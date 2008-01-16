@@ -7,8 +7,45 @@
  <div id="bd">
   <div id="yui-main">
    <div class="yui-b">
-    <div class="yui-g">
 
+<!-- TMPL_IF NAME="paramsloop" -->
+<!-- TMPL_LOOP NAME="paramsloop" -->
+<div class="yui-ge">
+    <div class="yui-u first">
+        <!-- TMPL_IF NAME="already" --><div class="dialog alert">A List named <b><!-- TMPL_VAR NAME="already" --></b> already exists!</div><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="status" --><div class="dialog alert"><!-- TMPL_VAR NAME="string" --></div><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="nobarcode" --><div class="dialog alert">ERROR: No barcode given.</div><!-- /TMPL_IF --> 
+		<!-- TMPL_IF NAME="noshelfnumber" --><div class="dialog alert">ERROR: No shelfnumber given.</div><!-- /TMPL_IF --> 
+		<!-- TMPL_IF NAME="need_confirm" -->
+		<div class="dialog alert">The list <i><!-- TMPL_VAR NAME="need_confirm" --></i> is not empty.
+			<br />It has <b><!-- TMPL_VAR NAME="count" --></b> entries.
+			<br />Use the "Confirm" button below to confirm deletion.
+		</div>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="nopermission" -->
+		<div class="dialog alert">ERROR: You do not have adequate permission for that action on list <!-- TMPL_VAR NAME="nopermission" -->.</div>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="failgetitem" -->
+		<div class="dialog alert">ERROR: No item found with barcode <!-- TMPL_VAR NAME="failgetitem" -->.</div>
+		<!-- /TMPL_IF --> 
+		<!-- TMPL_IF NAME="duplicatebiblio" -->
+		<div class="dialog alert">A record matching barcode <b><!-- TMPL_VAR NAME="duplicatebiblio" --></b> has already been added.</div>
+		<!-- /TMPL_IF --> 
+		<!-- TMPL_IF NAME="delete_ok" -->
+			<p class="message">Shelf <!-- TMPL_VAR NAME="delete_ok" --> Deleted.</p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="delete_fail" -->
+			<p class="error">ERROR: Database error. Delete (shelf number <!-- TMPL_VAR NAME="delete_fail" -->) failed.</p>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="unrecognized" -->
+			<p class="error">ERROR: Shelf number <!-- TMPL_VAR NAME="unrecognized" --> unrecognized.</p>
+		<!-- /TMPL_IF -->
+	</div>
+</div>
+<!-- /TMPL_LOOP -->
+<!-- /TMPL_IF --> 
+
+    <div class="yui-g">
     <!-- TMPL_IF NAME="viewshelf" -->
     <h3><a href="/cgi-bin/koha/opac-shelves.pl">Lists</a> <img src="<!-- TMPL_VAR NAME="themelang" -->/../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> <em><!-- TMPL_VAR NAME="shelfname" --></em></h3>
         <!-- TMPL_IF NAME="itemsloop" -->
@@ -74,24 +111,6 @@
 		</form>
     <!-- /TMPL_IF -->
 
-    <!-- TMPL_IF NAME="shelves" -->
-        <!-- TMPL_LOOP NAME="paramsloop" -->
-            <!-- TMPL_IF NAME="delete_ok" -->
-				<p class="message">Shelf <!-- TMPL_VAR NAME="delete_ok" --> Deleted.</p>
-			<!-- /TMPL_IF -->
-            <!-- TMPL_IF NAME="delete_fail" -->
-				<p class="error">ERROR: Database error. Delete (shelf number <!-- TMPL_VAR NAME="delete_fail" -->) failed.</p>
-			<!-- /TMPL_IF -->
-            <!-- TMPL_IF NAME="unrecognized" -->
-				<p class="error">ERROR: Shelf number <!-- TMPL_VAR NAME="unrecognized" --> unrecognized.</p>
-			<!-- /TMPL_IF -->
-        <!-- /TMPL_LOOP -->
-    <!-- /TMPL_IF --><!-- /shelves -->
-
-	<!-- TMPL_IF NAME="already" -->
-		<p class="error">Error: A shelf named <!-- TMPL_VAR NAME="already" --> already exists.  Please pick a different name.</p>
-	<!-- /TMPL_IF -->
-
     <!-- TMPL_IF NAME="edit" -->
         <form method="post" action="/cgi-bin/koha/opac-shelves.pl">
             <input type="hidden" name="op" value="modifsave">
@@ -139,10 +158,28 @@
                 <!-- TMPL_LOOP NAME="shelveslooppriv" -->
                     <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!--TMPL_ELSE--><tr><!-- /TMPL_IF -->
         <td><a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" --></a></td>
-        <td><!-- TMPL_VAR NAME="shelfvirtualcount" --> item(s)</td>
+        <td><!-- TMPL_VAR NAME="count" --> item(s)</td>
         <td><!-- TMPL_VAR NAME="sortfield" --></td>
         <td>
-            <!-- TMPL_IF NAME="mine" --><a href="opac-shelves.pl?op=modif&amp;shelf=<!-- TMPL_VAR NAME="shelf" -->">Edit</a> <a class="delete" href="opac-shelves.pl?shelves=1&amp;DEL-<!-- TMPL_VAR NAME="shelf" -->=1">Delete</a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+            <!-- TMPL_IF NAME="mine" -->
+				<form action="opac-shelves.pl" method="get">
+					<input type="hidden" name="shelf" value="<!-- TMPL_VAR NAME="shelf" -->" />
+					<input type="hidden" name="op" value="modif" />
+					<input type="submit" value="Edit" />
+				</form>
+				<form action="opac-shelves.pl" method="post">
+					<input type="hidden" name="shelves" value="1" />
+					<input type="hidden" name="DEL-<!-- TMPL_VAR NAME="shelf" -->" value="1" />
+					<!-- TMPL_IF NAME="confirm" -->
+					<input type="hidden" name="CONFIRM-<!-- TMPL_VAR NAME="confirm" -->" value="1" />
+					<input type="submit" class="confirm" value="Confirm" />
+					<!-- TMPL_ELSE -->
+					<input type="submit" onclick="return confirmDelete(_('Are you sure you want to remove this List?'));" value="Delete" />
+					<!-- /TMPL_IF -->
+				</form>
+			<!-- /TMPL_IF -->&nbsp;
+		</td>
+		</tr>
                 <!-- /TMPL_LOOP -->
             <!-- TMPL_ELSE -->
             <tr><td colspan="4">No Private Lists.</td></tr>
@@ -164,7 +201,7 @@
             <!-- TMPL_LOOP NAME="shelvesloop" -->
                 <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!--TMPL_ELSE--><tr><!-- /TMPL_IF -->
 		<td><a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" --></a></td>
-		<td><!-- TMPL_VAR NAME="shelfvirtualcount" --> item(s)</td></tr>
+		<td><!-- TMPL_VAR NAME="count" --> item(s)</td></tr>
             <!-- /TMPL_LOOP -->
         </table>
         <!-- TMPL_ELSE -->

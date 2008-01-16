@@ -33,7 +33,7 @@ use Exporter;
 use vars qw($debug @EXPORT @ISA $VERSION);
 
 BEGIN {
-	$VERSION = 1.00;
+	$VERSION = 1.01;
 	@ISA = qw(Exporter);
 	@EXPORT = qw(&shelfpage);
     $debug = $ENV{DEBUG} || 0;
@@ -101,28 +101,39 @@ if (defined $shelf_type) {
 	$template->param(showprivateshelves => 1);
 }
 
+my($okmanage, $okview);
+my $shelfnumber = $query->param('shelfnumber') || $query->param('viewshelf');
+if ($shelfnumber) {
+	$okmanage = &ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' );
+	$okview   = &ShelfPossibleAction( $loggedinuser, $shelfnumber, 'view' );
+}
 
 SWITCH: {
 	if ( $op ) {
+		unless ($okmanage) {
+			push @paramsloop, {nopermission=>$shelfnumber};
+			last SWITCH;
+		}
 		if ( $op eq 'modifsave' ) {
 			ModShelf(
-				$query->param('shelfnumber'), $query->param('shelfname'),
-				$loggedinuser,                $query->param('category'), $query->param('sortfield')
+				$shelfnumber, $query->param('shelfname'), $loggedinuser,
+				$query->param('category'), $query->param('sortfield')
 			);
 			$shelflist = GetShelves( $loggedinuser, 2 );    # refresh after mods
 		} elsif ( $op eq 'modif' ) {
-			my ( $shelfnumber, $shelfname, $owner, $category, $sortfield ) =GetShelf( $query->param('shelf') );
+			my ( $shelfnumber2, $shelfname, $owner, $category, $sortfield ) =GetShelf( $query->param('shelf') );
 			$template->param(
 				edit                => 1,
-				shelfnumber         => $shelfnumber,
+				shelfnumber         => $shelfnumber2,
 				shelfname           => $shelfname,
+				owner               => $owner,
 				"category$category" => 1,
 				"sort_$sortfield"   => 1,
 			);
 		}
 		last SWITCH;
 	}
-    if (my $shelfnumber = $query->param('viewshelf') ) {
+    if ($shelfnumber = $query->param('viewshelf') ) {
         #check that the user can view the shelf
         if ( ShelfPossibleAction( $loggedinuser, $shelfnumber, 'view' ) ) {
             my $items = GetShelfContents($shelfnumber);
@@ -144,13 +155,15 @@ SWITCH: {
         last SWITCH;
     }
     if ( $query->param('shelves') ) {
-        if ( my $newshelf = $query->param('addshelf') ) {
+		my $stay = 0;
+        if (my $newshelf = $query->param('addshelf')) {
+			# note: a user can always add a new shelf
             my $shelfnumber = AddShelf(
                 $newshelf,
                 $query->param('owner'),
                 $query->param('category')
             );
-
+			$stay = 1;
             if ( $shelfnumber == -1 ) {    #shelf already exists.
 				$showadd = 1;
 				push @paramsloop, { already => $newshelf };
@@ -160,26 +173,30 @@ SWITCH: {
             	exit;
 			}
         }
-		my $stay = 1;
-        foreach ( $query->param() ) {
-            /DEL-(\d+)/ or next;
+		foreach ($query->param()) {
+			/DEL-(\d+)/ or next;
 			my $number = $1;
-            my %line;
-			if (defined $shelflist->{$number}) {
-				my $name = $shelflist->{$number}->{'shelfname'};
-				if (DelShelf($number)) {
-					delete $shelflist->{$number};
-					$line{delete_ok}   = $name;
-					$stay = 0;
-				} else {
-					$line{delete_fail} = $name;
-				}
-			} else {
-				$line{unrecognized} = $number;
+			unless (defined $shelflist->{$number}) {
+				push(@paramsloop, {unrecognized=>$number}); last;
 	  		}
-			push(@paramsloop, \%line);
-            # print $query->redirect($pages{$type}->{redirect});
-			# exit;
+			unless (ShelfPossibleAction($loggedinuser, $number, 'manage')) {
+				push(@paramsloop, {nopermission=>$shelfnumber}); last;
+			}
+			my $contents = GetShelfContents($number);
+			if (my $count = scalar @$contents){
+				unless (scalar grep {/^CONFIRM-$number$/} $query->param()) {
+					push(@paramsloop, {need_confirm=>$shelflist->{$number}->{shelfname}, count=>$count});
+					$shelflist->{$number}->{confirm} = $number;
+					next;
+				}
+			} 
+			my $name = $shelflist->{$number}->{'shelfname'};
+			unless (DelShelf($number)) {
+				push(@paramsloop, {delete_fail=>$name}); last;
+			}
+			delete $shelflist->{$number};
+			push(@paramsloop, {delete_ok=>$name});
+			# print $query->redirect($pages{$type}->{redirect}); exit;
 		}
 		$showadd = 1;
 		$stay and $template->param(shelves => 1);
@@ -198,24 +215,20 @@ my $numberCanManage = 0;
 
 foreach my $element (sort { lc($shelflist->{$a}->{'shelfname'}) cmp lc($shelflist->{$b}->{'shelfname'}) } keys %$shelflist) {
 	my %line;
-	(++$i % 2) and $line{'toggle'} = $i;
-	$line{'shelf'}             = $element;
-	$line{'shelfname'}         = $shelflist->{$element}->{'shelfname'};
-	$line{'shelfvirtualcount'} = $shelflist->{$element}->{'count'};
-	$line{'sortfield'}         = $shelflist->{$element}->{'sortfield'};
-	$line{"viewcategory$shelflist->{$element}->{'category'}"} = 1;
-	$line{'canmanage'} = ShelfPossibleAction( $loggedinuser, $element, 'manage' );
+	(++$i % 2) and $shelflist->{$element}->{toggle} = 1; # $line{'toggle'} = $i;
+	$shelflist->{$element}->{shelf} = $element;
+	my $category = $shelflist->{$element}->{'category'};
+	my $canmanage = ShelfPossibleAction( $loggedinuser, $element, 'manage' );
+	$shelflist->{$element}->{"viewcategory$category"} = 1;
+	$shelflist->{$element}->{canmanage} = $canmanage;
 	if ($shelflist->{$element}->{'owner'} eq $loggedinuser) {
-		$line{'mine'} = 1;
-	} else {
-		$line{'firstname'} = $shelflist->{$element}->{'firstname'};
-		$line{'surname'}   = $shelflist->{$element}->{'surname'}  ;
+		$shelflist->{$element}->{'mine'} = 1;
 	}
-	$numberCanManage++ if $line{'canmanage'};
+	$numberCanManage++ if $canmanage;
 	if ($shelflist->{$element}->{'category'} eq '1') {
-		push (@shelveslooppriv, \%line);
+		push (@shelveslooppriv, $shelflist->{$element});
 	} else {
-		push (@shelvesloop, \%line);
+		push (@shelvesloop, $shelflist->{$element});
 	}
 }
 

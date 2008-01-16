@@ -132,14 +132,21 @@ function addRecord(val, selection,NoMsgAlert) {
     }
 }
 
+function AllAreChecked(s){
+	if (! s.length)	{ return false;}
+	var l = s.length;
+	for (var i=0; i < l; i++) {
+		if(! s[i].checked) { return false; }
+	}
+	return true;
+}
+
 function SelectAll(){
     if(document.bookbag_form.biblionumber.length > 0) {
-        for (var i=0; i < document.bookbag_form.biblionumber.length; i++) {
-            if (document.bookbag_form.select_all.checked) {
-                document.bookbag_form.biblionumber[i].checked=true;
-            } else {
-                document.bookbag_form.biblionumber[i].checked=false;
-            }
+		var checky = AllAreChecked(document.bookbag_form.biblionumber);
+		var l = document.bookbag_form.biblionumber.length;
+        for (var i=0; i < l; i++) {
+            document.bookbag_form.biblionumber[i].checked = (checky) ? false : true;
         }
     }
 }

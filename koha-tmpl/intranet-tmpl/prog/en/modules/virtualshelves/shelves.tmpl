@@ -61,12 +61,19 @@ $(document).ready(function(){
     }
     //]]>
 </script>
+<style type="text/css">
+	input.confirm {
+		background:lightblue url(../../img/button-bg.gif) repeat-x scroll left top;
+		border-width:2pt;
+	}
+</style>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <!-- TMPL_IF NAME="viewshelf" --><a href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a> &rsaquo; Contents of <i><!-- TMPL_VAR NAME="shelfname" --></i><!-- TMPL_ELSE --><a href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a><!-- /TMPL_IF --><!-- TMPL_IF NAME="shelves" --> &rsaquo; Create New List<!-- /TMPL_IF --><!-- TMPL_IF NAME="edit" --> &rsaquo; Edit List<i> <!-- TMPL_VAR name="shelfname"--></i><!-- /TMPL_IF --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a>
+<!-- TMPL_IF NAME="viewshelf" -->&rsaquo; Contents of <i><!-- TMPL_VAR NAME="shelfname" --></i><!-- /TMPL_IF --><!-- TMPL_IF NAME="shelves" --> &rsaquo; Create New List<!-- /TMPL_IF --><!-- TMPL_IF NAME="edit" --> &rsaquo; Edit List <i><!-- TMPL_VAR name="shelfname"--></i><!-- /TMPL_IF --></div>
 
 <div id="doc" class="yui-t7">
  <div id="bd">
@@ -82,6 +89,12 @@ $(document).ready(function(){
 		<!-- TMPL_IF NAME="status" --><div class="dialog alert"><!-- TMPL_VAR NAME="string" --></div><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="nobarcode" --><div class="dialog alert">ERROR: No barcode given.</div><!-- /TMPL_IF --> 
 		<!-- TMPL_IF NAME="noshelfnumber" --><div class="dialog alert">ERROR: No shelfnumber given.</div><!-- /TMPL_IF --> 
+		<!-- TMPL_IF NAME="need_confirm" -->
+		<div class="dialog alert">The list <i><!-- TMPL_VAR NAME="need_confirm" --></i> is not empty.
+			<br />It has <b><!-- TMPL_VAR NAME="count" --></b> entries.
+			<br />Use the "Confirm" button below to confirm deletion.
+		</div>
+		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="nopermission" -->
 		<div class="dialog alert">ERROR: You do not have adequate permission for that action on list <!-- TMPL_VAR NAME="nopermission" -->.</div>
 		<!-- /TMPL_IF -->
@@ -116,13 +129,18 @@ $(document).ready(function(){
                 <th>&nbsp;</th>
             </tr>
 		<!-- TMPL_LOOP NAME="itemsloop" -->
-			<!-- TMPL_IF NAME="color" -->
+			<!-- TMPL_IF NAME="toggle" -->
 			<tr class="highlight">
 			<!-- TMPL_ELSE -->
 			<tr>
 			<!-- /TMPL_IF -->
 			<td>
+				<!-- TMPL_IF NAME="confirm" -->
+				<input type="hidden"   name="CONFIRM-<!-- TMPL_VAR NAME="confirm" -->" />
+				<input type="checkbox" name="REM-<!-- TMPL_VAR NAME="biblionumber" -->" checked />
+				<!-- TMPL_ELSE -->
 				<input type="checkbox" name="REM-<!-- TMPL_VAR NAME="biblionumber" -->" />
+				<!-- /TMPL_IF -->
 			</td>
 			<td>
 				<!-- TMPL_VAR NAME="itemtype" -->
@@ -253,20 +271,38 @@ $(document).ready(function(){
 <!-- /TMPL_IF --><!-- /seflag -->
 
 <!-- TMPL_UNLESS NAME="vseflag" -->
-<!-- TMPL_IF NAME="shelvesloop" -->
+<!-- TMPL_IF NAME="shelvesloopall" -->
 <h3>Lists</h3>
 <table>
 <tr><th>Name</th><th>Category</th><th>Items</th><th>&nbsp;</th></tr>
 <!-- TMPL_LOOP NAME="shelvesloopall" -->
-<tr<!-- TMPL_IF name="color" --> class="highlight"<!-- /TMPL_IF -->>
+<tr<!-- TMPL_IF NAME="toggle" --> class="highlight"<!-- /TMPL_IF -->>
 <td><a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" --></a></td>
 <td>
   <!-- TMPL_IF NAME="viewcategory1" -->Private<!-- /TMPL_IF -->
   <!-- TMPL_IF NAME="viewcategory2" -->Public<!-- /TMPL_IF -->
   <!-- TMPL_IF NAME="viewcategory3" -->Open<!-- /TMPL_IF -->
 </td>
-<td><!-- TMPL_VAR NAME="shelfvirtualcount" --> </td>
-<td><!-- TMPL_IF name="mine" --><a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=modif&amp;shelf=<!-- TMPL_VAR NAME="shelf" -->">Edit</a> <a href="/cgi-bin/koha/virtualshelves/shelves.pl?shelves=1&amp;DEL-<!-- TMPL_VAR NAME="shelf" -->=1" onclick="return confirmDelete(_('Are you sure you want to remove this List?'))">Delete</a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td></tr>
+<td><!-- TMPL_VAR NAME="count" --></td>
+<td><!-- TMPL_IF NAME="mine" -->
+	<form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="get">
+		<input type="hidden" name="shelf" value="<!-- TMPL_VAR NAME="shelf" -->" />
+		<input type="hidden" name="op" value="modif" />
+		<input type="submit" value="Edit" />
+	</form>
+	<form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post">
+		<input type="hidden" name="shelves" value="1" />
+		<input type="hidden" name="DEL-<!-- TMPL_VAR NAME="shelf" -->" value="1" />
+		<!-- TMPL_IF NAME="confirm" -->
+		<input type="hidden" name="CONFIRM-<!-- TMPL_VAR NAME="confirm" -->" value="1" />
+		<input type="submit" class="confirm" value="Confirm" />
+		<!-- TMPL_ELSE -->
+		<input type="submit" onclick="return confirmDelete(_('Are you sure you want to remove this List?'));" value="Delete" />
+		<!-- /TMPL_IF -->
+	</form>
+	<!-- /TMPL_IF -->&nbsp;
+</td>
+</tr>
 <!-- /TMPL_LOOP -->
 </table>
 <!-- /TMPL_IF -->

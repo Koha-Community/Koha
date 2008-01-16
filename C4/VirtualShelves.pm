@@ -258,7 +258,7 @@ sub AddToShelf {
 
     $sth->execute( $shelfnumber, $biblionumber );
     ($sth->rows) and return undef;	# already on shelf
-	my $query = qq(
+	$query = qq(
 		INSERT INTO virtualshelfcontents
 			(shelfnumber, biblionumber, flags)
 		VALUES
@@ -318,20 +318,6 @@ sub ModShelf {
     $sth->execute( $shelfname, $owner, $category, $sortfield, $shelfnumber );
 }
 
-=item DelShelf
-
-  ($status) = &DelShelf($shelfnumber);
-
-Deletes virtual virtualshelves number C<$shelfnumber>. The virtualshelves must
-be empty.
-
-Returns a two-element array, where C<$status> is 0 if the operation
-was successful, or non-zero otherwise. C<$msg> is "Done" in case of
-success, or an error message giving the reason for failure.
-
-=cut
-
-
 =item ShelfPossibleAction
 
 ShelfPossibleAction($loggedinuser, $shelfnumber, $action);
@@ -382,15 +368,25 @@ sub DelFromShelf {
     $sth->execute( $shelfnumber, $biblionumber );
 }
 
-=head2 DelShelf
+=item DelShelf (old version)
+
+  ($status, $msg) = &DelShelf($shelfnumber);
+
+Deletes virtual virtualshelves number C<$shelfnumber>. The virtualshelves must
+be empty.
+
+Returns a two-element array, where C<$status> is 0 if the operation
+was successful, or non-zero otherwise. C<$msg> is "Done" in case of
+success, or an error message giving the reason for failure.
+
+=item DelShelf (current version)
 
   $Number = DelShelf($shelfnumber);
 
-    this function delete the shelf number, and all of it's content
+This function deletes the shelf number, and all of it's content.
 
 =cut
 
-#'
 sub DelShelf {
 	unless (@_) {
 		carp "DelShelf called without valid argument (shelfnumber)";
