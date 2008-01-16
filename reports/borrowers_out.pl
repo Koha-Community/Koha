@@ -133,9 +133,7 @@ if ($do_it) {
     my ($codes,$labels) = GetborCatFromCatType(undef,undef);
     my @borcatloop;
     foreach my $thisborcat (sort keys %$labels) {
-# 			my $selected = 1 if $thisbranch eq $branch;
             my %row =(value => $thisborcat,
-# 									selected => $selected,
                                     description => $labels->{$thisborcat},
                             );
             push @borcatloop, \%row;

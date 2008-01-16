@@ -50,7 +50,11 @@
     <form method="post" action="/cgi-bin/koha/reports/borrowers_out.pl">
     <fieldset class="rows">
 		<ol>
-			<li><label for="patroncategory">Patron category: </label> <input type="text" name="Filter" id="patroncategory" value="" />
+			<li><label for="patroncategory">Patron category: </label> <select name="Filter" id="patroncategory"><option value="" > Any Category code</option>
+    <!--TMPL_LOOP Name="borcatloop"-->
+        <option value="<!--TMPL_VAR Name="value"-->" ><!--TMPL_VAR Name="description"--> </option>  
+     <!--/TMPL_LOOP --> 
+    </select>
 </li>
 	<li><label for="to">Without issues since: </label> <input size="10" id="to" name="Filter" value="" type="text" />
                         <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" id="openCalendarTo" style="cursor: pointer;" border="0" />

@@ -26,6 +26,8 @@ use HTML::Template::Pro;
 use C4::Search;
 use C4::Output;
 use C4::Koha;
+use C4::Members;
+
 use C4::Branch; # GetBranches
 
 =head1 NAME
@@ -80,6 +82,15 @@ sub set_parameters {
 				-size     => 1,
 				-multiple => 0 );
 	$template->param(CGIbranch => $CGIbranch);
+  
+  my ($codes,$labels)=GetborCatFromCatType(undef,undef);
+  my @borcatloop;
+  foreach my $thisborcat (sort keys %$labels) {
+            push @borcatloop, {value => $thisborcat,
+                               description => $labels->{$thisborcat},
+                            };
+  }
+  $template->param(loopcategories => \@borcatloop);
 	return $template;
 }
 sub calculate {

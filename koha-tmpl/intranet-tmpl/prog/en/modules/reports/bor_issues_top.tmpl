@@ -186,15 +186,24 @@ function Dopop(link) {
 							</script></li>
 			<li> 
 				<label for="branch">Branch: </label>
-				<input type="text" name="Filter" id="branch" value="" />
+<select name="Filter" id="branch"><option value="" > Any Branch</option>
+    <!--TMPL_LOOP Name="branchloop"-->
+        <option value="<!--TMPL_VAR Name="value"-->" ><!--TMPL_VAR Name="branchname"--> </option>  
+     <!--/TMPL_LOOP --> 
+    </select>			</li>
+			<li> 
+				<label for="documenttype">Document Type: </label><select name="Filter" id="documenttype"><option value="" > Any Document type</option>
+    <!--TMPL_LOOP Name="itemtypeloop"-->
+        <option value="<!--TMPL_VAR Name="value"-->" ><!--TMPL_VAR Name="description"--> </option>  
+     <!--/TMPL_LOOP --> 
+    </select>
 			</li>
 			<li> 
-				<label for="documenttype">Document Type: </label>
-				<input type="text" name="Filter" id="documenttype" value="" />
-			</li>
-			<li> 
-				<label for="patroncategory">Patron Category: </label>
-				<input type="text" name="Filter" id="patroncategory" value="" />
+				<label for="patroncategory">Patron Category: </label><select name="Filter" id="patroncategory"><option value="" > Any Category code</option>
+    <!--TMPL_LOOP Name="borcatloop"-->
+        <option value="<!--TMPL_VAR Name="value"-->" ><!--TMPL_VAR Name="description"--> </option>  
+     <!--/TMPL_LOOP --> 
+    </select>
 			</li>
 			<li> 
 				<label for="day">Day: </label>
