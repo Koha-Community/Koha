@@ -433,7 +433,7 @@ sub TooMany {
             return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on branch/category/itemtype failed)" );
         }
         # now checking for total
-        $sth->execute( $cat_borrower, '', $branch );
+        $sth->execute( $cat_borrower, '*', $branch );
         my $result = $sth->fetchrow_hashref;
         if ( $result->{maxissueqty} ne '' ) {
             $sth2->execute( $borrower->{'borrowernumber'}, $type );
