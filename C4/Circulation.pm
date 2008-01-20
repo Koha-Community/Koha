@@ -435,7 +435,7 @@ sub TooMany {
         # now checking for total
         $sth->execute( $cat_borrower, '', $branch );
         my $result = $sth->fetchrow_hashref;
-        if ( $result->{maxissueqty} ne '*' ) {
+        if ( $result->{maxissueqty} ne '' ) {
             $sth2->execute( $borrower->{'borrowernumber'}, $type );
             my $alreadyissued = $sth2->fetchrow;
             if ( $result->{'maxissueqty'} <= $alreadyissued ) {
