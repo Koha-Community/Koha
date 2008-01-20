@@ -68,6 +68,7 @@ if ( $limit eq 'full' ) {
 else {
     $limit = 50;
 }
+
 my ( $count, $issues ) = GetAllIssues( $borrowernumber, $order2, $limit );
 
 # add the row parity
@@ -100,7 +101,7 @@ $template->param(
     count          => $count,
     READING_RECORD => \@loop_reading,
     limit          => $limit,
-    showfulllink   => ( $count > 50 ),
+    showfulllink   => 1,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

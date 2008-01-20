@@ -20,19 +20,23 @@ You have never borrowed anything from this library.
 
 <!-- TMPL_IF NAME="showfulllink" -->
 <!-- TMPL_IF NAME="limit" -->
-<li class="tabs-selected"><a href="/cgi-bin/koha/opac-readingrecord.pl#readingrec">Showing All Items</a></li><li><a href="/cgi-bin/koha/opac-readingrecord.pl?limit=">Show Last 50 Items Only</a></li>
-<!-- TMPL_ELSE -->
 <li><a href="/cgi-bin/koha/opac-readingrecord.pl?limit=full">Show All Items</a></li><li class="tabs-selected"><a href="#readingrec">Showing Last 50 Items</a></li>
+<!-- TMPL_ELSE -->
+<li class="tabs-selected"><a href="/cgi-bin/koha/opac-readingrecord.pl#readingrec">Showing All Items</a></li><li><a href="/cgi-bin/koha/opac-readingrecord.pl?limit=50">Show Last 50 Items Only</a></li>
 <!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
 <li class="tabs-selected"><a href="/cgi-bin/koha/opac-readingrecord.pl#readingrec">Showing All Items</a></li>
 <!-- /TMPL_IF -->
 </ul>
 <div class="tabs-container"><table id="readingrec">
-<tr><th><!-- TMPL_UNLESS NAME="orderbytitle" --><a href="/cgi-bin/koha/opac-readingrecord.pl?order=title">Title</a><!-- TMPL_ELSE -->&nbsp;
-        <!-- /TMPL_UNLESS --></th>
-<th><!-- TMPL_UNLESS --><a href="/cgi-bin/koha/opac-readingrecord.pl?order=author">Author</a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_UNLESS --></th>
-<th><!-- TMPL_UNLESS NAME="orderbydate" --><a href="/cgi-bin/koha/opac-readingrecord.pl">Date</a><!-- TMPL_ELSE -->Date<!-- /TMPL_UNLESS --></th></tr>
+<tr><th><!-- TMPL_UNLESS NAME="orderbytitle" --><a
+href="/cgi-bin/koha/opac-readingrecord.pl?order=title">Title</a><!--
+TMPL_ELSE -->Title<!-- /TMPL_UNLESS --></th>
+<th><!-- TMPL_UNLESS NAME="orderbyauthor" --><a
+href="/cgi-bin/koha/opac-readingrecord.pl?order=author">Author</a><!--
+TMPL_ELSE -->Author<!-- /TMPL_UNLESS --></th>
+<th><!-- TMPL_UNLESS NAME="orderbydate" --><a href="/cgi-bin/koha/opac-readingrecord.pl">Date</a><!-- TMPL_ELSE -->Date<!-- /TMPL_UNLESS --></th>
+</tr>
 
 <!-- TMPL_LOOP NAME="READING_RECORD" -->
 
