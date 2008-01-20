@@ -1,6 +1,6 @@
 <div class="yui-g"><div id="corner"><!-- TMPL_IF NAME="opacbookbag" --><a class="cart" href="/cgi-bin/koha/opac-basket.pl" onclick="openBasket(); return false;" title="A &quot;shopping cart&quot; for your selections">Book Bag<span id="basket"><script language="javascript" type="text/javascript">if(basketcount){ document.write(basketcount) };</script></span></a><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="opaclanguagesdisplay" --><div id="language">
-	<ul><!-- TMPL_LOOP NAME="languages" --><li><a href="/cgi-bin/koha/changelanguage.pl?language=<!-- TMPL_VAR NAME="language" -->"><!-- TMPL_VAR NAME="label" --></a> </li><!-- /TMPL_LOOP -->
+	<ul><!-- TMPL_LOOP NAME="languages" --><li><a href="/cgi-bin/koha/opac-changelanguage.pl?language=<!-- TMPL_VAR NAME="language" -->"><!-- TMPL_VAR NAME="label" --></a> </li><!-- /TMPL_LOOP -->
 	</ul></div><!-- /TMPL_IF --></div></div>
 
 <div id="members">

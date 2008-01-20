@@ -50,7 +50,8 @@ foreach my $language (@$langavail) {
 #   next if $currently_selected_languages->{$language};
 #   FIXME: could incorporate language_name and language_locale_name for better display
     push @languages,
-      { language => $language->{'language_code'}, counter => $counter };
+      { language => $language->{'language_code'}, counter => $counter, selected=>($input->cookie('KohaOpacLanguage') ? $language->{'language_code'} eq $input->cookie('KohaOpacLanguage')
+  : $language->{'language_code'} eq C4::Context->preference('opaclanguages')) };
     $counter++;
 }
 
