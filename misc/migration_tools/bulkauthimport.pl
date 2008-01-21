@@ -97,7 +97,7 @@ while ( my $record = $batch->next() ) {
         foreach my $pair ( $oldField->subfields() ) { 
             $pair->[1] =~ s/\<//g;
             $pair->[1] =~ s/\>//g;
-            push( @newSubfields, $pair->[0], $pair->[1], $char_encoding);
+            push( @newSubfields, $pair->[0], $pair->[1]);
         }
     
         # add the new field to our new record
