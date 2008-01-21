@@ -81,7 +81,7 @@ sub gettemplate {
     my $filename = "$htdocs/$theme/$lang/modules/$tmplbase";
     unless (-f $filename) {
         $lang = 'en';
-        $filename = "$htdocs/$theme/$lang/".($interface eq 'intranet'?"modules":"")."/$tmplbase";
+        $filename = "$htdocs/$theme/$lang/modules/$tmplbase";
     }
     my $template       = HTML::Template::Pro->new(
         filename          => $filename,
