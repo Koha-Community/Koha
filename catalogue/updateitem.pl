@@ -20,6 +20,7 @@
 use strict; 
 use warnings;
 use CGI;
+use C4::Auth;
 use C4::Context;
 use C4::Biblio;
 use C4::Items;
@@ -29,6 +30,8 @@ use C4::Accounts;
 use C4::Reserves;
 
 my $cgi= new CGI;
+
+my ($loggedinuser, $cookie, $sessionID) = checkauth($cgi, 0, {circulate => 1}, 'intranet');
 
 my $biblionumber=$cgi->param('biblionumber');
 my $itemnumber=$cgi->param('itemnumber');

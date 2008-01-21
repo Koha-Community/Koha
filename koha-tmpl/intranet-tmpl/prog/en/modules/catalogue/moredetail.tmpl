@@ -62,56 +62,76 @@
             <li><span class="label">Current Location:</span> <!-- TMPL_VAR NAME="holdingbranchname" -->&nbsp;</li>
             <li><span class="label">Circulation Status:</span> <!-- TMPL_IF NAME="issue" -->Checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="cardnumber" --></a>, Due back on <!-- TMPL_VAR NAME="onloan" --><!-- TMPL_ELSE -->Not Checked out <!-- /TMPL_IF --></li>
             <li><span class="label">Lost Status:</span>
-                <form action="updateitem.pl" method="post">
-                <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
-                <input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR Name="biblioitemnumber" -->" />
-                <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" />
-                <select name="itemlost" >
-        <!-- TMPL_LOOP NAME="itemlostloop" -->
-            <!-- TMPL_IF NAME="selected" -->
-                    <option value="<!-- TMPL_VAR NAME="authorised_value" -->" selected="selected"><!-- TMPL_VAR NAME="lib" --></option>
-            <!-- TMPL_ELSE -->
-                    <option value="<!-- TMPL_VAR NAME="authorised_value" -->"><!-- TMPL_VAR NAME="lib" --></option>
-            <!-- /TMPL_IF -->
-        <!-- /TMPL_LOOP -->
-                </select>
-                <input type="hidden" name="wthdrawn" value="<!-- TMPL_VAR NAME="wthdrawn" -->" />
-                <input type="hidden" name="damaged" value="<!-- TMPL_VAR NAME="damaged" -->" />
-                <input type="submit" name="submit" class="submit" value="Set Status" /></form>
+                <!-- TMPL_IF NAME="CAN_user_circulate" -->
+                    <form action="updateitem.pl" method="post">
+                    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
+                    <input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR Name="biblioitemnumber" -->" />
+                    <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" />
+                    <select name="itemlost" >
+            <!-- TMPL_LOOP NAME="itemlostloop" -->
+                <!-- TMPL_IF NAME="selected" -->
+                        <option value="<!-- TMPL_VAR NAME="authorised_value" -->" selected="selected"><!-- TMPL_VAR NAME="lib" --></option>
+                <!-- TMPL_ELSE -->
+                        <option value="<!-- TMPL_VAR NAME="authorised_value" -->"><!-- TMPL_VAR NAME="lib" --></option>
+                <!-- /TMPL_IF -->
+            <!-- /TMPL_LOOP -->
+                    </select>
+                    <input type="hidden" name="wthdrawn" value="<!-- TMPL_VAR NAME="wthdrawn" -->" />
+                    <input type="hidden" name="damaged" value="<!-- TMPL_VAR NAME="damaged" -->" />
+                    <input type="submit" name="submit" class="submit" value="Set Status" /></form>
+                <!-- TMPL_ELSE -->
+                    <!-- TMPL_LOOP NAME="itemlostloop" -->
+                        <!-- TMPL_IF NAME="selected" -->
+                            <!-- TMPL_VAR NAME="lib" -->
+                        <!-- /TMPL_IF -->
+                    <!-- /TMPL_LOOP -->
+                    &nbsp;
+                <!-- /TMPL_IF -->
             </li>
             <li><span class="label">Damaged Status:</span>
-                <form action="updateitem.pl" method="post">
-                <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
-                <input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR Name="biblioitemnumber" -->" />
-                <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" />
-                <select name="damaged" >
-        <!-- TMPL_LOOP NAME="itemdamagedloop" -->
-            <!-- TMPL_IF NAME="selected" -->
-                <option value="<!-- TMPL_VAR NAME="authorised_value" -->" selected="selected"><!-- TMPL_VAR NAME="lib" --></option>
-            <!-- TMPL_ELSE -->
-                <option value="<!-- TMPL_VAR NAME="authorised_value" -->"><!-- TMPL_VAR NAME="lib" --></option>
-            <!-- /TMPL_IF -->
-        <!-- /TMPL_LOOP -->
-                </select>
-                <input type="hidden" name="wthdrawn" value="<!-- TMPL_VAR NAME="wthdrawn" -->" />
-                <input type="hidden" name="itemlost" value="<!-- TMPL_VAR NAME="itemlost" -->" />
-                <input type="submit" name="submit" class="submit" value="Set Status" /></form>
+                <!-- TMPL_IF NAME="CAN_user_circulate" -->
+                    <form action="updateitem.pl" method="post">
+                    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
+                    <input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR Name="biblioitemnumber" -->" />
+                    <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" />
+                    <select name="damaged" >
+            <!-- TMPL_LOOP NAME="itemdamagedloop" -->
+                <!-- TMPL_IF NAME="selected" -->
+                    <option value="<!-- TMPL_VAR NAME="authorised_value" -->" selected="selected"><!-- TMPL_VAR NAME="lib" --></option>
+                <!-- TMPL_ELSE -->
+                    <option value="<!-- TMPL_VAR NAME="authorised_value" -->"><!-- TMPL_VAR NAME="lib" --></option>
+                <!-- /TMPL_IF -->
+            <!-- /TMPL_LOOP -->
+                    </select>
+                    <input type="hidden" name="wthdrawn" value="<!-- TMPL_VAR NAME="wthdrawn" -->" />
+                    <input type="hidden" name="itemlost" value="<!-- TMPL_VAR NAME="itemlost" -->" />
+                    <input type="submit" name="submit" class="submit" value="Set Status" /></form>
+                <!-- TMPL_ELSE -->
+                    <!-- TMPL_LOOP NAME="itemdamagedloop" -->
+                        <!-- TMPL_IF NAME="selected" -->
+                            <!-- TMPL_VAR NAME="lib" -->
+                        <!-- /TMPL_IF -->
+                    <!-- /TMPL_LOOP -->
+                    &nbsp;
+                <!-- /TMPL_IF -->
             </li>
             <li><span class="label">Withdrawn?:</span><!-- TMPL_IF NAME="wthdrawn" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF -->
-                <form action="updateitem.pl" method="post">
-                <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
-                <input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR Name="biblioitemnumber" -->" />
-                <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" />
-                <input type="hidden" name="itemlost" value="<!-- TMPL_VAR NAME="itemlost" -->" />
-                <input type="hidden" name="damaged" value="<!-- TMPL_VAR NAME="damaged" -->" />
+                <!-- TMPL_IF NAME="CAN_user_circulate" -->
+                    <form action="updateitem.pl" method="post">
+                    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
+                    <input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR Name="biblioitemnumber" -->" />
+                    <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" />
+                    <input type="hidden" name="itemlost" value="<!-- TMPL_VAR NAME="itemlost" -->" />
+                    <input type="hidden" name="damaged" value="<!-- TMPL_VAR NAME="damaged" -->" />
 
-        <!-- TMPL_IF NAME="wthdrawn" -->
-                <input type="hidden" name="wthdrawn" value="0" /><!-- TMPL_ELSE --><input type="hidden" name="wthdrawn" value="1" />
-        <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="wthdrawn" -->
-                <input type="submit" name="submit" class="submit" value="Restore" /><!-- TMPL_ELSE --><input type="submit" name="submit" class="submit" value="Withdraw" />
-        <!-- /TMPL_IF -->
-                </form>
+            <!-- TMPL_IF NAME="wthdrawn" -->
+                    <input type="hidden" name="wthdrawn" value="0" /><!-- TMPL_ELSE --><input type="hidden" name="wthdrawn" value="1" />
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="wthdrawn" -->
+                    <input type="submit" name="submit" class="submit" value="Restore" /><!-- TMPL_ELSE --><input type="submit" name="submit" class="submit" value="Withdraw" />
+            <!-- /TMPL_IF -->
+                    </form>
+                <!-- /TMPL_IF -->
             </li>
             </ol></div>
             <div class="listgroup"><h4>History</h4>
@@ -131,11 +151,17 @@
 		<!-- TMPL_IF NAME="card2" --><li><span class="label">Previous Borrower:</span> <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=<!-- TMPL_VAR NAME="borrower2" -->"><!-- TMPL_VAR NAME="card2" --></a>&nbsp;</li><!-- /TMPL_IF -->
                 <li><span class="label">Paid for?:</span> <!-- TMPL_VAR NAME="paidfor" -->&nbsp;</li>
             <li><span class="label">Public Note:</span>
+                <!-- TMPL_IF NAME="CAN_user_circulate" -->
               <form class="inline" action="updateitem.pl" method="post"><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
                     <input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR Name="biblioitemnumber" -->" /><input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" />
                     <textarea name="itemnotes" rows="2" cols="30"><!-- TMPL_VAR NAME="itemnotes" --></textarea><input type="submit" name="submit" class="submit" value="Update" /> 
                 </li>
-            </ol></form></div>
+            </ol></form>
+                <!-- TMPL_ELSE -->
+                    <!-- TMPL_VAR NAME="itemnotes" -->
+                    &nbsp;
+                <!-- /TMPL_IF -->
+            </div>
 </div>
 <!-- /TMPL_LOOP -->
 
