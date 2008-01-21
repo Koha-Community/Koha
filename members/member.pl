@@ -110,6 +110,7 @@ for (my $i=($startfrom-1)*$resultsperpage; $i < $to; $i++){
     borrowernotes => $results->[$i]{'borrowernotes'},
     sort1 => $results->[$i]{'sort1'},
     sort2 => $results->[$i]{'sort2'},
+    dateexpiry => C4::Dates->new($results->[$i]{'dateexpiry'},'iso')->output('syspref'),
     );
   if ( $toggle ) { $toggle = 0; } else {$toggle = 1; }
   push(@resultsdata, \%row);
