@@ -167,7 +167,7 @@ sub AddItemFromMarc {
     # parse item hash from MARC
     my $frameworkcode = GetFrameworkCode( $biblionumber );
     my $item = &TransformMarcToKoha( $dbh, $source_item_marc, $frameworkcode );
-    return AddItem($item, $biblionumber, $dbh, $frameworkcode);
+    return AddItem($item, $biblionumber, $dbh, $frameworkcode,$source_item_marc);
 }
 
 =head2 AddItem
@@ -194,6 +194,8 @@ sub AddItem {
 
     my $dbh           = @_ ? shift : C4::Context->dbh;
     my $frameworkcode = @_ ? shift : GetFrameworkCode( $biblionumber );
+    my $item_marc_record;  
+    if (@_){$item_marc_record=shift};
 
     # needs old biblionumber and biblioitemnumber
     $item->{'biblionumber'} = $biblionumber;
@@ -204,11 +206,12 @@ sub AddItem {
     _set_defaults_for_add($item);
     _set_derived_columns_for_add($item);
     # FIXME - checks here
-	my ( $itemnumber, $error ) = _koha_new_item( $dbh, $item, $item->{barcode} );
+	  my ( $itemnumber, $error ) = _koha_new_item( $item, $item->{barcode} );
     $item->{'itemnumber'} = $itemnumber;
 
     # create MARC tag representing item and add to bib
     my $new_item_marc = _marc_from_item_hash($item, $frameworkcode);
+    if ($item_marc_record){_add_unlinked_marc_fields($new_item_marc,$item_marc_record,$frameworkcode);}
     _add_item_field_to_biblio($new_item_marc, $item->{'biblionumber'}, $frameworkcode );
    
     logaction(C4::Context->userenv->{'number'},"CATALOGUING","ADD",$itemnumber,"item") 
@@ -300,7 +303,7 @@ sub AddItemBatchFromMarc {
 
         _set_defaults_for_add($item);
         _set_derived_columns_for_add($item);
-        my ( $itemnumber, $error ) = _koha_new_item( $dbh, $item, $item->{barcode} );
+        my ( $itemnumber, $error ) = _koha_new_item( $item, $item->{barcode} );
         warn $error if $error;
         push @itemnumbers, $itemnumber; # FIXME not checking error
         $item->{'itemnumber'} = $itemnumber;
@@ -347,7 +350,7 @@ sub ModItemFromMarc {
     my $frameworkcode = GetFrameworkCode( $biblionumber );
     my $item = &TransformMarcToKoha( $dbh, $item_marc, $frameworkcode );
    
-    return ModItem($item, $biblionumber, $itemnumber, $dbh, $frameworkcode); 
+    return ModItem($item, $biblionumber, $itemnumber, $dbh, $frameworkcode, $item_marc); 
 }
 
 =head2 ModItem
@@ -384,6 +387,9 @@ sub ModItem {
 
     my $dbh           = @_ ? shift : C4::Context->dbh;
     my $frameworkcode = @_ ? shift : GetFrameworkCode( $biblionumber );
+    
+    my $item_marc_record;  
+    if (@_){$item_marc_record=shift};
 
     $item->{'itemnumber'} = $itemnumber or return undef;
     _set_derived_columns_for_mod($item);
@@ -396,11 +402,16 @@ sub ModItem {
     # it should be a separate function)
 
     # update items table
-    _koha_modify_item($dbh, $item);
+    _koha_modify_item($item);
 
     # update biblio MARC XML
     my $whole_item = GetItem($itemnumber) or die "FAILED GetItem($itemnumber)";
     my $new_item_marc = _marc_from_item_hash($whole_item, $frameworkcode) or die "FAILED _marc_from_item_hash($whole_item, $frameworkcode)";
+    
+    if ($item_marc_record){
+      _add_unlinked_marc_fields($new_item_marc,$item_marc_record,$frameworkcode);
+    }   
+                  
     _replace_item_field_in_biblio($new_item_marc, $biblionumber, $itemnumber, $frameworkcode);
 	(C4::Context->userenv eq '0') and die "userenv is '0', not hashref";         # logaction line would crash anyway
 	($new_item_marc       eq '0') and die "$new_item_marc is '0', not hashref";  # logaction line would crash anyway
@@ -1318,8 +1329,18 @@ sub GetMarcItem {
     # Tack on 'items.' prefix to column names so that TransformKohaToMarc will work.
     # Also, don't emit a subfield if the underlying field is blank.
     my $mungeditem = { map {  $itemrecord->{$_} ne '' ? ("items.$_" => $itemrecord->{$_}) : ()  } keys %{ $itemrecord } };
-
     my $itemmarc = TransformKohaToMarc($mungeditem);
+    
+    my $marc = GetMarcBiblio($biblionumber);
+    my $frameworkcode=GetFrameworkCode($biblionumber);
+    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField("items.itemnumber",$frameworkcode);
+    foreach my $field ($marc->field($itemtag)){
+        if ($field->subfield($itemsubfield)==$itemnumber){
+            my $tmpmarc=MARC::Record->new();
+            $tmpmarc->append_fields($field);
+            _add_unlinked_marc_fields($itemmarc,$tmpmarc,$frameworkcode);
+        }    
+    }  
     return $itemmarc;
 
 }
@@ -1578,7 +1599,7 @@ sub _set_defaults_for_add {
 
 =over 4
 
-my ($itemnumber,$error) = _koha_new_item( $dbh, $item, $barcode );
+my ($itemnumber,$error) = _koha_new_item( $item, $barcode );
 
 =back
 
@@ -1587,7 +1608,8 @@ Perform the actual insert into the C<items> table.
 =cut
 
 sub _koha_new_item {
-    my ( $dbh, $item, $barcode ) = @_;
+    my ( $item, $barcode ) = @_;
+    my $dbh=C4::Context->dbh;  
     my $error;
     my $query =
            "INSERT INTO items SET
@@ -1669,7 +1691,7 @@ sub _koha_new_item {
 
 =over 4
 
-my ($itemnumber,$error) =_koha_modify_item( $dbh, $item, $op );
+my ($itemnumber,$error) =_koha_modify_item( $item );
 
 =back
 
@@ -1679,7 +1701,8 @@ routine accepts a hashref specifying the columns to update.
 =cut
 
 sub _koha_modify_item {
-    my ( $dbh, $item ) = @_;
+    my ( $item ) = @_;
+    my $dbh=C4::Context->dbh;  
     my $error;
 
     my $query = "UPDATE items SET ";
@@ -1691,9 +1714,9 @@ sub _koha_modify_item {
     $query =~ s/,$//;
     $query .= " WHERE itemnumber=?";
     push @bind, $item->{'itemnumber'};
-    my $sth = $dbh->prepare($query);
+    my $sth = C4::Context->dbh->prepare($query);
     $sth->execute(@bind);
-    if ( $dbh->errstr ) {
+    if ( C4::Context->dbh->errstr ) {
         $error.="ERROR in _koha_modify_item $query".$dbh->errstr;
         warn $error;
     }
@@ -1872,6 +1895,35 @@ sub _repack_item_errors {
     } 
 
     return @repacked_errors;
+}
+
+=head2 _add_unlinked_marc_fields
+
+Adds marc fields to new_item_marc 
+from $item_marc_record fields which 
+1) are not linked to items table 
+2) but still are used in framework 
+3) and are provided a value
+
+=cut
+sub _add_unlinked_marc_fields{
+    my $new_item_marc= shift;
+    my $item_marc_record= shift;
+    my $frameworkcode= shift;
+    my $tmp_item_marc=$new_item_marc->clone;  
+    my $marcstructure=GetMarcStructure(1,$frameworkcode);
+    foreach my $field ($item_marc_record->fields()){
+        if ($new_item_marc->fields($field->tag())){
+        # It is assumed  that item marc records only have ***one*** tag and that this tag is mandatory.
+        # So new_item_marc MUST have $field->tag    
+            foreach my $subfield ($field->subfields()){
+                if (!$marcstructure->{$field->tag}->{$subfield->[0]}->{'kohafield'} && !$tmp_item_marc->subfield($field->tag,$subfield->[0])){
+                    $new_item_marc->field($field->tag)->add_subfields($subfield->[0]=>$subfield->[1]);
+                }          
+            }       
+        }   
+    }
+    return $new_item_marc;      
 }
 
 1;
