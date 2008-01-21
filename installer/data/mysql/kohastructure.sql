@@ -1049,6 +1049,7 @@ CREATE TABLE `items` (
   `materials` varchar(10) default NULL,
   `uri` varchar(255) default NULL,
   `itype` varchar(10) default NULL,
+  `more_subfields_xml` longtext default NULL,
   PRIMARY KEY  (`itemnumber`),
   UNIQUE KEY `itembarcodeidx` (`barcode`),
   KEY `itembinoidx` (`biblioitemnumber`),

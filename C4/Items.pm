@@ -167,7 +167,8 @@ sub AddItemFromMarc {
     # parse item hash from MARC
     my $frameworkcode = GetFrameworkCode( $biblionumber );
     my $item = &TransformMarcToKoha( $dbh, $source_item_marc, $frameworkcode );
-    return AddItem($item, $biblionumber, $dbh, $frameworkcode,$source_item_marc);
+    my $unlinked_item_subfields = _get_unlinked_item_subfields($source_item_marc, $frameworkcode);
+    return AddItem($item, $biblionumber, $dbh, $frameworkcode, $unlinked_item_subfields);
 }
 
 =head2 AddItem
@@ -175,7 +176,7 @@ sub AddItemFromMarc {
 =over 4
 
 my ($biblionumber, $biblioitemnumber, $itemnumber) 
-    = AddItem($item, $biblionumber[, $dbh, $frameworkcode, $original_item_marc]);
+    = AddItem($item, $biblionumber[, $dbh, $frameworkcode, $unlinked_item_subfields]);
 
 =back
 
@@ -186,13 +187,12 @@ The first two optional parameters (C<$dbh> and C<$frameworkcode>)
 do not need to be supplied for general use; they exist
 simply to allow them to be picked up from AddItemFromMarc.
 
-The final optional parameter, C<$original_item_marc>, contains
-a C<MARC::Record> object containing the original MARC item tag
-that the item record came from, either from the item editor or
-the source MARC record during a bulk import.  This is used
-to supply item-level subfields that are not directly mapped to 
-a column in the C<items> table but should remain available for
-display and indexing.
+The final optional parameter, C<$unlinked_item_subfields>, contains
+an arrayref containing subfields present in the original MARC
+representation of the item (e.g., from the item editor) that are
+not mapped to C<items> columns directly but should instead
+be stored in C<items.more_subfields_xml> and included in 
+the biblio items tag for display and indexing.
 
 =cut
 
@@ -202,9 +202,9 @@ sub AddItem {
 
     my $dbh           = @_ ? shift : C4::Context->dbh;
     my $frameworkcode = @_ ? shift : GetFrameworkCode( $biblionumber );
-    my $original_item_marc;  
+    my $unlinked_item_subfields;  
     if (@_) {
-        $original_item_marc = shift
+        $unlinked_item_subfields = shift
     };
 
     # needs old biblionumber and biblioitemnumber
@@ -215,15 +215,13 @@ sub AddItem {
 
     _set_defaults_for_add($item);
     _set_derived_columns_for_add($item);
+    $item->{'more_subfields_xml'} = _get_unlinked_subfields_xml($unlinked_item_subfields);
     # FIXME - checks here
-	  my ( $itemnumber, $error ) = _koha_new_item( $item, $item->{barcode} );
+	my ( $itemnumber, $error ) = _koha_new_item( $item, $item->{barcode} );
     $item->{'itemnumber'} = $itemnumber;
 
     # create MARC tag representing item and add to bib
-    my $new_item_marc = _marc_from_item_hash($item, $frameworkcode);
-    if ($original_item_marc) {
-        _add_unlinked_marc_fields($new_item_marc,$original_item_marc,$frameworkcode);
-    }
+    my $new_item_marc = _marc_from_item_hash($item, $frameworkcode, $unlinked_item_subfields);
     _add_item_field_to_biblio($new_item_marc, $item->{'biblionumber'}, $frameworkcode );
    
     logaction(C4::Context->userenv->{'number'},"CATALOGUING","ADD",$itemnumber,"item") 
@@ -302,6 +300,8 @@ sub AddItemBatchFromMarc {
     
         # add biblionumber and biblioitemnumber
         my $item = TransformMarcToKoha( $dbh, $temp_item_marc, $frameworkcode, 'items' );
+        my $unlinked_item_subfields = _get_unlinked_item_subfields($temp_item_marc, $frameworkcode);
+        $item->{'more_subfields_xml'} = _get_unlinked_subfields_xml($unlinked_item_subfields);
         $item->{'biblionumber'} = $biblionumber;
         $item->{'biblioitemnumber'} = $biblioitemnumber;
 
@@ -323,8 +323,7 @@ sub AddItemBatchFromMarc {
         &logaction(C4::Context->userenv->{'number'},"CATALOGUING","ADD",$itemnumber,"item")
         if C4::Context->preference("CataloguingLog"); 
 
-        my $new_item_marc = _marc_from_item_hash($item, $frameworkcode);
-        # FIXME - add _add_unlinked_marc_fields here?
+        my $new_item_marc = _marc_from_item_hash($item, $frameworkcode, $unlinked_item_subfields);
         $item_field->replace_with($new_item_marc->field($itemtag));
     }
 
@@ -362,8 +361,9 @@ sub ModItemFromMarc {
     my $dbh = C4::Context->dbh;
     my $frameworkcode = GetFrameworkCode( $biblionumber );
     my $item = &TransformMarcToKoha( $dbh, $item_marc, $frameworkcode );
+    my $unlinked_item_subfields = _get_unlinked_item_subfields($item_marc, $frameworkcode);
    
-    return ModItem($item, $biblionumber, $itemnumber, $dbh, $frameworkcode, $item_marc); 
+    return ModItem($item, $biblionumber, $itemnumber, $dbh, $frameworkcode, $unlinked_item_subfields); 
 }
 
 =head2 ModItem
@@ -381,13 +381,12 @@ The first argument is a hashref mapping from item column
 names to the new values.  The second and third arguments
 are the biblionumber and itemnumber, respectively.
 
-The fourth, optional parameter, C<$original_item_marc>, contains
-a C<MARC::Record> object containing the original MARC item tag
-that the item record came from if the item is being modified
-via the the cataloging item editor.  This is used
-to supply item-level subfields that are not directly mapped to 
-a column in the C<items> table but should remain available for
-display and indexing.
+The fourth, optional parameter, C<$unlinked_item_subfields>, contains
+an arrayref containing subfields present in the original MARC
+representation of the item (e.g., from the item editor) that are
+not mapped to C<items> columns directly but should instead
+be stored in C<items.more_subfields_xml> and included in 
+the biblio items tag for display and indexing.
 
 If one of the changed columns is used to calculate
 the derived value of a column such as C<items.cn_sort>, 
@@ -409,9 +408,10 @@ sub ModItem {
     my $dbh           = @_ ? shift : C4::Context->dbh;
     my $frameworkcode = @_ ? shift : GetFrameworkCode( $biblionumber );
     
-    my $original_item_marc;  
+    my $unlinked_item_subfields;  
     if (@_) {
-        $original_item_marc = shift
+        $unlinked_item_subfields = shift;
+        $item->{'more_subfields_xml'} = _get_unlinked_subfields_xml($unlinked_item_subfields);
     };
 
     $item->{'itemnumber'} = $itemnumber or return undef;
@@ -429,15 +429,13 @@ sub ModItem {
 
     # update biblio MARC XML
     my $whole_item = GetItem($itemnumber) or die "FAILED GetItem($itemnumber)";
-    my $new_item_marc = _marc_from_item_hash($whole_item, $frameworkcode) 
+
+    unless (defined $unlinked_item_subfields) {
+        $unlinked_item_subfields = _parse_unlinked_item_subfields_from_xml($whole_item->{'more_subfields_xml'});
+    }
+    my $new_item_marc = _marc_from_item_hash($whole_item, $frameworkcode, $unlinked_item_subfields) 
         or die "FAILED _marc_from_item_hash($whole_item, $frameworkcode)";
     
-    # FIXME - handle case where item is being modified but must carry 
-    # additional unlnked subfields    
-    if ($original_item_marc) {
-        _add_unlinked_marc_fields($new_item_marc,$original_item_marc,$frameworkcode);
-    }
-                  
     _replace_item_field_in_biblio($new_item_marc, $biblionumber, $itemnumber, $frameworkcode);
 	(C4::Context->userenv eq '0') and die "userenv is '0', not hashref";         # logaction line would crash anyway
 	($new_item_marc       eq '0') and die "$new_item_marc is '0', not hashref";  # logaction line would crash anyway
@@ -1354,17 +1352,15 @@ sub GetMarcItem {
     # Also, don't emit a subfield if the underlying field is blank.
     my $mungeditem = { map {  $itemrecord->{$_} ne '' ? ("items.$_" => $itemrecord->{$_}) : ()  } keys %{ $itemrecord } };
     my $itemmarc = TransformKohaToMarc($mungeditem);
+
+    my $unlinked_item_subfields = _parse_unlinked_item_subfields_from_xml($mungeditem->{'items.more_subfields_xml'});
+    if (defined $unlinked_item_subfields and $#$unlinked_item_subfields > -1) {
+        my @fields = $itemmarc->fields();
+        if ($#fields > -1) {
+            $fields[0]->add_subfields(@$unlinked_item_subfields);
+        }
+    }
     
-    my $marc = GetMarcBiblio($biblionumber);
-    my $frameworkcode=GetFrameworkCode($biblionumber);
-    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField("items.itemnumber",$frameworkcode);
-    foreach my $field ($marc->field($itemtag)){
-        if ($field->subfield($itemsubfield)==$itemnumber){
-            my $tmpmarc=MARC::Record->new();
-            $tmpmarc->append_fields($field);
-            _add_unlinked_marc_fields($itemmarc,$tmpmarc,$frameworkcode);
-        }    
-    }  
     return $itemmarc;
 
 }
@@ -1668,7 +1664,8 @@ sub _koha_new_item {
             ccode               = ?,
             itype               = ?,
             materials           = ?,
-			uri                 = ?
+			uri                 = ?,
+            more_subfields_xml  = ?
           ";
     my $sth = $dbh->prepare($query);
    $sth->execute(
@@ -1702,6 +1699,7 @@ sub _koha_new_item {
             $item->{'itype'},
             $item->{'materials'},
             $item->{'uri'},
+            $item->{'more_subfields_xml'},
     );
     my $itemnumber = $dbh->{'mysql_insertid'};
     if ( defined $sth->errstr ) {
@@ -1790,7 +1788,7 @@ sub _koha_delete_item {
 
 =over 4
 
-my $item_marc = _marc_from_item_hash($item, $frameworkcode);
+my $item_marc = _marc_from_item_hash($item, $frameworkcode[, $unlinked_item_subfields]);
 
 =back
 
@@ -1798,11 +1796,20 @@ Given an item hash representing a complete item record,
 create a C<MARC::Record> object containing an embedded
 tag representing that item.
 
+The third, optional parameter C<$unlinked_item_subfields> is
+an arrayref of subfields (not mapped to C<items> fields per the
+framework) to be added to the MARC representation
+of the item.
+
 =cut
 
 sub _marc_from_item_hash {
     my $item = shift;
     my $frameworkcode = shift;
+    my $unlinked_item_subfields;
+    if (@_) {
+        $unlinked_item_subfields = shift;
+    }
    
     # Tack on 'items.' prefix to column names so lookup from MARC frameworks will work
     # Also, don't emit a subfield if the underlying field is blank.
@@ -1817,7 +1824,11 @@ sub _marc_from_item_hash {
         if (my $field = $item_marc->field($tag)) {
             $field->add_subfields($subfield => $mungeditem->{$item_field});
         } else {
-            $item_marc->add_fields( $tag, " ", " ", $subfield =>  $mungeditem->{$item_field});
+            my $add_subfields = [];
+            if (defined $unlinked_item_subfields and ref($unlinked_item_subfields) eq 'ARRAY' and $#$unlinked_item_subfields > -1) {
+                $add_subfields = $unlinked_item_subfields;
+            }
+            $item_marc->add_fields( $tag, " ", " ", $subfield =>  $mungeditem->{$item_field}, @$add_subfields);
         }
     }
 
@@ -1921,39 +1932,88 @@ sub _repack_item_errors {
     return @repacked_errors;
 }
 
-=head2 _add_unlinked_marc_fields
+=head2 _get_unlinked_item_subfields
 
-Adds marc fields to new_item_marc 
-from $original_item_marc fields which 
-1) are not linked to items table 
-2) but still are used in framework 
-3) and are provided a value
+=over 4
+
+my $unlinked_item_subfields = _get_unlinked_item_subfields($original_item_marc, $frameworkcode);
+
+=back
 
 =cut
-sub _add_unlinked_marc_fields{
-    my $new_item_marc = shift;
+
+sub _get_unlinked_item_subfields {
     my $original_item_marc = shift;
     my $frameworkcode = shift;
-    my $tmp_item_marc =$new_item_marc->clone;  
-    my $marcstructure = GetMarcStructure(1,$frameworkcode);
-    foreach my $field ($original_item_marc->fields()){
-	    my $tag = $field->tag();
-        if ($new_item_marc->fields($tag)){
-            # It is assumed  that item marc records only have ***one*** tag and that this tag is mandatory.
-            # So new_item_marc MUST have $field->tag    
-            foreach my $subfield ($field->subfields()) {
-                if (!$marcstructure->{$tag}->{$subfield->[0]}->{'kohafield'} && !$tmp_item_marc->subfield($tag,$subfield->[0])) {
-			        #$new_item_marc->field($tag)->add_subfields($subfield->[0]=>$subfield->[1]);
 
-		            my $ret= eval {$new_item_marc->field($tag)->add_subfields($subfield->[0] => $subfield->[1])};
-		            if ($@ or !$ret) {
-                        warn $subfield->[0]."=>".$subfield->[1]."\n".$new_item_marc->as_formatted."\n".$original_item_marc;
-                    }
-                }
+    my $marcstructure = GetMarcStructure(1, $frameworkcode);
+
+    # assume that this record has only one field, and that that
+    # field contains only the item information
+    my $subfields = [];
+    my @fields = $original_item_marc->fields();
+    if ($#fields > -1) {
+        my $field = $fields[0];
+	    my $tag = $field->tag();
+        foreach my $subfield ($field->subfields()) {
+            if (defined $subfield->[1] and
+                $subfield->[1] ne '' and
+                !$marcstructure->{$tag}->{$subfield->[0]}->{'kohafield'}) {
+                push @$subfields, $subfield->[0] => $subfield->[1];
             }
         }
     }
-    return $new_item_marc;      
+    return $subfields;
+}
+
+=head2 _get_unlinked_subfields_xml
+
+=over 4
+
+my $unlinked_subfields_xml = _get_unlinked_subfields_xml($unlinked_item_subfields);
+
+=back
+
+=cut
+
+sub _get_unlinked_subfields_xml {
+    my $unlinked_item_subfields = shift;
+
+    my $xml;
+    if (defined $unlinked_item_subfields and ref($unlinked_item_subfields) eq 'ARRAY' and $#$unlinked_item_subfields > -1) {
+        my $marc = MARC::Record->new();
+        # use of tag 999 is arbitrary, and doesn't need to match the item tag
+        # used in the framework
+        $marc->append_fields(MARC::Field->new('999', ' ', ' ', @$unlinked_item_subfields));
+        $xml = $marc->as_xml();
+    }
+
+    return $xml;
+}
+
+=head2 _parse_unlinked_item_subfields_from_xml
+
+=over 4
+
+my $unlinked_item_subfields = _parse_unlinked_item_subfields_from_xml($whole_item->{'more_subfields_xml'}):
+
+=back
+
+=cut
+
+sub  _parse_unlinked_item_subfields_from_xml {
+    my $xml = shift;
+
+    return unless defined $xml and $xml ne "";
+    my $marc = MARC::Record->new_from_xml($xml, 'UTF-8', C4::Context->preference("marcflavour"));
+    my $unlinked_subfields = [];
+    my @fields = $marc->fields();
+    if ($#fields > -1) {
+        foreach my $subfield ($fields[0]->subfields()) {
+            push @$unlinked_subfields, $subfield->[0] => $subfield->[1];
+        }
+    }
+    return $unlinked_subfields;
 }
 
 1;
