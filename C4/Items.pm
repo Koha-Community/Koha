@@ -1913,12 +1913,16 @@ sub _add_unlinked_marc_fields{
     my $tmp_item_marc=$new_item_marc->clone;  
     my $marcstructure=GetMarcStructure(1,$frameworkcode);
     foreach my $field ($item_marc_record->fields()){
-        if ($new_item_marc->fields($field->tag())){
+	my $tag=$field->tag();
+        if ($new_item_marc->fields($tag)){
         # It is assumed  that item marc records only have ***one*** tag and that this tag is mandatory.
         # So new_item_marc MUST have $field->tag    
             foreach my $subfield ($field->subfields()){
-                if (!$marcstructure->{$field->tag}->{$subfield->[0]}->{'kohafield'} && !$tmp_item_marc->subfield($field->tag,$subfield->[0])){
-                    $new_item_marc->field($field->tag)->add_subfields($subfield->[0]=>$subfield->[1]);
+                if (!$marcstructure->{$tag}->{$subfield->[0]}->{'kohafield'} && !$tmp_item_marc->subfield($tag,$subfield->[0])){
+			#$new_item_marc->field($tag)->add_subfields($subfield->[0]=>$subfield->[1]);
+
+		    my $ret= eval {$new_item_marc->field($tag)->add_subfields($subfield->[0]=>$subfield->[1])};
+		    if ($@ or !$ret) {warn $subfield->[0]."=>".$subfield->[1]."\n".$new_item_marc->as_formatted."\n".$item_marc_record;}
                 }          
             }       
         }   
