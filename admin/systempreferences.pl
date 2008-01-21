@@ -70,7 +70,6 @@ my %tabsysprefs;
     $tabsysprefs{libraryAddress}="Admin";
     $tabsysprefs{delimiter}="Admin";
     $tabsysprefs{IndependantBranches}="Admin";
-    $tabsysprefs{HomeOrHoldingBranch}="Admin";
     $tabsysprefs{insecure}="Admin";
     $tabsysprefs{KohaAdmin}="Admin";
     $tabsysprefs{KohaAdminEmailAddress}="Admin";
@@ -138,6 +137,7 @@ my %tabsysprefs;
     $tabsysprefs{finesCalendar}="Circulation";
     $tabsysprefs{previousIssuesDefaultSortOrder}="Circulation";
     $tabsysprefs{todaysIssuesDefaultSortOrder}="Circulation";
+    $tabsysprefs{HomeOrHoldingBranch}="Circulation";
 
 # Staff Client
     $tabsysprefs{TemplateEncoding}="StaffClient";
