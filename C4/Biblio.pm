@@ -576,10 +576,19 @@ $frameworkcode : the framework code to read
 
 =cut
 
+# cache for results of GetMarcStructure -- needed
+# for batch jobs
+our $marc_structure_cache;
+
 sub GetMarcStructure {
     my ( $forlibrarian, $frameworkcode ) = @_;
     my $dbh=C4::Context->dbh;
     $frameworkcode = "" unless $frameworkcode;
+
+    if (defined $marc_structure_cache and exists $marc_structure_cache->{$forlibrarian}->{$frameworkcode}) {
+        return $marc_structure_cache->{$forlibrarian}->{$frameworkcode};
+    }
+
     my $sth;
     my $libfield = ( $forlibrarian eq 1 ) ? 'liblibrarian' : 'libopac';
 
@@ -659,6 +668,9 @@ sub GetMarcStructure {
         $res->{$tag}->{$subfield}->{'link'}           = $link;
         $res->{$tag}->{$subfield}->{defaultvalue}     = $defaultvalue;
     }
+
+    $marc_structure_cache->{$forlibrarian}->{$frameworkcode} = $res;
+
     return $res;
 }
 
