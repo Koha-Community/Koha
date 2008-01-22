@@ -498,7 +498,16 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 		<ul class="toolbar">
 			<li><input id="addbiblio" type="submit" value="Save" /></li>
 			<li id="z3950searchc"><input type="button" id="z3950search" value="z39.50 Search" onclick="PopupZ3950(); return false;" /></li>
-			<li id="changeframework"><label for="Frameworks">Change framework: </label><!--TMPL_VAR Name="framework" -->	<input type="hidden" name="op" value="addbiblio" /></li>
+			<li id="changeframework"><label for="Frameworks">Change framework: </label>
+			<select name="Frameworks" id="Frameworks" onchange="Changefwk(this);">
+			                <option value="">Default</option>                
+							<!-- TMPL_LOOP NAME="frameworkcodeloop" -->                                             
+                                <option value="<!-- TMPL_VAR NAME="value"-->" <!-- TMPL_VAR NAME="selected" -->>
+					             <!-- TMPL_VAR NAME="frameworktext" -->                                      
+                                 </option>                          
+					        <!-- /TMPL_LOOP -->
+			</select> 
+<input type="hidden" name="op" value="addbiblio" /></li>
 		</ul>
 </div>
 

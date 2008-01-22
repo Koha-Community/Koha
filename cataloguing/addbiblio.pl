@@ -742,31 +742,22 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-#Getting the list of all frameworks
-my $queryfwk = $dbh->prepare("select frameworktext, frameworkcode from biblio_framework");
-$queryfwk->execute;
-my %select_fwk;
-my @select_fwk;
-my $curfwk;
-push @select_fwk, "Default";
-$select_fwk{"Default"} = "Default";
-
-while ( my ( $description, $fwk ) = $queryfwk->fetchrow ) {
-    push @select_fwk, $fwk;
-    $select_fwk{$fwk} = $description;
-}
-$curfwk = $frameworkcode;
-my $framework = CGI::scrolling_list(
-    -name     => 'Frameworks',
-    -id       => 'Frameworks',
-    -default  => $curfwk,
-    -onchange => 'Changefwk(this);',
-    -values   => \@select_fwk,
-    -labels   => \%select_fwk,
-    -size     => 1,
-    -multiple => 0
-);
-$template->param( framework => $framework, breedingid => $breedingid );
+# Getting the list of all frameworks
+# get framework list
+my $frameworks = getframeworks;
+my @frameworkcodeloop;
+foreach my $thisframeworkcode ( keys %$frameworks ) {
+	my %row = (
+		value         => $thisframeworkcode,
+		frameworktext => $frameworks->{$thisframeworkcode}->{'frameworktext'},
+	);
+	if ($frameworkcode eq $thisframeworkcode){
+		$row{'selected'}="selected";
+		}
+	push @frameworkcodeloop, \%row;
+} 
+$template->param( frameworkcodeloop => \@frameworkcodeloop,
+	breedingid => $breedingid );
 
 # ++ Global
 $tagslib         = &GetMarcStructure( 1, $frameworkcode );
