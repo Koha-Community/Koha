@@ -5,7 +5,7 @@
 # This software is placed under the gnu General Public License, v2 (http://www.gnu.org/licenses/gpl.html)
 
 # ALGO :
-# this script use an $op to know what to do.
+# this script use ano $op to know what to do.
 # if $op is empty or none of the above values,
 #	- the default screen is build (with all records, or filtered datas).
 #	- the   user can clic on add, modify or delete record.
@@ -107,23 +107,27 @@ if ($op eq 'add_form') {
 		      $input->param('searchfield'),
 		      $input->param('checked'),
 		      $input->param('rank'),
-			 $input->param('syntax'),
-          $input->param('encoding'),
+			  $input->param('syntax'),
+              $input->param('encoding'),
 		      $input->param('searchfield'),
 		      );
-	} else {
-		$sth=$dbh->prepare("insert into z3950servers (host,port,db,userid,password,name,checked,rank,syntax) values (?, ?, ?, ?, ?, ?, ?, ?,?)");
-		$sth->execute($input->param('host'),
-		      $input->param('port'),
-		      $input->param('db'),
-		      $input->param('userid'),
-		      $input->param('password'),
-		      $input->param('searchfield'),
-		      $input->param('checked'),
-		      $input->param('rank'),
-			 $input->param('syntax'),
-          $input->param('encoding'),
-		      );
+	} 
+	else {
+		$sth=$dbh->prepare(
+		  "INSERT INTO z3950servers " .
+		  "(host,port,db,userid,password,name,checked,rank,syntax,encoding) " .
+		  "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" );
+        $sth->execute(
+            $input->param( 'host' ),
+            $input->param( 'port' ),
+            $input->param( 'db' ),
+            $input->param( 'userid' ),
+            $input->param( 'password' ),
+            $input->param( 'searchfield' ),
+            $input->param( 'checked' ),
+            $input->param( 'rank' ),
+            $input->param( 'syntax' ),
+            $input->param( 'encoding' ) );
 	}
 	$sth->finish;
 													# END $OP eq ADD_VALIDATE
