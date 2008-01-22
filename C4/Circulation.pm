@@ -380,7 +380,7 @@ sub TooMany {
 	my $branch;
 	# Get which branchcode we need
 	if (C4::Context->preference('CircControl') eq 'PickupLibary'){
-		$branch = C4::Context->userenv->{'branchcode'}; 
+		$branch = C4::Context->userenv->{'branch'}; 
 	}
 	elsif (C4::Context->preference('CircControl') eq 'PatronLibary'){
         $branch = $borrower->{'branchcode'}; 
