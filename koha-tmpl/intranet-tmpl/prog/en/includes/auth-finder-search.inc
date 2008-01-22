@@ -53,7 +53,5 @@
             	<option value="HeadingAsc" selected="SELECTED">Heading Ascendant</option>
             	<option value="HeadingDsc">Heading Descendant</option>
           	</select>
-                <p>
-                <input type="submit" value="Start search" class="button" />
-                </p>
+             <input type="submit" value="Start search" class="submit" />
         </form>

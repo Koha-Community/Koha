@@ -55,7 +55,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
             <div id="borrowerautocomplete" class="autocomplete">
                 <input autocomplete="off" id="findborrower" name="findborrower" type="text" />
                 <div id="yborrowercontainer"></div>
-                <input id="ysearchsubmit" type="submit" value="Submit" />
+                <input id="ysearchsubmit" type="submit" class="submit" value="Submit" />
                 <input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
                 <input name="printer" value="" type="hidden" />
             </div>
@@ -83,7 +83,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
     <p class="tip">Enter search keywords:</p>
     <form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
         <input type="text" name="q" id="search-form" size="40" />
-        <input type="submit" class="form-submit" value="Submit"/>
+        <input type="submit" class="submit" value="Submit"/>
     </form>
 </div>
 <!-- /TMPL_IF -->

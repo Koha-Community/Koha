@@ -28,7 +28,7 @@
             <option value="HeadingAsc" selected="selected">Heading A-Z</option>
             <option value="HeadingDsc">Heading Z-A</option>
          </select>
-         <input type="submit" value="Search" />
+         <input type="submit" class="submit" value="Submit" />
     </form>
     </div>
     <div id="main_heading" class="residentsearch">
@@ -60,7 +60,7 @@
             <option value="HeadingAsc" selected="selected">Heading A-Z</option>
             <option value="HeadingDsc">Heading Z-A</option>
         </select>
-        <input type="submit" value="Search" />
+        <input type="submit" class="submit" value="Submit" />
     </form>
     </div>
     <div id="all_headings" class="residentsearch">
@@ -92,7 +92,7 @@
             <option value="HeadingAsc" selected="selected">Heading A-Z</option>
             <option value="HeadingDsc">Heading Z-A</option>
         </select>
-        <input type="submit" value="Search" />
+        <input type="submit" class="submit" value="Submit" />
     </form>
     </div>
     <ul>

@@ -5,7 +5,7 @@
 	<p class="tip">Search suppliers:</p>
         <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
            <input type="text" size="25" name="supplier" id="supplier" class="focus" />
-            <input type="submit" value="Search" /></form>
+            <input type="submit" class="submit" value="Submit" /></form>
 </div>
 	<div id="orders_search" class="residentsearch">
 	<p class="tip">Search orders:</p>

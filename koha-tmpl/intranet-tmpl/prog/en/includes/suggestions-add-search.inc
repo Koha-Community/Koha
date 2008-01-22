@@ -51,7 +51,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 	<label for="searchtitle">Title:</label> <input type="text" id="searchtitle" name="title" size="10" value="<!-- TMPL_VAR NAME="title"-->" />
     <label for="searchauthor">Author:</label> <input type="text" id="searchauthor" name="author" size="10" value="<!-- TMPL_VAR NAME="author" -->" />
     <label for="searchpublishercode">Publisher:</label> <input type="text" id="searchpublishercode" name="publishercode" size="10" value="<!-- TMPL_VAR NAME="publishercode"-->" />
-    <input type="submit" class="button" value="Search" />
+    <input type="submit" class="submit" value="Search" />
         </form>
 	</div>
 <!-- TMPL_IF NAME="CAN_user_circulate" -->
@@ -63,7 +63,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
             <div id="borrowerautocomplete" class="autocomplete">
                 <input autocomplete="off" id="findborrower" name="findborrower" class="focus" type="text" />
                 <div id="yborrowercontainer"></div>
-                <input id="ysearchsubmit" type="submit" value="Submit" />
+                <input id="ysearchsubmit" type="submit" class="submit" value="Submit" />
                 <input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
                 <input name="printer" value="" type="hidden" />
             </div>

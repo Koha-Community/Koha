@@ -48,7 +48,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 	<p class="tip">Stop word search:</p>
 	    <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
         <input type="text" size="40" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
-        <input type="submit" name="ok" value="Search" />
+        <input type="submit" name="ok" class="submit" value="Search" />
     </form>
 	</div>
 <!-- TMPL_IF NAME="CAN_user_circulate" -->
@@ -60,7 +60,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
             <div id="borrowerautocomplete" class="autocomplete">
                 <input autocomplete="off" id="findborrower" name="findborrower" class="focus" type="text" />
                 <div id="yborrowercontainer"></div>
-                <input id="ysearchsubmit" type="submit" value="Submit" />
+                <input id="ysearchsubmit" type="submit" class="submit" value="Submit" />
                 <input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
                 <input name="printer" value="" type="hidden" />
             </div>
