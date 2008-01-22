@@ -18,10 +18,12 @@ use strict;
 use warnings;
 use Carp;
 use C4::Context;
+use C4::Debug;
 use Exporter;
 use POSIX qw(strftime);
 use Date::Calc qw(check_date check_time);
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use vars qw($debug $cgi_debug);
 
 BEGIN {
 	$VERSION = 0.03;
@@ -30,7 +32,8 @@ BEGIN {
 }
 
 my $prefformat = C4::Context->preference('dateformat');
-my $debug = $ENV{'DEBUG'} || 0;
+# print STDERR " Dates :      \$debug is '$debug'\n";
+# print STDERR " Dates :  \$cgi_debug is '$cgi_debug'\n";
 
 our %format_map = ( 
 	  iso  => 'yyyy-mm-dd',
