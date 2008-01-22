@@ -26,8 +26,11 @@ use C4::Output;
 use C4::Calendar;
 
 my $input = new CGI;
-#my $branch = $input->param('branch');
+
 my $branch=C4::Context->preference('defaultbranch') || $input->param('branch');
+
+
+
 my $dbh = C4::Context->dbh();
 # Get the template to use
 my ($template, $loggedinuser, $cookie)
@@ -62,8 +65,12 @@ my $branchesList = CGI::scrolling_list(-name => 'branch',
 
 $branches->finish;
 
+if ( C4::Context->preference("IndependantBranches") ) { 
+    $branch = C4::Context->userenv->{'branch'};
+}
 # Get all the holidays
-# warn "BRANCH : $branch";
+ warn "BRANCH : $branch";
+
 my $calendar = C4::Calendar->new(branchcode => $branch);
 my $week_days_holidays = $calendar->get_week_days_holidays();
 my @week_days;
@@ -107,7 +114,13 @@ foreach my $yearMonthDay (keys %$single_holidays) {
 }
 
 # Replace the template values with the real ones
-$template->param(BRANCHES => $branchesList);
+# If we have independent branches on we need to only let the user set holidays for their branch
+if ( C4::Context->preference("IndependantBranches") ) { 
+	$template->param(BRANCHES => C4::Context->userenv->{'branchname'});		
+}
+else {
+	$template->param(BRANCHES => $branchesList);
+}
 $template->param(WEEK_DAYS_LOOP => \@week_days);
 $template->param(HOLIDAYS_LOOP => \@holidays);
 $template->param(EXCEPTION_HOLIDAYS_LOOP => \@exception_holidays);
