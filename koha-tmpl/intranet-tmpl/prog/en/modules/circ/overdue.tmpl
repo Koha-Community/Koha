@@ -6,7 +6,7 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="circ-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo Circulation Reports &rsaquo Overdues as of <!-- TMPL_VAR NAME="todaysdate" --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Circulation Reports &rsaquo; Overdues as of <!-- TMPL_VAR NAME="todaysdate" --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -71,7 +71,8 @@
         <!-- TMPL_IF NAME="email" -->
         <td><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" -->"><!-- TMPL_VAR NAME="name" --></a> (<!-- TMPL_VAR NAME="phone" -->)</td>
         <!-- TMPL_ELSE -->
-        <td><!-- TMPL_VAR NAME="name" --> (<!-- TMPL_VAR NAME="phone" -->)</td>
+        <td><!-- TMPL_VAR NAME="name" --> (<!--TMPL_IF NAME="phone" --><!-- TMPL_VAR NAME="phone" --><!-- TMPL_ELSE -->
+    <!--TMPL_IF NAME="mobile" --><!-- TMPL_VAR NAME="mobile" --><!-- TMPL_ELSE --><!--TMPL_IF NAME="phonepro" -->       <!-- TMPL_VAR NAME="phonepro" --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->)</td>
         <!-- /TMPL_IF -->
         <td>
             <p><!-- TMPL_VAR NAME="title" --></p>

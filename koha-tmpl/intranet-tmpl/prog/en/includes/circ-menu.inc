@@ -16,8 +16,14 @@
    <li> <!--TMPL_IF NAME="phone" -->
         <!-- TMPL_VAR NAME="phone" -->
     <!-- TMPL_ELSE -->
+    <!--TMPL_IF NAME="mobile" -->
+            <!-- TMPL_VAR NAME="mobile" -->
+    <!-- TMPL_ELSE -->
+    <!--TMPL_IF NAME="phonepro" -->
+            <!-- TMPL_VAR NAME="phonepro" -->
+    <!-- TMPL_ELSE -->
         <span class="problem">No phone stored.</span>    
-    <!-- /TMPL_IF --></li>
+    <!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF --></li>
 	    <!-- TMPL_IF NAME="email" -->
    <li class="email"> <a href="mailto:<!-- TMPL_VAR NAME="email" -->" title="<!-- TMPL_VAR NAME="email" -->"><!-- TMPL_VAR NAME="email" --></a></li>
     <!-- /TMPL_IF -->
