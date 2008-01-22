@@ -268,6 +268,7 @@ sub get_template_and_user {
 			'item-level_itypes' => C4::Context->preference('item-level_itypes'),
 			canreservefromotherbranches => C4::Context->preference('canreservefromotherbranches'),
 			intranetreadinghistory => C4::Context->preference("intranetreadinghistory"),
+			noItemTypeImages => C4::Context->preference("noItemTypeImages"),
         );
     }
     else {

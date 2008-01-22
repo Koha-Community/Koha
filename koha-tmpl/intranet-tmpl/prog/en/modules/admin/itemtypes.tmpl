@@ -153,7 +153,9 @@ Item Types Administration
   <!-- /TMPL_IF -->
       <li>
           <label for="description">Description</label><input type="text" id="description" name="description" size="48" maxlength="80" value="<!-- TMPL_VAR name="description" escape="HTML" -->" />      </li>
-      <li><fieldset>
+     <!-- TMPL_IF NAME="noItemTypeImages" -->
+	 <li><span class="label">Image: </span>Item type images are disabled. To enable them, turn off the <a href="/cgi-bin/koha/admin/systempreferences.pl?tab=all&searchfield=noItemTypeImages">noItemTypeImages system preference</a></li>
+	 <!-- TMPL_ELSE --> <li><fieldset>
 	  <legend>Image: </legend>
         
           <ol>
@@ -193,7 +195,7 @@ Item Types Administration
         
           </ol>
 		  </fieldset>
-      </li>
+      </li><!-- /TMPL_IF -->
       <li>
           <label for="notforloan">Not for loan</label>   <!-- TMPL_IF name="notforloan" -->
                 <input type="checkbox" id="notforloan" name="notforloan" checked="checked" value="1" />
@@ -260,7 +262,7 @@ Item Types Administration
 <h2>Item Types Administration</h2>
 <table>
   <tr>
-    <th>Image</th>
+    <!-- TMPL_UNLESS NAME="noItemTypeImages" --><th>Image</th><!-- /TMPL_UNLESS -->
     <th>Code</th>
     <th>Description</th>
     <th>Not for loan</th>
@@ -274,7 +276,7 @@ Item Types Administration
     <!-- TMPL_ELSE -->
   <tr class="highlight">
     <!-- /TMPL_IF -->
-    <td><img src="<!-- TMPL_VAR name="imageurl" -->" alt="" /></td>
+   <!-- TMPL_UNLESS NAME="noItemTypeImages" --> <td><img src="<!-- TMPL_VAR name="imageurl" -->" alt="" /></td><!-- /TMPL_UNLESS -->
     <td>
       <a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;itemtype=<!-- TMPL_VAR name="itemtype" escape="HTML" -->">
         <!-- TMPL_VAR name="itemtype" -->

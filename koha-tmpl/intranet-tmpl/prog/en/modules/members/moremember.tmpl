@@ -283,7 +283,7 @@ for (var i=0;i<ItemsNodes.length;i++){
 	<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
     <table>
         <tr>
-			<th scope="col"></th>
+			<!-- TMPL_UNLESS NAME="noItemTypeImages" --><th scope="col">&nbsp;</th><!-- /TMPL_UNLESS -->
             <th scope="col">Title</th>
             <th scope="col">Priority</th>
             <th scope="col">Date due</th>
@@ -304,11 +304,11 @@ for (var i=0;i<ItemsNodes.length;i++){
         <tr>
             <!-- /TMPL_IF -->
           <!-- /TMPL_IF -->
-		  <td>
+		  <!-- TMPL_UNLESS NAME="noItemTypeImages" --><td>
                 <!-- TMPL_IF NAME="itemtype_image" -->
                 <img src="<!-- TMPL_VAR NAME="itemtype_image" -->" alt="" />
 				<!-- TMPL_ELSE -->&nbsp;
-                <!-- /TMPL_IF --></td>
+                <!-- /TMPL_IF --></td><!-- /TMPL_UNLESS -->
             <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> <!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR name="author" --><!-- /TMPL_IF --> <!-- TMPL_IF name="publishercode" -->; <!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF --> <!-- TMPL_IF name="publicationyear" -->, <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->            </td>
             <td><!-- TMPL_VAR NAME="barcode" --></td>
             <td><!-- TMPL_VAR NAME="date_due" --></td>
@@ -343,7 +343,8 @@ for (var i=0;i<ItemsNodes.length;i++){
         </tr>
         <!-- /tmpl_loop -->
         <tr>
-            <td colspan="6">Total replacement cost:</td>
+			<!-- TMPL_UNLESS NAME="noItemTypeImages" --><td>&nbsp;</td><!-- /TMPL_UNLESS -->
+            <td colspan="5">Total replacement cost:</td>
             <td><!-- TMPL_VAR NAME="totalprice" --></td>
             <td colspan="2">&nbsp;</td>
         </tr>

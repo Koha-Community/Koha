@@ -397,9 +397,9 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         </td>
         <td>
             <!-- TMPL_VAR NAME="itemtype" -->
-            <!-- TMPL_IF NAME="itemtype_image" -->
+           <!-- TMPL_UNLESS NAME="noItemTypeImages" --> <!-- TMPL_IF NAME="itemtype_image" -->
             <img src="<!-- TMPL_VAR NAME="itemtype_image" -->" />
-            <!-- /TMPL_IF -->
+            <!-- /TMPL_IF --><!-- /TMPL_UNLESS -->
         </td>
         <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
         <td><!-- TMPL_VAR NAME="barcode" --></td>

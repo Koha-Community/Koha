@@ -147,7 +147,7 @@ function verify_images() {
             </tr>
             <!-- TMPL_LOOP NAME="itemloop" -->
                 <tr>
-                    <!-- TMPL_IF NAME="item-level_itypes" --><td><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->"></td><!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="item-level_itypes" --><td><!-- TMPL_IF NAME="noItemTypeImages" --><!-- TMPL_VAR NAME="description" --><!-- TMPL_ELSE --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->"><!-- /TMPL_IF --></td><!-- /TMPL_IF -->
                     <td><!-- TMPL_VAR NAME="branchname" --></td>
                     <td><!-- TMPL_VAR name="locationname" --></td>
                     <td><!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --></td>
@@ -258,7 +258,7 @@ function verify_images() {
 <div id="editions"><h2>Editions</h2>
 <ul>
 <!-- TMPL_LOOP NAME="XISBNS" -->
-<li><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itemtype" -->.gif" title="<!-- TMPL_VAR NAME="itemtype" -->" />
+<li><!-- TMPL_UNLESS NAME="noItemTypeImages" --><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itemtype" -->.gif" title="<!-- TMPL_VAR NAME="itemtype" -->" /><!-- /TMPL_UNLESS -->
 <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> by <!-- TMPL_VAR NAME="author" --> &copy;<!-- TMPL_VAR NAME="copyrightdate" --></li>
 <img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._AA75_PU_PU-5_.jpg" />
     <!-- TMPL_LOOP NAME=items -->
@@ -275,7 +275,7 @@ function verify_images() {
 <ul>
 <!-- TMPL_LOOP NAME="SIMILAR_PRODUCTS" -->
 <!-- TMPL_LOOP NAME="product" -->
-<li><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itemtype" -->.gif" title="<!-- TMPL_VAR NAME="itemtype" -->" />
+<li><!-- TMPL_UNLESS NAME="noItemTypeImages" --><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itemtype" -->.gif" title="<!-- TMPL_VAR NAME="itemtype" -->" /><!-- /TMPL_UNLESS -->
 <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR
 NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> by <!-- TMPL_VAR NAME="author" --> &copy;<!-- TMPL_VAR NAME="copyrightdate" --></li>
 <img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._THUMBZZZ_PU_PU-5_.jpg" />
