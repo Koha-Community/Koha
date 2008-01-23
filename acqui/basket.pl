@@ -86,13 +86,12 @@ my $basket = GetBasket($basketno);
 # if no booksellerid in parameter, get it from basket
 # warn "=>".$basket->{booksellerid};
 $booksellerid = $basket->{booksellerid} unless $booksellerid;
-my @booksellers = GetBookSeller($booksellerid);
-my $count2 = scalar @booksellers;
-# FIXME: do something with count2?
-# FIXME: how do you know the first BookSeller in the array is the one you want?
-# FIXME: GetBookSeller should be changing to reliably return 1 record based on ID,
-# 		 but we still should give some kind of Error back to the user if it fails.
+my ($bookseller) = GetBookSellerFromId($booksellerid);
 
+if (! $bookseller){
+	$template->param( NO_BOOKSELLER => 1 );	
+}
+else {
 # get librarian branch...
 if ( C4::Context->preference("IndependantBranches") ) {
     my $userenv = C4::Context->userenv;
@@ -164,7 +163,7 @@ my $prefgist = C4::Context->preference("gist");
 $gist            = sprintf( "%.2f", $sub_total * $prefgist );
 $grand_total     = $sub_total;
 $grand_total_est = $sub_total_est;
-unless ($booksellers[0]->{'listincgst'}) {
+unless ($bookseller->{'listincgst'}) {
 	$grand_total     += $gist;
 	$grand_total_est += sprintf( "%.2f", $sub_total_est * $prefgist );
 }
@@ -176,13 +175,13 @@ $template->param(
     authorisedby     => $basket->{authorisedby},
     authorisedbyname => $basket->{authorisedbyname},
     closedate        => format_date( $basket->{closedate} ),
-    active           => $booksellers[0]->{'active'},
-    booksellerid     => $booksellers[0]->{'id'},
-    name             => $booksellers[0]->{'name'},
-    address1         => $booksellers[0]->{'address1'},
-    address2         => $booksellers[0]->{'address2'},
-    address3         => $booksellers[0]->{'address3'},
-    address4         => $booksellers[0]->{'address4'},
+    active           => $bookseller->{'active'},
+    booksellerid     => $bookseller->{'id'},
+    name             => $bookseller->{'name'},
+    address1         => $bookseller->{'address1'},
+    address2         => $bookseller->{'address2'},
+    address3         => $bookseller->{'address3'},
+    address4         => $bookseller->{'address4'},
     entrydate        => format_date( $results[0]->{'entrydate'} ),
     books_loop       => \@books_loop,
     count            => $count,
@@ -193,8 +192,9 @@ $template->param(
     gist_est         => $gist_est,
     grand_total_est  => $grand_total_est,
     grand_total_rrp  => $grand_total_rrp,
-    currency         => $booksellers[0]->{'listprice'},
+    currency         => $bookseller->{'listprice'},
     qty_total        => $qty_total,
     GST => $prefgist,
 );
+	}
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -26,7 +26,9 @@
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
-
+<!-- TMPL_IF NAME="NO_BOOKSELLER" -->
+<h2>Supplier Not Found</h2>
+<!-- TMPL_ELSE -->
     <h1><!-- TMPL_UNLESS name="basketno" -->New <!-- /TMPL_UNLESS -->Basket <!-- TMPL_VAR NAME="basketno" --> for <a href="supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR NAME="name" --></a></h1>
 
     <!-- TMPL_IF NAME="basketno" --><div id="acqui_basket_summary">
@@ -148,7 +150,7 @@
         </form>
     </div>
     <!-- /TMPL_UNLESS -->
-
+<!-- /TMPL_IF -->
 </div>
 </div>
 <div class="yui-b">

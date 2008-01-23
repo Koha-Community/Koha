@@ -26,7 +26,7 @@ BEGIN {
 	$VERSION = 3.01;
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
-		&GetBookSeller &GetBooksellersWithLateOrders
+		&GetBookSeller &GetBooksellersWithLateOrders &GetBookSellerFromId
 		&ModBookseller
 		&DelBookseller
 		&AddBookseller
@@ -65,17 +65,13 @@ aqbooksellers table in the Koha database.
 sub GetBookSeller {
     my ($searchstring) = @_;
     my $dbh = C4::Context->dbh;
-    my $query = "
-        SELECT *
-        FROM   aqbooksellers
-        WHERE  name LIKE ? OR id = ?
-    ";
+    my $query = "SELECT * FROM aqbooksellers WHERE name LIKE ?";
     my $sth =$dbh->prepare($query);
-    $sth->execute("$searchstring%", $searchstring );
+    $sth->execute( "$searchstring%" );
     my @results;
     # count how many baskets this bookseller has.
     # if it has none, the bookseller can be deleted
-    my $sth2 = $dbh->prepare("select count(*) from aqbasket where booksellerid=?");
+    my $sth2 = $dbh->prepare("SELECT count(*) FROM aqbasket WHERE booksellerid=?");
     while ( my $data = $sth->fetchrow_hashref ) {
         $sth2->execute($data->{id});
         ($data->{basketcount}) = $sth2->fetchrow();
@@ -86,6 +82,24 @@ sub GetBookSeller {
 }
 
 
+sub GetBookSellerFromId {
+	my ($id) = @_;
+	my $dbh = C4::Context->dbh();
+	my $query = "SELECT * FROM aqbooksellers WHERE id = ?";
+	my $sth =$dbh->prepare($query);
+	$sth->execute( $id );
+	if (my $data = $sth->fetchrow_hashref()){
+		my $sth2 = $dbh->prepare("SELECT count(*) FROM aqbasket WHERE booksellerid=?"); 
+		$sth2->execute($id);
+		$data->{basketcount}=$sth2->fetchrow();
+		$sth->finish;
+		$sth2->finish;
+		return ($data);		
+	}
+	else {
+		return 0;
+	}
+}
 #-----------------------------------------------------------------#
 
 =head2 GetBooksellersWithLateOrders
