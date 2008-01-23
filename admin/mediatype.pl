@@ -53,7 +53,7 @@ sub StringSearch  {
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
 	my $count=@data;
-	my $sth=$dbh->prepare("Select * from mediatypetable where (description like ?) order by mediatypecode");
+	my $sth=$dbh->prepare("SELECT * FROM mediatypetable WHERE (description LIKE ?) ORDER BY mediatypecode");
 	$sth->execute("$data[0]%");
 	my @results;
 	while (my $data=$sth->fetchrow_hashref){
@@ -98,14 +98,14 @@ if ($op eq 'add_form') {
     my $dbh = C4::Context->dbh;
     my @itemtypesselected;
 	if ($mediatypecode) {
-    	my $sth=$dbh->prepare("select mediatypecode,description,itemtypecodes from mediatypetable where mediatypecode=?");
+    	my $sth=$dbh->prepare("SELECT mediatypecode,description,itemtypecodes FROM mediatypetable WHERE mediatypecode=?");
 		$sth->execute($mediatypecode);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
         @itemtypesselected = split ( /\|/, $data->{'itemtypecodes'} );
 	}
 
-    my $sth=$dbh->prepare("select description,itemtype from itemtypes order by description");
+    my $sth=$dbh->prepare("SELECT description,itemtype FROM itemtypes ORDER BY description");
     $sth->execute;
     while (my ($description,$itemtype) = $sth->fetchrow) {
         $itemtypes .='<td><input type="checkbox" name="itemtypecodes" value="'.$itemtype.'"';
@@ -127,12 +127,25 @@ if ($op eq 'add_form') {
 	my $dbh = C4::Context->dbh;
     my @itemtypecodesarray = $input->param('itemtypecodes');
     my $itemtypecodes=join('|',@itemtypecodesarray);
-	my $sth=$dbh->prepare("replace mediatypetable (mediatypecode,description,itemtypecodes) values (?,?,?)");
-	$sth->execute(
+	my $sth = $dbh->prepaer("SELECT * FROM mediatypetable WHERE mediatypecode = ?");
+	$sth->execute($input->param('mediatypecode'));
+	if (my $data = $sth->fetchrow_hashref()){
+		# row exists, so its a modify
+		$sth->finish();
+		$sth = $dbh->prepare("UPDATE mediatypetable SET description=?, itemtypecodes=? WHERE mediatypecode =? ");
+		$sth->execute($input->param('description'),$itemtypecodes,$input->param('mediatypecode'));
+		$sth->finish();
+	}
+	else {
+		# its an add
+		$sth->finish();
+		$sth = $dbh->prepare("INSERT INTO mediattypetable (mediatypecode,description,itemtypecodes) VALUES (?,?,?)");
+		$sth->execute(
 		$input->param('mediatypecode'),$input->param('description'),
 		$itemtypecodes
         );
-	$sth->finish;
+		$sth->finish;
+	}
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=mediatype.pl\"></html>";
 	exit;
 													# END $OP eq ADD_VALIDATE
