@@ -1411,7 +1411,12 @@
 						<xsl:value-of select="."/>
 					</recordChangeDate>
 				</xsl:for-each>
-
+				<xsl:for-each select="marc:datafield[@tag=999]">
+                                        <recordIdentifier>
+                                                <xsl:value-of select="marc:subfield[@code='c']"/>
+                                        </recordIdentifier>
+                                </xsl:for-each>
+<!--
 				<xsl:for-each select="marc:controlfield[@tag=001]">
 					<recordIdentifier>
 						<xsl:if test="../marc:controlfield[@tag=003]">
@@ -1422,6 +1427,7 @@
 						<xsl:value-of select="."/>
 					</recordIdentifier>
 				</xsl:for-each>
+-->
 			</recordInfo>
 		</mods>
 	</xsl:template>
