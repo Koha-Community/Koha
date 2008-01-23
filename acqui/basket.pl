@@ -61,8 +61,6 @@ the supplier this script have to display the basket.
 
 =item order
 
-
-
 =back
 
 =cut
@@ -90,13 +88,16 @@ my $basket = GetBasket($basketno);
 $booksellerid = $basket->{booksellerid} unless $booksellerid;
 my @booksellers = GetBookSeller($booksellerid);
 my $count2 = scalar @booksellers;
+# FIXME: do something with count2?
+# FIXME: how do you know the first BookSeller in the array is the one you want?
+# FIXME: GetBookSeller should be changing to reliably return 1 record based on ID,
+# 		 but we still should give some kind of Error back to the user if it fails.
 
 # get librarian branch...
 if ( C4::Context->preference("IndependantBranches") ) {
     my $userenv = C4::Context->userenv;
     unless ( $userenv->{flags} == 1 ) {
         my $validtest = ( $basket->{creationdate} eq '' )
-          || ( $basket->{branch}  eq '' )
           || ( $userenv->{branch} eq $basket->{branch} )
           || ( $userenv->{branch} eq '' )
           || ( $basket->{branch}  eq '' );
@@ -114,10 +115,8 @@ $debug and warn
 	sprintf "loggedinuser: $loggedinuser; creationdate: %s; authorisedby: %s",
 		$basket->{creationdate}, $basket->{authorisedby} ;
 
-
-my ( $count, @results );
-@results  = GetOrders( $basketno, $order );
-$count = scalar @results;
+my @results = GetOrders( $basketno, $order );
+my $count = scalar @results;
 
 my $line_total;     # total of each line
 my $sub_total;      # total of line totals
@@ -163,8 +162,12 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
 }
 my $prefgist = C4::Context->preference("gist");
 $gist            = sprintf( "%.2f", $sub_total * $prefgist );
-$grand_total     = $sub_total + $gist;
-$grand_total_est =  $sub_total_est + sprintf( "%.2f", $sub_total_est * $prefgist );
+$grand_total     = $sub_total;
+$grand_total_est = $sub_total_est;
+unless ($booksellers[0]->{'listincgst'}) {
+	$grand_total     += $gist;
+	$grand_total_est += sprintf( "%.2f", $sub_total_est * $prefgist );
+}
 my $grand_total_rrp =  sprintf( "%.2f", $sub_total_rrp );
 $gist_est = sprintf( "%.2f", $sub_total_est * $prefgist );
 $template->param(
@@ -192,6 +195,6 @@ $template->param(
     grand_total_rrp  => $grand_total_rrp,
     currency         => $booksellers[0]->{'listprice'},
     qty_total        => $qty_total,
-    GST => C4::Context->preference("gist"),
+    GST => $prefgist,
 );
 output_html_with_http_headers $query, $cookie, $template->output;
