@@ -42,7 +42,7 @@ my $limit=$input->param('limit');
 
 if ($limit){
     if ($limit eq 'full'){
-	$limit=0;
+		$limit=0;
     }
 } 
 else {
@@ -79,7 +79,9 @@ for (my $i=0;$i<$count;$i++){
 	my $borrowercategory = GetBorrowercategory( $data->{'categorycode'} );
 	my $category_type = $borrowercategory->{'category_type'};
 	( $template->param( adultborrower => 1 ) ) if ( $category_type eq 'A' );
-
+if (! $limit){ 
+	$limit = 'full'; 
+}
 $template->param(
 						readingrecordview => 1,
 						biblionumber => $data->{'biblionumber'},
