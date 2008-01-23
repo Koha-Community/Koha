@@ -147,7 +147,7 @@ else {
               || $DEBUG
               && warn( "" . $oConnection[$s]->errmsg() );
             $serverhost[$s] = $server->{host};
-            $encoding[$s]   = $server->{encoding};
+            $encoding[$s]   = ($server->{encoding}?$server->{encoding}:"iso-5426");
             $s++;
         }    ## while fetch
     }    # foreach

@@ -765,6 +765,7 @@ sub displayServers {
             value => $data->{host} . ":"
               . $data->{port} . "/"
               . $data->{database},
+            encoding   => ($data->{encoding}?$data->{encoding}:"iso-5426"),
             checked    => "checked",
             icon       => $data->{icon},
             zed        => $data->{type} eq 'zed',
@@ -915,7 +916,7 @@ sub FixEncoding {
   my $marc=shift;
   my $encoding=shift;
   my $record = MARC::Record->new_from_usmarc($marc);
-  if (C4::Context->preference("marcflavour") eq "UNIMARC"){
+#   if (C4::Context->preference("marcflavour") eq "UNIMARC"){
     my $targetcharset="utf8";
     if ($encoding  && $targetcharset ne $encoding){   
         my $newRecord=MARC::Record->new();
@@ -931,9 +932,11 @@ sub FixEncoding {
                     my $createdfield=0;
                     foreach my $subfield ($field->subfields()){
                     if ($createdfield){
-                        if (($newField->tag eq '100')) {
+                        if ((C4::Context->preference("marcflavour") eq "UNIMARC") && ($newField->tag eq '100')) {
                             substr($subfield->[1],26,4,"5050") if ($targetcharset eq "utf8");
-                        }
+                        } elsif (C4::Context->preference("marcflavour") eq "USMARC"){
+                            $newRecord->encoding("UTF-8");                
+                        }                
                         map {$decoder->convert($_)} @$subfield;
                         $newField->add_subfields($subfield->[0]=>$subfield->[1]);
                     } else {
@@ -956,9 +959,11 @@ sub FixEncoding {
 #                     my $utf8=eval{MARC::Charset::marc8_to_utf8($subfield->[1])};
 #                     if ($@) {warn "z3950 character conversion error $@ ";$utf8=$subfield->[1]};
                     my $utf8=char_decode5426($subfield->[1]);
-                    if (($field->tag eq '100')) {
+                    if ((C4::Context->preference("marcflavour") eq "UNIMARC") && ($field->tag eq '100')) {
                         substr($utf8,26,4,"5050");
-                    }            
+                    } elsif (C4::Context->preference("marcflavour") eq "USMARC"){
+                        $newRecord->encoding("UTF-8");                
+                    }                
                     if ($createdfield){
                         $newField->add_subfields($subfield->[0]=>$utf8);
                     } else {
@@ -974,8 +979,8 @@ sub FixEncoding {
         return $newRecord;            
      }
      return $record;  
-  }
-  return $record;
+#   }
+#   return $record;
 }
 
 

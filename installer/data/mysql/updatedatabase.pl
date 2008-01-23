@@ -960,6 +960,15 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.049";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+      $dbh->do("ALTER TABLE z3950servers
+  ADD `encoding` text default NULL,
+  ");
+  print "Upgrade to $DBversion done ( Added encoding field to z3950servers table )\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
