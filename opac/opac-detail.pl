@@ -54,7 +54,7 @@ my $dat = &GetBiblioData($biblionumber);
 
 if (!$dat) {
     print $query->redirect("/cgi-bin/koha/koha-tmpl/errors/404.pl");
-	exit;
+    exit;
 }
 
 #coping with subscriptions
@@ -80,7 +80,7 @@ $dat->{'count'} = scalar(@items);
 # FIXME - use me or delete me.
 my $RequestOnOpac;
 if (C4::Context->preference("RequestOnOpac")) {
-	$RequestOnOpac = 1;
+    $RequestOnOpac = 1;
 }
 
 my $norequests = 1;
@@ -105,15 +105,15 @@ $template->param( norequests => $norequests, RequestOnOpac=>$RequestOnOpac );
     my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );
     my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
     my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
-	my $marcseriesarray  = GetMarcSeries($record,$marcflavour);
-	my $marcurlsarray	= GetMarcUrls($record,$marcflavour);
+    my $marcseriesarray  = GetMarcSeries($record,$marcflavour);
+    my $marcurlsarray   = GetMarcUrls($record,$marcflavour);
 
     $template->param(
         MARCNOTES   => $marcnotesarray,
         MARCSUBJCTS => $marcsubjctsarray,
         MARCAUTHORS => $marcauthorsarray,
-		MARCSERIES  => $marcseriesarray,
-		MARCURLS	=> $marcurlsarray,
+        MARCSERIES  => $marcseriesarray,
+        MARCURLS    => $marcurlsarray,
     );
 
 foreach ( keys %{$dat} ) {
