@@ -420,7 +420,7 @@ sub _version_check ($$) {
 
 sub _session_log {
     (@_) or return 0;
-    open L, ">>/tmp/sessionlog";
+    open L, ">>/tmp/sessionlog" or warn "ERROR: Cannot append to /tmp/sessionlog";
     printf L join("\n",@_);
     close L;
 }
@@ -460,6 +460,7 @@ sub checkauth {
     elsif ( $sessionID = $query->cookie("CGISESSID")) {     # assignment, not comparison 
         my $session = get_session($sessionID);
         C4::Context->_new_userenv($sessionID);
+        my ($ip, $lasttime);
         if ($session){
             C4::Context::set_userenv(
                 $session->param('number'),       $session->param('id'),
@@ -469,13 +470,9 @@ sub checkauth {
                 $session->param('emailaddress'), $session->param('branchprinter')
             );
             $debug and printf STDERR "AUTH_SESSION: (%s)\t%s %s - %s\n", map {$session->param($_)} qw(cardnumber firstname surname branch) ;
-        }
-        my $ip;
-        my $lasttime;
-        if ($session) {
-            $ip = $session->param('ip');
+            $ip       = $session->param('ip');
             $lasttime = $session->param('lasttime');
-            $userid = $session->param('id');
+            $userid   = $session->param('id');
         }
     
         if ($logout) {
@@ -483,9 +480,9 @@ sub checkauth {
             $session->flush;      
             $session->delete();
             C4::Context->_unset_userenv($sessionID);
+            _session_log(sprintf "%20s from %16s logged out at %30s (manually).\n", $userid,$ip,localtime);
             $sessionID = undef;
             $userid    = undef;
-            _session_log(sprintf "%20s from %16s logged out at %30s (manually).\n", $userid,$ip,localtime);
         }
         if ($userid) {
             if ( $lasttime < time() - $timeout ) {
@@ -493,9 +490,9 @@ sub checkauth {
                 $info{'timed_out'} = 1;
                 $session->delete();
                 C4::Context->_unset_userenv($sessionID);
+                _session_log(sprintf "%20s from %16s logged out at %30s (inactivity).\n", $userid,$ip,localtime);
                 $userid    = undef;
                 $sessionID = undef;
-                _session_log(sprintf "%20s from %16s logged out at %30s (inactivity).\n", $userid,$ip,localtime);
             }
             elsif ( $ip ne $ENV{'REMOTE_ADDR'} ) {
                 # Different ip than originally logged in from
@@ -504,9 +501,9 @@ sub checkauth {
                 $info{'different_ip'} = 1;
                 $session->delete();
                 C4::Context->_unset_userenv($sessionID);
+                _session_log(sprintf "%20s from %16s logged out at %30s (ip changed to %16s).\n", $userid,$ip,localtime, $info{'newip'});
                 $sessionID = undef;
                 $userid    = undef;
-                _session_log(sprintf "%20s from %16s logged out at %30s (ip changed to %16s).\n", $userid,$ip,localtime, $info{'newip'});
             }
             else {
                 $cookie = $query->cookie( CGISESSID => $session->id );
@@ -686,7 +683,7 @@ sub checkauth {
     my $branches = GetBranches();
     my @branch_loop;
     for my $branch_hash (keys %$branches) {
-                push @branch_loop, {branchcode => "$branch_hash", branchname => $branches->{$branch_hash}->{'branchname'}, };
+		push @branch_loop, {branchcode => "$branch_hash", branchname => $branches->{$branch_hash}->{'branchname'}, };
     }
 
     my $template_name = ( $type eq 'opac' ) ? 'opac-auth.tmpl' : 'auth.tmpl';
@@ -707,14 +704,13 @@ sub checkauth {
         opaccolorstylesheet  => C4::Context->preference("opaccolorstylesheet"),
         opaclanguagesdisplay => C4::Context->preference("opaclanguagesdisplay"),
         opacuserjs           => C4::Context->preference("opacuserjs"),
-
         intranetcolorstylesheet =>
-          C4::Context->preference("intranetcolorstylesheet"),
+								C4::Context->preference("intranetcolorstylesheet"),
         intranetstylesheet => C4::Context->preference("intranetstylesheet"),
         IntranetNav        => C4::Context->preference("IntranetNav"),
         intranetuserjs     => C4::Context->preference("intranetuserjs"),
         TemplateEncoding   => C4::Context->preference("TemplateEncoding"),
-        IndependantBranches     => C4::Context->preference("IndependantBranches"),
+        IndependantBranches=> C4::Context->preference("IndependantBranches"),
         AutoLocation       => C4::Context->preference("AutoLocation"),
         yuipath            => C4::Context->preference("yuipath"),
 		wrongip            => $info{'wrongip'}
@@ -725,7 +721,7 @@ sub checkauth {
     my $self_url = $query->url( -absolute => 1 );
     $template->param(
         url         => $self_url,
-        LibraryName => => C4::Context->preference("LibraryName"),
+        LibraryName => C4::Context->preference("LibraryName"),
     );
     $template->param( \%info );
 #    $cookie = $query->cookie(CGISESSID => $session->id
