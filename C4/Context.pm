@@ -295,6 +295,7 @@ sub new {
     $self->{"marcfromkohafield"} = undef; # the hash with relations between koha table fields and MARC field/subfield
     $self->{"userenv"} = undef;        # User env
     $self->{"activeuser"} = undef;        # current active user
+    $self->{"shelves"} = undef;
 
     bless $self, $class;
     return $self;
@@ -872,6 +873,22 @@ sub set_userenv{
     };
     $context->{userenv}->{$var} = $cell;
     return $cell;
+}
+
+sub set_shelves_userenv ($) {
+	my $lists = shift or return undef;
+	my $activeuser = $context->{activeuser} or return undef;
+	$context->{userenv}->{$activeuser}->{shelves} = $lists;
+	# die "set_shelves_userenv: $lists";
+}
+sub get_shelves_userenv () {
+	my $active;
+	unless ($active = $context->{userenv}->{$context->{activeuser}}) {
+		warn "get_shelves_userenv cannot retrieve context->{userenv}->{context->{activeuser}}";
+		return undef;
+	}
+	my $lists = $active->{shelves} or return undef;#  die "get_shelves_userenv: activeenv has no ->{shelves}";
+	return $lists;
 }
 
 =item _new_userenv

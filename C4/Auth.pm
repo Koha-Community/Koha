@@ -31,12 +31,13 @@ use C4::Output;    # to get the template
 use C4::Members;
 use C4::Koha;
 use C4::Branch; # GetBranches
+use C4::VirtualShelves 3.02 qw(GetShelvesSummary);
 
 # use utf8;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug $ldap);
 
 BEGIN {
-    $VERSION = 3.01;        # set version for version checking
+    $VERSION = 3.02;        # set version for version checking
     $debug = $ENV{DEBUG} || 0 ;
     @ISA   = qw(Exporter);
     @EXPORT    = qw(&checkauth &get_template_and_user);
@@ -145,6 +146,11 @@ sub get_template_and_user {
         # user info
         $template->param( loggedinusername => $user );
         $template->param( sessionID        => $sessionID );
+		my $shelves;
+		if ($shelves = C4::Context->get_shelves_userenv()) {
+        	$template->param( barshelves     => scalar (@$shelves));
+        	$template->param( barshelvesloop => $shelves);
+		}
 
         $borrowernumber = getborrowernumber($user);
         my ( $borr, $alternativeflags ) =
@@ -316,6 +322,7 @@ sub get_template_and_user {
             'item-level_itypes' => C4::Context->preference('item-level_itypes'),
         );
     }
+	$template->param(listloop=>[{shelfname=>"Freelist", shelfnumber=>110}]);
     return ( $template, $borrowernumber, $cookie, $flags);
 }
 
@@ -427,7 +434,7 @@ sub _session_log {
 
 sub checkauth {
     my $query = shift;
-  # warn "Checking Auth";
+	$debug and warn "Checking Auth";
     # $authnotrequired will be set for scripts which will run without authentication
     my $authnotrequired = shift;
     my $flagsrequired   = shift;
@@ -446,7 +453,7 @@ sub checkauth {
     # state variables
     my $loggedin = 0;
     my %info;
-    my ( $userid, $cookie, $sessionID, $flags );
+    my ( $userid, $cookie, $sessionID, $flags, $shelves );
     my $logout = $query->param('logout.x');
     if ( $userid = $ENV{'REMOTE_USER'} ) {
         # Using Basic Authentication, no cookies required
@@ -469,6 +476,7 @@ sub checkauth {
                 $session->param('branchname'),   $session->param('flags'),
                 $session->param('emailaddress'), $session->param('branchprinter')
             );
+            C4::Context::set_shelves_userenv($session->param('shelves'));
             $debug and printf STDERR "AUTH_SESSION: (%s)\t%s %s - %s\n", map {$session->param($_)} qw(cardnumber firstname surname branch) ;
             $ip       = $session->param('ip');
             $lasttime = $session->param('lasttime');
@@ -532,11 +540,11 @@ sub checkauth {
                 $info{'nopermission'} = 1;
                 C4::Context->_unset_userenv($sessionID);
             }
+
+			my ($borrowernumber, $firstname, $surname, $userflags,
+				$branchcode, $branchname, $branchprinter, $emailaddress);
+
             if ( $return == 1 ) {
-                my (
-                   $borrowernumber, $firstname, $surname, $userflags,
-                   $branchcode, $branchname, $branchprinter, $emailaddress
-                );
                 my $select = "
                 SELECT borrowernumber, firstname, surname, flags, borrowers.branchcode, 
                         branches.branchname    as branchname, 
@@ -610,10 +618,11 @@ sub checkauth {
                 $session->param('emailaddress',$emailaddress);
                 $session->param('ip',$session->remote_addr());
                 $session->param('lasttime',time());
-                $debug and printf STDERR "AUTH_3: (%s)\t%s %s - %s\n", map {$session->param($_)} qw(cardnumber firstname surname branch) ;
+                $debug and printf STDERR "AUTH_4: (%s)\t%s %s - %s\n", map {$session->param($_)} qw(cardnumber firstname surname branch) ;
             }
             elsif ( $return == 2 ) {
                 #We suppose the user is the superlibrarian
+				$borrowernumber = 0;
                 $session->param('number',0);
                 $session->param('id',C4::Context->config('user'));
                 $session->param('cardnumber',C4::Context->config('user'));
@@ -633,6 +642,9 @@ sub checkauth {
                 $session->param('branchname'),   $session->param('flags'),
                 $session->param('emailaddress'), $session->param('branchprinter')
             );
+			$shelves = GetShelvesSummary($borrowernumber,2,10);
+			$session->param('shelves', $shelves);
+			C4::Context::set_shelves_userenv($shelves);
         }
         else {
             if ($userid) {

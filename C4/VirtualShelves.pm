@@ -25,11 +25,11 @@ use strict;
 use Carp;
 use C4::Context;
 use C4::Circulation;
-use vars qw($VERSION @ISA @EXPORT);
+use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
 BEGIN {
 	# set the version for version checking
-	$VERSION = 3.01;
+	$VERSION = 3.02;
 	require Exporter;
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
@@ -41,6 +41,7 @@ BEGIN {
         &ShelfPossibleAction
         &DelFromShelf &DelShelf
 	);
+	@EXPORT_OK = qw(&GetShelvesSummary);
 }
 
 my $dbh = C4::Context->dbh;
@@ -65,7 +66,9 @@ items to and from virtualshelves.
 
 =item GetShelves
 
+  $shelflist = &GetShelves($owner);
   $shelflist = &GetShelves($owner, $mincategory);
+  $shelflist = &GetShelves($owner, $mincategory, $limit);
   ($shelfnumber, $shelfhash) = each %{$shelflist};
 
 Looks up the virtual virtualshelves, and returns a summary. C<$shelflist>
@@ -73,7 +76,7 @@ is a reference-to-hash. The keys are the virtualshelves numbers
 (C<$shelfnumber>, above), and the values (C<$shelfhash>, above) are
 themselves references-to-hash, with the following keys:
 
-C<mincategory> : 2 if the list is for "look". 3 if the list is for "Select virtualshelves for adding a virtual".
+C<mincategory> : 2 if the list is for "Public", 3 for "Open".
 virtualshelves of the owner are always selected, whatever the category
 
 =over 4
@@ -90,14 +93,10 @@ The number of virtuals on that virtualshelves.
 
 =cut
 
-#'
-# FIXME - Wouldn't it be more intuitive to return a list, rather than
-# a reference-to-hash? The shelf number can be just another key in the
-# hash.
-
 sub GetShelves {
-    my ( $owner, $mincategory ) = @_;
-
+    my ($owner, $mincategory, $limit) = @_;
+	($mincategory and $mincategory =~ /^\d+$/) or $mincategory = 2;
+	(      $limit and       $limit =~ /^\d+$/) or $limit = undef;
     my $query = qq(
         SELECT virtualshelves.shelfnumber, virtualshelves.shelfname,owner,surname,firstname,virtualshelves.category,virtualshelves.sortfield,
                count(virtualshelfcontents.biblionumber) as count
@@ -108,6 +107,7 @@ sub GetShelves {
         GROUP BY virtualshelves.shelfnumber
         ORDER BY virtualshelves.category, virtualshelves.shelfname, borrowers.firstname, borrowers.surname
     );
+	$limit and $query .= " LIMIT $limit ";
     my $sth = $dbh->prepare($query);
     $sth->execute( $owner, $mincategory );
     my %shelflist;
@@ -121,13 +121,42 @@ sub GetShelves {
     {
         $shelflist{$shelfnumber}->{'shelfname'} = $shelfname;
         $shelflist{$shelfnumber}->{'count'}     = $count;
-        $shelflist{$shelfnumber}->{'sortfield'}     = $sortfield;
+        $shelflist{$shelfnumber}->{'sortfield'} = $sortfield;
         $shelflist{$shelfnumber}->{'category'}  = $category;
         $shelflist{$shelfnumber}->{'owner'}     = $owner;
-        $shelflist{$shelfnumber}->{'surname'}     = $surname;
-        $shelflist{$shelfnumber}->{'firstname'}   = $firstname;
+        $shelflist{$shelfnumber}->{'surname'}   = $surname;
+        $shelflist{$shelfnumber}->{'firstname'} = $firstname;
     }
     return ( \%shelflist );
+}
+
+sub GetShelvesSummary {
+    my ($owner, $mincategory, $limit) = @_;
+	($mincategory and $mincategory =~ /^\d+$/) or $mincategory = 2;
+	(      $limit and       $limit =~ /^\d+$/) or $limit = 10;
+    my $query = qq(
+		SELECT
+			virtualshelves.shelfnumber,
+			virtualshelves.shelfname,
+			owner,
+			CONCAT(firstname, ' ', surname) AS name,
+			virtualshelves.category,
+			count(virtualshelfcontents.biblionumber) AS count
+		FROM   virtualshelves
+			LEFT JOIN  virtualshelfcontents ON virtualshelves.shelfnumber = virtualshelfcontents.shelfnumber
+			LEFT JOIN             borrowers ON virtualshelves.owner = borrowers.borrowernumber
+		WHERE  owner=? OR category>=?
+		GROUP BY virtualshelves.shelfnumber
+		ORDER BY virtualshelves.category, borrowers.surname, borrowers.firstname, virtualshelves.shelfname
+		LIMIT ?
+	);
+	my $sth = $dbh->prepare($query);
+	$sth->execute($owner,$mincategory,$limit);
+    return $sth->fetchall_arrayref({});
+	# Probably NOT the final implementation since it is still bulky (repeated hash keys).
+	# might like an array of rows of delimited values:
+	# 1|2||0|blacklist|112
+	# 2|6|Josh Ferraro|51|en_fuego|106
 }
 
 =item GetShelf
