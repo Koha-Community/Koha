@@ -70,7 +70,8 @@
 	
 	<!-- TMPL_IF NAME="pages" --><p><span class="label">Physical details:</span> <!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></p><!-- /TMPL_IF -->
     <!-- COinS / OpenURL -->
-    <span class="Z3988" title="ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft.au=<!-- TMPL_VAR NAME="author" -->&rft.btitle=<!-- TMPL_VAR NAME="title" -->&rft.date=<!-- TMPL_VAR NAME="publicationyear" -->&rft.tpages=<!-- TMPL_VAR NAME="size" -->&rft.isbn=<!-- TMPL_VAR NAME=isbn -->&rft.aucorp=&rft.place=<!-- TMPL_VAR NAME="place" -->&rft.pub=<!-- TMPL_VAR NAME="publisher" -->&rft.edition=<!-- TMPL_VAR NAME="edition" -->&rft.series=<!-- TMPL_VAR NAME="series" -->&rft.genre="></span>
+    <!-- TMPL_IF NAME="ocoins_format" -->
+    <span class="Z3988" title="ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3A<!-- TMPL_VAR NAME="ocoins_format" -->&rft.au=<!-- TMPL_VAR NAME="author" -->&rft.btitle=<!-- TMPL_VAR NAME="title" -->&rft.date=<!-- TMPL_VAR NAME="publicationyear" -->&rft.tpages=<!-- TMPL_VAR NAME="size" -->&rft.isbn=<!-- TMPL_VAR NAME=isbn -->&rft.aucorp=&rft.place=<!-- TMPL_VAR NAME="place" -->&rft.pub=<!-- TMPL_VAR NAME="publisher" -->&rft.edition=<!-- TMPL_VAR NAME="edition" -->&rft.series=<!-- TMPL_VAR NAME="series" -->&rft.genre="></span><!-- /TMPL_IF -->
     <!-- TMPL_IF name="isbn" -->
     <!-- unAPI <abbr/> tag -->
     <p><span class="label">ISBN: </span><abbr class="unapi-id" title="koha:isbn:<!-- TMPL_VAR NAME="isbn" -->"><!-- TMPL_VAR NAME="isbn" --></abbr></a>
