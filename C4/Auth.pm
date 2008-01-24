@@ -484,48 +484,41 @@ sub checkauth {
             $sessionID = undef;
             $userid    = undef;
         }
-        if ($userid) {
-            if ( $lasttime < time() - $timeout ) {
-                # timed logout
-                $info{'timed_out'} = 1;
-                $session->delete();
-                C4::Context->_unset_userenv($sessionID);
-                _session_log(sprintf "%20s from %16s logged out at %30s (inactivity).\n", $userid,$ip,localtime);
-                $userid    = undef;
-                $sessionID = undef;
-            }
-            elsif ( $ip ne $ENV{'REMOTE_ADDR'} ) {
-                # Different ip than originally logged in from
-                $info{'oldip'}        = $ip;
-                $info{'newip'}        = $ENV{'REMOTE_ADDR'};
-                $info{'different_ip'} = 1;
-                $session->delete();
-                C4::Context->_unset_userenv($sessionID);
-                _session_log(sprintf "%20s from %16s logged out at %30s (ip changed to %16s).\n", $userid,$ip,localtime, $info{'newip'});
-                $sessionID = undef;
-                $userid    = undef;
-            }
-            else {
-                $cookie = $query->cookie( CGISESSID => $session->id );
-                $session->param('lasttime',time());
-                $flags = haspermission( $dbh, $userid, $flagsrequired );
-                if ($flags) {
-                    $loggedin = 1;
-                }
-                else {
-                    $info{'nopermission'} = 1;
-                }
-            }
-        }
+		elsif ( $lasttime < time() - $timeout ) {
+			# timed logout
+			$info{'timed_out'} = 1;
+			$session->delete();
+			C4::Context->_unset_userenv($sessionID);
+			_session_log(sprintf "%20s from %16s logged out at %30s (inactivity).\n", $userid,$ip,localtime);
+			$userid    = undef;
+			$sessionID = undef;
+		}
+		elsif ( $ip ne $ENV{'REMOTE_ADDR'} ) {
+			# Different ip than originally logged in from
+			$info{'oldip'}        = $ip;
+			$info{'newip'}        = $ENV{'REMOTE_ADDR'};
+			$info{'different_ip'} = 1;
+			$session->delete();
+			C4::Context->_unset_userenv($sessionID);
+			_session_log(sprintf "%20s from %16s logged out at %30s (ip changed to %16s).\n", $userid,$ip,localtime, $info{'newip'});
+			$sessionID = undef;
+			$userid    = undef;
+		}
+		else {
+			$cookie = $query->cookie( CGISESSID => $session->id );
+			$session->param('lasttime',time());
+			$flags = haspermission( $dbh, $userid, $flagsrequired );
+			if ($flags) {
+				$loggedin = 1;
+			} else {
+				$info{'nopermission'} = 1;
+			}
+		}
     }
     unless ($userid) {
-        my $session = get_session("");
-        my $sessionID;
-        if ($session) {
-            $sessionID = $session->id;
-        }
+        my $session = get_session("") or die "Auth ERROR: Cannot get_session()";
+        my $sessionID = $session->id;
         $userid    = $query->param('userid');
-        C4::Context->_new_userenv($sessionID);
         my $password = $query->param('password');
         C4::Context->_new_userenv($sessionID);
         my ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password );
@@ -554,29 +547,26 @@ sub checkauth {
                 ";
                 my $sth = $dbh->prepare("$select where userid=?");
                 $sth->execute($userid);
-                ($sth->rows) and (
-                    $borrowernumber, $firstname, $surname, $userflags,
-                    $branchcode, $branchname, $branchprinter, $emailaddress
-                ) = $sth->fetchrow;
-
-                $debug and print STDERR "AUTH_1: $cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress\n";
-                unless ( $sth->rows ) {
-                    my $sth = $dbh->prepare("$select where cardnumber=?");
+				unless ($sth->rows) {
+                	$debug and print STDERR "AUTH_1: no rows for userid='$userid'\n";
+					$sth = $dbh->prepare("$select where cardnumber=?");
                     $sth->execute($cardnumber);
-                    ($sth->rows) and (
-                        $borrowernumber, $firstname, $surname, $userflags,
-                        $branchcode, $branchname, $branchprinter, $emailaddress
-                    ) = $sth->fetchrow;
-
-                    $debug and print STDERR "AUTH_2: $cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress\n";
-                    unless ( $sth->rows ) {
-                        $sth->execute($userid);
-                        ($sth->rows) and (
-                            $borrowernumber, $firstname, $surname, $userflags,
-                            $branchcode, $branchname, $branchprinter, $emailaddress
-                        ) = $sth->fetchrow;
-                    }
-                }
+					unless ($sth->rows) {
+                		$debug and print STDERR "AUTH_2a: no rows for cardnumber='$cardnumber'\n";
+                    	$sth->execute($userid);
+						unless ($sth->rows) {
+                			$debug and print STDERR "AUTH_2b: no rows for userid='$userid' AS cardnumber\n";
+						}
+					}
+				}
+                if ($sth->rows) {
+                    ($borrowernumber, $firstname, $surname, $userflags,
+                    	$branchcode, $branchname, $branchprinter, $emailaddress) = $sth->fetchrow;
+					$debug and print STDERR "AUTH_3 results: " .
+						"$cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress\n";
+				} else {
+					print STDERR "AUTH_3: no results for userid='$userid', cardnumber='$cardnumber'.\n";
+				}
 
 # launch a sequence to check if we have a ip for the branch, i
 # if we have one we replace the branchcode of the userenv by the branch bound in the ip.
@@ -636,15 +626,13 @@ sub checkauth {
                 $session->param('ip',$session->remote_addr());
                 $session->param('lasttime',time());
             }
-            if ($session) {
-                C4::Context::set_userenv(
+            C4::Context::set_userenv(
                 $session->param('number'),       $session->param('id'),
                 $session->param('cardnumber'),   $session->param('firstname'),
                 $session->param('surname'),      $session->param('branch'),
                 $session->param('branchname'),   $session->param('flags'),
                 $session->param('emailaddress'), $session->param('branchprinter')
-                );
-            }
+            );
         }
         else {
             if ($userid) {
@@ -653,7 +641,7 @@ sub checkauth {
             }
 
         }
-    }
+    }	# END unless ($userid)
     my $insecure = C4::Context->boolean_preference('insecure');
 
     # finished authentification, now respond
