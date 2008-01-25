@@ -22,23 +22,6 @@
 </div>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="languages" -->
-<div id="opac-main-changelanguage">
-    <h1>Change language</h1>
-    <form action="/cgi-bin/koha/changelanguage.pl" method="post">
-        <label for="selectlang">Set language to</label>
-        <select id="selectlang" name="language" onchange="javascript:submit();">
-            <!-- TMPL_LOOP NAME="languages" -->
-                <option value="<TMPL_VAR NAME="language">">
-                    <!-- TMPL_VAR NAME="language" -->
-                </option>
-            <!-- /TMPL_LOOP -->
-        </select>
-        <input type="submit" value="Change" />
-    </form>
-</div>
-<!-- /TMPL_IF -->
-
 <!-- TMPL_IF NAME="recentacquiloop"-->
     <div class="searchresults">
         <table>

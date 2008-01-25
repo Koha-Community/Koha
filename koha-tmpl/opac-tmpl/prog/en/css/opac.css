@@ -157,7 +157,7 @@ h1#libraryname a {
 	text-decoration:none;
 	width:120px;
 }
-
+/*
 div#cartmenubutton {
 	background:transparent url(../../images/cart-button.gif) no-repeat scroll 0%;
 	border: 0;
@@ -199,7 +199,7 @@ div#listmenubutton a {
 	text-decoration:none;
 	width:84px;
 }
-
+*/
 h1,h2,h3,h4,h5,h6 {
 	font-weight : bold;
 	margin : .5em 0;
@@ -467,9 +467,45 @@ a .term {
 	font-weight : bold;
 }
 
-/***********************************************************/
-/* the user menu, for user option (and biblio detail view) */
-/***********************************************************/
+
+#search-facets ul {
+	margin : 0;
+	padding : .3em;
+}
+
+#search-facets {
+	border : 1px solid #e8e8e8;
+}
+
+#search-facets h4 {
+	background-color : #EFF1DC;
+	border-bottom : 1px solid #e8e8e8;
+	font-size : 90%;
+	margin : 0;
+	padding : .4em .2em;
+	text-align : center;
+}
+
+#search-facets ul li {
+	font-weight : bold;
+	list-style-type : none;
+}
+
+#search-facets li li {
+	font-weight : normal;
+	font-size : 85%;
+	margin-bottom : 2px;
+	padding : .1em .2em;
+}
+
+#search-facets li li a {
+	font-weight : normal;
+}
+
+#search-facets li.showmore a {
+	font-weight : bold;
+	text-indent : 1em;
+}
 
 .suggestion {
 	background-color : #EEEEEB;
@@ -666,6 +702,10 @@ a.cancel {
 .searchresults label {
 	float : right;
 	margin-top : 5px;
+}
+
+.searchresults p.details {
+	color : #979797;
 }
 
 .searchresults p {
@@ -978,8 +1018,7 @@ line-height : 25px;
 /* End hide from IE-mac */
 
 .searchhighlightblob {
-    font-size:75%;
-	font-style : italic;
+	font-size : 85%;
 }
 
 
@@ -1022,7 +1061,7 @@ div.message {
 	font-weight : normal;
 	text-decoration : none;
 }
-
+/*
 #cart-box {
 	float : left;
 	background : url(../../images/cart-background-right.gif) top right no-repeat;
@@ -1058,7 +1097,7 @@ div.message {
 #cart-box a.cartbutton {
 	background : #9bc1dd url(../../images/cart-small.gif) center left no-repeat;
 	padding-left : 20px;
-}
+}*/
 
 #opac-main-search #listsmenu a, #opac-main-search #listsmenu h4 {
 	color : #000;
@@ -1118,7 +1157,6 @@ ul#i18nMenu li:first-child {
 ul#i18nMenu li ul li {
  	border : 0;
  	display : block;
-	padding : 0;
  }
  
  		
@@ -1173,3 +1211,8 @@ ul#i18nMenu li.more ul li a {
 	color : #006699;
 	font-weight : normal;
  }
+ 	#cartDetails {
+		background-color : #FFF;
+		border: 1px solid black;
+		padding : .5em;
+	}
