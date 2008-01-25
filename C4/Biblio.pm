@@ -995,11 +995,12 @@ sub GetMarcAuthors {
             }
             else {
                 # reset $linkvalue if UNIMARC author responsibility
-                if ( $marcflavour eq 'UNIMARC' and ($authors_subfield->[0] eq '4')) {
+                if ( $marcflavour eq 'UNIMARC' and ($authors_subfield->[0] eq "4")) {
                     $linkvalue = "(".GetAuthorisedValueDesc( $field->tag(), $authors_subfield->[0], $authors_subfield->[1], '', $tagslib ).")";
                 }
                 push @link_loop, {'limit' => 'au', link => $linkvalue, operator => $operator };
             }
+            $value = GetAuthorisedValueDesc( $field->tag(), $authors_subfield->[0], $authors_subfield->[1], '', $tagslib ) if ( $marcflavour eq 'UNIMARC' and ($authors_subfield->[0] =~/4/));
             my @this_link_loop = @link_loop;
             my $separator = C4::Context->preference("authoritysep") unless $count_auth==0;
             push @subfields_loop, {code => $subfieldcode, value => $value, link_loop => \@this_link_loop, separator => $separator} unless ($authors_subfield->[0] == 9 );
