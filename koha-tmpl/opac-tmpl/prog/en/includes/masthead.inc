@@ -70,8 +70,8 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-	    <!-- TMPL_IF NAME="opacbookbag" -->var cartButton = new YAHOO.widget.Button("cartmenulink");<!-- /TMPL_IF -->
-		<!--TMPL_IF NAME="virtualshelves" -->var listsButton = new YAHOO.widget.Button("listsmenulink");<!-- /TMPL_IF -->
+	  //  <!-- TMPL_IF NAME="opacbookbag" -->var cartButton = new YAHOO.widget.Button("cartmenulink");<!-- /TMPL_IF -->
+		//<!--TMPL_IF NAME="virtualshelves" -->var listsButton = new YAHOO.widget.Button("listsmenulink");<!-- /TMPL_IF -->
  });
  
    <!--TMPL_IF NAME="virtualshelves" -->YAHOO.util.Event.onContentReady("listsmenu", function () {
@@ -102,8 +102,8 @@ $(document).ready(function() {
 		YAHOO.util.Event.addListener(window, "load", init);<!-- /TMPL_IF -->
 </script>
 
-<!-- TMPL_IF NAME="opacbookbag" --><a id="cartmenulink" href="#basket">Cart<span id="basket"><script language="javascript" type="text/javascript">if(basketcount){ document.write(basketcount) };</script></span></a><!-- /TMPL_IF -->
-<!--TMPL_IF NAME="virtualshelves" --><a id="listsmenulink" href="#listmenu">Lists</a><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="opacbookbag" --><a id="cartmenulink" href="#">Cart<span id="basket"><script language="javascript" type="text/javascript">if(basketcount){ document.write(basketcount) };</script></span></a><!-- /TMPL_IF -->
+<!--TMPL_IF NAME="virtualshelves" --><a id="listsmenulink" href="#">Lists</a><!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="virtualshelves" -->
 <div id="listsmenu" class="yuimenu">
@@ -119,12 +119,11 @@ $(document).ready(function() {
 			<ul class="second-of-type">
             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl">Manage Lists</a></li>
         </ul>
-		</li><!-- TMPL_ELSE --><ul class="first-of-type"><li><a href="/cgi-bin/koha/opac-user.pl">Log in</a> to Create Your Own Lists</li></ul><!-- /TMPL_IF -->
+		</li><!-- TMPL_ELSE --><ul class="first-of-type"><li><a href="/cgi-bin/koha/opac-user.pl">Log in to Create Your Own Lists</a></li></ul><!-- /TMPL_IF -->
 	  </div>
 </div>
 <!-- /TMPL_IF -->
 
-<!-- <!-- TMPL_IF NAME="opacbookbag" --><div><a class="button cart" href="/cgi-bin/koha/opac-basket.pl" onclick="openBasket(); return false;" title="A &quot;shopping cart&quot; for your selections"><span><span><span><span>Book Bag</span></span></span></span></a></div><!-- /TMPL_IF --> -->
 
 </div>
 </div>

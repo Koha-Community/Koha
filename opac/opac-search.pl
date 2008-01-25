@@ -100,15 +100,9 @@ foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtype
 }
 $template->param(itemtypeloop => \@itemtypesloop);
 
-<<<<<<< HEAD:opac/opac-search.pl
-# load the ccodes
-# my ($ccodecount,@ccode_loop) = GetCcodes();
-# $template->param(ccodeloop=>\@ccode_loop,);
-=======
 # # load the itypes (Called item types in the template -- just authorized values for searching)
 # my ($itypecount,@itype_loop) = GetCcodes();
 # $template->param(itypeloop=>\@itype_loop,);
->>>>>>> Styling facets; correcting markup error in search results; removing language picker from opac-main (is now in the footer); continuing unfinished work on cart/lists buttons:opac/opac-search.pl
 
 # The following should only be loaded if we're bringing up the advanced search template
 if ( $template_type eq 'advsearch' ) {
@@ -153,20 +147,6 @@ if ( $template_type eq 'advsearch' ) {
     $template->param(uc(C4::Context->preference("marcflavour")) => 1,
                       search_boxes_loop => \@search_boxes_array);
 
-<<<<<<< HEAD:opac/opac-search.pl
-    # load the language limits (for search)
-    my $languages_limit_loop = getAllLanguages();
-    $template->param(search_languages_loop => $languages_limit_loop,);
-
-    # use the global setting by default
-    if ( C4::Context->preference("expandedSearchOption") == 1) {
-        $template->param( expanded_options => C4::Context->preference("expandedSearchOption") );
-    }
-    # but let the user override it
-    if ( ($cgi->param('expanded_options') == 0) || ($cgi->param('expanded_options') == 1 ) ) {
-        $template->param( expanded_options => $cgi->param('expanded_options'));
-    }
-=======
 # use the global setting by default
 	if ( C4::Context->preference("expandedSearchOption") == 1) {
 		$template->param( expanded_options => C4::Context->preference("expandedSearchOption") );
@@ -175,7 +155,6 @@ if ( $template_type eq 'advsearch' ) {
    	if ( ($cgi->param('expanded_options') == 0) || ($cgi->param('expanded_options') == 1 ) ) {
     	$template->param( expanded_options => $cgi->param('expanded_options'));
 	}
->>>>>>> Styling facets; correcting markup error in search results; removing language picker from opac-main (is now in the footer); continuing unfinished work on cart/lists buttons:opac/opac-search.pl
 
     output_html_with_http_headers $cgi, $cookie, $template->output;
     exit;
