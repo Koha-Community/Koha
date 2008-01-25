@@ -35,4 +35,18 @@ function confirmDelete(message) {
 function Dopop(link) {
 	newin=window.open(link,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
 }
-
+	
+/*$(document).ready(function(){
+	$('#masthead').each(function(){
+		$('a.button').each(function(){
+			var b = $(this);
+			var tt = b.text() || b.val();
+			if ($(':submit,:button',this)) {
+				b = $('<a>').insertAfter(this).addClass('btn').attr('id',this.id).attr('href',this.href);
+				$(this).remove();
+			}
+			b.text('').css({cursor:'pointer'}). prepend('<i></i>').append($('<span>').
+			text(tt).append('<i></i><span></span>'));
+			});
+		});
+	});*/

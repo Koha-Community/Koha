@@ -28,7 +28,7 @@
         <option <!-- TMPL_IF NAME="ms_se" -->selected="selected"<!-- /TMPL_IF --> value="se">Series</option>
         <option <!-- TMPL_IF NAME="ms_callnum" -->selected="selected"<!-- /TMPL_IF --> value="callnum">Call Number</option>
 </select>
-        <input type="text" name="q" <!-- TMPL_IF NAME="ms_value" -->value="<!-- TMPL_VAR NAME="ms_value" -->" <!-- /TMPL_IF --> style="width: 30%;" />
+        <input type="text" name="q" <!-- TMPL_IF NAME="ms_value" -->value="<!-- TMPL_VAR NAME="ms_value" -->" <!-- /TMPL_IF --> style="width: 40%;" />
         <!-- TMPL_IF name="mylibraryfirst" --><!-- TMPL_IF name="loggedinusername" -->
             <input name="limit" value="<!-- TMPL_VAR name="LoginBranchcode" -->" type="hidden" />
         <!-- /TMPL_IF --><!-- /TMPL_IF -->
@@ -38,7 +38,7 @@
 	<!-- TMPL_IF NAME="opacbookbag" --><a class="cart" href="/cgi-bin/koha/opac-basket.pl" onclick="openBasket(); return false;" title="A &quot;shopping cart&quot; for your selections">Book Bag<span id="basket"><script language="javascript" type="text/javascript">if(basketcount){ document.write(basketcount) };</script></span></a><!-- /TMPL_IF -->
 
 	<!--TMPL_IF NAME="virtualshelves" --><a class="lists" href="/cgi-bin/koha/opac-shelves.pl">Lists</a><!-- /TMPL_IF -->
-	
+
 		<!-- TMPL_IF NAME="virtualshelves" -->
 		<li><a href="/cgi-bin/koha/opac-shelves.pl">Lists</a>
 		<!-- TMPL_IF NAME="barshelves" --><-- ! FIXME: Owen, you can take it from here!  Make it "barshelves" for proof/demo. -->
@@ -55,6 +55,10 @@
 	
 	<div id="moresearches"><a href="/cgi-bin/koha/opac-search.pl">Advanced Search</a><!-- TMPL_IF name="OpacBrowser" --> | <a href="/cgi-bin/koha/opac-browser.pl">Browse by Hierarchy</a><!-- /TMPL_IF --><!-- TMPL_IF name="OpacAuthorities" --> | <a href="/cgi-bin/koha/opac-authorities-home.pl">Browse by Subject</a><!-- /TMPL_IF --><!-- TMPL_IF name="OpacCloud" --> | <a href="/cgi-bin/koha/opac-tags_subject.pl">Tag Cloud</a><!-- /TMPL_IF --><!-- TMPL_IF name="OpacTopissue" --> | <a href="/cgi-bin/koha/opac-topissues.pl">Most Popular</a><!-- /TMPL_IF --></div>
 
+</div>
+<div id="fluid-content-2">
+<!-- TMPL_IF NAME="opacbookbag" --><div><a class="button cart" href="/cgi-bin/koha/opac-basket.pl" onclick="openBasket(); return false;" title="A &quot;shopping cart&quot; for your selections"><span><span><span><span>Book Bag</span></span></span></span></a></div><!-- /TMPL_IF -->
+	<!--TMPL_IF NAME="virtualshelves" --><div><a class="button lists" href="/cgi-bin/koha/opac-shelves.pl"><span><span><span><span>Lists</span></span></span></span></a></div><!-- /TMPL_IF -->
 </div>
 </div>
 </div>
