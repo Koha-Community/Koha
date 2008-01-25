@@ -10,7 +10,7 @@
         <!-- TMPL_LOOP NAME="languages_loop" -->
 
             <!-- TMPL_IF NAME="plural" -->
-            <li class="more"><a href="#"><!-- TMPL_VAR NAME="native_description" --> (<!-- TMPL_VAR NAME="rfc4646_subtag" -->)</a><div id="sublangs">
+            <li class="more"><a id="showlang" href="#"><!-- TMPL_VAR NAME="native_description" --> (<!-- TMPL_VAR NAME="rfc4646_subtag" -->)</a><div id="sublangs">
             <div class="bd"><ul>
             <!-- TMPL_LOOP NAME="sublanguages_loop" -->
 

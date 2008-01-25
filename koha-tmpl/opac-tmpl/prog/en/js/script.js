@@ -36,17 +36,32 @@ function Dopop(link) {
 	newin=window.open(link,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
 }
 	
-/*$(document).ready(function(){
-	$('#masthead').each(function(){
-		$('a.button').each(function(){
-			var b = $(this);
-			var tt = b.text() || b.val();
-			if ($(':submit,:button',this)) {
-				b = $('<a>').insertAfter(this).addClass('btn').attr('id',this.id).attr('href',this.href);
-				$(this).remove();
-			}
-			b.text('').css({cursor:'pointer'}). prepend('<i></i>').append($('<span>').
-			text(tt).append('<i></i><span></span>'));
-			});
-		});
-	});*/
+YAHOO.util.Event.onContentReady("changelanguage", function () {
+                var oMenu = new YAHOO.widget.Menu("sublangs", { zindex: 2 });
+
+	            function positionoMenu() {
+                    oMenu.align("bl", "tl");
+                }
+
+                oMenu.subscribe("beforeShow", function () {
+                    if (this.getRoot() == this) {
+						positionoMenu();
+                    }
+                });
+
+                oMenu.render();
+
+				oMenu.cfg.setProperty("context", ["showlang", "bl", "tl"]);
+
+				function onYahooClick(p_oEvent) {
+                    // Position and display the menu        
+                    positionoMenu();
+                    oMenu.show();
+                    // Stop propagation and prevent the default "click" behavior
+                    YAHOO.util.Event.stopEvent(p_oEvent);
+                }
+
+				YAHOO.util.Event.addListener("showlang", "click", onYahooClick);
+
+				YAHOO.widget.Overlay.windowResizeEvent.subscribe(positionoMenu);
+            });
