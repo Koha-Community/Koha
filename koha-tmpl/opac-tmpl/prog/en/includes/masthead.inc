@@ -57,8 +57,97 @@
 
 </div>
 <div id="fluid-content-2">
-<!-- TMPL_IF NAME="opacbookbag" --><div><a class="button cart" href="/cgi-bin/koha/opac-basket.pl" onclick="openBasket(); return false;" title="A &quot;shopping cart&quot; for your selections"><span><span><span><span>Book Bag</span></span></span></span></a></div><!-- /TMPL_IF -->
-	<!--TMPL_IF NAME="virtualshelves" --><div><a class="button lists" href="/cgi-bin/koha/opac-shelves.pl"><span><span><span><span>Lists</span></span></span></span></a></div><!-- /TMPL_IF -->
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#listmenubutton").hover(function(){
+		  $(this).attr("src","/opac-tmpl/prog/images/lists-button-on.gif");
+	},function(){
+		  $(this).attr("src","/opac-tmpl/prog/images/lists-button.gif");
+	});
+	
+	$("#cartmenubutton").hover(function(){
+		  $(this).attr("src","/opac-tmpl/prog/images/cart-button-on.gif");
+	},function(){
+		  $(this).attr("src","/opac-tmpl/prog/images/cart-button.gif");
+	});
+	
+ });
+ 
+    YAHOO.util.Event.onContentReady("cartmenu", function () {
+        var cartMenu = new YAHOO.widget.Menu("cartmenu", { lazyload: true });
+		cartMenu.render();
+		cartMenu.cfg.setProperty("context", ["cartmenubutton", "tr", "br"]);
+		cartMenu.subscribe("show", cartMenu.focus);
+        function positioncartMenu() {
+                    cartMenu.align("tr", "br");
+		}
+		YAHOO.util.Event.addListener("cartmenubutton", "click", cartMenu.show, null, cartMenu);
+		YAHOO.widget.Overlay.windowResizeEvent.subscribe(positioncartMenu);
+    });
+
+    YAHOO.util.Event.onContentReady("listsmenu", function () {
+        var listMenu = new YAHOO.widget.Menu("listsmenu", { lazyload: true });
+		listMenu.render();
+		listMenu.cfg.setProperty("context", ["listmenubutton", "tr", "br"]);
+		listMenu.subscribe("show", listMenu.focus);
+        function positionlistMenu() {
+                    listMenu.align("tr", "br");
+		}
+		YAHOO.util.Event.addListener("listmenubutton", "click", listMenu.show, null, listMenu);
+		YAHOO.widget.Overlay.windowResizeEvent.subscribe(positionlistMenu);
+    });
+    
+</script>
+<script>
+
+		function init() {
+
+			// Build overlay3 dynamically, initially hidden, aligned to context element "context", and 200px wide
+			var cartOverlay = new YAHOO.widget.Overlay("overlay3", { context:["cartmenubutton","tr","br"],
+																					  visible:false,
+																					  width:"200px" } );
+			cartOverlay.setHeader("Overlay #3 from Script");
+			cartOverlay.setBody("This is a dynamically generated Overlay.");
+			cartOverlay.setFooter("End of Overlay #3");
+			cartOverlay.render(document.body);
+
+			YAHOO.util.Event.addListener("cartmenubutton", "mouseover", cartOverlay.show, cartOverlay, true);
+			YAHOO.util.Event.addListener("cartmenubutton", "mouseout", cartOverlay.hide, cartOverlay, true);
+		}
+
+		YAHOO.util.Event.addListener(window, "load", init);
+</script>
+<style>
+	#overlay3 {
+		background-color : #FFF;
+		border: 1px solid black;
+		padding : .5em;
+	}
+</style>
+
+<div id="listsmenu" class="yuimenu">
+    <div class="bd">
+	<h4>Your Lists</h4>
+        <ul class="first-of-type">
+            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="#">Want to Read</a></li>
+            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="#">Class List</a></li>
+            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="#">Caldecott Winners</a></li>
+        </ul>
+	
+		        <ul class="second-of-type">
+            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://mail.yahoo.com">Manage Lists</a></li>
+            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://addressbook.yahoo.com">Create New List</a></li>
+        </ul>           
+    </div>
+</div>
+
+
+<div id="cartmenubutton"><a href="#basket">Your Cart</a></div>
+<div id="listmenubutton"><a href="#listmenu">Your Lists</a></div>
+
+<!-- <!-- TMPL_IF NAME="opacbookbag" --><div><a class="button cart" href="/cgi-bin/koha/opac-basket.pl" onclick="openBasket(); return false;" title="A &quot;shopping cart&quot; for your selections"><span><span><span><span>Book Bag</span></span></span></span></a></div><!-- /TMPL_IF -->
+	<!--TMPL_IF NAME="virtualshelves" --><div><a class="button lists" href="/cgi-bin/koha/opac-shelves.pl"><span><span><span><span>Lists</span></span></span></span></a></div><!-- /TMPL_IF --> -->
 </div>
 </div>
 </div>

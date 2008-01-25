@@ -130,25 +130,73 @@ h1 {
 	font-size : 138.5%;
 }
 
-h1#libraryname {
-	font-size : 50%
-	font-weight : normal;
-	margin : .2em 0 .2em .5em;
-}
-
 h1#library {
 	font-size : 100%
 	font-weight : normal;
 	margin : .2em 0 .2em .5em;
 } 
 
-h1#libraryname a {
-	text-decoration : none;
-	color : #006699;
+
+h1#libraryname {
+	background:transparent url(../../images/koha-logo.gif) no-repeat scroll 0%;
+	border: 0;
+	margin:0;
+	padding:0;
+	width:120px;
 }
 
-h1#libraryname a:hover {
-	color : #000066;
+h1#libraryname a {
+	border:0;
+	cursor:pointer;
+	display:block;
+	height:0px !important;
+	margin:0;
+	overflow:hidden;
+	padding:40px 0 0;
+	text-decoration:none;
+	width:120px;
+}
+
+div#cartmenubutton {
+	background:transparent url(../../images/cart-button.gif) no-repeat scroll 0%;
+	border: 0;
+	float : left;
+	margin:0 10px 0 0;
+	padding:0;
+	width:68px;
+}
+
+div#cartmenubutton a {
+	border:0;
+	cursor:pointer;
+	display:block;
+	height:0px !important;
+	margin:0;
+	overflow:hidden;
+	padding:40px 0 0;
+	text-decoration:none;
+	width:68px;
+}
+
+div#listmenubutton {
+	background:transparent url(../../images/lists-button.gif) no-repeat scroll 0%;
+	border: 0;
+	float : left;
+	margin:0;
+	padding:0;
+	width:84px;
+}
+
+div#listmenubutton a {
+	border:0;
+	cursor:pointer;
+	display:block;
+	height:0px !important;
+	margin:0;
+	overflow:hidden;
+	padding:40px 0 0;
+	text-decoration:none;
+	width:84px;
 }
 
 h1,h2,h3,h4,h5,h6 {
@@ -392,7 +440,7 @@ a .term {
 #opac-main-search {
 	background-image : url( ../../images/menu-background.gif);
 	background-repeat : repeat-x;
-	background-color : #6699CC;
+	background-color : #739ACF;
 	border-top : 1px solid #335599;
 	border-bottom : 1px solid #335599;
 	padding : .7em 0 .4em .5em;
@@ -694,14 +742,6 @@ a.reserve {
 	line-height : 2em;
 }
 
-#opac-main-search a.cart {
-
-}
-
-#opac-main-search a.lists {
-
-}
-
 .pages {
 	line-height : 1.8em;
 	text-align: center;
@@ -880,30 +920,6 @@ td.overdue {
 	padding:0.5em;
 }
 
-h1#libraryname {
-	border: 0;
-	margin:0;
-	padding:0;
-	width:120px;
-}
-h1#libraryname {
-	background:transparent url(../../images/koha-logo.gif) no-repeat scroll 0%;
-	border: 0;
-	padding:0;
-}
-
-h1#libraryname a {
-	border:0;
-	cursor:pointer;
-	display:block;
-	height:0px !important;
-	margin:0;
-	overflow:hidden;
-	padding:40px 0 0;
-	text-decoration:none;
-	width:120px;
-}
-
 table#marc, table#marc td, table#marc th {
 	border : 0;
 }
@@ -1005,108 +1021,74 @@ div.message {
 	font-weight : normal;
 	text-decoration : none;
 }
-* html .btn span,
-* html .btn i {
+
+#cart-box {
 	float : left;
-	width : auto;
-	background-image : none;
-	cursor : pointer;
+	background : url(../../images/cart-background-right.gif) top right no-repeat;
+	margin : 0 !important;
+	margin : 5px 0 0 0;
 }
 
-.btn {
-	display : block;
-	position : relative;
-	background : #adc2eb;
-	margin-left : 10px;
-	padding : 5px;
-	float : left;
-	color : #fff;
+#cart-box a {
+	font-size : 120%;
 	text-decoration : none;
-	cursor : pointer;
 }
 
-.btn * {
-	font-style : normal;
-	background-image : url(../../images/button-background2.png);
-	background-repeat : no-repeat;
+#cart-box .cart {
+	margin : 0;
+	padding : 10px 23px 0 9px;
+	background : url(../../images/cart-background-left.gif) top left no-repeat;
+}
+
+#cart-box .cart-bottom {
+	margin : 0;
+	padding : 0 0 0 12px;
+	background : url(../../images/cart-background-left.gif) bottom left no-repeat;
+}
+
+#cart-box .cart-bottom em {
 	display : block;
-	position : relative;
+	line-height : 1px;
+	background : url(../../images/cart-background-right.gif) bottom right no-repeat;
+	padding : 9px 9px 0 0;
+	margin : 0;
 }
 
-.btn i {
-	background-position : top left;
-	position : absolute;
-	margin-bottom : -5px;
-	top : 0;
-	left : 0;
-	width : 5px;
-	height : 5px;
+#cart-box a.cartbutton {
+	background : #9bc1dd url(../../images/cart-small.gif) center left no-repeat;
+	padding-left : 20px;
 }
 
-.btn span {
-	background-position : bottom left;
-	left : -5px;
-	padding : 0 0 5px 10px;
-	margin-bottom : -5px;
+#opac-main-search #listsmenu a, #opac-main-search #listsmenu h4 {
+	color : #000;
+	font-weight : normal;
+}
+ #opac-main-search #listsmenu h4 {
+	font-weight : bold;
+	margin : 0 .3em; 
+ }
+
+/*body #listsmenu .yuimenu ul {
+	border-top : 1px dashed #CC9;
+}*/
+
+#opac-main-search #listsmenu .bd {
+	background-color : #F2EDBA;
+	border : 2px solid #DFD69A;
+	// margin : 3em 0 0 0;
+}
+#opac-main-search #listsmenu .yui-menu-shadow {
+	// margin : 3em 0 0 0;
 }
 
-.btn span i {
-	background-position : bottom right;
-	margin-bottom : 0;
-	position : absolute;
-	left : 100%;
-	width : 10px;
-	height : 100%;
-	top : 0;
+#opac-main-search #listsmenu .yuimenuitemlabel.selected {
+	background-color : #F9F6D5;
 }
 
-.btn span span {
-	background-position : top right;
-	position : absolute;
-	right : -10px;
-	margin-left : 10px;
-	top : -5px;
-	height : 0;
+#opac-main-search #listsmenu ul {
+	border-color : #DFD69A;
 }
 
-.btn[class] {
-	background-image : url(../../images/shade.png);
-	background-position : bottom;
-}
-
-.button:link,
-.button:visited,
-.button:hover {border:none;}
-* html #wrap {width:50em}
-/* End Demo page styling */
-
-.button:link,
-.button:visited { /* Top left corner, top edge */
-	float:left;
-	color:#ddd;
-	background:#333 url(../../images/button-center.gif) no-repeat;
-	text-decoration:none;
-}
-.button * {display:block;}
-.button span { /* Top right corner */
-	padding:13px 0 0;
-	background:url(../../images/button-corners.gif) no-repeat right top;
-}
-.button span span { /* Bottom left corner, left and bottom edges */
-	padding:0 0 0 13px;
-	background:url(../../images/button-center.gif) no-repeat left bottom;
-}
-.button span span span { /* Bottom right corner */
-	padding:0 0 13px;
-	background:url(../../images/button-corners.gif) no-repeat right bottom;
-}
-.button span span span span { /* Right edge */
-	padding:3px 12px 3px 13px; /* Extra padding (3px vertical, 13px horizontal) added to give the text some breathing room */
-	background:url(../../images/button-center.gif) no-repeat right center;
-}
-.button:hover,
-.button:focus,
-.button:active { /* Make the button more visible on :hover and :focus */
-	outline:2px solid #ff0; /* Not supported by IE/Win :-( */
-	color:#fff;
+#container {
+	color : #000;
 }
