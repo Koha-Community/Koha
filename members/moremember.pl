@@ -336,6 +336,7 @@ $template->param($data);
 
 $template->param(
 	detailview => 1,
+  DHTMLcalendar_dateformat=>C4::Dates->DHTMLcalendar(), 
     roaddetails      => $roaddetails,
     borrowernumber   => $borrowernumber,
     reregistration   => $reregistration,

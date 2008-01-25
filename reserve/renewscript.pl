@@ -25,7 +25,8 @@
 use CGI;
 use C4::Circulation;
 use C4::Auth;
-
+use C4::Dates qw/format_date_in_iso/;
+use strict;
 my $input = new CGI;
 
 #Set Up User_env
@@ -55,6 +56,7 @@ else {
 }
 my @barcodes = $input->param('barcodes[]');
 my $branch=$input->param('branch');
+my $datedue=C4::Dates->new($input->param('newduedate'));
 
 # warn "barcodes : @barcodes";
 #
@@ -67,7 +69,7 @@ foreach my $itemno (@data) {
     # check status before renewing issue
 	my ($renewokay,$error) = CanBookBeRenewed($borrowernumber,$itemno);
     if ($renewokay){
-        AddRenewal($borrowernumber,$itemno,$branch);
+        AddRenewal($borrowernumber,$itemno,$branch,$datedue);
     }
 	else {
 		$failedrenews.="&failedrenew=$itemno";        
