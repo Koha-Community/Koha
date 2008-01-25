@@ -228,6 +228,7 @@ my %tabsysprefs;
     $tabsysprefs{OPACSubscriptionDisplay}="OPAC";
     $tabsysprefs{OPACURLOpenInNewWindow}="OPAC";
     $tabsysprefs{OPACUserCSS}="OPAC";
+    $tabsysprefs{OPACHighlightedWords}="OPAC";
     $tabsysprefs{OPACViewOthersSuggestions}="OPAC";
     $tabsysprefs{URLLinkText}="OPAC";
 

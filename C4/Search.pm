@@ -1237,28 +1237,29 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
         }
 
 # Add search-term highlighting to the whole record where they match using <span>s
-        my $searchhighlightblob;
-        for my $highlight_field ( $marcrecord->fields ) {
-
-  # FIXME: need to skip title, subtitle, author, etc., as they are handled below
-            next if $highlight_field->tag() =~ /(^00)/;    # skip fixed fields
-            for my $subfield ($highlight_field->subfields()) {
-                my $match;
-                next if $subfield->[0] eq '9';
-                my $field = $subfield->[1];
-                for my $term ( keys %$span_terms_hashref ) {
-                    if ( ( $field =~ /$term/i ) && (( length($term) > 3 ) || ($field =~ / $term /i)) ) {
-                        $field =~ s/$term/<span class=\"term\">$&<\/span>/gi;
-                    $match++;
+        if (C4::Context->preference("OpacHighlightedWords")){
+            my $searchhighlightblob;
+            for my $highlight_field ( $marcrecord->fields ) {
+    
+    # FIXME: need to skip title, subtitle, author, etc., as they are handled below
+                next if $highlight_field->tag() =~ /(^00)/;    # skip fixed fields
+                for my $subfield ($highlight_field->subfields()) {
+                    my $match;
+                    next if $subfield->[0] eq '9';
+                    my $field = $subfield->[1];
+                    for my $term ( keys %$span_terms_hashref ) {
+                        if ( ( $field =~ /$term/i ) && (( length($term) > 3 ) || ($field =~ / $term /i)) ) {
+                            $field =~ s/$term/<span class=\"term\">$&<\/span>/gi;
+                        $match++;
+                        }
                     }
+                    $searchhighlightblob .= $field . " ... " if $match;
                 }
-                $searchhighlightblob .= $field . " ... " if $match;
+    
             }
-
+            $searchhighlightblob = ' ... '.$searchhighlightblob if $searchhighlightblob;
+            $oldbiblio->{'searchhighlightblob'} = $searchhighlightblob;
         }
-        $searchhighlightblob = ' ... '.$searchhighlightblob if $searchhighlightblob;
-        $oldbiblio->{'searchhighlightblob'} = $searchhighlightblob;
-
 # save an author with no <span> tag, for the <a href=search.pl?q=<!--tmpl_var name="author"-->> link
         $oldbiblio->{'author_nospan'} = $oldbiblio->{'author'};
 
