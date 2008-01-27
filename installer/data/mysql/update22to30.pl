@@ -257,9 +257,9 @@ my $DBversion = "3.00.00.000";
                 value               => 'Calendar',
                 forceupdate         => { 'explanation' => 1,
                                         'type' => 1},
-                explanation            => 'How to calculate return dates : Calendar means holidays will be controled, Days means the return date don\'t depend on holidays',
+                explanation            => 'Choose the method for calculating due date: select Calendar to use the holidays module, and Days to ignore the holidays module',
                 type        => 'Choice',
-                options        => 'Calendar|Days'
+                options        => 'Calendar|Days|Datedue'
             },
             {
                 uniquefieldrequired => 'variable',
