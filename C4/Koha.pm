@@ -455,15 +455,23 @@ sub getitemtypeimagesrcfromurl {
 }
 
 sub getitemtypeimagedir {
-    return C4::Context->opachtdocs . '/'
-      . C4::Context->preference('template')
-      . '/itemtypeimg';
+	my $src = shift;
+	if ($src eq 'intranet') {
+		return C4::Context->config('intrahtdocs') . '/' .C4::Context->preference('template') . '/img/itemtypeimg';
+	}
+	else {
+		return C4::Context->config('opachtdocs') . '/' . C4::Context->preference('template') . '/itemtypeimg';
+	}
 }
 
 sub getitemtypeimagesrc {
-    return '/opac-tmpl' . '/'
-      . C4::Context->preference('template')
-      . '/itemtypeimg';
+	 my $src = shift;
+	if ($src eq 'intranet') {
+		return '/intranet-tmpl' . '/' .	C4::Context->preference('template') . '/img/itemtypeimg';
+	} 
+	else {
+		return '/opac-tmpl' . '/' . C4::Context->preference('template') . '/itemtypeimg';
+	}
 }
 
 =head2 GetPrinters
