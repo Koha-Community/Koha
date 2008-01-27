@@ -11,7 +11,7 @@ var valCookie = readCookie(nameCookie);
 if(valCookie){
     var arrayRecords = valCookie.split("/");
     if(arrayRecords.length > 0){
-        var basketcount = " ("+(arrayRecords.length-1)+")";
+        var basketcount = arrayRecords.length-1;
     } else {
         var basketcount = "";
     }
@@ -357,7 +357,12 @@ function showLess() {
 
 function updateBasket(updated_value,target) {
     if(typeof document.getElementById != "undefined") {
-        target.getElementById('basket').innerHTML = " ("+updated_value+")";
+		if(target.getElementById('basket')){
+        	target.getElementById('basket').innerHTML = " ("+updated_value+")";
+		}
+		if(target.getElementById('cartDetails')){
+			target.getElementById('cartDetails').innerHTML = _("Your cart contains ")+updated_value+_(" items");
+		}
     } else if (typeof document.layers != "undefined") {
         target.layers['basket'].open();
         target.layers['basket'].write(" ("+updated_value+")");
@@ -366,6 +371,7 @@ function updateBasket(updated_value,target) {
 document.getElementById == "undefined") {
         target.all['basket'].innerHTML = " ("+updated_value+")";
     }
+	var basketcount = updated_value;
 }
 
 function openBiblio(dest,biblionumber) {

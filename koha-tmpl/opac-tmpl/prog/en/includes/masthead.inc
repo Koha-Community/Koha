@@ -60,8 +60,6 @@
         <!-- /TMPL_IF --><!-- /TMPL_IF -->
         <input type="submit" value="Search" class="submit" />
     </form>
-
-<!-- 	<!-- TMPL_IF NAME="opacbookbag" --><a class="cart" href="/cgi-bin/koha/opac-basket.pl" onclick="openBasket(); return false;" title="A &quot;shopping cart&quot; for your selections">Book Bag<span id="basket"><script language="javascript" type="text/javascript">if(basketcount){ document.write(basketcount) };</script></span></a><!-- /TMPL_IF --> -->
 	
 	<div id="moresearches"><a href="/cgi-bin/koha/opac-search.pl">Advanced Search</a><!-- TMPL_IF name="OpacBrowser" --> | <a href="/cgi-bin/koha/opac-browser.pl">Browse by Hierarchy</a><!-- /TMPL_IF --><!-- TMPL_IF name="OpacAuthorities" --> | <a href="/cgi-bin/koha/opac-authorities-home.pl">Browse by Subject</a><!-- /TMPL_IF --><!-- TMPL_IF name="OpacCloud" --> | <a href="/cgi-bin/koha/opac-tags_subject.pl">Tag Cloud</a><!-- /TMPL_IF --><!-- TMPL_IF name="OpacTopissue" --> | <a href="/cgi-bin/koha/opac-topissues.pl">Most Popular</a><!-- /TMPL_IF --></div>
 
@@ -87,24 +85,29 @@ $(document).ready(function() {
     });<!-- /TMPL_IF -->
     
 		<!-- TMPL_IF NAME="opacbookbag" -->function init() {
+			
 			var cartOverlay = new YAHOO.widget.Overlay("cartDetails", { context:["cartmenulink","tr","br"],
-																					  visible:false,
-																					  width:"200px" } );
-			// cartOverlay.setHeader("Overlay #3 from Script");
-			cartOverlay.setBody("Your cart contains 3 items.");
-			// cartOverlay.setFooter("End of Overlay #3");
-			cartOverlay.render(document.body);
+																	  visible:false,
+																	  width:"200px" } );
+			cartOverlay.render();
+			
+	//		var cartOverlay = new YAHOO.widget.Overlay("cartDetails", { context:["cartmenulink","tr","br"],
+	//																				  visible:false,
+	//																				  width:"200px" } );
+	//		cartOverlay.setBody("Your cart has "+basketcount+" items in it");
+	//		cartOverlay.render(document.body);
 
 			YAHOO.util.Event.addListener("cartmenulink", "mouseover", cartOverlay.show, cartOverlay, true);
 			YAHOO.util.Event.addListener("cartmenulink", "mouseout", cartOverlay.hide, cartOverlay, true);
+			YAHOO.util.Event.addListener("cartmenulink", "click", cartOverlay.hide, cartOverlay, true);
 		}
 
 		YAHOO.util.Event.addListener(window, "load", init);<!-- /TMPL_IF -->
 </script>
 
-<!-- TMPL_IF NAME="opacbookbag" --><a id="cartmenulink" href="#">Cart<span id="basket"><script language="javascript" type="text/javascript">if(basketcount){ document.write(basketcount) };</script></span></a><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="opacbookbag" --><a id="cartmenulink" href="/cgi-bin/koha/opac-basket.pl">Cart<span id="basket"></span></a><!-- /TMPL_IF -->
 <!--TMPL_IF NAME="virtualshelves" --><a id="listsmenulink" href="#">Lists</a><!-- /TMPL_IF -->
-
+<!-- TMPL_IF NAME="opacbookbag" --><div id="cartDetails" style="visibility:hidden">Your cart is empty.</div><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="virtualshelves" -->
 <div id="listsmenu" class="yuimenu">
     <div class="bd">

@@ -35,24 +35,23 @@ function confirmDelete(message) {
 function Dopop(link) {
 	newin=window.open(link,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
 }
+
+$(document).ready(function(){
+	if(basketcount){ updateBasket(basketcount,document) }	
+});
 	
 YAHOO.util.Event.onContentReady("changelanguage", function () {
                 var oMenu = new YAHOO.widget.Menu("sublangs", { zindex: 2 });
-
 	            function positionoMenu() {
                     oMenu.align("bl", "tl");
                 }
-
                 oMenu.subscribe("beforeShow", function () {
                     if (this.getRoot() == this) {
 						positionoMenu();
                     }
                 });
-
                 oMenu.render();
-
 				oMenu.cfg.setProperty("context", ["showlang", "bl", "tl"]);
-
 				function onYahooClick(p_oEvent) {
                     // Position and display the menu        
                     positionoMenu();
@@ -60,8 +59,6 @@ YAHOO.util.Event.onContentReady("changelanguage", function () {
                     // Stop propagation and prevent the default "click" behavior
                     YAHOO.util.Event.stopEvent(p_oEvent);
                 }
-
 				YAHOO.util.Event.addListener("showlang", "click", onYahooClick);
-
 				YAHOO.widget.Overlay.windowResizeEvent.subscribe(positionoMenu);
             });
