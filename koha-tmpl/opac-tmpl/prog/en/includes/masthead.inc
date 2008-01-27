@@ -6,7 +6,7 @@
 <div id="opac-main-search" class="yui-g">
 
    <div id="masthead">
-   <!-- TMPL_IF NAME="opacsmallimage" --><h1 id="libraryname" style="background-image: url('http://www.myacpl.org/img/AthensLibraries_Logo.gif');"><!-- TMPL_ELSE --><h1 id="libraryname"><!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-main.pl"><!-- TMPL_IF NAME="LibraryName" --><!-- TMPL_VAR NAME="LibraryName" --><!-- TMPL_ELSE -->Koha Online Catalog<!-- /TMPL_IF --></a></h1>
+   <h1 id="libraryname" <!-- TMPL_IF NAME="opacsmallimage" -->style="background-image: url('<!-- TMPL_VAR NAME="opacsmallimage" -->');"><!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-main.pl"><!-- TMPL_IF NAME="LibraryName" --><!-- TMPL_VAR NAME="LibraryName" --><!-- TMPL_ELSE -->Koha Online Catalog<!-- /TMPL_IF --></a></h1>
    </div>
 
 <div id="fluid">
