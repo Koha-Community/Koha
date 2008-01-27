@@ -847,6 +847,38 @@ my $DBversion = "3.00.00.000";
             },
                 
         ],
+        biblio => [
+            {
+                field   => 'datecreated',
+                type    => 'date',
+                null    => 'NOT NULL',
+                default => '',
+                extra   => '',
+            },
+            {
+                field   => 'frameworkcode',
+                type    => 'varchar(4)',
+                null    => 'NULL',
+                default => '',
+                extra   => '',
+            },
+	],
+        deletedbiblio => [
+            {
+                field   => 'datecreated',
+                type    => 'date',
+                null    => 'NOT NULL',
+                default => '',
+                extra   => '',
+            },
+            {
+                field   => 'frameworkcode',
+                type    => 'varchar(4)',
+                null    => 'NULL',
+                default => '',
+                extra   => '',
+            },
+	],
         deletedbiblioitems => [
             {
                 field   => 'itemtype',
@@ -1983,6 +2015,12 @@ my $DBversion = "3.00.00.000";
         print "Updating publisheddate\n";
         $dbh->do("update serial set publisheddate=planneddate where publisheddate is NULL");
     }
+    # Why are we setting publisheddate = planneddate ?? if we don't have the data, we don't know it.
+    # now, let's get rid of 000-00-00's.
+
+        $dbh->do("update serial set publisheddate=NULL where publisheddate = 0");
+        $dbh->do("update subscription set firstacquidate=startdate where firstacquidate = 0");
+    
     foreach my $table ( keys %tabledata ) {
         print "Checking for data required in table $table...\n" unless $silent;
         my $tablerows = $tabledata{$table};
