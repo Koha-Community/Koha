@@ -133,7 +133,7 @@ if ( $email_add ) {
     $boundary = '--' . $boundary;
     $mail{body} = <<END_OF_BODY;
 $boundary
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
 $body
