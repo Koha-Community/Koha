@@ -102,8 +102,9 @@ if ( $op eq 'add_form' ) {
     }
 
     # build list of images
-    my $imagedir_filesystem = getitemtypeimagedir();
-    my $imagedir_web        = getitemtypeimagesrc();
+    my $src = "intranet"; # so that the getitemtypeimage functions know where they were called from -fbcit
+    my $imagedir_filesystem = getitemtypeimagedir($src);
+    my $imagedir_web        = getitemtypeimagesrc($src);
     opendir( DIR, $imagedir_filesystem )
       or warn "cannot opendir " . $imagedir_filesystem . ": " . $!;
     my @imagelist;
