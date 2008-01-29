@@ -77,7 +77,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacreadinghistory',1,'If ON, enables display of Patron Circulation History in OPAC','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacsmallimage','','Enter a complete URL to an image to replace the default Koha logo','','free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacstylesheet','','Enter a complete URL to use an alternate layout stylesheet in OPAC','','free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacthemes','prog','Set the preferred order for themes. The specified theme will be tried first.','','Themes');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacthemes','prog','Define the current theme for the OPAC interface.','','Themes');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacTopissue',1,'If ON, enables the \'most popular items\' link on OPAC',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacuserjs','','Define custom javascript for inclusion in OPAC','50|20','Textarea');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacuserlogin',1,'Enable or disable display of user login features',NULL,'YesNo');
