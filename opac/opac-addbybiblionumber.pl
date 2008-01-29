@@ -32,6 +32,8 @@ use C4::Output;
 
 my $query        = new CGI;
 my @biblionumber = $query->param('biblionumber');
+my $selectedshelf = $query->param('selectedshelf');
+my $newshelf = $query->param('newshelf');
 my $shelfnumber  = $query->param('shelfnumber');
 my $newvirtualshelf = $query->param('newvirtualshelf');
 my $category     = $query->param('category');
@@ -63,13 +65,23 @@ if ($shelfnumber && ($shelfnumber != -1)) {
 	exit;
 }
 else {
+	if($selectedshelf){
+	# adding to specific shelf
+	my ( $singleshelf, $singleshelfname, $singlecategory ) = GetShelf( $query->param('selectedshelf') );
+				$template->param(
+				singleshelf 		=> 1,
+				shelfnumber         => $singleshelf,
+				shelfname           => $singleshelfname,
+				"category$singlecategory" => 1
+			);
+	} else {
+	# offer choice of shelves
     my ($shelflist) = GetShelves( $loggedinuser, 3 );
     my @shelvesloop;
     my %shelvesloop;
     foreach my $element ( sort keys %$shelflist ) {
         push( @shelvesloop, $element );
 		$shelvesloop{$element} = $shelflist->{$element}->{'shelfname'};
-    }
 
     my $CGIvirtualshelves;
     if ( @shelvesloop > 0 ) {
@@ -81,7 +93,13 @@ else {
             -tabindex => '',
             -multiple => 0
         );
+
+	$template->param (
+		CGIvirtualshelves       => $CGIvirtualshelves,
+	);
     }
+    }
+	}
 
 	my @biblios;
 	for my $bib (@biblionumber) {
@@ -93,13 +111,10 @@ else {
 			} );
 	}
 	$template->param (
+		newshelf => $newshelf,
 		multiple => (scalar(@biblios) > 1),
 		total    => scalar @biblios,
 		biblios  => \@biblios,
-	);
-
-	$template->param (
-		CGIvirtualshelves       => $CGIvirtualshelves,
 	);
 
 	output_html_with_http_headers $query, $cookie, $template->output;

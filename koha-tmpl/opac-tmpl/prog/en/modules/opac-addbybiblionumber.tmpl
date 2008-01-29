@@ -8,10 +8,10 @@
 <body>
 <div id="custom-doc" class="yui-t7">
 
-<!-- TMPL_IF NAME="multiple"-->
-    <h1>Add <!-- TMPL_VAR NAME="total"--> items to a list:</h1>
+<!-- TMPL_UNLESS NAME="newshelf" --><!-- TMPL_IF NAME="multiple"-->
+    <h1>Add <!-- TMPL_VAR NAME="total"--> items to <!-- TMPL_IF NAME="singleshelf" --><em><!-- TMPL_VAR NAME="shelfname" --></em>: <!-- TMPL_ELSE -->a list:<!-- /TMPL_IF --></h1>
 <!-- TMPL_ELSE -->
-	<h1>Add to a list:</h1>
+	<h1>Add to <!-- TMPL_IF NAME="singleshelf" --><em><!-- TMPL_VAR NAME="shelfname" --></em><!-- TMPL_ELSE -->a list:<!-- /TMPL_IF --></h1>
 <!-- /TMPL_IF -->
      <ul> <!-- TMPL_LOOP NAME="biblios"-->
            <li> <span class="title"><!-- TMPL_VAR NAME="title"--></span> 
@@ -25,12 +25,21 @@
 <ol><li>    <label for="shelfnumber">Add to list:</label> <!-- TMPL_VAR NAME="CGIvirtualshelves" --></li></ol>
  <!-- TMPL_LOOP NAME="biblios" --> <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->"><!-- /TMPL_LOOP -->
     <input type="hidden" name="modifyshelfcontents" value="1" /></fieldset>
-    <fieldset class="action"><input type="submit" value="Save" class="submit" /> <a class="cancel" href="#" onclick="closePopup();">Cancel</a></fieldset>
+    <fieldset class="action"><input type="submit" value="Save" class="submit" /> <a class="close cancel" href="#">Cancel</a></fieldset>
 </form>
 <p>...or...</p>
+<!-- TMPL_ELSE -->
+<!-- TMPL_IF NAME="singleshelf" -->
+<form name="f1" action="/cgi-bin/koha/opac-addbybiblionumber.pl" method="post">
+<!-- TMPL_LOOP NAME="biblios" --> <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->"><!-- /TMPL_LOOP -->
+	<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->" />
+    <input type="hidden" name="modifyshelfcontents" value="1" /></fieldset>
+    <fieldset class="action"><input type="submit" value="Save" class="submit" /> <a class="close cancel" href="#">Cancel</a></fieldset>
+</form>
 <!-- /TMPL_IF -->
+<!-- /TMPL_IF --><!-- /TMPL_UNLESS -->
 
-<form name="f2" method="post" action="/cgi-bin/koha/opac-addbybiblionumber.pl">
+<!-- TMPL_UNLESS NAME="singleshelf" --><form name="f2" method="post" action="/cgi-bin/koha/opac-addbybiblionumber.pl">
 <fieldset class="rows">    <legend>Add to a New List:</legend>
         <ol><li>
             <label for="newvirtualshelf">
@@ -44,19 +53,13 @@
                 <option value="2">Public</option>
             </select></li></ol></fieldset>
  <!-- TMPL_LOOP NAME="biblios" --> <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->"><!-- /TMPL_LOOP -->
-    <fieldset class="action"><input type="submit" value="Save" class="submit" /> <a class="cancel" href="#" onclick="closePopup();">Cancel</a></fieldset>
-</form>
+    <fieldset class="action"><input type="submit" value="Save" class="submit" /> <a class="close cancel" href="#">Cancel</a></fieldset>
+</form><!-- /TMPL_UNLESS -->
 
 <p align="center">
     <br /><br />
-    <a href="javascript:closePopup();">close this window.</a>
+    <a href="#" class="close">close this window.</a>
 </p>
-
-<script type="text/javascript" language="javascript">
-    function closePopup () {
-        window.close();
-    }
-</script>
 
 </body>
 </html>

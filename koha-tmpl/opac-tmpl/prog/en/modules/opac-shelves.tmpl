@@ -32,13 +32,13 @@
 		<div class="dialog alert">A record matching barcode <b><!-- TMPL_VAR NAME="duplicatebiblio" --></b> has already been added.</div>
 		<!-- /TMPL_IF --> 
 		<!-- TMPL_IF NAME="delete_ok" -->
-			<p class="message">Shelf <!-- TMPL_VAR NAME="delete_ok" --> Deleted.</p>
+			<div class="dialog message">Shelf <!-- TMPL_VAR NAME="delete_ok" --> Deleted.</div>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="delete_fail" -->
-			<p class="error">ERROR: Database error. Delete (shelf number <!-- TMPL_VAR NAME="delete_fail" -->) failed.</p>
+			<div class="dialog message">ERROR: Database error. Delete (shelf number <!-- TMPL_VAR NAME="delete_fail" -->) failed.</div>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="unrecognized" -->
-			<p class="error">ERROR: Shelf number <!-- TMPL_VAR NAME="unrecognized" --> unrecognized.</p>
+			<div class="dialog message">ERROR: Shelf number <!-- TMPL_VAR NAME="unrecognized" --> unrecognized.</div>
 		<!-- /TMPL_IF -->
 	</div>
 </div>
@@ -93,7 +93,7 @@
                 <!-- /TMPL_LOOP --><!-- /itemsloop -->
     </table>
             <!-- TMPL_ELSE -->
-        <div class="message">This List is empty.  You can add to your lists from the results of any <a href="opac-main.pl">search</a>!</div>
+        <div class="dialog message">This List is empty.  You can add to your lists from the results of any <a href="opac-main.pl">search</a>!</div>
             <!-- /TMPL_IF --><!-- /itemsloop -->
     <!-- /TMPL_IF --><!-- /viewshelf -->
 

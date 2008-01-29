@@ -38,6 +38,9 @@ function Dopop(link) {
 
 $(document).ready(function(){
 	if(basketcount){ updateBasket(basketcount,document) }	
+	$(".close").click(function(){
+		window.close();
+	});
 });
 	
 YAHOO.util.Event.onContentReady("changelanguage", function () {
