@@ -65,6 +65,7 @@ my $path = C4::Context->config('intrahtdocs') . "/prog/en/includes/";
 sub gettemplate {
     my ( $tmplbase, $interface, $query ) = @_;
     ($query) or warn "no query in gettemplate";
+	warn "Template base is $tmplbase";
     my $htdocs;
     if ( $interface ne "intranet" ) {
         $htdocs = C4::Context->config('opachtdocs');
@@ -138,10 +139,8 @@ sub themelanguage {
     } else {
         $lang = $languages[0];
     }      
-    my $theme = 'prog';
-
+    my $theme = 'prog';	# in the event of theme failure default to 'prog' -fbcit
     my $dbh = C4::Context->dbh;
-    my @languages;
     my @themes;
     if ( $interface eq "intranet" ) {
         @themes    = split " ", C4::Context->preference("template");
