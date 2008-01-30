@@ -1,6 +1,6 @@
 <style type="text/css">
 	.btn { display: block; position: relative; background: #aaa; padding: 5px; float: right; color: #fff; text-decoration: none; cursor: pointer; }
-	.btn * { font-style: normal; background-image: url('../../opac-tmpl/prog/images/btn2.png'); background-repeat: no-repeat; display: block; position: relative; }
+	.btn * { font-style: normal; background-image: url('../../opac-tmpl/prog/images/button-background.png'); background-repeat: no-repeat; display: block; position: relative; }
 	.btn i { background-position: top left; position: absolute; margin-bottom: -5px;  top: 0; left: 0; width: 5px; height: 5px; }
 	.btn span { background-position: bottom left; left: -5px; padding: 0 0 5px 10px; margin-bottom: -5px; }
 	.btn span i { background-position: bottom right; margin-bottom: 0; position: absolute; left: 100%; width: 10px; height: 100%; top: 0; }
@@ -12,15 +12,13 @@
 	.btn.blue { background: #2ae; }
 	.btn.blue:hover { background-color: #6699FF;}
 	.btn.green { background: #9d4; }
-	.btn.pink { background: #e1a; }
-	.btn:hover { background-color: #a00; }
+	.btn.green:hover { background-color: #D5DD4D; }
 	.btn:active { background-color: #444; }
-	.btn[class] {  background-image: url('../../opac-tmpl/prog/images/shade.png'); background-position: bottom; }
+	.btn[class] {  background-image: url('../../opac-tmpl/prog/images/button-background-gradient.png'); background-position: bottom; }
 
 	* html .btn { border: 3px double #aaa; }
 	* html .btn.blue { border-color: #2ae; }
 	* html .btn.green { border-color: #9d4; }
-	* html .btn.pink { border-color: #e1a; }
 	* html .btn:hover { border-color: #a00; }
 	#cartmenulink { margin-right :  1em;	}
 
@@ -146,8 +144,8 @@ $(document).ready(function() {
 	   
 </script>
 
-<!-- TMPL_IF NAME="opacbookbag" --><a id="cartmenulink" class="btn green" href="/cgi-bin/koha/opac-basket.pl">Cart<span id="basket"></span></a><!-- /TMPL_IF -->
 <!--TMPL_IF NAME="virtualshelves" --><a class="btn blue" id="listsmenulink" href="#">Lists</a><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="opacbookbag" --><a id="cartmenulink" class="btn green" href="/cgi-bin/koha/opac-basket.pl">Cart<span id="basket"></span></a><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="opacbookbag" --><div id="cartDetails" style="visibility:hidden">Your cart is empty.</div><!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="virtualshelves" -->
