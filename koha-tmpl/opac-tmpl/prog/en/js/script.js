@@ -65,3 +65,43 @@ YAHOO.util.Event.onContentReady("changelanguage", function () {
 				YAHOO.util.Event.addListener("showlang", "click", onYahooClick);
 				YAHOO.widget.Overlay.windowResizeEvent.subscribe(positionoMenu);
             });
+YAHOO.util.Event.onContentReady("listsmenu", function () {
+   
+   	$('.btn').each(function(){
+	  var b = $(this);
+	  var tt = b.text() || b.val();
+	  if ($(':submit,:button',this)) {
+	  b = $('<a>').insertAfter(this). addClass(this.className).attr('id',this.id);
+	  $(this).remove();
+	  }
+	  b.text('').css({cursor:'pointer'}). prepend('<i></i>').append($('<span>').
+	  text(tt).append('<i></i><span></span>'));
+	  });
+   
+        var listMenu = new YAHOO.widget.Menu("listsmenu", { lazyload: true });
+		listMenu.render();
+		listMenu.cfg.setProperty("context", ["listsmenulink", "tr", "br"]);
+		listMenu.cfg.setProperty("effect",{effect:YAHOO.widget.ContainerEffect.FADE,duration:0.05});
+		listMenu.subscribe("show", listMenu.focus);
+        function positionlistMenu() {
+                    listMenu.align("tr", "br");
+		}
+		YAHOO.util.Event.addListener("listsmenulink", "click", listMenu.show, null, listMenu);
+		YAHOO.widget.Overlay.windowResizeEvent.subscribe(positionlistMenu);
+    });
+    
+function init() {
+		$('#cartmenulink').click(function(){
+			openBasket(); return false;
+		});
+					// Build cartOverlay based on markup
+					cartOverlay = new YAHOO.widget.Overlay("cartDetails", { context:["cartmenulink","tr","br"],
+																							  visible:false,
+																							  width:"200px",
+																							  effect:{effect:YAHOO.widget.ContainerEffect.FADE,duration:0.25} } );
+					cartOverlay.render();
+					YAHOO.util.Event.addListener("cartmenulink", "mouseover", cartOverlay.show, cartOverlay, true);
+					YAHOO.util.Event.addListener("cartmenulink", "mouseout", cartOverlay.hide, cartOverlay, true);
+					YAHOO.util.Event.addListener("cartmenulink", "click", cartOverlay.hide, cartOverlay, true);
+				}
+				YAHOO.util.Event.addListener(window, "load", init);

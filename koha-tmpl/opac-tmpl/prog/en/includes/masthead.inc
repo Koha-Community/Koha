@@ -1,36 +1,9 @@
-<style type="text/css">
-	.btn { display: block; position: relative; background: #aaa; padding: 5px; float: right; color: #fff; text-decoration: none; cursor: pointer; }
-	.btn * { font-style: normal; background-image: url('../../opac-tmpl/prog/images/button-background.png'); background-repeat: no-repeat; display: block; position: relative; }
-	.btn i { background-position: top left; position: absolute; margin-bottom: -5px;  top: 0; left: 0; width: 5px; height: 5px; }
-	.btn span { background-position: bottom left; left: -5px; padding: 0 0 5px 10px; margin-bottom: -5px; }
-	.btn span i { background-position: bottom right; margin-bottom: 0; position: absolute; left: 100%; width: 10px; height: 100%; top: 0; }
-	.btn span span { background-position: top right; position: absolute; right: -10px; margin-left: 10px; top: -5px; height: 0; }
-
-	* html .btn span,
-	* html .btn i { float: left; width: auto; background-image: none; cursor: pointer; }
-
-	.btn.blue { background: #3A7BFD; }
-	.btn.blue:hover { background-color: #6699FF;}
-	.btn.green { background: #9C0; }
-	.btn.green:hover { background-color: #9C0; background-image: none; }
-	.btn:active { background-color: #444; }
-	// .btn[class] {  background-image: url('../../opac-tmpl/prog/images/shade8.png'); background-position: bottom; }
-	.btn[class] {  background-image: url('../../opac-tmpl/prog/images/shade9.png'); background-position: top; }
-
-	* html .btn { border: 3px double #aaa; }
-	* html .btn.blue { border-color: #2ae; }
-	* html .btn.green { border-color: #9d4; }
-	* html .btn:hover { border-color: #a00; }
-	#cartmenulink { margin-right :  1em;	}
-
-</style>
 <div id="members">
 	<ul><!-- TMPL_IF NAME="loggedinusername" --><li><span class="members">Welcome, <a href="/cgi-bin/koha/opac-user.pl"><span class="loggedinusername"><!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --><!-- /TMPL_LOOP --></span></a></span></li><li><a class="logout" href="/cgi-bin/koha/opac-main.pl?logout.x=1">Log Out</a></li><!-- TMPL_ELSE --><li><a href="/cgi-bin/koha/opac-user.pl">Log in to Your Account</a></li><!-- /TMPL_IF -->
 	</ul>	
 </div>
 
 <div id="opac-main-search" class="yui-g">
-
    <div id="masthead">
    <h1 id="libraryname" <!-- TMPL_IF NAME="opacsmallimage" -->style="background-image: url('<!-- TMPL_VAR NAME="opacsmallimage" -->');"><!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-main.pl"><!-- TMPL_IF NAME="LibraryName" --><!-- TMPL_VAR NAME="LibraryName" --><!-- TMPL_ELSE -->Koha Online Catalog<!-- /TMPL_IF --></a></h1>
    </div>
@@ -92,61 +65,8 @@
 
 </div>
 <div id="fluid-content-2">
-
-<script type="text/javascript">
-$(document).ready(function() {
-	  //  <!-- TMPL_IF NAME="opacbookbag" -->var cartButton = new YAHOO.widget.Button("cartmenulink");<!-- /TMPL_IF -->
-		//<!--TMPL_IF NAME="virtualshelves" -->var listsButton = new YAHOO.widget.Button("listsmenulink");<!-- /TMPL_IF -->
- });
- 
-   <!--TMPL_IF NAME="virtualshelves" -->YAHOO.util.Event.onContentReady("listsmenu", function () {
-        var listMenu = new YAHOO.widget.Menu("listsmenu", { lazyload: true });
-		listMenu.render();
-		listMenu.cfg.setProperty("context", ["listsmenulink", "tr", "br"]);
-		listMenu.subscribe("show", listMenu.focus);
-        function positionlistMenu() {
-                    listMenu.align("tr", "br");
-		}
-		YAHOO.util.Event.addListener("listsmenulink", "click", listMenu.show, null, listMenu);
-		YAHOO.widget.Overlay.windowResizeEvent.subscribe(positionlistMenu);
-    });<!-- /TMPL_IF -->
-    
-		<!-- TMPL_IF NAME="opacbookbag" -->function init() {
-			
-			var cartOverlay = new YAHOO.widget.Overlay("cartDetails", { context:["cartmenulink","tr","br"],
-																	  visible:false,
-																	  width:"200px" } );
-			cartOverlay.render();
-			
-	//		var cartOverlay = new YAHOO.widget.Overlay("cartDetails", { context:["cartmenulink","tr","br"],
-	//																				  visible:false,
-	//																				  width:"200px" } );
-	//		cartOverlay.setBody("Your cart has "+basketcount+" items in it");
-	//		cartOverlay.render(document.body);
-
-			YAHOO.util.Event.addListener("cartmenulink", "mouseover", cartOverlay.show, cartOverlay, true);
-			YAHOO.util.Event.addListener("cartmenulink", "mouseout", cartOverlay.hide, cartOverlay, true);
-			YAHOO.util.Event.addListener("cartmenulink", "click", cartOverlay.hide, cartOverlay, true);
-		}
-
-		YAHOO.util.Event.addListener(window, "load", init);<!-- /TMPL_IF -->
-	$(document).ready(function(){
-	  $('.btn').each(function(){
-	  var b = $(this);
-	  var tt = b.text() || b.val();
-	  if ($(':submit,:button',this)) {
-	  b = $('<a>').insertAfter(this). addClass(this.className).attr('id',this.id);
-	  $(this).remove();
-	  }
-	  b.text('').css({cursor:'pointer'}). prepend('<i></i>').append($('<span>').
-	  text(tt).append('<i></i><span></span>'));
-	  });
-	  });
-	   
-</script>
-
 <!--TMPL_IF NAME="virtualshelves" --><a class="btn blue" id="listsmenulink" href="#">Lists</a><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="opacbookbag" --><a id="cartmenulink" class="btn green" href="/cgi-bin/koha/opac-basket.pl">Cart<span id="basket"></span></a><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="opacbookbag" --><a id="cartmenulink" class="btn green" href="/cgi-bin/koha/opac-basket.pl">Cart<div id="basket"></div></a><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="opacbookbag" --><div id="cartDetails" style="visibility:hidden">Your cart is empty.</div><!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="virtualshelves" -->

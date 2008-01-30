@@ -7,6 +7,7 @@
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/lib/yui/container.css" />
 <script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/yahoo-dom-event/yahoo-dom-event.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/element/element-beta-min.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/animation/animation-min.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/container/container-min.js"></script> 
 <script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/menu/menu-min.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/button/button-beta-min.js"></script>
@@ -28,7 +29,7 @@
 <script type="text/javascript" language="javascript">
 	//<![CDATA[
     function _(s) { return s } // dummy function for gettext
-    var MSG_BASKET_EMPTY = _("You cart is currently empty");
+    <!-- TMPL_IF NAME="opacbookbag" -->var MSG_BASKET_EMPTY = _("You cart is currently empty");
     var MSG_RECORD_IN_BASKET = _("This item is already in your cart");
     var MSG_RECORD_ADDED = _("This item has been added to your cart");
     var MSG_NRECORDS_ADDED = _(" item(s) added to your cart");
@@ -36,13 +37,7 @@
     var MSG_NO_RECORD_SELECTED = _("No item was selected");
     var MSG_NO_RECORD_ADDED = _("No item was added to your cart");
     var MSG_CONFIRM_DEL_BASKET = "Are you sure you want to empty your cart?"
-    var MSG_CONFIRM_DEL_RECORDS = "Are you sure you want to remove the selected items?";
-	$(document).ready(function(){
-		$('#cartmenulink').click(function(){
-			openBasket(); return false;
-		});
-	});
-
+    var MSG_CONFIRM_DEL_RECORDS = "Are you sure you want to remove the selected items?";<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="AmazonContent" -->$(window).load(function() {
 		 	verify_images();
 		 });<!-- /TMPL_IF -->
