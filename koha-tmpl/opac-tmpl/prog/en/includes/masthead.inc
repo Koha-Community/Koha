@@ -9,12 +9,13 @@
 	* html .btn span,
 	* html .btn i { float: left; width: auto; background-image: none; cursor: pointer; }
 
-	.btn.blue { background: #2ae; }
+	.btn.blue { background: #3A7BFD; }
 	.btn.blue:hover { background-color: #6699FF;}
-	.btn.green { background: #9d4; }
-	.btn.green:hover { background-color: #D5DD4D; }
+	.btn.green { background: #9C0; }
+	.btn.green:hover { background-color: #9C0; background-image: none; }
 	.btn:active { background-color: #444; }
-	.btn[class] {  background-image: url('../../opac-tmpl/prog/images/button-background-gradient.png'); background-position: bottom; }
+	// .btn[class] {  background-image: url('../../opac-tmpl/prog/images/shade8.png'); background-position: bottom; }
+	.btn[class] {  background-image: url('../../opac-tmpl/prog/images/shade9.png'); background-position: top; }
 
 	* html .btn { border: 3px double #aaa; }
 	* html .btn.blue { border-color: #2ae; }
@@ -37,7 +38,7 @@
 <div id="fluid">
 <div id="fluid-offset">
 <div id="fluid-content-1">
-    <form name="searchform" style="border: 1px solid #FFC;" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform">
+    <form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform">
 	<label for="masthead_search"> Search <!-- TMPL_IF name="mylibraryfirst" --> <!-- TMPL_IF name="loggedinusername" -->(in <!-- TMPL_VAR name="LoginBranchcode" --> only)<!-- /TMPL_IF --><!-- /TMPL_IF --></label>
 	<select name="idx" id="masthead_search">
 	<!-- TMPL_IF NAME="ms_kw" -->
