@@ -1,5 +1,11 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo;  Details for: <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" --><!-- TMPL_VAR NAME="title" --><!-- /TMPL_LOOP -->
-<!-- TMPL_INCLUDE NAME="doc-head-close-basket-print.inc" -->
+</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="shortcut icon" href="<!-- TMPL_VAR NAME="themelang" -->/includes/favicon.ico" type="image/x-icon" />
+<meta http-equiv="Content-Language" content="en-us" />
+<style type="text/css"> 
+    @import url(<!-- TMPL_VAR NAME="themelang" -->/css/print.css);
+</style>
 </head>
 <body>
 <div id="window">
@@ -61,7 +67,6 @@
 <th>Due Date</th>
 <th>Last Seen</th>
 <th>Barcode</th></tr>
-<tbody>
 <!--INFORMATION ROWS-->
 <!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
 <tr><td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="description" -->.gif" align="left" title="<!-- TMPL_VAR NAME="barcode" -->" alt="" /><!-- TMPL_VAR NAME="description" --></td>
@@ -71,11 +76,11 @@
 <td><!-- TMPL_VAR NAME="datelastseen" --></td>
 <td><!-- TMPL_VAR NAME="barcode" --></td></tr>
 <!-- /TMPL_LOOP -->
-</tbody>
 </table>
 <!-- TMPL_ELSE -->
 <table><tr><td>No copies available.</td></tr></table>
 <!-- /TMPL_IF -->
+</div>
 <script language="javascript" type="text/javascript">
 function docprint() {
 	window.print();

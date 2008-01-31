@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo; Your Book Bag
+<!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo; Your Cart
     <!-- TMPL_IF NAME="print_basket" --></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="<!-- TMPL_VAR NAME="themelang" -->/includes/favicon.ico" type="image/x-icon" />
@@ -14,7 +14,7 @@
 <div id="doc" class="yui-t7">
 
 <!-- TMPL_UNLESS NAME="print_basket" -->
-<h1>Your Book Bag</h1>
+<h1>Your Cart</h1>
 
 <div id="toolbar">
 <ul>
@@ -34,7 +34,7 @@
             <!-- TMPL_VAR NAME="title" -->
                 <!-- TMPL_IF name="subtitle" --> <!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF -->
         <!-- TMPL_ELSE -->
-            <form>
+            <form action="opac-basket.pl" method="get">
                 <input type="checkbox" value="<!-- TMPL_VAR NAME="biblionumber" -->" name="bib<!-- TMPL_VAR NAME="biblionumber" -->" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" onclick="selRecord(value,checked)" />
                 <!-- TMPL_VAR NAME="title" -->
                 <!-- TMPL_IF name="subtitle" --> <!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF -->
@@ -171,21 +171,16 @@
             <!-- TMPL_ELSE -->
                 <tr>
             <!-- /TMPL_IF -->
-            <td>
-                    <!-- TMPL_UNLESS NAME="print_basket" -->
+            <!-- TMPL_UNLESS NAME="print_basket" --><td>
+                    
                         <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->">
                         </label>
                         <br />
-                        <input type="checkbox"
-                            value="<!-- TMPL_VAR NAME="biblionumber" -->"
-                            name="bib<!-- TMPL_VAR NAME="biblionumber" -->"
-                            id="bib<!-- TMPL_VAR NAME="biblionumber" -->"
-                            onclick="selRecord(value,checked);">
-                    <!-- /TMPL_UNLESS -->
-                </form></td>
+                        <input type="checkbox" value="<!-- TMPL_VAR NAME="biblionumber" -->" name="bib<!-- TMPL_VAR NAME="biblionumber" -->" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" onclick="selRecord(value,checked);" />
+                   
+                </td> <!-- /TMPL_UNLESS -->
             <td><!-- TMPL_VAR name="itemtype" --></td>
-            <td><p>
-                    <a href="#" onclick="openBiblio('<!-- TMPL_VAR name="dest" -->',<!-- TMPL_VAR name="biblionumber" -->)">
+            <td><a href="#" onclick="openBiblio('<!-- TMPL_VAR name="dest" -->',<!-- TMPL_VAR name="biblionumber" -->)">
                         <!-- TMPL_VAR NAME="title" -->
                     </a>
                         <!-- TMPL_VAR NAME="author" -->
@@ -200,13 +195,15 @@
             <td><!-- TMPL_VAR NAME="classification" --></td>
             </tr>
         <!-- /TMPL_LOOP -->
-    </table>
+    </table></form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_UNLESS NAME="print_basket" -->
-<form name="myform">
+<form name="myform" action="opac-basket.pl" method="get">
     <input type="hidden" name="records" id="records" />
 </form>
 <!-- /TMPL_UNLESS -->
 
-<!-- TMPL_INCLUDE NAME="opac-basket-bottom.inc" -->
+</div>
+</body>
+</html>

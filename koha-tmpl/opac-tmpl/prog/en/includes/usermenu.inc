@@ -1,6 +1,6 @@
-<!-- TMPL_IF NAME="loggedinusername" --><div id="usermenu">
+<!-- TMPL_IF NAME="loggedinusername" --><div id="menu">
         	<ul>
-        		<li><a href="/cgi-bin/koha/opac-user.pl">my summary</a></li>
+        		<li class="active"><a href="/cgi-bin/koha/opac-user.pl">my summary</a></li>
         		<li><a href="/cgi-bin/koha/opac-account.pl">my fines</a></li>
         		<li><a href="/cgi-bin/koha/opac-userdetails.pl">my personal details</a></li>
         		<!-- TMPL_IF NAME="OpacPasswordChange" --><li><a href="/cgi-bin/koha/opac-passwd.pl">change my password</a></li><!-- /TMPL_IF -->

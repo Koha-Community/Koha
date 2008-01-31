@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo;  Sending Your Book Bag
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo;  Sending Your Cart
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body style="padding: 1em;">
@@ -6,11 +6,11 @@
 
 	<!-- TMPL_IF NAME="SENT" -->
 		<h3>Message Sent</h3>
-	    <p>The book bag was sent to: <!-- TMPL_VAR NAME="email_add" --></p>
+	    <p>The cart was sent to: <!-- TMPL_VAR NAME="email_add" --></p>
 		<p><a href="#" onclick="window.close(); return false;">Close window</a></p>
 	<!-- /TMPL_IF  -->
 	<!-- TMPL_IF NAME="error" -->
-	<p>Problem sending the book bag...</p>
+	<p>Problem sending the cart...</p>
 	<!-- /TMPL_IF -->
 	
 <!-- TMPL_ELSE -->
@@ -18,7 +18,7 @@
 <form action="<!-- TMPL_VAR NAME="url" -->" method="post">
 
 <fieldset class="rows"> 
-<legend>Sending your book bag</legend>
+<legend>Sending your cart</legend>
 <ol>   <li>
         <label for="email_add">E-mail Address:</label>
         <input type="text" id="email_add" name="email_add" size="43" />
@@ -34,5 +34,5 @@
 </form>
 
 <!-- /TMPL_IF -->
-
-<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+</body>
+</html>

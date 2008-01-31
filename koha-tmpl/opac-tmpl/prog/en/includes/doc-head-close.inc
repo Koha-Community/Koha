@@ -33,7 +33,7 @@
     var MSG_RECORD_IN_BASKET = _("This item is already in your cart");
     var MSG_RECORD_ADDED = _("This item has been added to your cart");
     var MSG_NRECORDS_ADDED = _(" item(s) added to your cart");
-    var MSG_NRECORDS_IN_BASKET = _("already in the bag");
+    var MSG_NRECORDS_IN_BASKET = _("already in your cart");
     var MSG_NO_RECORD_SELECTED = _("No item was selected");
     var MSG_NO_RECORD_ADDED = _("No item was added to your cart");
     var MSG_CONFIRM_DEL_BASKET = "Are you sure you want to empty your cart?"

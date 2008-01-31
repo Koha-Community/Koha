@@ -632,10 +632,6 @@ fieldset.brief div.hint, fieldset.rows div.hint {
 	margin : .4em;
 }
 
-#menu {
-	margin-top: 1em;
-}
-
 h2 span.hint {
 	font-size: 76%;
 	font-weight : normal;
@@ -647,10 +643,6 @@ h2 span.hint {
 }
 a.cancel {
 	padding-left : 1em;
-}
-
-#usermenu {
-	margin-top : 1em;
 }
 
 #toolbar ul {
@@ -1223,3 +1215,42 @@ a#cartmenulink, a#cartmenulink:hover {
 	* html .btn.green { border-color: #9d4; }
 	* html .btn:hover { border-color: #a00; }
 	#cartmenulink { margin-right :  1em;	}
+	
+	div#menu {
+	border-right: 1px solid #979797;
+	font-size : 94%;
+	margin-right: .5em;
+	padding-top: 1em;
+	padding-bottom: 2em;
+}
+
+div#menu li a {
+	text-decoration: none;
+	display: block;
+	background : #EEE url(../../images/side-tab-gradient.gif) repeat-y top right;
+	border: 1px solid #979797;
+	font-size: 111%;
+	margin: .5em 0;
+	padding: .4em .3em;
+	margin-right :  -1px;
+}
+
+div#menu li a:hover {
+	background : #E8F0F6 url(../../images/side-tab-gradient-hover.gif) repeat-y top right;
+}
+
+div#menu li.active a:hover {
+	background-color: #fff;
+	color :  #0000CC;
+}
+
+#menu ul li {
+	list-style-type: none;
+}
+
+#menu ul li.active a {
+	background-color: #FFF;
+	background-image : none;
+	border-right: 0;
+	font-weight: bold;
+}
