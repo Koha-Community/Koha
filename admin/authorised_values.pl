@@ -44,18 +44,6 @@ sub AuthorizedValuesForCategory  {
 	return ($cnt,\@results);
 }
 
-sub _already_exists {
-    my ($category, $authorised_value) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare_cached("SELECT COUNT(*) FROM authorised_values
-                                    WHERE category = ?
-                                    AND authorised_value = ?");
-    $sth->execute($category, $authorised_value);
-    my ($count) = $sth->fetchrow_array();
-    $sth->finish();
-    return $count;
-}
-
 my $input = new CGI;
 my $searchfield=$input->param('searchfield');
 $searchfield=~ s/\,//g;
@@ -115,32 +103,54 @@ if ($op eq 'add_form') {
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
+    my $new_category = $input->param('category');
+    my $new_authorised_value = $input->param('authorised_value');
+    my $duplicate_entry = 0;
 
-    if (_already_exists($input->param('category'), $input->param('authorised_value'))) {
-     if ($id){
-      my $sth=$dbh->prepare("UPDATE authorised_values SET category=?,authorised_value=?,lib=? where id=?");
-      my $lib = $input->param('lib');
-      undef $lib if ($lib eq ""); # to insert NULL instead of a blank string
-  
-      $sth->execute($input->param('category'), $input->param('authorised_value'), $lib,$input->param('id'));          
-      print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=".$input->param('category')."\"></html>";
-      exit;
-     } else {       
-        $template->param(duplicate_category => $input->param('category'),
-                         duplicate_value =>  $input->param('authorised_value'),
+    if ( $id ) { # Update
+        my $sth = $dbh->prepare( "SELECT category, authorised_value FROM authorised_values WHERE id='$id' ");
+        $sth->execute();
+        my ($category, $authorised_value) = $sth->fetchrow_array();
+        $sth->finish;
+        if ( $authorised_value ne $new_authorised_value ) {
+            my $sth = $dbh->prepare_cached( "SELECT COUNT(*) FROM authorised_values " .
+                "WHERE category = '$new_category' AND authorised_value = '$new_authorised_value' ");
+            $sth->execute();
+            ($duplicate_entry) = $sth->fetchrow_array();
+            warn "**** duplicate_entry = $duplicate_entry";
+        }
+        unless ( $duplicate_entry ) {
+            my $sth=$dbh->prepare("UPDATE authorised_values SET category=?,authorised_value=?,lib=? where id=?");
+            my $lib = $input->param('lib');
+            undef $lib if ($lib eq ""); # to insert NULL instead of a blank string
+            $sth->execute($new_category, $new_authorised_value, $lib, $id);          
+            print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=".$new_category."\"></html>";
+            exit;
+        }
+    }
+    else { # Insert
+        my $sth = $dbh->prepare_cached( "SELECT COUNT(*) FROM authorised_values " .
+            "WHERE category = '$new_category' AND authorised_value = '$new_authorised_value' ");
+        $sth->execute();
+        ($duplicate_entry) = $sth->fetchrow_array();
+        $sth->finish();
+        unless ( $duplicate_entry ) {
+            my $sth=$dbh->prepare("INSERT INTO authorised_values (id,category,authorised_value,lib) values (?,?,?,?)");
+    	    my $lib = $input->param('lib');
+    	    undef $lib if ($lib eq ""); # to insert NULL instead of a blank string
+    	    $sth->execute($id, $new_category, $new_authorised_value, $lib);
+    	    $sth->finish;
+    	    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=".$input->param('category')."\"></html>";
+    	    exit;
+        }
+    }
+    if ( $duplicate_entry ) {       
+        $template->param(duplicate_category => $new_category,
+                         duplicate_value =>  $new_authorised_value,
                          else => 1);
         default_form();
      }           
-    } else {
-	    my $sth=$dbh->prepare("INSERT INTO authorised_values (id,category,authorised_value,lib) values (?,?,?,?)");
-	    my $lib = $input->param('lib');
-	    undef $lib if ($lib eq ""); # to insert NULL instead of a blank string
 	
-	    $sth->execute($input->param('id'), $input->param('category'), $input->param('authorised_value'), $lib);
-	    $sth->finish;
-	    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=".$input->param('category')."\"></html>";
-	    exit;
-    }
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
