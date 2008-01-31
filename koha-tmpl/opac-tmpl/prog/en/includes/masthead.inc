@@ -72,14 +72,24 @@
 <!-- TMPL_IF NAME="virtualshelves" -->
 <div id="listsmenu" class="yuimenu">
     <div class="bd">
-<!-- TMPL_IF NAME="loggedinusername" --><h4>Your Lists</h4>
+	<h4>Public Lists</h4>
 		<!-- TMPL_IF NAME="barshelves" -->
 			<ul class="first-of-type">
 			<!-- TMPL_LOOP NAME="barshelvesloop" -->
-			<li class="yuimenuitem"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelfnumber" -->"><!-- TMPL_VAR NAME="shelfname" --></a></li>
+			<!-- TMPL_IF EXPR="category != 1" --><li class="yuimenuitem"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelfnumber" -->"><!-- TMPL_VAR NAME="shelfname" --></a></li><!-- /TMPL_IF -->
 			<!-- /TMPL_LOOP -->
 			</ul>   
 		<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="loggedinusername" -->
+<h4>Your Lists</h4>
+		<!-- TMPL_IF NAME="barshelves" -->
+			<ul class="first-of-type">
+			<!-- TMPL_LOOP NAME="barshelvesloop" -->
+			<!-- TMPL_IF EXPR="category == 1" --><li class="yuimenuitem"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelfnumber" -->"><!-- TMPL_VAR NAME="shelfname" --></a></li><!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+			</ul>   
+		<!-- /TMPL_IF -->
+
 			<ul class="second-of-type">
             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl">Manage Lists</a></li>
         </ul>
