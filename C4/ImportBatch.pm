@@ -269,7 +269,7 @@ sub  BatchStageMarcRecords {
         if ($progress_interval and (0 == ($rec_num % $progress_interval))) {
             &$progress_callback($rec_num);
         }
-        my $marc_record = FixEncoding($marc_blob, "\x1D");
+        my $marc_record = FixEncoding($marc_blob);
         my $import_record_id;
         if (scalar($marc_record->fields()) == 0) {
             push @invalid_records, $marc_blob;
@@ -312,6 +312,7 @@ sub AddItemsToImportBiblio {
     my ($item_tag,$item_subfield) = &GetMarcFromKohaField("items.itemnumber",'');
     foreach my $item_field ($marc_record->field($item_tag)) {
         my $item_marc = MARC::Record->new();
+        $item_marc->leader("00000    a              "); # must set Leader/09 to 'a'
         $item_marc->append_fields($item_field);
         $marc_record->delete_field($item_field);
         my $sth = $dbh->prepare_cached("INSERT INTO import_items (import_record_id, status, marcxml)
