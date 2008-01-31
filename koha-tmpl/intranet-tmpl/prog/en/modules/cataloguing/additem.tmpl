@@ -163,23 +163,25 @@ function CreateKey(){
 
 <div id="cataloguing_additem_itemlist">
     <!-- TMPL_IF name="item_loop" -->
+        <div style="overflow:auto">
         <table>
             <tr>
+                <th colspan="2">&nbsp;</th>
                 <!-- TMPL_LOOP NAME="item_header_loop" -->
                     <th>
                         <!-- TMPL_VAR NAME="header_value" -->
                     </th>
                 <!-- /TMPL_LOOP -->
-                <th colspan="2">&nbsp;</th>
             </tr>
                 <!-- TMPL_LOOP NAME="item_loop" -->
                 <tr id="row<!-- TMPL_VAR NAME="itemnumber" -->">
-                    <!-- TMPL_VAR NAME="item_value" -->
                     <!-- TMPL_IF Name="nomod"--> <td colspan="2">&nbsp;</td><!--TMPL_ELSE--><td><a href="additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Edit</a></td>
                     <td><a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->" onclick="confirm_deletion(<!-- TMPL_VAR NAME="biblionumber" -->,<!-- TMPL_VAR NAME="itemnumber" -->); return false;">Delete</a></td><!--/TMPL_IF-->
+                    <!-- TMPL_VAR NAME="item_value" -->
                 </tr>
                 <!-- /TMPL_LOOP -->
         </table>
+        </div>
     <!-- /TMPL_IF -->
 </div>
 
