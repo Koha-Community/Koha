@@ -11,7 +11,7 @@
 <div id="fluid">
 <div id="fluid-offset">
 <div id="fluid-content-1">
-    <!-- TMPL_UNLESS NAME="itemtypeloop" --><form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform">
+    <!-- TMPL_UNLESS NAME="advsearch" --><form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform">
 	<label for="masthead_search"> Search <!-- TMPL_IF name="mylibraryfirst" --> <!-- TMPL_IF name="loggedinusername" -->(in <!-- TMPL_VAR name="LoginBranchcode" --> only)<!-- /TMPL_IF --><!-- /TMPL_IF --></label>
 	<select name="idx" id="masthead_search">
 	<!-- TMPL_IF NAME="ms_kw" -->

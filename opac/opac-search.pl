@@ -145,6 +145,7 @@ if ( $template_type eq 'advsearch' ) {
 
     }
     $template->param(uc(C4::Context->preference("marcflavour")) => 1,
+					  advsearch => 1,
                       search_boxes_loop => \@search_boxes_array);
 
 # use the global setting by default
