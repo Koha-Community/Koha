@@ -7,6 +7,8 @@ use C4::Context;
 use C4::Auth;
 use C4::Output;
 
+my $DEBUG = 1;
+
 #my $destdir = "/usr/local/koha/intranet/htdocs/intranet-tmpl/images/patronpictures";
 #my $uploadfile = shift @ARGV;
 my $input = new CGI;
@@ -35,7 +37,9 @@ my ( $total, $handled, @counts );
 
 if ( $uploadfile ) {
     my $dirname = File::Temp::tempdir( CLEANUP => 1);
+    warn "dirname = $dirname" if $DEBUG;
     my ( $tfh, $tempfile ) = File::Temp::tempfile( SUFFIX => '.zip', UNLINK => 1 );
+    warn "tempfile = $tempfile" if $DEBUG;
     my ( @directories, %errors );
 
     $errors{'NOTZIP'} = 1 unless ( $uploadfilename =~ /\.zip$/i );
@@ -59,6 +63,7 @@ if ( $uploadfile ) {
 	    opendir $dir, $recursive_dir;
 	    while ( my $entry = readdir $dir ) {
 			push @directories, "$recursive_dir/$entry" if ( -d "$recursive_dir/$entry" and $entry !~ /^\./ );
+                        warn "$recursive_dir/$entry" if $DEBUG;
 	    }
 	    closedir $dir;
 	}
@@ -68,11 +73,12 @@ if ( $uploadfile ) {
 	}
 
 	$total = scalar @directories;
-
+        warn "Total files processed: $total" if $DEBUG;
 	$template->param(
 			 TOTAL => $total,
 			 HANDLED => $handled,
 			 COUNTS => \@counts,
+			 TCOUNTS => scalar(@counts),
 			 );
     }
 }
@@ -96,9 +102,11 @@ sub handle_dir {
 		my $delim = ($line =~ /\t/) ? "\t" : ",";
 		($cardnumber, $filename) = split $delim, $line;
 		$cardnumber =~ s/[\"\r\n]//g;  # remove offensive characters
-		$filename   =~ s/[\"\r\n]//g;
+		$filename   =~ s/[\"\r\n\s]//g;
+                warn "Cardnumber: $cardnumber Filename: $filename" if $DEBUG;
 
 		if ($cardnumber && $filename) {
+                    warn "Source: $dir/$filename Target: $destdir/$cardnumber.jpg" if $DEBUG;
 	    	my $result = move ( "$dir/$filename", "$destdir/$cardnumber.jpg" );
 			if ( $result ) {
 				$count{count}++;

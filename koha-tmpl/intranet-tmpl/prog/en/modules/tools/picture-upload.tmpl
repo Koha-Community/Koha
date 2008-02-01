@@ -12,24 +12,38 @@
 
    <div id="bd">
     <div id="yui-main">
+<!-- TMPL_IF name="TOTAL" -->
     <div class="yui-b">
+    <h1>Patron Images Successfully Uploaded</h1>
+    <div class="yui-g">
+    <div class="yui-u first">
+	<ul class="data">
+	    <li>Unpacking completed</li>
+            <li><!-- TMPL_VAR NAME ="TOTAL" --> directories scanned.</li>
+            <li><!-- TMPL_VAR NAME="HANDLED" --> directories processed.</li>
+        </ul>
+        <!-- TMPL_LOOP name="COUNTS" -->
+	    <ul class="data">
+                <li><!-- TMPL_VAR name="TCOUNTS" --> image(s) moved from <!-- TMPL_VAR name="source" --> to <!-- TMPL_VAR name="dest" -->:</li>
+            </ul>
+                <!-- TMPL_LOOP name="filenames" -->
+                    <ul class="data">
+                    <li><!-- TMPL_VAR name="source" --> To <!-- TMPL_VAR name="dest" --></li>
+                    </ul>
+                <!-- /TMPL_LOOP -->
+    <!-- /TMPL_LOOP -->
+    </div>
+    </div>
+    <div class="yui-u">
+    <a id="uploadmore" class="btn blue" href="/cgi-bin/koha/tools/picture-upload.pl">Upload Images</a>
+    <a id="doneupload" class="btn blue" href="/cgi-bin/koha/tools/tools-home.pl">Return to Tools</a>
+    </div>
+<!-- TMPL_ELSE -->
+
+<div class="yui-b">
 <h1>Upload Patron Images</h1>
 <div class="yui-g">
 <div class="yui-u first">
-<!-- TMPL_IF name="total" -->
-	<ul class="data">
-		<li>Unpacking completed</li>
-	</ul>
-    <!-- TMPL_VAR NAME="total" --> Scanned
-    <!-- TMPL_VAR NAME="handled" --> Processed
-    <!-- TMPL_LOOP name="counts" -->
-        <!-- TMPL_VAR name="count" --> 	Images moved from <!-- TMPL_VAR name="source" --> to <!-- TMPL_VAR name="dest" -->
-        <!-- TMPL_LOOP name="filenames" -->
-            <!-- TMPL_VAR name="source" --> To <!-- TMPL_VAR name="dest" -->
-        <!-- /TMPL_LOOP -->
-    <!-- /TMPL_LOOP -->
-<!-- TMPL_ELSE -->
-
     <!-- TMPL_IF name="ERRORS" -->
         <div class="dialog alert"><ul>
         <!-- TMPL_LOOP name="ERRORS" -->
@@ -72,10 +86,12 @@
     </ul>
 </div>
 </div>
+</div>
+</div>
 <!-- /TMPL_IF -->
+</div>
+</div>
 
-</div>
-</div>
 <div class="yui-b">
 <!-- TMPL_INCLUDE NAME="tools-menu.inc" -->
 </div>
