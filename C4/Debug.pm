@@ -37,9 +37,10 @@ BEGIN {
 BEGIN {
 	# this stuff needs a begin block too, since dependencies might alter their compilations
 	# for example, adding DataDumper
-	my $query = CGI->new();
+	#my $query = CGI->new();
 	$debug = $ENV{KOHA_DEBUG} || $ENV{DEBUG} || 0;
-	$cgi_debug = $ENV{KOHA_CGI_DEBUG} || $query->param('debug') || 0;
+	#$cgi_debug = $ENV{KOHA_CGI_DEBUG} || $query->param('debug') || 0;
+	$cgi_debug = $ENV{KOHA_CGI_DEBUG} || 0;
 	unless (0 <= $debug and $debug <= 9) {
 		warn "Invalid \$debug value attempted: $debug";
 		$debug=1;
