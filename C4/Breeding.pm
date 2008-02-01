@@ -20,6 +20,7 @@ package C4::Breeding;
 use strict;
 use C4::Biblio;
 use C4::Koha;
+use C4::Charset;
 use MARC::File::USMARC;
 use C4::ImportBatch;
 
@@ -58,7 +59,6 @@ C4::Breeding : module to add biblios to import_records via
     ImportBreeding import MARC records in the reservoir (import_records/import_batches tables).
     the records can be properly encoded or not, we try to reencode them in utf-8 if needed.
     works perfectly with BNF server, that sends UNIMARC latin1 records. Should work with other servers too.
-    the FixEncoding sub is in Koha.pm, as it's a general usage sub.
 
 =head2 ImportBreeding
 
@@ -94,9 +94,11 @@ sub ImportBreeding {
     my $notmarcrecord = 0;
     my $breedingid;
     for (my $i=0;$i<=$#marcarray;$i++) {
-        my $marcrecord = FixEncoding($marcarray[$i]."\x1D",$encoding);
+        my ($marcrecord, $charset_result, $charset_errors);
+        ($marcrecord, $charset_result, $charset_errors) = 
+            MarcToUTF8Record($marcarray[$i]."\x1D", C4::Context->preference("marcflavour"), $encoding);
+        
 #         warn "$i : $marcarray[$i]";
-#         warn "FixEncoding : ".$marcrecord->as_formatted;
         # FIXME - currently this does nothing 
         my @warnings = $marcrecord->warnings();
         

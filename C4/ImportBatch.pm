@@ -22,6 +22,7 @@ use C4::Context;
 use C4::Koha;
 use C4::Biblio;
 use C4::Items;
+use C4::Charset;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -269,7 +270,8 @@ sub  BatchStageMarcRecords {
         if ($progress_interval and (0 == ($rec_num % $progress_interval))) {
             &$progress_callback($rec_num);
         }
-        my $marc_record = FixEncoding($marc_blob);
+        my ($marc_record, $charset_guessed, $char_errors) =
+            MarcToUTF8Record($marc_blob, C4::Context->preference("marcflavour"));
         my $import_record_id;
         if (scalar($marc_record->fields()) == 0) {
             push @invalid_records, $marc_blob;
