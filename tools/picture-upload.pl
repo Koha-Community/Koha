@@ -7,7 +7,7 @@ use C4::Context;
 use C4::Auth;
 use C4::Output;
 
-my $DEBUG = 1;
+my $DEBUG = ($ENV{DEBUG}) ? 1 : 0;
 
 #my $destdir = "/usr/local/koha/intranet/htdocs/intranet-tmpl/images/patronpictures";
 #my $uploadfile = shift @ARGV;
