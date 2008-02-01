@@ -65,7 +65,6 @@ my $path = C4::Context->config('intrahtdocs') . "/prog/en/includes/";
 sub gettemplate {
     my ( $tmplbase, $interface, $query ) = @_;
     ($query) or warn "no query in gettemplate";
-	warn "Template base is $tmplbase";
     my $htdocs;
     if ( $interface ne "intranet" ) {
         $htdocs = C4::Context->config('opachtdocs');
