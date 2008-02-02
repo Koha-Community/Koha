@@ -324,12 +324,12 @@ foreach (@$alerts) {
     $_->{ $_->{type} } = 1;
     $_->{relatedto} = findrelatedto( $_->{type}, $_->{externalid} );
 }
-my $picture;
-my $htdocs = C4::Context->config('intrahtdocs');
-$picture = "patronimages/" . $data->{'cardnumber'} . ".jpg";
-if ( -e "$htdocs/$picture" ) {
-    $template->param( picture => "/intranet-tmpl/$picture" );   # FIXME: This is a real hack and should be handled better, but I'm in a hurry... -fbcit
-}
+
+# grab patron's image if available
+my $picture = GetPatronImage($data->{'cardnumber'});
+$template->param( picture => $picture );
+
+
 my $branch=C4::Context->userenv->{'branch'};
 
 $template->param($data);

@@ -82,6 +82,11 @@ for (my $i=0;$i<$count;$i++){
 if (! $limit){ 
 	$limit = 'full'; 
 }
+
+# grab patron's image if available
+my $picture = GetPatronImage($data->{'cardnumber'});
+$template->param( picture => $picture );
+
 $template->param(
 						readingrecordview => 1,
 						biblionumber => $data->{'biblionumber'},

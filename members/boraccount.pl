@@ -90,24 +90,28 @@ my $borrowercategory = GetBorrowercategory( $data->{'categorycode'} );
 my $category_type = $borrowercategory->{'category_type'};
 ( $template->param( adultborrower => 1 ) ) if ( $category_type eq 'A' );
 
+# grab patron's image if available
+my $picture = GetPatronImage($data->{'cardnumber'});
+$template->param( picture => $picture );
+
 $template->param(
-				finesview => 1,
-                firstname => $data->{'firstname'},
-                surname => $data->{'surname'},
-                borrowernumber => $borrowernumber,
-				cardnumber => $data->{'cardnumber'},
-			    categorycode => $data->{'categorycode'},
-			    category_type => $data->{'category_type'},
-			    category_description => $data->{'description'},
-				address => $data->{'address'},
-				address2 => $data->{'address2'},
-			    city => $data->{'city'},
-				zipcode => $data->{'zipcode'},
-				phone => $data->{'phone'},
-				email => $data->{'email'},
-			    branchcode => $data->{'branchcode'},
-	            total => sprintf("%.2f",$total),
-                totalcredit => $totalcredit,
-                accounts        => \@accountrows );
+    finesview           => 1,
+    firstname           => $data->{'firstname'},
+    surname             => $data->{'surname'},
+    borrowernumber      => $borrowernumber,
+    cardnumber          => $data->{'cardnumber'},
+    categorycode        => $data->{'categorycode'},
+    category_type       => $data->{'category_type'},
+    category_description => $data->{'description'},
+    address             => $data->{'address'},
+    address2            => $data->{'address2'},
+    city                => $data->{'city'},
+    zipcode             => $data->{'zipcode'},
+    phone               => $data->{'phone'},
+    email               => $data->{'email'},
+    branchcode          => $data->{'branchcode'},
+    total               => sprintf("%.2f",$total),
+    totalcredit         => $totalcredit,
+    accounts            => \@accountrows );
 
 output_html_with_http_headers $input, $cookie, $template->output;

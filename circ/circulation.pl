@@ -700,6 +700,10 @@ if ($stickyduedate) {
 #$cookie=[$cookie, $branchcookie, $printercookie];
 #}
 
+# grab patron's image if available
+my $picture = GetPatronImage($borrower->{'cardnumber'});
+$template->param( picture => $picture );
+
 $template->param(
     SpecifyDueDate           => C4::Context->preference("SpecifyDueDate"),
     CircAutocompl            => C4::Context->preference("CircAutocompl") ,

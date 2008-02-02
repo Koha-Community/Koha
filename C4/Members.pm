@@ -56,7 +56,8 @@ BEGIN {
 		&GetRoadTypes 
 		&GetRoadTypeDetails 
 		&GetSortDetails
-		&GetTitles	
+		&GetTitles
+                &GetPatronImage
 
 		&GetMemberAccountRecords
 		&GetBorNotifyAcctRecord
@@ -1695,7 +1696,26 @@ sub GetTitles {
     }
 }
 
+=head2 GetPatronImage
 
+    $patronimage = &GetPatronImage('cardnumber');
+
+Returns the path/filename.jpg of the image for the patron with the supplied cardnumber.
+
+=cut
+
+sub GetPatronImage {
+    my $cardnumber = shift;
+    warn "Cardnumber passed to GetPatronImage is $cardnumber" if $debug;
+    my $htdocs = C4::Context->config('intrahtdocs');
+    my $picture = "patronimages/" . $cardnumber . ".jpg";
+    if ( -e "$htdocs/$picture" ) {
+           return ( "/intranet-tmpl/$picture" );   # FIXME: This is a real hack and should be handled better, but I'm in a hurry... -fbcit
+    }
+    else {
+        return ();
+    }
+}
 
 =head2 GetRoadTypeDetails (OUEST-PROVENCE)
 
