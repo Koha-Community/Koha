@@ -53,6 +53,7 @@ my $basename = $input->param("basename");
 my $mime     = $input->param("MIME");
 my $del      = $input->param("sep");
 my $output   = $input->param("output") || "screen";
+my $src      = $input->param("src");    # this param allows us to be told where we were called from -fbcit
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -64,6 +65,32 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
+
+warn "Source of call was $src";
+
+if ($src eq 'circ') {   # if we were called from circulation, use the circulation menu and get data to populate it -fbcit
+    use C4::Members;
+    my $borrowernumber = $object;
+    my $data = GetMember($borrowernumber,'borrowernumber');
+    my $picture = GetPatronImage($data->{'cardnumber'});
+    $template->param(   menu => 1,
+                        title => $data->{'title'},
+                        initials => $data->{'initials'},
+                        surname => $data->{'surname'},
+                        borrowernumber => $borrowernumber,
+                        firstname => $data->{'firstname'},
+                        cardnumber => $data->{'cardnumber'},
+                        categorycode => $data->{'categorycode'},
+                        address => $data->{'address'},
+                        address2 => $data->{'address2'},
+                        city => $data->{'city'},
+                        phone => $data->{'phone'},
+                        phonepro => $data->{'phonepro'},
+                        email => $data->{'email'},
+                        branchcode => $data->{'branchcode'},
+                        picture => $picture,
+    );
+}
 
 $template->param(
 	DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),

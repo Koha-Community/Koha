@@ -182,7 +182,11 @@
 </div>
 </div>
 <div class="yui-b">
-<!-- TMPL_INCLUDE NAME="tools-menu.inc" -->
+<!-- TMPL_IF NAME="menu" -->
+    <!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
+<!-- TMPL_ELSE -->
+    <!-- TMPL_INCLUDE NAME="tools-menu.inc" -->
+<!-- /TMPL_IF -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

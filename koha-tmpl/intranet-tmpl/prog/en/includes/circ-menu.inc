@@ -2,36 +2,43 @@
 <div class="patroninfo"><h5><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</h5>
 <ul>
 <!-- TMPL_IF NAME="picture" --><li><img src="<!-- TMPL_VAR NAME="picture" -->" alt="<!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)" border="0" style="margin: .3em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC;" width="100" /></li><!-- /TMPL_IF -->
-	        <li><!-- TMPL_IF NAME="address"-->
+    <li><!-- TMPL_IF NAME="address"-->
             <!-- TMPL_VAR NAME="address" -->
-        <!-- TMPL_ELSE -->
-            <span class="problem">No address stored for patron.</span>
-        <!-- /TMPL_IF --></li>
-		<!-- TMPL_IF NAME="address2" --><li><!-- TMPL_VAR NAME="address2" --></li><!-- /TMPL_IF -->
-       <li> <!-- TMPL_IF NAME="city" -->
+    <!-- TMPL_ELSE -->
+            <span class="problem">No address stored.</span>
+    <!-- /TMPL_IF --></li>
+    <!-- TMPL_IF NAME="address2" -->
+        <li><!-- TMPL_VAR NAME="address2" --></li>
+    <!-- /TMPL_IF --><li> 
+    <!-- TMPL_IF NAME="city" -->
             <!-- TMPL_VAR NAME="city" -->
-        <!-- TMPL_ELSE -->
-            No city stored.
-        <!-- /TMPL_IF --></li>
-   <li> <!--TMPL_IF NAME="phone" -->
+    <!-- TMPL_ELSE -->
+        <span class="problem">No city stored.</span>
+    <!-- /TMPL_IF --></li>
+    <li><!--TMPL_IF NAME="phone" -->
         <!-- TMPL_VAR NAME="phone" -->
     <!-- TMPL_ELSE -->
-    <!--TMPL_IF NAME="mobile" -->
+        <!--TMPL_IF NAME="mobile" -->
             <!-- TMPL_VAR NAME="mobile" -->
+        <!-- TMPL_ELSE -->
+            <!--TMPL_IF NAME="phonepro" -->
+                <!-- TMPL_VAR NAME="phonepro" -->
+            <!-- TMPL_ELSE -->
+                <span class="problem">No phone stored.</span>    
+            <!-- /TMPL_IF -->
+        <!-- /TMPL_IF -->
+    <!-- /TMPL_IF --></li>
+    <!-- TMPL_IF NAME="email" -->
+        <li class="email"> <a href="mailto:<!-- TMPL_VAR NAME="email" -->" title="<!-- TMPL_VAR NAME="email" -->"><!-- TMPL_VAR NAME="email" --></a></li>
     <!-- TMPL_ELSE -->
-    <!--TMPL_IF NAME="phonepro" -->
-            <!-- TMPL_VAR NAME="phonepro" -->
-    <!-- TMPL_ELSE -->
-        <span class="problem">No phone stored.</span>    
-    <!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF --></li>
-	    <!-- TMPL_IF NAME="email" -->
-   <li class="email"> <a href="mailto:<!-- TMPL_VAR NAME="email" -->" title="<!-- TMPL_VAR NAME="email" -->"><!-- TMPL_VAR NAME="email" --></a></li>
-    <!-- /TMPL_IF -->
-		    <!-- TMPL_IF NAME="emailpro" -->
-   <li class="email"> <a href="mailto:<!-- TMPL_VAR NAME="emailpro" -->" title="<!-- TMPL_VAR NAME="emailpro" -->"><!-- TMPL_VAR NAME="emailpro" --></a></li>
+        <!-- TMPL_IF NAME="emailpro" -->
+            <li class="email"> <a href="mailto:<!-- TMPL_VAR NAME="emailpro" -->" title="<!-- TMPL_VAR NAME="emailpro" -->"><!-- TMPL_VAR NAME="emailpro" --></a></li>
+        <!-- TMPL_ELSE -->
+            <span class="problem">No email stored.</span>    
+        <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
     <li>Category: <!-- TMPL_VAR name="categorycode" --></li>
-	<li>Home Library: <!-- TMPL_IF NAME="branchcode" --><!-- TMPL_VAR NAME="branchcode" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="branch" --><!-- /TMPL_IF --></li>
+    <li>Home Library: <!-- TMPL_IF NAME="branchcode" --><!-- TMPL_VAR NAME="branchcode" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="branch" --><!-- /TMPL_IF --></li>
 </ul></div>
 <div id="menu">
 <ul>
@@ -43,7 +50,7 @@
 	<!-- TMPL_IF NAME="finesview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Fines</a></li>
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="intranetreadinghistory" --><!-- TMPL_IF NAME="readingrecordview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/members/readingrec.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Circulation History</a></li><!-- /TMPL_IF -->
-	<!-- TMPL_IF NAME="CAN_user_parameters"--><li><a href="/cgi-bin/koha/tools/viewlog.pl?do_it=1&amp;module=MEMBERS&amp;action=MODIFY&amp;object=<!-- TMPL_VAR NAME="borrowernumber" -->">Modification Log</a></li><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="CAN_user_parameters"--><li><a href="/cgi-bin/koha/tools/viewlog.pl?do_it=1&amp;module=MEMBERS&amp;action=MODIFY&amp;object=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;src=circ">Modification Log</a></li><!-- /TMPL_IF -->
 </ul></div>
 <!-- /TMPL_IF -->
 
