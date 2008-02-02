@@ -106,6 +106,8 @@ foreach my $item (@items) {
     if ($item->{damaged}) {
         $item->{itemdamagedloop}= GetAuthorisedValues(GetAuthValCode('items.damaged',$fw),$item->{damaged}) if GetAuthValCode('items.damaged',$fw);
     }
+    #get collection code description, too
+    $item->{'ccode'}  = GetAuthorisedValueDesc('','',   $item->{'ccode'} ,'','','ccode');
 
     # checking for holds
     my ($reservedate,$reservedfor,$expectedAt) = GetReservesFromItemnumber($item->{itemnumber});
