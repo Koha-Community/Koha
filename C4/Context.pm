@@ -263,19 +263,19 @@ sub new {
 
     # check that the specified config file exists and is not empty
     undef $conf_fname unless 
-        (defined $conf_fname && -e $conf_fname && -s $conf_fname);
+        (defined $conf_fname && -s $conf_fname);
     # Figure out a good config file to load if none was specified.
     if (!defined($conf_fname))
     {
         # If the $KOHA_CONF environment variable is set, use
         # that. Otherwise, use the built-in default.
-        if (exists $ENV{"KOHA_CONF"} and $ENV{'KOHA_CONF'} and -e  $ENV{"KOHA_CONF"} and -s  $ENV{"KOHA_CONF"}) {
+        if (exists $ENV{"KOHA_CONF"} and $ENV{'KOHA_CONF'} and -s  $ENV{"KOHA_CONF"}) {
             $conf_fname = $ENV{"KOHA_CONF"};
-        } elsif ($INSTALLED_CONFIG_FNAME !~ /__KOHA_CONF_DIR/ and -e $INSTALLED_CONFIG_FNAME and -s $INSTALLED_CONFIG_FNAME) {
+        } elsif ($INSTALLED_CONFIG_FNAME !~ /__KOHA_CONF_DIR/ and -s $INSTALLED_CONFIG_FNAME) {
             # NOTE: be careful -- don't change __KOHA_CONF_DIR in the above
             # regex to anything else -- don't want installer to rewrite it
             $conf_fname = $INSTALLED_CONFIG_FNAME;
-        } elsif (-e CONFIG_FNAME and -s CONFIG_FNAME) {
+        } elsif (-s CONFIG_FNAME) {
             $conf_fname = CONFIG_FNAME;
         } else {
             warn "unable to locate Koha configuration file koha-conf.xml";
