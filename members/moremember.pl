@@ -326,9 +326,9 @@ foreach (@$alerts) {
 }
 my $picture;
 my $htdocs = C4::Context->config('intrahtdocs');
-$picture = "/borrowerimages/" . $borrowernumber . ".jpg";
-if ( -e $htdocs . "$picture" ) {
-    $template->param( picture => $picture );
+$picture = "patronimages/" . $data->{'cardnumber'} . ".jpg";
+if ( -e "$htdocs/$picture" ) {
+    $template->param( picture => "/intranet-tmpl/$picture" );   # FIXME: This is a real hack and should be handled better, but I'm in a hurry... -fbcit
 }
 my $branch=C4::Context->userenv->{'branch'};
 

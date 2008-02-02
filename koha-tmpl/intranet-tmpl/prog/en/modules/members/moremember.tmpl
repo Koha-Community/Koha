@@ -193,7 +193,18 @@ for (var i=0;i<ItemsNodes.length;i++){
 			<!-- /TMPL_IF --></div>
 
 
-</div>    
+</div>
+<div id="patron-image" style="padding: 0.5em;">
+    <h3>Patron Image</h3>
+    <!-- TMPL_IF name="picture" -->
+       <img src="<!-- TMPL_VAR NAME="picture" -->" width="25%" height="25%" alt="Patron Picture">
+    <!-- TMPL_ELSE -->
+        <li>There is no picture available for this patron.</li>
+        <div class="action">
+            <a href="picture-upload.pl">Add Patron Images</a>
+        </div>
+    <!-- /TMPL_IF -->
+</div>
 </div>
  <div class="yui-u"> 
  <div id="patron-library-details">
