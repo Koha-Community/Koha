@@ -193,6 +193,7 @@ sub MarcToUTF8Record {
         } elsif ($source_encoding =~ /marc-?8/i) {
             @errors = _marc_marc8_to_utf8($marc_record, $marc_flavour);
         } elsif ($source_encoding =~ /5426/) {
+            @errors = _marc_iso5426_to_utf8($marc_record, $marc_flavour);
         } else {
             # assume any other character encoding is for Text::Iconv
             @errors = _marc_to_utf8_via_text_iconv($marc_record, $marc_flavour, 'iso-8859-1');
@@ -234,7 +235,7 @@ sub SetMarcUnicodeFlag {
         substr($leader, 9, 1) = 'a';
         $marc_record->leader($leader); 
     } elsif ($marc_flavour eq "UNIMARC") {
-        if (my $field = $marc_record->fields('100')) {
+        if (my $field = $marc_record->field('100')) {
             my $sfa = $field->subfield('a');
             substr($sfa, 26, 4) = '5050';
             $field->update('a' => $sfa);
