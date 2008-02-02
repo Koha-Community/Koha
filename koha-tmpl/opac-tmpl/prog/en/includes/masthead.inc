@@ -19,7 +19,7 @@
     <!-- TMPL_UNLESS NAME="advsearch" --><form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform">
 	<label for="masthead_search"> Search <!-- TMPL_IF name="mylibraryfirst" --> <!-- TMPL_IF name="loggedinusername" -->(in <!-- TMPL_VAR name="LoginBranchcode" --> only)<!-- /TMPL_IF --><!-- /TMPL_IF --></label>
 	<select name="idx" id="masthead_search">
-	<!-- TMPL_IF NAME="ms_kw" -->
+		<!-- TMPL_IF NAME="ms_kw" -->
         <option selected="selected" value="">Library Catalog</option>
 		<!-- TMPL_ELSE -->
         <option value="">Library Catalog</option>
@@ -53,16 +53,17 @@
         <option selected="selected" value="callnum">Call Number</option>
 		<!-- TMPL_ELSE -->
         <option value="callnum">Call Number</option>
-		<!-- /TMPL_IF --></select>
-<!-- TMPL_IF NAME="ms_value" -->
+		<!-- /TMPL_IF -->
+	</select>
+	<!-- TMPL_IF NAME="ms_value" -->
         <input type="text" name="q" value="<!-- TMPL_VAR NAME="ms_value" -->"  style="width: 40%;" />
-<!-- TMPL_ELSE -->
+	<!-- TMPL_ELSE -->
         <input type="text" name="q" style="width: 40%;" />
-<!-- /TMPL_IF -->
-        <!-- TMPL_IF name="mylibraryfirst" --><!-- TMPL_IF name="loggedinusername" -->
-            <input name="limit" value="<!-- TMPL_VAR name="LoginBranchcode" -->" type="hidden" />
-        <!-- /TMPL_IF --><!-- /TMPL_IF -->
-        <input type="submit" value="Search" class="submit" />
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="mylibraryfirst" --><!-- TMPL_IF name="loggedinusername" -->
+		<input name="limit" value="<!-- TMPL_VAR name="LoginBranchcode" -->" type="hidden" />
+	<!-- /TMPL_IF --><!-- /TMPL_IF -->
+		<input type="submit" value="Search" class="submit" />
 		
     </form>
 	
@@ -73,7 +74,7 @@
 </div>
 <div id="fluid-content-2">
 <!--TMPL_IF NAME="virtualshelves" --><a class="btn blue" id="listsmenulink" href="#">Lists</a><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="opacbookbag" --><a id="cartmenulink" class="btn green" href="/cgi-bin/koha/opac-basket.pl">Cart<div id="basket"></div></a><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="opacbookbag" --><a id="cartmenulink" class="btn green" href="/cgi-bin/koha/opac-basket.pl">Cart<span id="basket"></span></a><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="opacbookbag" --><div id="cartDetails" style="visibility:hidden">Your cart is empty.</div><!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="virtualshelves" -->
@@ -98,9 +99,10 @@
 		<!-- /TMPL_IF -->
 
 			<ul class="second-of-type">
-            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl">Manage Lists</a></li>
-        </ul>
-		<!-- TMPL_ELSE --><ul class="first-of-type"><li><a href="/cgi-bin/koha/opac-user.pl">Log in to Create Your Own Lists</a></li></ul><!-- /TMPL_IF -->
+			<li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl">Manage Lists</a></li>
+			</ul>
+<!-- TMPL_ELSE --><ul class="first-of-type"><li><a href="/cgi-bin/koha/opac-user.pl">Log in to Create Your Own Lists</a></li></ul>
+<!-- /TMPL_IF -->
 	  </div>
 </div>
 <!-- /TMPL_IF -->
@@ -114,20 +116,20 @@
 
 	<div id="breadcrumbs" class="yui-g">
 
-<!-- TMPL_IF NAME="searchdesc" --><p><!-- TMPL_IF name="total" --><strong>&ldquo;<!-- TMPL_VAR NAME="query_desc" --><!-- TMPL_VAR NAME="limit_desc" -->&rdquo; </strong>returned <!-- TMPL_VAR NAME="total" --> results. <!-- TMPL_IF NAME="related" --> (related searches: <!-- TMPL_LOOP NAME="related" --><!-- TMPL_VAR NAME="related_search" --><!-- /TMPL_LOOP -->). <!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="searchdesc" -->
+<p>
+  <!-- TMPL_IF NAME="total" --><strong>&ldquo;<!-- TMPL_VAR NAME="query_desc" --><!-- TMPL_VAR NAME="limit_desc" -->&rdquo; </strong>returned <!-- TMPL_VAR NAME="total" --> results.
+	<!-- TMPL_IF NAME="related" --> (related searches: <!-- TMPL_LOOP NAME="related" --><!-- TMPL_VAR NAME="related_search" --><!-- /TMPL_LOOP -->). <!-- /TMPL_IF -->
 
 <!-- TMPL_ELSE -->
-<!-- TMPL_IF NAME="searchdesc" -->
-<strong>No Result found !</strong>
-<p>
+	<strong>No Result found !</strong>
+	</p><p>
+	<!-- TMPL_IF NAME="searchdesc" -->
     No results match your search for <span style="font-weight: bold;">&ldquo;<!-- TMPL_VAR NAME="query_desc" --><!-- TMPL_VAR NAME="limit_desc" -->&rdquo;</span> in <!-- TMPL_VAR NAME="LibraryName" --> Catalog.
-</p>
-<!-- TMPL_ELSE -->
-<strong> No result found !</strong>
-<p>
+	<!-- TMPL_ELSE -->
     You did not specify any search criteria.
-</p>
-</div>
+	<!-- /TMPL_IF -->
+	</p>
+  <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
-<!-- /TMPL_IF --></p><!-- /TMPL_IF -->
 </div>
