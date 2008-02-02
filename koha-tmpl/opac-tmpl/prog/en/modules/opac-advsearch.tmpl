@@ -197,9 +197,10 @@
       <!--TMPL_LOOP Name="itemtypeloop"-->
         <td><input type="checkbox" id="mc-<!--TMPL_VAR Name="number" -->" name="limit" value="mc:<!--TMPL_VAR Name="code" -->"/><!-- TMPL_IF name="imageurl"--><img border="0" src="<!--TMPL_VAR Name="imageurl" -->" alt="<!--TMPL_VAR Name="description" -->" /><!-- /TMPL_IF -->&nbsp;
         <!--TMPL_VAR Name="description" --></td>
-        <!-- TMPL_UNLESS name="count5" --></tr><tr><!-- TMPL_ELSE --><!-- /TMPL_UNLESS -->
+        <!-- TMPL_UNLESS name="count5" --></tr><tr><!-- /TMPL_UNLESS -->
       <!--/TMPL_LOOP-->
-      
+	  <!-- FIXME: for validation, avoid generating emtpy row -->
+		</tr>
     </table>
     </div>
 <!-- TMPL_IF NAME="expanded_options" -->

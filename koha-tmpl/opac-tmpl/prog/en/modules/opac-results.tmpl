@@ -3,13 +3,14 @@
 <!-- TMPL_IF NAME="searchdesc" -->
 	Results of Search <!-- TMPL_IF NAME="query_desc" -->for '<!-- TMPL_VAR NAME="query_desc" -->'<!-- /TMPL_IF --><!-- TMPL_IF NAME="limit_desc" -->&nbsp;with limit(s):&nbsp;'<!-- TMPL_VAR NAME="limit_desc" -->'<!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
-    You did not specify any search criteria
+    You did not specify any search criteria.
 <!-- /TMPL_IF -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <link rel="alternate" type="application/rss+xml" title="Koha - RSS"
 href="/cgi-bin/koha/opac-rss.pl?<!-- TMPL_VAR name="query_cgi"--><!-- TMPL_VAR NAME="limit_cgi" -->" />
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.pack.js"></script>
 <script type="text/javascript">
+//<![CDATA[
 $(document).ready(function(){
 	$('#sortsubmit').hide();
     $('#sort_by').change(function() {
@@ -51,9 +52,9 @@ $(document).ready(function(){
         $("#bookbag_form").unCheckCheckboxes();
         return false;
     }); 
-});</script>
-
-
+});
+//]]>
+</script>
 </head>
 <body>
 <!--TMPL_INCLUDE NAME="masthead.inc" -->
