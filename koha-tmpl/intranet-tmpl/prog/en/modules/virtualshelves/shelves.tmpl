@@ -23,7 +23,7 @@ $(document).ready(function(){
     });
 });
 
-	function confirmDelete(message,n){
+	function confirmDelete(message){
 		if (window.confirm(message)) {
 			location.href="/cgi-bin/koha/virtualshelves/shelves.pl?shelves=1&amp;DEL-<!-- TMPL_VAR NAME="shelfnumber" -->=1";
 		} else { 
@@ -125,7 +125,7 @@ $(document).ready(function(){
                 <th>Icon</th>
                 <th>Title</th>
                 <th>Author</th>
-                <th>Call No.</th>
+                <th>Date Added</th>
                 <th>&nbsp;</th>
             </tr>
 		<!-- TMPL_LOOP NAME="itemsloop" -->
@@ -286,7 +286,7 @@ $(document).ready(function(){
 <td><!-- TMPL_VAR NAME="count" --></td>
 <td><!-- TMPL_IF NAME="mine" -->
 	<form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="get">
-		<input type="hidden" name="shelf" value="<!-- TMPL_VAR NAME="shelf" -->" />
+		<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelf" -->" />
 		<input type="hidden" name="op" value="modif" />
 		<input type="submit" value="Edit" />
 	</form>

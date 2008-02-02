@@ -59,7 +59,7 @@
             <th>Title</th>
             <th>Author</th>
             <th>Copyright</th>
-			<th>Call No.</th>
+			<th>Date Added</th>
         </tr>
             <!-- TMPL_LOOP NAME="itemsloop" -->
                 <!-- TMPL_IF NAME="toggle" -->
@@ -113,8 +113,8 @@
 
     <!-- TMPL_IF NAME="edit" -->
         <form method="post" action="/cgi-bin/koha/opac-shelves.pl">
-            <input type="hidden" name="op" value="modifsave">
-            <input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->">
+            <input type="hidden" name="op" value="modifsave" />
+            <input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->" />
             <div class="form">
             <table>
             <caption>Edit List <em><!-- TMPL_VAR NAME="shelfname" --></em></caption>
@@ -126,7 +126,7 @@
             <option value="copyrightdate" <!-- TMPL_IF NAME="sort_copyrightdate" -->selected="1"<!-- /TMPL_IF -->>copyrightdate</option>
             </select></td></tr>
             </table>
-            <p><input type="hidden" name="category" value="1" /><input type="submit" value="Save Changes" class="submit"></p>
+            <p><input type="hidden" name="category" value="1" /><input type="submit" value="Save Changes" class="submit" /></p>
             </div>
         </form>
     <!-- /TMPL_IF -->
@@ -163,7 +163,7 @@
         <td>
             <!-- TMPL_IF NAME="mine" -->
 				<form action="opac-shelves.pl" method="get">
-					<input type="hidden" name="shelf" value="<!-- TMPL_VAR NAME="shelf" -->" />
+					<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelf" -->" />
 					<input type="hidden" name="op" value="modif" />
 					<input type="submit" value="Edit" />
 				</form>
