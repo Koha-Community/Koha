@@ -1,11 +1,14 @@
 #!/usr/bin/perl
 
 use strict;
+use warnings;
+
 use C4::SMS;
 use C4::Auth;
 use C4::Context;
 use C4::Members;
 use C4::Circulation;
+
 my ($res,$ua);
 my %commands;
 my $message;
@@ -20,76 +23,69 @@ STARTAGAIN:
 ($res,$ua)=get_sms_auth();
 AGAIN:
 $errorcode=0;
-	if ($res->{pRetCode}==200){
-  	 $result=read_sms($ua,$res->{pSessionId});
+if ($res->{pRetCode}==200){
+	$result=read_sms($ua,$res->{pSessionId});
 	$errorcode=$result->{pErrCode};
-print "connected\n";
-	}else{
+	print "connected\n";
+} else {
 	kill_sms($ua,$res->{pSessionId});
 	warn (error_codes($res->{pErrCode}),$res->{pErrcode}) ;
 #	sleep $wait;
 	goto FINISH;
-
-	}
-if ($errorcode && $errorcode !=-9005){
-kill_sms($ua,$res->{pSessionId});
-warn error_codes($errorcode) ;
-# sleep $wait;
-goto FINISH;
-
-}elsif ($errorcode ==-9005){
-print "no more messages to read\n";
-goto WAITING;
 }
+if ($errorcode && $errorcode !=-9005){
+	kill_sms($ua,$res->{pSessionId});
+	warn error_codes($errorcode) ;
+	# sleep $wait;
+	goto FINISH;
+} elsif ($errorcode ==-9005){
+	print "no more messages to read\n";
+	goto WAITING;
+}
+
+
 #Parse the message to a useful hash
 my @action=parse_message( $result->{pContent});
 ## Log the request in our database;
- $smsid=write_sms($action[1], $result->{pContent},$result->{pMsisdn});
+$smsid=write_sms($action[1], $result->{pContent},$result->{pMsisdn});
 print "message logged\n";
 ##Now do the service required
 if (uc($action[0]) eq "RN"){
-print "dealing request\n";
-my ($ok,$cardnumber)=C4::Auth::checkpw($dbh,$action[1],$action[2]);
-    if($ok){
+	print "dealing request\n";
+	my ($ok,$cardnumber)=C4::Auth::checkpw($dbh,$action[1],$action[2]);
+    unless ($ok) {
+		##wrong user/pass
+		$message="Yanlis kullanici/sifre! :Wrong username/password!";
+		my $send=send_message($result,$message,$smsid);
+		goto AGAIN;
+    }
 	my $item=getiteminformation(undef,0,$action[3]);
-	   if ($item){
+	if ($item){
 		my $borrower=getmember($cardnumber);
 		my $status=renewstatus(undef,$borrower->{borrowernumber},$item->{itemnumber});
-		if ($status==1){
-		my $date=renewbook(undef,$borrower->{borrowernumber},$item->{itemnumber});
-		$message="Uzatildi :Renewed ".$item->{barcode}." : ".$date;
-		my $send=send_message($result,$message,$smsid);
-		}elsif($status==2){
-		 $message="Cok erken- yenilenmedi! :Too early-not renewed:".$item->{barcode};
-	   	my $send=send_message($result,$message,$smsid);
-		}elsif($status==3){
-		 $message="Uzatamazsiniz GERI getiriniz! :No more renewals RETURN the item:".$item->{barcode};
-	   	my $send=send_message($result,$message,$smsid);
-		}elsif($status==4){
-		 $message="Ayirtildi GERI getiriniz! :Reserved RETURN the item:".$item->{barcode};
-	   	my $send=send_message($result,$message,$smsid);
-		}elsif($status==0){
-		 $message="Uzatilamaz! :Can not renew:".$item->{barcode};
-	   	my $send=send_message($result,$message,$smsid);
+		if ($status==1) {
+			my $date=renewbook(undef,$borrower->{borrowernumber},$item->{itemnumber});
+			$message="Uzatildi :Renewed ".$item->{barcode}." : ".$date;
+		} elsif($status==2) {
+			$message="Cok erken- yenilenmedi! :Too early-not renewed:".$item->{barcode};
+		} elsif($status==3) {
+			$message="Uzatamazsiniz GERI getiriniz! :No more renewals RETURN the item:".$item->{barcode};
+		} elsif($status==4) {
+			$message="Ayirtildi GERI getiriniz! :Reserved RETURN the item:".$item->{barcode};
+		} elsif($status==0) {
+			$message="Uzatilamaz! :Can not renew:".$item->{barcode};
 		}
-	    }else{
+	} else {
 	   $message="Yanlis barkot! :Wrong barcode!";
-	   my $send=send_message($result,$message,$smsid);
-	  }#wrong barcode
-    }else{
-	$message="Yanlis kullanici/sifre! :Wrong username/password!";
-	my $send=send_message($result,$message,$smsid);
-    }##wrong user/pass
-}else{
-## reply about error
-$message="Yanlis mesaj formati! :Wrong message! :
+	}	
+} else {
+	## reply about error
+	$message="Yanlis mesaj formati! :Wrong message! :
 		 RN usercardno password barcode";
-my $send=send_message($result,$message,$smsid);
-}### wrong service
+}	### wrong service
+send_message($result,$message,$smsid);
 
 goto AGAIN;
-
-
 
 
 WAITING:
@@ -98,33 +94,32 @@ my $smssth=$dbh->prepare("SELECT smsid,user_phone,message from sms_messages wher
 $smssth->execute();
 my @phones;
 while (my $data=$smssth->fetchrow_hashref){
-push @phones,$data;
+	push @phones,$data;
 }
 $smssth->finish;
 
 foreach my $user(@phones){
-print "replying $user->{user_phone}";
-my $send=send_sms($ua,$user->{user_phone},$user->{message},$res->{pSessionId});
-my $reply="--failed\n";
+	print "replying $user->{user_phone}";
+	my $send=send_sms($ua,$user->{user_phone},$user->{message},$res->{pSessionId});
+	my $reply="--failed\n";
 	if ($send->{pRetCode}==200){
-$reply= "--replied\n";
-	mod_sms($user->{smsid},"Sent");
+		$reply= "--replied\n";
+		mod_sms($user->{smsid},"Sent");
 	}
-print $reply;
+	print $reply;
 }
 $dbh->disconnect;
 
-
-sub send_message{
-my ($mes,$message,$smsid)=@_;
-my $send=send_sms($ua,$mes->{pMsisdn},$message,$res->{pSessionId});
+sub send_message {
+	my ($mes,$message,$smsid)=@_;
+	my $send=send_sms($ua,$mes->{pMsisdn},$message,$res->{pSessionId});
 	if ($send->{pRetCode}==200){
-	mod_sms($smsid,$message);
-	}else{
-	my $error=error_codes($send->{pErrCode});
-	mod_sms($smsid,"Not replied error:".$error);
+		mod_sms($smsid,$message);
+	} else {
+		my $error=error_codes($send->{pErrCode});
+		mod_sms($smsid,"Not replied error:".$error);
 	}
-return $send;
+	return $send;
 }
 FINISH:
 1;
