@@ -683,7 +683,7 @@ sub _add_to_file_map {
     }
 }
 
-=head2 get_configuration_options
+=head2 get_configuration
 
 This prompts the user for various configuration options.
 
