@@ -104,39 +104,43 @@ Returns a reference to an array of hashes:
 =cut
 
 sub getTranslatedLanguages {
-    my ($interface, $theme, $current_language) = @_;
+    my ($interface, $theme, $current_language, $which) = @_;
     my $htdocs;
     my $all_languages = getAllLanguages();
     my @languages;
     my $lang;
-    
+    my @enabled_languages;
+ 
     if ($interface && $interface eq 'opac' ) {
+        @enabled_languages = split ",", C4::Context->preference('opaclanguages');
         $htdocs = C4::Context->config('opachtdocs');
         if ( $theme and -d "$htdocs/$theme" ) {
             (@languages) = _get_language_dirs($htdocs,$theme);
-            return _build_languages_arrayref($all_languages,\@languages,$current_language);
+            return _build_languages_arrayref($all_languages,\@languages,$current_language,\@enabled_languages);
         }
         else {
             for my $theme ( _get_themes('opac') ) {
                 push @languages, _get_language_dirs($htdocs,$theme);
             }
-            return _build_languages_arrayref($all_languages,\@languages,$current_language);
+            return _build_languages_arrayref($all_languages,\@languages,$current_language,\@enabled_languages);
         }
     }
     elsif ($interface && $interface eq 'intranet' ) {
+        @enabled_languages = split ",", C4::Context->preference('language');
         $htdocs = C4::Context->config('intrahtdocs');
         if ( $theme and -d "$htdocs/$theme" ) {
             @languages = _get_language_dirs($htdocs,$theme);
-            return _build_languages_arrayref($all_languages,\@languages,$current_language);
+            return _build_languages_arrayref($all_languages,\@languages,$current_language,\@enabled_languages);
         }
         else {
             foreach my $theme ( _get_themes('intranet') ) {
                 push @languages, _get_language_dirs($htdocs,$theme);
             }
-            return _build_languages_arrayref($all_languages,\@languages,$current_language);
+            return _build_languages_arrayref($all_languages,\@languages,$current_language,\@enabled_languages);
         }
     }
     else {
+        @enabled_languages = split ",", C4::Context->preference('opaclanguages');
         my $htdocs = C4::Context->config('intrahtdocs');
         foreach my $theme ( _get_themes('intranet') ) {
             push @languages, _get_language_dirs($htdocs,$theme);
@@ -145,7 +149,7 @@ sub getTranslatedLanguages {
         foreach my $theme ( _get_themes('opac') ) {
             push @languages, _get_language_dirs($htdocs,$theme);
         }
-        return _build_languages_arrayref($all_languages,\@languages,$current_language);
+        return _build_languages_arrayref($all_languages,\@languages,$current_language,\@enabled_languages);
     }
 }
 
@@ -177,8 +181,8 @@ sub getAllLanguages {
 
         # add the correct description info
         while (my $language_descriptions = $sth2->fetchrow_hashref) {
-	    # fill in the ISO6329 code
-	    $language_subtag_registry->{iso639_2_code} = $language_descriptions->{iso639_2_code};
+        # fill in the ISO6329 code
+        $language_subtag_registry->{iso639_2_code} = $language_descriptions->{iso639_2_code};
             $language_subtag_registry->{language_description} = $language_descriptions->{description};
         }
         push @languages_loop, $language_subtag_registry;
@@ -246,9 +250,10 @@ FIXME: this could be rewritten and simplified using map
 =cut
 
 sub _build_languages_arrayref {
-        my ($all_languages,$translated_languages,$current_language) = @_;
+        my ($all_languages,$translated_languages,$current_language,$enabled_languages) = @_;
         my @translated_languages = @$translated_languages;
         my @languages_loop; # the final reference to an array of hashrefs
+        my @enabled_languages = @$enabled_languages;
         my %seen_languages; # the language tags we've seen
         my %found_languages;
         my $language_groups;
@@ -256,9 +261,14 @@ sub _build_languages_arrayref {
         my $current_language_regex = regex_lang_subtags($current_language);
         # Loop through the translated languages
         for my $translated_language (@translated_languages) {
-
             # separate the language string into its subtag types
             my $language_subtags_hashref = regex_lang_subtags($translated_language);
+
+            # is this language string 'enabled'?
+            for my $enabled_language (@enabled_languages) {
+                #warn "Checking out if $translated_language eq $enabled_language";
+                $language_subtags_hashref->{'enabled'} = 1 if $translated_language eq $enabled_language;
+            }
             
             # group this language, key by langtag
             $language_subtags_hashref->{'sublanguage_current'} = 1 if $translated_language eq $current_language;
@@ -272,6 +282,13 @@ sub _build_languages_arrayref {
         }
         # $key is a language subtag like 'en'
         while( my ($key, $value) = each %$language_groups) {
+
+            # is this language group enabled? are any of the languages within it enabled?
+            my $enabled;
+            for my $enabled_language (@enabled_languages) {
+                my $regex_enabled_language = regex_lang_subtags($enabled_language);
+                $enabled = 1 if $key eq $regex_enabled_language->{language};
+            }
             push @languages_loop,  {
                             # this is only use if there is one
                             rfc4646_subtag => @$value[0]->{rfc4646_subtag},
@@ -280,6 +297,7 @@ sub _build_languages_arrayref {
                             sublanguages_loop => $value,
                             plural => $track_language_groups->{$key} >1 ? 1 : 0,
                             current => $current_language_regex->{language} eq $key ? 1 : 0,
+                            group_enabled => $enabled,
                            };
         }
         return \@languages_loop;

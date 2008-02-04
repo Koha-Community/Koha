@@ -473,25 +473,28 @@ if ($op eq 'add_form') {
             $counter++; 
         }
     } elsif ($data->{'type'} eq 'Languages') {
-        $template->param('type-choice' => 1);
-        my $type='';
-        @options=();
-        my $currently_selected_languages;
-        my $counter=0;
+	my $currently_selected_languages;
         foreach my $language (split /\s+/, $data->{'value'}) {
-            next if $language eq 'images';
-            push @options, { option => $language, counter => $counter };
             $currently_selected_languages->{$language}=1;
-            $counter++;
         }
-        my $langavail = getTranslatedLanguages();
-        foreach my $language (@$langavail) {
-            my $selected='0';
-            next if $currently_selected_languages->{$language->{'language_code'}};
-            #FIXME: could add language_name and language_locale_name for better display
-            push @options, { option => $language->{'language_code'}, counter => $counter };
-            $counter++;
-        }
+	# current language
+        my $lang = $template->param('lang');
+        my $theme;
+	my $interface;
+	if ($data->{'variable'} =~ /opac/) {
+		# this is the OPAC
+		$interface = 'opac';
+        	$theme = C4::Context->preference('opacthemes');
+	}
+	else {
+		# this is the staff client	
+		$interface = 'intranet';
+		$theme = C4::Context->preference('template');
+	}
+	my $languages_loop = getTranslatedLanguages($interface,$theme,$lang,$currently_selected_languages);
+
+    	$template->param('languages_loop' => $languages_loop);
+        $template->param('type-langselector' => 1);
     } else {
         $template->param('type-free' => 1);
         $template->param('fieldlength' => $data->{'options'}>0?$data->{'options'}:60);
@@ -510,16 +513,25 @@ if ($op eq 'add_form') {
     my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare("select * from systempreferences where variable=?");
     $sth->execute($input->param('variable'));
+    # to handle multiple values
+    my $value;
+    # handle multiple value strings (separated by ',')
+    my $params = $input->Vars;
+    my @values = split("\0",$params->{'value'}) if $params->{'value'};
+    for my $vl (@values) {
+    	$value .= "$vl,";
+    }
+    $value =~ s/,$//;
     if ($sth->rows) {
         unless (C4::Context->config('demo') eq 1) {
             my $sth=$dbh->prepare("update systempreferences set value=?,explanation=?,type=?,options=? where variable=?");
-            $sth->execute($input->param('value'), $input->param('explanation'), $input->param('preftype'), $input->param('prefoptions'), $input->param('variable'));
+            $sth->execute($value, $input->param('explanation'), $input->param('preftype'), $input->param('prefoptions'), $input->param('variable'));
             $sth->finish;
         }
     } else {
         unless (C4::Context->config('demo') eq 1) {
             my $sth=$dbh->prepare("insert into systempreferences (variable,value,explanation,type,options) values (?,?,?,?,?)");
-            $sth->execute($input->param('variable'), $input->param('value'), $input->param('explanation'), $input->param('preftype'), $input->param('prefoptions'));
+            $sth->execute($input->param('variable'), $value, $input->param('explanation'), $input->param('preftype'), $input->param('prefoptions'));
             $sth->finish;
         }
     }
