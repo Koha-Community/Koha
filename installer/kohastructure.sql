@@ -1009,30 +1009,66 @@ CREATE TABLE `itemtypes` (
 DROP TABLE IF EXISTS `labels`;
 CREATE TABLE `labels` (
   `labelid` int(11) NOT NULL auto_increment,
+  `batch_id` varchar(10) NOT NULL default '1',
   `itemnumber` varchar(100) NOT NULL default '',
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  PRIMARY KEY  (`labelid`)
+ PRIMARY KEY  (`labelid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `labels_conf`
 --
-
 DROP TABLE IF EXISTS `labels_conf`;
 CREATE TABLE `labels_conf` (
   `id` int(4) NOT NULL auto_increment,
   `barcodetype` char(100) default '',
-  `title` tinyint(1) default '0',
-  `isbn` tinyint(1) default '0',
-  `itemtype` tinyint(1) default '0',
-  `barcode` tinyint(1) default '0',
-  `dewey` tinyint(1) default '0',
-  `class` tinyint(1) default '0',
-  `author` tinyint(1) default '0',
-  `papertype` char(100) default '',
-  `startrow` int(2) default NULL,
+  `title` int(1) default '0',
+  `itemtype` int(1) default '0',
+  `barcode` int(1) default '0',
+  `dewey` int(1) default '0',
+  `class` int(1) default '0',
+  `subclass` int(1) default '0',
+  `itemcallnumber` int(1) default '0',
+  `author` int(1) default '0',
+  `issn` int(1) default '0',
+  `isbn` int(1) default '0',
+  `startlabel` int(2) NOT NULL default '1',
+  `printingtype` char(32) default 'BAR',
+  `layoutname` char(20) NOT NULL default 'TEST',
+  `guidebox` int(1) default '0',
+  `active` tinyint(1) default '1',
+  `fonttype` char(10) default NULL,
+  `subtitle` int(1) default NULL,
+  `callnum_split` int(1) default NULL,
+  `text_justify` char(1) default NULL,
+  `ccode` int(1) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `labels_templates`
+--
+
+DROP TABLE IF EXISTS `labels_templates`;
+CREATE TABLE `labels_templates` (
+  `tmpl_id` int(4) NOT NULL auto_increment,
+  `tmpl_code` char(100) character set utf8 collate utf8_unicode_ci default '',
+  `tmpl_desc` char(100) character set utf8 collate utf8_unicode_ci default '',
+  `page_width` float default '0',
+  `page_height` float default '0',
+  `label_width` float default '0',
+  `label_height` float default '0',
+  `topmargin` float default '0',
+  `leftmargin` float default '0',
+  `cols` int(2) default '0',
+  `rows` int(2) default '0',
+  `colgap` float default '0',
+  `rowgap` float default '0',
+  `active` int(1) default NULL,
+  `units` char(20) character set utf8 collate utf8_unicode_ci default 'PX',
+  `fontsize` int(4) NOT NULL default '3',
+  PRIMARY KEY  (`tmpl_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `letter`
