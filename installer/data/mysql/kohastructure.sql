@@ -836,6 +836,7 @@ CREATE TABLE `deleteditems` (
   `materials` varchar(10) default NULL,
   `uri` varchar(255) default NULL,
   `itype` varchar(10) default NULL,
+  `more_subfields_xml` longtext default NULL,
   `marc` longblob,
   PRIMARY KEY  (`itemnumber`),
   KEY `delitembarcodeidx` (`barcode`),
