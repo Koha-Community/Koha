@@ -30,6 +30,7 @@ use C4::Branch;
 use C4::Dates qw/format_date/;
 use C4::Log; # logaction
 use C4::ClassSource;
+use C4::Heading;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -81,6 +82,13 @@ BEGIN {
 	push @EXPORT, qw(
 		&DelBiblio
 	);
+
+    # To link headings in a bib record
+    # to authority records.
+    push @EXPORT, qw(
+        &LinkBibHeadingsToAuthorities
+    );
+
 	# Internal functions
 	# those functions are exported but should not be used
 	# they are usefull is few circumstances, so are exported.
@@ -365,6 +373,63 @@ sub DelBiblio {
     &logaction(C4::Context->userenv->{'number'},"CATALOGUING","DELETE",$biblionumber,"") 
         if C4::Context->preference("CataloguingLog");
     return;
+}
+
+=head2 LinkBibHeadingsToAuthorities
+
+=over 4
+
+my $headings_linked = LinkBibHeadingsToAuthorities($marc);
+
+=back
+
+Links bib headings to authority records by checking
+each authority-controlled field in the C<MARC::Record>
+object C<$marc>, looking for a matching authority record,
+and setting the linking subfield $9 to the ID of that
+authority record.  
+
+If no matching authority exists, or if multiple
+authorities match, no $9 will be added, and any 
+existing one inthe field will be deleted.
+
+Returns the number of heading links changed in the
+MARC record.
+
+=cut
+
+sub LinkBibHeadingsToAuthorities {
+    my $bib = shift;
+
+    my $num_headings_changed = 0;
+    foreach my $field ($bib->fields()) {
+        my $heading = C4::Heading->new_from_bib_field($field);    
+        next unless defined $heading;
+
+        # check existing $9
+        my $current_link = $field->subfield('9');
+
+        # look for matching authorities
+        my $authorities = $heading->authorities();
+
+        # want only one exact match
+        if ($#{ $authorities } == 0) {
+            my $authority = MARC::Record->new_from_usmarc($authorities->[0]);
+            my $authid = $authority->field('001')->data();
+            next if defined $current_link and $current_link eq $authid;
+
+            $field->delete_subfield(code => '9') if defined $current_link;
+            $field->add_subfields('9', $authid);
+            $num_headings_changed++;
+        } else {
+            if (defined $current_link) {
+                $field->delete_subfield(code => '9');
+                $num_headings_changed++;
+            }
+        }
+
+    }
+    return $num_headings_changed;
 }
 
 =head2 GetBiblioData
