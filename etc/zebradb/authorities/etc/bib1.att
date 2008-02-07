@@ -3,169 +3,93 @@ name bib1
 reference Bib-1
 
 att 9000    authtype
+att 12      Local-Number
+att 9038    Descriptive-cataloging-rules
+att 9039    Encoding-level
+att 9040    Heading-use-main-or-added-entry
+att 9041    Heading-use-series-added-entry
+att 9042    Heading-use-subject-added-entry
+att 9043    Kind-of-record
+att 9046    Record-status
+att 9050    Subject-heading-thesaurus
+
 # Personal Name
 att 1       Personal-name
 att 9001    Personal-name-heading
-att 9002    Personal-name-see
-att 9003    Personal-name-seealso
+att 9002    Personal-name-see-from
+att 9003    Personal-name-see-also-from
 
 # Corporate Name
 att 2       Corporate-name
 att 9004    Corporate-name-heading
-att 9005    Corporate-name-see
-att 9006    Corporate-name-seealso
+att 9005    Corporate-name-see-from
+att 9006    Corporate-name-see-also-from
 
 # Meeting Name
-att 3       Conference-name
-att 9007    Conference-name-heading
-att 9008    Conference-name-see
-att 9009    Conference-name-seealso
-
-att 4       Title
-att 5       Title-series
+att 3       Meeting-name
+att 9007    Meeting-name-heading
+att 9008    Meeting-name-see-from
+att 9009    Meeting-name-see-also-from
 
 # Uniform Title
 att 6       Title-uniform
 att 9010    Title-uniform-heading
-att 9011    Title-uniform-see
-att 9012    Title-uniform-seealso
+att 9011    Title-uniform-see-from
+att 9012    Title-uniform-see-also-from
 
-att 7       ISBN
-att 8       ISSN
-att 9       LC-card-number
-att 10      BNB-card-number
-att 11      BGF-number
-att 12      Local-number
-att 13      Dewey-classification
-att 14      UDC-classification
-att 15      Bliss-classification
-att 16      LC-call-number
-att 17      NLM-call-number
-att 18      NAL-call-number
-att 19      MOS-call-number
-att 20      Local-classification
-att 21      Subject
-att 22      Subject-Rameau
-att 23      BDI-index-subject
-att 24      INSPEC-subject
-att 25      MESH-subject
-att 26      PA-subject
-att 27      LC-subject-heading
-att 28      RVM-subject-heading
-att 29      Local-subject-index
-att 30      Date
-att 31      pubdate
-att 32      Date-of-acquisition
-att 33      Title-key
-att 34      Title-collective
-att 35      Title-parallel
-att 36      Title-cover
-att 37      Title-added-title-page
-att 38      Title-caption
-att 39      Title-running
-att 40      Title-spine
-att 41      Title-other-variant
-att 42      Title-former
-att 43      Title-abbreviated
-att 44      Title-expanded
-att 45      Subject-precis
-att 46      Subject-rswk
-att 47      Subject-subdivision
-att 48      Number-natl-biblio
-att 49      Number-legal-deposit
-att 50      Number-govt-pub
-att 51      Number-music-publisher
-att 52      Number-db
-att 53      Number-local-call
-att 54      ln
-att 55      Code-geographic
-att 56      Code-institution
-att 57      Name-and-title
-
-# Geographic Name
-att 58      Name-geographic
-att 9016    Name-geographic-heading
-att 9017    Name-geographic-see
-att 9018    Name-geographic-seealso
-
-# Place-publication, reduced to two chars because limited line length for leader indexing
-att 59      pl
-att 60      CODEN
-att 61      Microform-generation
-att 62      Abstract
-att 63      Note
-att 1000    Author-title
-
-# Record type, reduced to two chars because limited line length for leader indexing
-att 1001    rtype
-att 1002    Name
-att 1003    Author
-att 1004    Author-name-personal
-att 1005    Author-name-corporate
-att 1006    Author-name-conference
-att 1007    Identifier-standard
-att 1008    Subject-LC-childrens
-att 1009    Subject-name-personal
-att 1010    Body-of-text
-att 1011    date-entered-on-file
-att 1012    Date/time-last-modified
-att 1013    Authority/format-id
-att 1014    Concept-text
-att 1015    Concept-reference
-att 1016    Any 
-att 1017    Server-choice
-att 1018    Publisher
-att 1019    Record-source
-att 1020    Editor
-att 1021    Bib-level
-att 1022    Geographic-class
-att 1023    Indexed-by
-att 1024    Map-scale
-att 1025    Music-key
-att 1026    Related-periodical
-att 1027    Report-number
-att 1028    Stock-number
-att 1030    Thematic-number
-att 1031    Material-type
-att 1032    Doc-id
-att 1033    Host-item
-att 1034    ctype
-att 1035    Anywhere
-att 1036    Author-Title-Subject
-
-# Genre form
-att 1075    Term-genre-form
-att 9027    Term-genre-form-heading
-att 9028    Term-genre-form-see
-att 9029    Term-genre-form-seealso
+# Chronological Term
+att 9038    Chronological-term
+att 9019    Chronological-term-heading
+att 9020    Chronological-term-see-from
+att 9021    Chronological-term-see-also-from
 
 # Topical Term
 att 1079    Subject-topical
 att 9013    Subject-topical-heading
-att 9014    Subject-topical-see
-att 9015    Subject-topical-seealso
+att 9014    Subject-topical-see-from
+att 9015    Subject-topical-see-also-from
+
+# Geographic Name
+att 58      Name-geographic
+att 9016    Name-geographic-heading
+att 9017    Name-geographic-see-from
+att 9018    Name-geographic-see-also-from
+
+# Genre form
+att 1075    Term-genre-form
+att 9027    Term-genre-form-heading
+att 9028    Term-genre-form-see-from
+att 9029    Term-genre-form-see-also-from
 
 # Koha Local-Use Authority Indexes
 att 8001    Heading
-att 8002    See
-att 8003    See-also
-
-# Geographic Term
-# non-standard bib1
-att 9019    Term-geographic
-att 9020    Term-geographic-heading
-att 9021    Term-geographic-see
-att 9022    Term-geographic-seealso
+att 8002    See-from
+att 8003    See-also-from
+att 8804    Match-heading
+att 8805    Match-subdivision
+att 8806    Subdivision
+att 8807    Subdivision-see-also-from
+att 8808    Subdivision-see-from
+att 8809    Match-heading-see-from
+att 8810    Match-subdivision-see-from
 
 # General Subdivision (defined in att 47)
-# att 9023    Subject-subdivision
+att 9023    General-subdivision
+att 9030    General-subdivision-see-from
+att 9031    General-subdivision-see-also-from
 
 # Geographic Subdivision
 att 9024    Geographic-subdivision
+att 9032    Geographic-subdivision-see-from
+att 9033    Geographic-subdivision-see-also-from
 
 # Chronological Subdivision
 att 9025    Chronological-subdivision
+att 9034    Chronological-subdivision-see-from
+att 9035    Chronological-subdivision-see-also-from
 
 # Form Subdivision
 att 9026    Form-subdivision
+att 9036    Form-subdivision-see-from
+att 9037    Form-subdivision-see-also-from
 

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kohaidx:index_defs xmlns:kohaidx="http://www.koha.org/schemas/index-defs">
+  <!-- variables -->
+  <kohaidx:var name="form_subdivision_subfield">v</kohaidx:var>
+  <kohaidx:var name="general_subdivision_subfield">x</kohaidx:var>
+  <kohaidx:var name="chronological_subdivision_subfield">y</kohaidx:var>
+  <kohaidx:var name="geographic_subdivision_subfield">z</kohaidx:var>
+
   <!-- Leader  -->
   <kohaidx:index_leader offset="5" length="1">
     <kohaidx:target_index>Record-status</kohaidx:target_index>
@@ -47,6 +53,10 @@
     <kohaidx:target_index>Heading:p</kohaidx:target_index>
     <kohaidx:target_index>Heading:s</kohaidx:target_index>
   </kohaidx:index_heading>
+  <kohaidx:index_match_heading tag="100" subfields="abcdefghjklmnopqrstvxyz" subdivisions="vxyz">
+    <kohaidx:target_index>Match-heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:s</kohaidx:target_index>
+  </kohaidx:index_match_heading>
   
   <kohaidx:index_heading tag="400" subfields="abcdefghjklmnopqrstvxyz" subdivisions="vxyz">
     <kohaidx:target_index>Personal-name-see-from:w</kohaidx:target_index>
@@ -56,6 +66,10 @@
     <kohaidx:target_index>See-from:p</kohaidx:target_index>
     <kohaidx:target_index>See-from:s</kohaidx:target_index>
   </kohaidx:index_heading>
+  <kohaidx:index_match_heading tag="400" subfields="abcdefghjklmnopqrstvxyz" subdivisions="vxyz">
+    <kohaidx:target_index>Match-heading-see-from:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-from:s</kohaidx:target_index>
+  </kohaidx:index_match_heading>
   
   <kohaidx:index_heading tag="500" subfields="abcdefghjklmnopqrstvxyz" subdivisions="vxyz">
     <kohaidx:target_index>Personal-name-see-also-from:w</kohaidx:target_index>
@@ -79,6 +93,10 @@
     <kohaidx:target_index>Heading:p</kohaidx:target_index>
     <kohaidx:target_index>Heading:s</kohaidx:target_index>
   </kohaidx:index_heading>
+  <kohaidx:index_match_heading tag="110" subfields="abcdefghklmnoprstvxyz" subdivisions="vxyz">
+    <kohaidx:target_index>Match-heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:s</kohaidx:target_index>
+  </kohaidx:index_match_heading>
   
   <kohaidx:index_heading tag="410" subfields="abcdefghklmnoprstvxyz" subdivisions="vxyz">
     <kohaidx:target_index>Corporate-name-see-from:w</kohaidx:target_index>
@@ -88,6 +106,10 @@
     <kohaidx:target_index>See-from:p</kohaidx:target_index>
     <kohaidx:target_index>See-from:s</kohaidx:target_index>
   </kohaidx:index_heading>
+  <kohaidx:index_match_heading tag="410" subfields="abcdefghklmnoprstvxyz" subdivisions="vxyz">
+    <kohaidx:target_index>Match-heading-see-from:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-from:s</kohaidx:target_index>
+  </kohaidx:index_match_heading>
   
   <kohaidx:index_heading tag="510" subfields="abcdefghklmnoprstvxyz" subdivisions="vxyz">
     <kohaidx:target_index>Corporate-name-see-also-from:w</kohaidx:target_index>
@@ -111,6 +133,10 @@
     <kohaidx:target_index>Heading:p</kohaidx:target_index>
     <kohaidx:target_index>Heading:s</kohaidx:target_index>
   </kohaidx:index_heading>
+  <kohaidx:index_match_heading tag="111" subfields="acdefghjklnpqstvxyz" subdivisions="vxyz">
+    <kohaidx:target_index>Match-heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:s</kohaidx:target_index>
+  </kohaidx:index_match_heading>
   
   <kohaidx:index_heading tag="411" subfields="acdefghjklnpqstvxyz" subdivisions="vxyz">
     <kohaidx:target_index>Meeting-name-see-from:w</kohaidx:target_index>
@@ -120,6 +146,10 @@
     <kohaidx:target_index>See-from:p</kohaidx:target_index>
     <kohaidx:target_index>See-from:s</kohaidx:target_index>
   </kohaidx:index_heading>
+  <kohaidx:index_match_heading tag="411" subfields="acdefghjklnpqstvxyz" subdivisions="vxyz">
+    <kohaidx:target_index>Match-heading-see-from:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-from:s</kohaidx:target_index>
+  </kohaidx:index_match_heading>
   
   <kohaidx:index_heading tag="511" subfields="acdefghjklnpqstvxyz" subdivisions="vxyz">
     <kohaidx:target_index>Meeting-name-see-also-from:w</kohaidx:target_index>
@@ -143,6 +173,10 @@
     <kohaidx:target_index>Heading:p</kohaidx:target_index>
     <kohaidx:target_index>Heading:s</kohaidx:target_index>
   </kohaidx:index_heading>
+  <kohaidx:index_match_heading tag="130" subfields="adfghklmnoprstvxyz" subdivisions="vxyz">
+    <kohaidx:target_index>Match-heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:s</kohaidx:target_index>
+  </kohaidx:index_match_heading>
   
   <kohaidx:index_heading tag="430" subfields="adfghklmnoprstvxyz" subdivisions="vxyz">
     <kohaidx:target_index>Title-uniform-see-from:w</kohaidx:target_index>
@@ -152,6 +186,10 @@
     <kohaidx:target_index>See-from:p</kohaidx:target_index>
     <kohaidx:target_index>See-from:s</kohaidx:target_index>
   </kohaidx:index_heading>
+  <kohaidx:index_match_heading tag="430" subfields="adfghklmnoprstvxyz" subdivisions="vxyz">
+    <kohaidx:target_index>Match-heading-see-from:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-from:s</kohaidx:target_index>
+  </kohaidx:index_match_heading>
   
   <kohaidx:index_heading tag="530" subfields="adfghklmnoprstvxyz" subdivisions="vxyz">
     <kohaidx:target_index>Title-uniform-see-also-from:w</kohaidx:target_index>
@@ -175,6 +213,10 @@
     <kohaidx:target_index>Heading:p</kohaidx:target_index>
     <kohaidx:target_index>Heading:s</kohaidx:target_index>
   </kohaidx:index_heading>
+  <kohaidx:index_match_heading tag="148" subfields="avxyz" subdivisions="vxyz">
+    <kohaidx:target_index>Match-heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:s</kohaidx:target_index>
+  </kohaidx:index_match_heading>
   
   <kohaidx:index_heading tag="448" subfields="avxyz" subdivisions="vxyz">
     <kohaidx:target_index>Chronological-term-see-from:w</kohaidx:target_index>
@@ -184,6 +226,10 @@
     <kohaidx:target_index>See-from:p</kohaidx:target_index>
     <kohaidx:target_index>See-from:s</kohaidx:target_index>
   </kohaidx:index_heading>
+  <kohaidx:index_match_heading tag="448" subfields="avxyz" subdivisions="vxyz">
+    <kohaidx:target_index>Match-heading-see-from:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-from:s</kohaidx:target_index>
+  </kohaidx:index_match_heading>
   
   <kohaidx:index_heading tag="548" subfields="avxyz" subdivisions="vxyz">
     <kohaidx:target_index>Chronological-term-see-also-from:w</kohaidx:target_index>
@@ -208,6 +254,10 @@
     <kohaidx:target_index>Heading:p</kohaidx:target_index>
     <kohaidx:target_index>Heading:s</kohaidx:target_index>
   </kohaidx:index_heading>
+  <kohaidx:index_match_heading tag="150" subfields="abvxyz" subdivisions="vxyz">
+    <kohaidx:target_index>Match-heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:s</kohaidx:target_index>
+  </kohaidx:index_match_heading>
   
   <kohaidx:index_heading tag="450" subfields="abvxyz" subdivisions="vxyz">
     <kohaidx:target_index>Subject-topical-see-from:w</kohaidx:target_index>
@@ -217,6 +267,10 @@
     <kohaidx:target_index>See-from:p</kohaidx:target_index>
     <kohaidx:target_index>See-from:s</kohaidx:target_index>
   </kohaidx:index_heading>
+  <kohaidx:index_match_heading tag="450" subfields="abvxyz" subdivisions="vxyz">
+    <kohaidx:target_index>Match-heading-see-from:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-from:s</kohaidx:target_index>
+  </kohaidx:index_match_heading>
   
   <kohaidx:index_heading tag="550" subfields="abvxyz" subdivisions="vxyz">
     <kohaidx:target_index>Subject-topical-see-also-from:w</kohaidx:target_index>
@@ -240,6 +294,10 @@
     <kohaidx:target_index>Heading:p</kohaidx:target_index>
     <kohaidx:target_index>Heading:s</kohaidx:target_index>
   </kohaidx:index_heading>
+  <kohaidx:index_match_heading tag="151" subfields="avxyz" subdivisions="vxyz">
+    <kohaidx:target_index>Match-heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:s</kohaidx:target_index>
+  </kohaidx:index_match_heading>
   
   <kohaidx:index_heading tag="451" subfields="avxyz" subdivisions="vxyz">
     <kohaidx:target_index>Name-geographic-see-from:w</kohaidx:target_index>
@@ -249,6 +307,10 @@
     <kohaidx:target_index>See-from:p</kohaidx:target_index>
     <kohaidx:target_index>See-from:s</kohaidx:target_index>
   </kohaidx:index_heading>
+  <kohaidx:index_match_heading tag="451" subfields="avxyz" subdivisions="vxyz">
+    <kohaidx:target_index>Match-heading-see-from:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-from:s</kohaidx:target_index>
+  </kohaidx:index_match_heading>
   
   <kohaidx:index_heading tag="551" subfields="avxyz" subdivisions="vxyz">
     <kohaidx:target_index>Name-geographic-see-also-from:w</kohaidx:target_index>
@@ -272,6 +334,10 @@
     <kohaidx:target_index>Heading:p</kohaidx:target_index>
     <kohaidx:target_index>Heading:s</kohaidx:target_index>
   </kohaidx:index_heading>
+  <kohaidx:index_match_heading tag="155" subfields="avxyz" subdivisions="vxyz">
+    <kohaidx:target_index>Match-heading:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading:s</kohaidx:target_index>
+  </kohaidx:index_match_heading>
   
   <kohaidx:index_heading tag="455" subfields="avxyz" subdivisions="vxyz">
     <kohaidx:target_index>Term-genre-form-see-from:w</kohaidx:target_index>
@@ -281,6 +347,10 @@
     <kohaidx:target_index>See-from:p</kohaidx:target_index>
     <kohaidx:target_index>See-from:s</kohaidx:target_index>
   </kohaidx:index_heading>
+  <kohaidx:index_match_heading tag="455" subfields="avxyz" subdivisions="vxyz">
+    <kohaidx:target_index>Match-heading-see-from:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-heading-see-from:s</kohaidx:target_index>
+  </kohaidx:index_match_heading>
   
   <kohaidx:index_heading tag="555" subfields="avxyz" subdivisions="vxyz">
     <kohaidx:target_index>Term-genre-form-see-also-from:w</kohaidx:target_index>
@@ -300,6 +370,10 @@
     <kohaidx:target_index>Subdivision:p</kohaidx:target_index>
     <kohaidx:target_index>Subdivision:s</kohaidx:target_index>
   </kohaidx:index_heading>
+  <kohaidx:index_match_heading tag="180" subfields="vxyz" subdivisions="vxyz">
+    <kohaidx:target_index>Match-subdivision:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-subdivision:s</kohaidx:target_index>
+  </kohaidx:index_match_heading>
   
   <kohaidx:index_heading tag="480" subfields="vxyz" subdivisions="vxyz">
     <kohaidx:target_index>General-subdivision-see-from:w</kohaidx:target_index>
@@ -309,6 +383,10 @@
     <kohaidx:target_index>Subdivision-see-from:p</kohaidx:target_index>
     <kohaidx:target_index>Subdivision-see-from:s</kohaidx:target_index>
   </kohaidx:index_heading>
+  <kohaidx:index_match_heading tag="480" subfields="vxyz" subdivisions="vxyz">
+    <kohaidx:target_index>Match-subdivision-see-from:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-subdivision-see-from:s</kohaidx:target_index>
+  </kohaidx:index_match_heading>
   
   <kohaidx:index_heading tag="580" subfields="vxyz" subdivisions="vxyz">
     <kohaidx:target_index>General-subdivision-see-also-from:w</kohaidx:target_index>
@@ -328,6 +406,10 @@
     <kohaidx:target_index>Subdivision:p</kohaidx:target_index>
     <kohaidx:target_index>Subdivision:s</kohaidx:target_index>
   </kohaidx:index_heading>
+  <kohaidx:index_match_heading tag="181" subfields="vxyz" subdivisions="vxyz">
+    <kohaidx:target_index>Match-subdivision:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-subdivision:s</kohaidx:target_index>
+  </kohaidx:index_match_heading>
   
   <kohaidx:index_heading tag="481" subfields="vxyz" subdivisions="vxyz">
     <kohaidx:target_index>Geographic-subdivision-see-from:w</kohaidx:target_index>
@@ -337,6 +419,10 @@
     <kohaidx:target_index>Subdivision-see-from:p</kohaidx:target_index>
     <kohaidx:target_index>Subdivision-see-from:s</kohaidx:target_index>
   </kohaidx:index_heading>
+  <kohaidx:index_match_heading tag="481" subfields="vxyz" subdivisions="vxyz">
+    <kohaidx:target_index>Match-subdivision-see-from:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-subdivision-see-from:s</kohaidx:target_index>
+  </kohaidx:index_match_heading>
   
   <kohaidx:index_heading tag="581" subfields="vxyz" subdivisions="vxyz">
     <kohaidx:target_index>Geographic-subdivision-see-also-from:w</kohaidx:target_index>
@@ -356,6 +442,10 @@
     <kohaidx:target_index>Subdivision:p</kohaidx:target_index>
     <kohaidx:target_index>Subdivision:s</kohaidx:target_index>
   </kohaidx:index_heading>
+  <kohaidx:index_match_heading tag="182" subfields="vxyz" subdivisions="vxyz">
+    <kohaidx:target_index>Match-subdivision:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-subdivision:s</kohaidx:target_index>
+  </kohaidx:index_match_heading>
   
   <kohaidx:index_heading tag="482" subfields="vxyz" subdivisions="vxyz">
     <kohaidx:target_index>Chronological-subdivision-see-from:w</kohaidx:target_index>
@@ -365,6 +455,10 @@
     <kohaidx:target_index>Subdivision-see-from:p</kohaidx:target_index>
     <kohaidx:target_index>Subdivision-see-from:s</kohaidx:target_index>
   </kohaidx:index_heading>
+  <kohaidx:index_match_heading tag="482" subfields="vxyz" subdivisions="vxyz">
+    <kohaidx:target_index>Match-subdivision-see-from:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-subdivision-see-from:s</kohaidx:target_index>
+  </kohaidx:index_match_heading>
   
   <kohaidx:index_heading tag="582" subfields="vxyz" subdivisions="vxyz">
     <kohaidx:target_index>Chronological-subdivision-see-also-from:w</kohaidx:target_index>
@@ -384,6 +478,10 @@
     <kohaidx:target_index>Subdivision:p</kohaidx:target_index>
     <kohaidx:target_index>Subdivision:s</kohaidx:target_index>
   </kohaidx:index_heading>
+  <kohaidx:index_match_heading tag="485" subfields="vxyz" subdivisions="vxyz">
+    <kohaidx:target_index>Match-subdivision:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-subdivision:s</kohaidx:target_index>
+  </kohaidx:index_match_heading>
   
   <kohaidx:index_heading tag="485" subfields="vxyz" subdivisions="vxyz">
     <kohaidx:target_index>Form-subdivision-see-from:w</kohaidx:target_index>
@@ -393,6 +491,10 @@
     <kohaidx:target_index>Subdivision-see-from:p</kohaidx:target_index>
     <kohaidx:target_index>Subdivision-see-from:s</kohaidx:target_index>
   </kohaidx:index_heading>
+  <kohaidx:index_match_heading tag="185" subfields="vxyz" subdivisions="vxyz">
+    <kohaidx:target_index>Match-subdivision-see-from:p</kohaidx:target_index>
+    <kohaidx:target_index>Match-subdivision-see-from:s</kohaidx:target_index>
+  </kohaidx:index_match_heading>
   
   <kohaidx:index_heading tag="585" subfields="vxyz" subdivisions="vxyz">
     <kohaidx:target_index>Form-subdivision-see-also-from:w</kohaidx:target_index>

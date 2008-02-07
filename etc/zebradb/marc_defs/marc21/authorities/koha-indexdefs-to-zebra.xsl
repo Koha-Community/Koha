@@ -15,6 +15,7 @@
     <xsl:key name="index_control_field_tag"   match="kohaidx:index_control_field"   use="@tag"/>
     <xsl:key name="index_subfields_tag" match="kohaidx:index_subfields" use="@tag"/>
     <xsl:key name="index_heading_tag"   match="kohaidx:index_heading"   use="@tag"/>
+    <xsl:key name="index_match_heading_tag" match="kohaidx:index_match_heading" use="@tag"/>
 
     <xsl:template match="kohaidx:index_defs">
         <xslo:stylesheet version="1.0">
@@ -22,6 +23,7 @@
             <xslo:template match="text()"/>
             <xslo:template match="text()" mode="index_subfields"/>
             <xslo:template match="text()" mode="index_heading"/>
+            <xslo:template match="text()" mode="index_match_heading"/>
             <xslo:template match="text()" mode="index_subject_thesaurus"/>
             <xslo:template match="/">
                 <xslo:if test="marc:collection">
@@ -41,6 +43,7 @@
                     <xslo:apply-templates/>
                     <xslo:apply-templates mode="index_subfields"/>
                     <xslo:apply-templates mode="index_heading"/>
+                    <xslo:apply-templates mode="index_match_heading"/>
                     <xslo:apply-templates mode="index_subject_thesaurus"/>
                 </z:record>
             </xslo:template>
@@ -49,8 +52,17 @@
             <xsl:call-template name="handle-index-control-field"/>
             <xsl:call-template name="handle-index-subfields"/>
             <xsl:call-template name="handle-index-heading"/>
+            <xsl:call-template name="handle-index-match-heading"/>
             <xsl:apply-templates/>
         </xslo:stylesheet>
+    </xsl:template>
+
+    <!-- map kohaidx:var to stylesheet variables -->
+    <xsl:template match="kohaidx:var">
+        <xslo:variable>
+            <xsl:attribute name="name"><xsl:value-of select="@name"/></xsl:attribute>
+            <xsl:value-of select="."/>
+        </xslo:variable>
     </xsl:template>
 
     <xsl:template match="kohaidx:index_subject_thesaurus">   
@@ -259,6 +271,84 @@
                                         <xsl:text>', @code)</xsl:text>
                                     </xsl:attribute>
                                     <xslo:text>--</xslo:text>
+                                </xslo:when>
+                                <xslo:otherwise>
+                                    <xslo:value-of select="substring(' ', 1, 1)"/> <!-- FIXME surely there's a better way  to specify a space -->
+                                </xslo:otherwise>
+                            </xslo:choose>
+                        </xslo:if>
+                        <xslo:value-of select="."/>
+                    </xslo:if>
+                </xslo:for-each>
+            </xslo:variable>
+            <xslo:value-of select="normalize-space($raw_heading)"/>
+        </z:index>
+    </xsl:template>
+
+    <xsl:template name="handle-index-match-heading">
+        <xsl:for-each select="//kohaidx:index_match_heading[generate-id() = generate-id(key('index_match_heading_tag', @tag)[1])]">
+            <xslo:template mode="index_match_heading">
+                <xsl:attribute name="match">
+                    <xsl:text>marc:datafield[@tag='</xsl:text>
+                    <xsl:value-of select="@tag"/>
+                    <xsl:text>']</xsl:text>
+                </xsl:attribute>
+                <xsl:for-each select="key('index_match_heading_tag', @tag)">
+                    <xsl:call-template name="handle-one-index-match-heading"/>
+                </xsl:for-each>
+            </xslo:template>
+        </xsl:for-each>
+    </xsl:template>
+
+    <xsl:template name="handle-one-index-match-heading">
+        <xsl:variable name="indexes">
+            <xsl:call-template name="get-target-indexes"/>
+        </xsl:variable>
+        <z:index>
+            <xsl:attribute name="name"><xsl:value-of select="normalize-space($indexes)"/></xsl:attribute>
+            <xslo:variable name="raw_heading">
+                <xslo:for-each select="marc:subfield">
+                    <xslo:if>
+                        <xsl:attribute name="test">
+                            <xsl:text>contains('</xsl:text>
+                            <xsl:value-of select="@subfields"/>
+                            <xsl:text>', @code)</xsl:text>
+                        </xsl:attribute>
+                        <xsl:attribute name="name"><xsl:value-of select="normalize-space($indexes)"/></xsl:attribute>
+                        <xslo:if test="position() > 1">
+                            <xslo:choose>
+                                <xslo:when>
+                                    <xsl:attribute name="test">
+                                        <xsl:text>contains('</xsl:text>
+                                        <xsl:value-of select="@subdivisions"/>
+                                        <xsl:text>', @code)</xsl:text>
+                                    </xsl:attribute>
+                                    <xslo:choose>
+                                        <xslo:when>
+                                            <xsl:attribute name="test">
+                                                <xsl:text>@code = $general_subdivision_subfield</xsl:text>
+                                            </xsl:attribute>
+                                            <xslo:text> generalsubdiv </xslo:text>
+                                        </xslo:when>
+                                        <xslo:when>
+                                            <xsl:attribute name="test">
+                                                <xsl:text>@code = $form_subdivision_subfield</xsl:text>
+                                            </xsl:attribute>
+                                            <xslo:text> formsubdiv </xslo:text>
+                                        </xslo:when>
+                                        <xslo:when>
+                                            <xsl:attribute name="test">
+                                                <xsl:text>@code = $chronological_subdivision_subfield</xsl:text>
+                                            </xsl:attribute>
+                                            <xslo:text> chronologicalsubdiv </xslo:text>
+                                        </xslo:when>
+                                        <xslo:when>
+                                            <xsl:attribute name="test">
+                                                <xsl:text>@code = $geographic_subdivision_subfield</xsl:text>
+                                            </xsl:attribute>
+                                            <xslo:text> geographicsubdiv </xslo:text>
+                                        </xslo:when>
+                                    </xslo:choose>
                                 </xslo:when>
                                 <xslo:otherwise>
                                     <xslo:value-of select="substring(' ', 1, 1)"/> <!-- FIXME surely there's a better way  to specify a space -->
