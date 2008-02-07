@@ -520,7 +520,7 @@ LEFT JOIN categories on borrowers.categorycode=categories.categorycode
         $sth->execute($information);
         $data = $sth->fetchrow_hashref;
         $sth->finish;
-        return ($data);
+        ($data) and return ($data);
     }
     return undef;        
 }
