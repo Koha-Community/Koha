@@ -79,6 +79,9 @@ YAHOO.util.Event.onContentReady("listsmenu", function () {
 	  b.text('').css({cursor:'pointer'}). prepend('<i></i>')
 	  .append( $('<span>').text(tt).append('<i></i><span></span>') );
 	  });
+	$("#searchsubmit").click(function(){
+		$("#searchform").submit();
+	})
 	  
 	  $("#cartmenulink").find("i:first").before("<img src=\"/opac-tmpl/prog/images/cart.gif\" alt=\"\" />");
 	  $("#listsmenulink").find("i:last").before("<img src=\"/opac-tmpl/prog/images/list.gif\" alt=\"\" />");
