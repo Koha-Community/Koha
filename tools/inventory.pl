@@ -33,6 +33,7 @@ my $minlocation=$input->param('minlocation') || 'A';
 my $maxlocation=$input->param('maxlocation');
 $maxlocation=$minlocation.'Z' unless $maxlocation;
 my $location=$input->param('location');
+my $itemtype=$input->param('itemtype');
 my $datelastseen = $input->param('datelastseen');
 my $offset = $input->param('offset');
 my $markseen = $input->param('markseen');
@@ -62,12 +63,25 @@ for my $branch_hash (keys %$branches) {
 	                   selected => ($branch_hash eq $branchcode?1:0)};	
 }
  
+
+my $itemtypes = GetItemTypes;
+my @itemtypesloop;
+foreach my $thisitemtype (sort keys %$itemtypes) {
+    my $selected = 1 if $thisitemtype eq $itemtype;
+    my %row =(value => $thisitemtype,
+                selected => $selected,
+                description => $itemtypes->{$thisitemtype}->{'description'},
+            );
+    push @itemtypesloop, \%row;
+}
+$template->param(itemtypeloop => \@itemtypesloop);
+
 my @authorised_value_list;
 my $authorisedvalue_categories;
 
 my $dbh=C4::Context->dbh;
-my $rqauthcategorie=$dbh->prepare("select authorised_value from marc_subfield_structure where frameworkcode=? and kohafield='items.location'");
-my $rq=$dbh->prepare("select frameworkcode from biblio_framework");
+my $rqauthcategorie=$dbh->prepare("SELECT authorised_value FROM marc_subfield_structure WHERE frameworkcode=? AND kohafield='items.location'");
+my $rq=$dbh->prepare("SELECT frameworkcode FROM biblio_framework");
 $rq->execute;
 while (my ($fwkcode)=$rq->fetchrow){
   $rqauthcategorie->execute($fwkcode);
@@ -140,7 +154,7 @@ if ($uploadbarcodes && length($uploadbarcodes)>0){
         }
     }
     if ($markseen or $op) {
-        my $res = GetItemsForInventory($minlocation,$maxlocation,$location,$datelastseen,$branchcode,$offset,$pagesize);
+        my $res = GetItemsForInventory($minlocation,$maxlocation,$location,$itemtype,$datelastseen,$branchcode,$offset,$pagesize);
         $template->param(loop =>$res,
                         nextoffset => ($offset+$pagesize),
                         prevoffset => ($offset?$offset-$pagesize:0),

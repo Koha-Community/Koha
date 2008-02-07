@@ -32,6 +32,15 @@
         </select>
         </li>
         <li>
+        <label for="itemtype">Item type</label>
+        <select name="itemtype">
+            <option value="">Any</option>
+        <!-- TMPL_LOOP name="itemtypeloop" -->
+            <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="description" --></option>
+        <!-- /TMPL_LOOP -->
+        </select>
+        </li>
+        <li>
             <label for="minlocation">Item location between: </label> 
                 <input type="text" name="minlocation" id="minlocation" value="<!-- TMPL_VAR NAME="minlocation" -->" /> (items.itemcallnumber)  </li>
            <li><label for="maxlocation">...and: </label> 
@@ -155,6 +164,7 @@
         <input type="hidden" name="datelastseen" value="<!-- TMPL_VAR NAME="datelastseen" -->" />
         <input type="hidden" name="pagesize" value="<!-- TMPL_VAR NAME="pagesize" -->" />
         <input type="hidden" name="offset" value="<!-- TMPL_VAR NAME="prevoffset" -->" />
+        <input type="hidden" name="op" value="do_it" />
         <input type="submit" value="&lt;&lt;" class="button" />
     </form>
     <!-- /TMPL_IF -->
@@ -167,6 +177,7 @@
         <input type="hidden" name="datelastseen" value="<!-- TMPL_VAR NAME="datelastseen" -->" />
         <input type="hidden" name="pagesize" value="<!-- TMPL_VAR NAME="pagesize" -->" />
         <input type="hidden" name="offset" value="<!-- TMPL_VAR NAME="nextoffset" -->" />
+        <input type="hidden" name="op" value="do_it" />
         <input type="submit" value="&gt;&gt;" class="button" />
     </form>
     <!-- /TMPL_IF -->

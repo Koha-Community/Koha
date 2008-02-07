@@ -913,7 +913,7 @@ offset & size can be used to retrieve only a part of the whole listing (defaut b
 =cut
 
 sub GetItemsForInventory {
-    my ( $minlocation, $maxlocation,$location, $datelastseen, $branch, $offset, $size ) = @_;
+    my ( $minlocation, $maxlocation,$location, $itemtype, $datelastseen, $branch, $offset, $size ) = @_;
     my $dbh = C4::Context->dbh;
     my $sth;
     if ($datelastseen) {
@@ -921,12 +921,14 @@ sub GetItemsForInventory {
         my $query =
                 "SELECT itemnumber,barcode,itemcallnumber,title,author,biblio.biblionumber,datelastseen
                  FROM items
-                   LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber 
+                   LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber
+                   LEFT JOIN biblioitems on items.biblionumber=biblioitems.biblionumber
                  WHERE itemcallnumber>= ?
                    AND itemcallnumber <=?
                    AND (datelastseen< ? OR datelastseen IS NULL)";
         $query.= " AND items.location=".$dbh->quote($location) if $location;
         $query.= " AND items.homebranch=".$dbh->quote($branch) if $branch;
+        $query.= " AND biblioitems.itemtype=".$dbh->quote($itemtype) if $itemtype;
         $query .= " ORDER BY itemcallnumber,title";
         $sth = $dbh->prepare($query);
         $sth->execute( $minlocation, $maxlocation, $datelastseen );
@@ -935,16 +937,19 @@ sub GetItemsForInventory {
         my $query ="
                 SELECT itemnumber,barcode,itemcallnumber,biblio.biblionumber,title,author,datelastseen
                 FROM items 
-                  LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber 
+                    LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber 
+                   LEFT JOIN biblioitems on items.biblionumber=biblioitems.biblionumber
                 WHERE itemcallnumber>= ?
                   AND itemcallnumber <=?";
         $query.= " AND items.location=".$dbh->quote($location) if $location;
         $query.= " AND items.homebranch=".$dbh->quote($branch) if $branch;
+        $query.= " AND biblioitems.itemtype=".$dbh->quote($itemtype) if $itemtype;
         $query .= " ORDER BY itemcallnumber,title";
         $sth = $dbh->prepare($query);
         $sth->execute( $minlocation, $maxlocation );
     }
     my @results;
+    $size--;
     while ( my $row = $sth->fetchrow_hashref ) {
         $offset-- if ($offset);
         $row->{datelastseen}=format_date($row->{datelastseen});
