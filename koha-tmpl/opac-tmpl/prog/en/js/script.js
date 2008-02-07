@@ -66,7 +66,9 @@ YAHOO.util.Event.onContentReady("changelanguage", function () {
 				YAHOO.widget.Overlay.windowResizeEvent.subscribe(positionoMenu);
             });
 YAHOO.util.Event.onContentReady("listsmenu", function () {
-   
+    $("#listsmenu").css("display","block").css("visibility","hidden");
+    $("#cartDetails").css("display","block").css("visibility","hidden");
+
    	$('.btn').each(function(){
 	  var b = $(this);
 	  var tt = b.text() || b.val();
@@ -74,9 +76,12 @@ YAHOO.util.Event.onContentReady("listsmenu", function () {
 	  b = $('<a>').insertAfter(this). addClass(this.className).attr('id',this.id);
 	  $(this).remove();
 	  }
-	  b.text('').css({cursor:'pointer'}). prepend('<i></i>').append($('<span>').
-	  text(tt).append('<i></i><span></span>'));
+	  b.text('').css({cursor:'pointer'}). prepend('<i></i>')
+	  .append( $('<span>').text(tt).append('<i></i><span></span>') );
 	  });
+	  
+	  $("#cartmenulink").find("i:first").before("<img src=\"/opac-tmpl/prog/images/cart.gif\" alt=\"\" />");
+	  $("#listsmenulink").find("i:last").before("<img src=\"/opac-tmpl/prog/images/list.gif\" alt=\"\" />");
    
         var listMenu = new YAHOO.widget.Menu("listsmenu", { lazyload: true });
 		listMenu.render();

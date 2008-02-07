@@ -68,7 +68,6 @@
 </div>
 </div>
 
-
 <!-- TMPL_IF NAME="opacbookbag" --><div id="cartDetails" style="display: none">Your cart is empty.</div><!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="virtualshelves" -->
