@@ -255,7 +255,7 @@ sub SimpleSearch {
                 return ( $error, undef );
             }
         }
-        my $hits;
+        my $hits = 0;
         my $ev;
         while ( ( my $i = ZOOM::event( \@zconns ) ) != 0 ) {
             $ev = $zconns[ $i - 1 ]->last_event();
@@ -268,6 +268,7 @@ sub SimpleSearch {
                     push @results, $record;
                 }
             }
+            $hits = 0;
         }
         return ( undef, \@results );
     }
