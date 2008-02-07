@@ -279,7 +279,7 @@ my @query_inputs = _input_cgi_parse($query_cgi);
 $template->param ( QUERY_INPUTS => \@query_inputs );
 
 ## parse the limit_cgi string and put it into a form suitable for <input>s
-my @limit_inputs = _input_cgi_parse($query_cgi);
+my @limit_inputs = _input_cgi_parse($limit_cgi);
 
 # add OPAC 'hidelostitems'
 if (C4::Context->preference('hidelostitems') == 1) {
