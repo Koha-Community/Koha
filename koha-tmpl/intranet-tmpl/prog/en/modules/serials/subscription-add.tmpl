@@ -7,8 +7,8 @@
 <!--
 
 // the english words used in display purposes
-var text = new Array(_('Number'),_('Volume'),_('Issue'),_('Month'),_('Week'),_('Starting with:'),_('Rollover at:'),_('Choose Hemisphere:'),_('Northern'),_('Southern'),
-_('Autumn'),_('Winter'),_('Spring'),_('Summer'),_('Fall'),_('Season'),_('Year'));
+var text = new Array(_("Number"),_("Volume"),_("Issue"),_("Month"),_("Week"),_("Starting with:"),_("Rollover at:"),_("Choose Hemisphere:"),_("Northern"),_("Southern"),
+_("Autumn"),_("Winter"),_("Spring"),_("Summer"),_("Fall"),_("Season"),_("Year"));
 var is_season = 0;
 var is_hemisphere = 1;
 
@@ -53,7 +53,7 @@ var patternchoice = document.getElementById("numberpattern").value;
 /*        document.f.lastvalue1.value=1;
         document.f.lastvalue2.value=1;
         document.f.lastvalue3.value=1;*/
-        document.f.numberingmethod.value=_('Vol {X}, No {Y}, Issue {Z}');
+        document.f.numberingmethod.value=_("Vol {X}, No {Y}, Issue {Z}");
         moreoptions(text[1],text[0],text[2]);
         display_table(0); // toggle info box on (1) or off (0)
         break;
@@ -73,7 +73,7 @@ var patternchoice = document.getElementById("numberpattern").value;
 /*        document.f.lastvalue1.value=1;
         document.f.lastvalue2.value=1;
         document.f.lastvalue3.value='';*/
-        document.f.numberingmethod.value=_('Vol {X}, No {Y}');
+        document.f.numberingmethod.value=_("Vol {X}, No {Y}");
         moreoptions(text[1],text[0]);
         display_table(0);
         break;
@@ -90,7 +90,7 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.setto1.value=0;
         document.f.setto2.value=1;
         document.f.setto3.value='';
-        document.f.numberingmethod.value=_('Vol {X}, Issue {Y}');
+        document.f.numberingmethod.value=_("Vol {X}, Issue {Y}");
         moreoptions(text[1],text[2]);
         display_table(0);
         break;
@@ -109,7 +109,7 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.setto1.value=0;
         document.f.setto2.value=1;
         document.f.setto3.value='';
-        document.f.numberingmethod.value=_('No {X}, Issue {Y}');
+        document.f.numberingmethod.value=_("No {X}, Issue {Y}");
         moreoptions(text[0],text[2]);
         display_table(0);
         break;
@@ -133,7 +133,7 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.setto3.value='';
         document.f.lastvaluetemp1.value=sYear;
         document.f.periodicity.value='8';
-        document.f.numberingmethod.value=_('{Y} {X}');
+        document.f.numberingmethod.value=_("{Y} {X}");
         moreoptions_seasons(text[15],sYear);
         display_table(0);
         is_season = 1;
@@ -206,7 +206,7 @@ var patternchoice = document.getElementById("numberpattern").value;
         }    
         //         document.f.lastvalue2.value=document.f.lastvaluetemp2.value;
         document.f.lastvalue3.value='';
-        document.f.numberingmethod.value=_('{X}/{Y}');
+        document.f.numberingmethod.value=_("{X}/{Y}");
         moreoptions(text[16],text[0]);
         display_table(0);
         break;
@@ -294,7 +294,7 @@ function moreoptions_daily_check(x) {
     var errortext='';
     if(periodicity == 1){
         document.getElementById("irregularity").innerHTML = '';
-        var daynames = new Array(_('Monday'),_('Tuesday'),_('Wednesday'),_('Thursday'),_('Friday'),_('Saturday'),_('Sunday'));
+        var daynames = new Array(_("Monday"),_("Tuesday"),_("Wednesday"),_("Thursday"),_("Friday"),_("Saturday"),_("Sunday"));
         errortext =_("Please indicate which days of the week you <b>DO NOT<\/b> expect to receive issues.<br \/>");
         for(var j=0;j<daynames.length;j++){
             errortext +="<input type='checkbox' name='irregular' id='irregular"+(j+1)+"' value='"+(j+1)+"' />"+daynames[j]+" &nbsp; ";
@@ -334,14 +334,14 @@ var textbox = '';
         textbox +="<\/tr>\n";
         if(y){
             textbox +="<tr><th scope=\"row\">"+text[6]+"<\/th>";
-            textbox +="<td><a href='javascript:irregularity_check()'>"+_('Irregularity?')+"<\/a><\/td>\n";
+            textbox +="<td><a href='javascript:irregularity_check()'>"+_("Irregularity?")+"<\/a><\/td>\n";
             textbox +="<td><input type='text' name='whenmorethantemp2' size='4' onkeyup='moreoptionsupdate(\"whenmorethan2\",1)'><\/td>\n";
             if(z){
                 textbox +="<td><input type='text' name='whenmorethantemp3' size='4' onkeyup='moreoptionsupdate(\"whenmorethan3\",1)'><\/td>\n";
             }
             textbox +="<\/tr>";
         } else {
-          textbox +="<tr> <td>"+_('issues expected')+"</td><td><input type='text' name='issuesexpectedtemp1' size='4' onkeyup='moreoptionsupdate(\"issuesexpected1\",0)' value=\"" + document.f.issuesexpected1.value + "\" ><br/><a href='javascript:irregularity_check()'>"+_('Irregularity?')+"</a></td></tr>";
+          textbox +="<tr> <td>"+_("issues expected")+"</td><td><input type='text' name='issuesexpectedtemp1' size='4' onkeyup='moreoptionsupdate(\"issuesexpected1\",0)' value=\"" + document.f.issuesexpected1.value + "\" ><br/><a href='javascript:irregularity_check()'>"+_("Irregularity?")+"</a></td></tr>";
         }
         textbox +="<\/table>\n";
     }
@@ -404,7 +404,7 @@ var textbox = '';
         }
         textbox +="<\/select><\/td><\/tr>\n";
         textbox +="<tr><th scope=\"row\">"+text[6]+"<\/th>";
-        textbox +="<td><a href='javascript:irregularity_check()'>"+_('Irregularity?')+"<\/a><\/td>\n";
+        textbox +="<td><a href='javascript:irregularity_check()'>"+_("Irregularity?")+"<\/a><\/td>\n";
         textbox +="<td><input type='text' name='whenmorethantemp2' size='4' onkeyup='moreoptionsupdate(\"whenmorethan2\",1)'><\/td>\n";
                 textbox +="<\/tr><\/table>\n";
 
@@ -516,7 +516,7 @@ function irregularity_check(){
     }
     if(expected){
         if(expected == 365 || expected==730){
-            var daynames = new Array(_('Monday'),_('Tuesday'),_('Wednesday'),_('Thursday'),_('Friday'),_('Saturday'),_('Sunday'));
+            var daynames = new Array(_("Monday"),_("Tuesday"),_("Wednesday"),_("Thursday"),_("Friday"),_("Saturday"),_("Sunday"));
             errortext += _("Please indicate which days of the week you <b>DO NOT<\/b> expect to receive issues.<br \/>");
             for(var j=0;j<daynames.length;j++){
                 errortext +="<input type='checkbox' name='irregular' id='irregular"+(j+1)+"' value='"+(j+1)+"' />"+daynames[j]+" &nbsp; ";
@@ -539,7 +539,7 @@ function irregularity_check(){
         error=errortext;
     }
     if(error.length ==0){
-        error=_('No irregularities noticed');
+        error=_("No irregularities noticed");
     }
     display_example(expected);
     document.getElementById("irregularity").innerHTML = error;
@@ -551,8 +551,8 @@ function irregular_options(periodicity){
 <!-- TMPL_IF NAME="weekarrayjs" -->
     var weeks = new Array(<!-- TMPL_VAR NAME="weekarrayjs" -->); 
 <!-- /TMPL_IF -->
-    var months = new Array(_('January'),_('February'),_('March'),_('April'),_('May'),_('June'),_('July'),_('August'),_('September'),_('October'),_('November'),_('December'));
-    var seasons = new Array(_('Autumn'),_('Winter'),_('Spring'),_('Summer'),_('Fall'));
+    var months = new Array(_("January"),_("February"),_("March"),_("April"),_("May"),_("June"),_("July"),_("August"),_("September"),_("October"),_("November"),_("December"));
+    var seasons = new Array(_("Autumn"),_("Winter"),_("Spring"),_("Summer"),_("Fall"));
     var errortext='';
     if(periodicity == 1) {
         expected = 366;
@@ -636,7 +636,7 @@ function display_example(expected){
     var whenmorethan3 = parseInt(document.f.whenmorethan3.value);
     var setto2 = parseInt(document.f.setto2.value);
     var setto3 = parseInt(document.f.setto3.value);
-    var displaytext = _('Based on the information<br \/>entered the Numbering Pattern<br \/>will look like this<br \/>\n');
+    var displaytext = _("Based on the information<br \/>entered the Numbering Pattern<br \/>will look like this<br \/>\n");
     if(startfrom3>0){
         var count=startfrom3-1;
         var count2=startfrom2;
@@ -763,9 +763,9 @@ function Find_ISSN(f)
 
 function Check(f) {
     if (f.aqbooksellerid.value.length==0) {
-        alert(_('You must choose a supplier'));
+        alert(_("You must choose a supplier"));
     } else if (f.biblionumber.value.length==0) {
-        alert(_('You must choose or create a biblio'));
+        alert(_("You must choose or create a biblio"));
     } else if(f.startdate.value.length != 0 && f.sublength.value > 0) {
         if (f.irreg_check.value == 1) {
             document.f.submit();
@@ -777,7 +777,7 @@ function Check(f) {
             }
         }
     } else {
-        alert(_('You must choose a start date and a subscription length'));
+        alert(_("You must choose a start date and a subscription length"));
     }
     return false;
 }

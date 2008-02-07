@@ -50,7 +50,7 @@ function Dopop(link,i) {
 function confirm_deletion(biblionumber,itemnumber) {
 	var original = $("#row"+itemnumber).attr("class");
 	$("#row"+itemnumber).attr("class","confirm");
-    var is_confirmed = confirm(_('Are you sure you want to delete this item?'));
+    var is_confirmed = confirm(_("Are you sure you want to delete this item?"));
     if (is_confirmed) {
     window.location = "additem.pl?op=delitem&biblionumber="+biblionumber+"&itemnumber="+itemnumber;
 	} else {
