@@ -1,0 +1,30 @@
+<settings target="localhost:10005/biblios">
+
+  <set name="pz:name" value="Koha bib database"/>
+
+  <!-- This file introduces default settings for pazpar2 -->
+  <!-- $Id: loc.xml,v 1.2 2007-07-10 13:43:07 adam Exp $ -->
+
+  <!-- mapping for unqualified search -->
+  <set name="pz:cclmap:term" value="u=1016 t=l,r s=al"/>
+
+  <!-- field-specific mappings -->
+  
+  <set name="pz:cclmap:au" value="u=1004 s=al"/>
+  <set name="pz:cclmap:ti" value="u=4 s=al"/>
+  <set name="pz:cclmap:su" value="u=21 s=al"/>
+  <set name="pz:cclmap:isbn" value="u=7"/>
+  <set name="pz:cclmap:issn" value="u=8"/>
+  <set name="pz:cclmap:date" value="u=30 r=r"/>
+
+  <!-- Retrieval settings -->
+
+  <set name="pz:requestsyntax" value="marc21"/>
+  <set name="pz:elements" value="F"/>
+
+  <!-- Result normalization settings -->
+
+  <set name="pz:nativesyntax" value="iso2709"/>
+  <set name="pz:xslt" value="marc21.xsl"/>
+
+</settings>

@@ -611,6 +611,70 @@ sub getRecords {
     return ( undef, $results_hashref, \@facets_loop );
 }
 
+use C4::Search::PazPar2;
+use XML::Simple;
+use Data::Dumper;
+sub pazGetRecords {
+    my (
+        $koha_query,       $simple_query, $sort_by_ref,    $servers_ref,
+        $results_per_page, $offset,       $expanded_facet, $branches,
+        $query_type,       $scan
+    ) = @_;
+
+    my $paz = C4::Search::PazPar2->new('http://localhost:10006/search.pz2');
+    $paz->init();
+    $paz->search($simple_query);
+    sleep 1;
+
+    # do results
+    my $results_hashref = {};
+    my $stats = XMLin($paz->stat);
+    $results_hashref->{'biblioserver'}->{'hits'} = $stats->{'hits'};
+    my $results = XMLin($paz->show($offset, $results_per_page), forcearray => 1);
+    #die Dumper($results);
+    HIT: foreach my $hit (@{ $results->{'hit'} }) {
+        warn "hit";
+        my $recid = $hit->{recid}->[0];
+        #if ($recid =~ /[\200-\377]/) {
+        if ($recid =~ /sodot/) {
+            #die "bad $recid\n";
+            #probably do not want non-ASCII in record ID
+            last HIT;
+        }
+        my $count = 1;
+        if (exists $hit->{count}) {
+            $count = $hit->{count}->[0];
+        }
+        #die $count;
+        for (my $i = 0; $i < $count; $i++) {
+            warn "look for $recid offset = $i";
+            my $rec = $paz->record($recid, $i);
+            warn "got record $i";
+            push @{ $results_hashref->{'biblioserver'}->{'RECORDS'} }, $paz->record($recid, $i);
+        }
+    }
+    warn "past hits";
+    
+    # pass through facets
+    my $termlist_xml = $paz->termlist('author,subject');
+    my $terms = XMLin($termlist_xml, forcearray => 1);
+    my @facets_loop = ();
+    foreach my $list (sort keys %{ $terms->{'list'} }) {
+        my @facets = ();
+        foreach my $facet (sort @{ $terms->{'list'}->{$list}->{'term'} } ) {
+            push @facets, {
+                facet_label_value => $facet->{'name'}->[0],
+            };
+        }
+        push @facets_loop, ( {
+            type_label => $list,
+            facets => \@facets,
+        } );
+    }
+
+    return ( undef, $results_hashref, \@facets_loop );
+}
+
 # STOPWORDS
 sub _remove_stopwords {
     my ( $operand, $index ) = @_;

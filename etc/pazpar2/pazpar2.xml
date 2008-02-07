@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- $Id: pazpar2.cfg.dist,v 1.21 2007-10-04 12:01:15 adam Exp $ -->
+<pazpar2 xmlns="http://www.indexdata.com/pazpar2/1.0">
+  
+  <server>
+    <listen port="10006"/>
+    <settings src="/home/gmc/koha/dev/etc/pazpar2/koha-biblios.xml"/>
+
+    <relevance>
+      <icu_chain id="relevance" locale="el">
+	<normalize rule="[:Control:] Any-Remove"/>
+	<tokenize rule="l"/>
+	<normalize rule="[[:WhiteSpace:][:Punctuation:]] Remove"/>
+	<casemap rule="l"/>
+	<index/>
+      </icu_chain>
+    </relevance>
+
+    <sort>
+      <icu_chain id="sort" locale="el">
+	<normalize rule="[[:Control:][:WhiteSpace:][:Punctuation:]] Remove"/>
+	<casemap rule="l"/>
+	<sortkey/>
+      </icu_chain>
+    </sort>
+    
+    <mergekey>
+      <icu_chain id="mergekey" locale="el">
+	<tokenize rule="l"/>
+	<normalize rule="[[:Control:][:WhiteSpace:][:Punctuation:]] Remove"/>
+	<casemap rule="l"/>
+	<index/>
+      </icu_chain>
+    </mergekey>
+    
+    <service>
+      <!-- we try to keep same order as in marc21.xsl -->
+      <metadata name="id"/>
+      <metadata name="lccn" merge="unique"/>
+      <metadata name="kohaid" merge="unique" brief="yes" />
+      <metadata name="isbn"/>
+      <metadata name="issn"/>
+      <metadata name="tech-rep-nr"/>
+      <metadata name="author" brief="yes" termlist="yes" merge="longest" rank="2"/>
+      <metadata name="author-title"/>
+      <metadata name="author-date"/>
+      <metadata name="corporate-name"/>
+      <metadata name="corporate-location"/>
+      <metadata name="corporate-date"/>
+      <metadata name="meeting-name"/>
+      <metadata name="meeting-location"/>
+      <metadata name="meeting-date"/>
+      <metadata name="date" brief="yes" sortkey="numeric" type="year"
+		merge="range" termlist="yes"/>
+      <metadata name="title" brief="yes" sortkey="skiparticle"
+		merge="longest" rank="6"/>
+      <metadata name="title-remainder" brief="yes" merge="longest" rank="5"/>
+      <metadata name="title-responsibility" brief="yes" />
+      <metadata name="title-dates" brief="yes" merge="longest"/>
+      <metadata name="title-medium" brief="yes" merge="longest"/>
+      <metadata name="title-number-section" brief="yes" merge="longest"/>
+      <metadata name="medium" brief="yes" merge="longest"/>
+      <metadata name="edition"/>
+      <metadata name="publication-place"/>
+      <metadata name="publication-name"/>
+      <metadata name="publication-date"/>
+      <metadata name="physical-extent"/>	
+      <metadata name="physical-format"/>	
+      <metadata name="physical-dimensions"/>	
+      <metadata name="physical-accomp"/>	
+      <metadata name="physical-unittype"/>	
+      <metadata name="physical-unitsize"/>	
+      <metadata name="physical-specified"/>	
+
+      <metadata name="series-title"/>	
+
+      <metadata name="description" merge="longest" rank="3"/>
+      <metadata name="subject-long" rank="3"/>
+      <metadata name="subject" termlist="yes" rank="0"/>
+      <metadata name="electronic-url"/>
+      <metadata name="electronic-text"/>
+      <metadata name="electronic-note"/>
+      <metadata name="citation"/>
+      <metadata name="fulltext"/>
+
+      <metadata name="url_recipe" setting="postproc"/>
+      <metadata name="open_url_resolver" setting="parameter"/>
+      <metadata name="open-url" merge="longest"/>
+    </service>
+  </server>
+  
+</pazpar2>
+<!-- Keep this comment at the end of the file
+     Local variables:
+     mode: nxml
+     End:
+-->
+
