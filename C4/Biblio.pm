@@ -30,7 +30,6 @@ use C4::Branch;
 use C4::Dates qw/format_date/;
 use C4::Log; # logaction
 use C4::ClassSource;
-use C4::Heading;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -106,6 +105,12 @@ BEGIN {
 		&GetNoZebraIndexes
 	);
 }
+
+# because of interdependencies between
+# C4::Search, C4::Heading, and C4::Biblio,
+# 'use C4::Heading' must occur after
+# the exports have been defined.
+use C4::Heading;
 
 =head1 NAME
 
