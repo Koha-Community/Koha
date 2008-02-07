@@ -109,6 +109,8 @@ $prefix = $ENV{'INSTALL_BASE'} || "/usr";
   '__ZEBRA_RUN_DIR__' => "$prefix/var/run/zebradb",
   '__ZEBRA_MARC_FORMAT__' => 'marc21',
   '__ZEBRA_LANGUAGE__' => 'en',
+  '__ZEBRA_AUTH_CFG__' => 'zebra-authorities.cfg',
+  '__AUTH_RETRIEVAL_CFG__' => 'retrieval-info-auth-grs1.xml',
 );
 
 # Override configuration from the environment

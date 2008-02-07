@@ -370,6 +370,7 @@ my %config_defaults = (
   'DB_PASS'           => 'katikoan',
   'INSTALL_ZEBRA'     => 'yes',
   'INSTALL_SRU'       => 'yes',
+  'AUTH_INDEX_MODE'   => 'grs1',
   'ZEBRA_MARC_FORMAT' => 'marc21',
   'ZEBRA_LANGUAGE'    => 'en',
   'ZEBRA_USER'        => 'kohauser',
@@ -411,6 +412,7 @@ my %valid_config_values = (
   'DB_TYPE' => { 'mysql' => 1, 'Pg' => 1 },
   'INSTALL_ZEBRA' => { 'yes' => 1, 'no' => 1 },
   'INSTALL_SRU' => { 'yes' => 1, 'no' => 1 },
+  'AUTH_INDEX_MODE' => { 'grs1' => 1, 'dom' => 1 },
   'ZEBRA_MARC_FORMAT' => { 'marc21' => 1, 'unimarc' => 1 }, # FIXME should generate from contents of distributation
   'ZEBRA_LANGUAGE'    => { 'en' => 1, 'fr' => 1 }, # FIXME should generate from contents of distribution
 );
@@ -436,8 +438,11 @@ if ($config{'INSTALL_ZEBRA'} eq "yes") {
         'blib/ZEBRA_CONF_DIR/etc/passwd',
         'blib/ZEBRA_CONF_DIR/zebra-biblios.cfg',
         'blib/ZEBRA_CONF_DIR/zebra-authorities.cfg',
+        'blib/ZEBRA_CONF_DIR/zebra-authorities-dom.cfg',
         'blib/ZEBRA_CONF_DIR/explain-authorities.xml',
-        'blib/ZEBRA_CONF_DIR/explain-biblios.xml'
+        'blib/ZEBRA_CONF_DIR/explain-biblios.xml',
+        'blib/ZEBRA_CONF_DIR/retrieval-info-auth-grs1.xml',
+        'blib/ZEBRA_CONF_DIR/retrieval-info-auth-dom.xml',
     );
     if ($config{'INSTALL_MODE'} ne 'dev') {
         push @{ $pl_files->{'rewrite-config.PL'} }, (
@@ -445,6 +450,9 @@ if ($config{'INSTALL_ZEBRA'} eq "yes") {
             'blib/SCRIPT_DIR/koha-zebraqueue-ctl.sh',
         );
     }
+    $config{'ZEBRA_AUTH_CFG'} = $config{'AUTH_INDEX_MODE'} eq 'dom' ? 'zebra-authorities-dom.cfg' : 'zebra-authorities.cfg';
+    $config{'AUTH_RETRIEVAL_CFG'} = 
+        $config{'AUTH_INDEX_MODE'} eq 'dom' ? 'retrieval-info-auth-dom.xml' : 'retrieval-info-auth-grs1.xml';
 }
 
 if ($config{'INSTALL_MODE'} ne "dev") {
@@ -864,7 +872,20 @@ records.
 Primary language for Zebra indexing);
         $msg .= _add_valid_values_disp('ZEBRA_LANGUAGE', $valid_values);
         $config{'ZEBRA_LANGUAGE'} = _get_value('ZEBRA_LANGUAGE', $msg, $defaults->{'ZEBRA_LANGUAGE'}, $valid_values);
+   
+        $msg = q(
+Koha can use one of  two different indexing modes 
+for the MARC authorities records:
 
+grs1 - uses the Zebra GRS-1 filter, available 
+       for legacy support
+dom  - uses the DOM XML filter; offers improved
+       functionality.
+
+Authorities indexing mode);
+        $msg .= _add_valid_values_disp('AUTH_INDEX_MODE', $valid_values);
+        $config{'AUTH_INDEX_MODE'} = _get_value('AUTH_INDEX_MODE', $msg, $defaults->{'AUTH_INDEX_MODE'}, $valid_values);
+       
         $msg = q(
 Please specify Zebra database user);
         $config{'ZEBRA_USER'} = _get_value('ZEBRA_USER', $msg, $defaults->{'ZEBRA_USER'}, $valid_values);

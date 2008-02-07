@@ -85,11 +85,14 @@
 <!-- AUTHORITY RECORDS -->
 <server id="authorityserver"  listenref="authorityserver" >
     <directory>__ZEBRA_DATA_DIR__/authorities</directory>
-    <config>__ZEBRA_CONF_DIR__/zebra-authorities.cfg</config>
+    <config>__ZEBRA_CONF_DIR__/__ZEBRA_AUTH_CFG__</config>
     <cql2rpn>__ZEBRA_CONF_DIR__/pqf.properties</cql2rpn>
      <!-- <docpath>xsl</docpath> -->
      <!-- <stylesheet>xsl/default.xsl</stylesheet> -->
      <!-- <maximumrecordsize>2000000</maximumrecordsize> -->
+    <xi:include href="__KOHA_CONF_DIR__/zebradb/__AUTH_RETRIEVAL_CFG__"
+                xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:fallback>
      <retrievalinfo>
        <retrieval syntax="usmarc" name="F"/>
        <retrieval syntax="usmarc" name="B"/>
@@ -129,6 +132,8 @@
          </backend>
        </retrieval>
      </retrievalinfo>
+      </xi:fallback>
+    </xi:include>
     <xi:include href="__KOHA_CONF_DIR__/zebradb/explain-authorities.xml"
                 xmlns:xi="http://www.w3.org/2001/XInclude">
       <xi:fallback>
