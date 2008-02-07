@@ -312,19 +312,38 @@ a .term {
 /* action buttons */
 #action {
 	margin-top : .5em;
+	background-color : #F3F3F3;
+	border : 1px solid #E8E8E8;
+	padding-bottom : 3px;
 }
 
 #action li {
 	list-style : none;
+	margin : .2em;
+	padding : .3em 0;
 }
 
 #action a {
-	background-color : #F3F3F3;
-	border : 1px solid #E8E8E8;
-	display : block;
-	margin : .2em;
-	padding : .5em;
+	background-position : left;
+	background-repeat : no-repeat;
 	text-decoration : none;
+	padding-left : 26px;
+}
+
+#action a.reserve, #toolbar a.reserve {
+	background-image:url(../../images/placereserve.gif);
+}
+
+#action a.addtoshelf, #toolbar a.addtoshelf {
+	background-image:url(../../images/addtoshelf.gif);
+}
+
+#action a.addtocart, #toolbar a.addtocart {
+	background-image:url(../../images/cart2.gif);
+}
+
+#action a.print, #toolbar a.print {
+	background-image:url(../../images/print.gif);
 }
 
 /* the itemtype list in advanced search */
@@ -639,8 +658,12 @@ a.cancel {
 }
 
 #toolbar ul {
+	border-bottom : 1px solid #AFBCCF;
+}
+
+#toolbar ul {
 	margin : 1em 0 0 0;
-	padding : 0;
+	padding : 0 0 .3em 0;
 }
 
 #toolbar ul li {
@@ -649,10 +672,19 @@ a.cancel {
 }
 
 #toolbar ul li a {
-	border : 1px solid #afbccf;
+	border-left : 1px solid #afbccf;
+	border-top : 1px solid #afbccf;
+	border-right : 1px solid #afbccf;
 	padding : .3em;
 	text-decoration : none;
-	margin-right : .1em;
+	margin-left : .3em;
+}
+
+#toolbar ul li a.link {
+	border : 0;
+	background-position : left;
+	background-repeat : no-repeat;
+	padding : .3em .3em .3em 26px;
 }
 
 .resultscontrol, .resultscontrol select {
@@ -737,14 +769,6 @@ td.resultscontrol img {
 	color:#006699;
 }
 
-input.reserve, a.reserve {
-	background-image:url(../../images/placereserve.gif);
-}
-
-a.reserve {
-	background-color:#006699;
-	color:White;
-}
 .unavailable {
 	color: #990033;
 }
@@ -836,15 +860,6 @@ a:active.nav {
 	font-weight: bold;
 	padding: 1px 5px 1px 5px;
 	text-decoration: none;
-}
-
-input.icon {
-}
-
-input.shelf, a.shelf {
-}
-
-input.clearall, a.clearall {
 }
 
 /* Tabs */
@@ -1361,8 +1376,43 @@ div#menu li.active a:hover {
 	float : right;
 }
 
-#go {
+#searchsubmit {
 	cursor : default;
 	font-size : 87%;
-	margin-top : -.2em;
+	margin-top : -.1em;
+}
+
+#export {
+	margin-top : .5em;
+	background-color : #F3F3F3;
+	border : 1px solid #E8E8E8;
+	font-size : 76%;
+	padding : 3px;
+	text-align : center;
+}
+
+#export label {
+	display : block;
+	font-weight : bold;
+	font-size : 110%;
+	margin-bottom : 2px;
+}
+
+#export input {
+	padding : 2px;
+}
+#starFull {
+	background: url(../../images/bluestars.png) top left no-repeat;
+	height: 25px;
+	margin: 0;
+	padding: 0;
+}
+
+#starMT {
+	background: url(../../images/emptystars.png) top left no-repeat;
+	height: 25px;
+	margin: 0 3px 0 30px;
+	padding: 0;
+	position: relative;
+	width: 100px;
 }

@@ -18,7 +18,7 @@
 <body>
 <!--TMPL_INCLUDE NAME="masthead.inc" -->
 
-<div id="doc3" class="yui-t1">
+<!-- TMPL_IF NAME="OpacNav" --><div id="doc3" class="yui-t1"><!-- TMPL_ELSE --><div id="doc3" class="yui-t7"><!-- /TMPL_IF -->
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-ge">
@@ -149,28 +149,37 @@
 <!-- TMPL_UNLESS NAME="norequests" -->
     <!-- TMPL_UNLESS name="bi_notforloan" -->
         <!-- TMPL_IF NAME="RequestOnOpac" -->
-            <li><a href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
+            <li><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
             Place Reserve
             </a></li>
         <!-- /TMPL_IF -->
     <!-- /TMPL_UNLESS -->
 <!-- /TMPL_UNLESS -->
-       
-
-        <li><a href="/cgi-bin/koha/opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
+        <li><a class="print" href="/cgi-bin/koha/opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
             Print
         </a></li>
 <!-- TMPL_IF name="virtualshelves" -->
     <!-- TMPL_IF NAME="loggedinusername" -->
-        <li><a href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
-            Add to My List
+        <li><a class="addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
+            Save to Your Lists
         </a></li>
     <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
-        <li><a href="#" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
-            Add to My Cart
-        </a></li>
+        <!-- TMPL_IF NAME="opacbookbag" --><li><a class="addtocart" href="#" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
+            Add to Your Cart
+        </a></li><!-- /TMPL_IF -->
 </ul>
+		<div id="export">
+		<form method="get" action="/cgi-bin/koha/opac-export.pl">
+		<label for="format">Save Record:</label>
+	    <select name="format" id="format">
+		<option value="">-- Choose Format --</option>
+        <option value="mods">MODS (XML)</option>
+        <option value="dc">Dublin Core (XML)</option>
+        <option value="marcxml">MARCXML</option>
+        <option value="marc8">MARC (non-Unicode/MARC-8)</option>
+        <option value="utf8">MARC (Unicode/UTF-8)</option>    </select><input type="hidden" name="op" value="export" /><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+<input type="submit" name="save" value="Go" /></form></div>
 </div>
 </div>
 
@@ -197,6 +206,7 @@
 	<li> <a class="external" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
             MARC View
         </a></li>
+	<li></li>
 </ul>
 
 <div id="holdings" class="tabs-container">
@@ -368,7 +378,6 @@
 <!-- TMPL_IF NAME="AmazonContent" -->
 <!-- Amazon Reviews -->
 <div id="amazonreviews" class="tabs-container">
-        <h2>Amazon Reader Reviews:</h2>
         
     <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
     <!-- TMPL_IF NAME="isbn" -->
@@ -394,9 +403,7 @@
     <!-- /TMPL_LOOP -->
     <!-- TMPL_ELSE -->
 
-    <div class="content_set">
-    <p class="error"> Sorry, there are no reviews available for this title. </p>
-    </div>
+    <p> Sorry, there are no reviews available for this title. </p>
 
     <!-- /TMPL_IF -->
 </div> <!-- itemReviews -->
@@ -425,11 +432,11 @@ title="<!-- TMPL_VAR NAME="itype" -->" /><!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
 
 </div>
+
 </div>
 </div>
 </div>
-	<div class="yui-b">
-<!--TMPL_INCLUDE NAME="navigation.inc" --></div>
+	<!-- TMPL_IF NAME="OpacNav" --><div class="yui-b"><!--TMPL_INCLUDE NAME="navigation.inc" --></div><!-- /TMPL_IF -->
 	
 	</div>
 
