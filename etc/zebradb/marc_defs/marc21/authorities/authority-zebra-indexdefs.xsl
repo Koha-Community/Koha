@@ -30,10 +30,10 @@
     </z:record>
   </xslo:template>
   <xslo:template match="marc:leader">
-    <z:index name="Record-status">
+    <z:index name="Record-status:w">
       <xslo:value-of select="substring(., 6, 1)"/>
     </z:index>
-    <z:index name="Encoding-level">
+    <z:index name="Encoding-level:w">
       <xslo:value-of select="substring(., 18, 1)"/>
     </z:index>
   </xslo:template>
@@ -43,19 +43,19 @@
     </z:index>
   </xslo:template>
   <xslo:template match="marc:controlfield[@tag='008']">
-    <z:index name="Kind-of-record">
+    <z:index name="Kind-of-record:w">
       <xslo:value-of select="substring(., 10, 1)"/>
     </z:index>
-    <z:index name="Descriptive-cataloging-rules">
+    <z:index name="Descriptive-cataloging-rules:w">
       <xslo:value-of select="substring(., 11, 1)"/>
     </z:index>
-    <z:index name="Heading-use-main-or-added-entry">
+    <z:index name="Heading-use-main-or-added-entry:w">
       <xslo:value-of select="substring(., 15, 1)"/>
     </z:index>
-    <z:index name="Heading-use-subject-added-entry">
+    <z:index name="Heading-use-subject-added-entry:w">
       <xslo:value-of select="substring(., 16, 1)"/>
     </z:index>
-    <z:index name="Heading-use-series-added-entry">
+    <z:index name="Heading-use-series-added-entry:w">
       <xslo:value-of select="substring(., 17, 1)"/>
     </z:index>
   </xslo:template>
@@ -134,7 +134,7 @@
   <xslo:template mode="index_subfields" match="marc:datafield[@tag='942']">
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('a', @code)">
-        <z:index name="authtype">
+        <z:index name="authtype:w">
           <xslo:value-of select="."/>
         </z:index>
       </xslo:if>
@@ -1822,7 +1822,7 @@
         </xslo:otherwise>
       </xslo:choose>
     </xslo:variable>
-    <z:index name="Subject-heading-thesaurus">
+    <z:index name="Subject-heading-thesaurus:w">
       <xslo:value-of select="$full_thesaurus_code"/>
     </z:index>
   </xslo:template>
