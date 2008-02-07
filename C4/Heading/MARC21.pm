@@ -195,6 +195,10 @@ sub _get_search_heading {
             }
         }
     }
+
+    # remove characters that are part of CCL syntax
+    $heading =~ s/[)(=]//g;
+
     return $heading;
 }
 
