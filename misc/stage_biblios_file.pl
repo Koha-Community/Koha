@@ -24,7 +24,7 @@ my $want_help = 0;
 
 my $result = GetOptions(
     'file:s'        => \$input_file,
-    'match-bibs'    => \$match_bibs,
+    'match-bibs:s'    => \$match_bibs,
     'add-items'     => \$add_items,
     'comment:s'     => \$batch_comment,
     'h|help'        => \$want_help
@@ -70,11 +70,16 @@ sub process_batch {
 
     my $num_with_matches = 0;
     if ($match_bibs) {
-        my $matcher = C4::Matcher->new('biblio');
-        $matcher->add_simple_matchpoint('isbn', 1000, '020', 'a', -1, 0, '');
-        $matcher->add_simple_required_check('245', 'a', -1, 0, '', 
+    	my $matcher = C4::Matcher->fetch($match_bibs) ;
+	if( ! defined $matcher) {
+		$matcher = C4::Matcher->new('biblio');
+       	$matcher->add_simple_matchpoint('isbn', 1000, '020', 'a', -1, 0, '');
+       	$matcher->add_simple_required_check('245', 'a', -1, 0, '', 
                                             '245', 'a', -1, 0, '');
-        print "... looking for matches with records already in database\n";
+     } else {
+		 SetImportBatchMatcher($batch_id, $match_bibs);
+	}
+	print "... looking for matches with records already in database\n";
         $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher, 10, 100, \&print_progress_and_commit);
         print "... finished looking for matches\n";
     }
@@ -125,9 +130,11 @@ records into the main Koha database.
 
 Parameters:
     --file <file_name>      name of input MARC bib file
-    --match-bibs            use this option to match bibs
+    --match-bibs <match_id> use this option to match bibs
                             in the file with bibs already in 
                             the database for future overlay.
+			    If <match_id> isn't defined, a default 
+			    MARC21 ISBN & title match rule will be applied.
     --add-items             use this option to specify that
                             item data is embedded in the MARC
                             bibs and should be parsed.
