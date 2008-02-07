@@ -249,7 +249,7 @@
         <label for="branchloop">Individual Libraries:</label><select name="limit" id="branchloop" onchange='if(this.value != ""){document.getElementById("categoryloop").disabled=true;} else {document.getElementById("categoryloop").disabled=false;}'>
         <option value="">All Libraries</option>
         <!-- TMPL_LOOP NAME="branchloop" -->
-        <option value="homebranch:<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
+        <option value="branch:<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
         <!-- /TMPL_LOOP -->
         </select>
     <!-- <input type="hidden" name="limit" value="branch: MAIN" /> -->
