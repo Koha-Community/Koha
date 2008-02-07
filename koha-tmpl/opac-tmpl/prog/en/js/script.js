@@ -68,6 +68,7 @@ YAHOO.util.Event.onContentReady("listsmenu", function () {
     $("#listsmenu").css("display","block").css("visibility","hidden");
     $("#cartDetails").css("display","block").css("visibility","hidden");
 
+	$("#cmspan").html("<a id=\"cartmenulink\" class=\"btn green left\" href=\"/cgi-bin/koha/opac-basket.pl\">Cart</a>");
    	$('.btn').each(function(){
 	  var b = $(this);
 	  var tt = b.text() || b.val();
