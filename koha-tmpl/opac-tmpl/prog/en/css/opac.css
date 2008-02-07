@@ -847,7 +847,7 @@ a:active.nav {
 
 input.icon {
 	background-position: left;
-	/*  background-repeat: no-repeat;  */
+	background-repeat: no-repeat;
 	font-size : 96%;
 	font-weight: bold;
 	padding: 2px 2px 2px 22px;
@@ -961,31 +961,15 @@ width: 120px;
 }
 
 #fluid {
-float: right;
-width: 100%;
-margin-left: -120px;
+margin-left: 124px;
+margin-top : .4em;
+padding-left : 1em;
 }
 
 #fluid-offset {
-margin-left: 119px;
-margin-top : .4em;
-}
-
-#fluid-content-1 {
-float: left;
-width: 65%;
-margin : .3em -1px 0 2%;
-display: inline /* fix IE6 */;
-line-height : 15px;
-}
-
-#fluid-content-2 {
-float: left;
-width: 28%;
-margin-left: 2%;
-display: inline /* fix IE6 */;
-margin-right: -1px /* fix IE6 */;
-line-height : 25px;
+margin-left: 125px;
+float : right;
+width: 100%;
 }
 
 .clearfix:after {
@@ -1033,10 +1017,11 @@ div.message {
 }
 
 #moresearches {
+	clear : left;
 	color : #000099;
 	font-size : 90%;
 	line-height : 110%;
-	margin : .6em 0 .3em 2%;
+	margin : .6em 0 .3em 0;
 }
 
 #moresearches a:link, #moresearches a:visited {
@@ -1061,7 +1046,7 @@ div.message {
 	background-image : url("../../images/listmenu-container-bg.gif");
 	background-position : top right;
 	background-repeat : repeat-y;
-	padding-right: 1em;
+	padding : .3em 1em 0 0;
 	// margin : 3em 0 0 0;
 }
 #opac-main-search #listsmenu .yui-menu-shadow {
@@ -1170,10 +1155,15 @@ div#changelanguage a.yuimenuitemlabel {
 
 a#listsmenulink, a#listsmenulink:hover {
 	color : #006699;
+	font-size : 105%;
+	line-height : 185%;
 }
 
 a#cartmenulink, a#cartmenulink:hover {
 	color : #336600;
+	font-size : 105%;
+	line-height : 185%;
+	margin-left : 1.5em;
 }
 
 #login #userid, #login #password {
@@ -1181,7 +1171,7 @@ a#cartmenulink, a#cartmenulink:hover {
 }
 
 #opac-main-search input.submit {
-	background : #b8d0e6 url(../../images/submit-bg.gif) no-repeat 0 0;
+	background : #b8d0e6 url(../../images/submit-bg.gif) repeat-x 0 0;
 	background-color : #b8d0e6;
 	border-top: 1px solid #cccccc;
 	border-left: 1px solid #cccccc;
@@ -1192,49 +1182,146 @@ a#cartmenulink, a#cartmenulink:hover {
 	font-size : 80%;
 	padding : 2px;
 }
-	.btn { display: block; position: relative; background: #aaa; padding: 5px; float: right; color: #fff; text-decoration: none; cursor: pointer; }
-	.btn * { font-style: normal; background-image: url('../../images/button-background.png'); background-repeat: no-repeat; display: block; position: relative; }
-	.btn i { background-position: top left; position: absolute; margin-bottom: -5px;  top: 0; left: 0; width: 5px; height: 5px; }
-	.btn span { background-position: bottom left; left: -5px; padding: 0 0 5px 10px; margin-bottom: -5px; }
-	.btn span i { background-position: bottom right; margin-bottom: 0; position: absolute; left: 100%; width: 10px; height: 100%; top: 0; }
-	.btn span span { background-position: top right; position: absolute; right: -10px; margin-left: 10px; top: -5px; height: 0; }
-
-	* html .btn span,
-	* html .btn i { float: left; width: auto; background-image: none; cursor: pointer; }
-
-	.btn.blue { background: #6699FF; }
-	.btn.blue:hover { background-color: #6699FF; background-image: none; }
-	.btn.green { background: #98CB58; }
-	.btn.green:hover { background-color: #98CB58; background-image: none; }
-	.btn:active { background-color: #444; }
-	.btn[class] {  background-image: url('../../images/button-background-gradient.png'); background-position: 0 0; }
-	.btn[class]:hover { background-image: url('../../images/button-background-gradient.png'); background-position: 0 -200px; }
-
-	* html .btn { border: 3px double #aaa; }
-	* html .btn.blue { border-color: #2ae; }
-	* html .btn.green { border-color: #9d4; }
-	* html .btn:hover { border-color: #a00; }
-	#cartmenulink { margin-right :  1em;	}
-
-	
-	div#menu {
-	border-right: 1px solid #979797;
-	font-size : 94%;
-	margin-right: .5em;
-	padding-top: 1em;
-	padding-bottom: 2em;
+	.btn {
+	display : block;
+	position : relative;
+	background : #aaa;
+	padding : 5px;
+	color : #fff;
+	text-decoration : none;
+	cursor : default;
+	margin-left : .5em;
 }
 
+	.btn * {
+	font-style : normal;
+	background-image : url('../../images/button-background.png');
+	background-repeat : no-repeat;
+	display : block;
+	position : relative;
+}
+
+#cartmenulink.btn img {
+	background-image : none;
+	float : left;
+	padding : 3px 3px 0 3px;
+}
+
+#listsmenulink.btn img {
+	background-image : none;
+	display : inline;
+	padding : 0 0 2px 3px;
+}
+
+	.btn i {
+	background-position : top left;
+	position : absolute;
+	margin-bottom : -5px;
+	top : 0;
+	left : 0;
+	width : 5px;
+	height : 5px;
+}
+
+	.btn span {
+	background-position : bottom left;
+	left : -5px;
+	padding : 0 0 5px 10px;
+	margin-bottom : -5px;
+}
+
+	.btn span i {
+	background-position : bottom right;
+	margin-bottom : 0;
+	position : absolute;
+	left : 100%;
+	width : 10px;
+	height : 100%;
+	top : 0;
+}
+
+	.btn span span {
+	background-position : top right;
+	position : absolute;
+	right : -10px;
+	margin-left : 10px;
+	top : -5px;
+	height : 0;
+}
+
+	* html .btn span,
+	* html .btn i {
+	float : left;
+	width : auto;
+	background-image : none;
+	cursor : pointer;
+}
+
+	.btn.blue {
+	background : #9fbfff;
+}
+
+	.btn.blue:hover {
+	background-color : #6699FF;
+	background-image : none;
+}
+
+	.btn.green {
+	background : #98CB58;
+}
+
+	.btn.green:hover {
+	background-color : #98CB58;
+	background-image : none;
+}
+
+	.btn:active {
+	background-color : #444;
+}
+
+	.btn[class] {
+	background-image : url('../../images/button-background-gradient.png');
+	background-position : 0 0;
+}
+
+	 .btn[class]:hover {
+	background-image : url('../../images/button-background-gradient.png');
+	background-position : 0 -200px;
+}
+
+	* html .btn {
+	border : 3px double #aaa;
+}
+
+	* html .btn.blue {
+	border-color : #2ae;
+}
+
+	* html .btn.green {
+	border-color : #9d4;
+}
+
+	* html .btn:hover {
+	border-color : #a00;
+}
+
+div#menu {
+	border-right : 1px solid #979797;
+	font-size : 94%;
+	margin-right : .5em;
+	padding-top : 1em;
+	padding-bottom : 2em;
+}
 
 div#menu li a {
-	text-decoration: none;
-	display: block;
+	text-decoration : none;
+	display : block;
 	background : #EEE url(../../images/side-tab-gradient.gif) repeat-y top right;
-	border: 1px solid #979797;
-	font-size: 111%;
-	margin: .5em 0;
-	padding: .4em .3em;
-	margin-right :  -1px;
+	border : 1px solid #979797;
+	font-size : 111%;
+	margin : .5em 0;
+	padding : .4em .3em;
+	margin-right : -1px;
 }
 
 div#menu li a:hover {
@@ -1242,18 +1329,31 @@ div#menu li a:hover {
 }
 
 div#menu li.active a:hover {
-	background-color: #fff;
-	color :  #0000CC;
+	background-color : #fff;
+	color : #0000CC;
 }
 
 #menu ul li {
-	list-style-type: none;
+	list-style-type : none;
 }
 
 #menu ul li.active a {
-	background-color: #FFF;
+	background-color : #FFF;
 	background-image : none;
-	border-right: 0;
-	font-weight: bold;
+	border-right : 0;
+	font-weight : bold;
 }
 
+.left {
+	float : left;
+}
+
+.right {
+	float : right;
+}
+
+#go {
+	cursor : default;
+	font-size : 87%;
+	margin-top : -.2em;
+}

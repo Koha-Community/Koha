@@ -5,21 +5,15 @@
 
 <div id="opac-main-search" class="yui-g">
    <div id="masthead">
-<!-- TMPL_IF NAME="opacsmallimage" -->
-   <h1 id="libraryname" style="background-image: url('<!-- TMPL_VAR NAME="opacsmallimage" -->');">
-<!-- TMPL_ELSE -->
-	<h1 id="libraryname">
-<!-- /TMPL_IF -->
-<a href="/cgi-bin/koha/opac-main.pl"><!-- TMPL_IF NAME="LibraryName" --><!-- TMPL_VAR NAME="LibraryName" --><!-- TMPL_ELSE -->Koha Online Catalog<!-- /TMPL_IF --></a></h1>
+   <h1 id="libraryname" <!-- TMPL_IF NAME="opacsmallimage" -->style="background-image: url('<!-- TMPL_VAR NAME="opacsmallimage" -->');"><!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-main.pl"><!-- TMPL_IF NAME="LibraryName" --><!-- TMPL_VAR NAME="LibraryName" --><!-- TMPL_ELSE -->Koha Online Catalog<!-- /TMPL_IF --></a></h1>
    </div>
 
 <div id="fluid">
 <div id="fluid-offset">
-<div id="fluid-content-1">
-    <!-- TMPL_UNLESS NAME="advsearch" --><form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform">
-	<label for="masthead_search"> Search <!-- TMPL_IF name="mylibraryfirst" --> <!-- TMPL_IF name="loggedinusername" -->(in <!-- TMPL_VAR name="LoginBranchcode" --> only)<!-- /TMPL_IF --><!-- /TMPL_IF --></label>
-	<select name="idx" id="masthead_search">
-		<!-- TMPL_IF NAME="ms_kw" -->
+<!-- TMPL_UNLESS NAME="advsearch" --><form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform">
+	<label for="masthead_search" class="left"> Search <!-- TMPL_IF name="mylibraryfirst" --> <!-- TMPL_IF name="loggedinusername" -->(in <!-- TMPL_VAR name="LoginBranchcode" --> only)<!-- /TMPL_IF --><!-- /TMPL_IF --></label>
+	<select name="idx" id="masthead_search" class="left">
+	<!-- TMPL_IF NAME="ms_kw" -->
         <option selected="selected" value="">Library Catalog</option>
 		<!-- TMPL_ELSE -->
         <option value="">Library Catalog</option>
@@ -53,32 +47,32 @@
         <option selected="selected" value="callnum">Call Number</option>
 		<!-- TMPL_ELSE -->
         <option value="callnum">Call Number</option>
-		<!-- /TMPL_IF -->
-	</select>
-	<!-- TMPL_IF NAME="ms_value" -->
-        <input type="text" name="q" value="<!-- TMPL_VAR NAME="ms_value" -->"  style="width: 40%;" />
-	<!-- TMPL_ELSE -->
-        <input type="text" name="q" style="width: 40%;" />
-	<!-- /TMPL_IF -->
-	<!-- TMPL_IF name="mylibraryfirst" --><!-- TMPL_IF name="loggedinusername" -->
-		<input name="limit" value="<!-- TMPL_VAR name="LoginBranchcode" -->" type="hidden" />
-	<!-- /TMPL_IF --><!-- /TMPL_IF -->
-		<input type="submit" value="Search" class="submit" />
-		
+		<!-- /TMPL_IF --></select>
+<!-- TMPL_IF NAME="ms_value" -->
+        <input type="text" name="q" value="<!-- TMPL_VAR NAME="ms_value" -->" class="left" style="width: 40%;" />
+<!-- TMPL_ELSE -->
+        <input type="text" name="q" class="left" style="width: 35%;" />
+<!-- /TMPL_IF -->
+        <!-- TMPL_IF name="mylibraryfirst" --><!-- TMPL_IF name="loggedinusername" -->
+            <input name="limit" value="<!-- TMPL_VAR name="LoginBranchcode" -->" type="hidden" />
+        <!-- /TMPL_IF --><!-- /TMPL_IF -->
+        <input type="submit" value="Go" id="searchsubmit" class="btn blue left" />
+		<!-- TMPL_IF EXPR="opacbookbag || virtualshelves" -->
+<!-- TMPL_IF NAME="opacbookbag" --><a id="cartmenulink" class="btn green left" href="/cgi-bin/koha/opac-basket.pl">Cart<div id="basket"></div></a><!-- /TMPL_IF --><!--TMPL_IF NAME="virtualshelves" --><a class="btn blue left" id="listsmenulink" href="#">Lists</a><!-- /TMPL_IF --><!-- /TMPL_IF -->
     </form>
-	
-	<div id="moresearches"><a href="/cgi-bin/koha/opac-search.pl">Advanced Search</a><!-- TMPL_IF name="OpacBrowser" --> | <a href="/cgi-bin/koha/opac-browser.pl">Browse by Hierarchy</a><!-- /TMPL_IF --><!-- TMPL_IF name="OpacAuthorities" --> | <a href="/cgi-bin/koha/opac-authorities-home.pl">Browse by Subject</a><!-- /TMPL_IF --><!-- TMPL_IF name="OpacCloud" --> | <a href="/cgi-bin/koha/opac-tags_subject.pl">Tag Cloud</a><!-- /TMPL_IF --><!-- TMPL_IF name="OpacTopissue" --> | <a href="/cgi-bin/koha/opac-topissues.pl">Most Popular</a><!-- /TMPL_IF --></div>
+
+<div id="moresearches"><a href="/cgi-bin/koha/opac-search.pl">Advanced Search</a><!-- TMPL_IF name="OpacBrowser" --> | <a href="/cgi-bin/koha/opac-browser.pl">Browse by Hierarchy</a><!-- /TMPL_IF --><!-- TMPL_IF name="OpacAuthorities" --> | <a href="/cgi-bin/koha/opac-authorities-home.pl">Browse by Subject</a><!-- /TMPL_IF --><!-- TMPL_IF name="OpacCloud" --> | <a href="/cgi-bin/koha/opac-tags_subject.pl">Tag Cloud</a><!-- /TMPL_IF --><!-- TMPL_IF name="OpacTopissue" --> | <a href="/cgi-bin/koha/opac-topissues.pl">Most Popular</a><!-- /TMPL_IF --></div>
 <!-- TMPL_ELSE -->
 <div id="moresearches"><!-- TMPL_IF name="OpacBrowser" --> | <a href="/cgi-bin/koha/opac-browser.pl">Browse by Hierarchy</a><!-- /TMPL_IF --><!-- TMPL_IF name="OpacAuthorities" --> | <a href="/cgi-bin/koha/opac-authorities-home.pl">Browse by Subject</a><!-- /TMPL_IF --><!-- TMPL_IF name="OpacCloud" --> | <a href="/cgi-bin/koha/opac-tags_subject.pl">Tag Cloud</a><!-- /TMPL_IF --><!-- TMPL_IF name="OpacTopissue" --> | <a href="/cgi-bin/koha/opac-topissues.pl">Most Popular</a><!-- /TMPL_IF --></div><!-- /TMPL_UNLESS -->
 
 </div>
-<div id="fluid-content-2">
-<!--TMPL_IF NAME="virtualshelves" --><a class="btn blue" id="listsmenulink" href="#">Lists</a><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="opacbookbag" --><a id="cartmenulink" class="btn green" href="/cgi-bin/koha/opac-basket.pl">Cart<span id="basket"></span></a><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="opacbookbag" --><div id="cartDetails" style="visibility:hidden">Your cart is empty.</div><!-- /TMPL_IF -->
+</div>
+
+
+<!-- TMPL_IF NAME="opacbookbag" --><div id="cartDetails" style="display: none">Your cart is empty.</div><!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="virtualshelves" -->
-<div id="listsmenu" class="yuimenu">
+<div id="listsmenu" class="yuimenu" style="display: none">
     <div class="bd">
 	<h4>Public Lists</h4>
 		<!-- TMPL_IF NAME="barshelves" -->
@@ -99,37 +93,29 @@
 		<!-- /TMPL_IF -->
 
 			<ul class="second-of-type">
-			<li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl">Manage Lists</a></li>
-			</ul>
-<!-- TMPL_ELSE --><ul class="first-of-type"><li><a href="/cgi-bin/koha/opac-user.pl">Log in to Create Your Own Lists</a></li></ul>
-<!-- /TMPL_IF -->
+            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl">Manage Lists</a></li>
+        </ul>
+		</li><!-- TMPL_ELSE --><ul class="first-of-type"><li><a href="/cgi-bin/koha/opac-user.pl">Log in to Create Your Own Lists</a></li></ul><!-- /TMPL_IF -->
 	  </div>
 </div>
 <!-- /TMPL_IF -->
-
-
 </div>
-</div>
-</div>
-
-</div>
-
 	<div id="breadcrumbs" class="yui-g">
 
-<!-- TMPL_IF NAME="searchdesc" -->
-<p>
-  <!-- TMPL_IF NAME="total" --><strong>&ldquo;<!-- TMPL_VAR NAME="query_desc" --><!-- TMPL_VAR NAME="limit_desc" -->&rdquo; </strong>returned <!-- TMPL_VAR NAME="total" --> results.
-	<!-- TMPL_IF NAME="related" --> (related searches: <!-- TMPL_LOOP NAME="related" --><!-- TMPL_VAR NAME="related_search" --><!-- /TMPL_LOOP -->). <!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="searchdesc" --><p><!-- TMPL_IF name="total" --><strong>&ldquo;<!-- TMPL_VAR NAME="query_desc" --><!-- TMPL_VAR NAME="limit_desc" -->&rdquo; </strong>returned <!-- TMPL_VAR NAME="total" --> results. <!-- TMPL_IF NAME="related" --> (related searches: <!-- TMPL_LOOP NAME="related" --><!-- TMPL_VAR NAME="related_search" --><!-- /TMPL_LOOP -->). <!-- /TMPL_IF -->
 
 <!-- TMPL_ELSE -->
-	<strong>No Result found !</strong>
-	</p><p>
-	<!-- TMPL_IF NAME="searchdesc" -->
+<!-- TMPL_IF NAME="searchdesc" -->
+<strong>No Result found !</strong>
+<p>
     No results match your search for <span style="font-weight: bold;">&ldquo;<!-- TMPL_VAR NAME="query_desc" --><!-- TMPL_VAR NAME="limit_desc" -->&rdquo;</span> in <!-- TMPL_VAR NAME="LibraryName" --> Catalog.
-	<!-- TMPL_ELSE -->
+</p>
+<!-- TMPL_ELSE -->
+<strong> No result found !</strong>
+<p>
     You did not specify any search criteria.
-	<!-- /TMPL_IF -->
-	</p>
-  <!-- /TMPL_IF -->
+</p>
+</div>
 <!-- /TMPL_IF -->
+<!-- /TMPL_IF --></p><!-- /TMPL_IF -->
 </div>
