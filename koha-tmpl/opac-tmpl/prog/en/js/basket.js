@@ -358,7 +358,7 @@ function showLess() {
 function updateBasket(updated_value,target) {
     if(typeof document.getElementById != "undefined") {
 		if(target.getElementById('basket')){
-        	target.getElementById('basket').innerHTML = "<div>"+updated_value+"</div>";
+        	target.getElementById('basket').innerHTML = "<span>"+updated_value+"</span>";
 		}
 		if(target.getElementById('cartDetails')){
 			target.getElementById('cartDetails').innerHTML = _("Your cart contains ")+updated_value+_(" items");
