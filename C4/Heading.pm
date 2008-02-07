@@ -152,8 +152,8 @@ sub preferred_authorities {
 
 sub _query_limiters {
     my $self = shift;
-    my $limiters = "";
 
+    my $limiters = " AND at='$self->{'auth_type'}'";
     if ($self->{'subject_added_entry'}) {
         $limiters .= " AND Heading-use-subject-added-entry=a"; # FIXME -- is this properly in C4::Heading::MARC21?
         $limiters .= " AND Subject-heading-thesaurus=$self->{'thesaurus'}";
