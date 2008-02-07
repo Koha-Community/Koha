@@ -37,7 +37,6 @@ function Dopop(link) {
 }
 
 $(document).ready(function(){
-	if(basketcount){ updateBasket(basketcount,document) }	
 	$(".close").click(function(){
 		window.close();
 	});
@@ -84,7 +83,9 @@ YAHOO.util.Event.onContentReady("listsmenu", function () {
 	})
 	  
 	  $("#cartmenulink").find("i:first").before("<img src=\"/opac-tmpl/prog/images/cart.gif\" alt=\"\" />");
+	  $("#cartmenulink").find("i:last").before("<div id=\"basket\"></div>");
 	  $("#listsmenulink").find("i:last").before("<img src=\"/opac-tmpl/prog/images/list.gif\" alt=\"\" />");
+	  if(basketcount){ updateBasket(basketcount,document) }	
    
         var listMenu = new YAHOO.widget.Menu("listsmenu", { lazyload: true });
 		listMenu.render();

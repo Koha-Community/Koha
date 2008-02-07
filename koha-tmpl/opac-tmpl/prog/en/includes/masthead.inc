@@ -5,7 +5,11 @@
 
 <div id="opac-main-search" class="yui-g">
    <div id="masthead">
-   <h1 id="libraryname" <!-- TMPL_IF NAME="opacsmallimage" -->style="background-image: url('<!-- TMPL_VAR NAME="opacsmallimage" -->');"><!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-main.pl"><!-- TMPL_IF NAME="LibraryName" --><!-- TMPL_VAR NAME="LibraryName" --><!-- TMPL_ELSE -->Koha Online Catalog<!-- /TMPL_IF --></a></h1>
+   <!-- TMPL_IF NAME="opacsmallimage" -->
+   <h1 id="libraryname" style="background-image: url('<!-- TMPL_VAR NAME="opacsmallimage" -->');">
+   <!-- TMPL_ELSE -->
+   <h1 id="libraryname">
+   <!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-main.pl"><!-- TMPL_IF NAME="LibraryName" --><!-- TMPL_VAR NAME="LibraryName" --><!-- TMPL_ELSE -->Koha Online Catalog<!-- /TMPL_IF --></a></h1>
    </div>
 
 <div id="fluid">
@@ -51,7 +55,7 @@
 <!-- TMPL_IF NAME="ms_value" -->
         <input type="text" name="q" value="<!-- TMPL_VAR NAME="ms_value" -->" class="left" style="width: 40%;" />
 <!-- TMPL_ELSE -->
-        <input type="text" name="q" class="left" style="width: 35%;" />
+        <input type="text" name="q" class="left" style="width: 35%; font-size: 111%;" />
 <!-- /TMPL_IF -->
         <!-- TMPL_IF name="mylibraryfirst" --><!-- TMPL_IF name="loggedinusername" -->
             <input name="limit" value="<!-- TMPL_VAR name="LoginBranchcode" -->" type="hidden" />
@@ -94,7 +98,7 @@
 			<ul class="second-of-type">
             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl">Manage Lists</a></li>
         </ul>
-		</li><!-- TMPL_ELSE --><ul class="first-of-type"><li><a href="/cgi-bin/koha/opac-user.pl">Log in to Create Your Own Lists</a></li></ul><!-- /TMPL_IF -->
+		<!-- TMPL_ELSE --><ul class="first-of-type"><li><a href="/cgi-bin/koha/opac-user.pl">Log in to Create Your Own Lists</a></li></ul><!-- /TMPL_IF -->
 	  </div>
 </div>
 <!-- /TMPL_IF -->

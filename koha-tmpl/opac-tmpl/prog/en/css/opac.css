@@ -278,11 +278,11 @@ p.availability {
 
 /* css styles for reserves color alerts */
 .onloan {
-	background-color : #FFED3D;
+	background-color : #eeeeee;
 }
 
 .other {
-	background-color : #FF0000;
+	background-color : #ffcccc;
 }
 
 /* "problem" enhancement */
@@ -416,17 +416,8 @@ a .term {
 	border-top : 1px solid #335599;
 	border-bottom : 1px solid #335599;
 	padding : .7em 0 .4em .5em;
-	color : #FFFFCC;
 	font-size : 108%;
 	line-height : 116%;
-}
-
-#opac-main-search a, #opac-main-search a, #opac-main-search a:visited {
-	color : #FFFFCC;
-}
-
-#opac-main-search a:hover {
-	color : #FFFFFF;
 }
 
 #opac-main-search form {
@@ -435,7 +426,9 @@ a .term {
 }
 
 #opac-main-search label {
+	color : #FFFFCC;
 	font-weight : bold;
+	margin : .2em .3em 0 0;
 }
 
 
@@ -846,22 +839,12 @@ a:active.nav {
 }
 
 input.icon {
-	background-position: left;
-	background-repeat: no-repeat;
-	font-size : 96%;
-	font-weight: bold;
-	padding: 2px 2px 2px 22px;
-	background-color: #6699CC;
-	border: 1px outset #666666;
-	color: #FFFFCC;
 }
 
 input.shelf, a.shelf {
-	background-image: url(../../images/addtobasket.gif);
 }
 
 input.clearall, a.clearall {
-	background-image: url(../../images/clearbasket.gif);
 }
 
 /* Tabs */
@@ -1149,7 +1132,7 @@ div#changelanguage a.yuimenuitemlabel {
 	background-color : #FFF;
 	border: 1px solid #739acf;
 	color : black;
-	padding : .1em;
+	padding : .3em;
 	text-align : center;
 }
 
@@ -1182,23 +1165,38 @@ a#cartmenulink, a#cartmenulink:hover {
 	font-size : 80%;
 	padding : 2px;
 }
-	.btn {
+
+.btn {
 	display : block;
 	position : relative;
-	background : #aaa;
 	padding : 5px;
-	color : #fff;
 	text-decoration : none;
 	cursor : default;
 	margin-left : .5em;
 }
 
-	.btn * {
+.btn * {
 	font-style : normal;
 	background-image : url('../../images/button-background.png');
 	background-repeat : no-repeat;
 	display : block;
 	position : relative;
+}
+
+#cartmenulink.btn div {
+	background-image : none;
+	display : inline;
+}
+
+#cartmenulink.btn div div {
+	background-image : none;
+	background-color : #E6FCB7;
+	color : #000;
+	display : inline;
+	font-size : 80%;
+	font-weight : normal;
+	margin : 0 .5em;
+	padding : 0 .3em;
 }
 
 #cartmenulink.btn img {
@@ -1213,7 +1211,7 @@ a#cartmenulink, a#cartmenulink:hover {
 	padding : 0 0 2px 3px;
 }
 
-	.btn i {
+.btn i {
 	background-position : top left;
 	position : absolute;
 	margin-bottom : -5px;
@@ -1223,14 +1221,14 @@ a#cartmenulink, a#cartmenulink:hover {
 	height : 5px;
 }
 
-	.btn span {
+.btn span {
 	background-position : bottom left;
 	left : -5px;
 	padding : 0 0 5px 10px;
 	margin-bottom : -5px;
 }
 
-	.btn span i {
+.btn span i {
 	background-position : bottom right;
 	margin-bottom : 0;
 	position : absolute;
@@ -1240,7 +1238,7 @@ a#cartmenulink, a#cartmenulink:hover {
 	top : 0;
 }
 
-	.btn span span {
+.btn span span {
 	background-position : top right;
 	position : absolute;
 	right : -10px;
@@ -1249,59 +1247,58 @@ a#cartmenulink, a#cartmenulink:hover {
 	height : 0;
 }
 
-	* html .btn span,
-	* html .btn i {
+* html .btn span,	* html .btn i {
 	float : left;
 	width : auto;
 	background-image : none;
 	cursor : pointer;
 }
 
-	.btn.blue {
+.btn.blue {
 	background : #9fbfff;
 }
 
-	.btn.blue:hover {
+.btn.blue:hover {
 	background-color : #6699FF;
 	background-image : none;
 }
 
-	.btn.green {
+.btn.green {
 	background : #98CB58;
 }
 
-	.btn.green:hover {
+.btn.green:hover {
 	background-color : #98CB58;
 	background-image : none;
 }
 
-	.btn:active {
+.btn:active {
 	background-color : #444;
 }
 
-	.btn[class] {
+.btn[class] {
 	background-image : url('../../images/button-background-gradient.png');
 	background-position : 0 0;
 }
 
-	 .btn[class]:hover {
+.btn[class]:hover {
 	background-image : url('../../images/button-background-gradient.png');
 	background-position : 0 -200px;
 }
 
-	* html .btn {
+* html .btn {
 	border : 3px double #aaa;
 }
 
-	* html .btn.blue {
+* html .btn.blue {
 	border-color : #2ae;
 }
 
-	* html .btn.green {
+* html .btn.green {
 	border-color : #9d4;
 }
 
-	* html .btn:hover {
+* html .btn:hover {
 	border-color : #a00;
 }
 
