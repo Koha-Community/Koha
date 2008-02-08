@@ -54,6 +54,10 @@ sub process_batch {
     $/ = "\035";
     my $num_input_records = 0;
     while (<IN>) {
+        s/^\s+//;
+        s/\s+$//;
+        next unless $_; # skip if record has only whitespace, as might occur
+                        # if file includes newlines between each MARC record
         $marc_records .= $_; # FIXME - this sort of string concatenation
                              # is probably rather inefficient
         $num_input_records++;

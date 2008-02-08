@@ -266,6 +266,9 @@ sub  BatchStageMarcRecords {
     # FIXME - for now, we're dealing only with bibs
     my $rec_num = 0;
     foreach my $marc_blob (split(/\x1D/, $marc_records)) {
+        $marc_blob =~ s/^\s+//g;
+        $marc_blob =~ s/\s+$//g;
+        next unless $marc_blob;
         $rec_num++;
         if ($progress_interval and (0 == ($rec_num % $progress_interval))) {
             &$progress_callback($rec_num);

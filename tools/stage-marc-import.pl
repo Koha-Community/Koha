@@ -75,7 +75,10 @@ if ($completedJobID) {
     my $uploaded_file = C4::UploadedFile->fetch($sessionID, $fileID);
     my $fh = $uploaded_file->fh();
 	my $marcrecord='';
+    $/ = "\035";
 	while (<$fh>) {
+        s/^\s+//;
+        s/\s+$//;
 		$marcrecord.=$_;
 	}
 
