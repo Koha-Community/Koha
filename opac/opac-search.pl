@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 # Script to perform searching
-# Copied from search.pl
+# Mostly copied from search.pl, see POD there
 use strict;            # always use
 
 ## STEP 1. Load things that are used in both search page and
@@ -392,31 +392,26 @@ for (my $i=0;$i<=@servers;$i++) {
             $template->param(searchdesc => 1,query_desc => $query_desc,limit_desc => $limit_desc);
         }
     } # end of the if local
-    else {
-        # check if it's a z3950 or opensearch source
-        my $zed3950 = 0;  # FIXME :: Hardcoded value.
-        if ($zed3950) {
-            my @inner_sup_results_array;
-            for my $sup_record ( @{$results_hashref->{$server}->{"RECORDS"}} ) {
-                my $marc_record_object = MARC::Record->new_from_usmarc($sup_record);
-                my $control_number = $marc_record_object->field('010')->subfield('a') if $marc_record_object->field('010');
-                $control_number =~ s/^ //g;
-                my $link = "http://catalog.loc.gov/cgi-bin/Pwebrecon.cgi?SAB1=".$control_number."&BOOL1=all+of+these&FLD1=LC+Control+Number+LCCN+%28K010%29+%28K010%29&GRP1=AND+with+next+set&SAB2=&BOOL2=all+of+these&FLD2=Keyword+Anywhere+%28GKEY%29+%28GKEY%29&PID=6211&SEQ=20060816121838&CNT=25&HIST=1";
-                my $title = $marc_record_object->title();
-                push @inner_sup_results_array, {
-                    'title' => $title,
-                    'link' => $link,
-                };
-            }
-            my $servername = $server;
-            push @sup_results_array, { servername => $servername, inner_sup_results_loop => \@inner_sup_results_array};
-            $template->param(outer_sup_results_loop => \@sup_results_array);
+    # asynchronously search the authority server
+    elsif ($server =~/authorityserver/) { # this is the local authority server
+        my @inner_sup_results_array;
+        for my $sup_record ( @{$results_hashref->{$server}->{"RECORDS"}} ) {
+            my $marc_record_object = MARC::Record->new_from_usmarc($sup_record);
+            my $title_field = $marc_record_object->field(100);
+             warn "Authority Found: ".$marc_record_object->as_formatted();
+            push @inner_sup_results_array, {
+                'title' => $title_field->subfield('a'),
+                'link' => "&amp;idx=an&amp;q=".$marc_record_object->field('001')->as_string(),
+            };
         }
+        my $servername = $server;
+        push @sup_results_array, {  servername => $servername,
+                                    inner_sup_results_loop => \@inner_sup_results_array} if @inner_sup_results_array;
     }
-
+    # FIXME: can add support for other targets as needed here
+    $template->param(           outer_sup_results_loop => \@sup_results_array);
 } #/end of the for loop
 #$template->param(FEDERATED_RESULTS => \@results_array);
-
 
 $template->param(
             #classlist => $classlist,
