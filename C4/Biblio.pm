@@ -232,6 +232,9 @@ sub AddBiblio {
 
     _koha_marc_update_bib_ids($record, $frameworkcode, $biblionumber, $biblioitemnumber);
 
+    # update MARC subfield that stores biblioitems.cn_sort
+    _koha_marc_update_biblioitem_cn_sort($record, $olddata, $frameworkcode);
+    
     # now add the record
     $biblionumber = ModBiblioMarc( $record, $biblionumber, $frameworkcode ) unless $defer_marc_save;
       
@@ -290,12 +293,15 @@ sub ModBiblio {
     $sth->finish();
     _koha_marc_update_bib_ids($record, $frameworkcode, $biblionumber, $biblioitemnumber);
 
-    # update the MARC record (that now contains biblio and items) with the new record data
-    &ModBiblioMarc( $record, $biblionumber, $frameworkcode );
-    
     # load the koha-table data object
     my $oldbiblio = TransformMarcToKoha( $dbh, $record, $frameworkcode );
 
+    # update MARC subfield that stores biblioitems.cn_sort
+    _koha_marc_update_biblioitem_cn_sort($record, $oldbiblio, $frameworkcode);
+
+    # update the MARC record (that now contains biblio and items) with the new record data
+    &ModBiblioMarc( $record, $biblionumber, $frameworkcode );
+    
     # modify the other koha tables
     _koha_modify_biblio( $dbh, $oldbiblio, $frameworkcode );
     _koha_modify_biblioitem_nonmarc( $dbh, $oldbiblio );
@@ -2453,6 +2459,44 @@ sub _koha_marc_update_bib_ids {
         my $old_field = $record->field($biblio_tag);
         $record->delete_field($old_field);
         $record->insert_fields_ordered($new_field);
+    }
+}
+
+=head2 _koha_marc_update_biblioitem_cn_sort
+
+=over 4
+
+_koha_marc_update_biblioitem_cn_sort($marc, $biblioitem, $frameworkcode);
+
+=back
+
+Given a MARC bib record and the biblioitem hash, update the
+subfield that contains a copy of the value of biblioitems.cn_sort.
+
+=cut
+
+sub _koha_marc_update_biblioitem_cn_sort {
+    my $marc = shift;
+    my $biblioitem = shift;
+    my $frameworkcode= shift;
+
+    my ($biblioitem_tag, $biblioitem_subfield ) = GetMarcFromKohaField("biblioitems.cn_sort",$frameworkcode);
+    next unless $biblioitem_tag;
+
+    my ($cn_sort) = GetClassSort($biblioitem->{'biblioitems.cn_source'}, $biblioitem->{'cn_class'}, $biblioitem->{'cn_item'} );
+
+    if (my $field = $marc->field($biblioitem_tag)) {
+        $field->delete_subfield(code => $biblioitem_subfield);
+        if ($cn_sort ne '') {
+            $field->add_subfields($biblioitem_subfield => $cn_sort);
+        }
+    } else {
+        # if we get here, no biblioitem tag is present in the MARC record, so
+        # we'll create it if $cn_sort is not empty -- this would be
+        # an odd combination of events, however
+        if ($cn_sort) {
+            $marc->insert_grouped_field(MARC::Field->new($biblioitem_tag, ' ', ' ', $biblioitem_subfield => $cn_sort));
+        }
     }
 }
 
