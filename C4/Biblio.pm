@@ -30,6 +30,7 @@ use C4::Branch;
 use C4::Dates qw/format_date/;
 use C4::Log; # logaction
 use C4::ClassSource;
+use C4::Charset;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -821,14 +822,9 @@ sub GetMarcBiblio {
     my $sth          =
       $dbh->prepare("SELECT marcxml FROM biblioitems WHERE biblionumber=? ");
     $sth->execute($biblionumber);
-     my ($marcxml) = $sth->fetchrow;
+    my $row = $sth->fetchrow_hashref;
+    my $marcxml = StripNonXmlChars($row->{'marcxml'});
      MARC::File::XML->default_record_format(C4::Context->preference('marcflavour'));
-     $marcxml =~ s/\x1e//g;
-     $marcxml =~ s/\x1f//g;
-     $marcxml =~ s/\x1d//g;
-     $marcxml =~ s/\x0f//g;
-     $marcxml =~ s/\x0c//g;  
-#   warn $marcxml;
     my $record = MARC::Record->new();
     if ($marcxml) {
         $record = eval {MARC::Record::new_from_xml( $marcxml, "utf8", C4::Context->preference('marcflavour'))};

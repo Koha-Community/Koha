@@ -28,6 +28,7 @@ use C4::ClassSource;
 use C4::Log;
 use C4::Branch;
 require C4::Reserves;
+use C4::Charset;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -2005,7 +2006,7 @@ sub  _parse_unlinked_item_subfields_from_xml {
     my $xml = shift;
 
     return unless defined $xml and $xml ne "";
-    my $marc = MARC::Record->new_from_xml($xml, 'UTF-8', C4::Context->preference("marcflavour"));
+    my $marc = MARC::Record->new_from_xml(StripNonXmlChars($xml), 'UTF-8', C4::Context->preference("marcflavour"));
     my $unlinked_subfields = [];
     my @fields = $marc->fields();
     if ($#fields > -1) {

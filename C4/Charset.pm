@@ -32,6 +32,7 @@ BEGIN {
         IsStringUTF8ish
         MarcToUTF8Record
         SetMarcUnicodeFlag
+        StripNonXmlChars
     );
 }
 
@@ -243,7 +244,40 @@ sub SetMarcUnicodeFlag {
     }
 }
 
+=head2 StripNonXmlChars
 
+=over 4
+
+my $new_str = StripNonXmlChars($old_str);
+
+=back
+
+Given a string, return a copy with the
+characters that are illegal in XML 
+removed.
+
+This function exists to work around a problem
+that can occur with badly-encoded MARC records.
+Specifically, if a UTF-8 MARC record also
+has excape (\x1b) characters, MARC::File::XML
+will let the escape characters pass through
+when as_xml() or as_xml_record() is called.  The
+problem is that the escape character is not
+legal in well-formed XML documents, so when
+MARC::File::XML attempts to parse such a record,
+the XML parser will fail.
+
+Stripping such characters will allow a 
+MARC::Record->new_from_xml()
+to work, at the possible risk of some data loss.
+
+=cut
+
+sub StripNonXmlChars {
+    my $str = shift;
+    $str =~ s/[^\x09\x0A\x0D\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}\x{10000}-\x{10FFFF}]//g;
+    return $str;
+}
 
 =head1 INTERNAL FUNCTIONS
 

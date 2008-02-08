@@ -487,7 +487,7 @@ sub BatchCommitBibRecords {
 
             # remove item fields so that they don't get
             # added again if record is reverted
-            my $old_marc = MARC::Record->new_from_xml($oldxml, 'UTF-8', $rowref->{'encoding'});
+            my $old_marc = MARC::Record->new_from_xml(StripNonXmlChars($oldxml), 'UTF-8', $rowref->{'encoding'});
             foreach my $item_field ($old_marc->field($item_tag)) {
                 $old_marc->delete_field($item_field);
             }
@@ -536,7 +536,7 @@ sub BatchCommitItems {
     $sth->bind_param(1, $import_record_id);
     $sth->execute();
     while (my $row = $sth->fetchrow_hashref()) {
-        my $item_marc = MARC::Record->new_from_xml($row->{'marcxml'}, 'UTF-8', $row->{'encoding'});
+        my $item_marc = MARC::Record->new_from_xml(StripNonXmlChars($row->{'marcxml'}), 'UTF-8', $row->{'encoding'});
         # FIXME - duplicate barcode check needs to become part of AddItemFromMarc()
         my $item = TransformMarcToKoha($dbh, $item_marc);
         my $duplicate_barcode = exists($item->{'barcode'}) && GetItemnumberFromBarcode($item->{'barcode'});
@@ -606,7 +606,7 @@ sub BatchRevertBibRecords {
             }
         } else {
             $num_reverted++;
-            my $old_record = MARC::Record->new_from_xml($rowref->{'marcxml_old'}, 'UTF-8', $rowref->{'encoding'});
+            my $old_record = MARC::Record->new_from_xml(StripNonXmlChars($rowref->{'marcxml_old'}), 'UTF-8', $rowref->{'encoding'});
             my $biblionumber = $rowref->{'matched_biblionumber'};
             my ($count, $oldbiblio) = GetBiblio($biblionumber);
             $num_items_deleted += BatchRevertItems($rowref->{'import_record_id'}, $rowref->{'matched_biblionumber'});
