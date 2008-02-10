@@ -53,7 +53,7 @@ use C4::Bookfund;
 
 my $query=new CGI;
 my $id=$query->param('supplierid');
-my @booksellers = GetBookSeller($id) if $id;
+my @booksellers = GetBookSellerFromId($id) if $id;
 my $count = scalar @booksellers;
 my $op=$query->param('op') || "display";
 
