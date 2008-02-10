@@ -78,6 +78,7 @@ sub plugin_javascript {
 	my $nextnum;
 	my $query;
 	my $autoBarcodeType = C4::Context->preference("autoBarcode");
+        warn "Barcode type = $autoBarcodeType";
 	unless ($autoBarcodeType eq 'OFF' or !$autoBarcodeType) {
 
 	if ($autoBarcodeType eq 'annual') {
@@ -105,11 +106,23 @@ sub plugin_javascript {
 <script type=\"text/javascript\">
 //<![CDATA[
 
-function Blur$function_name(index) {
+//function Blur$function_name(index) {
 //need this?
-}
+//}
 
-function Focus$function_name(subfield_managed) {
+// Commenting this out so that the user can enter their own text w/the script prefilling the field on-focus -fbcit
+//function Focus$function_name(subfield_managed) {
+//		for (i=0 ; i<document.f.field_value.length ; i++) {
+//			if (document.f.tag[i].value == '$tag' && document.f.subfield[i].value == '$subfield') {
+//				if (document.f.field_value[i].value == '') {
+//					document.f.field_value[i].value = '$nextnum';
+//				}
+//			}
+//		}
+//return 0;
+//}
+
+function Clic$function_name(subfield_managed) {
 		for (i=0 ; i<document.f.field_value.length ; i++) {
 			if (document.f.tag[i].value == '$tag' && document.f.subfield[i].value == '$subfield') {
 				if (document.f.field_value[i].value == '') {
@@ -118,9 +131,6 @@ function Focus$function_name(subfield_managed) {
 			}
 		}
 return 0;
-}
-
-function Clic$function_name(subfield_managed) {
 }
 //]]>
 </script>
