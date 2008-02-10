@@ -76,7 +76,8 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
         'Koha-Auth-Number' => '6009,6019,6029,6039,6049,6059,6069,6109,7009,7019,7029,7109,7119,7129',
         'subject' => '600*,601*,606*,610*',
         'dewey' => '676a',
-        'host-item' => '995a,995c'", 'Entrez un tableau pour les index NoZebra. Saisir ''indexname'' => ''100a,245a,500*'',''index2'' => ''...''', '', 'Free');
+        'host-item' => '995a,995c',
+        'lcn' => '995k'", 'Entrez un tableau pour les index NoZebra. Saisir ''indexname'' => ''100a,245a,500*'',''index2'' => ''...''', '', 'Free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacAuthorities', '1', 'Active ou non la recherche des autorités à l''OPAC', '', 'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacbookbag', '1', 'Si ce paramètre est activé, les adhérents peuvent créer des paniers à l''OPAC', '', 'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacBrowser', '1', 'Active ou non le feuilletage du catalogue à l''OPAC (nécessite de lancer misc/cronjobs/build_browser_and_cloud.pl sur le serveur)', '', 'YesNo');
