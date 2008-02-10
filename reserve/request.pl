@@ -436,7 +436,7 @@ my $default = C4::Context->userenv->{branch};
 my @values;
 my %label_of;
 
-foreach my $branchcode ( keys %{$branches} ) {
+foreach my $branchcode (sort keys %{$branches} ) {
     push @values, $branchcode;
     $label_of{$branchcode} = $branches->{$branchcode}->{branchname};
 }
