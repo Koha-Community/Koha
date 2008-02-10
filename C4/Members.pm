@@ -1533,7 +1533,8 @@ sub GetSortDetails {
     my $sth = $dbh->prepare($query);
     $sth->execute( $category, $sortvalue );
     my $lib = $sth->fetchrow;
-    return ($lib);
+    return ($lib) if ($lib);
+    return ($sortvalue) unless ($lib);
 }
 
 =head2 DeleteBorrower 
