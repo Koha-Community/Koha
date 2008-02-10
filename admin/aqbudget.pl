@@ -96,9 +96,10 @@ SELECT aqbudgetid,
        budgetamount,
        aqbudget.branchcode
   FROM aqbudget
-    INNER JOIN aqbookfund ON (aqbudget.bookfundid = aqbookfund.bookfundid AND
-      aqbudget.branchcode = aqbookfund.branchcode)
-  WHERE aqbudgetid = ?
+    INNER JOIN aqbookfund ON (aqbudget.bookfundid = aqbookfund.bookfundid)
+  WHERE aqbudgetid = ? AND 
+       (aqbookfund.branchcode = aqbudget.branchcode  OR
+        (aqbudget.branchcode IS NULL and aqbookfund.branchcode=""))   
 ';
         $sth=$dbh->prepare($query);
         $sth->execute($aqbudgetid);
@@ -167,8 +168,8 @@ SELECT branchcode,
     $template->param(
         dateformat => C4::Dates->new()->visual(),
         aqbudgetid => $dataaqbudget->{'aqbudgetid'},
-        startdate => format_date($dataaqbudget->{'startdate'}),
-          enddate => format_date($dataaqbudget->{'enddate'}),
+        startdate => $dataaqbudget->{'startdate'},
+          enddate => $dataaqbudget->{'enddate'},
         budgetamount => $dataaqbudget->{'budgetamount'},
         branches => \@branches,
     );
