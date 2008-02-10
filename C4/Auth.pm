@@ -683,7 +683,7 @@ sub checkauth {
     # get the branchloop, which we need for authentication
     my $branches = GetBranches();
     my @branch_loop;
-    for my $branch_hash (keys %$branches) {
+    for my $branch_hash (sort keys %$branches) {
 		push @branch_loop, {branchcode => "$branch_hash", branchname => $branches->{$branch_hash}->{'branchname'}, };
     }
 
