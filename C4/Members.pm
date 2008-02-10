@@ -547,7 +547,7 @@ sub GetMemberIssuesAndFines {
       "Select count(*) from issues where borrowernumber='$borrowernumber' and
     returndate is NULL";
 
-    $debug and print $query, "\n";
+    $debug and warn $query."\n";
     my $sth = $dbh->prepare($query);
     $sth->execute;
     my $data = $sth->fetchrow_hashref;

@@ -120,7 +120,7 @@ sub init ($;$$) {
 	($format_map{$dformat}) or croak 
 		"Invalid date format '$dformat' from " . ((scalar(@_) >= 2) ? 'argument' : 'system preferences');
 	$self->{'dmy_arrayref'} = [((@_) ? $self->dmy_map(shift) : localtime )] ;
-	$debug and print STDERR "(during init) \@\$self->{'dmy_arrayref'}: " . join(' ',@{$self->{'dmy_arrayref'}}) . "\n";
+	$debug and warn "(during init) \@\$self->{'dmy_arrayref'}: " . join(' ',@{$self->{'dmy_arrayref'}}) . "\n";
 	return $self;
 }
 sub output ($;$) {
