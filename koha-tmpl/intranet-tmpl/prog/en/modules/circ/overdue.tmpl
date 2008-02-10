@@ -17,32 +17,32 @@
 <h2>Items Overdue as of <!-- TMPL_VAR NAME="todaysdate" --></h2>
   
   <form method="post" action="/cgi-bin/koha/circ/overdue.pl">
-  <div id="filters">Filter on :<br />
-    Name or cardnumber :<input type="text" name="borname" value="<!--TMPL_VAR Name="borname"-->">
-    Patron category :<select name="borcat" id="borcat"><option value="">Any</option>
+  <fieldset>
+    <legend>Filter on :</legend>
+    <p><label>Name or cardnumber:</label><input type="text" name="borname" value="<!--TMPL_VAR Name="borname"-->"></p>
+    <p><label>Patron category:</label><select name="borcat" id="borcat"><option value="">Any</option>
       <!-- TMPL_LOOP name="borcatloop" -->
         <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="catname" --></option>
       <!-- /TMPL_LOOP -->
       </select>
-      
-      
-    Patron flags :<!--TMPL_VAR Name="CGIflags" --><br/>
-      Item type :<select name="itemtype" id="itemtype"><option value="">Any</option>
+    </p>
+    <p>
+    <p><label>Patron flags:</label><!--TMPL_VAR Name="CGIflags" --></p>
+    <p><label>Item type:</label><select name="itemtype" id="itemtype"><option value="">Any</option>
       <!-- TMPL_LOOP name="itemtypeloop" -->
         <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemtypename" --></option>
       <!-- /TMPL_LOOP -->
       </select>
-    
-    
-    Library :<select name="branch" id="branch">
+    </p>
+    <p>
+    <label>Library of the patron:</label><select name="branch" id="branch">
         <option value="">Any</option>
       <!-- TMPL_LOOP name="branchloop" -->
         <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
       <!-- /TMPL_LOOP -->
-      </select><br/>
+      </select>
+    </p>
     Show any items currently issued:<input type="checkbox" name="showall" value="show" <!--TMPL_IF Name="showall"-->checked="checked"<!--/TMPL_IF-->>
-    
-    
     Sort By<select name="order" tabindex="0" size="1" id="order">
 <option <!--TMPL_UNLESS Name"order"-->selected<!-- /TMPL_UNLESS--> value="">Due Date</option>
 <option  value="borrower">Patron</option>
@@ -54,14 +54,15 @@
 <option  value="barcode desc">Barcode</option>
 </select>
       <input TYPE="submit" value="Apply Filter" class="button reports">
-   </div>   
+   </fieldset>   
   </form>
-
+<a href="overdue.pl?op=csv&branch=<!-- TMPL_VAR name="branchfilter" -->">Download file of all overdues</a> (for <!-- TMPL_IF name="branchfilter" -->branch <!-- TMPL_VAR name="branchfilter" --><!-- TMPL_ELSE --> all branches <!-- /TMPL_IF --> . Other filters are ignored)
 <div class="searchresults">
 <table>
 <tr>
     <th>Due Date</th>
     <th>Patron</th>
+    <th>Branch</th>
     <th>Title</th>
 </tr>
 
@@ -71,9 +72,10 @@
         <!-- TMPL_IF NAME="email" -->
         <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber"-->"><!-- TMPL_VAR NAME="name" --></a> <a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" -->">[email]</a> (<!-- TMPL_VAR NAME="phone" -->)</td>
         <!-- TMPL_ELSE -->
-        <td><!-- TMPL_VAR NAME="name" --> (<!--TMPL_IF NAME="phone" --><!-- TMPL_VAR NAME="phone" --><!-- TMPL_ELSE -->
+        <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber"-->"><!-- TMPL_VAR NAME="name" --></a> (<!--TMPL_IF NAME="phone" --><!-- TMPL_VAR NAME="phone" --><!-- TMPL_ELSE -->
     <!--TMPL_IF NAME="mobile" --><!-- TMPL_VAR NAME="mobile" --><!-- TMPL_ELSE --><!--TMPL_IF NAME="phonepro" -->       <!-- TMPL_VAR NAME="phonepro" --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->)</td>
         <!-- /TMPL_IF -->
+        <td><!-- TMPL_VAR name="branchcode" --></td>
         <td>
             <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></p>
             <p><!-- TMPL_VAR NAME="author" --></p>

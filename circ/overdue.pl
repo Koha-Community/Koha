@@ -37,6 +37,7 @@ my   $borcatfilter = $input->param('borcat');
 my $itemtypefilter = $input->param('itemtype');
 my $borflagsfilter = $input->param('borflags') || " ";
 my   $branchfilter = $input->param('branch');
+my $op             = $input->param('op');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -50,6 +51,18 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 my $dbh = C4::Context->dbh;
 
+
+# download the complete CSV
+if ($op eq 'csv') {
+warn "BRANCH : $branchfilter";
+    my $csv = `../misc/cronjobs/overduenotices-csv.pl -c -n -b $branchfilter`;
+    print $input->header(-type => 'application/vnd.sun.xml.calc',
+                        -encoding    => 'utf-8',
+                        -attachment=>"overdues.csv",
+                        -filename=>"overdues.csv" );
+    print $csv;
+    exit;
+}
 my $req;
 $req = $dbh->prepare( "select categorycode, description from categories order by description");
 $req->execute;
@@ -95,13 +108,14 @@ foreach my $thisbranch ( sort keys %$branches ) {
      my %row = (
         value      => $thisbranch,
         branchname => $branches->{$thisbranch}->{'branchname'},
-        selected   => (C4::Context->userenv && $branches->{$thisbranch}->{'branchcode'} eq C4::Context->userenv->{'branch'})
+        selected   => ($branches->{$thisbranch}->{'branchcode'} eq $branchfilter)
     );
     push @branchloop, \%row;
 }
 $branchfilter=C4::Context->userenv->{'branch'} if ($onlymine && !$branchfilter);
 
-$template->param( branchloop => \@branchloop );
+$template->param( branchloop => \@branchloop,
+                  branchfilter => $branchfilter);
 $template->param(borcatloop=> \@borcatloop,
           itemtypeloop => \@itemtypeloop,
           branchloop=> \@branchloop,
@@ -131,36 +145,36 @@ my $todaysdate =
 $bornamefilter =~s/\*/\%/g;
 $bornamefilter =~s/\?/\_/g;
 
-my $strsth="select date_due,concat(surname,' ', firstname) as borrower, 
-  borrowers.phone, borrowers.email,issues.itemnumber, items.barcode, biblio.title, biblio.author,borrowers.borrowernumber,biblio.biblionumber 
-  from issues
+my $strsth="SELECT date_due,concat(surname,' ', firstname) as borrower, 
+  borrowers.phone, borrowers.email,issues.itemnumber, items.barcode, biblio.title, biblio.author,borrowers.borrowernumber,biblio.biblionumber,borrowers.branchcode 
+  FROM issues
 LEFT JOIN borrowers ON (issues.borrowernumber=borrowers.borrowernumber )
 LEFT JOIN items ON (issues.itemnumber=items.itemnumber)
 LEFT JOIN biblioitems ON (biblioitems.biblioitemnumber=items.biblioitemnumber)
 LEFT JOIN biblio ON (biblio.biblionumber=items.biblionumber )
-where isnull(returndate) ";
+WHERE isnull(returndate) ";
 $strsth.= " && date_due<'".$todaysdate."' " unless ($showall);
 $strsth.=" && (borrowers.firstname like '".$bornamefilter."%' or borrowers.surname like '".$bornamefilter."%' or borrowers.cardnumber like '".$bornamefilter."%')" if($bornamefilter) ;
 $strsth.=" && borrowers.categorycode = '".$borcatfilter."' " if($borcatfilter) ;
 $strsth.=" && biblioitems.itemtype = '".$itemtypefilter."' " if($itemtypefilter) ;
 $strsth.=" && borrowers.flags = '".$borflagsfilter."' " if ($borflagsfilter ne " ") ;
-$strsth.=" && issues.branchcode = '".$branchfilter."' " if($branchfilter) ;
+$strsth.=" && borrowers.branchcode = '".$branchfilter."' " if($branchfilter) ;
 if ($order eq "borrower"){
-  $strsth.=" order by borrower,date_due " ;
+  $strsth.=" ORDER BY borrower,date_due " ;
 } elsif ($order eq "title"){
-  $strsth.=" order by title,date_due,borrower ";
+  $strsth.=" ORDER BY title,date_due,borrower ";
 } elsif ($order eq "barcode"){
-  $strsth.=" order by items.barcode,date_due,borrower ";
-}elsif ($order eq "borrower desc"){
-  $strsth.=" order by borrower desc,date_due " ;
-} elsif ($order eq "title desc"){
-  $strsth.=" order by title desc,date_due,borrower ";
-} elsif ($order eq "barcode desc"){
-  $strsth.=" order by items.barcode desc,date_due,borrower ";
-} elsif ($order eq "date_due desc"){
-  $strsth.=" order by date_due desc,borrower ";
+  $strsth.=" ORDER BY items.barcode,date_due,borrower ";
+}elsif ($order eq "borrower DESC"){
+  $strsth.=" ORDER BY borrower desc,date_due " ;
+} elsif ($order eq "title DESC"){
+  $strsth.=" ORDER BY title desc,date_due,borrower ";
+} elsif ($order eq "barcode DESC"){
+  $strsth.=" ORDER BY items.barcode desc,date_due,borrower ";
+} elsif ($order eq "date_due DESC"){
+  $strsth.=" ORDER BY date_due DESC,borrower ";
 } else {
-  $strsth.=" order by date_due,borrower ";
+  $strsth.=" ORDER BY date_due,borrower ";
 }
 my $sth=$dbh->prepare($strsth);
 #warn "overdue.pl : query string ".$strsth;
@@ -188,7 +202,8 @@ while (my $data=$sth->fetchrow_hashref) {
                         email          => $email,
                         biblionumber   => $data->{'biblionumber'},
                         title          => $title,
-                        author         => $author });
+                        author         => $author,
+                        branchcode     => $data->{'branchcode'} });
 }
 
 $template->param(
