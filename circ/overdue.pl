@@ -119,7 +119,6 @@ my $data3;
 my $name;
 my $phone;
 my $email;
-my $biblionumber;
 my $title;
 my $author;
 my @datearr    = localtime( time() );
@@ -133,7 +132,7 @@ $bornamefilter =~s/\*/\%/g;
 $bornamefilter =~s/\?/\_/g;
 
 my $strsth="select date_due,concat(surname,' ', firstname) as borrower, 
-  borrowers.phone, borrowers.email,issues.itemnumber, items.barcode, biblio.title, biblio.author,borrowers.borrowernumber 
+  borrowers.phone, borrowers.email,issues.itemnumber, items.barcode, biblio.title, biblio.author,borrowers.borrowernumber,biblio.biblionumber 
   from issues
 LEFT JOIN borrowers ON (issues.borrowernumber=borrowers.borrowernumber )
 LEFT JOIN items ON (issues.itemnumber=items.itemnumber)
@@ -179,17 +178,17 @@ while (my $data=$sth->fetchrow_hashref) {
 
   $title=$data->{'title'};
   $author=$data->{'author'};
-  push (@overduedata, { duedate      => $duedate,
-      bornum       => $data->{borrowernumber},
-      barcode      => $data->{barcode},
-      itemnum      => $itemnum,
-      name         => $name,
-      phone        => $phone,
-      email        => $email,
-      biblionumber => $biblionumber,
-      title        => $title,
-      author       => $author });
-
+  push (@overduedata, {
+                        duedate        => $duedate,
+                        borrowernumber => $data->{borrowernumber},
+                        barcode        => $data->{barcode},
+                        itemnum        => $itemnum,
+                        name           => $name,
+                        phone          => $phone,
+                        email          => $email,
+                        biblionumber   => $data->{'biblionumber'},
+                        title          => $title,
+                        author         => $author });
 }
 
 $template->param(
