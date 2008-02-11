@@ -30,7 +30,7 @@ use C4::Branch;
 use C4::Dates qw/format_date/;
 use C4::Log; # logaction
 use C4::ClassSource;
-
+use C4::Charset;
 
 use vars qw($VERSION @ISA @EXPORT);
 
