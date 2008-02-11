@@ -192,7 +192,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('952', 'v', 'Cost, replacement price', 'Cost, replacement price', 0, 0, 'items.replacementprice', 10, '', '', '', 0, 0, 'BKS', '', '', NULL),
 		('952', 'w', 'Price effective from', 'Price effective from', 0, 0, 'items.replacementpricedate', 10, '', '', '', 0, 0, 'BKS', '', '', NULL),
 		('952', 'x', 'Nonpublic note (lost item payment)', 'Nonpublic note (lost item payment)', 0, 0, 'items.paidfor', 10, '', '', '', NULL, 7, 'BKS', '', '', NULL),
-		('952', 'y', 'Koha item type', 'Koha item type', 0, 0, 'items.itype', 10, 'itemtypes', '', '', NULL, -1, 'BKS', '', '', NULL),
+		('952', 'y', 'Koha item type', 'Koha item type', 0, 0, 'items.itype', 10, 'itemtypes', '', '', NULL, 0, 'BKS', '', '', NULL),
 		('952', 'z', 'Public note', 'Public note', 0, 0, 'items.itemnotes', 10, '', '', '', NULL, 0, 'BKS', '', '', NULL);
 
 
@@ -4110,7 +4110,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('952', 'v', 'Cost, replacement price', 'Cost, replacement price', 0, 0, 'items.replacementprice', 10, '', '', '', 0, 0, 'CF', '', '', NULL),
 		('952', 'w', 'Price effective from', 'Price effective from', 0, 0, 'items.replacementpricedate', 10, '', '', '', 0, 0, 'CF', '', '', NULL),
 		('952', 'x', 'Nonpublic note (lost item payment)', 'Nonpublic note (lost item payment)', 0, 0, 'items.paidfor', 10, '', '', '', NULL, 7, 'CF', '', '', NULL),
-		('952', 'y', 'Koha item type', 'Koha item type', 0, 0, 'items.itype', 10, 'itemtypes', '', '', NULL, -1, 'CF', '', '', NULL),
+		('952', 'y', 'Koha item type', 'Koha item type', 0, 0, 'items.itype', 10, 'itemtypes', '', '', NULL, 0, 'CF', '', '', NULL),
 		('952', 'z', 'Public note', 'Public note', 0, 0, 'items.itemnotes', 10, '', '', '', NULL, 0, 'CF', '', '', NULL);
 
 
@@ -8029,7 +8029,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('952', 'v', 'Cost, replacement price', 'Cost, replacement price', 0, 0, 'items.replacementprice', 10, '', '', '', 0, 0, 'SR', '', '', NULL),
 		('952', 'w', 'Price effective from', 'Price effective from', 0, 0, 'items.replacementpricedate', 10, '', '', '', 0, 0, 'SR', '', '', NULL),
 		('952', 'x', 'Nonpublic note (lost item payment)', 'Nonpublic note (lost item payment)', 0, 0, 'items.paidfor', 10, '', '', '', NULL, 7, 'SR', '', '', NULL),
-		('952', 'y', 'Koha item type', 'Koha item type', 0, 0, 'items.itype', 10, 'itemtypes', '', '', NULL, -1, 'SR', '', '', NULL),
+		('952', 'y', 'Koha item type', 'Koha item type', 0, 0, 'items.itype', 10, 'itemtypes', '', '', NULL, 0, 'SR', '', '', NULL),
 		('952', 'z', 'Public note', 'Public note', 0, 0, 'items.itemnotes', 10, '', '', '', NULL, 0, 'SR', '', '', NULL);
 
 
@@ -11947,7 +11947,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('952', 'v', 'Cost, replacement price', 'Cost, replacement price', 0, 0, 'items.replacementprice', 10, '', '', '', 0, 0, 'VR', '', '', NULL),
 		('952', 'w', 'Price effective from', 'Price effective from', 0, 0, 'items.replacementpricedate', 10, '', '', '', 0, 0, 'VR', '', '', NULL),
 		('952', 'x', 'Nonpublic note (lost item payment)', 'Nonpublic note (lost item payment)', 0, 0, 'items.paidfor', 10, '', '', '', NULL, 7, 'VR', '', '', NULL),
-		('952', 'y', 'Koha item type', 'Koha item type', 0, 0, 'items.itype', 10, 'itemtypes', '', '', NULL, -1, 'VR', '', '', NULL),
+		('952', 'y', 'Koha item type', 'Koha item type', 0, 0, 'items.itype', 10, 'itemtypes', '', '', NULL, 0, 'VR', '', '', NULL),
 		('952', 'z', 'Public note', 'Public note', 0, 0, 'items.itemnotes', 10, '', '', '', NULL, 0, 'VR', '', '', NULL);
 
 
@@ -15864,7 +15864,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('952', 'v', 'Cost, replacement price', 'Cost, replacement price', 0, 0, 'items.replacementprice', 10, '', '', '', 0, 0, 'AR', '', '', NULL),
 		('952', 'w', 'Price effective from', 'Price effective from', 0, 0, 'items.replacementpricedate', 10, '', '', '', 0, 0, 'AR', '', '', NULL),
 		('952', 'x', 'Nonpublic note (lost item payment)', 'Nonpublic note (lost item payment)', 0, 0, 'items.paidfor', 10, '', '', '', NULL, 7, 'AR', '', '', NULL),
-		('952', 'y', 'Koha item type', 'Koha item type', 0, 0, 'items.itype', 10, 'itemtypes', '', '', NULL, -1, 'AR', '', '', NULL),
+		('952', 'y', 'Koha item type', 'Koha item type', 0, 0, 'items.itype', 10, 'itemtypes', '', '', NULL, 0, 'AR', '', '', NULL),
 		('952', 'z', 'Public note', 'Public note', 0, 0, 'items.itemnotes', 10, '', '', '', NULL, 0, 'AR', '', '', NULL);
 
 
@@ -19780,7 +19780,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('952', 'v', 'Cost, replacement price', 'Cost, replacement price', 0, 0, 'items.replacementprice', 10, '', '', '', 0, 0, 'KT', '', '', NULL),
 		('952', 'w', 'Price effective from', 'Price effective from', 0, 0, 'items.replacementpricedate', 10, '', '', '', 0, 0, 'KT', '', '', NULL),
 		('952', 'x', 'Nonpublic note (lost item payment)', 'Nonpublic note (lost item payment)', 0, 0, 'items.paidfor', 10, '', '', '', NULL, 7, 'KT', '', '', NULL),
-		('952', 'y', 'Koha item type', 'Koha item type', 0, 0, 'items.itype', 10, 'itemtypes', '', '', NULL, -1, 'KT', '', '', NULL),
+		('952', 'y', 'Koha item type', 'Koha item type', 0, 0, 'items.itype', 10, 'itemtypes', '', '', NULL, 0, 'KT', '', '', NULL),
 		('952', 'z', 'Public note', 'Public note', 0, 0, 'items.itemnotes', 10, '', '', '', NULL, 0, 'KT', '', '', NULL);
 
 
@@ -23697,7 +23697,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('952', 'v', 'Cost, replacement price', 'Cost, replacement price', 0, 0, 'items.replacementprice', 10, '', '', '', 0, 0, 'IR', '', '', NULL),
 		('952', 'w', 'Price effective from', 'Price effective from', 0, 0, 'items.replacementpricedate', 10, '', '', '', 0, 0, 'IR', '', '', NULL),
 		('952', 'x', 'Nonpublic note (lost item payment)', 'Nonpublic note (lost item payment)', 0, 0, 'items.paidfor', 10, '', '', '', NULL, 7, 'IR', '', '', NULL),
-		('952', 'y', 'Koha item type', 'Koha item type', 0, 0, 'items.itype', 10, 'itemtypes', '', '', NULL, -1, 'IR', '', '', NULL),
+		('952', 'y', 'Koha item type', 'Koha item type', 0, 0, 'items.itype', 10, 'itemtypes', '', '', NULL, 0, 'IR', '', '', NULL),
 		('952', 'z', 'Public note', 'Public note', 0, 0, 'items.itemnotes', 10, '', '', '', NULL, 0, 'IR', '', '', NULL);
 
 
@@ -27612,7 +27612,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('952', 'v', 'Cost, replacement price', 'Cost, replacement price', 0, 0, 'items.replacementprice', 10, '', '', '', 0, 0, 'SER', '', '', NULL),
 		('952', 'w', 'Price effective from', 'Price effective from', 0, 0, 'items.replacementpricedate', 10, '', '', '', 0, 0, 'SER', '', '', NULL),
 		('952', 'x', 'Nonpublic note (lost item payment)', 'Nonpublic note (lost item payment)', 0, 0, 'items.paidfor', 10, '', '', '', NULL, 7, 'SER', '', '', NULL),
-		('952', 'y', 'Koha item type', 'Koha item type', 0, 0, 'items.itype', 10, 'itemtypes', '', '', NULL, -1, 'SER', '', '', NULL),
+		('952', 'y', 'Koha item type', 'Koha item type', 0, 0, 'items.itype', 10, 'itemtypes', '', '', NULL, 0, 'SER', '', '', NULL),
 		('952', 'z', 'Public note', 'Public note', 0, 0, 'items.itemnotes', 10, '', '', '', NULL, 0, 'SER', '', '', NULL);
 
 
