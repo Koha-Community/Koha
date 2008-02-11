@@ -34,6 +34,8 @@ use C4::Serials;
 use C4::XISBN qw(get_xisbns get_biblio_from_xisbn);
 use C4::Amazon;
 
+# use Smart::Comments;
+
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -47,6 +49,14 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $biblionumber = $query->param('biblionumber');
 my $fw = GetFrameworkCode($biblionumber);
+
+## get notes and subjects from MARC record
+my $marcflavour      = C4::Context->preference("marcflavour");
+my $record           = GetMarcBiblio($biblionumber);
+my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );
+my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
+my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
+my $marcseriesarray  = GetMarcSeries($record,$marcflavour);
 
 # Get Branches, Itemtypes and Locations
 my $branches = GetBranches();
@@ -73,6 +83,8 @@ if (!$dat) {
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
 my @subscriptions       = GetSubscriptions( $dat->{title}, $dat->{issn}, $biblionumber );
+
+
 
 my @subs;
 foreach my $subscription (@subscriptions) {
@@ -143,17 +155,11 @@ foreach my $item (@items) {
 
 $template->param( norequests => $norequests );
 
-## get notes and subjects from MARC record
-    my $marcflavour      = C4::Context->preference("marcflavour");
-    my $record           = GetMarcBiblio($biblionumber);
-    my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );
-    my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
-    my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
-
     $template->param(
         MARCNOTES   => $marcnotesarray,
         MARCSUBJCTS => $marcsubjctsarray,
-        MARCAUTHORS => $marcauthorsarray
+        MARCAUTHORS => $marcauthorsarray,
+        MARCSERIES  => $marcseriesarray
     );
 
 my @results = ( $dat, );
