@@ -301,9 +301,15 @@ sub create_input {
         $value =~ s/DD/$day/g;
     }
     my $dbh = C4::Context->dbh;
+
+    # map '@' as "subfield" label for fixed fields
+    # to something that's allowed in a div id.
+    my $id_subfield = $subfield;
+    $id_subfield = "00" if $id_subfield eq "@";
+
     my %subfield_data = (
         tag        => $tag,
-        subfield   => $subfield,
+        subfield   => $id_subfield,
         marc_lib   => substr( $tagslib->{$tag}->{$subfield}->{lib}, 0, 22 ),
         marc_lib_plain => $tagslib->{$tag}->{$subfield}->{lib}, 
         tag_mandatory  => $tagslib->{$tag}->{mandatory},
@@ -311,16 +317,10 @@ sub create_input {
         repeatable     => $tagslib->{$tag}->{$subfield}->{repeatable},
         kohafield      => $tagslib->{$tag}->{$subfield}->{kohafield},
         index          => $index_tag,
-        id             => "tag_".$tag."_subfield_".$subfield."_".$index_tag."_".$index_subfield,
+        id             => "tag_".$tag."_subfield_".$id_subfield."_".$index_tag."_".$index_subfield,
         value          => $value,
         random         => CreateKey(),
     );
-    # deal with a <010 tag
-    if($subfield eq '@'){
-        $subfield_data{id} = "tag_".$tag."_subfield_00_".$index_tag."_".$index_subfield;
-    } else {
-         $subfield_data{id} = "tag_".$tag."_subfield_".$subfield."_".$index_tag."_".$index_subfield;
-    }
 
     if(exists $mandatory_z3950->{$tag.$subfield}){
         $subfield_data{z3950_mandatory} = $mandatory_z3950->{$tag.$subfield};
@@ -353,7 +353,7 @@ sub create_input {
                     maxlength=\"255\" 
                     \/>
                     <a href=\"#\" class=\"buttonDot\"
-                        onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&index=$subfield_data{id}','$subfield_data{id}'); return false;\" title=\"Tag Editor\">...</a>
+                        onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&amp;index=$subfield_data{id}','$subfield_data{id}'); return false;\" title=\"Tag Editor\">...</a>
 		";
     # it's a plugin field
     }
@@ -444,8 +444,6 @@ sub create_input {
                            name=\"".$subfield_data{id}."\"
                            class=\"input_marceditor\"
                            tabindex=\"1\"
-                            size=\"67\"
-                            maxlength=\"255\" 
                            >$value</textarea>
                 ";
         }
@@ -752,7 +750,7 @@ foreach my $thisframeworkcode ( keys %$frameworks ) {
 		frameworktext => $frameworks->{$thisframeworkcode}->{'frameworktext'},
 	);
 	if ($frameworkcode eq $thisframeworkcode){
-		$row{'selected'}="selected";
+		$row{'selected'}="selected=\"selected\"";
 		}
 	push @frameworkcodeloop, \%row;
 } 
