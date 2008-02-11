@@ -306,7 +306,7 @@ if (C4::Context->preference('NoZebra')) {
     };
 } else {
     eval {
-        ($error, $results_hashref, $facets) = getRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
+        ($error, $results_hashref, $facets) = C4::Search::pazGetRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
     };
 }
 if ($@ || $error) {
@@ -323,7 +323,11 @@ for (my $i=0;$i<=@servers;$i++) {
     if ($server =~/biblioserver/) { # this is the local bibliographic server
         $hits = $results_hashref->{$server}->{"hits"};
         my $page = $cgi->param('page') || 0;
-        my @newresults = searchResults( $query_desc,$hits,$results_per_page,$offset,@{$results_hashref->{$server}->{"RECORDS"}});
+        my @newresults;
+        for my $work_title (keys %{ $results_hashref->{$server} })  {
+            next if $work_title eq "hits";
+           push @newresults, searchResults( $query_desc,$hits,$results_per_page,$offset,@{$results_hashref->{$server}->{$work_title}->{"RECORDS"}});
+        }
         $total = $total + $results_hashref->{$server}->{"hits"};
         if ($hits) {
             $template->param(total => $hits);

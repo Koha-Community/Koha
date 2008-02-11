@@ -623,6 +623,7 @@ sub pazGetRecords {
 
     my $paz = C4::Search::PazPar2->new('http://localhost:10006/search.pz2');
     $paz->init();
+    #die $simple_query;
     $paz->search($simple_query);
     sleep 1;
 
@@ -635,6 +636,7 @@ sub pazGetRecords {
     HIT: foreach my $hit (@{ $results->{'hit'} }) {
         warn "hit";
         my $recid = $hit->{recid}->[0];
+        my $work_title = $hit->{'md-work-title'}->[0];
         #if ($recid =~ /[\200-\377]/) {
         if ($recid =~ /sodot/) {
             #die "bad $recid\n";
@@ -650,7 +652,7 @@ sub pazGetRecords {
             warn "look for $recid offset = $i";
             my $rec = $paz->record($recid, $i);
             warn "got record $i";
-            push @{ $results_hashref->{'biblioserver'}->{'RECORDS'} }, $paz->record($recid, $i);
+            push @{ $results_hashref->{'biblioserver'}->{$work_title}->{'RECORDS'} }, $paz->record($recid, $i);
         }
     }
     warn "past hits";
@@ -659,18 +661,19 @@ sub pazGetRecords {
     my $termlist_xml = $paz->termlist('author,subject');
     my $terms = XMLin($termlist_xml, forcearray => 1);
     my @facets_loop = ();
-    foreach my $list (sort keys %{ $terms->{'list'} }) {
-        my @facets = ();
-        foreach my $facet (sort @{ $terms->{'list'}->{$list}->{'term'} } ) {
-            push @facets, {
-                facet_label_value => $facet->{'name'}->[0],
-            };
-        }
-        push @facets_loop, ( {
-            type_label => $list,
-            facets => \@facets,
-        } );
-    }
+    #die Dumper($results);
+#    foreach my $list (sort keys %{ $terms->{'list'} }) {
+#        my @facets = ();
+#        foreach my $facet (sort @{ $terms->{'list'}->{$list}->{'term'} } ) {
+#            push @facets, {
+#                facet_label_value => $facet->{'name'}->[0],
+#            };
+#        }
+#        push @facets_loop, ( {
+#            type_label => $list,
+#            facets => \@facets,
+#        } );
+#    }
 
     return ( undef, $results_hashref, \@facets_loop );
 }
