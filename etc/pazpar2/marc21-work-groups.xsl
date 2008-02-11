@@ -141,6 +141,11 @@
         </pz:metadata>
       </xsl:for-each>
 
+      <xsl:if test="$non_ut_main_entry_key != ''">
+        <pz:metadata type="work-author">
+          <xsl:value-of select="$non_ut_main_entry_key" />
+        </pz:metadata>
+      </xsl:if>
 <!--
       <xsl:for-each select="marc:datafield[@tag='250']">
 	<pz:metadata type="edition">
