@@ -335,7 +335,10 @@ for (my $i=0;$i<=@servers;$i++) {
         my @newresults;
         if ($build_grouped_results) {
             foreach my $group (@{ $results_hashref->{$server}->{"GROUPS"} }) {
-                my @group_results = searchResults( $query_desc, $group->{'group_count'},$results_per_page,$offset, 
+                # because pazGetRecords handles retieving only the records
+                # we want as specified by $offset and $results_per_page,
+                # we need to set the offset parameter of searchResults to 0
+                my @group_results = searchResults( $query_desc, $group->{'group_count'},$results_per_page, 0,
                                                    @{ $group->{"RECORDS"} });
                 push @newresults, { group_label => $group->{'group_label'}, GROUP_RESULTS => \@group_results };
             }

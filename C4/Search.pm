@@ -21,6 +21,8 @@ use C4::Context;
 use C4::Biblio;    # GetMarcFromKohaField
 use C4::Koha;      # getFacets
 use Lingua::Stem;
+use C4::Search::PazPar2;
+use XML::Simple;
 use C4::Dates qw(format_date);
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
@@ -611,9 +613,6 @@ sub getRecords {
     return ( undef, $results_hashref, \@facets_loop );
 }
 
-use C4::Search::PazPar2;
-use XML::Simple;
-use Data::Dumper;
 sub pazGetRecords {
     my (
         $koha_query,       $simple_query, $sort_by_ref,    $servers_ref,
@@ -629,9 +628,14 @@ sub pazGetRecords {
     # do results
     my $results_hashref = {};
     my $stats = XMLin($paz->stat);
-    $results_hashref->{'biblioserver'}->{'hits'} = $stats->{'hits'};
     my $results = XMLin($paz->show($offset, $results_per_page, 'work-title:1'), forcearray => 1);
-    
+   
+    # for a grouped search result, the number of hits
+    # is the number of groups returned; 'bib_hits' will have
+    # the total number of bibs. 
+    $results_hashref->{'biblioserver'}->{'hits'} = $results->{'merged'}->[0];
+    $results_hashref->{'biblioserver'}->{'bib_hits'} = $stats->{'hits'};
+
     HIT: foreach my $hit (@{ $results->{'hit'} }) {
         my $recid = $hit->{recid}->[0];
 
@@ -655,7 +659,7 @@ sub pazGetRecords {
         for (my $i = 0; $i < $count; $i++) {
             # FIXME -- may need to worry about diacritics here
             my $rec = $paz->record($recid, $i);
-            push @{ $result_group->{'RECORDS'} }, $paz->record($recid, $i);
+            push @{ $result_group->{'RECORDS'} }, $rec;
         }
 
         push @{ $results_hashref->{'biblioserver'}->{'GROUPS'} }, $result_group;
