@@ -41,14 +41,21 @@
             <xsl:when test="marc:datafield[@tag='130']">
                 <xsl:for-each select="marc:datafield[@tag='130']">
                     <xsl:call-template name="subfieldSelect">
-                        <xsl:with-param name="codes">adfgkmnoprs</xsl:with-param>
+                        <xsl:with-param name="codes">adgknmpr</xsl:with-param>
                     </xsl:call-template>
                 </xsl:for-each>
             </xsl:when>
             <xsl:when test="marc:datafield[@tag='240']">
                 <xsl:for-each select="marc:datafield[@tag='240']">
                     <xsl:call-template name="subfieldSelect">
-                        <xsl:with-param name="codes">adfgkmnoprs</xsl:with-param>
+                        <xsl:with-param name="codes">adgknmpr</xsl:with-param>
+                    </xsl:call-template>
+                </xsl:for-each>
+            </xsl:when>
+            <xsl:when test="marc:datafield[@tag='243']">
+                <xsl:for-each select="marc:datafield[@tag='243']">
+                    <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">adgknmpr</xsl:with-param>
                     </xsl:call-template>
                 </xsl:for-each>
             </xsl:when>
@@ -80,6 +87,20 @@
                 <xsl:for-each select="marc:datafield[@tag='100']">
                     <xsl:call-template name="subfieldSelect">
                         <xsl:with-param name="codes">abcd</xsl:with-param>
+                    </xsl:call-template>
+                </xsl:for-each>
+            </xsl:when>
+            <xsl:when test="marc:datafield[@tag='110']">
+                <xsl:for-each select="marc:datafield[@tag='110']">
+                    <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">abcd</xsl:with-param>
+                    </xsl:call-template>
+                </xsl:for-each>
+            </xsl:when>
+            <xsl:when test="marc:datafield[@tag='111']">
+                <xsl:for-each select="marc:datafield[@tag='111']">
+                    <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">abcdnq</xsl:with-param>
                     </xsl:call-template>
                 </xsl:for-each>
             </xsl:when>
