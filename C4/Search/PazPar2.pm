@@ -102,6 +102,7 @@ sub show {
     my $self = shift;
     my $start = shift;
     my $count = shift;
+    my $sort = shift;
 
     my $uri = URI->new($self->{'endpoint'});
     $uri->query_param(command => 'show');
@@ -109,6 +110,7 @@ sub show {
     $uri->query_param(num => $count);
     $uri->query_param(block => 1);
     $uri->query_param(session => $self->{'session'});
+    $uri->query_param(sort => $sort);
     my $response = $self->{'ua'}->get($uri);
     if ($response->is_success) {
         return $response->content;

@@ -623,7 +623,6 @@ sub pazGetRecords {
 
     my $paz = C4::Search::PazPar2->new('http://localhost:10006/search.pz2');
     $paz->init();
-    #die $simple_query;
     $paz->search($simple_query);
     sleep 1;
 
@@ -631,31 +630,36 @@ sub pazGetRecords {
     my $results_hashref = {};
     my $stats = XMLin($paz->stat);
     $results_hashref->{'biblioserver'}->{'hits'} = $stats->{'hits'};
-    my $results = XMLin($paz->show($offset, $results_per_page), forcearray => 1);
-    #die Dumper($results);
+    my $results = XMLin($paz->show($offset, $results_per_page, 'work-title:1'), forcearray => 1);
+    
     HIT: foreach my $hit (@{ $results->{'hit'} }) {
-        warn "hit";
         my $recid = $hit->{recid}->[0];
+
         my $work_title = $hit->{'md-work-title'}->[0];
-        #if ($recid =~ /[\200-\377]/) {
-        if ($recid =~ /sodot/) {
-            #die "bad $recid\n";
-            #probably do not want non-ASCII in record ID
-            last HIT;
+        my $work_author;
+        if (exists $hit->{'md-work-author'}) {
+            $work_author = $hit->{'md-work-author'}->[0];
         }
+        my $group_label = (defined $work_author) ? "$work_title / $work_author" : $work_title;
+
+        my $result_group = {};
+        $result_group->{'group_label'} = $group_label;
+        $result_group->{'group_merge_key'} = $recid;
+
         my $count = 1;
         if (exists $hit->{count}) {
             $count = $hit->{count}->[0];
         }
-        #die $count;
+        $result_group->{'group_count'} = $count;
+
         for (my $i = 0; $i < $count; $i++) {
-            warn "look for $recid offset = $i";
+            # FIXME -- may need to worry about diacritics here
             my $rec = $paz->record($recid, $i);
-            warn "got record $i";
-            push @{ $results_hashref->{'biblioserver'}->{$work_title}->{'RECORDS'} }, $paz->record($recid, $i);
+            push @{ $result_group->{'RECORDS'} }, $paz->record($recid, $i);
         }
+
+        push @{ $results_hashref->{'biblioserver'}->{'GROUPS'} }, $result_group;
     }
-    warn "past hits";
     
     # pass through facets
     my $termlist_xml = $paz->termlist('author,subject');

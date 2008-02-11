@@ -26,7 +26,12 @@ my ($template,$borrowernumber,$cookie);
 my $template_name;
 my $template_type;
 my @params = $cgi->param("limit");
-if ((@params>=1) || ($cgi->param("q")) || ($cgi->param('multibranchlimit')) || ($cgi->param('limit-yr')) ) {
+
+my $build_grouped_results = C4::Context->preference('OPACGroupResults');
+if ($build_grouped_results) {
+    $template_name = 'opac-results-grouped.tmpl';
+} 
+elsif ((@params>=1) || ($cgi->param("q")) || ($cgi->param('multibranchlimit')) || ($cgi->param('limit-yr')) ) {
     $template_name = 'opac-results.tmpl';
 }
 else {
@@ -304,9 +309,13 @@ if (C4::Context->preference('NoZebra')) {
     eval {
         ($error, $results_hashref, $facets) = NZgetRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
     };
-} else {
+} elsif ($build_grouped_results) {
     eval {
         ($error, $results_hashref, $facets) = C4::Search::pazGetRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
+    };
+} else {
+    eval {
+        ($error, $results_hashref, $facets) = getRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
     };
 }
 if ($@ || $error) {
@@ -324,9 +333,14 @@ for (my $i=0;$i<=@servers;$i++) {
         $hits = $results_hashref->{$server}->{"hits"};
         my $page = $cgi->param('page') || 0;
         my @newresults;
-        for my $work_title (keys %{ $results_hashref->{$server} })  {
-            next if $work_title eq "hits";
-           push @newresults, searchResults( $query_desc,$hits,$results_per_page,$offset,@{$results_hashref->{$server}->{$work_title}->{"RECORDS"}});
+        if ($build_grouped_results) {
+            foreach my $group (@{ $results_hashref->{$server}->{"GROUPS"} }) {
+                my @group_results = searchResults( $query_desc, $group->{'group_count'},$results_per_page,$offset, 
+                                                   @{ $group->{"RECORDS"} });
+                push @newresults, { group_label => $group->{'group_label'}, GROUP_RESULTS => \@group_results };
+            }
+        } else {
+            @newresults = searchResults( $query_desc,$hits,$results_per_page,$offset,@{$results_hashref->{$server}->{"RECORDS"}});
         }
         $total = $total + $results_hashref->{$server}->{"hits"};
         if ($hits) {
