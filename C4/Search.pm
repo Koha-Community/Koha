@@ -620,7 +620,7 @@ sub pazGetRecords {
         $query_type,       $scan
     ) = @_;
 
-    my $paz = C4::Search::PazPar2->new('http://localhost:10006/search.pz2');
+    my $paz = C4::Search::PazPar2->new(C4::Context->config('pazpar2url'));
     $paz->init();
     $paz->search($simple_query);
     sleep 1;

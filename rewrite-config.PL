@@ -100,6 +100,7 @@ $prefix = $ENV{'INSTALL_BASE'} || "/usr";
   '__PERL_MODULE_DIR__' =>  ($ENV{'INSTALLSITELIB'} || sprintf($prefix."/lib/perl5/site_perl/%vd",$^V))."/koha",
   '__KOHA_CONF_DIR__' => "$prefix/etc/koha",
   '__ZEBRA_CONF_DIR__' => "$prefix/etc/koha/zebradb",
+  '__PAZPAR2_CONF_DIR__' => "$prefix/etc/koha/pazpar2",
   '__MISC_DIR__' => "$prefix/misc",
   '__SCRIPT_DIR__' => "$prefix/bin",
   '__MAN_DIR__' => "$prefix/man",
@@ -111,6 +112,10 @@ $prefix = $ENV{'INSTALL_BASE'} || "/usr";
   '__ZEBRA_LANGUAGE__' => 'en',
   '__ZEBRA_AUTH_CFG__' => 'zebra-authorities.cfg',
   '__AUTH_RETRIEVAL_CFG__' => 'retrieval-info-auth-grs1.xml',
+  "__MERGE_SERVER_HOST__" => $myhost,
+  "__MERGE_SERVER_PORT__" => '11001',
+  "__PAZPAR2_HOST__" => $myhost,
+  "__PAZPAR2_PORT__" => '11002',
 );
 
 # Override configuration from the environment

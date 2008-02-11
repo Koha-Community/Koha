@@ -201,6 +201,10 @@ command-line, e.g., READMEs.
 
 Directory for Apache and Zebra logs produced by Koha.
 
+=item PAZPAR2_CONF_DIR
+
+Directory for PazPar2 configuration files.
+
 =item NONE
 
 This is a dummy target used to explicitly state
@@ -230,6 +234,7 @@ my $target_map = {
   './edithelp.pl'               => 'INTRANET_CGI_DIR',
   './etc'                       => { target => 'KOHA_CONF_DIR', trimdir => -1 },
   './etc/zebradb'               => { target => 'ZEBRA_CONF_DIR', trimdir => -1 },
+  './etc/pazpar2'               => { target => 'PAZPAR2_CONF_DIR', trimdir => -1 },
   './help.pl'                   => 'INTRANET_CGI_DIR', 
   './installer-CPAN.pl'         => 'NONE',
   './installer'                 => 'INTRANET_CGI_DIR',
@@ -370,6 +375,7 @@ my %config_defaults = (
   'DB_PASS'           => 'katikoan',
   'INSTALL_ZEBRA'     => 'yes',
   'INSTALL_SRU'       => 'yes',
+  'INSTALL_PAZPAR2'   => 'no',
   'AUTH_INDEX_MODE'   => 'grs1',
   'ZEBRA_MARC_FORMAT' => 'marc21',
   'ZEBRA_LANGUAGE'    => 'en',
@@ -380,6 +386,10 @@ my %config_defaults = (
   'ZEBRA_SRU_AUTHORITIES_PORT'    => '9999',
   'KOHA_USER'         => 'koha',
   'KOHA_GROUP'        => 'koha',
+  'MERGE_SERVER_HOST' => 'localhost',
+  'MERGE_SERVER_PORT' => '11001',
+  'PAZPAR2_HOST' => 'localhost',
+  'PAZPAR2_PORT' => '11002',
 );
 
 # set some default configuratio options based on OS
@@ -447,7 +457,14 @@ if ($config{'INSTALL_ZEBRA'} eq "yes") {
     if ($config{'INSTALL_MODE'} ne 'dev') {
         push @{ $pl_files->{'rewrite-config.PL'} }, (
             'blib/SCRIPT_DIR/koha-zebra-ctl.sh',
+            'blib/SCRIPT_DIR/koha-pazpar2-ctl.sh',
             'blib/SCRIPT_DIR/koha-zebraqueue-ctl.sh',
+        );
+    }
+    if ($config{'INSTALL_PAZPAR2'} eq 'yes') {
+        push @{ $pl_files->{'rewrite-config.PL'} }, (
+            'blib/PAZPAR2_CONF_DIR/koha-biblios.xml',
+            'blib/PAZPAR2_CONF_DIR/pazpar2.xml'
         );
     }
     $config{'ZEBRA_AUTH_CFG'} = $config{'AUTH_INDEX_MODE'} eq 'dom' ? 'zebra-authorities-dom.cfg' : 'zebra-authorities.cfg';
@@ -926,6 +943,41 @@ SRU port for authority data?);
             $config{'ZEBRA_SRU_AUTHORITIES_PORT'} = _get_value('ZEBRA_SRU_AUTHORITIES_PORT', $msg, $defaults->{'ZEBRA_SRU_AUTHORITIES_PORT'}, $valid_values);
 
         }
+
+        $msg = q(
+Since you've chosen to use Zebra, you can also choose to
+install PazPar2, which is a metasearch tool.  With PazPar2,
+Koha can perform on-the-fly merging of bibliographic
+records during searching, allowing for FRBRization of
+the results list.
+
+Install the PazPar2 configuration files?);
+        $msg .= _add_valid_values_disp('INSTALL_PAZPAR2', $valid_values);
+        $config{'INSTALL_PAZPAR2'} = _get_value('INSTALL_PAZPAR2', $msg, $defaults->{'INSTALL_PAZPAR2'}, $valid_values);
+
+        if ($config{'INSTALL_PAZPAR2'} eq 'yes') {
+            $msg = q(
+Since you've chosen to configure PazPar2, you must
+specify the host and port(s) that PazPar2
+uses:
+);
+            $msg = q(
+Zebra bibliographic server host?);
+            $config{'MERGE_SERVER_HOST'} = _get_value('MERGE_SERVER_HOST', $msg, $defaults->{'MERGE_SERVER_HOST'}, $valid_values);
+
+            $msg = q(
+Zebra bibliographic port for PazPar2 to use?);
+            $config{'MERGE_SERVER_PORT'} = _get_value('MERGE_SERVER_PORT', $msg, $defaults->{'MERGE_SERVER_PORT'}, $valid_values);
+
+            $msg = q(
+PazPar2 host?);
+            $config{'PAZPAR2_HOST'} = _get_value('PAZPAR2_HOST', $msg, $defaults->{'PAZPAR2_HOST'}, $valid_values);
+
+            $msg = q(
+PazPar2 port?);
+            $config{'PAZPAR2_PORT'} = _get_value('PAZPAR2_PORT', $msg, $defaults->{'PAZPAR2_PORT'}, $valid_values);
+
+        }
     }
 
     print "\n\n";
@@ -1010,6 +1062,7 @@ sub get_target_directories {
         $dirmap{'PERL_MODULE_DIR'} = File::Spec->catdir(@basedir, $package, 'lib');
         $dirmap{'KOHA_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc');
         $dirmap{'ZEBRA_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'zebradb');
+        $dirmap{'PAZPAR2_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'pazpar2');
         $dirmap{'MISC_DIR'} = File::Spec->catdir(@basedir, $package, 'misc');
         $dirmap{'SCRIPT_DIR'} = File::Spec->catdir(@basedir, $package, 'bin');
         $dirmap{'MAN_DIR'} = File::Spec->catdir(@basedir, $package, 'man');
@@ -1036,6 +1089,7 @@ sub get_target_directories {
         $skipdirs{'PERL_MODULE_DIR'} = 1;
         $dirmap{'KOHA_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc');
         $dirmap{'ZEBRA_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'zebradb');
+        $dirmap{'PAZPAR2_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'pazpar2');
         $dirmap{'MISC_DIR'} = File::Spec->catdir(@basedir, $package, 'misc');
         $dirmap{'SCRIPT_DIR'} = File::Spec->catdir(@basedir, $package, 'bin');
         $skipdirs{'SCRIPT_DIR'} = 1;
@@ -1056,6 +1110,7 @@ sub get_target_directories {
         $dirmap{'PERL_MODULE_DIR'} = File::Spec->catdir(@basedir, $package, 'lib');
         $dirmap{'KOHA_CONF_DIR'} = File::Spec->catdir(File::Spec->rootdir(), 'etc', $package);
         $dirmap{'ZEBRA_CONF_DIR'} = File::Spec->catdir(File::Spec->rootdir(), 'etc', $package, 'zebradb');
+        $dirmap{'PAZPAR2_CONF_DIR'} = File::Spec->catdir(File::Spec->rootdir(), 'etc', $package, 'pazpar2');
         $dirmap{'MISC_DIR'} = File::Spec->catdir(@basedir, $package, 'misc');
         $dirmap{'SCRIPT_DIR'} = File::Spec->catdir(@basedir, $package, 'bin');
         $dirmap{'MAN_DIR'} = File::Spec->catdir(@basedir, $package, 'man');
@@ -1240,8 +1295,12 @@ Zebra's configuration files.
 sub _update_zebra_conf_target {
 
     my $target = "\nupdate_zebra_conf ::\n";
-    $target   .= "\tumask 022; \$(MOD_INSTALL) \\\n";
+    $target .= "\tumask 022; \$(MOD_INSTALL) \\\n";
     $target .= "\t\t\$(KOHA_INST_ZEBRA_CONF_DIR) \$(KOHA_DEST_ZEBRA_CONF_DIR) \n";
+    $target .= "\t\$(NOECHO) chmod -R u+w \$(KOHA_DEST_ZEBRA_CONF_DIR)\n" unless $^O eq "MSWin32";
+    $target .= "\tumask 022; \$(MOD_INSTALL) \\\n";
+    $target .= "\t\t\$(KOHA_INST_PAZPAR2_CONF_DIR) \$(KOHA_DEST_PAZPAR2_CONF_DIR) \n";
+    $target .= "\t\$(NOECHO) chmod -R u+w \$(KOHA_DEST_PAZPAR2_CONF_DIR)\n" unless $^O eq "MSWin32";
 
     return $target;
 }
