@@ -140,7 +140,7 @@ function ExpandField(index) {
     var original = document.getElementById(index); //original <div>
     var divs = original.getElementsByTagName('div');
     for(var i=0,divslen = divs.length ; i<divslen ; i++){      // foreach div
-        if(divs[i].getAttribute("name") == 'line'){  // if it s a subfield
+        if(divs[i].getAttribute('id').match(/^subfield/)){  // if it s a subfield
             if (divs[i].style.display == 'block') {
                 divs[i].style.display = 'none';
             } else {
@@ -171,7 +171,7 @@ function CloneField(index) {
         
     // settings all subfields
     for(var i=0,divslen = divs.length ; i<divslen ; i++){      // foreach div
-        if(divs[i].getAttribute("name") == 'line'){  // if it s a subfield
+        if(divs[i].getAttribute("id").match(/^subfield/)){  // if it s a subfield
             
             // set the attribute for the new 'div' subfields
             divs[i].setAttribute('id',divs[i].getAttribute('id')+new_key);
@@ -277,7 +277,7 @@ function CloneField(index) {
             <!-- /TMPL_UNLESS -->
             
         } else { // it's a indicator div
-            if(divs[i].getAttribute('name') == 'div_indicator'){
+            if(divs[i].getAttribute('id').match(/^div_indicator/)){
                 var inputs = divs[i].getElementsByTagName('input');
                 inputs[0].setAttribute('id',inputs[0].getAttribute('id')+new_key);
                 
@@ -539,7 +539,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
     <!-- TMPL_LOOP NAME="innerloop" -->
         <!-- TMPL_IF NAME="tag" -->
 	<div class="tag" id="tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->">
-        <div class="tag_title" name="div_indicator">
+        <div class="tag_title" id="div_indicator_tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->">
             <!-- TMPL_UNLESS name="hide_marc" -->
                 <span title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --></span>
                 <!-- TMPL_IF NAME="fixedfield" -->
@@ -566,7 +566,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 	
         <!-- TMPL_LOOP NAME="subfield_loop" -->
             <!--  One line on the marc editor -->
-            <div name="line" class="subfield_line" style="<!-- TMPL_VAR NAME='visibility' -->;" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
+            <div class="subfield_line" style="<!-- TMPL_VAR NAME='visibility' -->;" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
             
                 <!--TMPL_UNLESS NAME="advancedMARCEditor" -->
                     <label for="tag_<!-- TMPL_VAR NAME='tag'-->_subfield_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->" <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> class="labelsubfield">
