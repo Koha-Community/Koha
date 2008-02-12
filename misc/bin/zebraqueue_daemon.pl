@@ -79,7 +79,7 @@ sub zebraop {
 	while (my $data = $readsth->fetchrow_hashref()){
 		eval {
 		my $ok = 0;
-		if ($data->{'operation'} =~ /delete/ ){
+		if ($data->{'operation'} =~ /delete/i ){
 			# 1st read the record in zebra, we have to get it from zebra as its no longer in the db
 			my $Zconn=C4::Context->Zconn($data->{'server'}, 0, 1,'','xml');
 			my $query = $Zconn->search_pqf( '@attr 1=Local-Number '.$data->{'biblio_auth_number'});
