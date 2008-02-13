@@ -213,10 +213,10 @@ div.dmy {
 		</p>
 		<div id="exceptionPosibility" style="position:static">
 			<input type="radio" name="showOperation" id="showOperationExc" value="exception" /> <label for="showOperationExc">Generate an exception to this holiday.</label>
-			<a href="#" onclick=" additionalInformation('You can make an exception for this holiday rule. This means that you will be able to say for a repeatable holiday, that there is one of those days that is going to be an exception.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" border="0" alt="More information" /></a>
+			<a href="#" onclick=" additionalInformation('You can make an exception for this holiday rule. This means that you will be able to say for a repeatable holiday, that there is one of those days that is going to be an exception.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/../img/more.gif" border="0" alt="More information" /></a>
 		</div>
 		<input type="radio" name="showOperation" id="showOperationDel" value="delete" checked="checked" /> <label for="showOperationDel">Delete this holiday</label>.
-		<a href="#" onclick=" additionalInformation('This will delete this holiday rule. In case it is a repeatable holiday, this option checks for posible exceptions. In case those exists, this option take care of set this exceptions to regular holidays.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" border="0" alt="More information" /></a>
+		<a href="#" onclick=" additionalInformation('This will delete this holiday rule. In case it is a repeatable holiday, this option checks for posible exceptions. In case those exists, this option take care of set this exceptions to regular holidays.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/../img/more.gif" border="0" alt="More information" /></a>
 		<p>
 			<input type="submit" name="submit" value="Save" />
 			<input type="button" name="cancel2" value="Cancel" onclick=" hidePanel('showHoliday');hidePanel('information')" />
@@ -248,15 +248,15 @@ div.dmy {
 		</p>
 			<input type="radio" name="newOperation" id="newOperationOnce" value="holiday" checked="checked" />
 			<label for="newOperationOnce">Holiday only on this day</label>.
-			<a href="#" onclick=" additionalInformation('Make a single holiday. For example, selecting August 1st, 2012 will make it holiday, but will not affect August 1st in other years.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" border="0" alt="More information" /></a>
+			<a href="#" onclick=" additionalInformation('Make a single holiday. For example, selecting August 1st, 2012 will make it holiday, but will not affect August 1st in other years.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/../img/more.gif" border="0" alt="More information" /></a>
 			<br />
 			<input type="radio" name="newOperation" id="newOperationDay" value="weekday" />
 			<label for="newOperationDay">Holiday repeated every same day of the week</label>.
-			<a href="#" onclick=" additionalInformation('Make this weekday a holiday, every week. For example, if your library is closed on Saturdays, use this option to make every Saturday a holiday.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" border="0" alt="More information" /></a>
+			<a href="#" onclick=" additionalInformation('Make this weekday a holiday, every week. For example, if your library is closed on Saturdays, use this option to make every Saturday a holiday.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/../img/more.gif" border="0" alt="More information" /></a>
 			<br />
 			<input type="radio" name="newOperation" id="newOperationYear" value="repeatable" />
 			<label for="newOperationYear">Holiday repeated yearly on the same date</label>.
-			<a href="#" onclick=" additionalInformation('This will take this day and month as a reference to make it holiday. Through this option, you can repeat this rule for every year. For example, selecting August 1st will make August 1st a holiday every year.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/images/more.gif" border="0" alt="More information" /></a>
+			<a href="#" onclick=" additionalInformation('This will take this day and month as a reference to make it holiday. Through this option, you can repeat this rule for every year. For example, selecting August 1st will make August 1st a holiday every year.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/../img/more.gif" border="0" alt="More information" /></a>
 			<p>
 				<input type="submit" name="submit" value="Save" />
 				<input type="button" name="cancel2" value="Cancel" onclick=" hidePanel('newHoliday');hidePanel('information')" />
@@ -275,9 +275,6 @@ div.dmy {
 <div class="information" style="position:absolute" id="information" onclick=" hidePanel('information')">
 	<table>
 		<tr>
-			<td>
-				<img src="<!-- TMPL_VAR NAME="themelang" -->/images/info.gif" border="0" style="vertical-align:middle" alt="" />
-			</td>
 			<td>
 				<p id="explanation" style="display:inline;align:justify"></p>
 			</td>

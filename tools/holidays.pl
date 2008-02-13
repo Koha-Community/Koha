@@ -69,7 +69,6 @@ if ( C4::Context->preference("IndependantBranches") ) {
     $branch = C4::Context->userenv->{'branch'};
 }
 # Get all the holidays
- warn "BRANCH : $branch";
 
 my $calendar = C4::Calendar->new(branchcode => $branch);
 my $week_days_holidays = $calendar->get_week_days_holidays();
