@@ -35,6 +35,11 @@
             <tr><th scope="row">Koha version: </th><td><!-- TMPL_VAR ESCAPE="HTML" name="kohaVersion" --></td></tr>
             <tr><th scope="row">OS version ('uname -a'): </th><td><!-- TMPL_VAR ESCAPE="HTML" name="osVersion" --></td></tr>
             <tr><th scope="row">Perl version: </th><td><!-- TMPL_VAR ESCAPE="HTML" name="perlVersion" --></td></tr>
+            <tr><th scope="row">Perl @INC: </th><td>
+                <!-- TMPL_LOOP name="perlIncPath" -->
+                    <!-- TMPL_VAR ESCAPE="HTML" name="perlinc" --> <br />
+                <!-- /TMPL_LOOP -->
+            </td></tr>
             <tr><th scope="row">MySQL version: </th><td><!-- TMPL_VAR ESCAPE="HTML" name="mysqlVersion" --></td></tr>
             <tr><th scope="row">Apache version: </th><td><!-- TMPL_VAR ESCAPE="HTML" name="apacheVersion" --></td></tr>
             <tr><th scope="row">Zebra version: </th><td><!-- TMPL_VAR ESCAPE="HTML" name="zebraVersion" --></td></tr>

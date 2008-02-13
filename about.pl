@@ -50,6 +50,7 @@ $template->param(
     kohaVersion   => $kohaVersion,
     osVersion     => $osVersion,
     perlVersion   => $perlVersion,
+    perlIncPath   => [ map { perlinc => $_ }, sort @INC ],
     mysqlVersion  => $mysqlVersion,
     apacheVersion => $apacheVersion,
     zebraVersion  => $zebraVersion,
