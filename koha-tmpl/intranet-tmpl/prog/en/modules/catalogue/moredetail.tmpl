@@ -51,7 +51,7 @@
             <!-- TMPL_IF NAME="copyvol" --><li><span class="label">Copy / Vol :</span> <!-- TMPL_VAR NAME="copyvol" -->&nbsp;</li> <!-- /TMPL_IF -->  
             <!-- TMPL_IF NAME="replacementprice" --><li><span class="label">Replacement Price:</span> <!-- TMPL_VAR NAME="replacementprice" -->&nbsp;</li> <!-- /TMPL_IF -->
             </ol></div>
-           <div class="listgroup"><h4>Statuses</span> ( 
+           <div class="listgroup"><h4>Statuses ( 
                 <!-- TMPL_IF name="notforloantext" --><!-- TMPL_VAR name="notforloantext" --> <!-- /TMPL_IF -->
                 <!-- TMPL_IF name="itemlost"-->Lost<!-- /TMPL_IF --> 
                 <!-- TMPL_IF NAME="damaged" -->Damaged<!-- /TMPL_IF -->
@@ -155,8 +155,9 @@
               <form class="inline" action="updateitem.pl" method="post"><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
                     <input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR Name="biblioitemnumber" -->" /><input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" />
                     <textarea name="itemnotes" rows="2" cols="30"><!-- TMPL_VAR NAME="itemnotes" --></textarea><input type="submit" name="submit" class="submit" value="Update" /> 
-                </li>
-            </ol></form>
+              </form>
+            </li>
+            </ol>
                 <!-- TMPL_ELSE -->
                     <!-- TMPL_VAR NAME="itemnotes" -->
                     &nbsp;

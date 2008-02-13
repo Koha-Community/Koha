@@ -8,7 +8,6 @@
     <a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">ISBD</a></li>
     <!-- TMPL_IF NAME="moredetailview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
     <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Items</a></li>
-    <li>
     <!-- TMPL_IF NAME="CAN_user_reserveforothers" -->
     <!-- TMPL_IF NAME="holdsview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Holds</a></li>
     <!-- /TMPL_IF -->

@@ -46,7 +46,6 @@ function verify_images() {
     <div id="catalogue_detail_biblio" class="yui-u first">
         
     <h3><!-- TMPL_VAR NAME="title" --></h3> 
-        <p>
             <!-- TMPL_UNLESS NAME="item-level_itypes" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->"><!-- /TMPL_UNLESS -->
             <!-- TMPL_IF name="volume" --> <!-- TMPL_VAR name="volume" --><!-- /TMPL_IF -->
             <!-- TMPL_IF name="volumedesc" -->, <!-- TMPL_VAR name="volumedesc" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="number" --> <!-- TMPL_VAR NAME="number" --> <!-- /TMPL_IF -->
@@ -303,8 +302,10 @@ NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> by <!-- TMPL_VAR NAM
         <option value="utf8">MARC (Unicode/UTF-8)</option>    </select>
         <input type="submit" name="save" value="Download Record" /></td>
   </tr>
-  <tr><input type="hidden" name="op" value="export" /><input type="hidden" NAME="bib" VALUE="<!-- TMPL_VAR name="biblionumber" -->" />
-  </tr></table>
+  <tr><td>
+    <input type="hidden" name="op" value="export" /><input type="hidden" name="bib" value="<!-- TMPL_VAR name="biblionumber" -->" />
+  </td></tr>
+</table>
 </form>
 </div>
 
