@@ -75,6 +75,7 @@ foreach my $subscription (@subscriptions) {
     my %cell;
     $cell{subscriptionid}    = $subscription->{subscriptionid};
     $cell{subscriptionnotes} = $subscription->{notes};
+    $cell{branchcode}        = $subscription->{branchcode};
 
     #get the three latest serials.
     $cell{latestserials} =

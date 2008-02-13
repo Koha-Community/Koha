@@ -90,39 +90,40 @@
         <h2>
             We have <!-- TMPL_VAR name="subscriptionsnumber" --> subscription(s) associated with this title.
         </h2>
-        <p>Below is a list of the three latest issues :</p>
         <!-- TMPL_LOOP Name="subscriptions" -->
-                <!-- TMPL_IF name="subscriptionnotes"-->
-                    <h2><!--TMPL_VAR Name="subscriptionnotes"--> </h2>
-                <!-- /TMPL_IF -->
-                <!--TMPL_IF Name="latestserials"-->
-                <table>
-                <tr><th>Issue number</th><th>Date</th><th>Status</th></tr>
-                <!--TMPL_LOOP Name="latestserials"-->
-                    <tr>
-                        <td>            <!--TMPL_VAR Name="serialseq"-->
-                        </td>
-                        <td>            <!--TMPL_VAR Name="planneddate"-->
-                        </td>
-                        <td>            <!--TMPL_IF Name="status1"-->Pending
+            <h3>At library: <!-- TMPL_VAR name="branchcode" --> <!-- TMPL_VAR name="notes" --></h3>
+            <p>Below is a list of the three latest issues :</p>
+            <!-- TMPL_IF name="subscriptionnotes"-->
+                <p><!--TMPL_VAR Name="subscriptionnotes"--> </p>
+            <!-- /TMPL_IF -->
+            <!--TMPL_IF Name="latestserials"-->
+            <table>
+            <tr><th>Issue number</th><th>Date</th><th>Status</th></tr>
+            <!--TMPL_LOOP Name="latestserials"-->
+                <tr>
+                    <td>            <!--TMPL_VAR Name="serialseq"-->
+                    </td>
+                    <td>            <!--TMPL_VAR Name="planneddate"-->
+                    </td>
+                    <td>            <!--TMPL_IF Name="status1"-->Pending
+                        <!--TMPL_ELSE -->
+                            <!-- TMPL_IF Name="status2"-->Arrived
                             <!--TMPL_ELSE -->
-                                <!-- TMPL_IF Name="status2"-->Arrived
+                                <!-- TMPL_IF Name="status3"-->Late
                                 <!--TMPL_ELSE -->
-                                    <!-- TMPL_IF Name="status3"-->Late
+                                    <!-- TMPL_IF Name="status4"-->Missing
                                     <!--TMPL_ELSE -->
-                                        <!-- TMPL_IF Name="status4"-->Missing
-                                        <!--TMPL_ELSE -->
-                                            <!-- TMPL_IF Name="status5"-->Not Issued
-                                            <!--/TMPL_IF-->
+                                        <!-- TMPL_IF Name="status5"-->Not Issued
                                         <!--/TMPL_IF-->
                                     <!--/TMPL_IF-->
                                 <!--/TMPL_IF-->
                             <!--/TMPL_IF-->
-                        </td>
-                    </tr>
-                <!--/TMPL_LOOP -->
-                </table>
-                <!-- /TMPL_IF -->
+                        <!--/TMPL_IF-->
+                    </td>
+                </tr>
+            <!--/TMPL_LOOP -->
+            </table>
+            <!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
         <p><a href="/cgi-bin/koha/opac-serial-issues.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" title="Serial issues">Click here</a> for more information on subscription(s) history</p>
     <!-- /TMPL_IF --></div>

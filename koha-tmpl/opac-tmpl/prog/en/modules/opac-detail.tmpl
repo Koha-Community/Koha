@@ -279,6 +279,7 @@
     <h2>This is a serial subscription</h2>
     <p> (There are <!-- TMPL_VAR name="subscriptionsnumber" --> subscriptions associated with this title).</p>
     <!-- TMPL_LOOP Name="subscriptions" -->
+    <!-- TMPL_IF name="branchcode" --><h3>At branch: <!-- TMPL_VAR name="branchcode" --></h3><!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="subscriptionnotes" --><p><!--TMPL_VAR NAME="subscriptionnotes"--> </p><!-- /TMPL_IF -->
     <!--TMPL_IF NAME="latestserials"-->
     <p> The three latest issues for this subscription:</p>
