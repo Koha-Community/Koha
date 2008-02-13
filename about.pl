@@ -56,7 +56,7 @@ $template->param(
     osVersion     => $osVersion,
     perlPath      => $perl_path,
     perlVersion   => $perlVersion,
-    perlIncPath   => [ map { perlinc => $_ }, sort @INC ],
+    perlIncPath   => [ map { perlinc => $_ }, @INC ],
     mysqlVersion  => $mysqlVersion,
     apacheVersion => $apacheVersion,
     zebraVersion  => $zebraVersion,
