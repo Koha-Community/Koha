@@ -24,6 +24,7 @@ use C4::Context;
 use CGI;
 use LWP::Simple;
 use XML::Simple;
+use Config;
 
 my $query = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -39,6 +40,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $kohaVersion   = C4::Context::KOHAVERSION;
 my $osVersion     = `uname -a`;
+my $perl_path = $^X;
+if ($^O ne 'VMS') {
+    $perl_path .= $Config{_exe} unless $perl_path =~ m/$Config{_exe}$/i;
+}
 my $perlVersion   = $];
 my $mysqlVersion  = `mysql -V`;
 my $apacheVersion = `httpd -v`;
@@ -49,6 +54,7 @@ my $zebraVersion = `zebraidx -V`;
 $template->param(
     kohaVersion   => $kohaVersion,
     osVersion     => $osVersion,
+    perlPath      => $perl_path,
     perlVersion   => $perlVersion,
     perlIncPath   => [ map { perlinc => $_ }, sort @INC ],
     mysqlVersion  => $mysqlVersion,
