@@ -467,15 +467,16 @@ sub getRecords {
                                 a => $term,
                                 f => $occ
                             );
+                            $tmprecord->append_fields($tmptitle);
                         }
                         else {
                             $tmptitle =
                               MARC::Field->new( '245', ' ', ' ', a => $term, );
                             $tmpauthor =
                               MARC::Field->new( '100', ' ', ' ', a => $occ, );
+                            $tmprecord->append_fields($tmptitle);
+                            $tmprecord->append_fields($tmpauthor);
                         }
-                        $tmprecord->append_fields($tmptitle);
-                        $tmprecord->append_fields($tmpauthor);
                         $results_hash->{'RECORDS'}[$j] =
                           $tmprecord->as_usmarc();
                     }
