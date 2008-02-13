@@ -1,7 +1,7 @@
 <!-- AJAX file upload stuff -->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/ajaxfileupload.js"></script>
 <script type="text/javascript">
-    //<![CDATA
+    //<![CDATA[
     function updateProgress() {
         $.getJSON("/cgi-bin/koha/tools/upload-file-progress.pl", function(json) {
             $("#fileuploadprogress").text(json.progress + '%');

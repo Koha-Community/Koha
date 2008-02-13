@@ -15,7 +15,7 @@ function CheckForm(f) {
     return false;
 }
 
-//]]!>
+//]]>
 </script>
 </head>
 <body>
@@ -64,9 +64,9 @@ function CheckForm(f) {
         <form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->" enctype="multipart/form-data">
 		<label for="fileToUpload">Select the file to stage: </label>
 		<input type="file" id="fileToUpload" name="fileToUpload" /><br />
-        <button clase="input" onclick="return ajaxFileUpload();">Upload file</button>
+        <button class="input" onclick="return ajaxFileUpload();">Upload file</button>
 		</form>
-        <div id="fileuploadstatus" style="display:none">Upload progress: <span id="fileuploadprogress">0<span>%</div>
+        <div id="fileuploadstatus" style="display:none">Upload progress: <span id="fileuploadprogress">0</span>%</div>
         <div id="fileuploadfailed" style="display:none"></div>
         </div>
 	</li>
@@ -76,7 +76,7 @@ function CheckForm(f) {
         <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
         <input type="hidden" name="runinbackground" id="runinbackground" value="" />
         <input type="hidden" name="completedJobID" id="completedJobID" value="" />
-	<li>
+	<ol><li>
 		<label for="comments">Notes about this file: </label>
 		<input type="text" id="comments" name="comments" />
 		
@@ -113,7 +113,7 @@ function CheckForm(f) {
     </ol>
   </fieldset>
   <fieldset class="action"><input type="button" id="mainformsubmit" onclick="return CheckForm(this.form);" value="Stage for import" /></fieldset>
-  <div id="jobstatus" style="display:none">Job progress: <span id="jobprogress">0<span>%</div>
+  <div id="jobstatus" style="display:none">Job progress: <span id="jobprogress">0</span>%</div>
   <div id="jobfailed" style="display:none"></div>
 </form>
 <!-- /TMPL_IF -->

@@ -1,6 +1,6 @@
 <!-- Background job progress indicator -->
 <script type="text/javascript">
-    //<![CDATA
+    //<![CDATA[
     var jobID = '';
     var savedForm;
     function updateJobProgress() {

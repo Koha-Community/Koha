@@ -44,8 +44,9 @@
 <!-- TMPL_ELSE -->
   No matching rule in effect
 <!-- /TMPL_IF -->
+</p>
 <!-- TMPL_IF name="can_commit" -->
-<p>
+<div>
   <form action="<!-- TMPL_VAR name="script_name" -->" method="post">
     <input type="hidden" name="op" value="redo-matching" />
     <input type="hidden" name="import_batch_id" value="<!-- TMPL_VAR name="import_batch_id" -->" />
@@ -66,9 +67,9 @@
     </select>
     <input type="submit" class="button" value="Apply different matching rule" />
   </form>
-</p>
+</div>
 <!-- /TMPL_IF -->
-<p>
+<div>
   <!-- TMPL_IF name="can_commit" -->
   <form action="<!-- TMPL_VAR name="script_name" -->" method="post">
     <input type="hidden" name="op" value="commit-batch" />
@@ -77,7 +78,7 @@
     <input type="hidden" name="import_batch_id" value="<!-- TMPL_VAR name="import_batch_id" -->" />
     <input type="submit" class="button" name="mainformsubmit" value="Complete import" onclick="return submitBackgroundJob(this.form);" />
   </form>
-  <div id="jobstatus" style="display:none">Job progress: <span id="jobprogress">0<span>%</div>
+  <div id="jobstatus" style="display:none">Job progress: <span id="jobprogress">0</span>%</div>
   <div id="jobfailed" style="display:none"></div>
   <!-- /TMPL_IF -->
   <!-- TMPL_IF name="can_revert" -->
@@ -88,10 +89,10 @@
     <input type="hidden" name="import_batch_id" value="<!-- TMPL_VAR name="import_batch_id" -->" />
     <input type="submit" class="button" name="mainformsubmit" value="Undo import" onclick="return submitBackgroundJob(this.form);" />
   </form>
-  <div id="jobstatus" style="display:none">Job progress: <span id="jobprogress">0<span>%</div>
+  <div id="jobstatus" style="display:none">Job progress: <span id="jobprogress">0</span>%</div>
   <div id="jobfailed" style="display:none"></div>
   <!-- /TMPL_IF -->
-</p>
+</div>
   <!-- TMPL_IF name="did_commit" -->
   <p><span class="problem">Completed import of records</span></p>
   <table>
