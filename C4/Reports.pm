@@ -174,15 +174,17 @@ sub get_columns {
     my ($area,$cgi) = @_;
     my $tables = $table_areas{$area};
     my @allcolumns;
+    my $first = 1;
     foreach my $table (@$tables) {
-        my @columns = _get_columns($table,$cgi);
+        my @columns = _get_columns($table,$cgi, $first);
+        $first = 0;
         push @allcolumns, @columns;
     }
     return ( \@allcolumns );
 }
 
 sub _get_columns {
-    my ($tablename,$cgi) = @_;
+    my ($tablename,$cgi, $first) = @_;
     my $dbh         = C4::Context->dbh();
     my $sth         = $dbh->prepare("show columns from $tablename");
     $sth->execute();
@@ -190,6 +192,7 @@ sub _get_columns {
 	my $column_defs = _get_column_defs($cgi);
 	my %tablehash;
 	$tablehash{'table'}=$tablename;
+    $tablehash{'__first__'} = $first;
 	push @columns, \%tablehash;
     while ( my $data = $sth->fetchrow_arrayref() ) {
         my %temphash;

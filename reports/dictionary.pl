@@ -133,7 +133,9 @@ elsif ($phase eq 'New Term step 4'){
 
 elsif ($phase eq 'New Term step 5'){
 	# Confirmation screen
+	my $areas = C4::Reports::get_report_areas();
 	my $area = $input->param('area');
+    my $areaname = $areas->[$area - 1]->{'name'};
 	my $columnstring = $input->param('columnstring');
 	my $definition_name=$input->param('definition_name');
 	my $definition_description=$input->param('definition_description');	
@@ -169,6 +171,7 @@ elsif ($phase eq 'New Term step 5'){
 	}
 	$template->param( 'step_5' => 1,
 		'area' => $area,
+		'areaname' => $areaname,
 		'definition_name' => $definition_name,
 		'definition_description' => $definition_description,
 		'query' => $query_criteria,

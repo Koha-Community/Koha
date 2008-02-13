@@ -80,22 +80,23 @@ reports</p>
 <!-- TMPL_IF NAME="saved1" -->
 <!-- TMPL_IF NAME="savedreports" --><h1>Saved Reports</h1>
 <p>Choose the report to run from the list</p>
-<table>
 <form action="/cgi-bin/koha/reports/guided_reports.pl">
-<th>Report Name</th><th>Type</th><th>Notes</th><th>Saved Results</th><th>Saved SQL</th><th colspan="3">&nbsp;</th>
+<table>
+<tr><th>Report Name</th><th>Type</th><th>Notes</th><th>Saved Results</th><th>Saved SQL</th><th colspan="3">&nbsp;</th></tr>
 <!-- TMPL_LOOP NAME="savedreports" -->
 <tr><td><!-- TMPL_VAR NAME="report_name" --></td>
 <td><!-- TMPL_VAR NAME="type" --></td>
 <td><!-- TMPL_VAR NAME="notes" --></td>
 <td><!-- TMPL_IF NAME="date_run" --><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&id=<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="date_run" --></a><!-- /TMPL_IF -->
 </td>
-<td><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&phase=Show%20SQL">Show SQL</a></td>
-<td><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&phase=Run%20this%20report">Run this Report</a></td>
+<td><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&amp;phase=Show%20SQL">Show SQL</a></td>
+<td><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&amp;phase=Run%20this%20report">Run this Report</a></td>
 <td><a href="/cgi-bin/koha/tools/scheduler.pl?id=<!-- TMPL_VAR NAME="id" -->">Schedule this Report</a></td>
-<td><a class="confirmdelete" title="delete this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&phase=Delete%20Saved">Delete</a></td></tr>
+<td><a class="confirmdelete" title="delete this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&amp;phase=Delete%20Saved">Delete</a></td></tr>
 <!-- /TMPL_LOOP -->
+</table>
 </form>
-</table><!-- TMPL_ELSE --><h4>There are no saved reports. <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build new?</a></h4><!-- /TMPL_IF -->
+<!-- TMPL_ELSE --><h4>There are no saved reports. <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build new?</a></h4><!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
 
@@ -149,7 +150,6 @@ reports</p>
 <!-- TMPL_IF NAME="build3" -->
 <h3>Step 3 of 6: Select Columns for Display</h3>
 <p>Note: Be careful selecting when selecting columns. If your choice is too broad it could result in a very large report that will either not complete, or slow your system down.</p>
-</div>
 
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
 	<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->" />
@@ -172,9 +172,10 @@ reports</p>
 <!-- TMPL_ELSE -->
 <!-- TMPL_VAR NAME="name" -->
 <!-- /TMPL_IF -->
-<!-- /TMPL_IF -->
 </option>
+<!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
+</optgroup>
 </select></div>
 <div style="width: 6.3em; float: right; margin-top: 100px"><input type="button" name="Add" value="Add" class="button" style="width:6em;" onclick="addColumn()" /><br />
 <input type="button" name="delete" value="&lt;&lt; Delete" class="button" style="width: 6em; margin: 1em 0;" onclick="delColumn()" /></div>
@@ -190,6 +191,7 @@ reports</p>
 <input type="hidden" name="phase" value="Choose these columns" />
 <input type="submit" name="submit" value="Next &gt;&gt;" />
 </fieldset>
+</div>
 </form>
 
 <!-- /TMPL_IF -->
@@ -209,12 +211,12 @@ NAME="name" -->"><!-- TMPL_VAR NAME="description" --> </label>
 <!-- TMPL_IF NAME="date" -->
 <td><input type="text" size="10" id="<!-- TMPL_VAR NAME="name"
 -->_value" name="<!-- TMPL_VAR NAME="name" -->_value" value=""
-/><img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="buttonfrom1" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />                 
+/><img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="buttonfrom<!-- TMPL_VAR NAME="name" -->" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />                 
 <script type="text/javascript">   
 Calendar.setup({  
 inputField     : "<!-- TMPL_VAR NAME="name" -->_value",                               
 ifFormat       : "%Y-%m-%d",                               
-button         : "buttonfrom1",                               
+button         : "buttonfrom<!-- TMPL_VAR NAME="name" -->",                               
 align          : "Tl" 
 });     
 </script>          
@@ -241,7 +243,7 @@ TMPL_VAR NAME="id" -->" /> <!-- TMPL_VAR NAME="name" --></td></tr>
 
 <fieldset class="action"><input type="hidden" name="phase" value="Choose these criteria" />
 <input type="submit" name="submit" value="Next &gt;&gt;" /> </fieldset>
-</form></fieldset>
+</form>
 <!-- /TMPL_IF -->
 
 

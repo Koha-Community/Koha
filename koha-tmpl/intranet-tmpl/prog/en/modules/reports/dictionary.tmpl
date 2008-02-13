@@ -30,7 +30,7 @@ Filter by area <select name="areas">
 <option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name"--></option>                  
 <!-- /TMPL_LOOP -->                
 </select> 
-<input name="phase" value="Go" type="submit">
+<input name="phase" value="Go" type="submit" />
 </form>
 <br />
 <table border="1" cellspacing="0" cellpadding="5">
@@ -72,19 +72,19 @@ Filter by area <select name="areas">
 <fieldset class="rows"><legend>Add New Definition</legend><ol>
 <li>
 <label for="definition_name">Definition Name:</label>
-<input type="text" id="definition_name" name="definition_name">
+<input type="text" id="definition_name" name="definition_name" />
 </li>
 <li>
 <label for="definition_description">Definition Description:</label>
-<textarea name="definition_description" id="definition_description"></textarea>
+<textarea name="definition_description" id="definition_description" rows="3" cols="20"></textarea>
 </li>
 </ol></fieldset>
 																													  
 <fieldset class="action"><input type="hidden" name="phase" value="New Term step 2" />
 <input name="submit" value="Next" type="submit" /></fieldset>
+</div>
+</div>
 </form>
-</div>
-</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="step_2" -->
@@ -145,9 +145,10 @@ Filter by area <select name="areas">
 <!-- TMPL_ELSE -->               
 <!-- TMPL_VAR NAME="name" -->                          
 <!-- /TMPL_IF -->              
-<!-- /TMPL_IF -->              
 </option>      
+<!-- /TMPL_IF -->              
 <!-- /TMPL_LOOP -->                
+</optgroup>
 </select></td>
 
 <td><input type="button" name="Add" value="Add" class="button"  style="width : 6em; margin-bottom : .5em;" onclick="addColumn()" /><br /><input type="button" name="delete" value="&lt;&lt; Delete" class="button" style="width : 6em;"  onclick="delColumn()" />  </td>
@@ -261,10 +262,11 @@ align          : "Tl"
 </li>
 <li>
 <span class="label">Area:</span>
-<!-- TMPL_VAR NAME="area" -->
+<!-- TMPL_VAR NAME="areaname" -->
 </li></ol>
 
-<li><table>
+<ol><li>
+<table>
 <tr>
 <th>Columns</th>
 <th>Values</th>
@@ -275,7 +277,7 @@ align          : "Tl"
 <td><!-- TMPL_VAR NAME="value" --></td>
 </tr>
 <!-- /TMPL_LOOP -->
-</table></li> </fieldset>  
+</table></li></ol> </fieldset>  
 
 <fieldset class="action"><input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="query" -->" />
 <input type="hidden" name="phase" value="New Term step 6" />
@@ -290,6 +292,7 @@ align          : "Tl"
 </div>
 </div>
 <script type="text/javascript">                            
+//<![CDATA[
 function setObjects() {                    
     selectedColumnsObj=document.getElementById('selectedColumns');           
 	availableColumnsObj=document.getElementById('availableColumns');   
@@ -315,6 +318,7 @@ function delColumn() {
     }  
   }
 }
+//]]>
 </script>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
