@@ -28,6 +28,7 @@ my $noxml;
 my $noshadow;
 my $do_munge;
 my $want_help;
+my $as_xml;
 my $result = GetOptions(
     'd:s'           => \$directory,
     'reset'         => \$reset,
@@ -39,6 +40,7 @@ my $result = GetOptions(
     'munge-config'  => \$do_munge,
     'a'             => \$authorities,
     'h|help'        => \$want_help,
+	'x'				=> \$as_xml,
 );
 
 
@@ -169,7 +171,7 @@ if ($biblios) {
         mkdir "$directory" unless (-d $directory);
         mkdir "$directory/biblios" unless (-d "$directory/biblios");
         open(OUT,">:utf8 ","$directory/biblios/export") or die $!;
-        my $dbh=C4::Context->dbh;
+		my $dbh=C4::Context->dbh;
         my $sth;
     if ($noxml){
         $sth=$dbh->prepare("select biblionumber,marc from biblioitems order by biblionumber $limit");
@@ -269,7 +271,7 @@ if ($biblios) {
             # CHECK  biblionumber
             #
             #
-            if ($biblionumbertagfield eq '001') {
+	if ($biblionumbertagfield eq '001') {
                 unless ($record->field($biblionumbertagfield) && $record->field($biblionumbertagfield)->data()) {
                     $record_correct=0;
                     my $field;
@@ -335,7 +337,7 @@ if ($biblios) {
             #
             my $encoding = C4::Context->preference("marcflavour");
             # deal with UNIMARC field 100 (encoding) : create it if needed & set encoding to unicode
-            if ( $encoding eq "UNIMARC" ) {
+			if ( $encoding eq "UNIMARC" ) {
                 my $string;
                 if ( length($record->subfield( 100, "a" )) == 35 ) {
                     $string = $record->subfield( 100, "a" );
@@ -365,21 +367,26 @@ if ($biblios) {
             substr($leader,0,5)='     ';
             substr($leader,10,7)='22     ';
             $record->leader(substr($leader,0,24));
-            print OUT $record->as_usmarc();
-        }
+			if($as_xml) {
+				print OUT $record->as_xml_record();
+				} else {
+				print OUT $record->as_usmarc();
+			}
+			}
+		}
         close(OUT);
-    }
     }
     
     #
     # and reindexing everything
     #
-    print "====================\n";
+	print "====================\n";
     print "REINDEXING zebra\n";
     print "====================\n";
-    system("zebraidx -g iso2709 -c ".C4::Context->zebraconfig('biblioserver')->{config}." -d biblios init") if ($reset);
-    system("zebraidx -g iso2709 -c ".C4::Context->zebraconfig('biblioserver')->{config}." $noshadow -d biblios update $directory/biblios");
-    system("zebraidx -g iso2709 -c ".C4::Context->zebraconfig('biblioserver')->{config}." -d biblios commit") unless $noshadow;
+	my $record_fmt = ($as_xml) ? 'marcxml' : 'iso2709' ;
+    system("zebraidx -g $record_fmt -c ".C4::Context->zebraconfig('biblioserver')->{config}." -d biblios init") if ($reset);
+    system("zebraidx -g $record_fmt -c ".C4::Context->zebraconfig('biblioserver')->{config}." $noshadow -d biblios update $directory/biblios");
+    system("zebraidx -g $record_fmt -c ".C4::Context->zebraconfig('biblioserver')->{config}." -d biblios commit") unless $noshadow;
 } else {
     print "skipping biblios\n";
 }
@@ -442,6 +449,9 @@ Parameters:
                             option is recommended only
                             for advanced user.
 
+    -x                      export and index as xml instead of is02709 (biblios only).
+                            use this if you might have records > 99,999 chars,
+							
     -w                      skip shadow indexing for this batch
 
     -munge-config           Deprecated option to try
