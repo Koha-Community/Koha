@@ -751,6 +751,7 @@ sub get_install_log_values {
         next if /^#/ or /^\s*$/;
         next if /^=/;
         next unless m/=/;
+        s/\s+$//g;
         my ($key, $value) = split /=/, $_, 2;
         $values->{$key} = $value;
     }
@@ -1355,6 +1356,8 @@ install :: all install_koha warn_koha_env_vars
         $install .= _update_zebra_conf_target();
     }
 
+    $install .= upgrade();
+
     return $install;
 }
 
@@ -1376,6 +1379,39 @@ sub _update_zebra_conf_target {
     $target .= "\t\$(NOECHO) chmod -R u+w \$(KOHA_DEST_PAZPAR2_CONF_DIR)\n" unless $^O eq "MSWin32";
 
     return $target;
+}
+
+sub upgrade {
+    my $upgrade = ""; 
+
+    my $backup_suffix;
+    if (exists $install_log_values{'KOHA_INSTALLED_VERSION'}) {
+        my $version = $install_log_values{'KOHA_INSTALLED_VERSION'};
+        $version =~ s/\./_/g;
+        $backup_suffix = "_koha_$version";
+    } else {
+        $backup_suffix = "_upgrade_backup";
+    }
+
+    $upgrade .= qq/
+MOD_BACKUP = \$(ABSPERLRUN) -Minstall_misc::UpgradeBackup -e 'backup_changed_files({\@ARGV}, '$backup_suffix', '\''\$(VERBINST)'\'', '\''\$(UNINST)'\'');' --
+
+upgrade :: make_upgrade_backup install
+\t\$(NOECHO) \$(NOOP)
+make_upgrade_backup ::
+\t\$(NOECHO) umask 022; \$(MOD_BACKUP) \\
+\t\t\$(KOHA_INST_KOHA_CONF_DIR) \$(KOHA_DEST_KOHA_CONF_DIR) \\
+\t\t\$(KOHA_INST_INTRANET_TMPL_DIR) \$(KOHA_DEST_INTRANET_TMPL_DIR) \\
+\t\t\$(KOHA_INST_INTRANET_WWW_DIR) \$(KOHA_DEST_INTRANET_WWW_DIR) \\
+\t\t\$(KOHA_INST_OPAC_TMPL_DIR) \$(KOHA_DEST_OPAC_TMPL_DIR) \\
+\t\t\$(KOHA_INST_OPAC_WWW_DIR) \$(KOHA_DEST_OPAC_WWW_DIR) \\
+\t\t\$(KOHA_INST_OPAC_TMPL_DIR) \$(KOHA_DEST_OPAC_TMPL_DIR) \\
+\t\t\$(KOHA_INST_OPAC_WWW_DIR) \$(KOHA_DEST_OPAC_WWW_DIR) \\
+\t\t\$(KOHA_INST_PAZPAR2_CONF_DIR) \$(KOHA_DEST_PAZPAR2_CONF_DIR) \\
+\t\t\$(KOHA_INST_ZEBRA_CONF_DIR) \$(KOHA_DEST_ZEBRA_CONF_DIR)
+/;
+
+    return $upgrade;
 }
 
 sub postamble {
