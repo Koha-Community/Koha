@@ -52,8 +52,13 @@ BEGIN {
 		&delete_layout &get_active_layout
 		&get_highest_batch
 		&deduplicate_batch
+                &GetAllPrinterProfiles &GetSinglePrinterProfile
+                &SaveProfile &CreateProfile &DeleteProfile
+                &GetAssociatedProfile &SetAssociatedProfile
 	);
 }
+
+my $DEBUG = 0;
 
 =head1 NAME
 
@@ -558,6 +563,164 @@ sub save_layout {
     return;
 }
 
+=item GetAllPrinterProfiles;
+
+    @profiles = GetAllPrinterProfiles()
+
+Returns an array of references-to-hash, whos keys are .....
+
+=cut
+
+sub GetAllPrinterProfiles {
+
+    my $dbh = C4::Context->dbh;
+    my @data;
+    my $query = "SELECT * FROM printers_profile AS pp INNER JOIN labels_templates AS lt ON pp.tmpl_id = lt.tmpl_id; ";
+    my $sth = $dbh->prepare($query);
+    $sth->execute();
+    my @resultsloop;
+    while ( my $data = $sth->fetchrow_hashref ) {
+        push( @resultsloop, $data );
+    }
+    $sth->finish;
+
+    return @resultsloop;
+}
+
+=item GetSinglePrinterProfile;
+
+    $profile = GetSinglePrinterProfile()
+
+Returns a hashref whos keys are...
+
+=cut
+
+sub GetSinglePrinterProfile {
+    my ($prof_id) = @_;
+    my $dbh       = C4::Context->dbh;
+    my $query     = " SELECT * FROM printers_profile WHERE prof_id = ?; ";
+    my $sth       = $dbh->prepare($query);
+    $sth->execute($prof_id);
+    my $template = $sth->fetchrow_hashref;
+    $sth->finish;
+    return $template;
+}
+
+=item SaveProfile;
+
+    SaveProfile('parameters')
+
+When passed a set of parameters, this function updates the given profile with the new parameters.
+
+=cut
+
+sub SaveProfile {
+    my (
+        $prof_id,       $offset_horz,   $offset_vert,   $creep_horz,    $creep_vert,    $units
+    ) = @_;
+    my $dbh = C4::Context->dbh;
+    my $query =
+      " UPDATE printers_profile
+        SET offset_horz=?, offset_vert=?, creep_horz=?, creep_vert=?, unit=? 
+        WHERE prof_id = ? ";
+    my $sth = $dbh->prepare($query);
+    $sth->execute(
+        $offset_horz,   $offset_vert,   $creep_horz,    $creep_vert,    $units,         $prof_id
+    );
+    $sth->finish;
+}
+
+=item CreateProfile;
+
+    CreateProfile('parameters')
+
+When passed a set of parameters, this function creates a new profile containing those parameters
+and returns any errors.
+
+=cut
+
+sub CreateProfile {
+    my (
+        $prof_id,       $printername,   $paper_bin,     $tmpl_id,     $offset_horz,
+        $offset_vert,   $creep_horz,    $creep_vert,    $units
+    ) = @_;
+    my $dbh = C4::Context->dbh;
+    my $query = 
+        " INSERT INTO printers_profile (prof_id, printername, paper_bin, tmpl_id,
+                                        offset_horz, offset_vert, creep_horz, creep_vert, unit)
+          VALUES(?,?,?,?,?,?,?,?,?) ";
+    my $sth = $dbh->prepare($query);
+    $sth->execute(
+        $prof_id,       $printername,   $paper_bin,     $tmpl_id,     $offset_horz,
+        $offset_vert,   $creep_horz,    $creep_vert,    $units
+    );
+    my $error =  $sth->errstr;
+    $sth->finish;
+    return $error;
+}
+
+=item DeleteProfile;
+
+    DeleteProfile(prof_id)
+
+When passed a profile id, this function deletes that profile from the database and returns any errors.
+
+=cut
+
+sub DeleteProfile {
+    my ($prof_id) = @_;
+    my $dbh       = C4::Context->dbh;
+    my $query     = " DELETE FROM printers_profile WHERE prof_id = ?";
+    my $sth       = $dbh->prepare($query);
+    $sth->execute($prof_id);
+    my $error = $sth->errstr;
+    $sth->finish;
+    return $error;
+}
+
+=item GetAssociatedProfile;
+
+    $assoc_prof = GetAssociatedProfile(tmpl_id)
+
+When passed a template id, this function returns the parameters from the currently associated printer profile
+in a hashref where key=fieldname and value=fieldvalue.
+
+=cut
+
+sub GetAssociatedProfile {
+    my ($tmpl_id) = @_;
+    my $dbh   = C4::Context->dbh;
+    # First we find out the prof_id for the associated profile...
+    my $query = "SELECT * FROM labels_profile WHERE tmpl_id = ?";
+    my $sth   = $dbh->prepare($query);
+    $sth->execute($tmpl_id);
+    my $assoc_prof = $sth->fetchrow_hashref;
+    $sth->finish;
+    # Then we retrieve that profile and return it to the caller...
+    $assoc_prof = GetSinglePrinterProfile($assoc_prof->{'prof_id'});
+    return $assoc_prof;
+}
+
+=item SetAssociatedProfile;
+
+    SetAssociatedProfile($prof_id, $tmpl_id)
+
+When passed both a profile id and template id, this function establishes an association between the two. No more
+than one profile may be associated with any given template at the same time.
+
+=cut
+
+sub SetAssociatedProfile {
+
+    my ($prof_id, $tmpl_id) = @_;
+  
+    my $dbh = C4::Context->dbh;
+    my $query = "INSERT INTO labels_profile (prof_id, tmpl_id) VALUES (?,?) ON DUPLICATE KEY UPDATE prof_id = ?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($prof_id, $tmpl_id, $prof_id);
+    $sth->finish;
+}
+
 =item get_label_items;
 
         $options = get_label_items()
@@ -875,9 +1038,8 @@ sub DrawBarcode {
 
     my $moo2 = $tot_bar_length * $xsize_ratio;
 
-    warn " $x_pos, $y_pos, $barcode, $barcodetype\n";
-    warn
-"BAR_WDTH = $bar_width, TOT.BAR.LGHT=$tot_bar_length  R*TOT.BAR =$moo2 \n";
+    warn "$x_pos, $y_pos, $barcode, $barcodetype" if $DEBUG;
+    warn "BAR_WDTH = $bar_width, TOT.BAR.LGHT=$tot_bar_length  R*TOT.BAR =$moo2" if $DEBUG;
 }
 
 =item build_circ_barcode;

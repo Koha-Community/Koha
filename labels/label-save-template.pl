@@ -32,7 +32,7 @@ my $rowgap       = $query->param('rowgap');
 my $fontsize     = $query->param('fontsize');
 my $units        = $query->param('units');
 my $active       = $query->param('active');
-
+my $prof_id      = $query->param('prof_id');
 
 SaveTemplate(
 
@@ -43,7 +43,8 @@ SaveTemplate(
 
 );
 
+SetAssociatedProfile( $prof_id, $tmpl_id );
 
- print $query->redirect("./label-templates.pl");
+print $query->redirect("./label-templates.pl");
 
 

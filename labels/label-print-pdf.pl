@@ -13,6 +13,9 @@ use POSIX;
 #use C4::Labels;
 #use Smart::Comments;
 
+my $DEBUG = 0;
+my $DEBUG_LPT = 0;
+
 my $htdocs_path = C4::Context->config('intrahtdocs');
 my $cgi         = new CGI;
 print $cgi->header( -type => 'application/pdf', -attachment => 'barcode.pdf' );
@@ -24,6 +27,7 @@ my $spine_text = "";
 # get the printing settings
 my $template    = GetActiveLabelTemplate();
 my $conf_data   = get_label_options();
+my $profile = GetAssociatedProfile($template->{'tmpl_id'});
 
 my $batch_id =   $cgi->param('batch_id');
 my @resultsloop = get_label_items($batch_id);
@@ -34,6 +38,10 @@ my $barcodetype  = $conf_data->{'barcodetype'};
 my $printingtype = $conf_data->{'printingtype'};
 my $guidebox     = $conf_data->{'guidebox'};
 my $start_label  = $conf_data->{'startlabel'};
+if ($cgi->param('startlabel')) {
+        $start_label = $cgi->param('startlabel');       # A bit of a hack to allow setting the starting label from the address bar... -fbcit
+    }
+warn "Starting on label #$start_label" if $DEBUG;
 my $fontsize     = $template->{'fontsize'};
 my $units        = $template->{'units'};
 
@@ -56,6 +64,8 @@ my $units        = 'POINTS'
 
 my $unitvalue = GetUnitsValue($units);
 
+warn "Template units: $units which converts to $unitvalue PostScript Points" if $DEBUG;
+
 my $tmpl_code = $template->{'tmpl_code'};
 my $tmpl_desc = $template->{'tmpl_desc'};
 
@@ -70,10 +80,14 @@ my $left_margin  = ( $template->{'leftmargin'} * $unitvalue );
 my $colspace     = ( $template->{'colgap'} * $unitvalue );
 my $rowspace     = ( $template->{'rowgap'} * $unitvalue );
 
+warn "Converted dimensions are:" if $DEBUG;
+warn "pghth=$page_height, pgwth=$page_width, lblhth=$label_height, lblwth=$label_width, spinwth=$spine_width, circwth=$circ_width, tpmar=$top_margin, lmar=$left_margin, colsp=$colspace, rowsp=$rowspace" if $DEBUG;
+
 my $label_cols = $template->{'cols'};
 my $label_rows = $template->{'rows'};
 
 my $text_wrap_cols = GetTextWrapCols( $fontsize, $label_width );
+
 
 #warn $label_cols, $label_rows;
 
@@ -103,7 +117,38 @@ my $str;
 my $codetype; # = 'Code39';
 
 #do page border
-#drawbox( $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY );
+# drawbox( $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY );
+
+# draw margin box for alignment page
+drawbox( ($left_margin), ($top_margin), ($page_width-(2*$left_margin)), ($page_height-(2*$top_margin)) ) if $DEBUG_LPT;
+
+# Adjustments for image position and creep -fbcit
+# NOTE: *All* of these factor in to image position and creep. Keep this in mind when makeing adjustments.
+# Suggested proceedure: Adjust margins until both top and left margins are correct. Then adjust the label
+# height and width to correct label creep across and down page. Units are PostScript Points (72 per inch).
+
+warn "Active profile: $profile->{'prof_id'}" if $DEBUG;
+
+if ( $DEBUG ) {
+warn "-------------------------INITIAL VALUES-----------------------------";
+warn "top margin = $top_margin points\n";
+warn "left margin = $left_margin points\n";
+warn "label height = $label_height points\n";
+warn "label width = $label_width points\n";
+}
+
+$top_margin = $top_margin + $profile->{'offset_vert'};    #  controls vertical offset
+$label_height = $label_height + $profile->{'creep_vert'};    # controls vertical creep
+$left_margin = $left_margin + $profile->{'offset_horz'};    # controls horizontal offset
+$label_width = $label_width + $profile->{'creep_horz'};    # controls horizontal creep
+
+if ( $DEBUG ) {
+warn "-------------------------ADJUSTED VALUES-----------------------------";
+warn "top margin = $top_margin points\n";
+warn "left margin = $left_margin points\n";
+warn "label height = $label_height points\n";
+warn "label width = $label_width points\n";
+}
 
 my $item;
 my ( $i, $i2 );    # loop counters
@@ -140,6 +185,9 @@ else {
     $y_pos = $page_height - $top_margin - ( $label_height * $rowcount ) -
       ( $rowspace * ( $rowcount - 1 ) );
 
+    warn "Start label specified: $start_label Beginning in row $rowcount, column $colcount" if $DEBUG;
+    warn "X position = $x_pos Y position = $y_pos" if $DEBUG;
+    warn "Rowspace = $rowspace Label height = $label_height" if $DEBUG;
 }
 
 #warn "ROW COL $rowcount, $colcount";
@@ -151,7 +199,7 @@ else {
 #
 
 foreach $item (@resultsloop) {
-#    warn "$x_pos, $y_pos, $label_width, $label_height";
+    warn "Label parameters: xpos=$x_pos, ypos=$y_pos, lblwid=$label_width, lblhig=$label_height" if $DEBUG;
     my $barcode = $item->{'barcode'};
     if ( $printingtype eq 'BAR' ) {
         drawbox( $x_pos, $y_pos, $label_width, $label_height ) if $guidebox;

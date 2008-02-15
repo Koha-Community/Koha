@@ -24,6 +24,7 @@ my $columns    = $query->param('columns');
 my $rows       = $query->param('rows');
 my $colgap     = $query->param('colgap');
 my $rowgap     = $query->param('rowgap');
+my $prof_id    = $query->param('prof_id');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -37,6 +38,26 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $tmpl = GetSingleLabelTemplate($tmpl_id);
+my $curprof = GetAssociatedProfile($tmpl_id);
+my @prof = GetAllPrinterProfiles();
+my @proflist;
+
+# Generate an array of hashes containing possible profiles for given template and mark the currently associated one...
+
+foreach my $prof (@prof) {
+    if ( $prof->{'tmpl_id'} eq $tmpl->{'tmpl_id'} && $prof->{'prof_id'} eq $curprof->{'prof_id'} ) {
+        push ( @proflist,  {prof_id         => $prof->{'prof_id'},
+                            printername     => $prof->{'printername'},
+                            paper_bin       => $prof->{'paper_bin'},
+                            selected        => 1} );
+    }
+    
+    elsif ( $prof->{'tmpl_id'} eq $tmpl->{'tmpl_id'} ) {
+        push ( @proflist,  {prof_id         => $prof->{'prof_id'},
+                            printername     => $prof->{'printername'},
+                            paper_bin       => $prof->{'paper_bin'}} );
+    }
+}
 
 my @units = (
     { unit => 'INCH',  desc => 'Inches' },
@@ -53,7 +74,8 @@ foreach my $unit (@units) {
 
 $template->param(
 
-    units => \@units,
+    proflist     => \@proflist,
+    units        => \@units,
 
     tmpl_id      => $tmpl->{'tmpl_id'},
     tmpl_code    => $tmpl->{'tmpl_code'},

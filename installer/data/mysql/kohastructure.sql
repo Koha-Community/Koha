@@ -1124,6 +1124,18 @@ CREATE TABLE `labels_conf` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Table structure for table `labels_profile`
+--
+
+DROP TABLE IF EXISTS `labels_profile`;
+CREATE TABLE `labels_profile` (
+  `tmpl_id` int(4) NOT NULL,
+  `prof_id` int(4) NOT NULL,
+  UNIQUE KEY `tmpl_id` (`tmpl_id`),
+  UNIQUE KEY `prof_id` (`prof_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
 -- Table structure for table `labels_templates`
 --
 
@@ -1386,6 +1398,26 @@ CREATE TABLE `printers` (
   `printqueue` varchar(20) default NULL,
   `printtype` varchar(20) default NULL,
   PRIMARY KEY  (`printername`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `printers_profile`
+--
+
+DROP TABLE IF EXISTS `printers_profile`;
+CREATE TABLE `printers_profile` (
+  `prof_id` int(4) NOT NULL auto_increment,
+  `printername` varchar(40) NOT NULL,
+  `tmpl_id` int(4) NOT NULL,
+  `paper_bin` varchar(20) NOT NULL,
+  `offset_horz` float default NULL,
+  `offset_vert` float default NULL,
+  `creep_horz` float default NULL,
+  `creep_vert` float default NULL,
+  `unit` char(20) NOT NULL default 'POINT',
+  PRIMARY KEY  (`prof_id`),
+  UNIQUE KEY `printername` (`printername`,`tmpl_id`,`paper_bin`),
+  CONSTRAINT `printers_profile_pnfk_1` FOREIGN KEY (`tmpl_id`) REFERENCES `labels_templates` (`tmpl_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
