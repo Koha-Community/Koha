@@ -81,6 +81,12 @@ sub backup_changed_files {
 
 =head1 AUTHOR
 
+Code based on parts of ExtUtils::Install in order to
+approximately track how it identifies files to
+install.
+
+Koha Development Team <info@koha.org>
+
 Galen Charlton <galen.charlton@liblime.com>
 
 =cut

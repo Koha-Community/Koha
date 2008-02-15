@@ -1400,16 +1400,15 @@ upgrade :: make_upgrade_backup install
 \t\$(NOECHO) \$(NOOP)
 make_upgrade_backup ::
 \t\$(NOECHO) umask 022; \$(MOD_BACKUP) \\
-\t\t\$(KOHA_INST_KOHA_CONF_DIR) \$(KOHA_DEST_KOHA_CONF_DIR) \\
-\t\t\$(KOHA_INST_INTRANET_TMPL_DIR) \$(KOHA_DEST_INTRANET_TMPL_DIR) \\
-\t\t\$(KOHA_INST_INTRANET_WWW_DIR) \$(KOHA_DEST_INTRANET_WWW_DIR) \\
-\t\t\$(KOHA_INST_OPAC_TMPL_DIR) \$(KOHA_DEST_OPAC_TMPL_DIR) \\
-\t\t\$(KOHA_INST_OPAC_WWW_DIR) \$(KOHA_DEST_OPAC_WWW_DIR) \\
-\t\t\$(KOHA_INST_OPAC_TMPL_DIR) \$(KOHA_DEST_OPAC_TMPL_DIR) \\
-\t\t\$(KOHA_INST_OPAC_WWW_DIR) \$(KOHA_DEST_OPAC_WWW_DIR) \\
-\t\t\$(KOHA_INST_PAZPAR2_CONF_DIR) \$(KOHA_DEST_PAZPAR2_CONF_DIR) \\
-\t\t\$(KOHA_INST_ZEBRA_CONF_DIR) \$(KOHA_DEST_ZEBRA_CONF_DIR)
 /;
+    foreach my $key (qw/KOHA_CONF_DIR INTRANET_TMPL_DIR INTRANET_WWW_DIR OPAC_TMPL_DIR OPAC_WWW_DIR
+                     PAZPAR2_CONF_DIR ZEBRA_CONF_DIR/) {
+    	$upgrade .= "\t\t\$(KOHA_INST_$key) \$(KOHA_DEST_$key) \\\n" 
+            unless ($config{'INSTALL_ZEBRA'} ne "yes" and $key =~ /ZEBRA/) or
+                   exists $skip_directories->{$key} or
+                   not exists $target_directories->{$key};
+    }
+    $upgrade =~ s/\\\n$/\n/;
 
     return $upgrade;
 }
