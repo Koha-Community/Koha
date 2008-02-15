@@ -22,6 +22,8 @@
 require Exporter;
 use C4::Context;
 
+my $DEBUG = 0;
+
 =head1
 
 plugin_parameters : other parameters added when the plugin is called by the dopop function
@@ -74,11 +76,13 @@ sub plugin_javascript {
 	my $date = "$year";
 
 	my ($tag,$subfield) =  GetMarcFromKohaField("items.barcode");
+	my ($loctag,$locsubfield) =  GetMarcFromKohaField("items.homebranch");
 
 	my $nextnum;
 	my $query;
+        my $scr;
 	my $autoBarcodeType = C4::Context->preference("autoBarcode");
-        warn "Barcode type = $autoBarcodeType";
+        warn "Barcode type = $autoBarcodeType" if $DEBUG;
 	unless ($autoBarcodeType eq 'OFF' or !$autoBarcodeType) {
 
 	if ($autoBarcodeType eq 'annual') {
@@ -86,11 +90,20 @@ sub plugin_javascript {
 		my $sth=$dbh->prepare($query);
 		$sth->execute("$year%");
 		while (my ($count)= $sth->fetchrow_array) {
+                    warn "Examining Record: $count" if $DEBUG;
     		$nextnum = $count if $count;
 		}
 		$nextnum++;
 		$nextnum = sprintf("%0*d", "4",$nextnum);
 		$nextnum = "$year-$nextnum";
+                $scr = " 
+		for (i=0 ; i<document.f.field_value.length ; i++) {
+			if (document.f.tag[i].value == '$tag' && document.f.subfield[i].value == '$subfield') {
+				if (document.f.field_value[i].value == '') {
+					document.f.field_value[i].value = '$nextnum';
+				}
+			}
+		}";
 	}
 	elsif ($autoBarcodeType eq 'incremental') {
 		# not the best, two catalogers could add the same barcode easily this way :/
@@ -101,7 +114,44 @@ sub plugin_javascript {
 			$nextnum = $count;
 		}
 		$nextnum++;
+                $scr = " 
+		for (i=0 ; i<document.f.field_value.length ; i++) {
+			if (document.f.tag[i].value == '$tag' && document.f.subfield[i].value == '$subfield') {
+				if (document.f.field_value[i].value == '') {
+					document.f.field_value[i].value = '$nextnum';
+				}
+			}
+		}";
 	}
+        elsif ($autoBarcodeType eq 'hbyymmincr') {      # Generates a barcode where hb = home branch Code, yymm = year/month catalogued, incr = incremental number, reset yearly -fbcit
+            $year = substr($year, -2);
+	    $query = "SELECT MAX(CAST(SUBSTRING(barcode,7,4) AS signed)) FROM items WHERE barcode REGEXP ?";
+	    my $sth=$dbh->prepare($query);
+	    $sth->execute("^[a-zA-Z]{1,}$year");
+	    while (my ($count)= $sth->fetchrow_array) {
+    	        $nextnum = $count if $count;
+                warn "Existing incremental number = $nextnum" if $DEBUG;
+	    }
+	    $nextnum++;
+            $nextnum = sprintf("%0*d", "4",$nextnum);
+            $nextnum = $year . $mon . $nextnum;
+            warn "New Barcode = $nextnum" if $DEBUG;
+            $scr = " 
+		for (i=0 ; i<document.f.field_value.length ; i++) {
+			if (document.f.tag[i].value == '$loctag' && document.f.subfield[i].value == '$locsubfield') {
+				fnum = i;
+			}
+		}
+		for (i=0 ; i<document.f.field_value.length ; i++) {
+			if (document.f.tag[i].value == '$tag' && document.f.subfield[i].value == '$subfield') {
+				if (document.f.field_value[i].value == '') {
+					document.f.field_value[i].value = document.f.field_value[fnum].value + '$nextnum';
+				}
+			}
+		}";
+        }
+
+
 		my $res  = "
 <script type=\"text/javascript\">
 //<![CDATA[
@@ -110,32 +160,22 @@ sub plugin_javascript {
 //need this?
 //}
 
-// Commenting this out so that the user can enter their own text w/the script prefilling the field on-focus -fbcit
-//function Focus$function_name(subfield_managed) {
-//		for (i=0 ; i<document.f.field_value.length ; i++) {
-//			if (document.f.tag[i].value == '$tag' && document.f.subfield[i].value == '$subfield') {
-//				if (document.f.field_value[i].value == '') {
-//					document.f.field_value[i].value = '$nextnum';
-//				}
-//			}
-//		}
-//return 0;
-//}
+function Focus$function_name(subfield_managed) {";
 
-function Clic$function_name(subfield_managed) {
-		for (i=0 ; i<document.f.field_value.length ; i++) {
-			if (document.f.tag[i].value == '$tag' && document.f.subfield[i].value == '$subfield') {
-				if (document.f.field_value[i].value == '') {
-					document.f.field_value[i].value = '$nextnum';
-				}
-			}
-		}
+$res .= $scr;
+$res .= "
+return 0;
+}
+
+function Clic$function_name(subfield_managed) {";
+
+$res .= $scr;
+$res .= "
 return 0;
 }
 //]]>
 </script>
 ";
-
 	# don't return a value unless we have the appropriate syspref set
 	return ($function_name,$res);
 	}
