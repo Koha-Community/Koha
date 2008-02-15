@@ -24,6 +24,7 @@ use warnings;
 use ExtUtils::MakeMaker;
 use POSIX;
 use File::Spec;
+use Getopt::Long;
 
 my $DEBUG = 0;
 die "perl 5.6.1 or later required" unless ($] >= 5.006001);
@@ -41,14 +42,25 @@ Makefile.PL - Koha packager and installer
 
 =head2 BASIC INSTALLATION
 
-	perl Makefile.PL
-	make
-	sudo make install
+    perl Makefile.PL
+    make
+    make test
+    sudo make install
+
+=head2 UPGRADE INSTALLATION
+
+    perl Makefile.PL --prev-install-log /path/to/koha-install-log
+    -OR-
+    perl Makefile.PL # if no koha-install-log available
+
+    make
+    make test
+    sudo make upgrade
 
 =head2 PACKAGING RELEASE TARBALLS
 
-	make manifest tardist
-	make manifest zipdist
+    make manifest tardist
+    make manifest zipdist
 
 =head2 CLEANING UP
 
@@ -428,7 +440,19 @@ my %valid_config_values = (
   'ZEBRA_LANGUAGE'    => { 'en' => 1, 'fr' => 1 }, # FIXME should generate from contents of distribution
 );
 
-my %config = get_configuration(\%config_defaults, \%valid_config_values);
+# get settings from command-line
+my $koha_install_log = "";
+Getopt::Long::Configure('pass_through');
+my $results = GetOptions(
+    "prev-install-log=s" => \$koha_install_log
+);
+
+my %install_log_values = ();
+if ($koha_install_log ne "") {
+    get_install_log_values($koha_install_log, \%install_log_values);
+}
+
+my %config = get_configuration(\%config_defaults, \%valid_config_values, \%install_log_values);
 my ($target_directories, $skip_directories) = get_target_directories(\%config);
 display_configuration(\%config, $target_directories);
 my $file_map = {};
@@ -710,6 +734,37 @@ sub _add_to_file_map {
     }
 }
 
+=head2 get_install_log_values
+
+Reads value from the Koha install log specified by
+--prev-install-log
+
+=cut
+
+sub get_install_log_values {
+    my $install_log = shift;
+    my $values = shift;
+    
+    open LOG, "<$install_log" or die "Cannot open install log $install_log: $!\n";
+    while (<LOG>) {
+        chomp;
+        next if /^#/ or /^\s*$/;
+        next if /^=/;
+        next unless m/=/;
+        my ($key, $value) = split /=/, $_, 2;
+        $values->{$key} = $value;
+    }
+    close LOG;
+
+    print <<_EXPLAIN_INSTALL_LOG_;
+Reading values from install log $install_log.  You
+will be prompted only for settings that have been
+added since the last time you installed Koha.  To
+be prompted for all settings, run 'perl Makefile.PL'
+without the --prev-install-log option.
+_EXPLAIN_INSTALL_LOG_
+}
+
 =head2 get_configuration
 
 This prompts the user for various configuration options.
@@ -719,6 +774,7 @@ This prompts the user for various configuration options.
 sub get_configuration {
   my $defaults = shift;
   my $valid_values = shift;
+  my $install_log_values = shift;
   my %config = ();
 
   my $msg = q(
@@ -743,7 +799,7 @@ dev:      Create a set of symbolic links and configuration files to
 
 Installation mode);
     $msg .= _add_valid_values_disp('INSTALL_MODE', $valid_values);
-    $config{'INSTALL_MODE'} = _get_value('INSTALL_MODE', $msg, $defaults->{'INSTALL_MODE'}, $valid_values);
+    $config{'INSTALL_MODE'} = _get_value('INSTALL_MODE', $msg, $defaults->{'INSTALL_MODE'}, $valid_values, $install_log_values);
 
     # set message and default value for INSTALL_BASE
     # depending on value of INSTALL_MODE
@@ -781,7 +837,7 @@ as the package name in the FHS layout.
 
 Base installation directory);
     }
-    $config{'INSTALL_BASE'} = _get_value('INSTALL_BASE', $msg, $install_base_default, $valid_values);
+    $config{'INSTALL_BASE'} = _get_value('INSTALL_BASE', $msg, $install_base_default, $valid_values, $install_log_values);
 
     $config{'INSTALL_BASE'} = File::Spec->rel2abs($config{'INSTALL_BASE'});
 	print "INSTALL_BASE=$config{'INSTALL_BASE'}\r\n" if $DEBUG;
@@ -803,7 +859,7 @@ user should not be the same as the user
 account Apache runs under.
 
 User account);
-        $config{'KOHA_USER'} = _get_value('KOHA_USER', $msg, $defaults->{'KOHA_USER'}, $valid_values);
+        $config{'KOHA_USER'} = _get_value('KOHA_USER', $msg, $defaults->{'KOHA_USER'}, $valid_values, $install_log_values);
 
         $msg = q(
 Please specify the group that should own
@@ -812,7 +868,7 @@ not exist right now, but should be created
 before you run 'make install'.
 
 Group);
-        $config{'KOHA_GROUP'} = _get_value('KOHA_GROUP', $msg, $defaults->{'KOHA_GROUP'}, $valid_values);
+        $config{'KOHA_GROUP'} = _get_value('KOHA_GROUP', $msg, $defaults->{'KOHA_GROUP'}, $valid_values, $install_log_values);
     }
 
     $msg = q(
@@ -823,7 +879,7 @@ PostgreSQL support is highly experimental.
 
 DBMS to use);
     $msg .= _add_valid_values_disp('DB_TYPE', $valid_values);
-    $config{'DB_TYPE'} = _get_value('DB_TYPE', $msg, $defaults->{'DB_TYPE'}, $valid_values);
+    $config{'DB_TYPE'} = _get_value('DB_TYPE', $msg, $defaults->{'DB_TYPE'}, $valid_values, $install_log_values);
 
     $msg = q(
 Please specify the name or address of your 
@@ -833,28 +889,28 @@ can be created after running 'make install'
 and before you try using Koha for the first time.
 
 Database server);
-    $config{'DB_HOST'} = _get_value('DB_HOST', $msg, $defaults->{'DB_HOST'}, $valid_values);
+    $config{'DB_HOST'} = _get_value('DB_HOST', $msg, $defaults->{'DB_HOST'}, $valid_values, $install_log_values);
 
     $msg = q(
 Please specify the port used to connect to the
 DMBS);
     my $db_port_default = $config{'DB_TYPE'} eq 'mysql' ? '3306' : '5432';
-    $config{'DB_PORT'} = _get_value('DB_PORT', $msg, $db_port_default, $valid_values);
+    $config{'DB_PORT'} = _get_value('DB_PORT', $msg, $db_port_default, $valid_values, $install_log_values);
 
     $msg = q(
 Please specify the name of the database to be
 used by Koha);
-    $config{'DB_NAME'} = _get_value('DB_NAME', $msg, $defaults->{'DB_NAME'}, $valid_values);
+    $config{'DB_NAME'} = _get_value('DB_NAME', $msg, $defaults->{'DB_NAME'}, $valid_values, $install_log_values);
 
     $msg = q(
 Please specify the user that owns the database to be
 used by Koha);
-    $config{'DB_USER'} = _get_value('DB_USER', $msg, $defaults->{'DB_USER'}, $valid_values);
+    $config{'DB_USER'} = _get_value('DB_USER', $msg, $defaults->{'DB_USER'}, $valid_values, $install_log_values);
 
     $msg = q(
 Please specify the password of the user that owns the 
 database to be used by Koha);
-    $config{'DB_PASS'} = _get_value('DB_PASS', $msg, $defaults->{'DB_PASS'}, $valid_values);
+    $config{'DB_PASS'} = _get_value('DB_PASS', $msg, $defaults->{'DB_PASS'}, $valid_values, $install_log_values);
 
     $msg = q(
 Koha can use the Zebra search engine for high-performance
@@ -869,7 +925,7 @@ settings.  Those references will be ignored by Koha.
 
 Install the Zebra configuration files?);
     $msg .= _add_valid_values_disp('INSTALL_ZEBRA', $valid_values);
-    $config{'INSTALL_ZEBRA'} = _get_value('INSTALL_ZEBRA', $msg, $defaults->{'INSTALL_ZEBRA'}, $valid_values);
+    $config{'INSTALL_ZEBRA'} = _get_value('INSTALL_ZEBRA', $msg, $defaults->{'INSTALL_ZEBRA'}, $valid_values, $install_log_values);
 
     if ($config{'INSTALL_ZEBRA'} eq 'yes') {
         $msg = q(
@@ -882,7 +938,7 @@ and UNIMARC.
 
 MARC format for Zebra indexing);
         $msg .= _add_valid_values_disp('ZEBRA_MARC_FORMAT', $valid_values);
-        $config{'ZEBRA_MARC_FORMAT'} = _get_value('ZEBRA_MARC_FORMAT', $msg, $defaults->{'ZEBRA_MARC_FORMAT'}, $valid_values);
+        $config{'ZEBRA_MARC_FORMAT'} = _get_value('ZEBRA_MARC_FORMAT', $msg, $defaults->{'ZEBRA_MARC_FORMAT'}, $valid_values, $install_log_values);
         $msg = q(
 Koha supplies Zebra configuration files tuned for
 searching either English (en) or French (fr) MARC
@@ -890,7 +946,7 @@ records.
 
 Primary language for Zebra indexing);
         $msg .= _add_valid_values_disp('ZEBRA_LANGUAGE', $valid_values);
-        $config{'ZEBRA_LANGUAGE'} = _get_value('ZEBRA_LANGUAGE', $msg, $defaults->{'ZEBRA_LANGUAGE'}, $valid_values);
+        $config{'ZEBRA_LANGUAGE'} = _get_value('ZEBRA_LANGUAGE', $msg, $defaults->{'ZEBRA_LANGUAGE'}, $valid_values, $install_log_values);
    
         $msg = q(
 Koha can use one of  two different indexing modes 
@@ -903,15 +959,15 @@ dom  - uses the DOM XML filter; offers improved
 
 Authorities indexing mode);
         $msg .= _add_valid_values_disp('AUTH_INDEX_MODE', $valid_values);
-        $config{'AUTH_INDEX_MODE'} = _get_value('AUTH_INDEX_MODE', $msg, $defaults->{'AUTH_INDEX_MODE'}, $valid_values);
+        $config{'AUTH_INDEX_MODE'} = _get_value('AUTH_INDEX_MODE', $msg, $defaults->{'AUTH_INDEX_MODE'}, $valid_values, $install_log_values);
        
         $msg = q(
 Please specify Zebra database user);
-        $config{'ZEBRA_USER'} = _get_value('ZEBRA_USER', $msg, $defaults->{'ZEBRA_USER'}, $valid_values);
+        $config{'ZEBRA_USER'} = _get_value('ZEBRA_USER', $msg, $defaults->{'ZEBRA_USER'}, $valid_values, $install_log_values);
 
         $msg = q(
 Please specify the Zebra database password);
-        $config{'ZEBRA_PASS'} = _get_value('ZEBRA_PASS', $msg, $defaults->{'ZEBRA_PASS'}, $valid_values);
+        $config{'ZEBRA_PASS'} = _get_value('ZEBRA_PASS', $msg, $defaults->{'ZEBRA_PASS'}, $valid_values, $install_log_values);
 
         $msg = q(
 Since you've chosen to use Zebra, you can enable the SRU/
@@ -924,7 +980,7 @@ settings.  Those references will be ignored by Koha.
 
 Install the SRU configuration files?);
         $msg .= _add_valid_values_disp('INSTALL_SRU', $valid_values);
-        $config{'INSTALL_SRU'} = _get_value('INSTALL_SRU', $msg, $defaults->{'INSTALL_SRU'}, $valid_values);
+        $config{'INSTALL_SRU'} = _get_value('INSTALL_SRU', $msg, $defaults->{'INSTALL_SRU'}, $valid_values, $install_log_values);
 
         if ($config{'INSTALL_SRU'} eq 'yes') {
             $msg = q(
@@ -934,15 +990,15 @@ Servers (bibliographic and authority) should run on.
 );
             $msg = q(
 SRU Database host?);
-            $config{'ZEBRA_SRU_HOST'} = _get_value('ZEBRA_SRU_HOST', $msg, $defaults->{'ZEBRA_SRU_HOST'}, $valid_values);
+            $config{'ZEBRA_SRU_HOST'} = _get_value('ZEBRA_SRU_HOST', $msg, $defaults->{'ZEBRA_SRU_HOST'}, $valid_values, $install_log_values);
 
             $msg = q(
 SRU port for bibliographic data?);
-            $config{'ZEBRA_SRU_BIBLIOS_PORT'} = _get_value('ZEBRA_SRU_BIBLIOS_PORT', $msg, $defaults->{'ZEBRA_SRU_BIBLIOS_PORT'}, $valid_values);
+            $config{'ZEBRA_SRU_BIBLIOS_PORT'} = _get_value('ZEBRA_SRU_BIBLIOS_PORT', $msg, $defaults->{'ZEBRA_SRU_BIBLIOS_PORT'}, $valid_values, $install_log_values);
 
             $msg = q(
 SRU port for authority data?);
-            $config{'ZEBRA_SRU_AUTHORITIES_PORT'} = _get_value('ZEBRA_SRU_AUTHORITIES_PORT', $msg, $defaults->{'ZEBRA_SRU_AUTHORITIES_PORT'}, $valid_values);
+            $config{'ZEBRA_SRU_AUTHORITIES_PORT'} = _get_value('ZEBRA_SRU_AUTHORITIES_PORT', $msg, $defaults->{'ZEBRA_SRU_AUTHORITIES_PORT'}, $valid_values, $install_log_values);
 
         }
 
@@ -955,7 +1011,7 @@ the results list.
 
 Install the PazPar2 configuration files?);
         $msg .= _add_valid_values_disp('INSTALL_PAZPAR2', $valid_values);
-        $config{'INSTALL_PAZPAR2'} = _get_value('INSTALL_PAZPAR2', $msg, $defaults->{'INSTALL_PAZPAR2'}, $valid_values);
+        $config{'INSTALL_PAZPAR2'} = _get_value('INSTALL_PAZPAR2', $msg, $defaults->{'INSTALL_PAZPAR2'}, $valid_values, $install_log_values);
 
         if ($config{'INSTALL_PAZPAR2'} eq 'yes') {
             $msg = q(
@@ -965,19 +1021,19 @@ uses:
 );
             $msg = q(
 Zebra bibliographic server host?);
-            $config{'MERGE_SERVER_HOST'} = _get_value('MERGE_SERVER_HOST', $msg, $defaults->{'MERGE_SERVER_HOST'}, $valid_values);
+            $config{'MERGE_SERVER_HOST'} = _get_value('MERGE_SERVER_HOST', $msg, $defaults->{'MERGE_SERVER_HOST'}, $valid_values, $install_log_values);
 
             $msg = q(
 Zebra bibliographic port for PazPar2 to use?);
-            $config{'MERGE_SERVER_PORT'} = _get_value('MERGE_SERVER_PORT', $msg, $defaults->{'MERGE_SERVER_PORT'}, $valid_values);
+            $config{'MERGE_SERVER_PORT'} = _get_value('MERGE_SERVER_PORT', $msg, $defaults->{'MERGE_SERVER_PORT'}, $valid_values, $install_log_values);
 
             $msg = q(
 PazPar2 host?);
-            $config{'PAZPAR2_HOST'} = _get_value('PAZPAR2_HOST', $msg, $defaults->{'PAZPAR2_HOST'}, $valid_values);
+            $config{'PAZPAR2_HOST'} = _get_value('PAZPAR2_HOST', $msg, $defaults->{'PAZPAR2_HOST'}, $valid_values, $install_log_values);
 
             $msg = q(
 PazPar2 port?);
-            $config{'PAZPAR2_PORT'} = _get_value('PAZPAR2_PORT', $msg, $defaults->{'PAZPAR2_PORT'}, $valid_values);
+            $config{'PAZPAR2_PORT'} = _get_value('PAZPAR2_PORT', $msg, $defaults->{'PAZPAR2_PORT'}, $valid_values, $install_log_values);
 
         }
     }
@@ -1011,6 +1067,12 @@ sub _get_value {
     my $msg = shift;
     my $default = shift;
     my $valid_values = shift;
+    my $install_log_values = shift;
+
+    # take value from install log if present
+    if (exists $install_log_values{$key}) {
+        return $install_log_values{$key};
+    }
 
     # override default value from environment
     if (exists $ENV{$key}) {
@@ -1296,7 +1358,7 @@ install :: all install_koha warn_koha_env_vars
     return $install;
 }
 
-=head 2 _update_zebra_conf_target
+=head2 _update_zebra_conf_target
 
 Add an installation target for updating
 Zebra's configuration files.

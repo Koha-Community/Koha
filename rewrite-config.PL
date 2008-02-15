@@ -117,6 +117,12 @@ $prefix = $ENV{'INSTALL_BASE'} || "/usr";
   "__MERGE_SERVER_PORT__" => '11001',
   "__PAZPAR2_HOST__" => $myhost,
   "__PAZPAR2_PORT__" => '11002',
+  "__INSTALL_MODE__" => 'standard',
+  "__INSTALL_BASE__" => '/usr/share/koha',
+  "__INSTALL_ZEBRA__" => 'yes',
+  "__INSTALL_SRU__" => 'yes',
+  "__INSTALL_PAZPAR2__" => 'no',
+  "__AUTH_INDEX_MODE__" => 'grs1',
 );
 
 # Override configuration from the environment
