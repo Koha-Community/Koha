@@ -5,7 +5,7 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Labels</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/labels/label-home.pl">Labels</a> &rsaquo; <a href="/cgi-bin/koha/labels/label-templates.pl">Label Templates</a> &rsaquo; Edit Label Template</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -70,6 +70,16 @@
         <!-- TMPL_ELSE -->
             <option value="<!-- TMPL_VAR NAME="unit" -->">
         <!-- /TMPL_IF --><!-- TMPL_VAR NAME="desc" --></option>
+    <!-- /TMPL_LOOP -->
+</select></li>
+
+<li><label for="prof_id">Profile: </label><select id="prof_id" name="prof_id">
+    <!-- TMPL_LOOP NAME="proflist" -->
+        <!-- TMPL_IF NAME="selected" -->
+            <option value="<!-- TMPL_VAR NAME="prof_id" -->" selected="selected">
+        <!-- TMPL_ELSE -->
+            <option value="<!-- TMPL_VAR NAME="prof_id" -->">
+        <!-- /TMPL_IF --><!-- TMPL_VAR NAME="printername" -->/<!-- TMPL_VAR NAME="paper_bin" --></option>
     <!-- /TMPL_LOOP -->
 </select></li>
 
