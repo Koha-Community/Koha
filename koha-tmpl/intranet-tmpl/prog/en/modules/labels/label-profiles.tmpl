@@ -30,9 +30,9 @@ function confirm_deletion(prof_id) {
 
 <!-- TMPL_INCLUDE NAME="tools-labels-toolbar.inc" -->
 
-<!-- TMPL_IF NAME="resultsloop" -->
 <h2>Printer Profiles</h2>
 <form name="input" action="/cgi-bin/koha/labels/label-profiles.pl" method="get">
+<!-- TMPL_IF NAME="resultsloop" -->
 <table>
 <tr>
         <th>Printer Name</th>
@@ -77,6 +77,9 @@ function confirm_deletion(prof_id) {
 </tr>
 <!-- /TMPL_LOOP -->
 </table>
+</form>
+<!-- TMPL_ELSE -->
+No Printer Profiles currently defined.
 </form>
 <!-- /TMPL_IF -->
 
