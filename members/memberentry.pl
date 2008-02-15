@@ -36,6 +36,8 @@ use C4::Input;
 use C4::Log;
 use C4::Branch; # GetBranches
 
+#use Smart::Comments;
+
 use vars qw($debug);
 
 BEGIN {
@@ -68,6 +70,8 @@ my $check_member=$input->param('check_member');
 my $name_city=$input->param('name_city');
 my $nodouble=$input->param('nodouble');
 my $select_city=$input->param('select_city');
+my $zipcode=$input->param('zipcode');
+my $city=$input->param('city');
 my $nok=$input->param('nok');
 my $guarantorinfo=$input->param('guarantorinfo');
 my $step=$input->param('step') || 0;
@@ -163,12 +167,10 @@ if (($category_type eq 'C' || $category_type eq 'P') and $guarantorid ne '' ){
 
 ###############test to take the right zipcode and city name ##############
 if ( $guarantorid eq ''){
-  if ($select_city){
-    my ($borrower_city,$borrower_zipcode)=&getzipnamecity($select_city);
-    $newdata{'city'}= $borrower_city;
-    $newdata{'zipcode'}=$borrower_zipcode;
-    }
+    $newdata{'city'}= $city;
+    $newdata{'zipcode'}=$zipcode; 
 }
+
 #builds default userid
 if ( (defined $newdata{'userid'}) && ($newdata{'userid'} eq '')){
   my $onefirstnameletter = substr($data{'firstname'},0,1);
