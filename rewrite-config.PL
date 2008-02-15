@@ -71,6 +71,7 @@ $prefix = $ENV{'INSTALL_BASE'} || "/usr";
 # Keys were extracted by
 # <grep -o '__.*__' etc/* | cut -f2 -d: | sort -u | sed -e 's/^/  "/;s/$/" => "",/'
 %configuration = (
+  "__KOHA_INSTALLED_VERSION__" => "no_version_found",
   "__LOG_DIR__" => "/var/log",
   "__DB_TYPE__" => "mysql",
   "__DB_NAME__" => "koha",

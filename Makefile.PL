@@ -251,6 +251,7 @@ my $target_map = {
   './misc/bin'                  => { target => 'SCRIPT_DIR', trimdir => -1 }, 
   './misc/release_notes'        => { target => 'DOC_DIR', trimdir => 2 },
   './misc/translator'           => { target => 'MISC_DIR', trimdir => 2 }, 
+  './misc/koha-install-log'     => { target => 'MISC_DIR', trimdir => -1 },
   './misc/installer_devel_notes' => 'NONE',
   './opac'                      => 'OPAC_CGI_DIR',
   './README.txt'                => 'NONE',
@@ -436,7 +437,8 @@ get_file_map($target_map, $dirtree, $file_map, $config{'INSTALL_ZEBRA'} eq "yes"
 my $pl_files = {
       'rewrite-config.PL' => [
          'blib/KOHA_CONF_DIR/koha-conf.xml',
-         'blib/KOHA_CONF_DIR/koha-httpd.conf'
+         'blib/KOHA_CONF_DIR/koha-httpd.conf',
+         'blib/MISC_DIR/koha-install-log'
          ],
 	  'fix-perl-path.PL' => [	# this script ensures the correct shebang line for the platform installed on...
 		 'blib'
@@ -981,6 +983,15 @@ PazPar2 port?);
     }
 
     print "\n\n";
+
+    # add version number
+    my $version = "no_version_found";
+    eval {
+        require 'kohaversion.pl';
+        $version = kohaversion();
+    };
+    $config{'KOHA_INSTALLED_VERSION'} = $version;
+
     return %config;
 }
 
