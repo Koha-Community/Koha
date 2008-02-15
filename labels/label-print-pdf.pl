@@ -127,27 +127,31 @@ drawbox( ($left_margin), ($top_margin), ($page_width-(2*$left_margin)), ($page_h
 # Suggested proceedure: Adjust margins until both top and left margins are correct. Then adjust the label
 # height and width to correct label creep across and down page. Units are PostScript Points (72 per inch).
 
-warn "Active profile: $profile->{'prof_id'}" if $DEBUG;
+warn "Active profile: " . ($profile->{'prof_id'}?$profile->{'prof_id'}:"None") if $DEBUG;
 
 if ( $DEBUG ) {
-warn "-------------------------INITIAL VALUES-----------------------------";
-warn "top margin = $top_margin points\n";
-warn "left margin = $left_margin points\n";
-warn "label height = $label_height points\n";
-warn "label width = $label_width points\n";
+    warn "-------------------------INITIAL VALUES-----------------------------";
+    warn "top margin = $top_margin points\n";
+    warn "left margin = $left_margin points\n";
+    warn "label height = $label_height points\n";
+    warn "label width = $label_width points\n";
 }
 
-$top_margin = $top_margin + $profile->{'offset_vert'};    #  controls vertical offset
-$label_height = $label_height + $profile->{'creep_vert'};    # controls vertical creep
-$left_margin = $left_margin + $profile->{'offset_horz'};    # controls horizontal offset
-$label_width = $label_width + $profile->{'creep_horz'};    # controls horizontal creep
+if ( $profile->{'prof_id'} ) {
+    $top_margin = $top_margin + $profile->{'offset_vert'};    #  controls vertical offset
+    $label_height = $label_height + $profile->{'creep_vert'};    # controls vertical creep
+    $left_margin = $left_margin + $profile->{'offset_horz'};    # controls horizontal offset
+    $label_width = $label_width + $profile->{'creep_horz'};    # controls horizontal creep
+}
 
-if ( $DEBUG ) {
-warn "-------------------------ADJUSTED VALUES-----------------------------";
-warn "top margin = $top_margin points\n";
-warn "left margin = $left_margin points\n";
-warn "label height = $label_height points\n";
-warn "label width = $label_width points\n";
+if ( $DEBUG && $profile->{'prof_id'} ) {
+    warn "-------------------------ADJUSTED VALUES-----------------------------";
+    warn "top margin = $top_margin points\n";
+    warn "left margin = $left_margin points\n";
+    warn "label height = $label_height points\n";
+    warn "label width = $label_width points\n";
+} elsif ( $DEBUG ) {
+    warn "No profile associated so no adjustment applied.";
 }
 
 my $item;

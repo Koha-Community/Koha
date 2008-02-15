@@ -73,7 +73,9 @@
     <!-- /TMPL_LOOP -->
 </select></li>
 
-<li><label for="prof_id">Profile: </label><select id="prof_id" name="prof_id">
+<li><label for="prof_id">Profile: </label>
+<!-- TMPL_IF NAME="proflist" -->
+    <select id="prof_id" name="prof_id">
     <!-- TMPL_LOOP NAME="proflist" -->
         <!-- TMPL_IF NAME="selected" -->
             <option value="<!-- TMPL_VAR NAME="prof_id" -->" selected="selected">
@@ -81,7 +83,11 @@
             <option value="<!-- TMPL_VAR NAME="prof_id" -->">
         <!-- /TMPL_IF --><!-- TMPL_VAR NAME="printername" -->/<!-- TMPL_VAR NAME="paper_bin" --></option>
     <!-- /TMPL_LOOP -->
-</select></li>
+    </select>
+<!-- TMPL_ELSE -->
+    None Defined
+<!-- /TMPL_IF -->
+</li>
 
 <li><label for="fontsize">Font Size:</label> <input type="text" id="fontsize" name="fontsize"  size="1" value="<!-- TMPL_VAR NAME="fontsize" -->" /></li>
 

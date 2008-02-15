@@ -57,6 +57,10 @@ foreach my $prof (@prof) {
                             printername     => $prof->{'printername'},
                             paper_bin       => $prof->{'paper_bin'}} );
     }
+    
+    elsif ( !$prof ) {
+        undef @proflist;
+    }
 }
 
 my @units = (

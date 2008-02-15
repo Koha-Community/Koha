@@ -43,7 +43,7 @@ SaveTemplate(
 
 );
 
-SetAssociatedProfile( $prof_id, $tmpl_id );
+SetAssociatedProfile( $prof_id, $tmpl_id ) if $prof_id;
 
 print $query->redirect("./label-templates.pl");
 
