@@ -248,7 +248,7 @@ sub marc2dcxml {
 		$crosswalk = MARC::Crosswalk::DublinCore->new( qualified => 1 );
 	}
 	my $dcxml = $crosswalk->as_dublincore($marc_record_obj);
-	my $dcxmlfinal = "<?xml version=\"1.0\"?>\n";
+	my $dcxmlfinal = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 	$dcxmlfinal .= "<metadata
   xmlns=\"http://example.org/myapp/\"
   xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
