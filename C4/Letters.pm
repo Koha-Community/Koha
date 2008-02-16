@@ -175,7 +175,7 @@ sub getalert {
     my $dbh   = C4::Context->dbh;
     my $query = "select * from alert where";
     my @bind;
-    if ($borrowernumber) {
+    if ($borrowernumber =~ /^\d+$/) {
         $query .= " borrowernumber=? and";
         push @bind, $borrowernumber;
     }
