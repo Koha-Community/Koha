@@ -395,6 +395,10 @@ function vShelfAdd() {
                                 bibs.push("biblionumber=" +  document.bookbag_form.biblionumber[i].value);
                         }
                 }
-        return bibs.join("&");
+            return bibs.join("&");
+        } else {
+            if (document.bookbag_form.biblionumber.checked) {
+                return "biblionumber=" + document.bookbag_form.biblionumber.value;
+            }
         }
 }

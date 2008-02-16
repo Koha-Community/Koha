@@ -81,7 +81,7 @@
 		<!-- TMPL_IF NAME="barshelves" -->
 			<ul class="first-of-type">
 			<!-- TMPL_LOOP NAME="barshelvesloop" -->
-			<!-- TMPL_IF EXPR="category != 1" --><li class="yuimenuitem"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelfnumber" -->"><!-- TMPL_VAR NAME="shelfname" --></a></li><!-- /TMPL_IF -->
+			<!-- TMPL_UNLESS NAME="private" --><li class="yuimenuitem"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelfnumber" -->"><!-- TMPL_VAR NAME="shelfname" --></a></li><!-- /TMPL_UNLESS -->
 			<!-- /TMPL_LOOP -->
 			</ul>   
 		<!-- /TMPL_IF -->
@@ -90,7 +90,7 @@
 		<!-- TMPL_IF NAME="barshelves" -->
 			<ul class="first-of-type">
 			<!-- TMPL_LOOP NAME="barshelvesloop" -->
-			<!-- TMPL_IF EXPR="category == 1" --><li class="yuimenuitem"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelfnumber" -->"><!-- TMPL_VAR NAME="shelfname" --></a></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="private" --><li class="yuimenuitem"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelfnumber" -->"><!-- TMPL_VAR NAME="shelfname" --></a></li><!-- /TMPL_IF -->
 			<!-- /TMPL_LOOP -->
 			</ul>   
 		<!-- /TMPL_IF -->

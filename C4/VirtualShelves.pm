@@ -152,7 +152,18 @@ sub GetShelvesSummary {
 	);
 	my $sth = $dbh->prepare($query);
 	$sth->execute($owner,$mincategory,$limit);
-    return $sth->fetchall_arrayref({});
+
+    my $shelves = $sth->fetchall_arrayref({});
+    # add private flag to each shelf entry --
+    # need to do this because HTML::Template::Pro's EXPR
+    # support complains about a non-initialized 'category'
+    # if the user has no shelves -- the offending line in
+    # masthead.inc was <-- TMPL_IF EXPR="category == 1"...
+    foreach my $shelf (@{ $shelves }) {
+        $shelf->{'private'} = ($shelf->{'category'} == 1);
+    }
+    return $shelves;
+
 	# Probably NOT the final implementation since it is still bulky (repeated hash keys).
 	# might like an array of rows of delimited values:
 	# 1|2||0|blacklist|112

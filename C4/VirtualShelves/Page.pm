@@ -23,10 +23,10 @@ package C4::VirtualShelves::Page;
 use strict;
 use warnings;
 use CGI;
-use C4::VirtualShelves;
+use C4::VirtualShelves qw/:DEFAULT GetShelvesSummary/;
 use C4::Biblio;
 use C4::Items;
-use C4::Auth;
+use C4::Auth qw/get_session/;
 use C4::Output;
 use Exporter;
 
@@ -121,7 +121,7 @@ SWITCH: {
 			);
 			$shelflist = GetShelves( $loggedinuser, 2 );    # refresh after mods
 		} elsif ( $op eq 'modif' ) {
-			my ( $shelfnumber2, $shelfname, $owner, $category, $sortfield ) =GetShelf( $query->param('shelf') );
+			my ( $shelfnumber2, $shelfname, $owner, $category, $sortfield ) =GetShelf( $query->param('shelfnumber') );
 			$template->param(
 				edit                => 1,
 				shelfnumber         => $shelfnumber2,
@@ -155,7 +155,7 @@ SWITCH: {
         last SWITCH;
     }
     if ( $query->param('shelves') ) {
-		my $stay = 0;
+		my $stay = 1;
         if (my $newshelf = $query->param('addshelf')) {
 			# note: a user can always add a new shelf
             my $shelfnumber = AddShelf(
@@ -197,6 +197,7 @@ SWITCH: {
 			delete $shelflist->{$number};
 			push(@paramsloop, {delete_ok=>$name});
 			# print $query->redirect($pages{$type}->{redirect}); exit;
+			$stay = 0;
 		}
 		$showadd = 1;
 		$stay and $template->param(shelves => 1);
@@ -248,6 +249,13 @@ if ($template->param( 'shelves' ) or
 	$template->param(  'edit'   ) ) {
 	$template->param( seflag => 1);
 }
+
+my $sessionID = $query->cookie("CGISESSID") ;
+my $session = get_session($sessionID);
+my $shelves = GetShelvesSummary($loggedinuser, 2, 10);
+$session->param('shelves', $shelves);
+$template->param( barshelves     => scalar (@$shelves));
+$template->param( barshelvesloop => $shelves);
 
 output_html_with_http_headers $query, $cookie, $template->output;
 }	
