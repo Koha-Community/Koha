@@ -257,7 +257,7 @@ sub marc2dcxml {
   xmlns:dcterms=\"http://purl.org/dc/terms/\">";
 
 	foreach my $element ( $dcxml->elements() ) {
-                $dcxmlfinal.="<"."dc:".$element->name().">".$element->content()."</"."dc:".$element->name()."\n";
+                $dcxmlfinal.="<"."dc:".$element->name().">".$element->content()."</"."dc:".$element->name().">\n";
     }
 	$dcxmlfinal .= "\n</metadata>";
 	return ($error,$dcxmlfinal);
