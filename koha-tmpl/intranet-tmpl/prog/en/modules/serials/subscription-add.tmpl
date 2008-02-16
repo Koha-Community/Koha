@@ -95,8 +95,8 @@ var patternchoice = document.getElementById("numberpattern").value;
         display_table(0);
         break;
     case "5":
-        var d = new Date(document.f.firstacquidate.value);
-        var smonth = d.getMonth();
+//        var d = new Date(document.f.firstacquidate.value);
+//        var smonth = d.getMonth();
         document.f.add1.value=1;
         document.f.add2.value=1;
         document.f.add3.value='';
@@ -415,7 +415,7 @@ var textbox = '';
 function irregularity_check(){
     document.f.irreg_check.value = 1; // Irregularity button now pushed
     var periodicity = document.f.periodicity.value;
-    var rollover = document.f.issuesexpected1.value;
+	var rollover = document.f.issuesexpected1.value;
     if(document.f.whenmorethantemp2){
       rollover = document.f.whenmorethantemp2.value;
     }
@@ -926,7 +926,7 @@ window.onload = irregular_order();
         <li>
             <label for="periodicity">Frequency: (*)</label>
             
-                <select name="periodicity" size="1" id="periodicity" onchange="javascript:document.getElementsByName('manualhist')[0].checked=(this.value==1);num_pattern;">
+                <select name="periodicity" size="1" id="periodicity" onchange="javascript:document.getElementsByName('manualhist')[0].checked=(this.value==1); num_pattern();">
                 <option value="" selected="selected">-- please choose --</option>
                 <!-- TMPL_IF name="periodicity16" -->
                 <option value="16" selected="selected">Without periodicity</option>
