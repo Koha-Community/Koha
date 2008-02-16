@@ -136,14 +136,17 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'delete_confirmed') {
 	#start the page and read in includes
 	my $dbh = C4::Context->dbh;
-	my $frameworkcode=uc($input->param('frameworkcode'));
-	my $sth=$dbh->prepare("delete from marc_tag_structure where frameworkcode=?");
-	$sth->execute($frameworkcode);
-	$sth=$dbh->prepare("delete from marc_subfield_structure where frameworkcode=?");
-	$sth->execute($frameworkcode);
-	$sth=$dbh->prepare("delete from biblio_framework where frameworkcode=?");
-	$sth->execute($frameworkcode);
-	$sth->finish;
+#	my $frameworkcode=uc($input->param('frameworkcode'));
+#   
+	unless($frameworkcode) { 
+		my $sth=$dbh->prepare("delete from marc_tag_structure where frameworkcode=?");
+		$sth->execute($frameworkcode);
+		$sth=$dbh->prepare("delete from marc_subfield_structure where frameworkcode=?");
+		$sth->execute($frameworkcode);
+		$sth=$dbh->prepare("delete from biblio_framework where frameworkcode=?");
+		$sth->execute($frameworkcode);
+		$sth->finish;
+	}
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=biblio_framework.pl\"></html>";
 	exit;
 													# END $OP eq DELETE_CONFIRMED
