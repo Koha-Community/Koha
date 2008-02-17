@@ -84,6 +84,11 @@ my $dbh = C4::Context->dbh;
 my $CataloguingLog = C4::Context->preference('CataloguingLog');
 $dbh->do("UPDATE systempreferences SET value=0 WHERE variable='CataloguingLog'");
 
+if ($fk_off) {
+	$dbh->do("SET FOREIGN_KEY_CHECKS = 0");
+}
+
+
 if ($delete) {
     print "deleting biblios\n";
     $dbh->do("truncate biblio");
@@ -91,9 +96,9 @@ if ($delete) {
     $dbh->do("truncate items");
     $dbh->do("truncate zebraqueue");
 }
-if ($fk_off) {
-	$dbh->do("SET FOREIGN_KEY_CHECKS = 0");
-}
+
+
+
 if ($test_parameter) {
     print "TESTING MODE ONLY\n    DOING NOTHING\n===============\n";
 }
