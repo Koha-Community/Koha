@@ -2,19 +2,28 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/ajaxfileupload.js"></script>
 <script type="text/javascript">
     //<![CDATA[
+    var fileUploadProgressTimer = 0;
+    var inFileUploadProgressTimer = false;
+    var fileUploadProgressTimerCanceled = false;
     function updateProgress() {
+        if (inFileUploadProgressTimer) {
+            // since $.getJSON is asynchronous, wait
+            // until the last one is finished
+            return;
+        }
+        inFileUploadProgressTimer = true;
         $.getJSON("/cgi-bin/koha/tools/upload-file-progress.pl", function(json) {
-            $("#fileuploadprogress").text(json.progress + '%');
-            if (json.progress < 100) {
-                setTimeout("updateProgress()",200);
+            if (!fileUploadProgressTimerCanceled) {
+                $("#fileuploadprogress").text(json.progress);
             }
+            inFileUploadProgressTimer = false;
         });
     }
     function ajaxFileUpload()
     {
-
+        fileUploadProgressTimerCanceled = false;
         $("#fileuploadstatus").show();
-        setTimeout("updateProgress()",2000);
+        fileUploadProgressTimer = setInterval("updateProgress()",500);
         $.ajaxFileUpload (
             {
                 url:'/cgi-bin/koha/tools/upload-file.pl',
@@ -37,14 +46,18 @@
                         $("#fileuploadfailed").text("Upload failed -- database in maintenance state");
                     } else {
                          $("#uploadedfileid").val(data.fileid);
+                         $("#fileuploadprogress").text("100");
                     }
+                    fileUploadProgressTimerCanceled = true;
+                    clearInterval(fileUploadProgressTimer);
                 },
                 error: function (data, status, e) {
+                    fileUploadProgressTimerCanceled = true;
                     alert(e);
+                    clearInterval(fileUploadProgressTimer);
                 }
             }
         )
-        updateProgress();
         return false;
 
     }
