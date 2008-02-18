@@ -2488,7 +2488,7 @@ sub _koha_marc_update_biblioitem_cn_sort {
     my $frameworkcode= shift;
 
     my ($biblioitem_tag, $biblioitem_subfield ) = GetMarcFromKohaField("biblioitems.cn_sort",$frameworkcode);
-    next unless $biblioitem_tag;
+    return unless $biblioitem_tag;
 
     my ($cn_sort) = GetClassSort($biblioitem->{'biblioitems.cn_source'}, $biblioitem->{'cn_class'}, $biblioitem->{'cn_item'} );
 
