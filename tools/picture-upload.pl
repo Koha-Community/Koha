@@ -88,9 +88,13 @@ output_html_with_http_headers $input, $cookie, $template->output;
 sub handle_dir {
     my ( $dir ) = @_;
     my ( %count );
+    my $file;
     $count{filenames} = ();
-
-    my $file = ( -r "$dir/IDLINK.TXT" ) ? "$dir/IDLINK.TXT" : "$dir/DATALINK.TXT";
+    
+    opendir my $dirhandle, $dir;
+    while ( my $filename = readdir $dirhandle ) {
+        $file = "$dir/$filename" if ($filename =~ qr/datalink\.txt/i || qr/idlink\.txt/i);
+    }
     unless (open (FILE, $file)) { 
 		print "Openning $dir/$file failed!\n";
 		return 0;
