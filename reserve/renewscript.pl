@@ -56,7 +56,10 @@ else {
 }
 my @barcodes = $input->param('barcodes[]');
 my $branch=$input->param('branch');
-my $datedue=C4::Dates->new($input->param('newduedate'));
+my $datedue;
+if ($input->param('newduedate')){
+    $datedue=C4::Dates->new($input->param('newduedate'));
+}
 
 # warn "barcodes : @barcodes";
 #

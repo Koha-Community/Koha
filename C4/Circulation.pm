@@ -1634,8 +1634,7 @@ sub AddRenewal {
 
     my ( $borrowernumber, $itemnumber, $branch ,$datedue ) = @_;
     my $dbh = C4::Context->dbh;
-	
-	my $biblio = GetBiblioFromItemNumber($itemnumber);
+    my $biblio = GetBiblioFromItemNumber($itemnumber);
     # If the due date wasn't specified, calculate it by adding the
     # book's loan length to today's date.
     unless ( $datedue ) {
