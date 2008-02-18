@@ -2095,9 +2095,20 @@ sub ModZebra {
         #
         # we use zebra, just fill zebraqueue table
         #
-        my $sth=$dbh->prepare("INSERT INTO zebraqueue  (biblio_auth_number,server,operation) VALUES(?,?,?)");
-        $sth->execute($biblionumber,$server,$op);
-        $sth->finish;
+        my $check_sql = "SELECT COUNT(*) FROM zebraqueue 
+                         WHERE server = ?
+                         AND   biblio_auth_number = ?
+                         AND   operation = ?
+                         AND   done = 0";
+        my $check_sth = $dbh->prepare_cached($check_sql);
+        $check_sth->execute($server, $biblionumber, $op);
+        my ($count) = $check_sth->fetchrow_array;
+        $check_sth->finish();
+        if ($count == 0) {
+            my $sth=$dbh->prepare("INSERT INTO zebraqueue  (biblio_auth_number,server,operation) VALUES(?,?,?)");
+            $sth->execute($biblionumber,$server,$op);
+            $sth->finish;
+        }
     }
 }
 

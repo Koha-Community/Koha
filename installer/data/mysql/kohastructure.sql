@@ -1861,7 +1861,8 @@ CREATE TABLE `zebraqueue` (
   `server` char(20) NOT NULL default '',
   `done` int(11) NOT NULL default '0',
   `time` timestamp NOT NULL default CURRENT_TIMESTAMP,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY  (`id`),
+  KEY `zebraqueue_lookup` (`server`, `biblio_auth_number`, `operation`, `done`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `services_throttle`;
