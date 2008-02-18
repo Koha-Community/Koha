@@ -63,8 +63,10 @@ my $units        = 'POINTS'
 #warn Dumper $template;
 
 my $unitvalue = GetUnitsValue($units);
+my $prof_unitvalue = GetUnitsValue($profile->{'unit'});
 
 warn "Template units: $units which converts to $unitvalue PostScript Points" if $DEBUG;
+warn "Profile units: $profile->{'unit'} which converts to $prof_unitvalue PostScript Points" if $DEBUG;
 
 my $tmpl_code = $template->{'tmpl_code'};
 my $tmpl_desc = $template->{'tmpl_desc'};
@@ -138,10 +140,10 @@ if ( $DEBUG ) {
 }
 
 if ( $profile->{'prof_id'} ) {
-    $top_margin = $top_margin + $profile->{'offset_vert'};    #  controls vertical offset
-    $label_height = $label_height + $profile->{'creep_vert'};    # controls vertical creep
-    $left_margin = $left_margin + $profile->{'offset_horz'};    # controls horizontal offset
-    $label_width = $label_width + $profile->{'creep_horz'};    # controls horizontal creep
+    $top_margin = $top_margin + ($profile->{'offset_vert'} * $prof_unitvalue);    #  controls vertical offset
+    $label_height = $label_height + ($profile->{'creep_vert'} * $prof_unitvalue);    # controls vertical creep
+    $left_margin = $left_margin + ($profile->{'offset_horz'} * $prof_unitvalue);    # controls horizontal offset
+    $label_width = $label_width + ($profile->{'creep_horz'} * $prof_unitvalue);    # controls horizontal creep
 }
 
 if ( $DEBUG && $profile->{'prof_id'} ) {
