@@ -53,7 +53,7 @@ BEGIN {
 	# FIXME subs that should probably be elsewhere
 	push @EXPORT, qw(
 		&FixOverduesOnReturn
-		&cuecatbarcodedecode
+		&barcodedecode
 	);
 
 	# subs to deal with issuing a book
@@ -108,27 +108,35 @@ Also deals with stocktaking.
 
 =over 4
 
-=item Decodes a segment of a string emitted by a CueCat barcode scanner and
-returns it.
+=item Generic filter function for barcode string.
 
 =back
 
 =cut
 
-# FIXME - At least, I'm pretty sure this is for decoding CueCat stuff.
 # FIXME From Paul : i don't understand what this sub does & why it has to be called on every circ. Speak of this with chris maybe ?
+# FIXME -- the &decode fcn below should be wrapped into this one.
 
-sub cuecatbarcodedecode {
+sub barcodedecode {
     my ($barcode) = @_;
-    chomp($barcode);
-    my @fields = split( /\./, $barcode );
-    my @results = map( decode($_), @fields[ 1 .. $#fields ] );
-    if ( $#results == 2 ) {
-        return $results[2];
-    }
-    else {
-        return $barcode;
-    }
+    my $filter = C4::Context->preference('itemBarcodeInputFilter');
+	if($filter eq 'whitespace') {
+		$barcode =~ s/\s//g;
+		return $barcode;
+	} elsif($filter eq 'cuecat') {
+		chomp($barcode);
+	    my @fields = split( /\./, $barcode );
+	    my @results = map( decode($_), @fields[ 1 .. $#fields ] );
+	    if ( $#results == 2 ) {
+	        return $results[2];
+	    }
+	    else {
+	        return $barcode;
+	    }
+	} elsif($filter eq 'T-prefix') {
+		my $num = ( $barcode =~ /^[Tt] /) ? substr($barcode,2) + 0 : $barcode;
+		return sprintf( "T%07d",$num);
+	}
 }
 
 =head2 decode

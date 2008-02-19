@@ -90,8 +90,8 @@ foreach ( $query->param ) {
     my $borrowernumber = $query->param("bn-$counter");
     $counter++;
 
-    # decode cuecat
-    $barcode = cuecatbarcodedecode($barcode);
+    # decode barcode
+    $barcode = barcodedecode($barcode) if(C4::Context->preference('itemBarcodeInputFilter'));
 
     ######################
     #Are these lines still useful ?
@@ -165,7 +165,7 @@ my $messages;
 my $issueinformation;
 my $barcode = $query->param('barcode');
 # strip whitespace
-$barcode =~ s/\s*//g;
+# $barcode =~ s/\s*//g; - use barcodedecode for this; whitespace is not invalid.
 my $exemptfine = $query->param('exemptfine');
 
 my $dotransfer = $query->param('dotransfer');
@@ -178,8 +178,7 @@ if ($dotransfer){
 
 # actually return book and prepare item table.....
 if ($barcode) {
-    # decode cuecat
-    $barcode = cuecatbarcodedecode($barcode);
+    $barcode = barcodedecode($barcode)  if(C4::Context->preference('itemBarcodeInputFilter'));
 #
 # save the return
 #

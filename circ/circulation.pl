@@ -120,9 +120,7 @@ $printer = C4::Context->userenv->{'branchprinter'};
 
 my $barcode        = $query->param('barcode') || '';
 
-# strip whitespace
-$barcode =~ s/\s*//g;
-
+$barcode = barcodedecode($barcode) if(C4::Context->preference('itemBarcodeInputFilter'));
 my $year           = $query->param('year');
 my $month          = $query->param('month');
 my $day            = $query->param('day');
@@ -262,7 +260,6 @@ if ($borrowernumber) {
 #
 
 if ($barcode) {
-   # $barcode = cuecatbarcodedecode($barcode);
 	# always check for blockers on issuing
 	my ( $error, $question ) =
 	  CanBookBeIssued( $borrower, $barcode, $datedue , $inprocess );
