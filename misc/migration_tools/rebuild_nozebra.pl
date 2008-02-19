@@ -165,6 +165,10 @@ while (my ($biblionumber) = $sth->fetchrow) {
 }
 print "\nInserting records...\n";
 $i=0;
+
+my $commitnum = 100;
+$dbh->{AutoCommit} = 0;
+
 $sth = $dbh->prepare("INSERT INTO nozebra (server,indexname,value,biblionumbers) VALUES ('biblioserver',?,?,?)");
 foreach my $key (keys %result) {
     foreach my $index (keys %{$result{$key}}) {
@@ -174,6 +178,7 @@ foreach my $key (keys %result) {
         print "\r$i";
         $i++;
         $sth->execute($key,$index,$result{$key}->{$index});
+        $dbh->commit() if (0 == $i % $commitnum);
     }
 }
 print "\nbiblios done\n";
