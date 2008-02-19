@@ -108,7 +108,7 @@ while (my ($biblionumber) = $sth->fetchrow) {
     my $title = lc($record->subfield($titletag,$titlesubfield));
 
     # remove blancks comma (that could cause problem when decoding the string for CQL retrieval) and regexp specific values
-    $title =~ s/ |,|;|\[|\]|\(|\)|\*|-|'|=//g;
+    $title =~ s/ |\.|,|;|\[|\]|\(|\)|\*|-|'|=|://g;
     # limit to 10 char, should be enough, and limit the DB size
     $title = substr($title,0,10);
     #parse each field
@@ -214,7 +214,7 @@ while (my ($authid) = $sth->fetchrow) {
     $index{'auth_type'}    = '152b';
 
     # remove blancks comma (that could cause problem when decoding the string for CQL retrieval) and regexp specific values
-    $title =~ s/ |,|;|\[|\]|\(|\)|\*|-|'|=//g;
+    $title =~ s/ |\.|,|;|\[|\]|\(|\)|\*|-|'|:|=//g;
     $title = quotemeta $title;
     # limit to 10 char, should be enough, and limit the DB size
     $title = substr($title,0,10);
@@ -271,6 +271,9 @@ while (my ($authid) = $sth->fetchrow) {
 }
 print "\nInserting...\n";
 $i=0;
+
+my $commitnum = 100;
+$dbh->{AutoCommit} = 0;
 $sth = $dbh->prepare("INSERT INTO nozebra (server,indexname,value,biblionumbers) VALUES ('authorityserver',?,?,?)");
 foreach my $key (keys %result) {
     foreach my $index (keys %{$result{$key}}) {
@@ -280,6 +283,7 @@ foreach my $key (keys %result) {
         print "\r$i";
         $i++;
         $sth->execute($key,$index,$result{$key}->{$index});
+        $dbh->commit() if (0 == $i % $commitnum);
     }
 }
 print "\nauthorities done\n";

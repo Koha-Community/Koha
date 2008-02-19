@@ -1805,7 +1805,7 @@ sub NZoperatorAND{
                 "$value-$countvalue;$value-$countvalue;";
         }
     }
-    warn " $finalresult \n" if $DEBUG;
+    warn "NZAND DONE : $finalresult \n" if $DEBUG;
     return $finalresult;
 }
       
