@@ -57,6 +57,18 @@
 
     </p>
     <!-- /TMPL_IF -->
+
+   <!-- TMPL_IF name="MARCSERIES" -->
+    <p><span class="label">Series:</span>
+            <!-- TMPL_LOOP NAME="MARCSERIES" -->
+            <!-- TMPL_LOOP NAME="MARCSERIES_SUBFIELDS_LOOP" -->
+ <a href="/cgi-bin/koha/opac-search.pl?q=series:<!-- TMPL_VAR NAME
+    ="value"-->"><!-- TMPL_VAR NAME="value" --></a>
+                <!-- /TMPL_LOOP -->
+            <!-- /TMPL_LOOP -->
+    </p>
+    <!-- /TMPL_IF -->
+
     <!-- TMPL_IF name="editionstatement" -->
     <p><span class="label">Edition statement:</span><!-- TMPL_VAR name="editionstatement" --><!-- TMPL_IF name="editionresponsibility" -->/<!-- TMPL_VAR name="editionresponsibility" --><!-- /TMPL_IF--></p>
     <!-- /TMPL_IF -->
