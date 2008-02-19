@@ -298,6 +298,7 @@ for (var i=0;i<ItemsNodes.length;i++){
 			<!-- TMPL_UNLESS NAME="noItemTypeImages" --><th scope="col">&nbsp;</th><!-- /TMPL_UNLESS -->
             <th scope="col">Title</th>
             <th scope="col">Barcode</th>
+            <th scope="col">Checked out on</th>
             <th scope="col">Date due</th>
             <th scope="col">Itemtype</th>
             <th scope="col">Charge</th>
@@ -323,6 +324,7 @@ for (var i=0;i<ItemsNodes.length;i++){
                 <!-- /TMPL_IF --></td><!-- /TMPL_UNLESS -->
             <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> <!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR name="author" --><!-- /TMPL_IF --> <!-- TMPL_IF name="publishercode" -->; <!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF --> <!-- TMPL_IF name="publicationyear" -->, <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->            </td>
             <td><!-- TMPL_VAR NAME="barcode" --></td>
+            <td><!-- TMPL_VAR NAME="issuedate" --></td>
             <td><!-- TMPL_VAR NAME="date_due" --></td>
             <td>
                 <!-- TMPL_VAR NAME="itemtype_description" -->
