@@ -84,21 +84,21 @@
 			
 		since <!-- TMPl_VAR name="startdate" -->
 		</p>
+    <h2><!-- TMPL_VAR name="branchcode" --> <!-- TMPL_VAR name="notes" --></h2>
   <!-- TMPL_IF name="recievedlist" -->
-    <h2>Available Issues</h2>
+    <h3>Available Issues</h3>
     <p>
       <!-- TMPL_VAR name="recievedlist" -->
     </p>
   <!-- /TMPL_IF -->
   <!-- TMPL_IF name="missinglist" -->
-    <h2>Unavailable Issues</h2>
+    <h3>Unavailable Issues</h3>
     <p>
       <!-- TMPL_VAR name="missinglist" -->
     </p>
   <!-- /TMPL_IF -->
-    <p><!-- TMPL_VAR name="notes" --></p>
     <!-- TMPL_IF name="opacnote" -->
-        <h2>Issues summary</h2>
+        <h3>Issues summary</h3>
         <p>
             <!-- TMPL_VAR name="opacnote" -->
         </p>
