@@ -1669,6 +1669,8 @@ sub NZanalyse {
     else {
         $string =~ s/__X__/"$commacontent"/ if $commacontent;
         $string =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|&|\+|\*|\// /g;
+        #remove trailing blank at the beginning
+        $string =~ s/^ //g;
         warn "leaf:$string" if $DEBUG;
 
         # parse the string in in operator/operand/value again
@@ -1683,14 +1685,14 @@ sub NZanalyse {
             $left     = $1;
             $operator = $2;
             $right    = $3;
-#             warn
-# "handling unless (operator)... left:$left operator:$operator right:$right"
-#               if $DEBUG;
+            warn
+"handling unless (operator)... left:$left operator:$operator right:$right"
+              if $DEBUG;
         }
         my $results;
 
 # strip adv, zebra keywords, currently not handled in nozebra: wrdl, ext, phr...
-        $left =~ s/[, ].*$//;
+        $left =~ s/ .*$//;
 
         # automatic replace for short operators
         $left = 'title'            if $left =~ '^ti$';
@@ -1699,7 +1701,7 @@ sub NZanalyse {
         $left = 'subject'          if $left =~ '^su$';
         $left = 'koha-Auth-Number' if $left =~ '^an$';
         $left = 'keyword'          if $left =~ '^kw$';
-        warn "handling leaf... left:$left operator:$operator right:$right";
+        warn "handling leaf... left:$left operator:$operator right:$right" if $DEBUG;
         if ( $operator && $left ne 'keyword' ) {
 
             #do a specific search
@@ -1709,7 +1711,7 @@ sub NZanalyse {
               $dbh->prepare(
 "SELECT biblionumbers,value FROM nozebra WHERE server=? AND indexname=? AND value $operator ?"
               );
-            warn "$left / $operator / $right\n";
+            warn "$left / $operator / $right\n" if $DEBUG;
 
             # split each word, query the DB and build the biblionumbers result
             #sanitizing leftpart
@@ -1718,7 +1720,7 @@ sub NZanalyse {
                 my $biblionumbers;
                 $_ =~ s/^\s+|\s+$//;
                 next unless $_;
-                warn "EXECUTE : $server, $left, $_";
+                warn "EXECUTE : $server, $left, $_" if $DEBUG;
                 $sth->execute( $server, $left, $_ )
                   or warn "execute failed: $!";
                 while ( my ( $line, $value ) = $sth->fetchrow ) {
@@ -1729,12 +1731,12 @@ sub NZanalyse {
                       unless ( $right =~ /^\d+$/ && $value =~ /\D/ );
                     warn "result : $value "
                       . ( $right  =~ /\d/ ) . "=="
-                      . ( $value =~ /\D/?$line:"" );         #= $line";
+                      . ( $value =~ /\D/?$line:"" ) if $DEBUG;         #= $line";
                 }
 
 # do a AND with existing list if there is one, otherwise, use the biblionumbers list as 1st result list
                 if ($results) {
-                    warn "NZAND";        
+                    warn "NZAND" if $DEBUG;
                     $results = NZoperatorAND($biblionumbers,$results);
                 }
                 else {
