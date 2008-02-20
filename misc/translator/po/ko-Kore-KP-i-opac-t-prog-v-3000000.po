@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-01-08 00:58-0500\n"
-"PO-Revision-Date: 2007-02-11 11:04+0200\n"
+"POT-Creation-Date: 2008-02-20 07:08-0500\n"
+"PO-Revision-Date: 2008-01-08 15:42+0200\n"
 "Last-Translator: translate.koha.org\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,9 +16,9 @@ msgstr ""
 "\n"
 
 #. SCRIPT
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:31
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:45
 #, fuzzy
-msgid " item(s) added to your book bag"
+msgid " item(s) added to your cart"
 msgstr "책바구니로 보내기"
 
 #. For the first occurrence,
@@ -31,8 +31,20 @@ msgid "$%s"
 msgstr ""
 
 #. A
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:102
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:115
 msgid "$<!-- TMPL_VAR NAME=\"code\" --> <!-- TMPL_VAR NAME=\"value\" -->"
+msgstr ""
+
+#. For the first occurrence,
+#. %1$s: TMPL_VAR name=native_description
+#. %2$s: TMPL_VAR name=script_description
+#. %3$s: TMPL_VAR name=region_description
+#. %4$s: TMPL_VAR name=variant_description
+#. %5$s: TMPL_VAR name=rfc4646_subtag
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-bottom.inc:18
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-bottom.inc:20
+#, c-format
+msgid "%s %s %s %s (%s)"
 msgstr ""
 
 #. %1$s: TMPL_VAR name=firstname
@@ -64,7 +76,7 @@ msgid "%s -- Self Checkout"
 msgstr ""
 
 #. %1$s: TMPL_VAR name=unititle
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:92
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:105
 #, fuzzy, c-format
 msgid "%s ;"
 msgstr "%1$s;"
@@ -76,7 +88,7 @@ msgid "%s <a1>Top level</a>"
 msgstr ""
 
 #. %1$s: TMPL_VAR name=issues_count
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:128
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:130
 #, fuzzy, c-format
 msgid "%s Items"
 msgstr "%1$s 자료항목"
@@ -111,9 +123,9 @@ msgid "%s issues"
 msgstr "%1$s 정기간행물"
 
 #. For the first occurrence,
-#. %1$s: TMPL_VAR name=shelfvirtualcount
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:139
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:164
+#. %1$s: TMPL_VAR name=count
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:161
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:204
 #, c-format
 msgid "%s item(s)"
 msgstr "%1$s 자료항목"
@@ -139,7 +151,7 @@ msgid "%s record(s)"
 msgstr "%1$s 기록"
 
 #. %1$s: TMPL_VAR name=ExpectedAtLibrary
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:158
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:160
 #, c-format
 msgid "%s since"
 msgstr ""
@@ -165,20 +177,22 @@ msgstr "%1$s;"
 msgid "%s, %s"
 msgstr ""
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=result_number
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:135
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:184
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:186
 #, fuzzy, c-format
 msgid "%s."
 msgstr "%1$s;"
 
 #. %1$s: TMPL_VAR name=description
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:187
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:189
 #, c-format
 msgid "%s;"
 msgstr "%1$s;"
 
 #. %1$s: TMPL_VAR name=copyrightdate
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:350
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:374
 #, fuzzy, c-format
 msgid "&copy;%s"
 msgstr "사본"
@@ -186,7 +200,7 @@ msgstr "사본"
 #. IMG
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:12
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:12
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:13
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:50
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-account.tmpl:14
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:13
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:13
@@ -202,8 +216,8 @@ msgstr "다음 &gt;&gt;"
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=query_desc
 #. %2$s: TMPL_VAR name=limit_desc
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:48
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:54
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:108
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:114
 #, c-format
 msgid "&ldquo;%s%s&rdquo;"
 msgstr ""
@@ -283,10 +297,12 @@ msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authoritiessearchresultlist.tmpl:34
 msgid "&nbsp;No results found."
-msgstr "  해당결과없음"
+msgstr "해당결과없음"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=limit_desc
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:4
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:4
 #, c-format
 msgid "&nbsp;with limit(s):&nbsp;'%s'"
 msgstr ""
@@ -300,16 +316,16 @@ msgstr "%1$s 도서일람표"
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=renewsleft
 #. %2$s: TMPL_VAR name=renewsallowed
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:176
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:223
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:181
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:231
 #, c-format
 msgid "(%s of %s renewals remaining)"
 msgstr ""
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=overdues_count
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:203
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:243
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:211
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:251
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:106
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:84
 #, c-format
@@ -323,13 +339,15 @@ msgstr "(%1$s 종합/합계)"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:44
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:97
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:148
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:67
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:79
 #, c-format
 msgid "(%s)"
 msgstr ""
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=count
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:154
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:203
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:205
 #, c-format
 msgid "(%s),"
 msgstr ""
@@ -342,31 +360,33 @@ msgstr ""
 msgid "(<a1>Click here</a> if you're not %s %s %s)"
 msgstr "(당신이 %3$s %2$s %1$s가 아닌경우 <a1>여기를 눌러주세요</a>)"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:42
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:46
 msgid "(Checked out)"
 msgstr "체크아웃"
 
 #. %1$s: TMPL_VAR name=subscriptionsnumber
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:269
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:292
 #, fuzzy, c-format
 msgid "(There are %s subscriptions associated with this title)."
 msgstr "이 표제와 연관된 %s예약이 있습니다."
 
 #. %1$s: TMPL_VAR name=LoginBranchcode
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:22
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:18
 #, fuzzy, c-format
 msgid "(in %s only)"
 msgstr "(%1$s 종합/합계)"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=timestamp
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:142
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:191
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:193
 #, c-format
 msgid "(modified on %s)"
 msgstr "(수정했음:%s)"
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:43
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:52
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:60
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:69
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:77
 #, fuzzy
 msgid "(no title)"
 msgstr "(%1$s 종합/합계)"
@@ -377,7 +397,8 @@ msgstr "(%1$s 종합/합계)"
 msgid "(published on %s)"
 msgstr "%s에 의해 출판되었습니다"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:48
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:108
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-facets.inc:7
 #, fuzzy
 msgid "(related searches:"
 msgstr "상세검색"
@@ -386,13 +407,13 @@ msgstr "상세검색"
 #. %1$s: TMPL_VAR name=volumedesc
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:47
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:48
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:67
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:79
 #, fuzzy, c-format
 msgid ", %s"
 msgstr "에 %s"
 
 #. %1$s: TMPL_VAR name=collectionissn
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:84
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:97
 #, c-format
 msgid ", ISSN %s"
 msgstr ""
@@ -409,7 +430,7 @@ msgid ""
 ", you cannot place holds because the library doesn't have up-to-date "
 "<a1>contact information</a> on file."
 msgstr ""
-"본 도서관에는 컨텍정보가 업데이트되어있지 않음으로 예약할 수 없습니다"
+" 본 도서관에는 컨텍정보가 업데이트되어있지 않음으로 예약할 수 없습니다 "
 "<a1>contact information</a>on file."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:29
@@ -423,8 +444,8 @@ msgid ""
 ", you cannot place holds because your library card has been marked as lost "
 "or stolen."
 msgstr ""
-"당신은 당신의 대출 카드가 잃기를 위한 아마 따라지기 기록 훔치기이기 때문에 약"
-"속을 정할 수 없습니다。"
+" 당신은 당신의 대출 카드가 잃기를 위한 아마 따라지기 기록 훔치기이기 때문에 "
+"약 속을 정할 수 없습니다。"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=publicationyear
@@ -433,11 +454,14 @@ msgstr ""
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:93
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:79
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:102
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:192
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:194
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:136
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:137
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:139
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:187
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:189
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:185
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:186
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:188
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:187
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:188
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:190
 #, c-format
 msgid "- %s"
 msgstr ""
@@ -447,6 +471,12 @@ msgstr ""
 #, fuzzy, c-format
 msgid "- %s,"
 msgstr "에 %s"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:186
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:63
+#, fuzzy
+msgid "-- Choose Format --"
+msgstr "--당신의 구내분관을 선택하세요--"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/maintenance.tmpl:2
 #, fuzzy
@@ -465,7 +495,7 @@ msgid "/ %s %s"
 msgstr "%s%s 환영합니다"
 
 #. %1$s: TMPL_VAR name=editionresponsibility
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:61
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:73
 #, fuzzy, c-format
 msgid "/%s"
 msgstr "%1$s;"
@@ -507,8 +537,9 @@ msgstr "2 달"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=subtitle
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:7
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:140
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:13
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:189
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:191
 #, c-format
 msgid ": %s"
 msgstr ""
@@ -517,60 +548,57 @@ msgstr ""
 #. %1$s: TMPL_VAR name=place
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:92
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:94
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:85
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:138
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:141
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:98
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:187
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:190
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:189
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:192
 #, c-format
 msgid "; %s"
 msgstr ""
 
 #. %1$s: TMPL_VAR name=author
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:8
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:14
 #, c-format
 msgid "; By %s"
-msgstr "; %s 에 의한 "
+msgstr "; %s 에 의한"
 
 #. %1$s: TMPL_VAR name=title
 #. %2$s: TMPL_VAR name=author
 #. %3$s: TMPL_VAR name=copyrightdate
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:409
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:430
 #, c-format
 msgid "<a1>%s</a> by %s &copy;%s"
 msgstr ""
 
 #. %1$s: TMPL_VAR name=subject
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:35
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:41
 #, c-format
 msgid "<a1>%s</a>,"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:112
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:128
 #, c-format
 msgid "<a1>Click here</a> for more information on subscription(s) history"
 msgstr ""
-"보다더 상세한 예약(자)명부에 대한 정보를 보려면<a1>여기를 클릭하세요</a> "
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:142
-#, c-format
-msgid "<a1>Edit</a> <a2>Delete</a>"
-msgstr ""
+" 보다더 상세한 예약(자)명부에 대한 정보를 보려면<a1>여기를 클릭하세요</a>"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:61
 #, c-format
 msgid "<a1>HELP</a> with the self checkoutsystem"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:338
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:362
 #, c-format
 msgid "<a1>Log in to your account</a> to post a comment."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:144
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:160
 #, c-format
 msgid "<a1>Log in to your account</a> to write a review here."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:149
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:189
 #, fuzzy, c-format
 msgid "<a1>Log in</a> to create new Lists."
 msgstr "<a1>로그인</a>Koha"
@@ -585,6 +613,12 @@ msgstr ""
 msgid "<b>Selected items :</b> <a1> Remove </a>"
 msgstr ""
 
+#. %1$s: TMPL_VAR name=shelfname
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:12
+#, fuzzy, c-format
+msgid "<em>%s</em>:"
+msgstr "가상서가를 수정합니다 <em>%s</em>"
+
 #. %1$s: TMPL_VAR name=impossible
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:15
 #, c-format
@@ -597,14 +631,19 @@ msgstr ""
 msgid "<em>Title:</em> %s"
 msgstr ""
 
-#. A
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead-basic.inc:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead_adv.inc:3
-msgid "A &quot;shopping cart&quot; for your selections"
-msgstr "'책 바구니' 선택한것을 담기 위한 책바구니"
+#. %1$s: TMPL_VAR name=already
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:15
+#, c-format
+msgid "A List named <b>%s</b> already exists!"
+msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:265
+#. %1$s: TMPL_VAR name=duplicatebiblio
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:32
+#, c-format
+msgid "A record matching barcode <b>%s</b> has already been added."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:267
 msgid "Abstracts/summaries"
 msgstr ""
 
@@ -617,7 +656,7 @@ msgstr "도서관에 따른 정렬"
 msgid "Access Denied"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:36
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:38
 #, fuzzy, c-format
 msgid ""
 "According to our records, we don't have up-to-date <a1>contact information</"
@@ -625,12 +664,12 @@ msgid ""
 "form</a> to submit current information (<em>Please note:</em> there may be a "
 "delay in restoring your account if you submit online)"
 msgstr ""
-"우리 도서관 기록에는 업데이트된 자료가 없습니다<a1>파일상의 컨택정보</a>현재"
-"정보를 입력하기 위해 사서에게 연락하든지 아니면 온라인 업데이트 약식을 사용"
-"해 주세요.(<em>메모하세요:</em>만약 온라인으로 당신의 계정을 복구하기 위해 정"
-"보를 재입력하실경우 약간의 시간이 더 소요될 수 있습니다)"
+" 우리 도서관 기록에는 업데이트된 자료가 없습니다<a1>파일상의 컨택정보</a>현"
+"재 정보를 입력하기 위해 사서에게 연락하든지 아니면 온라인 업데이트 약식을 사"
+"용 해 주세요.(<em>메모하세요:</em>만약 온라인으로 당신의 계정을 복구하기 위"
+"해 정 보를 재입력하실경우 약간의 시간이 더 소요될 수 있습니다)"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:220
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:228
 msgid "Account Frozen"
 msgstr ""
 
@@ -651,18 +690,12 @@ msgstr ""
 
 #. %1$s: TMPL_VAR name=total
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:12
-#, c-format
-msgid "Add %s items to a list:"
-msgstr ""
-
-#. INPUT type=button
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:114
-#, fuzzy
-msgid "Add Checked Items to Lists"
-msgstr "체크된 항목을 책바구니에 첨가하세요"
+#, fuzzy, c-format
+msgid "Add %s items to"
+msgstr "%1$s 자료항목"
 
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:190
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:230
 msgid "Add New Shelf"
 msgstr "새 서가를 첨가하세요"
 
@@ -676,38 +709,22 @@ msgstr "구입 제안"
 msgid "Add another field"
 msgstr ""
 
-#. INPUT type=button
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:113
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:14
 #, fuzzy
-msgid "Add checked items to book bag"
-msgstr "체크된 항목을 책바구니에 첨가하세요"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:20
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:170
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:52
-msgid "Add to My Book Bag"
-msgstr "내 책바구니에 첨가하세요"
+msgid "Add to"
+msgstr "서가에 추가하세요"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:19
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:47
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:179
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:56
 #, fuzzy
-msgid "Add to My Book List"
-msgstr "내 책바구니에 첨가하세요"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:165
-#, fuzzy
-msgid "Add to My List"
+msgid "Add to Your Cart"
 msgstr "내 가상서가에 첨가하세요"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:34
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:43
 #, fuzzy
 msgid "Add to a New List:"
 msgstr "새 가상서가에 추가하세요:"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:14
-#, fuzzy
-msgid "Add to a list:"
-msgstr "서가에 추가하세요"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:165
 #, fuzzy
@@ -719,17 +736,17 @@ msgstr "서가에 추가하세요"
 msgid "Add to list:"
 msgstr "서가에 추가하세요"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:372
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:155
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:395
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:170
 msgid "Add your own review"
 msgstr "자신의 서평을 추가하세요"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:264
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:266
 #, fuzzy
 msgid "Additional Content Types"
 msgstr "추가된 저자들: %s"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:236
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:238
 msgid "Adult"
 msgstr ""
 
@@ -741,14 +758,13 @@ msgstr ""
 msgid "Adult, serious"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:38
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:6
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:68
 #, fuzzy
 msgid "Advanced Search"
 msgstr "상세검색"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:33
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:302
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:304
 #, fuzzy
 msgid "All branches"
 msgstr "모든 분관"
@@ -766,20 +782,15 @@ msgstr "대리 컨택담당자 세부사항"
 msgid "Alternate Contact:"
 msgstr "대리 컨택 담당자:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:368
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:151
-msgid "Amazon Reader Reviews:"
-msgstr "Amazon이용자 서펑들:"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:192
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:65
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:212
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:80
 #, fuzzy
 msgid "Amazon Reviews"
 msgstr "Amazon이용자 서펑들:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:60
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:71
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:80
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:62
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:73
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:82
 msgid "Amount"
 msgstr "총계"
 
@@ -787,17 +798,26 @@ msgstr "총계"
 msgid "Amount Outstanding"
 msgstr "미입수 총계"
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:12
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:12
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/401.tmpl:12
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/500.tmpl:12
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/404.tmpl:12
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/kohaerror.tmpl:10
 msgid "An Error has Occurred"
 msgstr "에러가 발생했습니다"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/500.tmpl:15
+msgid "An error occurred while try to process your request."
+msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:144
 msgid "Annual"
 msgstr ""
 
 #. INPUT type=checkbox name=request
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:84
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:184
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:85
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:186
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:6
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:35
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:51
@@ -809,26 +829,28 @@ msgstr ""
 msgid "Any"
 msgstr "무엇이든"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:232
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:234
 msgid "Any Audience"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:240
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:242
 #, fuzzy
 msgid "Any Content"
 msgstr "목차"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:250
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:252
 #, fuzzy
 msgid "Any Format"
 msgstr "포멧(형식)"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:57
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:102
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:102
 #, fuzzy
 msgid "Any Phrase"
 msgstr "어느 곳이든지"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:56
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:101
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:101
 #, fuzzy
 msgid "Any Word"
 msgstr "누구든지"
@@ -853,10 +875,23 @@ msgid "Anywhere:"
 msgstr "어느 곳이든지"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:49
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:288
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:94
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:312
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:110
 msgid "Arrived"
 msgstr "도착했다"
+
+#. %1$s: TMPL_VAR name=branchcode
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:294
+#, fuzzy, c-format
+msgid "At branch: %s"
+msgstr "모든 분관"
+
+#. %1$s: TMPL_VAR name=branchcode
+#. %2$s: TMPL_VAR name=notes
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:94
+#, c-format
+msgid "At library: %s %s"
+msgstr ""
 
 #. %1$s: TMPL_VAR name=title
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:42
@@ -877,15 +912,18 @@ msgstr ""
 msgid "Audience"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:47
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:30
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:108
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:127
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:23
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:60
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:69
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:71
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:34
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:60
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:26
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:36
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:37
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:105
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:105
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:31
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:33
 msgid "Author"
 msgstr "저자"
 
@@ -949,11 +987,16 @@ msgstr "저자："
 msgid "Authors: %s"
 msgstr "저자： %s"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:233
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-facets.inc:6
+#, fuzzy
+msgid "Availability"
+msgstr "사용가능함"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:255
 msgid "Available"
 msgstr "사용가능함"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:88
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:89
 #, fuzzy
 msgid "Available Issues"
 msgstr "사용가능함"
@@ -966,12 +1009,12 @@ msgstr "도서관 안에서 사용가능함"
 msgid "Back to biblio"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:104
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:63
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:106
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:69
 msgid "Barcode"
 msgstr "바코드"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:78
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:95
 msgid "Below is a list of the three latest issues :"
 msgstr "각주는 세 개의 최근호 리스트에 있습니다 :"
 
@@ -984,7 +1027,7 @@ msgstr ""
 msgid "Biblio records"
 msgstr "#도서목록"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:266
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:268
 msgid "Bibliographies"
 msgstr ""
 
@@ -993,7 +1036,7 @@ msgstr ""
 msgid "Bimonthly"
 msgstr "달"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:243
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:245
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:49
 msgid "Biography"
 msgstr ""
@@ -1003,39 +1046,33 @@ msgstr ""
 msgid "Biweekly"
 msgstr "주"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead-basic.inc:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead_adv.inc:3
-msgid "Book Bag"
-msgstr "책 바구니 이용"
-
 #. IMG
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:161
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:165
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:112
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:90
 msgid "Book Cover Image"
 msgstr "책 표지그림"
 
 #. IMG
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:211
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:213
 #, fuzzy
 msgid "Books"
 msgstr "책 바구니 이용"
 
 #. IMG
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:213
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:215
 #, fuzzy
 msgid "Books on Tape"
 msgstr "책 표지그림"
 
 #. LABEL
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:211
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:213
 msgid ""
 "Books, Pamphlets, Technical reports, Manuscripts, Legal papers, Theses and "
 "dissertations"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:253
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:255
 #, fuzzy
 msgid "Braille"
 msgstr "사용가능함"
@@ -1048,8 +1085,14 @@ msgstr ""
 msgid "Brief Display"
 msgstr "교서전시"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:7
-msgid "Browse catalogue:"
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:68
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:70
+msgid "Browse by Hierarchy"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:68
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:70
+msgid "Browse by Subject"
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-browser.tmpl:12
@@ -1062,26 +1105,26 @@ msgstr ""
 msgid "By <a1>%s</a>"
 msgstr "저자 <a1>%s</a>"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:259
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:261
 msgid "CD Software"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:255
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:257
 msgid "CD audio"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:131
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:206
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:133
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:214
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:108
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:86
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:108
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:127
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:25
 msgid "Call No."
 msgstr "호출 번호"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:59
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:30
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:65
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:51
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:53
 msgid "Call Number"
 msgstr "호출 번호"
 
@@ -1095,18 +1138,19 @@ msgstr ""
 msgid "Call Number (Non-fiction 0-9 to Fiction A-Z)"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:107
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:109
 #, fuzzy
 msgid "Call number"
 msgstr "호출 번호"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:36
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:279
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:287
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:39
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:49
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:27
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:28
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:47
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:37
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:56
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-review.tmpl:19
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:33
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:37
@@ -1118,7 +1162,7 @@ msgstr "항목취소"
 msgid "Card Number:"
 msgstr "대출카드번호"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:256
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:258
 msgid "Cassette recording"
 msgstr ""
 
@@ -1128,6 +1172,7 @@ msgstr ""
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authoritiessearchresultlist.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:2
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:2
 msgid "Catalog &rsaquo;"
 msgstr ""
 
@@ -1154,6 +1199,11 @@ msgstr ""
 msgid "Catalog &rsaquo; Advanced Search"
 msgstr "%s1$s 목록--상세검색목록"
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/401.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/500.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/404.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/kohaerror.tmpl:1
 #, fuzzy
 msgid "Catalog &rsaquo; An Error Has Occurred"
@@ -1200,7 +1250,7 @@ msgstr "%1$s 수집 목차 -- 도서관 홈 페이지"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-auth.tmpl:1
 #, fuzzy
 msgid "Catalog &rsaquo; Log in to Your Account"
-msgstr "%1$s 목록--내 계정(로그인) "
+msgstr "%1$s 목록--내 계정(로그인)"
 
 #. %1$s: TMPL_VAR name=biblionumber
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:1
@@ -1227,7 +1277,7 @@ msgstr "%1$s 목록--%2$s를 예약하기"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:1
 #, fuzzy
-msgid "Catalog &rsaquo; Sending Your Book Bag"
+msgid "Catalog &rsaquo; Sending Your Cart"
 msgstr "%1$s 목록--내 책바구니로 보내기"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:1
@@ -1243,41 +1293,29 @@ msgstr "%1$s 목록--세부갱신하기"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:2
 #, fuzzy
-msgid "Catalog &rsaquo; Your Book Bag"
+msgid "Catalog &rsaquo; Your Cart"
 msgstr "%1$s 목록--내 책바구니"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-dictionary.tmpl:69
 msgid "Catalog Search Results"
 msgstr "목록검색결과"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:267
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:269
 #, fuzzy
 msgid "Catalogs"
 msgstr "%1$s 목록"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:41
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:50
 msgid "Category:"
 msgstr "범주/영역:"
-
-#. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:37
-#, fuzzy
-msgid "Change"
-msgstr "변경사항 저장"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:27
-#, fuzzy
-msgid "Change language"
-msgstr "언어변경:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:12
 msgid "Change your Password"
 msgstr "패스워드변경"
 
 #. IMG
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:20
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:57
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:159
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:112
 msgid "Check All"
 msgstr "전체 체크"
 
@@ -1285,7 +1323,7 @@ msgstr "전체 체크"
 msgid "Check out or return an item:"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:46
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:48
 #, fuzzy
 msgid "Checked Out"
 msgstr "체크아웃"
@@ -1320,11 +1358,6 @@ msgstr "분류: %s"
 msgid "Classification: %s"
 msgstr "분류: %s"
 
-#. INPUT type=reset
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:115
-msgid "Clear All"
-msgstr "모두삭제"
-
 #. INPUT type=submit
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:69
 msgid "Click Here to Complete Transaction"
@@ -1341,9 +1374,10 @@ msgid "Click here if done."
 msgstr ""
 
 #. INPUT type=checkbox name=biblionumber
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:169
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:218
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:220
 #, fuzzy
-msgid "Click to add to book bag"
+msgid "Click to add to cart"
 msgstr "책 바구니에 첨가하세요"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:10
@@ -1356,12 +1390,12 @@ msgid "Coded Fields"
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:77
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:206
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:227
 #, fuzzy
 msgid "Collection"
 msgstr "합집:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:82
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:95
 msgid "Collection:"
 msgstr "합집:"
 
@@ -1374,7 +1408,7 @@ msgstr "장서: %s"
 #. %1$s: TMPL_VAR name=title
 #. %2$s: TMPL_VAR name=firstname
 #. %3$s: TMPL_VAR name=surname
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:317
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:341
 #, fuzzy, c-format
 msgid "Comment by %s %s %s"
 msgstr "%s의 목차"
@@ -1384,8 +1418,8 @@ msgstr "%s의 목차"
 msgid "Comment:"
 msgstr "목차"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:188
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:64
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:208
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:79
 #, fuzzy
 msgid "Comments"
 msgstr "목차"
@@ -1403,17 +1437,22 @@ msgid "Compact view"
 msgstr "전체보기"
 
 #. IMG
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:216
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:218
 #, fuzzy
 msgid "Computer Files"
 msgstr "전체보기"
 
 #. LABEL
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:216
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:218
 msgid "Computer files, Data, Software"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:178
+#. INPUT type=submit
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:175
+msgid "Confirm"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:180
 msgid "Confirm Reservation"
 msgstr "예약확인"
 
@@ -1431,8 +1470,8 @@ msgstr "세부사항연결"
 msgid "Content"
 msgstr "목차"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:134
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:160
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:156
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:200
 msgid "Contents"
 msgstr "목차"
 
@@ -1442,16 +1481,21 @@ msgstr "목차"
 msgid "Contents of %s"
 msgstr "%s의 목차"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:128
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:127
 msgid "Copies"
 msgstr "증정본"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:147
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:196
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:198
 #, fuzzy
 msgid "Copies available at:"
 msgstr "복사할 수 없습니다."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:24
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:232
+msgid "Copy / Vol"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:61
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:92
 #, fuzzy
 msgid "Copyright"
@@ -1468,11 +1512,12 @@ msgstr "판권년"
 msgid "Copyright year: %s"
 msgstr "판권년: %s"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:14
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:20
 msgid "Copyright:"
 msgstr "저작권:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:80
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:125
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:125
 #, fuzzy
 msgid "Count"
 msgstr "총계"
@@ -1484,13 +1529,13 @@ msgstr "총계"
 msgid "Cover Image"
 msgstr "책 표지그림"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:179
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:219
 #, fuzzy
 msgid "Create a New List"
 msgstr "새 가상서가 설치"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:50
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:78
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:52
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:80
 msgid "Credits"
 msgstr "크레디트"
 
@@ -1498,7 +1543,7 @@ msgstr "크레디트"
 msgid "Current Password:"
 msgstr "현재 패스워드:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:258
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:260
 msgid "DVD video / Videodisc"
 msgstr ""
 
@@ -1507,22 +1552,29 @@ msgstr ""
 msgid "Daily"
 msgstr "세부사항:"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=damagedcount
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:164
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:213
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:215
 #, c-format
 msgid "Damaged (%s),"
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:31
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:50
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:277
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:33
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:301
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-account.tmpl:21
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:35
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:85
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:38
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:101
 msgid "Date"
 msgstr "날짜"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:209
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:62
+#, fuzzy
+msgid "Date Added"
+msgstr "날짜"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:230
 #, fuzzy
 msgid "Date Due"
 msgstr "날짜"
@@ -1532,12 +1584,18 @@ msgid "Date received"
 msgstr "받은 날짜"
 
 #. INPUT type=submit
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:177
+#, fuzzy
+msgid "Delete"
+msgstr "선택"
+
+#. INPUT type=submit
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:103
 msgid "Delete Checked Items"
 msgstr "체크된 항목 삭제"
 
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:72
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:109
 #, fuzzy
 msgid "Delete this List"
 msgstr "이 서가 지우기"
@@ -1546,17 +1604,17 @@ msgstr "이 서가 지우기"
 msgid "Description"
 msgstr "기술"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:254
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:277
 #, fuzzy
 msgid "Description (from Amazon.com):"
 msgstr "(Amazon.com에 의한)자료설명"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:184
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:204
 #, fuzzy
 msgid "Descriptions"
 msgstr "기술"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:44
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:50
 msgid "Detailed notes:"
 msgstr "상세기술주기:"
 
@@ -1569,7 +1627,7 @@ msgstr "세부사항:"
 msgid "Dewey"
 msgstr "듀이분류법"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:119
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:132
 msgid "Dewey:"
 msgstr "듀이분류법:"
 
@@ -1579,7 +1637,7 @@ msgstr "듀이분류법:"
 msgid "Dewey: %s"
 msgstr "듀이분류법: %s"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:268
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:270
 #, fuzzy
 msgid "Dictionaries"
 msgstr "사전검색"
@@ -1588,15 +1646,16 @@ msgstr "사전검색"
 msgid "Dictionary Search"
 msgstr "사전검색"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:24
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:69
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:69
 msgid "Did you mean:"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:281
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:283
 msgid "Directories"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:274
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:276
 msgid "Discographies"
 msgstr ""
 
@@ -1612,22 +1671,27 @@ msgstr "도서카드가 없습니까?"
 msgid "Don't have a password yet?"
 msgstr "아직 패스워드를 가지고 있지 않습니까?"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:132
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:207
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:188
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:65
+msgid "Dublin Core (XML)"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:134
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:215
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:108
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:86
 msgid "Due"
 msgstr "회비"
 
 #. %1$s: TMPL_VAR name=date_due
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:140
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:142
 #, fuzzy, c-format
 msgid "Due %s"
 msgstr "듀이분류법: %s"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:108
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:127
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:61
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:67
 msgid "Due Date"
 msgstr "반납기일"
 
@@ -1639,21 +1703,58 @@ msgstr "전자메일 주소"
 msgid "E-mail:"
 msgstr "전자메일:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:233
+#. %1$s: TMPL_VAR name=delete_fail
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:38
+#, c-format
+msgid "ERROR: Database error. Delete (shelf number %s) failed."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:17
+msgid "ERROR: No barcode given."
+msgstr ""
+
+#. %1$s: TMPL_VAR name=failgetitem
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:29
+#, c-format
+msgid "ERROR: No item found with barcode %s."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:18
+msgid "ERROR: No shelfnumber given."
+msgstr ""
+
+#. %1$s: TMPL_VAR name=unrecognized
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:41
+#, c-format
+msgid "ERROR: Shelf number %s unrecognized."
+msgstr ""
+
+#. %1$s: TMPL_VAR name=nopermission
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:26
+#, c-format
+msgid "ERROR: You do not have adequate permission for that action on list %s."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:235
 msgid "Easy"
 msgstr ""
 
+#. INPUT type=submit
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:168
+msgid "Edit"
+msgstr ""
+
 #. %1$s: TMPL_VAR name=shelfname
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:98
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:120
 #, fuzzy, c-format
 msgid "Edit List <em>%s</em>"
 msgstr "가상서가를 수정합니다 <em>%s</em>"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:61
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:73
 msgid "Edition statement:"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:190
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:210
 msgid "Editions"
 msgstr ""
 
@@ -1666,7 +1767,7 @@ msgstr "전자메일:"
 msgid "Empty and Close"
 msgstr "비우기/닫기"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:269
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:271
 msgid "Encyclopedias"
 msgstr ""
 
@@ -1690,21 +1791,25 @@ msgid ""
 "Enter your User ID, and click the submit button (or press the enter key)."
 msgstr ""
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:13
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:13
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/401.tmpl:13
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/500.tmpl:13
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/404.tmpl:13
+#, fuzzy
+msgid "Error 404"
+msgstr "를 위해："
+
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:56
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:53
 msgid "Error Issuing Book"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:36
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:81
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:81
 #, fuzzy
 msgid "Error:"
 msgstr "를 위해："
-
-#. %1$s: TMPL_VAR name=already
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:89
-#, c-format
-msgid "Error: A shelf named %s already exists. Please pick a different name."
-msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:47
 msgid "Expires:"
@@ -1718,7 +1823,7 @@ msgstr ""
 msgid "Feschrift Ind."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:241
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:243
 #, fuzzy
 msgid "Fiction"
 msgstr "로케이션"
@@ -1729,10 +1834,10 @@ msgid ""
 "Fill this form to suggest the library a new acquisition. You will be emailed "
 "when the library processes your purchase suggestion"
 msgstr ""
-"도서관에 새로운 도서를 신청하기 위해 이 양식을 작성해 주세요. 귀하의 희망도서"
-"구매가 완료되는데로 이-메일로 연락드리겠습니다."
+" 도서관에 새로운 도서를 신청하기 위해 이 양식을 작성해 주세요. 귀하의 희망도"
+"서 구매가 완료되는데로 이-메일로 연락드리겠습니다."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:280
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:282
 msgid "Filmographies"
 msgstr ""
 
@@ -1740,22 +1845,22 @@ msgstr ""
 msgid "Fine Amount"
 msgstr "연체료"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:48
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:49
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:134
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:50
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:51
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:138
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:108
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:86
 msgid "Fines"
 msgstr "연체료(미납도서)"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:59
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:69
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:61
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:71
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-account.tmpl:14
 msgid "Fines and Charges"
 msgstr "연체료 및 수수료"
 
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:194
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:196
 msgid "Finish and Place Reservation"
 msgstr "예약하기 및 마침"
 
@@ -1764,7 +1869,7 @@ msgstr "예약하기 및 마침"
 msgid "First Name:"
 msgstr "이름"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:243
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:266
 #, fuzzy
 msgid "Fix Itemtype"
 msgstr "모든 항목유형"
@@ -1773,7 +1878,7 @@ msgstr "모든 항목유형"
 msgid "For:"
 msgstr "를 위해："
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:12
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:18
 msgid "Format:"
 msgstr "포멧(형식):"
 
@@ -1792,11 +1897,20 @@ msgstr "를 위해："
 msgid "Full Heading"
 msgstr "전체표제보기"
 
+#. INPUT type=submit name=save
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:192
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:159
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:69
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:159
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:63
+msgid "Go"
+msgstr ""
+
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:68
 msgid "Guarantor:"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:270
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:272
 msgid "Handbooks"
 msgstr ""
 
@@ -1817,41 +1931,41 @@ msgstr "%s%s 환영합니다"
 
 #. %1$s: TMPL_VAR name=email_sender
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:6
-#, c-format
-msgid "Hi, Here is your Book Bag, sent from the Koha Online Catalog by %s"
+#, fuzzy, c-format
+msgid "Hi, Here is your cart, sent from the Koha Online Catalog by %s"
 msgstr ""
-"안녕하세요. 여기에 Koha 온라인 %s 목록으로부터 전달된 귀하의 책바구니가 있습"
-"니다."
+" 안녕하세요. 여기에 Koha 온라인 %s 목록으로부터 전달된 귀하의 책바구니가 있"
+"습 니다."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:25
 msgid "Hide Window"
 msgstr "창을 숨긴다"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:101
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:103
 msgid "Hold"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:94
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:96
 msgid "Hold date"
 msgstr ""
 
 #. %1$s: TMPL_VAR name=count
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:181
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:201
 #, c-format
 msgid "Holdings ( %s )"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:52
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:243
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:54
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:251
 msgid "Holds"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:91
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:93
 #, fuzzy
 msgid "Holds Waiting"
 msgstr "대기"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:105
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:107
 msgid "Home Library"
 msgstr ""
 
@@ -1860,24 +1974,26 @@ msgstr ""
 msgid "Home Phone:"
 msgstr "집 전화번호"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:17
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:56
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:28
 msgid "ISBD"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:194
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:15
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:214
 #, fuzzy
 msgid "ISBD View"
 msgstr "단순 보기"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:48
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:67
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:28
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:112
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:112
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:41
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:43
 msgid "ISBN"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:76
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:17
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:89
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:23
 msgid "ISBN:"
 msgstr ""
 
@@ -1887,11 +2003,12 @@ msgstr ""
 msgid "ISBN: %s"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:68
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:113
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:113
 msgid "ISSN"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:79
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:92
 msgid "ISSN:"
 msgstr ""
 
@@ -1905,8 +2022,8 @@ msgid ""
 "If this is an error, please take your card to the circulation desk at your "
 "local library and the error will be corrected."
 msgstr ""
-"만약 이것에 문제가 있으면 귀하의 도서관 카드를 지참하고 가까운 도서관으로 대"
-"출대에 가서 문의하시면 문제를 해결해 드릴것입니다."
+" 만약 이것에 문제가 있으면 귀하의 도서관 카드를 지참하고 가까운 도서관으로 "
+"대 출대에 가서 문의하시면 문제를 해결해 드릴것입니다."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/help.tmpl:11
 msgid ""
@@ -1927,8 +2044,8 @@ msgid ""
 "If you don't have a password yet, stop by the circulation desk the next time "
 "you're in the library. We'll happily set one up for you."
 msgstr ""
-"아직 귀하의 암호가 없다면 다음에 오실때 대출대로 들러주세요. 성심껏 도와드리"
-"겠습니다."
+" 아직 귀하의 암호가 없다면 다음에 오실때 대출대로 들러주세요. 성심껏 도와드"
+"리 겠습니다."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:60
 msgid "Illustration"
@@ -1936,7 +2053,7 @@ msgstr ""
 
 #. %1$s: TMPL_VAR name=holdingbranch
 #. %2$s: TMPL_VAR name=branch
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:117
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:119
 #, c-format
 msgid "In transit from %s to %s"
 msgstr "%1$s에서 %2$s로 전환"
@@ -1944,30 +2061,31 @@ msgstr "%1$s에서 %2$s로 전환"
 #. %1$s: TMPL_VAR name=transfertfrom
 #. %2$s: TMPL_VAR name=transfertto
 #. %3$s: TMPL_VAR name=transfertwhen
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:143
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:145
 #, fuzzy, c-format
 msgid "In transit from %s, to %s, since %s"
 msgstr "%1$s에서 %2$s로 전환"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:54
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:99
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:99
 msgid "Indexed in:"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:272
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:274
 msgid "Indexes"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:108
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:110
 #, fuzzy
 msgid "Information"
 msgstr "로케이션"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:276
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:300
 #, fuzzy
 msgid "Issue #"
 msgstr "출판호"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:85
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:101
 msgid "Issue number"
 msgstr "호수"
 
@@ -1987,8 +2105,7 @@ msgstr "출판호"
 msgid "Issues for a subscription"
 msgstr "정기간행물판"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:100
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:107
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:101
 msgid "Issues summary"
 msgstr "출판물 요약"
 
@@ -2003,15 +2120,27 @@ msgstr "결호"
 msgid "It began on %s and is issued every"
 msgstr "<b>%s<b>시작되었고 각<b>마다 이슈되어졌다"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:231
+#. %1$s: TMPL_VAR name=count
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:21
+#, c-format
+msgid "It has <b>%s</b> entries."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:253
 msgid "Item Cancelled"
 msgstr "항목취소"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:184
+#. IMG
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:218
+#, fuzzy
+msgid "Item Type <!-- TMPL_VAR NAME=\"ccode\" -->"
+msgstr "검색 <!--TMPL_VAR name=\"marc_value\"-->"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:186
 msgid "Item Type:"
 msgstr "항목(자료)유형"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:186
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:188
 msgid "Item Types:"
 msgstr "항목(자료)유형:"
 
@@ -2020,45 +2149,45 @@ msgid "Item cannot be issued."
 msgstr ""
 
 #. %1$s: TMPL_VAR name=wbrname
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:270
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:278
 #, fuzzy, c-format
 msgid "Item in transit to <b> %s</b>"
 msgstr "%1$s에서 %2$s로 전환"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:228
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:250
 #, fuzzy
 msgid "Item lost"
 msgstr "자료분실"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:102
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:205
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:104
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:226
 #, fuzzy
 msgid "Item type"
 msgstr "항목(자료)유형"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:121
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:134
 #, fuzzy
 msgid "Item type :"
 msgstr "항목(자료)유형"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:94
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:96
 #, fuzzy
 msgid "Item type:"
 msgstr "항목(자료)유형"
 
 #. %1$s: TMPL_VAR name=wbrname
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:264
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:272
 #, c-format
 msgid "Item waiting at <b> %s</b>"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:273
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:281
 #, fuzzy
 msgid "Item waiting to be pulled"
 msgstr "항목취소"
 
 #. %1$s: TMPL_VAR name=wbrname
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:267
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:275
 #, c-format
 msgid "Item waiting to be pulled from <b> %s</b>"
 msgstr ""
@@ -2072,7 +2201,7 @@ msgstr "항목(자료)들:"
 msgid "Itemtype"
 msgstr "모든 항목유형"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:193
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:194
 msgid "Itemtype limit to any of the following:"
 msgstr ""
 
@@ -2084,7 +2213,7 @@ msgstr "등록 날짜："
 msgid "Joining Branch:"
 msgstr "협력인접분관"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:234
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:236
 msgid "Juvenile"
 msgstr ""
 
@@ -2098,13 +2227,14 @@ msgid "Keyword(s):"
 msgstr "키워드:"
 
 #. LABEL
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:222
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:224
 msgid "Kits"
 msgstr ""
 
 #. LINK
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:12
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:3
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:10
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:10
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:4
 msgid "Koha - RSS"
 msgstr ""
 
@@ -2113,6 +2243,11 @@ msgstr ""
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authorities-home.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/401.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/500.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/404.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/kohaerror.tmpl:1
@@ -2141,16 +2276,16 @@ msgstr ""
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-browser.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/maintenance.tmpl:2
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:2
 msgid "Koha Online"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead-basic.inc:15
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:15
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:12
 msgid "Koha Online Catalog"
 msgstr ""
 
 #. LINK
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:40
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:54
 msgid "Koha OpenSearch"
 msgstr ""
 
@@ -2163,7 +2298,7 @@ msgstr ""
 msgid "LCCN"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:20
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:26
 msgid "LCCN:"
 msgstr ""
 
@@ -2179,11 +2314,11 @@ msgstr ""
 msgid "Language"
 msgstr "언어변경:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:252
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:254
 msgid "Large print"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:106
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:108
 #, fuzzy
 msgid "Last Location"
 msgstr "로케이션"
@@ -2193,44 +2328,41 @@ msgstr "로케이션"
 msgid "Last Name:"
 msgstr "성"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:210
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:62
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:231
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:68
 msgid "Last Seen"
 msgstr "최근에 방문한 내용"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:50
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:290
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:96
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:314
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:112
 msgid "Late"
 msgstr "지난"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:285
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:287
 msgid "Law reports and digests"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:271
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:273
 msgid "Legal articles"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:284
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:286
 msgid "Legal cases and case notes"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:275
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:277
 #, fuzzy
 msgid "Legislation"
 msgstr "로케이션"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:24
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:21
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:23
 #, fuzzy
 msgid "Library Catalog"
 msgstr "%1$s 장서목록"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead_adv.inc:2
-msgid "Library Catalog Search"
-msgstr "장서목록검색"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:48
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-facets.inc:6
 #, c-format
 msgid "Limit to <a1>currently available items.</a>"
 msgstr ""
@@ -2239,46 +2371,45 @@ msgstr ""
 msgid "Limit to:"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:208
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:210
 msgid "Limit type to: match any of the following"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:134
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:160
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:156
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:200
 #, fuzzy
 msgid "List Name"
 msgstr "성"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:99
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:180
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:121
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:220
 #, fuzzy
 msgid "List Name:"
 msgstr "성"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:13
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:113
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead-basic.inc:8
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:8
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:50
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:135
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:65
 msgid "Lists"
 msgstr ""
 
 #. LABEL
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:217
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:219
 msgid "Local History Materials"
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:143
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:207
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:60
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:228
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:66
 msgid "Location"
 msgstr "로케이션"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:299
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:301
 msgid "Location and availability:"
 msgstr ""
 
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:109
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:91
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-auth.tmpl:46
 msgid "Log In"
 msgstr "로그인"
@@ -2287,44 +2418,63 @@ msgstr "로그인"
 msgid "Log In to Your Account"
 msgstr "귀하의 계정으로 로인인 하세요"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead-basic.inc:8
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:8
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead_adv.inc:13
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:2
 msgid "Log Out"
 msgstr "로그아웃"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:103
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:101
+#, fuzzy
+msgid "Log in to Create Your Own Lists"
+msgstr "<a1>로그인</a>Koha"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:2
+#, fuzzy
+msgid "Log in to Your Account"
+msgstr "귀하의 계정으로 로인인 하세요"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:86
 #, fuzzy
 msgid "Log in to Your Account:"
 msgstr "귀하의 계정으로 로인인 하세요"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead_adv.inc:18
-msgid "Log in to access"
-msgstr "접속하기 위해 로그인 하세요"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead-basic.inc:8
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:8
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead_adv.inc:10
-msgid "Logged in as"
-msgstr "현재 로그인 되어 있습니다."
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:105
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:88
 #, fuzzy
 msgid "Login:"
 msgstr "로케이션:"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=itemlostcount
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:163
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:212
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:214
 #, c-format
 msgid "Lost (%s),"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:26
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:197
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:36
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:70
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:191
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:68
+msgid "MARC (Unicode/UTF-8)"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:190
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:67
+msgid "MARC (non-Unicode/MARC-8)"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:25
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:217
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:85
 msgid "MARC View"
 msgstr "MARC"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:189
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:66
+msgid "MARCXML"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:187
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:64
+msgid "MODS (XML)"
+msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:22
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:24
@@ -2341,22 +2491,28 @@ msgstr "주요 품목（단지 그 후에 $a）"
 msgid "Main entry:"
 msgstr "기본 기입"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:187
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:236
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:239
 #, c-format
 msgid "Make a <a1>purchase suggestion</a>"
 msgstr "<a1>구입희망사항</a>을 작성하세요"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:99
+#, fuzzy
+msgid "Manage Lists"
+msgstr "의해 관리되어졌습니다"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:67
 msgid "Managed by"
 msgstr "의해 관리되어졌습니다"
 
 #. IMG
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:218
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:220
 msgid "Maps"
 msgstr ""
 
 #. LABEL
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:218
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:220
 msgid "Maps, Globes"
 msgstr ""
 
@@ -2380,17 +2536,17 @@ msgstr "회원입회 수:"
 msgid "Message Sent"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:27
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:29
 msgid "Message from the library"
 msgstr "도서관에서 보낸 메세지"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:51
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:292
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:98
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:316
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:114
 msgid "Missing"
 msgstr "결본"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:250
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:258
 msgid "Modify"
 msgstr "수정하다"
 
@@ -2417,28 +2573,25 @@ msgstr "단지"
 msgid "More Details"
 msgstr "더욱 세부적인 사항들"
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:68
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:70
+msgid "Most Popular"
+msgstr ""
+
 #. LABEL
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:212
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:214
 msgid ""
 "Motion pictures, Videorecordings, Filmstrips, Slides, Transparencies, "
 "Photos, Cards, Charts, Drawings"
 msgstr ""
 
 #. LABEL
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:221
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:223
 msgid "Music"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:244
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:246
 msgid "Musical recording"
-msgstr ""
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead_adv.inc:12
-msgid "My Account"
-msgstr "내 계정"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead_adv.inc:11
-msgid "My Book Lists"
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:1
@@ -2471,23 +2624,23 @@ msgstr "다음 &gt;&gt;"
 msgid "Next&gt;&gt;"
 msgstr "다음 &gt;&gt;"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:182
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:188
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:122
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:100
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:47
 msgid "No"
 msgstr "안됩니다"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:145
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:185
 msgid "No Private Lists."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:168
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:208
 #, fuzzy
 msgid "No Public Lists."
 msgstr "출판되지 않았습니다"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:52
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:112
 #, fuzzy
 msgid "No Result found !"
 msgstr "찾을 수 없습니다."
@@ -2505,8 +2658,8 @@ msgstr "대리 컨택담당자 세부사항"
 msgid "No borrower matched %s"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:142
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:77
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:141
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:81
 msgid "No copies available."
 msgstr "복사할 수 없습니다."
 
@@ -2516,20 +2669,22 @@ msgid ""
 "No fields are mandatory. Enter whatever information you have. The \"Notes\" "
 "field can be used to provide any additional information."
 msgstr ""
-"규정된 부연설명 추가형식은 없습니다.귀하가 가지고 있는 어떤 내용이라도 기입하"
-"세요.  '각주' 란에 모든 해당 부연설명이 제공될 것입니다. "
+" 규정된 부연설명 추가형식은 없습니다.귀하가 가지고 있는 어떤 내용이라도 기입"
+"하 세요.  '각주' 란에 모든 해당 부연설명이 제공될 것입니다."
 
 #. SCRIPT
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:31
-msgid "No item was added to your book bag"
-msgstr ""
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:45
+#, fuzzy
+msgid "No item was added to your cart"
+msgstr "책바구니로 보내기"
 
 #. SCRIPT
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:31
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:45
 msgid "No item was selected"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:158
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:207
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:209
 #, fuzzy
 msgid "No items available:"
 msgstr "복사할 수 없습니다."
@@ -2538,21 +2693,21 @@ msgstr "복사할 수 없습니다."
 msgid "No limit"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:360
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:384
 #, fuzzy
 msgid "No other editions found."
 msgstr "찾을 수 없습니다."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:249
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:272
 msgid "No physical items for this record"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:228
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:236
 #, fuzzy
 msgid "No renewals left"
 msgstr "갱신할수 없습니다"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:57
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:117
 #, fuzzy
 msgid "No result found !"
 msgstr "찾을 수 없습니다."
@@ -2576,21 +2731,21 @@ msgstr "목록내 찾을 수 없습니다."
 msgid "No results in Authorities"
 msgstr "검정된 검색결과 내에서 찾을 수 없습니다."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:54
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:114
 #, fuzzy
 msgid "No results match your search for"
 msgstr "'%1$s'를 위한 검색결과"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:137
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:153
 msgid "No reviews has been writed on this biblio."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:242
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:244
 #, fuzzy
 msgid "Non Fiction"
 msgstr "로케이션"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:245
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:247
 msgid "Non-musical recording"
 msgstr ""
 
@@ -2599,13 +2754,8 @@ msgstr ""
 msgid "None"
 msgstr "주"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:16
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:39
-#, fuzzy
-msgid "Normal"
-msgstr "일반(표준)개관"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:67
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:14
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:82
 msgid "Normal View"
 msgstr "일반(표준)개관"
 
@@ -2613,8 +2763,8 @@ msgstr "일반(표준)개관"
 msgid "Normalised irregular"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:294
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:100
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:318
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:116
 msgid "Not Issued"
 msgstr "발행되지 않았습니다"
 
@@ -2626,32 +2776,33 @@ msgstr "출판되지 않았습니다"
 msgid "Not a biography"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:187
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:236
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:239
 msgid "Not finding what you're looking for?"
 msgstr "귀하가 원하는 것을 찾지 못하고 있습니까?"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:219
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:241
 msgid "Not for loan"
 msgstr ""
 
 #. %1$s: TMPL_VAR name=notforloanvalue
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:153
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:155
 #, c-format
 msgid "Not for loan (%s)"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:162
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:164
 msgid "Not on hold"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:178
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:183
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:120
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:98
 msgid "Not renewable"
 msgstr "갱신할수 없습니다"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:65
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:279
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:303
 msgid "Note"
 msgstr "주"
 
@@ -2660,7 +2811,8 @@ msgid "Note: Your comment must be approved by a librarian."
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:99
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:65
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:110
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:110
 msgid "Notes"
 msgstr "주"
 
@@ -2677,7 +2829,7 @@ msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:66
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:25
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:29
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:35
 msgid "Notes:"
 msgstr "주："
 
@@ -2686,41 +2838,45 @@ msgid "Number"
 msgstr "호"
 
 #. INPUT type=submit name=do
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:328
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:330
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-tags_subject.tmpl:18
 msgid "OK"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:226
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:234
 #, fuzzy
 msgid "On Reserve"
 msgstr "예약"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:157
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:159
 msgid "On hold"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:222
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:244
 msgid "On loan"
 msgstr "대출중"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=onloancount
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:161
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:210
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:212
 #, fuzzy, c-format
 msgid "On loan (%s),"
 msgstr "대출중"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=orderedcount
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:165
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:214
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:216
 #, c-format
 msgid "On order (%s),"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:130
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:142
 msgid "Online Resources:"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:313
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:315
 msgid "Only items currently available"
 msgstr ""
 
@@ -2738,15 +2894,15 @@ msgstr "도서관에 따른 정렬"
 msgid "Other"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:345
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:369
 msgid "Other Editions of this Work"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:47
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:49
 msgid "Overdue"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:203
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:211
 msgid "Overdues"
 msgstr ""
 
@@ -2758,7 +2914,7 @@ msgstr "패스워드갱신"
 msgid "Password or PIN"
 msgstr "패스워드 혹은 PIN 넘버"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:106
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:89
 msgid "Password:"
 msgstr "패스워드:"
 
@@ -2766,11 +2922,11 @@ msgstr "패스워드:"
 msgid "Passwords do not match. Please re-type your new password."
 msgstr "패스워드가 일치하지 않습니다. 새 패스워드를 다시 입력해 주세요."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:273
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:275
 msgid "Patent document"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:92
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:108
 msgid "Pending"
 msgstr "검토중"
 
@@ -2803,24 +2959,24 @@ msgstr "전화번호(집):"
 msgid "Phone:"
 msgstr "전화번호:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:26
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:32
 msgid "Physical Details:"
 msgstr "신상명세:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:71
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:83
 #, fuzzy
 msgid "Physical details:"
 msgstr "신상명세:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:95
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:97
 msgid "Pick Up Branch"
 msgstr "픽업 분관"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:248
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:256
 msgid "Pick Up Location"
 msgstr "픽업 장소"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:191
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:193
 msgid "Pick up From:"
 msgstr "로 부터 픽업:"
 
@@ -2833,16 +2989,17 @@ msgid "Picture"
 msgstr ""
 
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:87
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:169
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:89
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:171
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:16
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:218
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:220
 #, fuzzy
 msgid "Place Hold"
 msgstr "두다"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:15
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:152
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:169
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:31
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:163
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:40
 msgid "Place Reserve"
 msgstr "예약장소"
 
@@ -2851,15 +3008,15 @@ msgstr "예약장소"
 msgid "Place a hold on"
 msgstr "두다"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:97
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:99
 msgid "Place a hold on a specific copy"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:83
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:84
 msgid "Place a hold on the next available copy"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:247
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:255
 msgid "Placed On"
 msgstr "두다"
 
@@ -2880,8 +3037,8 @@ msgid ""
 "submit current information (<em>Please note:</em> there may be a delay in "
 "restoring your account if you submit online)"
 msgstr ""
-"귀하의 현재정보를 등록하기 위해서는 귀하의 사서와 연락을 취하시거나 아니면 "
-"<a1>온라인 업데이트 양식</a>을 사용하세요.(<em>주지사항:</em>온라인으로 등록"
+" 귀하의 현재정보를 등록하기 위해서는 귀하의 사서와 연락을 취하시거나 아니면 "
+"<a1>온라인 업데이트 양식</a>을 사용하세요.(<em>주지사항:</em>온라인으로 등록 "
 "하실경우 귀하의 계정을 복구하는데 얼마간의 시간이 더 걸릴지도 모릅니다)"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:81
@@ -2895,12 +3052,12 @@ msgid ""
 "Please make any necessary changes to your record. Submitting the form will "
 "notify a library staff member, who will make the changes permanent."
 msgstr ""
-"필요한 모든 기록변경사항을 작성하세요. 등록한 양식내용은 해당 도서관 기록변경"
-"담당자에게 통보될 것입니다."
+" 필요한 모든 기록변경사항을 작성하세요. 등록한 양식내용은 해당 도서관 기록변"
+"경 담당자에게 통보될 것입니다."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:33
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:36
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:39
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:35
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:38
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:41
 msgid "Please note:"
 msgstr "다음을 주지하십시오："
 
@@ -2914,7 +3071,7 @@ msgstr ""
 msgid "Popularity (Most to Least)"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:335
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:359
 msgid "Post or edit your comments on this item."
 msgstr ""
 
@@ -2926,10 +3083,10 @@ msgstr ""
 msgid "Primary (5-8)"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:18
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:17
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:23
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:160
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:42
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:169
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:46
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:18
 msgid "Print"
 msgstr "프린트"
@@ -2938,29 +3095,31 @@ msgstr "프린트"
 msgid "Priority:"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:43
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:52
 msgid "Private"
 msgstr "개인 책꽂이"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:13
-msgid "Problem sending the book bag..."
+#, fuzzy
+msgid "Problem sending the cart..."
 msgstr "책바구니 보내는 문제..."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:279
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:281
 msgid "Programmed texts"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:44
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:53
 msgid "Public"
 msgstr "공중 책꽂이"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:121
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:123
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:143
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:145
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:80
 #, fuzzy
 msgid "Public Lists"
 msgstr "공중 책꽂이"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:96
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:98
 #, fuzzy
 msgid "Publication year:"
 msgstr "간행물 년도:"
@@ -2975,7 +3134,12 @@ msgstr ""
 msgid "Publication/Copyright Date: Oldest to Newest"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:64
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:233
+#, fuzzy
+msgid "Published"
+msgstr "발행인"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:76
 #, fuzzy
 msgid "Published by :"
 msgstr "%s에 의해 출판되었습니다"
@@ -2989,7 +3153,8 @@ msgstr "%s에 의해 출판되었습니다"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:64
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:123
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:125
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:64
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:109
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:109
 msgid "Publisher"
 msgstr "발행인"
 
@@ -3000,7 +3165,7 @@ msgid "Publisher Location"
 msgstr "발행인"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:24
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:23
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:29
 msgid "Publisher:"
 msgstr "발행인："
 
@@ -3018,16 +3183,16 @@ msgstr "분기"
 msgid "RECEIPT"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:377
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:160
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:400
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:175
 msgid "Rating (from Amazon.com):"
-msgstr "(Amazon.com 에의한) 평정척도: "
+msgstr "(Amazon.com 에의한) 평정척도:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:35
 msgid "Re-Type New Password:"
 msgstr "새 패스워드를 다시 한 번 입력하세요:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:40
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:46
 msgid "Record No.:"
 msgstr "Booklist 기록 번호："
 
@@ -3036,7 +3201,7 @@ msgid "Record not found"
 msgstr ""
 
 #. LABEL
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:223
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:225
 #, fuzzy
 msgid "Reference"
 msgstr "예약"
@@ -3049,7 +3214,7 @@ msgstr ""
 msgid "Regular"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:251
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:253
 msgid "Regular print"
 msgstr ""
 
@@ -3057,7 +3222,7 @@ msgstr ""
 msgid "Regularity"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:49
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:55
 msgid "Related links:"
 msgstr "관련된 링크:"
 
@@ -3071,14 +3236,14 @@ msgid "Relevance"
 msgstr "예약"
 
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:68
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:105
 msgid "Remove Selected Items"
 msgstr "선택한 항목들을 삭제하세요"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:133
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:176
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:208
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:223
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:136
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:181
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:216
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:231
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:108
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:118
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:86
@@ -3087,7 +3252,7 @@ msgid "Renew"
 msgstr "대출 혹은 구독예약기간연장"
 
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:192
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:199
 #, fuzzy
 msgid "Renew All"
 msgstr "대출 혹은 구독예약기간연장"
@@ -3135,6 +3300,7 @@ msgid "Results %s to %s of %s in the catalog."
 msgstr "목록내에 있는 %3$s의 %1$s에 대한 %$2s의 결과"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:4
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:4
 #, fuzzy
 msgid "Results of Search"
 msgstr "검색결과:"
@@ -3174,17 +3340,17 @@ msgstr ""
 #. %1$s: TMPL_VAR name=title
 #. %2$s: TMPL_VAR name=surname
 #. %3$s: TMPL_VAR name=firstname
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:121
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:137
 #, c-format
 msgid "Review by %s %s %s"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:278
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:280
 #, fuzzy
 msgid "Reviews"
 msgstr "대출 혹은 구독예약기간연장"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:117
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:133
 msgid "Reviews by members:"
 msgstr ""
 
@@ -3195,22 +3361,38 @@ msgstr "토요일"
 
 #. INPUT type=submit
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:28
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:47
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:37
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:56
 msgid "Save"
 msgstr "저장"
 
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:107
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:129
 msgid "Save Changes"
 msgstr "변경사항 저장"
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:184
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:61
+#, fuzzy
+msgid "Save Record:"
+msgstr "Booklist 기록 번호："
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:18
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:174
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:51
+msgid "Save to Your Lists"
+msgstr ""
+
+#. For the first occurrence,
 #. %1$S: type=text name=q
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:49
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:94
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:94
 #, c-format
 msgid "Scan Index for: %S"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:44
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:89
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:89
 msgid "Scan Index:"
 msgstr ""
 
@@ -3235,16 +3417,10 @@ msgid "Scan next item, or"
 msgstr ""
 
 #. INPUT type=submit name=do
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:328
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:22
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:36
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:330
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:18
 msgid "Search"
 msgstr "검색"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead_adv.inc:3
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:5
-msgid "Search Home"
-msgstr "홈페이지 검색"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:39
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:49
@@ -3286,7 +3462,7 @@ msgstr ""
 msgid "Select remote databases:"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:100
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:122
 msgid "Select sort field for this List:"
 msgstr ""
 
@@ -3313,7 +3489,8 @@ msgid "Send"
 msgstr "발송"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:21
-msgid "Sending your book bag"
+#, fuzzy
+msgid "Sending your cart"
 msgstr "책바구니로 보내기"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:115
@@ -3337,18 +3514,26 @@ msgstr "연속간행물 : %s"
 msgid "Serials"
 msgstr "연속간행물"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:63
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:29
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:108
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:108
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:46
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:48
 #, fuzzy
 msgid "Series"
 msgstr "총서명"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:179
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:181
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:66
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:111
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:111
 #, fuzzy
 msgid "Series Title"
 msgstr "총서명:"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:62
+#, fuzzy
+msgid "Series:"
+msgstr "총서명"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:49
 msgid "Session Lost"
@@ -3363,15 +3548,17 @@ msgstr ""
 msgid "Set Filter"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:29
-msgid "Set language to"
-msgstr ""
-
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:55
 msgid "Sex:"
 msgstr "성별:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:37
+#. %1$s: TMPL_VAR name=delete_ok
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:35
+#, c-format
+msgid "Shelf %s Deleted."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:46
 msgid "Shelf Name:"
 msgstr "서가 이름:"
 
@@ -3379,16 +3566,16 @@ msgstr "서가 이름:"
 msgid "Show"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:25
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:23
 msgid "Show All Items"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:23
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:25
 #, fuzzy
 msgid "Show Last 50 Items Only"
 msgstr "모든 항복 보기 <a1>지난 50개 항목만 보기</a>"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-facets.inc:8
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-facets.inc:13
 msgid "Show More"
 msgstr ""
 
@@ -3397,17 +3584,17 @@ msgstr ""
 msgid "Show the top"
 msgstr "목록검색"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:23
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:25
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:28
 msgid "Showing All Items"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:25
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:23
 #, fuzzy
 msgid "Showing Last 50 Items"
 msgstr "지난 50개 항목 보기 <a1>모든 항목 보기</a>"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:48
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-facets.inc:6
 msgid "Showing only"
 msgstr ""
 
@@ -3446,11 +3633,11 @@ msgstr ""
 msgid ""
 "Sorry, the system doesn't think you have permission to access this page."
 msgstr ""
-"미안합니다. KOAH 시스템은 당신이 이 페이지에 엑세스할 권한이 없다고 생각합니"
-"다."
+" 미안합니다. KOAH 시스템은 당신이 이 페이지에 엑세스할 권한이 없다고 생각합"
+"니 다."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:395
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:176
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:417
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:190
 msgid "Sorry, there are no reviews available for this title."
 msgstr "미안합니다. 이 표제에 대해서는 아무런 서평을 할 수 없습니다."
 
@@ -3475,18 +3662,18 @@ msgstr "미안합니다. 당신의 세션타임이 끝났습니다. 다시 로�
 msgid "Sorry, your session has timed out. Please log in again."
 msgstr "미안합니다. 당신의 세션타임이 끝났습니다. 다시 로그인 해 주세요."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:134
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:156
 #, fuzzy
 msgid "Sort by"
 msgstr "미안합니다"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:318
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:320
 #, fuzzy
 msgid "Sort by:"
 msgstr "미안합니다"
 
 #. LABEL
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:213
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:215
 msgid "Spoken, Books on CD and Cassette"
 msgstr ""
 
@@ -3501,17 +3688,17 @@ msgstr "대출카드번호"
 msgid "Start search"
 msgstr "검색 시작"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:282
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:284
 #, fuzzy
 msgid "Statistics"
 msgstr "지위"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:37
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:249
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:257
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:68
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:208
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:278
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:85
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:229
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:302
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:101
 msgid "Status"
 msgstr "지위"
 
@@ -3529,12 +3716,15 @@ msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:157
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:159
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:61
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:27
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:106
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:106
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:36
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:38
 msgid "Subject"
 msgstr "주제"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:62
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:107
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:107
 #, fuzzy
 msgid "Subject Phrase"
 msgstr "주제： %s"
@@ -3544,9 +3734,9 @@ msgstr "주제： %s"
 msgid "Subject cloud"
 msgstr "주제"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:99
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:108
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:35
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:112
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:121
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:41
 msgid "Subject(s):"
 msgstr "주제"
 
@@ -3596,13 +3786,13 @@ msgstr ""
 msgid "Subscription information for %s"
 msgstr "%s를 위한 예약정보"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:186
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:62
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:206
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:77
 #, fuzzy
 msgid "Subscriptions"
 msgstr "기술"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:231
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:233
 msgid "Subtype limits"
 msgstr ""
 
@@ -3635,11 +3825,16 @@ msgstr "요약"
 msgid "Sunday"
 msgstr "일요일"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:277
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:279
 msgid "Surveys"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:283
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:68
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:70
+msgid "Tag Cloud"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:285
 msgid "Technical reports"
 msgstr ""
 
@@ -3648,7 +3843,8 @@ msgstr ""
 msgid "Term"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:79
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:124
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:124
 msgid "Term/Phrase"
 msgstr ""
 
@@ -3656,17 +3852,15 @@ msgstr ""
 msgid "Textmessaging:"
 msgstr "텍스트 메세지"
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:26
+msgid "Thank you!"
+msgstr ""
+
 #. %1$s: TMPL_VAR name=limit
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:65
 #, fuzzy, c-format
 msgid "The %s most checked-out"
 msgstr "귀하는 체크아웃 한 것이 없습니다"
-
-#. %1$s: TMPL_VAR name=email_add
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:9
-#, fuzzy, c-format
-msgid "The book bag was sent to: %s"
-msgstr "배달된 책 바구니"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-browser.tmpl:43
 #, c-format
@@ -3676,7 +3870,19 @@ msgid ""
 "it."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:273
+#. %1$s: TMPL_VAR name=email_add
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:9
+#, fuzzy, c-format
+msgid "The cart was sent to: %s"
+msgstr "배달된 책 바구니"
+
+#. %1$s: TMPL_VAR name=need_confirm
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:20
+#, fuzzy, c-format
+msgid "The list <i>%s</i> is not empty."
+msgstr "이 서가는 비어 있습니다."
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:297
 #, fuzzy
 msgid "The three latest issues for this subscription:"
 msgstr "이 예약과 관련된 세 가지 최근 이슈"
@@ -3687,7 +3893,7 @@ msgstr "이 예약과 관련된 세 가지 최근 이슈"
 msgid "The userid %s was not found in the database. Please try again."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:330
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:354
 #, fuzzy
 msgid "There are no comments for this item."
 msgstr "미안합니다. 이 표제에 대해서는 아무런 서평을 할 수 없습니다."
@@ -3708,7 +3914,7 @@ msgstr ""
 msgid "There was a problem with your submission"
 msgstr "귀하의 입력사항에 문제가 있었습니다"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:276
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:278
 msgid "Theses"
 msgstr ""
 
@@ -3718,27 +3924,48 @@ msgid ""
 "of them to see the documents related to it"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:59
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:96
 #, c-format
 msgid ""
 "This List is empty. You can add to your lists from the results of any "
 "<a1>search</a>!"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:268
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:15
+msgid "This error means that the Koha is pointed an invalid link."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/404.tmpl:15
+msgid ""
+"This error means that the link was broken and that the page doesn't exist."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/401.tmpl:15
+msgid ""
+"This error means that the you are trying to access a link that you're not "
+"authorized to see."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:15
+msgid ""
+"This error means that you are forbidden for some reason to see this page."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:291
 #, fuzzy
 msgid "This is a serial subscription"
 msgstr "정기간행물판"
 
 #. SCRIPT
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:31
-msgid "This item has been added to your book bag"
-msgstr ""
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:45
+#, fuzzy
+msgid "This item has been added to your cart"
+msgstr "책바구니로 보내기"
 
 #. SCRIPT
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:31
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:45
 #, fuzzy
-msgid "This item is already in your book bag"
+msgid "This item is already in your cart"
 msgstr "책바구니로 보내기"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:148
@@ -3758,22 +3985,25 @@ msgstr ""
 msgid "Thursday"
 msgstr "목요일"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:46
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:29
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:78
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:93
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:130
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:206
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:246
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:95
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:132
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:214
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:254
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:108
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:86
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:108
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:127
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:22
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:59
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:169
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:171
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:32
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:58
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:25
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:33
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:34
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:103
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:103
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:26
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:28
 msgid "Title"
 msgstr "표제"
 
@@ -3789,13 +4019,23 @@ msgstr "표제"
 msgid "Title (Z-A)"
 msgstr "표제"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:59
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:104
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:104
 msgid "Title Phrase"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:181
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:183
 msgid "Title:"
 msgstr "표제:"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:16
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:16
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/401.tmpl:17
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/500.tmpl:16
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/404.tmpl:16
+#, c-format
+msgid "To report this error, you can <a1>email the Koha Administrator</a>."
+msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:106
 #, fuzzy
@@ -3811,13 +4051,18 @@ msgstr "%1$s 정기간행물"
 msgid "Total Due"
 msgstr "전체 수수료"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:286
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:288
 msgid "Treaties"
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:146
 msgid "Triennial"
 msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/401.tmpl:16
+#, fuzzy
+msgid "Try logging in to the catalog"
+msgstr "목록내 찾을 수 없습니다."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:62
 #, fuzzy
@@ -3828,7 +4073,7 @@ msgstr "화요일"
 msgid "Type of Heading"
 msgstr "표목 유형"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:58
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:64
 msgid "Type/Format"
 msgstr "유형/포멧"
 
@@ -3843,11 +4088,11 @@ msgstr "URL："
 msgid "URL : %s"
 msgstr "URL： %s"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:149
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:151
 msgid "Unavailable (lost or missing)"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:94
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:95
 #, fuzzy
 msgid "Unavailable Issues"
 msgstr "다음 유효한"
@@ -3863,7 +4108,7 @@ msgstr "통합 표제:"
 msgid "Unified title: %s"
 msgstr "통합 표제: %s"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:90
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:103
 #, fuzzy
 msgid "Uniform titles:"
 msgstr "통합 표제:"
@@ -3879,6 +4124,18 @@ msgstr ""
 msgid "Update Your Personal Details"
 msgstr "개인정보 세부사항"
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:22
+msgid "Use the \"Confirm\" button below to confirm deletion."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:18
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:18
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/401.tmpl:19
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/500.tmpl:18
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/404.tmpl:18
+msgid "Use top menu bar to navigate to another part of Koha."
+msgstr ""
+
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-dictionary.tmpl:45
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-dictionary.tmpl:79
 msgid "Used in"
@@ -3891,11 +4148,11 @@ msgid ""
 "If <a1>your account page</a> shows your account to be clear, please consult "
 "a librarian."
 msgstr ""
-"일반적으로 본인의 계정이 정지된 이유는 오래된 연체료가 있거나 지불해야 될 금"
-"액이 있기때문입니다. 만약<a1>당신의 온라인 계정 페이지</a>가 아무런 문제가 없"
-"게 보여진다면, 사서에게 문의해 주시기 바랍니다. "
+" 일반적으로 본인의 계정이 정지된 이유는 오래된 연체료가 있거나 지불해야 될 "
+"금 액이 있기때문입니다. 만약<a1>당신의 온라인 계정 페이지</a>가 아무런 문제"
+"가 없 게 보여진다면, 사서에게 문의해 주시기 바랍니다."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:257
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:259
 msgid "VHS tape / Videocassette"
 msgstr ""
 
@@ -3908,24 +4165,26 @@ msgstr "항목(자료)유형:"
 msgid "View Full Heading"
 msgstr "전체표제보기"
 
+#. A
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:184
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:186
+#, fuzzy
+msgid "View details for this title"
+msgstr "표제검색"
+
 #. IMG
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:212
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:214
 msgid "Visual Materials"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:211
-#, fuzzy
-msgid "Volume"
-msgstr "홈으로 돌아가기"
-
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:48
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:286
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:310
 msgid "Waited"
 msgstr "대기"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:157
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:51
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:115
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:159
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:53
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:117
 msgid "Waiting"
 msgstr "대기"
 
@@ -3935,12 +4194,12 @@ msgid "Warning:"
 msgstr "대기"
 
 #. %1$s: TMPL_VAR name=subscriptionsnumber
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:76
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:91
 #, c-format
 msgid "We have %s subscription(s) associated with this title."
 msgstr "이 표제와 연관된 %s예약이 있습니다."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:260
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:262
 #, fuzzy
 msgid "Website"
 msgstr "대기"
@@ -3955,8 +4214,15 @@ msgstr "수요일"
 msgid "Weekly"
 msgstr "주"
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:2
+#, c-format
+msgid "Welcome, <a1>"
+msgstr ""
+
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=wthdrawncount
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:162
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:211
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:213
 #, c-format
 msgid "Withdrawn (%s),"
 msgstr ""
@@ -3970,16 +4236,16 @@ msgstr ""
 msgid "Work/Fax phone:"
 msgstr "직장 전화번호/Fax번호"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:141
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:157
 msgid "Write or modify your reviews on this biblio."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:112
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:125
 #, fuzzy
 msgid "Year :"
 msgstr "년"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:182
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:188
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:122
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:100
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:45
@@ -4006,32 +4272,30 @@ msgstr "귀하는 지금처럼 로그인 되어 있습니다."
 msgid "You are logging from a different IP address. Please log in again."
 msgstr "귀하는 지금 다른 IP 주소로 로그인 하고 있습니다. 다시 로그인해 주세요"
 
-#. SCRIPT
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:31
-#, fuzzy
-msgid "You book bag is currently empty"
-msgstr "배달된 책 바구니"
-
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:39
 #, fuzzy
 msgid "You can't change your password."
 msgstr "패스워드변경"
+
+#. SCRIPT
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:45
+#, fuzzy
+msgid "You cart is currently empty"
+msgstr "배달된 책 바구니"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:127
 #, fuzzy
 msgid "You currently have nothing checked out."
 msgstr "귀하는 체크아웃 한 것이 없습니다"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:62
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:72
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:64
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:74
 msgid "You currently owe fines and charges amounting to:"
 msgstr "귀하는 현재 연체료와 수수료를 가지고 있습니다."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:6
-msgid "You did not specify any search criteria"
-msgstr "귀하는 아무런 검색기준을 지정하지 않았습니다."
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:59
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:6
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:119
 #, fuzzy
 msgid "You did not specify any search criteria."
 msgstr "귀하는 아무런 검색기준을 지정하지 않았습니다."
@@ -4042,10 +4306,10 @@ msgid ""
 "You entered an incorrect username or password. Please try again! And "
 "remember, usernames and passwords are case sensitive."
 msgstr ""
-"귀하는 잘못된 사용자 이름과 패스워드를 입력하였습니다. 다시 입력하세요! 그리"
-"고 그것을 기억하세요, 사용자 이름과 패스워드는 민감하고 중요한 사항입니다."
+" 귀하는 잘못된 사용자 이름과 패스워드를 입력하였습니다. 다시 입력하세요! 그"
+"리 고 그것을 기억하세요, 사용자 이름과 패스워드는 민감하고 중요한 사항입니다."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:81
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:83
 msgid "You have a credit of:"
 msgstr "귀하는 크레디트를 가지고 있습니다:"
 
@@ -4058,7 +4322,7 @@ msgstr "귀하는 한번도 그 도서관으로부터 빌린적이 없습니다.
 msgid "You have no Fines or Charges"
 msgstr "귀하는 어떤 과태료나 수수료도 없습니다."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:196
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:204
 msgid "You have nothing checked out"
 msgstr "귀하는 체크아웃 한 것이 없습니다"
 
@@ -4071,24 +4335,19 @@ msgstr "귀하는 픽업을 위해 분관을 선택해야만 합니다."
 msgid "You must select at least one item."
 msgstr "귀하는 적어도 한 개 이상의 품(항)목을 선정해야 합니다."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:235
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:237
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:11
 msgid "Young Adult"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead-basic.inc:8
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:8
-#, fuzzy
-msgid "Your Account"
-msgstr "내 계정"
-
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:2
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:17
-msgid "Your Book Bag"
-msgstr "귀하의 책 바구니"
+msgid "Your Cart"
+msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:116
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:118
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:138
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:140
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:89
 msgid "Your Lists"
 msgstr ""
 
@@ -4096,20 +4355,30 @@ msgstr ""
 msgid "Your Userid was not found in the database. Please try again."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:33
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:35
 #, fuzzy, c-format
 msgid ""
 "Your account has been frozen. Usually the reason for freezing an account is "
 "old overdues or damage fees.If <a1>your account page</a> shows your account "
 "to be clear, please consult a librarian."
 msgstr ""
-"귀하의 계정은 정지되었습니다. 그것은 대개 계정이 오래연체되었거나 배상해야할 "
-"비용이 있기 때문 입니다.만약 <a1>귀하의 온라인 계좌페이지</a>를 다시 정상적으"
-"로 보이게 하려면 사서에게 문의해 주세요."
+" 귀하의 계정은 정지되었습니다. 그것은 대개 계정이 오래연체되었거나 배상해야"
+"할 비용이 있기 때문 입니다.만약 <a1>귀하의 온라인 계좌페이지</a>를 다시 정상"
+"적으 로 보이게 하려면 사서에게 문의해 주세요."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-auth.tmpl:41
 msgid "Your card number"
 msgstr "귀하의 카드번호"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:75
+msgid "Your cart is empty."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:26
+msgid ""
+"Your corrections have been submitted to the library, and a staff member will "
+"update your record as soon as possible."
+msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:24
 #, fuzzy
@@ -4117,19 +4386,19 @@ msgid ""
 "Your current password was entered incorrectly. If this problem persists, "
 "please ask a librarian to re-set your password for you."
 msgstr ""
-"귀하가 현재 입력한 패스워드는 맞지 않습니다. 만약 이 문제가 계속 발생하면 사"
-"서에게 문의하여 패스워드를 다시 설정하세요."
+" 귀하가 현재 입력한 패스워드는 맞지 않습니다. 만약 이 문제가 계속 발생하면 "
+"사 서에게 문의하여 패스워드를 다시 설정하세요."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:39
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:41
 #, fuzzy
 msgid ""
 "Your library card has been marked as lost or stolen. If this is an error, "
 "please take your card to the circulation desk at your local library and the "
 "error will be corrected."
 msgstr ""
-"귀하의 도서관카트는 이미 잃어버렸거나 분실된 것으로 나타나 있습니다. 만약 이"
-"것이 잘못된 정보라면, 귀하의 카드를 지참하시고 지역 도서관 대출대로 가셔서 다"
-"시 수정하시면 됩니다."
+" 귀하의 도서관카트는 이미 잃어버렸거나 분실된 것으로 나타나 있습니다. 만약 "
+"이 것이 잘못된 정보라면, 귀하의 카드를 지참하시고 지역 도서관 대출대로 가셔"
+"서 다 시 수정하시면 됩니다."
 
 #. %1$s: TMPL_VAR name=minpasslen
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:21
@@ -4152,23 +4421,25 @@ msgstr "귀하의 새 패스워드는 적어도 6자리 이상이 되어야 합�
 msgid "Your session has timed out due to inactivity. Please sign in."
 msgstr "미안합니다. 당신의 세션타임이 끝났습니다. 다시 로그인 해 주세요."
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=itemcallnumber
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:152
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:201
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:203
 #, fuzzy, c-format
 msgid "[<a1>%s</a>]"
 msgstr "저자 <a1>%s</a>"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:330
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:332
 #, fuzzy
 msgid "[Fewer Options]"
 msgstr "다른 옵션:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:332
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:334
 #, fuzzy
 msgid "[More options]"
 msgstr "다른 옵션:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:334
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:336
 #, fuzzy
 msgid "[New Search]"
 msgstr "검색"
@@ -4177,14 +4448,20 @@ msgstr "검색"
 msgid "] :"
 msgstr ""
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:12
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:14
+#, fuzzy
+msgid "a list:"
+msgstr "서가에 추가하세요"
+
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:88
 msgid "abstract"
 msgstr ""
 
 #. SCRIPT
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:31
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:45
 #, fuzzy
-msgid "already in the bag"
+msgid "already in your cart"
 msgstr "도서관 안에서 사용가능함"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:20
@@ -4192,7 +4469,7 @@ msgstr "도서관 안에서 사용가능함"
 msgid "any"
 msgstr "무엇이든"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:158
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:160
 #, fuzzy
 msgid "at"
 msgstr "날짜"
@@ -4200,12 +4477,12 @@ msgstr "날짜"
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=branch
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:70
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:115
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:117
 #, c-format
 msgid "at %s"
 msgstr "에 %s"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:103
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:125
 #, fuzzy
 msgid "author"
 msgstr "저자"
@@ -4214,13 +4491,13 @@ msgstr "저자"
 msgid "autobiography"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:48
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-facets.inc:6
 #, fuzzy
 msgid "available"
 msgstr "사용가능함"
 
 #. %1$s: TMPL_VAR name=barcode
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:419
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:440
 #, fuzzy, c-format
 msgid "barcode:%s"
 msgstr "바코드："
@@ -4235,36 +4512,19 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=author
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:350
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:374
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-review.tmpl:15
 #, c-format
 msgid "by %s"
 msgstr "저자 %s"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=author
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:135
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:184
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:186
 #, fuzzy, c-format
 msgid "by <a1>%s</a>"
 msgstr "저자 <a1>%s</a>"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:17
-#, fuzzy
-msgid "by cloud"
-msgstr "너의 것。"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:11
-#, fuzzy
-msgid "by headings"
-msgstr "내 독서기록"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:8
-msgid "by hierarchy"
-msgstr ""
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:14
-#, fuzzy
-msgid "by top issues"
-msgstr "%1$s 정기간행물"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:183
 msgid "canvas"
@@ -4273,10 +4533,6 @@ msgstr ""
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:185
 msgid "cardboard/illustration board"
 msgstr ""
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead_adv.inc:18
-msgid "cardholder features"
-msgstr "카드 소지자 특징"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:104
 msgid "cartoons or comic strips"
@@ -4298,12 +4554,12 @@ msgstr ""
 msgid "children (9-14)"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:116
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:129
 #, fuzzy
 msgid "classification:"
 msgstr "분류: %s"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:52
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:61
 #, fuzzy
 msgid "close this window."
 msgstr "창을 닫으세요"
@@ -4330,30 +4586,31 @@ msgstr "포함한다"
 msgid "contains biogr. data"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:48
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:31
 #, fuzzy
 msgid "copyright"
 msgstr "저작권:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:104
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:126
 #, fuzzy
 msgid "copyrightdate"
 msgstr "판권년"
 
 #. SPAN
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:73
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:86
 msgid ""
-"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
-"au=<!-- TMPL_VAR NAME=\"author\" -->&rft.btitle=<!-- TMPL_VAR NAME=\"title\" "
-"-->&rft.date=<!-- TMPL_VAR NAME=\"publicationyear\" -->&rft.tpages=<!-- "
-"TMPL_VAR NAME=\"size\" -->&rft.isbn=<!-- TMPL_VAR NAME=isbn -->&rft."
-"aucorp=&rft.place=<!-- TMPL_VAR NAME=\"place\" -->&rft.pub=<!-- TMPL_VAR "
-"NAME=\"publisher\" -->&rft.edition=<!-- TMPL_VAR NAME=\"edition\" -->&rft."
-"series=<!-- TMPL_VAR NAME=\"series\" -->&rft.genre="
+"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3A<!-- TMPL_VAR "
+"NAME=\"ocoins_format\" -->&rft.au=<!-- TMPL_VAR NAME=\"author\" -->&rft."
+"btitle=<!-- TMPL_VAR NAME=\"title\" -->&rft.date=<!-- TMPL_VAR NAME="
+"\"publicationyear\" -->&rft.tpages=<!-- TMPL_VAR NAME=\"size\" -->&rft."
+"isbn=<!-- TMPL_VAR NAME=isbn -->&rft.aucorp=&rft.place=<!-- TMPL_VAR NAME="
+"\"place\" -->&rft.pub=<!-- TMPL_VAR NAME=\"publisher\" -->&rft.edition=<!-- "
+"TMPL_VAR NAME=\"edition\" -->&rft.series=<!-- TMPL_VAR NAME=\"series\" --"
+">&rft.genre="
 msgstr ""
 
 #. INPUT type=checkbox name=limit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:313
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:315
 msgid "datedue:0000-00-00"
 msgstr ""
 
@@ -4384,9 +4641,7 @@ msgstr ""
 
 #. META http-equiv=Content-Language
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:6
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close-results.inc:3
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close-basket.inc:3
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close-basket-print.inc:4
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:5
 msgid "en-us"
 msgstr ""
 
@@ -4403,7 +4658,7 @@ msgstr "화요일"
 msgid "examination paper"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:158
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:160
 msgid "expected at"
 msgstr ""
 
@@ -4420,13 +4675,15 @@ msgstr "로케이션"
 msgid "for"
 msgstr "위한"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=query_desc
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:4
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:4
 #, c-format
 msgid "for '%s'"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:157
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:159
 msgid "for patron"
 msgstr ""
 
@@ -4468,7 +4725,7 @@ msgid "in"
 msgstr "안에"
 
 #. %1$s: TMPL_VAR name=LibraryName
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:54
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:114
 #, fuzzy, c-format
 msgid "in %s Catalog."
 msgstr "%1$s 목록"
@@ -4498,7 +4755,7 @@ msgstr ""
 msgid "is exactly"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:48
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-facets.inc:6
 #, fuzzy, c-format
 msgid "items. <a1>Show all items</a>"
 msgstr "지난 50개 항목 보기 <a1>모든 항목 보기</a>"
@@ -4508,7 +4765,7 @@ msgid "juvenile, general"
 msgstr ""
 
 #. ABBR
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:76
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:89
 msgid "koha:isbn:<!-- TMPL_VAR NAME=\"isbn\" -->"
 msgstr ""
 
@@ -4524,10 +4781,6 @@ msgstr ""
 msgid "letters"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:19
-msgid "lists"
-msgstr ""
-
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:102
 msgid "literature surveys/reviews"
 msgstr ""
@@ -4537,49 +4790,55 @@ msgid "maps"
 msgstr ""
 
 #. INPUT type=checkbox name=limit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:217
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:219
 #, fuzzy
 msgid "mc-collection:LH"
 msgstr "합집:"
 
 #. INPUT type=checkbox name=limit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:223
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:225
 #, fuzzy
 msgid "mc-collection:REF"
 msgstr "합집:"
 
 #. INPUT type=checkbox name=limit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:213
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:215
 msgid "mc-rtype:i"
 msgstr ""
 
 #. INPUT type=checkbox name=limit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:221
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:223
 msgid "mc-rtype:j"
 msgstr ""
 
 #. INPUT type=checkbox name=limit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:222
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:224
 msgid "mc-rtype:o"
 msgstr ""
 
 #. INPUT type=checkbox name=limit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:218
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:198
+#, fuzzy
+msgid "mc:<!--TMPL_VAR Name=\"code\" -->"
+msgstr "검색 <!--TMPL_VAR name=\"marc_value\"-->"
+
+#. INPUT type=checkbox name=limit
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:220
 msgid "mc:a"
 msgstr ""
 
 #. INPUT type=checkbox name=limit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:216
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:218
 msgid "mc:c"
 msgstr ""
 
 #. INPUT type=checkbox name=limit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:211
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:213
 msgid "mc:t"
 msgstr ""
 
 #. INPUT type=checkbox name=limit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:212
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:214
 msgid "mc:v"
 msgstr ""
 
@@ -4608,12 +4867,6 @@ msgstr "달"
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:112
 msgid "motion picture"
 msgstr ""
-
-#. INPUT type=checkbox name=limit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:197
-#, fuzzy
-msgid "mt:<!--TMPL_VAR Name=\"code\" -->"
-msgstr "검색 <!--TMPL_VAR name=\"marc_value\"-->"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:27
 msgid "multimedia"
@@ -4764,12 +5017,12 @@ msgstr ""
 msgid "project description"
 msgstr "기술"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:49
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:32
 #, fuzzy
 msgid "publication year"
 msgstr "간행물 년도"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:20
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:4
 msgid "purchase suggestions"
 msgstr "구입 제안"
 
@@ -4782,7 +5035,7 @@ msgid "regular print"
 msgstr ""
 
 #. %1$s: TMPL_VAR name=total
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:48
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:108
 #, c-format
 msgid "returned %s results."
 msgstr ""
@@ -4846,11 +5099,6 @@ msgid "technical report"
 msgstr ""
 
 #. META http-equiv=Content-Type
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close-results.inc:2
-msgid "text/html; charset=<!-- TMPL_VAR NAME='TemplateEncoding' -->"
-msgstr ""
-
-#. META http-equiv=Content-Type
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:6
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:6
 msgid "text/html; charset=iso-8859-1"
@@ -4858,10 +5106,8 @@ msgstr ""
 
 #. META http-equiv=Content-Type
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:4
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:3
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:2
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close-results.inc:2
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close-basket.inc:2
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close-basket-print.inc:2
 msgid "text/html; charset=utf-8"
 msgstr ""
 
@@ -4869,7 +5115,7 @@ msgstr ""
 msgid "textile"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:102
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:124
 #, fuzzy
 msgid "title"
 msgstr "표제"
@@ -4897,7 +5143,7 @@ msgid "treaties"
 msgstr "전거기록들"
 
 #. LINK
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:39
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:53
 msgid "unAPI"
 msgstr ""
 
@@ -4996,14 +5242,14 @@ msgstr ""
 #~ msgid ", but managed only by you."
 #~ msgstr ",오직 당신만 관리할 수 있습니다."
 
-#~ msgid "-- Please choose your branch --"
-#~ msgstr "--당신의 구내분관을 선택하세요--"
-
 #~ msgid "...Or Choose Acceptable Formats"
 #~ msgstr "...혹은 적합한 형식(서식)을 선택하세요."
 
 #~ msgid "...and"
 #~ msgstr "...그리고"
+
+#~ msgid "A &quot;shopping cart&quot; for your selections"
+#~ msgstr "'책 바구니' 선택한것을 담기 위한 책바구니"
 
 #~ msgid "Accepted"
 #~ msgstr "승인되었음"
@@ -5017,14 +5263,29 @@ msgstr ""
 #~ msgid "Add <i>%s</i>"
 #~ msgstr "추가 <i>%s</i>"
 
+#, fuzzy
+#~ msgid "Add Checked Items to Lists"
+#~ msgstr "체크된 항목을 책바구니에 첨가하세요"
+
 #~ msgid "Add an Item to this Shelf by Barcode"
 #~ msgstr "이 항목을 바코드에 따라 이 서가에 첨가하세요"
+
+#, fuzzy
+#~ msgid "Add checked items to book bag"
+#~ msgstr "체크된 항목을 책바구니에 첨가하세요"
 
 #~ msgid "Add or Remove Book Shelves"
 #~ msgstr "책서가들을 첨가 혹은 삭제하세요"
 
 #~ msgid "Add to Existing Shelf"
 #~ msgstr "기존서가에 첨가하세요"
+
+#~ msgid "Add to My Book Bag"
+#~ msgstr "내 책바구니에 첨가하세요"
+
+#, fuzzy
+#~ msgid "Add to My Book List"
+#~ msgstr "내 책바구니에 첨가하세요"
 
 #~ msgid "Additional Author(s):"
 #~ msgstr "추가된 저자(들):"
@@ -5034,6 +5295,9 @@ msgstr ""
 
 #~ msgid "Advanced Search (More Options)"
 #~ msgstr "상세검색(더 많은 옵션)"
+
+#~ msgid "Amazon Reader Reviews:"
+#~ msgstr "Amazon이용자 서펑들:"
 
 #~ msgid "Ascending"
 #~ msgstr "체증"
@@ -5050,14 +5314,28 @@ msgstr ""
 #~ msgid "Back to Virtual Shelves"
 #~ msgstr "가상서가로 반환하세요"
 
+#~ msgid "Book Bag"
+#~ msgstr "책 바구니 이용"
+
 #~ msgid "Call Number:"
 #~ msgstr "호출 번호："
 
 #~ msgid "Category"
 #~ msgstr "범주/영역"
 
+#, fuzzy
+#~ msgid "Change"
+#~ msgstr "변경사항 저장"
+
+#, fuzzy
+#~ msgid "Change language"
+#~ msgstr "언어변경:"
+
 #~ msgid "Choose Either..."
 #~ msgstr "어느 한 쪽을 선택하세요..."
+
+#~ msgid "Clear All"
+#~ msgstr "모두삭제"
 
 #~ msgid "Confirm Reservation &gt;&gt;"
 #~ msgstr "예약확인 >>"
@@ -5098,11 +5376,20 @@ msgstr ""
 #~ msgid "Last renewal of subscription was <b>%s</b>"
 #~ msgstr "최근예약갱신 내용은 <b>%s</b>였습니다."
 
+#~ msgid "Library Catalog Search"
+#~ msgstr "장서목록검색"
+
 #~ msgid "List of Virtual Shelves"
 #~ msgstr "가상서가목록"
 
 #~ msgid "Log in to Check Your Account"
 #~ msgstr "귀하의 계정을 체크하기위해 로그인 하세요"
+
+#~ msgid "Log in to access"
+#~ msgstr "접속하기 위해 로그인 하세요"
+
+#~ msgid "Logged in as"
+#~ msgstr "현재 로그인 되어 있습니다."
 
 #~ msgid "Logged in as <b>%s</b> <a1>Members Home</a>"
 #~ msgstr "현재 <b>%s</b><a1>회원 홈</a>로 로그인 되었습니다."
@@ -5119,6 +5406,9 @@ msgstr ""
 #~ msgid "Modify this Shelf"
 #~ msgstr "이 서가를 수정합니다"
 
+#~ msgid "My Account"
+#~ msgstr "내 계정"
+
 #~ msgid "My Virtual Shelves"
 #~ msgstr "내 가상서가"
 
@@ -5127,6 +5417,10 @@ msgstr ""
 
 #~ msgid "Next Available Copy (any format)"
 #~ msgstr "다음번 사용가능한 복본 (모든서식)"
+
+#, fuzzy
+#~ msgid "Normal"
+#~ msgstr "일반(표준)개관"
 
 #~ msgid "Note there will be a reserve charge of"
 #~ msgstr "주 :<b>$%s</b>의 예약수수료를 지불해야 합니다.  "
@@ -5188,14 +5482,14 @@ msgstr ""
 #~ msgid "Results:"
 #~ msgstr "결과:"
 
+#~ msgid "Search Home"
+#~ msgstr "홈페이지 검색"
+
 #~ msgid "Search Purchase Suggestions"
 #~ msgstr "구매희망사항 검색"
 
 #~ msgid "Search Suggestions"
 #~ msgstr "구입희망(서) 검색"
-
-#~ msgid "Search for this title in:"
-#~ msgstr "표제검색"
 
 #~ msgid "Search the Library Catalog"
 #~ msgstr "도서관 목록 검색"
@@ -5218,9 +5512,6 @@ msgstr ""
 #~ msgid "Switch"
 #~ msgstr "스위치 언어"
 
-#~ msgid "This shelf is empty."
-#~ msgstr "이 서가는 비어 있습니다."
-
 #~ msgid "This subscription is now ended. The last issue was recieved on %s"
 #~ msgstr "이 예약은 이제 끝났습니다. 마지막 대출은 %s에 받아들여졌습니다."
 
@@ -5229,6 +5520,35 @@ msgstr ""
 
 #~ msgid "Virtual Shelves"
 #~ msgstr "가상 서가"
+
+#, fuzzy
+#~ msgid "Volume"
+#~ msgstr "홈으로 돌아가기"
+
+#~ msgid "You did not specify any search criteria"
+#~ msgstr "귀하는 아무런 검색기준을 지정하지 않았습니다."
+
+#, fuzzy
+#~ msgid "Your Account"
+#~ msgstr "내 계정"
+
+#~ msgid "Your Book Bag"
+#~ msgstr "귀하의 책 바구니"
+
+#, fuzzy
+#~ msgid "by cloud"
+#~ msgstr "너의 것。"
+
+#, fuzzy
+#~ msgid "by headings"
+#~ msgstr "내 독서기록"
+
+#, fuzzy
+#~ msgid "by top issues"
+#~ msgstr "%1$s 정기간행물"
+
+#~ msgid "cardholder features"
+#~ msgstr "카드 소지자 특징"
 
 #~ msgid "days"
 #~ msgstr "일"

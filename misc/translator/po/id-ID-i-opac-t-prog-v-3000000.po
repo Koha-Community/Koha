@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-01-08 00:49-0500\n"
-"PO-Revision-Date: 2007-02-11 11:04+0200\n"
+"POT-Creation-Date: 2008-02-20 07:59-0500\n"
+"PO-Revision-Date: 2008-01-08 15:42+0200\n"
 "Last-Translator: translate.koha.org\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,8 +16,8 @@ msgstr ""
 "\n"
 
 #. SCRIPT
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:31
-msgid " item(s) added to your book bag"
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:45
+msgid " item(s) added to your cart"
 msgstr ""
 
 #. For the first occurrence,
@@ -30,9 +30,21 @@ msgid "$%s"
 msgstr "$%s"
 
 #. A
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:102
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:115
 msgid "$<!-- TMPL_VAR NAME=\"code\" --> <!-- TMPL_VAR NAME=\"value\" -->"
 msgstr ""
+
+#. For the first occurrence,
+#. %1$s: TMPL_VAR name=native_description
+#. %2$s: TMPL_VAR name=script_description
+#. %3$s: TMPL_VAR name=region_description
+#. %4$s: TMPL_VAR name=variant_description
+#. %5$s: TMPL_VAR name=rfc4646_subtag
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-bottom.inc:18
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-bottom.inc:20
+#, fuzzy, c-format
+msgid "%s %s %s %s (%s)"
+msgstr "%s %s (%s)"
 
 #. %1$s: TMPL_VAR name=firstname
 #. %2$s: TMPL_VAR name=surname
@@ -63,7 +75,7 @@ msgid "%s -- Self Checkout"
 msgstr ""
 
 #. %1$s: TMPL_VAR name=unititle
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:92
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:105
 #, fuzzy, c-format
 msgid "%s ;"
 msgstr "%s;"
@@ -75,7 +87,7 @@ msgid "%s <a1>Top level</a>"
 msgstr ""
 
 #. %1$s: TMPL_VAR name=issues_count
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:128
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:130
 #, fuzzy, c-format
 msgid "%s Items"
 msgstr "%s item"
@@ -110,9 +122,9 @@ msgid "%s issues"
 msgstr "%s isu"
 
 #. For the first occurrence,
-#. %1$s: TMPL_VAR name=shelfvirtualcount
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:139
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:164
+#. %1$s: TMPL_VAR name=count
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:161
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:204
 #, c-format
 msgid "%s item(s)"
 msgstr "%s item"
@@ -138,7 +150,7 @@ msgid "%s record(s)"
 msgstr "%s rekod"
 
 #. %1$s: TMPL_VAR name=ExpectedAtLibrary
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:158
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:160
 #, c-format
 msgid "%s since"
 msgstr ""
@@ -164,20 +176,22 @@ msgstr "$%s"
 msgid "%s, %s"
 msgstr "&s, %s"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=result_number
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:135
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:184
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:186
 #, fuzzy, c-format
 msgid "%s."
 msgstr "$%s"
 
 #. %1$s: TMPL_VAR name=description
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:187
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:189
 #, c-format
 msgid "%s;"
 msgstr "%s;"
 
 #. %1$s: TMPL_VAR name=copyrightdate
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:350
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:374
 #, fuzzy, c-format
 msgid "&copy;%s"
 msgstr "&salinan;"
@@ -185,7 +199,7 @@ msgstr "&salinan;"
 #. IMG
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:12
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:12
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:13
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:50
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-account.tmpl:14
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:13
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:13
@@ -201,8 +215,8 @@ msgstr ">>"
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=query_desc
 #. %2$s: TMPL_VAR name=limit_desc
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:48
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:54
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:108
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:114
 #, c-format
 msgid "&ldquo;%s%s&rdquo;"
 msgstr ""
@@ -282,10 +296,12 @@ msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authoritiessearchresultlist.tmpl:34
 msgid "&nbsp;No results found."
-msgstr " Tiada hasil dijumpai."
+msgstr "Tiada hasil dijumpai."
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=limit_desc
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:4
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:4
 #, c-format
 msgid "&nbsp;with limit(s):&nbsp;'%s'"
 msgstr ""
@@ -299,16 +315,16 @@ msgstr "%s biblio"
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=renewsleft
 #. %2$s: TMPL_VAR name=renewsallowed
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:176
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:223
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:181
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:231
 #, c-format
 msgid "(%s of %s renewals remaining)"
 msgstr ""
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=overdues_count
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:203
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:243
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:211
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:251
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:106
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:84
 #, c-format
@@ -322,13 +338,15 @@ msgstr "(%s jumlah)"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:44
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:97
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:148
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:67
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:79
 #, c-format
 msgid "(%s)"
 msgstr "(%s)"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=count
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:154
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:203
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:205
 #, fuzzy, c-format
 msgid "(%s),"
 msgstr "(%s)"
@@ -341,31 +359,33 @@ msgstr "(%s)"
 msgid "(<a1>Click here</a> if you're not %s %s %s)"
 msgstr "(<a1>Klik di sini</a> jika anda bukan %s %s %s)"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:42
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:46
 msgid "(Checked out)"
 msgstr "(Keluar)"
 
 #. %1$s: TMPL_VAR name=subscriptionsnumber
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:269
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:292
 #, c-format
 msgid "(There are %s subscriptions associated with this title)."
 msgstr ""
 
 #. %1$s: TMPL_VAR name=LoginBranchcode
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:22
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:18
 #, fuzzy, c-format
 msgid "(in %s only)"
 msgstr "(%s jumlah)"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=timestamp
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:142
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:191
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:193
 #, c-format
 msgid "(modified on %s)"
 msgstr "(diubah pada %s)"
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:43
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:52
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:60
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:69
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:77
 #, fuzzy
 msgid "(no title)"
 msgstr "(%s jumlah)"
@@ -376,7 +396,8 @@ msgstr "(%s jumlah)"
 msgid "(published on %s)"
 msgstr "Diterbitkan oleh: %s"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:48
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:108
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-facets.inc:7
 #, fuzzy
 msgid "(related searches:"
 msgstr "Carian Tambahan"
@@ -385,13 +406,13 @@ msgstr "Carian Tambahan"
 #. %1$s: TMPL_VAR name=volumedesc
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:47
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:48
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:67
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:79
 #, fuzzy, c-format
 msgid ", %s"
 msgstr "&s, %s"
 
 #. %1$s: TMPL_VAR name=collectionissn
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:84
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:97
 #, fuzzy, c-format
 msgid ", ISSN %s"
 msgstr "ISBN: %s"
@@ -408,8 +429,8 @@ msgid ""
 ", you cannot place holds because the library doesn't have up-to-date "
 "<a1>contact information</a> on file."
 msgstr ""
-", anda tidak boleh menempah kerana perpustakaan tidak mempunyai <a1>maklumat "
-"perhubungan</a> yang terkini."
+" , anda tidak boleh menempah kerana perpustakaan tidak mempunyai "
+"<a1>maklumat perhubungan</a> yang terkini."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:29
 #, fuzzy
@@ -422,8 +443,8 @@ msgid ""
 ", you cannot place holds because your library card has been marked as lost "
 "or stolen."
 msgstr ""
-", anda tidak boleh menempah kerana kad perpustaaan telah ditanda hilang atau "
-"dicuri."
+" , anda tidak boleh menempah kerana kad perpustaaan telah ditanda hilang "
+"atau dicuri."
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=publicationyear
@@ -432,11 +453,14 @@ msgstr ""
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:93
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:79
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:102
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:192
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:194
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:136
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:137
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:139
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:187
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:189
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:185
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:186
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:188
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:187
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:188
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:190
 #, c-format
 msgid "- %s"
 msgstr "- %s"
@@ -446,6 +470,12 @@ msgstr "- %s"
 #, fuzzy, c-format
 msgid "- %s,"
 msgstr "- %s"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:186
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:63
+#, fuzzy
+msgid "-- Choose Format --"
+msgstr "-- Sila pilih cawangan anda --"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/maintenance.tmpl:2
 #, fuzzy
@@ -464,7 +494,7 @@ msgid "/ %s %s"
 msgstr "&s, %s"
 
 #. %1$s: TMPL_VAR name=editionresponsibility
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:61
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:73
 #, fuzzy, c-format
 msgid "/%s"
 msgstr "$%s"
@@ -506,8 +536,9 @@ msgstr "2 bulan"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=subtitle
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:7
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:140
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:13
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:189
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:191
 #, c-format
 msgid ": %s"
 msgstr ": %s"
@@ -516,15 +547,17 @@ msgstr ": %s"
 #. %1$s: TMPL_VAR name=place
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:92
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:94
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:85
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:138
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:141
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:98
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:187
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:190
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:189
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:192
 #, c-format
 msgid "; %s"
 msgstr "; %s"
 
 #. %1$s: TMPL_VAR name=author
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:8
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:14
 #, c-format
 msgid "; By %s"
 msgstr "; By %s"
@@ -532,43 +565,38 @@ msgstr "; By %s"
 #. %1$s: TMPL_VAR name=title
 #. %2$s: TMPL_VAR name=author
 #. %3$s: TMPL_VAR name=copyrightdate
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:409
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:430
 #, c-format
 msgid "<a1>%s</a> by %s &copy;%s"
 msgstr ""
 
 #. %1$s: TMPL_VAR name=subject
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:35
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:41
 #, c-format
 msgid "<a1>%s</a>,"
 msgstr "<a1>%s</a>,"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:112
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:128
 #, c-format
 msgid "<a1>Click here</a> for more information on subscription(s) history"
 msgstr "<a1>Klik sini</a> untuk maklumat lanjut untuk sejarah langganan"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:142
-#, c-format
-msgid "<a1>Edit</a> <a2>Delete</a>"
-msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:61
 #, c-format
 msgid "<a1>HELP</a> with the self checkoutsystem"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:338
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:362
 #, c-format
 msgid "<a1>Log in to your account</a> to post a comment."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:144
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:160
 #, c-format
 msgid "<a1>Log in to your account</a> to write a review here."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:149
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:189
 #, fuzzy, c-format
 msgid "<a1>Log in</a> to create new Lists."
 msgstr "<a1>Log masuk</a> ke Koha"
@@ -583,6 +611,12 @@ msgstr ""
 msgid "<b>Selected items :</b> <a1> Remove </a>"
 msgstr ""
 
+#. %1$s: TMPL_VAR name=shelfname
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:12
+#, fuzzy, c-format
+msgid "<em>%s</em>:"
+msgstr "Ubah Rak Virtual <em>%s</em>"
+
 #. %1$s: TMPL_VAR name=impossible
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:15
 #, c-format
@@ -595,14 +629,19 @@ msgstr ""
 msgid "<em>Title:</em> %s"
 msgstr ""
 
-#. A
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead-basic.inc:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead_adv.inc:3
-msgid "A &quot;shopping cart&quot; for your selections"
-msgstr "Bakul untuk pilihan anda"
+#. %1$s: TMPL_VAR name=already
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:15
+#, c-format
+msgid "A List named <b>%s</b> already exists!"
+msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:265
+#. %1$s: TMPL_VAR name=duplicatebiblio
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:32
+#, c-format
+msgid "A record matching barcode <b>%s</b> has already been added."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:267
 msgid "Abstracts/summaries"
 msgstr ""
 
@@ -615,7 +654,7 @@ msgstr "Dipesankan oleh perpustakaan"
 msgid "Access Denied"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:36
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:38
 #, fuzzy, c-format
 msgid ""
 "According to our records, we don't have up-to-date <a1>contact information</"
@@ -623,13 +662,13 @@ msgid ""
 "form</a> to submit current information (<em>Please note:</em> there may be a "
 "delay in restoring your account if you submit online)"
 msgstr ""
-"Menurut rekod kami, sistem tidak mempunyai <a>maklumat perhubungan</a> "
+" Menurut rekod kami, sistem tidak mempunyai <a>maklumat perhubungan</a> "
 "terkini. Sila hubungi pustakawan anda atau gunakan <a2>borang kemaskini "
 "online</a> untuk kemaskini maklumat terkini. (<em>Nota:</em> Mungkin "
 "terdapat kelewatan dalam mengembalikan akaun anda sekiranya anda menghantar "
 "secara online)"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:220
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:228
 msgid "Account Frozen"
 msgstr ""
 
@@ -649,18 +688,12 @@ msgstr ""
 
 #. %1$s: TMPL_VAR name=total
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:12
-#, c-format
-msgid "Add %s items to a list:"
-msgstr ""
-
-#. INPUT type=button
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:114
-#, fuzzy
-msgid "Add Checked Items to Lists"
-msgstr "Tambah Item bertanda ke Beg Buku"
+#, fuzzy, c-format
+msgid "Add %s items to"
+msgstr "%s item"
 
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:190
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:230
 msgid "Add New Shelf"
 msgstr "Tambah Rak Baru"
 
@@ -674,38 +707,22 @@ msgstr "Masukkan saran pembelian baru"
 msgid "Add another field"
 msgstr ""
 
-#. INPUT type=button
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:113
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:14
 #, fuzzy
-msgid "Add checked items to book bag"
-msgstr "Tambah Item bertanda ke Beg Buku"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:20
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:170
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:52
-msgid "Add to My Book Bag"
-msgstr "Tambah ke Beg Buku saya"
+msgid "Add to"
+msgstr "Tambah ke Rak"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:19
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:47
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:179
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:56
 #, fuzzy
-msgid "Add to My Book List"
-msgstr "Tambah ke Beg Buku saya"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:165
-#, fuzzy
-msgid "Add to My List"
+msgid "Add to Your Cart"
 msgstr "Tambah ke Rak Maya saya"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:34
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:43
 #, fuzzy
 msgid "Add to a New List:"
 msgstr "Tambah ke Rak Maya baru"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:14
-#, fuzzy
-msgid "Add to a list:"
-msgstr "Tambah ke Rak"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:165
 #, fuzzy
@@ -717,17 +734,17 @@ msgstr "Tambah ke Rak"
 msgid "Add to list:"
 msgstr "Tambah ke Rak"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:372
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:155
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:395
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:170
 msgid "Add your own review"
 msgstr "Tambah review anda"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:264
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:266
 #, fuzzy
 msgid "Additional Content Types"
 msgstr "Penulis tambahan: %s"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:236
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:238
 msgid "Adult"
 msgstr ""
 
@@ -739,14 +756,13 @@ msgstr ""
 msgid "Adult, serious"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:38
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:6
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:68
 #, fuzzy
 msgid "Advanced Search"
 msgstr "Carian Tambahan"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:33
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:302
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:304
 #, fuzzy
 msgid "All branches"
 msgstr "Mana-mana Cawangan"
@@ -764,20 +780,15 @@ msgstr "Butiran Perhubungan Alternatif"
 msgid "Alternate Contact:"
 msgstr "Perhubungan Alternatif:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:368
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:151
-msgid "Amazon Reader Reviews:"
-msgstr "Review Pembaca Amazon:"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:192
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:65
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:212
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:80
 #, fuzzy
 msgid "Amazon Reviews"
 msgstr "Review Pembaca Amazon:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:60
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:71
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:80
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:62
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:73
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:82
 msgid "Amount"
 msgstr "Jumlah"
 
@@ -785,17 +796,26 @@ msgstr "Jumlah"
 msgid "Amount Outstanding"
 msgstr "Jumlah Tertunggak"
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:12
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:12
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/401.tmpl:12
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/500.tmpl:12
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/404.tmpl:12
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/kohaerror.tmpl:10
 msgid "An Error has Occurred"
 msgstr "Kesalahan telah berlaku"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/500.tmpl:15
+msgid "An error occurred while try to process your request."
+msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:144
 msgid "Annual"
 msgstr ""
 
 #. INPUT type=checkbox name=request
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:84
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:184
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:85
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:186
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:6
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:35
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:51
@@ -807,26 +827,28 @@ msgstr ""
 msgid "Any"
 msgstr "Mana-mana"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:232
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:234
 msgid "Any Audience"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:240
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:242
 #, fuzzy
 msgid "Any Content"
 msgstr "Daftar Isi"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:250
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:252
 #, fuzzy
 msgid "Any Format"
 msgstr "Bentuk"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:57
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:102
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:102
 #, fuzzy
 msgid "Any Phrase"
 msgstr "Dimanapun"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:56
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:101
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:101
 #, fuzzy
 msgid "Any Word"
 msgstr "Sesiapa"
@@ -851,10 +873,23 @@ msgid "Anywhere:"
 msgstr "Dimanapun"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:49
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:288
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:94
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:312
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:110
 msgid "Arrived"
 msgstr "Tiba"
+
+#. %1$s: TMPL_VAR name=branchcode
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:294
+#, fuzzy, c-format
+msgid "At branch: %s"
+msgstr "Mana-mana Cawangan"
+
+#. %1$s: TMPL_VAR name=branchcode
+#. %2$s: TMPL_VAR name=notes
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:94
+#, c-format
+msgid "At library: %s %s"
+msgstr ""
 
 #. %1$s: TMPL_VAR name=title
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:42
@@ -875,15 +910,18 @@ msgstr ""
 msgid "Audience"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:47
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:30
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:108
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:127
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:23
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:60
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:69
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:71
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:34
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:60
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:26
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:36
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:37
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:105
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:105
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:31
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:33
 msgid "Author"
 msgstr "Pengarang"
 
@@ -947,11 +985,16 @@ msgstr "Pengarang:"
 msgid "Authors: %s"
 msgstr "Pengarang: %s"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:233
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-facets.inc:6
+#, fuzzy
+msgid "Availability"
+msgstr "Tersedia"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:255
 msgid "Available"
 msgstr "Tersedia"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:88
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:89
 #, fuzzy
 msgid "Available Issues"
 msgstr "Tersedia"
@@ -964,12 +1007,12 @@ msgstr "Tersedia di perpustakaan"
 msgid "Back to biblio"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:104
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:63
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:106
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:69
 msgid "Barcode"
 msgstr "Nomer Induk"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:78
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:95
 msgid "Below is a list of the three latest issues :"
 msgstr "Di bawah ini adalah daftar dari tiga peminjaman terbaru:"
 
@@ -982,7 +1025,7 @@ msgstr ""
 msgid "Biblio records"
 msgstr "# daripada Rekod Biblio"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:266
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:268
 msgid "Bibliographies"
 msgstr ""
 
@@ -990,7 +1033,7 @@ msgstr ""
 msgid "Bimonthly"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:243
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:245
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:49
 msgid "Biography"
 msgstr ""
@@ -999,39 +1042,33 @@ msgstr ""
 msgid "Biweekly"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead-basic.inc:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead_adv.inc:3
-msgid "Book Bag"
-msgstr "Kantong Buku"
-
 #. IMG
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:161
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:165
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:112
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:90
 msgid "Book Cover Image"
 msgstr "Gambar Sampul Buku"
 
 #. IMG
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:211
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:213
 #, fuzzy
 msgid "Books"
 msgstr "Kantong Buku"
 
 #. IMG
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:213
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:215
 #, fuzzy
 msgid "Books on Tape"
 msgstr "Gambar Sampul Buku"
 
 #. LABEL
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:211
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:213
 msgid ""
 "Books, Pamphlets, Technical reports, Manuscripts, Legal papers, Theses and "
 "dissertations"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:253
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:255
 #, fuzzy
 msgid "Braille"
 msgstr "Tersedia"
@@ -1044,8 +1081,14 @@ msgstr ""
 msgid "Brief Display"
 msgstr "Tampilan Ringkas"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:7
-msgid "Browse catalogue:"
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:68
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:70
+msgid "Browse by Hierarchy"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:68
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:70
+msgid "Browse by Subject"
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-browser.tmpl:12
@@ -1058,26 +1101,26 @@ msgstr ""
 msgid "By <a1>%s</a>"
 msgstr "Oleh <a1>%s</a>"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:259
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:261
 msgid "CD Software"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:255
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:257
 msgid "CD audio"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:131
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:206
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:133
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:214
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:108
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:86
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:108
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:127
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:25
 msgid "Call No."
 msgstr "No. Panggil"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:59
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:30
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:65
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:51
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:53
 msgid "Call Number"
 msgstr "Nomer Panggil"
 
@@ -1091,18 +1134,19 @@ msgstr ""
 msgid "Call Number (Non-fiction 0-9 to Fiction A-Z)"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:107
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:109
 #, fuzzy
 msgid "Call number"
 msgstr "Nomer Panggil"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:36
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:279
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:287
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:39
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:49
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:27
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:28
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:47
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:37
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:56
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-review.tmpl:19
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:33
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:37
@@ -1114,7 +1158,7 @@ msgstr "Aitem Dibatalkan"
 msgid "Card Number:"
 msgstr "Nomer Kartu:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:256
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:258
 msgid "Cassette recording"
 msgstr ""
 
@@ -1124,6 +1168,7 @@ msgstr ""
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authoritiessearchresultlist.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:2
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:2
 msgid "Catalog &rsaquo;"
 msgstr ""
 
@@ -1150,6 +1195,11 @@ msgstr ""
 msgid "Catalog &rsaquo; Advanced Search"
 msgstr "%s Katalog -- Pencarian Tambahan"
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/401.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/500.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/404.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/kohaerror.tmpl:1
 #, fuzzy
 msgid "Catalog &rsaquo; An Error Has Occurred"
@@ -1223,7 +1273,7 @@ msgstr "%s Katalog -- Simpan %s untuk"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:1
 #, fuzzy
-msgid "Catalog &rsaquo; Sending Your Book Bag"
+msgid "Catalog &rsaquo; Sending Your Cart"
 msgstr "%s Katalog -- Hantar Beg Buku Anda"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:1
@@ -1239,40 +1289,29 @@ msgstr "%s Katalog -- Kemaskini Butiran untuk"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:2
 #, fuzzy
-msgid "Catalog &rsaquo; Your Book Bag"
+msgid "Catalog &rsaquo; Your Cart"
 msgstr "%s Katalog -- Beg Buku Anda"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-dictionary.tmpl:69
 msgid "Catalog Search Results"
 msgstr "Hasil Penelusuran Katalog"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:267
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:269
 #, fuzzy
 msgid "Catalogs"
 msgstr "%s Katalog --"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:41
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:50
 msgid "Category:"
 msgstr "Kategori:"
-
-#. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:37
-msgid "Change"
-msgstr ""
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:27
-#, fuzzy
-msgid "Change language"
-msgstr "Ubah Bahasa:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:12
 msgid "Change your Password"
 msgstr "Ubah Sandi Anda"
 
 #. IMG
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:20
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:57
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:159
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:112
 msgid "Check All"
 msgstr "Tandai Semua"
 
@@ -1280,7 +1319,7 @@ msgstr "Tandai Semua"
 msgid "Check out or return an item:"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:46
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:48
 #, fuzzy
 msgid "Checked Out"
 msgstr "(Keluar)"
@@ -1315,11 +1354,6 @@ msgstr "Klasifikasi: %s"
 msgid "Classification: %s"
 msgstr "Klasifikasi: %s"
 
-#. INPUT type=reset
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:115
-msgid "Clear All"
-msgstr "Hapus Semua"
-
 #. INPUT type=submit
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:69
 msgid "Click Here to Complete Transaction"
@@ -1336,9 +1370,10 @@ msgid "Click here if done."
 msgstr ""
 
 #. INPUT type=checkbox name=biblionumber
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:169
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:218
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:220
 #, fuzzy
-msgid "Click to add to book bag"
+msgid "Click to add to cart"
 msgstr "Tambah ke Beg Buku"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:10
@@ -1351,12 +1386,12 @@ msgid "Coded Fields"
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:77
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:206
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:227
 #, fuzzy
 msgid "Collection"
 msgstr "Koleksi"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:82
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:95
 msgid "Collection:"
 msgstr "Koleksi"
 
@@ -1369,7 +1404,7 @@ msgstr "Koleksi: %s"
 #. %1$s: TMPL_VAR name=title
 #. %2$s: TMPL_VAR name=firstname
 #. %3$s: TMPL_VAR name=surname
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:317
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:341
 #, fuzzy, c-format
 msgid "Comment by %s %s %s"
 msgstr "Daftar Isi dari %s"
@@ -1379,8 +1414,8 @@ msgstr "Daftar Isi dari %s"
 msgid "Comment:"
 msgstr "Daftar Isi"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:188
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:64
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:208
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:79
 #, fuzzy
 msgid "Comments"
 msgstr "Daftar Isi"
@@ -1398,17 +1433,22 @@ msgid "Compact view"
 msgstr "Tampilan lengkap"
 
 #. IMG
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:216
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:218
 #, fuzzy
 msgid "Computer Files"
 msgstr "Tampilan lengkap"
 
 #. LABEL
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:216
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:218
 msgid "Computer files, Data, Software"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:178
+#. INPUT type=submit
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:175
+msgid "Confirm"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:180
 msgid "Confirm Reservation"
 msgstr "Pastikan Pemesanan"
 
@@ -1426,8 +1466,8 @@ msgstr "Rincian Kontak"
 msgid "Content"
 msgstr "Daftar Isi"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:134
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:160
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:156
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:200
 msgid "Contents"
 msgstr "Daftar Isi"
 
@@ -1437,16 +1477,21 @@ msgstr "Daftar Isi"
 msgid "Contents of %s"
 msgstr "Daftar Isi dari %s"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:128
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:127
 msgid "Copies"
 msgstr "Salinan"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:147
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:196
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:198
 #, fuzzy
 msgid "Copies available at:"
 msgstr "Tidak tersedia salinan."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:24
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:232
+msgid "Copy / Vol"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:61
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:92
 #, fuzzy
 msgid "Copyright"
@@ -1463,11 +1508,12 @@ msgstr "Tanggal Hakcipta"
 msgid "Copyright year: %s"
 msgstr "Tahun Hakcipta: %s"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:14
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:20
 msgid "Copyright:"
 msgstr "Hakcipta:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:80
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:125
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:125
 #, fuzzy
 msgid "Count"
 msgstr "Jumlah"
@@ -1479,13 +1525,13 @@ msgstr "Jumlah"
 msgid "Cover Image"
 msgstr "Gambar Sampul Buku"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:179
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:219
 #, fuzzy
 msgid "Create a New List"
 msgstr "Membuat Rak Maya Baru"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:50
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:78
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:52
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:80
 msgid "Credits"
 msgstr "Penyumbang"
 
@@ -1493,7 +1539,7 @@ msgstr "Penyumbang"
 msgid "Current Password:"
 msgstr "Sandi Sekarang:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:258
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:260
 msgid "DVD video / Videodisc"
 msgstr ""
 
@@ -1502,22 +1548,29 @@ msgstr ""
 msgid "Daily"
 msgstr "Rincian:"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=damagedcount
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:164
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:213
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:215
 #, c-format
 msgid "Damaged (%s),"
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:31
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:50
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:277
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:33
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:301
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-account.tmpl:21
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:35
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:85
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:38
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:101
 msgid "Date"
 msgstr "Tanggal"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:209
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:62
+#, fuzzy
+msgid "Date Added"
+msgstr "Tanggal"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:230
 #, fuzzy
 msgid "Date Due"
 msgstr "Tanggal"
@@ -1527,12 +1580,18 @@ msgid "Date received"
 msgstr "Tanggal diterima"
 
 #. INPUT type=submit
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:177
+#, fuzzy
+msgid "Delete"
+msgstr "Tanggal"
+
+#. INPUT type=submit
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:103
 msgid "Delete Checked Items"
 msgstr "Hapus aitem-aitem yang ditandai"
 
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:72
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:109
 #, fuzzy
 msgid "Delete this List"
 msgstr "Hapus Rak ini"
@@ -1541,17 +1600,17 @@ msgstr "Hapus Rak ini"
 msgid "Description"
 msgstr "Keterangan"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:254
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:277
 #, fuzzy
 msgid "Description (from Amazon.com):"
 msgstr "Keterangan Aitem (dari Amazon.com):"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:184
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:204
 #, fuzzy
 msgid "Descriptions"
 msgstr "Keterangan"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:44
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:50
 msgid "Detailed notes:"
 msgstr "Catatan rinci:"
 
@@ -1564,7 +1623,7 @@ msgstr "Rincian:"
 msgid "Dewey"
 msgstr "Dewey"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:119
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:132
 msgid "Dewey:"
 msgstr "Dewey:"
 
@@ -1574,7 +1633,7 @@ msgstr "Dewey:"
 msgid "Dewey: %s"
 msgstr "Dewey: %s"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:268
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:270
 #, fuzzy
 msgid "Dictionaries"
 msgstr "Penelusuran Kamus"
@@ -1583,15 +1642,16 @@ msgstr "Penelusuran Kamus"
 msgid "Dictionary Search"
 msgstr "Penelusuran Kamus"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:24
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:69
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:69
 msgid "Did you mean:"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:281
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:283
 msgid "Directories"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:274
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:276
 msgid "Discographies"
 msgstr ""
 
@@ -1607,22 +1667,27 @@ msgstr "Belum memiliki kartu perpustakaan?"
 msgid "Don't have a password yet?"
 msgstr "Belum memiliki kata sandi?"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:132
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:207
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:188
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:65
+msgid "Dublin Core (XML)"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:134
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:215
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:108
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:86
 msgid "Due"
 msgstr "Wajib Kembali"
 
 #. %1$s: TMPL_VAR name=date_due
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:140
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:142
 #, fuzzy, c-format
 msgid "Due %s"
 msgstr "Dewey: %s"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:108
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:127
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:61
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:67
 msgid "Due Date"
 msgstr "Tanggal Wajib Kembali"
 
@@ -1634,21 +1699,58 @@ msgstr "Alamat E-mail:"
 msgid "E-mail:"
 msgstr "E-mail:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:233
+#. %1$s: TMPL_VAR name=delete_fail
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:38
+#, c-format
+msgid "ERROR: Database error. Delete (shelf number %s) failed."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:17
+msgid "ERROR: No barcode given."
+msgstr ""
+
+#. %1$s: TMPL_VAR name=failgetitem
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:29
+#, c-format
+msgid "ERROR: No item found with barcode %s."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:18
+msgid "ERROR: No shelfnumber given."
+msgstr ""
+
+#. %1$s: TMPL_VAR name=unrecognized
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:41
+#, c-format
+msgid "ERROR: Shelf number %s unrecognized."
+msgstr ""
+
+#. %1$s: TMPL_VAR name=nopermission
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:26
+#, c-format
+msgid "ERROR: You do not have adequate permission for that action on list %s."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:235
 msgid "Easy"
 msgstr ""
 
+#. INPUT type=submit
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:168
+msgid "Edit"
+msgstr ""
+
 #. %1$s: TMPL_VAR name=shelfname
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:98
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:120
 #, fuzzy, c-format
 msgid "Edit List <em>%s</em>"
 msgstr "Ubah Rak Virtual <em>%s</em>"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:61
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:73
 msgid "Edition statement:"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:190
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:210
 msgid "Editions"
 msgstr ""
 
@@ -1661,7 +1763,7 @@ msgstr "E-mail:"
 msgid "Empty and Close"
 msgstr "Kosongkan dan Tutup"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:269
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:271
 msgid "Encyclopedias"
 msgstr ""
 
@@ -1684,21 +1786,25 @@ msgid ""
 "Enter your User ID, and click the submit button (or press the enter key)."
 msgstr ""
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:13
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:13
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/401.tmpl:13
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/500.tmpl:13
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/404.tmpl:13
+#, fuzzy
+msgid "Error 404"
+msgstr "Untuk:"
+
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:56
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:53
 msgid "Error Issuing Book"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:36
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:81
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:81
 #, fuzzy
 msgid "Error:"
 msgstr "Untuk:"
-
-#. %1$s: TMPL_VAR name=already
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:89
-#, c-format
-msgid "Error: A shelf named %s already exists. Please pick a different name."
-msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:47
 msgid "Expires:"
@@ -1712,7 +1818,7 @@ msgstr "Faks:"
 msgid "Feschrift Ind."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:241
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:243
 #, fuzzy
 msgid "Fiction"
 msgstr "Lokasi"
@@ -1723,11 +1829,11 @@ msgid ""
 "Fill this form to suggest the library a new acquisition. You will be emailed "
 "when the library processes your purchase suggestion"
 msgstr ""
-"Isilah form ini untuk menyarankan penambahan koleksi pustaka baru. Anda akan "
-"diberitahu melalui email ketika perpustakaan mengolah saran pembelian dari "
-"Anda."
+" Isilah form ini untuk menyarankan penambahan koleksi pustaka baru. Anda "
+"akan diberitahu melalui email ketika perpustakaan mengolah saran pembelian "
+"dari Anda."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:280
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:282
 msgid "Filmographies"
 msgstr ""
 
@@ -1735,22 +1841,22 @@ msgstr ""
 msgid "Fine Amount"
 msgstr "Jumlah Denda"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:48
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:49
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:134
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:50
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:51
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:138
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:108
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:86
 msgid "Fines"
 msgstr "Denda"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:59
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:69
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:61
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:71
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-account.tmpl:14
 msgid "Fines and Charges"
 msgstr "Denda dan Biaya"
 
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:194
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:196
 msgid "Finish and Place Reservation"
 msgstr "Selesai dan Pesan"
 
@@ -1759,7 +1865,7 @@ msgstr "Selesai dan Pesan"
 msgid "First Name:"
 msgstr "Nama Awal"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:243
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:266
 #, fuzzy
 msgid "Fix Itemtype"
 msgstr "Mana-mana Jenis Item"
@@ -1768,7 +1874,7 @@ msgstr "Mana-mana Jenis Item"
 msgid "For:"
 msgstr "Untuk:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:12
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:18
 msgid "Format:"
 msgstr "Bentuk:"
 
@@ -1786,11 +1892,20 @@ msgstr "Untuk:"
 msgid "Full Heading"
 msgstr "Tajuk Kewenangan Penuh"
 
+#. INPUT type=submit name=save
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:192
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:159
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:69
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:159
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:63
+msgid "Go"
+msgstr ""
+
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:68
 msgid "Guarantor:"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:270
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:272
 msgid "Handbooks"
 msgstr ""
 
@@ -1811,39 +1926,39 @@ msgstr ""
 
 #. %1$s: TMPL_VAR name=email_sender
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:6
-#, c-format
-msgid "Hi, Here is your Book Bag, sent from the Koha Online Catalog by %s"
+#, fuzzy, c-format
+msgid "Hi, Here is your cart, sent from the Koha Online Catalog by %s"
 msgstr ""
-"Hai, inilah Kantong Buku Anda, dikirim dari Katalog Online Koha oleh %s"
+" Hai, inilah Kantong Buku Anda, dikirim dari Katalog Online Koha oleh %s"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:25
 msgid "Hide Window"
 msgstr "Sembunyikan Tampilan"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:101
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:103
 msgid "Hold"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:94
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:96
 msgid "Hold date"
 msgstr ""
 
 #. %1$s: TMPL_VAR name=count
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:181
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:201
 #, c-format
 msgid "Holdings ( %s )"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:52
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:243
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:54
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:251
 msgid "Holds"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:91
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:93
 msgid "Holds Waiting"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:105
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:107
 msgid "Home Library"
 msgstr ""
 
@@ -1852,24 +1967,26 @@ msgstr ""
 msgid "Home Phone:"
 msgstr "Telepon Rumah"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:17
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:56
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:28
 msgid "ISBD"
 msgstr "ISBD"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:194
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:15
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:214
 #, fuzzy
 msgid "ISBD View"
 msgstr "ISBD"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:48
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:67
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:28
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:112
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:112
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:41
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:43
 msgid "ISBN"
 msgstr "ISBN"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:76
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:17
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:89
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:23
 msgid "ISBN:"
 msgstr "ISBN:"
 
@@ -1879,12 +1996,13 @@ msgstr "ISBN:"
 msgid "ISBN: %s"
 msgstr "ISBN: %s"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:68
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:113
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:113
 #, fuzzy
 msgid "ISSN"
 msgstr "ISBN"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:79
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:92
 #, fuzzy
 msgid "ISSN:"
 msgstr "ISBN:"
@@ -1899,7 +2017,7 @@ msgid ""
 "If this is an error, please take your card to the circulation desk at your "
 "local library and the error will be corrected."
 msgstr ""
-"Jika ini adalah sebuah kesalahan, silakan bawa kartu Anda ke bagian "
+" Jika ini adalah sebuah kesalahan, silakan bawa kartu Anda ke bagian "
 "sirkulasi di perpustakaan dan kesalahan tersebut akan dikoreksi."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/help.tmpl:11
@@ -1914,7 +2032,7 @@ msgstr ""
 msgid ""
 "If you don't have a library card, stop by your local library to sign up."
 msgstr ""
-"Jika Anda belum memiliki karu anggota perpustakaan, silakan kunjungi "
+" Jika Anda belum memiliki karu anggota perpustakaan, silakan kunjungi "
 "perpustakaan untuk mendaftarkan diri."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-auth.tmpl:47
@@ -1923,7 +2041,7 @@ msgid ""
 "If you don't have a password yet, stop by the circulation desk the next time "
 "you're in the library. We'll happily set one up for you."
 msgstr ""
-"Jika Anda belum memiliki kata sandi, silakan hubungi bagian sirkulasi. Kami "
+" Jika Anda belum memiliki kata sandi, silakan hubungi bagian sirkulasi. Kami "
 "akan membuatkannya untuk Anda dengan senang hati."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:60
@@ -1932,7 +2050,7 @@ msgstr ""
 
 #. %1$s: TMPL_VAR name=holdingbranch
 #. %2$s: TMPL_VAR name=branch
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:117
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:119
 #, c-format
 msgid "In transit from %s to %s"
 msgstr "Dalam persinggahan dari %s ke %s"
@@ -1940,30 +2058,31 @@ msgstr "Dalam persinggahan dari %s ke %s"
 #. %1$s: TMPL_VAR name=transfertfrom
 #. %2$s: TMPL_VAR name=transfertto
 #. %3$s: TMPL_VAR name=transfertwhen
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:143
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:145
 #, fuzzy, c-format
 msgid "In transit from %s, to %s, since %s"
 msgstr "Dalam persinggahan dari %s ke %s"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:54
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:99
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:99
 msgid "Indexed in:"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:272
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:274
 msgid "Indexes"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:108
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:110
 #, fuzzy
 msgid "Information"
 msgstr "Lokasi"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:276
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:300
 #, fuzzy
 msgid "Issue #"
 msgstr "Peminjaman"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:85
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:101
 msgid "Issue number"
 msgstr "Nomer peminjaman"
 
@@ -1983,8 +2102,7 @@ msgstr "Peminjaman"
 msgid "Issues for a subscription"
 msgstr "Peminjaman untuk sebuah koleksi"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:100
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:107
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:101
 msgid "Issues summary"
 msgstr "Ringkasan peminjaman"
 
@@ -1999,15 +2117,26 @@ msgstr "Peminjaman yang hilang"
 msgid "It began on %s and is issued every"
 msgstr "Dimulai pada <b>%s</b> dan dipinjamkan setiap <b>"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:231
+#. %1$s: TMPL_VAR name=count
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:21
+#, c-format
+msgid "It has <b>%s</b> entries."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:253
 msgid "Item Cancelled"
 msgstr "Aitem Dibatalkan"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:184
+#. IMG
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:218
+msgid "Item Type <!-- TMPL_VAR NAME=\"ccode\" -->"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:186
 msgid "Item Type:"
 msgstr "Tipe Aitem:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:186
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:188
 msgid "Item Types:"
 msgstr "Tipe-tipe Aitem:"
 
@@ -2016,45 +2145,45 @@ msgid "Item cannot be issued."
 msgstr ""
 
 #. %1$s: TMPL_VAR name=wbrname
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:270
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:278
 #, fuzzy, c-format
 msgid "Item in transit to <b> %s</b>"
 msgstr "Dalam persinggahan dari %s ke %s"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:228
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:250
 #, fuzzy
 msgid "Item lost"
 msgstr "Aitem Hilang"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:102
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:205
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:104
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:226
 #, fuzzy
 msgid "Item type"
 msgstr "Tipe Aitem:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:121
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:134
 #, fuzzy
 msgid "Item type :"
 msgstr "Tipe Aitem:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:94
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:96
 #, fuzzy
 msgid "Item type:"
 msgstr "Tipe Aitem:"
 
 #. %1$s: TMPL_VAR name=wbrname
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:264
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:272
 #, c-format
 msgid "Item waiting at <b> %s</b>"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:273
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:281
 #, fuzzy
 msgid "Item waiting to be pulled"
 msgstr "Aitem Dibatalkan"
 
 #. %1$s: TMPL_VAR name=wbrname
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:267
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:275
 #, c-format
 msgid "Item waiting to be pulled from <b> %s</b>"
 msgstr ""
@@ -2068,7 +2197,7 @@ msgstr "Aitem-aitem:"
 msgid "Itemtype"
 msgstr "Mana-mana Jenis Item"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:193
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:194
 msgid "Itemtype limit to any of the following:"
 msgstr ""
 
@@ -2080,7 +2209,7 @@ msgstr "Bergabung:"
 msgid "Joining Branch:"
 msgstr "Cabang bergabung:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:234
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:236
 msgid "Juvenile"
 msgstr ""
 
@@ -2094,13 +2223,14 @@ msgid "Keyword(s):"
 msgstr "Kata kunci:"
 
 #. LABEL
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:222
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:224
 msgid "Kits"
 msgstr ""
 
 #. LINK
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:12
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:3
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:10
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:10
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:4
 msgid "Koha - RSS"
 msgstr ""
 
@@ -2109,6 +2239,11 @@ msgstr ""
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authorities-home.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/401.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/500.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/404.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/kohaerror.tmpl:1
@@ -2137,16 +2272,16 @@ msgstr ""
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-browser.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/maintenance.tmpl:2
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:2
 msgid "Koha Online"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead-basic.inc:15
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:15
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:12
 msgid "Koha Online Catalog"
 msgstr ""
 
 #. LINK
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:40
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:54
 msgid "Koha OpenSearch"
 msgstr ""
 
@@ -2160,7 +2295,7 @@ msgstr ""
 msgid "LCCN"
 msgstr "LCCN:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:20
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:26
 msgid "LCCN:"
 msgstr "LCCN:"
 
@@ -2176,11 +2311,11 @@ msgstr "LCCN: %s"
 msgid "Language"
 msgstr "Ubah Bahasa:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:252
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:254
 msgid "Large print"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:106
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:108
 #, fuzzy
 msgid "Last Location"
 msgstr "Lokasi"
@@ -2190,44 +2325,41 @@ msgstr "Lokasi"
 msgid "Last Name:"
 msgstr "Nama Akhir"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:210
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:62
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:231
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:68
 msgid "Last Seen"
 msgstr "Lihat Terakhir"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:50
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:290
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:96
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:314
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:112
 msgid "Late"
 msgstr "Terlambat"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:285
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:287
 msgid "Law reports and digests"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:271
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:273
 msgid "Legal articles"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:284
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:286
 msgid "Legal cases and case notes"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:275
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:277
 #, fuzzy
 msgid "Legislation"
 msgstr "Lokasi"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:24
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:21
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:23
 #, fuzzy
 msgid "Library Catalog"
 msgstr "%s -- Katalog Perpustakaan"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead_adv.inc:2
-msgid "Library Catalog Search"
-msgstr "Penelusuran Katalog Perpustakaan"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:48
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-facets.inc:6
 #, c-format
 msgid "Limit to <a1>currently available items.</a>"
 msgstr ""
@@ -2236,46 +2368,45 @@ msgstr ""
 msgid "Limit to:"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:208
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:210
 msgid "Limit type to: match any of the following"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:134
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:160
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:156
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:200
 #, fuzzy
 msgid "List Name"
 msgstr "Nama Akhir"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:99
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:180
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:121
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:220
 #, fuzzy
 msgid "List Name:"
 msgstr "Nama Akhir"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:13
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:113
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead-basic.inc:8
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:8
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:50
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:135
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:65
 msgid "Lists"
 msgstr ""
 
 #. LABEL
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:217
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:219
 msgid "Local History Materials"
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:143
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:207
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:60
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:228
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:66
 msgid "Location"
 msgstr "Lokasi"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:299
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:301
 msgid "Location and availability:"
 msgstr ""
 
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:109
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:91
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-auth.tmpl:46
 msgid "Log In"
 msgstr "Masuk"
@@ -2284,44 +2415,63 @@ msgstr "Masuk"
 msgid "Log In to Your Account"
 msgstr "Masuk ke dalam Akun Anda"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead-basic.inc:8
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:8
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead_adv.inc:13
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:2
 msgid "Log Out"
 msgstr "Keluar"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:103
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:101
+#, fuzzy
+msgid "Log in to Create Your Own Lists"
+msgstr "<a1>Log masuk</a> ke Koha"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:2
+#, fuzzy
+msgid "Log in to Your Account"
+msgstr "Masuk ke dalam Akun Anda"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:86
 #, fuzzy
 msgid "Log in to Your Account:"
 msgstr "Masuk ke dalam Akun Anda"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead_adv.inc:18
-msgid "Log in to access"
-msgstr "Masuk ke dalam akses"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead-basic.inc:8
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:8
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead_adv.inc:10
-msgid "Logged in as"
-msgstr "Masuk sebagai"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:105
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:88
 #, fuzzy
 msgid "Login:"
 msgstr "Lokasi:"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=itemlostcount
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:163
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:212
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:214
 #, fuzzy, c-format
 msgid "Lost (%s),"
 msgstr "%s %s (%s)"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:26
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:197
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:36
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:70
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:191
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:68
+msgid "MARC (Unicode/UTF-8)"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:190
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:67
+msgid "MARC (non-Unicode/MARC-8)"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:25
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:217
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:85
 msgid "MARC View"
 msgstr "Tampilan MARC"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:189
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:66
+msgid "MARCXML"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:187
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:64
+msgid "MODS (XML)"
+msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:22
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:24
@@ -2338,22 +2488,28 @@ msgstr "Masukan utama (hanya $a)"
 msgid "Main entry:"
 msgstr "Masukan utama"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:187
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:236
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:239
 #, c-format
 msgid "Make a <a1>purchase suggestion</a>"
 msgstr "Buat sebuah <a1>saran pembelian</a>"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:99
+#, fuzzy
+msgid "Manage Lists"
+msgstr "Dikelola oleh"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:67
 msgid "Managed by"
 msgstr "Dikelola oleh"
 
 #. IMG
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:218
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:220
 msgid "Maps"
 msgstr ""
 
 #. LABEL
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:218
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:220
 msgid "Maps, Globes"
 msgstr ""
 
@@ -2377,17 +2533,17 @@ msgstr "Nomer Anggota:"
 msgid "Message Sent"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:27
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:29
 msgid "Message from the library"
 msgstr "Pesan dari perpustakaan"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:51
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:292
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:98
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:316
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:114
 msgid "Missing"
 msgstr "Hilang"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:250
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:258
 msgid "Modify"
 msgstr "Ubah"
 
@@ -2413,28 +2569,25 @@ msgstr ""
 msgid "More Details"
 msgstr "Lebih Rinci"
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:68
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:70
+msgid "Most Popular"
+msgstr ""
+
 #. LABEL
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:212
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:214
 msgid ""
 "Motion pictures, Videorecordings, Filmstrips, Slides, Transparencies, "
 "Photos, Cards, Charts, Drawings"
 msgstr ""
 
 #. LABEL
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:221
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:223
 msgid "Music"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:244
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:246
 msgid "Musical recording"
-msgstr ""
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead_adv.inc:12
-msgid "My Account"
-msgstr "Akunku"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead_adv.inc:11
-msgid "My Book Lists"
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:1
@@ -2467,23 +2620,23 @@ msgstr "Lanjut >>"
 msgid "Next&gt;&gt;"
 msgstr "Lanjut>>"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:182
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:188
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:122
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:100
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:47
 msgid "No"
 msgstr "Tidak"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:145
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:185
 msgid "No Private Lists."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:168
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:208
 #, fuzzy
 msgid "No Public Lists."
 msgstr "Tidak Diterbitkan"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:52
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:112
 #, fuzzy
 msgid "No Result found !"
 msgstr "Tidak ada hasil yang ditemukan."
@@ -2501,8 +2654,8 @@ msgstr "Butiran Perhubungan Alternatif"
 msgid "No borrower matched %s"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:142
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:77
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:141
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:81
 msgid "No copies available."
 msgstr "Tidak tersedia salinan."
 
@@ -2512,20 +2665,21 @@ msgid ""
 "No fields are mandatory. Enter whatever information you have. The \"Notes\" "
 "field can be used to provide any additional information."
 msgstr ""
-"Tidak ada kolom yang wajib diisi. Masukkan informasi apapun yang Anda punya. "
-"Kolom \"Catatan\" dapat digunakan untuk memberikan informasi tambahan."
+" Tidak ada kolom yang wajib diisi. Masukkan informasi apapun yang Anda "
+"punya. Kolom \"Catatan\" dapat digunakan untuk memberikan informasi tambahan."
 
 #. SCRIPT
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:31
-msgid "No item was added to your book bag"
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:45
+msgid "No item was added to your cart"
 msgstr ""
 
 #. SCRIPT
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:31
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:45
 msgid "No item was selected"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:158
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:207
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:209
 #, fuzzy
 msgid "No items available:"
 msgstr "Tidak tersedia salinan."
@@ -2534,21 +2688,21 @@ msgstr "Tidak tersedia salinan."
 msgid "No limit"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:360
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:384
 #, fuzzy
 msgid "No other editions found."
 msgstr "Tidak ada hasil yang ditemukan."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:249
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:272
 msgid "No physical items for this record"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:228
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:236
 #, fuzzy
 msgid "No renewals left"
 msgstr "Tidak dapat diperpanjang"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:57
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:117
 #, fuzzy
 msgid "No result found !"
 msgstr "Tidak ada hasil yang ditemukan."
@@ -2572,20 +2726,20 @@ msgstr "Tidak ada hasil yang ditemukan pada katalog."
 msgid "No results in Authorities"
 msgstr "Tidak ada hasil yang ditemukan pada Wewenang."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:54
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:114
 msgid "No results match your search for"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:137
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:153
 msgid "No reviews has been writed on this biblio."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:242
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:244
 #, fuzzy
 msgid "Non Fiction"
 msgstr "Lokasi"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:245
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:247
 msgid "Non-musical recording"
 msgstr ""
 
@@ -2594,13 +2748,8 @@ msgstr ""
 msgid "None"
 msgstr "Catatan"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:16
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:39
-#, fuzzy
-msgid "Normal"
-msgstr "Tampilan Normal"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:67
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:14
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:82
 msgid "Normal View"
 msgstr "Tampilan Normal"
 
@@ -2608,8 +2757,8 @@ msgstr "Tampilan Normal"
 msgid "Normalised irregular"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:294
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:100
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:318
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:116
 msgid "Not Issued"
 msgstr "Tidak Dipinjamkan"
 
@@ -2621,32 +2770,33 @@ msgstr "Tidak Diterbitkan"
 msgid "Not a biography"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:187
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:236
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:239
 msgid "Not finding what you're looking for?"
 msgstr "Tidak menemukan apa yang Anda cari?"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:219
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:241
 msgid "Not for loan"
 msgstr ""
 
 #. %1$s: TMPL_VAR name=notforloanvalue
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:153
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:155
 #, c-format
 msgid "Not for loan (%s)"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:162
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:164
 msgid "Not on hold"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:178
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:183
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:120
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:98
 msgid "Not renewable"
 msgstr "Tidak dapat diperpanjang"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:65
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:279
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:303
 msgid "Note"
 msgstr "Catatan"
 
@@ -2655,7 +2805,8 @@ msgid "Note: Your comment must be approved by a librarian."
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:99
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:65
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:110
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:110
 msgid "Notes"
 msgstr "Catatan"
 
@@ -2672,7 +2823,7 @@ msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:66
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:25
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:29
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:35
 msgid "Notes:"
 msgstr "Catatan:"
 
@@ -2681,41 +2832,45 @@ msgid "Number"
 msgstr "Nomer"
 
 #. INPUT type=submit name=do
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:328
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:330
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-tags_subject.tmpl:18
 msgid "OK"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:226
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:234
 #, fuzzy
 msgid "On Reserve"
 msgstr "Tempah"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:157
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:159
 msgid "On hold"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:222
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:244
 msgid "On loan"
 msgstr "Dipinjamkan"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=onloancount
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:161
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:210
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:212
 #, fuzzy, c-format
 msgid "On loan (%s),"
 msgstr "Dipinjamkan"
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=orderedcount
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:165
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:214
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:216
 #, c-format
 msgid "On order (%s),"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:130
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:142
 msgid "Online Resources:"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:313
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:315
 msgid "Only items currently available"
 msgstr ""
 
@@ -2733,15 +2888,15 @@ msgstr "Dipesankan oleh perpustakaan"
 msgid "Other"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:345
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:369
 msgid "Other Editions of this Work"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:47
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:49
 msgid "Overdue"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:203
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:211
 msgid "Overdues"
 msgstr ""
 
@@ -2753,7 +2908,7 @@ msgstr "Sandi Diperbarui"
 msgid "Password or PIN"
 msgstr "Sandi atau PIN"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:106
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:89
 msgid "Password:"
 msgstr "Sandi:"
 
@@ -2761,11 +2916,11 @@ msgstr "Sandi:"
 msgid "Passwords do not match. Please re-type your new password."
 msgstr "Sandi tidak sesuai. Silakan ketik ulang sandi baru Anda."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:273
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:275
 msgid "Patent document"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:92
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:108
 msgid "Pending"
 msgstr "Tunda"
 
@@ -2798,24 +2953,24 @@ msgstr "Telepon (Rumah):"
 msgid "Phone:"
 msgstr "Telepon:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:26
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:32
 msgid "Physical Details:"
 msgstr "Rincian fisik:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:71
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:83
 #, fuzzy
 msgid "Physical details:"
 msgstr "Rincian fisik:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:95
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:97
 msgid "Pick Up Branch"
 msgstr "Cabang Pengambilan"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:248
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:256
 msgid "Pick Up Location"
 msgstr "Lokasi Pengambilan"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:191
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:193
 msgid "Pick up From:"
 msgstr "Pengambilan Dari:"
 
@@ -2828,16 +2983,17 @@ msgid "Picture"
 msgstr ""
 
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:87
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:169
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:89
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:171
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:16
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:218
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:220
 #, fuzzy
 msgid "Place Hold"
 msgstr "Tempatkan"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:15
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:152
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:169
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:31
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:163
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:40
 msgid "Place Reserve"
 msgstr "Tempatkan Pemesanan"
 
@@ -2846,15 +3002,15 @@ msgstr "Tempatkan Pemesanan"
 msgid "Place a hold on"
 msgstr "Tempatkan"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:97
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:99
 msgid "Place a hold on a specific copy"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:83
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:84
 msgid "Place a hold on the next available copy"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:247
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:255
 msgid "Placed On"
 msgstr "Tempatkan"
 
@@ -2875,7 +3031,7 @@ msgid ""
 "submit current information (<em>Please note:</em> there may be a delay in "
 "restoring your account if you submit online)"
 msgstr ""
-"Silakan hubungi pustakawan Anda, atau gunakan <a1>form pembaruan online</a> "
+" Silakan hubungi pustakawan Anda, atau gunakan <a1>form pembaruan online</a> "
 "untuk mendaftarkan informasi terbaru (<em>Harap diperhatikan:</em> akan ada "
 "penundaan dalam memperbarui akun Anda jika Anda mendaftar secara online)"
 
@@ -2889,13 +3045,13 @@ msgid ""
 "Please make any necessary changes to your record. Submitting the form will "
 "notify a library staff member, who will make the changes permanent."
 msgstr ""
-"Silakan membuat perubahan yang diperlukan untuk data Anda. Pendaftaran form "
+" Silakan membuat perubahan yang diperlukan untuk data Anda. Pendaftaran form "
 "ini akan memberitahukan anggota staf pustakawan, yang akan menetapkan "
 "perubahan."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:33
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:36
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:39
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:35
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:38
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:41
 msgid "Please note:"
 msgstr "Ambil perhatian"
 
@@ -2909,7 +3065,7 @@ msgstr ""
 msgid "Popularity (Most to Least)"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:335
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:359
 msgid "Post or edit your comments on this item."
 msgstr ""
 
@@ -2921,10 +3077,10 @@ msgstr ""
 msgid "Primary (5-8)"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:18
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:17
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:23
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:160
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:42
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:169
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:46
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:18
 msgid "Print"
 msgstr "Cetak"
@@ -2933,29 +3089,31 @@ msgstr "Cetak"
 msgid "Priority:"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:43
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:52
 msgid "Private"
 msgstr "Persendirian"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:13
-msgid "Problem sending the book bag..."
+#, fuzzy
+msgid "Problem sending the cart..."
 msgstr "Masalah menghantar ke beg buku"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:279
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:281
 msgid "Programmed texts"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:44
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:53
 msgid "Public"
 msgstr "Awam"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:121
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:123
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:143
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:145
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:80
 #, fuzzy
 msgid "Public Lists"
 msgstr "Awam"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:96
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:98
 #, fuzzy
 msgid "Publication year:"
 msgstr "Tahun Penerbitan:"
@@ -2970,7 +3128,12 @@ msgstr ""
 msgid "Publication/Copyright Date: Oldest to Newest"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:64
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:233
+#, fuzzy
+msgid "Published"
+msgstr "Penerbit"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:76
 #, fuzzy
 msgid "Published by :"
 msgstr "Diterbitkan oleh: %s"
@@ -2984,7 +3147,8 @@ msgstr "Diterbitkan oleh: %s"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:64
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:123
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:125
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:64
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:109
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:109
 msgid "Publisher"
 msgstr "Penerbit"
 
@@ -2995,7 +3159,7 @@ msgid "Publisher Location"
 msgstr "Penerbit"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:24
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:23
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:29
 msgid "Publisher:"
 msgstr "Penerbit:"
 
@@ -3013,8 +3177,8 @@ msgstr "2 suku tahun"
 msgid "RECEIPT"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:377
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:160
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:400
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:175
 msgid "Rating (from Amazon.com):"
 msgstr "Nilai (daripada Amazon.com):"
 
@@ -3022,7 +3186,7 @@ msgstr "Nilai (daripada Amazon.com):"
 msgid "Re-Type New Password:"
 msgstr "Taip Semula Password"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:40
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:46
 msgid "Record No.:"
 msgstr "No Rekod:"
 
@@ -3031,7 +3195,7 @@ msgid "Record not found"
 msgstr ""
 
 #. LABEL
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:223
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:225
 #, fuzzy
 msgid "Reference"
 msgstr "Tempah"
@@ -3044,7 +3208,7 @@ msgstr ""
 msgid "Regular"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:251
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:253
 msgid "Regular print"
 msgstr ""
 
@@ -3052,7 +3216,7 @@ msgstr ""
 msgid "Regularity"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:49
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:55
 msgid "Related links:"
 msgstr "Pautan berkaitan:"
 
@@ -3066,14 +3230,14 @@ msgid "Relevance"
 msgstr "Tempah"
 
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:68
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:105
 msgid "Remove Selected Items"
 msgstr "Buang Item Bertanda"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:133
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:176
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:208
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:223
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:136
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:181
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:216
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:231
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:108
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:118
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:86
@@ -3082,7 +3246,7 @@ msgid "Renew"
 msgstr "Perbaharui"
 
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:192
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:199
 #, fuzzy
 msgid "Renew All"
 msgstr "Perbaharui"
@@ -3130,6 +3294,7 @@ msgid "Results %s to %s of %s in the catalog."
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:4
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:4
 msgid "Results of Search"
 msgstr ""
 
@@ -3165,17 +3330,17 @@ msgstr ""
 #. %1$s: TMPL_VAR name=title
 #. %2$s: TMPL_VAR name=surname
 #. %3$s: TMPL_VAR name=firstname
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:121
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:137
 #, c-format
 msgid "Review by %s %s %s"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:278
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:280
 #, fuzzy
 msgid "Reviews"
 msgstr "Perbaharui"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:117
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:133
 msgid "Reviews by members:"
 msgstr ""
 
@@ -3185,22 +3350,38 @@ msgstr ""
 
 #. INPUT type=submit
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:28
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:47
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:37
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:56
 msgid "Save"
 msgstr ""
 
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:107
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:129
 msgid "Save Changes"
 msgstr ""
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:184
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:61
+#, fuzzy
+msgid "Save Record:"
+msgstr "No Rekod:"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:18
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:174
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:51
+msgid "Save to Your Lists"
+msgstr ""
+
+#. For the first occurrence,
 #. %1$S: type=text name=q
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:49
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:94
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:94
 #, c-format
 msgid "Scan Index for: %S"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:44
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:89
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:89
 msgid "Scan Index:"
 msgstr ""
 
@@ -3225,15 +3406,9 @@ msgid "Scan next item, or"
 msgstr ""
 
 #. INPUT type=submit name=do
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:328
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:22
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:36
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:330
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:18
 msgid "Search"
-msgstr ""
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead_adv.inc:3
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:5
-msgid "Search Home"
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:39
@@ -3273,7 +3448,7 @@ msgstr ""
 msgid "Select remote databases:"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:100
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:122
 msgid "Select sort field for this List:"
 msgstr ""
 
@@ -3299,7 +3474,7 @@ msgid "Send"
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:21
-msgid "Sending your book bag"
+msgid "Sending your cart"
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:115
@@ -3320,15 +3495,22 @@ msgstr ""
 msgid "Serials"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:63
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:29
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:108
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:108
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:46
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:48
 msgid "Series"
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:179
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:181
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:66
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:111
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:111
 msgid "Series Title"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:62
+msgid "Series:"
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:49
@@ -3344,15 +3526,17 @@ msgstr ""
 msgid "Set Filter"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:29
-msgid "Set language to"
-msgstr ""
-
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:55
 msgid "Sex:"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:37
+#. %1$s: TMPL_VAR name=delete_ok
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:35
+#, c-format
+msgid "Shelf %s Deleted."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:46
 msgid "Shelf Name:"
 msgstr ""
 
@@ -3360,15 +3544,15 @@ msgstr ""
 msgid "Show"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:25
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:23
 msgid "Show All Items"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:23
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:25
 msgid "Show Last 50 Items Only"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-facets.inc:8
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-facets.inc:13
 msgid "Show More"
 msgstr ""
 
@@ -3376,16 +3560,16 @@ msgstr ""
 msgid "Show the top"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:23
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:25
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:28
 msgid "Showing All Items"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:25
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:23
 msgid "Showing Last 50 Items"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:48
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-facets.inc:6
 msgid "Showing only"
 msgstr ""
 
@@ -3424,8 +3608,8 @@ msgid ""
 "Sorry, the system doesn't think you have permission to access this page."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:395
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:176
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:417
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:190
 msgid "Sorry, there are no reviews available for this title."
 msgstr ""
 
@@ -3449,16 +3633,16 @@ msgstr ""
 msgid "Sorry, your session has timed out. Please log in again."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:134
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:156
 msgid "Sort by"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:318
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:320
 msgid "Sort by:"
 msgstr ""
 
 #. LABEL
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:213
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:215
 msgid "Spoken, Books on CD and Cassette"
 msgstr ""
 
@@ -3473,16 +3657,16 @@ msgstr "Nomer Kartu:"
 msgid "Start search"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:282
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:284
 msgid "Statistics"
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:37
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:249
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:257
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:68
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:208
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:278
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:85
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:229
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:302
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:101
 msgid "Status"
 msgstr ""
 
@@ -3500,12 +3684,15 @@ msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:157
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:159
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:61
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:27
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:106
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:106
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:36
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:38
 msgid "Subject"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:62
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:107
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:107
 msgid "Subject Phrase"
 msgstr ""
 
@@ -3513,9 +3700,9 @@ msgstr ""
 msgid "Subject cloud"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:99
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:108
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:35
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:112
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:121
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:41
 msgid "Subject(s):"
 msgstr ""
 
@@ -3563,13 +3750,13 @@ msgstr ""
 msgid "Subscription information for %s"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:186
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:62
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:206
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:77
 #, fuzzy
 msgid "Subscriptions"
 msgstr "Keterangan"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:231
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:233
 msgid "Subtype limits"
 msgstr ""
 
@@ -3599,11 +3786,16 @@ msgstr ""
 msgid "Sunday"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:277
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:279
 msgid "Surveys"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:283
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:68
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:70
+msgid "Tag Cloud"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:285
 msgid "Technical reports"
 msgstr ""
 
@@ -3612,7 +3804,8 @@ msgstr ""
 msgid "Term"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:79
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:124
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:124
 msgid "Term/Phrase"
 msgstr ""
 
@@ -3620,16 +3813,14 @@ msgstr ""
 msgid "Textmessaging:"
 msgstr ""
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:26
+msgid "Thank you!"
+msgstr ""
+
 #. %1$s: TMPL_VAR name=limit
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:65
 #, c-format
 msgid "The %s most checked-out"
-msgstr ""
-
-#. %1$s: TMPL_VAR name=email_add
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:9
-#, c-format
-msgid "The book bag was sent to: %s"
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-browser.tmpl:43
@@ -3640,7 +3831,19 @@ msgid ""
 "it."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:273
+#. %1$s: TMPL_VAR name=email_add
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:9
+#, c-format
+msgid "The cart was sent to: %s"
+msgstr ""
+
+#. %1$s: TMPL_VAR name=need_confirm
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:20
+#, c-format
+msgid "The list <i>%s</i> is not empty."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:297
 #, fuzzy
 msgid "The three latest issues for this subscription:"
 msgstr "Peminjaman untuk sebuah koleksi"
@@ -3651,7 +3854,7 @@ msgstr "Peminjaman untuk sebuah koleksi"
 msgid "The userid %s was not found in the database. Please try again."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:330
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:354
 msgid "There are no comments for this item."
 msgstr ""
 
@@ -3671,7 +3874,7 @@ msgstr ""
 msgid "There was a problem with your submission"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:276
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:278
 msgid "Theses"
 msgstr ""
 
@@ -3681,26 +3884,46 @@ msgid ""
 "of them to see the documents related to it"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:59
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:96
 #, c-format
 msgid ""
 "This List is empty. You can add to your lists from the results of any "
 "<a1>search</a>!"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:268
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:15
+msgid "This error means that the Koha is pointed an invalid link."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/404.tmpl:15
+msgid ""
+"This error means that the link was broken and that the page doesn't exist."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/401.tmpl:15
+msgid ""
+"This error means that the you are trying to access a link that you're not "
+"authorized to see."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:15
+msgid ""
+"This error means that you are forbidden for some reason to see this page."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:291
 #, fuzzy
 msgid "This is a serial subscription"
 msgstr "Peminjaman untuk sebuah koleksi"
 
 #. SCRIPT
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:31
-msgid "This item has been added to your book bag"
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:45
+msgid "This item has been added to your cart"
 msgstr ""
 
 #. SCRIPT
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:31
-msgid "This item is already in your book bag"
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:45
+msgid "This item is already in your cart"
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:148
@@ -3719,22 +3942,25 @@ msgstr ""
 msgid "Thursday"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:46
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:29
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:78
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:93
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:130
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:206
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:246
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:95
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:132
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:214
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:254
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:108
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:86
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:108
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:127
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:22
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:59
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:169
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:171
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:32
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:58
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:25
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:33
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:34
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:103
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:103
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:26
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:28
 msgid "Title"
 msgstr ""
 
@@ -3748,12 +3974,22 @@ msgstr ""
 msgid "Title (Z-A)"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:59
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:104
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:104
 msgid "Title Phrase"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:181
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:183
 msgid "Title:"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:16
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:16
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/401.tmpl:17
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/500.tmpl:16
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/404.tmpl:16
+#, c-format
+msgid "To report this error, you can <a1>email the Koha Administrator</a>."
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:106
@@ -3770,13 +4006,18 @@ msgstr "%s isu"
 msgid "Total Due"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:286
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:288
 msgid "Treaties"
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:146
 msgid "Triennial"
 msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/401.tmpl:16
+#, fuzzy
+msgid "Try logging in to the catalog"
+msgstr "Tidak ada hasil yang ditemukan pada katalog."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:62
 msgid "Tuesday"
@@ -3786,7 +4027,7 @@ msgstr ""
 msgid "Type of Heading"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:58
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:64
 msgid "Type/Format"
 msgstr ""
 
@@ -3800,11 +4041,11 @@ msgstr ""
 msgid "URL : %s"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:149
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:151
 msgid "Unavailable (lost or missing)"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:94
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:95
 #, fuzzy
 msgid "Unavailable Issues"
 msgstr "Tersedia di"
@@ -3819,7 +4060,7 @@ msgstr ""
 msgid "Unified title: %s"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:90
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:103
 msgid "Uniform titles:"
 msgstr ""
 
@@ -3834,6 +4075,18 @@ msgstr ""
 msgid "Update Your Personal Details"
 msgstr "Rincian Pribadi: %s %s"
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:22
+msgid "Use the \"Confirm\" button below to confirm deletion."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:18
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:18
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/401.tmpl:19
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/500.tmpl:18
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/404.tmpl:18
+msgid "Use top menu bar to navigate to another part of Koha."
+msgstr ""
+
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-dictionary.tmpl:45
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-dictionary.tmpl:79
 msgid "Used in"
@@ -3847,7 +4100,7 @@ msgid ""
 "a librarian."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:257
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:259
 msgid "VHS tape / Videocassette"
 msgstr ""
 
@@ -3860,24 +4113,25 @@ msgstr "Tipe-tipe Aitem:"
 msgid "View Full Heading"
 msgstr ""
 
+#. A
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:184
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:186
+msgid "View details for this title"
+msgstr ""
+
 #. IMG
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:212
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:214
 msgid "Visual Materials"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:211
-#, fuzzy
-msgid "Volume"
-msgstr "Rumah"
-
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:48
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:286
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:310
 msgid "Waited"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:157
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:51
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:115
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:159
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:53
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:117
 msgid "Waiting"
 msgstr ""
 
@@ -3886,12 +4140,12 @@ msgid "Warning:"
 msgstr ""
 
 #. %1$s: TMPL_VAR name=subscriptionsnumber
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:76
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:91
 #, c-format
 msgid "We have %s subscription(s) associated with this title."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:260
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:262
 msgid "Website"
 msgstr ""
 
@@ -3903,8 +4157,15 @@ msgstr ""
 msgid "Weekly"
 msgstr ""
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:2
+#, c-format
+msgid "Welcome, <a1>"
+msgstr ""
+
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=wthdrawncount
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:162
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:211
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:213
 #, c-format
 msgid "Withdrawn (%s),"
 msgstr ""
@@ -3917,15 +4178,15 @@ msgstr ""
 msgid "Work/Fax phone:"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:141
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:157
 msgid "Write or modify your reviews on this biblio."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:112
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:125
 msgid "Year :"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:182
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:188
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:122
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:100
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:45
@@ -3950,30 +4211,28 @@ msgstr "Masuk sebagai"
 msgid "You are logging from a different IP address. Please log in again."
 msgstr ""
 
-#. SCRIPT
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:31
-msgid "You book bag is currently empty"
-msgstr ""
-
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:39
 #, fuzzy
 msgid "You can't change your password."
 msgstr "Ubah Sandi Anda"
 
+#. SCRIPT
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:45
+msgid "You cart is currently empty"
+msgstr ""
+
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:127
 msgid "You currently have nothing checked out."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:62
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:72
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:64
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:74
 msgid "You currently owe fines and charges amounting to:"
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:6
-msgid "You did not specify any search criteria"
-msgstr ""
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:59
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:6
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:119
 msgid "You did not specify any search criteria."
 msgstr ""
 
@@ -3983,7 +4242,7 @@ msgid ""
 "remember, usernames and passwords are case sensitive."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:81
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:83
 msgid "You have a credit of:"
 msgstr ""
 
@@ -3995,7 +4254,7 @@ msgstr ""
 msgid "You have no Fines or Charges"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:196
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:204
 msgid "You have nothing checked out"
 msgstr ""
 
@@ -4007,24 +4266,19 @@ msgstr ""
 msgid "You must select at least one item."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:235
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:237
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:11
 msgid "Young Adult"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead-basic.inc:8
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:8
-#, fuzzy
-msgid "Your Account"
-msgstr "Akunku"
-
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:2
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:17
-msgid "Your Book Bag"
+msgid "Your Cart"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:116
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:118
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:138
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:140
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:89
 msgid "Your Lists"
 msgstr ""
 
@@ -4032,7 +4286,7 @@ msgstr ""
 msgid "Your Userid was not found in the database. Please try again."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:33
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:35
 #, c-format
 msgid ""
 "Your account has been frozen. Usually the reason for freezing an account is "
@@ -4044,20 +4298,30 @@ msgstr ""
 msgid "Your card number"
 msgstr ""
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:75
+msgid "Your cart is empty."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:26
+msgid ""
+"Your corrections have been submitted to the library, and a staff member will "
+"update your record as soon as possible."
+msgstr ""
+
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:24
 msgid ""
 "Your current password was entered incorrectly. If this problem persists, "
 "please ask a librarian to re-set your password for you."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:39
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:41
 #, fuzzy
 msgid ""
 "Your library card has been marked as lost or stolen. If this is an error, "
 "please take your card to the circulation desk at your local library and the "
 "error will be corrected."
 msgstr ""
-"Jika ini adalah sebuah kesalahan, silakan bawa kartu Anda ke bagian "
+" Jika ini adalah sebuah kesalahan, silakan bawa kartu Anda ke bagian "
 "sirkulasi di perpustakaan dan kesalahan tersebut akan dikoreksi."
 
 #. %1$s: TMPL_VAR name=minpasslen
@@ -4080,23 +4344,25 @@ msgstr ""
 msgid "Your session has timed out due to inactivity. Please sign in."
 msgstr ""
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=itemcallnumber
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:152
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:201
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:203
 #, fuzzy, c-format
 msgid "[<a1>%s</a>]"
 msgstr "<a1>%s</a>,"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:330
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:332
 #, fuzzy
 msgid "[Fewer Options]"
 msgstr "Pilihan-pilihan lain:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:332
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:334
 #, fuzzy
 msgid "[More options]"
 msgstr "Pilihan-pilihan lain:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:334
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:336
 msgid "[New Search]"
 msgstr ""
 
@@ -4104,14 +4370,20 @@ msgstr ""
 msgid "] :"
 msgstr ""
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:12
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:14
+#, fuzzy
+msgid "a list:"
+msgstr "Tambah ke Rak"
+
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:88
 msgid "abstract"
 msgstr ""
 
 #. SCRIPT
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:31
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:45
 #, fuzzy
-msgid "already in the bag"
+msgid "already in your cart"
 msgstr "Tersedia di perpustakaan"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:20
@@ -4119,7 +4391,7 @@ msgstr "Tersedia di perpustakaan"
 msgid "any"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:158
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:160
 #, fuzzy
 msgid "at"
 msgstr "Tanggal"
@@ -4127,12 +4399,12 @@ msgstr "Tanggal"
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=branch
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:70
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:115
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:117
 #, c-format
 msgid "at %s"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:103
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:125
 #, fuzzy
 msgid "author"
 msgstr "Pengarang"
@@ -4141,13 +4413,13 @@ msgstr "Pengarang"
 msgid "autobiography"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:48
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-facets.inc:6
 #, fuzzy
 msgid "available"
 msgstr "Tersedia"
 
 #. %1$s: TMPL_VAR name=barcode
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:419
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:440
 #, fuzzy, c-format
 msgid "barcode:%s"
 msgstr "Nomer Induk:"
@@ -4162,34 +4434,19 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=author
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:350
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:374
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-review.tmpl:15
 #, c-format
 msgid "by %s"
 msgstr ""
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=author
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:135
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:184
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:186
 #, fuzzy, c-format
 msgid "by <a1>%s</a>"
 msgstr "Oleh <a1>%s</a>"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:17
-msgid "by cloud"
-msgstr ""
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:11
-msgid "by headings"
-msgstr ""
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:8
-msgid "by hierarchy"
-msgstr ""
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:14
-#, fuzzy
-msgid "by top issues"
-msgstr "%s isu"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:183
 msgid "canvas"
@@ -4197,10 +4454,6 @@ msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:185
 msgid "cardboard/illustration board"
-msgstr ""
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead_adv.inc:18
-msgid "cardholder features"
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:104
@@ -4223,12 +4476,12 @@ msgstr ""
 msgid "children (9-14)"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:116
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:129
 #, fuzzy
 msgid "classification:"
 msgstr "Klasifikasi: %s"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:52
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:61
 #, fuzzy
 msgid "close this window."
 msgstr "Tutup Tampilan"
@@ -4255,30 +4508,31 @@ msgstr ""
 msgid "contains biogr. data"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:48
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:31
 #, fuzzy
 msgid "copyright"
 msgstr "Hakcipta:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:104
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:126
 #, fuzzy
 msgid "copyrightdate"
 msgstr "Tanggal Hakcipta"
 
 #. SPAN
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:73
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:86
 msgid ""
-"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
-"au=<!-- TMPL_VAR NAME=\"author\" -->&rft.btitle=<!-- TMPL_VAR NAME=\"title\" "
-"-->&rft.date=<!-- TMPL_VAR NAME=\"publicationyear\" -->&rft.tpages=<!-- "
-"TMPL_VAR NAME=\"size\" -->&rft.isbn=<!-- TMPL_VAR NAME=isbn -->&rft."
-"aucorp=&rft.place=<!-- TMPL_VAR NAME=\"place\" -->&rft.pub=<!-- TMPL_VAR "
-"NAME=\"publisher\" -->&rft.edition=<!-- TMPL_VAR NAME=\"edition\" -->&rft."
-"series=<!-- TMPL_VAR NAME=\"series\" -->&rft.genre="
+"ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3A<!-- TMPL_VAR "
+"NAME=\"ocoins_format\" -->&rft.au=<!-- TMPL_VAR NAME=\"author\" -->&rft."
+"btitle=<!-- TMPL_VAR NAME=\"title\" -->&rft.date=<!-- TMPL_VAR NAME="
+"\"publicationyear\" -->&rft.tpages=<!-- TMPL_VAR NAME=\"size\" -->&rft."
+"isbn=<!-- TMPL_VAR NAME=isbn -->&rft.aucorp=&rft.place=<!-- TMPL_VAR NAME="
+"\"place\" -->&rft.pub=<!-- TMPL_VAR NAME=\"publisher\" -->&rft.edition=<!-- "
+"TMPL_VAR NAME=\"edition\" -->&rft.series=<!-- TMPL_VAR NAME=\"series\" --"
+">&rft.genre="
 msgstr ""
 
 #. INPUT type=checkbox name=limit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:313
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:315
 msgid "datedue:0000-00-00"
 msgstr ""
 
@@ -4309,9 +4563,7 @@ msgstr ""
 
 #. META http-equiv=Content-Language
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:6
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close-results.inc:3
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close-basket.inc:3
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close-basket-print.inc:4
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:5
 msgid "en-us"
 msgstr ""
 
@@ -4327,7 +4579,7 @@ msgstr ""
 msgid "examination paper"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:158
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:160
 msgid "expected at"
 msgstr ""
 
@@ -4344,13 +4596,15 @@ msgstr "Lokasi"
 msgid "for"
 msgstr ""
 
+#. For the first occurrence,
 #. %1$s: TMPL_VAR name=query_desc
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:4
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:4
 #, c-format
 msgid "for '%s'"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:157
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:159
 msgid "for patron"
 msgstr ""
 
@@ -4391,7 +4645,7 @@ msgid "in"
 msgstr ""
 
 #. %1$s: TMPL_VAR name=LibraryName
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:54
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:114
 #, fuzzy, c-format
 msgid "in %s Catalog."
 msgstr "%s Katalog --"
@@ -4421,7 +4675,7 @@ msgstr ""
 msgid "is exactly"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:48
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-facets.inc:6
 #, c-format
 msgid "items. <a1>Show all items</a>"
 msgstr ""
@@ -4431,7 +4685,7 @@ msgid "juvenile, general"
 msgstr ""
 
 #. ABBR
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:76
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:89
 msgid "koha:isbn:<!-- TMPL_VAR NAME=\"isbn\" -->"
 msgstr ""
 
@@ -4447,10 +4701,6 @@ msgstr ""
 msgid "letters"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:19
-msgid "lists"
-msgstr ""
-
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:102
 msgid "literature surveys/reviews"
 msgstr ""
@@ -4460,49 +4710,54 @@ msgid "maps"
 msgstr ""
 
 #. INPUT type=checkbox name=limit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:217
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:219
 #, fuzzy
 msgid "mc-collection:LH"
 msgstr "Koleksi"
 
 #. INPUT type=checkbox name=limit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:223
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:225
 #, fuzzy
 msgid "mc-collection:REF"
 msgstr "Koleksi"
 
 #. INPUT type=checkbox name=limit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:213
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:215
 msgid "mc-rtype:i"
 msgstr ""
 
 #. INPUT type=checkbox name=limit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:221
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:223
 msgid "mc-rtype:j"
 msgstr ""
 
 #. INPUT type=checkbox name=limit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:222
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:224
 msgid "mc-rtype:o"
 msgstr ""
 
 #. INPUT type=checkbox name=limit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:218
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:198
+msgid "mc:<!--TMPL_VAR Name=\"code\" -->"
+msgstr ""
+
+#. INPUT type=checkbox name=limit
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:220
 msgid "mc:a"
 msgstr ""
 
 #. INPUT type=checkbox name=limit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:216
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:218
 msgid "mc:c"
 msgstr ""
 
 #. INPUT type=checkbox name=limit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:211
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:213
 msgid "mc:t"
 msgstr ""
 
 #. INPUT type=checkbox name=limit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:212
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:214
 msgid "mc:v"
 msgstr ""
 
@@ -4530,11 +4785,6 @@ msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:112
 msgid "motion picture"
-msgstr ""
-
-#. INPUT type=checkbox name=limit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:197
-msgid "mt:<!--TMPL_VAR Name=\"code\" -->"
 msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:27
@@ -4685,12 +4935,12 @@ msgstr ""
 msgid "project description"
 msgstr "Keterangan"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:49
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:32
 #, fuzzy
 msgid "publication year"
 msgstr "Tahun Penerbitan"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:20
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/navigation.inc:4
 msgid "purchase suggestions"
 msgstr ""
 
@@ -4703,7 +4953,7 @@ msgid "regular print"
 msgstr ""
 
 #. %1$s: TMPL_VAR name=total
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:48
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:108
 #, c-format
 msgid "returned %s results."
 msgstr ""
@@ -4766,11 +5016,6 @@ msgid "technical report"
 msgstr ""
 
 #. META http-equiv=Content-Type
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close-results.inc:2
-msgid "text/html; charset=<!-- TMPL_VAR NAME='TemplateEncoding' -->"
-msgstr ""
-
-#. META http-equiv=Content-Type
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:6
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:6
 msgid "text/html; charset=iso-8859-1"
@@ -4778,10 +5023,8 @@ msgstr ""
 
 #. META http-equiv=Content-Type
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:4
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:3
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:2
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close-results.inc:2
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close-basket.inc:2
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close-basket-print.inc:2
 msgid "text/html; charset=utf-8"
 msgstr ""
 
@@ -4789,7 +5032,7 @@ msgstr ""
 msgid "textile"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:102
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:124
 msgid "title"
 msgstr ""
 
@@ -4815,7 +5058,7 @@ msgid "treaties"
 msgstr "Wewenang"
 
 #. LINK
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:39
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:53
 msgid "unAPI"
 msgstr ""
 
@@ -4910,14 +5153,14 @@ msgstr ""
 #~ msgid ", but managed only by you."
 #~ msgstr ", tetapi pengurusan hanya dari anda."
 
-#~ msgid "-- Please choose your branch --"
-#~ msgstr "-- Sila pilih cawangan anda --"
-
 #~ msgid "...Or Choose Acceptable Formats"
 #~ msgstr "...Atau Pilih Format yang diterima"
 
 #~ msgid "...and"
 #~ msgstr "...dan"
+
+#~ msgid "A &quot;shopping cart&quot; for your selections"
+#~ msgstr "Bakul untuk pilihan anda"
 
 #~ msgid "Accepted"
 #~ msgstr "Diterima"
@@ -4931,14 +5174,29 @@ msgstr ""
 #~ msgid "Add <i>%s</i>"
 #~ msgstr "Tambah <i>%s</i>"
 
+#, fuzzy
+#~ msgid "Add Checked Items to Lists"
+#~ msgstr "Tambah Item bertanda ke Beg Buku"
+
 #~ msgid "Add an Item to this Shelf by Barcode"
 #~ msgstr "Tambah Item ke Rak menggunakan Barkod"
+
+#, fuzzy
+#~ msgid "Add checked items to book bag"
+#~ msgstr "Tambah Item bertanda ke Beg Buku"
 
 #~ msgid "Add or Remove Book Shelves"
 #~ msgstr "Tambah atau Buang Rak Buku"
 
 #~ msgid "Add to Existing Shelf"
 #~ msgstr "Tambah ke Rak Sedia Ada"
+
+#~ msgid "Add to My Book Bag"
+#~ msgstr "Tambah ke Beg Buku saya"
+
+#, fuzzy
+#~ msgid "Add to My Book List"
+#~ msgstr "Tambah ke Beg Buku saya"
 
 #~ msgid "Additional Author(s):"
 #~ msgstr "Penulis Tambahan:"
@@ -4948,6 +5206,9 @@ msgstr ""
 
 #~ msgid "Advanced Search (More Options)"
 #~ msgstr "Carian Tambahan (Lebih Pilihan)"
+
+#~ msgid "Amazon Reader Reviews:"
+#~ msgstr "Review Pembaca Amazon:"
 
 #~ msgid "Ascending"
 #~ msgstr "Menurun"
@@ -4961,14 +5222,24 @@ msgstr ""
 #~ msgid "Back to Virtual Shelves"
 #~ msgstr "Kembali ke Rak Maya"
 
+#~ msgid "Book Bag"
+#~ msgstr "Kantong Buku"
+
 #~ msgid "Call Number:"
 #~ msgstr "Nomer Panggil"
 
 #~ msgid "Category"
 #~ msgstr "Kategori"
 
+#, fuzzy
+#~ msgid "Change language"
+#~ msgstr "Ubah Bahasa:"
+
 #~ msgid "Choose Either..."
 #~ msgstr "Pilih Antara..."
+
+#~ msgid "Clear All"
+#~ msgstr "Hapus Semua"
 
 #~ msgid "Confirm Reservation &gt;&gt;"
 #~ msgstr "Pastikan Pemesanan >>"
@@ -5006,11 +5277,20 @@ msgstr ""
 #~ msgid "Last renewal of subscription was <b>%s</b>"
 #~ msgstr "Perpanjangan terakhir dari pendaftaran adalah <b>%s</b>"
 
+#~ msgid "Library Catalog Search"
+#~ msgstr "Penelusuran Katalog Perpustakaan"
+
 #~ msgid "List of Virtual Shelves"
 #~ msgstr "Daftar Rak-rak Maya"
 
 #~ msgid "Log in to Check Your Account"
 #~ msgstr "Masuk untuk Memeriksa Akun Anda"
+
+#~ msgid "Log in to access"
+#~ msgstr "Masuk ke dalam akses"
+
+#~ msgid "Logged in as"
+#~ msgstr "Masuk sebagai"
 
 #~ msgid "Logged in as <b>%s</b> <a1>Members Home</a>"
 #~ msgstr "Masuk sebagai <b>%s</b> <a1>Halaman Utama Anggota</a>"
@@ -5027,6 +5307,9 @@ msgstr ""
 #~ msgid "Modify this Shelf"
 #~ msgstr "Ubah Rak ini"
 
+#~ msgid "My Account"
+#~ msgstr "Akunku"
+
 #~ msgid "My Virtual Shelves"
 #~ msgstr "Rak Virtualku"
 
@@ -5035,6 +5318,10 @@ msgstr ""
 
 #~ msgid "Next Available Copy (any format)"
 #~ msgstr "Salinan Tersedia Berikutnya (bentuk apapun)"
+
+#, fuzzy
+#~ msgid "Normal"
+#~ msgstr "Tampilan Normal"
 
 #~ msgid "Note there will be a reserve charge of"
 #~ msgstr "catatan akan ada biaya pemesanan atas"
@@ -5077,3 +5364,15 @@ msgstr ""
 
 #~ msgid "Reserve date"
 #~ msgstr "Tarikh tempahan"
+
+#, fuzzy
+#~ msgid "Volume"
+#~ msgstr "Rumah"
+
+#, fuzzy
+#~ msgid "Your Account"
+#~ msgstr "Akunku"
+
+#, fuzzy
+#~ msgid "by top issues"
+#~ msgstr "%s isu"
