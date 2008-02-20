@@ -13,5 +13,6 @@
 	<li><a href="/cgi-bin/koha/tools/export.pl">Export bibs/holdings</a></li>
 	<li><a href="/cgi-bin/koha/tools/import_borrowers.pl">Import patrons</a></li>
 	<li><a href="/cgi-bin/koha/tools/cleanborrowers.pl">Patrons (anonomize, bulk-delete)</a></li>
+	<li><a href="/cgi-bin/koha/tools/picture-upload.pl">Upload Patron Images</a></li>
 	<li><a href="/cgi-bin/koha/tools/scheduler.pl">Task Scheduler</a></li>
 </ul>
