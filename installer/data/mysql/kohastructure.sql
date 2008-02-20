@@ -1051,6 +1051,7 @@ CREATE TABLE `items` (
   `uri` varchar(255) default NULL,
   `itype` varchar(10) default NULL,
   `more_subfields_xml` longtext default NULL,
+  `enumchron` varchar(80) default NULL,
   PRIMARY KEY  (`itemnumber`),
   UNIQUE KEY `itembarcodeidx` (`barcode`),
   KEY `itembinoidx` (`biblioitemnumber`),
