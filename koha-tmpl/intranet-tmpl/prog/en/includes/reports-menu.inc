@@ -21,7 +21,7 @@
 	<h5>Inactive</h5>
 	<ul>
 		<li><a href="/cgi-bin/koha/reports/borrowers_out.pl">Patrons who haven't checked out</a></li>
-		<li><a href="/cgi-bin/koha/reports/catalogue_out.pl">Items not checked out</a></li>
+		<li><a href="/cgi-bin/koha/reports/catalogue_out.pl">Items with no checkouts</a></li>
 	</ul>
 
 
