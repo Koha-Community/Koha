@@ -86,6 +86,7 @@ if ( $uploadfile ) {
 output_html_with_http_headers $input, $cookie, $template->output;
 
 sub handle_dir {
+    warn "Entering sub handle_dir" if $DEBUG;
     my ( $dir ) = @_;
     my ( %count );
     my $file;
@@ -93,30 +94,32 @@ sub handle_dir {
     
     opendir my $dirhandle, $dir;
     while ( my $filename = readdir $dirhandle ) {
-        $file = "$dir/$filename" if ($filename =~ qr/datalink\.txt/i || qr/idlink\.txt/i);
+        $file = "$dir/$filename" if ($filename =~ m/datalink\.txt/i || $filename =~ m/idlink\.txt/i);
     }
     unless (open (FILE, $file)) { 
-		print "Openning $dir/$file failed!\n";
+		warn "Opening $dir/$file failed!" if $DEBUG;
 		return 0;
 	};
 
     while (my $line = <FILE>) {
-		chomp $line;
-		my ( $filename, $cardnumber );
-		my $delim = ($line =~ /\t/) ? "\t" : ",";
-		($cardnumber, $filename) = split $delim, $line;
-		$cardnumber =~ s/[\"\r\n]//g;  # remove offensive characters
-		$filename   =~ s/[\"\r\n\s]//g;
-                warn "Cardnumber: $cardnumber Filename: $filename" if $DEBUG;
-
-		if ($cardnumber && $filename) {
-                    warn "Source: $dir/$filename Target: $destdir/$cardnumber.jpg" if $DEBUG;
-	    	my $result = move ( "$dir/$filename", "$destdir/$cardnumber.jpg" );
-			if ( $result ) {
-				$count{count}++;
-				push @{ $count{filenames} }, { source => $filename, dest => $cardnumber .".jpg" };
-			}
+        warn "Reading contents of $file" if $DEBUG;
+	chomp $line;
+        warn "Examining line: $line" if $DEBUG;
+        my ( $filename, $cardnumber );
+	my $delim = ($line =~ /\t/) ? "\t" : ",";
+        warn "Delimeter is \'$delim\'" if $DEBUG;
+	($cardnumber, $filename) = split $delim, $line;
+	$cardnumber =~ s/[\"\r\n]//g;  # remove offensive characters
+	$filename   =~ s/[\"\r\n\s]//g;
+        warn "Cardnumber: $cardnumber Filename: $filename" if $DEBUG;
+	if ($cardnumber && $filename) {
+            warn "Source: $dir/$filename Target: $destdir/$cardnumber.jpg" if $DEBUG;
+    	    my $result = move ( "$dir/$filename", "$destdir/$cardnumber.jpg" );
+		if ( $result ) {
+		    $count{count}++;
+		    push @{ $count{filenames} }, { source => $filename, dest => $cardnumber .".jpg" };
 		}
+	}
     }
     $count{source} = $dir;
     $count{dest} = $destdir;
