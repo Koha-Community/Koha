@@ -697,6 +697,7 @@ sub checkauth {
         virtualshelves       => C4::Context->preference("virtualshelves"),
         opaclargeimage       => C4::Context->preference("opaclargeimage"),
         LibraryName          => C4::Context->preference("LibraryName"),
+        opacuserlogin        => C4::Context->preference("opacuserlogin"),
         OpacNav              => C4::Context->preference("OpacNav"),
         opaccredits          => C4::Context->preference("opaccredits"),
         opacreadinghistory   => C4::Context->preference("opacreadinghistory"),

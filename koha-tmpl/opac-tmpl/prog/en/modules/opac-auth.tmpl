@@ -1,4 +1,9 @@
-<!-- TMPL_INCLUDE name="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo;  Log in to Your Account
+<!-- TMPL_INCLUDE name="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> 
+<!-- TMPL_IF NAME="opacuserlogin" -->
+ Catalog &rsaquo;  Log in to Your Account
+<!-- TMPL_ELSE -->
+ Catalog &rsaquo; Catalog Login Disabled
+<!-- /TMPL_IF -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
@@ -9,6 +14,7 @@
 	<div id="yui-g">
 
 <!--CONTENT-->
+<!-- TMPL_IF NAME="opacuserlogin" -->
 <!-- TMPL_IF NAME="loginprompt" -->
 <!-- login prompt time-->
 <h3>Log In to Your Account</h3>
@@ -50,8 +56,15 @@
 
 
 <!-- /TMPL_IF -->
+<!-- TMPL_ELSE -->
+<h4>Logging on to the catalog has not been enabled by the library.</h4>
+<ul>
+  <li>To report this error, you can 
+          <a href="mailto:<!-- TMPL_VAR NAME="admin" -->">email the Koha Administrator</a>.</li>
+  <li>Use top menu bar to navigate to another part of Koha.</li>
+</ul>
+<!-- /TMPL_IF -->
 
-</div>
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
