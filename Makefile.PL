@@ -48,10 +48,10 @@ Makefile.PL - Koha packager and installer
     sudo make install
 
 =head2 UPGRADE INSTALLATION
+    
+    NOTE: This option is only available if koha-install-log exists.
 
     perl Makefile.PL --prev-install-log /path/to/koha-install-log
-    -OR-
-    perl Makefile.PL # if no koha-install-log available
 
     make
     make test
@@ -1249,6 +1249,8 @@ sub display_configuration {
     print "perl Makefile.PL\n";
     print "\nor\n\n";
     print "DB_USER=my_koha DOC_DIR=/usr/local/info perl Makefile.PL\n\n";
+    print "If installing on a Win32 platform, be sure to use:\n";
+    print "'dmake -x MAXLINELENGTH=300000'\n\n";
 }
 
 package MY;
@@ -1345,9 +1347,6 @@ install :: all install_koha warn_koha_env_vars
     $install .= "\t\$(NOECHO) \$(ECHO)\n";
     $install .= "\t\$(NOECHO) \$(ECHO) export KOHA_CONF=\$(KOHA_DEST_KOHA_CONF_DIR)/koha-conf.xml\n";
     $install .= "\t\$(NOECHO) \$(ECHO) export PERL5LIB=$target_directories->{'PERL_MODULE_DIR'}\n";
-    $install .= "\t\$(NOECHO) \$(ECHO)\n";
-    $install .= "\t\$(NOECHO) \$(ECHO) If installing on a Win32 platform, be sure to use:\n";
-    $install .= "\t\$(NOECHO) \$(ECHO) 'dmake -x MAXLINELENGTH=300000'\n";
     $install .= "\t\$(NOECHO) \$(ECHO)\n";
     $install .= "\t\$(NOECHO) \$(ECHO) For other post-installation tasks, please consult the README.\n";
     $install .= "\t\$(NOECHO) \$(ECHO)\n";
