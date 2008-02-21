@@ -22,6 +22,8 @@ my $reset;
 my $biblios;
 my $authorities;
 my $sysprefs;
+my $commit;
+
 GetOptions(
     'd:s'      => \$directory,
     'reset'      => \$reset,
@@ -30,7 +32,11 @@ GetOptions(
     'b'        => \$biblios,
     'a'        => \$authorities,
     's'        => \$sysprefs,  # rebuild 'NoZebraIndexes' syspref
+    'commit:f'    => \$commit,
     );
+
+my $commitnum = 1000; 
+$commitnum = $commit if ($commit) ;
 
 $directory = "export" unless $directory;
 my $dbh=C4::Context->dbh;
@@ -83,9 +89,12 @@ if  (!%index || $sysprefs ) {
 }
 $|=1;
 
+$dbh->{AutoCommit} = 0;
+
 print "***********************************\n";
 print "***** building BIBLIO indexes *****\n";
 print "***********************************\n";
+
 my $sth;
 $sth=$dbh->prepare("select biblionumber from biblioitems order by biblionumber $limit");
 $sth->execute();
@@ -162,7 +171,11 @@ while (my ($biblionumber) = $sth->fetchrow) {
             }
         }
     }
+   $dbh->commit() if (0 == $i % $commitnum);
 }
+$dbh->commit;
+
+
 print "\nInserting records...\n";
 $i=0;
 
@@ -180,7 +193,11 @@ foreach my $key (keys %result) {
         $sth->execute($key,$index,$result{$key}->{$index});
         $dbh->commit() if (0 == $i % $commitnum);
     }
+   $dbh->commit() if (0 == $i % $commitnum);
 }
+$dbh->commit;
+
+
 print "\nbiblios done\n";
 
 print "\n***********************************\n";
@@ -268,7 +285,12 @@ while (my ($authid) = $sth->fetchrow) {
             }
         }
     }
+   $dbh->commit() if (0 == $i % $commitnum);
 }
+$dbh->commit;
+
+
+
 print "\nInserting...\n";
 $i=0;
 
@@ -285,5 +307,7 @@ foreach my $key (keys %result) {
         $sth->execute($key,$index,$result{$key}->{$index});
         $dbh->commit() if (0 == $i % $commitnum);
     }
+   $dbh->commit() if (0 == $i % $commitnum);
 }
+$dbh->commit;
 print "\nauthorities done\n";
