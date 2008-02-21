@@ -62,6 +62,16 @@ For full instructions on how to override the default settings, run
 $ perldoc rewrite-config.PL
 
 
+UPGRADE
+=======
+If you are upgrading from a previous installation of Koha 3, you can
+use the following:
+
+ perl Makefile.PL --prev-install-log /path/to/koha-install-log
+ make
+ make test
+ sudo make upgrade
+
 IF YOU HAVE PROBLEMS
 ====================
 

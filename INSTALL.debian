@@ -333,6 +333,16 @@ Koha's command-line scripts are installed, e.g., /usr/share/koha/bin.
     To enable the SRU servers, you'll need to edit your koha-conf.xml and change the
     <listen> options to listen on a TCP port; then restart the zebra daemon.
 
+UPGRADE
+=======
+If you are upgrading from a previous installation of Koha 3, you can
+use the following:
+
+ perl Makefile.PL --prev-install-log /path/to/koha-install-log
+ make
+ make test
+ sudo make upgrade
+
 Uninstall Instructions
 =============================
 1) Stop Services:
