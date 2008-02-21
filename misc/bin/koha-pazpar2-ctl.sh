@@ -6,7 +6,7 @@ LOGDIR=__LOG_DIR__
 ERRLOG=$LOGDIR/koha-pazpar2daemon.err
 STDOUT=$LOGDIR/koha-pazpar2daemon.log
 OUTPUT=$LOGDIR/koha-pazpar2daemon-output.log
-PAZPAR2_CONF=__PAZPAR_CONF_DIR__/pazpar2.xml
+PAZPAR2_CONF=__PAZPAR2_CONF_DIR__/pazpar2.xml
 PAZPAR2SRV=/usr/sbin/pazpar2
 
 test -f $PAZPAR2SRV || exit 0
