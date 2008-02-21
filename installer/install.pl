@@ -420,7 +420,17 @@ elsif ( $step && $step == 3 ) {
         undef $/;
         my $dir =
           C4::Context->config('intranetdir') . "/installer/data/$info{dbms}/$langchoice/marcflavour/".lc($marcflavour);
-        opendir( MYDIR, $dir ) || warn "no open $dir";
+        unless (opendir( MYDIR, $dir )) {
+            if ($langchoice eq 'en') {
+                warn "cannot open MARC frameworks directory $dir";
+            } else {
+                # if no translated MARC framework is available,
+                # default to English
+                $dir = C4::Context->config('intranetdir') . "/installer/data/$info{dbms}/en/marcflavour/".lc($marcflavour);
+                opendir(MYDIR, $dir) or warn "cannot open English MARC frameworks directory $dir";
+                $template->param('en_marc_frameworks' => 1);
+            }
+        }
         my @listdir = sort grep { !/^\.|marcflavour/ && -d "$dir/$_" } readdir(MYDIR);
         closedir MYDIR;
                   
@@ -480,7 +490,17 @@ elsif ( $step && $step == 3 ) {
         
         $dir =
           C4::Context->config('intranetdir') . "/installer/data/$info{dbms}/$langchoice";
-        opendir( MYDIR, $dir ) || warn "no open $dir";
+        unless (opendir( MYDIR, $dir )) {
+            if ($langchoice eq 'en') {
+                warn "cannot open sample data directory $dir";
+            } else {
+                # if no sample data is available,
+                # default to English
+                $dir = C4::Context->config('intranetdir') . "/installer/data/$info{dbms}/en";
+                opendir(MYDIR, $dir) or warn "cannot open English sample data directory $dir";
+                $template->param('en_sample_data' => 1);
+            }
+        }
         @listdir = sort grep { !/^\.|marcflavour/ && -d "$dir/$_" } readdir(MYDIR);
         closedir MYDIR;
         my @levellist;
@@ -547,7 +567,16 @@ elsif ( $step && $step == 3 ) {
         $langchoice = $query->cookie('KohaOpacLanguage') unless ($langchoice);
         my $dir =
           C4::Context->config('intranetdir') . "/installer/data/$info{dbms}/$langchoice/marcflavour";
-        opendir( MYDIR, $dir ) || warn "no open $dir";
+        unless (opendir( MYDIR, $dir )) {
+            if ($langchoice eq 'en') {
+                warn "cannot open MARC frameworks directory $dir";
+            } else {
+                # if no translated MARC framework is available,
+                # default to English
+                $dir = C4::Context->config('intranetdir') . "/installer/data/$info{dbms}/en/marcflavour";
+                opendir(MYDIR, $dir) or warn "cannot open English MARC frameworks directory $dir";
+            }
+        }
         my @listdir = grep { !/^\./ && -d "$dir/$_" } readdir(MYDIR);
         closedir MYDIR;
         my $marcflavour=C4::Context->preference("marcflavour");    

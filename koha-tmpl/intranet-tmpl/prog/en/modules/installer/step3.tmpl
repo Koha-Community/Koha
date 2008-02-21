@@ -108,6 +108,10 @@
     
     <!--TMPL_IF Name="frameworksloop"-->
     <h2>MARC Frameworks: <!--TMPL_VAR Name="marcflavour"--></h2>
+    <!-- TMPL_IF Name="en_marc_frameworks" -->
+        <h4><span class="error">No MARC frameworks are available for your language.  
+                Defaulting to the frameworks supplied for English (en)<span></h4>
+    <!-- /TMPL_IF -->
     <!--TMPL_LOOP Name="frameworksloop"-->
     <div>
     <h3><!--TMPL_VAR Name="label"--></h3>
@@ -132,6 +136,10 @@
     <!--/TMPL_LOOP-->
     <h2>Other data</h2>
     <!--/TMPL_IF -->
+    <!-- TMPL_IF Name="en_sample_data" -->
+        <h4><span class="error">No sample data and settings are available for your language.  
+                Defaulting to the samples supplied for English (en)<span></h4>
+    <!-- /TMPL_IF -->
     <!--TMPL_LOOP Name="levelloop"-->
     <div>
     <h3><!--TMPL_VAR Name="label"--></h3>
