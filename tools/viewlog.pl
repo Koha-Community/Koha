@@ -26,6 +26,7 @@ use C4::Koha;
 use C4::Dates;
 use C4::Output;
 use C4::Log;
+use C4::Items;
 
 use vars qw($debug);
 
@@ -102,6 +103,14 @@ if ($do_it) {
 
     my $results = GetLogs($datefrom,$dateto,$user,$module,$action,$object,$info);
     my $total = scalar @$results;
+    foreach my $result (@$results){
+	if ($result->{'info'} eq 'item'){
+	    # get item information so we can create a working link
+	    my $item=GetItem($result->{'object'});
+	    $result->{'biblionumber'}=$item->{'biblionumber'};
+	    $result->{'biblioitemnumber'}=$item->{'biblionumber'};		
+	}
+    }
     
     if ( $output eq "screen" ) {
         # Printing results to screen

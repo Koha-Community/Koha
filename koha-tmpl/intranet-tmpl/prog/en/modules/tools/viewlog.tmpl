@@ -157,7 +157,11 @@
 						        </a>
 						    <!-- TMPL_ELSE -->
 						    <!-- TMPL_IF NAME="CATALOGUING" -->
+						        <!-- TMPL_IF EXPR="info eq 'item'" -->
+							<a href="/cgi-bin/koha/catalogue/moredetail.pl?item=<!-- TMPL_VAR NAME="object" -->&biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->#item<!-- TMPL_VAR NAME="object" -->">Item <!-- TMPL_VAR NAME="object" --></a>
+							<!-- TMPL_ELSE -->
 						        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="object" -->" title="Display detail for this biblio">biblio <!-- TMPL_VAR NAME="object" --></a>
+							<!-- /TMPL_IF -->
 						    <!-- TMPL_ELSE-->
 						    <!-- TMPL_IF NAME="SERIAL"-->
 						        <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR NAME="object" -->">
