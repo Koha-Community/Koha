@@ -171,9 +171,7 @@ while (my ($biblionumber) = $sth->fetchrow) {
             }
         }
     }
-   $dbh->commit() if (0 == $i % $commitnum);
 }
-$dbh->commit;
 
 
 print "\nInserting records...\n";
@@ -285,9 +283,7 @@ while (my ($authid) = $sth->fetchrow) {
             }
         }
     }
-   $dbh->commit() if (0 == $i % $commitnum);
 }
-$dbh->commit;
 
 
 
