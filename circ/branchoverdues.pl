@@ -25,14 +25,13 @@ use C4::Dates qw/format_date/;
 use C4::Overdues;    # AddNotifyLine
 use C4::Biblio;
 use C4::Koha;
-use Mail::Sendmail;
-use Getopt::Long;
+use C4::Debug;
 use Date::Calc qw/Today Today_and_Now Now/;
 
 =head1 branchoverdues.pl
 
  this module is a new interface, allow to the librarian to check all items on overdues (based on the acountlines type 'FU' )
- this interface is filtered by branches (automaticly), and by location (optional) ....
+ this interface is filtered by branches (automatically), and by location (optional) ....
  all informations are stocked in the notifys BDD
 
  FIXME for this time, we have only four methods to notify :
@@ -82,7 +81,7 @@ my $itemnumber     = $input->param('itemnumber');
 my $method         = $input->param('method');
 my $overduelevel   = $input->param('overduelevel');
 my $notifyId       = $input->param('notifyId');
-my $location = $input->param('location');
+my $location       = $input->param('location');
 
 # now create the line in bdd (notifys)
 if ( $input->param('action') eq 'add' ) {
@@ -90,9 +89,7 @@ if ( $input->param('action') eq 'add' ) {
       AddNotifyLine( $borrowernumber, $itemnumber, $overduelevel, $method,
         $notifyId );
 }
-
-#  possibility to remove notify line
-if ( $input->param('action') eq 'remove' ) {
+elsif ( $input->param('action') eq 'remove' ) {
     my $notify_date  = $input->param('notify_date');
     my $removenotify =
       RemoveNotifyLine( $borrowernumber, $itemnumber, $notify_date );
@@ -104,7 +101,7 @@ my $counter = 0;
 
 my @getoverdues = GetOverduesForBranch( $default, $location );
 use Data::Dumper;
-warn "HERE : $default / $location".Dumper(@getoverdues);
+$debug and warn "HERE : $default / $location" . Dumper(@getoverdues);
 # search for location authorised value
 my ($tag,$subfield) = GetMarcFromKohaField('items.location','');
 my $tagslib = &GetMarcStructure(1,'');

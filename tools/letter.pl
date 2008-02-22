@@ -88,19 +88,16 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 if ($op) {
-    $template->param(
-        script_name => $script_name,
-        $op         => 1
-    );    # we show only the TMPL_VAR names $op
+	$template->param($op  => 1);
+} else {
+	$template->param(else => 1);
 }
-else {
-    $template->param(
-        script_name => $script_name,
-        else        => 1
-    );    # we show only the TMPL_VAR names $op
-}
+# we show only the TMPL_VAR names $op
 
-$template->param( action => $script_name );
+$template->param(
+	script_name => $script_name,
+	action => $script_name
+);
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
 if ( $op eq 'add_form' ) {
@@ -116,8 +113,8 @@ if ( $op eq 'add_form' ) {
 
     # build field list
     my @SQLfieldname;
-    push @SQLfieldname, { 'value' => "LibrarianFirstname", 'text' => 'LibrarianFirstname' };
-    push @SQLfieldname, { 'value' => "LibrarianSurname", 'text' => 'LibrarianSurname' };
+    push @SQLfieldname, { 'value' => "LibrarianFirstname",    'text' => 'LibrarianFirstname'    };
+    push @SQLfieldname, { 'value' => "LibrarianSurname",      'text' => 'LibrarianSurname'      };
     push @SQLfieldname, { 'value' => "LibrarianEmailaddress", 'text' => 'LibrarianEmailaddress' };
     my $sth2 = $dbh->prepare("SHOW COLUMNS from branches");
     $sth2->execute;
@@ -128,7 +125,7 @@ if ( $op eq 'add_form' ) {
     }
 
     # add acquisition specific tables
-    if ( index( $module, "acquisition" ) > 0 ) {
+    if ( index( $module, "acquisition" ) > 0 ) {	# FIXME: imprecise comparison
         $sth2 = $dbh->prepare("SHOW COLUMNS from aqbooksellers");
         $sth2->execute;
         push @SQLfieldname, { 'value' => "", 'text' => '---BOOKSELLERS---' };
@@ -150,7 +147,7 @@ if ( $op eq 'add_form' ) {
 
         # add issues specific tables
     }
-    elsif ( index( $module, "issues" ) > 0 ) {
+    elsif ( index( $module, "issues" ) > 0 ) {	# FIXME: imprecise comparison
         $sth2 = $dbh->prepare("SHOW COLUMNS from aqbooksellers");
         $sth2->execute;
         push @SQLfieldname, { 'value' => "", 'text' => '---BOOKSELLERS---' };
@@ -186,7 +183,6 @@ if ( $op eq 'add_form' ) {
         push @SQLfieldname, { 'value' => "", 'text' => '---BIBLIO---' };
 
         while ( ( my $field ) = $sth2->fetchrow_array ) {
-
             push @SQLfieldname, { 'value' => "biblio." . $field, 'text' => "biblio." . $field };
         }
         $sth2 = $dbh->prepare("SHOW COLUMNS from biblioitems");
