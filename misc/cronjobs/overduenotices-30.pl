@@ -11,6 +11,7 @@
 # Revision History:
 #    1.0  2003/9/7: original version
 #    1.5  2006/2/28: Modifications for managing Letters and overduerules
+#    2.01 2008/2/21: Overhaul, provide command line SMTP options, fix ouput
 #-----------------------------------
 # Copyright 2003 Skemotah Solutions
 #
@@ -36,145 +37,213 @@ BEGIN {
     use FindBin;
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
+
 use C4::Context;
 use C4::Dates qw/format_date/;
+use C4::Debug;
 use Mail::Sendmail;  # comment out if not doing e-mail notices
 use Getopt::Long;
 
+sub usage () {
+	return <<EndOfUsage
+This script will send overdue notices by e-mail and prepare a file of
+notices for printing if the borrower does not have e-mail.
+
+Optional script parameters :
+	-c to confirm and bypass this help & warning
+	-n no mail mode: avoid sending any mail. Instead, all mail messages are printed on screen.  Useful for testing.
+	-branch <branchcode> to select overdues for ONE specific branch.
+	-borcat <borcatcode> to select overdues for ONE borrower category,        NOT IMPLEMENTED
+	-borcatout <borcatcode> to exclude borrower category from overdunotices,  NOT IMPLEMENTED
+	-max <MAX> MAXIMUM day count before stopping to send overdue notice,
+	-file <filename> to enter a specific filename to be read for message.
+	-all to include ALL the items that reader borrowed, not just overdues.    NOT IMPLEMENTED ?
+
+Example: 
+	misc/cronjobs/overduenotices-30.pl -c -branch MAIN -s foobar.mail.com 
+
+EndOfUsage
+	;
+}
+
 my ($confirm, $nomail, $mybranch, $myborcat,$myborcatout, $letter, $MAX, $choice);
+my ($smtpserver);
 GetOptions(
-    'c'    => \$confirm,
-    'n'	=> \$nomail,
-    'max=s'	=> \$MAX,
-    'all'	=> \$choice,
+    'all'         => \$choice,
+    'c'           => \$confirm,
+    'n'	          => \$nomail,
+    'max=s'	      => \$MAX,
+    'smtp=s'      => \$smtpserver,
+	'branch=s'    => \$mybranch,
+	'borcat=s'    => \$myborcat,
+	'borcatout=s' => \$myborcatout,
 );
+
+my $deathknell = "Parameter %s is not implemented.  Remove this option and try again.";
+$myborcat    and die usage . sprintf($deathknell, "-borcat ($myborcat)");
+$myborcatout and die usage . sprintf($deathknell, "-borcatout ($myborcatout)");
+$choice      and die usage . sprintf($deathknell, "-all");
+
+# $confirm = 1;  # uncomment to hardcode pre-confirmation
+$smtpserver = ($smtpserver || 'smtp.wanadoo.fr'); # hardcode your smtp server (outgoing mail)
+unshift @{$Mail::Sendmail::mailcfg{'smtp'}} , $smtpserver;
+print STDERR ($nomail) ? "No Mail Mode\n" : "using SMTP: $smtpserver\n";
 unless ($confirm) {
         print qq|
-This script will send overdue notices by e-mail and prepare a file of\nnotices for printing if the borrower does not have e-mail.
-You MUST edit this script for your library BEFORE you run it for the first time!
+WARNING: You MUST edit this script for your library BEFORE you run it for the first time!
 See the comments in the script for directions on changing the script.
-This script has 2 parameters :
-        -c to confirm and remove this help & warning
-        -n to avoid sending any mail. Instead, all mail messages are printed on screen. Usefull for testing purposes.
-        -branch <branchcode> to select overdues for ONE specific branch.
-        -borcat <borcatcode> to select overdues for one borrower category,
-        -borcatout <borcatcode> to exclude this borrower category from overdunotices,
-        -max <MAX> MAXIMUM day count before stopping to send overdue notice,
-        -file <filename> to enter a specific filename to be read for message.
-        -all to include ALL the items that reader borrowed.
 
-Do you wish to continue? (y/n)
-|;
-        chomp($_ = <STDIN>);
-        exit unless (/^(y|Y|o|O)/i);  # comment these lines out once you've made the changes
-        
+|	. &usage . "Do you wish to continue? (y/[n]) ";
+	chomp($_ = <STDIN>);
+	unless (/^\s*[yo]/i) {
+		print "Exiting.\n";
+		exit;
+	}
 }
+
 my $dbh = C4::Context->dbh;
-my $rqoverduebranches=$dbh->prepare("SELECT DISTINCT branchcode FROM overduerules WHERE delay1>0");
+my $rqoverduebranches=$dbh->prepare("SELECT DISTINCT branchcode FROM overduerules WHERE delay1 IS NOT NULL");
 $rqoverduebranches->execute;
-while (my ($branchcode)=$rqoverduebranches->fetchrow){
-    warn "branchcode : $branchcode";
+my @branches = map {shift @$_} @{$rqoverduebranches->fetchall_arrayref};
+$rqoverduebranches->finish;
+
+my $branchcount = scalar(@branches);
+print "Found $branchcount branch(es) with first message enabled: " . join(' ', map {"\'$_\'"} @branches), "\n"; 
+$branchcount or die "No branches with active overduerules";
+
+if ($mybranch) {
+	print "Branch $mybranch selected\n";
+	if (scalar grep {$mybranch eq $_} @branches) {
+		@branches = ($mybranch);
+	} else {
+		print "No active overduerules for branch '$mybranch'\n";
+		(scalar grep {'' eq $_} @branches)
+			or die "No active overduerules for DEFAULT either!";
+		print "Falling back on default rules for $mybranch\n";
+		@branches = ('');
+	}
+}
+
+foreach my $branchcode (@branches) {
     my $branchname;
     my $emailaddress;
-    if ($branchcode){
-        my $rqbranch=$dbh->prepare("SELECT * FROM branches WHERE branchcode = ?");
-        $rqbranch->execute($branchcode);
-        my $data = $rqbranch->fetchrow_hashref;
-        $emailaddress = $data->{branchemail};
-        $branchname = $data->{branchname};
+    if ($branchcode) {
+        my $rqbranch=$dbh->prepare("SELECT branchemail,branchname FROM branches WHERE branchcode = ?");
+        $rqbranch->execute($mybranch || $branchcode);
+        ($emailaddress,$branchname) = $rqbranch->fetchrow;
     }
-    $emailaddress=C4::Context->preference('KohaAdminEmailAddress') unless ($emailaddress);
+	$emailaddress = C4::Context->preference('KohaAdminEmailAddress') unless ($emailaddress);
 
-    #print STDERR "$emailaddress\n";
-    #
+    print STDERR sprintf "branchcode : '%s' using %s\n", ($mybranch || $branchcode), $emailaddress;
+    
     # BEGINNING OF PARAMETERS
-    #
-    my $rqoverduerules=$dbh->prepare("SELECT * FROM overduerules WHERE delay1>0 and branchcode = ?");
+	my $rqdebarring    = $dbh->prepare("UPDATE borrowers SET debarred=1 WHERE borrowernumber=? ");
+	my $letter_sth     = $dbh->prepare("SELECT content FROM letter WHERE code = ? ");
+	my $sth2           = $dbh->prepare("
+	SELECT biblio.title, biblio.author, items.barcode, issues.timestamp
+	FROM   issues,items,biblio
+	WHERE  items.itemnumber=issues.itemnumber
+	AND    biblio.biblionumber=items.biblionumber
+	AND    issues.borrowernumber=?
+	AND    returndate IS NULL
+	AND    TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN ? and ? ");
+    my $rqoverduerules = $dbh->prepare("SELECT * FROM overduerules WHERE delay1 IS NOT NULL AND branchcode = ? ");
     $rqoverduerules->execute($branchcode);
+	my $outfile = 'overdues_' . ($mybranch || $branchcode || 'default');
+	open (OUTFILE, ">$outfile") or die "Cannot write file $outfile : $!";
     while (my $data=$rqoverduerules->fetchrow_hashref){
-        for (my $i=1; $i<=3;$i++){
-            #Two actions :
+        for (my $i=1; $i<=3; $i++) {
+            # Two actions:
             # A- Send a letter
             # B- Debar
+			$debug and print STDERR "branch '$branchcode', pass $i\n";
             my $mindays = $data->{"delay$i"}; # the notice will be sent after mindays days (grace period)
-            my $rqdebarring=$dbh->prepare("UPDATE borrowers SET debarred=1 WHERE borrowernumber=?") if $data->{"debarred$i"};
             my $maxdays = ($data->{"delay".($i+1)}?
-                            $data->{"delay".($i+1)}
+                           $data->{"delay".($i+1)}
                             :($MAX?$MAX:365)); # issues being more than maxdays late are managed somewhere else. (borrower probably suspended)
-            #LETTER parameters
-            my $smtpserver = 'smtp.wanadoo.fr'; # your smtp server (the server who sent mails)
-            my $from = $emailaddress; # all the mails sent to the borrowers will appear coming from here.
-            my $mailtitle = 'Overdue'; # the title of the mails
-            $mailtitle = 'Issue status' if ($choice); # the title of the mails
-            my $librarymail = $emailaddress; # all notices without mail are sent (in 1 mail) to this mail address. They must then be managed manually.
+            # LETTER parameters
+            my $from = $emailaddress; # all mail sent will appear to be coming from here.
+            my $mailtitle = ($choice) ? 'Issue status' : 'Overdue'; # the title of the mails
+            my $librarymail = $emailaddress; # all notices w/o mail are sent (in 1 mail) to this address. They must then be managed manually.
             my $letter = $data->{"letter$i"} if $data->{"letter$i"};
-            # this parameter (the last) is the text of the mail that is sent.
+			unless ($letter) {
+				warn "No letter$i code for branch '$branchcode'";
+				next;
+			}
+			$letter_sth->execute($letter);
+            my ($mailtext)=$letter_sth->fetchrow;
+			unless ($mailtext) {
+				warn "Message '$letter' content not found";
+				next;
+			}
+            # $mailtext is the text of the mail that is sent.
             # this text contains fields that are replaced by their value. Those fields must be written between brackets
             # The following fields are available :
             # <date> <itemcount> <firstname> <lastname> <address1> <address2> <address3> <city> <postcode>
-            my $mailtext=$letter;
-            #
+			#
             # END OF PARAMETERS
-            #
-            open OUTFILE, ">overdues" or die "Cannot open file overdues: $!";
             
-            # set the e-mail server -- comment out if not doing e-mail notices
-            unshift @{$Mail::Sendmail::mailcfg{'smtp'}} , $smtpserver;
-            # set your own mail server name here
-            
-            my $strsth = "SELECT COUNT(*), issues.borrowernumber,firstname,surname,address,address2,city,zipcode, email, MIN(date_due) as longest_issue FROM issues,borrowers,categories WHERE returndate IS NULL AND issues.borrowernumber=borrowers.borrowernumber AND borrowers.categorycode=categories.categorycode ";
-            $strsth .= " AND issues.branchcode='".$branchcode."' " if ($branchcode);
-            $strsth .= " AND borrowers.categorycode='".$data->{categorycode}."' " if ($data->{categorycode});
-            $strsth .= " AND categories.overduenoticerequired=1 GROUP BY issues.borrowernumber HAVING TO_DAYS(NOW())-TO_DAYS(longest_issue) BETWEEN $mindays and $maxdays ";
-            my $sth = $dbh->prepare ($strsth);
-#             warn "".$strsth;
-            my $sth2 = $dbh->prepare("SELECT biblio.title,biblio.author,items.barcode, issues.timestamp FROM issues,items,biblio WHERE items.itemnumber=issues.itemnumber and biblio.biblionumber=items.biblionumber AND issues.borrowernumber=? AND returndate IS NULL AND TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN $mindays and $maxdays");
-
-            $sth->execute;
-            # 
-            # my $itemcount = 0;
-            # my $row;
-            my $count = 0;   # to keep track of how many notices are printed
-            my $e_count = 0;   # and e-mailed
-            my $date=format_date(localtime);
+            my $strsth = "
+	SELECT COUNT(*), issues.borrowernumber,firstname,surname,address,address2,city,zipcode, email, MIN(date_due) as longest_issue
+	FROM   issues,borrowers,categories
+	WHERE  returndate IS NULL
+	AND    issues.borrowernumber=borrowers.borrowernumber
+	AND    borrowers.categorycode=categories.categorycode ";
+            $strsth .= "\n\tAND    issues.branchcode='$branchcode' " if ($branchcode);
+            $strsth .= "\n\tAND    borrowers.categorycode='".$data->{categorycode}."' " if ($data->{categorycode});
+            $strsth .= "\n\tAND    categories.overduenoticerequired=1
+	GROUP BY issues.borrowernumber HAVING TO_DAYS(NOW())-TO_DAYS(longest_issue) BETWEEN ? and ? ";
+            my $sth = $dbh->prepare($strsth);
+            $sth->execute($mindays, $maxdays);
+            $debug and warn $strsth . "\n\n ($mindays, $maxdays)\nreturns " .  $sth->rows . " rows";
+            my $count = 0;		# to keep track of how many notices are printed
+            my $e_count = 0;	# and e-mailed
+            my $date = C4::Dates->new()->output;
             my ($itemcount,$borrowernumber,$firstname,$lastname,$address1,$address2,$city,$postcode,$email);
-            
             while (($itemcount, $borrowernumber, $firstname, $lastname, $address1, $address2, $city, $postcode, $email) = $sth->fetchrow) {
                 if ($data->{"debarred$i"}){
                     #action taken is debarring
                     $rqdebarring->execute($borrowernumber);
-                    warn "debarring $borrowernumber $firstname $lastname";
+                    print STDERR "debarring $borrowernumber $firstname $lastname\n";
                 }
+				# for whatever reason, some of the template text is "double nested" with tags like:
+				#   <<branches.branchname>><<borrowers.firstname>>
+				# So we use the + operators below.
                 if ($letter){
                     my $notice .= $mailtext;
-                    $notice =~ s/\<itemcount\>/$itemcount/g if ($itemcount);
-                    $notice =~ s/\<firstname\>/$firstname/g if ($firstname);
-                    $notice =~ s/\<lastname\>/$lastname/g if ($lastname);
-                    $notice =~ s/\<address1\>/$address1/g if ($address1);
-                    $notice =~ s/\<address2\>/$address2/g if ($address2);
-                    $notice =~ s/\<city\>/$city/g if ($city);
-                    $notice =~ s/\<postcode\>/$postcode/g if ($postcode);
-                    $notice =~ s/\<date\>/$date/g if ($date);
-                    $notice =~ s/\<bib\>/$branchname/g if ($branchname);
+					$notice =~ s/[<]+itemcount[>]+/$itemcount/g               if ($itemcount);
+					$notice =~ s/[<]+(borrowers\.)?firstname[>]+/$firstname/g if ($firstname);
+					$notice =~ s/[<]+(borrowers\.)?surname[>]+/$lastname/g    if ($lastname);
+					$notice =~ s/[<]+lastname[>]+/$lastname/g                 if ($lastname);
+					$notice =~ s/[<]+address1[>]+/$address1/g                 if ($address1);
+					$notice =~ s/[<]+address2[>]+/$address2/g                 if ($address2);
+					$notice =~ s/[<]+city[>]+/$city/g                         if ($city);
+					$notice =~ s/[<]+postcode[>]+/$postcode/g                 if ($postcode);
+					$notice =~ s/[<]+date[>]+/$date/g                         if ($date);
+					$notice =~ s/[<]+bib[>]+/$branchname/g                    if ($branchname);
+					$notice =~ s/[<]+(branches\.)branchname[>]+/$mybranch/g   if ($mybranch);
+					$notice =~ s/[<]+(branches\.)branchname[>]+/$branchname/g if ($branchname);
     
-                    $sth2->execute($borrowernumber);
+                    $sth2->execute($borrowernumber, $mindays, $maxdays);
                     my $titles="";
-                    my ($title, $author, $barcode, $issuedate);
-                    while (($title, $author, $barcode,$issuedate) = $sth2->fetchrow){
-                            $titles .= "	".format_date($issuedate)."	".($barcode?$barcode:"")."	".($title?$title:"")."	".($author?$author:"")."\n";
+                    while (my ($title, $author, $barcode,$issuedate) = $sth2->fetchrow){
+                        $titles .= join "\t", format_date($issuedate), ($barcode?$barcode:""), ($title?$title:""), ($author?$author:"") . "\n";
                     }
                     $notice =~ s/\<titles\>/$titles/g;
+					my @misses = grep {/./} map {/^([^>]*)[>]+/; ($1 || '');} split /\</, $notice;
+					(@misses) and warn "The following terms were not matched/replaced: \n\t" . join "\n\t", @misses;
+                    $notice =~ s/\<[^<>]*?\>//g;	# Now that we've warned about them, remove them.
+                    $notice =~ s/\<[^<>]*?\>//g;	# 2nd pass for the double nesting.
                     $sth2->finish;
-                    # if not using e-mail notices, comment out the following lines
                     if ($email) {   # or you might check for borrowers.preferredcont 
                         if ($nomail) {
-                            print "TO => $email\n";
-                            print "FROM => $from\n";
+                            print "   TO   => $email\n";
+                            print "  FROM  => $emailaddress\n";
                             print "SUBJECT => $mailtitle\n";
                             print "MESSAGE => $notice\n";
                         } else {
-                            my %mail = ( To      => $email,
-                                        From    => $from,
+                            my %mail = ( To     => $email,
+                                        From    => $emailaddress,
                                         Subject => $mailtitle,
                                         Message => $notice,
                                     );
@@ -184,26 +253,24 @@ while (my ($branchcode)=$rqoverduebranches->fetchrow){
                     } else {
                         print OUTFILE $notice;
                         $count++;
-                    }    # and comment this one out, too, if not using e-mail
+                    }
                 }
             }
             $sth->finish;
-            close OUTFILE;
             # if some notices have to be printed & managed by the library, send them to library mail address.
             if ($count) {
-                open ODUES, "overdues" or die "Cannot open file overdues: $!";
-                my $notice = "$e_count overdue notices e-mailed\n";
-                $notice .= "$count overdue notices in file for printing\n\n";
-
-                $notice .= <ODUES>;
+                open (ODUES, $outfile) or die "Cannot read file $outfile: $!";
+                my $notice = "$e_count overdue notices e-mailed\n"
+                			. "$count overdue notices in file for printing\n\n"
+                			. <ODUES>;
                 if ($nomail) {
-                    print "TO => $email\n" if $email;
-                    print "FROM => $from\n";
+                    print "   TO   => $email\n" if $email;
+                    print "  FROM  => $emailaddress\n";
                     print "SUBJECT => Koha overdue\n";
                     print "MESSAGE => $notice\n";
                 } else {
-                    my %mail = (To      => $email,
-                                From    => $from,
+                    my %mail = (To      => $emailaddress,
+                                From    => $emailaddress,
                                 Subject => 'Koha overdues',
                                 Message => $notice,
                             );
@@ -212,4 +279,5 @@ while (my ($branchcode)=$rqoverduebranches->fetchrow){
             }
         }
     }
+	close OUTFILE;
 }
