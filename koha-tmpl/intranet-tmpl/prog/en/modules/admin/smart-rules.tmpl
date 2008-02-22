@@ -1,0 +1,108 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Administration &rsaquo; Issuing Rules</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function() {
+        $('#selectlibrary').find("input:submit").hide();
+        $('#branch').change(function() {
+                $('#selectlibrary').submit();
+        });
+});
+//]]>
+</script>
+
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  Issuing Rules</div>
+
+<div id="doc3" class="yui-t1">
+
+<div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+    <h1 class="parameters">
+        <!-- TMPL_IF NAME="humanbranch" -->
+            Defining issuing rules for "<!-- TMPL_VAR NAME="humanbranch" -->"
+        <!-- TMPL_ELSE -->
+            Defining default issuing rules
+        <!-- /TMPL_ELSE --><!-- /TMPL_IF -->
+    </h1>
+    <div class="help">
+        <p>The rules are applied from most specific to less specific, using the first found in this order:</p>
+        <ul>
+            <li>same branch, same borrower type, same item type</li>
+            <li>same branch, same borrower type, default item type</li>
+            <li>same branch, default borrower type, same item type</li>
+            <li>default branch, same borrower type, same item type</li>
+            <li>anything else</li>
+        </ul>
+        <p>To modify a rule, create a new one with the same borrower type and item type.</p>
+    </div>
+    <div id="bloc100">
+        <form method="GET" id="selectlibrary">
+        Select a branch :
+            <select name="branch" id="branch">
+                <option value="">Default</option>
+            <!-- TMPL_LOOP NAME="branchloop" -->
+                <option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF NAME="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="branchname" --></option>
+            <!-- /TMPL_LOOP -->
+            </select>
+        </form>
+        <form method="post">
+            <input type="hidden" name="op" value="add">
+            <table>
+            <tr>
+                <th>Item Type</th><th>Borrower Type</th><th>Amount</th><th>Grace Period</th><th>Charging Interval</th><th>Amount Loanable</th><th>Loan time</th>
+            </tr>
+            <!-- TMPL_LOOP NAME="rules" -->
+                <tr>
+                    <td><!-- TMPL_VAR NAME="humanitemtype" --></td>
+                    <td><!-- TMPL_VAR NAME="humancategorycode" --></td>
+                    <td>$<!-- TMPL_VAR NAME="fine" --></td>
+                    <td><!-- TMPL_VAR NAME="firstremind" --> day(s)</td>
+                    <td><!-- TMPL_VAR NAME="chargeperiod" --> day(s)</td>
+                    <td><!-- TMPL_VAR NAME="maxissueqty" --></td>
+                    <td><!-- TMPL_VAR NAME="issuelength" --> day(s)</td>
+                    <td>
+                        <a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-<!-- TMPL_VAR NAME="itemtype" -->-<!-- TMPL_VAR NAME="categorycode" -->&amp;branch=<!-- TMPL_VAR NAME="branch" -->">Delete</a>
+                    </td>
+                </tr>
+            <!-- /TMPL_LOOP -->
+                <tr>
+                    <td>
+                        <select name="itemtype">
+                        <!-- TMPL_LOOP NAME="itemtypeloop" -->
+                            <option value="<!-- TMPL_VAR NAME="itemtype" -->"><!-- TMPL_VAR NAME="description" --></option>
+                        <!-- /TMPL_LOOP -->
+                        </select>
+                    </td>
+                    <td>
+                        <select name="categorycode">
+                        <!-- TMPL_LOOP NAME="categoryloop" -->
+                            <option value="<!-- TMPL_VAR NAME="categorycode" -->"><!-- TMPL_VAR NAME="description" --></option>
+                        <!-- /TMPL_LOOP -->
+                        </select>
+                    </td>
+                    <td>$<input name="fine" size="4" /></td>
+                    <td><input name="firstremind" size="2" /> day(s)</td>
+                    <td><input name="chargeperiod" size="2" /> day(s)</td>
+                    <td><input name="maxissueqty" size="3" /></td>
+                    <td><input name="issuelength" size="3" /> day(s)</td>
+                    <td><input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->"/><input type="submit" value="Add" class="submit" /></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

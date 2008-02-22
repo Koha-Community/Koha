@@ -18,6 +18,7 @@
 	<li><a href="/cgi-bin/koha/admin/roadtype.pl">Road types</a></li>
 	<li><a href="/cgi-bin/koha/admin/issuingrules.pl">Circulation rules</a></li>
 	<li><a href="/cgi-bin/koha/admin/finesrules.pl">Fines rules</a></li>
+	<li><a href="/cgi-bin/koha/admin/smart-rules.pl">Alternate issuing rules</a></li>
 </ul>
 
 <h5>Catalogue</h5>
