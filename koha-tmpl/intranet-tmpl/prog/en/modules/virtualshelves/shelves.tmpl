@@ -31,8 +31,8 @@ $(document).ready(function(){
 		}
 	}
     /**
-     * this function checks all checkbox 
-     * or uncheck all if there are already checked.
+     * This function checks all checkboxes if all are empty,
+     * or unchecks all if any already checked.
      */
     function CheckAll(){
         var checkboxes = document.getElementsByTagName('input');
@@ -45,7 +45,7 @@ $(document).ready(function(){
         }
     }
     /**
-     * this function return true if all checkbox are checked
+     * This function returns true if ALL checkboxes are checked
      */
     function areAllChecked(){
         var checkboxes = document.getElementsByTagName('input');
@@ -232,9 +232,9 @@ $(document).ready(function(){
     <!-- TMPL_IF name="edit" -->
 		<input type="hidden" name="op" value="modifsave" />
 		<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR name="shelfnumber" -->" />
-		<legend>Edit List <i><!-- TMPL_VAR name="shelfname"--></i></legend>
+		<legend>Edit List <i><!-- TMPL_VAR name="shelfname" --></i></legend>
 		<ol>
-		<li><label for="shelfname">Name: </label><input type="text" id="shelfname" name="shelfname" size="25" value="<!-- TMPL_VAR name="shelfname"-->" /></li>
+		<li><label for="shelfname">Name: </label><input type="text" id="shelfname" name="shelfname" size="25" value='<!-- TMPL_VAR name="shelfname"-->' /></li>
 		<li><label for="owner">Owner: </label><input type="hidden" id="owner" name="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->" /><!-- TMPL_VAR NAME="loggedinusername" --></li>
 		<li><label for="category">Category: </label>
 			<select id="category" name="category">
@@ -274,17 +274,19 @@ $(document).ready(function(){
 <!-- TMPL_IF NAME="shelvesloopall" -->
 <h3>Lists</h3>
 <table>
-<tr><th>Name</th><th>Category</th><th>Items</th><th>&nbsp;</th></tr>
+<tr><th>Name</th><th>Owner</th><th>Category</th><th>Items</th><th>&nbsp;</th></tr>
 <!-- TMPL_LOOP NAME="shelvesloopall" -->
 <tr<!-- TMPL_IF NAME="toggle" --> class="highlight"<!-- /TMPL_IF -->>
 <td><a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" --></a></td>
+<td><!-- TMPL_IF NAME="owner" --><!-- TMPL_VAR NAME="ownername" --><!-- TMPL_ELSE -->Koha Admin<!-- /TMPL_IF -->
+</td>
 <td>
   <!-- TMPL_IF NAME="viewcategory1" -->Private<!-- /TMPL_IF -->
   <!-- TMPL_IF NAME="viewcategory2" -->Public<!-- /TMPL_IF -->
   <!-- TMPL_IF NAME="viewcategory3" -->Open<!-- /TMPL_IF -->
 </td>
 <td><!-- TMPL_VAR NAME="count" --></td>
-<td><!-- TMPL_IF NAME="mine" -->
+<td>
 	<form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="get">
 		<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelf" -->" />
 		<input type="hidden" name="op" value="modif" />
@@ -300,7 +302,6 @@ $(document).ready(function(){
 		<input type="submit" onclick='return confirmDelete(_("Are you sure you want to remove this List?"));' value="Delete" />
 		<!-- /TMPL_IF -->
 	</form>
-	<!-- /TMPL_IF -->&nbsp;
 </td>
 </tr>
 <!-- /TMPL_LOOP -->

@@ -172,7 +172,7 @@ sub GetShelvesSummary {
 
 =item GetShelf
 
-  (shelfnumber,shelfname,owner,category) = &GetShelf($shelfnumber);
+  (shelfnumber,shelfname,owner,category,sortfield) = &GetShelf($shelfnumber);
 
 Looks up information about the contents of virtual virtualshelves number
 C<$shelfnumber>
@@ -184,7 +184,7 @@ Returns the database's information on 'virtualshelves' table.
 sub GetShelf {
     my ($shelfnumber) = @_;
     my $query = qq(
-        SELECT shelfnumber,shelfname,owner,category,sortfield
+        SELECT shelfnumber, shelfname, owner, category, sortfield
         FROM   virtualshelves
         WHERE  shelfnumber=?
     );

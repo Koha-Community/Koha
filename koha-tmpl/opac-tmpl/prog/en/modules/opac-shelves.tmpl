@@ -153,13 +153,17 @@
         
 		<!-- TMPL_IF NAME="loggedinusername" -->
         <table>
-        <tr><th>List Name</th><th>Contents</th><th>Sort by</th><th>&nbsp;</th></tr>
+        <tr><th>List Name</th><th>Contents</th><th>Sort by</th><th>Type</th><th>&nbsp;</th></tr>
             <!-- TMPL_IF NAME="shelveslooppriv" -->
                 <!-- TMPL_LOOP NAME="shelveslooppriv" -->
                     <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!--TMPL_ELSE--><tr><!-- /TMPL_IF -->
         <td><a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" --></a></td>
         <td><!-- TMPL_VAR NAME="count" --> item(s)</td>
         <td><!-- TMPL_VAR NAME="sortfield" --></td>
+        <td><!-- TMPL_IF NAME="viewcategory1" -->Private<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="viewcategory2" -->Public<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="viewcategory3" -->Open<!-- /TMPL_IF -->
+		</td>
         <td>
             <!-- TMPL_IF NAME="mine" -->
 				<form action="opac-shelves.pl" method="get">
@@ -197,11 +201,16 @@
 		<!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="shelvesloop" -->
         <table>
-        <tr><th>List Name</th><th>Contents</th></tr>
+        <tr><th>List Name</th><th>Contents</th><th>Type</th></tr>
             <!-- TMPL_LOOP NAME="shelvesloop" -->
                 <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!--TMPL_ELSE--><tr><!-- /TMPL_IF -->
 		<td><a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" --></a></td>
-		<td><!-- TMPL_VAR NAME="count" --> item(s)</td></tr>
+		<td><!-- TMPL_VAR NAME="count" --> item(s)</td>
+        <td><!-- TMPL_IF NAME="viewcategory1" -->Private<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="viewcategory2" -->Public<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="viewcategory3" -->Open<!-- /TMPL_IF -->
+		</td>
+		</tr>
             <!-- /TMPL_LOOP -->
         </table>
         <!-- TMPL_ELSE -->

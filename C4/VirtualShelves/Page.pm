@@ -27,6 +27,7 @@ use C4::VirtualShelves qw/:DEFAULT GetShelvesSummary/;
 use C4::Biblio;
 use C4::Items;
 use C4::Auth qw/get_session/;
+use C4::Members;
 use C4::Output;
 use Exporter;
 
@@ -209,26 +210,29 @@ SWITCH: {
 # rebuild shelflist in case a shelf has been added
 # $shelflist = GetShelves( $loggedinuser, 2 );
 $showadd and $template->param(showadd => 1);
-my $i = 0;
 my @shelvesloop;
 my @shelveslooppriv;
 my $numberCanManage = 0;
 
 foreach my $element (sort { lc($shelflist->{$a}->{'shelfname'}) cmp lc($shelflist->{$b}->{'shelfname'}) } keys %$shelflist) {
 	my %line;
-	(++$i % 2) and $shelflist->{$element}->{toggle} = 1; # $line{'toggle'} = $i;
 	$shelflist->{$element}->{shelf} = $element;
 	my $category = $shelflist->{$element}->{'category'};
+	my $owner    = $shelflist->{$element}->{ 'owner'  };
 	my $canmanage = ShelfPossibleAction( $loggedinuser, $element, 'manage' );
 	$shelflist->{$element}->{"viewcategory$category"} = 1;
 	$shelflist->{$element}->{canmanage} = $canmanage;
-	if ($shelflist->{$element}->{'owner'} eq $loggedinuser) {
+	if ($owner eq $loggedinuser or $canmanage) {
 		$shelflist->{$element}->{'mine'} = 1;
-	}
-	$numberCanManage++ if $canmanage;
+	} 
+	my $member = GetMember($owner,'borrowernumber');
+	$shelflist->{$element}->{ownername} = $member->{firstname} . " " . $member->{surname};
+	$numberCanManage++ if $canmanage;	# possibly outmoded
 	if ($shelflist->{$element}->{'category'} eq '1') {
+		(scalar(@shelveslooppriv) % 2) and $shelflist->{$element}->{toggle} = 1;
 		push (@shelveslooppriv, $shelflist->{$element});
 	} else {
+		(scalar(@shelvesloop)     % 2) and $shelflist->{$element}->{toggle} = 1;
 		push (@shelvesloop, $shelflist->{$element});
 	}
 }
