@@ -177,7 +177,6 @@ sub handle_dir {
         %counts = handle_file($cardnumber, $source, %counts);
     }
 push @counts, \%counts;
-warn Dumper(@counts);
 return 1;
 }
 
