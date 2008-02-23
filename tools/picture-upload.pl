@@ -6,6 +6,7 @@ use CGI;
 use C4::Context;
 use C4::Auth;
 use C4::Output;
+use C4::Members;
 
 my $DEBUG = ($ENV{DEBUG}) ? 1 : 0;
 
@@ -91,6 +92,13 @@ sub handle_dir {
     my ( %count );
     my $file;
     $count{filenames} = ();
+
+    my $mimemap = {
+        "gif"   => "image/gif",
+        "jpg"   => "image/jpeg",
+        "jpeg"  => "image/jpeg",
+        "png"   => "image/png"
+    };
     
     opendir my $dirhandle, $dir;
     while ( my $filename = readdir $dirhandle ) {
@@ -113,12 +121,22 @@ sub handle_dir {
 	$filename   =~ s/[\"\r\n\s]//g;
         warn "Cardnumber: $cardnumber Filename: $filename" if $DEBUG;
 	if ($cardnumber && $filename) {
-            warn "Source: $dir/$filename Target: $destdir/$cardnumber.jpg" if $DEBUG;
-    	    my $result = move ( "$dir/$filename", "$destdir/$cardnumber.jpg" );
-		if ( $result ) {
-		    $count{count}++;
-		    push @{ $count{filenames} }, { source => $filename, dest => $cardnumber .".jpg" };
-		}
+            warn "Source: $dir/$filename" if $DEBUG;
+            open (IMG, "$dir/$filename") or warn "Could not open $dir/$filename";
+            #binmode (IMG); # Not sure if we need this or not -fbcit
+            my $imgfile;
+            while (<IMG>) {
+                $imgfile .= $_;
+            }
+            my $mimetype = $mimemap->{lc ($1)} if $filename =~ m/\.([^.]+)$/i;
+            warn "$filename is mimetype \"$mimetype\"" if $DEBUG;
+            my $dberror = PutPatronImage($cardnumber,$mimetype, $imgfile) if $mimetype;
+#            warn "Database says: $dberror" if $dberror;
+            close (IMG);
+	    unless ( $dberror || !$mimetype ) {
+	        $count{count}++;
+	        push @{ $count{filenames} }, { source => $filename, dest => $cardnumber };
+	    }
 	}
     }
     $count{source} = $dir;

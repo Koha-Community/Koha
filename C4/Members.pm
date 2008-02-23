@@ -58,6 +58,7 @@ BEGIN {
 		&GetSortDetails
 		&GetTitles
                 &GetPatronImage
+                &PutPatronImage
 
 		&GetMemberAccountRecords
 		&GetBorNotifyAcctRecord
@@ -1699,23 +1700,45 @@ sub GetTitles {
 
 =head2 GetPatronImage
 
-    $patronimage = &GetPatronImage('cardnumber');
+    my ($imagedata, $dberror) = GetPatronImage($cardnumber);
 
-Returns the path/filename.jpg of the image for the patron with the supplied cardnumber.
+Returns the mimetype and binary image data of the image for the patron with the supplied cardnumber.
 
 =cut
 
 sub GetPatronImage {
-    my $cardnumber = shift;
-    warn "Cardnumber passed to GetPatronImage is $cardnumber" if $debug;
-    my $htdocs = C4::Context->config('intrahtdocs');
-    my $picture = "patronimages/" . $cardnumber . ".jpg";
-    if ( -e "$htdocs/$picture" ) {
-           return ( "/intranet-tmpl/$picture" );   # FIXME: This is a real hack and should be handled better, but I'm in a hurry... -fbcit
-    }
-    else {
-        return ();
-    }
+    my ($cardnumber) = @_;
+    warn "Cardnumber passed to GetPatronImage is $cardnumber"; # if $debug;
+    my $dbh = C4::Context->dbh;
+    my $query = "SELECT mimetype, imagefile FROM patronimage WHERE cardnumber = ?;";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($cardnumber);
+    my $imagedata = $sth->fetchrow_hashref;
+    my $dberror = $sth->errstr;
+    warn "Database error!" if $sth->errstr;
+    $sth->finish;
+    return $imagedata, $dberror;
+}
+
+=head2 PutPatronImage
+
+    PutPatronImage($cardnumber, $mimetype, $imgfile);
+
+Stores patron binary image data and mimetype in database.
+
+=cut
+
+sub PutPatronImage {
+    my ($cardnumber, $mimetype, $imgfile) = @_;
+    warn "Parameters passed in: Cardnumber=$cardnumber, Mimetype=$mimetype, " . ($imgfile ? "Imagefile" : "No Imagefile") if $debug;
+    my $dbh = C4::Context->dbh;
+    my $query = "INSERT INTO patronimage (cardnumber, mimetype, imagefile) VALUES (?,?,?) ON DUPLICATE KEY UPDATE cardnumber = ?;";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($cardnumber,$mimetype,$imgfile,$cardnumber);
+    warn "Error returned inserting $cardnumber.$mimetype." if $sth->errstr;
+    my $dberror = $sth->errstr;
+    $sth->finish;
+    return $dberror;
 }
 
 =head2 GetRoadTypeDetails (OUEST-PROVENCE)

@@ -1,7 +1,7 @@
 <!-- TMPL_IF NAME="borrowernumber" -->
 <div class="patroninfo"><h5><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</h5>
 <ul>
-<!-- TMPL_IF NAME="picture" --><li><img src="<!-- TMPL_VAR NAME="picture" -->" alt="<!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)" border="0" style="margin: .3em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC;" width="100" /></li><!-- /TMPL_IF -->
+<li><img src="patronimage.pl?crdnum=<!-- TMPL_VAR NAME="cardnumber" -->" alt="<!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)" border="0" style="margin: .3em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC;" width="100" /></li>
     <li><!-- TMPL_IF NAME="address"-->
             <!-- TMPL_VAR NAME="address" -->
     <!-- TMPL_ELSE -->

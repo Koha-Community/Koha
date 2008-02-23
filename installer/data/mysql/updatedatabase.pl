@@ -1037,6 +1037,19 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.057";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("CREATE TABLE `patronimage` (
+            `cardnumber` varchar(16) NOT NULL,
+            `mimetype` varchar(15) NOT NULL,
+            `imagefile` mediumblob NOT NULL,
+            PRIMARY KEY  (`cardnumber`),
+            CONSTRAINT `patronimage_fk1` FOREIGN KEY (`cardnumber`) REFERENCES `borrowers` (`cardnumber`) ON DELETE CASCADE ON UPDATE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+	print "Upgrade to $DBversion done ( Added patronimage table. )\n";
+    SetVersion ($DBversion);
+}
+
 
 =item DropAllForeignKeys($table)
 

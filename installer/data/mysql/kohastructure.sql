@@ -1390,6 +1390,19 @@ CREATE TABLE `overduerules` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Table structure for table `patronimage`
+--
+
+DROP TABLE IF EXISTS `patronimage`;
+CREATE TABLE `patronimage` (
+  `cardnumber` varchar(16) NOT NULL,
+  `mimetype` varchar(15) NOT NULL,
+  `imagefile` mediumblob NOT NULL,
+  PRIMARY KEY  (`cardnumber`),
+  CONSTRAINT `patronimage_fk1` FOREIGN KEY (`cardnumber`) REFERENCES `borrowers` (`cardnumber`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
 -- Table structure for table `printers`
 --
 
