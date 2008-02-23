@@ -15,7 +15,15 @@
     <div class="yui-b">
         <div class="yui-g">
             <div class="yui-u first">
+            <!-- TMPL_IF name="ERRORS" -->
+                <div class="dialog alert">
+                <h1>Patron Images Uploaded With Some Errors</h1>
+                </div>
+            <!-- TMPL_ELSE -->
+                <div class="dialog message">
                 <h1>Patron Images Successfully Uploaded</h1>
+                </div>
+            <!-- /TMPL_IF -->
 	        <ul class="data">
 	            <li>Unpacking completed</li>
                   <li><!-- TMPL_VAR NAME ="TOTAL" --> directories scanned.</li>
@@ -23,13 +31,20 @@
                 </ul>
                 <!-- TMPL_LOOP name="COUNTS" -->
 	            <ul class="data">
-                        <li><!-- TMPL_VAR name="TCOUNTS" --> image(s) moved from <!-- TMPL_VAR name="source" --> to <!-- TMPL_VAR name="dest" -->:</li>
-                    </ul>
+                        <li><!-- TMPL_VAR name="TCOUNTS" --> image(s) moved into the database:</li>
                         <!-- TMPL_LOOP name="filenames" -->
-                           <ul class="data">
-                            <li><!-- TMPL_VAR name="source" --> To <!-- TMPL_VAR name="dest" --></li>
-                            </ul>
+                            <li><!-- TMPL_VAR name="source" --> - Cardnumber: <!-- TMPL_VAR name="cardnumber" -->
+                                    <!-- TMPL_IF NAME="filerrors" --><br /> <b>WARNING:</b> This image <i>not</i> imported because 
+                                    <!-- TMPL_LOOP NAME="filerrors" -->
+                                        <!-- TMPL_IF NAME="DBERR" -->the database returned an error.</li><!-- /TMPL_IF -->
+                                        <!-- TMPL_IF NAME="MIMERR" -->the image format is unrecognized.</li><!-- /TMPL_IF -->
+                                        <!-- TMPL_IF NAME="OPNERR" -->Koha was unable to open the image for reading.</li>
+                                        <!-- TMPL_ELSE -->of an unknown error. Please refer to the error log for more details.</li><!-- /TMPL_IF -->
+                                    <!-- /TMPL_LOOP -->
+                                        <!--TMPL_ELSE --> imported successfully.</li>
+                                    <!-- /TMPL_IF -->
                         <!-- /TMPL_LOOP -->
+                        </ul>
                 <!-- /TMPL_LOOP -->
                 <a id="uploadmore" href="/cgi-bin/koha/tools/picture-upload.pl">Upload More Images</a>
                 <a id="doneupload" href="/cgi-bin/koha/tools/tools-home.pl">Return to Tools</a>
@@ -41,25 +56,32 @@
                 <h1>Upload Patron Images</h1>
                 <!-- TMPL_IF name="ERRORS" -->
                 <div class="dialog alert">
-                    <ul>
                     <!-- TMPL_LOOP name="ERRORS" -->
-		        <!-- TMPL_IF NAME="NODIR" -->
-			    <li>The <span class="ex">patronimages/</span> directory isn't present on your server, please ask your systems administrator to create it</li>
-		        <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="NOTZIP" -->
-                            <li>The upload file does not appear to be a zip file.  The extention is not '.zip'.</li>
+                            <li><b>The upload file does not appear to be a zip file.  The extention is not '.zip'.</b></li>
                         <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="NOWRITETEMP" -->
-                            <li>This script is not able to create/write to the necessary temporary directory.</li>
-                        <!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="NOWRITEDEST" -->
-                            <li>This script is not able to write to the patron image storage directory.</li>
+                            <li><b>This script is not able to create/write to the necessary temporary directory.</b></li>
                         <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="EMPTYUPLOAD" -->
-                            <li>The upload file appears to be empty.</li>
+                            <li><b>The upload file appears to be empty.</b></li>
+                        <!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="OPNLINK" -->
+                            <li><b>Cannot open <!-- TMPL_VAR NAME="OPNLINK" --> to read.<br />Please verify that it exists.</b></li>
+                        <!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="OPNIMG" -->
+                            <li><b>Cannot open <!-- TMPL_VAR NAME="OPNIMG" --> to read.<br />Please verify that it exists.</b></li>
+                        <!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="DELERR" -->
+                            <li><b>Unrecognized or missing field delimeter.<br />Please verify that you are using either a single quote or a tab.</b></li>
+                        <!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="UZIPFAIL" -->
+                            <li><b><!-- TMPL_VAR name="UZIPFAIL" --> failed to unpack.<br />Please verify the integrity of the zip file and retry.</b></li>
+                        <!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="" -->
+                            <li><b>An unknown error has occurred.<br />Please review the error log for more details.</b></li>
                         <!-- /TMPL_IF -->
                     <!-- /TMPL_LOOP -->
-		    </ul>
                 </div>
                 <!-- /TMPL_IF -->
 	        <form method="post" action="/cgi-bin/koha/tools/picture-upload.pl" enctype="multipart/form-data">
@@ -75,14 +97,6 @@
                 </form>
 	
             </div>	
-            <div class="yui-u">
-            <h2>Notes:</h2>
-                <ul>
-                    <li>Select a file to upload to the server. Each .jpg file contained therein will be copied to the appropriate place on the server for patron pictures.</li>
-                    <li>You can include multiple pictures in a .zip file.</li>
-                    <li>There should be a DATALINK.TXT or IDLINK.TXT file for each group of pictures that has the cardnumber of the patron and the file containing that patrons picture.  One patron per line seperated by either commas or tabs.  Quotes around the fields are ignored.</li>
-                </ul>
-            </div>
 <!-- /TMPL_IF -->
         </div>
     </div>
