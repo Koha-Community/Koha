@@ -46,7 +46,7 @@ if ( $uploadfile ) {
 
         close $tfh;
 
-        unless (system("unzip $tempfile -d $dirname")) {
+        unless (system("unzip $tempfile -d $dirname") == 0) {
             $errors{'UZIPFAIL'} = $uploadfilename;
 	    $template->param( ERRORS => [ \%errors ] );
             output_html_with_http_headers $input, $cookie, $template->output;   # This error is fatal to the import, so bail out here
