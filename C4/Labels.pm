@@ -308,10 +308,12 @@ sub get_batches {
     }
     $sth->finish;
 
+# Not sure why we are doing this rather than simply telling the user that no batches are currently defined.
+# So I'm commenting this out and modifying label-manager.tmpl to properly inform the user as stated. -fbcit
     # adding a dummy batch=1 value , if none exists in the db
-    if ( !scalar(@resultsloop) ) {
-        push( @resultsloop, { batch_id => '1' , num => '0' } );
-    }
+#    if ( !scalar(@resultsloop) ) {
+#        push( @resultsloop, { batch_id => '1' , num => '0' } );
+#    }
     return @resultsloop;
 }
 
@@ -852,6 +854,7 @@ my $layout_id = $$conf_data->{'id'};
 
 my $str_fields = get_text_fields($layout_id, 'codes' );
 my @fields = split(/ /, $str_fields);
+#warn Dumper(@fields);
 ### @fields
 
     my $vPos   = ( $y_pos + ( $label_height - $top_text_margin ) );
