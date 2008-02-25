@@ -104,7 +104,7 @@
                 <!-- /TMPL_LOOP -->
             </select></li></ol>
 			</fieldset>
-        <p><input type="submit" value="Submit" /></p>
+        <fieldset class="action"><input type="submit" value="Submit" /></fieldset>
     </form>
 <!-- /TMPL_IF -->
 
@@ -118,7 +118,7 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="else" -->
-    <h1>Libraries</h1>
+    <h3>Libraries</h3>
     <!-- TMPL_IF NAME="message" --><div class="dialog message">
         <!-- TMPL_VAR name="message" --></div><!-- /TMPL_IF -->
     <!-- TMPL_IF name="MESSAGE1" --><div class="dialog message">Library not saved &mdash; code and/or name missing</div><!-- /TMPL_IF -->
@@ -189,8 +189,8 @@
     <!-- TMPL_IF NAME="branchcategories" -->
    
    <!-- TMPL_LOOP NAME="branchcategories" -->
+    <h3>Group(s):  <!-- TMPL_IF NAME="properties" -->Properties<!-- TMPL_ELSE --><!-- TMPL_IF NAME="searchdomain" -->Search Domain<!-- /TMPL_IF --><!-- /TMPL_IF --></h3>
 	<table>
-    <caption>Group(s):  <!-- TMPL_IF NAME="properties" -->Properties<!-- TMPL_ELSE --><!-- TMPL_IF NAME="searchdomain" -->Search Domain<!-- /TMPL_IF --><!-- /TMPL_IF --></caption>
     <tr>
         <th>Name</th>
         <th>Code</th>
@@ -257,7 +257,8 @@
             </select>
 		</li>
 		</ol>
-    </fieldset><input type="submit" value="Update" />
+    </fieldset>
+	<fieldset class="action"><input type="submit" value="Update" /></fieldset>
     </form>
 <!-- /TMPL_IF -->
 
