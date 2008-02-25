@@ -2,23 +2,14 @@
 <title>Koha &rsaquo; Tools &rsaquo; Upload Patron Images</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
-function blah($this){
-    var found=null
-    var els=document.getElementsByName($this.name)
-    for(var i=0;i<els.length;i++){
-        if(els[i]==$this){found=i;break}
-    }
-    if(found==0)return hideCardnumber()
-    if(found==1)return showCardnumber()
-}
-
-function showCardnumber(){
-    document.getElementById("cardnum").style.display="block"
-}
-
-function hideCardnumber(){
-    document.getElementById("cardnum").style.display="none"
-}
+ $(document).ready(function() {
+	$("#zipfile").click(function(){
+		$("#cardnum").hide();
+	});
+	$("#image").click(function(){
+		$("#cardnum").show();
+	});
+});
 </script>
 </head>
 <body>
@@ -92,17 +83,20 @@ function hideCardnumber(){
                 <!-- /TMPL_IF -->
 	        <form method="post" action="/cgi-bin/koha/tools/picture-upload.pl" enctype="multipart/form-data">
 	            <fieldset class="brief">
-                        <ol>
-                            <li>
-                                <input type="radio" id="filetype" name="filetype" onclick="blah(this)" value="zip" checked="checked" /> zip file
-                                <br />
-                                <input type="radio" id="filetype" name="filetype" onclick="blah(this)" value="image" /> image file
+                        <ol class="radio">
+                            <li class="radio">
+                                <label for="zipfile"><input type="radio" id="zipfile" name="filetype" value="zip" checked="checked" /> zip file</label></li>
+                                <li>
+                                <label for="image">
+								<!-- TMPL_IF EXPR="filetype eq 'image'" --><input type="radio" id="image" name="filetype" value="image" checked="checked" /><!-- TMPL_ELSE --><input type="radio" id="image" name="filetype" value="image" /><!-- /TMPL_IF -->
+								 image file</label>
 	                <ol>
                             <li>
                                 <label for="uploadfile">Select the file to upload: </label><input type="file" id="uploadfile" name="uploadfile" />
-                                <span id="cardnum" style="display: none"><label for="cardnumber">Enter patron cardnumber: </label><input type="text" id="cardnumber" name="cardnumber" size="15" /></span>
+                                <!-- TMPL_IF EXPR="filetype eq 'image'" --><span id="cardnum"><!-- TMPL_ELSE --><span id="cardnum" style="display: none"><!-- /TMPL_IF --><label for="cardnumber">Enter patron cardnumber: </label><input type="text" id="cardnumber" name="cardnumber" value="<!-- TMPL_VAR NAME="cardnumber" -->" size="15" /></span>
                             </li>
     	                </ol>
+					</li></ol>
 	            </fieldset>
                     <fieldset class="action"><input type="submit" value="Upload" class="submit" /> <a href="/cgi-bin/koha/tools/picture-upload.pl" class="cancel">Cancel</a>
                     </fieldset>

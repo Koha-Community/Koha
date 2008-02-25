@@ -10,9 +10,6 @@
 	 $(document).ready(function() {
  		$('#patronlists').tabs();
 	 });
-<!-- TMPL_IF NAME="patronimages" -->$(window).load(function() {
-		verify_patron_images();
-	 });<!-- /TMPL_IF -->
 //]]>
 </script>
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
@@ -555,4 +552,12 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 <!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
 </div><!-- /TMPL_UNLESS -->
 </div>
+<!-- TMPL_IF NAME="patronimages" --><script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+	verify_patron_images();
+	<!-- TMPL_IF NAME="CAN_user_tools" -->$("#patronimage").after("<a style=\"display: block; font-size:80%; margin:0  0 1em 1em;\" href=\"/cgi-bin/koha/tools/picture-upload.pl?cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&filetype=image\">+ Click to Add Image</a>").css({cursor: "pointer"}).click(function(){
+		location.href="/cgi-bin/koha/tools/picture-upload.pl?cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&filetype=image";
+	});<!-- /TMPL_IF -->
+//]]>
+</script><!-- /TMPL_IF -->
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -131,6 +131,9 @@ if ( $uploadfile ) {
             );
         }   
     }
+} else {
+	$template->param(cardnumber => $cardnumber );
+	$template->param(filetype => $filetype );
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;

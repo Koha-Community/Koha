@@ -19,7 +19,7 @@ function _(s) { return s } // dummy function for gettext
 function verify_patron_images() {
     for (var i = 0; i < document.images.length; i++) {
         img = document.images[i];
-        if ((img.src.indexOf('patronimages') >= 0)) {
+        if ((img.src.indexOf('patronimage') >= 0)) {
 			w = img.width;
             h = img.height;
      if ((w == 0) && (h == 0) || ((img.complete != null) && (!img.complete))) {
