@@ -6,7 +6,7 @@ function _(s) { return s } // dummy function for gettext
  	$(".focus").focus();
 	$('#header_search').tabs({
 		onShow: function() {
-	        $('#header_search').find('div:visible').find('input').eq(0).focus();
+	        $('#header_search').find('div.residentsearch').not('.tabs-hide').find('input').eq(0).focus();
 	    }	
 	});
 	$(".close").click(function(){
