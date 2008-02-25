@@ -121,8 +121,7 @@ $(document).ready(function(){
     <table>
             <tr>
                 <th class="checkall">&nbsp;</th>
-                <th>Type</th>
-                <th>Icon</th>
+                <th>Item Type</th>
                 <th>Title</th>
                 <th>Author</th>
                 <th>Date Added</th>
@@ -143,14 +142,11 @@ $(document).ready(function(){
 				<!-- /TMPL_IF -->
 			</td>
 			<td>
-				<!-- TMPL_VAR NAME="itemtype" -->
-			</td>
-			<td>
-				<!-- TMPL_IF NAME="imageurl" -->
-				<img src="<!-- TMPL_VAR NAME="themelang" -->/../img/itemtypeimg/<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="itemtype" -->" title="<!-- TMPL_VAR NAME="itemtype" -->" />
+				<!-- TMPL_UNLESS NAME="noItemTypeImages" --><!-- TMPL_IF NAME="imageurl" -->
+				<img src="<!-- TMPL_VAR NAME="themelang" -->/../img/itemtypeimg/<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" />
 				<!-- TMPL_ELSE -->
-				<img src="<!-- TMPL_VAR NAME="themelang" -->/../img/itemtypeimg/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="itemtype" -->" title="<!-- TMPL_VAR NAME="itemtype" -->" />
-				<!-- /TMPL_IF -->
+				<img src="<!-- TMPL_VAR NAME="themelang" -->/../img/itemtypeimg/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" />
+				<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="itemtype" --><!-- /TMPL_UNLESS -->
 			</td>
 			<td>
 			<!-- TMPL_IF name="BiblioDefaultViewmarc" -->
