@@ -28,22 +28,20 @@ function confirm_deletion(biblionumber,itemnumber) {
 	<div id="yui-main">
 	<div class="yui-b">
 
-<form name="input" action="/cgi-bin/koha/labels/label-create-profile.pl" method="get">
 
-<div class="yui-g">
+
 <h3>Create Printer Profile</h3>
 <!-- TMPL_IF NAME="dberror" -->
-<div class="yui-g first">
-<fieldset class="rows"><legend>Error Creating Profile</legend>
-<ol>
-<li>
+<div class="yui-g">
+<div class="dialog alert"><h3>Error Creating Profile</h3>
+<p>
     <!-- TMPL_VAR NAME="errmsg" --> 
-</li>
-</ol>
-</fieldset>
+</p>
 </div>
-<!-- TMPL_ELSE -->
-<div class="yui-g first">
+</div>
+<!-- /TMPL_IF -->
+<div class="yui-g">
+<form name="input" action="/cgi-bin/koha/labels/label-create-profile.pl" method="get">
 <fieldset class="rows"><legend>Profile Settings</legend>
 
 <ol>
@@ -55,28 +53,25 @@ function confirm_deletion(biblionumber,itemnumber) {
     <label for="paper_bin">Paper Bin:</label><input type="text"  size="20" name="paper_bin" id="paper_bin" />
 </li>
 <li>
-    <label for="tmpl_id">Template Code: </label><select id="tmpl_id" name="tmpl_id" />
+    <label for="tmpl_id">Template Code: </label><select id="tmpl_id" name="tmpl_id">
     <!-- TMPL_LOOP NAME="tmpllist" -->
         <option value="<!-- TMPL_VAR NAME="tmpl_id" -->"><!-- TMPL_VAR NAME="tmpl_code" --></option>
-    <!-- /TMPL_LOOP -->
+    <!-- /TMPL_LOOP --></select>
 </li>
 <li>
-    <label><h4>Offset:</h4></label>
+    <fieldset><legend>Offset:</legend>
+    <ol><li><label for="offset_horz">Horizontal:</label><input type="text" size="2" name="offset_horz" id="offset_horz" /></li>
+    <li><label for="offset_vert">Vertical:</label><input type="text"  size="2" name="offset_vert" id="offset_vert" /></li></ol></fieldset>
 </li>
 <li>
-    <label for="offset_horz">Horizontal:</label><input type="text" size="2" name="offset_horz" id="offset_horz" />
-</li>
-<li>
-    <label for="offset_vert">Vertical:</label><input type="text"  size="2" name="offset_vert" id="offset_vert" />
-</li>
-<li>
-    <label><h4>Creep:</h4></label>
-</li>
-<li>
+    <fieldset><legend>Creep:</legend>
+<ol><li>
     <label for="creep_horz">Horizontal:</label><input type="text" size="2" name="creep_horz" id="creep_horz" />
 </li>
 <li>
     <label for="creep_vert">Vertical:</label><input type="text" size="2" name="creep_vert" id="creep_vert" />
+</li></ol>
+</fieldset>
 </li>
 <li><label for="unit">Units: </label><select id="unit" name="unit">
     <!-- TMPL_LOOP NAME="unit" -->
@@ -87,13 +82,9 @@ function confirm_deletion(biblionumber,itemnumber) {
 </ol>
 </fieldset>
 <fieldset class="action">
-        <input type="submit" name="op" value="Save" />
-        <input type="reset" name="op" value="Reset" />
-        <input type="submit" name="op" value="Cancel" />
-</fieldset></div>
-<!-- /TMPL_IF -->
+        <input type="submit" name="op" value="Save" /> <a class="cancel" href="/cgi-bin/koha/labels/label-profiles.pl">Cancel</a>
+</fieldset></form></div>
 </div>
-</div></form>
 
 </div>
 <div class="yui-b">

@@ -39,10 +39,10 @@
         <option value="9">9</option>
         <option value="10">10</option>
         </select>
-        <label>Title</label>
+        <label for="tx_title">Title</label>
         </td>
 <td>
-        <select name="tx_subtitle">
+        <select name="tx_subtitle" id="tx_subtitle">
           <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
@@ -55,11 +55,11 @@
         <option value="9">9</option>
         <option value="10">10</option>
       </select>
-        <label>Subtitle</label>
+        <label for="tx_subtitle">Subtitle</label>
         </td>
  
         <td>
-        <select name="tx_author">
+        <select name="tx_author" id="tx_author">
          <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
@@ -72,12 +72,12 @@
         <option value="9">9</option>
         <option value="10">10</option>
        </select>
-        <label>Author</label>
+        <label for="tx_author">Author</label>
         </td>
 </tr>
 <tr>
         <td>
-        <select name="tx_isbn">
+        <select name="tx_isbn" id="tx_isbn">
          <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
@@ -90,11 +90,11 @@
         <option value="9">9</option>
         <option value="10">10</option>
        </select>
-        <label>ISBN</label>
+        <label for="tx_isbn">ISBN</label>
         </td>
 
         <td>
-        <select name="tx_issn">
+        <select name="tx_issn" id="tx_issn">
           <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
@@ -107,11 +107,11 @@
         <option value="9">9</option>
         <option value="10">10</option>
       </select>
-        <label>ISSN</label>
+        <label for="tx_issn">ISSN</label>
         </td>
 
         <td>
-        <select name="tx_itemtype">
+        <select name="tx_itemtype" id="tx_itemtype">
          <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
@@ -124,14 +124,14 @@
         <option value="9">9</option>
         <option value="10">10</option>
        </select>
-        <label>Itemtype</label>
+        <label for="tx_itemtype">Itemtype</label>
         </td>
 
 
   </tr>
 <tr>
         <td>
-        <select name="tx_dewey">
+        <select name="tx_dewey" id="tx_dewey">
          <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
@@ -144,11 +144,11 @@
         <option value="9">9</option>
         <option value="10">10</option>
        </select>
-        <label>Dewey</label>
+        <label for="tx_dewey">Dewey</label>
         </td>
 
         <td>
-        <select name="tx_barcode">
+        <select name="tx_barcode" id="tx_barcode">
          <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
@@ -161,11 +161,11 @@
         <option value="9">9</option>
         <option value="10">10</option>
        </select>
-        <label>Barcode</label>
+        <label for="tx_barcode">Barcode</label>
         </td>
 
         <td>
-        <select name="tx_classif">
+        <select name="tx_classif" id="tx_classif">
          <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
@@ -178,12 +178,12 @@
         <option value="9">9</option>
         <option value="10">10</option>
        </select>
-        <label>Classification</label>
+        <label for="tx_classif">Classification</label>
         </td>
 </tr>
 <tr>
         <td>
-        <select name="tx_subclass">
+        <select name="tx_subclass" id="tx_subclass">
          <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
@@ -196,10 +196,10 @@
         <option value="9">9</option>
         <option value="10">10</option>
        </select>
-        <label>Sub-Class</label>
+        <label for="tx_subclass">Sub-Class</label>
         </td>
         <td colspan="2">
-        <select name="tx_itemcallnumber">
+        <select name="tx_itemcallnumber" id="tx_itemcallnumber">
           <option value="0" selected="selected"></option>
         <option value="1">1</option>
         <option value="2">2</option>
@@ -212,7 +212,7 @@
         <option value="9">9</option>
         <option value="10">10</option>
       </select>
-        <label>Call Number</label>
+        <label for="tx_itemcallnumber">Call Number</label>
         </td>
   </tr>
 </table></fieldset></li>
@@ -242,8 +242,8 @@
 
 
 <li><label for="guidebox">Draw Guide Boxes: </label><input type="checkbox" id="guidebox" name="guidebox" value="1" /></li></ol></fieldset>
-<p>		<input type="hidden" name="op" value="add_layout" />
-        <input type="submit" value="Submit" /></p>
+<fieldset class="action"><input type="hidden" name="op" value="add_layout" />
+        <input type="submit" value="Submit" /> <a class="cancel" href="/cgi-bin/koha/labels/label-home.pl">Cancel</a></fieldset>
 </form>
 
 </div>

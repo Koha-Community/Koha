@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha -- Labels</title>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo; Labels</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
@@ -14,12 +14,14 @@
 	<div class="yui-b">
 
 <form name="input" action="/cgi-bin/koha/labels/label-manager.pl" method="get">
+<fieldset class="rows">
+<legend>Edit Label Layout</legend>
+<ol>
+<li><label for="layoutname">Layout Name</label>
+<input type="text" name="layoutname" id="layoutname" size="20" value="<!-- TMPL_VAR NAME="layoutname" -->" /></li>
 
-<h3>Layout Name</h3>
-<input type="textbox" name="layoutname"  size="20" value="<!-- TMPL_VAR NAME="layoutname" -->" />
-
-<h3>Choose Barcode Type (encoding)</h3>
-<select name="barcodetype">
+<li><label for="barcodetype">Choose Barcode Type (encoding)</label>
+<select name="barcodetype" id="barcodetype">
     <!-- TMPL_LOOP NAME="barcode_types" -->
 	<!-- TMPL_IF NAME="active" -->
         <option value="<!-- TMPL_VAR NAME="code" -->" selected="selected"><!-- TMPL_VAR NAME="desc" --></option>
@@ -27,11 +29,11 @@
         <option value="<!-- TMPL_VAR NAME="code" -->"><!-- TMPL_VAR NAME="desc" --></option>
 	<!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
-</select>
+</select></li>
 
 
-<h3>Choose Layout Type</h3>
-<select name="printingtype">
+<li><label for="printingtype">Choose Layout Type</label>
+<select name="printingtype" id="printingtype">
     <!-- TMPL_LOOP NAME="printingtypes" -->
 <!-- TMPL_IF NAME="active" -->
 	<option value="<!-- TMPL_VAR NAME="code" -->" selected="selected"><!-- TMPL_VAR NAME="desc" --></option>
@@ -39,16 +41,16 @@
         <option value="<!-- TMPL_VAR NAME="code" -->"><!-- TMPL_VAR NAME="desc" --></option>
 <!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
-</select>
+</select></li>
 
-
-<h3>
+<li><fieldset class="rows">
+<legend>
     Choose Order Of Text Fields to Print
-</h3>
+</legend>
 <table summary="fields to print">
 <tr>
         <td>
- <select name="tx_title">
+ <select name="tx_title" id="tx_title">
             <!-- TMPL_LOOP Name="tx_title" -->
 			<!-- TMPL_IF Name="selected" -->
                 <option value="<!-- TMPL_VAR Name="num" -->" selected="selected">
@@ -61,10 +63,10 @@
 		<!-- /TMPL_IF -->
             <!-- /TMPL_LOOP -->
             </select>
-        <label>Title</label>
+        <label for="tx_title">Title</label>
         </td>
             <td>
-        <select name="tx_subtitle">
+        <select name="tx_subtitle" id="tx_subtitle">
                  <!-- TMPL_LOOP Name="tx_subtitle" -->
          <!-- TMPL_IF Name="selected" -->
 				<option value="<!-- TMPL_VAR Name="num" -->" selected="selected">
@@ -77,11 +79,11 @@
 			<!-- /TMPL_IF -->	
             <!-- /TMPL_LOOP -->
       </select>
-        <label>Subtitle</label>
+        <label for="tx_subtitle">Subtitle</label>
         </td> 
 
         <td>
-        <select name="tx_author">
+        <select name="tx_author" id="tx_author">
              <!-- TMPL_LOOP Name="tx_author" -->
 		<!-- TMPL_IF Name="selected" -->	 
                 <option value="<!-- TMPL_VAR Name="num" -->" selected="selected">
@@ -94,12 +96,12 @@
 		<!-- /TMPL_IF -->		
             <!-- /TMPL_LOOP -->
             </select>
-       <label>Author</label>
+       <label for="tx_author">Author</label>
         </td>
 </tr> 
  <tr>
         <td>
-        <select name="tx_isbn">
+        <select name="tx_isbn" id="tx_isbn">
               <!-- TMPL_LOOP Name="tx_isbn" -->
 		<!-- TMPL_IF Name="selected" -->	  
                 <option value="<!-- TMPL_VAR Name="num" -->" selected="selected">
@@ -112,11 +114,11 @@
 		<!-- /TMPL_IF -->		
             <!-- /TMPL_LOOP -->
             </select>
-      <label>ISBN</label>
+      <label for="tx_isbn">ISBN</label>
         </td>
 
         <td>
-        <select name="tx_issn">
+        <select name="tx_issn" id="tx_issn">
                <!-- TMPL_LOOP Name="tx_issn" -->
 		<!-- TMPL_IF Name="selected" -->	   
                 <option value="<!-- TMPL_VAR Name="num" -->" selected="selected">
@@ -129,9 +131,10 @@
 		<!-- /TMPL_IF -->		
             <!-- /TMPL_LOOP -->
             </select>
-     <label>ISSN</label>
+     <label for="tx_issn">ISSN</label>
+	 </td>
         <td>
-        <select name="tx_itemtype">
+        <select name="tx_itemtype" id="tx_itemtype">
                  <!-- TMPL_LOOP Name="tx_itemtype" -->
 		<!-- TMPL_IF Name="selected" -->		 
                 <option value="<!-- TMPL_VAR Name="num" -->" selected="selected">
@@ -144,12 +147,12 @@
 		<!-- /TMPL_IF -->		
             <!-- /TMPL_LOOP -->
             </select>
-   <label>Itemtype</label>
+   <label for="tx_itemtype">Itemtype</label>
         </td>
   </tr>
 <tr>
         <td>
-        <select name="tx_dewey">
+        <select name="tx_dewey" id="tx_dewey">
                 <!-- TMPL_LOOP Name="tx_dewey" -->
 		<!-- TMPL_IF Name="selected" -->		
                 <option value="<!-- TMPL_VAR Name="num" -->" selected="selected">
@@ -162,10 +165,10 @@
 			<!-- /TMPL_IF -->	
             <!-- /TMPL_LOOP -->
        </select>
-        <label>Dewey</label>
+        <label for="tx_dewey">Dewey</label>
         </td>
         <td>
-        <select name="tx_barcode">
+        <select name="tx_barcode" id="tx_barcode">
                  <!-- TMPL_LOOP Name="tx_barcode" -->
 		<!-- TMPL_IF Name="selected" -->		 
                 <option value="<!-- TMPL_VAR Name="num" -->" selected="selected">
@@ -178,10 +181,10 @@
 			<!-- /TMPL_IF -->	
             <!-- /TMPL_LOOP -->
       </select>
-        <label>Barcode (as text)</label>
+        <label for="tx_barcode">Barcode (as text)</label>
         </td>
         <td>
-        <select name="tx_classif">
+        <select name="tx_classif" id="tx_classif">
                   <!-- TMPL_LOOP Name="tx_classif" -->
 		<!-- TMPL_IF Name="selected" -->		    
                 <option value="<!-- TMPL_VAR Name="num" -->" selected="selected">
@@ -194,12 +197,12 @@
 		<!-- /TMPL_IF -->		
             <!-- /TMPL_LOOP -->
      </select>
-        <label>Classification</label>
+        <label for="tx_classif">Classification</label>
         </td>
 </tr> 
  <tr>
         <td>
-        <select name="tx_subclass">
+        <select name="tx_subclass" id="tx_subclass">
                   <!-- TMPL_LOOP Name="tx_subclass" -->
 		<!-- TMPL_IF Name="selected" -->		  
                 <option value="<!-- TMPL_VAR Name="num" -->" selected="selected">
@@ -212,10 +215,10 @@
 			<!-- /TMPL_IF -->	
             <!-- /TMPL_LOOP -->
      </select>
-        <label>Subclass</label>
+        <label for="tx_subclass">Subclass</label>
         </td>
             <td>
-        <select name="tx_itemcallnumber">
+        <select name="tx_itemcallnumber" id="tx_itemcallnumber">
                  <!-- TMPL_LOOP Name="tx_itemcallnumber" -->
 			<!-- TMPL_IF Name="selected" -->	  
                 <option value="<!-- TMPL_VAR Name="num" -->" selected="selected">
@@ -228,30 +231,30 @@
 			<!-- /TMPL_IF -->	
             <!-- /TMPL_LOOP -->
       </select>
-        <label>Call Number</label>
+        <label for="tx_itemcallnumber">Call Number</label>
         </td>
 		<td>&nbsp;</td>
   </tr>
 </table>
+</fieldset></li>
+
+<li><label for="startlabel">Start printing from Label number: </label><input type="text" name="startlabel"  id="startlabel" size="1"  value="<!-- TMPL_VAR NAME="startlabel" -->" /></li>
 
 
-<h3>
-        Start printing from Label number: <input type="textbox" name="startlabel"  size="1"  value=" <!-- TMPL_VAR NAME="startlabel" --> " />
-</h3>
-
-<h3>Draw Guide Boxes 
+<li><label for="guidebox">Draw Guide Boxes</label>
 <!-- TMPL_IF NAME="guidebox"-->
-<input type="checkbox" name="guidebox" value="1"  checked="checked" />
+<input type="checkbox" name="guidebox" id="guidebox" value="1"  checked="checked" />
 <!-- TMPL_ELSE -->
-<input type="checkbox" name="guidebox" value="1" />
-<!-- /TMPL_IF -->
-</h3>
+<input type="checkbox" name="guidebox" id="guidebox" value="1" />
+<!-- /TMPL_IF --></li>
 
-<p>
-        <input type="submit" value="Submit" />
+</ol>
+</fieldset>
+<fieldset class="action">
+        <input type="submit" value="Submit" /> <a class="cancel" href="/cgi-bin/koha/labels/label-home.pl">Cancel</a>
         <input type="hidden" name="op" value="save_layout" />
         <input type="hidden" name="layout_id" value="<!-- TMPL_VAR NAME="layout_id" -->" />
-</p>
+</fieldset>
 </form>
 
 </div>
