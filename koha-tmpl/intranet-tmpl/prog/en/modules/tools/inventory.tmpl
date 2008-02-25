@@ -2,12 +2,27 @@
 <title>Koha &rsaquo; Tools &rsaquo; Inventory</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.pack.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+	$(".checkall").click(function(){
+	        $(".checkboxed").checkCheckboxes();
+	        return false;
+		});
+	$(".clearall").click(function(){
+	        $(".checkboxed").unCheckCheckboxes();
+	        return false;
+	    });
+	});
+//]]>
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc"-->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; Inventory</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <!-- TMPL_IF NAME="loop" --><a href="/cgi-bin/koha/tools/inventory.pl">Inventory</a> &rsaquo; Results<!-- TMPL_ELSE -->Inventory<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -15,6 +30,7 @@
 	<div id="yui-main">
 	<div class="yui-b">
     <h1>Inventory/Stocktaking</h1>
+	<!-- TMPL_UNLESS name="loop" -->
 	<div class="yui-g">
 	<div class="yui-u first">
     <form method="post" action="/cgi-bin/koha/tools/inventory.pl">
@@ -107,6 +123,7 @@
     </form>
 	</div>
 	</div>
+	<!--/TMPL_UNLESS-->
     <!--TMPL_IF Name="Number" --><div class="dialog message"><!--TMPL_VAR Name="Number"--> items modified : datelastseen set to <!--TMPL_VAR Name="date"--></div><!-- /TMPL_IF-->
     <!--TMPL_IF Name="errorfile" --><div class="dialog alert"><!--TMPL_VAR Name="errorfile"--> can't be opened</div><!-- /TMPL_IF-->
     <!--TMPL_LOOP Name="errorloop"-->
@@ -119,7 +136,7 @@
         </div>
     <!-- /TMPL_LOOP-->
     <!-- TMPL_IF NAME="loop" -->
-    <form method="post" action="/cgi-bin/koha/tools/inventory.pl">
+    <form method="post" action="/cgi-bin/koha/tools/inventory.pl" class="checkboxed">
     <input type="hidden" name="markseen" value="1" />
     <input type="hidden" name="minlocation" value="<!-- TMPL_VAR NAME="minlocation" -->" />
     <input type="hidden" name="maxlocation" value="<!-- TMPL_VAR NAME="maxlocation" -->" />
@@ -128,6 +145,7 @@
     <input type="hidden" name="datelastseen" value="<!-- TMPL_VAR NAME="datelastseen" -->" />
     <input type="hidden" name="pagesize" value="<!-- TMPL_VAR NAME="pagesize" -->" />
     <input type="hidden" name="offset" value="<!-- TMPL_VAR NAME="offset" -->" />
+	<div style="padding : .3em 0"><a href="#" class="checkall">[Select All]</a> <a href="#" class="clearall">[Clear All]</a></div>
     <table>
         <tr>
             <th>Seen</th>
@@ -153,6 +171,7 @@
         </tr>
     <!-- /TMPL_LOOP -->
     </table>
+	<div style="padding : .3em 0"><a href="#" class="checkall">[Select All]</a> <a href="#" class="clearall">[Clear All]</a></div>
     <input type="submit" value="Mark seen" />
     </form>
     <!-- TMPL_IF NAME="offset" -->
@@ -165,7 +184,7 @@
         <input type="hidden" name="pagesize" value="<!-- TMPL_VAR NAME="pagesize" -->" />
         <input type="hidden" name="offset" value="<!-- TMPL_VAR NAME="prevoffset" -->" />
         <input type="hidden" name="op" value="do_it" />
-        <input type="submit" value="&lt;&lt;" class="button" />
+        <input type="submit" value="&lt;&lt; Continue without Marking" class="submit" />
     </form>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="nextoffset" -->
@@ -178,7 +197,7 @@
         <input type="hidden" name="pagesize" value="<!-- TMPL_VAR NAME="pagesize" -->" />
         <input type="hidden" name="offset" value="<!-- TMPL_VAR NAME="nextoffset" -->" />
         <input type="hidden" name="op" value="do_it" />
-        <input type="submit" value="&gt;&gt;" class="button" />
+        <input type="submit" value="Continue without Marking &gt;&gt;" class="submit" />
     </form>
     <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
