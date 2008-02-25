@@ -2269,7 +2269,7 @@ sub _AddBiblioNoZebra {
     }
 
     # remove blancks comma (that could cause problem when decoding the string for CQL retrieval) and regexp specific values
-    $title =~ s/ |\.|,|;|\[|\]|\(|\)|\*|-|'|:|=//g;
+    $title =~ s/ |\.|,|;|\[|\]|\(|\)|\*|-|'|:|=|\r|\n//g;
     # limit to 10 char, should be enough, and limit the DB size
     $title = substr($title,0,10);
     #parse each field
@@ -2281,6 +2281,7 @@ sub _AddBiblioNoZebra {
             my $tag = $field->tag();
             my $subfieldcode = $subfield->[0];
             my $indexed=0;
+            warn "INDEXING :".$subfield->[1];
             # check each index to see if the subfield is stored somewhere
             # otherwise, store it in __RAW__ index
             foreach my $key (keys %index) {
@@ -2289,7 +2290,7 @@ sub _AddBiblioNoZebra {
                     $indexed=1;
                     my $line= lc $subfield->[1];
                     # remove meaningless value in the field...
-                    $line =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|<|>|&|\+|\*|\/|=|:/ /g;
+                    $line =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|<|>|&|\+|\*|\/|=|:|\r|\n/ /g;
                     # ... and split in words
                     foreach (split / /,$line) {
                         next unless $_; # skip  empty values (multiple spaces)
@@ -2322,7 +2323,7 @@ sub _AddBiblioNoZebra {
             # the subfield is not indexed, store it in __RAW__ index anyway
             unless ($indexed) {
                 my $line= lc $subfield->[1];
-                $line =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|<|>|&|\+|\*|\/|=|:/ /g;
+                $line =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|<|>|&|\+|\*|\/|=|:|\r|\n/ /g;
                 # ... and split in words
                 foreach (split / /,$line) {
                     next unless $_; # skip  empty values (multiple spaces)
