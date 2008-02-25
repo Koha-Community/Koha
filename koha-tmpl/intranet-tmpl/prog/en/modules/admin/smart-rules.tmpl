@@ -44,7 +44,7 @@ $(document).ready(function() {
         <p>To modify a rule, create a new one with the same borrower type and item type.</p>
     </div>
     <div id="bloc100">
-        <form method="GET" id="selectlibrary">
+        <form method="get" action="/cgi-bin/koha/admin/smart-rules.pl" id="selectlibrary">
         Select a branch :
             <select name="branch" id="branch">
                 <option value="">Default</option>
@@ -53,11 +53,11 @@ $(document).ready(function() {
             <!-- /TMPL_LOOP -->
             </select>
         </form>
-        <form method="post">
-            <input type="hidden" name="op" value="add">
+        <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
+            <input type="hidden" name="op" value="add" />
             <table>
             <tr>
-                <th>Item Type</th><th>Borrower Type</th><th>Amount</th><th>Grace Period</th><th>Charging Interval</th><th>Amount Loanable</th><th>Loan time</th>
+                <th>Item Type</th><th>Borrower Type</th><th>Amount</th><th>Grace Period</th><th>Charging Interval</th><th>Amount Loanable</th><th>Loan time</th><th>&nbsp;</th>
             </tr>
             <!-- TMPL_LOOP NAME="rules" -->
                 <tr>
