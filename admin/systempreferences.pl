@@ -263,6 +263,14 @@ my %tabsysprefs;
     $tabsysprefs{LetterLog}       = "LOGFeatures";
     $tabsysprefs{FinesLog}        = "LOGFeatures";
     
+# OAI-PMH variables
+   $tabsysprefs{'OAI-PMH'}           = "OAI-PMH";
+   $tabsysprefs{'OAI-PMH:archiveID'} = "OAI-PMH";
+   $tabsysprefs{'OAI-PMH:MaxCount'}  = "OAI-PMH";
+   $tabsysprefs{'OAI-PMH:Set'}       = "OAI-PMH";
+   $tabsysprefs{'OAI-PMH:Subset'}    = "OAI-PMH";
+
+
 sub StringSearch  {
     my ($searchstring,$type)=@_;
     my $dbh = C4::Context->dbh;
