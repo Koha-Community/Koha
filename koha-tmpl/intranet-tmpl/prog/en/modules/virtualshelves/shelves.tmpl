@@ -7,18 +7,14 @@
 
 $(document).ready(function(){
 	$("#addbarcode").focus();
-    $("th.checkall").html("<a href=\"/cgi-bin/koha/shelves.pl\" id=\"CheckAll\"><img src=\"<!-- TMPL_VAR NAME="themelang" -->/../img/checkall.gif\" height=\"18\" width=\"18\" alt=\"Check All\" title=\"Check All\" border=\"0\" /></a>");
+	$("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/shelves.pl\">Clear All</a>");
+	$("span.checkall").html("<a id=\"CheckAll\" href=\"/cgi-bin/koha/shelves.pl\">Select All</a>");
     $("#CheckAll").click(function(){
         $(".checkboxed").checkCheckboxes();
-        $("#CheckAll img").attr("src","<!-- TMPL_VAR NAME="themelang" -->/../img/checknone.gif").attr("title","Check None").attr("alt","Check None");
-																	// FIXME: a checknone.gif image should be made!
-        $("#CheckAll").attr("id","CheckNone");
         return false;
     });
     $("#CheckNone").click(function(){
         $(".checkboxed").unCheckCheckboxes();
-        $("#CheckNone img").attr("src","<!-- TMPL_VAR NAME="themelang" -->/../img/checkall.gif").attr("title","Check All").attr("alt","Check All");
-        $("#CheckNone").attr("id","CheckAll");
         return false;
     });
 });
@@ -118,6 +114,7 @@ $(document).ready(function(){
         <input type="hidden" name="modifyshelfcontents" value="1" />
  <fieldset>
   <legend>Contents of <i><!-- TMPL_VAR NAME="shelfname" --></i></legend>
+  <p><span class="checkall"></span><span class="clearall"></span></p>
     <table>
             <tr>
                 <th class="checkall">&nbsp;</th>
