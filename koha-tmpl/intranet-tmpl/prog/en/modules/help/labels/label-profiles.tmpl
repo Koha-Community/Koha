@@ -1,0 +1,48 @@
+<!-- TMPL_INCLUDE NAME="help-top.inc" -->
+
+<h1>Label Profiles</h1>
+<h2>What is a &quot;Printer Profile&quot;?</h2>
+
+<p>A printer profile is where you setup adjustments for label offset and creep (also known as printer calibration).</p>
+<p>Depending upon the printer you use and even the tray within the printer you use, the text on labels may be offset so that it does not appear correctly on the labels.
+Even once the offset (usually measured from the upper left-hand corner) is correct, the text may appear to "creep" -print correctly on some labels, but slowly move off of other labels.
+A printer profile will allow you to provide a per printer per tray per label template correction for these symptoms.</p>
+
+<h2>How do I setup a Printer Profile?</h2>
+
+<h3>Creating a Printer Profile</h3>
+<p>
+<ol>
+<li>First note: You can only create Printer Profiles for existing label templates.</li>
+<li>Provide a printername and a tray name for your Profile. Note: You can only have a single instance of printername-trayname per label template.</li>
+<li>Then select a label template from the pull-down list of templates.</li>
+<li>Next set the horizontal and vertical offset. Be sure to use numbers which corrispond to the units you specify at the bottom of the form. Negative values are permitted.</li>
+<li>Last set the horizontal and vertical creep. Be sure to use numbers which corrispond to the units you specify at the bottom of the form. Negative values are permitted.</li>
+<li>Click on the 'Save' button at the bottom of the form to save your new profile.</li>
+</ol>
+</p>
+
+<h3>Applying a Printer Profile</h3>
+<p>
+<ol>
+<li>After creating a Printer Profile, it must be applied to a particular label template. Note: You can only apply one Printer Profile to a given label template at a time.</li>
+<li>Edit the label template you want to apply a profile to.</li>
+<li>On the edit form and in the left-hand column, you will see a "Printer Profile:" field.</li>
+<li>If one or more Printer Profiles are defined for this label template, you will see a pull-down control allowing you to select from a list of available Printer Profiles for that label template.</li>
+<li>Select the profile you want to be applied to the label template at this time. Remember: Only one Printer Profile can be applied at any given time.</li>
+<li>If the "Printer Profile:" field reads "None Defined" this indicates that you will need to create at least one Printer Profile for this label template in order to apply a Printer Profile to this label template.</li>
+</ol>
+</p>
+
+<h3>Tips to Remember When Adjusting a Printer Profile</h3>
+<p>
+<ol>
+<li><b>All</b> of these factor in to image position and creep. Keep this in mind when makeing adjustments.</li>
+<li>Adjust margins until both top and left margins are correct.</li>
+<li>Then adjust the label height and width to correct label creep across and down page.</li>
+<li>Negative offset units cause overall image movement up and to the left. Positive offset units cause overall image movement down and to the right.</li>
+<li>Negative creep units cause shrinkage of the overall image. Positive creep units cause enlarging of the overall image.</li>
+</ol>
+</p>
+
+<!-- TMPL_INCLUDE name="help-bottom.inc" -->
