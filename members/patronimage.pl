@@ -64,8 +64,15 @@ if ($dberror) {
 # NOTE: Never dump the contents of $imagedata->{'patronimage'} via a warn to a log or nasty
 # things will result... you have been warned!
 
-print header (-type => $imagedata->{'mimetype'}, -Content_Length => length ($imagedata->{'imagefile'})), 
-            $imagedata->{'imagefile'};
+if ($imagedata) {
+    print header (-type => $imagedata->{'mimetype'}, -Content_Length => length ($imagedata->{'imagefile'})), $imagedata->{'imagefile'};
+    exit;
+} else {
+    warn "No image exists for $cardnumber" if $DEBUG;
+    my $urlbase = url(-base => 1 -rewrite => 1);
+    warn "URL base: $urlbase" if $DEBUG;
+    print redirect (-uri => "$urlbase/intranet-tmpl/prog/img/patron-blank.png");
+}
 
 exit;
 
