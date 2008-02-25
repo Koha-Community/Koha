@@ -225,9 +225,9 @@
             <label for="barcode">Enter item barcode: </label>
 
 <!-- TMPL_IF NAME="overduecharges" -->
-<input name="barcode" id="barcode" size="14" maxlength="14" class="focus" onfocus="if(this.form.exemptcheck.checked == true) {this.className='alert'} else {this.className='focus'};" onblur="this.className='unfocus';"   />
+<input name="barcode" id="barcode" size="14" class="focus" onfocus="if(this.form.exemptcheck.checked == true) {this.className='alert'} else {this.className='focus'};" onblur="this.className='unfocus';"   />
 <!-- TMPL_ELSE -->
-<input name="barcode" id="barcode" size="14" maxlength="14" class="focus" />
+<input name="barcode" id="barcode" size="14" class="focus" />
 <!-- /TMPL_IF -->
 
             <input type="submit" class="submit" value="Submit" />

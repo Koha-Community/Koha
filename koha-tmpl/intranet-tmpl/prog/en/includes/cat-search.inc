@@ -73,7 +73,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 <div id="checkin_search" class="residentsearch">
     <p class="tip">Scan a barcode to check in:</p>
     <form method="post" action="/cgi-bin/koha/circ/returns.pl">
-        <input name="barcode" id="ret_barcode" size="40" maxlength="14" />
+        <input name="barcode" id="ret_barcode" size="40" />
         <input value="Submit" class="submit" type="submit" />
     </form>
 </div>
