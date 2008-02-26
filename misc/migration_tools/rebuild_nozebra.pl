@@ -133,7 +133,7 @@ while (my ($biblionumber) = $sth->fetchrow) {
             # check each index to see if the subfield is stored somewhere
             # otherwise, store it in __RAW__ index
             foreach my $key (keys %index) {
-                if ($index{$key} =~ /$tag\*/ or $index{$key} =~ /$tag$subfieldcode/) {
+                if ($index{$key} =~ /\Q$tag\E\*/ or $index{$key} =~ /\Q$tag$subfieldcode\E/) {
                     $indexed=1;
                     my $line= lc $subfield->[1];
                     # remove meaningless value in the field...
