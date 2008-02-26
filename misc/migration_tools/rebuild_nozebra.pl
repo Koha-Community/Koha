@@ -81,7 +81,9 @@ if  (!%index || $sysprefs ) {
 'callnum' => '952o',
 'an' => '6009,6109,6119',
 'series' => 440*,490*,
-'host-item' => '952a,952c',
+'host-item' => '9529
+'shelf' => '952c',
+'collection' => '9528',
 \"WHERE variable='NoZebraIndexes'");
 
         %index = GetNoZebraIndexes();
