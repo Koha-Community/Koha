@@ -113,7 +113,7 @@ Koha database.
 #'
 sub Getoverdues {
     my $dbh = C4::Context->dbh;
-    my $sth =  (C4::context->preference('item-level_itypes')) ? 
+    my $sth =  (C4::Context->preference('item-level_itypes')) ? 
 				$dbh->prepare(
         			"SELECT issues.*,items.itype as itemtype FROM issues 
                 	LEFT JOIN items USING (itemnumber)
