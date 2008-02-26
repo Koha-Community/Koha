@@ -126,6 +126,7 @@ for ( my $i = 0 ; $i <= $#resultsbr ; $i++ ) {
 
 $template->param(
     frameworkcodeloop => \@frameworkcodeloop,
+    breeding_count    => $countbr,
     breeding_loop     => \@breeding_loop,
 );
 
