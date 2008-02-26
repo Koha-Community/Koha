@@ -152,23 +152,7 @@
   </tr>
 <tr>
         <td>
-        <select name="tx_dewey" id="tx_dewey">
-                <!-- TMPL_LOOP Name="tx_dewey" -->
-		<!-- TMPL_IF Name="selected" -->		
-                <option value="<!-- TMPL_VAR Name="num" -->" selected="selected">
-                    <!-- TMPL_VAR Name="num" -->
-                </option>
-			<!-- TMPL_ELSE -->	
-                <option value="<!-- TMPL_VAR Name="num" -->">
-                    <!-- TMPL_VAR Name="num" -->
-                </option>
-			<!-- /TMPL_IF -->	
-            <!-- /TMPL_LOOP -->
-       </select>
-        <label for="tx_dewey">Dewey</label>
-        </td>
-        <td>
-        <select name="tx_barcode" id="tx_barcode">
+        <select name="tx_barcode">
                  <!-- TMPL_LOOP Name="tx_barcode" -->
 		<!-- TMPL_IF Name="selected" -->		 
                 <option value="<!-- TMPL_VAR Name="num" -->" selected="selected">
@@ -199,8 +183,6 @@
      </select>
         <label for="tx_classif">Classification</label>
         </td>
-</tr> 
- <tr>
         <td>
         <select name="tx_subclass" id="tx_subclass">
                   <!-- TMPL_LOOP Name="tx_subclass" -->
@@ -217,6 +199,8 @@
      </select>
         <label for="tx_subclass">Subclass</label>
         </td>
+</tr> 
+ <tr>
             <td>
         <select name="tx_itemcallnumber" id="tx_itemcallnumber">
                  <!-- TMPL_LOOP Name="tx_itemcallnumber" -->
@@ -233,6 +217,7 @@
       </select>
         <label for="tx_itemcallnumber">Call Number</label>
         </td>
+		<td>&nbsp;</td>
 		<td>&nbsp;</td>
   </tr>
 </table>
