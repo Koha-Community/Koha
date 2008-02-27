@@ -154,9 +154,9 @@ function verify_images() {
 
                 <!-- TMPL_IF name="datedue" -->
                     <!-- TMPL_IF  NAME="NOTSAMEBRANCH" -->
-                                        Checked out, due <!-- TMPL_VAR NAME="datedue" -->
+                                        <span class="datedue">Checked out, due <!-- TMPL_VAR NAME="datedue" --></span>
                     <!-- TMPL_ELSE -->
-                                        Checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a>, due <!-- TMPL_VAR NAME="datedue" -->
+                                        <span class="datedue">Checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a>, due <!-- TMPL_VAR NAME="datedue" --></span>
                     <!-- /TMPL_IF -->
 					<!-- TMPL_ELSE -->
                 <!-- TMPL_IF Name="transfertwhen" -->
@@ -169,27 +169,27 @@ function verify_images() {
                     <!-- TMPL_IF NAME="itemlostloop" -->
                     <!-- TMPL_LOOP NAME="itemlostloop" -->
                         <!-- TMPL_IF NAME="selected" -->
-                                        <!-- TMPL_VAR NAME="lib" -->
+                                        <span class="lost"><!-- TMPL_VAR NAME="lib" --></span>
                         <!-- /TMPL_IF -->
                     <!-- /TMPL_LOOP -->
                     <!-- TMPL_ELSE -->
-                                        Unavailable (lost or missing)
+                                        <span class="lost">Unavailable (lost or missing)</span>
                     <!-- /TMPL_IF -->
                 <!-- /TMPL_IF -->
 
                 <!-- TMPL_IF NAME="wthdrawn" -->
-                                        Withdrawn
+                                        <span class="wdn">Withdrawn</span>
                 <!-- /TMPL_IF -->
 
                 <!-- TMPL_IF NAME="damaged" -->
                     <!-- TMPL_IF NAME="itemdamagedloop" -->
                         <!-- TMPL_LOOP NAME="itemdamagedloop" -->
                         <!-- TMPL_IF NAME="selected" -->
-                                        <!-- TMPL_VAR NAME="lib" -->
+                                        <span class="dmg"><!-- TMPL_VAR NAME="lib" --></span>
                         <!-- /TMPL_IF -->
                         <!-- /TMPL_LOOP -->
                     <!-- TMPL_ELSE -->
-                                        Damaged
+                                        <span class="dmg">Damaged</span>
                     <!-- /TMPL_IF -->
                 <!-- /TMPL_IF -->
 
