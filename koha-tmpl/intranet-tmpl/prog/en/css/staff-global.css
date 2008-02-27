@@ -267,6 +267,7 @@ legend {
 	clear : both;
 	font-size : 90%;
 	padding :.2em .5em .4em 10px;
+	margin : 0;
 }
 
 #header+#breadcrumbs {
@@ -359,6 +360,10 @@ div.patroninfo {
 	margin-top : -.5em;
 }
 
+*html div.patroninfo {
+	margin-right : .5em;
+}
+
 div.patroninfo h5 {
 	border-right :  1px solid #000;
 	margin-bottom : 0;
@@ -368,10 +373,16 @@ div.patroninfo h5 {
 }
 
 div.patroninfo ul {
+	border : 0;
 	border-right : 1px solid #000;
 	border-bottom : 0;
 	border-top : 0;
-	padding : 0 0 .5em 0;
+	padding : 0;
+	margin : 0;
+}
+
+div.patroninfo ul li {
+	margin : 0;
 }
 
 div.patroninfo ul li, div.patronviews ul li {
@@ -872,7 +883,7 @@ tr.highlight th[scope=row] {
 	background-color : #DDDDDD;
 }
 
-tr.confirm td, tr.confirm.highlight td {
+tr.confirm td, tr.highlight.confirm td {
 	background-color : #ffbfbf;
 }
 
@@ -1056,6 +1067,10 @@ div#menu {
 	padding-bottom: 2em;
 }
 
+*html #menu li {
+	display : inline;
+}
+
 div#menu li a {
 	text-decoration: none;
 	display: block;
@@ -1107,6 +1122,10 @@ h1#logo {
 	border: 0;
 	margin:0.75em .3em 0.75em .7em;
 	padding:0;
+}
+
+*html h1#logo {
+	margin : 0.75em .3em 0.75em .3em;
 }
 
 h1#logo a {
@@ -1268,7 +1287,7 @@ div#header_search input.submit {
 	font-size : 1em;
 }
 
-input[type=submit], input[type=button], input.submit {
+input[type=submit], input[type=button] {
 	border: 1px outset #999999;
 	border-top-color: #666;
 	border-left-color: #666;
@@ -1277,7 +1296,24 @@ input[type=submit], input[type=button], input.submit {
 	color: #333333;
 }
 
-input[type=submit]:active, input[type=button]:active, input.submit:active {
+input.submit {
+	border: 1px solid #999999;
+	border-top-color: #666;
+	border-left-color: #666;
+	padding: 0.25em;
+	background : #E8E8E8 url(../../img/button-bg.gif) top left repeat-x;
+	color: #333333;
+}
+
+*html input.submit {
+	padding : .1em;
+}
+
+input[type=submit]:active, input[type=button]:active {
+	border : 1px inset #999999;
+}
+
+input.submit:active {
 	border : 1px inset #999999;
 }
 

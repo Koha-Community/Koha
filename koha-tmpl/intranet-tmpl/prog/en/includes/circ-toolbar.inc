@@ -41,12 +41,12 @@ function confirm_reregistration() {
 	
 		var moremenu = [
 			{ text: "Renew Patron",  onclick: { fn: confirm_reregistration } },
-            { text: "Set Permissions", url: "/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->",
+            { text: "Set Permissions", url: "/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->"
                 <!-- TMPL_IF NAME="CAN_user_permission" --><!-- TMPL_IF NAME="StaffMember" -->
-                    <!-- TMPL_UNLESS NAME="CAN_user_staffaccess" -->disabled: true, <!-- /TMPL_UNLESS-->
+                    <!-- TMPL_UNLESS NAME="CAN_user_staffaccess" -->, disabled: true<!-- /TMPL_UNLESS-->
                     <!-- TMPL_ELSE --><!-- /TMPL_IF -->
-                <!-- TMPL_ELSE --> disabled: true, <!-- /TMPL_IF-->},
-            { text: "Delete", <!-- TMPL_IF NAME="StaffMember" --><!-- TMPL_UNLESS NAME="CAN_user_staffaccess" -->disabled: true, <!-- /TMPL_UNLESS --><!-- /TMPL_IF --> onclick: { fn: confirm_deletion } },
+                <!-- TMPL_ELSE -->, disabled: true<!-- /TMPL_IF-->},
+            { text: "Delete", <!-- TMPL_IF NAME="StaffMember" --><!-- TMPL_UNLESS NAME="CAN_user_staffaccess" -->disabled: true, <!-- /TMPL_UNLESS --><!-- /TMPL_IF --> onclick: { fn: confirm_deletion } }
 		]
 
 	    new YAHOO.widget.Button({
