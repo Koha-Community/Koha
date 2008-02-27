@@ -339,7 +339,7 @@ a .term {
 	padding-left : 26px;
 }
 
-#action a.reserve, #toolbar a.reserve {
+#action a.reserve, #toolbar a.reserve, .searchresults a.reserve {
 	background-image:url(../../images/placereserve.gif);
 }
 
@@ -968,16 +968,43 @@ width: 120px;
 }
 
 #fluid {
+float: right;
+width: 100%;
+margin-left: -120px;
+margin-top : .4em;
+
+/*border : 1px solid #FCC;
+padding-left : 1em;*/
+}
+
+#fluid-offset {
+margin-left: 130px;
+/*
+border: 1px dashed #FFF;*/
+}
+
+#fluid-content-1 {
+float: left;
+width: 96%;
+margin-left: 2%;
+display: inline /* fix IE6 */;
+margin-right: -1px /* fix IE6 */;
+}
+
+
+/*#fluid {
+border : 1px solid #FCC;
 margin-left: 124px;
 margin-top : .4em;
 padding-left : 1em;
 }
 
 #fluid-offset {
+border: 1px dashed #FFF;
 margin-left: 125px;
 float : right;
 width: 100%;
-}
+}*/
 
 .clearfix:after {
     content: "."; 
