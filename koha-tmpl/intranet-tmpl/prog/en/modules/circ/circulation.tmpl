@@ -447,7 +447,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
             <img src="<!-- TMPL_VAR NAME="itemtype_image" -->" />
             <!-- /TMPL_IF -->
         </td>
-        <td><!-- TMPL_VAR NAME="classification" --></td>
+        <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
         <td><!-- TMPL_VAR NAME="barcode" --></td>
         <td>
 		<!-- TMPL_IF NAME="can_renew" -->
@@ -554,7 +554,6 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 </div>
 <!-- TMPL_IF NAME="patronimages" --><script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
-	verify_patron_images();
 	<!-- TMPL_IF NAME="CAN_user_tools" -->$("#patronimage").after("<a style=\"display: block; font-size:80%; margin:0  0 1em 1em;\" href=\"/cgi-bin/koha/tools/picture-upload.pl?cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&filetype=image\">+ Click to Add Image</a>").css({cursor: "pointer"}).click(function(){
 		location.href="/cgi-bin/koha/tools/picture-upload.pl?cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&filetype=image";
 	});<!-- /TMPL_IF -->
