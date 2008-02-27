@@ -68,8 +68,11 @@ YAHOO.util.Event.onContentReady("listsmenu", function () {
     $("#listsmenu").css("display","block").css("visibility","hidden");
     $("#cartDetails").css("display","block").css("visibility","hidden");
 
-	$("#cmspan").html("<a id=\"cartmenulink\" class=\"btn green left\" href=\"/cgi-bin/koha/opac-basket.pl\">Cart</a>");
-   	$('.btn').each(function(){
+	$("#cmspan").html("<a id=\"cartmenulink\" class=\"left\" href=\"/cgi-bin/koha/opac-basket.pl\">Cart</a>");
+	    new YAHOO.widget.Button("searchsubmit");
+	    new YAHOO.widget.Button("cartmenulink");
+	    new YAHOO.widget.Button("listsmenulink");
+   /*	$('.btn').each(function(){
 	  var b = $(this);
 	  var tt = b.text() || b.val();
 	  if ($(':submit,:button',this)) {
@@ -78,15 +81,15 @@ YAHOO.util.Event.onContentReady("listsmenu", function () {
 	  }
 	  b.text('').css({cursor:'pointer'}). prepend('<i></i>')
 	  .append( $('<span>').text(tt).append('<i></i><span></span>') );
-	  });
+	  }); */
 	$("#searchsubmit").click(function(){
 		$("#searchform").submit();
 	})
 	  
-	  $("#cartmenulink").find("i:first").before("<img src=\"/opac-tmpl/prog/images/cart.gif\" alt=\"\" />");
-	  $("#cartmenulink").find("i:last").before("<span id=\"basket\"></span>");
+	 // $("#cartmenulink").find("i:first").before("<img src=\"/opac-tmpl/prog/images/cart.gif\" alt=\"\" />");
+	 // $("#cartmenulink").find("i:last").before("<span id=\"basket\"></span>");
 	  
-	  $("#listsmenulink").find("i:last").before("<img src=\"/opac-tmpl/prog/images/list.gif\" alt=\"\" />");
+	 // $("#listsmenulink").find("i:last").before("<img src=\"/opac-tmpl/prog/images/list.gif\" alt=\"\" />");
 	  if(basketcount){ updateBasket(basketcount,document) }	
    
         var listMenu = new YAHOO.widget.Menu("listsmenu", { lazyload: true });
