@@ -69,21 +69,15 @@ YAHOO.util.Event.onContentReady("listsmenu", function () {
     $("#cartDetails").css("display","block").css("visibility","hidden");
 
 	$("#cmspan").html("<a id=\"cartmenulink\" class=\"left\" href=\"/cgi-bin/koha/opac-basket.pl\">Cart</a>");
+	$("#listsmenulinkc").empty();
 	    new YAHOO.widget.Button("searchsubmit");
 	    new YAHOO.widget.Button("cartmenulink");
-	    new YAHOO.widget.Button("listsmenulink");
-	$("#cartmenulink").find("a").append(" <span class=\"cartcount\" style=\"background-color : #FFC; font-size : 79%; padding: 2px;\">18</span>");
-	$("#searchsubmit").click(function(){
-		$("#searchform").submit();
-	})
-	  
-	 // $("#cartmenulink").find("i:first").before("<img src=\"/opac-tmpl/prog/images/cart.gif\" alt=\"\" />");
-	 // $("#cartmenulink").find("i:last").before("<span id=\"basket\"></span>");
-	  
-	 // $("#listsmenulink").find("i:last").before("<img src=\"/opac-tmpl/prog/images/list.gif\" alt=\"\" />");
-	  if(basketcount){ updateBasket(basketcount,document) }	
-   
-        var listMenu = new YAHOO.widget.Menu("listsmenu", { lazyload: true });
+		new YAHOO.widget.Button({  
+	                            type: "link",  
+	                            id: "listsmenulink",  
+	                            label: "Lists",
+	                            container: "listsmenulinkc" }); 
+	var listMenu = new YAHOO.widget.Menu("listsmenu", { lazyload: true });
 		listMenu.render();
 		listMenu.cfg.setProperty("context", ["listsmenulink", "tr", "br"]);
 		listMenu.cfg.setProperty("effect",{effect:YAHOO.widget.ContainerEffect.FADE,duration:0.05});
@@ -92,7 +86,15 @@ YAHOO.util.Event.onContentReady("listsmenu", function () {
                     listMenu.align("tr", "br");
 		}
 		YAHOO.util.Event.addListener("listsmenulink", "click", listMenu.show, null, listMenu);
-		YAHOO.widget.Overlay.windowResizeEvent.subscribe(positionlistMenu);
+		YAHOO.widget.Overlay.windowResizeEvent.subscribe(positionlistMenu);	
+	$("#cartmenulink").find("a").append("<span id=\"basket\"></span>");
+	$("#searchsubmit").click(function(){
+		$("#searchform").submit();
+	})
+	  
+	  if(basketcount){ updateBasket(basketcount,document) }	
+   
+        
     });
     
 function init() {

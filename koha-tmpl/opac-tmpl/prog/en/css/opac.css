@@ -1301,8 +1301,15 @@ body #opac-main-search #searchsubmit.yui-button {
 }
 
 body #opac-main-search #cartmenulink.yui-button , body #opac-main-search #listsmenulink.yui-button  {
+	font-size:105%;
 	margin-bottom : -1em;
 	margin-left : 1em;
+	line-height:185%;
+}
+
+a#cartmenulink, a#cartmenulink:hover {
+}
+a#listsmenulink, a#listsmenulink:hover {
 }
 
 body #opac-main-search #cartmenulink.yui-button {
@@ -1315,6 +1322,7 @@ body #opac-main-search #listsmenulink.yui-button {
 	background-image : url(../../images/lists-button-background.gif);
 	background-position : top left;
 	background-repeat : repeat;
+	color:#006699;
 }
 
 body #opac-main-search #cartmenulink.yui-button a {
@@ -1323,6 +1331,43 @@ body #opac-main-search #cartmenulink.yui-button a {
 	background-image : url(../../images/cart2.gif);
 	background-repeat: no-repeat;
 	background-position: left;
+	color:#336600;
+}
+
+body #opac-main-search #listsmenulink.yui-button a {
+	background-image : url(../../images/list.gif);
+	background-position : right;
+	background-repeat : no-repeat;
+	margin-right : 10px;
+	padding-right : 10px;
+}
+
+body #opac-main-search #cartmenulink.yui-button span#basket {
+	background-image : none;
+	display : inline;
+	height : auto;
+	position : relative;
+	margin : 0;
+	padding : 0;
+	left : auto;
+	right : auto;
+	top : auto;
+}
+
+body #opac-main-search #cartmenulink.yui-button span#basket span {
+	background-image : none;
+	background-color : #E6FCB7;
+	color : #000;
+	display : inline;
+	font-size : 80%;
+	font-weight : normal;
+	height : auto;
+	left : auto;
+	margin : 0 0 0 .5em;
+	padding : 0 .3em 0 .3em;
+	position : relative;
+	right : auto;
+	top : auto;
 }
 
 #export {
