@@ -387,10 +387,10 @@ sub TooMany {
     my $dbh             = C4::Context->dbh;
 	my $branch;
 	# Get which branchcode we need
-	if (C4::Context->preference('CircControl') eq 'PickupLibary'){
+	if (C4::Context->preference('CircControl') eq 'PickupLibrary'){
 		$branch = C4::Context->userenv->{'branch'}; 
 	}
-	elsif (C4::Context->preference('CircControl') eq 'PatronLibary'){
+	elsif (C4::Context->preference('CircControl') eq 'PatronLibrary'){
         $branch = $borrower->{'branchcode'}; 
 	}
 	else {
@@ -859,10 +859,10 @@ sub AddIssue {
 		
 		my $branch;
 		# Get which branchcode we need
-		if (C4::Context->preference('CircControl') eq 'PickupLibary'){
-			$branch = C4::Context->userenv->{'branchcode'}; 
+		if (C4::Context->preference('CircControl') eq 'PickupLibrary'){
+			$branch = C4::Context->userenv->{'branch'}; 
 		}
-		elsif (C4::Context->preference('CircControl') eq 'PatronLibary'){
+		elsif (C4::Context->preference('CircControl') eq 'PatronLibrary'){
 			$branch = $borrower->{'branchcode'}; 
 		}
 		else {
