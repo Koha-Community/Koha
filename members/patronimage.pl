@@ -65,13 +65,13 @@ if ($dberror) {
 # things will result... you have been warned!
 
 if ($imagedata) {
-    print header (-type => $imagedata->{'mimetype'}, -Content_Length => length ($imagedata->{'imagefile'})), $imagedata->{'imagefile'};
+    print $data->header (-type => $imagedata->{'mimetype'}, -Content_Length => length ($imagedata->{'imagefile'})), $imagedata->{'imagefile'};
     exit;
 } else {
     warn "No image exists for $cardnumber" if $DEBUG;
     my $urlbase = url(-base => 1 -rewrite => 1);
     warn "URL base: $urlbase" if $DEBUG;
-    print redirect (-uri => "$urlbase/intranet-tmpl/prog/img/patron-blank.png");
+    print $data->redirect (-uri => "$urlbase/intranet-tmpl/prog/img/patron-blank.png");
 }
 
 exit;
