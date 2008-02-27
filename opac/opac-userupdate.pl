@@ -49,8 +49,8 @@ my ( $borr, $flags ) = GetMemberDetails( $borrowernumber );
 # handle the new information....
 # collect the form values and send an email.
 my @fields = (
-    'title',     'surname',       'firstname',    'phone',
-    'fax', 'streetaddress', 'emailaddress', 'city','phonepro',
+    'surname',       'firstname',    'phone',
+    'fax', 'address','address2','city','zipcode','phone','mobile','fax','phonepro', 'emailaddress','B_streetaddress','B_city','B_zipcode','dateofbirth','sex'
 );
 my $update;
 my $updateemailaddress = C4::Context->preference('KohaAdminEmailAddress');
