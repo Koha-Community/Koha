@@ -141,6 +141,7 @@ h1#library {
 h1#libraryname {
 	background:transparent url(../../images/koha-logo.gif) no-repeat scroll 0%;
 	border: 0;
+	float : left !important;
 	margin:0;
 	padding:0;
 	width:120px;
@@ -986,43 +987,15 @@ width: 120px;
 }
 
 #fluid {
-float: right;
-width: 100%;
-margin-left: -120px;
-margin-top : .4em;
-
-/*border : 1px solid #FCC;
-padding-left : 1em;*/
-}
-
-#fluid-offset {
-margin-left: 130px;
-/*
-border: 1px dashed #FFF;*/
-}
-
-#fluid-content-1 {
-float: left;
-width: 96%;
-margin-left: 2%;
-display: inline /* fix IE6 */;
-margin-right: -1px /* fix IE6 */;
-}
-
-
-/*#fluid {
-border : 1px solid #FCC;
 margin-left: 124px;
 margin-top : .4em;
 padding-left : 1em;
 }
 
 #fluid-offset {
-border: 1px dashed #FFF;
-margin-left: 125px;
 float : right;
 width: 100%;
-}*/
+}
 
 .clearfix:after {
     content: "."; 
@@ -1205,19 +1178,10 @@ div#changelanguage a.yuimenuitemlabel {
 	text-align : center;
 }
 
-#listsmenulink {
-	margin-left: 1em;
-}
-
 a#listsmenulink, a#listsmenulink:hover {
 	color : #006699;
 	font-size : 105%;
 	line-height : 185%;
-}
-
-
-#cartmenulink .first-child a, #listsmenulink .first-child a {
-	padding: .3em 1em;
 }
 
 a#cartmenulink, a#cartmenulink:hover {
@@ -1242,6 +1206,154 @@ a#cartmenulink, a#cartmenulink:hover {
 	font-weight : normal;
 	font-size : 80%;
 	padding : 2px;
+}
+
+.btn {
+	display : block;
+	position : relative;
+	padding : 5px;
+	text-decoration : none;
+	cursor : default;
+	margin-left : .5em;
+}
+
+.btn * {
+	font-style : normal;
+	background-image : url('../../images/button-background.png');
+	background-repeat : no-repeat;
+	display : block;
+	position : relative;
+}
+
+#cartmenulink.btn span#basket {
+	background-image : none;
+	display : inline;
+	height : auto;
+	position : relative;
+	margin : 0;
+	padding : 0;
+	left : auto;
+	right : auto;
+	top : auto;
+}
+
+#cartmenulink.btn span#basket span {
+	background-image : none;
+	background-color : #E6FCB7;
+	color : #000;
+	display : inline;
+	font-size : 80%;
+	font-weight : normal;
+	height : auto;
+	left : auto;
+	margin : 0 .5em 0 .5em;
+	padding : 0 .3em 0 .3em;
+	position : relative;
+	right : auto;
+	top : auto;
+}
+
+#cartmenulink.btn img {
+	background-image : none;
+	float : left;
+	padding : 3px 3px 0 3px;
+}
+
+#listsmenulink.btn img {
+	background-image : none;
+	display : inline;
+	padding : 0 0 2px 3px;
+}
+
+.btn i {
+	background-position : top left;
+	position : absolute;
+	margin-bottom : -5px;
+	top : 0;
+	left : 0;
+	width : 5px;
+	height : 5px;
+}
+
+.btn span {
+	background-position : bottom left;
+	left : -5px;
+	padding : 0 0 5px 10px;
+	margin-bottom : -5px;
+}
+
+.btn span i {
+	background-position : bottom right;
+	margin-bottom : 0;
+	position : absolute;
+	left : 100%;
+	width : 10px;
+	height : 100%;
+	top : 0;
+}
+
+.btn span span {
+	background-position : top right;
+	position : absolute;
+	right : -10px;
+	margin-left : 10px;
+	top : -5px;
+	height : 0;
+}
+
+* html .btn span,	* html .btn i {
+	float : left;
+	width : auto;
+	background-image : none;
+	cursor : pointer;
+}
+
+.btn.blue {
+	background : #9fbfff;
+}
+
+.btn.blue:hover {
+	background-color : #6699FF;
+	background-image : none;
+}
+
+.btn.green {
+	background : #98CB58;
+}
+
+.btn.green:hover {
+	background-color : #98CB58;
+	background-image : none;
+}
+
+.btn:active {
+	background-color : #444;
+}
+
+.btn[class] {
+	background-image : url('../../images/button-background-gradient.png');
+	background-position : 0 0;
+}
+
+.btn[class]:hover {
+	background-image : url('../../images/button-background-gradient.png');
+	background-position : 0 -200px;
+}
+
+* html .btn {
+	border : 1px solid #aaa;
+}
+
+* html .btn.blue {
+	border-color : #2ae;
+}
+
+* html .btn.green {
+	border-color : #9d4;
+}
+
+* html .btn:hover {
+	border-color : #a00;
 }
 
 div#menu {
@@ -1294,80 +1406,7 @@ div#menu li.active a:hover {
 #searchsubmit {
 	cursor : default;
 	font-size : 87%;
-}
-
-body #opac-main-search #searchsubmit.yui-button {
-	margin :  -.3em 0.25em;
-}
-
-body #opac-main-search #cartmenulink.yui-button , body #opac-main-search #listsmenulink.yui-button  {
-	font-size:105%;
-	margin-bottom : -1em;
-	margin-left : 1em;
-	line-height:185%;
-}
-
-a#cartmenulink, a#cartmenulink:hover {
-}
-a#listsmenulink, a#listsmenulink:hover {
-}
-
-body #opac-main-search #cartmenulink.yui-button {
-	background-image : url(../../images/cart-button-background.gif);
-	background-position : top left;
-	background-repeat : repeat;
-}
-
-body #opac-main-search #listsmenulink.yui-button {
-	background-image : url(../../images/lists-button-background.gif);
-	background-position : top left;
-	background-repeat : repeat;
-	color:#006699;
-}
-
-body #opac-main-search #cartmenulink.yui-button a {
-	margin-left : 3px;
-	padding-left : 25px;
-	background-image : url(../../images/cart2.gif);
-	background-repeat: no-repeat;
-	background-position: left;
-	color:#336600;
-}
-
-body #opac-main-search #listsmenulink.yui-button a {
-	background-image : url(../../images/list.gif);
-	background-position : right;
-	background-repeat : no-repeat;
-	margin-right : 10px;
-	padding-right : 10px;
-}
-
-body #opac-main-search #cartmenulink.yui-button span#basket {
-	background-image : none;
-	display : inline;
-	height : auto;
-	position : relative;
-	margin : 0;
-	padding : 0;
-	left : auto;
-	right : auto;
-	top : auto;
-}
-
-body #opac-main-search #cartmenulink.yui-button span#basket span {
-	background-image : none;
-	background-color : #E6FCB7;
-	color : #000;
-	display : inline;
-	font-size : 80%;
-	font-weight : normal;
-	height : auto;
-	left : auto;
-	margin : 0 0 0 .5em;
-	padding : 0 .3em 0 .3em;
-	position : relative;
-	right : auto;
-	top : auto;
+	margin-top : -.1em;
 }
 
 #export {
@@ -1403,8 +1442,4 @@ body #opac-main-search #cartmenulink.yui-button span#basket span {
 	padding: 0;
 	position: relative;
 	width: 100px;
-}
-
-#searchsubmit button {
-	padding :  0 3px;
 }
