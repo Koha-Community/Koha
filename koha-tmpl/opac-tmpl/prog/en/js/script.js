@@ -72,16 +72,7 @@ YAHOO.util.Event.onContentReady("listsmenu", function () {
 	    new YAHOO.widget.Button("searchsubmit");
 	    new YAHOO.widget.Button("cartmenulink");
 	    new YAHOO.widget.Button("listsmenulink");
-   /*	$('.btn').each(function(){
-	  var b = $(this);
-	  var tt = b.text() || b.val();
-	  if ($(':submit,:button',this)) {
-	  b = $('<a>').insertAfter(this). addClass(this.className).attr('id',this.id);
-	  $(this).remove();
-	  }
-	  b.text('').css({cursor:'pointer'}). prepend('<i></i>')
-	  .append( $('<span>').text(tt).append('<i></i><span></span>') );
-	  }); */
+	$("#cartmenulink").find("a").append(" <span class=\"cartcount\" style=\"background-color : #FFC; font-size : 79%; padding: 2px;\">18</span>");
 	$("#searchsubmit").click(function(){
 		$("#searchform").submit();
 	})

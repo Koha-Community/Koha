@@ -10,7 +10,7 @@
 <script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/animation/animation-min.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/container/container-min.js"></script> 
 <script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/menu/menu-min.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/button/button-min.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/button/button-beta-min.js"></script>
 
 <script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/utilities/utilities.js"></script>
 <!-- TMPL_IF name="opacstylesheet" --><link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="opacstylesheet" -->" /><!-- TMPL_ELSE -->
