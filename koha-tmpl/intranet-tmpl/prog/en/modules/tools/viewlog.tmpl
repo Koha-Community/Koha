@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Tools &rsaquo; Logs</title>
+<title>Koha &rsaquo; Tools &rsaquo; <!-- TMPL_IF NAME="do_it" -->Logs &rsaquo; Results<!-- TMPL_ELSE -->Logs<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 </head>
@@ -7,7 +7,7 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; Logs</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <!-- TMPL_IF NAME="do_it" --><a href="/cgi-bin/koha/tools/viewlog.pl">Logs</a> &rsaquo; Results<!-- TMPL_ELSE -->Logs<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -81,13 +81,13 @@
 </fieldset>
     
     <!-- TMPL_IF NAME="do_it" -->
-        <p>
         <!-- TMPL_IF NAME="total" -->
-            <b><!-- TMPL_VAR NAME="total" --> lines found.</b>
+            <h4><!-- TMPL_VAR NAME="total" --> lines found.</h4>
         <!-- TMPL_ELSE -->
-            <b><span class="problem">No log found.</span></b>
+            <div class="dialog alert">No log found
+			<!-- TMPL_IF EXPR="module eq 'CATALOGUING'" -->for <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="object" -->">Bibliographic Record <!-- TMPL_VAR NAME="object" --></a><!-- /TMPL_IF --><!-- TMPL_IF EXPR="module eq 'MEMBERS'" -->for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="object" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</a><!-- /TMPL_IF -->
+			.</div>
         <!-- /TMPL_IF -->
-        </p>
     <!-- /TMPL_IF -->
     <table>
     <tr>
@@ -191,7 +191,8 @@
 <!-- TMPL_IF NAME="menu" -->
     <!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
 <!-- TMPL_ELSE -->
-    <!-- TMPL_INCLUDE NAME="tools-menu.inc" -->
+	
+    <!-- TMPL_IF EXPR="module eq 'CATALOGUING'" --><!-- TMPL_INCLUDE NAME="biblio-view-menu.inc" --><!-- TMPL_ELSE --><!-- TMPL_INCLUDE NAME="tools-menu.inc" --><!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 </div>
 </div>

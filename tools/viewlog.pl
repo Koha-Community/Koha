@@ -115,6 +115,7 @@ if ($do_it) {
     if ( $output eq "screen" ) {
         # Printing results to screen
         $template->param (
+			logview => 1,
             total    => $total,
             $module  => 1,
             looprow  => $results,
