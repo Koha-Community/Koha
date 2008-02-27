@@ -11,28 +11,54 @@
 <!-- TMPL_LOOP name="BORROWER_INFO" -->
 
 <h3><a href="/cgi-bin/koha/opac-user.pl"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->'s account</a> <img src="<!-- TMPL_VAR NAME="themelang" -->../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Update Your Personal Details</h3>
-
 <p>Please make any necessary changes to your record.  Submitting the form will notify a library staff member, who will make the changes permanent.</p>
+<div class="yui-u first">
+
 <form action="/cgi-bin/koha/opac-userupdate.pl" method="get">
 <input type="hidden" name="modify" value="yes" />
-<fieldset class="rows"><ol>
-<li><label for="surname">Last Name:</label> <input id="surname" type="text"  size="28" value="<!-- TMPL_VAR name="surname" -->"  name="surname" /></li>
-
+<fieldset class="brief"><legend>Name</legend><ol>
 <li><label for="firstname">First Name:</label> <input id="firstname" type="text"  size="28" value="<!-- TMPL_VAR name="firstname" -->"  name="firstname" /></li>
+<li><label for="surname">Last Name:</label> <input id="surname" type="text"  size="28" value="<!-- TMPL_VAR name="surname" -->"  name="surname" /></li>
+</ol>
+</fieldset>
 
+<fieldset class="brief"><legend>Mailing Address</legend>
+<ol>
 <li>
-    <label for="streetaddress">Mailing Address:</label>
-        <textarea id="streetaddress" cols="25"  name="streetaddress"><!--TMPL_VAR NAME="streetnumber"--> <!-- TMPL_VAR name="address" --> <!-- TMPL_VAR NAME="zipcode"--></textarea>
+    <label for="streetaddress">Address:</label>
+	<input type="text" size="28" name="address" value="<!-- TMPL_VAR NAME="address" -->" id="address" />
 </li>
-
+<li><input type="text" size="28" name="address2" value="<!-- TMPL_VAR NAME="address2" -->" id="address2" /></li>
 <li><label for="city">City, State:</label> <input id="city" type="text"  size="28" value="<!-- TMPL_VAR name="city" -->"  name="city" /></li>
-
+<li><label for="zipcode">Zip Code: </label><input id="zipcode" name="zipcode" size="28" value="<!-- TMPL_VAR NAME="zipcode" -->" /></li>
+</ol>
+</fieldset>
+<fieldset class="brief"><legend>Contact Information</legend>
+<ol>
 <li><label for="phone">Home Phone:</label> <input id="phone" type="text"  size="28" value="<!-- TMPL_VAR name="phone" -->"  name="phone" /></li>
+<li><label for="mobile">Mobile Phone:</label> <input id="mobile" type="text"  size="28" value="<!-- TMPL_VAR name="mobile" -->"  name="mobile" /></li>
+<li><label for="fax">Fax:</label> <input id="fax" type="text"  size="28" value="<!-- TMPL_VAR name="fax" -->"  name="fax" /></li>
 
-<li><label for="faxnumber">Work/Fax phone:</label> <input id="faxnumber"  type="text"  size="28" value="<!-- TMPL_VAR name="fax" -->"  name="faxnumber" /></li>
+<li><label for="phonepro">Work phone:</label> <input id="phonepro"  type="text"  size="28" value="<!-- TMPL_VAR name="phonepro" -->"  name="phonepro" /></li>
 
 <li><label for="emailaddress">Email:</label> <input id="emailaddress" type="text"  size="28" value="<!-- TMPL_VAR name="email" -->"  name="emailaddress" /></li>
+</ol>
+</fieldset>
+</div>
+<div class="yui-u">
+<fieldset class="brief">
+<legend>Permanent Address</legend>
+<ol>
+<li>
+    <label for="B_streetaddress">Permanent or Alternate Address:</label>
+        <textarea id="B_streetaddress" cols="25"  name="B_streetaddress"><!--TMPL_VAR NAME="B_streetnumber"--> <!-- TMPL_VAR name="B_address" --> <!-- TMPL_VAR NAME="B_zipcode"--></textarea>
+</li>
+
+<li><label for="B_city">City, State:</label> <input id="B_city" type="text"  size="28" value="<!-- TMPL_VAR name="B_city" -->"  name="B_city" /></li>
+
+<li><label for="dob">Date of Birth: </label> <input id="dob" type="text" size="10" value="<!-- TMPL_VAR NAME="dateofbirth" -->" name="dateofbirth" /></li>
 </ol></fieldset>
+</div>
 <fieldset class="action">
 <input type="submit" value="Submit Changes" /> <a class="cancel" href="/cgi-bin/koha/opac-userdetails.pl">Cancel</a></fieldset>
 </form>
