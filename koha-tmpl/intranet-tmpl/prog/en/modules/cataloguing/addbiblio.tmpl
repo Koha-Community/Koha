@@ -1,12 +1,12 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Cataloging &rsaquo; <!-- TMPL_IF NAME="biblionumber" -->Edit MARC Record Number <!-- TMPL_VAR name="biblionumber" --><!-- TMPL_ELSE -->Add MARC Record<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/yui/plugins/bubbling-min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 
 	 $(document).ready(function() {
  		$('#addbibliotabs').tabs();
-		$("#loading,.loading").hide();
 	 });
 
 function confirmnotdup(){
@@ -420,12 +420,12 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 <link rel="stylesheet" href="<!-- TMPL_VAR NAME="themelang" -->/css/addbiblio.css" />
 </head>
 <body>
-<script type="text/javascript">
-//<![CDATA[
-	   document.write("<div id=\"loading\"></div><div class=\"loading\">Loading...</div>");
-//]]>
-</script>
-
+<div id="yui-cms-loading">
+      <div id="yui-cms-float">
+          Loading, please wait...
+      </div>
+  </div>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/yui/plugins/loading-min.js"></script> 
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloguing</a>  &rsaquo; <!-- TMPL_IF NAME="biblionumber" -->Edit MARC Record Number <!-- TMPL_VAR name="biblionumber" --><!-- TMPL_ELSE -->Add MARC Record<!-- /TMPL_IF --></div>
 
