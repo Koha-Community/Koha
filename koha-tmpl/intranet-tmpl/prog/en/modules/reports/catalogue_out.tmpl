@@ -37,7 +37,8 @@
 						<!-- TMPL_VAR NAME="rowtitle" --></td>
 						<!-- TMPL_LOOP NAME="loopcell" -->
 							<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td ><!-- /TMPL_IF -->
-								<!-- TMPL_IF NAME="value" --><!-- TMPL_VAR NAME="value" --><!-- /TMPL_IF -->
+							<p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR name="title" --></a></p>
+							<!-- TMPL_VAR name="author" --> <!--TMPL_IF name="barcode" -->Barcode : <!-- TMPL_VAR name="barcode" --><!-- /TMPL_IF -->
 							</td>
 						<!-- /TMPL_LOOP -->
 					</tr>
