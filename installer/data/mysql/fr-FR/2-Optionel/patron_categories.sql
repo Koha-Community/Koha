@@ -6,9 +6,9 @@ INSERT INTO `categories` (`categorycode`, `description`, `enrolmentperiod`, `upp
 ('ADO','Adolescent',99,17,5,NULL,NULL,'0.000000',1,NULL,'0.000000','C'),
 
 ('PROF','Professeur',99,999,18,NULL,NULL,'0.000000',0,NULL,'0.000000','P'),
-('PERS','Personnel bibliothèque',99,999,18,NULL,NULL,'0.000000',0,NULL,'0.000000','P'),
+('PERS','Personnel bibliothÃ¨que',99,999,18,NULL,NULL,'0.000000',0,NULL,'0.000000','P'),
 
-('PEB','Prêt Entre Bibliothèque',99,999,18,NULL,NULL,'0.000000',1,NULL,'0.000000','I'),
+('PEB','PrÃªt Entre BibliothÃ¨que',99,999,18,NULL,NULL,'0.000000',1,NULL,'0.000000','I'),
 ('PMI','PMI',99,999,18,NULL,NULL,'0.000000',1,NULL,'0.000000','I'),
-('BDP','Bibliothèque Départementale',99,999,18,NULL,NULL,'0.000000',1,NULL,'0.000000','I');
+('BDP','BibliothÃ¨que DÃ©partementale',99,999,18,NULL,NULL,'0.000000',1,NULL,'0.000000','I');
 
