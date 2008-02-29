@@ -3,15 +3,15 @@
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
 	 $(document).ready(function() {
- 			var $tabs = $('#bibliodescriptions').tabs({
-   			onClick: function(tab) {
-		       if ( $(tab).is('.external') ) {
-		           location.href = tab.href;
-		           return false;
-		       }
-		   }
-		});
-	 }); 
+var $tabs = $('#bibliodescriptions > ul').tabs({
+    click: function(tab) {
+        if ( $(tab).attr("class") == 'external') {
+            location.href = tab.href;
+            return false;
+        }
+    }
+}); 
+}); 
 //]]>
 </script>
 </head>
@@ -83,10 +83,10 @@
 	<!-- TMPL_IF NAME="pages" --><p><span class="label">Physical details:</span> <!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></p><!-- /TMPL_IF -->
     <!-- COinS / OpenURL -->
     <!-- TMPL_IF NAME="ocoins_format" -->
-    <span class="Z3988" title="ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3A<!-- TMPL_VAR NAME="ocoins_format" -->&rft.au=<!-- TMPL_VAR NAME="author" -->&rft.btitle=<!-- TMPL_VAR NAME="title" -->&rft.date=<!-- TMPL_VAR NAME="publicationyear" -->&rft.tpages=<!-- TMPL_VAR NAME="size" -->&rft.isbn=<!-- TMPL_VAR NAME=isbn -->&rft.aucorp=&rft.place=<!-- TMPL_VAR NAME="place" -->&rft.pub=<!-- TMPL_VAR NAME="publisher" -->&rft.edition=<!-- TMPL_VAR NAME="edition" -->&rft.series=<!-- TMPL_VAR NAME="series" -->&rft.genre="></span><!-- /TMPL_IF -->
+    <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3A<!-- TMPL_VAR NAME="ocoins_format" -->&amp;rft.au=<!-- TMPL_VAR NAME="author" -->&amp;rft.btitle=<!-- TMPL_VAR NAME="title" -->&amp;rft.date=<!-- TMPL_VAR NAME="publicationyear" -->&amp;rft.tpages=<!-- TMPL_VAR NAME="size" -->&amp;rft.isbn=<!-- TMPL_VAR NAME=isbn -->&amp;rft.aucorp=&amp;rft.place=<!-- TMPL_VAR NAME="place" -->&amp;rft.pub=<!-- TMPL_VAR NAME="publisher" -->&amp;rft.edition=<!-- TMPL_VAR NAME="edition" -->&amp;rft.series=<!-- TMPL_VAR NAME="series" -->&amp;rft.genre="></span><!-- /TMPL_IF -->
     <!-- TMPL_IF name="isbn" -->
     <!-- unAPI <abbr/> tag -->
-    <p><span class="label">ISBN: </span><abbr class="unapi-id" title="koha:isbn:<!-- TMPL_VAR NAME="isbn" -->"><!-- TMPL_VAR NAME="isbn" --></abbr></a>
+    <p><span class="label">ISBN: </span><abbr class="unapi-id" title="koha:isbn:<!-- TMPL_VAR NAME="isbn" -->"><!-- TMPL_VAR NAME="isbn" --></abbr></p>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF name="issn" -->
     <p><span class="label">ISSN:</span><!-- TMPL_VAR NAME="issn" --></p>
@@ -140,6 +140,7 @@
     </p>
     <!-- TMPL_IF name="MARCURLS" -->
 	<p><span class="label">Online Resources:</span>
+    </p>
     <ul>    <!-- TMPL_LOOP name="MARCURLS" -->
 		<li><!-- TMPL_IF NAME="part" --><!-- TMPL_VAR NAME="part" -->
 			<br /><!-- /TMPL_IF --> 
@@ -147,7 +148,6 @@
 		<a href="<!-- TMPL_VAR NAME="MARCURL" -->"><!-- TMPL_VAR NAME="linktext" --></a>
 			<!-- TMPL_IF NAME="notes" --><ul><!-- TMPL_LOOP NAME="notes" --><li><!-- TMPL_VAR NAME="note" --></li><!-- /TMPL_LOOP --></ul><!-- /TMPL_IF --></li>
             <!-- /TMPL_LOOP --></ul>
-    </p>
     <!-- /TMPL_IF -->
 </div>
 </div>
@@ -219,7 +219,7 @@
 	<li></li>
 </ul>
 
-<div id="holdings" class="tabs-container">
+<div id="holdings">
 <!-- TMPL_IF name="count" -->
     <table>
         <tr>
@@ -272,7 +272,7 @@
 <!-- /TMPL_IF -->
 </div>
 
-<div id="descriptions" class="tabs-container">
+<div id="descriptions">
 <!-- TMPL_IF NAME="AmazonContent" --><!-- TMPL_IF NAME="item_description" --><strong>Description (from Amazon.com):</strong><ul><li><!-- TMPL_VAR NAME="item_description" --></li></ul><!-- /TMPL_IF --><!-- /TMPL_IF -->
  <!-- TMPL_IF name="MARCNOTES" -->
         <!-- TMPL_LOOP NAME="MARCNOTES" -->
@@ -286,7 +286,7 @@
 </div>
 
 <!-- TMPL_IF name="subscriptionsnumber" -->
-<div id="subscriptions" class="tabs-container">
+<div id="subscriptions">
     <h2>This is a serial subscription</h2>
     <p> (There are <!-- TMPL_VAR name="subscriptionsnumber" --> subscriptions associated with this title).</p>
     <!-- TMPL_LOOP Name="subscriptions" -->
@@ -334,7 +334,7 @@
 
 
 <!-- TMPL_IF NAME="reviewson" -->
-<div id="comments" class="tabs-container">
+<div id="comments">
 <!-- TMPL_IF NAME="reviews" -->
         <!--TMPL_LOOP NAME="reviews"-->
             <h5>
@@ -364,7 +364,7 @@
 	</div>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="OPACFRBRizeEditions" --><div id="editions" class="tabs-container">
+<!-- TMPL_IF NAME="OPACFRBRizeEditions" --><div id="editions">
 
 <h2>Other Editions of this Work</h2>
 <!-- TMPL_IF NAME="XISBNS" -->
@@ -388,7 +388,7 @@
 
 <!-- TMPL_IF NAME="AmazonContent" -->
 <!-- Amazon Reviews -->
-<div id="amazonreviews" class="tabs-container">
+<div id="amazonreviews">
         
     <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
     <!-- TMPL_IF NAME="isbn" -->
@@ -444,7 +444,6 @@ title="<!-- TMPL_VAR NAME="itype" -->" /><!-- /TMPL_IF -->
 
 </div>
 
-</div>
 </div>
 </div>
 	<!-- TMPL_IF NAME="OpacNav" --><div class="yui-b"><!--TMPL_INCLUDE NAME="navigation.inc" --></div><!-- /TMPL_IF -->

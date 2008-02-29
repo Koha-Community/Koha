@@ -6,9 +6,10 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
-     $(document).ready(function() {
-        $('#opac-user-views').tabs();
-     });
+            $(function() {
+                        $('#opac-user-views > ul').tabs();
+                
+            });
 //]]>
 </script>
 </head>
@@ -21,7 +22,7 @@
     <div class="yui-b"><div class="yui-g">
 
     <!-- TMPL_LOOP NAME="BORROWER_INFO" -->
-        <h2>Hello, <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> <span class="hint">(<a href="/cgi-bin/koha/opac-logout.pl">Click here</a> if you're not <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->)</span></h2>
+        <h2>Hello, <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> <span class="hint">(<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Click here</a> if you're not <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->)</span></h2>
         
 		<!-- TMPL_IF NAME="patronupdate" --><div class="dialog message"><h3>Thank you!</h3><p>Your corrections have been submitted to the library, and a staff member will update your record as soon as possible.</p></div><!-- /TMPL_IF -->
 		
@@ -56,9 +57,8 @@
         
         <!-- FINES BOX -->
         <!-- TMPL_IF NAME="amountoverfive" -->
-            <div id="opac-user-fines">
+            <div id="opac-user-fines"> <h3>Fines and Charges</h3>
             <table>
-                <caption>Fines and Charges</caption>
                 <tr><th colspan="2">Amount</th></tr>
                 <tr>
                     <td>You currently owe fines and charges amounting to:</td>
@@ -76,7 +76,7 @@
             </table></div>
         <!-- /TMPL_IF -->
 
-        <!-- TMPL_IF NAME"amountlessthanzero" -->
+        <!-- TMPL_IF NAME="amountlessthanzero" -->
           <div id="opac-user-fines">  <h3>Credits</h3>
             <table>
             <tr><th colspan="2">Amount</th></tr>

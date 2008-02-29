@@ -43,4 +43,4 @@ my $biblionumber = $query->param('biblionumber');
 if ($biblionumber and $borrowernumber) {
 	CancelReserve($biblionumber, '', $borrowernumber);
 }
-print $query->redirect("/cgi-bin/koha/opac-user.pl");
+print $query->redirect("/cgi-bin/koha/opac-user.pl#opac-user-holds");
