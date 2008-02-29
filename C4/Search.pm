@@ -1799,7 +1799,7 @@ sub NZoperatorAND{
         my $value = $_;
         my $countvalue;
         ( $value, $countvalue ) = ( $1, $2 ) if ($value=~/(.*)-(\d+)$/);
-        if ( $rightresult =~ /$value-(\d+);/ ) {
+        if ( $rightresult =~ /\Q$value\E-(\d+);/ ) {
             $countvalue = ( $1 > $countvalue ? $countvalue : $1 );
             $finalresult .=
                 "$value-$countvalue;$value-$countvalue;";
