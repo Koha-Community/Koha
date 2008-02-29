@@ -35,23 +35,23 @@ function confirm_reregistration() {
 
 	function yuiToolbar() {
 	    var printmenu = [
-	        { text: "Print Page", url: "/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page" },
-	        { text: "Print Slip", url: "/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip" }
+	        { text: _("Print Page"), url: "/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page" },
+	        { text: _("Print Slip"), url: "/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip" }
 	    ];
 	
 		var moremenu = [
-			{ text: "Renew Patron",  onclick: { fn: confirm_reregistration } },
-            { text: "Set Permissions", url: "/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->"
+			{ text: _("Renew Patron"),  onclick: { fn: confirm_reregistration } },
+            { text: _("Set Permissions"), url: "/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->"
                 <!-- TMPL_IF NAME="CAN_user_permission" --><!-- TMPL_IF NAME="StaffMember" -->
                     <!-- TMPL_UNLESS NAME="CAN_user_staffaccess" -->, disabled: true<!-- /TMPL_UNLESS-->
                     <!-- TMPL_ELSE --><!-- /TMPL_IF -->
                 <!-- TMPL_ELSE -->, disabled: true<!-- /TMPL_IF-->},
-            { text: "Delete", <!-- TMPL_IF NAME="StaffMember" --><!-- TMPL_UNLESS NAME="CAN_user_staffaccess" -->disabled: true, <!-- /TMPL_UNLESS --><!-- /TMPL_IF --> onclick: { fn: confirm_deletion } }
+            { text: _("Delete"), <!-- TMPL_IF NAME="StaffMember" --><!-- TMPL_UNLESS NAME="CAN_user_staffaccess" -->disabled: true, <!-- /TMPL_UNLESS --><!-- /TMPL_IF --> onclick: { fn: confirm_deletion } }
 		]
 
 	    new YAHOO.widget.Button({
 	        type: "menu",
-	        label: "Print",
+	        label: _("Print"),
 	        name: "printmenubutton",
 	        menu: printmenu,
 	        container: "printmenuc"
@@ -59,7 +59,7 @@ function confirm_reregistration() {
 	
 	    new YAHOO.widget.Button({
 	        type: "menu",
-	        label: "More",
+	        label: _("More"),
 	        name: "moremenubutton",
 	        menu: moremenu,
 	        container: "moremenuc"

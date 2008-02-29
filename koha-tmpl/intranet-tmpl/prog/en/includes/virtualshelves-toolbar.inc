@@ -17,9 +17,9 @@
 			deleteshelfButton = new YAHOO.widget.Button({
                                             id: "deleteshelf", 
                                             type: "button", 
-                                            label: "Delete List", 
+                                            label: _("Delete List"), 
                                             container: "deleteshelfc",
-											onclick: {fn:function(){confirmDelete("Are you sure you want to delete this shelf?")}}
+											onclick: {fn:function(){confirmDelete(_("Are you sure you want to delete this shelf?"))}}
                                         });
 	}
 
