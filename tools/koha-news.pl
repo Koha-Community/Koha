@@ -60,8 +60,8 @@ my $tlangs = getTranslatedLanguages() ;
 foreach my $language ( @$tlangs ) {
     push @lang_list,
       {
-        language => $language->{'language'},
-        selected => ( $new_detail->{lang} eq $language->{'language'} ? 1 : 0 ),
+        language => $language->{'rfc4646_subtag'},
+        selected => ( $new_detail->{lang} eq $language->{'rfc4646_subtag'} ? 1 : 0 ),
       };
 }
 
