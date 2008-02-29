@@ -28,6 +28,7 @@ use C4::Biblio;
 use C4::Items;
 use C4::Members;
 use C4::Dates;
+use C4::Calendar;
 use Date::Calc qw(
   Today
   Today_and_Now
@@ -955,7 +956,7 @@ sub AddIssue {
                     "UPDATE branchtransfers 
                         SET datearrived = now(),
                         tobranch = ?,
-                        comments = 'Forced branchtransfert'
+                        comments = 'Forced branchtransfer'
                     WHERE itemnumber= ? AND datearrived IS NULL"
                     );
                     $sth->execute(C4::Context->userenv->{'branch'},$item->{'itemnumber'});
@@ -979,11 +980,7 @@ sub AddIssue {
         	    $itype,
                 $branch
         	);
-        	$datedue  = time + ($loanlength) * 86400;
-        	my @datearr  = localtime($datedue);
-			$dateduef = C4::Dates->new( sprintf("%04d-%02d-%02d", 1900 + $datearr[5], $datearr[4] + 1, $datearr[3]), 'iso');
-			$dateduef=CheckValidDatedue($dateduef,$item->{'itemnumber'},C4::Context->userenv->{'branch'});
-		
+			$dateduef = CalcDateDue(C4::Dates->new(),$loanlength,$branch);
 		# if ReturnBeforeExpiry ON the datedue can't be after borrower expirydate
         	if ( C4::Context->preference('ReturnBeforeExpiry') && $dateduef->output('iso') gt $borrower->{dateexpiry} ) {
         	    $dateduef = C4::Dates->new($borrower->{dateexpiry},'iso');
@@ -1654,15 +1651,16 @@ sub AddRenewal {
              (C4::Context->preference('item-level_itypes')) ? $biblio->{'itype'} : $biblio->{'itemtype'} ,
 			$borrower->{'branchcode'}
         );
-		#FIXME --  choose issuer or borrower branch.
-		#FIXME -- where's the calendar ?
+		#FIXME --  choose issuer or borrower branch -- use circControl.
+
 		#FIXME -- $debug-ify the (0)
-        my @darray = Add_Delta_DHMS( Today_and_Now(), $loanlength, 0, 0, 0 );
-        $datedue = C4::Dates->new( sprintf("%04d-%02d-%02d",@darray[0..2]), 'iso');
-		(0) and print STDERR  "C4::Dates->new->output = " . C4::Dates->new()->output()
-		 		. "\ndatedue->output = " . $datedue->output()
-		 		. "\n(Y,M,D) = " . join ',', @darray;
-		$datedue=CheckValidDatedue($datedue,$itemnumber,$branch);
+        #my @darray = Add_Delta_DHMS( Today_and_Now(), $loanlength, 0, 0, 0 );
+        #$datedue = C4::Dates->new( sprintf("%04d-%02d-%02d",@darray[0..2]), 'iso');
+		#(0) and print STDERR  "C4::Dates->new->output = " . C4::Dates->new()->output()
+		# 		. "\ndatedue->output = " . $datedue->output()
+		# 		. "\n(Y,M,D) = " . join ',', @darray;
+		#$datedue=CheckValidDatedue($datedue,$itemnumber,$branch,$loanlength);
+		$datedue =  CalcDateDue(C4::Dates->new(),$loanlength,$branch);
     }
 
     # Find the issues record for this book
@@ -1961,19 +1959,44 @@ sub UpdateHoldingbranch {
     ModItem({ holdingbranch => $branch }, undef, $itemnumber);
 }
 
-=head2 CheckValidDatedue
+=head2 CalcDateDue
 
-$newdatedue = CheckValidDatedue($date_due,$itemnumber,$branchcode);
-this function return a new date due after checked if it's a repeatable or special holiday
-C<$date_due>   = returndate calculate with no day check
-C<$itemnumber>  = itemnumber
-C<$branchcode>  = localisation of issue 
-
+$newdatedue = CalcDateDue($startdate,$loanlength,$branchcode);
+this function calculates the due date given the loan length ,
+checking against the holidays calendar as per the 'useDaysMode' syspref.
+C<$startdate>   = C4::Dates object representing start date of loan period (assumed to be today)
+C<$branch>  = location whose calendar to use
+C<$loanlength>  = loan length prior to adjustment
 =cut
 
-# Why not create calendar object?  - 
-# TODO add 'duedate' option to useDaysMode .
-sub CheckValidDatedue { 
+sub CalcDateDue { 
+	my ($startdate,$loanlength,$branch) = @_;
+	if(C4::Context->preference('useDaysMode') eq 'Days') {  # ignoring calendar
+		my $datedue = time + ($loanlength) * 86400;
+	#FIXME - assumes now even though we take a startdate 
+		my @datearr  = localtime($datedue);
+		return C4::Dates->new( sprintf("%04d-%02d-%02d", 1900 + $datearr[5], $datearr[4] + 1, $datearr[3]), 'iso');
+	} else {
+	warn $branch;
+		my $calendar = C4::Calendar->new(  branchcode => $branch );
+		my $datedue = $calendar->addDate($startdate, $loanlength);
+		return $datedue;
+	}
+}
+
+=head2 CheckValidDatedue
+       This function does not account for holiday exceptions nor does it handle the 'useDaysMode' syspref .
+       To be replaced by CalcDateDue() once C4::Calendar use is tested.
+
+$newdatedue = CheckValidDatedue($date_due,$itemnumber,$branchcode);
+this function validates the loan length against the holidays calendar, and adjusts the due date as per the 'useDaysMode' syspref.
+C<$date_due>   = returndate calculate with no day check
+C<$itemnumber>  = itemnumber
+C<$branchcode>  = location of issue (affected by 'CircControl' syspref)
+C<$loanlength>  = loan length prior to adjustment
+=cut
+
+sub CheckValidDatedue {
 my ($date_due,$itemnumber,$branchcode)=@_;
 my @datedue=split('-',$date_due->output('iso'));
 my $years=$datedue[0];
@@ -1982,24 +2005,25 @@ my $day=$datedue[2];
 # die "Item# $itemnumber ($branchcode) due: " . ${date_due}->output() . "\n(Y,M,D) = ($years,$month,$day)":
 my $dow;
 for (my $i=0;$i<2;$i++){
-	$dow=Day_of_Week($years,$month,$day);
-	($dow=0) if ($dow>6);
-	my $result=CheckRepeatableHolidays($itemnumber,$dow,$branchcode);
-	my $countspecial=CheckSpecialHolidays($years,$month,$day,$itemnumber,$branchcode);
-	my $countspecialrepeatable=CheckRepeatableSpecialHolidays($month,$day,$itemnumber,$branchcode);
-		if (($result ne '0') or ($countspecial ne '0') or ($countspecialrepeatable ne '0') ){
-		$i=0;
-		(($years,$month,$day) = Add_Delta_Days($years,$month,$day, 1))if ($i ne '1');
-		}
-	}
-	my $newdatedue=C4::Dates->new(sprintf("%04d-%02d-%02d",$years,$month,$day),'iso');
+    $dow=Day_of_Week($years,$month,$day);
+    ($dow=0) if ($dow>6);
+    my $result=CheckRepeatableHolidays($itemnumber,$dow,$branchcode);
+    my $countspecial=CheckSpecialHolidays($years,$month,$day,$itemnumber,$branchcode);
+    my $countspecialrepeatable=CheckRepeatableSpecialHolidays($month,$day,$itemnumber,$branchcode);
+        if (($result ne '0') or ($countspecial ne '0') or ($countspecialrepeatable ne '0') ){
+        $i=0;
+        (($years,$month,$day) = Add_Delta_Days($years,$month,$day, 1))if ($i ne '1');
+        }
+    }
+    my $newdatedue=C4::Dates->new(sprintf("%04d-%02d-%02d",$years,$month,$day),'iso');
 return $newdatedue;
 }
+
 
 =head2 CheckRepeatableHolidays
 
 $countrepeatable = CheckRepeatableHoliday($itemnumber,$week_day,$branchcode);
-this function check if the date due is a repeatable holiday
+this function checks if the date due is a repeatable holiday
 C<$date_due>   = returndate calculate with no day check
 C<$itemnumber>  = itemnumber
 C<$branchcode>  = localisation of issue 

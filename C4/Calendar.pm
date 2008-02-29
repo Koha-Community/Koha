@@ -429,31 +429,28 @@ sub delete_holiday {
     $isHoliday = isHoliday($day, $month $year);
 
 
-C<$day> Is the day to check wether if is a holiday or not.
+C<$day> Is the day to check whether if is a holiday or not.
 
-C<$month> Is the month to check wether if is a holiday or not.
+C<$month> Is the month to check whether if is a holiday or not.
 
-C<$year> Is the year to check wether if is a holiday or not.
+C<$year> Is the year to check whether if is a holiday or not.
 
 =cut
 
 sub isHoliday {
     my ($self, $day, $month, $year) = @_;
-
-    my $weekday = Date_DayOfWeek($month, $day, $year) % 7;
-    
+    my $weekday = &Date::Calc::Day_of_Week($year, $month, $day) % 7; 
     my $weekDays = $self->get_week_days_holidays();
     my $dayMonths = $self->get_day_month_holidays();
     my $exceptions = $self->get_exception_holidays();
     my $singles = $self->get_single_holidays();
-
     if (defined($exceptions->{"$year/$month/$day"})) {
         return 0;
     } else {
         if ((exists($weekDays->{$weekday})) ||
             (exists($dayMonths->{"$month/$day"})) ||
             (exists($singles->{"$year/$month/$day"}))) {
-            return 1;
+		 	return 1;
         } else {
             return 0;
         }
@@ -463,40 +460,38 @@ sub isHoliday {
 
 =item addDate
 
-    my ($day, $month, $year) = $calendar->addDate($day, $month, $year, $offset)
+    my ($day, $month, $year) = $calendar->addDate($date, $offset)
 
-C<$day> Is the starting day of the interval.
-
-C<$month> Is the starting month of the interval.
-
-C<$year> Is the starting year of the interval.
+C<$date> is a C4::Dates object representing the starting date of the interval.
 
 C<$offset> Is the number of days that this function has to count from $date.
 
 =cut
 
 sub addDate {
-    my ($self, $day, $month, $year, $offset) = @_;
-    
-    if ($offset < 0) { # In case $offset is negative
+    my ($self, $startdate, $offset) = @_;
+    my ($year,$month,$day) = split("-",$startdate->output('iso'));
+	if ($offset < 0) { # In case $offset is negative
         $offset = $offset*(-1);
     }
-
-    my $daysMode = C4::Context->preference('useDaysMode');
-    if ($daysMode eq 'normal') {
-        ($year, $month, $day) = &Date::Calc::Add_Delta_Days($year, $month, $day, ($offset - 1));
-    } else {
+	my $daysMode = C4::Context->preference('useDaysMode');
+    if ($daysMode eq 'Datedue') {
+        ($year, $month, $day) = &Date::Calc::Add_Delta_Days($year, $month, $day, $offset );
+        while ($self->isHoliday($day, $month, $year)) {
+                ($year, $month, $day) = &Date::Calc::Add_Delta_Days($year, $month, $day, 1);
+        }
+    } elsif($daysMode eq 'Calendar') {
         while ($offset > 0) {
+                ($year, $month, $day) = &Date::Calc::Add_Delta_Days($year, $month, $day, 1);
             if (!($self->isHoliday($day, $month, $year))) {
                 $offset = $offset - 1;
-            }
-            if ($offset > 0) {
-                ($year, $month, $day) = &Date::Calc::Add_Delta_Days($year, $month, $day, 1);
-            }
+			}
         }
+	} else { ## ($daysMode eq 'Days') 
+        ($year, $month, $day) = &Date::Calc::Add_Delta_Days($year, $month, $day, $offset );
     }
-
-    return($day, $month, $year);
+warn  sprintf("%04d-%02d-%02d",$year,$month,$day);
+    return(C4::Dates->new( sprintf("%04d-%02d-%02d",$year,$month,$day),'iso'));
 }
 
 =item daysBetween
@@ -522,9 +517,10 @@ sub daysBetween {
     my ($self, $dayFrom, $monthFrom, $yearFrom, $dayTo, $monthTo, $yearTo) = @_;
     
     my $daysMode = C4::Context->preference('useDaysMode');
+#FIXME : useDaysMode == 'Datedue' is not implemented here, but neither is this fcn used anywhere.
     my $count = 1;
     my $continue = 1;
-    if ($daysMode eq 'normal') {
+    if ($daysMode eq 'Days') {
         while ($continue) {
             if (($yearFrom != $yearTo) || ($monthFrom != $monthTo) || ($dayFrom != $dayTo)) {
                 ($yearFrom, $monthFrom, $dayFrom) = &Date::Calc::Add_Delta_Days($yearFrom, $monthFrom, $dayFrom, 1);
