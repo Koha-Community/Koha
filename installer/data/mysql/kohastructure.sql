@@ -1362,7 +1362,7 @@ CREATE TABLE `opac_news` (
   `idnew` int(10) unsigned NOT NULL auto_increment,
   `title` varchar(250) NOT NULL default '',
   `new` text NOT NULL,
-  `lang` varchar(4) NOT NULL default '',
+  `lang` varchar(25) NOT NULL default '',
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `expirationdate` date default NULL,
   `number` int(11) default NULL,
