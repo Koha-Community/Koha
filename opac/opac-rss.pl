@@ -72,6 +72,7 @@ my $size = $cgi->param('size') || 50;
 
 # the filename of the cached rdf file.
 my $filename = md5_base64($query);
+$filename =~ s/\///g;
 my $rss = new XML::RSS( version => '1.0', encoding=>C4::Context->preference("TemplateEncoding"), output=>C4::Context->preference("TemplateEncoding"),language=>C4::Context->preference('opaclanguages'));
 
 # the site URL
@@ -88,11 +89,8 @@ if ( -e "rss/$filename" ) {
 
 # check if we have to rebuild the RSS feed (once every 30mn), or just return the actual rdf
     my $rdf_stamp = $rss->{'channel'}->{'dc'}->{'date'};
-    $rdf_stamp =~ /(.*)-(.*)-(.*):(.*):(.*):(.*)/;
-    my (
-        $stamp_year, $stamp_month, $stamp_day,
-        $stamp_hour, $stamp_min,   $stamp_sec
-    ) = ( $1, $2, $3, $4, $5, $6 );
+    my ( $stamp_year, $stamp_month, $stamp_day, $stamp_hour, $stamp_min, $stamp_sec ) =
+       ( $rdf_stamp =~ /(.*)-(.*)-(.*):(.*):(.*):(.*)/ );
 
 # if more than 30 mn since the last RDF update, rebuild the RDF. Otherwise, just return it
     unless ( ( $year - $stamp_year > 0 )
@@ -109,9 +107,9 @@ if ($RDF_update_needed) {
 
     #     warn "RDF update in progress";
     utf8::decode($query);
-    my $libname=utf8::decode(C4::Context->preference("LibraryName"));
+    my $libname = C4::Context->preference("LibraryName");
     $rss->channel(
-        title       => "Koha : $query",
+        title       => "Koha: $query",
         description => $libname,
         link        => $short_url,
         dc          => {
