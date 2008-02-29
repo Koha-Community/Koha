@@ -85,6 +85,8 @@ if (C4::Context->preference("RequestOnOpac")) {
 }
 
 my $norequests = 1;
+my $imgdir = getitemtypeimagesrc();
+my $itemtypes = GetItemTypes();
 foreach my $itm (@items) {
      $norequests = 0 && $norequests
        if ( (not $itm->{'wthdrawn'} )
@@ -93,6 +95,13 @@ foreach my $itm (@items) {
          || ($itm->{'itemnumber'} ) );
         $itm->{ $itm->{'publictype'} } = 1;
 
+    # imageurl:
+    my $itemtype = $itm->{'itemtype'};
+    if ( $itemtype ) {
+        $itm->{'imageurl'}    = $imgdir."/".$itemtypes->{$itemtype}->{'imageurl'};
+        $itm->{'description'} = $itemtypes->{$itemtype}->{'description'};
+    }
+	
         #get collection code description, too
         $itm->{'ccode'}  = GetAuthorisedValueDesc('','',   $itm->{'ccode'} ,'','','CCODE');
 }

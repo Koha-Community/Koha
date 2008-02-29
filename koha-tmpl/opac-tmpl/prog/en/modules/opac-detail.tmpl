@@ -224,7 +224,6 @@
     <table>
         <tr>
             <th>Item type</th>
-            <th>Collection</th>
             <th>Location</th>
             <th>Status</th>
             <th>Date Due</th>
@@ -234,8 +233,8 @@
         </tr>
         <!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
         <tr>
-            <td><!-- TMPL_VAR NAME="description" --></td>
-            <td><!-- TMPL_VAR NAME="ccode" --></td>
+            <td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR name="description" -->
+                    </td>
             <td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR name="location" --> <!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --></td>
             <td><!-- TMPL_IF name="bi_notforloan" -->
                     Not for loan

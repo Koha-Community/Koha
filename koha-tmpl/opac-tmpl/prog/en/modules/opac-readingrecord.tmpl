@@ -29,20 +29,26 @@ You have never borrowed anything from this library.
 <!-- /TMPL_IF -->
 </ul>
 <div class="tabs-container"><table id="readingrec">
-<tr><th><!-- TMPL_UNLESS NAME="orderbytitle" --><a
+<tr>
+<!-- TMPL_IF NAME="AmazonContent" --><th>&nbsp;</th><!-- /TMPL_IF -->
+<th><!-- TMPL_UNLESS NAME="orderbytitle" --><a
 href="/cgi-bin/koha/opac-readingrecord.pl?order=title">Title</a><!--
 TMPL_ELSE -->Title<!-- /TMPL_UNLESS --></th>
-<th><!-- TMPL_UNLESS NAME="orderbyauthor" --><a
-href="/cgi-bin/koha/opac-readingrecord.pl?order=author">Author</a><!--
-TMPL_ELSE -->Author<!-- /TMPL_UNLESS --></th>
+<th>Item Type</th>
+<th>Call No.</th>
 <th><!-- TMPL_UNLESS NAME="orderbydate" --><a href="/cgi-bin/koha/opac-readingrecord.pl">Date</a><!-- TMPL_ELSE -->Date<!-- /TMPL_UNLESS --></th>
 </tr>
 
 <!-- TMPL_LOOP NAME="READING_RECORD" -->
 
 <!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
-<td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
-<td><!-- TMPL_VAR NAME="author" --></td>
+<!-- TMPL_IF NAME="AmazonContent" --><td><!-- TMPL_IF NAME="isbn" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.THUMBZZZ.jpg" alt="Book Cover Image" class="thumbnail" /></a><!-- /TMPL_IF --></td><!-- /TMPL_IF -->
+<td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
+                    <span class="item-details">
+                        <!-- TMPL_VAR NAME="author" -->
+                    </span></td>
+<td><!-- TMPL_VAR NAME="description" --></td>
+<td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
 <td><!-- TMPL_IF NAME="returndate" --><!-- TMPL_VAR NAME="returndate" --><!-- TMPL_ELSE --><em>(Checked out)</em><!-- /TMPL_IF --></td>
 </tr>
 

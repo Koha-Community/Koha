@@ -129,7 +129,9 @@
         <table>
         <caption><!-- TMPL_VAR NAME="issues_count" --> Items</caption>
         <!-- ISSUES TABLE ROWS --><tr>
-        <th colspan="2">Title</th>
+		<!-- TMPL_IF NAME="AmazonContent" --><th>&nbsp;</th><!-- /TMPL_IF -->
+        <th>Title</th>
+		<th>Item Type</th>
         <th>Call No.</th>
         <th>Due</th>
         <!-- TMPL_IF name="OpacRenewalAllowed" -->
@@ -155,20 +157,17 @@
             <!-- /TMPL_IF -->
             
             <!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="AmazonContent" --><td><!-- TMPL_IF NAME="isbn" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.THUMBZZZ.jpg" alt="Book Cover Image" class="thumbnail" /></a><!-- /TMPL_IF --></td><!-- /TMPL_IF -->
                 <td>
-                    <!-- TMPL_IF NAME="imageurl" -->
-                        <img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itemtype" -->.gif" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" />
-                    <!-- TMPL_ELSE -->
-                        <!-- TMPL_VAR name="description" -->
-                    <!-- /TMPL_IF -->
-                </td>
-                <td><!-- TMPL_IF NAME="AmazonContent" --><!-- TMPL_IF NAME="isbn" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.THUMBZZZ.jpg" alt="Book Cover Image" class="thumbnail" /></a><!-- /TMPL_IF --><!-- /TMPL_IF -->
                     <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
                     <span class="item-details">
                         <!-- TMPL_VAR NAME="author" -->
                     </span>
                 </td>
-                <td><!-- TMPL_VAR NAME="classification" --></td>
+                <td>
+                    <!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR name="description" -->
+                </td>
+                <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
                 <!-- TMPL_IF NAME="overdue" -->
                     <td class="overdue"><!-- TMPL_VAR NAME="date_due" --></td>
                 <!-- TMPL_ELSE -->
