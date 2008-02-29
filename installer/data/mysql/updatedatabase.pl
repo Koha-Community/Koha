@@ -1058,6 +1058,31 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.058";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+
+    $dbh->do("CREATE TABLE IF NOT EXISTS `labels_templates` (
+            `tmpl_id` int(4) NOT NULL auto_increment,
+            `tmpl_code` char(100)  default '',
+            `tmpl_desc` char(100) default '',
+            `page_width` float default '0',
+            `page_height` float default '0',
+            `label_width` float default '0',
+            `label_height` float default '0',
+            `topmargin` float default '0',
+            `leftmargin` float default '0',
+            `cols` int(2) default '0',
+            `rows` int(2) default '0',
+            `colgap` float default '0',
+            `rowgap` float default '0',
+            `active` int(1) default NULL,
+            `units` char(20)  default 'PX',
+            `fontsize` int(4) NOT NULL default '3',
+            PRIMARY KEY  (`tmpl_id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+    print "Upgrade to $DBversion done ( Added labels_templates table if it did not exist. )\n";
+    SetVersion ($DBversion);
+}
 
 $DBversion = "3.00.00.058";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
