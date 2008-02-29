@@ -173,21 +173,21 @@ sub delalert {
 sub getalert {
     my ( $borrowernumber, $type, $externalid ) = @_;
     my $dbh   = C4::Context->dbh;
-    my $query = "select * from alert where";
+    my $query = "SELECT * FROM alert WHERE";
     my @bind;
     if ($borrowernumber =~ /^\d+$/) {
-        $query .= " borrowernumber=? and";
+        $query .= " borrowernumber=? AND ";
         push @bind, $borrowernumber;
     }
     if ($type) {
-        $query .= " type=? and";
+        $query .= " type=? AND ";
         push @bind, $type;
     }
     if ($externalid) {
-        $query .= " externalid=? and";
+        $query .= " externalid=? AND ";
         push @bind, $externalid;
     }
-    $query =~ s/ and$//;
+    $query =~ s/ AND $//;
     my $sth = $dbh->prepare($query);
     $sth->execute(@bind);
     my @result;
@@ -252,7 +252,7 @@ sub SendAlerts {
         # search the biblionumber
         my $sth =
           $dbh->prepare(
-            "select biblionumber from subscription where subscriptionid=?");
+            "SELECT biblionumber FROM subscription WHERE subscriptionid=?");
         $sth->execute($externalid);
         my ($biblionumber) = $sth->fetchrow;
 
@@ -280,10 +280,10 @@ sub SendAlerts {
             parseletter( $innerletter, 'borrowers', $_->{'borrowernumber'} );
 
             # ... then send mail
-            if ( $borinfo->{emailaddress} ) {
+            if ( $borinfo->{email} ) {
                 my %mail = (
-                    To      => $borinfo->{emailaddress},
-                    From    => $userenv->{emailaddress},
+                    To      => $borinfo->{email},
+                    From    => $borinfo->{email},
                     Subject => "" . $innerletter->{title},
                     Message => "" . $innerletter->{content},
                 );

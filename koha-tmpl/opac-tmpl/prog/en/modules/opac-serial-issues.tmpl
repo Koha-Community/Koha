@@ -103,6 +103,18 @@
             <!-- TMPL_VAR name="opacnote" -->
         </p>
     <!-- /TMPL_IF -->
+    <!-- TMPL_IF name="letter" -->
+        <!-- TMPL_IF name="hasalert" -->
+            You already follow this subscription <a href="opac-alert-subscribe.pl?op=cancel&amp;externalid=<!-- TMPL_VAR name="subscriptionid" -->&amp;alerttype=issue&amp;biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button" title="Cancel alert">
+                Cancel mail alert
+            </a>
+        <!-- TMPL_ELSE -->
+            <a href="opac-alert-subscribe.pl?externalid=<!-- TMPL_VAR name="subscriptionid" -->&amp;alerttype=issue&amp;biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button" title="Be alerted when an issue arrive at the library">
+                Be mailed when a new issue arrives at the library
+            </a>
+        <!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->
+
 <!-- /TMPL_LOOP -->
 
 </div>

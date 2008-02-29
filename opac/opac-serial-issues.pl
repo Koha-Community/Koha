@@ -41,13 +41,6 @@ my $sth;
 my ( $template, $loggedinuser, $cookie );
 my $biblionumber = $query->param('biblionumber');
 if ( $selectview eq "full" ) {
-    my $subscriptions = GetFullSubscriptionsFromBiblionumber($biblionumber);
-    my $subscriptioninformation=PrepareSerialsData($subscriptions);
-
-    my $title   = $subscriptions->[0]{bibliotitle};
-    my $yearmin = $subscriptions->[0]{year};
-    my $yearmax = $subscriptions->[ scalar(@$subscriptions) - 1 ]{year};
-
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
             template_name   => "opac-full-serial-issues.tmpl",
@@ -57,6 +50,19 @@ if ( $selectview eq "full" ) {
             debug           => 1,
         }
     );
+    my $subscriptions = GetFullSubscriptionsFromBiblionumber($biblionumber);
+    my $subscriptioninformation=PrepareSerialsData($subscriptions);
+    # now, check is there is an alert subscription for one of the subscriptions
+    foreach (@$subscriptions) {
+        if (getalert($loggedinuser,'issue',$_->{subscriptionid})) {
+            $_->{hasalert} = 1;
+        }
+    }
+
+    my $title   = $subscriptions->[0]{bibliotitle};
+    my $yearmin = $subscriptions->[0]{year};
+    my $yearmax = $subscriptions->[ scalar(@$subscriptions) - 1 ]{year};
+
 
     # replace CR by <br> in librarian note
     # $subscription->{opacnote} =~ s/\n/\<br\/\>/g;
@@ -73,8 +79,6 @@ if ( $selectview eq "full" ) {
 
 }
 else {
-    my $subscriptions = GetSubscriptionsFromBiblionumber($biblionumber);
-
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
             template_name   => "opac-serial-issues.tmpl",
@@ -84,6 +88,16 @@ else {
             debug           => 1,
         }
     );
+
+    my $subscriptions = GetSubscriptionsFromBiblionumber($biblionumber);
+    # now, check is there is an alert subscription for one of the subscriptions
+    foreach (@$subscriptions) {
+        my $subscription = getalert($loggedinuser,'issue',$_->{subscriptionid});
+        if (@$subscription[0]) {
+		warn ">>>>>>>>> has alert : loggedinuser / ".$_->{subscriptionid};
+            $_->{hasalert} = 1;
+        }
+    }
 
     # replace CR by <br> in librarian note
     # $subscription->{opacnote} =~ s/\n/\<br\/\>/g;

@@ -59,6 +59,7 @@ if ( $op eq 'alert_confirmed' ) {
 }
 elsif ( $op eq 'cancel_confirmed' ) {
     my $alerts = getalert( $loggedinuser, $alerttype, $externalid );
+    warn "CANCEL confirmed : $loggedinuser, $alerttype, $externalid".Data::Dumper::Dumper( $alerts );
     foreach (@$alerts)
     {    # we are supposed to have only 1 result, but just in case...
         delalert( $_->{alertid} );
