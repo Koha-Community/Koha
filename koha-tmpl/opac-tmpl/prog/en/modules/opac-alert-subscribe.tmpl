@@ -11,7 +11,7 @@
     <!-- TMPL_IF name="typeissue" -->
         <h1 class="catalogue">Subscribe issue recieve warning</h1>
             <form action="opac-alert-subscribe.pl" method="post">
-                <p>Do you want to be mailed when a new issue for this subscription arrives at the library ?</p>
+                <p>Do you want to receive an email when a new issue for this subscription arrives?</p>
                 <!-- TMPL_VAR name="bibliotitle" --> <!-- TMPL_IF name="notes" -->(<!-- TMPL_VAR name="notes" -->)<!-- /TMPL_IF --> arrive ?</p>
                 <input type="hidden" name="externalid" value="<!-- TMPL_VAR name="externalid" -->">
                 <input type="hidden" name="alerttype" value="issue">
@@ -25,7 +25,7 @@
     <!-- TMPL_IF name="typeissuecancel" -->
         <h1 class="catalogue">Unsubscribe</h1>
             <form action="opac-alert-subscribe.pl" method="post">
-                <p>Do you confirm you want to unsubscribe mail warning for this subscription ?</p>
+                <p>Please confirm that you do not want to receive email when a new issue arrives for this subscription</p>
                 <!-- TMPL_VAR name="bibliotitle" --> <!-- TMPL_IF name="notes" -->(<!-- TMPL_VAR name="notes" -->)<!-- /TMPL_IF --> ?</p>
                 <input type="hidden" name="externalid" value="<!-- TMPL_VAR name="externalid" -->">
                 <input type="hidden" name="alerttype" value="issue">
