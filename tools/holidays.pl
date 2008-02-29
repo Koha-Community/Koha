@@ -114,8 +114,9 @@ foreach my $yearMonthDay (keys %$single_holidays) {
 
 # Replace the template values with the real ones
 # If we have independent branches on we need to only let the user set holidays for their branch
-if ( C4::Context->preference("IndependantBranches") ) { 
-	$template->param(BRANCHES => C4::Context->userenv->{'branchname'});		
+# (except if the user is superlibrarian, in which case he can choose the branch anyway)
+if ( C4::Context->preference("IndependantBranches") && !(C4::Context->userenv->{'flags'} % 2) ) { 
+	$template->param(BRANCHES => C4::Context->userenv->{'branchname'}."<input type='hidden' id='branch' value='".C4::Context->userenv->{'branch'}."'>");
 }
 else {
 	$template->param(BRANCHES => $branchesList);
