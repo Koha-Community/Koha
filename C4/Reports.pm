@@ -326,10 +326,10 @@ sub execute_query {
     my $dbh = C4::Context->dbh();
 
     # take this line out when in production
-	if ($format eq 'url'){
+	if ($format eq 'csv' or $format eq 'tab'){
 		}
 	else {
-		$sql .= " LIMIT 10";
+		$sql .= " LIMIT 20";
 	}
     my $sth = $dbh->prepare($sql);
     $sth->execute();
