@@ -62,7 +62,13 @@
         <!-- /TMPL_IF --><!-- /TMPL_IF -->
         <input type="submit" value="Go" id="searchsubmit" class="btn blue left" />
 		<!-- TMPL_IF EXPR="opacbookbag || virtualshelves" -->
-<!-- TMPL_IF NAME="opacbookbag" --><span id="cmspan"></span><!-- /TMPL_IF --><!--TMPL_IF NAME="virtualshelves" --><a class="btn blue left" id="listsmenulink" href="/cgi-bin/koha/opac-shelves.pl">Lists</a><!-- /TMPL_IF --><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="opacbookbag" --><a href="#" id="cartmenulink" class=""><i></i><span><i></i><span></span><img src="/opac-tmpl/prog/images/cart.gif" width="14" height="14" alt="" border="0"> Cart<span id="basket"></span></span></a><!-- /TMPL_IF -->
+
+<!--TMPL_IF NAME="virtualshelves" --><a href="#" id="listsmenulink" class=""><i></i><span><i></i><span></span>Lists <img src="/opac-tmpl/prog/images/list.gif" width="5" height="6" alt="" border="0"></span></a><!-- /TMPL_IF -->
+
+
+<!-- /TMPL_IF -->
     </form>
 
 <div id="moresearches"><a href="/cgi-bin/koha/opac-search.pl">Advanced Search</a><!-- TMPL_IF name="OpacBrowser" --> | <a href="/cgi-bin/koha/opac-browser.pl">Browse by Hierarchy</a><!-- /TMPL_IF --><!-- TMPL_IF name="OpacAuthorities" --> | <a href="/cgi-bin/koha/opac-authorities-home.pl">Browse by Subject</a><!-- /TMPL_IF --><!-- TMPL_IF name="OpacCloud" --> | <a href="/cgi-bin/koha/opac-tags_subject.pl">Tag Cloud</a><!-- /TMPL_IF --><!-- TMPL_IF name="OpacTopissue" --> | <a href="/cgi-bin/koha/opac-topissues.pl">Most Popular</a><!-- /TMPL_IF --></div>
