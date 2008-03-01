@@ -494,7 +494,7 @@ sub Zconn {
     my $auth=shift;
     my $piggyback=shift;
     my $syntax=shift;
-    if ( defined($context->{"Zconn"}->{$server}) && !$context->{"Zconn"}->{$server}->exception() ) {
+    if ( defined($context->{"Zconn"}->{$server}) && (0 == $context->{"Zconn"}->{$server}->errcode()) ) {
         return $context->{"Zconn"}->{$server};
     # No connection object or it died. Create one.
     }else {
