@@ -3,14 +3,10 @@
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
 	 $(document).ready(function() {
-var $tabs = $('#bibliodescriptions > ul').tabs({
-    click: function(tab) {
-        if ( $(tab).attr("class") == 'external') {
-            location.href = tab.href;
-            return false;
-        }
-    }
-}); 
+$('#bibliodescriptions > ul').tabs().bind('select.ui-tabs', function(e, ui) {
+   location.href = $.data(ui.tab, 'load.ui-tabs');
+   return false;
+});
 }); 
 //]]>
 </script>
@@ -160,7 +156,7 @@ var $tabs = $('#bibliodescriptions > ul').tabs({
     <!-- TMPL_UNLESS name="bi_notforloan" -->
         <!-- TMPL_IF NAME="RequestOnOpac" -->
             <li><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
-            Place Reserve
+            Place Hold
             </a></li>
         <!-- /TMPL_IF -->
     <!-- /TMPL_UNLESS -->
