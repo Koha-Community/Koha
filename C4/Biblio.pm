@@ -1011,7 +1011,7 @@ sub GetMarcSubjects {
             my $separator = C4::Context->preference("authoritysep") unless $counter==0;
             # ignore $9
             my @this_link_loop = @link_loop;
-            push @subfields_loop, {code => $code, value => $value, link_loop => \@this_link_loop, separator => $separator} unless ($subject_subfield->[0] == 9 );
+            push @subfields_loop, {code => $code, value => $value, link_loop => \@this_link_loop, separator => $separator} unless ($subject_subfield->[0] eq 9 );
             $counter++;
         }
                 
