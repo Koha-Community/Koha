@@ -697,7 +697,7 @@ sub GetMarcStructure {
     {
         $res->{$tag}->{lib} =
           ( $forlibrarian or !$libopac ) ? $liblibrarian : $libopac;
-        $res->{$tab}->{tab}        = "";
+        $res->{$tag}->{tab}        = "";
         $res->{$tag}->{mandatory}  = $mandatory;
         $res->{$tag}->{repeatable} = $repeatable;
     }
