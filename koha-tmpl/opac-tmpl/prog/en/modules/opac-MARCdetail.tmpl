@@ -21,8 +21,9 @@
 </div>
 </div>
 
-    <div class="yui-g" style="margin-top : 1em;"><table id="marc">
-	<caption>MARC View</caption>
+    <div class="yui-g" style="margin-top : 1em;">
+	<div><h1 style="display: inline;">MARC View</h1> <span id="views"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">[ Normal View ]</a> <a id="ISBDview"  href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">[ ISBD View ]</a></span></div>
+	<table id="marc">
         <!-- TMPL_LOOP name="0XX" -->
         <tr><th colspan="2"><!-- TMPL_VAR name="tag" --></th></tr>
         <!-- TMPL_LOOP name="subfield" -->

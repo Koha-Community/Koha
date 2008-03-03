@@ -3,15 +3,11 @@
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
 	 $(document).ready(function() {
- 			var $tabs = $('#bibliodescriptions').tabs({
-   			onClick: function(tab) {
-		       if ( $(tab).is('.external') ) {
-		           location.href = tab.href;
-		           return false;
-		       }
-		   }
-		});
-	 }); 
+$('#bibliodescriptions > ul').tabs().bind('select.ui-tabs', function(e, ui) {
+   location.href = $.data(ui.tab, 'load.ui-tabs');
+   return false;
+});
+}); 
 //]]>
 </script>
 </head>
@@ -25,7 +21,7 @@
     <div class="yui-u first">
 	
 	
-    <h1>ISBD</h1>
+   <div> <h1 style="display: inline;">ISBD</h1> <span id="views"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">[ Normal View ]</a> <a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">[ MARC View ]</a></span></div>
     <!-- TMPL_VAR name="ISBD" -->
 	
 	</div>

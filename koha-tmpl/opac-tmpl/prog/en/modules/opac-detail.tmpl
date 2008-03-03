@@ -29,7 +29,7 @@ $('#bibliodescriptions > ul').tabs().bind('select.ui-tabs', function(e, ui) {
         <img border="0" src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="Cover Image" />
         <!-- /TMPL_IF --></div>
 <!-- /TMPL_IF -->
-    <h1><!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF NAME="subtitle" --> <span class="subtitle"><!-- TMPL_VAR NAME="subtitle" --></span><!-- /TMPL_IF --></h1>
+   <div id="views"> <h1 style="display: inline"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF NAME="subtitle" --> <span class="subtitle"><!-- TMPL_VAR NAME="subtitle" --></span><!-- /TMPL_IF --></h1> <span class="views"><span id="Normalview">Normal View</span> <a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">MARC View</a> <a id="ISBDview"  href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">ISBD View</a></span></div>
     <!-- TMPL_IF NAME="author" --><h2 class="author">By <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="author" -->"><!-- TMPL_VAR NAME="author" --></a></h2><!-- /TMPL_IF -->
     <p>
         [
