@@ -12,9 +12,7 @@ BEGIN {
 
 # Koha modules used
 use MARC::File::USMARC;
-# Uncomment the line below and use MARC::File::XML again when it works better.
-# -- thd
-# use MARC::File::XML;
+use MARC::File::XML;
 use MARC::Record;
 use MARC::Batch;
 use MARC::Charset;
@@ -66,6 +64,7 @@ parameters :
 \tsupported. MARC21 by default.
 \td : delete EVERYTHING related to biblio in koha-DB before import  :tables :
 \t\tbiblio, \tbiblioitems,\titems
+\tm : format, MARCXML or ISO2709 (defaults to ISO2709)
 IMPORTANT : don't use this script before you've entered and checked your MARC parameters tables twice (or more!).
 Otherwise, the import won't work correctly and you will get invalid data.
 
@@ -109,6 +108,16 @@ print "Characteristic MARC flavour: $marcFlavour\n" if $verbose;
 my $starttime = gettimeofday;
 my $batch;
 if ($format =~ /XML/i) {
+    # ugly hack follows -- MARC::File::XML, when used by MARC::Batch,
+    # appears to try to convert incoming XML records from MARC-8
+    # to UTF-8.  Setting the BinaryEncoding key turns that off
+    # TODO: see what happens to ISO-8859-1 XML files.
+    # TODO: determine if MARC::Batch can be fixed to handle
+    #       XML records properly -- it probably should be
+    #       be using a proper push or pull XML parser to
+    #       extract the records, not using regexes to look
+    #       for <record>.*</record>.
+    $MARC::File::XML::_load_args{BinaryEncoding} = 'utf-8';
     $batch = MARC::Batch->new( 'XML', $input_marc_file );
 } else {
     $batch = MARC::Batch->new( 'USMARC', $input_marc_file );
