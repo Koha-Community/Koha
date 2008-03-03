@@ -362,7 +362,13 @@ sub DelBiblio {
     # - we need to read the biblio if NoZebra is set (to remove it from the indexes
     # - if something goes wrong, the biblio may be deleted from Koha but not from zebra
     #   and we would have no way to remove it (except manually in zebra, but I bet it would be very hard to handle the problem)
-    ModZebra($biblionumber, "recordDelete", "biblioserver", undef);
+    my $oldRecord;
+    if (C4::Context->preference("NoZebra")) {
+        # only NoZebra indexing needs to have
+        # the previous version of the record
+        $oldRecord = GetMarcBiblio($biblionumber);
+    }
+    ModZebra($biblionumber, "recordDelete", "biblioserver", $oldRecord, undef);
 
     # delete biblioitems and items from Koha tables and save in deletedbiblioitems,deleteditems
     $sth =
@@ -2049,7 +2055,7 @@ ModZebra( $biblionumber, $op, $server, $newRecord );
 
 sub ModZebra {
 ###Accepts a $server variable thus we can use it for biblios authorities or other zebra dbs
-    my ( $biblionumber, $op, $server, $newRecord ) = @_;
+    my ( $biblionumber, $op, $server, $oldRecord, $newRecord ) = @_;
     my $dbh=C4::Context->dbh;
 
     # true ModZebra commented until indexdata fixes zebraDB crashes (it seems they occur on multiple updates
@@ -2063,24 +2069,18 @@ sub ModZebra {
         # lock the table to avoid someone else overwriting what we are doing
         $dbh->do('LOCK TABLES nozebra WRITE,biblio WRITE,biblioitems WRITE, systempreferences WRITE, auth_types WRITE, auth_header WRITE');
         my %result; # the result hash that will be builded by deletion / add, and written on mySQL at the end, to improve speed
-        my $record;
-        if ($server eq 'biblioserver') {
-            $record= GetMarcBiblio($biblionumber);
-        } else {
-            $record= C4::AuthoritiesMarc::GetAuthority($biblionumber);
-        }
         if ($op eq 'specialUpdate') {
             # OK, we have to add or update the record
             # 1st delete (virtually, in indexes), if record actually exists
-            if ($record) { 
-                %result = _DelBiblioNoZebra($biblionumber,$record,$server);
+            if ($oldRecord) { 
+                %result = _DelBiblioNoZebra($biblionumber,$oldRecord,$server);
             }
             # ... add the record
             %result=_AddBiblioNoZebra($biblionumber,$newRecord, $server, %result);
         } else {
             # it's a deletion, delete the record...
             # warn "DELETE the record $biblionumber on $server".$record->as_formatted;
-            %result=_DelBiblioNoZebra($biblionumber,$record,$server);
+            %result=_DelBiblioNoZebra($biblionumber,$oldRecord,$server);
         }
         # ok, now update the database...
         my $sth = $dbh->prepare("UPDATE nozebra SET biblionumbers=? WHERE server=? AND indexname=? AND value=?");
@@ -2947,13 +2947,19 @@ sub ModBiblioMarc {
                 MARC::Field->new( 100, "", "", "a" => $string ) );
         }
     }
-    ModZebra($biblionumber,"specialUpdate","biblioserver",$record);
+    my $oldRecord;
+    if (C4::Context->preference("NoZebra")) {
+        # only NoZebra indexing needs to have
+        # the previous version of the record
+        $oldRecord = GetMarcBiblio($biblionumber);
+    }
     $sth =
       $dbh->prepare(
         "UPDATE biblioitems SET marc=?,marcxml=? WHERE biblionumber=?");
     $sth->execute( $record->as_usmarc(), $record->as_xml_record($encoding),
         $biblionumber );
     $sth->finish;
+    ModZebra($biblionumber,"specialUpdate","biblioserver",$oldRecord,$record);
     return $biblionumber;
 }
 

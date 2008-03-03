@@ -544,6 +544,7 @@ sub AddAuthority {
     $record->add_fields($auth_type_tag,'','', $auth_type_subfield=>$authtypecode); 
   }
 
+  my $oldRecord;
   if (!$authid) {
     my $sth=$dbh->prepare("select max(authid) from auth_header");
     $sth->execute;
@@ -560,6 +561,9 @@ sub AddAuthority {
     $sth->execute($authid,$authtypecode,$record->as_usmarc,$record->as_xml_record($format));
     $sth->finish;
   }else{
+      if (C4::Context->preference('NoZebra')) {
+        $oldRecord = GetAuthority($authid);
+      }
       $record->add_fields('001',$authid) unless ($record->field('001'));
       $dbh->do("lock tables auth_header WRITE");
       my $sth=$dbh->prepare("update auth_header set marc=?,marcxml=? where authid=?");
@@ -567,7 +571,7 @@ sub AddAuthority {
       $sth->finish;
   }
   $dbh->do("unlock tables");
-  ModZebra($authid,'specialUpdate',"authorityserver",$record);
+  ModZebra($authid,'specialUpdate',"authorityserver",$oldRecord,$record);
   return ($authid);
 }
 
@@ -588,7 +592,7 @@ sub DelAuthority {
     my ($authid) = @_;
     my $dbh=C4::Context->dbh;
 
-    ModZebra($authid,"recordDelete","authorityserver",GetAuthority($authid));
+    ModZebra($authid,"recordDelete","authorityserver",GetAuthority($authid),undef);
     $dbh->do("delete from auth_header where authid=$authid") ;
 
 }
