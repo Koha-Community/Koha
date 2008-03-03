@@ -2042,11 +2042,14 @@ sub PrepareItemrecordDisplay {
 
 =over 4
 
-ModZebra( $biblionumber, $op, $server, $newRecord );
+ModZebra( $biblionumber, $op, $server, $oldRecord, $newRecord );
 
     $biblionumber is the biblionumber we want to index
     $op is specialUpdate or delete, and is used to know what we want to do
     $server is the server that we want to update
+    $oldRecord is the MARC::Record containing the previous version of the record.  This is used only when 
+      NoZebra=1, as NoZebra indexing needs to know the previous version of a record in order to
+      do an update.
     $newRecord is the MARC::Record containing the new record. It is usefull only when NoZebra=1, and is used to know what to add to the nozebra database. (the record in mySQL being, if it exist, the previous record, the one just before the modif. We need both : the previous and the new one.
     
 =back
