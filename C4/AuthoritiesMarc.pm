@@ -556,7 +556,6 @@ sub AddAuthority {
         $record->insert_fields_ordered(MARC::Field->new('001',$authid));
     }
 #     warn $record->as_formatted;
-    $dbh->do("lock tables auth_header WRITE");
     $sth=$dbh->prepare("insert into auth_header (authid,datecreated,authtypecode,marc,marcxml) values (?,now(),?,?,?)");
     $sth->execute($authid,$authtypecode,$record->as_usmarc,$record->as_xml_record($format));
     $sth->finish;
@@ -565,12 +564,10 @@ sub AddAuthority {
         $oldRecord = GetAuthority($authid);
       }
       $record->add_fields('001',$authid) unless ($record->field('001'));
-      $dbh->do("lock tables auth_header WRITE");
       my $sth=$dbh->prepare("update auth_header set marc=?,marcxml=? where authid=?");
       $sth->execute($record->as_usmarc,$record->as_xml_record($format),$authid);
       $sth->finish;
   }
-  $dbh->do("unlock tables");
   ModZebra($authid,'specialUpdate',"authorityserver",$oldRecord,$record);
   return ($authid);
 }
