@@ -372,7 +372,17 @@ function searchauthority() {
           Loading, please wait...
       </div>
   </div>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/yui/plugins/loading-min.js"></script> 
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/yui/plugins/loading-min.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+	// configuring the loading mask
+	YAHOO.widget.Loading.config({
+		opacity: 0.8
+	});
+})();
+//]]>
+</script>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a> &rsaquo; <!-- TMPL_IF name="authid" -->Modify authority #<!-- TMPL_VAR NAME="authid" --> (<!-- TMPL_VAR name="authtypetext" -->)<!-- TMPL_ELSE -->Adding authority <!-- TMPL_VAR name="authtypetext" --><!-- /TMPL_IF -->  </div>

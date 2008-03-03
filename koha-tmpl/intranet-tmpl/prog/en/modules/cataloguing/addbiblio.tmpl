@@ -425,7 +425,17 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
           Loading, please wait...
       </div>
   </div>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/yui/plugins/loading-min.js"></script> 
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/yui/plugins/loading-min.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+	// configuring the loading mask
+	YAHOO.widget.Loading.config({
+		opacity: 0.8
+	});
+})();
+//]]>
+</script>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloguing</a>  &rsaquo; <!-- TMPL_IF NAME="biblionumber" -->Edit MARC Record Number <!-- TMPL_VAR name="biblionumber" --><!-- TMPL_ELSE -->Add MARC Record<!-- /TMPL_IF --></div>
 
