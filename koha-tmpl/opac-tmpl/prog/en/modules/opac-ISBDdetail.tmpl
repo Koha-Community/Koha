@@ -2,12 +2,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
-	 $(document).ready(function() {
-$('#bibliodescriptions > ul').tabs().bind('select.ui-tabs', function(e, ui) {
-   location.href = $.data(ui.tab, 'load.ui-tabs');
-   return false;
-});
-}); 
+	$(document).ready(function() {
+		$('#bibliodescriptions > ul').tabs();
+	}); 
 //]]>
 </script>
 </head>
@@ -21,7 +18,7 @@ $('#bibliodescriptions > ul').tabs().bind('select.ui-tabs', function(e, ui) {
     <div class="yui-u first">
 	
 	
-   <div> <h1 style="display: inline;">ISBD</h1> <span id="views"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">[ Normal View ]</a> <a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">[ MARC View ]</a></span></div>
+    <div id="views"> <h1 style="display: inline;">ISBD</h1> <span class="views"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">[ Normal View ]</a> <a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">[ MARC View ]</a> <span id="ISBDview"  href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">ISBD View</span></span></div>
     <!-- TMPL_VAR name="ISBD" -->
 	
 	</div>
@@ -72,14 +69,8 @@ $('#bibliodescriptions > ul').tabs().bind('select.ui-tabs', function(e, ui) {
 <!-- TMPL_IF name="subscriptionsnumber" --><li>
             <a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#opac-isbd-subscriptions">Subscriptions</a>
     </li><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="reviewson" --><li><a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#opac-isbd-comments">Comments</a></li><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="reviewson" --><li><a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#comments">Comments</a></li><!-- /TMPL_IF -->
  	<!-- TMPL_IF NAME="AmazonContent" --><li><a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#opac-isbd-amazonreviews">Amazon Reviews</a></li><!-- /TMPL_IF -->
-
-      <li><a class="external"  href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Normal View</a></li>
-
-	<li> <a class="external" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
-            MARC View
-        </a></li>
 </ul>
 
 	<div id="opac-isbd-subscriptions">    <!-- TMPL_IF name="subscriptionsnumber" -->
@@ -125,36 +116,35 @@ $('#bibliodescriptions > ul').tabs().bind('select.ui-tabs', function(e, ui) {
     <!-- /TMPL_IF --></div>
 	
 <!-- TMPL_IF NAME="reviewson" -->
-    <div id="opac-isbd-comments"><!-- TMPL_IF NAME="reviews" -->
-    <h2>Reviews by members:</h2>
+<div id="comments">
+<!-- TMPL_IF NAME="reviews" -->
         <!--TMPL_LOOP NAME="reviews"-->
-        <p>
-            <b>
-                Review by
+            <h5>
+                Comment by
                 <!--TMPL_VAR NAME="title"-->
-                <!--TMPL_VAR NAME="surname"-->
                 <!--TMPL_VAR NAME="firstname"-->
-            </b>
-            <br />
-            <small>
+                <!--TMPL_VAR NAME="surname"-->
+            </h5>
+			<small>
                 <!--TMPL_VAR NAME="datereviewed"-->
             </small>
-        </p>
         <p>
           <!--TMPL_VAR NAME="review"-->
         </p>
-        <br />
         <!--/TMPL_LOOP-->
     <!-- TMPL_ELSE  -->
-        <b>No reviews has been writed on this biblio.</b>
-    <!-- /TMPL_IF -->
+        <p>There are no comments for this item.</p>
+<!-- /TMPL_IF -->
+
     <!-- TMPL_IF NAME="loggedinusername" -->
-        <a href="javascript:Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->');">
-            Write or modify your reviews on this biblio.
-        </a>
+       <p> <a href="javascript:Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->');">
+            Post or edit your comments on this item.
+        </a></p>
     <!-- TMPL_ELSE -->
-        <br /><a href="/cgi-bin/koha/opac-user.pl">Log in to your account</a> to write a review here.
-    <!-- /TMPL_IF --></div>
+        <p><a href="/cgi-bin/koha/opac-user.pl">Log in to your account</a> to post a comment.</p>
+    <!-- /TMPL_IF -->
+	</div>
+
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="AmazonContent" -->

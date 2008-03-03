@@ -11,8 +11,6 @@
 
 <div id="toolbar">
 <ul>
-	<li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Normal View</a></li>
-	<!-- TMPL_IF NAME="ISBD" --><li><a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">ISBD View</a></li><!-- /TMPL_IF -->
 	<!-- TMPL_UNLESS NAME="norequests" --><!-- TMPL_IF NAME="RequestOnOpac" --><li><a class="link reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a></li><!-- /TMPL_IF --><!-- /TMPL_UNLESS -->
 	<li><a class="link print" href="/cgi-bin/koha/opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">Print</a></li>
 	<!-- TMPL_IF name="virtualshelves" --><!-- TMPL_IF NAME="loggedinusername" --><li><a class="link addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">Save to Your Lists</a></li><!-- /TMPL_IF --><!-- /TMPL_IF -->
@@ -22,7 +20,7 @@
 </div>
 
     <div class="yui-g" style="margin-top : 1em;">
-	<div><h1 style="display: inline;">MARC View</h1> <span id="views"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">[ Normal View ]</a> <a id="ISBDview"  href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">[ ISBD View ]</a></span></div>
+	<div id="views"><h1 style="display: inline;">MARC View</h1> <span class="views"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Normal View</a> <span id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">MARC View</span> <!-- TMPL_IF NAME="ISBD" --><a id="ISBDview"  href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">ISBD View</a><!-- /TMPL_IF --></span></div>
 	<table id="marc">
         <!-- TMPL_LOOP name="0XX" -->
         <tr><th colspan="2"><!-- TMPL_VAR name="tag" --></th></tr>

@@ -1202,7 +1202,10 @@ div#menu li.active a:hover {
 #searchsubmit {
 	cursor : default;
 	font-size : 87%;
-	margin-top : -.1em;
+	font-weight :  normal;
+	margin-top : 0;
+	margin-left :  .2em;
+	padding: 2px 2px 1px 2px;
 }
 
 #export {
@@ -1424,15 +1427,30 @@ ul.ui-tabs-nav li.ui-tabs-selected a, ul.ui-tabs-nav li.ui-tabs-selected span.a 
 	margin-left : .7em;
 }
 
+#bibliodescriptions {
+	margin-top : .5em;
+}
+
 a#MARCview, span#MARCview, a#ISBDview, span#ISBDview, a#Normalview, span#Normalview {
-	background-image : url(../../images/doc.gif);
 	background-position : 5px 3px;
 	background-repeat : no-repeat;
 	font-size : 87%;
 	font-weight : normal;
 	padding : .2em .5em;
-	padding-left : 15px;
 	text-decoration: none;
+}
+
+a#MARCview, span#MARCview {
+	background-image : url(../../images/marc.gif);
+	padding-left : 17px;
+}
+a#ISBDview, span#ISBDview {
+	background-image : url(../../images/isbd.gif);
+	padding-left : 20px;
+}
+a#Normalview, span#Normalview {
+	background-image : url(../../images/normal.gif);
+	padding-left : 15px;
 }
 
 a#MARCview, a#ISBDview, a#Normalview {

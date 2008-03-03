@@ -151,6 +151,11 @@ foreach ( @$reviews ) {
     $_->{datereviewed} = format_date($_->{datereviewed});
 }
 
+
+if(C4::Context->preference("ISBD")) {
+	$template->param(ISBD => 1);
+}
+
 $template->param(
     ITEM_RESULTS        => \@items,
     subscriptionsnumber => $subscriptionsnumber,
