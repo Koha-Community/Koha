@@ -80,38 +80,35 @@ sub zebraop {
         warn "Inside while loop" if $debug;
         eval {
         my $ok = 0;
+        my $record;
         if ($data->{'operation'} =~ /delete/i ){
             eval {
 
-            warn "Searching for record to delete" if $debug;
-            # 1st read the record in zebra, we have to get it from zebra as its no longer in the db
-            my $Zconn=C4::Context->Zconn($data->{'server'}, 0, 1,'','xml');
-            my $query = $Zconn->search_pqf( '@attr 1=Local-number '.$data->{'biblio_auth_number'});
-
-            # then, delete the record
-            warn "Deleting record" if $debug;
-            $ok=zebrado($query->record(0)->render(),$data->{'operation'},$data->{'server'},$data->{'biblio_auth_number'});
+                warn "Searching for record to delete" if $debug;
+                # 1st read the record in zebra, we have to get it from zebra as its no longer in the db
+                my $Zconn=C4::Context->Zconn($data->{'server'}, 0, 1,'','xml');
+                my $results = $Zconn->search_pqf( '@attr 1=Local-number '.$data->{'biblio_auth_number'});
+                $results->option(elementSetName => 'marcxml');
+                $record = $results->record(0)->raw();
             };
-
             if ($@) {
-                # caught a ZOOM::Exception
-                my $error =
-                    $@->message() . " ("
-                  . $@->code() . ") "
-                  . $@->addinfo() . " "
-                  . $@->diagset();
-                warn "ERROR: $error";
                 # this doesn't exist, so no need to wail on zebra to delete it
                 if ($@->code() eq 13) {
                     $ok = 1;
-                }        
+                } else {
+                    # caught a ZOOM::Exception
+                    my $error =
+                        $@->message() . " ("
+                        . $@->code() . ") "
+                        . $@->addinfo() . " "
+                        . $@->diagset();
+                    warn "ERROR: $error";
+                }
+            } else {
+                # then, delete the record
+                warn "Deleting record" if $debug;
+                $ok=zebrado($record,$data->{'operation'},$data->{'server'},$data->{'biblio_auth_number'});
             }
-            #if ($ok == 1) { 
-            #    my $delsth=$dbh->prepare("UPDATE zebraqueue SET done=1 WHERE id =?");
-            #    $delsth->execute($data->{'id'});
-            #    next;
-            #}
-
         }
         else {
             # it is an update           
@@ -146,7 +143,7 @@ sub zebraop {
             # did a modif (or item deletion) just before biblio deletion, there are some specialUpdate
             # that are pending and can't succeed, as we don't have the XML anymore
             # so, delete everything for this biblionumber
-            if ($data->{'operation'} eq 'delete_record') {
+            if ($data->{'operation'} =~ /delete/i) {
                 $delsth =$dbh->prepare("UPDATE zebraqueue SET done=1 WHERE biblio_auth_number =?");
                 $delsth->execute($data->{'biblio_auth_number'});
                 # if it's not a deletion, delete every pending specialUpdate for this biblionumber
