@@ -4,7 +4,9 @@
 	</ul>	
   <!-- /TMPL_IF -->
 </div>
-
+  <!-- TMPL_IF NAME="opacheader" -->
+	<!-- TMPL_VAR NAME="opacheader" -->
+  <!-- /TMPL_IF -->
 <div id="opac-main-search" class="yui-g">
    <!-- TMPL_IF NAME="opacsmallimage" -->
    <h1 id="libraryname" style="background-image: url('<!-- TMPL_VAR NAME="opacsmallimage" -->');">
