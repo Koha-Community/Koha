@@ -16,12 +16,14 @@ use MARC::File::XML;
 use MARC::Record;
 use MARC::Batch;
 use C4::Context;
+use C4::Charset;
 use C4::AuthoritiesMarc;
 use Time::HiRes qw(gettimeofday);
 
 use Getopt::Long;
 my ( $input_marc_file, $number) = ('',0);
-my ($version, $delete, $test_parameter,$char_encoding, $verbose, $format);
+my ($version, $delete, $test_parameter,$char_encoding, $verbose, $format, $commit);
+$| = 1;
 GetOptions(
     'file:s'    => \$input_marc_file,
     'n' => \$number,
@@ -31,6 +33,7 @@ GetOptions(
     'c:s' => \$char_encoding,
     'v:s' => \$verbose,
     'm:s' => \$format,
+    'commit:f' => \$commit,
 );
 
 if ($version || ($input_marc_file eq '')) {
@@ -45,6 +48,7 @@ parameters :
 \tc : the MARC flavour. At the moment, MARC21 and UNIMARC supported. MARC21 by default.
 \td : delete EVERYTHING related to authorities in koha-DB before import
 \tm : format, MARCXML or ISO2709
+\tcommit : the number of records to wait before performing a 'commit' operation
 IMPORTANT : don't use this script before you've entered and checked twice (or more) your MARC parameters tables.
 If you fail the test, the import won't work correctly and you will get invalid datas.
 
@@ -64,11 +68,22 @@ if ($test_parameter) {
     print "TESTING MODE ONLY\n    DOING NOTHING\n===============\n";
 }
 
+my $marcFlavour = C4::Context->preference('marcflavour') || 'MARC21';
 $char_encoding = 'MARC21' unless ($char_encoding);
 print "CHAR : $char_encoding\n" if $verbose;
 my $starttime = gettimeofday;
 my $batch;
 if ($format =~ /XML/i) {
+    # ugly hack follows -- MARC::File::XML, when used by MARC::Batch,
+    # appears to try to convert incoming XML records from MARC-8
+    # to UTF-8.  Setting the BinaryEncoding key turns that off
+    # TODO: see what happens to ISO-8859-1 XML files.
+    # TODO: determine if MARC::Batch can be fixed to handle
+    #       XML records properly -- it probably should be
+    #       be using a proper push or pull XML parser to
+    #       extract the records, not using regexes to look
+    #       for <record>.*</record>.
+    $MARC::File::XML::_load_args{BinaryEncoding} = 'utf-8';
     $batch = MARC::Batch->new( 'XML', $input_marc_file );
 } else {
     $batch = MARC::Batch->new( 'USMARC', $input_marc_file );
@@ -76,54 +91,42 @@ if ($format =~ /XML/i) {
 $batch->warnings_off();
 $batch->strict_off();
 my $i=0;
-while ( my $record = $batch->next() ) {
-    $i++;
-    #now, parse the record, extract the item fields, and store them in somewhere else.
 
-    ## create an empty record object to populate
-    my $newRecord = MARC::Record->new();
-    $newRecord->leader($record->leader);
-    # go through each field in the existing record
-    foreach my $oldField ( $record->fields() ) {
-        # just reproduce tags < 010 in our new record
-        if ( $oldField->tag() < 10 ) {
-            $newRecord->append_fields( $oldField );
-            next();
+$dbh->{AutoCommit} = 0;
+my $commitnum = 50;
+if ($commit) {
+    $commitnum = $commit;
+}
+
+RECORD: while ( my $record = $batch->next() ) {
+    $i++;
+    print ".";
+    print "\r$i" unless $i % 100;
+
+    if ($record->encoding() eq 'MARC-8') {
+        my ($guessed_charset, $charset_errors);
+        ($record, $guessed_charset, $charset_errors) = MarcToUTF8Record($record, $marcFlavour);
+        if ($guessed_charset eq 'failed') {
+            warn "ERROR: failed to perform character conversion for record $i\n";
+            next RECORD;            
         }
-        # store our new subfield data in this list
-        my @newSubfields = ();
-    
-        # go through each subfield code/data pair
-        foreach my $pair ( $oldField->subfields() ) { 
-            $pair->[1] =~ s/\<//g;
-            $pair->[1] =~ s/\>//g;
-            push( @newSubfields, $pair->[0], $pair->[1]);
-        }
-    
-        # add the new field to our new record
-        my $newField = MARC::Field->new(
-            $oldField->tag(),
-            $oldField->indicator(1),
-            $oldField->indicator(2),
-            @newSubfields
-        );
-        $newRecord->append_fields( $newField );
     }
-    warn "$i ==>".$newRecord->as_formatted() if $verbose eq 2;
+
+    warn "$i ==>".$record->as_formatted() if $verbose eq 2;
     my $authtypecode;
     if (C4::Context->preference('marcflavour') eq 'MARC21') {
-        $authtypecode="PERSO_NAME" if ($newRecord->field('100'));
-        $authtypecode="CORPO_NAME" if ($newRecord->field('110'));
-        $authtypecode="MEETI_NAME" if ($newRecord->field('111'));
-        $authtypecode="UNIF_TITLE" if ($newRecord->field('130'));
-        $authtypecode="CHRON_TERM" if ($newRecord->field('148'));
-        $authtypecode="TOPIC_TERM" if ($newRecord->field('150'));
-        $authtypecode="GEOGR_NAME" if ($newRecord->field('151'));
-        $authtypecode="GENRE/FORM" if ($newRecord->field('155'));
+        $authtypecode="PERSO_NAME" if ($record->field('100'));
+        $authtypecode="CORPO_NAME" if ($record->field('110'));
+        $authtypecode="MEETI_NAME" if ($record->field('111'));
+        $authtypecode="UNIF_TITLE" if ($record->field('130'));
+        $authtypecode="CHRON_TERM" if ($record->field('148'));
+        $authtypecode="TOPIC_TERM" if ($record->field('150'));
+        $authtypecode="GEOGR_NAME" if ($record->field('151'));
+        $authtypecode="GENRE/FORM" if ($record->field('155'));
         next unless $authtypecode; # skip invalid records FIXME: far too simplistic
     }
     else {
-        $authtypecode=substr($newRecord->leader(),9,1);
+        $authtypecode=substr($record->leader(),9,1);
         $authtypecode="NP" if ($authtypecode eq 'a'); # personnes
         $authtypecode="CO" if ($authtypecode eq 'b'); # collectivit�
         $authtypecode="NG" if ($authtypecode eq 'c'); # g�graphique
@@ -133,12 +136,14 @@ while ( my $record = $batch->next() ) {
         $authtypecode="TI" if ($authtypecode eq 'h'); # auteur/titre
         $authtypecode="MM" if ($authtypecode eq 'j'); # mot mati�e
     }
-    # now, create biblio and items with NEWnewXX call.
+
     unless ($test_parameter) {
-        my ($authid) = AddAuthority($newRecord,0,$authtypecode);
+        my ($authid) = AddAuthority($record,0,$authtypecode);
         warn "ADDED authority NB $authid in DB\n" if $verbose;
+        $dbh->commit() if (0 == $i % $commitnum);
     }
 }
-# $dbh->do("unlock tables");
+$dbh->commit();
+
 my $timeneeded = gettimeofday - $starttime;
-print "$i MARC record done in $timeneeded seconds";
+print "$i MARC record done in $timeneeded seconds\n";
