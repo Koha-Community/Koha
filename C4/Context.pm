@@ -498,6 +498,14 @@ sub Zconn {
         return $context->{"Zconn"}->{$server};
     # No connection object or it died. Create one.
     }else {
+        # release resources if we're closing a connection and making a new one
+        # FIXME: this needs to be smarter -- an error due to a malformed query or
+        # a missing index does not necessarily require us to close the connection
+        # and make a new one, particularly for a batch job.  However, at
+        # first glance it does not look like there's a way to easily check
+        # the basic health of a ZOOM::Connection
+        $context->{"Zconn"}->{$server}->destroy() if defined($context->{"Zconn"}->{$server});
+
         $context->{"Zconn"}->{$server} = &_new_Zconn($server,$async,$auth,$piggyback,$syntax);
         return $context->{"Zconn"}->{$server};
     }
