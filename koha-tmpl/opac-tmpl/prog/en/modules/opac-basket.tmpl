@@ -7,7 +7,33 @@
 <style type="text/css"> 
     @import url(<!-- TMPL_VAR NAME="themelang" -->/css/print.css);
 </style>
-    <!-- TMPL_ELSE --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" --><!-- /TMPL_IF -->
+    <!-- TMPL_ELSE --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+	<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.pack.js"></script>
+	<script type="text/javascript">
+	//<![CDATA[
+	$(document).ready(function(){
+		$("#CheckAll").click(function(){
+		var checked = [];
+		$("#bookbag_form").checkCheckboxes("*", true).each(
+		    function() {
+				selRecord(this.id,true); 
+			}
+		); 
+	        return false;
+	    });
+	    $("#CheckNone").click(function(){
+	    var checked = [];
+		$("#bookbag_form").unCheckCheckboxes("*",true).each(
+		    function() {
+				selRecord(this.id,false);
+			}
+		);
+	        return false;
+	    });
+	});
+	//]]>
+	</script>
+	<!-- /TMPL_IF -->
 </head>
 <body>
 
@@ -154,16 +180,12 @@
     <!-- /TMPL_LOOP -->
 
 <!-- TMPL_ELSE -->
-	<form action="/cgi-bin/koha/opac-basket.pl" method="get" name="bookbag_form">
+	<form action="/cgi-bin/koha/opac-basket.pl" method="get" name="bookbag_form" id="bookbag_form">
     <table>
-				<!-- TMPL_UNLESS NAME="print_basket" --><tr><td><a href="#" onclick="SelectAll()"><img src="/opac-tmpl/prog/images/checkall.gif" alt="Check All" border="0" /></a></td><td colspan="3"><b>Selected items :</b>
-<a href="javascript:delSelRecords();">
-    Remove
-</a> | 
+				<!-- TMPL_UNLESS NAME="print_basket" --><tr><td colspan="3" style="padding-bottom: 7px;"><a id="CheckAll" href="#">Select All</a> <a id="CheckNone" href="#">Clear All</a> | <b>Selected items :</b>
+<a href="#" onclick="delSelRecords(); return false;">Remove</a>
 <!-- TMPL_IF NAME="loggedinusername" -->
-    <a href="javascript:addSelToShelf();">
-        Add to a shelf
-    </a>
+     | <a href="#" onclick="addSelToShelf(); return false;">Add to a shelf</a>
 <!-- /TMPL_IF --></td></tr><!-- /TMPL_UNLESS -->
         <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
             <!-- TMPL_IF NAME="even" -->
@@ -172,14 +194,9 @@
                 <tr>
             <!-- /TMPL_IF -->
             <!-- TMPL_UNLESS NAME="print_basket" --><td>
-                    
-                        <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->">
-                        </label>
-                        <br />
                         <input type="checkbox" value="<!-- TMPL_VAR NAME="biblionumber" -->" name="bib<!-- TMPL_VAR NAME="biblionumber" -->" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" onclick="selRecord(value,checked);" />
                    
                 </td> <!-- /TMPL_UNLESS -->
-            <td><!-- TMPL_VAR name="itemtype" --></td>
             <td><a href="#" onclick="openBiblio('<!-- TMPL_VAR name="dest" -->',<!-- TMPL_VAR name="biblionumber" -->)">
                         <!-- TMPL_VAR NAME="title" -->
                     </a>
@@ -192,7 +209,7 @@
                         <!-- TMPL_IF name="notes" -->
                         <p><!-- TMPL_VAR name="notes" --></p>
                         <!-- /TMPL_IF --></td>
-            <td><!-- TMPL_VAR NAME="classification" --></td>
+            <td><!-- TMPL_VAR name="description" --></td>
             </tr>
         <!-- /TMPL_LOOP -->
     </table></form>

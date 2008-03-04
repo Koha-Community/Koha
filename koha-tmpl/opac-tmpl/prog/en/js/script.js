@@ -40,6 +40,21 @@ $(document).ready(function(){
 	$(".close").click(function(){
 		window.close();
 	});
+	$("#logout").click(function(){
+		alert("logging out!");
+		var nameCookie = "bib_list";
+	    var valCookie = readCookie(nameCookie);
+		if (valCookie) { // basket has contents
+			if(confirm("Are you sure you want to log out? The contents of your cart will be lost")){
+				delBasket();
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return true;
+		}
+	});
 });
 	
 YAHOO.util.Event.onContentReady("changelanguage", function () {
