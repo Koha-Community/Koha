@@ -534,7 +534,7 @@ WriteMakefile(
 'GD::Barcode::UPCE' => 1.1,
 'Getopt::Long' => 2.35,
 'Getopt::Std' => 1.05,
-'HTML::Template::Pro' => 0.65,
+'HTML::Template::Pro' => 0.69,
 'HTTP::Cookies' => 1.39,
 'HTTP::Request::Common' => 1.26,
 'LWP::Simple' => 1.41,
