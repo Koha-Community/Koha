@@ -336,11 +336,26 @@ a .term {
 	padding : .3em 0;
 }
 
-#action a {
-	background-position : left;
+#action a, #toolbar a {
+	background-position : 5px center;
 	background-repeat : no-repeat;
 	text-decoration : none;
 	padding-left : 26px;
+}
+
+
+
+#toolbar ul li {
+	display : inline;
+	list-style : none;
+}
+
+#toolbar ul li a {
+	border-left : 1px solid #e8e8e8;
+}
+
+#toolbar ul li:first-child {
+	border-left : 0;
 }
 
 #action a.reserve, #toolbar a.reserve, .searchresults a.reserve {
@@ -357,6 +372,29 @@ a .term {
 
 #action a.print, #toolbar a.print {
 	background-image:url(../../images/print.gif);
+}
+
+#toolbar a.brief {
+	background-image: url(../../images/brief.gif);
+}
+
+#toolbar  a.detail {
+	background-image: url(../../images/detail.gif);
+}
+
+#toolbar a.print {
+	background-image: url(../../images/print.gif);
+}
+
+#toolbar a.hide {
+	background-image: url(../../images/close.gif);
+}
+
+#toolbar a.send {
+	background-image: url(../../images/send.gif);
+}
+#toolbar a.empty {
+	background-image: url(../../images/trash.gif);
 }
 
 /* the itemtype list in advanced search */
@@ -639,36 +677,6 @@ h2 span.hint {
 }
 a.cancel {
 	padding-left : 1em;
-}
-
-#toolbar ul {
-	border-bottom : 1px solid #AFBCCF;
-}
-
-#toolbar ul {
-	margin : 1em 0 0 0;
-	padding : 0 0 .3em 0;
-}
-
-#toolbar ul li {
-	display : inline;
-	list-style : none;
-}
-
-#toolbar ul li a {
-	border-left : 1px solid #afbccf;
-	border-top : 1px solid #afbccf;
-	border-right : 1px solid #afbccf;
-	padding : .3em;
-	text-decoration : none;
-	margin-left : .3em;
-}
-
-#toolbar ul li a.link {
-	border : 0;
-	background-position : left;
-	background-repeat : no-repeat;
-	padding : .3em .3em .3em 26px;
 }
 
 .resultscontrol, .resultscontrol select {

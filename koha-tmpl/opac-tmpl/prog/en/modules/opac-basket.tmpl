@@ -16,7 +16,7 @@
 		var checked = [];
 		$("#bookbag_form").checkCheckboxes("*", true).each(
 		    function() {
-				selRecord(this.id,true); 
+				selRecord(this.value,true); 
 			}
 		); 
 	        return false;
@@ -25,7 +25,7 @@
 	    var checked = [];
 		$("#bookbag_form").unCheckCheckboxes("*",true).each(
 		    function() {
-				selRecord(this.id,false);
+				selRecord(this.value,false);
 			}
 		);
 	        return false;
@@ -44,31 +44,34 @@
 
 <div id="toolbar">
 <ul>
-	<li><!-- TMPL_IF NAME="verbose" --><a href="opac-basket.pl" onclick="showLess(); return false;">Brief Display</a><!-- TMPL_ELSE --><a href="opac-basket.pl" onclick="showMore(); return false;">More Details</a><!-- /TMPL_IF --></li>
-	<li><a href="opac-basket.pl" onclick="sendBasket(); return false;">Send</a></li>
-	<li><a href="opac-basket.pl" onclick="printBasket(); return false;">Print</a></li>
-	<li><a href="opac-basket.pl" onclick="delBasket(); return false;">Empty and Close</a></li>
-	<li><a href="opac-basket.pl" onclick="quit(); return false;">Hide Window</a></li>
+	<li><!-- TMPL_IF NAME="verbose" --><a href="opac-basket.pl" class="brief" onclick="showLess(); return false;">Brief Display</a><!-- TMPL_ELSE --><a href="opac-basket.pl" class="detail" onclick="showMore(); return false;">More Details</a><!-- /TMPL_IF --></li>
+	<li><a class="send" href="opac-basket.pl" onclick="sendBasket(); return false;">Send</a></li>
+	<li><a class="print" href="opac-basket.pl" onclick="printBasket(); return false;">Print</a></li>
+	<li><a class="empty" href="opac-basket.pl" onclick="delBasket(); return false;">Empty and Close</a></li>
+	<li><a class="hide" href="opac-basket.pl" onclick="quit(); return false;">Hide Window</a></li>
 </ul>
         <!-- /TMPL_UNLESS -->
 </div>
 
 <!-- TMPL_IF NAME="verbose" -->
+	<!-- TMPL_UNLESS NAME="print_basket" --><p style="padding: 7px 0; border-top : 1px solid #E8E8E8;"><a id="CheckAll" href="#">Select All</a> <a id="CheckNone" href="#">Clear All</a> | <b>Selected items :</b>
+<a href="#" onclick="delSelRecords(); return false;">Remove</a>
+<!-- TMPL_IF NAME="loggedinusername" -->
+     | <a href="#" onclick="addSelToShelf(); return false;">Add to a shelf</a>
+<!-- /TMPL_IF --></p><!-- /TMPL_UNLESS -->
+            <form action="opac-basket.pl" method="get" name="bookbag_form" id="bookbag_form">
     <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
     <h3>
         <!-- TMPL_IF NAME="print_basket" -->
             <!-- TMPL_VAR NAME="title" -->
                 <!-- TMPL_IF name="subtitle" --> <!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF -->
         <!-- TMPL_ELSE -->
-            <form action="opac-basket.pl" method="get">
                 <input type="checkbox" value="<!-- TMPL_VAR NAME="biblionumber" -->" name="bib<!-- TMPL_VAR NAME="biblionumber" -->" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" onclick="selRecord(value,checked)" />
                 <!-- TMPL_VAR NAME="title" -->
                 <!-- TMPL_IF name="subtitle" --> <!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF -->
-            </form>
         <!-- /TMPL_IF -->
     </h3>
     <table>
-    	
         <!-- TMPL_IF name="isbn" -->
         <tr>
             <th scope="row">ISBN</th>
@@ -178,6 +181,7 @@
         </tr>
     </table>
     <!-- /TMPL_LOOP -->
+            </form>
 
 <!-- TMPL_ELSE -->
 	<form action="/cgi-bin/koha/opac-basket.pl" method="get" name="bookbag_form" id="bookbag_form">
