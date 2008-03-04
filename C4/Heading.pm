@@ -117,7 +117,7 @@ heading.
 
 sub authorities {
     my $self = shift;
-    my $query = "Match-heading,ext='$self->{'search_form'}'";
+    my $query = qq(Match-heading,ext="$self->{'search_form'}");
     $query .= $self->_query_limiters();
     my $results = SimpleSearch($query, "authorityserver");
     return $results;
