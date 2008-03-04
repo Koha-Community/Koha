@@ -24,7 +24,7 @@ Free Software Foundation, 59 Temple Place - Suite 330, Boston, MA
 -->
 
 <!--
-Authorities DOM config for MARC XML input
+Authorities DOM config for MARC ISO2709 input
 -->
 <dom>
   <extract name="index">
@@ -46,6 +46,6 @@ Authorities DOM config for MARC XML input
     <xslt stylesheet="authority-zebra-indexdefs.xsl"/>
   </retrieve>
   <input>
-    <xmlreader level="0"/>
+    <marc inputcharset="utf-8"/>
   </input>
 </dom>
