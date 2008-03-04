@@ -1,7 +1,8 @@
 #!/bin/bash
 USER=__KOHA_USER__
 GROUP=__KOHA_GROUP__
-NAME=koha-pazpar2-ctl
+DBNAME=__DB_NAME__
+NAME=koha-pazpar2-ctl.$DBNAME
 LOGDIR=__LOG_DIR__
 ERRLOG=$LOGDIR/koha-pazpar2daemon.err
 STDOUT=$LOGDIR/koha-pazpar2daemon.log

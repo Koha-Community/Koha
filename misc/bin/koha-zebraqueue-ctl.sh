@@ -1,7 +1,8 @@
 #!/bin/bash
 USER=__KOHA_USER__
 GROUP=__KOHA_GROUP__
-NAME=koha-zebraqueue-ctl
+DBNAME=__DB_NAME__
+NAME=koha-zebraqueue-ctl-$DBNAME
 LOGDIR=__LOG_DIR__
 PERL5LIB=__PERL_MODULE_DIR__
 KOHA_CONF=__KOHA_CONF_DIR__/koha-conf.xml
