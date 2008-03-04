@@ -38,7 +38,7 @@
     </z:index>
   </xslo:template>
   <xslo:template match="marc:controlfield[@tag='001']">
-    <z:index name="Local-Number">
+    <z:index name="Local-Number:w">
       <xslo:value-of select="."/>
     </z:index>
   </xslo:template>
