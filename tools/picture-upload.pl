@@ -137,7 +137,7 @@ if ( $uploadfile ) {
 	$template->param(filetype => $filetype );
 }
 
-if ( $borrowernumber ) {
+if ( $borrowernumber && !$errors && !$template->param('ERRORS') ) {
     my $urlbase = $input->url(-base => 1 -rewrite => 1);
     print $input->redirect ("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
 } else {
