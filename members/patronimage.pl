@@ -21,7 +21,7 @@
 #
 
 use strict;
-use CGI qw(:standard escapeHTML);
+use CGI; #qw(:standard escapeHTML);
 use C4::Context;
 use C4::Members;
 
@@ -41,7 +41,7 @@ patronimage.pl - Script for retrieving and formating Koha patron images for disp
 
 =head1 DESCRIPTION
 
-This script, when called from within HTML and passed a valid patron cardnumber, will retrieve the image data associated with that cardnumber, format it in proper HTML format and pass it back to be displayed.
+This script, when called from within HTML and passed a valid patron cardnumber, will retrieve the image data associated with that cardnumber if one exists, format it in proper HTML format and pass it back to be displayed.
 
 =cut
 
@@ -65,13 +65,11 @@ if ($dberror) {
 # things will result... you have been warned!
 
 if ($imagedata) {
-    print $data->header (-type => $imagedata->{'mimetype'}, -Content_Length => length ($imagedata->{'imagefile'})), $imagedata->{'imagefile'};
+    print $data->header (-type => $imagedata->{'mimetype'}, -'Cache-Control' => 'no-store', -Content_Length => length ($imagedata->{'imagefile'})), $imagedata->{'imagefile'};
     exit;
 } else {
-    warn "No image exists for $cardnumber" if $DEBUG;
-    my $urlbase = url(-base => 1 -rewrite => 1);
-    warn "URL base: $urlbase" if $DEBUG;
-    print $data->redirect (-uri => "$urlbase/intranet-tmpl/prog/img/patron-blank.png");
+    warn "No image exists for $cardnumber";
+    exit;
 }
 
 exit;

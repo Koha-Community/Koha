@@ -45,6 +45,7 @@ my $filetype            = $input->param('filetype');
 my $cardnumber          = $input->param('cardnumber');
 my $uploadfilename      = $input->param('uploadfile');
 my $uploadfile          = $input->upload('uploadfile');
+my $borrowernumber      = $input->param('borrowernumber');
 
 #FIXME: This code is really in the rough. The variables need to be re-scoped as the two subs depend on global vars to operate.
 #       Other parts of this code could be optimized as well, I think. Perhaps the file upload could be done with YUI's upload
@@ -136,7 +137,12 @@ if ( $uploadfile ) {
 	$template->param(filetype => $filetype );
 }
 
-output_html_with_http_headers $input, $cookie, $template->output;
+if ( $borrowernumber ) {
+    my $urlbase = $input->url(-base => 1 -rewrite => 1);
+    print $input->redirect ("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
+} else {
+    output_html_with_http_headers $input, $cookie, $template->output;
+}
 
 sub handle_dir {
     my ( $dir, $suffix ) = @_;

@@ -202,9 +202,10 @@ for (var i=0;i<ItemsNodes.length;i++){
 	<!-- TMPL_IF NAME="CAN_user_tools" --><!-- TMPL_UNLESS NAME="picture" -->
 	        <form method="post" action="/cgi-bin/koha/tools/picture-upload.pl" enctype="multipart/form-data">
                 <fieldset class="brief"><legend>Upload Patron Image</legend>
-                    <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> does not currently have an image available. To import an image for <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="surname" -->, enter the name of an image file to upload.
+                   <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> does not currently have an image available. To import an image for <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="surname" -->, enter the name of an image file to upload.
 		    <input type="hidden" id="image" name="filetype" value="image" />
-		    <input type="hidden" id="patron" name="cardnumber" value="<!-- TMPL_VAR NAME="cardnumber" -->" />
+		    <input type="hidden" id="cardnumber" name="cardnumber" value="<!-- TMPL_VAR NAME="cardnumber" -->" />
+		    <input type="hidden" id="borrowernumber" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
 	             <ol>
                         <li>
                            <label for="uploadfile">Select the file to upload: </label><input type="file" id="uploadfile" name="uploadfile" />
