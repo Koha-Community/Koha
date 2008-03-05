@@ -14,6 +14,16 @@ $(document).ready(function(){
 	        $(".checkboxed").unCheckCheckboxes();
 	        return false;
 	    });
+<!-- TMPL_IF NAME="offset" -->$("#markseen").before("<input type=\"submit\" value=\"&lt;&lt; Mark Seen and Continue\" id=\"markback\" />");<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="nextoffset" -->$("#markseen").after("<input type=\"submit\" id=\"marknext\" value=\"Mark Seen and Continue &gt;&gt;\" />");<!-- /TMPL_IF -->
+	$("#markback").click(function(){
+		$(".checkboxed").find("input").filter("[name=offset]").attr("value","<!-- TMPL_VAR NAME="prevoffset" -->");
+		return true;
+	});
+	$("#marknext").click(function(){
+		$(".checkboxed").find("input").filter("[name=offset]").attr("value","<!-- TMPL_VAR NAME="nextoffset" -->");
+		return true;
+	});
 	});
 //]]>
 </script>
@@ -172,7 +182,7 @@ $(document).ready(function(){
     <!-- /TMPL_LOOP -->
     </table>
 	<div style="padding : .3em 0"><a href="#" class="checkall">[Select All]</a> <a href="#" class="clearall">[Clear All]</a></div>
-    <input type="submit" value="Mark seen" />
+     <input type="submit" id="markseen" value="Mark seen" />
     </form>
     <!-- TMPL_IF NAME="offset" -->
     <form method="post" action="/cgi-bin/koha/tools/inventory.pl">
