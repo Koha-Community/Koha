@@ -334,6 +334,14 @@ sub postpone_update {
     $message .= "\n" unless $message =~ /\n$/;
     Unix::Syslog::syslog LOG_ERR, $message;
     $postponed_updates->{$server}->{$record_number} = 1;
+
+    $num_postponed_updates++;
+    if ($num_postponed_updates > $max_postponed_updates) {
+        warn "exiting, over $max_postponed_updates postponed indexing updates";
+        Unix::Syslog::syslog LOG_ERR, "exiting, over $max_postponed_updates postponed indexing updates";
+        Unix::Syslog::closelog;
+        exit;
+    }
 }
 
 sub handler_stop {
