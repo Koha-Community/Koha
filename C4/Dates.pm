@@ -31,7 +31,14 @@ BEGIN {
 	@EXPORT_OK = qw(DHTMLcalendar format_date_in_iso format_date);
 }
 
-my $prefformat = C4::Context->preference('dateformat');
+my $prefformat;
+sub _prefformat {
+    unless (defined $prefformat) {
+        $prefformat = C4::Context->preference('dateformat');
+    }
+    return $prefformat;
+}
+
 # print STDERR " Dates :      \$debug is '$debug'\n";
 # print STDERR " Dates :  \$cgi_debug is '$cgi_debug'\n";
 
@@ -116,7 +123,7 @@ sub new {
 sub init ($;$$) {
 	my $self = shift;
 	my $dformat;
-	$self->{'dateformat'} = $dformat = (scalar(@_) >= 2) ? $_[1] : $prefformat;
+	$self->{'dateformat'} = $dformat = (scalar(@_) >= 2) ? $_[1] : _prefformat();
 	($format_map{$dformat}) or croak 
 		"Invalid date format '$dformat' from " . ((scalar(@_) >= 2) ? 'argument' : 'system preferences');
 	$self->{'dmy_arrayref'} = [((@_) ? $self->dmy_map(shift) : localtime )] ;
@@ -125,24 +132,24 @@ sub init ($;$$) {
 }
 sub output ($;$) {
 	my $self = shift;
-	my $newformat = (@_) ? _recognize_format(shift) : $prefformat;
+	my $newformat = (@_) ? _recognize_format(shift) : _prefformat();
 	return (eval {POSIX::strftime($posix_map{$newformat}, @{$self->{'dmy_arrayref'}})} || undef);
 }
 sub today ($;$) {		# NOTE: sets date value to today (and returns it in the requested or current format)
 	my $class = shift;
 	$class = ref($class) || $class;
-	my $format = (@_) ? _recognize_format(shift) : $prefformat;
+	my $format = (@_) ? _recognize_format(shift) : _prefformat();
 	return $class->new()->output($format);
 }
 sub _recognize_format($) {
 	my $incoming = shift;
-	($incoming eq 'syspref') and return $prefformat;
+	($incoming eq 'syspref') and return _prefformat();
 	(scalar grep (/^$incoming$/, keys %format_map) == 1) or croak "The format you asked for ('$incoming') is unrecognized.";
 	return $incoming;
 }
 sub DHTMLcalendar ($;$) {	# interface to posix_map
 	my $class = shift;
-	my $format = (@_) ? shift : $prefformat;
+	my $format = (@_) ? shift : _prefformat();
 	return $posix_map{$format};	
 }
 sub format {	# get or set dateformat: iso, metric, us, etc.
@@ -155,16 +162,16 @@ sub visual {
 	if (@_) {
 		return $format_map{ _recognize_format(shift) };
 	}
-	$self eq __PACKAGE__ and return $format_map{$prefformat};
-	return $format_map{ eval { $self->{'dateformat'} } || $prefformat} ;
+	$self eq __PACKAGE__ and return $format_map{_prefformat()};
+	return $format_map{ eval { $self->{'dateformat'} } || _prefformat()} ;
 }
 
 # like the functions from the old C4::Date.pm
 sub format_date {
-	return __PACKAGE__ -> new(shift,'iso')->output((@_) ? shift : $prefformat);
+	return __PACKAGE__ -> new(shift,'iso')->output((@_) ? shift : _prefformat());
 }
 sub format_date_in_iso {
-	return __PACKAGE__ -> new(shift,$prefformat)->output('iso');
+	return __PACKAGE__ -> new(shift,_prefformat())->output('iso');
 }
 
 1;
@@ -290,6 +297,17 @@ If the date format is not in <systempreference>, we should send an error back to
 This kind of check should be centralized somewhere.  Probably not here, though.
 
 Notes: if the date in the db is null or empty, interpret null expiration to mean "never expires".
+
+=head3 _prefformat()
+
+This internal function is used to read the preferred date format
+from the system preference table.  It reads the preference once, 
+then caches it.
+
+This replaces using the package variable $prefformat directly, and
+specifically, doing a call to C4::Context->preference() during
+module initialization.  That way, C4::Dates no longer has a
+compile-time dependency on having a valid $dbh.
 
 =cut
 
