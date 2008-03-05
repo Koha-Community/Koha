@@ -326,10 +326,11 @@ foreach (@$alerts) {
     $_->{relatedto} = findrelatedto( $_->{type}, $_->{externalid} );
 }
 
-# grab patron's image if available
-my $picture = GetPatronImage($data->{'cardnumber'});
-$template->param( picture => $picture );
-
+# check to see if patron's image exists in the database
+# basically this gives us a template var to condition the display of
+# patronimage related interface on
+my ($picture, $dberror) = GetPatronImage($data->{'cardnumber'});
+$template->param( picture => 1 ) if $picture;
 
 my $branch=C4::Context->userenv->{'branch'};
 

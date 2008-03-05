@@ -194,6 +194,30 @@ for (var i=0;i<ItemsNodes.length;i++){
 
 
 </div>
+
+<!-- Begin Upload Patron Image Section -->
+
+<div>
+<!-- TMPL_IF NAME="patronimages" -->
+	<!-- TMPL_IF NAME="CAN_user_tools" --><!-- TMPL_UNLESS NAME="picture" -->
+	        <form method="post" action="/cgi-bin/koha/tools/picture-upload.pl" enctype="multipart/form-data">
+                <fieldset class="brief"><legend>Upload Patron Image</legend>
+                    <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> does not currently have an image available. To import an image for <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="surname" -->, enter the name of an image file to upload.
+		    <input type="hidden" id="image" name="filetype" value="image" />
+		    <input type="hidden" id="patron" name="cardnumber" value="<!-- TMPL_VAR NAME="cardnumber" -->" />
+	             <ol>
+                        <li>
+                           <label for="uploadfile">Select the file to upload: </label><input type="file" id="uploadfile" name="uploadfile" />
+                         </li>
+    	             </ol>
+                    <fieldset class="action"><input type="submit" value="Upload" class="submit" />
+                </fieldset>
+                </form>
+<!-- /TMPL_IF -->
+</div>
+
+<!-- End Upload Patron Image Section -->
+
 </div>
  <div class="yui-u"> 
  <div id="patron-library-details">
@@ -450,11 +474,4 @@ for (var i=0;i<ItemsNodes.length;i++){
 <!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
 </div>
 </div>
-<!-- TMPL_IF NAME="patronimages" --><script type="text/JavaScript" language="JavaScript">
-//<![CDATA[
-	<!-- TMPL_IF NAME="CAN_user_tools" -->$("#patronimage").after("<a style=\"display: block; font-size:80%; margin:0  0 1em 1em;\" href=\"/cgi-bin/koha/tools/picture-upload.pl?cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&filetype=image\">+ Click to Add Image</a>").css({cursor: "pointer"}).click(function(){
-		location.href="/cgi-bin/koha/tools/picture-upload.pl?cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&filetype=image";
-	});<!-- /TMPL_IF -->
-//]]>
-</script><!-- /TMPL_IF -->
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
