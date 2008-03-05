@@ -191,8 +191,8 @@ retry:
         warn "At Retry" if $debug;
         eval { $Zpackage->send("update") };
         if ($@ && $@->isa("ZOOM::Exception")) {
-        print "Oops!  ", $@->message(), "\n";
-        return $@->code();
+            print "Oops!  ", $@->message(), "\n";
+            return $@->code();
         }
         my($error, $errmsg, $addinfo, $diagset) = $Zconn->error_x();
         if ($error == 10007 && $tried < 3) {## timeout --another 30 looonng seconds for this update
