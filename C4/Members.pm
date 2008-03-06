@@ -57,8 +57,10 @@ BEGIN {
 		&GetRoadTypeDetails 
 		&GetSortDetails
 		&GetTitles
+
                 &GetPatronImage
                 &PutPatronImage
+                &RmPatronImage
 
 		&GetMemberAccountRecords
 		&GetBorNotifyAcctRecord
@@ -1708,7 +1710,7 @@ Returns the mimetype and binary image data of the image for the patron with the 
 
 sub GetPatronImage {
     my ($cardnumber) = @_;
-    warn "Cardnumber passed to GetPatronImage is $cardnumber"; # if $debug;
+    warn "Cardnumber passed to GetPatronImage is $cardnumber" if $debug;
     my $dbh = C4::Context->dbh;
     my $query = "SELECT mimetype, imagefile FROM patronimage WHERE cardnumber = ?;";
     my $sth = $dbh->prepare($query);
@@ -1732,11 +1734,32 @@ sub PutPatronImage {
     my ($cardnumber, $mimetype, $imgfile) = @_;
     warn "Parameters passed in: Cardnumber=$cardnumber, Mimetype=$mimetype, " . ($imgfile ? "Imagefile" : "No Imagefile") if $debug;
     my $dbh = C4::Context->dbh;
-    my $query = "INSERT INTO patronimage (cardnumber, mimetype, imagefile) VALUES (?,?,?) ON DUPLICATE KEY UPDATE cardnumber = ?;";
+    my $query = "INSERT INTO patronimage (cardnumber, mimetype, imagefile) VALUES (?,?,?) ON DUPLICATE KEY UPDATE imagefile = ?;";
     my $sth = $dbh->prepare($query);
-    $sth->execute($cardnumber,$mimetype,$imgfile,$cardnumber);
+    $sth->execute($cardnumber,$mimetype,$imgfile,$imgfile);
     warn "Error returned inserting $cardnumber.$mimetype." if $sth->errstr;
     my $dberror = $sth->errstr;
+    $sth->finish;
+    return $dberror;
+}
+
+=head2 RmPatronImage
+
+    my ($dberror) = RmPatronImage($cardnumber);
+
+Removes the image for the patron with the supplied cardnumber.
+
+=cut
+
+sub RmPatronImage {
+    my ($cardnumber) = @_;
+    warn "Cardnumber passed to GetPatronImage is $cardnumber" if $debug;
+    my $dbh = C4::Context->dbh;
+    my $query = "DELETE FROM patronimage WHERE cardnumber = ?;";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($cardnumber);
+    my $dberror = $sth->errstr;
+    warn "Database error!" if $sth->errstr;
     $sth->finish;
     return $dberror;
 }

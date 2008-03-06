@@ -46,6 +46,7 @@ my $cardnumber          = $input->param('cardnumber');
 my $uploadfilename      = $input->param('uploadfile');
 my $uploadfile          = $input->upload('uploadfile');
 my $borrowernumber      = $input->param('borrowernumber');
+my $op                  = $input->param('op');
 
 #FIXME: This code is really in the rough. The variables need to be re-scoped as the two subs depend on global vars to operate.
 #       Other parts of this code could be optimized as well, I think. Perhaps the file upload could be done with YUI's upload
@@ -67,11 +68,11 @@ THis script is called and presents the user with an interface allowing him/her t
 
 =cut
 
-
+warn "Operation requested: $op" if $DEBUG;
 
 my ( $total, $handled, @counts, $tempfile, $tfh );
 
-if ( $uploadfile ) {
+if ( ($op eq 'Upload') && $uploadfile ) {       # Case is important in these operational values as the template must use case to be visually pleasing!
     my $dirname = File::Temp::tempdir( CLEANUP => 1);
     warn "dirname = $dirname" if $DEBUG;
     my $filesuffix = $1 if $uploadfilename =~ m/(\..+)$/i;
@@ -132,13 +133,18 @@ if ( $uploadfile ) {
             );
         }   
     }
-} else {
-	$template->param(cardnumber => $cardnumber );
-	$template->param(filetype => $filetype );
+} elsif ( ($op eq 'Upload') && !$uploadfile ) {
+    warn "Problem uploading file or no file uploaded.";
+    $template->param(cardnumber => $cardnumber);
+    $template->param(filetype => $filetype);
+} elsif ( $op eq 'Delete' ) {
+    my $dberror = RmPatronImage($cardnumber);
+    warn "Database returned $dberror" if $dberror;
+} elsif ( $op eq 'Cancel' ) {
+    print $input->redirect ("/cgi-bin/koha/tools/picture-upload.pl");
 }
 
 if ( $borrowernumber && !$errors && !$template->param('ERRORS') ) {
-    my $urlbase = $input->url(-base => 1 -rewrite => 1);
     print $input->redirect ("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
 } else {
     output_html_with_http_headers $input, $cookie, $template->output;
