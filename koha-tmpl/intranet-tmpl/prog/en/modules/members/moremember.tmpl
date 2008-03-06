@@ -163,7 +163,7 @@ for (var i=0;i<ItemsNodes.length;i++){
 	<!-- TMPL_IF NAME="fax" --><li><span class="label">Fax: </span><!-- TMPL_VAR NAME="fax" --></li><!-- /TMPL_IF -->
   <!-- TMPL_UNLESS NAME="I"-->
 	<!--TMPL_IF Name="email"--><li><span class="label">Email (home):</span><a href="mailto:<!-- TMPL_VAR NAME="email" -->"><!-- TMPL_VAR NAME="email" --></a></li><!-- /TMPL_IF -->
-	<!--TMPL_IF Name="emailpro"--><span class="label">Email (work): </span><a href="mailto:<!-- TMPL_VAR NAME="emailpro" -->"><!-- TMPL_VAR NAME="emailpro" --></a></li><!--/TMPL_IF-->
+	<!--TMPL_IF Name="emailpro"--><li><span class="label">Email (work): </span><a href="mailto:<!-- TMPL_VAR NAME="emailpro" -->"><!-- TMPL_VAR NAME="emailpro" --></a></li><!--/TMPL_IF-->
     <!-- /TMPL_UNLESS -->
     <li><span class="label">Initials: </span><!-- TMPL_VAR NAME="initials" --></li>
     <li><span class="label">Date of birth:</span><!-- TMPL_VAR NAME="dateofbirth" --></li>
@@ -199,7 +199,7 @@ for (var i=0;i<ItemsNodes.length;i++){
 	<!-- TMPL_IF NAME="CAN_user_tools" --><!-- TMPL_UNLESS NAME="picture" -->
 	        <form method="post" action="/cgi-bin/koha/tools/picture-upload.pl" enctype="multipart/form-data">
                 <fieldset class="brief"><legend>Upload Patron Image</legend>
-                   <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> does not currently have an image available. To import an image for <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="surname" -->, enter the name of an image file to upload.
+                   <div class="hint"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> does not currently have an image available. To import an image for <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="surname" -->, enter the name of an image file to upload.</div>
 		    <input type="hidden" id="image" name="filetype" value="image" />
 		    <input type="hidden" id="cardnumber" name="cardnumber" value="<!-- TMPL_VAR NAME="cardnumber" -->" />
 		    <input type="hidden" id="borrowernumber" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
@@ -211,6 +211,8 @@ for (var i=0;i<ItemsNodes.length;i++){
                     <fieldset class="action"><input type="submit" value="Upload" class="submit" />
                 </fieldset>
                 </form>
+<!-- /TMPL_UNLESS -->
+<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 </div>
 
@@ -268,7 +270,8 @@ for (var i=0;i<ItemsNodes.length;i++){
     <li><span class="label">Relationship: </span><!-- TMPL_VAR NAME="relationship" --></li></ol></div>
    <!-- /TMPL_IF -->
 </div>
- <div id="patron-alternate-address" style="padding-top: 1em;">
+
+ <div id="patron-alternative-contact" style="padding-top: 1em;">
  <h3>Alternative Contact</h3>	
    <div class="rows"> <ol><li><span class="label">Surname: </span><!-- TMPL_VAR NAME="altcontactsurname" --></li>
     <li><span class="label">Firstname: </span><!-- TMPL_VAR NAME="altcontactfirstname" --></li>    
