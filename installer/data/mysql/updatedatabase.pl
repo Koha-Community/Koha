@@ -1078,6 +1078,20 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
             `fontsize` int(4) NOT NULL default '3',
             PRIMARY KEY  (`tmpl_id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+    $dbh->do("CREATE TABLE  IF NOT EXISTS `printers_profile` (
+            `prof_id` int(4) NOT NULL auto_increment,
+            `printername` varchar(40) NOT NULL,
+            `tmpl_id` int(4) NOT NULL,
+            `paper_bin` varchar(20) NOT NULL,
+            `offset_horz` float default NULL,
+            `offset_vert` float default NULL,
+            `creep_horz` float default NULL,
+            `creep_vert` float default NULL,
+            `unit` char(20) NOT NULL default 'POINT',
+            PRIMARY KEY  (`prof_id`),
+            UNIQUE KEY `printername` (`printername`,`tmpl_id`,`paper_bin`),
+            CONSTRAINT `printers_profile_pnfk_1` FOREIGN KEY (`tmpl_id`) REFERENCES `labels_templates` (`tmpl_id`) ON DELETE CASCADE ON UPDATE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ");
     print "Upgrade to $DBversion done ( Added labels_templates table if it did not exist. )\n";
     SetVersion ($DBversion);
 }
