@@ -697,9 +697,9 @@ if ($stickyduedate) {
 #$cookie=[$cookie, $branchcookie, $printercookie];
 #}
 
-# grab patron's image if available
-my $picture = GetPatronImage($borrower->{'cardnumber'});
-$template->param( picture => $picture );
+my ($picture, $dberror) = GetPatronImage($borrower->{'cardnumber'});
+$template->param( picture => 1 ) if $picture;
+
 
 $template->param(
     SpecifyDueDate           => C4::Context->preference("SpecifyDueDate"),

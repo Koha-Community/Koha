@@ -83,9 +83,8 @@ if (! $limit){
 	$limit = 'full'; 
 }
 
-# grab patron's image if available
-my $picture = GetPatronImage($data->{'cardnumber'});
-$template->param( picture => $picture );
+my ($picture, $dberror) = GetPatronImage($data->{'cardnumber'});
+$template->param( picture => 1 ) if $picture;
 
 $template->param(
 						readingrecordview => 1,

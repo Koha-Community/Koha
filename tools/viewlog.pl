@@ -73,7 +73,8 @@ if ($src eq 'circ') {   # if we were called from circulation, use the circulatio
     use C4::Members;
     my $borrowernumber = $object;
     my $data = GetMember($borrowernumber,'borrowernumber');
-    my $picture = GetPatronImage($data->{'cardnumber'});
+    my ($picture, $dberror) = GetPatronImage($data->{'cardnumber'});
+    $template->param( picture => 1 ) if $picture;
     $template->param(   menu => 1,
                         title => $data->{'title'},
                         initials => $data->{'initials'},
@@ -89,7 +90,6 @@ if ($src eq 'circ') {   # if we were called from circulation, use the circulatio
                         phonepro => $data->{'phonepro'},
                         email => $data->{'email'},
                         branchcode => $data->{'branchcode'},
-                        picture => $picture,
     );
 }
 
