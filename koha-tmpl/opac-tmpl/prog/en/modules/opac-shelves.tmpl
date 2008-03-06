@@ -218,24 +218,21 @@
     <!-- /TMPL_UNLESS --><!-- /viewshelf -->
 
     <!-- TMPL_IF NAME="showadd" -->
-		<div style="padding: 1.5em 0em;"><hr /></div>
-        <form method="post" action="/cgi-bin/koha/opac-shelves.pl">
+        <div id="addshelf"><form method="post" action="/cgi-bin/koha/opac-shelves.pl">
+		<fieldset class="rows">
+		<legend>Create a New List</legend>
             <input type="hidden" name="shelves" value="1" />
-            <div class="form">
-            <table>
-            <caption>Create a New List</caption>
-            <tr><th><label for="addshelf">List Name:</label> </th><td> 
+            <ol><li><label for="addshelf">List Name:</label>
 				<!-- TMPL_IF NAME="already" -->
 				<input id="addshelf" type="text" name="addshelf" value="<!-- TMPL_VAR NAME="already" -->" size="60" />
 				<!-- TMPL_ELSE -->
 				<input id="addshelf" type="text" name="addshelf" size="60" />
 				<!-- /TMPL_IF -->
-				<input type="hidden" name="owner" id="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->" />
-			</td></tr>
-            </table>
-			</div>
-            <p><input type="hidden" name="category" value="1" /><input type="submit" value="Add New Shelf" class="icon add" /></p>
-        </form>    
+				<input type="hidden" name="owner" id="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->" /></li>
+</ol>
+		</fieldset>
+            <fieldset class="action"><input type="hidden" name="category" value="1" /><input type="submit" value="Add New Shelf" class="submit" /></fieldset>
+        </form>    </div>
 	<!-- /TMPL_IF --><!-- /showadd -->
     </div>
    </div>
