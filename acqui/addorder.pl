@@ -114,15 +114,14 @@ if it is an order from an existing suggestion : the id of this suggestion.
 
 use strict;
 use CGI;
-use C4::Auth;
-use C4::Acquisition;
-use C4::Suggestions;
-use C4::Biblio;
+use C4::Auth;			# get_template_and_user
+use C4::Acquisition;	# NewOrder DelOrder ModOrder
+use C4::Suggestions;	# ModStatus
+use C4::Biblio;			# AddBiblio TransformKohaToMarc
 use C4::Output;
 
-
-
-#use Date::Manip;
+# FIXME: This needs to do actual error checking and possibly return user to the same form,
+# not just blindly call C4 functions and print a redirect.  
 
 my $input = new CGI;
 
@@ -139,22 +138,19 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 # get CGI parameters
-my $ordnum       = $input->param('ordnum');
-my $basketno     = $input->param('basketno');
-my $booksellerid = $input->param('booksellerid');
-my $existing     = $input->param('existing');    # existing biblio, (not basket or order)
+my $ordnum        = $input->param('ordnum');
+my $basketno      = $input->param('basketno');
+my $booksellerid  = $input->param('booksellerid');
+my $existing      = $input->param('existing');    # existing biblio, (not basket or order)
 my $title         = $input->param('title');
 my $author        = $input->param('author');
 my $copyrightdate = $input->param('copyrightdate');
 my $isbn          = $input->param('ISBN');
 my $itemtype      = $input->param('format');
-my $quantity      = $input->param('quantity');
-my $listprice     = $input->param('list_price');
+my $quantity      = $input->param('quantity');		# FIXME: else ERROR!
+my $listprice     = $input->param('list_price') || 0;
 my $branch        = $input->param('branch');
-if ( $listprice eq '' ) {
-    $listprice = 0;
-}
-my $series = $input->param('series');
+my $series        = $input->param('series');
 my $notes         = $input->param('notes');
 my $bookfund      = $input->param('bookfund');
 my $sort1         = $input->param('sort1');
@@ -178,8 +174,8 @@ my $createbibitem = $input->param('createbibitem');
 # create, modify or delete biblio
 # create if $quantity>=0 and $existing='no'
 # modify if $quantity>=0 and $existing='yes'
-# delete if $quantity has been se to 0 by the librarian
-my $biblionumber=$input->param('biblionumber');
+# delete if $quantity has been set to 0 by the librarian
+my $biblionumber  = $input->param('biblionumber');
 my $bibitemnum;
 if ( $quantity ne '0' ) {
     #check to see if biblio exists
@@ -192,8 +188,8 @@ if ( $quantity ne '0' ) {
                 "biblio.author"             => "$author",
                 "biblio.copyrightdate"      => $copyrightdate ? $copyrightdate : "",
                 "biblio.series"             => $series        ? $series        : "",
-                "biblioitems.itemtype"      => $itemtype ? $itemtype : "",
-                "biblioitems.isbn"          => $isbn ? $isbn : "",
+                "biblioitems.itemtype"      => $itemtype      ? $itemtype      : "",
+                "biblioitems.isbn"          => $isbn          ? $isbn          : "",
                 "biblioitems.publishercode" => $publishercode ? $publishercode : "",
             });
         # create the record in catalogue, with framework ''

@@ -69,25 +69,24 @@ use C4::Input;
 
 use C4::Auth;
 use C4::Bookfund;
-use C4::Bookseller;
+use C4::Bookseller;		# GetBookSellerFromId
 use C4::Acquisition;
-use C4::Suggestions;
-use C4::Biblio;
+use C4::Suggestions;	# GetSuggestion
+use C4::Biblio;			# GetBiblioData
 use C4::Output;
 use C4::Input;
 use C4::Koha;
-use C4::Branch; # GetBranches
+use C4::Branch;			# GetBranches
 use C4::Members;
 
 my $input        = new CGI;
-my $booksellerid = $input->param('booksellerid');
+my $booksellerid = $input->param('booksellerid');	# FIXME: else ERROR!
 my $title        = $input->param('title');
 my $author       = $input->param('author');
 my $copyright    = $input->param('copyright');
-my @booksellers  = GetBookSeller($booksellerid);
-my $count        = scalar @booksellers;
+my $bookseller   = GetBookSellerFromId($booksellerid);	# FIXME: else ERROR!
 my $ordnum       = $input->param('ordnum');
-my $biblionumber       = $input->param('biblionumber');
+my $biblionumber = $input->param('biblionumber');
 my $basketno     = $input->param('basketno');
 my $purchaseorder= $input->param('purchaseordernumber');
 my $suggestionid = $input->param('suggestionid');
@@ -108,18 +107,13 @@ if ( $ordnum eq '' ) {    # create order
 # get suggestion fields if applicable. If it's a subscription renewal, then the biblio already exists
 # otherwise, retrieve suggestion information.
     if ($suggestionid) {
-        if ($biblionumber) {
-            $data = GetBiblioData($biblionumber);
-        }
-        else {
-            $data = GetSuggestion($suggestionid);
-        }
+		$data = ($biblionumber) ? GetBiblioData($biblionumber) : GetSuggestion($suggestionid);
     }
 }
 else {    #modify order
     $data   = GetOrder($ordnum);
     $biblionumber = $data->{'biblionumber'};
-    #get basketno and suppleirno. too!
+    #get basketno and supplierno. too!
     my $data2 = GetBasket( $data->{'basketno'} );
     $basketno     = $data2->{'basketno'};
     $booksellerid = $data2->{'booksellerid'};
@@ -138,7 +132,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 # get currencies (for change rates calcs if needed)
 my @rates = GetCurrencies();
-$count = scalar @rates;
+my $count = scalar @rates;
 
 my @loop_currency = ();
 for ( my $i = 0 ; $i < $count ; $i++ ) {
@@ -176,13 +170,11 @@ $template->param( branchloop => \@branchloop , itypeloop => \@itemtypesloop );
 my $borrower= GetMember($loggedinuser);
 my ( $flags, $homebranch )= ($borrower->{'flags'},$borrower->{'branchcode'});
 
-my $count2;
-my @bookfund;
 my @select_bookfund;
 my %select_bookfunds;
 
-@bookfund = GetBookFunds($homebranch);
-$count2 = scalar @bookfund;
+my @bookfund = GetBookFunds($homebranch);
+my $count2 = scalar @bookfund;
 
 for ( my $i = 0 ; $i < $count2 ; $i++ ) {
     push @select_bookfund, $bookfund[$i]->{'bookfundid'};
@@ -191,12 +183,12 @@ for ( my $i = 0 ; $i < $count2 ; $i++ ) {
 }
 my $CGIbookfund = CGI::scrolling_list(
     -name     => 'bookfund',
-	-id         => 'bookfund',
+	-id       => 'bookfund',
     -values   => \@select_bookfund,
     -default  => $data->{'bookfundid'},
     -labels   => \%select_bookfunds,
-    -size     => 1,
-	-tabindex=>'',
+	#-size     => 1,
+	-tabindex =>'',
     -multiple => 0
 );
 
@@ -211,20 +203,16 @@ if ($close) {
 my $CGIsort1 = buildCGIsort( "Asort1", "sort1", $data->{'sort1'} );
 if ($CGIsort1) {
     $template->param( CGIsort1 => $CGIsort1 );
-}
-else {
+} else {
     $template->param( sort1 => $data->{'sort1'} );
 }
 
 my $CGIsort2 = buildCGIsort( "Asort2", "sort2", $data->{'sort2'} );
 if ($CGIsort2) {
     $template->param( CGIsort2 => $CGIsort2 );
-}
-else {
+} else {
     $template->param( sort2 => $data->{'sort2'} );
 }
-
-my $bibitemsexists;
 
 #do a biblioitems lookup on bib
 my @bibitems = GetBiblioItemByBiblioNumber($biblionumber);
@@ -232,8 +220,6 @@ my $bibitemscount = scalar @bibitems;
 
 if ( $bibitemscount > 0 ) {
     # warn "NEWBIBLIO: bibitems for $biblio exists\n";
-    $bibitemsexists = 1;
-
     my @bibitemloop;
     for ( my $i = 0 ; $i < $bibitemscount ; $i++ ) {
         my %line;
@@ -262,20 +248,20 @@ $template->param(
     basketno         => $basketno,
     booksellerid     => $booksellerid,
     suggestionid     => $suggestionid,
-    biblionumber           => $biblionumber,
+    biblionumber     => $biblionumber,
     authorisedbyname => $borrower->{'firstname'} . " " . $borrower->{'surname'},
 	biblioitemnumber => $data->{'biblioitemnumber'},
     itemtype         => $data->{'itemtype'},
-    itemtype_desc         => $itemtypes->{$data->{'itemtype'}}->{description},
-    discount         => $booksellers[0]->{'discount'},
-    listincgst       => $booksellers[0]->{'listincgst'},
-    listprice        => $booksellers[0]->{'listprice'},
-    gstreg           => $booksellers[0]->{'gstreg'},
-    invoiceinc       => $booksellers[0]->{'invoiceincgst'},
-    invoicedisc      => $booksellers[0]->{'invoicedisc'},
-    nocalc           => $booksellers[0]->{'nocalc'},
-    name             => $booksellers[0]->{'name'},
-    currency         => $booksellers[0]->{'listprice'},
+    itemtype_desc    => $itemtypes->{$data->{'itemtype'}}->{description},
+    discount         => $bookseller->{'discount'},
+    listincgst       => $bookseller->{'listincgst'},
+    listprice        => $bookseller->{'listprice'},
+    gstreg           => $bookseller->{'gstreg'},
+    invoiceinc       => $bookseller->{'invoiceincgst'},
+    invoicedisc      => $bookseller->{'invoicedisc'},
+    nocalc           => $bookseller->{'nocalc'},
+    name             => $bookseller->{'name'},
+    currency         => $bookseller->{'listprice'},
     gstrate          => C4::Context->preference("gist"),
     loop_currencies  => \@loop_currency,
     orderexists      => ( $new eq 'yes' ) ? 0 : 1,
@@ -291,7 +277,7 @@ $template->param(
     total            => $data->{ecost}*$data->{quantity},
     invoice          => $data->{'booksellerinvoicenumber'},
     ecost            => $data->{'ecost'},
-    purchaseordernumber            => $data->{'purchaseordernumber'},
+    purchaseordernumber => $data->{'purchaseordernumber'},
     notes            => $data->{'notes'},
     publishercode    => $data->{'publishercode'},
 #     donation         => $donation

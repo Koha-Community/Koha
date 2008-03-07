@@ -62,7 +62,10 @@ aqbooksellers table in the Koha database.
 
 =cut
 
-sub GetBookSeller {
+# FIXME: This function is badly named.  It should be something like 
+# SearchBookSellersByName.  It is NOT a singular return value.
+
+sub GetBookSeller($) {
     my ($searchstring) = @_;
     my $dbh = C4::Context->dbh;
     my $query = "SELECT * FROM aqbooksellers WHERE name LIKE ?";
@@ -74,7 +77,7 @@ sub GetBookSeller {
     my $sth2 = $dbh->prepare("SELECT count(*) FROM aqbasket WHERE booksellerid=?");
     while ( my $data = $sth->fetchrow_hashref ) {
         $sth2->execute($data->{id});
-        ($data->{basketcount}) = $sth2->fetchrow();
+        $data->{basketcount} = $sth2->fetchrow();
         push( @results, $data );
     }
     $sth->finish;
@@ -82,23 +85,19 @@ sub GetBookSeller {
 }
 
 
-sub GetBookSellerFromId {
-	my ($id) = @_;
+sub GetBookSellerFromId($) {
+	my ($id) = shift or return undef;
 	my $dbh = C4::Context->dbh();
 	my $query = "SELECT * FROM aqbooksellers WHERE id = ?";
 	my $sth =$dbh->prepare($query);
 	$sth->execute( $id );
 	if (my $data = $sth->fetchrow_hashref()){
-		my $sth2 = $dbh->prepare("SELECT count(*) FROM aqbasket WHERE booksellerid=?"); 
+		my $sth2 = $dbh->prepare("SELECT count(*) FROM aqbasket WHERE booksellerid=?");
 		$sth2->execute($id);
 		$data->{basketcount}=$sth2->fetchrow();
-		$sth->finish;
-		$sth2->finish;
-		return ($data);		
+		return ($data);
 	}
-	else {
-		return 0;
-	}
+	return 0;
 }
 #-----------------------------------------------------------------#
 
