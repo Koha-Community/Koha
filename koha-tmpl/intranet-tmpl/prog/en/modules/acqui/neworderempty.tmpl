@@ -41,7 +41,7 @@ f.GST.value=GST;
 return true;
 }
 
-function messenger(X,Y,etc){
+function messenger(X,Y,etc){	// FIXME: unused?
     win=window.open("","mess","height="+X+",width="+Y+",screenX=150,screenY=0");
     win.focus();
     win.document.close();
@@ -204,10 +204,10 @@ if (quantity ==0) {
 		<ol>
             <li>
                 <!-- TMPL_IF name="close" -->
-			<span class="label">Quantity: </span>
+			<span class="label required">Quantity: </span>
                     <input type="hidden" size="20" id="quantity" name="quantity" value="<!-- TMPL_VAR NAME="quantity" -->" /><!-- TMPL_VAR NAME="quantity" -->
                 <!-- TMPL_ELSE -->
-                <label for="quantity">Quantity: </label>
+                <label class="required" for="quantity">Quantity: </label>
                     <input type="text" size="20" id="quantity" name="quantity" value="<!-- TMPL_VAR NAME="quantity" -->" onchange="update(this.form);" />
                 <!--/TMPL_IF-->
             </li>

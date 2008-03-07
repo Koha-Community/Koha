@@ -28,11 +28,10 @@
 
 <!--TMPL_LOOP NAME="commitedloop"-->
 	<!--TMPL_IF name="toggle"-->
-		<tr class="hilighted">
+	<tr class="hilighted">
 	<!--TMPL_ELSE-->
-		<tr class="hilighted2">
-	<!--/TMPL_IF-->
 	<tr>
+	<!--/TMPL_IF-->
 		<td><!--TMPL_VAR NAME="title"-->	</td>
 		<td>	<a href="/cgi-bin/koha/acqui/newbiblio.pl?ordnum=<!--TMPL_VAR NAME="ordnum"-->&amp;booksellerid=<!--TMPL_VAR NAME="booksellerid"-->&amp;basket=<!--TMPL_VAR NAME="basketno"-->"><!--TMPL_VAR NAME="ordnum"--></a></td>
 		<td><!--TMPL_VAR NAME="itemtype"-->	</td>
