@@ -124,7 +124,7 @@ if ($op eq 'add_form') {
 			);
 
   $template->param(searchfield => $searchfield) if ($searchfield);
-	if ($data eq undef) {
+	if ($searchfield) {
 		$template->param(action => "Modify tag");
 		$template->param('heading-modify-tag-p' => 1);
 	} else {
