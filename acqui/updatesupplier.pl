@@ -92,7 +92,7 @@ if($data{'name'}) {
 	    $data{id}=AddBookseller(\%data);
 	}
 #redirect to booksellers.pl
-print $input->redirect("booksellers.pl?supplier=".$data{id});
+print $input->redirect("booksellers.pl?id=".$data{id});
 } else {
 print $input->redirect("supplier.pl?op=enter"); # fail silently.
 }

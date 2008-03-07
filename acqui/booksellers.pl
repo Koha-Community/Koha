@@ -77,8 +77,14 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 #parameters
 my $supplier = $query->param('supplier');
+my $id       = $query->param('id') || $query->param('supplierid');
+my @suppliers;
 
-my @suppliers = GetBookSeller($supplier);
+if ($id) {
+	push @suppliers, GetBookSellerFromId($id);
+} else {
+	@suppliers = GetBookSeller($supplier);
+}
 my $count = scalar @suppliers;
 if ($count == 1){
 	$template->param( supplier_name => $suppliers[0]->{'name'},
@@ -86,10 +92,9 @@ if ($count == 1){
 	);
 }
 # check if we have to "close" a basket before building page
-my $op     = $query->param('op');
-my $basket = $query->param('basketno');
-if ( $op eq 'close' ) {
-    CloseBasket($basket);
+if ($query->param('op') eq 'close') {
+	my $basket = $query->param('basketno');
+	$basket =~ /^\d+$/ and CloseBasket($basket);
 }
 
 #build result page
@@ -118,7 +123,7 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
         $inner_line{surname}      = $orders->[$i2]{'firstname'};
         $inner_line{firstname}    = $orders->[$i2]{'surname'};
         $inner_line{creationdate} = format_date( $orders->[$i2]{'creationdate'} );
-        $inner_line{closedate} = format_date( $orders->[$i2]{'closedate'} );
+        $inner_line{closedate}    = format_date( $orders->[$i2]{'closedate'}    );
         push @loop_basket, \%inner_line;
     }
     $line{loop_basket} = \@loop_basket;
@@ -126,7 +131,7 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
 }
 $template->param(
     loop_suppliers          => \@loop_suppliers,
-    supplier                => $supplier,
+    supplier                => ($id || $supplier),
     count                   => $count,
 );
 
