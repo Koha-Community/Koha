@@ -12,7 +12,10 @@
             }
 //]]>
         </script>
-		<!-- /TMPL_UNLESS -->
+<!-- /TMPL_UNLESS -->
+<style type="text/css">
+.sortmsg {font-size: 80%;}
+</style>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -46,6 +49,17 @@
     
     <div id="acqui_basket_content">
     <h2>Order Details</h2>
+	<!-- TMPL_IF NAME="sort_loop" -->
+		<!-- TMPL_LOOP NAME="sort_loop" -->
+			<!-- TMPL_IF name="error" -->
+			<div class="error">ERROR: Illegal sort requested by &quot;<!-- TMPL_VAR NAME="string" -->&quot;.
+				<br />You will need to use valid sort criteria to return valid results.</div>
+			<!-- TMPL_ELSE -->
+			<div class="sortmsg">Sorted by &quot;<!-- TMPL_VAR NAME="string" -->&quot;.</div>
+			<!-- /TMPL_IF -->
+		<!-- /TMPL_LOOP -->
+	<!-- /TMPL_IF -->
+
     <!-- TMPL_IF name="books_loop" -->
         <table>
             <tr>
@@ -67,7 +81,7 @@
                 <!-- /TMPL_IF -->
             </tr>
             <!-- TMPL_LOOP NAME="books_loop" -->
-                 <!-- TMPL_IF NAME="order_received" --><tr class="disabled"><!-- TMPL_ELSE --><!-- TMPL_IF NAME="highlight" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF --><!-- /TMPL_IF -->
+                 <!-- TMPL_IF NAME="order_received" --><tr class="disabled"><!-- TMPL_ELSE --><!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF --><!-- /TMPL_IF -->
                     <td><!-- TMPL_VAR NAME="ordernumber" -->
 							<!-- TMPL_IF NAME="order_received" --> (rcvd)<!-- /TMPL_IF --></td>
                         <td>
@@ -101,28 +115,32 @@
                     <input type="hidden" name="number" value="<!-- TMPL_VAR NAME="count" -->" />
                     <input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->" />
                 </td>
-                <th colspan="3">SubTotal</th>
-              <!--  <th><!-- TMPL_VAR NAME="sub_total_est" --></th> -->
+                <th>SubTotal</th>
+                <th><!-- TMPL_VAR NAME="sub_total_rrp" --></th>
+                <th><!-- currently duplicative <!-- TMPL_VAR NAME="sub_total_est" --> --></th>
                 <th><!-- TMPL_VAR name="qty_total" --></th>
                 <th><!-- TMPL_VAR NAME="sub_total" --></th>
                     <!-- TMPL_IF name="active" -->
                         <!-- TMPL_IF name="closedate" -->
-                          <td colspan="2">&nbsp;</td>
+                          <td colspan="1" rowspan="3">&nbsp;</td>
                         <!-- TMPL_ELSE -->
-                          <td colspan="3">&nbsp;</td>
+                          <td colspan="3" rowspan="3">&nbsp;</td>
                         <!-- /TMPL_IF -->
                     <!-- /TMPL_IF -->
-                
             </tr>
-<!-- TMPL_IF NAME="GST" -->            <tr>
-                <th>GST</th>
+			<tr>
+                <th>GST (<!-- TMPL_VAR NAME="gist_rate" -->)</th>
+                <th><!-- TMPL_VAR NAME="gist_rrp" --></th>
+<!-- TMPL_UNLESS NAME="listincgst" -->
+                <th><!-- currently duplicative <!-- TMPL_VAR NAME="gist_est" --> --></th>
                 <th>&nbsp;</th>
-                <th><!-- TMPL_VAR NAME="gist_est" --></th>
                 <th><!-- TMPL_VAR NAME="gist" --></th>
-                <th>&nbsp;</th>
-            </tr><!-- /TMPL_IF -->
+<!-- TMPL_ELSE -->
+				<th colspan="3">**</th>
+<!-- /TMPL_UNLESS -->
+            </tr>
             <tr>
-                <th>TOTAL  (<!-- TMPL_VAR NAME="currency" -->)</th>
+                <th>TOTAL (<!-- TMPL_VAR NAME="currency" -->)</th>
                 <th><!-- TMPL_VAR NAME="grand_total_rrp" --></th>
                 <th>&nbsp;</th>
                 <th><!-- TMPL_VAR name="qty_total" --></th>
@@ -134,8 +152,10 @@
             <tr><td>Basket empty</td></tr>
         </table>
     <!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="listincgst" --><small class="highlight">** Vendor's listings already include GST.</small>
+    <!-- /TMPL_IF -->
     </div>
-    
+    <br />
     <!-- TMPL_UNLESS name="closedate" -->
     <div id="acqui_basket_add">
         <h2>Add To Order</h2>
