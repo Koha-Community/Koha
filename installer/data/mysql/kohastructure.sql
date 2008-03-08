@@ -1158,6 +1158,7 @@ CREATE TABLE `labels_templates` (
   `active` int(1) default NULL,
   `units` char(20)  default 'PX',
   `fontsize` int(4) NOT NULL default '3',
+  `font` char(10) NOT NULL default 'TR',
   PRIMARY KEY  (`tmpl_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

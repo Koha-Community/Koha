@@ -89,6 +89,16 @@
 <!-- /TMPL_IF -->
 </li>
 
+<li><label for="fonts">Font: </label><select id="fonts" name="fonts">
+    <!-- TMPL_LOOP NAME="fonts" -->
+        <!-- TMPL_IF NAME="selected" -->
+            <option value="<!-- TMPL_VAR NAME="font" -->" selected="selected">
+        <!-- TMPL_ELSE -->
+            <option value="<!-- TMPL_VAR NAME="font" -->">
+        <!-- /TMPL_IF --><!-- TMPL_VAR NAME="name" --></option>
+    <!-- /TMPL_LOOP -->
+</select></li>
+
 <li><label for="fontsize">Font Size:</label> <input type="text" id="fontsize" name="fontsize"  size="1" value="<!-- TMPL_VAR NAME="fontsize" -->" /></li>
 
 <li><label for="active">Active: </label>

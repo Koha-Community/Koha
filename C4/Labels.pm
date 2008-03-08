@@ -43,7 +43,7 @@ BEGIN {
 		&get_layouts
 		&get_barcode_types
 		&get_batches &delete_batch
-		&add_batch &SetFontSize &printText
+		&add_batch &printText
 		&GetItemFields
 		&get_text_fields
 		get_layout &save_layout &add_layout
@@ -332,10 +332,10 @@ sub get_barcode_types {
     my $barcode     = $layout->{'barcodetype'};
     my @array;
 
-    push( @array, { code => 'CODE39',    desc => 'Code 39' } );
-    push( @array, { code => 'CODE39MOD', desc => 'Code39 + Modulo43' } );
+    push( @array, { code => 'CODE39',      desc => 'Code 39' } );
+    push( @array, { code => 'CODE39MOD',   desc => 'Code39 + Modulo43' } );
     push( @array, { code => 'CODE39MOD10', desc => 'Code39 + Modulo10' } ); 
-	push( @array, { code => 'ITF',       desc => 'Interleaved 2 of 5' } );
+    push( @array, { code => 'ITF',         desc => 'Interleaved 2 of 5' } );
 
     foreach my $line (@array) {
         if ( $line->{'code'} eq $barcode ) {
@@ -358,19 +358,17 @@ sub GetUnitsValue {
 }
 
 sub GetTextWrapCols {
-    my ( $fontsize, $label_width ) = @_;
-    my $string           = "0";
-    my $left_text_margin = 3;
-    my ( $strtmp, $strwidth );
-    my $count     = 0;
-    my $textlimit = $label_width - $left_text_margin;
+    my ( $font, $fontsize, $label_width, $left_text_margin ) = @_;
+    my $string = '0';
+    my $strwidth;
+    my $count = 0;
+    my $textlimit = $label_width - ( 2* $left_text_margin);
 
     while ( $strwidth < $textlimit ) {
-        $strwidth = prStrWidth( $string, 'C', $fontsize );
-        $string = $string . '0';
-
-        #	warn "strwidth $strwidth, $textlimit, $string";
         $count++;
+        $strwidth = prStrWidth( $string, $font, $fontsize );
+        $string = $string . '0';
+        #warn "strwidth:$strwidth, textlimit:$textlimit, count:$count string:$string";
     }
     return $count;
 }
@@ -439,13 +437,14 @@ sub SaveTemplate {
         $tmpl_id,     $tmpl_code,   $tmpl_desc,    $page_width,
         $page_height, $label_width, $label_height, $topmargin,
         $leftmargin,  $cols,        $rows,         $colgap,
-        $rowgap,      $fontsize,     $units
+        $rowgap,      $font,        $fontsize,     $units
     ) = @_;
+    warn "Passed \$font:$font";
     my $dbh = C4::Context->dbh;
     my $query =
       " UPDATE labels_templates SET tmpl_code=?, tmpl_desc=?, page_width=?,
                page_height=?, label_width=?, label_height=?, topmargin=?,
-               leftmargin=?, cols=?, rows=?, colgap=?, rowgap=?, fontsize=?,
+               leftmargin=?, cols=?, rows=?, colgap=?, rowgap=?, font=?, fontsize=?,
 	  		   units=? 
                   WHERE tmpl_id = ?";
 
@@ -454,9 +453,11 @@ sub SaveTemplate {
         $tmpl_code,   $tmpl_desc,    $page_width, $page_height,
         $label_width, $label_height, $topmargin,  $leftmargin,
         $cols,        $rows,         $colgap,     $rowgap,
-        $fontsize,    $units,        $tmpl_id
+        $font,        $fontsize,     $units,      $tmpl_id
     );
+    my $dberror = $sth->errstr;
     $sth->finish;
+    return $dberror;
 }
 
 sub CreateTemplate {
@@ -465,23 +466,26 @@ sub CreateTemplate {
         $tmpl_code,   $tmpl_desc,    $page_width, $page_height,
         $label_width, $label_height, $topmargin,  $leftmargin,
         $cols,        $rows,         $colgap,     $rowgap,
-        $fontsize,     $units
+        $font,        $fontsize,     $units
     ) = @_;
 
     my $dbh = C4::Context->dbh;
 
     my $query = "INSERT INTO labels_templates (tmpl_code, tmpl_desc, page_width,
                          page_height, label_width, label_height, topmargin,
-                         leftmargin, cols, rows, colgap, rowgap, fontsize, units)
-                         VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                         leftmargin, cols, rows, colgap, rowgap, font, fontsize, units)
+                         VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
     my $sth = $dbh->prepare($query);
     $sth->execute(
         $tmpl_code,   $tmpl_desc,    $page_width, $page_height,
         $label_width, $label_height, $topmargin,  $leftmargin,
         $cols,        $rows,         $colgap,     $rowgap,
-        $fontsize,    $units
+        $font,        $fontsize,    $units
     );
+    my $dberror = $sth->errstr;
+    $sth->finish;
+    return $dberror;
 }
 
 sub GetAllLabelTemplates {
@@ -831,8 +835,8 @@ sub deduplicate_batch {
 
 sub DrawSpineText {
 
-    my ( $y_pos, $label_height, $fontsize, $x_pos, $left_text_margin,
-        $text_wrap_cols, $item, $conf_data )
+    my ( $y_pos, $label_height, $label_width, $font, $fontsize, $x_pos, $left_text_margin,
+        $text_wrap_cols, $item, $conf_data, $printingtype )
       = @_;
 # hack to fix column name mismatch betwen labels_conf.class, and bibitems.classification
 	$$item->{'class'} = $$item->{'classification'};
@@ -843,22 +847,21 @@ sub DrawSpineText {
     my $str;
     ##      $item
 
-    my $top_text_margin = ( $fontsize + 3 );
-    my $line_spacer = ($fontsize);    # number of pixels between text rows.
+    my $top_text_margin = ( $fontsize + 3 );    #FIXME: This should be a template parameter and passed in...
+    my $line_spacer = ( $fontsize * 0.20 );    # number of pixels between text rows (This is actually leading: baseline to baseline minus font size. Recommended starting point is 20% of font size.).
 
     # add your printable fields manually in here
 
-my $layout_id = $$conf_data->{'id'};
+    my $layout_id = $$conf_data->{'id'};
 
 #    my @fields = GetItemFields();
 
-my $str_fields = get_text_fields($layout_id, 'codes' );
-my @fields = split(/ /, $str_fields);
-#warn Dumper(@fields);
-### @fields
+    my $str_fields = get_text_fields($layout_id, 'codes' );
+    my @fields = split(/ /, $str_fields);
+    #warn Dumper(@fields);
+    ### @fields
 
     my $vPos   = ( $y_pos + ( $label_height - $top_text_margin ) );
-    my $hPos   = ( $x_pos + $left_text_margin );
 
     # warn Dumper $conf_data;
     #warn Dumper $item;
@@ -879,7 +882,8 @@ my @fields = split(/ /, $str_fields);
             # strip out naughty existing nl/cr's
             $str =~ s/\n//g;
             $str =~ s/\r//g;
-
+            # strip out division slashes
+            $str =~ s/\///g;
             # chop the string up into _upto_ 12 chunks
             # and seperate the chunks with newlines
 
@@ -891,31 +895,39 @@ my @fields = split(/ /, $str_fields);
 
             # then loop for each string line
             foreach my $str (@strings) {
-
-                #warn "HPOS ,  VPOS $hPos, $vPos ";
-                # set the font size A
-
-                #   prText( $hPos, $vPos, $str );
-                PrintText( $hPos, $vPos, $fontsize, $str );
+                my $hPos;
+                if ( $printingtype eq 'BIB' ) { #FIXME: This is a hack and needs to be implimented as a text justification option in the template...
+                    # some code to try and center each line on the label based on font size and string point length...
+                    my $stringwidth = prStrWidth($str, $font, $fontsize);
+                    my $whitespace = ( $label_width - ( $stringwidth + (2 * $left_text_margin) ) );
+                    $hPos = ( ( $whitespace  / 2 ) + $x_pos + $left_text_margin );
+                    warn "\$label_width=$label_width \$stringwidth=$stringwidth \$whitespace=$whitespace \$left_text_margin=$left_text_margin for $str";
+                } else {
+                    $hPos = ( $x_pos + $left_text_margin );
+                }
+                PrintText( $hPos, $vPos, $font, $fontsize, $str );
                 $vPos = $vPos - $line_spacer;
+                
             }
-        }    # if field is     }    #foreach feild
-    }
+        }    # if field is     
+    }    #foreach feild
 }
 
 sub PrintText {
-    my ( $hPos, $vPos, $fontsize, $text ) = @_;
-    my $str = "BT /Ft1 $fontsize Tf $hPos $vPos Td ($text) Tj ET";
+    my ( $hPos, $vPos, $font, $fontsize, $text ) = @_;
+    my $str = "BT /$font $fontsize Tf $hPos $vPos Td ($text) Tj ET";
     prAdd($str);
 }
 
-sub SetFontSize {
+# Is this used anywhere?
 
-    my ($fontsize) = @_;
-### fontsize
-    my $str = "BT/F13 30 Tf288 720 Td( AAAAAAAAAA ) TjET";
-    prAdd($str);
-}
+#sub SetFontSize {
+#
+#    my ($fontsize) = @_;
+#### fontsize
+#    my $str = "BT/F13 30 Tf288 720 Td( AAAAAAAAAA ) TjET";
+#    prAdd($str);
+#}
 
 sub DrawBarcode {
 

@@ -10,7 +10,6 @@ use HTML::Template::Pro;
 use PDF::Reuse;
 use PDF::Reuse::Barcode;
 use POSIX;
-#use C4::Labels;
 #use Smart::Comments;
 
 my $DEBUG = 0;
@@ -27,7 +26,7 @@ my $spine_text = "";
 # get the printing settings
 my $template    = GetActiveLabelTemplate();
 my $conf_data   = get_label_options();
-my $profile = GetAssociatedProfile($template->{'tmpl_id'});
+my $profile     = GetAssociatedProfile($template->{'tmpl_id'});
 
 my $batch_id =   $cgi->param('batch_id');
 my @resultsloop = get_label_items($batch_id);
@@ -45,21 +44,8 @@ warn "Starting on label #$start_label" if $DEBUG;
 my $fontsize     = $template->{'fontsize'};
 my $units        = $template->{'units'};
 
-### $printingtype;
-
-=c
-################### defaults for testing
-my $barcodetype  = 'CODE39';
-my $printingtype = 'BARBIB';
-my $guidebox     = 1;
-my $start_label  = 1;
-my $units        = 'POINTS'
-=cut
-
-#my $fontsize = 3;
-
-#warn "UNITS $units";
-#warn "fontsize = $fontsize";
+warn "UNITS $units";
+warn "fontsize = $fontsize";
 #warn Dumper $template;
 
 my $unitvalue = GetUnitsValue($units);
@@ -88,8 +74,24 @@ warn "pghth=$page_height, pgwth=$page_width, lblhth=$label_height, lblwth=$label
 my $label_cols = $template->{'cols'};
 my $label_rows = $template->{'rows'};
 
-my $text_wrap_cols = GetTextWrapCols( $fontsize, $label_width );
+my $margin           = $top_margin;
+my $left_text_margin = 3;       # FIXME: This value should not be hardcoded
+my $str;
 
+prInitVars();
+$| = 1;
+prFile();
+
+# Some peritent notes from PDF::Reuse regarding prFont()...
+# If a font wasn't found, Helvetica will be set.
+# These names are always recognized: Times-Roman, Times-Bold, Times-Italic, Times-BoldItalic, Courier, Courier-Bold,
+#   Courier-Oblique, Courier-BoldOblique, Helvetica, Helvetica-Bold, Helvetica-Oblique, Helvetica-BoldOblique
+# They can be abbreviated: TR, TB, TI, TBI, C, CB, CO, CBO, H, HB, HO, HBO
+
+my $fontname = $template->{'font'};
+my $font = prFont( $fontname );
+
+my $text_wrap_cols = GetTextWrapCols( $font, $fontsize, $label_width, $left_text_margin );
 
 #warn $label_cols, $label_rows;
 
@@ -99,19 +101,7 @@ my $lowerLeftY  = 0;
 my $upperRightX = $page_width;
 my $upperRightY = $page_height;
 
-prInitVars();
-$| = 1;
-prFile();
-
 prMbox( $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY );
-
-# later feature, change the font-type and size?
-prFont('C');    # Just setting a font
-prFontSize($fontsize);
-
-my $margin           = $top_margin;
-my $left_text_margin = 3;
-my $str;
 
 #warn "STARTROW = $startrow\n";
 
@@ -223,7 +213,7 @@ foreach $item (@resultsloop) {
 
         DrawBarcode( $x_pos, $barcode_y, $barcode_height, $label_width,
             $barcode, $barcodetype );
-        DrawSpineText( $y_pos, $text_height, $fontsize, $x_pos,
+        DrawSpineText( $y_pos, $text_height, $label_width, $font, $fontsize, $x_pos,
             $left_text_margin, $text_wrap_cols, \$item, \$conf_data );
 
         CalcNextLabelPos();
@@ -234,7 +224,7 @@ foreach $item (@resultsloop) {
         my $barcode_height = $label_height / 2;
         DrawBarcode( $x_pos, $y_pos, $barcode_height, $label_width, $barcode,
             $barcodetype );
-        DrawSpineText( $y_pos, $label_height, $fontsize, $x_pos,
+        DrawSpineText( $y_pos, $label_height, $label_width, $font, $fontsize, $x_pos,
             $left_text_margin, $text_wrap_cols, \$item, \$conf_data );
 
         CalcNextLabelPos();
@@ -246,7 +236,7 @@ foreach $item (@resultsloop) {
             $barcodetype );
         CalcNextLabelPos();
         drawbox( $x_pos, $y_pos, $label_width, $label_height ) if $guidebox;
-        DrawSpineText( $y_pos, $label_height, $fontsize, $x_pos,
+        DrawSpineText( $y_pos, $label_height, $label_width, $font, $fontsize, $x_pos,
             $left_text_margin, $text_wrap_cols, \$item, \$conf_data );
 
         CalcNextLabelPos();
@@ -255,8 +245,8 @@ foreach $item (@resultsloop) {
 
     elsif ( $printingtype eq 'BIB' ) {
         drawbox( $x_pos, $y_pos, $label_width, $label_height ) if $guidebox;
-        DrawSpineText( $y_pos, $label_height, $fontsize, $x_pos,
-            $left_text_margin, $text_wrap_cols, \$item, \$conf_data );
+        DrawSpineText( $y_pos, $label_height, $label_width, $font, $fontsize, $x_pos,
+            $left_text_margin, $text_wrap_cols, \$item, \$conf_data, $printingtype );
         CalcNextLabelPos();
     }
 

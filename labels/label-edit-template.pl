@@ -76,10 +76,32 @@ foreach my $unit (@units) {
     }
 }
 
+my @fonts = (        #FIXME: There is probably a way to discover what additional fonts are installed on a user's system and generate this list dynamically...
+    { font => 'TR',     name => 'Times Roman' },
+    { font => 'TB',     name => 'Times Bold' },
+    { font => 'TI',     name => 'Times Italic' },
+    { font => 'TBI',    name => 'Times Bold Italic' },
+    { font => 'C',      name => 'Courier' },
+    { font => 'CB',     name => 'Courier Bold' },
+    { font => 'CO',     name => 'Courier Oblique' },
+    { font => 'CBO',    name => 'Courier Bold Oblique' },
+    { font => 'H',      name => 'Helvetica' },
+    { font => 'HB',     name => 'Helvetica Bold' },
+    { font => 'HO',     name => 'Helvetica Oblique' },
+    { font => 'HBO',    name => 'Helvetica Bold Oblique' },
+);
+
+foreach my $font (@fonts) {
+    if ( $font->{'font'} eq $tmpl->{'font'} ) {
+        $font->{'selected'} = 1;
+    }
+}
+
 $template->param(
 
     proflist     => \@proflist,
     units        => \@units,
+    fonts        => \@fonts,
 
     tmpl_id      => $tmpl->{'tmpl_id'},
     tmpl_code    => $tmpl->{'tmpl_code'},

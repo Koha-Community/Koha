@@ -29,21 +29,24 @@ my $cols         = $query->param('cols');
 my $rows         = $query->param('rows');
 my $colgap       = $query->param('colgap');
 my $rowgap       = $query->param('rowgap');
+my $font         = $query->param('fonts');
 my $fontsize     = $query->param('fontsize');
 my $units        = $query->param('units');
 my $active       = $query->param('active');
 my $prof_id      = $query->param('prof_id');
 
-SaveTemplate(
+my $dberror = SaveTemplate(
 
     $tmpl_id,     $tmpl_code,   $tmpl_desc,    $page_width,
     $page_height, $label_width, $label_height, $topmargin,
     $leftmargin,  $cols,        $rows,         $colgap,
-    $rowgap,      $fontsize,     $units
+    $rowgap,      $font,        $fontsize,     $units
 
 );
 
 SetAssociatedProfile( $prof_id, $tmpl_id ) if $prof_id;
+
+warn "Database returned the following error: $dberror" if $dberror;
 
 print $query->redirect("./label-templates.pl");
 
