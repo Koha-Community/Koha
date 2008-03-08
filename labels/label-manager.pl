@@ -64,7 +64,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "labels/label-manager.tmpl",
         query           => $query,
         type            => "intranet",
-        authnotrequired => 1,
+        authnotrequired => 0,
         flagsrequired   => { catalogue => 1 },
         debug           => 1,
     }
