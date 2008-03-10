@@ -852,9 +852,7 @@ See verbose embedded documentation.
 sub buildQuery {
     my ( $operators, $operands, $indexes, $limits, $sort_by, $scan ) = @_;
 
-    warn "---------"        if $DEBUG;
-    warn "Enter buildQuery" if $DEBUG;
-    warn "---------"        if $DEBUG;
+    warn "---------\nEnter buildQuery\n---------" if $DEBUG;
 
     # dereference
     my @operators = @$operators if $operators;
@@ -1157,9 +1155,7 @@ sub buildQuery {
         warn "LIMIT:" . $limit;
         warn "LIMIT CGI:" . $limit_cgi;
         warn "LIMIT DESC:" . $limit_desc;
-        warn "---------";
-        warn "Leave buildQuery";
-        warn "---------";
+        warn "---------\nLeave buildQuery\n---------";
     }
     return (
         undef,              $query, $simple_query, $query_cgi,
@@ -1179,7 +1175,6 @@ Format results in a form suitable for passing to the template
 sub searchResults {
     my ( $searchdesc, $hits, $results_per_page, $offset, @marcresults ) = @_;
     my $dbh = C4::Context->dbh;
-    my $toggle;
     my $even = 1;
     my @newresults;
 
@@ -1364,15 +1359,7 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
             }
         }
 
-        # FIXME:
-        # surely there's a better way to handle this
-        if ( $i % 2 ) {
-            $toggle = "#ffffcc";
-        }
-        else {
-            $toggle = "white";
-        }
-        $oldbiblio->{'toggle'} = $toggle;
+        ($i % 2) and $oldbiblio->{'toggle'} = 1;
 
         # Pull out the items fields
         my @fields = $marcrecord->field($itemtag);
@@ -1490,19 +1477,16 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
           ? C4::Context->preference('maxItemsinSearchResults') - 1
           : 1;
         for my $key ( sort keys %$onloan_items ) {
-            $onloanitemscount++;
-            push @onloan_items_loop, $onloan_items->{$key}
-              unless $onloanitemscount > $maxitems;
+            (++$onloanitemscount > $maxitems) and last;
+            push @onloan_items_loop, $onloan_items->{$key};
         }
         for my $key ( sort keys %$other_items ) {
-            $otheritemscount++;
-            push @other_items_loop, $other_items->{$key}
-              unless $otheritemscount > $maxitems;
+            (++$otheritemscount > $maxitems) and last;
+            push @other_items_loop, $other_items->{$key};
         }
         for my $key ( sort keys %$available_items ) {
-            $availableitemscount++;
+            (++$availableitemscount > $maxitems) and last;
             push @available_items_loop, $available_items->{$key}
-              unless $availableitemscount > $maxitems;
         }
 
 # last check for norequest : if itemtype is notforloan, it can't be reserved either, whatever the items
@@ -1775,9 +1759,7 @@ sub NZanalyse {
         warn "return : $results for LEAF : $string" if $DEBUG;
         return $results;
     }
-    warn "---------"       if $DEBUG;
-    warn "Leave NZanalyse" if $DEBUG;
-    warn "---------"       if $DEBUG;
+    warn "---------\nLeave NZanalyse\n---------" if $DEBUG;
 }
 
 sub NZoperatorAND{
