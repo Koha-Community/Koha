@@ -6,8 +6,12 @@
 //<![CDATA[
 
 	 $(document).ready(function() {
- 		$('#addbibliotabs > ul').tabs();
+ 		$('#addbibliotabs > ul').tabs().bind('show.ui-tabs', function(e, ui) {
+			$("#"+ui.panel.id+" input:eq(0)").focus();
+		});
 	 });
+	 
+	 $('#header_search > ul').tabs().bind('show.ui-tabs', function(e, ui) { $('#header_search > div:not(.ui-tabs-hide)').find('input').eq(0).focus(); });
 
 function confirmnotdup(){
 	$("#confirm_not_duplicate").attr("value","1");
