@@ -22,7 +22,7 @@ use warnings;
 
 use Exporter;
 
-use CGI;
+# use CGI;
 use vars qw($VERSION @ISA @EXPORT $debug $cgi_debug);
 # use vars qw(@EXPORT_OK %EXPORT_TAGS);
 
@@ -37,16 +37,29 @@ BEGIN {
 BEGIN {
 	# this stuff needs a begin block too, since dependencies might alter their compilations
 	# for example, adding DataDumper
-	#my $query = CGI->new();
+
 	$debug = $ENV{KOHA_DEBUG} || $ENV{DEBUG} || 0;
-	#$cgi_debug = $ENV{KOHA_CGI_DEBUG} || $query->param('debug') || 0;
+
+	# CGI->new conflicts w/ some upload functionality, 
+	# since we would get the "first" CGI object here.
+	# Instead we have to parse for ourselves if we want QUERY_STRING triggers.
+	#	my $query = CGI->new();		# conflicts!
+	#	$cgi_debug = $ENV{KOHA_CGI_DEBUG} || $query->param('debug') || 0;
+
 	$cgi_debug = $ENV{KOHA_CGI_DEBUG} || 0;
-	unless (0 <= $debug and $debug <= 9) {
+	unless ($cgi_debug or not $ENV{QUERY_STRING}) {
+		foreach (split /\&/,  $ENV{QUERY_STRING}) {
+			/^debug\=(.+)$/ or next;
+			$cgi_debug = $1;
+			last;
+		}
+	}
+	unless ($debug =~ /^\d$/) {
 		warn "Invalid \$debug value attempted: $debug";
 		$debug=1;
 	}
-	unless (0 <= $cgi_debug and $cgi_debug <= 9) {
-		$debug and 
+	unless ($cgi_debug =~ /^\d$/) {
+		$debug and
 		warn "Invalid \$cgi_debug value attempted: $cgi_debug";
 		$cgi_debug=1;
 	}
@@ -126,7 +139,7 @@ command with ERROR_LOG enabled for your VirtualHost.  Not intended for productio
 
 =over
 
-=item From a web browser, for example by supplying a non-zero debug parameter:
+=item From a web browser, for example by supplying a non-zero debug parameter (1 to 9):
 
 	http://www.mylibrary.org/cgi-bin/koha/opac-search.pl?q=history&debug=1
 
@@ -139,7 +152,8 @@ command with ERROR_LOG enabled for your VirtualHost.  Not intended for productio
 =back 
 
 The former methods mean $cgi_debug is exposed.  Do NOT use it to trigger any actions that you would
-not allow a (potentially anonymous) end user to perform.  
+not allow a (potentially anonymous) end user to perform.  Dumping sensitive data, directory listings, or 
+emailing yourself a test message would all be bad actions to tie to $cgi_debug.
 
 =head1 OTHER SOURCES of Debug Switches
 
