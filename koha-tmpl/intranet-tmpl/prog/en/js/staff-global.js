@@ -12,6 +12,9 @@ function _(s) { return s } // dummy function for gettext
 	$(".close").click(function(){
 		window.close();
 	});
+	if($("#header_search #checkin_search")){ $.hotkeys.add('Alt+r',function (){$("#header_search").triggerTab(2); }); }
+	if($("#header_search #circ_search")){ $.hotkeys.add('Alt+u',function (){ $("#header_search").triggerTab("#circ_search"); }); }
+	if($("#header_search #catalog_search")){ $.hotkeys.add('Alt+q',function (){ $("#header_search").triggerTab(3); }); }
  });
  
 

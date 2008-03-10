@@ -53,7 +53,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
     <!-- TMPL_IF NAME="CircAutocompl" -->
     <div class="autocomplete">
             <div id="borrowerautocomplete" class="autocomplete">
-                <input autocomplete="off" id="findborrower" name="findborrower" class="focus" type="text" />
+                <input autocomplete="off" id="findborrower" name="findborrower" class="focus" type="text" accesskey="u" />
                 <div id="yborrowercontainer"></div>
                 <input id="ysearchsubmit" type="submit" class="submit" value="Submit" />
                 <input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
@@ -61,7 +61,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
             </div>
         </div>
 	<!-- TMPL_ELSE -->
-            <input id="findborrower" name="findborrower" size="40" class="focus" type="text" />
+            <input id="findborrower" name="findborrower" size="40" class="focus" type="text" accesskey="u" />
             <input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
             <input name="printer" value="" type="hidden" />
             <input value="Submit" class="submit" type="submit" />
@@ -72,7 +72,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 <div id="checkin_search" class="residentsearch">
     <p class="tip">Scan a barcode to check in:</p>
     <form method="post" action="/cgi-bin/koha/circ/returns.pl">
-        <input name="barcode" id="ret_barcode" size="40" />
+        <input name="barcode" id="ret_barcode" size="40" accesskey="r" />
         <input value="Submit" class="submit" type="submit" />
     </form>
 </div><!-- /TMPL_IF -->
@@ -80,7 +80,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 <div id="catalog_search" class="residentsearch">
     <p class="tip">Enter search keywords:</p>
     <form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
-        <input type="text" name="q" id="search-form" size="40" />
+        <input type="text" name="q" id="search-form" size="40" accesskey="q" />
         <input type="submit" class="submit" value="Submit"/>
     </form>
 </div><!-- /TMPL_IF -->
