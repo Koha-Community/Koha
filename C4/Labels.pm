@@ -362,13 +362,14 @@ sub GetTextWrapCols {
     my $string = '0';
     my $strwidth;
     my $count = 0;
+#    my $textlimit = $label_width - ($left_text_margin);
     my $textlimit = $label_width - ( 2* $left_text_margin);
 
     while ( $strwidth < $textlimit ) {
-        $count++;
         $strwidth = prStrWidth( $string, $font, $fontsize );
         $string = $string . '0';
         #warn "strwidth:$strwidth, textlimit:$textlimit, count:$count string:$string";
+        $count++;
     }
     return $count;
 }
@@ -835,7 +836,7 @@ sub deduplicate_batch {
 
 sub DrawSpineText {
 
-    my ( $y_pos, $label_height, $label_width, $font, $fontsize, $x_pos, $left_text_margin,
+    my ( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize, $left_text_margin,
         $text_wrap_cols, $item, $conf_data, $printingtype )
       = @_;
 # hack to fix column name mismatch betwen labels_conf.class, and bibitems.classification
@@ -845,7 +846,6 @@ sub DrawSpineText {
     $Text::Wrap::separator = "\n";
 
     my $str;
-    ##      $item
 
     my $top_text_margin = ( $fontsize + 3 );    #FIXME: This should be a template parameter and passed in...
     my $line_spacer = ( $fontsize * 0.20 );    # number of pixels between text rows (This is actually leading: baseline to baseline minus font size. Recommended starting point is 20% of font size.).
@@ -859,9 +859,9 @@ sub DrawSpineText {
     my $str_fields = get_text_fields($layout_id, 'codes' );
     my @fields = split(/ /, $str_fields);
     #warn Dumper(@fields);
-    ### @fields
 
     my $vPos   = ( $y_pos + ( $label_height - $top_text_margin ) );
+    my $font = prFont($fontname);
 
     # warn Dumper $conf_data;
     #warn Dumper $item;
@@ -897,11 +897,11 @@ sub DrawSpineText {
             foreach my $str (@strings) {
                 my $hPos;
                 if ( $printingtype eq 'BIB' ) { #FIXME: This is a hack and needs to be implimented as a text justification option in the template...
-                    # some code to try and center each line on the label based on font size and string point length...
-                    my $stringwidth = prStrWidth($str, $font, $fontsize);
+                    # some code to try and center each line on the label based on font size and string point width...
+                    my $stringwidth = prStrWidth($str, $fontname, $fontsize);
                     my $whitespace = ( $label_width - ( $stringwidth + (2 * $left_text_margin) ) );
                     $hPos = ( ( $whitespace  / 2 ) + $x_pos + $left_text_margin );
-                    warn "\$label_width=$label_width \$stringwidth=$stringwidth \$whitespace=$whitespace \$left_text_margin=$left_text_margin for $str";
+                    #warn "\$label_width=$label_width \$stringwidth=$stringwidth \$whitespace=$whitespace \$left_text_margin=$left_text_margin for $str\n";
                 } else {
                     $hPos = ( $x_pos + $left_text_margin );
                 }

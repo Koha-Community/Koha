@@ -41,11 +41,10 @@ if ($cgi->param('startlabel')) {
         $start_label = $cgi->param('startlabel');       # A bit of a hack to allow setting the starting label from the address bar... -fbcit
     }
 warn "Starting on label #$start_label" if $DEBUG;
-my $fontsize     = $template->{'fontsize'};
 my $units        = $template->{'units'};
 
-warn "UNITS $units";
-warn "fontsize = $fontsize";
+#warn "UNITS $units";
+#warn "fontsize = $fontsize";
 #warn Dumper $template;
 
 my $unitvalue = GetUnitsValue($units);
@@ -88,10 +87,10 @@ prFile();
 #   Courier-Oblique, Courier-BoldOblique, Helvetica, Helvetica-Bold, Helvetica-Oblique, Helvetica-BoldOblique
 # They can be abbreviated: TR, TB, TI, TBI, C, CB, CO, CBO, H, HB, HO, HBO
 
-my $fontname = $template->{'font'};
-my $font = prFont( $fontname );
+my $fontsize    = $template->{'fontsize'};
+my $fontname    = $template->{'font'};
 
-my $text_wrap_cols = GetTextWrapCols( $font, $fontsize, $label_width, $left_text_margin );
+my $text_wrap_cols = GetTextWrapCols( $fontname, $fontsize, $label_width, $left_text_margin );
 
 #warn $label_cols, $label_rows;
 
@@ -213,7 +212,7 @@ foreach $item (@resultsloop) {
 
         DrawBarcode( $x_pos, $barcode_y, $barcode_height, $label_width,
             $barcode, $barcodetype );
-        DrawSpineText( $y_pos, $text_height, $label_width, $font, $fontsize, $x_pos,
+        DrawSpineText( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize,
             $left_text_margin, $text_wrap_cols, \$item, \$conf_data );
 
         CalcNextLabelPos();
@@ -224,7 +223,7 @@ foreach $item (@resultsloop) {
         my $barcode_height = $label_height / 2;
         DrawBarcode( $x_pos, $y_pos, $barcode_height, $label_width, $barcode,
             $barcodetype );
-        DrawSpineText( $y_pos, $label_height, $label_width, $font, $fontsize, $x_pos,
+        DrawSpineText( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize,
             $left_text_margin, $text_wrap_cols, \$item, \$conf_data );
 
         CalcNextLabelPos();
@@ -236,7 +235,7 @@ foreach $item (@resultsloop) {
             $barcodetype );
         CalcNextLabelPos();
         drawbox( $x_pos, $y_pos, $label_width, $label_height ) if $guidebox;
-        DrawSpineText( $y_pos, $label_height, $label_width, $font, $fontsize, $x_pos,
+        DrawSpineText( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize,
             $left_text_margin, $text_wrap_cols, \$item, \$conf_data );
 
         CalcNextLabelPos();
@@ -245,7 +244,7 @@ foreach $item (@resultsloop) {
 
     elsif ( $printingtype eq 'BIB' ) {
         drawbox( $x_pos, $y_pos, $label_width, $label_height ) if $guidebox;
-        DrawSpineText( $y_pos, $label_height, $label_width, $font, $fontsize, $x_pos,
+        DrawSpineText( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize,
             $left_text_margin, $text_wrap_cols, \$item, \$conf_data, $printingtype );
         CalcNextLabelPos();
     }
