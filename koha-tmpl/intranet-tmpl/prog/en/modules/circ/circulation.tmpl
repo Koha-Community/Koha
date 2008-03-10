@@ -158,6 +158,10 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <!-- RESULT OF ISSUING REQUEST -->
         <!-- TMPL_IF NAME="IMPOSSIBLE" -->
         <ul>
+        <!-- TMPL_IF NAME="STATS" -->
+            <li><span class="problem">Local Use Recorded</span></li>
+        <!-- /TMPL_IF -->
+
         <!-- TMPL_IF NAME="INVALID_DATE" -->
             <li><span class="problem">The due date is invalid</span></li>
         <!-- /TMPL_IF -->  

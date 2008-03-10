@@ -9,6 +9,7 @@
 		$("#addprofessional").parent().remove();
 		$("#addorganisation").parent().remove();
 		$("#addstaff").parent().remove();
+		$("#addstatistical").parent().remove();
 	    $("#newmenuc").empty();
 	    yuiToolbar();
 	 });
@@ -23,6 +24,7 @@
 			{ text: _("Professional Patron"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=P" },
 			{ text: _("Organisation"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=I" },
 			{ text: _("Staff"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=S" },
+			{ text: _("Statistical"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=X" },
 		] 
 	
 	    new YAHOO.widget.Button({
@@ -43,4 +45,5 @@
 <li><a id="addprofessional" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=P">Professional</a></li>
 <li><a id="addorganisation" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=I">Organisation</a></li>
 <li><a id="addstaff" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=S">Staff</a></li>
+<li><a id="addstatistical" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=X">Statistical</a></li>
 </ul></div>

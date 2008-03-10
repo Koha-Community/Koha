@@ -659,7 +659,7 @@ sub CanBookBeIssued {
     my $item = GetItem(GetItemnumberFromBarcode( $barcode ));
     my $issue = GetItemIssue($item->{itemnumber});
 	my $biblioitem = GetBiblioItemData($item->{biblioitemnumber});
-	$item->{'itemtype'}=$biblioitem->{'itemtype'};
+	$item->{'itemtype'}=$item->{'itype'}; 
     my $dbh             = C4::Context->dbh;
 
     #
@@ -670,6 +670,11 @@ sub CanBookBeIssued {
     #
     # BORROWER STATUS
     #
+    if ( $borrower->{'category_type'} eq 'X' && (  $item->{barcode}  )) { 
+    	# stats only borrower -- add entry to statistics table, and return issuingimpossible{STATS} = 1  .
+        &UpdateStats(C4::Context->userenv->{'branch'},'localuse','','',$item->{'itemnumber'},$item->{'itemtype'},$borrower->{'borrowernumber'});
+        return( { STATS => 1 }, {});
+    }
     if ( $borrower->{flags}->{GNA} ) {
         $issuingimpossible{GNA} = 1;
     }

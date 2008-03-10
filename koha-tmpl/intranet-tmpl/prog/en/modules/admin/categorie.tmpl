@@ -128,6 +128,7 @@
 					<!-- TMPL_IF NAME="type_S" --><option value="S" selected="selected">Staff</option><!-- TMPL_ELSE --><option value="S">Staff</option><!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="type_I" --><option value="I" selected="selected">Organisation</option><!-- TMPL_ELSE --><option value="I">Organisation</option><!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="type_P" --><option value="P" selected="selected">Professional</option><!-- TMPL_ELSE --><option value="P">Professional</option><!-- /TMPL_IF -->
+					<!-- TMPL_IF NXME="type_X" --><option value="X" selected="selected">Statistical</option><!-- TMPL_ELSE --><option value="X">Statistical</option><!-- /TMPL_IF -->
 					</select>
 	</li></ol>
 </fieldset>
@@ -234,6 +235,7 @@ Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" --><!-- /TMPL_IF 
                             <!-- TMPL_IF NAME="type_P" -->Prof.<!-- /TMPL_IF -->
                             <!-- TMPL_IF NAME="type_I" -->Org.<!-- /TMPL_IF -->
                             <!-- TMPL_IF NAME="type_S" -->Staff<!-- /TMPL_IF -->
+                            <!-- TMPL_IF NAME="type_X" -->Statistical<!-- /TMPL_IF -->
                         </td>
                         <td><!-- TMPL_VAR NAME="enrolmentperiod" --> months</td>
                         <td><!-- TMPL_VAR NAME="dateofbirthrequired" --> years</td>

@@ -231,9 +231,9 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --></stro
 				<label for="sex-male">Male </label><input type="radio" name="sex" id="sex-male" value="M" />
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="none" -->
-				<label for="sex-none">? </label><input type="radio" name="sex" id="sex-none" value=""  checked="checked"  />
+				<label for="sex-none">N/A </label><input type="radio" name="sex" id="sex-none" value=""  checked="checked"  />
 <!-- TMPL_ELSE -->
-				<label for="sex-none">? </label><input type="radio" name="sex" id="sex-none" value="" />
+				<label for="sex-none">N/A </label><input type="radio" name="sex" id="sex-none" value="" />
 <!-- /TMPL_IF -->
        	</li>
     <!--/TMPL_UNLESS-->
@@ -600,6 +600,7 @@ patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" --></stro
 		<!-- TMPL_IF EXPR="typename eq 'S'" --><optgroup label="Staff"><!-- /TMPL_IF -->
 		<!-- TMPL_IF EXPR="typename eq 'I'" --><optgroup label="Organisation"><!-- /TMPL_IF -->
 		<!-- TMPL_IF EXPR="typename eq 'P'" --><optgroup label="Professional"><!-- /TMPL_IF -->
+		<!-- TMPL_IF EXPR="typename eq 'X'" --><optgroup label="Statistical"><!-- /TMPL_IF -->
                 <!-- TMPL_LOOP NAME="categoryloop" -->
 				<!-- TMPL_IF NAME="categorycodeselected" -->
                <option value="<!-- TMPL_VAR NAME="categorycode" -->" selected="selected"><!-- TMPL_VAR NAME="categoryname" --></option>

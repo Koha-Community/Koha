@@ -97,6 +97,7 @@ $template->param("checked" => 1) if ($nodouble eq 1);
 ($borrower_data = GetMember($borrowernumber,'borrowernumber')) if ($op eq 'modify' or $op eq 'save');
 my $categorycode = $input->param('categorycode') || $borrower_data->{'categorycode'};
 my $category_type = $input->param('category_type');
+my $new_c_type = $category_type; #if we have input param, then we've already chosen the cat_type.
 unless ($category_type or !($categorycode)){
   my $borrowercategory= GetBorrowercategory($categorycode);
   $category_type = $borrowercategory->{'category_type'};
@@ -301,7 +302,7 @@ if ($ethnicitycategoriescount>=0) {
 }
 
 my @typeloop;
-foreach (qw(C A S P I)){
+foreach ( ($new_c_type) ? ($new_c_type) : qw(C A S P I X)){
 	my $action="WHERE category_type=?";
 	($categories,$labels)=GetborCatFromCatType($_,$action);
 	my @categoryloop;
@@ -483,7 +484,7 @@ foreach (qw(dateenrolled dateexpiry dateofbirth)) {
 	$template->param( $_ => $data{$_});
 }
 
-$template->param( "showguarantor"  => ($category_type=~/A|I|S/) ? 0 : 1); # associate with step to know where you are
+$template->param( "showguarantor"  => ($category_type=~/A|I|S|X/) ? 0 : 1); # associate with step to know where you are
 $debug and warn "memberentry step: $step";
 $template->param(%data);
 $template->param( "step_$step"  => 1) if $step;	# associate with step to know where u are

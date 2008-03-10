@@ -143,7 +143,13 @@ sub GetItem {
         $ssth->execute($data->{'itemnumber'}) ;
         ($data->{'serialseq'} , $data->{'publisheddate'}) = $ssth->fetchrow_array();
 		warn $data->{'serialseq'} , $data->{'publisheddate'};
-    }		
+    }
+	#if we don't have an items.itype, use biblioitems.itemtype.
+	if( ! $data->{'itype'} ) {
+		my $sth = $dbh->prepare("SELECT itemtype FROM biblioitems  WHERE biblionumber = ?");
+		$sth->execute($data->{'biblionumber'});
+		($data->{'itype'}) = $sth->fetchrow_array;
+	}
     return $data;
 }    # sub GetItem
 
