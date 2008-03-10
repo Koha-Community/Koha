@@ -1,16 +1,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="<!-- TMPL_VAR NAME="themelang" -->/includes/favicon.ico" type="image/x-icon" />
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/lib/jquery/plugins/jquery.tabs.css" />
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/lib/jquery/plugins/ui.tabs.css" />
 <link rel="stylesheet" type="text/css" media="print" href="<!-- TMPL_VAR name="themelang" -->/css/print.css" />
 <!-- TMPL_IF name="intranetstylesheet" -->
     <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="intranetstylesheet" -->" />
 <!-- TMPL_ELSE -->
     <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/staff-global.css" />
 <!-- /TMPL_IF -->
-        <!-- Additional IE/Win specific style sheet (Conditional Comments) -->
-        <!--[if lte IE 7]>
-        <link rel="stylesheet" href="<!-- TMPL_VAR NAME="themelang" -->/lib/jquery/plugins/jquery.tabs-ie.css" type="text/css" media="projection, screen">
-        <![endif]-->
 <!-- TMPL_IF NAME="css_libs" --><!-- TMPL_LOOP NAME="css_libs" --><link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/<!-- TMPL_VAR NAME="lib" -->" /><!-- /TMPL_LOOP --><!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="css_module" --><link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/modules/<!-- TMPL_VAR NAME="css_module" -->" /><!-- /TMPL_IF -->
@@ -22,7 +18,7 @@
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_IF -->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/jquery.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tabs.pack.js"></script><script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.hotkeys.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/ui.tabs.js"></script><script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.hotkeys.js"></script>
 <!-- TMPL_IF NAME="js_libs" -->
 <!-- TMPL_LOOP NAME="js_libs" --><script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/<!-- TMPL_VAR NAME="lib" -->"></script>
 <!-- /TMPL_LOOP -->

@@ -18,7 +18,7 @@
 	</div>	
 			<ul>
 			<li><a href="/cgi-bin/koha/acqui/booksellers.pl#supplier_search">Supplier Search</a></li>
-			<li class="tabs-selected"><a href="/cgi-bin/koha/acqui/histsearch.pl#orders_search">Orders Search</a></li>
+			<li class="ui-tabs-selected"><a href="/cgi-bin/koha/acqui/histsearch.pl#orders_search">Orders Search</a></li>
 			</ul>	
 </div>
 <!-- End Acquisitions Resident Search Box -->

@@ -4,21 +4,15 @@ function _(s) { return s } // dummy function for gettext
 
  $(document).ready(function() {
  	$(".focus").focus();
-	$('#header_search').tabs({
-		onShow: function() {
-	        $('#header_search').find('div.residentsearch').not('.tabs-hide').find('input').eq(0).focus();
-	    }	
-	});
-	$(".close").click(function(){
-		window.close();
-	});
-	if($("#header_search #checkin_search")){ $.hotkeys.add('Alt+r',function (){$("#header_search").triggerTab(2); }); }
-	if($("#header_search #circ_search")){ $.hotkeys.add('Alt+u',function (){ $("#header_search").triggerTab("#circ_search"); }); }
-	if($("#header_search #catalog_search")){ $.hotkeys.add('Alt+q',function (){ $("#header_search").triggerTab(3); }); }
+	$('#header_search > ul').tabs().bind('show.ui-tabs', function(e, ui) { $('#header_search > div:not(.ui-tabs-hide)').find('input').eq(0).focus(); });
+	$(".close").click(function(){ window.close(); });
+	if($("#header_search #checkin_search")){
+		$.hotkeys.add('Alt+r',function (){ $("#header_search > ul").tabs("select","#checkin_search"); }); }
+	if($("#header_search #circ_search")){ $.hotkeys.add('Alt+u',function (){ $("#header_search > ul").tabs("select","#circ_search"); }); }
+	if($("#header_search #catalog_search")){ $.hotkeys.add('Alt+q',function (){ $("#header_search > ul").tabs("select","#catalog_search"); }); }
  });
  
-
-            YAHOO.util.Event.onContentReady("header", function () {
+             YAHOO.util.Event.onContentReady("header", function () {
 				var oMoremenu = new YAHOO.widget.Menu("moremenu", { zindex: 2 });
 
 				function positionoMoremenu() {

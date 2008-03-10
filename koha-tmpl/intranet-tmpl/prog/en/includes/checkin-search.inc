@@ -89,7 +89,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 <!-- /TMPL_IF -->
 <ul>
     <!-- TMPL_IF NAME="CAN_user_circulate" --><li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li><!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="CAN_user_circulate" --><li class="tabs-selected"><a href="/cgi-bin/koha/circ/returns.pl#checkin_search">Check In</a></li><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="CAN_user_circulate" --><li class="ui-tabs-selected"><a href="/cgi-bin/koha/circ/returns.pl#checkin_search">Check In</a></li><!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="CAN_user_catalogue" --><li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the Catalog</a></li><!-- /TMPL_IF -->
 </ul>   
 
