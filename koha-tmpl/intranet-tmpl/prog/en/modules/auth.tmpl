@@ -38,7 +38,7 @@
 <!-- login prompt time-->
 <form action="<!-- TMPL_VAR NAME="url" -->" method="post" name="loginform" id="loginform">
 <!-- TMPL_LOOP NAME="INPUTS" -->
-    <input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->" />
+    <input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" ESCAPE="html" -->" />
 <!-- /TMPL_LOOP -->
 <p><label>Username:<br />
 <input type="text" name="userid" id="userid" class="input focus" value="<!-- TMPL_VAR NAME="userid" -->" size="20" tabindex="1" /></label>
