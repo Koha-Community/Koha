@@ -227,7 +227,7 @@ function verify_images() {
                     <!-- TMPL_IF NAME="serial" -->
 					 <td><!-- TMPL_VAR NAME="serialseq" --><!-- TMPL_IF NAME="publisheddate" --> (<!-- TMPL_VAR NAME="publisheddate" -->)<!-- /TMPL_IF --></td>
 					<!-- TMPL_ELSE -->
-					 <td><!-- TMPL_VAR NAME="volumeddesc" --></td>
+					 <td><!-- TMPL_VAR NAME="enumchron" --></td>
 					<!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="type" -->
                     <td><a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemtype" -->">Fix Itemtype</a></td>
