@@ -34,7 +34,7 @@ use C4::Dates qw( DHTMLcalendar );
 use C4::Koha;    # XXX subfield_is_koha_internal_p
 
 #use Smart::Comments;
-#use Data::Dumper;
+use Data::Dumper;
 
 # Creates a scrolling list with the associated default value.
 # Using more than one scrolling list in a CGI assigns the same default value to all the
@@ -78,29 +78,40 @@ if ( $op eq "do_search" ) {
 if ( $show_results ) {
 	my $hits = $show_results;
 	my (@results,@results2);
+        # This code needs to be refactored using these subs...
+        #my @items = &GetItemsInfo( $biblio->{biblionumber}, 'intra' );
+        #my $dat = &GetBiblioData( $biblio->{biblionumber} );
 	for(my $i=0; $i<$hits; $i++) {
-		my $marcrecord = MARC::File::USMARC::decode($marcresults->[$i]);
-		my $biblio = TransformMarcToKoha(C4::Context->dbh,$marcrecord,'');
-		#build the hash for the template.
-		$biblio->{highlight}       = ($i % 2)?(1):(0);
-		#warn $biblio->{biblionumber};
-		push @results, $biblio;
-		my $biblionumber = $biblio->{'biblionumber'};
-        my $itemnums = get_itemnumbers_of($biblionumber);
-        my $iii = $itemnums->{$biblionumber} ;
-		if ($iii) {
-			my $item_results =  &GetItemInfosOf( @$iii );
+            #DEBUG Notes: Decode the MARC record from each resulting MARC record...
+	    my $marcrecord = MARC::File::USMARC::decode($marcresults->[$i]);
+            #DEBUG Notes: Transform it to Koha form...
+	    my $biblio = TransformMarcToKoha(C4::Context->dbh,$marcrecord,'');
+	    #build the hash for the template.
+	    $biblio->{highlight}       = ($i % 2)?(1):(0);
+            #DEBUG Notes: Stuff it into @results... (used below to supply fields not existing in the item data)
+            push @results, $biblio;
+	    my $biblionumber = $biblio->{'biblionumber'};
+            #DEBUG Notes: Grab the item numbers associated with this MARC record...
+            my $itemnums = get_itemnumbers_of($biblionumber);
+            #DEBUG Notes: Retrieve the item data for each number... 
+            my $iii = $itemnums->{$biblionumber};
+	    if ($iii) {
+                my @titem_results = GetItemsInfo( $itemnums->{$biblionumber}, 'intra' );
+	        my $item_results =  GetItemInfosOf( @$iii );
         	foreach my $item (keys %$item_results) {
-				for my $bibdata (keys %{$results[$i]}) {
-					#warn Dumper($bibdata);        
-					#warn Dumper($results[$i]->{$bibdata});
-					$item_results->{$item}{$bibdata} = $results[$i]->{$bibdata};
-				}
-            	push @results2, $item_results->{$item};
-			}
+		    for my $bibdata (keys %{$results[$i]}) {
+			if ( !$item_results->{$item}{$bibdata} ) {      #Only add the data from the bibliodata if the data does not already exit in itemdata.
+                                                                        #Otherwise we just build duplicate records rather than unique records per item.
+                            $item_results->{$item}{$bibdata} = $results[$i]->{$bibdata};
+                        }
+                    }
+                    #DEBUG Notes: After merging the bib and item data, stuff the results into $results2...
+            	    push @results2, $item_results->{$item};
 		}
+                #warn Dumper(@results2);
+	    }
     }
-   ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
             template_name   => "labels/result.tmpl",
             query           => $query,
