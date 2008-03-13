@@ -406,6 +406,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <td><!-- TMPL_VAR NAME="barcode" --></td>
         <td>
 		<!-- TMPL_IF NAME="can_renew" -->
+        <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
         <!-- TMPL_IF NAME="od" -->
             <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
         <!-- TMPL_ELSE -->
@@ -419,7 +420,6 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 			    Too Many Renewals
 			<!-- /TMPL_IF -->
 		<!-- /TMPL_IF -->
-        <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
         </td>
 		<td><a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR NAME="barcode" -->">Check In</a></td>
 		<!-- TMPL_IF NAME="renew_failed" -->
@@ -455,6 +455,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <td><!-- TMPL_VAR NAME="barcode" --></td>
         <td>
 		<!-- TMPL_IF NAME="can_renew" -->
+            <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
         <!-- TMPL_IF NAME="od" -->
             <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
         <!-- TMPL_ELSE -->
@@ -469,7 +470,6 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 			<!-- /TMPL_IF -->
 			
 		<!-- /TMPL_IF -->
-        <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
         </td>
 		<td><a href="/cgi-bin/koha/circ/returns.pl?barcode=<!-- TMPL_VAR NAME="barcode" -->">Check In</a></td>
 		<!-- TMPL_IF NAME="renew_failed" -->

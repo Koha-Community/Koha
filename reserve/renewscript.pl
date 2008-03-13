@@ -47,9 +47,21 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 # find items to renew, all items or a selection of items
 #
 
-my @data = $input->param('items[]');
+my @data;
+if ($input->param('renew_all')) {
+    @data = $input->param('all_items[]');
+}
+else {
+    @data = $input->param('items[]');
+}
 
-my @barcodes = $input->param('barcodes[]');
+my @barcodes;
+if ($input->param('return_all')) {
+    @barcodes = $input->param('all_barcodes[]');
+} else {
+    @barcodes = $input->param('barcodes[]');
+}
+
 my $branch=$input->param('branch');
 my $datedue;
 if ($input->param('newduedate')){
