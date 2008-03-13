@@ -839,6 +839,7 @@ CREATE TABLE `deleteditems` (
   `more_subfields_xml` longtext default NULL,
   `marc` longblob,
   `copynumber` smallint(6) default NULL,
+  `enumchron` varchar(80) default NULL,
   PRIMARY KEY  (`itemnumber`),
   KEY `delitembarcodeidx` (`barcode`),
   KEY `delitembinoidx` (`biblioitemnumber`),

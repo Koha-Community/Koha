@@ -1179,7 +1179,8 @@ $DBversion = "3.00.00.063";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE deleteditems
                 CHANGE COLUMN booksellerid booksellerid MEDIUMTEXT,
-                ADD COLUMN copynumber SMALLINT(6);");
+                ADD COLUMN copynumber SMALLINT(6) DEFAULT NULL,
+                ADD COLUMN enumchron VARCHAR(80) DEFAULT NULL;");
     $dbh->do("ALTER TABLE items
                 CHANGE COLUMN booksellerid booksellerid MEDIUMTEXT,
                 ADD COLUMN copynumber SMALLINT(6);");
