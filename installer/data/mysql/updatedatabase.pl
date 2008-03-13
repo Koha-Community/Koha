@@ -1175,6 +1175,19 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.063";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE deleteditems
+                CHANGE COLUMN booksellerid booksellerid MEDIUMTEXT,
+                ADD COLUMN copynumber SMALLINT(6);");
+    $dbh->do("ALTER TABLE items
+                CHANGE COLUMN booksellerid booksellerid MEDIUMTEXT,
+                ADD COLUMN copynumber SMALLINT(6);");
+	print "Upgrade to $DBversion done ( Changed items.booksellerid and deleteditems.booksellerid to MEDIUMTEXT and added missing items.copynumber and deleteditems.copynumber to fix Bug 1927)\n";
+    SetVersion ($DBversion);
+}
+
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
