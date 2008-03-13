@@ -179,7 +179,7 @@ else {
     }
     $borrowernumber = $input->param('borrowernumber');
     print $input->redirect(
-        "/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
+        "/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
 }
 
 sub writeoff {
