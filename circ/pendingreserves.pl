@@ -105,9 +105,8 @@ my $strsth =
  LEFT JOIN items ON items.biblionumber=reserves.biblionumber 
  LEFT JOIN borrowers ON reserves.borrowernumber=borrowers.borrowernumber
  LEFT JOIN biblio ON reserves.biblionumber=biblio.biblionumber
- WHERE isnull(cancellationdate)
+ WHERE reserves.found is NULL 
  $sqldatewhere
- AND reserves.found is NULL 
  AND reserves.itemnumber is NULL";
 
 if (C4::Context->preference('IndependantBranches')){

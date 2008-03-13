@@ -292,7 +292,7 @@ sub calculate {
 #	warn "filtres ".@filters[1];
 #	warn "filtres ".@filters[2];
 #	warn "filtres ".@filters[3];
-    $line = "issues.".$line if ($line=~/branchcode/) or ($line=~/timestamp/);
+    $line = "old_issues.".$line if ($line=~/branchcode/) or ($line=~/timestamp/);
     $line = "biblioitems.".$line if $line=~/itemtype/;
     
     $linefilter[0] = @$filters[0] if ($line =~ /timestamp/ )  ;
@@ -311,7 +311,7 @@ sub calculate {
     $linefilter[0] = @$filters[12] if ($line =~ /sort2/ ) ;
 #warn "filtre lignes".$linefilter[0]." ".$linefilter[1];
 # 
-    $column = "issues.".$column if (($column=~/branchcode/) or ($column=~/timestamp/));
+    $column = "old_issues.".$column if (($column=~/branchcode/) or ($column=~/timestamp/));
     $column = "biblioitems.".$column if $column=~/itemtype/;
     my @colfilter ;
     $colfilter[0] = @$filters[0] if ($column =~ /timestamp/ )  ;
@@ -354,7 +354,7 @@ sub calculate {
     }  
     
     my $strsth;
-    $strsth .= "select distinctrow $linefield FROM `issues`,borrowers,biblioitems LEFT JOIN items ON (biblioitems.biblioitemnumber=items.biblioitemnumber) LEFT JOIN issuingrules ON (issuingrules.branchcode=issues.branchcode AND  issuingrules.itemtype=biblioitems.itemtype AND  issuingrules.categorycode=borrowers.categorycode) WHERE issues.itemnumber=items.itemnumber AND issues.borrowernumber=borrowers.borrowernumber and returndate is not null";
+    $strsth .= "select distinctrow $linefield FROM `old_issues`,borrowers,biblioitems LEFT JOIN items ON (biblioitems.biblioitemnumber=items.biblioitemnumber) LEFT JOIN issuingrules ON (issuingrules.branchcode=branchcode AND  issuingrules.itemtype=biblioitems.itemtype AND  issuingrules.categorycode=categorycode) WHERE old_issues.itemnumber=items.itemnumber AND old_issues.borrowernumber=borrowers.borrowernumber";
     
     if (($line=~/timestamp/) or ($line=~/returndate/)){
         if ($linefilter[1] and ($linefilter[0])){
@@ -376,7 +376,7 @@ sub calculate {
     }
     $strsth .=" group by $linefield";
     $strsth .=" order by $lineorder";
-    
+   
     my $sth = $dbh->prepare( $strsth );
     $sth->execute;
 
@@ -416,7 +416,7 @@ sub calculate {
     }  
     
     my $strsth2;
-    $strsth2 .= "select distinctrow $colfield FROM `issues`,borrowers,biblioitems LEFT JOIN items ON (biblioitems.biblioitemnumber=items.biblioitemnumber) LEFT JOIN issuingrules ON (issuingrules.branchcode=issues.branchcode AND  issuingrules.itemtype=biblioitems.itemtype AND  issuingrules.categorycode=borrowers.categorycode) WHERE issues.itemnumber=items.itemnumber AND issues.borrowernumber=borrowers.borrowernumber and returndate is not null";
+    $strsth2 .= "select distinctrow $colfield FROM `old_issues`,borrowers,biblioitems LEFT JOIN items ON (biblioitems.biblioitemnumber=items.biblioitemnumber) LEFT JOIN issuingrules ON (issuingrules.branchcode=branchcode AND  issuingrules.itemtype=biblioitems.itemtype AND  issuingrules.categorycode=categorycode) WHERE old_issues.itemnumber=items.itemnumber AND old_issues.borrowernumber=borrowers.borrowernumber";
     
     if (($column=~/timestamp/) or ($column=~/returndate/)){
         if ($colfilter[1] and ($colfilter[0])){
@@ -483,22 +483,22 @@ sub calculate {
     
 # Processing average loanperiods
     $strcalc .= "SELECT $linefield, $colfield, ";
-    $strcalc .= " issuedate, returndate, timestamp, COUNT(*), date_due, issues.renewals, issuelength FROM `issues`,borrowers,biblioitems LEFT JOIN items ON (biblioitems.biblioitemnumber=items.biblioitemnumber) LEFT JOIN issuingrules ON (issuingrules.branchcode=issues.branchcode AND  issuingrules.itemtype=biblioitems.itemtype AND  issuingrules.categorycode=borrowers.categorycode) WHERE issues.itemnumber=items.itemnumber AND issues.borrowernumber=borrowers.borrowernumber AND returndate IS NOT NULL";
+    $strcalc .= " issuedate, returndate, old_issues.timestamp, COUNT(*), date_due, old_issues.renewals, issuelength FROM `old_issues`,borrowers,biblioitems LEFT JOIN items ON (biblioitems.biblioitemnumber=items.biblioitemnumber) LEFT JOIN issuingrules ON (issuingrules.branchcode=branchcode AND  issuingrules.itemtype=biblioitems.itemtype AND  issuingrules.categorycode=categorycode) WHERE old_issues.itemnumber=items.itemnumber AND old_issues.borrowernumber=borrowers.borrowernumber";
 
     @$filters[0]=~ s/\*/%/g if (@$filters[0]);
-    $strcalc .= " AND issues.timestamp > '" . @$filters[0] ."'" if ( @$filters[0] );
+    $strcalc .= " AND old_issues.timestamp > '" . @$filters[0] ."'" if ( @$filters[0] );
     @$filters[1]=~ s/\*/%/g if (@$filters[1]);
-    $strcalc .= " AND issues.timestamp < '" . @$filters[1] ."'" if ( @$filters[1] );
+    $strcalc .= " AND old_issues.timestamp < '" . @$filters[1] ."'" if ( @$filters[1] );
     @$filters[4]=~ s/\*/%/g if (@$filters[4]);
-    $strcalc .= " AND issues.returndate > '" . @$filters[4] ."'" if ( @$filters[4] );
+    $strcalc .= " AND old_issues.returndate > '" . @$filters[4] ."'" if ( @$filters[4] );
     @$filters[5]=~ s/\*/%/g if (@$filters[5]);
-    $strcalc .= " AND issues.returndate < '" . @$filters[5] ."'" if ( @$filters[5] );
+    $strcalc .= " AND old_issues.returndate < '" . @$filters[5] ."'" if ( @$filters[5] );
     @$filters[8]=~ s/\*/%/g if (@$filters[8]);
     $strcalc .= " AND borrowers.categorycode like '" . @$filters[8] ."'" if ( @$filters[8] );
     @$filters[9]=~ s/\*/%/g if (@$filters[9]);
     $strcalc .= " AND biblioitems.itemtype like '" . @$filters[9] ."'" if ( @$filters[9] );
     @$filters[10]=~ s/\*/%/g if (@$filters[10]);
-    $strcalc .= " AND issues.branchcode like '" . @$filters[10] ."'" if ( @$filters[10] );
+    $strcalc .= " AND old_issues.branchcode like '" . @$filters[10] ."'" if ( @$filters[10] );
     @$filters[11]=~ s/\*/%/g if (@$filters[11]);
     $strcalc .= " AND borrowers.sort1 like '" . @$filters[11] ."'" if ( @$filters[11] );
     @$filters[12]=~ s/\*/%/g if (@$filters[12]);

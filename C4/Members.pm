@@ -530,14 +530,14 @@ LEFT JOIN categories on borrowers.categorycode=categories.categorycode
 
 =item GetMemberIssuesAndFines
 
-  ($borrowed, $due, $fine) = &GetMemberIssuesAndFines($borrowernumber);
+  ($overdue_count, $issue_count, $total_fines) = &GetMemberIssuesAndFines($borrowernumber);
 
 Returns aggregate data about items borrowed by the patron with the
 given borrowernumber.
 
-C<&GetMemberIssuesAndFines> returns a three-element array. C<$borrowed> is the
-number of books the patron currently has borrowed. C<$due> is the
-number of overdue items the patron currently has borrowed. C<$fine> is
+C<&GetMemberIssuesAndFines> returns a three-element array.  C<$overdue_count> is the
+number of overdue items the patron currently has borrowed. C<$issue_count> is the
+number of books the patron currently has borrowed.  C<$total_fines> is
 the total fine currently due by the borrower.
 
 =cut
@@ -546,32 +546,29 @@ the total fine currently due by the borrower.
 sub GetMemberIssuesAndFines {
     my ( $borrowernumber ) = @_;
     my $dbh   = C4::Context->dbh;
-    my $query =
-      "Select count(*) from issues where borrowernumber='$borrowernumber' and
-    returndate is NULL";
+    my $query = "SELECT COUNT(*) FROM issues WHERE borrowernumber = ?";
 
     $debug and warn $query."\n";
     my $sth = $dbh->prepare($query);
-    $sth->execute;
-    my $data = $sth->fetchrow_hashref;
-    $sth->finish;
-    $sth = $dbh->prepare(
-        "Select count(*) from issues where
-    borrowernumber='$borrowernumber' and date_due < now() and returndate is NULL"
-    );
-    $sth->execute;
-    my $data2 = $sth->fetchrow_hashref;
-    $sth->finish;
-    $sth = $dbh->prepare(
-        "Select sum(amountoutstanding) from accountlines where
-    borrowernumber='$borrowernumber'"
-    );
-    $sth->execute;
-    my $data3 = $sth->fetchrow_hashref;
+    $sth->execute($borrowernumber);
+    my $issue_count = $sth->fetchrow_arrayref->[0];
     $sth->finish;
 
-    return ( $data2->{'count(*)'}, $data->{'count(*)'},
-        $data3->{'sum(amountoutstanding)'} );
+    $sth = $dbh->prepare(
+        "SELECT COUNT(*) FROM issues 
+         WHERE borrowernumber = ? 
+         AND date_due < now()"
+    );
+    $sth->execute($borrowernumber);
+    my $overdue_count = $sth->fetchrow_arrayref->[0];
+    $sth->finish;
+
+    $sth = $dbh->prepare("SELECT SUM(amountoutstanding) FROM accountlines WHERE borrowernumber = ?");
+    $sth->execute($borrowernumber);
+    my $total_fines = $sth->fetchrow_arrayref->[0];
+    $sth->finish;
+
+    return ($overdue_count, $issue_count, $total_fines);
 }
 
 =head2
@@ -965,7 +962,6 @@ sub GetPendingIssues {
       LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber
     WHERE
       borrowernumber=? 
-      AND returndate IS NULL
     ORDER BY issues.issuedate"
     );
     $sth->execute($borrowernumber);
@@ -1011,12 +1007,19 @@ sub GetAllIssues {
     my $dbh   = C4::Context->dbh;
     my $count = 0;
     my $query =
-  "Select *,items.timestamp AS itemstimestamp from 
-  issues 
+  "SELECT *,items.timestamp AS itemstimestamp 
+  FROM issues 
   LEFT JOIN items on items.itemnumber=issues.itemnumber
   LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber
   LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber
-  where borrowernumber=? 
+  WHERE borrowernumber=? 
+  UNION ALL
+  SELECT *,items.timestamp AS itemstimestamp 
+  FROM old_issues 
+  LEFT JOIN items on items.itemnumber=old_issues.itemnumber
+  LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber
+  LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber
+  WHERE borrowernumber=? 
   order by $order";
     if ( $limit != 0 ) {
         $query .= " limit $limit";
@@ -1024,7 +1027,7 @@ sub GetAllIssues {
 
     #print $query;
     my $sth = $dbh->prepare($query);
-    $sth->execute($borrowernumber);
+    $sth->execute($borrowernumber, $borrowernumber);
     my @result;
     my $i = 0;
     while ( my $data = $sth->fetchrow_hashref ) {
@@ -1037,6 +1040,10 @@ sub GetAllIssues {
     # large chunk of older issues data put into table oldissues
     # to speed up db calls for issuing items
     if ( C4::Context->preference("ReadingHistory") ) {
+        # FIXME oldissues (not to be confused with old_issues) is
+        # apparently specific to HLT.  Not sure if the ReadingHistory
+        # syspref is still required, as old_issues by design
+        # is no longer checked with each loan.
         my $query2 = "SELECT * FROM oldissues
                       LEFT JOIN items ON items.itemnumber=oldissues.itemnumber
                       LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber
@@ -1860,7 +1867,7 @@ sub GetBorrowersWithIssuesHistoryOlderThan {
     return unless $date;    # date is mandatory.
     my $query = "
        SELECT count(borrowernumber) as n,borrowernumber
-       FROM issues
+       FROM old_issues
        WHERE returndate < ?
          AND borrowernumber IS NOT NULL 
        GROUP BY borrowernumber

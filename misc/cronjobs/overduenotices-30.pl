@@ -145,7 +145,6 @@ foreach my $branchcode (@branches) {
 	WHERE  items.itemnumber=issues.itemnumber
 	AND    biblio.biblionumber=items.biblionumber
 	AND    issues.borrowernumber=?
-	AND    returndate IS NULL
 	AND    TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN ? and ? ");
     my $rqoverduerules = $dbh->prepare("SELECT * FROM overduerules WHERE delay1 IS NOT NULL AND branchcode = ? ");
     $rqoverduerules->execute($branchcode);
@@ -186,8 +185,7 @@ foreach my $branchcode (@branches) {
             my $strsth = "
 	SELECT COUNT(*), issues.borrowernumber,firstname,surname,address,address2,city,zipcode, email, MIN(date_due) as longest_issue
 	FROM   issues,borrowers,categories
-	WHERE  returndate IS NULL
-	AND    issues.borrowernumber=borrowers.borrowernumber
+	WHERE  issues.borrowernumber=borrowers.borrowernumber
 	AND    borrowers.categorycode=categories.categorycode ";
             $strsth .= "\n\tAND    issues.branchcode='$branchcode' " if ($branchcode);
             $strsth .= "\n\tAND    borrowers.categorycode='".$data->{categorycode}."' " if ($data->{categorycode});

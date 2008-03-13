@@ -1037,7 +1037,6 @@ sub GetItemsByBiblioitemnumber {
         # Foreach item, get circulation information
         my $sth2 = $dbh->prepare( "SELECT * FROM issues,borrowers
                                    WHERE itemnumber = ?
-                                   AND returndate is NULL
                                    AND issues.borrowernumber = borrowers.borrowernumber"
         );
         $sth2->execute( $data->{'itemnumber'} );
@@ -1053,9 +1052,8 @@ sub GetItemsByBiblioitemnumber {
         }    # else         
         $sth2->finish;
         # Find the last 3 people who borrowed this item.                  
-        my $query2 = "SELECT * FROM issues, borrowers WHERE itemnumber = ?
-                      AND issues.borrowernumber = borrowers.borrowernumber
-                      AND returndate is not NULL
+        my $query2 = "SELECT * FROM old_issues, borrowers WHERE itemnumber = ?
+                      AND old_issues.borrowernumber = borrowers.borrowernumber
                       ORDER BY returndate desc,timestamp desc LIMIT 3";
         $sth2 = $dbh->prepare($query2) || die $dbh->errstr;
         $sth2->execute( $data->{'itemnumber'} ) || die $sth2->errstr;
@@ -1143,8 +1141,7 @@ sub GetItemsInfo {
     my $isth    = $dbh->prepare(
         "SELECT issues.*,borrowers.cardnumber,borrowers.surname,borrowers.firstname,borrowers.branchcode as bcode
         FROM   issues LEFT JOIN borrowers ON issues.borrowernumber=borrowers.borrowernumber
-        WHERE  itemnumber = ?
-            AND returndate IS NULL"
+        WHERE  itemnumber = ?"
        );
 	my $ssth = $dbh->prepare("SELECT serialseq,publisheddate from serialitems left join serial on serialitems.serialid=serial.serialid where serialitems.itemnumber=? "); 
 	while ( my $data = $sth->fetchrow_hashref ) {
@@ -1234,10 +1231,10 @@ sub GetItemsInfo {
             $data->{stack} = $lib;
         }
         # Find the last 3 people who borrowed this item.
-        my $sth2 = $dbh->prepare("SELECT * FROM issues,borrowers
+        my $sth2 = $dbh->prepare("SELECT * FROM old_issues,borrowers
                                     WHERE itemnumber = ?
-                                    AND issues.borrowernumber = borrowers.borrowernumber
-                                    AND returndate IS NOT NULL LIMIT 3");
+                                    AND old_issues.borrowernumber = borrowers.borrowernumber
+                                    LIMIT 3");
         $sth2->execute($data->{'itemnumber'});
         my $ii = 0;
         while (my $data2 = $sth2->fetchrow_hashref()) {

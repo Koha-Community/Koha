@@ -25,11 +25,11 @@ use Mail::Sendmail;
 
 my $dbh   = C4::Context->dbh;
 my $message;   # e-mail message
-my $admin = "root@localhost"; #To
-my @library = "root@localhost"; #From
+my $admin = 'root@localhost'; #To
+my @library = 'root@localhost'; #From
 #    get biblionumbers of unfilled reserves
-my $bibnos_sth=$dbh->prepare("SELECT DISTINCT biblionumber FROM reserves WHERE cancellationdate IS NULL AND found IS NULL AND priority>0");
-my $get_sth=$dbh->prepare("SELECT * FROM reserves WHERE biblionumber=? AND cancellationdate IS NULL AND found IS NULL ORDER BY reservedate,priority");
+my $bibnos_sth=$dbh->prepare("SELECT DISTINCT biblionumber FROM reserves WHERE found IS NULL AND priority>0");
+my $get_sth=$dbh->prepare("SELECT * FROM reserves WHERE biblionumber=? AND found IS NULL ORDER BY reservedate,priority");
 #    checking reservedate avoids overwriting legitimate duplicate reserves
 my $put_sth=$dbh->prepare("UPDATE reserves SET priority=? WHERE biblionumber=? AND borrowernumber=? AND reservedate=?");
 my $count_sth=$dbh->prepare("SELECT COUNT(itemnumber) FROM items WHERE biblionumber=?");

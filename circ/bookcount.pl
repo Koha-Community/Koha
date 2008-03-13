@@ -132,22 +132,27 @@ sub issuessince {
     my ( $itemnumber, $date ) = @_;
     my $dbh = C4::Context->dbh;
     my $sth =
-      $dbh->prepare(
-"Select count(*) from issues where issues.itemnumber=? and issues.timestamp > ?"
-      );
-    $sth->execute( $itemnumber, $date );
-    my $count = $sth->fetchrow_hashref;
+      $dbh->prepare("SELECT SUM(count) FROM (
+                        SELECT COUNT(*) AS count FROM issues WHERE itemnumber = ? and timestamp > ?
+                        UNION ALL
+                        SELECT COUNT(*) AS count FROM old_issues WHERE itemnumber = ? and timestamp > ?
+                     ) tmp");
+    $sth->execute( $itemnumber, $date, $itemnumber, $date );
+    my $count = $sth->fetchrow_arrayref->[0];
     $sth->finish;
-    return ( $count->{'count(*)'} );
+    return ( $count );
 }
 
 sub issuesat {
     my ( $itemnumber, $brcd ) = @_;
     my $dbh = C4::Context->dbh;
     my $sth =
-      $dbh->prepare(
-        "Select count(*) from issues where itemnumber=? and branchcode = ?");
-    $sth->execute( $itemnumber, $brcd );
+      $dbh->prepare("SELECT SUM(count) FROM (
+                        SELECT COUNT(*) AS count FROM issues WHERE itemnumber = ? and branchcode = ?
+                        UNION ALL
+                        SELECT COUNT(*) AS count FROM old_issues WHERE itemnumber = ? and branchcode = ?
+                     ) tmp");
+    $sth->execute( $itemnumber, $brcd, $itemnumber, $brcd );
     my ($count) = $sth->fetchrow_array;
     $sth->finish;
     return ($count);
@@ -157,10 +162,12 @@ sub lastseenat {
     my ( $itm, $brc ) = @_;
     my $dbh = C4::Context->dbh;
     my $sth =
-      $dbh->prepare(
-"Select max(timestamp) from issues where itemnumber=? and branchcode = ?"
-      );
-    $sth->execute( $itm, $brc );
+      $dbh->prepare("SELECT MAX(tstamp) FROM (
+                        SELECT MAX(timestamp) AS tstamp FROM issues WHERE itemnumber = ? and branchcode = ?
+                        UNION ALL
+                        SELECT MAX(timestamp) AS tstamp FROM old_issues WHERE itemnumber = ? and branchcode = ?
+                     ) tmp");
+    $sth->execute( $itm, $brc, $itm, $brc );
     my ($date1) = $sth->fetchrow_array;
     $sth->finish;
     $sth =
@@ -172,6 +179,9 @@ sub lastseenat {
     $sth->finish;
 
     #FIXME: MJR thinks unsafe
+    $date1 =~ s/-//g;
+    $date1 =~ s/://g;
+    $date1 =~ s/ //g;
     $date2 =~ s/-//g;
     $date2 =~ s/://g;
     $date2 =~ s/ //g;

@@ -91,8 +91,8 @@ unshift @{$Mail::Sendmail::mailcfg{'smtp'}} , $smtpserver;
 #                                         set your own mail server name here
 
 my $dbh = C4::Context->dbh;
-my $sth = $dbh->prepare ("SELECT COUNT(*), issues.borrowernumber,firstname,surname,streetaddress,physstreet,city,zipcode,emailaddress FROM issues,borrowers,categories WHERE returndate IS NULL AND TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN 0 and 500 AND issues.borrowernumber=borrowers.borrowernumber and borrowers.categorycode=categories.categorycode and categories.overduenoticerequired=1 group by issues.borrowernumber");
-my $sth2 = $dbh->prepare("SELECT biblio.title,biblio.author,items.barcode FROM issues,items,biblio WHERE items.itemnumber=issues.itemnumber and biblio.biblionumber=items.biblionumber AND issues.borrowernumber=? AND returndate IS NULL AND TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN 0 and 500");
+my $sth = $dbh->prepare ("SELECT COUNT(*), issues.borrowernumber,firstname,surname,streetaddress,physstreet,city,zipcode,emailaddress FROM issues,borrowers,categories WHERE TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN 0 and 500 AND issues.borrowernumber=borrowers.borrowernumber and borrowers.categorycode=categories.categorycode and categories.overduenoticerequired=1 group by issues.borrowernumber");
+my $sth2 = $dbh->prepare("SELECT biblio.title,biblio.author,items.barcode FROM issues,items,biblio WHERE items.itemnumber=issues.itemnumber and biblio.biblionumber=items.biblionumber AND issues.borrowernumber=? AND TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN 0 and 500");
 
 $sth->execute;
 # 

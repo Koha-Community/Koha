@@ -1116,6 +1116,64 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.062";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("CREATE TABLE `old_issues` (
+                `borrowernumber` int(11) default NULL,
+                `itemnumber` int(11) default NULL,
+                `date_due` date default NULL,
+                `branchcode` varchar(10) default NULL,
+                `issuingbranch` varchar(18) default NULL,
+                `returndate` date default NULL,
+                `lastreneweddate` date default NULL,
+                `return` varchar(4) default NULL,
+                `renewals` tinyint(4) default NULL,
+                `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+                `issuedate` date default NULL,
+                KEY `old_issuesborridx` (`borrowernumber`),
+                KEY `old_issuesitemidx` (`itemnumber`),
+                KEY `old_bordate` (`borrowernumber`,`timestamp`),
+                CONSTRAINT `old_issues_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) 
+                    ON DELETE SET NULL ON UPDATE SET NULL,
+                CONSTRAINT `old_issues_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) 
+                    ON DELETE SET NULL ON UPDATE SET NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+    $dbh->do("CREATE TABLE `old_reserves` (
+                `borrowernumber` int(11) default NULL,
+                `reservedate` date default NULL,
+                `biblionumber` int(11) default NULL,
+                `constrainttype` varchar(1) default NULL,
+                `branchcode` varchar(10) default NULL,
+                `notificationdate` date default NULL,
+                `reminderdate` date default NULL,
+                `cancellationdate` date default NULL,
+                `reservenotes` mediumtext,
+                `priority` smallint(6) default NULL,
+                `found` varchar(1) default NULL,
+                `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+                `itemnumber` int(11) default NULL,
+                `waitingdate` date default NULL,
+                KEY `old_reserves_borrowernumber` (`borrowernumber`),
+                KEY `old_reserves_biblionumber` (`biblionumber`),
+                KEY `old_reserves_itemnumber` (`itemnumber`),
+                KEY `old_reserves_branchcode` (`branchcode`),
+                CONSTRAINT `old_reserves_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) 
+                    ON DELETE SET NULL ON UPDATE SET NULL,
+                CONSTRAINT `old_reserves_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) 
+                    ON DELETE SET NULL ON UPDATE SET NULL,
+                CONSTRAINT `old_reserves_ibfk_3` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) 
+                    ON DELETE SET NULL ON UPDATE SET NULL
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+
+    # move closed transactions to old_* tables
+    $dbh->do("INSERT INTO old_issues SELECT * FROM issues WHERE returndate IS NOT NULL");
+    $dbh->do("DELETE FROM issues WHERE returndate IS NOT NULL");
+    $dbh->do("INSERT INTO old_reserves SELECT * FROM reserves WHERE cancellationdate IS NOT NULL OR found = 'F'");
+    $dbh->do("DELETE FROM reserves WHERE cancellationdate IS NOT NULL OR found = 'F'");
+
+	print "Upgrade to $DBversion done ( Added old_issues and old_reserves tables )\n";
+    SetVersion ($DBversion);
+}
 
 =item DropAllForeignKeys($table)
 

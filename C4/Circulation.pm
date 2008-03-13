@@ -75,6 +75,7 @@ BEGIN {
 	# subs to deal with returns
 	push @EXPORT, qw(
 		&AddReturn
+        &MarkIssueReturned
 	);
 
 	# subs to deal with transfers
@@ -412,7 +413,6 @@ sub TooMany {
 
     my $query2 = "SELECT  COUNT(*) FROM issues i, biblioitems s1, items s2 
                 WHERE i.borrowernumber = ? 
-                    AND i.returndate IS NULL 
                     AND i.itemnumber = s2.itemnumber 
                     AND s1.biblioitemnumber = s2.biblioitemnumber";
     if (C4::Context->preference('item-level_itypes')){
@@ -424,8 +424,7 @@ sub TooMany {
     my $sth3 =
       $dbh->prepare(
             'SELECT COUNT(*) FROM issues
-                WHERE borrowernumber = ?
-                    AND returndate IS NULL'
+                WHERE borrowernumber = ?'
             );
     my $alreadyissued;
 
@@ -599,7 +598,6 @@ sub itemissues {
             "SELECT * FROM issues
                 LEFT JOIN borrowers ON issues.borrowernumber = borrowers.borrowernumber
                 WHERE itemnumber = ?
-                    AND returndate IS NULL
             "
         );
 
@@ -617,10 +615,9 @@ sub itemissues {
 
         # Find the last 3 people who borrowed this item.
         $sth2 = $dbh->prepare(
-            "SELECT * FROM issues
+            "SELECT * FROM old_issues
                 LEFT JOIN borrowers ON  issues.borrowernumber = borrowers.borrowernumber
                 WHERE itemnumber = ?
-                AND returndate IS NOT NULL
                 ORDER BY returndate DESC,timestamp DESC"
         );
 
@@ -1197,12 +1194,7 @@ sub AddReturn {
     # case of a return of document (deal with issues and holdingbranch)
     
         if ($doreturn) {
-            my $sth =
-            $dbh->prepare(
-    "UPDATE issues SET returndate = now() WHERE (borrowernumber = ?) AND (itemnumber = ?) AND (returndate IS NULL)"
-            );
-            $sth->execute( $borrower->{'borrowernumber'},
-                $iteminformation->{'itemnumber'} );
+            MarkIssueReturned($borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'});
             $messages->{'WasReturned'} = 1;    # FIXME is the "= 1" right?
         }
     
@@ -1294,6 +1286,43 @@ sub AddReturn {
         }
     }
     return ( $doreturn, $messages, $iteminformation, $borrower );
+}
+
+=head2 MarkIssueReturned
+
+=over 4
+
+MarkIssueReturned($borrowernumber, $itemnumber);
+
+=back
+
+Unconditionally marks an issue as being returned by
+moving the C<issues> row to C<old_issues> and
+setting C<returndate> to the current date.
+
+Ideally, this function would be internal to C<C4::Circulation>,
+not exported, but it is currently needed by one 
+routine in C<C4::Accounts>.
+
+=cut
+
+sub MarkIssueReturned {
+    my ($borrowernumber, $itemnumber) = @_;
+
+    my $dbh = C4::Context->dbh;
+    # FIXME transaction
+    my $sth_upd  = $dbh->prepare("UPDATE issues SET returndate = now() 
+                                  WHERE borrowernumber = ?
+                                  AND itemnumber = ?");
+    $sth_upd->execute($borrowernumber, $itemnumber);
+    my $sth_copy = $dbh->prepare("INSERT INTO old_issues SELECT * FROM issues 
+                                  WHERE borrowernumber = ?
+                                  AND itemnumber = ?");
+    $sth_copy->execute($borrowernumber, $itemnumber);
+    my $sth_del  = $dbh->prepare("DELETE FROM issues
+                                  WHERE borrowernumber = ?
+                                  AND itemnumber = ?");
+    $sth_del->execute($borrowernumber, $itemnumber);
 }
 
 =head2 FixOverduesOnReturn
@@ -1453,7 +1482,7 @@ sub GetItemIssue {
         "SELECT * FROM issues 
         LEFT JOIN items ON issues.itemnumber=items.itemnumber
     WHERE
-    issues.itemnumber=?  AND returndate IS NULL ");
+    issues.itemnumber=?");
     $sth->execute($itemnumber);
     my $data = $sth->fetchrow_hashref;
     my $datedue = $data->{'date_due'};
@@ -1487,15 +1516,24 @@ sub GetItemIssues {
     # get today date
     my $today = POSIX::strftime("%Y%m%d", localtime);
 
-    my $sth = $dbh->prepare(
-        "SELECT * FROM issues 
-        LEFT JOIN borrowers ON borrowers.borrowernumber 
-        LEFT JOIN items ON items.itemnumber=issues.itemnumber 
-    WHERE
-    issues.itemnumber=?".($history?"":" AND returndate IS NULL ").
-    "ORDER BY issues.date_due DESC"
-    );
-    $sth->execute($itemnumber);
+    my $sql = "SELECT * FROM issues 
+              JOIN borrowers USING (borrowernumber)
+              JOIN items USING (itemnumber)
+              WHERE issues.itemnumber = ? ";
+    if ($history) {
+        $sql .= "UNION ALL
+                 SELECT * FROM old_issues 
+                 LEFT JOIN borrowers USING (borrowernumber)
+                 JOIN items USING (itemnumber)
+                 WHERE old_issues.itemnumber = ? ";
+    }
+    $sql .= "ORDER BY date_due DESC";
+    my $sth = $dbh->prepare($sql);
+    if ($history) {
+        $sth->execute($itemnumber, $itemnumber);
+    } else {
+        $sth->execute($itemnumber);
+    }
     while ( my $data = $sth->fetchrow_hashref ) {
         my $datedue = $data->{'date_due'};
         $datedue =~ s/-//g;
@@ -1533,10 +1571,18 @@ sub GetBiblioIssues {
             LEFT JOIN biblioitems ON items.itemnumber = biblioitems.biblioitemnumber
             LEFT JOIN biblio ON biblio.biblionumber = items.biblioitemnumber
         WHERE biblio.biblionumber = ?
-        ORDER BY issues.timestamp
+        UNION ALL
+        SELECT old_issues.*,items.barcode,biblio.biblionumber,biblio.title, biblio.author,borrowers.cardnumber,borrowers.surname,borrowers.firstname
+        FROM old_issues
+            LEFT JOIN borrowers ON borrowers.borrowernumber = old_issues.borrowernumber
+            LEFT JOIN items ON old_issues.itemnumber = items.itemnumber
+            LEFT JOIN biblioitems ON items.itemnumber = biblioitems.biblioitemnumber
+            LEFT JOIN biblio ON biblio.biblionumber = items.biblioitemnumber
+        WHERE biblio.biblionumber = ?
+        ORDER BY timestamp
     ";
     my $sth = $dbh->prepare($query);
-    $sth->execute($biblionumber);
+    $sth->execute($biblionumber, $biblionumber);
 
     my @issues;
     while ( my $data = $sth->fetchrow_hashref ) {
@@ -1581,8 +1627,7 @@ sub CanBookBeRenewed {
     my $sth1 = $dbh->prepare(
         "SELECT * FROM issues
             WHERE borrowernumber = ?
-            AND itemnumber = ?
-            AND returndate IS NULL"
+            AND itemnumber = ?"
     );
     $sth1->execute( $borrowernumber, $itemnumber );
     if ( my $data1 = $sth1->fetchrow_hashref ) {
@@ -1672,8 +1717,7 @@ sub AddRenewal {
     my $sth =
       $dbh->prepare("SELECT * FROM issues
                         WHERE borrowernumber=? 
-                        AND itemnumber=? 
-                        AND returndate IS NULL"
+                        AND itemnumber=?"
       );
     $sth->execute( $borrowernumber, $itemnumber );
     my $issuedata = $sth->fetchrow_hashref;
@@ -1684,8 +1728,7 @@ sub AddRenewal {
     my $renews = $issuedata->{'renewals'} + 1;
     $sth = $dbh->prepare("UPDATE issues SET date_due = ?, renewals = ?
                             WHERE borrowernumber=? 
-                            AND itemnumber=? 
-                            AND returndate IS NULL"
+                            AND itemnumber=?"
     );
     $sth->execute( $datedue->output('iso'), $renews, $borrowernumber, $itemnumber );
     $sth->finish;
@@ -1728,8 +1771,7 @@ sub GetRenewCount {
     # FIXME - I think this function could be redone to use only one SQL call.
     my $sth = $dbh->prepare("select * from issues
                                 where (borrowernumber = ?)
-                                and (itemnumber = ?)
-                                and returndate is null");
+                                and (itemnumber = ?)");
     $sth->execute($bornum,$itemno);
         my $data = $sth->fetchrow_hashref;
         $renewcount = $data->{'renewals'} if $data->{'renewals'};
@@ -1916,7 +1958,7 @@ sub AnonymiseIssueHistory {
     my $borrowernumber = shift;
     my $dbh            = C4::Context->dbh;
     my $query          = "
-        UPDATE issues
+        UPDATE old_issues
         SET    borrowernumber = NULL
         WHERE  returndate < '".$date."'
           AND borrowernumber IS NOT NULL

@@ -152,7 +152,8 @@ LEFT JOIN borrowers ON (issues.borrowernumber=borrowers.borrowernumber )
 LEFT JOIN items ON (issues.itemnumber=items.itemnumber)
 LEFT JOIN biblioitems ON (biblioitems.biblioitemnumber=items.biblioitemnumber)
 LEFT JOIN biblio ON (biblio.biblionumber=items.biblionumber )
-WHERE isnull(returndate) ";
+WHERE 1=1 "; # placeholder, since it is possible that none of the additional
+             # conditions will be selected by user
 $strsth.= " && date_due<'".$todaysdate."' " unless ($showall);
 $strsth.=" && (borrowers.firstname like '".$bornamefilter."%' or borrowers.surname like '".$bornamefilter."%' or borrowers.cardnumber like '".$bornamefilter."%')" if($bornamefilter) ;
 $strsth.=" && borrowers.categorycode = '".$borcatfilter."' " if($borcatfilter) ;

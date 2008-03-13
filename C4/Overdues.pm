@@ -116,17 +116,16 @@ sub Getoverdues {
     my $sth =  (C4::Context->preference('item-level_itypes')) ? 
 				$dbh->prepare(
         			"SELECT issues.*,items.itype as itemtype FROM issues 
-                	LEFT JOIN items USING (itemnumber)
-                	WHERE date_due < now() 
-                	    AND returndate IS NULL ORDER BY borrowernumber " )
+                	 LEFT JOIN items USING (itemnumber)
+                	 WHERE date_due < now() 
+                	 ORDER BY borrowernumber " )
 				:
  				$dbh->prepare(
                     "SELECT issues.*,biblioitems.itemtype,items.itype FROM issues 
-                    LEFT JOIN items USING (itemnumber)
-                    LEFT JOIN biblioitems USING (biblioitemnumber)
-                    WHERE date_due < now() 
-                        AND returndate IS 
-                        NULL ORDER BY borrowernumber " );
+                     LEFT JOIN items USING (itemnumber)
+                     LEFT JOIN biblioitems USING (biblioitemnumber)
+                     WHERE date_due < now() 
+                     ORDER BY borrowernumber " );
     $sth->execute;
 
     my @results;
@@ -162,7 +161,6 @@ sub checkoverdues {
          LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber
          LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
             WHERE issues.borrowernumber  = ?
-                AND issues.returndate is NULL
                 AND issues.date_due < ?"
     );
     $sth->execute( $borrowernumber, $today );
@@ -1179,8 +1177,7 @@ sub GetOverduesForBranch {
             LEFT JOIN biblioitems ON biblioitems.biblioitemnumber=items.biblioitemnumber
             LEFT JOIN itemtypes ON itemtypes.itemtype = $itype_link
             LEFT JOIN branches ON branches.branchcode = issues.branchcode
-            WHERE ( issues.returndate  is null)
-              AND ( accountlines.amountoutstanding  != '0.000000')
+            WHERE ( accountlines.amountoutstanding  != '0.000000')
               AND ( accountlines.accounttype  = 'FU')
               AND (issues.branchcode = ?)
               AND (issues.date_due <= NOW())
@@ -1230,8 +1227,7 @@ sub GetOverduesForBranch {
             LEFT JOIN biblioitems ON biblioitems.biblioitemnumber=items.biblioitemnumber
             LEFT JOIN itemtypes ON itemtypes.itemtype = $itype_link
             LEFT JOIN branches ON branches.branchcode = issues.branchcode
-           WHERE ( issues.returndate  is null )
-             AND ( accountlines.amountoutstanding  != '0.000000')
+           WHERE ( accountlines.amountoutstanding  != '0.000000')
              AND ( accountlines.accounttype  = 'FU')
              AND (issues.branchcode = ? AND items.location = ?)
              AND (issues.date_due <= NOW())

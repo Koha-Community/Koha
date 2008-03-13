@@ -62,8 +62,7 @@ if($ok){
     my $notes;
     my $title = $subs->{'bibliotitle'};
     for(my $i=0;$i<$routing;$i++){
-	my $sth = $dbh->prepare("SELECT * FROM reserves WHERE biblionumber = ? AND borrowernumber = ? 
-                                 AND cancellationdate is NULL AND (found <> 'F' or found is NULL)");
+	my $sth = $dbh->prepare("SELECT * FROM reserves WHERE biblionumber = ? AND borrowernumber = ?");
         $sth->execute($biblio,$routinglist[$i]->{'borrowernumber'});
         my $data = $sth->fetchrow_hashref;
 

@@ -356,7 +356,7 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
         }
 
     # FIXME: move this to a pm
-    my $sth2 = $dbh->prepare("SELECT * FROM reserves WHERE borrowernumber=? AND itemnumber=? AND found='W' AND cancellationdate IS NULL");
+    my $sth2 = $dbh->prepare("SELECT * FROM reserves WHERE borrowernumber=? AND itemnumber=? AND found='W'");
     $sth2->execute($item->{ReservedForBorrowernumber},$item->{itemnumber});
     while (my $wait_hashref = $sth2->fetchrow_hashref) {
         $item->{waitingdate} = format_date($wait_hashref->{waitingdate});

@@ -133,7 +133,7 @@ if ($op eq "additem") {
 } elsif ($op eq "delitem") {
 #-------------------------------------------------------------------------------
     # check that there is no issue on this item before deletion.
-    my $sth=$dbh->prepare("select * from issues i where i.returndate is null and i.itemnumber=?");
+    my $sth=$dbh->prepare("select * from issues i where i.itemnumber=?");
     $sth->execute($itemnumber);
     my $onloan=$sth->fetchrow;
 	$sth->finish();
@@ -142,7 +142,7 @@ if ($op eq "additem") {
 		$nextop="additem";
     } else {
 		# check it doesnt have a waiting reserve
-		$sth=$dbh->prepare("SELECT * FROM reserves WHERE found = 'W' AND cancellationdate IS NULL AND itemnumber = ?");
+		$sth=$dbh->prepare("SELECT * FROM reserves WHERE found = 'W' AND itemnumber = ?");
 		$sth->execute($itemnumber);
 		my $reserve=$sth->fetchrow;
 		if ($reserve){

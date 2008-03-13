@@ -133,7 +133,7 @@ while (my $biblionumber=$biblionumber_sth->fetchrow) {
 		my $item_data_hashref = $item_data_sth->fetchrow_hashref();
 		
 		# create a new MARC::Field object and put a date_due in it (from issues table)
-		my $date_due_sth = $dbh->prepare("SELECT date_due FROM issues WHERE itemnumber=? AND returndate IS NULL");
+		my $date_due_sth = $dbh->prepare("SELECT date_due FROM issues WHERE itemnumber=?");
 		$date_due_sth->execute($itemnumber);
 		my ($date_due) = $date_due_sth->fetchrow();
 		$date_due = "0000-00-00" unless ($date_due);

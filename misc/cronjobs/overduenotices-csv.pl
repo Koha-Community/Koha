@@ -86,13 +86,13 @@ print OUTFILE "2title;2author;2barcode;2issue_date;2return_date;3title;3author;3
 #                                         set your own mail server name here
 
 my $dbh = C4::Context->dbh;
-my $query = "SELECT COUNT(*), issues.borrowernumber,firstname,surname,address,address2,city,zipcode,email FROM issues,borrowers ,categories WHERE returndate IS NULL AND TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN 0 and 500 AND issues.borrowernumber=borrowers.borrowernumber and borrowers.categorycode=categories.categorycode and (categories.overduenoticerequired = 1)";
+my $query = "SELECT COUNT(*), issues.borrowernumber,firstname,surname,address,address2,city,zipcode,email FROM issues,borrowers ,categories WHERE TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN 0 and 500 AND issues.borrowernumber=borrowers.borrowernumber and borrowers.categorycode=categories.categorycode and (categories.overduenoticerequired = 1)";
 $query .= " AND borrowers.branchcode=".$dbh->quote($branch) if $branch;
 $query .=" GROUP BY issues.borrowernumber";
 my $sth = $dbh->prepare ($query);
 
 warn "Q : $query";
-my $sth2 = $dbh->prepare("SELECT biblio.title,biblio.author,items.barcode, issues.timestamp, issues.date_due FROM issues,items,biblio WHERE items.itemnumber=issues.itemnumber and biblio.biblionumber=items.biblionumber AND issues.borrowernumber=? AND returndate IS NULL AND TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN 0 and 500");
+my $sth2 = $dbh->prepare("SELECT biblio.title,biblio.author,items.barcode, issues.timestamp, issues.date_due FROM issues,items,biblio WHERE items.itemnumber=issues.itemnumber and biblio.biblionumber=items.biblionumber AND issues.borrowernumber=? AND TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN 0 and 500");
 
 $sth->execute;
 #

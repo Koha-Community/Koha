@@ -24,7 +24,7 @@ use C4::Items;
 
 my $dbh = C4::Context->dbh;
 
-my $itemnos_sth=$dbh->prepare("SELECT items.itemnumber FROM issues,items WHERE items.itemnumber=issues.itemnumber AND DATE_SUB(CURDATE(),INTERVAL 90 DAY) > date_due AND returndate IS NULL AND (itemlost=0 OR itemlost IS NULL)");
+my $itemnos_sth=$dbh->prepare("SELECT items.itemnumber FROM issues,items WHERE items.itemnumber=issues.itemnumber AND DATE_SUB(CURDATE(),INTERVAL 90 DAY) > date_due AND (itemlost=0 OR itemlost IS NULL)");
 
 #    get itemnumbers of items more than 90 days overdue
 $itemnos_sth->execute();

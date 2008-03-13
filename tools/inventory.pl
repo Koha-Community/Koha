@@ -114,7 +114,7 @@ if ($uploadbarcodes && length($uploadbarcodes)>0){
     my $dbh=C4::Context->dbh;
     my $date = format_date_in_iso($input->param('setdate')) || C4::Dates->today('iso');
 # 	warn "$date";
-    my $strsth="select * from issues, items where items.itemnumber=issues.itemnumber and items.barcode =? and issues.returndate is null";
+    my $strsth="select * from issues, items where items.itemnumber=issues.itemnumber and items.barcode =?";
     my $qonloan = $dbh->prepare($strsth);
     $strsth="select * from items where items.barcode =? and issues.wthdrawn=1";
     my $qwthdrawn = $dbh->prepare($strsth);

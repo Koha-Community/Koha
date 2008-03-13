@@ -23,8 +23,8 @@ use C4::Context;
 use C4::Stats;
 use C4::Members;
 use C4::Items;
+use C4::Circulation;
 
-#use C4::Circulation;
 use vars qw($VERSION @ISA @EXPORT);
 
 BEGIN {
@@ -266,22 +266,13 @@ sub fixaccounts {
 EOT
 }
 
-# FIXME - Never used, but not exported, either.
 sub returnlost {
     my ( $borrowernumber, $itemnum ) = @_;
-    my $dbh      = C4::Context->dbh;
+    MarkIssueReturned( $borrowernumber, $itemnum );
     my $borrower = C4::Members::GetMember( $borrowernumber, 'borrowernumber' );
-    my $sth      = $dbh->prepare(
-        "UPDATE issues SET returndate=now() WHERE
-  borrowernumber=? AND itemnumber=? AND returndate IS NULL"
-    );
-    $sth->execute( $borrowernumber, $itemnum );
-    $sth->finish;
     my @datearr = localtime(time);
-    my $date =
-      ( 1900 + $datearr[5] ) . "-" . ( $datearr[4] + 1 ) . "-" . $datearr[3];
-    my $bor =
-"$borrower->{'firstname'} $borrower->{'surname'} $borrower->{'cardnumber'}";
+    my $date = ( 1900 + $datearr[5] ) . "-" . ( $datearr[4] + 1 ) . "-" . $datearr[3];
+    my $bor = "$borrower->{'firstname'} $borrower->{'surname'} $borrower->{'cardnumber'}";
     ModItem({ paidfor =>  "Paid for by $bor $date" }, undef, $itemnum);
 }
 

@@ -218,9 +218,7 @@ sub GetReservesFromBiblionumber {
                 itemnumber,
                 reservenotes
         FROM     reserves
-        WHERE     cancellationdate IS NULL
-        AND    (found <> \'F\' OR found IS NULL)
-        AND biblionumber = ?
+        WHERE biblionumber = ?
         ORDER BY priority";
     my $sth = $dbh->prepare($query);
     $sth->execute($biblionumber);
@@ -289,8 +287,6 @@ sub GetReservesFromItemnumber {
     SELECT reservedate,borrowernumber,branchcode
     FROM   reserves
     WHERE  itemnumber=?
-        AND  cancellationdate IS NULL
-        AND  (found <> 'F' OR found IS NULL)
     ";
     my $sth_res = $dbh->prepare($query);
     $sth_res->execute($itemnumber);
@@ -315,7 +311,6 @@ sub GetReservesFromBorrowernumber {
             SELECT *
             FROM   reserves
             WHERE  borrowernumber=?
-                AND  cancellationdate IS NULL
                 AND found =?
             ORDER BY reservedate
         ");
@@ -325,8 +320,6 @@ sub GetReservesFromBorrowernumber {
             SELECT *
             FROM   reserves
             WHERE  borrowernumber=?
-                AND  cancellationdate IS NULL
-                AND (found != 'F' or found is null)
             ORDER BY reservedate
         ");
         $sth->execute($borrowernumber);
@@ -353,8 +346,6 @@ sub GetReserveCount {
         SELECT COUNT(*) AS counter
         FROM reserves
           WHERE borrowernumber = ?
-          AND cancellationdate IS NULL
-          AND (found != \'F\' OR found IS NULL)
     ';
     my $sth = $dbh->prepare($query);
     $sth->execute($borrowernumber);
@@ -492,8 +483,7 @@ sub GetReserveFee {
             while ( my $itdata = $sth2->fetchrow_hashref ) {
                 my $sth3 = $dbh->prepare(
                     "SELECT * FROM issues
-                       WHERE itemnumber = ?
-                         AND returndate IS NULL"
+                       WHERE itemnumber = ?"
                 );
                 $sth3->execute( $itdata->{'itemnumber'} );
                 if ( my $isdata = $sth3->fetchrow_hashref ) {
@@ -532,9 +522,8 @@ sub GetReservesToBranch {
     my $sth = $dbh->prepare(
         "SELECT borrowernumber,reservedate,itemnumber,timestamp
          FROM reserves 
-         WHERE priority='0' AND cancellationdate is null  
-           AND branchcode=?
-           AND found IS NULL "
+         WHERE priority='0' 
+           AND branchcode=?"
     );
     $sth->execute( $frombranch );
     my @transreserv;
@@ -559,7 +548,6 @@ sub GetReservesForBranch {
 	my $query        = "SELECT borrowernumber,reservedate,itemnumber,waitingdate
         FROM   reserves 
         WHERE   priority='0'
-            AND cancellationdate IS NULL 
             AND found='W' ";
     if ($frombranch){
         $query .= " AND branchcode=? ";
@@ -725,6 +713,21 @@ sub CancelReserve {
         my $sth = $dbh->prepare($query);
         $sth->execute( $item, $borr );
         $sth->finish;
+        $query = "
+            INSERT INTO old_reserves
+            SELECT * FROM reserves
+            WHERE  itemnumber       = ?
+             AND   borrowernumber   = ?
+        ";
+        $sth = $dbh->prepare($query);
+        $sth->execute( $item, $borr );
+        $query = "
+            DELETE FROM reserves
+            WHERE  itemnumber       = ?
+             AND   borrowernumber   = ?
+        ";
+        $sth = $dbh->prepare($query);
+        $sth->execute( $item, $borr );
     }
     else {
         # removing a reserve record....
@@ -736,7 +739,6 @@ sub CancelReserve {
               AND borrowernumber = ?
               AND cancellationdate IS NULL
               AND itemnumber IS NULL
-              AND (found <> 'F' OR found IS NULL)
         /;
         my $sth = $dbh->prepare($query);
         $sth->execute( $biblio, $borr );
@@ -749,14 +751,29 @@ sub CancelReserve {
                    priority         = 0
             WHERE  biblionumber     = ?
               AND  borrowernumber   = ?
-              AND cancellationdate IS NULL
-              AND (found <> 'F' or found IS NULL)
         /;
 
         # update the database, removing the record...
         $sth = $dbh->prepare($query);
         $sth->execute( $biblio, $borr );
         $sth->finish;
+
+        $query = qq/
+            INSERT INTO old_reserves
+            SELECT * FROM reserves
+            WHERE  biblionumber     = ?
+              AND  borrowernumber   = ?
+        /;
+        $sth = $dbh->prepare($query);
+        $sth->execute( $biblio, $borr );
+
+        $query = qq/
+            DELETE FROM reserves
+            WHERE  biblionumber     = ?
+              AND  borrowernumber   = ?
+        /;
+        $sth = $dbh->prepare($query);
+        $sth->execute( $biblio, $borr );
 
         # now fix the priority on the others....
         _FixPriority( $priority, $biblio );
@@ -781,12 +798,26 @@ sub ModReserve {
             SET    cancellationdate=now()
             WHERE  biblionumber   = ?
              AND   borrowernumber = ?
-             AND   cancellationdate is NULL
-             AND   (found <> 'F' or found is NULL)
         /;
         my $sth = $dbh->prepare($query);
         $sth->execute( $biblio, $borrower );
         $sth->finish;
+        $query = qq/
+            INSERT INTO old_reserves
+            SELECT *
+            FROM   reserves 
+            WHERE  biblionumber   = ?
+             AND   borrowernumber = ?
+        /;
+        $sth = $dbh->prepare($query);
+        $sth->execute( $biblio, $borrower );
+        $query = qq/
+            DELETE FROM reserves 
+            WHERE  biblionumber   = ?
+             AND   borrowernumber = ?
+        /;
+        $sth = $dbh->prepare($query);
+        $sth->execute( $biblio, $borrower );
         
     }
     else {
@@ -794,8 +825,6 @@ sub ModReserve {
         UPDATE reserves SET priority = ? ,branchcode = ?, itemnumber = ?, found = NULL
             WHERE biblionumber   = ?
              AND borrowernumber = ?
-             AND cancellationdate is NULL
-             AND (found <> 'F' or found is NULL)
         /;
         my $sth = $dbh->prepare($query);
         $sth->execute( $rank, $branch,$itemnumber, $biblio, $borrower);
@@ -848,6 +877,23 @@ sub ModReserveFill {
     $sth->execute( $biblionumber, $resdate, $borrowernumber );
     $sth->finish;
 
+    # move to old_reserves
+    $query = "INSERT INTO old_reserves
+                 SELECT * FROM reserves
+                 WHERE  biblionumber     = ?
+                    AND reservedate      = ?
+                    AND borrowernumber   = ?
+                ";
+    $sth = $dbh->prepare($query);
+    $sth->execute( $biblionumber, $resdate, $borrowernumber );
+    $query = "DELETE FROM reserves
+                 WHERE  biblionumber     = ?
+                    AND reservedate      = ?
+                    AND borrowernumber   = ?
+                ";
+    $sth = $dbh->prepare($query);
+    $sth->execute( $biblionumber, $resdate, $borrowernumber );
+    
     # now fix the priority on the others (if the priority wasn't
     # already sorted!)....
     unless ( $priority == 0 ) {
@@ -915,8 +961,6 @@ sub ModReserveAffect {
                itemnumber = ?
         WHERE borrowernumber = ?
           AND biblionumber = ?
-          AND reserves.cancellationdate IS NULL
-          AND (reserves.found <> 'F' OR reserves.found IS NULL)
     ";
     }
     else {
@@ -929,8 +973,6 @@ sub ModReserveAffect {
                 itemnumber = ?
         WHERE borrowernumber = ?
           AND biblionumber = ?
-          AND reserves.cancellationdate IS NULL
-          AND (reserves.found <> 'F' OR reserves.found IS NULL)
     ";
     }
     $sth = $dbh->prepare($query);
@@ -977,8 +1019,7 @@ sub ModReserveMinusPriority {
     my $query = "
         UPDATE reserves
         SET    priority = 0 , itemnumber = ? 
-        WHERE  cancellationdate IS NULL 
-          AND  borrowernumber=?
+        WHERE  borrowernumber=?
           AND  biblionumber=?
     ";
     my $sth_upd = $dbh->prepare($query);
@@ -990,7 +1031,6 @@ sub ModReserveMinusPriority {
             SET    priority = priority-1
             WHERE  biblionumber = ?
             AND priority > 0
-            AND cancellationdate IS NULL
     ";
     $sth_upd = $dbh->prepare($query);
     $sth_upd->execute( $biblionumber );
@@ -1025,7 +1065,6 @@ sub _FixPriority {
             SET    priority = 0
             WHERE biblionumber = ?
               AND borrowernumber = ?
-              AND cancellationdate IS NULL
               AND found ='W'
         /;
         my $sth = $dbh->prepare($query);
@@ -1043,8 +1082,7 @@ sub _FixPriority {
         SELECT borrowernumber, reservedate, constrainttype
         FROM   reserves
         WHERE  biblionumber   = ?
-          AND  cancellationdate IS NULL
-          AND  ((found <> 'F' and found <> 'W') or found is NULL)
+          AND  ((found <> 'W') or found is NULL)
         ORDER BY priority ASC
     /;
     my $sth = $dbh->prepare($query);
@@ -1132,8 +1170,6 @@ sub _Findgroupreserve {
           AND reserves.borrowernumber = reserveconstraints.borrowernumber
           AND reserves.reservedate    =reserveconstraints.reservedate )
           OR  reserves.constrainttype='a' )
-          AND reserves.cancellationdate is NULL
-          AND (reserves.found <> 'F' or reserves.found is NULL)
     /;
     my $sth = $dbh->prepare($query);
     $sth->execute( $biblio, $bibitem );

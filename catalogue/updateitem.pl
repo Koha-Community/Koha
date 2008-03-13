@@ -81,7 +81,7 @@ ModItem($item_changes, $biblionumber, $itemnumber);
 # a charge has been added
 # FIXME : if no replacement price, borrower just doesn't get charged?
 if ($itemlost==1) {
-    my $sth=$dbh->prepare("SELECT * FROM issues WHERE (itemnumber=? AND returndate IS NULL)");
+    my $sth=$dbh->prepare("SELECT * FROM issues WHERE itemnumber=?");
     $sth->execute($itemnumber);
     my $issues=$sth->fetchrow_hashref();
 

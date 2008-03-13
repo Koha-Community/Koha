@@ -47,8 +47,6 @@ sub GetBorrowerNotifys{
 			AND
 			(notifys.borrowernumber=issues.borrowernumber AND notifys.itemnumber=issues.itemnumber)
 			AND
-			issues.returndate IS NULL
-			AND
 			notifys.borrowernumber=?
 			AND notify_send_date IS NULL");
 			$sth2->execute($borrowernumber);
