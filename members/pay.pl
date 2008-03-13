@@ -186,6 +186,7 @@ sub writeoff {
     my ( $borrowernumber, $accountnum, $itemnum, $accounttype, $amount ) = @_;
     my $user = $input->remote_user;
     my $dbh  = C4::Context->dbh;
+    undef $itemnum unless $itemnum; # if no item is attached to fine, make sure to store it as a NULL
     my $sth =
       $dbh->prepare(
 "Update accountlines set amountoutstanding=0 where (accounttype='Res' OR accounttype='FU' OR accounttype ='IP' OR accounttype='CH' OR accounttype='N' OR accounttype='F' OR accounttype='A' OR accounttype='M' OR accounttype='L' OR accounttype='RE' OR accounttype='RL') and accountno=? and borrowernumber=?"
