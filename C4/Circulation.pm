@@ -1638,13 +1638,13 @@ sub CanBookBeRenewed {
         # because it's a bit messy: given the item number, we need to find
         # the biblioitem, which gives us the itemtype, which tells us
         # whether it may be renewed.
-        my $sth2 = $dbh->prepare(
-            "SELECT renewalsallowed FROM items
-                LEFT JOIN biblioitems on items.biblioitemnumber = biblioitems.biblioitemnumber
-                LEFT JOIN itemtypes ON biblioitems.itemtype = itemtypes.itemtype
-                WHERE items.itemnumber = ?
-                "
-        );
+        my $query = "SELECT renewalsallowed FROM items ";
+        $query .= (C4::Context->preference('item-level_itypes'))
+                    ? "LEFT JOIN itemtypes ON items.itype = itemtypes.itemtype "
+                    : "LEFT JOIN biblioitems on items.biblioitemnumber = biblioitems.biblioitemnumber
+                       LEFT JOIN itemtypes ON biblioitems.itemtype = itemtypes.itemtype ";
+        $query .= "WHERE items.itemnumber = ?";
+        my $sth2 = $dbh->prepare($query);
         $sth2->execute($itemnumber);
         if ( my $data2 = $sth2->fetchrow_hashref ) {
             $renews = $data2->{'renewalsallowed'};
@@ -1773,19 +1773,23 @@ sub GetRenewCount {
                                 where (borrowernumber = ?)
                                 and (itemnumber = ?)");
     $sth->execute($bornum,$itemno);
-        my $data = $sth->fetchrow_hashref;
-        $renewcount = $data->{'renewals'} if $data->{'renewals'};
-    my $sth2 = $dbh->prepare("select renewalsallowed from items,biblioitems,itemtypes
-        where (items.itemnumber = ?)
-                and (items.biblioitemnumber = biblioitems.biblioitemnumber)
-        and (biblioitems.itemtype = itemtypes.itemtype)");
+    my $data = $sth->fetchrow_hashref;
+    $renewcount = $data->{'renewals'} if $data->{'renewals'};
+    $sth->finish;
+    my $query = "SELECT renewalsallowed FROM items ";
+    $query .= (C4::Context->preference('item-level_itypes'))
+                ? "LEFT JOIN itemtypes ON items.itype = itemtypes.itemtype "
+                : "LEFT JOIN biblioitems on items.biblioitemnumber = biblioitems.biblioitemnumber
+                   LEFT JOIN itemtypes ON biblioitems.itemtype = itemtypes.itemtype ";
+    $query .= "WHERE items.itemnumber = ?";
+    my $sth2 = $dbh->prepare($query);
     $sth2->execute($itemno);
-        my $data2 = $sth2->fetchrow_hashref();
-        $renewsallowed = $data2->{'renewalsallowed'};
-        $renewsleft = $renewsallowed - $renewcount;
-#         warn "Renewcount:$renewcount RenewsAll:$renewsallowed RenewLeft:$renewsleft";
-        return ($renewcount,$renewsallowed,$renewsleft);
+    my $data2 = $sth2->fetchrow_hashref();
+    $renewsallowed = $data2->{'renewalsallowed'};
+    $renewsleft = $renewsallowed - $renewcount;
+    return ($renewcount,$renewsallowed,$renewsleft);
 }
+
 =head2 GetIssuingCharges
 
 ($charge, $item_type) = &GetIssuingCharges($itemnumber, $borrowernumber);
