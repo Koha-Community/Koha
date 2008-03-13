@@ -142,7 +142,7 @@ if ($op eq "additem") {
 		$nextop="additem";
     } else {
 		# check it doesnt have a waiting reserve
-		$sth=$dbh->prepare("SELECT * FROM reserves WHERE found = 'w' AND cancellationdate IS NULL AND itemnumber = ?");
+		$sth=$dbh->prepare("SELECT * FROM reserves WHERE found = 'W' AND cancellationdate IS NULL AND itemnumber = ?");
 		$sth->execute($itemnumber);
 		my $reserve=$sth->fetchrow;
 		if ($reserve){
