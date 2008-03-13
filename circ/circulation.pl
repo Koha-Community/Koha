@@ -434,9 +434,11 @@ if ($borrower) {
 						$it->{'itemnumber'}, $borrower->{'borrowernumber'}
 		);
 		$it->{'charge'} = sprintf("%.2f", $it->{'charge'});
-        ($it->{'can_renew'}, $it->{'can_renew_error'}) = CanBookBeRenewed( 
+        my $can_renew_error;
+        ($it->{'can_renew'}, $can_renew_error) = CanBookBeRenewed( 
 						$borrower->{'borrowernumber'},$it->{'itemnumber'}
 		);
+        $it->{"renew_error_${can_renew_error}"} = 1 if defined $can_renew_error;
 		my ($restype, $reserves) = CheckReserves($it->{'itemnumber'});
 		($restype) and $it->{'can_renew'} = 0;
 

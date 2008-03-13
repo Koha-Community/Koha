@@ -412,10 +412,10 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
             <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
         <!-- /TMPL_IF -->
 		<!-- TMPL_ELSE -->
-		    <!-- TMPL_IF EXPR="can_renew_error eq 'on_reserve'" -->
+		    <!-- TMPL_IF NAME="renew_error_on_reserve" -->
 			    On Hold
 			<!-- /TMPL_IF -->
-			<!-- TMPL_IF EXPR="can_renew_error eq 'too_many'" -->
+			<!-- TMPL_IF NAME="renew_error_too_many" -->
 			    Too Many Renewals
 			<!-- /TMPL_IF -->
 		<!-- /TMPL_IF -->
@@ -461,10 +461,10 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
             <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
         <!-- /TMPL_IF -->
 		<!-- TMPL_ELSE -->
-		    <!-- TMPL_IF EXPR="can_renew_error eq 'on_reserve'" -->
+		    <!-- TMPL_IF NAME="renew_error_on_reserve" -->
 			    On Hold
 			<!-- /TMPL_IF -->
-			<!-- TMPL_IF EXPR="can_renew_error eq 'too_many'" -->
+			<!-- TMPL_IF NAME="renew_error_too_many" -->
 			    Too Many Renewals
 			<!-- /TMPL_IF -->
 			
