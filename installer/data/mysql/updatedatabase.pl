@@ -1178,12 +1178,12 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 $DBversion = "3.00.00.063";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE deleteditems
-                CHANGE COLUMN booksellerid booksellerid MEDIUMTEXT,
-                ADD COLUMN copynumber SMALLINT(6) DEFAULT NULL,
-                ADD COLUMN enumchron VARCHAR(80) DEFAULT NULL;");
+                CHANGE COLUMN booksellerid booksellerid MEDIUMTEXT DEFAULT NULL,
+                ADD COLUMN enumchron VARCHAR(80) DEFAULT NULL AFTER more_subfields_xml,
+                ADD COLUMN copynumber SMALLINT(6) DEFAULT NULL AFTER enumchron;");
     $dbh->do("ALTER TABLE items
                 CHANGE COLUMN booksellerid booksellerid MEDIUMTEXT,
-                ADD COLUMN copynumber SMALLINT(6);");
+                ADD COLUMN copynumber SMALLINT(6) DEFAULT NULL AFTER enumchron;");
 	print "Upgrade to $DBversion done ( Changed items.booksellerid and deleteditems.booksellerid to MEDIUMTEXT and added missing items.copynumber and deleteditems.copynumber to fix Bug 1927)\n";
     SetVersion ($DBversion);
 }
