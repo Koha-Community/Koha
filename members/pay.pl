@@ -39,6 +39,17 @@ use C4::Branch; # GetBranches
 
 my $input = new CGI;
 
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "members/pay.tmpl",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { borrowers => 1 },
+        debug           => 1,
+    }
+);
+
 my $borrowernumber = $input->param('borrowernumber');
 if ( $borrowernumber eq '' ) {
     $borrowernumber = $input->param('borrowernumber0');
@@ -73,16 +84,6 @@ for ( my $i = 0 ; $i < @names ; $i++ ) {
 }
 my $total = $input->param('total');
 if ( $check == 0 ) {
-    my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-        {
-            template_name   => "members/pay.tmpl",
-            query           => $input,
-            type            => "intranet",
-            authnotrequired => 0,
-            flagsrequired   => { borrowers => 1 },
-            debug           => 1,
-        }
-    );
     if ( $total ne '' ) {
         recordpayment( $borrowernumber, $total );
     }
