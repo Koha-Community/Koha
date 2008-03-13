@@ -29,6 +29,7 @@ use C4::Items;
 use C4::Members;
 use C4::Dates;
 use C4::Calendar;
+use C4::Accounts;
 use Date::Calc qw(
   Today
   Today_and_Now
