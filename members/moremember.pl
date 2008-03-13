@@ -245,7 +245,7 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
 
 	my ( $renewokay,$renewerror ) = CanBookBeRenewed( $borrowernumber, $issue->[$i]{'itemnumber'});
 	$row{'norenew'} = !$renewokay;
-	$row{'norenew_reason'} = $renewerror;
+	$row{"norenew_reason_$renewerror"} = 1 if $renewerror;
 	$row{'renew_failed'} = $renew_failed[$issue->[$i]{'itemnumber'}];		
 	$row{'return_failed'} = $return_failed[$issue->[$i]{'barcode'}];   
     push( @issuedata, \%row );
