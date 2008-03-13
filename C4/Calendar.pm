@@ -490,7 +490,6 @@ sub addDate {
 	} else { ## ($daysMode eq 'Days') 
         ($year, $month, $day) = &Date::Calc::Add_Delta_Days($year, $month, $day, $offset );
     }
-warn  sprintf("%04d-%02d-%02d",$year,$month,$day);
     return(C4::Dates->new( sprintf("%04d-%02d-%02d",$year,$month,$day),'iso'));
 }
 

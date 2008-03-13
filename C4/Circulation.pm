@@ -2024,7 +2024,6 @@ sub CalcDateDue {
 		my @datearr  = localtime($datedue);
 		return C4::Dates->new( sprintf("%04d-%02d-%02d", 1900 + $datearr[5], $datearr[4] + 1, $datearr[3]), 'iso');
 	} else {
-	warn $branch;
 		my $calendar = C4::Calendar->new(  branchcode => $branch );
 		my $datedue = $calendar->addDate($startdate, $loanlength);
 		return $datedue;
