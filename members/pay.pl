@@ -114,9 +114,9 @@ if ( $check == 0 ) {
                 $line{title}          = $accts->[$i]{'title'};
                 $line{notify_id}      = $accts->[$i]{'notify_id'};
                 $line{notify_level}   = $accts->[$i]{'notify_level'};
-
+                $line{net_balance} = 1;
+                push( @loop_pay, \%line );
             }
-            push( @loop_pay, \%line );
         }
 
         my $totalnotify = AmountNotify( $notify[$j], $borrowernumber );

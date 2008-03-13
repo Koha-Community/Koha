@@ -50,7 +50,7 @@
 	<!-- TMPL_LOOP name="loop_pay" -->
 <tr>
 	<td>
-	<!-- TMPL_IF EXPR="amountoutstanding > 0" -->
+	<!-- TMPL_IF NAME="net_balance" -->
 	<select name="payfine<!-- TMPL_VAR name="i" -->">
 	<option value="no">Unpaid</option>
 	<option value="yes">Paid</option>
