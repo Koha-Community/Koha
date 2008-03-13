@@ -329,7 +329,7 @@ if ($borrowernumber) {
         my %getreserv;
         my %getWaitingReserveInfo;
         my $getiteminfo  = GetBiblioFromItemNumber( $num_res->{'itemnumber'} );
-        my $itemtypeinfo = getitemtypeinfo( (C4::Context->preference('item-level_itype')) ? $getiteminfo->{'itype'} : $getiteminfo->{'itemtype'} );
+        my $itemtypeinfo = getitemtypeinfo( (C4::Context->preference('item-level_itypes')) ? $getiteminfo->{'itype'} : $getiteminfo->{'itemtype'} );
         my ( $transfertwhen, $transfertfrom, $transfertto ) =
           GetTransfers( $num_res->{'itemnumber'} );
 
@@ -427,6 +427,9 @@ if ($borrower) {
 
     # split in 2 arrays for today & previous
     foreach my $it ( @$issueslist ) {
+        # set itemtype per item-level_itype syspref - FIXME this is an ugly hack
+        $it->{'itemtype'} = (C4::Context->preference('item-level_itypes')) ? $it->{'itype'} : $it->{'itemtype'};
+
         my $issuedate = $it->{'issuedate'};
         $issuedate =~ s/-//g;
         $issuedate = substr( $issuedate, 0, 8 );
