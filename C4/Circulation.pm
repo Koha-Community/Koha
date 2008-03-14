@@ -1165,6 +1165,11 @@ sub AddReturn {
         # find the borrower
         if ( ( not $iteminformation->{borrowernumber} ) && $doreturn ) {
             $messages->{'NotIssued'} = $barcode;
+            # even though item is not on loan, it may still
+            # be transferred; therefore, get current branch information
+            my $curr_iteminfo = GetItem($iteminformation->{'itemnumber'});
+            $iteminformation->{'homebranch'} = $curr_iteminfo->{'homebranch'};
+            $iteminformation->{'holdingbranch'} = $curr_iteminfo->{'holdingbranch'};
             $doreturn = 0;
         }
     
