@@ -21,7 +21,6 @@
 use strict;
 
 # external modules
-use Date::Calc qw/Today/;
 use CGI;
 # use Digest::MD5 qw(md5_base64);
 
@@ -212,7 +211,7 @@ if ($op eq 'save' || $op eq 'insert'){
 
 if ($op eq 'modify' || $op eq 'insert'){
   unless ($newdata{'dateexpiry'}){
-	my $arg2 = $newdata{'dateenrolled'} || sprintf('%04d-%02d-%02d', Today());
+	my $arg2 = $newdata{'dateenrolled'} || C4::Dates->today('iso');
     $newdata{'dateexpiry'} = GetExpiryDate($newdata{'categorycode'},$arg2);
   }
 }
@@ -267,7 +266,7 @@ if (C4::Context->preference("IndependantBranches")) {
   }
 }
 if ($op eq 'add'){
-	my $arg2 = $newdata{'dateenrolled'} || sprintf('%04d-%02d-%02d', Today()); 
+	my $arg2 = $newdata{'dateenrolled'} || C4::Dates->today('iso');
 	$data{'dateexpiry'} = GetExpiryDate($newdata{'categorycode'},$arg2);
 	$template->param( updtype => 'I',step_1=>1,step_2=>1,step_3=>1);
 	
@@ -472,8 +471,7 @@ if ($nok) {
   #Formatting data for display    
   
 if ($data{'dateenrolled'} eq ''){
-  my $today = sprintf('%04d-%02d-%02d', Today());	# ISO format
-  $data{'dateenrolled'}=$today;
+  $data{'dateenrolled'}=C4::Dates->today('iso');
 }
 if (C4::Context->preference('uppercasesurnames')) {
 	$data{'surname'}    =uc($data{'surname'}    );

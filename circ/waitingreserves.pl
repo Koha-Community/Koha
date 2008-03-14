@@ -62,12 +62,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $default = C4::Context->userenv->{'branch'};
 
-my @datearr    = localtime( time() );
-my $todaysdate =
-    ( 1900 + $datearr[5] ) . '-'
-  . sprintf( "%0.2d", ( $datearr[4] + 1 ) ) . '-'
-  . sprintf( "%0.2d", $datearr[3] );
-
 # if we have a return from the form we launch the subroutine CancelReserve
 if ($item) {
     my $messages;
@@ -164,7 +158,7 @@ foreach my $num (@getreserves) {
 
 $template->param(
     reserveloop => \@reservloop,
-    show_date   => format_date($todaysdate),
+    show_date   => format_date(C4::Dates->today('iso')),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

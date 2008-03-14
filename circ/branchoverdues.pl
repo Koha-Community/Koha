@@ -26,7 +26,6 @@ use C4::Overdues;    # AddNotifyLine
 use C4::Biblio;
 use C4::Koha;
 use C4::Debug;
-use Date::Calc qw/Today Today_and_Now Now/;
 
 =head1 branchoverdues.pl
 
@@ -70,10 +69,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $default = C4::Context->userenv->{'branch'};
-
-# Initate localtime
-my ( $year, $month, $day ) = &Today;
-my $todaysdate = join "-", ( $year, $month, $day );
 
 # Deal with the vars recept from the template
 my $borrowernumber = $input->param('borrowernumber');
@@ -149,7 +144,7 @@ foreach my $num (@getoverdues) {
 # initiate the templates for the overdueloop
 $template->param(
     overduesloop => \@overduesloop,
-    show_date    => format_date($todaysdate),
+    show_date    => format_date(C4::Dates->today('iso')),
     location     => $location,
 );
 

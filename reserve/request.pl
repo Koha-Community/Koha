@@ -29,7 +29,7 @@ use strict;
 use C4::Branch; # GetBranches get_branchinfos_of
 use CGI;
 use List::MoreUtils qw/uniq/;
-use Date::Calc qw/Today Date_to_Days/;
+use Date::Calc qw/Date_to_Days/;
 use C4::Output;
 use C4::Auth;
 use C4::Reserves;
@@ -70,7 +70,7 @@ my $messageborrower;
 my $warnings;
 my $messages;
 
-my $date = sprintf( '%04d-%02d-%02d', Today() );
+my $date = C4::Dates->today('iso');
 
 if ($findborrower) {
     my ( $count, $borrowers ) =

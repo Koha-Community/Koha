@@ -39,7 +39,7 @@ use C4::Output;
 use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Members;        # GetBorrowersWhoHavexxxBorrowed.
 use C4::Circulation;    # AnonymiseIssueHistory.
-use Date::Calc qw/Date_to_Days Today/;
+use Date::Calc qw/Today Add_Delta_YM/;
 
 my $cgi = new CGI;
 
@@ -147,10 +147,8 @@ if ( $params->{'step3'} ) {
 
 #default value set to the template are the 'CNIL' value.
 my ( $year, $month, $day ) = &Today();
-my $tmpyear  = $year - 1;
-my $tmpmonth = $month - 3;
-$filterdate1 = format_date($tmpyear . "-" . $month . "-" . $day);
-$filterdate2 = format_date($year . "-" . $tmpmonth . "-" . $day);
+$filterdate1 = format_date(sprintf("%-04.4d-%-02.2d-%02.2d", Add_Delta_YM($year, $month, $day, -1, 0)));
+$filterdate2 = format_date(sprintf("%-04.4d-%-02.2d-%02.2d", Add_Delta_YM($year, $month, $day, 0, -3)));
 
 $template->param(
     step1       => '1',

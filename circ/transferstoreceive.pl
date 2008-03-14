@@ -124,7 +124,7 @@ foreach my $br ( keys %$branches ) {
 
 $template->param(
     branchesloop => \@branchesloop,
-    show_date    => format_date(join("-", &Today)),
+    show_date    => format_date(C4::Dates->today('iso')),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
