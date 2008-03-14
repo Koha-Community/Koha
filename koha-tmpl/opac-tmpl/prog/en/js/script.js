@@ -83,27 +83,12 @@ YAHOO.util.Event.onContentReady("listsmenu", function () {
     $("#listsmenu").css("display","block").css("visibility","hidden");
     $("#cartDetails").css("display","block").css("visibility","hidden");
 
-/*	$("#cmspan").html("<a id=\"cartmenulink\" class=\"btn green left\" href=\"/cgi-bin/koha/opac-basket.pl\">Cart</a>");*/
-	/*if(!$.browser.msie){
-   	$('.btn').each(function(){
-	  var b = $(this);
-	  var tt = b.text() || b.val();
-	  if ($(':submit,:button',this)) {
-	  b = $('<a>').insertAfter(this). addClass(this.className).attr('id',this.id);
-	  $(this).remove();
-	  }
-	  b.text('').css({cursor:'pointer'}). prepend('<i></i>')
-	  .append( $('<span>').text(tt).append('<i></i><span></span>') );
-	  });
-	  }*/
+	$("#cmspan").html("<a href=\"#\" id=\"cartmenulink\" class=\"\"><i></i><span><i></i><span></span><img src=\"/opac-tmpl/prog/images/cart.gif\" width=\"14\" height=\"14\" alt=\"\" border=\"0\" /> Cart<span id=\"basket\"></span></span></a>");
+	$("#listsmenulink").attr("href","#").find("span:eq(0)").append("<img src=\"/opac-tmpl/prog/images/list.gif\" width=\"5\" height=\"6\" alt=\"\" border=\"0\" />");
 	$("#searchsubmit").click(function(){
 		$("#searchform").submit();
 	})
-/*	  
-	  $("#cartmenulink").find("i:first").before("<img src=\"/opac-tmpl/prog/images/cart.gif\" alt=\"\" />");
-	  $("#cartmenulink").find("i:last").before("<span id=\"basket\"></span>");
-	  
-	  $("#listsmenulink").find("i:last").before("<img src=\"/opac-tmpl/prog/images/list.gif\" alt=\"\" />");*/
+
 	  if(basketcount){ updateBasket(basketcount,document) }	
    
 	var listMenu = new YAHOO.widget.Menu("listsmenu", { lazyload: true });
@@ -115,10 +100,9 @@ YAHOO.util.Event.onContentReady("listsmenu", function () {
                     listMenu.align("tr", "br");
 		}
 		YAHOO.util.Event.addListener("listsmenulink", "click", listMenu.show, null, listMenu);
-		YAHOO.widget.Overlay.windowResizeEvent.subscribe(positionlistMenu);	
-/*	$("#cartmenulink").find("a").append("<span id=\"basket\"></span>");*/
-  
-	  if(basketcount){ updateBasket(basketcount,document) }	
+		YAHOO.widget.Overlay.windowResizeEvent.subscribe(positionlistMenu);
+	
+	if(basketcount){ updateBasket(basketcount,document) }	
    
         
     });
