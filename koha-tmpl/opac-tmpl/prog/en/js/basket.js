@@ -8,7 +8,6 @@ var CGIBIN = "/cgi-bin/koha/";
 var nameCookie = "bib_list";
 var valCookie = readCookie(nameCookie);
 
-function getBasketCount(){
 if(valCookie){
     var arrayRecords = valCookie.split("/");
     if(arrayRecords.length > 0){
@@ -19,9 +18,6 @@ if(valCookie){
 } else {
         var basketcount = "";
 }
-return basketcount;
-}
-var bCount = getBasketCount();
 
 function writeCookie(name, val, wd) {
     if (wd) {
@@ -86,7 +82,7 @@ function openBasket() {
         if (window.focus) {basket.focus()}
     }
     else {
-        alert(MSG_BASKET_EMPTY);
+        showCartUpdate(MSG_BASKET_EMPTY);
     }
 }
 
@@ -115,7 +111,7 @@ function addRecord(val, selection,NoMsgAlert) {
                 return 0;
             }
             if (! NoMsgAlert ) {
-                alert(MSG_RECORD_IN_BASKET);
+                showCartUpdate(MSG_RECORD_IN_BASKET);
             }
         }
         else {
@@ -131,7 +127,7 @@ function addRecord(val, selection,NoMsgAlert) {
             return 1;
         }
         if (! NoMsgAlert ) {
-            alert(MSG_RECORD_ADDED);
+            showCartUpdate(MSG_RECORD_ADDED);
         }
     }
 }
@@ -200,15 +196,14 @@ function addSelRecords(valSel) { // function for adding a selection of biblios t
             msg = MSG_NO_RECORD_ADDED+" ("+MSG_NRECORDS_IN_BASKET+") !";
         }
     }
-	$("#cartDetails").html(msg);
-	cartOverlay.show();
-	alert(nbAdd);
-	newtotal = nbAdd + Number($('#basket span').html());
-	setTimeout("cartOverlay.hide(updateCart("+newtotal+"))",5000);
+	showCartUpdate(msg);
 }
 
-function updateCart(newtotal){
-$('#cartDetails').html(_("Your cart contains ")+newtotal+_(" items"));
+function showCartUpdate(msg){
+	cartUpdate.setBody(msg);
+	cartUpdate.render("cc");
+	cartUpdate.show();
+	setTimeout("cartUpdate.hide()",5000);	
 }
 
 function selRecord(num, status) {
@@ -373,7 +368,7 @@ function updateBasket(updated_value,target) {
 	$('#basket').html("<span>"+updated_value+"</span>");
 	$('#cartDetails').html(_("Your cart contains ")+updated_value+_(" items"));
 	}
-	var bCount = updated_value;
+	var basketcount = updated_value;
 }
 
 function openBiblio(dest,biblionumber) {
@@ -406,9 +401,9 @@ function vShelfAdd() {
 }
 
 YAHOO.util.Event.onContentReady("cartDetails", function () {
-	$("#cartDetails").css("display","block").css("visibility","hidden");
+	$("#cartDetails").css("display","block").css("visibility","hidden").after("<div id=\"cc\" style=\"visibility: hidden\"></div>");
 	$("#cmspan").html("<a href=\"#\" id=\"cartmenulink\" class=\"\"><i></i><span><i></i><span></span><img src=\"/opac-tmpl/prog/images/cart.gif\" width=\"14\" height=\"14\" alt=\"\" border=\"0\" /> Cart<span id=\"basket\"></span></span></a>");
-	if(bCount){ updateBasket(bCount) }	
+	if(basketcount){ updateBasket(basketcount) }	
 });
 
 function cartMenuInit() {
@@ -421,5 +416,7 @@ function cartMenuInit() {
 	YAHOO.util.Event.addListener("cartmenulink", "mouseover", cartOverlay.show, cartOverlay, true);
 	YAHOO.util.Event.addListener("cartmenulink", "mouseout", cartOverlay.hide, cartOverlay, true);
 	YAHOO.util.Event.addListener("cartmenulink", "click", cartOverlay.hide, cartOverlay, true);
+	
+	cartUpdate = new YAHOO.widget.Panel("cartUpdate", { context:["cartmenulink","tr","br"],																							  visible:false,width:"200px",effect:{effect:YAHOO.widget.ContainerEffect.FADE,duration:0.25} } );
 }
 YAHOO.util.Event.addListener(window, "load", cartMenuInit);
