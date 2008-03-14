@@ -8,9 +8,9 @@
 <div id="custom-doc" class="yui-t7">
    <div id="bd">
 
-<h1>Catalog item search
+<h1>Search for items
 <!-- TMPL_IF name="batch_id" -->
- for batch <!-- TMPL_VAR NAME="batch_id" -->
+to add to Batch <!-- TMPL_VAR NAME="batch_id" -->
 <!-- /TMPL_IF  -->
 </h1>
 
@@ -35,8 +35,8 @@
     <option value="acqdate" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Acquisition Date</option>
 </select>
    <input type="text" size="30" id="marclist" name="marclist" class="focus" title="Enter search terms" value=""/>  
-</li><li>
-<select name="idx" disabled="disabled"><!-- FIXME: script does keyword search regardless -->
+</li><!-- FIXME: script does keyword search regardless<li>
+<select name="idx" disabled="disabled">
     <option value="kw" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Keyword</option>
     <option value="au" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Author</option>
     <option value="yr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Publication Date</option>
@@ -51,8 +51,8 @@
     <option value="bc" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Barcode</option>
     <option value="acqdate" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Acquisition Date</option>
 </select>
-   <input type="text" size="30" name="q" title="Enter search terms" value="" disabled="disabled" /><!-- FIXME: script doesn't "catch" q param -->
-</li>
+   <input type="text" size="30" name="q" title="Enter search terms" value="" disabled="disabled" />  FIXME: script doesn't "catch" q param
+</li> -->
 </ol>
 </fieldset>
 
@@ -68,9 +68,9 @@
 </fieldset>
 <!-- /TMPL_IF -->
 
-<fieldset class="rows">
-	<table>
-<!--
+
+	
+<!--<fieldset class="rows"><table>
 	<tr><th scope="row">
 		<label for="datefrom">Added on or after date</label>
 	    </th>
@@ -114,10 +114,10 @@
         align          :    "Tl",
     });
 </script>
--->
+--><!-- FIXME: script returns ALL type regardless
     <tr><th scope="row">Document Type</th>
                 <td colspan="2">
-                    <select name="Filter" disabled="disabled"><!-- FIXME: script returns ALL type regardless-->
+                    <select name="Filter" disabled="disabled">
                         <option value="">All Item Types</option>
                         <!-- TMPL_LOOP name="itemtypeloop" -->
                             <!-- TMPL_IF name="selected" -->
@@ -128,12 +128,9 @@
                         <!-- /TMPL_LOOP -->
                     </select>
                 </td>
-            </tr>
+            </tr></table></fieldset>-->
 
-	</table>
-	<br />
-</fieldset>
-<fieldset class="action"><input type="submit" value="Start search" class="submit" /> <a class="cancel close" href="#">Cancel</a></fieldset>
+<fieldset class="action"><input type="submit" value="Search" class="submit" /> <a class="cancel close" href="#">Cancel</a></fieldset>
 </form>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
