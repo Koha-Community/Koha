@@ -121,6 +121,8 @@ if ( $query->param('resbarcode') ) {
     my $diffBranchReturned = $query->param('diffBranch');
     # set to waiting....
     my $iteminfo   = GetBiblioFromItemNumber($item);
+    # fix up item type for display
+    $iteminfo->{'itemtype'} = C4::Context->preference('item-level_itypes') ? $iteminfo->{'itype'} : $iteminfo->{'itemtype'};
     my $diffBranchSend;
     
 #     addin in ModReserveAffect the possibility to check if the document is expected in this library or not,
@@ -186,6 +188,9 @@ if ($barcode) {
       AddReturn( $barcode, C4::Context->userenv->{'branch'}, $exemptfine );
     # get biblio description
     my $biblio = GetBiblioFromItemNumber($issueinformation->{'itemnumber'});
+    # fix up item type for display
+    $biblio->{'itemtype'} = C4::Context->preference('item-level_itypes') ? $biblio->{'itype'} : $biblio->{'itemtype'};
+
     $template->param(
         title            => $biblio->{'title'},
         homebranch       => $biblio->{'homebranch'},
@@ -544,6 +549,8 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
 
         #        my %ri;
         my $biblio = GetBiblioFromItemNumber(GetItemnumberFromBarcode($barcode));
+        # fix up item type for display
+        $biblio->{'itemtype'} = C4::Context->preference('item-level_itypes') ? $biblio->{'itype'} : $biblio->{'itemtype'};
         $ri{itembiblionumber} = $biblio->{'biblionumber'};
         $ri{itemtitle}        = $biblio->{'title'};
         $ri{itemauthor}       = $biblio->{'author'};
