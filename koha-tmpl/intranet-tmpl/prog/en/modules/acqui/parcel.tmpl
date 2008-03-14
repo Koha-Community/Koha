@@ -27,13 +27,13 @@
             Receive orders from <!-- TMPL_VAR NAME="name" -->
         <!-- /TMPL_IF -->
     </h1>
-<div id="acqui_recieve_summary">
+<div id="acqui_receive_summary">
     <p>Invoice number: <!-- TMPL_VAR NAME="invoice" --></p>
     <p>Received by: <!-- TMPL_VAR NAME="loggedinusername" --></p>
     <p>On: <!-- TMPL_VAR NAME="formatteddatereceived" --></p>
 	<!-- TODO: Add date picker, change rcv date. -->
 </div>
-<div id="acqui_recieve_recievelist">
+<div id="acqui_receive_receivelist">
     <h2>Items in shipment</h2>
     <form action="/cgi-bin/koha/acqui/parcel.pl" method="get" name="orderform">
     <table>
@@ -96,7 +96,7 @@
     </table>
     </form>
 </div>
-<div id="acqui_recieve_search">
+<div id="acqui_receive_search">
     <h2>Search orders to add to this shipment</h2>
     <form action="/cgi-bin/koha/acqui/orderreceive.pl">
         <input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->" />
