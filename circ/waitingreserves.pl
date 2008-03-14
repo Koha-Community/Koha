@@ -122,6 +122,8 @@ else {
 foreach my $num (@getreserves) {
     my %getreserv;
     my $gettitle     = GetBiblioFromItemNumber( $num->{'itemnumber'} );
+    # fix up item type for display
+    $gettitle->{'itemtype'} = C4::Context->preference('item-level_itypes') ? $gettitle->{'itype'} : $gettitle->{'itemtype'};
     my $getborrower  = GetMemberDetails( $num->{'borrowernumber'} );
     my $itemtypeinfo = getitemtypeinfo( $gettitle->{'itemtype'} );
     $getreserv{'waitingdate'} = format_date( $num->{'waitingdate'} );
