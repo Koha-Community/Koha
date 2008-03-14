@@ -38,28 +38,37 @@ function Dopop(link) {
 				<!-- TMPL_LOOP NAME="loopcol" -->
 					<th colspan="2"><!-- TMPL_VAR NAME="coltitle" --></th>
 				<!-- /TMPL_LOOP -->
-
+</tr>
+<tr>
 				<th>&nbsp;</th>
 				<!-- TMPL_LOOP NAME="loopcol" -->
 					<th>Item</th>
 					<th>Count of Checkouts</th>
 				<!-- /TMPL_LOOP -->
-			
+</tr>
 				<!-- TMPL_LOOP NAME="looprow" -->
-					
-						<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
-						<!-- TMPL_VAR NAME="rowtitle" --></td>
+<!-- TMPL_IF NAME="hilighted" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+			<td><!-- TMPL_VAR NAME="rowtitle" --></td>
 						<!-- TMPL_LOOP NAME="loopcell" -->
-							<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td ><!-- /TMPL_IF -->
-								<!-- TMPL_IF NAME="reference" --><a href="javascript:Dopop('../catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="reference" -->')" ><!-- /TMPL_IF -->
-								<!-- TMPL_IF NAME="value" --><!-- TMPL_VAR NAME="value" --><!-- TMPL_ELSE -->Item<!-- /TMPL_IF -->
+							<td>
+
+<!-- TMPL_IF NAME="reference" -->
+<!-- TMPL_IF name="BiblioDefaultViewmarc" -->
+	<a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="reference" ESCAPE="URL" -->">
+<!-- TMPL_ELSIF name="BiblioDefaultViewisbd"-->
+	<a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="reference" ESCAPE="URL" -->">
+<!-- TMPL_ELSE -->
+	<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="reference" ESCAPE="URL" -->">
+ <!-- /TMPL_IF -->
+ <!-- /TMPL_IF -->                                        
+								<!-- TMPL_IF NAME="value" --><!-- TMPL_VAR NAME="value" --><!-- /TMPL_IF -->
 								<!-- TMPL_IF NAME="reference" --></a><!-- /TMPL_IF -->
 							</td>
-							<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td ><!-- /TMPL_IF -->
+							<td>
 								<!-- TMPL_IF NAME="count" --><!-- TMPL_VAR NAME="count" --><!-- /TMPL_IF -->
 							</td>
 						<!-- /TMPL_LOOP -->
-					
+					</tr>
 				<!-- /TMPL_LOOP -->
 		</table>
 	<!-- /TMPL_LOOP -->
