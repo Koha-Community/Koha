@@ -26,7 +26,7 @@
         <img border="0" src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="Cover Image" />
         <!-- /TMPL_IF --></div>
 <!-- /TMPL_IF -->
-   <div id="views"> <h1 style="display: inline"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF NAME="subtitle" --> <span class="subtitle"><!-- TMPL_VAR NAME="subtitle" --></span><!-- /TMPL_IF --></h1> <span class="views"><span id="Normalview">Normal View</span> <a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">MARC View</a> <!-- TMPL_IF NAME="ISBD" --><a id="ISBDview" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">ISBD View</a><!-- /TMPL_IF --></span></div>
+   <div id="views"> <h1><!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF NAME="subtitle" --> <span class="subtitle"><!-- TMPL_VAR NAME="subtitle" --></span><!-- /TMPL_IF --></h1> <span class="views"><span id="Normalview">Normal View</span> <a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">MARC View</a> <!-- TMPL_IF NAME="ISBD" --><a id="ISBDview" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">ISBD View</a><!-- /TMPL_IF --></span></div>
     <!-- TMPL_IF NAME="author" --><h2 class="author">By <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="author" -->"><!-- TMPL_VAR NAME="author" --></a></h2><!-- /TMPL_IF -->
     <p>
         [
@@ -172,6 +172,15 @@
             Add to Your Cart
         </a></li><!-- /TMPL_IF -->
 </ul>
+
+<div id="further">
+<h4>Search for this title in:</h4>
+<ul>
+<li><a href="http://worldcat.org/search?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->">Other Libraries (WorldCat)</a></li>
+<li><a href="http://www.scholar.google.com/scholar?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->">Other Databases (Google Scholar)</a></li>
+</ul>
+</div>
+
 		<div id="export">
 		<form method="get" action="/cgi-bin/koha/opac-export.pl">
 		<label for="format">Save Record:</label>
