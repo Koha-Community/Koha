@@ -107,6 +107,7 @@ my $strsth =
  LEFT JOIN biblio ON reserves.biblionumber=biblio.biblionumber
  WHERE reserves.found is NULL 
  $sqldatewhere
+ AND items.itemnumber NOT IN (SELECT itemnumber FROM issues)
  AND reserves.itemnumber is NULL";
 
 if (C4::Context->preference('IndependantBranches')){
