@@ -35,9 +35,22 @@ BEGIN {
 	@EXPORT_OK = qw(
 		&get_xisbns
 		&get_biblio_from_xisbn
+        &get_biblionumber_from_isbn
 	);
 }
 
+sub get_biblionumber_from_isbn {
+    my $isbn = shift;
+    my @biblionumbers;
+    my $dbh=C4::Context->dbh;
+    my $query = "SELECT biblionumber FROM biblioitems WHERE isbn=?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($isbn);
+    while ( my $biblionumber = $sth->fetchrow_hashref() ) {
+        push (@biblionumbers, $biblionumber);
+    }
+    return \@biblionumbers;
+}
 =head1 NAME
 
 C4::XISBN - Functions for retrieving XISBN content in Koha

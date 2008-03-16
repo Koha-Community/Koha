@@ -27,13 +27,13 @@ use strict;
 use vars qw($VERSION @ISA @EXPORT);
 
 BEGIN {
-	require Exporter;
-	$VERSION = 0.03;
-	@ISA = qw(Exporter);
-	@EXPORT = qw(
-		&get_amazon_details
-		&check_search_inside
-	);
+    require Exporter;
+    $VERSION = 0.03;
+    @ISA = qw(Exporter);
+    @EXPORT = qw(
+        &get_amazon_details
+        &check_search_inside
+    );
 }
 
 =head1 NAME
@@ -52,25 +52,40 @@ This module provides facilities for retrieving Amazon.com content in Koha
 
 sub get_amazon_details {
     my ( $isbn ) = @_;
+    #normalize the ISBN
+    $isbn =~ s/(p|-|:| )//g;
 
-    #get rid of MARC cataloger's nonsense
-    $isbn =~ s/(p|-)//g;
+    # Determine which content to grab in the request
 
-    # grab the developer's key: mine is 'ektostoukadou-20'
-    my $dev_key=C4::Context->preference('AmazonDevKey');
+    # Determine correct locale
+    my $locale_hashref = {
+        CA => '.ca',
+        DE => '.de',
+        FR => '.fr',
+        JP => '.jp',
+        UK => '.co.uk',
+        US => '.com',
+    };
 
-    #grab the associates tag: mine is '0ZRY7YASKJS280T7YB02'
+    my $amazon_locale_syspref = C4::Context->preference('AmazonLocale');
+    my $tld = $locale_hashref->{$amazon_locale_syspref} || '.com'; # default top level domain is .com
+
+    # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
+    my $aws_access_key_id = C4::Context->preference('AWSAccessKeyID');
+
+    #grab the associates tag: mine is 'kadabox-20'
     my $af_tag=C4::Context->preference('AmazonAssocTag');
-
+    my $response_group = "Similarities,EditorialReview,Reviews,ItemAttributes";
     my $asin=$isbn;
-    my $url = "http://xml.amazon.com/onca/xml3?t=$af_tag&dev-t=$dev_key&type=heavy&f=xml&AsinSearch=" . $asin;
+    my $url = "http://ecs.amazonaws$tld/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=$aws_access_key_id&Operation=ItemLookup&AssociateTag=$af_tag&Version=2007-01-15&ItemId=$asin&ResponseGroup=$response_group";
+    # warn $url;
     my $content = get($url);
-    #warn $content;
     warn "could not retrieve $url" unless $content;
     my $xmlsimple = XML::Simple->new();
-    my $response = $xmlsimple->XMLin($content,
-    forcearray => [ qw(Details Product AvgCustomerRating CustomerReview) ],
-);
+    my $response = $xmlsimple->XMLin(
+        $content,
+        forcearray => [ qw(SimilarProduct EditorialReview Review) ],
+    );
     return $response;
 }
 

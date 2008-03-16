@@ -31,7 +31,7 @@ use C4::Branch;
 use C4::Reserves;
 use C4::Members;
 use C4::Serials;
-use C4::XISBN qw(get_xisbns get_biblio_from_xisbn);
+use C4::XISBN qw(get_xisbns get_biblionumber_from_isbn get_biblio_from_xisbn);
 use C4::Amazon;
 
 # use Smart::Comments;
@@ -190,45 +190,24 @@ if (C4::Context->preference("FRBRizeEditions")==1) {
     if ($@) { warn "XISBN Failed $@"; }
 }
 if ( C4::Context->preference("AmazonContent") == 1 ) {
+    my $similar_products_exist;
     my $amazon_details = &get_amazon_details( $xisbn );
-    foreach my $result ( @{ $amazon_details->{Details} } ) {
-        $template->param( item_description => $result->{ProductDescription} );
-        $template->param( image            => $result->{ImageUrlMedium} );
-        $template->param( list_price       => $result->{ListPrice} );
-        $template->param( amazon_url       => $result->{url} );
+    my $item_attributes = \%{$amazon_details->{Items}->{Item}->{ItemAttributes}};
+    my $customer_reviews = \@{$amazon_details->{Items}->{Item}->{CustomerReviews}->{Review}};
+    my @similar_products;
+    for my $similar_product (@{$amazon_details->{Items}->{Item}->{SimilarProducts}->{SimilarProduct}}) {
+        # do we have any of these isbns in our collection?
+        my $similar_biblionumbers = get_biblionumber_from_isbn($similar_product->{ASIN});
+        # verify that there is at least one similar item
+        $similar_products_exist++ if ${@$similar_biblionumbers}[0];
+        push @similar_products, +{ similar_biblionumbers => $similar_biblionumbers, title => $similar_product->{Title}, ASIN => $similar_product->{ASIN}  };
     }
-
-    my @products;
-    my @reviews;
-    for my $details ( @{ $amazon_details->{Details} } ) {
-
-        next unless $details->{SimilarProducts};
-        for my $product ( @{ $details->{SimilarProducts}->{Product} } ) {
-            if (C4::Context->preference("AmazonSimilarItems") ) {
-                my @xisbns;
-                if (C4::Context->preference("XISBNAmazonSimilarItems") ) {
-                    @xisbns = @{get_xisbns($product)};
-                }
-                else {
-                    push @xisbns, get_biblio_from_xisbn($product);
-                }
-                push @products, +{ product => \@xisbns };
-            }
-        }
-        next unless $details->{Reviews};
-        for my $product ( @{ $details->{Reviews}->{AvgCustomerRating} } ) {
-            $template->param( rating => $product * 20 );
-        }
-        for my $reviews ( @{ $details->{Reviews}->{CustomerReview} } ) {
-            push @reviews,
-              +{
-                summary => $reviews->{Summary},
-                comment => $reviews->{Comment},
-              };
-        }
-    }
-    $template->param( SIMILAR_PRODUCTS => \@products );
-    $template->param( AMAZONREVIEWS    => \@reviews );
+    my $editorial_reviews = \@{$amazon_details->{Items}->{Item}->{EditorialReviews}->{EditorialReview}};
+    my $average_rating = $amazon_details->{Items}->{Item}->{CustomerReviews}->{AverageRating};
+    $template->param( AmazonSimilarItems => $similar_products_exist );
+    $template->param( amazon_average_rating => $average_rating * 20);
+    $template->param( AMAZON_CUSTOMER_REVIEWS    => $customer_reviews );
+    $template->param( AMAZON_SIMILAR_PRODUCTS => \@similar_products );
+    $template->param( AMAZON_EDITORIAL_REVIEWS    => $editorial_reviews );
 }
-
 output_html_with_http_headers $query, $cookie, $template->output;

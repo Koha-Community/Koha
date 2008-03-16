@@ -126,7 +126,7 @@ function verify_images() {
 
 <ul>   
 <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#holdings">Holdings</a></li>
-<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#description">Description</a></li>
+<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#description">Descriptions</a></li>
 <!-- TMPL_IF NAME="FRBRizeEditions" --><li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#editions">Editions</a></li><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="AmazonSimilarItems" --><li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#related">Related Titles</a></li><!-- /TMPL_IF -->
  </ul>
@@ -242,17 +242,27 @@ function verify_images() {
     </div>
     
 <div id="description">
-    <!-- TMPL_IF name="MARCNOTES" -->
-    <!-- TMPL_LOOP NAME="MARCNOTES" -->
-        <p><!-- TMPL_VAR NAME="marcnote" --></p>
-                <!-- /TMPL_LOOP -->
-        <!-- TMPL_ELSE -->
-            <!-- TMPL_IF name="notes" -->
-                <p><!-- TMPL_VAR NAME="notes" --></p>
-            <!-- /TMPL_IF -->
-        <!-- /TMPL_IF -->
-</div>
+<div class="content_set">
+<!-- TMPL_IF NAME="AmazonContent" -->
+<!-- TMPL_LOOP NAME="AMAZON_EDITORIAL_REVIEWS" -->
+    <!-- TMPL_IF NAME="Content" -->
+    <h4>From <!-- TMPL_VAR NAME="Source" -->:</h4>
+    <p><!-- TMPL_VAR NAME="Content" --></p>
+    <!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+<!-- /TMPL_IF-->
 
+<!-- TMPL_IF name="MARCNOTES" -->
+    <!-- TMPL_LOOP NAME="MARCNOTES" -->
+    <p><!-- TMPL_VAR NAME="marcnote" --></p>
+    <!-- /TMPL_LOOP -->
+    <!-- TMPL_ELSE -->
+    <!-- TMPL_IF name="notes" -->
+    <p><!-- TMPL_VAR NAME="notes" --></p>
+    <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+</div>
+</div>
 <!-- TMPL_IF NAME="FRBRizeEditions" -->
 <div id="editions"><h2>Editions</h2>
 <ul>
@@ -269,24 +279,18 @@ function verify_images() {
 </ul></div>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="AmazonSimilarItems" -->
-<div id="related"><h2>Related Items</h2>
+<!-- TMPL_IF NAME="AmazonContent" --><!-- TMPL_IF NAME="AmazonSimilarItems" -->
+<div id="related">
+<h4>Similar Items</h4>
 <ul>
-<!-- TMPL_LOOP NAME="SIMILAR_PRODUCTS" -->
-<!-- TMPL_LOOP NAME="product" -->
-<li><!-- TMPL_UNLESS NAME="noItemTypeImages" --><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itemtype" -->.gif" title="<!-- TMPL_VAR NAME="itemtype" -->" /><!-- /TMPL_UNLESS -->
-<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR
-NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> by <!-- TMPL_VAR NAME="author" --> &copy;<!-- TMPL_VAR NAME="copyrightdate" --></li>
-<img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._THUMBZZZ_PU_PU-5_.jpg" />
-
-   <!-- TMPL_LOOP NAME="items" -->
-   <!-- <!-- TMPL_IF NAME="itype" --><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itype" -->.gif" title="<!-- TMPL_VAR NAME="itype" -->" /><!-- /TMPL_IF --> -->
-   <!-- barcode:<!-- TMPL_VAR NAME="barcode" --> -->
-   <!-- /TMPL_LOOP -->
+<!-- TMPL_LOOP NAME="AMAZON_SIMILAR_PRODUCTS" -->
+<!-- TMPL_LOOP NAME="similar_biblionumbers" -->
+<li><img alt="img" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="ASIN"-->.01._SS50_.jpg" /> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" ESCAPE="HTML" --></a> </li>
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_LOOP -->
-</ul></div>
-<!-- /TMPL_IF -->
+</ul>
+</div>
+<!-- /TMPL_IF --><!-- /TMPL_IF -->
 
 </div><!-- /bibliodetails -->
 

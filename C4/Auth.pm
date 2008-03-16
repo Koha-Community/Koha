@@ -299,6 +299,7 @@ sub get_template_and_user {
             opacbookbag            => "" . C4::Context->preference("opacbookbag"),
             TemplateEncoding       => "". C4::Context->preference("TemplateEncoding"),
             AmazonContent          => "" . C4::Context->preference("AmazonContent"),
+            OPACAmazonSimilarItems => "" . C4::Context->preference("OPACAmazonSimilarItems"),
             LibraryName            => "" . C4::Context->preference("LibraryName"),
             LibraryNameTitle       => "" . $LibraryNameTitle,
             LoginBranchcode        => (C4::Context->userenv?C4::Context->userenv->{"branch"}:"insecure"),

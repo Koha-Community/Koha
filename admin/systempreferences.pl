@@ -165,6 +165,7 @@ my %tabsysprefs;
     $tabsysprefs{NoReturnSetLost}="Patrons";
     $tabsysprefs{MaxFine}="Patrons";
     $tabsysprefs{NotifyBorrowerDeparture}="Patrons";
+    $tabsysprefs{PatronsPerPage}="Patrons";
 
 # FRBR
     $tabsysprefs{FRBRizeEditions}="FRBR";
@@ -174,7 +175,6 @@ my %tabsysprefs;
     $tabsysprefs{PINESISBN}="FRBR";
     $tabsysprefs{ThingISBN}="FRBR";
     $tabsysprefs{OPACFRBRizeEditions}="FRBR";
-    $tabsysprefs{XISBNAmazonSimilarItems}="FRBR";
 
 # I18N/L10N
     $tabsysprefs{dateformat}="I18N/L10N";
@@ -199,12 +199,16 @@ my %tabsysprefs;
     $tabsysprefs{QueryAutoTruncate}="Searching";
     $tabsysprefs{QueryRemoveStopwords}="Searching";
 
+# Amazon.com
+    $tabsysprefs{AmazonContent}="Amazon";
+    $tabsysprefs{AWSAccessKeyID}="Amazon";
+    $tabsysprefs{AmazonLocale}="Amazon";
+    $tabsysprefs{AmazonAssocTag}="Amazon";
+    $tabsysprefs{AmazonSimilarItems}="Amazon";
+    $tabsysprefs{OPACAmazonContent}="Amazon";
+    $tabsysprefs{OPACAmazonSimilarItems}="Amazon";
+
 # OPAC
-    $tabsysprefs{AmazonAssocTag}="OPAC";
-    $tabsysprefs{AmazonSimilarItems}="OPAC";
-    $tabsysprefs{AmazonContent}="OPAC";
-    $tabsysprefs{OPACAmazonContent}="OPAC";
-    $tabsysprefs{AmazonDevKey}="OPAC";
     $tabsysprefs{BiblioDefaultView}="OPAC";
     $tabsysprefs{LibraryName}="OPAC";
     $tabsysprefs{opaccolorstylesheet}="OPAC";
@@ -218,8 +222,6 @@ my %tabsysprefs;
     $tabsysprefs{opacuserjs}="OPAC";
     $tabsysprefs{SubscriptionHistory}="OPAC";
     $tabsysprefs{opacheader}="OPAC";
-    $tabsysprefs{OPACAmazonSimilarItems}="OPAC";
-    $tabsysprefs{OPACXISBNAmazonSimilarItems}="OPAC";
 
     $tabsysprefs{hideBiblioNumber}="OPAC";
     $tabsysprefs{noOPACUserLogin}="OPAC";
@@ -232,27 +234,27 @@ my %tabsysprefs;
     $tabsysprefs{OPACViewOthersSuggestions}="OPAC";
     $tabsysprefs{URLLinkText}="OPAC";
 
-# OPACFeatures
-    $tabsysprefs{SearchMyLibraryFirst}="OPACFeatures";
-    $tabsysprefs{Disable_Dictionary}="OPACFeatures";
-    $tabsysprefs{hidelostitems}="OPACFeatures";
-    $tabsysprefs{opacbookbag}="OPACFeatures";
-    $tabsysprefs{opaclanguagesdisplay}="OPACFeatures";
-    $tabsysprefs{OpacPasswordChange}="OPACFeatures";
-    $tabsysprefs{opacreadinghistory}="OPACFeatures";
-    $tabsysprefs{virtualshelves}="OPACFeatures";
-    $tabsysprefs{RequestOnOpac}="OPACFeatures";
-    $tabsysprefs{reviewson}="OPACFeatures";
-    $tabsysprefs{OpacTopissues}="OPACFeatures";
-    $tabsysprefs{OpacAuthorities}="OPACFeatures";
-    $tabsysprefs{OpacCloud}="OPACFeatures";
-    $tabsysprefs{opacuserlogin}="OPACFeatures";
-    $tabsysprefs{AnonSuggestions}="OPACFeatures";
-    $tabsysprefs{suggestion}="OPACFeatures";
-    $tabsysprefs{OpacTopissue}="OPACFeatures";
-    $tabsysprefs{OpacBrowser}="OPACFeatures";
-    $tabsysprefs{kohaspsuggest} = "OPACFeatures";
-    $tabsysprefs{OpacRenewalAllowed} = "OPACFeatures";
+# OPAC
+    $tabsysprefs{SearchMyLibraryFirst}="OPAC";
+    $tabsysprefs{Disable_Dictionary}="OPAC";
+    $tabsysprefs{hidelostitems}="OPAC";
+    $tabsysprefs{opacbookbag}="OPAC";
+    $tabsysprefs{opaclanguagesdisplay}="OPAC";
+    $tabsysprefs{OpacPasswordChange}="OPAC";
+    $tabsysprefs{opacreadinghistory}="OPAC";
+    $tabsysprefs{virtualshelves}="OPAC";
+    $tabsysprefs{RequestOnOpac}="OPAC";
+    $tabsysprefs{reviewson}="OPAC";
+    $tabsysprefs{OpacTopissues}="OPAC";
+    $tabsysprefs{OpacAuthorities}="OPAC";
+    $tabsysprefs{OpacCloud}="OPAC";
+    $tabsysprefs{opacuserlogin}="OPAC";
+    $tabsysprefs{AnonSuggestions}="OPAC";
+    $tabsysprefs{suggestion}="OPAC";
+    $tabsysprefs{OpacTopissue}="OPAC";
+    $tabsysprefs{OpacBrowser}="OPAC";
+    $tabsysprefs{kohaspsuggest} = "OPAC";
+    $tabsysprefs{OpacRenewalAllowed} = "OPAC";
 
 # LOGFeatures
     $tabsysprefs{CataloguingLog}  = "LOGFeatures";
