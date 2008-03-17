@@ -1198,6 +1198,22 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (IMPORTANT: Upgrading to Amazon.com Associates Web Service 4.0 ) ";
     SetVersion ($DBversion);
 }
+
+$DBversion = "3.00.00.065";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("Create Table: CREATE TABLE `patroncards` (
+                `cardid` int(11) NOT NULL auto_increment,
+                `batch_id` varchar(10) NOT NULL default '1',
+                `borrowernumber` int(11) NOT NULL,
+                `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+                PRIMARY KEY  (`cardid`),
+                KEY `patroncards_ibfk_1` (`borrowernumber`),
+                CONSTRAINT `patroncards_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+    print "Upgrade to $DBversion done (Adding patroncards table for patroncards generation feature. ) ";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
