@@ -40,18 +40,17 @@
 <!-- /TMPL_IF -->
    <div id="views"> <h1><!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF NAME="subtitle" --> <span class="subtitle"><!-- TMPL_VAR NAME="subtitle" --></span><!-- /TMPL_IF --></h1> <span class="views"><span id="Normalview">Normal View</span> <a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">MARC View</a> <!-- TMPL_IF NAME="ISBD" --><a id="ISBDview" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">ISBD View</a><!-- /TMPL_IF --></span></div>
     <!-- TMPL_IF NAME="author" --><h2 class="author">By <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="author" -->"><!-- TMPL_VAR NAME="author" ESCAPE="HTML" --></a></h2><!-- /TMPL_IF -->
-    <p>
+    <p><!-- TMPL_UNLESS NAME="item-level_itypes" -->
         [
         <!-- TMPL_IF name="description" -->
             <!-- TMPL_VAR name="description" -->
         <!-- TMPL_ELSE -->
             <!-- TMPL_VAR NAME="itemtype" -->
         <!-- /TMPL_IF -->
-        ] :
+        ] <!-- /TMPL_UNLESS -->
         <!-- TMPL_IF name="volume" --> <!-- TMPL_VAR name="volume" --><!-- /TMPL_IF -->
         <!-- TMPL_IF name="volumedesc" -->, <!-- TMPL_VAR name="volumedesc" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="number" --> <!-- TMPL_VAR NAME="number" --> <!-- /TMPL_IF -->
         <!-- TMPL_IF name="unititle" -->, <!-- TMPL_VAR name="unititle" --><!-- /TMPL_IF -->
-        / <!-- TMPL_VAR NAME="author" --> <!-- TMPL_VAR NAME="class" -->
     </p>
 
     <!-- TMPL_IF name="MARCAUTHORS" -->
@@ -129,20 +128,15 @@
     <!-- TMPL_IF name="copyrightdate" -->
     <p><span class="label">Year : </span><!-- TMPL_VAR NAME="copyrightdate" --></p>
     <!-- /TMPL_IF -->
-   
-    <!-- TMPL_IF name="classification" -->
-    <p><span class="label">classification:</span><!-- TMPL_VAR name="subclass" --><!-- TMPL_VAR name="classification" --></p>
-    <!-- /TMPL_IF -->
-    <!-- TMPL_IF name="dewey" -->
-    <p><span class="label">Dewey:</span><!-- TMPL_VAR name="dewey" --></p>
-    <!-- /TMPL_IF -->
+<!-- TMPL_UNLESS NAME="item-level_itypes" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->">
     <p><span class="label">Item type : </span>
         <!-- TMPL_IF name="description" -->
         <!-- TMPL_VAR name="description" -->
         <!-- TMPL_ELSE -->
         <!-- TMPL_VAR NAME="itemtype" -->
         <!-- /TMPL_IF -->
-    </p>
+    </p><!-- /TMPL_UNLESS -->
+
     <!-- TMPL_IF name="MARCURLS" -->
 	<p><span class="label">Online Resources:</span>
     </p>
@@ -257,7 +251,7 @@
         <tr>
             <td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR name="description" -->
                     </td>
-            <td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR name="location" --> <!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="OPACShelfBrowser" -->(<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser">Browse Shelf</a>)<!-- /TMPL_IF --></td>
+            <td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR name="location_description" --> <!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="OPACShelfBrowser" -->(<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser">Browse Shelf</a>)<!-- /TMPL_IF --></td>
             <td><!-- TMPL_IF name="bi_notforloan" -->
                     Not for loan
                 <!-- TMPL_ELSE -->
@@ -296,15 +290,16 @@
 <div id="shelfbrowser">
 <p>
 <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Close Shelf Browser</a>
-Browsing <!-- TMPL_VAR NAME="starting_homebranch" --> <!-- TMPL_VAR NAME="starting_location" -->
+<!-- TMPL_IF NAME="starting_homebranch" --><span class="label">Library:</span> <!-- TMPL_VAR NAME="starting_homebranch" --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="starting_location" --><span class="label">Shelving Location:</span><!-- TMPL_VAR NAME="starting_location" --> <!-- /TMPL_IF -->
 </p>
         <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="shelfbrowser_prev_biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="shelfbrowser_prev_itemnumber" -->#shelfbrowser">Previous</a>
         <dl>
 <!-- TMPL_LOOP NAME="PREVIOUS_SHELF_BROWSE" -->
-        <dt> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser"><img alt="img" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn"-->.01._SS50_.jpg" /></a></dt><dd><!-- TMPL_VAR NAME="title" --></dd>
+        <dt> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser"><img alt="img" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn"-->.01._SS50_.jpg" /></a></dt><dd><em><!-- TMPL_VAR NAME="itemcallnumber" --></em><!-- TMPL_VAR NAME="title" --></dd>
 <!-- /TMPL_LOOP -->
 <!-- TMPL_LOOP NAME="NEXT_SHELF_BROWSE" -->
-        <dt> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser"><img alt="img" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn"-->.01._SS50_.jpg" /></a></dt><dd><!-- TMPL_VAR NAME="title" --></dd>
+        <dt> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser"><img alt="img" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn"-->.01._SS50_.jpg" /></a></dt><dd><em><!-- TMPL_VAR NAME="itemcallnumber" --></em><!-- TMPL_VAR NAME="title" --></dd>
 <!-- /TMPL_LOOP -->
         </dl>
         <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="shelfbrowser_next_biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="shelfbrowser_next_itemnumber" -->#shelfbrowser">Next</a>
