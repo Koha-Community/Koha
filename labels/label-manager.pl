@@ -135,7 +135,7 @@ elsif ( $op eq 'delete' ) {
 }
 elsif ( $op eq 'delete_batch' ) {
 	delete_batch($batch_id, $batch_type);
-	print $query->redirect("label-manager.pl?batch_id=");
+	print $query->redirect("label-manager.pl");
 	exit;
 }
 elsif ( $op eq 'add_batch' ) {
