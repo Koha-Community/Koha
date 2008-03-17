@@ -188,6 +188,9 @@ if ( C4::Context->preference("OPACAmazonContent") == 1 ) {
     my $amazon_details = &get_amazon_details( $xisbn );
     my $item_attributes = \%{$amazon_details->{Items}->{Item}->{ItemAttributes}};
     my $customer_reviews = \@{$amazon_details->{Items}->{Item}->{CustomerReviews}->{Review}};
+    for my $one_review (@$customer_reviews) {
+        $one_review->{Date} = format_date($one_review->{Date});
+    }
     my @similar_products;
     for my $similar_product (@{$amazon_details->{Items}->{Item}->{SimilarProducts}->{SimilarProduct}}) {
         # do we have any of these isbns in our collection?
