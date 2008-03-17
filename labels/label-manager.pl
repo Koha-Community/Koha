@@ -56,6 +56,7 @@ my $active_template_name = $active_template->{'tmpl_code'};
 #    $batch_id  = get_highest_batch();
 #}
 
+my $batch_type = "labels";      #FIXME: Hardcoded for testing...
 my @messages;
 my ($itemnumber) = @itemnumber if (scalar(@itemnumber) == 1);
 
@@ -104,8 +105,11 @@ elsif  ( $op eq 'add_layout' ) {
 	print $query->redirect("label-home.pl");
 	exit;
 }
+
+# FIXME: The trinary conditionals here really need to be replaced with a more robust form of db abstraction -fbcit
+
 elsif ( $op eq 'add' ) {   # add item
-	my $query2 = "INSERT INTO labels ( itemnumber, batch_id ) values ( ?,? )";
+	my $query2 = "INSERT INTO $batch_type ( " . (($batch_type eq 'labels') ? 'itemnumber' : 'borrowernumber') . ", batch_id ) values ( ?,? )";
 	my $sth2   = $dbh->prepare($query2);
 	for my $inum (@itemnumber) {
 		$sth2->execute($inum, $batch_id);
@@ -113,29 +117,29 @@ elsif ( $op eq 'add' ) {   # add item
 	$sth2->finish;
 }
 elsif ( $op eq 'deleteall' ) {
-	my $query2 = "DELETE FROM labels";
+	my $query2 = "DELETE FROM $batch_type";
 	my $sth2   = $dbh->prepare($query2);
 	$sth2->execute();
 	$sth2->finish;
 }
 elsif ( $op eq 'delete' ) {
-	my @labelids = $query->param('labelid');
-	scalar @labelids or push @messages, "ERROR: No labelid(s) supplied for deletion.";
+	my @labelids = $query->param((($batch_type eq 'labels') ? 'labelid' : 'cardid'));
+	scalar @labelids or push @messages, (($batch_type eq 'labels') ? "ERROR: No labelid(s) supplied for deletion." : "ERROR: No cardid(s) supplied for deletion.");
 	my $ins = "?," x (scalar @labelids);
 	$ins =~ s/\,$//;
-	my $query2 = "DELETE FROM labels WHERE labelid IN ($ins) ";
+	my $query2 = "DELETE FROM $batch_type WHERE " . (($batch_type eq 'labels') ? 'labelid' : 'cardid') ." IN ($ins) ";
 	$debug and push @messages, "query2: $query2 -- (@labelids)";
 	my $sth2   = $dbh->prepare($query2);
 	$sth2->execute(@labelids);
 	$sth2->finish;
 }
 elsif ( $op eq 'delete_batch' ) {
-	delete_batch($batch_id);
+	delete_batch($batch_id, $batch_type);
 	print $query->redirect("label-manager.pl?batch_id=");
 	exit;
 }
 elsif ( $op eq 'add_batch' ) {
-	$batch_id= add_batch();
+	$batch_id= add_batch($batch_type);
 }
 elsif ( $op eq 'set_active_layout' ) {
 	set_active_layout($layout_id);
