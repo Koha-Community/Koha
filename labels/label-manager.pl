@@ -41,22 +41,22 @@ my $printingtype   = $query->param('printingtype');
 my $guidebox       = $query->param('guidebox');
 my $fontsize       = $query->param('fontsize');
 my @itemnumber     = $query->param('itemnumber');
-
+my $batch_type     = $query->param('type');
 
 # little block for displaying active layout/template/batch in templates
 # ----------
-my $batch_id     = $query->param('batch_id');
-my $active_layout = get_active_layout();
-my $active_template = GetActiveLabelTemplate();
-my $active_layout_name = $active_layout->{'layoutname'};
-my $active_template_name = $active_template->{'tmpl_code'};
+my $batch_id                    = $query->param('batch_id');
+my $active_layout               = get_active_layout();
+my $active_template             = GetActiveLabelTemplate();
+my $active_layout_name          = $active_layout->{'layoutname'};
+my $active_template_name        = $active_template->{'tmpl_code'};
 # ----------
 
 #if (!$batch_id ) {
 #    $batch_id  = get_highest_batch();
 #}
 
-my $batch_type = "labels";      #FIXME: Hardcoded for testing...
+#my $batch_type = "labels";      #FIXME: Hardcoded for testing/development...
 my @messages;
 my ($itemnumber) = @itemnumber if (scalar(@itemnumber) == 1);
 
@@ -154,8 +154,8 @@ elsif ( $op eq 'deduplicate' ) {
 
 #  first lets do a read of the labels table , to get the a list of the
 # currently entered items to be prinited
-my @batches = get_batches();
-my @resultsloop = get_label_items($batch_id);
+my @batches = get_batches($batch_type);
+my @resultsloop = ($batch_type eq 'labels') ? GetLabelItems($batch_id) : GetPatronCardItems($batch_id);
 #warn "$batches[0] (id $batch_id)";
 #warn Dumper(@resultsloop);
 
@@ -176,14 +176,15 @@ if (scalar @messages) {
 	$template->param(message_loop => \@complex);
 }
 $template->param(
-    batch_id => $batch_id,
-	batch_count => scalar @resultsloop,
-    active_layout_name => $active_layout_name,
-    active_template_name => $active_template_name,
+    batch_type                  => $batch_type,
+    batch_id                    => $batch_id,
+    batch_count                 => scalar @resultsloop,
+    active_layout_name          => $active_layout_name,
+    active_template_name        => $active_template_name,
 
-    resultsloop => \@resultsloop,
-    batches => \@batches,
-	tmpl_desc => $active_template->{'tmpl_desc'},
+    resultsloop                 => \@resultsloop,
+    batches                     => \@batches,
+    tmpl_desc                   => $active_template->{'tmpl_desc'},
 
     #  startrow         => $startrow,
     #  sheets           => $sheets_needed,

@@ -33,7 +33,7 @@ BEGIN {
 	require Exporter;
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
-		&get_label_options &get_label_items
+		&get_label_options &GetLabelItems
 		&build_circ_barcode &draw_boundaries
 		&drawbox &GetActiveLabelTemplate
 		&GetAllLabelTemplates &DeleteTemplate
@@ -302,8 +302,9 @@ sub get_highest_batch {
 
 #FIXME: Needs to be ported to receive $batch_type
 sub get_batches {
+    my ($batch_type) = @_;
     my $dbh = C4::Context->dbh;
-    my $q   = "select batch_id, count(*) as num from labels group by batch_id";
+    my $q   = "select batch_id, count(*) as num from $batch_type group by batch_id";
     my $sth = $dbh->prepare($q);
     $sth->execute();
     my @resultsloop;
@@ -733,16 +734,16 @@ sub SetAssociatedProfile {
     $sth->finish;
 }
 
-=item get_label_items;
+=item GetLabelItems;
 
-        $options = get_label_items()
+        $options = GetLabelItems()
 
 Returns an array of references-to-hash, whos keys are the field from the biblio, biblioitems, items and labels tables in the Koha database.
 
 =cut
 
 #'
-sub get_label_items {
+sub GetLabelItems {
     my ($batch_id) = @_;
     my $dbh = C4::Context->dbh;
 
@@ -808,18 +809,19 @@ sub GetPatronCardItems {
     my ( $batch_id ) = @_;
     my @resultsloop;
     
-    warn "Received batch id: $batch_id";
     my $dbh = C4::Context->dbh;
     my $query = "SELECT * FROM patroncards WHERE batch_id = ? ORDER BY borrowernumber";
     my $sth = $dbh->prepare($query);
-    warn "Executing query...\n";
     $sth->execute($batch_id);
-    warn "Parsing results...\n";
+    my $cardno = 1;
     while ( my $data = $sth->fetchrow_hashref ) {
-        warn "for borrowernumber $data->{'borrowernumber'}\n";
         my $patron_data = GetMember( $data->{'borrowernumber'} );
         $patron_data->{'branchname'} = GetBranchName( $patron_data->{'branchcode'} );
+        $patron_data->{'cardno'} = $cardno;
+        $patron_data->{'cardid'} = $data->{'cardid'};
+        $patron_data->{'batch_id'} = $batch_id;
         push( @resultsloop, $patron_data );
+        $cardno++;
     }
     $sth->finish;
     return @resultsloop;
@@ -1131,7 +1133,7 @@ sub DrawBarcode {
   build_circ_barcode( $x_pos, $y_pos, $barcode,
 	        $barcodetype, \$item);
 
-$item is the result of a previous call to get_label_items();
+$item is the result of a previous call to GetLabelItems();
 
 =cut
 
