@@ -7,17 +7,26 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pack.js"></script>
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
+$.tablesorter.addParser({ 
+    // set a unique id 
+    id: 'articles', 
+    is: function(s) { 
+        // return false so this parser is not auto detected 
+        return false; 
+    }, 
+    format: function(s) { 
+        // format your data for normalization 
+        return s.toLowerCase().replace(/^(the|an|a) /,''); 
+    }, 
+    // set type, either numeric or text 
+    type: 'text' 
+});
+
             $(function() {
-                        $('#opac-user-views > ul').tabs();
+            $('#opac-user-views > ul').tabs();
 			$("#checkoutst").tablesorter({
 				sortList: [[4,0]],
-				debug: true,
-		        headers: { 
-		            0: { sorter: false }, 
-		            2: { sorter: false },
-		            3: { sorter: false },
-					5: { sorter: false },
-					6: { sorter: false } 
+		        headers: { 0: { sorter: false }, 1: { sorter: 'articles' },2: { sorter: false },3: { sorter: false },5: { sorter: false },6: { sorter: false } 
 				}
 			}); 
             });
@@ -25,7 +34,7 @@
 </script>
 <style type="text/css">
 .header {
-	background-image:url("/opac-tmpl/prog/images/bg.gif");
+	background-image:url("/opac-tmpl/prog/images/ascdesc.gif");
 	background-position:right center;
 	background-repeat:no-repeat;
 	cursor:pointer;
@@ -37,10 +46,6 @@
 	background-image:url("/opac-tmpl/prog/images/desc.gif");
 }
  tr th, tr th:last-child {
-	background-color:#E6EEEE;
-	border:1px solid #FFFFFF;
-	font-size:8pt;
-	padding:4px;
 	text-align : center;
 }
 </style>
