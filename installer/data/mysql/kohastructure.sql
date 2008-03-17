@@ -840,6 +840,7 @@ CREATE TABLE `deleteditems` (
   `enumchron` varchar(80) default NULL,
   `copynumber` smallint(6) default NULL,
   `marc` longblob,
+  `copynumber` smallint(6) default NULL,
   PRIMARY KEY  (`itemnumber`),
   KEY `delitembarcodeidx` (`barcode`),
   KEY `delitembinoidx` (`biblioitemnumber`),
