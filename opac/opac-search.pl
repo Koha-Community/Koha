@@ -91,7 +91,8 @@ my $itemtypes = GetItemTypes;
 my @itemtypesloop;
 my $selected=1;
 my $cnt;
-my $imgdir = getitemtypeimagesrc();
+my $imgdir = getitemtypeimagesrc('opac');
+
 foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
     my %row =(  number=>$cnt++,
                 imageurl=> $itemtypes->{$thisitemtype}->{'imageurl'}?($imgdir."/".$itemtypes->{$thisitemtype}->{'imageurl'}):"",
