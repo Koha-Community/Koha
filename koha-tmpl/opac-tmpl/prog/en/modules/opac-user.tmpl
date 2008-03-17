@@ -147,7 +147,7 @@ $.tablesorter.addParser({
        <thead><tr>
 		<!-- TMPL_IF NAME="AmazonContent" --><th>&nbsp;</th><!-- /TMPL_IF -->
         <th>Title</th>
-		<th>Item Type</th>
+		<!-- TMPL_UNLESS NAME="item-level_itypes" --><th>Item Type</th> <!-- /TMPL_UNLESS -->
         <th>Call No.</th>
         <th>Due</th>
         <!-- TMPL_IF name="OpacRenewalAllowed" -->
@@ -179,9 +179,9 @@ $.tablesorter.addParser({
                         <!-- TMPL_VAR NAME="author" -->
                     </span>
                 </td>
-                <td>
+                <!-- TMPL_UNLESS NAME="item-level_itypes" --><td>
                     <!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR name="description" -->
-                </td>
+                </td><!-- /TMPL_UNLESS -->
                 <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
                 <!-- TMPL_IF NAME="overdue" -->
                     <td class="overdue"><!-- TMPL_VAR NAME="date_due" --></td>

@@ -45,6 +45,9 @@ my ( $borr, $flags ) = GetMemberDetails( $borrowernumber );
 
 $template->param($borr);
 
+my $imgdir = getitemtypeimagesrc();
+my $itemtypes = GetItemTypes();
+
 # get the record
 my $order  = $query->param('order');
 my $order2 = $order;
@@ -89,12 +92,14 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
     $line{biblionumber}   = $issues->[$i]->{'biblionumber'};
     $line{title}          = $issues->[$i]->{'title'};
     $line{author}         = $issues->[$i]->{'author'};
-	$line{isbn}         = $issues->[$i]->{'isbn'};
+    $line{isbn}         = $issues->[$i]->{'isbn'};
     $line{itemcallnumber} = $issues->[$i]->{'itemcallnumber'};
     $line{date_due}       = format_date( $issues->[$i]->{'date_due'} );
     $line{returndate}     = format_date( $issues->[$i]->{'returndate'} );
     $line{volumeddesc}    = $issues->[$i]->{'volumeddesc'};
     $line{counter}        = $i + 1;
+    $line{'description'} = $itemtypes->{ $issues->[$i]->{'itemtype'} }->{'description'};
+    $line{imageurl}       = $imgdir."/".$itemtypes->{ $issues->[$i]->{'itemtype'}  }->{'imageurl'}; 
     push( @loop_reading, \%line );
 }
 

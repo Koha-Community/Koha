@@ -34,7 +34,7 @@ You have never borrowed anything from this library.
 <th><!-- TMPL_UNLESS NAME="orderbytitle" --><a
 href="/cgi-bin/koha/opac-readingrecord.pl?order=title">Title</a><!--
 TMPL_ELSE -->Title<!-- /TMPL_UNLESS --></th>
-<th>Item Type</th>
+<!-- TMPL_UNLESS NAME="item-level_itypes" --><th>Item Type</th><!-- /TMPL_UNLESS -->
 <th>Call No.</th>
 <th><!-- TMPL_UNLESS NAME="orderbydate" --><a href="/cgi-bin/koha/opac-readingrecord.pl">Date</a><!-- TMPL_ELSE -->Date<!-- /TMPL_UNLESS --></th>
 </tr>
@@ -47,7 +47,7 @@ TMPL_ELSE -->Title<!-- /TMPL_UNLESS --></th>
                     <span class="item-details">
                         <!-- TMPL_VAR NAME="author" -->
                     </span></td>
-<td><!-- TMPL_VAR NAME="description" --></td>
+<!-- TMPL_UNLESS NAME="item-level_itypes" --><td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR name="description" --></td><!-- /TMPL_UNLESS -->
 <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
 <td><!-- TMPL_IF NAME="returndate" --><!-- TMPL_VAR NAME="returndate" --><!-- TMPL_ELSE --><em>(Checked out)</em><!-- /TMPL_IF --></td>
 </tr>

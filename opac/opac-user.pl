@@ -135,6 +135,7 @@ foreach my $issue ( @$issues ) {
         $issue->{'imageurl'}    = $imgdir."/".$itemtypes->{$itemtype}->{'imageurl'};
         $issue->{'description'} = $itemtypes->{$itemtype}->{'description'};
     }
+    $issue->{date_due} = format_date($issue->{date_due});
     push @issuedat, $issue;
     $count++;
 }
