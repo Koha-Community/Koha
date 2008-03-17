@@ -7,8 +7,20 @@
 	}); 
 //]]>
 </script>
+<style type="text/css">
+
+#shelfbrowser dl {text-align:center;font-size:.95em;margin-top:25px;}
+#shelfbrowser dt,dd {width:10.5em;float:left;}
+#shelfbrowser dt {margin-bottom:5.5em;}
+#shelfbrowser dd {margin:90px 0 0 -10.5em;}
+#shelfbrowser img {vertical-align:bottom;border:1px solid #999;padding:2px;background:#fff;}
+#shelfbrowser em {display:block;font-weight:bold;margin-bottom:5px;}
+#shelfbrowser dl a:hover img,dl a:active img,dl a:focus img {background:#f33;}
+
+</style>
 </head>
 <body>
+
 <!--TMPL_INCLUDE NAME="masthead.inc" -->
 
 <!-- TMPL_IF NAME="OpacNav" --><div id="doc3" class="yui-t1"><!-- TMPL_ELSE --><div id="doc3" class="yui-t7"><!-- /TMPL_IF -->
@@ -226,6 +238,7 @@
 	<!-- TMPL_IF NAME="OPACFRBRizeEditions" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#editions">Editions</a></li><!-- /TMPL_IF -->
 	
  	<!-- TMPL_IF NAME="AmazonContent" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#amazonreviews">Amazon Reviews</a></li><!-- /TMPL_IF -->
+
 </ul>
 
 <div id="holdings">
@@ -244,7 +257,7 @@
         <tr>
             <td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR name="description" -->
                     </td>
-            <td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR name="location" --> <!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --></td>
+            <td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR name="location" --> <!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="OPACShelfBrowser" -->(<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser">Browse Shelf</a>)<!-- /TMPL_IF --></td>
             <td><!-- TMPL_IF name="bi_notforloan" -->
                     Not for loan
                 <!-- TMPL_ELSE -->
@@ -278,6 +291,24 @@
     </table>
 <!-- TMPL_ELSE -->
 <p>No physical items for this record</p>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="OpenOPACShelfBrowser" -->
+<div id="shelfbrowser">
+<p>
+<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Close Shelf Browser</a>
+Browsing <!-- TMPL_VAR NAME="starting_homebranch" --> <!-- TMPL_VAR NAME="starting_location" -->
+</p>
+        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="shelfbrowser_prev_biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="shelfbrowser_prev_itemnumber" -->#shelfbrowser">Previous</a>
+        <dl>
+<!-- TMPL_LOOP NAME="PREVIOUS_SHELF_BROWSE" -->
+        <dt> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser"><img alt="img" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn"-->.01._SS50_.jpg" /></a></dt><dd><!-- TMPL_VAR NAME="title" --></dd>
+<!-- /TMPL_LOOP -->
+<!-- TMPL_LOOP NAME="NEXT_SHELF_BROWSE" -->
+        <dt> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser"><img alt="img" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn"-->.01._SS50_.jpg" /></a></dt><dd><!-- TMPL_VAR NAME="title" --></dd>
+<!-- /TMPL_LOOP -->
+        </dl>
+        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="shelfbrowser_next_biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="shelfbrowser_next_itemnumber" -->#shelfbrowser">Next</a>
+</div>
 <!-- /TMPL_IF -->
 </div>
 
@@ -403,8 +434,6 @@
 <p>No other editions found.</p>
 <!-- /TMPL_IF -->
 </div><!-- /TMPL_IF -->
-
-
 <!-- TMPL_IF NAME="AmazonContent" -->
 <!-- Amazon Reviews -->
 <div id="amazonreviews">
@@ -434,9 +463,10 @@
 </div>
 <!-- /Amazon Reviews -->
 <!-- /TMPL_IF-->
-</div>
 
 </div>
+</div>
+
 </div>
 </div>
 	<!-- TMPL_IF NAME="OpacNav" --><div class="yui-b"><!--TMPL_INCLUDE NAME="navigation.inc" --></div><!-- /TMPL_IF -->

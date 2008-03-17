@@ -102,8 +102,8 @@ foreach my $itm (@items) {
         $itm->{'description'} = $itemtypes->{$itemtype}->{'description'};
     }
 	
-        #get collection code description, too
-        $itm->{'ccode'}  = GetAuthorisedValueDesc('','',   $itm->{'ccode'} ,'','','CCODE');
+    #get collection code description, too
+    $itm->{'ccode'}  = GetAuthorisedValueDesc('','',   $itm->{'ccode'} ,'','','CCODE');
 }
 
 $template->param( norequests => $norequests, RequestOnOpac=>$RequestOnOpac );
@@ -178,7 +178,7 @@ if (C4::Context->preference("OPACFRBRizeEditions")==1) {
     };
     if ($@) { warn "XISBN Failed $@"; }
 }
-
+# Amazon.com Stuff
 if ( C4::Context->preference("OPACAmazonContent") == 1 ) {
     my $similar_products_exist;
     my $amazon_details = &get_amazon_details( $xisbn );
@@ -199,6 +199,62 @@ if ( C4::Context->preference("OPACAmazonContent") == 1 ) {
     $template->param( AMAZON_CUSTOMER_REVIEWS    => $customer_reviews );
     $template->param( AMAZON_SIMILAR_PRODUCTS => \@similar_products );
     $template->param( AMAZON_EDITORIAL_REVIEWS    => $editorial_reviews );
+}
+# Shelf Browser Stuff
+if (C4::Context->preference("OPACShelfBrowser")) {
+# pick the first itemnumber unless one was selected by the user
+my $starting_itemnumber = $query->param('shelfbrowse_itemnumber'); # || $items[0]->{itemnumber};
+$template->param( OpenOPACShelfBrowser => 1) if $starting_itemnumber;
+# find the right cn_sort value for this item
+my ($starting_cn_sort, $starting_homebranch, $starting_location);
+my $sth_get_cn_sort = $dbh->prepare("SELECT cn_sort,homebranch,location from items where itemnumber=?");
+$sth_get_cn_sort->execute($starting_itemnumber);
+while (my $result = $sth_get_cn_sort->fetchrow_hashref()) {
+    $starting_cn_sort = $result->{'cn_sort'};
+    $starting_homebranch = $result->{'homebranch'};
+    $starting_location = $result->{'location'};
+}
+
+## List of Previous Items
+# order by cn_sort, which should include everything we need for ordering purposes (though not
+# for limits, those need to be handled separately
+my $sth_shelfbrowse_previous = $dbh->prepare("SELECT * FROM items WHERE CONCAT(cn_sort,itemnumber) <= ? AND homebranch=? AND location=? ORDER BY CONCAT(cn_sort,itemnumber) DESC LIMIT 3");
+$sth_shelfbrowse_previous->execute($starting_cn_sort.$starting_itemnumber, $starting_homebranch, $starting_location);
+my @previous_items;
+while (my $this_item = $sth_shelfbrowse_previous->fetchrow_hashref()) {
+    my $sth_get_biblio = $dbh->prepare("SELECT biblio.*,biblioitems.isbn AS isbn FROM biblio LEFT JOIN biblioitems ON biblio.biblionumber=biblioitems.biblionumber WHERE biblio.biblionumber=?");
+    $sth_get_biblio->execute($this_item->{biblionumber});
+    while (my $this_biblio = $sth_get_biblio->fetchrow_hashref()) {
+        $this_item->{'title'} = $this_biblio->{'title'};
+        $this_item->{'isbn'} = $this_biblio->{'isbn'};
+    }
+    unshift @previous_items, $this_item;
+}
+my $throwaway = pop @previous_items;
+## List of Next Items
+my $sth_shelfbrowse_next = $dbh->prepare("SELECT * FROM items WHERE CONCAT(cn_sort,itemnumber) >= ? AND homebranch=? AND location=? ORDER BY CONCAT(cn_sort,itemnumber) ASC LIMIT 3");
+$sth_shelfbrowse_next->execute($starting_cn_sort.$starting_itemnumber, $starting_homebranch, $starting_location);
+my @next_items;
+while (my $this_item = $sth_shelfbrowse_next->fetchrow_hashref()) {
+    my $sth_get_biblio = $dbh->prepare("SELECT biblio.*,biblioitems.isbn AS isbn FROM biblio LEFT JOIN biblioitems ON biblio.biblionumber=biblioitems.biblionumber WHERE biblio.biblionumber=?");
+    $sth_get_biblio->execute($this_item->{biblionumber});
+    while (my $this_biblio = $sth_get_biblio->fetchrow_hashref()) {
+        $this_item->{'title'} = $this_biblio->{'title'};
+        $this_item->{'isbn'} = $this_biblio->{'isbn'};
+    }
+    push @next_items, $this_item;
+}
+
+$template->param(
+    starting_homebranch => $starting_homebranch,
+    starting_location => $starting_location,
+    shelfbrowser_prev_itemnumber => $previous_items[0]->{itemnumber},
+    shelfbrowser_next_itemnumber => $next_items[-1]->{itemnumber},
+    shelfbrowser_prev_biblionumber => $previous_items[0]->{biblionumber},
+    shelfbrowser_next_biblionumber => $next_items[-1]->{biblionumber},
+    PREVIOUS_SHELF_BROWSE => \@previous_items,
+    NEXT_SHELF_BROWSE => \@next_items,
+);
 }
 
 output_html_with_http_headers $query, $cookie, $template->output;

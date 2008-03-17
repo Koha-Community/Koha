@@ -299,6 +299,7 @@ sub get_template_and_user {
             opacbookbag            => "" . C4::Context->preference("opacbookbag"),
             TemplateEncoding       => "". C4::Context->preference("TemplateEncoding"),
             AmazonContent          => "" . C4::Context->preference("AmazonContent"),
+            OPACShelfBrowser       => "". C4::Context->preference("OPACShelfBrowser"),
             OPACAmazonSimilarItems => "" . C4::Context->preference("OPACAmazonSimilarItems"),
             LibraryName            => "" . C4::Context->preference("LibraryName"),
             LibraryNameTitle       => "" . $LibraryNameTitle,
