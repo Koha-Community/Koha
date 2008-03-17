@@ -7,17 +7,6 @@
 	}); 
 //]]>
 </script>
-<style type="text/css">
-
-#shelfbrowser dl {text-align:center;font-size:.95em;margin-top:25px;}
-#shelfbrowser dt,dd {width:10.5em;float:left;}
-#shelfbrowser dt {margin-bottom:5.5em;}
-#shelfbrowser dd {margin:90px 0 0 -10.5em;}
-#shelfbrowser img {vertical-align:bottom;border:1px solid #999;padding:2px;background:#fff;}
-#shelfbrowser em {display:block;font-weight:bold;margin-bottom:5px;}
-#shelfbrowser dl a:hover img,dl a:active img,dl a:focus img {background:#f33;}
-
-</style>
 </head>
 <body>
 
@@ -149,75 +138,6 @@
             <!-- /TMPL_LOOP --></ul>
     <!-- /TMPL_IF -->
 </div>
-</div>
-
-<div class="yui-u">
-
-<ul id="action">
-
-<!-- TMPL_UNLESS NAME="norequests" -->
-    <!-- TMPL_UNLESS name="bi_notforloan" -->
-        <!-- TMPL_IF NAME="RequestOnOpac" -->
-            <li><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
-            Place Hold
-            </a></li>
-        <!-- /TMPL_IF -->
-    <!-- /TMPL_UNLESS -->
-<!-- /TMPL_UNLESS -->
-        <li><a class="print" href="/cgi-bin/koha/opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
-            Print
-        </a></li>
-<!-- TMPL_IF name="virtualshelves" -->
-    <!-- TMPL_IF NAME="loggedinusername" -->
-        <li><a class="addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
-            Save to Your Lists
-        </a></li>
-    <!-- /TMPL_IF -->
-<!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="opacbookbag" --><li><a class="addtocart" href="#" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
-            Add to Your Cart
-        </a></li><!-- /TMPL_IF -->
-</ul>
-
-<div id="further">
-<h4>Search for this title in:</h4>
-<ul>
-<li><a href="http://worldcat.org/search?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->">Other Libraries (WorldCat)</a></li>
-<li><a href="http://www.scholar.google.com/scholar?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->">Other Databases (Google Scholar)</a></li>
-<li><a href="http://www.bookfinder.com/search/?author=<!-- TMPL_VAR NAME="author" -->&title=<!-- TMPL_VAR NAME="title" -->&st=xl&ac=qr">Online Stores (Bookfinder.com)</a></li>
-<li><a href="http://search.ebscohost.com/Login.aspx?authtype=ip,uid&amp;site=novelist-live&amp;direct=true&amp;bquery=TI+<!-- TMPL_VAR NAME="title" -->+and+AU+<!-- TMPL_VAR NAME="author" -->&amp;scope=site">Novelist</a></li>
-</ul>
-</div>
-
-		<div id="export">
-		<form method="get" action="/cgi-bin/koha/opac-export.pl">
-		<label for="format">Save Record:</label>
-	    <select name="format" id="format">
-		<option value="">-- Choose Format --</option>
-        <option value="mods">MODS (XML)</option>
-        <option value="dc">Dublin Core (XML)</option>
-        <option value="marcxml">MARCXML</option>
-        <option value="marc8">MARC (non-Unicode/MARC-8)</option>
-        <option value="utf8">MARC (Unicode/UTF-8)</option>    </select><input type="hidden" name="op" value="export" /><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
-<input type="submit" name="save" value="Go" /></form></div>
-
-<!-- TMPL_IF NAME="AmazonContent" --><!-- TMPL_IF NAME="OPACAmazonSimilarItems" -->
-<div id="similars">
-<h4>Similar Items</h4>
-<ul>
-<!-- TMPL_LOOP NAME="AMAZON_SIMILAR_PRODUCTS" -->
-<!-- TMPL_LOOP NAME="similar_biblionumbers" -->
-<li><img alt="img" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="ASIN"-->.01._SS50_.jpg" /> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" ESCAPE="HTML" --></a> </li>
-<!-- /TMPL_LOOP -->
-<!-- /TMPL_LOOP -->
-</ul>
-</div>
-<!-- /TMPL_IF --><!-- /TMPL_IF -->
-
-</div>
-</div>
-
-<div class="yui-g">
 
 <div id="bibliodescriptions" class="toptabs">
 
@@ -253,7 +173,7 @@
         <tr>
             <td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR name="description" -->
                     </td>
-            <td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR name="location_description" --> <!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="OPACShelfBrowser" -->(<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser">Browse Shelf</a>)<!-- /TMPL_IF --></td>
+            <td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR name="location_description" --> <!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="OPACShelfBrowser" -->(<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser">Browse Shelf</a>)<!-- /TMPL_IF --></td>
             <td><!-- TMPL_IF name="bi_notforloan" -->
                     Not for loan
                 <!-- TMPL_ELSE -->
@@ -290,23 +210,21 @@
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="OpenOPACShelfBrowser" -->
 <div id="shelfbrowser">
-<p>
-<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Close Shelf Browser</a>
-<!-- TMPL_IF NAME="starting_homebranch" --><span class="label">Library:</span> <!-- TMPL_VAR NAME="starting_homebranch" --><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="starting_location" --><span class="label">Shelving Location:</span><!-- TMPL_VAR NAME="starting_location" --> <!-- /TMPL_IF -->
-</p>
-        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="shelfbrowser_prev_biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="shelfbrowser_prev_itemnumber" -->#shelfbrowser">Previous</a>
+<h5 style="text-align: center;"><!-- TMPL_IF NAME="starting_homebranch" -->Browsing <!-- TMPL_VAR NAME="starting_homebranch" --> Library<!-- /TMPL_IF --><!-- TMPL_IF NAME="starting_location" -->, Shelving Location:</span><!-- TMPL_VAR NAME="starting_location" --> <!-- /TMPL_IF --> <a style="font-size: 75%;" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Close Shelf Browser</a></h5>
+
+        <a class="left" style="height: 10em;" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="shelfbrowser_prev_biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="shelfbrowser_prev_itemnumber" -->#shelfbrowser"><img src="/opac-tmpl/prog/images/browse-prev.gif" alt="Previous" border="0" /></a>
         <dl>
 <!-- TMPL_LOOP NAME="PREVIOUS_SHELF_BROWSE" -->
-        <dt> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser"><img alt="img" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn"-->.01._SS50_.jpg" /></a></dt><dd><em><!-- TMPL_VAR NAME="itemcallnumber" --></em><!-- TMPL_VAR NAME="title" --></dd>
+        <div><dt> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser"><img alt="" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn"-->.01._AA75_PU_PU-5_.jpg" /></a></dt><dd><em><!-- TMPL_VAR NAME="itemcallnumber" --></em><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser"><!-- TMPL_VAR NAME="title" --></a></dd></div>
 <!-- /TMPL_LOOP -->
 <!-- TMPL_LOOP NAME="NEXT_SHELF_BROWSE" -->
-        <dt> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser"><img alt="img" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn"-->.01._SS50_.jpg" /></a></dt><dd><em><!-- TMPL_VAR NAME="itemcallnumber" --></em><!-- TMPL_VAR NAME="title" --></dd>
+       <div> <dt> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser"><img alt="" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn"-->.01._AA75_PU_PU-5_.jpg" /></a></dt><dd><em><!-- TMPL_VAR NAME="itemcallnumber" --></em><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser"><!-- TMPL_VAR NAME="title" --></a></dd></div>
 <!-- /TMPL_LOOP -->
         </dl>
-        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="shelfbrowser_next_biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="shelfbrowser_next_itemnumber" -->#shelfbrowser">Next</a>
+        <a class="left" style="height: 10em;" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="shelfbrowser_next_biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="shelfbrowser_next_itemnumber" -->#shelfbrowser"><img src="/opac-tmpl/prog/images/browse-next.gif" alt="Next" border="0" /></a>
 </div>
 <!-- /TMPL_IF -->
+<br clear="all" />
 </div>
 
 <div id="descriptions">
@@ -435,26 +353,22 @@
 <!-- Amazon Reviews -->
 <div id="amazonreviews">
         
-    <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
-    <!-- TMPL_IF NAME="isbn" -->
-        <h4><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&amp;asin=<!-- TMPL_VAR NAME="isbn" -->&amp;store=books">Add your own review</a></h4>
-    <!-- /TMPL_IF -->
-    <!-- /TMPL_LOOP --><br/>
+   
 
         <!-- TMPL_IF NAME="amazon_average_rating" -->
-            <h4>Average Rating (from Amazon.com): <span class="starMT"><span class="starFull" style="width:<!-- TMPL_VAR NAME="amazon_average_rating" -->px"></span></span></h4>
+            <div class="clearfix"><h3 style="float: left;">Average Rating (from Amazon.com): </h3><span class="starMT" style="float: left;"><span class="starFull" style="float: left; width:<!-- TMPL_VAR EXPR="amazon_average_rating / 2" -->px"></span></span> <!-- TMPL_IF NAME="isbn" --><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&amp;asin=<!-- TMPL_VAR NAME="isbn" -->&amp;store=books">Add your own review</a><!-- /TMPL_IF --></div>
 
         <!-- TMPL_LOOP NAME="AMAZON_CUSTOMER_REVIEWS" -->
             <div class="content_set">
-            <h4 class="underline">  <span class="starMT"><span class="starFull" style="width:<!-- TMPL_VAR NAME="Rating" -->px"></span></span> <!-- TMPL_VAR NAME="Summary" ESCAPE="HTML" --></h4>  <!-- TMPL_VAR NAME="Date" -->
+            <div class="clearfix" style="margin: .5em 0;"><h4 style="float: left;"><!-- TMPL_VAR NAME="Summary" ESCAPE="HTML" --></h4>  <span class="starMT" style="float: left;"><span class="starFull" style="float: left; width:<!-- TMPL_VAR EXPR="Rating * 10" -->px"></span></span> </div>  <!-- TMPL_VAR NAME="Date" -->
 			<!-- TMPL_IF NAME="Content" -->
-                <p><!-- TMPL_VAR NAME="Content" ESCAPE="HTML" --></p>
+                <p style="margin-left: .2em;"><!-- TMPL_VAR NAME="Content" ESCAPE="HTML" --></p>
 			<!-- /TMPL_IF -->
             </div>
         <!-- /TMPL_LOOP -->
         <!-- TMPL_ELSE -->
 
-    <p> Sorry, there are no reviews available for this title. </p>
+    <p> Sorry, there are no reviews available for this title. <!-- TMPL_IF NAME="isbn" --><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&amp;asin=<!-- TMPL_VAR NAME="isbn" -->&amp;store=books">Add your own review</a><!-- /TMPL_IF --></p>
 
         <!-- /TMPL_IF -->
 </div>
@@ -462,7 +376,75 @@
 <!-- /TMPL_IF-->
 
 </div>
+
 </div>
+
+<div class="yui-u">
+
+<ul id="action">
+
+<!-- TMPL_UNLESS NAME="norequests" -->
+    <!-- TMPL_UNLESS name="bi_notforloan" -->
+        <!-- TMPL_IF NAME="RequestOnOpac" -->
+            <li><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
+            Place Hold
+            </a></li>
+        <!-- /TMPL_IF -->
+    <!-- /TMPL_UNLESS -->
+<!-- /TMPL_UNLESS -->
+        <li><a class="print" href="/cgi-bin/koha/opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
+            Print
+        </a></li>
+<!-- TMPL_IF name="virtualshelves" -->
+    <!-- TMPL_IF NAME="loggedinusername" -->
+        <li><a class="addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
+            Save to Your Lists
+        </a></li>
+    <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="opacbookbag" --><li><a class="addtocart" href="#" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
+            Add to Your Cart
+        </a></li><!-- /TMPL_IF -->
+</ul>
+
+<!-- TMPL_IF NAME="AmazonContent" --><!-- TMPL_IF NAME="OPACAmazonSimilarItems" -->
+<div id="similars">
+<h4>Similar Items</h4>
+<ul>
+<!-- TMPL_LOOP NAME="AMAZON_SIMILAR_PRODUCTS" -->
+<!-- TMPL_LOOP NAME="similar_biblionumbers" -->
+<li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><img alt="img" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="ASIN"-->.01._SS50_.jpg" /></a> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" ESCAPE="HTML" --></a> </li>
+<!-- /TMPL_LOOP -->
+<!-- /TMPL_LOOP -->
+</ul>
+</div>
+<!-- /TMPL_IF --><!-- /TMPL_IF -->
+
+<div id="further">
+<h4>Search for this title in:</h4>
+<ul>
+<li><a href="http://worldcat.org/search?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->">Other Libraries (WorldCat)</a></li>
+<li><a href="http://www.scholar.google.com/scholar?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->">Other Databases (Google Scholar)</a></li>
+<li><a href="http://www.bookfinder.com/search/?author=<!-- TMPL_VAR NAME="author" -->&title=<!-- TMPL_VAR NAME="title" -->&st=xl&ac=qr">Online Stores (Bookfinder.com)</a></li>
+</ul>
+</div>
+
+		<div id="export">
+		<form method="get" action="/cgi-bin/koha/opac-export.pl">
+		<label for="format">Save Record:</label>
+	    <select name="format" id="format">
+		<option value="">-- Choose Format --</option>
+        <option value="mods">MODS (XML)</option>
+        <option value="dc">Dublin Core (XML)</option>
+        <option value="marcxml">MARCXML</option>
+        <option value="marc8">MARC (non-Unicode/MARC-8)</option>
+        <option value="utf8">MARC (Unicode/UTF-8)</option>    </select><input type="hidden" name="op" value="export" /><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+<input type="submit" name="save" value="Go" /></form></div>
+
+</div>
+</div>
+
+
 
 </div>
 </div>
