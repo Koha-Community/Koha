@@ -4,14 +4,46 @@
     <!-- TMPL_VAR name="firstname" --><!-- TMPL_VAR name="surname" -->
 <!-- /TMPL_LOOP -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pack.js"></script>
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
             $(function() {
                         $('#opac-user-views > ul').tabs();
-                
+			$("#checkoutst").tablesorter({
+				sortList: [[4,0]],
+				debug: true,
+		        headers: { 
+		            0: { sorter: false }, 
+		            2: { sorter: false },
+		            3: { sorter: false },
+					5: { sorter: false },
+					6: { sorter: false } 
+				}
+			}); 
             });
 //]]>
 </script>
+<style type="text/css">
+.header {
+	background-image:url("/opac-tmpl/prog/images/bg.gif");
+	background-position:right center;
+	background-repeat:no-repeat;
+	cursor:pointer;
+}
+.headerSortUp {
+	background-image:url("/opac-tmpl/prog/images/asc.gif");
+}
+.headerSortDown {
+	background-image:url("/opac-tmpl/prog/images/desc.gif");
+}
+ tr th, tr th:last-child {
+	background-color:#E6EEEE;
+	border:1px solid #FFFFFF;
+	font-size:8pt;
+	padding:4px;
+	text-align : center;
+}
+</style>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
@@ -89,7 +121,7 @@
     <!-- TMPL_IF NAME="waiting_count" -->
     <!-- TMPL_IF NAME="atdestination" -->
     <div id="opac-user-waiting">
-        <table>
+        <table id="waitingt">
             <caption>Holds Waiting</caption>
             <tr>
                 <th colspan="2">Title</th>
@@ -126,9 +158,9 @@
     <!-- /TMPL_IF -->
 
     <div id="opac-user-checkouts"><!-- TMPL_IF NAME="issues_count" -->
-        <table>
+        <table id="checkoutst">
         <caption><!-- TMPL_VAR NAME="issues_count" --> Items Checked Out</caption>
-        <!-- ISSUES TABLE ROWS --><tr>
+       <thead><tr>
 		<!-- TMPL_IF NAME="AmazonContent" --><th>&nbsp;</th><!-- /TMPL_IF -->
         <th>Title</th>
 		<th>Item Type</th>
@@ -138,8 +170,8 @@
         <!-- TMPL_UNLESS name="patron_flagged" --><th>Renew</th><!-- /TMPL_UNLESS -->
         <!-- /TMPL_IF -->
         <th>Fines</th>
-        </tr>
-        <!-- TMPL_LOOP NAME="ISSUES" -->
+        </tr></thead>
+        <tbody><!-- TMPL_LOOP NAME="ISSUES" -->
         <!-- TMPL_IF NAME="toggle" -->
             
             <!-- TMPL_IF NAME="overdue" -->
@@ -158,8 +190,7 @@
             
             <!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="AmazonContent" --><td><!-- TMPL_IF NAME="isbn" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.THUMBZZZ.jpg" alt="Book Cover Image" class="thumbnail" /></a><!-- /TMPL_IF --></td><!-- /TMPL_IF -->
-                <td>
-                    <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
+                <td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
                     <span class="item-details">
                         <!-- TMPL_VAR NAME="author" -->
                     </span>
@@ -186,9 +217,9 @@
                 <!-- /TMPL_IF -->
                 <td><!-- TMPL_IF NAME="charges" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
             </tr>
-        <!-- /TMPL_LOOP -->
+        <!-- /TMPL_LOOP --></tbody>
         </table>
-        <!--TMPL_IF Name="OpacRenewalAllowed"-->
+        <!-- FIXME: See bug 1101 <!--TMPL_IF Name="OpacRenewalAllowed"-->
             <form action="/cgi-bin/koha/opac-renew.pl" method="post">
                 <input type="hidden" name="from" value="opac_user" />
                 <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
@@ -197,7 +228,7 @@
                 <!-- /TMPL_LOOP -->
                 <input type="submit" value="Renew All" />
             </form>
-        <!--/TMPL_IF-->
+        <!--/TMPL_IF--> -->
     <!-- TMPL_ELSE -->
         <table>
             <tr><td>You have nothing checked out</td></tr>
@@ -206,7 +237,7 @@
     
     
 <!-- TMPL_IF NAME="overdues_count" -->
-<div id="opac-user-overdues"><table>
+<div id="opac-user-overdues"><table id="overduest>
 <caption>Overdues <span class="count">(<!-- TMPL_VAR NAME="overdues_count" --> total)</span></caption>
 <!-- OVERDUES TABLE ROWS -->
 <tr>
@@ -246,7 +277,7 @@ No renewals left
 
     <!-- TMPL_IF NAME="reserves_count" -->
         <div id="opac-user-holds">
-        <table>
+        <table id="holdst">
         <caption>Holds <span class="count">(<!-- TMPL_VAR NAME="reserves_count" --> total)</span></caption>
             <!-- RESERVES TABLE ROWS -->
             <tr>
