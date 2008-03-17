@@ -6,10 +6,13 @@ use C4::Labels;
 use C4::Auth;
 use C4::Output;
 use C4::Context;
+use C4::Members;
+use C4::Branch;
 use HTML::Template::Pro;
 use PDF::Reuse;
 use PDF::Reuse::Barcode;
 use POSIX;
+use Data::Dumper;
 #use Smart::Comments;
 
 my $DEBUG = 0;
@@ -29,7 +32,7 @@ my $conf_data   = get_label_options();
 my $profile     = GetAssociatedProfile($template->{'tmpl_id'});
 
 my $batch_id =   $cgi->param('batch_id');
-my @resultsloop = get_label_items($batch_id);
+my @resultsloop;
 
 #$DB::single = 1;
 
@@ -42,6 +45,12 @@ if ($cgi->param('startlabel')) {
     }
 warn "Starting on label #$start_label" if $DEBUG;
 my $units        = $template->{'units'};
+
+if ($printingtype eq 'PATCRD') {
+    @resultsloop = GetPatronCardItems($batch_id);
+} else {
+    @resultsloop = get_label_items($batch_id);
+}
 
 #warn "UNITS $units";
 #warn "fontsize = $fontsize";
@@ -195,10 +204,9 @@ else {
 
 foreach $item (@resultsloop) {
     warn "Label parameters: xpos=$x_pos, ypos=$y_pos, lblwid=$label_width, lblhig=$label_height" if $DEBUG;
-    my $barcode = $item->{'barcode'};
     if ( $printingtype eq 'BAR' ) {
         drawbox( $x_pos, $y_pos, $label_width, $label_height ) if $guidebox;
-        DrawBarcode( $x_pos, $y_pos, $label_height, $label_width, $barcode,
+        DrawBarcode( $x_pos, $y_pos, $label_height, $label_width, $item->{'barcode'},
             $barcodetype );
         CalcNextLabelPos();
     }
@@ -211,7 +219,7 @@ foreach $item (@resultsloop) {
         my $barcode_y      = $y_pos + ( $label_height / 2.5  );   ## scaling voodoo
 
         DrawBarcode( $x_pos, $barcode_y, $barcode_height, $label_width,
-            $barcode, $barcodetype );
+            $item->{'barcode'}, $barcodetype );
         DrawSpineText( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize,
             $left_text_margin, $text_wrap_cols, \$item, \$conf_data );
 
@@ -221,7 +229,7 @@ foreach $item (@resultsloop) {
     elsif ( $printingtype eq 'BIBBAR' ) {
         drawbox( $x_pos, $y_pos, $label_width, $label_height ) if $guidebox;
         my $barcode_height = $label_height / 2;
-        DrawBarcode( $x_pos, $y_pos, $barcode_height, $label_width, $barcode,
+        DrawBarcode( $x_pos, $y_pos, $barcode_height, $label_width, $item->{'barcode'},
             $barcodetype );
         DrawSpineText( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize,
             $left_text_margin, $text_wrap_cols, \$item, \$conf_data );
@@ -231,7 +239,7 @@ foreach $item (@resultsloop) {
 
     elsif ( $printingtype eq 'ALT' ) {
         drawbox( $x_pos, $y_pos, $label_width, $label_height ) if $guidebox;
-        DrawBarcode( $x_pos, $y_pos, $label_height, $label_width, $barcode,
+        DrawBarcode( $x_pos, $y_pos, $label_height, $label_width, $item->{'barcode'},
             $barcodetype );
         CalcNextLabelPos();
         drawbox( $x_pos, $y_pos, $label_width, $label_height ) if $guidebox;
@@ -246,6 +254,28 @@ foreach $item (@resultsloop) {
         drawbox( $x_pos, $y_pos, $label_width, $label_height ) if $guidebox;
         DrawSpineText( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize,
             $left_text_margin, $text_wrap_cols, \$item, \$conf_data, $printingtype );
+        CalcNextLabelPos();
+    }
+
+    elsif ( $printingtype eq 'PATCRD' ) {
+        my $borrowernumber = '3';       # Hardcoded for testing purposes...
+        my $patron_data = $item;
+
+        #FIXME: This needs to be paramatized and passed in from the user...
+        #Each element of this hash is a separate line on the patron card. Keys are the text to print and the associated data is the point size.
+        my $text = {        
+            $patron_data->{'description'}  => $fontsize,
+            $patron_data->{'branchname'}   => ($fontsize + 3),
+        };
+
+        warn "Generating patron card for cardnumber $patron_data->{'cardnumber'}";
+
+        drawbox( $x_pos, $y_pos, $label_width, $label_height ) if $guidebox;
+        my $barcode_height = $label_height / 2.75; #FIXME: Scaling barcode height; this needs to be a user parameter.
+        DrawBarcode( $x_pos, $y_pos, $barcode_height, $label_width, $patron_data->{'cardnumber'},
+            $barcodetype );
+        DrawPatronCardText( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize,
+            $left_text_margin, $text_wrap_cols, $text, $printingtype );
         CalcNextLabelPos();
     }
 

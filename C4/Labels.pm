@@ -23,6 +23,8 @@ use vars qw($VERSION @ISA @EXPORT);
 use PDF::Reuse;
 use Text::Wrap;
 use Algorithm::CheckDigits;
+use C4::Members;
+use C4::Branch;
 # use Data::Dumper;
 # use Smart::Comments;
 
@@ -38,8 +40,8 @@ BEGIN {
 		&GetSingleLabelTemplate &SaveTemplate
 		&CreateTemplate &SetActiveTemplate
 		&SaveConf &DrawSpineText &GetTextWrapCols
-		&GetUnitsValue &DrawBarcode
-		&get_printingtypes
+		&GetUnitsValue &DrawBarcode &DrawPatronCardText
+		&get_printingtypes &GetPatronCardItems
 		&get_layouts
 		&get_barcode_types
 		&get_batches &delete_batch
@@ -256,10 +258,11 @@ sub by_order {
 }
 
 sub add_batch {
+    my ( $batch_type ) = @_;
     my $new_batch;
     my $dbh = C4::Context->dbh;
     my $q =
-      "select distinct batch_id from labels order by batch_id desc limit 1";
+      "SELECT DISTINCT batch_id FROM $batch_type ORDER BY batch_id desc LIMIT 1";
     my $sth = $dbh->prepare($q);
     $sth->execute();
     my $data = $sth->fetchrow_hashref;
@@ -275,7 +278,7 @@ sub add_batch {
     return $new_batch;
 }
 
-
+#FIXME: Needs to be ported to receive $batch_type
 sub get_highest_batch {
     my $new_batch;
     my $dbh = C4::Context->dbh;
@@ -297,6 +300,7 @@ sub get_highest_batch {
 }
 
 
+#FIXME: Needs to be ported to receive $batch_type
 sub get_batches {
     my $dbh = C4::Context->dbh;
     my $q   = "select batch_id, count(*) as num from labels group by batch_id";
@@ -318,9 +322,10 @@ sub get_batches {
 }
 
 sub delete_batch {
-    my ($batch_id) = @_;
+    my ($batch_id, $batch_type) = @_;
+    warn "Deleteing batch of type $batch_type";
     my $dbh        = C4::Context->dbh;
-    my $q          = "DELETE FROM labels where batch_id  = ?";
+    my $q          = "DELETE FROM $batch_type WHERE batch_id  = ?";
     my $sth        = $dbh->prepare($q);
     $sth->execute($batch_id);
     $sth->finish;
@@ -798,6 +803,29 @@ sub GetItemFields {
     return @fields;
 }
 
+sub GetPatronCardItems {
+
+    my ( $batch_id ) = @_;
+    my @resultsloop;
+    
+    warn "Received batch id: $batch_id";
+    my $dbh = C4::Context->dbh;
+    my $query = "SELECT * FROM patroncards WHERE batch_id = ? ORDER BY borrowernumber";
+    my $sth = $dbh->prepare($query);
+    warn "Executing query...\n";
+    $sth->execute($batch_id);
+    warn "Parsing results...\n";
+    while ( my $data = $sth->fetchrow_hashref ) {
+        warn "for borrowernumber $data->{'borrowernumber'}\n";
+        my $patron_data = GetMember( $data->{'borrowernumber'} );
+        $patron_data->{'branchname'} = GetBranchName( $patron_data->{'branchcode'} );
+        push( @resultsloop, $patron_data );
+    }
+    $sth->finish;
+    return @resultsloop;
+
+}
+
 sub deduplicate_batch {
 	my $batch_id = shift or return undef;
 	my $query = "
@@ -848,7 +876,7 @@ sub DrawSpineText {
     my $str;
 
     my $top_text_margin = ( $fontsize + 3 );    #FIXME: This should be a template parameter and passed in...
-    my $line_spacer = ( $fontsize * 0.20 );    # number of pixels between text rows (This is actually leading: baseline to baseline minus font size. Recommended starting point is 20% of font size.).
+    my $line_spacer = ( $fontsize * 1 );    # number of pixels between text rows (This is actually leading: baseline to baseline minus font size. Recommended starting point is 20% of font size.).
 
     # add your printable fields manually in here
 
@@ -882,16 +910,30 @@ sub DrawSpineText {
             # strip out naughty existing nl/cr's
             $str =~ s/\n//g;
             $str =~ s/\r//g;
+            # wrap lines based on call number dividers '/'
+            my @strings;
+
+            while ( $str =~ /\// ) {
+                $str =~ /^(.*)\/(.*)$/;
+
+                #warn "\$2=$2";
+                unshift @strings, $2;
+                $str = $1;
+            }
+            
+            unshift @strings, $str;
+            
             # strip out division slashes
-            $str =~ s/\///g;
+            #$str =~ s/\///g;
+            #warn "\$str after striping division marks: $str";
             # chop the string up into _upto_ 12 chunks
             # and seperate the chunks with newlines
 
-            $str = wrap( "", "", "$str" );
-            $str = wrap( "", "", "$str" );
+            #$str = wrap( "", "", "$str" );
+            #$str = wrap( "", "", "$str" );
 
             # split the chunks between newline's, into an array
-            my @strings = split /\n/, $str;
+            #my @strings = split /\n/, $str;
 
             # then loop for each string line
             foreach my $str (@strings) {
@@ -916,10 +958,37 @@ sub DrawSpineText {
 sub PrintText {
     my ( $hPos, $vPos, $font, $fontsize, $text ) = @_;
     my $str = "BT /$font $fontsize Tf $hPos $vPos Td ($text) Tj ET";
+    warn $str;
     prAdd($str);
 }
 
-# Is this used anywhere?
+sub DrawPatronCardText {
+
+    my ( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize, $left_text_margin,
+        $text_wrap_cols, $text, $printingtype )
+      = @_;
+
+    my $top_text_margin = 25;    #FIXME: This should be a template parameter and passed in...
+
+    my $vPos   = ( $y_pos + ( $label_height - $top_text_margin ) );
+    my $font = prFont($fontname);
+
+    my $hPos;
+
+    foreach my $line (keys %$text) {
+        warn "Current text is \"$line\" and font size for \"$line\" is $text->{$line} points";
+        # some code to try and center each line on the label based on font size and string point width...
+        my $stringwidth = prStrWidth($line, $fontname, $text->{$line});
+        my $whitespace = ( $label_width - ( $stringwidth + (2 * $left_text_margin) ) );
+        $hPos = ( ( $whitespace  / 2 ) + $x_pos + $left_text_margin );
+
+        PrintText( $hPos, $vPos, $font, $text->{$line}, $line );
+        my $line_spacer = ( $text->{$line} * 1 );    # number of pixels between text rows (This is actually leading: baseline to baseline minus font size. Recommended starting point is 20% (0.20) of font size.).
+        $vPos = $vPos - ($line_spacer + $text->{$line});   # Linefeed equiv: leading + font size
+    }
+}
+
+# Not used anywhere.
 
 #sub SetFontSize {
 #
