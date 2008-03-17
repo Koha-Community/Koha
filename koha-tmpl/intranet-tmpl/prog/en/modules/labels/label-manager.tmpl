@@ -1,10 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo; <!-- TMPL_IF EXPR="(batch_type eq 'labels')" -->Labels<!-- TMPL_ELSIF EXPR="(batch_type eq 'patroncards')" -->Patron Cards<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<script type="text/javascript">
-function Plugin(batch_id) {
-	window.open("label-item-search.pl?batch_id="+batch_id+"",'FindABibIndex','width=640,height=400,toolbar=no,scrollbars=yes');
-}
-</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -22,8 +17,8 @@ function Plugin(batch_id) {
 	<!-- /TMPL_LOOP -->
 <!-- /TMPL_IF -->
 
-<!-- TMPL_INCLUDE NAME="tools-labels-toolbar.inc" -->
 <!-- TMPL_IF NAME="batch_id" -->
+<!-- TMPL_INCLUDE NAME="tools-labels-batches-toolbar.inc" -->
 <!-- TMPL_IF EXPR="(batch_type eq 'labels')" -->
     <h2>Items to be Printed for Batch <!-- TMPL_VAR NAME="batch_id" -->  (<!-- TMPL_VAR NAME="batch_count" -->  items)</h2>
     <table>
@@ -66,9 +61,9 @@ function Plugin(batch_id) {
         </tr>
         <!-- /TMPL_LOOP -->
     </table>
-<!-- TMPL_ELSIF EXPR="(batch_type eq 'patroncards')" -->
 <!-- /TMPL_IF --><!-- /batch_type -->
 <!-- TMPL_ELSE -->
+<!-- TMPL_INCLUDE NAME="tools-labels-toolbar.inc" -->
 <!-- TMPL_IF EXPR="(batch_type eq 'labels')" -->
 <!-- TMPL_IF NAME="batches" -->
     <div class="yui-g">
