@@ -36,6 +36,7 @@ my @resultsloop;
 
 #$DB::single = 1;
 
+my $batch_type   = $conf_data->{'type'};
 my $barcodetype  = $conf_data->{'barcodetype'};
 my $printingtype = $conf_data->{'printingtype'};
 my $guidebox     = $conf_data->{'guidebox'};
@@ -258,7 +259,6 @@ foreach $item (@resultsloop) {
     }
 
     elsif ( $printingtype eq 'PATCRD' ) {
-        my $borrowernumber = '3';       # Hardcoded for testing purposes...
         my $patron_data = $item;
 
         #FIXME: This needs to be paramatized and passed in from the user...
