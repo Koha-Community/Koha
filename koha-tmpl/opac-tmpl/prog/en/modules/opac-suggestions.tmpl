@@ -2,6 +2,29 @@
 <!-- TMPL_IF name="op_add" -->Enter a new purchase suggestion<!-- /TMPL_IF -->
 <!-- TMPL_IF name="op_else" -->Purchase Suggestions<!-- /TMPL_IF -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pack.js"></script>
+<script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+$.tablesorter.addParser({
+    id: 'articles', 
+    is: function(s) {return false;  }, 
+    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
+    type: 'text' 
+});
+
+       $(function() {
+			$("#suggestt").tablesorter({
+				widgets : ['zebra'],
+				<!-- TMPL_IF NAME="loggedinusername" -->sortList: [[1,0]],<!-- TMPL_ELSE -->sortList: [[0,0]],<!-- /TMPL_IF -->
+		        headers: {
+				<!-- TMPL_IF NAME="loggedinusername" -->0: { sorter: false },2: { sorter: 'articles' },2: {sorter: false },4: {sorter: false},5:{sorter:false}
+				<!-- TMPL_ELSE -->0: { sorter: 'articles' },1: {sorter: false },3: {sorter: false},4:{sorter:false}
+				<!-- /TMPL_IF -->
+				}
+			}); 
+       });
+//]]>
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE name="masthead.inc" -->
@@ -58,16 +81,16 @@
             </form>
         <form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
             <input type="hidden" name="op" value="delete_confirm" />
-			<table>
-			<tr>
+			<table id="suggestt">
+			<thead><tr>
             <!-- TMPL_IF NAME="loggedinusername" --><th>&nbsp;</th><!-- /TMPL_IF -->
             <th>Summary</th>
             <th>Note</th>
             <th>Suggested by</th>
             <th>Managed by</th>
             <th>Status</th>
-        </tr>
-        <!-- TMPL_LOOP NAME="suggestions_loop" -->
+        </tr></thead>
+        <tbody><!-- TMPL_LOOP NAME="suggestions_loop" -->
             <!-- TMPL_IF name="even" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="loggedinusername" --><td>
                     <input type="checkbox" name="delete_field" value="<!--TMPL_VAR name="suggestionid" -->" />
@@ -98,12 +121,11 @@
                 </td>
             </tr>
         <!-- /TMPL_LOOP -->
-        <!-- TMPL_IF NAME="loggedinusername" --><tr>
-            <td colspan="9">
+       </tbody>
+    </table> <!-- TMPL_IF NAME="loggedinusername" --><fieldset class="action">
                 <input type="submit" value="Delete Checked Items" />
-            </td>
+            </fieldset>
         </tr><!-- /TMPL_IF -->
-    </table>
         </form>
     <!-- TMPL_ELSE --><p>There are no pending purchase suggestions.</p><!-- /TMPL_IF -->
 	

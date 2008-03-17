@@ -237,7 +237,8 @@ td,th {
 th {
 	background-color:#EFF1DC;
 	font-weight : bold;
-	padding : 2px 4px;
+	padding : 2px 23px;
+	text-align : center;
 }
 
 th.sum {
@@ -253,10 +254,14 @@ th[scope=row] {
 	text-align : right;
 }
 
-tr.highlight td, tr.highlight th {
+tr.highlight td, tr.highlight th, tr.odd td {
 	background-color : #F3F3F3;
 	border : 1px solid #DDDDDD;
 	border-right : 1px solid #DDDDDD;
+}
+
+tr.even td, tr.even.highlight td {
+	background-color: #FFF;
 }
 
 tr.grouplabel td {
@@ -266,6 +271,18 @@ tr.grouplabel td {
 	text-align : center;
 	font-weight : bold;
     padding: 10px;
+}
+.header {
+	background-image:url("../../images/ascdesc.gif");
+	background-position:right center;
+	background-repeat:no-repeat;
+	cursor:pointer;
+}
+.headerSortUp {
+	background-image:url("../../images/asc.gif");
+}
+.headerSortDown {
+	background-image:url("../../images/desc.gif");
 }
 
 ul {

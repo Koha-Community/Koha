@@ -7,23 +7,19 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pack.js"></script>
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
-$.tablesorter.addParser({ 
-    // set a unique id 
+$.tablesorter.addParser({
     id: 'articles', 
-    is: function(s) { 
-        // return false so this parser is not auto detected 
-        return false; 
-    }, 
-    format: function(s) { 
-        // format your data for normalization 
-        return s.toLowerCase().replace(/^(the|an|a) /,''); 
-    }, 
-    // set type, either numeric or text 
+    is: function(s) {return false;  }, 
+    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
     type: 'text' 
 });
-
             $(function() {
             $('#opac-user-views > ul').tabs();
+			$("#holdst").tablesorter({
+				sortList: [[0,0]],
+		        headers: { 0: { sorter: 'articles' },3: { sorter: false },4: { sorter: false }
+				}
+			}); 
 			$("#checkoutst").tablesorter({
 				sortList: [[4,0]],
 		        headers: { 0: { sorter: false }, 1: { sorter: 'articles' },2: { sorter: false },3: { sorter: false },5: { sorter: false },6: { sorter: false } 
@@ -32,23 +28,6 @@ $.tablesorter.addParser({
             });
 //]]>
 </script>
-<style type="text/css">
-.header {
-	background-image:url("/opac-tmpl/prog/images/ascdesc.gif");
-	background-position:right center;
-	background-repeat:no-repeat;
-	cursor:pointer;
-}
-.headerSortUp {
-	background-image:url("/opac-tmpl/prog/images/asc.gif");
-}
-.headerSortDown {
-	background-image:url("/opac-tmpl/prog/images/desc.gif");
-}
- tr th, tr th:last-child {
-	text-align : center;
-}
-</style>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
@@ -285,13 +264,14 @@ No renewals left
         <table id="holdst">
         <caption>Holds <span class="count">(<!-- TMPL_VAR NAME="reserves_count" --> total)</span></caption>
             <!-- RESERVES TABLE ROWS -->
-            <tr>
+            <thead><tr>
                 <th>Title</th>
                 <th>Placed On</th>
                 <th>Pick Up Location</th>
                 <th>Status</th>
 		<th>Modify</th>
-            </tr>
+            </tr></thead>
+			<tbody>
             <!-- TMPL_LOOP NAME="RESERVES" -->
             <tr>
                 <td>
@@ -324,6 +304,7 @@ No renewals left
 
             </tr>
             <!-- /TMPL_LOOP -->
+			</tbody>
         </table>
     </div>
     <!-- /TMPL_IF -->
