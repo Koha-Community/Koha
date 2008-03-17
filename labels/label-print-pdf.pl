@@ -49,7 +49,7 @@ my $units        = $template->{'units'};
 if ($printingtype eq 'PATCRD') {
     @resultsloop = GetPatronCardItems($batch_id);
 } else {
-    @resultsloop = get_label_items($batch_id);
+    @resultsloop = GetLabelItems($batch_id);
 }
 
 #warn "UNITS $units";
