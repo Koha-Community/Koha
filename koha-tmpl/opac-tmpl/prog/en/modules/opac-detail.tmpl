@@ -161,7 +161,7 @@
 <!-- TMPL_IF name="count" -->
     <table>
         <tr>
-            <th>Item type</th>
+            <!-- TMPL_IF NAME="item-level_itypes" --><th>Item type</th><!-- /TMPL_IF -->
             <th>Location</th>
             <th>Status</th>
             <th>Date Due</th>
@@ -171,8 +171,9 @@
         </tr>
         <!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
         <tr>
-            <td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR name="description" -->
-                    </td>
+
+            <!-- TMPL_IF NAME="item-level_itypes" --><td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR name="description" -->
+                    </td><!-- /TMPL_IF -->
             <td><!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR name="location_description" --> <!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="OPACShelfBrowser" -->(<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser">Browse Shelf</a>)<!-- /TMPL_IF --></td>
             <td><!-- TMPL_IF name="bi_notforloan" -->
                     Not for loan
