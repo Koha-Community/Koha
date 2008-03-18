@@ -15,8 +15,13 @@ $.tablesorter.addParser({
 			$("span.checkall").html("<a id=\"CheckAll\" href=\"#\">Select All</a>");
 			$("#listcontents").tablesorter({
 				widgets : ['zebra'],
-				<!-- TMPL_IF NAME="manageshelf" -->sortList: [[2,0]],<!-- TMPL_ELSE -->sortList: [[1,0]],<!-- /TMPL_IF -->
-		        headers: { 0: { sorter: false },<!-- TMPL_IF NAME="manageshelf" -->1: { sorter: false },2: { sorter: 'articles' }<!-- TMPL_ELSE -->1:{sorter: 'articles' }<!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="manageshelf" -->
+				sortList: [[1,0]],
+				headers: { 0: { sorter: false },1:{sorter: 'articles'}
+				<!-- TMPL_ELSE -->
+				sortList: [[0,0]],
+				headers: { 0:{sorter:'articles'}
+				<!-- /TMPL_IF -->
 				}
 			}); 
 			$("#CheckAll").click(function(){
