@@ -48,6 +48,7 @@ BEGIN {
     GetImportBatchRangeDesc
     GetNumberOfNonZ3950ImportBatches
     GetImportBibliosRange
+	GetItemNumbersFromImportBatch
     
     GetImportBatchStatus
     SetImportBatchStatus
@@ -718,6 +719,24 @@ sub GetImportBatchRangeDesc {
     }
     $sth->finish();
     return $results;
+}
+
+=head2 GetItemNumbersFromImportBatch
+
+=over 4
+=back
+=cut
+
+sub GetItemNumbersFromImportBatch {
+	my ($batch_id) = @_;
+ 	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare("select itemnumber from import_batches,import_records,import_items where import_batches.import_batch_id=import_records.import_batch_id and import_records.import_record_id=import_items.import_record_id and import_batches.import_batch_id=?");
+	$sth->execute($batch_id);
+	my @items ;
+	while ( my ($itm) = $sth->fetchrow_array ) {
+		push @items, $itm;
+	}
+	return @items;
 }
 
 =head2 GetNumberOfImportBatches 

@@ -49,7 +49,10 @@ function CheckForm(f) {
         <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
 	<li><!-- TMPL_VAR name="num_items" --> item records found and staged</li>
-    <li><a href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=<!-- TMPL_VAR name="import_batch_id" -->">Manage staged records</a></li>
+	<<!-- TMPL_IF name="label_batch" -->
+	  <li>New label batch created: # <!-- TMPL_VAR name="label_batch" --> </li>
+    <!-- /TMPL_IF -->
+	<li><a href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=<!-- TMPL_VAR name="import_batch_id" -->">Manage staged records</a></li>
 	<li><a href="/cgi-bin/koha/tools/tools-home.pl">Back</a></li>
 </ul>
 <!-- TMPL_ELSE -->
@@ -105,6 +108,10 @@ function CheckForm(f) {
       <li class="radio">
         <input type="radio" id="parse_itemsyes" name="parse_items" value="1" checked="checked" />
         <label for="parse_itemsyes">Yes</label>
+    	  <ul class="inline"><li class="inline">
+    	    <input type="checkbox" id="create_labelbatch" name="create_labelbatch" />
+    	    <label for="create_labelbatch">Create a label batch for this import?</label>
+    	  </li></ul>
       </li>
       <li class="radio">
         <input type="radio" id="parse_itemsno" name="parse_items" value="0" />

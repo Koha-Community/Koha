@@ -32,7 +32,11 @@
  &rsaquo; Batch <!-- TMPL_VAR name="import_batch_id" -->
 <!-- /TMPL_IF -->
 </h1>
-
+<!-- TMPL_IF name="label_batch" -->
+<div class="alert">
+<p>Label batch created, with id: <!-- TMPL_VAR name="label_batch" --> </p>
+</div>
+<!-- /TMPL_IF -->
 <!-- TMPL_IF name="batch_info" -->
 <p><label>File name</label> <!-- TMPL_VAR name="file_name" --></p>
 <p><label>Comments</label> <!-- TMPL_VAR name="comments" --></p>
@@ -156,7 +160,7 @@ Page
     <td><!-- TMPL_VAR name="import_status" --></td>
     <td><!-- TMPL_VAR name="upload_timestamp" --></td>
     <td><!-- TMPL_VAR name="num_biblios" --></td>
-    <td><!-- TMPL_VAR name="num_items" --></td>
+    <td><!-- TMPL_VAR name="num_items" --><!-- TMPL_IF NAME="num_items" --><a href="<!-- TMPL_VAR name="script_name" -->?import_batch_id=<!-- TMPL_VAR name="import_batch_id" -->&op=create_labels">(Create Label Batch)</a><!-- /TMPL_IF --></td>
   </tr>
   <!-- /TMPL_LOOP -->
 </table>

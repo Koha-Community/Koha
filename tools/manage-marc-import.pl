@@ -59,6 +59,13 @@ my %cookies = parse CGI::Cookie($cookie);
 my $sessionID = $cookies{'CGISESSID'}->value;
 my $dbh = C4::Context->dbh;
 
+if ($op eq "create_labels") {
+	#create a batch of labels, then lose $op & $import_batch_id so we get back to import batch list.
+	my $label_batch_id = create_labelbatch_from_importbatch($import_batch_id);
+	$template->param( label_batch => $label_batch_id );
+	$op='';
+	$import_batch_id='';
+}
 if ($op) {
     $template->param(script_name => $script_name, $op => 1);
 } else {
@@ -93,7 +100,7 @@ if ($op eq "") {
     my $current_matcher_id = $input->param('current_matcher_id');
     redo_matching($template, $import_batch_id, $new_matcher_id, $current_matcher_id);
     import_biblios_list($template, $import_batch_id, $offset, $results_per_page);
-}
+} 
 
 output_html_with_http_headers $input, $cookie, $template->output;
 
@@ -120,6 +127,13 @@ sub redo_matching {
     $template->param(rematch_failed => $rematch_failed);
     $template->param(rematch_attempted => 1);
     $template->param(num_with_matches => $num_with_matches);
+}
+
+sub create_labelbatch_from_importbatch {
+	my ($batch_id) = @_;
+	my @items = GetItemNumbersFromImportBatch($batch_id);
+	warn join("/",@items);
+	return 0; # dummy return until C4::Labels::add_batch() takes an array
 }
 
 sub import_batches_list {
