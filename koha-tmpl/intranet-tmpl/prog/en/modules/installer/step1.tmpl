@@ -13,13 +13,13 @@ listed, please inform your systems administrator.</p>
 <!-- TMPL_IF NAME="installer_languages_loop" -->
         <!-- TMPL_LOOP NAME="installer_languages_loop" -->
             <!-- TMPL_IF NAME="plural" -->
-            <optgroup label="<!-- TMPL_VAR NAME="rfc4646_subtag" -->">
+            <optgroup label="<!-- TMPL_VAR NAME="language" -->">
             <!-- TMPL_LOOP NAME="sublanguages_loop" -->
-                <option value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->"><!-- TMPL_VAR NAME="rfc4646_subtag" --></option>
+                <option value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->"><!-- TMPL_IF NAME="native_description" --><!-- TMPL_VAR NAME="native_description" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="rfc4646_subtag" --><!-- /TMPL_IF --></option>
             <!-- /TMPL_LOOP -->
             </optgroup>
             <!-- TMPL_ELSE -->
-		<option value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->"><!-- TMPL_VAR NAME="rfc4646_subtag" --></option>
+		<option value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->"><!-- TMPL_IF NAME="native_description" --><!-- TMPL_VAR NAME="native_description" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="rfc4646_subtag" --><!-- /TMPL_IF --></option>
             <!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
 <!-- /TMPL_IF -->

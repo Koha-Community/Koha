@@ -149,6 +149,9 @@ sub getTranslatedLanguages {
         foreach my $theme ( _get_themes('opac') ) {
             push @languages, _get_language_dirs($htdocs,$theme);
         }
+        my %seen;
+        $seen{$_}++ for @languages;
+        @languages = keys %seen;
         return _build_languages_arrayref($all_languages,\@languages,$current_language,\@enabled_languages);
     }
 }
