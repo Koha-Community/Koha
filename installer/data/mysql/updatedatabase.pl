@@ -1201,7 +1201,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion = "3.00.00.065";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("Create Table: CREATE TABLE `patroncards` (
+    $dbh->do("CREATE TABLE `patroncards` (
                 `cardid` int(11) NOT NULL auto_increment,
                 `batch_id` varchar(10) NOT NULL default '1',
                 `borrowernumber` int(11) NOT NULL,
