@@ -633,7 +633,7 @@ sub ModMember {
         # is adult check guarantees;
         UpdateGuarantees(%data);
     }
-    &logaction(C4::Context->userenv->{'number'},"MEMBERS","MODIFY",$data{'borrowernumber'},"") 
+    &logaction(C4::Context->userenv->{'number'},"MEMBERS","MODIFY",$data{'borrowernumber'},"$query (executed w/ arg: $data{'borrowernumber'})") 
         if C4::Context->preference("BorrowersLog");
 }
 
@@ -1734,6 +1734,7 @@ sub GetPatronImage {
     PutPatronImage($cardnumber, $mimetype, $imgfile);
 
 Stores patron binary image data and mimetype in database.
+NOTE: This function is good for updating images as well as inserting new images in the database.
 
 =cut
 
