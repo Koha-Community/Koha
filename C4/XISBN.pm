@@ -115,6 +115,8 @@ sub get_xisbns {
 
     # loop through each ISBN and scope to the local collection
     for my $response_data( @{ $response->{ isbn } } ) {
+        next if $response_data->{'content'} eq $isbn;
+        next if $isbn eq $response_data;
         next if $unique_xisbns->{ $response_data->{content} };
         $unique_xisbns->{ $response_data->{content} }++;
         my $xbiblio= get_biblio_from_xisbn($response_data->{content});
