@@ -151,7 +151,7 @@
     </li><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="reviewson" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#comments">Comments</a></li><!-- /TMPL_IF -->
 
-	<!-- TMPL_IF NAME="OPACFRBRizeEditions" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#editions">Editions</a></li><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="OPACFRBRizeEditions" --><!-- TMPL_IF NAME="XISBNS" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#editions">Editions</a></li><!-- /TMPL_IF --><!-- /TMPL_IF -->
 	
  	<!-- TMPL_IF NAME="AmazonContent" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#amazonreviews">Amazon Reviews</a></li><!-- /TMPL_IF -->
 
@@ -330,26 +330,25 @@
 	</div>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="OPACFRBRizeEditions" --><div id="editions">
+<!-- TMPL_IF NAME="OPACFRBRizeEditions" --><!-- TMPL_IF NAME="XISBNS" --><div id="editions">
 
 <h2>Other Editions of this Work</h2>
-<!-- TMPL_IF NAME="XISBNS" -->
-<ul>
+<table>
 <!-- TMPL_LOOP NAME="XISBNS" -->
-<li><!-- <img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="itemtype" -->" title="<!-- TMPL_VAR NAME="itemtype" -->" /> -->
-<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR NAME="author" ESCAPE="HTML" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="copyrightdate" --> &copy;<!-- TMPL_VAR NAME="copyrightdate" --><!-- /TMPL_IF --></li>
-<!-- <img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._THUMBZZZ_PU_PU-5_.jpg" /> -->
+<tr><!-- TMPL_IF NAME="AmazonContent" --><td><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._AA75_PU_PU-5_.jpg" /></td><!-- /TMPL_IF --><td><!-- TMPL_VAR NAME="description" --></td><td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR NAME="author" ESCAPE="HTML" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="copyrightdate" --> &copy;<!-- TMPL_VAR NAME="copyrightdate" --><!-- /TMPL_IF --><!-- TMPL_IF name="publishercode" -->
+    <p><!-- TMPL_VAR NAME="publishercode" ESCAPE="HTML" --> 
+       <!-- TMPL_IF name="place" -->(<!-- TMPL_VAR NAME="place"-->)<!--/TMPL_IF--> <!-- TMPL_IF NAME="publicationyear" -->, <!-- TMPL_VAR NAME="publicationyear" --><!-- /TMPL_IF -->
+    	<!-- TMPL_IF NAME="pages" --><!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></p><!-- /TMPL_IF -->
+    <!-- /TMPL_IF --></td>
+</tr>
 
 	<!-- <!-- TMPL_LOOP NAME=items -->
 	<!-- TMPL_IF NAME="itype" --><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itype" -->.gif" title="<!-- TMPL_VAR NAME="itype" -->" alt="<!-- TMPL_VAR NAME="itype" -->" /><!-- /TMPL_IF -->
 	barcode:<!-- TMPL_VAR NAME="barcode" -->
 	<!-- /TMPL_LOOP --> -->
 <!-- /TMPL_LOOP -->
-</ul>
-<!-- TMPL_ELSE -->
-<p>No other editions found.</p>
-<!-- /TMPL_IF -->
-</div><!-- /TMPL_IF -->
+</table>
+</div><!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="AmazonContent" -->
 <!-- Amazon Reviews -->
 <div id="amazonreviews">

@@ -4,7 +4,7 @@
 //<![CDATA[
 // http://www.oreillynet.com/pub/a/javascript/2003/10/21/amazonhacks.html
 function verify_images() {
-    $("img").each(function(i){
+    $("#bookcoverimg img").each(function(i){
            if ((this.src.indexOf('images.amazon.com') >= 0) || (this.src.indexOf('g-images.amazon.com') >=0)) {
             w = this.width;
             h = this.height;
@@ -17,7 +17,18 @@ function verify_images() {
             }
         }
         });
+	$("#editions img").each(function(i){
+           if ((this.src.indexOf('images.amazon.com') >= 0) || (this.src.indexOf('g-images.amazon.com') >=0)) {
+            w = this.width;
+            h = this.height;
+            if ((w == 1) || (h == 1)) {
+				this.src = 'http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
+            } else if ((this.complete != null) && (!this.complete)) {
+				this.src = 'http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
+            }
         }
+        });
+}
      $(document).ready(function() {
         $('#bibliodetails > ul').tabs();
      });
@@ -127,7 +138,7 @@ function verify_images() {
 <ul>   
 <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#holdings">Holdings</a></li>
 <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#description">Descriptions</a></li>
-<!-- TMPL_IF NAME="FRBRizeEditions" --><li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#editions">Editions</a></li><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="FRBRizeEditions" --><!-- TMPL_IF NAME="XISBNS" --><li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#editions">Editions</a></li><!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="AmazonSimilarItems" --><li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#related">Related Titles</a></li><!-- /TMPL_IF -->
  </ul>
 
@@ -263,20 +274,25 @@ function verify_images() {
 <!-- /TMPL_IF -->
 </div>
 </div>
-<!-- TMPL_IF NAME="FRBRizeEditions" -->
+<!-- TMPL_IF NAME="FRBRizeEditions" --><!-- TMPL_IF NAME="XISBNS" -->
 <div id="editions"><h2>Editions</h2>
-<ul>
-<!-- TMPL_LOOP NAME="XISBNS" -->
-<li><!-- TMPL_UNLESS NAME="noItemTypeImages" --><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itemtype" -->.gif" title="<!-- TMPL_VAR NAME="itemtype" -->" /><!-- /TMPL_UNLESS -->
-<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> by <!-- TMPL_VAR NAME="author" --> &copy;<!-- TMPL_VAR NAME="copyrightdate" --></li>
-<img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._AA75_PU_PU-5_.jpg" />
+<table>
+<!-- TMPL_LOOP NAME="XISBNS" --><tr><!-- TMPL_IF NAME="AmazonContent" --><td><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._AA75_PU_PU-5_.jpg" /></a></td><!-- /TMPL_IF --><td><!-- TMPL_IF NAME="noItemTypeImages" --><!-- TMPL_VAR NAME="description" --><!-- TMPL_ELSE --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->"><!-- /TMPL_IF --></td><td>
+<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> by <!-- TMPL_VAR NAME="author" --> &copy;<!-- TMPL_VAR NAME="copyrightdate" -->
+  <!-- TMPL_IF name="publishercode" -->
+<!-- TMPL_VAR NAME="publishercode" --> <!-- TMPL_IF name="place" -->(<!-- TMPL_VAR NAME="place"-->)<!--/TMPL_IF--> <!-- TMPL_IF NAME="publicationyear" -->, <!-- TMPL_VAR NAME="publicationyear" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="editionstatement" --><!-- TMPL_VAR NAME="editionstatement" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="editionresponsability" --><!-- TMPL_VAR NAME="editionresponsability" --><!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->
+                <!-- TMPL_IF name="pages" --> <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" --> <!-- TMPL_IF NAME="illus" --><!-- TMPL_VAR NAME="illus" --><!-- /TMPL_IF -->
+                <!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" -->
+</td>
+
     <!-- TMPL_LOOP NAME=items -->
     <!-- <!-- TMPL_IF NAME="itype" --><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itype" -->.gif" title="<!-- TMPL_VAR NAME="itype" -->" /><!-- /TMPL_IF --> -->
     <!-- barcode:<!-- TMPL_VAR NAME="barcode" --> -->
     <!-- /TMPL_LOOP -->
 
 <!-- /TMPL_LOOP -->
-</ul></div>
+</table></div><!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="AmazonContent" --><!-- TMPL_IF NAME="AmazonSimilarItems" -->
