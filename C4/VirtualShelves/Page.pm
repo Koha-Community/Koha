@@ -26,6 +26,7 @@ use CGI;
 use C4::VirtualShelves qw/:DEFAULT GetShelvesSummary/;
 use C4::Biblio;
 use C4::Items;
+use C4::Koha;
 use C4::Auth qw/get_session/;
 use C4::Members;
 use C4::Output;
@@ -59,7 +60,9 @@ sub shelfpage ($$$$$) {
 	# getting the Shelves list
 	my $shelflist = GetShelves( $loggedinuser, 2 );
 	my $op = $query->param('op');
-
+    my $imgdir = getitemtypeimagesrc();
+    my $itemtypes = GetItemTypes();
+    
 # the format of this is unindented for ease of diff comparison to the old script
 # Note: do not mistake the assignment statements below for comparisons!
 
@@ -138,6 +141,10 @@ SWITCH: {
         #check that the user can view the shelf
         if ( ShelfPossibleAction( $loggedinuser, $shelfnumber, 'view' ) ) {
             my $items = GetShelfContents($shelfnumber);
+            for my $this_item (@$items) {
+                $this_item->{imageurl} = $imgdir."/".$itemtypes->{ $this_item->{itemtype}  }->{'imageurl'};
+                $this_item->{'description'} = $itemtypes->{ $this_item->{itemtype} }->{'description'};
+            }
 			$showadd = 1;
 			my $i = 0;
 			foreach (grep {$i++ % 2} @$items) {     # every other item

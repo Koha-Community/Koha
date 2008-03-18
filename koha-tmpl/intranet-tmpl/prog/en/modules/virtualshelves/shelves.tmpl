@@ -118,7 +118,7 @@ $(document).ready(function(){
     <table>
             <tr>
                 <th class="checkall">&nbsp;</th>
-                <th>Item Type</th>
+                <!-- TMPL_UNLESS NAME="item-level_itypes" --><th>Item Type</th><!-- /TMPL_UNLESS -->
                 <th>Title</th>
                 <th>Author</th>
                 <th>Date Added</th>
@@ -138,13 +138,9 @@ $(document).ready(function(){
 				<input type="checkbox" name="REM-<!-- TMPL_VAR NAME="biblionumber" -->" />
 				<!-- /TMPL_IF -->
 			</td>
-			<td>
-				<!-- TMPL_UNLESS NAME="noItemTypeImages" --><!-- TMPL_IF NAME="imageurl" -->
-				<img src="<!-- TMPL_VAR NAME="themelang" -->/../img/itemtypeimg/<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" />
-				<!-- TMPL_ELSE -->
-				<img src="<!-- TMPL_VAR NAME="themelang" -->/../img/itemtypeimg/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" />
-				<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="itemtype" --><!-- /TMPL_UNLESS -->
-			</td>
+			<!-- TMPL_UNLESS NAME="item-level_itypes" --><td>
+                <img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /><!-- TMPL_VAR NAME="description" -->
+			<!-- /TMPL_UNLESS --></td>
 			<td>
 			<!-- TMPL_IF name="BiblioDefaultViewmarc" -->
 				<a class="title" href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">

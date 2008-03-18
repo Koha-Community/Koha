@@ -87,7 +87,7 @@ $.tablesorter.addParser({
 		<span class="clearall"></span><!-- /TMPL_IF --><table id="listcontents">
         <thead><tr>
             <!-- TMPL_IF NAME="manageshelf" --><th>&nbsp;</th><!-- /TMPL_IF -->
-            <th>&nbsp;</th>
+            <!-- TMPL_UNLESS NAME="item-level_itypes" --><th>Item Type</th><!-- /TMPL_UNLESS -->
             <th>Title</th>
             <th>Author</th>
             <th>Copyright</th>
@@ -103,9 +103,10 @@ $.tablesorter.addParser({
                 <input type="checkbox" name="REM-<!-- TMPL_VAR NAME="biblionumber" -->" />
             </td>
                 <!-- /TMPL_IF -->
-            <td>
-                <img src="<!-- TMPL_VAR NAME="themelang" -->/../itemtypeimg/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="itemtype" -->" title="<!-- TMPL_VAR NAME="itemtype" -->" />
-            </td>
+            <!-- TMPL_UNLESS NAME="item-level_itypes" --><td>
+                <img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /><!-- TMPL_VAR NAME="description" -->
+            </td> <!-- /TMPL_UNLESS -->
+
             <td><!-- TMPL_IF NAME="BiblioDefaultViewmarc" --><a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" --></a><!-- TMPL_ELSE --><!-- TMPL_IF NAME="BiblioDefaultViewisbd" --><a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" --></a><!-- TMPL_ELSE --><a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" --></a><!-- /TMPL_IF --><!-- /TMPL_IF --></td>
             <td><!-- TMPL_VAR NAME="author" --></td>
             <td><!-- TMPL_VAR NAME="copyrightdate" --></td>
