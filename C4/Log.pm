@@ -188,21 +188,24 @@ sub GetLogs {
     my $action   = shift;
     my $object   = shift;
     my $info     = shift;
-    
+   
+    my $iso_datefrom = C4::Dates->new($datefrom,C4::Context->preference("dateformat"))->output('iso');
+    my $iso_dateto = C4::Dates->new($dateto,C4::Context->preference("dateformat"))->output('iso');
+
     my $dbh = C4::Context->dbh;
     my $query = "
         SELECT *
         FROM   action_logs
         WHERE 1
     ";
-    $query .= " AND DATE_FORMAT(timestamp, '%Y-%m-%d') >= \"".$datefrom."\" " if $datefrom;
-    $query .= " AND DATE_FORMAT(timestamp, '%Y-%m-%d') <= \"".$dateto."\" " if $dateto;
+    $query .= " AND DATE_FORMAT(timestamp, '%Y-%m-%d') >= \"".$iso_datefrom."\" " if $iso_datefrom;
+    $query .= " AND DATE_FORMAT(timestamp, '%Y-%m-%d') <= \"".$iso_dateto."\" " if $iso_dateto;
     $query .= " AND user LIKE \"%".$user."%\" "     if $user;
     $query .= " AND module LIKE \"%".$module."%\" " if $module;
     $query .= " AND action LIKE \"%".$action."%\" " if $action;
     $query .= " AND object LIKE \"%".$object."%\" " if $object;
     $query .= " AND info LIKE \"%".$info."%\" "     if $info;
-    
+   
     my $sth = $dbh->prepare($query);
     $sth->execute;
     
