@@ -41,6 +41,8 @@ my $author        = $input->param('author');
 my $isbn          = $input->param('isbn');
 my $issn          = $input->param('issn');
 my $lccn          = $input->param('lccn');
+my $subject= $input->param('subject');
+my $dewey = $input->param('dewey');
 my $random        = $input->param('random');
 my $op            = $input->param('op');
 my $noconnection;
@@ -104,29 +106,42 @@ else {
     my @oConnection;
     my @oResult;
     my $s = 0;
-
-    if ( $isbn || $issn ) {
-        $attr = '1=7';
-        $term = $isbn if ($isbn);
-        $term = $issn if ($issn);
+    my $query;
+    my $nterms;
+    if ($isbn || $issn) {
+        $term=$isbn if ($isbn);
+        $term=$issn if ($issn);
+        $query .= " \@attr 1=7 \"$term\" ";
+        $nterms++;
     }
-    elsif ($lccn) {
-        $attr = '1=9';
-        $term = $lccn;
-    }
-    elsif ($title) {
-        $attr = '1=4 ';
+    if ($title) {
         utf8::decode($title);
-        $term = $title;
+        $query .= " \@attr 1=4 \"$title\" ";
+        $nterms++;
     }
-    elsif ($author) {
-        $attr = '1=1003';
+    if ($author) {
         utf8::decode($author);
-        $term = $author;
+        $query .= " \@attr 1=1003 \"$author\" ";
+        $nterms++;
     }
+    if ($dewey) {
+        $query .= " \@attr 1=16 \"$dewey\" ";
+        $nterms++;
+    }
+    if ($subject) {
+        utf8::decode($subject);
+        $query .= " \@attr 1=21 \"$subject\" ";
+        $nterms++;
+    }
+	if ($lccn) {	
+        $query .= " \@attr 1=9 $lccn ";
+        $nterms++;
+    }
+for my $i (1..$nterms-1) {
+    $query = "\@and " . $query;
+}
+warn "query ".$query  if $DEBUG;
 
-    my $query = "\@attr $attr \"$term\"";
-    warn "query " . $query if $DEBUG;
     foreach my $servid (@id) {
         my $sth = $dbh->prepare("select * from z3950servers where id=?");
         $sth->execute($servid);
