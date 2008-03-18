@@ -2,6 +2,8 @@
 <title>Koha &rsaquo; Z39.50 Search Results</title>
 <!-- TMPL_INCLUDE NAME="greybox.inc" -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.pack.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pack.js"></script>
 <script type="text/javascript">
 //<![CDATA[
     function Import(GetThisOne,biblionumber) {
@@ -9,37 +11,60 @@
         window.close();
         return false;
     }
+$.tablesorter.addParser({
+    id: 'articles', 
+    is: function(s) {return false;  }, 
+    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
+    type: 'text' 
+});
+
+	$(document).ready(function(){
+    $("#CheckAll").click(function(){
+        $(".checkboxed").checkCheckboxes();
+        return false;
+    });
+    $("#CheckNone").click(function(){
+        $(".checkboxed").unCheckCheckboxes();
+        return false;
+    });
+	$("#resultst").tablesorter({
+		sortList: [[1,0]],
+		headers: { 0: {sorter:false}, 1: { sorter: 'articles' },5: { sorter: false },6: { sorter: false }}
+	}); 
+});
 //]]>
 </script>
-<style type="text/css">body {margin: 1em; }</style>
+   <style type="text/css">
+   #custom-doc { width:54.92em;*width:53.55em;min-width:720px; margin:auto; text-align:left; }
+   </style>
 </head>
 <body>
-<h2>Search Z39.50 Targets:</h2>
-<!-- TMPL_IF name="opsearch" -->
-<div class="formfields">
-    <form method="post" action="z3950_search.pl" name="f">
-    <input type="hidden" name="op" id="op" value="do_search" />
-    <!-- <fieldset class="rows"> 
-	<legend>Search these servers:</legend>
--->
-<table>
-<caption>Search points</caption>
-	<tr>
-		<td> <label for="title">Title</label> <input type="text" id="title"  name="title" value="<!-- TMPL_VAR NAME="title" -->" /></td>
-  		<td> <label for="author">Author</label> <input type="text" name="author" value="<!-- TMPL_VAR NAME="author" -->" /></td></tr>
-	<tr> 
-		<td> <label for=isbn"">ISBN/ISSN</label> <input type="text" name="isbn" value="<!-- TMPL_VAR NAME="isbn" -->" /></td>
-  			<!--  <label for="Keyword">Keyword</label> <input type="text" name="keyword" value="" /> -->
- 		<td>  <label for="subject">Subject Heading</label> <input type="text" name="subject heading" value="" /></td></tr>
-	<tr> 
-		<td> <label for="lccall">LC Call Number</label> <input type="text" name="lccall" value="" /></td>
-  		<td> <label for="dewey">Dewey</label> <input type="text" name="dewey" value="" /></td></tr>
-</table>
 
+<div id="custom-doc" class="yui-t7">
+      <div id="bd">
+	  <!-- TMPL_IF name="opsearch" -->
+<h2>Z39.50 Search Points</h2>
+    <form method="post" action="z3950_search.pl" name="f" class="checkboxed">
+    <input type="hidden" name="op" id="op" value="do_search" />
+	<div class="yui-g">
+    <div class="yui-u first">
+	    <fieldset class="rows"> 
+		 <ol><li><label for="title">Title: </label> <input type="text" id="title"  name="title" value="<!-- TMPL_VAR NAME="title" -->" /></li>
+		 <li><label for="isbn">ISBN/ISSN: </label> <input type="text" id="isbn" name="isbn" value="<!-- TMPL_VAR NAME="isbn" -->" /></li>
+		 <li><label for="lccall">LC Call Number: </label> <input type="text" id="lccall" name="lccall" value="" /></li></ol>
+  		</fieldset>
+	    </div>
+    <div class="yui-u">
+	<fieldset class="rows">		 <ol><li><label for="author">Author: </label> <input type="text" id="author" name="author" value="<!-- TMPL_VAR NAME="author" -->" /><!--  <label for="Keyword">Keyword</label> <input type="text" name="keyword" value="" /> --></li>
+ 		 <li> <label for="subject">Subject Heading: </label> <input type="text" id="subject" name="subject" value="" /></li>
+  		 <li><label for="dewey">Dewey: </label> <input type="text" id="dewey" name="dewey" value="" /></li></ol></fieldset>
     <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
     <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
+	    </div>
 </div>
-<h2>Search targets:</h2>
+<div class="yui-g">
+<h2>Search targets <span style="display: inline; font-size: 70%; padding-left: 1em;"><span class="checkall"><a id="CheckAll" href="#">Select All</a></span><span class="clearall"><a id="CheckNone" href="#">Clear All</a></span></span></h2>
+
     <!-- TMPL_LOOP name="serverloop" -->
         <p> 
             <!-- TMPL_IF name="checked" -->
@@ -53,20 +78,22 @@
     <!-- /TMPL_LOOP -->
     <input type="submit"  class="submit" value="Search" onclick="cursor :'wait'"/>
     </form>
+
+
 <!-- TMPL_ELSE -->
     <h2>Results</h2>
-    <table>
-    <tr>
+    <table id="resultst">
+<thead>    <tr>
         <th>Server</th>
         <th>Title</th>
         <th>Author</th>
         <th>ISBN</th>
         <th>LCCN</th>
-        <th>Preview<th>
+        <th colspan="2">Preview</th>
 		<th>&nbsp;</th>
-    </tr>
+    </tr></thead>
     <!-- TMPL_IF name="breeding_loop" -->
-    <!-- TMPL_LOOP name="breeding_loop" -->
+    <tbody><!-- TMPL_LOOP name="breeding_loop" -->
         <!-- TMPL_IF NAME="breedingid" -->
 		
         <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
@@ -75,17 +102,21 @@
             <td><!-- TMPL_VAR NAME="author" --></td>
             <td><!-- TMPL_VAR NAME="isbn" --></td>
             <td><!-- TMPL_VAR NAME="lccn" --></td>
-            <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=<!-- TMPL_VAR NAME="breedingid" -->" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&importid=<!-- TMPL_VAR NAME="breedingid" -->" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
+            <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=<!-- TMPL_VAR NAME="breedingid" -->" title="MARC" rel="gb_page_center[600,500]">MARC</a></td><td><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&importid=<!-- TMPL_VAR NAME="breedingid" -->" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
 			<td><a href="javascript:Import(<!-- TMPL_VAR NAME="breedingid" -->,<!-- TMPL_VAR NAME="biblionumber" -->)">Import</a></td> 
         </tr>
         <!-- /TMPL_IF -->
-    <!-- /TMPL_LOOP -->
+    <!-- /TMPL_LOOP --></tbody>
     <!-- TMPL_ELSE -->
         <tr><td colspan="6">Nothing found</td></tr>
     <!-- /TMPL_IF -->
 </table>
+
+
 <!-- /TMPL_IF -->
 
+	</div>
+</div>
 <!-- TMPL_IF name="numberpending" --><h3 align="center">Still <!-- TMPL_VAR NAME="numberpending" --> servers to search</h3><!-- /TMPL_IF -->
 
 </body>
