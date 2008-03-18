@@ -257,28 +257,40 @@ sub by_order {
     $$a{order} <=> $$b{order};
 }
 
+=head2 sub add_batch
+=over 4
+ add_batch($batch_type,\@batch_list);
+ if $batch_list is supplied,
+   create a new batch with those items.
+ else, return the next available batch_id.
+=return
+=cut
 sub add_batch {
-    my ( $batch_type ) = @_;
+    my ( $batch_type,$batch_list ) = @_;
     my $new_batch;
     my $dbh = C4::Context->dbh;
-    my $q =
-      "SELECT DISTINCT batch_id FROM $batch_type ORDER BY batch_id desc LIMIT 1";
+    my $q ="SELECT MAX(DISTINCT batch_id) FROM $batch_type";
     my $sth = $dbh->prepare($q);
     $sth->execute();
-    my $data = $sth->fetchrow_hashref;
+    my ($batch_id) = $sth->fetchrow_array;
     $sth->finish;
-
-    if ( !$data->{'batch_id'} ) {
-        $new_batch = 1;
-    }
-    else {
-        $new_batch = ( $data->{'batch_id'} + 1 );
-    }
-
-    return $new_batch;
+	if($batch_id) {
+		$batch_id++;
+	} else {
+		$batch_id = 1;
+	}
+	# TODO: let this block use $batch_type
+	if(ref($batch_list) && ($batch_type eq 'labels') ) {
+	 	my $sth = $dbh->prepare("INSERT INTO labels (`batch_id`,`itemnumber`) VALUES (?,?)"); 
+		for my $item (@$batch_list) {
+			$sth->execute($batch_id,$item);
+		}
+	}
+	return $batch_id;
 }
 
 #FIXME: Needs to be ported to receive $batch_type
+# ... this looks eerily like add_batch() ...
 sub get_highest_batch {
     my $new_batch;
     my $dbh = C4::Context->dbh;

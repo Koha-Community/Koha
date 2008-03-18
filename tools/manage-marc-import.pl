@@ -33,6 +33,7 @@ use C4::Biblio;
 use C4::ImportBatch;
 use C4::Matcher;
 use C4::BackgroundJob;
+use C4::Labels qw(add_batch);  
 
 my $script_name = "/cgi-bin/koha/tools/manage-marc-import.pl";
 
@@ -132,8 +133,8 @@ sub redo_matching {
 sub create_labelbatch_from_importbatch {
 	my ($batch_id) = @_;
 	my @items = GetItemNumbersFromImportBatch($batch_id);
-	warn join("/",@items);
-	return 0; # dummy return until C4::Labels::add_batch() takes an array
+	my $labelbatch = add_batch('labels',\@items);
+	return $labelbatch; 
 }
 
 sub import_batches_list {
