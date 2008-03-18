@@ -218,6 +218,7 @@ if (alreadyreserved > "0"){
         </tr>
     <!-- TMPL_LOOP Name="itemloop" -->
         <tr class="<!-- TMPL_VAR NAME="backgroundcolor" -->">
+            <!-- TMPL_IF NAME="item-level_itypes" -->
             <td>
             <!-- TMPL_IF NAME="available" -->
             <input type="checkbox" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
@@ -226,7 +227,6 @@ if (alreadyreserved > "0"){
             <!-- /TMPL_IF -->
             </td>
 
-            <!-- TMPL_IF NAME="item-level_itypes" -->
             <td>
             <img src="<!-- TMPL_VAR name="imageurl" -->" alt="<!-- TMPL_VAR NAME="itypename" -->" title="<!-- TMPL_VAR NAME="itypename" -->" />
             </td>
