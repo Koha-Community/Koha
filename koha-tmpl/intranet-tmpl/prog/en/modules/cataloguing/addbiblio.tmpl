@@ -44,9 +44,9 @@ function Dopop(link,i) {
  * this function open a popup to search on z3950 server.
  */
 function PopupZ3950() {
-    var strQuery = AreZ3950MandoriesOk();
-    if(strQuery){
-        window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->"+strQuery,"z3950search",'width=740,height=450,location=yes,toolbar=no,scrollbars=yes,resize=yes');
+    var strQuery = GetZ3950Terms();
+	if(strQuery){
+        window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"+strQuery,"z3950search",'width=740,height=450,location=yes,toolbar=no,scrollbars=yes,resize=yes');
     } else {
         var strAlert = _("To perform a z39.50 search, you must enter at least one of the following: \n\n ISBN\n ISSN\n Title\n Author\n LCCN\n");    
         alert(strAlert);
@@ -102,27 +102,20 @@ function AreMandatoriesNotOk(){
 /** 
  * check if z3950 mandatories are set or not
  */
-function AreZ3950MandoriesOk(){
+function GetZ3950Terms(){
+ var strQuery="&frameworkcode="+document.forms['f'].frameworkcode.value;
     var mandatories = new Array();
     var mandatories_label = new Array();
-	<!-- TMPL_LOOP NAME='BIG_LOOP' --><!-- TMPL_LOOP NAME='innerloop' --><!-- TMPL_LOOP NAME='subfield_loop'--><!-- TMPL_IF NAME='z3950_mandatory'-->mandatories.push("<!-- TMPL_VAR NAME='id' -->");
+    <!-- TMPL_LOOP NAME='BIG_LOOP' --><!-- TMPL_LOOP NAME='innerloop' --><!-- TMPL_LOOP NAME='subfield_loop'--><!-- TMPL_IF NAME='z3950_mandatory'-->mandatories.push("<!-- TMPL_VAR NAME='id' -->");
         mandatories_label.push("<!-- TMPL_VAR NAME='z3950_mandatory' -->");<!-- /TMPL_IF --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP -->
     
-    var error = 0;
-    var strQuery="";
     for(var i=0,len=mandatories.length; i<len ; i++){
         var field_value = document.getElementById(mandatories[i]).value;
-        if( ! field_value ){
-            error++;
-        } else {
+        if( field_value ){
             strQuery += "&"+mandatories_label[i]+"="+field_value;
         }
     }
-    if(error < 5){
-        return strQuery;
-    } else {
-        return false;
-    }
+    return strQuery;
 }
 
 function Changefwk(FwkList) {
