@@ -63,13 +63,13 @@ $.tablesorter.addParser({
 		<div class="dialog alert">A record matching barcode <b><!-- TMPL_VAR NAME="duplicatebiblio" --></b> has already been added.</div>
 		<!-- /TMPL_IF --> 
 		<!-- TMPL_IF NAME="delete_ok" -->
-			<div class="dialog message">Shelf <!-- TMPL_VAR NAME="delete_ok" --> Deleted.</div>
+			<div class="dialog message">List <!-- TMPL_VAR NAME="delete_ok" --> Deleted.</div>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="delete_fail" -->
-			<div class="dialog message">ERROR: Database error. Delete (shelf number <!-- TMPL_VAR NAME="delete_fail" -->) failed.</div>
+			<div class="dialog message">ERROR: Database error. Delete (list number <!-- TMPL_VAR NAME="delete_fail" -->) failed.</div>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="unrecognized" -->
-			<div class="dialog message">ERROR: Shelf number <!-- TMPL_VAR NAME="unrecognized" --> unrecognized.</div>
+			<div class="dialog message">ERROR: List number <!-- TMPL_VAR NAME="unrecognized" --> unrecognized.</div>
 		<!-- /TMPL_IF -->
 	</div>
 </div>
@@ -254,7 +254,7 @@ $.tablesorter.addParser({
 				<input type="hidden" name="owner" id="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->" /></li>
 </ol>
 		</fieldset>
-            <fieldset class="action"><input type="hidden" name="category" value="1" /><input type="submit" value="Add New Shelf" class="submit" /></fieldset>
+            <fieldset class="action"><input type="hidden" name="category" value="1" /><input type="submit" value="Add New List" class="submit" /></fieldset>
         </form>    </div>
 	<!-- /TMPL_IF --><!-- /showadd -->
     </div>
