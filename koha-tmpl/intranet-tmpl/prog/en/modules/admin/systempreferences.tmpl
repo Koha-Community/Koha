@@ -211,11 +211,16 @@
     <!-- TMPL_IF NAME="else" -->
     
     <div id="toolbar">
+	<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pack.js"></script>
     <script type="text/javascript">
     //<![CDATA[
     // prepare DOM for YUI Toolbar
      $(document).ready(function() {
         yuiToolbar();
+		$("#sysprefst").tablesorter({
+			sortList: [[0,0]],
+			headers: { 1: {sorter:false},2: { sorter: false },3: { sorter: false },4: { sorter: false }}
+		});
      });
     // YUI Toolbar Functions
     function yuiToolbar() {
@@ -229,15 +234,15 @@
     <h1>System preferences admin</h1>
     <h2>'<!-- TMPL_VAR name="tab" -->' preferences</h2>
     <!-- TMPL_VAR NAME="searchfield" -->
-    <table width="80%">
-    <tr>
+    <table width="80%" id="sysprefst">
+<thead>    <tr>
         <th>Preference</th>
         <th>Explanation</th>
         <th>Value</th>
         <th>Edit</th>
         <th>Delete</th>
-    </tr>
-    <!-- TMPL_LOOP NAME="loop" -->
+    </tr></thead>
+    <tbody><!-- TMPL_LOOP NAME="loop" -->
     <tr<!-- TMPL_IF NAME="toggle" --> class="highlight"<!-- /TMPL_IF -->>
 
         <td><strong><a href="<!-- TMPL_VAR NAME="edit" -->"><!-- TMPL_VAR NAME="variable" --></a></strong></td><td> <!-- TMPL_VAR NAME="explanation" --></td>
@@ -248,7 +253,7 @@
         <td><a href="<!-- TMPL_VAR NAME="edit" -->">Edit </a></td>
         <td><a href="<!-- TMPL_VAR NAME="delete" -->">Delete</a></td>
     </tr>
-    <!-- /TMPL_LOOP -->
+    <!-- /TMPL_LOOP --></tbody>
     </table>
     
     <!-- /TMPL_IF -->
