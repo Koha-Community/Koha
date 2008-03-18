@@ -57,6 +57,14 @@ if (!$dat) {
     print $query->redirect("/cgi-bin/koha/koha-tmpl/errors/404.pl");
     exit;
 }
+my $imgdir = getitemtypeimagesrc();
+my $itemtypes = GetItemTypes();
+# imageurl:
+my $itemtype = $dat->{'itemtype'};
+if ( $itemtype ) {
+    $dat->{'imageurl'}    = $imgdir."/".$itemtypes->{$itemtype}->{'imageurl'};
+    $dat->{'description'} = $itemtypes->{$itemtype}->{'description'};
+}
 
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
@@ -86,8 +94,6 @@ if (C4::Context->preference("RequestOnOpac")) {
 }
 
 my $norequests = 1;
-my $imgdir = getitemtypeimagesrc();
-my $itemtypes = GetItemTypes();
 foreach my $itm (@items) {
      $norequests = 0 && $norequests
        if ( (not $itm->{'wthdrawn'} )
@@ -98,13 +104,6 @@ foreach my $itm (@items) {
     $itm->{datedue} = format_date($itm->{datedue});
     $itm->{datelastseen} = format_date($itm->{datelastseen});
 
-    # imageurl:
-    my $itemtype = $itm->{'itemtype'};
-    if ( $itemtype ) {
-        $itm->{'imageurl'}    = $imgdir."/".$itemtypes->{$itemtype}->{'imageurl'};
-        $itm->{'description'} = $itemtypes->{$itemtype}->{'description'};
-    }
-	
     #get collection code description, too
     $itm->{'ccode'}  = GetAuthorisedValueDesc('','',   $itm->{'ccode'} ,'','','CCODE');
     $itm->{'location_description'} = GetAuthorisedValueDesc('','',   $itm->{'location'} ,'','','LOC');
