@@ -35,6 +35,7 @@ use C4::Context;
 use C4::Output;
 use C4::Auth;
 use C4::Biblio;
+use C4::ImportBatch;
 use XML::LibXSLT;
 use XML::LibXML;
 
@@ -42,6 +43,7 @@ my $userid = $ENV{'REMOTE_USER'};
 
 my $input       = new CGI;
 my $biblionumber = $input->param('id');
+my $importid		=	$input->param('importid');
 my $view		= $input->param('viewas');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -56,8 +58,17 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 $template->param( SCRIPT_NAME => $ENV{'SCRIPT_NAME'}, );
+my ($record, $xmlrecord);
+if($importid) {
+	my ($marc,$encoding) = GetImportRecordMarc($importid);
+		$record = MARC::Record->new_from_usmarc($marc) ;
+ 	if($view eq 'card') {
+		$xmlrecord = $record->as_xml();
+	} 
+}
+		
 if($view eq 'card') {
-my $xmlrecord = GetXmlBiblio($biblionumber);
+$xmlrecord = GetXmlBiblio($biblionumber) unless $xmlrecord;
 
 my $xslfile = C4::Context->config('intranetdir')."/koha-tmpl/intranet-tmpl/prog/en/xslt/compact.xsl";
 my $parser = XML::LibXML->new();
@@ -73,7 +84,7 @@ print $newxmlrecord;
 
 } else {
 
-my $record =GetMarcBiblio($biblionumber); 
+$record =GetMarcBiblio($biblionumber) unless $record; 
 
 my $formatted = $record->as_formatted;
 $template->param( MARC_FORMATTED => $formatted );

@@ -46,11 +46,8 @@ function Dopop(link,i) {
 function PopupZ3950() {
     var strQuery = GetZ3950Terms();
 	if(strQuery){
-        window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"+strQuery,"z3950search",'width=740,height=450,location=yes,toolbar=no,scrollbars=yes,resize=yes');
-    } else {
-        var strAlert = _("To perform a z39.50 search, you must enter at least one of the following: \n\n ISBN\n ISSN\n Title\n Author\n LCCN\n");    
-        alert(strAlert);
-    }
+        window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"+strQuery,"z3950search",'width=740,height=450,location=yes,toolbar=no,resize=yes');
+    } 
 }
 
 /**
@@ -434,7 +431,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 //]]>
 </script>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloguing</a>  &rsaquo; <!-- TMPL_IF NAME="biblionumber" -->Edit MARC Record Number <!-- TMPL_VAR name="biblionumber" --><!-- TMPL_ELSE -->Add MARC Record<!-- /TMPL_IF --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloguing</a>  &rsaquo; <!-- TMPL_IF NAME="biblionumber" -->Edit MARC Record Number <!-- TMPL_VAR name="biblionumber" --> ( <!-- TMPL_VAR NAME="title" --> )<!-- TMPL_ELSE -->Add MARC Record<!-- /TMPL_IF --></div>
 
 <div id="doc" class="yui-t7">
 
@@ -444,7 +441,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 
 
 
-<h1><!-- TMPL_IF NAME="biblionumber" -->Edit MARC Record Number <!-- TMPL_VAR name="biblionumber" --><!-- TMPL_ELSE -->Add MARC Record<!-- /TMPL_IF --></h1>
+<h1><!-- TMPL_IF NAME="biblionumber" -->Edit MARC Record Number <!-- TMPL_VAR name="biblionumber" --></h1><h2> ( <!-- TMPL_VAR NAME="title" --> )</h2><!-- TMPL_ELSE -->Add MARC Record</h1><!-- /TMPL_IF -->
 
 <!-- TMPL_UNLESS name="number" -->
     <!-- show duplicate warning on tab 0 only -->

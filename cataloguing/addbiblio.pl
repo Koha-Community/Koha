@@ -785,6 +785,7 @@ $is_a_modif = 0;
     
 if ($biblionumber) {
     $is_a_modif = 1;
+	$template->param( title => $record->title(), );
 
     # if it's a modif, retrieve bibli and biblioitem numbers for the future modification of old-DB.
     ( $biblionumbertagfield, $biblionumbertagsubfield ) =

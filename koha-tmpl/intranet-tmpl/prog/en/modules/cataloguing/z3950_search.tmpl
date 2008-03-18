@@ -1,5 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Z39.50 Search Results</title>
+<!-- TMPL_INCLUDE NAME="greybox.inc" -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 //<![CDATA[
@@ -61,7 +62,8 @@
         <th>Author</th>
         <th>ISBN</th>
         <th>LCCN</th>
-        <th>&nbsp;</th>
+        <th>Preview<th>
+		<th>&nbsp;</th>
     </tr>
     <!-- TMPL_IF name="breeding_loop" -->
     <!-- TMPL_LOOP name="breeding_loop" -->
@@ -73,7 +75,8 @@
             <td><!-- TMPL_VAR NAME="author" --></td>
             <td><!-- TMPL_VAR NAME="isbn" --></td>
             <td><!-- TMPL_VAR NAME="lccn" --></td>
-            <td><a href="javascript:Import(<!-- TMPL_VAR NAME="breedingid" -->,<!-- TMPL_VAR NAME="biblionumber" -->)">Import</a></td> 
+            <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=<!-- TMPL_VAR NAME="breedingid" -->" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&importid=<!-- TMPL_VAR NAME="breedingid" -->" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
+			<td><a href="javascript:Import(<!-- TMPL_VAR NAME="breedingid" -->,<!-- TMPL_VAR NAME="biblionumber" -->)">Import</a></td> 
         </tr>
         <!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
