@@ -489,6 +489,12 @@ for (my $i=0;$i<@servers;$i++) {
         my $page = $cgi->param('page') || 0;
         my @newresults = searchResults( $query_desc,$hits,$results_per_page,$offset,@{$results_hashref->{$server}->{"RECORDS"}});
         $total = $total + $results_hashref->{$server}->{"hits"};
+        ## If there's just one result, redirect to the detail page
+        if ($total == 1) {         
+            my $biblionumber=@newresults[0]->{biblionumber};
+            print $cgi->redirect("/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber");
+            exit;
+        }
         if ($hits) {
             $template->param(total => $hits);
             my $limit_cgi_not_availablity = $limit_cgi;
