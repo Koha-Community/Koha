@@ -2,6 +2,16 @@
 <title>Koha &rsaquo; Tools &rsaquo; Koha News</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pack.js"></script>
+<script type="text/javascript">//<![CDATA[
+$(document).ready(function() {
+	$("#newst").tablesorter({
+		sortList: [[2,0]],
+		headers: { 0: {sorter:false},6: { sorter: false },7: { sorter: false }}
+	}); 
+}); 
+//]]>
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -100,8 +110,8 @@ Edit News Item<!-- TMPL_ELSE -->Add News Item<!-- /TMPL_IF --><!-- TMPL_ELSE -->
             </form>
         <!-- TMPL_IF NAME="opac_news_count" -->
         <form name="del_form" method="post" action="/cgi-bin/koha/tools/koha-news.pl" onsubmit="return confirm('Are you sure you want to delete the selected news?')">
-                <table>
-                    <tr>
+                <table id="newst">
+                   <thead> <tr>
                         <th>&nbsp;</th>
                         <th>Language</th>
                         <th>Number</th>
@@ -110,8 +120,8 @@ Edit News Item<!-- TMPL_ELSE -->Add News Item<!-- /TMPL_IF --><!-- TMPL_ELSE -->
                         <th>Title</th>
                         <th>News</th>
                         <th>&nbsp;</th>
-                    </tr>
-                    <!-- TMPL_LOOP NAME="opac_news" -->
+                    </tr></thead>
+                    <tbody><!-- TMPL_LOOP NAME="opac_news" -->
                          <!-- TMPL_IF NAME="expired" -->
                             <tr class="expired">
                             <!-- TMPL_ELSE -->
@@ -130,7 +140,7 @@ Edit News Item<!-- TMPL_ELSE -->Add News Item<!-- /TMPL_IF --><!-- TMPL_ELSE -->
                             </td>
                             <td><a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;id=<!-- TMPL_VAR NAME="idnew" -->">Edit</a></td>
                         </tr>
-                    <!-- /TMPL_LOOP -->
+                    <!-- /TMPL_LOOP --></tbody>
                 </table>
                 <input type="hidden" name="op" value="del" />
                 <fieldset class="action"><input type="submit" class="button" value="Delete selected" /></fieldset>

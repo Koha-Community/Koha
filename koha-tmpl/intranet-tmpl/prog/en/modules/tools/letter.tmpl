@@ -1,9 +1,17 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Tools &rsaquo; Notices<!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF name="modify" --> &rsaquo; Modify notice<!-- TMPL_ELSE --> &rsaquo; Add notice<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="add_validate" --> &rsaquo; Notice added<!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirm" --> &rsaquo; Confirm Deletion<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- TMPL_IF NAME="add_form" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pack.js"></script>
 	<script type="text/javascript">
 	//<![CDATA[
+$(document).ready(function() {
+	$("#lettert").tablesorter({
+		widgets : ['zebra'],
+		sortList: [[0,0]],
+		headers: { 3: {sorter:false},4: { sorter: false }}
+	}); 
+}); 
+<!-- TMPL_IF NAME="add_form" -->
 	
 		function isNotNull(f,noalert) {
 			if (f.value.length ==0) {
@@ -90,9 +98,9 @@
 				}
 			}
 		}
+	<!-- /TMPL_IF -->
 		//]]>
 		</script>
-	<!-- /TMPL_IF -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -127,16 +135,16 @@
 		<!-- TMPL_IF NAME="search" -->
 		<p>You Searched for <b><!-- TMPL_VAR NAME="searchfield" --></b></p>
 		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="letter" --><table>
-		<tr>
+		<!-- TMPL_IF NAME="letter" --><table id="lettert">
+		<thead><tr>
 			<th>Module</th>
 			<th>Code</th>
 			<th>Name</th>
 			<th>&nbsp;</th>
 			<th>&nbsp;</th>
-		</tr>
-		<!-- TMPL_LOOP NAME="letter" -->
-			<tr bgcolor="<!-- TMPL_VAR NAME="toggle" -->" >
+		</tr></thead>
+		<tbody><!-- TMPL_LOOP NAME="letter" -->
+		<!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
 				<td><!-- TMPL_VAR NAME="module" --></td>
 				<td><!-- TMPL_VAR NAME="code" --></td>
 				<td><!-- TMPL_VAR NAME="name" --></td>
@@ -147,7 +155,7 @@
 					<a href="/cgi-bin/koha/tools/letter.pl?op=delete_confirm&amp;module=<!-- TMPL_VAR name="module"-->&amp;code=<!-- TMPL_VAR NAME="code" -->">Delete</a>
 				</td>
 			</tr>
-		<!-- /TMPL_LOOP -->
+		<!-- /TMPL_LOOP --></tbody>
 		</table>
 		<!-- /TMPL_IF -->
 

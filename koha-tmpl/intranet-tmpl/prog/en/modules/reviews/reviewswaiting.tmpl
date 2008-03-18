@@ -1,6 +1,22 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Tools &rsaquo; Comments waiting for Approval</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pack.js"></script>
+<script type="text/javascript">//<![CDATA[
+$(document).ready(function() {
+$.tablesorter.addParser({
+    id: 'articles', 
+    is: function(s) {return false;  }, 
+    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
+    type: 'text' 
+});
+	$("#commentst").tablesorter({
+		sortList: [[0,0]],
+		headers: { 1: {sorter: 'articles'},2: { sorter: false },3: { sorter: false }}
+	}); 
+}); 
+//]]>
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -18,13 +34,13 @@
 <h1>Comments</h1>
 
 <!-- TMPL_IF NAME="reviews" -->
-<table>
-    <tr>
+<table id="commentst">
+    <thead><tr>
         <th>
-            Authors
+            Commenter
         </th>
         <th>
-            On biblio
+            On Title
         </th>
         <th>
             Comment
@@ -32,15 +48,14 @@
         <th>
             &nbsp;
         </th>
-    </tr>
-    <!-- TMPL_LOOP NAME="reviews" -->
+    </tr></thead>
+    <tbody><!-- TMPL_LOOP NAME="reviews" -->
     <tr>
         <td>
-            <!-- TMPL_VAR NAME="surname" -->
-            <!-- TMPL_VAR NAME="firstname" -->
+            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --></a>
         </td>
         <td>
-            <!-- TMPL_VAR NAME="bibliotitle" -->
+            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="bibliotitle" --></a>
         </td>
         <td>
             <!-- TMPL_VAR NAME="review" -->
@@ -50,7 +65,7 @@
             <a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=delete&amp;reviewid=<!-- TMPL_VAR NAME="reviewid" -->">Delete</a>
         </td>
     </tr>
-    <!-- /TMPL_LOOP -->
+    <!-- /TMPL_LOOP --></tbody>
 </table>
 <!-- TMPL_ELSE -->
 <b>No comments to moderate</b>
