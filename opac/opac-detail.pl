@@ -50,7 +50,16 @@ my $biblionumber = $query->param('biblionumber') || $query->param('bib');
 $template->param( biblionumber => $biblionumber );
 
 # change back when ive fixed request.pl
-my @items = &GetItemsInfo( $biblionumber, 'opac' );
+my @all_items = &GetItemsInfo( $biblionumber, 'opac' );
+my @items;
+@items = @all_items unless C4::Context->preference('hidelostitems');
+
+if (C4::Context->preference('hidelostitems')) {
+    # Hide host items
+    for my $itm (@all_items) {
+        push @items, $itm unless $itm->{itemlost};
+    }
+}
 my $dat = &GetBiblioData($biblionumber);
 
 if (!$dat) {

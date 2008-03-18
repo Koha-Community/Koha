@@ -319,6 +319,7 @@ sub get_template_and_user {
             reviewson              => C4::Context->preference("reviewson"),
             hide_marc              => C4::Context->preference("hide_marc"),
             patronimages           => C4::Context->preference("patronimages"),
+            hidelostitems          => C4::Context->preference("hidelostitems"),
             mylibraryfirst   => C4::Context->preference("SearchMyLibraryFirst"),
             "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
             OPACFRBRizeEditions => C4::Context->preference("OPACFRBRizeEditions"),
