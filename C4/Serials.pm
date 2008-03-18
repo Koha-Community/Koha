@@ -1268,8 +1268,7 @@ sub ModSubscription {
     my $rows=$sth->rows;
     $sth->finish;
     
-    &logaction(C4::Context->userenv->{'number'},"SERIAL","MODIFY",$subscriptionid,"") 
-        if C4::Context->preference("SubscriptionLog");
+    logaction("SERIAL", "MODIFY", $subscriptionid, "") if C4::Context->preference("SubscriptionLog");
     return $rows;
 }
 
@@ -1382,8 +1381,7 @@ sub NewSubscription {
         format_date_in_iso($startdate)
     );
     
-    &logaction(C4::Context->userenv->{'number'},"SERIAL","ADD",$subscriptionid,"") 
-        if C4::Context->preference("SubscriptionLog");
+    logaction("SERIAL", "ADD", $subscriptionid, "") if C4::Context->preference("SubscriptionLog");
     
 #set serial flag on biblio if not already set.
     my ($null, ($bib)) = GetBiblio($biblionumber);
@@ -1444,8 +1442,7 @@ sub ReNewSubscription {
     $sth->execute( format_date_in_iso($startdate),
         $numberlength, $weeklength, $monthlength, $subscriptionid );
         
-    &logaction(C4::Context->userenv->{'number'},"SERIAL","RENEW",$subscriptionid,"") 
-        if C4::Context->preference("SubscriptionLog");
+    logaction("SERIAL", "RENEW", $subscriptionid, "") if C4::Context->preference("SubscriptionLog");
 }
 
 =head2 NewIssue
@@ -1797,8 +1794,7 @@ sub DelSubscription {
         "DELETE FROM subscriptionhistory WHERE subscriptionid=$subscriptionid");
     $dbh->do("DELETE FROM serial WHERE subscriptionid=$subscriptionid");
     
-    &logaction(C4::Context->userenv->{'number'},"SERIAL","DELETE",$subscriptionid,"") 
-        if C4::Context->preference("SubscriptionLog");
+    logaction("SERIAL", "DELETE", $subscriptionid, "") if C4::Context->preference("SubscriptionLog");
 }
 
 =head2 DelIssue

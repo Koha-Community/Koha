@@ -354,7 +354,6 @@ sub SendAlerts {
         }
         if ( C4::Context->preference("LetterLog") ) {
             logaction(
-                $userenv->{number},
                 "ACQUISITION",
                 "Send Acquisition claim letter",
                 "",
@@ -419,8 +418,7 @@ sub SendAlerts {
                 Message => "" . $innerletter->{content},
             );
             sendmail(%mail);
-            &logaction(
-                C4::Context->userenv->{'number'},
+            logaction(
                 "ACQUISITION",
                 "CLAIM ISSUE",
                 undef,

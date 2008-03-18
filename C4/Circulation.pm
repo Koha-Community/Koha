@@ -1026,7 +1026,7 @@ sub AddIssue {
         );
     }
     
-    &logaction(C4::Context->userenv->{'number'},"CIRCULATION","ISSUE",$borrower->{'borrowernumber'},$biblio->{'biblionumber'}) 
+    logaction("CIRCULATION", "ISSUE", $borrower->{'borrowernumber'}, $biblio->{'biblionumber'}) 
         if C4::Context->preference("IssueLog");
     return ($datedue);
   }
@@ -1275,7 +1275,7 @@ sub AddReturn {
             $borrower->{'borrowernumber'}
         );
         
-        &logaction(C4::Context->userenv->{'number'},"CIRCULATION","RETURN",$iteminformation->{borrowernumber},$iteminformation->{'biblionumber'}) 
+        logaction("CIRCULATION", "RETURN", $iteminformation->{borrowernumber}, $iteminformation->{'biblionumber'}) 
             if C4::Context->preference("ReturnLog");
         
         #adding message if holdingbranch is non equal a userenv branch to return the document to homebranch

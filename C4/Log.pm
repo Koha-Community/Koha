@@ -52,16 +52,25 @@ The functions in this module perform various functions in order to log all the o
 
 =item logaction
 
-  &logaction($usernumber, $modulename, $actionname, $objectnumber, $infos);
+  &logaction($modulename, $actionname, $objectnumber, $infos);
 
-Adds a record into action_logs table to report the different changes upon the database
+Adds a record into action_logs table to report the different changes upon the database.
+Each log entry includes the number of the user currently logged in.  For batch
+jobs, which operate without authenticating a user and setting up a session, the user
+number is set to 0, which is the same as the superlibrarian's number.
 
 =cut
 
 #'
 sub logaction {
-  my ($usernumber,$modulename, $actionname, $objectnumber, $infos)=@_;
-    $usernumber='' unless $usernumber;
+    my ($modulename, $actionname, $objectnumber, $infos)=@_;
+
+    # Get ID of logged in user.  if called from a batch job,
+    # no user session exists and C4::Context->userenv() returns
+    # the scalar '0'.
+    my $userenv = C4::Context->userenv();
+    my $usernumber = (ref($userenv) eq 'HASH') ? $userenv->{'number'} : 0;
+
     my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare("Insert into action_logs (timestamp,user,module,action,object,info) values (now(),?,?,?,?,?)");
     $sth->execute($usernumber,$modulename,$actionname,$objectnumber,$infos);

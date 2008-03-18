@@ -633,7 +633,7 @@ sub ModMember {
         # is adult check guarantees;
         UpdateGuarantees(%data);
     }
-    &logaction(C4::Context->userenv->{'number'},"MEMBERS","MODIFY",$data{'borrowernumber'},"$query (executed w/ arg: $data{'borrowernumber'})") 
+    logaction("MEMBERS", "MODIFY", $data{'borrowernumber'}, "$query (executed w/ arg: $data{'borrowernumber'})") 
         if C4::Context->preference("BorrowersLog");
 }
 
@@ -729,8 +729,7 @@ sub AddMember {
     $data{'borrowernumber'} = $dbh->{'mysql_insertid'};     # unneeded w/ autoincrement ?  
     # mysql_insertid is probably bad.  not necessarily accurate and mysql-specific at best.
     
-    &logaction(C4::Context->userenv->{'number'},"MEMBERS","CREATE",$data{'borrowernumber'},"") 
-        if C4::Context->preference("BorrowersLog");
+    logaction("MEMBERS", "CREATE", $data{'borrowernumber'}, "") if C4::Context->preference("BorrowersLog");
     
     # check for enrollment fee & add it if needed
     $sth = $dbh->prepare("SELECT enrolmentfee FROM categories WHERE categorycode=?");
@@ -783,8 +782,7 @@ sub changepassword {
         return 1;
     }
     
-    &logaction(C4::Context->userenv->{'number'},"MEMBERS","CHANGE PASS",$member,"") 
-        if C4::Context->preference("BorrowersLog");
+    logaction("MEMBERS", "CHANGE PASS", $member, "") if C4::Context->preference("BorrowersLog");
 }
 
 
@@ -1604,8 +1602,7 @@ sub DelMember {
     $sth = $dbh->prepare($query);
     $sth->execute($borrowernumber);
     $sth->finish;
-    &logaction(C4::Context->userenv->{'number'},"MEMBERS","DELETE",$borrowernumber,"") 
-        if C4::Context->preference("BorrowersLog");
+    logaction("MEMBERS", "DELETE", $borrowernumber, "") if C4::Context->preference("BorrowersLog");
     return $sth->rows;
 }
 

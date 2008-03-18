@@ -507,7 +507,6 @@ sub UpdateFine {
     }
     # logging action
     &logaction(
-        C4::Context->userenv->{'number'},
         "FINES",
         $type,
         $borrowernumber,

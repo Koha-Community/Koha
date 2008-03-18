@@ -231,8 +231,7 @@ sub AddItem {
     my $new_item_marc = _marc_from_item_hash($item, $frameworkcode, $unlinked_item_subfields);
     _add_item_field_to_biblio($new_item_marc, $item->{'biblionumber'}, $frameworkcode );
    
-    logaction(C4::Context->userenv->{'number'},"CATALOGUING","ADD",$itemnumber,"item") 
-        if C4::Context->preference("CataloguingLog");
+    logaction("CATALOGUING", "ADD", $itemnumber, "item") if C4::Context->preference("CataloguingLog");
     
     return ($item->{biblionumber}, $item->{biblioitemnumber}, $itemnumber);
 }
@@ -327,8 +326,7 @@ sub AddItemBatchFromMarc {
         push @itemnumbers, $itemnumber; # FIXME not checking error
         $item->{'itemnumber'} = $itemnumber;
 
-        &logaction(C4::Context->userenv->{'number'},"CATALOGUING","ADD",$itemnumber,"item")
-        if C4::Context->preference("CataloguingLog"); 
+        logaction("CATALOGUING", "ADD", $itemnumber, "item") if C4::Context->preference("CataloguingLog"); 
 
         my $new_item_marc = _marc_from_item_hash($item, $frameworkcode, $unlinked_item_subfields);
         $item_field->replace_with($new_item_marc->field($itemtag));
@@ -444,10 +442,8 @@ sub ModItem {
         or die "FAILED _marc_from_item_hash($whole_item, $frameworkcode)";
     
     _replace_item_field_in_biblio($new_item_marc, $biblionumber, $itemnumber, $frameworkcode);
-	(C4::Context->userenv eq '0') and die "userenv is '0', not hashref";         # logaction line would crash anyway
 	($new_item_marc       eq '0') and die "$new_item_marc is '0', not hashref";  # logaction line would crash anyway
-    logaction(C4::Context->userenv->{'number'},"CATALOGUING","MODIFY",$itemnumber,$new_item_marc->as_formatted)
-        if C4::Context->preference("CataloguingLog");
+    logaction("CATALOGUING", "MODIFY", $itemnumber, $new_item_marc->as_formatted) if C4::Context->preference("CataloguingLog");
 }
 
 =head2 ModItemTransfer
@@ -537,8 +533,7 @@ sub DelItem {
         }
     }
     &ModBiblioMarc( $record, $biblionumber, $frameworkcode );
-    &logaction(C4::Context->userenv->{'number'},"CATALOGUING","DELETE",$itemnumber,"item") 
-        if C4::Context->preference("CataloguingLog");
+    logaction("CATALOGUING", "DELETE", $itemnumber, "item") if C4::Context->preference("CataloguingLog");
 }
 
 =head2 CheckItemPreSave
