@@ -22,5 +22,5 @@ my $query    = new CGI;
 my $language = $query->param('language');
 my $url      = $query->referer();
 
-warn "Language : $query // $language // $url";
+#warn "Language : $query // $language // $url";
 setlanguagecookie( $query, $language, $url );

@@ -24,6 +24,7 @@
             </ul></div></div></li>
 
             <!-- TMPL_ELSE -->
+            <!-- TMPL_UNLESS NAME="one_language_enabled" -->
 	    	<!-- TMPL_IF NAME="group_enabled" -->
                 <!-- TMPL_IF NAME="current" -->
                     <li><!-- TMPL_IF NAME="native_description" --><!-- TMPL_VAR NAME="native_description" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="rfc4646_subtag" --><!-- /TMPL_IF --></li>
@@ -32,6 +33,7 @@
                 <!-- /TMPL_IF -->
 		<!-- /TMPL_IF -->
             <!-- /TMPL_IF -->
+            <!-- /TMPL_UNLESS -->
             <!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
         </ul>

@@ -254,6 +254,8 @@ sub _build_languages_arrayref {
         my @translated_languages = @$translated_languages;
         my @languages_loop; # the final reference to an array of hashrefs
         my @enabled_languages = @$enabled_languages;
+        # how many languages are enabled, if one, take note, some contexts won't need to display it
+        my $one_language_enabled = 1 unless @enabled_languages > 1;
         my %seen_languages; # the language tags we've seen
         my %found_languages;
         my $language_groups;
@@ -298,6 +300,7 @@ sub _build_languages_arrayref {
                             plural => $track_language_groups->{$key} >1 ? 1 : 0,
                             current => $current_language_regex->{language} eq $key ? 1 : 0,
                             group_enabled => $enabled,
+                            one_language_enabled => $one_language_enabled,
                            };
         }
         return \@languages_loop;
