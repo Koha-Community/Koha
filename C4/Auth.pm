@@ -710,6 +710,11 @@ sub checkauth {
         opaccolorstylesheet  => C4::Context->preference("opaccolorstylesheet"),
         opaclanguagesdisplay => C4::Context->preference("opaclanguagesdisplay"),
         opacuserjs           => C4::Context->preference("opacuserjs"),
+        opacbookbag          => "" . C4::Context->preference("opacbookbag"),
+        OpacCloud            => C4::Context->preference("OpacCloud"),
+        OpacTopissue         => C4::Context->preference("OpacTopissue"),
+        OpacAuthorities      => C4::Context->preference("OpacAuthorities"),
+        OpacBrowser          => C4::Context->preference("OpacBrowser"),
         intranetcolorstylesheet =>
 								C4::Context->preference("intranetcolorstylesheet"),
         intranetstylesheet => C4::Context->preference("intranetstylesheet"),
