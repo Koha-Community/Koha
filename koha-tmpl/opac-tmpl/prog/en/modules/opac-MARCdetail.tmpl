@@ -21,6 +21,7 @@
 
     <div class="yui-g" style="margin-top : 1em;">
 	<div id="views"><h1 style="display: inline;">MARC View</h1> <span class="views"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Normal View</a> <span id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">MARC View</span> <!-- TMPL_IF NAME="ISBD" --><a id="ISBDview"  href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">ISBD View</a><!-- /TMPL_IF --></span></div>
+    <h1>MARC biblio : <!-- TMPL_VAR NAME="biblionumber" -->  ( <!-- TMPL_VAR NAME="bibliotitle" --> )</h1>
 	<table id="marc">
         <!-- TMPL_LOOP name="0XX" -->
         <tr><th colspan="2"><!-- TMPL_VAR name="tag" --></th></tr>

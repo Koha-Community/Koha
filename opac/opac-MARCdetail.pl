@@ -57,7 +57,7 @@ my $dbh = C4::Context->dbh;
 my $biblionumber = $query->param('biblionumber');
 my $itemtype     = &GetFrameworkCode($biblionumber);
 my $tagslib      = &GetMarcStructure( 0, $itemtype );
-
+my $biblio = GetBiblioData($biblionumber);
 my $record = GetMarcBiblio($biblionumber);
 
 # open template
@@ -70,6 +70,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
+
+$template->param(
+    bibliotitle => $biblio->{title},
+);
+
 # adding the $RequestOnOpac param
 my $RequestOnOpac;
 if (C4::Context->preference("RequestOnOpac")) {
