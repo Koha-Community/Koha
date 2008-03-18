@@ -1909,7 +1909,7 @@ CREATE TABLE `virtualshelfcontents` (
   `shelfnumber` int(11) NOT NULL default 0,
   `biblionumber` int(11) NOT NULL default 0,
   `flags` int(11) default NULL,
-  `dateadded` timestamp NULL default NULL,
+  `dateadded` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   KEY `shelfnumber` (`shelfnumber`),
   KEY `biblionumber` (`biblionumber`),
   CONSTRAINT `virtualshelfcontents_ibfk_1` FOREIGN KEY (`shelfnumber`) REFERENCES `virtualshelves` (`shelfnumber`) ON DELETE CASCADE ON UPDATE CASCADE,

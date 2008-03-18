@@ -1214,6 +1214,15 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.066";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE `virtualshelfcontents` MODIFY `dateadded` timestamp NOT NULL
+DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP;
+");
+    print "Upgrade to $DBversion done (fix for bug 1873: virtualshelfcontents dateadded column empty. ) ";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
