@@ -324,6 +324,7 @@ sub get_template_and_user {
             "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
             OPACFRBRizeEditions => C4::Context->preference("OPACFRBRizeEditions"),
             'item-level_itypes' => C4::Context->preference('item-level_itypes'),
+            'Version' => C4::Context->preference('Version'),
 			yuipath => C4::Context->preference("yuipath"),
         );
     }
