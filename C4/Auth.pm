@@ -297,6 +297,7 @@ sub get_template_and_user {
             opaclanguagesdisplay   => "". C4::Context->preference("opaclanguagesdisplay"),
             opacuserlogin          => "" . C4::Context->preference("opacuserlogin"),
 			OpacMainUserBlock =>  "" . C4::Context->preference("OpacMainUserBlock"),
+			OPACURLOpenInNewWindow =>  "" . C4::Context->preference("OPACURLOpenInNewWindow"),
             opacbookbag            => "" . C4::Context->preference("opacbookbag"),
             TemplateEncoding       => "". C4::Context->preference("TemplateEncoding"),
             AmazonContent          => "" . C4::Context->preference("AmazonContent"),
