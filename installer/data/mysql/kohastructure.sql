@@ -1456,7 +1456,7 @@ CREATE TABLE `overduerules` (
 --
 
 DROP TABLE IF EXISTS `patroncards`;
-Create Table: CREATE TABLE `patroncards` (
+CREATE TABLE `patroncards` (
   `cardid` int(11) NOT NULL auto_increment,
   `batch_id` varchar(10) NOT NULL default '1',
   `borrowernumber` int(11) NOT NULL,
@@ -1464,7 +1464,7 @@ Create Table: CREATE TABLE `patroncards` (
    PRIMARY KEY  (`cardid`),
    KEY `patroncards_ibfk_1` (`borrowernumber`),
    CONSTRAINT `patroncards_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `patronimage`
