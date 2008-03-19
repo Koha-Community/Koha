@@ -27,6 +27,7 @@ use C4::Dates;
 use C4::Output;
 use C4::Log;
 use C4::Items;
+use Data::Dumper;
 
 use vars qw($debug);
 
@@ -41,6 +42,7 @@ plugin that shows a stats on borrowers
 =cut
 
 my $input    = new CGI;
+
 $debug or $debug = $input->param('debug') || 0;
 my $do_it    = $input->param('do_it');
 my $module   = $input->param("module");
@@ -67,29 +69,27 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-warn "Source of call was $src";
-
 if ($src eq 'circ') {   # if we were called from circulation, use the circulation menu and get data to populate it -fbcit
     use C4::Members;
     my $borrowernumber = $object;
     my $data = GetMember($borrowernumber,'borrowernumber');
     my ($picture, $dberror) = GetPatronImage($data->{'cardnumber'});
     $template->param( picture => 1 ) if $picture;
-    $template->param(   menu => 1,
-                        title => $data->{'title'},
-                        initials => $data->{'initials'},
-                        surname => $data->{'surname'},
-                        borrowernumber => $borrowernumber,
-                        firstname => $data->{'firstname'},
-                        cardnumber => $data->{'cardnumber'},
-                        categorycode => $data->{'categorycode'},
-                        address => $data->{'address'},
-                        address2 => $data->{'address2'},
-                        city => $data->{'city'},
-                        phone => $data->{'phone'},
-                        phonepro => $data->{'phonepro'},
-                        email => $data->{'email'},
-                        branchcode => $data->{'branchcode'},
+    $template->param(   menu            => 1,
+                        title           => $data->{'title'},
+                        initials        => $data->{'initials'},
+                        surname         => $data->{'surname'},
+                        borrowernumber  => $borrowernumber,
+                        firstname       => $data->{'firstname'},
+                        cardnumber      => $data->{'cardnumber'},
+                        categorycode    => $data->{'categorycode'},
+                        address         => $data->{'address'},
+                        address2        => $data->{'address2'},
+                        city            => $data->{'city'},
+                        phone           => $data->{'phone'},
+                        phonepro        => $data->{'phonepro'},
+                        email           => $data->{'email'},
+                        branchcode      => $data->{'branchcode'},
     );
 }
 
@@ -103,6 +103,7 @@ if ($do_it) {
 
     my $results = GetLogs($datefrom,$dateto,$user,$module,$action,$object,$info);
     my $total = scalar @$results;
+    warn "Total records retrieved = $total";
     foreach my $result (@$results){
 	if ($result->{'info'} eq 'item'){
 	    # get item information so we can create a working link
@@ -127,6 +128,7 @@ if ($do_it) {
             object   => $object,
             action   => $action,
             info     => $info,
+            src      => $src,
         );
         output_html_with_http_headers $input, $cookie, $template->output;
     } else {

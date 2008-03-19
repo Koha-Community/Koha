@@ -19,6 +19,11 @@
 
 <form method="post" action="/cgi-bin/koha/tools/viewlog.pl">
 
+	    <!-- TMPL_IF NAME="do_it" --><input type="hidden" name="do_it" value="<!--TMPL_VAR NAME="do_it" -->" /><!-- /TMPL_IF -->
+	    <input type="hidden" name="module" value="<!--TMPL_VAR NAME="module" -->" />
+	    <input type="hidden" name="action" value="<!--TMPL_VAR NAME="action" -->" />
+	    <input type="hidden" name="object" value="<!--TMPL_VAR NAME="object" -->" />
+	    <input type="hidden" name="src" value="<!--TMPL_VAR NAME="src" -->" />
 <fieldset>
     <legend>Additional parameters</legend>
         <p>
@@ -39,7 +44,7 @@
 				//	}
 				// 	if (dateFrom > today) { 
 				//		alert("The starting date cannot be in the future.");
-				//		document.getElementById(from_id).select();
+			    //		document.getElementById(from_id).select();
 				//		return false;
 				//	}
 				// }
@@ -100,7 +105,7 @@
 	</tr>
 	<tr>
 	    <td>
-            <input type="submit" value="filter" />
+            <input type="submit" value="Apply Filter" />
             <input type="hidden" name="do_it" value="1" />
 	    </td>
 	    <td>
