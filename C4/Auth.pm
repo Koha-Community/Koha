@@ -419,8 +419,7 @@ sub _version_check ($$) {
     $kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
     $debug and print STDERR "kohaversion : $kohaversion\n";
     if ($version < $kohaversion){
-        my $warning = "Database update needed, redirecting to %s. Database is $version and Koha is "
-            . C4::Context->config("kohaversion");
+        my $warning = "Database update needed, redirecting to %s. Database is $version and Koha is $kohaversion";
         if ($type ne 'opac'){
             warn sprintf($warning, 'Installer');
             print $query->redirect("/cgi-bin/koha/installer/install.pl?step=3");
