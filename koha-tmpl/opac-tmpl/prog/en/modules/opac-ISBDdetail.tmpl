@@ -28,22 +28,22 @@
 
 <!-- TMPL_UNLESS NAME="norequests" -->
     <!-- TMPL_UNLESS name="bi_notforloan" -->
-        <!-- TMPL_IF NAME="RequestOnOpac" -->
+        <!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="RequestOnOpac" -->
             <li><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
             Place Hold
             </a></li>
-        <!-- /TMPL_IF -->
+        <!-- /TMPL_IF --><!-- /TMPL_IF -->
     <!-- /TMPL_UNLESS -->
 <!-- /TMPL_UNLESS -->
         <li><a class="print" href="/cgi-bin/koha/opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
             Print
         </a></li>
 <!-- TMPL_IF name="virtualshelves" -->
-    <!-- TMPL_IF NAME="loggedinusername" -->
+   <!-- TMPL_IF NAME="opacuserlogin" --> <!-- TMPL_IF NAME="loggedinusername" -->
         <li><a class="addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
             Save to Your Lists
         </a></li>
-    <!-- /TMPL_IF -->
+    <!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="opacbookbag" --><li><a class="addtocart" href="#" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
             Add to Your Cart
