@@ -220,20 +220,22 @@ sub GetPendingOrders {
             AND (to_days(now())-to_days(closedate) < 180 OR closedate IS NULL)
     ";
     ## FIXME  Why 180 days ???
+    my @query_params = ( $supplierid );
     if ( C4::Context->preference("IndependantBranches") ) {
         my $userenv = C4::Context->userenv;
         if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
-            $strsth .=
-                " and (borrowers.branchcode = '"
-              . $userenv->{branch}
-              . "' or borrowers.branchcode ='')";
+            warn 'in branch';
+            $strsth .= " and (borrowers.branchcode = ?
+                          or borrowers.branchcode  = '')";
+            push @query_params, $userenv->{branch};
+ 
         }
     }
     $strsth .= " group by aqbasket.basketno" if $grouped;
     $strsth .= " order by aqbasket.basketno";
 
     my $sth = $dbh->prepare($strsth);
-    $sth->execute($supplierid);
+    $sth->execute( @query_params );
     my $results = $sth->fetchall_arrayref({});
     $sth->finish;
     return $results;
