@@ -363,28 +363,28 @@ sub calculate {
                     (issuingrules.branchcode=old_issues.branchcode
                     AND  issuingrules.itemtype=biblioitems.itemtype 
                     AND  issuingrules.categorycode=borrowers.categorycode) 
-                WHERE returndate is not null";
+                WHERE 1";
     
     if (($line=~/timestamp/) or ($line=~/returndate/)){
         if ($linefilter[1] and ($linefilter[0])){
-            $strsth .= " and $line between '$linefilter[0]' and '$linefilter[1]' " ;
+            $strsth .= " AND $line BETWEEN '$linefilter[0]' AND '$linefilter[1]' " ;
         } elsif ($linefilter[1]) {
-                $strsth .= " and $line < \'$linefilter[1]\' " ;
+                $strsth .= " AND $line < \'$linefilter[1]\' " ;
         } elsif ($linefilter[0]) {
-            $strsth .= " and $line > \'$linefilter[0]\' " ;
+            $strsth .= " AND $line > \'$linefilter[0]\' " ;
         }
         if ($linefilter[2]){
-            $strsth .= " and dayname($line) = '$linefilter[2]' " ;
+            $strsth .= " AND dayname($line) = '$linefilter[2]' " ;
         }
         if ($linefilter[3]){
-            $strsth .= " and monthname($line) = '$linefilter[3]' " ;
+            $strsth .= " AND monthname($line) = '$linefilter[3]' " ;
         }
     } elsif ($linefilter[0]) {
         $linefilter[0] =~ s/\*/%/g;
-        $strsth .= " and $line LIKE '$linefilter[0]' " ;
+        $strsth .= " AND $line LIKE '$linefilter[0]' " ;
     }
-    $strsth .=" group by $linefield";
-    $strsth .=" order by $lineorder";
+    $strsth .=" GROUP BY $linefield";
+    $strsth .=" ORDER BY $lineorder";
    
     my $sth = $dbh->prepare( $strsth );
     $sth->execute;
@@ -434,28 +434,28 @@ sub calculate {
                     (issuingrules.branchcode=old_issues.branchcode 
                     AND  issuingrules.itemtype=biblioitems.itemtype 
                     AND  issuingrules.categorycode=borrowers.categorycode) 
-                  WHERE returndate is not null";
+                  WHERE 1";
     
     if (($column=~/timestamp/) or ($column=~/returndate/)){
         if ($colfilter[1] and ($colfilter[0])){
-            $strsth2 .= " and $column between '$colfilter[0]' and '$colfilter[1]' " ;
+            $strsth2 .= " AND $column BETWEEN '$colfilter[0]' AND '$colfilter[1]' " ;
         } elsif ($colfilter[1]) {
-                $strsth2 .= " and $column < '$colfilter[1]' " ;
+                $strsth2 .= " AND $column < '$colfilter[1]' " ;
         } elsif ($colfilter[0]) {
-            $strsth2 .= " and $column > '$colfilter[0]' " ;
+            $strsth2 .= " AND $column > '$colfilter[0]' " ;
         }
         if ($colfilter[2]){
-            $strsth2 .= " and dayname($column) = '$colfilter[2]' " ;
+            $strsth2 .= " AND dayname($column) = '$colfilter[2]' " ;
         }
         if ($colfilter[3]){
-            $strsth2 .= " and monthname($column) = '$colfilter[3]' " ;
+            $strsth2 .= " AND monthname($column) = '$colfilter[3]' " ;
         }
     } elsif ($colfilter[0]) {
         $colfilter[0] =~ s/\*/%/g;
-        $strsth2 .= " and $column LIKE '$colfilter[0]' " ;
+        $strsth2 .= " AND $column LIKE '$colfilter[0]' " ;
     }
-    $strsth2 .=" group by $colfield";
-    $strsth2 .=" order by $colorder";
+    $strsth2 .=" GROUP BY $colfield";
+    $strsth2 .=" ORDER BY $colorder";
     warn "". $strsth2;
     
     my $sth2 = $dbh->prepare( $strsth2 );

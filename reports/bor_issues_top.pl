@@ -273,21 +273,21 @@ sub calculate {
                      LEFT JOIN borrowers ON old_issues.borrowernumber=borrowers.borrowernumber 
                      LEFT JOIN items ON old_issues.itemnumber=items.itemnumber 
                      LEFT JOIN biblioitems ON (biblioitems.biblioitemnumber=items.biblioitemnumber)
-                     WHERE returndate is not null";
+                     WHERE 1";
         if (($column=~/timestamp/) or ($column=~/returndate/)){
             if ($colfilter[1] and ($colfilter[0])){
-                $strsth2 .= " and $column between '$colfilter[0]' and '$colfilter[1]' " ;
+                $strsth2 .= " AND $column between '$colfilter[0]' AND '$colfilter[1]' " ;
             } elsif ($colfilter[1]) {
-                    $strsth2 .= " and $column < '$colfilter[1]' " ;
+                    $strsth2 .= " AND $column < '$colfilter[1]' " ;
             } elsif ($colfilter[0]) {
-                $strsth2 .= " and $column > '$colfilter[0]' " ;
+                $strsth2 .= " AND $column > '$colfilter[0]' " ;
             }
         } elsif ($colfilter[0]) {
             $colfilter[0] =~ s/\*/%/g;
-            $strsth2 .= " and $column LIKE '$colfilter[0]' " ;
+            $strsth2 .= " AND $column LIKE '$colfilter[0]' " ;
         }
-        $strsth2 .=" group by $colfield";
-        $strsth2 .=" order by $colorder";
+        $strsth2 .=" GROUP BY $colfield";
+        $strsth2 .=" ORDER BY $colorder";
         warn "". $strsth2;
         
         my $sth2 = $dbh->prepare( $strsth2 );
@@ -326,8 +326,8 @@ sub calculate {
     $strcalc .= " FROM `old_issues`
                   LEFT JOIN  borrowers ON borrowers.borrowernumber
                   LEFT JOIN  items ON items.itemnumber=old_issues.itemnumber
-                  LEFT JOIN biblioitems ON (biblioitems.biblioitemnumber=items.biblioitemnumber)  
-                  WHERE returndate is not null";
+                  LEFT JOIN biblioitems ON (biblioitems.biblioitemnumber=items.biblioitemnumber)
+                  WHERE 1";
 
     @$filters[0]=~ s/\*/%/g if (@$filters[0]);
     $strcalc .= " AND old_issues.timestamp > '" . @$filters[0] ."'" if ( @$filters[0] );
@@ -350,9 +350,9 @@ sub calculate {
     @$filters[9]=~ s/\*/%/g if (@$filters[9]);
     $strcalc .= " AND year(old_issues.timestamp) like '" . @$filters[9] ."'" if ( @$filters[9] );
     
-    $strcalc .= " group by borrowers.borrowernumber";
+    $strcalc .= " GROUP BY borrowers.borrowernumber";
     $strcalc .= ", $colfield" if ($column);
-    $strcalc .= " order by RANK DESC";
+    $strcalc .= " ORDER BY RANK DESC";
     $strcalc .= ",$colfield " if ($colfield);
 # 	my $max;
 # 	if (@loopcol) {

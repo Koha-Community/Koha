@@ -218,10 +218,10 @@ sub calculate {
             AND old_issues.borrowernumber=borrowers.borrowernumber";
         if ($colfilter[0]) {
             $colfilter[0] =~ s/\*/%/g;
-            $strsth2 .= " and $column LIKE '$colfilter[0]' " ;
+            $strsth2 .= " AND $column LIKE '$colfilter[0]' " ;
         }
-        $strsth2 .=" group by $colfield";
-        $strsth2 .=" order by $colorder";
+        $strsth2 .=" GROUP BY $colfield";
+        $strsth2 .=" ORDER BY $colorder";
         warn "". $strsth2;
         
         my $sth2 = $dbh->prepare( $strsth2 );
@@ -272,9 +272,9 @@ sub calculate {
     @$filters[1]=~ s/\*/%/g if (@$filters[1]);
     $strcalc .= " AND biblioitems.itemtype like '" . @$filters[1] ."'" if ( @$filters[1] );
     
-    $strcalc .= " group by items.itemnumber";
+    $strcalc .= " GROUP BY items.itemnumber";
     $strcalc .= ", $colfield"          if ($column);
-    $strcalc .= " order by $colfield " if ($colfield);
+    $strcalc .= " ORDER BY $colfield " if ($colfield);
     my $max = (@loopcol) ? $line*@loopcol : $line ;
     $strcalc .= " LIMIT 0,$max"        if ($line);
     warn "SQL :". $strcalc;
