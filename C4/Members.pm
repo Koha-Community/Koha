@@ -1829,7 +1829,7 @@ sub GetBorrowersWhoHaveNotBorrowedSince {
         $query.=" HAVING latestissue <? OR latestissue IS NULL";
         push @query_params,$filterdate;
     }
-    warn $query;
+    warn $query if $debug;
     my $sth = $dbh->prepare($query);
     if (scalar(@query_params)>0){  
         $sth->execute(@query_params);
@@ -1875,7 +1875,7 @@ sub GetBorrowersWhoHaveNeverBorrowed {
         $query.=" AND branchcode= ?";
         push @query_params,$filterbranch;
     }
-    warn $query;
+    warn $query if $debug;
   
     my $sth = $dbh->prepare($query);
     if (scalar(@query_params)>0){  
@@ -1919,13 +1919,16 @@ sub GetBorrowersWithIssuesHistoryOlderThan {
        WHERE returndate < ?
          AND borrowernumber IS NOT NULL 
     "; 
+    my @query_params;
+    push @query_params, $date;
     if ($filterbranch){
-        $query.="   AND branchcode=\'$filterbranch\'";
+        $query.="   AND branchcode = ?";
+        push @query_params, $filterbranch;
     }    
     $query.=" GROUP BY borrowernumber ";
-    warn $query;
+    warn $query if $debug;
     my $sth = $dbh->prepare($query);
-    $sth->execute($date);
+    $sth->execute(@query_params);
     my @results;
 
     while ( my $data = $sth->fetchrow_hashref ) {
