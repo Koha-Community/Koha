@@ -108,6 +108,7 @@ $template->param(
     READING_RECORD => \@loop_reading,
     limit          => $limit,
     showfulllink   => 1,
+	readingrecview => 1
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

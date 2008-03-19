@@ -224,6 +224,7 @@ $template->param(
     textmessaging      => $borr->{textmessaging},
 	patronupdate => $patronupdate,
 	OpacRenewalAllowed => C4::Context->preference("OpacRenewalAllowed"),
+	userview => 1,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

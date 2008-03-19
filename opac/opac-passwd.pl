@@ -99,6 +99,7 @@ else {
 $template->param(firstname => $borr->{'firstname'},
 							surname => $borr->{'surname'},
 							minpasslen => $minpasslen,
+							passwdview => 1,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

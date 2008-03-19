@@ -103,6 +103,7 @@ $template->param(
     status           => $status,
     suggestedbyme    => $suggestedbyme,
     "op_$op"         => 1,
+	suggestionsview => 1
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

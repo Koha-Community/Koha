@@ -76,7 +76,8 @@ foreach my $row (@$accts) {
 
 $template->param (
     ACCOUNT_LINES => $accts,
-    total => sprintf( "%.2f", $total )
+    total => sprintf( "%.2f", $total ),
+	accountview => 1
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

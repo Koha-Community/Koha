@@ -121,7 +121,8 @@ my @bordat;
 $bordat[0] = $borr;
 
 $template->param( 
-    BORROWER_INFO => \@bordat
+    BORROWER_INFO => \@bordat,
+    userupdateview => 1,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
