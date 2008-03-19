@@ -354,7 +354,16 @@ sub calculate {
     }  
     
     my $strsth;
-    $strsth .= "select distinctrow $linefield FROM `old_issues`,borrowers,biblioitems LEFT JOIN items ON (biblioitems.biblioitemnumber=items.biblioitemnumber) LEFT JOIN issuingrules ON (issuingrules.branchcode=branchcode AND  issuingrules.itemtype=biblioitems.itemtype AND  issuingrules.categorycode=categorycode) WHERE old_issues.itemnumber=items.itemnumber AND old_issues.borrowernumber=borrowers.borrowernumber";
+    $strsth .= "select distinctrow $linefield 
+                FROM `old_issues` 
+                LEFT JOIN borrowers ON borrowers.borrowernumber=old_issues.borrowernumber
+                LEFT JOIN items ON old_issues.itemnumber=items.itemnumber
+                LEFT JOIN biblioitems ON (biblioitems.biblioitemnumber=items.biblioitemnumber) 
+                LEFT JOIN issuingrules ON 
+                    (issuingrules.branchcode=old_issues.branchcode
+                    AND  issuingrules.itemtype=biblioitems.itemtype 
+                    AND  issuingrules.categorycode=borrowers.categorycode) 
+                WHERE returndate is not null";
     
     if (($line=~/timestamp/) or ($line=~/returndate/)){
         if ($linefilter[1] and ($linefilter[0])){
@@ -416,7 +425,16 @@ sub calculate {
     }  
     
     my $strsth2;
-    $strsth2 .= "select distinctrow $colfield FROM `old_issues`,borrowers,biblioitems LEFT JOIN items ON (biblioitems.biblioitemnumber=items.biblioitemnumber) LEFT JOIN issuingrules ON (issuingrules.branchcode=branchcode AND  issuingrules.itemtype=biblioitems.itemtype AND  issuingrules.categorycode=categorycode) WHERE old_issues.itemnumber=items.itemnumber AND old_issues.borrowernumber=borrowers.borrowernumber";
+    $strsth2 .= "SELECT distinctrow $colfield 
+                  FROM `old_issues`
+                  LEFT JOIN borrowers ON borrowers.borrowernumber=old_issues.borrowernumber
+                  LEFT JOIN items  ON items.itemnumber=old_issues.itemnumber  
+                  LEFT JOIN biblioitems ON (biblioitems.biblioitemnumber=items.biblioitemnumber) 
+                  LEFT JOIN issuingrules ON 
+                    (issuingrules.branchcode=old_issues.branchcode 
+                    AND  issuingrules.itemtype=biblioitems.itemtype 
+                    AND  issuingrules.categorycode=borrowers.categorycode) 
+                  WHERE returndate is not null";
     
     if (($column=~/timestamp/) or ($column=~/returndate/)){
         if ($colfilter[1] and ($colfilter[0])){

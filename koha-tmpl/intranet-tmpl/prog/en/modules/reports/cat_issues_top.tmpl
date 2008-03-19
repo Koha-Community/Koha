@@ -38,17 +38,18 @@ function Dopop(link) {
 				<!-- TMPL_LOOP NAME="loopcol" -->
 					<th colspan="2"><!-- TMPL_VAR NAME="coltitle" --></th>
 				<!-- /TMPL_LOOP -->
-</tr>
-<tr>
+        <tr>
 				<th>&nbsp;</th>
 				<!-- TMPL_LOOP NAME="loopcol" -->
 					<th>Item</th>
 					<th>Count of Checkouts</th>
 				<!-- /TMPL_LOOP -->
-</tr>
+			  </tr>
 				<!-- TMPL_LOOP NAME="looprow" -->
-<!-- TMPL_IF NAME="hilighted" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="hilighted" --><tr class="highlighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
 			<td><!-- TMPL_VAR NAME="rowtitle" --></td>
+						<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
+						<!-- TMPL_VAR NAME="rowtitle" --></td>
 						<!-- TMPL_LOOP NAME="loopcell" -->
 							<td>
 

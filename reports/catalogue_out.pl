@@ -256,7 +256,11 @@ sub calculate {
 # Processing average loanperiods
     $strcalc .= "SELECT items.barcode, biblio.title, biblio.biblionumber, biblio.author";
     $strcalc .= " , $colfield " if ($colfield);
-    $strcalc .= " FROM (items LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber  LEFT JOIN biblio ON biblio.biblionumber=items.biblionumber) LEFT JOIN issues ON  issues.itemnumber=items.itemnumber WHERE issues.itemnumber is null";
+    $strcalc .= " FROM (items 
+                        LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber  
+                        LEFT JOIN biblio ON biblio.biblionumber=items.biblionumber) 
+                  LEFT JOIN issues ON  issues.itemnumber=items.itemnumber 
+                  WHERE issues.itemnumber is null";
     @$filters[0]=~ s/\*/%/g if (@$filters[0]);
     $strcalc .= " AND items.homebranch like '" . @$filters[0] ."'" if ( @$filters[0] );
     @$filters[1]=~ s/\*/%/g if (@$filters[1]);

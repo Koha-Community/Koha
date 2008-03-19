@@ -268,7 +268,12 @@ sub calculate {
         }  
         
         my $strsth2;
-        $strsth2 .= "select distinctrow $colfield FROM `issues`,borrowers,biblioitems LEFT JOIN items ON (biblioitems.biblioitemnumber=items.biblioitemnumber) WHERE issues.itemnumber=items.itemnumber AND issues.borrowernumber=borrowers.borrowernumber and returndate is not null";
+        $strsth2 .= "SELECT DISTINCTROW $colfield 
+                     FROM `issues` 
+                     LEFT JOIN borrowers ON issues.borrowernumber=borrowers.borrowernumber 
+                     LEFT JOIN items ON issues.itemnumber=items.itemnumber 
+                     LEFT JOIN biblioitems ON (biblioitems.biblioitemnumber=items.biblioitemnumber)
+                     WHERE returndate is not null";
         if (($column=~/timestamp/) or ($column=~/returndate/)){
             if ($colfilter[1] and ($colfilter[0])){
                 $strsth2 .= " and $column between '$colfilter[0]' and '$colfilter[1]' " ;
@@ -318,7 +323,11 @@ sub calculate {
 # Processing average loanperiods
     $strcalc .= "SELECT  CONCAT(borrowers.surname , \"\\t\",borrowers.firstname),  COUNT(*) AS RANK, borrowers.borrowernumber AS ID";
     $strcalc .= " , $colfield " if ($colfield);
-    $strcalc .= " FROM `issues`,borrowers,biblioitems LEFT JOIN items ON (biblioitems.biblioitemnumber=items.biblioitemnumber)  WHERE issues.itemnumber=items.itemnumber AND issues.borrowernumber=borrowers.borrowernumber and returndate is not null";
+    $strcalc .= " FROM `issues`
+                  LEFT JOIN  borrowers ON borrowers.borrowernumber
+                  LEFT JOIN  items ON items.itemnumber=issues.itemnumber
+                  LEFT JOIN biblioitems ON (biblioitems.biblioitemnumber=items.biblioitemnumber)  
+                  WHERE returndate is not null";
 
     @$filters[0]=~ s/\*/%/g if (@$filters[0]);
     $strcalc .= " AND issues.timestamp > '" . @$filters[0] ."'" if ( @$filters[0] );
