@@ -229,7 +229,7 @@ sub calculate {
     my $colfield;
     my $colorder;
     if ($column){
-        $column = "issues.".$column if (($column=~/branchcode/) or ($column=~/timestamp/));
+        $column = "old_issues.".$column if (($column=~/branchcode/) or ($column=~/timestamp/));
         $column = "biblioitems.".$column if $column=~/itemtype/;
         $column = "borrowers.".$column if $column=~/categorycode/;
         my @colfilter ;
@@ -249,17 +249,17 @@ sub calculate {
     # loop cols.
         if ($column eq "Day") {
             #Display by day
-            $column = "issues.timestamp";
+            $column = "old_issues.timestamp";
             $colfield .="dayname($column)";  
             $colorder .="weekday($column)";
         } elsif ($column eq "Month") {
             #Display by Month
-            $column = "issues.timestamp";
+            $column = "old_issues.timestamp";
             $colfield .="monthname($column)";  
             $colorder .="month($column)";  
         } elsif ($column eq "Year") {
             #Display by Year
-            $column = "issues.timestamp";
+            $column = "old_issues.timestamp";
             $colfield .="Year($column)";
             $colorder .= $column;
         } else {
@@ -269,11 +269,11 @@ sub calculate {
         
         my $strsth2;
         $strsth2 .= "SELECT distinctrow $colfield 
-                     FROM `issues` 
-                     LEFT JOIN borrowers ON borrowers.borrowernumber=issues.borrowernumber 
-                     LEFT JOIN items ON issues.itemnumber=items.itemnumber 
+                     FROM `old_issues` 
+                     LEFT JOIN borrowers ON borrowers.borrowernumber=old_issues.borrowernumber 
+                     LEFT JOIN items ON old_issues.itemnumber=items.itemnumber 
                      LEFT JOIN biblioitems  ON biblioitems.biblioitemnumber=items.biblioitemnumber 
-                     WHERE returndate is not null";
+                     WHERE 1";
         if (($column=~/timestamp/) or ($column=~/returndate/)){
             if ($colfilter[1] and ($colfilter[0])){
                 $strsth2 .= " and $column between '$colfilter[0]' and '$colfilter[1]' " ;
@@ -330,34 +330,34 @@ sub calculate {
 # Processing average loanperiods
     $strcalc .= "SELECT DISTINCT biblio.title, COUNT(biblio.biblionumber) AS RANK, biblio.biblionumber AS ID";
     $strcalc .= " , $colfield " if ($colfield);
-    $strcalc .= " FROM `issues` 
-                  LEFT JOIN borrowers ON issues.borrowernumber=borrowers.borrowernumber 
+    $strcalc .= " FROM `old_issues` 
+                  LEFT JOIN borrowers ON old_issues.borrowernumber=borrowers.borrowernumber 
                   LEFT JOIN (items 
                          LEFT JOIN biblioitems ON biblioitems.biblioitemnumber=items.biblioitemnumber) 
-                    ON items.itemnumber=issues.itemnumber 
+                    ON items.itemnumber=old_issues.itemnumber 
                   LEFT JOIN biblio ON (biblio.biblionumber=items.biblionumber) 
-                  WHERE returndate is not null";
+                  WHERE 1";
 
     @$filters[0]=~ s/\*/%/g if (@$filters[0]);
-    $strcalc .= " AND issues.timestamp > '" . @$filters[0] ."'" if ( @$filters[0] );
+    $strcalc .= " AND old_issues.timestamp > '" . @$filters[0] ."'" if ( @$filters[0] );
     @$filters[1]=~ s/\*/%/g if (@$filters[1]);
-    $strcalc .= " AND issues.timestamp < '" . @$filters[1] ."'" if ( @$filters[1] );
+    $strcalc .= " AND old_issues.timestamp < '" . @$filters[1] ."'" if ( @$filters[1] );
     @$filters[2]=~ s/\*/%/g if (@$filters[2]);
-    $strcalc .= " AND issues.returndate > '" . @$filters[2] ."'" if ( @$filters[2] );
+    $strcalc .= " AND old_issues.returndate > '" . @$filters[2] ."'" if ( @$filters[2] );
     @$filters[3]=~ s/\*/%/g if (@$filters[3]);
-    $strcalc .= " AND issues.returndate < '" . @$filters[3] ."'" if ( @$filters[3] );
+    $strcalc .= " AND old_issues.returndate < '" . @$filters[3] ."'" if ( @$filters[3] );
     @$filters[4]=~ s/\*/%/g if (@$filters[4]);
-    $strcalc .= " AND issues.branchcode like '" . @$filters[4] ."'" if ( @$filters[4] );
+    $strcalc .= " AND old_issues.branchcode like '" . @$filters[4] ."'" if ( @$filters[4] );
     @$filters[5]=~ s/\*/%/g if (@$filters[5]);
     $strcalc .= " AND biblioitems.itemtype like '" . @$filters[5] ."'" if ( @$filters[5] );
     @$filters[6]=~ s/\*/%/g if (@$filters[6]);
     $strcalc .= " AND borrowers.categorycode like '" . @$filters[6] ."'" if ( @$filters[6] );
     @$filters[7]=~ s/\*/%/g if (@$filters[7]);
-    $strcalc .= " AND dayname(issues.timestamp) like '" . @$filters[7]."'" if (@$filters[7]);
+    $strcalc .= " AND dayname(old_issues.timestamp) like '" . @$filters[7]."'" if (@$filters[7]);
     @$filters[8]=~ s/\*/%/g if (@$filters[8]);
-    $strcalc .= " AND monthname(issues.timestamp) like '" . @$filters[8]."'" if (@$filters[8]);
+    $strcalc .= " AND monthname(old_issues.timestamp) like '" . @$filters[8]."'" if (@$filters[8]);
     @$filters[9]=~ s/\*/%/g if (@$filters[9]);
-    $strcalc .= " AND year(issues.timestamp) like '" . @$filters[9] ."'" if ( @$filters[9] );
+    $strcalc .= " AND year(old_issues.timestamp) like '" . @$filters[9] ."'" if ( @$filters[9] );
     
     $strcalc .= " group by biblio.biblionumber";
     $strcalc .= ", $colfield" if ($column);
