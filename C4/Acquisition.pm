@@ -224,7 +224,6 @@ sub GetPendingOrders {
     if ( C4::Context->preference("IndependantBranches") ) {
         my $userenv = C4::Context->userenv;
         if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
-            warn 'in branch';
             $strsth .= " and (borrowers.branchcode = ?
                           or borrowers.branchcode  = '')";
             push @query_params, $userenv->{branch};
