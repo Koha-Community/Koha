@@ -286,6 +286,7 @@ sub get_template_and_user {
             KohaAdminEmailAddress  => "" . C4::Context->preference("KohaAdminEmailAddress"),
             AnonSuggestions =>  "" . C4::Context->preference("AnonSuggestions"),
             suggestion             => "" . C4::Context->preference("suggestion"),
+            OPACViewOthersSuggestions             => "" . C4::Context->preference("OPACViewOthersSuggestions"),
             virtualshelves         => "" . C4::Context->preference("virtualshelves"),
             OpacNav                => "" . C4::Context->preference("OpacNav"),
             opacheader             => "" . C4::Context->preference("opacheader"),

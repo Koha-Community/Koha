@@ -17,8 +17,18 @@ $.tablesorter.addParser({
 				widgets : ['zebra'],
 				<!-- TMPL_IF NAME="loggedinusername" -->sortList: [[1,0]],<!-- TMPL_ELSE -->sortList: [[0,0]],<!-- /TMPL_IF -->
 		        headers: {
-				<!-- TMPL_IF NAME="loggedinusername" -->0: { sorter: false },2: { sorter: 'articles' },2: {sorter: false },4: {sorter: false},5:{sorter:false}
-				<!-- TMPL_ELSE -->0: { sorter: 'articles' },1: {sorter: false },3: {sorter: false},4:{sorter:false}
+				<!-- TMPL_IF NAME="loggedinusername" -->
+					<!-- TMPL_IF NAME="OPACViewOthersSuggestions" -->
+					0: { sorter: false },2: { sorter: 'articles' },2: {sorter: false },4: {sorter: false},5:{sorter:false}
+					<!-- TMPL_ELSE -->
+					0: { sorter: false },2: { sorter: 'articles' },2: {sorter: false },3: {sorter: false},4:{sorter:false}
+					<!-- /TMPL_IF -->
+				<!-- TMPL_ELSE -->
+				<!-- TMPL_IF NAME="OPACViewOthersSuggestions" -->
+					0: { sorter: 'articles' },1: {sorter: false },3: {sorter: false},4:{sorter:false}
+					<!-- TMPL_ELSE -->
+					0: { sorter: 'articles' },1: {sorter: false },2: {sorter: false},3:{sorter:false}
+					<!-- /TMPL_IF -->
 				<!-- /TMPL_IF -->
 				}
 			}); 
@@ -53,9 +63,10 @@ $.tablesorter.addParser({
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="op_else" -->
-    <h1>Purchase Suggestions</h1>
+    <h1><!-- TMPL_UNLESS NAME="OPACViewOthersSuggestions" -->My <!-- /TMPL_UNLESS -->Purchase Suggestions</h1>
     <!-- TMPL_IF NAME="suggestions_loop" -->
-            <form action="/cgi-bin/koha/opac-suggestions.pl" method="get">
+    <!-- TMPL_IF NAME="OPACViewOthersSuggestions" -->
+	<form action="/cgi-bin/koha/opac-suggestions.pl" method="get">
     <table>
         <tr>
                 <th>
@@ -74,11 +85,11 @@ $.tablesorter.addParser({
                     </select>
                 </td>
                 <th>
-                    <input type="submit" value="Set Filter" />
+                    <input type="submit" value="Search" />
                 </th>
         </tr>
 		</table>
-            </form>
+            </form><!-- /TMPL_IF -->
         <form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
             <input type="hidden" name="op" value="delete_confirm" />
 			<table id="suggestt">
@@ -86,7 +97,7 @@ $.tablesorter.addParser({
             <!-- TMPL_IF NAME="loggedinusername" --><th>&nbsp;</th><!-- /TMPL_IF -->
             <th>Summary</th>
             <th>Note</th>
-            <th>Suggested by</th>
+            <!-- TMPL_IF NAME="OPACViewOthersSuggestions" --><th>Suggested by</th><!-- /TMPL_IF -->
             <th>Managed by</th>
             <th>Status</th>
         </tr></thead>
@@ -105,9 +116,9 @@ $.tablesorter.addParser({
                 <td>
                     <!-- TMPL_VAR name="note" -->
                 </td>
-                <td>
+                <!-- TMPL_IF NAME="OPACViewOthersSuggestions" --><td>
                     <!-- TMPL_VAR name="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamesuggestedby" -->
-                </td>
+                </td><!-- /TMPL_IF -->
                 <td>
 					<!-- TMPL_VAR name="surnamemanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamemanagedby" -->
                 </td>
