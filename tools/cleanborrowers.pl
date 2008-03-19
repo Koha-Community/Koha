@@ -69,14 +69,16 @@ if ( $params->{'step2'} ) {
     my $checkbox = $params->{'checkbox'};
 
     my $totalDel;
+    my $membersToDelete;
     if ($checkbox eq "borrower") {
-        my $membersToDelete = GetBorrowersWhoHaveNotBorrowedSince($filterdate1);
+        $membersToDelete = GetBorrowersWhoHaveNotBorrowedSince($filterdate1);
         $totalDel = scalar @$membersToDelete;
+            
     }
-
     my $totalAno;
+    my $membersToAnonymize;
     if ($checkbox eq "issue") {
-        my $membersToAnonymize =
+        $membersToAnonymize =
           GetBorrowersWithIssuesHistoryOlderThan($filterdate2);
         $totalAno = scalar @$membersToAnonymize;
     }
@@ -85,10 +87,13 @@ if ( $params->{'step2'} ) {
         step2            => 1,
         totalToDelete    => $totalDel,
         totalToAnonymize => $totalAno,
+        memberstodelete_list => $membersToDelete,    
+        memberstoanonymize_list => $membersToAnonymize,    
         filterdate1      => format_date($filterdate1),
         filterdate2      => format_date($filterdate2),
     );
-
+### TODO : Use GetBorrowersNamesAndLatestIssue function in order to get the borrowers to delete or anonymize.
+### Now, we are only using total, which is not enough imlo
     #writing the template
     output_html_with_http_headers $cgi, $cookie, $template->output;
     exit;

@@ -58,9 +58,9 @@ BEGIN {
 		&GetSortDetails
 		&GetTitles
 
-                &GetPatronImage
-                &PutPatronImage
-                &RmPatronImage
+    &GetPatronImage
+    &PutPatronImage
+    &RmPatronImage
 
 		&GetMemberAccountRecords
 		&GetBorNotifyAcctRecord
@@ -1797,24 +1797,46 @@ WHERE roadtypeid=?|;
 &GetBorrowersWhoHaveNotBorrowedSince($date)
 
 this function get all borrowers who haven't borrowed since the date given on input arg.
-
+      
 =cut
 
 sub GetBorrowersWhoHaveNotBorrowedSince {
-    my $date = shift;
-    return unless $date;    # date is mandatory.
+### TODO : It could be dangerous to delete Borrowers who have just been entered and who have not yet borrowed any book. May be good to add a dateexpiry or dateenrolled filter.      
+       
+                my $filterdate = shift||POSIX::strftime("%Y-%m-%d",localtime());
+    my $filterbranch = shift || 
+                        ((C4::Context->preference('IndependantBranches') 
+                             && C4::Context->userenv 
+                             && C4::Context->userenv->{flags}!=1 
+                             && C4::Context->userenv->{branch})
+                         ? C4::Context->userenv->{branch}
+                         : "");  
     my $dbh   = C4::Context->dbh;
     my $query = "
-        SELECT borrowers.borrowernumber,max(timestamp)
+        SELECT borrowers.borrowernumber,max(issues.timestamp) as latestissue
         FROM   borrowers
           LEFT JOIN issues ON borrowers.borrowernumber = issues.borrowernumber
-        WHERE issues.borrowernumber IS NOT NULL
-        GROUP BY borrowers.borrowernumber
    ";
+    my @query_params;
+    if ($filterbranch && $filterbranch ne ""){ 
+        $query.=" WHERE branchcode= ?";
+        push @query_params,$filterbranch;
+    }    
+    $query.=" GROUP BY borrowers.borrowernumber";
+    if ($filterdate){ 
+        $query.=" HAVING latestissue <? OR latestissue IS NULL";
+        push @query_params,$filterdate;
+    }
+    warn $query;
     my $sth = $dbh->prepare($query);
-    $sth->execute;
+    if (scalar(@query_params)>0){  
+        $sth->execute(@query_params);
+    } 
+    else {
+        $sth->execute;
+    }      
+    
     my @results;
-
     while ( my $data = $sth->fetchrow_hashref ) {
         push @results, $data;
     }
@@ -1832,15 +1854,35 @@ I<$result> is a ref to an array which all elements are a hasref.
 =cut
 
 sub GetBorrowersWhoHaveNeverBorrowed {
+    my $filterbranch = shift || 
+                        ((C4::Context->preference('IndependantBranches') 
+                             && C4::Context->userenv 
+                             && C4::Context->userenv->{flags}!=1 
+                             && C4::Context->userenv->{branch})
+                         ? C4::Context->userenv->{branch}
+                         : "");  
     my $dbh   = C4::Context->dbh;
     my $query = "
-        SELECT borrowers.borrowernumber,max(timestamp)
+        SELECT borrowers.borrowernumber,max(timestamp) as latestissue
         FROM   borrowers
           LEFT JOIN issues ON borrowers.borrowernumber = issues.borrowernumber
         WHERE issues.borrowernumber IS NULL
    ";
+    my @query_params;
+    if ($filterbranch && $filterbranch ne ""){ 
+        $query.=" AND branchcode= ?";
+        push @query_params,$filterbranch;
+    }
+    warn $query;
+  
     my $sth = $dbh->prepare($query);
-    $sth->execute;
+    if (scalar(@query_params)>0){  
+        $sth->execute(@query_params);
+    } 
+    else {
+        $sth->execute;
+    }      
+    
     my @results;
     while ( my $data = $sth->fetchrow_hashref ) {
         push @results, $data;
@@ -1861,15 +1903,25 @@ This hashref is containt the number of time this borrowers has borrowed before I
 
 sub GetBorrowersWithIssuesHistoryOlderThan {
     my $dbh  = C4::Context->dbh;
-    my $date = shift;
-    return unless $date;    # date is mandatory.
+    my $date = shift ||POSIX::strftime("%Y-%m-%d",localtime());
+    my $filterbranch = shift || 
+                        ((C4::Context->preference('IndependantBranches') 
+                             && C4::Context->userenv 
+                             && C4::Context->userenv->{flags}!=1 
+                             && C4::Context->userenv->{branch})
+                         ? C4::Context->userenv->{branch}
+                         : "");  
     my $query = "
        SELECT count(borrowernumber) as n,borrowernumber
        FROM old_issues
        WHERE returndate < ?
          AND borrowernumber IS NOT NULL 
-       GROUP BY borrowernumber
-   ";
+    "; 
+    if ($filterbranch){
+        $query.="   AND branchcode=\'$filterbranch\'";
+    }    
+    $query.=" GROUP BY borrowernumber ";
+    warn $query;
     my $sth = $dbh->prepare($query);
     $sth->execute($date);
     my @results;
@@ -1880,6 +1932,31 @@ sub GetBorrowersWithIssuesHistoryOlderThan {
     return \@results;
 }
 
+=head2 GetBorrowersNamesAndLatestIssue
+
+$results = &GetBorrowersNamesAndLatestIssueList(@borrowernumbers)
+
+this function get borrowers Names and surnames and Issue information.
+
+I<@borrowernumbers> is an array which all elements are borrowernumbers.
+This hashref is containt the number of time this borrowers has borrowed before I<$date> and the borrowernumber.
+
+=cut
+
+sub GetBorrowersNamesAndLatestIssue {
+    my $dbh  = C4::Context->dbh;
+    my @borrowernumbers=@_;  
+    my $query = "
+       SELECT surname,lastname, phone, email,max(timestamp)
+       FROM borrowers 
+         LEFT JOIN issues ON borrowers.borrowernumber=issues.borrowernumber
+       GROUP BY borrowernumber
+   ";
+    my $sth = $dbh->prepare($query);
+    $sth->execute;
+    my $results = $sth->fetchall_arrayref({});
+    return $results;
+}
 END { }    # module clean-up code here (global destructor)
 
 1;
