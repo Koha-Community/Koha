@@ -116,6 +116,9 @@ foreach my $itm (@items) {
     #get collection code description, too
     $itm->{'ccode'}  = GetAuthorisedValueDesc('','',   $itm->{'ccode'} ,'','','CCODE');
     $itm->{'location_description'} = GetAuthorisedValueDesc('','',   $itm->{'location'} ,'','','LOC');
+    $itm->{'imageurl'}    = $imgdir."/".$itemtypes->{ $itm->{itype} }->{'imageurl'};     
+    $itm->{'description'} = $itemtypes->{$itemtype}->{'description'};
+
 }
 
 $template->param( norequests => $norequests, RequestOnOpac=>$RequestOnOpac );
