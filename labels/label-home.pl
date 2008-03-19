@@ -32,7 +32,6 @@ my $active_layout_name = $active_layout->{'layoutname'};
 my $active_template_name = $active_template->{'tmpl_code'};
 # ----------
 
-
 my $data = get_label_options();
 my $op =  $query->param('op');
 my $layout_id =  $query->param('layout_id');
@@ -41,7 +40,7 @@ my @label_templates = GetAllLabelTemplates();
 my @printingtypes       = get_printingtypes();
 my @layouts       = get_layouts();
 my @barcode_types = get_barcode_types();
-my @batches = get_batches();
+#my @batches = get_batches();   #This is not used afaics -fbcit
 
 if ($op eq 'delete_layout') {	# had been assignment! serious error!
 	delete_layout($layout_id);
@@ -53,7 +52,6 @@ $template->param( guidebox => 1 ) if ( $data->{'guidebox'} );
 $template->param( "papertype_$data->{'papertype'}"       => 1 );
 $template->param( "$data->{'barcodetype'}_checked" => 1 );
 $template->param( "startrow" . $data->{'startrow'} . "_checked" => 1 );
-
 $template->param(
     op => $op,
     active_layout_name => $active_layout_name,
@@ -64,7 +62,7 @@ $template->param(
     printingtypes    => \@printingtypes,
 layout_loop => \@layouts,
 
-batches => \@batches,
+#batches => \@batches, #This is not used afaics -fbcit
      id             => $data->{'id'},
     barcodetype    => $data->{'barcodetype'},
       papertype => $data->{'papertype'},
