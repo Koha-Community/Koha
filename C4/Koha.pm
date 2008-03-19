@@ -587,14 +587,18 @@ sub getFacets {
                 tags        => ['225'],
                 subfield    => 'a',
             },
-            {
+            ];
+
+            my $library_facet;
+
+            $library_facet = {
                 link_value  => 'branch',
                 label_value => 'Libraries',
                 tags        => [ '995', ],
                 subfield    => 'b',
                 expanded    => '1',
-            },
-        ];
+            };
+            push @$facets, $library_facet unless C4::Context->preference("singleBranchMode");
     }
     else {
         $facets = [
@@ -635,14 +639,16 @@ sub getFacets {
                 tags        => [ '440', '490', ],
                 subfield    => 'a',
             },
-            {
+            ];
+            my $library_facet;
+            $library_facet = {
                 link_value  => 'branch',
                 label_value => 'Libraries',
                 tags        => [ '952', ],
                 subfield    => 'b',
                 expanded    => '1',
-            },
-        ];
+            };
+            push @$facets, $library_facet unless C4::Context->preference("singleBranchMode");
     }
     return $facets;
 }
