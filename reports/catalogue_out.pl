@@ -209,7 +209,13 @@ sub calculate {
         $colorder .= $column;
         
         my $strsth2;
-        $strsth2 .= "select distinctrow $colfield FROM `issues`,borrowers,biblioitems LEFT JOIN items ON (biblioitems.biblioitemnumber=items.biblioitemnumber) WHERE issues.itemnumber=items.itemnumber AND issues.borrowernumber=borrowers.borrowernumber and returndate is not null";
+        $strsth2 .= "select distinctrow $colfield 
+          FROM `old_issues` 
+            LEFT JOIN borrowers ON borrowers.borrowernumber=old_issues.borrowernumber 
+            LEFT JOIN items ON old_issues.itemnumber=items.itemnumber 
+            LEFT JOIN biblioitems ON biblioitems.biblioitemnumber=items.biblioitemnumber  
+            WHERE old_issues.itemnumber=items.itemnumber 
+            AND old_issues.borrowernumber=borrowers.borrowernumber";
         if ($colfilter[0]) {
             $colfilter[0] =~ s/\*/%/g;
             $strsth2 .= " and $column LIKE '$colfilter[0]' " ;
@@ -259,8 +265,8 @@ sub calculate {
     $strcalc .= " FROM (items 
                         LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber  
                         LEFT JOIN biblio ON biblio.biblionumber=items.biblionumber) 
-                  LEFT JOIN issues ON  issues.itemnumber=items.itemnumber 
-                  WHERE issues.itemnumber is null";
+                  LEFT JOIN old_issues ON  old_issues.itemnumber=items.itemnumber 
+                  WHERE old_issues.itemnumber is null";
     @$filters[0]=~ s/\*/%/g if (@$filters[0]);
     $strcalc .= " AND items.homebranch like '" . @$filters[0] ."'" if ( @$filters[0] );
     @$filters[1]=~ s/\*/%/g if (@$filters[1]);

@@ -396,8 +396,8 @@ sub calculate {
 	$strcalc .= " AND sort1 like '" . @$filters[5] ."'" if ( @$filters[5] );
 	@$filters[6]=~ s/\*/%/g if (@$filters[6]);
 	$strcalc .= " AND sort2 like '" . @$filters[6] ."'" if ( @$filters[6] );
-	$strcalc .= " AND borrowernumber in (select distinct(borrowernumber) from issues where issuedate > '" . $newperioddate . "')" if ($activity eq 'active');
-	$strcalc .= " AND borrowernumber not in (select distinct(borrowernumber) from issues where issuedate > '" . $newperioddate . "')" if ($activity eq 'nonactive');
+	$strcalc .= " AND borrowernumber in (select distinct(borrowernumber) from old_issues where issuedate > '" . $newperioddate . "')" if ($activity eq 'active');
+	$strcalc .= " AND borrowernumber not in (select distinct(borrowernumber) from old_issues where issuedate > '" . $newperioddate . "')" if ($activity eq 'nonactive');
 	$strcalc .= " AND $status='1' " if ($status);
 	$strcalc .= " group by $linefield, $colfield";
 #	warn "". $strcalc;

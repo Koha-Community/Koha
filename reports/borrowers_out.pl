@@ -189,7 +189,7 @@ sub calculate {
         $colorder .= $column;
         
         my $strsth2;
-        $strsth2 .= "select distinctrow $colfield FROM borrowers LEFT JOIN `issues` ON issues.borrowernumber=borrowers.borrowernumber";
+        $strsth2 .= "select distinctrow $colfield FROM borrowers LEFT JOIN `old_issues` ON issues.borrowernumber=borrowers.borrowernumber";
         if ($colfilter[0]) {
             $colfilter[0] =~ s/\*/%/g;
             $strsth2 .= " and $column LIKE '$colfilter[0]' " ;
@@ -239,8 +239,8 @@ sub calculate {
     @$filters[0]=~ s/\*/%/g if (@$filters[0]);
     $strcalc .= " AND borrowers.categorycode like '" . @$filters[0] ."'" if ( @$filters[0] );
     if (@$filters[1]){
-        my $strqueryfilter="SELECT DISTINCT borrowernumber FROM issues where issues.timestamp> @$filters[1] ";
-        my $queryfilter = $dbh->prepare("SELECT DISTINCT borrowernumber FROM issues where issues.timestamp> ".format_date_in_iso(@$filters[1]));
+        my $strqueryfilter="SELECT DISTINCT borrowernumber FROM old_issues where old_issues.timestamp> @$filters[1] ";
+        my $queryfilter = $dbh->prepare("SELECT DISTINCT borrowernumber FROM old_issues where old_issues.timestamp> ".format_date_in_iso(@$filters[1]));
         $strcalc .= " AND borrowers.borrowernumber not in ($strqueryfilter)";
         
 # 		$queryfilter->execute(@$filters[1]);
@@ -248,8 +248,8 @@ sub calculate {
 # 			$strcalc .= " AND borrowers.borrowernumber <> $borrowernumber ";
 # 		}
     } else {
-        my $strqueryfilter="SELECT DISTINCT borrowernumber FROM issues ";
-        my $queryfilter = $dbh->prepare("SELECT DISTINCT borrowernumber FROM issues ");
+        my $strqueryfilter="SELECT DISTINCT borrowernumber FROM old_issues ";
+        my $queryfilter = $dbh->prepare("SELECT DISTINCT borrowernumber FROM old_issues ");
         $queryfilter->execute;
         $strcalc .= " AND borrowers.borrowernumber not in ($strqueryfilter)";
 # 		while (my ($borrowernumber)=$queryfilter->fetchrow){
