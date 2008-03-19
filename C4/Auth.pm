@@ -295,6 +295,7 @@ sub get_template_and_user {
             opaclargeimage         => "" . C4::Context->preference("opaclargeimage"),
             opaclayoutstylesheet   => "". C4::Context->preference("opaclayoutstylesheet"),
             opaccolorstylesheet    => "". C4::Context->preference("opaccolorstylesheet"),
+            OPACUserCSS    => "". C4::Context->preference("OPACUserCSS"),
             opaclanguagesdisplay   => "". C4::Context->preference("opaclanguagesdisplay"),
             opacuserlogin          => "" . C4::Context->preference("opacuserlogin"),
 			OpacMainUserBlock =>  "" . C4::Context->preference("OpacMainUserBlock"),
