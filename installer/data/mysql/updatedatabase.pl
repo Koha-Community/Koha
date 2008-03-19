@@ -1223,6 +1223,13 @@ DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP;
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.067";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("UPDATE systempreferences SET explanation = 'Enable patron images for the Staff Client', type = 'YesNo' WHERE variable = 'patronimages'");
+    print "Upgrade to $DBversion done (Updating patronimages syspref to reflect current kohastructure.sql. ) ";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
