@@ -4,6 +4,7 @@
         <!-- TMPL_VAR NAME="opaccredits" -->
     </div>
 <!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="opaclanguagesdisplay" -->
 <!-- TMPL_IF NAME="languages_loop" -->
         <div id="changelanguage" class="ft">
         <ul id="i18nMenu" class="footermenu">
@@ -38,6 +39,7 @@
         <!-- /TMPL_LOOP -->
         </ul>
         </div>
+<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 </div>
 </body>
