@@ -957,8 +957,6 @@ $DBversion = "3.00.00.048";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE `items` ADD `more_subfields_xml` longtext default NULL");
 	print "Upgrade to $DBversion done (added items.more_subfields_xml)\n";
-    $dbh->do("ALTER TABLE `deleteditems` ADD `more_subfields_xml` longtext default NULL");
-  print "Upgrade to $DBversion done (added items.more_subfields_xml)\n";
     SetVersion ($DBversion);
 }
 
