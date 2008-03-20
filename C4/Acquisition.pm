@@ -345,7 +345,7 @@ sub GetOrder {
     my ($ordnum) = @_;
     my $dbh      = C4::Context->dbh;
     my $query = "
-        SELECT *
+        SELECT biblioitems.*, biblio.*, aqorderbreakdown.*, aqorders.*
         FROM   aqorders
         LEFT JOIN aqorderbreakdown ON aqorders.ordernumber=aqorderbreakdown.ordernumber
         LEFT JOIN biblio on           biblio.biblionumber=aqorders.biblionumber
