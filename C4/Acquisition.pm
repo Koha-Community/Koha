@@ -506,22 +506,23 @@ sub ModOrder {
 		$ordnum,   $bibnum
     );
     $sth->finish;
+    my $branchcode;  
     $query = "
         UPDATE aqorderbreakdown
-        SET    bookfundid=?
+        SET    bookfundid=?,branchcode=?
         WHERE  ordernumber=?
     ";
     $sth = $dbh->prepare($query);
 
-    unless ( $sth->execute( $bookfund, $ordnum ) )
+    unless ( $sth->execute( $bookfund,$branchcode, $ordnum ) )
     {    # zero rows affected [Bug 734]
         my $query ="
             INSERT INTO aqorderbreakdown
-                     (ordernumber,bookfundid)
-            VALUES   (?,?)
+                     (ordernumber,branchcode,bookfundid)
+            VALUES   (?,?,?)
         ";
         $sth = $dbh->prepare($query);
-        $sth->execute( $ordnum, $bookfund );
+        $sth->execute( $ordnum,$branchcode, $bookfund );
     }
     $sth->finish;
 }
@@ -626,10 +627,7 @@ sub ModReceiveOrder {
                     $order->{'listprice'},$order->{'booksellerid'},$order->{'authorisedby'},$order->{'notes'},   
                     $order->{'bookfundid'},$order->{'biblioitemnumber'},$order->{'rrp'},$order->{'ecost'},$order->{'gst'},
                     $order->{'budget'},$order->{'unitcost'},$order->{'sub'},'',$order->{'sort1'},$order->{'sort2'},$order->{'purchaseordernumber'});
-    
-        $sth=$dbh->prepare(" insert into aqorderbreakdown (ordernumber, branchcode, bookfundid) values (?,?,?)"); 
-        $sth->execute($newOrder,$order->{branch},$order->{bookfundid});
-    } else {
+  } else {
         $sth=$dbh->prepare("update aqorders 
 							set quantityreceived=?,datereceived=?,booksellerinvoicenumber=?, 
 								unitprice=?,freight=?,rrp=?
