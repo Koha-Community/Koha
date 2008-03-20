@@ -839,11 +839,11 @@ sub GetParcel {
         LEFT JOIN aqbasket ON aqbasket.basketno=aqorders.basketno
         LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber
         WHERE 
-            aqbasket.booksellerid=?
-            AND aqorders.booksellerinvoicenumber LIKE  \"$code\"
-            AND aqorders.datereceived= \'$datereceived\'";
+            aqbasket.booksellerid = ?
+            AND aqorders.booksellerinvoicenumber LIKE ?
+            AND aqorders.datereceived = ? ";
 
-    my @query_params = ( $supplierid );
+    my @query_params = ( $supplierid, $code, $datereceived );
     if ( C4::Context->preference("IndependantBranches") ) {
         my $userenv = C4::Context->userenv;
         if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
