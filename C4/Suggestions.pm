@@ -91,8 +91,10 @@ sub SearchSuggestion  {
     SELECT suggestions.*,
         U1.surname   AS surnamesuggestedby,
         U1.firstname AS firstnamesuggestedby,
+        U1.borrowernumber AS borrnumsuggestedby,
         U2.surname   AS surnamemanagedby,
-        U2.firstname AS firstnamemanagedby
+        U2.firstname AS firstnamemanagedby,
+        U2.borrowernumber AS borrnummanagedby
     FROM suggestions
     LEFT JOIN borrowers AS U1 ON suggestedby=U1.borrowernumber
     LEFT JOIN borrowers AS U2 ON managedby=U2.borrowernumber
@@ -214,8 +216,10 @@ sub GetSuggestionByStatus {
     my $query = "SELECT suggestions.*,
                         U1.surname   AS surnamesuggestedby,
                         U1.firstname AS firstnamesuggestedby,
+						U1.borrowernumber AS borrnumsuggestedby,
                         U2.surname   AS surnamemanagedby,
-                        U2.firstname AS firstnamemanagedby
+                        U2.firstname AS firstnamemanagedby,
+						U2.borrowernumber AS borrnummanagedby
                         FROM suggestions
                         LEFT JOIN borrowers AS U1 ON suggestedby=U1.borrowernumber
                         LEFT JOIN borrowers AS U2 ON managedby=U2.borrowernumber

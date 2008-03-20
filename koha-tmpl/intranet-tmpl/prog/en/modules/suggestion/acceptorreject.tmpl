@@ -8,27 +8,24 @@
 	 *  displayOther.
 	 *  This function display the select or an textaera to write a reason.
 	 */
-	function displayOther(id) {
-		var spanselect = document.getElementById("span-select-reason"+id);
-		var spanother = document.getElementById("span-other-reason"+id);
-        var select = spanselect.firstChild.nextSibling;	
-        
-		if(select.value != "other"){
-			return;
-		}
-		if(spanother.getAttribute('class')=='content_visible'){
-			spanother.removeAttribute('class');
-			spanselect.removeAttribute('class');
-			spanother.setAttribute('class','content_hidden');
-			spanselect.setAttribute('class','content_visible');
-		}
-		else{
-			spanother.removeAttribute('class');
-			spanselect.removeAttribute('class');
-			spanselect.setAttribute('class','content_hidden');
-			spanother.setAttribute('class','content_visible');			
-		}
+	function displayOther(id,show,hide) {
+		$("#"+hide+id).hide();
+		$("#"+show+id).show();
 	}
+	$(document).ready(function() {
+		$("div[id*=other-reason]").hide();
+		$("input[name*=other-reason]").focus(function(){ $(this).val(""); });
+		$("select[name*=reason]").change(function(){
+			if($(this).children("[@selected]").val() == "other"){
+			displayOther($(this).attr("name").replace(/reason/,""),"other-reason","select-reason");
+			}
+		});
+		$("a[href*=back]").click(function(){
+			var sid = $(this).attr("href").replace(/#back/,"");
+			displayOther(sid,"select-reason","other-reason");
+			$("#reason"+sid).find("option[value='']").attr("selected","selected");
+		});
+	}); 
 // ]]>
 </script>
 </head>
@@ -76,21 +73,19 @@
                     </select>
                 </td>
                 <td>
-
-		            <span id="span-select-reason<!-- TMPL_VAR NAME="suggestionid" -->" class="content_visible">
-                        <!-- TMPL_IF NAME="reasonsloop" --><select name="reason<!-- TMPL_VAR name="suggestionid" -->" onchange="displayOther('<!-- TMPL_VAR NAME="suggestionid" -->');">
+		            <div id="select-reason<!-- TMPL_VAR NAME="suggestionid" -->">
+                    <!-- TMPL_IF NAME="reasonsloop" --><select id="reason<!-- TMPL_VAR name="suggestionid" -->" name="reason<!-- TMPL_VAR name="suggestionid" -->">
 			                <option value=""> -- Choose a reason -- </option>
                             <!-- TMPL_LOOP NAME="reasonsloop" -->
                                 <option value="<!-- TMPL_VAR NAME="lib" -->"><!-- TMPL_VAR NAME="lib" --></option>
                             <!-- /TMPL_LOOP -->
 			                <option value="other">Others...</option>
                         </select><!-- TMPL_ELSE --><span class="problem">No reasons defined in <a href="/cgi-bin/koha/admin/authorised_values.pl">authorised values</a></span><!-- /TMPL_IF -->
-		    </span>
-			
-		    <span id="span-other-reason<!-- TMPL_VAR NAME="suggestionid" -->" class="content_hidden">
-			<input type="text" name="other-reason<!-- TMPL_VAR name="suggestionid" -->" value="please note your reason here..." onclick="if(this.value === 'please note your reason here...'){this.value=''}" />
-			<small><a href="#" onclick="displayOther('<!-- TMPL_VAR NAME="suggestionid" -->'); return false;">back to list</a></small>
-		    </span>
+		    </div>
+		    <div id="other-reason<!-- TMPL_VAR NAME="suggestionid" -->">
+			<input type="text" size="31" name="other-reason<!-- TMPL_VAR name="suggestionid" -->" value="please note your reason here..."  />
+			<p><a href="#back<!-- TMPL_VAR NAME="suggestionid" -->">back to list</a></p>
+		    </div>
 			
                 </td>
                 <td>
@@ -99,11 +94,7 @@
                         <!-- TMPL_IF name="volumedesc" -->; Volume:<i><!-- TMPL_VAR name="volumedesc" --></i> <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="isbn" -->; ISBN :<i><!-- TMPL_VAR name="isbn" --></i> <!-- /TMPL_IF --><!-- TMPL_IF name="publishercode" -->; Published by <!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF --><!-- TMPL_IF name="publicationyear" --> in <i><!-- TMPL_VAR name="publicationyear" --></i> <!-- /TMPL_IF --><!-- TMPL_IF name="place" --> in <i><!-- TMPL_VAR name="place" --></i> <!-- /TMPL_IF --><br /><!-- TMPL_IF name="note" --><!-- TMPL VAR NAME="note" --><!-- /TMPL_IF -->
                 </td>
-                <td>
-                    <!-- TMPL_VAR name="surnamesuggestedby" -->
-                    <!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF -->
-                    <!-- TMPL_VAR name="firstnamesuggestedby" -->
-                </td>
+                <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrnumsuggestedby" -->"><!-- TMPL_VAR name="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->, <!-- TMPL_VAR name="firstnamesuggestedby" --><!-- /TMPL_IF --></a></td>
             </tr>
         <!-- /TMPL_LOOP -->
         </table>
@@ -158,9 +149,7 @@
                     <!-- /TMPL_IF -->
             </td>
             <td>
-                <!-- TMPL_VAR name="surnamesuggestedby" -->
-                <!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF -->
-                <!-- TMPL_VAR name="firstnamesuggestedby" -->
+                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrnumsuggestedby" -->"><!-- TMPL_VAR name="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->, <!-- TMPL_VAR name="firstnamesuggestedby" --><!-- /TMPL_IF --></a>
             </td>
             <td>
                 <!-- TMPL_VAR NAME="date" -->
