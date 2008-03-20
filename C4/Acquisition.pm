@@ -382,6 +382,8 @@ entry to the aqorderbreakdown table, with the order number just found,
 and the book fund ID of the newly-added order.
 
 C<$budget> is effectively ignored.
+  If it's undef (anything false) or the string 'now', the current day is used.
+  Else, the upcoming July 1st is used.
 
 C<$subscription> may be either "yes", or anything else for "no".
 
@@ -432,16 +434,19 @@ sub NewOrder {
     my $dbh = C4::Context->dbh;
     my $query = "
         INSERT INTO aqorders
-           ( biblionumber,title,basketno,quantity,listprice,notes,
-           biblioitemnumber,rrp,ecost,gst,unitprice,subscription,sort1,sort2,budgetdate,entrydate,purchaseordernumber)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,COALESCE(?,NOW()),NOW(),? )
+           ( biblionumber, title,            basketno, quantity, listprice,
+             notes,        biblioitemnumber, rrp,      ecost,    gst,
+             unitprice,    subscription,     sort1,    sort2,    budgetdate,
+             entrydate,    purchaseordernumber)
+        VALUES ( ?,?,?,?,?,?,?,?,?,?,?,?,?,?,COALESCE(?,NOW()),NOW(),? )
     ";
     my $sth = $dbh->prepare($query);
 
     $sth->execute(
         $bibnum, $title,      $basketno, $quantity, $listprice,
         $notes,  $bibitemnum, $rrp,      $ecost,    $gst,
-        $cost,   $sub,        $sort1,    $sort2,    $budget,    $purchaseorder
+        $cost,   $sub,        $sort1,    $sort2,    $budget,
+                 $purchaseorder
     );
     $sth->finish;
 
