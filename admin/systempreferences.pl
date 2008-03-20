@@ -233,6 +233,7 @@ my %tabsysprefs;
     $tabsysprefs{OPACHighlightedWords}="OPAC";
     $tabsysprefs{OPACViewOthersSuggestions}="OPAC";
     $tabsysprefs{URLLinkText}="OPAC";
+    $tabsysprefs{OPACShelfBrowser}="OPAC";
 
 # OPAC
     $tabsysprefs{SearchMyLibraryFirst}="OPAC";
