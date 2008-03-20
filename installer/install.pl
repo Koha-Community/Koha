@@ -324,7 +324,7 @@ elsif ( $step && $step == 3 ) {
               		. ( $info{hostname} ? " -h $info{hostname} " : "" )
               		. ( $info{port}     ? " -P $info{port} "     : "" )
               		. ( $info{user}     ? " -u $info{user} "     : "" )
-              		. ( $info{password} ? " -p$info{password}"   : "" )
+              		. ( $info{password} ? " -p'$info{password}'"   : "" )
               		. " $info{dbname} ";
             	$error = qx($strcmd < $file 2>&1 1>/dev/null);			# We want to send stdout to null and return only stderr... -fbcit
     	    }
@@ -605,7 +605,7 @@ elsif ( $step && $step == 3 ) {
 	        . ( $info{hostname} ? " -h $info{hostname} " : "" )
 	        . ( $info{port}     ? " -P $info{port} "     : "" )
 	        . ( $info{user}     ? " -u $info{user} "     : "" )
-	        . ( $info{password} ? " -p$info{password}"   : "" )
+	        . ( $info{password} ? " -p'$info{password}'"   : "" )
 	        . " $info{dbname} ";
 	    $error = qx($strcmd <$datadir/kohastructure.sql 2>&1 1>/dev/null);
         }
