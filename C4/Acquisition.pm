@@ -403,18 +403,18 @@ sub NewOrder {
     my $month = localtime->mon() + 1;       # months starts at 0, add 1
 
     if ( !$budget || $budget eq 'now' ) {
-        $budget = "now()";
+        $budget = undef;
     }
 
     # if month is july or more, budget start is 1 jul, next year.
     elsif ( $month >= '7' ) {
         ++$year;                            # add 1 to year , coz its next year
-        $budget = "'$year-07-01'";
+        $budget = "$year-07-01";
     }
     else {
 
         # START OF NEW BUDGET, 1ST OF JULY, THIS YEAR
-        $budget = "'$year-07-01'";
+        $budget = "$year-07-01";
     }
 
     if ( $sub eq 'yes' ) {
@@ -434,14 +434,14 @@ sub NewOrder {
         INSERT INTO aqorders
            ( biblionumber,title,basketno,quantity,listprice,notes,
            biblioitemnumber,rrp,ecost,gst,unitprice,subscription,sort1,sort2,budgetdate,entrydate,purchaseordernumber)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,$budget,now(),? )
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,COALESCE(?,NOW()),NOW(),? )
     ";
     my $sth = $dbh->prepare($query);
 
     $sth->execute(
         $bibnum, $title,      $basketno, $quantity, $listprice,
         $notes,  $bibitemnum, $rrp,      $ecost,    $gst,
-        $cost,   $sub,        $sort1,    $sort2,	$purchaseorder
+        $cost,   $sub,        $sort1,    $sort2,    $budget,    $purchaseorder
     );
     $sth->finish;
 
