@@ -227,7 +227,6 @@ sub GetPendingOrders {
             $strsth .= " and (borrowers.branchcode = ?
                           or borrowers.branchcode  = '')";
             push @query_params, $userenv->{branch};
- 
         }
     }
     $strsth .= " group by aqbasket.basketno" if $grouped;
@@ -844,20 +843,19 @@ sub GetParcel {
             AND aqorders.booksellerinvoicenumber LIKE  \"$code\"
             AND aqorders.datereceived= \'$datereceived\'";
 
+    my @query_params = ( $supplierid );
     if ( C4::Context->preference("IndependantBranches") ) {
         my $userenv = C4::Context->userenv;
         if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
-            $strsth .=
-                " AND (borrowers.branchcode = '"
-              . $userenv->{branch}
-              . "' OR borrowers.branchcode ='')";
+            $strsth .= " and (borrowers.branchcode = ?
+                          or borrowers.branchcode  = '')";
+            push @query_params, $userenv->{branch};
         }
     }
     $strsth .= " ORDER BY aqbasket.basketno";
     ### parcelinformation : $strsth
- #   warn "STH : $strsth";
     my $sth = $dbh->prepare($strsth);
-    $sth->execute($supplierid);
+    $sth->execute( @query_params );
     while ( my $data = $sth->fetchrow_hashref ) {
         push( @results, $data );
     }
