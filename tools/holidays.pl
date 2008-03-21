@@ -60,8 +60,7 @@ my $branchesList = CGI::scrolling_list(-name => 'branch',
                                        -size => 1,
                                        -default => [$branch],
                                        -multiple => 0,
-                                       -id => "branch",
-                                       -onChange => "changeBranch()");
+                                       -id => "branch");
 
 $branches->finish;
 

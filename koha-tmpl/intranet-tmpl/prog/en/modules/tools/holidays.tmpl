@@ -88,7 +88,7 @@
 	}
 
 	function changeBranch () {
-		var branch = document.getElementById('branch').options[document.getElementById('branch').selectedIndex].value;
+		var branch = $("#branch option:selected").val();
 		location.href='/cgi-bin/koha/tools/holidays.pl?branch=' + branch;
 	}
 
@@ -108,6 +108,11 @@
 	function Help() {
 		newin=window.open("/cgi-bin/koha/help.pl","Koha Help",'width=600,height=600,toolbar=false,scrollbars=yes');
 	}
+	$(document).ready(function() {
+		$("#branch").change(function(){
+			changeBranch();
+		});
+	});
 //]]>
 </script>
 
