@@ -10,9 +10,7 @@ BEGIN {
 }
 
 # Koha modules used
-# use MARC::File::USMARC;
 use MARC::Record;
-use MARC::Batch;
 use C4::Context;
 use C4::Biblio;
 use Time::HiRes qw(gettimeofday);
