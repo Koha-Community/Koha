@@ -17,6 +17,8 @@ use MARC::Record;
 use MARC::Batch;
 
 use Getopt::Long;
+use IO::File;
+
 my ( $input_marc_file,$number,$nowarning,$frameworkcode) = ('',0);
 my $version;
 GetOptions(
@@ -49,7 +51,8 @@ EOF
 die;
 }#/
 
-my $batch = MARC::Batch->new( 'USMARC', $input_marc_file );
+my $fh = IO::File->new($input_marc_file); # don't let MARC::Batch open the file, as it applies the ':utf8' IO layer
+my $batch = MARC::Batch->new( 'USMARC', $fh );
 $batch->warnings_off() unless $nowarning;
 $batch->strict_off() unless $nowarning;
 my $dbh=C4::Context->dbh;

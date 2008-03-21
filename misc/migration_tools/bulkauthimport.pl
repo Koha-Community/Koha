@@ -19,8 +19,9 @@ use C4::Context;
 use C4::Charset;
 use C4::AuthoritiesMarc;
 use Time::HiRes qw(gettimeofday);
-
 use Getopt::Long;
+use IO::File;
+
 my ( $input_marc_file, $number) = ('',0);
 my ($version, $delete, $test_parameter,$char_encoding, $verbose, $format, $commit);
 $| = 1;
@@ -72,6 +73,7 @@ my $marcFlavour = C4::Context->preference('marcflavour') || 'MARC21';
 $char_encoding = 'MARC21' unless ($char_encoding);
 print "CHAR : $char_encoding\n" if $verbose;
 my $starttime = gettimeofday;
+my $fh = IO::File->new($input_marc_file); # don't let MARC::Batch open the file, as it applies the ':utf8' IO layer
 my $batch;
 if ($format =~ /XML/i) {
     # ugly hack follows -- MARC::File::XML, when used by MARC::Batch,
@@ -84,9 +86,9 @@ if ($format =~ /XML/i) {
     #       extract the records, not using regexes to look
     #       for <record>.*</record>.
     $MARC::File::XML::_load_args{BinaryEncoding} = 'utf-8';
-    $batch = MARC::Batch->new( 'XML', $input_marc_file );
+    $batch = MARC::Batch->new( 'XML', $fh );
 } else {
-    $batch = MARC::Batch->new( 'USMARC', $input_marc_file );
+    $batch = MARC::Batch->new( 'USMARC', $fh );
 }
 $batch->warnings_off();
 $batch->strict_off();

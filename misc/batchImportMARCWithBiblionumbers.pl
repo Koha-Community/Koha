@@ -19,6 +19,8 @@ use MARC::File::XML;
 use MARC::Batch;
 use Time::HiRes qw(gettimeofday);
 use Getopt::Long;
+use IO::File;
+
 my  $input_marc_file = '';
 my ($version);
 GetOptions(
@@ -45,7 +47,8 @@ my $timeneeded;
 my $dbh = C4::Context->dbh;
 
 my $sth2=$dbh->prepare("update biblioitems  set marc=? where biblionumber=?");
-my $batch = MARC::Batch->new( 'USMARC', $input_marc_file );
+my $fh = IO::File->new($input_marc_file); # don't let MARC::Batch open the file, as it applies the ':utf8' IO layer
+my $batch = MARC::Batch->new( 'USMARC', $fh );
 $batch->warnings_off();
 $batch->strict_off();
 my ($tagfield,$biblionumtagsubfield) = &GetMarcFromKohaField("biblio.biblionumber","");
