@@ -170,6 +170,9 @@ $(document).ready(function(){
             <!-- TMPL_ELSE -->
                 <tr>
             <!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="XSLTResultsDisplay" -->
+                <!-- TMPL_VAR NAME="XSLTResultsRecord" -->
+            <!-- TMPL_ELSE -->
                     <td><!-- TMPL_IF NAME="AmazonContent" -->
                         <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_IF NAME="isbn" --><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.TZZZZZZZ.jpg" alt="" class="thumbnail" /><!-- TMPL_ELSE --><img src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="" class="thumbnail" /><!-- /TMPL_IF -->
                         </a>
@@ -191,12 +194,19 @@ $(document).ready(function(){
 						<!-- TMPL_IF name="size" -->, <!-- TMPL_VAR name="size" --><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="timestamp" --> <i>(modified on <!-- TMPL_VAR name="timestamp" -->)</i><!-- /TMPL_IF -->
 				</p>
+                <!-- TMPL_VAR NAME="copyrightdate" -->
         <!--TMPL_IF Name="searchhighlightblob"--><p class="searchhighlightblob"><!-- TMPL_VAR NAME="searchhighlightblob" --></p><!--/TMPL_IF-->
 				<p class="availability">
 					<!-- TMPL_IF NAME="available_items_loop" -->
-					<span class="available"><strong>Copies available at:</strong>
+					<span class="available"><strong>Copies available:</strong>
 					<!-- TMPL_LOOP NAME="available_items_loop" -->
-					<!-- TMPL_IF NAME="branchname" --><!-- TMPL_VAR NAME="branchname" --><!-- /TMPL_IF -->
+
+                    <!-- TMPL_IF NAME="singleBranchMode" -->
+                        <!-- TMPL_VAR NAME="location" -->
+                    <!-- TMPL_ELSE -->
+                        <!-- TMPL_VAR NAME="branchname" -->
+                    <!-- /TMPL_IF -->
+
 					<!-- TMPL_IF name="OPACItemsResultsDisplay" -->
                         <!-- TMPL_IF NAME="location" --><!-- TMPL_VAR NAME="location" --><!-- /TMPL_IF -->
                         <!-- TMPL_IF NAME="itemcallnumber" -->[<a href="/cgi-bin/koha/opac-search.pl?q=callnum:<!-- TMPL_VAR NAME="itemcallnumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="itemcallnumber" --></a>]<!-- /TMPL_IF -->
@@ -220,6 +230,7 @@ $(document).ready(function(){
                 <a href="/cgi-bin/koha/opac-search.pl?q=callnum:<!-- TMPL_VAR NAME="itemcallnumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="itemcallnumber" --></a>
 <!-- /TMPL_IF --></p> 
 				</td>
+                <!-- /TMPL_IF -->
                 </tr>
                 <!-- /TMPL_LOOP -->
             </table>

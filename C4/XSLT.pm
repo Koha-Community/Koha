@@ -1,0 +1,152 @@
+package C4::XSLT;
+# Copyright (C) 2006 LibLime
+# <jmf at liblime dot com>
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+
+use C4::Context;
+use C4::Branch;
+use C4::Items;
+use C4::Koha;
+use C4::Biblio;
+use XML::LibXML;
+use XML::LibXSLT;
+
+use strict;
+
+use vars qw($VERSION @ISA @EXPORT);
+
+BEGIN {
+    require Exporter;
+    $VERSION = 0.03;
+    @ISA = qw(Exporter);
+    @EXPORT = qw(
+        &XSLTParse4Display
+    );
+}
+
+=head1 NAME
+
+C4::XSLT - Functions for displaying XSLT-generated content
+
+=head1 FUNCTIONS
+
+=head1 transformMARCXML4XSLT
+
+=head2 replaces codes with authorized values in a MARCXML record
+
+=cut
+
+sub transformMARCXML4XSLT {
+    my ($biblionumber) = @_;
+    my $record = GetMarcBiblio($biblionumber);
+    my $biblio = GetBiblioData($biblionumber);
+    my $frameworkcode = GetFrameworkCode($biblionumber);
+    my $tagslib = &GetMarcStructure(1,$frameworkcode);
+    my @fields = $record->fields();
+    my $list_of_authvalues = getAuthorisedValues4MARCSubfields($frameworkcode);
+    for my $authvalue (@$list_of_authvalues) {
+        for my $field ( $record->field($authvalue->{tagfield}) ) {
+            my @newSubfields = ();
+            for my $subfield ( $field->subfields() ) {
+                my ($code,$data) = @$subfield;
+                unless ($code eq $authvalue->{tagsubfield}) {
+                    push ( @newSubfields, $code, $data );
+                } else {
+                    my $newvalue = GetAuthorisedValueDesc( $authvalue->{tagfield}, $code, $data, '', $tagslib );
+                    push ( @newSubfields, $code, $newvalue );
+                }
+            }
+            my $newField = MARC::Field->new(
+                $authvalue->{tagfield},
+                $field->indicator(1),
+                $field->indicator(2),
+                $authvalue->{tagsubfield} => @newSubfields
+            );
+            $field->replace_with($newField);
+        }
+    }
+    return $record;
+}
+
+=head1 getAuthorisedValues4MARCSubfields
+
+=head2 returns an array of hash refs for authorised value tag/subfield combos for a given framework
+
+=cut
+
+sub getAuthorisedValues4MARCSubfields {
+    my ($frameworkcode) = @_;
+    my @results;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT DISTINCT tagfield,tagsubfield FROM marc_subfield_structure WHERE authorised_value IS NOT NULL AND authorised_value!='' AND frameworkcode=?");
+    $sth->execute($frameworkcode);
+    while (my $result = $sth->fetchrow_hashref()) {
+        push @results, $result;
+    }
+    return \@results;
+}
+
+sub XSLTParse4Display {
+    my ($biblionumber,$type) = @_;
+    # grab the XML, run it through our stylesheet, push it out to the browser
+    my $record = transformMARCXML4XSLT($biblionumber);
+    my $itemsxml  = buildKohaItemsNamespace($biblionumber);
+    my $xmlrecord = $record->as_xml();
+    $xmlrecord =~ s/\<\/record\>/$itemsxml\<\/record\>/;
+    my $xslfile = C4::Context->config('intranetdir')."/koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPAC$type.xsl";
+    my $parser = XML::LibXML->new();
+    # don't die when you find &, >, etc
+    $parser->recover_silently(1);
+    my $xslt = XML::LibXSLT->new();
+    my $source = $parser->parse_string($xmlrecord);
+    my $style_doc = $parser->parse_file($xslfile);
+    my $stylesheet = $xslt->parse_stylesheet($style_doc);
+    my $results = $stylesheet->transform($source);
+    my $newxmlrecord = $stylesheet->output_string($results);
+    return $newxmlrecord;
+}
+
+sub buildKohaItemsNamespace {
+    my ($biblionumber) = @_;
+    my @items = C4::Items::GetItemsInfo($biblionumber);
+    my $branches = GetBranches();
+    my $itemtypes = GetItemTypes();
+    my $xml;
+    for my $item (@items) {
+        my $status;
+        if ($item->{onloan}) {
+            $status = "On loan";
+        } else {
+            $status = "available";
+        }
+        $xml.="<item><homebranch>".$branches->{$item->{homebranch}}->{'branchname'}."</homebranch>"."<status>$status</status></item>";
+    }
+    return "<items xmlns='http://www.koha.org/items'>".$xml."</items>";
+}
+
+
+
+1;
+__END__
+
+=head1 NOTES
+
+=head1 AUTHOR
+
+Joshua Ferraro <jmf@liblime.com>
+
+=cut

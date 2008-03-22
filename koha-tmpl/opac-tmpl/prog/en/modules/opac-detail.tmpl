@@ -27,7 +27,13 @@
         <img border="0" src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="Cover Image" />
         <!-- /TMPL_IF --></div>
 <!-- /TMPL_IF -->
-   <div id="views"> <h1><!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF NAME="subtitle" --> <span class="subtitle"><!-- TMPL_VAR NAME="subtitle" --></span><!-- /TMPL_IF --></h1> <span class="views"><span id="Normalview">Normal View</span> <a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">MARC View</a> <!-- TMPL_IF NAME="ISBD" --><a id="ISBDview" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">ISBD View</a><!-- /TMPL_IF --></span></div>
+<!-- TMPL_IF NAME="XSLTDetailsDisplay" -->
+<!-- TMPL_VAR NAME="XSLTBloc" -->
+<!-- TMPL_ELSE -->
+   <div id="views">
+   <h1><!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF NAME="subtitle" --> <span class="subtitle"><!-- TMPL_VAR NAME="subtitle" --></span><!-- /TMPL_IF --></h1> <span class="views"><span id="Normalview">Normal View</span> <a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">MARC View</a> <!-- TMPL_IF NAME="ISBD" --><a id="ISBDview" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">ISBD View</a><!-- /TMPL_IF --></span>
+   </div>
+
     <!-- TMPL_IF NAME="author" --><h2 class="author">By <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="author" -->"><!-- TMPL_VAR NAME="author" ESCAPE="HTML" --></a></h2><!-- /TMPL_IF -->
     <p><!-- TMPL_UNLESS NAME="item-level_itypes" -->
         [
@@ -61,7 +67,6 @@
             <!-- /TMPL_LOOP -->
     </p>
     <!-- /TMPL_IF -->
-
     <!-- TMPL_IF name="editionstatement" -->
     <p><span class="label">Edition statement:</span><!-- TMPL_VAR name="editionstatement" --><!-- TMPL_IF name="editionresponsibility" -->/<!-- TMPL_VAR name="editionresponsibility" --><!-- /TMPL_IF--></p>
     <!-- /TMPL_IF -->
@@ -140,6 +145,7 @@
 			<!-- TMPL_IF NAME="notes" --><ul><!-- TMPL_LOOP NAME="notes" --><li><!-- TMPL_VAR NAME="note" --></li><!-- /TMPL_LOOP --></ul><!-- /TMPL_IF --></li>
             <!-- /TMPL_LOOP --></ul>
     <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
 </div>
 
 <div id="bibliodescriptions" class="toptabs">
@@ -177,7 +183,7 @@
 
             <!-- TMPL_IF NAME="item-level_itypes" --><td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR name="description" -->
                     </td><!-- /TMPL_IF -->
-            <td><!-- TMPL_IF NAME="singleBranchMode" --><!-- TMPL_VAR NAME="location_description" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="branchname" --> <!-- /TMPL_IF --><!-- TMPL_VAR name="location_description" --> <!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="OPACShelfBrowser" -->(<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser">Browse Shelf</a>)<!-- /TMPL_IF --></td>
+            <td><!-- TMPL_UNLESS NAME="singleBranchMode" --><!-- TMPL_VAR NAME="branchname" --><!-- /TMPL_UNLESS --> <!-- TMPL_VAR name="location_description" --> <!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="OPACShelfBrowser" -->(<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser">Browse Shelf</a>)<!-- /TMPL_IF --></td>
             <td><!-- TMPL_IF name="bi_notforloan" -->
                     Not for loan
                 <!-- TMPL_ELSE -->

@@ -34,6 +34,7 @@ use C4::Amazon;
 use C4::Review;
 use C4::Serials;
 use C4::Members;
+use C4::XSLT;
 
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -48,6 +49,11 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $biblionumber = $query->param('biblionumber') || $query->param('bib');
 $template->param( biblionumber => $biblionumber );
+# XSLT processing of some stuff
+if (C4::Context->preference("XSLTResultsDisplay") ) {
+    my $newxmlrecord = XSLTParse4Display($biblionumber,'Detail');
+    $template->param('XSLTBloc' => $newxmlrecord);
+}
 
 # change back when ive fixed request.pl
 my @all_items = &GetItemsInfo( $biblionumber, 'opac' );

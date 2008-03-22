@@ -24,6 +24,7 @@ use Lingua::Stem;
 use C4::Search::PazPar2;
 use XML::Simple;
 use C4::Dates qw(format_date);
+use C4::XSLT;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
 
@@ -1489,7 +1490,13 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
             push @available_items_loop, $available_items->{$key}
         }
 
-# last check for norequest : if itemtype is notforloan, it can't be reserved either, whatever the items
+        # XSLT processing of some stuff
+        if (C4::Context->preference("XSLTResultsDisplay") ) {
+            my $newxmlrecord = XSLTParse4Display($oldbiblio->{biblionumber},'Results');
+            $oldbiblio->{XSLTResultsRecord} = $newxmlrecord;
+        }
+
+        # last check for norequest : if itemtype is notforloan, it can't be reserved either, whatever the items
         $can_place_holds = 0
           if $itemtypes{ $oldbiblio->{itemtype} }->{notforloan};
         $oldbiblio->{norequests} = 1 unless $can_place_holds;

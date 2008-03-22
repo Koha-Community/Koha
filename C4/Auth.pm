@@ -275,6 +275,7 @@ sub get_template_and_user {
 			canreservefromotherbranches => C4::Context->preference('canreservefromotherbranches'),
 			intranetreadinghistory => C4::Context->preference("intranetreadinghistory"),
 			noItemTypeImages => C4::Context->preference("noItemTypeImages"),
+            singleBranchMode => C4::Context->preference("singleBranchMode"),
         );
     }
     else {
@@ -329,6 +330,9 @@ sub get_template_and_user {
             'item-level_itypes' => C4::Context->preference('item-level_itypes'),
             'Version' => C4::Context->preference('Version'),
 			yuipath => C4::Context->preference("yuipath"),
+            singleBranchMode => C4::Context->preference("singleBranchMode"),
+            XSLTResultsDisplay => C4::Context->preference("XSLTResultsDisplay"),
+            XSLTDetailsDisplay => C4::Context->preference("XSLTDetailsDisplay"),
         );
     }
 	$template->param(listloop=>[{shelfname=>"Freelist", shelfnumber=>110}]);
