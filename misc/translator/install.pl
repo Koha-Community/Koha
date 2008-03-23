@@ -10,13 +10,12 @@ my $po;
 opendir (DIR,$dir);
 while (defined($po = readdir(DIR))) {
     next if $po =~ /^\.\.?$/;
-    print "processing $po...\n";
-    my $interface = 'intranet';
-    if ($po =~ /opac/) {
-        $interface = 'opac';
-    }
-    system("./tmpl_process3.pl update -i ../../koha-tmpl/$interface-tmpl/prog/en/ -s po/$po -r");
-    print "Finished\n";
+    $po =~  /^(.*)-i-(staff|opac).*/;
+    print "lang: $1 interface:$2\n";
+    my ($lang,$interface) = ($1,$2);
+    $interface =~ s/staff/intranet/;
+    system("mkdir ../../koha-tmpl/$interface-tmpl/prog/$lang");
+    system("./tmpl_process3.pl install -i ../../koha-tmpl/$interface-tmpl/prog/en/ -o ../../koha-tmpl/$interface-tmpl/prog/$lang/ -s po/$po -r");
 }
 closedir DIR;
 
