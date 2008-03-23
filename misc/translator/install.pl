@@ -9,7 +9,7 @@ my $dir = "po";
 my $po;
 opendir (DIR,$dir);
 while (defined($po = readdir(DIR))) {
-    next if $po =~ /^\.\.?$/;
+    next if $po =~ /(^\.\.?$|img|fam)/;
     $po =~  /^(.*)-i-(staff|opac).*/;
     print "lang: $1 interface:$2\n";
     my ($lang,$interface) = ($1,$2);
