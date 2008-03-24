@@ -471,7 +471,9 @@ $template->param(
     CGIselectborrower => $CGIselectborrower,
     title             => $dat->{title},
     author            => $dat->{author},
-	holdsview => 1
+	holdsview => 1,
+	borrower_branchname => $branches->{$borrowerinfo->{'branchcode'}}->{'branchname'},
+	borrower_branchcode => $borrowerinfo->{'branchcode'},
 );
 
 # printout the page
