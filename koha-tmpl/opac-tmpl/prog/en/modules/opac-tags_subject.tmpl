@@ -11,14 +11,13 @@
 
     <h1>Subject cloud</h1>
     <p>This "cloud" show you the most used topics in our catalogue. Click on one of them to see the documents related to it</p>
-    <div id="action">
         <fieldset>
         <legend>Show</legend>
-        <form>
-            <p>up to <input type="text" name="number" value="<!-- TMPL_VAR name="number" -->" size="4" maxlength="4"/> subjects <input type="submit" value="OK"></p>
+        <form action="/cgi-bin/koha/opac-tags_subject.pl" method="post">
+            <p>up to <input type="text" name="number" value="<!-- TMPL_VAR name="number" -->" size="4" maxlength="4" /> subjects <input type="submit" value="OK" /></p>
         </form>
         </fieldset>
-    </div>
+
         <!-- TMPL_LOOP name="LOOP" -->
             <a href="/cgi-bin/koha/opac-search.pl?q=su:<!-- TMPL_VAR name="entry" ESCAPE="HTML" -->" style="font-size:<!-- TMPL_VAR name="weight" -->px;"><!-- TMPL_VAR name="entry" --></a>
         <!-- /TMPL_LOOP -->

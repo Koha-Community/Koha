@@ -10,54 +10,50 @@
 
 <!-- TMPL_IF NAME="message" -->
     <!-- TMPL_IF NAME="GNA" -->
-    <p class="problem">
+    <div class="dialog alert">
         <strong>Sorry</strong>, you cannot place holds because the library doesn't have up-to-date <a href="/cgi-bin/koha/opac-userdetails.pl">contact information</a> on file.
-    </p>
-    <p class="problem">Please contact your librarian, or use the <a href="/cgi-bin/koha/opac-userupdate.pl">online update form</a> to submit current information (<em>Please note:</em> there may be a delay in restoring your account if you submit online)
-    </p>
+    </div>
+    <div class="dialog alert">Please contact your librarian, or use the <a href="/cgi-bin/koha/opac-userupdate.pl">online update form</a> to submit current information (<em>Please note:</em> there may be a delay in restoring your account if you submit online)
+    </div>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="lost" -->
-    <p class="problem">
+    <div class="dialog alert">
         <strong>Sorry</strong>, you cannot place holds because your library card has been marked as lost or stolen.
-    </p>
-    <p class="problem">
+    </div>
+    <div class="dialog alert">
         If this is an error, please take your card to the circulation desk at your local library and the error will be corrected.
-    </p>
+    </div>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="debarred" -->
     <p class="error">
         <strong>Sorry</strong>, you cannot place holds because your account has been frozen.
-    </p>
-    <p class="problem">Usually the reason for freezing an account is old overdues or damage fees.   If <a href="/cgi-bin/koha/opac-user.pl">your account page</a> shows your account to be clear, please consult a librarian.
-    </p>
+    </div>
+    <div class="dialog alert">Usually the reason for freezing an account is old overdues or damage fees.   If <a href="/cgi-bin/koha/opac-user.pl">your account page</a> shows your account to be clear, please consult a librarian.
+    </div>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="too_much_oweing" -->
-    <p class="problem">
+    <div class="dialog alert">
         Sorry, you cannot place holds because you owe <!-- TMPL_VAR NAME="too_much_oweing" -->.
-    </p>
+    </div>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="too_many_reserves" -->
-        <p class="error">Sorry, you cannot place more than <!-- TMPL_VAR NAME="too_many_reserves" --> holds.
-        </p>
+        <div class="dialog alert">Sorry, you cannot place more than <!-- TMPL_VAR NAME="too_many_reserves" --> holds.
+        </div>
         <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="already_reserved" -->
-    <p class="problem">
-        You already have a hold placed on this item.
-        <form action="/cgi-bin/koha/opac-detail.pl" method="post">
-            <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
-            <input type="submit" class="icon back" value="Return to Item Detail Screen" />
-        </form>
-    </p>
+    <div class="dialog alert">
+        You already have a hold placed on this item. <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Return to Item Detail Screen</a>
+    </div>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="no_items_selected" -->
-    <p class="problem">
+    <div class="dialog alert">
         You must select at least one item.
-    </p>
+    </div>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="no_branch_selected" -->
-    <p class="error">
+    <div class="dialog alert">
         You must select a library for pickup.
-    </p>
+    </div>
     <!-- /TMPL_IF -->
 </div>
 <!-- /TMPL_IF -->
@@ -67,15 +63,17 @@
     <form action="/cgi-bin/koha/opac-reserve.pl" method="post">
         <input type="hidden" name="item_types_selected" value="1">
         <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
-        <h3>Place a hold on <span class="title"><!-- TMPL_VAR NAME="title" --><!-- TMPL_IF NAME="author" -->,  by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --></h3>
-            <p><strong>For:</strong> <!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)
+        <h3>Place a hold on <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><!-- TMPL_IF NAME="author" -->,  by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --></h3>
+		<fieldset class="rows holds">
+			<ol>
+				<li><span class="label">For:</span> <!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)
             <!-- TMPL_IF NAME="singleBranchMode" -->
              <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branchcode" -->"/>
             <!-- /TMPL_IF -->
-            <!-- /TMPL_LOOP --></p>
-            <p><strong>Priority:</strong><!-- TMPL_VAR Name="fixedRank" --> out of ?</p> 
+            <!-- /TMPL_LOOP --></li>
+            <li><span class="label">Priority:</span><!-- TMPL_VAR Name="fixedRank" --> out of ?</li> 
             <!-- TMPL_UNLESS NAME="singleBranchMode" -->
-            <p>Pick up from:<select name="branch" id="branch">
+            <li><label for="branch">Pick up from:</label> <select name="branch" id="branch">
                     <!-- TMPL_LOOP NAME="CGIbranch" -->
                         <!-- TMPL_IF name="selected" -->
                             <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branch" --></option>
@@ -84,17 +82,20 @@
                         <!-- /TMPL_IF -->
                     <!-- /TMPL_LOOP -->
             </select>
-            </p>
+            </li>
             <!-- /TMPL_UNLESS -->
 			<!-- TMPL_IF NAME="forloan" -->
-            <p> <label for="requestany">Place a hold on the next available copy </label>
+            <li> <label for="requestany">Place a hold on the next available copy </label>
             <input type="checkbox" id="requestany" name="request" checked="checked" value="Any" />
-            </p>
+            </li>
+			</ol>
+		</fieldset>
 
-            <input type="hidden" name="biblioitem" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" />
+
+<fieldset class="action">            <input type="hidden" name="biblioitem" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" />
             <input type="submit" value="Place Hold" />
-            <input type="hidden" name="all" value="1"/></p>
-            <input type="hidden" name="place_reserve" value="1"/>
+            <input type="hidden" name="all" value="1" /></p>
+            <input type="hidden" name="place_reserve" value="1" /></fieldset>
 			<!-- /TMPL_IF -->            
         <!-- TMPL_LOOP name="bibitemloop" -->    
 
@@ -102,8 +103,9 @@
             <p><strong>Item type:</strong> <!-- TMPL_VAR NAME="description" --></p>
             <!-- /TMPL_UNLESS -->
             <!-- TMPL_IF NAME="publicationyear" --><p><strong>Publication year:</strong> <!-- TMPL_VAR NAME="publicationyear" --></p><!-- /TMPL_IF -->
-            <label for="requestspecific">Place a hold on a specific copy</label>
+
             <table id="requestspecific">
+			<caption>Place a hold on a specific copy</caption>
             <tr>
 	            <!-- TMPL_IF NAME="item-level_itypes" -->
                 <th>Hold</th>

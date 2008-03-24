@@ -14,11 +14,11 @@ function Dopop(link) {
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
 
-        <form method="post">
+        <form method="post" action="/cgi-bin/koha/opac-topissues.pl">
 		<fieldset class="rows">
 		<legend>See the Most Popular Titles</legend>
           <ol>  <li><label for="limit">Show the top </label> <select name="limit" id="limit">
-                            <option value ="10" checked>10</option>
+                            <option value ="10" selected="selected">10</option>
                             <option value ="15">15</option>
                             <option value ="20">20</option>
                             <option value ="25">25</option>
@@ -53,11 +53,13 @@ function Dopop(link) {
                 <option value="6">6 months</option>
                 <option value="12">12 months</option>
                 <option value="999">No limit</option>
-            <li></ol>
+				</select>
+            </li></ol>
         <input type="hidden" name="do_it" value="1" />
-    </fieldset><fieldset class="action">
+    </fieldset>
+	<fieldset class="action">
         <input type="submit" value="Submit" /></fieldset>
-        </form>
+    </form>
 
     <!-- TMPL_IF NAME="results_loop" -->
     
@@ -85,7 +87,6 @@ function Dopop(link) {
                         <p><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">
                         <!-- TMPL_VAR name="title" --></a>
                         </p>
-                        <p>
                         <!-- TMPL_VAR NAME="author" -->
                         <!-- TMPL_IF name="publicationyear" --> - <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="publishercode" -->- <!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF --> <!-- TMPL_IF name="seriestitle" -->(<!-- TMPL_VAR name="seriestitle" -->)<!-- /TMPL_IF -->
