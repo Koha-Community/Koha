@@ -29,6 +29,7 @@ use C4::Circulation;
 use C4::Output;
 use C4::Dates qw/format_date/;
 use C4::Members;
+use C4::Branch;
 
 my $query = new CGI;
 
@@ -45,6 +46,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 # get borrower information ....
 my ( $borr, $flags ) = GetMemberDetails( $borrowernumber );
+my $lib = GetBranchDetail($borr->{'branchcode'});
 
 # handle the new information....
 # collect the form values and send an email.
@@ -53,7 +55,8 @@ my @fields = (
     'fax', 'address','address2','city','zipcode','phone','mobile','fax','phonepro', 'emailaddress','B_streetaddress','B_city','B_zipcode','dateofbirth','sex'
 );
 my $update;
-my $updateemailaddress = C4::Context->preference('KohaAdminEmailAddress');
+my $updateemailaddress = $lib->{'branchemail'};
+$updateemailaddress = C4::Context->preference('KohaAdminEmailAddress') unless( $updateemailaddress =~ /\w+@\w+/);
 if ( $updateemailaddress eq '' ) {
     warn
 "KohaAdminEmailAddress system preference not set.  Couldn't send patron update information for $borr->{'firstname'} $borr->{'surname'} (#$borrowernumber)\n";
