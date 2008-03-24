@@ -134,6 +134,8 @@ if ( $check == 0 ) {
 my $borrowercategory = GetBorrowercategory( $data->{'categorycode'} );
 my $category_type = $borrowercategory->{'category_type'};
 ( $template->param( adultborrower => 1 ) ) if ( $category_type eq 'A' );
+my ($picture, $dberror) = GetPatronImage($data->{'cardnumber'});
+$template->param( picture => 1 ) if $picture;
 	
     $template->param(
         allfile        => \@allfile,
