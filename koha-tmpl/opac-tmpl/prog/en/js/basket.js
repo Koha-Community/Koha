@@ -58,7 +58,11 @@ function readCookie(name, wd) {
 function delCookie(name) {
     var exp = new Date();
     exp.setTime(exp.getTime()-1);
+	if(parent.opener){
     parent.opener.document.cookie = name + "=null; expires=" + exp.toGMTString();
+	} else {
+	document.cookie = name + "=null; expires=" + exp.toGMTString();
+	}
 }
 
 ///////////////////////////////////////////////////////////////////

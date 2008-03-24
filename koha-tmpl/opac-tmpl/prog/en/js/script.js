@@ -10,6 +10,18 @@ $(document).ready(function(){
 	$(".close").click(function(){
 		window.close();
 	});
+	// clear the basket when user logs out
+	$("#logout").click(function(){
+		var nameCookie = "bib_list";
+	    var valCookie = readCookie(nameCookie);
+		if (valCookie) { // basket has contents
+			updateBasket(0,null);
+			delCookie(nameCookie);
+			return true;
+		} else {
+			return true;
+		}
+	});
 });
 
 // build Change Language menus
@@ -51,4 +63,3 @@ YAHOO.util.Event.onContentReady("listsmenu", function () {
 		YAHOO.util.Event.addListener("listsmenulink", "click", listMenu.show, null, listMenu);
 		YAHOO.widget.Overlay.windowResizeEvent.subscribe(positionlistMenu);
  });
-
