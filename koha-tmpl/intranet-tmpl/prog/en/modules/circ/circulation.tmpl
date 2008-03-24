@@ -106,8 +106,63 @@
 </form>
 
 </div></div>
-
 <!-- /TMPL_IF --> <!-- NEEDSCONFIRMATION -->
+
+        <!-- TMPL_IF NAME="IMPOSSIBLE" -->
+<div class="yui-g">
+<div id="circ_impossible" class="dialog alert">
+<!-- RESULT OF ISSUING REQUEST -->
+        <ul>
+        <!-- TMPL_IF NAME="STATS" -->
+            <li>Local Use Recorded</li>
+        <!-- /TMPL_IF -->
+
+        <!-- TMPL_IF NAME="INVALID_DATE" -->
+            <li>The due date is invalid</li>
+        <!-- /TMPL_IF -->  
+        <!-- TMPL_IF NAME="UNKNOWN_BARCODE" -->
+            <li>The barcode was not found</li>
+        <!-- /TMPL_IF -->
+
+        <!-- TMPL_IF NAME="NOT_FOR_LOAN" -->
+            <li>Item not for loan</li>
+        <!-- /TMPL_IF -->
+
+        <!-- TMPL_IF NAME="WTHDRAWN" -->
+            <li>Item has been withdrawn</li>
+        <!-- /TMPL_IF -->
+
+        <!-- TMPL_IF NAME="GNA" -->
+            <li>Patron's address is in doubt</li>
+        <!-- /TMPL_IF -->
+
+        <!-- TMPL_IF NAME="CARD_LOST" -->
+            <li>Patron's card is lost</li>
+        <!-- /TMPL_IF -->
+
+        <!-- TMPL_IF NAME="DEBARRED" -->
+            <li>Patron is restricted</li>
+        <!-- /TMPL_IF -->
+
+        <!-- TMPL_IF NAME="NO_MORE_RENEWALS" -->
+            <li>No more renewals possible</li>
+        <!-- /TMPL_IF -->
+
+        <!-- TMPL_IF NAME="EXPIRED" -->
+            <li>Patron's card is expired</li>
+        <!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="NOTSAMEBRANCH" -->
+	     <li>This item belongs to <!-- TMPL_VAR NAME="itemhomebranch" --> and cannot be issued from this location.</li>
+	<!-- /TMPL_IF -->	 
+        </ul>
+
+    <!-- TMPL_IF NAME="memberofinstution" -->
+    <p><!-- TMPL_VAR NAME="CGIorganisations" --></p>
+    <!-- /TMPL_IF -->
+
+</div></div>
+    <!--/TMPL_IF --> <!-- /impossible -->
 
 <!-- TMPL_IF NAME="issued" -->
 <p>Item Checked out</p>
@@ -155,58 +210,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 	<div class="hint">Enter item barcode:</div>
 	
 	<input type="text" name="barcode" id="barcode" class="barcode focus" size="14" /> <input type="submit" value="Check Out" />
-        <!-- RESULT OF ISSUING REQUEST -->
-        <!-- TMPL_IF NAME="IMPOSSIBLE" -->
-        <ul>
-        <!-- TMPL_IF NAME="STATS" -->
-            <li><span class="problem">Local Use Recorded</span></li>
-        <!-- /TMPL_IF -->
-
-        <!-- TMPL_IF NAME="INVALID_DATE" -->
-            <li><span class="problem">The due date is invalid</span></li>
-        <!-- /TMPL_IF -->  
-        <!-- TMPL_IF NAME="UNKNOWN_BARCODE" -->
-            <li><span class="problem">The barcode was not found</span></li>
-        <!-- /TMPL_IF -->
-
-        <!-- TMPL_IF NAME="NOT_FOR_LOAN" -->
-            <li><span class="problem">Item not for loan</span></li>
-        <!-- /TMPL_IF -->
-
-        <!-- TMPL_IF NAME="WTHDRAWN" -->
-            <li><span class="problem">Item has been withdrawn</span></li>
-        <!-- /TMPL_IF -->
-
-        <!-- TMPL_IF NAME="GNA" -->
-            <li><span class="problem">Patron's address is in doubt</span></li>
-        <!-- /TMPL_IF -->
-
-        <!-- TMPL_IF NAME="CARD_LOST" -->
-            <li><span class="problem">Patron's card is lost</span></li>
-        <!-- /TMPL_IF -->
-
-        <!-- TMPL_IF NAME="DEBARRED" -->
-            <li><span class="problem">Patron is restricted</span></li>
-        <!-- /TMPL_IF -->
-
-        <!-- TMPL_IF NAME="NO_MORE_RENEWALS" -->
-            <li><span class="problem">No more renewals possible</span></li>
-        <!-- /TMPL_IF -->
-
-        <!-- TMPL_IF NAME="EXPIRED" -->
-            <li><span class="problem">Patron's card is expired</span></li>
-        <!-- /TMPL_IF -->
-	
-	<!-- TMPL_IF NAME="NOTSAMEBRANCH" -->
-	     <li><span class="problem">This item belongs to <!-- TMPL_VAR NAME="itemhomebranch" --> and cannot be issued from this location.</span></li>
-	<!-- /TMPL_IF -->	 
-        </ul>
-
-    <!-- TMPL_IF NAME="memberofinstution" -->
-    <p><!-- TMPL_VAR NAME="CGIorganisations" --></p>
-    <!-- /TMPL_IF -->
-
-    <!--/TMPL_IF --> <!-- /impossible -->
+        
     <div class="date-select">
         <div class="hint">Specify Due Date:</div><input type="text" size="10" id="duedatespec" name="duedatespec" value="<!-- TMPL_VAR NAME="duedatespec" -->" />                                                        
 		<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar"  border="0" id="CalendarDueDate" style="cursor: pointer;" valign="top" />
@@ -322,9 +326,9 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 		    <h4>Holds waiting:</h4>
 			        <!-- TMPL_LOOP NAME="WaitingReserveLoop" -->
 			            <ul> 
-			                <li> <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title"--></a> (<!-- TMPL_VAR NAME="itemtype"-->), <!-- TMPL_IF NAME="author" -->by <!-- TMPL_VAR NAME="author"-->,<!-- /TMPL_IF --> reserved on <!-- TMPL_VAR NAME="reservedate"--> 
+			                <li> <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title"--></a> (<!-- TMPL_VAR NAME="itemtype"-->), <!-- TMPL_IF NAME="author" -->by <!-- TMPL_VAR NAME="author"--><!-- /TMPL_IF --> Reserved on <!-- TMPL_VAR NAME="reservedate"-->.
 			            <!-- TMPL_IF NAME="waitingat" -->
-			                waiting at : <!-- TMPL_VAR NAME="waitingat" -->	
+			                Waiting at <!-- TMPL_VAR NAME="waitingat" -->	
 			            <!-- /TMPL_IF -->
 			                </li>
 			            </ul>
@@ -481,10 +485,10 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 <!--/if previssues --><!-- /TMPL_IF --> 
     </table>
 	<!--TMPL_IF NAME="issuecount"-->
-    <div id="action">
+    <fieldset class="action">
     <input type="submit" name="renew_checked" value="Renew Checked Items" />
     <input type="submit" name="renew_all" value="Renew All" />
-    </div>
+    </fieldset>
 	<!-- /TMPL_IF -->
 </form>
 <!-- TMPL_ELSE -->
@@ -498,44 +502,33 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
     <table>
         <tr>
             <th>Hold date</th>
-            <th>Priority</th>
             <th>Title</th>
-            <th>Author</th>
+            <th>Item Type</th>
             <th>Call Number</th>
+			<th>Barcode</th>
+            <th>Priority</th>
         </tr>
         <!-- TMPL_LOOP NAME="reservloop" -->
         <tr class="<!-- TMPL_VAR NAME="color" -->">
+                    <td><!-- TMPL_VAR NAME="reservedate" --></td>
                     <td>
-                        <!-- TMPL_VAR NAME="reservedate" -->
-                    </td>
-                    <td>
-                        <!-- TMPL_IF name="barcodereserv" -->Item <!-- TMPL_VAR NAME="barcodereserv" --> targeted
+                        <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
+ </td>
+					<td><!-- TMPL_VAR NAME="itemtype" --></td>
+                    <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
+					<td><!-- TMPL_IF name="barcodereserv" -->Item <!-- TMPL_VAR NAME="barcodereserv" -->
+                        <!-- /TMPL_IF --><!-- TMPL_IF name="waiting" --> waiting
                         <!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="transfered" --> in transit from
+                        <!-- TMPL_VAR NAME="frombranch" --> since <!-- TMPL_VAR NAME="datesent" -->
+                        <!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="nottransfered" --> hasn't been transfered yet from <!-- TMPL_VAR NAME="nottransferedby" --></i>
+                        <!-- /TMPL_IF --></td>
+                    <td>                    
                         <!-- TMPL_IF NAME="waitingposition" -->
                         Hold priority
-                        <b> <!-- TMPL_VAR NAME="waitingposition" --> </b>
-                        <!-- /TMPL_IF -->
+                        <b> <!-- TMPL_VAR NAME="waitingposition" --> </b><!-- /TMPL_IF -->
                     </td>
-                    <td>
-                        <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> (<b> <!-- TMPL_VAR NAME="itemtype" --> </b>) 
-
-                        <!-- TMPL_IF name="waiting" -->
-                        <br />
-                        <i>Item is waiting</i>
-                        <!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="transfered" -->
-                        <br />
-                        <i>Item in transit from
-                        <!-- TMPL_VAR NAME="frombranch" --> since <!-- TMPL_VAR NAME="datesent" --> </i>
-                        <!-- /TMPL_IF -->
-
-                        <!-- TMPL_IF name="nottransfered" -->
-                        <br />
-                        <i>This item hasn't been transfered yet from <!-- TMPL_VAR NAME="nottransferedby" --></i>
-                        <!-- /TMPL_IF -->
-                    </td>
-                    <td><!-- TMPL_VAR NAME="author" --></td>
-                    <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
             </tr>
         <!-- /TMPL_LOOP -->
     </table>
