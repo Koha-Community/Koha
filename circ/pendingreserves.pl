@@ -33,14 +33,18 @@ BEGIN {
 
 my $input = new CGI;
 my $order = $input->param('order');
-my $startdate=$input->param('from');
-my $enddate=$input->param('to');
-
+my $startdate = $input->param('from');
+my $enddate = $input->param('to');
 my $theme = $input->param('theme');    # only used if allowthemeoverride is set
+my $op = $input->param('op');
+my $biblionumber = $input->param('biblionumber');
+my $borrowernumber = $input->param('borrowernumber');
+
+my $tmpl_name = ($op eq 'slip') ? "circ/hold-transfer-slip.tmpl" : "circ/pendingreserves.tmpl" ;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "circ/pendingreserves.tmpl",
+        template_name   => $tmpl_name,
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
@@ -50,7 +54,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $duedate;
-my $borrowernumber;
 my $itemnum;
 my $data1;
 my $data2;
@@ -58,10 +61,11 @@ my $data3;
 my $name;
 my $phone;
 my $email;
-my $biblionumber;
 my $title;
 my $author;
-
+warn $op;
+warn $biblionumber;
+warn $borrowernumber;
 my @datearr    = localtime( time() );
 my $todaysdate =
     ( 1900 + $datearr[5] ) . '-'
@@ -69,11 +73,15 @@ my $todaysdate =
   . sprintf( "%0.2d", $datearr[3] );
 
 my $dbh    = C4::Context->dbh;
-my ($sqlorderby, $sqldatewhere) = ("","");
+my ($sqlorderby, $sqldatewhere, $sqlwhowhere) = ("","","");
 $debug and warn format_date_in_iso($startdate) . "\n" . format_date_in_iso($enddate);
-$sqldatewhere .= " AND reservedate >= " . $dbh->quote(format_date_in_iso($startdate))  if ($startdate) ;
-$sqldatewhere .= " AND reservedate <= " . $dbh->quote(format_date_in_iso($enddate))  if ($enddate) ;
-
+if ($op eq 'slip') {        
+	$sqlwhowhere .= " && reserves.borrowernumber = " . $dbh->quote($borrowernumber) ;
+    $sqlwhowhere .= " && reserves.biblionumber = " . $dbh->quote($biblionumber) ;
+} else {
+	$sqldatewhere .= " AND reservedate >= " . $dbh->quote(format_date_in_iso($startdate))  if ($startdate) ;
+	$sqldatewhere .= " AND reservedate <= " . $dbh->quote(format_date_in_iso($enddate))  if ($enddate) ;
+}
 if ($order eq "borrower") {
 	$sqlorderby = " order by  borrower, reservedate";
 } elsif ($order eq "biblio") {
@@ -106,6 +114,7 @@ my $strsth =
  LEFT JOIN borrowers ON reserves.borrowernumber=borrowers.borrowernumber
  LEFT JOIN biblio ON reserves.biblionumber=biblio.biblionumber
  WHERE reserves.found is NULL 
+ $sqlwhowhere
  $sqldatewhere
  AND items.itemnumber NOT IN (SELECT itemnumber FROM issues)
  AND reserves.itemnumber is NULL";
@@ -114,6 +123,8 @@ if (C4::Context->preference('IndependantBranches')){
 	$strsth .= " AND items.holdingbranch=? ";
 }
 $strsth .= $sqlorderby;
+warn $strsth;
+
 my $sth = $dbh->prepare($strsth);
 
 if (C4::Context->preference('IndependantBranches')){

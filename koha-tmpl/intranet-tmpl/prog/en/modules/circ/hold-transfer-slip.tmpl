@@ -1,0 +1,33 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha -- Circulation: Transfers</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close-receipt.inc" -->
+</head>
+<body onload="window.print();window.close();">
+<div id="main">
+        <!-- TMPL_LOOP NAME="reservedata" -->
+<h5>Date: <!-- TMPL_VAR NAME="pulldate" --></h5>
+<h3> <!-- TMPL_IF NAME="transferrequired" -->Transfer to <!-- TMPL_VAR Name="branchname" --> <!-- TMPL_ELSE -->Hold in <!-- TMPL_VAR Name="branchname" --><!-- /TMPL_IF --></h3>
+
+<div id="reserve_display">
+
+<h3><!-- TMPL_VAR Name="surname" -->, <!-- TMPL_VAR Name="firstname" --></h3>
+
+<ul>
+	<li><!-- TMPL_VAR Name="cardnumber" --></li>
+    <li><!-- TMPL_VAR Name="phone" --></li>
+    <li><!-- TMPL_VAR Name="address" --><br />
+	  <!-- TMPL_IF Name="address2" --><!-- TMPL_VAR Name="address2" --><br /><!-- /TMPL_IF -->
+      <!-- TMPL_VAR Name="city" -->  <!-- TMPL_VAR NAME="zip" --></li>
+    <!-- TMPL_IF NAME="email" --><li><!-- TMPL_VAR NAME="email" --></li> <!-- /TMPL_IF -->
+</ul>
+<br />
+<h3>RESERVED ITEM</h2>
+ <h4><!-- TMPL_VAR Name="title" --></h4>
+ <h5><!-- TMPL_VAR NAME="author" --> </h5>
+ <p><!-- TMPL_VAR Name="barcode" --></p>
+
+
+
+                <!-- /TMPL_LOOP -->
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

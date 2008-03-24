@@ -1,5 +1,10 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Circulation &rsaquo; Check In <!-- TMPL_VAR Name="title" --></title>
+<script>
+function Dopop(link) {
+    var newin=window.open(link,'popup','width=600,height=400,resizable=yes,toolbar=false,top');
+}
+</script>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
@@ -36,6 +41,8 @@
             <input type="hidden" name="WT-waitingAt" value="<!-- TMPL_VAR Name="TransferWaitingAt" -->" />
             <input type="hidden" name="WT-From" value="<!-- TMPL_VAR Name="wtransfertFrom" -->" />
         <input type="submit" class="approve" value="Confirm" />
+		<br />
+			<input type="button" value="Print Slip & Confirm" class="approve" onclick='Dopop("hold-transfer-slip.pl?transfer=1&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;op=slip") ; this.form.submit()'; />
     </form>
     <!-- /TMPL_IF --></div>
 <!-- /TMPL_IF -->
@@ -59,6 +66,8 @@
         </p>
         <form method="post" action="returns.pl">
             <input type="submit" class="approve" value="Confirm" />
+			<br />
+			<input type="button" value="Print Slip & Confirm" class="approve" onclick='Dopop("hold-transfer-slip.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;op=slip") ; this.form.submit()'; />
             <!-- TMPL_LOOP Name="inputloop" -->
                 <input type="hidden" name="ri-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
                 <input type="hidden" name="dd-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="duedate" -->" />
@@ -92,6 +101,8 @@
 
         <form method="post" action="returns.pl">
             <input type="submit" class="approve" value="Confirm" />
+			<br />
+			<input type="button" value="Print Slip & Confirm" class="submit" onclick='Dopop("hold-transfer-slip.pl?transfer=1&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;op=slip") ; this.form.submit()'; />
             <!-- TMPL_LOOP Name="inputloop" -->
                 <input type="hidden" name="ri-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
                 <input type="hidden" name="dd-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="duedate" -->" />
@@ -176,6 +187,8 @@
         <form method="post" action="returns.pl">
             <!-- TMPL_IF name="transfertodo" -->
                 <input type="submit" class="approve" value="Confirm hold and transfer" />
+				<br />
+			<input type="button" value="Print Slip & Confirm" class="submit" onclick='Dopop("hold-transfer-slip.pl?transfer=1&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;op=slip") ; this.form.submit()'; />
             <!-- TMPL_ELSE -->
                 <input type="submit" class="approve" value="Confirm hold" />
             <!-- /TMPL_IF -->
