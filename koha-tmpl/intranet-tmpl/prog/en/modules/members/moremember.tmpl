@@ -3,6 +3,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pack.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.pack.js"></script>
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
 $.tablesorter.addParser({
@@ -15,7 +16,7 @@ $(document).ready(function() {
 	$('#finesholdsissues > ul').tabs();
 	$("#issuest").tablesorter({
 		sortList: [[1,0]],
-		<!-- TMPL_IF NAME="noItemTypeImages" -->headers: { 0: { sorter: 'articles' },1: { sorter: false },4: { sorter: false },5:{sorter:false},6:{sorter:false},7:{sorter:false},8:{sorter:false}}<!-- TMPL_ELSE -->headers: { 0: {sorter:false}, 1: { sorter: 'articles' },2: { sorter: false },5: { sorter: false },6:{sorter:false},7:{sorter:false},8:{sorter:false},9:{sorter:false}}<!-- /TMPL_IF -->
+		headers: { 1: { sorter: 'articles' },4:{sorter:false},5: { sorter: false },6:{sorter:false},7:{sorter:false}}
 	}); 
 	$("#holdst").tablesorter({
 		sortList: [[0,0]],
@@ -32,6 +33,12 @@ $(document).ready(function() {
 		 return confirm('Are you sure you want to replace the current patron image? This cannot be undone.');
 		 }
 	});<!-- /TMPL_IF -->
+	$("#renew_all").click(function(){ $(".checkboxed").checkCheckboxes(":not(input[@name*=barcodes])"); $(".checkboxed").unCheckCheckboxes(":not(input[@name*=items])"); });
+	$("#return_all").click(function(){ $(".checkboxed").checkCheckboxes(":not(input[@name*=items])"); $(".checkboxed").unCheckCheckboxes(":not(input[@name*=barcodes])"); });
+	$("#CheckAllitems").click(function(){ $(".checkboxed").checkCheckboxes(":not(input[@name*=barcodes])"); $(".checkboxed").unCheckCheckboxes(":not(input[@name*=items])"); return false; });
+    $("#CheckNoitems").click(function(){ $(".checkboxed").unCheckCheckboxes(":not(input[@name*=barcodes])"); return false; });
+	$("#CheckAllreturns").click(function(){ $(".checkboxed").checkCheckboxes(":not(input[@name*=items])"); $(".checkboxed").unCheckCheckboxes(":not(input[@name*=barcodes])"); return false; });
+    $("#CheckNoreturns").click(function(){ $(".checkboxed").unCheckCheckboxes(":not(input[@name*=items])"); return false; });
  });
 function uncheck_sibling(me){
 nodename=me.getAttribute("name");
@@ -54,38 +61,6 @@ if (nodename =="barcodes[]"){
         Nodes[i].checked=false;
       }     
    }   
-}
-}
-function checkall(myname){
-var ItemsNodes=document.getElementsByName('items[]');
-var BarcodesNodes=document.getElementsByName('barcodes[]');
-if (myname =="barcodes[]"){
-for (var i=0;i<ItemsNodes.length;i++){
-    ItemsNodes[i].checked=false;
-}   
-for (var i=0;i<BarcodesNodes.length;i++){
-    BarcodesNodes[i].checked=true;
-}   
-}else {
-for (var i=0;i<BarcodesNodes.length;i++){
-    BarcodesNodes[i].checked=false;
-}   
-for (var i=0;i<ItemsNodes.length;i++){
-    ItemsNodes[i].checked=true;
-}   
-}
-}
-function uncheckall(myname){
-var ItemsNodes=document.getElementsByName('items[]');
-var BarcodesNodes=document.getElementsByName('barcodes[]');
-if (myname =="barcodes[]"){
-for (var i=0;i<BarcodesNodes.length;i++){
-    BarcodesNodes[i].checked=false;
-}   
-}else {
-for (var i=0;i<ItemsNodes.length;i++){
-    ItemsNodes[i].checked=false;
-}   
 }
 }
 //]]>
@@ -339,22 +314,20 @@ for (var i=0;i<ItemsNodes.length;i++){
 
 <div id="checkedout">
     <h2>Checked Out</h2>
-    <!-- TMPL_IF NAME="issueloop" --><form action="/cgi-bin/koha/reserve/renewscript.pl" method="post">
+    <!-- TMPL_IF NAME="issueloop" --><form action="/cgi-bin/koha/reserve/renewscript.pl" method="post" class="checkboxed">
         <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
 	<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
     <table id="issuest">
 <thead>
 		<tr>
-			<!-- TMPL_UNLESS NAME="noItemTypeImages" --><th scope="col">&nbsp;</th><!-- /TMPL_UNLESS -->
+			<th scope="col">Item Type</th>
             <th scope="col">Title</th>
-            <th scope="col">Barcode</th>
             <th scope="col">Checked out on</th> 
             <th scope="col">Date due</th>
-            <th scope="col">Itemtype</th>
             <th scope="col">Charge</th>
             <th scope="col">Price</th>
-            <th scope="col">Renew</th>
-            <th scope="col">Return</th>
+            <th scope="col">Renew <p style="font-size: 80%;"><a href="#" id="CheckAllitems">select all</a> | <a href="#" id="CheckNoitems">none</a></p></th>
+            <th scope="col">Return <p style="font-size: 80%;"><a href="#" id="CheckAllreturns">select all</a> | <a href="#" id="CheckNoreturns">none</a></p></th>
         </tr></thead>
     
        <tbody> <!-- TMPL_LOOP name="issueloop" -->
@@ -367,18 +340,13 @@ for (var i=0;i<ItemsNodes.length;i++){
         <tr>
             <!-- /TMPL_IF -->
           <!-- /TMPL_IF -->
-		  <!-- TMPL_UNLESS NAME="noItemTypeImages" --><td>
-                <!-- TMPL_IF NAME="itemtype_image" -->
+		  <td><!-- TMPL_UNLESS NAME="noItemTypeImages" --> <!-- TMPL_IF NAME="itemtype_image" -->
                 <img src="<!-- TMPL_VAR NAME="itemtype_image" -->" alt="" />
-				<!-- TMPL_ELSE -->&nbsp;
-                <!-- /TMPL_IF --></td><!-- /TMPL_UNLESS -->
-            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> <!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR name="author" --><!-- /TMPL_IF --> <!-- TMPL_IF name="publishercode" -->; <!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF --> <!-- TMPL_IF name="publicationyear" -->, <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->            </td>
-            <td><!-- TMPL_VAR NAME="barcode" --></td>
+                <!-- /TMPL_IF --><!-- /TMPL_UNLESS -->
+                <!-- TMPL_VAR NAME="itemtype_description" --></td>
+            <td><!-- TMPL_IF NAME="red" --><a class="overdue" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><!-- TMPL_ELSE --><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><!-- /TMPL_IF --> <!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR name="author" --><!-- /TMPL_IF --> <!-- TMPL_IF name="publishercode" -->; <!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF --> <!-- TMPL_IF name="publicationyear" -->, <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF --> <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
             <td><!-- TMPL_VAR NAME="issuedate" --></td>
-            <td><!-- TMPL_VAR NAME="date_due" --></td>
-            <td>
-                <!-- TMPL_VAR NAME="itemtype_description" -->
-            </td>
+            <td><!-- TMPL_IF NAME="red" --><span class="overdue"><!-- TMPL_VAR NAME="date_due" --></span><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="date_due" --><!-- /TMPL_IF --></td>
             <td><!-- TMPL_VAR NAME="charge" --></td>
             <td><!-- TMPL_VAR NAME="replacementprice" --></td>
       <!-- TMPL_IF NAME="renew_failed" -->
@@ -412,10 +380,9 @@ for (var i=0;i<ItemsNodes.length;i++){
         </tr>
         <!-- /tmpl_loop --></tbody>
         <tr>
-			<!-- TMPL_UNLESS NAME="noItemTypeImages" --><td>&nbsp;</td><!-- /TMPL_UNLESS -->
-            <td colspan="5">Total replacement cost:</td>
+            <td colspan="5" style="text-align: right; font-weight:bold;">Total replacement cost:</td>
             <td><!-- TMPL_VAR NAME="totalprice" --></td>
-            <td colspan="3">      
+            <td colspan="2">      
             renewal due date :<input type="text" size="8" id="newduedate" name="newduedate" value="<!-- TMPL_VAR Name="newduedate" -->" />
       <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="newduedate_button" alt="Show Calendar" />
       <script type="text/javascript">
@@ -432,10 +399,8 @@ for (var i=0;i<ItemsNodes.length;i++){
         </table>
         <fieldset class="action">
         <input type="submit" name="renew_checked" value="Renew or Return checked items" />
-        <input type="submit" name="renew_all" value="Renew all" onclick="checkall('items[]');"/>
-        <input type="submit" name="return_all" value="Return all" onclick="checkall('barcodes[]');"/>
-        <input type="button" name="renew_all" value="Uncheck all Renew" onclick="uncheckall('items[]');"/>
-        <input type="button" name="return_all" value="Uncheck all Returns" onclick="uncheckall('barcodes[]');"/>
+        <input type="submit" id="renew_all" name="renew_all" value="Renew all" />
+        <input type="submit" id="return_all" name="return_all" value="Return all" />
         </fieldset>
     </form><!-- TMPL_ELSE --><p>Patron has nothing checked out.</p><!-- /TMPL_IF -->
 	</div>

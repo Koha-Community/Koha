@@ -217,7 +217,7 @@ my $lib2 = &GetSortDetails( "Bsort2", $data->{'sort2'} );
 #
 my ( $count, $issue ) = GetPendingIssues($borrowernumber);
 my $roaddetails = &GetRoadTypeDetails( $data->{'streettype'} );
-my $today       = POSIX::strftime("%Y%m%d", localtime);	# iso format
+my $today       = POSIX::strftime("%Y-%m-%d", localtime);	# iso format
 my @issuedata;
 my $totalprice = 0;
 my $toggle     = 0;
@@ -228,9 +228,9 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
     my %row = %{ $issue->[$i] };
     $totalprice += $issue->[$i]{'replacementprice'};
     $row{'replacementprice'} = $issue->[$i]{'replacementprice'};
-    if ( $datedue < $today ) {
+    if ( $datedue lt $today ) {
         $row{'red'} = 1;    #print "<font color=red>";
-    }
+	}
     $row{toggle} = $toggle++ % 2;
 
     #find the charge for an item
