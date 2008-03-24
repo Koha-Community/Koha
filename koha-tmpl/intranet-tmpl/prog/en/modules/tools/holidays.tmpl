@@ -36,7 +36,7 @@
 	        mouseXMax = window.innerWidth + window.pageXOffset;
 	        mouseYMax = window.innerHeight + window.pageYOffset;
 	    }
-	}
+	} 
 
 	function holidayOperation(formObject, opType) {
 		var op = document.getElementsByName('operation');
@@ -46,12 +46,8 @@
 
 	// This function shows the "Show Holiday" panel //
 	function showHoliday (exceptionPosibility, dayName, day, month, year, weekDay, title, description) {
-		
-		var panel = document.getElementById('showHoliday');
-		panel.style.display = 'inline';
-		document.getElementById('newHoliday').style.display = 'none';
-		panel.style.top = mouseYMax/2;
-		panel.style.left = (mouseXMax/2) - 250;
+		$("#newHoliday").slideUp("fast");
+		$("#showHoliday").slideDown("fast");
 		document.getElementById('showDayname').value = dayName;
 		document.getElementById('showBranchName').value = document.getElementById('branch').value;
 		document.getElementById('showDay').value = day;
@@ -70,21 +66,18 @@
 
 	// This function shows the "Add Holiday" panel //
 	function newHoliday (dayName, day, month, year, weekDay) {
-		var panel = document.getElementById('newHoliday');
-		panel.style.display = 'inline';
-		document.getElementById('showHoliday').style.display = 'none';
-		panel.style.top = mouseYMax/2;
-		panel.style.left = (mouseXMax/2)  - 250;
-		document.getElementById('newDayname').value = dayName;
-		document.getElementById('newBranchName').value = document.getElementById('branch').value;
-		document.getElementById('newDay').value = day;
-		document.getElementById('newMonth').value = month;
-		document.getElementById('newYear').value = year;
-		document.getElementsByName('newWeekday')[0].value = weekDay;
+		$("#showHoliday").slideUp("fast");
+		$("#newHoliday").slideDown("fast");
+		$("#newDayname").val(dayName);
+		$("#newBranchName").val($('#branch').val());
+		$("#newDay").val(day);
+		$("#newMonth").val(month);
+		$("#newYear").val(year);
+		$("#newWeekday")[0].val(weekDay);
 	}
 
 	function hidePanel(aPanelName) {
-		document.getElementById(aPanelName).style.display = 'none';
+		$("#"+aPanelName).slideUp("fast");
 	}
 
 	function changeBranch () {
@@ -161,7 +154,7 @@
 	display : none;
 	border : 1px solid #000000;
 	padding : 3px;
-	position: absolute;
+	/* position: absolute; */
 	background-color: #CCCCCC;
 }
 
@@ -190,88 +183,7 @@ div.dmy {
 	<div class="yui-b">
 
 
-<!-- ******************************** FLAT PANELS ******************************************* -->
-<!-- *****           Makes all the flat panel to deal with holidays                     ***** -->
-<!-- **************************************************************************************** -->
 
-<!-- ********************** Panel for showing already loaded holidays *********************** -->
-<div class="panel" id="showHoliday">
- 	<form action="/cgi-bin/koha/tools/exceptionHolidays.pl" method="post">
-		<h2>Edit this holiday</h2>
-		<p>
-			<label for="showBranchName">Library</label>
-			<input type="text" size="20" id="showBranchName" name="showBranchName" readonly="readonly" class="blacklabel" />
-		</p>
-		<p>
-			<label for="showDayname">Day name</label>
-			<input type="text" size="20" id="showDayname" name="showDayname" readonly="readonly" class="blacklabel" />
-			<input type="hidden" name="showWeekday" />
-		</p>
-		<div class="dmy">
-			<label for="showDay">Day</label> <input type="text" size="2" id="showDay" name="showDay" readonly="readonly" />
-			<label for="showMonth">Month</label> <input type="text" size="2" id="showMonth" name="showMonth" readonly="readonly" />
-			<label for="showYear">Year</label> <input type="text" size="4" id="showYear" name="showYear" readonly="readonly" />		
-		</div>
-	    <p><label for="showDescription">Description:</label>
-			<br />
-			<textarea rows="2" cols="40" id="showDescription" name="showDescription"></textarea>	
-		</p>
-		<div id="exceptionPosibility" style="position:static">
-			<input type="radio" name="showOperation" id="showOperationExc" value="exception" /> <label for="showOperationExc">Generate an exception to this holiday.</label>
-			<a href="#" onclick=" additionalInformation('You can make an exception for this holiday rule. This means that you will be able to say for a repeatable holiday, that there is one of those days that is going to be an exception.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/../img/more.gif" border="0" alt="More information" /></a>
-		</div>
-		<input type="radio" name="showOperation" id="showOperationDel" value="delete" checked="checked" /> <label for="showOperationDel">Delete this holiday</label>.
-		<a href="#" onclick=" additionalInformation('This will delete this holiday rule. In case it is a repeatable holiday, this option checks for posible exceptions. In case those exists, this option take care of set this exceptions to regular holidays.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/../img/more.gif" border="0" alt="More information" /></a>
-		<p>
-			<input type="submit" name="submit" value="Save" />
-			<input type="button" name="cancel2" value="Cancel" onclick=" hidePanel('showHoliday');hidePanel('information')" />
-		</p>
-	</form>
-</div>
-
-<!-- ***************************** Panel to deal with new holidays **********************  -->
-<div class="panel" id="newHoliday">
- 	<form action="/cgi-bin/koha/tools/newHolidays.pl" method="post">
-		<h2>Add new holiday</h2>
-		<p>
-			<label for="newBranchName">Library</label>
-			<input type="text" size="20" id="newBranchName" name="newBranchName" readonly="readonly" class="blacklabel" />
-		</p>
-		<p>
-			<label for="newDayname">Day name</label>
-			<input type="text" size="20" id="newDayname" name="newDayname" readonly="readonly" class="blacklabel" />
-			<input type="hidden" name="newWeekday" />
-		</p>
-		<div class="dmy">
-			<label for="newDay">Day</label> <input type="text" size="2" id="newDay" name="newDay" readonly="readonly" />
-			<label for="newMonth">Month</label> <input type="text" size="2" id="newMonth" name="newMonth"  readonly="readonly" />
-			<label for="newYear">Year</label> <input type="text" size="4" id="newYear" name="newYear" readonly="readonly" />
-		</div>
-		<p><label for="newDescription">Description:</label>
-			<br />
-			<textarea rows="2" cols="40" id="newDescription" name="newDescription"></textarea>
-		</p>
-			<input type="radio" name="newOperation" id="newOperationOnce" value="holiday" checked="checked" />
-			<label for="newOperationOnce">Holiday only on this day</label>.
-			<a href="#" onclick=" additionalInformation('Make a single holiday. For example, selecting August 1st, 2012 will make it holiday, but will not affect August 1st in other years.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/../img/more.gif" border="0" alt="More information" /></a>
-			<br />
-			<input type="radio" name="newOperation" id="newOperationDay" value="weekday" />
-			<label for="newOperationDay">Holiday repeated every same day of the week</label>.
-			<a href="#" onclick=" additionalInformation('Make this weekday a holiday, every week. For example, if your library is closed on Saturdays, use this option to make every Saturday a holiday.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/../img/more.gif" border="0" alt="More information" /></a>
-			<br />
-			<input type="radio" name="newOperation" id="newOperationYear" value="repeatable" />
-			<label for="newOperationYear">Holiday repeated yearly on the same date</label>.
-			<a href="#" onclick=" additionalInformation('This will take this day and month as a reference to make it holiday. Through this option, you can repeat this rule for every year. For example, selecting August 1st will make August 1st a holiday every year.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/../img/more.gif" border="0" alt="More information" /></a>
-			<p>
-				<input type="submit" name="submit" value="Save" />
-				<input type="button" name="cancel2" value="Cancel" onclick=" hidePanel('newHoliday');hidePanel('information')" />
-			</p>
- 	</form>
-</div>
-
-<!-- *************************************************************************************** -->
-<!-- ******                          END OF FLAT PANELS                               ****** -->
-<!-- *************************************************************************************** -->
 
 <!-- *************************************************************************************** -->
 <!-- ******                     START OF INFORMATION PANEL                            ****** -->
@@ -303,6 +215,89 @@ div.dmy {
 		<span class="repeatableday">Repeatable holiday</span>
 		<span class="exception">Holiday exception</span>
 	</p>
+	
+	<!-- ******************************** FLAT PANELS ******************************************* -->
+	<!-- *****           Makes all the flat panel to deal with holidays                     ***** -->
+	<!-- **************************************************************************************** -->
+
+	<!-- ********************** Panel for showing already loaded holidays *********************** -->
+	<div class="panel" id="showHoliday">
+	 	<form action="/cgi-bin/koha/tools/exceptionHolidays.pl" method="post">
+			<h2>Edit this holiday</h2>
+			<p>
+				<label for="showBranchName">Library</label>
+				<input type="text" size="20" id="showBranchName" name="showBranchName" readonly="readonly" class="blacklabel" />
+			</p>
+			<p>
+				<label for="showDayname">Day name</label>
+				<input type="text" size="20" id="showDayname" name="showDayname" readonly="readonly" class="blacklabel" />
+				<input type="hidden" name="showWeekday" />
+			</p>
+			<div class="dmy">
+				<label for="showDay">Day</label> <input type="text" size="2" id="showDay" name="showDay" readonly="readonly" />
+				<label for="showMonth">Month</label> <input type="text" size="2" id="showMonth" name="showMonth" readonly="readonly" />
+				<label for="showYear">Year</label> <input type="text" size="4" id="showYear" name="showYear" readonly="readonly" />		
+			</div>
+		    <p><label for="showDescription">Description:</label>
+				<br />
+				<textarea rows="2" cols="40" id="showDescription" name="showDescription"></textarea>	
+			</p>
+			<div id="exceptionPosibility" style="position:static">
+				<input type="radio" name="showOperation" id="showOperationExc" value="exception" /> <label for="showOperationExc">Generate an exception to this holiday.</label>
+				<a href="#" onclick=" additionalInformation('You can make an exception for this holiday rule. This means that you will be able to say for a repeatable holiday, that there is one of those days that is going to be an exception.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/../img/more.gif" border="0" alt="More information" /></a>
+			</div>
+			<input type="radio" name="showOperation" id="showOperationDel" value="delete" checked="checked" /> <label for="showOperationDel">Delete this holiday</label>.
+			<a href="#" onclick=" additionalInformation('This will delete this holiday rule. In case it is a repeatable holiday, this option checks for posible exceptions. In case those exists, this option take care of set this exceptions to regular holidays.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/../img/more.gif" border="0" alt="More information" /></a>
+			<p>
+				<input type="submit" name="submit" value="Save" />
+				<input type="button" name="cancel2" value="Cancel" onclick=" hidePanel('showHoliday');hidePanel('information')" />
+			</p>
+		</form>
+	</div>
+
+	<!-- ***************************** Panel to deal with new holidays **********************  -->
+	<div class="panel" id="newHoliday">
+	 	<form action="/cgi-bin/koha/tools/newHolidays.pl" method="post">
+			<h2>Add new holiday</h2>
+			<p>
+				<label for="newBranchName">Library</label>
+				<input type="text" size="20" id="newBranchName" name="newBranchName" readonly="readonly" class="blacklabel" />
+			</p>
+			<p>
+				<label for="newDayname">Day name</label>
+				<input type="text" size="20" id="newDayname" name="newDayname" readonly="readonly" class="blacklabel" />
+				<input type="hidden" name="newWeekday" />
+			</p>
+			<div class="dmy">
+				<label for="newDay">Day</label> <input type="text" size="2" id="newDay" name="newDay" readonly="readonly" />
+				<label for="newMonth">Month</label> <input type="text" size="2" id="newMonth" name="newMonth"  readonly="readonly" />
+				<label for="newYear">Year</label> <input type="text" size="4" id="newYear" name="newYear" readonly="readonly" />
+			</div>
+			<p><label for="newDescription">Description:</label>
+				<br />
+				<textarea rows="2" cols="40" id="newDescription" name="newDescription"></textarea>
+			</p>
+				<input type="radio" name="newOperation" id="newOperationOnce" value="holiday" checked="checked" />
+				<label for="newOperationOnce">Holiday only on this day</label>.
+				<a href="#" onclick=" additionalInformation('Make a single holiday. For example, selecting August 1st, 2012 will make it holiday, but will not affect August 1st in other years.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/../img/more.gif" border="0" alt="More information" /></a>
+				<br />
+				<input type="radio" name="newOperation" id="newOperationDay" value="weekday" />
+				<label for="newOperationDay">Holiday repeated every same day of the week</label>.
+				<a href="#" onclick=" additionalInformation('Make this weekday a holiday, every week. For example, if your library is closed on Saturdays, use this option to make every Saturday a holiday.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/../img/more.gif" border="0" alt="More information" /></a>
+				<br />
+				<input type="radio" name="newOperation" id="newOperationYear" value="repeatable" />
+				<label for="newOperationYear">Holiday repeated yearly on the same date</label>.
+				<a href="#" onclick=" additionalInformation('This will take this day and month as a reference to make it holiday. Through this option, you can repeat this rule for every year. For example, selecting August 1st will make August 1st a holiday every year.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/../img/more.gif" border="0" alt="More information" /></a>
+				<p>
+					<input type="submit" name="submit" value="Save" />
+					<input type="button" name="cancel2" value="Cancel" onclick=" hidePanel('newHoliday');hidePanel('information')" />
+				</p>
+	 	</form>
+	</div>
+
+	<!-- *************************************************************************************** -->
+	<!-- ******                          END OF FLAT PANELS                               ****** -->
+	<!-- *************************************************************************************** -->
 
 <!-- ************************************************************************************** -->
 <!-- ******                              MAIN SCREEN CODE                            ****** -->
