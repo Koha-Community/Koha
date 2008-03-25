@@ -21,13 +21,6 @@ a:hover {
 
 body	{
 	background: #f9fcfe;
-	color: #000;
-	margin: 0;
-	padding: 0;
-}
-
-body, td {
-	font: 13px "Lucida Grande", "Lucida Sans Unicode", Tahoma, Verdana;
 }
 
 form, label input {
@@ -41,7 +34,8 @@ input:focus, textarea:focus, label:focus {
 }
 
 label {
-	cursor: pointer;
+	display : block;
+	margin : .2em 0;
 }
 
 #logo { margin-bottom: 2em; }
@@ -49,7 +43,7 @@ label {
 #login {
 	background: #fff;
 	border: 1px solid #a2a2a2;
-	margin: 5em auto;
+	margin: 4em auto;
 	padding: 1.5em;
 	position : relative;
 	top : auto;
@@ -68,14 +62,15 @@ label {
 }
 
 #login h1 {
-	background: url(../../img/koha-logo.gif) no-repeat top left;
+	background: url(../../img/koha-logo.gif) no-repeat top center;
 	margin-top: 0;
+	margin-bottom : .5em;
 }
 
 #login h1 a {
 	display: block;
 	text-indent: -1000px;
-	height: 66px;
+	height: 74px;
 	border-bottom: none;
 }
 
@@ -101,7 +96,7 @@ label {
 }
 
 #login #branch {
-	width : 97%;
+	width : 99%;
 }
 
 #login #submit {
@@ -118,8 +113,8 @@ label {
 }
 
 .submit input, .submit input:focus, .button {
-	background: url(../../img/fade-butt.png );
-	border: 3px double #999;
+	background: url(../../img/button-bg.gif );
+	border: 1px solid #999;
 	border-left-color: #ccc;
 	border-top-color: #ccc;
 	color: #333;
@@ -128,7 +123,7 @@ label {
 
 .submit input:active, .button:active {
 	background: #f4f4f4;
-	border: 3px double #ccc;
+	border: 1px solid #999;
 	border-left-color: #999;
 	border-top-color: #999;
 }

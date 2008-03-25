@@ -40,19 +40,19 @@
 <!-- TMPL_LOOP NAME="INPUTS" -->
     <input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" ESCAPE="html" -->" />
 <!-- /TMPL_LOOP -->
-<p><label>Username:<br />
-<input type="text" name="userid" id="userid" class="input focus" value="<!-- TMPL_VAR NAME="userid" -->" size="20" tabindex="1" /></label>
+<p><label for="userid">Username:</label>
+<input type="text" name="userid" id="userid" class="input focus" value="<!-- TMPL_VAR NAME="userid" -->" size="20" tabindex="1" />
 </p>
-<p><label>Password:<br />
-<input type="password" name="password" id="password" class="input" value="" size="20" tabindex="2" /></label>
+<p><label for="password">Password:</label>
+<input type="password" name="password" id="password" class="input" value="" size="20" tabindex="2" />
 </p>
 
-<!-- TMPL_IF NAME="AutoLocation" --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="IndependantBranches" --><!-- TMPL_ELSE --><p><label for="branch">Library:<br />
+<!-- TMPL_IF NAME="AutoLocation" --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="IndependantBranches" --><!-- TMPL_ELSE --><p><label for="branch">Library:</label>
     <select name="branch" id="branch" class="input" tabindex="3">
     <!-- TMPL_LOOP NAME="branchloop" -->
     <option value="<!-- TMPL_VAR NAME='branchcode' -->"><!-- TMPL_VAR NAME='branchname' --></option>
     <!-- /TMPL_LOOP -->
-    </select></label>
+    </select>
     </p><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
 <!-- <p><label><input name="rememberme" type="checkbox" id="rememberme" value="forever" tabindex="3" />Remember me</label></p> -->
