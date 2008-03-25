@@ -49,7 +49,13 @@ if (not $result or $want_help) {
 }
 
 if (not $biblios and not $authorities) {
-    my $msg = "Must specify -b or -a to reindex bibs or authorites\n";
+    my $msg = "Must specify -b or -a to reindex bibs or authorities\n";
+    $msg   .= "Please do '$0 --help' to see usage.\n";
+    die $msg;
+}
+
+if ($authorities and $as_xml) {
+    my $msg = "Cannot specify both -a and -x\n";
     $msg   .= "Please do '$0 --help' to see usage.\n";
     die $msg;
 }
