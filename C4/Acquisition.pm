@@ -991,7 +991,7 @@ sub GetLateOrders {
             (aqbasket LEFT JOIN borrowers ON aqbasket.authorisedby = borrowers.borrowernumber)
             LEFT JOIN aqbooksellers ON aqbasket.booksellerid = aqbooksellers.id
             WHERE aqorders.basketno = aqbasket.basketno
-            AND (closedate < DATE_SUB(CURDATE( ),INTERVAL $delay DAY))
+            AND (closedate <= DATE_SUB(CURDATE( ),INTERVAL $delay DAY))
             AND ((datereceived = '' OR datereceived is null)
             OR (aqorders.quantityreceived < aqorders.quantity) )
         ";
@@ -1032,7 +1032,7 @@ sub GetLateOrders {
                         LEFT JOIN aqbookfund ON aqorderbreakdown.bookfundid = aqbookfund.bookfundid),
                         (aqbasket LEFT JOIN borrowers on aqbasket.authorisedby = borrowers.borrowernumber) LEFT JOIN aqbooksellers ON aqbasket.booksellerid = aqbooksellers.id
                     WHERE aqorders.basketno = aqbasket.basketno
-                    AND (closedate < (CURDATE -(INTERVAL $delay DAY))
+                    AND (closedate <= (CURDATE -(INTERVAL $delay DAY))
                     AND ((datereceived = '' OR datereceived is null)
                     OR (aqorders.quantityreceived < aqorders.quantity) ) ";
         $strsth .= " AND aqbasket.booksellerid = $supplierid " if ($supplierid);
