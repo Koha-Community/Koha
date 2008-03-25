@@ -144,9 +144,7 @@ if ($authorities) {
     print "====================\n";
     print "REINDEXING zebra\n";
     print "====================\n";
-    system("zebraidx -c ".C4::Context->zebraconfig('authorityserver')->{config}." -g iso2709 -d authorities init") if ($reset);
-    system("zebraidx -c ".C4::Context->zebraconfig('authorityserver')->{config}." $noshadow -g iso2709 -d authorities update $directory/authorities");
-    system("zebraidx -c ".C4::Context->zebraconfig('authorityserver')->{config}." -g iso2709 -d authorities commit") unless $noshadow;
+    do_indexing('authority', 'update', "$directory/authorities", $reset, $noshadow, 'iso2709');
 } else {
     print "skipping authorities\n";
 }
@@ -383,9 +381,7 @@ if ($biblios) {
     print "REINDEXING zebra\n";
     print "====================\n";
 	my $record_fmt = ($as_xml) ? 'marcxml' : 'iso2709' ;
-    system("zebraidx -g $record_fmt -c ".C4::Context->zebraconfig('biblioserver')->{config}." -d biblios init") if ($reset);
-    system("zebraidx -g $record_fmt -c ".C4::Context->zebraconfig('biblioserver')->{config}." $noshadow -d biblios update $directory/biblios");
-    system("zebraidx -g $record_fmt -c ".C4::Context->zebraconfig('biblioserver')->{config}." -d biblios commit") unless $noshadow;
+    do_indexing('biblio', 'update', "$directory/biblios", $reset, $noshadow, $record_fmt);
 } else {
     print "skipping biblios\n";
 }
@@ -412,6 +408,20 @@ if ($keep_export) {
         rmtree($directory, 0, 1);
         print "directory $directory deleted\n";
     }
+}
+
+sub do_indexing {
+    my ($record_type, $op, $record_dir, $reset_index, $noshadow, $record_format) = @_;
+
+    my $zebra_server  = ($record_type eq 'biblio') ? 'biblioserver' : 'authorityserver';
+    my $zebra_db_name = ($record_type eq 'biblio') ? 'biblios' : 'authorities';
+    my $zebra_config  = C4::Context->zebraconfig($zebra_server)->{'config'};
+    my $zebra_db_dir  = C4::Context->zebraconfig($zebra_server)->{'directory'};
+
+    system("zebraidx -c $zebra_config -g $record_format -d $zebra_db_name init") if $reset_index;
+    system("zebraidx -c $zebra_config $noshadow -g $record_format -d $zebra_db_name $op $record_dir");
+    system("zebraidx -c $zebra_config -g $record_format -d $zebra_db_name commit") unless $noshadow;
+
 }
 
 sub print_usage {
