@@ -383,7 +383,11 @@ function openBiblio(dest,biblionumber) {
 
 function addSelToShelf() {
     var items = document.getElementById('records').value;
+	if(items){
     document.location = "/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber="+items;
+	} else {
+        alert(MSG_NO_RECORD_SELECTED);
+    }
 }
 
 ///  vShelfAdd()  builds url string for multiple-biblio adds.
