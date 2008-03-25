@@ -28,6 +28,7 @@ my $noshadow;
 my $do_munge;
 my $want_help;
 my $as_xml;
+my $process_zebraqueue;
 my $result = GetOptions(
     'd:s'           => \$directory,
     'reset'         => \$reset,
@@ -40,6 +41,7 @@ my $result = GetOptions(
     'a'             => \$authorities,
     'h|help'        => \$want_help,
 	'x'				=> \$as_xml,
+    'z'             => \$process_zebraqueue,
 );
 
 
@@ -56,6 +58,12 @@ if (not $biblios and not $authorities) {
 
 if ($authorities and $as_xml) {
     my $msg = "Cannot specify both -a and -x\n";
+    $msg   .= "Please do '$0 --help' to see usage.\n";
+    die $msg;
+}
+
+if ($process_zebraqueue and ($skip_export or $reset)) {
+    my $msg = "Cannot specify -r or -s if -z is specified\n";
     $msg   .= "Please do '$0 --help' to see usage.\n";
     die $msg;
 }
@@ -91,10 +99,14 @@ if ($do_munge) {
     munge_config();
 }
 
+$dbh->{AutoCommit} = 0; # don't autocommit - want a consistent view of the zebraqueue table
+
 if ($authorities) {
     #
     # exporting authorities
     #
+    my $num_authorities_exported = 0;
+    my $num_authorities_deleted = 0;
     if ($skip_export) {
         print "====================\n";
         print "SKIPPING authorities export\n";
@@ -105,11 +117,19 @@ if ($authorities) {
         print "====================\n";
         mkdir "$directory" unless (-d $directory);
         mkdir "$directory/authorities" unless (-d "$directory/authorities");
-        my $dbh=C4::Context->dbh;
-        my $sth;
-        $sth=$dbh->prepare("select authid,marc from auth_header");
-        $sth->execute();
-        export_marc_records('authority', $sth, "$directory/authorities", $as_xml, $noxml);
+        if ($process_zebraqueue) {
+            my $sth = select_zebraqueue_records('authority', 'deleted');
+            mkdir "$directory/del_authorities" unless (-d "$directory/del_authorities");
+            $num_authorities_deleted = generate_deleted_marc_records('authority', $sth, "$directory/del_authorities", $as_xml);
+            mark_zebraqueue_done('authority', 'deleted');
+            $sth = select_zebraqueue_records('authority', 'updated');
+            mkdir "$directory/upd_authorities" unless (-d "$directory/upd_authorities");
+            $num_authorities_exported = export_marc_records('authority', $sth, "$directory/upd_authorities", $as_xml, $noxml);
+            mark_zebraqueue_done('authority', 'updated');
+        } else {
+            my $sth = select_all_authorities();
+            $num_authorities_exported = export_marc_records('authority', $sth, "$directory/authorities", $as_xml, $noxml);
+        }
     }
     
     #
@@ -119,10 +139,22 @@ if ($authorities) {
     print "REINDEXING zebra\n";
     print "====================\n";
 	my $record_fmt = ($as_xml) ? 'marcxml' : 'iso2709' ;
-    do_indexing('authority', 'update', "$directory/authorities", $reset, $noshadow, $record_fmt);
+    if ($process_zebraqueue) {
+        do_indexing('authority', 'delete', "$directory/del_authorities", $reset, $noshadow, $record_fmt) 
+            if $num_authorities_deleted;
+        do_indexing('authority', 'update', "$directory/upd_authorities", $reset, $noshadow, $record_fmt)
+            if $num_authorities_exported;
+    } else {
+        do_indexing('authority', 'update', "$directory/authorities", $reset, $noshadow, $record_fmt)
+            if $num_authorities_exported;
+    }
+
 } else {
     print "skipping authorities\n";
 }
+
+$dbh->commit(); # commit changes to zebraqueue, if any
+
 #################################################################################################################
 #                        BIBLIOS 
 #################################################################################################################
@@ -131,6 +163,8 @@ if ($biblios) {
     #
     # exporting biblios
     #
+    my $num_biblios_exported = 0;
+    my $num_biblios_deleted = 0;
     if ($skip_export) {
         print "====================\n";
         print "SKIPPING biblio export\n";
@@ -140,11 +174,20 @@ if ($biblios) {
         print "exporting biblios\n";
         print "====================\n";
         mkdir "$directory" unless (-d $directory);
-        mkdir "$directory/biblios" unless (-d "$directory/biblios");
-		my $dbh=C4::Context->dbh;
-        my $sth = $dbh->prepare("SELECT biblionumber FROM biblioitems ORDER BY biblionumber");
-        $sth->execute();
-        export_marc_records('biblio', $sth, "$directory/biblios", $as_xml, $noxml);
+        if ($process_zebraqueue) {
+            my $sth = select_zebraqueue_records('biblio', 'deleted');
+            mkdir "$directory/del_biblios" unless (-d "$directory/del_biblios");
+            $num_biblios_deleted = generate_deleted_marc_records('biblio', $sth, "$directory/del_biblios", $as_xml);
+            mark_zebraqueue_done('biblio', 'deleted');
+            $sth = select_zebraqueue_records('biblio', 'updated');
+            mkdir "$directory/upd_biblios" unless (-d "$directory/upd_biblios");
+            $num_biblios_exported = export_marc_records('biblio', $sth, "$directory/upd_biblios", $as_xml, $noxml);
+            mark_zebraqueue_done('biblio', 'updated');
+        } else {
+            mkdir "$directory/biblios" unless (-d "$directory/biblios");
+            my $sth = select_all_biblios();
+            $num_biblios_exported = export_marc_records('biblio', $sth, "$directory/biblios", $as_xml, $noxml);
+        }
     }
     
     #
@@ -154,10 +197,20 @@ if ($biblios) {
     print "REINDEXING zebra\n";
     print "====================\n";
 	my $record_fmt = ($as_xml) ? 'marcxml' : 'iso2709' ;
-    do_indexing('biblio', 'update', "$directory/biblios", $reset, $noshadow, $record_fmt);
+    if ($process_zebraqueue) {
+        do_indexing('biblio', 'delete', "$directory/del_biblios", $reset, $noshadow, $record_fmt)
+            if $num_biblios_deleted;
+        do_indexing('biblio', 'update', "$directory/upd_biblios", $reset, $noshadow, $record_fmt)
+            if $num_biblios_exported;
+    } else {
+        do_indexing('biblio', 'update', "$directory/biblios", $reset, $noshadow, $record_fmt)
+            if $num_biblios_exported;
+    }
 } else {
     print "skipping biblios\n";
 }
+
+$dbh->commit(); # commit changes to zebraqueue, if any
 
 print "====================\n";
 print "CLEANING\n";
@@ -183,9 +236,68 @@ if ($keep_export) {
     }
 }
 
+sub select_zebraqueue_records {
+    my ($record_type, $update_type) = @_;
+
+    my $server = ($record_type eq 'biblio') ? 'biblioserver' : 'authorityserver';
+    my $op = ($update_type eq 'deleted') ? 'recordDelete' : 'specialUpdate';
+
+    my $sth = $dbh->prepare("SELECT DISTINCT biblio_auth_number 
+                             FROM zebraqueue
+                             WHERE server = ?
+                             AND   operation = ?
+                             AND   done = 0");
+    $sth->execute($server, $op);
+    return $sth;
+}
+
+sub mark_zebraqueue_done {
+    my ($record_type, $update_type) = @_;
+
+    my $server = ($record_type eq 'biblio') ? 'biblioserver' : 'authorityserver';
+    my $op = ($update_type eq 'deleted') ? 'recordDelete' : 'specialUpdate';
+
+    if ($op eq 'recordDelete') {
+        my $sth = $dbh->prepare("UPDATE zebraqueue SET done = 1
+                                 WHERE id IN (
+                                    SELECT id FROM (
+                                        SELECT z1.id
+                                        FROM zebraqueue z1
+                                        JOIN zebraqueue z2 ON z2.biblio_auth_number = z1.biblio_auth_number
+                                        WHERE z1.done = 0
+                                        AND   z1.server = ?
+                                        AND   z2.done = 0
+                                        AND   z2.server = ?
+                                        AND   z1.operation = ?
+                                    ) d2
+                                 )
+                                ");
+        $sth->execute($server, $server, $op); # if we've deleted a record, any prior specialUpdates are void
+    } else {
+        my $sth = $dbh->prepare("UPDATE zebraqueue SET done = 1
+                                 WHERE server = ?
+                                 AND   operation = ?
+                                 AND   done = 0");
+        $sth->execute($server, $op); 
+    }
+}
+
+sub select_all_authorities {
+    my $sth = $dbh->prepare("select authid from auth_header");
+    $sth->execute();
+    return $sth;
+}
+
+sub select_all_biblios {
+    my $sth = $dbh->prepare("SELECT biblionumber FROM biblioitems ORDER BY biblionumber");
+    $sth->execute();
+    return $sth;
+}
+
 sub export_marc_records {
     my ($record_type, $sth, $directory, $as_xml, $noxml) = @_;
 
+    my $num_exported = 0;
     open (OUT, ">:utf8 ", "$directory/exported_records") or die $!;
     my $i = 0;
     while (my ($record_number) = $sth->fetchrow_array) {
@@ -199,10 +311,42 @@ sub export_marc_records {
             # to care, though, at least if you're using the GRS-1 filter.  It does
             # care if you're using the DOM filter, which requires valid XML file(s).
             print OUT ($as_xml) ? $marc->as_xml_record() : $marc->as_usmarc();
+            $num_exported++;
         }
     }
-    print "\nRecords exported: $i\n";
+    print "\nRecords exported: $num_exported\n";
     close OUT;
+    return $num_exported;
+}
+
+sub generate_deleted_marc_records {
+    my ($record_type, $sth, $directory, $as_xml) = @_;
+
+    my $num_exported = 0;
+    open (OUT, ">:utf8 ", "$directory/exported_records") or die $!;
+    my $i = 0;
+    while (my ($record_number) = $sth->fetchrow_array) {
+        print "\r$i" unless ($i++ %100);
+        print ".";
+
+        my $marc = MARC::Record->new();
+        if ($record_type eq 'biblio') {
+            fix_biblio_ids($marc, $record_number, $record_number);
+        } else {
+            fix_authority_id($marc, $record_number);
+        }
+        if (C4::Context->preference("marcflavour") eq "UNIMARC") {
+            fix_unimarc_100($marc);
+        }
+
+        print OUT ($as_xml) ? $marc->as_xml_record() : $marc->as_usmarc();
+        $num_exported++;
+    }
+    print "\nRecords exported: $num_exported\n";
+    close OUT;
+    return $num_exported;
+    
+
 }
 
 sub get_corrected_marc_record {
@@ -278,15 +422,19 @@ sub fix_biblio_ids {
     #         otherwise, Zebra will choke on the record.  However, this
     #         logic belongs in the relevant C4::Biblio APIs.
     my ($marc, $biblionumber) = @_;
-
-    my $sth = $dbh->prepare(
-        "SELECT biblioitemnumber FROM biblioitems WHERE biblionumber=?");
-    $sth->execute($biblionumber);
-    my ($biblioitemnumber) = $sth->fetchrow_array;
-    $sth->finish;
-    unless ($biblioitemnumber) {
-        warn "failed to get biblioitemnumber for biblio $biblionumber";
-        return 0;
+    my $biblioitemnumber;
+    if (@_) {
+        $biblioitemnumber = shift;
+    } else {    
+        my $sth = $dbh->prepare(
+            "SELECT biblioitemnumber FROM biblioitems WHERE biblionumber=?");
+        $sth->execute($biblionumber);
+        ($biblioitemnumber) = $sth->fetchrow_array;
+        $sth->finish;
+        unless ($biblioitemnumber) {
+            warn "failed to get biblioitemnumber for biblio $biblionumber";
+            return 0;
+        }
     }
 
     # FIXME - this is cheating on two levels
@@ -307,8 +455,7 @@ sub fix_authority_id {
     #         for Zebra's sake.  However, this really belongs
     #         in C4::AuthoritiesMarc.
     my ($marc, $authid) = @_;
-    unless ($marc->field('001')->data() eq $authid){
-        print "$authid don't exist for this authority :".$marc->as_formatted;
+    unless ($marc->field('001') and $marc->field('001')->data() eq $authid){
         $marc->delete_field($marc->field('001'));
         $marc->insert_fields_ordered(MARC::Field->new('001',$authid));
     }
@@ -363,6 +510,11 @@ Parameters:
     -b                      index bibliographic records
 
     -a                      index authority records
+
+    -z                      select only updated and deleted
+                            records marked in the zebraqueue
+                            table.  Cannot be used with -r
+                            or -s.
 
     -r                      clear Zebra index before
                             adding records to index
