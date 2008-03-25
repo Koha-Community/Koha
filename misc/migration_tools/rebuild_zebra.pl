@@ -16,7 +16,6 @@ use C4::AuthoritiesMarc;
 
 $|=1; # flushes output
 
-# limit for database dumping
 my $directory;
 my $skip_export;
 my $keep_export;
@@ -102,115 +101,19 @@ if ($do_munge) {
 $dbh->{AutoCommit} = 0; # don't autocommit - want a consistent view of the zebraqueue table
 
 if ($authorities) {
-    #
-    # exporting authorities
-    #
-    my $num_authorities_exported = 0;
-    my $num_authorities_deleted = 0;
-    if ($skip_export) {
-        print "====================\n";
-        print "SKIPPING authorities export\n";
-        print "====================\n";
-    } else {
-        print "====================\n";
-        print "exporting authorities\n";
-        print "====================\n";
-        mkdir "$directory" unless (-d $directory);
-        mkdir "$directory/authorities" unless (-d "$directory/authorities");
-        if ($process_zebraqueue) {
-            my $sth = select_zebraqueue_records('authority', 'deleted');
-            mkdir "$directory/del_authorities" unless (-d "$directory/del_authorities");
-            $num_authorities_deleted = generate_deleted_marc_records('authority', $sth, "$directory/del_authorities", $as_xml);
-            mark_zebraqueue_done('authority', 'deleted');
-            $sth = select_zebraqueue_records('authority', 'updated');
-            mkdir "$directory/upd_authorities" unless (-d "$directory/upd_authorities");
-            $num_authorities_exported = export_marc_records('authority', $sth, "$directory/upd_authorities", $as_xml, $noxml);
-            mark_zebraqueue_done('authority', 'updated');
-        } else {
-            my $sth = select_all_authorities();
-            $num_authorities_exported = export_marc_records('authority', $sth, "$directory/authorities", $as_xml, $noxml);
-        }
-    }
-    
-    #
-    # and reindexing everything
-    #
-    print "====================\n";
-    print "REINDEXING zebra\n";
-    print "====================\n";
-	my $record_fmt = ($as_xml) ? 'marcxml' : 'iso2709' ;
-    if ($process_zebraqueue) {
-        do_indexing('authority', 'delete', "$directory/del_authorities", $reset, $noshadow, $record_fmt) 
-            if $num_authorities_deleted;
-        do_indexing('authority', 'update', "$directory/upd_authorities", $reset, $noshadow, $record_fmt)
-            if $num_authorities_exported;
-    } else {
-        do_indexing('authority', 'update', "$directory/authorities", $reset, $noshadow, $record_fmt)
-            if $num_authorities_exported;
-    }
-
+    index_records('authority', $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml);
+    $dbh->commit(); # commit changes to zebraqueue, if any
 } else {
     print "skipping authorities\n";
 }
 
-$dbh->commit(); # commit changes to zebraqueue, if any
-
-#################################################################################################################
-#                        BIBLIOS 
-#################################################################################################################
-
 if ($biblios) {
-    #
-    # exporting biblios
-    #
-    my $num_biblios_exported = 0;
-    my $num_biblios_deleted = 0;
-    if ($skip_export) {
-        print "====================\n";
-        print "SKIPPING biblio export\n";
-        print "====================\n";
-    } else {
-        print "====================\n";
-        print "exporting biblios\n";
-        print "====================\n";
-        mkdir "$directory" unless (-d $directory);
-        if ($process_zebraqueue) {
-            my $sth = select_zebraqueue_records('biblio', 'deleted');
-            mkdir "$directory/del_biblios" unless (-d "$directory/del_biblios");
-            $num_biblios_deleted = generate_deleted_marc_records('biblio', $sth, "$directory/del_biblios", $as_xml);
-            mark_zebraqueue_done('biblio', 'deleted');
-            $sth = select_zebraqueue_records('biblio', 'updated');
-            mkdir "$directory/upd_biblios" unless (-d "$directory/upd_biblios");
-            $num_biblios_exported = export_marc_records('biblio', $sth, "$directory/upd_biblios", $as_xml, $noxml);
-            mark_zebraqueue_done('biblio', 'updated');
-        } else {
-            mkdir "$directory/biblios" unless (-d "$directory/biblios");
-            my $sth = select_all_biblios();
-            $num_biblios_exported = export_marc_records('biblio', $sth, "$directory/biblios", $as_xml, $noxml);
-        }
-    }
-    
-    #
-    # and reindexing everything
-    #
-	print "====================\n";
-    print "REINDEXING zebra\n";
-    print "====================\n";
-	my $record_fmt = ($as_xml) ? 'marcxml' : 'iso2709' ;
-    if ($process_zebraqueue) {
-        do_indexing('biblio', 'delete', "$directory/del_biblios", $reset, $noshadow, $record_fmt)
-            if $num_biblios_deleted;
-        do_indexing('biblio', 'update', "$directory/upd_biblios", $reset, $noshadow, $record_fmt)
-            if $num_biblios_exported;
-    } else {
-        do_indexing('biblio', 'update', "$directory/biblios", $reset, $noshadow, $record_fmt)
-            if $num_biblios_exported;
-    }
+    index_records('biblio', $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml);
+    $dbh->commit(); # commit changes to zebraqueue, if any
 } else {
     print "skipping biblios\n";
 }
 
-$dbh->commit(); # commit changes to zebraqueue, if any
 
 print "====================\n";
 print "CLEANING\n";
@@ -233,6 +136,54 @@ if ($keep_export) {
         # automatically.
         rmtree($directory, 0, 1);
         print "directory $directory deleted\n";
+    }
+}
+
+sub index_records {
+    my ($record_type, $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml) = @_;
+
+    my $num_records_exported = 0;
+    my $num_records_deleted = 0;
+    if ($skip_export) {
+        print "====================\n";
+        print "SKIPPING $record_type export\n";
+        print "====================\n";
+    } else {
+        print "====================\n";
+        print "exporting $record_type\n";
+        print "====================\n";
+        mkdir "$directory" unless (-d $directory);
+        mkdir "$directory/$record_type" unless (-d "$directory/$record_type");
+        if ($process_zebraqueue) {
+            my $sth = select_zebraqueue_records($record_type, 'deleted');
+            mkdir "$directory/del_$record_type" unless (-d "$directory/del_$record_type");
+            $num_records_deleted = generate_deleted_marc_records($record_type, $sth, "$directory/del_$record_type", $as_xml);
+            mark_zebraqueue_done($record_type, 'deleted');
+            $sth = select_zebraqueue_records($record_type, 'updated');
+            mkdir "$directory/upd_$record_type" unless (-d "$directory/upd_$record_type");
+            $num_records_exported = export_marc_records($record_type, $sth, "$directory/upd_$record_type", $as_xml, $noxml);
+            mark_zebraqueue_done($record_type, 'updated');
+        } else {
+            my $sth = select_all_records($record_type);
+            $num_records_exported = export_marc_records($record_type, $sth, "$directory/$record_type", $as_xml, $noxml);
+        }
+    }
+    
+    #
+    # and reindexing everything
+    #
+    print "====================\n";
+    print "REINDEXING zebra\n";
+    print "====================\n";
+	my $record_fmt = ($as_xml) ? 'marcxml' : 'iso2709' ;
+    if ($process_zebraqueue) {
+        do_indexing($record_type, 'delete', "$directory/del_$record_type", $reset, $noshadow, $record_fmt) 
+            if $num_records_deleted;
+        do_indexing($record_type, 'update', "$directory/upd_$record_type", $reset, $noshadow, $record_fmt)
+            if $num_records_exported;
+    } else {
+        do_indexing($record_type, 'update', "$directory/$record_type", $reset, $noshadow, $record_fmt)
+            if $num_records_exported;
     }
 }
 
@@ -282,8 +233,13 @@ sub mark_zebraqueue_done {
     }
 }
 
+sub select_all_records {
+    my $record_type = shift;
+    return ($record_type eq 'biblio') ? select_all_biblios() : select_all_authorities();
+}
+
 sub select_all_authorities {
-    my $sth = $dbh->prepare("select authid from auth_header");
+    my $sth = $dbh->prepare("SELECT authid FROM auth_header");
     $sth->execute();
     return $sth;
 }
