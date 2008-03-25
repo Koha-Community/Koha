@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Administration &rsaquo; <!-- TMPL_IF name="add_form" --> System Preferences &rsaquo; <!-- TMPL_IF NAME="modify" -->Modify system preference '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->Add a system preference<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF name="add_validate" --> System Preferences &rsaquo; Data Added<!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirm" --> <a href="">System Preferences &rsaquo; <!-- TMPL_VAR NAME="searchfield" --> &rsaquo; Confirm Deletion of Parameter '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirmed" --> System Preferences &rsaquo; Parameter Deleted<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->System Preferences<!-- /TMPL_IF --></title>
+<!-- TMPL_IF name="delete_confirm" --> System Preferences &rsaquo; <!-- TMPL_VAR NAME="searchfield" --> &rsaquo; Confirm Deletion of Parameter '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirmed" --> System Preferences &rsaquo; Parameter Deleted<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->System Preferences<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 //<![CDATA[
@@ -217,10 +217,10 @@
     // prepare DOM for YUI Toolbar
      $(document).ready(function() {
         yuiToolbar();
-		$("#sysprefst").tablesorter({
+		<!-- TMPL_IF NAME="loop" -->$("#sysprefst").tablesorter({
 			sortList: [[0,0]],
 			headers: { 1: {sorter:false},2: { sorter: false },3: { sorter: false },4: { sorter: false }}
-		});
+		});<!-- /TMPL_IF -->
      });
     // YUI Toolbar Functions
     function yuiToolbar() {
