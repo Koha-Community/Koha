@@ -8,7 +8,7 @@ a, a:visited {
 	color : #006699;
 }
 
-a:hover {
+a:hover,input.editshelf:hover,a.editshelf:hover,input.deleteshelf:hover {
 	color : #990033;
 }
 
@@ -1572,3 +1572,34 @@ a#MARCview, a#ISBDview, a#Normalview {
 #shelfbrowser em {display:block;font-weight:bold;margin-bottom:5px;font-style:normal;}
 #shelfbrowser dl div {float:left;}
 #shelfbrowser img {margin-top:3.5em;}
+input.editshelf,a.editshelf {
+	background : transparent url("../../images/shelf-edit.gif") center left no-repeat;
+	border : 0;
+	color : #006699;
+	cursor : pointer;
+	margin:0pt 0.5em;
+	padding-left : 15px;
+	text-decoration : none;
+}
+input.newshelf,a.newshelf {
+	background : transparent url("../../images/shelf-new.gif") center left no-repeat;
+	border : 0;
+	color : #006699;
+	cursor : pointer;
+	margin:0pt 0.5em;
+	padding-left : 15px;
+	text-decoration : none;
+}
+input.deleteshelf {
+	background : transparent url("../../images/shelf-delete.gif") center left no-repeat;
+	border : 0;
+	color : #006699;
+	cursor : pointer;
+	font-size : 100%;
+	margin:0pt 0.5em;
+	padding-left : 13px;
+}
+
+input.editshelf:active,input.deleteshelf:active {
+	border : 0;
+}
