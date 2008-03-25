@@ -17,7 +17,6 @@ use C4::AuthoritiesMarc;
 $|=1; # flushes output
 
 # limit for database dumping
-my $limit;# = "LIMIT 1";
 my $directory;
 my $skip_export;
 my $keep_export;
@@ -103,7 +102,7 @@ if ($authorities) {
         open(OUT,">:utf8","$directory/authorities/authorities.iso2709") or die $!;
         my $dbh=C4::Context->dbh;
         my $sth;
-        $sth=$dbh->prepare("select authid,marc from auth_header $limit");
+        $sth=$dbh->prepare("select authid,marc from auth_header");
         $sth->execute();
         my $i=0;
         while (my ($authid,$record) = $sth->fetchrow) {
@@ -174,7 +173,7 @@ if ($biblios) {
 		my $dbh=C4::Context->dbh;
         my $sth;
     if ($noxml){
-        $sth=$dbh->prepare("select biblionumber,marc from biblioitems order by biblionumber $limit");
+        $sth=$dbh->prepare("select biblionumber,marc from biblioitems order by biblionumber");
         $sth->execute();
         my $i=0;
         while (my ($biblionumber,$marc) = $sth->fetchrow) {
@@ -245,7 +244,7 @@ if ($biblios) {
         }
         close (OUT);
     } else {
-        $sth=$dbh->prepare("SELECT biblionumber FROM biblioitems ORDER BY biblionumber $limit");
+        $sth=$dbh->prepare("SELECT biblionumber FROM biblioitems ORDER BY biblionumber");
         $sth->execute();
         my $i=0;
         while (my ($biblionumber) = $sth->fetchrow) {
