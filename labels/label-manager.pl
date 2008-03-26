@@ -7,7 +7,7 @@ use C4::Labels;
 use C4::Output;
 use HTML::Template::Pro;
 #use POSIX qw(ceil);
-use Data::Dumper;
+#use Data::Dumper;
 #use Smart::Comments;
 
 use vars qw($debug);
@@ -110,14 +110,11 @@ elsif  ( $op eq 'add_layout' ) {
 # FIXME: The trinary conditionals here really need to be replaced with a more robust form of db abstraction -fbcit
 
 elsif ( $op eq 'add' ) {   # add item
-	warn "op \'add\': batch id = $batch_id, type = $batch_type";
         my $query2 = "INSERT INTO $batch_type ( " . (($batch_type eq 'labels') ? 'itemnumber' : 'borrowernumber') . ", batch_id ) values ( ?,? )";
-        warn "op \'add\' \$query2=$query2";
 	my $sth2   = $dbh->prepare($query2);
-        warn Dumper($itemnumber);
 	for my $inum (@itemnumber) {
             warn "INSERTing " . (($batch_type eq 'labels') ? 'itemnumber' : 'borrowernumber') . ":$inum for batch $batch_id";
-		$sth2->execute($inum, $batch_id);
+	    $sth2->execute($inum, $batch_id);
 	}
 	$sth2->finish;
 }

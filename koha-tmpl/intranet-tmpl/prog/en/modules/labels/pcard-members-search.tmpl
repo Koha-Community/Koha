@@ -1,0 +1,128 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Patrons <!-- TMPL_IF NAME="searching" -->&rsaquo; Search Results<!-- /TMPL_IF --></title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.pack.js"></script>
+<script type="text/javascript">
+//<![CDATA[ 
+$(document).ready(function(){
+    $("#CheckAll").click(function(){
+		$(".checkboxed").checkCheckboxes();
+	        return false;
+    });
+    $("#CheckNone").click(function(){
+        $(".checkboxed").unCheckCheckboxes();
+        return false;
+    });
+});
+function add_item(borrowernum,batch_id,type_id){
+ var getstr='';
+ if (borrowernum == 'checked') {
+    itms= new Array;        
+    if(document.resultform.borrowernumber.length > 0) {
+        for (var i=0; i < document.resultform.borrowernumber.length; i++) {
+            if (document.resultform.borrowernumber[i].checked) {
+                itms.push("borrowernumber=" +  document.resultform.borrowernumber[i].value);
+            }
+        }
+        getstr = itms.join("&");
+    } else {
+        getstr = "borrowernumber="+document.resultform.borrowernumber.value;
+    }
+  } else {
+		getstr = "borrowernumber="+borrowernum;
+    } 
+ 	var myurl = "label-manager.pl?op=add&batch_id="+batch_id+"&type="+type_id+"&"+getstr;
+	window.opener.location.href = myurl;
+}
+function add_item3(borrowernumber){
+ var myurl = "label-manager.pl?op=add&borrowernumber="+borrowernumber+"";
+     window.opener.location.href = myurl;
+}
+//]]>
+</script>
+</head>
+</head>
+<body>
+<div id="breadcrumbs">Home &rsaquo; <!-- TMPL_IF NAME="searching" --><a href="/cgi-bin/koha/labels/pcard-member-search.pl">Patrons</a>  &rsaquo; Search Results<!-- TMPL_ELSE -->Patrons<!-- /TMPL_IF --></div>
+
+<div id="doc2"><!-- class="yui-t4">-->
+   
+<!--   <div id="bd"> -->
+<!--	<div id="yui-main"> -->
+<!--	<div class="yui-g"> -->
+	
+
+<div class="browse">
+    Browse by last name:
+    <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=a&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">A</a>
+    <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=b&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">B</a>
+    <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=c&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">C</a>
+    <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=d&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">D</a>
+    <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=e&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">E</a>
+    <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=f&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">F</a>
+    <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=g&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">G</a>
+    <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=h&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">H</a>
+    <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=i&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">I</a>
+    <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=j&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">J</a>
+    <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=k&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">K</a>
+    <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=l&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">L</a>
+    <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=m&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">M</a>
+    <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=n&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">N</a>
+    <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=o&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">O</a>
+    <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=p&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">P</a>
+    <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=q&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">Q</a>
+    <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=r&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">R</a>
+    <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=s&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">S</a>
+    <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=t&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">T</a>
+    <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=u&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">U</a>
+    <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=v&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">V</a>
+    <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=w&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">W</a>
+    <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=x&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">X</a>
+    <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=y&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">Y</a>
+    <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=z&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">Z</a>
+</div>
+
+
+<!-- TMPL_IF NAME="resultsloop" -->
+<div id="searchheader"> <h3>Results <!-- TMPL_VAR Name ="from" --> to <!-- TMPL_VAR Name ="to" --> of <!-- TMPL_VAR Name ="numresults" --> found for '<span class="ex"><!-- TMPL_VAR NAME="member" --></span>'</h3></div>
+<form name="resultform" class="checkboxed"><div style="float: right; margin-top: .5em;"><input type="submit" class="icon addchecked" value="Add checked" onclick="add_item('checked',<!-- TMPL_VAR NAME="batch_id" -->,'<!-- TMPL_VAR NAME="type" -->'); return false" /> <input type="button" class="close" value="Done" /></div>
+<div style="line-height: 2em; margin-left: .7em;"><a id="CheckAll" href="/cgi-bin/koha/labels/pcard-member-search.pl">Select All</a></span><span class="clearall"><a id="CheckNone" href="/cgi-bin/koha/labels/pcard-member-search.pl">Clear All</a></div>
+<div class="searchresults">
+
+    <table style="float: left; margin: .5em 0;">
+    <tr>
+    <th><label for="patron<!-- TMPL_VAR NAME="borrowernumber" -->" style="font-weight:bold;">Select</label></th>
+    <th><a href="pcard-member-search.pl?member=<!--TMPL_VAR Name="member" -->&amp;orderby=cardnumber">Card</a></th>
+    <th><a href="pcard-member-search.pl?member=<!--TMPL_VAR Name="member" -->&amp;orderby=surname">Name</a></th>
+    <th><a href="pcard-member-search.pl?member=<!--TMPL_VAR Name="member" -->&amp;orderby=borrowers.categorycode">Cat</a></th>
+    <th><a href="pcard-member-search.pl?member=<!--TMPL_VAR Name="member" -->&amp;orderby=branchcode">Branch</a></th>
+    <th>Expires on</th>
+    <th>Notes</th>
+    <th></th>
+    </tr>
+    <!-- TMPL_LOOP NAME="resultsloop" -->
+    <tr>
+    <td align="center"> <input type="checkbox" name="borrowernumber" id="patron<!-- TMPL_VAR NAME="borrowernumber" -->" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />	</td>
+    <td><!-- TMPL_VAR NAME="cardnumber" --></td>
+    <td style="white-space: nowrap;"><a href="/cgi-bin/koha/members/morepcard-member-search.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --></a> <br /> <!-- TMPL_VAR NAME="address" --><!-- TMPL_IF NAME="address2" --><br /><!-- TMPL_VAR NAME="address2" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="city" --><br /><!-- TMPL_VAR NAME=city --><!-- /TMPL_IF --></td>
+    <td><!-- TMPL_VAR NAME="category_description" --> (<!-- TMPL_VAR name="category_type" -->)</td>
+    <td><!-- TMPL_VAR NAME="branchcode" --></td>
+    <td><!-- TMPL_VAR NAME="dateexpiry" --></td>
+    <td><!-- TMPL_VAR NAME="borrowernotes" --></td>
+    <td align="center"><a onclick="add_item('<!-- TMPL_VAR NAME="borrowernumber" -->',<!-- TMPL_VAR NAME="batch_id" -->,'<!-- TMPL_VAR NAME="type" -->'); return false" href="/cgi-bin/koha/barcodes/label-manager.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;batch_id=<!-- TMPL_VAR name="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->&amp;op=add">Add</a></td>
+    </tr>
+    <!-- /TMPL_LOOP -->
+    </table>
+</form>
+<!--  </div> -->
+<!-- TMPL_ELSE -->
+<!-- TMPL_IF NAME="searching" -->
+No results found
+<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+
+<!-- </div> -->
+<!-- </div> -->
+
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
