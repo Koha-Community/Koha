@@ -197,6 +197,7 @@ if ( $show_results ) {
         to             => $to,
         numbers        => \@numbers,
         batch_id       => $batch_id,
+        type           => $type,
     );
 }
 
@@ -229,7 +230,8 @@ else {
     }  
     $template->param(
     itemtypeloop =>\@itemtypeloop,
-        batch_id     => $batch_id,
+    batch_id     => $batch_id,
+    type         => $type,
     );
 
 }

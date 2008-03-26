@@ -13,7 +13,7 @@ $(document).ready(function(){
         return false;
     });
 });
-function add_item(itemnum,batch_id){
+function add_item(itemnum,batch_id,type_id){
  var getstr='';
  if (itemnum == 'checked') {
     itms= new Array;        
@@ -24,11 +24,13 @@ function add_item(itemnum,batch_id){
             }
         }
         getstr = itms.join("&");
+    } else {
+        getstr = "itemnumber="+document.resultform.itemnumber.value;
     }
   } else {
 		getstr = "itemnumber="+itemnum;
 } 
- 	var myurl = "label-manager.pl?op=add&batch_id="+batch_id+"&"+getstr;
+ 	var myurl = "label-manager.pl?op=add&batch_id="+batch_id+"&type="+type_id+"&"+getstr;
 	window.opener.location.href = myurl;
 }
 function add_item3(itemnumber){
@@ -68,7 +70,7 @@ function add_item3(itemnumber){
 		</p>
 	</div>
 <div id="breadcrumbs"><a href="/cgi-bin/koha/labels/label-item-search.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->">Search for Items for Batch <!-- TMPL_VAR NAME="batch_id" --></a> &rsaquo; Search results</div>
-<form name="resultform" class="checkboxed"><div style="float: right; margin-top: .5em;"><input type="submit" class="icon addchecked" value="Add checked" onclick="add_item('checked',<!-- TMPL_VAR NAME="batch_id" -->); return false" /> <input type="button" class="close" value="Done" /></div><div style="line-height: 2em; margin-left: .7em;"><a id="CheckAll" href="/cgi-bin/koha/labels/label-item-search.pl">Select All</a></span><span class="clearall"><a id="CheckNone" href="/cgi-bin/koha/labels/label-item-search.pl">Clear All</a></div>
+<form name="resultform" class="checkboxed"><div style="float: right; margin-top: .5em;"><input type="submit" class="icon addchecked" value="Add checked" onclick="add_item('checked',<!-- TMPL_VAR NAME="batch_id" -->,'<!-- TMPL_VAR NAME="type" -->'); return false" /> <input type="button" class="close" value="Done" /></div><div style="line-height: 2em; margin-left: .7em;"><a id="CheckAll" href="/cgi-bin/koha/labels/label-item-search.pl">Select All</a></span><span class="clearall"><a id="CheckNone" href="/cgi-bin/koha/labels/label-item-search.pl">Clear All</a></div>
 
 	<table style="float: left; margin: .5em 0;">
 	<!-- TMPL_LOOP name="result" -->
@@ -95,7 +97,7 @@ function add_item3(itemnumber){
 					<!-- TMPL_IF name="barcode" --> <!-- TMPL_VAR name="barcode" --> <!-- /TMPL_IF -->
 				</td>
 				<td>
-					<a onclick="add_item('<!-- TMPL_VAR NAME="itemnumber" -->',<!-- TMPL_VAR NAME="batch_id" -->); return false" href="/cgi-bin/koha/barcodes/label-manager.pl?itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&amp;batch_id=<!-- TMPL_VAR name="batch_id" -->&amp;op=add">Add</a>
+					<a onclick="add_item('<!-- TMPL_VAR NAME="itemnumber" -->',<!-- TMPL_VAR NAME="batch_id" -->, '<!-- TMPL_VAR NAME="type" -->'); return false" href="/cgi-bin/koha/barcodes/label-manager.pl?itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&amp;batch_id=<!-- TMPL_VAR name="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->&amp;op=add">Add</a>
 
 <!-- /NEW -->
 				</td>

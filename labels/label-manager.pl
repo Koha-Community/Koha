@@ -40,8 +40,8 @@ my $startlabel     = $query->param('startlabel');
 my $printingtype   = $query->param('printingtype');
 my $guidebox       = $query->param('guidebox');
 my $fontsize       = $query->param('fontsize');
-my @itemnumber     = $query->param('itemnumber') if ($query->param('type') eq 'labels');
-my @itemnumber     = $query->param('borrowernumber') if  ($query->param('type') eq 'patroncards');
+my @itemnumber;
+($query->param('type') eq 'labels') ? (@itemnumber = $query->param('itemnumber')) : (@itemnumber = $query->param('borrowernumber'));
 my $batch_type     = $query->param('type');
 
 # little block for displaying active layout/template/batch in templates
@@ -137,7 +137,7 @@ elsif ( $op eq 'delete' ) {
 }
 elsif ( $op eq 'delete_batch' ) {
 	delete_batch($batch_id, $batch_type);
-	print $query->redirect("label-manager.pl");
+	print $query->redirect("label-manager.pl?type=$batch_type");
 	exit;
 }
 elsif ( $op eq 'add_batch' ) {
@@ -149,8 +149,9 @@ elsif ( $op eq 'set_active_layout' ) {
 	exit;
 }
 elsif ( $op eq 'deduplicate' ) {
-	my $return = deduplicate_batch($batch_id);
-	my $msg = (($return) ? "Removed $return" : "Error revoving") . " duplicate items from Batch $batch_id";
+    warn "\$batch_id=$batch_id and \$batch_type=$batch_type";
+	my ($return, $dberror) = deduplicate_batch($batch_id, $batch_type);
+	my $msg = (($return) ? "Removed $return" : "Error removing") . " duplicate items from Batch $batch_id." . (($dberror) ? " Database returned: $dberror" : "");
 	push @messages, $msg;
 }
 

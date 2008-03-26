@@ -20,6 +20,8 @@
 <!-- TMPL_IF NAME="batch_id" -->
 <!-- TMPL_INCLUDE NAME="tools-labels-batches-toolbar.inc" -->
 <!-- TMPL_IF EXPR="(type eq 'labels')" -->
+<div class="yui-g">
+    <div class="yui-u first">
     <h2>Items to be Printed for Batch <!-- TMPL_VAR NAME="batch_id" -->  (<!-- TMPL_VAR NAME="batch_count" -->  items)</h2>
     <table>
         <tr>
@@ -40,7 +42,10 @@
         </tr>
         <!-- /TMPL_LOOP -->
     </table>
+    </div>
 <!-- TMPL_ELSIF EXPR="(type eq 'patroncards')" -->
+<div class="yui-g">
+    <div class="yui-u first">
     <h2>Patron Cards to be Printed for Batch <!-- TMPL_VAR NAME="batch_id" -->  (<!-- TMPL_VAR NAME="batch_count" -->  items)</h2>
     <table>
         <tr>
@@ -61,7 +66,12 @@
         </tr>
         <!-- /TMPL_LOOP -->
     </table>
+    </div>
 <!-- /TMPL_IF --><!-- /type -->
+    <div class="yui-u">
+        <!-- TMPL_INCLUDE NAME="label-status.inc" -->
+    </div>
+</div>
 <!-- TMPL_ELSE -->
 <!-- TMPL_INCLUDE NAME="tools-labels-toolbar.inc" -->
 <!-- TMPL_IF EXPR="(type eq 'labels')" -->
@@ -95,7 +105,12 @@
 <!-- TMPL_ELSE -->
     <div class="yui-g">
         <div class="yui-u first">
-            <h2>No Label Batches Currently Defined</h2>
+            <fieldset class="brief">
+            <legend>No Label Batches Currently Defined</legend>
+            <div class="hint">
+                Select "New Label Batch" to create a Label batch.
+            </div>
+            </fieldset>
         </div>
         <div class="yui-u">
         <!-- TMPL_INCLUDE NAME="label-status.inc" -->
@@ -133,7 +148,12 @@
 <!-- TMPL_ELSE -->
     <div class="yui-g">
         <div class="yui-u first">
-            <h2>No Patron Card Batches Currently Defined</h2>
+            <fieldset class="brief">
+            <legend>No Patron Card Batches Currently Defined</legend>
+            <div class="hint">
+                Select "New Patron Card Batch" to create a Label batch.
+            </div>
+            </fieldset>
         </div>
         <div class="yui-u">
             <!-- TMPL_INCLUDE NAME="label-status.inc" -->

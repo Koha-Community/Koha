@@ -312,11 +312,10 @@ sub get_highest_batch {
 }
 
 
-#FIXME: Needs to be ported to receive $batch_type
 sub get_batches {
-    my ($batch_type) = @_;
+    my ( $batch_type ) = @_;
     my $dbh = C4::Context->dbh;
-    my $q   = "select batch_id, count(*) as num from $batch_type group by batch_id";
+    my $q   = "SELECT batch_id, COUNT(*) AS num FROM $batch_type GROUP BY batch_id";
     my $sth = $dbh->prepare($q);
     $sth->execute();
     my @resultsloop;
@@ -841,39 +840,41 @@ sub GetPatronCardItems {
 }
 
 sub deduplicate_batch {
-	my $batch_id = shift or return undef;
+	my ( $batch_id, $batch_type ) = @_;
 	my $query = "
 	SELECT DISTINCT
-			batch_id,itemnumber,
-			count(labelid) as count 
-	FROM     labels 
-	WHERE    batch_id = ?
-	GROUP BY itemnumber,batch_id
-	HAVING   count > 1
+			batch_id," . (($batch_type eq 'labels') ? 'itemnumber' : 'borrowernumber') . ",
+			count(". (($batch_type eq 'labels') ? 'labelid' : 'cardid') . ") as count 
+	FROM $batch_type 
+	WHERE batch_id = ?
+	GROUP BY " . (($batch_type eq 'labels') ? 'itemnumber' : 'borrowernumber') . ",batch_id
+	HAVING count > 1
 	ORDER BY batch_id,
-			 count DESC  ";
+	count DESC  ";
 	my $sth = C4::Context->dbh->prepare($query);
 	$sth->execute($batch_id);
-	$sth->rows or return undef;
+        warn $sth->errstr if $sth->errstr;
+	$sth->rows or return undef, $sth->errstr;
 
-	my $del_query = qq(
+	my $del_query = "
 	DELETE 
-	FROM     labels 
+	FROM     $batch_type
 	WHERE    batch_id = ?
-	AND      itemnumber = ?
+	AND      " . (($batch_type eq 'labels') ? 'itemnumber' : 'borrowernumber') . " = ?
 	ORDER BY timestamp ASC
-	);
+	";
 	my $killed = 0;
 	while (my $data = $sth->fetchrow_hashref()) {
-		my $itemnumber = $data->{itemnumber} or next;
+		my $itemnumber = $data->{(($batch_type eq 'labels') ? 'itemnumber' : 'borrowernumber')} or next;
 		my $limit      = $data->{count} - 1  or next;
 		my $sth2 = C4::Context->dbh->prepare("$del_query  LIMIT $limit");
 		# die sprintf "$del_query LIMIT %s\n (%s, %s)", $limit, $batch_id, $itemnumber;
 		# $sth2->execute($batch_id, C4::Context->dbh->quote($data->{itemnumber}), $data->{count} - 1)
 		$sth2->execute($batch_id, $itemnumber) and
 			$killed += ($data->{count} - 1);
+                warn $sth2->errstr if $sth2->errstr;
 	}
-	return $killed;
+	return $killed, undef;
 }
 
 sub DrawSpineText {
