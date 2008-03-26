@@ -7,7 +7,7 @@ use C4::Labels;
 use C4::Output;
 use HTML::Template::Pro;
 #use POSIX qw(ceil);
-#use Data::Dumper;
+use Data::Dumper;
 #use Smart::Comments;
 
 use vars qw($debug);
@@ -40,7 +40,8 @@ my $startlabel     = $query->param('startlabel');
 my $printingtype   = $query->param('printingtype');
 my $guidebox       = $query->param('guidebox');
 my $fontsize       = $query->param('fontsize');
-my @itemnumber     = $query->param('itemnumber');
+my @itemnumber     = $query->param('itemnumber') if ($query->param('type') eq 'labels');
+my @itemnumber     = $query->param('borrowernumber') if  ($query->param('type') eq 'patroncards');
 my $batch_type     = $query->param('type');
 
 # little block for displaying active layout/template/batch in templates
@@ -109,9 +110,13 @@ elsif  ( $op eq 'add_layout' ) {
 # FIXME: The trinary conditionals here really need to be replaced with a more robust form of db abstraction -fbcit
 
 elsif ( $op eq 'add' ) {   # add item
-	my $query2 = "INSERT INTO $batch_type ( " . (($batch_type eq 'labels') ? 'itemnumber' : 'borrowernumber') . ", batch_id ) values ( ?,? )";
+	warn "op \'add\': batch id = $batch_id, type = $batch_type";
+        my $query2 = "INSERT INTO $batch_type ( " . (($batch_type eq 'labels') ? 'itemnumber' : 'borrowernumber') . ", batch_id ) values ( ?,? )";
+        warn "op \'add\' \$query2=$query2";
 	my $sth2   = $dbh->prepare($query2);
+        warn Dumper($itemnumber);
 	for my $inum (@itemnumber) {
+            warn "INSERTing " . (($batch_type eq 'labels') ? 'itemnumber' : 'borrowernumber') . ":$inum for batch $batch_id";
 		$sth2->execute($inum, $batch_id);
 	}
 	$sth2->finish;
@@ -176,7 +181,7 @@ if (scalar @messages) {
 	$template->param(message_loop => \@complex);
 }
 $template->param(
-    batch_type                  => $batch_type,
+    type                        => $batch_type,
     batch_id                    => $batch_id,
     batch_count                 => scalar @resultsloop,
     active_layout_name          => $active_layout_name,

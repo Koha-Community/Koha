@@ -1,11 +1,11 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo; <!-- TMPL_IF EXPR="(batch_type eq 'labels')" -->Labels<!-- TMPL_ELSIF EXPR="(batch_type eq 'patroncards')" -->Patron Cards<!-- /TMPL_IF --></title>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo; <!-- TMPL_IF EXPR="(type eq 'labels')" -->Labels<!-- TMPL_ELSIF EXPR="(type eq 'patroncards')" -->Patron Cards<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <!-- TMPL_IF EXPR="(batch_type eq 'labels')" -->Labels<!-- TMPL_ELSIF EXPR="(batch_type eq 'patroncards')" -->Patron Cards<!-- /TMPL_IF --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <!-- TMPL_IF EXPR="(type eq 'labels')" -->Labels<!-- TMPL_ELSIF EXPR="(type eq 'patroncards')" -->Patron Cards<!-- /TMPL_IF --></div>
  <div id="doc3" class="yui-t2">
   <div id="bd">
    <div id="yui-main">
@@ -19,7 +19,7 @@
 
 <!-- TMPL_IF NAME="batch_id" -->
 <!-- TMPL_INCLUDE NAME="tools-labels-batches-toolbar.inc" -->
-<!-- TMPL_IF EXPR="(batch_type eq 'labels')" -->
+<!-- TMPL_IF EXPR="(type eq 'labels')" -->
     <h2>Items to be Printed for Batch <!-- TMPL_VAR NAME="batch_id" -->  (<!-- TMPL_VAR NAME="batch_count" -->  items)</h2>
     <table>
         <tr>
@@ -40,7 +40,7 @@
         </tr>
         <!-- /TMPL_LOOP -->
     </table>
-<!-- TMPL_ELSIF EXPR="(batch_type eq 'patroncards')" -->
+<!-- TMPL_ELSIF EXPR="(type eq 'patroncards')" -->
     <h2>Patron Cards to be Printed for Batch <!-- TMPL_VAR NAME="batch_id" -->  (<!-- TMPL_VAR NAME="batch_count" -->  items)</h2>
     <table>
         <tr>
@@ -61,10 +61,10 @@
         </tr>
         <!-- /TMPL_LOOP -->
     </table>
-<!-- /TMPL_IF --><!-- /batch_type -->
+<!-- /TMPL_IF --><!-- /type -->
 <!-- TMPL_ELSE -->
 <!-- TMPL_INCLUDE NAME="tools-labels-toolbar.inc" -->
-<!-- TMPL_IF EXPR="(batch_type eq 'labels')" -->
+<!-- TMPL_IF EXPR="(type eq 'labels')" -->
 <!-- TMPL_IF NAME="batches" -->
     <div class="yui-g">
         <div class="yui-u first">
@@ -102,7 +102,7 @@
         </div>
     </div>
 <!-- /TMPL_IF --><!-- /batches -->
-<!-- TMPL_ELSIF EXPR="(batch_type eq 'patroncards')" -->
+<!-- TMPL_ELSIF EXPR="(type eq 'patroncards')" -->
 <!-- TMPL_IF NAME="batches" -->
     <div class="yui-g">
         <div class="yui-u first">
@@ -140,7 +140,7 @@
         </div>
     </div>
 <!-- /TMPL_IF --><!-- /batches -->
-<!-- /TMPL_IF --><!-- /batch_type -->
+<!-- /TMPL_IF --><!-- /type -->
 <!-- /TMPL_IF --><!-- batch_id -->
 </div>
 </div>

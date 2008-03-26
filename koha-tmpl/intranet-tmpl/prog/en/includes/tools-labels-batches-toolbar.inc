@@ -1,4 +1,4 @@
-<!-- TMPL_IF EXPR="(batch_type eq 'labels')" -->
+<!-- TMPL_IF EXPR="(type eq 'labels')" -->
 <div id="toolbar">
 	<script type="text/javascript">
 	//<![CDATA[
@@ -38,13 +38,14 @@
 	<li><a id="dedup" href="/cgi-bin/koha/labels/label-manager.pl?op=deduplicate&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="batch_type" -->">Remove duplicate barcodes</a></li>
 	<li><a id="generate" href="/cgi-bin/koha/labels/label-print-pdf.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="batch_type" -->">Generate PDF for Batch</a></li>
 </ul></div>
-<!-- TMPL_ELSIF EXPR="(batch_type eq 'patroncards')" -->
+<!-- TMPL_ELSIF EXPR="(type eq 'patroncards')" -->
 <div id="toolbar">
 	<script type="text/javascript">
 	//<![CDATA[
 
-        function Plugin(batch_id) {
-	        window.open("label-patron-search.pl?batch_id="+batch_id+"",'FindABibIndex','width=640,height=400,toolbar=no,scrollbars=yes');
+        function Plugin(batch_id, batch_type) {
+//	        window.open("label-item-search.pl?batch_id="+batch_id+"",'FindABibIndex','width=640,height=400,toolbar=no,scrollbars=yes');
+	        window.open("pcard-member-search.pl?batch_id="+batch_id+"&amp;type="+batch_type+"",'FindAPatronIndex','width=1280,height=400,toolbar=no,scrollbars=yes');
         }
 
 	// prepare DOM for YUI Toolbar
@@ -62,7 +63,7 @@
                                             type: "button", 
                                             label: "Add patron(s) to batch", 
                                             container: "addpatronsc",
-											onclick: {fn:function(){Plugin(<!-- TMPL_VAR NAME="batch_id" -->)}}
+											onclick: {fn:function(){Plugin(<!-- TMPL_VAR NAME="batch_id" -->,"<!-- TMPL_VAR NAME="type" -->")}}
                                         });
 		new YAHOO.widget.Button("deletebatch");
 		new YAHOO.widget.Button("dedup");
@@ -72,7 +73,7 @@
 	//]]>
 	</script>
 	<ul class="toolbar">
-	<li id="addpatronsc"><a id="addpatrons" href="#" onclick="Plugin(<!-- TMPL_VAR NAME="batch_id" -->); return false;">Add item(s) to batch</a></li>
+	<li id="addpatronsc"><a id="addpatrons" href="#" onclick="Plugin(<!-- TMPL_VAR NAME="batch_id" -->,"<!-- TMPL_VAR NAME="type" -->"); return false;">Add item(s) to batch</a></li>
 	<li><a id="deletebatch" href="/cgi-bin/koha/labels/label-manager.pl?op=delete_batch&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="batch_type" -->">Delete current batch</a></li>
 				<!-- FIXME: should use POST to change server state, not GET -->
 	<li><a id="dedup" href="/cgi-bin/koha/labels/label-manager.pl?op=deduplicate&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="batch_type" -->">Remove duplicate barcodes</a></li>
