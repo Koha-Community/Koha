@@ -220,7 +220,15 @@ sub handle_file {
             } else {
                 $filename = $1 if ($source =~ /\/([^\/]+)$/);
             }
-            warn "\$filename=$filename";
+            warn "$filename is " . length($imgfile) . " bytes";
+            if (length($imgfile) > 100000) {
+                warn "$filename is TOO BIG!!! I refuse to beleagur my database with that much data. Try reducing the pixel dimensions and I\'ll reconsider.";
+                $filerrors{'OVRSIZ'} = 1;
+                push my @filerrors, \%filerrors;
+	        push @{ $count{filenames} }, { filerrors => \@filerrors, source => $filename, cardnumber => $cardnumber };
+                $template->param( ERRORS => 1 );
+                return %count;
+            }
             my $mimetype = $mimemap->{lc ($1)} if $filename =~ m/\.([^.]+)$/i;
             warn "$filename is mimetype \"$mimetype\"" if $DEBUG;
             my $dberror = PutPatronImage($cardnumber,$mimetype, $imgfile) if $mimetype;
