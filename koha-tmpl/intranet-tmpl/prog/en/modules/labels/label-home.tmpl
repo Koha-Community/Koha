@@ -16,11 +16,10 @@
 <!-- TMPL_INCLUDE NAME="tools-labels-toolbar.inc" -->
 
 <!-- TMPL_IF NAME="layout_loop" -->
-<div class="yui-gc">
+<div class="yui-g">
 <div class="yui-u first">
 <form name="input" action="/cgi-bin/koha/labels/label-manager.pl" method="get">
-<fieldset>
-<legend>Set Active Layout</legend>
+<h2>Set Active Layout</h2>
 
 <table>
 <tr>
@@ -58,7 +57,6 @@
 <!-- /TMPL_LOOP -->
 
 </table>
-</fieldset>
 <fieldset class="action">
      <input type="submit" value="Save" />
         <input type="hidden" name="op" value="set_active_layout" /></fieldset>

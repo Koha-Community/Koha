@@ -23,6 +23,15 @@ my $prof_id     = $query->param('prof_id');
 #my $creep_horz  = $query->param('creep_horz');
 #my $creep_vert  = $query->param('creep_vert');
 
+# little block for displaying active layout/template/batch in templates
+# ----------
+my $batch_id                    = $query->param('batch_id');
+my $active_layout               = get_active_layout();
+my $active_template             = GetActiveLabelTemplate();
+my $active_layout_name          = $active_layout->{'layoutname'};
+my $active_template_name        = $active_template->{'tmpl_code'};
+# ----------
+
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "labels/label-profiles.tmpl",
@@ -44,6 +53,10 @@ if ( $op eq 'delete' ) {
 @resultsloop = GetAllPrinterProfiles();
 
 $template->param(
+    batch_id => $batch_id,
+    active_layout_name => $active_layout_name,
+    active_template_name => $active_template_name,
+
     resultsloop => \@resultsloop,
 );
 

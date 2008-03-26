@@ -30,6 +30,8 @@ function confirm_deletion(prof_id) {
 
 <!-- TMPL_INCLUDE NAME="tools-labels-toolbar.inc" -->
 
+<div class="yui-g">
+<div class="yui-u first">
 <h2>Printer Profiles</h2>
 <form name="input" action="/cgi-bin/koha/labels/label-profiles.pl" method="get">
 <!-- TMPL_IF NAME="resultsloop" -->
@@ -82,8 +84,11 @@ function confirm_deletion(prof_id) {
 No Printer Profiles currently defined.
 </form>
 <!-- /TMPL_IF -->
-
-
+</div>
+<div class="yui-u">
+    <!-- TMPL_INCLUDE NAME="label-status.inc" -->
+</div>
+</div>
 </div>
 </div>
 <div class="yui-b">
