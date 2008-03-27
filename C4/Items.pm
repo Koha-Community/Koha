@@ -1994,6 +1994,7 @@ sub _get_unlinked_subfields_xml {
         # use of tag 999 is arbitrary, and doesn't need to match the item tag
         # used in the framework
         $marc->append_fields(MARC::Field->new('999', ' ', ' ', @$unlinked_item_subfields));
+        $marc->encoding("UTF-8");    
         $xml = $marc->as_xml();
     }
 
@@ -2014,7 +2015,7 @@ sub  _parse_unlinked_item_subfields_from_xml {
     my $xml = shift;
 
     return unless defined $xml and $xml ne "";
-    my $marc = MARC::Record->new_from_xml(StripNonXmlChars($xml), 'UTF-8', C4::Context->preference("marcflavour"));
+    my $marc = MARC::Record->new_from_xml(StripNonXmlChars($xml),'UTF-8');
     my $unlinked_subfields = [];
     my @fields = $marc->fields();
     if ($#fields > -1) {
