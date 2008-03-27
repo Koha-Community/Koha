@@ -158,7 +158,7 @@ sub FindDuplicate {
 
 =head2 SimpleSearch
 
-($error,$results) = SimpleSearch($query,@servers);
+($error,$results) = SimpleSearch( $query, $offset, $max_results, [ @servers ] );
 
 This function provides a simple search API on the bibliographic catalog
 
@@ -168,6 +168,9 @@ This function provides a simple search API on the bibliographic catalog
 
     * $query can be a simple keyword or a complete CCL query
     * @servers is optional. Defaults to biblioserver as found in koha-conf.xml
+    * $offset - If present, represents the number of records at the beggining to omit. Defaults to 0
+    * $max_results - if present, determines the maximum number of records to fetch. undef is All. defaults to undef.
+
 
 =item C<Output arg:>
     * $error is a empty unless an error is detected
@@ -211,7 +214,8 @@ $template->param(result=>\@results);
 =cut
 
 sub SimpleSearch {
-    my $query = shift;
+    my ( $query, $offset, $max_results, $servers )  = @_;
+    
     if ( C4::Context->preference('NoZebra') ) {
         my $result = NZorder( NZanalyse($query) )->{'biblioserver'};
         my $search_result =
@@ -220,14 +224,12 @@ sub SimpleSearch {
         return ( undef, $search_result );
     }
     else {
-        my @servers = @_;
+        # FIXME hardcoded value. See catalog/search.pl & opac-search.pl too.
+        my @servers = defined ( $servers ) ? @$servers : ( "biblioserver" );
         my @results;
         my @tmpresults;
         my @zconns;
         return ( "No query entered", undef ) unless $query;
-
-        # FIXME hardcoded value. See catalog/search.pl & opac-search.pl too.
-        @servers = ("biblioserver") unless @servers;
 
         # Initialize & Search Zebra
         for ( my $i = 0 ; $i < @servers ; $i++ ) {
@@ -258,21 +260,25 @@ sub SimpleSearch {
                 return ( $error, undef );
             }
         }
-        my $hits = 0;
-        my $ev;
+
         while ( ( my $i = ZOOM::event( \@zconns ) ) != 0 ) {
-            $ev = $zconns[ $i - 1 ]->last_event();
-            if ( $ev == ZOOM::Event::ZEND ) {
-                $hits = $tmpresults[ $i - 1 ]->size();
-            }
-            if ( $hits > 0 ) {
-                for ( my $j = 0 ; $j < $hits ; $j++ ) {
-                    my $record = $tmpresults[ $i - 1 ]->record($j)->raw();
+            my $event = $zconns[ $i - 1 ]->last_event();
+            if ( $event == ZOOM::Event::ZEND ) {
+
+                my $first_record = defined( $offset ) ? $offset+1 : 1;
+                my $hits = $tmpresults[ $i - 1 ]->size();
+                my $last_record = $hits;
+                if ( defined $max_results && $offset + $max_results < $hits ) {
+                    $last_record  = $offset + $max_results;
+                }
+
+                for my $j ( $first_record..$last_record ) {
+                    my $record = $tmpresults[ $i - 1 ]->record( $j-1 )->raw(); # 0 indexed
                     push @results, $record;
                 }
             }
-            $hits = 0;
         }
+
         return ( undef, \@results );
     }
 }
