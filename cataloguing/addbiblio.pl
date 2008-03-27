@@ -678,7 +678,7 @@ AND (authtypecode IS NOT NULL AND authtypecode<>\"\")|);
       # Search if there is any authorities to link to.
       my $query='at='.$data->{authtypecode}.' ';
       map {$query.= ' and he,ext="'.$_->[1].'"' if ($_->[0]=~/[A-z]/)}  $field->subfields();
-      my ($error,$results)=SimpleSearch($query,"authorityserver");
+      my ($error,$results)=SimpleSearch( $query, undef, undef, [ "authorityserver" ] );
     # there is only 1 result 
 	  if ( $error ) {
         warn "BIBLIOADDSAUTHORITIES: $error";

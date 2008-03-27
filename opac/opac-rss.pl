@@ -121,11 +121,10 @@ if ($RDF_update_needed) {
         },
     );
 
-    my $total;    # the total results for the whole set
-    my ( $error, $marcresults ) = SimpleSearch($query);
+    warn "fetching $size results for $query";
+    my ( $error, $marcresults ) = SimpleSearch( $query, 0, $size );
 
     my $hits = scalar @$marcresults;
-    $hits = $size if $hits > $size;
     my @results;
     for ( my $i = 0 ; $i < $hits ; $i++ ) {
         my %resultsloop;

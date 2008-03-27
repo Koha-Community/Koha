@@ -802,7 +802,7 @@ sub FindDuplicateAuthority {
     # build a request for SearchAuthorities
     my $query='at='.$authtypecode.' ';
     map {$query.= " and he=\"".$_->[1]."\"" if ($_->[0]=~/[A-z]/)}  $record->field($auth_tag_to_report)->subfields() if $record->field($auth_tag_to_report);
-    my ($error,$results)=SimpleSearch($query,"authorityserver");
+    my ($error,$results)=SimpleSearch( $query, 0, 1, [ "authorityserver" ] );
     # there is at least 1 result => return the 1st one
     if (@$results>0) {
       my $marcrecord = MARC::File::USMARC::decode($results->[0]);

@@ -119,7 +119,7 @@ sub authorities {
     my $self = shift;
     my $query = qq(Match-heading,ext="$self->{'search_form'}");
     $query .= $self->_query_limiters();
-    my $results = SimpleSearch($query, "authorityserver");
+    my $results = SimpleSearch( $query, undef, undef, [ "authorityserver" ] );
     return $results;
 }
 
@@ -140,7 +140,7 @@ sub preferred_authorities {
     my $self = shift;
     my $query = "Match-heading-see-from,ext='$self->{'search_form'}'";
     $query .= $self->_query_limiters();
-    my $results = SimpleSearch($query, "authorityserver");
+    my $results = SimpleSearch( $query, undef, undef, [ "authorityserver" ] );
     return $results;
 }
 
