@@ -27,28 +27,38 @@ BEGIN {
 				my $msg = shift;
 				my $debug_level =  C4::Context->preference("DebugLevel");
 
+                print q(<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                            "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+                       <html lang="en" xml:lang="en"  xmlns="http://www.w3.org/1999/xhtml">
+                       <head><title>Koha Error</title></head>
+                       <body>
+                );
 				if ($debug_level eq "2"){
 					# debug 2 , print extra info too.
 					my %versions = get_versions();
 
 		# a little example table with various version info";
 					print "
-						<h1>debug level $debug_level </h1>
-						<p>Got an error: $msg</p>
+						<h1>Koha error</h1>
+						<p>The following error has occurred:</p> 
+                        <p><code>$msg</code></p>
 						<table>
-						<tr><th>Apache<td>  $versions{apacheVersion}</tr>
-						<tr><th>Koha<td>    $versions{kohaVersion}</tr>
-						<tr><th>MySQL<td>   $versions{mysqlVersion}</tr>
-						<tr><th>OS<td>      $versions{osVersion}</tr>
-						<tr><th>Perl<td>    $versions{perlVersion}</tr>
+						<tr><th>Apache</th><td>  $versions{apacheVersion}</td></tr>
+						<tr><th>Koha</th><td>    $versions{kohaVersion}</td></tr>
+						<tr><th>MySQL</th><td>   $versions{mysqlVersion}</td></tr>
+						<tr><th>OS</th><td>      $versions{osVersion}</td></tr>
+						<tr><th>Perl</th><td>    $versions{perlVersion}</td></tr>
 						</table>";
 
 				} elsif ($debug_level eq "1"){
-					print "<h1>debug level $debug_level </h1>";
-					print "<p>Got an error: $msg</p>";
+					print "
+						<h1>Koha error</h1>
+						<p>The following error has occurred:</p> 
+                        <p><code>$msg</code></p>";
 				} else {
-					print "production mode - trapped fatal";
+					print "<p>production mode - trapped fatal error</p>";
 				}       
+                print "</body></html>";
 			}
 		CGI::Carp::set_message(\&handle_errors);
     }  	# else there is no browser to send fatals to!
