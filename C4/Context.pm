@@ -22,6 +22,8 @@ use vars qw($VERSION $AUTOLOAD $context @context_stack);
 BEGIN {
 	if ($ENV{'HTTP_USER_AGENT'})	{
 		require CGI::Carp;
+        # FIXME for future reference, CGI::Carp doc says
+        #  "Note that fatalsToBrowser does not work with mod_perl version 2.0 and higher."
 		import CGI::Carp qw(fatalsToBrowser);
 			sub handle_errors {
 				my $msg = shift;
@@ -40,11 +42,12 @@ BEGIN {
 		# a little example table with various version info";
 					print "
 						<h1>Koha error</h1>
-						<p>The following error has occurred:</p> 
-                        <p><code>$msg</code></p>
+						<p>The following fatal error has occurred:</p> 
+                        <pre><code>$msg</code></pre>
 						<table>
 						<tr><th>Apache</th><td>  $versions{apacheVersion}</td></tr>
 						<tr><th>Koha</th><td>    $versions{kohaVersion}</td></tr>
+						<tr><th>Koha DB</th><td> $versions{kohaDbVersion}</td></tr>
 						<tr><th>MySQL</th><td>   $versions{mysqlVersion}</td></tr>
 						<tr><th>OS</th><td>      $versions{osVersion}</td></tr>
 						<tr><th>Perl</th><td>    $versions{perlVersion}</td></tr>
@@ -53,8 +56,8 @@ BEGIN {
 				} elsif ($debug_level eq "1"){
 					print "
 						<h1>Koha error</h1>
-						<p>The following error has occurred:</p> 
-                        <p><code>$msg</code></p>";
+						<p>The following fatal error has occurred:</p> 
+                        <pre><code>$msg</code></pre>";
 				} else {
 					print "<p>production mode - trapped fatal error</p>";
 				}       
@@ -960,7 +963,8 @@ Gets various version info, for core Koha packages, Currently called from carp ha
 # A little example sub to show more debugging info for CGI::Carp
 sub get_versions {
     my %versions;
-    $versions{kohaVersion}  = C4::Context->config("kohaversion");
+    $versions{kohaVersion}  = KOHAVERSION();
+    $versions{kohaDbVersion} = C4::Context->preference('version');
     $versions{osVersion} = `uname -a`;
     $versions{perlVersion} = $];
     $versions{mysqlVersion} = `mysql -V`;
