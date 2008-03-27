@@ -49,8 +49,8 @@ BEGIN {
 				} else {
 					print "production mode - trapped fatal";
 				}       
-			}       
-		CGI::Carp->set_message(\&handle_errors);
+			}
+		CGI::Carp::set_message(\&handle_errors);
     }  	# else there is no browser to send fatals to!
 	$VERSION = '3.00.00.036';
 }
