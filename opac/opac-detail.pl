@@ -162,6 +162,7 @@ $template->param(
 );
 
 my $reviews = getreviews( $biblionumber, 1 );
+my $loggedincommenter;
 foreach ( @$reviews ) {
     my $borrower_number_review = $_->{borrowernumber};
     my $borrowerData           = GetMember($borrower_number_review,'borrowernumber');
@@ -169,7 +170,9 @@ foreach ( @$reviews ) {
     $_->{title}     = $borrowerData->{'title'};
     $_->{surname}   = $borrowerData->{'surname'};
     $_->{firstname} = $borrowerData->{'firstname'};
+    $_->{userid} = $borrowerData->{'userid'};
     $_->{datereviewed} = format_date($_->{datereviewed});
+    if($borrowerData->{'borrowernumber'} eq $borrowernumber){ $loggedincommenter = 1; }
 }
 
 
@@ -183,7 +186,8 @@ $template->param(
     biblionumber        => $biblionumber,
     subscriptions       => \@subs,
     subscriptionsnumber => $subscriptionsnumber,
-    reviews             => $reviews
+    reviews             => $reviews,
+    loggedincommenter => $loggedincommenter
 );
 
 # XISBN Stuff

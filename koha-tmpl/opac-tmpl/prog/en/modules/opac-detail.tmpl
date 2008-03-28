@@ -312,7 +312,21 @@
 <div id="comments">
 <!-- TMPL_IF NAME="reviews" -->
         <!--TMPL_LOOP NAME="reviews"-->
-            <h5>
+			<!-- TMPL_IF NAME="loggedinusername" -->
+			<!-- TMPL_IF EXPR="userid eq loggedinusername" -->
+			<div class="commentline yours">
+			<h5>
+				Your Comment
+			</h5>
+			<small>
+                <!--TMPL_VAR NAME="datereviewed"-->
+            </small>
+        <p>
+          <!--TMPL_VAR NAME="review"--> <a href="#" onclick="Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->');">Edit</a>
+        </p></div>
+			<!-- TMPL_ELSE -->
+			<div class="commentline">
+			<h5>
                 Comment by
                 <!--TMPL_VAR NAME="title"-->
                 <!--TMPL_VAR NAME="firstname"-->
@@ -323,18 +337,21 @@
             </small>
         <p>
           <!--TMPL_VAR NAME="review"-->
-        </p>
+        </p></div>
+			<!-- /TMPL_IF -->
+			<!-- /TMPL_IF -->
         <!--/TMPL_LOOP-->
     <!-- TMPL_ELSE  -->
         <p>There are no comments for this item.</p>
 <!-- /TMPL_IF -->
-
     <!-- TMPL_IF NAME="loggedinusername" -->
-       <p> <a href="javascript:Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->');">
+		<!-- TMPL_UNLESS NAME="loggedincommenter" -->
+       <div id="addcomment"> <a href="#" onclick="Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->'); return false;">
             Post or edit your comments on this item.
-        </a></p>
+        </a></div>
+		<!-- /TMPL_UNLESS -->
     <!-- TMPL_ELSE -->
-        <p><a href="/cgi-bin/koha/opac-user.pl">Log in to your account</a> to post a comment.</p>
+        <div id="addcomment"><a href="/cgi-bin/koha/opac-user.pl">Log in to your account</a> to post a comment.</div>
     <!-- /TMPL_IF -->
 	</div>
 <!-- /TMPL_IF -->
