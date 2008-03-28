@@ -150,7 +150,7 @@ my %tabsysprefs;
     $tabsysprefs{IntranetmainUserblock}="StaffClient";
     
 # Patrons
-    $tabsysprefs{automembernum}="Patrons";
+    $tabsysprefs{autoMemberNum}="Patrons";
     $tabsysprefs{checkdigit}="Patrons";
     $tabsysprefs{intranetreadinghistory}="Patrons";
     $tabsysprefs{NotifyBorrowerDeparture}="Patrons";
