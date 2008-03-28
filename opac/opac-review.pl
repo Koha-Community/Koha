@@ -31,6 +31,7 @@ my $query        = new CGI;
 my $biblionumber = $query->param('biblionumber');
 my $type         = $query->param('type');
 my $review       = $query->param('review');
+my $reviewid       = $query->param('reviewid');
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
         template_name   => "opac-review.tmpl",
@@ -61,6 +62,7 @@ $template->param(
     'borrowernumber' => $borrowernumber,
     'type'           => $type,
     'review'         => $reviewdata,
+	'reviewid'  => $reviewid,
     'title'          => $biblio->{'title'},
 );
 

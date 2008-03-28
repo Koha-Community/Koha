@@ -310,11 +310,12 @@
 
 <!-- TMPL_IF NAME="reviewson" -->
 <div id="comments">
+		<div id="newcomment"></div>
 <!-- TMPL_IF NAME="reviews" -->
         <!--TMPL_LOOP NAME="reviews"-->
 			<!-- TMPL_IF NAME="loggedinusername" -->
 			<!-- TMPL_IF EXPR="userid eq loggedinusername" -->
-			<div class="commentline yours">
+			<div class="commentline yours" id="c<!-- TMPL_VAR NAME="reviewid" -->">
 			<h5>
 				Your Comment
 			</h5>
@@ -322,7 +323,7 @@
                 <!--TMPL_VAR NAME="datereviewed"-->
             </small>
         <p>
-          <!--TMPL_VAR NAME="review"--> <a href="#" onclick="Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->');">Edit</a>
+          <!--TMPL_VAR NAME="review"--> <a href="#" onclick="Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->&amp;reviewid=<!-- TMPL_VAR NAME="reviewid" -->');">Edit</a>
         </p></div>
 			<!-- TMPL_ELSE -->
 			<div class="commentline">
