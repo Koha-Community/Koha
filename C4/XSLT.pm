@@ -107,7 +107,7 @@ sub XSLTParse4Display {
     my $itemsxml  = buildKohaItemsNamespace($biblionumber);
     my $xmlrecord = $record->as_xml();
     $xmlrecord =~ s/\<\/record\>/$itemsxml\<\/record\>/;
-    my $xslfile = C4::Context->config('intranetdir')."/koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPAC$type.xsl";
+    my $xslfile = C4::Context->config('opachtdocs')."/prog/en/xslt/MARC21slim2OPAC$type.xsl";
     my $parser = XML::LibXML->new();
     # don't die when you find &, >, etc
     $parser->recover_silently(1);
