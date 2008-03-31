@@ -278,7 +278,7 @@ sub marc2modsxml {
 	my ($marc) = @_;
 	# grab the XML, run it through our stylesheet, push it out to the browser
 	my $xmlrecord = marc2marcxml($marc);
-	my $xslfile = C4::Context->config('intranetdir')."/koha-tmpl/intranet-tmpl/prog/en/xslt/MARC21slim2MODS3-1.xsl";
+	my $xslfile = C4::Context->config('intrahtdocs')."/prog/en/xslt/MARC21slim2MODS3-1.xsl";
 	my $parser = XML::LibXML->new();
 	my $xslt = XML::LibXSLT->new();
 	my $source = $parser->parse_string($xmlrecord);
