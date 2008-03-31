@@ -419,6 +419,16 @@ sub _marc_marc8_to_utf8 {
             my @converted_subfields;
             foreach my $subfield ($field->subfields()) {
                 my $utf8sf = MARC::Charset::marc8_to_utf8($subfield->[1]);
+                unless (IsStringUTF8ish($utf8sf)) {
+                    # Because of a bug in MARC::Charset 0.98, if the string
+                    # has (a) one or more diacritics that (b) are only in character positions
+                    # 128 to 255 inclusive, the resulting converted string is not in
+                    # UTF-8, but the legacy 8-bit encoding (e.g., ISO-8859-1).  If that
+                    # occurs, upgrade the string in place.  Moral of the story seems to be
+                    # that pack("U", ...) is better than chr(...) if you need to guarantee
+                    # that the resulting string is UTF-8.
+                    utf8::upgrade($utf8sf);
+                }
                 push @converted_subfields, $subfield->[0], $utf8sf;
             }
 
