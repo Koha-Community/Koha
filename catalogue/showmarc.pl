@@ -70,7 +70,7 @@ if($importid) {
 if($view eq 'card') {
 $xmlrecord = GetXmlBiblio($biblionumber) unless $xmlrecord;
 
-my $xslfile = C4::Context->config('intranetdir')."/koha-tmpl/intranet-tmpl/prog/en/xslt/compact.xsl";
+my $xslfile = C4::Context->config('intrahtdocs')."/prog/en/xslt/compact.xsl";
 my $parser = XML::LibXML->new();
 my $xslt = XML::LibXSLT->new();
 my $source = $parser->parse_string($xmlrecord);
