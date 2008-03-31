@@ -377,7 +377,8 @@ sub fix_biblio_ids {
     # FIXME - it is essential to ensure that the biblionumber is present,
     #         otherwise, Zebra will choke on the record.  However, this
     #         logic belongs in the relevant C4::Biblio APIs.
-    my ($marc, $biblionumber) = @_;
+    my $marc = shift;
+    my $biblionumber = shift;
     my $biblioitemnumber;
     if (@_) {
         $biblioitemnumber = shift;
