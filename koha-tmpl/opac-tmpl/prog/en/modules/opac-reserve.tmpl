@@ -64,6 +64,14 @@
         <input type="hidden" name="item_types_selected" value="1">
         <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->">
         <h3>Place a hold on <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><!-- TMPL_IF NAME="author" -->,  by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --></h3>
+
+<!-- TMPL_IF NAME="OPACItemHolds" --> <!-- TMPL_LOOP name="bibitemloop" --> 
+            <!-- TMPL_UNLESS NAME="item-level_itypes" -->
+            <p><strong>Item type:</strong> <!-- TMPL_VAR NAME="description" --></p>
+            <!-- /TMPL_UNLESS -->
+            <!-- TMPL_IF NAME="publicationyear" --><p><strong>Publication year:</strong> <!-- TMPL_VAR NAME="publicationyear" --></p><!-- /TMPL_IF -->
+<!-- /TMPL_IF --><!-- /TMPL_LOOP -->
+
 		<fieldset class="rows holds">
 			<ol>
 				<li><span class="label">For:</span> <!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)
@@ -84,10 +92,11 @@
             </select>
             </li>
             <!-- /TMPL_UNLESS -->
+			
 			<!-- TMPL_IF NAME="forloan" -->
-            <li> <label for="requestany">Place a hold on the next available copy </label>
+            <!-- TMPL_IF NAME="OPACItemHolds" --><li> <label for="requestany">Place a hold on the next available copy </label>
             <input type="checkbox" id="requestany" name="request" checked="checked" value="Any" />
-            </li>
+            </li><!-- TMPL_ELSE --><input type="hidden" name="request" value="Any" /><!-- /TMPL_IF -->
 			</ol>
 		</fieldset>
 
@@ -96,17 +105,14 @@
             <input type="submit" value="Place Hold" />
             <input type="hidden" name="all" value="1" /></p>
             <input type="hidden" name="place_reserve" value="1" /></fieldset>
-			<!-- /TMPL_IF -->            
-        <!-- TMPL_LOOP name="bibitemloop" -->    
-
-            <!-- TMPL_UNLESS NAME="item-level_itypes" -->
-            <p><strong>Item type:</strong> <!-- TMPL_VAR NAME="description" --></p>
-            <!-- /TMPL_UNLESS -->
-            <!-- TMPL_IF NAME="publicationyear" --><p><strong>Publication year:</strong> <!-- TMPL_VAR NAME="publicationyear" --></p><!-- /TMPL_IF -->
+			<!-- /TMPL_IF -->  
+			          
+       <!-- TMPL_IF NAME="OPACItemHolds" --> <!-- TMPL_LOOP name="bibitemloop" -->    
 
             <table id="requestspecific">
 			<caption>Place a hold on a specific copy</caption>
             <tr>
+				<th>&nbsp;</th>
 	            <!-- TMPL_IF NAME="item-level_itypes" -->
                 <th>Hold</th>
                 <!-- TMPL_IF NAME="item-level_itypes" --><th>Item Type</th><!-- /TMPL_IF -->
@@ -181,7 +187,7 @@
         </table>
         <!-- /TMPL_LOOP --> <!-- bibitemloop -->
         <input type="submit" value="Place Hold" />
-        </form>
+        </form><!-- /TMPL_IF -->
     <!-- end of the first form -->
 <!-- /TMPL_IF -->
 

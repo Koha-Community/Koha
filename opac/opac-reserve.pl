@@ -243,7 +243,7 @@ if ( $query->param('place_reserve') ) {
     } else {
         AddReserve($branch,$borrowernumber,$biblionumber,'a',\@realbi,$rank,$notes,$bibdata->{'title'},$checkitem, $found);
     }
-    print $query->redirect("/cgi-bin/koha/opac-user.pl");
+    print $query->redirect("/cgi-bin/koha/opac-user.pl#opac-user-holds");
 }
 else {
 
