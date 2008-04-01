@@ -90,8 +90,11 @@ if (!defined($startdate) or $startdate eq "") {
 if (!defined($enddate) or $enddate eq "") {
 	$enddate = format_date($todaysdate);
 }
-if (!defined($ratio)  or $ratio eq "") {
+if (!defined($ratio)  or $ratio eq "" or $ratio !~ /^\s*\d+\s*$/ ) {
 	$ratio = 3;
+}
+if ($ratio == 0) {
+    $ratio = 1; # prevent division by zero
 }
 
 my $dbh    = C4::Context->dbh;
