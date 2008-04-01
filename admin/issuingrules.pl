@@ -46,11 +46,11 @@ my ($template, $loggedinuser, $cookie)
 # save the values entered
 if ($op eq 'save') {
     my @names=$input->param();
-    my $sth_search = $dbh->prepare("SELECT count(*) AS total FROM issuingrules WHERE branchcode=? and categorycode=? and itemtype=?");
+    my $sth_search = $dbh->prepare("SELECT branchcode FROM issuingrules WHERE branchcode=? and categorycode=? and itemtype=?");
 
     my $sth_Iinsert = $dbh->prepare("INSERT INTO issuingrules (branchcode,categorycode,itemtype,maxissueqty,issuelength,rentaldiscount) VALUES (?,?,?,?,?,?)");
     my $sth_Iupdate=$dbh->prepare("UPDATE issuingrules SET maxissueqty=?, issuelength=?, rentaldiscount=? WHERE branchcode=? AND categorycode=? AND itemtype=?");
-    my $sth_Idelete=$dbh->prepare("DELETE FROM issuingrules WHERE branchcode=? AND categorycode=? AND itemtype=? AND fine=0");
+    my $sth_Idelete=$dbh->prepare("DELETE FROM issuingrules WHERE branchcode=? AND categorycode=? AND itemtype=?");
     foreach my $key (@names){
         # ISSUES
         if ($key =~ /I-(.*)-(.*)\.(.*)/) {
@@ -59,12 +59,17 @@ if ($op eq 'save') {
             my $cat = $3; # item type
             my $data=$input->param($key);
             my ($issuelength,$maxissueqty,$rentaldiscount)=split(',',$data);
-            $sth_search->execute($br,$bor,$cat);
-            my $res = $sth_search->fetchrow_hashref();
-            if ($res->{'total'} >0) {
-                $sth_Iupdate->execute($maxissueqty,$issuelength,$rentaldiscount,$br,$bor,$cat);
+            if ($maxissueqty) {
+                $sth_search->execute($br,$bor,$cat);
+                my $res = $sth_search->fetchrow_hashref();
+                warn "$br / $bor / $cat = ".$res->{'total'};
+                if ( $res->{'branchcode'} ne $br ) {
+                    $sth_Iinsert->execute($br,$bor,$cat,$maxissueqty,$issuelength,$rentaldiscount);
+                } else {
+                    $sth_Iupdate->execute($maxissueqty,$issuelength,$rentaldiscount,$br,$bor,$cat);
+                }
             } else {
-                $sth_Iinsert->execute($br,$bor,$cat,$maxissueqty,$issuelength,$rentaldiscount);
+                $sth_Idelete->execute($br,$bor,$cat);
             }
         }
     }
