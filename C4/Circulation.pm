@@ -1230,7 +1230,7 @@ sub AddReturn {
         }
     
         # check if the book is in a permanent collection....
-        my $hbr      = $iteminformation->{'homebranch'};
+        my $hbr      = $iteminformation->{C4::Context->preference("HomeOrHoldingBranch")};
         my $branches = GetBranches();
         if ( $hbr && $branches->{$hbr}->{'PE'} ) {
             $messages->{'IsPermanent'} = $hbr;
