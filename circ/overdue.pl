@@ -25,6 +25,7 @@ use CGI;
 use C4::Auth;
 use C4::Branch;
 use C4::Dates qw/format_date/;
+use Date::Calc qw/Today/;
 
 my $input = new CGI;
 my $type    = $input->param('type');
@@ -135,12 +136,8 @@ my $phone;
 my $email;
 my $title;
 my $author;
-my @datearr    = localtime( time() );
-my $todaysdate =
-    ( 1900 + $datearr[5] ) . '-'
-  . sprintf( "%0.2d", ( $datearr[4] + 1 ) ) . '-'
-  . sprintf( "%0.2d", $datearr[3] );
 
+my $todaysdate = sprintf("%-04.4d-%-02.2d-%02.2d", Today());
 
 $bornamefilter =~s/\*/\%/g;
 $bornamefilter =~s/\?/\_/g;
@@ -208,7 +205,7 @@ while (my $data=$sth->fetchrow_hashref) {
 }
 
 $template->param(
-    todaysdate  => $todaysdate,
+    todaysdate  => format_date($todaysdate),
     overdueloop => \@overduedata
 );
 

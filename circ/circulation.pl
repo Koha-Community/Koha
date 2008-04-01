@@ -153,13 +153,7 @@ if ($duedatespec) {
 #        ($year, $month, $day) = ($duedatespec) ? split /-/, $duedatespec : (0,0,0);
 #}
 
-my @datearr = localtime();
-
-# FIXME - Could just use POSIX::strftime("%Y%m%d", localtime);
-my $todaysdate =
-    ( 1900 + $datearr[5] )
-  . sprintf( "%0.2d", ( $datearr[4] + 1 ) )
-  . sprintf( "%0.2d", ( $datearr[3] ) );
+my $todaysdate     = sprintf("%-04.4d%-02.2d%-02.2d", Today());
 
 # check and see if we should print
 if ( $barcode eq '' && $print eq 'maybe' ) {

@@ -24,6 +24,7 @@ use C4::Output;
 use CGI;
 use C4::Auth;
 use C4::Dates qw/format_date format_date_in_iso/;
+use Date::Calc qw/Today Add_Delta_YM/;
 
 use vars qw($debug);
 
@@ -63,20 +64,11 @@ my $biblionumber;
 my $title;
 my $author;
 
-my @datearr    = localtime( time() );
-my 
-$todaysdate =
-    ( 1900 + $datearr[5] ) . '-'
-  . sprintf( "%0.2d", ( $datearr[4] + 1 ) ) . '-'
-  . sprintf( "%0.2d", $datearr[3] );
-
+my ( $year, $month, $day ) = Today();
+my $todaysdate     = sprintf("%-04.4d-%-02.2d-%02.2d", $year, $month, $day);
 # Find yesterday for the default shelf pull start and end dates
-#    A defualt of the prior years's holds is a reasonable way to pull holds 
-my @datearr_yesterday    = localtime( time() - 86400*365 );
-my $yesterdaysdate =
-    ( 1900 + $datearr_yesterday[5] ) . '-'
-  . sprintf( "%0.2d", ( $datearr_yesterday[4] + 1 ) ) . '-'
-  . sprintf( "%0.2d", $datearr_yesterday[3] );
+#    A default of the prior years's holds is a reasonable way to pull holds 
+my $datelastyear = sprintf("%-04.4d-%-02.2d-%02.2d", Add_Delta_YM($year, $month, $day, -1, 0));
 
 #		Predefine the start and end dates if they are not already defined
 $startdate =~ s/^\s+//;
@@ -85,7 +77,7 @@ $enddate =~ s/^\s+//;
 $enddate =~ s/\s+$//;
 #		Check if null, should string match, if so set start and end date to yesterday
 if (!defined($startdate) or $startdate eq "") {
-	$startdate = format_date($yesterdaysdate);
+	$startdate = format_date($datelastyear);
 }
 if (!defined($enddate) or $enddate eq "") {
 	$enddate = format_date($todaysdate);
