@@ -1698,7 +1698,7 @@ sub AddRenewal {
     my $biblio = GetBiblioFromItemNumber($itemnumber);
     # If the due date wasn't specified, calculate it by adding the
     # book's loan length to today's date.
-    unless ( $datedue ) {
+    unless ( $datedue->output('iso') ) {
 
 
         my $borrower = C4::Members::GetMemberDetails( $borrowernumber, 0 );
