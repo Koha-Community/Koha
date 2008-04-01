@@ -135,8 +135,8 @@ Calendar.setup(
     </tr>
     
     <!-- TMPL_LOOP NAME="reserveloop" -->
+        <!-- TMPL_IF name="ratio_ge_one" -->
         <tr>
-            <!-- TMPL_IF name="ratio_ge_one" -->
             	 <td>
             	 	  <p><!-- TMPL_VAR NAME="reservecount" --></p>
             	 </td>
@@ -169,8 +169,8 @@ Calendar.setup(
             	<td><p><!-- TMPL_VAR NAME="itype" --></p></td>
             	<td><p><!-- TMPL_VAR NAME="listcall" --></p></td>
             	<td><p><b>Order: <!-- TMPL_VAR NAME="ratiocalc" --></b></p></td>
-            <!-- /TMPL_IF -->
         </tr>
+        <!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
     </table>
     <!-- TMPL_ELSE -->

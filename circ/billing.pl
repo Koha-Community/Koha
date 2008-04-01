@@ -118,11 +118,11 @@ if ($order eq "patron") {
 }
 my $strsth =
 	"SELECT 
-		GROUP_CONCAT(accountlines.accounttype ORDER BY accountlines.date DESC SEPARATOR '<br>') as l_accounttype,
-		GROUP_CONCAT(description ORDER BY accountlines.date DESC SEPARATOR '<br>') as l_description,
-		GROUP_CONCAT(round(amountoutstanding,2) ORDER BY accountlines.date DESC SEPARATOR '<br>') as l_amountoutstanding, 
-		GROUP_CONCAT(accountlines.date ORDER BY accountlines.date DESC SEPARATOR '<br>') as l_date, 
-		GROUP_CONCAT(accountlines.itemnumber ORDER BY accountlines.date DESC SEPARATOR '<br>') as l_itemnumber, 
+		GROUP_CONCAT(accountlines.accounttype ORDER BY accountlines.date DESC SEPARATOR '<br/>') as l_accounttype,
+		GROUP_CONCAT(description ORDER BY accountlines.date DESC SEPARATOR '<br/>') as l_description,
+		GROUP_CONCAT(round(amountoutstanding,2) ORDER BY accountlines.date DESC SEPARATOR '<br/>') as l_amountoutstanding, 
+		GROUP_CONCAT(accountlines.date ORDER BY accountlines.date DESC SEPARATOR '<br/>') as l_date, 
+		GROUP_CONCAT(accountlines.itemnumber ORDER BY accountlines.date DESC SEPARATOR '<br/>') as l_itemnumber, 
 		count(*) as cnt, 
 		max(accountlines.date) as maxdate,
 		round(sum(amountoutstanding),2) as sum_amount, 

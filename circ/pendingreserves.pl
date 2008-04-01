@@ -116,7 +116,7 @@ my $strsth =
 "SELECT min(reservedate) as l_reservedate,
         reserves.borrowernumber as borrowernumber,
         GROUP_CONCAT(DISTINCT items.holdingbranch 
-        		ORDER BY items.itemnumber SEPARATOR '<br>') l_holdingbranch,
+        		ORDER BY items.itemnumber SEPARATOR '<br/>') l_holdingbranch,
         reserves.biblionumber,
         reserves.branchcode,
         GROUP_CONCAT(DISTINCT reserves.branchcode 
@@ -124,11 +124,11 @@ my $strsth =
         items.holdingbranch as branch,
         items.itemcallnumber,
         GROUP_CONCAT(DISTINCT items.itype 
-        		ORDER BY items.itemnumber SEPARATOR '<br>') l_itype,
+        		ORDER BY items.itemnumber SEPARATOR '<br/>') l_itype,
         GROUP_CONCAT(DISTINCT items.location 
-        		ORDER BY items.itemnumber SEPARATOR '<br>') l_location,
+        		ORDER BY items.itemnumber SEPARATOR '<br/>') l_location,
         GROUP_CONCAT(DISTINCT items.itemcallnumber 
-        		ORDER BY items.itemnumber SEPARATOR '<br>') l_itemcallnumber,
+        		ORDER BY items.itemnumber SEPARATOR '<br/>') l_itemcallnumber,
         items.itemnumber,
         notes,
         notificationdate,

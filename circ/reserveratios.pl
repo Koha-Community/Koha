@@ -123,13 +123,13 @@ my $strsth =
         items.itemcallnumber,
         items.itemnumber,
         GROUP_CONCAT(DISTINCT items.itemcallnumber 
-        		ORDER BY items.itemnumber SEPARATOR '<br>') as listcall,
+        		ORDER BY items.itemnumber SEPARATOR '<br/>') as listcall,
         GROUP_CONCAT(DISTINCT holdingbranch 
-        		ORDER BY items.itemnumber SEPARATOR '<br>') as listbranch,
+        		ORDER BY items.itemnumber SEPARATOR '<br/>') as listbranch,
         GROUP_CONCAT(DISTINCT items.location 
-        		ORDER BY items.itemnumber SEPARATOR '<br>') as l_location,
+        		ORDER BY items.itemnumber SEPARATOR '<br/>') as l_location,
         GROUP_CONCAT(DISTINCT items.itype 
-        		ORDER BY items.itemnumber SEPARATOR '<br>') as l_itype,
+        		ORDER BY items.itemnumber SEPARATOR '<br/>') as l_itype,
         notes,
         reserves.found,
         biblio.title,
