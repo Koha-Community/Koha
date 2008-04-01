@@ -161,13 +161,13 @@ if (C4::Context->preference('IndependantBranches')){
 else {
 	$sth->execute();
 }	
-my @reservedata;
+my @billingdata;
 my $previous;
 my $this;
 while ( my $data = $sth->fetchrow_hashref ) {   
     my @itemlist;
     push(
-        @reservedata,
+        @billingdata,
         {
 				l_accountype			=>		$data->{l_accounttype},
 				l_description			=>		$data->{l_description},
@@ -200,7 +200,7 @@ $template->param(
     from            => $startdate,
     to              => $enddate,
     ratio           => $max_bill,
-    reserveloop     => \@reservedata,
+    billingloop     => \@billingdata,
     "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
     DHTMLcalendar_dateformat =>  C4::Dates->DHTMLcalendar(),
 );
