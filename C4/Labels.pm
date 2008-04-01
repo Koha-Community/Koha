@@ -150,12 +150,13 @@ sub delete_layout {
 sub get_printingtypes {
     my ($layout_id) = @_;
     my @printtypes;
-
+# FIXME: hard coded print types
     push( @printtypes, { code => 'BAR',    desc => "barcode" } );
     push( @printtypes, { code => 'BIB',    desc => "biblio" } );
     push( @printtypes, { code => 'BARBIB', desc => "barcode / biblio" } );
     push( @printtypes, { code => 'BIBBAR', desc => "biblio / barcode" } );
     push( @printtypes, { code => 'ALT',    desc => "alternating labels" } );
+    push( @printtypes, { code => 'PATCRD', desc => "patron cards" } );
 
     my $conf             = get_layout($layout_id);
     my $active_printtype = $conf->{'printingtype'};
@@ -821,7 +822,8 @@ sub GetPatronCardItems {
     my @resultsloop;
     
     my $dbh = C4::Context->dbh;
-    my $query = "SELECT * FROM patroncards WHERE batch_id = ? ORDER BY borrowernumber";
+#    my $query = "SELECT * FROM patroncards WHERE batch_id = ? ORDER BY borrowernumber";
+    my $query = "SELECT * FROM patroncards WHERE batch_id = ? ORDER BY cardid";
     my $sth = $dbh->prepare($query);
     $sth->execute($batch_id);
     my $cardno = 1;
