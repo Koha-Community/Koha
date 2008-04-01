@@ -87,25 +87,32 @@ if ($ratio == 0) {
 my $dbh    = C4::Context->dbh;
 my ($sqlorderby, $sqldatewhere) = ("","");
 $debug and warn format_date_in_iso($startdate) . "\n" . format_date_in_iso($enddate);
-$sqldatewhere .= " AND reservedate >= " . $dbh->quote(format_date_in_iso($startdate))  if ($startdate) ;
-$sqldatewhere .= " AND reservedate <= " . $dbh->quote(format_date_in_iso($enddate))  if ($enddate) ;
+my @query_params = ();
+if ($startdate) {
+    $sqldatewhere .= " AND reservedate >= ?";
+    push @query_params, format_date_in_iso($startdate);
+}
+if ($enddate) {
+    $sqldatewhere .= " AND reservedate <= ?";
+    push @query_params, format_date_in_iso($enddate);
+}
 
 if ($order eq "biblio") {
-	$sqlorderby = " order by biblio.title, holdingbranch, listcall, l_location ";
+	$sqlorderby = " ORDER BY biblio.title, holdingbranch, listcall, l_location ";
 } elsif ($order eq "callnumber") {
-    $sqlorderby = " order by listcall, holdingbranch, l_location ";
+    $sqlorderby = " ORDER BY listcall, holdingbranch, l_location ";
 } elsif ($order eq "itemcount") {
-    $sqlorderby = " order by itemcount, reservecount ";
+    $sqlorderby = " ORDER BY itemcount, reservecount ";
 } elsif ($order eq "itype") {
-    $sqlorderby = " order by l_itype, holdingbranch, listcall ";
+    $sqlorderby = " ORDER BY l_itype, holdingbranch, listcall ";
 } elsif ($order eq "location") {
-    $sqlorderby = " order by l_location, holdingbranch, listcall ";
+    $sqlorderby = " ORDER BY l_location, holdingbranch, listcall ";
 } elsif ($order eq "reservecount") {
-    $sqlorderby = " order by reservecount DESC ";
+    $sqlorderby = " ORDER BY reservecount DESC ";
 } elsif ($order eq "branch") {
-    $sqlorderby = " order by holdingbranch, l_location, listcall ";
+    $sqlorderby = " ORDER BY holdingbranch, l_location, listcall ";
 } else {
-	$sqlorderby = " order by reservecount DESC ";
+	$sqlorderby = " ORDER BY reservecount DESC ";
 }
 my $strsth =
 "SELECT reservedate,
@@ -140,16 +147,13 @@ notforloan = 0 AND damaged = 0 AND itemlost = 0 AND wthdrawn = 0
 
 if (C4::Context->preference('IndependantBranches')){
 	$strsth .= " AND items.holdingbranch=? ";
+    push @query_params, C4::Context->userenv->{'branch'};
 }
+
 $strsth .= " GROUP BY reserves.biblionumber " . $sqlorderby;
 my $sth = $dbh->prepare($strsth);
+$sth->execute(@query_params);
 
-if (C4::Context->preference('IndependantBranches')){
-	$sth->execute(C4::Context->userenv->{'branch'});
-}
-else {
-	$sth->execute();
-}	
 my @reservedata;
 while ( my $data = $sth->fetchrow_hashref ) {
     my @itemlist;

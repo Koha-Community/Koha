@@ -87,26 +87,34 @@ if (!defined($max_bill) or $max_bill eq "") {
 my $dbh    = C4::Context->dbh;
 my ($sqlorderby, $sqldatewhere, $presqldatewhere) = ("","","");
 $debug and warn format_date_in_iso($startdate) . "\n" . format_date_in_iso($enddate);
+my @query_params = ();
 # the dates below is to check for compliance of the current date range
-#$sqldatewhere .= " AND date >= " . $dbh->quote(format_date_in_iso($startdate))  if ($startdate) ;
-$sqldatewhere .= " AND date <= " . $dbh->quote(format_date_in_iso($enddate))  if ($enddate) ;
+if ($enddate) {
+    $sqldatewhere .= " AND date <= ?";
+    push @query_params, format_date_in_iso($enddate);
+}
+push @query_params, $max_bill;
 # the date below is to check for compliance of all fees prior
-$presqldatewhere .= " AND date < " . $dbh->quote(format_date_in_iso($startdate))  if ($startdate) ;
+if ($startdate) {
+    $presqldatewhere .= " AND date < ?";
+    push @query_params, format_date_in_iso($startdate);
+}
+push @query_params, $max_bill;
 
 if ($order eq "patron") {
-	$sqlorderby = " order by surname, firstname ";
+	$sqlorderby = " ORDER BY surname, firstname ";
 } elsif ($order eq "fee") {
-    $sqlorderby = " order by l_amountoutstanding DESC ";
+    $sqlorderby = " ORDER BY l_amountoutstanding DESC ";
 } elsif ($order eq "desc") {
-    $sqlorderby = " order by l_description ";
+    $sqlorderby = " ORDER BY l_description ";
 } elsif ($order eq "type") {
-    $sqlorderby = " order by l_accounttype ";
+    $sqlorderby = " ORDER BY l_accounttype ";
 } elsif ($order eq "date") {
-    $sqlorderby = " order by l_date DESC ";
+    $sqlorderby = " ORDER BY l_date DESC ";
 } elsif ($order eq "total") {
-    $sqlorderby = " order by sum_amount DESC ";
+    $sqlorderby = " ORDER BY sum_amount DESC ";
 } else {
-	$sqlorderby = " order by surname, firstname ";
+	$sqlorderby = " ORDER BY surname, firstname ";
 }
 my $strsth =
 	"SELECT 
@@ -135,27 +143,25 @@ my $strsth =
 			IN (SELECT borrowernumber FROM accountlines 
 				where borrowernumber >= 0
 				$sqldatewhere 
-				GROUP BY accountlines.borrowernumber HAVING sum(amountoutstanding) >= $max_bill ) 
+				GROUP BY accountlines.borrowernumber HAVING sum(amountoutstanding) >= ? ) 
 		AND accountlines.borrowernumber 
 			NOT IN (SELECT borrowernumber FROM accountlines 
 				where borrowernumber >= 0
 				$presqldatewhere 
-				GROUP BY accountlines.borrowernumber HAVING sum(amountoutstanding) >= $max_bill ) 
+				GROUP BY accountlines.borrowernumber HAVING sum(amountoutstanding) >= ? ) 
 ";
 
 
 if (C4::Context->preference('IndependantBranches')){
 	$strsth .= " AND borrowers.branchcode=? ";
+    push @query_params, C4::Context->userenv->{'branch'};
 }
-$strsth .= " GROUP BY accountlines.borrowernumber HAVING sum(amountoutstanding) >= $max_bill " . $sqlorderby;
-my $sth = $dbh->prepare($strsth);
+$strsth .= " GROUP BY accountlines.borrowernumber HAVING sum(amountoutstanding) >= ? " . $sqlorderby;
+push @query_params, $max_bill;
 
-if (C4::Context->preference('IndependantBranches')){
-	$sth->execute(C4::Context->userenv->{'branch'});
-}
-else {
-	$sth->execute();
-}	
+my $sth = $dbh->prepare($strsth);
+$sth->execute(@query_params);
+
 my @billingdata;
 my $previous;
 my $this;

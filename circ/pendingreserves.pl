@@ -87,24 +87,30 @@ if (!defined($enddate) or $enddate eq "") {
 my $dbh    = C4::Context->dbh;
 my ($sqlorderby, $sqldatewhere) = ("","");
 $debug and warn format_date_in_iso($startdate) . "\n" . format_date_in_iso($enddate);
-$sqldatewhere .= " AND reservedate >= " . $dbh->quote(format_date_in_iso($startdate))  if ($startdate) ;
-$sqldatewhere .= " AND reservedate <= " . $dbh->quote(format_date_in_iso($enddate))  if ($enddate) ;
-
+my @query_params = ();
+if ($startdate) {
+    $sqldatewhere .= " AND reservedate >= ?";
+    push @query_params, format_date_in_iso($startdate);
+}
+if ($enddate) {
+    $sqldatewhere .= " AND reservedate <= ?";
+    push @query_params, format_date_in_iso($enddate);
+}
 
 if ($order eq "biblio") {
-	$sqlorderby = " order by biblio.title ";
+	$sqlorderby = " ORDER BY biblio.title ";
 } elsif ($order eq "itype") {
-	$sqlorderby = " order by l_itype, location, l_itemcallnumber ";
+	$sqlorderby = " ORDER BY l_itype, location, l_itemcallnumber ";
 } elsif ($order eq "location") {
-	$sqlorderby = " order by location, l_itemcallnumber, holdingbranch ";
+	$sqlorderby = " ORDER BY location, l_itemcallnumber, holdingbranch ";
 } elsif ($order eq "date") {
-    $sqlorderby = " order by l_reservedate, location, l_itemcallnumber ";
+    $sqlorderby = " ORDER BY l_reservedate, location, l_itemcallnumber ";
 } elsif ($order eq "library") {
-    $sqlorderby = " order by holdingbranch, l_itemcallnumber, location ";
+    $sqlorderby = " ORDER BY holdingbranch, l_itemcallnumber, location ";
 } elsif ($order eq "call") {
-    $sqlorderby = " order by l_itemcallnumber, holdingbranch, location ";    
+    $sqlorderby = " ORDER BY l_itemcallnumber, holdingbranch, location ";    
 } else {
-	$sqlorderby = " order by biblio.title ";
+	$sqlorderby = " ORDER BY biblio.title ";
 }
 my $strsth =
 "SELECT min(reservedate) as l_reservedate,
@@ -152,16 +158,13 @@ AND notforloan = 0 AND damaged = 0 AND itemlost = 0 AND wthdrawn = 0
 
 if (C4::Context->preference('IndependantBranches')){
 	$strsth .= " AND items.holdingbranch=? ";
+    push @query_params, C4::Context->userenv->{'branch'};
 }
 $strsth .= " GROUP BY reserves.biblionumber " . $sqlorderby;
-my $sth = $dbh->prepare($strsth);
 
-if (C4::Context->preference('IndependantBranches')){
-	$sth->execute(C4::Context->userenv->{'branch'});
-}
-else {
-	$sth->execute();
-}	
+my $sth = $dbh->prepare($strsth);
+$sth->execute(@query_params);
+
 my @reservedata;
 my $previous;
 my $this;
