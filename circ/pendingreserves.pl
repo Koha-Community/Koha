@@ -29,13 +29,8 @@ use C4::Output;
 use CGI;
 use C4::Auth;
 use C4::Dates qw/format_date format_date_in_iso/;
+use C4::Debug;
 use Date::Calc qw/Today Add_Delta_YMD/;
-
-use vars qw($debug);
-
-BEGIN {
-    $debug = $ENV{DEBUG} || 0;
-}
 
 my $input = new CGI;
 my $order = $input->param('order');
