@@ -16,14 +16,32 @@ $.tablesorter.addParser({
             $(function() {
             $('#opac-user-views > ul').tabs();
 			$("#holdst").tablesorter({
+				widgets : ['zebra'],
 				sortList: [[0,0]],
-		        headers: { 0: { sorter: 'articles' },3: { sorter: false },4: { sorter: false }
+		        headers: { 0: { sorter: 'articles' },4: { sorter: false }
 				}
 			}); 
 			$("#checkoutst").tablesorter({
-				sortList: [[4,0]],
-		        headers: { 0: { sorter: false }, 1: { sorter: 'articles' },2: { sorter: false },3: { sorter: false },5: { sorter: false },6: { sorter: false } 
-				}
+				widgets : ['zebra'],
+				<!-- TMPL_IF NAME="AmazonContent" -->
+				sortList: [[3,0]],
+				<!-- TMPL_IF NAME="item-level_itypes" -->
+				sortList: [[3,0]],
+				headers: { 0: { sorter: false }, 1: { sorter: 'articles' },4: { sorter: false },5: { sorter: false }}
+				<!-- TMPL_ELSE -->
+				sortList: [[3,0]],
+				headers: { 0: { sorter: false }, 1: { sorter: 'articles' },5: { sorter: false },6: { sorter: false }}
+				<!-- /TMPL_IF -->
+				<!-- TMPL_ELSE -->
+				sortList: [[2,0]],
+				<!-- TMPL_IF NAME="item-level_itypes" -->
+				sortList: [[2,0]],
+				headers: { 0: { sorter: 'articles' },3: { sorter: false },4: { sorter: false }}
+				<!-- TMPL_ELSE -->
+				sortList: [[3,0]],
+				headers: { 0: { sorter: 'articles' },4: { sorter: false },5: { sorter: false }}
+				<!-- /TMPL_IF -->
+				<!-- /TMPL_IF -->
 			}); 
             });
 //]]>
