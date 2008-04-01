@@ -27,10 +27,10 @@
 	to <!-- TMPL_VAR NAME="to" -->)</h1>
 <div id="filters">
 <br />
-<form method="post" >
+<form action="/cgi-bin/koha/circ/pendingreserves.pl" method="post" >
 <p>
 
-<label for "from">
+<label for="from">
     Start date:
 </label>
 <input type="text" size="10" id="from" name="from" value="<!-- TMPL_VAR NAME="from" -->" />
@@ -61,11 +61,11 @@ Calendar.setup(
         }
 );
 </script>
-<label for "to" >
+<label for="to" >
     End date:
 </label>
 <input size="10" id="to" name="to" value="<!-- TMPL_VAR NAME="to" -->" type="text" />
-<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="" id="openCalendarTo" style="cursor: pointer;" valign="top" border="0" />
+<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="" id="openCalendarTo" style="cursor: pointer;" border="0" />
 <script type="text/javascript">
         function validate2(date) {
             var day = date.getDate();
@@ -93,9 +93,9 @@ Calendar.setup(
                 }
         );
 </script>
-<br>
-<i>(Inclusive, default is (10yr/ago to yesterday), set"to" to today as needed. )</i>
-<input type="submit" value="Go" class="submit">
+<br/>
+<i>(Inclusive, default is (10 years ago to yesterday), set "to" to today as needed. )</i>
+<input type="submit" value="Go" class="submit"/>
 </p>
 </form>
 <p>The following holds have not been filled.</p>
@@ -116,26 +116,26 @@ Calendar.setup(
 				Patrons with Holds
         </th>
         <th >Title
-        <a href="/cgi-bin/koha/circ/pendingreserves.pl?order=biblio&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+        <a href="/cgi-bin/koha/circ/pendingreserves.pl?order=biblio&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
         <th>
             Libraries
-				<a href="/cgi-bin/koha/circ/pendingreserves.pl?order=library&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+				<a href="/cgi-bin/koha/circ/pendingreserves.pl?order=library&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
         <th>
             Available Call Numbers
-				<a href="/cgi-bin/koha/circ/pendingreserves.pl?order=call&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+				<a href="/cgi-bin/koha/circ/pendingreserves.pl?order=call&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
         <th>
             Available Itypes
-				<a href="/cgi-bin/koha/circ/pendingreserves.pl?order=itype&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+				<a href="/cgi-bin/koha/circ/pendingreserves.pl?order=itype&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
         <th>
             Available Locations
-				<a href="/cgi-bin/koha/circ/pendingreserves.pl?order=location&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+				<a href="/cgi-bin/koha/circ/pendingreserves.pl?order=location&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
         <th >Earliest Hold Date
-            <a href="/cgi-bin/koha/circ/pendingreserves.pl?order=date&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+            <a href="/cgi-bin/koha/circ/pendingreserves.pl?order=date&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
 
     </tr>
@@ -143,7 +143,7 @@ Calendar.setup(
     <!-- TMPL_LOOP NAME="reserveloop" -->
         <tr>
             <!-- TMPL_IF name="borrowernumber" -->
-                <td><p><center><b><!-- TMPL_VAR NAME="pullcount" --></b></center></p></td>
+                <td><p><!-- TMPL_VAR NAME="pullcount" --></b></p></td>
                 <td><!-- TMPL_VAR NAME="count" --></td>  
                 <td><!-- TMPL_VAR NAME="rcount" --></td> 
                 <td>

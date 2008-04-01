@@ -23,18 +23,18 @@
 	<div class="yui-b">
 
 <h1>Billing on 
-   <!-- TMPL_VAR NAME="todaysdate" --> <br>From <!-- TMPL_VAR NAME="from" -->
+   <!-- TMPL_VAR NAME="todaysdate" --> <br/>From <!-- TMPL_VAR NAME="from" -->
 	to <!-- TMPL_VAR NAME="to" --></h1>
 <div id="filters">
 <br />
 
-<form method="post" >
+<form action="/cgi-bin/koha/circ/billing.pl" method="post" >
 <p>
-<label for "ratio">
+<label for="ratio">
     Currency Cutoff:
 </label>
 <input type="text" size="5" id="ratio" name="ratio" value="<!-- TMPL_VAR NAME="ratio" -->" />
-<label for "from">
+<label for="from">
     Start date:
 </label>
 <input type="text" size="10" id="from" name="from" value="<!-- TMPL_VAR NAME="from" -->" />
@@ -65,11 +65,11 @@ Calendar.setup(
         }
 );
 </script>
-<label for "to" >
+<label for="to" >
     End date:
 </label>
 <input size="10" id="to" name="to" value="<!-- TMPL_VAR NAME="to" -->" type="text" />
-<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="" id="openCalendarTo" style="cursor: pointer;" valign="top" border="0" />
+<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="" id="openCalendarTo" style="cursor: pointer;" border="0" />
 <script type="text/javascript">
         function validate2(date) {
             var day = date.getDate();
@@ -99,7 +99,7 @@ Calendar.setup(
 </script>
 (inclusive)
 
-<input type="submit" value="Go" class="submit">
+<input type="submit" value="Go" class="submit"/>
 </p>
 </form>
 <p>The following patrons have bills.</p>
@@ -111,22 +111,22 @@ Calendar.setup(
     <table>
     <tr>
         <th >Patron
-        <a href="/cgi-bin/koha/circ/billing.pl?order=patron&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+        <a href="/cgi-bin/koha/circ/billing.pl?order=patron&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
         <th >Fee Item
-        <a href="/cgi-bin/koha/circ/billing.pl?order=fee&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+        <a href="/cgi-bin/koha/circ/billing.pl?order=fee&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
         <th>Description
-        <a href="/cgi-bin/koha/circ/billing.pl?order=desc&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+        <a href="/cgi-bin/koha/circ/billing.pl?order=desc&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
         <th>Type
-        <a href="/cgi-bin/koha/circ/billing.pl?order=type&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+        <a href="/cgi-bin/koha/circ/billing.pl?order=type&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
         <th >Date
-        <a href="/cgi-bin/koha/circ/billing.pl?order=date&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+        <a href="/cgi-bin/koha/circ/billing.pl?order=date&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
         <th>Total Amount
-        <a href="/cgi-bin/koha/circ/billing.pl?order=total&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+        <a href="/cgi-bin/koha/circ/billing.pl?order=total&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
     </tr>
     

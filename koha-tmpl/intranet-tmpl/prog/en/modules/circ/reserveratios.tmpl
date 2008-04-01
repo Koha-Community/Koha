@@ -22,19 +22,19 @@
 	<div id="yui-main">
 	<div class="yui-b">
 
-<h1>Hold Ratios to Calculate Items Needed<br>
-    Calculated on <!-- TMPL_VAR NAME="todaysdate" --> <br>From <!-- TMPL_VAR NAME="from" -->
+<h1>Hold Ratios to Calculate Items Needed<br/>
+    Calculated on <!-- TMPL_VAR NAME="todaysdate" --> <br/>From <!-- TMPL_VAR NAME="from" -->
 	to <!-- TMPL_VAR NAME="to" --></h1>
 <div id="filters">
 <br />
 
-<form method="post" >
+<form action="/cgi-bin/koha/circ/reserverations.pl" method="post" >
 <p>
-<label for "ratio">
+<label for="ratio">
     Hold Ratio:
 </label>
 <input type="text" size="5" id="ratio" name="ratio" value="<!-- TMPL_VAR NAME="ratio" -->" />
-<label for "from">
+<label for="from">
     Start date:
 </label>
 <input type="text" size="10" id="from" name="from" value="<!-- TMPL_VAR NAME="from" -->" />
@@ -65,11 +65,11 @@ Calendar.setup(
         }
 );
 </script>
-<label for "to" >
+<label for="to" >
     End date:
 </label>
 <input size="10" id="to" name="to" value="<!-- TMPL_VAR NAME="to" -->" type="text" />
-<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="" id="openCalendarTo" style="cursor: pointer;" valign="top" border="0" />
+<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="" id="openCalendarTo" style="cursor: pointer;" border="0" />
 <script type="text/javascript">
         function validate2(date) {
             var day = date.getDate();
@@ -99,7 +99,7 @@ Calendar.setup(
 </script>
 (inclusive)
 
-<input type="submit" value="Go" class="submit">
+<input type="submit" value="Go" class="submit"/>
 </p>
 </form>
 <p>These items have a large number of holds.</p>
@@ -110,25 +110,25 @@ Calendar.setup(
     <table>
     <tr>
         <th >Reserves
-        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=<!-- TMPL_VAR NAME="ratio" -->&order=reservecount&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=<!-- TMPL_VAR NAME="ratio" -->&amp;order=reservecount&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
         <th >Items
-        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=<!-- TMPL_VAR NAME="ratio" -->&order=itemcount&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=<!-- TMPL_VAR NAME="ratio" -->&amp;order=itemcount&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
         <th >Title
-        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=<!-- TMPL_VAR NAME="ratio" -->&order=biblio&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=<!-- TMPL_VAR NAME="ratio" -->&amp;order=biblio&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
         <th>Holding Branches
-        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=<!-- TMPL_VAR NAME="ratio" -->&order=branch&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=<!-- TMPL_VAR NAME="ratio" -->&amp;order=branch&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
         <th>Location
-        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=<!-- TMPL_VAR NAME="ratio" -->&order=location&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=<!-- TMPL_VAR NAME="ratio" -->&amp;order=location&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
         <th>Itype
-        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=<!-- TMPL_VAR NAME="ratio" -->&order=itype&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=<!-- TMPL_VAR NAME="ratio" -->&amp;order=itype&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
         <th>Call Numbers
-        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=<!-- TMPL_VAR NAME="ratio" -->&order=callnumber&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=<!-- TMPL_VAR NAME="ratio" -->&amp;order=callnumber&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
         <th >Items Needed
         </th>
