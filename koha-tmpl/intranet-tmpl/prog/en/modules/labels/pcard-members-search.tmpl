@@ -1,6 +1,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Patrons <!-- TMPL_IF NAME="searching" -->&rsaquo; Search Results<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+	<style type="text/css"> 
+   		#custom-doc { width:47.23em;*width:46.04em;min-width:600px; margin:auto; text-align:left; } 
+   	</style> 
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.pack.js"></script>
 <script type="text/javascript">
 //<![CDATA[ 
@@ -41,16 +44,12 @@ function add_item3(borrowernumber){
 //]]>
 </script>
 </head>
-</head>
 <body>
-<div id="breadcrumbs">Home &rsaquo; <!-- TMPL_IF NAME="searching" --><a href="/cgi-bin/koha/labels/pcard-member-search.pl">Patrons</a>  &rsaquo; Search Results<!-- TMPL_ELSE -->Patrons<!-- /TMPL_IF --></div>
 
-<div id="doc2"><!-- class="yui-t4">-->
-   
-<!--   <div id="bd"> -->
-<!--	<div id="yui-main"> -->
-<!--	<div class="yui-g"> -->
-	
+<div id="custom-doc" class="yui-t7">
+  <div id="bd">
+	<div class="yui-g">
+<h3>Patron Search</h3>	
 
 <div class="browse">
     Browse by last name:
@@ -85,8 +84,8 @@ function add_item3(borrowernumber){
 
 <!-- TMPL_IF NAME="resultsloop" -->
 <div id="searchheader"> <h3>Results <!-- TMPL_VAR Name ="from" --> to <!-- TMPL_VAR Name ="to" --> of <!-- TMPL_VAR Name ="numresults" --> found for '<span class="ex"><!-- TMPL_VAR NAME="member" --></span>'</h3></div>
-<form name="resultform" class="checkboxed"><div style="float: right; margin-top: .5em;"><input type="submit" class="icon addchecked" value="Add checked" onclick="add_item('checked',<!-- TMPL_VAR NAME="batch_id" -->,'<!-- TMPL_VAR NAME="type" -->'); return false" /> <input type="button" class="close" value="Done" /></div>
-<div style="line-height: 2em; margin-left: .7em;"><a id="CheckAll" href="/cgi-bin/koha/labels/pcard-member-search.pl">Select All</a></span><span class="clearall"><a id="CheckNone" href="/cgi-bin/koha/labels/pcard-member-search.pl">Clear All</a></div>
+<form name="resultform" action="/cgi-bin/koha/labels/pcard-member-search.pl" method="get" class="checkboxed"><div style="float: right; margin-top: .5em;"><input type="submit" class="icon addchecked" value="Add checked" onclick="add_item('checked',<!-- TMPL_VAR NAME="batch_id" -->,'<!-- TMPL_VAR NAME="type" -->'); return false" /> <input type="button" class="close" value="Done" /></div>
+<div style="line-height: 2em; margin-left: .7em;"><a id="CheckAll" href="/cgi-bin/koha/labels/pcard-member-search.pl">Select All</a><a id="CheckNone" href="/cgi-bin/koha/labels/pcard-member-search.pl">Clear All</a></div>
 <div class="searchresults">
 
     <table style="float: left; margin: .5em 0;">
@@ -102,27 +101,26 @@ function add_item3(borrowernumber){
     </tr>
     <!-- TMPL_LOOP NAME="resultsloop" -->
     <tr>
-    <td align="center"> <input type="checkbox" name="borrowernumber" id="patron<!-- TMPL_VAR NAME="borrowernumber" -->" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />	</td>
+    <td> <input type="checkbox" name="borrowernumber" id="patron<!-- TMPL_VAR NAME="borrowernumber" -->" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />	</td>
     <td><!-- TMPL_VAR NAME="cardnumber" --></td>
     <td style="white-space: nowrap;"><a href="/cgi-bin/koha/members/morepcard-member-search.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --></a> <br /> <!-- TMPL_VAR NAME="address" --><!-- TMPL_IF NAME="address2" --><br /><!-- TMPL_VAR NAME="address2" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="city" --><br /><!-- TMPL_VAR NAME=city --><!-- /TMPL_IF --></td>
     <td><!-- TMPL_VAR NAME="category_description" --> (<!-- TMPL_VAR name="category_type" -->)</td>
     <td><!-- TMPL_VAR NAME="branchcode" --></td>
     <td><!-- TMPL_VAR NAME="dateexpiry" --></td>
     <td><!-- TMPL_VAR NAME="borrowernotes" --></td>
-    <td align="center"><a onclick="add_item('<!-- TMPL_VAR NAME="borrowernumber" -->',<!-- TMPL_VAR NAME="batch_id" -->,'<!-- TMPL_VAR NAME="type" -->'); return false" href="/cgi-bin/koha/barcodes/label-manager.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;batch_id=<!-- TMPL_VAR name="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->&amp;op=add">Add</a></td>
+    <td><a onclick="add_item('<!-- TMPL_VAR NAME="borrowernumber" -->',<!-- TMPL_VAR NAME="batch_id" -->,'<!-- TMPL_VAR NAME="type" -->'); return false" href="/cgi-bin/koha/barcodes/label-manager.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;batch_id=<!-- TMPL_VAR name="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->&amp;op=add">Add</a></td>
     </tr>
     <!-- /TMPL_LOOP -->
     </table>
+	</div>
 </form>
-<!--  </div> -->
+
 <!-- TMPL_ELSE -->
 <!-- TMPL_IF NAME="searching" -->
 No results found
 <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
-<!-- </div> -->
-<!-- </div> -->
-
+</div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
