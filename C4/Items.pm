@@ -876,14 +876,19 @@ sub GetLostItems {
 
     my $query   = "
         SELECT *
-        FROM   items
-        WHERE  itemlost IS NOT NULL
-          AND  itemlost <> 0
+        FROM   items, biblio, authorised_values
+        WHERE
+        		items.biblionumber = biblio.biblionumber
+        		AND items.itemlost = authorised_values.authorised_value
+        		AND authorised_values.category = 'LOST'
+          	AND itemlost IS NOT NULL
+         	AND itemlost <> 0
+          
     ";
     foreach my $key (keys %$where) {
         $query .= " AND " . $key . " LIKE '%" . $where->{$key} . "%'";
     }
-    $query .= " ORDER BY ".$orderby if defined $orderby;
+    $query .= " ORDER BY ".$orderby." " if defined $orderby;
 
     my $sth = $dbh->prepare($query);
     $sth->execute;

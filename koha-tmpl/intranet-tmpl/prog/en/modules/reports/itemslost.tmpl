@@ -28,9 +28,13 @@
 
     <!-- TMPL_IF NAME="itemsloop" --><table>
     <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Lost Code</th>
         <th>Barcode</th>
         <th>Date last seen</th>
         <th>Price</th>
+        <th>Rep.Price</th>
         <th>Branch</th>
         <th>Itemtype</th>
         <th>Holdingbranch</th>
@@ -39,12 +43,18 @@
      <!-- TMPL_LOOP NAME="itemsloop"-->
         <tr>
             <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->" title="<!-- TMPL_VAR NAME="itemnotes"-->">
+						  <!-- TMPL_VAR NAME="title"--></td>
+					 </a></td>
+            <td><!-- TMPL_VAR NAME="author"--></td>
+            <td><!-- TMPL_VAR NAME="lib"--></td>
+            <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->" title="<!-- TMPL_VAR NAME="itemnotes"-->">
                     <!-- TMPL_VAR NAME="barcode"-->
                 </a></td>
             <td><!-- TMPL_VAR NAME="datelastseen"--></td>
             <td><!-- TMPL_VAR NAME="price" --></td>
+            <td><!-- TMPL_VAR NAME="replacementprice" --></td>
             <td><!-- TMPL_VAR NAME="homebranch" --></td>
-            <td><!-- TMPL_VAR NAME="itemtype" --></td>
+            <td><!-- TMPL_VAR NAME="itype" --></td>
             <td><!-- TMPL_VAR NAME="holdingbranch"--></td>
             <td><!-- TMPL_VAR NAME="location"--></td>
         </tr>
@@ -57,10 +67,16 @@
 <fieldset class="rows"><ol>    <li><label for="orderbyfilter">Order by: </label>
     <select id="orderbyfilter" name="orderbyfilter">
         <option value=""> --- </option>
+        <option value="title">Title</option>
+        <option value="author">Author</option>
         <option value="homebranch">Branch</option>
-        <option value="itemtype">Itemtypes</option>
+        <option value="itype">Itemtypes</option>
         <option value="barcode">Barcode</option>
-        <option value="price">price</option>
+        <option value="price">Price</option>
+        <option value="replacementprice">Replacement Price</option>
+        <option value="lib">Lost Code</option>
+        <option value="datelastseen">Date Last Seen</option>
+        <option value="location">Location</option>
     </select></li>
 	
 	<li><label for="barcodefilter">Barcode: </label><input type="text" name="barcodefilter" id="barcodefilter" size="6" /></li>

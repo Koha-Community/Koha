@@ -57,13 +57,23 @@ if ( $get_items ) {
     $where{barcode}    = $barcodefilter   if defined $barcodefilter;
     $where{itemtype}   = $itemtypesfilter if defined $itemtypesfilter;
 
-    my $items = GetLostItems( \%where, $orderbyfilter );
+    my $items = GetLostItems( \%where, $orderbyfilter ); 
     $template->param(
         total     => scalar @$items,
         itemsloop => $items,
-		get_items => $get_items
+		  get_items => $get_items
     );
 }
+
+# Get the Lost colletion codes
+#my $fw = GetFrameworkCode($biblionumber);
+#$item = GetAuthorisedValues(GetAuthValCode('items.itemlost',$fw),$item->{itemlost}) if GetAuthValCode('items.itemlost',$fw);
+#if ($item->{damaged}) {
+#    $item->{itemdamagedloop}= GetAuthorisedValues(GetAuthValCode('items.damaged',$fw),$item->{damaged}) if GetAuthValCode('items.damaged',$fw);
+#}
+#get collection code description, too
+#my $ccodes = GetAuthorisedValueDesc('','',   'ccode' ,'','','ccode');
+
 
 # getting all branches.
 my $branches = GetBranches;

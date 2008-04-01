@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Circulation &rsaquo; Pending Holds</title>
+<title>Koha &rsaquo; Circulation &rsaquo; Reserve Ratios</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- Additions to enable Calendar system -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
@@ -14,7 +14,7 @@
 <!-- TMPL_INCLUDE NAME="circ-search.inc" -->
 
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Pending Holds</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Reserve Ratios</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -22,14 +22,18 @@
 	<div id="yui-main">
 	<div class="yui-b">
 
-<h1>Reserve Pull List</h1>
-<h1>Pending holds on <!-- TMPL_VAR NAME="todaysdate" --> (from <!-- TMPL_VAR NAME="from" -->
-	to <!-- TMPL_VAR NAME="to" -->)</h1>
+<h1>Reserve Ratios to Calculate Items Needed<br>
+    Calculated on <!-- TMPL_VAR NAME="todaysdate" --> <br>From <!-- TMPL_VAR NAME="from" -->
+	to <!-- TMPL_VAR NAME="to" --></h1>
 <div id="filters">
 <br />
+
 <form method="post" >
 <p>
-
+<label for "ratio">
+    Reserves Ratio:
+</label>
+<input type="text" size="5" id="ratio" name="ratio" value="<!-- TMPL_VAR NAME="ratio" -->" />
 <label for "from">
     Start date:
 </label>
@@ -93,59 +97,52 @@ Calendar.setup(
                 }
         );
 </script>
-<br>
-<i>(Inclusive, default is (10yr/ago to yesterday), set"to" to today as needed. )</i>
+(inclusive)
+
 <input type="submit" value="Go" class="submit">
 </p>
 </form>
-<p>The following holds have not been filled.</p>
-<p>Please retrieve them and check them in</p>
+<p>These items have a large number of holds.</p>
 </div>
 
 <div class="searchresults">
     <!-- TMPL_IF NAME="reserveloop" -->
     <table>
     <tr>
-        <th>
-				Pull This Many Items
-        </th>        
-        <th>
-				Items Available
+        <th >Reserves
+        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=<!-- TMPL_VAR NAME="ratio" -->&order=reservecount&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
-        <th>
-				Patrons with Reserves
+        <th >Items
+        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=<!-- TMPL_VAR NAME="ratio" -->&order=itemcount&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
         <th >Title
-        <a href="/cgi-bin/koha/circ/pendingreserves.pl?order=biblio&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=<!-- TMPL_VAR NAME="ratio" -->&order=biblio&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
-        <th>
-            Libraries
-				<a href="/cgi-bin/koha/circ/pendingreserves.pl?order=library&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+        <th>Holding Branches
+        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=<!-- TMPL_VAR NAME="ratio" -->&order=branch&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
-        <th>
-            Available Call Numbers
-				<a href="/cgi-bin/koha/circ/pendingreserves.pl?order=call&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+        <th>Location
+        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=<!-- TMPL_VAR NAME="ratio" -->&order=location&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
-        <th>
-            Available Itypes
-				<a href="/cgi-bin/koha/circ/pendingreserves.pl?order=itype&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+        <th>Itype
+        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=<!-- TMPL_VAR NAME="ratio" -->&order=itype&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
-        <th>
-            Available Locations
-				<a href="/cgi-bin/koha/circ/pendingreserves.pl?order=location&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+        <th>Call Numbers
+        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=<!-- TMPL_VAR NAME="ratio" -->&order=callnumber&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
-        <th >Earliest Hold Date
-            <a href="/cgi-bin/koha/circ/pendingreserves.pl?order=date&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+        <th >Items Needed
         </th>
-
     </tr>
     
     <!-- TMPL_LOOP NAME="reserveloop" -->
         <tr>
-            <!-- TMPL_IF name="borrowernumber" -->
-                <td><p><center><b><!-- TMPL_VAR NAME="pullcount" --></b></center></p></td>
-                <td><!-- TMPL_VAR NAME="count" --></td>  
-                <td><!-- TMPL_VAR NAME="rcount" --></td> 
+            <!-- TMPL_IF name="ratio_ge_one" -->
+            	 <td>
+            	 	  <p><!-- TMPL_VAR NAME="reservecount" --></p>
+            	 </td>
+            	 <td>
+            	 	  <p><!-- TMPL_VAR NAME="itemcount" --></p>
+            	 </td>
                 <td>
                     <p>
                     <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
@@ -166,21 +163,13 @@ Calendar.setup(
                     </p>
                     <p><!-- TMPL_VAR NAME="notes" --></p>
                 </td>
-            <!-- TMPL_ELSE -->
-                <td colspan="3">
-                    &nbsp;
-                </td>
-                <td>"</td>
+
+            	<td><p><!-- TMPL_VAR NAME="listbranch" --></p></td>
+            	<td><p><!-- TMPL_VAR NAME="location" --></p></td>
+            	<td><p><!-- TMPL_VAR NAME="itype" --></p></td>
+            	<td><p><!-- TMPL_VAR NAME="listcall" --></p></td>
+            	<td><p><b>Order: <!-- TMPL_VAR NAME="ratiocalc" --></b></p></td>
             <!-- /TMPL_IF -->
-            <td><p><!-- TMPL_VAR NAME="holdingbranch" --></p></td>
-            <td><p><!-- TMPL_VAR NAME="itemcallnumber" --></p></td>
-				<td><p><!-- TMPL_VAR NAME="itype" --></p></td> 
-				<td><p><!-- TMPL_VAR NAME="location" --></p></td>
-            <td width="15%">
-                <p><!-- TMPL_VAR NAME="reservedate" --></p>
-                <p>in <!-- TMPL_VAR NAME="branch" --></p>
-                <!-- TMPL_IF NAME="statusw" --><p>Waiting</p><!-- /TMPL_IF --><!-- TMPL_IF NAME="statusf" --><p>Fullfilled</p><!-- /TMPL_IF -->
-            </td>
         </tr>
     <!-- /TMPL_LOOP -->
     </table>

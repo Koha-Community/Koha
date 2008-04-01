@@ -1,0 +1,175 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Circulation &rsaquo; Billing</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- Additions to enable Calendar system -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
+<!-- End of additions --><!-- Additions to enable Calendar system -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-en.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
+<!-- End of additions -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="circ-search.inc" -->
+
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Billing</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+<h1>Billing on 
+   <!-- TMPL_VAR NAME="todaysdate" --> <br>From <!-- TMPL_VAR NAME="from" -->
+	to <!-- TMPL_VAR NAME="to" --></h1>
+<div id="filters">
+<br />
+
+<form method="post" >
+<p>
+<label for "ratio">
+    Currency Cutoff:
+</label>
+<input type="text" size="5" id="ratio" name="ratio" value="<!-- TMPL_VAR NAME="ratio" -->" />
+<label for "from">
+    Start date:
+</label>
+<input type="text" size="10" id="from" name="from" value="<!-- TMPL_VAR NAME="from" -->" />
+<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif"  border="0" id="openCalendarFrom" style="cursor: pointer;" alt="" />
+<script language="JavaScript" type="text/javascript">
+function validate1(date) {
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+    var weekDay = date.getDay();
+    var dayMonth = month + '-' + day;
+    var dateString = year + '-' + month + '-' + day;
+    var dateTo = document.getElementById('to').value.split("-");
+    var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
+    if (date > limitDate) {
+            return true;
+    } else {
+            return false;
+    }
+}
+Calendar.setup(
+        {
+        inputField : "from",
+        ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+        button : "openCalendarFrom",
+        disableFunc : validate1,
+        dateStatusFunc : validate1
+        }
+);
+</script>
+<label for "to" >
+    End date:
+</label>
+<input size="10" id="to" name="to" value="<!-- TMPL_VAR NAME="to" -->" type="text" />
+<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="" id="openCalendarTo" style="cursor: pointer;" valign="top" border="0" />
+<script type="text/javascript">
+        function validate2(date) {
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+            var weekDay = date.getDay();
+            var dayMonth = month + '-' + day;
+            var dateString = year + '-' + month + '-' + day;
+            var dateFrom = document.getElementById('from').value.split("-");
+            var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
+            if (limitDate > date) {
+                    return true;
+            } else {
+                    return false;
+            }
+        }
+
+        Calendar.setup(
+                {
+                    inputField : "to",
+                    ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+                    button : "openCalendarTo",
+                    disableFunc : validate2,
+                    dateStatusFunc : validate2
+                }
+        );
+</script>
+(inclusive)
+
+<input type="submit" value="Go" class="submit">
+</p>
+</form>
+<p>The following patrons have bills.</p>
+</div>
+
+
+<div class="searchresults">
+    <!-- TMPL_IF NAME="reserveloop" -->
+    <table>
+    <tr>
+        <th >Patron
+        <a href="/cgi-bin/koha/circ/billing.pl?order=patron&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+        </th>
+        <th >Fee Item
+        <a href="/cgi-bin/koha/circ/billing.pl?order=fee&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+        </th>
+        <th>Description
+        <a href="/cgi-bin/koha/circ/billing.pl?order=desc&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+        </th>
+        <th>Type
+        <a href="/cgi-bin/koha/circ/billing.pl?order=type&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+        </th>
+        <th >Date
+        <a href="/cgi-bin/koha/circ/billing.pl?order=date&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+        </th>
+        <th>Total Amount
+        <a href="/cgi-bin/koha/circ/billing.pl?order=total&from=<!-- TMPL_VAR NAME="from" -->&to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
+        </th>
+    </tr>
+    
+                    <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
+                    <!-- /TMPL_IF -->
+                    <!-- TMPL_IF name="BiblioDefaultViewisbd" -->
+                    <!-- /TMPL_IF -->    
+    
+    <!-- TMPL_LOOP NAME="reserveloop" -->
+        <tr>
+            <!-- TMPL_IF name="surname" -->
+            	 <td>
+					 <p><a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=<!--TMPL_VAR Name="borrowernumber"-->"><!-- TMPL_VAR NAME="patronname" --></a><br /><!-- TMPL_VAR NAME="phone" --><br />
+                <!-- TMPL_IF NAME="email" --><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Account: <!-- TMPL_VAR NAME="title" -->">
+    				 <!-- TMPL_VAR NAME="email" --></a><!--/TMPL_IF-->
+                </p>
+            	 </td>
+                <td align="right">
+                    <p><!-- TMPL_VAR NAME="l_amountoutstanding" --></p>
+                </td>
+                <td>
+                    <p><!-- TMPL_VAR NAME="l_description" --></p>
+                </td>
+                <td>
+                    <p><!-- TMPL_VAR NAME="l_accounttype" --></p>
+                </td>
+                <td>
+                    <p><!-- TMPL_VAR NAME="l_date" --></p>
+                </td>                
+                <td align="right">
+                    <p><!-- TMPL_VAR NAME="sum_amount" --></p>
+                </td>
+        </tr>
+    <!-- /TMPL_LOOP -->
+    </table>
+    <!-- TMPL_ELSE -->
+        <b>No items found.</b>
+    <!-- /TMPL_IF -->
+</div>
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
