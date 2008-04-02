@@ -25,7 +25,7 @@ use Text::Wrap;
 use Algorithm::CheckDigits;
 use C4::Members;
 use C4::Branch;
- use Data::Dumper;
+# use Data::Dumper;
 # use Smart::Comments;
 
 BEGIN {
