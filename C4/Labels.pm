@@ -25,7 +25,7 @@ use Text::Wrap;
 use Algorithm::CheckDigits;
 use C4::Members;
 use C4::Branch;
-# use Data::Dumper;
+ use Data::Dumper;
 # use Smart::Comments;
 
 BEGIN {
@@ -200,42 +200,72 @@ sub get_text_fields {
 
     my $sortorder = get_layout($layout_id);
 
-    # $sortorder
-
+    # FIXME: This is all hardcoded and should be user selectable I think or are these the only text fields? -fbcit
     $a = {
         code  => 'itemtype',
         desc  => "Item Type",
         order => $sortorder->{'itemtype'}
-    };
+        };
+
     $b = {
         code  => 'dewey',
         desc  => "Dewey",
         order => $sortorder->{'dewey'}
-    };
-    $c = { code => 'issn', desc => "ISSN", 
-        order => $sortorder->{'issn'} };
-    $d = { code => 'isbn', desc => "ISBN", 
-            order => $sortorder->{'isbn'} };
+        };
+
+    $c = {
+        code => 'issn',
+        desc => "ISSN", 
+        order => $sortorder->{'issn'}
+        };
+
+    $d = {
+        code => 'isbn',
+        desc => "ISBN", 
+        order => $sortorder->{'isbn'}
+        };
+
     $e = {
         code  => 'class',
         desc  => "Classification",
         order => $sortorder->{'class'}
-    };
+        };
+
     $f = {
         code  => 'subclass',
         desc  => "Sub-Class",
         order => $sortorder->{'subclass'}
-    };
+        };
+
     $g = {
         code  => 'barcode',
         desc  => "Barcode",
         order => $sortorder->{'barcode'}
-    };
-    $h =
-      { code => 'author', desc => "Author", order => $sortorder->{'author'} };
-    $i = { code => 'title', desc => "Title", order => $sortorder->{'title'} };
-    $j = { code => 'itemcallnumber', desc => "Call Number", order => $sortorder->{'itemcallnumber'} };
-	$k = { code => 'subtitle', desc => "Subtitle", order => $sortorder->{'subtitle'} }; 
+        };
+
+    $h = {
+        code => 'author',
+        desc => "Author",
+        order => $sortorder->{'author'}
+        };
+
+    $i = {
+        code => 'title',
+        desc => "Title",
+        order => $sortorder->{'title'}
+        };
+
+    $j = {
+        code => 'itemcallnumber',
+        desc => "Call Number",
+        order => $sortorder->{'itemcallnumber'}
+        };
+
+    $k = {
+        code => 'subtitle',
+        desc => "Subtitle",
+        order => $sortorder->{'subtitle'}
+        }; 
     
 	my @text_fields = ( $a, $b, $c, $d, $e, $f, $g, $h, $i ,$j, $k );
 
@@ -245,12 +275,17 @@ sub get_text_fields {
     }
 
     my @sorted_fields = sort by_order @new_fields;
+    
     my $active_fields;
-    foreach my $field (@sorted_fields) {
-     $sorttype eq 'codes' ?   $active_fields .= "$field->{'code'} " :
-          $active_fields .= "$field->{'desc'} ";
+
+    if ($sorttype eq 'codes') { # FIXME: This sub should really always return the array of hashrefs and let the caller take what he wants from that -fbcit
+        return @sorted_fields;
+    } else {
+        foreach my $field (@sorted_fields) {
+            $active_fields .= "$field->{'desc'} ";
+        }
+        return $active_fields;
     }
-    return $active_fields;
 
 }
 
@@ -882,7 +917,7 @@ sub deduplicate_batch {
 sub DrawSpineText {
 
     my ( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize, $left_text_margin,
-        $text_wrap_cols, $item, $conf_data, $printingtype )
+        $text_wrap_cols, $item, $conf_data, $printingtype, $nowrap )
       = @_;
 # hack to fix column name mismatch betwen labels_conf.class, and bibitems.classification
 	$$item->{'class'} = $$item->{'classification'};
@@ -895,21 +930,16 @@ sub DrawSpineText {
     my $top_text_margin = ( $fontsize + 3 );    #FIXME: This should be a template parameter and passed in...
     my $line_spacer = ( $fontsize * 1 );    # number of pixels between text rows (This is actually leading: baseline to baseline minus font size. Recommended starting point is 20% of font size.).
 
-    # add your printable fields manually in here
-
     my $layout_id = $$conf_data->{'id'};
 
-#    my @fields = GetItemFields();
-
-    my $str_fields = get_text_fields($layout_id, 'codes' );
-    my @fields = split(/ /, $str_fields);
-    #warn Dumper(@fields);
-
-    my $vPos   = ( $y_pos + ( $label_height - $top_text_margin ) );
+    my $vPos = ( $y_pos + ( $label_height - $top_text_margin ) );
     my $font = prFont($fontname);
 
-    # warn Dumper $conf_data;
-    #warn Dumper $item;
+    my @str_fields = get_text_fields($layout_id, 'codes' );
+    my @fields;
+    foreach my $field (@str_fields) {
+        push (@fields, $field->{'code'});
+    }
 
     foreach my $field (@fields) {
 
@@ -927,18 +957,21 @@ sub DrawSpineText {
             # strip out naughty existing nl/cr's
             $str =~ s/\n//g;
             $str =~ s/\r//g;
-            # wrap lines based on call number dividers '/'
             my @strings;
+            if (($nowrap == 0) || (!$nowrap)) {
+                # wrap lines based on segmentation markers: '/' (other types of segmentation markers can be added as needed here or this could be added as a syspref.)
 
-            while ( $str =~ /\// ) {
-                $str =~ /^(.*)\/(.*)$/;
+                while ( $str =~ /\// ) {
+                    $str =~ /^(.*)\/(.*)$/;
 
-                #warn "\$2=$2";
-                unshift @strings, $2;
-                $str = $1;
+                    #warn "\$2=$2";
+                    unshift @strings, $2;
+                    $str = $1;
+                }   
+                unshift @strings, $str;
+            } else {
+                push @strings, $str;    # if we are not wrapping the call number just send it along as we found it...
             }
-            
-            unshift @strings, $str;
             
             # strip out division slashes
             #$str =~ s/\///g;
