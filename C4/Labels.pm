@@ -1008,7 +1008,6 @@ sub DrawSpineText {
 sub PrintText {
     my ( $hPos, $vPos, $font, $fontsize, $text ) = @_;
     my $str = "BT /$font $fontsize Tf $hPos $vPos Td ($text) Tj ET";
-    warn $str;
     prAdd($str);
 }
 
