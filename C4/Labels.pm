@@ -25,7 +25,7 @@ use Text::Wrap;
 use Algorithm::CheckDigits;
 use C4::Members;
 use C4::Branch;
-# use Data::Dumper;
+ use Data::Dumper;
 # use Smart::Comments;
 
 BEGIN {
@@ -200,7 +200,8 @@ sub get_text_fields {
 
     my $sortorder = get_layout($layout_id);
 
-    # FIXME: This is all hardcoded and should be user selectable I think or are these the only text fields? -fbcit
+    # These fields are hardcoded based on the template for label-edit-layout.pl
+
     $a = {
         code  => 'itemtype',
         desc  => "Item Type",
@@ -917,11 +918,20 @@ sub deduplicate_batch {
 sub DrawSpineText {
 
     my ( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize, $left_text_margin,
-        $text_wrap_cols, $item, $conf_data, $printingtype, $nowrap )
-      = @_;
-# hack to fix column name mismatch betwen labels_conf.class, and bibitems.classification
-	$$item->{'class'} = $$item->{'classification'};
- 
+        $text_wrap_cols, $item, $conf_data, $printingtype, $nowrap ) = @_;
+
+    # FIXME: we need to fix the column name mismatch betwen labels_conf.class, and bibitems.classification
+    $$item->{'class'} = $$item->{'classification'};
+
+    # Replaced item's itemtype with the more user-friendly description...
+    my $dbh = C4::Context->dbh;
+    my %itemtypes;
+    my $sth = $dbh->prepare("SELECT itemtype,description FROM itemtypes");
+    $sth->execute();
+    while ( my $data = $sth->fetchrow_hashref ) {
+        $$item->{'itemtype'} = $data->{'description'} if ($$item->{'itemtype'} eq $data->{'itemtype'});
+    }
+
     $Text::Wrap::columns   = $text_wrap_cols;
     $Text::Wrap::separator = "\n";
 
@@ -933,7 +943,6 @@ sub DrawSpineText {
     my $layout_id = $$conf_data->{'id'};
 
     my $vPos = ( $y_pos + ( $label_height - $top_text_margin ) );
-    my $font = prFont($fontname);
 
     my @str_fields = get_text_fields($layout_id, 'codes' );
     my @fields;
@@ -941,51 +950,38 @@ sub DrawSpineText {
         push (@fields, $field->{'code'});
     }
 
+    my $old_fontname = $fontname; # We need to keep track of the original font passed in...
+    
     foreach my $field (@fields) {
-
-        # testing hack
-#     $$item->{"$field"} = $field . ": " . $$item->{"$field"};
-
+        # This allows us to print the title in italic (oblique) type... (Times Roman has a different nomenclature.)
+        # It seems there should be a better way to handle fonts in the label/patron card tool altogether -fbcit
+        ($field eq 'title') ? (($old_fontname =~ /T/) ? ($fontname = 'TI') : ($fontname = ($old_fontname . 'O'))) : ($fontname = $old_fontname);
+        my $font = prFont($fontname);
         # if the display option for this field is selected in the DB,
         # and the item record has some values for this field, display it.
         if ( $$conf_data->{"$field"} && $$item->{"$field"} ) {
-
-            #            warn "CONF_TYPE = $field";
-
             # get the string
             $str = $$item->{"$field"};
             # strip out naughty existing nl/cr's
             $str =~ s/\n//g;
             $str =~ s/\r//g;
             my @strings;
-            if (($nowrap == 0) || (!$nowrap)) {
-                # wrap lines based on segmentation markers: '/' (other types of segmentation markers can be added as needed here or this could be added as a syspref.)
-
-                while ( $str =~ /\// ) {
-                    $str =~ /^(.*)\/(.*)$/;
-
-                    #warn "\$2=$2";
-                    unshift @strings, $2;
-                    $str = $1;
-                }   
-                unshift @strings, $str;
-            } else {
-                push @strings, $str;    # if we are not wrapping the call number just send it along as we found it...
+            if ($field eq 'itemcallnumber') { # If the field contains the call number, we do some special processing on it here...
+                if (($nowrap == 0) || (!$nowrap)) { # wrap lines based on segmentation markers: '/' (other types of segmentation markers can be added as needed here or this could be added as a syspref.)
+                    while ( $str =~ /\// ) {
+                        $str =~ /^(.*)\/(.*)$/;
+                        unshift @strings, $2;
+                        $str = $1;
+                    }   
+                    unshift @strings, $str;
+                } else {
+                    push @strings, $str;    # or if we are not wrapping the call number just send it along as we found it...
+                }
+            } else {    # Here we will strip out all trailing '/' in fields other than the call number...
+                $str =~ s/\/$//g;
+                push @strings, $str;
             }
-            
-            # strip out division slashes
-            #$str =~ s/\///g;
-            #warn "\$str after striping division marks: $str";
-            # chop the string up into _upto_ 12 chunks
-            # and seperate the chunks with newlines
-
-            #$str = wrap( "", "", "$str" );
-            #$str = wrap( "", "", "$str" );
-
-            # split the chunks between newline's, into an array
-            #my @strings = split /\n/, $str;
-
-            # then loop for each string line
+            # loop for each string line
             foreach my $str (@strings) {
                 my $hPos;
                 if ( $printingtype eq 'BIB' ) { #FIXME: This is a hack and needs to be implimented as a text justification option in the template...
@@ -999,7 +995,6 @@ sub DrawSpineText {
                 }
                 PrintText( $hPos, $vPos, $font, $fontsize, $str );
                 $vPos = $vPos - $line_spacer;
-                
             }
         }    # if field is     
     }    #foreach feild
