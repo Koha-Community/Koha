@@ -121,8 +121,12 @@ if ($op eq 'mod'||$op eq 'dup') {
       warn "Attempt to modify subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
       print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
     }  
-	for (qw(startdate firstacquidate histstartdate enddate)) {
-    	$subs->{$_} = format_date($subs->{$_}) if $subs->{$_};
+	for (qw(startdate firstacquidate histstartdate enddate histenddate)) {
+         if ($subs->{$_} eq '0000-00-00') {
+            $subs->{$_} = ''
+    	} else {
+            $subs->{$_} = format_date($subs->{$_});
+        }
 	}
     $subs->{'letter'}='' unless($subs->{'letter'});
     $irregularity   = $subs->{'irregularity'};
@@ -285,25 +289,31 @@ if ($op eq 'addsubscription') {
     my $letter = $query->param('letter');
     my $manualhistory = $query->param('manualhist');
     my $enddate = $query->param('enddate');
+    # subscription history
+    my $histenddate = format_date_in_iso($query->param('histenddate'));
+    warn "HIST END : $histenddate";
     my $histstartdate = format_date_in_iso($query->param('histstartdate'));
     my $recievedlist = $query->param('recievedlist');
     my $missinglist = $query->param('missinglist');
     my $opacnote = $query->param('opacnote');
     my $librariannote = $query->param('librariannote');
-    &ModSubscription(
-        $auser,           $branchcode,   $aqbooksellerid, $cost,
-        $aqbudgetid,      $startdate,    $periodicity,    $firstacquidate,
-        $dow,             $irregularity, $numberpattern,  $numberlength,
-        $weeklength,      $monthlength,  $add1,           $every1,
-        $whenmorethan1,   $setto1,       $lastvalue1,     $innerloop1,
-        $add2,            $every2,       $whenmorethan2,  $setto2,
-        $lastvalue2,      $innerloop2,   $add3,           $every3,
-        $whenmorethan3,   $setto3,       $lastvalue3,     $innerloop3,
-        $numberingmethod, $status,       $biblionumber,   $callnumber,
-        $notes,           $letter,       $hemisphere,     $manualhistory,$internalnotes,
-        $subscriptionid);
-
-    ModSubscriptionHistory ($subscriptionid,$histstartdate,$enddate,$recievedlist,$missinglist,$opacnote,$librariannote);
+    my $history_only = $query->param('history_only');
+    if ($history_only) {
+        ModSubscriptionHistory ($subscriptionid,$histstartdate,$histenddate,$recievedlist,$missinglist,$opacnote,$librariannote);
+    } else {
+        &ModSubscription(
+            $auser,           $branchcode,   $aqbooksellerid, $cost,
+            $aqbudgetid,      $startdate,    $periodicity,    $firstacquidate,
+            $dow,             $irregularity, $numberpattern,  $numberlength,
+            $weeklength,      $monthlength,  $add1,           $every1,
+            $whenmorethan1,   $setto1,       $lastvalue1,     $innerloop1,
+            $add2,            $every2,       $whenmorethan2,  $setto2,
+            $lastvalue2,      $innerloop2,   $add3,           $every3,
+            $whenmorethan3,   $setto3,       $lastvalue3,     $innerloop3,
+            $numberingmethod, $status,       $biblionumber,   $callnumber,
+            $notes,           $letter,       $hemisphere,     $manualhistory,$internalnotes,
+            $subscriptionid);
+    }
     print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
 } else {
 

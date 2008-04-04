@@ -352,6 +352,7 @@ sub GetSubscription {
     my $query            = qq(
         SELECT  subscription.*,
                 subscriptionhistory.*,
+                subscriptionhistory.enddate as histenddate,
                 aqbudget.bookfundid,
                 aqbooksellers.name AS aqbooksellername,
                 biblio.title AS bibliotitle,

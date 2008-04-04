@@ -34,6 +34,7 @@ my $sth;
 my ($template, $loggedinuser, $cookie, $hemisphere);
 my $subscriptionid = $query->param('subscriptionid');
 my $subs = &GetSubscription($subscriptionid);
+
 $subs->{enddate} = GetExpirationDate($subscriptionid);
 
 if ($op eq 'del') {
@@ -87,6 +88,7 @@ $subs->{startdate}      = format_date($subs->{startdate});
 $subs->{firstacquidate} = format_date($subs->{firstacquidate});
 $subs->{histstartdate}  = format_date($subs->{histstartdate});
 $subs->{enddate}        = format_date($subs->{enddate});
+$subs->{histenddate}    = format_date($subs->{histenddate});
 $subs->{abouttoexpire}  = abouttoexpire($subs->{subscriptionid});
 # Done in Serials.pm
 # $subs->{'donotedit'}=(C4::Context->preference('IndependantBranches') && 
