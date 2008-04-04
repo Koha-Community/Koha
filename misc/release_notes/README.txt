@@ -28,6 +28,11 @@ From a clone of the RM repo, run:
 
  $ git tag -a -m "version 3.00.00 beta" v3.00.00-beta
  $ git push --tags
- 
+
+From the gitweb repo, issue:
+
+ $ git fetch --tags
+
+
  * update the website, trigger the change
  * email the list
