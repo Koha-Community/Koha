@@ -519,6 +519,7 @@ sub GetSubscriptionsFromBiblionumber {
         SELECT subscription.*,
                branches.branchname,
                subscriptionhistory.*,
+               subscriptionhistory.enddate as histenddate, 
                aqbudget.bookfundid,
                aqbooksellers.name AS aqbooksellername,
                biblio.title AS bibliotitle
@@ -541,6 +542,7 @@ sub GetSubscriptionsFromBiblionumber {
     while ( my $subs = $sth->fetchrow_hashref ) {
         $subs->{startdate}     = format_date( $subs->{startdate} );
         $subs->{histstartdate} = format_date( $subs->{histstartdate} );
+        $subs->{histenddate} = format_date( $subs->{histenddate} );
         $subs->{opacnote}     =~ s/\n/\<br\/\>/g;
         $subs->{missinglist}  =~ s/\n/\<br\/\>/g;
         $subs->{recievedlist} =~ s/\n/\<br\/\>/g;

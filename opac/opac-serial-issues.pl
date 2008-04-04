@@ -94,7 +94,6 @@ else {
     foreach (@$subscriptions) {
         my $subscription = getalert($loggedinuser,'issue',$_->{subscriptionid});
         if (@$subscription[0]) {
-		warn ">>>>>>>>> has alert : loggedinuser / ".$_->{subscriptionid};
             $_->{hasalert} = 1;
         }
     }

@@ -17,8 +17,7 @@
 <form method="post" name="f">
 <!-- TMPL_LOOP name="subscription_LOOP" -->
 <h2>Subscription information for <!-- TMPL_VAR name="bibliotitle" --></h2>
-		<p>It began on <!-- TMPL_VAR name="startdate" --> and is issued every
-		
+		<p>The current subscription began on <!-- TMPL_VAR name="startdate" --> and is issued every
 		<!--TMPL_IF name="periodicity1" -->
 				day
 		<!-- /TMPL_IF -->
@@ -52,29 +51,26 @@
 		<!--TMPL_IF name="periodicity11" -->
 				2 years
 		<!-- /TMPL_IF -->
-		
-		on
-		
 		<!--TMPL_IF name="arrival1" -->
-			Monday
+			on Monday
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="arrival2" -->
-				Tuesday
+				on Tuesday
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="arrival3" -->
-				Wednesday
+				on Wednesday
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="arrival4" -->
-				Thursday
+				on Thursday
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="arrival5" -->
-				Friday
+				on Friday
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="arrival6" -->
-				Saturday
+				on Saturday
 		<!-- /TMPL_IF -->
 		<!--TMPL_IF name="arrival7" -->
-				Sunday
+				on Sunday
 		<!-- /TMPL_IF -->
 		
 		for 
@@ -82,7 +78,10 @@
 			<!-- TMPL_IF name="weeklength" --><!-- TMPL_VAR name="weeklength" --> weeks<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="monthlength" --><!-- TMPL_VAR name="monthlength" --> months<!-- /TMPL_IF -->
 			
-		since <!-- TMPl_VAR name="startdate" -->
+		<p>The first subscription was started on  <!-- TMPl_VAR name="histstartdate" --></p>
+		<!-- TMPL_IF name="histenddate" -->
+            <p>The subscription expired on <!-- TMPl_VAR name="histenddate" --></p>
+        <!-- /TMPL_IF -->
 		</p>
     <h2><!-- TMPL_VAR name="branchcode" --> <!-- TMPL_VAR name="notes" --></h2>
   <!-- TMPL_IF name="recievedlist" -->
