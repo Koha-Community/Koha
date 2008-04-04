@@ -71,6 +71,10 @@ my $query = $input->param('q');
 # don't run the search if no search term !
 if ($op eq "do_search" && $query) {
 
+    # add the itemtype limit if applicable
+    my $itemtypelimit = $input->param('itemtypelimit');
+    $query .= " AND itype=$itemtypelimit" if $itemtypelimit;
+    
     $resultsperpage= $input->param('resultsperpage');
     $resultsperpage = 19 if(!defined $resultsperpage);
 
@@ -172,6 +176,22 @@ if ($op eq "do_search" && $query) {
                 flagsrequired => {catalogue => 1, serials=>1},
                 debug => 1,
                 });
+    # load the itemtypes
+    my $itemtypes = GetItemTypes;
+    my @itemtypesloop;
+    my $selected=1;
+    my $cnt;
+    my $imgdir = getitemtypeimagesrc('intranet');
+    foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
+        my %row =(
+                    code => $thisitemtype,
+                    selected => $selected,
+                    description => $itemtypes->{$thisitemtype}->{'description'},
+                );
+        $selected = 0 if ($selected) ;
+        push @itemtypesloop, \%row;
+    }
+    $template->param(itemtypeloop => \@itemtypesloop);
     $template->param("no_query" => 1);
 }
  else {
@@ -183,7 +203,22 @@ if ($op eq "do_search" && $query) {
                 flagsrequired => {catalogue => 1, serials=>1},
                 debug => 1,
                 });
-
+    # load the itemtypes
+    my $itemtypes = GetItemTypes;
+    my @itemtypesloop;
+    my $selected=1;
+    my $cnt;
+    my $imgdir = getitemtypeimagesrc('intranet');
+    foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
+        my %row =(
+                    code => $thisitemtype,
+                    selected => $selected,
+                    description => $itemtypes->{$thisitemtype}->{'description'},
+                );
+        $selected = 0 if ($selected) ;
+        push @itemtypesloop, \%row;
+    }
+    $template->param(itemtypeloop => \@itemtypesloop);
     $template->param("no_query" => 0);
 }
 

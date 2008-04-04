@@ -17,7 +17,21 @@
     <input type="hidden" name="type" value="intranet" />
     <label for="q">Keyword</label>
     <input type="text" id="q"  name="q" />
+    
+    <!-- ITEMTYPE LIMITS -->
+        <p>Limit type to: 
+        <select name="itemtypelimit">
+        <!--TMPL_LOOP Name="itemtypeloop"-->
+            <option value="<!--TMPL_VAR Name="code" -->" />
+            <!--TMPL_VAR Name="description" -->
+        <!--/TMPL_LOOP-->
+        </select>
+        </p>
+    <!-- /ITEMTYPE LIMITS -->
+
     <input type="submit" value="Search" />
+
+
 </form>
 
 </div>
