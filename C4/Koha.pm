@@ -852,12 +852,10 @@ sub GetAuthorisedValues {
 
 =head2 GetKohaAuthorisedValues
 	
-	Takes $kohafield, $fwcode, $value as parameters.
-	If C<$codedvalue> is supplied, returns scalar authorised value description.
-	If C<$codedvalue> is undefined, returns hashref of Code => description
+	Takes $kohafield, $fwcode as parameters.
+	Returns hashref of Code => description
 	Returns undef 
 	  if no authorised value category is defined for the kohafield.
-      or no authorised value is defined for C<$codedvalue> .
 
 =cut
 
@@ -868,22 +866,15 @@ sub GetKohaAuthorisedValues {
   my $dbh = C4::Context->dbh;
   my $avcode = GetAuthValCode($kohafield,$fwcode);
   if ($avcode) {  
-	if($codedvalue || ($codedvalue==0)) {
-		my $sth = $dbh->prepare("select lib from authorised_values where category=? and authorised_value=? ");
-    	$sth->execute($avcode,$codedvalue);
-		my ($avdesc) = $sth->fetchrow_array;
-		return $avdesc;
-	} else {
-		my $sth = $dbh->prepare("select authorised_value, lib from authorised_values where category=? ");
-    	$sth->execute($avcode);
-		while ( my ($val, $lib) = $sth->fetchrow_array ) { 
-   			$values{$val}= $lib;
-   		}
-    	return \%values;
-  	}
+	my $sth = $dbh->prepare("select authorised_value, lib from authorised_values where category=? ");
+   	$sth->execute($avcode);
+	while ( my ($val, $lib) = $sth->fetchrow_array ) { 
+   		$values{$val}= $lib;
+   	}
+   	return \%values;
   } else {
   	return undef;
-}
+  }
 }
 
 =head2 GetManagedTagSubfields

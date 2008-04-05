@@ -1203,15 +1203,13 @@ sub searchResults {
     while ( my $bdata = $bsth->fetchrow_hashref ) {
         $branches{ $bdata->{'branchcode'} } = $bdata->{'branchname'};
     }
-    my %locations;
-    my $lsch =
-      $dbh->prepare(
-"SELECT authorised_value,lib FROM authorised_values WHERE category = 'LOC'"
-      );
-    $lsch->execute();
-    while ( my $ldata = $lsch->fetchrow_hashref ) {
-        $locations{ $ldata->{'authorised_value'} } = $ldata->{'lib'};
-    }
+# FIXME - We build an authorised values hash here, using the default framework
+# though it is possible to have different authvals for different fws.
+
+    my $shelflocations =GetKohaAuthorisedValues('items.location','');
+
+    # get notforloan authorised value list (see $shelflocations  FIXME)
+    my $notforloan_authorised_value = GetAuthValCode('items.notforloan','');
 
     #Build itemtype hash
     #find itemtype & itemtype image
@@ -1237,14 +1235,6 @@ sub searchResults {
       );
     $sth->execute;
     my ($itemtag) = $sth->fetchrow;
-
-    # get notforloan authorised value list
-    $sth =
-      $dbh->prepare(
-"SELECT authorised_value FROM `marc_subfield_structure` WHERE kohafield = 'items.notforloan' AND frameworkcode=''"
-      );
-    $sth->execute;
-    my ($notforloan_authorised_value) = $sth->fetchrow;
 
     ## find column names of items related to MARC
     my $sth2 = $dbh->prepare("SHOW COLUMNS FROM items");
@@ -1424,7 +1414,7 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
 				$onloan_items->{$key}->{due_date} = format_date($item->{onloan});
 				$onloan_items->{$key}->{count}++ if $item->{homebranch};
 				$onloan_items->{$key}->{branchname} = $item->{branchname};
-				$onloan_items->{$key}->{location} = $locations{ $item->{location} };
+				$onloan_items->{$key}->{location} = $shelflocations->{ $item->{location} };
 				$onloan_items->{$key}->{itemcallnumber} = $item->{itemcallnumber};
 				$onloan_items->{$key}->{imageurl} = getitemtypeimagesrc() . "/" . $itemtypes{ $item->{itype} }->{imageurl};
                 # if something's checked out and lost, mark it as 'long overdue'
@@ -1462,7 +1452,7 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
 					}
 					$other_items->{$key}->{notforloan} = GetAuthorisedValueDesc('','',$item->{notforloan},'','',$notforloan_authorised_value) if $notforloan_authorised_value;
 					$other_items->{$key}->{count}++ if $item->{homebranch};
-					$other_items->{$key}->{location} = $locations{ $item->{location} };
+					$other_items->{$key}->{location} = $shelflocations->{ $item->{location} };
 					$other_items->{$key}->{imageurl} = getitemtypeimagesrc() . "/" . $itemtypes{ $item->{itype} }->{imageurl};
                 }
                 # item is available
@@ -1473,7 +1463,7 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
 					foreach (qw(branchname itemcallnumber)) {
                     	$available_items->{$prefix}->{$_} = $item->{$_};
 					}
-					$available_items->{$prefix}->{location} = $locations{ $item->{location} };
+					$available_items->{$prefix}->{location} = $shelflocations->{ $item->{location} };
 					$available_items->{$prefix}->{imageurl} = getitemtypeimagesrc() . "/" . $itemtypes{ $item->{itype} }->{imageurl};
                 }
             }

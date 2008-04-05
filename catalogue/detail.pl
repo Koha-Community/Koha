@@ -112,11 +112,10 @@ foreach my $item (@items) {
         $item->{itemdamagedloop}= GetAuthorisedValues(GetAuthValCode('items.damaged',$fw),$item->{damaged}) if GetAuthValCode('items.damaged',$fw);
     }
     #get shelf location and collection code description if they are authorised value.
-	my $itemlocation = GetKohaAuthorisedValues('items.location',$fw, $item->{location} );
-	$item->{location} = $itemlocation if($itemlocation);
-	my $itemccode = $item->{ccode} ;
-    $itemccode =  GetKohaAuthorisedValues('items.ccode',$fw, $itemccode );
-	$item->{'ccode'} = $itemccode if($itemccode); 
+	my $shelflocations = GetKohaAuthorisedValues('items.location',$fw );
+	$item->{'location'} = $shelflocations->{$item->{'location'}} if($shelflocations->{$item->{'location'}}); 
+    my $collections =  GetKohaAuthorisedValues('items.ccode',$fw );
+	$item->{'ccode'} = $collections->{$item->{'ccode'}} if($collections->{$item->{'ccode'}}); 
 
     # checking for holds
     my ($reservedate,$reservedfor,$expectedAt) = GetReservesFromItemnumber($item->{itemnumber});
