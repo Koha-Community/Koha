@@ -62,14 +62,8 @@ my $marcseriesarray  = GetMarcSeries($record,$marcflavour);
 my $branches = GetBranches();
 my $itemtypes = GetItemTypes();
 
-my %locations;
 # FIXME: move this to a pm, check waiting status for holds
 my $dbh = C4::Context->dbh;
-my $lsch = $dbh->prepare("SELECT authorised_value,lib FROM authorised_values WHERE category = 'LOC'");
-$lsch->execute();
-while (my $ldata = $lsch->fetchrow_hashref ) {
-    $locations{ $ldata->{'authorised_value'} } = $ldata->{'lib'};
-}
 
 # change back when ive fixed request.pl
 my @items = &GetItemsInfo( $biblionumber, 'intra' );
@@ -112,14 +106,17 @@ foreach my $item (@items) {
     $item->{datedue} = format_date($item->{datedue});
     $item->{datelastseen} = format_date($item->{datelastseen});
     $item->{onloan} = format_date($item->{onloan});
-    $item->{locationname} = $locations{$item->{location}};
     # item damaged, lost, withdrawn loops
     $item->{itemlostloop}= GetAuthorisedValues(GetAuthValCode('items.itemlost',$fw),$item->{itemlost}) if GetAuthValCode('items.itemlost',$fw);
     if ($item->{damaged}) {
         $item->{itemdamagedloop}= GetAuthorisedValues(GetAuthValCode('items.damaged',$fw),$item->{damaged}) if GetAuthValCode('items.damaged',$fw);
     }
-    #get collection code description, too
-    $item->{'ccode'}  = GetAuthorisedValueDesc('','',   $item->{'ccode'} ,'','','ccode');
+    #get shelf location and collection code description if they are authorised value.
+	my $itemlocation = GetKohaAuthorisedValues('items.location',$fw, $item->{location} );
+	$item->{location} = $itemlocation if($itemlocation);
+	my $itemccode = $item->{ccode} ;
+    $itemccode =  GetKohaAuthorisedValues('items.ccode',$fw, $itemccode );
+	$item->{'ccode'} = $itemccode if($itemccode); 
 
     # checking for holds
     my ($reservedate,$reservedfor,$expectedAt) = GetReservesFromItemnumber($item->{itemnumber});
