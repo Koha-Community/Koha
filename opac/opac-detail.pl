@@ -198,8 +198,8 @@ $template->param(
 
 # XISBN Stuff
 my $xisbn=$dat->{'isbn'};
-$xisbn =~ s/(p|-| |:)//g;
-$template->param(amazonisbn => $xisbn);
+$xisbn =~ /(\d*[X]*)/;
+$template->param(amazonisbn => $1);
 if (C4::Context->preference("OPACFRBRizeEditions")==1) {
     eval {
         $template->param(

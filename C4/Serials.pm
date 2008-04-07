@@ -1389,7 +1389,9 @@ sub NewSubscription {
         my $record = GetMarcBiblio($biblionumber);
         my ($tag,$subf) = GetMarcFromKohaField('biblio.serial',$bib->{'frameworkcode'});
         if($tag) {
+            eval {
             $record->field($tag)->update( $subf => 1 );
+            };
         }
         ModBiblio($record,$biblionumber,$bib->{'frameworkcode'});
     }    

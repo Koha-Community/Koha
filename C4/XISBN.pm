@@ -41,6 +41,8 @@ BEGIN {
 
 sub get_biblionumber_from_isbn {
     my $isbn = shift;
+    $isbn =~ /(\d*[X]*)/;
+    $isbn = $1;
     my @biblionumbers;
     my $dbh=C4::Context->dbh;
     my $query = "SELECT biblionumber FROM biblioitems WHERE isbn=?";
@@ -71,6 +73,8 @@ sub get_biblio_from_xisbn {
     my $xbiblio;
     if ($xbib_data->{biblionumber}) {
         $xbiblio = GetBiblioData($xbib_data->{biblionumber});
+        $xbiblio->{isbn} =~ /(\d*[X]*)/;
+        $xbiblio->{amazonisbn} = $1;
         $xbiblio->{items} = GetItemsByBiblioitemnumber($xbib_data->{biblionumber});
     }
     return ($xbiblio);

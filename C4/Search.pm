@@ -1277,7 +1277,9 @@ sub searchResults {
             $oldbiblio->{description} =
               $itemtypes{ $oldbiblio->{itemtype} }->{description};
         }
-
+        my $aisbn=$oldbiblio->{'isbn'};
+        $aisbn =~ /(\d*[X]*)/;
+        $oldbiblio->{'amazonisbn'} = $1;
  # Build summary if there is one (the summary is defined in the itemtypes table)
  # FIXME: is this used anywhere, I think it can be commented out? -- JF
         if ( $itemtypes{ $oldbiblio->{itemtype} }->{summary} ) {

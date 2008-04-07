@@ -53,7 +53,8 @@ This module provides facilities for retrieving Amazon.com content in Koha
 sub get_amazon_details {
     my ( $isbn ) = @_;
     #normalize the ISBN
-    $isbn =~ s/(p|-|:| )//g;
+    $isbn =~ /(\d*[X]*)/;
+    $isbn = $1;
 
     # Determine which content to grab in the request
 

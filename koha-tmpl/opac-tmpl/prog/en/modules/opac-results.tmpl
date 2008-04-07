@@ -52,6 +52,7 @@ $(document).ready(function(){
         $("#bookbag_form").unCheckCheckboxes();
         return false;
     }); 
+    KOHA.Google.GetCoverFromIsbn();
 });
 //]]>
 </script>
@@ -155,7 +156,7 @@ $(document).ready(function(){
 
         <!-- TABLE RESULTS START -->
         <table>
-		<tr><td colspan="3" class="resultscontrol">
+		<tr><td colspan="5" class="resultscontrol" style="border : 1px solid #e8e8e8;">
 		<div class="resort"> <select id="sort_by" name="sort_by"> <!--TMPL_INCLUDE NAME="resort_form.inc"--> </select> <input type="submit" class="submit clearfix" id="sortsubmit" value="Go" /></div>
         <!-- TMPL_IF EXPR="opacbookbag || virtualshelves" --><div class="cartlist"><span class="checkall"></span>
 		<span class="clearall"></span>
@@ -166,12 +167,22 @@ $(document).ready(function(){
             <!-- Actual Search Results -->
             <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
             <!-- TMPL_IF name="even" -->
-                <tr class="highlight">
+                <tr class="highlight" style="border-bottom:0px;">
             <!-- TMPL_ELSE -->
-                <tr>
+                <tr style="border-bottom:0px;">
             <!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="XSLTResultsDisplay" -->
+                <td class="select"><!--TMPL_IF EXPR="opacbookbag || virtualshelves" --><input type="checkbox" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" title="Click to add to cart" /> <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"><!-- /TMPL_IF --><!--TMPL_IF EXPR="opacbookbag || virtualshelves" --></label><!-- /TMPL_IF --></td>
+                <td class="select"><!-- TMPL_VAR NAME="result_number" -->.</td>
                 <!-- TMPL_VAR NAME="XSLTResultsRecord" -->
+                <td>
+                    <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
+                    <img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="amazonisbn" -->.01.TZZZZZZZ.jpg" alt="" class="thumbnail" /></a>
+                    <!-- TMPL_IF NAME="GoogleJackets" --><div style="block" title="<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" id="<!-- TMPL_VAR name="amazonisbn" -->" class="gbs-thumbnail"></div><!-- /TMPL_IF -->
+                </td>
+                <tr>
+                <td></td><td></td><td style="size:65%; color:grey;"><!--TMPL_IF Name="searchhighlightblob"--><p class="searchhighlightblob">Match: <!-- TMPL_VAR NAME="searchhighlightblob" --></p><!-- /TMPL_IF --></td><td></td>
+                </tr>
             <!-- TMPL_ELSE -->
                     <td><!-- TMPL_IF NAME="AmazonContent" -->
                         <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_IF NAME="isbn" --><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.TZZZZZZZ.jpg" alt="" class="thumbnail" /><!-- TMPL_ELSE --><img src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="" class="thumbnail" /><!-- /TMPL_IF -->
