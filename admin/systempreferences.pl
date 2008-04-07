@@ -47,6 +47,7 @@ use C4::Context;
 use C4::Koha;
 use C4::Languages qw(getTranslatedLanguages);
 use C4::ClassSource;
+use C4::Log;
 use C4::Output;
 use C4::Context;
 
@@ -333,8 +334,9 @@ sub StringSearch  {
 }
 
 my $input = new CGI;
-my $searchfield=$input->param('searchfield');
-my $offset=$input->param('offset');
+my $searchfield = $input->param('searchfield');
+my $Tvalue = $input->param('Tvalue');
+my $offset = $input->param('offset');
 my $script_name="/cgi-bin/koha/admin/systempreferences.pl";
 
 my ($template, $borrowernumber, $cookie)
@@ -400,12 +402,16 @@ if ($op eq 'update_and_reedit') {
             my $sth=$dbh->prepare("update systempreferences set value=?,explanation=?,type=?,options=? where variable=?");
             $sth->execute($value, $input->param('explanation'), $input->param('variable'), $input->param('preftype'), $input->param('prefoptions'));
             $sth->finish;
+			warn "logaction !! mod ";
+			logaction('SYSTEMPREFERENCE','MODIFY',undef, $input->param('variable') . " | " . $value );
         }
     } else {
         unless (C4::Context->config('demo') eq 1) {
             my $sth=$dbh->prepare("insert into systempreferences (variable,value,explanation) values (?,?,?,?,?)");
             $sth->execute($input->param('variable'), $input->param('value'), $input->param('explanation'), $input->param('preftype'), $input->param('prefoptions'));
             $sth->finish;
+			warn "logaction !! add ";
+			logaction('SYSTEMPREFERENCE','ADD',undef, $input->param('variable') . " | " . $input->param('value') );
         }
     }
     $sth->finish;
@@ -538,12 +544,14 @@ if ($op eq 'add_form') {
             my $sth=$dbh->prepare("update systempreferences set value=?,explanation=?,type=?,options=? where variable=?");
             $sth->execute($value, $input->param('explanation'), $input->param('preftype'), $input->param('prefoptions'), $input->param('variable'));
             $sth->finish;
+			logaction('SYSTEMPREFERENCE','MODIFY',undef, $input->param('variable') . " | " . $value );
         }
     } else {
         unless (C4::Context->config('demo') eq 1) {
             my $sth=$dbh->prepare("insert into systempreferences (variable,value,explanation,type,options) values (?,?,?,?,?)");
             $sth->execute($input->param('variable'), $value, $input->param('explanation'), $input->param('preftype'), $input->param('prefoptions'));
             $sth->finish;
+			logaction('SYSTEMPREFERENCE','ADD',undef, $input->param('variable') . " | " . $value );
         }
     }
     $sth->finish;
@@ -568,6 +576,8 @@ if ($op eq 'add_form') {
     my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare("delete from systempreferences where variable=?");
     $sth->execute($searchfield);
+	my $logstring =  $searchfield . " | " . $Tvalue ;
+	logaction('SYSTEMPREFERENCE','DELETE',undef,$logstring);
     $sth->finish;
 
                                                     # END $OP eq DELETE_CONFIRMED

@@ -194,8 +194,12 @@
         <tr><th>Value: </th><td>
         <!-- TMPL_VAR NAME="Tvalue" -->
         </td></tr></table>
-        <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
-        <input type="submit"  value="Yes, Delete" /></form> <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="No, Do not Delete" /></form>
+        <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+		<input type="hidden" name="op" value="delete_confirmed" />
+		<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
+		<input type="hidden" name="Tvalue" value="<!-- TMPL_VAR NAME="Tvalue" -->" />
+        <input type="submit"  value="Yes, Delete" /></form> 
+		<form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="No, Do not Delete" /></form>
     
     
     <!-- /TMPL_IF -->
