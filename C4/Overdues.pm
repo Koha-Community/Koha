@@ -119,13 +119,13 @@ sub Getoverdues {
     my $dbh = C4::Context->dbh;
     my $sth =  (C4::Context->preference('item-level_itypes')) ? 
 				$dbh->prepare(
-        			"SELECT issues.*,items.itype as itemtype FROM issues 
+        			"SELECT issues.*,items.itype as itemtype, items.homebranch FROM issues 
                 	 LEFT JOIN items USING (itemnumber)
                 	 WHERE date_due < now() 
                 	 ORDER BY borrowernumber " )
 				:
  				$dbh->prepare(
-                    "SELECT issues.*,biblioitems.itemtype,items.itype FROM issues 
+                    "SELECT issues.*,biblioitems.itemtype,items.itype, items.homebranch  FROM issues 
                      LEFT JOIN items USING (itemnumber)
                      LEFT JOIN biblioitems USING (biblioitemnumber)
                      WHERE date_due < now() 
@@ -225,7 +225,7 @@ sub CalcFine {
     my $countalldayclosed = $countspecialday + $countrepeatableday;
     my $daycount = $difference - $countalldayclosed;
     # get issuingrules (fines part will be used)
-    my $data = C4::Circulation::GetIssuingRule($item->{'itemtype'},$bortype,$branchcode);
+    my $data = C4::Circulation::GetIssuingRule($bortype, $item->{'itemtype'},$branchcode);
     my $daycounttotal = $daycount - $data->{'firstremind'};
     if ($data->{'chargeperiod'} >0) { # if there is a rule for this bortype
         if ($data->{'firstremind'} < $daycount)
@@ -237,7 +237,7 @@ sub CalcFine {
 		#  
     }
     
-#    warn "Calc Fine: " . join(", ", ($item->{'itemnumber'}, $bortype, $difference , $data->{'fine'} . " * " . $daycount . " days = \$ " . $amount , "desc: $dues")) ;
+  #  warn "Calc Fine: " . join(", ", ($item->{'itemnumber'}, $bortype, $difference , $data->{'fine'} . " * " . $daycount . " days = \$ " . $amount , "desc: $dues")) ;
  return ( $amount, $data->{'chargename'}, $printout ,$daycounttotal ,$daycount );
 }
 
@@ -801,7 +801,7 @@ C<$level> contains the file level
  sub CreateItemAccountLine {
   my ($borrowernumber,$itemnumber,$date,$amount,$description,$accounttype,$amountoutstanding,$timestamp,$notify_id,$level)=@_;
   my $dbh = C4::Context->dbh;
-  my $nextaccntno = getnextacctno($borrowernumber);
+  my $nextaccntno = C4::Accounts::getnextacctno($borrowernumber);
    my $query= "INSERT into accountlines  
          (borrowernumber,accountno,itemnumber,date,amount,description,accounttype,amountoutstanding,timestamp,notify_id,notify_level)
           VALUES

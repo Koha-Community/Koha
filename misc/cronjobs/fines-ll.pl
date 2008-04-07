@@ -38,7 +38,8 @@ use C4::Circulation;
 use C4::Overdues;
 use Date::Manip qw/Date_DaysSince1BC/;
 use C4::Biblio;
-
+#use Data::Dumper;
+#
 my $fldir = "/tmp";
 
 my $libname=C4::Context->preference('LibraryName');
@@ -78,7 +79,7 @@ for (my $i=0;$i<scalar(@$data);$i++){
   	$branchcode = $data->[$i]->{'homebranch'};
   } elsif ( C4::Context->preference('CircControl') eq 'PatronLibrary' ) {
   	$branchcode = $borrower->{'branchcode'};
-  } else {
+} else {
   	# CircControl must be PickupLibrary. (branchcode comes from issues table here).
 	$branchcode =  $data->[$i]->{'branchcode'};
   }
@@ -91,13 +92,9 @@ for (my $i=0;$i<scalar(@$data);$i++){
     my ($amount,$type,$printout,$daycounttotal,$daycount)=
   		CalcFine($data->[$i], $borrower->{'categorycode'}, $branchcode,
         		$difference, $datedue);
-
-
     my ($delays1,$delays2,$delays3)=GetOverdueDelays($borrower->{'categorycode'});
-    my $issuingrules=GetIssuingRule($data->[$i]->{'itemnumber'},$borrower->{'categorycode'},$branchcode);
-
-	UpdateFine($data->[$i]->{'itemnumber'},$data->[$i]->{'borrowernumber'},$amount,$type,$due);
- 
+    my $issuingrules=GetIssuingRule($borrower->{'categorycode'}, $data->[$i]->{'itemnumber'},$branchcode);
+	UpdateFine($data->[$i]->{'itemnumber'},$data->[$i]->{'borrowernumber'},$amount,$type,$due) if( $amount > 0 ) ;
  	if($delays1  and $delays2  and $delays3)  {
     
     	my $debarredstatus=CheckBorrowerDebarred($borrower->{'borrowernumber'});
