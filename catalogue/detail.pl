@@ -113,9 +113,11 @@ foreach my $item (@items) {
     }
     #get shelf location and collection code description if they are authorised value.
 	my $shelflocations = GetKohaAuthorisedValues('items.location',$fw );
-	$item->{'location'} = $shelflocations->{$item->{'location'}} if($shelflocations->{$item->{'location'}}); 
+	my $shelfcode= $item->{'location'};
+	$item->{'location'} = $shelflocations->{$shelfcode} if(defined($shelflocations) && exists($shelflocations->{$shelfcode})); 
     my $collections =  GetKohaAuthorisedValues('items.ccode',$fw );
-	$item->{'ccode'} = $collections->{$item->{'ccode'}} if($collections->{$item->{'ccode'}}); 
+	my $ccode= $item->{'ccode'};
+	$item->{'ccode'} = $collections->{$ccode} if(defined($collections) && exists($collections->{$ccode})); 
 
     # checking for holds
     my ($reservedate,$reservedfor,$expectedAt) = GetReservesFromItemnumber($item->{itemnumber});
