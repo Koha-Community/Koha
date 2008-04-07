@@ -376,7 +376,13 @@
                     </xsl:call-template>
             </xsl:for-each>
         </xsl:variable>
-
+        <xsl:variable name="lcc">
+            <xsl:for-each select="marc:datafield[@tag=050]">
+                    <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">ab</xsl:with-param>
+                    </xsl:call-template>
+            </xsl:for-each>
+        </xsl:variable>
     <td style="vertical-align:top;">
      <a><xsl:attribute name="href">/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="$biblionumber"/></xsl:attribute>
 
@@ -786,6 +792,11 @@
             </xsl:for-each>
 
     </xsl:if>
+    <xsl:if test="marc:datafield[@tag=050]">
+        <span class="label">Library of Congress Classification: </span>
+        <xsl:value-of select="$lcc"/>
+    </xsl:if>
+
     </span>
                <div class="holdings_summary">
                    <xsl:if test="count(key('item-by-status', 'available'))>0">

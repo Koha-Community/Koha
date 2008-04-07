@@ -49,6 +49,13 @@
                 <xsl:when test="$leader6='c' or $leader6='d' or $leader6='i' or $leader6='j'">Music</xsl:when>
             </xsl:choose>
         </xsl:variable>
+        <xsl:variable name="lcc">
+            <xsl:for-each select="marc:datafield[@tag=050]">
+                    <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">ab</xsl:with-param>
+                    </xsl:call-template>
+            </xsl:for-each>
+        </xsl:variable>
 
         <!-- Title Statement -->
 <style type="text/css">
@@ -130,6 +137,11 @@
         <xsl:if test="$materialTypeCode">
         <p><span class="label">Type: </span>
         <img src="/opac-tmpl/prog/famfamfam/{$materialTypeCode}.png"/><xsl:value-of select="$materialTypeLabel"/>
+        </p>
+        </xsl:if>
+        <xsl:if test="$lcc">
+        <p><span class="label">Library of Congress Classification: </span>
+        <xsl:value-of select="$lcc"/>
         </p>
         </xsl:if>
         <xsl:if test="marc:datafield[@tag=440 or @tag=490]">
