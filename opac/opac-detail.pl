@@ -109,7 +109,8 @@ if (C4::Context->preference("RequestOnOpac")) {
 }
 
 my $norequests = 1;
-foreach my $itm (@items) {
+my %itemfields;
+for my $itm (@items) {
      $norequests = 0 && $norequests
        if ( (not $itm->{'wthdrawn'} )
          || (not $itm->{'itemlost'} )
@@ -124,10 +125,10 @@ foreach my $itm (@items) {
     $itm->{'location_description'} = GetAuthorisedValueDesc('','',   $itm->{'location'} ,'','','LOC');
     $itm->{'imageurl'}    = $imgdir."/".$itemtypes->{ $itm->{itype} }->{'imageurl'};     
     $itm->{'description'} = $itemtypes->{$itemtype}->{'description'};
-
+	$itemfields{ccode} = 1 if($itm->{ccode});
+	$itemfields{enumchron} = 1 if($itm->{enumchron});
+	$itemfields{copynumber} = 1 if($itm->{copynumber});
 }
-
-$template->param( norequests => $norequests, RequestOnOpac=>$RequestOnOpac );
 
 ## get notes and subjects from MARC record
     my $dbh              = C4::Context->dbh;
@@ -145,6 +146,11 @@ $template->param( norequests => $norequests, RequestOnOpac=>$RequestOnOpac );
         MARCAUTHORS => $marcauthorsarray,
         MARCSERIES  => $marcseriesarray,
         MARCURLS    => $marcurlsarray,
+		norequests => $norequests,
+		RequestOnOpac=>$RequestOnOpac,
+		itemdata_ccode => $itemfields{ccode},
+		itemdata_enumchron => $itemfields{enumchron},
+		itemdata_copynumber => $itemfields{copynumber},
     );
 
 foreach ( keys %{$dat} ) {
