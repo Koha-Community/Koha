@@ -21,6 +21,7 @@ package C4::Overdues;
 use strict;
 use Date::Calc qw/Today/;
 use Date::Manip qw/UnixDate/;
+use C4::Circulation;
 use C4::Context;
 use C4::Accounts;
 use C4::Log; # logaction
@@ -66,9 +67,12 @@ BEGIN {
 
 	# subs to move to Circulation.pm
 	push @EXPORT, qw(
-        &GetIssuingRules
         &GetIssuesIteminfo
 	);
+    #
+	# &GetIssuingRules - delete.
+	# use C4::Circulation::GetIssuingRule instead.
+	
 	# subs to move to Members.pm
 	push @EXPORT, qw(
         &CheckBorrowerDebarred
@@ -174,8 +178,8 @@ sub checkoverdues {
 
 =item CalcFine
 
-  ($amount, $chargename, $message) =
-    &CalcFine($itemnumber, $borrowercode, $days_overdue);
+  ($amount, $chargename, $message, $daycounttotal, $daycount) =
+    &CalcFine($itemnumber, $categorycode, $branch, $days_overdue, $description);
 
 Calculates the fine for a book.
 
@@ -185,28 +189,17 @@ standard fine for books might be $0.50, but $1.50 for DVDs, or staff
 members might get a longer grace period between the first and second
 reminders that a book is overdue).
 
-The fine is calculated as follows: if it is time for the first
-reminder, the fine is the value listed for the given (branch, item type,
-borrower code) combination. If it is time for the second reminder, the
-fine is doubled. Finally, if it is time to send the account to a
-collection agency, the fine is set to 5 local monetary units (a really
-good deal for the patron if the library is in Italy). Otherwise, the
-fine is 0.
-
-Note that the way this function is currently implemented, it only
-returns a nonzero value on the notable days listed above. That is, if
-the categoryitems entry says to send a first reminder 7 days after the
-book is due, then if you call C<&CalcFine> 7 days after the book is
-due, it will give a nonzero fine. If you call C<&CalcFine> the next
-day, however, it will say that the fine is 0.
 
 C<$itemnumber> is the book's item number.
 
-C<$borrowercode> is the borrower code of the patron who currently has
+C<$categorycode> is the category code of the patron who currently has
 the book.
+
+C<$branchcode> is the library whose issuingrules govern this transaction.
 
 C<$days_overdue> is the number of days elapsed since the book's due
 date.
+
 
 C<&CalcFine> returns a list of three values:
 
@@ -222,7 +215,7 @@ or "Final Notice".
 
 #'
 sub CalcFine {
-    my ( $item, $bortype, $difference , $dues  ) = @_;
+    my ( $item, $bortype, $branchcode, $difference , $dues  ) = @_;
     my $dbh = C4::Context->dbh;
     my $amount = 0;
     my $printout;
@@ -232,7 +225,7 @@ sub CalcFine {
     my $countalldayclosed = $countspecialday + $countrepeatableday;
     my $daycount = $difference - $countalldayclosed;
     # get issuingrules (fines part will be used)
-    my $data = GetIssuingRules($item->{'itemtype'},$bortype);
+    my $data = C4::Circulation::GetIssuingRule($item->{'itemtype'},$bortype,$branchcode);
     my $daycounttotal = $daycount - $data->{'firstremind'};
     if ($data->{'chargeperiod'} >0) { # if there is a rule for this bortype
         if ($data->{'firstremind'} < $daycount)
@@ -240,18 +233,11 @@ sub CalcFine {
             $amount   = int($daycounttotal/$data->{'chargeperiod'})*$data->{'fine'};
         }
     } else {
-        # get fines default rules
-        my $data = GetIssuingRules($item->{'itemtype'},'*');
-        $daycounttotal = $daycount - $data->{'firstremind'};
-        if ($data->{'firstremind'} < $daycount)
-            {
-                if ($data->{'chargeperiod'} >0) { # if there is a rule for this bortype
-                    $amount   = int($daycounttotal/$data->{'chargeperiod'})*$data->{'fine'};
-                }
-            }
+        # a zero (or null)  chargeperiod means no charge.
+		#  
     }
     
-    warn "Calc Fine for $item->{'itemnumber'}, $bortype, $difference , $dues = $amount / $daycount";
+#    warn "Calc Fine: " . join(", ", ($item->{'itemnumber'}, $bortype, $difference , $data->{'fine'} . " * " . $daycount . " days = \$ " . $amount , "desc: $dues")) ;
  return ( $amount, $data->{'chargename'}, $printout ,$daycounttotal ,$daycount );
 }
 
@@ -597,6 +583,9 @@ sub GetFine {
 
 
 =item GetIssuingRules
+
+FIXME - This sub should be deprecated and removed.
+It ignores branch and defaults.
 
 $data = &GetIssuingRules($itemtype,$categorycode);
 

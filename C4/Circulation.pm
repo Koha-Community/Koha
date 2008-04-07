@@ -69,6 +69,7 @@ BEGIN {
 		&GetItemIssues
 		&GetBorrowerIssues
 		&GetIssuingCharges
+		&GetIssuingRule
 		&GetBiblioIssues
 		&AnonymiseIssueHistory
 	);
@@ -1092,6 +1093,60 @@ sub GetLoanLength {
 
     # if no rule is set => 21 days (hardcoded)
     return 21;
+}
+
+=head2 GetIssuingRule
+
+FIXME - This is a copy-paste of GetLoanLength 
+as a stop-gap.  Do not wish to change API for GetLoanLength 
+this close to release, however, Overdues::GetIssuingRules is broken.
+
+Get the issuing rule for an itemtype, a borrower type and a branch
+Returns a hashref from the issuingrules table.
+
+my $irule = &GetIssuingRule($borrowertype,$itemtype,branchcode)
+
+=cut
+
+sub GetIssuingRule {
+    my ( $borrowertype, $itemtype, $branchcode ) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth =  $dbh->prepare( "select * from issuingrules where categorycode=? and itemtype=? and branchcode=? and issuelength is not null"  );
+    
+	$sth->execute( $borrowertype, $itemtype, $branchcode );
+    my $irule = $sth->fetchrow_hashref;
+    return $irule if defined($irule) ;
+
+    $sth->execute( $borrowertype, $itemtype, "*" );
+    my $irule = $sth->fetchrow_hashref;
+    return $irule if defined($irule) ;
+
+    $sth->execute( $borrowertype, "*", $branchcode );
+    my $irule = $sth->fetchrow_hashref;
+    return $irule if defined($irule) ;
+
+    $sth->execute( "*", $itemtype, $branchcode );
+    my $irule = $sth->fetchrow_hashref;
+    return $irule if defined($irule) ;
+
+    $sth->execute( $borrowertype, "*", "*" );
+    my $irule = $sth->fetchrow_hashref;
+    return $irule if defined($irule) ;
+
+    $sth->execute( "*", "*", $branchcode );
+    my $irule = $sth->fetchrow_hashref;
+    return $irule if defined($irule) ;
+
+    $sth->execute( "*", $itemtype, "*" );
+    my $irule = $sth->fetchrow_hashref;
+    return $irule if defined($irule) ;
+
+    $sth->execute( "*", "*", "*" );
+    my $irule = $sth->fetchrow_hashref;
+    return $irule if defined($irule) ;
+
+    # if no rule matches,
+    return undef;
 }
 
 =head2 AddReturn
