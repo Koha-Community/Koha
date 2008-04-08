@@ -1490,7 +1490,7 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
 
         # XSLT processing of some stuff
         if (C4::Context->preference("XSLTResultsDisplay") ) {
-            my $newxmlrecord = XSLTParse4Display($oldbiblio->{biblionumber},'Results');
+            my $newxmlrecord = XSLTParse4Display($oldbiblio->{biblionumber},C4::Context->config('opachtdocs')."/prog/en/xslt/MARC21slim2OPACResults.xsl");
             $oldbiblio->{XSLTResultsRecord} = $newxmlrecord;
         }
 

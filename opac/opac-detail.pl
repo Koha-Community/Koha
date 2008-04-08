@@ -51,7 +51,7 @@ my $biblionumber = $query->param('biblionumber') || $query->param('bib');
 $template->param( biblionumber => $biblionumber );
 # XSLT processing of some stuff
 if (C4::Context->preference("XSLTResultsDisplay") ) {
-    my $newxmlrecord = XSLTParse4Display($biblionumber,'Detail');
+    my $newxmlrecord = XSLTParse4Display($biblionumber,C4::Context->config('opachtdocs')."/prog/en/xslt/MARC21slim2OPACDetail.xsl");
     $template->param('XSLTBloc' => $newxmlrecord);
 }
 

@@ -54,6 +54,7 @@
                     <xsl:call-template name="subfieldSelect">
                         <xsl:with-param name="codes">ab</xsl:with-param>
                     </xsl:call-template>
+                    <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
             </xsl:for-each>
         </xsl:variable>
 
@@ -139,7 +140,7 @@
         <img src="/opac-tmpl/prog/famfamfam/{$materialTypeCode}.png"/><xsl:value-of select="$materialTypeLabel"/>
         </p>
         </xsl:if>
-        <xsl:if test="$lcc">
+        <xsl:if test="marc:datafield[@tag=050]">
         <p><span class="label">Library of Congress Classification: </span>
         <xsl:value-of select="$lcc"/>
         </p>
@@ -185,8 +186,10 @@
         </xsl:if>
         <xsl:if test="marc:datafield[@tag=020]">
         <p><span class="label">ISBN: </span>
+        <!-- unAPI <abbr/> tag -->
         <xsl:for-each select="marc:datafield[@tag=020]">
-                <xsl:value-of select="marc:subfield[@code='a']"/>
+        <xsl:variable name="isbn" select="marc:subfield[@code='a']"/>
+        <abbr class="unapi-id" title="koha:isbn:{$isbn}"><xsl:value-of select="marc:subfield[@code='a']"/></abbr>
                 <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
         </xsl:for-each>
         </p>

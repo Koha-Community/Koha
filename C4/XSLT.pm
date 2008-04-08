@@ -101,13 +101,12 @@ sub getAuthorisedValues4MARCSubfields {
 }
 
 sub XSLTParse4Display {
-    my ($biblionumber,$type) = @_;
+    my ($biblionumber,$xslfile) = @_;
     # grab the XML, run it through our stylesheet, push it out to the browser
     my $record = transformMARCXML4XSLT($biblionumber);
     my $itemsxml  = buildKohaItemsNamespace($biblionumber);
     my $xmlrecord = $record->as_xml();
     $xmlrecord =~ s/\<\/record\>/$itemsxml\<\/record\>/;
-    my $xslfile = C4::Context->config('opachtdocs')."/prog/en/xslt/MARC21slim2OPAC$type.xsl";
     my $parser = XML::LibXML->new();
     # don't die when you find &, >, etc
     $parser->recover_silently(1);
