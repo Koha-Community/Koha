@@ -263,9 +263,9 @@ Or even:
 
 		print C4::Dates->new($date_from_database,"iso")->output("syspref");
 
-If you just want to know what the <systempreferece> is, you can use:
+If you just want to know what the <systempreferece> is, a default Dates object can tell you:
 
-C4::Dates->
+		C4::Dates->new()->format();
 
 =head2 ->DHMTLcalendar([date_format])
 
@@ -289,7 +289,7 @@ To validate before creating a new object, use the regexp method of the class:
 		$input =~ C4::Dates->regexp("iso") or deal_with_it("input ($input) invalid as iso format");
 		my $date = C4::Dates->new($input,"iso");
 
-More verose debugging messages are sent in the presence of non-zero $ENV{"DEBUG"}.
+More verbose debugging messages are sent in the presence of non-zero $ENV{"DEBUG"}.
 
 =head3 TO DO
 
