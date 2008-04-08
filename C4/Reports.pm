@@ -70,16 +70,23 @@ $keys{'5'} = ['borrowers.borrowernumber=accountlines.borrowernumber'];
 our %criteria;
 $criteria{'1'} = [
     'statistics.type',   'borrowers.categorycode',
-    'statistics.branch', 'biblioitems.itemtype',
+    'statistics.branch',
     'biblioitems.publicationyear|date',
     'items.dateaccessioned|date'
 ];
 $criteria{'2'} =
-  [ 'biblioitems.itemtype', 'items.holdingbranch', 'items.homebranch' ,'items.itemlost'];
+  [ 'items.holdingbranch', 'items.homebranch' ,'items.itemlost', 'items.location', 'items.ccode'];
 $criteria{'3'} = ['borrowers.branchcode'];
 $criteria{'4'} = ['aqorders.datereceived|date'];
 $criteria{'5'} = ['borrowers.branchcode'];
 
+if (C4::Context->preference('item-level_itypes')) {
+    unshift @{ $criteria{'1'} }, 'items.itype';
+    unshift @{ $criteria{'2'} }, 'items.itype';
+} else {
+    unshift @{ $criteria{'1'} }, 'biblioitems.itemtype';
+    unshift @{ $criteria{'2'} }, 'biblioitems.itemtype';
+}
 
 =head1 NAME
    
