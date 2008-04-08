@@ -1,9 +1,13 @@
 <!-- TMPL_IF NAME="borrowernumber" -->
 <div class="patroninfo"><h5><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</h5>
+<!--[if IE 6]>
+<style type="tex/css">img { width: expression(this.width > 140 ? 140: true);
+}</style>
+<![endif]-->
 <ul>
 <!-- TMPL_IF NAME="patronimages" -->
 <!-- TMPL_IF NAME="picture" -->
-<li><img src="/cgi-bin/koha/members/patronimage.pl?crdnum=<!-- TMPL_VAR NAME="cardnumber" -->" id="patronimage" alt="<!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)" border="0" style="margin: .3em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC;" /></li>
+<li><img src="/cgi-bin/koha/members/patronimage.pl?crdnum=<!-- TMPL_VAR NAME="cardnumber" -->" id="patronimage" alt="<!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)" border="0" style="max-width : 140px; margin: .3em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC; width:auto !important; width:130px;" /></li>
 <!-- TMPL_ELSE -->
 <li><img src="/intranet-tmpl/prog/img/patron-blank.png" alt="<!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)" border="0" style="margin: .3em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC;" /></li>
 <!-- /TMPL_IF -->

@@ -28,12 +28,10 @@
             <div class="yui-u first">
             <!-- TMPL_IF name="ERRORS" -->
                 <div class="dialog alert">
-                <h1>Patron Image(s) Uploaded With Some Errors</h1>
-                </div>
+                <h3>Patron Image(s) Uploaded With Some Errors</h3>
             <!-- TMPL_ELSE -->
                 <div class="dialog message">
-                <h1>Patron Image(s) Successfully Uploaded</h1>
-                </div>
+                <h3>Patron Image(s) Successfully Uploaded</h3>
             <!-- /TMPL_IF -->
 	        <ul class="data">
 	            <li>Unpacking completed</li>
@@ -60,6 +58,8 @@
                         <!-- /TMPL_LOOP -->
                         </ul>
                 <!-- /TMPL_LOOP -->
+
+				</div>
                 <a id="uploadmore" href="/cgi-bin/koha/tools/picture-upload.pl">Upload More Images</a>
                 <a id="doneupload" href="/cgi-bin/koha/tools/tools-home.pl">Return to Tools</a>
             </div>
