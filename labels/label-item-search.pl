@@ -78,40 +78,41 @@ if ( $op eq "do_search" ) {
 if ( $show_results ) {
 	my $hits = $show_results;
 	my (@results,@results2);
-        # This code needs to be refactored using these subs...
-        #my @items = &GetItemsInfo( $biblio->{biblionumber}, 'intra' );
-        #my $dat = &GetBiblioData( $biblio->{biblionumber} );
+    # This code needs to be refactored using these subs...
+    #my @items = &GetItemsInfo( $biblio->{biblionumber}, 'intra' );
+    #my $dat = &GetBiblioData( $biblio->{biblionumber} );
 	for(my $i=0; $i<$hits; $i++) {
-            #DEBUG Notes: Decode the MARC record from each resulting MARC record...
+        #DEBUG Notes: Decode the MARC record from each resulting MARC record...
 	    my $marcrecord = MARC::File::USMARC::decode($marcresults->[$i]);
-            #DEBUG Notes: Transform it to Koha form...
+        #DEBUG Notes: Transform it to Koha form...
 	    my $biblio = TransformMarcToKoha(C4::Context->dbh,$marcrecord,'');
 	    #build the hash for the template.
 	    $biblio->{highlight}       = ($i % 2)?(1):(0);
-            #DEBUG Notes: Stuff it into @results... (used below to supply fields not existing in the item data)
-            push @results, $biblio;
+        #DEBUG Notes: Stuff it into @results... (used below to supply fields not existing in the item data)
+        push @results, $biblio;
 	    my $biblionumber = $biblio->{'biblionumber'};
-            #DEBUG Notes: Grab the item numbers associated with this MARC record...
-            my $itemnums = get_itemnumbers_of($biblionumber);
-            #DEBUG Notes: Retrieve the item data for each number... 
-            my $iii = $itemnums->{$biblionumber};
+        #DEBUG Notes: Grab the item numbers associated with this MARC record...
+        my $itemnums = get_itemnumbers_of($biblionumber);
+        #DEBUG Notes: Retrieve the item data for each number... 
+        my $iii = $itemnums->{$biblionumber};
 	    if ($iii) {
-                my @titem_results = GetItemsInfo( $itemnums->{$biblionumber}, 'intra' );
+            my @titem_results = GetItemsInfo( $itemnums->{$biblionumber}, 'intra' );
 	        my $item_results =  GetItemInfosOf( @$iii );
         	foreach my $item (keys %$item_results) {
-		    for my $bibdata (keys %{$results[$i]}) {
-			if ( !$item_results->{$item}{$bibdata} ) {      #Only add the data from the bibliodata if the data does not already exit in itemdata.
-                                                                        #Otherwise we just build duplicate records rather than unique records per item.
-                            $item_results->{$item}{$bibdata} = $results[$i]->{$bibdata};
-                        }
+                for my $bibdata (keys %{$results[$i]}) {
+                    if ( !$item_results->{$item}{$bibdata} ) {      #Only add the data from the bibliodata if the data does not already exit in itemdata.
+                        #Otherwise we just build duplicate records rather than unique records per item.
+                        $item_results->{$item}{$bibdata} = $results[$i]->{$bibdata};
                     }
-                    #DEBUG Notes: After merging the bib and item data, stuff the results into $results2...
-            	    push @results2, $item_results->{$item};
-		}
-                #warn Dumper(@results2);
+                }
+                #DEBUG Notes: After merging the bib and item data, stuff the results into $results2...
+                push @results2, $item_results->{$item};
+            }
+            #warn Dumper(@results2);
 	    }
     }
-    ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+  
+  ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
             template_name   => "labels/result.tmpl",
             query           => $query,
@@ -163,26 +164,6 @@ if ( $show_results ) {
 	my $temp = ( $startfrom + 1 ) * $resultsperpage;
     my $to   = ($total < $temp) ? $total : $temp;
 
-    # this gets the results of the search (which are bibs)
-    # and then does a lookup on all items that exist for that bib
-    # then pushes the items onto a new array, as we really want the
-    # items attached to the bibs not thew bibs themselves
-
-   # my @results2;
-    # for (my $i = 0 ; $i < $total ; $i++ )
-    # {
-        #warn $i;
-        #warn Dumper $results->[$i]{'bibid'};
-    #     my $type = 'intra';
-    #     my @item_results = &ItemInfo( 0, $results->[$i]{'biblionumber'}, $type );
-			# FIXME: ItemInfo doesn't exist !!
-# 		push @results2,\@item_results;
-        # foreach my $item (@item_results) {
-        #	warn Dumper $item;
-        #	push @results2, $item;
-        # }
-#     }
-# 
     $template->param(
         result         => \@results2,
         startfrom      => $startfrom,
