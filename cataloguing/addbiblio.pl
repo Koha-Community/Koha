@@ -342,6 +342,7 @@ sub create_input {
     # it's a thesaurus / authority field
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{authtypecode} ) {
+     if (C4::Context->preference("BiblioAddsAuthorities")) {
         $subfield_data{marc_value} =
             "<input type=\"text\"
                     id=\"".$subfield_data{id}."\"
@@ -354,7 +355,23 @@ sub create_input {
                     \/>
                     <a href=\"#\" class=\"buttonDot\"
                         onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&amp;index=$subfield_data{id}','$subfield_data{id}'); return false;\" title=\"Tag Editor\">...</a>
-		";
+            ";
+      } else {
+        $subfield_data{marc_value} =
+            "<input type=\"text\"
+                    id=\"".$subfield_data{id}."\"
+                    name=\"".$subfield_data{id}."\"
+                    value=\"$value\"
+                    class=\"input_marceditor\"
+                    tabindex=\"1\"
+                    size=\"67\"
+                    maxlength=\"255\" 
+                    disabled=\"true\"
+                    \/>
+                    <a href=\"#\" class=\"buttonDot\"
+                        onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&amp;index=$subfield_data{id}','$subfield_data{id}'); return false;\" title=\"Tag Editor\">...</a>
+            ";
+      }
     # it's a plugin field
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{'value_builder'} ) {
