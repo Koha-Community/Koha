@@ -20,7 +20,7 @@ $(document).ready(function() {
 	}); 
 	$("#holdst").tablesorter({
 		sortList: [[0,0]],
-		headers: { 1: {sorter:false}, 2: { sorter: 'articles' },4: { sorter: false },5: { sorter: false }}
+		headers: { 1: { sorter: 'articles' },6: { sorter: false }}
 	}); 
 	$('#manage-patron-image').find("input[@value*=Delete]").click(function(){
 		 return confirm('Are you sure you want to delete this patron image? This cannot be undone.');
@@ -413,10 +413,11 @@ if (nodename =="barcodes[]"){
 	<table id="holdst">
 		<thead><tr>
 			<th>Hold date</th>
-			<th>Barcode</th>
 			<th>Title</th>
-			<th>Author</th>
-			<th>Localisation</th>
+			<th>Item Type</th>
+			<th>Call Number</th>
+			<th>Barcode</th>
+			<th>Priority</th>
 			<th>Delete?</th>
 		</tr></thead>
 		<tbody><!-- TMPL_LOOP NAME="reservloop" -->
@@ -425,33 +426,27 @@ if (nodename =="barcodes[]"){
 						<!-- TMPL_VAR NAME="reservedate" -->
 					</td>
 					<td>
-						<!-- TMPL_IF name="barcodereserv" -->
-						<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="openWindow(this, 'Item', 480, 640); return false;"><!-- TMPL_VAR NAME="barcodereserv" --></a>
-						<!-- /TMPL_IF -->
-						<!-- TMPL_IF NAME="waitingposition" -->
-					 Queue for this item :
-						<b> <!-- TMPL_VAR NAME="waitingposition" --> </b>
-						<!-- /TMPL_IF -->
+						<a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
+                        
 					</td>
-					<td>
-						<a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> (<b> <!-- TMPL_VAR NAME="itemtype" --> </b>) 
-                        <!-- TMPL_IF name="waiting" -->
-                        <br />
-                        <i>Item is waiting</i>
+					<td><!-- TMPL_VAR NAME="itemtype" --></td>
+					<td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
+					<td><!-- TMPL_IF name="waiting" -->
+                        <em>Item is <strong>waiting</strong></em>
                         <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="transfered" -->
-                        <br />
-                        <i>Item in transit from
-                        <!-- TMPL_VAR NAME="frombranch" --> since <!-- TMPL_VAR NAME="datesent" --> </i>
+                        <em>Item <strong>in transit</strong> from
+                        <!-- TMPL_VAR NAME="frombranch" --> since <!-- TMPL_VAR NAME="datesent" --> </em>
                         <!-- /TMPL_IF -->
 
                         <!-- TMPL_IF name="nottransfered" -->
-                        <br />
-                        <i>This item hasn't been transfered yet from <!-- TMPL_VAR NAME="nottransferedby" --></i>
+                        <em>Item hasn't been transfered yet from <!-- TMPL_VAR NAME="nottransferedby" --></em>
                         <!-- /TMPL_IF -->
+						<!-- TMPL_IF name="barcodereserv" -->
+						<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="barcodereserv" --></a>
+						<!-- /TMPL_IF -->
 					</td>
-					<td><!-- TMPL_VAR NAME="author" --></td>
-					<td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
+					<td><!-- TMPL_IF NAME="waitingposition" --><strong><!-- TMPL_VAR NAME="waitingposition" --></strong><!-- /TMPL_IF --></td>
 					<td><select name="rank-request">
 			<option value="n">No</option>
 			<option value="del">Yes</option>

@@ -308,7 +308,6 @@ if ($borrowernumber) {
             $getreserv{nottransfered}   = 0;
             $getreserv{itemtype}        = $getbibtype->{'description'};
             $getreserv{author}          = $getbibinfo->{'author'};
-            $getreserv{itemcallnumber}  = '----------';
             $getreserv{biblionumber}  = $num_res->{'biblionumber'};	
         }
 
