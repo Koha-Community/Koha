@@ -422,9 +422,9 @@
                         </xsl:call-template>
                     </xsl:with-param>
                 </xsl:call-template>
-            </xsl:if><xsl:text> </xsl:text>
+            </xsl:if>
+            <xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
             <xsl:call-template name="part"/>
-            <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
         </xsl:for-each>
         </xsl:if>
     </a>
@@ -808,7 +808,8 @@
                            <xsl:value-of select="items:homebranch"/>
                            <xsl:text> (</xsl:text>
                            <xsl:value-of select="count(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch)))"/>
-                           <xsl:text>) </xsl:text>
+                           <xsl:text>)</xsl:text>
+<xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>, </xsl:text></xsl:otherwise></xsl:choose>
                        </xsl:for-each>
                    </span>
                    </xsl:if>
@@ -816,8 +817,32 @@
                    <span class="unavailable">
                        <xsl:text>On loan (</xsl:text>
                        <xsl:value-of select="count(key('item-by-status', 'On loan'))"/>
-                       <xsl:text>)</xsl:text>
+                       <xsl:text>) </xsl:text>
                    </span>
+                   </xsl:if>
+                   <xsl:if test="count(key('item-by-status', 'Withdrawn'))>0">
+                   <span class="unavailable">
+                       <xsl:text>Withdrawn (</xsl:text>
+                       <xsl:value-of select="count(key('item-by-status', 'Withdrawn'))"/>
+                       <xsl:text>) </xsl:text>                   </span>
+                   </xsl:if>
+                    <xsl:if test="count(key('item-by-status', 'Lost'))>0">
+                   <span class="unavailable">
+                       <xsl:text>Lost (</xsl:text>
+                       <xsl:value-of select="count(key('item-by-status', 'Lost'))"/>
+                       <xsl:text>) </xsl:text>                   </span>
+                   </xsl:if>
+                    <xsl:if test="count(key('item-by-status', 'Damaged'))>0">
+                   <span class="unavailable">
+                       <xsl:text>Damaged (</xsl:text>
+                       <xsl:value-of select="count(key('item-by-status', 'Damaged'))"/>
+                       <xsl:text>) </xsl:text>                   </span>
+                   </xsl:if>
+                    <xsl:if test="count(key('item-by-status', 'On order'))>0">
+                   <span class="unavailable">
+                       <xsl:text>On order (</xsl:text>
+                       <xsl:value-of select="count(key('item-by-status', 'On order'))"/>
+                       <xsl:text>) </xsl:text>                   </span>
                    </xsl:if>
                </div>
     </td>

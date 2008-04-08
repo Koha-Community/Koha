@@ -128,8 +128,22 @@ sub buildKohaItemsNamespace {
     my $xml;
     for my $item (@items) {
         my $status;
-        if ($item->{onloan}) {
-            $status = "On loan";
+        if ( $item->{notforloan} == -1 || $item->{onloan} || $item->{wthdrawn} || $item->{itemlost} || $item->{damaged}) {
+            if ( $item->{notforloan} == -1) {
+                $status = "On order";
+            }
+            if ($item->{onloan}) {
+                $status = "On loan";
+            }
+            if ( $item->{wthdrawn}) {
+                $status = "Withdrawn";
+            }
+            if ($item->{itemlost}) {
+                $status = "Lost";
+            }
+            if ($item->{damaged}) {
+                $status = "Damaged"; 
+            }
         } else {
             $status = "available";
         }
