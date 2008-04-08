@@ -25,11 +25,16 @@
 	</script>
 <ul class="toolbar">
 	<li><a id="newsubscription" href="/cgi-bin/koha/serials/subscription-add.pl">New Subscription</a></li>
-	<!-- TMPL_IF NAME="subscriptionid" --><li><a id="edit" href="subscription-add.pl?op=mod&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Edit</a></li>
-	<li><a id="duplicate" href="subscription-add.pl?op=dup&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Duplicate </a></li>
-	<li><a id="renew" href="#" onclick="popup(<!--TMPL_VAR Name="subscriptionid"-->)">Renew </a></li>
-	<li><a id="receive" href="serials-edit.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&amp;serstatus=1,3">Receive</a></li>
-	<li><a id="delete" href="javascript:confirm_deletion()">Delete</a></li>
-		<!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="subscriptionid" -->
+        <!-- TMPL_UNLESS name="cannotedit" -->
+            <li><a id="edit" href="subscription-add.pl?op=mod&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Edit</a></li>
+        <!-- /TMPL_UNLESS -->
+        <li><a id="duplicate" href="subscription-add.pl?op=dup&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Duplicate </a></li>
+        <!-- TMPL_UNLESS name="cannotedit" -->
+            <li><a id="renew" href="#" onclick="popup(<!--TMPL_VAR Name="subscriptionid"-->)">Renew </a></li>
+            <li><a id="receive" href="serials-edit.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&amp;serstatus=1,3">Receive</a></li>
+            <li><a id="delete" href="javascript:confirm_deletion()">Delete</a></li>
+        <!-- /TMPL_UNLESS -->
+    <!-- /TMPL_IF -->
 </ul>
 </div>

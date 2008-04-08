@@ -105,6 +105,11 @@ $template->param(
     serialslist => \@serialslist,
     totalissues => $totalissues,
     hemisphere => $hemisphere,
+    cannotedit =>(C4::Context->preference('IndependantBranches') && 
+                C4::Context->userenv && 
+                C4::Context->userenv->{flags} !=1  && 
+                C4::Context->userenv->{branch} && $subs->{branchcode} &&
+                (C4::Context->userenv->{branch} ne $subs->{branchcode})),
     );
 $template->param(
             "periodicity".($subs->{periodicity}?$subs->{periodicity}:'0') => 1,
