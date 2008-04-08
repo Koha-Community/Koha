@@ -181,3 +181,5 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('QueryAutoTruncate',1,'Si activé, la troncature est activée par défaut',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('QueryRemoveStopwords',0,'Si activé, les mots vides listés dans l''interface d''administration sont supprimés des requètes',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('CircControl',"ItemHomeLibrary",'Précise la bibliothèque qui contrôle les règles de prêt et d''amende',"PickupLibrary|PatronLibrary|ItemHomeLibrary",'Choice');
+
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACItemHolds','1','Si activé, les adhérents peuvent placer des réservations sur un exemplaire spécifique. Sinon, il ne peuvent que réserver le prochain disponible.','','YesNo');
