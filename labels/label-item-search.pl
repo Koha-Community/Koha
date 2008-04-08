@@ -33,6 +33,7 @@ use C4::Search;
 use C4::Dates qw( DHTMLcalendar );
 use C4::Koha;    # XXX subfield_is_koha_internal_p
 
+use List::Util qw( max min );
 #use Smart::Comments;
 use Data::Dumper;
 
@@ -51,6 +52,7 @@ my $dbh = C4::Context->dbh;
 my $startfrom = $query->param('startfrom') || 0;
 my ( $template, $loggedinuser, $cookie );
 my (@marclist,@and_or,@excluding,@operator,@value,$orderby,@tags,$results,$total,$error,$marcresults);
+# XXX should this be maxItemsInSearchResults or numSearchResults preference instead of 19?
 my $resultsperpage = $query->param('resultsperpage') || 19;
 
 my $show_results = 0;
@@ -65,7 +67,7 @@ if ( $op eq "do_search" ) {
       #catalogsearch( $dbh, \@tags, \@and_or, \@excluding, \@operator, \@value,
       #  $startfrom * $resultsperpage,
       #  $resultsperpage, $orderby );
-		($error, $marcresults) = SimpleSearch($marclist[0]);
+		( $error, $marcresults ) = SimpleSearch( $marclist[0], $startfrom, $resultsperpage );
 		if ($marcresults) {
 			$show_results = scalar @$marcresults;
 		} else {
@@ -124,13 +126,6 @@ if ( $show_results ) {
         }
     );
 
-    # multi page display gestion
-    my $displaynext = 0;
-    my $displayprev = $startfrom;
-    if ( ( $total - ( ( $startfrom + 1 ) * ($resultsperpage) ) ) > 0 ) {
-        $displaynext = 1;
-    }
-
     my @field_data = ();
 
 	# FIXME: this relies on symmetric order of CGI params that IS NOT GUARANTEED by spec.
@@ -160,9 +155,13 @@ if ( $show_results ) {
         }
     }
 
-    my $from = $startfrom * $resultsperpage + 1;
-	my $temp = ( $startfrom + 1 ) * $resultsperpage;
-    my $to   = ($total < $temp) ? $total : $temp;
+    # multi page display gestion
+    my $displaynext = 0;
+    my $displayprev = $startfrom;
+    # XXX Kludge. We show the "next" link if we retrieved the max number of results. There could be 0 more.
+    if ( scalar @results2 == $resultsperpage ) {
+        $displaynext = 1;
+    }
 
     $template->param(
         result         => \@results2,
@@ -170,12 +169,12 @@ if ( $show_results ) {
         displaynext    => $displaynext,
         displayprev    => $displayprev,
         resultsperpage => $resultsperpage,
-        startfromnext  => $startfrom + 1,
-        startfromprev  => $startfrom - 1,
+        startfromnext  => $startfrom + min( $resultsperpage, scalar @results2 ),
+        startfromprev  => max( $startfrom - $resultsperpage, 0 ),
         searchdata     => \@field_data,
         total          => $total,
-        from           => $from,
-        to             => $to,
+        from           => $startfrom + 1,
+        to             => $startfrom + min( $resultsperpage, scalar @results2 ),
         numbers        => \@numbers,
         batch_id       => $batch_id,
         type           => $type,
