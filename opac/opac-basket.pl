@@ -57,6 +57,13 @@ foreach my $biblionumber ( @bibs ) {
     my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
     my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
     my @items            = &GetItemsInfo( $biblionumber, 'opac' );
+	
+	# COinS format FIXME: for books Only
+        my $coins_format;
+        my $fmt = substr $record->leader(), 6,2;
+        my $fmts;
+        $fmts->{'am'} = 'book';
+        $dat->{ocoins_format} => $fmts->{$fmt};
 
     if ( $num % 2 == 1 ) {
         $dat->{'even'} = 1;

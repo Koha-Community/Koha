@@ -80,7 +80,7 @@ function openBasket() {
     if ( strCookie ) {
         var iW = 820;
         var iH = 450;
-        var optWin = "dependant=yes,status=yes,scrollbars=yes,resizable=yes,toolbar=no,adressbar=no,height="+iH+",width="+iW;
+        var optWin = "dependant=yes,status=yes,scrollbars=yes,resizable=yes,toolbar=no,location=yes,height="+iH+",width="+iW;
         var loc = CGIBIN + "opac-basket.pl?" + strCookie;
         var basket = open(loc, "basket", optWin);
         if (window.focus) {basket.focus()}
