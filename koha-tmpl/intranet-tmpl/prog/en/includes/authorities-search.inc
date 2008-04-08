@@ -31,7 +31,7 @@
          <input type="submit" class="submit" value="Submit" />
     </form>
     </div>
-    <div id="main_heading" class="residentsearch">
+    <div id="main_heading" class="residentsearch" style="display:none;">
     <p class="tip">Enter authority heading:</p>
     <form name="f" action="/cgi-bin/koha/authorities/authorities-home.pl" method="get">
         <input type="hidden" name="op" value="do_search" />
@@ -63,7 +63,7 @@
         <input type="submit" class="submit" value="Submit" />
     </form>
     </div>
-    <div id="all_headings" class="residentsearch">
+    <div id="all_headings" class="residentsearch" style="display:none;">
     <p class="tip">Enter any authority field:</p>
     <form name="f" action="/cgi-bin/koha/authorities/authorities-home.pl" method="get">
         <input type="hidden" name="op" value="do_search" />

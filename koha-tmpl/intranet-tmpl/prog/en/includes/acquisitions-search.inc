@@ -7,7 +7,7 @@
            <input type="text" size="25" name="supplier" id="supplier" class="focus" />
             <input type="submit" class="submit" value="Submit" /></form>
 </div>
-	<div id="orders_search" class="residentsearch">
+	<div id="orders_search" class="residentsearch" style="display:none;">
 	<p class="tip">Search orders:</p>
 	
 		<form action="/cgi-bin/koha/acqui/histsearch.pl" method="post">

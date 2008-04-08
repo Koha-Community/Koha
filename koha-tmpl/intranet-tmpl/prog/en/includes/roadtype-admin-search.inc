@@ -53,7 +53,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 	</form>
 	</div>
 	<!-- TMPL_IF NAME="CAN_user_circulate" -->
-	<div id="circ_search" class="residentsearch">
+	<div id="circ_search" class="residentsearch" style="display:none;">
 	<p class="tip">Enter patron card number or partial name:</p>
     <form action="/cgi-bin/koha/circ/circulation.pl" method="post">
     <!-- TMPL_IF NAME="CircAutocompl" -->
@@ -76,7 +76,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 	</div>
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="CAN_user_catalogue" -->
-	<div id="catalog_search" class="residentsearch">
+	<div id="catalog_search" class="residentsearch" style="display:none;">
 	<p class="tip">Enter search keywords:</p>
 		<form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
 			 <input type="text" name="q" id="search-form" size="40" value="" title="Enter the terms you wish to search for." class="form-text" />

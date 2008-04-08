@@ -2,7 +2,7 @@
 <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl"><!-- TMPL_VAR NAME="LibraryName" --></a></h1>
 <!-- Begin Acquisitions Resident Search Box -->
 <div id="header_search">
-<div id="supplier_search" class="residentsearch">
+<div id="supplier_search" class="residentsearch" style="display:none;">
 	<p class="tip">Search vendors:</p>
         <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
            <input type="text" size="25" name="supplier" id="supplier" class="focus" />
