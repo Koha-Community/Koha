@@ -16,12 +16,13 @@ $.tablesorter.addParser({
 });
 	 $(document).ready(function() {
  		$('#patronlists > ul').tabs();
+		$.tablesorter.defaults.widgets = ['zebra']; 
 		$("#issuest").tablesorter({
-//		sortList: [[0,0]], don't sort by default to preserve 'previous checkouts header
+//		sortList: [[0,0]], don't sort by default to preserve 'previous checkouts' header
 		headers: { 1: { sorter: 'articles' },4:{sorter:false},5: { sorter: false },6:{sorter:false}}
 		});
-		$("#issuest").bind("sortEnd",function() { 
-        	$("#previous").parents("tr").remove();
+		$("#issuest").bind("sortEnd",function() {
+        	$("#previous").parents("tr").remove();  // 'previous checkouts' header chokes table sorter
 	    }); 
 		$("#holdst").tablesorter({
 			sortList: [[0,0]],
@@ -231,8 +232,9 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         
     <div class="date-select">
         <div class="hint">Specify Due Date:</div><input type="text" size="10" id="duedatespec" name="duedatespec" value="<!-- TMPL_VAR NAME="duedatespec" -->" />                                                        
-		<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar"  border="0" id="CalendarDueDate" style="cursor: pointer;" valign="top" />
+		<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar"  border="0" id="CalendarDueDate" style="cursor: pointer;" />
              <script language="JavaScript" type="text/javascript">
+			 //<![CDATA[ 
                    function validate1(date) {
                          var today = new Date();
                          if ( date < today ) {
@@ -256,6 +258,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
                              onClose : refocus
                            }
                         );
+				//]]>
                  </script>
 
           <label for="stickyduedate"> Remember for Session:</label>
@@ -398,10 +401,10 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <th>Barcode</th>
         <th>Renew?</th>
 		<th>Check In?</th>
-    </tr></thead>
-<!-- TMPL_IF NAME="todayissues" -->
-
+    </tr>
+<!-- TMPL_IF NAME="todayissues" --></thead>
 	<tbody>
+
     <!-- TMPL_LOOP NAME="todayissues" -->
     <!-- TMPL_IF NAME="togglecolor" -->
     <tr>
@@ -443,7 +446,10 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
     <!-- /loop todayissues --><!-- /TMPL_LOOP --> 
     <!-- /if todayissues --><!-- /TMPL_IF --> 
 <!-- TMPL_IF NAME="previssues" -->
-<tr><th colspan="7"><a name="previous" id="previous"></a>Previous checkouts</th></tr>
+<!-- TMPL_IF NAME="todayissues" --><tr><th colspan="7"><a name="previous" id="previous"></a>Previous checkouts</th></tr><!-- TMPL_ELSE -->
+<tr><th colspan="7"><a name="previous" id="previous"></a>Previous checkouts</th></tr></thead>
+	<tbody>
+<!-- /TMPL_IF -->
     <!-- TMPL_LOOP NAME="previssues" -->
     <!-- TMPL_IF NAME="togglecolor" -->
         <tr>

@@ -363,9 +363,9 @@ if (nodename =="barcodes[]"){
             <!-- TMPL_ELSE -->
             <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
             <!-- TMPL_IF NAME="red" -->
-            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" onclick="javascript:uncheck_sibling(this);" />
+            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" onclick="uncheck_sibling(this);" />
             <!-- TMPL_ELSE -->
-            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" onClick="javascript:uncheck_sibling(this);" />
+            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" onclick="uncheck_sibling(this);" />
             <!-- /TMPL_IF -->
             <!-- /TMPL_IF -->
             </td>
@@ -373,7 +373,7 @@ if (nodename =="barcodes[]"){
       <!-- TMPL_IF NAME="return_failed" -->
             <td class="problem">Return Failed</td>
        <!--TMPL_ELSE-->   
-            <td><input type="checkbox" name="barcodes[]"  value="<!-- TMPL_VAR NAME="barcode" -->" onClick="javascript:uncheck_sibling(this);" />
+            <td><input type="checkbox" name="barcodes[]"  value="<!-- TMPL_VAR NAME="barcode" -->" onclick="uncheck_sibling(this);" />
             <input type="checkbox" name="all_barcodes[]" value="<!-- TMPL_VAR NAME="barcode" -->" checked="checked" style="display: none;" />
             </td>
       <!-- /TMPL_IF -->
