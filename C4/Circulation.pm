@@ -1731,7 +1731,7 @@ sub CanBookBeRenewed {
 
 =head2 AddRenewal
 
-&AddRenewal($borrowernumber, $itemnumber, $datedue);
+&AddRenewal($borrowernumber, $itemnumber, $branch, [$datedue]);
 
 Renews a loan.
 
@@ -1740,41 +1740,38 @@ has the item.
 
 C<$itemnumber> is the number of the item to renew.
 
-C<$datedue> can be used to set the due date. If C<$datedue> is the
-empty string, C<&AddRenewal> will calculate the due date automatically
-from the book's item type. If you wish to set the due date manually,
-C<$datedue> should be in the form YYYY-MM-DD.
+C<$branch> is the library branch.  Defaults to the homebranch of the ITEM.
+
+C<$datedue> can be a C4::Dates object used to set the due date.
+
+If C<$datedue> is the empty string, C<&AddRenewal> will calculate the due date automatically
+from the book's item type.
 
 =cut
 
 sub AddRenewal {
-
-    my ( $borrowernumber, $itemnumber, $branch ,$datedue ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $biblio = GetBiblioFromItemNumber($itemnumber);
+	my $borrowernumber = shift or return undef;
+	my     $itemnumber = shift or return undef;
+    my $item   = GetItem($itemnumber) or return undef;
+    my $biblio = GetBiblioFromItemNumber($itemnumber) or return undef;
+    my $branch  = (@_) ? shift : $item->{homebranch};	# opac-renew doesn't send branch
+    my $datedue;
     # If the due date wasn't specified, calculate it by adding the
     # book's loan length to today's date.
-    unless ( $datedue->output('iso') ) {
+    unless (@_ and $datedue = shift and $datedue->output('iso')) {
 
-
-        my $borrower = C4::Members::GetMemberDetails( $borrowernumber, 0 );
+        my $borrower = C4::Members::GetMemberDetails( $borrowernumber, 0 ) or return undef;
         my $loanlength = GetLoanLength(
             $borrower->{'categorycode'},
              (C4::Context->preference('item-level_itypes')) ? $biblio->{'itype'} : $biblio->{'itemtype'} ,
-			$borrower->{'branchcode'}
+			$item->{homebranch}			# item's homebranch determines loanlength OR do we want the branch specified by the AddRenewal argument?
         );
-		#FIXME --  choose issuer or borrower branch -- use circControl.
-
-		#FIXME -- $debug-ify the (0)
-        #my @darray = Add_Delta_DHMS( Today_and_Now(), $loanlength, 0, 0, 0 );
-        #$datedue = C4::Dates->new( sprintf("%04d-%02d-%02d",@darray[0..2]), 'iso');
-		#(0) and print STDERR  "C4::Dates->new->output = " . C4::Dates->new()->output()
-		# 		. "\ndatedue->output = " . $datedue->output()
-		# 		. "\n(Y,M,D) = " . join ',', @darray;
-		#$datedue=CheckValidDatedue($datedue,$itemnumber,$branch,$loanlength);
-		$datedue =  CalcDateDue(C4::Dates->new(),$loanlength,$branch);
+		#FIXME -- use circControl?
+		$datedue =  CalcDateDue(C4::Dates->new(),$loanlength,$branch);	# this branch is the transactional branch.
+								# The question of whether to use item's homebranch calendar is open.
     }
 
+    my $dbh = C4::Context->dbh;
     # Find the issues record for this book
     my $sth =
       $dbh->prepare("SELECT * FROM issues
@@ -1806,10 +1803,12 @@ sub AddRenewal {
         my $item = GetBiblioFromItemNumber($itemnumber);
         $sth = $dbh->prepare(
                 "INSERT INTO accountlines
-                    (borrowernumber,accountno,date,amount,
-                        description,accounttype,amountoutstanding,
-                    itemnumber)
-                    VALUES (?,?,now(),?,?,?,?,?)"
+                    (date,
+					borrowernumber, accountno, amount,
+                    description,
+					accounttype, amountoutstanding, itemnumber
+					)
+                    VALUES (now(),?,?,?,?,?,?,?)"
         );
         $sth->execute( $borrowernumber, $accountno, $charge,
             "Renewal of Rental Item $item->{'title'} $item->{'barcode'}",
