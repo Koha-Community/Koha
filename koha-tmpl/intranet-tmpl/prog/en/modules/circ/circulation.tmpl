@@ -17,9 +17,16 @@ $.tablesorter.addParser({
 	 $(document).ready(function() {
  		$('#patronlists > ul').tabs();
 		$("#issuest").tablesorter({
-		sortList: [[1,0]],
-		headers: { 1: { sorter: 'articles' },4:{sorter:false},5: { sorter: false },6:{sorter:false},7:{sorter:false}}
-	}); 
+//		sortList: [[0,0]], don't sort by default to preserve 'previous checkouts header
+		headers: { 1: { sorter: 'articles' },4:{sorter:false},5: { sorter: false },6:{sorter:false}}
+		});
+		$("#issuest").bind("sortEnd",function() { 
+        	$("#previous").parents("tr").remove();
+	    }); 
+		$("#holdst").tablesorter({
+			sortList: [[0,0]],
+			headers: { 1: { sorter: 'articles' }}
+		}); 
 	 });
 //]]>
 </script>
@@ -394,19 +401,15 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
     </tr></thead>
 <!-- TMPL_IF NAME="todayissues" -->
 
-    <!-- TMPL_LOOP NAME="todayissues" -->
 	<tbody>
+    <!-- TMPL_LOOP NAME="todayissues" -->
     <!-- TMPL_IF NAME="togglecolor" -->
     <tr>
     <!-- TMPL_ELSE -->
     <tr class="highlight">
     <!-- /TMPL_IF -->
         <td><!-- TMPL_VAR NAME="dd" --></td>
-        <td>
-        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra"><!-- TMPL_VAR NAME="title" --></a>
-       <!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="itemnotes" -->- <!-- TMPL_VAR name="itemnotes" --><!-- /TMPL_IF -->
-        </td>
+        <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra"><!-- TMPL_VAR NAME="title" --></a><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="itemnotes" -->- <!-- TMPL_VAR name="itemnotes" --><!-- /TMPL_IF --></td>
         <td>
             <!-- TMPL_VAR NAME="itemtype" -->
            <!-- TMPL_UNLESS NAME="noItemTypeImages" --> <!-- TMPL_IF NAME="itemtype_image" -->
@@ -440,9 +443,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
     <!-- /loop todayissues --><!-- /TMPL_LOOP --> 
     <!-- /if todayissues --><!-- /TMPL_IF --> 
 <!-- TMPL_IF NAME="previssues" -->
-<!--     <tr>
-        <th colspan="7"><a name="previous" id="previous">Previous checkouts</a></th>
-    </tr> -->
+<tr><th colspan="7"><a name="previous" id="previous"></a>Previous checkouts</th></tr>
     <!-- TMPL_LOOP NAME="previssues" -->
     <!-- TMPL_IF NAME="togglecolor" -->
         <tr>
@@ -452,10 +453,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <!-- TMPL_IF NAME="od" --><td class="od"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
         <!-- TMPL_VAR NAME="dd" -->
         </td>
-        <td>
-        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra"><!-- TMPL_VAR NAME="title" --></a>
-        <br /><!-- TMPL_IF NAME="author" --><!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="itemnotes" -->- <!-- TMPL_VAR name="itemnotes" --><!-- /TMPL_IF -->
-        </td>
+        <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra"><!-- TMPL_VAR NAME="title" --></a><br /><!-- TMPL_IF NAME="author" --><!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="itemnotes" -->- <!-- TMPL_VAR name="itemnotes" --><!-- /TMPL_IF --></td>
         <td>
             <!-- TMPL_VAR NAME="itemtype" -->
             <!-- TMPL_IF NAME="itemtype_image" -->
@@ -507,21 +505,20 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 
 <div id="reserves">
 <!-- TMPL_IF NAME="reservloop" -->
-    <table>
-        <tr>
+    <table id="holdst">
+        <thead><tr>
             <th>Hold date</th>
             <th>Title</th>
             <th>Item Type</th>
             <th>Call Number</th>
 			<th>Barcode</th>
             <th>Priority</th>
-        </tr>
+        </tr></thead>
+		<tbody>
         <!-- TMPL_LOOP NAME="reservloop" -->
         <tr class="<!-- TMPL_VAR NAME="color" -->">
                     <td><!-- TMPL_VAR NAME="reservedate" --></td>
-                    <td>
-                        <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
- </td>
+                    <td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --></td>
 					<td><!-- TMPL_VAR NAME="itemtype" --></td>
                     <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
 					<td><em><!-- TMPL_IF name="barcodereserv" -->Item <!-- TMPL_VAR NAME="barcodereserv" -->
@@ -538,7 +535,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
                         <b> <!-- TMPL_VAR NAME="waitingposition" --> </b><!-- /TMPL_IF -->
                     </td>
             </tr>
-        <!-- /TMPL_LOOP -->
+        <!-- /TMPL_LOOP --></tbody>
     </table>
 	<!-- TMPL_ELSE -->
 	<p>Patron has no pending holds.</p>
