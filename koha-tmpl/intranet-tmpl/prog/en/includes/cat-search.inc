@@ -70,7 +70,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 	<!-- /TMPL_IF -->
 	
 <!-- TMPL_IF NAME="CAN_user_circulate" -->
-<div id="checkin_search" class="residentsearch">
+<div id="checkin_search" class="residentsearch" style="display:none;">
     <p class="tip">Scan a barcode to check in:</p>
     <form method="post" action="/cgi-bin/koha/circ/returns.pl">
         <input name="barcode" id="ret_barcode" size="40" />
@@ -79,7 +79,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 </div>
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="CAN_user_catalogue" -->
-	<div id="catalog_search" class="residentsearch">
+	<div id="catalog_search" class="residentsearch" style="display:none;">
 	<p class="tip">Enter search keywords:</p>
 		<form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
 			 <input type="text" name="q" id="search-form" size="40" value="" title="Enter the terms you wish to search for." class="form-text" />
