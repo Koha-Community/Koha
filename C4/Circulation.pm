@@ -1112,37 +1112,38 @@ sub GetIssuingRule {
     my ( $borrowertype, $itemtype, $branchcode ) = @_;
     my $dbh = C4::Context->dbh;
     my $sth =  $dbh->prepare( "select * from issuingrules where categorycode=? and itemtype=? and branchcode=? and issuelength is not null"  );
-    
+    my $irule;
+
 	$sth->execute( $borrowertype, $itemtype, $branchcode );
-    my $irule = $sth->fetchrow_hashref;
+    $irule = $sth->fetchrow_hashref;
     return $irule if defined($irule) ;
 
     $sth->execute( $borrowertype, $itemtype, "*" );
-    my $irule = $sth->fetchrow_hashref;
+    $irule = $sth->fetchrow_hashref;
     return $irule if defined($irule) ;
 
     $sth->execute( $borrowertype, "*", $branchcode );
-    my $irule = $sth->fetchrow_hashref;
+    $irule = $sth->fetchrow_hashref;
     return $irule if defined($irule) ;
 
     $sth->execute( "*", $itemtype, $branchcode );
-    my $irule = $sth->fetchrow_hashref;
+    $irule = $sth->fetchrow_hashref;
     return $irule if defined($irule) ;
 
     $sth->execute( $borrowertype, "*", "*" );
-    my $irule = $sth->fetchrow_hashref;
+    $irule = $sth->fetchrow_hashref;
     return $irule if defined($irule) ;
 
     $sth->execute( "*", "*", $branchcode );
-    my $irule = $sth->fetchrow_hashref;
+    $irule = $sth->fetchrow_hashref;
     return $irule if defined($irule) ;
 
     $sth->execute( "*", $itemtype, "*" );
-    my $irule = $sth->fetchrow_hashref;
+    $irule = $sth->fetchrow_hashref;
     return $irule if defined($irule) ;
 
     $sth->execute( "*", "*", "*" );
-    my $irule = $sth->fetchrow_hashref;
+    $irule = $sth->fetchrow_hashref;
     return $irule if defined($irule) ;
 
     # if no rule matches,
