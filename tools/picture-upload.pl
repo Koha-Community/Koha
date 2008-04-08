@@ -22,6 +22,7 @@
 use File::Temp;
 use File::Copy;
 use CGI;
+use Image::Magick;
 use C4::Context;
 use C4::Auth;
 use C4::Output;
@@ -198,41 +199,53 @@ return 1;
 sub handle_file {
     my ($cardnumber, $source, %count) = @_;
     warn "Entering sub handle_file; passed \$cardnumber=$cardnumber, \$source=$source" if $DEBUG;
-    my $mimemap = {
-        "gif"   => "image/gif",
-        "jpg"   => "image/jpeg",
-        "jpeg"  => "image/jpeg",
-        "png"   => "image/png"
-    };
     $count{filenames} = () if !$count{filenames};
     $count{source} = $source if !$count{source};
     if ($cardnumber && $source) {     # Now process any imagefiles
         my %filerrors;
+        my $filename;
+        if ($filetype eq 'image') {
+            $filename = $uploadfilename;
+        } else {
+            $filename = $1 if ($source =~ /\/([^\/]+)$/);
+        }
         warn "Source: $source" if $DEBUG;
-        if (open (IMG, "$source")) {
-            #binmode (IMG); # Not sure if we need this or not -fbcit
-            my $imgfile;
-            while (<IMG>) {
-                $imgfile .= $_;
-            }
-            if ($filetype eq 'image') {
-                $filename = $uploadfilename;
-            } else {
-                $filename = $1 if ($source =~ /\/([^\/]+)$/);
-            }
-            warn "$filename is " . length($imgfile) . " bytes";
-            if (length($imgfile) > 100000) {
+        my $size = (stat($source))[7];
+            if ($size > 100000) {    # This check is necessary even with image resizing to avoid possible security/performance issues...
                 warn "$filename is TOO BIG!!! I refuse to beleagur my database with that much data. Try reducing the pixel dimensions and I\'ll reconsider.";
                 $filerrors{'OVRSIZ'} = 1;
                 push my @filerrors, \%filerrors;
-	        push @{ $count{filenames} }, { filerrors => \@filerrors, source => $filename, cardnumber => $cardnumber };
+                push @{ $count{filenames} }, { filerrors => \@filerrors, source => $filename, cardnumber => $cardnumber };
                 $template->param( ERRORS => 1 );
-                return %count;
+                return %count;    # this one is fatal so bail here...
             }
-            my $mimetype = $mimemap->{lc ($1)} if $filename =~ m/\.([^.]+)$/i;
-            warn "$filename is mimetype \"$mimetype\"" if $DEBUG;
-            my $dberror = PutPatronImage($cardnumber,$mimetype, $imgfile) if $mimetype;
+        my $image = Image::Magick->new;
+        if (open (IMG, "$source")) {
+            $image->Read(file=>\*IMG);
             close (IMG);
+            my $mimetype = $image->Get('mime');
+            # Check the pixel size of the image we are about to import...
+            my ($height, $width) = $image->Get('height', 'width');
+            warn "$filename is $width pix X $height pix." if $DEBUG;
+            if ($width > 140 || $height > 200) {    # MAX pixel dims are 140 X 200...
+                warn "$filename exceeds the maximum pixel dimensions of 140 X 200. Resizing...";
+                my $percent_reduce;    # Percent we will reduce the image dimensions by...
+                if ($width > 140) {
+                    $percent_reduce = sprintf("%.5f",(140/$width));    # If the width is oversize, scale based on width overage...
+                } else {
+                    $percent_reduce = sprintf("%.5f",(200/$height));    # otherwise scale based on height overage.
+                }
+                my $width_reduce = sprintf("%.0f", ($width * $percent_reduce));
+                my $height_reduce = sprintf("%.0f", ($height * $percent_reduce));
+                warn "Reducing $filename by " . ($percent_reduce * 100) . "\% or to $width_reduce pix X $height_reduce pix";
+                $image->Resize(width=>$width_reduce, height=>$height_reduce);
+                my @img = $image->ImageToBlob();
+                $imgfile = $img[0];
+                warn "$filename is " . length($imgfile) . " bytes after resizing.";
+                undef $image;    # This object can get big...
+            }
+            warn "Image is of mimetype $mimetype" if $DEBUG;
+            my $dberror = PutPatronImage($cardnumber,$mimetype, $imgfile) if $mimetype;
 	    if ( !$dberror && $mimetype ) { # Errors from here on are fatal only to the import of a particular image, so don't bail, just note the error and keep going
 	        $count{count}++;
 	        push @{ $count{filenames} }, { source => $filename, cardnumber => $cardnumber };
@@ -273,5 +286,6 @@ sub handle_file {
 Original contributor(s) undocumented
 
 Database storage, single patronimage upload option, and extensive error trapping contributed by Chris Nighswonger cnighswonger <at> foundations <dot> edu
+Image scaling/resizing contributed by the same.
 
 =cut

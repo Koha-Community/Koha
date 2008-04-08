@@ -537,6 +537,7 @@ WriteMakefile(
 'HTML::Template::Pro' => 0.69,
 'HTTP::Cookies' => 1.39,
 'HTTP::Request::Common' => 1.26,
+'Image::Magick' => 6.2,
 'LWP::Simple' => 1.41,
 'LWP::UserAgent' => 2.033,
 'Lingua::Stem' => 0.82,
