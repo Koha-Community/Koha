@@ -21,13 +21,15 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 	}
 ); 
 my $itemnumber     = $query->param('item');
-my $borrowernumber = $query->param("borrowernumber");
+my $borrowernumber = $query->param('borrowernumber') || $query->param('bornum');
 
 my ($status,$error) = CanBookBeRenewed( $borrowernumber, $itemnumber );
 if ( $status == 1 ) {
     AddRenewal( $borrowernumber, $itemnumber );
 }
+# FIXME: else return ERROR to user!!
 
 if ( $query->param('from') eq 'opac_user' ) {
     print $query->redirect("/cgi-bin/koha/opac-user.pl");
-}
+} 
+# FIXME: ELSE WHAT?  No response at all.  Not very robust.
