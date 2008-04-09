@@ -106,7 +106,7 @@ function verify_images() {
             <li><strong>Subjects:</strong> 
             <ul>
                 <!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
-                <li><!-- TMPL_LOOP NAME="MARCSUBJECT_SUBFIELDS_LOOP" --><!-- TMPL_VAR NAME="separator" --><a title="‡<!-- TMPL_VAR NAME=code --> <!-- TMPL_VAR NAME=value -->" href="/cgi-bin/koha/catalogue/search.pl?q=<!-- TMPL_LOOP NAME=link_loop --><!-- TMPL_VAR NAME=operator --><!-- TMPL_VAR name='limit' -->:<!-- TMPL_VAR NAME=link --><!-- /TMPL_LOOP -->"><!-- TMPL_VAR NAME="value" --></a><!-- /TMPL_LOOP --></li>
+                <li><!-- TMPL_LOOP NAME="MARCSUBJECT_SUBFIELDS_LOOP" --> <!-- TMPL_VAR NAME="separator" --> <a title="‡<!-- TMPL_VAR NAME="code" --> <!-- TMPL_VAR NAME="value" -->" href="/cgi-bin/koha/catalogue/search.pl?q=<!-- TMPL_LOOP NAME="link_loop" --><!-- TMPL_VAR NAME="operator" --><!-- TMPL_VAR name="limit" -->:<!-- TMPL_VAR NAME="link" --><!-- /TMPL_LOOP -->"><!-- TMPL_VAR NAME="value" --></a><!-- /TMPL_LOOP --></li>
                 <!-- /TMPL_LOOP -->
                 </ul>
             </li>
