@@ -1,10 +1,30 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo; Most Popular Titles
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pack.js"></script>
 <script language="JavaScript" type="text/javascript">
+//<![CDATA[
+$.tablesorter.addParser({
+    id: 'articles', 
+    is: function(s) {return false;  }, 
+    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
+    type: 'text' 
+});
+    $(function() {
+		$("#topissuest").tablesorter({
+				widgets : ['zebra'],
+				sortList: [[2,1]],
+				headers: { 0:{sorter:'articles'}<!-- TMPL_IF NAME="opacuserlogin" -->,3:{sorter:false}<!-- /TMPL_IF -->
+				}
+			}); 
+	});
 function Dopop(link) {
     newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
 }
+
 </script>
+<style type="text/css">
+	#search-facets fieldset { border: 0; margin: 0;padding:0;}#search-facets ol{padding:.3em;}#search-facets li {list-style-type:none;padding:4px 4px;}#search-facets label{font-weight:bold;display:block;margin:.2em 0;}#search-facets fieldset.action {padding-left:4px;margin:.3em;};
+</style>
 </head>
 <body>
 <!-- TMPL_INCLUDE name="masthead.inc" -->
@@ -13,57 +33,9 @@ function Dopop(link) {
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
-
-        <form method="post" action="/cgi-bin/koha/opac-topissues.pl">
-		<fieldset class="rows">
-		<legend>See the Most Popular Titles</legend>
-          <ol>  <li><label for="limit">Show the top </label> <select name="limit" id="limit">
-                            <option value ="10" selected="selected">10</option>
-                            <option value ="15">15</option>
-                            <option value ="20">20</option>
-                            <option value ="25">25</option>
-                            <option value ="40">40</option>
-                            <option value ="50">50</option>
-                            <option value ="100">100</option>
-                        </select> titles
-						</li>
-				<li>
-               <label for="branch">From: </label>
-                <select name="branch" id="branch">
-                <option value="">All branches</option>
-                <!-- TMPL_LOOP name="branchloop" -->
-                    <option value="<!-- TMPL_VAR name="value" -->">
-                        <!-- TMPL_VAR name="branchname" -->
-                    </option>
-                <!-- /TMPL_LOOP -->
-                </select>
-            </li>
-            <li><label for="itemtype">Limit to: </label>
-                    <select name="itemtype" id="itemtype">
-                        <option value="">All item types</option>
-                        <!-- TMPL_LOOP name="itemtypeloop" -->
-                            <option value="<!-- TMPL_VAR name="value" -->">
-                                <!-- TMPL_VAR name="description" -->
-                            </option>
-                        <!-- /TMPL_LOOP -->
-                    </select></li>
-			<li>
-            <label for="timeLimit">Acquired in the last:</label> <select name="timeLimit" id="timeLimit">
-                <option value="3">3 months</option>
-                <option value="6">6 months</option>
-                <option value="12">12 months</option>
-                <option value="999">No limit</option>
-				</select>
-            </li></ol>
-        <input type="hidden" name="do_it" value="1" />
-    </fieldset>
-	<fieldset class="action">
-        <input type="submit" value="Submit" /></fieldset>
-    </form>
-
     <!-- TMPL_IF NAME="results_loop" -->
     
-        <table>
+        <table id="topissuest">
 		<caption>The <!-- TMPL_VAR NAME="limit"--> most checked-out 
         <!-- TMPL_IF name="itemtype" -->
             <!-- TMPL_VAR name="itemtype" -->
@@ -76,35 +48,82 @@ function Dopop(link) {
         in the past <!-- TMPL_VAR name="timeLimit" --> months
         <!-- TMPL_ELSE --> of all time<!-- /TMPL_IF -->
     </caption>
-            <tr>
+            <thead><tr>
                 <th>Title</th>
                 <th>Itemtype</th>
                 <th>Checkouts</th>
-            </tr>
-                <!-- TMPL_LOOP NAME="results_loop" -->
+				<!-- TMPL_IF NAME="opacuserlogin" --><th>&nbsp;</th><!-- /TMPL_IF -->
+				
+            </tr></thead>
+                <tbody><!-- TMPL_LOOP NAME="results_loop" -->
                     <tr>
-                        <td>
-                        <p><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">
-                        <!-- TMPL_VAR name="title" --></a>
-                        </p>
-                        <!-- TMPL_VAR NAME="author" -->
+                        <td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR name="title" --></a><p><!-- TMPL_VAR NAME="author" -->
                         <!-- TMPL_IF name="publicationyear" --> - <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="publishercode" -->- <!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF --> <!-- TMPL_IF name="seriestitle" -->(<!-- TMPL_VAR name="seriestitle" -->)<!-- /TMPL_IF -->
                         <!-- TMPL_IF name="place" --> ; <!-- TMPL_VAR name="place" --><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="pages" --> - <!-- TMPL_VAR name="pages" --><!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="size" --> ; <!-- TMPL_VAR name="size" --><!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="size" --> ; <!-- TMPL_VAR name="size" --><!-- /TMPL_IF --></p>
                         </td>
                         <td><!-- TMPL_VAR name="description" --></td>
                         <td><!-- TMPL_VAR name="tot" --></td>
+						<!-- TMPL_IF NAME="opacuserlogin" --><td><!-- TMPL_UNLESS NAME="norequests" --><a href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a><!-- /TMPL_UNLESS --></td><!-- /TMPL_IF -->
                         </tr>
-                <!-- /TMPL_LOOP-->
+                <!-- /TMPL_LOOP--></tbody>
         </table>
+<!-- TMPL_ELSE -->
+<form method="post" action="/cgi-bin/koha/opac-topissues.pl">
+		<fieldset class="rows">
+		<legend>See the Most Popular Titles</legend>
+          <ol>  <li><label for="limit">Show the top </label> <select name="limit" id="limit">
+                            <!-- TMPL_IF EXPR="limit == 10" --><option value ="10" selected="selected">10 titles</option><!-- TMPL_ELSE --><option value="10">10 titles</option><!-- /TMPL_IF -->
+                            <!-- TMPL_IF EXPR="limit == 15" --><option value ="15" selected="selected">15 titles</option><!-- TMPL_ELSE --><option value="15">15 titles</option><!-- /TMPL_IF -->
+                            <!-- TMPL_IF EXPR="limit == 20" --><option value ="20" selected="selected">20 titles</option><!-- TMPL_ELSE --><option value="20">20 titles</option><!-- /TMPL_IF -->
+                            <!-- TMPL_IF EXPR="limit == 30" --><option value ="30" selected="selected">30 titles</option><!-- TMPL_ELSE --><option value="30">30 titles</option><!-- /TMPL_IF -->
+                            <!-- TMPL_IF EXPR="limit == 40" --><option value ="40" selected="selected">40 titles</option><!-- TMPL_ELSE --><option value="40">40 titles</option><!-- /TMPL_IF -->
+                            <!-- TMPL_IF EXPR="limit == 50" --><option value ="50" selected="selected">50 titles</option><!-- TMPL_ELSE --><option value="50">50 titles</option><!-- /TMPL_IF -->
+                            <!-- TMPL_IF EXPR="limit == 100" --><option value ="100" selected="selected">100 titles</option><!-- TMPL_ELSE --><option value="100">100 titles</option><!-- /TMPL_IF -->
+                        </select>
+						</li>
+				<li>
+               <label for="branch">From: </label>
+                <select name="branch" id="branch">
+                <option value="">All branches</option>
+                <!-- TMPL_LOOP name="branchloop" -->
+                    <!-- TMPL_IF EXPR="branch eq branchname" --><option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="value" -->"><!-- /TMPL_IF -->
+                        <!-- TMPL_VAR name="branchname" -->
+                    </option>
+                <!-- /TMPL_LOOP -->
+                </select>
+            </li>
+            <li><label for="itemtype">Limit to: </label>
+                    <select name="itemtype" id="itemtype">
+                        <option value="">All item types</option>
+                       <!-- TMPL_LOOP name="itemtypeloop" -->
+                            <!-- TMPL_IF EXPR="itemtype eq description" --><option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="value" -->"><!-- /TMPL_IF -->
+                                <!-- TMPL_VAR name="description" -->
+                            </option>
+                        <!-- /TMPL_LOOP -->
+                    </select></li>
+			<li>
+            <label for="timeLimit">Acquired in the last:</label> <select name="timeLimit" id="timeLimit">
+                <!-- TMPL_IF EXPR="timeLimit == 3" --><option value="3" selected="selected">3 months</option><!-- TMPL_ELSE --><option value="3">3 months</option><!-- /TMPL_IF -->
+                 <!-- TMPL_IF EXPR="timeLimit == 6" --><option value="6" selected="selected">6 months</option><!-- TMPL_ELSE --><option value="6">6 months</option><!-- /TMPL_IF -->
+                 <!-- TMPL_IF EXPR="timeLimit == 12" --><option value="12" selected="selected">12 months</option><!-- TMPL_ELSE --><option value="12">12 months</option><!-- /TMPL_IF -->
+                 <!-- TMPL_IF EXPR="timeLimit == 999" --><option value="999" selected="selected">No limit</option><!-- TMPL_ELSE --><option value="999">No limit</option><!-- /TMPL_IF -->
+				</select>
+            </li></ol>
+        <input type="hidden" name="do_it" value="1" />
+    </fieldset>
+	<fieldset class="action">
+        <input type="submit" value="Submit" /></fieldset>
+    </form>
    <!-- /TMPL_IF -->
 
 </div>
 </div>
 </div>
 <div class="yui-b">
+<!-- TMPL_IF NAME="results_loop" --><!-- TMPL_INCLUDE NAME="opac-topissues.inc" --><!-- /TMPL_IF -->
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
 <!-- TMPL_INCLUDE name="usermenu.inc" -->
 </div>
