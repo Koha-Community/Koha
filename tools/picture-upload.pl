@@ -27,9 +27,8 @@ use C4::Context;
 use C4::Auth;
 use C4::Output;
 use C4::Members;
+use C4::Debug;
 #use Data::Dumper;
-
-my $DEBUG = ($ENV{DEBUG}) ? 1 : 0;
 
 my $input = new CGI;
 
@@ -53,7 +52,7 @@ my $op                  = $input->param('op');
 #       Other parts of this code could be optimized as well, I think. Perhaps the file upload could be done with YUI's upload
 #       coded. -fbcit
 
-warn "Params are: filetype=$filetype, cardnumber=$cardnumber, uploadfile=$uploadfilename" if $DEBUG;
+$debug and warn "Params are: filetype=$filetype, cardnumber=$cardnumber, uploadfile=$uploadfilename";
 
 =head1 NAME
 
@@ -65,20 +64,21 @@ picture-upload.pl
 
 =head1 DESCRIPTION
 
-THis script is called and presents the user with an interface allowing him/her to upload a single patron image or bulk patron images via a zip file.
+This script is called and presents the user with an interface allowing him/her to upload a single patron image or bulk patron images via a zip file.
+Files greater than 100K will be refused. Images should be 140x200 pixels. If they are larger they will be auto-resized to comply.
 
 =cut
 
-warn "Operation requested: $op" if $DEBUG;
+$debug and warn "Operation requested: $op";
 
 my ( $total, $handled, @counts, $tempfile, $tfh );
 
 if ( ($op eq 'Upload') && $uploadfile ) {       # Case is important in these operational values as the template must use case to be visually pleasing!
     my $dirname = File::Temp::tempdir( CLEANUP => 1);
-    warn "dirname = $dirname" if $DEBUG;
+    $debug and warn "dirname = $dirname";
     my $filesuffix = $1 if $uploadfilename =~ m/(\..+)$/i;
     ( $tfh, $tempfile ) = File::Temp::tempfile( SUFFIX => $filesuffix, UNLINK => 1 );
-    warn "tempfile = $tempfile" if $DEBUG;
+    $debug and warn "tempfile = $tempfile";
     my ( @directories, $errors );
 
     $errors{'NOTZIP'} = 1 if ( $uploadfilename !~ /\.zip$/i && $filetype =~ m/zip/i );
@@ -105,7 +105,7 @@ if ( ($op eq 'Upload') && $uploadfile ) {       # Case is important in these ope
                 opendir $dir, $recursive_dir;
                 while ( my $entry = readdir $dir ) {
 	        push @directories, "$recursive_dir/$entry" if ( -d "$recursive_dir/$entry" and $entry !~ /^\./ );
-                warn "$recursive_dir/$entry" if $DEBUG;
+                $debug and warn "$recursive_dir/$entry";
                 }   
                 closedir $dir;
             }       
@@ -124,7 +124,7 @@ if ( ($op eq 'Upload') && $uploadfile ) {       # Case is important in these ope
         if ( %$results || %errors ) {
             $template->param( ERRORS => [ \%$results ] );
         } else {
-            warn "Total files processed: $total" if $DEBUG;
+            $debug and warn "Total files processed: $total";
             warn "Errors in \$errors." if $errors;
             $template->param(
     		 TOTAL => $total,
@@ -154,10 +154,10 @@ if ( $borrowernumber && !$errors && !$template->param('ERRORS') ) {
 sub handle_dir {
     my ( $dir, $suffix ) = @_;
     my $source;
-    warn "Entering sub handle_dir; passed \$dir=$dir, \$suffix=$suffix" if $DEBUG;
+    $debug and warn "Entering sub handle_dir; passed \$dir=$dir, \$suffix=$suffix";
     if ($suffix =~ m/zip/i) {     # If we were sent a zip file, process any included data/idlink.txt files 
         my ( $file, $filename, $cardnumber );
-        warn "Passed a zip file." if $DEBUG;
+        $debug and warn "Passed a zip file.";
         opendir my $dirhandle, $dir;
         while ( my $filename = readdir $dirhandle ) {
             $file = "$dir/$filename" if ($filename =~ m/datalink\.txt/i || $filename =~ m/idlink\.txt/i);
@@ -169,11 +169,11 @@ sub handle_dir {
         };
 
         while (my $line = <FILE>) {
-            warn "Reading contents of $file" if $DEBUG;
+            $debug and warn "Reading contents of $file";
 	    chomp $line;
-            warn "Examining line: $line" if $DEBUG;
+            $debug and warn "Examining line: $line";
 	    my $delim = ($line =~ /\t/) ? "\t" : ($line =~ /,/) ? "," : "";
-            warn "Delimeter is \'$delim\'" if $DEBUG;
+            $debug and warn "Delimeter is \'$delim\'";
             unless ( $delim eq "," || $delim eq "\t" ) {
                 warn "Unrecognized or missing field delimeter. Please verify that you are using either a ',' or a 'tab'";
                 $errors{'DELERR'} = 1;      # This error is fatal to the import of this directory contents, so bail and return the error to the caller
@@ -182,7 +182,7 @@ sub handle_dir {
 	    ($cardnumber, $filename) = split $delim, $line;
 	    $cardnumber =~ s/[\"\r\n]//g;  # remove offensive characters
 	    $filename   =~ s/[\"\r\n\s]//g;
-            warn "Cardnumber: $cardnumber Filename: $filename" if $DEBUG;
+            $debug and warn "Cardnumber: $cardnumber Filename: $filename";
             $source = "$dir/$filename";
             %counts = handle_file($cardnumber, $source, %counts);
         }
@@ -198,7 +198,7 @@ return 1;
 
 sub handle_file {
     my ($cardnumber, $source, %count) = @_;
-    warn "Entering sub handle_file; passed \$cardnumber=$cardnumber, \$source=$source" if $DEBUG;
+    $debug and warn "Entering sub handle_file; passed \$cardnumber=$cardnumber, \$source=$source";
     $count{filenames} = () if !$count{filenames};
     $count{source} = $source if !$count{source};
     if ($cardnumber && $source) {     # Now process any imagefiles
@@ -209,7 +209,7 @@ sub handle_file {
         } else {
             $filename = $1 if ($source =~ /\/([^\/]+)$/);
         }
-        warn "Source: $source" if $DEBUG;
+        $debug and warn "Source: $source";
         my $size = (stat($source))[7];
             if ($size > 100000) {    # This check is necessary even with image resizing to avoid possible security/performance issues...
                 warn "$filename is TOO BIG!!! I refuse to beleagur my database with that much data. Try reducing the pixel dimensions and I\'ll reconsider.";
@@ -226,7 +226,7 @@ sub handle_file {
             my $mimetype = $image->Get('mime');
             # Check the pixel size of the image we are about to import...
             my ($height, $width) = $image->Get('height', 'width');
-            warn "$filename is $width pix X $height pix." if $DEBUG;
+            $debug and warn "$filename is $width pix X $height pix.";
             if ($width > 140 || $height > 200) {    # MAX pixel dims are 140 X 200...
                 warn "$filename exceeds the maximum pixel dimensions of 140 X 200. Resizing...";
                 my $percent_reduce;    # Percent we will reduce the image dimensions by...
@@ -244,7 +244,7 @@ sub handle_file {
                 warn "$filename is " . length($imgfile) . " bytes after resizing.";
                 undef $image;    # This object can get big...
             }
-            warn "Image is of mimetype $mimetype" if $DEBUG;
+            $debug and warn "Image is of mimetype $mimetype";
             my $dberror = PutPatronImage($cardnumber,$mimetype, $imgfile) if $mimetype;
 	    if ( !$dberror && $mimetype ) { # Errors from here on are fatal only to the import of a particular image, so don't bail, just note the error and keep going
 	        $count{count}++;
