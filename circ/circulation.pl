@@ -338,7 +338,7 @@ if ($borrowernumber) {
         $getreserv{barcodereserv}  = $getiteminfo->{'barcode'};
         $getreserv{itemcallnumber} = $getiteminfo->{'itemcallnumber'};
 		$getreserv{biblionumber}   = $getiteminfo->{'biblionumber'};
-
+		$getreserv{waitingat}    = GetBranchName( $num_res->{'branchcode'} );
         #         check if we have a waiting status for reservations
         if ( $num_res->{'found'} eq 'W' ) {
             $getreserv{color}   = 'reserved';
@@ -349,10 +349,8 @@ if ($borrowernumber) {
         $getWaitingReserveInfo{itemtype}    = $itemtypeinfo->{'description'};
         $getWaitingReserveInfo{author}        = $getiteminfo->{'author'};
         $getWaitingReserveInfo{reservedate}    = format_date( $num_res->{'reservedate'} );
-        if ($getiteminfo->{'holdingbranch'} ne $num_res->{'branchcode'} ) {
         $getWaitingReserveInfo{waitingat}    = GetBranchName( $num_res->{'branchcode'} );
-        }
-    
+    	if($num_res->{'branchcode'} eq $branch){ $getWaitingReserveInfo{waitinghere} = 1; }
         }
         #         check transfers with the itemnumber foud in th reservation loop
         if ($transfertwhen) {

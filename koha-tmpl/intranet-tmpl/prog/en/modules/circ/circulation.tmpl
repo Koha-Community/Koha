@@ -349,7 +349,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 			            <ul> 
 			                <li> <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title"--></a> (<!-- TMPL_VAR NAME="itemtype"-->), <!-- TMPL_IF NAME="author" -->by <!-- TMPL_VAR NAME="author"--><!-- /TMPL_IF --> Reserved on <!-- TMPL_VAR NAME="reservedate"-->.
 			            <!-- TMPL_IF NAME="waitingat" -->
-			                Waiting at <!-- TMPL_VAR NAME="waitingat" -->	
+			                <br /><!-- TMPL_IF NAME="waitinghere" --><strong class="waitinghere"><!-- TMPL_ELSE --><strong><!-- /TMPL_IF -->Waiting at <!-- TMPL_VAR NAME="waitingat" --></strong>	
 			            <!-- /TMPL_IF -->
 			                </li>
 			            </ul>
@@ -528,7 +528,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 					<td><!-- TMPL_VAR NAME="itemtype" --></td>
                     <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
 					<td><em><!-- TMPL_IF name="barcodereserv" -->Item <!-- TMPL_VAR NAME="barcodereserv" -->
-                        <!-- /TMPL_IF --><!-- TMPL_IF name="waiting" --> <strong>waiting</strong>
+                        <!-- /TMPL_IF --><!-- TMPL_IF name="waiting" --> <strong>waiting at <!-- TMPL_VAR NAME="waitingat" --></strong>
                         <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="transfered" --> <strong>in transit</strong> from
                         <!-- TMPL_VAR NAME="frombranch" --> since <!-- TMPL_VAR NAME="datesent" -->
