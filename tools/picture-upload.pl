@@ -116,7 +116,7 @@ if ( ($op eq 'Upload') && $uploadfile ) {       # Case is important in these ope
             }
             $total = scalar @directories;
         } else {       #if ($filetype eq 'zip' )
-            $result = handle_dir( $dirname, $filesuffix );
+            $results = handle_dir( $dirname, $filesuffix );
             $handled = 1;
             $total = 1;
         }
