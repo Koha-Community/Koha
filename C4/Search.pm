@@ -967,10 +967,19 @@ sub buildQuery {
                         $remove_stopwords
                     ) = ( 0, 0, 0, 0, 0 );
                 }
+                # ISBN,ISSN,Standard Number, don't need special treatment
+                elsif ( $index eq 'nb' || $index eq 'ns' ) {
+                    $indexes_set++;
+                    (   
+                        $stemming,      $auto_truncation,
+                        $weight_fields, $fuzzy_enabled,
+                        $remove_stopwords
+                    ) = ( 0, 0, 0, 0, 0 );
 
+                }
                 # Set default structure attribute (word list)
                 my $struct_attr;
-                unless ( !$index || $index =~ /(st-|phr|ext|wrdl)/ ) {
+                unless ( $indexes_set || !$index || $index =~ /(st-|phr|ext|wrdl)/ ) {
                     $struct_attr = ",wrdl";
                 }
 

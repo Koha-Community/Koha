@@ -39,10 +39,10 @@
 		<!-- TMPL_ELSE -->
         <option value="su">Subject</option>
 		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="ms_isbn" -->
-		<option selected="selected" value="isbn">ISBN</option>
+		<!-- TMPL_IF NAME="ms_nb" -->
+		<option selected="selected" value="nb">ISBN</option>
 		<!-- TMPL_ELSE -->
-		<option value="isbn">ISBN</option>
+		<option value="nb">ISBN</option>
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="ms_se" -->
         <option selected="selected" value="se">Series</option>
