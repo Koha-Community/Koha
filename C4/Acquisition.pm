@@ -911,6 +911,7 @@ a pointer on a hash list containing parcel informations as such :
 sub GetParcels {
     my ($bookseller,$order, $code, $datefrom, $dateto) = @_;
     my $dbh    = C4::Context->dbh;
+    my @query_params = ();
     my $strsth ="
         SELECT  aqorders.booksellerinvoicenumber,
                 datereceived,purchaseordernumber,
@@ -921,18 +922,31 @@ sub GetParcels {
         WHERE aqbasket.booksellerid = $bookseller and datereceived IS NOT NULL
     ";
 
-    $strsth .= "and aqorders.booksellerinvoicenumber like \"$code%\" " if ($code);
+    if ( defined $code ) {
+        $strsth .= ' and aqorders.booksellerinvoicenumber like ? ';
+        # add a % to the end of the code to allow stemming.
+        push @query_params, "$code%";
+    }
+    
+    if ( defined $datefrom ) {
+        $strsth .= ' and datereceived >= ? ';
+        push @query_params, $datefrom;
+    }
 
-    $strsth .= "and datereceived >=" . $dbh->quote($datefrom) . " " if ($datefrom);
-
-    $strsth .= "and datereceived <=" . $dbh->quote($dateto) . " " if ($dateto);
+    if ( defined $dateto ) {
+        $strsth .=  'and datereceived <= ? ';
+        push @query_params, $dateto;
+    }
 
     $strsth .= "group by aqorders.booksellerinvoicenumber,datereceived ";
+
+    # can't use a placeholder to place this column name.
+    # but, we could probably be checking to make sure it is a column that will be fetched.
     $strsth .= "order by $order " if ($order);
-### $strsth
+
     my $sth = $dbh->prepare($strsth);
 
-    $sth->execute;
+    $sth->execute( @query_params );
     my $results = $sth->fetchall_arrayref({});
     $sth->finish;
     return @$results;
