@@ -2,7 +2,7 @@
 <title>Koha &rsaquo; Circulation &rsaquo; Check In <!-- TMPL_VAR Name="title" --></title>
 <script>
 function Dopop(link) {
-    var newin=window.open(link,'popup','width=600,height=400,resizable=yes,toolbar=false,top');
+    var newin=window.open(link,'popup','width=600,height=400,resizable=1,toolbar=0,scrollbars=1,top');
 }
 </script>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
@@ -36,13 +36,12 @@ function Dopop(link) {
 		<!-- TMPL_IF NAME="wboremail" --><li><a id="boremail" href="mailto:<!-- TMPL_VAR NAME="wboremail" -->"><!-- TMPL_VAR NAME="wboremail" --></a></li><!-- /TMPL_IF -->
         </ul>
   
-    <form method="post" action="returns.pl">
+    <form method="post" action="returns.pl" class="confirm">
             <input type="hidden" name="WT-itemNumber" value="<!-- TMPL_VAR Name="WrongTransferItem" -->" />
             <input type="hidden" name="WT-waitingAt" value="<!-- TMPL_VAR Name="TransferWaitingAt" -->" />
             <input type="hidden" name="WT-From" value="<!-- TMPL_VAR Name="wtransfertFrom" -->" />
         <input type="submit" class="approve" value="Confirm" />
-		<br />
-			<input type="button" value="Print Slip & Confirm" class="approve" onclick='Dopop("hold-transfer-slip.pl?transfer=1&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;op=slip") ; this.form.submit()'; />
+			<input type="submit" value="Print Slip and Confirm" class="print" onclick="Dopop('hold-transfer-slip.pl?transfer=1&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;op=slip'); this.form.submit();" />
     </form>
     <!-- /TMPL_IF --></div>
 <!-- /TMPL_IF -->
@@ -53,9 +52,8 @@ function Dopop(link) {
     <!-- TMPL_IF Name="waiting" -->
 	<!-- waiting -->
 <div class="dialog message">
-        <h3>Hold Found (item is already waiting) </h3>
-		<h4><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a></h4>
-        <h5>Hold for:</h5>
+        <h3>Hold Found (item is already waiting):  <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a></h3>
+        <h4>Hold for:</h4>
 			<ul>
             <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR Name="borsurname" -->, <!-- TMPL_VAR Name="borfirstname" --></a> (<!-- TMPL_VAR Name="borcnum" -->)</li>
             <li><!-- TMPL_VAR Name="boraddress" --><br />
@@ -64,10 +62,10 @@ function Dopop(link) {
            <!-- TMPL_IF NAME="borphone" --><li> <!-- TMPL_VAR Name="borphone" --></li><!-- /TMPL_IF -->
 		   <!-- TMPL_IF NAME="boremail" --><li><a id="boremail" href="mailto:<!-- TMPL_VAR NAME="boremail" -->"><!-- TMPL_VAR NAME="boremail" --></a></li><!-- /TMPL_IF --></ul>
         </p>
-        <form method="post" action="returns.pl">
+        <form method="post" action="returns.pl" class="confirm">
             <input type="submit" class="approve" value="Confirm" />
-			<br />
-			<input type="button" value="Print Slip & Confirm" class="approve" onclick='Dopop("hold-transfer-slip.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;op=slip") ; this.form.submit()'; />
+
+			<input type="submit" value="Print Slip and Confirm" class="print" onclick="Dopop('hold-transfer-slip.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;op=slip'); this.form.submit();" />
             <!-- TMPL_LOOP Name="inputloop" -->
                 <input type="hidden" name="ri-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
                 <input type="hidden" name="dd-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="duedate" -->" />
@@ -84,8 +82,7 @@ function Dopop(link) {
     <!-- TMPL_IF Name="diffbranch" -->
 		<!-- diffbranch -->
         <div class="dialog message">
-		<h2>Hold needing transfer found</h2>
-        <h3><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a></h3>
+		<h3>Hold needing transfer found: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a></h3>
                 <h4>Hold for: </h4>
                     <ul>
                         <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR Name="borsurname" -->, <!-- TMPL_VAR Name="borfirstname" --></a> (<!-- TMPL_VAR Name="borcnum" -->)</li>
@@ -99,10 +96,9 @@ function Dopop(link) {
                 <h4><strong>Transfer to:</strong> <!-- TMPL_VAR Name="destbranchname" --></h4>
             <!-- /TMPL_IF -->
 
-        <form method="post" action="returns.pl">
+        <form method="post" action="returns.pl" class="confirm">
             <input type="submit" class="approve" value="Confirm" />
-			<br />
-			<input type="button" value="Print Slip & Confirm" class="submit" onclick='Dopop("hold-transfer-slip.pl?transfer=1&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;op=slip") ; this.form.submit()'; />
+			<input type="submit" value="Print Slip and Confirm" class="print" onclick="Dopop('hold-transfer-slip.pl?transfer=1&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;op=slip'); this.form.submit();" />
             <!-- TMPL_LOOP Name="inputloop" -->
                 <input type="hidden" name="ri-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
                 <input type="hidden" name="dd-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="duedate" -->" />
@@ -166,8 +162,7 @@ function Dopop(link) {
     <!-- TMPL_IF Name="reserved" -->
 	<!--  reserved  -->
 	<div class="dialog message">
-	  <h3>Hold Found:</h3>
-       <h4><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a></h4>
+	  <h3>Hold Found: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a></h3>
         <h5>Hold for:</h5>
 		<ul>
             <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">
@@ -184,11 +179,10 @@ function Dopop(link) {
 		<!-- TMPL_ELSE -->
 		<h4><strong>Hold at</strong> <!-- TMPL_VAR Name="destbranchname" --></h4>
         <!-- /TMPL_IF -->
-        <form method="post" action="returns.pl">
+        <form method="post" action="returns.pl" class="confirm">
             <!-- TMPL_IF name="transfertodo" -->
                 <input type="submit" class="approve" value="Confirm hold and transfer" />
-				<br />
-			<input type="button" value="Print Slip & Confirm" class="submit" onclick='Dopop("hold-transfer-slip.pl?transfer=1&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;op=slip") ; this.form.submit()'; />
+			<input type="submit" value="Print Slip and Confirm" class="print" onclick="Dopop('hold-transfer-slip.pl?transfer=1&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;op=slip'); this.form.submit();" />
             <!-- TMPL_ELSE -->
                 <input type="submit" class="approve" value="Confirm hold" />
             <!-- /TMPL_IF -->

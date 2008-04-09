@@ -2,7 +2,7 @@
 <title>Koha -- Circulation: Transfers</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close-receipt.inc" -->
 </head>
-<body onload="window.print();window.close();">
+<body onload="window.print();">
 <div id="main">
         <!-- TMPL_LOOP NAME="reservedata" -->
 <h5>Date: <!-- TMPL_VAR NAME="pulldate" --></h5>
@@ -21,7 +21,7 @@
     <!-- TMPL_IF NAME="email" --><li><!-- TMPL_VAR NAME="email" --></li> <!-- /TMPL_IF -->
 </ul>
 <br />
-<h3>RESERVED ITEM</h2>
+<h3>RESERVED ITEM</h3>
  <h4><!-- TMPL_VAR Name="title" --></h4>
  <h5><!-- TMPL_VAR NAME="author" --> </h5>
  <p><!-- TMPL_VAR Name="barcode" --></p>
