@@ -48,7 +48,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 	<div id="patron_search" class="residentsearch">
 	<p class="tip">Enter patron card number or partial name:</p>
 	<form action="/cgi-bin/koha/members/member.pl" method="post">
-    <input id="searchmember" size="25" name="member" type="text" />
+    <input id="searchmember" size="25" class="focus" name="member" type="text" />
     order by:
     <select name="orderby" id="searchorderby">
     <option value="surname,firstname">Surname</option>
@@ -64,7 +64,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
     <!-- TMPL_IF NAME="CircAutocompl" -->
     <div class="autocomplete">
             <div id="borrowerautocomplete" class="autocomplete">
-                <input autocomplete="off" id="findborrower" name="findborrower" class="focus" type="text" />
+                <input autocomplete="off" id="findborrower" name="findborrower" type="text" />
                 <div id="yborrowercontainer"></div>
                 <input id="ysearchsubmit" type="submit" class="submit" value="Submit" />
                 <input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
@@ -72,7 +72,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
             </div>
         </div>
 	<!-- TMPL_ELSE -->
-            <input id="findborrower" name="findborrower" size="40" class="focus" type="text" />
+            <input id="findborrower" name="findborrower" size="40" type="text" />
             <input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
             <input name="printer" value="" type="hidden" />
             <input value="Submit" class="submit" type="submit" />
@@ -84,7 +84,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 	<p class="tip">Enter search keywords:</p>
 		<form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
 			 <input type="text" name="q" id="search-form" size="40" value="" title="Enter the terms you wish to search for." class="form-text" />
-				<input type="submit" name="op" id="opac-submit" value="Submit"  class="submit" />
+				<input type="submit" name="op" id="opac-submit" value="Submit" class="submit" />
 		</form>
 	</div><!-- /TMPL_IF -->
 			<ul>
