@@ -17,6 +17,7 @@ to add to Batch <!-- TMPL_VAR NAME="batch_id" -->
 <form name="f" method="post" action="/cgi-bin/koha/labels/label-item-search.pl">
 	<input type="hidden" name="op" value="do_search" />
 	<input type="hidden" name="batch_id" value="<!-- TMPL_VAR NAME="batch_id" -->" />
+	<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" />
 	<fieldset class="rows">
 <ol><li>
   <select name="idx" disabled="disabled"><!-- FIXME: script does keyword search regardless -->

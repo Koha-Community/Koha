@@ -113,7 +113,7 @@ elsif ( $op eq 'add' ) {   # add item
         my $query2 = "INSERT INTO $batch_type ( " . (($batch_type eq 'labels') ? 'itemnumber' : 'borrowernumber') . ", batch_id ) values ( ?,? )";
 	my $sth2   = $dbh->prepare($query2);
 	for my $inum (@itemnumber) {
-            warn "INSERTing " . (($batch_type eq 'labels') ? 'itemnumber' : 'borrowernumber') . ":$inum for batch $batch_id";
+            # warn "INSERTing " . (($batch_type eq 'labels') ? 'itemnumber' : 'borrowernumber') . ":$inum for batch $batch_id";
 	    $sth2->execute($inum, $batch_id);
 	}
 	$sth2->finish;
