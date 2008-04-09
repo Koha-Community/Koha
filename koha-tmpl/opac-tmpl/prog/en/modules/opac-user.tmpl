@@ -291,7 +291,19 @@ No renewals left
             </tr></thead>
 			<tbody>
             <!-- TMPL_LOOP NAME="RESERVES" -->
-            <tr>
+           <!-- TMPL_IF NAME="wait" -->
+                        <!-- TMPL_IF NAME="atdestination" -->
+                            <!-- TMPL_IF NAME="found" -->
+                            <tr class="reserved">
+                            <!-- TMPL_ELSE -->
+                            <tr>
+                        <!-- /TMPL_IF -->
+                        <!-- TMPL_ELSE -->
+                            <tr class="transfered">
+                        <!-- /TMPL_IF -->
+                    <!-- TMPL_ELSE -->
+                            <tr>
+                    <!-- /TMPL_IF -->
                 <td>
                     <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="reserves_title" --></a>
                     <!-- TMPL_VAR NAME="author" -->
