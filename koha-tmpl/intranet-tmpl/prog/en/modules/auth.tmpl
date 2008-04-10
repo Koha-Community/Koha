@@ -47,13 +47,17 @@
 <input type="password" name="password" id="password" class="input" value="" size="20" tabindex="2" />
 </p>
 
-<!-- TMPL_IF NAME="AutoLocation" --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="IndependantBranches" --><!-- TMPL_ELSE --><p><label for="branch">Library:</label>
+<!-- TMPL_IF NAME="AutoLocation" --><!-- TMPL_ELSE -->
+<!-- TMPL_IF NAME="IndependantBranches" --><!-- TMPL_ELSE -->
+<p><label for="branch">Library:</label>
     <select name="branch" id="branch" class="input" tabindex="3">
+    <option value="">Default</option>
     <!-- TMPL_LOOP NAME="branchloop" -->
     <option value="<!-- TMPL_VAR NAME='branchcode' -->"><!-- TMPL_VAR NAME='branchname' --></option>
     <!-- /TMPL_LOOP -->
     </select>
-    </p><!-- /TMPL_IF --><!-- /TMPL_IF -->
+    </p><!-- /TMPL_IF -->
+	<!-- /TMPL_IF -->
 
 <!-- <p><label><input name="rememberme" type="checkbox" id="rememberme" value="forever" tabindex="3" />Remember me</label></p> -->
 
