@@ -32,10 +32,25 @@ my $filename=$query->param("filename");
 my $dbh=C4::Context->dbh;
 my $marcflavour = C4::Context->preference("marcflavour");
 
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user
+    (
+        {
+            template_name => "tools/export.tmpl",
+            query => $query,
+            type => "intranet",
+            authnotrequired => 0,
+            flagsrequired => {tools => 1},
+            debug => 1,
+            }
+    );
+
 if ($op eq "export") {
+    binmode(STDOUT,":utf8");
 	print $query->header(   -type => 'application/octet-stream', 
-							-attachment=>$filename);
-    
+                            -charset => 'utf-8',
+                            -attachment=>$filename);
+     
     my $StartingBiblionumber  = $query->param("StartingBiblionumber");
     my $EndingBiblionumber    = $query->param("EndingBiblionumber");
     my $output_format         = $query->param("output_format");
@@ -159,7 +174,6 @@ else {
             debug => 1,
          }
     );
-    
     $template->param(
         branchloop   => \@branchloop,
         itemtypeloop => \@itemtypesloop
