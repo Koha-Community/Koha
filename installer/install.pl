@@ -696,7 +696,7 @@ else {
 
     # LANGUAGE SELECTION page by default
     # using opendir + language Hash
-    my $languages_loop = getTranslatedLanguages();
+    my $languages_loop = getTranslatedLanguages('intranet');
     $template->param( installer_languages_loop => $languages_loop );
     if ($dbh) {
         my $rq =
