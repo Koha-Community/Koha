@@ -18,7 +18,7 @@ $(document).ready(function(){
     });
 	$("span.clearall").html("<a id=\"CheckNone\" href=\"#\">Clear All</a>");
 	$("span.checkall").html("<a id=\"CheckAll\" href=\"#\">Select All</a>");
-	$("span.addto").html("<label for=\"addto\">Add to: </label><select name=\"addto\" id=\"addto\"><option value=\"\"></option><!-- TMPL_IF name="opacbookbag" --><option value=\"addtocart\">Cart</option><!-- /TMPL_IF --><!-- TMPL_IF NAME="virtualshelves" --><!-- TMPL_IF NAME="loggedinusername" --><optgroup label=\"Lists:\"><!-- TMPL_IF NAME="barshelves" --><!-- TMPL_LOOP NAME="barshelvesloop" --><!-- TMPL_IF EXPR="category == 1" --><option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP --><!-- /TMPL_IF --><option value=\"newlist\">[ New List ]</option></optgroup><!-- TMPL_ELSE --><option value=\"newlist\">List</option><!-- /TMPL_IF --><!-- /TMPL_IF --></select> <input type=\"submit\" class=\"submit\" value=\"Save\" />");
+	$("span.addto").html("<label for=\"addto\">Add to: </label><select name=\"addto\" id=\"addto\"><option value=\"\"></option><!-- TMPL_IF name="opacbookbag" --><option value=\"addtocart\">Cart</option><!-- /TMPL_IF --><!-- TMPL_IF NAME="virtualshelves" --><!-- TMPL_IF NAME="loggedinusername" --><optgroup label=\"Lists:\"><!-- TMPL_IF NAME="barshelves" --><!-- TMPL_LOOP NAME="barshelvesloop" --><!-- TMPL_IF EXPR="category == 1" --><option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--></option><!-- /TMPL_IF --><!-- /TMPL_LOOP --><!-- /TMPL_IF --><option value=\"newlist\">[ New List ]</option></optgroup><!-- TMPL_ELSE --><option value=\"newlist\">List</option><!-- /TMPL_IF --><!-- /TMPL_IF --></select> <input type=\"submit\" class=\"submit\" value=\"Save\" />");
 	$("#addto").change(function(){
 		cartList();
 	});
@@ -52,7 +52,7 @@ $(document).ready(function(){
         $("#bookbag_form").unCheckCheckboxes();
         return false;
     }); 
-    KOHA.Google.GetCoverFromIsbn();
+    <!-- TMPL_IF NAME="GoogleJackets" -->KOHA.Google.GetCoverFromIsbn();<!-- /TMPL_IF -->
 });
 //]]>
 </script>
@@ -167,9 +167,9 @@ $(document).ready(function(){
             <!-- Actual Search Results -->
             <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
             <!-- TMPL_IF name="even" -->
-                <tr class="highlight" style="border-bottom:0px;">
+                <tr class="highlight">
             <!-- TMPL_ELSE -->
-                <tr style="border-bottom:0px;">
+                <tr>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="XSLTResultsDisplay" -->
                 <td class="select"><!--TMPL_IF EXPR="opacbookbag || virtualshelves" --><input type="checkbox" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" title="Click to add to cart" /> <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"><!-- /TMPL_IF --><!--TMPL_IF EXPR="opacbookbag || virtualshelves" --></label><!-- /TMPL_IF --></td>
