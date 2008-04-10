@@ -154,7 +154,7 @@ $.tablesorter.addParser({
             <input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->" />
             <fieldset class="rows">
             <ol>
-            <li><label for="shelfname">List Name: </label><input type="text" id="shelfname" name="shelfname" size="60" value="<!-- TMPL_VAR NAME="shelfname"-->" /></li>
+            <li><label for="shelfname">List Name: </label><input type="text" id="shelfname" name="shelfname" size="60" value="<!-- TMPL_VAR NAME="shelfname" ESCAPE="html" -->" /></li>
             <li><label for="sortfield" >Sort this list by: </label>
             <select name="sortfield">
             <option value="title" <!-- TMPL_IF NAME="sort_title" -->selected="1"<!-- /TMPL_IF -->>title</option>
