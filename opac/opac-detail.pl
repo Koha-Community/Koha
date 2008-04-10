@@ -80,6 +80,8 @@ if ( $itemtype ) {
     $dat->{'imageurl'}    = $imgdir."/".$itemtypes->{$itemtype}->{'imageurl'};
     $dat->{'description'} = $itemtypes->{$itemtype}->{'description'};
 }
+my $shelflocations =GetKohaAuthorisedValues('items.location',$dat->{'frameworkcode'});
+my $collections =  GetKohaAuthorisedValues('items.ccode',$dat->{'frameworkcode'} );
 
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
@@ -121,8 +123,9 @@ for my $itm (@items) {
     $itm->{datelastseen} = format_date($itm->{datelastseen});
 
     #get collection code description, too
-    $itm->{'ccode'}  = GetAuthorisedValueDesc('','',   $itm->{'ccode'} ,'','','CCODE');
-    $itm->{'location_description'} = GetAuthorisedValueDesc('','',   $itm->{'location'} ,'','','LOC');
+	my $ccode= $itm->{'ccode'};
+	$itm->{'ccode'} = $collections->{$ccode} if(defined($collections) && exists($collections->{$ccode}));
+    $itm->{'location_description'} = $shelflocations->{$itm->{'location'} };
     $itm->{'imageurl'}    = $imgdir."/".$itemtypes->{ $itm->{itype} }->{'imageurl'};     
     $itm->{'description'} = $itemtypes->{$itemtype}->{'description'};
 	$itemfields{ccode} = 1 if($itm->{ccode});
