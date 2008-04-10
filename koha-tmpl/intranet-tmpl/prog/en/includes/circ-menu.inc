@@ -44,7 +44,7 @@
         <!-- TMPL_IF NAME="emailpro" -->
             <li class="email"> <a href="mailto:<!-- TMPL_VAR NAME="emailpro" -->" title="<!-- TMPL_VAR NAME="emailpro" -->"><!-- TMPL_VAR NAME="emailpro" --></a></li>
         <!-- TMPL_ELSE -->
-            <span class="problem">No email stored.</span>    
+            <li> <span class="problem">No email stored.</span>    </li>
         <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
     <li>Category: <!-- TMPL_VAR name="categorycode" --></li>
