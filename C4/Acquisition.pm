@@ -980,6 +980,8 @@ sub GetLateOrders {
     my $strsth;
     my $dbdriver = C4::Context->config("db_scheme") || "mysql";
 
+    my @query_params = ();
+
     #    warn " $dbdriver";
     if ( $dbdriver eq "mysql" ) {
         $strsth = "
@@ -1005,26 +1007,35 @@ sub GetLateOrders {
             (aqbasket LEFT JOIN borrowers ON aqbasket.authorisedby = borrowers.borrowernumber)
             LEFT JOIN aqbooksellers ON aqbasket.booksellerid = aqbooksellers.id
             WHERE aqorders.basketno = aqbasket.basketno
-            AND (closedate <= DATE_SUB(CURDATE( ),INTERVAL $delay DAY))
+            AND (closedate <= DATE_SUB(CURDATE( ),INTERVAL ? DAY))
             AND ((datereceived = '' OR datereceived is null)
             OR (aqorders.quantityreceived < aqorders.quantity) )
         ";
-        $strsth .= " AND aqbasket.booksellerid = $supplierid " if ($supplierid);
-        $strsth .= " AND borrowers.branchcode like \'" . $branch . "\'"
-          if ($branch);
-        $strsth .=
-          " AND borrowers.branchcode like \'"
-          . C4::Context->userenv->{branch} . "\'"
-          if ( C4::Context->preference("IndependantBranches")
-            && C4::Context->userenv
-            && C4::Context->userenv->{flags} != 1 );
-        $strsth .=" HAVING quantity<>0
-                    AND unitpricesupplier<>0
-                    AND unitpricelib<>0
-                    ORDER BY latesince,basketno,borrowers.branchcode, supplier
-        ";
-    }
-    else {
+
+        push @query_params, $delay;
+    
+        if ( defined $supplierid ) {
+            $strsth .= ' AND aqbasket.booksellerid = ? ';
+            push @query_params, $supplierid;
+        }
+        
+        if ( defined $branch ) {
+            $strsth .= ' AND borrowers.branchcode like ? ';
+            push @query_params, $branch;
+        }
+
+        if ( C4::Context->preference("IndependantBranches")
+             && C4::Context->userenv
+             && C4::Context->userenv->{flags} != 1 ) {
+            $strsth .= ' AND borrowers.branchcode like ? ';
+            push @query_params, C4::Context->userenv->{branch};
+        }
+        
+        $strsth .= " HAVING quantity       <> 0
+                     AND unitpricesupplier <> 0
+                     AND unitpricelib      <> 0
+                     ORDER BY latesince, basketno, borrowers.branchcode, supplier ";
+    } else {
         $strsth = "
             SELECT aqbasket.basketno,
                    DATE(aqbasket.closedate) AS orderdate,
@@ -1057,7 +1068,7 @@ sub GetLateOrders {
         $strsth .=" ORDER BY latesince,basketno,borrowers.branchcode, supplier";
     }
     my $sth = $dbh->prepare($strsth);
-    $sth->execute;
+    $sth->execute( @query_params );
     my @results;
     my $hilighted = 1;
     while ( my $data = $sth->fetchrow_hashref ) {
