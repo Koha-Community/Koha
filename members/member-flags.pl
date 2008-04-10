@@ -64,7 +64,7 @@ if ($input->param('newflags')) {
     $sth = $dbh->prepare("UPDATE borrowers SET flags=? WHERE borrowernumber=?");
     $sth->execute($module_flags, $member);
     
-    if (C4::Context->preference('CheckSpecificUserPermissions')) {
+    if (C4::Context->preference('GranularPermissions')) {
         # deal with subpermissions
         $sth = $dbh->prepare("DELETE FROM user_permissions WHERE borrowernumber = ?");
         $sth->execute($member); 
@@ -102,7 +102,7 @@ if ($input->param('newflags')) {
 		    checked => $checked,
 		    flagdesc => $flagdesc );
 
-        if (C4::Context->preference('CheckSpecificUserPermissions')) {
+        if (C4::Context->preference('GranularPermissions')) {
             my @sub_perm_loop = ();
             my $expand_parent = 0;
             if ($checked) {

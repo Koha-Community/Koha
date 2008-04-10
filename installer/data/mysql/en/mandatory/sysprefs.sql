@@ -182,4 +182,4 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACItemHolds','1','Allow OPAC users to place hold on specific items. If OFF, users can only request next available copy.','','YesNo');
 
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('CheckSpecificUserPermissions','0','Check most specific staff user permissions',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('GranularPermissions','0','Use detailed staff user permissions',NULL,'YesNo');

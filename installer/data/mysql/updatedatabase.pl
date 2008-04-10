@@ -1268,9 +1268,9 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     (13, 'batch_upload_patron_images', 'Upload patron images in batch or one at a time'),
     (13, 'schedule_tasks', 'Schedule tasks to run')");
         
-    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('CheckSpecificUserPermissions','0','Check most specific staff user permissions',NULL,'YesNo')");
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('GranularPermissions','0','Use detailed staff user permissions',NULL,'YesNo')");
 
-    print "Upgrade to $DBversion done (adding permissions and user_permissions tables and CheckSpecificUserPermissions syspref) ";
+    print "Upgrade to $DBversion done (adding permissions and user_permissions tables and GranularPermissions syspref) ";
     SetVersion ($DBversion);
 }
 
