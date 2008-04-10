@@ -55,7 +55,7 @@ function update_child() {
 	
 		var moremenu = [
 			{ text: _("Renew Patron"),  onclick: { fn: confirm_reregistration } },
-			{ text: _("Set Permissions"), url: "/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->",<!-- TMPL_UNLESS NAME="CAN_user_permission" -->disabled: true, <!-- /TMPL_UNLESS -->},
+			{ text: _("Set Permissions"), url: "/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->",<!-- TMPL_UNLESS NAME="CAN_user_permissions" -->disabled: true, <!-- /TMPL_UNLESS -->},
 			{ text: _("Delete"), onclick: { fn: confirm_deletion } },
 			{ text: _("Update Child to Adult Patron") , onclick: { fn: update_child }, <!-- TMPL_UNLESS NAME="is_child" -->disabled: true, <!-- /TMPL_UNLESS -->},
 		]
@@ -110,5 +110,5 @@ function update_child() {
 	<li><a id="changepassword" href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Change Password</a></li>
 	<li id="printmenuc"><a id="printpage" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page">Print Page</a></li>
 	<li><a id="printslip" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip">Print Slip</a></li>
-	<li id="moremenuc"><a id="renewpatron" href="/cgi-bin/koha/members/moremember.pl?reregistration=y&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Renew Account</a></li><!-- TMPL_IF NAME="CAN_user_permission" --><li><a id="patronflags" href="/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Set Permissions</a></li><!-- /TMPL_IF --><li><a id="deletepatron" href="javascript:confirm_deletion();">Delete</a></li>
+	<li id="moremenuc"><a id="renewpatron" href="/cgi-bin/koha/members/moremember.pl?reregistration=y&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Renew Account</a></li><!-- TMPL_IF NAME="CAN_user_permissions" --><li><a id="patronflags" href="/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Set Permissions</a></li><!-- /TMPL_IF --><li><a id="deletepatron" href="javascript:confirm_deletion();">Delete</a></li>
 </ul></div>

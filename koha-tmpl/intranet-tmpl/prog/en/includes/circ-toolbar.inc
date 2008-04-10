@@ -42,7 +42,7 @@ function confirm_reregistration() {
 		var moremenu = [
 			{ text: _("Renew Patron"),  onclick: { fn: confirm_reregistration } },
             { text: _("Set Permissions"), url: "/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->"
-                <!-- TMPL_IF NAME="CAN_user_permission" --><!-- TMPL_IF NAME="StaffMember" -->
+                <!-- TMPL_IF NAME="CAN_user_permissions" --><!-- TMPL_IF NAME="StaffMember" -->
                     <!-- TMPL_UNLESS NAME="CAN_user_staffaccess" -->, disabled: true<!-- /TMPL_UNLESS-->
                     <!-- TMPL_ELSE --><!-- /TMPL_IF -->
                 <!-- TMPL_ELSE -->, disabled: true<!-- /TMPL_IF-->},
@@ -73,7 +73,7 @@ function confirm_reregistration() {
 	    new YAHOO.widget.Button("printslilp");
 		new YAHOO.widget.Button("printpage");
 	    new YAHOO.widget.Button("renewpatron");		 
-        <!-- TMPL_IF NAME="CAN_user_permission" -->
+        <!-- TMPL_IF NAME="CAN_user_permissions" -->
           <!-- TMPL_IF NAME="StaffMember" -->
             <!-- TMPL_IF NAME="CAN_user_staffaccess" -->
               new YAHOO.widget.Button("patronflags");
@@ -113,7 +113,7 @@ function confirm_reregistration() {
 	<li id="printmenuc"><a id="printpage" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page">Print Page</a></li>
 	<li><a id="printslip" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip">Print Slip</a></li>
 	<li id="moremenuc"><a id="renewpatron" href="/cgi-bin/koha/members/moremember.pl?reregistration=y&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Renew Account</a></li>
-    <!-- TMPL_IF NAME="CAN_user_permission" -->
+    <!-- TMPL_IF NAME="CAN_user_permissions" -->
         <!-- TMPL_IF NAME="StaffMember" -->
             <!-- TMPL_IF NAME="CAN_user_staffaccess" -->
                 <li><a id="patronflags" href="/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Set Permissions</a></li>
