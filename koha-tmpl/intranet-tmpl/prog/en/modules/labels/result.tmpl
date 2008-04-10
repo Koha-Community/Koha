@@ -17,15 +17,15 @@ function add_item(itemnum,batch_id,type_id){
  var getstr='';
  if (itemnum == 'checked') {
     itms= new Array;        
-    if(document.resultform.itemnumber.length > 0) {
-        for (var i=0; i < document.resultform.itemnumber.length; i++) {
-            if (document.resultform.itemnumber[i].checked) {
-                itms.push("itemnumber=" +  document.resultform.itemnumber[i].value);
+    if(document.resultform.i_itemnumber.length > 0) {
+        for (var i=0; i < document.resultform.i_itemnumber.length; i++) {
+            if (document.resultform.i_itemnumber[i].checked) {
+                itms.push("itemnumber=" +  document.resultform.i_itemnumber[i].value);
             }
         }
         getstr = itms.join("&");
     } else {
-        getstr = "itemnumber="+document.resultform.itemnumber.value;
+        getstr = "itemnumber="+document.resultform.i_itemnumber.value;
     }
   } else {
 		getstr = "itemnumber="+itemnum;
@@ -33,8 +33,8 @@ function add_item(itemnum,batch_id,type_id){
  	var myurl = "label-manager.pl?op=add&batch_id="+batch_id+"&type="+type_id+"&"+getstr;
 	window.opener.location.href = myurl;
 }
-function add_item3(itemnumber){
- var myurl = "label-manager.pl?op=add&itemnumber="+itemnumber+"";
+function add_item3(i_itemnumber){
+ var myurl = "label-manager.pl?op=add&itemnumber="+i_itemnumber+"";
      window.opener.location.href = myurl;
 }
 //]]>
@@ -72,38 +72,39 @@ function add_item3(itemnumber){
 <div id="breadcrumbs"><a href="/cgi-bin/koha/labels/label-item-search.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->">Search for Items for Batch <!-- TMPL_VAR NAME="batch_id" --></a> &rsaquo; Search results</div>
 <form name="resultform" class="checkboxed"><div style="float: right; margin-top: .5em;"><input type="submit" class="icon addchecked" value="Add checked" onclick="add_item('checked',<!-- TMPL_VAR NAME="batch_id" -->,'<!-- TMPL_VAR NAME="type" -->'); return false" /> <input type="button" class="close" value="Done" /></div><div style="line-height: 2em; margin-left: .7em;"><a id="CheckAll" href="/cgi-bin/koha/labels/label-item-search.pl">Select All</a></span><span class="clearall"><a id="CheckNone" href="/cgi-bin/koha/labels/label-item-search.pl">Clear All</a></div>
 
-	<table style="float: left; margin: .5em 0;">
 	<!-- TMPL_LOOP name="result" -->
+	<table width="610 pixels" frame="border" border="2" style="float: left; margin: .5em 0;">
 		<!-- TMPL_IF name="highlight" -->
 			<tr class="highlight">
 		<!-- TMPL_ELSE -->
 			<tr>
 		<!-- /TMPL_IF -->
-			<td> <input type="checkbox" name="itemnumber" id="itm<!-- TMPL_VAR NAME="itemnumber" -->" value="<!-- TMPL_VAR NAME="itemnumber" -->" />	</td>
-			<td>
-					<p><label for="itm<!-- TMPL_VAR NAME="itemnumber" -->" style="font-weight:bold;"><!-- TMPL_VAR NAME="title" --></label> 
-					<!-- TMPL_VAR NAME="author" -->
-					<p>[ <!-- TMPL_VAR NAME="itemtype" --> ]
-					<!-- TMPL_IF name="publishercode" -->- <!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF -->
-					<!-- TMPL_IF name="place" --> ; <!-- TMPL_VAR name="place" --><!-- /TMPL_IF -->
-					<!-- TMPL_IF name="pages" --> - <!-- TMPL_VAR name="pages" --><!-- /TMPL_IF -->
-					<!-- TMPL_IF name="notes" --> <br /> <!-- TMPL_VAR name="notes" --><!-- /TMPL_IF -->
-					</p>
-				</td>
+			<td colspan="5">
+					<label style="font-weight:bold;"><!-- TMPL_VAR NAME="title" --></label> by <!-- TMPL_VAR NAME="author" --><br />
+                                      [<!-- TMPL_VAR NAME="itemtype" -->], <!-- TMPL_IF name="publishercode" --><!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF --><!-- TMPL_IF name="place" --><!-- TMPL_VAR name="place" --> <!-- /TMPL_IF --><!-- TMPL_IF name="copyrightdate" --><!-- TMPL_VAR name="copyrightdate" -->, <!-- /TMPL_IF --><!-- TMPL_IF name="pages" --><!-- TMPL_VAR name="pages" --><!-- /TMPL_IF --><!-- TMPL_IF name="isbn" -->, <b>ISBN: </b><!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF --><!-- TMPL_IF name="notes" -->,<br /><!-- TMPL_VAR name="notes" --><!-- /TMPL_IF -->
+			</td>
+                        </tr>
 <!-- NEW -->
-				<td>
-					<!-- TMPL_IF name="itemcallnumber" --><!-- TMPL_VAR name="itemcallnumber" --><br /> <!-- /TMPL_IF -->
-					<!-- TMPL_IF name="dateaccessioned" -->[<!-- TMPL_VAR name="dateaccessioned" -->]<br /> <!-- /TMPL_IF -->
-					<!-- TMPL_IF name="barcode" --> <!-- TMPL_VAR name="barcode" --> <!-- /TMPL_IF -->
-				</td>
-				<td>
-					<a onclick="add_item('<!-- TMPL_VAR NAME="itemnumber" -->',<!-- TMPL_VAR NAME="batch_id" -->, '<!-- TMPL_VAR NAME="type" -->'); return false" href="/cgi-bin/koha/barcodes/label-manager.pl?itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&amp;batch_id=<!-- TMPL_VAR name="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->&amp;op=add">Add</a>
-
+                                <tr>
+                                    <th>Select</th>
+                                    <th>Item Call Number</th>
+                                    <th>Date Accessioned</th>
+                                    <th>Barcode</th>
+                                    <th></th>
+                                </tr>
+        <!-- TMPL_LOOP name="item" -->
+					<!-- TMPL_IF name="i_itemnumber1" --><tr><td align="center"><label for="itm<!-- TMPL_VAR NAME="i_itemnumber1" -->" ><input type="checkbox" name="i_itemnumber" id="itm<!-- TMPL_VAR NAME="i_itemnumber1" -->" value="<!-- TMPL_VAR NAME="i_itemnumber1" -->" /></label></td><!-- /TMPL_IF -->
+					<!-- TMPL_IF name="i_itemcallnumber" --><td align="center"><!-- TMPL_VAR name="i_itemcallnumber" --><br /></td><!-- /TMPL_IF -->
+					<!-- TMPL_IF name="i_dateaccessioned" --><td align="center"><!-- TMPL_VAR name="i_dateaccessioned" --><br /></td><!-- /TMPL_IF -->
+					<!-- TMPL_IF name="i_barcode" --><td align="center"><!-- TMPL_VAR name="i_barcode" --></td><!-- /TMPL_IF -->
+					<!-- TMPL_IF name="i_itemnumber2" --><td align="center"> 
+					<a onclick="add_item('<!-- TMPL_VAR NAME="i_itemnumber2" -->',<!-- TMPL_VAR NAME="batch_id" -->, '<!-- TMPL_VAR NAME="type" -->'); return false" href="/cgi-bin/koha/barcodes/label-manager.pl?itemnumber=<!-- TMPL_VAR NAME="i_itemnumber2" -->&amp;batch_id=<!-- TMPL_VAR name="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->&amp;op=add">Add</a></td>
+		                        <!-- /TMPL_IF -->
 <!-- /NEW -->
-				</td>
-			</tr>
+        <!-- /TMPL_LOOP --><!-- item -->
+                                        </tr>
+	 </table>
 	<!-- /TMPL_LOOP -->
-		</table>
 </form>
 	<div class="results">
 		<p>

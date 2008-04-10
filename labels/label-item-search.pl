@@ -32,10 +32,17 @@ use C4::Acquisition;
 use C4::Search;
 use C4::Dates qw( DHTMLcalendar );
 use C4::Koha;    # XXX subfield_is_koha_internal_p
-
+use C4::Debug;
 use List::Util qw( max min );
 #use Smart::Comments;
-use Data::Dumper;
+
+BEGIN {
+    $debug = $debug || $cgi_debug;
+    if ($debug) {
+        require Data::Dumper;
+        import Data::Dumper qw(Dumper);
+    }
+}
 
 # Creates a scrolling list with the associated default value.
 # Using more than one scrolling list in a CGI assigns the same default value to all the
@@ -79,40 +86,43 @@ if ( $op eq "do_search" ) {
 
 if ( $show_results ) {
 	my $hits = $show_results;
-	my (@results,@results2);
-    # This code needs to be refactored using these subs...
-    #my @items = &GetItemsInfo( $biblio->{biblionumber}, 'intra' );
-    #my $dat = &GetBiblioData( $biblio->{biblionumber} );
+        my (@results, @items);
+        # This code needs to be refactored using these subs...
+        #my @items = &GetItemsInfo( $biblio->{biblionumber}, 'intra' );
+        #my $dat = &GetBiblioData( $biblio->{biblionumber} );
 	for(my $i=0; $i<$hits; $i++) {
         #DEBUG Notes: Decode the MARC record from each resulting MARC record...
-	    my $marcrecord = MARC::File::USMARC::decode($marcresults->[$i]);
+	my $marcrecord = MARC::File::USMARC::decode($marcresults->[$i]);
         #DEBUG Notes: Transform it to Koha form...
-	    my $biblio = TransformMarcToKoha(C4::Context->dbh,$marcrecord,'');
-	    #build the hash for the template.
-	    $biblio->{highlight}       = ($i % 2)?(1):(0);
-        #DEBUG Notes: Stuff it into @results... (used below to supply fields not existing in the item data)
+	my $biblio = TransformMarcToKoha(C4::Context->dbh,$marcrecord,'');
+	# Begin building the hash for the template...
+        # I don't think we need this with the current template design, but I'm leaving it in place. -fbcit
+	#$biblio->{highlight}       = ($i % 2)?(1):(0);
+        #DEBUG Notes: Stuff the bib into @results...
         push @results, $biblio;
-	    my $biblionumber = $biblio->{'biblionumber'};
+	my $biblionumber = $biblio->{'biblionumber'};
         #DEBUG Notes: Grab the item numbers associated with this MARC record...
         my $itemnums = get_itemnumbers_of($biblionumber);
         #DEBUG Notes: Retrieve the item data for each number... 
         my $iii = $itemnums->{$biblionumber};
 	    if ($iii) {
-            my @titem_results = GetItemsInfo( $itemnums->{$biblionumber}, 'intra' );
 	        my $item_results =  GetItemInfosOf( @$iii );
-        	foreach my $item (keys %$item_results) {
-                for my $bibdata (keys %{$results[$i]}) {
-                    if ( !$item_results->{$item}{$bibdata} ) {      #Only add the data from the bibliodata if the data does not already exit in itemdata.
-                        #Otherwise we just build duplicate records rather than unique records per item.
-                        $item_results->{$item}{$bibdata} = $results[$i]->{$bibdata};
+                foreach my $item (keys %$item_results) {
+                    #DEBUG Notes: Build an array element 'item' of the correct bib (results) hash which contains item-specific data...
+                    if ($item_results->{$item}->{'biblionumber'} eq $results[$i]->{'biblionumber'}) {
+                        # NOTE: The order of the elements in this array must be preserved or the table dependent on it will be incorrectly rendered.
+                        # This is a real hack, but I can't think of a better way right now. -fbcit
+                        push @{$results[$i]->{'item'}}, { i_itemnumber1         => $item_results->{$item}->{'itemnumber'} };
+                        push @{$results[$i]->{'item'}}, { i_itemcallnumber      => $item_results->{$item}->{'itemcallnumber'} };
+                        push @{$results[$i]->{'item'}}, { i_dateaccessioned     => $item_results->{$item}->{'dateaccessioned'} };
+                        push @{$results[$i]->{'item'}}, { i_barcode             => $item_results->{$item}->{'barcode'} };
+                        push @{$results[$i]->{'item'}}, { i_itemnumber2         => $item_results->{$item}->{'itemnumber'} };
                     }
                 }
-                #DEBUG Notes: After merging the bib and item data, stuff the results into $results2...
-                push @results2, $item_results->{$item};
-            }
-            #warn Dumper(@results2);
 	    }
-    }
+        }
+        $debug and warn "**********\@results**********\n";
+        $debug and warn Dumper(@results);
   
   ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
@@ -159,22 +169,22 @@ if ( $show_results ) {
     my $displaynext = 0;
     my $displayprev = $startfrom;
     # XXX Kludge. We show the "next" link if we retrieved the max number of results. There could be 0 more.
-    if ( scalar @results2 == $resultsperpage ) {
+    if ( scalar @results == $resultsperpage ) {
         $displaynext = 1;
     }
 
     $template->param(
-        result         => \@results2,
+        result         => \@results,
         startfrom      => $startfrom,
         displaynext    => $displaynext,
         displayprev    => $displayprev,
         resultsperpage => $resultsperpage,
-        startfromnext  => $startfrom + min( $resultsperpage, scalar @results2 ),
+        startfromnext  => $startfrom + min( $resultsperpage, scalar @results ),
         startfromprev  => max( $startfrom - $resultsperpage, 0 ),
         searchdata     => \@field_data,
         total          => $total,
         from           => $startfrom + 1,
-        to             => $startfrom + min( $resultsperpage, scalar @results2 ),
+        to             => $startfrom + min( $resultsperpage, scalar @results ),
         numbers        => \@numbers,
         batch_id       => $batch_id,
         type           => $type,
