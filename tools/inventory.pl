@@ -50,7 +50,7 @@ my ($template, $borrowernumber, $cookie)
                 query => $input,
                 type => "intranet",
                 authnotrequired => 0,
-                flagsrequired => {tools => 1},
+                flagsrequired => {tools => 'inventory'},
                 debug => 1,
                 });
 

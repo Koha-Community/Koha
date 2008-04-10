@@ -64,7 +64,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { tools => 1 },
+        flagsrequired   => { tools => 'view_system_logs' },
         debug           => 1,
     }
 );

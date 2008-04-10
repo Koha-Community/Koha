@@ -41,7 +41,7 @@ my ($template, $loggedinuser, $cookie)
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => {parameters => 1, tools => 1},
+                            flagsrequired => {parameters => 1, tools => 'edit_notice_status_triggers'},
                             debug => 1,
                             });
 my $err=0;

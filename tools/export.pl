@@ -155,7 +155,7 @@ else {
             query => $query,
             type => "intranet",
             authnotrequired => 0,
-            flagsrequired => {tools => 1},
+            flagsrequired => {tools => 'export_catalog'},
             debug => 1,
          }
     );

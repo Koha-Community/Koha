@@ -37,7 +37,7 @@ my ($template, $loggedinuser, $cookie)
 					query => $input,
 					type => "intranet",
 					authnotrequired => 0,
-					flagsrequired => {management => 1, tools => 1},
+					flagsrequired => {management => 1, tools => 'batch_upload_patron_images'},
 					debug => 0,
 					});
 

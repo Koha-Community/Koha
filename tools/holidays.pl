@@ -38,7 +38,7 @@ my ($template, $loggedinuser, $cookie)
                              type => "intranet",
                              query => $input,
                              authnotrequired => 0,
-                             flagsrequired => {tools => 1},
+                             flagsrequired => {tools => 'edit_calendar'},
                              debug => 1,
                            });
 

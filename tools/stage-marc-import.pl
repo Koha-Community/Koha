@@ -58,7 +58,7 @@ my ($template, $loggedinuser, $cookie)
 					query => $input,
 					type => "intranet",
 					authnotrequired => 0,
-					flagsrequired => {tools => 1},
+					flagsrequired => {tools => 'stage_marc_import'},
 					debug => 1,
 					});
 

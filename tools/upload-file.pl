@@ -38,7 +38,7 @@ use C4::UploadedFile;
 # have been created.
 
 my %cookies = fetch CGI::Cookie;
-my ($auth_status, $sessionID) = check_cookie_auth($cookies{'CGISESSID'}->value, { tools => 1 });
+my ($auth_status, $sessionID) = check_cookie_auth($cookies{'CGISESSID'}->value, { tools => '*' });
 if ($auth_status ne "ok") {
     $auth_status = 'denied' if $auth_status eq 'failed';
     send_reply($auth_status, "");

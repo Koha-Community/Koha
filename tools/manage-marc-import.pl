@@ -52,7 +52,7 @@ my ($template, $loggedinuser, $cookie)
                  query => $input,
                  type => "intranet",
                  authnotrequired => 0,
-                 flagsrequired => {parameters => 1},
+                 flagsrequired => {tools => 'manage_staged_marc'},
                  debug => 1,
                  });
 
