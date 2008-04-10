@@ -41,7 +41,8 @@ BEGIN {
     $debug = $ENV{DEBUG} || 0 ;
     @ISA   = qw(Exporter);
     @EXPORT    = qw(&checkauth &get_template_and_user);
-    @EXPORT_OK = qw(&check_api_auth &get_session &check_cookie_auth &checkpw);
+    @EXPORT_OK = qw(&check_api_auth &get_session &check_cookie_auth &checkpw &get_all_subpermissions &get_user_subpermissions);
+    %EXPORT_TAGS = (EditPermissions => [qw(get_all_subpermissions get_user_subpermissions)]);
     $ldap = C4::Context->config('useldapserver') || 0;
     if ($ldap) {
         require C4::Auth_with_ldap;             # no import
@@ -67,7 +68,7 @@ C4::Auth - Authenticates Koha users
             query           => $query,
       type            => "opac",
       authnotrequired => 1,
-      flagsrequired   => {borrow => 1},
+      flagsrequired   => {borrow => 1, catalogue => '*', tools => 'import_patrons' },
   }
     );
 
@@ -97,7 +98,7 @@ C4::Auth - Authenticates Koha users
             query           => $query,
             type            => "opac",
             authnotrequired => 1,
-            flagsrequired   => {borrow => 1},
+            flagsrequired   => {borrow => 1, catalogue => '*', tools => 'import_patrons' },
           }
         );
 
@@ -158,6 +159,8 @@ sub get_template_and_user {
         my @bordat;
         $bordat[0] = $borr;
         $template->param( "USER_INFO" => \@bordat );
+        
+        my $all_perms = get_all_subpermissions();
 
         my @flagroots = qw(circulate catalogue parameters borrowers permissions reserveforothers borrow
                             editcatalogue updatecharges management tools editauthorities serials reports);
@@ -169,7 +172,7 @@ sub get_template_and_user {
             $template->param( CAN_user_catalogue        => 1 );
             $template->param( CAN_user_parameters       => 1 );
             $template->param( CAN_user_borrowers        => 1 );
-            $template->param( CAN_user_permission       => 1 );
+            $template->param( CAN_user_permissions      => 1 );
             $template->param( CAN_user_reserveforothers => 1 );
             $template->param( CAN_user_borrow           => 1 );
             $template->param( CAN_user_editcatalogue    => 1 );
@@ -181,68 +184,47 @@ sub get_template_and_user {
             $template->param( CAN_user_serials          => 1 );
             $template->param( CAN_user_reports          => 1 );
             $template->param( CAN_user_staffaccess      => 1 );
+            foreach my $module (keys %$all_perms) {
+                foreach my $subperm (keys %{ $all_perms->{$module} }) {
+                    $template->param( "CAN_user_${module}_${subperm}" => 1 );
+                }
+            }
         }
 
-        if ( $flags && $flags->{circulate} == 1 ) {
-            $template->param( CAN_user_circulate => 1 );
+        if (C4::Context->preference('CheckSpecificUserPermissions')) {
+            if ( $flags ) {
+                foreach my $module (keys %$all_perms) {
+                    if ( $flags->{$module} == 1) {
+                        foreach my $subperm (keys %{ $all_perms->{$module} }) {
+                            $template->param( "CAN_user_${module}_${subperm}" => 1 );
+                        }
+                    } elsif ( ref($flags->{$module}) ) {
+                        foreach my $subperm (keys %{ $flags->{$module} } ) {
+                            $template->param( "CAN_user_${module}_${subperm}" => 1 );
+                        }
+                    }
+                }
+            }
+        } else {
+            foreach my $module (keys %$all_perms) {
+                foreach my $subperm (keys %{ $all_perms->{$module} }) {
+                    $template->param( "CAN_user_${module}_${subperm}" => 1 );
+                }
+            }
         }
 
-        if ( $flags && $flags->{catalogue} == 1 ) {
-            $template->param( CAN_user_catalogue => 1 );
-        }
-
-        if ( $flags && $flags->{parameters} == 1 ) {
-            $template->param( CAN_user_parameters => 1 );
-            $template->param( CAN_user_management => 1 );
-        }
-
-        if ( $flags && $flags->{borrowers} == 1 ) {
-            $template->param( CAN_user_borrowers => 1 );
-        }
-
-        if ( $flags && $flags->{permissions} == 1 ) {
-            $template->param( CAN_user_permission => 1 );
-        }
-
-        if ( $flags && $flags->{reserveforothers} == 1 ) {
-            $template->param( CAN_user_reserveforothers => 1 );
-        }
-
-        if ( $flags && $flags->{borrow} == 1 ) {
-            $template->param( CAN_user_borrow => 1 );
-        }
-
-        if ( $flags && $flags->{editcatalogue} == 1 ) {
-            $template->param( CAN_user_editcatalogue => 1 );
-        }
-
-        if ( $flags && $flags->{updatecharges} == 1 ) {
-            $template->param( CAN_user_updatecharges => 1 );
-        }
-
-        if ( $flags && $flags->{acquisition} == 1 ) {
-            $template->param( CAN_user_acquisition => 1 );
-        }
-
-        if ( $flags && $flags->{tools} == 1 ) {
-            $template->param( CAN_user_tools => 1 );
-        }
-  
-        if ( $flags && $flags->{editauthorities} == 1 ) {
-            $template->param( CAN_user_editauthorities => 1 );
-        }
-    
-        if ( $flags && $flags->{serials} == 1 ) {
-            $template->param( CAN_user_serials => 1 );
-        }
-
-        if ( $flags && $flags->{reports} == 1 ) {
-            $template->param( CAN_user_reports => 1 );
-        }
-        if ( $flags && $flags->{staffaccess} == 1 ) {
-            $template->param( CAN_user_staffaccess => 1 );
+        if ($flags) {
+            foreach my $module (keys %$flags) {
+                if ( $flags->{$module} == 1 or ref($flags->{$module}) ) {
+                    $template->param( "CAN_user_$module" => 1 );
+                    if ($module eq "parameters") {
+                        $template->param( CAN_user_management => 1 );
+                    }
+                }
+            }
         }
     }
+
     if ( $in->{'type'} eq "intranet" ) {
         $template->param(
             intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
@@ -374,6 +356,25 @@ in the userflags table. E.g., { circulate => 1 } would specify
 that the user must have the "circulate" privilege in order to
 proceed. To make sure that access control is correct, the
 C<$flagsrequired> parameter must be specified correctly.
+
+If the CheckSpecificUserPermissions system preference is ON, the
+value of each key in the C<flagsrequired> hash takes on an additional
+meaning, e.g.,
+
+=item 1
+
+The user must have access to all subfunctions of the module
+specified by the hash key.
+
+=item *
+
+The user must have access to at least one subfunction of the module
+specified by the hash key.
+
+=item specific permission, e.g., 'export_catalog'
+
+The user must have access to the specific subfunction list, which
+must correspond to a row in the permissions table.
 
 The C<$type> argument specifies whether the template should be
 retrieved from the opac or intranet directory tree.  "opac" is
@@ -1197,6 +1198,7 @@ C<$authflags> is a hashref of permissions
 
 sub getuserflags {
     my $flags   = shift;
+    my $userid  = shift;
     my $dbh     = shift;
     my $userflags;
     $flags = 0 unless $flags;
@@ -1211,7 +1213,93 @@ sub getuserflags {
             $userflags->{$flag} = 0;
         }
     }
+
+    # get subpermissions and merge with top-level permissions
+    my $user_subperms = get_user_subpermissions($userid);
+    foreach my $module (keys %$user_subperms) {
+        next if $userflags->{$module} == 1; # user already has permission for everything in this module
+        $userflags->{$module} = $user_subperms->{$module};
+    }
+
     return $userflags;
+}
+
+=item get_user_subpermissions 
+
+=over 4
+
+my $user_perm_hashref = get_user_subpermissions($userid);
+
+=back
+
+Given the userid (note, not the borrowernumber) of a staff user,
+return a hashref of hashrefs of the specific subpermissions 
+accorded to the user.  An example return is
+
+{ 
+    tools => {
+        export_catalog => 1,
+        import_patrons => 1,
+    }
+}
+
+The top-level hash-key is a module or function code from
+userflags.flag, while the second-level key is a code
+from permissions.
+
+The results of this function do not give a complete picture
+of the functions that a staff user can access; it is also
+necessary to check borrowers.flags.
+
+=cut
+
+sub get_user_subpermissions {
+    my $userid = shift;
+
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT flag, code
+                             FROM user_permissions
+                             JOIN permissions USING (module_bit, code)
+                             JOIN userflags ON (module_bit = bit)
+                             JOIN borrowers USING (borrowernumber)
+                             WHERE userid = ?");
+    $sth->execute($userid);
+
+    my $user_perms = {};
+    while (my $perm = $sth->fetchrow_hashref) {
+        $user_perms->{$perm->{'flag'}}->{$perm->{'code'}} = 1;
+    }
+    return $user_perms;
+}
+
+=item get_all_subpermissions
+
+=over 4
+
+my $perm_hashref = get_all_subpermissions();
+
+=back
+
+Returns a hashref of hashrefs defining all specific
+permissions currently defined.  The return value
+has the same structure as that of C<get_user_subpermissions>,
+except that the innermost hash value is the description
+of the subpermission.
+
+=cut
+
+sub get_all_subpermissions {
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT flag, code, description
+                             FROM permissions
+                             JOIN userflags ON (module_bit = bit)");
+    $sth->execute();
+
+    my $all_perms = {};
+    while (my $perm = $sth->fetchrow_hashref) {
+        $all_perms->{$perm->{'flag'}}->{$perm->{'code'}} = $perm->{'description'};
+    }
+    return $all_perms;
 }
 
 =item haspermission 
@@ -1219,7 +1307,7 @@ sub getuserflags {
   $flags = ($dbh,$member,$flagsrequired);
 
 C<$member> may be either userid or overloaded with $borrower hashref from GetMemberDetails.
-C<$flags> is a hashref of required flags lik C<$borrower-&lt;{authflags}> 
+C<$flags> is a hashref of required flags like C<$borrower-&lt;{authflags}> 
 
 Returns member's flags or 0 if a permission is not met.
 
@@ -1235,7 +1323,7 @@ sub haspermission {
         my $sth = $dbh->prepare("SELECT flags FROM borrowers WHERE userid=?");
         $sth->execute($userid);
         my ($intflags) = $sth->fetchrow;
-        $flags = getuserflags( $intflags, $dbh );
+        $flags = getuserflags( $intflags, $userid, $dbh );
     }
     if ( $userid eq C4::Context->config('user') ) {
         # Super User Account from /etc/koha.conf
@@ -1246,8 +1334,18 @@ sub haspermission {
         $flags->{'superlibrarian'} = 1;
     }
     return $flags if $flags->{superlibrarian};
-    foreach ( keys %$flagsrequired ) {
-        return 0 unless( $flags->{$_} );
+    foreach my $module ( keys %$flagsrequired ) {
+        if (C4::Context->preference('CheckSpecificUserPermissions')) {
+            my $subperm = $flagsrequired->{$module};
+            if ($subperm eq '*') {
+                return 0 unless ( $flags->{$module} == 1 or ref($flags->{$module}) );
+            } else {
+                return 0 unless ( $flags->{$module} == 1 or
+                                    ( exists $flags->{$module}->{$subperm} and $flags->{$module}->{$subperm} == 1 ) );
+            }
+        } else {
+            return 0 unless ( $flags->{$module} );
+        }
     }
     return $flags;
     #FIXME - This fcn should return the failed permission so a suitable error msg can be delivered.
