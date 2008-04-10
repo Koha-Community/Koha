@@ -243,6 +243,11 @@ sub handle_file {
                 $imgfile = $img[0];
                 warn "$filename is " . length($imgfile) . " bytes after resizing.";
                 undef $image;    # This object can get big...
+            } else {
+                my @img = $image->ImageToBlob();
+                $imgfile = $img[0];
+                $debug and warn "$filename is " . length($imgfile) . " bytes.";
+                undef $image;
             }
             $debug and warn "Image is of mimetype $mimetype";
             my $dberror = PutPatronImage($cardnumber,$mimetype, $imgfile) if $mimetype;
