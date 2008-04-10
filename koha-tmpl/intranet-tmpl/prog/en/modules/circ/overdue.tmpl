@@ -8,55 +8,68 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Overdues as of <!-- TMPL_VAR NAME="todaysdate" --></div>
 
-<div id="doc3" class="yui-t2">
+<div id="doc" class="yui-t7">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b">
+	<div class="yui-g">
 
 <h2>Items Overdue as of <!-- TMPL_VAR NAME="todaysdate" --></h2>
   
   <form method="post" action="/cgi-bin/koha/circ/overdue.pl">
-  <fieldset>
+  <fieldset class="rows">
     <legend>Filter on :</legend>
-    <p><label>Name or cardnumber:</label><input type="text" name="borname" value="<!--TMPL_VAR Name="borname"-->"></p>
-    <p><label>Patron category:</label><select name="borcat" id="borcat"><option value="">Any</option>
+	<ol>
+    <li><label>Name or cardnumber:</label><input type="text" name="borname" value="<!--TMPL_VAR Name="borname"-->" /></li>
+    <li><label>Patron category:</label><select name="borcat" id="borcat"><option value="">Any</option>
       <!-- TMPL_LOOP name="borcatloop" -->
-        <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="catname" --></option>
+        <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="catname" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="catname" --></option><!-- /TMPL_IF -->
       <!-- /TMPL_LOOP -->
       </select>
-    </p>
-    <p>
-    <p><label>Patron flags:</label><!--TMPL_VAR Name="CGIflags" --></p>
-    <p><label>Item type:</label><select name="itemtype" id="itemtype"><option value="">Any</option>
-      <!-- TMPL_LOOP name="itemtypeloop" -->
-        <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="itemtypename" --></option>
+    </li>
+    <li><label>Patron flags:</label><!--TMPL_VAR Name="CGIflags" --></li>
+    <li><label>Item type:</label><select name="itemtype" id="itemtype"><option value="">Any</option>
+      <!-- TMPL_LOOP name="itemtypeloop" --><!-- TMPL_IF NAME="selected" -->
+        <option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="itemtypename" --></option><!-- TMPL_ELSE -->
+        <option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="itemtypename" --></option><!-- /TMPL_IF -->
       <!-- /TMPL_LOOP -->
       </select>
-    </p>
-    <p>
+    </li>
+    <li>
     <label>Library of the patron:</label><select name="branch" id="branch">
         <option value="">Any</option>
       <!-- TMPL_LOOP name="branchloop" -->
-        <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+        <!-- TMPL_IF NAME="selected" -->
+        <option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="itemtypename" --></option><!-- TMPL_ELSE -->
+        <option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="itemtypename" --></option><!-- /TMPL_IF -->
       <!-- /TMPL_LOOP -->
       </select>
-    </p>
-    Show any items currently issued:<input type="checkbox" name="showall" value="show" <!--TMPL_IF Name="showall"-->checked="checked"<!--/TMPL_IF-->>
-    Sort By<select name="order" tabindex="0" size="1" id="order">
-<option <!--TMPL_UNLESS Name"order"-->selected<!-- /TMPL_UNLESS--> value="">Due Date</option>
-<option  value="borrower">Patron</option>
-<option  value="title">Title</option>
-<option  value="barcode">Barcode</option>
-<option  value="date_due desc">Due Date desc</option>
-<option  value="borrower desc">Patron desc</option>
-<option  value="title desc">Title desc</option>
-<option  value="barcode desc">Barcode</option>
-</select>
-      <input TYPE="submit" value="Apply Filter" class="button reports">
+    </li>
+   
+    <li><label for="order">Sort By:</label> <select name="order" id="order">
+<!-- TMPL_IF NAME="order" -->
+<option value="">Due Date</option>
+<!-- TMPL_ELSE --><option value="" selected="selected">Due Date</option><!-- /TMPL_IF -->
+<option value="borrower">Patron</option>
+<option value="title">Title</option>
+<option value="barcode">Barcode</option>
+<option value="date_due desc">Due Date desc</option>
+<option value="borrower desc">Patron desc</option>
+<option value="title desc">Title desc</option>
+<option value="barcode desc">Barcode</option>
+</select></li>
+<li class="radio"><label for="showall">Show any items currently issued:</label> 
+	<!-- TMPL_IF NAME="showall" --><input type="checkbox" id="showall" name="showall" value="show" checked="checked" /><!-- TMPL_ELSE --><input type="checkbox" id="showall" name="showall" value="show" /><!-- /TMPL_IF -->
+</li>
+</ol>
+   </fieldset>   
+   <fieldset class="action">
+      <input type="submit" value="Apply Filter" class="submit" />
    </fieldset>   
   </form>
-<a href="overdue.pl?op=csv&branch=<!-- TMPL_VAR name="branchfilter" -->">Download file of all overdues</a> (for <!-- TMPL_IF name="branchfilter" -->branch <!-- TMPL_VAR name="branchfilter" --><!-- TMPL_ELSE --> all branches <!-- /TMPL_IF --> . Other filters are ignored)
+  
+ <h3>Results</h3>
+<a href="overdue.pl?op=csv&amp;branch=<!-- TMPL_VAR name="branchfilter" -->">Download file of all overdues</a> (for <!-- TMPL_IF name="branchfilter" -->branch <!-- TMPL_VAR name="branchfilter" --><!-- TMPL_ELSE -->all branches<!-- /TMPL_IF -->. Other filters are ignored)
 <div class="searchresults">
 <table>
 <tr>
@@ -86,8 +99,6 @@
 </div>
 </div>
 </div>
-<div class="yui-b">
-<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
-</div>
+
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

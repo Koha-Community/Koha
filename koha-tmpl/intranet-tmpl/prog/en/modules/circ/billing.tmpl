@@ -16,17 +16,16 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Billing</div>
 
-<div id="doc3" class="yui-t2">
+<div id="doc" class="yui-t7">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b">
+	<div class="yui-g">
 
 <h1>Billing on 
    <!-- TMPL_VAR NAME="todaysdate" --> <br/>From <!-- TMPL_VAR NAME="from" -->
 	to <!-- TMPL_VAR NAME="to" --></h1>
 <div id="filters">
-<br />
 
 <form action="/cgi-bin/koha/circ/billing.pl" method="post" >
 <p>
@@ -166,10 +165,8 @@ Calendar.setup(
         <b>No items found.</b>
     <!-- /TMPL_IF -->
 </div>
+
 </div>
-</div>
-<div class="yui-b">
-<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -1,18 +1,18 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Circulation &rsaquo; Transfers to your branch</title>
+<title>Koha &rsaquo; Circulation &rsaquo; Transfers to your library</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="circ-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>  &rsaquo; Transfers to your branch</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>  &rsaquo; Transfers to your library</div>
 
-<div id="doc3" class="yui-t2">
+<div id="doc" class="yui-t7">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b">
+	<div class="yui-g">
 
 
 	<h1>Transfers made TO your library on : <!-- TMPL_VAR NAME="show_date" --></h1>
@@ -21,10 +21,8 @@
             <div id="resultlist">
             <!-- TMPL_LOOP NAME="branchesloop" -->
                 <!-- TMPL_IF NAME="branchcode" -->
-                <table>
-                <tr>
-                        <th colspan="5">Coming from <!-- TMPL_VAR NAME="branchname" --> </th>
-                </tr>
+                <table style="width: 100%">
+				<caption>Coming from <!-- TMPL_VAR NAME="branchname" --></caption>
                 <tr>
                     <th>Date of transfer</th>
                     <th>Title</th>
@@ -79,9 +77,6 @@
         <!-- /TMPL_IF -->
 
 </div>
-</div>
-<div class="yui-b">
-<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

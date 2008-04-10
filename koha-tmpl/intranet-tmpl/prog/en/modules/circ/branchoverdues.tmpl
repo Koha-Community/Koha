@@ -8,18 +8,18 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Library Overdues at <!-- TMPL_VAR NAME="LoginBranchname" --></div>
 
-<div id="doc3" class="yui-t2">
+<div id="doc" class="yui-t7">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b">
+	<div class="yui-g">
 
 
 <h1>Circulation: Library Overdues at <!-- TMPL_VAR NAME="LoginBranchname" --></h1>
 
 <!-- selector of location -->
 <!-- TMPL_IF NAME="location" -->
-<legend>location selected</legend>
+<h4>location selected</h4>
 <form name="changelocation" action="branchoverdues.pl">
     <ul>
         <li>
@@ -29,9 +29,8 @@
     </ul>
 </form>
 <!-- TMPL_ELSE -->
-<p>Select a location
 <form name="selectlocation" action="branchoverdues.pl" method="post">
-    <select id="location" name="location">
+    <label for="location">Select a location: </label><select id="location" name="location">
         <option value="">All locations</option>
         <!-- TMPL_LOOP NAME="locationsloop" -->
             <option value="<!-- TMPL_VAR NAME="authorised_value" -->"><!-- TMPL_VAR NAME="lib" --></option>
@@ -39,11 +38,10 @@
     </select>
     <input type="submit" name="location" class="button" value="OK" />
 </form>
-</p>
+
 <!-- /TMPL_IF -->
-    <form name="sendnotify" action="branchoverdues.pl" method="post">
     <!-- TMPL_IF name="overduesloop" -->
-        <table>
+        <table style="width:100%;">
         <tr>
             <th>Date_due</th>
             <th>Title</th>
@@ -119,9 +117,9 @@
         There is no overdue for today
     <!-- /TMPL_IF -->
     <!-- TMPL_IF name="todayoverduesloop" -->
-        <fieldset id="branch_odues_today_odues">
-        <legend>Today's notifications</legend>	
-            <table>
+        <div id="branch_odues_today_odues">
+            <table style="width:100%;">
+			<caption>Today's notifications</caption>
             <tr>
                 <th>Date_due</th>
                 <th>Title</th>
@@ -176,13 +174,10 @@
                     </tr>
                 <!-- /TMPL_LOOP -->
             </table>
-        </fieldset>
+        </div>
     <!-- /TMPL_IF -->
 
 </div>
-</div>
-<div class="yui-b">
-<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

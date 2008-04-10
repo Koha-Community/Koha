@@ -8,14 +8,11 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Holds</div>
 
-<div id="doc3" class="yui-t2">
+<div id="doc" class="yui-t7">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b">
-
-
-<h1>Circulation: Library Holds</h1>
+	<div class="yui-g">
 
         <h2>Holds for your library on : <!-- TMPL_VAR NAME="show_date" --></h2>
         <!-- TMPL_IF NAME="messagetransfert" -->
@@ -43,9 +40,6 @@
         <div id="resultlist">
             <!-- TMPL_IF NAME="reserveloop" -->
                 <table>
-                <tr>
-                        <th colspan="5">Holds at your library</th>
-                </tr>
                 <tr>
                         <th>Available since</th>
                         <th>Title</th>
@@ -93,9 +87,6 @@
         <!-- /TMPL_UNLESS -->
 
 </div>
-</div>
-<div class="yui-b">
-<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
