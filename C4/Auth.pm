@@ -1341,7 +1341,11 @@ sub haspermission {
                 return 0 unless ( $flags->{$module} == 1 or ref($flags->{$module}) );
             } else {
                 return 0 unless ( $flags->{$module} == 1 or
-                                    ( exists $flags->{$module}->{$subperm} and $flags->{$module}->{$subperm} == 1 ) );
+                                    ( ref($flags->{$module}) and 
+                                      exists $flags->{$module}->{$subperm} and 
+                                      $flags->{$module}->{$subperm} == 1 
+                                    ) 
+                                );
             }
         } else {
             return 0 unless ( $flags->{$module} );
