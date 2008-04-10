@@ -1230,6 +1230,50 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.068";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("CREATE TABLE `permissions` (
+                `module_bit` int(11) NOT NULL DEFAULT 0,
+                `code` varchar(30) DEFAULT NULL,
+                `description` varchar(255) DEFAULT NULL,
+                PRIMARY KEY  (`module_bit`, `code`),
+                CONSTRAINT `permissions_ibfk_1` FOREIGN KEY (`module_bit`) REFERENCES `userflags` (`bit`)
+                    ON DELETE CASCADE ON UPDATE CASCADE
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+    $dbh->do("CREATE TABLE `user_permissions` (
+                `borrowernumber` int(11) NOT NULL DEFAULT 0,
+                `module_bit` int(11) NOT NULL DEFAULT 0,
+                `code` varchar(30) DEFAULT NULL,
+                CONSTRAINT `user_permissions_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`)
+                    ON DELETE CASCADE ON UPDATE CASCADE,
+                CONSTRAINT `user_permissions_ibfk_2` FOREIGN KEY (`module_bit`, `code`) 
+                    REFERENCES `permissions` (`module_bit`, `code`)
+                    ON DELETE CASCADE ON UPDATE CASCADE
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+
+    $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES
+    (13, 'edit_news', 'Write news for the OPAC and staff interfaces'),
+    (13, 'label_creator', 'Create printable labels and barcodes from catalog and patron data'),
+    (13, 'edit_calendar', 'Define days when the library is closed'),
+    (13, 'moderate_comments', 'Moderate patron comments'),
+    (13, 'edit_notices', 'Define notices'),
+    (13, 'edit_notice_status_triggers', 'Set notice/status triggers for overdue items'),
+    (13, 'view_system_logs', 'Browse the system logs'),
+    (13, 'inventory', 'Perform inventory (stocktaking) of your catalogue'),
+    (13, 'stage_marc_import', 'Stage MARC records into the reservoir'),
+    (13, 'manage_staged_marc', 'Managed staged MARC records, including completing and reversing imports'),
+    (13, 'export_catalog', 'Export bibliographic and holdings data'),
+    (13, 'import_patrons', 'Import patron data'),
+    (13, 'delete_anonymize_patrons', 'Delete old borrowers and anonymize circulation history (deletes borrower reading history)'),
+    (13, 'batch_upload_patron_images', 'Upload patron images in batch or one at a time'),
+    (13, 'schedule_tasks', 'Schedule tasks to run')");
+        
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('CheckSpecificUserPermissions','0','Check most specific staff user permissions',NULL,'YesNo')");
+
+    print "Upgrade to $DBversion done (adding permissions and user_permissions tables and CheckSpecificUserPermissions syspref) ";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table

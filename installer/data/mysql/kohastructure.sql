@@ -2011,11 +2011,32 @@ CREATE TABLE language_script_mapping (
         KEY `language_subtag` (`language_subtag`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `permissions`;
+CREATE TABLE `permissions` (
+  `module_bit` int(11) NOT NULL DEFAULT 0,
+  `code` varchar(30) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY  (`module_bit`, `code`),
+  CONSTRAINT `permissions_ibfk_1` FOREIGN KEY (`module_bit`) REFERENCES `userflags` (`bit`)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS serialitems;
 CREATE TABLE serialitems (
         serialid int(11) NOT NULL,
         itemnumber int(11) NOT NULL,
         UNIQUE KEY `serialididx` (`serialid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `user_permissions`;
+CREATE TABLE `user_permissions` (
+  `borrowernumber` int(11) NOT NULL DEFAULT 0,
+  `module_bit` int(11) NOT NULL DEFAULT 0,
+  `code` varchar(30) DEFAULT NULL,
+  CONSTRAINT `user_permissions_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_permissions_ibfk_2` FOREIGN KEY (`module_bit`, `code`) REFERENCES `permissions` (`module_bit`, `code`)
+    ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

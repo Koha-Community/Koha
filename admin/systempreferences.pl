@@ -82,6 +82,7 @@ my %tabsysprefs;
     $tabsysprefs{SessionStorage}="Admin";
     $tabsysprefs{noItemTypeImages}="Admin";
     $tabsysprefs{OPACBaseURL}="Admin";
+    $tabsysprefs{CheckSpecificUserPermissions}="Admin";
 
 # Authorities
     $tabsysprefs{authoritysep}="Authorities";

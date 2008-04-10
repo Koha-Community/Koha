@@ -183,3 +183,4 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('CircControl',"ItemHomeLibrary",'Précise la bibliothèque qui contrôle les règles de prêt et d''amende',"PickupLibrary|PatronLibrary|ItemHomeLibrary",'Choice');
 
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACItemHolds','1','Si activé, les adhérents peuvent placer des réservations sur un exemplaire spécifique. Sinon, il ne peuvent que réserver le prochain disponible.','','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('CheckSpecificUserPermissions','0','Check most specific staff user permissions',NULL,'YesNo');
