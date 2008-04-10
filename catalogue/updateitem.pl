@@ -68,7 +68,7 @@ if (defined $itemnotes) { # i.e., itemnotes parameter passed from form
     $item_changes->{'damaged'} = $damaged;
 } else {
     #nothings changed, so do nothing.
-    print $cgi->redirect("moredetail.pl?biblionumber=$biblionumber&itemnumber=$itemnumber");
+    print $cgi->redirect("moredetail.pl?biblionumber=$biblionumber&itemnumber=$itemnumber#item$itemnumber");
 	exit;
 }
 
@@ -112,4 +112,4 @@ if ($itemlost==1) {
     $sth->finish;
 }
 
-print $cgi->redirect("moredetail.pl?biblionumber=$biblionumber&itemnumber=$itemnumber");
+print $cgi->redirect("moredetail.pl?biblionumber=$biblionumber&itemnumber=$itemnumber#item$itemnumber");
