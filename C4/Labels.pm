@@ -577,7 +577,7 @@ sub add_layout {
     $sth2->execute();
     $query2 = "INSERT INTO labels_conf
             ( barcodetype, title, subtitle, isbn,issn, itemtype, barcode,
-              dewey, class, subclass, itemcallnumber, author, printingtype,
+              dewey, classification, subclass, itemcallnumber, author, printingtype,
                 guidebox, startlabel, layoutname, active )
                values ( ?, ?, ?, ?, ?, ?, ?,  ?,?, ?, ?, ?, ?, ?,?,?, 1 )";
     $sth2 = $dbh->prepare($query2);
@@ -609,7 +609,7 @@ sub save_layout {
     my $dbh    = C4::Context->dbh;
     my $query2 = "update labels_conf set 
              barcodetype=?, title=?, subtitle=?, isbn=?,issn=?, 
-            itemtype=?, barcode=?,    dewey=?, class=?,
+            itemtype=?, barcode=?,    dewey=?, classification=?,
              subclass=?, itemcallnumber=?, author=?,  printingtype=?,  
                guidebox=?, startlabel=?, layoutname=? where id = ?";
     my $sth2 = $dbh->prepare($query2);
@@ -919,9 +919,6 @@ sub DrawSpineText {
 
     my ( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize, $left_text_margin,
         $text_wrap_cols, $item, $conf_data, $printingtype, $nowrap ) = @_;
-
-    # FIXME: we need to fix the column name mismatch betwen labels_conf.class, and bibitems.classification
-    $$item->{'class'} = $$item->{'classification'};
 
     # Replaced item's itemtype with the more user-friendly description...
     my $dbh = C4::Context->dbh;

@@ -1109,7 +1109,7 @@ CREATE TABLE `labels_conf` (
   `itemtype` int(1) default '0',
   `barcode` int(1) default '0',
   `dewey` int(1) default '0',
-  `class` int(1) default NULL,
+  `classification` int(1) default NULL,
   `subclass` int(1) default '0',
   `itemcallnumber` int(1) default '0',
   `author` int(1) default '0',
