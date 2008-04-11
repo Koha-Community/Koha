@@ -1087,9 +1087,31 @@ sub GetLateOrders {
 
 =over 4
 
-(\@order_loop, $total_qty, $total_price, $total_qtyreceived)=&GetHistory( $title, $author, $name, $from_placed_on, $to_placed_on )
+(\@order_loop, $total_qty, $total_price, $total_qtyreceived) = GetHistory( $title, $author, $name, $from_placed_on, $to_placed_on );
 
-this function get the search history.
+  Retreives some acquisition history information
+
+  returns:
+    $order_loop is a list of hashrefs that each look like this:
+              {
+                'author'           => 'Twain, Mark',
+                'basketno'         => '1',
+                'biblionumber'     => '215',
+                'count'            => 1,
+                'creationdate'     => 'MM/DD/YYYY',
+                'datereceived'     => undef,
+                'ecost'            => '1.00',
+                'id'               => '1',
+                'invoicenumber'    => undef,
+                'name'             => '',
+                'ordernumber'      => '1',
+                'quantity'         => 1,
+                'quantityreceived' => undef,
+                'title'            => 'The Adventures of Huckleberry Finn'
+              }
+    $total_qty is the sum of all of the quantities in $order_loop
+    $total_price is the cost of each in $order_loop times the quantity
+    $total_qtyreceived is the sum of all of the quantityreceived entries in $order_loop
 
 =back
 
@@ -1127,35 +1149,45 @@ sub GetHistory {
         $query .= " LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber"
           if ( C4::Context->preference("IndependantBranches") );
 
-        $query .= " WHERE 1 ";
-        $query .= " AND biblio.title LIKE " . $dbh->quote( "%" . $title . "%" )
-          if $title;
+        $query .= " WHERE (datecancellationprinted is NULL or datecancellationprinted='0000-00-00') ";
+        
+        my @query_params  = ();
+        
+        if ( defined $title ) {
+            $query .= " AND biblio.title LIKE ? ";
+            push @query_params, "%$title%";
+        }
 
-        $query .=
-          " AND biblio.author LIKE " . $dbh->quote( "%" . $author . "%" )
-          if $author;
+        if ( defined $author ) {
+            $query .= " AND biblio.author LIKE ? ";
+            push @query_params, "%$author%";
+        }
 
-        $query .= " AND name LIKE " . $dbh->quote( "%" . $name . "%" ) if $name;
+        if ( defined $name ) {
+            $query .= " AND name LIKE ? ";
+            push @query_params, "%$name%";
+        }            
 
-        $query .= " AND creationdate >" . $dbh->quote($from_placed_on)
-          if $from_placed_on;
+        if ( defined $from_placed_on ) {
+            $query .= " AND creationdate > ? ";
+            push @query_params, $from_placed_on;
+        }
 
-        $query .= " AND creationdate<" . $dbh->quote($to_placed_on)
-          if $to_placed_on;
-        $query .= " AND (datecancellationprinted is NULL or datecancellationprinted='0000-00-00')";
+        if ( defined $to_placed_on ) {
+            $query .= " AND creationdate < ? ";
+            push @query_params, $to_placed_on;
+        }
 
         if ( C4::Context->preference("IndependantBranches") ) {
             my $userenv = C4::Context->userenv;
             if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
-                $query .=
-                    " AND (borrowers.branchcode = '"
-                  . $userenv->{branch}
-                  . "' OR borrowers.branchcode ='')";
+                $query .= " AND (borrowers.branchcode = ? OR borrowers.branchcode ='' ) ";
+                push @query_params, $userenv->{branch};
             }
         }
         $query .= " ORDER BY booksellerid";
         my $sth = $dbh->prepare($query);
-        $sth->execute;
+        $sth->execute( @query_params );
         my $cnt = 1;
         while ( my $line = $sth->fetchrow_hashref ) {
             $line->{count} = $cnt++;
