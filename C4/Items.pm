@@ -1997,7 +1997,7 @@ sub _get_unlinked_subfields_xml {
         # used in the framework
         $marc->append_fields(MARC::Field->new('999', ' ', ' ', @$unlinked_item_subfields));
         $marc->encoding("UTF-8");    
-        $xml = $marc->as_xml();
+        $xml = $marc->as_xml("USMARC");
     }
 
     return $xml;
