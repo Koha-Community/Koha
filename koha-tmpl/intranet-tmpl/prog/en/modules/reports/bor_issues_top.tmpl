@@ -11,8 +11,8 @@
 
 <div id="doc3" class="yui-t2">
    
-   <div id="bd">
-	<div id="yui-main">
+ <div id="bd">
+  <div id="yui-main">
 	<div class="yui-b">
 
 <!-- TMPL_IF NAME="do_it" -->
@@ -33,34 +33,33 @@ function Dopop(link) {
 		<!-- /TMPL_IF -->
 		
 		<table>
-			<tr >
-				<th>Rank/Patrons</th>
+			<tr>
+				<th rowspan="2">Rank</th>
 				<!-- TMPL_LOOP NAME="loopcol" -->
 					<th colspan="2"><!-- TMPL_VAR NAME="coltitle" --></th>
 				<!-- /TMPL_LOOP -->
 			</tr>
-			<tr >
-				<th>&nbsp;</th>
+			<tr>
 				<!-- TMPL_LOOP NAME="loopcol" -->
 					<th>Patron</th>
 					<th>Issues count</th>
 				<!-- /TMPL_LOOP -->
 			</tr>
 				<!-- TMPL_LOOP NAME="looprow" -->
-					<tr>
+				<tr>
+					<!-- TMPL_IF NAME="hilighted" --><td><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
+					<!-- TMPL_VAR NAME="rowtitle" --></td>
+					<!-- TMPL_LOOP NAME="loopcell" -->
 						<!-- TMPL_IF NAME="hilighted" --><td><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
-						<!-- TMPL_VAR NAME="rowtitle" --></td>
-						<!-- TMPL_LOOP NAME="loopcell" -->
-							<!-- TMPL_IF NAME="hilighted" --><td><!-- TMPL_ELSE --><td ><!-- /TMPL_IF -->
-								<!-- TMPL_IF NAME="reference" --><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="reference" -->"><!-- /TMPL_IF -->
-								<!-- TMPL_IF NAME="value" --><!-- TMPL_VAR NAME="value" --><!-- /TMPL_IF -->
-								<!-- TMPL_IF NAME="reference" --></a><!-- /TMPL_IF -->
-							</td>
-							<!-- TMPL_IF NAME="hilighted" --><td><!-- TMPL_ELSE --><td ><!-- /TMPL_IF -->
-								<!-- TMPL_IF NAME="count" --><!-- TMPL_VAR NAME="count" --><!-- /TMPL_IF -->
-							</td>
-						<!-- /TMPL_LOOP -->
-					</tr>
+							<!-- TMPL_IF NAME="reference" --><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="reference" -->"><!-- /TMPL_IF -->
+							<!-- TMPL_IF NAME="value" --><!-- TMPL_VAR NAME="value" --><!-- /TMPL_IF -->
+							<!-- TMPL_IF NAME="reference" --></a><!-- /TMPL_IF -->
+						</td>
+						<!-- TMPL_IF NAME="hilighted" --><td><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="count" --><!-- TMPL_VAR NAME="count" --><!-- /TMPL_IF -->
+						</td>
+					<!-- /TMPL_LOOP -->
+				</tr>
 				<!-- /TMPL_LOOP -->
 		</table>
 	<!-- /TMPL_LOOP -->
@@ -205,22 +204,21 @@ function Dopop(link) {
      <!--/TMPL_LOOP --> 
     </select>
 			</li>
-			<li> 
+			<li>
 				<label for="day">Day: </label>
 				<input type="text" name="Filter" id="day" value="" />
 			</li>
-			<li> 
+			<li>
 				<label for="month">Month: </label>
 				<input type="text" name="Filter" id="month" value="" />
 			</li>
-			<li> 
+			<li>
 				<label for="year">Year: </label>
 				<input type="text" name="Filter" id="year" value="" />
 			</li>
-							
-							</ol>	
+
+		</ol>
 	</fieldset>
-	
 	
 	<fieldset class="rows">
 	<ol>
@@ -236,7 +234,7 @@ function Dopop(link) {
 					</select></li>
 		<li><label for="criteria">By: </label> <select name="Criteria" id="criteria">
 						<option value ="" selected="selected">None</option>
-						<option value ="issuingbranch">Branch</option>
+						<option value ="branchcode">Branch</option>
 						<option value ="categorycode">Categorycode</option>
 						<option value ="itemtype">Itemtype</option>
 						<option value ="Day">Day</option>
@@ -249,10 +247,23 @@ function Dopop(link) {
 
 <fieldset class="rows">
 	<legend>Output</legend>
-<ol><li><label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> </li>
-<li><label for="outputfile">To a file:</label> 		<input type="radio" name="output" value="file" id="outputfile" /> <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" /> <label class="inline" for="MIME">Into an application  
-		</label><!-- TMPL_VAR NAME="CGIextChoice" -->
-		<!-- TMPL_VAR NAME="CGIsepChoice" --></li></ol>
+	<ol><li><label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /></li>
+		<li><label for="outputfile">To a file: </label><input type="radio" name="output" value="file" id="outputfile" />
+			<label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" />
+			<label class="inline" for="MIME">Into an application: </label>
+			<select name="MIME" id="MIME">
+			<!-- TMPL_LOOP NAME="mimeloop" -->
+				<option value="<!-- TMPL_VAR NAME="type" -->"><!-- TMPL_VAR NAME="type" --></option>
+			<!-- /TMPL_LOOP -->
+			</select>
+			<!-- <label class="inline" for="sep">Delimiter: </label> -->
+			<select name="sep" id="sep">
+			<!-- TMPL_LOOP NAME="seploop" -->
+				<option value="<!-- TMPL_VAR NAME="delim" -->"><!-- TMPL_VAR NAME="delim" --></option>
+			<!-- /TMPL_LOOP -->
+			</select>
+		</li>
+	</ol>
 	</fieldset>
 
 	<fieldset class="action">
