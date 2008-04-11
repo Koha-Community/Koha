@@ -147,7 +147,7 @@
 				<tr><td colspan="4"><input type="hidden" name="Filter" /> <input type="hidden" name="Filter" /></td></tr>
 			<!-- /TMPL_IF -->
 			<!--TMPL_IF Name="hglghtDT"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
-				<td>Document Type</td>
+				<td>Item Type</td>
 				<td><input type="radio" name="Line" value="itemtype" /></td>
 				<td><input type="radio" name="Column" value="itemtype" /></td>
 				<td><select name="Filter" id="itemtype">
@@ -189,13 +189,13 @@
 				<td><select name="Filter" id="location">
 					<option value=""> </option>
 					<!-- TMPL_LOOP NAME="locationloop" -->
-					<option value="<!-- TMPL_VAR NAME='location' -->" <!-- TMPL_IF NAME='selected' -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="location" --></option>
+					<option value="<!-- TMPL_VAR NAME='code' -->" <!-- TMPL_IF NAME='selected' -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="description" --></option>
 					<!-- /TMPL_LOOP -->
 					</select>
 				</td>
 			</tr>
 			<tr class="hilighted">
-				<td>Catalogue Code</td>
+				<td>Collection</td>
 				<td><input type="radio" name="Line"   value="items.ccode" /></td>
 				<td><input type="radio" name="Column" value="items.ccode" /></td>
 				<td><select name="Filter" id="ccode">

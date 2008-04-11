@@ -206,6 +206,11 @@ if ($do_it) {
 	$req = $dbh->prepare("select distinctrow location from items order by location");
 	$req->execute;
 	my $locationloop = $req->fetchall_arrayref({});
+	my $locations = GetKohaAuthorisedValues("items.location");
+	my @locations;
+	foreach (sort keys %$locations) {
+		push @locations, { code => $_, description => "$_ - " . $locations->{$_} };
+	}
 	
 	my @mime  = ( map { +{type =>$_} } (split /[;:]/,C4::Context->preference("MIME")) );
 	my @delim = ( map { +{delim=>$_} } (split //,C4::Context->preference("delimiter")) );
@@ -213,16 +218,16 @@ if ($do_it) {
 	$template->param(hasdewey=>$hasdewey,
 #					CGIFromDeweyClass => $CGIdewey,
 #					CGIToDeweyClass => $CGIdewey,
-					haslccn=> $haslccn,
+					haslccn   => $haslccn,
 					hlghtlccn => $hlghtlccn,
 #					CGIFromLoCClass => $CGIlccn,
 #					CGIToLoCClass => $CGIlccn,
-					hascote=> $hascote,
+					hascote   => $hascote,
 					hlghtcote => $hlghtcote,
-					hglghtDT => $hglghtDT,
+					hglghtDT  => $hglghtDT,
 					hglghtPub => $hglghtPub,
-					hglghtPY => $hglghtPY,
-					hglghtHB => $hglghtHB,
+					hglghtPY  => $hglghtPY,
+					hglghtHB  => $hglghtHB,
 					hglghtLOC => $hglghtLOC,
 #					CGIFromCoteClass => $CGIcote,
 #					CGIToCoteClass => $CGIcote,
@@ -230,9 +235,9 @@ if ($do_it) {
 # 					CGIFromPublicationYear => $CGIpublicationyear,
 # 					CGIToPublicationYear => $CGIpublicationyear,
 #					CGIPublisher => $CGIpublisher,
-					CGIBranch => \@branchloop,
-					locationloop => $locationloop,
-					authvals  => \@authvals,
+					CGIBranch    => \@branchloop,
+					locationloop => \@locations,
+					authvals     => \@authvals,
 					CGIextChoice => \@mime,
 					CGIsepChoice => \@delim,
 					);
