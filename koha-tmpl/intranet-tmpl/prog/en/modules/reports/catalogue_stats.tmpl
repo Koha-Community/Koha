@@ -150,7 +150,13 @@
 				<td>Document Type</td>
 				<td><input type="radio" name="Line" value="itemtype" /></td>
 				<td><input type="radio" name="Column" value="itemtype" /></td>
-				<td><!-- TMPL_VAR NAME="CGIItemType" --></td>
+				<td><select name="Filter" id="itemtype">
+					<option value=""> </option>
+					<!-- TMPL_LOOP NAME="CGIItemType" -->
+					<option value="<!-- TMPL_VAR NAME='itemtype' -->" <!-- TMPL_IF NAME='selected' -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="description" --></option>
+					<!-- /TMPL_LOOP -->
+					</select>
+				</td>
 			</tr>
 			<!--TMPL_IF Name="hglghtPub"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
 				<td>Publisher</td>
@@ -168,23 +174,60 @@
 				<td>Home Branch</td>
 				<td><input type="radio" name="Line" value="items.homebranch" /></td>
 				<td><input type="radio" name="Column" value="items.homebranch" /></td>
-				<td><!-- TMPL_VAR NAME="CGIBranch" --></td>
+				<td><select name="Filter" id="branch">
+					<option value=""> </option>
+					<!-- TMPL_LOOP NAME="CGIBranch" -->
+					<option value="<!-- TMPL_VAR NAME='branchcode' -->" <!-- TMPL_IF NAME='selected' -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="branchname" --></option>
+					<!-- /TMPL_LOOP -->
+					</select>
+				</td>
 			</tr>
 			<!--TMPL_IF Name="hglghtLOC"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
 				<td>Location</td>
 				<td><input type="radio" name="Line" value="items.location" /></td>
 				<td><input type="radio" name="Column" value="items.location" /></td>
-				<td><!-- TMPL_VAR NAME="CGILocation" --> </td>
+				<td><select name="Filter" id="location">
+					<option value=""> </option>
+					<!-- TMPL_LOOP NAME="locationloop" -->
+					<option value="<!-- TMPL_VAR NAME='location' -->" <!-- TMPL_IF NAME='selected' -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="location" --></option>
+					<!-- /TMPL_LOOP -->
+					</select>
+				</td>
+			</tr>
+			<tr class="hilighted">
+				<td>Catalogue Code</td>
+				<td><input type="radio" name="Line"   value="items.ccode" /></td>
+				<td><input type="radio" name="Column" value="items.ccode" /></td>
+				<td><select name="Filter" id="ccode">
+					<option value=""> </option>
+					<!-- TMPL_LOOP NAME="authvals" -->
+					<option value="<!-- TMPL_VAR NAME='code' -->" <!-- TMPL_IF NAME='selected' -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="description" --></option>
+					<!-- /TMPL_LOOP -->
+					</select>
+				</td>
 			</tr>
 		</tbody>
 	</table><br /></fieldset>
 	
 	<fieldset class="rows">
 	<legend>Output</legend>
-<ol><li><label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> </li>
-<li><label for="outputfile">To a file:</label> 		<input type="radio" name="output" value="file" id="outputfile" /> <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" /> <label class="inline" for="MIME">Into an application  
-		</label><!-- TMPL_VAR NAME="CGIextChoice" -->
-		<!-- TMPL_VAR NAME="CGIsepChoice" --></li></ol>
+	<ol><li><label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /></li>
+		<li><label for="outputfile">To a file: </label><input type="radio" name="output" value="file" id="outputfile" />
+			<label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" />
+			<label class="inline" for="MIME">Into an application: </label>
+			<select name="MIME" id="MIME">
+			<!-- TMPL_LOOP NAME="CGIextChoice" -->
+			<option value="<!-- TMPL_VAR NAME="type" -->"><!-- TMPL_VAR NAME="type" --></option>
+			<!-- /TMPL_LOOP -->
+			</select>
+			<!-- <label class="inline" for="sep">Delimiter: </label> -->
+			<select name="sep" id="sep">
+			<!-- TMPL_LOOP NAME="CGIsepChoice" -->
+			<option value="<!-- TMPL_VAR NAME="delim" -->"><!-- TMPL_VAR NAME="delim" --></option>
+			<!-- /TMPL_LOOP -->
+			</select>
+		</li>
+	</ol>
 	</fieldset>
 
 	<fieldset class="action">
