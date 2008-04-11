@@ -56,7 +56,12 @@ sub transformMARCXML4XSLT {
     my $biblio = GetBiblioData($biblionumber);
     my $frameworkcode = GetFrameworkCode($biblionumber);
     my $tagslib = &GetMarcStructure(1,$frameworkcode);
-    my @fields = $record->fields();
+    my @fields;
+    # FIXME: wish there was a better way to handle exceptions
+    eval {
+        @fields = $record->fields();
+    };
+    if ($@) { warn "PROBLEM WITH RECORD"; next; }
     my $list_of_authvalues = getAuthorisedValues4MARCSubfields($frameworkcode);
     for my $authvalue (@$list_of_authvalues) {
         for my $field ( $record->field($authvalue->{tagfield}) ) {
