@@ -63,7 +63,6 @@ if ( $counter > 1 ) {
 
 $template->param(
     textmessaging        => $borrower->{textmessaging},
-    opaclanguagesdisplay => 0,
 );
 
 # display news
