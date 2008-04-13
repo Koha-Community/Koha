@@ -1,3 +1,5 @@
+SET NAMES utf8;
+
 INSERT INTO `userflags` VALUES(0,'superlibrarian','Accès à toutes les fonctions bibliothécaires, sans limite',0);
 INSERT INTO `userflags` VALUES(1,'circulate','Circulation',0);
 INSERT INTO `userflags` VALUES(2,'catalogue','Consultation du catalogue (interface professionnelle)',0);
