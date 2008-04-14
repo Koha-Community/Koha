@@ -66,7 +66,7 @@ function Dopop(link) {
                         </td>
                         <td><!-- TMPL_VAR name="description" --></td>
                         <td><!-- TMPL_VAR name="tot" --></td>
-						<!-- TMPL_IF NAME="opacuserlogin" --><td><!-- TMPL_UNLESS NAME="norequests" --><a href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a><!-- /TMPL_UNLESS --></td><!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="opacuserlogin" --><td><!-- TMPL_IF name="RequestOnOpac" --><!-- TMPL_UNLESS NAME="norequests" --><a href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a><!-- /TMPL_UNLESS --><!-- /TMPL_IF --></td><!-- /TMPL_IF -->
                         </tr>
                 <!-- /TMPL_LOOP--></tbody>
         </table>
