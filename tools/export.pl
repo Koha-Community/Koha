@@ -40,7 +40,7 @@ my ($template, $loggedinuser, $cookie)
             query => $query,
             type => "intranet",
             authnotrequired => 0,
-            flagsrequired => {tools => 1},
+            flagsrequired => {tools => 'export_catalog'},
             debug => 1,
             }
     );
@@ -162,18 +162,6 @@ else {
        push @branchloop, \%row;
     }
     
-    my ($template, $loggedinuser, $cookie)
-    = get_template_and_user
-    (
-        {
-            template_name => "tools/export.tmpl",
-            query => $query,
-            type => "intranet",
-            authnotrequired => 0,
-            flagsrequired => {tools => 'export_catalog'},
-            debug => 1,
-         }
-    );
     $template->param(
         branchloop   => \@branchloop,
         itemtypeloop => \@itemtypesloop
