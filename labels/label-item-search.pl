@@ -182,7 +182,7 @@ if ( $show_results ) {
         startfromnext  => $startfrom + min( $resultsperpage, scalar @results ),
         startfromprev  => max( $startfrom - $resultsperpage, 0 ),
         searchdata     => \@field_data,
-        total          => $total,
+        total          => (scalar @results),
         from           => $startfrom + 1,
         to             => $startfrom + min( $resultsperpage, scalar @results ),
         numbers        => \@numbers,
