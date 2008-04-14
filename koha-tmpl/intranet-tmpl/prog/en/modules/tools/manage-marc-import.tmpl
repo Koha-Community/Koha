@@ -4,6 +4,7 @@
  &rsaquo; Batch <!-- TMPL_VAR name="import_batch_id" -->
 <!-- /TMPL_IF -->
 </title>
+<!-- TMPL_INCLUDE NAME="greybox.inc" -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="background-job.inc" -->
 </head>
@@ -200,7 +201,7 @@ Page
   </tr>
   <!-- TMPL_LOOP name="biblio_list" -->
   <tr>
-    <td><!-- TMPL_VAR name="record_sequence"--></td>
+    <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=<!-- TMPL_VAR name='import_record_id' -->" rel="gb_page_center[600,500]"><!-- TMPL_VAR name="record_sequence"--></a></td>
     <td><!-- TMPL_VAR name="citation"--></td>
     <td><!-- TMPL_VAR name="status"--></td>
     <td><!-- TMPL_VAR name="overlay_status"--></td>
