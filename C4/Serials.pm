@@ -1353,7 +1353,7 @@ sub NewSubscription {
     $query             = qq(
         INSERT INTO subscriptionhistory
             (biblionumber, subscriptionid, histstartdate,  opacnote, librariannote)
-        VALUES (?,?,?,?,?,?,?,?)
+        VALUES (?,?,?,?,?)
         );
     $sth = $dbh->prepare($query);
     $sth->execute( $biblionumber, $subscriptionid,
