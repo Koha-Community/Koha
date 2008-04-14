@@ -1316,7 +1316,10 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
             $oldbiblio->{summary} = $summary;
         }
 
-# Add search-term highlighting to the whole record where they match using <span>s
+        # save an author with no <span> tag, for the <a href=search.pl?q=<!--tmpl_var name="author"-->> link
+        $oldbiblio->{'author_nospan'} = $oldbiblio->{'author'};
+        $oldbiblio->{'title_nospan'} = $oldbiblio->{'title'};
+        # Add search-term highlighting to the whole record where they match using <span>s
         if (C4::Context->preference("OpacHighlightedWords")){
             my $searchhighlightblob;
             for my $highlight_field ( $marcrecord->fields ) {
@@ -1339,31 +1342,29 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
             }
             $searchhighlightblob = ' ... '.$searchhighlightblob if $searchhighlightblob;
             $oldbiblio->{'searchhighlightblob'} = $searchhighlightblob;
-        }
-# save an author with no <span> tag, for the <a href=search.pl?q=<!--tmpl_var name="author"-->> link
-        $oldbiblio->{'author_nospan'} = $oldbiblio->{'author'};
-
-        # Add search-term highlighting to the title, subtitle, etc. fields
-        for my $term ( keys %$span_terms_hashref ) {
-            my $old_term = $term;
-            if ( length($term) > 3 ) {
-                $term =~ s/(.*=|\)|\(|\+|\.|\?|\[|\]|\\|\*)//g;
-                $oldbiblio->{'title'} =~
-                  s/$term/<span class=\"term\">$&<\/span>/gi;
-                $oldbiblio->{'subtitle'} =~
-                  s/$term/<span class=\"term\">$&<\/span>/gi;
-                $oldbiblio->{'author'} =~
-                  s/$term/<span class=\"term\">$&<\/span>/gi;
-                $oldbiblio->{'publishercode'} =~
-                  s/$term/<span class=\"term\">$&<\/span>/gi;
-                $oldbiblio->{'place'} =~
-                  s/$term/<span class=\"term\">$&<\/span>/gi;
-                $oldbiblio->{'pages'} =~
-                  s/$term/<span class=\"term\">$&<\/span>/gi;
-                $oldbiblio->{'notes'} =~
-                  s/$term/<span class=\"term\">$&<\/span>/gi;
-                $oldbiblio->{'size'} =~
-                  s/$term/<span class=\"term\">$&<\/span>/gi;
+    
+            # Add search-term highlighting to the title, subtitle, etc. fields
+            for my $term ( keys %$span_terms_hashref ) {
+                my $old_term = $term;
+                if ( length($term) > 3 ) {
+                    $term =~ s/(.*=|\)|\(|\+|\.|\?|\[|\]|\\|\*)//g;
+                    $oldbiblio->{'title'} =~
+                    s/$term/<span class=\"term\">$&<\/span>/gi;
+                    $oldbiblio->{'subtitle'} =~
+                    s/$term/<span class=\"term\">$&<\/span>/gi;
+                    $oldbiblio->{'author'} =~
+                    s/$term/<span class=\"term\">$&<\/span>/gi;
+                    $oldbiblio->{'publishercode'} =~
+                    s/$term/<span class=\"term\">$&<\/span>/gi;
+                    $oldbiblio->{'place'} =~
+                    s/$term/<span class=\"term\">$&<\/span>/gi;
+                    $oldbiblio->{'pages'} =~
+                    s/$term/<span class=\"term\">$&<\/span>/gi;
+                    $oldbiblio->{'notes'} =~
+                    s/$term/<span class=\"term\">$&<\/span>/gi;
+                    $oldbiblio->{'size'} =~
+                    s/$term/<span class=\"term\">$&<\/span>/gi;
+                }
             }
         }
 
