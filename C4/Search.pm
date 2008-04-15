@@ -229,6 +229,7 @@ sub SimpleSearch {
         my @results;
         my @tmpresults;
         my @zconns;
+        my $total_hits;
         return ( "No query entered", undef, undef ) unless $query;
 
         # Initialize & Search Zebra
@@ -260,7 +261,6 @@ sub SimpleSearch {
                 return ( $error, undef, undef );
             }
         }
-        my $total_hits;
         while ( ( my $i = ZOOM::event( \@zconns ) ) != 0 ) {
             my $event = $zconns[ $i - 1 ]->last_event();
             if ( $event == ZOOM::Event::ZEND ) {
