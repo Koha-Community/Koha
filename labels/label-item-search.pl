@@ -74,7 +74,8 @@ if ( $op eq "do_search" ) {
       #catalogsearch( $dbh, \@tags, \@and_or, \@excluding, \@operator, \@value,
       #  $startfrom * $resultsperpage,
       #  $resultsperpage, $orderby );
-		( $error, $marcresults ) = SimpleSearch( $marclist[0], $startfrom, $resultsperpage );
+		( $error, $marcresults, $total ) = SimpleSearch( $marclist[0], $startfrom, $resultsperpage );
+                warn "\$total=$total";
 		if ($marcresults) {
 			$show_results = scalar @$marcresults;
 		} else {
@@ -182,7 +183,7 @@ if ( $show_results ) {
         startfromnext  => $startfrom + min( $resultsperpage, scalar @results ),
         startfromprev  => max( $startfrom - $resultsperpage, 0 ),
         searchdata     => \@field_data,
-        total          => (scalar @results),
+        total          => $total,
         from           => $startfrom + 1,
         to             => $startfrom + min( $resultsperpage, scalar @results ),
         numbers        => \@numbers,

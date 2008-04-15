@@ -221,7 +221,7 @@ sub SimpleSearch {
         my $search_result =
           (      $result->{hits}
               && $result->{hits} > 0 ? $result->{'RECORDS'} : [] );
-        return ( undef, $search_result );
+        return ( undef, $search_result, scalar($search_result) );
     }
     else {
         # FIXME hardcoded value. See catalog/search.pl & opac-search.pl too.
@@ -229,7 +229,7 @@ sub SimpleSearch {
         my @results;
         my @tmpresults;
         my @zconns;
-        return ( "No query entered", undef ) unless $query;
+        return ( "No query entered", undef, undef ) unless $query;
 
         # Initialize & Search Zebra
         for ( my $i = 0 ; $i < @servers ; $i++ ) {
@@ -246,7 +246,7 @@ sub SimpleSearch {
                   . $zconns[$i]->addinfo() . " "
                   . $zconns[$i]->diagset();
 
-                return ( $error, undef ) if $zconns[$i]->errcode();
+                return ( $error, undef, undef ) if $zconns[$i]->errcode();
             };
             if ($@) {
 
@@ -257,16 +257,17 @@ sub SimpleSearch {
                   . $@->addinfo() . " "
                   . $@->diagset();
                 warn $error;
-                return ( $error, undef );
+                return ( $error, undef, undef );
             }
         }
-
+        my $total_hits;
         while ( ( my $i = ZOOM::event( \@zconns ) ) != 0 ) {
             my $event = $zconns[ $i - 1 ]->last_event();
             if ( $event == ZOOM::Event::ZEND ) {
 
                 my $first_record = defined( $offset ) ? $offset+1 : 1;
                 my $hits = $tmpresults[ $i - 1 ]->size();
+                $total_hits += $hits;
                 my $last_record = $hits;
                 if ( defined $max_results && $offset + $max_results < $hits ) {
                     $last_record  = $offset + $max_results;
@@ -279,7 +280,7 @@ sub SimpleSearch {
             }
         }
 
-        return ( undef, \@results );
+        return ( undef, \@results, $total_hits );
     }
 }
 
