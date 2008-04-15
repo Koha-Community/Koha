@@ -52,10 +52,11 @@ YAHOO.util.Event.onContentReady("changelanguage", function () {
 YAHOO.util.Event.onContentReady("listsmenu", function () {
     $("#listsmenu").css("display","block").css("visibility","hidden");
 	$("#listsmenulink").attr("href","#").find("span:eq(0)").append("<img src=\"/opac-tmpl/prog/images/list.gif\" width=\"5\" height=\"6\" alt=\"\" border=\"0\" />");
-	var listMenu = new YAHOO.widget.Menu("listsmenu", { lazyload: true });
+	var listMenu = new YAHOO.widget.Menu("listsmenu");
 		listMenu.render();
 		listMenu.cfg.setProperty("context", ["listsmenulink", "tr", "br"]);
 		listMenu.cfg.setProperty("effect",{effect:YAHOO.widget.ContainerEffect.FADE,duration:0.05});
+		listMenu.subscribe("beforeShow",positionlistMenu);
 		listMenu.subscribe("show", listMenu.focus);
         function positionlistMenu() {
                     listMenu.align("tr", "br");

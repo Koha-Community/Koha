@@ -207,6 +207,7 @@ function showCartUpdate(msg){
 	cartUpdate.setBody(msg);
 	cartUpdate.render("cc");
 	cartUpdate.show();
+	YAHOO.util.Event.addListener("cartUpdate", "click", cartUpdate.hide, cartUpdate, true);
 	setTimeout("cartUpdate.hide()",5000);	
 }
 
@@ -425,6 +426,6 @@ function cartMenuInit() {
 	YAHOO.util.Event.addListener("cartmenulink", "mouseout", cartOverlay.hide, cartOverlay, true);
 	YAHOO.util.Event.addListener("cartmenulink", "click", cartOverlay.hide, cartOverlay, true);
 	
-	cartUpdate = new YAHOO.widget.Panel("cartUpdate", { context:["cartmenulink","tr","br"],																							  visible:false,width:"200px",effect:{effect:YAHOO.widget.ContainerEffect.FADE,duration:0.25} } );
+	cartUpdate = new YAHOO.widget.Panel("cartUpdate", { context:["cartmenulink","tr","br"],																							  visible:false,draggable:false, close:false,width:"200px",effect:{effect:YAHOO.widget.ContainerEffect.FADE,duration:0.25} } );
 }
 YAHOO.util.Event.addListener(window, "load", cartMenuInit);
