@@ -171,11 +171,26 @@ When the configuration is completed CPAN will install the Perl modules.
 
     /etc/perl/XML/SAX/ParserDetails.ini
 
-2.4 Create test database in order to install DBD::mysql
+2.4 Install DBD::mysql Perl module
 
 In order to handle UTF-8 correctly, Koha requires at least version 4.004
-of the DBD::mysql Perl module.  However, Debian Etch has a stable package
+of the DBD::mysql Perl module. However, Debian Etch has a stable package
 only for version 3.0008, so it is necessary to install the module  from CPAN.
+DBD::mysql's test suite needs to use a MySQL 'test' DB which doesn't exist 
+anymore. So there are two options to install DBD::mysql: 
+
+  (1) install without test suite,
+  (2) install with test suite requiring a test MySQL DB creation.
+
+2.4.1 Install without test suite
+
+Force install DBD::mysql:
+
+    $ sudo cpan
+    cpan> force install DBD::mysql
+
+2.4.2 Create test database in order to install DBD::mysql
+
 Because of DBD::mysql's test suite, it is necessary to temporarily create a
 test database and user:
 
