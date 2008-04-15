@@ -72,6 +72,8 @@ use C4::Auth;    # get_template_and_user
 use C4::Output;
 use C4::Suggestions;
 use C4::Koha;    # GetAuthorisedValue
+use C4::Dates qw(format_date);
+
 
 my $input           = new CGI;
 my $title           = $input->param('title');
@@ -100,53 +102,77 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $suggestions;
 
-if ( $op eq "aorr_confirm" ) {
-    my @suggestionlist = $input->param("aorr");
+my $branchcode;
+my $userenv = C4::Context->userenv;
+if ($userenv) {
+    unless ($userenv->{flags} == 1){
+        $branchcode=$userenv->{branch};
+    }
+}
 
-    foreach my $suggestion (@suggestionlist) {
-        if ( $suggestion =~ /(A|R)(.*)/ ) {
-            my ( $newstatus, $suggestionid ) = ( $1, $2 );
-            $newstatus = "REJECTED" if $newstatus eq "R";
-            $newstatus = "ACCEPTED" if $newstatus eq "A";
-            my $reason = $input->param( "reason" . $suggestionid );
+if ( $op eq "aorr_confirm" ) {
+    my $parameters=$input->Vars;
+    my @deletelist;
+    my $suggestiontype=$parameters->{suggestiontype};
+    foreach my $suggestionid (keys %$parameters){
+        next unless $suggestionid=~/^\d+$/;
+        ## it is a suggestion
+        if ($parameters->{$suggestionid}=~/delete/i){
+           push @deletelist,$suggestionid;    
+        }
+        else {        
+        ## it is not a deletion    
+            ## Get the Reason
+            my $reason = $parameters->{"reason$suggestionid"};
             if ( $reason eq "other" ) {
-                $reason = $input->param( "other-reason" . $suggestionid );
+                $reason = $parameters->{"other-reason$suggestionid"};
             }
-            ModStatus( $suggestionid, $newstatus, $loggedinuser, '', $reason );
+            unless ($reason){
+                $reason= $parameters->{"reason".$suggestiontype."all"};
+            if ( $reason eq "other" ) {
+                    $reason = $parameters->{"other-reason".$suggestiontype."all"};
+            }
+            }      
+            ModStatus( $suggestionid, $parameters->{$suggestionid}, $loggedinuser, '', $reason );
         }
     }
     $op = "else";
-    $suggestions = &SearchSuggestion( "", "", "", "", 'ASKED', "" );
+    if (scalar(@deletelist)>0){  
+        my $params = "&delete_field=".join ("&delete_field=",@deletelist);
+        warn $params;    
+        print $input->redirect("/cgi-bin/koha/suggestion/acceptorreject.pl?op=delete_confirm$params");
+    }  
 }
 
 if ( $op eq "delete_confirm" ) {
     my @delete_field = $input->param("delete_field");
     foreach my $delete_field (@delete_field) {
-        &DelSuggestion( $loggedinuser, $delete_field );
+        &DelSuggestion( $loggedinuser, $delete_field,"intranet" );
     }
     $op = 'else';
-    $suggestions = &SearchSuggestion( "", "", "", "", 'ASKED', "" );
-}
-
-if ( $op eq "accepted" ) {
-    $suggestions = &GetSuggestionByStatus('ACCEPTED');
-    $template->param(done => 1);
-}
-
-if ( $op eq "rejected" ) {
-    $suggestions = &GetSuggestionByStatus('REJECTED');
-    $template->param(done => 1);
 }
 
 my $reasonsloop = GetAuthorisedValues("SUGGEST");
-my @suggestions_loop;
-foreach my $suggestion (@$suggestions) {
-    $suggestion->{'reasonsloop'} = $reasonsloop;
-    push @suggestions_loop, $suggestion;
-}
+my $pending_suggestions = &SearchSuggestion( "", "", "", "", 'ASKED', "",$branchcode );
+map{$_->{'reasonsloop'}=$reasonsloop;$_->{'date'}=format_date($_->{'date'})} @$pending_suggestions;
+my $accepted_suggestions = &GetSuggestionByStatus('ACCEPTED',$branchcode);
+map{$_->{'reasonsloop'}=$reasonsloop;$_->{'date'}=format_date($_->{'date'})} @$accepted_suggestions;
+my $rejected_suggestions = &GetSuggestionByStatus('REJECTED',$branchcode);
+map{$_->{'reasonsloop'}=$reasonsloop;$_->{'date'}=format_date($_->{'date'})} @$rejected_suggestions;
+
+my @allsuggestions;
+push @allsuggestions,{"suggestiontype"=>"accepted",
+                    'suggestions_loop'=>$accepted_suggestions,    
+                    'reasonsloop' => $reasonsloop};
+push @allsuggestions,{"suggestiontype"=>"pending",
+                     'suggestions_loop'=>$pending_suggestions,
+                    'reasonsloop' => $reasonsloop};
+push @allsuggestions,{"suggestiontype"=>"rejected",
+                     'suggestions_loop'=>$rejected_suggestions,
+                    'reasonsloop' => $reasonsloop};
 
 $template->param(
-    suggestions_loop        => \@suggestions_loop,
+    suggestions       => \@allsuggestions,
     "op_$op"                => 1,
 );
 

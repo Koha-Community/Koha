@@ -72,7 +72,7 @@ Suggestions done by other borrowers can be seen when not "AVAILABLE"
 
 =head2 SearchSuggestion
 
-(\@array) = &SearchSuggestion($user,$author,$title,$publishercode,$status,$suggestedbyme)
+(\@array) = &SearchSuggestion($user,$author,$title,$publishercode,$status,$suggestedbyme,$branchcode)
 
 searches for a suggestion
 
@@ -85,7 +85,7 @@ Note the status is stored twice :
 =cut
 
 sub SearchSuggestion  {
-    my ($user,$author,$title,$publishercode,$status,$suggestedbyme)=@_;
+    my ($user,$author,$title,$publishercode,$status,$suggestedbyme,$branchcode)=@_;
     my $dbh = C4::Context->dbh;
     my $query = "
     SELECT suggestions.*,
@@ -113,13 +113,17 @@ sub SearchSuggestion  {
         push @sql_params,"%".$publishercode."%";
         $query .= " and publishercode like ?";
     }
-    if (C4::Context->preference("IndependantBranches")) {
+    if (C4::Context->preference("IndependantBranches") || $branchcode) {
         my $userenv = C4::Context->userenv;
         if ($userenv) {
             unless ($userenv->{flags} == 1){
                 push @sql_params,$userenv->{branch};
                 $query .= " and (U1.branchcode = ? or U1.branchcode ='')";
             }
+        }
+        if ($branchcode) {
+            push @sql_params,$branchcode;
+            $query .= " and (U1.branchcode = ? or U1.branchcode ='')";
         }
     }
     if ($status) {
@@ -146,6 +150,7 @@ sub SearchSuggestion  {
         } else {
             $even=1;
         }
+#         $data->{date} = format_date($data->{date});
         push(@results,$data);
     }
     return (\@results);
@@ -201,7 +206,7 @@ sub GetSuggestionFromBiblionumber {
 
 =head2 GetSuggestionByStatus
 
-$suggestions = &GetSuggestionByStatus($status)
+$suggestions = &GetSuggestionByStatus($status,[$branchcode])
 
 Get a suggestion from it's status
 
@@ -212,8 +217,10 @@ all the suggestion with C<$status>
 
 sub GetSuggestionByStatus {
     my $status = shift;
+    my $branchcode = shift;
     my $dbh = C4::Context->dbh;
-    my $query = "SELECT suggestions.*,
+    my @sql_params=($status);  
+    my $query = qq(SELECT suggestions.*,
                         U1.surname   AS surnamesuggestedby,
                         U1.firstname AS firstnamesuggestedby,
 						U1.borrowernumber AS borrnumsuggestedby,
@@ -223,17 +230,28 @@ sub GetSuggestionByStatus {
                         FROM suggestions
                         LEFT JOIN borrowers AS U1 ON suggestedby=U1.borrowernumber
                         LEFT JOIN borrowers AS U2 ON managedby=U2.borrowernumber
-                        WHERE status = ?
-                        ";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($status);
-    
-    my @results;
-    while(my $data = $sth->fetchrow_hashref){
-        $data->{date} = format_date($data->{date});
-        push @results,$data;
+                        WHERE status = ?);
+    if (C4::Context->preference("IndependantBranches") || $branchcode) {
+        my $userenv = C4::Context->userenv;
+        if ($userenv) {
+            unless ($userenv->{flags} == 1){
+                push @sql_params,$userenv->{branch};
+                $query .= " and (U1.branchcode = ? or U1.branchcode ='')";
+            }
+        }
+        if ($branchcode) {
+            push @sql_params,$branchcode;
+            $query .= " and (U1.branchcode = ? or U1.branchcode ='')";
+        }
     }
-    return \@results;
+    
+    my $sth = $dbh->prepare($query);
+    $sth->execute(@sql_params);
+    
+    my $results;
+    $results=  $sth->fetchall_arrayref({});
+#     map{$_->{date} = format_date($_->{date})} @$results;
+    return $results;
 }
 
 =head2 CountSuggestion
@@ -443,7 +461,7 @@ Delete a suggestion. A borrower can delete a suggestion only if he is its owner.
 =cut
 
 sub DelSuggestion {
-    my ($borrowernumber,$suggestionid) = @_;
+    my ($borrowernumber,$suggestionid,$type) = @_;
     my $dbh = C4::Context->dbh;
     # check that the suggestion comes from the suggestor
     my $query = "
@@ -454,13 +472,14 @@ sub DelSuggestion {
     my $sth = $dbh->prepare($query);
     $sth->execute($suggestionid);
     my ($suggestedby) = $sth->fetchrow;
-    if ($suggestedby eq $borrowernumber) {
+    if ($type eq "intranet" || $suggestedby eq $borrowernumber ) {
         my $queryDelete = "
             DELETE FROM suggestions
             WHERE suggestionid=?
         ";
         $sth = $dbh->prepare($queryDelete);
-        $sth->execute($suggestionid);
+        my $suggestiondeleted=$sth->execute($suggestionid);
+        return $suggestiondeleted;  
     }
 }
 
