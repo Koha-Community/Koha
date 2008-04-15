@@ -68,7 +68,7 @@ foreach my $thisframeworkcode ( keys %$frameworks ) {
 if ($query) {
 
     # find results
-    my ( $error, $marcresults ) = SimpleSearch($query);
+    my ( $error, $marcresults, $total_hits ) = SimpleSearch($query);
 
     if ( defined $error ) {
         $template->param( error => $error );

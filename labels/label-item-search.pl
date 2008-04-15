@@ -58,6 +58,7 @@ my $dbh = C4::Context->dbh;
 
 my $startfrom = $query->param('startfrom') || 0;
 my ( $template, $loggedinuser, $cookie );
+my $total_hits;
 my (@marclist,@and_or,@excluding,@operator,@value,$orderby,@tags,$results,$total,$error,$marcresults);
 # XXX should this be maxItemsInSearchResults or numSearchResults preference instead of 19?
 my $resultsperpage = $query->param('resultsperpage') || 19;
@@ -74,8 +75,7 @@ if ( $op eq "do_search" ) {
       #catalogsearch( $dbh, \@tags, \@and_or, \@excluding, \@operator, \@value,
       #  $startfrom * $resultsperpage,
       #  $resultsperpage, $orderby );
-		( $error, $marcresults, $total ) = SimpleSearch( $marclist[0], $startfrom, $resultsperpage );
-                warn "\$total=$total";
+		( $error, $marcresults, $total_hits ) = SimpleSearch( $marclist[0], $startfrom, $resultsperpage );
 		if ($marcresults) {
 			$show_results = scalar @$marcresults;
 		} else {
@@ -150,6 +150,7 @@ if ( $show_results ) {
     }
 
     my @numbers = ();
+    $total = $total_hits;
     if ( $total > $resultsperpage ) {
         for ( my $i = 1 ; $i < $total / $resultsperpage + 1 ; $i++ ) {
             if ( $i < 16 ) {
@@ -183,7 +184,7 @@ if ( $show_results ) {
         startfromnext  => $startfrom + min( $resultsperpage, scalar @results ),
         startfromprev  => max( $startfrom - $resultsperpage, 0 ),
         searchdata     => \@field_data,
-        total          => $total,
+        total          => $total_hits,
         from           => $startfrom + 1,
         to             => $startfrom + min( $resultsperpage, scalar @results ),
         numbers        => \@numbers,

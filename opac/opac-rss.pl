@@ -122,7 +122,7 @@ if ($RDF_update_needed) {
     );
 
     warn "fetching $size results for $query";
-    my ( $error, $marcresults ) = SimpleSearch( $query, 0, $size );
+    my ( $error, $marcresults, $total_hits ) = SimpleSearch( $query, 0, $size );
 
     my $hits = scalar @$marcresults;
     my @results;

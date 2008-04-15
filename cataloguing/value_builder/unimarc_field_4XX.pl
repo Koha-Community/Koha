@@ -330,7 +330,7 @@ sub plugin {
         my $startfrom      = $query->param('startfrom');
         my $resultsperpage = $query->param('resultsperpage');
         my $orderby;
-        my ( $errors, $results ) = SimpleSearch($search);
+        my ( $errors, $results, $total_hits ) = SimpleSearch($search);
         my $total = scalar(@$results);
         $resultsperpage = 20 unless $resultsperpage;
 
