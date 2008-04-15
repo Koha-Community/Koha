@@ -46,13 +46,13 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 </script><!-- /TMPL_IF --><!-- /TMPL_IF -->
 <div id="header_search">
 	<!-- TMPL_IF NAME="CAN_user_circulate" -->
-	<div id="circ_search" class="residentsearch">
+	<div id="circ_search" class="residentsearch" style="display:none;">
 	<p class="tip">Enter patron card number or partial name:</p>
     <form action="/cgi-bin/koha/circ/circulation.pl" method="post">
     <!-- TMPL_IF NAME="CircAutocompl" -->
     <div class="autocomplete">
             <div id="borrowerautocomplete" class="autocomplete">
-                <input autocomplete="off" id="findborrower" name="findborrower" class="focus" type="text" />
+                <input autocomplete="off" id="findborrower" name="findborrower" type="text" />
                 <div id="yborrowercontainer"></div>
                 <input id="ysearchsubmit" type="submit" class="submit" value="Submit" />
                 <input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
@@ -60,7 +60,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
             </div>
         </div>
 	<!-- TMPL_ELSE -->
-            <input id="findborrower" name="findborrower" size="40" class="focus" type="text" />
+            <input id="findborrower" name="findborrower" size="40" type="text" />
             <input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
             <input name="printer" value="" type="hidden" />
             <input value="Submit" class="submit" type="submit" />
@@ -79,7 +79,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 </div>
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="CAN_user_catalogue" -->
-	<div id="catalog_search" class="residentsearch" style="display:none;">
+	<div id="catalog_search" class="residentsearch">
 	<p class="tip">Enter search keywords:</p>
 		<form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
 			 <input type="text" name="q" id="search-form" size="40" value="" title="Enter the terms you wish to search for." class="form-text" />

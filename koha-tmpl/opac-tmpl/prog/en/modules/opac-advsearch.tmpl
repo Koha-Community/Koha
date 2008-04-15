@@ -3,7 +3,7 @@
     Catalog &rsaquo; Advanced Search
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
-<body>
+<body id="advsearch">
 <!-- TMPL_INCLUDE name="masthead.inc" -->
 <div id="doc3" class="yui-t7">
    <div id="bd">
@@ -300,7 +300,7 @@
 <!-- AVAILABILITY LIMITS -->
     <fieldset><legend>Location and availability: </legend>
         
-        <select name="limit" id="branchloop">
+        <select name="limit" id="branchloop" style="width: 20em;">
         <option value="">All branches</option>
         <!-- TMPL_LOOP NAME="branchloop" -->
         <!--TMPL_IF Name="selected"-->
@@ -318,7 +318,7 @@
 
 <!-- RANK LIMITS -->
     <fieldset><legend>Sort by: </legend>
-        <select id="sort_by" name="sort_by">
+        <select id="sort_by" name="sort_by" style="width:20em;">
 <!--TMPL_INCLUDE NAME="resort_form.inc" -->
 </select></fieldset>
 <!-- RANK LIMITS -->
