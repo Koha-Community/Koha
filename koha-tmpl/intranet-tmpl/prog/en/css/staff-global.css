@@ -1,7 +1,12 @@
 @import url("../lib/yui/reset-fonts-grids.css");
+@import url("../lib/yui/skin.css");
 
 a, a:link, a:visited, a:active {
 	color : #0000CC;
+}
+
+.yui-button a,.yui-button a:link,.yui-button a:visited {
+	color : #000;
 }
 
 a:hover {
@@ -1367,40 +1372,9 @@ input[type=reset]:active, input[type=button]:active, input.submit:active {
 	font-style : italic;
 }
 
-/* Define a new style for each menu */
-	
-.yui-skin-sam .yuimenu {
-	line-height: 2;/* ~24px */
-	*line-height: 1.9; /* For IE */
-}
-
-a.yuimenuitemlabel {
-}
-	
-.yui-skin-sam .yuimenu .bd {
-	border-width: 1px;
-	border-color: #ddd #666 #666 #ddd;
-	border-style: solid;
-	background-color: #fff;
-}
-
-.yui-skin-sam #sublangs li.yuimenuitem {
-	/*
-	For IE 7 Quirks and IE 6 Strict Mode and Quirks Mode:
-	Used to collapse superfluous white space between <li> 
-	elements that is triggered by the "display" property of the
-	<a> elements being set to "block."
-	*/
-	_border-bottom: solid 1px #ccc;
-}
-	
-	
-/* Define a new style for a MenuItem instance's "selected" state. */
-.yui-skin-sam #sublangs .yuimenuitem-selected {
-	background-color: #82AAE1;
-}
-.yui-skin-sam #sublangs .yuimenuitemlabel-selected {
-	color: #fff;
+a.yuimenuitemlabel:hover {
+	background-color : #B3D4FF;
+	color : #000;
 }
 		
 #toplevelnav {
@@ -1565,4 +1539,13 @@ label.permissioncode {
 span.permissiondesc {
 	font-weight : normal;
 }
-
+/* autocomplete additions */
+#borrowerautocomplete { width: 450px; text-align:left;} /* z-index needed on top instances for ie & sf absolute inside relative issue */
+.autocomplete { width:130px; }/* set width of widget here*/
+.autocomplete .yui-ac-highlight ,
+.autocomplete .yui-ac-highlight .sample-result,
+.autocomplete .yui-ac-highlight .sample-query { color:#FFF; }
+.autocomplete .sample-result { color: black; }
+.autocomplete .sample-query { color:#000; }
+#findborrower { position:static; width:335px; }
+#yborrowercontainer { text-align:left;width:335px; }
