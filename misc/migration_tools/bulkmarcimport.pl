@@ -2,7 +2,8 @@
 # Import an iso2709 file into Koha 3
 
 use strict;
-# use warnings;
+#use warnings;
+#use diagnostics;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
@@ -28,7 +29,7 @@ use IO::File;
 
 binmode(STDOUT, ":utf8");
 
-my ( $input_marc_file, $number) = ('',0);
+my ( $input_marc_file, $number, $offset) = ('',0,0);
 my ($version, $delete, $test_parameter, $skip_marc8_conversion, $char_encoding, $verbose, $commit, $fk_off,$format);
 
 $|=1;
@@ -37,6 +38,7 @@ GetOptions(
     'commit:f'    => \$commit,
     'file:s'    => \$input_marc_file,
     'n:f' => \$number,
+    'o|offset:f' => \$offset,
     'h' => \$version,
     'd' => \$delete,
     't' => \$test_parameter,
@@ -49,28 +51,33 @@ GetOptions(
 
 if ($version || ($input_marc_file eq '')) {
     print <<EOF
-small script to import an iso2709 file into Koha.
-parameters :
-\th : this version/help screen
-\tfile /path/to/file/to/dump : the file to import
-\tv : verbose mode. 1 means "some infos", 2 means "MARC dumping"
-\tfk : Turn off foreign key checks during import.
-\tn : the number of records to import. If missing, all the file is imported
-\tcommit : the number of records to wait before performing a 'commit' operation
-\tt : test mode : parses the file, saying what he would do, but doing nothing.
-\ts : skip automatic conversion of MARC-8 to UTF-8.  This option is 
-\t    provided for debugging.
-\tc : the characteristic MARC flavour. At the moment, only MARC21 and UNIMARC 
-\tsupported. MARC21 by default.
-\td : delete EVERYTHING related to biblio in koha-DB before import  :tables :
-\t\tbiblio, \tbiblioitems,\titems
-\tm : format, MARCXML or ISO2709 (defaults to ISO2709)
-IMPORTANT : don't use this script before you've entered and checked your MARC parameters tables twice (or more!).
-Otherwise, the import won't work correctly and you will get invalid data.
+Small script to import bibliographic records into Koha.
 
-SAMPLE : 
-\t\$ export KOHA_CONF=/etc/koha.conf
-\t\$ perl misc/migration_tools/bulkmarcimport.pl -d -commit 1000 -file /home/jmf/koha.mrc -n 3000
+Parameters:
+  h      this version/help screen
+  file   /path/to/file/to/dump: the file to import
+  v      verbose mode. 1 means "some infos", 2 means "MARC dumping"
+  fk     Turn off foreign key checks during import.
+  n      the number of records to import. If missing, all the file is imported
+  o      file offset before importing, ie number of records to skip.
+  commit the number of records to wait before performing a 'commit' operation
+  t      test mode: parses the file, saying what he would do, but doing nothing.
+  s      skip automatic conversion of MARC-8 to UTF-8.  This option is 
+         provided for debugging.
+  c      the characteristic MARC flavour. At the moment, only MARC21 and 
+         UNIMARC are supported. MARC21 by default.
+  d      delete EVERYTHING related to biblio in koha-DB before import. Tables:
+         biblio, biblioitems, titems
+  m      format, MARCXML or ISO2709 (defaults to ISO2709)
+  
+IMPORTANT: don't use this script before you've entered and checked your MARC 
+           parameters tables twice (or more!). Otherwise, the import won't work 
+           correctly and you will get invalid data.
+
+SAMPLE: 
+  \$ export KOHA_CONF=/etc/koha.conf
+  \$ perl misc/migration_tools/bulkmarcimport.pl -d -commit 1000 \\
+    -file /home/jmf/koha.mrc -n 3000
 EOF
 ;#'
 exit;
@@ -126,20 +133,28 @@ if ($format =~ /XML/i) {
 $batch->warnings_off();
 $batch->strict_off();
 my $i=0;
-my $commitnum = 50;
+my $commitnum = $commit ? $commit : 50;
 
-if ($commit) {
 
-$commitnum = $commit;
-
+# Skip file offset
+if ( $offset ) {
+    print "Skipping file offset: $offset records\n";
+    $batch->next() while ($offset--);
 }
 
 $dbh->{AutoCommit} = 0;
-RECORD: while ( my $record = $batch->next() ) {
+RECORD: while (  ) {
+    my $record;
+    eval { $record = $batch->next() };
+    if ( $@ ) {
+        print "Bad MARC record: skipped\n";
+        next;
+    }
+    last unless ( $record );
     $i++;
     print ".";
     print "\r$i" unless $i % 100;
-
+    
     if ($record->encoding() eq 'MARC-8' and not $skip_marc8_conversion) {
         # FIXME update condition
         my ($guessed_charset, $charset_errors);
