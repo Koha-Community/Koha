@@ -54,6 +54,6 @@
 			</select>
 			<input type="submit" value="Add Record Without Search" />
 		</form>
-  
+    <!-- /TMPL_IF -->  
   </span>
 </div>
