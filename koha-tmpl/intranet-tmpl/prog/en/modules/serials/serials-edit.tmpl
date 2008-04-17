@@ -60,7 +60,6 @@ function Check(f) {
         alert(alertString2);
     }
 }
-<!--TMPL_IF Name="serialsadditems"-->
 function unHideItems(index,labelindex) {
 	subfield = document.getElementById(index);
 	subfield.style.display = 'block';
@@ -137,7 +136,6 @@ function CloneSubfield(index){
     // insert this line on the page
     original.parentNode.insertBefore(clone,original.nextSibling);
 }
-<!--/TMPL_IF>
 //]]>
 </script>
 </head>
@@ -262,7 +260,7 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
         <div id="item<!-- TMPL_VAR NAME="serialid" --><!-- TMPL_VAR NAME="countitems" -->" class="items">
         <!-- TMPL_LOOP NAME="iteminformation" -->
                <div name="line" class="subfield_line" style="<!-- TMPL_VAR NAME='hidden' -->;" id="subfield<!-- TMPL_VAR NAME='serialid' --><!-- TMPL_VAR NAME='countitems' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
-   
+                              
                 <label><!-- TMPL_VAR NAME="subfield" --> - <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR NAME="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></label>
                 <!-- TMPL_VAR NAME="marc_value" -->
                 <input type="hidden" name="itemid" value="<!-- TMPL_VAR NAME="itemid" -->" />

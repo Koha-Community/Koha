@@ -40,7 +40,7 @@ my ($subscriptionid,$auser,$branchcode,$librarian,$cost,$aqbooksellerid, $aqbook
 	$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
 	$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
 	$numberingmethod, $status, $biblionumber, 
-	$bibliotitle, $callnumber, $notes, $hemisphere, $letter, $manualhistory);
+	$bibliotitle, $callnumber, $notes, $hemisphere, $letter, $manualhistory,$serialsadditems);
 
 	my @budgets;
 my ($template, $loggedinuser, $cookie)
@@ -220,13 +220,15 @@ if ($op eq 'addsubscription') {
 	my $letter = $query->param('letter');
     # ## BugFIX : hdl doesnot know what innerloops or letter stand for but it seems necessary. So he adds them.
     my $manualhistory = $query->param('manualhist');
+    my $serialsadditems = $query->param('serialsadditems');
 	my $subscriptionid = NewSubscription($auser,$branchcode,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,
 					$startdate,$periodicity,$dow,$numberlength,$weeklength,$monthlength,
 					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
 					$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
 					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
 					$numberingmethod, $status, $notes,$letter,$firstacquidate,join(",",@irregularity),
-                    $numberpattern, $callnumber, $hemisphere,($manualhistory?$manualhistory:0),$internalnotes
+                    $numberpattern, $callnumber, $hemisphere,($manualhistory?$manualhistory:0),$internalnotes,
+                    $serialsadditems,
 				);
 
     print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
@@ -289,9 +291,9 @@ if ($op eq 'addsubscription') {
     my $letter = $query->param('letter');
     my $manualhistory = $query->param('manualhist');
     my $enddate = $query->param('enddate');
+    my $serialsadditems = $query->param('serialsadditems');
     # subscription history
     my $histenddate = format_date_in_iso($query->param('histenddate'));
-    warn "HIST END : $histenddate";
     my $histstartdate = format_date_in_iso($query->param('histstartdate'));
     my $recievedlist = $query->param('recievedlist');
     my $missinglist = $query->param('missinglist');
@@ -312,7 +314,8 @@ if ($op eq 'addsubscription') {
             $whenmorethan3,   $setto3,       $lastvalue3,     $innerloop3,
             $numberingmethod, $status,       $biblionumber,   $callnumber,
             $notes,           $letter,       $hemisphere,     $manualhistory,$internalnotes,
-            $subscriptionid);
+            $serialsadditems, $subscriptionid,
+        );
     }
     print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
 } else {

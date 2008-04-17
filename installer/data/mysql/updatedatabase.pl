@@ -1292,6 +1292,19 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.071";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(" ALTER TABLE `subscription` ADD `serialsadditems` TINYINT( 1 ) NOT NULL DEFAULT '0';");
+    # fill the new field with the previous systempreference value, then drop the syspref
+    my $sth = $dbh->prepare("SELECT value FROM systempreferences WHERE variable='serialsadditems'");
+    $sth->execute;
+    my ($serialsadditems) = $sth->fetchrow();
+    $dbh->do("UPDATE subscription SET serialsadditems=$serialsadditems");
+    $dbh->do("DELETE FROM systempreferences WHERE variable='serialsadditems'");
+    print "Upgrade to $DBversion done ( moving serialsadditems from syspref to subscription )\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table

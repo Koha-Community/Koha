@@ -99,7 +99,6 @@ my %tabsysprefs;
     $tabsysprefs{LabelMARCView}="Cataloguing";
     $tabsysprefs{marc}="Cataloguing";
     $tabsysprefs{marcflavour}="Cataloguing";
-    $tabsysprefs{serialsadditems}="Cataloguing";
     $tabsysprefs{MARCOrgCode}="Cataloguing";
     $tabsysprefs{z3950AuthorAuthFields}="Cataloguing";
     $tabsysprefs{z3950NormalizeAuthor}="Cataloguing";

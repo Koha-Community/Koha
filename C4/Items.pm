@@ -229,6 +229,8 @@ sub AddItem {
 
     # create MARC tag representing item and add to bib
     my $new_item_marc = _marc_from_item_hash($item, $frameworkcode, $unlinked_item_subfields);
+    warn "HERE : ".$item->{'biblionumber'};
+    warn "HERE 2 : ".$new_item_marc->as_formatted;
     _add_item_field_to_biblio($new_item_marc, $item->{'biblionumber'}, $frameworkcode );
    
     logaction("CATALOGUING", "ADD", $itemnumber, "item") if C4::Context->preference("CataloguingLog");
@@ -1866,7 +1868,6 @@ sub _add_item_field_to_biblio {
     my ($item_marc, $biblionumber, $frameworkcode) = @_;
 
     my $biblio_marc = GetMarcBiblio($biblionumber);
-
     foreach my $field ($item_marc->fields()) {
         $biblio_marc->append_fields($field);
     }

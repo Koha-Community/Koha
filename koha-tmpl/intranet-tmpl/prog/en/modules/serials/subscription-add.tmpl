@@ -820,7 +820,7 @@ window.onload = irregular_order();
     <fieldset id="subscription_add_information" class="rows">
 	<legend>Subscription details</legend>
 	<ol>
-	<li><span class="label">Subscription #</span> <!--TMPL_VAR name="subscriptionid"--></li>
+        <li><span class="label">Subscription #</span> <!--TMPL_VAR name="subscriptionid"--></li>
         <li>
             <span class="label">Librarian: </span>            <!-- TMPL_VAR name="loggedinusername" -->
         </li>
@@ -836,6 +836,15 @@ window.onload = irregular_order();
                <div class="inputnote"> <a href="#" onclick="Plugin(f)">Search for Biblio</a> | <!--TMPL_IF Name="mod"--><a href="#" onclick="addbiblioPopup(<!-- TMPL_VAR NAME="bibnum" -->); return false;">Edit biblio</a><!-- TMPL_ELSE -->
                 <a href="#" onclick="addbiblioPopup(); return false;">Create Biblio</a><!--/TMPL_IF--></div>
             
+        </li>
+        <li class="radio">
+            <!-- TMPL_IF name="serialsadditems" -->
+                <label for="serialsadditems-yes">serial recieve create an item </label><input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1" checked="checked" />
+                <label for="serialsadditems-no">serial recieve don't create an item </label><input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" />
+            <!-- TMPL_ELSE -->
+                <label for="serialsadditems-yes">serial recieve create an item </label><input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1"/>
+                <label for="serialsadditems-no">serial recieve don't create an item </label><input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" checked="checked" />
+            <!-- /TMPL_IF -->
         </li>
         <li>
             <label for="callnumber">Call Number</label>
@@ -890,7 +899,7 @@ window.onload = irregular_order();
                     <li>You <b>must</b> select a vendor if you wish to generate claims.</li>
                 </ul></div>
             
-
+            
 	</fieldset>
 	</div>
 	

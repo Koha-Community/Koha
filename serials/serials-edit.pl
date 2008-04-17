@@ -130,12 +130,14 @@ my $bibdata=GetBiblioData($serialdatalist[0]->{'biblionumber'});
 
 my @newserialloop;
 my @subscriptionloop;
+# check, for each subscription edited, that we have an empty item line if applicable for the subscription
 foreach my $subscriptionid (@subscriptionids){
   my $cell;
-  if (C4::Context->preference("serialsadditems")){
+  if ($serialdatalist[0]->{'serialsadditems'}){
   #Create New empty item  
     $cell =
-      PrepareItemrecordDisplay( $serialdatalist[0]->{'biblionumber'} );
+    PrepareItemrecordDisplay( $serialdatalist[0]->{'biblionumber'} );
+    $cell->{serialsadditems} = 1;
   }
   $cell->{'subscriptionid'}=$subscriptionid;
   $cell->{'itemid'}       = "NNEW";
@@ -175,8 +177,8 @@ if ($op eq 'serialchangestatus') {
                             $notes[$i]);
         }
     }
-    if (C4::Context->preference("serialsadditems")){
-      my @moditems = $query->param('moditem');
+    my @moditems = $query->param('moditem');
+    if (scalar(@moditems)){
       my @tags = $query->param('tag');
       my @subfields = $query->param('subfield');
       my @field_values = $query->param('field_value');
@@ -227,7 +229,7 @@ if ($op eq 'serialchangestatus') {
             my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.barcode");
             if (C4::Context->preference("autoBarcode") ne  'OFF'  ) {
               eval {    $record->field($tagfield)->subfield($tagsubfield) };
-		  if ($@) {
+              if ($@) {
                 my $sth_barcode = $dbh->prepare("select max(abs(barcode)) from items");
                 $sth_barcode->execute;
                 my ($newbarcode) = $sth_barcode->fetchrow;

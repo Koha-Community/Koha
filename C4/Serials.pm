@@ -239,7 +239,7 @@ sub GetSerialInformation {
     my ($serialid) = @_;
     my $dbh        = C4::Context->dbh;
     my $query      = qq|
-        SELECT serial.*, serial.notes as sernotes, serial.status as serstatus,subscription.*,subscription.subscriptionid as subsid|;
+        SELECT serial.*, serial.notes as sernotes, serial.status as serstatus,subscription.*,subscription.subscriptionid as subsid |;
        if (C4::Context->preference('IndependantBranches') && 
               C4::Context->userenv && 
               C4::Context->userenv->{'flags'} != 1 && C4::Context->userenv->{'branch'}){
@@ -253,8 +253,8 @@ sub GetSerialInformation {
     my $rq = $dbh->prepare($query);
     $rq->execute($serialid);
     my $data = $rq->fetchrow_hashref;
-
-    if ( C4::Context->preference("serialsadditems") ) {
+    # create item information if we have serialsadditems for this subscription
+    if ( $data->{'serialsadditems'} ) {
         if ( $data->{'itemnumber'} ) {
             my @itemnumbers = split /,/, $data->{'itemnumber'};
             foreach my $itemnum (@itemnumbers) {
@@ -1239,7 +1239,7 @@ sub ModSubscription {
         $whenmorethan3,   $setto3,       $lastvalue3,     $innerloop3,
         $numberingmethod, $status,       $biblionumber,   $callnumber,
         $notes,           $letter,       $hemisphere,     $manualhistory,
-        $internalnotes,
+        $internalnotes,   $serialsadditems,
         $subscriptionid
     ) = @_;
 #     warn $irregularity;
@@ -1250,7 +1250,7 @@ sub ModSubscription {
                         add1=?,every1=?,whenmorethan1=?,setto1=?,lastvalue1=?,innerloop1=?,
                         add2=?,every2=?,whenmorethan2=?,setto2=?,lastvalue2=?,innerloop2=?,
                         add3=?,every3=?,whenmorethan3=?,setto3=?,lastvalue3=?,innerloop3=?,
-                        numberingmethod=?, status=?, biblionumber=?, callnumber=?, notes=?, letter=?, hemisphere=?,manualhistory=?,internalnotes=?
+                        numberingmethod=?, status=?, biblionumber=?, callnumber=?, notes=?, letter=?, hemisphere=?,manualhistory=?,internalnotes=?,serialsadditems=?
                     WHERE subscriptionid = ?";
 #     warn "query :".$query;
     my $sth = $dbh->prepare($query);
@@ -1265,7 +1265,7 @@ sub ModSubscription {
         $whenmorethan3,   $setto3,       $lastvalue3,     $innerloop3,
         $numberingmethod, $status,       $biblionumber,   $callnumber,
         $notes,           $letter,       $hemisphere,     ($manualhistory?$manualhistory:0),
-        $internalnotes,
+        $internalnotes,   $serialsadditems,
         $subscriptionid
     );
     my $rows=$sth->rows;
@@ -1284,7 +1284,7 @@ $subscriptionid = &NewSubscription($auser,branchcode,$aqbooksellerid,$cost,$aqbu
     $add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
     $add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
     $add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
-    $numberingmethod, $status, $notes)
+    $numberingmethod, $status, $notes, $serialsadditems)
 
 Create a new subscription with value given on input args.
 
@@ -1307,7 +1307,7 @@ sub NewSubscription {
         $lastvalue3,    $innerloop3,   $numberingmethod, $status,
         $notes,         $letter,       $firstacquidate,  $irregularity,
         $numberpattern, $callnumber,   $hemisphere,      $manualhistory,
-        $internalnotes
+        $internalnotes, $serialsadditems,
     ) = @_;
     my $dbh = C4::Context->dbh;
 
@@ -1320,8 +1320,8 @@ sub NewSubscription {
             add2,every2,whenmorethan2,setto2,lastvalue2,innerloop2,
             add3,every3,whenmorethan3,setto3,lastvalue3,innerloop3,
             numberingmethod, status, notes, letter,firstacquidate,irregularity,
-            numberpattern, callnumber, hemisphere,manualhistory,internalnotes)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+            numberpattern, callnumber, hemisphere,manualhistory,internalnotes,serialsadditems)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         |;
     my $sth = $dbh->prepare($query);
     $sth->execute(
@@ -1345,7 +1345,7 @@ sub NewSubscription {
         format_date_in_iso($firstacquidate),                $irregularity,
         $numberpattern,                 $callnumber,
         $hemisphere,                    $manualhistory,
-        $internalnotes
+        $internalnotes,                 $serialsadditems,
     );
 
     #then create the 1st waited number
