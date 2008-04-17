@@ -113,10 +113,11 @@ if ( $show_results ) {
                     if ($item_results->{$item}->{'biblionumber'} eq $results[$i]->{'biblionumber'}) {
                         # NOTE: The order of the elements in this array must be preserved or the table dependent on it will be incorrectly rendered.
                         # This is a real hack, but I can't think of a better way right now. -fbcit
+                        # It is conceivable that itemcallnumber and/or barcode fields might be empty so the trinaries cover this possibility.
                         push @{$results[$i]->{'item'}}, { i_itemnumber1         => $item_results->{$item}->{'itemnumber'} };
-                        push @{$results[$i]->{'item'}}, { i_itemcallnumber      => $item_results->{$item}->{'itemcallnumber'} };
+                        push @{$results[$i]->{'item'}}, { i_itemcallnumber      => ($item_results->{$item}->{'itemcallnumber'} ? $item_results->{$item}->{'itemcallnumber'} : 'NA') };
                         push @{$results[$i]->{'item'}}, { i_dateaccessioned     => $item_results->{$item}->{'dateaccessioned'} };
-                        push @{$results[$i]->{'item'}}, { i_barcode             => $item_results->{$item}->{'barcode'} };
+                        push @{$results[$i]->{'item'}}, { i_barcode             => ($item_results->{$item}->{'barcode'} ? $item_results->{$item}->{'barcode'} : 'NA')};
                         push @{$results[$i]->{'item'}}, { i_itemnumber2         => $item_results->{$item}->{'itemnumber'} };
                     }
                 }
