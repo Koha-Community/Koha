@@ -67,8 +67,6 @@ $(window).load(function() {
                     <!-- TMPL_LOOP NAME="LIMIT_INPUTS"-->
                     <input type="hidden" name="<!-- TMPL_VAR NAME="input_name" -->" value="<!-- TMPL_VAR NAME="input_value" -->"/>
                     <!-- /TMPL_LOOP -->
-
-
                 <!-- /TMPL_IF -->
                 <!-- RE-SORT START -->
                     <label for="sort_by">Sort By: </label>
@@ -76,11 +74,12 @@ $(window).load(function() {
                     <!-- TMPL_INCLUDE NAME="resort_form.inc" -->
                     </select>
                     <input type="submit" value="Go" />
-                    <!-- RESORT END -->
-                </form>
-    <h3>
-        <!-- TMPL_VAR NAME="total" --> result(s) found <!-- TMPL_IF NAME="query_desc" -->for <span style="font-weight: bold;">'<!-- TMPL_VAR NAME="query_desc" -->'</span><!-- /TMPL_IF --><!-- TMPL_IF NAME="limit_desc" -->&nbsp;with limit(s): <span style="font-weight: bold;">'<!-- TMPL_VAR NAME="limit_desc" -->'</span><!-- /TMPL_IF --><!-- TMPL_IF NAME="LibraryName" --> in <!-- TMPL_VAR NAME="LibraryName" --> Catalog<!-- /TMPL_IF -->.
-    </h3></div>
+                <!-- RESORT END -->
+            </form>
+            <h3>
+                <!-- TMPL_VAR NAME="total" --> result(s) found <!-- TMPL_IF NAME="query_desc" -->for <span style="font-weight: bold;">'<!-- TMPL_VAR NAME="query_desc" -->'</span><!-- /TMPL_IF --><!-- TMPL_IF NAME="limit_desc" -->&nbsp;with limit(s): <span style="font-weight: bold;">'<!-- TMPL_VAR NAME="limit_desc" -->'</span><!-- /TMPL_IF --><!-- TMPL_IF NAME="LibraryName" --> in <!-- TMPL_VAR NAME="LibraryName" --> Catalog<!-- /TMPL_IF -->.<br />&nbsp;
+            </h3>
+        </div>
     <!-- TMPL_IF NAME="stopwords_removed" --><div><p class="tip">Ignored the following common words: "<!-- TMPL_VAR NAME="stopwords_removed" -->"<p></div><!-- /TMPL_IF -->
     <!-- TMPL_ELSE -->
         <!-- TMPL_IF NAME="searchdesc" -->
