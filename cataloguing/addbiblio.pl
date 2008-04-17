@@ -366,7 +366,7 @@ sub create_input {
                     tabindex=\"1\"
                     size=\"67\"
                     maxlength=\"255\" 
-                    disabled=\"true\"
+                    readonly=\"true\"
                     \/>
                     <a href=\"#\" class=\"buttonDot\"
                         onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&amp;index=$subfield_data{id}','$subfield_data{id}'); return false;\" title=\"Tag Editor\">...</a>
