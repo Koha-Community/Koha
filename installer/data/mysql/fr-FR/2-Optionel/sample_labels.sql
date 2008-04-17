@@ -1,4 +1,5 @@
 -- Label Templates
+set NAMES 'utf8';
 LOCK TABLES `labels_templates` WRITE;
 INSERT INTO `labels_templates` VALUES
 (1,'Avery 5160 | 1 x 2-5/8','3 colonnes, 10 lignes d''étiquette',8.5,11,2.625,1,0.5,0.1875,3,10,0.125,0,1,'INCH',7,'TR'),

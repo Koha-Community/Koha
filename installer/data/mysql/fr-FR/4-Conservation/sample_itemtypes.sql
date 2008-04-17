@@ -1,9 +1,7 @@
 -- 
 -- Contenu de la table `itemtypes`
 -- 
-
 SET NAMES utf8;
-
 INSERT INTO `itemtypes` (`itemtype`, `description`, `renewalsallowed`, `rentalcharge`, `notforloan`, `imageurl`, `summary`) VALUES ('ARTI', 'Article', 0, 0.0000, 0, 'Pamphlet.gif', '');
 INSERT INTO `itemtypes` (`itemtype`, `description`, `renewalsallowed`, `rentalcharge`, `notforloan`, `imageurl`, `summary`) VALUES ('MEM', 'Mémoire', 0, 0.0000, 0, 'Faculty Course Materials.gif', '');
 INSERT INTO `itemtypes` (`itemtype`, `description`, `renewalsallowed`, `rentalcharge`, `notforloan`, `imageurl`, `summary`) VALUES ('MICR', 'Microfiche', 0, 0.0000, 0, 'Microfiche.gif', '');
