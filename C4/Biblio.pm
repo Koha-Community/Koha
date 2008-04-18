@@ -2168,12 +2168,13 @@ sub _DelBiblioNoZebra {
         $title = lc($record->subfield($titletag,$titlesubfield));
     } else {
         # for authorities, the "title" is the $a mainentry
-        my $authref = C4::AuthoritiesMarc::GetAuthType($record->subfield(152,'b'));
+        my ($auth_type_tag, $auth_type_sf) = C4::AuthoritiesMarc::get_auth_type_location();
+        my $authref = C4::AuthoritiesMarc::GetAuthType($record->subfield($auth_type_tag, $auth_type_sf));
         warn "ERROR : authtype undefined for ".$record->as_formatted unless $authref;
         $title = $record->subfield($authref->{auth_tag_to_report},'a');
         $index{'mainmainentry'}= $authref->{'auth_tag_to_report'}.'a';
         $index{'mainentry'}    = $authref->{'auth_tag_to_report'}.'*';
-        $index{'auth_type'}    = '152b';
+        $index{'auth_type'}    = "${auth_type_tag}${auth_type_sf}";
     }
     
     my %result;
@@ -2262,12 +2263,13 @@ sub _AddBiblioNoZebra {
     } else {
         # warn "server : $server";
         # for authorities, the "title" is the $a mainentry
-        my $authref = C4::AuthoritiesMarc::GetAuthType($record->subfield(152,'b'));
+        my ($auth_type_tag, $auth_type_sf) = C4::AuthoritiesMarc::get_auth_type_location();
+        my $authref = C4::AuthoritiesMarc::GetAuthType($record->subfield($auth_type_tag, $auth_type_sf));
         warn "ERROR : authtype undefined for ".$record->as_formatted unless $authref;
         $title = $record->subfield($authref->{auth_tag_to_report},'a');
         $index{'mainmainentry'} = $authref->{auth_tag_to_report}.'a';
         $index{'mainentry'}     = $authref->{auth_tag_to_report}.'*';
-        $index{'auth_type'}     = '152b';
+        $index{'auth_type'}    = "${auth_type_tag}${auth_type_sf}";
     }
 
     # remove blancks comma (that could cause problem when decoding the string for CQL retrieval) and regexp specific values
