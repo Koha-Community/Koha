@@ -8,14 +8,6 @@ eval "use Test::Class";
 plan skip_all => "Test::Class required for performing database tests" if $@;
 # Or, maybe I should just die there.
 
-if ( $ENV{'USER'} ne 'acm' ) {
-    die 'This test suite rewrites your database, so this is to keep you from accidently doing that.';
-}
-
-BEGIN {
-    $ENV{'KOHA_CONF'} = '/home/acm/koha/dev/t/etc/koha-conf.xml';
-}
-
 use lib qw(..);
 use C4::Biblio;
 use C4::Bookfund;
