@@ -507,6 +507,16 @@ if ($config{'INSTALL_MODE'} ne "dev") {
     );
 }
 
+my %test_suite_override_dirs = (
+    KOHA_CONF_DIR  => ['etc'],
+    ZEBRA_CONF_DIR => ['etc', 'zebradb'],
+    LOG_DIR        => ['var', 'log'],
+    SCRIPT_DIR     => ['bin'],
+    ZEBRA_LOCK_DIR => ['var', 'lock', 'zebradb'],
+    ZEBRA_DATA_DIR => ['var', 'lib', 'zebradb'],
+    ZEBRA_RUN_DIR  => ['var', 'run', 'zebradb'],
+);
+ 
 WriteMakefile(
     NAME => 'koha',
     #VERSION => strftime('2.9.%Y%m%d%H',gmtime),
@@ -1228,6 +1238,25 @@ sub get_target_directories {
     return \%dirmap, \%skipdirs;
 }
 
+=head2 get_test_dir 
+
+Map a directory target to the corresponding path for
+the test suite.
+
+=cut
+
+sub get_test_dir {
+    my ($dirname) = @_;
+  
+    my @basedir = (File::Spec->rel2abs(File::Spec->curdir()), 't', 'run'); 
+    if (exists $test_suite_override_dirs{$dirname}) {
+        return File::Spec->catdir(@basedir, @{ $test_suite_override_dirs{$dirname} });
+    } else {
+        return;
+    }
+    
+}
+
 sub _get_env_overrides {
     my $dirmap = shift;
 
@@ -1473,14 +1502,10 @@ sub postamble {
             print $confhandle "# It is separate from the standard koha-conf.xml so that you can edit this by hand and test with different configurations.\n";
 
             # these directories will be relocated to the 't' directory
-            my %move_to_t = map { $_ => 1 } qw( KOHA_CONF_DIR LOG_DIR SCRIPT_DIR ZEBRA_CONF_DIR ZEBRA_LOCK_DIR ZEBRA_DATA_DIR ZEBRA_RUN_DIR );
-            my $oldbasedir = substr( $target_directories->{'KOHA_CONF_DIR'}, 0, - length( '/etc' ) );
-            my $newbasedir = $target_directories->{'KOHA_CONF_DIR'};
-            $newbasedir =~ s/etc$/t/;
             foreach my $dirname ( keys %$target_directories ) {
-                my $dir = $target_directories->{ $dirname };
-                if ( $move_to_t{ $dirname } ) {
-                    $dir =~ s/$oldbasedir/$newbasedir/;
+                my $dir = $target_directories->{$dirname};
+                if ( exists $test_suite_override_dirs{$dirname} ) {
+                    $dir = main::get_test_dir($dirname);
                 }
                 print $confhandle "$dirname = $dir\n"
             }

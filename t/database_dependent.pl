@@ -39,7 +39,7 @@ stop_zebrasrv();
 
 sub create_test_database {
 
-    diag 'creating testing datbase...';
+    diag 'creating testing database...';
     my $installer = C4::Installer->new() or die 'unable to create new installer';
     # warn Data::Dumper->Dump( [ $installer ], [ 'installer' ] );
     my $all_languages = getAllLanguages();
@@ -140,7 +140,7 @@ sub stop_zebrasrv {
 
 sub start_zebraqueue_daemon {
 
-    my $command = q(bin/koha-zebraqueue-ctl.sh start);
+    my $command = q(run/bin/koha-zebraqueue-ctl.sh start);
     diag $command;
     my $started = system( $command );
     diag "started: $started";
@@ -162,7 +162,7 @@ sub start_zebraqueue_daemon {
 
 sub stop_zebraqueue_daemon {
 
-    my $command = q(bin/koha-zebraqueue-ctl.sh stop);
+    my $command = q(run/bin/koha-zebraqueue-ctl.sh stop);
     diag $command;
     my $started = system( $command );
     diag "started: $started";

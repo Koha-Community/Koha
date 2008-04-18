@@ -6,6 +6,7 @@ ECHO = echo
 MKDIR = /bin/mkdir
 CP = cp
 SED = /bin/sed
+CHMOD = chmod
 
 # some of these are pretty questionable.
 PERL = /usr/bin/perl
@@ -15,18 +16,18 @@ PROVE = /usr/bin/prove
 PROVE_FLAGS = -v
 KOHA_CONF_DIR = ../etc
 CONF_FILE_TEMPLATE = $(KOHA_CONF_DIR)/koha-conf.xml 
-TEST_CONF_FILE = etc/koha-conf.xml
+TEST_CONF_FILE = run/etc/koha-conf.xml
 MKPATH = $(PERL) "-MExtUtils::Command" -e mkpath
 
 TEST_REWRITE_SCRIPT = rewrite-config-test.PL
 REAL_REWRITE_SCRIPT = ../rewrite-config.PL
 
-ZEBRA_CONF_DIR = etc/zebradb
+ZEBRA_CONF_DIR = run/etc/zebradb
 ZEBRA_CONF_FILES = $(ZEBRA_CONF_DIR)/etc/passwd $(ZEBRA_CONF_DIR)/zebra-biblios.cfg $(ZEBRA_CONF_DIR)/zebra-authorities.cfg $(ZEBRA_CONF_DIR)/zebra-authorities-dom.cfg $(ZEBRA_CONF_DIR)/explain-authorities.xml $(ZEBRA_CONF_DIR)/explain-biblios.xml $(ZEBRA_CONF_DIR)/retrieval-info-auth-grs1.xml $(ZEBRA_CONF_DIR)/retrieval-info-auth-dom.xml $(ZEBRA_CONF_DIR)/ccl.properties $(ZEBRA_CONF_DIR)/cql.properties $(ZEBRA_CONF_DIR)/pqf.properties
 
 SCRIPTS = koha-zebra-ctl.sh koha-pazpar2-ctl.sh koha-zebraqueue-ctl.sh zebraqueue_daemon.pl
 SRC_SCRIPT_DIR = ../misc/bin
-TEST_SCRIPT_DIR = bin
+TEST_SCRIPT_DIR = run/bin
 
 
 all ::
@@ -45,7 +46,6 @@ zebra_conf_files :: test_run_dirs $(ZEBRA_CONF_FILES)
 
 
 $(ZEBRA_CONF_FILES) ::
-	$(CP) ../$@ $@
 	$(PERL) $(TEST_REWRITE_SCRIPT) --file $@
 	$(PERL) $(REAL_REWRITE_SCRIPT)  $@
 
@@ -53,24 +53,26 @@ $(SCRIPTS) ::
 	$(SED) s/--user=\$$USER.\$$GROUP// $(SRC_SCRIPT_DIR)/$@ > $(TEST_SCRIPT_DIR)/$@
 	$(PERL) $(TEST_REWRITE_SCRIPT) --file $(TEST_SCRIPT_DIR)/$@
 	$(PERL) $(REAL_REWRITE_SCRIPT)  $(TEST_SCRIPT_DIR)/$@
+	$(CHMOD) 755 $(TEST_SCRIPT_DIR)/$@
 
 test :: config_file $(ZEBRA_CONF_FILES) $(SCRIPTS)
 	KOHA_CONF=$(TEST_CONF_FILE) $(PROVE) $(PROVE_FLAGS) $(TEST_FILES)
 
 test_run_dirs ::
-	$(CP) -a ../etc/zebradb etc
-	$(MKPATH) etc/zebradb/etc
-	$(MKPATH) var/lib/zebradb/biblios/key
-	$(MKPATH) var/lib/zebradb/biblios/register
-	$(MKPATH) var/lib/zebradb/biblios/shadow
-	$(MKPATH) var/lib/zebradb/biblios/tmp
-	$(MKPATH) var/lib/zebradb/authorities/key
-	$(MKPATH) var/lib/zebradb/authorities/register
-	$(MKPATH) var/lib/zebradb/authorities/shadow
-	$(MKPATH) var/lib/zebradb/authorities/tmp
-	$(MKPATH) var/lock/zebradb/biblios
-	$(MKPATH) var/lock/zebradb/authorities
-	$(MKPATH) var/run/zebradb
-	$(MKPATH) var/log/zebradb
-	$(MKPATH) bin
+	$(MKPATH) run/etc
+	$(CP) -a ../etc/zebradb run/etc
+	$(MKPATH) run/etc/zebradb/etc
+	$(MKPATH) run/var/lib/zebradb/biblios/key
+	$(MKPATH) run/var/lib/zebradb/biblios/register
+	$(MKPATH) run/var/lib/zebradb/biblios/shadow
+	$(MKPATH) run/var/lib/zebradb/biblios/tmp
+	$(MKPATH) run/var/lib/zebradb/authorities/key
+	$(MKPATH) run/var/lib/zebradb/authorities/register
+	$(MKPATH) run/var/lib/zebradb/authorities/shadow
+	$(MKPATH) run/var/lib/zebradb/authorities/tmp
+	$(MKPATH) run/var/lock/zebradb/biblios
+	$(MKPATH) run/var/lock/zebradb/authorities
+	$(MKPATH) run/var/run/zebradb
+	$(MKPATH) run/var/log/zebradb
+	$(MKPATH) run/bin
 
