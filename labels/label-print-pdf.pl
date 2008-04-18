@@ -222,7 +222,7 @@ foreach $item (@resultsloop) {
         DrawBarcode( $x_pos, $barcode_y, $barcode_height, $label_width,
             $item->{'barcode'}, $barcodetype );
         DrawSpineText( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize,
-            $left_text_margin, $text_wrap_cols, \$item, \$conf_data, $printingtype );
+            $left_text_margin, $text_wrap_cols, \$item, \$conf_data, $printingtype, '1' );
 
         CalcNextLabelPos();
 
@@ -245,7 +245,7 @@ foreach $item (@resultsloop) {
         CalcNextLabelPos();
         drawbox( $x_pos, $y_pos, $label_width, $label_height ) if $guidebox;
         DrawSpineText( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize,
-            $left_text_margin, $text_wrap_cols, \$item, \$conf_data, $printingtype );
+            $left_text_margin, $text_wrap_cols, \$item, \$conf_data, $printingtype, '1' );
 
         CalcNextLabelPos();
     }
@@ -254,7 +254,7 @@ foreach $item (@resultsloop) {
     elsif ( $printingtype eq 'BIB' ) {
         drawbox( $x_pos, $y_pos, $label_width, $label_height ) if $guidebox;
         DrawSpineText( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize,
-            $left_text_margin, $text_wrap_cols, \$item, \$conf_data, $printingtype );
+            $left_text_margin, $text_wrap_cols, \$item, \$conf_data, $printingtype, '0' );
         CalcNextLabelPos();
     }
 
