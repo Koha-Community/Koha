@@ -28,6 +28,7 @@ my $do_munge;
 my $want_help;
 my $as_xml;
 my $process_zebraqueue;
+my $do_not_clear_zebraqueue;
 my $result = GetOptions(
     'd:s'           => \$directory,
     'reset'         => \$reset,
@@ -40,6 +41,7 @@ my $result = GetOptions(
     'a'             => \$authorities,
     'h|help'        => \$want_help,
 	'x'				=> \$as_xml,
+    'y'             => \$do_not_clear_zebraqueue,
     'z'             => \$process_zebraqueue,
 );
 
@@ -63,6 +65,12 @@ if ($authorities and $as_xml) {
 
 if ($process_zebraqueue and ($skip_export or $reset)) {
     my $msg = "Cannot specify -r or -s if -z is specified\n";
+    $msg   .= "Please do '$0 --help' to see usage.\n";
+    die $msg;
+}
+
+if ($process_zebraqueue and $do_not_clear_zebraqueue) {
+    my $msg = "Cannot specify both -y and -z\n";
     $msg   .= "Please do '$0 --help' to see usage.\n";
     die $msg;
 }
@@ -101,14 +109,14 @@ if ($do_munge) {
 $dbh->{AutoCommit} = 0; # don't autocommit - want a consistent view of the zebraqueue table
 
 if ($authorities) {
-    index_records('authority', $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml);
+    index_records('authority', $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $do_not_clear_zebraqueue);
     $dbh->commit(); # commit changes to zebraqueue, if any
 } else {
     print "skipping authorities\n";
 }
 
 if ($biblios) {
-    index_records('biblio', $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml);
+    index_records('biblio', $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $do_not_clear_zebraqueue);
     $dbh->commit(); # commit changes to zebraqueue, if any
 } else {
     print "skipping biblios\n";
@@ -140,7 +148,7 @@ if ($keep_export) {
 }
 
 sub index_records {
-    my ($record_type, $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml) = @_;
+    my ($record_type, $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $do_not_clear_zebraqueue) = @_;
 
     my $num_records_exported = 0;
     my $num_records_deleted = 0;
@@ -165,6 +173,10 @@ sub index_records {
             mark_zebraqueue_done($record_type, 'updated');
         } else {
             my $sth = select_all_records($record_type);
+            unless ($do_not_clear_zebraqueue) {
+                mark_zebraqueue_done($record_type, 'deleted');
+                mark_zebraqueue_done($record_type, 'updated');
+            }
             $num_records_exported = export_marc_records($record_type, $sth, "$directory/$record_type", $as_xml, $noxml);
         }
     }
@@ -497,6 +509,13 @@ Parameters:
                             use this if you might have records > 99,999 chars,
 							
     -w                      skip shadow indexing for this batch
+
+    -y                      do NOT clear zebraqueue after indexing; normally,
+                            after doing batch indexing, zebraqueue should be
+                            marked done for the affected record type(s) so that
+                            a running zebraqueue_daemon doesn't try to reindex
+                            the same records - specify -y to override this.  
+                            Cannot be used with -z.
 
     -munge-config           Deprecated option to try
                             to fix Zebra config files.
