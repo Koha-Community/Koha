@@ -181,6 +181,23 @@ if ($res) {
 	$total++;
 }
 
+# verify that all of a field's subfields (except the ones explicitly ignore) 
+# are in the same tab
+$sth = $dbh->prepare("SELECT tagfield, frameworkcode, frameworktext, GROUP_CONCAT(DISTINCT tab) AS tabs
+                      FROM marc_subfield_structure
+                      LEFT JOIN biblio_framework USING (frameworkcode)
+                      WHERE tab != -1
+                      GROUP BY tagfield, frameworkcode, frameworktext
+                      HAVING COUNT(DISTINCT tab) > 1");
+$sth->execute;
+my $inconsistent_tabs = $sth->fetchall_arrayref({});
+if (scalar(@$inconsistent_tabs) > 0) {
+    $total++;
+    $template->param(inconsistent_tabs => 1);
+    $template->param(tab_info => $inconsistent_tabs);
+}
+
 $template->param(total => $total,
 		);
+
 output_html_with_http_headers $input, $cookie, $template->output;
