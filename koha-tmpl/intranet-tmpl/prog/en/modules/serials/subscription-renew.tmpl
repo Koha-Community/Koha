@@ -1,9 +1,13 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Serials Subscription renew #<!-- TMPL_VAR name="subscriptionid" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<style type="text/css">
+   #custom-doc { width:39.85em;*width:38.86em;min-width:531px; margin:auto; text-align:left; }
+   </style>
 </head>
 <body>
 
+<div id="custom-doc" class="yui-t7">
 <!--TMPL_IF Name="renew"-->
   Subscription renewed.
   
@@ -14,23 +18,23 @@
   //]]>
 </script>
 <!--TMPL_ELSE-->
-
-<h1>Subscription renewal for <!-- TMPL_VAR name="bibliotitle" --></h1>
-
+      <div id="bd">
 <form name="f" action="/cgi-bin/koha/serials/subscription-renew.pl" method="post">
 		<input type="hidden" name="op" value="renew" />
 		<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" />
-		<p><label for="startdate">Start date</label><input type="text" id="startdate" name="startdate" value="<!-- TMPL_VAR name="startdate" -->" /></p>
-		<p>Subscription length :</p>
-		<p><label for="numberlength">Number of num</label><input type="text" id="numberlength" name="numberlength" value="<!-- TMPL_VAR name="numberlength" -->" /></p>
-		<p><label for="weeklength">Number of weeks</label><input type="text" id="weeklength" name="weeklength" value="<!-- TMPL_VAR name="weeklength" -->" /></p>
-		<p><label for="monthlength">Number of months</label><input type="text" id="monthlength" name="monthlength" value="<!-- TMPL_VAR name="monthlength" -->" /></p>
-		<p><label for="note">Note for the librarian that will manage your renewal request</label></p>
-		<p><textarea name="note" id="note" rows="5" cols="50"></textarea></p>
-		<input type="submit" value="Request a renewal" class="button" />
+		<fieldset class="rows"><legend>Subscription renewal for <!-- TMPL_VAR name="bibliotitle" --></legend>
+		<ol><li><label for="startdate">Start date: </label><input type="text" id="startdate" name="startdate" value="<!-- TMPL_VAR name="startdate" -->" /></li>
+		<li><fieldset>
+		<legend>Subscription length:</legend>
+		<ol><li><label for="numberlength">Number of num:</label><input type="text" id="numberlength" name="numberlength" value="<!-- TMPL_VAR name="numberlength" -->" /></li>
+		<li><label for="weeklength">Number of weeks: </label><input type="text" id="weeklength" name="weeklength" value="<!-- TMPL_VAR name="weeklength" -->" /></li>
+		<li><label for="monthlength">Number of months: </label><input type="text" id="monthlength" name="monthlength" value="<!-- TMPL_VAR name="monthlength" -->" /></li></ol></fieldset></li>
+		<li><label for="note">Note for the librarian that will manage your renewal request: </label>
+		<textarea name="note" id="note" rows="5" cols="50"></textarea></li></ol></fieldset>
+		<fieldset class="action"><input type="submit" value="Submit" class="button" /></fieldset>
 </form>
-
+</div>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
 

@@ -853,7 +853,7 @@ window.onload = irregular_order();
         <li>
             <label for="branchcode">Library</label>
             
-                <select name="branchcode" id="branchcode">
+                <select name="branchcode" id="branchcode" style="width: 20em;">
                     <!-- TMPL_UNLESS NAME="Independantbranches" --><option value="">Any branch</option><!-- /TMPL_UNLESS -->
                     <!-- TMPL_LOOP name="branchloop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
 				<!-- TMPL_ELSE -->
@@ -1178,7 +1178,8 @@ window.onload = irregular_order();
     </ol>
 	</fieldset>
 </div>
-    <input type="button" value="Save subscription" onclick="Check(this.form)" accesskey="w" />
+	<fieldset class="action">
+    <input type="button" value="Save subscription" onclick="Check(this.form)" accesskey="w" /></fieldset>
 </div>
 
 </form>
