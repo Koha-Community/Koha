@@ -1281,6 +1281,17 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.070";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $sth = $dbh->prepare("SELECT value FROM systempreferences WHERE variable='yuipath'");
+    $sth->execute;
+    my ($value) = $sth->fetchrow;
+    $value =~ s/2.3.1/2.5.1/;
+    $dbh->do("UPDATE systempreferences SET value='$value' WHERE variable='yuipath';");
+	print "Update yuipath syspref to 2.5.1 if necessary\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
