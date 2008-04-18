@@ -7,6 +7,7 @@ use InstallAuth;
 use C4::Context;
 use C4::Output;
 use C4::Languages qw(getAllLanguages getTranslatedLanguages);
+use C4::Installer;
 
 use strict;    # please develop with the strict pragma
 
@@ -33,6 +34,7 @@ if ( defined($language) ) {
     }
 );
 
+my $installer = C4::Installer->new();
 my %info;
 $info{'dbname'} = C4::Context->config("database");
 $info{'dbms'} =
@@ -264,18 +266,7 @@ elsif ( $step && $step == 3 ) {
         exit 1;
     }
     elsif ( $op && $op eq 'finish' ) {
-        my $kohaversion=C4::Context::KOHAVERSION;
-        # remove the 3 last . to have a Perl number
-        $kohaversion =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
-        if (C4::Context->preference('Version')) {
-            warn "UPDATE Version";
-            my $finish=$dbh->prepare("UPDATE systempreferences SET value=? WHERE variable='Version'");
-            $finish->execute($kohaversion);
-        } else {
-            warn "INSERT Version";
-            my $finish=$dbh->prepare("INSERT into systempreferences (variable,value,explanation) values ('Version',?,'The Koha database version. WARNING: Do not change this value manually, it is maintained by the webinstaller')");
-            $finish->execute($kohaversion);
-        }
+        $installer->set_version_syspref();
 
         # Installation is finished.
         # We just deny anybody access to install
@@ -284,12 +275,7 @@ elsif ( $step && $step == 3 ) {
         $template->param( "$op" => 1 );
     }
     elsif ( $op && $op eq 'SetIndexingEngine' ) {
-        if ($query->param('NoZebra')) {
-            $dbh->do("UPDATE systempreferences SET value=1 WHERE variable='NoZebra'");
-            $dbh->do("UPDATE systempreferences SET value=0 WHERE variable in ('QueryFuzzy','QueryWeightFields','QueryStemming')");
-        } else {
-            $dbh->do("UPDATE systempreferences SET value=0 WHERE variable='NoZebra'");
-        }
+        $installer->set_indexing_engine($query->param('NoZebra'));
         $template->param( "$op" => 1 );
     }
     elsif ( $op && $op eq 'addframeworks' ) {
@@ -297,88 +283,10 @@ elsif ( $step && $step == 3 ) {
     # 1ST install, 3rd sub-step : insert the SQL files the user has selected
     #
 
-        #Framework importing and reports
-        my $lang;
-        my %hashlevel;
-
-       # sort by filename -> prepend with numbers to specify order of insertion.
-        my @fnames = sort {
-            my @aa = split /\/|\\/, ($a);
-            my @bb = split /\/|\\/, ($b);
-            $aa[-1] cmp $bb[-1]
-        } $query->param('framework');
-        my $request =
-          $dbh->prepare(
-            "SELECT value FROM systempreferences WHERE variable='FrameworksLoaded'"
-          );
-        $request->execute;
-        my ($systempreference) = $request->fetchrow;
-        $systempreference = '' unless defined $systempreference; # avoid warning
-        foreach my $file (@fnames) {
-
-            #      warn $file;
-            undef $/;
-	    my $error;
-	    if ( $info{dbms} eq 'mysql' ) {
-            	my $strcmd = "mysql "
-              		. ( $info{hostname} ? " -h $info{hostname} " : "" )
-              		. ( $info{port}     ? " -P $info{port} "     : "" )
-              		. ( $info{user}     ? " -u $info{user} "     : "" )
-              		. ( $info{password} ? " -p'$info{password}'"   : "" )
-              		. " $info{dbname} ";
-            	$error = qx($strcmd < $file 2>&1 1>/dev/null);			# We want to send stdout to null and return only stderr... -fbcit
-    	    }
-	    elsif ( $info{dbms} eq 'Pg' ) { 
-            	my $strcmd = "psql "
-              		. ( $info{hostname} ? " -h $info{hostname} " : "" )
-              		. ( $info{port}     ? " -p $info{port} "     : "" )
-              		. ( $info{user}     ? " -U $info{user} "     : "" )
-#              		 . ( $info{password} ? " -W $info{password}"   : "" )
-              		. " $info{dbname} ";
-            	$error = qx($strcmd -f $file 2>&1 1>/dev/null);			# ...even more so with psql...
-    	    }
-            my @file = split qr(\/|\\), $file;
-            $lang = $file[ scalar(@file) - 3 ] unless ($lang);
-            my $level = $file[ scalar(@file) - 2 ];
-            unless ($error) {
-                $systempreference .= "$file[scalar(@file)-1]|"
-                  unless (
-                    index( $systempreference, $file[ scalar(@file) - 1 ] ) >=
-                    0 );
-            }
-
-            #Bulding here a hierarchy to display files by level.
-            push @{ $hashlevel{$level} },
-              { "fwkname" => $file[ scalar(@file) - 1 ], "error" => $error };
-        }
-
-        #systempreference contains an ending |
-        chop $systempreference;
-        my @list;
-        map { push @list, { "level" => $_, "fwklist" => $hashlevel{$_} } }
-          keys %hashlevel;
-        my $fwk_language;
-        for my $each_language (@$all_languages) {
-
-            # 		warn "CODE".$each_language->{'language_code'};
-            # 		warn "LANG:".$lang;
-            if ( $lang eq $each_language->{'language_code'} ) {
-                $fwk_language = $each_language->{language_locale_name};
-            }
-        }
-        my $updateflag =
-          $dbh->do(
-            "UPDATE systempreferences set value=\"$systempreference\" where variable='FrameworksLoaded'"
-          );
-        unless ( $updateflag == 1 ) {
-            my $string =
-                "INSERT INTO systempreferences (value, variable, explanation, type) VALUES (\"$systempreference\",'FrameworksLoaded','Frameworks loaded through webinstaller','choice')";
-            my $rq = $dbh->prepare($string);
-            $rq->execute;
-        }
+        my ($fwk_language, $list) = $installer->load_sql_in_order($all_languages, $query->param('framework'));
         $template->param(
             "fwklanguage" => $fwk_language,
-            "list"        => \@list
+            "list"        => $list
         );
         $template->param( "$op" => 1 );
     }
@@ -404,145 +312,19 @@ elsif ( $step && $step == 3 ) {
         $langchoice = $query->cookie('KohaOpacLanguage') unless ($langchoice);
         my $marcflavour = $query->param('marcflavour');
         if ($marcflavour){
-            # we can have some variants of marc flavour, by having different directories, like : unimarc_small and unimarc_full, for small and complete unimarc frameworks.
-            # marc_cleaned finds the marcflavour, without the variant.
-            my $marc_cleaned = 'MARC21';
-            $marc_cleaned = 'UNIMARC' if $marcflavour =~ /unimarc/i;
-          my $request =
-            $dbh->prepare(
-              "INSERT IGNORE INTO `systempreferences` (variable,value,explanation,options,type) VALUES('marcflavour','$marc_cleaned','Define global MARC flavor (MARC21 or UNIMARC) used for character encoding','MARC21|UNIMARC','Choice');"
-            );     
-          $request->execute;
+            $installer->set_marcflavour_syspref($marcflavour);
         };    
         $marcflavour = C4::Context->preference('marcflavour') unless ($marcflavour);
         #Insert into database the selected marcflavour
-    
-        undef $/;
-        my $dir =
-          C4::Context->config('intranetdir') . "/installer/data/$info{dbms}/$langchoice/marcflavour/".lc($marcflavour);
-        unless (opendir( MYDIR, $dir )) {
-            if ($langchoice eq 'en') {
-                warn "cannot open MARC frameworks directory $dir";
-            } else {
-                # if no translated MARC framework is available,
-                # default to English
-                $dir = C4::Context->config('intranetdir') . "/installer/data/$info{dbms}/en/marcflavour/".lc($marcflavour);
-                opendir(MYDIR, $dir) or warn "cannot open English MARC frameworks directory $dir";
-                $template->param('en_marc_frameworks' => 1);
-            }
-        }
-        my @listdir = sort grep { !/^\.|marcflavour/ && -d "$dir/$_" } readdir(MYDIR);
-        closedir MYDIR;
-                  
-        my @fwklist;
-        my $request =
-          $dbh->prepare(
-            "SELECT value FROM systempreferences WHERE variable='FrameworksLoaded'"
-          );
-        $request->execute;
-        my ($frameworksloaded) = $request->fetchrow;
-        $frameworksloaded = '' unless defined $frameworksloaded; # avoid warning
-        my %frameworksloaded;
-        foreach ( split( /\|/, $frameworksloaded ) ) {
-            $frameworksloaded{$_} = 1;
-        }
-        
-        foreach my $requirelevel (@listdir) {
-            opendir( MYDIR, "$dir/$requirelevel" );
-            my @listname =
-              grep { !/^\./ && -f "$dir/$requirelevel/$_" && $_ =~ m/\.sql$/ }
-              readdir(MYDIR);
-            closedir MYDIR;
-            my %cell;
-            my @frameworklist;
-            map {
-                my $name = substr( $_, 0, -4 );
-                open FILE, "<:utf8","$dir/$requirelevel/$name.txt";
-                my $lines = <FILE>;
-                $lines =~ s/\n|\r/<br \/>/g;
-                use utf8;
-                utf8::encode($lines) unless ( utf8::is_utf8($lines) );
-                push @frameworklist,
-                  {
-                    'fwkname'        => $name,
-                    'fwkfile'        => "$dir/$requirelevel/$_",
-                    'fwkdescription' => $lines,
-                    'checked'        => (
-                        (
-                            $frameworksloaded{$_}
-                              || ( $requirelevel =~
-                                /(mandatory|requi|oblig|necess)/i )
-                        ) ? 1 : 0
-                    )
-                  };
-            } @listname;
-            my @fwks =
-              sort { $a->{'fwkname'} cmp $b->{'fwkname'} } @frameworklist;
-
-#             $cell{"mandatory"}=($requirelevel=~/(mandatory|requi|oblig|necess)/i);
-            $cell{"frameworks"} = \@fwks;
-            $cell{"label"}      = ucfirst($requirelevel);
-            $cell{"code"}       = lc($requirelevel);
-            push @fwklist, \%cell;
-        }
-        $template->param( "frameworksloop" => \@fwklist );
+        undef $/; 
+        my ($marc_defaulted_to_en, $fwklist) = $installer->marc_framework_sql_list($langchoice, $marcflavour);
+        $template->param('en_marc_frameworks' => $marc_defaulted_to_en);
+        $template->param( "frameworksloop" => $fwklist );
         $template->param( "marcflavour" => ucfirst($marcflavour));
-        
-        $dir =
-          C4::Context->config('intranetdir') . "/installer/data/$info{dbms}/$langchoice";
-        unless (opendir( MYDIR, $dir )) {
-            if ($langchoice eq 'en') {
-                warn "cannot open sample data directory $dir";
-            } else {
-                # if no sample data is available,
-                # default to English
-                $dir = C4::Context->config('intranetdir') . "/installer/data/$info{dbms}/en";
-                opendir(MYDIR, $dir) or warn "cannot open English sample data directory $dir";
-                $template->param('en_sample_data' => 1);
-            }
-        }
-        @listdir = sort grep { !/^\.|marcflavour/ && -d "$dir/$_" } readdir(MYDIR);
-        closedir MYDIR;
-        my @levellist;
-        foreach my $requirelevel (@listdir) {
-            opendir( MYDIR, "$dir/$requirelevel" );
-            my @listname =
-              grep { !/^\./ && -f "$dir/$requirelevel/$_" && $_ =~ m/\.sql$/ }
-              readdir(MYDIR);
-            closedir MYDIR;
-            my %cell;
-            my @frameworklist;
-            map {
-                my $name = substr( $_, 0, -4 );
-                open FILE, "<:utf8","$dir/$requirelevel/$name.txt";
-                my $lines = <FILE>;
-                $lines =~ s/\n|\r/<br \/>/g;
-                use utf8;
-                utf8::encode($lines) unless ( utf8::is_utf8($lines) );
-                push @frameworklist,
-                  {
-                    'fwkname'        => $name,
-                    'fwkfile'        => "$dir/$requirelevel/$_",
-                    'fwkdescription' => $lines,
-                    'checked'        => (
-                        (
-                            $frameworksloaded{$_}
-                              || ( $requirelevel =~
-                                /(mandatory|requi|oblig|necess)/i )
-                        ) ? 1 : 0
-                    )
-                  };
-            } @listname;
-            my @fwks =
-              sort { $a->{'fwkname'} cmp $b->{'fwkname'} } @frameworklist;
-
-#             $cell{"mandatory"}=($requirelevel=~/(mandatory|requi|oblig|necess)/i);
-            $cell{"frameworks"} = \@fwks;
-            $cell{"label"}      = ucfirst($requirelevel);
-            $cell{"code"}       = lc($requirelevel);
-            push @levellist, \%cell;
-        }
-        $template->param( "levelloop" => \@levellist );
+       
+        my ($sample_defaulted_to_en, $levellist) = $installer->sample_data_sql_list($langchoice, $marcflavour);
+        $template->param( "en_sample_data" => $sample_defaulted_to_en);
+        $template->param( "levelloop" => $levellist );
         $template->param( "$op"       => 1 );
     }
     elsif ( $op && $op eq 'choosemarc' ) {
@@ -598,28 +380,7 @@ elsif ( $step && $step == 3 ) {
         # 1st install, 1st "sub-step" : import kohastructure
         #
         #
-	my $datadir = C4::Context->config('intranetdir') . "/installer/data/$info{dbms}";
-	my $error;
-        if ( $info{dbms} eq 'mysql' ) {
-	    my $strcmd = "mysql "
-	        . ( $info{hostname} ? " -h $info{hostname} " : "" )
-	        . ( $info{port}     ? " -P $info{port} "     : "" )
-	        . ( $info{user}     ? " -u $info{user} "     : "" )
-	        . ( $info{password} ? " -p'$info{password}'"   : "" )
-	        . " $info{dbname} ";
-	    $error = qx($strcmd <$datadir/kohastructure.sql 2>&1 1>/dev/null);
-        }
-        elsif ( $info{dbms} eq 'Pg' ) { 
-            my $strcmd = "psql "
-                . ( $info{hostname} ? " -h $info{hostname} " : "" )
-                . ( $info{port}     ? " -p $info{port} "     : "" )
-                . ( $info{user}     ? " -U $info{user} "     : "" )
-#                . ( $info{password} ? " -W $info{password}"   : "" )		# psql will NOT accept a password, but prompts...
-                . " $info{dbname} ";						# Therefore, be sure to run 'trust' on localhost in pg_hba.conf -fbcit
-            $error = qx($strcmd -f $datadir/kohastructure.sql 2>&1 1>/dev/null);# Be sure to set 'client_min_messages = error' in postgresql.conf
-	    									# so that only true errors are returned to stderr or else the installer will
-										# report the import a failure although it really succeded -fbcit
-    	}
+        my $error = $installer->load_db_schema();
         $template->param(
             "error" => $error,
             "$op"   => 1,
