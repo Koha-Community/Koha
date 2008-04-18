@@ -21,11 +21,12 @@ use strict;
 use vars qw($VERSION @ISA @EXPORT);
 
 use PDF::Reuse;
-use Text::Wrap;
+#use Text::Wrap;
 use Algorithm::CheckDigits;
 use C4::Members;
 use C4::Branch;
- use Data::Dumper;
+use C4::Debug;
+#use Data::Dumper;
 # use Smart::Comments;
 
 BEGIN {
@@ -60,7 +61,6 @@ BEGIN {
 	);
 }
 
-my $DEBUG = 0;
 
 =head1 NAME
 
@@ -417,7 +417,7 @@ sub GetTextWrapCols {
     my $strwidth;
     my $count = 0;
 #    my $textlimit = $label_width - ($left_text_margin);
-    my $textlimit = $label_width - ( 2* $left_text_margin);
+    my $textlimit = $label_width - ( 3 * $left_text_margin);
 
     while ( $strwidth < $textlimit ) {
         $strwidth = prStrWidth( $string, $font, $fontsize );
@@ -929,9 +929,6 @@ sub DrawSpineText {
         $$item->{'itemtype'} = $data->{'description'} if ($$item->{'itemtype'} eq $data->{'itemtype'});
     }
 
-    $Text::Wrap::columns   = $text_wrap_cols;
-    $Text::Wrap::separator = "\n";
-
     my $str;
 
     my $top_text_margin = ( $fontsize + 3 );    #FIXME: This should be a template parameter and passed in...
@@ -972,11 +969,17 @@ sub DrawSpineText {
                     }   
                     unshift @strings, $str;
                 } else {
-                    push @strings, $str;    # or if we are not wrapping the call number just send it along as we found it...
+                    push @strings, $str;    # if $nowrap == 1 do not wrap or remove segmentation markers...
                 }
-            } else {    # Here we will strip out all trailing '/' in fields other than the call number...
-                $str =~ s/\/$//g;
-                push @strings, $str;
+            } else {
+                $str =~ s/\/$//g;    # Here we will strip out all trailing '/' in fields other than the call number...
+                if ( length($str) > $text_wrap_cols ) {    # wrap lines greater than $text_wrap_cols width...
+                    my $wrap = substr($str, ($text_wrap_cols - length($str)), $text_wrap_cols, "");
+                    push @strings, $str;
+                    push @strings, $wrap;
+                } else {
+                    push @strings, $str;
+                }
             }
             # loop for each string line
             foreach my $str (@strings) {
@@ -1163,8 +1166,8 @@ sub DrawBarcode {
 
     my $moo2 = $tot_bar_length * $xsize_ratio;
 
-    warn "$x_pos, $y_pos, $barcode, $barcodetype" if $DEBUG;
-    warn "BAR_WDTH = $bar_width, TOT.BAR.LGHT=$tot_bar_length  R*TOT.BAR =$moo2" if $DEBUG;
+    warn "$x_pos, $y_pos, $barcode, $barcodetype" if $debug;
+    warn "BAR_WDTH = $bar_width, TOT.BAR.LGHT=$tot_bar_length  R*TOT.BAR =$moo2" if $debug;
 }
 
 =item build_circ_barcode;
