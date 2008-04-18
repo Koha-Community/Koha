@@ -55,7 +55,7 @@ Edit News Item<!-- TMPL_ELSE -->Add News Item<!-- /TMPL_IF --><!-- TMPL_ELSE -->
             <select id="lang" name="lang">
                 <option value="koha">Librarian interface</option>
                 <!-- TMPL_LOOP name="lang_list" -->
-                    <!-- TMPL_IF name="selected" --><option value="<!-- TMPL_VAR name="language" -->" selected="selected"><!-- TMPL_VAR name="language" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="language" -->"><!-- TMPL_VAR name="language" --></option><!-- /TMPL_IF -->
+                    <!-- TMPL_IF name="selected" --><option value="<!-- TMPL_VAR name="language" -->" selected="selected">OPAC (<!-- TMPL_VAR name="language" -->)</option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="language" -->">OPAC (<!-- TMPL_VAR name="language" -->)</option><!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
             </select>
             </li>
@@ -65,10 +65,12 @@ Edit News Item<!-- TMPL_ELSE -->Add News Item<!-- /TMPL_IF --><!-- TMPL_ELSE -->
             </li>
             <li>
                 <label for="expirationdate">Expiration date</label>
-                <input id="expirationdate" type="text" name="expirationdate" value="<!-- TMPL_VAR NAME="expirationdate" -->" />
+                <input id="expirationdate" type="text" name="expirationdate" size="15" value="<!-- TMPL_VAR NAME="expirationdate" -->" />
+				<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="openCalendar" style="cursor: pointer;" />
                 <script type="text/javascript">
                     Calendar.setup(
                     {
+						button : "openCalendar",
                         inputField : "expirationdate",
                         ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
                     }
@@ -103,7 +105,7 @@ Edit News Item<!-- TMPL_ELSE -->Add News Item<!-- /TMPL_IF --><!-- TMPL_ELSE -->
                     <!-- TMPL_ELSE -->
                         <option value="<!-- TMPL_VAR name="language" -->">
                     <!-- /TMPL_IF -->
-                        <!-- TMPL_VAR name="language" -->
+                        OPAC (<!-- TMPL_VAR name="language" -->)
                     </option>
                 <!-- /TMPL_LOOP -->
             </select>
@@ -132,7 +134,7 @@ Edit News Item<!-- TMPL_ELSE -->Add News Item<!-- /TMPL_IF --><!-- TMPL_ELSE -->
                             <td>
                                 <input type="checkbox" name="ids" value="<!-- TMPL_VAR NAME="idnew" -->" />
                             </td>
-                            <td><!-- TMPL_VAR NAME="lang" --></td>
+                            <td><!-- TMPL_IF EXPR="lang eq 'koha'" -->Librarian interface<!-- TMPL_ELSE -->OPAC (<!-- TMPL_VAR NAME="lang" -->)<!-- /TMPL_IF --></td>
                             <td><!-- TMPL_VAR NAME="number" --></td>
                             <td><!-- TMPL_VAR NAME="newdate" --></td>
                             <td><!-- TMPL_VAR NAME="expirationdate" --> <!-- TMPL_IF NAME="expired" -->(<span class="expired">expired</span>)<!-- /TMPL_IF --></td>
