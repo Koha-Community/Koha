@@ -21,6 +21,7 @@ return false;
 		new YAHOO.widget.Button({
               id: "additems", 
               type: "link", 
+			  href: "#",
               label: _("Add item(s) to batch"), 
               container: "additemsc",
 onclick: {fn:function(){Plugin(<!-- TMPL_VAR NAME="batch_id" -->,"<!-- TMPL_VAR NAME="type" -->")}}
