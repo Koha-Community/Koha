@@ -55,10 +55,10 @@ if ($op eq 'save') {
 
   foreach my $key (@names){
     # FINES
-    if ($key =~ /F-(.*)-(.*)\.(.*)/) {
-      my $br = $1; # branch
-      my $bor = $2; # borrower category
-      my $cat = $3; # item type
+    if ($key =~ /F-(.*)-(.*)-(.*)/) {
+      my $br = base64_to_str($1); # branch
+      my $bor = base64_to_str($2); # borrower category
+      my $cat = base64_to_str($3); # item type
       my $data=$input->param($key);
       my ($fine,$firstremind,$chargeperiod)=split(',',$data);
       $bor="*" unless ($bor);
@@ -129,7 +129,8 @@ foreach my $data (@itemtypes) {
         $fine =~ s/\.*0*$//g;
         my $finesvalue;
         $finesvalue= "$fine,$dat->{'firstremind'},$dat->{'chargeperiod'}" if $fine ne '';
-        my %row = (finesname=> "F-$branch-$trow3[$i].$$data->{'itemtype'}",
+        my $finesname = join("-", "F", map { str_to_base64($_) } ($branch, $trow3[$i], $$data->{'itemtype'}));
+        my %row = (finesname=> $finesname,
                     finesvalue => $finesvalue,
                     toggle => $toggle,
                     );

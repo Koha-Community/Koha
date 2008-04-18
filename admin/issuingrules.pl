@@ -53,10 +53,10 @@ if ($op eq 'save') {
     my $sth_Idelete=$dbh->prepare("DELETE FROM issuingrules WHERE branchcode=? AND categorycode=? AND itemtype=?");
     foreach my $key (@names){
         # ISSUES
-        if ($key =~ /I-(.*)-(.*)\.(.*)/) {
-            my $br = $1; # branch
-            my $bor = $2; # borrower category
-            my $cat = $3; # item type
+        if ($key =~ /I-(.*)-(.*)-(.*)/) {
+            my $br = base64_to_str($1); # branch
+            my $bor =  base64_to_str($2); # borrower category
+            my $cat =  base64_to_str($3); # item type
             my $data=$input->param($key);
             my ($issuelength,$maxissueqty,$rentaldiscount)=split(',',$data);
             if ($maxissueqty) {
@@ -131,7 +131,8 @@ foreach my $data (@itemtypes) {
         my $issuelength = $dat->{'issuelength'};
         my $issuingvalue;
         $issuingvalue = "$issuelength,$maxissueqty" if $maxissueqty ne '';
-        my %row = (issuingname => "I-$branch-$trow3[$i].$$data->{itemtype}",
+        my $issuingname = join("-", "I", map { str_to_base64($_) } ($branch, $trow3[$i], $$data->{itemtype}) );
+        my %row = (issuingname => $issuingname,
                     issuingvalue => $issuingvalue,
                     toggle => $toggle,
                     );
