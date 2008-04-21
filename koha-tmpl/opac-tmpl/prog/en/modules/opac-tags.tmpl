@@ -1,0 +1,76 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo; Tags
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+
+<div id="doc3" class="yui-t1">
+<div id="bd">
+<div id="yui-main">
+  <div class="yui-b"><div class="yui-g">
+
+	<!-- TMPL_IF NAME="ERRORS" -->
+	<!-- TMPL_LOOP NAME="ERRORS" -->
+		<div class="error">There was a problem with this operation:
+		<!-- TMPL_IF NAME="tagsdisabled" -->Sorry, tags are not enabled on this system.<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="badparam" -->ERROR: illegal paramter <!-- TMPL_VAR NAME="badparam" --><!-- /TMPL_IF -->
+		</div>
+	<!-- /TMPL_LOOP -->
+	<!-- /TMPL_IF -->
+
+	<!-- TMPL_IF NAME="add_op" -->
+		<h3><!-- TMPL_VAR NAME="added_count" --> tags successfully added.</h3>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="deleted_count" -->
+		<h3><!-- TMPL_VAR NAME="deleted_count" --> tags successfully deleted.</h3>
+	<!-- /TMPL_IF -->
+
+	<!-- TMPL_IF NAME="MY_TAGS" -->
+		<form method="post" action="opac-tags.pl">
+		<h2>My Tags</h2>
+		<table>
+		<tr><th>Term</th><th>Title</th><th>Date/Time Added</th><th>Delete</th>
+		</tr>
+	<!-- TMPL_LOOP NAME="MY_TAGS" -->
+		<tr><td><a href="/cgi-bin/koha/opac-search.pl?tag=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->&amp;q=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->">
+				<!-- TMPL_VAR NAME="term" ESCAPE="HTML" --></a>
+			</td>
+			<td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
+				<!-- TMPL_VAR NAME="bib_summary" ESCAPE="HTML" --></a></td>
+			<td><!-- TMPL_VAR NAME="date_created_display" -->
+				<span class="time" style="background-color:lightgray;"><!-- TMPL_VAR NAME="time_created_display" --></span></td>
+			<td><input type="submit" name="del<!-- TMPL_VAR NAME="tag_id" -->" value="Delete" /></td>
+		</tr>
+	<!-- /TMPL_LOOP -->
+		</table>
+		</form>
+	<!-- TMPL_ELSE -->
+		<div class="msg">To see any of your own saved tags, first log in.</div>
+	<!-- /TMPL_IF -->
+
+	<h1>All Tags</h1>
+	<div id="action">
+		<form method="post" action="opac-tags.pl">
+		<p>Show up to <input name="limit" maxlength="4" size="4" value="100" />
+			tags from other users.
+			<input type="submit" value="OK" />
+		</p>
+		</form>
+	</div>
+	<!-- TMPL_IF NAME="TAGLOOP" --> Results:<ul>
+	<!-- TMPL_LOOP NAME="TAGLOOP" -->
+	<li><a href="/cgi-bin/koha/opac-search.pl?tag=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->&amp;q=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->">
+		<!-- TMPL_VAR NAME="term" ESCAPE="HTML" --></a> (<!-- TMPL_VAR NAME="weight_total" -->)</li>
+	<!-- /TMPL_LOOP -->
+	</ul>
+	<!-- /TMPL_IF -->
+
+</div>
+</div>
+</div>
+	<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="navigation.inc"  -->
+<!-- TMPL_INCLUDE NAME="usermenu.inc"    -->
+	</div>
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
