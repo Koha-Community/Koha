@@ -19,7 +19,7 @@ package C4::External::BakerTaylor;
 
 use XML::Simple;
 use LWP::Simple;
-use LWP::UserAgent;
+# use LWP::UserAgent;
 use HTTP::Request::Common;
 use C4::Context;
 use C4::Debug;
@@ -51,19 +51,30 @@ sub initialize {
 			#"Mozilla/4.76 [en] (Win98; U)",	#  if for some reason you want to go stealth, you might prefer this
 }
 
-sub image_url ($) {
+sub image_url (;$) {
 	($user and $pass) or return undef;
-	return $image_url . (@_ ? shift : '');
+	my $isbn = (@_ ? shift : '');
+	$isbn =~ s/(p|-)//g;	# sanitize
+	return $image_url . $isbn;
 }
-sub link_url ($) {
+sub link_url (;$) {
+	my $isbn = (@_ ? shift : '');
+	$isbn =~ s/(p|-)//g;	# sanitize
 	$link_url or return undef;
-	return $link_url  . (@_ ? shift : '');
+	return $link_url . $isbn;
+}
+sub content_cafe_url ($) {
+	($user and $pass) or return undef;
+	my $isbn = (@_ ? shift : '');
+	$isbn =~ s/(p|-)//g;	# sanitize
+	return "http://contentcafe2.btol.com/ContentCafeClient/ContentCafe.aspx?UserID=$user&Password=$pass&Options=Y&ItemKey=$isbn";
 }
 sub http_jacket_link ($) {
 	my $isbn = shift or return undef;
+	$isbn =~ s/(p|-)//g;	# sanitize
 	my $image = availability($isbn);
 	my $alt = "Buy this book";
-	$image and $image = qq(<img class="btjacket" alt="Buy this book" src="$image" />);
+	$image and $image = qq(<img class="btjacket" alt="$alt" src="$image" />);
 	my $link = &link_url($isbn);
 	unless ($link) {return $image || '';}
 	return sprintf qq(<a class="btlink" href="%s">%s</a>),$link,($image||$alt);
@@ -85,28 +96,6 @@ sub availability ($) {
 	}
 	my $avail = $result->{Availability};
 	return ($avail and $avail !~ /^false$/i) ? &image_url($isbn) : 0;
-}
-
-sub content_cafe ($) {
-	my $isbn = shift or return undef;
-	my $ua = LWP::UserAgent->new(
-		agent => $agent,
-		keep_alive => 1,
-		env_proxy  => 1,
-	);
-	my $available = 1;
-	my $uri = "http://contentcafe2.btol.com/ContentCafe/InventoryAvailability.asmx/CheckInventory?UserID=$user&Password=$pass&Value=$isbn";
-	my $req = HTTP::Request->new(GET => $uri);
-	$req->header (
-		'Accept' => 'image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*',
-		'Accept-Charset' => 'iso-8859-1,*,utf-8',
-		'Accept-Language' => 'en-US' );
-	my $res = $ua->request($req);
-	my $content = $res->content();
-	if ($content =~ /This book is temporarily unavailable/) {
-		return undef;
-	}
-	return $available;
 }
 
 1;
