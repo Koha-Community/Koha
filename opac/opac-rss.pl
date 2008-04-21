@@ -21,12 +21,13 @@ use strict;    # always use
 
 use XML::RSS;
 use Digest::MD5 qw(md5_base64);
-use POSIX qw(ceil floor);
+# use POSIX qw(ceil floor);
 use Date::Calc qw(Today_and_Now Delta_YMDHMS);
 use C4::Context;
 use C4::Search;
 use C4::Koha;
 use C4::Biblio;
+use Cwd;
 
 =head1 NAME
 
@@ -73,7 +74,12 @@ my $size = $cgi->param('size') || 50;
 # the filename of the cached rdf file.
 my $filename = md5_base64($query);
 $filename =~ s/\///g;
-my $rss = new XML::RSS( version => '1.0', encoding=>C4::Context->preference("TemplateEncoding"), output=>C4::Context->preference("TemplateEncoding"),language=>C4::Context->preference('opaclanguages'));
+my $rss = new XML::RSS(
+		version  => '1.0',
+		encoding => C4::Context->preference("TemplateEncoding"),
+		output   => C4::Context->preference("TemplateEncoding"),
+		language => C4::Context->preference('opaclanguages')
+);
 
 # the site URL
 my $url = $cgi->url();
@@ -93,11 +99,11 @@ if ( -e "rss/$filename" ) {
        ( $rdf_stamp =~ /(.*)-(.*)-(.*):(.*):(.*):(.*)/ );
 
 # if more than 30 mn since the last RDF update, rebuild the RDF. Otherwise, just return it
-    unless ( ( $year - $stamp_year > 0 )
-        or ( $month - $stamp_month > 0 )
-        or ( $day - $stamp_day > 0 )
-        or ( $hour - $stamp_hour > 0 )
-        or ( $min - $stamp_min > 30 ) )
+    unless(( $year  - $stamp_year  >  0 )
+        or ( $month - $stamp_month >  0 )
+        or ( $day   - $stamp_day   >  0 )
+        or ( $hour  - $stamp_hour  >  0 )
+        or ( $min   - $stamp_min   > 30 ))
     {
         $RDF_update_needed = 0;
     }
@@ -122,7 +128,7 @@ if ($RDF_update_needed) {
     );
 
     warn "fetching $size results for $query";
-    my ( $error, $marcresults, $total_hits ) = SimpleSearch( $query, 0, $size );
+    my ( $error, $marcresults, $total_hits ) = SimpleSearch( $query, 0, $size );  # FIXME: Simple Search should die!
 
     my $hits = scalar @$marcresults;
     my @results;
@@ -153,7 +159,8 @@ if ($RDF_update_needed) {
     }
 
     # save the rss feed.
-    $rss->save("rss/$filename");
+	# (-w "rss/$filename") or die "Cannot write " . cwd() . "/rss/$filename";
+    # $rss->save("rss/$filename");
 }
 print $cgi->header( -type => "application/rss+xml" );
 print $rss->as_string;
