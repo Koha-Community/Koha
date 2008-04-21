@@ -353,8 +353,7 @@ elsif (C4::Context->preference('NoZebra')) {
         ($error, $results_hashref, $facets) = getRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
     };
 }
-use Data::Dumper;
-print STDERR "-" x 25, "\n", Dumper($results_hashref);
+# use Data::Dumper; print STDERR "-" x 25, "\n", Dumper($results_hashref);
 if ($@ || $error) {
     $template->param(query_error => $error.$@);
     output_html_with_http_headers $cgi, $cookie, $template->output;
