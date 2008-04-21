@@ -53,21 +53,23 @@ $(document).ready(function() {
             <!-- /TMPL_LOOP -->
             </select>
         </form>
+		<br />
+		<br />
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
             <input type="hidden" name="op" value="add" />
             <table>
             <tr>
-                <th>Item Type</th><th>Borrower Type</th><th>Amount</th><th>Grace Period</th><th>Charging Interval</th><th>Amount Loanable</th><th>Loan time</th><th>&nbsp;</th>
+                <th>Item Type</th><th>Borrower Type</th><th>Amount</th><th>Grace<br />Period</th><th>Charging<br />Interval</th><th>Amount<br />Loanable</th><th>Loan time</th><th>&nbsp;</th>
             </tr>
             <!-- TMPL_LOOP NAME="rules" -->
                 <tr>
                     <td><!-- TMPL_VAR NAME="humanitemtype" --></td>
                     <td><!-- TMPL_VAR NAME="humancategorycode" --></td>
                     <td>$<!-- TMPL_VAR NAME="fine" --></td>
-                    <td><!-- TMPL_VAR NAME="firstremind" --> day(s)</td>
-                    <td><!-- TMPL_VAR NAME="chargeperiod" --> day(s)</td>
+                    <td><!-- TMPL_IF NAME="firstremind" --><!-- TMPL_VAR NAME="firstremind" --> day(s)<!-- /TMPL_IF --></td>
+                    <td><!-- TMPL_IF NAME="chargeperiod" --><!-- TMPL_VAR NAME="chargeperiod" --> day(s)<!-- /TMPL_IF --></td>
                     <td><!-- TMPL_VAR NAME="maxissueqty" --></td>
-                    <td><!-- TMPL_VAR NAME="issuelength" --> day(s)</td>
+                    <td><!-- TMPL_IF NAME="issuelength" --><!-- TMPL_VAR NAME="issuelength" --> day(s)<!-- /TMPL_IF --></td>
                     <td>
                         <a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-<!-- TMPL_VAR NAME="itemtype" -->-<!-- TMPL_VAR NAME="categorycode" -->&amp;branch=<!-- TMPL_VAR NAME="branch" -->">Delete</a>
                     </td>
