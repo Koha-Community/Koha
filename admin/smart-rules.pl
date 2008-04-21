@@ -23,14 +23,14 @@ use C4::Context;
 use C4::Output;
 use C4::Auth;
 use C4::Koha;
+use C4::Debug;
 use C4::Branch; # GetBranches
 
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
 
 my $type=$input->param('type');
-my $branch = $input->param('branch');
-$branch="*" unless $branch;
+my $branch = $input->param('branch') || '*';
 my $op = $input->param('op');
 
 # my $flagsrequired;
@@ -44,29 +44,29 @@ my ($template, $loggedinuser, $cookie)
                             debug => 1,
                             });
 
-if ($op =~ 'delete-(.*)-(.*)') {
+if ($op =~ /delete-(.+)-(.+)/) {
     my $itemtype = $1;
     my $categorycode = $2;
-    warn "deleting $1 $2 $branch";
+    $debug and warn "deleting $1 $2 $branch";
 
     my $sth_Idelete = $dbh->prepare("delete from issuingrules where branchcode=? and categorycode=? and itemtype=?");
     $sth_Idelete->execute($branch, $categorycode, $itemtype);
 }
 # save the values entered
-if ($op eq 'add') {
+elsif ($op eq 'add') {
     my $sth_search = $dbh->prepare("SELECT COUNT(*) AS total FROM issuingrules WHERE branchcode=? AND categorycode=? AND itemtype=?");
     my $sth_insert = $dbh->prepare("INSERT INTO issuingrules (branchcode, categorycode, itemtype, maxissueqty, issuelength, fine, firstremind, chargeperiod) VALUES(?,?,?,?,?,?,?,?)");
     my $sth_update=$dbh->prepare("UPDATE issuingrules SET fine=?, firstremind=?, chargeperiod=?, maxissueqty=?, issuelength=? WHERE branchcode=? AND categorycode=? AND itemtype=?");
     
     my $br = $branch; # branch
-    my $bor = $input->param('categorycode'); # borrower category
-    my $cat = $input->param('itemtype'); # item type
+    my $bor  = $input->param('categorycode'); # borrower category
+    my $cat  = $input->param('itemtype');     # item type
     my $fine = $input->param('fine');
-    my $firstremind = $input->param('firstremind');
+    my $firstremind  = $input->param('firstremind');
     my $chargeperiod = $input->param('chargeperiod');
-    my $maxissueqty = $input->param('maxissueqty');
-    my $issuelength = $input->param('issuelength');
-    warn "Adding $br, $bor, $cat, $fine, $maxissueqty";
+    my $maxissueqty  = $input->param('maxissueqty');
+    my $issuelength  = $input->param('issuelength');
+    $debug and warn "Adding $br, $bor, $cat, $fine, $maxissueqty";
 
     $sth_search->execute($br,$bor,$cat);
     my $res = $sth_search->fetchrow_hashref();
@@ -106,12 +106,19 @@ my @row_loop;
 my @itemtypes;
 while (my $row=$sth->fetchrow_hashref){
     push @itemtypes,$row;
-    
 }
 my %row = (itemtype => '*', description => 'Any');
 push @itemtypes,\%row;
 
-my $sth2 = $dbh->prepare("SELECT issuingrules.*, itemtypes.description AS humanitemtype, categories.description AS humancategorycode FROM issuingrules LEFT JOIN itemtypes ON (itemtypes.itemtype = issuingrules.itemtype) LEFT JOIN categories ON (categories.categorycode = issuingrules.categorycode) WHERE issuingrules.branchcode = ?");
+my $sth2 = $dbh->prepare("
+    SELECT issuingrules.*, itemtypes.description AS humanitemtype, categories.description AS humancategorycode
+    FROM issuingrules
+    LEFT JOIN itemtypes
+        ON (itemtypes.itemtype = issuingrules.itemtype)
+    LEFT JOIN categories
+        ON (categories.categorycode = issuingrules.categorycode)
+    WHERE issuingrules.branchcode = ?
+");
 $sth2->execute($branch);
 
 while (my $row = $sth2->fetchrow_hashref) {
