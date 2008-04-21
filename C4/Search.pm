@@ -330,13 +330,7 @@ sub getRecords {
 
 # perform the search, create the results objects
 # if this is a local search, use the $koha-query, if it's a federated one, use the federated-query
-        my $query_to_use;
-        if ( $servers[$i] =~ /biblioserver/ ) {
-            $query_to_use = $koha_query;
-        }
-        else {
-            $query_to_use = $simple_query;
-        }
+        my $query_to_use = ($servers[$i] =~ /biblioserver/) ? $koha_query : $simple_query;
 
         #$query_to_use = $simple_query if $scan;
         warn $simple_query if ( $scan and $DEBUG );
@@ -467,26 +461,16 @@ sub getRecords {
                         my $tmpauthor;
 
                 # the minimal record in author/title (depending on MARC flavour)
-                        if ( C4::Context->preference("marcflavour") eq
-                            "UNIMARC" )
-                        {
-                            $tmptitle = MARC::Field->new(
-                                '200', ' ', ' ',
-                                a => $term,
-                                f => $occ
-                            );
+                        if (C4::Context->preference("marcflavour") eq "UNIMARC") {
+                            $tmptitle = MARC::Field->new('200',' ',' ', a => $term, f => $occ);
                             $tmprecord->append_fields($tmptitle);
-                        }
-                        else {
-                            $tmptitle =
-                              MARC::Field->new( '245', ' ', ' ', a => $term, );
-                            $tmpauthor =
-                              MARC::Field->new( '100', ' ', ' ', a => $occ, );
+                        } else {
+                            $tmptitle  = MARC::Field->new('245',' ',' ', a => $term,);
+                            $tmpauthor = MARC::Field->new('100',' ',' ', a => $occ,);
                             $tmprecord->append_fields($tmptitle);
                             $tmprecord->append_fields($tmpauthor);
                         }
-                        $results_hash->{'RECORDS'}[$j] =
-                          $tmprecord->as_usmarc();
+                        $results_hash->{'RECORDS'}[$j] = $tmprecord->as_usmarc();
                     }
 
                     # not an index scan
@@ -951,22 +935,14 @@ sub buildQuery {
                 if ( $index eq 'yr' ) {
                     $index .= ",st-numeric";
                     $indexes_set++;
-                    (
-                        $stemming,      $auto_truncation,
-                        $weight_fields, $fuzzy_enabled,
-                        $remove_stopwords
-                    ) = ( 0, 0, 0, 0, 0 );
+					$stemming = $auto_truncation = $weight_fields = $fuzzy_enabled = $remove_stopwords = 0;
                 }
 
                 # Date of Acquisition
                 elsif ( $index eq 'acqdate' ) {
                     $index .= ",st-date-normalized";
                     $indexes_set++;
-                    (
-                        $stemming,      $auto_truncation,
-                        $weight_fields, $fuzzy_enabled,
-                        $remove_stopwords
-                    ) = ( 0, 0, 0, 0, 0 );
+					$stemming = $auto_truncation = $weight_fields = $fuzzy_enabled = $remove_stopwords = 0;
                 }
                 # ISBN,ISSN,Standard Number, don't need special treatment
                 elsif ( $index eq 'nb' || $index eq 'ns' ) {
@@ -1230,12 +1206,9 @@ sub searchResults {
       );
     $bsth->execute();
     while ( my $bdata = $bsth->fetchrow_hashref ) {
-        $itemtypes{ $bdata->{'itemtype'} }->{description} =
-          $bdata->{'description'};
-        $itemtypes{ $bdata->{'itemtype'} }->{imageurl} = $bdata->{'imageurl'};
-        $itemtypes{ $bdata->{'itemtype'} }->{summary}  = $bdata->{'summary'};
-        $itemtypes{ $bdata->{'itemtype'} }->{notforloan} =
-          $bdata->{'notforloan'};
+		foreach (qw(description imageurl summary notforloan)) {
+        	$itemtypes{ $bdata->{'itemtype'} }->{$_} = $bdata->{$_};
+		}
     }
 
     #search item field code
@@ -1262,13 +1235,12 @@ sub searchResults {
         $times = $offset + $results_per_page;
     }
     else {
-        $times = $hits;
+        $times = $hits;	 # FIXME: if $hits is undefined, why do we want to equal it?
     }
 
     # loop through all of the records we've retrieved
     for ( my $i = $offset ; $i <= $times - 1 ; $i++ ) {
-        my $marcrecord;
-        $marcrecord = MARC::File::USMARC::decode( $marcresults[$i] );
+        my $marcrecord = MARC::File::USMARC::decode( $marcresults[$i] );
         my $oldbiblio = TransformMarcToKoha( $dbh, $marcrecord, '' );
         $oldbiblio->{result_number} = $i + 1;
 
@@ -1276,20 +1248,16 @@ sub searchResults {
         if ( $itemtypes{ $oldbiblio->{itemtype} }->{imageurl} =~ /^http:/ ) {
             $oldbiblio->{imageurl} =
               $itemtypes{ $oldbiblio->{itemtype} }->{imageurl};
-            $oldbiblio->{description} =
-              $itemtypes{ $oldbiblio->{itemtype} }->{description};
-        }
-        else {
+        } else {
             $oldbiblio->{imageurl} =
               getitemtypeimagesrc() . "/"
               . $itemtypes{ $oldbiblio->{itemtype} }->{imageurl}
               if ( $itemtypes{ $oldbiblio->{itemtype} }->{imageurl} );
-            $oldbiblio->{description} =
-              $itemtypes{ $oldbiblio->{itemtype} }->{description};
         }
-        my $aisbn=$oldbiblio->{'isbn'};
+        my $aisbn = $oldbiblio->{'isbn'};
         $aisbn =~ /(\d*[X]*)/;
-        $oldbiblio->{'amazonisbn'} = $1;
+        $oldbiblio->{amazonisbn} = $1;
+		$oldbiblio->{description} = $itemtypes{ $oldbiblio->{itemtype} }->{description};
  # Build summary if there is one (the summary is defined in the itemtypes table)
  # FIXME: is this used anywhere, I think it can be commented out? -- JF
         if ( $itemtypes{ $oldbiblio->{itemtype} }->{summary} ) {
@@ -1343,29 +1311,16 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
             }
             $searchhighlightblob = ' ... '.$searchhighlightblob if $searchhighlightblob;
             $oldbiblio->{'searchhighlightblob'} = $searchhighlightblob;
-    
-            # Add search-term highlighting to the title, subtitle, etc. fields
-            for my $term ( keys %$span_terms_hashref ) {
-                my $old_term = $term;
-                if ( length($term) > 3 ) {
-                    $term =~ s/(.*=|\)|\(|\+|\.|\?|\[|\]|\\|\*)//g;
-                    $oldbiblio->{'title'} =~
-                    s/$term/<span class=\"term\">$&<\/span>/gi;
-                    $oldbiblio->{'subtitle'} =~
-                    s/$term/<span class=\"term\">$&<\/span>/gi;
-                    $oldbiblio->{'author'} =~
-                    s/$term/<span class=\"term\">$&<\/span>/gi;
-                    $oldbiblio->{'publishercode'} =~
-                    s/$term/<span class=\"term\">$&<\/span>/gi;
-                    $oldbiblio->{'place'} =~
-                    s/$term/<span class=\"term\">$&<\/span>/gi;
-                    $oldbiblio->{'pages'} =~
-                    s/$term/<span class=\"term\">$&<\/span>/gi;
-                    $oldbiblio->{'notes'} =~
-                    s/$term/<span class=\"term\">$&<\/span>/gi;
-                    $oldbiblio->{'size'} =~
-                    s/$term/<span class=\"term\">$&<\/span>/gi;
-                }
+        }
+
+        # Add search-term highlighting to the title, subtitle, etc. fields
+        for my $term ( keys %$span_terms_hashref ) {
+            my $old_term = $term;
+            if ( length($term) > 3 ) {
+                $term =~ s/(.*=|\)|\(|\+|\.|\?|\[|\]|\\|\*)//g;
+				foreach(qw(title subtitle author publishercode place pages notes size)) {
+                	$oldbiblio->{$_} =~ s/$term/<span class=\"term\">$&<\/span>/gi;
+				}
             }
         }
 
