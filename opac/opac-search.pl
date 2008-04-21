@@ -11,7 +11,9 @@ use C4::Context;
 use C4::Output;
 use C4::Auth;
 use C4::Search;
+use C4::Biblio;  # GetBiblioData
 use C4::Koha;
+use C4::Tags qw(get_tags);
 use POSIX qw(ceil floor);
 use C4::Branch; # GetBranches
 
@@ -19,6 +21,13 @@ use C4::Branch; # GetBranches
 # FIXME: no_undef_params needs to be tested
 use CGI qw('-no_undef_params');
 my $cgi = new CGI;
+
+BEGIN {
+	if (C4::Context->preference('BakerTaylorEnabled')) {
+		require C4::External::BakerTaylor;
+		import C4::External::BakerTaylor qw(&image_url &link_url);
+	}
+}
 
 my ($template,$borrowernumber,$cookie);
 
@@ -50,8 +59,19 @@ if (C4::Context->preference("marcflavour") eq "UNIMARC" ) {
     $template->param('UNIMARC' => 1);
 }
 
-foreach (qw(TaggingOnList TaggingOnDetail)) {
-	C4::Context->preference($_) and $template->param($_ => 1);
+if (C4::Context->preference('BakerTaylorEnabled')) {
+	$template->param(
+		BakerTaylorEnabled  => 1,
+		BakerTaylorImageURL => &image_url(),
+		BakerTaylorLinkURL  => &link_url(),
+		BakerTaylorBookstoreURL => C4::Context->preference('BakerTaylorBookstoreURL'),
+	);
+}
+if (C4::Context->preference('TagsEnabled')) {
+	$template->param(TagsEnabled => 1);
+	foreach (qw(TagsShowOnList TagsInputOnList)) {
+		C4::Context->preference($_) and $template->param($_ => 1);
+	}
 }
 
 ## URI Re-Writing
@@ -178,6 +198,8 @@ if ( $template_type eq 'advsearch' ) {
 #  * we can edit the values by changing the key
 #  * multivalued CGI paramaters are returned as a packaged string separated by "\0" (null)
 my $params = $cgi->Vars;
+my $tag;
+$tag = $params->{tag} if $params->{tag};
 
 # Params that can have more than one value
 # sort by is used to sort the query
@@ -277,9 +299,7 @@ sub _input_cgi_parse ($) {
     for my $this_cgi ( split('&',shift) ) {
         next unless $this_cgi;
         $this_cgi =~ /(.*)=(.*)/;
-        my $input_name = $1;
-        my $input_value = $2;
-        push @elements, { input_name => $input_name, input_value => $input_value };
+        push @elements, { input_name => $1, input_value => $2 };
     }
     return @elements;
 }
@@ -310,7 +330,17 @@ my $facets; # this object stores the faceted results that display on the left-ha
 my @results_array;
 my $results_hashref;
 
-if (C4::Context->preference('NoZebra')) {
+if ($tag) {
+	my $taglist = get_tags({term=>$tag});
+	$results_hashref->{biblioserver}->{hits} = scalar (@$taglist);
+	my @biblist  = (map {GetBiblioData($_->{biblionumber})} @$taglist);
+	my @marclist = (map {$_->{marc}} @biblist );
+	$DEBUG and printf STDERR "taglist (%s biblionumber)\nmarclist (%s records)\n", scalar(@$taglist), scalar(@marclist);
+	$results_hashref->{biblioserver}->{RECORDS} = \@marclist;
+	# FIXME: tag search and standard search should work together, not exclusively
+	# FIXME: No facets for tags search.
+}
+elsif (C4::Context->preference('NoZebra')) {
     eval {
         ($error, $results_hashref, $facets) = NZgetRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
     };
@@ -323,6 +353,8 @@ if (C4::Context->preference('NoZebra')) {
         ($error, $results_hashref, $facets) = getRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
     };
 }
+use Data::Dumper;
+print STDERR "-" x 25, "\n", Dumper($results_hashref);
 if ($@ || $error) {
     $template->param(query_error => $error.$@);
     output_html_with_http_headers $cgi, $cookie, $template->output;
@@ -350,6 +382,26 @@ for (my $i=0;$i<=@servers;$i++) {
         } else {
             @newresults = searchResults( $query_desc,$hits,$results_per_page,$offset,@{$results_hashref->{$server}->{"RECORDS"}});
         }
+		my $tag_quantity;
+		if (C4::Context->preference('TagsEnabled') and
+			$tag_quantity = C4::Context->preference('TagsShowOnList')) {
+			foreach (@newresults) {
+				my $bibnum = $_->{biblionumber} or next;
+				$_ ->{'TagLoop'} = get_tags({biblionumber=>$bibnum, 'sort'=>'-weight',
+										limit=>$tag_quantity });
+			}
+		}
+		foreach (@newresults) {
+			my $clean = $_->{isbn} or next;
+			unless (
+				$clean =~ /\b(\d{13})\b/ or
+				$clean =~ /\b(\d{10})\b/ or 
+				$clean =~ /\b(\d{9}X)\b/i
+			) {
+				next;
+			}
+			$_ ->{'clean_isbn'} = $1;
+		}
         $total = $total + $results_hashref->{$server}->{"hits"};
         ## If there's just one result, redirect to the detail page
         if ($total == 1) {         

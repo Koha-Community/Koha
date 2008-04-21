@@ -28,6 +28,7 @@ use C4::Serials;    #uses getsubscriptionfrom biblionumber
 use C4::Output;
 use C4::Biblio;
 use C4::Items;
+use C4::Tags qw(get_tags);
 use C4::Dates qw/format_date/;
 use C4::XISBN qw(get_xisbns get_biblionumber_from_isbn get_biblio_from_xisbn);
 use C4::Amazon;
@@ -35,6 +36,13 @@ use C4::Review;
 use C4::Serials;
 use C4::Members;
 use C4::XSLT;
+
+BEGIN {
+	if (C4::Context->preference('BakerTaylorEnabled')) {
+		require C4::External::BakerTaylor;
+		import C4::External::BakerTaylor qw(&image_url &link_url);
+	}
+}
 
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -137,11 +145,11 @@ for my $itm (@items) {
     my $dbh              = C4::Context->dbh;
     my $marcflavour      = C4::Context->preference("marcflavour");
     my $record           = GetMarcBiblio($biblionumber);
-    my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );
-    my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
-    my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
-    my $marcseriesarray  = GetMarcSeries($record,$marcflavour);
-    my $marcurlsarray   = GetMarcUrls($record,$marcflavour);
+    my $marcnotesarray   = GetMarcNotes   ($record,$marcflavour);
+    my $marcauthorsarray = GetMarcAuthors ($record,$marcflavour);
+    my $marcsubjctsarray = GetMarcSubjects($record,$marcflavour);
+    my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);
+    my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
 
     $template->param(
         MARCNOTES   => $marcnotesarray,
@@ -202,7 +210,19 @@ $template->param(
 # XISBN Stuff
 my $xisbn=$dat->{'isbn'};
 $xisbn =~ /(\d*[X]*)/;
-$template->param(amazonisbn => $1);
+$template->param(amazonisbn => $1);		# FIXME: so it is OK if the ISBN = 'XXXXX' ?
+my ($clean, $amazonisbn);
+$amazonisbn = $1;
+# these might be overkill, but they are better than the regexp above.
+if (
+	$amazonisbn =~ /\b(\d{13})\b/ or
+	$amazonisbn =~ /\b(\d{10})\b/ or 
+	$amazonisbn =~ /\b(\d{9}X)\b/i
+) {
+	$clean = $1;
+	$template->param(clean_isbn => $1);
+}
+
 if (C4::Context->preference("OPACFRBRizeEditions")==1) {
     eval {
         $template->param(
@@ -300,6 +320,37 @@ $template->param(
     PREVIOUS_SHELF_BROWSE => \@previous_items,
     NEXT_SHELF_BROWSE => \@next_items,
 );
+}
+
+if (C4::Context->preference("BakerTaylorEnabled")) {
+	$template->param(
+		BakerTaylorEnabled  => 1,
+		BakerTaylorImageURL => &image_url(),
+		BakerTaylorLinkURL  => &link_url(),
+		BakerTaylorBookstoreURL => C4::Context->preference('BakerTaylorBookstoreURL'),
+	);
+	my ($bt_user, $bt_pass);
+	if ($clean and
+		$bt_user = C4::Context->preference('BakerTaylorUsername') and
+		$bt_pass = C4::Context->preference('BakerTaylorPassword')    )
+	{
+		$template->param(
+		BakerTaylorContentURL   =>
+		sprintf("http://contentcafe2.btol.com/ContentCafeClient/ContentCafe.aspx?UserID=%s&Password=%s&ItemKey=%s&Options=Y",
+				$bt_user,$bt_pass,$clean)
+		);
+	}
+}
+
+my $tag_quantity;
+if (C4::Context->preference('TagsEnabled') and $tag_quantity = C4::Context->preference('TagsShowOnDetail')) {
+	$template->param(
+		TagsEnabled => 1,
+		TagsShowOnDetail => $tag_quantity,
+		TagsInputOnDetail => C4::Context->preference('TagsInputOnDetail')
+	);
+	$template->param(TagLoop => get_tags({biblionumber=>$biblionumber,
+								'sort'=>'-weight', limit=>$tag_quantity}));
 }
 
 output_html_with_http_headers $query, $cookie, $template->output;

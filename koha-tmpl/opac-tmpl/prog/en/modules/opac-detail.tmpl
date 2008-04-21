@@ -28,13 +28,23 @@
 	
 	<div id="catalogue_detail_biblio">
     <!-- TMPL_IF NAME="AmazonContent" -->
-       <div id="bookcover"> <!-- TMPL_IF NAME="isbn" -->
+       <div id="bookcover"><!-- TMPL_IF NAME="isbn" -->
         <a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="amazonisbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link">
             <img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="amazonisbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Cover Image" />
         </a><!-- TMPL_ELSE -->
         <img border="0" src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="Cover Image" />
         <!-- /TMPL_IF --></div>
-<!-- /TMPL_IF -->
+	<!-- TMPL_ELSE -->
+    	<!-- TMPL_IF NAME="BakerTaylorEnabled" -->
+       		<div id="bookcover">
+			<!-- TMPL_IF NAME="isbn" -->
+			  <a href="https://<!-- TMPL_VAR name="BakerTaylorBookstoreURL" ESCAPE="HTML" --><!-- TMPL_VAR name="clean_isbn" -->">
+			  <img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR name="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR name="clean_isbn" -->" />
+			  </a>
+			<!-- TMPL_ELSE -->
+			<!-- /TMPL_IF --></div>
+		<!-- /TMPL_IF -->
+	<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="XSLTDetailsDisplay" -->
 <!-- TMPL_VAR NAME="XSLTBloc" -->
 <!-- TMPL_ELSE -->
@@ -154,6 +164,7 @@
             <!-- /TMPL_LOOP --></ul>
     <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
+
 </div>
 
 <div id="bibliodescriptions" class="toptabs">
@@ -481,6 +492,34 @@
         <option value="utf8">MARC (Unicode/UTF-8)</option>    </select><input type="hidden" name="op" value="export" /><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
 <input type="submit" name="save" value="Go" /></form></div>
 
+		<!-- TMPL_IF NAME="TagsShowOnDetail" -->
+		<div class="detailtagcell"><span class="tagtitle">Tags:</span>
+		<!-- TMPL_IF NAME="TagLoop" -->
+			<ul><!-- TMPL_LOOP NAME="TagLoop" -->
+			<li><a href="/cgi-bin/koha/opac-search.pl?tag=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->&amp;q=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="term" ESCAPE="HTML" --></a> <span class="weight">(<!-- TMPL_VAR NAME="weight_total" -->)</span></li>
+			<!-- /TMPL_LOOP -->
+			</ul>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="TagsInputOnDetail" -->
+			<form name="tagform<!-- TMPL_VAR NAME="biblionumber" -->" method="post" action="/cgi-bin/koha/opac-tags.pl">
+				<label for="newtag<!-- TMPL_VAR NAME="biblionumber" -->">New tag:</label>
+				<input name="newtag<!-- TMPL_VAR NAME="biblionumber" -->" id="newtag<!-- TMPL_VAR NAME="biblionumber" -->" maxlength="100" />
+				<input name="tagbutton" class="tagbutton" type="submit" value="Add" />
+			</form>
+			<br />
+			<span id="tagstatus<!-- TMPL_VAR NAME="biblionumber" -->" class="tagstatus" style="display:none;">
+				Tag status here.
+			</span>
+		<!-- /TMPL_IF -->
+		</div>
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="BakerTaylorContentURL" -->
+		<div id="bakertaylor" class="detailtagcell">
+		<a href="<!-- TMPL_VAR NAME="BakerTaylorContentURL" ESCAPE="HTML" -->">
+			More info from B&amp;T
+		</a>
+		</div>
+		<!-- /TMPL_IF -->
 </div>
 </div>
 

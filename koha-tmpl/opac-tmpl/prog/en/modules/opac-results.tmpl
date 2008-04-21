@@ -192,7 +192,18 @@ $(document).ready(function(){
                         <!-- TMPL_IF name="imageurl" -->
                         <img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" />
                         <!-- TMPL_ELSE -->
-                        <!-- TMPL_VAR name="description" -->
+						  <!-- TMPL_IF NAME="BakerTaylorEnabled" -->
+						  <!-- TMPL_IF NAME="clean_isbn" --><a href="https://<!-- TMPL_VAR name="BakerTaylorBookstoreURL" ESCAPE="HTML" --><!-- TMPL_VAR name="clean_isbn" -->">
+						  <img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR name="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR name="clean_isbn" -->" />
+						  </a>
+                          <!-- TMPL_ELSE -->
+							(No clean ISBN.)
+                          <!-- /TMPL_IF -->
+                          <!-- TMPL_ELSE -->
+                            <!-- TMPL_IF name="imageurl" --><img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" />
+                            <!-- TMPL_ELSE --><!-- TMPL_VAR name="description" -->
+                            <!-- /TMPL_IF -->
+                          <!-- /TMPL_IF -->
                         <!-- /TMPL_IF -->
                         <!-- /TMPL_UNLESS -->
                     </td>
@@ -240,19 +251,30 @@ $(document).ready(function(){
 				<p><!-- TMPL_IF name="RequestOnOpac" --><!-- TMPL_UNLESS NAME="norequests" --><!-- TMPL_IF NAME="opacuserlogin" --><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a><!-- /TMPL_IF --><!-- /TMPL_UNLESS --> <!-- /TMPL_IF -->
 				<!--TMPL_IF EXPR="opacbookbag || virtualshelves" --><input type="checkbox" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" title="Click to add to cart" /> <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"><!-- /TMPL_IF --><!--TMPL_IF EXPR="opacbookbag || virtualshelves" --></label><!-- /TMPL_IF --> </p> 
 				</td>
-                <!-- /TMPL_IF -->
-				<!-- TMPL_IF NAME="TaggingOnList" -->
+                <!-- /TMPL_IF --> <!-- this is possibly an extra from merge -->
+				<!-- TMPL_IF NAME="TagsEnabled" -->
+				<!-- TMPL_IF NAME="TagsShowOnList" -->
 				<td><div class="tagcell">
 					<!-- TMPL_IF NAME="TagLoop" -->
 						<span class="tagtitle">Tags:</span>
-						<ul><!-- TMPL_LOOP NAME="TagLoop" --><li><!-- TMPL_VAR NAME="tag" --></li>
+						<ul><!-- TMPL_LOOP NAME="TagLoop" --><li><a href="/cgi-bin/koha/opac-search.pl?tag=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->&amp;q=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="term" --></a> <span class="weight">(<!-- TMPL_VAR NAME="weight_total" -->)</span></li>
 							<!-- /TMPL_LOOP -->
 						</ul>
-					<!-- TMPL_ELSE -->
 					<!-- /TMPL_IF -->
-						<a href="#">Add new tag</a>
+					<!-- TMPL_IF NAME="TagsInputOnList" -->
+					<form name="tagform<!-- TMPL_VAR NAME="biblionumber" -->" method="post" action="/cgi-bin/koha/opac-tags.pl">
+						<label for="newtag<!-- TMPL_VAR NAME="biblionumber" -->">New tag:</label>
+						<input name="newtag<!-- TMPL_VAR NAME="biblionumber" -->" id="newtag<!-- TMPL_VAR NAME="biblionumber" -->" maxlength="100" />
+						<input name="tagbutton" class="tagbutton" type="submit" value="Add" />
+					</form>
+					<br />
+					<span id="tagstatus<!-- TMPL_VAR NAME="biblionumber" -->" class="tagstatus" style="display:none;">
+						Tag status here.
+					</span>
+					<!-- /TMPL_IF -->
 					</div>
 				</td>
+				<!-- /TMPL_IF -->
 				<!-- /TMPL_IF -->
                 </tr>
                 <!-- /TMPL_LOOP -->
