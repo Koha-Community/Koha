@@ -80,7 +80,7 @@ This will return the At job with the given id
 
 sub get_at_job {
 	my ($id)=@_;
-	my %jobs = chedule::At::getJobs(JOBID => $id);
+	my %jobs = Schedule::At::getJobs(JOBID => $id);
 }
 
 =item add_at_job ($time,$command)
