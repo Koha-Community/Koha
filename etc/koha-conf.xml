@@ -13,12 +13,14 @@
      Because PazPar2 only connects to a Z39.50 server using TCP/IP,
      it cannot use the Unix-domain socket that biblioserver uses.
      Therefore, a custom server is defined. -->
+__PAZPAR2_TOGGLE_XML_PRE__
 <listen id="mergeserver">tcp:@:__MERGE_SERVER_PORT__</listen>
 <server id="mergeserver"  listenref="mergeserver"> 
     <directory>__ZEBRA_DATA_DIR__/biblios</directory>
     <config>__ZEBRA_CONF_DIR__/zebra-biblios.cfg</config>
     <cql2rpn>__ZEBRA_CONF_DIR__/pqf.properties</cql2rpn>
 </server>
+__PAZPAR2_TOGGLE_XML_POST__
 
 <!-- BIBLIOGRAPHIC RECORDS -->
 <server id="biblioserver"  listenref="biblioserver"> 

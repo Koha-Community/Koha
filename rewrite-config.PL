@@ -122,6 +122,8 @@ $prefix = $ENV{'INSTALL_BASE'} || "/usr";
   "__INSTALL_ZEBRA__" => 'yes',
   "__INSTALL_SRU__" => 'yes',
   "__INSTALL_PAZPAR2__" => 'no',
+  "__PAZPAR2_TOGGLE_XML_PRE__" => '<!--',
+  "__PAZPAR2_TOGGLE_XML_POST__" => '-->',
   "__AUTH_INDEX_MODE__" => 'grs1',
 );
 
@@ -132,8 +134,15 @@ foreach $key (keys %configuration) {
   }
 }
 
+# munge commenting out the PazPar2 mergeserver
+# entry in koha-conf.xml if necessary
+if ($configuration{'__INSTALL_PAZPAR2__'} eq 'yes') {
+    $configuration{'__PAZPAR2_TOGGLE_XML_PRE__'} = '';
+    $configuration{'__PAZPAR2_TOGGLE_XML_POST__'} = '';
+}
+
 $fname = $ARGV[0];
-$file = read_file($fname);
+$file = &read_file($fname);
 $file =~ s/__.*?__/exists $configuration{$&} ? $configuration{$&} : $&/seg;
 
 # At this point, file is in 'blib' and by default
