@@ -20,19 +20,12 @@ use CGI;
 use C4::Output;
 use C4::Auth;
 use C4::Context;
-use Date::Manip;
 use C4::Stats;
 use C4::Accounts;
+use C4::Debug;
+use Date::Manip;
 
-#use strict;
-#use CGI;
-#use C4::Output;
 #use HTML::Template;
-#use C4::Auth;
-#use C4::Interface::CGI::Output;
-#use C4::Context;
-#use Date::Manip;
-#use C4::Stats;
 #use Text::CSV_XS;
 #use Data::Dumper;
 
@@ -60,15 +53,15 @@ my $date  = ParseDate($time);
 my $date2 = ParseDate($time2);
 $date  = UnixDate( $date,  '%Y-%m-%d' );
 $date2 = UnixDate( $date2, '%Y-%m-%d' );
-warn "MASON: TIME: $time, $time2";
-warn "MASON: DATE: $date, $date2";
+$debug and warn "MASON: TIME: $time, $time2";
+$debug and warn "MASON: DATE: $date, $date2";
 
 # get a list of every payment
 my @payments = TotalPaid( $date, $date2 );
 
 my $count = @payments;
 
-warn "MASON: number of payments=$count\n";
+$debug and warn "MASON: number of payments=$count\n";
 
 my $i            = 0;
 my $totalcharges = 0;
@@ -123,7 +116,7 @@ foreach my $payment (@payments) {
 
         }
             $totalpaid = $totalpaid + $payment->{'value'};
-			warn "totalpaid = $totalpaid";		
+			$debug and warn "totalpaid = $totalpaid";		
     }
     else {
         ++$totalwritten;
