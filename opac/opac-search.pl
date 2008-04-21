@@ -50,6 +50,10 @@ if (C4::Context->preference("marcflavour") eq "UNIMARC" ) {
     $template->param('UNIMARC' => 1);
 }
 
+foreach (qw(TaggingOnList TaggingOnDetail)) {
+	C4::Context->preference($_) and $template->param($_ => 1);
+}
+
 ## URI Re-Writing
 # Deprecated, but preserved because it's interesting :-)
 # The same thing can be accomplished with mod_rewrite in

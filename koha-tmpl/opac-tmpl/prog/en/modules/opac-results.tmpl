@@ -241,6 +241,19 @@ $(document).ready(function(){
 				<!--TMPL_IF EXPR="opacbookbag || virtualshelves" --><input type="checkbox" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" title="Click to add to cart" /> <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"><!-- /TMPL_IF --><!--TMPL_IF EXPR="opacbookbag || virtualshelves" --></label><!-- /TMPL_IF --> </p> 
 				</td>
                 <!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="TaggingOnList" -->
+				<td><div class="tagcell">
+					<!-- TMPL_IF NAME="TagLoop" -->
+						<span class="tagtitle">Tags:</span>
+						<ul><!-- TMPL_LOOP NAME="TagLoop" --><li><!-- TMPL_VAR NAME="tag" --></li>
+							<!-- /TMPL_LOOP -->
+						</ul>
+					<!-- TMPL_ELSE -->
+					<!-- /TMPL_IF -->
+						<a href="#">Add new tag</a>
+					</div>
+				</td>
+				<!-- /TMPL_IF -->
                 </tr>
                 <!-- /TMPL_LOOP -->
             </table>
