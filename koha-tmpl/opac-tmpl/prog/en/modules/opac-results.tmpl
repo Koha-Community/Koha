@@ -181,7 +181,7 @@ $(document).ready(function(){
                     <!-- TMPL_IF NAME="GoogleJackets" --><div style="block" title="<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" id="<!-- TMPL_VAR name="amazonisbn" -->" class="gbs-thumbnail"></div><!-- /TMPL_IF -->
                 </td>
                 <tr>
-                <td></td><td></td><td style="size:65%; color:grey;"><!--TMPL_IF Name="searchhighlightblob"--><p class="searchhighlightblob">Match: <!-- TMPL_VAR NAME="searchhighlightblob" --></p><!-- /TMPL_IF --></td><td></td>
+                <td></td><td></td><td style="size:65%; color:grey;"><!-- TMPL_IF Name="searchhighlightblob" --><p class="searchhighlightblob">Match: <!-- TMPL_VAR NAME="searchhighlightblob" --></p><!-- /TMPL_IF --></td><td></td>
                 </tr>
             <!-- TMPL_ELSE -->
                     <td><!-- TMPL_IF NAME="AmazonContent" -->
@@ -248,10 +248,21 @@ $(document).ready(function(){
 					</span>
 				</p>
 
-				<p><!-- TMPL_IF name="RequestOnOpac" --><!-- TMPL_UNLESS NAME="norequests" --><!-- TMPL_IF NAME="opacuserlogin" --><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a><!-- /TMPL_IF --><!-- /TMPL_UNLESS --> <!-- /TMPL_IF -->
-				<!--TMPL_IF EXPR="opacbookbag || virtualshelves" --><input type="checkbox" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" title="Click to add to cart" /> <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"><!-- /TMPL_IF --><!--TMPL_IF EXPR="opacbookbag || virtualshelves" --></label><!-- /TMPL_IF --> </p> 
+				<p><!-- TMPL_IF name="RequestOnOpac" --><!-- TMPL_UNLESS NAME="norequests" --><!-- TMPL_IF NAME="opacuserlogin" --><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a><!-- /TMPL_IF --><!-- /TMPL_UNLESS --><!-- /TMPL_IF -->
+				<!--TMPL_IF EXPR="opacbookbag || virtualshelves" -->
+					<input type="checkbox" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" title="Click to add to cart" />
+					<label for="bib<!-- TMPL_VAR NAME="biblionumber" -->">
+				<!-- /TMPL_IF -->
+					<img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="Item Type <!-- TMPL_VAR NAME="ccode" -->" title="<!-- TMPL_VAR NAME="ccode" -->" />
+				<!--TMPL_IF EXPR="opacbookbag || virtualshelves" -->
+					</label>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="itemcallnumber" -->
+                <a href="/cgi-bin/koha/opac-search.pl?q=callnum:<!-- TMPL_VAR NAME="itemcallnumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="itemcallnumber" --></a>
+				<!-- /TMPL_IF --></p>
+
 				</td>
-                <!-- /TMPL_IF --> <!-- this is possibly an extra from merge -->
+		<!-- /TMPL_IF --> <!-- this is possibly an extra from merge -->
 				<!-- TMPL_IF NAME="TagsEnabled" -->
 				<!-- TMPL_IF NAME="TagsShowOnList" -->
 				<td><div class="tagcell">
