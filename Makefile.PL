@@ -525,7 +525,7 @@ WriteMakefile(
 'DBD::mysql' => 4.004,
 'DBI' => 1.53,
 'Data::ICal' => 0.13,
-'Data::Dumper' => 2.121_08,
+'Data::Dumper' => 2.121,
 'Date::Calc' => 5.4,
 'Date::ICal' => 1.72,
 'Date::Manip' => 5.44,
