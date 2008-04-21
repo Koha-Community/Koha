@@ -56,6 +56,14 @@ use C4::Context;
 
 # FIXME, shouldnt we store this stuff in the systempreferences table? 
 
+# FIXME: This uses hash in a backwards way.  What we really want is:
+# 		$tabsysprefs{key} = $array_ref;
+# 				like
+# 		$tabsysprefs{Cataloguing} = [qw(autoBarcode ISBD marc ...)];
+#
+# 	Because some things *should* be on more than one tab.
+# 	And the tabname is the unique part (the key).
+
 my %tabsysprefs;
 # Acquisitions
     $tabsysprefs{acquisitions}="Acquisitions";
@@ -273,6 +281,21 @@ my %tabsysprefs;
    $tabsysprefs{'OAI-PMH:MaxCount'}  = "OAI-PMH";
    $tabsysprefs{'OAI-PMH:Set'}       = "OAI-PMH";
    $tabsysprefs{'OAI-PMH:Subset'}    = "OAI-PMH";
+
+# Tags
+   $tabsysprefs{TagsEnabled}            = 'Tags';
+   $tabsysprefs{TagsExternalDictionary} = 'Tags';
+   $tabsysprefs{TagsInputOnDetail}      = 'Tags';
+   $tabsysprefs{TagsInputOnList}        = 'Tags';
+   $tabsysprefs{TagsShowOnDetail}       = 'Tags';
+   $tabsysprefs{TagsShowOnList}         = 'Tags';
+   $tabsysprefs{TagsModeration}         = 'Tags';
+
+# Baker & Taylor 
+   $tabsysprefs{BakerTaylorBookstoreURL} = 'BakerTaylor';
+   $tabsysprefs{BakerTaylorEnabled}      = 'BakerTaylor';
+   $tabsysprefs{BakerTaylorPassword}     = 'BakerTaylor';
+   $tabsysprefs{BakerTaylorUsername}     = 'BakerTaylor';
 
 
 sub StringSearch  {

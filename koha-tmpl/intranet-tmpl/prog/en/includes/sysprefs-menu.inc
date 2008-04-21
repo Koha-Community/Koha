@@ -4,6 +4,7 @@
 <!-- TMPL_IF NAME="Acquisitions" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a title="Acquisitions" href="/cgi-bin/koha/admin/systempreferences.pl?tab=Acquisitions">Acquisitions</a></li>
 <!-- TMPL_IF NAME="Amazon" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a title="Amazon.com module" href="/cgi-bin/koha/admin/systempreferences.pl?tab=Amazon">Amazon.com</a></li>
 <!-- TMPL_IF NAME="Authorities" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a title="Authority Control" href="/cgi-bin/koha/admin/systempreferences.pl?tab=Authorities">Authorities</a></li>
+<!-- TMPL_IF NAME="BakerTaylor" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a title="Baker and Taylor" href="/cgi-bin/koha/admin/systempreferences.pl?tab=BakerTaylor">Baker &amp; Taylor</a></li>
 <!-- TMPL_IF NAME="Cataloguing" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a title="Cataloging" href="/cgi-bin/koha/admin/systempreferences.pl?tab=Cataloguing">Cataloguing</a></li>
 <!-- TMPL_IF NAME="Circulation" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a title="Circulation" href="/cgi-bin/koha/admin/systempreferences.pl?tab=Circulation">Circulation</a></li>
 <!-- TMPL_IF NAME="FRBR" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a title="Functional Requiremnets for Bibliographic Records" href="/cgi-bin/koha/admin/systempreferences.pl?tab=FRBR">FRBR</a></li>
@@ -14,6 +15,7 @@
 <!-- TMPL_IF NAME="Patrons" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a title="Patrons" href="/cgi-bin/koha/admin/systempreferences.pl?tab=Patrons">Patrons</a></li>
 <!-- TMPL_IF NAME="Searching" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a title="Searching" href="/cgi-bin/koha/admin/systempreferences.pl?tab=Searching">Searching</a></li>
 <!-- TMPL_IF NAME="StaffClient" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a title="Staff Client" href="/cgi-bin/koha/admin/systempreferences.pl?tab=StaffClient">Staff Client</a></li>
+<!-- TMPL_IF NAME="Tags" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a title="Tags" href="/cgi-bin/koha/admin/systempreferences.pl?tab=Tags">Tags</a></li>
 <!-- TMPL_IF NAME="" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/admin/systempreferences.pl">Local Use</a></li>
 </ul>
 </div>

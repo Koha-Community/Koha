@@ -1312,6 +1312,72 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.073";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do("DROP TABLE IF EXISTS `tags_all`;");
+	$dbh->do(q#
+	CREATE TABLE `tags_all` (
+	  `tag_id`         int(11) NOT NULL auto_increment,
+	  `borrowernumber` int(11) NOT NULL,
+	  `biblionumber`   int(11) NOT NULL,
+	  `term`      varchar(255) NOT NULL,
+	  `language`       int(4) default NULL,
+	  `date_created` datetime  NOT NULL,
+	  PRIMARY KEY  (`tag_id`),
+	  KEY `tags_borrowers_fk_1` (`borrowernumber`),
+	  KEY `tags_biblionumber_fk_1` (`biblionumber`),
+	  CONSTRAINT `tags_borrowers_fk_1` FOREIGN KEY (`borrowernumber`)
+		REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+	  CONSTRAINT `tags_biblionumber_fk_1` FOREIGN KEY (`biblionumber`)
+		REFERENCES `biblio`     (`biblionumber`)  ON DELETE CASCADE ON UPDATE CASCADE
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	#);
+	$dbh->do("DROP TABLE IF EXISTS `tags_approval`;");
+	$dbh->do(q#
+	CREATE TABLE `tags_approval` (
+	  `term`   varchar(255) NOT NULL,
+	  `approved`     int(1) NOT NULL default '0',
+	  `date_approved` datetime       default NULL,
+	  `approved_by` int(11)          default NULL,
+	  `weight_total` int(9) NOT NULL default '1',
+	  PRIMARY KEY  (`term`),
+	  KEY `tags_approval_borrowers_fk_1` (`approved_by`),
+	  CONSTRAINT `tags_approval_borrowers_fk_1` FOREIGN KEY (`approved_by`)
+		REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	#);
+	$dbh->do("DROP TABLE IF EXISTS `tags_index`;");
+	$dbh->do(q#
+	CREATE TABLE `tags_index` (
+	  `term`    varchar(255) NOT NULL,
+	  `biblionumber` int(11) NOT NULL,
+	  `weight`        int(9) NOT NULL default '1',
+	  PRIMARY KEY  (`term`,`biblionumber`),
+	  KEY `tags_index_biblionumber_fk_1` (`biblionumber`),
+	  CONSTRAINT `tags_index_term_fk_1` FOREIGN KEY (`term`)
+		REFERENCES `tags_approval` (`term`)  ON DELETE CASCADE ON UPDATE CASCADE,
+	  CONSTRAINT `tags_index_biblionumber_fk_1` FOREIGN KEY (`biblionumber`)
+		REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	#);
+	$dbh->do(q#
+	INSERT INTO `systempreferences` VALUES
+		('BakerTaylorBookstoreURL','','','URL template for \"My Libary Bookstore\" links, to which the \"key\" value is appended, and \"https://\" is prepended.  It should include your hostname and \"Parent Number\".  Make this variable empty to turn MLB links off.<br /> Example: ocls.mylibrarybookstore.com/MLB/actions/searchHandler.do?nextPage=bookDetails&parentNum=10923&key=',''),
+		('BakerTaylorEnabled','0','','Enable or disable all Baker & Taylor features.','YesNo'),
+		('BakerTaylorPassword','','','Baker & Taylor Password for Content Cafe (external content)','Textarea'),
+		('BakerTaylorUsername','','','Baker & Taylor Username for Content Cafe (external content)','Textarea'),
+		('TagsEnabled','1','','Enables or disables all tagging features.  This is the main switch for tags.','YesNo'),
+		('TagsExternalDictionary','/usr/bin/ispell','','Path on server to local ispell executable, used to set $Lingua::Ispell::path <br />This dictionary is used as a \"whitelist\" of pre-allowed tags.',''),
+		('TagsInputOnDetail','1','','Allow users to input tags from the detail page.',         'YesNo'),
+		('TagsInputOnList',  '0','','Allow users to input tags from the search results list.', 'YesNo'),
+		('TagsModeration',  NULL,'','(unimplemented) Requires tags from patrons to be approved before becoming visible.','YesNo'),
+		('TagsShowOnDetail','10','','Number of tags to display on detail page.  0 is off.',        'Integer'),
+		('TagsShowOnList',   '6','','Number of tags to display on search results list.  0 is off.','Integer')
+	#);
+	print "Upgrade to $DBversion done (Baker/Taylor,Tags: sysprefs and tables (tags_all, tags_index, tags_approval)) ";
+	SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
@@ -1338,11 +1404,6 @@ sub DropAllForeignKeys {
         }
     }
 }
-
-
-
-
-
 
 
 =item TransformToNum
