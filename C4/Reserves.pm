@@ -81,7 +81,7 @@ C4::Reserves - Koha functions for dealing with reservation.
 
 BEGIN {
     # set the version for version checking
-    $VERSION = 3.01;
+    $VERSION = 3.02;
 	require Exporter;
     @ISA = qw(Exporter);
     @EXPORT = qw(
@@ -430,7 +430,7 @@ sub GetReserveFee {
     my $data = $sth->fetchrow_hashref;
     $sth->finish();
     my $fee      = $data->{'reservefee'};
-    my $cntitems = @- > $bibitems;
+    my $cntitems = @- > $bibitems;	# FIXME: @- is a regexp match var.  Unclear and probably INCORRECT usage here.
 
     if ( $fee > 0 ) {
 
@@ -457,15 +457,9 @@ sub GetReserveFee {
                     }
                     $x++;
                 }
-                if ( $const eq 'o' ) {
-                    if ( $found == 1 ) {
-                        push @biblioitems, $data1;
-                    }
-                }
-                else {
-                    if ( $found == 0 ) {
-                        push @biblioitems, $data1;
-                    }
+                if ( $found == 0 or
+                    ($found == 1 and $const eq 'o')) {
+					push @biblioitems, $data1;
                 }
             }
         }
@@ -476,32 +470,21 @@ sub GetReserveFee {
         my $allissued     = 1;
         while ( $x < $cntitemsfound ) {
             my $bitdata = $biblioitems[$x];
-            my $sth2    = $dbh->prepare(
-                "SELECT * FROM items
-                     WHERE biblioitemnumber = ?"
-            );
+            my $sth2    = $dbh->prepare("SELECT * FROM items WHERE biblioitemnumber = ?");
             $sth2->execute( $bitdata->{'biblioitemnumber'} );
             while ( my $itdata = $sth2->fetchrow_hashref ) {
-                my $sth3 = $dbh->prepare(
-                    "SELECT * FROM issues
-                       WHERE itemnumber = ?"
-                );
+                my $sth3 = $dbh->prepare("SELECT * FROM issues WHERE itemnumber = ?");
                 $sth3->execute( $itdata->{'itemnumber'} );
-                if ( my $isdata = $sth3->fetchrow_hashref ) {
-                }
-                else {
+                unless ($sth3->rows()) {
                     $allissued = 0;
                 }
             }
             $x++;
         }
         if ( $allissued == 0 ) {
-            my $rsth =
-              $dbh->prepare("SELECT * FROM reserves WHERE biblionumber = ?");
+            my $rsth = $dbh->prepare("SELECT * FROM reserves WHERE biblionumber = ?");
             $rsth->execute($biblionumber);
-            if ( my $rdata = $rsth->fetchrow_hashref ) {
-            }
-            else {
+            unless ($rsth->rows()) {
                 $fee = 0;
             }
         }
@@ -777,7 +760,7 @@ sub CancelReserve {
         $sth->execute( $biblio, $borr );
 
         # now fix the priority on the others....
-        _FixPriority( $priority, $biblio );
+        _FixPriority($biblio,$borr,$priority);
     }
 }
 
@@ -898,7 +881,7 @@ sub ModReserveFill {
     # now fix the priority on the others (if the priority wasn't
     # already sorted!)....
     unless ( $priority == 0 ) {
-        _FixPriority( $priority, $biblionumber );
+        _FixPriority($biblionumber, $borrowernumber, $priority);
     }
 }
 
@@ -1210,12 +1193,7 @@ sub _Findgroupreserve {
     /;
     my $sth = $dbh->prepare($query);
     $sth->execute( $biblio, $bibitem );
-    my @results;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data );
-    }
-    $sth->finish;
-    return @results;
+	return $sth->fetchall_arrayref({});
 }
 
 =back
