@@ -99,10 +99,7 @@ sub numberofreviews {
       "SELECT count(*) FROM reviews WHERE biblionumber=? and approved=?";
     my $sth = $dbh->prepare($query);
     $sth->execute( $biblionumber, 1 );
-    my $count = $sth->fetchrow_hashref;
-
-    $sth->finish();
-    return ( $count->{'count(*)'} );
+	return $sth->fetchrow;
 }
 
 sub getreviews {
@@ -112,12 +109,7 @@ sub getreviews {
 "SELECT * FROM reviews WHERE biblionumber=? and approved=? order by datereviewed desc";
     my $sth = $dbh->prepare($query) || warn $dbh->err_str;
     $sth->execute( $biblionumber, $approved );
-    my @results;
-    while ( my $data = $sth->fetchrow_hashref() ) {
-        push @results, $data;
-    }
-    $sth->finish();
-    return ( \@results );
+	return $sth->fetchall_arrayref({});
 }
 
 sub getallreviews {
@@ -127,12 +119,7 @@ sub getallreviews {
       "SELECT * FROM reviews WHERE approved=? order by datereviewed desc";
     my $sth = $dbh->prepare($query);
     $sth->execute($status);
-    my @results;
-    while ( my $data = $sth->fetchrow_hashref() ) {
-        push @results, $data;
-    }
-    $sth->finish();
-    return ( \@results );
+	return $sth->fetchall_arrayref({});
 }
 
 =head2 approvereview

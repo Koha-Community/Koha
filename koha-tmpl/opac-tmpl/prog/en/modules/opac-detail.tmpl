@@ -334,41 +334,36 @@
 
 <!-- TMPL_IF NAME="reviewson" -->
 <div id="comments">
-		<div id="newcomment"></div>
-<!-- TMPL_IF NAME="reviews" -->
-        <!--TMPL_LOOP NAME="reviews"-->
-			<!-- TMPL_IF NAME="loggedinusername" -->
-			<!-- TMPL_IF EXPR="userid eq loggedinusername" -->
+	<div id="newcomment"></div>
+	<!-- TMPL_IF NAME="reviews" -->
+        <!-- TMPL_LOOP NAME="reviews" -->
+			<!-- TMPL_IF NAME="your_comment" -->
 			<div class="commentline yours" id="c<!-- TMPL_VAR NAME="reviewid" -->">
 			<h5>
 				Your Comment
 			</h5>
-			<small>
-                <!--TMPL_VAR NAME="datereviewed"-->
-            </small>
+			<small><!-- TMPL_VAR NAME="datereviewed" --></small>
         <p>
-          <!--TMPL_VAR NAME="review"--> <a href="#" onclick="Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->&amp;reviewid=<!-- TMPL_VAR NAME="reviewid" -->');">Edit</a>
+          <!-- TMPL_VAR NAME="review" -->
+		  <a href="#" onclick="Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->&amp;reviewid=<!-- TMPL_VAR NAME="reviewid" -->');">Edit</a>
         </p></div>
 			<!-- TMPL_ELSE -->
 			<div class="commentline">
 			<h5>
                 Comment by
-                <!--TMPL_VAR NAME="title"-->
-                <!--TMPL_VAR NAME="firstname"-->
-                <!--TMPL_VAR NAME="surname"-->
+                <!-- TMPL_VAR NAME="title" -->
+                <!-- TMPL_VAR NAME="firstname" -->
+                <!-- TMPL_VAR NAME="surname" -->
             </h5>
-			<small>
-                <!--TMPL_VAR NAME="datereviewed"-->
-            </small>
+			<small><!-- TMPL_VAR NAME="datereviewed" --></small>
         <p>
-          <!--TMPL_VAR NAME="review"-->
+          <!-- TMPL_VAR NAME="review" -->
         </p></div>
 			<!-- /TMPL_IF -->
-			<!-- /TMPL_IF -->
-        <!--/TMPL_LOOP-->
+        <!-- /TMPL_LOOP -->
     <!-- TMPL_ELSE  -->
         <p>There are no comments for this item.</p>
-<!-- /TMPL_IF -->
+	<!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="loggedinusername" -->
 		<!-- TMPL_UNLESS NAME="loggedincommenter" -->
        <div id="addcomment"> <a href="#" onclick="Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->'); return false;">
@@ -378,7 +373,7 @@
     <!-- TMPL_ELSE -->
         <div id="addcomment"><a href="/cgi-bin/koha/opac-user.pl">Log in to your account</a> to post a comment.</div>
     <!-- /TMPL_IF -->
-	</div>
+</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="OPACFRBRizeEditions" --><!-- TMPL_IF NAME="XISBNS" --><div id="editions">
