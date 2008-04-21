@@ -31,7 +31,7 @@ my $query        = new CGI;
 my $biblionumber = $query->param('biblionumber');
 my $type         = $query->param('type');
 my $review       = $query->param('review');
-my $reviewid       = $query->param('reviewid');
+my $reviewid     = $query->param('reviewid');
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
         template_name   => "opac-review.tmpl",
@@ -47,38 +47,18 @@ my $savedreview = getreview( $biblionumber, $borrowernumber );
 if ( $type eq 'save' ) {
     savereview( $biblionumber, $borrowernumber, $review );
 }
-if ( $type eq 'update' ) {
+elsif ( $type eq 'update' ) {
     updatereview( $biblionumber, $borrowernumber, $review );
 }
-if ($savedreview) {
-    $type = "update";
-}
-else {
-    $type = "save";
-}
-my $reviewdata = $savedreview->{'review'};
+$type = ($savedreview) ? "update" : "save";
 $template->param(
     'biblionumber'   => $biblionumber,
     'borrowernumber' => $borrowernumber,
     'type'           => $type,
-    'review'         => $reviewdata,
-	'reviewid'  => $reviewid,
+    'review'         => $savedreview->{'review'},
+	'reviewid'       => $reviewid,
     'title'          => $biblio->{'title'},
 );
-
-# get the record
-my $order  = $query->param('order');
-my $order2 = $order;
-if ( $order2 eq '' ) {
-    $order2 = "date_due desc";
-}
-my $limit = $query->param('limit');
-if ( $limit eq 'full' ) {
-    $limit = 0;
-}
-else {
-    $limit = 50;
-}
 
 output_html_with_http_headers $query, $cookie, $template->output;
 
