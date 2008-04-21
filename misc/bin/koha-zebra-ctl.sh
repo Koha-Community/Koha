@@ -15,6 +15,11 @@ ZEBRASRV=/usr/bin/zebrasrv
 
 test -f $ZEBRASRV || exit 0
 
+OTHERUSER=''
+if [[ $EUID -eq 0 ]]; then
+    OTHERUSER="--user=$USER.$GROUP"
+fi
+
 case "$1" in
     start)
       echo "Starting Zebra Server"
@@ -25,25 +30,29 @@ case "$1" in
       if [[ ! -d $RUNDIR ]]; then
         umask 022
         mkdir -p $RUNDIR
-        chown $USER:$GROUP $RUNDIR
+        if [[ $EUID -eq 0 ]]; then
+            chown $USER:$GROUP $RUNDIR
+        fi
       fi
       if [[ ! -d $LOCKDIR ]]; then
         umask 022
         mkdir -p $LOCKDIR
         mkdir -p $LOCKDIR/biblios
         mkdir -p $LOCKDIR/authorities
-        chown -R $USER:$GROUP $LOCKDIR
+        if [[ $EUID -eq 0 ]]; then
+            chown -R $USER:$GROUP $LOCKDIR
+        fi
       fi
 
-      daemon --name=$NAME --errlog=$ERRLOG --stdout=$STDOUT --output=$OUTPUT --verbose=1 --respawn --delay=30 --user=$USER.$GROUP -- $ZEBRASRV -f $KOHA_CONF 
+      daemon --name=$NAME --errlog=$ERRLOG --stdout=$STDOUT --output=$OUTPUT --verbose=1 --respawn --delay=30 $OTHERUSER -- $ZEBRASRV -f $KOHA_CONF 
       ;;
     stop)
       echo "Stopping Zebra Server"
-      daemon --name=$NAME --errlog=$ERRLOG --stdout=$STDOUT --output=$OUTPUT --verbose=1 --respawn --delay=30 --user=$USER.$GROUP --stop -- $ZEBRASRV -f $KOHA_CONF 
+      daemon --name=$NAME --errlog=$ERRLOG --stdout=$STDOUT --output=$OUTPUT --verbose=1 --respawn --delay=30 $OTHERUSER --stop -- $ZEBRASRV -f $KOHA_CONF 
       ;;
     restart)
       echo "Restarting the Zebra Server"
-      daemon --name=$NAME --errlog=$ERRLOG --stdout=$STDOUT --output=$OUTPUT --verbose=1 --respawn --delay=30 --user=$USER.$GROUP --restart -- $ZEBRASRV -f $KOHA_CONF 
+      daemon --name=$NAME --errlog=$ERRLOG --stdout=$STDOUT --output=$OUTPUT --verbose=1 --respawn --delay=30 $OTHERUSER --restart -- $ZEBRASRV -f $KOHA_CONF 
       ;;
     *)
       echo "Usage: /etc/init.d/$NAME {start|stop|restart}"

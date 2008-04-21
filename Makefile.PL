@@ -197,7 +197,14 @@ things the translation toolkit and RSS feed tools.
 
 =item SCRIPT_DIR
 
-Directory for command-line scripts and daemons.
+Directory for command-line scripts and daemons to
+be set up all for installation modes.
+
+=item SCRIPT_NONDEV_DIR
+
+Directory for command-line scripts that should
+be installed in the same directory as the
+SCRIPT_DIR target except 'dev' installs.
 
 =item MAN_DIR
 
@@ -259,7 +266,7 @@ my $target_map = {
   './Makefile.PL'               => 'NONE',
   './MANIFEST.SKIP'             => 'NONE',
   './members'                   => 'INTRANET_CGI_DIR',
-  './misc'                      => { target => 'SCRIPT_DIR', trimdir => -1 }, 
+  './misc'                      => { target => 'SCRIPT_NONDEV_DIR', trimdir => -1 }, 
   './misc/bin'                  => { target => 'SCRIPT_DIR', trimdir => -1 }, 
   './misc/release_notes'        => { target => 'DOC_DIR', trimdir => 2 },
   './misc/translator'           => { target => 'MISC_DIR', trimdir => 2 }, 
@@ -482,13 +489,11 @@ if ($config{'INSTALL_ZEBRA'} eq "yes") {
         'blib/ZEBRA_CONF_DIR/retrieval-info-auth-grs1.xml',
         'blib/ZEBRA_CONF_DIR/retrieval-info-auth-dom.xml',
     );
-    if ($config{'INSTALL_MODE'} ne 'dev') {
-        push @{ $pl_files->{'rewrite-config.PL'} }, (
-            'blib/SCRIPT_DIR/koha-zebra-ctl.sh',
-            'blib/SCRIPT_DIR/koha-pazpar2-ctl.sh',
-            'blib/SCRIPT_DIR/koha-zebraqueue-ctl.sh',
-        );
-    }
+    push @{ $pl_files->{'rewrite-config.PL'} }, (
+        'blib/SCRIPT_DIR/koha-zebra-ctl.sh',
+        'blib/SCRIPT_DIR/koha-pazpar2-ctl.sh',
+        'blib/SCRIPT_DIR/koha-zebraqueue-ctl.sh',
+    );
     if ($config{'INSTALL_PAZPAR2'} eq 'yes') {
         push @{ $pl_files->{'rewrite-config.PL'} }, (
             'blib/PAZPAR2_CONF_DIR/koha-biblios.xml',
@@ -503,7 +508,7 @@ if ($config{'INSTALL_ZEBRA'} eq "yes") {
 if ($config{'INSTALL_MODE'} ne "dev") {
     push @{ $pl_files->{'rewrite-config.PL'} }, (
         'blib/PERL_MODULE_DIR/C4/Context.pm',
-        'blib/SCRIPT_DIR/kohalib.pl'
+        'blib/SCRIPT_NONDEV_DIR/kohalib.pl'
     );
 }
 
@@ -1176,6 +1181,7 @@ sub get_target_directories {
         $dirmap{'PAZPAR2_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'pazpar2');
         $dirmap{'MISC_DIR'} = File::Spec->catdir(@basedir, $package, 'misc');
         $dirmap{'SCRIPT_DIR'} = File::Spec->catdir(@basedir, $package, 'bin');
+        $dirmap{'SCRIPT_NONDEV_DIR'} = $dirmap{'SCRIPT_DIR'};
         $dirmap{'MAN_DIR'} = File::Spec->catdir(@basedir, $package, 'man');
         $dirmap{'DOC_DIR'} = File::Spec->catdir(@basedir, $package, 'doc');
         $dirmap{'ZEBRA_LOCK_DIR'} = File::Spec->catdir(@basedir, $package, 'var', 'lock', 'zebradb');
@@ -1203,7 +1209,8 @@ sub get_target_directories {
         $dirmap{'PAZPAR2_CONF_DIR'} = File::Spec->catdir(@basedir, $package, 'etc', 'pazpar2');
         $dirmap{'MISC_DIR'} = File::Spec->catdir(@basedir, $package, 'misc');
         $dirmap{'SCRIPT_DIR'} = File::Spec->catdir(@basedir, $package, 'bin');
-        $skipdirs{'SCRIPT_DIR'} = 1;
+        $dirmap{'SCRIPT_NONDEV_DIR'} = $dirmap{'SCRIPT_DIR'};
+        $skipdirs{'SCRIPT_NONDEV_DIR'} = 1;
         $dirmap{'MAN_DIR'} = File::Spec->catdir(@basedir, $package, 'man');
         $dirmap{'DOC_DIR'} = File::Spec->catdir(@basedir, $package, 'doc');
         $dirmap{'ZEBRA_LOCK_DIR'} = File::Spec->catdir(@basedir, $package, 'var', 'lock', 'zebradb');
@@ -1224,6 +1231,7 @@ sub get_target_directories {
         $dirmap{'PAZPAR2_CONF_DIR'} = File::Spec->catdir(File::Spec->rootdir(), 'etc', $package, 'pazpar2');
         $dirmap{'MISC_DIR'} = File::Spec->catdir(@basedir, $package, 'misc');
         $dirmap{'SCRIPT_DIR'} = File::Spec->catdir(@basedir, $package, 'bin');
+        $dirmap{'SCRIPT_NONDEV_DIR'} = $dirmap{'SCRIPT_DIR'};
         $dirmap{'MAN_DIR'} = File::Spec->catdir(@basedir, $package, 'man');
         $dirmap{'DOC_DIR'} = File::Spec->catdir(@basedir, $package, 'doc');
         $dirmap{'ZEBRA_LOCK_DIR'} = File::Spec->catdir(File::Spec->rootdir(), 'var', 'lock', $package, 'zebradb');

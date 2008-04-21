@@ -12,18 +12,23 @@ PAZPAR2SRV=/usr/sbin/pazpar2
 
 test -f $PAZPAR2SRV || exit 0
 
+OTHERUSER=''
+if [[ $EUID -eq 0 ]]; then
+    OTHERUSER="--user=$USER.$GROUP"
+fi
+
 case "$1" in
     start)
       echo "Starting PazPar2 Server"
-      daemon --name=$NAME --errlog=$ERRLOG --stdout=$STDOUT --output=$OUTPUT --verbose=1 --respawn --delay=30 --user=$USER.$GROUP -- $PAZPAR2SRV -f $PAZPAR2_CONF 
+      daemon --name=$NAME --errlog=$ERRLOG --stdout=$STDOUT --output=$OUTPUT --verbose=1 --respawn --delay=30 $OTHERUSER -- $PAZPAR2SRV -f $PAZPAR2_CONF 
       ;;
     stop)
       echo "Stopping PazPar2 Server"
-      daemon --name=$NAME --errlog=$ERRLOG --stdout=$STDOUT --output=$OUTPUT --verbose=1 --respawn --delay=30 --user=$USER.$GROUP --stop -- $PAZPAR2SRV -f $PAZPAR2_CONF 
+      daemon --name=$NAME --errlog=$ERRLOG --stdout=$STDOUT --output=$OUTPUT --verbose=1 --respawn --delay=30 --stop -- $PAZPAR2SRV -f $PAZPAR2_CONF 
       ;;
     restart)
       echo "Restarting the PazPar2 Server"
-      daemon --name=$NAME --errlog=$ERRLOG --stdout=$STDOUT --output=$OUTPUT --verbose=1 --respawn --delay=30 --user=$USER.$GROUP --restart -- $PAZPAR2SRV -f $PAZPAR2_CONF 
+      daemon --name=$NAME --errlog=$ERRLOG --stdout=$STDOUT --output=$OUTPUT --verbose=1 --respawn --delay=30 --restart -- $PAZPAR2SRV -f $PAZPAR2_CONF 
       ;;
     *)
       echo "Usage: /etc/init.d/$NAME {start|stop|restart}"
