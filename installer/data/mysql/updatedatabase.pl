@@ -1305,20 +1305,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.00.00.070";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do(" ALTER TABLE `subscription` ADD `serialsadditems` TINYINT( 1 ) NOT NULL DEFAULT '0';");
-    # fill the new field with the previous systempreference value, then drop the syspref
-    my $sth = $dbh->prepare("SELECT value FROM systempreferences WHERE variable='serialsadditems'");
-    $sth->execute;
-    my ($serialsadditems) = $sth->fetchrow();
-    $dbh->do("UPDATE subscription SET serialsadditems=$serialsadditems");
-    $dbh->do("DELETE FROM systempreferences WHERE variable='serialsadditems'");
-    print "Upgrade to $DBversion done ( moving serialsadditems from syspref to subscription )\n";
-    SetVersion ($DBversion);
-}
-
-$DBversion = "3.00.00.071";
+$DBversion = "3.00.00.072";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE labels_conf ADD COLUMN formatstring VARCHAR(64) DEFAULT NULL;");
 	print "Upgrade to $DBversion done ( Adding format string to labels generator. )\n";
