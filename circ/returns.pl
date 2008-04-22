@@ -32,6 +32,7 @@ use C4::Auth qw/:DEFAULT get_session/;
 use C4::Output;
 use C4::Circulation;
 use C4::Dates qw/format_date/;
+use Date::Calc qw/Add_Delta_Days/;
 use C4::Print;
 use C4::Reserves;
 use C4::Biblio;
@@ -169,7 +170,10 @@ my $barcode = $query->param('barcode');
 # strip whitespace
 # $barcode =~ s/\s*//g; - use barcodedecode for this; whitespace is not invalid.
 my $exemptfine = $query->param('exemptfine');
-
+my $dropboxmode= $query->param('dropboxmode');
+my @datearr    = localtime( time() );
+my @yesterdayarr =  Add_Delta_Days( $datearr[5] + 1900 , $datearr[4] + 1, $datearr[3] , -1 );
+my $yesterday= C4::Dates->new( sprintf("%0.4d-%0.2d-%0.2d",@yesterdayarr),'iso');
 my $dotransfer = $query->param('dotransfer');
 if ($dotransfer){
 	# An item has been returned to a branch other than the homebranch, and the librarian has choosen to initiate a transfer
@@ -185,7 +189,7 @@ if ($barcode) {
 # save the return
 #
     ( $returned, $messages, $issueinformation, $borrower ) =
-      AddReturn( $barcode, C4::Context->userenv->{'branch'}, $exemptfine );
+      AddReturn( $barcode, C4::Context->userenv->{'branch'}, $exemptfine, $dropboxmode);
     # get biblio description
     my $biblio = GetBiblioFromItemNumber($issueinformation->{'itemnumber'});
     # fix up item type for display
@@ -339,12 +343,9 @@ if ( $messages->{'ResFound'}) {
 
     }
     if ( $reserve->{'ResFound'} eq "Reserved" ) {
-        my @da         = localtime( time() );
-        my $todaysdate =
-            sprintf( "%0.2d", ( $da[3] + 1 ) ) . "/"
-          . sprintf( "%0.2d", ( $da[4] + 1 ) ) . "/"
-          . ( $da[5] + 1900 );
-
+       # my @da         = localtime( time() );
+       # my $todaysdate = sprintf( "%0.2d/%0.2d/%0.4d", ( $datearr[3] + 1 ),( $datearr[4] + 1 ),( $datearr[5] + 1900 ) );
+		# FIXME - use Dates obj , locale. AND, why [4]+1 ??
         if ( C4::Context->userenv->{'branch'} eq $reserve->{'branchcode'} ) {
             $template->param( intransit => 0 );
         }
@@ -361,7 +362,7 @@ if ( $messages->{'ResFound'}) {
             transfertodo => ( C4::Context->userenv->{'branch'} eq $reserve->{'branchcode'} ? 0 : 1 ),
             reserved => 1,
             resbarcode       => $barcode,
-            today            => $todaysdate,
+          #  today            => $todaysdate,
             itemnumber       => $reserve->{'itemnumber'},
             borsurname       => $borr->{'surname'},
             bortitle         => $borr->{'title'},
@@ -529,11 +530,12 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
             $ri{month} = $tempdate[1];
             $ri{day}   = $tempdate[2];
             my $duedatenz  = "$tempdate[2]/$tempdate[1]/$tempdate[0]";
-            my @datearr    = localtime( time() );
+          #  my @datearr    = localtime( time() );
             my $todaysdate =
                 $datearr[5] . '-'
               . sprintf( "%0.2d", ( $datearr[4] + 1 ) ) . '-'
               . sprintf( "%0.2d", $datearr[3] );
+		  # FIXME - todaysdate isn't used, and what date _is_ it ?
             $ri{duedate} = format_date($duedate);
             my ($borrower) =
               GetMemberDetails( $riborrowernumber{$_}, 0 );
@@ -573,6 +575,8 @@ $template->param(
     printer                 => $printer,
     errmsgloop              => \@errmsgloop,
     exemptfine              => $exemptfine,
+    dropboxmode              => $dropboxmode,
+    yesterdaysdate			=> $yesterday->output(),
 	overduecharges          => $overduecharges,
 );
 

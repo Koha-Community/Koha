@@ -1153,13 +1153,15 @@ sub GetIssuingRule {
 =head2 AddReturn
 
 ($doreturn, $messages, $iteminformation, $borrower) =
-    &AddReturn($barcode, $branch, $exemptfine);
+    &AddReturn($barcode, $branch, $exemptfine, $dropbox);
 
 Returns a book.
 
 C<$barcode> is the bar code of the book being returned. C<$branch> is
 the code of the branch where the book is being returned.  C<$exemptfine>
-indicates that overdue charges for the item will not be applied.
+indicates that overdue charges for the item will be removed.  C<$dropbox>
+indicates that the check-in date is assumed to be yesterday.  If overdue
+charges are applied and C<$dropbox> is true, the last charge will be removed.
 
 C<&AddReturn> returns a list of four items:
 
@@ -1202,7 +1204,7 @@ patron who last borrowed the book.
 =cut
 
 sub AddReturn {
-    my ( $barcode, $branch, $exemptfine ) = @_;
+    my ( $barcode, $branch, $exemptfine, $dropbox ) = @_;
     my $dbh      = C4::Context->dbh;
     my $messages;
     my $doreturn = 1;
@@ -1256,7 +1258,11 @@ sub AddReturn {
     # case of a return of document (deal with issues and holdingbranch)
     
         if ($doreturn) {
-            MarkIssueReturned($borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'});
+			if($dropbox) {
+				# don't allow dropbox mode to create an invalid entry in issues ( issuedate > returndate)
+				undef($dropbox) if ( $iteminformation->{'issuedate'} eq C4::Dates->today('iso') );
+			}
+            MarkIssueReturned($borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'},$dropbox);
             $messages->{'WasReturned'} = 1;    # FIXME is the "= 1" right?
         }
     
@@ -1310,7 +1316,7 @@ sub AddReturn {
         }
         # fix up the overdues in accounts...
         FixOverduesOnReturn( $borrower->{'borrowernumber'},
-            $iteminformation->{'itemnumber'}, $exemptfine );
+            $iteminformation->{'itemnumber'}, $exemptfine, $dropbox );
     
     # find reserves.....
     #     if we don't have a reserve with the status W, we launch the Checkreserves routine
@@ -1360,7 +1366,9 @@ MarkIssueReturned($borrowernumber, $itemnumber);
 
 Unconditionally marks an issue as being returned by
 moving the C<issues> row to C<old_issues> and
-setting C<returndate> to the current date.
+setting C<returndate> to the current date, or
+yesterday if C<dropbox> is true.  Assumes you've 
+already checked that yesterday > issuedate.
 
 Ideally, this function would be internal to C<C4::Circulation>,
 not exported, but it is currently needed by one 
@@ -1369,14 +1377,22 @@ routine in C<C4::Accounts>.
 =cut
 
 sub MarkIssueReturned {
-    my ($borrowernumber, $itemnumber) = @_;
-
-    my $dbh = C4::Context->dbh;
+    my ($borrowernumber, $itemnumber, $dropbox) = @_;
+	my $dbh = C4::Context->dbh;
+	my $query = "UPDATE issues SET returndate=";
+	my @bind = ($borrowernumber,$itemnumber);
+	if($dropbox) {
+		my @datearr = localtime( time() );
+		my @yesterdayarr =  Add_Delta_Days( $datearr[5] + 1900 , $datearr[4] + 1, $datearr[3] , -1 );
+		unshift @bind, sprintf("%0.4d-%0.2d-%0.2d",@yesterdayarr) ;
+		$query .= " ? "
+	} else {
+		$query .= " now() ";
+	}
+	$query .=  " WHERE  borrowernumber = ?  AND itemnumber = ?";
     # FIXME transaction
-    my $sth_upd  = $dbh->prepare("UPDATE issues SET returndate = now() 
-                                  WHERE borrowernumber = ?
-                                  AND itemnumber = ?");
-    $sth_upd->execute($borrowernumber, $itemnumber);
+    my $sth_upd  = $dbh->prepare($query);
+    $sth_upd->execute(@bind);
     my $sth_copy = $dbh->prepare("INSERT INTO old_issues SELECT * FROM issues 
                                   WHERE borrowernumber = ?
                                   AND itemnumber = ?");
