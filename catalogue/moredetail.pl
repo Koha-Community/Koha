@@ -28,6 +28,7 @@ use C4::Branch;
 use C4::Acquisition;
 use C4::Output;             # contains gettemplate
 use C4::Auth;
+use C4::Serials;
 use C4::Dates qw/format_date/;
 use C4::Circulation;  # to use itemissues
 
@@ -54,6 +55,9 @@ my $title=$query->param('title');
 # $bi = $biblionumber unless $bi;
 my $data=GetBiblioData($biblionumber);
 my $dewey = $data->{'dewey'};
+
+#coping with subscriptions
+my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
 
 # FIXME Dewey is a string, not a number, & we should use a function
 # $dewey =~ s/0+$//;
@@ -99,7 +103,10 @@ foreach my $item (@items){
         $item->{'issue'}= 1;
     }
 }
-$template->param(count => $data->{'count'});
+$template->param(count => $data->{'count'},
+	subscriptionsnumber => $subscriptionsnumber,
+    subscriptiontitle   => $data->{title},
+);
 $template->param(BIBITEM_DATA => \@results);
 $template->param(ITEM_DATA => \@items);
 $template->param(moredetailview => 1);
