@@ -49,7 +49,6 @@ use C4::Languages qw(getTranslatedLanguages);
 use C4::ClassSource;
 use C4::Log;
 use C4::Output;
-use C4::Context;
 
 # use Smart::Comments;
 
