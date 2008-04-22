@@ -1,12 +1,12 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Circulation</title>
+<title>Koha &rsaquo; Circulation &rsquo; Overdues at <!-- TMPL_VAR NAME="LoginBranchname" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="circ-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Library Overdues at <!-- TMPL_VAR NAME="LoginBranchname" --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Overdues at <!-- TMPL_VAR NAME="LoginBranchname" --></div>
 
 <div id="doc" class="yui-t7">
    
@@ -15,16 +15,16 @@
 	<div class="yui-g">
 
 
-<h1>Circulation: Library Overdues at <!-- TMPL_VAR NAME="LoginBranchname" --></h1>
+<h1>Circulation: Overdues at <!-- TMPL_VAR NAME="LoginBranchname" --></h1>
 
 <!-- selector of location -->
 <!-- TMPL_IF NAME="location" -->
-<h4>location selected</h4>
+<h4>Location selected</h4>
 <form name="changelocation" action="branchoverdues.pl">
     <ul>
         <li>
             You are working actually on the overdues for the location : <b><!-- TMPL_VAR NAME="location" --></b>
-    <input type="submit" name="changelocation" class="button" value="change location" />
+    <input type="submit" name="changelocation" class="submit" value="change location" />
         </li>
     </ul>
 </form>
@@ -36,13 +36,13 @@
             <option value="<!-- TMPL_VAR NAME="authorised_value" -->"><!-- TMPL_VAR NAME="lib" --></option>
         <!-- /TMPL_LOOP -->
     </select>
-    <input type="submit" name="location" class="button" value="OK" />
+    <input type="submit" name="location" class="submit" value="OK" />
 </form>
 
 <!-- /TMPL_IF -->
     <!-- TMPL_IF name="overduesloop" -->
         <table style="width:100%;">
-        <tr>
+        <tr>	
             <th>Date_due</th>
             <th>Title</th>
             <th>Patron</th>
@@ -114,7 +114,7 @@
             <!-- /TMPL_LOOP -->
         </table>
     <!-- TMPL_ELSE -->
-        There is no overdue for today
+        <div class="dialog message">There are no overdues for today.</div>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF name="todayoverduesloop" -->
         <div id="branch_odues_today_odues">

@@ -22,9 +22,7 @@
 	<div id="yui-main">
 	<div class="yui-g">
 
-<h1>Hold Pull List</h1>
-<h1>Pending holds on <!-- TMPL_VAR NAME="todaysdate" --> (from <!-- TMPL_VAR NAME="from" -->
-	to <!-- TMPL_VAR NAME="to" -->)</h1>
+<h1>Pending holds placed between <!-- TMPL_VAR NAME="from" --> and <!-- TMPL_VAR NAME="to" --></h1>
 <div id="filters">
 <br />
 <form action="/cgi-bin/koha/circ/pendingreserves.pl" method="post" >
@@ -94,12 +92,11 @@ Calendar.setup(
         );
 </script>
 <br/>
-<i>(Inclusive, default is (10 years ago to yesterday), set "to" to today as needed. )</i>
+<i>(Inclusive, default is 10 years ago to yesterday, set "to" to today as needed. )</i>
 <input type="submit" value="Go" class="submit"/>
 </p>
 </form>
-<p>The following holds have not been filled.</p>
-<p>Please retrieve them and check them in</p>
+<p>The following holds have not been filled. Please retrieve them and check them in</p>
 </div>
 
 <div class="searchresults">

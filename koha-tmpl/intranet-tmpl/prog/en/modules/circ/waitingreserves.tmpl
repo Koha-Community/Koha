@@ -1,12 +1,12 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Circulation</title>
+<title>Koha &rsaquo; Circulation &rsaquo; Holds awaiting pickup</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="circ-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Holds</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Holds awaiting pickup</div>
 
 <div id="doc" class="yui-t7">
    
@@ -14,7 +14,7 @@
 	<div id="yui-main">
 	<div class="yui-g">
 
-        <h2>Holds for your library on : <!-- TMPL_VAR NAME="show_date" --></h2>
+        <h2>Holds awaiting pickup for your library on : <!-- TMPL_VAR NAME="show_date" --></h2>
         <!-- TMPL_IF NAME="messagetransfert" -->
                 <div>
                                 <h2>Hold find for (<!-- TMPL_VAR NAME="nextreservtitle" -->) must transfered</h2>
@@ -58,7 +58,7 @@
                                                 </p>
                                         </td>
                                         <td>
-                                                <p><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernum"-->"><!-- TMPL_VAR NAME="borrowername" --> &nbsp; <!-- TMPL_VAR NAME="borrowerfirstname" --></a><br /><!-- TMPL_VAR NAME="borrowerphone" --><br />
+                                                <p><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernum"-->"><!-- TMPL_VAR NAME="borrowername" -->, <!-- TMPL_VAR NAME="borrowerfirstname" --></a><br /><!-- TMPL_VAR NAME="borrowerphone" --><br />
                                         <!-- TMPL_IF NAME="borrowermail" --><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Reservation: <!-- TMPL_VAR NAME="title" -->">
                 <!-- TMPL_VAR NAME="borrowermail" --></a><!--/TMPL_IF-->
                                                 </p>
@@ -81,7 +81,7 @@
                         <!-- /TMPL_LOOP -->
                 </table>
                 <!-- TMPL_ELSE -->
-                    <p><b>No hold found.</b></p>
+                    <div class="dialog message">No holds found.</div>
                 <!-- /TMPL_IF -->
         </div>
         <!-- /TMPL_UNLESS -->
