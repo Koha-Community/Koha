@@ -29,7 +29,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "errors/500.tmpl",
         query           => $query,
         type            => "opac",
-        koha-tmpl/authnotrequired => 1,
+        authnotrequired => 1,
         debug           => 1,
     }
 );
