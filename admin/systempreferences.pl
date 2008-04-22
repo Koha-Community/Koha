@@ -175,15 +175,6 @@ my %tabsysprefs;
     $tabsysprefs{NotifyBorrowerDeparture}="Patrons";
     $tabsysprefs{PatronsPerPage}="Patrons";
 
-# FRBR
-    $tabsysprefs{FRBRizeEditions}="FRBR";
-    $tabsysprefs{XISBN}="FRBR";
-    $tabsysprefs{OCLCAffiliateID}="FRBR";
-    $tabsysprefs{XISBNDailyLimit}="FRBR";
-    $tabsysprefs{PINESISBN}="FRBR";
-    $tabsysprefs{ThingISBN}="FRBR";
-    $tabsysprefs{OPACFRBRizeEditions}="FRBR";
-
 # I18N/L10N
     $tabsysprefs{dateformat}="I18N/L10N";
     $tabsysprefs{opaclanguages}="I18N/L10N";
@@ -207,14 +198,27 @@ my %tabsysprefs;
     $tabsysprefs{QueryAutoTruncate}="Searching";
     $tabsysprefs{QueryRemoveStopwords}="Searching";
 
-# Amazon.com
-    $tabsysprefs{AmazonContent}="Amazon";
-    $tabsysprefs{AWSAccessKeyID}="Amazon";
-    $tabsysprefs{AmazonLocale}="Amazon";
-    $tabsysprefs{AmazonAssocTag}="Amazon";
-    $tabsysprefs{AmazonSimilarItems}="Amazon";
-    $tabsysprefs{OPACAmazonContent}="Amazon";
-    $tabsysprefs{OPACAmazonSimilarItems}="Amazon";
+# EnhancedContent
+    $tabsysprefs{AmazonContent}="EnhancedContent";
+    $tabsysprefs{AWSAccessKeyID}="EnhancedContent";
+    $tabsysprefs{AmazonLocale}="EnhancedContent";
+    $tabsysprefs{AmazonAssocTag}="EnhancedContent";
+    $tabsysprefs{AmazonSimilarItems}="EnhancedContent";
+    $tabsysprefs{OPACAmazonContent}="EnhancedContent";
+    $tabsysprefs{OPACAmazonSimilarItems}="EnhancedContent";
+# Baker & Taylor 
+   $tabsysprefs{BakerTaylorBookstoreURL} = 'EnhancedContent';
+   $tabsysprefs{BakerTaylorEnabled}      = 'EnhancedContent';
+   $tabsysprefs{BakerTaylorPassword}     = 'EnhancedContent';
+   $tabsysprefs{BakerTaylorUsername}     = 'EnhancedContent';
+# FRBR    
+   $tabsysprefs{FRBRizeEditions}="EnhancedContent";
+   $tabsysprefs{XISBN}="EnhancedContent";
+   $tabsysprefs{OCLCAffiliateID}="EnhancedContent";
+   $tabsysprefs{XISBNDailyLimit}="EnhancedContent";
+   $tabsysprefs{PINESISBN}="EnhancedContent";
+   $tabsysprefs{ThingISBN}="EnhancedContent";
+   $tabsysprefs{OPACFRBRizeEditions}="EnhancedContent";
 
 # OPAC
     $tabsysprefs{BiblioDefaultView}="OPAC";
@@ -289,13 +293,6 @@ my %tabsysprefs;
    $tabsysprefs{TagsShowOnDetail}       = 'Tags';
    $tabsysprefs{TagsShowOnList}         = 'Tags';
    $tabsysprefs{TagsModeration}         = 'Tags';
-
-# Baker & Taylor 
-   $tabsysprefs{BakerTaylorBookstoreURL} = 'BakerTaylor';
-   $tabsysprefs{BakerTaylorEnabled}      = 'BakerTaylor';
-   $tabsysprefs{BakerTaylorPassword}     = 'BakerTaylor';
-   $tabsysprefs{BakerTaylorUsername}     = 'BakerTaylor';
-
 
 sub StringSearch  {
     my ($searchstring,$type)=@_;
