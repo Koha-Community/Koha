@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration &rsaquo; Issuing Rules</title>
+<title>Koha &rsaquo; Administration &rsaquo; Circulation Rules</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
 <script type="text/javascript">
@@ -18,7 +18,7 @@ $(document).ready(function() {
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  Issuing Rules</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  Circulation Rules</div>
 
 <div id="doc3" class="yui-t1">
 
@@ -26,10 +26,10 @@ $(document).ready(function() {
     <div id="yui-main">
     <div class="yui-b">
 
-    <h1>Defining <!-- TMPL_IF NAME="branch" -->issuing rules for <!-- TMPL_VAR NAME="branch" --><!-- TMPL_ELSE -->default issuing rules<!-- /TMPL_IF --></h1>
+    <h1>Defining <!-- TMPL_IF NAME="branch" -->circulation rules for <!-- TMPL_VAR NAME="branch" --><!-- TMPL_ELSE -->default circulation rules<!-- /TMPL_IF --></h1>
     <div class="help">
-        <h3>HINT for issues</h3>
-        <p>Each box needs to be filled in with issuelength,maxissues. For example: 21,5 enables 5 issues for 21 days</p>
+        <h3>HINT</h3>
+        <p>Each box needs to be filled in with <span class="ex">checkout-length,maxissues</span>. For example: 21,5 enables 5 checkouts for 21 days</p>
     </div>
 
     <div class="help">

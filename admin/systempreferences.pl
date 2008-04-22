@@ -259,13 +259,13 @@ my %tabsysprefs;
     $tabsysprefs{OpacRenewalAllowed} = "OPAC";
 
 # LOGFeatures
-    $tabsysprefs{CataloguingLog}  = "LOGFeatures";
-    $tabsysprefs{BorrowersLog}    = "LOGFeatures";
-    $tabsysprefs{SubscriptionLog} = "LOGFeatures";
-    $tabsysprefs{IssueLog}        = "LOGFeatures";
-    $tabsysprefs{ReturnLog}       = "LOGFeatures";
-    $tabsysprefs{LetterLog}       = "LOGFeatures";
-    $tabsysprefs{FinesLog}        = "LOGFeatures";
+    $tabsysprefs{CataloguingLog}  = "Logs";
+    $tabsysprefs{BorrowersLog}    = "Logs";
+    $tabsysprefs{SubscriptionLog} = "Logs";
+    $tabsysprefs{IssueLog}        = "Logs";
+    $tabsysprefs{ReturnLog}       = "Logs";
+    $tabsysprefs{LetterLog}       = "Logs";
+    $tabsysprefs{FinesLog}        = "Logs";
     
 # OAI-PMH variables
    $tabsysprefs{'OAI-PMH'}           = "OAI-PMH";

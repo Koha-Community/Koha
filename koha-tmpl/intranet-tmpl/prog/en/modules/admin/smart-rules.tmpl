@@ -46,7 +46,7 @@ $(document).ready(function() {
     <div id="bloc100">
         <form method="get" action="/cgi-bin/koha/admin/smart-rules.pl" id="selectlibrary">
         Select a branch :
-            <select name="branch" id="branch">
+            <select name="branch" id="branch" style="width:20em;">
                 <option value="">Default</option>
             <!-- TMPL_LOOP NAME="branchloop" -->
                 <option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF NAME="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="branchname" --></option>
@@ -75,7 +75,7 @@ $(document).ready(function() {
             <!-- /TMPL_LOOP -->
                 <tr>
                     <td>
-                        <select name="itemtype">
+                        <select name="itemtype" style="width:13em;">
                         <!-- TMPL_LOOP NAME="itemtypeloop" -->
                             <option value="<!-- TMPL_VAR NAME="itemtype" -->"><!-- TMPL_VAR NAME="description" --></option>
                         <!-- /TMPL_LOOP -->
