@@ -28,31 +28,6 @@ these are run once, at the beginning of the whole test suite
 
 =cut
 
-=head2 startup_10_prepare_database
-
-prepare a blank database.
-
-This ends up getting run once for each test module, so that's several
-times throughout the test suite. That may be too many times to refresh
-the database. We may have to tune that.
-
-=cut
-
-sub startup_10_prepare_database : Test(startup => 1) {
-    my $self = shift;
-    # this is how I'm refreshing my database for now.  I'll think of
-    # something better later.  Eventually, I'd like to drop the
-    # database entirely and use the regular install code to rebuild a
-    # base database.
-    my $class = ref $self;
-
-    # like( C4::Context->config( 'database '), qr/test$/, 'using test database: ' . C4::Context->config( 'database' ) )
-    like( C4::Context->database(), qr/test$/, 'using test database: ' . C4::Context->database() )
-      or BAIL_OUT( 'This appears to not be a test database.' );
-
-    return;
-}
-
 sub startup_15_truncate_tables : Test( startup => 1 ) {
     my $self = shift;
     

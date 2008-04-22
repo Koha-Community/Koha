@@ -1065,9 +1065,19 @@ Would you like to run the database-dependent test suite?);
   if ( $config{'RUN_DATABASE_TESTS'} eq 'yes' ) {
       $config{'TEST_DB_TYPE'} = $config{'DB_TYPE'};
       $config{'TEST_DB_HOST'} = $config{'DB_HOST'};
-      $msg = q(
+      $msg = q(TEST DATABASE
+
+THE DATA IN THIS DATABASE WILL BE DESTROYED during the process of
+testing. Please don't do this on your production database. It is not
+reversable.
+
+YOU WILL SUFFER DATA LOSS if you run this test suite on your test
+database. You are better off not running this optional test suite than
+doing it in a database that you don't want to lose.
+
 Please specify the name of the test database to be
 used by Koha);
+      
     $config{'TEST_DB_NAME'} = _get_value('TEST_DB_NAME', $msg, $defaults->{'TEST_DB_NAME'}, $valid_values, $install_log_values);
 
       $msg = q(
