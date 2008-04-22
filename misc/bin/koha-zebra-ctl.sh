@@ -11,7 +11,7 @@ KOHA_CONF=__KOHA_CONF_DIR__/koha-conf.xml
 RUNDIR=__ZEBRA_RUN_DIR__
 LOCKDIR=__ZEBRA_LOCK_DIR__
 # you may need to change this depending on where zebrasrv is installed
-ZEBRASRV=/usr/bin/zebrasrv
+ZEBRASRV=__PATH_TO_ZEBRA__/zebrasrv
 
 test -f $ZEBRASRV || exit 0
 

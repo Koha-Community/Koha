@@ -126,6 +126,7 @@ $prefix = $ENV{'INSTALL_BASE'} || "/usr";
   "__PAZPAR2_TOGGLE_XML_POST__" => '-->',
   "__AUTH_INDEX_MODE__" => 'grs1',
   "__RUN_DATABASE_TESTS__" => 'no',
+  "__PATH_TO_ZEBRA__" => "",
 );
 
 # Override configuration from the environment

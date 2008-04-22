@@ -411,6 +411,7 @@ my %config_defaults = (
   'PAZPAR2_HOST' => 'localhost',
   'PAZPAR2_PORT' => '11002',
   'RUN_DATABASE_TESTS' => 'no',
+  'PATH_TO_ZEBRA' => '',
 );
 
 # set some default configuratio options based on OS
@@ -947,6 +948,21 @@ Install the Zebra configuration files?);
     $config{'INSTALL_ZEBRA'} = _get_value('INSTALL_ZEBRA', $msg, $defaults->{'INSTALL_ZEBRA'}, $valid_values, $install_log_values);
 
     if ($config{'INSTALL_ZEBRA'} eq 'yes') {
+
+        if (defined(my $zebra_path = find_zebra())) {
+            $config{'PATH_TO_ZEBRA'} = $zebra_path;
+            print qq(
+Found 'zebrasrv' and 'zebraidx' in $zebra_path.
+);
+        } else {
+            print q(
+Unable to find the Zebra programs 'zebrasrv' and 'zebraidx'
+in your PATH or in some of the usual places.  If you haven't
+installed Zebra yet, please do so and run Makefile.PL again.
+
+);
+        }
+
         $msg = q(
 Since you've chosen to use Zebra with Koha,
 you must specify the primary MARC format of the
@@ -1325,6 +1341,32 @@ sub display_configuration {
     print "DB_USER=my_koha DOC_DIR=/usr/local/info perl Makefile.PL\n\n";
     print "If installing on a Win32 platform, be sure to use:\n";
     print "'dmake -x MAXLINELENGTH=300000'\n\n";
+}
+
+=head2 find_zebra
+
+Attempt to find Zebra - check user's PATH and
+a few other directories for zebrasrv and zebraidx.
+
+FIXME: doesn't handle Win32
+
+=cut
+
+sub find_zebra {
+    my @search_dirs = map {
+                            my $abs = File::Spec->rel2abs($_);
+                            my ($toss, $directories);
+                            ($toss, $directories, $toss) = File::Spec->splitpath($abs, 1);
+                            $directories;
+                        }  split /:/, $ENV{PATH};
+    push @search_dirs, qw(/usr/local/bin /opt/local/bin /usr/bin);
+    my @zebrasrv_dirs = grep { -x File::Spec->catpath('', $_, 'zebrasrv') } @search_dirs;
+    return unless @zebrasrv_dirs;
+    # verify that directory that contains zebrasrv also contains zebraidx
+    foreach my $dir (@zebrasrv_dirs) {
+        return $dir if -x File::Spec->catpath('', $dir, 'zebraidx');
+    }
+    return;
 }
 
 package MY;
