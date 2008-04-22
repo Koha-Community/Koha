@@ -13,6 +13,9 @@
 		dad.appendChild(line.cloneNode(true));
 		line.removeChild(ButtonPlus);
 	}
+	$(document).ready(function() {
+		$("input[@name='q']:eq(0)").focus();
+	});
 </script>
 </head>
 <body>
@@ -64,7 +67,7 @@
             <!-- /TMPL_IF --> 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_INCLUDE NAME="search_indexes.inc" -->
-			<input type="text" size="30" name="q" title="Enter search terms" value="" class="focus" />
+			<input type="text" size="30" name="q" title="Enter search terms" value="" />
             <!-- TMPL_IF NAME="expanded_options" -->
                 <!-- TMPL_IF NAME="add_field" -->
                     <a href="JavaScript:add_field();" id="ButtonPlus" title="Add another field">[+]</a>
