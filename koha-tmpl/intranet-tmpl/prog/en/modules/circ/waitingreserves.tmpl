@@ -1,6 +1,25 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Circulation &rsaquo; Holds awaiting pickup</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pack.js"></script>
+<script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+$.tablesorter.addParser({
+    id: 'articles', 
+    is: function(s) {return false;  }, 
+    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
+    type: 'text' 
+});
+	 $(document).ready(function() {
+	 	$("th a").hide();
+		$.tablesorter.defaults.widgets = ['zebra'];
+		$("#holdst").tablesorter({
+			sortList: [[3,0]],
+			headers: { 1:{sorter:'articles'},3: { sorter: 'articles' },4:{sorter:false}}
+		}); 
+ 	 });
+//]]>
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -39,31 +58,34 @@
         <!-- TMPL_UNLESS NAME="message" -->
         <div id="resultlist">
             <!-- TMPL_IF NAME="reserveloop" -->
-                <table>
-                <tr>
+                <table id="holdst">
+               <thead> <tr>
                         <th>Available since</th>
                         <th>Title</th>
                         <th>Patron</th>
                         <th>Localisation</th>
                         <th>Action</th>
-                </tr>
-                        <!-- TMPL_LOOP NAME="reserveloop" -->
+                </tr></thead>
+                        <tbody><!-- TMPL_LOOP NAME="reserveloop" -->
                                 <tr <!-- TMPL_IF NAME="messcompa" --> class="problem" <!-- /TMPL_IF -->>
                                         <td><p><!-- TMPL_VAR NAME="waitingdate" --></p> <!-- TMPL_IF NAME="messcompa" --> Hold Over <!-- /TMPL_IF --></td>
                                         <td>
-                                                <p>
-                                                        <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
-                                                        &nbsp; (<b><!-- TMPL_VAR NAME="itemtype" --></b>)
+
+
+<!-- TMPL_IF name="BiblioDefaultViewmarc" -->
+<a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>
+<!-- TMPL_ELSIF NAME="BiblioDefaultViewisbd" -->
+<a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>
+<!-- TMPL_ELSE -->
+<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" -->  <!-- TMPL_VAR NAME="subtitle" --></a><!-- /TMPL_IF --> &nbsp; (<b><!-- TMPL_VAR NAME="itemtype" --></b>)
                                                         <br />Barcode : <!-- TMPL_VAR NAME="barcode" -->
-                                                </p>
                                         </td>
                                         <td>
-                                                <p><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernum"-->"><!-- TMPL_VAR NAME="borrowername" -->, <!-- TMPL_VAR NAME="borrowerfirstname" --></a><br /><!-- TMPL_VAR NAME="borrowerphone" --><br />
+                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernum"-->"><!-- TMPL_VAR NAME="borrowername" -->, <!-- TMPL_VAR NAME="borrowerfirstname" --></a><br /><!-- TMPL_VAR NAME="borrowerphone" --><br />
                                         <!-- TMPL_IF NAME="borrowermail" --><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Reservation: <!-- TMPL_VAR NAME="title" -->">
                 <!-- TMPL_VAR NAME="borrowermail" --></a><!--/TMPL_IF-->
-                                                </p>
                                         </td>
-                                        <td><p><!-- TMPL_VAR NAME="homebranch" --> <!-- TMPL_VAR NAME="itemcallnumber" --></p></td>
+                                        <td><!-- TMPL_VAR NAME="homebranch" --> <!-- TMPL_VAR NAME="itemcallnumber" --></td>
                                         <td>
                                                 <form name="cancelReserve" action="waitingreserves.pl" method="post">
                                                         <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernum" -->" />
@@ -78,7 +100,7 @@
                                                 </form>
                                         </td>
                                 </tr>
-                        <!-- /TMPL_LOOP -->
+                        <!-- /TMPL_LOOP --></tbody>
                 </table>
                 <!-- TMPL_ELSE -->
                     <div class="dialog message">No holds found.</div>

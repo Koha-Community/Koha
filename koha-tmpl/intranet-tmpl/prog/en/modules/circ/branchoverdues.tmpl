@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Circulation &rsquo; Overdues at <!-- TMPL_VAR NAME="LoginBranchname" --></title>
+<title>Koha &rsaquo; Circulation &rsaquo; Overdues at <!-- TMPL_VAR NAME="LoginBranchname" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
@@ -53,24 +53,24 @@
             <!-- TMPL_LOOP NAME="overduesloop" -->
                 <tr>
                     <td>
-                        <p>
                         <!-- TMPL_VAR NAME="date_due" -->
-                        </p>
                     </td>
                     <td>
-                        <p>
-                            <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
+                        <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
+<a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>
+<!-- TMPL_ELSIF NAME="BiblioDefaultViewisbd" -->
+<a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>
+<!-- TMPL_ELSE -->
+<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" -->  <!-- TMPL_VAR NAME="subtitle" --></a><!-- /TMPL_IF -->
                             &nbsp; (<b><!-- TMPL_VAR NAME="description" --></b>)
                             <br />Barcode : <!-- TMPL_VAR NAME="barcode" -->
-                        </p>
                     </td>
                     <td>
-                        <p><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernumber"-->"><!-- TMPL_VAR NAME="borrowersurname" --> &nbsp; <!-- TMPL_VAR NAME="borrowerfirstname" --></a><br /><!-- TMPL_VAR NAME="borrowerphone" --><br />
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernumber"-->"><!-- TMPL_VAR NAME="borrowersurname" --> &nbsp; <!-- TMPL_VAR NAME="borrowerfirstname" --></a><br /><!-- TMPL_VAR NAME="borrowerphone" --><br />
                     <!-- TMPL_IF NAME="borroweremail" --><a href="mailto:<!-- TMPL_VAR NAME="borroweremail" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" -->">
                     <!-- TMPL_VAR NAME="borroweremail" --></a><!--/TMPL_IF-->
-                        </p>
                     </td>
-                    <td><p><!-- TMPL_VAR NAME="homebranch" --> <!-- TMPL_VAR NAME="itemcallnumber" --></p>
+                    <td><!-- TMPL_VAR NAME="homebranch" --> <!-- TMPL_VAR NAME="itemcallnumber" -->
                     </td>
                     <td align="center">
                     <b>

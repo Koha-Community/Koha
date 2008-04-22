@@ -44,8 +44,7 @@ $.tablesorter.addParser({
    <h3>Calculated on <!-- TMPL_VAR NAME="todaysdate" -->. From <!-- TMPL_VAR NAME="from" -->
 	to <!-- TMPL_VAR NAME="to" --></h3>
 <p>These items have a large number of holds.</p>
-<div class="searchresults">
-    <!-- TMPL_IF NAME="reserveloop" -->
+<!-- TMPL_IF NAME="reserveloop" -->
     <table id="holdst">
 <thead>    <tr>
         <th>Reserves
@@ -115,7 +114,6 @@ $.tablesorter.addParser({
     <!-- TMPL_ELSE -->
         <b>No items found.</b>
     <!-- /TMPL_IF -->
-</div>
 </div>
 </div>
 <div class="yui-b">
@@ -195,7 +193,6 @@ Calendar.setup(
 </fieldset>
 </form>
 
-</div>
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

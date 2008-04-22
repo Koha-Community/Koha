@@ -50,7 +50,12 @@ $.tablesorter.addParser({
             <tbody><!-- TMPL_LOOP NAME="reserv" -->
                 <tr <!-- TMPL_IF NAME="messcompa" --> class="problem" <!-- /TMPL_IF -->>
                     <td><p><!-- TMPL_VAR NAME="reservedate" --></p> <!-- TMPL_IF NAME="messcompa" --> Hold over <!-- /TMPL_IF --></td>
-                    <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>&nbsp; (<b><!-- TMPL_VAR NAME="itemtype" --> </b>) <br />Barcode : <!-- TMPL_VAR NAME="barcode" --></td>
+                    <td><!-- TMPL_IF name="BiblioDefaultViewmarc" -->
+<a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>
+<!-- TMPL_ELSIF NAME="BiblioDefaultViewisbd" -->
+<a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>
+<!-- TMPL_ELSE -->
+<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" -->  <!-- TMPL_VAR NAME="subtitle" --></a><!-- /TMPL_IF -->&nbsp; (<b><!-- TMPL_VAR NAME="itemtype" --> </b>) <br />Barcode : <!-- TMPL_VAR NAME="barcode" --></td>
                     <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernum"-->"><!-- TMPL_VAR NAME="borrowername" --> &nbsp; <!-- TMPL_VAR NAME="borrowerfirstname" --></a><br />
                             <!-- TMPL_VAR NAME="borrowerphone" --><br />
                             <!-- TMPL_IF NAME="borrowermail" -->
