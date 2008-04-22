@@ -199,13 +199,13 @@ my %tabsysprefs;
     $tabsysprefs{QueryRemoveStopwords}="Searching";
 
 # EnhancedContent
-    $tabsysprefs{AmazonContent}="EnhancedContent";
-    $tabsysprefs{AWSAccessKeyID}="EnhancedContent";
-    $tabsysprefs{AmazonLocale}="EnhancedContent";
-    $tabsysprefs{AmazonAssocTag}="EnhancedContent";
-    $tabsysprefs{AmazonSimilarItems}="EnhancedContent";
-    $tabsysprefs{OPACAmazonContent}="EnhancedContent";
-    $tabsysprefs{OPACAmazonSimilarItems}="EnhancedContent";
+   $tabsysprefs{AmazonContent}="EnhancedContent";
+   $tabsysprefs{AWSAccessKeyID}="EnhancedContent";
+   $tabsysprefs{AmazonLocale}="EnhancedContent";
+   $tabsysprefs{AmazonAssocTag}="EnhancedContent";
+   $tabsysprefs{AmazonSimilarItems}="EnhancedContent";
+   $tabsysprefs{OPACAmazonContent}="EnhancedContent";
+   $tabsysprefs{OPACAmazonSimilarItems}="EnhancedContent";
 # Baker & Taylor 
    $tabsysprefs{BakerTaylorBookstoreURL} = 'EnhancedContent';
    $tabsysprefs{BakerTaylorEnabled}      = 'EnhancedContent';
@@ -219,6 +219,14 @@ my %tabsysprefs;
    $tabsysprefs{PINESISBN}="EnhancedContent";
    $tabsysprefs{ThingISBN}="EnhancedContent";
    $tabsysprefs{OPACFRBRizeEditions}="EnhancedContent";
+# Tags
+   $tabsysprefs{TagsEnabled}            = 'EnhancedContent';
+   $tabsysprefs{TagsExternalDictionary} = 'EnhancedContent';
+   $tabsysprefs{TagsInputOnDetail}      = 'EnhancedContent';
+   $tabsysprefs{TagsInputOnList}        = 'EnhancedContent';
+   $tabsysprefs{TagsShowOnDetail}       = 'EnhancedContent';
+   $tabsysprefs{TagsShowOnList}         = 'EnhancedContent';
+   $tabsysprefs{TagsModeration}         = 'EnhancedContent';
 
 # OPAC
     $tabsysprefs{BiblioDefaultView}="OPAC";
@@ -284,15 +292,6 @@ my %tabsysprefs;
    $tabsysprefs{'OAI-PMH:MaxCount'}  = "OAI-PMH";
    $tabsysprefs{'OAI-PMH:Set'}       = "OAI-PMH";
    $tabsysprefs{'OAI-PMH:Subset'}    = "OAI-PMH";
-
-# Tags
-   $tabsysprefs{TagsEnabled}            = 'Tags';
-   $tabsysprefs{TagsExternalDictionary} = 'Tags';
-   $tabsysprefs{TagsInputOnDetail}      = 'Tags';
-   $tabsysprefs{TagsInputOnList}        = 'Tags';
-   $tabsysprefs{TagsShowOnDetail}       = 'Tags';
-   $tabsysprefs{TagsShowOnList}         = 'Tags';
-   $tabsysprefs{TagsModeration}         = 'Tags';
 
 sub StringSearch  {
     my ($searchstring,$type)=@_;
