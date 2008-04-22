@@ -47,8 +47,8 @@
             <li> <span class="problem">No email stored.</span>    </li>
         <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
-    <li>Category: <!-- TMPL_VAR name="categorycode" --></li>
-    <li>Home Library: <!-- TMPL_IF NAME="branchcode" --><!-- TMPL_VAR NAME="branchcode" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="branch" --><!-- /TMPL_IF --></li>
+    <li>Category: <!-- TMPL_VAR NAME="categoryname" --> (<!-- TMPL_VAR NAME="categorycode" -->) 
+    <li>Home Library: <!-- TMPL_IF NAME="branchname" --><!-- TMPL_VAR NAME="branchname" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="branch" --><!-- /TMPL_IF --></li>
 </ul></div>
 <div id="menu">
 <ul>

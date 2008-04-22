@@ -27,6 +27,7 @@ use C4::Dates;
 use C4::Output;
 use C4::Log;
 use C4::Items;
+use C4::Branch;
 use Data::Dumper;
 
 use vars qw($debug);
@@ -83,6 +84,7 @@ if ($src eq 'circ') {   # if we were called from circulation, use the circulatio
                         firstname       => $data->{'firstname'},
                         cardnumber      => $data->{'cardnumber'},
                         categorycode    => $data->{'categorycode'},
+                        categoryname	=> $data->{'description'},
                         address         => $data->{'address'},
                         address2        => $data->{'address2'},
                         city            => $data->{'city'},
@@ -90,6 +92,7 @@ if ($src eq 'circ') {   # if we were called from circulation, use the circulatio
                         phonepro        => $data->{'phonepro'},
                         email           => $data->{'email'},
                         branchcode      => $data->{'branchcode'},
+                        branchname		=> GetBranchName($data->{'branchcode'}),
     );
 }
 

@@ -340,6 +340,7 @@ $template->param(
   DHTMLcalendar_dateformat=>C4::Dates->DHTMLcalendar(), 
     roaddetails      => $roaddetails,
     borrowernumber   => $borrowernumber,
+    categoryname	=> $borrowercategory->{description},
     reregistration   => $reregistration,
     branch	     => $branch,	
     totalprice       => sprintf( "%.2f", $totalprice ),

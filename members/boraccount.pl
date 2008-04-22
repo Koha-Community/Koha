@@ -28,7 +28,7 @@ use C4::Output;
 use C4::Dates qw/format_date/;
 use CGI;
 use C4::Members;
-
+use C4::Branch;
 
 my $input=new CGI;
 
@@ -101,7 +101,8 @@ $template->param(
     cardnumber          => $data->{'cardnumber'},
     categorycode        => $data->{'categorycode'},
     category_type       => $data->{'category_type'},
-    category_description => $data->{'description'},
+ #   category_description => $data->{'description'},
+    categoryname		 => $data->{'description'},
     address             => $data->{'address'},
     address2            => $data->{'address2'},
     city                => $data->{'city'},
@@ -109,6 +110,7 @@ $template->param(
     phone               => $data->{'phone'},
     email               => $data->{'email'},
     branchcode          => $data->{'branchcode'},
+	branchname			=> GetBranchName($data->{'branchcode'}),
     total               => sprintf("%.2f",$total),
     totalcredit         => $totalcredit,
     accounts            => \@accountrows );

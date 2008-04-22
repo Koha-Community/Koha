@@ -25,6 +25,7 @@ use C4::Auth;
 use C4::Output;
 use CGI;
 use C4::Members;
+use C4::Branch;
 
 use C4::Dates qw/format_date/;
 my $input=new CGI;
@@ -98,7 +99,8 @@ $template->param(
 						cardnumber => $data->{'cardnumber'},
 					    categorycode => $data->{'categorycode'},
 					    category_type => $data->{'category_type'},
-					    category_description => $data->{'description'},
+					   # category_description => $data->{'description'},
+					    categoryname	=> $data->{'description'},
 					    address => $data->{'address'},
 						address2 => $data->{'address2'},
 					    city => $data->{'city'},
@@ -106,6 +108,7 @@ $template->param(
 						phone => $data->{'phone'},
 						email => $data->{'email'},
 			   			branchcode => $data->{'branchcode'},
+			   			branchname => GetBranchName($data->{'branchcode'}),
 						showfulllink => ($count > 50),					
 						loop_reading => \@loop_reading);
 output_html_with_http_headers $input, $cookie, $template->output;
