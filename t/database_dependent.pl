@@ -15,8 +15,6 @@ use C4::Languages;
 use Data::Dumper;
 use Test::More;
 
-use lib q( . .. );
-
 use Test::Class::Load qw ( . ); # run from the t directory
 
 create_test_database();

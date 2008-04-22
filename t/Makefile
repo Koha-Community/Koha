@@ -14,6 +14,7 @@ PERL = /usr/bin/perl
 TEST_FILES = database_dependent.pl
 PROVE = /usr/bin/prove
 PROVE_FLAGS = -v
+PERL5LIB = ..
 KOHA_CONF_DIR = ../etc
 CONF_FILE_TEMPLATE = $(KOHA_CONF_DIR)/koha-conf.xml 
 TEST_CONF_FILE = run/etc/koha-conf.xml
@@ -56,7 +57,7 @@ $(SCRIPTS) ::
 	$(CHMOD) 755 $(TEST_SCRIPT_DIR)/$@
 
 test :: config_file $(ZEBRA_CONF_FILES) $(SCRIPTS)
-	KOHA_CONF=$(TEST_CONF_FILE) $(PROVE) $(PROVE_FLAGS) $(TEST_FILES)
+	KOHA_CONF=$(TEST_CONF_FILE) PERL5LIB=$(PERL5LIB) $(PROVE) $(PROVE_FLAGS) $(TEST_FILES)
 
 test_run_dirs ::
 	$(MKPATH) run/etc

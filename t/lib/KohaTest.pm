@@ -8,7 +8,6 @@ eval "use Test::Class";
 plan skip_all => "Test::Class required for performing database tests" if $@;
 # Or, maybe I should just die there.
 
-use lib qw(..);
 use C4::Biblio;
 use C4::Bookfund;
 use C4::Bookseller;
