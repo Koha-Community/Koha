@@ -21,7 +21,7 @@
 	//]]>
 	</script>
 	<ul class="toolbar">
-	<li><a id="newlabel" href="/cgi-bin/koha/labels/label-create-layout.pl">New Layout</a></li>
+	<li><a id="newlabel" href="/cgi-bin/koha/labels/label-edit-layout.pl">New Layout</a></li>
 	<li><a id="newtemplate" href="/cgi-bin/koha/labels/label-create-template.pl?op=blank">New Label Template</a></li>
 	<li><a id="newprofile" href="/cgi-bin/koha/labels/label-create-profile.pl?op=blank">New Printer Profile</a></li>
 	<li><a id="newlabelbatch" href="/cgi-bin/koha/labels/label-manager.pl?op=add_batch&amp;type=labels">New Label Batch</a></li>

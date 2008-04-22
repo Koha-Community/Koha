@@ -93,7 +93,7 @@
                     <td><!-- TMPL_VAR NAME="num" --> records</td>
                     <td><a href="/cgi-bin/koha/labels/label-manager.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=labels">Edit</a></td>
                     <td><a href="/cgi-bin/koha/labels/label-manager.pl?op=delete_batch&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=labels">Delete</a><!-- FIXME: should use POST to change server state, not GET --></td>
-                    <td><a style="float: left;"  href="/cgi-bin/koha/labels/label-print-pdf.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=labels">Generate PDF for Batch  <!-- TMPL_VAR NAME="batch_id" --></a></td>
+                    <td><a style="float: left;"  href="/cgi-bin/koha/labels/label-print-<!-- TMPL_VAR NAME="outputformat" -->.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=labels">Generate and download <!-- TMPL_VAR NAME="batch_id" --></a></td>
                 </tr>
                 <!-- /TMPL_LOOP -->
             </table>
@@ -136,7 +136,7 @@
                     <td><!-- TMPL_VAR NAME="num" --> records</td>
                     <td><a href="/cgi-bin/koha/labels/label-manager.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=patroncards">Edit</a></td>
                     <td><a href="/cgi-bin/koha/labels/label-manager.pl?op=delete_batch&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=patroncards">Delete</a><!-- FIXME: should use POST to change server state, not GET --></td>
-                    <td><a style="float: left;"  href="/cgi-bin/koha/labels/label-print-pdf.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=patroncards">Generate PDF for Batch  <!-- TMPL_VAR NAME="batch_id" --></a></td>
+                    <td><a style="float: left;"  href="/cgi-bin/koha/labels/label-print-<!-- TMPL_VAR NAME="outputformat" -->.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=patroncards">Generate and download <!-- TMPL_VAR NAME="batch_id" --></a></td>
                 </tr>
                 <!-- /TMPL_LOOP -->
             </table>

@@ -8,9 +8,7 @@ use C4::Labels;
 use C4::Context;
 use HTML::Template::Pro;
 
-#use Data::Dumper;
-#use Smart::Comments;
-
+my $dbh =  = C4::Context->dbh;
 my $query = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -25,6 +23,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $data = get_label_options();
 my $op =  $query->param('op');
+my $layout_id = $query->param('layout_id');
 
 my $active_template = GetActiveLabelTemplate();
 my @label_templates = GetAllLabelTemplates();
@@ -33,7 +32,10 @@ my @layouts       = get_layouts();
 my @barcode_types = get_barcode_types();
 my @batches = get_batches();
 
-###  $data
+my @barcode_types = get_barcode_types($layout_id);
+my @printingtypes = get_printingtypes($layout_id);
+my $layout;
+$layout = get_layout($layout_id) if($layout_id);
 
 $template->param( guidebox => 1 ) if ( $data->{'guidebox'} );
 $template->param( "papertype_$data->{'papertype'}"       => 1 );

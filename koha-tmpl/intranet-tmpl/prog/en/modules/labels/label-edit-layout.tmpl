@@ -1,21 +1,54 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo; Tools &rsaquo; Labels</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script>
+function jscss(action,o,c1,c2)
+{
+ // from:  http://onlinetools.org/articles/unobtrusivejavascript/cssjsseparation.html
+  switch (action){
+    case 'swap':
+      o.className=!jscss('check',o,c1)?o.className.replace(c2,c1): o.className.replace(c1,c2);
+    break;
+    case 'add':
+      if(!jscss('check',o,c1)){o.className+=o.className?' '+c1:c1;}
+    break;
+    case 'remove':
+      var rep=o.className.match(' '+c1)?' '+c1:c1;
+      o.className=o.className.replace(rep,'');
+    break;
+    case 'check':
+      return new RegExp('\\b'+c1+'\\b').test(o.className)
+    break;
+  }
+}
+function chooselayoutspec(rb) {
+	stringspec=document.getElementById("formatstring");
+	if(rb.value == 'layout_string') {
+		stringspec.disabled=0;
+		jscss('remove',document.getElementById('layout_string'),'disabled','');
+		jscss('add',document.getElementById('layout_tx'),'disabled','');
+	} else {
+		stringspec.disabled=1;
+		jscss('remove',document.getElementById('layout_tx'),'disabled','');
+		jscss('add',document.getElementById('layout_string'),'disabled','');
+	}
+}
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/labels/label-home.pl">Labels</a> &rsaquo; Edit Label Layout</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/labels/label-home.pl">Labels</a> &rsaquo; <!-- TMPL_IF NAME="layout_id" -->Edit<!-- TMPL_ELSE -->Create<!-- /TMPL_IF --> Label Layout</div>
 
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
-
+	<!-- TMPL_INCLUDE NAME="tools-labels-toolbar.inc" -->
 <form name="input" action="/cgi-bin/koha/labels/label-manager.pl" method="get">
 <fieldset class="rows">
-<legend>Edit Label Layout</legend>
+<legend><!-- TMPL_IF NAME="layout_id" -->Edit<!-- TMPL_ELSE -->Create<!-- /TMPL_IF --> Label Layout</legend>
 <ol>
 <li><label for="layoutname">Layout Name</label>
 <input type="text" name="layoutname" id="layoutname" size="20" value="<!-- TMPL_VAR NAME="layoutname" -->" /></li>
@@ -43,10 +76,14 @@
     <!-- /TMPL_LOOP -->
 </select></li>
 
-<li><fieldset class="rows">
+
+<li> 
+<fieldset class="rows">
 <legend>
-    Choose Order Of Text Fields to Print
+Bibliographic Data to Print
 </legend>
+<input type="radio" name="layoutchoice" value="layout_tx" <!-- TMPL_UNLESS NAME="layout_string" -->checked="checked"<!-- /TMPL_UNLESS --> onclick="chooselayoutspec(this);" >Choose Order Of Text Fields to Print</input>
+<fieldset id="layout_tx"  <!-- TMPL_IF NAME="layout_string" -->class="disabled"<!-- /TMPL_IF -->>
 <table summary="fields to print">
 <tr>
         <td>
@@ -221,9 +258,21 @@
 		<td>&nbsp;</td>
   </tr>
 </table>
-</fieldset></li>
-
-<li><label for="startlabel">Start printing from Label number: </label><input type="text" name="startlabel"  id="startlabel" size="1"  value="<!-- TMPL_VAR NAME="startlabel" -->" /></li>
+</fieldset>
+<br />
+<input type="radio" name="layoutchoice" value="layout_string" <!-- TMPL_IF NAME="layout_string" -->checked="checked"<!-- /TMPL_IF --> onclick="chooselayoutspec(this);"> List Fields </input>
+<fieldset id="layout_string" <!-- TMPL_UNLESS NAME="layout_string" -->class="disabled"<!-- /TMPL_UNLESS -->>
+<label for="layoutname">Data Fields</label>
+   <input type="text" name="formatstring" id="formatstring" size="60" value="<!-- TMPL_VAR NAME="formatstring" -->" <!-- TMPL_UNLESS NAME="layout_string" -->disabled="true"<!-- /TMPL_UNLESS --> />
+   <div class="help">
+   <p>Enter a comma separated list of fields to print.  You may include any <em>Koha field</em> or MARC subfield.</p>
+   <p>See online help for advanced options</p>
+   <p>ex: barcode, itemcallnumber, title, "050a 050b", 300a </p>
+	</div>
+</fieldset>
+</fieldset>   
+</li>
+<li><label for="startlabel">Start printing from Label number: </label><input type="text" name="startlabel"  id="startlabel" size="1"  value="<!-- TMPL_IF NAME="startlabel" --><!-- TMPL_VAR NAME="startlabel" --><!-- TMPL_ELSE -->1<!-- /TMPL_IF -->" /></li>
 
 
 <li><label for="guidebox">Draw Guide Boxes</label>
@@ -237,7 +286,7 @@
 </fieldset>
 <fieldset class="action">
         <input type="submit" value="Submit" /> <a class="cancel" href="/cgi-bin/koha/labels/label-home.pl">Cancel</a>
-        <input type="hidden" name="op" value="save_layout" />
+        <input type="hidden" name="op" value="<!-- TMPL_IF NAME="layout_id" -->save<!-- TMPL_ELSE -->add<!-- /TMPL_IF -->_layout" />
         <input type="hidden" name="layout_id" value="<!-- TMPL_VAR NAME="layout_id" -->" />
 </fieldset>
 </form>

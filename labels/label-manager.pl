@@ -40,6 +40,7 @@ my $startlabel     = $query->param('startlabel');
 my $printingtype   = $query->param('printingtype');
 my $guidebox       = $query->param('guidebox');
 my $fontsize       = $query->param('fontsize');
+my $formatstring	= $query->param('formatstring');
 my @itemnumber;
 ($query->param('type') eq 'labels') ? (@itemnumber = $query->param('itemnumber')) : (@itemnumber = $query->param('borrowernumber'));
 my $batch_type     = $query->param('type');
@@ -72,24 +73,25 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-if ( $op eq 'save_conf' ) {    # this early sub is depreciated, use save_layout()
-	SaveConf(
-		$barcodetype,    $title,  $isbn, 
-		$issn,    $itemtype,         $bcn,            $dcn, 
-		$classif, $subclass,         $itemcallnumber,      $author, 
-		$tmpl_id, $printingtype,   $guidebox,       $startlabel, $layoutname
-	);
-	print $query->redirect("label-home.pl");
-	exit;
-}
-elsif  ( $op eq 'save_layout' ) {
+#if ( $op eq 'save_conf' ) {    # this early sub is depreciated, use save_layout()
+#	SaveConf(
+#		$barcodetype,    $title,  $isbn, 
+#		$issn,    $itemtype,         $bcn,            $dcn, 
+#		$classif, $subclass,         $itemcallnumber,      $author, 
+#		$tmpl_id, $printingtype,   $guidebox,       $startlabel, $layoutname
+#	);
+#	print $query->redirect("label-home.pl");
+#	exit;
+#}
+#elsif  ( $op eq 'save_layout' ) {
+if  ( $op eq 'save_layout' ) {
 	save_layout(
 		$barcodetype,    $title,  $subtitle, $isbn, 
 		$issn,    $itemtype,         $bcn,            $dcn, 
 		$classif, $subclass,         $itemcallnumber,      $author, 
 		$tmpl_id, $printingtype,   $guidebox,       $startlabel, $layoutname,
-		$layout_id
-		);
+		,  $formatstring , $layout_id	
+	);
 	### $layoutname
 	print $query->redirect("label-home.pl");
 	exit;
@@ -100,7 +102,7 @@ elsif  ( $op eq 'add_layout' ) {
 		$issn,    $itemtype,         $bcn,            $dcn, 
 		$classif, $subclass,         $itemcallnumber,      $author, 
 		$tmpl_id, $printingtype,   $guidebox,       $startlabel, $layoutname,
-		$layout_id
+		$formatstring , $layout_id
 	);
 	### $layoutname
 	print $query->redirect("label-home.pl");
@@ -184,6 +186,9 @@ $template->param(
     batch_count                 => scalar @resultsloop,
     active_layout_name          => $active_layout_name,
     active_template_name        => $active_template_name,
+	outputformat				=> ( $active_layout->{'printingtype'} eq 'CSV' ) ? 'csv' : 'pdf' ,
+	layout_tx					=> ( $active_layout->{'formatstring'}) ? 0 : 1 ,
+	layout_string				=> ( $active_layout->{'formatstring'}) ? 1 : 0 ,
 
     resultsloop                 => \@resultsloop,
     batches                     => \@batches,
