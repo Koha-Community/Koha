@@ -8,6 +8,25 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-en.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
 <!-- End of additions -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pack.js"></script>
+<script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+$.tablesorter.addParser({
+    id: 'articles', 
+    is: function(s) {return false;  }, 
+    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
+    type: 'text' 
+});
+	 $(document).ready(function() {
+	 	$("th a").hide();
+		$.tablesorter.defaults.widgets = ['zebra'];
+		$("#holdst").tablesorter({
+			sortList: [[3,0]],
+			headers: { 0:{sorter:false},1:{sorter:false},3: { sorter: 'articles' },7:{sorter:false}}
+		}); 
+ 	 });
+//]]>
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -16,93 +35,19 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Pending Holds</div>
 
-<div id="doc" class="yui-t7">
+<div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-g">
+	<div class="yui-b">
 
-<h1>Pending holds placed between <!-- TMPL_VAR NAME="from" --> and <!-- TMPL_VAR NAME="to" --></h1>
-<div id="filters">
-<br />
-<form action="/cgi-bin/koha/circ/pendingreserves.pl" method="post" >
-<p>
-
-<label for="from">
-    Start date:
-</label>
-<input type="text" size="10" id="from" name="from" value="<!-- TMPL_VAR NAME="from" -->" />
-<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif"  border="0" id="openCalendarFrom" style="cursor: pointer;" alt="" />
-<script language="JavaScript" type="text/javascript">
-function validate1(date) {
-    var day = date.getDate();
-    var month = date.getMonth() + 1;
-    var year = date.getFullYear();
-    var weekDay = date.getDay();
-    var dayMonth = month + '-' + day;
-    var dateString = year + '-' + month + '-' + day;
-    var dateTo = document.getElementById('to').value.split("-");
-    var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
-    if (date > limitDate) {
-            return true;
-    } else {
-            return false;
-    }
-}
-Calendar.setup(
-        {
-        inputField : "from",
-        ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
-        button : "openCalendarFrom",
-        disableFunc : validate1,
-        dateStatusFunc : validate1
-        }
-);
-</script>
-<label for="to" >
-    End date:
-</label>
-<input size="10" id="to" name="to" value="<!-- TMPL_VAR NAME="to" -->" type="text" />
-<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="" id="openCalendarTo" style="cursor: pointer;" border="0" />
-<script type="text/javascript">
-        function validate2(date) {
-            var day = date.getDate();
-            var month = date.getMonth() + 1;
-            var year = date.getFullYear();
-            var weekDay = date.getDay();
-            var dayMonth = month + '-' + day;
-            var dateString = year + '-' + month + '-' + day;
-            var dateFrom = document.getElementById('from').value.split("-");
-            var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
-            if (limitDate > date) {
-                    return true;
-            } else {
-                    return false;
-            }
-        }
-
-        Calendar.setup(
-                {
-                    inputField : "to",
-                    ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
-                    button : "openCalendarTo",
-                    disableFunc : validate2,
-                    dateStatusFunc : validate2
-                }
-        );
-</script>
-<br/>
-<i>(Inclusive, default is 10 years ago to yesterday, set "to" to today as needed. )</i>
-<input type="submit" value="Go" class="submit"/>
-</p>
-</form>
-<p>The following holds have not been filled. Please retrieve them and check them in</p>
-</div>
-
+<h2>Pending holds placed between <!-- TMPL_VAR NAME="from" --> and <!-- TMPL_VAR NAME="to" --></h2>
+<h3>Reported on <!-- TMPL_VAR NAME="todaysdate" --></h3>
+<p>The following holds have not been filled. Please retrieve them and check them in.</p>
 <div class="searchresults">
     <!-- TMPL_IF NAME="reserveloop" -->
-    <table>
-    <tr>
+    <table id="holdst">
+    <thead><tr>
         <th>
 				Pull This Many Items
         </th>        
@@ -112,7 +57,7 @@ Calendar.setup(
         <th>
 				Patrons with Holds
         </th>
-        <th >Title
+        <th>Title
         <a href="/cgi-bin/koha/circ/pendingreserves.pl?order=biblio&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
         <th>
@@ -135,9 +80,9 @@ Calendar.setup(
             <a href="/cgi-bin/koha/circ/pendingreserves.pl?order=date&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
 
-    </tr>
+    </tr></thead>
     
-    <!-- TMPL_LOOP NAME="reserveloop" -->
+   <tbody> <!-- TMPL_LOOP NAME="reserveloop" -->
         <tr>
             <!-- TMPL_IF name="borrowernumber" -->
                 <td><p><b><!-- TMPL_VAR NAME="pullcount" --></b></p></td>
@@ -179,12 +124,92 @@ Calendar.setup(
                 <!-- TMPL_IF NAME="statusw" --><p>Waiting</p><!-- /TMPL_IF --><!-- TMPL_IF NAME="statusf" --><p>Fullfilled</p><!-- /TMPL_IF -->
             </td>
         </tr>
-    <!-- /TMPL_LOOP -->
+    <!-- /TMPL_LOOP --></tbody>
     </table>
     <!-- TMPL_ELSE -->
         <b>No items found.</b>
     <!-- /TMPL_IF -->
 </div>
+
+</div>
+</div>
+<div class="yui-b">
+<div id="filters">
+
+<form action="/cgi-bin/koha/circ/pendingreserves.pl" method="post" >
+<fieldset class="brief">
+<h4>Refine Results</h4>
+<ol>
+<li>
+<label for="from">
+    Start date:
+</label>
+<input type="text" size="10" id="from" name="from" value="<!-- TMPL_VAR NAME="from" -->" />
+<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif"  border="0" id="openCalendarFrom" style="cursor: pointer;" alt="" />
+<script language="JavaScript" type="text/javascript">
+function validate1(date) {
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+    var weekDay = date.getDay();
+    var dayMonth = month + '-' + day;
+    var dateString = year + '-' + month + '-' + day;
+    var dateTo = document.getElementById('to').value.split("-");
+    var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
+    if (date > limitDate) {
+            return true;
+    } else {
+            return false;
+    }
+}
+Calendar.setup(
+        {
+        inputField : "from",
+        ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+        button : "openCalendarFrom",
+        disableFunc : validate1,
+        dateStatusFunc : validate1
+        }
+);
+</script></li>
+<li><label for="to">
+    End date:
+</label>
+<input size="10" id="to" name="to" value="<!-- TMPL_VAR NAME="to" -->" type="text" />
+<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="" id="openCalendarTo" style="cursor: pointer;" border="0" />
+<script type="text/javascript">
+        function validate2(date) {
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+            var weekDay = date.getDay();
+            var dayMonth = month + '-' + day;
+            var dateString = year + '-' + month + '-' + day;
+            var dateFrom = document.getElementById('from').value.split("-");
+            var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
+            if (limitDate > date) {
+                    return true;
+            } else {
+                    return false;
+            }
+        }
+
+        Calendar.setup(
+                {
+                    inputField : "to",
+                    ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+                    button : "openCalendarTo",
+                    disableFunc : validate2,
+                    dateStatusFunc : validate2
+                }
+        );
+</script></li>
+</ol>
+<p><i>(Inclusive, default is 10 years ago to yesterday, set "to" to today as needed. )</i></p>
+<fieldset class="action"><input type="submit" value="Submit" class="submit"/></fieldset>
+</fieldset>
+</form>
+
 </div>
 </div>
 </div>

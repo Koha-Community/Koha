@@ -2,6 +2,7 @@
 <title>Koha &rsaquo; Administration &rsaquo; <!-- TMPL_IF NAME="editcategory" --><!-- TMPL_IF NAME="categorycode" -->Libraries, branches, &amp; Groups &rsaquo; Edit Group <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Libraries, branches, &amp; Groups &rsaquo; New Group<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_category" -->Libraries, branches, &amp; Groups &rsaquo; Confirm Deletion of Group <!-- TMPL_VAR name="categorycode" --><!-- /TMPL_IF --><!-- TMPL_IF name="add" -->
     <!-- TMPL_IF name="heading-branches-add-branch-p" -->New library<!-- TMPL_ELSE -->Libraries, branches, &amp; Groups &rsaquo; Modify library <!-- TMPL_VAR name="branchcode" --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirm" -->Libraries, branches, &amp; Groups &rsaquo; Confirm deletion of library '<!-- TMPL_VAR NAME="branchcode" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->Libraries, branches, &amp; Groups<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pack.js"></script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -35,6 +36,11 @@
 
 	 $(document).ready(function() {
 	    yuiToolbar();
+		$.tablesorter.defaults.widgets = ['zebra']; 
+		$("#branchest").tablesorter({
+			sortList: [[0,0]],
+			headers: { 3:{sorter:false},4:{sorter:false},5:{sorter:false},6:{sorter:false}}
+		}); 
 	 });
 
 	// YUI Toolbar Functions
@@ -130,18 +136,23 @@
     <!-- TMPL_IF name="MESSAGE7" --><div class="dialog message">Library cannot be deleted because there are patrons using that library</div><!-- /TMPL_IF -->
     <!-- TMPL_IF name="MESSAGE8" --><div class="dialog message">Category cannot be deleted because there are libraries using that category</div><!-- /TMPL_IF -->
 
-    <table>
-        <tr>
-            <th>Name</th>
+<!-- TMPL_IF NAME="branches" -->
+    <table id="branchest">
+<thead>        <tr>
+			<th>Name</th>
             <th>Code</th>
             <th>Address</th>
             <th>Properties</th>
             <th>IP</th>
             <th>Printer</th>
             <th colspan="2">&nbsp;</th>
-        </tr>
+        </tr></thead><tbody>
         <!-- TMPL_LOOP name="branches" -->
-            <tr>
+	<!-- TMPL_IF NAME="toggle" -->
+        <tr>
+	<!-- TMPL_ELSE -->
+		<tr class="highlight">
+	<!-- /TMPL_IF -->
                 <td><!-- TMPL_VAR name="branch_name" escape="HTML" --></td>
                 <td><!-- TMPL_VAR name="branch_code" escape="HTML" --></td>
                 <td>
@@ -183,8 +194,11 @@
                     <a href="<!-- TMPL_VAR name="action" -->?branchcode=<!-- TMPL_VAR name="value" escape="HTML" -->&amp;branchname=<!-- TMPL_VAR NAME="branch_name" escape="HTML" -->&amp;op=delete">Delete</a>
                 </td>
             </tr>
-        <!-- /TMPL_LOOP -->
+        <!-- /TMPL_LOOP --></tbody>
     </table>
+	<!-- TMPL_ELSE -->
+	<div class="dialog message">There are no branches defined. <a href="/cgi-bin/koha/admin/branches.pl?op=add">Start defining libraries</a>.</div>
+	<!-- /TMPL_IF -->
     
     <!-- TMPL_IF NAME="branchcategories" -->
    

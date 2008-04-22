@@ -1,6 +1,24 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Circulation &rsaquo; Transfers to your library</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pack.js"></script>
+<script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+$.tablesorter.addParser({
+    id: 'articles', 
+    is: function(s) {return false;  }, 
+    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
+    type: 'text' 
+});
+	 $(document).ready(function() {
+		$.tablesorter.defaults.widgets = ['zebra']; 
+		$("#transferst").tablesorter({
+			sortList: [[1,0]],
+			headers: { 1: { sorter: 'articles' },4:{sorter:false}}
+		}); 
+	 });
+//]]>
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -15,35 +33,34 @@
 	<div class="yui-g">
 
 
-	<h1>Transfers made TO your library on : <!-- TMPL_VAR NAME="show_date" --></h1>
+	<h1>Transfers made to your library on : <!-- TMPL_VAR NAME="show_date" --></h1>
 	<!-- TMPL_IF name="branchesloop" -->
             <p>Your library is the destination for the following transfer(s)</p>
             <div id="resultlist">
             <!-- TMPL_LOOP NAME="branchesloop" -->
                 <!-- TMPL_IF NAME="branchcode" -->
-                <table style="width: 100%">
+                <table style="width: 100%" id="transferst">
 				<caption>Coming from <!-- TMPL_VAR NAME="branchname" --></caption>
-                <tr>
+                <thead><tr>
                     <th>Date of transfer</th>
                     <th>Title</th>
                     <th>Reserved by </th>
                     <th>Localisation</th>
                     <th>Action</th>
-                </tr>
-                <!-- TMPL_LOOP NAME="reserv" -->
-                    <tr <!-- TMPL_IF NAME="messcompa" --> class="problem" <!-- /TMPL_IF -->>
+                </tr></thead>
+                <tbody><!-- TMPL_LOOP NAME="reserv" -->
+				<!-- TMPL_IF NAME="messcompa" -->
+                    <tr class="problem">
+					<!-- TMPL_ELSE -->
+					<tr>
+					<!-- /TMPL_IF -->
                         <td><p><!-- TMPL_VAR NAME="datetransfer" --></p> <!-- TMPL_IF NAME="messcompa" --> check this transfer<!-- /TMPL_IF --></td>
-                        <td>
-                            <p>
-                                <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
+                        <td><a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
                                 &nbsp; (<b><!-- TMPL_VAR NAME="itemtype" --> </b>)
                                 <br />Barcode : <!-- TMPL_VAR NAME="barcode" -->
-                            </p>
                         </td>
-                        <td>
-                        <!-- TMPL_IF NAME="borrowername" -->
-                            <p>
-                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernum"-->">
+                        <td><!-- TMPL_IF NAME="borrowername" -->
+                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernum"-->">
                                     <!-- TMPL_VAR NAME="borrowername" --> &nbsp; <!-- TMPL_VAR NAME="borrowerfirstname" -->
                                 </a>
                                 <br /><!-- TMPL_VAR NAME="borrowerphone" --><br />
@@ -52,14 +69,13 @@
                                         <!-- TMPL_VAR NAME="borrowermail" -->
                                     </a>
                                 <!--/TMPL_IF-->
-                            </p>
                         <!-- TMPL_ELSE -->
                             <p>
                             None
                             </p>
                         <!-- /TMPL_IF -->
                         </td>
-                        <td><p><!-- TMPL_VAR NAME="homebranch" --> <!-- TMPL_VAR NAME="itemcallnumber" --></p></td>
+                        <td><!-- TMPL_VAR NAME="homebranch" --> <!-- TMPL_VAR NAME="itemcallnumber" --></td>
                         <td>
                         <!--<form name="dotransfer" action="currenttransfers.pl" method="post">
                                         <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->">
@@ -67,7 +83,7 @@
                         </form>-->
                         </td>	
                     </tr>
-                <!-- /TMPL_LOOP -->	
+                <!-- /TMPL_LOOP -->	</tbody>
                 </table>
                 <!-- /TMPL_IF -->
             <!-- /TMPL_LOOP -->

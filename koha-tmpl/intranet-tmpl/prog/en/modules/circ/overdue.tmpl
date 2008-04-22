@@ -1,6 +1,25 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Circulation &rsaquo; Items Overdue as of <!-- TMPL_VAR NAME="todaysdate" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pack.js"></script>
+<script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+$.tablesorter.addParser({
+    id: 'articles', 
+    is: function(s) {return false;  }, 
+    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
+    type: 'text' 
+});
+	$(document).ready(function() {
+ 		$('#patronlists > ul').tabs();
+		$.tablesorter.defaults.widgets = ['zebra']; 
+		$("#overduest").tablesorter({
+			sortList: [[0,0]],
+			headers: { 1: { sorter: 'articles' }}
+		}); 
+	});
+//]]>
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -8,17 +27,49 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Overdues as of <!-- TMPL_VAR NAME="todaysdate" --></div>
 
-<div id="doc" class="yui-t7">
+<div id="doc3" class="yui-t2">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-g">
+	<div class="yui-b">
 
 <h2>Items Overdue as of <!-- TMPL_VAR NAME="todaysdate" --></h2>
   
-  <form method="post" action="/cgi-bin/koha/circ/overdue.pl">
-  <fieldset class="rows">
-    <legend>Filter on :</legend>
+ <h3>Results</h3>
+<a href="overdue.pl?op=csv&amp;branch=<!-- TMPL_VAR name="branchfilter" -->">Download file of all overdues</a> (for <!-- TMPL_IF name="branchfilter" -->branch <!-- TMPL_VAR name="branchfilter" --><!-- TMPL_ELSE -->all branches<!-- /TMPL_IF -->. Other filters are ignored)
+<div class="searchresults">
+<table id="overduest">
+<thead><tr>
+    <th>Due Date</th>
+    <th>Patron</th>
+    <th>Branch</th>
+    <th>Title</th>
+</tr></thead>
+
+<tbody><!-- TMPL_LOOP NAME="overdueloop" -->
+    <tr>
+        <td><!-- TMPL_VAR NAME="duedate" --></td>
+        <!-- TMPL_IF NAME="email" -->
+        <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber"-->"><!-- TMPL_VAR NAME="name" --></a> <a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" -->">[email]</a> (<!-- TMPL_VAR NAME="phone" -->)</td>
+        <!-- TMPL_ELSE -->
+        <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber"-->"><!-- TMPL_VAR NAME="name" --></a> (<!--TMPL_IF NAME="phone" --><!-- TMPL_VAR NAME="phone" --><!-- TMPL_ELSE -->
+    <!--TMPL_IF NAME="mobile" --><!-- TMPL_VAR NAME="mobile" --><!-- TMPL_ELSE --><!--TMPL_IF NAME="phonepro" -->       <!-- TMPL_VAR NAME="phonepro" --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->)</td>
+        <!-- /TMPL_IF -->
+        <td><!-- TMPL_VAR name="branchcode" --></td>
+        <td>
+            <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></p>
+            <p><!-- TMPL_VAR NAME="author" --></p>
+        </td>
+    </tr>
+<!-- /TMPL_LOOP --></tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="yui-b">
+<form method="post" action="/cgi-bin/koha/circ/overdue.pl">
+  <fieldset class="brief">
+<h4>Filter On:</h4>
 	<ol>
     <li><label>Name or cardnumber:</label><input type="text" name="borname" value="<!--TMPL_VAR Name="borname"-->" /></li>
     <li><label>Patron category:</label><select name="borcat" id="borcat"><option value="">Any</option>
@@ -62,43 +113,11 @@
 	<!-- TMPL_IF NAME="showall" --><input type="checkbox" id="showall" name="showall" value="show" checked="checked" /><!-- TMPL_ELSE --><input type="checkbox" id="showall" name="showall" value="show" /><!-- /TMPL_IF -->
 </li>
 </ol>
-   </fieldset>   
    <fieldset class="action">
       <input type="submit" value="Apply Filter" class="submit" />
    </fieldset>   
+   </fieldset>   
   </form>
-  
- <h3>Results</h3>
-<a href="overdue.pl?op=csv&amp;branch=<!-- TMPL_VAR name="branchfilter" -->">Download file of all overdues</a> (for <!-- TMPL_IF name="branchfilter" -->branch <!-- TMPL_VAR name="branchfilter" --><!-- TMPL_ELSE -->all branches<!-- /TMPL_IF -->. Other filters are ignored)
-<div class="searchresults">
-<table>
-<tr>
-    <th>Due Date</th>
-    <th>Patron</th>
-    <th>Branch</th>
-    <th>Title</th>
-</tr>
-
-<!-- TMPL_LOOP NAME="overdueloop" -->
-    <tr>
-        <td><!-- TMPL_VAR NAME="duedate" --></td>
-        <!-- TMPL_IF NAME="email" -->
-        <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber"-->"><!-- TMPL_VAR NAME="name" --></a> <a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" -->">[email]</a> (<!-- TMPL_VAR NAME="phone" -->)</td>
-        <!-- TMPL_ELSE -->
-        <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber"-->"><!-- TMPL_VAR NAME="name" --></a> (<!--TMPL_IF NAME="phone" --><!-- TMPL_VAR NAME="phone" --><!-- TMPL_ELSE -->
-    <!--TMPL_IF NAME="mobile" --><!-- TMPL_VAR NAME="mobile" --><!-- TMPL_ELSE --><!--TMPL_IF NAME="phonepro" -->       <!-- TMPL_VAR NAME="phonepro" --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->)</td>
-        <!-- /TMPL_IF -->
-        <td><!-- TMPL_VAR name="branchcode" --></td>
-        <td>
-            <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></p>
-            <p><!-- TMPL_VAR NAME="author" --></p>
-        </td>
-    </tr>
-<!-- /TMPL_LOOP -->
-</table>
 </div>
-</div>
-</div>
-
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
