@@ -1367,7 +1367,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 		('BakerTaylorPassword','','','Baker & Taylor Password for Content Cafe (external content)','Textarea'),
 		('BakerTaylorUsername','','','Baker & Taylor Username for Content Cafe (external content)','Textarea'),
 		('TagsEnabled','1','','Enables or disables all tagging features.  This is the main switch for tags.','YesNo'),
-		('TagsExternalDictionary','/usr/bin/ispell','','Path on server to local ispell executable, used to set $Lingua::Ispell::path <br />This dictionary is used as a \"whitelist\" of pre-allowed tags.',''),
+		('TagsExternalDictionary',NULL,'','Path on server to local ispell executable, used to set $Lingua::Ispell::path <br />This dictionary is used as a \"whitelist\" of pre-allowed tags.',''),
 		('TagsInputOnDetail','1','','Allow users to input tags from the detail page.',         'YesNo'),
 		('TagsInputOnList',  '0','','Allow users to input tags from the search results list.', 'YesNo'),
 		('TagsModeration',  NULL,'','(unimplemented) Requires tags from patrons to be approved before becoming visible.','YesNo'),
