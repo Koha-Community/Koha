@@ -258,6 +258,7 @@ sub get_template_and_user {
 			intranetreadinghistory => C4::Context->preference("intranetreadinghistory"),
 			noItemTypeImages => C4::Context->preference("noItemTypeImages"),
             singleBranchMode => C4::Context->preference("singleBranchMode"),
+			TagsEnabled => C4::Context->preference("TagsEnabled"),
         );
     }
     else {
@@ -316,6 +317,7 @@ sub get_template_and_user {
             singleBranchMode => C4::Context->preference("singleBranchMode"),
             XSLTResultsDisplay => C4::Context->preference("XSLTResultsDisplay"),
             XSLTDetailsDisplay => C4::Context->preference("XSLTDetailsDisplay"),
+			TagsEnabled => C4::Context->preference("TagsEnabled"),
         );
     }
 	$template->param(listloop=>[{shelfname=>"Freelist", shelfnumber=>110}]);

@@ -119,7 +119,7 @@ if ($loggedinuser) {
 		$_->{date_created_display} = format_date($_->{date_created});
 	}
 }
-
+$template->param(tagsview => 1,);
 if ($add_op) {
 	my $adds = 0;
 	for (values %counts) {$adds += $_;}
