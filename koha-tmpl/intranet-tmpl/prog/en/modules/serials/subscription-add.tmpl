@@ -839,11 +839,11 @@ window.onload = irregular_order();
         </li>
         <li class="radio">
             <!-- TMPL_IF name="serialsadditems" -->
-                <p><input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1" checked="checked" /><label for="serialsadditems-yes">serial recieve create an item </label></p>
-                <p><input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" /><label for="serialsadditems-no">serial recieve don't create an item </label></p>
+                <p><input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1" checked="checked" /><label for="serialsadditems-yes">create an item record when receiving this serial</label></p>
+                <p><input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" /><label for="serialsadditems-no">do not create an item record when receiving this serial </label></p>
             <!-- TMPL_ELSE -->
-                <p><input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1"/><label for="serialsadditems-yes">serial recieve create an item </label></p>
-                <p><input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" checked="checked" /><label for="serialsadditems-no">serial recieve don't create an item </label></p>
+                <p><input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1"/><label for="serialsadditems-yes">create an item record when receiving this serial</label></p>
+                <p><input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" checked="checked" /><label for="serialsadditems-no">do not create an item record when receiving this serial</label></p>
             <!-- /TMPL_IF -->
         </li>
         <li>
@@ -854,7 +854,7 @@ window.onload = irregular_order();
             <label for="branchcode">Library</label>
             
                 <select name="branchcode" id="branchcode" style="width: 20em;">
-                    <!-- TMPL_UNLESS NAME="Independantbranches" --><option value="">Any branch</option><!-- /TMPL_UNLESS -->
+                    <!-- TMPL_UNLESS NAME="Independantbranches" --><option value="">None</option><!-- /TMPL_UNLESS -->
                     <!-- TMPL_LOOP name="branchloop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
 				<!-- TMPL_ELSE -->
 				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
@@ -876,7 +876,7 @@ window.onload = irregular_order();
             
                <!-- TMPL_IF NAME="letterloop" -->
 			   <select name="letter" id="letter">
-                    <option value="">none</option>
+                    <option value="">None</option>
                 <!-- TMPL_LOOP name="letterloop" -->
 				<!-- TMPL_IF name="selected" -->
                     <option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="lettername" --></option>
