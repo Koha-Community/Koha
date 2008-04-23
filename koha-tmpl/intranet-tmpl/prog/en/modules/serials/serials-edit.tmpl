@@ -174,7 +174,7 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
 	<tr>
 		<th>Numbered</th>
 		<th>Published on</th>
-		<th>Planned for</th>
+		<th>Expected on</th>
 		<th>Status</th>
 		<th>Notes</th>
 	</tr>
@@ -250,10 +250,10 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
           <tr>
           <td colspan="5">
       <a id="label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->" style="color: grey; font-size: 80%; cursor: pointer;"  onclick="unHideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')">
-             Items   </a>
+             Click to add item</a>
         <fieldset style="display:none;" id="items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->">
         <legend><a style="cursor: pointer;"  onclick="HideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')">
-                Items</a>
+                Item</a>
         </legend>
           <div id="cataloguing_additem_itemlist">
         <!-- TMPL_LOOP NAME="items" -->
@@ -300,7 +300,7 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
             <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
             <input type="hidden" name="itemcount" value="<!-- TMPL_VAR name="issuesatonce" -->" />
             <input type="hidden" name="user" value="<!-- TMPL_VAR name="librarian" -->" />
-            <b>Subs. <!-- TMPL_VAR name="subscriptionid" --></b> New Issue <input type="text" name="serialseq" value="" size="20" maxlength="100" onchange="if (this.value!=''){unHideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!-- TMPL_VAR NAME="serialid" -->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')} else {HideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!-- TMPL_VAR NAME="serialid" -->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')}" />
+            Supplemental Issue <input type="text" name="serialseq" value="" size="20" maxlength="100" onchange="if (this.value!=''){unHideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!-- TMPL_VAR NAME="serialid" -->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')} else {HideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!-- TMPL_VAR NAME="serialid" -->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')}" />
         </td>
         <td>
             <input type="text" name="publisheddate" value="<!-- TMPL_VAR name="publisheddate" -->" size="10" maxlength="15" />
@@ -355,7 +355,7 @@ Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
           <tr>
           <td colspan="5">
       <a id="label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->" style="color: grey; font-size: 80%; cursor: pointer;"  onclick="unHideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')">
-             Item</a>
+             Click to add item</a>
         <fieldset style="display:none;" id="items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->">
         <legend><a style="cursor: pointer;"  onclick="HideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')">
                 Item</a>
