@@ -372,16 +372,7 @@
             </xsl:for-each>
 -->
         </xsl:variable>
-        <xsl:variable name="lcc">
-            <xsl:for-each select="marc:datafield[@tag=050]">
-                    <xsl:call-template name="subfieldSelect">
-                        <xsl:with-param name="codes">ab</xsl:with-param>
-                    </xsl:call-template>
-                    <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
-            </xsl:for-each>
-        </xsl:variable>
-    <td style="vertical-align:top;">
-     <a><xsl:attribute name="href">/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="$biblionumber"/></xsl:attribute>
+     	<a><xsl:attribute name="href">/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="$biblionumber"/></xsl:attribute>
 
         <xsl:if test="marc:datafield[@tag=245]">
         <xsl:for-each select="marc:datafield[@tag=245]">
@@ -801,26 +792,25 @@
             </xsl:when>
             </xsl:choose>
     </xsl:if>
-    <br/> 
+	</span>
     <xsl:if test="marc:datafield[@tag=260]">
+	<span class="results_summary">
     <span class="label">Publisher: </span> 
             <xsl:for-each select="marc:datafield[@tag=260]">
                     <xsl:call-template name="subfieldSelect">
                         <xsl:with-param name="codes">bcg</xsl:with-param>
                     </xsl:call-template>
             </xsl:for-each>
-
+	</span>
     </xsl:if>
-    <xsl:if test="marc:datafield[@tag=050]">
-        <span class="label">; Library of Congress Classification: </span>
-        <xsl:value-of select="$lcc"/>.
-    </xsl:if>
-
-    </span>
-               <div class="holdings_summary">
-                   <xsl:if test="count(key('item-by-status', 'available'))>0">
+    <span class="results_summary">
+			   <span class="label">Availability: </span>
+			       <xsl:choose>
+				   <xsl:when test="count(key('item-by-status', 'available'))=0">No copies available
+				   </xsl:when>
+                   <xsl:when test="count(key('item-by-status', 'available'))>0">
                    <span class="available">
-                       <xsl:text>Copies available at: </xsl:text>
+                       <b><xsl:text>Copies available at: </xsl:text></b>
                        <xsl:variable name="available_items"
                            select="key('item-by-status', 'available')"/>
                        <xsl:for-each select="$available_items[generate-id() = generate-id(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch))[1])]">
@@ -831,7 +821,8 @@
 <xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>, </xsl:text></xsl:otherwise></xsl:choose>
                        </xsl:for-each>
                    </span>
-                   </xsl:if>
+                   </xsl:when>
+				   </xsl:choose>
                    <xsl:if test="count(key('item-by-status', 'On loan'))>0">
                    <span class="unavailable">
                        <xsl:text>On loan (</xsl:text>
@@ -863,8 +854,7 @@
                        <xsl:value-of select="count(key('item-by-status', 'On order'))"/>
                        <xsl:text>) </xsl:text>                   </span>
                    </xsl:if>
-               </div>
-    </td>
+               </span>
     </xsl:template>
 
     <xsl:template name="nameABCDQ">

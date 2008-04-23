@@ -227,6 +227,7 @@ my %tabsysprefs;
    $tabsysprefs{TagsShowOnDetail}       = 'EnhancedContent';
    $tabsysprefs{TagsShowOnList}         = 'EnhancedContent';
    $tabsysprefs{TagsModeration}         = 'EnhancedContent';
+   $tabsysprefs{GoogleJackets} 			= 'EnhancedContent';
 
 # OPAC
     $tabsysprefs{BiblioDefaultView}="OPAC";

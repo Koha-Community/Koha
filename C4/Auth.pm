@@ -259,6 +259,7 @@ sub get_template_and_user {
 			noItemTypeImages => C4::Context->preference("noItemTypeImages"),
             singleBranchMode => C4::Context->preference("singleBranchMode"),
 			TagsEnabled => C4::Context->preference("TagsEnabled"),
+			GoogleJackets => C4::Context->preference("GoogleJackets"),
         );
     }
     else {
@@ -318,6 +319,7 @@ sub get_template_and_user {
             XSLTResultsDisplay => C4::Context->preference("XSLTResultsDisplay"),
             XSLTDetailsDisplay => C4::Context->preference("XSLTDetailsDisplay"),
 			TagsEnabled => C4::Context->preference("TagsEnabled"),
+			GoogleJackets => C4::Context->preference("GoogleJackets"),
         );
     }
 	$template->param(listloop=>[{shelfname=>"Freelist", shelfnumber=>110}]);

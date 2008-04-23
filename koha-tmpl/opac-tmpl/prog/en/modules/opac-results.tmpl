@@ -171,57 +171,37 @@ $(document).ready(function(){
             <!-- TMPL_ELSE -->
                 <tr>
             <!-- /TMPL_IF -->
-            <!-- TMPL_IF NAME="XSLTResultsDisplay" -->
-                <td class="select"><!--TMPL_IF EXPR="opacbookbag || virtualshelves" --><input type="checkbox" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" title="Click to add to cart" /> <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"><!-- /TMPL_IF --><!--TMPL_IF EXPR="opacbookbag || virtualshelves" --></label><!-- /TMPL_IF --></td>
-                <td class="select"><!-- TMPL_VAR NAME="result_number" -->.</td>
+
+                <td class="select selectcol"><!--TMPL_IF EXPR="opacbookbag || virtualshelves" --><input type="checkbox" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" title="Click to add to cart" /> <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"><!-- /TMPL_IF --><!--TMPL_IF EXPR="opacbookbag || virtualshelves" --></label><!-- /TMPL_IF --></td>
+                <td class="select selectcol"><!-- TMPL_VAR NAME="result_number" -->.</td>
+				<!-- TMPL_UNLESS NAME="item-level_itypes" -->
+				<td class="itypecol">
+                <!-- TMPL_IF name="imageurl" -->
+				<img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR name="description" -->" />
+                <!-- /TMPL_IF -->
+				</td>
+                <!-- /TMPL_UNLESS-->
+
+				<td>
+				<!-- TMPL_IF NAME="XSLTResultsDisplay" -->
                 <!-- TMPL_VAR NAME="XSLTResultsRecord" -->
-                <td>
-                    <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
-                    <img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="amazonisbn" -->.01.TZZZZZZZ.jpg" alt="" class="thumbnail" /></a>
-                    <!-- TMPL_IF NAME="GoogleJackets" --><div style="block" title="<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" id="<!-- TMPL_VAR name="amazonisbn" -->" class="gbs-thumbnail"></div><!-- /TMPL_IF -->
-                </td>
-                <tr>
-                <td></td><td></td><td style="size:65%; color:grey;"><!-- TMPL_IF Name="searchhighlightblob" --><p class="searchhighlightblob">Match: <!-- TMPL_VAR NAME="searchhighlightblob" --></p><!-- /TMPL_IF --></td><td></td>
-                </tr>
-            <!-- TMPL_ELSE -->
-                    <td><!-- TMPL_IF NAME="AmazonContent" -->
-                        <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_IF NAME="isbn" --><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.TZZZZZZZ.jpg" alt="" class="thumbnail" /><!-- TMPL_ELSE --><img src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="" class="thumbnail" /><!-- /TMPL_IF -->
-                        </a>
-                        <!-- /TMPL_IF -->
-                        <!-- TMPL_UNLESS NAME="item-level_itypes" -->
-                        <!-- TMPL_IF name="imageurl" -->
-                        <img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" />
-                        <!-- TMPL_ELSE -->
-						  <!-- TMPL_IF NAME="BakerTaylorEnabled" -->
-						  <!-- TMPL_IF NAME="clean_isbn" --><a href="https://<!-- TMPL_VAR name="BakerTaylorBookstoreURL" ESCAPE="HTML" --><!-- TMPL_VAR name="clean_isbn" -->">
-						  <img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR name="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR name="clean_isbn" -->" />
-						  </a>
-                          <!-- TMPL_ELSE -->
-							(No clean ISBN.)
-                          <!-- /TMPL_IF -->
-                          <!-- TMPL_ELSE -->
-                            <!-- TMPL_IF name="imageurl" --><img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" />
-                            <!-- TMPL_ELSE --><!-- TMPL_VAR name="description" -->
-                            <!-- /TMPL_IF -->
-                          <!-- /TMPL_IF -->
-                        <!-- /TMPL_IF -->
-                        <!-- /TMPL_UNLESS -->
-                    </td>
-                    <td><!-- TMPL_VAR NAME="result_number" -->. <!-- TMPL_IF name="BiblioDefaultViewmarc" --><a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" title="View details for this title"><!-- TMPL_VAR NAME="title"  --> <!-- TMPL_VAR NAME="subtitle"  --></a><!-- TMPL_ELSE --><!-- TMPL_IF name="BiblioDefaultViewisbd" --><a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" title="View details for this title"><!-- TMPL_VAR NAME="title"  --> <!-- TMPL_VAR NAME="subtitle"  --></a><!-- TMPL_ELSE --><a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" title="View details for this title"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle"  --></a><!-- /TMPL_IF --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="author" -->by <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="author_nospan" ESCAPE="URL" -->" title="Search for works by this author"><!-- TMPL_VAR NAME="author" --></a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
-				<p> 
-						<!-- TMPL_IF name="place" --><!-- TMPL_VAR name="place" --> <!-- /TMPL_IF --><!-- TMPL_IF name="publishercode" --><!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF --><!-- TMPL_IF name="publicationyear" --> <!-- TMPL_VAR name="publicationyear" -->
-					<!-- TMPL_ELSE --><!-- TMPL_IF name="copyrightdate" --> <!-- TMPL_VAR name="copyrightdate" --><!-- /TMPL_IF --><!-- /TMPL_IF -->						
-						<!-- TMPL_IF name="pages" -->- <!-- TMPL_VAR name="pages" --><!-- /TMPL_IF -->
-						<!-- TMPL_IF name="notes" -->, <!-- TMPL_VAR name="notes" --><!-- /TMPL_IF -->
-						<!-- TMPL_IF name="size" -->, <!-- TMPL_VAR name="size" --><!-- /TMPL_IF -->
-						<!-- TMPL_IF name="timestamp" --> <i>(modified on <!-- TMPL_VAR name="timestamp" -->)</i><!-- /TMPL_IF -->
-				</p>
-                <!-- TMPL_VAR NAME="copyrightdate" -->
-        <!--TMPL_IF Name="searchhighlightblob"--><p class="searchhighlightblob"><!-- TMPL_VAR NAME="searchhighlightblob" --></p><!--/TMPL_IF-->
-				<p class="availability">
-					<!-- TMPL_IF NAME="available_items_loop" -->
-					<span class="available"><strong>Copies available:</strong>
-					<!-- TMPL_LOOP NAME="available_items_loop" -->
+				<!-- TMPL_ELSE -->
+				<!-- TMPL_IF name="BiblioDefaultViewmarc" --><a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" title="View details for this title"><!-- TMPL_VAR NAME="title"  --> <!-- TMPL_VAR NAME="subtitle"  --></a><!-- TMPL_ELSE --><!-- TMPL_IF name="BiblioDefaultViewisbd" --><a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" title="View details for this title"><!-- TMPL_VAR NAME="title"  --> <!-- TMPL_VAR NAME="subtitle"  --></a><!-- TMPL_ELSE --><a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" title="View details for this title"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle"  --></a><!-- /TMPL_IF --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="author" -->by <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="author_nospan" ESCAPE="URL" -->" title="Search for works by this author"><!-- TMPL_VAR NAME="author" --></a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+				<span class="results_summary"><span class="label">Publication:</span>
+                        <!-- TMPL_IF name="place" --><!-- TMPL_VAR name="place" --> <!-- /TMPL_IF --><!-- TMPL_IF name="publishercode" --><!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF --><!-- TMPL_IF name="publicationyear" --> <!-- TMPL_VAR name="publicationyear" -->
+                    <!-- TMPL_ELSE --><!-- TMPL_IF name="copyrightdate" --> <!-- TMPL_VAR name="copyrightdate" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="pages" -->- <!-- TMPL_VAR name="pages" --><!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="notes" -->, <!-- TMPL_VAR name="notes" --><!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="size" -->, <!-- TMPL_VAR name="size" --><!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="timestamp" --> <i>(modified on <!-- TMPL_VAR name="timestamp" -->)</i><!-- /TMPL_IF -->
+                </span>
+                <!-- TMPL_IF NAME="copyrightdate" --><span class="results_summary"><span class="label">Date:</span><!-- TMPL_VAR NAME="copyrightdate" --></span><!-- /TMPL_IF -->
+
+				<span class="results_summary">
+                <span class="label">Availability:</span>
+                    <!-- TMPL_IF NAME="available_items_loop" -->
+                    <span class="available"><strong>Copies available:</strong>
+                    <!-- TMPL_LOOP NAME="available_items_loop" -->
 
                     <!-- TMPL_IF NAME="singleBranchMode" -->
                         <!-- TMPL_VAR NAME="location" -->
@@ -229,64 +209,67 @@ $(document).ready(function(){
                         <!-- TMPL_VAR NAME="branchname" -->
                     <!-- /TMPL_IF -->
 
-					<!-- TMPL_IF name="OPACItemsResultsDisplay" -->
+                    <!-- TMPL_IF name="OPACItemsResultsDisplay" -->
                         <!-- TMPL_IF NAME="location" --><!-- TMPL_VAR NAME="location" --><!-- /TMPL_IF -->
                         <!-- TMPL_IF NAME="itemcallnumber" -->[<a href="/cgi-bin/koha/opac-search.pl?q=callnum:<!-- TMPL_VAR NAME="itemcallnumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="itemcallnumber" --></a>]<!-- /TMPL_IF -->
                     <!-- /TMPL_IF -->
-					(<!-- TMPL_VAR NAME="count" -->),
-					<!-- /TMPL_LOOP -->
-					</span>
-					<!-- TMPL_ELSE -->
-					<span class="unavailable">No items available:</span>
-					<!-- /TMPL_IF -->
-					<span class="unavailable">
-					<!-- TMPL_IF NAME="onloancount" --> On loan (<!-- TMPL_VAR NAME="onloancount" -->), <!-- /TMPL_IF -->
-					<!-- TMPL_IF NAME="wthdrawncount" --> Withdrawn (<!-- TMPL_VAR NAME="wthdrawncount" -->), <!-- /TMPL_IF -->
-					<!-- TMPL_UNLESS NAME="hidelostitems" --><!-- TMPL_IF NAME="itemlostcount" --> Lost (<!-- TMPL_VAR NAME="itemlostcount" -->),<!-- /TMPL_IF --><!-- /TMPL_UNLESS -->
-					<!-- TMPL_IF NAME="damagedcount" --> Damaged (<!-- TMPL_VAR NAME="damagedcount" -->),<!-- /TMPL_IF -->
-					<!-- TMPL_IF NAME="orderedcount" --> On order (<!-- TMPL_VAR NAME="orderedcount" -->),<!-- /TMPL_IF -->
-					</span>
-				</p>
+                    (<!-- TMPL_VAR NAME="count" -->),
+                    <!-- /TMPL_LOOP -->
+                    </span>
+                    <!-- TMPL_ELSE -->
+                    <span class="unavailable">No items available:</span>
+                    <!-- /TMPL_IF -->
+                    <span class="unavailable">
+                    <!-- TMPL_IF NAME="onloancount" --> On loan (<!-- TMPL_VAR NAME="onloancount" -->), <!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="wthdrawncount" --> Withdrawn (<!-- TMPL_VAR NAME="wthdrawncount" -->), <!-- /TMPL_IF -->
+                    <!-- TMPL_UNLESS NAME="hidelostitems" --><!-- TMPL_IF NAME="itemlostcount" --> Lost (<!-- TMPL_VAR NAME="itemlostcount" -->),<!-- /TMPL_IF --><!-- /TMPL_UNLESS -->
+                    <!-- TMPL_IF NAME="damagedcount" --> Damaged (<!-- TMPL_VAR NAME="damagedcount" -->),<!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="orderedcount" --> On order (<!-- TMPL_VAR NAME="orderedcount" -->),<!-- /TMPL_IF -->
+                    </span>
+                </span>
 
-				<p><!-- TMPL_IF name="RequestOnOpac" --><!-- TMPL_UNLESS NAME="norequests" --><!-- TMPL_IF NAME="opacuserlogin" --><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a><!-- /TMPL_IF --><!-- /TMPL_UNLESS --><!-- /TMPL_IF -->
-				<!--TMPL_IF EXPR="opacbookbag || virtualshelves" -->
-					<input type="checkbox" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" title="Click to add to cart" />
-					<label for="bib<!-- TMPL_VAR NAME="biblionumber" -->">
 				<!-- /TMPL_IF -->
-					<img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="Item Type <!-- TMPL_VAR NAME="ccode" -->" title="<!-- TMPL_VAR NAME="ccode" -->" />
-				<!--TMPL_IF EXPR="opacbookbag || virtualshelves" -->
-					</label>
-				<!-- /TMPL_IF -->
-				<!-- TMPL_IF name="itemcallnumber" -->
-                <a href="/cgi-bin/koha/opac-search.pl?q=callnum:<!-- TMPL_VAR NAME="itemcallnumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="itemcallnumber" --></a>
-				<!-- /TMPL_IF --></p>
+				<span class="results_summary"><span class="label">Actions:</span>
+				<!-- TMPL_IF name="RequestOnOpac" --><!-- TMPL_UNLESS NAME="norequests" --><!-- TMPL_IF NAME="opacuserlogin" --><a href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a><!-- add back when available 0 holds in queue--> <!-- /TMPL_IF --><!-- /TMPL_UNLESS --><!-- /TMPL_IF -->
 
-				</td>
-		<!-- /TMPL_IF --> <!-- this is possibly an extra from merge -->
+				<!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="loggedinusername" --><a class="addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">Save to Lists</a>
+    			<!-- /TMPL_IF --><!-- /TMPL_IF -->
+        		<!-- TMPL_IF NAME="opacbookbag" --><a class="addtocart" href="#" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">Add to Cart</a><!-- /TMPL_IF -->
+				</span>
+
+				<span class="results_summary">
+				<span class="label">Call Number:</span> <!-- TMPL_VAR NAME="cn_class" --> <!-- TMPL_VAR NAME="cn_item" -->
+				</span>	
 				<!-- TMPL_IF NAME="TagsEnabled" -->
-				<!-- TMPL_IF NAME="TagsShowOnList" -->
-				<td><div class="tagcell">
-					<!-- TMPL_IF NAME="TagLoop" -->
-						<span class="tagtitle">Tags:</span>
-						<ul><!-- TMPL_LOOP NAME="TagLoop" --><li><a href="/cgi-bin/koha/opac-search.pl?tag=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->&amp;q=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="term" --></a> <span class="weight">(<!-- TMPL_VAR NAME="weight_total" -->)</span></li>
-							<!-- /TMPL_LOOP -->
-						</ul>
-					<!-- /TMPL_IF -->
-					<!-- TMPL_IF NAME="TagsInputOnList" -->
-					<form name="tagform<!-- TMPL_VAR NAME="biblionumber" -->" method="post" action="/cgi-bin/koha/opac-tags.pl">
-						<label for="newtag<!-- TMPL_VAR NAME="biblionumber" -->">New tag:</label>
-						<input name="newtag<!-- TMPL_VAR NAME="biblionumber" -->" id="newtag<!-- TMPL_VAR NAME="biblionumber" -->" maxlength="100" />
-						<input name="tagbutton" class="tagbutton" type="submit" value="Add" />
-					</form>
-					<br />
-					<span id="tagstatus<!-- TMPL_VAR NAME="biblionumber" -->" class="tagstatus" style="display:none;">
-						Tag status here.
+                <!-- TMPL_IF NAME="TagsShowOnList" -->
+						<span class="results_summary">
+                <!-- TMPL_IF NAME="TagLoop" -->
+                        <span class="label">Tags:</span>
+                        <ul style="display: inline; list-style: none;"><!-- TMPL_LOOP NAME="TagLoop" --><li style="display: inline; list-style: none;"><a href="/cgi-bin/koha/opac-search.pl?tag=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->&amp;q=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="term" --></a> <span class="weight">(<!-- TMPL_VAR NAME="weight_total" -->)</span></li>
+                            <!-- /TMPL_LOOP -->
+                        </ul>
+               	<!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="TagsInputOnList" -->
+                    <form name="tagform<!-- TMPL_VAR NAME="biblionumber" -->" method="post" action="/cgi-bin/koha/opac-tags.pl">
+                        <label for="newtag<!-- TMPL_VAR NAME="biblionumber" -->">New tag:</label>
+                        <input name="newtag<!-- TMPL_VAR NAME="biblionumber" -->" id="newtag<!-- TMPL_VAR NAME="biblionumber" -->" maxlength="100" />
+                        <input name="tagbutton" class="tagbutton" type="submit" value="Add" />
+                    </form>
+                    <span id="tagstatus<!-- TMPL_VAR NAME="biblionumber" -->" class="tagstatus" style="display:none;">
+                        Tag status here.
+                    </span>
+                <!-- /TMPL_IF -->
 					</span>
-					<!-- /TMPL_IF -->
-					</div>
+				<!-- /TMPL_IF -->
+                <!-- /TMPL_IF -->
+				<!-- TMPL_IF Name="searchhighlightblob" --><span class="results_summary"><span class="label">Match:</span> <!-- TMPL_VAR NAME="searchhighlightblob" --></span><!-- /TMPL_IF -->
+				</td><td>
+					<a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
+                    <!-- TMPL_IF NAME="AmazonContent" --><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="amazonisbn" -->.01.TZZZZZZZ.jpg" alt="" class="thumbnail" /><!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="GoogleJackets" --><div style="block" title="<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" id="<!-- TMPL_VAR name="amazonisbn" -->" class="gbs-thumbnail"></div><!-- /TMPL_IF -->
+                    </a>
+                    <!-- TMPL_IF NAME="BakerTaylorEnabled" --><!-- TMPL_IF NAME="clean_isbn" --><a href="https://<!-- TMPL_VAR name="BakerTaylorBookstoreURL" ESCAPE="HTML" --><!-- TMPL_VAR name="clean_isbn" -->"><img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR name="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR name="clean_isbn" -->" /></a><!-- /TMPL_IF --><!-- /TMPL_IF -->
 				</td>
-				<!-- /TMPL_IF -->
-				<!-- /TMPL_IF -->
                 </tr>
                 <!-- /TMPL_LOOP -->
             </table>

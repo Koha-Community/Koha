@@ -488,8 +488,8 @@
 <input type="submit" name="save" value="Go" /></form></div>
 
 		<!-- TMPL_IF NAME="TagsShowOnDetail" -->
-		<div class="detailtagcell"><span class="tagtitle">Tags:</span>
 		<!-- TMPL_IF NAME="TagLoop" -->
+		<div class="detailtagcell"><span class="tagtitle">Tags:</span>
 			<ul><!-- TMPL_LOOP NAME="TagLoop" -->
 			<li><a href="/cgi-bin/koha/opac-search.pl?tag=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->&amp;q=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="term" ESCAPE="HTML" --></a> <span class="weight">(<!-- TMPL_VAR NAME="weight_total" -->)</span></li>
 			<!-- /TMPL_LOOP -->
@@ -505,8 +505,8 @@
 			<span id="tagstatus<!-- TMPL_VAR NAME="biblionumber" -->" class="tagstatus" style="display:none;">
 				Tag status here.
 			</span>
-		<!-- /TMPL_IF -->
 		</div>
+		<!-- /TMPL_IF -->
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="BakerTaylorContentURL" -->
 		<div id="bakertaylor" class="detailtagcell">
