@@ -14,43 +14,42 @@
 	 *  displayOther.
 	 *  This function display the select or an textaera to write a reason.
 	 */
-	function displayOther(id,show,hide) {
-		$("#"+hide+id).hide();
-		$("#"+show+id).show();
-	}
+	function displayOther(id,show,hide) {$("#"+hide+id).hide(); $("#"+show+id).show(); }
 	$(document).ready(function() {
-    $('#suggestiontabs > ul').tabs({
-		select: function(ui) {
-	        $("#loadingtab").show();
-	    },
-    	show: function(ui) {
-	        $("#loadingtab").hide();
-	    }
-	}); 
-	$("#acceptedt").tablesorter({
-		headers: { 0: { sorter: 'articles' },3:{sorter: false},4:{sorter: false},5:{sorter: false},6:{sorter: false},7:{sorter: false}}
-	});
-	$("#acceptedt").bind("sortStart",function() {
-		$("#sorting").show();
-	}).bind("sortEnd",function() {
-		$("#sorting").hide();
-	});
-	$("#pendingt").tablesorter({
-    headers: { 0: { sorter: 'articles' },3:{sorter: false},4:{sorter: false},5:{sorter: false},6:{sorter: false},7:{sorter: false}}
-	});
-	$("#pendingt").bind("sortStart",function() {
-		$("#sorting").show();
-	}).bind("sortEnd",function() {
-		$("#sorting").hide();
-	});
-	$("#rejectedt").tablesorter({
-    headers: { 0: { sorter: 'articles' },3:{sorter: false},4:{sorter: false},5:{sorter: false},6:{sorter: false},7:{sorter: false}}
-	});
-	$("#rejectedt").bind("sortStart",function() {
-		$("#sorting").show();
-	}).bind("sortEnd",function() {
-		$("#sorting").hide();
-	});
+	    $('#suggestiontabs > ul').tabs({
+			select: function(ui) {
+		        $("#loadingtab").show();
+		    },
+	    	show: function(ui) {
+		        $("#loadingtab").hide();
+		    }
+		});
+		$.tablesorter.defaults.widgets = ['zebra'];
+		$("#acceptedt").tablesorter({
+			headers: { 0: { sorter: 'articles' },3:{sorter: false},4:{sorter: false},5:{sorter: false},6:{sorter: false},7:{sorter: false}}
+		});
+		$("#acceptedt").bind("sortStart",function() {
+			$("#sorting").show();
+		}).bind("sortEnd",function() {
+			$("#sorting").hide();
+		});
+		$("#pendingt").tablesorter({
+	    headers: { 0: { sorter: 'articles' },3:{sorter: false},4:{sorter: false},5:{sorter: false},6:{sorter: false},7:{sorter: false}}
+		});
+		$("#pendingt").bind("sortStart",function() {
+			$("#sorting").show();
+		}).bind("sortEnd",function() {
+			$("#sorting").hide();
+		});
+		$("#rejectedt").tablesorter({
+	    headers: { 0: { sorter: 'articles' },3:{sorter: false},4:{sorter: false},5:{sorter: false},6:{sorter: false},7:{sorter: false}}
+		});
+		$("#rejectedt").bind("sortStart",function() {
+			$("#sorting").show();
+		}).bind("sortEnd",function() {
+			$("#sorting").hide();
+		});
+			
 		$("div[id*=other-reason]").hide();
 		$("input[name*=other-reason]").focus(function(){ $(this).val(""); });
 		$("select[name*=reason]").change(function(){
@@ -63,23 +62,34 @@
 			displayOther(sid,"select-reason","other-reason");
 			$("#reason"+sid).find("option[value='']").attr("selected","selected");
 		});
+		$("a[href=#markall]").click(function(){
+			if($(this).attr("id").indexOf("markallop") > -1){
+				// select each identical option, clear each input
+				var selectedOp = $(this).prev().find("option:selected").val();
+				var container = $(this).attr("id").replace(/markallop/,"");
+				$("#"+container+" div[id*=other-reason]").hide();
+				$("#"+container+" div[id*=select-reason]").show();
+				$("#"+container+" select[name*=reason]").not("select[name*=all]").children().each(function(){
+					if($(this).val() == selectedOp){ $(this).attr("selected","selected"); }
+				});
+			} else {
+				// set each input value, deselect options
+				var inputText = $(this).prev().val();
+				var container = $(this).attr("id").replace(/markalltext/,"");
+				// hide all selects
+				$("#"+container+" input[name*=other-reason]").not("input[name*=all]").each(function(){
+					// show all text inputs and populate
+					$(this).val(inputText).parent("div").show();
+					$("div[class=select"+container+"]").hide();
+				});
+				
+			}
+		});
 	}); 
 // ]]>
 </script>
-<style>
-.overlay {
-	top: 180px;
-	left: 50%;
-	position: absolute;
-	margin-left: -100px;
-	width: 200px;
-	text-align: center;
-	display: none;
-	margin-top: -10px;
-	background: #eeffd4;
-	padding : .5em;
-	color: #000;
-}
+<style type="text/css">
+.overlay { top: 180px; left: 50%; position: absolute; margin-left: -100px; width: 200px; text-align: center; display: none; margin-top: -10px; background: #eeffd4; padding : .5em; color: #000; }
 </style>
 </head>
 <body>
@@ -106,9 +116,9 @@
 	
  <!--TMPL_LOOP Name="suggestions"-->
   <div id="<!--TMPL_VAR Name="suggestiontype"-->">
-<form name="f<!--TMPL_VAR Name="suggestiontype"-->" method="post" action="/cgi-bin/koha/suggestion/acceptorreject.pl">
+<form name="f<!--TMPL_VAR Name="suggestiontype"-->" method="post" action="/cgi-bin/koha/suggestion/acceptorreject.pl#<!--TMPL_VAR Name="suggestiontype"-->">
  <input type="hidden" name="op" value="aorr_confirm" />
- <input type="hidden" name="suggestiontype" value="<!--TMPL_VAR Name="suggestiontype"-->" >
+ <input type="hidden" name="suggestiontype" value="<!--TMPL_VAR Name="suggestiontype"-->" />
 
     <!-- TMPL_IF NAME="suggestions_loop" -->
 	<!--TMPL_IF EXPR="suggestiontype eq 'accepted'"-->
@@ -152,11 +162,12 @@
     <!--TMPL_IF EXPR="suggestiontype ne 'pending'"-->
                 <td>
                 <!--TMPL_VAR Name="reason"-->
+      <input type="hidden" name="initial-reason<!-- TMPL_VAR name="suggestionid" -->" value="<!--TMPL_VAR Name="reason" ESCAPE="HTML"-->"  />
       
                 </td>
     <!--/TMPL_IF -->
                 <td>
-		            <div id="select-reason<!-- TMPL_VAR NAME="suggestionid" -->">
+		            <div id="select-reason<!-- TMPL_VAR NAME="suggestionid" -->" class="select<!-- TMPL_VAR NAME="suggestiontype" -->">
                         <!-- TMPL_IF NAME="reasonsloop" --><select id="reason<!-- TMPL_VAR NAME="suggestionid" -->" name="reason<!-- TMPL_VAR NAME="suggestionid" -->">
 			                <option value=""> -- Choose a reason -- </option>
                             <!-- TMPL_LOOP NAME="reasonsloop" -->
@@ -166,14 +177,14 @@
                         </select><!-- TMPL_ELSE --><span class="problem">No reasons defined in <a href="/cgi-bin/koha/admin/authorised_values.pl">authorised values</a></span><!-- /TMPL_IF -->
 		    </div>
 		    <div id="other-reason<!-- TMPL_VAR NAME="suggestionid" -->">
-			<input type="text" size="31" name="other-reason<!-- TMPL_VAR name="suggestionid" -->" value="please note your reason here..."  />
+			<input type="text" size="31" name="other-reason<!-- TMPL_VAR name="suggestionid" -->" value="please note your reason here..." />
 			<p><a href="#back<!-- TMPL_VAR NAME="suggestionid" -->">back to list</a></p>
 		    </div>
 			
                 </td>
                 <td>
     <!--TMPL_IF EXPR="suggestiontype eq 'accepted'"-->
-                        <input id="a<!--TMPL_VAR name="suggestionid" -->" name="<!--TMPL_VAR name="suggestionid" -->" type="radio" value="ACCEPTED" disabled="disabled"  />
+                        <input id="a<!--TMPL_VAR name="suggestionid" -->" name="<!--TMPL_VAR name="suggestionid" -->" type="radio" value="ACCEPTED" readonly="readonly" checked="checked"  />
     
     <!--TMPL_ELSE-->  
                         <input id="a<!--TMPL_VAR name="suggestionid" -->" name="<!--TMPL_VAR name="suggestionid" -->" type="radio" value="ACCEPTED" />
@@ -181,7 +192,7 @@
             </td>
             <td>
     <!--TMPL_IF EXPR="suggestiontype eq 'rejected'"-->
-                        <input id="r<!--TMPL_VAR name="suggestionid" -->" name="<!--TMPL_VAR name="suggestionid" -->" type="radio" value="REJECTED" disabled="disabled" />
+                        <input id="r<!--TMPL_VAR name="suggestionid" -->" name="<!--TMPL_VAR name="suggestionid" -->" type="radio" value="REJECTED" readonly="readonly" checked="checked" />
     
     <!--TMPL_ELSE-->  
                         <input id="r<!--TMPL_VAR name="suggestionid" -->"  name="<!--TMPL_VAR name="suggestionid" -->" type="radio" value="REJECTED" />
@@ -205,9 +216,9 @@
       </div>
 	
         <div id="other-reason<!-- TMPL_VAR NAME="suggestiontype" -->all">
-    <label for="other-reason<!-- TMPL_VAR NAME="suggestiontype" -->all">Enter a reason for all marked entries:</label>
-      <input type="text" size="31" id="other-reason<!-- TMPL_VAR NAME="suggestiontype" -->all" name="other-reason<!-- TMPL_VAR NAME="suggestiontype" -->all" value="please note your reason here..." /> 
-    </div>
+		<label for="other-reason<!-- TMPL_VAR NAME="suggestiontype" -->all">Enter a reason for all marked entries:</label>
+			<input type="text" size="31" id="select-other-reason<!-- TMPL_VAR NAME="suggestiontype" -->all" name="other-reason<!-- TMPL_VAR NAME="suggestiontype" -->all" value="please note your reason here..." /> <a href="#markall" id="markalltext<!-- TMPL_VAR NAME="suggestiontype" -->">Mark all with this reason</a> <a href="#back<!-- TMPL_VAR NAME="suggestiontype" -->all">Cancel</a>
+		</div>
   </fieldset>
         <fieldset class="action"><input type="submit" value="Change Status" /></fieldset>
 </form>
