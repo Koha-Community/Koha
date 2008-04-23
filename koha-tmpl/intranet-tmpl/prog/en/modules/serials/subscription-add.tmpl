@@ -763,8 +763,14 @@ function Find_ISSN(f)
 
 function Check(f) {
     if (f.aqbooksellerid.value.length==0) {
-        alert(_("You must choose a supplier"));
-    } else if (f.biblionumber.value.length==0) {
+        input_box = confirm(_("If you wish to claim late or missing issues you must link this subscription to a vendor. Click OK to ignore or Cancel to return and enter a vendor"));
+		if (input_box==true) {
+		}
+		else {
+			return false;
+		}
+    }
+	if (f.biblionumber.value.length==0) {
         alert(_("You must choose or create a biblio"));
     } else if(f.startdate.value.length != 0 && f.sublength.value > 0) {
         if (f.irreg_check.value == 1) {
