@@ -581,8 +581,8 @@ sub add_layout {
     $query2 = "INSERT INTO labels_conf
             ( barcodetype, title, subtitle, isbn,issn, itemtype, barcode,
               dewey, classification, subclass, itemcallnumber, author, printingtype,
-                guidebox, startlabel, layoutname, active )
-               values ( ?, ?, ?, ?, ?, ?, ?,  ?,?, ?, ?, ?, ?, ?,?,?, 1 )";
+                guidebox, startlabel, layoutname, formatstring, active )
+               values ( ?, ?,?, ?, ?, ?, ?, ?,  ?,?, ?, ?, ?, ?, ?,?,?, 1 )";
     $sth2 = $dbh->prepare($query2);
     $sth2->execute(
         $barcodetype, $title, $subtitle, $isbn, $issn,
