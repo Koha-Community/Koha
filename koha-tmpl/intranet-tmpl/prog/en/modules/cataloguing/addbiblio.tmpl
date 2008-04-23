@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Cataloging &rsaquo; <!-- TMPL_IF NAME="biblionumber" -->Edit MARC Record Number <!-- TMPL_VAR name="biblionumber" --><!-- TMPL_ELSE -->Add MARC Record<!-- /TMPL_IF --></title>
+<title>Koha &rsaquo; Cataloging &rsaquo; <!-- TMPL_IF NAME="biblionumber" -->Editing <!-- TMPL_VAR NAME="title" --> (Record Number <!-- TMPL_VAR name="biblionumber" -->)<!-- TMPL_ELSE -->Add MARC Record<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/yui/plugins/bubbling-min.js"></script>
 <script type="text/javascript">
@@ -431,7 +431,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 //]]>
 </script>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloguing</a>  &rsaquo; <!-- TMPL_IF NAME="biblionumber" -->Edit MARC Record Number <!-- TMPL_VAR name="biblionumber" --> ( <!-- TMPL_VAR NAME="title" --> )<!-- TMPL_ELSE -->Add MARC Record<!-- /TMPL_IF --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloguing</a>  &rsaquo; <!-- TMPL_IF NAME="biblionumber" -->Editing <em><!-- TMPL_VAR NAME="title" --></em> (Record Number <!-- TMPL_VAR name="biblionumber" -->)<!-- TMPL_ELSE -->Add MARC Record<!-- /TMPL_IF --></div>
 
 <div id="doc" class="yui-t7">
 
@@ -441,7 +441,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 
 
 
-<h1><!-- TMPL_IF NAME="biblionumber" -->Edit MARC Record Number <!-- TMPL_VAR name="biblionumber" --></h1><h2> ( <!-- TMPL_VAR NAME="title" --> )</h2><!-- TMPL_ELSE -->Add MARC Record</h1><!-- /TMPL_IF -->
+<h1><!-- TMPL_IF NAME="biblionumber" -->Editing <em><!-- TMPL_VAR NAME="title" --></em> (Record Number <!-- TMPL_VAR name="biblionumber" -->)</h1><!-- TMPL_ELSE -->Add MARC Record</h1><!-- /TMPL_IF -->
 
 <!-- TMPL_UNLESS name="number" -->
     <!-- show duplicate warning on tab 0 only -->
@@ -545,7 +545,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 	<div class="tag" id="tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->">
         <div class="tag_title" id="div_indicator_tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->">
             <!-- TMPL_UNLESS name="hide_marc" -->
-                <span title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --></span>
+                <span class="tagnum" title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --></span>
                 <!-- TMPL_IF NAME="fixedfield" -->
 	                <input tabindex="1" class="indicator flat" type="text" style="display:none;" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->" size="2" maxlength="2" value="<!-- TMPL_VAR NAME="indicator" -->" />
                 <!-- TMPL_ELSE -->
@@ -570,27 +570,29 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 	
         <!-- TMPL_LOOP NAME="subfield_loop" -->
             <!--  One line on the marc editor -->
-            <div class="subfield_line" style="<!-- TMPL_VAR NAME='visibility' -->;" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
+            <div class="subfield_line" style="<!-- TMPL_VAR NAME='visibility' -->; float: left; clear: left;" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
             
                 <!--TMPL_UNLESS NAME="advancedMARCEditor" -->
                     <label for="tag_<!-- TMPL_VAR NAME='tag'-->_subfield_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->" <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> class="labelsubfield">
                 <!-- /TMPL_UNLESS --> 
                 
                 <!-- TMPL_UNLESS name="hide_marc" -->
-                <!-- TMPL_IF NAME="fixedfield" --> 
+                <span class="subfieldcode"><!-- TMPL_IF NAME="fixedfield" --> 
                         <img class="buttonUp" style="display:none;" src="<!-- TMPL_VAR NAME="themelang" -->/../img/up.png" onclick="upSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->')" alt="Move Up" title="Move Up" />
                     <!-- TMPL_ELSE -->
                         <img class="buttonUp" src="<!-- TMPL_VAR NAME="themelang" -->/../img/up.png" onclick="upSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->')" alt="Move Up" title="Move Up" />
-                    <!-- /TMPL_IF --> 
+                    <!-- /TMPL_IF -->
                         <input title="<!-- TMPL_VAR NAME='marc_lib_plain' -->" style=" <!-- TMPL_IF NAME="fixedfield" -->display:none; <!-- /TMPL_IF -->border:0;" type="text" name="tag_<!-- TMPL_VAR NAME='tag'-->_code_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->" value="<!-- TMPL_VAR NAME="subfield" -->" size="1" maxlength="1" class="flat" tabindex="-1" />
+ </span>
                 <!-- TMPL_ELSE -->
                     <input type="hidden" name="tag_<!-- TMPL_VAR NAME='tag'-->_code_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->" value="<!-- TMPL_VAR NAME="subfield" -->" />
+ </span>
                 <!-- /TMPL_UNLESS -->
             
                 <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
-                    <!-- TMPL_IF name="mandatory" --><span class="subfield_mandatory"><!-- /TMPL_IF -->
+                    <!-- TMPL_IF name="mandatory" --><span class="subfield subfield_mandatory"><!-- TMPL_ELSE --><span class="subfield"><!-- /TMPL_IF -->
                         <!-- TMPL_VAR NAME="marc_lib_plain" -->
-                    <!-- TMPL_IF name="mandatory" --></span><!-- /TMPL_IF -->
+                    </span>
                     </label>
                 <!-- /TMPL_UNLESS -->
                 
@@ -609,7 +611,6 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
     <!-- /TMPL_LOOP -->
     </div>
 <!-- /TMPL_LOOP -->
-
 </div>
 </form>
 
