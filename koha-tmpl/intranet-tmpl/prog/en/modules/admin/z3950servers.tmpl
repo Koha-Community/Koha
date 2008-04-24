@@ -180,11 +180,17 @@
 <!-- TMPL_IF NAME="else" -->
 
 <div id="toolbar">
+		<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pack.js"></script>
 	<script type="text/javascript">
 	//<![CDATA[
 	// prepare DOM for YUI Toolbar
 	 $(document).ready(function() {
 	    yuiToolbar();
+		<!-- TMPL_IF NAME="loop" -->$.tablesorter.defaults.widgets = ['zebra'];
+		$("#serverst").tablesorter({
+			sortList: [[0,0]],
+			headers: { 2: {sorter:false},3: { sorter: false },4: { sorter: false },7: { sorter: false },8: { sorter: false },9: { sorter: false },10: { sorter: false }}
+		});<!-- /TMPL_IF -->
 	 });
 	// YUI Toolbar Functions
 	function yuiToolbar() {
@@ -195,17 +201,17 @@
 	<li><a id="newserver" href="/cgi-bin/koha/admin/z3950servers.pl?op=add_form">New z39.50 Server</a></li>
 </ul></div>
 
-<h3>Z39.50 Servers Admininistration</h3>
+<h3>Z39.50 Servers Administration</h3>
 
         <!-- TMPL_IF NAME="searchfield" -->
                 You searched for <!-- TMPL_VAR NAME="searchfield" -->
         <!-- /TMPL_IF -->		
-<table>
-                <tr><th>Target</th><th>Hostname/Port</th><th>Database</th><th>Userid</th><th>Password</th><th>Checked</th><th>Rank</th>       			<th>Syntax</th><th>Encoding</th><th colspan="2">&nbsp;</th>
-                </tr>
-                <!-- TMPL_LOOP NAME="loop" -->
-               <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF --><td><!-- TMPL_VAR NAME="name" --></td><td><!-- TMPL_VAR NAME="host" -->:<!-- TMPL_VAR NAME="port" --></td><td><!-- TMPL_VAR NAME="db" --></td><td><!-- TMPL_VAR NAME="userid" --></td><td><!-- TMPL_VAR NAME="password" --></td><td><!-- TMPL_VAR NAME="checked" --></td><td><!-- TMPL_VAR NAME="rank" --></td>			<td><!-- TMPL_VAR NAME="syntax" --></td><td><!-- TMPL_VAR NAME="encoding" --></td><td><a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="name" -->">Edit</a></td><td><a href="<!-- TMPL_VAR name="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="name" -->">Delete</a></td>                </tr>
-                <!-- /TMPL_LOOP -->
+<table id="serverst">
+                <thead><tr><th>Target</th><th>Hostname/Port</th><th>Database</th><th>Userid</th><th>Password</th><th>Checked</th><th>Rank</th>       			<th>Syntax</th><th>Encoding</th><th colspan="2">&nbsp;</th>
+                </tr></thead>
+                <tbody><!-- TMPL_LOOP NAME="loop" -->
+               <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF --><td><a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="name" -->"><!-- TMPL_VAR NAME="name" --></a></td><td><!-- TMPL_VAR NAME="host" -->:<!-- TMPL_VAR NAME="port" --></td><td><!-- TMPL_VAR NAME="db" --></td><td><!-- TMPL_VAR NAME="userid" --></td><td><!-- TMPL_VAR NAME="password" --></td><td><!-- TMPL_VAR NAME="checked" --></td><td><!-- TMPL_VAR NAME="rank" --></td>			<td><!-- TMPL_VAR NAME="syntax" --></td><td><!-- TMPL_VAR NAME="encoding" --></td><td><a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="name" -->">Edit</a></td><td><a href="<!-- TMPL_VAR name="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="name" -->">Delete</a></td>                </tr>
+                <!-- /TMPL_LOOP --></tbody>
 	</table>
 
 <!-- TMPL_IF NAME="offsetgtzero" --><form action="<!-- TMPL_VAR NAME="script_name" -->" method="get">
