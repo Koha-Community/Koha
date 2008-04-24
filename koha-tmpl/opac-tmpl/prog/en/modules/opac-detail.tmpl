@@ -3,10 +3,23 @@
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
 	 $(document).ready(function() {
+	 	$("#tagform").hide();
+		$("#addtagl").show();
 		$('#bibliodescriptions > ul').tabs();
+		$("#addtagl a").click(function(){
+			$("#addtagl").hide();
+			$("#tagform, #tagform a").show();
+		});
+		$("#tagform a").click(function(){
+			$("#addtagl").show();
+			$("#tagform").hide();
+		});
 	}); 
 //]]>
 </script>
+<style type="text/css">
+	#addtagl { display: none; }
+</style>
 <script type="text/javascript">                            
     var GB_ROOT_DIR = "/intranet-tmpl/prog/en/lib/greybox/";                               
 </script>
@@ -68,7 +81,7 @@
     <span class="results_summary"><span class="label">Series:</span>
             <!-- TMPL_LOOP NAME="MARCSERIES" -->
             <!-- TMPL_LOOP NAME="MARCSERIES_SUBFIELDS_LOOP" -->
-            <a href="/cgi-bin/koha/opac-search.pl?q=series:<!-- TMPL_VAR NAME="value"-->"><!-- TMPL_VAR NAME="value" --></a>
+            <a href="/cgi-bin/koha/opac-search.pl?q=se:<!-- TMPL_VAR NAME="value"-->"><!-- TMPL_VAR NAME="value" --></a>
             <!-- /TMPL_LOOP -->
             <!-- /TMPL_LOOP -->
     </span>
@@ -152,20 +165,22 @@
     </span>
     <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
+
 	<!-- TMPL_IF NAME="TagsShowOnDetail" -->
         <div class="results_summary">
         <!-- TMPL_IF NAME="TagLoop" -->
         <span class="label">Tags:</span>
-            <ul style="display: inline; list-style: none;"><!-- TMPL_LOOP NAME="TagLoop" -->
-            <li style="display: inline; list-style: none;"><a href="/cgi-bin/koha/opac-search.pl?tag=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->&amp;q=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="term" ESCAPE="HTML" --></a> <span class="weight">(<!-- TMPL_VAR NAME="weight_total" -->)</span></li>
+            <ul><!-- TMPL_LOOP NAME="TagLoop" -->
+            <li><a href="/cgi-bin/koha/opac-search.pl?tag=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->&amp;q=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="term" ESCAPE="HTML" --></a> <span class="weight">(<!-- TMPL_VAR NAME="weight_total" -->)</span></li>
             <!-- /TMPL_LOOP -->
-            </ul>
+            </ul><!-- TMPL_ELSE -->No tags for this title. 
         <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="TagsInputOnDetail" -->
-            <span class="label">New:</span>
-            <form name="tagform<!-- TMPL_VAR NAME="biblionumber" -->" method="post" action="/cgi-bin/koha/opac-tags.pl">
-                <input name="newtag<!-- TMPL_VAR NAME="biblionumber" -->" id="newtag<!-- TMPL_VAR NAME="biblionumber" -->" maxlength="100" />
-                <input name="tagbutton" class="tagbutton" type="submit" value="Add" />
+		<span class="label" id="addtagl"><a href="#">Add</a></span>
+         <form name="tagform<!-- TMPL_VAR NAME="biblionumber" -->" method="post" action="/cgi-bin/koha/opac-tags.pl" id="tagform">
+                <label for="newtag<!-- TMPL_VAR NAME="biblionumber" -->">New:</span><input name="newtag<!-- TMPL_VAR NAME="biblionumber" -->" id="newtag<!-- TMPL_VAR NAME="biblionumber" -->" maxlength="100" />
+                <input name="tagbutton" class="input tagbutton" type="submit" value="Add" />
+				<a href="#">Cancel</a>
             </form>
             <br />
             <span id="tagstatus<!-- TMPL_VAR NAME="biblionumber" -->" class="tagstatus" style="display:none;">
