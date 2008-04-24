@@ -573,6 +573,7 @@ sub AddAuthority {
       my $sth=$dbh->prepare("update auth_header set marc=?,marcxml=? where authid=?");
       $sth->execute($record->as_usmarc,$record->as_xml_record($format),$authid);
       $sth->finish;
+      $dbh->do("unlock tables");
   }
   ModZebra($authid,'specialUpdate',"authorityserver",$oldRecord,$record);
   return ($authid);
