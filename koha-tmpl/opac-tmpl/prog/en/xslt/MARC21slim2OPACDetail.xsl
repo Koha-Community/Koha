@@ -6,8 +6,7 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   exclude-result-prefixes="marc items">
     <xsl:import href="MARC21slimUtils.xsl"/>
-    <xsl:output method="html" indent="yes"/>
-
+	<xsl:output method = "xml" indent="yes" omit-xml-declaration = "yes" />
     <xsl:template match="/">
             <xsl:apply-templates/>
     </xsl:template>
@@ -26,7 +25,7 @@
                     </xsl:choose>
                 </xsl:when>
                 <xsl:when test="$leader6='t'">BK</xsl:when>
-                <xsl:when test="$leader6='p'">MM</xsl:when>
+                <xsl:when test="$leader6='p'">MX</xsl:when>
                 <xsl:when test="$leader6='m'">CF</xsl:when>
                 <xsl:when test="$leader6='e' or $leader6='f'">MP</xsl:when>
                 <xsl:when test="$leader6='g' or $leader6='k' or $leader6='o' or $leader6='r'">VM</xsl:when>
@@ -59,12 +58,6 @@
         </xsl:variable>
 
         <!-- Title Statement -->
-<style type="text/css">
-    .label {
-        font-size: 80%;
-        color: grey;
-    }
-</style>
         <div id="views">
         <xsl:if test="marc:datafield[@tag=245]">
         <h1>
@@ -77,7 +70,7 @@
         </xsl:if>
 
         <span class="views"><span id="Normalview">Normal View</span> 
-        <a id="MARCview" href="/cgi-bin/koha/opac-showmarc.pl?id={marc:datafield[@tag=999]/marc:subfield[@code='c']}" title="MARC" rel="gb_page_center[600,500]">MARC View</a>
+        <a id="MARCviewPop" href="/cgi-bin/koha/opac-showmarc.pl?id={marc:datafield[@tag=999]/marc:subfield[@code='c']}" title="MARC" rel="gb_page_center[600,500]">MARC View</a>
         <a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber={marc:datafield[@tag=999]/marc:subfield[@code='c']}" title="MARC">Expanded MARC View</a>
         <a id="ISBDview" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber={marc:datafield[@tag=999]/marc:subfield[@code='c']}">Card View (ISBD)</a></span>
         </div> 
@@ -133,20 +126,19 @@
         </xsl:when>
         </xsl:choose>
 
-        <div class="summary">
-
         <xsl:if test="$materialTypeCode">
-        <p><span class="label">Type: </span>
-        <img src="/opac-tmpl/prog/famfamfam/{$materialTypeCode}.png"/><xsl:value-of select="$materialTypeLabel"/>
-        </p>
+        <span class="results_summary"><span class="label">Type: </span>
+        <xsl:element name="img"><xsl:attribute name="src">/opac-tmpl/prog/famfamfam/<xsl:value-of select="$materialTypeCode"/>.png</xsl:attribute><xsl:attribute name="alt">typeicon</xsl:attribute></xsl:element>
+		<xsl:value-of select="$materialTypeLabel"/>
+        </span>
         </xsl:if>
         <xsl:if test="marc:datafield[@tag=050]">
-        <p><span class="label">Library of Congress Classification: </span>
+        <span class="results_summary"><span class="label">Library of Congress Classification: </span>
         <xsl:value-of select="$lcc"/>
-        </p>
+        </span>
         </xsl:if>
         <xsl:if test="marc:datafield[@tag=440 or @tag=490]">
-        <p><span class="label">Series: </span>
+        <span class="results_summary"><span class="label">Series: </span>
         <xsl:for-each select="marc:datafield[@tag=440]">
             <xsl:call-template name="chopPunctuation">
                             <xsl:with-param name="chopString">
@@ -172,40 +164,40 @@
                     <xsl:call-template name="part"/>
         <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
         </xsl:for-each>
-        </p>
+        </span>
         </xsl:if>
         <xsl:if test="marc:datafield[@tag=260]">
-        <p><span class="label">Publisher: </span>
+        <span class="results_summary"><span class="label">Publisher: </span>
             <xsl:for-each select="marc:datafield[@tag=260]">
                     <xsl:call-template name="subfieldSelect">
                         <xsl:with-param name="codes">bcg</xsl:with-param>
                     </xsl:call-template>
                     <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
             </xsl:for-each>
-        </p> 
+        </span> 
         </xsl:if>
         <xsl:if test="marc:datafield[@tag=020]">
-        <p><span class="label">ISBN: </span>
+        <span class="results_summary"><span class="label">ISBN: </span>
         <!-- unAPI <abbr/> tag -->
         <xsl:for-each select="marc:datafield[@tag=020]">
         <xsl:variable name="isbn" select="marc:subfield[@code='a']"/>
         <abbr class="unapi-id" title="koha:isbn:{$isbn}"><xsl:value-of select="marc:subfield[@code='a']"/></abbr>
                 <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
         </xsl:for-each>
-        </p>
+        </span>
         </xsl:if>
 
         <xsl:if test="marc:datafield[@tag=022]">
-        <p><span class="label">ISSN: </span>
+        <span class="results_summary"><span class="label">ISSN: </span>
         <xsl:for-each select="marc:datafield[@tag=022]">
                 <xsl:value-of select="marc:subfield[@code='a']"/>
                 <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
         </xsl:for-each>
-        </p>
+        </span>
         </xsl:if>
 
         <xsl:if test="marc:datafield[@tag=130]|marc:datafield[@tag=240]|marc:datafield[@tag=730][@ind2!=2]">
-        <p><span class="label">Uniform titles: </span>
+        <span class="results_summary"><span class="label">Uniform titles: </span>
         <xsl:for-each select="marc:datafield[@tag=130]|marc:datafield[@tag=240]|marc:datafield[@tag=730][@ind2!=2]">
             <xsl:variable name="str">
                 <xsl:for-each select="marc:subfield">
@@ -223,11 +215,11 @@
             </xsl:call-template>
             <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
         </xsl:for-each>
-        </p>
+        </span>
         </xsl:if>
 
         <xsl:if test="marc:datafield[@tag=650]">
-            <p><span class="label">Related Subjects: </span>
+            <span class="results_summary"><span class="label">Related Subjects: </span>
             <xsl:for-each select="marc:datafield[@tag=650]">
             <a>
             <xsl:choose>
@@ -252,11 +244,11 @@
             </xsl:choose>
 
             </xsl:for-each>
-            </p>
+            </span>
         </xsl:if>
 
         <xsl:if test="marc:datafield[@tag=856]">
-        <p><span class="label">Online Resources: </span>
+        <span class="results_summary"><span class="label">Online Resources: </span>
         <xsl:for-each select="marc:datafield[@tag=856]">
             <a><xsl:attribute name="href"> <xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute>
             <xsl:if test="marc:subfield[@code='y' or @code='3' or @code='z']">
@@ -270,13 +262,13 @@
             </xsl:choose>
             
         </xsl:for-each>
-        </p>
+        </span>
         </xsl:if>
 
         <!-- 780 -->
         <xsl:if test="marc:datafield[@tag=780]">
         <xsl:for-each select="marc:datafield[@tag=780]">
-        <p><span class="label">
+        <span class="results_summary"><span class="label">
         <xsl:choose>
         <xsl:when test="@ind2=0">
             Continues:
@@ -312,11 +304,11 @@
              <a><xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=<xsl:value-of select="translate($f780, '()', '')"/></xsl:attribute>
                 <xsl:value-of select="translate($f780, '()', '')"/>
             </a>
-        </p>
+        </span>
  
         <xsl:choose>
         <xsl:when test="@ind1=0">
-            <p><xsl:value-of select="marc:subfield[@code='n']"/></p>
+            <span class="results_summary"><xsl:value-of select="marc:subfield[@code='n']"/></span>
         </xsl:when>
         </xsl:choose>
 
@@ -326,7 +318,7 @@
         <!-- 785 -->
         <xsl:if test="marc:datafield[@tag=785]">
         <xsl:for-each select="marc:datafield[@tag=785]">
-        <p><span class="label">
+        <span class="results_summary"><span class="label">
         <xsl:choose>
         <xsl:when test="@ind2=0">
             Continued by:
@@ -368,10 +360,9 @@
                 <xsl:value-of select="translate($f785, '()', '')"/>
             </a>
 
-        </p>
+        </span>
         </xsl:for-each>
         </xsl:if>
-        </div>
 
     </xsl:template>
 
