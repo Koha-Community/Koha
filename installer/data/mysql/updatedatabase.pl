@@ -49,7 +49,9 @@ my $dbh = C4::Context->dbh;
 $|=1; # flushes output
 
 =item
+
     Deal with virtualshelves
+
 =cut
 
 my $DBversion = "3.00.00.001";
@@ -1378,10 +1380,20 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.074";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do( q(update itemtypes set imageurl = concat( 'npl/', imageurl )
+                  where imageurl not like 'http%'
+                    and imageurl is not NULL
+                    and imageurl != '') );
+    print "Upgrade to $DBversion done (updating imagetype.imageurls to reflect new icon locations.)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
-  
+
 =cut
 
 sub DropAllForeignKeys {
@@ -1410,7 +1422,7 @@ sub DropAllForeignKeys {
 
   Transform the Koha version from a 4 parts string
   to a number, with just 1 .
-  
+
 =cut
 
 sub TransformToNum {
@@ -1421,7 +1433,9 @@ sub TransformToNum {
 }
 
 =item SetVersion
+
     set the DBversion in the systempreferences
+
 =cut
 
 sub SetVersion {
