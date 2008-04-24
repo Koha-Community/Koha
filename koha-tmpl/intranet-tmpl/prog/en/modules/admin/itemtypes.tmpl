@@ -156,10 +156,12 @@ Item Types Administration
      <!-- TMPL_IF NAME="noItemTypeImages" -->
 	 <li><span class="label">Image: </span>Item type images are disabled. To enable them, turn off the <a href="/cgi-bin/koha/admin/systempreferences.pl?tab=all&searchfield=noItemTypeImages">noItemTypeImages system preference</a></li>
 	 <!-- TMPL_ELSE --> <li><fieldset>
-	  <legend>Image: </legend>
+	  <legend>Images: </legend>
         
           <ol>
-  <!-- TMPL_LOOP NAME="IMAGESLOOP" -->
+  <!-- TMPL_LOOP NAME="imagesets" -->
+  <li>Icons from collection <b><!-- TMPL_VAR name="imagesetname" --></b>:</li>
+  <!-- TMPL_LOOP NAME="images" -->
   			<li style="float: none; display: inline; clear : none; width: auto;">
             <label> <!-- TMPL_IF NAME="KohaImageSrc" -->
               <img src="<!-- TMPL_VAR name="KohaImageSrc" -->" alt="<!-- TMPL_VAR name="KohaImageSrc" -->" title="<!-- TMPL_VAR name="KohaImageSrc" -->" />
@@ -174,6 +176,7 @@ Item Types Administration
     <!-- /TMPL_IF -->
             </label>
 			</li>
+  <!-- /TMPL_LOOP -->
   <!-- /TMPL_LOOP -->
 	<li>
             <label for="remote_image_check"> Remote image:</label>

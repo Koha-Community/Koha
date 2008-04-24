@@ -44,6 +44,7 @@ use strict;
 use CGI;
 
 use List::Util qw/min/;
+use File::Spec;
 
 use C4::Koha;
 use C4::Context;
@@ -61,6 +62,35 @@ sub StringSearch {
     $sth->execute("$data[0]%");
     return $sth->fetchall_arrayref({});		# return ref-to-array of ref-to-hashes
 								# like [ fetchrow_hashref(), fetchrow_hashref() ... ]
+}
+
+sub getImagesFromDirectory {
+    my $directoryname = shift;
+    return unless defined $directoryname;
+    return unless -d $directoryname;
+
+    if ( opendir ( my $dh, $directoryname ) ) {
+        my @images = grep { /\.(gif|png)$/i } readdir( $dh );
+        closedir $dh;
+        return @images;
+    } else {
+        warn "unable to opendir $directoryname: $!";
+        return;
+    }
+}
+sub getSubdirectoryNames {
+    my $directoryname = shift;
+    return unless defined $directoryname;
+    return unless -d $directoryname;
+
+    if ( opendir ( my $dh, $directoryname ) ) {
+        my @directories = grep { -d File::Spec->catfile( $directoryname, $_ ) && ! ( /^\./ ) } readdir( $dh );
+        closedir $dh;
+        return @directories;
+    } else {
+        warn "unable to opendir $directoryname: $!";
+        return;
+    }
 }
 
 my $input       = new CGI;
@@ -105,31 +135,35 @@ if ( $op eq 'add_form' ) {
     my $src = "intranet"; # so that the getitemtypeimage functions know where they were called from -fbcit
     my $imagedir_filesystem = getitemtypeimagedir($src);
     my $imagedir_web        = getitemtypeimagesrc($src);
-    opendir( DIR, $imagedir_filesystem )
-      or warn "cannot opendir " . $imagedir_filesystem . ": " . $!;
-    my @imagelist;
-    my $i              = 0;
-    my $image_per_line = 12;
-    while ( my $line = readdir(DIR) ) {
-        $i++;
-        if ( $line =~ /\.(gif|png)$/i ) {
+
+    my @imagesets = (); # list of hasrefs of image set data to pass to template
+    my @subdirectories = getSubdirectoryNames( $imagedir_filesystem );
+
+    foreach my $imagesubdir ( @subdirectories ) {
+        my @imagelist     = (); # hashrefs of image info
+        my $i              = 0; # counter
+        my $image_per_line = 12; # max images in a line?
+        my @imagenames = getImagesFromDirectory( File::Spec->catfile( $imagedir_filesystem, $imagesubdir ) );
+        foreach my $thisimage ( @imagenames ) {
+            $i++;
             if ( $i == $image_per_line ) {
                 $i = 0;
                 push @imagelist, { KohaImage => '', KohaImageSrc => '' };
-            }
-            else {
+            } else {
                 push(
-                    @imagelist,
-                    {
-                        KohaImage    => $line,
-                        KohaImageSrc => $imagedir_web . '/' . $line,
-                        checked      => $line eq $data->{imageurl} ? 1 : 0,
-                    }
-                );
+                     @imagelist,
+                     {
+                      KohaImage    => "$imagesubdir/$thisimage",
+                      KohaImageSrc => join( '/', $imagedir_web, $imagesubdir, $thisimage ),
+                      checked      => "$imagesubdir/$thisimage" eq $data->{imageurl} ? 1 : 0,
+                  }
+                 );
             }
         }
+        push @imagesets, { imagesetname => $imagesubdir,
+                           images       => \@imagelist };
+        
     }
-    closedir DIR;
 
     my $remote_image = undef;
     if ( defined $data->{imageurl} and $data->{imageurl} =~ /^http/i ) {
@@ -145,7 +179,7 @@ if ( $op eq 'add_form' ) {
         imageurl        => $data->{'imageurl'},
         template        => C4::Context->preference('template'),
         summary         => $data->{summary},
-        IMAGESLOOP      => \@imagelist,
+        imagesets       => \@imagesets,
         remote_image    => $remote_image,
     );
 
