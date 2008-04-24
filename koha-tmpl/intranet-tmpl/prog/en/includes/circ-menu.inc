@@ -15,7 +15,7 @@
     <li><!-- TMPL_IF NAME="address"-->
             <!-- TMPL_VAR NAME="address" -->
     <!-- TMPL_ELSE -->
-            <span class="problem">No address stored.</span>
+            <span class="empty">No address stored.</span>
     <!-- /TMPL_IF --></li>
     <!-- TMPL_IF NAME="address2" -->
         <li><!-- TMPL_VAR NAME="address2" --></li>
@@ -23,7 +23,7 @@
     <!-- TMPL_IF NAME="city" -->
             <!-- TMPL_VAR NAME="city" -->
     <!-- TMPL_ELSE -->
-        <span class="problem">No city stored.</span>
+        <span class="empty">No city stored.</span>
     <!-- /TMPL_IF --></li>
     <li><!--TMPL_IF NAME="phone" -->
         <!-- TMPL_VAR NAME="phone" -->
@@ -34,7 +34,7 @@
             <!--TMPL_IF NAME="phonepro" -->
                 <!-- TMPL_VAR NAME="phonepro" -->
             <!-- TMPL_ELSE -->
-                <span class="problem">No phone stored.</span>    
+                <span class="empty">No phone stored.</span>    
             <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
     <!-- /TMPL_IF --></li>
@@ -44,10 +44,10 @@
         <!-- TMPL_IF NAME="emailpro" -->
             <li class="email"> <a href="mailto:<!-- TMPL_VAR NAME="emailpro" -->" title="<!-- TMPL_VAR NAME="emailpro" -->"><!-- TMPL_VAR NAME="emailpro" --></a></li>
         <!-- TMPL_ELSE -->
-            <li> <span class="problem">No email stored.</span>    </li>
+            <li> <span class="empty">No email stored.</span>    </li>
         <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
-    <li>Category: <!-- TMPL_VAR NAME="categoryname" --> (<!-- TMPL_VAR NAME="categorycode" -->) 
+    <li>Category: <!-- TMPL_VAR NAME="categoryname" --> (<!-- TMPL_VAR NAME="categorycode" -->)</li>
     <li>Home Library: <!-- TMPL_IF NAME="branchname" --><!-- TMPL_VAR NAME="branchname" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="branch" --><!-- /TMPL_IF --></li>
 </ul></div>
 <div id="menu">

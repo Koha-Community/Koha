@@ -443,11 +443,11 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 		<td>Renewal Failed</td>
 		<!-- /TMPL_IF -->
     </tr>
-    <!-- /loop todayissues --><!-- /TMPL_LOOP --> 
+    <!-- /TMPL_LOOP --> <!-- /loop todayissues -->
     <!-- /if todayissues --><!-- /TMPL_IF --> 
 <!-- TMPL_IF NAME="previssues" -->
 <!-- TMPL_IF NAME="todayissues" --><tr><th colspan="7"><a name="previous" id="previous"></a>Previous checkouts</th></tr><!-- TMPL_ELSE -->
-<tr><th colspan="7"><a name="previous" id="previous"></a>Previous checkouts</th></tr></thead>
+<tr><th class="{sorter: false}" colspan="7"><a name="previous" id="previous"></a>Previous checkouts</th></tr></thead>
 	<tbody>
 <!-- /TMPL_IF -->
     <!-- TMPL_LOOP NAME="previssues" -->
