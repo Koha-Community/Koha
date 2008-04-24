@@ -1,15 +1,48 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Circulation &rsaquo; Check In <!-- TMPL_VAR Name="title" --></title>
-<script>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript">
+//<![CDATA[
 function Dopop(link) {
     var newin=window.open(link,'popup','width=600,height=400,resizable=1,toolbar=0,scrollbars=1,top');
 }
+	 $(document).ready(function() {
+	 	$("#exemptcheck").change(function(){
+			if(this.checked == true) {
+				$("#barcode").addClass("alert");
+				$("#exemptfines").show();
+			} else {
+				$("#barcode").removeClass("alert");
+				$("#exemptfines").hide();
+			}
+			$("#barcode").focus();
+		});
+	 	$("#dropboxcheck").change(function(){
+			if (this.checked == true) {
+				$("#barcode").addClass("alert");
+				$("#dropboxmode").show();
+			} else {
+				$("#barcode").removeClass("alert");
+				$("#dropboxmode").hide();
+			}
+			$("#barcode").focus();
+		});
+		<!-- TMPL_IF NAME="overduecharges" -->$("#barcode").focus(function(){
+			if(($("#exemptcheck").attr("checked") == true)||($("#dropboxcheck").attr("checked") == true)){
+				$("#barcode").addClass("alert");
+			} else {
+				$("#barcode").removeClass("alert");
+			}
+		});
+		$("#barcode").blur(function(){
+			$("#barcode").removeClass("alert");
+		});<!-- /TMPL_IF -->
+	 });
+//]]>
 </script>
-<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-
 <!-- TMPL_INCLUDE NAME="checkin-search.inc" -->
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Check In</div>
@@ -154,7 +187,6 @@ function Dopop(link) {
             <!-- /TMPL_LOOP -->
             <input type="hidden" name="barcode" value="0" />
         </form>
-		</div>
     <!-- /TMPL_IF -->
     
     
@@ -229,46 +261,48 @@ function Dopop(link) {
     <div id="dropboxmode" class="dialog message" style="display:none;">
         <p>Dropbox Mode.  (Effective checkin date is <!-- TMPL_VAR NAME="yesterdaysdate" --> ).</p>
     </div>
-    <div class="details">
+</div>
+	<div class="yui-g">
     <form method="post" action="/cgi-bin/koha/circ/returns.pl" >
-            <fieldset><legend>Check In</legend>
+     <!-- TMPL_IF NAME="overduecharges" --><div class="yui-u first"><!-- /TMPL_IF -->
+            <fieldset>
+	<legend>Check In</legend>
             <label for="barcode">Enter item barcode: </label>
-
-<!-- TMPL_IF NAME="overduecharges" -->
-<input name="barcode" id="barcode" size="14" class="focus" onfocus="if( (this.form.exemptcheck.checked == true) || (this.form.dropboxcheck.checked == true ) ) {this.className='alert'} else {this.className='focus'};" onblur="this.className='unfocus';"   />
-<!-- TMPL_ELSE -->
-<input name="barcode" id="barcode" size="14" class="focus" />
-<!-- /TMPL_IF -->
-
+			<input name="barcode" id="barcode" size="14" />
             <input type="submit" class="submit" value="Submit" />
             <!-- TMPL_LOOP Name="inputloop" -->
                 <input type="hidden" name="ri-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
                 <input type="hidden" name="dd-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="duedate" -->" />
                 <input type="hidden" name="bn-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="borrowernumber" -->" />
             <!-- /TMPL_LOOP -->
-			<fieldset id="checkin_options">
-			<legend>Options</legend>
-         <!-- TMPL_IF NAME="overduecharges" -->
-
-		<label for="exemptcheck">Forgive Overdue charges on this item</label>
-<!-- TMPL_IF NAME="exemptfine" -->
-<input type="checkbox" id="exemptcheck" name="exemptfine" value="exemptfine" checked="checked" onchange=" if (this.checked == true) { this.form.barcode.className='alert'; document.getElementById('exemptfines').style.display='block';} else { this.form.barcode.className='unfocus';document.getElementById('exemptfines').style.display='none'; } this.form.barcode.focus(); return false;" />
-<!-- TMPL_ELSE -->
-				<input type="checkbox" id="exemptcheck" name="exemptfine" value="exemptfine" onchange=" if (this.checked == true) { this.form.barcode.className='alert'; document.getElementById('exemptfines').style.display='block';} else { this.form.barcode.className='unfocus';document.getElementById('exemptfines').style.display='none'; } this.form.barcode.focus(); return false;" />
-<!-- /TMPL_IF -->
-<br /><!-- (fixme) -->
-	<label for="dropboxcheck">Dropbox mode </label>
-<!-- TMPL_IF NAME="dropboxmode" -->
-<input type="checkbox" id="dropboxcheck" name="dropboxmode" value="dropboxmode" checked="checked" onchange=" if (this.checked == true) { this.form.barcode.className='alert'; document.getElementById('dropboxmode').style.display='block';} else { this.form.barcode.className='unfocus';document.getElementById('dropboxmode').style.display='none'; } this.form.barcode.focus(); return false;" />
-<!-- TMPL_ELSE -->
-				<input type="checkbox" id="dropboxcheck" name="dropboxmode" value="dropboxmode" onchange=" if (this.checked == true) { this.form.barcode.className='alert'; document.getElementById('dropboxmode').style.display='block';} else { this.form.barcode.className='unfocus';document.getElementById('dropboxmode').style.display='none'; } this.form.barcode.focus(); return false;" />
-<!-- /TMPL_IF -->								
-								
-		<!-- /TMPL_IF --> <!-- overduecharges -->
-		</fieldset>
-            </fieldset>
-        </form>
+			
    
+            </fieldset>
+         <!-- TMPL_IF NAME="overduecharges" -->
+</div>
+<div class="yui-u">
+<fieldset id="checkin_options">
+			<legend>Options</legend>
+
+<ul>		<li>
+<!-- TMPL_IF NAME="exemptfine" -->
+<input type="checkbox" id="exemptcheck" name="exemptfine" value="exemptfine" checked="checked" />
+<!-- TMPL_ELSE -->
+<input type="checkbox" id="exemptcheck" name="exemptfine" value="exemptfine" />
+<!-- /TMPL_IF --><label for="exemptcheck">Forgive overdue charges</label></li>
+
+<li><!-- (fixme) -->
+	
+<!-- TMPL_IF NAME="dropboxmode" -->
+<input type="checkbox" id="dropboxcheck" name="dropboxmode" value="dropboxmode" checked="checked" />
+<!-- TMPL_ELSE -->
+<input type="checkbox" id="dropboxcheck" name="dropboxmode" value="dropboxmode" />
+<!-- /TMPL_IF -->		<label for="dropboxcheck">Dropbox mode </label></li>		</ul>				
+								
+		</fieldset>
+</div>
+		<!-- /TMPL_IF --> <!-- overduecharges -->
+        </form>
 </div>
 
 <!-- TMPL_IF Name="returned" -->
