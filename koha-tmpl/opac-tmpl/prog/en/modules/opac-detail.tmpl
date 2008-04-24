@@ -494,9 +494,9 @@
 <div id="further">
 <h4>Search for this title in:</h4>
 <ul>
-<li><a href="http://worldcat.org/search?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->">Other Libraries (WorldCat)</a></li>
-<li><a href="http://www.scholar.google.com/scholar?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->">Other Databases (Google Scholar)</a></li>
-<li><a href="http://www.bookfinder.com/search/?author=<!-- TMPL_VAR NAME="author" -->&amp;title=<!-- TMPL_VAR NAME="title" -->&amp;st=xl&amp;ac=qr">Online Stores (Bookfinder.com)</a></li>
+<li><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a href="http://worldcat.org/search?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->" target="_blank">Other Libraries (WorldCat)</a><!-- TMPL_ELSE --><a href="http://worldcat.org/search?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->">Other Libraries (WorldCat)</a><!-- /TMPL_IF --></li>
+<li><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a href="http://www.scholar.google.com/scholar?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->" target="_blank">Other Databases (Google Scholar)</a><!-- TMPL_ELSE --><a href="http://www.scholar.google.com/scholar?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->">Other Databases (Google Scholar)</a><!-- /TMPL_IF --></li>
+<li><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a href="http://www.bookfinder.com/search/?author=<!-- TMPL_VAR NAME="author" -->&amp;title=<!-- TMPL_VAR NAME="title" -->&amp;st=xl&amp;ac=qr" target="_blank">Online Stores (Bookfinder.com)</a><!-- TMPL_ELSE --><a href="http://www.bookfinder.com/search/?author=<!-- TMPL_VAR NAME="author" -->&amp;title=<!-- TMPL_VAR NAME="title" -->&amp;st=xl&amp;ac=qr">Online Stores (Bookfinder.com)</a><!-- /TMPL_IF --></li>
 </ul>
 </div>
 
