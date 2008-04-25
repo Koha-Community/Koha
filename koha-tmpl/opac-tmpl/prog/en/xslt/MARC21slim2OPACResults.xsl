@@ -823,10 +823,10 @@
                    </span>
                    </xsl:when>
 				   </xsl:choose>
-                   <xsl:if test="count(key('item-by-status', 'On loan'))>0">
+                   <xsl:if test="count(key('item-by-status', 'Checked out'))>0">
                    <span class="unavailable">
-                       <xsl:text>On loan (</xsl:text>
-                       <xsl:value-of select="count(key('item-by-status', 'On loan'))"/>
+                       <xsl:text>Checked out (</xsl:text>
+                       <xsl:value-of select="count(key('item-by-status', 'Checked out'))"/>
                        <xsl:text>) </xsl:text>
                    </span>
                    </xsl:if>

@@ -137,7 +137,7 @@ sub buildKohaItemsNamespace {
                 $status = "On order";
             }
             if ($item->{onloan}) {
-                $status = "On loan";
+                $status = "Checked out";
             }
             if ( $item->{wthdrawn}) {
                 $status = "Withdrawn";
