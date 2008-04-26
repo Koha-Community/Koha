@@ -409,7 +409,7 @@ function vShelfAdd() {
         }
 }
 
-YAHOO.util.Event.onContentReady("cartDetails", function () {
+YAHOO.util.Event.onAvailable("cartDetails", function () {
 	$("#cartDetails").css("display","block").css("visibility","hidden").after("<div id=\"cc\" style=\"visibility: hidden\"></div>");
 	$("#cmspan").html("<a href=\"#\" id=\"cartmenulink\" class=\"\"><i></i><span><i></i><span></span><img src=\"/opac-tmpl/prog/images/cart.gif\" width=\"14\" height=\"14\" alt=\"\" border=\"0\" /> Cart<span id=\"basket\"></span></span></a>");
 	if(basketcount){ updateBasket(basketcount) }	
@@ -420,6 +420,7 @@ function cartMenuInit() {
 		openBasket(); return false;
 	});
 	// Build cartOverlay based on markup
+	$("#cartDetails").css("display","block");
 	cartOverlay = new YAHOO.widget.Overlay("cartDetails", { context:["cartmenulink","tr","br"],																							  visible:false,width:"200px",effect:{effect:YAHOO.widget.ContainerEffect.FADE,duration:0.25} } );
 	cartOverlay.render();
 	YAHOO.util.Event.addListener("cartmenulink", "mouseover", cartOverlay.show, cartOverlay, true);

@@ -1380,8 +1380,6 @@ span.starMT {
 	width: 50px;
 }
 
-
-
 #cartmenulink, #listsmenulink {
 	display : block;
 	position : relative;
@@ -1417,6 +1415,9 @@ span.starMT {
 	padding : 0 0 5px 10px;
 	margin-bottom : -5px;
 }
+/* For IE7 */
+ *:first-child+html #cartmenulink span { padding-top : 3px; padding-bottom : 7px; }
+ *:first-child+html #listsmenulink span { padding-top : 5px; }
 
  #cartmenulink span i, #listsmenulink span i {
 	background-position : bottom right;
@@ -1443,7 +1444,9 @@ span.starMT {
 	background-image : none;
 	cursor : pointer;
 }
-
+* html #cartmenulink span, * html #listsmenulink span {
+	padding-top : 5px;
+}
 #listsmenulink {
 	background : #9FBFFF;
 }
@@ -1502,9 +1505,6 @@ span.starMT {
 	top : auto;
 }
 
-*html #cartmenulink span#basket, *html #cartmenulink span#basket span {
-}
-
 a#listsmenulink, a#listsmenulink:hover {
 	color : #006699;
 	font-size : 105%;
@@ -1520,6 +1520,19 @@ a#cartmenulink, a#cartmenulink:hover {
 	line-height : 185%;
 	margin-left : 1.5em;
 }
+* html a#cartmenulink {
+	padding-top: 0;
+}
+ * html a#cartmenulink:hover {
+	padding-top : 0;
+}
+/* For IE7 */
+*:first-child+html a#listsmenulink { padding-top : 0; }
+*:first-child+html a#listsmenulink:hover { padding-top : 0; }
+*:first-child+html a#cartmenulink { padding-top : 0; }
+*:first-child+html a#cartmenulink:hover { padding-top : 0; }
+*:first-child+html #cartmenulink span i{ top : -4px; }
+*:first-child+html #listsmenulink span i { top : -5px; }
 
 #listsmenulink img {
 	background-image : none;

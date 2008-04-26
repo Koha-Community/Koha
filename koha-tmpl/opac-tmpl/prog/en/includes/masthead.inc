@@ -80,7 +80,7 @@
 </div>
 </div>
 
-<!-- TMPL_IF NAME="opacbookbag" --><div id="cartDetails" style="display: none">Your cart is empty.</div><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="opacbookbag" --><div id="cartDetails" style="visible:false;">Your cart is empty.</div><!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="virtualshelves" -->
 <div id="listsmenu" class="yuimenu" style="display: none">
