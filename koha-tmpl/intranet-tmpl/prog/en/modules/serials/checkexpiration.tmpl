@@ -27,7 +27,7 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="serials-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; List subscriptions nearing expiry. </div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Check expiration </div>
 
 <div id="doc3" class="yui-t2">
    
@@ -37,30 +37,34 @@
 
 <h1>Check expiration</h1>
 
-<fieldset>
+    <form name="f" action="/cgi-bin/koha/serials/checkexpiration.pl" method="post" onsubmit="return CheckForm(this);">
+<fieldset class="rows">
     <legend>Filter results :</legend>
     
-    <form name="f" action="/cgi-bin/koha/serials/checkexpiration.pl" method="post" onsubmit="return CheckForm(this);">
-         
-        <p><label for="title">Title</label>
-        <input id="title" type="text" name="title" size="15" value="<!--TMPL_VAR NAME="title"-->" /></p>
+         <ol>
+        <li><label for="title">Title:</label>
+        <input id="title" type="text" name="title" size="15" value="<!--TMPL_VAR NAME="title"-->" /></li>
 
-        <p><label for="issn">ISSN</label>
-        <input id="issn" type="text" name="issn" size="15" value="<!-- TMPL_VAR NAME="issn"-->" /></p>
+        <li><label for="issn">ISSN:</label>
+        <input id="issn" type="text" name="issn" size="15" value="<!-- TMPL_VAR NAME="issn"-->" /></li>
 
-        <p><label for="date">Expiring before</label>
+        <li><label for="date" class="required" title="Required field">Expiring before:</label>
         <input id="date" type="text" name="date" size="10" value="<!-- TMPL_VAR NAME="date"-->" class="focus" />
+				<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="openCalendar" style="cursor: pointer;" />
             <script type="text/javascript">
                 Calendar.setup(
                  {
+					button : "openCalendar",
                      inputField : "date",
                      ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
                  }
                 );
-            </script></p>
-        <input type="submit" value="Search" />
-    </form>
+            </script> <span class="required">Required</span></li>
+			</ol>
+        
 </fieldset>
+<fieldset class="action"><input type="submit" value="Search" /></fieldset>
+</form>
 
 <!-- TMPL_IF NAME="subscriptions_loop"-->
 <p>

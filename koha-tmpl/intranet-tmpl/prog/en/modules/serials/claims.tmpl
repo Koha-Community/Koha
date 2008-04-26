@@ -35,6 +35,7 @@
 	<div id="yui-main">
 	<div class="yui-b">
 
+	<!-- TMPL_UNLESS NAME="letter" --><div class="dialog alert">No claims notice defined. Please Define One</div><!-- /TMPL_UNLESS -->
     <h1>Claims</h1>
     <form name="claims" action="claims.pl" method="post">
     <p>
@@ -46,14 +47,12 @@
     </p>
     <p>
         <!-- TMPL_IF NAME="letter" -->
-            Select Letter :
+            Select notice:
             <select name="letter_code">
                 <!-- TMPL_LOOP name="letters" -->
                     <option value="<!--TMPL_VAR Name="code"-->"><!--TMPL_VAR Name="name"--></option>
                 <!--/TMPL_LOOP-->
             </select>
-        <!--TMPL_ELSE-->
-            No Letter defined. Please Define One. The list of expected issues is displayed.
         <!--/TMPL_IF-->
     </p> 
         <input type="hidden" name="order" value="<!--TMPL_VAR Name="order"-->" />
@@ -103,7 +102,7 @@
                         <!-- TMPL_VAR name="claimdate" -->
                         </td>
                         <td>
-                            <a href="/cgi-bin/koha/serials/lateissues-excel.pl?supplierid=<!-- TMPL_VAR name="supplieri" -->&serialid=<!-- TMPL_VAR name="serialid" -->&op=claims">Export item data</a>
+                            <a href="/cgi-bin/koha/serials/lateissues-excel.pl?supplierid=<!-- TMPL_VAR name="supplieri" -->&amp;serialid=<!-- TMPL_VAR name="serialid" -->&amp;op=claims">Export item data</a>
                         </td>
                     </tr>
                 <!-- /TMPL_LOOP -->
@@ -114,10 +113,7 @@
 
         <!-- TMPL_IF Name="singlesupplier"-->
             <input type="hidden" name="supplierid" value="<!--TMPL_VAR NAME="supplierid"-->" />
-            <!--
-                <a href="claims.pl?supplierid=<!-- TMPL_VAR
-name="supplierid" -->&amp;op=preview" onclick="popup(<!-- TMPL_VAR
-name="supplierid" -->,''); return false" class="button">Supplier Group Claim Letter</a></p> -->
+            <!-- <a href="claims.pl?supplierid=<!-- TMPL_VAR name="supplierid" -->&amp;op=preview" onclick="popup(<!-- TMPL_VAR name="supplierid" -->,''); return false" class="button">Supplier Group Claim Notice</a></p> -->
         <!-- /TMPL_IF -->
 
 <!--TMPL_IF Name="letter" -->
@@ -185,7 +181,7 @@ name="supplierid" -->,''); return false" class="button">Supplier Group Claim Let
         </table>
         <!-- /TMPL_IF -->
 
-<p class="noprint"><a href="javascript:window.print()" class="button">Print</a> &nbsp; <a href="javascript:window.close()" class="button">Close</a></p>
+<p class="noprint"><a href="javascript:window.print()">Print</a> &nbsp; <a href="javascript:window.close()">Close</a></p>
 <!-- /TMPL_UNLESS -->
 
 </div>
