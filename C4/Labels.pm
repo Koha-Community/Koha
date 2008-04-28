@@ -1000,11 +1000,11 @@ sub DrawSpineText {
     my $old_fontname = $fontname; # We need to keep track of the original font passed in...
     
     for my $field (@str_fields) {
-		
+		$field->{'code'} or warn "get_text_fields($layout_id, 'codes') element missing 'code' field";
 		if ($$conf_data->{'formatstring'}) {
 			$field->{'data'} =  GetBarcodeData($field->{'code'},$$item,$record) ;
 		} else {
-			$field->{data} =   $$item{$field->{'code'}}  ;
+			$field->{data} =   $$item->{$field->{'code'}}  ;
 		}
 
         # This allows us to print the title in italic (oblique) type... (Times Roman has a different nomenclature.)
