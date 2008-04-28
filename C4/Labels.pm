@@ -353,24 +353,14 @@ sub get_highest_batch {
 
 
 sub get_batches {
-    my ( $batch_type ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $q   = "SELECT batch_id, COUNT(*) AS num FROM $batch_type GROUP BY batch_id";
-    my $sth = $dbh->prepare($q);
+	# my $q   = "SELECT batch_id, COUNT(*) AS num FROM " . shift . " GROUP BY batch_id";
+    # FIXEDME:  There is only ONE table with batch_id, so why try to select a different one?
+	# get_batches() was frequently being called w/ no args, crashing DBD
+    my $q   = "SELECT batch_id, COUNT(*) AS num FROM labels GROUP BY batch_id";
+    my $sth = C4::Context->dbh->prepare($q);
     $sth->execute();
-    my @resultsloop;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push( @resultsloop, $data );
-    }
-    $sth->finish;
-
-# Not sure why we are doing this rather than simply telling the user that no batches are currently defined.
-# So I'm commenting this out and modifying label-manager.tmpl to properly inform the user as stated. -fbcit
-    # adding a dummy batch=1 value , if none exists in the db
-#    if ( !scalar(@resultsloop) ) {
-#        push( @resultsloop, { batch_id => '1' , num => '0' } );
-#    }
-    return @resultsloop;
+	my $batches = $sth->fetchall_arrayref({});
+	return @$batches;
 }
 
 sub delete_batch {
