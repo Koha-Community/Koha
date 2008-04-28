@@ -82,13 +82,10 @@ Return a pointer on a hash list containing info from labels_conf table in Koha D
 
 #'
 sub get_label_options {
-    my $dbh    = C4::Context->dbh;
-    my $query2 = " SELECT * FROM labels_conf where active = 1";
-    my $sth    = $dbh->prepare($query2);
+    my $query2 = " SELECT * FROM labels_conf where active = 1";		# FIXME: exact same as get_active_layout
+    my $sth    = C4::Context->dbh->prepare($query2);
     $sth->execute();
-    my $conf_data = $sth->fetchrow_hashref;
-    $sth->finish;
-    return $conf_data;
+    return $sth->fetchrow_hashref;
 }
 
 sub get_layouts {
@@ -126,16 +123,10 @@ sub get_layout {
 }
 
 sub get_active_layout {
-    my ($layout_id) = @_;
-    my $dbh = C4::Context->dbh;
-
-    # get the actual items to be printed.
-    my $query = " Select * from labels_conf where active = 1";
-    my $sth   = $dbh->prepare($query);
+    my $query = " Select * from labels_conf where active = 1";		# FIXME: exact same as get_label_options
+    my $sth   = C4::Context->dbh->prepare($query);
     $sth->execute();
-    my $data = $sth->fetchrow_hashref;
-    $sth->finish;
-    return $data;
+    return $sth->fetchrow_hashref;
 }
 
 sub delete_layout {
@@ -487,7 +478,7 @@ sub SaveTemplate {
         $leftmargin,  $cols,        $rows,         $colgap,
         $rowgap,      $font,        $fontsize,     $units
     ) = @_;
-    warn "Passed \$font:$font";
+    $debug and warn "Passed \$font:$font";
     my $dbh = C4::Context->dbh;
     my $query =
       " UPDATE labels_templates SET tmpl_code=?, tmpl_desc=?, page_width=?,
@@ -1070,7 +1061,7 @@ sub DrawPatronCardText {
     my $hPos;
 
     foreach my $line (keys %$text) {
-        warn "Current text is \"$line\" and font size for \"$line\" is $text->{$line} points";
+        $debug and warn "Current text is \"$line\" and font size for \"$line\" is $text->{$line} points";
         # some code to try and center each line on the label based on font size and string point width...
         my $stringwidth = prStrWidth($line, $fontname, $text->{$line});
         my $whitespace = ( $label_width - ( $stringwidth + (2 * $left_text_margin) ) );
