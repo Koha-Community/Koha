@@ -21,27 +21,29 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Context;
+use C4::Koha;
 use C4::Output;
-
-use C4::Context;
 
 
 sub AuthorizedValuesForCategory  {
-	my ($searchstring,$type)=@_;
-	my $dbh = C4::Context->dbh;
-	$searchstring=~ s/\'/\\\'/g;
-	my @data=split(' ',$searchstring);
-	my $count=@data;
-	my $sth=$dbh->prepare("Select id,category,authorised_value,lib from authorised_values where (category = ?) order by category,authorised_value");
-	$sth->execute("$data[0]");
-	my @results;
-	my $cnt=0;
-	while (my $data=$sth->fetchrow_hashref){
+    my ($searchstring,$type)=@_;
+    my $dbh = C4::Context->dbh;
+    $searchstring=~ s/\'/\\\'/g;
+    my @data=split(' ',$searchstring);
+    my $count=@data;
+    my $sth=$dbh->prepare( 'Select id, category, authorised_value, lib, imageurl
+                              from authorised_values
+                              where (category = ?)
+                              order by category,authorised_value' );
+    $sth->execute("$data[0]");
+    my @results;
+    my $cnt=0;
+    while (my $data=$sth->fetchrow_hashref){
 	push(@results,$data);
 	$cnt ++;
-	}
-	$sth->finish;
-	return ($cnt,\@results);
+    }
+    $sth->finish;
+    return ($cnt,\@results);
 }
 
 my $input = new CGI;
@@ -76,7 +78,7 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($id) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select id,category,authorised_value,lib from authorised_values where id=?");
+		my $sth=$dbh->prepare("select id, category, authorised_value, lib, imageurl from authorised_values where id=?");
 		$sth->execute($id);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
@@ -94,11 +96,13 @@ if ($op eq 'add_form') {
 		$template->param('heading-add-authorized-value-p' => 1);
 	}
 	$template->param('use-heading-flags-p' => 1);
-	$template->param(category => $data->{'category'},
-							authorised_value => $data->{'authorised_value'},
-							lib => $data->{'lib'},
-							id => $data->{'id'}
-							);
+	$template->param( category        => $data->{'category'},
+                         authorised_value => $data->{'authorised_value'},
+                         lib              => $data->{'lib'},
+                         id               => $data->{'id'},
+                         imagesets        => C4::Koha::getImageSets( checked => $data->{'imageurl'} )
+                     );
+                          
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
@@ -120,10 +124,15 @@ if ($op eq 'add_form') {
             warn "**** duplicate_entry = $duplicate_entry";
         }
         unless ( $duplicate_entry ) {
-            my $sth=$dbh->prepare("UPDATE authorised_values SET category=?,authorised_value=?,lib=? where id=?");
+            my $sth=$dbh->prepare( 'UPDATE authorised_values
+                                      SET category         = ?,
+                                          authorised_value = ?,
+                                          lib              = ?,
+                                          imageurl         = ?
+                                      WHERE id=?' );
             my $lib = $input->param('lib');
             undef $lib if ($lib eq ""); # to insert NULL instead of a blank string
-            $sth->execute($new_category, $new_authorised_value, $lib, $id);          
+            $sth->execute($new_category, $new_authorised_value, $lib, $input->param( 'imageurl' ), $id);          
             print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=".$new_category."\"></html>";
             exit;
         }
@@ -135,10 +144,12 @@ if ($op eq 'add_form') {
         ($duplicate_entry) = $sth->fetchrow_array();
         $sth->finish();
         unless ( $duplicate_entry ) {
-            my $sth=$dbh->prepare("INSERT INTO authorised_values (id,category,authorised_value,lib) values (?,?,?,?)");
+            my $sth=$dbh->prepare( 'INSERT INTO authorised_values
+                                    ( id, category, authorised_value, lib, imageurl )
+                                    values (?, ?, ?, ?, ?)' );
     	    my $lib = $input->param('lib');
     	    undef $lib if ($lib eq ""); # to insert NULL instead of a blank string
-    	    $sth->execute($id, $new_category, $new_authorised_value, $lib);
+    	    $sth->execute($id, $new_category, $new_authorised_value, $lib, $input->param( 'imageurl' ) );
     	    $sth->finish;
     	    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=".$input->param('category')."\"></html>";
     	    exit;
@@ -231,17 +242,18 @@ sub default_form {
 			$toggle=0;
 	  	}
 		my %row_data;  # get a fresh hash for the row data
-		$row_data{category} = $results->[$i]{'category'};
+		$row_data{category}         = $results->[$i]{'category'};
 		$row_data{authorised_value} = $results->[$i]{'authorised_value'};
-		$row_data{lib} = $results->[$i]{'lib'};
-		$row_data{edit} = "$script_name?op=add_form&amp;id=".$results->[$i]{'id'};
-		$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=$searchfield&amp;id=".$results->[$i]{'id'};
+		$row_data{lib}              = $results->[$i]{'lib'};
+		$row_data{imageurl}         =  getitemtypeimagesrc('intranet') . '/' . $results->[$i]{'imageurl'};
+		$row_data{edit}             = "$script_name?op=add_form&amp;id=".$results->[$i]{'id'};
+		$row_data{delete}           = "$script_name?op=delete_confirm&amp;searchfield=$searchfield&amp;id=".$results->[$i]{'id'};
 		push(@loop_data, \%row_data);
 	}
 
-	$template->param(loop => \@loop_data,
-							tab_list => $tab_list,
-							category => $searchfield);
+	$template->param( loop     => \@loop_data,
+                          tab_list => $tab_list,
+                          category => $searchfield );
 
 	if ($offset>0) {
 		my $prevpage = $offset-$pagesize;

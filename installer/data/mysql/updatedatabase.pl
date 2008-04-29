@@ -1390,6 +1390,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.075";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do( q(alter table authorised_values add imageurl varchar(200) default NULL) );
+    print "Upgrade to $DBversion done (adding imageurl field to authorised_values table)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table

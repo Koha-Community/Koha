@@ -46,6 +46,31 @@
             <label for="lib">Description</label>
             <input type="text" name="lib" id="lib" value="<!-- TMPL_VAR name="lib" -->" />
         </li>
+        <li>
+            <label for="lib">Icon</label>
+            <ul>
+  <!-- TMPL_LOOP NAME="imagesets" -->
+  <li>Icons from collection <b><!-- TMPL_VAR name="imagesetname" --></b>:</li>
+  <!-- TMPL_LOOP NAME="images" -->
+  			<li style="float: none; display: inline; clear : none; width: auto;">
+            <label> <!-- TMPL_IF NAME="StaffImageUrl" -->
+              <img src="<!-- TMPL_VAR name="StaffImageUrl" -->" alt="<!-- TMPL_VAR name="StaffImageUrl" -->" title="<!-- TMPL_VAR name="StaffImageUrl" -->" />
+        <!-- TMPL_ELSE -->
+        <!-- /TMPL_IF -->
+    <!-- TMPL_IF name="checked" -->
+              <input type="radio" name="imageurl" value="<!-- TMPL_VAR name="KohaImage" -->" checked="checked" />
+    <!-- TMPL_ELSE -->
+              <!-- TMPL_IF NAME="KohaImage" --> <!-- to delete the radio button if there is no image after -->
+              <input type="radio" name="imageurl" value="<!-- TMPL_VAR name="KohaImage" -->" />
+              <!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->
+            </label>
+			</li>
+  <!-- /TMPL_LOOP -->
+  <!-- /TMPL_LOOP -->
+  </ul>
+
+        
         </ol></fieldset>
        <fieldset class="action"> <input type="hidden" name="id" value="<!-- TMPL_VAR name="id" -->" />
         <input type="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=<!-- TMPL_VAR NAME="category" -->">Cancel</a></fieldset>
@@ -143,6 +168,7 @@ the subfield is not entered through a free field, but though a list of authorize
 	<th>Category</th>
 	<th>Authorized value</th>
 	<th>Description</th>
+	<th>Icon</th>
 	<th>Edit</th>
 	<th>Delete</th>
 	</tr>
@@ -151,6 +177,7 @@ the subfield is not entered through a free field, but though a list of authorize
 	<td><!-- TMPL_VAR name="category" --></td>
 	<td><!-- TMPL_VAR name="authorised_value" --></td>
 	<td><!-- TMPL_VAR name="lib" --></td>
+	<td><img src="<!-- TMPL_VAR name="imageurl" -->"</img></td>
 	<td><a href="<!-- TMPL_VAR name="edit" -->">Edit</a></td>
 	<td><a href="<!-- TMPL_VAR name="delete" -->">Delete</a></td>
 </tr>
