@@ -40,10 +40,10 @@ my $startlabel     = $query->param('startlabel');
 my $printingtype   = $query->param('printingtype');
 my $guidebox       = $query->param('guidebox');
 my $fontsize       = $query->param('fontsize');
-my $formatstring	= $query->param('formatstring');
+my $formatstring   = $query->param('formatstring');
+my $batch_type     = $query->param('type') || 'labels';
 my @itemnumber;
-($query->param('type') eq 'labels') ? (@itemnumber = $query->param('itemnumber')) : (@itemnumber = $query->param('borrowernumber'));
-my $batch_type     = $query->param('type');
+($batch_type eq 'labels') ? (@itemnumber = $query->param('itemnumber')) : (@itemnumber = $query->param('borrowernumber'));
 
 # little block for displaying active layout/template/batch in templates
 # ----------
@@ -112,7 +112,7 @@ elsif  ( $op eq 'add_layout' ) {
 # FIXME: The trinary conditionals here really need to be replaced with a more robust form of db abstraction -fbcit
 
 elsif ( $op eq 'add' ) {   # add item
-        my $query2 = "INSERT INTO $batch_type ( " . (($batch_type eq 'labels') ? 'itemnumber' : 'borrowernumber') . ", batch_id ) values ( ?,? )";
+	my $query2 = "INSERT INTO labels (itemnumber, batch_id) values ( ?,? )";
 	my $sth2   = $dbh->prepare($query2);
 	for my $inum (@itemnumber) {
             # warn "INSERTing " . (($batch_type eq 'labels') ? 'itemnumber' : 'borrowernumber') . ":$inum for batch $batch_id";
@@ -181,7 +181,7 @@ if (scalar @messages) {
 	$template->param(message_loop => \@complex);
 }
 $template->param(
-    type                        => $batch_type,
+    type                        => $batch_type,		# FIXME: type is an otherwise RESERVED template variable with 2 valid values: 'opac' and 'intranet'
     batch_id                    => $batch_id,
     batch_count                 => scalar @resultsloop,
     active_layout_name          => $active_layout_name,

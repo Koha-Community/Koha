@@ -30,7 +30,9 @@ function add_item(itemnum,batch_id,type_id){
   } else {
 		getstr = "itemnumber="+itemnum;
 } 
- 	var myurl = "label-manager.pl?op=add&batch_id="+batch_id+"&type="+type_id+"&"+getstr;
+ 	var myurl = "label-manager.pl?op=add&batch_id="+batch_id+
+									// "&type="+type_id+	// The template variable NAME="TYPE" is RESERVED ('opac' or 'intranet').
+									"&"+getstr;
 	window.opener.location.href = myurl;
 }
 function add_item3(i_itemnumber){
@@ -48,17 +50,17 @@ function add_item3(i_itemnumber){
 	<div class="results">
 		<!-- TMPL_IF EXPR="displayprev || displaynext" --><p>
 			<!-- TMPL_IF NAME="displayprev" -->
-				<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">&lt;&lt;</a>
+				<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">&lt;&lt;</a>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="numbers" -->
 				<!-- TMPL_IF NAME="highlight" -->
 					<span class="current"><!-- TMPL_VAR NAME="number" --></span>
 				<!-- TMPL_ELSE -->
-					<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->"><!-- TMPL_VAR NAME="number" --></a>
+					<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->"><!-- TMPL_VAR NAME="number" --></a>
 				<!-- /TMPL_IF -->
 			<!-- /TMPL_LOOP -->
 			<!-- TMPL_IF NAME="displaynext" -->
-				<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">&gt;&gt;</a>
+				<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">&gt;&gt;</a>
 				<!-- /TMPL_IF -->
 		</p><!-- /TMPL_IF -->
 		<p>
@@ -98,7 +100,7 @@ function add_item3(i_itemnumber){
 					<!-- TMPL_IF name="i_dateaccessioned" --><td align="center"><!-- TMPL_VAR name="i_dateaccessioned" --><br /></td><!-- /TMPL_IF -->
 					<!-- TMPL_IF name="i_barcode" --><td align="center"><!-- TMPL_VAR name="i_barcode" --></td><!-- /TMPL_IF -->
 					<!-- TMPL_IF name="i_itemnumber2" --><td align="center"> 
-					<a onclick="add_item('<!-- TMPL_VAR NAME="i_itemnumber2" -->',<!-- TMPL_VAR NAME="batch_id" -->, '<!-- TMPL_VAR NAME="type" -->'); return false" href="/cgi-bin/koha/barcodes/label-manager.pl?itemnumber=<!-- TMPL_VAR NAME="i_itemnumber2" -->&amp;batch_id=<!-- TMPL_VAR name="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->&amp;op=add">Add</a></td>
+					<a onclick="add_item('<!-- TMPL_VAR NAME="i_itemnumber2" -->',<!-- TMPL_VAR NAME="batch_id" -->, '<!-- TMPL_VAR NAME="type" -->'); return false" href="/cgi-bin/koha/barcodes/label-manager.pl?itemnumber=<!-- TMPL_VAR NAME="i_itemnumber2" -->&amp;batch_id=<!-- TMPL_VAR name="batch_id" -->&amp;op=add">Add</a></td>
 		                        <!-- /TMPL_IF -->
 <!-- /NEW -->
         <!-- /TMPL_LOOP --><!-- item -->
@@ -109,17 +111,17 @@ function add_item3(i_itemnumber){
 	<div class="results">
 		<p>
 			<!-- TMPL_IF NAME="displayprev" -->
-			<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search>&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">&lt;&lt;</a>
+			<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search>&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">&lt;&lt;</a>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="numbers" -->
 				<!-- TMPL_IF NAME="highlight" -->
 				<span class="current"><!-- TMPL_VAR NAME="number" --></span>
 				<!-- TMPL_ELSE -->
-				<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->"><!-- TMPL_VAR NAME="number" --></a>
+				<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->"><!-- TMPL_VAR NAME="number" --></a>
 				<!-- /TMPL_IF -->
 			<!-- /TMPL_LOOP -->
 			<!-- TMPL_IF NAME="displaynext" -->
-			<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">&gt;&gt;</a>
+			<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">&gt;&gt;</a>
 				<!-- /TMPL_IF -->
 		</p>
 	</div>
