@@ -64,35 +64,6 @@ sub StringSearch {
 								# like [ fetchrow_hashref(), fetchrow_hashref() ... ]
 }
 
-sub getImagesFromDirectory {
-    my $directoryname = shift;
-    return unless defined $directoryname;
-    return unless -d $directoryname;
-
-    if ( opendir ( my $dh, $directoryname ) ) {
-        my @images = grep { /\.(gif|png)$/i } readdir( $dh );
-        closedir $dh;
-        return @images;
-    } else {
-        warn "unable to opendir $directoryname: $!";
-        return;
-    }
-}
-sub getSubdirectoryNames {
-    my $directoryname = shift;
-    return unless defined $directoryname;
-    return unless -d $directoryname;
-
-    if ( opendir ( my $dh, $directoryname ) ) {
-        my @directories = grep { -d File::Spec->catfile( $directoryname, $_ ) && ! ( /^\./ ) } readdir( $dh );
-        closedir $dh;
-        return @directories;
-    } else {
-        warn "unable to opendir $directoryname: $!";
-        return;
-    }
-}
-
 my $input       = new CGI;
 my $searchfield = $input->param('description');
 my $script_name = "/cgi-bin/koha/admin/itemtypes.pl";
@@ -131,39 +102,7 @@ if ( $op eq 'add_form' ) {
         $data = $sth->fetchrow_hashref;
     }
 
-    # build list of images
-    my $src = "intranet"; # so that the getitemtypeimage functions know where they were called from -fbcit
-    my $imagedir_filesystem = getitemtypeimagedir($src);
-    my $imagedir_web        = getitemtypeimagesrc($src);
-
-    my @imagesets = (); # list of hasrefs of image set data to pass to template
-    my @subdirectories = getSubdirectoryNames( $imagedir_filesystem );
-
-    foreach my $imagesubdir ( @subdirectories ) {
-        my @imagelist     = (); # hashrefs of image info
-        my $i              = 0; # counter
-        my $image_per_line = 12; # max images in a line?
-        my @imagenames = getImagesFromDirectory( File::Spec->catfile( $imagedir_filesystem, $imagesubdir ) );
-        foreach my $thisimage ( @imagenames ) {
-            $i++;
-            if ( $i == $image_per_line ) {
-                $i = 0;
-                push @imagelist, { KohaImage => '', KohaImageSrc => '' };
-            } else {
-                push(
-                     @imagelist,
-                     {
-                      KohaImage    => "$imagesubdir/$thisimage",
-                      KohaImageSrc => join( '/', $imagedir_web, $imagesubdir, $thisimage ),
-                      checked      => "$imagesubdir/$thisimage" eq $data->{imageurl} ? 1 : 0,
-                  }
-                 );
-            }
-        }
-        push @imagesets, { imagesetname => $imagesubdir,
-                           images       => \@imagelist };
-        
-    }
+    my $imagesets = C4::Koha::getImageSets( checked => $data->{'imageurl'} );
 
     my $remote_image = undef;
     if ( defined $data->{imageurl} and $data->{imageurl} =~ /^http/i ) {
@@ -179,7 +118,7 @@ if ( $op eq 'add_form' ) {
         imageurl        => $data->{'imageurl'},
         template        => C4::Context->preference('template'),
         summary         => $data->{summary},
-        imagesets       => \@imagesets,
+        imagesets       => $imagesets,
         remote_image    => $remote_image,
     );
 

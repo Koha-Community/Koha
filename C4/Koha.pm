@@ -479,6 +479,119 @@ sub getitemtypeimagesrc {
 	}
 }
 
+=head3 _getImagesFromDirectory
+
+  Find all of the image files in a directory in the filesystem
+
+  parameters:
+    a directory name
+
+  returns: a list of images in that directory.
+
+  Notes: this does not traverse into subdirectories. See
+      _getSubdirectoryNames for help with that.
+    Images are assumed to be files with .gif or .png file extensions.
+    The image names returned do not have the directory name on them.
+
+=cut
+
+sub _getImagesFromDirectory {
+    my $directoryname = shift;
+    return unless defined $directoryname;
+    return unless -d $directoryname;
+
+    if ( opendir ( my $dh, $directoryname ) ) {
+        my @images = grep { /\.(gif|png)$/i } readdir( $dh );
+        closedir $dh;
+        return @images;
+    } else {
+        warn "unable to opendir $directoryname: $!";
+        return;
+    }
+}
+
+=head3 _getSubdirectoryNames
+
+  Find all of the directories in a directory in the filesystem
+
+  parameters:
+    a directory name
+
+  returns: a list of subdirectories in that directory.
+
+  Notes: this does not traverse into subdirectories. Only the first
+      level of subdirectories are returned.
+    The directory names returned don't have the parent directory name
+      on them.
+
+=cut
+
+sub _getSubdirectoryNames {
+    my $directoryname = shift;
+    return unless defined $directoryname;
+    return unless -d $directoryname;
+
+    if ( opendir ( my $dh, $directoryname ) ) {
+        my @directories = grep { -d File::Spec->catfile( $directoryname, $_ ) && ! ( /^\./ ) } readdir( $dh );
+        closedir $dh;
+        return @directories;
+    } else {
+        warn "unable to opendir $directoryname: $!";
+        return;
+    }
+}
+
+=head3 getImageSets
+
+  returns: a listref of hashrefs. Each hash represents another collection of images.
+           { imagesetname => 'npl', # the name of the image set (npl is the original one)
+             images => listref of image hashrefs
+           }
+
+    each image is represented by a hashref like this:
+      { KohaImage     => 'npl/image.gif',
+        StaffImageUrl => '/intranet-tmpl/prog/img/itemtypeimg/npl/image.gif',
+        OpacImageURL  => '/opac-tmpl/prog/itemtypeimg/npl/image.gif'
+        checked       => 0 or 1: was this the image passed to this method?
+                         Note: I'd like to remove this somehow.
+      }
+
+=cut
+
+sub getImageSets {
+    my %params = @_;
+    my $checked = $params{'checked'} || '';
+
+    my $paths = { staff => { filesystem => getitemtypeimagedir('intranet'),
+                             url        => getitemtypeimagesrc('intranet'),
+                        },
+                  opac => { filesystem => getitemtypeimagedir('opac'),
+                             url       => getitemtypeimagesrc('opac'),
+                        }
+                  };
+
+    my @imagesets = (); # list of hasrefs of image set data to pass to template
+    my @subdirectories = _getSubdirectoryNames( $paths->{'staff'}{'filesystem'} );
+
+    foreach my $imagesubdir ( @subdirectories ) {
+        my @imagelist     = (); # hashrefs of image info
+        my @imagenames = _getImagesFromDirectory( File::Spec->catfile( $paths->{'staff'}{'filesystem'}, $imagesubdir ) );
+        foreach my $thisimage ( @imagenames ) {
+            push( @imagelist,
+                  { KohaImage     => "$imagesubdir/$thisimage",
+                    StaffImageUrl => join( '/', $paths->{'staff'}{'url'}, $imagesubdir, $thisimage ),
+                    OpacImageUrl  => join( '/', $paths->{'opac'}{'url'}, $imagesubdir, $thisimage ),
+                    checked       => "$imagesubdir/$thisimage" eq $checked ? 1 : 0,
+               }
+             );
+        }
+        push @imagesets, { imagesetname => $imagesubdir,
+                           images       => \@imagelist };
+        
+    }
+    return \@imagesets;
+}
+
 =head2 GetPrinters
 
   $printers = &GetPrinters();
