@@ -3,7 +3,7 @@ function confirmDelete(message) {
 }
 
 function Dopop(link) {
-	newin=window.open(link,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
+	newin=window.open(link,'popup','width=500,height=400,toolbar=false,scrollbars=yes,resizeable=yes');
 }
 
 $(document).ready(function(){
