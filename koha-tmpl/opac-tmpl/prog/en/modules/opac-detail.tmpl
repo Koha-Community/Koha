@@ -171,6 +171,14 @@
     <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
+        <!-- TMPL_IF NAME="authorised_value_images" -->
+        <div class="authorised_value_images">
+          <!-- TMPL_LOOP NAME="authorised_value_images" -->
+          <img src="<!-- TMPL_VAR name="imageurl" -->" alt="<!-- TMPL_VAR name="label" -->" title="<!-- TMPL_VAR name="label" -->">
+          <!-- /TMPL_LOOP -->
+        </div>
+        <!-- /TMPL_IF -->
+
 	<!-- TMPL_IF NAME="TagsShowOnDetail" -->
         <div class="results_summary">
         <!-- TMPL_IF NAME="TagLoop" -->
@@ -259,7 +267,7 @@
                             <!-- TMPL_VAR NAME="notforloan" -->
                         <!-- TMPL_ELSE -->
                             <!-- TMPL_IF name="itemlost"-->
-                                Item lost
+                                <!-- TMPL_IF name="lostimageurl"--><img src="<!-- TMPL_VAR NAME="lostimageurl" -->" alt="<!-- TMPL_VAR NAME="lostimagelabel" -->" title="<!-- TMPL_VAR NAME="lostimagelabel" -->"><!-- TMPL_ELSE -->Item lost<!-- /TMPL_IF -->
                             <!-- TMPL_ELSE -->
                                 <!-- TMPL_IF NAME="wthdrawn" -->
                                     Item Cancelled

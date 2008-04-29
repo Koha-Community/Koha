@@ -118,6 +118,8 @@ if (C4::Context->preference("RequestOnOpac")) {
     $RequestOnOpac = 1;
 }
 
+my $biblio_authorised_value_images = C4::Items::get_authorised_value_images( C4::Biblio::get_biblio_authorised_values( $biblionumber ) );
+
 my $norequests = 1;
 my %itemfields;
 for my $itm (@items) {
@@ -139,29 +141,41 @@ for my $itm (@items) {
 	$itemfields{ccode} = 1 if($itm->{ccode});
 	$itemfields{enumchron} = 1 if($itm->{enumchron});
 	$itemfields{copynumber} = 1 if($itm->{copynumber});
+
+     # walk through the item-level authorised values and populate some images
+     my $item_authorised_value_images = C4::Items::get_authorised_value_images( C4::Items::get_item_authorised_values( $itm->{'itemnumber'} ) );
+     # warn( Data::Dumper->Dump( [ $item_authorised_value_images ], [ 'item_authorised_value_images' ] ) );
+
+     if ( $itm->{'itemlost'} ) {
+         my $lostimageinfo = List::Util::first { $_->{'category'} eq 'LOST' } @$item_authorised_value_images;
+         $itm->{'lostimageurl'}   = $lostimageinfo->{ 'imageurl' };
+         $itm->{'lostimagelabel'} = $lostimageinfo->{ 'label' };
+     }
+
 }
 
 ## get notes and subjects from MARC record
-    my $dbh              = C4::Context->dbh;
-    my $marcflavour      = C4::Context->preference("marcflavour");
-    my $record           = GetMarcBiblio($biblionumber);
-    my $marcnotesarray   = GetMarcNotes   ($record,$marcflavour);
-    my $marcauthorsarray = GetMarcAuthors ($record,$marcflavour);
-    my $marcsubjctsarray = GetMarcSubjects($record,$marcflavour);
-    my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);
-    my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
+my $dbh              = C4::Context->dbh;
+my $marcflavour      = C4::Context->preference("marcflavour");
+my $record           = GetMarcBiblio($biblionumber);
+my $marcnotesarray   = GetMarcNotes   ($record,$marcflavour);
+my $marcauthorsarray = GetMarcAuthors ($record,$marcflavour);
+my $marcsubjctsarray = GetMarcSubjects($record,$marcflavour);
+my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);
+my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
 
     $template->param(
-        MARCNOTES   => $marcnotesarray,
-        MARCSUBJCTS => $marcsubjctsarray,
-        MARCAUTHORS => $marcauthorsarray,
-        MARCSERIES  => $marcseriesarray,
-        MARCURLS    => $marcurlsarray,
-		norequests => $norequests,
-		RequestOnOpac=>$RequestOnOpac,
-		itemdata_ccode => $itemfields{ccode},
-		itemdata_enumchron => $itemfields{enumchron},
-		itemdata_copynumber => $itemfields{copynumber},
+                     MARCNOTES               => $marcnotesarray,
+                     MARCSUBJCTS             => $marcsubjctsarray,
+                     MARCAUTHORS             => $marcauthorsarray,
+                     MARCSERIES              => $marcseriesarray,
+                     MARCURLS                => $marcurlsarray,
+                     norequests              => $norequests,
+                     RequestOnOpac           => $RequestOnOpac,
+                     itemdata_ccode          => $itemfields{ccode},
+                     itemdata_enumchron      => $itemfields{enumchron},
+                     itemdata_copynumber     => $itemfields{copynumber},
+                     authorised_value_images => $biblio_authorised_value_images,
     );
 
 foreach ( keys %{$dat} ) {

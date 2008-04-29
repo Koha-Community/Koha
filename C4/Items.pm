@@ -1315,6 +1315,106 @@ sub GetItemnumberFromBarcode {
     return ($result);
 }
 
+=head3 get_item_authorised_values
+
+  find the types and values for all authorised values assigned to this item.
+
+  parameters:
+    itemnumber
+
+  returns: a hashref malling the authorised value to the value set for this itemnumber
+
+    $authorised_values = {
+             'CCODE'      => undef,
+             'DAMAGED'    => '0',
+             'LOC'        => '3',
+             'LOST'       => '0'
+             'NOT_LOAN'   => '0',
+             'RESTRICTED' => undef,
+             'STACK'      => undef,
+             'WITHDRAWN'  => '0',
+             'branches'   => 'CPL',
+             'cn_source'  => undef,
+             'itemtypes'  => 'SER',
+           };
+
+   Notes: see C4::Biblio::get_biblio_authorised_values for a similar method at the biblio level.
+
+=cut
+
+sub get_item_authorised_values {
+    my $itemnumber = shift;
+
+    # assume that these entries in the authorised_value table are item level.
+    my $query = q(SELECT distinct authorised_value, kohafield
+                    FROM marc_subfield_structure
+                    WHERE kohafield like 'item%'
+                      AND authorised_value != '' );
+
+    my $itemlevel_authorised_values = C4::Context->dbh->selectall_hashref( $query, 'authorised_value' );
+    my $iteminfo = GetItem( $itemnumber );
+    # warn( Data::Dumper->Dump( [ $itemlevel_authorised_values ], [ 'itemlevel_authorised_values' ] ) );
+    my $return;
+    foreach my $this_authorised_value ( keys %$itemlevel_authorised_values ) {
+        my $field = $itemlevel_authorised_values->{ $this_authorised_value }->{'kohafield'};
+        $field =~ s/^items\.//;
+        if ( exists $iteminfo->{ $field } ) {
+            $return->{ $this_authorised_value } = $iteminfo->{ $field };
+        }
+    }
+    # warn( Data::Dumper->Dump( [ $return ], [ 'return' ] ) );
+    return $return;
+}
+
+=head3 get_authorised_value_images
+
+  find a list of icons that are appropriate for display based on the
+  authorised values for a biblio.
+
+  parameters: listref of authorised values, such as comes from
+    get_item_ahtorised_values or
+    from C4::Biblio::get_biblio_authorised_values
+
+  returns: listref of hashrefs for each image. Each hashref looks like
+    this:
+
+      { imageurl => '/intranet-tmpl/prog/img/itemtypeimg/npl/WEB.gif',
+        label    => '',
+        category => '',
+        value    => '', }
+
+  Notes: Currently, I put on the full path to the images on the staff
+  side. This should either be configurable or not done at all. Since I
+  have to deal with 'intranet' or 'opac' in
+  get_biblio_authorised_values, perhaps I should be passing it in.
+
+=cut
+
+sub get_authorised_value_images {
+    my $authorised_values = shift;
+
+    my @imagelist;
+
+    my $authorised_value_list = GetAuthorisedValues();
+    # warn ( Data::Dumper->Dump( [ $authorised_value_list ], [ 'authorised_value_list' ] ) );
+    foreach my $this_authorised_value ( @$authorised_value_list ) {
+        if ( exists $authorised_values->{ $this_authorised_value->{'category'} }
+             && $authorised_values->{ $this_authorised_value->{'category'} } eq $this_authorised_value->{'authorised_value'} ) {
+            # warn ( Data::Dumper->Dump( [ $this_authorised_value ], [ 'this_authorised_value' ] ) );
+            if ( defined $this_authorised_value->{'imageurl'} ) {
+                push @imagelist, { imageurl => C4::Koha::getitemtypeimagesrc( 'intranet' ) . '/' . $this_authorised_value->{'imageurl'},
+                                   label    => $this_authorised_value->{'lib'},
+                                   category => $this_authorised_value->{'category'},
+                                   value    => $this_authorised_value->{'authorised_value'}, };
+            }
+        }
+    }
+
+    # warn ( Data::Dumper->Dump( [ \@imagelist ], [ 'imagelist' ] ) );
+    return \@imagelist;
+
+}
+
 =head1 LIMITED USE FUNCTIONS
 
 The following functions, while part of the public API,

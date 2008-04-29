@@ -298,6 +298,15 @@ $(window).load(function() {
                                         <!-- TMPL_IF name="cn_class" -->[<a href="/cgi-bin/koha/opac-search.pl?q=callnum:<!-- TMPL_VAR NAME="cn_class" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="cn_class" --></a>]<!-- /TMPL_IF -->
                                     </p>
                                     <p class="searchhighlightblob"><!-- TMPL_VAR NAME="searchhighlightblob" --></p>
+
+                                    <!-- TMPL_IF NAME="authorised_value_images" -->
+                                <p>
+                                  <!-- TMPL_LOOP NAME="authorised_value_images" -->
+                                  <img src="<!-- TMPL_VAR name="imageurl" -->" />
+                                  <!-- /TMPL_LOOP -->
+                                </p>
+                                <!-- /TMPL_IF -->
+                                
                                 <!-- /TMPL_IF -->
                                   <!-- TMPL_IF NAME="norequests" -->
                                         No holds allowed

@@ -3075,6 +3075,66 @@ sub set_service_options {
     return $serviceOptions;
 }
 
+=head3 get_biblio_authorised_values
+
+  find the types and values for all authorised values assigned to this biblio.
+
+  parameters:
+    biblionumber
+
+  returns: a hashref malling the authorised value to the value set for this biblionumber
+
+      $authorised_values = {
+                             'Scent'     => 'flowery',
+                             'Audience'  => 'Young Adult',
+                             'itemtypes' => 'SER',
+                           };
+
+  Notes: forlibrarian should probably be passed in, and called something different.
+
+
+=cut
+
+sub get_biblio_authorised_values {
+    my $biblionumber = shift;
+    
+    my $forlibrarian = 1; # are we in staff or opac?
+    my $frameworkcode = GetFrameworkCode( $biblionumber );
+
+    my $authorised_values;
+
+    my $record  = GetMarcBiblio( $biblionumber );
+    my $tagslib = GetMarcStructure( $forlibrarian, $frameworkcode );
+
+    # assume that these entries in the authorised_value table are bibliolevel.
+    # ones that start with 'item%' are item level.
+    my $query = q(SELECT distinct authorised_value, kohafield
+                    FROM marc_subfield_structure
+                    WHERE authorised_value !=''
+                      AND (kohafield like 'biblio%'
+                       OR  kohafield like '') );
+    my $bibliolevel_authorised_values = C4::Context->dbh->selectall_hashref( $query, 'authorised_value' );
+    
+    foreach my $tag ( keys( %$tagslib ) ) {
+        foreach my $subfield ( keys( %{$tagslib->{ $tag }} ) ) {
+            # warn "checking $subfield. type is: " . ref $tagslib->{ $tag }{ $subfield };
+            if ( 'HASH' eq ref $tagslib->{ $tag }{ $subfield } ) {
+                if ( exists $tagslib->{ $tag }{ $subfield }{'authorised_value'} && exists $bibliolevel_authorised_values->{ $tagslib->{ $tag }{ $subfield }{'authorised_value'} } ) {
+                    if ( defined $record->field( $tag ) ) {
+                        my $this_subfield_value = $record->field( $tag )->subfield( $subfield );
+                        if ( defined $this_subfield_value ) {
+                            $authorised_values->{ $tagslib->{ $tag }{ $subfield }{'authorised_value'} } = $this_subfield_value;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    # warn ( Data::Dumper->Dump( [ $authorised_values ], [ 'authorised_values' ] ) );
+    return $authorised_values;
+}
+
+
 1;
 
 __END__
