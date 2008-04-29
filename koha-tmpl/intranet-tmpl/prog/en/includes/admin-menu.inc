@@ -27,7 +27,7 @@
 	<li><a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC Bibliographic framework</a></li>
 	<li><a href="/cgi-bin/koha/admin/koha2marclinks.pl">Koha to MARC mapping</a></li>
 	<li><a href="/cgi-bin/koha/admin/checkmarc.pl">MARC Bibliographic framework test</a></li>
-    <li><a href="/cgi-bin/koha/admin/authtypes.pl">MARC Authorities framework</a></li>
+    <li><a href="/cgi-bin/koha/admin/authtypes.pl">Authority types</a></li>
     <li><a href="/cgi-bin/koha/admin/classsources.pl">Classification sources</a></li>
     <li><a href="/cgi-bin/koha/admin/matching-rules.pl">Record matching rules</a></li>
 </ul>
