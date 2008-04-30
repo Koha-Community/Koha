@@ -419,7 +419,7 @@
 			</h5>
 			<small><!-- TMPL_VAR NAME="datereviewed" --></small>
         <p>
-          <!-- TMPL_VAR NAME="review" -->
+          <!-- TMPL_VAR NAME="review" ESCAPE="HTML" -->
 		  <a href="#" onclick="Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->&amp;reviewid=<!-- TMPL_VAR NAME="reviewid" -->');">Edit</a>
         </p></div>
 			<!-- TMPL_ELSE -->
@@ -432,7 +432,7 @@
             </h5>
 			<small><!-- TMPL_VAR NAME="datereviewed" --></small>
         <p>
-          <!-- TMPL_VAR NAME="review" -->
+          <!-- TMPL_VAR NAME="review" ESCAPE="HTML" -->
         </p></div>
 			<!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->

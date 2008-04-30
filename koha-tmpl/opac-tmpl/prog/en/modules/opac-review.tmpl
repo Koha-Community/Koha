@@ -24,13 +24,13 @@
 		$('#reviewf').submit( function() {
 			<!-- TMPL_IF NAME="reviewid" -->
 			parent.opener.$('#c<!-- TMPL_VAR NAME="reviewid" --> p').prev("small").prev("h5").html("Your Edited Comment (preview, pending approval)");
-			parent.opener.$('#c<!-- TMPL_VAR NAME="reviewid" --> p').html($("#review").val());
+			parent.opener.$('#c<!-- TMPL_VAR NAME="reviewid" --> p').html($("#review").val().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'));
 			parent.opener.$('#c<!-- TMPL_VAR NAME="reviewid" --> p').append(" <a href=\"#comment\" onclick=\"Dopop(\'/cgi-bin/koha/opac-review.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->&amp;reviewid=<!-- TMPL_VAR NAME="reviewid" -->\');\">Edit</a>");
 			window.close();
 			<!-- TMPL_ELSE -->
 			parent.opener.$('#newcomment').attr("class","yours");
 			parent.opener.$('#newcomment').html("<h5>Your Comment (preview, pending approval)</h5>");
-			parent.opener.$('#newcomment').append("<p>"+$("#review").val());
+			parent.opener.$('#newcomment').append("<p>"+$("#review").val().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'));
 			parent.opener.$('#newcomment p').append(" <a href=\"#comment\" onclick=\"Dopop(\'/cgi-bin/koha/opac-review.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->&amp;reviewid=<!-- TMPL_VAR NAME="reviewid" -->\');\">Edit</a></p>");
 			parent.opener.$("#addcomment").prev("p").remove();
 			parent.opener.$("#addcomment").remove();
