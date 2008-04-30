@@ -17,17 +17,86 @@ use Test::More;
 
 use Test::Class::Load qw ( . ); # run from the t directory
 
+clear_test_database();
 create_test_database();
 
 start_zebrasrv();
 start_zebraqueue_daemon();
 
-Test::Class->runtests;
+if ($ENV{'TEST_CLASS'}) {
+    # assume only one test class is specified;
+    # should extend to allow multiples, but that will 
+    # mean changing how test classes are loaded.
+    eval "KohaTest::$ENV{'TEST_CLASS'}->runtests";
+} else {
+    Test::Class->runtests;
+}
 
 stop_zebraqueue_daemon();
 stop_zebrasrv();
 
 # stop_zebrasrv();
+
+=head3 clear_test_database
+
+  removes all tables from test database so that install starts with a clean slate
+
+=cut
+
+sub clear_test_database {
+
+    diag "removing tables from test database";
+
+    my $dbh = C4::Context->dbh;
+    my $schema = C4::Context->config("database");
+
+    my @tables = get_all_tables($dbh, $schema);
+    foreach my $table (@tables) {
+        drop_all_foreign_keys($dbh, $table);
+    }
+
+    foreach my $table (@tables) {
+        drop_table($dbh, $table);
+    }
+}
+
+sub get_all_tables {
+  my ($dbh, $schema) = @_;
+  my $sth = $dbh->prepare("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = ?");
+  my @tables = ();
+  $sth->execute($schema);
+  while (my ($table) = $sth->fetchrow_array) {
+    push @tables, $table;
+  }
+  $sth->finish;
+  return @tables;
+}
+
+sub drop_all_foreign_keys {
+    my ($dbh, $table) = @_;
+    # get the table description
+    my $sth = $dbh->prepare("SHOW CREATE TABLE $table");
+    $sth->execute;
+    my $vsc_structure = $sth->fetchrow;
+    # split on CONSTRAINT keyword
+    my @fks = split /CONSTRAINT /,$vsc_structure;
+    # parse each entry
+    foreach (@fks) {
+        # isolate what is before FOREIGN KEY, if there is something, it's a foreign key to drop
+        $_ = /(.*) FOREIGN KEY.*/;
+        my $id = $1;
+        if ($id) {
+            # we have found 1 foreign, drop it
+            $dbh->do("ALTER TABLE $table DROP FOREIGN KEY $id");
+            $id="";
+        }
+    }
+}
+
+sub drop_table {
+    my ($dbh, $table) = @_;
+    $dbh->do("DROP TABLE $table");
+}
 
 =head3 create_test_database
 
