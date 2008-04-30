@@ -15,6 +15,7 @@ use C4::Context;
 use C4::Items;
 use C4::Members;
 use C4::Search;
+use File::Temp qw/ tempdir /;
 
 # Since this is an abstract base class, this prevents these tests from
 # being run directly unless we're testing a subclass. It just makes
@@ -154,11 +155,8 @@ sub startup_15_truncate_tables : Test( startup => 1 ) {
                               deletedborrowers            
                               deleteditems                
                               ethnicity                   
-                              import_items                
-                              import_record_matches       
                               issues                      
                               issuingrules                
-                              items                       
                               labels                      
                               labels_profile              
                               matchchecks                 
@@ -391,6 +389,50 @@ sub add_biblios {
     }
 
     
+}
+
+=head3 reindex_bibs
+
+Do a fast reindexing of all of the bib and authority
+records and mark all zebraqueue entries done.
+
+Useful for test routines that need to do a
+lot of indexing without having to wait for
+zebraqueue.
+
+In NoZebra model, this only marks zebraqueue
+done - the records should already be indexed.
+
+=cut
+
+sub reindex_marc {
+    my $self = shift;
+
+    # mark zebraqueue done regardless of the indexing mode
+    my $dbh = C4::Context->dbh();
+    $dbh->do("UPDATE zebraqueue SET done = 1 WHERE done = 0");
+
+    return if C4::Context->preference('NoZebra');
+
+    my $directory = tempdir(CLEANUP => 1);
+    foreach my $record_type qw(biblio authority) {
+        mkdir "$directory/$record_type";
+        my $sth = $dbh->prepare($record_type eq "biblio" ? "SELECT marc FROM biblioitems" : "SELECT marc FROM auth_header");
+        $sth->execute();
+        open OUT, ">:utf8", "$directory/$record_type/records";
+        while (my ($blob) = $sth->fetchrow_array) {
+            print OUT $blob;
+        }
+        close OUT;
+        my $zebra_server = "${record_type}server";
+        my $zebra_config  = C4::Context->zebraconfig($zebra_server)->{'config'};
+        my $zebra_db_dir  = C4::Context->zebraconfig($zebra_server)->{'directory'};
+        my $zebra_db = $record_type eq 'biblio' ? 'biblios' : 'authorities';
+        system "zebraidx -c $zebra_config -d $zebra_db -g iso2709 init > /dev/null 2>\&1";
+        system "zebraidx -c $zebra_config -d $zebra_db -g iso2709 update $directory/${record_type} > /dev/null 2>\&1";
+        system "zebraidx -c $zebra_config -d $zebra_db -g iso2709 commit > /dev/null 2>\&1";
+    }
+        
 }
 
 1;
