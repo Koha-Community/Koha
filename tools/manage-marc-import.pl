@@ -99,7 +99,11 @@ if ($op eq "") {
 } elsif ($op eq "redo-matching") {
     my $new_matcher_id = $input->param('new_matcher_id');
     my $current_matcher_id = $input->param('current_matcher_id');
-    redo_matching($template, $import_batch_id, $new_matcher_id, $current_matcher_id);
+    my $overlay_action = $input->param('overlay_action');
+    my $nomatch_action = $input->param('nomatch_action');
+    my $item_action = $input->param('item_action');
+    redo_matching($template, $import_batch_id, $new_matcher_id, $current_matcher_id, 
+                  $overlay_action, $nomatch_action, $item_action);
     import_biblios_list($template, $import_batch_id, $offset, $results_per_page);
 } 
 
@@ -108,10 +112,34 @@ output_html_with_http_headers $input, $cookie, $template->output;
 exit 0;
 
 sub redo_matching {
-    my ($template, $import_batch_id, $new_matcher_id, $current_matcher_id) = @_;
+    my ($template, $import_batch_id, $new_matcher_id, $current_matcher_id, $overlay_action, $nomatch_action, $item_action) = @_;
     my $rematch_failed = 0;
     return if not defined $new_matcher_id and not defined $current_matcher_id;
-    return if $new_matcher_id == $current_matcher_id;
+    my $old_overlay_action = GetImportBatchOverlayAction($import_batch_id);
+    my $old_nomatch_action = GetImportBatchNoMatchAction($import_batch_id);
+    my $old_item_action = GetImportBatchItemAction($import_batch_id);
+    return if $new_matcher_id == $current_matcher_id and 
+              $old_overlay_action eq $overlay_action and 
+              $old_nomatch_action eq $nomatch_action and 
+              $old_item_action eq $item_action;
+ 
+    if ($old_overlay_action ne $overlay_action) {
+        SetImportBatchOverlayAction($import_batch_id, $overlay_action);
+        $template->param('changed_overlay_action' => 1);
+    }
+    if ($old_nomatch_action ne $nomatch_action) {
+        SetImportBatchNoMatchAction($import_batch_id, $nomatch_action);
+        $template->param('changed_nomatch_action' => 1);
+    }
+    if ($old_item_action ne $item_action) {
+        SetImportBatchItemAction($import_batch_id, $item_action);
+        $template->param('changed_item_action' => 1);
+    }
+
+    if ($new_matcher_id == $current_matcher_id) {
+        return;
+    } 
+
     my $num_with_matches = 0;
     if (defined $new_matcher_id and $new_matcher_id ne "") {
         my $matcher = C4::Matcher->fetch($new_matcher_id);
@@ -123,7 +151,8 @@ sub redo_matching {
         }
     } else {
         $num_with_matches = BatchFindBibDuplicates($import_batch_id, undef);
-         SetImportBatchMatcher($import_batch_id, undef);
+        SetImportBatchMatcher($import_batch_id, undef);
+        SetImportBatchOverlayAction('create_new');
     }
     $template->param(rematch_failed => $rematch_failed);
     $template->param(rematch_attempted => 1);
@@ -314,6 +343,15 @@ sub import_biblios_list {
     $template->param(num_results => $num_biblios);
     $template->param(results_per_page => $results_per_page);
     $template->param(import_batch_id => $import_batch_id);
+    my $overlay_action = GetImportBatchOverlayAction($import_batch_id);
+    $template->param("overlay_action_${overlay_action}" => 1);
+    $template->param(overlay_action => $overlay_action);
+    my $nomatch_action = GetImportBatchNoMatchAction($import_batch_id);
+    $template->param("nomatch_action_${nomatch_action}" => 1);
+    $template->param(nomatch_action => $nomatch_action);
+    my $item_action = GetImportBatchItemAction($import_batch_id);
+    $template->param("item_action_${item_action}" => 1);
+    $template->param(item_action => $item_action);
     batch_info($template, $batch);
     
 }

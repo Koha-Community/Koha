@@ -1397,6 +1397,26 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.076";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE import_batches
+              ADD COLUMN nomatch_action enum('create_new', 'ignore') NOT NULL default 'create_new' AFTER overlay_action");
+    $dbh->do("ALTER TABLE import_batches
+              ADD COLUMN item_action enum('always_add', 'add_only_for_matches', 'add_only_for_new', 'ignore') 
+                  NOT NULL default 'always_add' AFTER nomatch_action");
+    $dbh->do("ALTER TABLE import_batches
+              MODIFY overlay_action  enum('replace', 'create_new', 'use_template', 'ignore')
+                  NOT NULL default 'create_new'");
+    $dbh->do("ALTER TABLE import_records
+              MODIFY status  enum('error', 'staged', 'imported', 'reverted', 'items_reverted', 
+                                  'ignored') NOT NULL default 'staged'");
+    $dbh->do("ALTER TABLE import_items
+              MODIFY status enum('error', 'staged', 'imported', 'reverted', 'ignored') NOT NULL default 'staged'");
+
+	print "Upgrade to $DBversion done (changes to import_batches and import_records) ";
+	SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table

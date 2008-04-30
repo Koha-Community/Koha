@@ -74,16 +74,20 @@ sub process_batch {
 
     my $num_with_matches = 0;
     if ($match_bibs) {
-    	my $matcher = C4::Matcher->fetch($match_bibs) ;
-	if( ! defined $matcher) {
-		$matcher = C4::Matcher->new('biblio');
-       	$matcher->add_simple_matchpoint('isbn', 1000, '020', 'a', -1, 0, '');
-       	$matcher->add_simple_required_check('245', 'a', -1, 0, '', 
+        my $matcher = C4::Matcher->fetch($match_bibs) ;
+        if (! defined $matcher) {
+            $matcher = C4::Matcher->new('biblio');
+            $matcher->add_simple_matchpoint('isbn', 1000, '020', 'a', -1, 0, '');
+            $matcher->add_simple_required_check('245', 'a', -1, 0, '', 
                                             '245', 'a', -1, 0, '');
-     } else {
-		 SetImportBatchMatcher($batch_id, $match_bibs);
-	}
-	print "... looking for matches with records already in database\n";
+        } else {
+            SetImportBatchMatcher($batch_id, $match_bibs);
+        }
+        # set default record overlay behavior
+        SetImportBatchOverlayAction($batch_id, 'replace');
+        SetImportBatchNoMatchAction($batch_id, 'create_new');
+        SetImportBatchItemAction($batch_id, 'always_add');
+        print "... looking for matches with records already in database\n";
         $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher, 10, 100, \&print_progress_and_commit);
         print "... finished looking for matches\n";
     }
@@ -137,8 +141,8 @@ Parameters:
     --match-bibs <match_id> use this option to match bibs
                             in the file with bibs already in 
                             the database for future overlay.
-			    If <match_id> isn't defined, a default 
-			    MARC21 ISBN & title match rule will be applied.
+                            If <match_id> isn't defined, a default 
+                            MARC21 ISBN & title match rule will be applied.
     --add-items             use this option to specify that
                             item data is embedded in the MARC
                             bibs and should be parsed.

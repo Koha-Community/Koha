@@ -39,23 +39,33 @@
 </div>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="batch_info" -->
-<p><label>File name</label> <!-- TMPL_VAR name="file_name" --></p>
-<p><label>Comments</label> <!-- TMPL_VAR name="comments" --></p>
-<p><label>Staged</label> <!-- TMPL_VAR name="upload_timestamp" --></p>
-<p><label>Status</label> <!-- TMPL_VAR name="import_status" --></p>
-<p><label>Matching rule applied</label> 
+<fieldset class="rows">
+  <ul>
+    <li><label>File name</label> <!-- TMPL_VAR name="file_name" --></li>
+    <li><label>Comments</label> <!-- TMPL_VAR name="comments" --></li>
+    <li><label>Staged</label> <!-- TMPL_VAR name="upload_timestamp" --></li>
+    <li><label>Status</label> <!-- TMPL_VAR name="import_status" --></li>
+    <li><label>Matching rule applied</label> 
 <!-- TMPL_IF name="current_matcher_id" -->
   <!-- TMPL_VAR name="current_matcher_code" --> (<!-- TMPL_VAR name="current_matcher_description" -->)
 <!-- TMPL_ELSE -->
   No matching rule in effect
 <!-- /TMPL_IF -->
-</p>
+    </li>
+    <li><label>Action if matching record found</label> <!-- TMPL_VAR NAME="overlay_action" --></li>
+    <li><label>Action if no match found</label> <!-- TMPL_VAR NAME="nomatch_action" --></li>
+    <li><label>Item processing</label> <!-- TMPL_VAR NAME="item_action" --></li>
+  </ul>
+</fieldset>
 <!-- TMPL_IF name="can_commit" -->
 <div>
+  <fieldset class="rows">
   <form action="<!-- TMPL_VAR name="script_name" -->" method="post">
     <input type="hidden" name="op" value="redo-matching" />
     <input type="hidden" name="import_batch_id" value="<!-- TMPL_VAR name="import_batch_id" -->" />
     <input type="hidden" name="current_matcher_id" value="<!-- TMPL_VAR name="current_matcher_id" -->" />
+    <ul>
+    <li><label for name="new_matcher_id">New matching rule</label>
     <select name="new_matcher_id" id="new_matcher_id">
        <option value="">Do not look for matching records</option> 
        <!-- TMPL_LOOP name="available_matchers" -->
@@ -70,11 +80,42 @@
           <!-- /TMPL_IF -->
        <!-- /TMPL_LOOP -->
     </select>
+    </li>
+    <li><label for="overlay_action">Action if matching record found</label>
+     <!-- TMPL_INCLUDE NAME="tools-overlay-action.inc" -->
+    </li>
+    <li><label for="overlay_action">Action if no match found</label>
+     <!-- TMPL_INCLUDE NAME="tools-nomatch-action.inc" -->
+    </li>
+    <li><label for="overlay_action">Item processing</label>
+     <!-- TMPL_INCLUDE NAME="tools-item-action.inc" -->
+    </li>
+    </ul>
     <input type="submit" class="button" value="Apply different matching rule" />
   </form>
+  <!-- TMPL_IF name="rematch_attempted" -->
+    <!-- TMPL_IF name="rematch_failed" -->
+      <p><span class="problem">Failed to apply different matching rule</span></p>
+    <!-- TMPL_ELSE -->
+      <p><span class="problem">Applied different matching rule.  Number of records matched now
+       <!-- TMPL_VAR name="num_with_matches" -->
+      </span></p>
+    <!-- /TMPL_IF -->
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF name="changed_overlay_action" -->
+      <p><span class="problem">Changed action if matching record found</span></p>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF name="changed_nomatch_action" -->
+      <p><span class="problem">Changed action if no match found</span></p>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF name="changed_item_action" -->
+      <p><span class="problem">Changed item processing option</span></p>
+  <!-- /TMPL_IF -->
+    </fieldset>
 </div>
 <!-- /TMPL_IF -->
 <div>
+  <fieldset class="rows">
   <!-- TMPL_IF name="can_commit" -->
   <form action="<!-- TMPL_VAR name="script_name" -->" method="post">
     <input type="hidden" name="op" value="commit-batch" />
@@ -97,15 +138,16 @@
   <div id="jobstatus" style="display:none">Job progress: <span id="jobprogress">0</span>%</div>
   <div id="jobfailed" style="display:none"></div>
   <!-- /TMPL_IF -->
+  </fieldset>
 </div>
   <!-- TMPL_IF name="did_commit" -->
   <p><span class="problem">Completed import of records</span></p>
   <table>
   <tr><td>Number of records added</td><td><!-- TMPL_VAR name="num_added" --></td></tr>
   <tr><td>Number of records updated</td><td><!-- TMPL_VAR name="num_updated" --></td></tr>
+  <tr><td>Number of records ignored</td><td><!-- TMPL_VAR name="num_ignored" --></td></tr>
   <tr><td>Number of items added</td><td><!-- TMPL_VAR name="num_items_added" --></td></tr>
   <tr><td>Number of items ignored because of duplicate barcode</td><td><!-- TMPL_VAR name="num_items_errored" --></td></tr>
-  <tr><td>Number of records ignored</td><td><!-- TMPL_VAR name="num_ignored" --></td></tr>
   </table>
   <!-- /TMPL_IF -->
   <!-- TMPL_IF name="did_revert" -->
@@ -117,15 +159,6 @@
   <tr><td>Number of records changed back</td><td><!-- TMPL_VAR name="num_reverted" --></td></tr>
   <tr><td>Number of records ignored</td><td><!-- TMPL_VAR name="num_ignored" --></td></tr>
   </table>
-  <!-- /TMPL_IF -->
-  <!-- TMPL_IF name="rematch_attempted" -->
-    <!-- TMPL_IF name="rematch_failed" -->
-      <p><span class="problem">Failed to apply different matching rule</span></p>
-    <!-- TMPL_ELSE -->
-      <p><span class="problem">Applied different matching rule.  Number of records matched now
-       <!-- TMPL_VAR name="num_with_matches" -->
-      </span></p>
-    <!-- /TMPL_IF -->
   <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 <br />

@@ -100,7 +100,14 @@ function CheckForm(f) {
           </option>
        <!-- /TMPL_LOOP -->
     </select>
-    </li></ol>
+    </li>
+      <li><label for="overlay_action">Action if matching bibliographic record found </label>
+           <!-- TMPL_INCLUDE NAME="tools-overlay-action.inc" -->
+      </li>
+      <li><label for="nomatch_action">Action if no match is found </label>
+           <!-- TMPL_INCLUDE NAME="tools-nomatch-action.inc" -->
+      </li>
+    </ol>
   </fieldset>
   <fieldset class="rows">
     <legend>Check for embedded item record data?</legend>
@@ -116,6 +123,11 @@ function CheckForm(f) {
       <li class="radio">
         <input type="radio" id="parse_itemsno" name="parse_items" value="0" />
         <label for="parse_itemsno">No</label>
+      </li>
+    </ol>
+    <ol>
+      <li><label for="item_action">How to process items </label>
+           <!-- TMPL_INCLUDE NAME="tools-item-action.inc" -->
       </li>
     </ol>
   </fieldset>

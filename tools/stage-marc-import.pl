@@ -50,7 +50,10 @@ my $fileID=$input->param('uploadedfileid');
 my $runinbackground = $input->param('runinbackground');
 my $completedJobID = $input->param('completedJobID');
 my $matcher_id = $input->param('matcher');
+my $overlay_action = $input->param('overlay_action');
+my $nomatch_action = $input->param('nomatch_action');
 my $parse_items = $input->param('parse_items');
+my $item_action = $input->param('item_action');
 my $comments = $input->param('comments');
 my $syntax = $input->param('syntax');
 my ($template, $loggedinuser, $cookie)
@@ -140,8 +143,12 @@ if ($completedJobID) {
         if (defined $matcher) {
             $checked_matches = 1;
             $matcher_code = $matcher->code();
-            $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher, 10, 50, matching_progress_callback($job, $dbh));
+            $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher, 
+                                                       10, 50, matching_progress_callback($job, $dbh));
             SetImportBatchMatcher($batch_id, $matcher_id);
+            SetImportBatchOverlayAction($batch_id, $overlay_action);
+            SetImportBatchNoMatchAction($batch_id, $nomatch_action);
+            SetImportBatchItemAction($batch_id, $item_action);
             $dbh->commit();
         } else {
             $matcher_failed = 1;
