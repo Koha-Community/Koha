@@ -37,11 +37,14 @@ my $template_type;
 my @params = $cgi->param("limit");
 
 my $build_grouped_results = C4::Context->preference('OPACGroupResults');
-if ($build_grouped_results) {
+if  ($cgi->param("format") =~ /(rss|atom|opensearchdescription)/) {
+	$template_name = 'opac-opensearch.tmpl';
+}
+elsif ($build_grouped_results) {
     $template_name = 'opac-results-grouped.tmpl';
-} 
+}
 elsif ((@params>=1) || ($cgi->param("q")) || ($cgi->param('multibranchlimit')) || ($cgi->param('limit-yr')) ) {
-    $template_name = 'opac-results.tmpl';
+	$template_name = 'opac-results.tmpl';
 }
 else {
     $template_name = 'opac-advsearch.tmpl';
@@ -55,6 +58,15 @@ else {
     authnotrequired => 1,
     }
 );
+if ($cgi->param("format") eq 'rss2') {
+	$template->param("rss2" => 1);
+}
+elsif ($cgi->param("format") eq 'atom') {
+	$template->param("atom" => 1);
+}
+elsif ($cgi->param("format") eq 'opensearchdescription') {
+	$template->param("opensearchdescription" => 1);
+}
 if (C4::Context->preference("marcflavour") eq "UNIMARC" ) {
     $template->param('UNIMARC' => 1);
 }
@@ -282,7 +294,7 @@ my $count = C4::Context->preference('OPACnumSearchResults') || 20;
 my $results_per_page = $params->{'count'} || $count;
 my $offset = $params->{'offset'} || 0;
 my $page = $cgi->param('page') || 1;
-#my $offset = ($page-1)*$results_per_page;
+$offset = ($page-1)*$results_per_page if $page>1;
 my $hits;
 my $expanded_facet = $params->{'expand'};
 

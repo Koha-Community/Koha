@@ -41,4 +41,4 @@
 	//]]>
 </script>
 <link rel="unapi-server" type="application/xml" title="unAPI" href="/cgi-bin/koha/unapi" />
-<link rel="search" type="application/opensearchdescription+xml" title="Koha OpenSearch" href="/cgi-bin/koha/opensearch" />
+<link rel="search" type="application/opensearchdescription+xml" title="<!-- TMPL_VAR NAME="LibraryName" --> OpenSearch" href="http://<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?format=opensearchdescription" />

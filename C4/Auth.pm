@@ -322,6 +322,7 @@ sub get_template_and_user {
 			TagsEnabled => C4::Context->preference("TagsEnabled"),
 			GoogleJackets => C4::Context->preference("GoogleJackets"),
 			AuthorisedValueImages => C4::Context->preference("AuthorisedValueImages"),
+			OPACBaseURL=> C4::Context->preference("OPACBaseURL"),
         );
     }
 	$template->param(listloop=>[{shelfname=>"Freelist", shelfnumber=>110}]);
