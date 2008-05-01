@@ -1,0 +1,1268 @@
+=============================
+Installation Guide for Installing Koha on Fedora Core 7
+=============================
+
+Copyright (C) 2008, Department of Computer and Information
+Science, Library of the University Lyon 2, France
+
+Translated by: Google with help from Joshua Ferraro
+(jmf AT liblime DOT com)
+
+Feedback/bug reports: Koha Developer's List: 
+http://lists.koha.org/mailman/listinfo/koha-devel
+
+This document last modified: 30 April 2008
+
+Installation Instructions
+=============================
+This document was prepared in order to help you discover (or
+test) Koha (Integrated Library System).
+
+The installation of Linux system described below is a basic, 
+it is not designed for a production server (e.g., security, 
+load balancing .. are not described).
+
+This document describes the different stages of installing 
+the software to version 3.00 koha beta on a Fedora 7 Linux.
+Your mileage may vary with different RedHat distributions.
+
+1. LINUX SYSTEM INSTALLATION
+
+System: Linux Fedora 7 (May 2007) Linux Redhat
+The Linux distribution Fedora 7 is downloadable from the 
+Fedora website:
+
+http://fedoraproject.org/
+
+The Fedora website also offers additional content such as
+documentation, FAQ, etc.
+
+Using the entire disk (removal of existing partitions and 
+therefore permanent loss of data stored on the disk) is
+the easiest method; This is not the best practice for a 
+production system, but is useful for testing purposes.
+
+Check that the computer is able to boot from a CD or DVD,
+perhaps by changing the boot order in the bios.
+
+Place the CD or DVD in the drive and restart the machine.
+
+Settings when installing Linux (French specific, may not apply)
+
+Language: French (French)
+Choice of keyboard: French (Latin9) recognized by default.
+Removal of existing Linux partitions
+Host Name: NomMachine.NomDomaine.fr
+Time zone: Europe / Paris. Click on the map or select from the
+list and check system clock to UTC.
+Informing the root password, which is the administrator account.
+
+The installation of the system will automatically start and may
+take between 15 to 30 minutes to complete.
+
+Click Restart.
+
+Enter the default options.
+For Firewall, check www http server (configuration of the firewall).
+Create a user koha with the password kohakoha (eg)
+The koha is therefore created and the group koha which this user belongs.
+
+Setting the homepage
+Enter root, then the password root.
+
+With Fedora, GNOME is the default environment.
+
+To use KDE default (as we at Lyon 2 have done), close the session,
+having recovered the KDE packages on Add / Remove software. For the
+french interface,  go through the package manager and seek, then
+install kde-french.
+
+On the login prompt, go to Options è Select Session and choose KDE. A
+the next connection, the system will ask if you want to use KDE or 
+GNOME by default. Also on the login prompt, go to Languages and 
+choose the French.
+
+The installation of Linux system is complete. 
+
+1.2 Verification of system settings
+
+You must be logged in as administrator of the system (root).
+
+-- Make sure the environment is KDE. The taskbar is at the
+bottom of the screen and left of this bar is the menu K.
+
+-- Check that the system is in french and click on K.
+
+-- Create a few shortcuts in making a drag and drop the following
+items in the taskbar:
+
+Menu K è è Internet Firefox Web Browser
+Menu K è è Terminal System
+Menu K è è Services System Management Services
+
+-- Check that the koha and the group koha are created:
+Menu K è è System Users and Groups
+
+-- Check that web servers Apache and MySQL are installed.
+Menu K è è Services System Management Services
+
+The lines httpd (demon Apache) and mysqld (demon MySQL) must be 
+included in the line of services. You must configure these two 
+services so that they are lançés automatically at boot. Check th
+e box to the left of the service, click the Start button at the 
+top of the list, if the two services start without any problem, 
+validate the change of manager services by clicking on Save or 
+File menu è save changes
+
+Close the services manager.
+
+If one or both services are absent, it is necessary to install Apache
+and / or MySQL. To do so, go in the Package Manager, choose and 
+select Apache server and / or MySQL. In the case of MySQL, we must
+not forget MySQL-devel (available in packages optional). Finally,
+start the installation.
+
+1.3 Installation of additional software
+
+The software installation Koha requires adding additional programs
+to your system linux based on a standard installation. This list may
+be slightly different depending on the version and support (Live
+CD or DVD).
+
+List of software to add
+Libxml2-devel
+Libxslt-devel
+TCL
+Bzip2-devel
+GCC
+Perl-CPAN
+Perl-ExtUtils-AutoInstall
+Ncftp
+Wget
+Gdbm-devel
+Expat-devel
+Tcp_wrappers-devel
+Libicu (see below)
+git-1.5.3.7-1.fc8 [is not necessary for the installation of koha, but
+  useful if one participates in the development of koha.]
+PhPMyAdmin
+Libicu
+Libicu-devel
+
+To add software Linux Fedora, you have two tools
+
+A graphical tool
+Menu K è è System Add / Remove software
+
+Click on the Search tab
+Enter the name of the software in the zone entry and click the
+Search button;
+
+The software that match your search are listed.
+Make sure the check box is checked if the tick and click Apply to
+add software to your system.
+
+A tool mode Terminal YUM
+The YUM documentation is available on the Fedora site
+
+Open a terminal window (K Menu è è Terminal System)
+
+Examples of using YUM:
+Is the web browser Firefox installed?
+Type the command: yum list firefox
+This command will launch the software yum, and asked it to list
+the information on the Firefox.
+Yum visit the various deposits of software for Fedora (fedora,
+updates, etc.). And said that the firefox software is installed
+on this machine (version 2.0.0.3-4.fc7) and there is a
+downloadable version newer ( version 2.0.0.10-2.fc7)
+
+************************************************** ****************
+Screenshot
+[root @ nomduserveur ~] # yum list firefox
+Loading "installonlyn" plugin
+fedora 100% |=========================| 2.1 kB 00:00
+updates 100% |=========================| 2.3 kB 00:00
+Installed Packages
+firefox.i386 2.0.0.3-4.fc7 installed
+Packages Available
+firefox.i386 2.0.0.10-2.fc7 updates
+************************************************** ****************
+
+Updated software firefox by the command yum update firefox.
+YUM inspect the system to check whether it is necessary to update
+other software used by firefox.
+confirm your request y
+
+Installation of new software by the command yum install firefox.
+
+
+Verification
+Check whether these programs are installed using the command rpm
+with option-q followed by the name of the software, possibly separated
+by a space.
+Example:
+rpm-q libxml2-devel libxslt-devel tcl bzip2-devel gcc mysql-devel-perl CPAN perl-ExtUtils-AutoInstall ncftp wget gdbm devel-expat-devel tcp_wrappers-devel
+
+NB: The tool rpm (Redhat Package Manager) allows facilities
+management software under the Linux distribution Fedora.
+
+Special case: the library libicu under Fedora 8
+Under Fedora 8:
+The library libicu, is standard in the distribution Fedora.
+Version 3.8 of this library installed with Fedora 8 is too recent
+and poses a problem when installing software and ZEBRA YAZ, the
+company Indexdata who compiled these two programs with version 3.6
+of the library, it is therefore necessary to remove the libicu 3.8
+library and replace it with version 3.6.
+
+Uninstall the library libicu - 3.8-1.fc8
+
+With the web browser, download the library libicu-3.6-18.fc7.i386.rpm
+(old version, choose the version Fedora 7 for i386) here:
+
+  HYPERLINK "http://rpmfind.net/linux/rpm2html/search.php?query=libicutu.so.36" http://rpmfind.net/linux/rpm2html/search.php?query=libicutu.so.36
+
+Download the package rpm
+Open a terminal window, a menu K> System> Terminal
+find the file libicu-3.6-18.fc7.i386.rpm
+Desktop CD
+ls-l
+
+decompress the archive with the command: rpm-ivh libicu-3.6-18.fc7.i386.rpm
+
+Setting 1.4 for the use of unicode
+
+VERY IMPORTANT
+UNICODE must be set up correctly before installing Koha.
+
+1.4.1 The Linux system is it configured to use UNICODE?
+
+For more information:
+  HYPERLINK "http://wiki.koha.org/doku.php?id=encodingscratchpad" http://wiki.koha.org/doku.php?id=encodingscratchpad
+
+To check, open a terminal window and type the locale.
+You must obtain:
+LANG = en_GB.UTF-8
+...
+
+1.4.2 The web server Apache 2 is it configured to use UNICODE?
+
+To verify, using a text editor, open the httpd.conf file located
+in / etc / httpd / conf and look if it contains the directive:
+
+AddDefaultCharset UTF-8
+
+1.4.3 The MySQL server is it configured to use UNICODE?
+
+NB: mysqld service must be started.
+In a Terminal window, type the command mysql, then an SQL
+to display variables content server configuration.
+Text of query:
+
+show where variable_name variables like 'char%';
+
+************************************************** ****************
+Screenshot
+mysql> show where variable_name variables like 'char%';
++--------------------------+---------------------- ------+
+| Variable_name | Value |
++--------------------------+---------------------- ------+
+| Character_set_client | latin1 |
+| Character_set_connection | latin1 |
+| Character_set_database | latin1 |
+| Character_set_filesystem | Binary |
+| Character_set_results | latin1 |
+| Character_set_server | latin1 |
+| Character_set_system | utf8 |
+| Character_sets_dir | / usr / share / mysql / charsets / |
++--------------------------+---------------------- ------+
+8 rows in set (0.00 sec)
+************************************************** ****************
+
+Some variables are not properly configured (latin1), so we have to
+change the configuration file server MySQL.
+Leaving the mysql client by the command quit.
+
+Using a text editor, open the file my.cnf located in the directory /
+etc and add these 3 lines in the section [mysqld]:
+
+default-character-set = utf8
+character-set-server = utf8
+skip-character-set-client-handshake
+
+To ensure that this change is taken into account, restart the server
+Mysql using the following command in a terminal window:
+mysqld restart service
+
+Check that changing the parameters was taken into account by reconnecting
+the MySQL server with the command mysql, then typing the query:
+
+show where variable_name variables like 'char%';
+The variables contain well utf8 /
+Quit MySQL by the command quit
+
+************************************************** ****************
+Screenshot
+  MySQL
+Welcome to the MySQL monitor. Commands end with; or \ g.
+Your MySQL connection id is 2
+Server version: 5.0.45 Source distribution
+
+Type 'help,' or '\ h' for help. Type '\ c' to clear the buffer.
+
+mysql> show where variable_name variables like 'char%';
++--------------------------+---------------------- ------+
+| Variable_name | Value |
++--------------------------+---------------------- ------+
+| Character_set_client | utf8 |
+| Character_set_connection | utf8 |
+| Character_set_database | utf8 |
+| Character_set_filesystem | Binary |
+| Character_set_results | utf8 |
+| Character_set_server | utf8 |
+| Character_set_system | utf8 |
+| Character_sets_dir | / usr / share / mysql / charsets / |
++--------------------------+---------------------- ------+
+8 rows in set (0.00 sec)
+
+MySQL> quit
+Bye
+************************************************** ****************
+
+Some information for the use of MySQL here: HYPERLINK "http://doc.ubuntu-fr.org/mysql" http://doc.ubuntu-fr.org/mysql
+
+2 INSTALLATION OF ZEBRA SERVER INDEXING
+
+For libraries that must manage several tens of thousands of bib records
+it is recommended that you install the server indexing ZEBRA. Otherwise
+(far fewer records to manage), it is not necessary to install ZEBRA.
+
+The software installation ZEBRA requires prior installation of software
+modules YAZ client and server Z3950.
+
+The installation is as administrator (root).
+
+NB: the creation of files yaz and zebra is only necessary if you use
+the graphical
+
+Website for downloads: HYPERLINK "http://www.indexdata.dk/software/" http://www.indexdata.dk/software/
+
+
+2.1 Installation of the software YAZ
+
+Creating a file needed for the installation of Yaz
+Create files redhat in the directory / usr / src
+SOURCES Create a folder in the directory / usr / src / redhat
+NB: redhat lowercase and uppercase SOURCES.
+
+Installing Yaz by the command:
+rpm-ivh ftp://ftp.indexdata.dk/pub/yaz/redhat/fc6/ *- 3.0.24 *.*. rpm
+Check the final published version and replace -3.0.24 by the number
+of the current version.
+
+Check the installation by the command:
+rpm-q libyaz3 libyaz3-devel yaz yaz-debuginfo yaz-icu-yaz illclient yaz-3.0.24-1.src
+
+
+2.2 Installation of the software ZEBRA
+
+To install packages from the version 2.0.26-1:
+rpm-ivh ftp://ftp.indexdata.dk/pub/zebra/redhat/fc6/ *- 2.0.26-1 .*. rpm
+Check dernère published version and replace -2.0.26-1 by the
+number of the current version.
+
+Check the installation by the command:
+rpm-q libidzebra-2.0-2.0-libidzebra modules idzebra-2.0 idzebra-2.0-debuginfo libidzebra-2.0-devel idzebra-2.0
+
+3 INSTALLATION OF KOHA 3.0
+
+Important Reminder:
+Make sure, BEFORE you install koha, that the system Linux, the MySQL
+server and the Apache server are configured to use the Unicode
+format (cf. 1.4).
+
+
+Download koha here: HYPERLINK "http://download.koha.org/koha-3.00.00-beta2.tar.gz" http://download.koha.org/koha-3.00.00-beta2.tar.gz
+
+3.1 Decompression of the archive koha 3.0
+
+Save the file in the directory / usr / share.
+Opening a window Terminal, and placing himself in the directory / usr / share by the command:
+cd / usr / share
+verify the presence of compressed file koha by the command:
+ls-l * Koha
+Unzip the file with the command tar:
+tar-xvf koha-3.00.00-beta2.tar.gz
+You get a folder koha-3.00.00-beta2, which contains folders and files needed for the installation of software koha.
+
+NB: the installation procedure is described in the text files "INSTALL"
+and "INSTALL debian", the second is more complete.
+
+
+3.2 Protect access to the database server MySQL
+
+Update the password root server MySQL (by default, unprotected access to databases)
+In a Terminal window:
+sudo password mysqladmin Koha
+
+3.3 Creation of a database MySQL test
+
+The basic test is immediately under Fedora. We must remove the existing basic
+test and then create a basic test MySQL provisional, which will be deleted
+after installing koha.
+
+mysql-u root-p
+Enter password: kohakoha (eg)
+
+mysql> drop test database;
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> create database test;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> grant all on test .* to 'test' @ 'localhost' identified by 'test';
+Query OK, 0 rows affected (0.00 sec)
+
+MySQL> flush privileges;
+Query OK, 0 rows affected (0.00 sec)
+
+MySQL> quit
+Bye
+
+
+3.4 Creation of the MySQL database koha
+
+Creation of the database, a user kohaadmin with password and defining its
+privileges.
+
+In a Terminal window:
+mysql-u root-p
+Enter password: type kohakoha (eg a password for root)
+Create Database Koha;
+grant all on koha .* to 'kohaadmin' @ 'localhost' identified by 'kohakoha';
+flush privileges;
+quit;
+
+3.5 Configuration CPAN
+
+The koha software is written in Perl. You have access to deposits modules
+written in perl (CPAN) to download some libraries on your system. The Perl
+language of origin is installed on most Linux distributions, but some modules
+must be installed.
+During the first use of cpan, you must configure.
+
+Open a terminal window and type the command cpan
+
+During the installation of modules, validate the additions of modules when
+necessary. Indicate the continent and the country. Select 3 or 4 CPAN deposits
+in the proposed list.
+
+It is possible to force the installation of a module. In this case, in a
+Terminal window, type:
+
+cpan
+then force install NomDuModule
+then quit
+
+************************************************** ****************
+Screenshot:
+/ usr/lib/perl5/5.8.8/CPAN/Config.pm initialized.
+
+
+CPAN is the world-wide archive of perl resources. It consists of about
+100 sites that all replicate the same contents all around the globe.
+Many countries have at least one CPAN site already. The resources
+found on CPAN are easily accessible with the CPAN.pm module. If you
+want to use CPAN.pm, you have to configure it properly.
+
+If you do not want to enter a dialog now, you can answer 'no' to this
+question and I'll try to autoconfigure. (Note: you can revisit this
+dialog anytime later by typing 'o conf init' at the cpan prompt.)
+
+Are you ready for manual configuration? [yes]
+
+
+The following questions are intended to help you with the
+configuration. The CPAN module needs a directory of its own to cache
+important index files and maybe keep a temporary mirror of CPAN files.
+This may be a site-wide directory or a personal directory.
+
+
+
+First of all, I'd like to create this directory. Where?
+
+CPAN build and cache directory? [/ root / .cpan]
+
+
+If you want, I can keep the source files after a build in the cpan
+Home directory. If you choose so then future builds will take the
+files from there. If you do not want to keep them, answer to the 0
+Next question.
+
+
+
+How big should the disk cache be for keeping the build directories
+with all the intermediate files?
+
+Cache size for build directory (in MB)? [10]
+
+
+By default, each time the CPAN module is started, scanning cache
+is performed to keep the cache size in sync. To prevent from this,
+disable the cache scanning with 'never'.
+
+Perform cache scanning (atstart or never)? [atstart]
+
+
+To considerably speed up the initial CPAN shell startup, it is
+Storable possible to use to create a cache of metadata. If Storable
+is not available, the normal index mechanism will be used.
+
+Cache metadata (yes / no)? [yes]
+
+
+The next option deals with the charset your terminal supports. In
+general CPAN is English speaking territory, thus the charset does not
+matter much, but some of the aliens out there who upload their
+software to CPAN bear names that are outside the ASCII range. If your
+terminal supports UTF-8, you say no to the next question, if it
+supports ISO-8859-1 (also known as LATIN1) then you say yes, and if it
+neither supports nor, your answer does not matter, you will not be
+able to read the names of some authors anyway. If you answer no, names
+will be output in UTF-8.
+Your terminal expects iso-8859-1 (yes / no) [yes]
+
+If you have one of the readline packages (Term: ReadLine: Perl,
+Term: ReadLine: Gnu, possibly others) installed, the interactive CPAN
+Shell will have history support. The next two questions deal with the
+filename of the history file and with its size. If you do not want to
+set this variable, please hit SPACE RETURN to the following question.
+
+File to save your history? [/ root / .cpan / histfile]
+Number of lines to save? [100]
+
+
+The CPAN module can detect when a module that which you are trying to
+build depends on prerequisites. If this happens, it can build the
+prerequisites for you automatically ( 'follow'), ask you for
+confirmation ( 'ask'), or just ignore them ( 'ignore'). Please set your
+policy to one of the three values.
+
+Policy on building prerequisites (follow, ask or ignore)? [ask]
+
+
+The CPAN module will need a few external programs to work properly.
+Please correct me, if I guess the wrong path for a program. Do not
+panic if you do not have some of them, just press ENTER for those. To
+disable the use of a download program, you can type a space followed
+by ENTER.
+
+
+Where is your gzip program? [/ bin / gzip]
+Where is your tar program? [/ bin / tar]
+Where is your unzip program? [/ usr / bin / unzip]
+Where is your make program? [/ usr / bin / make]
+Where is your links program? [/ usr / bin / links]
+Where is your wget program? [/ usr / bin / wget]
+Where is your ncftpget program? [/ usr / bin / ncftpget]
+Where is your ftp program? [/ usr / bin / ftp]
+Where is your gpg program? [/ usr / bin / gpg]
+What is your favorite pager program? [/ usr / bin / less]
+What is your favorite shell? [/ bin / bash]
+
+
+Every Makefile.PL is run by perl in a separate process. Likewise we
+run 'make' and 'make install' in processes. If you have any
+parameters (eg PREFIX, LIB, UNINST or the like) you want to pass
+to the calls, please specify them here.
+
+If you do not understand this question, just press ENTER.
+
+Parameters for the 'perl Makefile.PL' command?
+Typical frequently used settings:
+
+     PREFIX = ~ / perl non-root users (please see manual for more hints)
+
+
+Every Makefile.PL is run by perl in a separate process. Likewise we
+run 'make' and 'make install' in processes. If you have any
+parameters (eg PREFIX, LIB, UNINST or the like) you want to pass
+to the calls, please specify them here.
+
+If you do not understand this question, just press ENTER.
+
+Parameters for the 'perl Makefile.PL' command?
+Typical frequently used settings:
+
+     PREFIX = ~ / perl non-root users (please see manual for more hints)
+
+Your choice: []
+Parameters for the 'make' command?
+Typical frequently used setting:
+
+     J3 dual-processor system
+
+Your choice: []
+Parameters for the 'make install' command?
+Typical frequently used setting:
+
+     UNINST = 1 to always uninstall potentially conflicting files
+
+Your choice: []
+
+
+Sometimes you may wish to leave the processes run by CPAN alone
+without caring about them. As sometimes contains the Makefile.PL
+question you're expected to answer, you can set a timer that will
+kill a 'perl Makefile.PL' process after the specified time in seconds.
+
+If you set this value to 0, these processes will wait forever. This is
+the default and recommended setting.
+
+
+Timeout for inactivity during Makefile.PL? [0]
+
+
+If you're accessing the net via proxies, you can specify them in the
+CPAN configuration or via environment variables. The variable in
+the $ CPAN:: Config takes precedence.
+
+Your ftp_proxy?
+Your http_proxy?
+Your no_proxy?
+You have no / root / .cpan / sources / MIRRORED.BY
+   I'm trying to fetch one
+CPAN: LWP:: UserAgent loaded ok
+Fetching with LWP:
+   ftp://ftp.perl.org/pub/CPAN/MIRRORED.BY
+Fetching with LWP:
+   ftp://ftp.perl.org/pub/CPAN/MIRRORED.BY.gz
+Fetching with Net: FTP:
+   ftp://ftp.perl.org/pub/CPAN/MIRRORED.BY
+
+
+Now we need to know where your favorite CPAN sites are located. Push
+a few sites onto the array (just in case the first on the array will not
+work). If you are mirroring CPAN to your local workstation, specify a
+file: URL.
+
+First, pick a nearby continent and country (you can pick several of
+each, separated by spaces, or none if you just want to keep your
+existing selections). Then, you will be presented with a list of URLs
+CPAN of mirrors in the countries you selected, along with previously
+selected URLs. Select some of those URLs, or just keep the old list.
+Finally, you will be prompted for any extra URLs - file:, ftp:, or
+http:-- that host a CPAN mirror.
+
+(1) Africa
+(2) Asia
+(3) Central America
+(4) Europe
+(5) North America
+(6) Oceania
+(7) South America
+Select your continent (or several nearby continents) [] 4
+Sorry! since you do not have any existing picks, you must make a
+Geographic selection.
+
+(1) Austria
+(2) Belgium
+(3) Bosnia and Herzegovina
+(4) Bulgaria
+(5) Croatia
+(6) Czech Republic
+(7) Denmark
+(8) Finland
+(9) France
+(10) Germany
+(11) Greece
+(12) Hungary
+(13) Iceland
+(14) Ireland
+(15) Italy
+(16) Latvia
+15 more items, hit SPACE RETURN to show them
+Select your country (or several nearby countries) [] 9
+Sorry! since you do not have any existing picks, you must make a
+Geographic selection.
+
+(1) ftp://cpan.cict.fr/pub/CPAN/
+(2) ftp://cpan.mirrors.easynet.fr/pub/ftp.cpan.org/
+(3) ftp://distrib-coffee.ipsl.jussieu.fr/pub/mirrors/cpan/
+(4) ftp://ftp.crihan.fr/mirrors/ftp.cpan.org/
+(5) ftp://ftp.erasme.org/pub/CPAN/
+(6) ftp://ftp.inria.fr/pub/CPAN/
+(7) ftp://ftp.oleane.net/pub/CPAN/
+(8) ftp://ftp.pasteur.fr/pub/computing/CPAN/
+(9) ftp://ftp.u-strasbg.fr/CPAN
+(10) ftp://mir1.ovh.net/ftp.cpan.org
+(11) ftp://miroir-francais.fr/pub/cpan/
+(12) http://cpan.ebsd.net/
+(13) http://cpan.enstimac.fr/
+(14) http://cpan.univ-paris.com
+Select URLs as many as you like (by number),
+put them on one line, separated by blanks, e.g. '1 4 5 [] 1 2 4 10
+
+Enter another URL or RETURN to quit: []
+New set of picks:
+   ftp://cpan.cict.fr/pub/CPAN/
+   ftp://cpan.mirrors.easynet.fr/pub/ftp.cpan.org/
+   ftp://ftp.crihan.fr/mirrors/ftp.cpan.org/
+   ftp://mir1.ovh.net/ftp.cpan.org
+
+
+commit: wrote / usr/lib/perl5/5.8.8/CPAN/Config.pm
+Terminal does not support AddHistory.
+
+cpan shell - CPAN exploration and modules installation (v1.7602)
+ReadLine support available (try 'install Bundle: CPAN')
+
+cpan> quit
+************************************************** ****************
+
+Type quit to break cpan
+
+
+
+3.6 Installation of additional modules from CPAN
+
+3.6.1 modules installation
+
+Install Command: cpan NomDuModule to install and validate the default
+choice for each question.
+
+List of modules required to koha need to install:
+MARC: Record
+Class:: Accessor
+XML:: SAX
+MARC: Charset
+MARC:: File:: XML
+Net: Z3950: ZOOM
+HTML:: Template:: Pro
+MARC: Crosswalk: DublinCore
+PDF:: Reuse
+PDF:: Reuse: Barcode
+Data: ICal
+GD: Barcode: UPCE
+XML:: RSS
+Algorithm: CheckDigits: M43_001
+Biblio: EndnoteStyle
+Schedule:: At
+Barcode: Code128
+XML:: LibXML: SAX
+MARC: Charset:: Constants
+CGI:: Session
+Class:: Factory: Util
+Date: ICal
+Date:: Manip
+Lingua:: Stem
+List: MoreUtils
+PDF: API2
+PDF: API2::
+PDF: API2: Util
+Text: CSV
+Text: CSV_XS
+XML:: Dumper
+XML: LibXSLT
+XML:: Simple
+YAML: Syck
+Unix:: Syslog
+POE
+Date: Calc
+Net:: LDAP: Filter
+
+
+3.6.2 Installation of modules - Cases difficult
+
+In some cases, we must force the installation of modules. The two
+modules (and sometimes others) need to force the installation.
+Type the command cpan, then:
+
+force install Mail: Sendmail ======= force install ok For this unit
+should be Ctrl + C, when he attempted to send an e-mail.
+force install Net:: LDAP ======= force install ok
+
+
+
+3.6.3 Installing module access MySQL DBMS
+
+Installation of the connector DBD:: mysql for perl
+
+We will have to rebuild this module because koha requires the latest version.
+
+In a window Terminal:
+cpan
+cpan> o conf makepl_arg
+     (search parameters for the CPAN)
+
+cpan> o conf makepl_arg "- testdb = test - testuser = test - testpass = test"
+
+cpan> install DBD:: mysql
+
+cpan> o conf makepl_arg''
+     (clean to avoid interference with future installations modules).
+
+cpan> quit
+
+
+Destruction of the basis of test MySQL
+
+In a terminal window
+mysql-u root-p
+Enter password: kohakoha
+Database drop test;
+quit
+
+
+3.7 Test SAX Parser
+
+In a Terminal window, go to the installation directory koha.
+CD / usr/share/koha-3.00.00-alpha/misc
+launch the script sax_parser_print.pl
+. / sax_parser_print.pl
+which returns: XML:: LibXML: SAX = HASH (0x895a3fc)
+
+The file / usr/lib/perl5/site_perl/5.8.8/XML/SAX/ParserDetails.ini should be amended to
+contain the final (save the other lines to comment or delete):
+[XML:: LibXML: SAX:: Parser]
+Http://xml.org/sax/features/namespaces = 1
+
+
+3.8 Installation of Koha
+
+Opening a window Terminal and placed in the directory koha
+CD / usr/share/koha-3.00.00-alpha
+launch the script Makefile.PL
+perl Makefile.PL
+
+Most options are to be validated by default. The data to information are
+password based koha, format Marc (Marc21 or Unimarc), language indexing
+Zebra (or en). It should be noted that the three ports will be open:
+3306, 9998, 9999.
+
+************************************************** ****************
+Screenshot
+By default, Koha can be installed in one of three ways:
+
+Standard: Install files in conformance with the Filesystem
+           Hierarchy Standard (FHS). This is the default mode
+           and should be used when installing a production
+           Koha system. On Unix systems, root access is
+           needed to complete a standard installation.
+
+single: Install files under a single directory. This option
+           is useful for installing Koha without root access, eg,
+           on a web host that allows CGI scripts and MySQL databases
+           but requires the user to keep all files under the user's
+           HOME directory.
+
+dev: Create a set of symbolic links and configuration files to
+           Koha allow to run directly from the source distribution.
+           This mode is useful for developers who want to run
+           Koha from a git clone.
+
+Installation mode (dev, single, standard) [standard]
+
+Please specify the directory under which most Koha files
+will be installed.
+
+Note that if you are planning in installing more than
+one instance of Koha, you may want to modify the last
+component of the directory path, which will be used
+as the package name in the FHS layout.
+
+Base installation directory [/ usr / share / koha]
+
+Since you are using the 'standard' install
+mode, you should run 'make install' as root.
+However, it is recommended that a non-root
+user (on Unix and Linux platforms) have
+ownership of Koha's files, including the
+Zebra indexes if applicable.
+
+Please specify a user account. This
+user account does not need to exist
+right now, but it needs to exist
+before you run 'make install'. Please
+note that for security reasons, this
+user should not be the same as the user
+account Apache runs under.
+
+User account [koha]
+
+Please specify the group that should own
+Koha's files. As above, this group need
+not exist right now, but should be created
+before you run 'make install'.
+
+Group [koha]
+
+Please specify which database engine you will use
+to store data in Koha. The choices are MySQL and
+PostgreSQL; please note that at the moment
+PostgreSQL support is highly experimental.
+
+DBMS to use (Pg, mysql) [mysql]
+
+Please specify the name or address of your
+database server. Note that the database
+does not have to exist at this point, it
+can be created after running 'make install'
+and before you try using Koha for the first time.
+
+Database server [localhost]
+
+Please specify the port used to connect to the
+DMBS [3306]
+
+Please specify the name of the database to be
+used by Koha [koha]
+
+Please specify the user that owns the database to be
+used by Koha [kohaadmin]
+
+Please specify the password of the user that owns the
+database to be used by Koha [katikoan] kohakoha
+
+Koha can use the Zebra search engine for high-performance
+searching of bibliographic and authority records. If you
+have installed the Zebra software and would like to use it,
+please answer 'yes' to the following question. Otherwise,
+Koha will default to using its internal search engine.
+
+Please note that if you choose *NOT* to install Zebra,
+koha-conf.xml will still contain some references to Zebra
+settings. Those references will be ignored by Koha.
+
+
+Install the Zebra configuration files? (no, yes) [yes]
+
+Since you've chosen to use Zebra with Koha,
+you must specify the primary MARC format of the
+records to be indexed by Zebra.
+
+Koha provides Zebra configuration files for MARC 21
+and UNIMARC.
+
+MARC format for Zebra indexing (marc21, unimarc) [marc21] unimarc
+
+Koha supplies Zebra configuration files tuned for
+searching either English (en) or French (fr) MARC
+records.
+
+
+Primary language for Zebra indexing (en, fr) [en] fr
+
+Please specify Zebra database user [kohauser]
+
+Please specify the Zebra database password [zebrastripes]
+
+Since you've chosen to use Zebra, you can enable the SRU/
+Z39.50 Server if you so choose, but you must specify a
+few configuration options for it.
+
+Please note that if you choose *NOT* to configure SRU,
+koha-conf.xml will still contain some references to SRU
+settings. Those references will be ignored by Koha.
+
+
+Install the SRU configuration files? (no, yes) [yes]
+
+SRU Database host? [localhost]
+
+SRU port for bibliographic data? [9998]
+
+SRU port for authority data? [9999]
+
+
+
+
+Koha will be installed with the following configuration parameters:
+
+DB_HOST localhost
+DB_NAME koha
+DB_PASS koha
+DB_PORT 3306
+DB_TYPE mysql
+DB_USER kohaadmin
+INSTALL_BASE /usr/share/koha
+INSTALL_MODE standard
+INSTALL_SRU yes
+INSTALL_ZEBRA yes
+KOHA_GROUP koha
+KOHA_USER koha
+ZEBRA_LANGUAGE fr
+ZEBRA_MARC_FORMAT unimarc
+ZEBRA_PASS zebrastripes
+ZEBRA_SRU_AUTHORITIES_POR9999
+ZEBRA_SRU_BIBLIOS_PORT 9998
+ZEBRA_SRU_HOST localhost
+ZEBRA_USER kohauser
+
+and in the following directories:
+
+DOC_DIR /usr/share/koha/doc
+INTRANET_CGI_DIR /usr/share/koha/intranet/cgi-bin
+INTRANET_TMPL_DIR /usr/share/koha/intranet/htdocs/intranet-tmpl
+INTRANET_WWW_DIR /usr/share/koha/intranet/htdocs
+KOHA_CONF_DIR /etc/koha
+LOG_DIR /var/log/koha
+MAN_DIR /usr/share/koha/man
+MISC_DIR /usr/share/koha/misc
+OPAC_CGI_DIR /usr/share/koha/opac/cgi-bin
+OPAC_TMPL_DIR /usr/share/koha/opac/htdocs/opac-tmpl
+OPAC_WWW_DIR /usr/share/koha/opac/htdocs
+PERL_MODULE_DIR /usr/share/koha/lib
+SCRIPT_DIR /usr/share/koha/bin
+ZEBRA_CONF_DIR /etc/koha/zebradb
+ZEBRA_DATA_DIR /var/lib/koha/zebradb
+ZEBRA_LOCK_DIR /var/lock/koha/zebradb
+ZEBRA_RUN_DIR /var/run/koha/zebradb
+
+
+To change any configuration setting, please run
+perl Makefile.PL again. To override one of the target
+directories, you can do so on the command line like this:
+
+perl Makefile.PL PERL_MODULE_DIR=/usr/share/perl/5.8
+
+You can also set different default values for parameters
+or override directory locations by using environment variables.
+
+For example:
+
+export DB_USER=my_koha
+perl Makefile.PL
+
+or
+
+DB_USER=my_koha DOC_DIR=/usr/local/info perl Makefile.PL
+
+Checking if your kit is complete...
+Looks good
+Writing Makefile for koha
+************************************************** ****************
+
+Taper la commande make
+
+Taper la commande make test (ne pas tenir compte des erreurs listées)
+
+Taper la commande make install
+
+
+
+4 CONFIGURATION POST INSTALLATION
+
+.1 Saving environment variables
+
+As indicated at the end of the installation (see screen shot), we must add two environment variables:
+
+Entering the two lines below a window in Terminal:
+export KOHA_CONF = / etc / koha / koha-conf.xml
+export PERL5LIB = / usr / share / koha / lib
+
+Seizures of this event, both variables are recorded on a temporary basis. If these variables are definitely enr
+egistrées we must add these two lines in the file. bash_profile or. bashrc users root and koha.
+
+
+4.2 Creation of the database
+The base is not created. It is a bug, we must launch a script to recreate it. In a Terminal window, type:
+mysql - user = kohaadmin - password = kohakoha koha </ usr/share/koha-3.00.00-alpha/installer/data/mysql/kohastructure.sql;
+
+Explanation:
+mysql è launches client mysql
+-- user = kohaadmin è behalf of the user base
+-- password = kohakoha è password for this user
+koha è the name of the database
+<È means setting the result of a script (here, the base koha)
+/ usr/share/koha-3.00.00-alpha/installer/data/mysql/kohastructure.sql è address sql script to execute
+Do not forget the sign at the end of the investigation.
+
+To check if the base is well rebuilt: mysql-u-p kohaadmin
+Enter password: kohakoha
+
+
+************************************************** ****************
+Screenshot
+Welcome to the MySQL monitor. Commands end with; or \ g.
+Your MySQL connection id is 51
+Server version: 5.0.45 Source distribution
+
+Type 'help,' or '\ h' for help. Type '\ c' to clear the buffer.
+
+MySQL> use Koha;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with A -
+
+Database changed
+MySQL> show tables;
++----------------------------+
+| Tables_in_koha |
++----------------------------+
+| accountlines |
+| accountoffsets |
+| action_logs |
+| alert |
+| aqbasket |
+| aqbookfund |
+| aqbooksellers |
+| aqbudget |
+| aqorderbreakdown |
+| aqorderdelivery |
+| aqorders |
+| auth_header |
+| auth_subfield_structure |
+| auth_tag_structure |
+| auth_types |
+| authorised_values |
+| biblio |
+| biblio_framework |
+| biblioitems |
+| borrowers |
+| branchcategories |
+| branches |
+| branchrelations |
+| branchtransfers |
+| browser |
+| categories |
+| categorytable |
+| cities |
+| class_sort_rules |
+| class_sources |
+| currency |
+| deletedbiblio |
+| deletedbiblioitems |
+| deletedborrowers |
+| deleteditems |
+| ethnicity |
+| import_batches |
+| import_biblios |
+| import_items |
+| import_record_matches |
+| import_records |
+| issues |
+| issuingrules |
+| items |
+| itemtypes |
+| labels |
+| labels_conf |
+| labels_templates |
+| language_descriptions |
+| language_rfc4646_to_iso639 |
+| language_script_bidi |
+| language_script_mapping |
+| language_subtag_registry |
+| letter |
+| marc_matchers |
+| marc_subfield_structure |
+| marc_tag_structure |
+| matchchecks |
+| matcher_matchpoints |
+| matchpoint_component_norms |
+| matchpoint_components |
+| matchpoints |
+| mediatypetable |
+| notifys |
+| nozebra |
+| opac_news |
+| overduerules |
+| printers |
+| repeatable_holidays |
+| reports_dictionary |
+| reserveconstraints |
+| reserves |
+| reviews |
+| roadtype |
+| saved_reports |
+| saved_sql |
+| serial |
+| services_throttle |
+| sessions |
+| special_holidays |
+| statistics |
+| stopwords |
+| subcategorytable |
+| subscription |
+| subscriptionhistory |
+| subscriptionroutinglist |
+| suggestions |
+| systempreferences |
+| tags |
+| userflags |
+| virtualshelfcontents |
+| virtualshelves |
+| z3950servers |
+| zebraqueue |
++----------------------------+
+94 rows in set (0.00 sec)
+
+mysql> quit
+************************************************** ****************
+
+4.3 Changing the configuration of the Apache server
+
+Create a link koha in the directory / etc / httpd / conf.d / pointing to the configuration file of koha for apache.
+Open / etc / koha / koha-httpd.conf and paste the contents of this file at the end of / etc / httpd / conf / httpd.conf
+
+Editing httpd.conf located in the directory / etc / httpd / conf, so the Apache web server is reachable on port 8
+0 (standard) and also on port 8080.
+Find string Listen 80 and add a new line below with the string Listen 8080
+Restarting the service httpd. On a Terminal window, type service httpd restart.
+
+Lancer Zebra Server
+zebrasrv east / usr / bin
+with the name zebrasrv-2.0
+go to the directory / usr / bin
+cd / usr / bin
+koha become user by typing the command su:
+su Koha
+zebra start the server by the command:
+./zebrasrv-2.0-f / etc / koha / koha-conf.xml
+
+Starting the daemon Zebraqueue
+zebraqueue_daemon.pl is in / usr / share / koha / bin
+go in / usr / share / koha / bin
+cd / usr / share / koha / bin
+and launch the script zebraqueue_daemon.pl
+. / zebraqueue_daemon.pl
+
+
+4.4 loading data for tests
+
+This step helps to have some input in Koha for testing purposes (table cataloguing default, etc.).
+
+Disable temporarily SElinux
+SE-LINUX blocking access to KOHA.
+Menu K Hotel è è SElinux
+Then turn off Selinux and relaunch the service iptables
+
+Unlocking ports
+It must grant access to ports 3306, 9998 and 9999
+Menu K Hotel è è Firewall and SElinux
+Other ports and click Add button.
+When the 3 ports are added, click Apply, then click the button.
+
+Using the Web installer
+We must move the fr located in / usr / share / koha / intranet / cgi-bin / data / mysql en-US (installer points to the directory
+en-ing and not en).
+
+Connect to Koha: HYPERLINK "http://localhost:8080/" http://localhost:8080 and use the Web installer french (en-US).
+
+-- Validate Step 1 (dependencies);
+-- Step 2 (settings of the database on two screens);
+-- A Phase 3, click on Install the basic settings (screen 1), select the declination Marc (Unimarc_complet in our
+Where Unimarc_lecture_pub; screen 2), select default settings and then click on Import (only settings obligat
+oires are checked by default; screen 3);
+-- The screen 4 summarizes what has been imported, while low demand to opt for a configuration Zebra (our choice) or NoZebra;
+-- Finally, the screen 5 indicates the end of the installation; then you just have to click Finish.
+
+Complements
+Connect to PhPMyadmin: HYPERLINK "http://localhost/phpmyadmin" http://localhost/phpmyadmin
+Connect to interface professional Koha: HYPERLINK "http://localhost:8080/" http://localhost:8080
+Connect to online catalogue Koha: HYPERLINK "http://localhost:80/" http://localhost:80
+
+Zebra is in / etc / koha
+The files perl Koha professional can be found in / usr / share / koha / intranet / cgi-bin (then a large repertoire by fonctionnal
+ities of SIGB)
+The files perl Koha public are in / usr / share / koha / koha / cgi-bin
