@@ -35,7 +35,7 @@
 	</script>
 	<!-- /TMPL_IF -->
 </head>
-<body id="basket">
+<!-- TMPL_IF NAME="print_basket" --><body id="basket" onload="print();history.back();"><!-- TMPL_ELSE --><body id="basket"><!-- /TMPL_IF -->
 
 <div id="doc" class="yui-t7">
 
@@ -72,7 +72,7 @@
         <!-- /TMPL_IF -->
     </h3>
 	    <!-- COinS / OpenURL -->
-    <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=<!-- TMPL_VAR NAME="author" -->&amp;rft.btitle=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->&amp;rft.date=<!-- TMPL_VAR NAME="publicationyear" -->&amp;rft.tpages=<!-- TMPL_VAR NAME="size" -->&amp;rft.isbn=<!-- TMPL_VAR NAME="isbn"  ESCAPE="url" -->&amp;rft.aucorp=&amp;rft.place=<!-- TMPL_VAR NAME="place" -->&amp;rft.pub=<!-- TMPL_VAR NAME="publisher" ESCAPE="url" -->&amp;rft.edition=<!-- TMPL_VAR NAME="edition" -->&amp;rft.series=<!-- TMPL_VAR NAME="series" -->&amp;rft.genre=">COinS</span>
+    <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=<!-- TMPL_VAR NAME="author" -->&amp;rft.btitle=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->&amp;rft.date=<!-- TMPL_VAR NAME="publicationyear" -->&amp;rft.tpages=<!-- TMPL_VAR NAME="size" -->&amp;rft.isbn=<!-- TMPL_VAR NAME="isbn"  ESCAPE="url" -->&amp;rft.aucorp=&amp;rft.place=<!-- TMPL_VAR NAME="place" -->&amp;rft.pub=<!-- TMPL_VAR NAME="publisher" ESCAPE="url" -->&amp;rft.edition=<!-- TMPL_VAR NAME="edition" -->&amp;rft.series=<!-- TMPL_VAR NAME="series" -->&amp;rft.genre="></span>
     <table>
         <!-- TMPL_IF name="isbn" -->
         <tr>
@@ -112,10 +112,11 @@
         
         <!-- TMPL_IF name="MARCSUBJCTS" -->
         <tr>
-            <th scope="row">Subjects</th>
+            <th scope="row">Subject(s)</th>
             <td><!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
-                    <p><!-- TMPL_VAR NAME="label" --></p>
-            <!-- /TMPL_LOOP --></td>
+                   <p> <!-- TMPL_LOOP NAME="MARCSUBJECT_SUBFIELDS_LOOP" -->
+                        <!-- TMPL_VAR NAME="separator" --><!-- TMPL_VAR NAME="value" --><!-- /TMPL_LOOP -->
+                <!-- /TMPL_LOOP --></p></td>
         </tr>
         <!-- /TMPL_IF -->
     
@@ -165,21 +166,30 @@
             <td> <!-- TMPL_VAR name="lccn" --></td>
         </tr>
         <!-- /TMPL_IF -->
-        <!-- TMPL_IF name="url" -->
+		
+        <!-- TMPL_IF name="MARCURLS" -->
         <tr>
-            <th scope="row">URL</th>
-            <td> <!-- TMPL_VAR NAME="url" --></td>
+            <th scope="row">URL(s)</th>
+            <td>
+	   <!-- TMPL_LOOP name="MARCURLS" -->
+		<p><!-- TMPL_IF NAME="part" --><!-- TMPL_VAR NAME="part" -->
+			<br /><!-- /TMPL_IF --> 
+	
+		<!-- TMPL_VAR NAME="MARCURL" -->
+			<!-- TMPL_IF NAME="notes" --><!-- TMPL_LOOP NAME="notes" --><!-- TMPL_VAR NAME="note" --><br /><!-- /TMPL_LOOP --><!-- /TMPL_IF -->
+            <!-- /TMPL_LOOP --></p></td>
         </tr><!-- /TMPL_IF -->
+		
         <tr>
-            <th scope="row">Location</th>
-            <td><!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+            <th scope="row">Location(s)</th>
+            <td><!-- TMPL_IF NAME="ITEM_RESULTS" --><!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
                 <p>
-                    <!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR NAME="location" -->
+                    <!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR NAME="location_description" -->
                     <!-- TMPL_IF name="itemcallnumber" -->
                         (<!-- TMPL_VAR NAME="itemcallnumber" -->)
                     <!-- /TMPL_IF -->
                 </p>
-                <!-- /TMPL_LOOP --></td>
+                <!-- /TMPL_LOOP --><!-- TMPL_ELSE -->This record has no items.<!-- /TMPL_IF --></td>
         </tr>
     </table>
     <!-- /TMPL_LOOP -->
@@ -207,11 +217,11 @@
                         <!-- TMPL_VAR NAME="title" -->
                     </a>
                         <!-- TMPL_VAR NAME="author" -->
-                        <!-- TMPL_IF name="publishercode" -->- <!-- TMPL_VAR name="publishercode" -->
+                        <p><!-- TMPL_IF name="publishercode" -->- <!-- TMPL_VAR name="publishercode" -->
                         <!-- TMPL_IF name="place" --> <!-- TMPL_VAR name="place" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="pages" --> - <!-- TMPL_VAR name="pages" --><!-- TMPL_IF name="size" --> <!-- TMPL_VAR name="size" -->
                         <!-- /TMPL_IF -->
-                        <!-- /TMPL_IF -->
+                        <!-- /TMPL_IF --></p>
                         <!-- TMPL_IF name="notes" -->
                         <p><!-- TMPL_VAR name="notes" --></p>
                         <!-- /TMPL_IF -->
@@ -224,11 +234,13 @@
     </table></form>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_UNLESS NAME="print_basket" -->
+<!-- TMPL_IF NAME="print_basket" -->
+<a href="#back" class="screen">&lt;&lt; Back to Cart</a>
+<!-- TMPL_ELSE -->
 <form name="myform" action="opac-basket.pl" method="get">
     <input type="hidden" name="records" id="records" />
 </form>
-<!-- /TMPL_UNLESS -->
+<!-- /TMPL_IF -->
 
 </div>
 </body>

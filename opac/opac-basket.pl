@@ -19,6 +19,7 @@
 use strict;
 require Exporter;
 use CGI;
+use C4::Koha;
 use C4::Biblio;
 use C4::Items;
 use C4::Auth;
@@ -48,6 +49,8 @@ my @results;
 
 my $num = 1;
 my $marcflavour = C4::Context->preference('marcflavour');
+
+
 foreach my $biblionumber ( @bibs ) {
     $template->param( biblionumber => $biblionumber );
 
@@ -56,8 +59,16 @@ foreach my $biblionumber ( @bibs ) {
     my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );
     my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
     my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
+    my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);
+    my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
     my @items            = &GetItemsInfo( $biblionumber, 'opac' );
 	
+    my $shelflocations =GetKohaAuthorisedValues('items.location',$dat->{'frameworkcode'});
+    my $collections =  GetKohaAuthorisedValues('items.ccode',$dat->{'frameworkcode'} );
+
+	for my $itm (@items) {
+	    $itm->{'location_description'} = $shelflocations->{$itm->{'location'} };
+	}
 	# COinS format FIXME: for books Only
         my $coins_format;
         my $fmt = substr $record->leader(), 6,2;
@@ -75,6 +86,8 @@ foreach my $biblionumber ( @bibs ) {
     $dat->{MARCNOTES}      = $marcnotesarray;
     $dat->{MARCSUBJCTS}    = $marcsubjctsarray;
     $dat->{MARCAUTHORS}    = $marcauthorsarray;
+    $dat->{MARCSERIES}  = $marcseriesarray;
+    $dat->{MARCURLS}    = $marcurlsarray;
 
     if ( C4::Context->preference("BiblioDefaultView") eq "normal" ) {
         $dat->{dest} = "opac-detail.pl";
