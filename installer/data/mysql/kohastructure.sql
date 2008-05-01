@@ -1877,6 +1877,58 @@ CREATE TABLE `tags` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Table structure for table `tags_all`
+--
+
+CREATE TABLE `tags_all` (
+  `tag_id`         int(11) NOT NULL auto_increment,
+  `borrowernumber` int(11) NOT NULL,
+  `biblionumber`   int(11) NOT NULL,
+  `term`      varchar(255) NOT NULL,
+  `language`       int(4) default NULL,
+  `date_created` datetime  NOT NULL,
+  PRIMARY KEY  (`tag_id`),
+  KEY `tags_borrowers_fk_1` (`borrowernumber`),
+  KEY `tags_biblionumber_fk_1` (`biblionumber`),
+  CONSTRAINT `tags_borrowers_fk_1` FOREIGN KEY (`borrowernumber`)
+        REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `tags_biblionumber_fk_1` FOREIGN KEY (`biblionumber`)
+        REFERENCES `biblio`     (`biblionumber`)  ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `tags_approval`
+--
+
+CREATE TABLE `tags_approval` (
+  `term`   varchar(255) NOT NULL,
+  `approved`     int(1) NOT NULL default '0',
+  `date_approved` datetime       default NULL,
+  `approved_by` int(11)          default NULL,
+  `weight_total` int(9) NOT NULL default '1',
+  PRIMARY KEY  (`term`),
+  KEY `tags_approval_borrowers_fk_1` (`approved_by`),
+  CONSTRAINT `tags_approval_borrowers_fk_1` FOREIGN KEY (`approved_by`)
+        REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `tags_index`
+--
+
+CREATE TABLE `tags_index` (
+  `term`    varchar(255) NOT NULL,
+  `biblionumber` int(11) NOT NULL,
+  `weight`        int(9) NOT NULL default '1',
+  PRIMARY KEY  (`term`,`biblionumber`),
+  KEY `tags_index_biblionumber_fk_1` (`biblionumber`),
+  CONSTRAINT `tags_index_term_fk_1` FOREIGN KEY (`term`)
+        REFERENCES `tags_approval` (`term`)  ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `tags_index_biblionumber_fk_1` FOREIGN KEY (`biblionumber`)
+        REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
 -- Table structure for table `userflags`
 --
 
