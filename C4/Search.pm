@@ -1254,6 +1254,8 @@ sub searchResults {
               . $itemtypes{ $oldbiblio->{itemtype} }->{imageurl}
               if ( $itemtypes{ $oldbiblio->{itemtype} }->{imageurl} );
         }
+		my $biblio_authorised_value_images = C4::Items::get_authorised_value_images( C4::Biblio::get_biblio_authorised_values( $oldbiblio->{biblionumber} ) );
+		$oldbiblio->{authorised_value_images} = $biblio_authorised_value_images;
         my $aisbn = $oldbiblio->{'isbn'};
         $aisbn =~ /(\d*[X]*)/;
         $oldbiblio->{amazonisbn} = $1;

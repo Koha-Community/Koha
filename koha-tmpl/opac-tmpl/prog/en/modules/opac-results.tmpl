@@ -174,6 +174,7 @@ $(document).ready(function(){
 
                 <td class="select selectcol"><!--TMPL_IF EXPR="opacbookbag || virtualshelves" --><input type="checkbox" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" title="Click to add to cart" /> <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"><!-- /TMPL_IF --><!--TMPL_IF EXPR="opacbookbag || virtualshelves" --></label><!-- /TMPL_IF --></td>
                 <td class="select selectcol"><!-- TMPL_VAR NAME="result_number" -->.</td>
+
 				<!-- TMPL_UNLESS NAME="item-level_itypes" -->
 				<td class="itypecol">
                 <!-- TMPL_IF name="imageurl" -->
@@ -181,6 +182,14 @@ $(document).ready(function(){
                 <!-- /TMPL_IF -->
 				</td>
                 <!-- /TMPL_UNLESS-->
+
+				<!-- TMPL_IF NAME="AuthorisedValueImages" -->
+                <td class="itypecol">
+                <!-- TMPL_LOOP NAME="authorised_value_images" -->
+                <img src="<!-- TMPL_VAR name="imageurl" -->" alt="<!-- TMPL_VAR name="label" -->" title="<!-- TMPL_VAR name="label" -->">
+                <!-- /TMPL_LOOP -->
+                </td>
+                <!-- /TMPL_IF -->
 
 				<td>
 				<!-- TMPL_IF NAME="XSLTResultsDisplay" -->
