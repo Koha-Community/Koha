@@ -338,6 +338,7 @@ CREATE TABLE `authorised_values` (
   `category` varchar(10) NOT NULL default '',
   `authorised_value` varchar(80) NOT NULL default '',
   `lib` varchar(80) default NULL,
+  `imageurl` varchar(200) default NULL,
   PRIMARY KEY  (`id`),
   KEY `name` (`category`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
