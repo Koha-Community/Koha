@@ -7,7 +7,7 @@ use C4::Biblio;
 
 my $dbh=C4::Context->dbh;
 
-if (C4::Context->preference("marcflavour") ne "UNIMARC" {
+if (C4::Context->preference("marcflavour") ne "UNIMARC") {
     print "this script is for UNIMARC only\n";
     exit;
 }
