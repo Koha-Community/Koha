@@ -1455,6 +1455,26 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.078";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    my ($print_error) = $dbh->{PrintError};
+    $dbh->{PrintError} = 0;
+    
+    unless ($dbh->do("SELECT 1 FROM browser")) {
+        $dbh->{PrintError} = $print_error;
+        $dbh->do("CREATE TABLE `browser` (
+                    `level` int(11) NOT NULL,
+                    `classification` varchar(20) NOT NULL,
+                    `description` varchar(255) NOT NULL,
+                    `number` bigint(20) NOT NULL,
+                    `endnode` tinyint(4) NOT NULL
+                  ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+    }
+    $dbh->{PrintError} = $print_error;
+	print "Upgrade to $DBversion done (add browser table if not already present)\n";
+	SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
