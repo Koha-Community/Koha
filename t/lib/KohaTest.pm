@@ -58,7 +58,6 @@ sub startup_15_truncate_tables : Test( startup => 1 ) {
 #                               branchtransfers             
 #                               browser                     
 #                               categories                  
-#                               categorytable               
 #                               cities                      
 #                               class_sort_rules            
 #                               class_sources               
@@ -95,7 +94,6 @@ sub startup_15_truncate_tables : Test( startup => 1 ) {
 #                               matchpoint_component_norms  
 #                               matchpoint_components       
 #                               matchpoints                 
-#                               mediatypetable              
 #                               notifys                     
 #                               nozebra                     
 #                               old_issues                  
@@ -121,7 +119,6 @@ sub startup_15_truncate_tables : Test( startup => 1 ) {
 #                               special_holidays            
 #                               statistics                  
 #                               stopwords                   
-#                               subcategorytable            
 #                               subscription                
 #                               subscriptionhistory         
 #                               subscriptionroutinglist     
@@ -148,7 +145,6 @@ sub startup_15_truncate_tables : Test( startup => 1 ) {
                               branchrelations             
                               branchtransfers             
                               browser                     
-                              categorytable               
                               cities                      
                               deletedbiblio               
                               deletedbiblioitems          
@@ -160,7 +156,6 @@ sub startup_15_truncate_tables : Test( startup => 1 ) {
                               labels                      
                               labels_profile              
                               matchchecks                 
-                              mediatypetable              
                               notifys                     
                               nozebra                     
                               old_issues                  
@@ -182,7 +177,6 @@ sub startup_15_truncate_tables : Test( startup => 1 ) {
                               services_throttle           
                               special_holidays            
                               statistics                  
-                              subcategorytable            
                               subscription                
                               subscriptionhistory         
                               subscriptionroutinglist     

@@ -1197,7 +1197,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("DELETE FROM `systempreferences` WHERE variable='AmazonDevKey';");
     $dbh->do("DELETE FROM `systempreferences` WHERE variable='XISBNAmazonSimilarItems';");
     $dbh->do("DELETE FROM `systempreferences` WHERE variable='OPACXISBNAmazonSimilarItems';");
-    print "Upgrade to $DBversion done (IMPORTANT: Upgrading to Amazon.com Associates Web Service 4.0 ) ";
+    print "Upgrade to $DBversion done (IMPORTANT: Upgrading to Amazon.com Associates Web Service 4.0 ) \n";
     SetVersion ($DBversion);
 }
 
@@ -1212,7 +1212,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
                 KEY `patroncards_ibfk_1` (`borrowernumber`),
                 CONSTRAINT `patroncards_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-    print "Upgrade to $DBversion done (Adding patroncards table for patroncards generation feature. ) ";
+    print "Upgrade to $DBversion done (Adding patroncards table for patroncards generation feature. ) \n";
     SetVersion ($DBversion);
 }
 
@@ -1221,14 +1221,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE `virtualshelfcontents` MODIFY `dateadded` timestamp NOT NULL
 DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP;
 ");
-    print "Upgrade to $DBversion done (fix for bug 1873: virtualshelfcontents dateadded column empty. ) ";
+    print "Upgrade to $DBversion done (fix for bug 1873: virtualshelfcontents dateadded column empty. ) \n";
     SetVersion ($DBversion);
 }
 
 $DBversion = "3.00.00.067";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("UPDATE systempreferences SET explanation = 'Enable patron images for the Staff Client', type = 'YesNo' WHERE variable = 'patronimages'");
-    print "Upgrade to $DBversion done (Updating patronimages syspref to reflect current kohastructure.sql. ) ";
+    print "Upgrade to $DBversion done (Updating patronimages syspref to reflect current kohastructure.sql. ) \n";
     SetVersion ($DBversion);
 }
 
@@ -1272,7 +1272,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
         
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('GranularPermissions','0','Use detailed staff user permissions',NULL,'YesNo')");
 
-    print "Upgrade to $DBversion done (adding permissions and user_permissions tables and GranularPermissions syspref) ";
+    print "Upgrade to $DBversion done (adding permissions and user_permissions tables and GranularPermissions syspref) \n";
     SetVersion ($DBversion);
 }
 
@@ -1376,7 +1376,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 		('TagsShowOnDetail','10','','Number of tags to display on detail page.  0 is off.',        'Integer'),
 		('TagsShowOnList',   '6','','Number of tags to display on search results list.  0 is off.','Integer')
 	#);
-	print "Upgrade to $DBversion done (Baker/Taylor,Tags: sysprefs and tables (tags_all, tags_index, tags_approval)) ";
+	print "Upgrade to $DBversion done (Baker/Taylor,Tags: sysprefs and tables (tags_all, tags_index, tags_approval)) \n";
 	SetVersion ($DBversion);
 }
 
@@ -1413,7 +1413,45 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE import_items
               MODIFY status enum('error', 'staged', 'imported', 'reverted', 'ignored') NOT NULL default 'staged'");
 
-	print "Upgrade to $DBversion done (changes to import_batches and import_records) ";
+	print "Upgrade to $DBversion done (changes to import_batches and import_records)\n";
+	SetVersion ($DBversion);
+}
+
+$DBversion = "3.00.00.077";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    # drop these tables only if they exist and none of them are empty
+    # these tables are not defined in the packaged 2.2.9, but since it is believed
+    # that at least one library may be using them in a post-2.2.9 but pre-3.0 Koha,
+    # some care is taken.
+    my ($print_error) = $dbh->{PrintError};
+    $dbh->{PrintError} = 0;
+    my ($raise_error) = $dbh->{RaiseError};
+    $dbh->{RaiseError} = 1;
+    
+    my $count = 0;
+    my $do_drop = 1;
+    eval { $count = $dbh->do("SELECT 1 FROM categorytable"); };
+    if ($count > 0) {
+        $do_drop = 0;
+    }
+    eval { $count = $dbh->do("SELECT 1 FROM mediatypetable"); };
+    if ($count > 0) {
+        $do_drop = 0;
+    }
+    eval { $count = $dbh->do("SELECT 1 FROM subcategorytable"); };
+    if ($count > 0) {
+        $do_drop = 0;
+    }
+
+    if ($do_drop) {
+        $dbh->do("DROP TABLE IF EXISTS `categorytable`");
+        $dbh->do("DROP TABLE IF EXISTS `mediatypetable`");
+        $dbh->do("DROP TABLE IF EXISTS `subcategorytable`");
+    }
+
+    $dbh->{PrintError} = $print_error;
+    $dbh->{RaiseError} = $raise_error;
+	print "Upgrade to $DBversion done (drop categorytable, subcategorytable, and mediatypetable)\n";
 	SetVersion ($DBversion);
 }
 

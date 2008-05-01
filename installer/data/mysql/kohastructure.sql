@@ -597,18 +597,6 @@ CREATE TABLE `categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Table structure for table `categorytable`
---
-
-DROP TABLE IF EXISTS `categorytable`;
-CREATE TABLE `categorytable` (
-  `categorycode` varchar(5) NOT NULL default '',
-  `description` text,
-  `itemtypecodes` text,
-  PRIMARY KEY  (`categorycode`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
 -- Table structure for table `cities`
 --
 
@@ -1321,18 +1309,6 @@ CREATE TABLE `matchchecks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Table structure for table `mediatypetable`
---
-
-DROP TABLE IF EXISTS `mediatypetable`;
-CREATE TABLE `mediatypetable` (
-  `mediatypecode` varchar(5) NOT NULL default '',
-  `description` text,
-  `itemtypecodes` text,
-  PRIMARY KEY  (`mediatypecode`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
 -- Table structure for table `notifys`
 --
 
@@ -1724,18 +1700,6 @@ CREATE TABLE `statistics` (
 DROP TABLE IF EXISTS `stopwords`;
   CREATE TABLE `stopwords` (
   `word` varchar(255) default NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Table structure for table `subcategorytable`
---
-
-DROP TABLE IF EXISTS `subcategorytable`;
-CREATE TABLE `subcategorytable` (
-  `subcategorycode` varchar(5) NOT NULL default '',
-  `description` text,
-  `itemtypecodes` text,
-  PRIMARY KEY  (`subcategorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

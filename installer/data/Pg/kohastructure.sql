@@ -616,19 +616,6 @@ PRIMARY KEY (categorycode)
 );
 
 -- 
--- Table structure for table categorytable
--- 
-
---DROP TABLE categorytable;
-
-CREATE TABLE categorytable (
-categorycode varchar(5) NOT NULL default '',
-description text,
-itemtypecodes text,
-PRIMARY KEY (categorycode)
-);
-
--- 
 -- Table structure for table cities
 -- 
 
@@ -1127,19 +1114,6 @@ PRIMARY KEY (frameworkcode,tagfield)
 );
 
 -- 
--- Table structure for table mediatypetable
--- 
-
---DROP TABLE mediatypetable;
-
-CREATE TABLE mediatypetable (
-mediatypecode varchar(5) NOT NULL default '',
-description text,
-itemtypecodes text,
-PRIMARY KEY (mediatypecode)
-);
-
--- 
 -- Table structure for table notifys
 -- 
 
@@ -1384,19 +1358,6 @@ CREATE INDEX statistics_timeidx_idx ON statistics (datetime);
 
 CREATE TABLE stopwords (
 word varchar(255) default NULL
-);
-
--- 
--- Table structure for table subcategorytable
--- 
-
---DROP TABLE subcategorytable;
-
-CREATE TABLE subcategorytable (
-subcategorycode varchar(5) NOT NULL default '',
-description text,
-itemtypecodes text,
-PRIMARY KEY (subcategorycode)
 );
 
 -- 
