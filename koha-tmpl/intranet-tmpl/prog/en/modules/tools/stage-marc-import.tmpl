@@ -92,7 +92,7 @@ function CheckForm(f) {
 </ol></fieldset>
   <fieldset class="rows">
     <legend>Look for existing records in catalogue?</legend>
-    <ol><li><label for="matcher">Record matching rule</label>
+    <ol><li><label for="matcher">Record matching rule:</label>
     <select name="matcher" id="matcher">
        <option value="">Do not look for matching records</option> 
        <!-- TMPL_LOOP name="available_matchers" -->
@@ -101,10 +101,10 @@ function CheckForm(f) {
        <!-- /TMPL_LOOP -->
     </select>
     </li>
-      <li><label for="overlay_action">Action if matching bibliographic record found </label>
+      <li><label for="overlay_action">Action if matching bibliographic record found: </label>
            <!-- TMPL_INCLUDE NAME="tools-overlay-action.inc" -->
       </li>
-      <li><label for="nomatch_action">Action if no match is found </label>
+      <li><label for="nomatch_action">Action if no match is found: </label>
            <!-- TMPL_INCLUDE NAME="tools-nomatch-action.inc" -->
       </li>
     </ol>
@@ -115,10 +115,9 @@ function CheckForm(f) {
       <li class="radio">
         <input type="radio" id="parse_itemsyes" name="parse_items" value="1" checked="checked" />
         <label for="parse_itemsyes">Yes</label>
-    	  <ul class="inline"><li class="inline">
-    	    <input type="checkbox" id="create_labelbatch" name="create_labelbatch" />
-    	    <label for="create_labelbatch">Create a label batch for this import?</label>
-    	  </li></ul>
+    	     
+    	    <label for="create_labelbatch" style="padding-left: 1em;"><input type="checkbox" id="create_labelbatch" name="create_labelbatch" /> Create a label batch for this import?</label>
+    	  
       </li>
       <li class="radio">
         <input type="radio" id="parse_itemsno" name="parse_items" value="0" />
@@ -126,7 +125,7 @@ function CheckForm(f) {
       </li>
     </ol>
     <ol>
-      <li><label for="item_action">How to process items </label>
+      <li><label for="item_action">How to process items: </label>
            <!-- TMPL_INCLUDE NAME="tools-item-action.inc" -->
       </li>
     </ol>
@@ -139,7 +138,7 @@ function CheckForm(f) {
 
 </div>
 </div>
-<div class="yui-b noprint">
+<div class="yui-b">
 <!-- TMPL_INCLUDE NAME="tools-menu.inc" -->
 </div>
 </div>
