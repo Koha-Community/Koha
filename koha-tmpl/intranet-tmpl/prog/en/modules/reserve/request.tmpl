@@ -206,9 +206,9 @@ if (alreadyreserved > "0"){
         <table id="requestspecific">
         <caption>Place a hold on a specific copy</caption>
 		<tr>
+            <th>Hold</th>
             <!-- TMPL_IF NAME="item-level_itypes" -->
-	    <th>Hold</th>
-            <th>Item type</th>
+                <th>Item type</th>
             <!-- /TMPL_IF -->
             <th>Barcode</th>
             <th>Home Library</th>
@@ -218,18 +218,17 @@ if (alreadyreserved > "0"){
         </tr>
     <!-- TMPL_LOOP Name="itemloop" -->
         <tr class="<!-- TMPL_VAR NAME="backgroundcolor" -->">
-            <!-- TMPL_IF NAME="item-level_itypes" -->
             <td>
             <!-- TMPL_IF NAME="available" -->
-            <input type="checkbox" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+                <input type="checkbox" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
             <!-- TMPL_ELSE -->
-            <input disabled="disabled" type="checkbox" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" /> 
+                <input disabled="disabled" type="checkbox" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" /> 
             <!-- /TMPL_IF -->
             </td>
-
-            <td>
-            <img src="<!-- TMPL_VAR name="imageurl" -->" alt="<!-- TMPL_VAR NAME="itypename" -->" title="<!-- TMPL_VAR NAME="itypename" -->" />
-            </td>
+            <!-- TMPL_IF NAME="item-level_itypes" -->
+                <td>
+                    <img src="<!-- TMPL_VAR name="imageurl" -->" alt="<!-- TMPL_VAR NAME="itypename" -->" title="<!-- TMPL_VAR NAME="itypename" -->" />
+                </td>
             <!-- /TMPL_IF -->
 
             <td>
