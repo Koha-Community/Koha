@@ -63,7 +63,7 @@ my $cpt_isbn = 0;
 if(not $no_isbn){
 
     my $query_isbn = "
-        SELECT biblioitemnumber,isbn FROM biblioitems WHERE isbn IS NOT NULL
+        SELECT biblioitemnumber,isbn FROM biblioitems WHERE isbn IS NOT NULL ORDER BY biblioitemnumber
     ";
 
     my $update_isbn = "
@@ -94,7 +94,7 @@ if(not $no_isbn){
 if(not $no_marcxml){
     
     my $query_marcxml = "
-        SELECT biblioitemnumber,marcxml FROM biblioitems WHERE isbn IS NOT NULL
+        SELECT biblioitemnumber,marcxml FROM biblioitems WHERE isbn IS NOT NULL ORDER BY biblioitemnumber
     ";
     
     
