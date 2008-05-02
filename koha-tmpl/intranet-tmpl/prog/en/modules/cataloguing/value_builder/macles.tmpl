@@ -131,19 +131,27 @@ function add_macles(myvalue)
       mycountMACLESgen++;
     }
   }
-  if (mycountMACLESgen==1){opener.document.f.field_value[<!-- TMPL_VAR name="index" -->].value = tab[0];
+  if (mycountMACLESgen==1){opener.document.f.<!-- TMPL_VAR name="index" -->.value = tab[0];
   } else {
-    var mytags=opener.document.getElementsByName("tag");
+    var mytags=opener.document.getElementsByTagName("input");
+    var index_string="<!-- TMPL_VAR name="index" -->";
+    index_string=index_string.substr(0,index_string.lastIndexOf("_"));  
+    index_string=index_string.substr(0,index_string.lastIndexOf("_"));
+    index_string=index_string+".*";    
     var mycountMACLESinit=0;
-    var indexmin=0
+    var indexmin=0;
+    var tab_ids_fields=new Array();  
     //Compter le nombre de MACLES present
     for (i=0;i<mytags.length;i++){
-      if (mytags[i].value==myvalue) {
-        if (indexmin==0){
-          indexmin=i
+      if (mytags[i].name.match(index_string)){
+        if (mytags[i].value==myvalue) {
+            if (indexmin==0){
+                indexmin=i
+            }
         }
+        tab_ids_fields[mycountMACLESinit]=mytags[i].getAttribute("id");
         mycountMACLESinit++;
-      }
+      }   
     }
     // Si Nombre de Macles <Nombre de cases cochees, ajouter le nombre de champ manquant
     if (mycountMACLESinit < mycountMACLESgen){
@@ -153,11 +161,11 @@ function add_macles(myvalue)
       alert("veuillez d'abord creer le nombre de champs necessaires ");
     } else {
     // Pour chaque valeur cochee, ajouter la valeur dans un noeud MACLES.
-      k=indexmin;
       for (i=0;i<tab.length;i++){
           // Se positionner sur le prochain noeud MACLES
-          opener.document.f.field_value[k].value = tab[i];
-          k=k+2;
+        alert (i);alert(tab_ids_fields[i]);
+        alert (tab[i]);
+          opener.document.f.elements[tab_ids_fields[i]].value = tab[i];
       }
     }
   }
