@@ -15,8 +15,7 @@
 </script>
 </head>
 
-<body  class="yui-skin-sam">
-<!-- onload="Activate(0);load_macles(630);" -->
+<body  class="yui-skin-sam" onload="Activate(0);load_macles();" -->
 
 <h1>Gestion des index MACLES</h1>
 <form name="f_pop"> <!-- onsubmit="add_macles('630');"> -->
@@ -163,8 +162,6 @@ function add_macles(myvalue)
     // Pour chaque valeur cochee, ajouter la valeur dans un noeud MACLES.
       for (i=0;i<tab.length;i++){
           // Se positionner sur le prochain noeud MACLES
-        alert (i);alert(tab_ids_fields[i]);
-        alert (tab[i]);
           opener.document.f.elements[tab_ids_fields[i]].value = tab[i];
       }
     }
@@ -227,33 +224,23 @@ function check_row(row)
   return false;
 }
 
-function load_macles(myvalue)
+function load_macles()
 {
   document.forms.f_pop.reset;
-  var mystart=<!-- TMPL_VAR name="index" -->;
-  var descent=mystart;
-  var countchecked=0;
-  // Remonter a la source
-  while (opener.document.f.tag[descent].value==myvalue && descent>0){
-    var checkvalue=opener.document.f.field_value[descent].value;
-    var myinput=document.getElementsByName(checkvalue);
-    if (myinput.length>0){
-      myinput[0].checked=true;
-      countchecked++;
-    }
-    descent = descent - 2;
-  }
-  // Continuer jusqu'a la fin
-  var ascent=mystart+2;
-  while (opener.document.f.tag[ascent].value==myvalue && ascent>0){
-    var checkvalue=opener.document.f.field_value[ascent].value;
-    var myinput=document.getElementsByName(checkvalue);
-    if (myinput.length>0){
-      myinput[0].checked=true;
-      countchecked++;
-    }
-    ascent=ascent+2;
-  }
+  var mystart="<!-- TMPL_VAR name="index" -->";
+  mystart=mystart.substr(0,mystart.lastIndexOf("_"));  
+  mystart=mystart.substr(0,mystart.lastIndexOf("_"));
+  mystart=mystart+".*";    
+  var mytags=opener.document.getElementsByTagName("input");
+  for (i=0;i<mytags.length;i++){
+    if (mytags[i].name.match(mystart)){
+      var checkvalue=mytags[i].value;
+      var myinput=document.getElementsByName(checkvalue);
+      if (myinput.length>0){
+        myinput[0].checked=true;
+      }
+    }  
+  } 
   return false;
 }
 </script>
