@@ -86,50 +86,87 @@ my ($holdingbrtagf,$holdingbrtagsubf) = &GetMarcFromKohaField("items.holdingbran
 
 foreach my $isbdfield ( split /#/, $bloc ) {
 
-    #         $isbdfield= /(.?.?.?)/;
-    $isbdfield =~ /(\d\d\d)\|(.*)\|(.*)\|(.*)/;
+    $isbdfield =~ /(\d\d\d)([^\|])?\|(.*)\|(.*)\|(.*)/;
     my $fieldvalue    = $1;
-    my $textbefore    = $2;
-    my $analysestring = $3;
-    my $textafter     = $4;
+    my $subfvalue = $2;
+    my $textbefore    = $3;
+    my $analysestring = $4;
+    my $textafter     = $5;
 
     #         warn "==> $1 / $2 / $3 / $4";
     #         my $fieldvalue=substr($isbdfield,0,3);
     if ( $fieldvalue > 0 ) {
-
-   #         warn "ERROR IN ISBD DEFINITION at : $isbdfield" unless $fieldvalue;
-   #             warn "FV : $fieldvalue";
         my $hasputtextbefore = 0;
         my @fieldslist = $record->field($fieldvalue);
-        @fieldslist= sort {$a->subfield($holdingbrtagsubf) cmp $b->subfield($holdingbrtagsubf)} @fieldslist if ($fieldvalue eq $holdingbrtagf);
-        foreach my $field ( @fieldslist ) {
-            my $calculated = $analysestring;
-            my $tag        = $field->tag();
-            if ( $tag < 10 ) {
-            }
-            else {
-                my @subf = $field->subfields;
-                for my $i ( 0 .. $#subf ) {
-                    my $subfieldcode  = $subf[$i][0];
-                    my $subfieldvalue =
-                      GetAuthorisedValueDesc( $tag, $subf[$i][0],
-                        $subf[$i][1], $itemtype,$tagslib);
-                    my $tagsubf = $tag . $subfieldcode;
-                    $calculated =~s/\{(.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
-                }
+        @fieldslist = sort {$a->subfield($holdingbrtagsubf) cmp $b->subfield($holdingbrtagsubf)} @fieldslist if ($fieldvalue eq $holdingbrtagf);
+
+        #         warn "ERROR IN ISBD DEFINITION at : $isbdfield" unless $fieldvalue;
+        #             warn "FV : $fieldvalue";
+        if ($subfvalue ne ""){
+          foreach my $field ( @fieldslist ) {
+            foreach my $subfield ($field->subfield($subfvalue)){
+              warn $fieldvalue."$subfvalue";    
+              my $calculated = $analysestring;
+              my $tag        = $field->tag();
+              if ( $tag < 10 ) {
+              }
+              else {
+                my $subfieldvalue =
+                GetAuthorisedValueDesc( $tag, $subfvalue,
+                  $subfield, '', $tagslib );
+                my $tagsubf = $tag . $subfvalue;
+                $calculated =~
+                      s/\{(.?.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
+#                 $calculated =~s#/cgi-bin/koha/[^/]+/([^.]*.pl\?.*)$#opac-$1#g;
+            
                 # field builded, store the result
                 if ( $calculated && !$hasputtextbefore )
                 {    # put textbefore if not done
-                    $blocres .= $textbefore;
-                    $hasputtextbefore = 1;
+                $blocres .= $textbefore;
+                $hasputtextbefore = 1;
                 }
-
+            
                 # remove punctuation at start
                 $calculated =~ s/^( |;|:|\.|-)*//g;
                 $blocres .= $calculated;
+                            
+              }         
+            }          
+          }
+          $blocres .= $textafter if $hasputtextbefore;  
+        } else {    
+        foreach my $field ( @fieldslist ) {
+          my $calculated = $analysestring;
+          my $tag        = $field->tag();
+          if ( $tag < 10 ) {
+          }
+          else {
+            my @subf = $field->subfields;
+            for my $i ( 0 .. $#subf ) {
+            my $subfieldcode  = $subf[$i][0];
+            my $subfieldvalue =
+            GetAuthorisedValueDesc( $tag, $subf[$i][0],
+              $subf[$i][1], '', $tagslib );
+            my $tagsubf = $tag . $subfieldcode;
+            $calculated =~
+        s/\{(.?.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
+#         $calculated =~s#/cgi-bin/koha/[^/]+/([^.]*.pl\?.*)$#opac-$1#g;
             }
+        
+            # field builded, store the result
+            if ( $calculated && !$hasputtextbefore )
+            {    # put textbefore if not done
+            $blocres .= $textbefore;
+            $hasputtextbefore = 1;
+            }
+        
+            # remove punctuation at start
+            $calculated =~ s/^( |;|:|\.|-)*//g;
+            $blocres .= $calculated;
+          }
         }
         $blocres .= $textafter if $hasputtextbefore;
+        }       
     }
     else {
         $blocres .= $isbdfield;

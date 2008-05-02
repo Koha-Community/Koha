@@ -113,11 +113,12 @@ my ($holdingbrtagf,$holdingbrtagsubf) = &GetMarcFromKohaField("items.holdingbran
 foreach my $isbdfield ( split /#/, $bloc ) {
 
     #         $isbdfield= /(.?.?.?)/;
-    $isbdfield =~ /(\d\d\d)\|(.*)\|(.*)\|(.*)/;
+    $isbdfield =~ /(\d\d\d)([^\|])?\|(.*)\|(.*)\|(.*)/;
     my $fieldvalue    = $1;
-    my $textbefore    = $2;
-    my $analysestring = $3;
-    my $textafter     = $4;
+    my $subfvalue = $2;
+    my $textbefore    = $3;
+    my $analysestring = $4;
+    my $textafter     = $5;
 
     #         warn "==> $1 / $2 / $3 / $4";
     #         my $fieldvalue=substr($isbdfield,0,3);
@@ -128,6 +129,39 @@ foreach my $isbdfield ( split /#/, $bloc ) {
 
         #         warn "ERROR IN ISBD DEFINITION at : $isbdfield" unless $fieldvalue;
         #             warn "FV : $fieldvalue";
+        if ($subfvalue ne ""){
+          foreach my $field ( @fieldslist ) {
+            foreach my $subfield ($field->subfield($subfvalue)){
+              warn $fieldvalue."$subfvalue";    
+              my $calculated = $analysestring;
+              my $tag        = $field->tag();
+              if ( $tag < 10 ) {
+              }
+              else {
+                my $subfieldvalue =
+                GetAuthorisedValueDesc( $tag, $subfvalue,
+                  $subfield, '', $tagslib );
+                my $tagsubf = $tag . $subfvalue;
+                $calculated =~
+                      s/\{(.?.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
+                $calculated =~s#/cgi-bin/koha/[^/]+/([^.]*.pl\?.*)$#opac-$1#g;
+            
+                # field builded, store the result
+                if ( $calculated && !$hasputtextbefore )
+                {    # put textbefore if not done
+                $blocres .= $textbefore;
+                $hasputtextbefore = 1;
+                }
+            
+                # remove punctuation at start
+                $calculated =~ s/^( |;|:|\.|-)*//g;
+                $blocres .= $calculated;
+                            
+              }         
+            }          
+          }
+          $blocres .= $textafter if $hasputtextbefore;
+        } else {    
         foreach my $field ( @fieldslist ) {
           my $calculated = $analysestring;
           my $tag        = $field->tag();
@@ -159,6 +193,7 @@ foreach my $isbdfield ( split /#/, $bloc ) {
           }
         }
         $blocres .= $textafter if $hasputtextbefore;
+        }       
     }
     else {
         $blocres .= $isbdfield;
