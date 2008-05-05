@@ -22,7 +22,7 @@ my $dbh = C4::Context->dbh();
 #
 
 # changing marc field type
-$dbh->do('ALTER TABLE `biblioitems` CHANGE `marc` `marc` BLOB NULL DEFAULT NULL ');
+$dbh->do('ALTER TABLE `biblioitems` CHANGE `marc` `marc` LONGBLOB NULL DEFAULT NULL ');
 # adding marc xml, just for convenience
 $dbh->do('ALTER TABLE `biblioitems` ADD `marcxml` LONGTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ');
 # moving data from marc_subfield_value to biblio
