@@ -60,15 +60,15 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     # 
     $dbh->do("ALTER TABLE `bookshelf` RENAME `virtualshelves`");
     $dbh->do("ALTER TABLE `shelfcontents` RENAME `virtualshelfcontents`");
-    $dbh->do("ALTER TABLE `virtualshelfcontents` ADD `biblionumber` INT( 11 ) NOT NULL");
+    $dbh->do("ALTER TABLE `virtualshelfcontents` ADD `biblionumber` INT( 11 ) NOT NULL default '0' AFTER shelfnumber");
     $dbh->do("UPDATE `virtualshelfcontents` SET biblionumber=(SELECT biblionumber FROM items WHERE items.itemnumber=virtualshelfcontents.itemnumber)");
     # drop all foreign keys : otherwise, we can't drop itemnumber field.
     DropAllForeignKeys('virtualshelfcontents');
+    $dbh->do("ALTER TABLE `virtualshelfcontents` ADD KEY biblionumber (biblionumber)");
     # create the new foreign keys (on biblionumber)
-    $dbh->do("ALTER TABLE `virtualshelfcontents` ADD FOREIGN KEY biblionumber_fk (biblionumber) REFERENCES biblio (biblionumber) ON UPDATE CASCADE ON DELETE CASCADE");
+    $dbh->do("ALTER TABLE `virtualshelfcontents` ADD CONSTRAINT `virtualshelfcontents_ibfk_1` FOREIGN KEY (`shelfnumber`) REFERENCES `virtualshelves` (`shelfnumber`) ON DELETE CASCADE ON UPDATE CASCADE");
     # re-create the foreign key on virtualshelf
-    $dbh->do("ALTER TABLE `virtualshelfcontents` ADD FOREIGN KEY shelfnumber_fk (shelfnumber) REFERENCES virtualshelves (shelfnumber) ON UPDATE CASCADE ON DELETE CASCADE");
-    # now we can drop the itemnumber column
+    $dbh->do("ALTER TABLE `virtualshelfcontents` ADD CONSTRAINT `shelfcontents_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE");
     $dbh->do("ALTER TABLE `virtualshelfcontents` DROP `itemnumber`");
     print "Upgrade to $DBversion done (virtualshelves)\n";
     SetVersion ($DBversion);
@@ -79,7 +79,7 @@ $DBversion = "3.00.00.002";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("DROP TABLE sessions");
     $dbh->do("CREATE TABLE `sessions` (
-  `id` char(32) NOT NULL,
+  `id` varchar(32) NOT NULL,
   `a_session` text NOT NULL,
   UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
@@ -217,13 +217,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
                         MODIFY `editionstatement` TEXT DEFAULT NULL AFTER `collectionvolume`,
                         MODIFY `editionresponsibility` TEXT DEFAULT NULL AFTER `editionstatement`,
                         MODIFY `place` VARCHAR(255) DEFAULT NULL AFTER `size`,
-                        MODIFY `marc` BLOB,
+                        MODIFY `marc` LONGBLOB,
                         ADD `cn_source` VARCHAR(10) DEFAULT NULL AFTER `url`,
                         ADD `cn_class` VARCHAR(30) DEFAULT NULL AFTER `cn_source`,
                         ADD `cn_item` VARCHAR(10) DEFAULT NULL AFTER `cn_class`,
                         ADD `cn_suffix` VARCHAR(10) DEFAULT NULL AFTER `cn_item`,
                         ADD `cn_sort` VARCHAR(30) DEFAULT NULL AFTER `cn_suffix`,
                         ADD `totalissues` INT(10) AFTER `cn_sort`,
+                        ADD `marcxml` LONGTEXT NOT NULL AFTER `totalissues`,
                         ADD KEY `isbn` (`isbn`),
                         ADD KEY `publishercode` (`publishercode`)
                     ");
@@ -305,11 +306,11 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion = "3.00.00.011";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("ALTER TABLE `branchcategories` CHANGE `categorycode` `categorycode` char(10) ");
+    $dbh->do("ALTER TABLE `branchcategories` CHANGE `categorycode` `categorycode` varchar(10) ");
     $dbh->do("ALTER TABLE `branchcategories` CHANGE `categoryname` `categoryname` varchar(32) ");
     $dbh->do("ALTER TABLE `branchcategories` ADD COLUMN `categorytype` varchar(16) ");
     $dbh->do("UPDATE `branchcategories` SET `categorytype` = 'properties'");
-    $dbh->do("ALTER TABLE `branchrelations` CHANGE `categorycode` `categorycode` char(10) ");
+    $dbh->do("ALTER TABLE `branchrelations` CHANGE `categorycode` `categorycode` varchar(10) ");
     print "Upgrade to $DBversion done (added branchcategory type)\n";
     SetVersion ($DBversion);
 }
@@ -561,7 +562,9 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 $DBversion = "3.00.00.022";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE items 
-                ADD `damaged` tinyint(1) default NULL");
+                ADD `damaged` tinyint(1) default NULL AFTER notforloan");
+    $dbh->do("ALTER TABLE deleteditems 
+                ADD `damaged` tinyint(1) default NULL AFTER notforloan");
     print "Upgrade to $DBversion done (adding damaged column to items table)\n";
     SetVersion ($DBversion);
 }
@@ -572,8 +575,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
          VALUES ('yuipath','http://yui.yahooapis.com/2.3.1/build','Insert the path to YUI libraries','','free')");
     print "Upgrade to $DBversion done (adding new system preference for controlling YUI path)\n";
     SetVersion ($DBversion);
-}
-
+} 
 $DBversion = "3.00.00.024";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE biblioitems CHANGE  itemtype itemtype VARCHAR(10)");
@@ -584,6 +586,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 $DBversion = "3.00.00.025";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE items ADD COLUMN itype VARCHAR(10)");
+    $dbh->do("ALTER TABLE deleteditems ADD COLUMN itype VARCHAR(10) AFTER uri");
     if(C4::Context->preference('item-level_itypes')){
         $dbh->do('update items,biblioitems set items.itype=biblioitems.itemtype where items.biblionumber=biblioitems.biblionumber and itype is null');
     }
@@ -837,6 +840,15 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
                 MODIFY damaged    tinyint(1) NOT NULL default 0,
                 MODIFY itemlost   tinyint(1) NOT NULL default 0,
                 MODIFY wthdrawn   tinyint(1) NOT NULL default 0");
+    $dbh->do("UPDATE deleteditems SET notforloan = 0 WHERE notforloan IS NULL");
+    $dbh->do("UPDATE deleteditems SET damaged = 0 WHERE damaged IS NULL");
+    $dbh->do("UPDATE deleteditems SET itemlost = 0 WHERE itemlost IS NULL");
+    $dbh->do("UPDATE deleteditems SET wthdrawn = 0 WHERE wthdrawn IS NULL");
+    $dbh->do("ALTER TABLE deleteditems
+                MODIFY notforloan tinyint(1) NOT NULL default 0,
+                MODIFY damaged    tinyint(1) NOT NULL default 0,
+                MODIFY itemlost   tinyint(1) NOT NULL default 0,
+                MODIFY wthdrawn   tinyint(1) NOT NULL default 0");
 	print "Upgrade to $DBversion done (disallow NULL in several item status columns)\n";
     SetVersion ($DBversion);
 }
@@ -850,7 +862,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion = "3.00.00.043";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("ALTER TABLE `currency` ADD `symbol` varchar(5) default NULL, ADD `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP");
+    $dbh->do("ALTER TABLE `currency` ADD `symbol` varchar(5) default NULL AFTER currency, ADD `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP AFTER symbol");
 	print "Upgrade to $DBversion done (currency table: add symbol and timestamp columns)\n";
     SetVersion ($DBversion);
 }
@@ -940,9 +952,9 @@ VALUES( 'he', 'Hebr')");
 
 $DBversion = "3.00.00.046";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("ALTER TABLE `subscription` CHANGE `numberlength` `numberlength` int(11) default NULL , 
-    		 CHANGE `weeklength` `weeklength` int(11) default NULL");
-    $dbh->do("CREATE TABLE `serialitems` (`serialid` int(11) NOT NULL, `itemnumber` int(11) NOT NULL, UNIQUE KEY (`serialid`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+    $dbh->do("ALTER TABLE `subscription` CHANGE `numberlength` `numberlength` int(11) default '0' , 
+    		 CHANGE `weeklength` `weeklength` int(11) default '0'");
+    $dbh->do("CREATE TABLE `serialitems` (`serialid` int(11) NOT NULL, `itemnumber` int(11) NOT NULL, UNIQUE KEY `serialididx` (`serialid`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
     $dbh->do("INSERT INTO `serialitems` SELECT `serialid`,`itemnumber` from serial where NOT ISNULL(itemnumber) && itemnumber <> '' && itemnumber NOT LIKE '%,%'");
 	print "Upgrade to $DBversion done (Add serialitems table to link serial issues to items. )\n";
     SetVersion ($DBversion);
@@ -957,14 +969,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion = "3.00.00.048";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("ALTER TABLE `items` ADD `more_subfields_xml` longtext default NULL");
+    $dbh->do("ALTER TABLE `items` ADD `more_subfields_xml` longtext default NULL AFTER `itype`");
 	print "Upgrade to $DBversion done (added items.more_subfields_xml)\n";
     SetVersion ($DBversion);
 }
 
 $DBversion = "3.00.00.049";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-	$dbh->do("ALTER TABLE `z3950servers` ADD `encoding` text default NULL ");
+	$dbh->do("ALTER TABLE `z3950servers` ADD `encoding` text default NULL AFTER type ");
 	print "Upgrade to $DBversion done ( Added encoding field to z3950servers table )\n";
     SetVersion ($DBversion);
 }
@@ -985,7 +997,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion = "3.00.00.052";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("ALTER TABLE `deleteditems` ADD `more_subfields_xml` LONGTEXT DEFAULT NULL;");
+    $dbh->do("ALTER TABLE `deleteditems` ADD `more_subfields_xml` LONGTEXT DEFAULT NULL AFTER `itype`");
 	print "Upgrade to $DBversion done ( Adding missing column to deleteditems table. )\n";
     SetVersion ($DBversion);
 }
@@ -1057,7 +1069,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
                 CHANGE `lang` `lang` VARCHAR( 25 ) 
                 CHARACTER SET utf8 
                 COLLATE utf8_general_ci 
-                NOT NULL ");
+                NOT NULL default ''");
 	print "Upgrade to $DBversion done ( lang field in opac_news made longer )\n";
     SetVersion ($DBversion);
 }
@@ -1312,7 +1324,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion = "3.00.00.072";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("ALTER TABLE labels_conf ADD COLUMN formatstring VARCHAR(64) DEFAULT NULL;");
+    $dbh->do("ALTER TABLE labels_conf ADD COLUMN formatstring VARCHAR(64) DEFAULT NULL AFTER printingtype");
 	print "Upgrade to $DBversion done ( Adding format string to labels generator. )\n";
     SetVersion ($DBversion);
 }
@@ -1480,12 +1492,21 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion = "3.00.00.079";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    my ($print_error) = $dbh->{PrintError};
+ my ($print_error) = $dbh->{PrintError};
     $dbh->{PrintError} = 0;
-    
+
     $dbh->do("INSERT INTO `systempreferences` (variable, value,options,type, explanation)VALUES
-	    ('AddPatronLists','categorycode','categorycode|category_type','Choice','Allow user to choose what list to pick up from when adding patrons')");
-	print "Upgrade to $DBversion done (add browser table if not already present)\n";
+        ('AddPatronLists','categorycode','categorycode|category_type','Choice','Allow user to choose what list to pick up from when adding patrons')");
+    print "Upgrade to $DBversion done (add browser table if not already present)\n";
+	SetVersion ($DBversion);
+}
+
+$DBversion = "3.00.00.080";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE subscription CHANGE monthlength monthlength int(11) default '0'");
+    $dbh->do("ALTER TABLE deleteditems MODIFY marc LONGBLOB AFTER copynumber");
+    $dbh->do("ALTER TABLE aqbooksellers CHANGE name name mediumtext NOT NULL");
+	print "Upgrade to $DBversion done (catch up on DB schema changes since alpha and beta)\n";
 	SetVersion ($DBversion);
 }
 
