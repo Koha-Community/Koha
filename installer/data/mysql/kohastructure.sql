@@ -123,7 +123,7 @@ CREATE TABLE `aqbookfund` (
 DROP TABLE IF EXISTS `aqbooksellers`;
 CREATE TABLE `aqbooksellers` (
   `id` int(11) NOT NULL auto_increment,
-  `name` mediumtext,
+  `name` mediumtext NOT NULL,
   `address1` mediumtext,
   `address2` mediumtext,
   `address3` mediumtext,
@@ -1754,6 +1754,7 @@ CREATE TABLE `subscription` (
   `branchcode` varchar(10) NOT NULL default '',
   `hemisphere` tinyint(3) default 0,
   `lastbranch` varchar(10),
+  `serialsadditems` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`subscriptionid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
