@@ -85,7 +85,7 @@ my $DBversion = "3.00.00.000";
                     )",
         repeatable_holidays => "(
                     `id` int(11) NOT NULL auto_increment,
-                    `branchcode` varchar(4) NOT NULL default '',
+                    `branchcode` varchar(10) NOT NULL default '',
                     `weekday` smallint(6) default NULL,
                     `day` smallint(6) default NULL,
                     `month` smallint(6) default NULL,
@@ -95,7 +95,7 @@ my $DBversion = "3.00.00.000";
                     )",
         special_holidays => "(
                     `id` int(11) NOT NULL auto_increment,
-                    `branchcode` varchar(4) NOT NULL default '',
+                    `branchcode` varchar(10) NOT NULL default '',
                     `day` smallint(6) NOT NULL default '0',
                     `month` smallint(6) NOT NULL default '0',
                     `year` smallint(6) NOT NULL default '0',
@@ -104,13 +104,13 @@ my $DBversion = "3.00.00.000";
                     `description` text NOT NULL,
                     PRIMARY KEY  (`id`)
                     )",
-        overduerules    =>"(`branchcode` varchar(255) NOT NULL default '',
-                        `categorycode` char(2) NOT NULL default '',
+        overduerules    =>"(`branchcode` varchar(10) NOT NULL default '',
+                        `categorycode` varchar(2) NOT NULL default '',
                         `delay1` int(4) default '0',
                         `letter1` varchar(20) default NULL,
-                        `debarred1` char(1) default '0',
+                        `debarred1` varchar(1) default '0',
                         `delay2` int(4) default '0',
-                        `debarred2` char(1) default '0',
+                        `debarred2` varchar(1) default '0',
                         `letter2` varchar(20) default NULL,
                         `delay3` int(4) default '0',
                         `letter3` varchar(20) default NULL,
@@ -118,17 +118,18 @@ my $DBversion = "3.00.00.000";
                         PRIMARY KEY  (`branchcode`,`categorycode`)
                         )",
         cities            => "(`cityid` int auto_increment,
-                            `city_name` char(100) NOT NULL,
-                            `city_zipcode` char(20),
+                            `city_name` varchar(100) NOT NULL default '',
+                            `city_zipcode` varchar(20),
                             PRIMARY KEY (`cityid`)
                         )",
         roadtype            => "(`roadtypeid` int auto_increment,
-                            `road_type` char(100) NOT NULL,
+                            `road_type` varchar(100) NOT NULL default '',
                             PRIMARY KEY (`roadtypeid`)
                         )",
     
         labels                     => "(
                     labelid int(11) NOT NULL auto_increment,
+                                batch_id varchar(10) NOT NULL default '1',
                                 itemnumber varchar(100) NOT NULL default '',
                                 timestamp timestamp(14) NOT NULL,
                                 PRIMARY KEY  (labelid)
@@ -137,15 +138,26 @@ my $DBversion = "3.00.00.000";
         labels_conf                => "(
                     id int(4) NOT NULL auto_increment,
                                 barcodetype char(100) default '',
-                                title tinyint(1) default '0',
-                                isbn tinyint(1) default '0',
-                                itemtype tinyint(1) default '0',
-                                barcode tinyint(1) default '0',
-                                dewey tinyint(1) default '0',
-                                class tinyint(1) default '0',
-                                author tinyint(1) default '0',
-                                papertype char(100) default '',
-                                startrow int(2) default NULL,
+                                title int(1) default '0',
+                                subtitle int(1) default '0',
+                                itemtype int(1) default '0',
+                                barcode int(1) default '0',
+                                dewey int(1) default '0',
+                                class int(1) default '0',
+                                subclass int(1) default '0',
+                                itemcallnumber int(1) default '0',
+                                author int(1) default '0',
+                                issn int(1) default '0',
+                                isbn int(1) default '0',
+                                startlabel int(2) NOT NULL default '1',
+                                printingtype char(32) default 'BAR',
+                                layoutname char(20) NOT NULL default 'TEST',
+                                guidebox int(1) default '0',
+                                active tinyint(1) default '1',
+                                fonttype char(10) collate utf8_unicode_ci default NULL,
+                                ccode char(4) collate utf8_unicode_ci default NULL,
+                                callnum_split int(1) default NULL,
+                                text_justify char(1) collate utf8_unicode_ci default NULL,
                                 PRIMARY KEY  (id)
                                 )",
         reviews                  => "(
@@ -169,7 +181,7 @@ my $DBversion = "3.00.00.000";
                 notify_id int(11) NOT NULL default '0',
                     `borrowernumber` int(11) NOT NULL default '0',
                 `itemnumber` int(11) NOT NULL default '0',
-                `notify_date` date NOT NULL default '0000-00-00',
+                `notify_date` date default NULL,
                         `notify_send_date` date default NULL,
                         `notify_level` int(1) NOT NULL default '0',
                         `method` varchar(20) NOT NULL default ''
@@ -192,29 +204,29 @@ my $DBversion = "3.00.00.000";
         ",
     zebraqueue    => "(
                     `id` int NOT NULL auto_increment,
-                    `biblio_auth_number` int NOT NULL,
-                    `operation` char(20) NOT NULL,
-                    `server` char(20) NOT NULL ,
+                    `biblio_auth_number` int(11) NOT NULL default '0',
+                    `operation` char(20) NOT NULL default '',
+                    `server` char(20) NOT NULL default '',
                     PRIMARY KEY  (`id`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=1",
     
     );
     
     my %requirefields = (
-        subscription => { 'letter' => 'char(20) NULL', 'distributedto' => 'text NULL', 'firstacquidate'=>'date NOT NULL','irregularity'=>'TEXT NULL default \'\'','numberpattern'=>'TINYINT(3) NULL default 0', 'callnumber'=>'text NULL', 'hemisphere' =>'TINYINT(3) NULL default 0', 'issuesatonce'=>'TINYINT(3) NOT NULL default 1',  'branchcode' =>'varchar(12) NOT NULL default \'\'', 'manualhistory'=>'TINYINT(1) NOT NULL default 0','internalnotes'=>'LONGTEXT NULL default \'\''},
-        itemtypes => { 'imageurl' => 'char(200) NULL'},
+        subscription => { 'letter' => 'varchar(20) NULL', 'distributedto' => 'text NULL', 'firstacquidate'=>'date default NULL','irregularity'=>'TEXT NULL default \'\'','numberpattern'=>'TINYINT(3) NULL default 0', 'callnumber'=>'text NULL', 'hemisphere' =>'TINYINT(3) NULL default 0', 'issuesatonce'=>'TINYINT(3) NOT NULL default 1',  'branchcode' =>'varchar(10) NOT NULL default \'\'', 'manualhistory'=>'TINYINT(1) NOT NULL default 0','internalnotes'=>'LONGTEXT NULL default \'\''},
+        itemtypes => { 'imageurl' => 'varchar(200) NULL'},
         aqbookfund => { 'branchcode' => 'varchar(4) NULL'},
         aqbudget => { 'branchcode' => 'varchar(4) NULL'},
         auth_header => { 'marc' => 'BLOB NOT NULL', 'linkid' => 'BIGINT(20) NULL'},
-        auth_subfield_structure =>{ 'hidden' => 'TINYINT(3) NOT NULL default 0', 'kohafield' => 'VARCHAR(45) NULL', 'linkid' =>  'TINYINT(1) NOT NULL default 0', 'isurl' => 'TINYINT(1)', 'frameworkcode'=>'VARCHAR(8) NOT  NULL'},
+        auth_subfield_structure =>{ 'hidden' => 'TINYINT(3) NOT NULL default 0', 'kohafield' => "VARCHAR(45) NULL default ''", 'linkid' =>  'TINYINT(1) NOT NULL default 0', 'isurl' => 'TINYINT(1)', 'frameworkcode'=>'VARCHAR(8) NOT  NULL'},
         marc_breeding => { 'isbn' => 'varchar(13) NOT NULL'},
-        serial =>{ 'publisheddate' => 'date', 'claimdate' => 'date', 'itemnumber'=>'text NULL','routingnotes'=>'text NULL',},
+        serial =>{ 'publisheddate' => 'date AFTER planneddate', 'claimdate' => 'date', 'itemnumber'=>'text NULL','routingnotes'=>'text NULL',},
         statistics => { 'associatedborrower' => 'integer'},
         z3950servers =>{  "name" =>"text",  "description" => "text NOT NULL",
                         "position" =>"enum('primary','secondary','') NOT NULL default 'primary'",  "icon" =>"text",
                         "type" =>"enum('zed','opensearch') NOT NULL default 'zed'",
                         },
-        issues =>{ 'issuedate'=>"date NOT NULL default '0000-00-00'", },
+        issues =>{ 'issuedate'=>"date NULL default NULL", },
     
     #    tablename        => { 'field' => 'fieldtype' },
     );
@@ -231,6 +243,8 @@ my $DBversion = "3.00.00.000";
     # tablename => "field1,field2",
         borrowers => "suburb,altstreetaddress,altsuburb,altcity,studentnumber,school,area,preferredcont,altcp",
         deletedborrowers=> "suburb,altstreetaddress,altsuburb,altcity,studentnumber,school,area,preferredcont,altcp",
+        items => "multivolumepart,multivolume,binding",
+        deleteditems => "multivolumepart,multivolume,binding",
         );
     # the other hash contains other actions that can't be done elsewhere. they are done
     # either BEFORE of AFTER everything else, depending on "when" entry (default => AFTER)
@@ -586,16 +600,41 @@ my $DBversion = "3.00.00.000";
                 default    => '1',
                 extra    => '',
             },
+            {
+                field   => 'booksellerinvoicenumber',
+                type    => 'mediumtext',
+				null    => 'NULL',
+                key     => '',
+                default => '',
+                extra   => '',
+            },
         ],
 		aqbookfund => [
 			{
 				field  => 'bookfundid',
-				type   => 'varchar(5)',
+				type   => 'varchar(10)',
 				null   => 'NOT NULL',
-				key    => 'PRI',
-				default => '',
+				key    => '',
+				default => "''",
 				extra  => '',
 			},
+            {
+                field   => 'branchcode',
+                type    => 'varchar(10)',
+				null    => 'NOT NULL',
+                key     => '',
+                default => "''",
+                extra   => '',
+            },
+            {
+                field   => 'bookfundname',
+                type    => 'mediumtext',
+				null    => 'NULL',
+                key     => '',
+                default => '',
+                extra   => '',
+                after   => 'bookfundid',
+            },
 		],
   
         aqbooksellers =>  [
@@ -606,6 +645,14 @@ my $DBversion = "3.00.00.000";
                 key        => 'PRI',
                 default    => '',
                 extra    => 'auto_increment',
+            },
+            {
+                field    => 'currency',
+                type    => 'varchar(3)',
+                null    => 'NOT NULL',
+                key        => '',
+                default    => "''",
+                extra    => '',
             },
             {
                 field    => 'listprice',
@@ -631,20 +678,220 @@ my $DBversion = "3.00.00.000";
 				default => 'NULL',
 				extra   => '',
 			},
-				
+			{
+				field   => 'address1',
+				type    => 'mediumtext',
+				null    => 'NULL',
+				key     => '',
+				default => '',
+				extra   => '',
+			},
+			{
+				field   => 'address2',
+				type    => 'mediumtext',
+				null    => 'NULL',
+				key     => '',
+				default => '',
+				extra   => '',
+			},
+			{
+				field   => 'address3',
+				type    => 'mediumtext',
+				null    => 'NULL',
+				key     => '',
+				default => '',
+				extra   => '',
+			},
+			{
+				field   => 'address4',
+				type    => 'mediumtext',
+				null    => 'NULL',
+				key     => '',
+				default => '',
+				extra   => '',
+			},
+			{
+				field   => 'accountnumber',
+				type    => 'mediumtext',
+				null    => 'NULL',
+				key     => '',
+				default => '',
+				extra   => '',
+			},
+			{
+				field   => 'othersupplier',
+				type    => 'mediumtext',
+				null    => 'NULL',
+				key     => '',
+				default => '',
+				extra   => '',
+			},
+			{
+				field   => 'specialty',
+				type    => 'mediumtext',
+				null    => 'NULL',
+				key     => '',
+				default => '',
+				extra   => '',
+			},
+			{
+				field   => 'booksellerfax',
+				type    => 'mediumtext',
+				null    => 'NULL',
+				key     => '',
+				default => '',
+				extra   => '',
+			},
+			{
+				field   => 'notes',
+				type    => 'mediumtext',
+				null    => 'NULL',
+				key     => '',
+				default => '',
+				extra   => '',
+			},
+			{
+				field   => 'bookselleremail',
+				type    => 'mediumtext',
+				null    => 'NULL',
+				key     => '',
+				default => '',
+				extra   => '',
+			},
+			{
+				field   => 'booksellerurl',
+				type    => 'mediumtext',
+				null    => 'NULL',
+				key     => '',
+				default => '',
+				extra   => '',
+			},
+			{
+				field   => 'contnotes',
+				type    => 'mediumtext',
+				null    => 'NULL',
+				key     => '',
+				default => '',
+				extra   => '',
+			},
+			{
+				field   => 'postal',
+				type    => 'mediumtext',
+				null    => 'NULL',
+				key     => '',
+				default => '',
+				extra   => '',
+			},
         ],
         
 		aqbudget     =>  [
 			{
 				field    => 'bookfundid',
-				type     => 'varchar(5)',
+				type     => 'varchar(10)',
 				null     => 'NOT NULL',
+				key      => '',
+				default  => "''",
+				exra     => '',
+			 },
+			{
+				field    => 'branchcode',
+				type     => 'varchar(10)',
+				null     => 'NULL',
 				key      => '',
 				default  => '',
 				exra     => '',
 			 },
 		],
 		
+		aqorderbreakdown     =>  [
+			{
+				field    => 'bookfundid',
+				type     => 'varchar(10)',
+				null     => 'NOT NULL',
+				key      => '',
+				default  => "''",
+				exra     => '',
+			 },
+			{
+				field    => 'branchcode',
+				type     => 'varchar(10)',
+				null     => 'NULL',
+				key      => '',
+				default  => '',
+				exra     => '',
+			 },
+		],
+
+		aqorderdelivery => [
+			{
+				field    => 'ordernumber',
+				type     => 'date',
+				null     => 'NULL',
+				key      => '',
+				default  => 'NULL',
+				exra     => '',
+			 },
+			{
+				field    => 'deliverycomments',
+				type     => 'mediumtext',
+				null     => 'NULL',
+				key      => '',
+				default  => '',
+				exra     => '',
+			 },
+        ],
+
+        aqorders => [
+			{
+				field    => 'title',
+				type     => 'mediumtext',
+				null     => 'NULL',
+				key      => '',
+				default  => '',
+				exra     => '',
+			 },
+			{
+				field    => 'currency',
+				type     => 'varchar(3)',
+				null     => 'NULL',
+				key      => '',
+				default  => 'NULL',
+				exra     => '',
+			 },
+            {
+                field   => 'booksellerinvoicenumber',
+                type    => 'mediumtext',
+				null    => 'NULL',
+                key     => '',
+                default => '',
+                extra   => '',
+            },
+            {
+                field   => 'notes',
+                type    => 'mediumtext',
+				null    => 'NULL',
+                key     => '',
+                default => '',
+                extra   => '',
+            },
+            {
+                field   => 'supplierreference',
+                type    => 'mediumtext',
+				null    => 'NULL',
+                key     => '',
+                default => '',
+                extra   => '',
+            },
+            {
+                field   => 'purchaseordernumber',
+                type    => 'mediumtext',
+				null    => 'NULL',
+                key     => '',
+                default => '',
+                extra   => '',
+            },
+        ],
+
         accountlines =>  [
             {
                 field    => 'notify_id',
@@ -682,10 +929,257 @@ my $DBversion = "3.00.00.000";
 		    },
         
         ],
-        
+       
+        auth_header => [
+            {
+                field   => 'authtypecode',
+                type    => 'varchar(10)',
+				null    => 'NOT NULL',
+                key     => '',
+                default => "''",
+                extra   => '',
+            },
+            {
+                field   => 'datecreated',
+                type    => 'date',
+				null    => 'NULL',
+                key     => '',
+                default => "NULL",
+                extra   => '',
+            },
+            {
+                field   => 'origincode',
+                type    => 'varchar(20)',
+				null    => 'NULL',
+                key     => '',
+                default => "NULL",
+                extra   => '',
+            },
+            {
+                field   => 'authtrees',
+                type    => 'mediumtext',
+				null    => 'NULL',
+                key     => '',
+                default => "",
+                extra   => '',
+                after   => 'origincode',
+            },
+        ],
+ 
+        auth_subfield_structure => [
+            {
+                field   => 'authtypecode',
+                type    => 'varchar(10)',
+				null    => 'NOT NULL',
+                key     => '',
+                default => "''",
+                extra   => '',
+            },
+            {
+                field   => 'tagfield',
+                type    => 'varchar(3)',
+				null    => 'NOT NULL',
+                key     => '',
+                default => "''",
+                extra   => '',
+            },
+            {
+                field   => 'tagsubfield',
+                type    => 'varchar(1)',
+				null    => 'NOT NULL',
+                key     => '',
+                default => "''",
+                extra   => '',
+            },
+            {
+                field   => 'liblibrarian',
+                type    => 'varchar(255)',
+				null    => 'NOT NULL',
+                key     => '',
+                default => "''",
+                extra   => '',
+            },
+            {
+                field   => 'libopac',
+                type    => 'varchar(255)',
+				null    => 'NOT NULL',
+                key     => '',
+                default => "''",
+                extra   => '',
+            },
+            {
+                field   => 'authorised_value',
+                type    => 'varchar(10)',
+				null    => 'NULL',
+                key     => '',
+                default => "NULL",
+                extra   => '',
+            },
+            {
+                field   => 'value_builder',
+                type    => 'varchar(80)',
+				null    => 'NULL',
+                key     => '',
+                default => "NULL",
+                extra   => '',
+            },
+            {
+                field   => 'seealso',
+                type    => 'varchar(255)',
+				null    => 'NULL',
+                key     => '',
+                default => "NULL",
+                extra   => '',
+            },
+            {
+                field   => 'kohafield',
+                type    => 'varchar(45)',
+				null    => 'NULL',
+                key     => '',
+                default => "''",
+                extra   => '',
+            },
+            {
+                field   => 'frameworkcode',
+                type    => 'varchar(8)',
+				null    => 'NOT NULL',
+                key     => '',
+                default => "''",
+                extra   => '',
+            },
+        ],
+            
+        auth_tag_structure => [
+            {
+                field   => 'authtypecode',
+                type    => 'varchar(10)',
+				null    => 'NOT NULL',
+                key     => '',
+                default => "''",
+                extra   => '',
+            },
+            {
+                field   => 'tagfield',
+                type    => 'varchar(3)',
+				null    => 'NOT NULL',
+                key     => '',
+                default => "''",
+                extra   => '',
+            },
+            {
+                field   => 'liblibrarian',
+                type    => 'varchar(255)',
+				null    => 'NOT NULL',
+                key     => '',
+                default => "''",
+                extra   => '',
+            },
+            {
+                field   => 'libopac',
+                type    => 'varchar(255)',
+				null    => 'NOT NULL',
+                key     => '',
+                default => "''",
+                extra   => '',
+            },
+            {
+                field   => 'authorised_value',
+                type    => 'varchar(10)',
+				null    => 'NULL',
+                key     => '',
+                default => "NULL",
+                extra   => '',
+            },
+        ],
+
+        auth_types => [
+            {
+                field   => 'auth_tag_to_report',
+                type    => 'varchar(3)',
+				null    => 'NOT NULL',
+                key     => '',
+                default => "''",
+                extra   => '',
+            },
+            {
+                field   => 'summary',
+                type    => 'mediumtext',
+				null    => 'NOT NULL',
+                key     => '',
+                default => '',
+                extra   => '',
+            },
+        ],
+
+        authorised_values => [
+            {
+                field   => 'category',
+                type    => 'varchar(10)',
+				null    => 'NOT NULL',
+                key     => '',
+                default => "''",
+                extra   => '',
+            },
+            {
+                field   => 'authorised_value',
+                type    => 'varchar(80)',
+				null    => 'NOT NULL',
+                key     => '',
+                default => "''",
+                extra   => '',
+            },
+            {
+                field   => 'lib',
+                type    => 'varchar(80)',
+				null    => 'NULL',
+                key     => '',
+                default => 'NULL',
+                extra   => '',
+            },
+        ],
+
+        biblio_framework => [
+            {
+                field   => 'frameworkcode',
+                type    => 'varchar(4)',
+				null    => 'NOT NULL',
+                key     => '',
+                default => "''",
+                extra   => '',
+            },
+            {
+                field   => 'frameworktext',
+                type    => 'varchar(255)',
+				null    => 'NOT NULL',
+                key     => '',
+                default => "''",
+                extra   => '',
+            },
+        ],
+
         borrowers => [
+            {
+                field   => 'cardnumber',
+                type    => 'varchar(16)',
+				null    => 'NULL',
+                key     => '',
+                default => 'NULL',
+                extra   => '',
+            },
+            {    field => 'surname',
+                type => 'mediumtext',
+                null => 'NOT NULL',
+            },
             {    field => 'firstname',
                 type => 'text',
+                null => 'NULL',
+            },
+            {    field => 'title',
+                type => 'mediumtext',
+                null => 'NULL',
+            },
+            {    field => 'othernames',
+                type => 'mediumtext',
                 null => 'NULL',
             },
             {    field => 'initials',
@@ -699,13 +1193,13 @@ my $DBversion = "3.00.00.000";
             },
             {
                 field => 'streetnumber', # street number (hidden if streettable table is empty)
-                type => 'char(10)',
+                type => 'varchar(10)',
                 null => 'NULL',
                 after => 'initials',
             },
             {
                 field => 'streettype', # street table, list builded from a system table
-                type => 'char(50)',
+                type => 'varchar(50)',
                 null => 'NULL',
                 after => 'streetnumber',
             },
@@ -715,13 +1209,13 @@ my $DBversion = "3.00.00.000";
             },
             {
                 field => 'B_streetnumber', # street number (hidden if streettable table is empty)
-                type => 'char(10)',
+                type => 'varchar(10)',
                 null => 'NULL',
                 after => 'fax',
             },
             {
                 field => 'B_streettype', # street table, list builded from a system table
-                type => 'char(50)',
+                type => 'varchar(50)',
                 null => 'NULL',
                 after => 'B_streetnumber',
             },
@@ -759,16 +1253,86 @@ my $DBversion = "3.00.00.000";
                 field => 'branchcode',
                 type  => 'varchar(10)',
                 null  => 'NOT NULL',
-                default    => '',
+                default    => "''",
                 extra => '',
             },
             {
                 field => 'categorycode',
                 type  => 'varchar(10)',
                 null  => 'NOT NULL',
+                default    => "''",
+                extra => '',
+            },
+            {
+                field => 'address',
+                type  => 'mediumtext',
+                null  => 'NOT NULL',
                 default    => '',
                 extra => '',
-            }
+            },
+            {
+                field => 'email',
+                type  => 'mediumtext',
+                null  => 'NULL',
+                default    => '',
+                extra => '',
+            },
+            {
+                field => 'B_city',
+                type  => 'mediumtext',
+                null  => 'NULL',
+                default    => '',
+                extra => '',
+            },
+            {
+                field => 'city',
+                type  => 'mediumtext',
+                null  => 'NOT NULL',
+                default    => '',
+                extra => '',
+            },
+            {
+                field => 'fax',
+                type  => 'mediumtext',
+                null  => 'NULL',
+                default    => '',
+                extra => '',
+            },
+            {
+                field => 'B_phone',
+                type  => 'mediumtext',
+                null  => 'NULL',
+                default    => '',
+                extra => '',
+            },
+            {
+                field => 'contactname',
+                type  => 'mediumtext',
+                null  => 'NULL',
+                default    => '',
+                extra => '',
+            },
+            {
+                field => 'opacnote',
+                type  => 'mediumtext',
+                null  => 'NULL',
+                default    => '',
+                extra => '',
+            },
+            {
+                field => 'borrowernotes',
+                type  => 'mediumtext',
+                null  => 'NULL',
+                default    => '',
+                extra => '',
+            },
+            {
+                field => 'sex',
+                type  => 'varchar(1)',
+                null  => 'NULL',
+                default    => 'NULL',
+                extra => '',
+            },
         ],
         
         biblioitems =>  [
@@ -816,13 +1380,15 @@ my $DBversion = "3.00.00.000";
                 null    => 'null',
                 default => '',
                 extra   => '',
+                after   => 'volumeddesc',
             },
             {
                 field   => 'collectionissn',
-                type    => 'mediumtext',
+                type    => 'text',
                 null    => 'null',
                 default => '',
                 extra   => '',
+                after   => 'collectiontitle',
             },
             {
                 field   => 'collectionvolume',
@@ -830,6 +1396,7 @@ my $DBversion = "3.00.00.000";
                 null    => 'null',
                 default => '',
                 extra   => '',
+                after   => 'collectionissn',
             },
             {
                 field   => 'editionstatement',
@@ -837,6 +1404,7 @@ my $DBversion = "3.00.00.000";
                 null    => 'null',
                 default => '',
                 extra   => '',
+                after   => 'collectionvolume',
             },
             {
                 field   => 'editionresponsibility',
@@ -844,41 +1412,136 @@ my $DBversion = "3.00.00.000";
                 null    => 'null',
                 default => '',
                 extra   => '',
+                after   => 'editionstatement',
             },
-                
+            {
+                field   => 'volume',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                default => '',
+                extra   => '',
+            },
+            {
+                field   => 'number',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                default => '',
+                extra   => '',
+            },
+            {
+                field   => 'notes',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                default => '',
+                extra   => '',
+            },
         ],
+                
         biblio => [
             {
-                field   => 'datecreated',
-                type    => 'date',
-                null    => 'NOT NULL',
+                field   => 'author',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                default => '',
+                extra   => '',
+            },
+            {
+                field   => 'title',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                default => '',
+                extra   => '',
+            },
+            {
+                field   => 'unititle',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                default => '',
+                extra   => '',
+            },
+            {
+                field   => 'seriestitle',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                default => '',
+                extra   => '',
+            },
+            {
+                field   => 'abstract',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                default => '',
+                extra   => '',
+            },
+            {
+                field   => 'notes',
+                type    => 'mediumtext',
+                null    => 'NULL',
                 default => '',
                 extra   => '',
             },
             {
                 field   => 'frameworkcode',
                 type    => 'varchar(4)',
-                null    => 'NULL',
-                default => '',
+                null    => 'NOT NULL',
+                default => "''",
                 extra   => '',
+                after   => 'biblionumber',
             },
-	],
+	    ],
+
         deletedbiblio => [
             {
-                field   => 'datecreated',
-                type    => 'date',
-                null    => 'NOT NULL',
+                field   => 'author',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                default => '',
+                extra   => '',
+            },
+            {
+                field   => 'title',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                default => '',
+                extra   => '',
+            },
+            {
+                field   => 'unititle',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                default => '',
+                extra   => '',
+            },
+            {
+                field   => 'seriestitle',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                default => '',
+                extra   => '',
+            },
+            {
+                field   => 'abstract',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                default => '',
+                extra   => '',
+            },
+            {
+                field   => 'notes',
+                type    => 'mediumtext',
+                null    => 'NULL',
                 default => '',
                 extra   => '',
             },
             {
                 field   => 'frameworkcode',
                 type    => 'varchar(4)',
-                null    => 'NULL',
-                default => '',
+                null    => 'NOT NULL',
+                default => "''",
                 extra   => '',
+                after   => 'biblionumber',
             },
-	],
+	    ],
         deletedbiblioitems => [
             {
                 field   => 'itemtype',
@@ -894,7 +1557,70 @@ my $DBversion = "3.00.00.000";
                 default => '',
                 extra   => '',
             },
+            {
+                field   => 'itemtype',
+                type    => 'varchar(10)',
+                null    => 'NULL',
+                default => 'NULL',
+                extra   => '',
+            },
+            {
+                field   => 'volume',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                default => '',
+                extra   => '',
+            },
+            {
+                field   => 'notes',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                default => '',
+                extra   => '',
+            },
+            {
+                field   => 'number',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                default => '',
+                extra   => '',
+            },
         ],
+
+        bookshelf => [
+            {
+                field   => 'shelfname',
+                type    => 'varchar(255)',
+                null    => 'NULL',
+                default => 'NULL',
+                extra   => '',
+            },
+            {
+                field   => 'owner',
+                type    => 'varchar(80)',
+                null    => 'NULL',
+                default => 'NULL',
+                extra   => '',
+            },
+            {
+                field   => 'category',
+                type    => 'varchar(1)',
+                null    => 'NULL',
+                default => 'NULL',
+                extra   => '',
+            },
+        ],
+
+        branchcategories => [
+            {
+                field   => 'codedescription',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                default => '',
+                extra   => '',
+            },
+        ],
+
         branches =>  [
             {
                 field    => 'branchip',
@@ -916,17 +1642,86 @@ my $DBversion = "3.00.00.000";
                 field   => 'branchcode',
                 type    => 'varchar(10)',
                 null    => 'NOT NULL',
+                default => "''",
+                extra   => '',
+            },
+            {
+                field   => 'branchname',
+                type    => 'mediumtext',
+                null    => 'NOT NULL',
                 default => '',
+                extra   => '',
+            },
+            {
+                field   => 'branchaddress1',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                default => '',
+                extra   => '',
+            },
+            {
+                field   => 'branchaddress2',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                default => '',
+                extra   => '',
+            },
+            {
+                field   => 'branchaddress3',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                default => '',
+                extra   => '',
+            },
+            {
+                field   => 'branchphone',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                default => '',
+                extra   => '',
+            },
+            {
+                field   => 'branchfax',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                default => '',
+                extra   => '',
+            },
+            {
+                field   => 'branchemail',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                default => '',
+                extra   => '',
+            },
+        ],
+    
+        branchrelations => [
+            {
+                field   => 'branchcode',
+                type    => 'VARCHAR(10)',
+                null    => 'NOT NULL',
+                key     => '',
+                default => "''",
+                extra   => '',
+            },
+            {
+                field   => 'categorycode',
+                type    => 'VARCHAR(10)',
+                null    => 'NOT NULL',
+                key     => '',
+                default => "''",
                 extra   => '',
             }
         ],
+
         branchtransfers =>[
             {
                 field   => 'frombranch',
                 type    => 'VARCHAR(10)',
                 null    => 'NOT NULL',
                 key     => '',
-                default => '',
+                default => "''",
                 extra   => '',
             },
             {
@@ -934,14 +1729,21 @@ my $DBversion = "3.00.00.000";
                 type    => 'VARCHAR(10)',
                 null    => 'NOT NULL',
                 key     => '',
+                default => "''",
+            },
+            {
+                field   => 'comments',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                key     => '',
                 default => '',
-            }
+            },
         ],
         
         categories =>  [
             {
                 field    => 'category_type',
-                type    => 'char(1)',
+                type    => 'varchar(1)',
                 null    => 'NOT NULL',
                 key        => '',
                 default    => 'A',
@@ -952,18 +1754,123 @@ my $DBversion = "3.00.00.000";
                 type    => 'varchar(10)',
                 null    => 'NOT NULL',
                 key     => 'PRI',
+                default => "''",
+                extra   => '',
+            },
+            {
+                field   => 'description',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                key     => '',
                 default => '',
                 extra   => '',
             },
         ],
         
         deletedborrowers => [
+            {
+                field => 'branchcode',
+                type  => 'varchar(10)',
+                null  => 'NOT NULL',
+                default    => "''",
+                extra => '',
+            },
+            {
+                field => 'categorycode',
+                type  => 'varchar(2)',
+                null  => 'NULL',
+                default    => 'NULL',
+                extra => '',
+            },
+            {
+                field => 'B_phone',
+                type  => 'mediumtext',
+                null  => 'NULL',
+                default    => '',
+                extra => '',
+            },
+            {
+                field => 'borrowernotes',
+                type  => 'mediumtext',
+                null  => 'NULL',
+                default    => '',
+                extra => '',
+            },
+            {
+                field => 'contactname',
+                type  => 'mediumtext',
+                null  => 'NULL',
+                default    => '',
+                extra => '',
+            },
+            {
+                field => 'B_city',
+                type  => 'mediumtext',
+                null  => 'NULL',
+                default    => '',
+                extra => '',
+            },
+            {
+                field => 'B_zipcode',
+                type  => 'varchar(25)',
+                null  => 'NULL',
+                default    => 'NULL',
+                extra => '',
+            },
+            {
+                field => 'zipcode',
+                type  => 'varchar(25)',
+                null  => 'NULL',
+                default    => 'NULL',
+                extra => '',
+                after => 'city',
+            },
+            {
+                field => 'email',
+                type  => 'mediumtext',
+                null  => 'NULL',
+                default    => '',
+                extra => '',
+            },
+            {
+                field => 'address',
+                type  => 'mediumtext',
+                null  => 'NOT NULL',
+                default    => '',
+                extra => '',
+            },
+            {
+                field => 'fax',
+                type  => 'mediumtext',
+                null  => 'NULL',
+                default    => '',
+                extra => '',
+            },
+            {
+                field => 'city',
+                type  => 'mediumtext',
+                null  => 'NOT NULL',
+                default    => '',
+                extra => '',
+            },
+            {    field => 'surname',
+                type => 'mediumtext',
+                null => 'NOT NULL',
+            },
             {    field => 'firstname',
                 type => 'text',
                 null => 'NULL',
             },
             {    field => 'initials',
                 type => 'text',
+                null => 'NULL',
+            },
+            {    field => 'title',
+                type => 'mediumtext',
+                null => 'NULL',
+            },
+            {    field => 'othernames',
+                type => 'mediumtext',
                 null => 'NULL',
             },
             {    field => 'B_email',
@@ -973,14 +1880,16 @@ my $DBversion = "3.00.00.000";
             },
             {
                 field => 'streetnumber', # street number (hidden if streettable table is empty)
-                type => 'char(10)',
+                type => 'varchar(10)',
                 null => 'NULL',
+                default => 'NULL',
                 after => 'initials',
             },
             {
                 field => 'streettype', # street table, list builded from a system table
-                type => 'char(50)',
+                type => 'varchar(50)',
                 null => 'NULL',
+                default => 'NULL',
                 after => 'streetnumber',
             },
             {    field => 'phone',
@@ -989,13 +1898,13 @@ my $DBversion = "3.00.00.000";
             },
             {
                 field => 'B_streetnumber', # street number (hidden if streettable table is empty)
-                type => 'char(10)',
+                type => 'varchar(10)',
                 null => 'NULL',
                 after => 'fax',
             },
             {
                 field => 'B_streettype', # street table, list builded from a system table
-                type => 'char(50)',
+                type => 'varchar(50)',
                 null => 'NULL',
                 after => 'B_streetnumber',
             },
@@ -1029,6 +1938,13 @@ my $DBversion = "3.00.00.000";
                 null => 'NULL',
                 after => 'contactfirstname',
             },
+            {
+                field => 'sex',
+                type  => 'varchar(1)',
+                null  => 'NULL',
+                default    => 'NULL',
+                extra => '',
+            },
         ],
         
         issues =>  [
@@ -1059,9 +1975,25 @@ my $DBversion = "3.00.00.000";
             {
                 field   => 'issuedate',
                 type    => 'date',
-                null    => '',
+                null    => 'NULL',
                 key     => '',
-                default => '0000-00-00',
+                default => '',
+                extra   => '',
+            },
+            {
+                field   => 'return',
+                type    => 'varchar(4)',
+                null    => 'NULL',
+                key     => '',
+                default => 'NULL',
+                extra   => '',
+            },
+            {
+                field   => 'issuingbranch',
+                type    => 'varchar(18)',
+                null    => 'NULL',
+                key     => '',
+                default => '',
                 extra   => '',
             },
         ],
@@ -1070,21 +2002,21 @@ my $DBversion = "3.00.00.000";
                 field   => 'categorycode',
                 type    => 'varchar(10)',
                 null    => 'NOT NULL',
-                default => '',
+                default => "''",
                 extra   => '',
             },
             {
                 field   => 'branchcode',
                 type    => 'varchar(10)',
                 null    => 'NOT NULL',
-                default => '',
+                default => "''",
                 extra   => '',
             },
             {
                 field   => 'itemtype',
                 type    => 'varchar(10)',
                 null    => 'NOT NULL',
-                default => '',
+                default => "''",
                 extra   => '',
             },
         ],
@@ -1095,7 +2027,7 @@ my $DBversion = "3.00.00.000";
                 type    => 'date',
                 null    => 'NULL',
                 key        => '',
-                default    => '0000-00-00',
+                default    => '',
                 extra    => '',
             },
             {
@@ -1130,15 +2062,58 @@ my $DBversion = "3.00.00.000";
                 default    => '',
                 extra    => '',
             },
+            {
+                field    => 'paidfor',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                key        => '',
+                default    => '',
+                extra    => '',
+            },
+            {
+                field    => 'itemnotes',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                key        => '',
+                default    => '',
+                extra    => '',
+            },
         ],
+
+        deleteditems => [
+            {
+                field    => 'paidfor',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                key        => '',
+                default    => '',
+                extra    => '',
+            },
+            {
+                field    => 'itemnotes',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                key        => '',
+                default    => '',
+                extra    => '',
+            },
+        ],
+
         itemtypes => [
             {
                 field  => 'itemtype',
                 type   => 'varchar(10)',
-                default    => '',
+                default    => "''",
                 null   => 'NOT NULL',
                 key    => 'PRI',
                 extra  => 'UNIQUE',
+            },
+            {
+                field  => 'description',
+                type   => 'MEDIUMTEXT',
+                null   => 'NULL',
+                key    => '',
+                extra  => '',
             },
             {
                 field  => 'summary',
@@ -1164,8 +2139,92 @@ my $DBversion = "3.00.00.000";
                 null  => 'NULL',
                 key    => '',
                 extra  => '',
-            }
+            },
+            {
+                field   => 'authtypecode',
+                type    => 'varchar(20)',
+				null    => 'NULL',
+                key     => '',
+                default => 'NULL',
+                extra   => '',
+            },
+            {
+                field   => 'tagfield',
+                type    => 'varchar(3)',
+				null    => 'NOT NULL',
+                key     => '',
+                default => "''",
+                extra   => '',
+            },
+            {
+                field   => 'tagsubfield',
+                type    => 'varchar(1)',
+				null    => 'NOT NULL',
+                key     => '',
+                default => "''",
+                extra   => '',
+            },
+            {
+                field   => 'authorised_value',
+                type    => 'varchar(20)',
+				null    => 'NULL',
+                key     => '',
+                default => "NULL",
+                extra   => '',
+            },
+            {
+                field   => 'seealso',
+                type    => 'varchar(1100)',
+				null    => 'NULL',
+                key     => '',
+                default => "NULL",
+                extra   => '',
+            },
         ],
+            
+        marc_tag_structure => [
+            {
+                field   => 'tagfield',
+                type    => 'varchar(3)',
+				null    => 'NOT NULL',
+                key     => '',
+                default => "''",
+                extra   => '',
+            },
+            {
+                field   => 'liblibrarian',
+                type    => 'varchar(255)',
+				null    => 'NOT NULL',
+                key     => '',
+                default => "''",
+                extra   => '',
+            },
+            {
+                field   => 'libopac',
+                type    => 'varchar(255)',
+				null    => 'NOT NULL',
+                key     => '',
+                default => "''",
+                extra   => '',
+            },
+            {
+                field   => 'authorised_value',
+                type    => 'varchar(10)',
+				null    => 'NULL',
+                key     => '',
+                default => "NULL",
+                extra   => '',
+            },
+            {
+                field   => 'frameworkcode',
+                type    => 'varchar(4)',
+				null    => 'NOT NULL',
+                key     => '',
+                default => "''",
+                extra   => '',
+            },
+        ],
+
         opac_news => [
             {
                 field  => 'expirationdate',
@@ -1179,10 +2238,49 @@ my $DBversion = "3.00.00.000";
                 type    => 'int(11)',
                 null    => 'NULL',
                 key     => '',
-                default => '0',
+                default => '',
                 extra   => '',
             },
         ],
+
+        printers => [
+            {
+                field   => 'printername',
+                type    => 'varchar(40)',
+				null    => 'NOT NULL',
+                key     => '',
+                default => "''",
+                extra   => '',
+            },
+            {
+                field   => 'printqueue',
+                type    => 'varchar(20)',
+				null    => 'NULL',
+                key     => '',
+                default => "NULL",
+                extra   => '',
+            },
+            {
+                field   => 'printtype',
+                type    => 'varchar(20)',
+				null    => 'NULL',
+                key     => '',
+                default => "NULL",
+                extra   => '',
+            },
+        ],
+
+        reserveconstraints => [
+            {
+                field    => 'reservedate',
+                type    => 'date',
+                null    => 'NULL',
+                key        => '',
+                default    => 'NULL',
+                extra    => '',
+            },
+        ],
+
         reserves =>  [
             {
                 field    => 'waitingdate',
@@ -1192,17 +2290,69 @@ my $DBversion = "3.00.00.000";
                 default    => '',
                 extra    => '',
             },
+            {
+                field    => 'reservedate',
+                type    => 'date',
+                null    => 'NULL',
+                key        => '',
+                default    => '',
+                extra    => '',
+            },
+            {
+                field    => 'constrainttype',
+                type    => 'varchar(1)',
+                null    => 'NULL',
+                key        => '',
+                default    => 'NULL',
+                extra    => '',
+                after   => 'biblionumber',
+            },
+            {
+                field    => 'branchcode',
+                type    => 'varchar(10)',
+                null    => 'NULL',
+                key        => '',
+                default    => '',
+                extra    => '',
+            },
+            {
+                field    => 'reservenotes',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                key        => '',
+                default    => '',
+                extra    => '',
+            },
+            {
+                field    => 'found',
+                type    => 'varchar(1)',
+                null    => 'NULL',
+                key        => '',
+                default    => '',
+                extra    => '',
+            },
         ],
+
         serial => [
+            {
+                field   => 'planneddate',
+                type    => 'DATE',
+                null    => 'NULL',
+                key     => '',
+                default => 'NULL',
+                extra   => '',
+            },
             {
                 field   => 'notes',
                 type    => 'TEXT',
                 null    => 'NULL',
                 key     => '',
                 default => '',
-                extra   => ''
+                extra   => '',
+                after   => 'planneddate',
             },
         ],
+
         shelfcontents => [
             {
                 field => 'dateadded',
@@ -1210,6 +2360,7 @@ my $DBversion = "3.00.00.000";
                 null    => 'NULL',
             },
         ],
+
         statistics => [
             {
                 field => 'branch',
@@ -1217,12 +2368,78 @@ my $DBversion = "3.00.00.000";
                 null    => 'NOT NULL',
             },
             {
+                field => 'datetime',
+                type => 'datetime',
+                null    => 'NULL',
+                default => 'NULL',
+            },
+            {
                 field => 'itemtype',
                 type => 'varchar(10)',
-                null    => 'NOT NULL',
+                null    => 'NULL',
+            },
+            {
+                field => 'other',
+                type => 'mediumtext',
+                null    => 'NULL',
             },
         ],
+
+        subscription => [
+            {
+                field   => 'startdate',
+                type    => 'date',
+                null    => 'NULL',
+                key     => ''  ,
+                default => 'NULL',
+                extra   =>    '',
+            },
+            {
+                field   => 'notes',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                key     => ''  ,
+                default => '',
+                extra   =>    '',
+            },
+            {
+                field   => 'monthlength',
+                type    => 'int(11)',
+                null    => 'NULL',
+                key     => ''  ,
+                default => '0',
+                extra   =>    '',
+            },
+        ],
+
+        subscriptionhistory => [
+            {
+                field   => 'histstartdate',
+                type    => 'date',
+                null    => 'NULL',
+                key     => ''  ,
+                default => 'NULL',
+                extra   =>    '',
+            },
+            {
+                field   => 'enddate',
+                type    => 'date',
+                null    => 'NULL',
+                key     => ''  ,
+                default => 'NULL',
+                extra   =>    '',
+            },
+        ],
+
         systempreferences =>  [
+            {
+                field   => 'options',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                key     => ''  ,
+                default => '',
+                extra   =>    '',
+            },
             {
                 field    => 'value',
                 type    => 'text',
@@ -1248,7 +2465,43 @@ my $DBversion = "3.00.00.000";
                 key     => ''  ,
                 default => '',
                 extra   =>    '',
-            }
+            },
+            {
+                field   => 'note',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                key     => ''  ,
+                default => '',
+                extra   =>    '',
+            },
+        ],
+        userflags => [
+            {
+                field   => 'flag',
+                type    => 'varchar(30)',
+                null    => 'NULL',
+                key     => ''  ,
+                default => '',
+                extra   =>    '',
+            },
+            {
+                field   => 'flagdesc',
+                type    => 'varchar(255)',
+                null    => 'NULL',
+                key     => ''  ,
+                default => '',
+                extra   =>    '',
+            },
+        ],
+        z3950servers => [
+            {
+                field   => 'name',
+                type    => 'mediumtext',
+                null    => 'NULL',
+                key     => ''  ,
+                default => '',
+                extra   =>    '',
+            },
         ],
     );
     
@@ -1257,6 +2510,11 @@ my $DBversion = "3.00.00.000";
     #         {    indexname => 'index detail'
     #         }
     #    ],
+        accountoffsets => [
+            {    indexname => 'accountoffsets_ibfk_1',
+                content => 'borrowernumber',
+            },
+        ],
         aqbooksellers => [
             {    indexname => 'PRIMARY',
                 content => 'id',
@@ -1288,6 +2546,14 @@ my $DBversion = "3.00.00.000";
             {    indexname => 'publishercode',
                 content => 'publishercode',
             },
+        ],
+        borrowers => [
+            {
+                indexname => 'borrowernumber',
+                content   => 'borrowernumber',
+                type => 'PRI',
+                force => 1,
+            }
         ],
         branches => [
             {
@@ -1326,6 +2592,16 @@ my $DBversion = "3.00.00.000";
                 indexname => 'categorycode',
                 content   => 'categorycode',
             }
+        ],
+        issuingrules => [
+            {
+                indexname => 'categorycode',
+                content   => 'categorycode',
+            },
+            {
+                indexname => 'itemtype',
+                content   => 'itemtype',
+            },
         ],
         items => [
             {    indexname => 'homebranch',
@@ -1382,7 +2658,7 @@ my $DBversion = "3.00.00.000";
         ],
         shelfcontents => [
             {    key => 'shelfnumber',
-                foreigntable => 'virtualshelf',
+                foreigntable => 'bookshelf',
                 foreignkey => 'shelfnumber',
                 onUpdate => 'CASCADE',
                 onDelete => 'CASCADE',
@@ -1402,12 +2678,6 @@ my $DBversion = "3.00.00.000";
                 foreignkey => 'biblionumber',
                 onUpdate => 'CASCADE',
                 onDelete => 'CASCADE',
-            },
-            {    key => 'itemtype',
-                foreigntable => 'itemtypes',
-                foreignkey => 'itemtype',
-                onUpdate => 'CASCADE',
-                onDelete => 'RESTRICT',
             },
         ],
         items => [
@@ -1556,21 +2826,6 @@ my $DBversion = "3.00.00.000";
                 onDelete => 'RESTRICT',
             },
         ],
-        deletedborrowers => [ # foreign keys are RESTRICT as we don't want to delete borrowers when a branch is deleted
-        # but prevent deleting a branch as soon as it has 1 borrower !
-            {    key => 'categorycode',
-                foreigntable => 'categories',
-                foreignkey => 'categorycode',
-                onUpdate => 'RESTRICT',
-                onDelete => 'RESTRICT',
-            },
-            {    key => 'branchcode',
-                foreigntable => 'branches',
-                foreignkey => 'branchcode',
-                onUpdate => 'RESTRICT',
-                onDelete => 'RESTRICT',
-            },
-        ],
         accountlines => [
             {    key => 'borrowernumber',
                 foreigntable => 'borrowers',
@@ -1583,6 +2838,14 @@ my $DBversion = "3.00.00.000";
                 foreignkey => 'itemnumber',
                 onUpdate => 'SET NULL',
                 onDelete => 'SET NULL',
+            },
+        ],
+        accountoffsets => [
+            {    key => 'borrowernumber',
+                foreigntable => 'borrowers',
+                foreignkey => 'borrowernumber',
+                onUpdate => 'CASCADE',
+                onDelete => 'CASCADE',
             },
         ],
         auth_tag_structure => [
@@ -1768,7 +3031,51 @@ my $DBversion = "3.00.00.000";
         } else {
         }
     }
+   
+    # list of columns that must exist for %column_change to be
+    # processed without error, but which do not necessarily exist
+    # in all 2.2 databases
+    my %required_prereq_fields = (
+        deletedborrowers => [ 
+                                [ 'textmessaging', 'mediumtext AFTER faxnumber' ],
+                                [ 'password',      'varchar(30) default NULL'   ],
+                                [ 'flags',         'int(11) default NULL'       ],
+                                [ 'userid',        'varchar(30) default NULL'   ],
+                                [ 'homezipcode',   'varchar(25) default NULL'   ],
+                                [ 'zipcode',       'varchar(25) default NULL'   ],
+                                [ 'sort1',         'varchar(80) default NULL'   ],
+                                [ 'sort2',         'varchar(80) default NULL'   ],
+                             ],
+    );
+
+    foreach $table ( keys %required_prereq_fields ) {
+        print "Check table $table\n" if $debug and not $silent;
+        $sth = $dbh->prepare("show columns from $table");
+        $sth->execute();
+        undef %types;
+        while ( ( $column, $type, $null, $key, $default, $extra ) = $sth->fetchrow )
+        {
+            $types{$column} = $type;
+        }    # while
+        foreach my $entry ( @{ $required_prereq_fields{$table} } ) {
+            ($column, $type) = @{ $entry };
+            print "  Check column $column  [$type]\n" if $debug and not $silent;
+            if ( !$types{$column} ) {
     
+                # column doesn't exist
+                print "Adding $column field to $table table...\n" unless $silent;
+                $query = "alter table $table
+                add column $column " . $type;
+                print "Execute: $query\n" if $debug;
+                my $sti = $dbh->prepare($query);
+                $sti->execute;
+                if ( $sti->err ) {
+                    print "**Error : $sti->errstr \n";
+                    $sti->finish;
+                }    # if error
+            }    # if column
+        }    # foreach column
+    }    # foreach table
     
     foreach my $table (keys %column_change) {
         $sth = $dbh->prepare("show columns from $table");
@@ -1821,7 +3128,7 @@ my $DBversion = "3.00.00.000";
     # Enter here the line you want to remove from DB.
     my %linetodelete = (
         # table name => where clause.
-        userflags => "bit = 8", # delete the 'reserveforself' flags
+        userflags => [ "bit = 8" ], # delete the 'reserveforself' flags
         
     ); # %linetodelete
     
@@ -1893,7 +3200,7 @@ my $DBversion = "3.00.00.000";
         }    # foreach column
     }    # foreach table
     
-    foreach $table ( keys %fielddefinitions ) {
+    foreach $table ( sort keys %fielddefinitions ) {
         print "Check table $table\n" if $debug;
         $sth = $dbh->prepare("show columns from $table");
         $sth->execute();
@@ -1923,6 +3230,7 @@ my $DBversion = "3.00.00.000";
             unless ( $type eq $def->{type}
                 && $null eq $def->{null}
                 && $key eq $def->{key}
+                && $default eq $def->{default}
                 && $extra eq $def->{extra} )
             {
                 if ( $null eq '' ) {
@@ -1938,7 +3246,7 @@ my $DBversion = "3.00.00.000";
                 # if it's a new column use "add", if it's an old one, use "change".
                 my $action;
                 if ($definitions->{$field}->{type}) {
-                    $action="change $field"
+                    $action="change `$field`"
                 } else {
                     $action="add";
                 }
@@ -1947,24 +3255,27 @@ my $DBversion = "3.00.00.000";
                 my $query;
                 if ($key ne 'PRIMARY KEY') {
     #                 warn "alter table $table $action $field $type $null $key $extra default $default $after";
-                    $query = "alter table $table $action $field $type $null $key $extra ".($default?"default ".$dbh->quote($default):"")." $after";
+                    $query = "alter table $table $action `$field` $type $null $key $extra ".
+                             GetDefaultClause($default)." $after";
                 } else {
     #             warn "alter table $table drop primary key, $action $field $type $null $key $extra default $default $after";
                     # something strange : for indexes UNIQUE, they are reported as primary key here.
                     # but if you try to run with drop primary key, it fails.
                     # thus, we run the query twice, one will fail, one will succeed.
                     # strange...
-                    $query="alter table $table drop primary key, $action $field $type $null $key $extra ".($default?"default ".$dbh->quote($default):"")." $after";
-                    $query="alter table $table $action $field $type $null $key $extra ".($default?"default ".$dbh->quote($default):"")." $after";
+                    $query="alter table $table drop primary key, $action `$field` $type $null $key $extra ".
+                           GetDefaultClause($default)." $after";
+                    $query="alter table $table $action `$field` $type $null $key $extra ".
+                           GetDefaultClause($default)." $after";
                 }
-                $dbh->do($query);
+                $dbh->do($query) or warn "Error while executing: $query";
             }
         }
     }
     
     print "removing some unused data...\n";
     foreach my $table ( keys %linetodelete ) {
-        foreach my $where ( @{linetodelete{$table}} ){
+        foreach my $where ( @{$linetodelete{$table}} ){
             print "DELETE FROM ".$table." where ".$where;
             print "\n";
             my $sth = $dbh->prepare("DELETE FROM $table where $where");
@@ -2084,12 +3395,12 @@ my $DBversion = "3.00.00.000";
         my $tablerows = $indexes{$table};
         foreach my $row (@$tablerows) {
             my $key_name=$row->{indexname};
-            if ($existingindexes{$key_name} eq 1) {
+            if ($existingindexes{$key_name} eq 1 and not $row->{force}) {
     #             print "$key_name existing";
             } else {
                 print "\tCreating index $key_name in $table\n";
                 my $sql;
-                if ($row->{indexname} eq 'PRIMARY') {
+                if ($row->{indexname} eq 'PRIMARY' or $row->{type} eq 'PRI') {
                     $sql = "alter table $table ADD PRIMARY KEY ($row->{content})";
                 } else {
                     $sql = "alter table $table ADD INDEX $key_name ($row->{content}) $row->{type}";
@@ -2104,7 +3415,7 @@ my $DBversion = "3.00.00.000";
     # check foreign keys and create them when needed
     #
     print "Checking for foreign keys required...\n" unless $silent;
-    foreach my $table ( keys %foreign_keys ) {
+    foreach my $table ( sort keys %foreign_keys ) {
         #
         # read all indexes from $table
         #
@@ -2215,11 +3526,29 @@ my $DBversion = "3.00.00.000";
     #
     $sth=$dbh->prepare("ALTER TABLE `aqbookfund` DROP PRIMARY KEY , ADD PRIMARY KEY ( `bookfundid` , `branchcode` ) ;");
     $sth->execute;
-    
+   
+    # drop extra key on borrowers.borrowernumber
+    $dbh->do("ALTER TABLE borrowers DROP KEY borrowernumber"); 
+
     $sth->finish;
     print "upgrade to Koha 3.0 done\n";
     SetVersion ($DBversion);
 
+
+=item GetDefaultClause
+
+Generate a default clause (for an ALTER TABLE command)
+
+=cut
+sub GetDefaultClause {
+    my $default = shift;
+
+    return "" unless defined $default;
+    return "" if $default eq '';    
+    return "default ''" if $default eq "''";
+    return "default NULL" if $default eq "NULL";
+    return "default " . $dbh->quote($default);
+}
 
 =item TransformToNum
 
