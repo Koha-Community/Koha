@@ -2,7 +2,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Koha <!-- TMPL_VAR NAME="Version" -->" /> <!-- leave this for stats -->
 <link rel="shortcut icon" href="<!-- TMPL_VAR NAME="themelang" -->/includes/favicon.ico" type="image/x-icon" />
-<!-- TMPL_IF name="RSS" --><link rel="alternate" type="application/rss+xml" title="Koha - RSS" href="<!-- TMPL_VAR name="site_url"-->/opac-rss.pl?q=<!-- TMPL_VAR name="searchdesc"-->" /><!-- /TMPL_IF -->
 <!-- TMPL_IF name="opacstylesheet" --><link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="opacstylesheet" -->" /><!-- TMPL_ELSE -->
 <!-- TMPL_IF name="opaclayoutstylesheet" --><link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/<!-- TMPL_VAR NAME="opaclayoutstylesheet" -->" /><!-- TMPL_ELSE --><link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/opac.css" /><!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF name="opaccolorstylesheet" --><link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/<!-- TMPL_VAR NAME="opaccolorstylesheet" -->" /><!-- /TMPL_IF -->
@@ -41,4 +40,3 @@
 	//]]>
 </script>
 <link rel="unapi-server" type="application/xml" title="unAPI" href="/cgi-bin/koha/unapi" />
-<link rel="search" type="application/opensearchdescription+xml" title="<!-- TMPL_VAR NAME="LibraryName" --> OpenSearch" href="http://<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?format=opensearchdescription" />
