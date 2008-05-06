@@ -109,6 +109,7 @@ if ($op eq 'add_form') {
 	my $dbh = C4::Context->dbh;
     my $new_category = $input->param('category');
     my $new_authorised_value = $input->param('authorised_value');
+    my $imageurl=$input->param( 'imageurl' )|'';   
     my $duplicate_entry = 0;
 
     if ( $id ) { # Update
@@ -118,7 +119,7 @@ if ($op eq 'add_form') {
         $sth->finish;
         if ( $authorised_value ne $new_authorised_value ) {
             my $sth = $dbh->prepare_cached( "SELECT COUNT(*) FROM authorised_values " .
-                "WHERE category = '$new_category' AND authorised_value = '$new_authorised_value' ");
+                "WHERE category = '$new_category' AND authorised_value = '$new_authorised_value' and id<>$id");
             $sth->execute();
             ($duplicate_entry) = $sth->fetchrow_array();
             warn "**** duplicate_entry = $duplicate_entry";
@@ -132,7 +133,7 @@ if ($op eq 'add_form') {
                                       WHERE id=?' );
             my $lib = $input->param('lib');
             undef $lib if ($lib eq ""); # to insert NULL instead of a blank string
-            $sth->execute($new_category, $new_authorised_value, $lib, $input->param( 'imageurl' ), $id);          
+            $sth->execute($new_category, $new_authorised_value, $lib, $imageurl, $id);          
             print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=".$new_category."\"></html>";
             exit;
         }
@@ -149,7 +150,7 @@ if ($op eq 'add_form') {
                                     values (?, ?, ?, ?, ?)' );
     	    my $lib = $input->param('lib');
     	    undef $lib if ($lib eq ""); # to insert NULL instead of a blank string
-    	    $sth->execute($id, $new_category, $new_authorised_value, $lib, $input->param( 'imageurl' ) );
+    	    $sth->execute($id, $new_category, $new_authorised_value, $lib, $imageurl );
     	    $sth->finish;
     	    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=".$input->param('category')."\"></html>";
     	    exit;
