@@ -41,7 +41,7 @@
     <!-- TMPL_LOOP NAME="ITEM_DATA" -->
     <div class="yui-g">
         <h3 id="item<!-- TMPL_VAR NAME="itemnumber" -->">Barcode <!-- TMPL_VAR NAME="barcode" -->  <!-- TMPL_IF name="notforloantext" --><!-- TMPL_VAR name="notforloantext" --> <!-- /TMPL_IF --></h3>
-        <div class="listgroup"><h4>Item Information <!-- TMPL_IF NAME="CAN_user_editcatalogue" --><a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">[Edit Items]</a><!-- /TMPL_IF --></h4>
+        <div class="listgroup"><h4>Item Information <!-- TMPL_IF NAME="CAN_user_editcatalogue" --><!-- TMPL_UNLESS name="nomod" --><a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">[Edit Items]</a><!-- /TMPL_IF --><!-- /TMPL_UNLESS --></h4>
             <ol class="bibliodetails">
             <li><span class="label">Home Library:</span> <!-- TMPL_VAR NAME="homebranchname" -->&nbsp;</li>
 	    <!-- TMPL_IF NAME="item-level_itypes" -->

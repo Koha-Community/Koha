@@ -94,6 +94,14 @@ foreach my $item (@items){
     $item->{'datelastseen'} = format_date($item->{'datelastseen'});
     $item->{'ordernumber'} = $ordernum;
     $item->{'booksellerinvoicenumber'} = $order->{'booksellerinvoicenumber'};
+
+    if (C4::Context->preference("IndependantBranches")) {
+        #verifying rights
+        my $userenv = C4::Context->userenv();
+        unless (($userenv->{'flags'} == 1) or ($userenv->{'branch'} eq $item->{'homebranch'})) {
+                $item->{'nomod'}=1;
+        }
+    }
     $item->{'homebranchname'} = GetBranchName($item->{'homebranch'});
     $item->{'holdingbranchname'} = GetBranchName($item->{'holdingbranch'});
     if ($item->{'onloan'} eq ''){
