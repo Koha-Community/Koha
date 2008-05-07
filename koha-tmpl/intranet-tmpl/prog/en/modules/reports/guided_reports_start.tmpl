@@ -10,7 +10,7 @@ $(document).ready(function(){
 	$(".confirmdelete").click(function(){
 		$(this).parents('tr').attr("class","warn");
 		if(confirm("Are you sure you want to "+$(this).attr("title")+"?")){
-			return false;
+			return true;
 		} else {
 			$(this).parents('tr').attr("class","");
 			return false;
