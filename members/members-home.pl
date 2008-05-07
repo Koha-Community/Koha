@@ -20,7 +20,7 @@ use CGI;
 use C4::Auth;
 use C4::Output;
 use C4::Context;
-
+use C4::Members;
 
 my $query = new CGI;
 my $quicksearch = $query->param('quicksearch');
@@ -46,5 +46,13 @@ if($quicksearch){
                  debug => 1,
                  });
 }
+$template->param( 
+        "AddPatronLists_".C4::Context->preference("AddPatronLists")=> "1",
+            );
+if (C4::Context->preference("AddPatronLists")=~/code/){
+    my $categories=GetBorrowercategory();
+    $categories->[0]->{'first'}=1;
+    $template->param(categories=>$categories);  
+}  
 
 output_html_with_http_headers $query, $cookie, $template->output;

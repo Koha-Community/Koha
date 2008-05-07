@@ -1279,7 +1279,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (adding permissions and user_permissions tables and GranularPermissions syspref) \n";
     SetVersion ($DBversion);
 }
-
 $DBversion = "3.00.00.069";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE labels_conf CHANGE COLUMN class classification int(1) DEFAULT NULL;");
@@ -1475,6 +1474,17 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
                   ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
     }
     $dbh->{PrintError} = $print_error;
+	print "Upgrade to $DBversion done (add browser table if not already present)\n";
+	SetVersion ($DBversion);
+}
+
+$DBversion = "3.00.00.079";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    my ($print_error) = $dbh->{PrintError};
+    $dbh->{PrintError} = 0;
+    
+    $dbh->do("INSERT INTO `systempreferences` (variable, value,options,type, explanation)VALUES
+	    ('AddPatronLists','categorycode','categorycode|category_type','Choice','Allow user to choose what list to pick up from when adding patrons')");
 	print "Upgrade to $DBversion done (add browser table if not already present)\n";
 	SetVersion ($DBversion);
 }

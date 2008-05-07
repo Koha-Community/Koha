@@ -55,13 +55,22 @@ if($quicksearch){
                  });
 }
 my $theme = $input->param('theme') || "default";
+
+
+$template->param( 
+        "AddPatronLists_".C4::Context->preference("AddPatronLists")=> "1",
+            );
+if (C4::Context->preference("AddPatronLists")=~/code/){
+    my $categories=GetBorrowercategory();
+    $categories->[0]->{'first'}=1;
+    $template->param(categories=>$categories);  
+}  
             # only used if allowthemeoverride is set
 #my %tmpldata = pathtotemplate ( template => 'member.tmpl', theme => $theme, language => 'fi' );
     # FIXME - Error-checking
 #my $template = HTML::Template->new( filename => $tmpldata{'path'},
 #                   die_on_bad_params => 0,
 #                   loop_context_vars => 1 );
-
 
 my $member=$input->param('member');
 my $orderby=$input->param('orderby');

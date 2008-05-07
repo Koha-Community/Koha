@@ -68,20 +68,20 @@ if ($branch){
 my $printer = $query->param('printer');
 if ($printer){
     # update our session so the userenv is updated
-	my $dbh=C4::Context->dbh;
-	my $sessionID = $query->cookie("CGISESSID") ;
-	my $session = get_session($sessionID);
-	$session->param('branchprinter',$printer);
+  my $dbh=C4::Context->dbh;
+  my $sessionID = $query->cookie("CGISESSID") ;
+  my $session = get_session($sessionID);
+  $session->param('branchprinter',$printer);
 
 }
 if (!C4::Context->userenv && !$branch){
-	my $sessionID = $query->cookie("CGISESSID") ;
-	my $session = get_session($sessionID);
-	if ($session->param('branch') eq 'NO_LIBRARY_SET'){
-		# no branch set we can't issue
-		print $query->redirect("/cgi-bin/koha/circ/selectbranchprinter.pl");
-		exit;
-	}
+  my $sessionID = $query->cookie("CGISESSID") ;
+  my $session = get_session($sessionID);
+  if ($session->param('branch') eq 'NO_LIBRARY_SET'){
+    # no branch set we can't issue
+    print $query->redirect("/cgi-bin/koha/circ/selectbranchprinter.pl");
+    exit;
+  }
 }
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
@@ -106,7 +106,7 @@ $findborrower =~ s|,| |g;
 #$findborrower =~ s|'| |g;
 my $borrowernumber = $query->param('borrowernumber');
 
-$branch  = C4::Context->userenv->{'branch'};	
+$branch  = C4::Context->userenv->{'branch'};  
 $printer = C4::Context->userenv->{'branchprinter'};
 
 
@@ -143,8 +143,8 @@ my $newexpiry = $query->param('dateexpiry');
 
 my ($datedue,$invalidduedate);
 if ($duedatespec) {
-	$datedue =  C4::Dates->new($duedatespec);
-	$invalidduedate=1 unless $datedue;
+  $datedue =  C4::Dates->new($duedatespec);
+  $invalidduedate=1 unless $datedue;
 }
 
 #if (defined($year)) {
@@ -223,24 +223,24 @@ if ($borrowernumber) {
     {
         #borrowercard expired, no issues
         $template->param(
-			flagged => "1",
+      flagged => "1",
             noissues       => "1",
             expired => format_date($borrower->{dateexpiry}),
             renewaldate   => format_date("$renew_year-$renew_month-$renew_day")
         );
     }
     # check for NotifyBorrowerDeparture
-	elsif ( C4::Context->preference('NotifyBorrowerDeparture') &&
-		Date_to_Days(Add_Delta_Days($warning_year,$warning_month,$warning_day,- C4::Context->preference('NotifyBorrowerDeparture'))) <
-		Date_to_Days( $today_year, $today_month, $today_day ) ) 
-	{
-		# borrower card soon to expire warn librarian
-		$template->param("warndeparture" => format_date($borrower->{dateexpiry}),
-			flagged       => "1",);
-		if ( C4::Context->preference('ReturnBeforeExpiry')){
-			$template->param("returnbeforeexpiry" => 1);
-		}
-	}
+  elsif ( C4::Context->preference('NotifyBorrowerDeparture') &&
+    Date_to_Days(Add_Delta_Days($warning_year,$warning_month,$warning_day,- C4::Context->preference('NotifyBorrowerDeparture'))) <
+    Date_to_Days( $today_year, $today_month, $today_day ) ) 
+  {
+    # borrower card soon to expire warn librarian
+    $template->param("warndeparture" => format_date($borrower->{dateexpiry}),
+      flagged       => "1",);
+    if ( C4::Context->preference('ReturnBeforeExpiry')){
+      $template->param("returnbeforeexpiry" => 1);
+    }
+  }
     $template->param(
         overduecount => $od,
         issuecount   => $issue,
@@ -254,11 +254,11 @@ if ($borrowernumber) {
 #
 
 if ($barcode) {
-	# always check for blockers on issuing
-	my ( $error, $question ) =
-	  CanBookBeIssued( $borrower, $barcode, $datedue , $inprocess );
-	my $noerror    = 1;
-	foreach my $impossible ( keys %$error ) {
+  # always check for blockers on issuing
+  my ( $error, $question ) =
+    CanBookBeIssued( $borrower, $barcode, $datedue , $inprocess );
+  my $noerror    = 1;
+  foreach my $impossible ( keys %$error ) {
             $template->param(
                 $impossible => $$error{$impossible},
                 IMPOSSIBLE  => 1
@@ -266,17 +266,17 @@ if ($barcode) {
             $noerror = 0;
         }
     
-	if ($issueconfirmed && $noerror) {
-		# we have no blockers for issuing and any issues needing confirmation have been resolved
+  if ($issueconfirmed && $noerror) {
+    # we have no blockers for issuing and any issues needing confirmation have been resolved
         AddIssue( $borrower, $barcode, $datedue, $cancelreserve );
         $inprocess = 1;
     }
-	elsif ($issueconfirmed){
-	}
+  elsif ($issueconfirmed){
+  }
     else {
         my $noquestion = 1;
 #         Get the item title for more information
-    	my $getmessageiteminfo  = GetBiblioFromItemNumber(undef,$barcode);
+      my $getmessageiteminfo  = GetBiblioFromItemNumber(undef,$barcode);
     
         foreach my $needsconfirmation ( keys %$question ) {
             $template->param(
@@ -287,8 +287,8 @@ if ($barcode) {
             $noquestion = 0;
         }
         $template->param(
-			 itemhomebranch => $getmessageiteminfo->{'homebranch'} ,	             
-			 duedatespec => $duedatespec,
+       itemhomebranch => $getmessageiteminfo->{'homebranch'} ,               
+       duedatespec => $duedatespec,
         );
         if ( $noerror && ( $noquestion || $issueconfirmed ) ) {
             AddIssue( $borrower, $barcode, $datedue );
@@ -311,6 +311,8 @@ if ($borrowernumber) {
 ##################################################################################
 # BUILD HTML
 # show all reserves of this borrower, and the position of the reservation ....
+my $borrowercategory;
+my $category_type;
 if ($borrowernumber) {
 
     # new op dev
@@ -337,8 +339,8 @@ if ($borrowernumber) {
         $getreserv{author}         = $getiteminfo->{'author'};
         $getreserv{barcodereserv}  = $getiteminfo->{'barcode'};
         $getreserv{itemcallnumber} = $getiteminfo->{'itemcallnumber'};
-		$getreserv{biblionumber}   = $getiteminfo->{'biblionumber'};
-		$getreserv{waitingat}    = GetBranchName( $num_res->{'branchcode'} );
+        $getreserv{biblionumber}   = $getiteminfo->{'biblionumber'};
+        $getreserv{waitingat}    = GetBranchName( $num_res->{'branchcode'} );
         #         check if we have a waiting status for reservations
         if ( $num_res->{'found'} eq 'W' ) {
             $getreserv{color}   = 'reserved';
@@ -350,7 +352,7 @@ if ($borrowernumber) {
         $getWaitingReserveInfo{author}        = $getiteminfo->{'author'};
         $getWaitingReserveInfo{reservedate}    = format_date( $num_res->{'reservedate'} );
         $getWaitingReserveInfo{waitingat}    = GetBranchName( $num_res->{'branchcode'} );
-    	if($num_res->{'branchcode'} eq $branch){ $getWaitingReserveInfo{waitinghere} = 1; }
+      if($num_res->{'branchcode'} eq $branch){ $getWaitingReserveInfo{waitinghere} = 1; }
         }
         #         check transfers with the itemnumber foud in th reservation loop
         if ($transfertwhen) {
@@ -378,7 +380,7 @@ if ($borrowernumber) {
             $getreserv{nottransfered}   = 0;
             $getreserv{itemtype}        = $getbibtype->{'description'};
             $getreserv{author}          = $getbibinfo->{'author'};
-	        $getreserv{biblionumber}    = $num_res->{'biblionumber'};
+          $getreserv{biblionumber}    = $num_res->{'biblionumber'};
         }
         push( @reservloop, \%getreserv );
 
@@ -395,6 +397,9 @@ if ($borrowernumber) {
         reservloop  => \@reservloop ,
         WaitingReserveLoop  => \@WaitingReserveLoop,
     );
+    $borrowercategory = GetBorrowercategory( $borrower->{'categorycode'} );
+    $category_type = $borrowercategory->{'category_type'};
+    ( $template->param( adultborrower => 1 ) ) if ( $category_type eq 'A' );
 }
 
 # make the issued books table.
@@ -424,22 +429,22 @@ if ($borrower) {
         my $issuedate = $it->{'issuedate'};
         $issuedate =~ s/-//g;
         $issuedate = substr( $issuedate, 0, 8 );
-		($it->{'charge'}, $it->{'itemtype_charge'}) = GetIssuingCharges(
-						$it->{'itemnumber'}, $borrower->{'borrowernumber'}
-		);
-		$it->{'charge'} = sprintf("%.2f", $it->{'charge'});
+    ($it->{'charge'}, $it->{'itemtype_charge'}) = GetIssuingCharges(
+            $it->{'itemnumber'}, $borrower->{'borrowernumber'}
+    );
+    $it->{'charge'} = sprintf("%.2f", $it->{'charge'});
         my $can_renew_error;
         ($it->{'can_renew'}, $can_renew_error) = CanBookBeRenewed( 
-						$borrower->{'borrowernumber'},$it->{'itemnumber'}
-		);
+            $borrower->{'borrowernumber'},$it->{'itemnumber'}
+    );
         $it->{"renew_error_${can_renew_error}"} = 1 if defined $can_renew_error;
-		my ($restype, $reserves) = CheckReserves($it->{'itemnumber'});
-		($restype) and $it->{'can_renew'} = 0;
+    my ($restype, $reserves) = CheckReserves($it->{'itemnumber'});
+    ($restype) and $it->{'can_renew'} = 0;
 
-		$it->{'dd'} = format_date($it->{'date_due'});
+    $it->{'dd'} = format_date($it->{'date_due'});
         my $datedue = $it->{'date_due'};
         $datedue =~ s/-//g;
-		$it->{'od'} = ($datedue < $todaysdate) ? 1 : 0 ;
+    $it->{'od'} = ($datedue < $todaysdate) ? 1 : 0 ;
         ($it->{'author'} eq '') and $it->{'author'} = ' ';
         $it->{'renew_failed'} = $renew_failed[$it->{'itemnumber'}];
         # ADDED BY JF: NEW ITEMTYPE COUNT DISPLAY
@@ -451,24 +456,24 @@ if ($borrower) {
             push @previousissues, $it;
         }
     }
-	if (C4::Context->preference("todaysIssuesDefaultSortOrder") eq 'asc'){
-		@todaysissues   = sort { $a->{'timestamp'} cmp $b->{'timestamp'} } @todaysissues;
-	}
-	else {
-		@todaysissues   = sort { $b->{'timestamp'} cmp $a->{'timestamp'} } @todaysissues;
-	}
-	if (C4::Context->preference("previousIssuesDefaultSortOrder") eq 'asc'){
-		@previousissues = sort { $a->{'date_due' } cmp $b->{'date_due' } } @previousissues;
-	}
-	else {
-		@previousissues = sort { $b->{'date_due' } cmp $a->{'date_due' } } @previousissues;
-	}
+  if (C4::Context->preference("todaysIssuesDefaultSortOrder") eq 'asc'){
+    @todaysissues   = sort { $a->{'timestamp'} cmp $b->{'timestamp'} } @todaysissues;
+  }
+  else {
+    @todaysissues   = sort { $b->{'timestamp'} cmp $a->{'timestamp'} } @todaysissues;
+  }
+  if (C4::Context->preference("previousIssuesDefaultSortOrder") eq 'asc'){
+    @previousissues = sort { $a->{'date_due' } cmp $b->{'date_due' } } @previousissues;
+  }
+  else {
+    @previousissues = sort { $b->{'date_due' } cmp $a->{'date_due' } } @previousissues;
+  }
     my $i = 1;
-	foreach my $book (@todaysissues) {
+  foreach my $book (@todaysissues) {
         $book->{'togglecolor'} = (++$i % 2) ? 0 : 1 ;
     }
     $i = 1;
-	foreach my $book (@previousissues) {
+  foreach my $book (@previousissues) {
         $book->{'togglecolor'} = (++$i % 2) ? 0 : 1 ;
     }
 }
@@ -528,8 +533,8 @@ if ($borrowerslist) {
     }
     $CGIselectborrower = CGI::scrolling_list(
         -name     => 'borrowernumber',
-		-class     => 'focus',
-		-id          => 'borrowernumber',
+        -class    => 'focus',
+        -id       => 'borrowernumber',
         -values   => \@values,
         -labels   => \%labels,
         -size     => 7,
@@ -642,9 +647,6 @@ if ( C4::Context->preference("memberofinstitution") ) {
 
 $amountold = $temp[1];
 
-my $borrowercategory = GetBorrowercategory( $borrower->{'categorycode'} );
-my $category_type = $borrowercategory->{'category_type'};
-( $template->param( adultborrower => 1 ) ) if ( $category_type eq 'A' );
 
 $template->param(
     issued_itemtypes_count_loop => $issued_itemtypes_loop,
@@ -652,19 +654,19 @@ $template->param(
     borrower                    => $borrower,
     borrowernumber              => $borrowernumber,
     branch                      => $branch,
-    branchname                  => GetBranchName($branch),
+    branchname                  => GetBranchName($borrower->{'branchcode'}),
     printer                     => $printer,
     printername                 => $printer,
     firstname                   => $borrower->{'firstname'},
     surname                     => $borrower->{'surname'},
-	dateexpiry => format_date($newexpiry),
-    expiry                      => format_date($borrower->{'dateexpiry'}),
+    dateexpiry        => format_date($newexpiry),
+    expiry            => format_date($borrower->{'dateexpiry'}),
     categorycode      => $borrower->{'categorycode'},
     categoryname      => $borrowercategory->{description},
-    address     => $borrower->{'address'},
-    address2     => $borrower->{'address2'},
-    email      => $borrower->{'email'},
-	emailpro           => $borrower->{'emailpro'},
+    address           => $borrower->{'address'},
+    address2          => $borrower->{'address2'},
+    email             => $borrower->{'email'},
+    emailpro          => $borrower->{'emailpro'},
     borrowernotes     => $borrower->{'borrowernotes'},
     city              => $borrower->{'city'},
     phone             => $borrower->{'phone'} || $borrower->{'mobile'},
@@ -679,8 +681,8 @@ $template->param(
     inprocess         => $inprocess,
     memberofinstution => $member_of_institution,
     CGIorganisations  => $CGIorganisations,
-	circview => 1,
-	
+  circview => 1,
+  
 );
 
 # set return date if stickyduedate

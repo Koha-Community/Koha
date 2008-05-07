@@ -173,6 +173,7 @@ my %tabsysprefs;
     $tabsysprefs{NoReturnSetLost}="Patrons";
     $tabsysprefs{MaxFine}="Patrons";
     $tabsysprefs{NotifyBorrowerDeparture}="Patrons";
+    $tabsysprefs{AddPatronLists}="Patrons";
     $tabsysprefs{PatronsPerPage}="Patrons";
 
 # I18N/L10N

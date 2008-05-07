@@ -1335,23 +1335,40 @@ sub GetborCatFromCatType {
 
 Given the borrower's category code, the function returns the corresponding
 data hashref for a comprehensive information display.
+  
+  $arrayref_hashref = &GetBorrowercategory;
+If no category code provided, the function returns all the categories.
 
 =cut
 
 sub GetBorrowercategory {
     my ($catcode) = @_;
     my $dbh       = C4::Context->dbh;
-    my $sth       =
-      $dbh->prepare(
-"SELECT description,dateofbirthrequired,upperagelimit,category_type 
- FROM categories 
- WHERE categorycode = ?"
-      );
-    $sth->execute($catcode);
-    my $data =
-      $sth->fetchrow_hashref;
-    $sth->finish();
-    return $data;
+    if ($catcode){
+        my $sth       =
+        $dbh->prepare(
+    "SELECT description,dateofbirthrequired,upperagelimit,category_type 
+    FROM categories 
+    WHERE categorycode = ?"
+        );
+        $sth->execute($catcode);
+        my $data =
+        $sth->fetchrow_hashref;
+        $sth->finish();
+        return $data;
+    } 
+    else {
+        my $sth       =
+        $dbh->prepare(
+    "SELECT *
+    FROM categories order by description"
+        );
+        $sth->execute;
+        my $data =
+        $sth->fetchall_arrayref({});
+        $sth->finish();
+        return $data;
+    }  
 }    # sub getborrowercategory
 
 =head2 ethnicitycategories

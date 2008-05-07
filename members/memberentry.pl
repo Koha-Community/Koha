@@ -301,14 +301,14 @@ if ($ethnicitycategoriescount>=0) {
 }
 
 my @typeloop;
-foreach ( ($new_c_type) ? ($new_c_type) : qw(C A S P I X)){
+foreach ( ($category_type) ? ($category_type) : qw(C A S P I X)){
 	my $action="WHERE category_type=?";
 	($categories,$labels)=GetborCatFromCatType($_,$action);
 	my @categoryloop;
 	foreach my $cat (@$categories){
 		push @categoryloop,{'categorycode' => $cat,
 			  'categoryname' => $labels->{$cat},
-			  'categorycodeselected' => ($cat eq $borrower_data->{'categorycode'}),
+			  'categorycodeselected' => ($cat eq $borrower_data->{'categorycode'} || $cat eq $categorycode),
 		};
 	}
 	my %typehash;

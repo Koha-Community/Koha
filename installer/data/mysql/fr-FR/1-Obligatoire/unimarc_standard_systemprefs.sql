@@ -184,3 +184,4 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACItemHolds','1','Si activé, les adhérents peuvent placer des réservations sur un exemplaire spécifique. Sinon, il ne peuvent que réserver le prochain disponible.','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('GranularPermissions','0','Use detailed staff user permissions',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable, value,options,type, explanation) VALUES ('AddPatronLists','categorycode','categorycode|category_type','Choice','Slectionner categorycode ou category_type permet d\'afficher la liste des catégories ou des types de catégories à l\'ajout d\'un lecteur');

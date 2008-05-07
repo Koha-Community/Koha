@@ -5,11 +5,14 @@
 	// prepare DOM for YUI Toolbar
 
 	 $(document).ready(function() {
+<!--TMPL_IF Name="AddPatronLists_categorycode"-->
+<!--TMPL_ELSE-->
 	 	$("#addchild").parent().remove();
 		$("#addprofessional").parent().remove();
 		$("#addorganisation").parent().remove();
 		$("#addstaff").parent().remove();
 		$("#addstatistical").parent().remove();
+<!--/TMPL_IF-->
 	    $("#newmenuc").empty();
 	    yuiToolbar();
 	 });
@@ -19,12 +22,16 @@
 	function yuiToolbar() {
 
 		var newmenu = [
+<!--TMPL_IF Name="AddPatronLists_categorycode"-->
+<!--TMPL_LOOP Name="categories"-->{ text: "<!--TMPL_VAR Name="description"-->",  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;categorycode=<!--TMPL_VAR Name="categorycode"-->" },<!--/TMPL_LOOP-->
+<!--TMPL_ELSE-->
 			{ text: _("Adult Patron"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=A" },
 			{ text: _("Child Patron"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=C" },
 			{ text: _("Professional Patron"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=P" },
 			{ text: _("Organisation"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=I" },
 			{ text: _("Staff"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=S" },
 			{ text: _("Statistical"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=X" },
+<!--/TMPL_IF-->
 		] 
 	
 	    new YAHOO.widget.Button({
@@ -40,10 +47,6 @@
 	//]]>
 	</script>
 	<ul class="toolbar">
-	<li id="newmenuc"><a id="addadult" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=A">Adult</a></li>
-<li><a id="addchild" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=C">Child</a></li>
-<li><a id="addprofessional" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=P">Professional</a></li>
-<li><a id="addorganisation" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=I">Organisation</a></li>
-<li><a id="addstaff" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=S">Staff</a></li>
-<li><a id="addstatistical" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=X">Statistical</a></li>
-</ul></div>
+	<li id="newmenuc"></li>
+</ul>
+</div>
