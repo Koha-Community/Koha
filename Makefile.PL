@@ -1094,7 +1094,11 @@ doing it in a database that you don't want to lose.
 Please specify the name of the test database to be
 used by Koha);
       
-    $config{'TEST_DB_NAME'} = _get_value('TEST_DB_NAME', $msg, $defaults->{'TEST_DB_NAME'}, $valid_values, $install_log_values);
+      $config{'TEST_DB_NAME'} = _get_value('TEST_DB_NAME', $msg, $defaults->{'TEST_DB_NAME'}, $valid_values, $install_log_values);
+      while ( $config{'TEST_DB_NAME'} eq $config{'DB_NAME'} ) {
+          $msg = q(Please do not use the same database for testing as you do for production. You run the severe risk of data loss.);
+          $config{'TEST_DB_NAME'} = _get_value('TEST_DB_NAME', $msg, $defaults->{'TEST_DB_NAME'}, $valid_values, $install_log_values);
+      }
 
       $msg = q(
 Please specify the user that owns the database to be
