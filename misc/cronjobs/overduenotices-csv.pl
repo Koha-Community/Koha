@@ -39,12 +39,14 @@ use Mail::Sendmail;  # comment out if not doing e-mail notices
 use Getopt::Long;
 use MIME::QuotedPrint;
 use MIME::Base64;
+use utf8;
 
-my ($confirm, $nomail,$branch);
+my ($confirm, $nomail,$branch,$filename);
 GetOptions(
     'c'    => \$confirm,
 	'n'	=> \$nomail,
 	'b:s' => \$branch,
+	'o:s' => \$filename,
 );
 unless ($confirm) {
 	print qq|
@@ -65,7 +67,7 @@ Do you wish to continue? (y/n)
 # BEGINNING OF PARAMETERS
 #
 my $mindays = 7; # the notice will be sent after mindays days (grace period)
-my $maxdays = 30; # issues being more than maxdays late are managed somewhere else. (borrower probably suspended)
+my $maxdays = 500; # issues being more than maxdays late are managed somewhere else. (borrower probably suspended)
 my $smtpserver = 'smtp.laposte.net'; # your smtp server (the server who sent mails)
 my $from = 'fromadress@toto'; # all the mails sent to the borrowers will appear coming from here.
 my $mailtitle = 'Relances'; # the title of the mails
@@ -74,25 +76,27 @@ my $librarymail = 'tonadress@email'; # all notices without mail are sent (in 1 m
 # this text contains fields that are replaced by their value. Those fields must be written between brackets
 # The following fields are available :
 # <date> <itemcount> <firstname> <lastname> <address1> <address2> <address3> <city> <postcode>
-my $mailtext = "<firstname>;<lastname>;<address>;<address2>;<postcode>;<city>;<email>;<itemcount>;<titles>\n";
+my $mailtext = q("<firstname>";"<lastname>";"<address>";"<address2>";"<postcode>";"<city>";"<email>";"<itemcount>";<titles>);
 #
 # END OF PARAMETERS
 #
-open OUTFILE, ">:utf8","overdues.csv" or die "impossible d'ouvrir le fichier de relances";
-print OUTFILE "Date;Name;Surname;Adress1;Adress2;zipcode;city;Mail;Nbitems;1title;1author;1barcode;1issuedate;1returndate;";
-print OUTFILE "2title;2author;2barcode;2issue_date;2return_date;3title;3author;3barcode;3issue_date;3return_date;4title;4author;4barcode;4issue_date;4return_date;5title;5author;5barcode;5issue_date;5return_date;6title;6author;6barcode;6issue_date;6return_date;7title;7author;7barcode;7issue_date;7return_date;8title;8author;8barcode;8issue_date;8return_date;9title;9author;9barcode;9issue_date;9return_date;10title;10author;10barcode;10issue_date;10return_date;\n";
+my $result;
+$result= <<END_HEADER;
+Name;Surname;Adress1;Adress2;zipcode;city;Mail;Nbitems;1title;1author;1barcode;1issuedate;1returndate;2title;2author;2barcode;2issue_date;2return_date;3title;3author;3barcode;3issue_date;3return_date;4title;4author;4barcode;4issue_date;4return_date;5title;5author;5barcode;5issue_date;5return_date;6title;6author;6barcode;6issue_date;6return_date;7title;7author;7barcode;7issue_date;7return_date;8title;8author;8barcode;8issue_date;8return_date;9title;9author;9barcode;9issue_date;9return_date;10title;10author;10barcode;10issue_date;10return_date;
+END_HEADER
+
 # set the e-mail server -- comment out if not doing e-mail notices
 # unshift @{$Mail::Sendmail::mailcfg{'smtp'}} , $smtpserver;
 #                                         set your own mail server name here
 
 my $dbh = C4::Context->dbh;
-my $query = "SELECT COUNT(*), issues.borrowernumber,firstname,surname,address,address2,city,zipcode,email FROM issues,borrowers ,categories WHERE TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN 0 and 500 AND issues.borrowernumber=borrowers.borrowernumber and borrowers.categorycode=categories.categorycode and (categories.overduenoticerequired = 1)";
+my $query = "SELECT COUNT(*), issues.borrowernumber,firstname,surname,address,address2,city,zipcode,email FROM issues,borrowers ,categories WHERE TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN $mindays and $maxdays AND issues.borrowernumber=borrowers.borrowernumber and borrowers.categorycode=categories.categorycode and (categories.overduenoticerequired = 1)";
 $query .= " AND borrowers.branchcode=".$dbh->quote($branch) if $branch;
 $query .=" GROUP BY issues.borrowernumber";
 my $sth = $dbh->prepare ($query);
 
 warn "Q : $query";
-my $sth2 = $dbh->prepare("SELECT biblio.title,biblio.author,items.barcode, issues.timestamp, issues.date_due FROM issues,items,biblio WHERE items.itemnumber=issues.itemnumber and biblio.biblionumber=items.biblionumber AND issues.borrowernumber=? AND TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN 0 and 500");
+my $sth2 = $dbh->prepare("SELECT biblio.title,biblio.author,items.barcode, issues.timestamp, issues.date_due FROM issues,items,biblio WHERE items.itemnumber=issues.itemnumber and biblio.biblionumber=items.biblionumber AND issues.borrowernumber=? AND TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN $mindays and $maxdays");
 
 $sth->execute;
 #
@@ -117,21 +121,27 @@ while (($itemcount,$borrnum,$firstname,$lastname,$address1,$address2,$city,$post
                 my $titles="";
                 my ($title, $author, $barcode,$timestamp,$date_due);
                 while (($title, $author, $barcode,$timestamp,$date_due) = $sth2->fetchrow){
-                        $titles .= ($title?$title:"").";".($author?$author:"").";".($barcode?$barcode:"").";" ;
-                        $titles .= ($timestamp?format_date(substr($timestamp,0,10)):"").";".($date_due?format_date($date_due):"").";" ;
+                        $titles .= '"'.($title?$title:"").'";"'.($author?$author:"").'";"'.($barcode?$barcode:"").'";"' ;
+                        $titles .= ($timestamp?format_date(substr($timestamp,0,10)):"").'";"'.($date_due?format_date($date_due):"").'";' ;
                 }
                 $notice =~ s/\<titles\>/$titles/g;
                 $notice =~ s/(\<.*?\>)//g;
                 $sth2->finish;
-                        print OUTFILE $notice;
-                        $count++;
+                $result.=$notice."\n";
+                $count++;
 
 }
 $sth->finish;
-    close OUTFILE;
 if ($nomail) {
-    open(OD,"overdues.csv");
-    print <OD>;
+    if ($filename){
+	open OUTFILE, ">:utf8","$filename" or die "impossible d'ouvrir le fichier de relances";
+	print OUTFILE $result;
+	close OUTFILE;
+    } 
+    else {
+    	binmode STDOUT, ":encoding(UTF-8)";
+       	print $result;
+    }
 } else {
         my %mail = ( To      => 'mailto@mail.com',
                                         From    => 'mailfrom@mail.com',
@@ -140,28 +150,24 @@ if ($nomail) {
         my $boundary = "====" . time() . "====";
         $mail{'content-type'} = "multipart/mixed; boundary=\"$boundary\"";
         
-#         open FILE, "Relances.csv";
         my $message = encode_qp("The file");
         
-        my $file = "overdues.csv";
-        
-        open (F, $file) or die "Cannot read $ $!";
-        binmode F;
-        undef $/;
-        $mail{body} = encode_base64(<F>);
-        close F;
+        $mail{body} = encode_base64($result);
+	open OUTFILE, ">:utf8","$filename" or die "impossible d'ouvrir le fichier de relances";
+	print OUTFILE $result;
+	close OUTFILE;
         
         $boundary = '--'.$boundary;
         $mail{body} = <<END_OF_BODY;
 $boundary
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
 $message
 $boundary
 Content-Type: application/octet-stream; name="$^X"
 Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="Overdues.csv"
+Content-Disposition: attachment; filename="$filename"
 
 $mail{body}
 $boundary--
