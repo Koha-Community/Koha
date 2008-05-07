@@ -8,6 +8,7 @@ eval "use Test::Class";
 plan skip_all => "Test::Class required for performing database tests" if $@;
 # Or, maybe I should just die there.
 
+use C4::Auth;
 use C4::Biblio;
 use C4::Bookfund;
 use C4::Bookseller;
@@ -195,6 +196,29 @@ sub startup_15_truncate_tables : Test( startup => 1 ) {
     
 }
 
+=head startup_18_set_insecure
+
+=cut
+
+# sub startup_18_set_insecure : Test( startup => 4 ) {
+sub startup_18_set_insecure {
+    my $self = shift;
+
+    ok( C4::Context->dbh, 'got a database handle' );
+    isa_ok( C4::Context->dbh, 'DBI::db' );
+    my $query = q( UPDATE systempreferences
+                     SET value = 1
+                     WHERE variable = 'insecure' );
+    my $ok = C4::Context->dbh->do( $query );
+    ok( $ok, 'set context to insecure' );
+
+    my $insecure_from_preference = C4::Context->preference( 'insecure' );
+    is( $insecure_from_preference, 1, 'running in insecure mode' )
+      or diag( Data::Dumper->Dump( [ $insecure_from_preference ], [ 'insecure_from_preference' ] ) );
+      
+    return $ok;
+}
+
 =head2 startup_20_add_bookseller
 
 we need a bookseller for many of the tests, so let's insert one. Feel
@@ -249,15 +273,49 @@ sub startup_24_add_member : Test(startup => 1) {
                        firstname    => 'firstname' . $self->random_string(),
                        address      => 'address'   . $self->random_string(),
                        city         => 'city'      . $self->random_string(),
+                       cardnumber   => 'card'      . $self->random_string(),
                        branchcode   => 'CPL', # CPL => Centerville
                        categorycode => 'PT',  # PT  => PaTron
+                       dateexpiry   => '2010-01-01',
+                       password     => 'testpassword',
                   };
 
-    my $id = AddMember( %$memberinfo );
-    ok( $id, "created member: $id" );
-    $self->{'memberid'} = $id;
+    my $borrowernumber = AddMember( %$memberinfo );
+    ok( $borrowernumber, "created member: $borrowernumber" );
+    $self->{'memberid'} = $borrowernumber;
     
     return;
+}
+
+=head2 startup_30_login
+
+=cut
+
+sub startup_30_login : Test( startup => 2 ) {
+    my $self = shift;
+
+    $self->{'sessionid'} = '12345678'; # does this value matter?
+    my $borrower_details = C4::Members::GetMemberDetails( $self->{'memberid'} );
+    ok( $borrower_details->{'cardnumber'}, 'cardnumber' );
+    
+    # make a cookie and force it into $cgi.
+    # This would be a lot easier with Test::MockObject::Extends.
+    my $cgi = CGI->new( { userid   => $borrower_details->{'cardnumber'},
+                          password => 'testpassword' } );
+    my $setcookie = $cgi->cookie( -name  => 'CGISESSID',
+                                  -value => $self->{'sessionid'} );
+    $cgi->{'.cookies'} = { CGISESSID => $setcookie };
+    is( $cgi->cookie('CGISESSID'), $self->{'sessionid'}, 'the CGISESSID cookie is set' );
+    # diag( Data::Dumper->Dump( [ $cgi->cookie('CGISESSID') ], [ qw( cookie ) ] ) );
+
+    # C4::Auth::checkauth sometimes emits a warning about unable to append to sessionlog. That's OK.
+    my ( $userid, $cookie, $sessionID ) = C4::Auth::checkauth( $cgi, 'noauth', {}, 'intranet' );
+    # diag( Data::Dumper->Dump( [ $userid, $cookie, $sessionID ], [ qw( userid cookie sessionID ) ] ) );
+
+    # my $session = C4::Auth::get_session( $sessionID );
+    # diag( Data::Dumper->Dump( [ $session ], [ qw( session ) ] ) );
+    
+
 }
 
 =head2 setup methods
@@ -344,9 +402,16 @@ sub add_biblios {
                                                                                 d => "1835-1910." ),
                                                               MARC::Field->new( '245', '1', '4',
                                                                                 a => sprintf( 'The Adventures of Huckleberry Finn Test %s', $counter ),
-                                                                                c => "Mark Twain ; illustrated by E.W. Kemble." )
+                                                                                c => "Mark Twain ; illustrated by E.W. Kemble." ),
+                                                              MARC::Field->new( '952', '0', '0',
+                                                                                p => '12345678' ),   # barcode
+                                                              MARC::Field->new( '952', '0', '0',
+                                                                                a => 'CPL',
+                                                                                b => 'CPL' ),
                                                          );
-        is( $appendedfieldscount, 2, 'added 2 fields' );
+        
+        diag $MARC::Record::ERROR if ( $MARC::Record::ERROR );
+        is( $appendedfieldscount, 4, 'added 4 fields' );
         
         my $frameworkcode = ''; # XXX I'd like to put something reasonable here.
         my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $marcrecord, $frameworkcode );
