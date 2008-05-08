@@ -81,6 +81,7 @@ foreach my $supplierid (keys %supplierlist){
 my $CGIsupplier=CGI::scrolling_list( -name     => 'supplierid',
 			-values   => \@select_supplier,
 			-default  => $supplierid,
+			-id        => 'supplierid',
 			-labels   => \%supplierlist,
 			-size     => 1,
 			-tabindex=>'',

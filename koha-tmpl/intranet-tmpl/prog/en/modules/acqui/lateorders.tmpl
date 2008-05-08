@@ -1,12 +1,12 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Acquisitions &rsaquo; Late issues</title>
+<title>Koha &rsaquo; Acquisitions &rsaquo; Late orders</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Late issues</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Late orders</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -14,8 +14,17 @@
 	<div id="yui-main">
 	<div class="yui-b">
 	
-<h1 ><!-- TMPL_IF name="Supplier" --><!-- TMPL_VAR name="Supplier" --> : <!--/TMPL_IF -->Late issues</h1>
+<h1><!-- TMPL_IF name="Supplier" --><!-- TMPL_VAR name="Supplier" --> : <!--/TMPL_IF -->Late orders</h1>
 <div id="acqui_lateorders">
+
+<!-- TMPL_IF NAME="lateorders" --><form action="lateorders.pl" name="claim" method="post">
+<input type="hidden" name="op" value="send_alert" />
+<!-- TMPL_IF NAME="letters" --><p><label for="letter_code">Claim using notice: </label><select name="letter_code" id="letter_code">
+                        <!--TMPL_LOOP Name="letters"-->
+                            <option value="<!--TMPL_VAR Name="code"-->"><!--TMPL_VAR Name="name"--></option>
+                        <!--/TMPL_LOOP -->
+                    </select>
+					</p><!-- /TMPL_IF -->
     <table>
         <tr>
             <th>Order Date</th>
@@ -25,36 +34,9 @@
             <th>Basket</th>
             <th>&nbsp;</th>
         </tr>
-        <tr>
-            <td>
-                <form action="lateorders.pl" method="post">
-                <input size="4" maxlength="3" type="text" name="delay" value="<!--TMPL_VAR Name="delay" -->" /> days ago
-            </td>
-            <td>
-                    <!-- TMPL_VAR name="CGIsupplier" -->
-            </td>
-            <td colspan="2">
-                    &nbsp;
-            </td>
-            <td>
-                <input type="submit" value="filter" />
-                </form>
-            </td>
-            <td>
-                <form action="lateorders.pl" name="claim" method="post">
-                    <input type="hidden" name="op" value="send_alert" />
-                    <!-- TMPL_IF NAME="letters" --><select name="letter_code" id="letter_code">
-                        <!--TMPL_LOOP Name="letters"-->
-                            <option value="<!--TMPL_VAR Name="code"-->"><!--TMPL_VAR Name="name"--></option>
-                        <!--/TMPL_LOOP -->
-                    </select>
-					<!-- /TMPL_IF -->
-                    <input type="submit" value="Claim Order" />
-            </td>
-        </tr>
         <!-- TMPL_LOOP name="lateorders" -->
             <!--TMPL_IF Name="hilighted" -->
-                <tr class="hilighted"> 
+                <tr class="highlight"> 
             <!--TMPL_ELSE-->
                 <tr>
             <!-- /TMPL_IF -->
@@ -105,14 +87,22 @@
             <th> &nbsp;</th>
             <td>
                 <input type="submit" value="Claim Order" />
-                </form>
             </td>
         </tr>
     </table>
+                </form><!-- TMPL_ELSE --><p>There are no late orders.</p><!-- /TMPL_IF -->
 </div>
 </div>
 </div>
 <div class="yui-b">
+<form action="lateorders.pl" method="post">
+<fieldset class="brief">
+<h4>Filter Results:</h4>
+<ol>	<li><label for="delay">Order date:</label><input size="3" maxlength="3" id="delay" type="text" name="delay" value="<!--TMPL_VAR Name="delay" -->" /> days ago</li>
+	<li><label for="supplierid">Vendor:</label><!-- TMPL_VAR name="CGIsupplier" --></li></ol>
+	<fieldset class="action"><input type="submit" value="filter" /></fieldset>
+</fieldset>
+    </form>
 <!-- TMPL_INCLUDE NAME="acquisitions-menu.inc" -->
 </div>
 </div>
