@@ -7,7 +7,6 @@ use Test::More tests => 126;
 BEGIN {
 	use FindBin;
 	use lib $FindBin::Bin;
-	use override_context_prefs;
 	use_ok('C4::Dates', qw(format_date format_date_in_iso));
 }
 

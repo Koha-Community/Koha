@@ -7,7 +7,7 @@ use Test::More tests => 28;
 BEGIN {
 	use FindBin;
 	use lib $FindBin::Bin;
-	use override_context_prefs;
+	# use override_context_prefs;
         use_ok('C4::Items');
 }
 

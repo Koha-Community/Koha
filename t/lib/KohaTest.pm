@@ -193,30 +193,6 @@ sub startup_15_truncate_tables : Test( startup => 1 ) {
           or $failed_to_truncate = 1;
     }
     is( $failed_to_truncate, 0, 'truncated tables' );
-    
-}
-
-=head startup_18_set_insecure
-
-=cut
-
-# sub startup_18_set_insecure : Test( startup => 4 ) {
-sub startup_18_set_insecure {
-    my $self = shift;
-
-    ok( C4::Context->dbh, 'got a database handle' );
-    isa_ok( C4::Context->dbh, 'DBI::db' );
-    my $query = q( UPDATE systempreferences
-                     SET value = 1
-                     WHERE variable = 'insecure' );
-    my $ok = C4::Context->dbh->do( $query );
-    ok( $ok, 'set context to insecure' );
-
-    my $insecure_from_preference = C4::Context->preference( 'insecure' );
-    is( $insecure_from_preference, 1, 'running in insecure mode' )
-      or diag( Data::Dumper->Dump( [ $insecure_from_preference ], [ 'insecure_from_preference' ] ) );
-      
-    return $ok;
 }
 
 =head2 startup_20_add_bookseller
@@ -404,7 +380,7 @@ sub add_biblios {
                                                                                 a => sprintf( 'The Adventures of Huckleberry Finn Test %s', $counter ),
                                                                                 c => "Mark Twain ; illustrated by E.W. Kemble." ),
                                                               MARC::Field->new( '952', '0', '0',
-                                                                                p => '12345678' ),   # barcode
+                                                                                p => '12345678' . $self->random_string() ),   # barcode
                                                               MARC::Field->new( '952', '0', '0',
                                                                                 a => 'CPL',
                                                                                 b => 'CPL' ),
@@ -450,7 +426,7 @@ sub add_biblios {
     
 }
 
-=head3 reindex_bibs
+=head3 reindex_marc
 
 Do a fast reindexing of all of the bib and authority
 records and mark all zebraqueue entries done.
