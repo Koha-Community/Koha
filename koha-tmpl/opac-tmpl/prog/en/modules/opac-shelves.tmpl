@@ -88,16 +88,16 @@ $.tablesorter.addParser({
 	<!--  Viewing a particular shelf -->
     <h3><a href="/cgi-bin/koha/opac-shelves.pl">Lists</a> <img src="<!-- TMPL_VAR NAME="themelang" -->/../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> <em><!-- TMPL_VAR NAME="shelfname" ESCAPE="html" --></em></h3>
         <!-- TMPL_IF NAME="itemsloop" -->
-    <form action="/cgi-bin/koha/opac-shelves.pl" method="post" name="myform" class="checkboxed">
-        <input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->" />
-        <input type="hidden" name="modifyshelfcontents" value="1" />
 		<!-- TMPL_IF NAME="manageshelf" --><div><span class="checkall"></span>
 		<span class="clearall"></span> | <a class="editshelf" href="/cgi-bin/koha/opac-shelves.pl?shelfnumber=<!-- TMPL_VAR NAME="shelfnumber" -->&amp;op=modif">Edit List</a> <form method="post" action="opac-shelves.pl">
 <input type="hidden" value="1" name="shelves"/>
 <input type="hidden" value="1" name="DEL-1"/>
-<input type="submit" class="deleteshelf" value="Delete List" onclick="return confirmDelete(_('Are you sure you want to remove this List?'));"/>
-</form>
-</div><!-- /TMPL_IF --><table id="listcontents">
+<input type="submit" class="deleteshelf" value="Delete List" onclick="return confirmDelete(_('Are you sure you want to remove this List?'));"/></form>
+</div><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="manageshelf" --><form action="/cgi-bin/koha/opac-shelves.pl" method="post" name="myform" class="checkboxed">
+        <input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->" />
+        <input type="hidden" name="modifyshelfcontents" value="1" /><!-- /TMPL_IF -->
+<table id="listcontents">
         <thead><tr>
             <!-- TMPL_IF NAME="manageshelf" --><th>&nbsp;</th><!-- /TMPL_IF -->
             <!-- TMPL_UNLESS NAME="item-level_itypes" --><th>Item Type</th><!-- /TMPL_UNLESS -->
@@ -134,12 +134,12 @@ $.tablesorter.addParser({
 
 	<!-- TMPL_IF NAME="manageshelf" -->
 	<!-- Editing shelf -->
-		<form method="post" action="/cgi-bin/koha/opac-shelves.pl">
         <!-- TMPL_IF NAME="itemsloop" -->
     		<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->" />
     		<input type="hidden" name="modifyshelfcontents" value="1" />
     		<input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->" /><input type="submit" value="Remove Selected Items" class="icon delete" onclick="return confirmDelete(_('Are you sure you want to remove these items from the list?'))" />
         <!-- TMPL_ELSE -->
+<form method="post" action="opac-shelves.pl">
 			<input type="hidden" name="DEL-<!-- TMPL_VAR NAME="shelfnumber" -->" value="1" />
 			<input type="hidden" name="shelves" value="1" />
 			<input type="submit" class="icon delete" value="Delete this List" onclick="return confirmDelete(_('Are you sure you want to delete this List?'))" />
