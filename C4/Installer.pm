@@ -84,6 +84,30 @@ sub new {
     return $self;
 }
 
+=head2 marcflavour_list
+
+=over 4
+
+my ($marcflavours) = $installer->marcflavour_list($lang);
+
+=back
+
+Return a arrayref of the MARC flavour sets available for the
+specified language C<$lang>.  Returns 'undef' if a directory
+for the language does not exist.
+
+=cut
+
+sub marcflavour_list {
+    my $self = shift;
+    my $lang = shift;
+
+    my $dir = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/$lang/marcflavour";
+    opendir(MYDIR, $dir) or return;
+    my @list = grep { !/^\.|CVS/ && -d "$dir/$_" } readdir(MYDIR);
+    closedir MYDIR;
+    return \@list;
+}
 
 =head2 marc_framework_sql_list
 
