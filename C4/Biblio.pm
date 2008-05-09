@@ -3103,8 +3103,10 @@ sub get_biblio_authorised_values {
 
     my $authorised_values;
 
-    my $record  = GetMarcBiblio( $biblionumber );
-    my $tagslib = GetMarcStructure( $forlibrarian, $frameworkcode );
+    my $record  = GetMarcBiblio( $biblionumber )
+      or return $authorised_values;
+    my $tagslib = GetMarcStructure( $forlibrarian, $frameworkcode )
+      or return $authorised_values;
 
     # assume that these entries in the authorised_value table are bibliolevel.
     # ones that start with 'item%' are item level.
