@@ -97,7 +97,18 @@
 				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="description" --></option>
 				<!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
-            </select></li></ol></fieldset>
+            </select></li>
+
+	<li><label for="loststatusfilter">Lost Status: </label><select name="loststatusfilter" id="loststatusfilter">
+                <option value="">All</option>
+                <!-- TMPL_LOOP name="loststatusloop" -->
+                <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="authorised_value" -->" selected="selected"><!-- TMPL_VAR NAME="lib" --></option>
+		<!-- TMPL_ELSE -->
+		<option value="<!-- TMPL_VAR NAME="authorised_value" -->"><!-- TMPL_VAR NAME="lib" --></option>
+		<!-- /TMPL_IF -->
+                <!-- /TMPL_LOOP -->
+            </select></li>
+</ol></fieldset>
 <fieldset class="action">    <input type="submit" value="Submit" />
     <input type="hidden" name="get_items" value="1" /></fieldset>
 </form>

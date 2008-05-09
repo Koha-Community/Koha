@@ -47,15 +47,17 @@ my $params = $query->Vars;
 my $get_items = $params->{'get_items'};
 
 if ( $get_items ) {
-    my $orderbyfilter   = $params->{'orderbyfilter'}   || undef;
-    my $branchfilter    = $params->{'branchfilter'}    || undef;
-    my $barcodefilter   = $params->{'barcodefilter'}   || undef;
-    my $itemtypesfilter = $params->{'itemtypesfilter'} || undef;
+    my $orderbyfilter    = $params->{'orderbyfilter'}   || undef;
+    my $branchfilter     = $params->{'branchfilter'}    || undef;
+    my $barcodefilter    = $params->{'barcodefilter'}   || undef;
+    my $itemtypesfilter  = $params->{'itemtypesfilter'} || undef;
+    my $loststatusfilter = $params->{'loststatusfilter'} || undef;
 
     my %where;
-    $where{homebranch} = $branchfilter    if defined $branchfilter;
-    $where{barcode}    = $barcodefilter   if defined $barcodefilter;
-    $where{itemtype}   = $itemtypesfilter if defined $itemtypesfilter;
+    $where{'homebranch'}       = $branchfilter    if defined $branchfilter;
+    $where{'barcode'}          = $barcodefilter   if defined $barcodefilter;
+    $where{'itemtype'}         = $itemtypesfilter if defined $itemtypesfilter;
+    $where{'authorised_value'} = $loststatusfilter if defined $loststatusfilter;
 
     my $items = GetLostItems( \%where, $orderbyfilter ); 
     $template->param(
@@ -100,9 +102,12 @@ foreach my $thisitemtype ( sort keys %$itemtypes ) {
     push @itemtypesloop, \%row;
 }
 
-$template->param(
-    branchloop   => \@branchloop,
-    itemtypeloop => \@itemtypesloop,
+# get lost statuses
+my $lost_status_loop = C4::Koha::GetAuthorisedValues( 'LOST' );
+
+$template->param( branchloop     => \@branchloop,
+                  itemtypeloop   => \@itemtypesloop,
+                  loststatusloop => $lost_status_loop,
 );
 
 # writing the template
