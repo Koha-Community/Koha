@@ -904,7 +904,7 @@ sub GetLostItems {
 
     my $sth = $dbh->prepare($query);
     $sth->execute( @query_parameters );
-    my $items;
+    my $items = [];
     while ( my $row = $sth->fetchrow_hashref ){
         push @$items, $row;
     }

@@ -56,7 +56,7 @@ if ( $get_items ) {
     my %where;
     $where{'homebranch'}       = $branchfilter    if defined $branchfilter;
     $where{'barcode'}          = $barcodefilter   if defined $barcodefilter;
-    $where{'itemtype'}         = $itemtypesfilter if defined $itemtypesfilter;
+    $where{'itype'}            = $itemtypesfilter if defined $itemtypesfilter;
     $where{'authorised_value'} = $loststatusfilter if defined $loststatusfilter;
 
     my $items = GetLostItems( \%where, $orderbyfilter ); 
