@@ -841,28 +841,35 @@ sub GetItemLocation {
 
 =over 4
 
-$items = GetLostItems($where,$orderby);
+$items = GetLostItems( $where, $orderby );
 
 =back
 
-This function get the items lost into C<$items>.
+This function gets a list of lost items.
 
 =over 2
 
 =item input:
+
 C<$where> is a hashref. it containts a field of the items table as key
-and the value to match as value.
-C<$orderby> is a field of the items table.
+and the value to match as value. For example:
+
+{ barcode    => 'abc123',
+  homebranch => 'CPL',    }
+
+C<$orderby> is a field of the items table by which the resultset
+should be orderd.
 
 =item return:
-C<$items> is a reference to an array full of hasref which keys are items' table column.
+
+C<$items> is a reference to an array full of hashrefs with columns
+from the "items" table as keys.
 
 =item usage in the perl script:
 
-my %where;
-$where{barcode} = 0001548;
-my $items = GetLostItems( \%where, "homebranch" );
-$template->param(itemsloop => $items);
+my $where = { barcode => '0001548' };
+my $items = GetLostItems( $where, "homebranch" );
+$template->param( itemsloop => $items );
 
 =back
 
@@ -885,18 +892,23 @@ sub GetLostItems {
          	AND itemlost <> 0
           
     ";
+    my @query_parameters;
     foreach my $key (keys %$where) {
-        $query .= " AND " . $key . " LIKE '%" . $where->{$key} . "%'";
+        $query .= " AND $key LIKE ?";
+        push @query_parameters, "%$where->{$key}%";
     }
-    $query .= " ORDER BY ".$orderby." " if defined $orderby;
+    if ( defined $orderby ) {
+        $query .= ' ORDER BY ?';
+        push @query_parameters, $orderby;
+    }
 
     my $sth = $dbh->prepare($query);
-    $sth->execute;
-    my @items;
+    $sth->execute( @query_parameters );
+    my $items;
     while ( my $row = $sth->fetchrow_hashref ){
-        push @items, $row;
+        push @$items, $row;
     }
-    return \@items;
+    return $items;
 }
 
 =head2 GetItemsForInventory
