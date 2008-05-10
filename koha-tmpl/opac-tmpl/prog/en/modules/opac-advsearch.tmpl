@@ -11,7 +11,7 @@
 	<div class="yui-gc">
 <div class="yui-u first">
     <!-- TMPL_IF NAME="if_expanded_options_actually_worked" -->
-        <!-- TMPL_IF NAME="outer_servers_loop" -->
+       <div id="databases" class="container"> <!-- TMPL_IF NAME="outer_servers_loop" -->
             <!-- DATABASES -->
             
             <fieldset>
@@ -41,11 +41,11 @@
                             <!-- /TMPL_LOOP -->
                 </fieldset>
             <!-- /REMOTE DATABASES -->
-        <!-- /TMPL_IF -->
+        <!-- /TMPL_IF --></div>
     <!-- /TMPL_IF -->
 
     <!-- BOOLEAN SEARCH OPTIONS -->
-    <fieldset>
+    <div id="booleansearch" class="container"><fieldset>
     <legend>Search for:</legend>
     <!-- TMPL_LOOP NAME="search_boxes_loop" -->
         <p>
@@ -188,9 +188,9 @@
         </p>
     <!-- /TMPL_LOOP -->
 
-    </fieldset>
+    </fieldset></div>
 <!-- /BOOLEAN SEARCH OPTIONS -->
-    <div id="advsearch-itemtype">
+    <div id="advsearch-itemtype" class="container">
     <h3>Itemtype limit to any of the following:</h3>
     <table>
         <tr>
@@ -229,7 +229,7 @@
         <!-- /BASIC LIMITS -->
 
         <!-- SUBTYPE LIMITS -->
-            <fieldset>
+            <div id="subtypes" class="container"><fieldset>
             <legend>Subtype limits</legend><select name="limit" class="subtype">
                 <option value="" selected="selected" class="menuheader">Any Audience</option>
                     <option value="aud:a">Easy</option>
@@ -288,20 +288,20 @@
                     <option value="ctype:z">Treaties </option>
                 </select>
     
-    </fieldset>
+    </fieldset></div>
     <!--/TMPL_IF -->
     <!--TMPL_IF Name="UNIMARC" -->
-        <!-- SUBTYPE LIMITS -->
-    <!-- TMPL_INCLUDE NAME="subtypes_unimarc.inc" -->
+        <div id="subtypes_unimarc" class="container"><!-- SUBTYPE LIMITS -->
+    <!-- TMPL_INCLUDE NAME="subtypes_unimarc.inc" --></div>
     <!--/TMPL_IF-->
 <!--/TMPL_IF-->
 </div>
         <div class="yui-u">
 <!-- AVAILABILITY LIMITS -->
-    <fieldset><legend>Location and availability: </legend>
+    <div id="location" class="container"><fieldset><legend>Location and availability: </legend>
         
         <select name="limit" id="branchloop" style="width: 20em;">
-        <option value="">All branches</option>
+        <option value="">All libraries</option>
         <!-- TMPL_LOOP NAME="branchloop" -->
         <!--TMPL_IF Name="selected"-->
         <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
@@ -313,14 +313,14 @@
         
         
         <div style="margin-top:.4em"><label for="available-items"><input type="checkbox" id="available-items" name="limit" value="available" /> Only items currently available</label></div>
-    </fieldset>
+    </fieldset></div>
 <!-- /AVAILABILITY LIMITS -->
 
 <!-- RANK LIMITS -->
-    <fieldset><legend>Sort by: </legend>
+    <div id="sortby" class="container"><fieldset><legend>Sort by: </legend>
         <select id="sort_by" name="sort_by" style="width:20em;">
 <!--TMPL_INCLUDE NAME="resort_form.inc" -->
-</select></fieldset>
+</select></fieldset></div>
 <!-- RANK LIMITS -->
 </div>
 </div>

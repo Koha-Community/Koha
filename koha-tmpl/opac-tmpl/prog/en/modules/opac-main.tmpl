@@ -11,7 +11,7 @@
 	<div class="yui-b"><div class="yui-ge">
     <div class="yui-u first">
 	<!-- TMPL_IF name="koha_news_count" -->
-<div id="news">
+<div id="news" class="container">
     <table>
     <!-- TMPL_LOOP name="koha_news" -->
     <tr><th><!-- TMPL_VAR name="title" --></th></tr>
@@ -80,8 +80,8 @@
     <div class="yui-u">
 	
 	<!-- TMPL_IF NAME="opacuserlogin" -->
-<div id="login">
     <!-- TMPL_UNLESS NAME="loggedinusername" -->
+<div id="login" class="container">
 	<form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth">
 	<fieldset class="brief">
 		<legend>Log in to Your Account:</legend>
@@ -93,8 +93,8 @@
 	 </fieldset></fieldset>
 
 	 </form>
-    <!-- /TMPL_UNLESS -->
 </div>
+    <!-- /TMPL_UNLESS -->
 <!-- /TMPL_IF -->
 	    </div>
 </div>

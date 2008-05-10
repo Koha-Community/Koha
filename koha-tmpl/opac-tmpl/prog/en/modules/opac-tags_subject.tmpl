@@ -9,7 +9,7 @@
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
 
-    <h1>Subject cloud</h1>
+   <div id="subjectcloud" class="container"> <h1>Subject cloud</h1>
     <p>This "cloud" show you the most used topics in our catalog. Click on any
 subject below to see the items in our collection.</p>
         <fieldset>
@@ -21,7 +21,7 @@ subject below to see the items in our collection.</p>
 
         <!-- TMPL_LOOP name="LOOP" -->
             <a href="/cgi-bin/koha/opac-search.pl?q=su:<!-- TMPL_VAR name="entry" ESCAPE="HTML" -->" style="font-size:<!-- TMPL_VAR name="weight" -->px;"><!-- TMPL_VAR name="entry" --></a>
-        <!-- /TMPL_LOOP -->
+        <!-- /TMPL_LOOP --></div>
 
 </div>
 </div>
