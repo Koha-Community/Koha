@@ -43,7 +43,7 @@ $.tablesorter.addParser({
  <div id="bd">
   <div id="yui-main">
    <div class="yui-b">
-
+<div class="container">
 <!-- TMPL_IF NAME="paramsloop" -->
 <!-- TMPL_LOOP NAME="paramsloop" -->
 <div class="yui-ge">
@@ -273,12 +273,14 @@ $.tablesorter.addParser({
             <fieldset class="action"><input type="hidden" name="category" value="1" /><input type="submit" value="Save" class="submit" /> <a class="cancel" href="/cgi-bin/koha/opac-shelves.pl">Cancel</a></fieldset>
         </form>    </div>
 	<!-- /TMPL_IF --><!-- /showadd -->
-    </div>
+    </div></div>
    </div>
   </div>
   <div class="yui-b">
-<!-- TMPL_INCLUDE NAME="navigation.inc" -->
-<!-- TMPL_INCLUDE NAME="usermenu.inc" -->
+  <div class="container">
+	<!-- TMPL_INCLUDE NAME="navigation.inc" -->
+	<!-- TMPL_INCLUDE NAME="usermenu.inc" -->
+  </div>
   </div>
  </div>
 <!-- </div> -->

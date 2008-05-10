@@ -14,16 +14,134 @@
 <!-- TMPL_IF NAME="OpacNav" --><div id="doc3" class="yui-t1"><!-- TMPL_ELSE --><div id="doc3" class="yui-t7"><!-- /TMPL_IF -->
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-ge">
+	<div class="yui-b">
+	<div class="yui-ge">
     <div class="yui-u first">
+	<div class="container">	
 	
 	
     <div id="views"> <h1 style="display: inline;">ISBD</h1> <span class="views"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Normal View</a> <a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">MARC View</a> <span id="ISBDview">ISBD View</span></span></div>
     <!-- TMPL_VAR name="ISBD" -->
 	
+		<div id="bibliodescriptions" class="toptabs">
+	<ul>   
+	<!-- TMPL_IF name="subscriptionsnumber" --><li>
+	            <a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#opac-isbd-subscriptions">Subscriptions</a>
+	    </li><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="reviewson" --><li><a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#comments">Comments</a></li><!-- /TMPL_IF -->
+	 	<!-- TMPL_IF NAME="AmazonContent" --><li><a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#opac-isbd-amazonreviews">Amazon Reviews</a></li><!-- /TMPL_IF -->
+	</ul>
+
+		<div id="opac-isbd-subscriptions">    <!-- TMPL_IF name="subscriptionsnumber" -->
+	        <h2>
+	            We have <!-- TMPL_VAR name="subscriptionsnumber" --> subscription(s) associated with this title.
+	        </h2>
+	        <!-- TMPL_LOOP Name="subscriptions" -->
+	            <h3>At library: <!-- TMPL_VAR name="branchcode" --> <!-- TMPL_VAR name="notes" --></h3>
+	            <p>Below is a list of the three latest issues :</p>
+	            <!-- TMPL_IF name="subscriptionnotes"-->
+	                <p><!--TMPL_VAR Name="subscriptionnotes"--> </p>
+	            <!-- /TMPL_IF -->
+	            <!--TMPL_IF Name="latestserials"-->
+	            <table>
+	            <tr><th>Issue number</th><th>Date</th><th>Status</th></tr>
+	            <!--TMPL_LOOP Name="latestserials"-->
+	                <tr>
+	                    <td>            <!--TMPL_VAR Name="serialseq"-->
+	                    </td>
+	                    <td>            <!--TMPL_VAR Name="planneddate"-->
+	                    </td>
+	                    <td>            <!--TMPL_IF Name="status1"-->Pending
+	                        <!--TMPL_ELSE -->
+	                            <!-- TMPL_IF Name="status2"-->Arrived
+	                            <!--TMPL_ELSE -->
+	                                <!-- TMPL_IF Name="status3"-->Late
+	                                <!--TMPL_ELSE -->
+	                                    <!-- TMPL_IF Name="status4"-->Missing
+	                                    <!--TMPL_ELSE -->
+	                                        <!-- TMPL_IF Name="status5"-->Not Issued
+	                                        <!--/TMPL_IF-->
+	                                    <!--/TMPL_IF-->
+	                                <!--/TMPL_IF-->
+	                            <!--/TMPL_IF-->
+	                        <!--/TMPL_IF-->
+	                    </td>
+	                </tr>
+	            <!--/TMPL_LOOP -->
+	            </table>
+	            <!-- /TMPL_IF -->
+	        <!-- /TMPL_LOOP -->
+	        <p><a href="/cgi-bin/koha/opac-serial-issues.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" title="Serial issues">Click here</a> for more information on subscription(s) history</p>
+	    <!-- /TMPL_IF --></div>
+
+	<!-- TMPL_IF NAME="reviewson" -->
+	<div id="comments">
+	<!-- TMPL_IF NAME="reviews" -->
+	        <!--TMPL_LOOP NAME="reviews"-->
+	            <h5>
+	                Comment by
+	                <!--TMPL_VAR NAME="title"-->
+	                <!--TMPL_VAR NAME="firstname"-->
+	                <!--TMPL_VAR NAME="surname"-->
+	            </h5>
+				<small>
+	                <!--TMPL_VAR NAME="datereviewed"-->
+	            </small>
+	        <p>
+	          <!--TMPL_VAR NAME="review" ESCAPE="HTML"-->
+	        </p>
+	        <!--/TMPL_LOOP-->
+	    <!-- TMPL_ELSE  -->
+	        <p>There are no comments for this item.</p>
+	<!-- /TMPL_IF -->
+
+	    <!-- TMPL_IF NAME="loggedinusername" -->
+	       <p> <a href="javascript:Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->');">
+	            Post or edit your comments on this item.
+	        </a></p>
+	    <!-- TMPL_ELSE -->
+	        <p><a href="/cgi-bin/koha/opac-user.pl">Log in to your account</a> to post a comment.</p>
+	    <!-- /TMPL_IF -->
+		</div>
+
+	<!-- /TMPL_IF -->
+
+	<!-- TMPL_IF NAME="AmazonContent" -->
+	<!-- Amazon Reviews -->
+	<div id="opac-isbd-amazonreviews">
+
+	    <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+	    <!-- TMPL_IF NAME="isbn" -->
+	        <h4><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&asin=<!-- TMPL_VAR NAME="isbn" -->&amp;store=books">Add your own review</a></h4>
+	    <!-- /TMPL_IF -->
+	    <!-- /TMPL_LOOP --><br/>
+
+	        <!-- TMPL_IF NAME="rating" -->
+	            <h4>Rating (from Amazon.com):</h4>
+	        <div id="starMT"><div id="starFull" style="width:<!-- TMPL_VAR NAME="rating" -->px"></div></div>
+
+	        <!-- TMPL_LOOP NAME="AMAZONREVIEWS" -->
+	            <div class="content_set">
+	            <!-- TMPL_IF NAME="summary" -->
+	            <h4 class="underline">  <!-- TMPL_VAR NAME="summary" --></h4>
+	            <!-- /TMPL_IF -->
+	            <!-- TMPL_IF NAME="comment" -->
+	                <p><!-- TMPL_VAR NAME="comment" -->
+	            </p><!-- /TMPL_IF -->
+	            </div>
+	    <!-- /TMPL_LOOP -->
+	    <!-- TMPL_ELSE -->
+
+	    <p> Sorry, there are no reviews available for this title. </p>
+
+	    <!-- /TMPL_IF -->
+	</div> <!-- itemReviews -->
+	<!-- /TMPL_IF-->
+	</div>
+	</div>
 	</div>
 	<div class="yui-u">
-
+	<div class="container">
 <ul id="action">
 
 <!-- TMPL_UNLESS NAME="norequests" -->
@@ -62,127 +180,14 @@
 <input type="submit" name="save" value="Go" /></form></div>
 </div>
 </div>
-
-<div class="yui-g">
-	<div id="bibliodescriptions" class="toptabs">
-<ul>   
-<!-- TMPL_IF name="subscriptionsnumber" --><li>
-            <a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#opac-isbd-subscriptions">Subscriptions</a>
-    </li><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="reviewson" --><li><a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#comments">Comments</a></li><!-- /TMPL_IF -->
- 	<!-- TMPL_IF NAME="AmazonContent" --><li><a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#opac-isbd-amazonreviews">Amazon Reviews</a></li><!-- /TMPL_IF -->
-</ul>
-
-	<div id="opac-isbd-subscriptions">    <!-- TMPL_IF name="subscriptionsnumber" -->
-        <h2>
-            We have <!-- TMPL_VAR name="subscriptionsnumber" --> subscription(s) associated with this title.
-        </h2>
-        <!-- TMPL_LOOP Name="subscriptions" -->
-            <h3>At library: <!-- TMPL_VAR name="branchcode" --> <!-- TMPL_VAR name="notes" --></h3>
-            <p>Below is a list of the three latest issues :</p>
-            <!-- TMPL_IF name="subscriptionnotes"-->
-                <p><!--TMPL_VAR Name="subscriptionnotes"--> </p>
-            <!-- /TMPL_IF -->
-            <!--TMPL_IF Name="latestserials"-->
-            <table>
-            <tr><th>Issue number</th><th>Date</th><th>Status</th></tr>
-            <!--TMPL_LOOP Name="latestserials"-->
-                <tr>
-                    <td>            <!--TMPL_VAR Name="serialseq"-->
-                    </td>
-                    <td>            <!--TMPL_VAR Name="planneddate"-->
-                    </td>
-                    <td>            <!--TMPL_IF Name="status1"-->Pending
-                        <!--TMPL_ELSE -->
-                            <!-- TMPL_IF Name="status2"-->Arrived
-                            <!--TMPL_ELSE -->
-                                <!-- TMPL_IF Name="status3"-->Late
-                                <!--TMPL_ELSE -->
-                                    <!-- TMPL_IF Name="status4"-->Missing
-                                    <!--TMPL_ELSE -->
-                                        <!-- TMPL_IF Name="status5"-->Not Issued
-                                        <!--/TMPL_IF-->
-                                    <!--/TMPL_IF-->
-                                <!--/TMPL_IF-->
-                            <!--/TMPL_IF-->
-                        <!--/TMPL_IF-->
-                    </td>
-                </tr>
-            <!--/TMPL_LOOP -->
-            </table>
-            <!-- /TMPL_IF -->
-        <!-- /TMPL_LOOP -->
-        <p><a href="/cgi-bin/koha/opac-serial-issues.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" title="Serial issues">Click here</a> for more information on subscription(s) history</p>
-    <!-- /TMPL_IF --></div>
-	
-<!-- TMPL_IF NAME="reviewson" -->
-<div id="comments">
-<!-- TMPL_IF NAME="reviews" -->
-        <!--TMPL_LOOP NAME="reviews"-->
-            <h5>
-                Comment by
-                <!--TMPL_VAR NAME="title"-->
-                <!--TMPL_VAR NAME="firstname"-->
-                <!--TMPL_VAR NAME="surname"-->
-            </h5>
-			<small>
-                <!--TMPL_VAR NAME="datereviewed"-->
-            </small>
-        <p>
-          <!--TMPL_VAR NAME="review" ESCAPE="HTML"-->
-        </p>
-        <!--/TMPL_LOOP-->
-    <!-- TMPL_ELSE  -->
-        <p>There are no comments for this item.</p>
-<!-- /TMPL_IF -->
-
-    <!-- TMPL_IF NAME="loggedinusername" -->
-       <p> <a href="javascript:Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->');">
-            Post or edit your comments on this item.
-        </a></p>
-    <!-- TMPL_ELSE -->
-        <p><a href="/cgi-bin/koha/opac-user.pl">Log in to your account</a> to post a comment.</p>
-    <!-- /TMPL_IF -->
-	</div>
-
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="AmazonContent" -->
-<!-- Amazon Reviews -->
-<div id="opac-isbd-amazonreviews">
-        
-    <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
-    <!-- TMPL_IF NAME="isbn" -->
-        <h4><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&asin=<!-- TMPL_VAR NAME="isbn" -->&amp;store=books">Add your own review</a></h4>
-    <!-- /TMPL_IF -->
-    <!-- /TMPL_LOOP --><br/>
-
-        <!-- TMPL_IF NAME="rating" -->
-            <h4>Rating (from Amazon.com):</h4>
-        <div id="starMT"><div id="starFull" style="width:<!-- TMPL_VAR NAME="rating" -->px"></div></div>
-
-        <!-- TMPL_LOOP NAME="AMAZONREVIEWS" -->
-            <div class="content_set">
-            <!-- TMPL_IF NAME="summary" -->
-            <h4 class="underline">  <!-- TMPL_VAR NAME="summary" --></h4>
-            <!-- /TMPL_IF -->
-            <!-- TMPL_IF NAME="comment" -->
-                <p><!-- TMPL_VAR NAME="comment" -->
-            </p><!-- /TMPL_IF -->
-            </div>
-    <!-- /TMPL_LOOP -->
-    <!-- TMPL_ELSE -->
-
-    <p> Sorry, there are no reviews available for this title. </p>
-
-    <!-- /TMPL_IF -->
-</div> <!-- itemReviews -->
-<!-- /TMPL_IF-->
 </div>
 
 </div>
 </div>
+<div class="yui-b">
+<div class="container">
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
 </div>
-	<!-- TMPL_IF NAME="OpacNav" --><div class="yui-b"><!--TMPL_INCLUDE NAME="navigation.inc" --></div><!-- /TMPL_IF -->
+</div>
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

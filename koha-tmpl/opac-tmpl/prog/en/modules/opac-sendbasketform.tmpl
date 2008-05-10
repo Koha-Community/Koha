@@ -2,12 +2,12 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body style="padding: 1em;" id="sendbasket">
-<!-- TMPL_IF NAME="email_add" -->
+<div class="container"><!-- TMPL_IF NAME="email_add" -->
 
 	<!-- TMPL_IF NAME="SENT" -->
 		<h3>Message Sent</h3>
 	    <p>The cart was sent to: <!-- TMPL_VAR NAME="email_add" --></p>
-		<p><a href="#" onclick="window.close(); return false;">Close window</a></p>
+		<p><a class="close" href="#">Close window</a></p>
 	<!-- /TMPL_IF  -->
 	<!-- TMPL_IF NAME="error" -->
 	<p>Problem sending the cart...</p>
@@ -30,9 +30,9 @@
     <li>
         <input type="hidden" name="bib_list" value="<!-- TMPL_VAR NAME="bib_list" -->" />
     </li></ol></fieldset>
-       <fieldset class="action"> <input type="submit" value="Send" /> <a class="cancel" href="#" onclick="window.close(); return false;">Cancel</a> </fieldset>
+       <fieldset class="action"> <input type="submit" value="Send" /> <a class="cancel close" href="#">Cancel</a> </fieldset>
 </form>
 
-<!-- /TMPL_IF -->
+<!-- /TMPL_IF --></div>
 </body>
 </html>

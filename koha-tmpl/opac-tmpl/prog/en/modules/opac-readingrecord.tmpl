@@ -8,7 +8,7 @@
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
-
+<div class="container">
 <!--CONTENT-->
 <h3><a href="/cgi-bin/koha/opac-user.pl"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->'s account</a> <img src="<!-- TMPL_VAR NAME="themelang" -->../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Checkout History</h3>
 
@@ -30,7 +30,7 @@ You have never borrowed anything from this library.
 </ul>
 <div class="tabs-container"><table id="readingrec">
 <tr>
-<!-- TMPL_IF NAME="AmazonContent" --><th>&nbsp;</th><!-- /TMPL_IF -->
+<!-- TMPL_IF EXPR="AmazonContent||GoogleJackets||BakerTaylorEnabled" --><th>&nbsp;</th><!-- /TMPL_IF -->
 <th><!-- TMPL_UNLESS NAME="orderbytitle" --><a
 href="/cgi-bin/koha/opac-readingrecord.pl?order=title">Title</a><!--
 TMPL_ELSE -->Title<!-- /TMPL_UNLESS --></th>
@@ -42,7 +42,13 @@ TMPL_ELSE -->Title<!-- /TMPL_UNLESS --></th>
 <!-- TMPL_LOOP NAME="READING_RECORD" -->
 
 <!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="AmazonContent" --><td><!-- TMPL_IF NAME="isbn" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.THUMBZZZ.jpg" alt="Book Cover Image" class="thumbnail" /></a><!-- /TMPL_IF --></td><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="AmazonContent" --><td><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="amazonisbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="amazonisbn" -->.01.THUMBZZZ.jpg" alt="Cover Image" /></a></td><!-- /TMPL_IF -->
+
+    <!-- TMPL_IF NAME="GoogleJackets" --><td><div style="block" title="<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" id="<!-- TMPL_VAR NAME="amazonisbn" -->" class="gbs-thumbnail"></div></td><!-- /TMPL_IF -->
+
+    <!-- TMPL_IF NAME="BakerTaylorEnabled" --><td><!-- TMPL_IF NAME="clean_isbn" --><a href="https://<!-- TMPL_VAR NAME="BakerTaylorBookstoreURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="clean_isbn" -->"><img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="clean_isbn" -->" /></a><!-- /TMPL_IF --></td><!-- /TMPL_IF -->
+
 <td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
                     <span class="item-details">
                         <!-- TMPL_VAR NAME="author" -->
@@ -56,13 +62,15 @@ TMPL_ELSE -->Title<!-- /TMPL_UNLESS --></th>
 </table></div></div>
 
 <!-- /TMPL_UNLESS -->
-
+</div>
 </div>
 </div>
 </div>
 <div class="yui-b">
+<div class="container">
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
 <!-- TMPL_INCLUDE name="usermenu.inc" -->
+</div>
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

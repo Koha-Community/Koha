@@ -7,7 +7,7 @@
 </head>
 <body id="addtolist">
 <div id="custom-doc" class="yui-t7">
-
+<div class="container">
 <!-- TMPL_UNLESS NAME="newshelf" --><!-- TMPL_IF NAME="multiple"-->
     <h1>Add <!-- TMPL_VAR NAME="total"--> items to <!-- TMPL_IF NAME="singleshelf" --><em><!-- TMPL_VAR NAME="shelfname" --></em>: <!-- TMPL_ELSE -->a list:<!-- /TMPL_IF --></h1>
 <!-- TMPL_ELSE -->
@@ -23,7 +23,7 @@
 <form name="f1" action="/cgi-bin/koha/opac-addbybiblionumber.pl" method="post">
     <fieldset class="rows"><legend>Select a List</legend>
 <ol><li>    <label for="shelfnumber">Add to list:</label> <!-- TMPL_VAR NAME="CGIvirtualshelves" --></li></ol>
- <!-- TMPL_LOOP NAME="biblios" --> <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->"><!-- /TMPL_LOOP -->
+ <!-- TMPL_LOOP NAME="biblios" --> <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><!-- /TMPL_LOOP -->
     <input type="hidden" name="modifyshelfcontents" value="1" /></fieldset>
     <fieldset class="action"><input type="submit" value="Save" class="submit" /> <a class="close cancel" href="#">Cancel</a></fieldset>
 </form>
@@ -52,14 +52,13 @@
                 <option value="1">Private</option>
                 <option value="2">Public</option>
             </select></li></ol></fieldset>
- <!-- TMPL_LOOP NAME="biblios" --> <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->"><!-- /TMPL_LOOP -->
+ <!-- TMPL_LOOP NAME="biblios" --> <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><!-- /TMPL_LOOP -->
     <fieldset class="action"><input type="submit" value="Save" class="submit" /> <a class="close cancel" href="#">Cancel</a></fieldset>
 </form><!-- /TMPL_UNLESS -->
 
 <p align="center">
-    <br /><br />
     <a href="#" class="close">close this window.</a>
 </p>
-
+</div></div>
 </body>
 </html>

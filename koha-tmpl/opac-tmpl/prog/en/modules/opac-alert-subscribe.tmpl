@@ -7,8 +7,8 @@
 <div id="doc3" class="yui-t1">
 <div id="bd">
     <div id="yui-main">
-    <div class="yui-b"><div class="yui-g">
-    <!-- TMPL_IF name="typeissue" -->
+    <div class="yui-b">
+<div class="container">    <!-- TMPL_IF name="typeissue" -->
         <h1 class="catalogue">Subscribe issue receive warning</h1>
             <form action="opac-alert-subscribe.pl" method="post">
                 <p>Do you want to receive an email when a new issue for this subscription arrives?</p>
@@ -20,7 +20,7 @@
                 <input type="submit" value="Yes">
                 <a href="opac-serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" >No</a>
             </form>
-        </div>
+
     <!-- /TMPL_IF -->
     <!-- TMPL_IF name="typeissuecancel" -->
         <h1 class="catalogue">Unsubscribe</h1>
@@ -34,8 +34,10 @@
                 <input type="submit" value="Yes" class="button">
                 <a href="opac-serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button">No</a>
             </form>
-        </div>
-    <!-- /TMPL_IF -->
+
+    <!-- /TMPL_IF --></div>
+</div>
+</div>
 </div>
 
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

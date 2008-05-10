@@ -8,7 +8,7 @@
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
-
+		<div class="container">
 <!--CONTENT-->
     <!-- TMPL_LOOP NAME="BORROWER_INFO" -->
         <h3><a href="/cgi-bin/koha/opac-user.pl"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->'s account</a> <img src="<!-- TMPL_VAR NAME="themelang" -->../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Fines and Charges</h3>
@@ -48,13 +48,15 @@
     <!-- TMPL_ELSE -->
         <h4>You have no Fines or Charges</h4>
     <!-- /TMPL_IF -->
-    
+</div>
 </div>
 </div>
 </div>
 <div class="yui-b">
+<div class="container">
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
 <!-- TMPL_INCLUDE name="usermenu.inc" -->
+</div>
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

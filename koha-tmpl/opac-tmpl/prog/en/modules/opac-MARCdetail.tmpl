@@ -7,8 +7,8 @@
 <!-- TMPL_IF NAME="OpacNav" --><div id="doc3" class="yui-t1"><!-- TMPL_ELSE --><div id="doc3" class="yui-t7"><!-- /TMPL_IF -->
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
-
+	<div class="yui-b">
+<div class="container"><div class="yui-g">
 <div id="toolbar">
 <ul>
 	<!-- TMPL_UNLESS NAME="norequests" --><!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="RequestOnOpac" --><li><a class="link reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a></li><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_UNLESS -->
@@ -27,8 +27,8 @@
         <tr><th colspan="2"><!-- TMPL_VAR name="tag" --></th></tr>
         <!-- TMPL_LOOP name="subfield" -->
                 <tr>
-                    <td ><!-- TMPL_VAR name="marc_lib" --></td>
-                    <td ><!-- TMPL_VAR name="marc_value" --></td>
+                    <td><!-- TMPL_VAR name="marc_lib" --></td>
+                    <td><!-- TMPL_VAR name="marc_value" --></td>
                 </tr>
             <!-- /TMPL_LOOP -->
         <!-- /TMPL_LOOP -->
@@ -46,8 +46,8 @@
         <tr><th colspan="2"><!-- TMPL_VAR name="tag" --></th></tr>
         <!-- TMPL_LOOP name="subfield" -->
                 <tr>
-                    <td ><!-- TMPL_VAR name="marc_lib" --></td>
-                    <td ><!-- TMPL_VAR name="marc_value" --></td>
+                    <td><!-- TMPL_VAR name="marc_lib" --></td>
+                    <td><!-- TMPL_VAR name="marc_value" --></td>
                 </tr>
             <!-- /TMPL_LOOP -->
         <!-- /TMPL_LOOP -->
@@ -56,18 +56,18 @@
         <tr><th colspan="2"><!-- TMPL_VAR name="tag" --></th></tr>
         <!-- TMPL_LOOP name="subfield" -->
                 <tr>
-                    <td ><!-- TMPL_VAR name="marc_lib" --></td>
-                    <td ><!-- TMPL_VAR name="marc_value" --></td>
+                    <td><!-- TMPL_VAR name="marc_lib" --></td>
+                    <td><!-- TMPL_VAR name="marc_value" --></td>
                 </tr>
             <!-- /TMPL_LOOP -->
         <!-- /TMPL_LOOP -->
 
         <!-- TMPL_LOOP name="4XX" -->
-        <tr><th colspan="2" ><!-- TMPL_VAR name="tag" --></td></tr>
+        <tr><th colspan="2" ><!-- TMPL_VAR name="tag" --></th></tr>
         <!-- TMPL_LOOP name="subfield" -->
                 <tr>
-                    <td ><!-- TMPL_VAR name="marc_lib" --></td>
-                    <td ><!-- TMPL_VAR name="marc_value" --></td>
+                    <td><!-- TMPL_VAR name="marc_lib" --></td>
+                    <td><!-- TMPL_VAR name="marc_value" --></td>
                 </tr>
             <!-- /TMPL_LOOP -->
         <!-- /TMPL_LOOP -->
@@ -76,8 +76,8 @@
         <tr><th colspan="2"><!-- TMPL_VAR name="tag" --></th></tr>
         <!-- TMPL_LOOP name="subfield" -->
                 <tr>
-                    <td ><!-- TMPL_VAR name="marc_lib" --></td>
-                    <td ><!-- TMPL_VAR name="marc_value" --></td>
+                    <td><!-- TMPL_VAR name="marc_lib" --></td>
+                    <td><!-- TMPL_VAR name="marc_value" --></td>
                 </tr>
             <!-- /TMPL_LOOP -->
         <!-- /TMPL_LOOP -->
@@ -86,8 +86,8 @@
         <tr><th colspan="2"><!-- TMPL_VAR name="tag" --></th></tr>
         <!-- TMPL_LOOP name="subfield" -->
                 <tr>
-                    <td ><!-- TMPL_VAR name="marc_lib" --></td>
-                    <td ><!-- TMPL_VAR name="marc_value" --></td>
+                    <td><!-- TMPL_VAR name="marc_lib" --></td>
+                    <td><!-- TMPL_VAR name="marc_value" --></td>
                 </tr>
             <!-- /TMPL_LOOP -->
         <!-- /TMPL_LOOP -->
@@ -96,8 +96,8 @@
         <tr><th colspan="2"><!-- TMPL_VAR name="tag" --></th></tr>
         <!-- TMPL_LOOP name="subfield" -->
                 <tr>
-                    <td ><!-- TMPL_VAR name="marc_lib" --></td>
-                    <td ><!-- TMPL_VAR name="marc_value" --></td>
+                    <td><!-- TMPL_VAR name="marc_lib" --></td>
+                    <td><!-- TMPL_VAR name="marc_value" --></td>
                 </tr>
             <!-- /TMPL_LOOP -->
         <!-- /TMPL_LOOP -->
@@ -106,8 +106,8 @@
         <tr><th colspan="2"><!-- TMPL_VAR name="tag" --></th></tr>
         <!-- TMPL_LOOP name="subfield" -->
                 <tr>
-                    <td ><!-- TMPL_VAR name="marc_lib" --></td>
-                    <td ><!-- TMPL_VAR name="marc_value" --></td>
+                    <td><!-- TMPL_VAR name="marc_lib" --></td>
+                    <td><!-- TMPL_VAR name="marc_value" --></td>
                 </tr>
             <!-- /TMPL_LOOP -->
         <!-- /TMPL_LOOP -->
@@ -116,8 +116,8 @@
         <tr><th colspan="2"><!-- TMPL_VAR name="tag" --></th></tr>
         <!-- TMPL_LOOP name="subfield" -->
                 <tr>
-                    <td ><!-- TMPL_VAR name="marc_lib" --></td>
-                    <td ><!-- TMPL_VAR name="marc_value" --></td>
+                    <td><!-- TMPL_VAR name="marc_lib" --></td>
+                    <td><!-- TMPL_VAR name="marc_value" --></td>
                 </tr>
             <!-- /TMPL_LOOP -->
         <!-- /TMPL_LOOP -->
@@ -139,10 +139,15 @@
                 <!-- /TMPL_LOOP -->
         </table><!-- TMPL_ELSE -->
         <p>No copies available.</p>
-    <!-- /TMPL_IF --></div>
-
+    <!-- /TMPL_IF -->
 </div>
 </div>
-	<!-- TMPL_IF NAME="OpacNav" --><div class="yui-b"><!--TMPL_INCLUDE NAME="navigation.inc" --></div><!-- /TMPL_IF -->
+</div>
+</div>
+<div class="yui-b">
+<div class="container">
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+</div>
+</div>
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

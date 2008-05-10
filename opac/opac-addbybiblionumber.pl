@@ -87,6 +87,7 @@ else {
     if ( @shelvesloop > 0 ) {
         $CGIvirtualshelves = CGI::scrolling_list (
             -name     => 'shelfnumber',
+            -id     => 'shelfnumber',
             -values   => \@shelvesloop,
             -labels   => \%shelvesloop,
             -size     => 1,

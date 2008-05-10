@@ -89,6 +89,23 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
     if ( $i % 2 ) {
         $line{'toggle'} = 1;
     }
+	
+	# XISBN Stuff
+	my $xisbn=$issues->[$i]->{'isbn'};
+	$xisbn =~ /(\d*[X]*)/;
+	$line{amazonisbn} = $1;		# FIXME: so it is OK if the ISBN = 'XXXXX' ?
+	my ($clean, $amazonisbn);
+	$amazonisbn = $1;
+	# these might be overkill, but they are better than the regexp above.
+	if (
+		$amazonisbn =~ /\b(\d{13})\b/ or
+		$amazonisbn =~ /\b(\d{10})\b/ or 
+		$amazonisbn =~ /\b(\d{9}X)\b/i
+	) {
+		$clean = $1;
+		$line{clean_isbn} = $1;
+	}
+	
     $line{biblionumber}   = $issues->[$i]->{'biblionumber'};
     $line{title}          = $issues->[$i]->{'title'};
     $line{author}         = $issues->[$i]->{'author'};
@@ -101,6 +118,22 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
     $line{'description'} = $itemtypes->{ $issues->[$i]->{'itemtype'} }->{'description'};
     $line{imageurl}       = $imgdir."/".$itemtypes->{ $issues->[$i]->{'itemtype'}  }->{'imageurl'}; 
     push( @loop_reading, \%line );
+}
+
+if (C4::Context->preference('BakerTaylorEnabled')) {
+	$template->param(
+		BakerTaylorEnabled  => 1,
+		BakerTaylorImageURL => &image_url(),
+		BakerTaylorLinkURL  => &link_url(),
+		BakerTaylorBookstoreURL => C4::Context->preference('BakerTaylorBookstoreURL'),
+	);
+}
+
+BEGIN {
+	if (C4::Context->preference('BakerTaylorEnabled')) {
+		require C4::External::BakerTaylor;
+		import C4::External::BakerTaylor qw(&image_url &link_url);
+	}
 }
 
 $template->param(

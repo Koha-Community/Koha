@@ -43,7 +43,7 @@
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-ge">
     <div class="yui-u first">
-	
+	<div class="container">
 	<div id="catalogue_detail_biblio">
 
 	<div id="bookcover">
@@ -156,7 +156,7 @@
     </span><!-- /TMPL_UNLESS -->
 
     <!-- TMPL_IF name="MARCURLS" -->
-	<span class="results_summary"><span class="label">Online Resources:</span>
+	<div class="results_summary"><span class="label">Online Resources:</span>
     <ul>    <!-- TMPL_LOOP name="MARCURLS" -->
 		<li><!-- TMPL_IF NAME="part" --><!-- TMPL_VAR NAME="part" -->
 			<br /><!-- /TMPL_IF --> 
@@ -167,7 +167,7 @@
 		<!-- TMPL_VAR NAME="linktext" --></a>
 			<!-- TMPL_IF NAME="notes" --><ul><!-- TMPL_LOOP NAME="notes" --><li><!-- TMPL_VAR NAME="note" --></li><!-- /TMPL_LOOP --></ul><!-- /TMPL_IF --></li>
             <!-- /TMPL_LOOP --></ul>
-    </span>
+    </div>
     <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="AuthorisedValueImages" -->
@@ -192,7 +192,7 @@
         <!-- TMPL_IF NAME="TagsInputOnDetail" -->
 		<span class="label" id="addtagl"><a href="#">Add</a></span>
          <form name="tagform<!-- TMPL_VAR NAME="biblionumber" -->" method="post" action="/cgi-bin/koha/opac-tags.pl" id="tagform">
-                <label for="newtag<!-- TMPL_VAR NAME="biblionumber" -->">New:</span><input name="newtag<!-- TMPL_VAR NAME="biblionumber" -->" id="newtag<!-- TMPL_VAR NAME="biblionumber" -->" maxlength="100" />
+                <label for="newtag<!-- TMPL_VAR NAME="biblionumber" -->">New:</label><input name="newtag<!-- TMPL_VAR NAME="biblionumber" -->" id="newtag<!-- TMPL_VAR NAME="biblionumber" -->" maxlength="100" />
                 <input name="tagbutton" class="input tagbutton" type="submit" value="Add" />
 				<a href="#">Cancel</a>
             </form>
@@ -209,7 +209,6 @@
         <span class="label">Enhanced Content:</span><a href="<!-- TMPL_VAR NAME="BakerTaylorContentURL" ESCAPE="HTML" -->">Content Cafe</a>
         </span>
     <!-- /TMPL_IF -->
-
 </div>
 
 <div id="bibliodescriptions" class="toptabs">
@@ -494,11 +493,11 @@
 <!-- /TMPL_IF-->
 
 </div>
-
+</div>
 </div>
 
 <div class="yui-u">
-
+<div class="container">
 <ul id="action">
 
 <!-- TMPL_UNLESS NAME="norequests" -->
@@ -562,10 +561,17 @@
 
 </div>
 </div>
+</div>
 
 
 </div>
 </div>
-	<!-- TMPL_IF NAME="OpacNav" --><div class="yui-b"><!--TMPL_INCLUDE NAME="navigation.inc" --></div><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="OpacNav" -->
+	<div class="yui-b">
+	<div class="container">
+	<!--TMPL_INCLUDE NAME="navigation.inc" -->
+	</div>
+	</div>
+<!-- /TMPL_IF -->
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

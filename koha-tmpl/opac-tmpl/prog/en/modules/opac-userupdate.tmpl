@@ -1,6 +1,7 @@
 <!-- TMPL_INCLUDE name="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo;  Updating Details for <!-- TMPL_LOOP name="BORROWER_INFO" --><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --><!-- /TMPL_LOOP -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
+<body>
 <!-- TMPL_INCLUDE name="masthead.inc" -->
 
 <div id="doc3" class="yui-t1">
@@ -8,13 +9,13 @@
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g" id="userupdate">
 
+<div class="container" style="overflow:auto;">
 <!-- TMPL_LOOP name="BORROWER_INFO" -->
-
 <h3><a href="/cgi-bin/koha/opac-user.pl"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->'s account</a> <img src="<!-- TMPL_VAR NAME="themelang" -->../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Your Personal Details</h3>
 
+<form action="/cgi-bin/koha/opac-userupdate.pl" method="get">
 <div class="yui-u first">
 
-<form action="/cgi-bin/koha/opac-userupdate.pl" method="get">
 <input type="hidden" name="modify" value="yes" />
 <fieldset class="brief"><legend>Name</legend><ol>
 <li><label for="firstname">First Name:</label> <input id="firstname" type="text" value="<!-- TMPL_VAR name="firstname" -->"  name="firstname" /></li>
@@ -25,7 +26,7 @@
 <fieldset class="brief"><legend>Contact Information</legend>
 <ol>
 <li>
-    <label for="streetaddress">Address:</label>
+    <label for="address">Address:</label>
 	<input type="text" name="address" value="<!-- TMPL_VAR NAME="address" -->" id="address" />
 	<input type="text" name="address2" value="<!-- TMPL_VAR NAME="address2" -->" id="address2" /></li>
 <li><label for="city">City, State:</label> <input id="city" type="text" value="<!-- TMPL_VAR name="city" -->"  name="city" /></li>
@@ -46,7 +47,7 @@
 <ol>
 <li>
     <label for="B_streetaddress">Permanent or Alternate Address:</label>
-        <textarea id="B_streetaddress" cols="25"  name="B_streetaddress"><!--TMPL_VAR NAME="B_streetnumber"--> <!-- TMPL_VAR name="B_address" --></textarea>
+        <textarea id="B_streetaddress" cols="25" rows="2" name="B_streetaddress"><!--TMPL_VAR NAME="B_streetnumber"--> <!-- TMPL_VAR name="B_address" --></textarea>
 </li>
 
 <li><label for="B_city">City, State:</label> <input id="B_city" type="text" value="<!-- TMPL_VAR name="B_city" -->"  name="B_city" /></li>
@@ -73,18 +74,19 @@
 <fieldset class="action">
 <p>Please make any necessary changes to your record.  Submitting the form will notify a library staff member, who will make the changes permanent.</p>
 <input type="submit" value="Submit Changes" /> <a class="cancel" href="/cgi-bin/koha/opac-user.pl">Cancel</a></fieldset>
-
 </div>
+
 </form>
-
 <!-- /TMPL_LOOP -->
-
+</div>
 </div>
 </div>
 </div>
 <div class="yui-b">
+<div class="container">
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
 <!-- TMPL_INCLUDE name="usermenu.inc" -->
+</div>
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
