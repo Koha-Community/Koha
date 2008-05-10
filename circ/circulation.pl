@@ -120,7 +120,7 @@ $printer = C4::Context->userenv->{'branchprinter'};
 
 my $barcode        = $query->param('barcode') || '';
 
-$barcode = barcodedecode($barcode) if(C4::Context->preference('itemBarcodeInputFilter'));
+$barcode = barcodedecode($barcode) if( $barcode && C4::Context->preference('itemBarcodeInputFilter'));
 my $year           = $query->param('year');
 my $month          = $query->param('month');
 my $day            = $query->param('day');
@@ -252,7 +252,6 @@ if ($borrowernumber) {
 # STEP 3 : ISSUING
 #
 #
-
 if ($barcode) {
   # always check for blockers on issuing
   my ( $error, $question ) =
@@ -276,19 +275,22 @@ if ($barcode) {
     else {
         my $noquestion = 1;
 #         Get the item title for more information
-      my $getmessageiteminfo  = GetBiblioFromItemNumber(undef,$barcode);
-    
-        foreach my $needsconfirmation ( keys %$question ) {
-            $template->param(
-                $needsconfirmation => $$question{$needsconfirmation},
-                getTitleMessageIteminfo => $getmessageiteminfo->{'title'},
-                NEEDSCONFIRMATION  => 1
-            );
-            $noquestion = 0;
+    	my $getmessageiteminfo  = GetBiblioFromItemNumber(undef,$barcode);
+		if ($noerror) {
+			# only pass needsconfirmation to template if issuing is possible 
+        	foreach my $needsconfirmation ( keys %$question ) {
+        	    $template->param(
+        	        $needsconfirmation => $$question{$needsconfirmation},
+        	        getTitleMessageIteminfo => $getmessageiteminfo->{'title'},
+        	        NEEDSCONFIRMATION  => 1
+        	    );
+        	    $noquestion = 0;
+        	}
         }
-        $template->param(
-       itemhomebranch => $getmessageiteminfo->{'homebranch'} ,               
-       duedatespec => $duedatespec,
+		# only pass needsconfirmation to template if issuing is possible 
+		$template->param(
+			 itemhomebranch => $getmessageiteminfo->{'homebranch'} ,	             
+			 duedatespec => $duedatespec,
         );
         if ( $noerror && ( $noquestion || $issueconfirmed ) ) {
             AddIssue( $borrower, $barcode, $datedue );
