@@ -106,21 +106,26 @@ Also deals with stocktaking.
 
 =head1 FUNCTIONS
 
-=head2 decode
+=head2 barcodedecode
 
-=head3 $str = &decode($chunk);
+=head3 $str = &barcodedecode($barcode);
 
 =over 4
 
 =item Generic filter function for barcode string.
+Called on every circ if the System Pref itemBarcodeInputFilter is set.
+Will do some manipulation of the barcode for systems that deliver a barcode
+to circulation.pl that differs from the barcode stored for the item.
+For proper functioning of this filter, calling the function on the 
+correct barcode string (items.barcode) should return an unaltered barcode.
 
 =back
 
 =cut
 
-# FIXME From Paul : i don't understand what this sub does & why it has to be called on every circ. Speak of this with chris maybe ?
 # FIXME -- the &decode fcn below should be wrapped into this one.
-
+# FIXME -- these plugins should be moved out of Circulation.pm
+#
 sub barcodedecode {
     my ($barcode) = @_;
     my $filter = C4::Context->preference('itemBarcodeInputFilter');
@@ -138,8 +143,14 @@ sub barcodedecode {
 	        return $barcode;
 	    }
 	} elsif($filter eq 'T-prefix') {
-		my $num = ( $barcode =~ /^[Tt] /) ? substr($barcode,2) + 0 : $barcode;
-		return sprintf( "T%07d",$num);
+		if ( $barcode =~ /^[Tt]/) {
+			if (substr($barcode,1,1) eq '0') {
+				return $barcode;
+			} else {
+				$barcode = substr($barcode,2) + 0 ;
+			}
+		}
+		return sprintf( "T%07d",$barcode);
 	}
 }
 
