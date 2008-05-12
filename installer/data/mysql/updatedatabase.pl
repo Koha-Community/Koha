@@ -1501,6 +1501,8 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	SetVersion ($DBversion);
 }
 
+
+
 $DBversion = "3.00.00.080";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE subscription CHANGE monthlength monthlength int(11) default '0'");
