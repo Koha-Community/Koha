@@ -175,6 +175,7 @@ my %tabsysprefs;
     $tabsysprefs{NotifyBorrowerDeparture}="Patrons";
     $tabsysprefs{AddPatronLists}="Patrons";
     $tabsysprefs{PatronsPerPage}="Patrons";
+    $tabsysprefs{ExtendedPatronAttributes}="Patrons";
 
 # I18N/L10N
     $tabsysprefs{dateformat}="I18N/L10N";

@@ -1512,6 +1512,38 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	SetVersion ($DBversion);
 }
 
+
+
+$DBversion = "3.00.00.081";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("CREATE TABLE `borrower_attribute_types` (
+                `code` varchar(10) NOT NULL,
+                `description` varchar(255) NOT NULL,
+                `repeatable` tinyint(1) NOT NULL default 0,
+                `unique_id` tinyint(1) NOT NULL default 0,
+                `opac_display` tinyint(1) NOT NULL default 0,
+                `password_allowed` tinyint(1) NOT NULL default 0,
+                `staff_searchable` tinyint(1) NOT NULL default 0,
+                `authorised_value_category` varchar(10) default NULL,
+                PRIMARY KEY  (`code`)
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+    $dbh->do("CREATE TABLE `borrower_attributes` (
+                `borrowernumber` int(11) NOT NULL,
+                `code` varchar(10) NOT NULL,
+                `attribute` varchar(30) default NULL,
+                `password` varchar(30) default NULL,
+                KEY `borrowernumber` (`borrowernumber`),
+                KEY `code_attribute` (`code`, `attribute`),
+                CONSTRAINT `borrower_attributes_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`)
+                    ON DELETE CASCADE ON UPDATE CASCADE,
+                CONSTRAINT `borrower_attributes_ibfk_2` FOREIGN KEY (`code`) REFERENCES `borrower_attribute_types` (`code`)
+                    ON DELETE CASCADE ON UPDATE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ExtendedPatronAttributes','0','Use extended patron IDs and attributes',NULL,'YesNo')");
+    print "Upgrade to $DBversion done (added borrower_attributes and  borrower_attribute_types)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
