@@ -471,20 +471,22 @@ C<$offset> Is the number of days that this function has to count from $date.
 sub addDate {
     my ($self, $startdate, $offset) = @_;
     my ($year,$month,$day) = split("-",$startdate->output('iso'));
+	my $daystep = 1;
 	if ($offset < 0) { # In case $offset is negative
-        $offset = $offset*(-1);
+       # $offset = $offset*(-1);
+		$daystep = -1;
     }
 	my $daysMode = C4::Context->preference('useDaysMode');
     if ($daysMode eq 'Datedue') {
         ($year, $month, $day) = &Date::Calc::Add_Delta_Days($year, $month, $day, $offset );
-        while ($self->isHoliday($day, $month, $year)) {
-                ($year, $month, $day) = &Date::Calc::Add_Delta_Days($year, $month, $day, 1);
+	 	while ($self->isHoliday($day, $month, $year)) {
+                ($year, $month, $day) = &Date::Calc::Add_Delta_Days($year, $month, $day, $daystep);
         }
     } elsif($daysMode eq 'Calendar') {
-        while ($offset > 0) {
-                ($year, $month, $day) = &Date::Calc::Add_Delta_Days($year, $month, $day, 1);
+        while ($offset !=  0) {
+                ($year, $month, $day) = &Date::Calc::Add_Delta_Days($year, $month, $day, $daystep);
             if (!($self->isHoliday($day, $month, $year))) {
-                $offset = $offset - 1;
+                $offset = $offset - $daystep;
 			}
         }
 	} else { ## ($daysMode eq 'Days') 
@@ -504,11 +506,10 @@ useDaysMode syspref has no effect here.
 =cut
 
 sub daysBetween {
-   # my ($self, $dayFrom, $monthFrom, $yearFrom, $dayTo, $monthTo, $yearTo) = @_;
     my ( $self, $startdate, $enddate ) = @_ ; 
 	my ($yearFrom,$monthFrom,$dayFrom) = split("-",$startdate->output('iso'));
 	my ($yearTo,$monthTo,$dayTo) = split("-",$enddate->output('iso'));
-	if (($yearFrom >= $yearTo) && ($monthFrom >= $monthTo) && ($dayFrom >= $dayTo)) {
+	if (Date_to_Days($yearFrom,$monthFrom,$dayFrom) > Date_to_Days($yearTo,$monthTo,$dayTo)) {
 		return 0;
 		# we don't go backwards  ( FIXME - handle this error better )
 	}
