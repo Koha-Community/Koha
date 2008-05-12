@@ -286,7 +286,8 @@ sub SendAlerts {
                     From    => $borinfo->{email},
                     Subject => "" . $innerletter->{title},
                     Message => "" . $innerletter->{content},
-                );
+                    'Content-Type' => 'text/plain; charset="utf8"',
+                    );
                 sendmail(%mail);
 
 # warn "sending to $mail{To} From $mail{From} subj $mail{Subject} Mess $mail{Message}";
@@ -416,6 +417,7 @@ sub SendAlerts {
                 From    => $userenv->{emailaddress},
                 Subject => "" . $innerletter->{title},
                 Message => "" . $innerletter->{content},
+                'Content-Type' => 'text/plain; charset="utf8"',
             );
             sendmail(%mail);
             logaction(

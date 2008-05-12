@@ -427,7 +427,8 @@ sub ModStatus {
         To => $emailinfo->{byemail},
         From => $emailinfo->{libemail},
         Subject => 'Koha suggestion',
-        Message => "".$template->output
+        Message => "".$template->output,
+        'Content-Type' => 'text/plain; charset="utf8"',
     );
     sendmail(%mail);
 }

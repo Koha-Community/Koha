@@ -99,7 +99,8 @@ EOF
         To      => $updateemailaddress,
         From    => $updateemailaddress,
         Subject => "User Request for update of Record.",
-        Message => $message
+        Message => $message,
+        'Content-Type' => 'text/plain; charset="utf8"',
     );
 
     if ( sendmail %mail ) {

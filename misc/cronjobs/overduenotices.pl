@@ -134,6 +134,7 @@ while (($itemcount,$borrowernumber,$firstname,$lastname,$address1,$address2,$cit
 								From    => $from,
 								Subject => $mailtitle,
 								Message => $notice,
+                                'Content-Type' => 'text/plain; charset="utf8"',
 					);
 				sendmail(%mail);
 			}
@@ -163,6 +164,7 @@ if ($count) {
 							From    => $from,
 							Subject => 'Koha overdues',
 							Message => $notice,
+                            'Content-Type' => 'text/plain; charset="utf8"',
 				);
 			sendmail(%mail);
 		}

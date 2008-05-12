@@ -244,6 +244,7 @@ foreach my $branchcode (@branches) {
                                         From    => $emailaddress,
                                         Subject => $mailtitle,
                                         Message => $notice,
+                                        'Content-Type' => 'text/plain; charset="utf8"',
                                     );
                             sendmail(%mail);
                         }
@@ -271,6 +272,7 @@ foreach my $branchcode (@branches) {
                                 From    => $emailaddress,
                                 Subject => 'Koha overdues',
                                 Message => $notice,
+                                'Content-Type' => 'text/plain; charset="utf8"',
                             );
                     sendmail(%mail);
                 }

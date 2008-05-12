@@ -101,6 +101,7 @@ my %mail = ( To      => '$admin',
              From    => '$library',
              Subject => 'Reserve problems',
              Message => $message,
+            'Content-Type' => 'text/plain; charset="utf8"',
  	    );
 sendmail(%mail);
 
