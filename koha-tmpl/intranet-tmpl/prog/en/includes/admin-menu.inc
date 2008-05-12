@@ -16,6 +16,7 @@
 	<li><a href="/cgi-bin/koha/admin/categorie.pl">Patron types and categories</a></li>
 	<li><a href="/cgi-bin/koha/admin/cities.pl">Cities and towns</a></li>
 	<li><a href="/cgi-bin/koha/admin/roadtype.pl">Road types</a></li>
+	<li><a href="/cgi-bin/koha/admin/patron-attr-types.pl">Patron attribute types</a></li>
 	<li><a href="/cgi-bin/koha/admin/issuingrules.pl">Circulation rules</a></li>
 	<li><a href="/cgi-bin/koha/admin/smart-rules.pl">Alternate circulation rules</a></li>
 	<li><a href="/cgi-bin/koha/admin/finesrules.pl">Fines rules</a></li>

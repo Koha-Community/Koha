@@ -1,0 +1,239 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Administration &rsaquo; Patron Attribute Types
+<!-- TMPL_IF name="attribute_type_form" -->
+  <!-- TMPL_IF name="edit_attribute_type" -->
+    &rsaquo; Modify patron attribute type
+  <!-- TMPL_ELSE -->
+    &rsaquo; Add patron attribute type
+  <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_attribute_type_form" -->
+  &rsaquo; Confirm deletion of patron attribute type &quot;<!-- TMPL_VAR name="code" -->&quot;
+<!-- /TMPL_IF -->
+</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<script type="text/javascript">
+//<![CDATA[
+
+function DoCancel(f) {
+  f.op.value='';
+  document.Aform.submit();
+}
+
+function CheckAttributeTypeForm(f) {
+    var ok=1;
+    var _alertString="";
+    var alertString2;
+    if (f.code.value.length==0) {
+        _alertString += "\n- " + _("Patron attribute type code missing");
+    }
+    if (f.description.value.length==0) {
+        _alertString += "\n- " + _("Description missing");
+    }
+    if (_alertString.length==0) {
+        document.Aform.submit();
+    } else {
+        alertString2  = _("Form not submitted because of the following problem(s)");
+        alertString2 += "\n------------------------------------------------------------------------------------\n";
+        alertString2 += _alertString;
+        alert(alertString2);
+    }
+}
+
+//]]>
+</script>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="display_list" -->Patron Attribute Types<!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/patron-attr-types.pl">Patron Attribute Types</a><!-- /TMPL_IF -->
+<!-- TMPL_IF name="attribute_type_form" -->
+  <!-- TMPL_IF name="edit_attribute_type" -->
+    &rsaquo; Modify patron attribute type
+  <!-- TMPL_ELSE -->
+    &rsaquo; Add patron attribute type
+  <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_attribute_type_form" -->
+  &rsaquo; Confirm deletion of patron attribute type &quot;<!-- TMPL_VAR name="code" -->&quot;
+<!-- /TMPL_IF -->
+</div>
+
+<div id="doc3" class="yui-t2">
+
+   <div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+
+<!-- TMPL_IF name="WARNING_extended_attributes_off" -->
+<div class="dialog message">Because the 'ExtendedPatronAttributes` system preference is currently OFF, extended patron attributes 
+cannot be given to patron records.  Go 
+<a href="/cgi-bin/koha/admin/systempreferences.pl?op=add_form&amp;searchfield=ExtendedPatronAttributes">here</a> if you wish to turn 
+this feature on.</div>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="attribute_type_form" -->
+  <!-- TMPL_IF name="edit_attribute_type" -->
+<h2>Modify patron attribute type</h2>
+  <!-- TMPL_ELSE -->
+<h2>Add patron attribute type</h2>
+  <!-- /TMPL_IF -->
+<!-- TMPL_IF name="duplicate_code_error" -->
+<div class="dialog message">Could not add patron attribute type &quot;<!-- TMPL_VAR name="duplicate_code_error" -->&quot; 
+    &mdash; one with that code already exists.
+</div>
+<!-- /TMPL_IF -->
+<form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
+  <input type="hidden" name="op" value="<!-- TMPL_VAR name="confirm_op"-->" />
+  <fieldset class="rows">
+    <ol>
+      <li>
+          <!-- TMPL_IF name="edit_attribute_type" -->
+		  <span class="label">Patron attribute type code: </span>
+            <input type="hidden" name="code" value="<!-- TMPL_VAR name="code" -->" />
+            <!-- TMPL_VAR name="code" -->
+          <!-- TMPL_ELSE -->
+		  <label for="code">Patron attribute type code: </label>
+            <input type="text" id="code" name="code"  size="10" maxlength="10" />
+          <!-- /TMPL_IF -->
+       </li>
+       <li><label for="description">Description: </label>
+           <input type="text" id="description" name="description" size="50" maxlength="250" 
+                  value="<!-- TMPL_VAR name="description" escape="HTML" -->" />
+       </li>
+       <li><label for="repeatable">Repeatable: </label>
+            <input type="checkbox" id="repeatable" name="repeatable" <!-- TMPL_VAR name="repeatable_checked" --> 
+                    <!-- TMPL_VAR name="repeatable_disabled" --> />
+            <span>Check to let a patron record have multiple values of this attribute.  
+                  This setting cannot be changed after an attribute is defined.</span>
+       </li>
+       <li><label for="unique_id">Unique identifier: </label>
+            <input type="checkbox" id="unique_id" name="unique_id" <!-- TMPL_VAR name="unique_id_checked" --> 
+                    <!-- TMPL_VAR name="unique_id_disabled" --> />
+            <span>If checked, attribute will be a unique identifier &mdash; if a value is given to a patron record, the same value
+                  cannot be given to a different record.  This setting cannot be changed after an attribute is defined.</span>
+       </li>
+       <li><label for="password_allowed">Allow password: </label>
+            <input type="checkbox" id="password_allowed" name="password_allowed" <!-- TMPL_VAR name="password_allowed_checked" --> />
+            <span>Check to make it possible to associate a password with this attribute.</span>
+       </li>
+       <li><label for="opac_display">Display in OPAC: </label>
+            <input type="checkbox" id="opac_display" name="opac_display" <!-- TMPL_VAR name="opac_display_checked" --> />
+            <span>Check to display this attribute on a patron's details page in the OPAC.</span>
+       </li>
+       <li><label for="staff_searchable">Searchable: </label>
+            <input type="checkbox" id="staff_searchable" name="staff_searchable" <!-- TMPL_VAR name="staff_searchable_checked" --> />
+            <span>Check to make this attribute staff_searchable in the staff patron search.</span>
+       </li>
+        <li><label for="authorised_value_category">Authorised value category: </label>
+            <select name="authorised_value_category" id="authorised_value_category">
+                <option value="" />
+                <!-- TMPL_LOOP name="authorised_value_categories" -->
+                    <!-- TMPL_IF name="selected" -->
+                        <option value="<!-- TMPL_VAR name="category" -->" selected="selected">
+                            <!-- TMPL_VAR name="category" -->
+                        </option>
+                    <!-- TMPL_ELSE -->
+                        <option value="<!-- TMPL_VAR name="category" -->">
+                            <!-- TMPL_VAR name="category" -->
+                        </option>
+                    <!-- /TMPL_IF -->
+                <!-- /TMPL_LOOP -->
+            </select>
+            <span>Authorised value category; if one is selected, the patron record input page will only allow values 
+                  to be chosen from the authorised value list.  However, an authorised value list is not 
+                  enforced during batch patron import.</span>
+        </li>
+    </ol>
+  </fieldset>
+  <fieldset class="action">
+    <!-- TMPL_IF name="edit_attribute_type" -->
+    <input type="button" value="Save"
+           onclick="CheckAttributeTypeForm(this.form)" />
+    <!-- TMPL_ELSE -->
+    <input type="button" value="Save"
+           onclick="CheckAttributeTypeForm(this.form)" />
+    <!-- /TMPL_IF-->
+    <a class="cancel" href="/cgi-bin/koha/admin/patron-attr-types.pl">Cancel</a>
+  </fieldset>
+</form>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="delete_attribute_type_form" -->
+<div class="dialog alert"><h3>Confirm deletion of patron attribute type <span class="ex">'<!-- TMPL_VAR name="code" -->' (<!-- TMPL_VAR name="description" -->)</span>?</h3>
+<form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
+  <input type="hidden" name="op" value="<!-- TMPL_VAR name="confirm_op"-->" />
+  <input type="hidden" name="code" value="<!-- TMPL_VAR name="code" -->" />
+    <input type="submit" value="Delete patron attribute type" class="approve" /></form>
+	<form action="<!-- TMPL_VAR name="script_name" -->" method="get">
+    <input type="submit" value="No, Do Not Delete" class="deny" />
+</form></div>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="display_list" -->
+
+<div id="toolbar">
+	<script type="text/javascript">
+	//<![CDATA[
+	// prepare DOM for YUI Toolbar
+	 $(document).ready(function() {
+	    yuiToolbar();
+	 });
+	// YUI Toolbar Functions
+	function yuiToolbar() {
+	    new YAHOO.widget.Button("newrule");
+	}	//]]>
+	</script>
+	<ul class="toolbar">
+	<li><a id="newrule" href="<!-- TMPL_VAR name="script_name" -->?op=add_attribute_type">New Patron Attribute Type</a></li>
+</ul></div>
+
+<h2>Patron Attribute Types</h2>
+<!-- TMPL_IF name="added_attribute_type" -->
+<div class="dialog message">Added patron attribute type &quot;<!-- TMPL_VAR name="added_attribute_type" -->&quot;</div>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="edited_attribute_type" -->
+<div class="dialog message">Modified patron attribute type &quot;<!-- TMPL_VAR name="edited_attribute_type" -->&quot;</div>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="deleted_attribute_type" -->
+<div class="dialog message">Deleted patron attribute type &quot;<!-- TMPL_VAR name="deleted_attribute_type" -->&quot;</div>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="ERROR_delete_in_use" -->
+<div class="dialog message">Could not delete patron attribute type &quot;<!-- TMPL_VAR name="ERROR_delete_in_use" -->&quot; 
+    &mdash; it is in use by <!-- TMPL_VAR name="ERROR_num_patrons" --> patron records</div>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="ERROR_delete_not_found" -->
+<div class="dialog message">Could not delete patron attribute type &quot;<!-- TMPL_VAR name="ERROR_delete_not_found" -->&quot; 
+    &mdash; it was already absent from the database.</div>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="available_attribute_types" --><table>
+  <tr>
+    <th>Code</th>
+    <th>Description</th>
+    <th>Actions</th>
+  </tr>
+  <!-- TMPL_LOOP name="available_attribute_types" -->
+  <tr>
+    <td><!-- TMPL_VAR name="code" --></td>
+    <td><!-- TMPL_VAR name="description" --></td>
+    <td>
+      <a href="<!-- TMPL_VAR name="script_name" -->?op=edit_attribute_type&amp;code=<!-- TMPL_VAR name="code" escape="HTML" -->">Edit</a>
+      <a href="<!-- TMPL_VAR name="script_name" -->?op=delete_attribute_type&amp;code=<!-- TMPL_VAR name="code" escape="HTML" -->">Delete</a>
+    </td>
+  </tr>
+  <!-- /TMPL_LOOP -->
+</table><!-- TMPL_ELSE --><p>There are no saved patron attribute types.</p><!-- /TMPL_IF -->
+
+<div class="paginationBar"><!-- TMPL_VAR NAME="pagination_bar" --></div>
+
+<!-- /TMPL_IF -->
+ 
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
