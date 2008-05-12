@@ -7884,4 +7884,4 @@ INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VA
 INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VALUES (146, 'SUGGEST', 'Document ne correspondant pas à notre politique d''acquisition', 'Document ne correspondant pas à notre politique d''acquisition');
 INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VALUES (147, 'COUNTRY', 'FR', 'France');
 INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VALUES (148, 'COUNTRY', 'EN', 'Grande Bretagne');
-INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VALUES (147, 'COUNTRY', 'DE', 'Allemagne');
+INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VALUES (149, 'COUNTRY', 'DE', 'Allemagne');
