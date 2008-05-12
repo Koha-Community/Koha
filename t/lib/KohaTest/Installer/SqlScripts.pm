@@ -51,14 +51,21 @@ sub installer_all_sample_data : Tests {
                     my ($fwk_language, $installed_list) = $self->{installer}->load_sql_in_order($all_languages, @$list);
 
                     # extract list of files
-                    my @file_list = map { map { $_ } @{  $_->{fwklist} } } @$installed_list; 
+                    my $level;
+                    my @file_list = map { 
+                                            map { $_->{level} = $level; $_ } @{ $level = $_->{level}; $_->{fwklist} } 
+                                        } @$installed_list; 
                     my $num_processed = scalar(@file_list);
                     cmp_ok($num_processed, '==', $sql_count, "processed all sql scripts for $lang_code, $flavour");
 
-                    my %sql_to_load = map { my $file = $_; $file =~ s!^(.*)(/|\\)!!; $file => 1 } @$list;                    
+                    my %sql_to_load = map { my $file = $_; 
+                                            my @file = split qr(\/|\\), $file; 
+                                            join("\t", $file[-2], $file[-1]) => 1 
+                                           } @$list;
                     foreach my $sql (@file_list) {
-                        ok(exists($sql_to_load{ $sql->{fwkname} }), "SQL script $sql->{fwkname} is on list");
-                        delete $sql_to_load{ $sql->{fwkname} };
+                        ok(exists($sql_to_load{ "$sql->{level}\t$sql->{fwkname}" }), 
+                            "SQL script $sql->{level}/$sql->{fwkname} is on list");
+                        delete $sql_to_load{ "$sql->{level}\t$sql->{fwkname}" };
                         is($sql->{error}, "", "no errors when loading $sql->{fwkname}");
                     }
                     ok(not(%sql_to_load), "no SQL scripts for $lang_code, $flavour left unloaded");
