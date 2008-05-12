@@ -29,6 +29,7 @@ use C4::Circulation;
 use C4::Output;
 use C4::Dates qw/format_date/;
 use C4::Members;
+use C4::Members::Attributes;
 use C4::Branch;
 
 my $query = new CGI;
@@ -119,6 +120,14 @@ $borr->{'dateenrolled'} = format_date( $borr->{'dateenrolled'} );
 $borr->{'expiry'}       = format_date( $borr->{'expiry'} );
 $borr->{'dateofbirth'}  = format_date( $borr->{'dateofbirth'} );
 $borr->{'ethnicity'}    = fixEthnicity( $borr->{'ethnicity'} );
+
+if (C4::Context->preference('ExtendedPatronAttributes')) {
+    my $attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber, 'opac');
+    if (scalar(@$attributes) > 0) {
+        $borr->{ExtendedPatronAttributes} = 1;
+        $borr->{patron_attributes} = $attributes;
+    }
+}
 
 my @bordat;
 $bordat[0] = $borr;
