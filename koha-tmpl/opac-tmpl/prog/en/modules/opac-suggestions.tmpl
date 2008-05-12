@@ -2,6 +2,7 @@
 <!-- TMPL_IF name="op_add" -->Enter a new purchase suggestion<!-- /TMPL_IF -->
 <!-- TMPL_IF name="op_else" -->Purchase Suggestions<!-- /TMPL_IF -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.pack.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pack.js"></script>
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
@@ -32,6 +33,14 @@ $.tablesorter.addParser({
 				<!-- /TMPL_IF -->
 				}
 			}); 
+			$("#CheckAll").click(function(){
+		        $(".checkboxed").checkCheckboxes();
+		        return false;
+		    });
+		    $("#CheckNone").click(function(){
+		        $(".checkboxed").unCheckCheckboxes();
+		        return false;
+		    }); 
        });
 //]]>
 </script>
@@ -92,7 +101,10 @@ $.tablesorter.addParser({
             </form><!-- /TMPL_IF -->
         <form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
             <input type="hidden" name="op" value="delete_confirm" />
-			<table id="suggestt">
+			<div><span class="checkall"><a href="#" id="CheckAll">Select All</a></span>
+		<span class="clearall"><a href="#" id="CheckNone">Clear All</a></span> | <!-- TMPL_IF NAME="loggedinusername" --><a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a><!-- TMPL_ELSE --><!-- TMPL_IF NAME="AnonSuggestions" --><a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a><!-- /TMPL_IF --><!-- /TMPL_IF -->
+</div>
+			<table id="suggestt" class="checkboxed">
 			<thead><tr>
             <!-- TMPL_IF NAME="loggedinusername" --><th>&nbsp;</th><!-- /TMPL_IF -->
             <th>Summary</th>
@@ -140,7 +152,6 @@ $.tablesorter.addParser({
         </form>
     <!-- TMPL_ELSE --><p>There are no pending purchase suggestions.</p><!-- /TMPL_IF -->
 	
-	<!-- TMPL_IF NAME="loggedinusername" --><a href="/cgi-bin/koha/opac-suggestions.pl?op=add">Add a purchase suggestion</a><!-- TMPL_ELSE --><!-- TMPL_IF NAME="AnonSuggestions" --><a href="/cgi-bin/koha/opac-suggestions.pl?op=add">Add a purchase suggestion</a><!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 </div>
 </div>
