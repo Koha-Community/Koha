@@ -495,49 +495,33 @@ sub addDate {
 
 =item daysBetween
 
-    my $daysBetween = $calendar->daysBetween($dayFrom, $monthFrom, $yearFrom,
-                                             $dayTo, $monthTo, $yearTo)
+    my $daysBetween = $calendar->daysBetween($startdate, $enddate )
 
-C<$dayFrom> Is the starting day of the interval.
+C<$startdate>  and C<$enddate> are C4::Dates objects that define the interval.
 
-C<$monthFrom> Is the starting month of the interval.
-
-C<$yearFrom> Is the starting year of the interval.
-
-C<$dayTo> Is the ending day of the interval.
-
-C<$monthTo> Is the ending month of the interval.
-
-C<$yearTo> Is the ending year of the interval.
-
+Returns the number of non-holiday days in the interval.
+useDaysMode syspref has no effect here.
 =cut
 
 sub daysBetween {
-    my ($self, $dayFrom, $monthFrom, $yearFrom, $dayTo, $monthTo, $yearTo) = @_;
-    
-    my $daysMode = C4::Context->preference('useDaysMode');
-#FIXME : useDaysMode == 'Datedue' is not implemented here, but neither is this fcn used anywhere.
-    my $count = 1;
+   # my ($self, $dayFrom, $monthFrom, $yearFrom, $dayTo, $monthTo, $yearTo) = @_;
+    my ( $self, $startdate, $enddate ) = @_ ; 
+	my ($yearFrom,$monthFrom,$dayFrom) = split("-",$startdate->output('iso'));
+	my ($yearTo,$monthTo,$dayTo) = split("-",$enddate->output('iso'));
+	if (($yearFrom >= $yearTo) && ($monthFrom >= $monthTo) && ($dayFrom >= $dayTo)) {
+		return 0;
+		# we don't go backwards  ( FIXME - handle this error better )
+	}
+    my $count = 0;
     my $continue = 1;
-    if ($daysMode eq 'Days') {
-        while ($continue) {
-            if (($yearFrom != $yearTo) || ($monthFrom != $monthTo) || ($dayFrom != $dayTo)) {
-                ($yearFrom, $monthFrom, $dayFrom) = &Date::Calc::Add_Delta_Days($yearFrom, $monthFrom, $dayFrom, 1);
+    while ($continue) {
+        if (($yearFrom != $yearTo) || ($monthFrom != $monthTo) || ($dayFrom != $dayTo)) {
+            if (!($self->isHoliday($dayFrom, $monthFrom, $yearFrom))) {
                 $count++;
-            } else {
-                $continue = 0;
             }
-        }
-    } else {
-        while ($continue) {
-            if (($yearFrom != $yearTo) || ($monthFrom != $monthTo) || ($dayFrom != $dayTo)) {
-                if (!($self->isHoliday($dayFrom, $monthFrom, $yearFrom))) {
-                    $count++;
-                }
-                ($yearFrom, $monthFrom, $dayFrom) = &Date::Calc::Add_Delta_Days($yearFrom, $monthFrom, $dayFrom, 1);
-            } else {
-                $continue = 0;
-            }
+            ($yearFrom, $monthFrom, $dayFrom) = &Date::Calc::Add_Delta_Days($yearFrom, $monthFrom, $dayFrom, 1);
+        } else {
+            $continue = 0;
         }
     }
     return($count);
