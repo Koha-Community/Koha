@@ -1171,8 +1171,10 @@ Returns a book.
 C<$barcode> is the bar code of the book being returned. C<$branch> is
 the code of the branch where the book is being returned.  C<$exemptfine>
 indicates that overdue charges for the item will be removed.  C<$dropbox>
-indicates that the check-in date is assumed to be yesterday.  If overdue
+indicates that the check-in date is assumed to be yesterday, or the last
+non-holiday as defined in C4::Calendar .  If overdue
 charges are applied and C<$dropbox> is true, the last charge will be removed.
+This assumes that the fines accrual script has run for _today_.
 
 C<&AddReturn> returns a list of four items:
 
@@ -1245,6 +1247,7 @@ sub AddReturn {
         # check if the book is in a permanent collection....
         my $hbr      = $iteminformation->{C4::Context->preference("HomeOrHoldingBranch")};
         my $branches = GetBranches();
+		# FIXME -- This 'PE' attribute is largely undocumented.  afaict, there's no user interface that reflects this functionality.
         if ( $hbr && $branches->{$hbr}->{'PE'} ) {
             $messages->{'IsPermanent'} = $hbr;
         }
@@ -1269,11 +1272,20 @@ sub AddReturn {
     # case of a return of document (deal with issues and holdingbranch)
     
         if ($doreturn) {
+			my $circControlBranch;
 			if($dropbox) {
 				# don't allow dropbox mode to create an invalid entry in issues ( issuedate > returndate)
 				undef($dropbox) if ( $iteminformation->{'issuedate'} eq C4::Dates->today('iso') );
+				if (C4::Context->preference('CircControl') eq 'ItemHomeBranch' ) {
+					$circControlBranch = $iteminformation->{homebranch};
+				} elsif ( C4::Context->preference('CircControl') eq 'PatronLibrary') {
+					$circControlBranch = $borrower->{branchcode};
+				} else { # CircControl must be PickupLibrary.
+					$circControlBranch = $iteminformation->{holdingbranch};
+					# FIXME - is this right ? are we sure that the holdingbranch is still the pickup branch?
+				}
 			}
-            MarkIssueReturned($borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'},$dropbox);
+            MarkIssueReturned($borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'},$circControlBranch);
             $messages->{'WasReturned'} = 1;    # FIXME is the "= 1" right?
         }
     
@@ -1371,15 +1383,16 @@ sub AddReturn {
 
 =over 4
 
-MarkIssueReturned($borrowernumber, $itemnumber);
+MarkIssueReturned($borrowernumber, $itemnumber, $dropbox_branch);
 
 =back
 
 Unconditionally marks an issue as being returned by
 moving the C<issues> row to C<old_issues> and
 setting C<returndate> to the current date, or
-yesterday if C<dropbox> is true.  Assumes you've 
-already checked that yesterday > issuedate.
+the last non-holiday date of the branccode specified in
+C<dropbox> .  Assumes you've already checked that 
+it's safe to do this, i.e. last non-holiday > issuedate.
 
 Ideally, this function would be internal to C<C4::Circulation>,
 not exported, but it is currently needed by one 
@@ -1388,14 +1401,14 @@ routine in C<C4::Accounts>.
 =cut
 
 sub MarkIssueReturned {
-    my ($borrowernumber, $itemnumber, $dropbox) = @_;
+    my ($borrowernumber, $itemnumber, $dropbox_branch ) = @_;
 	my $dbh = C4::Context->dbh;
 	my $query = "UPDATE issues SET returndate=";
 	my @bind = ($borrowernumber,$itemnumber);
-	if($dropbox) {
-		my @datearr = localtime( time() );
-		my @yesterdayarr =  Add_Delta_Days( $datearr[5] + 1900 , $datearr[4] + 1, $datearr[3] , -1 );
-		unshift @bind, sprintf("%0.4d-%0.2d-%0.2d",@yesterdayarr) ;
+	if($dropbox_branch) {
+		my $calendar = C4::Calendar->new(  branchcode => $dropbox_branch );
+		my $dropboxdate = $calendar->addDate(C4::Dates->new(), -1 );
+		unshift @bind, $dropboxdate->output('iso') ;
 		$query .= " ? "
 	} else {
 		$query .= " now() ";
