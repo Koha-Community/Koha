@@ -1549,6 +1549,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.083";                                                                                                        
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {                                                             
+    $dbh->do( qq(UPDATE systempreferences SET value='local' where variable='yuipath' and value like "%/intranet-tmpl/prog/%"));    
+    print "Upgrade to $DBversion done (Changing yuipath behaviour in managing a local value)\n";                                   
+    SetVersion ($DBversion);                                                                                                       
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
