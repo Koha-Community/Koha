@@ -104,6 +104,7 @@ for (my $i=0;$i<scalar(@$data);$i++){
 	# Don't update the fine if today is a holiday.  
   	# This ensures that dropbox mode will remove the correct amount of fine.
 	if( ! $isHoliday ) {
+		# FIXME - $type is always null, afaict.
 		UpdateFine($data->[$i]->{'itemnumber'},$data->[$i]->{'borrowernumber'},$amount,$type,$due) if( $amount > 0 ) ;
  	}
 	if($delays1  and $delays2  and $delays3)  {

@@ -1429,18 +1429,21 @@ sub MarkIssueReturned {
 
 =head2 FixOverduesOnReturn
 
-    &FixOverduesOnReturn($brn,$itm, $exemptfine);
+    &FixOverduesOnReturn($brn,$itm, $exemptfine, $dropboxmode);
 
 C<$brn> borrowernumber
 
 C<$itm> itemnumber
+
+C<$exemptfine> BOOL -- remove overdue charge associated with this issue. 
+C<$dropboxmode> BOOL -- remove lastincrement on overdue charge associated with this issue.
 
 internal function, called only by AddReturn
 
 =cut
 
 sub FixOverduesOnReturn {
-    my ( $borrowernumber, $item, $exemptfine ) = @_;
+    my ( $borrowernumber, $item, $exemptfine, $dropbox ) = @_;
     my $dbh = C4::Context->dbh;
 
     # check for overdue fine
@@ -1453,10 +1456,30 @@ sub FixOverduesOnReturn {
     # alter fine to show that the book has been returned
    my $data; 
 	if ($data = $sth->fetchrow_hashref) {
-        my $uquery =($exemptfine)? "update accountlines set accounttype='FFOR', amountoutstanding=0":"update accountlines set accounttype='F' ";
+        my $uquery;
+		my @bind = ($borrowernumber,$item ,$data->{'accountno'});
+		if ($exemptfine) {
+			$uquery = "update accountlines set accounttype='FFOR', amountoutstanding=0";
+			if (C4::Context->preference("FinesLog")) {
+		    	&logaction("FINES", 'MODIFY',$borrowernumber,"Overdue forgiven: item $item");
+			}
+		} elsif ($dropbox && $data->{lastincrement}) {
+			my $outstanding = $data->{amountoutstanding} - $data->{lastincrement} ;
+			my $amt = $data->{amount} - $data->{lastincrement} ;
+			if (C4::Context->preference("FinesLog")) {
+		    	&logaction("FINES", 'MODIFY',$borrowernumber,"Dropbox adjustment $amt, item $item");
+			}
+			 $uquery = "update accountlines set accounttype='F' ";
+			 if($outstanding  >= 0 && $amt >=0) {
+			 	$uquery .= ", amount = ? , amountoutstanding=? ";
+				unshift @bind, ($amt, $outstanding) ;
+			}
+		} else {
+			$uquery = "update accountlines set accounttype='F' ";
+		}
 	 	$uquery .= " where (borrowernumber = ?) and (itemnumber = ?) and (accountno = ?)";
         my $usth = $dbh->prepare($uquery);
-        $usth->execute($borrowernumber,$item ,$data->{'accountno'});
+        $usth->execute(@bind);
         $usth->finish();
     }
 

@@ -207,12 +207,13 @@ but retain these for backwards-comptibility with extant fines scripts.
 
 Fines scripts should just supply the date range over which to calculate the fine.
 
-C<&CalcFine> returns a list of three values:
+C<&CalcFine> returns a list of four values:
 
 C<$amount> is the fine owed by the patron (see above).
 
 C<$chargename> is the chargename field from the applicable record in
 the categoryitem table, whatever that is.
+FIXME - What is chargename supposed to be ?
 
 C<$message> is a text message, either "First Notice", "Second Notice",
 or "Final Notice".
@@ -451,21 +452,19 @@ sub UpdateFine {
 
     if ( my $data = $sth->fetchrow_hashref ) {
 
-        # I think this if-clause deals with the case where we're updating
-        # an existing fine.
-        #    print "in accounts ...";
+		# we're updating an existing fine.
     if ( $data->{'amount'} != $amount ) {
            
-        #      print "updating";
             my $diff = $amount - $data->{'amount'};
             my $out  = $data->{'amountoutstanding'} + $diff;
+			my $increment = -1 * $diff;
             my $sth2 = $dbh->prepare(
                 "UPDATE accountlines SET date=now(), amount=?,
-      amountoutstanding=?,accounttype='FU' WHERE
+      amountoutstanding=?, lastincrement=? , accounttype='FU' WHERE
       borrowernumber=? AND itemnumber=?
       AND (accounttype='FU' OR accounttype='O') AND description LIKE ?"
             );
-            $sth2->execute( $amount, $out, $data->{'borrowernumber'},
+            $sth2->execute( $amount, $out, $increment, $data->{'borrowernumber'},
                 $data->{'itemnumber'}, "%$due%" );
             $sth2->finish;
         }
@@ -498,12 +497,12 @@ sub UpdateFine {
     my $sth2 = $dbh->prepare(
             "INSERT INTO accountlines
     (borrowernumber,itemnumber,date,amount,
-    description,accounttype,amountoutstanding,accountno) VALUES
-    (?,?,now(),?,?,'FU',?,?)"
+    description,accounttype,amountoutstanding,lastincrement,accountno) VALUES
+    (?,?,now(),?,?,'FU',?,?,?)"
         );
         $sth2->execute( $borrowernumber, $itemnum, $amount,
             "$type $title->{'title'} $due",
-            $amount, $nextaccntno);
+            $amount,$amount, $nextaccntno);
         $sth2->finish;
     }
     # logging action
