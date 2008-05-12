@@ -30,6 +30,7 @@ CREATE TABLE `accountlines` (
   `dispute` mediumtext,
   `accounttype` varchar(5) default NULL,
   `amountoutstanding` decimal(28,6) default NULL,
+  `lastincrement` decimal(28,6) default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `notify_id` int(11) NOT NULL default 0,
   `notify_level` int(2) NOT NULL default 0,

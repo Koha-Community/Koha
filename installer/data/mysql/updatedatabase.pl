@@ -1512,8 +1512,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	SetVersion ($DBversion);
 }
 
-
-
 $DBversion = "3.00.00.081";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("CREATE TABLE `borrower_attribute_types` (
@@ -1541,6 +1539,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ExtendedPatronAttributes','0','Use extended patron IDs and attributes',NULL,'YesNo')");
     print "Upgrade to $DBversion done (added borrower_attributes and  borrower_attribute_types)\n";
+ SetVersion ($DBversion);
+}
+
+$DBversion = "3.00.00.082";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do( q(alter table accountlines add column lastincrement decimal(28,6) default NULL) );
+    print "Upgrade to $DBversion done (adding lastincrement column to accountlines table)\n";
     SetVersion ($DBversion);
 }
 
