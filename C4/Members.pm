@@ -215,9 +215,19 @@ sub SearchMember {
 
             # FIXME - .= <<EOT;
         }
-        $query = $query . ") OR cardnumber LIKE ?
-        order by $orderby";
+        $query = $query . ") OR cardnumber LIKE ? ";
         push( @bind, $searchstring );
+        if (C4::Context->preference('ExtendedPatronAttributes')) {
+            $query .= "OR borrowernumber IN (
+SELECT borrowernumber
+FROM borrower_attributes
+JOIN borrower_attribute_types USING (code)
+WHERE staff_searchable = 1
+AND attribute like ?
+)";
+            push (@bind, $searchstring);
+        }
+        $query .= "order by $orderby";
 
         # FIXME - .= <<EOT;
     }
