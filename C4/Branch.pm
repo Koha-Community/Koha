@@ -100,12 +100,14 @@ sub GetBranches {
     my $dbh = C4::Context->dbh;
     my $sth;
     my $query="SELECT * FROM branches";
+    my @bind_parameters;
     if ($onlymine && C4::Context->userenv && C4::Context->userenv->{branch}){
-      $query .= " WHERE branchcode =".$dbh->quote(C4::Context->userenv->{branch});
+      $query .= ' WHERE branchcode = ? ';
+      push @bind_parameters, C4::Context->userenv->{branch};
     }
-    $query.=" ORDER BY branchname";
+        $query.=" ORDER BY branchname";
     $sth = $dbh->prepare($query);
-    $sth->execute;
+    $sth->execute( @bind_parameters );
     while ( my $branch = $sth->fetchrow_hashref ) {
         my $nsth =
           $dbh->prepare(
