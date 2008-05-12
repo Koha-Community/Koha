@@ -399,9 +399,7 @@ if ($borrowernumber) {
         reservloop  => \@reservloop ,
         WaitingReserveLoop  => \@WaitingReserveLoop,
     );
-    $borrowercategory = GetBorrowercategory( $borrower->{'categorycode'} );
-    $category_type = $borrowercategory->{'category_type'};
-    ( $template->param( adultborrower => 1 ) ) if ( $category_type eq 'A' );
+    $template->param( adultborrower => 1 ) if ( $borrower->{'category_type'} eq 'A' );
 }
 
 # make the issued books table.

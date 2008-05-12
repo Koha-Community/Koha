@@ -53,26 +53,21 @@ my $borrowernumber=$input->param('borrowernumber');
 my $description=$input->param('description');
 my $category_type=$input->param('category_type');
 
- if ( $data{'surname'} eq '') 
- 	{
- 		$data=GetMember($borrowernumber,'borrowernumber');
- 		%data=%$data;
- 	}
- my $borrowercategory = GetBorrowercategory($data{'categorycode'});	
+$data=GetMember($borrowernumber,'borrowernumber');
 
 $template->param(		borrowernumber  => $borrowernumber,#register number
 				#transform value  in capital or capital for first letter of the word
- 				firstname       => ucfirst($data{'firstname'}),
- 				surname         => uc($data{'surname'}),
- 				categorycode 	=> $data{'categorycode'},
-				title 		=> $data{'title'},
-				category_type	=> $borrowercategory ->{'category_type'},
- 				"title_".$data{'title'} 	    => " SELECTED ",			
- 				dateofbirth	=> format_date($data{'dateofbirth'}),
- 				description	=> $borrowercategory->{'description'}
-				);
-	$template->param(Institution => 1) if ($category_type eq "I");
-	output_html_with_http_headers $input, $cookie, $template->output;
+ 				firstname       => ucfirst($data->{'firstname'}),
+ 				surname         => uc($data->{'surname'}),
+ 				categorycode 	=> $data->{'categorycode'},
+				title 		=> $data->{'title'},
+				category_type	=> $data->{'category_type'},
+ 				"title_".$data->{'title'} 	    => " SELECTED ",			
+ 				dateofbirth	=> format_date($data->{'dateofbirth'}),
+ 				description	=> $data->{'description'}
+		);
+$template->param(Institution => 1) if ($category_type eq "I");
+output_html_with_http_headers $input, $cookie, $template->output;
 
 # Local Variables:
 # tab-width: 8

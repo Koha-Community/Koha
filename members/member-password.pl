@@ -76,9 +76,7 @@ if ( $newpassword  && ! $errormsg ) {
 	$defaultnewpassword.=substr($chars, int(rand(length($chars))),1);
     }
 	
-	my $borrowercategory = GetBorrowercategory( $bor->{'categorycode'} );
-my $category_type = $borrowercategory->{'category_type'};
-( $template->param( adultborrower => 1 ) ) if ( $category_type eq 'A' );
+$template->param( adultborrower => 1 ) if ( $bor->{'category_type'} eq 'A' );
 my ($picture, $dberror) = GetPatronImage($bor->{'cardnumber'});
 $template->param( picture => 1 ) if $picture;
 	

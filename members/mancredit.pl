@@ -45,42 +45,32 @@ if ($add){
     manualinvoice($borrowernumber,$itemnum,$desc,$type,$amount);
     print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
 } else {
-
-
-
 	my ($template, $loggedinuser, $cookie)
-	= get_template_and_user({template_name => "members/mancredit.tmpl",
-					query => $input,
-					type => "intranet",
-					authnotrequired => 0,
-					flagsrequired => {borrowers => 1},
-					debug => 1,
-					});
-
-my $borrowercategory = GetBorrowercategory( $data->{'categorycode'} );
-my $category_type = $borrowercategory->{'category_type'};
-( $template->param( adultborrower => 1 ) ) if ( $category_type eq 'A' );
-my ($picture, $dberror) = GetPatronImage($data->{'cardnumber'});
-$template->param( picture => 1 ) if $picture;
-
+	  = get_template_and_user({template_name => "members/mancredit.tmpl",
+					  query => $input,
+					  type => "intranet",
+					  authnotrequired => 0,
+					  flagsrequired => {borrowers => 1},
+					  debug => 1,
+					  });
+    $template->param( adultborrower => 1 ) if ( $data->{category_type} eq 'A' );
+    my ($picture, $dberror) = GetPatronImage($data->{'cardnumber'});
+    $template->param( picture => 1 ) if $picture;
+    
     $template->param(
-                    borrowernumber => $borrowernumber,
-                    firstname => $data->{'firstname'},
-                    surname  => $data->{'surname'},
-					cardnumber => $data->{'cardnumber'},
-				    categorycode => $data->{'categorycode'},
-				    category_type => $data->{'category_type'},
-				    category_description => $data->{'description'},
-				    address => $data->{'address'},
-					address2 => $data->{'address2'},
-				    city => $data->{'city'},
-					zipcode => $data->{'zipcode'},
-					phone => $data->{'phone'},
-					email => $data->{'email'},
-    );
-	print $input->header(
-	    -type => 'utf-8',
-	    -cookie => $cookie
-	),$template->output;
-
+        borrowernumber => $borrowernumber,
+        firstname => $data->{'firstname'},
+        surname  => $data->{'surname'},
+		    cardnumber => $data->{'cardnumber'},
+		    categorycode => $data->{'categorycode'},
+		    category_type => $data->{'category_type'},
+		    category_description => $data->{'description'},
+		    address => $data->{'address'},
+		    address2 => $data->{'address2'},
+		    city => $data->{'city'},
+		    zipcode => $data->{'zipcode'},
+		    phone => $data->{'phone'},
+		    email => $data->{'email'},
+        );
+    print $input->header( -type => 'utf-8', -cookie => $cookie),$template->output;
 }

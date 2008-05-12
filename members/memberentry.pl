@@ -102,6 +102,8 @@ my $new_c_type = $category_type; #if we have input param, then we've already cho
 unless ($category_type or !($categorycode)){
   my $borrowercategory= GetBorrowercategory($categorycode);
   $category_type = $borrowercategory->{'category_type'};
+  my $category_name = $borrowercategory->{'description'}; 
+  $template->param("categoryname"=>$category_name);
 }
 $category_type="A" unless $category_type; # FIXME we should display a error message instead of a 500 error !
 
@@ -149,8 +151,10 @@ if ($op eq 'insert'){
 		);
           
   #   recover the category type if the borrowers is a doublon 
-        my $tmpborrowercategory=GetBorrowercategory($check_category);
-        $check_categorytype=$tmpborrowercategory->{'category_type'};
+    if ($check_category) {
+      my $tmpborrowercategory=GetBorrowercategory($check_category);
+      $check_categorytype=$tmpborrowercategory->{'category_type'};
+    }   
 }
 
   #recover all data from guarantor address phone ,fax... 

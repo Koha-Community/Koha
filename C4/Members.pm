@@ -67,6 +67,7 @@ BEGIN {
 
 		&GetborCatFromCatType 
 		&GetBorrowercategory
+    &GetBorrowercategoryList
 
 		&GetBorrowersWhoHaveNotBorrowedSince
 		&GetBorrowersWhoHaveNeverBorrowed
@@ -1367,18 +1368,29 @@ sub GetBorrowercategory {
         $sth->finish();
         return $data;
     } 
-    else {
-        my $sth       =
-        $dbh->prepare(
-    "SELECT *
-    FROM categories order by description"
+    return;  
+}    # sub getborrowercategory
+
+=head2 GetBorrowercategoryList
+ 
+  $arrayref_hashref = &GetBorrowercategoryList;
+If no category code provided, the function returns all the categories.
+
+=cut
+
+sub GetBorrowercategoryList {
+    my $dbh       = C4::Context->dbh;
+    my $sth       =
+    $dbh->prepare(
+    "SELECT * 
+    FROM categories 
+    ORDER BY description"
         );
-        $sth->execute;
-        my $data =
-        $sth->fetchall_arrayref({});
-        $sth->finish();
-        return $data;
-    }  
+    $sth->execute;
+    my $data =
+    $sth->fetchall_arrayref({});
+    $sth->finish();
+    return $data;
 }    # sub getborrowercategory
 
 =head2 ethnicitycategories

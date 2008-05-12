@@ -1,8 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Patrons &rsaquo; 
-<!-- TMPL_IF NAME="opadd" -->	Add<!--TMPL_IF Name="I"--> Organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional <!--/TMPL_IF --><!--TMPL_IF Name="S"--> Staff <!--/TMPL_IF -->
-patron <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR name="firstname" --><!-- TMPL_ELSE -->Modify<!--TMPL_IF Name="I"--> Organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional <!--/TMPL_IF --><!--TMPL_IF Name="S"--> Staff<!--/TMPL_IF -->
-patron <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR name="firstname" --><!-- /TMPL_IF --></title>
+<!-- TMPL_IF NAME="opadd" -->	Add<!-- TMPL_ELSE --> Modify<!--/TMPL_IF--> <!--TMPL_IF Name="categoryname"--> <!--TMPL_VAR Name="categoryname"--> patron<!-- TMPL_ELSE --><!--TMPL_IF Name="I"--> Organisation patron<!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult patron<!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child patron<!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional patron<!--/TMPL_IF --><!--TMPL_IF Name="S"--> Staff patron<!--/TMPL_IF --><!--/TMPL_IF --><!--TMPL_UNLESS Name="opadd"--> <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR name="firstname" --><!--/TMPL_UNLESS--></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript" src="<!-- TMPL_VAR NAME='themelang' -->/js/members.js"></script>
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
@@ -57,11 +55,11 @@ patron <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR name="firstname" --><!-- 
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; 
 <!-- TMPL_IF NAME="opadd" -->
-		Add<!--TMPL_IF Name="I"--> Organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional <!--/TMPL_IF --> <!--TMPL_IF Name="S"--> Staff <!--/TMPL_IF -->
-patron <!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
+		Add<!--TMPL_IF Name="categoryname"--> <!--TMPL_VAR Name="categoryname"--> patron<!-- TMPL_ELSE --><!--TMPL_IF Name="I"--> Organisation patron<!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult patron<!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child patron<!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional patron<!--/TMPL_IF --><!--TMPL_IF Name="S"--> Staff patron<!--/TMPL_IF --><!--/TMPL_IF -->
+<!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR name="firstname" -->
 <!-- TMPL_ELSE --> 
-<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" --></a> &rsaquo; <strong>Modify<!--TMPL_IF Name="I"--> Organisation <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional <!--/TMPL_IF --><!--TMPL_IF Name="S"-->Staff <!--/TMPL_IF -->
-patron </strong><!-- /TMPL_IF --></div>
+<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" --></a> &rsaquo; <strong>Modify<!--TMPL_IF Name="categoryname"--> <!--TMPL_VAR Name="categoryname"--> patron<!-- TMPL_ELSE --><!--TMPL_IF Name="I"--> Organisation patron<!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult patron<!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child patron<!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional patron<!--/TMPL_IF --><!--TMPL_IF Name="S"--> Staff patron<!--/TMPL_IF --><!--/TMPL_IF -->
+</strong><!-- /TMPL_IF --></div>
 
 <!-- TMPL_IF NAME="opadd" --><div id="doc" class="yui-t7"><!-- TMPL_ELSE --><div id="doc3" class="yui-t2"><!-- /TMPL_IF -->
    
@@ -72,12 +70,11 @@ patron </strong><!-- /TMPL_IF --></div>
 
 	<!-- TMPL_IF NAME="opadd" -->
 	<h1>
-		<!--TMPL_IF Name="I"--> Add Organisation patron <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Add Adult patron <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Add Child patron <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Add Professional patron <!--/TMPL_IF --><!--TMPL_IF Name="S"--> Add Staff patron <!--/TMPL_IF -->
-<!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" --> 
+		Add<!--TMPL_IF Name="categoryname"--> <!--TMPL_VAR Name="categoryname"--> patron<!-- TMPL_ELSE --><!--TMPL_IF Name="I"--> Organisation patron<!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult patron<!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child patron<!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional patron<!--/TMPL_IF --><!--TMPL_IF Name="S"--> Staff patron<!--/TMPL_IF --><!--/TMPL_IF --> <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" --> 
 	</h1>
 	<!-- TMPL_ELSE -->
-	<h1 >
-		<!--TMPL_IF Name="I"--> Modify Organisation patron <!--/TMPL_IF --><!--TMPL_IF Name="A"--> Modify Adult patron <!--/TMPL_IF --><!--TMPL_IF Name="C"--> Modify Child patron <!--/TMPL_IF --><!--TMPL_IF Name="P"--> Modify Professional patron <!--/TMPL_IF --><!--TMPL_IF Name="S"--> Modify Staff patron <!--/TMPL_IF -->
+	<h1>
+		Modify<!--TMPL_IF Name="categoryname"--> <!--TMPL_VAR Name="categoryname"--> patron<!-- TMPL_ELSE --><!--TMPL_IF Name="I"--> Organisation patron<!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult patron<!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child patron<!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional patron<!--/TMPL_IF --><!--TMPL_IF Name="S"--> Staff patron<!--/TMPL_IF --><!--/TMPL_IF -->
 <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" --> 
 	</h1>
 	<!-- /TMPL_IF -->

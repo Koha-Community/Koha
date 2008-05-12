@@ -102,8 +102,7 @@ if ( $reregistration eq 'y' ) {
 	$data->{'dateexpiry'} = ExtendMemberSubscriptionTo( $borrowernumber );
 }
 
-my $borrowercategory = GetBorrowercategory( $data->{'categorycode'} );
-my $category_type = $borrowercategory->{'category_type'};
+my $category_type = $data->{'category_type'};
 
 ### $category_type
 
@@ -346,7 +345,7 @@ $template->param(
   DHTMLcalendar_dateformat=>C4::Dates->DHTMLcalendar(), 
     roaddetails      => $roaddetails,
     borrowernumber   => $borrowernumber,
-    categoryname	=> $borrowercategory->{description},
+    categoryname	=> $data->{'description'},
     reregistration   => $reregistration,
     branch	     => $branch,	
     totalprice       => sprintf( "%.2f", $totalprice ),
