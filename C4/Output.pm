@@ -90,10 +90,11 @@ sub gettemplate {
         case_sensitive    => 1,
         path              => ["$htdocs/$theme/$lang/$path"]
     );
-
+    my $themelang=( $interface ne 'intranet' ? '/opac-tmpl' : '/intranet-tmpl' )
+          . "/$theme/$lang";
     $template->param(
-        themelang => ( $interface ne 'intranet' ? '/opac-tmpl' : '/intranet-tmpl' )
-          . "/$theme/$lang",
+        themelang => $themelang,
+        yuipath => (C4::Context->preference("yuipath") eq "local"?"$themelang/lib/yui":C4::Context->preference("yuipath")),
         interface => ( $interface ne 'intranet' ? '/opac-tmpl' : '/intranet-tmpl' ),
         theme => $theme,
         opacstylesheet      => $opacstylesheet,
