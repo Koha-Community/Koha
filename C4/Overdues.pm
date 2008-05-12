@@ -179,7 +179,7 @@ sub checkoverdues {
 =item CalcFine
 
   ($amount, $chargename, $message, $daycounttotal, $daycount) =
-    &CalcFine($itemnumber, $categorycode, $branch, $days_overdue, $description);
+    &CalcFine($itemnumber, $categorycode, $branch, $days_overdue, $description, $start_date, $end_date );
 
 Calculates the fine for a book.
 
@@ -197,9 +197,15 @@ the book.
 
 C<$branchcode> is the library whose issuingrules govern this transaction.
 
-C<$days_overdue> is the number of days elapsed since the book's due
-date.
+C<$days_overdue> is the number of days elapsed since the book's due date.
+  NOTE: supplying days_overdue is deprecated.
 
+C<$start_date> & C<$end_date> are C4::Dates objects 
+defining the date range over which to determine the fine.
+Note that if these are defined, we ignore C<$difference> and C<$dues> , 
+but retain these for backwards-comptibility with extant fines scripts.
+
+Fines scripts should just supply the date range over which to calculate the fine.
 
 C<&CalcFine> returns a list of three values:
 
@@ -215,30 +221,39 @@ or "Final Notice".
 
 #'
 sub CalcFine {
-    my ( $item, $bortype, $branchcode, $difference , $dues  ) = @_;
+    my ( $item, $bortype, $branchcode, $difference ,$dues , $start_date, $end_date  ) = @_;
     my $dbh = C4::Context->dbh;
     my $amount = 0;
     my $printout;
-    # calculate how many days the patron is late
-    my $countspecialday=&GetSpecialHolidays($dues,$item->{itemnumber});
-    my $countrepeatableday=&GetRepeatableHolidays($dues,$item->{itemnumber},$difference);    
-    my $countalldayclosed = $countspecialday + $countrepeatableday;
-    my $daycount = $difference - $countalldayclosed;
-    # get issuingrules (fines part will be used)
+	my $daystocharge;
+	# get issuingrules (fines part will be used)
     my $data = C4::Circulation::GetIssuingRule($bortype, $item->{'itemtype'},$branchcode);
-    my $daycounttotal = $daycount - $data->{'firstremind'};
-    if ($data->{'chargeperiod'} >0) { # if there is a rule for this bortype
-        if ($data->{'firstremind'} < $daycount)
-            {
-            $amount   = int($daycounttotal/$data->{'chargeperiod'})*$data->{'fine'};
-        }
+	if($difference) {
+		# if $difference is supplied, the difference has already been calculated, but we still need to adjust for the calendar.
+    	# use copy-pasted functions from calendar module.  (deprecated -- these functions will be removed from C4::Overdues ).
+	    my $countspecialday=&GetSpecialHolidays($dues,$item->{itemnumber});
+	    my $countrepeatableday=&GetRepeatableHolidays($dues,$item->{itemnumber},$difference);    
+	    my $countalldayclosed = $countspecialday + $countrepeatableday;
+	    $daystocharge = $difference - $countalldayclosed;
+	} else {
+		# if $difference is not supplied, we have C4::Dates objects giving us the date range, and we use the calendar module.
+		if(C4::Context->preference('finesCalendar') eq 'noFinesWhenClosed') {
+			my $calendar = C4::Calendar->new(  branchcode => $branchcode );
+			$daystocharge = $calendar->daysBetween( $start_date, $end_date );
+		} else {
+			$daystocharge = Date_to_Days(split('-',$end_date->output('iso'))) - Date_to_Days(split('-',$start_date->output('iso')));
+		}
+	}
+	# correct for grace period.
+	$daystocharge -= $data->{'firstremind'};
+    if ($data->{'chargeperiod'} > 0 && $daystocharge > 0 ) { 
+        $amount   = int($daystocharge / $data->{'chargeperiod'}) * $data->{'fine'};
     } else {
         # a zero (or null)  chargeperiod means no charge.
-		#  
     }
     
-  #  warn "Calc Fine: " . join(", ", ($item->{'itemnumber'}, $bortype, $difference , $data->{'fine'} . " * " . $daycount . " days = \$ " . $amount , "desc: $dues")) ;
- return ( $amount, $data->{'chargename'}, $printout ,$daycounttotal ,$daycount );
+    #  warn "Calc Fine: " . join(", ", ($item->{'itemnumber'}, $bortype, $difference , $data->{'fine'} . " * " . $daycount . " days = \$ " . $amount , "desc: $dues")) ;
+    return ( $amount, $data->{'chargename'}, $printout ,$daystocharge , $daystocharge + $data->{'firstremind'} );
 }
 
 

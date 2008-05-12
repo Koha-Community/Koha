@@ -19,8 +19,7 @@ use strict;
 require Exporter;
 use vars qw($VERSION @EXPORT);
 
-#use Date::Manip;
-# use Date::Calc;
+use Date::Calc qw( Date_to_Days );
 
 # set the version for version checking
 $VERSION = 3.00;
@@ -439,6 +438,10 @@ C<$year> Is the year to check whether if is a holiday or not.
 
 sub isHoliday {
     my ($self, $day, $month, $year) = @_;
+	# FIXME - date strings are stored in non-padded metric format. should change to iso.
+	$month=$month+0;
+	$year=$year+0;
+	$day=$day+0;
     my $weekday = &Date::Calc::Day_of_Week($year, $month, $day) % 7; 
     my $weekDays = $self->get_week_days_holidays();
     my $dayMonths = $self->get_day_month_holidays();

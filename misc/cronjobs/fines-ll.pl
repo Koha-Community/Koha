@@ -36,6 +36,7 @@ BEGIN {
 use C4::Context;
 use C4::Circulation;
 use C4::Overdues;
+use C4::Calendar;
 use Date::Manip qw/Date_DaysSince1BC/;
 use C4::Biblio;
 #use Data::Dumper;
@@ -44,6 +45,8 @@ my $fldir = "/tmp";
 
 my $libname=C4::Context->preference('LibraryName');
 my $dbname= C4::Context->config('database');
+
+my $SET_LOST = 0;  #  automatically charge item price at delay=3 if set.
 
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =localtime(time);
 $mon++;
@@ -54,7 +57,7 @@ my $filename= $dbname;
 $filename =~ s/\W//;
 $filename = $fldir . '/'. $filename . $datestr . ".log";
 open (FILE,">$filename") || die "Can't open LOG";
-print FILE "cardnumber\tcategory\tsurname\tfirstname\temail\tphone\taddress\tcitystate\tbarcode\tdate_due\ttype\tdays_overdue\tfine\n";
+print FILE "cardnumber\tcategory\tsurname\tfirstname\temail\tphone\taddress\tcitystate\tbarcode\tdate_due\ttype\titemnumber\tdays_overdue\tfine\n";
 
 # FIXME
 # it looks like $count is just a counter, would it be
@@ -83,19 +86,27 @@ for (my $i=0;$i<scalar(@$data);$i++){
   	# CircControl must be PickupLibrary. (branchcode comes from issues table here).
 	$branchcode =  $data->[$i]->{'branchcode'};
   }
-  
+  my $calendar = C4::Calendar->new( branchcode => $branchcode );
+
+  my @dmy =  split( '-', C4::Dates->new()->output('metric') ) ;
+  my $isHoliday = $calendar->isHoliday( split( '/', C4::Dates->new()->output('metric') ) );
   my $starter;
       
  if ($date2 <= $date){
     $overdueItemsCounted++ if $DEBUG;
     my $difference=$date-$date2;
+	my $start_date = C4::Dates->new($data->[$i]->{'date_due'},'iso');
+	my $end_date = C4::Dates->new($datestr,'iso');
     my ($amount,$type,$printout,$daycounttotal,$daycount)=
-  		CalcFine($data->[$i], $borrower->{'categorycode'}, $branchcode,
-        		$difference, $datedue);
+  		CalcFine($data->[$i], $borrower->{'categorycode'}, $branchcode,undef,undef, $start_date,$end_date);
     my ($delays1,$delays2,$delays3)=GetOverdueDelays($borrower->{'categorycode'});
-    my $issuingrules=GetIssuingRule($borrower->{'categorycode'}, $data->[$i]->{'itemnumber'},$branchcode);
-	UpdateFine($data->[$i]->{'itemnumber'},$data->[$i]->{'borrowernumber'},$amount,$type,$due) if( $amount > 0 ) ;
- 	if($delays1  and $delays2  and $delays3)  {
+
+	# Don't update the fine if today is a holiday.  
+  	# This ensures that dropbox mode will remove the correct amount of fine.
+	if( ! $isHoliday ) {
+		UpdateFine($data->[$i]->{'itemnumber'},$data->[$i]->{'borrowernumber'},$amount,$type,$due) if( $amount > 0 ) ;
+ 	}
+	if($delays1  and $delays2  and $delays3)  {
     
     	my $debarredstatus=CheckBorrowerDebarred($borrower->{'borrowernumber'});
 
@@ -146,7 +157,7 @@ for (my $i=0;$i<scalar(@$data);$i++){
             my $notifyid=GetNotifyId($borrower->{'borrowernumber'},$data->[$i]->{'itemnumber'});
             my $timestamp=$todaydate." ".$hour."\:".$min."\:".$sec;
             my $create=CheckAccountLineItemInfo($borrower->{'borrowernumber'},$data->[$i]->{'itemnumber'},$typeaccount,$notifyid);
-            if ($create eq '0'){
+            if ($SET_LOST && ($create eq '0') ){
           		CreateItemAccountLine($borrower->{'borrowernumber'},$data->[$i]->{'itemnumber'},$todaydate,$items->{'price'},$description,$typeaccount,
             		$items->{'price'},$timestamp,$notifyid,$level);
             }
@@ -166,7 +177,7 @@ for (my $i=0;$i<scalar(@$data);$i++){
         $sth->finish;
         $borrower->{'phone'}=$tdata->{'phone'};
     }
- 	print FILE "$printout\t$borrower->{'cardnumber'}\t$borrower->{'categorycode'}\t$borrower->{'surname'}\t$borrower->{'firstname'}\t$borrower->{'email'}\t$borrower->{'phone'}\t$borrower->{'address'}\t$borrower->{'city'}\t$data->[$i]->{'barcode'}\t$data->[$i]->{'date_due'}\t$type\t$difference\t$amount\n";
+ 	print FILE "$printout\t$borrower->{'cardnumber'}\t$borrower->{'categorycode'}\t$borrower->{'surname'}\t$borrower->{'firstname'}\t$borrower->{'email'}\t$borrower->{'phone'}\t$borrower->{'address'}\t$borrower->{'city'}\t$data->[$i]->{'barcode'}\t$data->[$i]->{'date_due'}\t$type\t$data->[$i]->{'itemnumber'}\t$daycounttotal\t$amount\n";
  }
 }
 
