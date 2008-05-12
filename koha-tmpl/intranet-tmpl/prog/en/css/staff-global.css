@@ -171,13 +171,11 @@ ol li {
 	background-color : #F3F3F3;
 	border-bottom : 1px solid #E8E8E8;
 	line-height : 2em;
-	display : inline-block;
+	overflow : auto;
 }
 
-#header:after { /* clearing without presentational markup, IE gets extra treatment */
-    display: block;
-    clear: both;
-    content: " ";
+*html #header {
+	display : inline-block;
 }
 
 #sitetitle {

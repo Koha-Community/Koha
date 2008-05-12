@@ -76,12 +76,13 @@ $.tablesorter.addParser({
 
         </p>
     <!-- /TMPL_LOOP -->
-    <input type="submit"  class="submit" value="Search" onclick="cursor :'wait'"/>
+    <fieldset class="action"><input type="submit"  class="submit" value="Search" onclick="cursor :'wait'"/> <a class="cancel close" href="#">Cancel</a></fieldset>
     </form>
 
 
 <!-- TMPL_ELSE -->
     <h2>Results</h2>
+    <!-- TMPL_IF name="breeding_loop" -->
     <table id="resultst">
 <thead>    <tr>
         <th>Server</th>
@@ -92,7 +93,6 @@ $.tablesorter.addParser({
         <th colspan="2">Preview</th>
 		<th>&nbsp;</th>
     </tr></thead>
-    <!-- TMPL_IF name="breeding_loop" -->
     <tbody><!-- TMPL_LOOP name="breeding_loop" -->
         <!-- TMPL_IF NAME="breedingid" -->
 		
@@ -107,10 +107,10 @@ $.tablesorter.addParser({
         </tr>
         <!-- /TMPL_IF -->
     <!-- /TMPL_LOOP --></tbody>
-    <!-- TMPL_ELSE -->
-        <tr><td colspan="6">Nothing found</td></tr>
-    <!-- /TMPL_IF -->
 </table>
+    <!-- TMPL_ELSE -->
+        <p>Nothing found. <a href="/cgi-bin/koha/cataloguing/z3950_search.pl">Try another search</a>.</p>
+    <!-- /TMPL_IF -->
 
 
 <!-- /TMPL_IF -->
