@@ -42,27 +42,45 @@ my $total = 0;
 # checks itemnum field
 my $sth = $dbh->prepare("select tab from marc_subfield_structure where kohafield=\"items.itemnumber\"");
 $sth->execute;
-my ($res) = $sth->fetchrow;
-if ($res==-1) {
-	$template->param(itemnum => 0);
-} else {
-	$template->param(itemnum => 1);
-	$total++;
+while (my ($res) = $sth->fetchrow) {
+    if ($res==-1) {
+	    $template->param(itemnum => 0);
+    } else {
+	    $template->param(itemnum => 1);
+	    $total++;
+        last;
+    }
 }
 
 # checks biblio.biblionumber and biblioitem.biblioitemnumber (same tag and tab=-1)
-$sth = $dbh->prepare("select tagfield,tab from marc_subfield_structure where kohafield=\"biblio.biblionumber\"");
+$sth = $dbh->prepare("select tagfield,tab,frameworkcode from marc_subfield_structure where kohafield=\"biblio.biblionumber\"");
 $sth->execute;
-my $tab;
-($res,$tab) = $sth->fetchrow;
-$sth = $dbh->prepare("select tagfield,tab from marc_subfield_structure where kohafield=\"biblioitems.biblioitemnumber\"");
-$sth->execute;
-my ($res2,$tab2) = $sth->fetchrow;
-if ($res && $res2 && $tab==-1 && $tab2==-1) {
-	$template->param(biblionumber => 0);
-} else {
-	$template->param(biblionumber => 1);
-	$total++;
+my $first = 1;
+my $bibliotag = '';
+while (my ($res,$tab,$frameworkcode) = $sth->fetchrow) {
+    if ($first) {
+        $bibliotag = $res;
+        $first = 0;
+    } else {
+        if ($bibliotag != $res) {
+	        $template->param(biblionumber => 1);
+	        $total++;
+            last;
+        }
+    }
+    my $sth2 = $dbh->prepare("SELECT tagfield,tab 
+                              FROM marc_subfield_structure 
+                              WHERE kohafield=\"biblioitems.biblioitemnumber\"
+                              AND frameworkcode = ? ");
+    $sth2->execute($frameworkcode);
+    my ($res2,$tab2) = $sth2->fetchrow;
+    if ($res && $res2 && $tab==-1 && $tab2==-1) {
+	    $template->param(biblionumber => 0);
+    } else {
+	    $template->param(biblionumber => 1);
+	    $total++;
+        last;
+    }
 }
 
 # checks all item fields are in the same tag and in tab 10
@@ -70,6 +88,9 @@ if ($res && $res2 && $tab==-1 && $tab2==-1) {
 $sth = $dbh->prepare("select tagfield,tab,kohafield from marc_subfield_structure where kohafield like \"items.%\" and tab >=0");
 $sth->execute;
 my $field;
+my $res;
+my $res2;
+my $tab;
 ($res,$res2,$field) = $sth->fetchrow;
 my $tagfield = $res;
 $tab = $res2;
@@ -115,33 +136,39 @@ if ($totaltags > 1) {
 # checks biblioitems.itemtype must be mapped and use authorised_value=itemtype
 $sth = $dbh->prepare("select tagfield,tab,authorised_value from marc_subfield_structure where kohafield = \"biblioitems.itemtype\"");
 $sth->execute;
-($res,$res2,$field) = $sth->fetchrow;
-if ($res && $res2>=0 && $field eq "itemtypes") {
-	$template->param(itemtype => 0);
-} else {
-	$template->param(itemtype => 1);
-	$total++;
+while (($res,$res2,$field) = $sth->fetchrow) {
+    if ($res && $res2>=0 && $field eq "itemtypes") {
+	    $template->param(itemtype => 0);
+    } else {
+	    $template->param(itemtype => 1);
+	    $total++;
+        last;
+    }
 }
 
 # checks items.homebranch must be mapped and use authorised_value=branches
 $sth = $dbh->prepare("select tagfield,tab,authorised_value from marc_subfield_structure where kohafield = \"items.homebranch\"");
 $sth->execute;
-($res,$res2,$field) = $sth->fetchrow;
-if ($res && $res2 eq 10 && $field eq "branches") {
-	$template->param(branch => 0);
-} else {
-	$template->param(branch => 1);
-	$total++;
+while (($res,$res2,$field) = $sth->fetchrow) {
+    if ($res && $res2 eq 10 && $field eq "branches") {
+	    $template->param(branch => 0);
+    } else {
+	    $template->param(branch => 1);
+	    $total++;
+        last;
+    }
 }
+
 # checks items.homebranch must be mapped and use authorised_value=branches
 $sth = $dbh->prepare("select tagfield,tab,authorised_value from marc_subfield_structure where kohafield = \"items.holdingbranch\"");
 $sth->execute;
-($res,$res2,$field) = $sth->fetchrow;
-if ($res && $res2 eq 10 && $field eq "branches") {
-	$template->param(holdingbranch => 0);
-} else {
-	$template->param(holdingbranch => 1);
-	$total++;
+while (($res,$res2,$field) = $sth->fetchrow) {
+    if ($res && $res2 eq 10 && $field eq "branches") {
+	    $template->param(holdingbranch => 0);
+    } else {
+	    $template->param(holdingbranch => 1);
+	    $total++;
+    }
 }
 
 # checks that itemtypes & branches tables are not empty
