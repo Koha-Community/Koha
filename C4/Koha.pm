@@ -51,6 +51,7 @@ BEGIN {
 		&getitemtypeimagedir
 		&getitemtypeimagesrc
 		&GetAuthorisedValues
+		&GetAuthorisedValueCategories
 		&GetKohaAuthorisedValues
 		&GetAuthValCode
 		&GetManagedTagSubfields
@@ -967,6 +968,26 @@ sub GetAuthorisedValues {
 	}
     #my $data = $sth->fetchall_arrayref({});
     return \@results; #$data;
+}
+
+=head2 GetAuthorisedValueCategories
+
+$auth_categories = GetAuthorisedValueCategories();
+
+Return an arrayref of all of the available authorised
+value categories.
+
+=cut
+
+sub GetAuthorisedValueCategories {
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT DISTINCT category FROM authorised_values ORDER BY category");
+    $sth->execute;
+    my @results;
+    while (my $category = $sth->fetchrow_array) {
+        push @results, $category;
+    }
+    return \@results;
 }
 
 =head2 GetKohaAuthorisedValues
