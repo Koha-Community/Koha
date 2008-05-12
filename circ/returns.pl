@@ -33,6 +33,7 @@ use C4::Output;
 use C4::Circulation;
 use C4::Dates qw/format_date/;
 use Date::Calc qw/Add_Delta_Days/;
+use C4::Calendar;
 use C4::Print;
 use C4::Reserves;
 use C4::Biblio;
@@ -171,9 +172,9 @@ my $barcode = $query->param('barcode');
 # $barcode =~ s/\s*//g; - use barcodedecode for this; whitespace is not invalid.
 my $exemptfine = $query->param('exemptfine');
 my $dropboxmode= $query->param('dropboxmode');
-my @datearr    = localtime( time() );
-my @yesterdayarr =  Add_Delta_Days( $datearr[5] + 1900 , $datearr[4] + 1, $datearr[3] , -1 );
-my $yesterday= C4::Dates->new( sprintf("%0.4d-%0.2d-%0.2d",@yesterdayarr),'iso');
+my $calendar = C4::Calendar->new(  branchcode => C4::Context->userenv->{'branch'} );
+	#dropbox: get last open day (today - 1)
+my $dropboxdate = $calendar->addDate(C4::Dates->new(), -1 );
 my $dotransfer = $query->param('dotransfer');
 if ($dotransfer){
 	# An item has been returned to a branch other than the homebranch, and the librarian has choosen to initiate a transfer
@@ -530,7 +531,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
             $ri{month} = $tempdate[1];
             $ri{day}   = $tempdate[2];
             my $duedatenz  = "$tempdate[2]/$tempdate[1]/$tempdate[0]";
-          #  my @datearr    = localtime( time() );
+            my @datearr    = localtime( time() );
             my $todaysdate =
                 $datearr[5] . '-'
               . sprintf( "%0.2d", ( $datearr[4] + 1 ) ) . '-'
@@ -576,7 +577,7 @@ $template->param(
     errmsgloop              => \@errmsgloop,
     exemptfine              => $exemptfine,
     dropboxmode              => $dropboxmode,
-    yesterdaysdate			=> $yesterday->output(),
+    dropboxdate				=> $dropboxdate->output(),
 	overduecharges          => $overduecharges,
 );
 
