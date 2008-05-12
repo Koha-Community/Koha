@@ -37,6 +37,7 @@ use C4::Context;
 use C4::Auth;
 use C4::Output;
 use C4::Members;
+use C4::Members::Attributes;
 use C4::Dates;
 use C4::Reserves;
 use C4::Circulation;
@@ -334,6 +335,11 @@ $template->param( picture => 1 ) if $picture;
 my $branch=C4::Context->userenv->{'branch'};
 
 $template->param($data);
+
+if (C4::Context->preference('ExtendedPatronAttributes')) {
+    $template->param(ExtendedPatronAttributes => 1);
+    $template->param(patron_attributes => C4::Members::Attributes::GetBorrowerAttributes($borrowernumber));
+}
 
 $template->param(
 	detailview => 1,

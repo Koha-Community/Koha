@@ -29,6 +29,8 @@ use C4::Auth;
 use C4::Context;
 use C4::Output;
 use C4::Members;
+use C4::Members::Attributes;
+use C4::Members::AttributeTypes;
 use C4::Koha;
 use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Input;
@@ -180,6 +182,7 @@ if ( (defined $newdata{'userid'}) && ($newdata{'userid'} eq '')){
   
 $debug and warn join "\t", map {"$_: $newdata{$_}"} qw(dateofbirth dateenrolled dateexpiry);
 my $loginexist=0;
+my $extended_patron_attributes = ();
 if ($op eq 'save' || $op eq 'insert'){
   if (checkcardnumber($newdata{cardnumber},$newdata{borrowernumber})){ 
     push @errors, 'ERROR_cardnumber';
@@ -207,6 +210,16 @@ if ($op eq 'save' || $op eq 'insert'){
     push @errors, "ERROR_login_exist";
     $loginexist=1; 
   }
+
+  if (C4::Context->preference('ExtendedPatronAttributes')) {
+    $extended_patron_attributes = parse_extended_patron_attributes($input);
+    foreach my $attr (@$extended_patron_attributes) {
+        unless (C4::Members::Attributes::CheckUniqueness($attr->{code}, $attr->{value}, $borrowernumber)) {
+            push @errors, "ERROR_extended_unique_id_failed";
+            $template->param(ERROR_extended_unique_id_failed => "$attr->{code}/$attr->{value}");
+        }
+    }
+  }
 }
 
 if ($op eq 'modify' || $op eq 'insert'){
@@ -229,12 +242,18 @@ if ((!$nok) and ($op eq 'insert' or $op eq 'save')){
 			my @orgs=split(/\|/,$data{'organisations'});
 			add_member_orgs($borrowernumber,\@orgs);
 		}
+        if (C4::Context->preference('ExtendedPatronAttributes') and $input->param('setting_extended_patron_attributes')) {
+            C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $extended_patron_attributes);
+        }
 	} elsif ($op eq 'save'){ 
 		if ($NoUpdateLogin) {
 			delete $newdata{'password'};
 			delete $newdata{'userid'};
 		}
 		&ModMember(%newdata);    
+        if (C4::Context->preference('ExtendedPatronAttributes') and $input->param('setting_extended_patron_attributes')) {
+            C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $extended_patron_attributes);
+        }
 	}
 	print scalar ($destination eq "circ") ? 
 		$input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber") :
@@ -253,7 +272,7 @@ if ($nok){
   %data=%newdata; 
   $template->param( updtype => ($op eq 'add' ?'I':'M'));	# used to check for $op eq "insert"... but we just changed $op!
   unless ($step){  
-    $template->param( step_1 => 1,step_2 => 1,step_3 => 1);
+    $template->param( step_1 => 1,step_2 => 1,step_3 => 1, step_4 => 1);
   }  
 } 
 if (C4::Context->preference("IndependantBranches")) {
@@ -268,12 +287,12 @@ if (C4::Context->preference("IndependantBranches")) {
 if ($op eq 'add'){
 	my $arg2 = $newdata{'dateenrolled'} || C4::Dates->today('iso');
 	$data{'dateexpiry'} = GetExpiryDate($newdata{'categorycode'},$arg2);
-	$template->param( updtype => 'I',step_1=>1,step_2=>1,step_3=>1);
+	$template->param( updtype => 'I',step_1=>1,step_2=>1,step_3=>1, step_4 => 1);
 	
 } 
 if ($op eq "modify")  {
   $template->param( updtype => 'M',modify => 1 );
-  $template->param( step_1=>1,step_2=>1,step_3=>1) unless $step;
+  $template->param( step_1=>1,step_2=>1,step_3=>1, step_4 => 1) unless $step;
 }
 # my $cardnumber=$data{'cardnumber'};
 $data{'cardnumber'}=fixup_cardnumber($data{'cardnumber'}) if $op eq 'add';
@@ -482,6 +501,11 @@ foreach (qw(dateenrolled dateexpiry dateofbirth)) {
 	$template->param( $_ => $data{$_});
 }
 
+if (C4::Context->preference('ExtendedPatronAttributes')) {
+    $template->param(ExtendedPatronAttributes => 1);
+    patron_attributes_form($template, $borrowernumber);
+}
+
 $template->param( "showguarantor"  => ($category_type=~/A|I|S|X/) ? 0 : 1); # associate with step to know where you are
 $debug and warn "memberentry step: $step";
 $template->param(%data);
@@ -521,6 +545,83 @@ $template->param(
   );
   
 output_html_with_http_headers $input, $cookie, $template->output;
+
+sub  parse_extended_patron_attributes {
+    my ($input) = @_;
+    my @patron_attr = grep { /^patron_attr_\d+$/ } $input->param();
+
+    my @attr = ();
+    my %dups = ();
+    foreach my $key (@patron_attr) {
+        my $value = $input->param($key);
+        next unless defined($value) and $value ne '';
+        my $password = $input->param("${key}_password");
+        my $code = $input->param("${key}_code");
+        next if exists $dups{$code}->{$value};
+        $dups{$code}->{$value} = 1;
+        push @attr, { code => $code, value => $value, password => $password };
+    }
+    return \@attr;
+}
+
+sub patron_attributes_form {
+    my $template = shift;
+    my $borrowernumber = shift;
+
+    my @types = C4::Members::AttributeTypes::GetAttributeTypes();
+    if (scalar(@types) == 0) {
+        $template->param(no_patron_attribute_types => 1);
+        return;
+    }
+    my $attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
+
+    # map patron's attributes into a more convenient structure
+    my %attr_hash = ();
+    foreach my $attr (@$attributes) {
+        push @{ $attr_hash{$attr->{code}} }, $attr;
+    }
+
+    my @attribute_loop = ();
+    my $i = 0;
+    foreach my $type_code (map { $_->{code} } @types) {
+        my $attr_type = C4::Members::AttributeTypes->fetch($type_code);
+        my $entry = {
+            code              => $attr_type->code(),
+            description       => $attr_type->description(),
+            repeatable        => $attr_type->repeatable(),
+            password_allowed  => $attr_type->password_allowed(),
+            category          => $attr_type->authorised_value_category(),
+            password          => '',
+        };
+        if (exists $attr_hash{$attr_type->code()}) {
+            foreach my $attr (@{ $attr_hash{$attr_type->code()} }) {
+                my $newentry = { map { $_ => $entry->{$_} } %$entry };
+                $newentry->{value} = $attr->{value};
+                $newentry->{password} = $attr->{password};
+                $newentry->{use_dropdown} = 0;
+                if ($attr_type->authorised_value_category()) {
+                    $newentry->{use_dropdown} = 1;
+                    $newentry->{auth_val_loop} = GetAuthorisedValues($attr_type->authorised_value_category(), $attr->{value});
+                }
+                $i++;
+                $newentry->{form_id} = "patron_attr_$i";
+                #use Data::Dumper; die Dumper($entry) if  $entry->{use_dropdown};
+                push @attribute_loop, $newentry;
+            }
+        } else {
+            $i++;
+            my $newentry = { map { $_ => $entry->{$_} } %$entry };
+            if ($attr_type->authorised_value_category()) {
+                $newentry->{use_dropdown} = 1;
+                $newentry->{auth_val_loop} = GetAuthorisedValues($attr_type->authorised_value_category());
+            }
+            $newentry->{form_id} = "patron_attr_$i";
+            push @attribute_loop, $newentry;
+        }
+    }
+    $template->param(patron_attributes => \@attribute_loop);
+
+}
 
 # Local Variables:
 # tab-width: 8

@@ -22,6 +22,32 @@ patron <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR name="firstname" --><!-- 
 		        document.form.city.value=RegExp.$2;					
 		});
 	 });
+
+    function clear_entry(node) {
+        var original = node.parentNode.parentNode;
+        $("input", original).attr('value', '');
+        $("select", original).attr('value', '');
+    }
+
+    function clone_entry(node) {
+        var original = node.parentNode.parentNode;
+        var clone = original.cloneNode(true);
+        var newId = 50 + parseInt(Math.random() * 100000);
+        $("input", clone).attr('id', function() {
+            return this.id.replace(/patron_attr_\d+/, 'patron_attr_' + newId);
+        });
+        $("input", clone).attr('name', function() {
+            return this.name.replace(/patron_attr_\d+/, 'patron_attr_' + newId);
+        });
+        $("select", clone).attr('id', function() {
+            return this.id.replace(/patron_attr_\d+/, 'patron_attr_' + newId);
+        });
+        $("select", clone).attr('name', function() {
+            return this.name.replace(/patron_attr_\d+/, 'patron_attr_' + newId);
+        });
+        original.parentNode.insertBefore(clone, original.nextSibling);
+    }
+
 //]]>
 </script>
 </head>
@@ -105,6 +131,10 @@ patron </strong><!-- /TMPL_IF --></div>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="ERROR_dateexpiry" -->
 				<li id="ERROR_dateexpiry">Date of expiration is invalid.</li>
+			<!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="ERROR_extended_unique_id_failed" -->
+                <li id="ERROR_extended_unique_id_failed">The attribute value 
+                    <!-- TMPL_VAR NAME="ERROR_extended_unique_id_failed" --> is already is use by another patron record.</li>
 			<!-- /TMPL_IF -->
 			</ul>
 		</div>
@@ -793,6 +823,63 @@ patron </strong><!-- /TMPL_IF --></div>
 			</fieldset>
 		<!-- /TMPL_UNLESS -->	
 <!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="step_4" --><!-- TMPL_IF NAME="ExtendedPatronAttributes" -->
+  <fieldset class="rows" id="memberentry_patron_attributes">
+    <input type="hidden" name="setting_extended_patron_attributes" value="1">
+    <legend>Additional attributes and identifiers</legend>
+    <!-- TMPL_IF NAME="no_patron_attribute_types" -->
+    No patron attribute types defined.
+    <!-- TMPL_ELSE -->
+    <table>
+        <tr>
+            <th>Type</th>
+            <th colspan="2">Value</th>
+        </tr>
+        <!-- TMPL_LOOP NAME='patron_attributes' -->
+        <tr>
+            <td><!-- TMPL_VAR NAME="code" --> (<!-- TMPL_VAR NAME="description" -->)
+            </td>
+            <td>
+                <input type="hidden" id="<!-- TMPL_VAR NAME="form_id" -->_code" name="<!-- TMPL_VAR NAME="form_id" -->_code"
+                       value="<!-- TMPL_VAR NAME="code" -->" />
+                <!-- TMPL_IF NAME="use_dropdown" -->
+                    <select id="<!-- TMPL_VAR NAME="form_id" -->" name="<!-- TMPL_VAR NAME="form_id" -->">
+                        <option value="" />
+                        <!-- TMPL_LOOP NAME="auth_val_loop" -->
+                            <!-- TMPL_IF NAME="selected" -->
+                                <option value="<!-- TMPL_VAR NAME="authorised_value" -->" selected="selected">
+                                    <!-- TMPL_VAR NAME="lib" -->
+                                </option>
+                            <!-- TMPL_ELSE -->
+                                <option value="<!-- TMPL_VAR NAME="authorised_value" -->" >
+                                    <!-- TMPL_VAR NAME="lib" -->
+                                </option>
+                            <!-- /TMPL_IF -->
+                        <!-- /TMPL_LOOP -->
+                    </select>
+                <!-- TMPL_ELSE -->
+                    <input type="text" maxlength="30" value="<!-- TMPL_VAR NAME="value" -->"
+                           id="<!-- TMPL_VAR NAME="form_id" -->" name="<!-- TMPL_VAR NAME="form_id" -->" />
+                <!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="password_allowed" -->
+                    (Password: <input type="password" maxlength="30" value="<!-- TMPL_VAR NAME="password" -->"
+                           id="<!-- TMPL_VAR NAME="form_id" -->_password" name="<!-- TMPL_VAR NAME="form_id" -->_password" />)
+                <!-- /TMPL_IF -->
+            </td>
+            <td>
+                <a href="#" onclick="clear_entry(this); return false;">Clear</a>
+                <!-- TMPL_IF NAME="repeatable" -->
+                <a href="#" onclick="clone_entry(this); return false;">New</a>
+                <!-- /TMPL_IF -->
+            </td>
+        </tr>
+        <!-- /TMPL_LOOP -->
+    </table>
+    <!-- /TMPL_IF -->
+  </fieldset>
+<!-- /TMPL_IF--><!-- /TMPL_IF -->
+
     <fieldset class="action">
         <input type="submit" name="save" onclick="return check_form_borrowers();" value="Save" />
       <!-- TMPL_IF NAME="opadd" -->
