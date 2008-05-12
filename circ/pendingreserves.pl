@@ -259,6 +259,7 @@ $template->param(
     reserveloop     	=> \@reservedata,
     "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
     DHTMLcalendar_dateformat =>  C4::Dates->DHTMLcalendar(),
+	dateformat    => C4::Context->preference("dateformat"),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

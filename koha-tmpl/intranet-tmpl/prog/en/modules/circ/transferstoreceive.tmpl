@@ -11,11 +11,14 @@ $.tablesorter.addParser({
     type: 'text' 
 });
 	 $(document).ready(function() {
+            <!-- TMPL_LOOP NAME="branchesloop" -->
 		$.tablesorter.defaults.widgets = ['zebra']; 
-		$("#transferst").tablesorter({
+		$("#transferst<!-- TMPL_VAR NAME="branchcode" -->").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
+		dateFormat: 'uk',<!-- /TMPL_IF -->
 			sortList: [[1,0]],
 			headers: { 1: { sorter: 'articles' },4:{sorter:false}}
 		}); 
+		<!-- /TMPL_LOOP -->
 	 });
 //]]>
 </script>
@@ -39,7 +42,7 @@ $.tablesorter.addParser({
             <div id="resultlist">
             <!-- TMPL_LOOP NAME="branchesloop" -->
                 <!-- TMPL_IF NAME="branchcode" -->
-                <table style="width: 100%" id="transferst">
+                <table style="width: 100%" id="transferst<!-- TMPL_VAR NAME="branchcode" -->">
 				<caption>Coming from <!-- TMPL_VAR NAME="branchname" --></caption>
                 <thead><tr>
                     <th>Date of transfer</th>

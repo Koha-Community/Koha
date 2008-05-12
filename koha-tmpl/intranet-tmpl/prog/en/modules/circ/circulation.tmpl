@@ -17,14 +17,15 @@ $.tablesorter.addParser({
 	 $(document).ready(function() {
  		$('#patronlists > ul').tabs();
 		$.tablesorter.defaults.widgets = ['zebra']; 
-		$("#issuest").tablesorter({
-//		sortList: [[0,0]], don't sort by default to preserve 'previous checkouts' header
+		$("#issuest").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
+		dateFormat: 'uk',<!-- /TMPL_IF -->
 		headers: { 1: { sorter: 'articles' },4:{sorter:false},5: { sorter: false },6:{sorter:false}}
 		});
 		$("#issuest").bind("sortEnd",function() {
         	$("#previous").parents("tr").remove();  // 'previous checkouts' header chokes table sorter
 	    }); 
-		$("#holdst").tablesorter({
+		$("#holdst").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
+		dateFormat: 'uk',<!-- /TMPL_IF -->
 			sortList: [[0,0]],
 			headers: { 1: { sorter: 'articles' }}
 		}); 

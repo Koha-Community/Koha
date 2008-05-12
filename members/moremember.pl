@@ -357,6 +357,7 @@ $template->param(
     StaffMember		=> ($category_type eq 'S'),
 	is_child        => ($category_type eq 'C'),
 	# 		 reserveloop     => \@reservedata,
+	dateformat    => C4::Context->preference("dateformat"),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

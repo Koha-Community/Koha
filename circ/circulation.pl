@@ -702,7 +702,8 @@ $template->param( picture => 1 ) if $picture;
 
 $template->param(
     SpecifyDueDate           => C4::Context->preference("SpecifyDueDate"),
-    CircAutocompl            => C4::Context->preference("CircAutocompl") ,
+    CircAutocompl            => C4::Context->preference("CircAutocompl"),
+	dateformat            => C4::Context->preference("dateformat"),
     DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
 );
 output_html_with_http_headers $query, $cookie, $template->output;

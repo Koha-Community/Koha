@@ -159,6 +159,7 @@ foreach my $num (@getreserves) {
 $template->param(
     reserveloop => \@reservloop,
     show_date   => format_date(C4::Dates->today('iso')),
+	dateformat   => C4::Context->preference("dateformat"),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

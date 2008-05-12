@@ -120,6 +120,7 @@ foreach my $thisitemtype (keys %$itemtypes) {
 
 $template->param(
                  itemtypeloop =>\@itemtypeloop,
+                 dateformat    => C4::Context->preference("dateformat"),
                 );
 output_html_with_http_headers $input, $cookie, $template->output;
 

@@ -174,6 +174,7 @@ push @allsuggestions,{"suggestiontype"=>"rejected",
 $template->param(
     suggestions       => \@allsuggestions,
     "op_$op"                => 1,
+    dateformat    => C4::Context->preference("dateformat"),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

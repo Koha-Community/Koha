@@ -15,13 +15,15 @@ $.tablesorter.addParser({
 });
             $(function() {
             $('#opac-user-views > ul').tabs();
-			$("#holdst").tablesorter({
+			$("#holdst").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
+		dateFormat: 'uk',<!-- /TMPL_IF -->
 				widgets : ['zebra'],
 				sortList: [[0,0]],
 		        headers: { 0: { sorter: 'articles' },4: { sorter: false }
 				}
 			}); 
-			$("#checkoutst").tablesorter({
+			$("#checkoutst").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
+		dateFormat: 'uk',<!-- /TMPL_IF -->
 				widgets : ['zebra'],
 				<!-- TMPL_IF NAME="AmazonContent" -->
 				sortList: [[3,0]],

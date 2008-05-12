@@ -11,11 +11,14 @@ $.tablesorter.addParser({
     type: 'text' 
 });
 	 $(document).ready(function() {
+	 <!-- TMPL_LOOP NAME="branchesloop" -->
 		$.tablesorter.defaults.widgets = ['zebra']; 
-		$("#transferst").tablesorter({
+		$("#transferst<!-- TMPL_VAR NAME="branchcode" -->").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
+		dateFormat: 'uk',<!-- /TMPL_IF -->
 			sortList: [[1,0]],
 			headers: { 1: { sorter: 'articles' },4:{sorter:false}}
 		}); 
+	<!-- /TMPL_LOOP -->
 	 });
 //]]>
 </script>
@@ -39,7 +42,7 @@ $.tablesorter.addParser({
         <!-- TMPL_LOOP NAME="branchesloop" -->
             <!-- TMPL_IF NAME="branchcode" -->
 			<h4>Holds waiting for: <!-- TMPL_VAR NAME="branchname" --></h4>
-            <table id="transferst">
+            <table id="transferst<!-- TMPL_VAR NAME="branchcode" -->" style="width:100%;">
             <thead><tr>
                 <th>Date of hold</th>
                 <th>Title</th>
@@ -56,7 +59,7 @@ $.tablesorter.addParser({
 <a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>
 <!-- TMPL_ELSE -->
 <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" -->  <!-- TMPL_VAR NAME="subtitle" --></a><!-- /TMPL_IF -->&nbsp; (<b><!-- TMPL_VAR NAME="itemtype" --> </b>) <br />Barcode : <!-- TMPL_VAR NAME="barcode" --></td>
-                    <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernum"-->"><!-- TMPL_VAR NAME="borrowername" --> &nbsp; <!-- TMPL_VAR NAME="borrowerfirstname" --></a><br />
+                    <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernum"-->"><!-- TMPL_VAR NAME="borrowername" -->, <!-- TMPL_VAR NAME="borrowerfirstname" --></a><br />
                             <!-- TMPL_VAR NAME="borrowerphone" --><br />
                             <!-- TMPL_IF NAME="borrowermail" -->
                                 <a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Reservation: <!-- TMPL_VAR NAME="title" -->">

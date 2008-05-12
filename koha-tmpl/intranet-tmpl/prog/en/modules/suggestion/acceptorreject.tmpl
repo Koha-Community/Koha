@@ -25,7 +25,8 @@
 		    }
 		});
 		$.tablesorter.defaults.widgets = ['zebra'];
-		$("#acceptedt").tablesorter({
+		$("#acceptedt").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
+		dateFormat: 'uk',<!-- /TMPL_IF -->
 			headers: { 0: { sorter: 'articles' },3:{sorter: false},4:{sorter: false},5:{sorter: false},6:{sorter: false},7:{sorter: false}}
 		});
 		$("#acceptedt").bind("sortStart",function() {
@@ -33,7 +34,8 @@
 		}).bind("sortEnd",function() {
 			$("#sorting").hide();
 		});
-		$("#pendingt").tablesorter({
+		$("#pendingt").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
+		dateFormat: 'uk',<!-- /TMPL_IF -->
 	    headers: { 0: { sorter: 'articles' },3:{sorter: false},4:{sorter: false},5:{sorter: false},6:{sorter: false},7:{sorter: false}}
 		});
 		$("#pendingt").bind("sortStart",function() {
@@ -41,7 +43,8 @@
 		}).bind("sortEnd",function() {
 			$("#sorting").hide();
 		});
-		$("#rejectedt").tablesorter({
+		$("#rejectedt").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
+		dateFormat: 'uk',<!-- /TMPL_IF -->
 	    headers: { 0: { sorter: 'articles' },3:{sorter: false},4:{sorter: false},5:{sorter: false},6:{sorter: false},7:{sorter: false}}
 		});
 		$("#rejectedt").bind("sortStart",function() {

@@ -13,7 +13,8 @@ $.tablesorter.addParser({
 	 $(document).ready(function() {
 	 	$("th a").hide();
 		$.tablesorter.defaults.widgets = ['zebra'];
-		$("#holdst").tablesorter({
+		$("#holdst").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
+		dateFormat: 'uk',<!-- /TMPL_IF -->
 			sortList: [[3,0]],
 			headers: { 1:{sorter:'articles'},3: { sorter: 'articles' },4:{sorter:false}}
 		}); 
