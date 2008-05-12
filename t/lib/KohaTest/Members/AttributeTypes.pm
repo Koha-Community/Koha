@@ -1,6 +1,5 @@
 package KohaTest::Members::AttributeTypes;
-#use base qw( KohaTest );
-use base qw( Test::Class );
+use base qw( KohaTest );
 
 use strict;
 use warnings;
