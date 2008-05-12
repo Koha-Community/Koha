@@ -40,8 +40,21 @@
 		<input type="file" id="uploadborrowers" name="uploadborrowers" />
 	</li>
 </ol></fieldset>
+    <fieldset class="rows">
+        <legend>Field to use for record matching</legend>
+        <ol>
+            <li class="radio">
+                <select name="matchpoint" id="matchpoint">
+                    <option value="cardnumber">Cardnumber</option>
+                    <!-- TMPL_LOOP NAME="matchpoints" -->
+                        <option value="<!-- TMPL_VAR NAME="code" -->"><!-- TMPL_VAR NAME="description" --></option>
+                    <!-- /TMPL_LOOP -->
+                </select>
+            </li>
+        </ol>
+    </fieldset>
 	<fieldset class="rows">
-	<legend>If cardnumber is already in the borrowers table:</legend><ol><li class="radio">
+	<legend>If matching record is already in the borrowers table:</legend><ol><li class="radio">
 		 
 		<input type="radio" id="overwrite_cardnumberno" name="overwrite_cardnumber" value="0" checked="checked" /><label for="overwrite_cardnumberno">Ignore this one, keep the existing one</label></li>
 <li class="radio">
@@ -66,8 +79,14 @@
     'debarred',      'contactname',  'contactfirstname', 'contacttitle',
     'borrowernotes', 'relationship', 'ethnicity',        'ethnotes',
     'sex',           'userid',       'opacnote',         'contactnote',
-    'password',      'sort1',        'sort2'
+    'password',      'sort1',        'sort2'<!-- TMPL_IF NAME="ExtendedPatronAttributes" -->, 'patron_attributes'<!-- /TMPL_IF -->
 </li>
+<!-- TMPL_IF NAME="ExtendedPatronAttributes" -->
+<li>If loading patron attributes, the 'patron_attributes' field should contain a comma-separated list of attribute types 
+and values.  The attribute type code and a ':' should precede each value. For example: &quot;INSTID:12345,LANG:fr&quot;.  This
+means that if an input record has more than one attribute, the 'patron_attributes' field must be wrapped in double quotation marks.
+<li>
+<!-- /TMPL_IF -->
 <li>Please make sure the 'branchcode' and 'categorycode' are valid entries in your database.</li>
 <li>password should be stored in plaintext, and will be converted to a md5 hash (if your passwords are already encrypted, talk to your systems administrator about options).</li>
 </ul>
