@@ -457,14 +457,13 @@ sub UpdateFine {
            
             my $diff = $amount - $data->{'amount'};
             my $out  = $data->{'amountoutstanding'} + $diff;
-			my $increment = -1 * $diff;
             my $sth2 = $dbh->prepare(
                 "UPDATE accountlines SET date=now(), amount=?,
       amountoutstanding=?, lastincrement=? , accounttype='FU' WHERE
       borrowernumber=? AND itemnumber=?
       AND (accounttype='FU' OR accounttype='O') AND description LIKE ?"
             );
-            $sth2->execute( $amount, $out, $increment, $data->{'borrowernumber'},
+            $sth2->execute( $amount, $out, $diff , $data->{'borrowernumber'},
                 $data->{'itemnumber'}, "%$due%" );
             $sth2->finish;
         }
