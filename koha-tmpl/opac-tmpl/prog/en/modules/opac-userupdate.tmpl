@@ -69,6 +69,17 @@
 	<li><label for="categorycode">Patron Category:</label><input type="text" id="categorycode" disabled="disabled" readonly="readonly" value="<!-- TMPL_VAR NAME="categorycode" -->" /></li>
 	<li><label for="dateenrolled">Joined: </label><input type="text" id="dateenrolled" disabled="disabled" readonly="readonly" value="<!-- TMPL_VAR NAME="dateenrolled" -->" /></li>
 	<li><label for="dateexpiry">Expires: </label><input type="text" id="dateexpiry" disabled="disabled" readonly="readonly" value="<!-- TMPL_VAR NAME="dateexpiry" -->" /></li>
+   <!-- TMPL_IF NAME="ExtendedPatronAttributes" -->
+    <!-- TMPL_LOOP NAME="patron_attributes" -->
+        <li><label><!-- TMPL_VAR NAME="description" --></label>
+        <!-- TMPL_IF NAME="value_description" -->
+            <input type="text"  disabled="disabled" readonly="readonly" value="<!-- TMPL_VAR NAME="value_description" -->" />
+        <!-- TMPL_ELSE -->
+            <input type="text"  disabled="disabled" readonly="readonly" value="<!-- TMPL_VAR NAME="value" -->" />
+        <!-- /TMPL_IF -->
+        </li>
+    <!-- /TMPL_LOOP -->
+   <!-- /TMPL_IF  -->
 </ol>
 </fieldset>
 <fieldset class="action">
