@@ -3,7 +3,7 @@
 <!-- TMPL_IF name="op_else" -->Purchase Suggestions<!-- /TMPL_IF -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.pack.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pack.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
 $.tablesorter.addParser({
@@ -129,10 +129,10 @@ $.tablesorter.addParser({
                     <!-- TMPL_VAR name="note" -->
                 </td>
                 <!-- TMPL_IF NAME="OPACViewOthersSuggestions" --><td>
-                    <!-- TMPL_VAR name="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamesuggestedby" -->
+                    <<!-- TMPL_IF NAME="surnamesuggestedby" -->!-- TMPL_VAR name="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamesuggestedby" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
                 </td><!-- /TMPL_IF -->
                 <td>
-					<!-- TMPL_VAR name="surnamemanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamemanagedby" -->
+					<!-- TMPL_IF NAME="surnamemanagedby" --><!-- TMPL_VAR name="surnamemanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamemanagedby" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
                 </td>
                 <td>
                     <!-- TMPL_IF name="ASKED" -->Requested<!-- /TMPL_IF -->

@@ -55,9 +55,9 @@ function update_child() {
 	
 		var moremenu = [
 			{ text: _("Renew Patron"),  onclick: { fn: confirm_reregistration } },
-			{ text: _("Set Permissions"), url: "/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->",<!-- TMPL_UNLESS NAME="CAN_user_permissions" -->disabled: true, <!-- /TMPL_UNLESS -->},
+			{ text: _("Set Permissions"), url: "/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->"<!-- TMPL_UNLESS NAME="CAN_user_permissions" -->, disabled: true<!-- /TMPL_UNLESS -->},
 			{ text: _("Delete"), onclick: { fn: confirm_deletion } },
-			{ text: _("Update Child to Adult Patron") , onclick: { fn: update_child }, <!-- TMPL_UNLESS NAME="is_child" -->disabled: true, <!-- /TMPL_UNLESS -->},
+			{ text: _("Update Child to Adult Patron") , onclick: { fn: update_child }<!-- TMPL_UNLESS NAME="is_child" -->, disabled: true<!-- /TMPL_UNLESS -->}
 		]
 
 	    new YAHOO.widget.Button({

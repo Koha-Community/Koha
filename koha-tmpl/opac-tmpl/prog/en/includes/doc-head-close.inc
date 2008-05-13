@@ -24,7 +24,7 @@
 <script type="text/javascript" language="javascript">
 	//<![CDATA[
     function _(s) { return s } // dummy function for gettext
-    <!-- TMPL_IF NAME="opacbookbag" -->var MSG_BASKET_EMPTY = _("You cart is currently empty");
+    <!-- TMPL_IF NAME="opacbookbag" -->var MSG_BASKET_EMPTY = _("Your cart is currently empty");
     var MSG_RECORD_IN_BASKET = _("This item is already in your cart");
     var MSG_RECORD_ADDED = _("This item has been added to your cart");
     var MSG_NRECORDS_ADDED = _(" item(s) added to your cart");

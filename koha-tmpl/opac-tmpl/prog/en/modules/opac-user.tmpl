@@ -4,7 +4,7 @@
     <!-- TMPL_VAR name="firstname" --><!-- TMPL_VAR name="surname" -->
 <!-- /TMPL_LOOP -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pack.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
 $.tablesorter.addParser({
@@ -25,24 +25,21 @@ $.tablesorter.addParser({
 			$("#checkoutst").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
 		dateFormat: 'uk',<!-- /TMPL_IF -->
 				widgets : ['zebra'],
-				<!-- TMPL_IF NAME="AmazonContent" -->
-				sortList: [[3,0]],
-				<!-- TMPL_IF NAME="item-level_itypes" -->
-				sortList: [[3,0]],
-				headers: { 0: { sorter: false }, 1: { sorter: 'articles' },4: { sorter: false },5: { sorter: false }}
+				<!-- TMPL_IF EXPR="AmazonContent||GoogleJackets||BakerTaylorEnabled" -->
+					sortList: [[3,0]],
+						<!-- TMPL_IF NAME="item-level_itypes" -->
+							headers: { 0: { sorter: false }, 1: { sorter: 'articles' },4: { sorter: false },5: { sorter: false }}
+						<!-- TMPL_ELSE -->
+							headers: { 0: { sorter: false }, 1: { sorter: 'articles' },5: { sorter: false },6: { sorter: false }}
+						<!-- /TMPL_IF -->
 				<!-- TMPL_ELSE -->
-				sortList: [[3,0]],
-				headers: { 0: { sorter: false }, 1: { sorter: 'articles' },5: { sorter: false },6: { sorter: false }}
-				<!-- /TMPL_IF -->
-				<!-- TMPL_ELSE -->
-				sortList: [[2,0]],
-				<!-- TMPL_IF NAME="item-level_itypes" -->
-				sortList: [[2,0]],
-				headers: { 0: { sorter: 'articles' },3: { sorter: false },4: { sorter: false }}
-				<!-- TMPL_ELSE -->
-				sortList: [[3,0]],
-				headers: { 0: { sorter: 'articles' },4: { sorter: false },5: { sorter: false }}
-				<!-- /TMPL_IF -->
+						<!-- TMPL_IF NAME="item-level_itypes" -->
+							sortList: [[2,0]],
+							headers: { 0: { sorter: 'articles' },3: { sorter: false },4: { sorter: false }}
+						<!-- TMPL_ELSE -->
+							sortList: [[3,0]],
+							headers: { 0: { sorter: 'articles' },4: { sorter: false },5: { sorter: false }}
+					<!-- /TMPL_IF -->
 				<!-- /TMPL_IF -->
 			}); 
             });
@@ -134,27 +131,17 @@ $.tablesorter.addParser({
             </tr>
             <!-- TMPL_LOOP NAME="WAITING" -->
                 <tr>
-                    <td>
-                        <img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="itemtype" -->" title="<!-- TMPL_VAR NAME="itemtype" -->" />
-                    </td>
-                    <td>
-                        <a href="opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
+                    <td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="itemtype" -->" title="<!-- TMPL_VAR NAME="itemtype" -->" /></td>
+                    <td><a href="opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
                             <!-- TMPL_VAR NAME="waiting_title" -->
-                        </a>
-                        <span class="item-details">
+                        </a><span class="item-details">
                             <!-- TMPL_VAR NAME="author" -->
-                        </span>
-                    </td>
-                    <td>
-                        <!-- TMPL_VAR NAME="reservedate" -->
-                    </td>
-                    <td>
-                        <!-- TMPL_IF NAME="atdestination" -->
-                        <strong>Waiting</strong> at <!-- TMPL_VAR NAME="branch" -->
+                        </span></td>
+                    <td><!-- TMPL_VAR NAME="reservedate" --></td>
+                    <td><!-- TMPL_IF NAME="atdestination" --><strong>Waiting</strong> at <!-- TMPL_VAR NAME="branch" -->
                         <!-- TMPL_ELSE -->
                         In transit from <!-- TMPL_VAR NAME="holdingbranch" --> to <!-- TMPL_VAR NAME="branch" -->
-                        <!-- /TMPL_IF -->
-                    </td>
+                        <!-- /TMPL_IF --></td>
                 </tr>
             <!-- /TMPL_LOOP -->
         </table></div>
@@ -165,7 +152,7 @@ $.tablesorter.addParser({
         <table id="checkoutst">
         <caption><!-- TMPL_VAR NAME="issues_count" --> Items Checked Out</caption>
        <thead><tr>
-		<!-- TMPL_IF NAME="AmazonContent" --><th>&nbsp;</th><!-- /TMPL_IF -->
+		<!-- TMPL_IF EXPR="AmazonContent||GoogleJackets||BakerTaylorEnabled" --><th>&nbsp;</th><!-- /TMPL_IF -->
         <th>Title</th>
 		<!-- TMPL_UNLESS NAME="item-level_itypes" --><th>Item Type</th> <!-- /TMPL_UNLESS -->
         <th>Call No.</th>
@@ -193,15 +180,15 @@ $.tablesorter.addParser({
             <!-- /TMPL_IF -->
             
             <!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="AmazonContent" --><td><!-- TMPL_IF NAME="isbn" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.THUMBZZZ.jpg" alt="Book Cover Image" class="thumbnail" /></a><!-- /TMPL_IF --></td><!-- /TMPL_IF -->
-                <td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
-                    <span class="item-details">
+<!-- TMPL_IF NAME="AmazonContent" --><td><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="amazonisbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="amazonisbn" -->.01.THUMBZZZ.jpg" alt="Cover Image" /></a></td><!-- /TMPL_IF -->
+
+    <!-- TMPL_IF NAME="GoogleJackets" --><td><div style="block" title="<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" id="<!-- TMPL_VAR NAME="amazonisbn" -->" class="gbs-thumbnail"></div></td><!-- /TMPL_IF -->
+
+    <!-- TMPL_IF NAME="BakerTaylorEnabled" --><td><!-- TMPL_IF NAME="clean_isbn" --><a href="https://<!-- TMPL_VAR NAME="BakerTaylorBookstoreURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="clean_isbn" -->"><img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="clean_isbn" -->" /></a><!-- /TMPL_IF --></td><!-- /TMPL_IF -->
+                <td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><span class="item-details">
                         <!-- TMPL_VAR NAME="author" -->
-                    </span>
-                </td>
-                <!-- TMPL_UNLESS NAME="item-level_itypes" --><td>
-                    <!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR name="description" -->
-                </td><!-- /TMPL_UNLESS -->
+                    </span></td>
+                <!-- TMPL_UNLESS NAME="item-level_itypes" --><td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR name="description" --></td><!-- /TMPL_UNLESS -->
                 <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
                 <!-- TMPL_IF NAME="overdue" -->
                     <td class="overdue"><!-- TMPL_VAR NAME="date_due" --></td>
@@ -210,13 +197,10 @@ $.tablesorter.addParser({
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF name="OpacRenewalAllowed" -->
                     <!-- TMPL_UNLESS name="patron_flagged" -->
-                    <td>
-                        <!-- TMPL_IF NAME="status" -->
-                            <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Renew</a> <span class="renewals">(<!-- TMPL_VAR NAME="renewsleft" --> of <!-- TMPL_VAR NAME="renewsallowed" --> renewals remaining)</span>
+                    <td><!-- TMPL_IF NAME="status" --><a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Renew</a> <span class="renewals">(<!-- TMPL_VAR NAME="renewsleft" --> of <!-- TMPL_VAR NAME="renewsallowed" --> renewals remaining)</span>
                         <!-- TMPL_ELSE -->
                             Not renewable
-                        <!-- /TMPL_IF -->
-                    </td>
+                        <!-- /TMPL_IF --></td>
                     <!-- /TMPL_UNLESS -->
                 <!-- /TMPL_IF -->
                 <td><!-- TMPL_IF NAME="charges" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
