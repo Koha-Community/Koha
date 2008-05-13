@@ -1860,7 +1860,7 @@ sub GetBorrowersWhoHaveNotBorrowedSince {
    ";
     my @query_params;
     if ($filterbranch && $filterbranch ne ""){ 
-        $query.=" WHERE branchcode= ?";
+        $query.=" WHERE borrowers.branchcode= ?";
         push @query_params,$filterbranch;
     }    
     $query.=" GROUP BY borrowers.borrowernumber";
@@ -1911,7 +1911,7 @@ sub GetBorrowersWhoHaveNeverBorrowed {
    ";
     my @query_params;
     if ($filterbranch && $filterbranch ne ""){ 
-        $query.=" AND branchcode= ?";
+        $query.=" AND borrowers.branchcode= ?";
         push @query_params,$filterbranch;
     }
     warn $query if $debug;

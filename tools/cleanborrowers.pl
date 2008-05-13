@@ -66,18 +66,18 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 if ( $params->{'step2'} ) {
     $filterdate1 = format_date_in_iso($params->{'filterdate1'});
     $filterdate2 = format_date_in_iso($params->{'filterdate2'});
-    my $checkbox = $params->{'checkbox'};
+    my %checkboxes = map { $_ => 1 } split /\0/, $params->{'checkbox'};
 
     my $totalDel;
     my $membersToDelete;
-    if ($checkbox eq "borrower") {
+    if ($checkboxes{borrower}) {
         $membersToDelete = GetBorrowersWhoHaveNotBorrowedSince($filterdate1);
         $totalDel = scalar @$membersToDelete;
             
     }
     my $totalAno;
     my $membersToAnonymize;
-    if ($checkbox eq "issue") {
+    if ($checkboxes{issue}) {
         $membersToAnonymize =
           GetBorrowersWithIssuesHistoryOlderThan($filterdate2);
         $totalAno = scalar @$membersToAnonymize;
