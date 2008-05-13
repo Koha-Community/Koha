@@ -59,7 +59,7 @@ This package is used to deal with holidays. Through this package, you can set al
 
 =item new
 
-    $calendar = C4::Calendar::Calendar->new(branchcode => $branchcode);
+    $calendar = C4::Calendar->new(branchcode => $branchcode);
 
 C<$branchcode> Is the branch code wich you want to use calendar.
 
@@ -339,8 +339,8 @@ sub insert_exception_holiday {
 	$insertException->execute( $self->{branchcode}, $options{day},$options{month},$options{year}, $isexception, $options{title}, $options{description});
     $insertException->finish;
 
-    $self->{'exceptions_holidays'}->{"$options{year}/$options{month}/$options{day}"}{title} = $options{title};
-    $self->{'exceptions_holidays'}->{"$options{year}/$options{month}/$options{day}"}{description} = $options{description};
+    $self->{'exception_holidays'}->{"$options{year}/$options{month}/$options{day}"}{title} = $options{title};
+    $self->{'exception_holidays'}->{"$options{year}/$options{month}/$options{day}"}{description} = $options{description};
     return $self;
 }
 
