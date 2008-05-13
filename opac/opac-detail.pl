@@ -163,6 +163,7 @@ my $marcauthorsarray = GetMarcAuthors ($record,$marcflavour);
 my $marcsubjctsarray = GetMarcSubjects($record,$marcflavour);
 my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);
 my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
+my $subtitle         = C4::Biblio::get_koha_field_from_marc('bibliosubtitle', 'subtitle', $record, '');
 
     $template->param(
                      MARCNOTES               => $marcnotesarray,
@@ -176,6 +177,7 @@ my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
                      itemdata_enumchron      => $itemfields{enumchron},
                      itemdata_copynumber     => $itemfields{copynumber},
                      authorised_value_images => $biblio_authorised_value_images,
+                     subtitle                => $subtitle,
     );
 
 foreach ( keys %{$dat} ) {

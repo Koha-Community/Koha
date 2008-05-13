@@ -56,7 +56,7 @@ function verify_images() {
     <!-- TMPL_IF NAME="AmazonContent" --><div class="yui-gb"><!-- TMPL_ELSE --><div class="yui-g"><!-- /TMPL_IF -->
     <div id="catalogue_detail_biblio" class="yui-u first">
         
-    <h3><!-- TMPL_VAR NAME="title" --></h3> 
+    <h3><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" --></h3> 
             <!-- TMPL_UNLESS NAME="item-level_itypes" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->"><!-- /TMPL_UNLESS -->
             <!-- TMPL_IF name="volume" --> <!-- TMPL_VAR name="volume" --><!-- /TMPL_IF -->
             <!-- TMPL_IF name="volumedesc" -->, <!-- TMPL_VAR name="volumedesc" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="number" --> <!-- TMPL_VAR NAME="number" --> <!-- /TMPL_IF -->

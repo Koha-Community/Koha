@@ -1242,6 +1242,7 @@ sub searchResults {
     for ( my $i = $offset ; $i <= $times - 1 ; $i++ ) {
         my $marcrecord = MARC::File::USMARC::decode( $marcresults[$i] );
         my $oldbiblio = TransformMarcToKoha( $dbh, $marcrecord, '' );
+        $oldbiblio->{subtitle} = C4::Biblio::get_koha_field_from_marc('bibliosubtitle', 'subtitle', $marcrecord, '');
         $oldbiblio->{result_number} = $i + 1;
 
         # add imageurl to itemtype if there is one
