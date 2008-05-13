@@ -149,7 +149,6 @@ reserves.found IS NULL
 AND items.itemnumber NOT IN (SELECT itemnumber FROM branchtransfers where datearrived IS NULL)
 AND items.itemnumber NOT IN (SELECT itemnumber FROM issues)
 AND reserves.priority <> 0 
-AND reserves.itemnumber is NULL
 AND notforloan = 0 AND damaged = 0 AND itemlost = 0 AND wthdrawn = 0
 ";
 # GROUP BY reserves.biblionumber allows only items that are not checked out, else multiples occur when 
