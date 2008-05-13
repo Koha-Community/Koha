@@ -72,5 +72,5 @@ if ($add){
 		    phone => $data->{'phone'},
 		    email => $data->{'email'},
         );
-    print $input->header( -type => 'utf-8', -cookie => $cookie),$template->output;
+    output_html_with_http_headers $input, $cookie, $template->output;
 }

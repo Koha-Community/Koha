@@ -42,6 +42,7 @@ InstallAuth - Authenticates Koha users for Install process
 
   use CGI;
   use InstallAuth;
+  use C4::Output;
 
   my $query = new CGI;
 
@@ -53,11 +54,7 @@ InstallAuth - Authenticates Koha users for Install process
 			     flagsrequired   => {borrow => 1},
 			  });
 
-  print $query->header(
-    -type => 'utf-8',
-    -cookie => $cookie
-  ), $template->output;
-
+  output_html_with_http_headers $query, $cookie, $template->output;
 
 =head1 DESCRIPTION
 

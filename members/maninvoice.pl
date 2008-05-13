@@ -55,10 +55,7 @@ if ($add){
 			$template->param('ITEMNUMBER' => 1);
 		}
 		$template->param('ERROR' => $error);
-		print $input->header(
-			-type => 'utf-8',
-			-cookie => $cookie
-		),$template->output;
+        output_html_with_http_headers $input, $cookie, $template->output;
 	}
 	else {
 		print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
@@ -75,9 +72,9 @@ if ($add){
 					debug => 1,
 					});
 
-$template->param( adultborrower => 1 ) if ( $data->{'category_type'} eq 'A' );
-my ($picture, $dberror) = GetPatronImage($data->{'cardnumber'});
-$template->param( picture => 1 ) if $picture;
+    $template->param( adultborrower => 1 ) if ( $data->{'category_type'} eq 'A' );
+    my ($picture, $dberror) = GetPatronImage($data->{'cardnumber'});
+    $template->param( picture => 1 ) if $picture;
 
 	$template->param(
                     borrowernumber => $borrowernumber,
@@ -94,8 +91,5 @@ $template->param( picture => 1 ) if $picture;
 					phone => $data->{'phone'},
 					email => $data->{'email'},
     );
-    print $input->header(
-	    -type => 'utf-8',
-	    -cookie => $cookie
-    ),$template->output;
+    output_html_with_http_headers $input, $cookie, $template->output;
 }
