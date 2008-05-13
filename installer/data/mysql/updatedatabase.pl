@@ -1555,6 +1555,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (Changing yuipath behaviour in managing a local value)\n";                                   
     SetVersion ($DBversion);                                                                                                       
 }
+$DBversion = "3.00.00.084";
+    if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('RenewSerialAddsSuggestion','0','if ON, adds a new suggestion at serial subscription renewal',NULL,'YesNo')");
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('GoogleJackets','0','if ON, displays jacket covers from Google Books API',NULL,'YesNo')");
+    print "Upgrade to $DBversion done (add new sysprefs)\n";
+    SetVersion ($DBversion);
+}                                             
 
 =item DropAllForeignKeys($table)
 
