@@ -85,8 +85,11 @@ sub _init {
     my $self = shift @_;
 
     my $dbh = C4::Context->dbh();
-    my $week_days_sql = $dbh->prepare("select weekday, title, description from repeatable_holidays where ('$self->{branchcode}' = branchcode) and (NOT(ISNULL(weekday)))");
-    $week_days_sql->execute;
+    my $week_days_sql = $dbh->prepare( 'SELECT weekday, title, description
+                                          FROM repeatable_holidays
+                                          WHERE ( branchcode = ? )
+                                            AND (NOT(ISNULL(weekday)))' );
+    $week_days_sql->execute( $self->{'branchcode'} );
     my %week_days_holidays;
     while (my ($weekday, $title, $description) = $week_days_sql->fetchrow) {
         $week_days_holidays{$weekday}{title} = $title;
@@ -95,8 +98,11 @@ sub _init {
     $week_days_sql->finish;
     $self->{'week_days_holidays'} = \%week_days_holidays;
 
-    my $day_month_sql = $dbh->prepare("select day, month, title, description from repeatable_holidays where ('$self->{branchcode}' = branchcode) and ISNULL(weekday)");
-    $day_month_sql->execute;
+    my $day_month_sql = $dbh->prepare( 'SELECT day, month, title, description
+                                         FROM repeatable_holidays
+                                         WHERE ( branchcode = ? )
+                                           AND ISNULL(weekday)' );
+    $day_month_sql->execute( $self->{'branchcode'} );
     my %day_month_holidays;
     while (my ($day, $month, $title, $description) = $day_month_sql->fetchrow) {
         $day_month_holidays{"$month/$day"}{title} = $title;
@@ -105,8 +111,11 @@ sub _init {
     $day_month_sql->finish;
     $self->{'day_month_holidays'} = \%day_month_holidays;
 
-    my $exception_holidays_sql = $dbh->prepare("select day, month, year, title, description from special_holidays where ('$self->{branchcode}' = branchcode) and (isexception = 1)");
-    $exception_holidays_sql->execute;
+    my $exception_holidays_sql = $dbh->prepare( 'SELECT day, month, year, title, description
+                                                   FROM special_holidays
+                                                   WHERE ( branchcode = ? )
+                                                     AnD (isexception = 1)' );
+    $exception_holidays_sql->execute( $self->{'branchcode'} );
     my %exception_holidays;
     while (my ($day, $month, $year, $title, $description) = $exception_holidays_sql->fetchrow) {
         $exception_holidays{"$year/$month/$day"}{title} = $title;
@@ -115,8 +124,11 @@ sub _init {
     $exception_holidays_sql->finish;
     $self->{'exception_holidays'} = \%exception_holidays;
 
-    my $holidays_sql = $dbh->prepare("select day, month, year, title, description from special_holidays where ('$self->{branchcode}' = branchcode) and (isexception = 0)");
-    $holidays_sql->execute;
+    my $holidays_sql = $dbh->prepare( 'SELECT day, month, year, title, description
+                                         FROM special_holidays
+                                         WHERE ( branchcode = ? )
+                                           AND (isexception = 0)' );
+    $holidays_sql->execute( $self->{'branchcode'} );
     my %single_holidays;
     while (my ($day, $month, $year, $title, $description) = $holidays_sql->fetchrow) {
         $single_holidays{"$year/$month/$day"}{title} = $title;
