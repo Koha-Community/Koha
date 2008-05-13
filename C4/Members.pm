@@ -1856,11 +1856,13 @@ sub GetBorrowersWhoHaveNotBorrowedSince {
     my $query = "
         SELECT borrowers.borrowernumber,max(issues.timestamp) as latestissue
         FROM   borrowers
-          LEFT JOIN issues ON borrowers.borrowernumber = issues.borrowernumber
+        JOIN   categories USING (categorycode)
+        LEFT JOIN issues ON borrowers.borrowernumber = issues.borrowernumber
+        WHERE  category_type <> 'S'
    ";
     my @query_params;
     if ($filterbranch && $filterbranch ne ""){ 
-        $query.=" WHERE borrowers.branchcode= ?";
+        $query.=" AND borrowers.branchcode= ?";
         push @query_params,$filterbranch;
     }    
     $query.=" GROUP BY borrowers.borrowernumber";
