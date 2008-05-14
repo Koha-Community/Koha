@@ -1783,7 +1783,7 @@ sub NZoperatorOR{
 }
 
 sub NZoperatorNOT{
-    my ($rightresult, $leftresult)=@_;
+    my ($leftresult, $rightresult)=@_;
     
     my @leftresult = split /;/, $leftresult;
 
