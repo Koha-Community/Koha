@@ -553,6 +553,7 @@ WriteMakefile(
 'Getopt::Long' => 2.35,
 'Getopt::Std' => 1.05,
 'HTML::Template::Pro' => 0.69,
+'HTML::Scrubber' => 0.08,
 'HTTP::Cookies' => 1.39,
 'HTTP::Request::Common' => 1.26,
 'Image::Magick' => 6.2,
