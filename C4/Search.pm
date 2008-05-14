@@ -1582,10 +1582,14 @@ sub NZanalyse {
         } 
     }
     warn "string :" . $string if $DEBUG;
-    $string =~ /(.*?)( and | or | not | AND | OR | NOT )(.*)/;
-    my $left     = $1;
-    my $right    = $3;
-    my $operator = lc($2);    # FIXME: and/or/not are operators, not operands
+    my $left = "";
+    my $right = "";
+    my $operator = "";
+    if ($string =~ /(.*?)( and | or | not | AND | OR | NOT )(.*)/) {
+        $left     = $1;
+        $right    = $3;
+        $operator = lc($2);    # FIXME: and/or/not are operators, not operands
+    }
     warn "no parenthesis. left : $left operator: $operator right: $right"
       if $DEBUG;
 
@@ -1631,20 +1635,29 @@ sub NZanalyse {
         warn "leaf:$string" if $DEBUG;
 
         # parse the string in in operator/operand/value again
-        $string =~ /(.*)(>=|<=)(.*)/;
-        my $left     = $1;
-        my $operator = $2;
-        my $right    = $3;
-#         warn "handling leaf... left:$left operator:$operator right:$right"
-#           if $DEBUG;
-        unless ($operator) {
-            $string =~ /(.*)(>|<|=)(.*)/;
+        my $left = "";
+        my $operator = "";
+        my $right = "";
+        if ($string =~ /(.*)(>=|<=)(.*)/) {
             $left     = $1;
             $operator = $2;
             $right    = $3;
-            warn
-"handling unless (operator)... left:$left operator:$operator right:$right"
-              if $DEBUG;
+        } else {
+            $left = $string;
+        }
+#         warn "handling leaf... left:$left operator:$operator right:$right"
+#           if $DEBUG;
+        unless ($operator) {
+            if ($string =~ /(.*)(>|<|=)(.*)/) {
+                $left     = $1;
+                $operator = $2;
+                $right    = $3;
+                warn
+    "handling unless (operator)... left:$left operator:$operator right:$right"
+                if $DEBUG;
+            } else {
+                $left = $string;
+            }
         }
         my $results;
 
