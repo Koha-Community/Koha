@@ -138,7 +138,7 @@ if ($op eq 'add_form') {
 	my $dbh = C4::Context->dbh;
 #	my $frameworkcode=uc($input->param('frameworkcode'));
 #   
-	unless($frameworkcode) { 
+	if($frameworkcode) { 
 		my $sth=$dbh->prepare("delete from marc_tag_structure where frameworkcode=?");
 		$sth->execute($frameworkcode);
 		$sth=$dbh->prepare("delete from marc_subfield_structure where frameworkcode=?");
