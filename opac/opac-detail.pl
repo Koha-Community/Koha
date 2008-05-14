@@ -225,20 +225,26 @@ $template->param(
     loggedincommenter   => $loggedincommenter
 );
 
+sub isbn_cleanup ($) {
+	my $isbn=shift;
+	if (
+		$isbn =~ /\b(\d{13})\b/ or
+		$isbn =~ /\b(\d{10})\b/ or 
+		$isbn =~ /\b(\d{9}X)\b/i
+	) {
+		return $1;
+	}
+	return undef;
+}
+
 # XISBN Stuff
 my $xisbn=$dat->{'isbn'};
 $xisbn =~ /(\d*[X]*)/;
 $template->param(amazonisbn => $1);		# FIXME: so it is OK if the ISBN = 'XXXXX' ?
-my ($clean, $amazonisbn);
-$amazonisbn = $1;
+my ($clean,$clean2);
 # these might be overkill, but they are better than the regexp above.
-if (
-	$amazonisbn =~ /\b(\d{13})\b/ or
-	$amazonisbn =~ /\b(\d{10})\b/ or 
-	$amazonisbn =~ /\b(\d{9}X)\b/i
-) {
-	$clean = $1;
-	$template->param(clean_isbn => $1);
+if ($clean = isbn_cleanup($xisbn)){
+	$template->param(clean_isbn => $clean);
 }
 
 if (C4::Context->preference("OPACFRBRizeEditions")==1) {
@@ -305,7 +311,11 @@ while (my $this_item = $sth_shelfbrowse_previous->fetchrow_hashref()) {
     $sth_get_biblio->execute($this_item->{biblionumber});
     while (my $this_biblio = $sth_get_biblio->fetchrow_hashref()) {
         $this_item->{'title'} = $this_biblio->{'title'};
-        $this_item->{'isbn'} = $this_biblio->{'isbn'};
+		if ($clean2 = isbn_cleanup($this_biblio->{'isbn'})) {
+        	$this_item->{'isbn'} = $clean2;
+		} else { 
+			$this_item->{'isbn'} = $this_biblio->{'isbn'};
+		}
     }
     unshift @previous_items, $this_item;
 }
@@ -319,7 +329,11 @@ while (my $this_item = $sth_shelfbrowse_next->fetchrow_hashref()) {
     $sth_get_biblio->execute($this_item->{biblionumber});
     while (my $this_biblio = $sth_get_biblio->fetchrow_hashref()) {
         $this_item->{'title'} = $this_biblio->{'title'};
-        $this_item->{'isbn'} = $this_biblio->{'isbn'};
+		if ($clean2 = isbn_cleanup($this_biblio->{'isbn'})) {
+        	$this_item->{'isbn'} = $clean2;
+		} else { 
+			$this_item->{'isbn'} = $this_biblio->{'isbn'};
+		}
     }
     push @next_items, $this_item;
 }
