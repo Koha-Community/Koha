@@ -72,7 +72,7 @@ $.tablesorter.addParser({
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="op_else" -->
-    <h1><!-- TMPL_UNLESS NAME="OPACViewOthersSuggestions" -->My <!-- /TMPL_UNLESS -->Purchase Suggestions</h1>
+    <h1><!-- TMPL_UNLESS NAME="OPACViewOthersSuggestions" --><!-- TMPL_IF NAME="loggedinusername" -->My <!-- /TMPL_IF --><!-- /TMPL_UNLESS -->Purchase Suggestions</h1>
     <!-- TMPL_IF NAME="suggestions_loop" -->
     <!-- TMPL_IF NAME="OPACViewOthersSuggestions" -->
 	<form action="/cgi-bin/koha/opac-suggestions.pl" method="get">
@@ -150,7 +150,7 @@ $.tablesorter.addParser({
             </fieldset>
         <!-- /TMPL_IF -->
         </form>
-    <!-- TMPL_ELSE --><p>There are no pending purchase suggestions.</p><!-- /TMPL_IF -->
+    <!-- TMPL_ELSE --><p>There are no pending purchase suggestions.</p> <!-- TMPL_IF NAME="loggedinusername" --><p><a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a></p><!-- TMPL_ELSE --><!-- TMPL_IF NAME="AnonSuggestions" --><p><a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a></p><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
 	
 <!-- /TMPL_IF -->
 </div>
