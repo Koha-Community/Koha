@@ -171,12 +171,22 @@ ol li {
 	background-color : #F3F3F3;
 	border-bottom : 1px solid #E8E8E8;
 	line-height : 2em;
-	overflow : auto;
 }
 
-*html #header {
-	display : inline-block;
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
 }
+
+.clearfix {display: inline-block;}
+
+/* Hides from IE-mac \*/
+* html .clearfix {height: 1%;}
+.clearfix {display: block;}
+/* End hide from IE-mac */
 
 #sitetitle {
 /*	background-image : url("../../img/koha-logo-black.png");

@@ -1,4 +1,4 @@
-<div id="header">
+<div id="header" class="clearfix">
 
 <div id="toplevelnav">
 <ul id="toplevelmenu">
