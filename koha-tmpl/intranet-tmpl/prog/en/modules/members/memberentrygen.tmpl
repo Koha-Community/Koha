@@ -143,7 +143,6 @@
 <input type="hidden" name="BorrowerMandatoryField" value="<!--TMPL_VAR NAME="BorrowerMandatoryField"-->" />
 <input type="hidden" name="category_type" value="<!-- TMPL_VAR name="category_type" -->" />
 <input type="hidden" name="updtype" value="<!-- TMPL_VAR NAME="updtype" -->" />
-<input type="hidden" name="guarantorid"   value="<!-- TMPL_VAR NAME="guarantorid" -->" />
 <input type="hidden" name="select_roadtype" value="<!-- TMPL_VAR NAME="select_roadtype" -->" />
 <input type="hidden" name="destination" value="<!-- TMPL_VAR NAME="destination" -->" />
 <input type="hidden" name="check_member" value="<!-- TMPL_VAR NAME="check_member" -->" />
@@ -264,7 +263,8 @@
 <!-- /TMPL_IF -->
        	</li>
     <!--/TMPL_UNLESS-->
-<!--TMPL_IF EXPR="showguarantor"-->  <li><label for="">Guarantor: </label>
+<!--TMPL_IF Name="showguarantor"--><input type="hidden" name="guarantorid"   value="<!-- TMPL_VAR NAME="guarantorid" -->" />
+  <li><label for="">Guarantor: </label>
   <select name="relationship" id="relationship" >
     <!-- TMPL_LOOP name="relshiploop" -->
         <!-- TMPL_IF name="selected" -->

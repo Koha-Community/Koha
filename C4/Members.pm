@@ -628,12 +628,18 @@ sub ModMember {
         $data{'password'} = md5_base64( $data{'password'} )  if ($data{'password'} ne "");
         delete $data{'password'} if ($data{password} eq "");
     }
-    foreach (keys %data)
-    { push @parameters,"$_ = ".$dbh->quote($data{$_}) if ($_ ne 'borrowernumber' and $_ ne 'flags' and $hashborrowerfields{$_}); }
-    $query .= join (',',@parameters) . "\n WHERE borrowernumber=? \n";
+    foreach (keys %data){  
+        if ($_ ne 'borrowernumber' and $_ ne 'flags' and $hashborrowerfields{$_}){
+          $query .= " $_=?, "; 
+          push @parameters,$data{$_};
+        }
+    }
+    $query =~ s/, $//;
+    $query .= " WHERE borrowernumber=?";
+    push @parameters, $data{'borrowernumber'};
     $debug and print STDERR "$query (executed w/ arg: $data{'borrowernumber'})";
     $sth = $dbh->prepare($query);
-    $sth->execute($data{'borrowernumber'});
+    $sth->execute(@parameters);
     $sth->finish;
 
 # ok if its an adult (type) it may have borrowers that depend on it as a guarantor
