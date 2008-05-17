@@ -111,32 +111,112 @@
 		</li>
 		<li><label for="checked">Checked (searched by default): </label>	<input type="text" size="1" name="checked" id="checked" value="<!-- TMPL_VAR NAME="checked" -->" onblur="isNum(this)" />  </li>
 		<li><label for="rank">Rank (display order): </label>	<input type="text" name="rank" id="rank" size="4" value="<!-- TMPL_VAR NAME="rank" -->" onblur="isNum(this)" />
-		</li>	<li><label for="syntax">Syntax (z3950 can send<br /> records in various format. Choose one): </label>	
-                <select name="syntax">
-                <option value="UNIMARC" <!-- TMPL_IF EXPR="syntax eq 'UNIMARC'"> selected="selected" <!-- /TMPL_IF>>UNIMARC</option>
-                <option value="INTERMARC" <!-- TMPL_IF EXPR="syntax eq 'INTERMARC'"> selected="selected" <!-- /TMPL_IF>>INTERMARC</option>
-                <option value="CCF" <!-- TMPL_IF EXPR="syntax eq 'CCF'"> selected="selected" <!-- /TMPL_IF>>CCF</option>
-                <option value="USMARC" <!-- TMPL_IF EXPR="syntax eq 'USMARC'"> selected="selected" <!-- /TMPL_IF>>MARC21/USMARC</option>
-                <option value="UKMARC" <!-- TMPL_IF EXPR="syntax eq 'UKMARC'"> selected="selected" <!-- /TMPL_IF>>UKMARC</option>
-                <option value="NORMARC" <!-- TMPL_IF EXPR="syntax eq 'NORMARC'"> selected="selected" <!-- /TMPL_IF>>NORMARC</option>
-                <option value="LIBRISMARC" <!-- TMPL_IF EXPR="syntax eq 'LIBRISMARC'"> selected="selected" <!-- /TMPL_IF>>LIBRISMARC</option>
-                <option value="DANMARC" <!-- TMPL_IF EXPR="syntax eq 'DANMARC'"> selected="selected" <!-- /TMPL_IF>>DANMARC</option>
-                <option value="FINMARC" <!-- TMPL_IF EXPR="syntax eq 'FINMARC'"> selected="selected" <!-- /TMPL_IF>>FINMARC</option>
-                <option value="CANMARC" <!-- TMPL_IF EXPR="syntax eq 'CANMARC'"> selected="selected" <!-- /TMPL_IF>>CANMARC</option>
-                <option value="SBN" <!-- TMPL_IF EXPR="syntax eq 'SBN'"> selected="selected" <!-- /TMPL_IF>>SBN</option>
-                <option value="PICAMARC" <!-- TMPL_IF EXPR="syntax eq 'PICAMARC'"> selected="selected" <!-- /TMPL_IF>>PICAMARC</option>
-                <option value="AUSMARC" <!-- TMPL_IF EXPR="syntax eq 'AUSMARC'"> selected="selected" <!-- /TMPL_IF>>AUSMARC</option>
-                <option value="IBERMARC" <!-- TMPL_IF EXPR="syntax eq 'IBERMARC'"> selected="selected" <!-- /TMPL_IF>>IBERMARC</option>
-                <option value="CATMARC" <!-- TMPL_IF EXPR="syntax eq 'CATMARC'"> selected="selected" <!-- /TMPL_IF>>CATMARC</option>
-                <option value="MALMARC" <!-- TMPL_IF EXPR="syntax eq 'MALMARC'"> selected="selected" <!-- /TMPL_IF>>MALMARC</option>
-                </select>
-		</li><li><label for="encoding">Encoding (z3950 can send<br /> records in various encodings. Choose one): </label>  
-                <select name="encoding">
-                <option value="utf8" <!-- TMPL_IF EXPR="encoding eq 'utf8'"> selected="selected" <!-- /TMPL_IF>>utf8</option>
-                <option value="ISO_5426" <!-- TMPL_IF EXPR="encoding eq 'ISO_5426'"> selected="selected" <!-- /TMPL_IF>>Iso5426 (MARC8 ANSEL)</option>
-                <option value="ISO_6937" <!-- TMPL_IF EXPR="encoding eq 'ISO_6937'"> selected="selected" <!-- /TMPL_IF>>ISO_6937</option>
-                </select>
-    </li></ol>
+		</li>	
+		<li><label for="syntax">Syntax (z3950 can send<br /> records in various format. Choose one): </label>	
+<select name="syntax">
+<!-- TMPL_IF EXPR="syntax eq 'UNIMARC'">
+<option value="UNIMARC" selected="selected">UNIMARC</option>
+<!-- TMPL_ELSE>
+<option value="UNIMARC">UNIMARC</option>
+<!-- /TMPL_IF>
+<!-- TMPL_IF EXPR="syntax eq 'INTERMARC'">
+<option value="INTERMARC" selected="selected">INTERMARC</option>
+<!-- TMPL_ELSE>
+<option value="INTERMARC">INTERMARC</option>
+<!-- /TMPL_IF>
+<!-- TMPL_IF EXPR="syntax eq 'CCF'">
+<option value="CCF" selected="selected">CCF</option>
+<!-- TMPL_ELSE>
+<option value="CCF">CCF</option>
+<!-- /TMPL_IF>
+<!-- TMPL_IF EXPR="syntax eq 'USMARC'">
+<option value="USMARC" selected="selected">MARC21/USMARC</option>
+<!-- TMPL_ELSE>
+<option value="USMARC">MARC21/USMARC</option>
+<!-- /TMPL_IF>
+<!-- TMPL_IF EXPR="syntax eq 'UKMARC'">
+<option value="UKMARC" selected="selected">UKMARC</option>
+<!-- TMPL_ELSE>
+<option value="UKMARC">UKMARC</option>
+<!-- /TMPL_IF>
+<!-- TMPL_IF EXPR="syntax eq 'NORMARC'">
+<option value="NORMARC" selected="selected">NORMARC</option>
+<!-- TMPL_ELSE>
+<option value="NORMARC">NORMARC</option>
+<!-- /TMPL_IF>
+<!-- TMPL_IF EXPR="syntax eq 'LIBRISMARC'">
+<option value="LIBRISMARC" selected="selected">LIBRISMARC</option>
+<!-- TMPL_ELSE>
+<option value="LIBRISMARC">LIBRISMARC</option>
+<!-- /TMPL_IF>
+<!-- TMPL_IF EXPR="syntax eq 'DANMARC'">
+<option value="DANMARC" selected="selected">DANMARC</option>
+<!-- TMPL_ELSE>
+<option value="DANMARC">DANMARC</option>
+<!-- /TMPL_IF>
+<!-- TMPL_IF EXPR="syntax eq 'FINMARC'">
+<option value="FINMARC" selected="selected">FINMARC</option>
+<!-- TMPL_ELSE>
+<option value="FINMARC">FINMARC</option>
+<!-- /TMPL_IF>
+<!-- TMPL_IF EXPR="syntax eq 'CANMARC'">
+<option value="CANMARC" selected="selected">CANMARC</option>
+<!-- TMPL_ELSE>
+<option value="CANMARC">CANMARC</option>
+<!-- /TMPL_IF>
+<!-- TMPL_IF EXPR="syntax eq 'SBN'">
+<option value="SBN" selected="selected">SBN</option>
+<!-- TMPL_ELSE>
+<option value="SBN">SBN</option>
+<!-- /TMPL_IF>
+<!-- TMPL_IF EXPR="syntax eq 'PICAMARC'">
+<option value="PICAMARC" selected="selected">PICAMARC</option>
+<!-- TMPL_ELSE>
+<option value="PICAMARC">PICAMARC</option>
+<!-- /TMPL_IF>
+<!-- TMPL_IF EXPR="syntax eq 'AUSMARC'">
+<option value="AUSMARC" selected="selected">AUSMARC</option>
+<!-- TMPL_ELSE>
+<option value="AUSMARC">AUSMARC</option>
+<!-- /TMPL_IF>
+<!-- TMPL_IF EXPR="syntax eq 'IBERMARC'">
+<option value="IBERMARC" selected="selected">IBERMARC</option>
+<!-- TMPL_ELSE>
+<option value="IBERMARC">IBERMARC</option>
+<!-- /TMPL_IF>
+<!-- TMPL_IF EXPR="syntax eq 'CATMARC'">
+<option value="CATMARC" selected="selected">CATMARC</option>
+<!-- TMPL_ELSE>
+<option value="CATMARC">CATMARC</option>
+<!-- /TMPL_IF>
+<!-- TMPL_IF EXPR="syntax eq 'MALMARC'">
+<option value="MALMARC" selected="selected">MALMARC</option>
+<!-- TMPL_ELSE>
+<option value="MALMARC">MALMARC</option>
+<!-- /TMPL_IF>
+</select>
+</li>
+
+    <li><label for="encoding">Encoding (z3950 can send<br /> records in various encodings. Choose one): </label>  
+<select name="encoding">
+<!-- TMPL_IF EXPR="encoding eq 'utf8'">
+<option value="utf8" selected="selected">UTF-8</option>
+<!-- TMPL_ELSE>
+<option value="utf8">UTF-8</option>
+<!-- /TMPL_IF>
+<!-- TMPL_IF EXPR="encoding eq 'ISO_5426'">
+<option value="ISO_5426" selected="selected">ISO_5426</option>
+<!-- TMPL_ELSE>
+<option value="ISO_5426">ISO_5426</option>
+<!-- /TMPL_IF>
+<!-- TMPL_IF EXPR="encoding eq 'ISO_6937'">
+<option value="ISO_6937" selected="selected">ISO_6937</option>
+<!-- TMPL_ELSE>
+<option value="ISO_6937">ISO_6937</option>
+<!-- /TMPL_IF>
+</select>
+</li>
+</ol>
         </fieldset>
 		
 		<fieldset class="action"><input type="button" value="Save" onclick="Check(this.form)" /> <a class="cancel" href="/cgi-bin/koha/admin/z3950servers.pl">Cancel</a></fieldset>
