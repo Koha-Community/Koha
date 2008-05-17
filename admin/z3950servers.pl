@@ -78,17 +78,10 @@ if ($op eq 'add_form') {
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
-	
-	$template->param(host => $data->{'host'},
-			 port => $data->{'port'},
-			 db   => $data->{'db'},
-			 userid => $data->{'userid'},
-			 password => $data->{'password'},
-			 checked => $data->{'checked'},
-			 rank => $data->{'rank'},
-       syntax => $data->{'syntax'},
-       encoding => $data->{'encoding'},
-       );
+    $template->param( $_ => $data->{$_} ) 
+        for ( qw( host port db userid password checked rank ) );
+    $template->param( $_ . $data->{$_} => 1)
+        for ( qw( syntax encoding ) );
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
