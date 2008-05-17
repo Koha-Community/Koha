@@ -113,28 +113,28 @@
 		<li><label for="rank">Rank (display order): </label>	<input type="text" name="rank" id="rank" size="4" value="<!-- TMPL_VAR NAME="rank" -->" onblur="isNum(this)" />
 		</li>	<li><label for="syntax">Syntax (z3950 can send<br /> records in various format. Choose one): </label>	
                 <select name="syntax">
-                <option value="UNIMARC">UNIMARC</option>
-                <option value="INTERMARC">INTERMARC</option>
-                <option value="CCF">CCF</option>
-                <option selected="selected" value="USMARC">MARC21/USMARC</option>
-                <option value="UKMARC">UKMARC</option>
-                <option value="NORMARC">NORMARC</option>
-                <option value="LIBRISMARC">LIBRISMARC</option>
-                <option value="DANMARC">DANMARC</option>
-                <option value="FINMARC">FINMARC</option>
-                <option value="CANMARC">CANMARC</option>
-                <option value="SBN">SBN</option>
-                <option value="PICAMARC">PICAMARC</option>
-                <option value="AUSMARC">AUSMARC</option>
-                <option value="IBERMARC">IBERMARC</option>
-                <option value="CATMARC">CATMARC</option>
-                <option value="MALMARC">MALMARC</option>
+                <option value="UNIMARC" <!-- TMPL_IF EXPR="syntax eq 'UNIMARC'"> selected="selected" <!-- /TMPL_IF>>UNIMARC</option>
+                <option value="INTERMARC" <!-- TMPL_IF EXPR="syntax eq 'INTERMARC'"> selected="selected" <!-- /TMPL_IF>>INTERMARC</option>
+                <option value="CCF" <!-- TMPL_IF EXPR="syntax eq 'CCF'"> selected="selected" <!-- /TMPL_IF>>CCF</option>
+                <option value="USMARC" <!-- TMPL_IF EXPR="syntax eq 'USMARC'"> selected="selected" <!-- /TMPL_IF>>MARC21/USMARC</option>
+                <option value="UKMARC" <!-- TMPL_IF EXPR="syntax eq 'UKMARC'"> selected="selected" <!-- /TMPL_IF>>UKMARC</option>
+                <option value="NORMARC" <!-- TMPL_IF EXPR="syntax eq 'NORMARC'"> selected="selected" <!-- /TMPL_IF>>NORMARC</option>
+                <option value="LIBRISMARC" <!-- TMPL_IF EXPR="syntax eq 'LIBRISMARC'"> selected="selected" <!-- /TMPL_IF>>LIBRISMARC</option>
+                <option value="DANMARC" <!-- TMPL_IF EXPR="syntax eq 'DANMARC'"> selected="selected" <!-- /TMPL_IF>>DANMARC</option>
+                <option value="FINMARC" <!-- TMPL_IF EXPR="syntax eq 'FINMARC'"> selected="selected" <!-- /TMPL_IF>>FINMARC</option>
+                <option value="CANMARC" <!-- TMPL_IF EXPR="syntax eq 'CANMARC'"> selected="selected" <!-- /TMPL_IF>>CANMARC</option>
+                <option value="SBN" <!-- TMPL_IF EXPR="syntax eq 'SBN'"> selected="selected" <!-- /TMPL_IF>>SBN</option>
+                <option value="PICAMARC" <!-- TMPL_IF EXPR="syntax eq 'PICAMARC'"> selected="selected" <!-- /TMPL_IF>>PICAMARC</option>
+                <option value="AUSMARC" <!-- TMPL_IF EXPR="syntax eq 'AUSMARC'"> selected="selected" <!-- /TMPL_IF>>AUSMARC</option>
+                <option value="IBERMARC" <!-- TMPL_IF EXPR="syntax eq 'IBERMARC'"> selected="selected" <!-- /TMPL_IF>>IBERMARC</option>
+                <option value="CATMARC" <!-- TMPL_IF EXPR="syntax eq 'CATMARC'"> selected="selected" <!-- /TMPL_IF>>CATMARC</option>
+                <option value="MALMARC" <!-- TMPL_IF EXPR="syntax eq 'MALMARC'"> selected="selected" <!-- /TMPL_IF>>MALMARC</option>
                 </select>
 		</li><li><label for="encoding">Encoding (z3950 can send<br /> records in various encodings. Choose one): </label>  
                 <select name="encoding">
-                <option selected="selected" value="utf8">utf8</option>
-                <option value="ISO_5426">Iso5426 (MARC8 ANSEL)</option>
-                <option value="ISO_6937">ISO_6937</option>
+                <option value="utf8" <!-- TMPL_IF EXPR="encoding eq 'utf8'"> selected="selected" <!-- /TMPL_IF>>utf8</option>
+                <option value="ISO_5426" <!-- TMPL_IF EXPR="encoding eq 'ISO_5426'"> selected="selected" <!-- /TMPL_IF>>Iso5426 (MARC8 ANSEL)</option>
+                <option value="ISO_6937" <!-- TMPL_IF EXPR="encoding eq 'ISO_6937'"> selected="selected" <!-- /TMPL_IF>>ISO_6937</option>
                 </select>
     </li></ol>
         </fieldset>
