@@ -41,11 +41,12 @@ BEGIN {
 
 sub get_biblionumber_from_isbn {
     my $isbn = shift;
-    $isbn =~ /(\d*[X]*)/;
-    $isbn = $1.'%' if $isbn;
+     if ($isbn =~ /(\d{9,}[X]*)/) {
+    	$isbn = $1.'%';
+    }
     my @biblionumbers;
     my $dbh=C4::Context->dbh;
-    my $query = "SELECT biblionumber FROM biblioitems WHERE isbn LIKE ?";
+    my $query = "SELECT biblionumber FROM biblioitems WHERE isbn LIKE ? LIMIT 10";
     my $sth = $dbh->prepare($query);
     $sth->execute($isbn);
     while ( my $biblionumber = $sth->fetchrow_hashref() ) {
@@ -65,7 +66,7 @@ This module provides facilities for retrieving ThingISBN and XISBN content in Ko
 
 sub get_biblio_from_xisbn {
     my $xisbn = shift;
-    $xisbn .='%' if ($xisbn =~ /(\d*[X]*)/);
+    $xisbn .='%' if ($xisbn =~ /(\d{9,}[X]*)/);
     my $dbh = C4::Context->dbh;
     my $query = "SELECT biblionumber FROM biblioitems WHERE isbn LIKE ?";
     my $sth = $dbh->prepare($query);
@@ -74,7 +75,7 @@ sub get_biblio_from_xisbn {
     my $xbiblio;
     if ($xbib_data->{biblionumber}) {
         $xbiblio = GetBiblioData($xbib_data->{biblionumber});
-        $xbiblio->{isbn} =~ /(\d*[X]*)/;
+        $xbiblio->{isbn} =~ /(\d{9,}[X]*)/;
         $xbiblio->{amazonisbn} = $1;
         $xbiblio->{items} = GetItemsByBiblioitemnumber($xbib_data->{biblionumber});
     }
@@ -90,7 +91,7 @@ sub get_biblio_from_xisbn {
 sub get_xisbns {
     my ( $isbn ) = @_;
     my ($response,$thing_response,$xisbn_response,$gapines_response);
-    $isbn =~ /(\d*[X]*)/;
+    $isbn =~ /(\d{9,}[X]*)/;
     $isbn = $1;
     # THINGISBN
     if ( C4::Context->preference('ThingISBN') ) {
