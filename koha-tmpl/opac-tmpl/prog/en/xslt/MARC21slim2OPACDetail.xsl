@@ -237,12 +237,18 @@
         <xsl:if test="marc:datafield[@tag=856]">
         <span class="results_summary"><span class="label">Online Resources: </span>
         <xsl:for-each select="marc:datafield[@tag=856]">
-            <a><xsl:attribute name="href"> <xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute>
-            <xsl:if test="marc:subfield[@code='y' or @code='3' or @code='z']">
+            <a><xsl:attribute name="href"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute>
+	    <xsl:choose>
+            <xsl:when test="marc:subfield[@code='y' or @code='3' or @code='z']">
                     <xsl:call-template name="subfieldSelect">
                         <xsl:with-param name="codes">y3z</xsl:with-param>
                     </xsl:call-template>
-            </xsl:if></a>
+            </xsl:when>
+	    <xsl:when test="not(marc:subfield[@code='y']) and not(marc:subfield[@code='3']) and not(marc:subfield[@code='z'])">
+	    Click Here
+	    </xsl:when>
+	    </xsl:choose>
+	    </a>
             <xsl:choose>
             <xsl:when test="position()=last()"></xsl:when>
             <xsl:otherwise> | </xsl:otherwise>
