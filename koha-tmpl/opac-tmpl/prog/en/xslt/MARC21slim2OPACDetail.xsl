@@ -48,14 +48,6 @@
                 <xsl:when test="$leader6='c' or $leader6='d' or $leader6='i' or $leader6='j'">Music</xsl:when>
             </xsl:choose>
         </xsl:variable>
-        <xsl:variable name="lcc">
-            <xsl:for-each select="marc:datafield[@tag=050]">
-                    <xsl:call-template name="subfieldSelect">
-                        <xsl:with-param name="codes">ab</xsl:with-param>
-                    </xsl:call-template>
-                    <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
-            </xsl:for-each>
-        </xsl:variable>
 
         <!-- Title Statement -->
         <div id="views">
@@ -130,11 +122,6 @@
         <span class="results_summary"><span class="label">Type: </span>
         <xsl:element name="img"><xsl:attribute name="src">/opac-tmpl/prog/famfamfam/<xsl:value-of select="$materialTypeCode"/>.png</xsl:attribute><xsl:attribute name="alt">typeicon</xsl:attribute></xsl:element>
 		<xsl:value-of select="$materialTypeLabel"/>
-        </span>
-        </xsl:if>
-        <xsl:if test="marc:datafield[@tag=050]">
-        <span class="results_summary"><span class="label">Library of Congress Classification: </span>
-        <xsl:value-of select="$lcc"/>
         </span>
         </xsl:if>
         <xsl:if test="marc:datafield[@tag=440 or @tag=490]">

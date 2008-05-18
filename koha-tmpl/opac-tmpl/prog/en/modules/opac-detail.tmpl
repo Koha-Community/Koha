@@ -233,25 +233,25 @@
 <!-- TMPL_IF name="count" -->
     <table>
         <tr>
-            <!-- TMPL_IF NAME="item-level_itypes" --><th>Item type</th><!-- /TMPL_IF -->
-			  <!-- TMPL_IF NAME="itemdata_ccode" --><th>Collection</th><!-- /TMPL_IF -->
-              <th>Location</th>
-			  <th>Call Number</th>
-			  <!-- TMPL_IF NAME="itemdata_enumchron" --><th>Vol Info</th><!-- /TMPL_IF -->
-			  <!-- TMPL_IF NAME="itemdata_copynumber" --><th>Copy</th><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="OPACDisplayItypes" --><!-- TMPL_IF NAME="item-level_itypes" --><th>Item type</th><!-- /TMPL_IF --><!-- /TMPL_IF -->
+            <th>Location</th>
+	    <!-- TMPL_IF NAME="itemdata_ccode" --><th>Collection</th><!-- /TMPL_IF -->
+	    <th>Call Number</th>
+	    <!-- TMPL_IF NAME="itemdata_enumchron" --><th>Vol Info</th><!-- /TMPL_IF -->
+	    <!-- TMPL_IF NAME="itemdata_copynumber" --><th>Copy</th><!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="serial" -->
-			  <th>Serial Data</th>
-              <th>Published</th><!-- /TMPL_IF -->
-              <th>Status</th>
-              <th>Date Due</th>
+	    <th>Serial Data</th>
+            <th>Published</th><!-- /TMPL_IF -->
+            <th>Status</th>
+            <th>Date Due</th>
         </tr>
         <!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
         <tr>
 
-            <!-- TMPL_IF NAME="item-level_itypes" --><td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR NAME="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="description" -->
-                    </td><!-- /TMPL_IF -->
-            <!-- TMPL_IF NAME="itemdata_ccode" --><td><!-- TMPL_VAR NAME="ccode" --></td><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="item-level_itypes" --><!-- TMPL_IF NAME="OPACDisplayItypes" --><td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR NAME="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="description" -->
+                    </td><!-- /TMPL_IF --><!-- /TMPL_IF -->
 			<td><!-- TMPL_UNLESS NAME="singleBranchMode" --><!-- TMPL_VAR NAME="branchname" --><!-- /TMPL_UNLESS --> <!-- TMPL_VAR NAME="location_description" --> </td>
+			<!-- TMPL_IF NAME="itemdata_ccode" --><td><!-- TMPL_VAR NAME="ccode" --></td><!-- /TMPL_IF -->
 			<td><!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="OPACShelfBrowser" -->(<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser">Browse Shelf</a>)<!-- /TMPL_IF --></td>
 			<!-- TMPL_IF NAME="itemdata_enumchron" --><td><!-- TMPL_VAR NAME="enumchron" --></td><!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="itemdata_copynumber" --><td><!-- TMPL_VAR NAME="copynumber" --></td><!-- /TMPL_IF -->
@@ -455,7 +455,7 @@
 <h2>Other Editions of this Work</h2>
 <table>
 <!-- TMPL_LOOP NAME="XISBNS" -->
-<tr><!-- TMPL_IF NAME="AmazonContent" --><td><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._AA75_PU_PU-5_.jpg" alt="" /></td><!-- /TMPL_IF --><td><!-- TMPL_VAR NAME="description" --></td><td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR NAME="author" ESCAPE="HTML" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="copyrightdate" --> &copy;<!-- TMPL_VAR NAME="copyrightdate" --><!-- /TMPL_IF --><!-- TMPL_IF name="publishercode" -->
+<tr><!-- TMPL_IF NAME="AmazonContent" --><td><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="amazonisbn" -->.01._AA75_PU_PU-5_.jpg" alt="" /></td><!-- /TMPL_IF --><td><!-- TMPL_VAR NAME="description" --></td><td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR NAME="author" ESCAPE="HTML" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="copyrightdate" --> &copy;<!-- TMPL_VAR NAME="copyrightdate" --><!-- /TMPL_IF --><!-- TMPL_IF name="publishercode" -->
     <p><!-- TMPL_VAR NAME="publishercode" ESCAPE="HTML" --> 
        <!-- TMPL_IF name="place" -->(<!-- TMPL_VAR NAME="place"-->)<!--/TMPL_IF--> <!-- TMPL_IF NAME="publicationyear" -->, <!-- TMPL_VAR NAME="publicationyear" --><!-- /TMPL_IF -->
     	<!-- TMPL_IF NAME="pages" --><!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></p><!-- /TMPL_IF -->
@@ -524,7 +524,7 @@
         </a></li><!-- /TMPL_IF -->
 </ul>
 
-<!-- TMPL_IF NAME="AmazonContent" --><!-- TMPL_IF NAME="OPACAmazonSimilarItems" --><!-- TMPL_IF NAME="similar_biblionumbers" -->
+<!-- TMPL_IF NAME="AmazonContent" --><!-- TMPL_IF NAME="OPACAmazonSimilarItems" --><!-- TMPL_IF NAME="AMAZON_SIMILAR_PRODUCTS" -->
 <div id="similars">
 <h4>Similar Items</h4>
 <ul>

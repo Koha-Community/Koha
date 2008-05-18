@@ -42,10 +42,10 @@ BEGIN {
 sub get_biblionumber_from_isbn {
     my $isbn = shift;
     $isbn =~ /(\d*[X]*)/;
-    $isbn = $1;
+    $isbn = $1.'%' if $isbn;
     my @biblionumbers;
     my $dbh=C4::Context->dbh;
-    my $query = "SELECT biblionumber FROM biblioitems WHERE isbn=?";
+    my $query = "SELECT biblionumber FROM biblioitems WHERE isbn LIKE ?";
     my $sth = $dbh->prepare($query);
     $sth->execute($isbn);
     while ( my $biblionumber = $sth->fetchrow_hashref() ) {
@@ -65,8 +65,9 @@ This module provides facilities for retrieving ThingISBN and XISBN content in Ko
 
 sub get_biblio_from_xisbn {
     my $xisbn = shift;
+    $xisbn .='%' if ($xisbn =~ /(\d*[X]*)/);
     my $dbh = C4::Context->dbh;
-    my $query = "SELECT biblionumber FROM biblioitems WHERE isbn=?";
+    my $query = "SELECT biblionumber FROM biblioitems WHERE isbn LIKE ?";
     my $sth = $dbh->prepare($query);
     $sth->execute($xisbn);
     my $xbib_data =  $sth->fetchrow_hashref();
@@ -89,7 +90,8 @@ sub get_biblio_from_xisbn {
 sub get_xisbns {
     my ( $isbn ) = @_;
     my ($response,$thing_response,$xisbn_response,$gapines_response);
-
+    $isbn =~ /(\d*[X]*)/;
+    $isbn = $1;
     # THINGISBN
     if ( C4::Context->preference('ThingISBN') ) {
         my $url = "http://www.librarything.com/api/thingISBN/".$isbn;
