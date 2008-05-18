@@ -299,9 +299,11 @@
 <!-- TMPL_LOOP NAME="PREVIOUS_SHELF_BROWSE" -->
         <td> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser">
 
-	<!-- TMPL_IF NAME="AmazonContent" --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn"-->.01._AA75_PU_PU-5_.jpg" alt="Cover Image" /></a><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="AmazonContent" -->
+	<img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn"-->.01._AA75_PU_PU-5_.jpg" alt="Cover Image" /><!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="GoogleJackets" --><div style="block" title="<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" id="<!-- TMPL_VAR NAME="isbn" -->" class="gbs-thumbnail"></div><!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="BakerTaylorEnabled" --><!-- TMPL_IF NAME="isbn" --><a href="https://<!-- TMPL_VAR NAME="BakerTaylorBookstoreURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="isbn" -->"><img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="isbn" -->" /></a><!-- /TMPL_IF --><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="BakerTaylorEnabled" --><!-- TMPL_IF NAME="isbn" -->
+    <img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="isbn" -->" /><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
 </a></td>
 <!-- /TMPL_LOOP -->
@@ -309,9 +311,11 @@
 <!-- TMPL_LOOP NAME="NEXT_SHELF_BROWSE" -->
        <td> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser">
 
-	<!-- TMPL_IF NAME="AmazonContent" --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn"-->.01._AA75_PU_PU-5_.jpg" alt="Cover Image" /></a><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="AmazonContent" -->
+	<img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn"-->.01._AA75_PU_PU-5_.jpg" alt="Cover Image" /><!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="GoogleJackets" --><div style="block" title="<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" id="<!-- TMPL_VAR NAME="isbn" -->" class="gbs-thumbnail"></div><!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="BakerTaylorEnabled" --><!-- TMPL_IF NAME="isbn" --><a href="https://<!-- TMPL_VAR NAME="BakerTaylorBookstoreURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="isbn" -->"><img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="isbn" -->" /></a><!-- /TMPL_IF --><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="BakerTaylorEnabled" --><!-- TMPL_IF NAME="isbn" -->
+    <img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="isbn" -->" /><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
 </a></td>
 <!-- /TMPL_LOOP -->
