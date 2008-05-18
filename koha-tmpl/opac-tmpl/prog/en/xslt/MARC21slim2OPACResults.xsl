@@ -614,7 +614,7 @@
                  <img src="/opac-tmpl/prog/famfamfam/silk/user.png" alt="biography" title="biography"/>
             </xsl:if>
 
-            <xsl:if test="$controlField008-33 and $controlField008-33!='|' and $controlField008-33!='u'">
+            <xsl:if test="$controlField008-33 and $controlField008-33!='|' and $controlField008-33!='u' and $controlField008-33!=' '">
             <span class="label">; Literary form: </span>
             </xsl:if>
             <xsl:choose>
@@ -653,8 +653,8 @@
                 </xsl:when>
             </xsl:choose>
         </xsl:if> 
-        <xsl:if test="$typeOf008='MU'">
-            <span class="label">; Literary form: </span> <!-- Literary text for sound recordings -->
+        <xsl:if test="$typeOf008='MU' and $controlField008-30-31 and $controlField008-30-31!='||' and $controlField008-30-31!='  '">
+            <span class="label">; Literary form: <xsl:value-of select="$controlField008-30-31"/> </span> <!-- Literary text for sound recordings -->
             <xsl:if test="contains($controlField008-30-31,'b')">
                 biography
             </xsl:if>
