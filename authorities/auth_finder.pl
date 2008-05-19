@@ -128,6 +128,7 @@ if ( $op eq "do_search" ) {
 
     $template->param( result => $results ) if $results;
     $template->param(
+        orderby      => $orderby,
         startfrom      => $startfrom,
     displaynext    => $displaynext,
     displayprev    => $displayprev,
