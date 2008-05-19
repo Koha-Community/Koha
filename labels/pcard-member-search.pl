@@ -27,13 +27,14 @@ use C4::Auth;
 use C4::Output;
 use CGI;
 use C4::Members;
+use C4::Debug;
 
 
 my $input = new CGI;
 my $batch_id    = $input->param('batch_id');
 my $batch_type  = $input->param('type');
 
-warn "Passed Batch Id: $batch_id and Type: $batch_type";
+$debug and warn "[In pcard-member-search] Batch Id: $batch_id, and Type: $batch_type";
 
 my $quicksearch = $input->param('quicksearch');
 my $startfrom = $input->param('startfrom')||1;
@@ -42,7 +43,7 @@ my $resultsperpage = $input->param('resultsperpage')||C4::Context->preference("P
 my ($template, $loggedinuser, $cookie);
 if($quicksearch){
     ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "members/member-quicksearch-results.tmpl",
+    = get_template_and_user({template_name => "members/member-quicksearch-results.tmpl",	# FIXME: template doesn't exist
                  query => $input,
                  type => "intranet",
                  authnotrequired => 0,
@@ -127,14 +128,14 @@ for (my $i=($startfrom-1)*$resultsperpage; $i < $to; $i++){
   push(@resultsdata, \%row);
 }
 my $base_url =
-    'member.pl?&amp;'
+    'pcard-member-search.pl?'
   . join(
     '&amp;',
     map { $_->{term} . '=' . $_->{val} } (
-        { term => 'member', val => $member},
-        { term => 'orderby', val => $orderby },
+        { term => 'member',         val => $member         },
+        { term => 'orderby',        val => $orderby        },
         { term => 'resultsperpage', val => $resultsperpage },
-        { term => 'type',           val => 'intranet' },
+        { term => 'type',           val => 'intranet'      },
     )
   );
 

@@ -84,6 +84,7 @@ function add_item3(borrowernumber){
 
 <!-- TMPL_IF NAME="resultsloop" -->
 <div id="searchheader"> <h3>Results <!-- TMPL_VAR Name ="from" --> to <!-- TMPL_VAR Name ="to" --> of <!-- TMPL_VAR Name ="numresults" --> found for '<span class="ex"><!-- TMPL_VAR NAME="member" --></span>'</h3></div>
+<!-- TMPL_IF NAME="paginationbar" --><div id="pagination_top"><!-- TMPL_VAR Name ="paginationbar" --></div><!-- /TMPL_IF -->
 <form name="resultform" action="/cgi-bin/koha/labels/pcard-member-search.pl" method="get" class="checkboxed"><div style="float: right; margin-top: .5em;"><input type="submit" class="icon addchecked" value="Add checked" onclick="add_item('checked',<!-- TMPL_VAR NAME="batch_id" -->,'<!-- TMPL_VAR NAME="type" -->'); return false" /> <input type="button" class="close" value="Done" /></div>
 <div style="line-height: 2em; margin-left: .7em;"><a id="CheckAll" href="/cgi-bin/koha/labels/pcard-member-search.pl">Select All</a><a id="CheckNone" href="/cgi-bin/koha/labels/pcard-member-search.pl">Clear All</a></div>
 <div class="searchresults">
