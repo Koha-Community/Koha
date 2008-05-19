@@ -31,7 +31,7 @@ $html = q|
 <em FAKE="attribute" > I am em with fake="attribute" </em><br />
 <B> I am BOLD </B><br />
 <span style="background-image: url(http://hackersite.cn/porno.jpg);"> I am a span w/ style.  Bad style.</span>
-<span> I am a span trying to inject a link: &lt;a href="badlink.html"&gt; link &lt;a&gt;</span>
+<span> I am a span trying to inject a link: &lt;a href="badlink.html"&gt; link &lt;/a&gt;</span>
 <br>
 <A NAME="evil">
 	<A HREF="javascript:alert('OMG YOO R HACKED');">I am a link firing javascript.</A>
