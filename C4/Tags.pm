@@ -26,7 +26,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use vars qw($ext_dict $select_all @fields);
 
 BEGIN {
-	$VERSION = 0.01;
+	$VERSION = 0.02;
 	@ISA = qw(Exporter);
 	@EXPORT_OK = qw(
 		&get_tag &get_tags &get_tag_rows
@@ -35,6 +35,10 @@ BEGIN {
 		&remove_tag
 		&delete_tag_rows_by_ids
 		&rectify_weights
+		&get_approval_rows
+		&blacklist
+		&whitelist
+		&is_approved
 	);
 	# %EXPORT_TAGS = ();
 	$ext_dict = C4::Context->preference('TagsExternalDictionary');
@@ -45,7 +49,7 @@ BEGIN {
 	}
 	if ($ext_dict) {
 		require Lingua::Ispell;
-		import Lingua::Ispell qw(spellcheck);
+		import Lingua::Ispell qw(spellcheck add_word_lc save_dictionary);
 	}
 }
 
@@ -128,7 +132,7 @@ sub get_tag_rows ($) {
 		}
 		if ($key =~ /^limit$/i) {
 			my $val = $hash->{$key};
-			unless ($val =~ /^\d+$/) {
+			unless ($val =~ /^(\d+,)?\d+$/) {
 				carp "Non-nuerical limit value '$val' ignored!";
 				next;
 			}
@@ -151,7 +155,6 @@ sub get_tag_rows ($) {
 }
 
 sub get_tags (;$) {		# i.e., from tags_index
-	# my $self = shift;
 	my $hash = shift || {};
 	my @ok_fields = qw(term biblionumber weight limit sort);
 	my $wheres;
@@ -170,7 +173,7 @@ sub get_tags (;$) {		# i.e., from tags_index
 		}
 		if ($key =~ /^limit$/i) {
 			my $val = $hash->{$key};
-			unless ($val =~ /^\d+$/) {
+			unless ($val =~ /^(\d+,)?\d+$/) {
 				carp "Non-nuerical limit value '$val' ignored!";
 				next;
 			}
@@ -185,7 +188,12 @@ sub get_tags (;$) {		# i.e., from tags_index
 					carp "get_tags received illegal sort order '$by'";
 					next;
 				}
-				$order .= " ORDER BY $2 " . ($1 eq '-' ? 'DESC' : $1 eq '+' ? 'ASC' : '') . "\n";
+				if ($order) {
+					$order .= ", ";
+				} else {
+					$order = " ORDER BY ";
+				}
+				$order .= $2 . " " . ((!$1) ? '' : $1 eq '-' ? 'DESC' : $1 eq '+' ? 'ASC' : '') . "\n";
 			}
 			
 		} else {
@@ -212,14 +220,87 @@ sub get_tags (;$) {		# i.e., from tags_index
 	return $sth->fetchall_arrayref({});
 }
 
+sub get_approval_rows (;$) {		# i.e., from tags_approval
+	my $hash = shift || {};
+	my @ok_fields = qw(term approved date_approved approved_by weight_total limit sort);
+	my $wheres;
+	my $limit  = "";
+	my $order  = "";
+	my @exe_args = ();
+	foreach my $key (keys %$hash) {
+		$debug and print STDERR "get_approval_rows arg. '$key' = ", $hash->{$key}, "\n";
+		unless (length $key) {
+			carp "Empty argument key to get_approval_rows: ignoring!";
+			next;
+		}
+		unless (1 == scalar grep {/^ $key $/xi} @ok_fields) {
+			carp "get_approval_rows received unreconized argument key '$key'.";
+			next;
+		}
+		if ($key =~ /^limit$/i) {
+			my $val = $hash->{$key};
+			unless ($val =~ /^(\d+,)?\d+$/) {
+				carp "Non-nuerical limit value '$val' ignored!";
+				next;
+			}
+			$limit = " LIMIT $val\n";
+		} elsif ($key =~ /^sort$/i) {
+			foreach my $by (split /\,/, $hash->{$key}) {
+				unless (
+					$by =~ /^([-+])?(term)/            or
+					$by =~ /^([-+])?(biblionumber)/    or
+					$by =~ /^([-+])?(weight_total)/    or
+					$by =~ /^([-+])?(approved(_by)?)/  or
+					$by =~ /^([-+])?(date_approved)/
+				) {
+					carp "get_approval_rows received illegal sort order '$by'";
+					next;
+				}
+				if ($order) {
+					$order .= ", ";
+				} else {
+					$order = " ORDER BY " unless $order;
+				}
+				$order .= $2 . " " . ((!$1) ? '' : $1 eq '-' ? 'DESC' : $1 eq '+' ? 'ASC' : '') . "\n";
+			}
+			
+		} else {
+			my $whereval = $key;
+			# ($key =~ /^term$/i) and $whereval = 'tags_index.term';
+			$wheres .= ($wheres) ? " AND    $whereval = ?\n" : " WHERE  $whereval = ?\n";
+			push @exe_args, $hash->{$key};
+		}
+	}
+	my $query = "
+	SELECT 	tags_approval.term          AS term,
+			tags_approval.approved      AS approved,
+			tags_approval.date_approved AS date_approved,
+			tags_approval.approved_by   AS approved_by,
+			tags_approval.weight_total  AS weight_total,
+			CONCAT(borrowers.surname, ', ', borrowers.firstname) AS approved_by_name
+	FROM 	tags_approval
+	LEFT JOIN borrowers
+	ON      tags_approval.approved_by = borrowers.borrowernumber ";
+	$query .= ($wheres||'') . $order . $limit;
+	$debug and print STDERR "get_approval_rows query:\n $query\n",
+							"get_approval_rows query args: ", join(',', @exe_args), "\n";
+	my $sth = C4::Context->dbh->prepare($query);
+	if (@exe_args) {
+		$sth->execute(@exe_args);
+	} else {
+		$sth->execute;
+	}
+	return $sth->fetchall_arrayref({});
+}
+
 sub is_approved ($) {
 	my $term = shift or return undef;
-	if ($ext_dict) {
-		return (spellcheck($term) ? 0 : 1);
-	}
 	my $sth = C4::Context->dbh->prepare("SELECT approved FROM tags_approval WHERE term = ?");
 	$sth->execute($term);
-	$sth->rows or return undef;
+	unless ($sth->rows) {
+		$ext_dict and return (spellcheck($term) ? 0 : 1);
+		return undef;
+	}
 	return $sth->fetch;
 }
 
@@ -236,18 +317,70 @@ sub get_tag_index ($;$) {
 	return $sth->fetchrow_hashref;
 }
 
-sub add_tag_approval ($;$) {
+sub whitelist {
+	my $operator = shift;
+	defined $operator or return undef; # have to test defined to allow =0 (kohaadmin)
+	if ($ext_dict) {
+		foreach (@_) {
+			spellcheck($_) or next;
+			add_word_lc($_);
+		}
+	}
+	foreach (@_) {
+		my $aref = get_approval_rows({term=>$_});
+		if ($aref and scalar @$aref) {
+			mod_tag_approval($operator,$_,1);
+		} else {
+			add_tag_approval($_,$operator);
+		}
+	}
+	return scalar @_;
+}
+# note: there is no "unwhitelist" operation because there is no remove for Ispell.
+# The blacklist regexps should operate "in front of" the whitelist, so if you approve
+# a term mistakenly, you can still reverse it. But there is no going back to "neutral".
+sub blacklist {
+	my $operator = shift;
+	defined $operator or return undef; # have to test defined to allow =0 (kohaadmin)
+	foreach (@_) {
+		my $aref = get_approval_rows({term=>$_});
+		if ($aref and scalar @$aref) {
+			mod_tag_approval($operator,$_,-1);
+		} else {
+			add_tag_approval($_,$operator,-1);
+		}
+	}
+	return scalar @_;
+}
+sub add_filter {
+	my $operator = shift;
+	defined $operator or return undef; # have to test defined to allow =0 (kohaadmin)
+	my $query = "INSERT INTO tags_blacklist (regexp,y,z) VALUES (?,?,?)";
+	# my $sth = C4::Context->dbh->prepare($query);
+	return scalar @_;
+}
+sub remove_filter {
+	my $operator = shift;
+	defined $operator or return undef; # have to test defined to allow =0 (kohaadmin)
+	my $query = "REMOVE FROM tags_blacklist WHERE blacklist_id = ?";
+	# my $sth = C4::Context->dbh->prepare($query);
+	# $sth->execute($term);
+	return scalar @_;
+}
+
+sub add_tag_approval ($;$$) {	# or disapproval
 	my $term = shift or return undef;
 	my $query = "SELECT * FROM tags_approval WHERE term = ?";
 	my $sth = C4::Context->dbh->prepare($query);
 	$sth->execute($term);
 	($sth->rows) and return increment_weight_total($term);
-	my $ok = (@_ ? shift : 0);
-	if ($ok) {
-		$query = "INSERT INTO tags_approval (term,approved_by,approved,date_approved) VALUES (?,?,1,NOW())";
-		$debug and print STDERR "add_tag_approval query:\n$query\nadd_tag_approval args: ($term,$ok)\n";
+	my $operator = (@_ ? shift : 0);
+	if ($operator) {
+		my $approval = (@_ ? shift : 1); # default is to approve
+		$query = "INSERT INTO tags_approval (term,approved_by,approved,date_approved) VALUES (?,?,?,NOW())";
+		$debug and print STDERR "add_tag_approval query:\n$query\nadd_tag_approval args: ($term,$operator,$approval)\n";
 		$sth = C4::Context->dbh->prepare($query);
-		$sth->execute($term,$ok);
+		$sth->execute($term,$operator,$approval);
 	} else {
 		$query = "INSERT INTO tags_approval (term,date_approved) VALUES (?,NOW())";
 		$debug and print STDERR "add_tag_approval query:\n$query\nadd_tag_approval args: ($term)\n";
@@ -255,6 +388,16 @@ sub add_tag_approval ($;$) {
 		$sth->execute($term);
 	}
 	return $sth->rows;
+}
+
+sub mod_tag_approval ($$$) {
+	my $operator = shift or return undef;
+	my $term     = shift or return undef;
+	my $approval = (@_ ? shift : 1);	# default is to approve
+	my $query = "UPDATE tags_approval SET approved_by=?, approved=?, date_approved=NOW() WHERE term = ?";
+	$debug and print STDERR "mod_tag_approval query:\n$query\nmod_tag_approval args: ($operator,$approval,$term)\n";
+	my $sth = C4::Context->dbh->prepare($query);
+	$sth->execute($operator,$approval,$term);
 }
 
 sub add_tag_index ($$;$) {
@@ -311,7 +454,7 @@ sub increment_weights ($$) {
 }
 sub decrement_weights ($$) {
 	decrement_weight(@_);
-	derement_weight_total(shift);
+	decrement_weight_total(shift);
 }
 sub increment_weight_total ($) {
 	_set_weight_total('weight_total+1',shift);
@@ -330,7 +473,7 @@ sub _set_weight_total ($$) {
 	UPDATE tags_approval
 	SET    weight_total=" . (shift) . "
 	WHERE  term=?
-	");
+	");						# note: CANNOT use "?" for weight_total (see the args above).
 	$sth->execute(shift);	# just the term
 }
 sub _set_weight ($$$) {
@@ -382,6 +525,67 @@ More verose debugging messages are sent in the presence of non-zero $ENV{"DEBUG"
 =head2 add_tag(biblionumber,term[,borrowernumber])
 
 =head3 TO DO: Add real perldoc
+
+=head2 External Dictionary (Ispell) [Recommended]
+
+An external dictionary can be used as a means of "pre-populating" and tracking
+allowed terms based on the widely available Ispell dictionary.  This can be the system
+dictionary or a personal version, but in order to support whitelisting, it must be
+editable to the process running Koha.  
+
+To enable, enter the absolute path to the ispell dictionary in the system
+preference "TagsExternalDictionary".
+
+Using external Ispell is recommended for both ease of use and performance.  Note that any
+language version of Ispell can be installed.  It is also possible to modify the dictionary 
+at the command line to affect the desired content.
+
+=head2 Table Structure
+
+The tables used by tags are:
+	tags_all
+	tags_index
+	tags_approval
+	tags_blacklist
+
+Your first thought may be that this looks a little complicated.  It is, but only because
+it has to be.  I'll try to explain.
+
+tags_all - This table would be all we really need if we didn't care about moderation or
+performance or tags disappearing when borrowers are removed.  Too bad, we do.  Otherwise
+though, it contains all the relevant info about a given tag:
+	tag_id         - unique id number for it
+	borrowernumber - user that entered it
+	biblionumber   - book record it is attached to
+	term           - tag "term" itself
+	language       - perhaps used later to influence weighting
+	date_created   - date and time it was created
+
+tags_approval - Since we need to provide moderation, this table is used to track it.  If no
+external dictionary is used, this table is the sole reference for approval and rejection.
+With an external dictionary, it tracks pending terms and past whitelist/blacklist actions.
+This could be called an "approved terms" table.  See above regarding the External Dictionary.
+	term           - tag "term" itself 
+	approved       - Negative, 0 or positive if tag is rejected, pending or approved.
+	date_approved  - date of last action
+	approved_by    - staffer performing the last action
+	weight_total   - total occurance of term in any biblio by any users
+
+tags_index - This table is for performance, because by far the most common operation will 
+be fetching tags for a list of search results.  We will have a set of biblios, and we will
+want ONLY their approved tags and overall weighting.  While we could implement a query that
+would traverse tags_all filtered against tags_approval, the performance implications of
+trying to calculate that and the "weight" (number of times a tag appears) on the fly are drastic.
+	term           - approved term as it appears in tags_approval
+	biblionumber   - book record it is attached to
+	weight         - number of times tag applied by any user
+
+tags_blacklist - TODO
+
+So the best way to think about the different tabes is that they are each tailored to a certain
+use.  Note that tags_approval and tags_index do not rely on the user's borrower mapping, so
+the tag population can continue to grow even if a user is removed, along with the corresponding
+rows in tags_all.  
 
 =head2 Tricks
 
