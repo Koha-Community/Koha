@@ -646,7 +646,13 @@ fieldset.rows .inputnote {
 }
 
 .ui-tabs-nav li {
-	list-style : none;
+	margin-right : .5em;
+	position : relative;
+	top : -1px;
+}
+
+.ui-tabs-nav li.ui-tabs-selected {
+
 }
 
 .ui-tabs-nav a, .ui-tabs-nav a span, .ui-tabs-nav span.a {
@@ -656,7 +662,7 @@ fieldset.rows .inputnote {
 }
 
 .ui-tabs-nav a, .ui-tabs-nav span.a {
-    z-index : auto;
+
 }
 
 .ui-tabs-nav .ui-tabs-selected a, .ui-tabs-nav .ui-tabs-selected span.a {
@@ -668,16 +674,11 @@ fieldset.rows .inputnote {
 	font-weight : bold;
 	text-align : center;
 	text-decoration : none;
-	margin-top : -1px;
-	z-index: 100;
+
 }
 
 .ui-tabs-nav .tabs-selected a, .ui-tabs-nav a:hover, .ui-tabs-nav a:focus, .ui-tabs-nav a:active, .ui-tabs-nav span.a {
-    background-position : inherit;
     outline: 0; /* prevent dotted border in Firefox */
-}
-.ui-tabs-nav a, .ui-tabs-nav .ui-tabs-disabled a:hover, .ui-tabs-nav .ui-tabs-disabled a:focus, .ui-tabs-nav .ui-tabs-disabled a:active, .ui-tabs-nav span.a {
-    background-position: inherit;
 }
 
 .ui-tabs-nav .ui-tabs-selected a:hover {
@@ -707,34 +708,27 @@ fieldset.rows .inputnote {
 	margin-top : 1em;
 }
 
-/*.toptabs .ui-tabs-nav a, .toptabs .ui-tabs-nav span.a {
-    top: 0;
- }*/
-
 .toptabs .ui-tabs-nav li {
 	margin-right : .5em;
+	position : relative;
+	top : 1px;
 }
 
 .toptabs .ui-tabs-nav li a, .toptabs .ui-tabs-nav li span.a {
 	background-color : #F3F3F3;
-	border-top : 1px solid #E8E8E8;
-	border-left : 1px solid #E8E8E8;
-	border-right : 1px solid #E8E8E8;
-	border-bottom : 0;
+	border : 1px solid #E8E8E8;
 	text-align : center;
 	text-decoration : none;
 }
 
 .toptabs .ui-tabs-nav li.ui-tabs-selected  {
-	background-color : #FFF;
-	margin-top :  1px;
+
 }
 
 .toptabs .ui-tabs-nav li.ui-tabs-selected a, .toptabs .ui-tabs-nav li.ui-tabs-selected span.a {
 	background-color : #FFF;
 	border-bottom : 1px solid #FFF;
-	margin-bottom :  -1px;
-	z-index : 2;
+	margin-top : 0;
 }
 
 .toptabs .tabs-container {
