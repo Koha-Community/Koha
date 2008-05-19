@@ -814,10 +814,13 @@ sub GetMarcFromKohaField {
 
 =over 4
 
-Returns MARC::Record of the biblionumber passed in parameter.
-the marc record contains both biblio & item datas
+my $record = GetMarcBiblio($biblionumber);
 
 =back
+
+Returns MARC::Record representing bib identified by
+C<$biblionumber>.  If no bib exists, returns undef.
+The MARC record contains both biblio & item data.
 
 =cut
 
