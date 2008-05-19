@@ -31,13 +31,19 @@ use C4::Context;
 use C4::Languages qw(getTranslatedLanguages get_bidi regex_lang_subtags language_get_description accept_language );
 
 use HTML::Template::Pro;
-use vars qw($VERSION @ISA @EXPORT);
+use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
     # set the version for version checking
-    $VERSION = 3.01;
+    $VERSION = 3.02;
     require Exporter;
     @ISA    = qw(Exporter);
+	@EXPORT_OK = qw(&output_ajax_with_http_headers); # More stuff should go here instead
+	%EXPORT_TAGS = ( all =>[qw(&themelanguage &gettemplate setlanguagecookie pagination_bar
+								&output_ajax_with_http_headers &output_html_with_http_headers)],
+					ajax =>[qw(&output_ajax_with_http_headers)],
+					html =>[qw(&output_html_with_http_headers)]
+				);
     push @EXPORT, qw(
         &themelanguage &gettemplate setlanguagecookie pagination_bar
     );
@@ -88,6 +94,7 @@ sub gettemplate {
         die_on_bad_params => 1,
         global_vars       => 1,
         case_sensitive    => 1,
+	    loop_context_vars => 1,		# enable: __first__, __last__, __inner__, __odd__, __counter__ 
         path              => ["$htdocs/$theme/$lang/$path"]
     );
     my $themelang=( $interface ne 'intranet' ? '/opac-tmpl' : '/intranet-tmpl' )
@@ -213,7 +220,7 @@ sub pagination_bar {
     my $pages_around = 2;
 
     my $url =
-      $base_url . ( $base_url =~ m/&/ ? '&amp;' : '?' ) . $startfrom_name . '=';
+      $base_url . ( $base_url =~ m/[?&]/ ? '&amp;' : '?' ) . $startfrom_name . '=';
 
     my $pagination_bar = '';
 
@@ -345,6 +352,17 @@ sub output_html_with_http_headers ($$$) {
         -Pragma => 'no-cache',
         -'Cache-Control' => 'no-cache',
     ), $html;
+}
+
+sub output_ajax_with_http_headers ($$) {
+    my ($query, $js) = @_;
+    print $query->header(
+        -type    => 'text/javascript',
+        -charset => 'UTF-8',
+        -Pragma  => 'no-cache',
+        -'Cache-Control' => 'no-cache',
+		-expires =>'-1d',
+    ), $js;
 }
 
 END { }    # module clean-up code here (global destructor)
