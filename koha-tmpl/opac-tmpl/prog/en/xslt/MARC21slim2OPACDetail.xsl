@@ -6,7 +6,7 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   exclude-result-prefixes="marc items">
     <xsl:import href="MARC21slimUtils.xsl"/>
-	<xsl:output method = "xml" indent="yes" omit-xml-declaration = "yes" />
+    <xsl:output method = "xml" indent="yes" omit-xml-declaration = "yes" />
     <xsl:template match="/">
             <xsl:apply-templates/>
     </xsl:template>
@@ -121,7 +121,7 @@
         <xsl:if test="$materialTypeCode">
         <span class="results_summary"><span class="label">Type: </span>
         <xsl:element name="img"><xsl:attribute name="src">/opac-tmpl/prog/famfamfam/<xsl:value-of select="$materialTypeCode"/>.png</xsl:attribute><xsl:attribute name="alt">typeicon</xsl:attribute></xsl:element>
-		<xsl:value-of select="$materialTypeLabel"/>
+        <xsl:value-of select="$materialTypeLabel"/>
         </span>
         </xsl:if>
         <xsl:if test="marc:datafield[@tag=440 or @tag=490]">
@@ -238,17 +238,17 @@
         <span class="results_summary"><span class="label">Online Resources: </span>
         <xsl:for-each select="marc:datafield[@tag=856]">
             <a><xsl:attribute name="href"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute>
-	    <xsl:choose>
+        <xsl:choose>
             <xsl:when test="marc:subfield[@code='y' or @code='3' or @code='z']">
                     <xsl:call-template name="subfieldSelect">
                         <xsl:with-param name="codes">y3z</xsl:with-param>
                     </xsl:call-template>
             </xsl:when>
-	    <xsl:when test="not(marc:subfield[@code='y']) and not(marc:subfield[@code='3']) and not(marc:subfield[@code='z'])">
-	    Click Here
-	    </xsl:when>
-	    </xsl:choose>
-	    </a>
+        <xsl:when test="not(marc:subfield[@code='y']) and not(marc:subfield[@code='3']) and not(marc:subfield[@code='z'])">
+        Click here to access online
+        </xsl:when>
+        </xsl:choose>
+        </a>
             <xsl:choose>
             <xsl:when test="position()=last()"></xsl:when>
             <xsl:otherwise> | </xsl:otherwise>
@@ -256,6 +256,36 @@
             
         </xsl:for-each>
         </span>
+        </xsl:if>
+        <xsl:if test="marc:datafield[@tag=505]">
+        <xsl:for-each select="marc:datafield[@tag=505]">
+        <span class="results_summary"><span class="label">
+        <xsl:choose>
+        <xsl:when test="@ind1=0">
+            Contents:
+        </xsl:when>
+        <xsl:when test="@ind1=1">
+            Incomplete contents:
+        </xsl:when>
+        <xsl:when test="@ind1=1">
+            Partial contents:
+        </xsl:when>
+        </xsl:choose>  
+        </span>
+        <xsl:choose>
+        <xsl:when test="@ind2=0">
+            <xsl:for-each select="marc:subfield[@code='t']">
+                <xsl:value-of select="marc:subfield[@code=t]"/> <xsl:value-of select="marc:subfield[@code=r]"/>
+            </xsl:for-each> 
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="subfieldSelect">
+                <xsl:with-param name="codes">au</xsl:with-param>
+            </xsl:call-template>
+        </xsl:otherwise>
+        </xsl:choose>
+        </span>
+        </xsl:for-each>
         </xsl:if>
 
         <!-- 780 -->
