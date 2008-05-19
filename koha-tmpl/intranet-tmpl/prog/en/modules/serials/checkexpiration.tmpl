@@ -4,7 +4,6 @@
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 <script type="text/javascript" language="JavaScript">
 // <![CDATA[
-    
     /**
      *  Function CheckForm
      *  This function checks the form before submit
@@ -19,6 +18,11 @@
             return false;
         }
      }
+
+	function popup(subscriptionid) {
+	   newin=window.open("subscription-renew.pl?mode=popup&subscriptionid="+subscriptionid,'popup','width=590,height=440,toolbar=false,scrollbars=yes,resize=yes');
+	}
+
      // ]]>
 </script>
 <!-- End of additions -->
@@ -84,6 +88,7 @@
             <th>Title</th>
             <th>Note</th>
             <th>Expiration date</th>
+			<th colspan="2">&nbsp;</th>
         </tr>
     <!-- TMPL_LOOP NAME="subscriptions_loop"-->
         <!-- TMPL_IF NAME="toogle"-->
@@ -94,34 +99,12 @@
             <td>
                 <!-- TMPL_VAR NAME="issn" -->
             </td>
-            <td>
-            <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
-                <a class="title" href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                <!-- TMPL_IF NAME="title"-->
+            <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" ESCAPE="URL" -->"><!-- TMPL_IF NAME="title"-->
                     <!-- TMPL_VAR NAME="title" -->
                 <!-- TMPL_ELSE -->
                     |
                 <!-- /TMPL_IF -->
                 </a>
-                <!-- TMPL_ELSE -->
-                <!-- TMPL_IF name="BiblioDefaultViewisbd" -->
-                <a class="title" href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                <!-- TMPL_IF NAME="title"-->
-                    <!-- TMPL_VAR NAME="title" -->
-                <!-- TMPL_ELSE -->
-                    |
-                <!-- /TMPL_IF -->
-                </a>
-                <!-- TMPL_ELSE -->
-                <a class="title" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                <!-- TMPL_IF NAME="title"-->
-                    <!-- TMPL_VAR NAME="title" -->
-                <!-- TMPL_ELSE -->
-                    |
-                <!-- /TMPL_IF -->
-                </a>
-                <!-- /TMPL_IF -->
-            <!-- /TMPL_IF -->
             </td>
             <td>
                 <!-- TMPL_VAR NAME="notes"-->
@@ -129,6 +112,8 @@
             <td>
                 <!-- TMPL_VAR NAME="expirationdate" -->
             </td>
+			<td><a href="/cgi-bin/koha/serials/subscription-add.pl?op=mod&amp;subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->">Edit</a></td>
+			<td><a href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" onclick="popup(<!-- TMPL_VAR NAME="subscriptionid" -->); return false;">Renew</a></td>
         </tr>
     <!-- /TMPL_LOOP -->
     </table>
