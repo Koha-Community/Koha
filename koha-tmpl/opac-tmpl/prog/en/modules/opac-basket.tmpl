@@ -57,7 +57,7 @@
 	<!-- TMPL_UNLESS NAME="print_basket" --><p style="padding: 7px 0; border-top : 1px solid #E8E8E8;"><a id="CheckAll" href="#">Select All</a> <a id="CheckNone" href="#">Clear All</a> | <b>Selected items :</b>
 <a href="#" onclick="delSelRecords(); return false;">Remove</a>
 <!-- TMPL_IF NAME="loggedinusername" -->
-     | <a href="#" onclick="addSelToShelf(); return false;">Add to a shelf</a>
+     | <a href="#" onclick="addSelToShelf(); return false;">Add to a list</a>
 <!-- /TMPL_IF --></p><!-- /TMPL_UNLESS -->
             <form action="opac-basket.pl" method="get" name="bookbag_form" id="bookbag_form">
     <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
@@ -201,7 +201,7 @@
 				<!-- TMPL_UNLESS NAME="print_basket" --><tr><td colspan="3" style="padding-bottom: 7px;"><a id="CheckAll" href="#">Select All</a> <a id="CheckNone" href="#">Clear All</a> | <b>Selected items :</b>
 <a href="#" onclick="delSelRecords(); return false;">Remove</a>
 <!-- TMPL_IF NAME="loggedinusername" -->
-     | <a href="#" onclick="addSelToShelf(); return false;">Add to a shelf</a>
+     | <a href="#" onclick="addSelToShelf(); return false;">Add to a list</a>
 <!-- /TMPL_IF --></td></tr><!-- /TMPL_UNLESS -->
         <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
             <!-- TMPL_IF NAME="even" -->
