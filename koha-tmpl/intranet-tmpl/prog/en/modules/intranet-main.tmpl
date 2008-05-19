@@ -29,13 +29,17 @@
 	<div class="yui-u">
 
     <!-- TMPL_IF NAME="CAN_user_editcatalogue" -->
-    <h3><a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloguing</a></h3>
+    <h3><a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a></h3>
 	<ul>
         <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl">Add MARC Record</a></li>
         <li><a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a></li>
+		<!-- TMPL_IF NAME="CAN_user_serials" -->
         <li><a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a></li>
+		<!-- /TMPL_IF -->
     </ul>
+	<!-- TMPL_IF NAME="CAN_user_acquisition" -->
     <h3><a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a></h3>
+	<!-- /TMPL_IF -->
     <!-- /TMPL_IF --><!-- TMPL_IF NAME="CAN_user_reports" -->
           <h3><a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a></h3>
     <!-- /TMPL_IF -->

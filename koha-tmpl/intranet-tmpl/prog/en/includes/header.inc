@@ -8,10 +8,14 @@
 	<!-- TMPL_VAR name="IntranetNav" -->
 	<li class="more"><a id="showmore" href="/cgi-bin/koha/mainpage.pl">More</a><div id="moremenu"><div class="bd"><ul>
 	<li><a href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a></li>
-	<!-- TMPL_IF NAME="CAN_user_editcatalogue" --><li><a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloguing</a></li>
+	<!-- TMPL_IF NAME="CAN_user_editcatalogue" --><li><a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a></li>
+	<!-- TMPL_IF NAME="CAN_user_acquisition" -->
 	<li><a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a></li>
+	<!-- /TMPL_IF -->
 	<li><a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a></li>
+	<!-- TMPL_IF NAME="CAN_user_serials" -->
 	<li><a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a></li><!-- /TMPL_IF -->
+	<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="CAN_user_reports" --><li><a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a></li><!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="CAN_user_tools" --><li><a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a></li><!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="CAN_user_parameters" --><li><a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a></li><!-- /TMPL_IF -->
