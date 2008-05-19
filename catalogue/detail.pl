@@ -53,6 +53,12 @@ my $fw = GetFrameworkCode($biblionumber);
 ## get notes and subjects from MARC record
 my $marcflavour      = C4::Context->preference("marcflavour");
 my $record           = GetMarcBiblio($biblionumber);
+
+unless (defined($record)) {
+    print $query->redirect("/cgi-bin/koha/errors/404.pl");
+	exit;
+}
+
 my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );
 my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
 my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
@@ -69,11 +75,6 @@ my $dbh = C4::Context->dbh;
 # change back when ive fixed request.pl
 my @items = &GetItemsInfo( $biblionumber, 'intra' );
 my $dat = &GetBiblioData($biblionumber);
-
-if (!$dat) { 
-    print $query->redirect("/cgi-bin/koha/koha-tmpl/errors/404.pl");
-	exit;
-}
 
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
