@@ -12,17 +12,28 @@
 	<!-- TMPL_IF NAME="ERRORS" -->
 	<!-- TMPL_LOOP NAME="ERRORS" -->
 		<div class="error">There was a problem with this operation:
-		<!-- TMPL_IF NAME="tagsdisabled" -->Sorry, tags are not enabled on this system.<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="badparam" -->ERROR: illegal paramter <!-- TMPL_VAR NAME="badparam" --><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="tagsdisabled" -->Sorry, tags are not enabled on this system.
+		<!-- TMPL_ELSIF NAME="badparam" -->ERROR: illegal paramter <!-- TMPL_VAR NAME="badparam" -->
+		<!-- TMPL_ELSIF NAME="login"    -->ERROR: You must log in to complete that action.
+		<!-- TMPL_ELSIF NAME="failed_delete" -->ERROR: You cannot delete the tag <!-- TMPL_VAR NAME="failed_delete" -->.
+					<br />Note: you can only delete your own tags.
+		<!-- TMPL_ELSIF NAME="scrubbed" -->Note: your tag contained markup code that was removed. 
+					<br />The tag was added as &quot;<!-- TMPL_VAR NAME="scrubbed" -->&quot;.
+		<!-- TMPL_ELSIF NAME="scrubbed_all_bad" -->Note: your tag was entirely markup code.  It was NOT added.
+					<br />Please try again with plain text.
+		<!-- TMPL_ELSE -->Unrecognized error.
+		<!-- /TMPL_IF -->
 		</div>
 	<!-- /TMPL_LOOP -->
 	<!-- /TMPL_IF -->
 
 	<!-- TMPL_IF NAME="add_op" -->
-		<h3><!-- TMPL_VAR NAME="added_count" --> tags successfully added.</h3>
-	<!-- /TMPL_IF -->
-	<!-- TMPL_IF NAME="deleted_count" -->
-		<h3><!-- TMPL_VAR NAME="deleted_count" --> tags successfully deleted.</h3>
+	  <!-- TMPL_IF NAME="added_count" -->
+		<h3><!-- TMPL_VAR NAME="added_count" --> tag(s) successfully added.</h3>
+	  <!-- /TMPL_IF -->
+	  <!-- TMPL_IF NAME="deleted_count" -->
+		<h3><!-- TMPL_VAR NAME="deleted_count" --> tag(s) successfully deleted.</h3>
+	  <!-- /TMPL_IF -->
 	<!-- /TMPL_IF -->
 
 	<!-- TMPL_IF NAME="MY_TAGS" -->

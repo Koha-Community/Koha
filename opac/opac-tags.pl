@@ -22,32 +22,37 @@
 
 TODO :: Description here
 
+C4::Scrubber is used to remove all markup content from the sumitted text.
+
 =cut
 
 use strict;
 use warnings;
+use CGI;
+use CGI::Cookie; # need to check cookies before having CGI parse the POST request
+
 use C4::Auth;
 use C4::Context;
 use C4::Debug;
-use C4::Output;
+use C4::Output 3.02 qw(:html :ajax pagination_bar);
 use C4::Dates qw(format_date);
-use CGI;
+use C4::Scrubber;
 use C4::Biblio;
 use C4::Tags qw(add_tag get_tags get_tag_rows remove_tag);
 
-my $query = new CGI;
 my %newtags = ();
 my @deltags = ();
 my %counts  = ();
 my @errors  = ();
 
 # The trick here is to support multiple tags added to multiple bilbios in one POST.
+# The HTML might not use this, but it makes it more web-servicey from the start.
 # So the name of param has to have biblionumber built in.
 # For lack of anything more compelling, we just use "newtag[biblionumber]"
 # We split the value into tags at comma and semicolon
 
 my $openadds = C4::Context->preference('TagsModeration') ? 0 : 1;
-
+my $query = new CGI;
 unless (C4::Context->preference('TagsEnabled')) {
 	push @errors, {+ tagsdisabled=>1 };
 } else {
@@ -77,31 +82,47 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
 
 if ($add_op) {
 	unless ($loggedinuser) {
-		push @errors, {+'login' => $_ };
+		push @errors, {+'login' => 1 };
 		%newtags=();	# zero out any attempted additions
 		@deltags=();	# zero out any attempted deletions
 	}
 }
-foreach my $biblionumber (keys %newtags) {
-	my @values = split /[;,]/, $newtags{$biblionumber};
-	foreach (@values) {
-		s/^\s*(.+)\s*$/$1/;
-		my $result;
-		if ($openadds) {
-			$result = add_tag($biblionumber,$_,$loggedinuser,0); # pre-approved
-		} else {
-			$result = add_tag($biblionumber,$_,$loggedinuser);
-		}
-		if ($result) {
-			$counts{$biblionumber}++;
-		} else {
-			warn "add_tag($biblionumber,$_,$loggedinuser...) returned $result";
+
+my $scrubber;
+my @newtags_keys = (keys %newtags);
+if (scalar @newtags_keys) {
+	$scrubber = C4::Scrubber->new();
+	foreach my $biblionumber (@newtags_keys) {
+		my @values = split /[;,]/, $newtags{$biblionumber};
+		foreach (@values) {
+			s/^\s*(.+)\s*$/$1/;
+			my $clean_tag = $scrubber->scrub($_);
+			unless ($clean_tag eq $_) {
+				if ($clean_tag =~ /\S/) {
+					push @errors, {scrubbed=>$clean_tag};
+				} else {
+					push @errors, {scrubbed_all_bad=>1};
+					next;	# we don't add it if there's nothing left!
+				}
+			}
+			my $result = ($openadds) ?
+				add_tag($biblionumber,$clean_tag,$loggedinuser,0) : # pre-approved
+				add_tag($biblionumber,$clean_tag,$loggedinuser)   ;
+			if ($result) {
+				$counts{$biblionumber}++;
+			} else {
+				warn "add_tag($biblionumber,$clean_tag,$loggedinuser...) returned bad result ($result)";
+			}
 		}
 	}
 }
 my $dels = 0;
 foreach (@deltags) {
-	remove_tag($_) and $dels++;
+	if (remove_tag($_,$loggedinuser)) {
+		$dels++;
+	} else {
+		push @errors, {failed_delete=>$_};
+	}
 }
 
 my $results = [];
