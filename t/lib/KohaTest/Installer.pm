@@ -8,6 +8,8 @@ use Test::More;
 use C4::Languages;
 use C4::Installer;
 
+sub SKIP_CLASS : Expensive { }
+
 sub testing_class { 'C4::Installer' };
 
 sub methods : Test( 1 ) {

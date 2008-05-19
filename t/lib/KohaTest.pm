@@ -25,6 +25,37 @@ use File::Temp qw/ tempdir /;
 # things faster.
 __PACKAGE__->SKIP_CLASS( 1 );
 
+use Attribute::Handlers;
+
+=head2 Expensive test method attribute
+
+If a test method is decorated with an Expensive
+attribute, it is skipped unless the RUN_EXPENSIVE_TESTS
+environment variable is defined.
+
+To declare an entire test class and its subclasses expensive,
+define a SKIP_CLASS with the Expensive attribute:
+
+    sub SKIP_CLASS : Expensive { }
+
+=cut
+
+sub Expensive : ATTR(CODE) {
+    my ($package, $symbol, $sub, $attr, $data, $phase) = @_;
+    my $name = *{$symbol}{NAME};
+    if ($name eq 'SKIP_CLASS') {
+        if ($ENV{'RUN_EXPENSIVE_TESTS'}) {
+            *{$symbol} = sub { 0; }
+        } else {
+            *{$symbol} = sub { "Skipping expensive test classes $package (and subclasses)"; }
+        }
+    } else {
+        unless ($ENV{'RUN_EXPENSIVE_TESTS'}) {
+            # a test method that runs no tests and just returns a scalar is viewed by Test::Class as a skip
+            *{$symbol} = sub { "Skipping expensive test $package\:\:$name"; }
+        }
+    }
+}
 
 =head2 startup methods
 
