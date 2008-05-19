@@ -1,0 +1,361 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Tags &rsaquo; <!-- TMPL_IF NAME="do_it" -->Review &rsaquo; <!-- TMPL_ELSE -->Review Tags<!-- /TMPL_IF --></title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="calendar.inc" -->
+<style type="text/css">
+.setlabel {width: 6em; font-family: courier; background-color:#E8E8E8;}
+.red      {color:darkred;   background-color: pink;}
+.green    {color:darkgreen; background-color: #D1EFD5; text-align: center;}
+.pending  {background-color: lightyellow;}
+</style>
+<script type="text/javascript">
+//<![CDATA[
+	// <!-- TMPL_VAR NAME="script_name" -->
+	$.ajaxSetup({
+	  url: "/cgi-bin/koha/tags/review.pl",
+	  type: "POST",
+	  dataType: "script"
+	});
+	var ok_count  = 0;
+	var nok_count = 0;
+	var rej_count = 0;
+	var alerted = 0;
+	function pull_counts () {
+		ok_count  = parseInt(document.getElementById("terms_summary_approved_count"  ).innerHTML);
+		nok_count = parseInt(document.getElementById("terms_summary_unapproved_count").innerHTML);
+		rej_count = parseInt(document.getElementById("terms_summary_rejected_count"  ).innerHTML);
+	}
+	function count_approve () {
+		pull_counts();
+		if (nok_count > 0) {
+			$("#terms_summary_unapproved_count").html(nok_count -1);
+			$("#terms_summary_approved_count"  ).html( ok_count +1);
+		}
+	}
+	function count_reject () {
+		pull_counts();
+		if (nok_count > 0) {
+			$("#terms_summary_unapproved_count").html(nok_count -1);
+			$("#terms_summary_rejected_count"  ).html(rej_count +1);
+		}
+	}
+	function warn_once (evt) {
+		if (alerted <= 1 && ($(evt.target).is('.ok') || $(evt.target).is('.rej'))) {
+			alerted += 1;
+			window.alert("this is: " + this + "is '.ok': " + $(evt.target).is('.ok') + "  is '.rej': " + $(evt.target).is('.rej'));
+		}
+	}
+	var success_approve = function(tag){
+		window.alert('AJAX approved tag: ' + tag);
+	};
+	var failure_approve = function(tag){
+		window.alert('AJAX failed to approve tag: ' + tag);
+	};
+	var success_reject  = function(tag){
+		window.alert('AJAX rejected tag: ' + tag);
+	};
+	var failure_reject  = function(tag){
+		window.alert('AJAX failed to reject tag: ' + tag);
+	};
+	var success_test    = function(tag){
+		$('#verdict').html(tag + ' is permitted!');
+	};
+	var failure_test    = function(tag){
+		$('#verdict').html(tag + ' is prohibited!');
+	};
+
+	var success_test_call = function() {
+		$('#test_button').removeAttr("disabled");
+		$('#test_button').attr("value","test");
+	};
+	function readCookie(name) { // from http://www.quirksmode.org/js/cookies.html
+		var nameEQ = name + "=";
+		var ca = document.cookie.split(';');
+			for(var i=0;i < ca.length;i++) {
+				var c = ca[i];
+				while (c.charAt(0)==' '){ c = c.substring(1,c.length); }
+				if (c.indexOf(nameEQ) == 0){ return c.substring(nameEQ.length,c.length); }
+			}
+		return null;
+	}
+	function check_all() {
+		$(':checkbox').each(function(){this.checked="checked"});
+	}
+	function uncheck_all() {
+		$(':checkbox').each(function(){this.checked=""});
+	}
+	$(document).ready(function() {
+		$('.ajax_buttons' ).css({visibility:"visible"});
+		$('body').click(function(event) {
+			pull_counts();
+			// window.alert("Click detected on " + event.target + ": " + $(event.target).html);
+			if ($(event.target).is('.ok')) {
+				$.ajax({
+					"data": {ok: $(event.target).attr("title"), CGISESSID: readCookie('CGISESSID')},
+					"success": count_approve // success_approve
+				});
+				$(event.target).next(".rej").removeAttr("disabled");
+				$(event.target).attr(   "value","approved");
+				$(event.target).attr("disabled","disabled");
+				return false;	// cancel submit
+			}
+			if ($(event.target).is('.rej')) {
+				$.ajax({
+					"data": {rej: $(event.target).attr("title"), CGISESSID: readCookie('CGISESSID')},
+					"success": count_reject // success_reject
+				});
+				$(event.target).prev(".ok").removeAttr("disabled");
+				$(event.target).attr(   "value","rejected");
+				$(event.target).attr("disabled","disabled");
+				return false;	// cancel submit
+			}
+			if ($(event.target).is('#test_button')) {
+				$(event.target).attr(   "value","testing...");
+				$(event.target).attr("disabled","disabled");
+				$.ajax({
+					"data": {test: $('#test').attr("value")},
+					"success": success_test_call // success_reject
+				});
+				return false;	// cancel submit
+			}
+		});
+		$("*").ajaxError(function(evt, request, settings){
+			if ((alerted +=1) <= 1){ window.alert("AJAX error (" + alerted + " alert)"); }
+		});
+	});
+//]]>
+</script>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tags/review.pl">Tags</a> &rsaquo; Review Tags</div>
+
+<div id="doc3" class="yui-t2">
+ <div id="bd">
+  <div id="yui-main">
+   <div class="yui-b">
+
+<form method="post" action="/cgi-bin/koha/tags/review.pl">
+<fieldset>
+  <legend>Filters</legend>
+	<input type="submit" value="Apply Filter(s)" />
+  <br />
+  <br />
+  <table>
+    <tr>
+		<th>Term</th>
+		<th>Status</th>
+		<th>Reviewer</th>
+		<th>Date</th>
+	</tr>
+	<tr>
+	    <td><input type="text" name="tag" value="<!-- TMPL_VAR NAME="filter_tag" -->" />
+	    </td>
+	    <td><select name="approved">
+			<option <!-- TMPL_IF NAME="filter_approved_all"     -->selected="selected" <!-- /TMPL_IF -->value="all">all</option>
+			<option <!-- TMPL_IF NAME="filter_approved_ok"      -->selected="selected" <!-- /TMPL_IF -->value="1">approved</option>
+			<option <!-- TMPL_IF NAME="filter_approved_pending" -->selected="selected" <!-- /TMPL_IF -->value="0">pending</option>
+			<option <!-- TMPL_IF NAME="filter_approved_rej"     -->selected="selected" <!-- /TMPL_IF -->value="-1">rejected</option>
+			</select>
+	    </td>
+	    <td><input type="text" name="approver" value="<!-- TMPL_VAR NAME="filter_approver" -->" />
+	    </td>
+	    <td>
+			<label for="from" class="setlabel">from </label>
+			<input type="text" size="10" id="from" name="from" value="<!-- TMPL_VAR NAME="filter_date_approved_from" -->" />
+			<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" alt="Show Calendar" style="cursor: pointer;" id="openCalendarFrom" />
+			<br />
+			<label for="to" class="setlabel">&nbsp;&nbsp;to </label>
+			<input type="text" size="10" id="to"   name="to"   value="<!-- TMPL_VAR NAME="filter_date_approved_to" -->" />
+			<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" alt="Show Calendar" style="cursor: pointer;" id="openCalendarTo" />
+	    </td>
+	</tr>
+  </table>
+</fieldset>
+</form>
+<script type="text/javascript">
+//<![CDATA[
+// function submit_check (from_id,to_id) {
+//	var dateFrom = Date_from_syspref(document.getElementById(from_id).value);
+//	var dateTo   = Date_from_syspref(document.getElementById(  to_id).value);
+//	var today = new Date();
+// 	if (dateFrom < dateTo) { 
+//		alert("The starting date cannot be after the ending date.");
+//		document.getElementById(to_id).select();
+//		return false;
+//	}
+// 	if (dateFrom > today) { 
+//		alert("The starting date cannot be in the future.");
+//		document.getElementById(from_id).select();
+//		return false;
+//	}
+// }
+
+// return true if the date is blocked.
+function disable_from(date) {var limit = get_Calendar_limit(date,'to'  ); return (limit && limit < date);}
+function disable_to  (date) {var limit = get_Calendar_limit(date,'from'); return (limit && limit > date);}
+
+Calendar.setup({
+	inputField : "from",
+	  ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+		button : "openCalendarFrom",
+	   disableFunc : disable_from,
+	dateStatusFunc : disable_from
+});
+Calendar.setup({
+	inputField : "to",
+	  ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+		button : "openCalendarTo",
+	   disableFunc : disable_to,
+	dateStatusFunc : disable_to
+});
+//]]>
+</script>
+<form method="post" action="/cgi-bin/koha/tags/review.pl">
+  <h4>Displaying 
+	<!-- TMPL_IF NAME="filter_approved_all"     -->ALL<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="filter_approved_ok"      -->Approved<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="filter_approved_pending" -->Pending<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="filter_approved_rej"     -->Rejected<!-- /TMPL_IF -->
+	Terms
+  </h4>
+  <p>
+   <input type="submit" value="approve" id="approve_button" name="op" />
+   <input type="submit" value="reject"  id="reject_button"  name="op" />
+   <input type="button" value="check all" class="ajax_buttons" onclick="check_all()" />
+   <input type="button" value="uncheck all" class="ajax_buttons" onclick="uncheck_all()" />
+  </p>
+  <!-- TMPL_IF NAME="op_count" -->
+  <div class="message" id="main_status">
+  		<!-- TMPL_IF EXPR="op eq 'approve'" -->		Approved
+  		<!-- TMPL_ELSIF EXPR="op eq 'reject'" -->	Rejected
+  		<!-- TMPL_ELSIF EXPR="op eq 'test'" -->		Tested
+  		<!-- TMPL_ELSE -->							Unkown Operation (<!-- TMPL_VAR NAME="op" -->) on
+  		<!-- /TMPL_IF -->
+	<!-- TMPL_VAR NAME="op_count" --> Term(s).
+  </div>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME="message_loop" -->
+  <div class="error" id="main_error">
+	<!-- TMPL_LOOP NAME="message_loop" -->
+		<!-- TMPL_IF    NAME="date_from"  -->ERROR: Date from is not a legal value (<!-- TMPL_VAR NAME="date_from" -->).
+		<!-- TMPL_ELSIF NAME="date_to"    -->ERROR: Date to is not a legal value (<!-- TMPL_VAR NAME="date_to" -->).
+		<!-- TMPL_ELSIF NAME="failed_ok"  -->ERROR: Failed to approve term (<!-- TMPL_VAR NAME="failed_ok" -->).
+		<!-- TMPL_ELSIF NAME="failed_rej" -->ERROR: Failed to reject term (<!-- TMPL_VAR NAME="failed_rej" -->).
+		<!-- TMPL_ELSIF NAME="approver"   -->ERROR: No match for user (<!-- TMPL_VAR NAME="approver" -->). FILTER REQUIRES BORROWERNUMBER (not name).
+		<!-- TMPL_ELSIF NAME="approved_by"-->ERROR: No match for borrowernumber (<!-- TMPL_VAR NAME="approved_by" -->).
+		<!-- TMPL_ELSIF NAME="op_zero"    -->ERROR: The root koha user in your KOHA_CONF file
+				(default: kohaadmin) is not a valid tag moderator.  These actions are logged 
+				by borrowernumber, so the moderator must exist in your borrowers table.
+				Please login as a different authorized staff user to moderate tags.  
+		<!-- TMPL_ELSE -->					Unrecognized error! 
+		<!-- /TMPL_IF -->
+		<br />
+	<!-- /TMPL_LOOP -->
+  </div>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME="pagination_bar" -->
+  <div class="pagination" id="pagination_top">
+  	<!-- TMPL_VAR NAME="pagination_bar" -->
+  </div>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME="tagloop" -->
+  <table>
+    <tr>
+    	<th>&nbsp;</th>
+    	<th>&nbsp;</th>
+		<th>Status</th>
+		<th>Term</th>
+		<th>Weight</th>
+		<th>Actions</th>
+		<th>Reviewer</th>
+		<th>Date</th>
+	</tr>
+	<!-- TMPL_LOOP NAME="tagloop" -->
+	<tr>
+	    <td class="count"><!-- TMPL_VAR EXPR="offset + __counter__" -->
+	    </td>
+	    <td><span><input type="checkbox" value="<!-- TMPL_VAR NAME="term"-->" name="tags" /></span>
+	    </td>
+	    <!-- TMPL_IF EXPR="approved == -1" --><td class="red">rejected
+		<!-- TMPL_ELSIF EXPR="approved == 1" --><td class="green"><img alt="OK" src="/intranet-tmpl/prog/img/approve.gif" />
+		<!-- TMPL_ELSE --><td class="pending">
+		<!-- /TMPL_IF -->
+	    </td>
+	    <td><!-- TMPL_VAR NAME="term" -->
+	    </td>
+		<td><!-- TMPL_VAR NAME="weight_total" -->
+	    </td>
+		<!-- TMPL_IF NAME="approved" -->
+	    <td><span class="ajax_buttons" style="visibility:hidden">
+			<!-- TMPL_IF EXPR="approved == -1" -->
+			<input class="ok"  type="submit" title="<!-- TMPL_VAR NAME="term"-->" value="approve" name="approve" />
+			<input class="rej" disabled="disabled" type="submit" title="<!-- TMPL_VAR NAME="term"-->" value="reject" name="reject" />
+			<!-- TMPL_ELSE -->
+			<input class="ok"  disabled="disabled" type="submit" title="<!-- TMPL_VAR NAME="term"-->" value="approve" name="approve" />
+			<input class="rej" type="submit" title="<!-- TMPL_VAR NAME="term"-->" value="reject" name="reject" />
+			<!-- /TMPL_IF -->
+			</span>
+	    </td>
+	    <td><a href="?approved_by=<!-- TMPL_VAR NAME="approved_by" -->&amp;approved=all"><!-- TMPL_VAR NAME="approved_by_name" --></a>
+	    </td>
+		<!-- TMPL_ELSE -->
+		<td colspan="2"><span class="ajax_buttons" style="visibility:hidden">
+	    	<input class="ok"  type="submit" title="<!-- TMPL_VAR NAME="term"-->" value="approve" name="approve" />
+			<input class="rej" type="submit" title="<!-- TMPL_VAR NAME="term"-->" value="reject" name="reject" />
+			</span>
+	    </td>
+		<!-- /TMPL_IF -->
+	    <td><!-- TMPL_VAR NAME="date_approved"-->
+	    </td>
+	</tr>
+	<!-- /TMPL_LOOP -->
+  </table>
+  <!-- /TMPL_IF -->
+  </form>
+  </div>
+ </div>
+ <div class="yui-b noprint">
+<h1>Tags</h1>
+
+  <fieldset>
+  <legend>Terms Summary</legend>
+  <table class="summary">
+  	<tr><td><a href="review.pl?approved=1">Approved</a>:</td>
+		<td><span id="terms_summary_approved_count"><!-- TMPL_VAR NAME="approved_count" --></span></td>
+  	</tr>
+  	<tr><td><a href="review.pl?approved=-1">Rejected</a>:</td>
+		<td><span id="terms_summary_rejected_count"><!-- TMPL_VAR NAME="rejected_count" --></span></td>
+  	</tr>
+	<tr><td><a href="review.pl?approved=0">Pending</a>:</td>
+		<td><span id="terms_summary_unapproved_count"><!-- TMPL_VAR NAME="unapproved_count" --></span></td>
+  	</tr>
+	<tr><td><a href="review.pl?approved=all">Total</a>:</td>
+		<td><span id="terms_summary_approved_total"><!-- TMPL_VAR NAME="approved_total" --></span></td>
+  	</tr>
+  </table>
+  <span id="terms_summary_status">&nbsp;</span>
+  </fieldset>
+  <fieldset>
+   <legend>Test Blacklist</legend>
+   <div class="description">Enter a word or phrase here to test against your whitelist/blacklist.</div>
+   <form method="post" action="/cgi-bin/koha/tags/review.pl">
+   <input type="text" size="14" name="test" id="test" />
+   <input type="submit" value="test" id="test_button" name="op" />
+   <div id="verdict">
+	<!-- TMPL_IF NAME="test_term" -->
+	<!-- TMPL_IF NAME="verdict_ok" -->
+		&quot;<!-- TMPL_VAR NAME="test_term" -->&quot; is permitted.
+	<!-- TMPL_ELSIF NAME="verdict_rej" -->
+		&quot;<!-- TMPL_VAR NAME="test_term" -->&quot; is prohibited.
+	<!-- /TMPL_IF -->
+	<!-- /TMPL_IF -->
+   </div>
+   </form>
+  </fieldset>
+ </div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+

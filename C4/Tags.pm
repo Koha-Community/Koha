@@ -60,10 +60,14 @@ INIT {
 	$select_all = "SELECT " . join(',',@fields) . "\n FROM   tags_all\n";
 }
 
-sub remove_tag ($) {
-	my $tag_id = shift;
-	my $rows = get_tag_rows({tag_id=>$tag_id}) or return 0;
-	(scalar(@$rows) == 1) or return undef;
+sub remove_tag ($;$) {
+	my $tag_id  = shift or return undef;
+	my $user_id = (@_) ? shift : undef;
+	my $rows = (defined $user_id) ?
+			get_tag_rows({tag_id=>$tag_id, borrowernumber=>$user_id}) :
+			get_tag_rows({tag_id=>$tag_id}) ;
+	$rows or return 0;
+	(scalar(@$rows) == 1) or return undef;	# should never happen (duplicate ids)
 	my $row = shift(@$rows);
 	($tag_id == $row->{tag_id}) or return 0;
 	my $tags = get_tags({term=>$row->{term}, biblionumber=>$row->{biblionumber}});
@@ -126,11 +130,11 @@ sub get_tag_rows ($) {
 			carp "Empty argument key to get_tag_rows: ignoring!";
 			next;
 		}
-		unless (1 == scalar grep {/^ $key $/xi} @ok_fields) {
+		unless (1 == scalar grep {/^ $key $/x} @ok_fields) {
 			carp "get_tag_rows received unreconized argument key '$key'.";
 			next;
 		}
-		if ($key =~ /^limit$/i) {
+		if ($key eq 'limit') {
 			my $val = $hash->{$key};
 			unless ($val =~ /^(\d+,)?\d+$/) {
 				carp "Non-nuerical limit value '$val' ignored!";
@@ -167,18 +171,18 @@ sub get_tags (;$) {		# i.e., from tags_index
 			carp "Empty argument key to get_tags: ignoring!";
 			next;
 		}
-		unless (1 == scalar grep {/^ $key $/xi} @ok_fields) {
+		unless (1 == scalar grep {/^ $key $/x} @ok_fields) {
 			carp "get_tags received unreconized argument key '$key'.";
 			next;
 		}
-		if ($key =~ /^limit$/i) {
+		if ($key eq 'limit') {
 			my $val = $hash->{$key};
 			unless ($val =~ /^(\d+,)?\d+$/) {
 				carp "Non-nuerical limit value '$val' ignored!";
 				next;
 			}
 			$limit = " LIMIT $val\n";
-		} elsif ($key =~ /^sort$/i) {
+		} elsif ($key eq 'sort') {
 			foreach my $by (split /\,/, $hash->{$key}) {
 				unless (
 					$by =~ /^([-+])?(term)/ or
@@ -197,10 +201,12 @@ sub get_tags (;$) {		# i.e., from tags_index
 			}
 			
 		} else {
-			my $whereval = $key;
-			($key =~ /^term$/i) and $whereval = 'tags_index.term';
-			$wheres .= ($wheres) ? " AND    $whereval = ?\n" : " WHERE  $whereval = ?\n";
-			push @exe_args, $hash->{$key};
+			my $whereval = $hash->{$key};
+			my $longkey = ($key eq 'term') ? 'tags_index.term' : $key;
+			my $op = ($whereval =~ s/^(>=|<=)// or
+					  $whereval =~ s/^(>|=|<)//   ) ? $1 : '=';
+			$wheres .= ($wheres) ? " AND    $longkey $op ?\n" : " WHERE  $longkey $op ?\n";
+			push @exe_args, $whereval;
 		}
 	}
 	my $query = "
@@ -233,18 +239,18 @@ sub get_approval_rows (;$) {		# i.e., from tags_approval
 			carp "Empty argument key to get_approval_rows: ignoring!";
 			next;
 		}
-		unless (1 == scalar grep {/^ $key $/xi} @ok_fields) {
+		unless (1 == scalar grep {/^ $key $/x} @ok_fields) {
 			carp "get_approval_rows received unreconized argument key '$key'.";
 			next;
 		}
-		if ($key =~ /^limit$/i) {
+		if ($key eq 'limit') {
 			my $val = $hash->{$key};
 			unless ($val =~ /^(\d+,)?\d+$/) {
 				carp "Non-nuerical limit value '$val' ignored!";
 				next;
 			}
 			$limit = " LIMIT $val\n";
-		} elsif ($key =~ /^sort$/i) {
+		} elsif ($key eq 'sort') {
 			foreach my $by (split /\,/, $hash->{$key}) {
 				unless (
 					$by =~ /^([-+])?(term)/            or
@@ -265,10 +271,11 @@ sub get_approval_rows (;$) {		# i.e., from tags_approval
 			}
 			
 		} else {
-			my $whereval = $key;
-			# ($key =~ /^term$/i) and $whereval = 'tags_index.term';
-			$wheres .= ($wheres) ? " AND    $whereval = ?\n" : " WHERE  $whereval = ?\n";
-			push @exe_args, $hash->{$key};
+			my $whereval = $hash->{$key};
+			my $op = ($whereval =~ s/^(>=|<=)// or
+					  $whereval =~ s/^(>|=|<)//   ) ? $1 : '=';
+			$wheres .= ($wheres) ? " AND    $key $op ?\n" : " WHERE  $key $op ?\n";
+			push @exe_args, $whereval;
 		}
 	}
 	my $query = "
@@ -298,7 +305,7 @@ sub is_approved ($) {
 	my $sth = C4::Context->dbh->prepare("SELECT approved FROM tags_approval WHERE term = ?");
 	$sth->execute($term);
 	unless ($sth->rows) {
-		$ext_dict and return (spellcheck($term) ? 0 : 1);
+		$ext_dict and return (spellcheck($term) ? 0 : 1);	# spellcheck returns empty on OK word
 		return undef;
 	}
 	return $sth->fetch;
@@ -391,7 +398,8 @@ sub add_tag_approval ($;$$) {	# or disapproval
 }
 
 sub mod_tag_approval ($$$) {
-	my $operator = shift or return undef;
+	my $operator = shift;
+	defined $operator or return undef; # have to test defined to allow =0 (kohaadmin)
 	my $term     = shift or return undef;
 	my $approval = (@_ ? shift : 1);	# default is to approve
 	my $query = "UPDATE tags_approval SET approved_by=?, approved=?, date_approved=NOW() WHERE term = ?";
