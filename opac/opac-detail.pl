@@ -77,7 +77,7 @@ if (C4::Context->preference('hidelostitems')) {
 my $dat = &GetBiblioData($biblionumber);
 
 if (!$dat) {
-    print $query->redirect("/cgi-bin/koha/koha-tmpl/errors/404.pl");
+    print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
 my $imgdir = getitemtypeimagesrc();
