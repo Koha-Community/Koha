@@ -59,14 +59,16 @@ $(document).ready(function(){
 </script>
 </head>
 <body id="results">
-<!--TMPL_INCLUDE NAME="masthead.inc" -->
-
-<div id="doc3" class="yui-t1">
+	<!-- TMPL_IF NAME="opacfacets" --><div id="doc3" class="yui-t1"><!-- TMPL_ELSE --><div id="doc3" class="yui-t7"><!-- /TMPL_IF -->
    <div id="bd">
 
-	<div id="yui-main">
+<!--TMPL_INCLUDE NAME="masthead.inc" -->
 
+
+
+	<div id="yui-main">
 	<div class="yui-b">
+	<div class="container">
   <!-- TMPL_IF NAME="koha_spsuggest" -->
 	Did you mean:
     <ul style="list-style: none;">
@@ -144,7 +146,7 @@ $(document).ready(function(){
     </form>
 <!-- TMPL_ELSE -->
 
-    <div class="searchresults container">
+    <div class="searchresults">
 	<form action="/cgi-bin/koha/opac-search.pl" method="get" name="bookbag_form" id="bookbag_form">
 		<!-- TMPL_IF NAME="searchdesc" -->
 		<!-- TMPL_LOOP NAME="QUERY_INPUTS"-->
@@ -294,16 +296,16 @@ $(document).ready(function(){
 	<!-- TMPL_IF name="suggestion" -->
 <!-- TMPL_IF NAME="AnonSuggestions" --><div class="suggestion">Not finding what you're looking for?<br />  Make a <a href="/cgi-bin/koha/opac-suggestions.pl?op=add">purchase suggestion</a></div><!-- TMPL_ELSE --><!-- TMPL_IF NAME="loggedinusername" --><div class="suggestion">Not finding what you're looking for?<br />  Make a <a href="/cgi-bin/koha/opac-suggestions.pl?op=add">purchase suggestion</a></div><!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
-    
+</div>    
 </div>
 </div>
-<div class="yui-b">
-        <!-- FACETS START -->
         <!-- TMPL_IF NAME="opacfacets" -->
+<div class="yui-b"><div class="container">
+        <!-- FACETS START -->
 		<!-- TMPL_INCLUDE NAME="opac-facets.inc" -->
-        <!-- /TMPL_IF -->
         <!-- FACETS END -->
-</div>
+</div></div>
+        <!-- /TMPL_IF -->
 </div>
 
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

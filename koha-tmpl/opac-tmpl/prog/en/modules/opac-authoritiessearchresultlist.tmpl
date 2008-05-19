@@ -2,17 +2,17 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
+<!-- TMPL_IF NAME="OpacNav" --><div id="doc3" class="yui-t1"><!-- TMPL_ELSE --><div id="doc3" class="yui-t7"><!-- /TMPL_IF -->
+   <div id="bd">
 <!-- TMPL_INCLUDE name="masthead.inc" -->
 
-<div id="doc3" class="yui-t1">
-   <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
-
+<div class="container">
 	<h1>Authority search results</h1>
 	<div id="pages">
 			<!-- TMPL_IF name="displayprev" -->
-				<a href="opac-authorities-home.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=opac&amp;op=do_search&authtypecode=<!-- TMPL_VAR name="authtypecode" -->">
+				<a href="opac-authorities-home.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=opac&amp;op=do_search&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" -->">
 					&lt;&lt;
 				</a>
 			<!-- /TMPL_IF -->
@@ -20,11 +20,11 @@
 				<!-- TMPL_IF name="highlight" -->
 					<span class="current"><!-- TMPL_VAR NAME="number" --></span>
 				<!-- TMPL_ELSE -->
-					<a href="opac-authorities-home.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=opac&amp;op=do_search&authtypecode=<!-- TMPL_VAR name="authtypecode" -->"><!-- TMPL_VAR NAME="number" --></a>
+					<a href="opac-authorities-home.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=opac&amp;op=do_search&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" -->"><!-- TMPL_VAR NAME="number" --></a>
 				<!-- /TMPL_IF -->
 			<!-- /TMPL_LOOP -->
 			<!-- TMPL_IF name="displaynext" -->
-				<a href="opac-authorities-home.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=opac&amp;op=do_search&authtypecode=<!-- TMPL_VAR name="authtypecode" -->">&gt;&gt;</a>
+				<a href="opac-authorities-home.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=opac&amp;op=do_search&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" -->">&gt;&gt;</a>
 				<!-- /TMPL_IF -->
 		</div>
 		<div id="results">
@@ -68,11 +68,11 @@
 	<div id="resultnumber">
 		<p>
 			<!-- TMPL_IF name="displayprev" -->
-				<a href="opac-authorities-home.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=opac&amp;op=do_search&authtypecode=<!-- TMPL_VAR name="authtypecode" -->">&lt;&lt;</a>
+				<a href="opac-authorities-home.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=opac&amp;op=do_search&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" -->">&lt;&lt;</a>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_LOOP NAME="numbers" -->
 				<!-- TMPL_IF name="highlight" --><span class="current"><!-- TMPL_VAR NAME="number" --></span><!-- TMPL_ELSE -->
-					<a href="opac-authorities-home.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=opac&amp;op=do_search&authtypecode=<!-- TMPL_VAR name="authtypecode" -->"><!-- TMPL_VAR NAME="number" --></a>
+					<a href="opac-authorities-home.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=opac&amp;op=do_search&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" -->"><!-- TMPL_VAR NAME="number" --></a>
 				<!-- /TMPL_IF -->
 			<!-- /TMPL_LOOP -->
 			<!-- TMPL_IF name="displaynext" -->
@@ -84,11 +84,12 @@
 </div>
 </div>
 </div>
+</div>
+<!-- TMPL_IF NAME="OpacNav" -->
 <div class="yui-b">
 <div class="container">
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
-<!-- TMPL_INCLUDE name="usermenu.inc" -->
 </div>
-</div>
+</div><!-- /TMPL_IF -->
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

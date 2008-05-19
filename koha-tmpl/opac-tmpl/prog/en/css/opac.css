@@ -334,27 +334,25 @@ p.availability {
 	color : #006600;
 }
 
-.inwait {
-	background-color : #33CC99;
+.waiting,.intransit,.notforloan,.checkedout,.lost,.notonhold {
+	display : block;
+}
+.notforloan {
+	color : #900;
+}
+.lost {
+	color : #666;
+}
+.waiting {
+	
 }
 
-/* css styles for reserves color alerts */
-.onloan {
-	background-color : #eeeeee;
-}
 
-.other {
-	background-color : #ffcccc;
-}
 
 /* "problem" enhancement */
 .problem {
 	color : white;
 	background-color : red;
-}
-
-.reserved {
-	background-color : #8EBAFF;
 }
 
 /* style for search terms in catalogsearch */
@@ -499,9 +497,17 @@ a .term {
 	background-color: #FFF;
 }
 
+#holds,#opac-auth {
+	min-width : 750px;
+	width : 57.69em;
+	margin : auto;
+}
+
 #members {
 	background-color: #fff;
 	font-size : 85%;
+	margin-left : -10px;
+	margin-right : -10px;
 	padding : 4px 0 4px 0;
 	color : #000066;
 }
@@ -540,6 +546,8 @@ a .term {
 	background-color : #739ACF;
 	border-top : 1px solid #335599;
 	border-bottom : 1px solid #335599;
+	margin-left : -10px;
+	margin-right : -10px;
 	padding : .7em 0 .4em .5em;
 	font-size : 108%;
 	line-height : 116%;
@@ -1122,6 +1130,11 @@ div.message {
 	text-decoration : none;
 }
 
+#news th {
+	text-align : left;
+	padding : 3px 5px;
+}
+
 #opac-main-search #listsmenu a, #opac-main-search #listsmenu h4 {
 	color : #000;
 	font-weight : normal;
@@ -1619,6 +1632,7 @@ ul.ui-tabs-nav li.ui-tabs-selected a, ul.ui-tabs-nav li.ui-tabs-selected span.a 
 }
 
 #bibliodescriptions {
+	clear : left;
 	margin-top : .5em;
 }
 
@@ -1732,4 +1746,7 @@ input.tagbutton {
 }
 table#items th {
 	padding : 2px;
+}
+#action {
+	margin-top: 0;
 }

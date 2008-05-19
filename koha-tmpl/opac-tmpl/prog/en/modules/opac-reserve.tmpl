@@ -2,9 +2,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
+<div id="doc3" class="yui-t7">
 <!--TMPL_INCLUDE NAME="masthead.inc" -->
 
-<div id="doc" class="yui-t7">
    <div id="bd">
 	<div id="yui-g">
 <div id="holds" class="container">
@@ -134,7 +134,7 @@
             <input DISABLED type="checkbox" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
             <!-- /TMPL_IF -->
             </td>
-
+			<td>&nbsp;</td>
             <!-- TMPL_IF NAME="item-level_itypes" -->
             <td>
             <img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->">
@@ -160,27 +160,27 @@
             <span class="checkedout">Due <!-- TMPL_VAR NAME="date_due" --></span>
 			<!-- TMPL_ELSE -->
         <!-- TMPL_IF Name="transfertwhen" -->
-            In transit from <!-- TMPL_VAR NAME="transfertfrom" -->,
-            to <!-- TMPL_VAR NAME="transfertto" -->, since <!-- TMPL_VAR NAME="transfertwhen" -->
+            <span class="intransit">In transit from <!-- TMPL_VAR NAME="transfertfrom" -->,
+            to <!-- TMPL_VAR NAME="transfertto" -->, since <!-- TMPL_VAR NAME="transfertwhen" --></span>
         <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
 
         <!-- TMPL_IF Name="message" -->
-            Unavailable (lost or missing)
+            <span class="lost">Unavailable (lost or missing)</span>
         <!-- /TMPL_IF -->
 
         <!-- TMPL_IF Name="notforloan" -->
-            Not for loan (<!-- TMPL_VAR NAME="notforloanvalue" -->)
+            <span class="notforloan">Not for loan (<!-- TMPL_VAR NAME="notforloanvalue" -->)</span>
         <!-- /TMPL_IF -->
 
             <!-- TMPL_IF NAME="reservedate"-->
-                    <!-- TMPL_IF NAME="waitingdate" -->Waiting<!-- TMPL_ELSE -->On hold<!-- /TMPL_IF --> for patron 
+                    <span class="waiting"><!-- TMPL_IF NAME="waitingdate" -->Waiting<!-- TMPL_ELSE -->On hold<!-- /TMPL_IF --> for patron 
                     <!-- TMPL_IF NAME="waitingdate" -->at<!-- TMPL_ELSE -->expected at<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="ExpectedAtLibrary" -->
                     since
-                    <!-- TMPL_IF NAME="waitingdate" --><!-- TMPL_VAR NAME="waitingdate" --><!-- TMPL_ELSE --><!-- TMPL_IF name="reservedate" --><!-- TMPL_VAR NAME="reservedate" --><!-- /TMPL_IF --><!-- /TMPL_IF -->.
+                    <!-- TMPL_IF NAME="waitingdate" --><!-- TMPL_VAR NAME="waitingdate" --><!-- TMPL_ELSE --><!-- TMPL_IF name="reservedate" --><!-- TMPL_VAR NAME="reservedate" --><!-- /TMPL_IF --><!-- /TMPL_IF -->.</span>
             <!-- TMPL_ELSE -->
-                    Not on hold
-            <!-- /TMPL_IF -->
+                    <span class="notonhold">Not on hold</span>
+            <!-- /TMPL_IF -->&nbsp;
             </td>
         </tr>
         <!-- /TMPL_LOOP --> <!-- itemloop -->

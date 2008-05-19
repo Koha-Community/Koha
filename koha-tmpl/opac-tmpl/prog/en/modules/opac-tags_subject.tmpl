@@ -2,10 +2,10 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
+	<!-- TMPL_IF NAME="OpacNav" --><div id="doc3" class="yui-t1"><!-- TMPL_ELSE --><div id="doc3" class="yui-t7"><!-- /TMPL_IF -->
+   <div id="bd">
 <!-- TMPL_INCLUDE name="masthead.inc" -->
 
-<div id="doc3" class="yui-t1">
-   <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
 
@@ -25,12 +25,11 @@ subject below to see the items in our collection.</p>
 
 </div>
 </div>
-</div>
+</div><!-- TMPL_IF NAME="OpacNav" -->
 <div class="yui-b">
 <div class="container">
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
-<!-- TMPL_INCLUDE name="usermenu.inc" -->
 </div>
-</div>
+</div><!-- /TMPL_IF -->
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

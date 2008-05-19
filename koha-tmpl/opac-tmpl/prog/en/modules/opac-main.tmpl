@@ -3,13 +3,18 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
-<!--TMPL_INCLUDE NAME="masthead.inc" -->
-
 <!-- TMPL_IF NAME="OpacNav" --><div id="doc3" class="yui-t1"><!-- TMPL_ELSE --><div id="doc3" class="yui-t7"><!-- /TMPL_IF -->
    <div id="bd">
+<!--TMPL_INCLUDE NAME="masthead.inc" -->
+
 	<div id="yui-main">
+
 	<div class="yui-b"><div class="yui-ge">
+		<!-- TMPL_IF NAME="opacuserlogin" -->
+	    <!-- TMPL_UNLESS NAME="loggedinusername" -->		
     <div class="yui-u first">
+    <!-- /TMPL_UNLESS -->
+<!-- /TMPL_IF -->	
 	<!-- TMPL_IF name="koha_news_count" -->
 <div id="news" class="container">
     <table>
@@ -77,10 +82,10 @@
 <!-- /TMPL_IF -->
 
 	    </div>
-    <div class="yui-u">
-	
 	<!-- TMPL_IF NAME="opacuserlogin" -->
     <!-- TMPL_UNLESS NAME="loggedinusername" -->
+    <div class="yui-u">
+	
 <div id="login" class="container">
 	<form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth">
 	<fieldset class="brief">
@@ -94,17 +99,17 @@
 
 	 </form>
 </div>
+	    </div>
     <!-- /TMPL_UNLESS -->
 <!-- /TMPL_IF -->
-	    </div>
 </div>
 </div>
 </div>
-<div class="yui-b">
+<!-- TMPL_IF NAME="OpacNav" --><div class="yui-b">
 <div class="container">
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
 </div>
-</div>
+</div><!-- /TMPL_IF -->
 </div>
 
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

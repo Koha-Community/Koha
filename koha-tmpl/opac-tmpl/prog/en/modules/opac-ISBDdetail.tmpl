@@ -9,10 +9,10 @@
 </script>
 </head>
 <body>
+<!-- TMPL_IF NAME="OpacNav" --><div id="doc3" class="yui-t1"><!-- TMPL_ELSE --><div id="doc3" class="yui-t7"><!-- /TMPL_IF -->
+   <div id="bd" class="columnfix">
 <!-- TMPL_INCLUDE name="masthead.inc" -->
 
-<!-- TMPL_IF NAME="OpacNav" --><div id="doc3" class="yui-t1"><!-- TMPL_ELSE --><div id="doc3" class="yui-t7"><!-- /TMPL_IF -->
-   <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
 	<div class="yui-ge">
@@ -183,11 +183,11 @@
 </div>
 
 </div>
-</div>
+</div><!-- TMPL_IF NAME="OpacNav" -->
 <div class="yui-b">
 <div class="container">
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
 </div>
-</div>
+</div><!-- /TMPL_IF -->
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

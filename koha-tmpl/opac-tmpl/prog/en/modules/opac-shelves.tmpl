@@ -37,10 +37,10 @@ $.tablesorter.addParser({
 </script>
 </head>
 <body>
+	<!-- TMPL_IF EXPR="OpacNav||loggedinusername" --><div id="doc3" class="yui-t1"><!-- TMPL_ELSE --><div id="doc3" class="yui-t7"><!-- /TMPL_IF -->
+ <div id="bd">
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 
-<div id="doc3" class="yui-t1">
- <div id="bd">
   <div id="yui-main">
    <div class="yui-b">
 <div class="container">
@@ -276,12 +276,13 @@ $.tablesorter.addParser({
     </div></div>
    </div>
   </div>
+<!-- TMPL_IF EXPR="OpacNav||loggedinusername" -->
   <div class="yui-b">
   <div class="container">
 	<!-- TMPL_INCLUDE NAME="navigation.inc" -->
 	<!-- TMPL_INCLUDE NAME="usermenu.inc" -->
   </div>
-  </div>
+  </div><!-- /TMPL_IF -->
  </div>
 <!-- </div> -->
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

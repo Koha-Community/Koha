@@ -1,7 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo;  Dictionary Search<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body><div id="window">
-	<h1>Dictionary Search</h1>
+	<div class="container"><h1>Dictionary Search</h1>
 	
 <form name="f" method="post" action="opac-dictionary.pl">
 				<input type="hidden" name="op" value="do_search" />
@@ -11,7 +11,7 @@
 				<input type="submit" value="Start search" class="submit" />
 				<input type="hidden" name="type" value="<!-- TMPL_VAR Name="type" -->" />
 				<input type="hidden" name="index" value="<!-- TMPL_VAR Name="anindex" ESCAPE="URL" -->" />
-	</form>
+	</form></div>
 
 <!-- TMPL_IF Name=search -->
 	<!-- TMPL_IF NAME="authresult" -->

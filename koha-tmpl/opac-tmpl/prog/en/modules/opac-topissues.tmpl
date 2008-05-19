@@ -27,10 +27,10 @@ function Dopop(link) {
 </style>
 </head>
 <body>
+	<!-- TMPL_IF EXPR="OpacNav||results_loop" --><div id="doc3" class="yui-t1"><!-- TMPL_ELSE --><div id="doc3" class="yui-t7"><!-- /TMPL_IF -->
+   <div id="bd">
 <!-- TMPL_INCLUDE name="masthead.inc" -->
 
-<div id="doc3" class="yui-t1">
-   <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
 	<div id="topissues" class="container">
@@ -122,11 +122,11 @@ function Dopop(link) {
 	</div>
 </div>
 </div>
-</div>
+</div><!-- TMPL_IF EXPR="OpacNav||results_loop" -->
 <div class="yui-b"><div class="container">
 <!-- TMPL_IF NAME="results_loop" --><!-- TMPL_INCLUDE NAME="opac-topissues.inc" --><!-- /TMPL_IF -->
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
-<!-- TMPL_INCLUDE name="usermenu.inc" -->
 </div></div>
+<!-- /TMPL_IF -->
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
