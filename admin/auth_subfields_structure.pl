@@ -42,7 +42,7 @@ sub StringSearch  {
 		$u++;
 	}
 	$sth->finish;
-	$dbh->disconnect;
+# 	$dbh->disconnect;
 	return ($cnt,\@results);
 }
 
