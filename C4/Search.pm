@@ -592,8 +592,7 @@ sub getRecords {
                         {
                             type_link_value => $link_value,
                             type_id         => $link_value . "_id",
-                            type_label =>
-                              $facets_info->{$link_value}->{'label_value'},
+                            "type_label_" . $facets_info->{$link_value}->{'label_value'} => 1, 
                             facets     => \@this_facets_array,
                             expandable => $expandable,
                             expand     => $link_value,
