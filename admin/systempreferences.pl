@@ -248,7 +248,6 @@ my %tabsysprefs;
     $tabsysprefs{opacheader}="OPAC";
 
     $tabsysprefs{hideBiblioNumber}="OPAC";
-    $tabsysprefs{noOPACUserLogin}="OPAC";
     $tabsysprefs{OPACDisplayExtendedSubInfo}="OPAC";
     $tabsysprefs{OpacMainUserBlock}="OPAC";
     $tabsysprefs{OPACSubscriptionDisplay}="OPAC";
