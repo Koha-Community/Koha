@@ -2096,6 +2096,28 @@ CREATE TABLE `user_permissions` (
     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `tmp_holdsqueue`
+--
+
+DROP TABLE IF EXISTS `tmp_holdsqueue`;
+CREATE TABLE `tmp_holdsqueue` (
+  `biblionumber` int(11) default NULL,
+  `itemnumber` int(11) default NULL,
+  `barcode` varchar(20) default NULL,
+  `surname` mediumtext NOT NULL,
+  `firstname` text,
+  `phone` text,
+  `borrowernumber` int(11) NOT NULL,
+  `cardnumber` varchar(16) default NULL,
+  `reservedate` date default NULL,
+  `title` mediumtext,
+  `itemcallnumber` varchar(30) default NULL,
+  `holdingbranch` varchar(10) default NULL,
+  `pickbranch` varchar(10) default NULL,
+  `notes` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

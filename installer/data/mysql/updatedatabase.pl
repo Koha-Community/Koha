@@ -1576,6 +1576,29 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.086";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do(
+	"CREATE TABLE `tmp_holdsqueue` (
+  	`biblionumber` int(11) default NULL,
+  	`itemnumber` int(11) default NULL,
+  	`barcode` varchar(20) default NULL,
+  	`surname` mediumtext NOT NULL,
+  	`firstname` text,
+  	`phone` text,
+  	`borrowernumber` int(11) NOT NULL,
+  	`cardnumber` varchar(16) default NULL,
+  	`reservedate` date default NULL,
+  	`title` mediumtext,
+  	`itemcallnumber` varchar(30) default NULL,
+  	`holdingbranch` varchar(10) default NULL,
+  	`pickbranch` varchar(10) default NULL,
+  	`notes` text
+	) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+	print "Upgrade to $DBversion done (Table structure for table `tmp_holdsqueue`)\n";
+	SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
