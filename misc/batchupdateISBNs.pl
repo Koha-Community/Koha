@@ -127,7 +127,7 @@ if(not $no_marcxml){
                 }
 	    }
             if($flag){
-                $marcxml = $record->as_xml;
+                $marcxml = $record->as_xml_record('UNIMARC');
                 # Update
                 my $sth = $dbh->prepare($update_marcxml);
                 $sth->execute($marcxml,$biblioitemnumber);
