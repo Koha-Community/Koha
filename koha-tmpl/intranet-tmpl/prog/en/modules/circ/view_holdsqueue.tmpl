@@ -18,13 +18,13 @@
 
 <!-- TMPL_IF NAME="run_report" -->
 
-<div class="results">
+
     <!-- TMPL_IF NAME="total" -->
-        <!-- TMPL_VAR NAME="total" --> items found for <!-- TMPL_VAR NAME="branch" -->
+        <div class="results"><!-- TMPL_VAR NAME="total" --> items found for <!-- TMPL_VAR NAME="branch" --></div>
     <!-- TMPL_ELSE-->
-        No items found
+        <div class="dialog message">No items found.</div>
     <!-- /TMPL_IF -->
-</div>
+
 
     <!-- TMPL_IF NAME="itemsloop" --><table>
     <tr>
@@ -53,10 +53,12 @@
     <!-- /TMPL_LOOP -->
     </table>
 	<!-- /TMPL_IF --> 
-	<!-- TMPL_ELSE -->
+	<!-- /TMPL_IF --> 
 	
+<!-- TMPL_UNLESS NAME="total" -->
 	<form name="f" action="/cgi-bin/koha/circ/view_holdsqueue.pl" method="post">
-	
+	<fieldset class="rows">
+	<ol>
 	<li><label for="branchlimit">Library: </label><select name="branchlimit" id="branchlimit">
                 <option value="">All</option>
             <!-- TMPL_LOOP name="branchloop" -->
@@ -81,8 +83,7 @@
 <fieldset class="action">    <input type="submit" value="Submit" />
     <input type="hidden" name="run_report" value="1" /></fieldset>
 </form>
-	
-	<!-- /TMPL_IF -->
+	<!-- /TMPL_UNLESS -->
 
 </div>
 </div>
