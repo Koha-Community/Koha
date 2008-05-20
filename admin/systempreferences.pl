@@ -147,6 +147,8 @@ my %tabsysprefs;
     $tabsysprefs{previousIssuesDefaultSortOrder}="Circulation";
     $tabsysprefs{todaysIssuesDefaultSortOrder}="Circulation";
     $tabsysprefs{HomeOrHoldingBranch}="Circulation";
+	$tabsysprefs{RandomizeHoldsQueueWeight}="Circulation";
+	$tabsysprefs{StaticHoldsQueueWeight}="Circulation";
 
 # Staff Client
     $tabsysprefs{TemplateEncoding}="StaffClient";

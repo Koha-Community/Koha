@@ -49,7 +49,6 @@ SELECT biblionumber,itemnumber,reserves.branchcode,reservenotes,borrowers.borrow
 WHERE reserves.found IS NULL 
     AND reserves.borrowernumber=borrowers.borrowernumber 
     AND priority=1 
-    AND cancellationdate IS NULL 
 GROUP BY biblionumber");
 
 my $sth_load=$dbh->prepare("
@@ -102,21 +101,21 @@ while (my $data=$sth->fetchrow_hashref){
 		# Item is not notforloan
 		(!$itm->{"notforloan"}) ) ) {
 
-            warn "patron requested pickup at $pickbranch for item in ".$itm->{'holdingbranch'};
+            #warn "patron requested pickup at $pickbranch for item in ".$itm->{'holdingbranch'};
 
 			# This selects items for fulfilment, and weights them based on
 			# a static list
 			my $weight=0;
 			# always prefer a direct match
             if ($itm->{'holdingbranch'} eq $pickbranch) {
-				warn "Found match in pickuplibrary";
+				#warn "Found match in pickuplibrary";
                 $itemorder[$weight]=$itm;
             } 
 			else {
 				for my $branchcode (@branch_loop) {
 					$weight++;
 					if ($itm->{'homebranch'} eq $branchcode) {
-						warn "Match found with weight $weight in ".$branchcode;
+						#warn "Match found with weight $weight in ".$branchcode;
                 		$itemorder[$weight]=$itm;
 					}
 				}
@@ -124,7 +123,7 @@ while (my $data=$sth->fetchrow_hashref){
         }
     }
     my $count = @itemorder;
-	warn "Empty array" if $count<1;
+	#warn "Empty array" if $count<1;
     next GETIT if $count<1;  # if the re-ordered array is empty, skip to next
 
     PREP: 

@@ -1595,6 +1595,10 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
   	`pickbranch` varchar(10) default NULL,
   	`notes` text
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+
+	$dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('RandomizeHoldsQueueWeight','0','if ON, the holds queue in circulation will be randomized, either based on all location codes, or by the location codes specified in StaticHoldsQueueWeight',NULL,'YesNo')");
+	$dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('StaticHoldsQueueWeight','0','Specify a list of library location codes separated by commas -- the list of codes will be traversed and weighted with first values given higher weight for holds fulfillment -- alternatively, if RandomizeHoldsQueueWeight is set, the list will be randomly selective',NULL,'TextArea')");
+
 	print "Upgrade to $DBversion done (Table structure for table `tmp_holdsqueue`)\n";
 	SetVersion ($DBversion);
 }

@@ -1,0 +1,93 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Circulation &rsaquo; Holds Queue</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a><!-- TMPL_IF NAME="run_report" --> &rsaquo; <a href="/cgi-bin/koha/circ/view_holdsqueue.pl">Holds Queue</a> &rsaquo; Results<!-- TMPL_ELSE --> &rsaquo; Holds Queue<!-- /TMPL_IF --></div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+<h1>Holds Queue</h1>
+
+<!-- TMPL_IF NAME="run_report" -->
+
+<div class="results">
+    <!-- TMPL_IF NAME="total" -->
+        <!-- TMPL_VAR NAME="total" --> items found for <!-- TMPL_VAR NAME="branch" -->
+    <!-- TMPL_ELSE-->
+        No items found
+    <!-- /TMPL_IF -->
+</div>
+
+    <!-- TMPL_IF NAME="itemsloop" --><table>
+    <tr>
+        <th>Title</th>
+        <th>Call Number</th>
+        <th>Patron</th>
+        <th>Phone Number</th>
+        <th>Date</th>
+        <th>Send To</th>
+    </tr>
+     <!-- TMPL_LOOP NAME="itemsloop"-->
+        <tr>
+            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->">
+						  <!-- TMPL_VAR NAME="title"--></td>
+					 </a></td>
+            <td><!-- TMPL_VAR NAME="itemcallnumber"--></td>
+            <td><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->">
+					<!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" -->
+                    <!-- TMPL_VAR NAME="barcode"-->
+                </a></td>
+
+            <td><!-- TMPL_VAR NAME="phone"--></td>
+            <td><!-- TMPL_VAR NAME="reservedate" --></td>
+            <td><!-- TMPL_VAR NAME="pickbranch" --></td>
+        </tr>
+    <!-- /TMPL_LOOP -->
+    </table>
+	<!-- /TMPL_IF --> 
+	<!-- TMPL_ELSE -->
+	
+	<form name="f" action="/cgi-bin/koha/circ/view_holdsqueue.pl" method="post">
+	
+	<li><label for="branchlimit">Library: </label><select name="branchlimit" id="branchlimit">
+                <option value="">All</option>
+            <!-- TMPL_LOOP name="branchloop" -->
+                <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
+				<!-- TMPL_ELSE -->
+				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
+				<!-- /TMPL_IF -->
+            <!-- /TMPL_LOOP -->
+            </select></li>
+			<!--  Not working yet
+			<li><label for="itemtypeslimit">Item Type: </label><select name="itemtypeslimit" id="itemtypeslimit">
+                <option value="">All</option>
+                <!-- TMPL_LOOP name="itemtypeloop" -->
+                <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option>
+				<!-- TMPL_ELSE -->
+				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="description" --></option>
+				<!-- /TMPL_IF -->
+                <!-- /TMPL_LOOP -->
+            </select></li>
+			-->
+</ol></fieldset>
+<fieldset class="action">    <input type="submit" value="Submit" />
+    <input type="hidden" name="run_report" value="1" /></fieldset>
+</form>
+	
+	<!-- /TMPL_IF -->
+
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
