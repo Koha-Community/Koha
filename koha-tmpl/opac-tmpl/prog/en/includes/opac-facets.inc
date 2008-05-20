@@ -10,6 +10,7 @@
 <!-- TMPL_LOOP NAME="facets_loop" -->
 <li id="<!-- TMPL_VAR NAME="type_id" -->">
 <!-- TMPL_IF NAME="type_label_Authors" -->Authors<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="type_label_Titles" -->Titles<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="type_label_Topics" -->Topics<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="type_label_Places" -->Places<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="type_label_Series" -->Series<!-- /TMPL_IF -->
