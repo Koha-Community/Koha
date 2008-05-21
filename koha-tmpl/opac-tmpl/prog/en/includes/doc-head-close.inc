@@ -16,7 +16,9 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/ui.tabs.js"></script>
 <!-- TMPL_IF NAME="AmazonContent" --><script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/amazonimages.js"></script><!-- /TMPL_IF -->
 <script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/script.js"></script>
-<!-- TMPL_IF NAME="opacbookbag" --><script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/basket.js"></script><!-- /TMPL_IF -->
+<script type="text/javascript" language="javascript"
+<!-- TMPL_IF NAME="opacbookbag" -->src="<!-- TMPL_VAR NAME="themelang" -->/js/basket.js"><!-- TMPL_ELSE -->>var readCookie;<!-- /TMPL_IF --></script>
+<!-- TMPL_IF NAME="TagsEnabled" --><script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/tags.js"></script><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="GoogleJackets" -->
 <script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/google-jackets.js"></script>
 <!-- /TMPL_IF -->

@@ -31,7 +31,7 @@ use warnings;
 use CGI;
 use CGI::Cookie; # need to check cookies before having CGI parse the POST request
 
-use C4::Auth;
+use C4::Auth qw(:DEFAULT check_cookie_auth);
 use C4::Context;
 use C4::Debug;
 use C4::Output 3.02 qw(:html :ajax pagination_bar);
@@ -45,14 +45,34 @@ my @deltags = ();
 my %counts  = ();
 my @errors  = ();
 
+sub ajax_auth_cgi ($) {     # returns CGI object
+    my $needed_flags = shift;
+	my %cookies = fetch CGI::Cookie;
+	my $input = CGI->new;
+	my $sessid = $cookies{'CGISESSID'}->value || $input->param('CGISESSID');
+	my ($auth_status, $auth_sessid) = check_cookie_auth($sessid, $needed_flags);
+	$debug and
+	print STDERR "($auth_status, $auth_sessid) = check_cookie_auth($sessid," . Dumper($needed_flags) . ")\n";
+	if ($auth_status ne "ok") {
+		output_ajax_with_http_headers $input,
+		"window.alert('Your CGI session cookie ($sessid) is not current.  " .
+		"Please refresh the page and try again.');\n";
+		exit 0;
+	}
+	$debug and print STDERR "AJAX request: " . Dumper($input),
+		"\n(\$auth_status,\$auth_sessid) = ($auth_status,$auth_sessid)\n";
+	return $input;
+}
+
 # The trick here is to support multiple tags added to multiple bilbios in one POST.
 # The HTML might not use this, but it makes it more web-servicey from the start.
 # So the name of param has to have biblionumber built in.
 # For lack of anything more compelling, we just use "newtag[biblionumber]"
 # We split the value into tags at comma and semicolon
 
+my $is_ajax = is_ajax();
 my $openadds = C4::Context->preference('TagsModeration') ? 0 : 1;
-my $query = new CGI;
+my $query = ($is_ajax) ? &ajax_auth_cgi({}) : CGI->new();
 unless (C4::Context->preference('TagsEnabled')) {
 	push @errors, {+ tagsdisabled=>1 };
 } else {
@@ -72,13 +92,19 @@ unless (C4::Context->preference('TagsEnabled')) {
 }
 
 my $add_op = (scalar(keys %newtags) + scalar(@deltags)) ? 1 : 0;
-my ($template, $loggedinuser, $cookie) = get_template_and_user({
-	template_name   => "opac-tags.tmpl",
-	query           => $query,
-	type            => "opac",
-	authnotrequired => ($add_op ? 0 : 1),	# auth required to add tags
-	debug           => 1,
-});
+my ($template, $loggedinuser, $cookie);
+if ($is_ajax) {
+	$loggedinuser = C4::Context->userenv->{'number'};  # must occur AFTER auth
+	$debug and print STDERR "op: $loggedinuser\n";
+} else {
+	($template, $loggedinuser, $cookie) = get_template_and_user({
+		template_name   => "opac-tags.tmpl",
+		query           => $query,
+		type            => "opac",
+		authnotrequired => ($add_op ? 0 : 1),	# auth required to add tags
+		debug           => 1,
+	});
+}
 
 if ($add_op) {
 	unless ($loggedinuser) {
@@ -111,6 +137,7 @@ if (scalar @newtags_keys) {
 			if ($result) {
 				$counts{$biblionumber}++;
 			} else {
+				push @errors, {failed_add_tag=>$clean_tag};
 				warn "add_tag($biblionumber,$clean_tag,$loggedinuser...) returned bad result ($result)";
 			}
 		}
@@ -123,6 +150,23 @@ foreach (@deltags) {
 	} else {
 		push @errors, {failed_delete=>$_};
 	}
+}
+
+if ($is_ajax) {
+	my $sum = 0;
+	foreach (values %counts) {$sum += $_;}
+	my $js_reply = sprintf("response = {\n\tadded: %d,\n\tdeleted: %d,\n\terrors: %d,",$sum,$dels,scalar @errors);
+	my $err_string = '';
+	if (scalar @errors) {
+		$err_string = "\n\talerts: [";	# open response_function
+		foreach (@errors) {
+			my $key = (keys %$_)[0];
+			$err_string .= "\n\t\t KOHA.Tags.tag_message.$key(\"" . $_->{$key} . '"),';
+		}
+		$err_string .= "\n\t],\n";	# close response_function
+	}
+	output_ajax_with_http_headers($query, "$js_reply\n$err_string};");
+	exit;
 }
 
 my $results = [];
@@ -172,4 +216,34 @@ if ($add_op) {
 (scalar @$my_tags) and $template->param(MY_TAGS => $my_tags);
 
 output_html_with_http_headers $query, $cookie, $template->output;
+__END__
+
+=head1 EXAMPLE AJAX POST PARAMETERS
+
+CGISESSID	7c6288263107beb320f70f78fd767f56
+newtag396	fire,+<a+href="foobar.html">foobar</a>,+<img+src="foo.jpg"+/>
+
+So this request is trying to add 3 tags to biblio #396.  The CGISESSID is the same as that the browser would
+typically communicate using cookies.  If it is valid, the server will split the value of "newtag396" and 
+process the components for addition.  In this case the intended tags are:
+	fire
+	<a+href="foobar.html">foobar</a>
+	<img src="foo.jpg" />
+
+The first tag is acceptable.  The second will be scrubbed of markup, resulting in the tag "foobar".  
+The third tag is all markup, and will be rejected.  
+
+=head1 EXAMPLE AJAX JSON response
+
+response = {
+	added: 2,
+	deleted: 0,
+	errors: 2,
+	alerts: [
+		 KOHA.Tags.tag_message.scrubbed("foobar"),
+ 		 KOHA.Tags.tag_message.scrubbed_all_bad("1"),
+ 	],
+};
+
+=cut
 
