@@ -434,6 +434,23 @@ sub SendAlerts {
         }
         warn
 "sending to From $userenv->{emailaddress} subj $innerletter->{title} Mess $innerletter->{content}";
+    }    
+   # send an "account details" notice to a newly created user 
+    elsif ( $type eq 'members' ) {
+        $letter->{content} =~ s/<<borrowers.title>>/$externalid->{'title'}/g;
+        $letter->{content} =~ s/<<borrowers.firstname>>/$externalid->{'firstname'}/g;
+        $letter->{content} =~ s/<<borrowers.surname>>/$externalid->{'surname'}/g;
+        $letter->{content} =~ s/<<borrowers.cardnumber>>/$externalid->{'cardnumber'}/g;
+        $letter->{content} =~ s/<<borrowers.password>>/$externalid->{'password'}/g;
+
+        my %mail = (
+                To      =>     $externalid->{'emailaddr'},
+                From    =>  C4::Context->preference("KohaAdminEmailAddress"),
+                Subject => $letter->{'title'}, 
+                Message => $letter->{'content'},
+                'Content-Type' => 'text/plain; charset="utf8"',
+        );
+        sendmail(%mail);
     }
 }
 

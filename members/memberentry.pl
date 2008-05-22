@@ -35,9 +35,8 @@ use C4::Koha;
 use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Input;
 use C4::Log;
+use C4::Letters;
 use C4::Branch; # GetBranches
-
-#use Smart::Comments;
 
 use vars qw($debug);
 
@@ -240,7 +239,35 @@ if ((!$nok) and ($op eq 'insert' or $op eq 'save')){
 	$debug and warn "$op dates: " . join "\t", map {"$_: $newdata{$_}"} qw(dateofbirth dateenrolled dateexpiry);
 	if ($op eq 'insert'){
 		# we know it's not a duplicate borrowernumber or there would already be an error
-		$borrowernumber = &AddMember(%newdata);
+        $borrowernumber = &AddMember(%newdata);
+
+        # If 'AutoEmailOpacUser' syspref is on, email user their account details from the 'notice' that matches the user's branchcode.
+        if ( C4::Context->preference("AutoEmailOpacUser") == 1 && $newdata{'userid'}  && $newdata{'password'}) {
+            #look for defined primary email address, if blank - attempt to use borr.email and borr.emailpro instead
+            my $emailaddr;
+            if  (C4::Context->preference("AutoEmailPrimaryAddress") ne 'OFF'  && 
+                $newdata{C4::Context->preference("AutoEmailPrimaryAddress")} =~  /\w\@\w/ ) {
+                $emailaddr =   $newdata{C4::Context->preference("AutoEmailPrimaryAddress")} 
+            } 
+            elsif ($newdata{email} =~ /\w\@\w/) {
+                $emailaddr = $newdata{email} 
+            }
+            elsif ($newdata{emailpro} =~ /\w\@\w/) {
+                $emailaddr = $newdata{emailpro} 
+            }
+            elsif ($newdata{B_email} =~ /\w\@\w/) {
+                $emailaddr = $newdata{B_email} 
+            }
+            # if we manage to find a valid email address, send notice 
+            if ($emailaddr) {
+                $newdata{emailaddr} = $emailaddr;
+                my $letter = getletter ('members', "ACCTDETAILS:$newdata{'branchcode'}") ;
+                # if $branch notice fails, then email a default notice instead.
+                $letter = getletter ('members', "ACCTDETAILS")  if !$letter;
+                SendAlerts ( 'members' , \%newdata , $letter ) if $letter
+            }
+        } 
+
 		if ($data{'organisations'}){            
 			# need to add the members organisations
 			my @orgs=split(/\|/,$data{'organisations'});
