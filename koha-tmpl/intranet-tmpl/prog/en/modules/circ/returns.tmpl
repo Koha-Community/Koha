@@ -268,7 +268,13 @@ function Dopop(link) {
             <fieldset>
 	<legend>Check In</legend>
             <label for="barcode">Enter item barcode: </label>
+			<!-- TMPL_IF NAME="exemptfine" -->
+			<input name="barcode" id="barcode" size="14" class="focus alert"/>
+			<!-- TMPL_ELSIF NAME="dropboxmode"-->
+			<input name="barcode" id="barcode" size="14" class="focus alert"/>
+			<!-- TMPL_ELSE -->
 			<input name="barcode" id="barcode" size="14" class="focus"/>
+			<!-- /TMPL_IF -->
             <input type="submit" class="submit" value="Submit" />
             <!-- TMPL_LOOP Name="inputloop" -->
                 <input type="hidden" name="ri-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
