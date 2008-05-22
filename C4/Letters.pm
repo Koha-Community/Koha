@@ -440,7 +440,7 @@ sub SendAlerts {
         $letter->{content} =~ s/<<borrowers.title>>/$externalid->{'title'}/g;
         $letter->{content} =~ s/<<borrowers.firstname>>/$externalid->{'firstname'}/g;
         $letter->{content} =~ s/<<borrowers.surname>>/$externalid->{'surname'}/g;
-        $letter->{content} =~ s/<<borrowers.cardnumber>>/$externalid->{'cardnumber'}/g;
+        $letter->{content} =~ s/<<borrowers.userid>>/$externalid->{'userid'}/g;
         $letter->{content} =~ s/<<borrowers.password>>/$externalid->{'password'}/g;
 
         my %mail = (
