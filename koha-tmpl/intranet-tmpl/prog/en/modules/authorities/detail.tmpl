@@ -1,12 +1,12 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Authority Details</title>
+<title>Koha &rsaquo; Authorities &rsaquo; Details for Authority #<!-- TMPL_VAR NAME="authid" --> (<!-- TMPL_VAR name="authtypetext" -->)</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 
 //<![CDATA[
 
 	 $(document).ready(function() {
- 		$('#authoritiestabs').tabs();
+ 		$('#authoritiestabs>ul').tabs();
 	 });
 
 function confirm_deletion() {
@@ -42,13 +42,6 @@ function showChildren(mynumber) {
     }
   }
 }
-</script>
- <!--/TMPL_IF -->
-</head>
-<body>
-<!-- TMPL_INCLUDE NAME="header.inc" -->
-
-<script language="JavaScript" type="text/javascript">
 function Help() {
     newin=window.open("/cgi-bin/koha/help.pl","Koha Help",'width=600,height=600,toolbar=false,scrollbars=yes');
 }
@@ -63,13 +56,21 @@ function searchauthority() {
     window.location="/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&authtypecode="+X+"&value="+Y+"&marclist=&and_or=and&excluding=&operator=contains";
 }
 </script>
+ <!--/TMPL_IF -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="authorities-search.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a> &rsaquo; Details for Authority #<!-- TMPL_VAR NAME="authid" --> (<!-- TMPL_VAR name="authtypetext" -->) </div>
 
-<div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
+<div id="doc" class="yui-t7">
 
+<div id="bd">
+        <div id="yui-main">
+        <div class="yui-g">
+
+    <!-- TMPL_INCLUDE NAME="authorities-toolbar.inc" -->
+	
 <!-- TMPL_IF Name="displayhierarchy"-->
 
 <div class="hierarchies">
@@ -104,13 +105,9 @@ function searchauthority() {
 <h1>Authority #<!-- TMPL_VAR NAME="authid" --> (<!-- TMPL_VAR name="authtypetext" -->)</h1>
 
 <div id="action">
-    <a href="authorities.pl?authid=<!-- TMPL_VAR NAME="authid" -->">Edit</a>
     
-    <!-- TMPL_UNLESS name="count" -->
-    <a href="javascript:confirm_deletion()">Delete</a>
-    <!-- /TMPL_UNLESS -->
     
-    <a href="../catalogue/search.pl?type=intranet&amp;op=do_search&amp;q=an=<!--TMPL_VAR Name="authid" -->" class="button"><!-- TMPL_VAR name="count" --> biblio(s)</a>
+    Used in <a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;q=an=<!--TMPL_VAR Name="authid" -->"><!-- TMPL_VAR name="count" --> record(s)</a>
 </div>
 
 <div id="authoritiestabs" class="toptabs numbered">
@@ -158,5 +155,4 @@ function searchauthority() {
 </div>
 </div>
 
-<!-- TMPL_INCLUDE NAME="mainmenu.inc" -->
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
