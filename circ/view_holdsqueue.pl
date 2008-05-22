@@ -55,7 +55,8 @@ if ( $run_report ) {
 					 branch    => $branchlimit,
                      total     => scalar @$items,
                      itemsloop => $items,
-                     run_report => $run_report
+                     run_report => $run_report,
+                     dateformat => C4::Context->preference("dateformat"),
                  );
 }
 
