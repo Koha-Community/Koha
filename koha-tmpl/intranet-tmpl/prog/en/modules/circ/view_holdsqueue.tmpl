@@ -1,6 +1,25 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Circulation &rsaquo; Holds Queue</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+$.tablesorter.addParser({
+    id: 'articles', 
+    is: function(s) {return false;  }, 
+    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
+    type: 'text' 
+});
+	 $(document).ready(function() {
+		$.tablesorter.defaults.widgets = ['zebra']; 
+		$("#holdst").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
+		dateFormat: 'uk',<!-- /TMPL_IF -->
+		sortList: [[1,0]],
+		headers: { 0: { sorter: 'articles' }}
+		});
+	 });
+//]]>
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -8,11 +27,11 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a><!-- TMPL_IF NAME="run_report" --> &rsaquo; <a href="/cgi-bin/koha/circ/view_holdsqueue.pl">Holds Queue</a> &rsaquo; Results<!-- TMPL_ELSE --> &rsaquo; Holds Queue<!-- /TMPL_IF --></div>
 
-<div id="doc3" class="yui-t2">
+<div id="doc" class="yui-t7">
    
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b">
+	<div class="yui-g">
 
 <h1>Holds Queue</h1>
 
@@ -26,8 +45,10 @@
     <!-- /TMPL_IF -->
 
 
-    <!-- TMPL_IF NAME="itemsloop" --><table>
-    <tr>
+    <!-- TMPL_IF NAME="itemsloop" -->
+<table id="holdst">
+	<thead>
+	<tr>
         <th>Title</th>
         <th>Call Number</th>
         <th>Patron</th>
@@ -35,22 +56,18 @@
         <th>Date</th>
         <th>Send To</th>
     </tr>
-     <!-- TMPL_LOOP NAME="itemsloop"-->
+	</thead>
+     <tbody><!-- TMPL_LOOP NAME="itemsloop"-->
         <tr>
-            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->">
-						  <!-- TMPL_VAR NAME="title"--></td>
-					 </a></td>
+            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->"><!-- TMPL_VAR NAME="title"--></a> (<!-- TMPL_VAR NAME="barcode" -->)</td>
             <td><!-- TMPL_VAR NAME="itemcallnumber"--></td>
-            <td><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->">
-					<!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" -->
-                    <!-- TMPL_VAR NAME="barcode"-->
-                </a></td>
+            <td><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->"><!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --></a> (<!-- TMPL_VAR NAME="cardnumber"-->)</td>
 
             <td><!-- TMPL_VAR NAME="phone"--></td>
             <td><!-- TMPL_VAR NAME="reservedate" --></td>
             <td><!-- TMPL_VAR NAME="pickbranch" --></td>
         </tr>
-    <!-- /TMPL_LOOP -->
+    <!-- /TMPL_LOOP --></tbody>
     </table>
 	<!-- /TMPL_IF --> 
 	<!-- /TMPL_IF --> 
@@ -86,9 +103,6 @@
 	<!-- /TMPL_UNLESS -->
 
 </div>
-</div>
-<div class="yui-b">
-<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
