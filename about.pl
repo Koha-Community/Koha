@@ -80,6 +80,7 @@ File::Temp
 GD::Barcode::UPCE
 Getopt::Long
 Getopt::Std
+Image::Magick
 HTML::Template::Pro
 HTTP::Cookies
 HTTP::Request::Common
