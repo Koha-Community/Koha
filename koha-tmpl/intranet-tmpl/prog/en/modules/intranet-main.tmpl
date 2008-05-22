@@ -5,58 +5,12 @@
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<div id="doc3">
+<!-- TMPL_IF NAME="koha_news_count" --><div id="doc3" class="yui-t3"><!-- TMPL_ELSE --><div id="doc3" class="yui-t7"><!-- /TMPL_IF -->
 <div id="bd">
-	<div class="yui-gb">
-	<div class="yui-u first">
-        <!-- TMPL_IF name="koha_news_count" -->
-		<div id="koha-news">
-            <h3>News</h3>
-			<!-- <!-- TMPL_VAR name="koha_news_count" --> recent news item(s) -->
-            <!-- TMPL_LOOP name="koha_news" -->
-                    <div class="newsitem" id="news<!-- TMPL_VAR NAME="idnew" -->"><h4><!-- TMPL_VAR name="title" --></h4>
-					 <p><!-- TMPL_VAR name="new" --></p>
-					<p class="newsfooter"> Posted on <!-- TMPL_VAR name="newdate" --> <!-- TMPL_IF NAME="CAN_user_tools" -->
-    <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;id=<!-- TMPL_VAR NAME="idnew" -->">Edit</a> | <a href="/cgi-bin/koha/tools/koha-news.pl?op=del&amp;ids=<!-- TMPL_VAR NAME="idnew" -->">Delete</a> | <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form">New</a><!-- /TMPL_IF --></p></div>
-            <!-- /TMPL_LOOP -->
-		</div><!-- /koha-news -->
-        <!-- /TMPL_IF -->
-		<div>
-		<!-- TMPL_VAR NAME="IntranetmainUserblock" -->
-		</div>
-	</div>
-	
-	<div class="yui-u">
+<!-- TMPL_IF NAME="koha_news_count" --><div id="yui-main"><div class="yui-b"><div class="yui-g">
+<!-- TMPL_ELSE -->	<div class="yui-g"><!-- /TMPL_IF -->
 
-    <!-- TMPL_IF NAME="CAN_user_editcatalogue" -->
-    <h3><a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a></h3>
-	<ul>
-        <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl">Add MARC Record</a></li>
-        <li><a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a></li>
-		<!-- TMPL_IF NAME="CAN_user_serials" -->
-        <li><a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a></li>
-		<!-- /TMPL_IF -->
-    </ul>
-	<!-- TMPL_IF NAME="CAN_user_acquisition" -->
-    <h3><a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a></h3>
-	<!-- /TMPL_IF -->
-    <!-- /TMPL_IF --><!-- TMPL_IF NAME="CAN_user_reports" -->
-          <h3><a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a></h3>
-    <!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="CAN_user_parameters" -->
-   <h3> <a href="/cgi-bin/koha/admin/admin-home.pl">Koha administration</a></h3>
-   			<ul>
-            <li><a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a></li>
-        </ul>
-    <!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="CAN_user_tools" -->
-    <h3><a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a></h3>
-    <!-- /TMPL_IF -->
-    <h3><a href="/cgi-bin/koha/about.pl">About Koha</a></h3>
-	</div>
-	
-	
-	<div class="yui-u">
+	<div class="yui-u first">
 	<!-- TMPL_IF NAME="CAN_user_circulate" -->
 	<h3><a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a></h3>
 	<ul><li>
@@ -90,7 +44,7 @@
                         <input type="hidden" name="idx" value="" />
                         <label for="navkeyword">
                             Search catalogue:&nbsp;
-                        </label><input type="text" id="navkeyword" name="q" size="10" accesskey="s" />
+                        </label><input type="text" id="navkeyword" name="q" size="10" accesskey="q" />
                         <input type="submit" value=" OK " class="submit" />
                         </form>
                      </li>
@@ -99,6 +53,53 @@
    <!-- /TMPL_IF -->
 	</div>
 	
-</div>
+	<div class="yui-u">
+    <!-- TMPL_IF NAME="CAN_user_editcatalogue" -->
+    <h3><a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a></h3>
+	<ul>
+        <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl">Add MARC Record</a></li>
+        <li><a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a></li>
+		<!-- TMPL_IF NAME="CAN_user_serials" -->
+        <li><a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a></li>
+		<!-- /TMPL_IF -->
+    </ul>
+	<!-- TMPL_IF NAME="CAN_user_acquisition" -->
+    <h3><a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a></h3>
+	<!-- /TMPL_IF -->
+    <!-- /TMPL_IF --><!-- TMPL_IF NAME="CAN_user_reports" -->
+          <h3><a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a></h3>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="CAN_user_parameters" -->
+   <h3> <a href="/cgi-bin/koha/admin/admin-home.pl">Koha administration</a></h3>
+   			<ul>
+            <li><a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a></li>
+        </ul>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="CAN_user_tools" -->
+    <h3><a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a></h3>
+    <!-- /TMPL_IF -->
+    <h3><a href="/cgi-bin/koha/about.pl">About Koha</a></h3>
+	</div>
+	</div>
+			<!-- TMPL_IF NAME="IntranetmainUserblock" --><div id="mainuserblock" class="yui-g">
+		<!-- TMPL_VAR NAME="IntranetmainUserblock" -->
+		</div><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="koha_news_count" -->
+	</div><!-- /yui-bd -->
+	</div><!-- /yui-main -->
+	<div class="yui-b">
+		<div id="koha-news">
+            <h3>News</h3>
+			<!-- <!-- TMPL_VAR name="koha_news_count" --> recent news item(s) -->
+            <!-- TMPL_LOOP name="koha_news" -->
+                    <div class="newsitem" id="news<!-- TMPL_VAR NAME="idnew" -->"><h4><!-- TMPL_VAR name="title" --></h4>
+					 <p><!-- TMPL_VAR name="new" --></p>
+					<p class="newsfooter"> Posted on <!-- TMPL_VAR name="newdate" --> <!-- TMPL_IF NAME="CAN_user_tools" -->
+    <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;id=<!-- TMPL_VAR NAME="idnew" -->">Edit</a> | <a href="/cgi-bin/koha/tools/koha-news.pl?op=del&amp;ids=<!-- TMPL_VAR NAME="idnew" -->">Delete</a> | <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form">New</a><!-- /TMPL_IF --></p></div>
+            <!-- /TMPL_LOOP -->
+		</div><!-- /koha-news -->
+	</div>
+<!-- /TMPL_IF -->
+	
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
