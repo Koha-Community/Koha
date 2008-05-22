@@ -1,15 +1,71 @@
-<!-- TMPL_INCLUDE name="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo; Library Home for  <!-- TMPL_LOOP name="BORROWER_INFO" --><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --><!-- /TMPL_LOOP -->
+<!-- TMPL_INCLUDE name="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" DEFAULT="Koha Online" --> Catalog &rsaquo; Comments on <!--TMPL_VAR NAME="title" -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-	   <style type="text/css"> 
-   #custom-doc { width:37.08em;*width:36.16em;min-width:485px; margin:1em auto; text-align:left; } 
-	   </style> 
-	</head> 
-	<body id="comment"> 
-	<div id="custom-doc" class="yui-t7"> 
+<style type="text/css"> 
+  #custom-doc { width:37.08em;*width:36.16em;min-width:485px; margin:1em auto; text-align:left; } 
+</style> 
+<script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+	 $(document).ready(function() {
+	 	var inject_old = function(comment) {
+			<!-- TMPL_IF NAME="reviewid" -->
+			<!-- TMPL_IF NAME="cgi_debug" -->alert("injecting OLD comment: " +comment);<!-- /TMPL_IF -->
+			parent.opener.$('#c<!-- TMPL_VAR NAME="reviewid" --> p').prev("small").prev("h5").html("Your Edited Comment (preview, pending approval)");
+			parent.opener.$('#c<!-- TMPL_VAR NAME="reviewid" --> p').html(comment);
+			parent.opener.$('#c<!-- TMPL_VAR NAME="reviewid" --> p').append(" <a href=\"#comment\" onclick=\"Dopop(\'/cgi-bin/koha/opac-review.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->&amp;reviewid=<!-- TMPL_VAR NAME="reviewid" -->\');\">Edit</a>");
+			<!-- /TMPL_IF -->
+			return 1;
+		};
+	 	var inject_new = function(comment) {
+			<!-- TMPL_IF NAME="cgi_debug" -->alert("injecting NEW comment: " +comment);<!-- /TMPL_IF -->
+			parent.opener.$('#newcomment').attr("class","yours");
+			parent.opener.$('#newcomment').html(
+				"<h5>Your Comment (preview, pending approval)</h5>" +
+				"<p>"+comment+"</p>" +
+				"<a href=\"#comment\" onclick=\"Dopop(\'/cgi-bin/koha/opac-review.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->\');\">Edit</a></p>"
+			);
+			parent.opener.$("#addcomment").prev("p").remove();
+			parent.opener.$("#addcomment").remove();
+		};
+		<!-- TMPL_IF NAME="clean_review" -->
+			var clean_review = "<!-- TMPL_VAR NAME="clean_review" ESCAPE=JS -->";		// TMPL var must not contain " quotes.
+			<!-- TMPL_IF NAME="reviewid" -->
+			inject_old(clean_review);
+			<!-- TMPL_ELSE -->
+			inject_new(clean_review);
+			<!-- /TMPL_IF -->
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="WINDOW_CLOSE" -->
+			<!-- TMPL_IF NAME="ERRORS" -->
+				setTimeout("window.close()",5000);	// flash this page, then close.  Change warning in template if you change this value.
+			<!-- TMPL_ELSE -->
+				window.close();
+			<!-- /TMPL_IF -->
+		<!-- /TMPL_IF -->
+		// $('#reviewf').submit(function() {});
+	}); 
+//]]>
+</script>
+</head> 
+<body id="comment"> 
+<div id="custom-doc" class="yui-t7"> 
 <div class="container">
+<!-- TMPL_IF NAME="ERRORS" -->
+	<div class="error">
+	<!-- TMPL_LOOP NAME="ERRORS" -->
+		<p>
+		<!-- TMPL_IF NAME="scrubbed"     -->Note: your comment contained illegal markup code.
+			It has been saved with the markup removed, as below.
+			You can edit the comment further, or cancel to retain the comment as is.
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="scrubbed_all" -->Error!  Your comment was entirely illegal markup code.  It has NOT been added.<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="empty"        -->Error!  You cannot add an empty comment.  Please add content or cancel.<!-- /TMPL_IF -->
+		</p>
+	<!-- /TMPL_LOOP -->
+	<!-- TMPL_IF NAME="WINDOW_CLOSE" -->Note: this window will close automatically in 5 seconds<!-- /TMPL_IF -->
+	</div>
+<!-- /TMPL_IF -->
 <form id="reviewf" action="/cgi-bin/koha/opac-review.pl" method="post"> 
     <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
-    <input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" />
 	<fieldset class="brief">
 	<legend>Comments on <i><!--TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" --></i><!-- TMPL_IF NAME="author" -->by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --></legend>
             <ol><li><textarea id="review" name="review" cols="60" rows="8"><!--TMPL_VAR NAME="review"--></textarea></li></ol>
@@ -17,30 +73,6 @@
     <p>Note: Your comment must be approved by a librarian. </p>
 		<fieldset class="action"> <input type="submit" value="Submit and close this window" /> <a class="cancel close" href="#">Cancel</a></fieldset>
 </form></div>
-<script type="text/JavaScript" language="JavaScript">
-//<![CDATA[
-	 $(document).ready(function() {
-		$('#reviewf').submit( function() {
-			<!-- TMPL_IF NAME="reviewid" -->
-			parent.opener.$('#c<!-- TMPL_VAR NAME="reviewid" --> p').prev("small").prev("h5").html("Your Edited Comment (preview, pending approval)");
-			parent.opener.$('#c<!-- TMPL_VAR NAME="reviewid" --> p').html($("#review").val().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'));
-			parent.opener.$('#c<!-- TMPL_VAR NAME="reviewid" --> p').append(" <a href=\"#comment\" onclick=\"Dopop(\'/cgi-bin/koha/opac-review.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->&amp;reviewid=<!-- TMPL_VAR NAME="reviewid" -->\');\">Edit</a>");
-			window.close();
-			<!-- TMPL_ELSE -->
-			parent.opener.$('#newcomment').attr("class","yours");
-			parent.opener.$('#newcomment').html("<h5>Your Comment (preview, pending approval)</h5>");
-			parent.opener.$('#newcomment').append("<p>"+$("#review").val().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'));
-			parent.opener.$('#newcomment p').append(" <a href=\"#comment\" onclick=\"Dopop(\'/cgi-bin/koha/opac-review.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->&amp;reviewid=<!-- TMPL_VAR NAME="reviewid" -->\');\">Edit</a></p>");
-			parent.opener.$("#addcomment").prev("p").remove();
-			parent.opener.$("#addcomment").remove();
-			window.close();
-			<!-- /TMPL_IF -->
-		});
-	}); 
-//]]>
-</script>
 </div>
-
 </body>
 </html>
-
