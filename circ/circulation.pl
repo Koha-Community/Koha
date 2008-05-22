@@ -39,7 +39,6 @@ use CGI::Session;
 
 use Date::Calc qw(
   Today
-  Today_and_Now
   Add_Delta_YM
   Add_Delta_Days
   Date_to_Days
@@ -130,7 +129,7 @@ my $issueconfirmed = $query->param('issueconfirmed');
 my $cancelreserve  = $query->param('cancelreserve');
 my $organisation   = $query->param('organisations');
 my $print          = $query->param('print');
-my $newexpiry = $query->param('dateexpiry');
+my $newexpiry      = $query->param('dateexpiry');
 
 #set up cookie.....
 # my $branchcookie;
@@ -143,17 +142,15 @@ my $newexpiry = $query->param('dateexpiry');
 
 my ($datedue,$invalidduedate);
 if ($duedatespec) {
-  $datedue =  C4::Dates->new($duedatespec);
-  $invalidduedate=1 unless $datedue;
+	if ($duedatespec =~ C4::Dates->regexp('syspref')) {
+		$datedue = C4::Dates->new($duedatespec);
+	} else {
+		$invalidduedate = 1;
+		$template->param(IMPOSSIBLE=>1, INVALID_DATE=>$duedatespec);
+	}
 }
 
-#if (defined($year)) {
-#        $duedatespec = "$year-$month-$day";
-#} else {
-#        ($year, $month, $day) = ($duedatespec) ? split /-/, $duedatespec : (0,0,0);
-#}
-
-my $todaysdate     = sprintf("%-04.4d%-02.2d%-02.2d", Today());
+my $todaysdate = C4::Dates->new->output('iso');
 
 # check and see if we should print
 if ( $barcode eq '' && $print eq 'maybe' ) {
@@ -256,7 +253,7 @@ if ($barcode) {
   # always check for blockers on issuing
   my ( $error, $question ) =
     CanBookBeIssued( $borrower, $barcode, $datedue , $inprocess );
-  my $noerror    = 1;
+  my $noerror = $invalidduedate ? 0 : 1;
   foreach my $impossible ( keys %$error ) {
             $template->param(
                 $impossible => $$error{$impossible},
@@ -270,9 +267,9 @@ if ($barcode) {
         AddIssue( $borrower, $barcode, $datedue, $cancelreserve );
         $inprocess = 1;
     }
-  elsif ($issueconfirmed){
+  elsif ($issueconfirmed){	# FIXME: Do something? Or is this to *intentionally* do nothing?
   }
-    else {
+  else {
         my $noquestion = 1;
 #         Get the item title for more information
     	my $getmessageiteminfo  = GetBiblioFromItemNumber(undef,$barcode);
@@ -286,16 +283,20 @@ if ($barcode) {
         	    );
         	    $noquestion = 0;
         	}
-        }
-		# only pass needsconfirmation to template if issuing is possible 
+			# Because of the weird conditional structure (empty elsif block),
+			# if we reached here, $issueconfirmed must be false.
+			# Also, since we moved inside the if ($noerror) conditional,
+			# this old chunky conditional can be simplified:
+   		    # if ( $noerror && ( $noquestion || $issueconfirmed ) ) {
+			if ($noquestion) {
+				AddIssue( $borrower, $barcode, $datedue );
+				$inprocess = 1;
+			}
+   	    }
 		$template->param(
 			 itemhomebranch => $getmessageiteminfo->{'homebranch'} ,	             
 			 duedatespec => $duedatespec,
         );
-        if ( $noerror && ( $noquestion || $issueconfirmed ) ) {
-            AddIssue( $borrower, $barcode, $datedue );
-            $inprocess = 1;
-        }
     }
     
 # FIXME If the issue is confirmed, we launch another time borrdata2, now display the issue count after issue 
@@ -491,7 +492,7 @@ FROM issuingrules
   WHERE categorycode=?
 " );
 #my @issued_itemtypes_count;  # huh?
-$issueqty_sth->execute("*");
+$issueqty_sth->execute("*");	# FIXME: Why have a WHERE clause at all with a hardcoded "*"?
 
 while ( my $data = $issueqty_sth->fetchrow_hashref() ) {
 
@@ -549,7 +550,7 @@ my $flag;
 
 foreach $flag ( sort keys %$flags ) {
     $template->param( flagged=> 1);
-    $flags->{$flag}->{'message'} =~ s/\n/<br>/g;
+    $flags->{$flag}->{'message'} =~ s#\n#<br />#g;
     if ( $flags->{$flag}->{'noissues'} ) {
         $template->param(
             flagged  => 1,
