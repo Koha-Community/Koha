@@ -1071,7 +1071,7 @@ sub GetMarcAuthors {
             my $operator = " and " unless $count_auth==0;
             # if we have an authority link, use that as the link, otherwise use standard searching
             if ($subfield9) {
-                @link_loop = ({'limit' => 'Koha-Auth-Number' ,link => "$subfield9" });
+                @link_loop = ({'limit' => 'an' ,link => "$subfield9" });
             }
             else {
                 # reset $linkvalue if UNIMARC author responsibility
