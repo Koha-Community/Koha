@@ -60,7 +60,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
     <!-- /TMPL_LOOP -->
       </select>
       <label for="filter_bookfundname">Name: </label><input type="text" name="filter_bookfundname" id="filter_bookfundname" size="10" value="<!-- TMPL_VAR name="filter_bookfundname" -->" />
-      <label for="filter_branchcode">Library: </label><select name="filter_branchcode" id="filter_branchcode">
+      <label for="filter_branchcode">Library: </label><select name="filter_branchcode" id="filter_branchcode" style="width:10em;">
         <option value="">----</option>
     <!-- TMPL_LOOP name="filter_branches" -->
       <!-- TMPL_IF NAME="selected" -->
