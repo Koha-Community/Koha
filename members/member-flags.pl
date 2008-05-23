@@ -154,7 +154,9 @@ if ($input->param('newflags')) {
     }
 
 $template->param( adultborrower => 1 ) if ( $bor->{'category_type'} eq 'A' );
-	
+    my ($picture, $dberror) = GetPatronImage($bor->{'cardnumber'});
+    $template->param( picture => 1 ) if $picture;
+		
 $template->param(
 		borrowernumber => $bor->{'borrowernumber'},
     cardnumber => $bor->{'cardnumber'},
