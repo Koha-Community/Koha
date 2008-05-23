@@ -26,7 +26,7 @@ use vars qw($VERSION @ISA);
 use vars qw(%scrubbertypes $scrubbertype);
 
 BEGIN {
-	$VERSION = 0.01;
+	$VERSION = 0.02;
 	# @ISA = qw(HTML::Scrubber);
 }
 
@@ -35,7 +35,7 @@ INIT {
 		default => {},	# place holder, default settings are below as fallbacks in call to constructor
 		    tag => {},	# uses defaults
 		comment => {
-			allow   => [qw( br b i em big small )],
+			allow   => [qw( br b i em big small strong )],
 		},
 		staff   => {
 			default => [ 1 =>{'*'=>1} ],
