@@ -518,7 +518,7 @@ SELECT borrowers.*, categories.category_type, categories.description
 FROM borrowers 
 LEFT JOIN categories on borrowers.categorycode=categories.categorycode 
 ";
-    if ($type eq 'cardnumber' || $type eq 'firstname'|| $type eq 'userid'|| $type eq 'borrowernumber'){
+    if ( defined $type && ( $type eq 'cardnumber' || $type eq 'firstname'|| $type eq 'userid'|| $type eq 'borrowernumber' ) ){
         $information = uc $information;
         $sth = $dbh->prepare("$select WHERE $type=?");
     } else {
