@@ -71,6 +71,7 @@ $(document).ready(function() {
   <th>Branch</th>
   <th>Call Number</th>
   <th>Notes</th>
+  <th>Routing</th>
   <th>Renew</th>
 </tr>
 <!--TMPL_LOOP Name="subscriptions"-->
@@ -136,9 +137,10 @@ $(document).ready(function() {
         <td> <!-- TMPL_VAR name="notes" -->        <!--TMPL_IF name="subscriptionexpired"--><br /><span class="problem"> Subscription Expired</span>
         <!--/TMPL_IF-->
         </td>
-        <!--TMPL_IF name="abouttoexpire"--><td class="problem"> <a onclick="popup(<!--TMPL_VAR Name="subscriptionid"-->)">Renew</a></td>
+			<td><a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->">Edit Routing List</a></td>
+        <!--TMPL_IF name="abouttoexpire"--><td class="problem"> <a href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" onclick="popup(<!--TMPL_VAR Name="subscriptionid"-->); return false;">Renew</a></td>
         <!--TMPL_ELSE-->
-        <!--TMPL_IF name="subscriptionexpired"--><td class="problem"> <a onclick="popup(<!--TMPL_VAR Name="subscriptionid"-->)">Renew</a></td>
+        <!--TMPL_IF name="subscriptionexpired"--><td class="problem"> <a href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" onclick="popup(<!--TMPL_VAR Name="subscriptionid"-->) return false;">Renew</a></td>
         <!--TMPL_ELSE-->
         <td> &nbsp;</td>
         <!--/TMPL_IF-->
