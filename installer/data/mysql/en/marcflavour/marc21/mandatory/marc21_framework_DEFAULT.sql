@@ -2924,7 +2924,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('855', 'y', 'Regularity pattern', 'Regularity pattern', 1, 0, '', 8, '', '', '', NULL, 5, '', '', '', NULL),
 		('855', 'z', 'Numbering scheme', 'Numbering scheme', 1, 0, '', 8, '', '', '', NULL, 5, '', '', '', NULL),
 		('856', '2', 'Access method', 'Access method', 0, 0, '', 8, '', '', '', 0, -6, '', '', '', NULL),
-		('856', '3', 'Materials specified', 'Materials specified', 0, 0, '', 8, '', '', '', 0, -6, '', '', '', NULL),
+		('856', '3', 'Materials specified', 'Materials specified', 0, 0, '', 8, '', '', '', 0, 0, '', '', '', NULL),
 		('856', '6', 'Linkage', 'Linkage', 0, 0, '', 8, '', '', '', 0, -6, '', '', '', NULL),
 		('856', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 8, '', '', '', 0, -6, '', '', '', NULL),
 		('856', 'a', 'Host name', 'Host name', 1, 0, '', 8, '', '', '', 0, -1, '', '', '', NULL),
