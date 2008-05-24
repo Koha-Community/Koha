@@ -1113,17 +1113,31 @@ sub GetMarcUrls {
         for my $note ( $field->subfield('z')) {
             push @notes , {note => $note};
         }        
-        $marcurl = {  MARCURL => $url,
-                      notes => \@notes,
-                    };
         if($marcflavour eq 'MARC21') {
             my $s3 = $field->subfield('3');
             my $link = $field->subfield('y');
-            $marcurl->{'linktext'} = $link || $s3 || $url ;;
+			warn $url;
+			unless($url =~ /^\w+:/) {
+			warn $field->indicator(1);
+				if($field->indicator(1) eq '7') {
+					$url = $field->subfield('2') . "://" . $url;
+				} elsif ($field->indicator(1) eq '1') {
+					$url = 'ftp://' . $url;
+				} else {  
+					#  properly, this should be if ind1=4,
+					#  however we will assume http protocol since we're building a link.
+					$url = 'http://' . $url;
+				}
+			}
+			# TODO handle ind 2 (relationship)
+        	$marcurl = {  MARCURL => $url,
+                      notes => \@notes,
+            };
+            $marcurl->{'linktext'} = $link || $s3 || C4::Context->preference('URLLinkText') || $url ;;
             $marcurl->{'part'} = $s3 if($link);
             $marcurl->{'toc'} = 1 if($s3 =~ /^[Tt]able/) ;
         } else {
-            $marcurl->{'linktext'} = $url;
+            $marcurl->{'linktext'} = $url || C4::Context->preference('URLLinkText') ;
         }
         push @marcurls, $marcurl;    
     }
