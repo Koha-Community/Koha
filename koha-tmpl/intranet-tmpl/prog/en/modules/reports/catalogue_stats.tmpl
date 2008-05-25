@@ -74,38 +74,15 @@
 			</tr>
 		</thead>
 		<tbody>
-			<!-- TMPL_IF Name="hasdewey" -->
-				<tr class="hilighted">
-					<td>Dewey Classification</td>
-					<td><input type="radio" name="Line" value="dewey" /></td>
-					<td><input type="radio" name="Column" value="dewey" /></td>
-					<td> <label for="deweyFrom">From</label> <input type="text" id="deweyFrom" name="Filter" /> <label for="deweyTo">To</label> <input type="text" id="deweyTo" name="Filter" /></td>
-				</tr>
-				<tr class="hilighted">
-					<td>&nbsp;</td>
-					<td colspan="2"><select name="deweydigits" id="deweydigits">
-						<option value=""> </option>
-						<option value ="1">1</option>
-						<option value ="2">2</option>
-						<option value ="3">3</option>
-						<option value ="4">4</option>
-						<option value ="5">5</option>
-						</select>
-						<label for="deweydigits">digits</label> 
-					</td>
-					<td>&nbsp;</td>
-				</tr>
-				<!-- TMPL_ELSE -->
-				<tr><td colspan="4"><input type="hidden" name="Filter" /> <input type="hidden" name="Filter" /></td></tr>
-			<!-- /TMPL_IF -->
+				<input type="hidden" name="Filter" /> <input type="hidden" name="Filter" />
 			<!-- TMPL_IF Name="haslccn" -->
-				<!--TMPL_IF Name="hlghtlccn"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
+					<tr>
 					<td>LoC Classification</td>
 					<td><input type="radio" name="Line" value="lccn" /></td>
 					<td><input type="radio" name="Column" value="lccn" /></td>
 					<td> <label for="locFrom">From</label> <input type="text" name="Filter" id="locFrom" /> <label for="locTo">To</label> <input type="text" name="Filter" id="locTo" /></td>
 				</tr>
-				<!--TMPL_IF Name="hlghtlccn"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
+					<tr>
 					<td>&nbsp;</td>
 					<td colspan="2"><select name="lccndigits" id="lccndigits">
 						<option value=""> </option>
@@ -120,16 +97,16 @@
 					<td>&nbsp;</td>
 				</tr>
 				<!-- TMPL_ELSE -->
-				<tr><td colspan="4"><input type="hidden" name="Filter" /> <input type="hidden" name="Filter" /></td></tr>
+				<input type="hidden" name="Filter" /> <input type="hidden" name="Filter" />
 			<!-- /TMPL_IF  -->
 			<!-- TMPL_IF Name="hascote" -->
-				<!--TMPL_IF Name="hlghtcote"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
-					<td>Callnumber</td>
+			  <tr>
+					<td>Koha Full Call Number</td>
 					<td><input type="radio" name="Line" value="items.itemcallnumber" /></td>
 					<td><input type="radio" name="Column" value="items.itemcallnumber" /></td>
 					<td><label for="callnoFrom">From</label> <input type="text" name="Filter" id="callnoFrom" /> <label for="callnoTo">To</label> <input type="text" name="Filter" id="callnoTo" /></td>
 				</tr>
-				<!--TMPL_IF Name="hlghtcote"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
+			 <tr>
 					<td>&nbsp;</td>
 					<td colspan="2"><select name="cotedigits" id="cotedigits">
 						<option value=""> </option>
@@ -146,7 +123,7 @@
 				<!-- TMPL_ELSE -->
 				<tr><td colspan="4"><input type="hidden" name="Filter" /> <input type="hidden" name="Filter" /></td></tr>
 			<!-- /TMPL_IF -->
-			<!--TMPL_IF Name="hglghtDT"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
+			 <tr>
 				<td>Item Type</td>
 				<td><input type="radio" name="Line" value="itemtype" /></td>
 				<td><input type="radio" name="Column" value="itemtype" /></td>
@@ -158,19 +135,19 @@
 					</select>
 				</td>
 			</tr>
-			<!--TMPL_IF Name="hglghtPub"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
+			 <tr>
 				<td>Publisher</td>
 				<td><input type="radio" name="Line" value="publishercode" /></td>
 				<td><input type="radio" name="Column" value="publishercode" /></td>
 				<td><input type="text" name="Filter" /></td>
 			</tr>
-			<!--TMPL_IF Name="hglghtPY"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
+			<tr>
 				<td>Publication Year</td>
 				<td><input type="radio" name="Line" value="publicationyear" /></td>
 				<td><input type="radio" name="Column" value="publicationyear" /></td>
 				<td><label for="pubyearFrom">From</label> <input type="text" name="Filter" id="pubyearFrom" /> <label for="pubyearTo">To</label> <input type="text" name="Filter" id="pubyearTo" /></td>
 			</tr>
-			<!--TMPL_IF Name="hglghtHB"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
+			<tr>
 				<td>Home Branch</td>
 				<td><input type="radio" name="Line" value="items.homebranch" /></td>
 				<td><input type="radio" name="Column" value="items.homebranch" /></td>
@@ -182,8 +159,8 @@
 					</select>
 				</td>
 			</tr>
-			<!--TMPL_IF Name="hglghtLOC"--><tr class="hilighted"> <!--TMPL_ELSE --><tr><!--/TMPL_IF-->
-				<td>Location</td>
+			<tr>
+				<td>Shelving Location</td>
 				<td><input type="radio" name="Line" value="items.location" /></td>
 				<td><input type="radio" name="Column" value="items.location" /></td>
 				<td><select name="Filter" id="location">
@@ -194,7 +171,7 @@
 					</select>
 				</td>
 			</tr>
-			<tr class="hilighted">
+			<tr>
 				<td>Collection</td>
 				<td><input type="radio" name="Line"   value="items.ccode" /></td>
 				<td><input type="radio" name="Column" value="items.ccode" /></td>

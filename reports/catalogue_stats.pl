@@ -121,47 +121,52 @@ if ($do_it) {
 # 				-values   => \@select,
 # 				-size     => 1,
 # 				-multiple => 0 );
-	
-	$req = $dbh->prepare( "select count(lccn) from biblioitems ");
-	$req->execute;
-# 	undef @select;
-# 	push @select,"";
-	my $haslccn;
-	my $hlghtlccn;
-	while (my ($value) =$req->fetchrow) {
-		$hlghtlccn = !($hasdewey);
-		$haslccn =1 if (($value>2) and (! $haslccn));
-		$count++ if (($value) and (! $haslccn));
+
+# (rch) biblioitems.lccn is mapped to lccn MARC21 010$a in default framework.
+# This is not the LC Classification.  It's the Control Number.
+# So I'm just going to remove this bit.  Call Number is handled in itemcallnumber.
+#
+	my $haslccn = 0;
+#	$req = $dbh->prepare( "select count(lccn) from biblioitems ");
+#	$req->execute;
+#	my $hlghtlccn;
+#	while (my ($value) =$req->fetchrow) {
+#		$hlghtlccn = !($hasdewey);
+#		$haslccn =1 if (($value>2) and (! $haslccn));
+#		$count++ if (($value) and (! $haslccn));
 #		push @select, $value;
-	}
+#	}
 # 	my $CGIlccn=CGI::scrolling_list( -name     => 'Filter',
 # 				-id => 'Filter',
 # 				-values   => \@select,
 # 				-size     => 1,
 # 				-multiple => 0 );
-	
-	$req = $dbh->prepare("select count(itemcallnumber) from items");
-	$req->execute;
-#	undef @select;
-#	push @select,"";
-	my $hascote;
-	my $hlghtcote;
-	while (my ($value) =$req->fetchrow) {
-		$hascote =1 if (($value>2) and (! $hascote));
-		$count++ if (($value) and (! $hascote));
-		$hlghtcote = (($hasdewey) and ($haslccn)) or (!($hasdewey) and !($haslccn));
-#		push @select, $value;
-	}
+
+# No need to test for data here.  If you don't have itemcallnumbers, you probably know it.
+# FIXME: Hardcoding to 5 chars on itemcallnum. 
+#
+	 my $hascote = 1;
+	 my $highcote = 5;
+
+#	$req = $dbh->prepare("select count(itemcallnumber) from items");
+#	$req->execute;
+#	my $hlghtcote;
+#	while (my ($value) =$req->fetchrow) {
+#		$hascote =1 if (($value>2) and (! $hascote));
+#		$count++ if (($value) and (! $hascote));
+#		$hlghtcote = (($hasdewey) and ($haslccn)) or (!($hasdewey) and !($haslccn));
+##		push @select, $value;
+#	}
 # 	my $CGIcote=CGI::scrolling_list( -name     => 'Filter',
 # 				-id => 'Filter',
 # 				-values   => \@select,
 # 				-size     => 1,
 # 				-multiple => 0 );
-	my $hglghtDT  = ++$count % 2;
-	my $hglghtPub = ++$count % 2;
-	my $hglghtPY  = ++$count % 2;
-	my $hglghtHB  = ++$count % 2;
-	my $hglghtLOC = ++$count % 2;
+#	my $hglghtDT  = ++$count % 2;
+#	my $hglghtPub = ++$count % 2;
+#	my $hglghtPY  = ++$count % 2;
+#	my $hglghtHB  = ++$count % 2;
+#	my $hglghtLOC = ++$count % 2;
 #	warn "highlightDT "  .$hglghtDT;
 #	warn "highlightPub " .$hglghtPub;
 #	warn "highlightPY "  .$hglghtPY;
@@ -219,16 +224,16 @@ if ($do_it) {
 #					CGIFromDeweyClass => $CGIdewey,
 #					CGIToDeweyClass => $CGIdewey,
 					haslccn   => $haslccn,
-					hlghtlccn => $hlghtlccn,
+#					hlghtlccn => $hlghtlccn,
 #					CGIFromLoCClass => $CGIlccn,
 #					CGIToLoCClass => $CGIlccn,
 					hascote   => $hascote,
-					hlghtcote => $hlghtcote,
-					hglghtDT  => $hglghtDT,
-					hglghtPub => $hglghtPub,
-					hglghtPY  => $hglghtPY,
-					hglghtHB  => $hglghtHB,
-					hglghtLOC => $hglghtLOC,
+#					hlghtcote => $hlghtcote,
+#					hglghtDT  => $hglghtDT,
+#					hglghtPub => $hglghtPub,
+#					hglghtPY  => $hglghtPY,
+#					hglghtHB  => $hglghtHB,
+#					hglghtLOC => $hglghtLOC,
 #					CGIFromCoteClass => $CGIcote,
 #					CGIToCoteClass => $CGIcote,
 					CGIItemType => $CGIitemtype,
@@ -276,15 +281,15 @@ sub calculate {
 				($i== 1) ? "Dewey Classification To"   :
 				($i== 2) ? "Lccn Classification From"  :
 				($i== 3) ? "Lccn Classification To"    :
-				($i== 4) ? "Cote Classification From"  :
-				($i== 5) ? "Cote Classification To"    :
-				($i== 6) ? "Document type"             :
+				($i== 4) ? "Item CallNumber From"  :
+				($i== 5) ? "Item CallNumber To"    :
+				($i== 6) ? "Item type"             :
 				($i== 7) ? "Publisher"                 :
 				($i== 8) ? "Publication year From"     :
 				($i== 9) ? "Publication year To"       :
-				($i==10) ? "Branch :"                  :
-				($i==11) ? "Location :"                :
-				($i==12) ? "Catalog Code :"            : '';
+				($i==10) ? "Library :"                  :
+				($i==11) ? "Shelving Location :"                :
+				($i==12) ? "Collection Code :"            : '';
 			push @loopfilter, \%cell;
 		}
 	}
