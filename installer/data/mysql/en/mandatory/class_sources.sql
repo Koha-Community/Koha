@@ -32,4 +32,5 @@ INSERT INTO `class_sources` (`cn_source`, `description`, `used`, `class_sort_rul
                             ('lcc', 'Library of Congress Classification', 1, 'lcc'),
                             ('udc', 'Universal Decimal Classification', 0, 'generic'),
                             ('sudocs', 'SuDoc Classification (U.S. GPO)', 0, 'generic'),
+                            ('anscr', 'ANSCR (Sound Recordings)', 0, 'generic'),
                             ('z', 'Other/Generic Classification Scheme', 0, 'generic');
