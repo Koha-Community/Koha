@@ -559,12 +559,12 @@ else {    # DEFAULT
     if ( $offset > 0 ) {
         my $prevpage = $offset - $pagesize;
         $template->param(
-            prev => "<a href=\"$script_name?offset=$prevpage\">" );
+            prev => "<a href=\"$script_name?offset=$prevpage\&tagfield=$tagfield\&frameworkcode=$frameworkcode \">" );
     }
     if ( $offset + $pagesize < $count ) {
         my $nextpage = $offset + $pagesize;
         $template->param(
-            next => "<a href=\"$script_name?offset=$nextpage\">" );
+            next => "<a href=\"$script_name?offset=$nextpage\&tagfield=$tagfield\&frameworkcode=$frameworkcode \">" );
     }
 }    #---- END $OP eq DEFAULT
 
