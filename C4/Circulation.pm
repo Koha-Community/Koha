@@ -1034,7 +1034,7 @@ sub AddIssue {
             C4::Context->userenv->{'branch'},
             'issue',                        $charge,
             '',                             $item->{'itemnumber'},
-            $item->{'itemtype'}, $borrower->{'borrowernumber'}
+            $item->{'itype'}, $borrower->{'borrowernumber'}
         );
     }
     
@@ -1879,7 +1879,7 @@ sub AddRenewal {
         $sth->finish;
     }
     # Log the renewal
-    UpdateStats( $branch, 'renew', $charge, '', $itemnumber );
+    UpdateStats( $branch, 'renew', $charge, '', $itemnumber, $item->{itype}, $borrowernumber);
 }
 
 sub GetRenewCount {
