@@ -111,7 +111,7 @@ else {
     if ($isbn || $issn) {
         $term=$isbn if ($isbn);
         $term=$issn if ($issn);
-        $query .= " \@attr 1=7 \"$term\" ";
+        $query .= " \@or \@attr 1=8 \"$term\" \@attr 1=7 \"$term\" ";
         $nterms++;
     }
     if ($title) {
