@@ -15,7 +15,6 @@ sub methods : Test( 1 ) {
     my @methods = qw( recordpayment
                       makepayment
                       getnextacctno
-                      fixaccounts
                       returnlost
                       manualinvoice
                       fixcredit
@@ -23,7 +22,7 @@ sub methods : Test( 1 ) {
                       getcharges
                       getcredits
                       getrefunds
-                );
+                );	# removed fixaccounts (unused by codebase)
     
     can_ok( $self->testing_class, @methods );    
 }

@@ -29,14 +29,14 @@ use vars qw($VERSION @ISA @EXPORT);
 
 BEGIN {
 	# set the version for version checking
-	$VERSION = 3.02;
+	$VERSION = 3.03;
 	require Exporter;
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
-		&recordpayment &fixaccounts &makepayment &manualinvoice
+		&recordpayment &makepayment &manualinvoice
 		&getnextacctno &reconcileaccount &getcharges &getcredits
 		&getrefunds
-	);
+	); # removed &fixaccounts
 }
 
 =head1 NAME
@@ -217,28 +217,21 @@ borrower number.
 
 #'
 # FIXME - Okay, so what does the above actually _mean_?
-sub getnextacctno {
-    my ($borrowernumber) = @_;
-    my $nextaccntno      = 1;
-    my $dbh              = C4::Context->dbh;
-    my $sth              = $dbh->prepare(
-        "SELECT * FROM accountlines
-                                WHERE (borrowernumber = ?)
-                                ORDER BY accountno DESC"
+sub getnextacctno ($) {
+    my ($borrowernumber) = shift or return undef;
+    my $sth = C4::Context->dbh->prepare(
+        "SELECT accountno+1 FROM accountlines
+         WHERE    (borrowernumber = ?)
+         ORDER BY accountno DESC
+		 LIMIT 1"
     );
     $sth->execute($borrowernumber);
-    if ( my $accdata = $sth->fetchrow_hashref ) {
-        $nextaccntno = $accdata->{'accountno'} + 1;
-    }
-    $sth->finish;
-    return ($nextaccntno);
+    return ($sth->fetchrow || 1);
 }
 
-=head2 fixaccounts
+=head2 fixaccounts (removed)
 
   &fixaccounts($borrowernumber, $accountnumber, $amount);
-
-=cut
 
 #'
 # FIXME - I don't understand what this function does.
@@ -264,7 +257,10 @@ sub fixaccounts {
         WHERE   borrowernumber = $borrowernumber
           AND   accountno = $accountno
 EOT
+	# FIXME: exceedingly bad form.  Use prepare with placholders ("?") in query and execute args.
 }
+
+=cut
 
 sub returnlost {
     my ( $borrowernumber, $itemnum ) = @_;
