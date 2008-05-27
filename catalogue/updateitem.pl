@@ -97,7 +97,7 @@ if ($itemlost==1) {
         # OK, they haven't
         unless ($existing_charge_hashref) {
             # This item is on issue ... add replacement cost to the borrower's record and mark it returned
-            my $accountno = getnextacctno('',$issues->{'borrowernumber'},$dbh);
+            my $accountno = getnextacctno($issues->{'borrowernumber'});
             my $sth2=$dbh->prepare("INSERT INTO accountlines
             (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding,itemnumber)
             VALUES
