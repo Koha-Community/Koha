@@ -451,6 +451,7 @@ C<$year> Is the year to check whether if is a holiday or not.
 sub isHoliday {
     my ($self, $day, $month, $year) = @_;
 	# FIXME - date strings are stored in non-padded metric format. should change to iso.
+	# FIXME - should change arguments to accept C4::Dates object
 	$month=$month+0;
 	$year=$year+0;
 	$day=$day+0;
