@@ -26,29 +26,13 @@ use POSIX;
 use CGI;
 use CGI::Cookie; # need to check cookies before having CGI parse the POST request
 
-use C4::Auth qw(:DEFAULT check_cookie_auth);;
+use C4::Auth qw(:DEFAULT check_cookie_auth);
 use C4::Context;
 use C4::Dates qw(format_date format_date_in_iso);
 # use C4::Koha;
 use C4::Output 3.02 qw(:html :ajax pagination_bar);
 use C4::Debug;
-use C4::Tags 0.02 qw(get_tags get_approval_rows whitelist blacklist is_approved);
-
-sub counts () { 
-	my $query = "SELECT " .
-	# 		(SELECT count(*) FROM tags_all     ) as tags_all,
-	# 		(SELECT count(*) FROM tags_index   ) as tags_index,
-	"		(SELECT count(*) FROM tags_approval WHERE approved= 1) as approved_count,
-			(SELECT count(*) FROM tags_approval WHERE approved=-1) as rejected_count,
-			(SELECT count(*) FROM tags_approval WHERE approved= 0) as unapproved_count
-	";
-	my $sth = C4::Context->dbh->prepare($query);
-	$sth->execute;
-	my $result = $sth->fetchrow_hashref();
-	$result->{approved_total} = $result->{approved_count} + $result->{rejected_count} + $result->{unapproved_count};
-	$debug and warn "counts returned: " . Dumper $result;
-	return $result;
-}
+use C4::Tags 0.03 qw(get_tags get_approval_rows approval_counts whitelist blacklist is_approved);
 
 my $script_name = "/cgi-bin/koha/tags/review.pl";
 my $needed_flags = { tools => 'moderate_comments' };	# FIXME: replace when more specific permission is created.
@@ -124,7 +108,7 @@ $borrowernumber == 0 and push @errors, {op_zero=>1};
 	);
 }
 
-my $counts = &counts;
+my $counts = &approval_counts;
 foreach (keys %$counts) {
 	$template->param($_ => $counts->{$_});
 }

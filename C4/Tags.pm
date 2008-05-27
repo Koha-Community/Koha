@@ -26,7 +26,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use vars qw($ext_dict $select_all @fields);
 
 BEGIN {
-	$VERSION = 0.02;
+	$VERSION = 0.03;
 	@ISA = qw(Exporter);
 	@EXPORT_OK = qw(
 		&get_tag &get_tags &get_tag_rows
@@ -39,6 +39,8 @@ BEGIN {
 		&blacklist
 		&whitelist
 		&is_approved
+		&approval_counts
+		&get_filters
 	);
 	# %EXPORT_TAGS = ();
 	$ext_dict = C4::Context->preference('TagsExternalDictionary');
@@ -58,6 +60,36 @@ INIT {
     $debug and print STDERR "\$Lingua::Ispell::path = $Lingua::Ispell::path\n";
 	@fields = qw(tag_id borrowernumber biblionumber term language date_created);
 	$select_all = "SELECT " . join(',',@fields) . "\n FROM   tags_all\n";
+}
+
+sub get_filters (;$) {
+	my $query = "SELECT * FROM tags_filters ";
+	my ($sth);
+	if (@_) {
+		$sth = C4::Context->dbh->prepare($query . " WHERE filter_id = ? ");
+		$sth->execute(shift);
+	} else {
+		$sth = C4::Context->dbh->prepare($query);
+		$sth->execute;
+	}
+	return $sth->fetchall_arrayref({});
+}
+
+# 	(SELECT count(*) FROM tags_all     ) as tags_all,
+# 	(SELECT count(*) FROM tags_index   ) as tags_index,
+
+sub approval_counts () { 
+	my $query = "SELECT
+		(SELECT count(*) FROM tags_approval WHERE approved= 1) as approved_count,
+		(SELECT count(*) FROM tags_approval WHERE approved=-1) as rejected_count,
+		(SELECT count(*) FROM tags_approval WHERE approved= 0) as unapproved_count
+	";
+	my $sth = C4::Context->dbh->prepare($query);
+	$sth->execute;
+	my $result = $sth->fetchrow_hashref();
+	$result->{approved_total} = $result->{approved_count} + $result->{rejected_count} + $result->{unapproved_count};
+	$debug and warn "counts returned: " . Dumper $result;
+	return $result;
 }
 
 sub remove_tag ($;$) {
