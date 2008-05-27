@@ -209,13 +209,8 @@ if ($filter = $input->param('approved_by')) {	# borrowernumber from link
 $debug and print STDERR "filters: " . Dumper(\%filters);
 my $tagloop = get_approval_rows(\%filters);
 my $qstring = $input->query_string;
-$qstring =~ s/([&;])*\blimit=\d+//;		# remove pagination vars
-# $qstring =~ s/([&;])*\bpage=\d+//;		# remove pagination vars
-# $qstring =~ s/\&[\&]+/&/g;		# compress duplicates
-# $qstring =~ s/;;+/;/g;		# compress duplicates
-# $qstring =~ s/\&;//g;		# remove empties
-# $qstring =~ s/;+$//;		# remove trailing delim
-$qstring =~ s/^;+//;		# remove leading delim
+$qstring =~ s/([&;])*\blimit=\d+//;		# remove pagination var
+$qstring =~ s/^;+//;					# remove leading delims
 $qstring = "limit=$pagesize" . ($qstring ? '&amp;' . $qstring : '');
 $debug and print STDERR "number of approval_rows: " . scalar(@$tagloop) . "rows\n";
 (scalar @errors) and $template->param(message_loop=>\@errors);
@@ -236,3 +231,9 @@ $template->param(
 output_html_with_http_headers $input, $cookie, $template->output;
 __END__
 
+=head1 AUTHOR
+
+Joe Atzberger
+atz AT liblime.com
+
+=cut
