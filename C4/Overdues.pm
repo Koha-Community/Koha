@@ -25,6 +25,7 @@ use C4::Circulation;
 use C4::Context;
 use C4::Accounts;
 use C4::Log; # logaction
+use C4::Debug;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -131,14 +132,7 @@ sub Getoverdues {
                      WHERE date_due < now() 
                      ORDER BY borrowernumber " );
     $sth->execute;
-
-    my @results;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push @results, $data;
-    }
-    $sth->finish;
-
-    return \@results;
+	return $sth->fetchall_arrayref({});
 }
 
 =head2 checkoverdues
@@ -178,8 +172,8 @@ sub checkoverdues {
 
 =item CalcFine
 
-  ($amount, $chargename, $message, $daycounttotal, $daycount) =
-    &CalcFine($itemnumber, $categorycode, $branch, $days_overdue, $description, $start_date, $end_date );
+  ($amount, $chargename, $daycount, $daycounttotal) =
+    &CalcFine($item, $categorycode, $branch, $days_overdue, $description, $start_date, $end_date );
 
 Calculates the fine for a book.
 
@@ -190,12 +184,12 @@ members might get a longer grace period between the first and second
 reminders that a book is overdue).
 
 
-C<$itemnumber> is the book's item number.
+C<$item> is an item object (hashref).
 
-C<$categorycode> is the category code of the patron who currently has
+C<$categorycode> is the category code (string) of the patron who currently has
 the book.
 
-C<$branchcode> is the library whose issuingrules govern this transaction.
+C<$branchcode> is the library (string) whose issuingrules govern this transaction.
 
 C<$days_overdue> is the number of days elapsed since the book's due date.
   NOTE: supplying days_overdue is deprecated.
@@ -207,34 +201,48 @@ but retain these for backwards-comptibility with extant fines scripts.
 
 Fines scripts should just supply the date range over which to calculate the fine.
 
-C<&CalcFine> returns a list of four values:
+C<&CalcFine> returns four values:
 
 C<$amount> is the fine owed by the patron (see above).
 
 C<$chargename> is the chargename field from the applicable record in
 the categoryitem table, whatever that is.
+
+C<$daycount> is the number of days between start and end dates, Calendar adjusted (where needed), 
+minus any applicable grace period.
+
+C<$daycounttotal> is C<$daycount> without consideration of grace period.
+
 FIXME - What is chargename supposed to be ?
 
-C<$message> is a text message, either "First Notice", "Second Notice",
-or "Final Notice".
+FIXME: previously attempted to return C<$message> as a text message, either "First Notice", "Second Notice",
+or "Final Notice".  But CalcFine never defined any value.
 
 =cut
 
 #'
 sub CalcFine {
     my ( $item, $bortype, $branchcode, $difference ,$dues , $start_date, $end_date  ) = @_;
+	$debug and warn sprintf("CalcFine(%s, %s, %s, %s, %s, %s, %s)",
+			($item    ? '{item}' : 'UNDEF'), 
+			($bortype    || 'UNDEF'), 
+			($branchcode || 'UNDEF'), 
+			($difference || 'UNDEF'), 
+			($dues       || 'UNDEF'), 
+			($start_date ? ($start_date->output('iso') || 'Not a C4::Dates object') : 'UNDEF'), 
+			(  $end_date ? (  $end_date->output('iso') || 'Not a C4::Dates object') : 'UNDEF')
+	);
     my $dbh = C4::Context->dbh;
     my $amount = 0;
-    my $printout;
 	my $daystocharge;
 	# get issuingrules (fines part will be used)
     my $data = C4::Circulation::GetIssuingRule($bortype, $item->{'itemtype'},$branchcode);
 	if($difference) {
 		# if $difference is supplied, the difference has already been calculated, but we still need to adjust for the calendar.
     	# use copy-pasted functions from calendar module.  (deprecated -- these functions will be removed from C4::Overdues ).
-	    my $countspecialday=&GetSpecialHolidays($dues,$item->{itemnumber});
-	    my $countrepeatableday=&GetRepeatableHolidays($dues,$item->{itemnumber},$difference);    
-	    my $countalldayclosed = $countspecialday + $countrepeatableday;
+	    my $countspecialday    =    &GetSpecialHolidays($dues,$item->{itemnumber});
+	    my $countrepeatableday = &GetRepeatableHolidays($dues,$item->{itemnumber},$difference);    
+	    my $countalldayclosed  = $countspecialday + $countrepeatableday;
 	    $daystocharge = $difference - $countalldayclosed;
 	} else {
 		# if $difference is not supplied, we have C4::Dates objects giving us the date range, and we use the calendar module.
@@ -246,15 +254,13 @@ sub CalcFine {
 		}
 	}
 	# correct for grace period.
-	$daystocharge -= $data->{'firstremind'};
-    if ($data->{'chargeperiod'} > 0 && $daystocharge > 0 ) { 
-        $amount   = int($daystocharge / $data->{'chargeperiod'}) * $data->{'fine'};
+	my $days_minus_grace = $daystocharge - $data->{'firstremind'};
+    if ($data->{'chargeperiod'} > 0 && $days_minus_grace > 0 ) { 
+        $amount = int($days_minus_grace / $data->{'chargeperiod'}) * $data->{'fine'};
     } else {
         # a zero (or null)  chargeperiod means no charge.
     }
-    
-    #  warn "Calc Fine: " . join(", ", ($item->{'itemnumber'}, $bortype, $difference , $data->{'fine'} . " * " . $daycount . " days = \$ " . $amount , "desc: $dues")) ;
-    return ( $amount, $data->{'chargename'}, $printout ,$daystocharge , $daystocharge + $data->{'firstremind'} );
+    return ( $amount, $data->{'chargename'}, $days_minus_grace, $daystocharge);
 }
 
 
@@ -429,13 +435,17 @@ accountlines table of the Koha database.
 
 =cut
 
-#'
-# FIXME - This API doesn't look right: why should the caller have to
+#
+# Question: Why should the caller have to
 # specify both the item number and the borrower number? A book can't
 # be on loan to two different people, so the item number should be
 # sufficient.
+#
+# Possible Answer: You might update a fine for a damaged item, *after* it is returned.
+#
 sub UpdateFine {
     my ( $itemnum, $borrowernumber, $amount, $type, $due ) = @_;
+	$debug and warn "UpdateFine($itemnum, $borrowernumber, $amount, " . ($type||'""') . ", $due) called";
     my $dbh = C4::Context->dbh;
     # FIXME - What exactly is this query supposed to do? It looks up an
     # entry in accountlines that matches the given item and borrower
@@ -443,45 +453,58 @@ sub UpdateFine {
     # account type has one of several values, but what does this _mean_?
     # Does it look up existing fines for this item?
     # FIXME - What are these various account types? ("FU", "O", "F", "M")
+	#	"L"   is LOST item
+	#   "A"   is Account Management Fee
+	#   "N"   is New Card
+	#   "M"   is Sundry
+	#   "O"   is Overdue ??
+	#   "F"   is Fine ??
+	#   "FU"  is Fine UPDATE??
+	#	"Pay" is Payment
+	#   "REF" is Cash Refund
     my $sth = $dbh->prepare(
-        "Select * from accountlines where itemnumber=? and
-  borrowernumber=? and (accounttype='FU' or accounttype='O' or
-  accounttype='F' or accounttype='M') and description like ?"
+        "SELECT * FROM accountlines 
+		WHERE itemnumber=?
+		AND   borrowernumber=?
+		AND   accounttype IN ('FU','O','F','M')
+		AND   description like ? "
     );
     $sth->execute( $itemnum, $borrowernumber, "%$due%" );
 
     if ( my $data = $sth->fetchrow_hashref ) {
 
 		# we're updating an existing fine.
-    if ( $data->{'amount'} != $amount ) {
-           
+    	if ( $data->{'amount'} != $amount ) {
             my $diff = $amount - $data->{'amount'};
             my $out  = $data->{'amountoutstanding'} + $diff;
-            my $sth2 = $dbh->prepare(
-                "UPDATE accountlines SET date=now(), amount=?,
-      amountoutstanding=?, lastincrement=? , accounttype='FU' WHERE
-      borrowernumber=? AND itemnumber=?
-      AND (accounttype='FU' OR accounttype='O') AND description LIKE ?"
-            );
-            $sth2->execute( $amount, $out, $diff , $data->{'borrowernumber'},
-                $data->{'itemnumber'}, "%$due%" );
-            $sth2->finish;
-        }
-        else {
-
+            my $query = "
+                UPDATE accountlines
+				SET date=now(), amount=?, amountoutstanding=?,
+					lastincrement=?, accounttype='FU'
+	  			WHERE borrowernumber=?
+				AND   itemnumber=?
+				AND   accounttype IN ('FU','O')
+				AND   description LIKE ?
+				LIMIT 1 ";
+            my $sth2 = $dbh->prepare($query);
+			# FIXME: BOGUS query cannot ensure uniqueness w/ LIKE %x% !!!
+			# 		LIMIT 1 added to prevent multiple affected lines
+			# FIXME: accountlines table needs unique key!! Possibly a combo of borrowernumber and accountline.  
+			# 		But actually, we should just have a regular autoincrementing PK and forget accountline,
+			# 		including the bogus getnextaccountno function (doesn't prevent conflict on simultaneous ops).
+			# FIXME: Why only 2 account types here?
+			$debug and print STDERR "UpdateFine query: $query\n" .
+				"w/ args: $amount, $out, $diff, $data->{'borrowernumber'}, $data->{'itemnumber'}, \"\%$due\%\"\n";
+            $sth2->execute($amount, $out, $diff, $data->{'borrowernumber'}, $data->{'itemnumber'}, "%$due%");
+        } else {
             #      print "no update needed $data->{'amount'}"
         }
-    }
-    else {
-
-        # I think this else-clause deals with the case where we're adding
-        # a new fine.
+    } else {
         my $sth4 = $dbh->prepare(
             "SELECT title FROM biblio LEFT JOIN items ON biblio.biblionumber=items.biblionumber WHERE items.itemnumber=?"
         );
         $sth4->execute($itemnum);
-        my $title = $sth4->fetchrow_hashref;
-        $sth4->finish;
+        my $title = $sth4->fetchrow;
 
 #         #   print "not in account";
 #         my $sth3 = $dbh->prepare("Select max(accountno) from accountlines");
@@ -492,17 +515,14 @@ sub UpdateFine {
 #         $sth3->finish;
 #         $accountno[0]++;
 # begin transaction
-  my $nextaccntno = C4::Accounts::getnextacctno($borrowernumber);
-    my $sth2 = $dbh->prepare(
-            "INSERT INTO accountlines
-    (borrowernumber,itemnumber,date,amount,
-    description,accounttype,amountoutstanding,lastincrement,accountno) VALUES
-    (?,?,now(),?,?,'FU',?,?,?)"
-        );
-        $sth2->execute( $borrowernumber, $itemnum, $amount,
-            "$type $title->{'title'} $due",
-            $amount,$amount, $nextaccntno);
-        $sth2->finish;
+		my $nextaccntno = C4::Accounts::getnextacctno($borrowernumber);
+		my $desc = ($type ? "$type " : '') . "$title $due";	# FIXEDME, avoid whitespace prefix on empty $type
+		my $query = "INSERT INTO accountlines
+		    (borrowernumber,itemnumber,date,amount,description,accounttype,amountoutstanding,lastincrement,accountno)
+			    VALUES (?,?,now(),?,?,'FU',?,?,?)";
+		my $sth2 = $dbh->prepare($query);
+		$debug and print STDERR "UpdateFine query: $query\nw/ args: $borrowernumber, $itemnum, $amount, $desc, $amount, $amount, $nextaccntno\n";
+        $sth2->execute($borrowernumber, $itemnum, $amount, $desc, $amount, $amount, $nextaccntno);
     }
     # logging action
     &logaction(
@@ -511,8 +531,6 @@ sub UpdateFine {
         $borrowernumber,
         "due=".$due."  amount=".$amount." itemnumber=".$itemnum
         ) if C4::Context->preference("FinesLog");
-
-    $sth->finish;
 }
 
 =item BorType
@@ -587,12 +605,8 @@ sub GetFine {
     my $sth = $dbh->prepare($query);
     $sth->execute( $itemnum, $borrowernumber );
     my $data = $sth->fetchrow_hashref();
-    $sth->finish();
-    $dbh->disconnect();
     return ( $data->{'sum(amountoutstanding)'} );
 }
-
-
 
 
 =item GetIssuingRules
@@ -614,6 +628,7 @@ category he or she belongs to.
 =cut 
 
 sub GetIssuingRules {
+	warn "GetIssuingRules is deprecated: use GetIssuingRule from C4::Circulation instead.";
    my ($itemtype,$categorycode)=@_;
    my $dbh   = C4::Context->dbh();    
    my $query=qq|SELECT * 
@@ -624,10 +639,7 @@ sub GetIssuingRules {
     my $sth = $dbh->prepare($query);
     #  print $query;
     $sth->execute($itemtype,$categorycode);
-    my ($data) = $sth->fetchrow_hashref;
-   $sth->finish;
-return ($data);
-
+    return $sth->fetchrow_hashref;
 }
 
 
@@ -643,8 +655,6 @@ sub ReplacementCost2 {
     my $sth = $dbh->prepare($query);
     $sth->execute( $itemnum, $borrowernumber );
     my $data = $sth->fetchrow_hashref();
-    $sth->finish();
-    $dbh->disconnect();
     return ( $data->{'amountoutstanding'} );
 }
 
