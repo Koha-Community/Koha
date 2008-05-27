@@ -1503,7 +1503,6 @@ Internal function, called by AddReturn
 
 sub FixAccountForLostAndReturned {
 	my ($iteminfo, $borrower) = @_;
-	my %env;
 	my $dbh = C4::Context->dbh;
 	my $itm = $iteminfo->{'itemnumber'};
 	# check for charge made for lost book
@@ -1528,7 +1527,7 @@ sub FixAccountForLostAndReturned {
 		$usth->execute($data->{'borrowernumber'},$itm,$acctno);
 		$usth->finish;
 	#check if any credit is left if so writeoff other accounts
-		my $nextaccntno = getnextacctno(\%env,$data->{'borrowernumber'},$dbh);
+		my $nextaccntno = getnextacctno($data->{'borrowernumber'});
 		if ($amountleft < 0){
 		$amountleft*=-1;
 		}
