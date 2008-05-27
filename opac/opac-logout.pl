@@ -24,7 +24,7 @@ use CGI::Session;
 
 my $query=new CGI;
 
-my $sessionID=$query->cookie('sessionID');
+my $sessionID=$query->cookie('CGISESSID');
 
 if ($ENV{'REMOTE_USER'}) {
     print $query->header();
@@ -74,7 +74,7 @@ printf L "%20s from %16s logged out at %30s (manual log out).\n", $userid, $ip, 
 							# where is $ip is coming from??
 close L;
 
-my $cookie=$query->cookie(-name => 'sessionID',
+my $cookie=$query->cookie(-name => 'CGISESSID',
         -value => '',
         -expires => '+1y');
 
