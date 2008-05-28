@@ -417,7 +417,13 @@ for (my $i=0;$i<=@servers;$i++) {
         ## If there's just one result, redirect to the detail page
         if ($total == 1) {         
             my $biblionumber=@newresults[0]->{biblionumber};
-            print $cgi->redirect("/cgi-bin/koha/opac-detail.pl?biblionumber=$biblionumber");
+            if (C4::Context->preference('BiblioDefaultView') eq 'isbd') {
+                print $cgi->redirect("/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=$biblionumber");
+            } elsif  (C4::Context->preference('BiblioDefaultView') eq 'marc') {
+                print $cgi->redirect("/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=$biblionumber");
+            } else {
+                print $cgi->redirect("/cgi-bin/koha/opac-detail.pl?biblionumber=$biblionumber");
+            } 
             exit;
         }
         if ($hits) {
