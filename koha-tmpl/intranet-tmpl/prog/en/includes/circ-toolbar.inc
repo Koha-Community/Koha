@@ -32,11 +32,15 @@ function confirm_reregistration() {
 	 });
 
 	// YUI Toolbar Functions
+	function printx_window(print_type) {
+		window.open("/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=" + print_type, "printwindow");
+		return false;
+	}
 
 	function yuiToolbar() {
 	    var printmenu = [
-	        { text: _("Print Page"), url: "/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page" },
-	        { text: _("Print Slip"), url: "/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip" }
+	        { text: _("Print Page"), onclick: {fn: function(){printx_window("page")}}, },
+	        { text: _("Print Slip"), onclick: {fn: function(){printx_window("slip")}}, }
 	    ];
 	
 		var moremenu = [
@@ -47,7 +51,7 @@ function confirm_reregistration() {
                     <!-- TMPL_ELSE --><!-- /TMPL_IF -->
                 <!-- TMPL_ELSE -->, disabled: true<!-- /TMPL_IF-->},
             { text: _("Delete"), <!-- TMPL_IF NAME="StaffMember" --><!-- TMPL_UNLESS NAME="CAN_user_staffaccess" -->disabled: true, <!-- /TMPL_UNLESS --><!-- /TMPL_IF --> onclick: { fn: confirm_deletion } }
-		]
+		];
 
 	    new YAHOO.widget.Button({
 	        type: "menu",
@@ -70,7 +74,7 @@ function confirm_reregistration() {
 	    new YAHOO.widget.Button("addnote");
         <!-- TMPL_IF NAME="StaffMember" --><!-- TMPL_IF NAME="CAN_user_staffaccess" --> new YAHOO.widget.Button("changepassword");  <!-- /TMPL_IF-->
             <!-- TMPL_ELSE--> new YAHOO.widget.Button("changepassword"); <!-- /TMPL_IF -->
-	    new YAHOO.widget.Button("printslilp");
+	    new YAHOO.widget.Button("printslip");
 		new YAHOO.widget.Button("printpage");
 	    new YAHOO.widget.Button("renewpatron");		 
         <!-- TMPL_IF NAME="CAN_user_permissions" -->

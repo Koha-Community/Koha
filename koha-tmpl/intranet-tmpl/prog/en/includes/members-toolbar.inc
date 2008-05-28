@@ -46,11 +46,15 @@ function update_child() {
 	 });
 
 	// YUI Toolbar Functions
+	function printx_window(print_type) {
+		window.open("/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=" + print_type, "printwindow");
+		return false;
+	}
 
 	function yuiToolbar() {
 	    var printmenu = [
-	        { text: _("Print Page"), url: "/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page" },
-	        { text: _("Print Slip"), url: "/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip" }
+	        { text: _("Print Page"), onclick: {fn: function(){printx_window("page")}}, },
+	        { text: _("Print Slip"), onclick: {fn: function(){printx_window("slip")}}, }
 	    ];
 	
 		var moremenu = [
@@ -58,7 +62,7 @@ function update_child() {
 			{ text: _("Set Permissions"), url: "/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->"<!-- TMPL_UNLESS NAME="CAN_user_permissions" -->, disabled: true<!-- /TMPL_UNLESS -->},
 			{ text: _("Delete"), onclick: { fn: confirm_deletion } },
 			{ text: _("Update Child to Adult Patron") , onclick: { fn: update_child }<!-- TMPL_UNLESS NAME="is_child" -->, disabled: true<!-- /TMPL_UNLESS -->}
-		]
+		];
 
 	    new YAHOO.widget.Button({
 	        type: "menu",
