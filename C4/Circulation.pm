@@ -445,7 +445,6 @@ sub TooMany {
     $sth->execute( $cat_borrower, $type, $branch );
     my $result = $sth->fetchrow_hashref;
 #     warn "$cat_borrower, $type, $branch = ".Data::Dumper::Dumper($result);
-
     if ( $result->{maxissueqty} ne '' ) {
 #         warn "checking on everything set";
         $sth2->execute( $borrower->{'borrowernumber'}, $type );
@@ -457,8 +456,8 @@ sub TooMany {
         $sth->execute( $cat_borrower, '*', $branch );
         my $result = $sth->fetchrow_hashref;
         if ( $result->{maxissueqty} ne '' ) {
-            $sth2->execute( $borrower->{'borrowernumber'}, $type );
-            my $alreadyissued = $sth2->fetchrow;
+            $sth3->execute( $borrower->{'borrowernumber'} );
+            my $alreadyissued = $sth3->fetchrow;
             if ( $result->{'maxissueqty'} <= $alreadyissued ) {
                 return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on branch/category/total failed)"  );
             }
@@ -481,8 +480,8 @@ sub TooMany {
         $sth->execute( '*', '*', $branch );
         my $result = $sth->fetchrow_hashref;
         if ( $result->{maxissueqty} ne '' ) {
-            $sth2->execute( $borrower->{'borrowernumber'}, $type );
-            my $alreadyissued = $sth2->fetchrow;
+            $sth3->execute( $borrower->{'borrowernumber'} );
+            my $alreadyissued = $sth3->fetchrow;
             if ( $result->{'maxissueqty'} <= $alreadyissued ) {
                 return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on branch / default category / total failed)" );
             }
@@ -505,8 +504,8 @@ sub TooMany {
         $sth->execute( $cat_borrower, '*', '*' );
         my $result = $sth->fetchrow_hashref;
         if ( $result->{maxissueqty} ne '' ) {
-            $sth2->execute( $borrower->{'borrowernumber'}, $type );
-            my $alreadyissued = $sth2->fetchrow;
+            $sth3->execute( $borrower->{'borrowernumber'} );
+            my $alreadyissued = $sth3->fetchrow;
             if ( $result->{'maxissueqty'} <= $alreadyissued ) {
                 return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on default branch / category / total failed)"  );
             }
