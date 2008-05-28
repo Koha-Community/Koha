@@ -202,7 +202,7 @@ for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
                     }
                     $subfield_data{marc_value} =
                       GetAuthorisedValueDesc( $fields[$x_i]->tag(),
-                        $subf[$i][0], $subf[$i][1], '', $tagslib);
+                        $subf[$i][0], $subf[$i][1], '', $tagslib) || $subf[$i][1];
 
                 }
                 $subfield_data{marc_subfield} = $subf[$i][0];
@@ -259,7 +259,7 @@ foreach my $field (@fields) {
         $witness{ $subf[$i][0] } =
         $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{lib};
         $this_row{ $subf[$i][0] } = GetAuthorisedValueDesc( $field->tag(),
-                        $subf[$i][0], $subf[$i][1], '', $tagslib);
+                        $subf[$i][0], $subf[$i][1], '', $tagslib) || $subf[$i][1];
     }
     if (%this_row) {
         push( @big_array, \%this_row );
