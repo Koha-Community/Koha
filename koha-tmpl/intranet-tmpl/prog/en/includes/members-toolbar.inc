@@ -80,7 +80,7 @@ function update_child() {
 	    new YAHOO.widget.Button("editpatron");
 	    new YAHOO.widget.Button("addnote");
 	    new YAHOO.widget.Button("changepassword");
-	    new YAHOO.widget.Button("printslilp");
+	    new YAHOO.widget.Button("printslip");
 		new YAHOO.widget.Button("printpage");
 	    new YAHOO.widget.Button("renewpatron");		 
 		new YAHOO.widget.Button("patronflags");
