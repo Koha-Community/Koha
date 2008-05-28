@@ -265,6 +265,7 @@
     <!--/TMPL_UNLESS-->
 <!--TMPL_IF Name="showguarantor"--><input type="hidden" name="guarantorid"   value="<!-- TMPL_VAR NAME="guarantorid" -->" />
   <li><label for="">Guarantor: </label>
+  <!-- TMPL_IF name="relshiploop" -->
   <select name="relationship" id="relationship" >
     <!-- TMPL_LOOP name="relshiploop" -->
         <!-- TMPL_IF name="selected" -->
@@ -274,6 +275,7 @@
         <!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
     </select>
+  <!-- /TMPL_IF -->
   <input name="contactname" id="contactname" type="text"  size="20" value="<!-- TMPL_VAR NAME="contactname" -->" />
   <input name="contactfirstname" id="contactfirstname" type="text"  size="20" value="<!-- TMPL_VAR NAME="contactfirstname" -->" />
   <!-- TMPL_IF NAME="guarantorid"-->  
