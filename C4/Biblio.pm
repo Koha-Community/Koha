@@ -999,7 +999,7 @@ sub GetMarcSubjects {
         my $subfield9 = $field->subfield('9');
         for my $subject_subfield (@subfields ) {
             # don't load unimarc subfields 3,4,5
-            next if (($marcflavour eq "UNIMARC") and ($subject_subfield->[0] =~ (3|4|5) ) );
+            next if (($marcflavour eq "UNIMARC") and ($subject_subfield->[0] =~ /3|4|5/ ) );
             my $code = $subject_subfield->[0];
             my $value = $subject_subfield->[1];
             my $linkvalue = $value;
@@ -1063,7 +1063,7 @@ sub GetMarcAuthors {
         my $subfield9 = $field->subfield('9');
         for my $authors_subfield (@subfields) {
             # don't load unimarc subfields 3, 5
-            next if ($marcflavour eq 'UNIMARC' and ($authors_subfield->[0] =~ (3|5) ) );
+            next if ($marcflavour eq 'UNIMARC' and ($authors_subfield->[0] =~ /3|5/ ) );
             my $subfieldcode = $authors_subfield->[0];
             my $value = $authors_subfield->[1];
             my $linkvalue = $value;
