@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+
 
 
 # Copyright 2000-2002 Katipo Communications
@@ -42,7 +42,6 @@ sub StringSearch  {
 		$u++;
 	}
 	$sth->finish;
-# 	$dbh->disconnect;
 	return ($cnt,\@results);
 }
 
