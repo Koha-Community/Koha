@@ -67,9 +67,7 @@ sub getreview {
       "SELECT * FROM reviews WHERE biblionumber=? and borrowernumber=?";
     my $sth = $dbh->prepare($query);
     $sth->execute( $biblionumber, $borrowernumber );
-    my $review = $sth->fetchrow_hashref();
-    $sth->finish();
-    return $review;
+    return $sth->fetchrow_hashref();
 }
 
 sub savereview {
@@ -80,7 +78,6 @@ sub savereview {
   (?,?,?,0,now())";
     my $sth = $dbh->prepare($query);
     $sth->execute( $borrowernumber, $biblionumber, $review);
-    $sth->finish();
 }
 
 sub updatereview {
@@ -89,7 +86,6 @@ sub updatereview {
     my $query = "UPDATE reviews SET review=?,datereviewed=now(),approved=0  WHERE borrowernumber=? and biblionumber=?";
     my $sth = $dbh->prepare($query);
     $sth->execute( $review, $borrowernumber, $biblionumber );
-    $sth->finish();
 }
 
 sub numberofreviews {
@@ -138,7 +134,6 @@ sub approvereview {
                WHERE reviewid=?";
     my $sth = $dbh->prepare($query);
     $sth->execute( 1, $reviewid );
-    $sth->finish();
 }
 
 =head2 deletereview
@@ -156,7 +151,6 @@ sub deletereview {
                WHERE reviewid=?";
     my $sth = $dbh->prepare($query);
     $sth->execute($reviewid);
-    $sth->finish();
 }
 
 1;
