@@ -94,7 +94,7 @@ sub getFrameworkLanguages {
 Returns a reference to an array of hashes:
 
  my $languages = getTranslatedLanguages();
- print "Available translated langauges:\n";
+ print "Available translated languages:\n";
  for my $language(@$trlanguages) {
     print "$language->{language_code}\n"; # language code in iso 639-2
     print "$language->{language_name}\n"; # language name in native script
@@ -161,7 +161,7 @@ sub getTranslatedLanguages {
 Returns a reference to an array of hashes:
 
  my $alllanguages = getAllLanguages();
- print "Available translated langauges:\n";
+ print "Available translated languages:\n";
  for my $language(@$alllanguages) {
     print "$language->{language_code}\n";
     print "$language->{language_name}\n";
