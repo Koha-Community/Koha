@@ -38,10 +38,10 @@ BEGIN {
     $VERSION = 3.02;
     require Exporter;
     @ISA    = qw(Exporter);
-	@EXPORT_OK = qw(&output_ajax_with_http_headers); # More stuff should go here instead
+	@EXPORT_OK = qw(&output_ajax_with_http_headers &is_ajax); # More stuff should go here instead
 	%EXPORT_TAGS = ( all =>[qw(&themelanguage &gettemplate setlanguagecookie pagination_bar
 								&output_ajax_with_http_headers &output_html_with_http_headers)],
-					ajax =>[qw(&output_ajax_with_http_headers)],
+					ajax =>[qw(&output_ajax_with_http_headers is_ajax)],
 					html =>[qw(&output_html_with_http_headers)]
 				);
     push @EXPORT, qw(
@@ -214,20 +214,27 @@ This function returns HTML, without any language dependency.
 =cut
 
 sub pagination_bar {
-    my ( $base_url, $nb_pages, $current_page, $startfrom_name ) = @_;
+	my $base_url = (@_ ? shift : $ENV{SCRIPT_NAME} . $ENV{QUERY_STRING}) or return undef;
+    my $nb_pages       = (@_) ? shift : 1;
+    my $current_page   = (@_) ? shift : undef;	# delay default until later
+    my $startfrom_name = (@_) ? shift : 'page';
 
     # how many pages to show before and after the current page?
     my $pages_around = 2;
 
-    my $url =
-      $base_url . ( $base_url =~ m/[?&]/ ? '&amp;' : '?' ) . $startfrom_name . '=';
-
-    my $pagination_bar = '';
-
-    # current page detection
-    if ( not defined $current_page ) {
-        $current_page = 1;
+	my $delim = qr/\&(?:amp;)?|;/;		# "non memory" cluster: no backreference
+	$base_url =~ s/$delim*\b$startfrom_name=(\d+)//g; # remove previous pagination var
+    unless (defined $current_page and $current_page > 0 and $current_page <= $nb_pages) {
+        $current_page = ($1) ? $1 : 1;	# pull current page from param in URL, else default to 1
+		# $debug and	# FIXME: use C4::Debug;
+		# warn "with QUERY_STRING:" .$ENV{QUERY_STRING}. "\ncurrent_page:$current_page\n1:$1  2:$2  3:$3";
     }
+	$base_url =~ s/($delim)+/$1/g;	# compress duplicate delims
+	$base_url =~ s/$delim;//g;		# remove empties
+	$base_url =~ s/$delim$//;		# remove trailing delim
+
+    my $url = $base_url . ( $base_url =~ m/$delim/ ? '&amp;' : '?' ) . $startfrom_name . '=';
+    my $pagination_bar = '';
 
     # navigation bar useful only if more than one page to display !
     if ( $nb_pages > 1 ) {
@@ -363,6 +370,11 @@ sub output_ajax_with_http_headers ($$) {
         -'Cache-Control' => 'no-cache',
 		-expires =>'-1d',
     ), $js;
+}
+
+sub is_ajax () {
+	my $x_req = $ENV{HTTP_X_REQUESTED_WITH};
+	return ($x_req and $x_req =~ /XMLHttpRequest/i) ? 1 : 0;
 }
 
 END { }    # module clean-up code here (global destructor)
