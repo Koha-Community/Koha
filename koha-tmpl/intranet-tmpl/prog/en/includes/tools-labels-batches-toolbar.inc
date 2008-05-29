@@ -1,4 +1,4 @@
-<!-- TMPL_IF EXPR="(type eq 'labels')" -->
+<!-- TMPL_IF NAME="batch_is_labels" -->
 <div id="toolbar">
 	<script type="text/javascript">
 	//<![CDATA[
@@ -24,7 +24,7 @@ return false;
 			  href: "#",
               label: _("Add item(s) to batch"), 
               container: "additemsc",
-onclick: {fn:function(){Plugin(<!-- TMPL_VAR NAME="batch_id" -->,"<!-- TMPL_VAR NAME="type" -->")}}
+onclick: {fn:function(){Plugin(<!-- TMPL_VAR NAME="batch_id" -->,"<!-- TMPL_VAR NAME="batch_type" -->")}}
           });
 		new YAHOO.widget.Button("deletebatch");
 		new YAHOO.widget.Button("dedup");
@@ -35,12 +35,12 @@ onclick: {fn:function(){Plugin(<!-- TMPL_VAR NAME="batch_id" -->,"<!-- TMPL_VAR 
 	</script>
 	<ul class="toolbar">
 	<li id="additemsc"><a id="additems" href="#">Add item(s) to batch</a></li>
-	<li><a id="deletebatch" href="/cgi-bin/koha/labels/label-manager.pl?op=delete_batch&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">Delete current batch</a></li>
+	<li><a id="deletebatch" href="/cgi-bin/koha/labels/label-manager.pl?op=delete_batch&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="batch_type" -->">Delete current batch</a></li>
 				<!-- FIXME: should use POST to change server state, not GET -->
-	<li><a id="dedup" href="/cgi-bin/koha/labels/label-manager.pl?op=deduplicate&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">Remove duplicate barcodes</a></li>
-	<li><a id="generate" href="/cgi-bin/koha/labels/label-print-pdf.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">Generate PDF for Batch</a></li>
+	<li><a id="dedup" href="/cgi-bin/koha/labels/label-manager.pl?op=deduplicate&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="batch_type" -->">Remove duplicates</a></li>
+	<li><a id="generate" href="/cgi-bin/koha/labels/label-print-pdf.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="batch_type" -->">Generate PDF for Batch</a></li>
 </ul></div>
-<!-- TMPL_ELSIF EXPR="(type eq 'patroncards')" -->
+<!-- TMPL_ELSIF NAME="batch_is_patroncards" -->
 <div id="toolbar">
 	<script type="text/javascript">
 	//<![CDATA[
@@ -66,7 +66,7 @@ onclick: {fn:function(){Plugin(<!-- TMPL_VAR NAME="batch_id" -->,"<!-- TMPL_VAR 
             href: "#",
             label: _("Add patron(s) to batch"), 
             container: "addpatronsc",
-onclick: {fn:function(){Plugin(<!-- TMPL_VAR NAME="batch_id" -->,"<!-- TMPL_VAR NAME="type" -->"); }}
+onclick: {fn:function(){Plugin(<!-- TMPL_VAR NAME="batch_id" -->,"<!-- TMPL_VAR NAME="batch_type" -->"); }}
         });
 		new YAHOO.widget.Button("deletebatch");
 		new YAHOO.widget.Button("dedup");
@@ -76,10 +76,10 @@ onclick: {fn:function(){Plugin(<!-- TMPL_VAR NAME="batch_id" -->,"<!-- TMPL_VAR 
 	//]]>
 	</script>
 	<ul class="toolbar">
-	<li id="addpatronsc"><a id="addpatrons" href="#">Add item(s) to batch</a></li>
-	<li><a id="deletebatch" href="/cgi-bin/koha/labels/label-manager.pl?op=delete_batch&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">Delete current batch</a></li>
+	<li id="addpatronsc"><a id="addpatrons" href="#">Add patron(s) to batch</a></li>
+	<li><a id="deletebatch" href="/cgi-bin/koha/labels/label-manager.pl?op=delete_batch&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="batch_type" -->">Delete current batch</a></li>
 				<!-- FIXME: should use POST to change server state, not GET -->
-	<li><a id="dedup" href="/cgi-bin/koha/labels/label-manager.pl?op=deduplicate&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">Remove duplicate patrons</a></li>
-	<li><a id="generate" href="/cgi-bin/koha/labels/label-print-pdf.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">Generate PDF for Batch</a></li>
+	<li><a id="dedup" href="/cgi-bin/koha/labels/label-manager.pl?op=deduplicate&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="batch_type" -->">Remove duplicates</a></li>
+	<li><a id="generate" href="/cgi-bin/koha/labels/label-print-pdf.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="batch_type" -->">Generate PDF for Batch</a></li>
 </ul></div>
 <!-- /TMPL_IF -->

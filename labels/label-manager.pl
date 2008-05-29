@@ -41,7 +41,8 @@ my $printingtype   = $query->param('printingtype');
 my $guidebox       = $query->param('guidebox');
 my $fontsize       = $query->param('fontsize');
 my $formatstring   = $query->param('formatstring');
-my $batch_type     = $query->param('type') || 'labels';
+my $batch_type     = $query->param('type');
+($batch_type and $batch_type eq 'patroncards') or $batch_type = 'labels';
 my @itemnumber;
 ($batch_type eq 'labels') ? (@itemnumber = $query->param('itemnumber')) : (@itemnumber = $query->param('borrowernumber'));
 
@@ -112,19 +113,19 @@ elsif  ( $op eq 'add_layout' ) {
 # FIXME: The trinary conditionals here really need to be replaced with a more robust form of db abstraction -fbcit
 
 elsif ( $op eq 'add' ) {   # add item
-	my $query2 = "INSERT INTO labels (itemnumber, batch_id) values ( ?,? )";
+	my $query2 = ($batch_type eq 'patroncards') ? 
+		"INSERT INTO patroncards (borrowernumber, batch_id) values (?,?)" :
+		"INSERT INTO labels      (itemnumber,     batch_id) values (?,?)" ;
 	my $sth2   = $dbh->prepare($query2);
 	for my $inum (@itemnumber) {
-            # warn "INSERTing " . (($batch_type eq 'labels') ? 'itemnumber' : 'borrowernumber') . ":$inum for batch $batch_id";
+		# warn "INSERTing " . (($batch_type eq 'labels') ? 'itemnumber' : 'borrowernumber') . ":$inum for batch $batch_id";
 	    $sth2->execute($inum, $batch_id);
 	}
-	$sth2->finish;
 }
 elsif ( $op eq 'deleteall' ) {
 	my $query2 = "DELETE FROM $batch_type";
 	my $sth2   = $dbh->prepare($query2);
 	$sth2->execute();
-	$sth2->finish;
 }
 elsif ( $op eq 'delete' ) {
 	my @labelids = $query->param((($batch_type eq 'labels') ? 'labelid' : 'cardid'));
@@ -135,7 +136,6 @@ elsif ( $op eq 'delete' ) {
 	$debug and push @messages, "query2: $query2 -- (@labelids)";
 	my $sth2   = $dbh->prepare($query2);
 	$sth2->execute(@labelids);
-	$sth2->finish;
 }
 elsif ( $op eq 'delete_batch' ) {
 	delete_batch($batch_id, $batch_type);
@@ -180,8 +180,11 @@ if (scalar @messages) {
 	}
 	$template->param(message_loop => \@complex);
 }
+if ($batch_type eq 'labels' or $batch_type eq 'patroncards') {
+	$template->param("batch_is_$batch_type" => 1);
+}
 $template->param(
-    type                        => $batch_type,		# FIXME: type is an otherwise RESERVED template variable with 2 valid values: 'opac' and 'intranet'
+    batch_type                  => $batch_type,
     batch_id                    => $batch_id,
     batch_count                 => scalar @resultsloop,
     active_layout_name          => $active_layout_name,

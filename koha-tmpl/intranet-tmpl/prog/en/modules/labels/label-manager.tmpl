@@ -1,11 +1,11 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo; Tools &rsaquo; Labels &rsaquo; <!-- TMPL_IF EXPR="(type eq 'labels')" -->Label Batch<!-- TMPL_ELSIF EXPR="(type eq 'patroncards')" -->Patron Card Batch<!-- /TMPL_IF --></title>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo; Tools &rsaquo; Labels &rsaquo; <!-- TMPL_IF NAME="batch_is_labels" -->Label<!-- TMPL_ELSIF NAME="batch_is_patroncards" -->Patron Card<!-- TMPL_ELSE -->Unknown Batchtype<!-- /TMPL_IF --> Batch</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/labels/label-home.pl">Labels</a> &rsaquo; <!-- TMPL_IF EXPR="(type eq 'labels')" -->Label Batch<!-- TMPL_ELSIF EXPR="(type eq 'patroncards')" -->Patron Card Batch<!-- /TMPL_IF --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/labels/label-home.pl">Labels</a> &rsaquo; <!-- TMPL_IF NAME="batch_is_labels" -->Label<!-- TMPL_ELSIF NAME="batch_is_patroncards" -->Patron Card<!-- TMPL_ELSE -->Unknown Batchtype<!-- /TMPL_IF --> Batch</div>
  <div id="doc3" class="yui-t2">
   <div id="bd">
    <div id="yui-main">
@@ -19,9 +19,9 @@
 
 <!-- TMPL_IF NAME="batch_id" -->
 <!-- TMPL_INCLUDE NAME="tools-labels-batches-toolbar.inc" -->
-<!-- TMPL_IF EXPR="(type eq 'labels')" -->
 <div class="yui-g">
     <div class="yui-u first">
+<!-- TMPL_IF NAME="batch_is_labels" -->
     <h2>Items to be Printed for Batch <!-- TMPL_VAR NAME="batch_id" -->  (<!-- TMPL_VAR NAME="batch_count" -->  items)</h2>
     <table>
         <tr>
@@ -42,10 +42,7 @@
         </tr>
         <!-- /TMPL_LOOP -->
     </table>
-    </div>
-<!-- TMPL_ELSIF EXPR="(type eq 'patroncards')" -->
-<div class="yui-g">
-    <div class="yui-u first">
+<!-- TMPL_ELSIF NAME="batch_is_patroncards" -->
     <h2>Patron Cards to be Printed for Batch <!-- TMPL_VAR NAME="batch_id" -->  (<!-- TMPL_VAR NAME="batch_count" -->  items)</h2>
     <table>
         <tr>
@@ -66,18 +63,20 @@
         </tr>
         <!-- /TMPL_LOOP -->
     </table>
+<!-- TMPL_ELSE -->
+	<span class="error">Error: Unknown Batch Type &quot;<!-- TMPL_VAR NAME="batch_type" -->&quot;
+<!-- /TMPL_IF -->
     </div>
-<!-- /TMPL_IF --><!-- /type -->
     <div class="yui-u">
         <!-- TMPL_INCLUDE NAME="label-status.inc" -->
     </div>
 </div>
 <!-- TMPL_ELSE -->
 <!-- TMPL_INCLUDE NAME="tools-labels-toolbar.inc" -->
-<!-- TMPL_IF EXPR="(type eq 'labels')" -->
-<!-- TMPL_IF NAME="batches" -->
+<!-- TMPL_IF NAME="batch_is_labels" -->
     <div class="yui-g">
         <div class="yui-u first">
+<!-- TMPL_IF NAME="batches" -->
             <h2>Label Batches</h2>
             <table>
                 <tr>
@@ -97,30 +96,23 @@
                 </tr>
                 <!-- /TMPL_LOOP -->
             </table>
-        </div>
-        <div class="yui-u">
-        <!-- TMPL_INCLUDE NAME="label-status.inc" -->
-        </div>
-    </div>
 <!-- TMPL_ELSE -->
-    <div class="yui-g">
-        <div class="yui-u first">
             <fieldset class="brief">
             <legend>No Label Batches Currently Defined</legend>
             <div class="hint">
                 Select "New Label Batch" to create a Label batch.
             </div>
             </fieldset>
+<!-- /TMPL_IF --><!-- /batches -->
         </div>
         <div class="yui-u">
         <!-- TMPL_INCLUDE NAME="label-status.inc" -->
         </div>
     </div>
-<!-- /TMPL_IF --><!-- /batches -->
-<!-- TMPL_ELSIF EXPR="(type eq 'patroncards')" -->
-<!-- TMPL_IF NAME="batches" -->
+<!-- TMPL_ELSIF NAME="batch_is_patroncards" -->
     <div class="yui-g">
         <div class="yui-u first">
+<!-- TMPL_IF NAME="batches" -->
             <h2>Patron Card Batches</h2>
             <table>
                 <tr>
@@ -140,26 +132,19 @@
                 </tr>
                 <!-- /TMPL_LOOP -->
             </table>
-        </div>
-        <div class="yui-u">
-            <!-- TMPL_INCLUDE NAME="label-status.inc" -->
-        </div>
-    </div>
 <!-- TMPL_ELSE -->
-    <div class="yui-g">
-        <div class="yui-u first">
             <fieldset class="brief">
             <legend>No Patron Card Batches Currently Defined</legend>
             <div class="hint">
                 Select "New Patron Card Batch" to create a Label batch.
             </div>
             </fieldset>
+<!-- /TMPL_IF --><!-- /batches -->
         </div>
         <div class="yui-u">
             <!-- TMPL_INCLUDE NAME="label-status.inc" -->
         </div>
     </div>
-<!-- /TMPL_IF --><!-- /batches -->
 <!-- /TMPL_IF --><!-- /type -->
 <!-- /TMPL_IF --><!-- batch_id -->
 </div>

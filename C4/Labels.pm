@@ -296,25 +296,23 @@ sub get_text_fields {
  else, return the next available batch_id.
 =return
 =cut
-sub add_batch {
-    my ( $batch_type,$batch_list ) = @_;
-    my $new_batch;
+sub add_batch ($;$) {
+	my $table = (@_ and 'patroncards' eq shift) ? 'patroncards' : 'labels';
+    my $batch_list = (@_) ? shift : undef;
     my $dbh = C4::Context->dbh;
-    my $q ="SELECT MAX(DISTINCT batch_id) FROM $batch_type";
+    my $q ="SELECT MAX(DISTINCT batch_id) FROM $table";
     my $sth = $dbh->prepare($q);
     $sth->execute();
-    my ($batch_id) = $sth->fetchrow_array;
-    $sth->finish;
-	if($batch_id) {
-		$batch_id++;
-	} else {
-		$batch_id = 1;
-	}
-	# TODO: let this block use $batch_type
-	if(ref($batch_list) && ($batch_type eq 'labels') ) {
-	 	my $sth = $dbh->prepare("INSERT INTO labels (`batch_id`,`itemnumber`) VALUES (?,?)"); 
-		for my $item (@$batch_list) {
-			$sth->execute($batch_id,$item);
+    my ($batch_id) = $sth->fetchrow_array || 0;
+	$batch_id++;
+	if ($batch_list) {
+		if ($table eq 'patroncards') {
+	 		$sth = $dbh->prepare("INSERT INTO $table (`batch_id`,`borrowernumber`) VALUES (?,?)"); 
+		} else {
+	 		$sth = $dbh->prepare("INSERT INTO $table (`batch_id`,`itemnumber`    ) VALUES (?,?)"); 
+		}
+		for (@$batch_list) {
+			$sth->execute($batch_id,$_);
 		}
 	}
 	return $batch_id;
@@ -323,31 +321,19 @@ sub add_batch {
 #FIXME: Needs to be ported to receive $batch_type
 # ... this looks eerily like add_batch() ...
 sub get_highest_batch {
-    my $new_batch;
-    my $dbh = C4::Context->dbh;
+	my $table = (@_ and 'patroncards' eq shift) ? 'patroncards' : 'labels';
     my $q =
-      "select distinct batch_id from labels order by batch_id desc limit 1";
-    my $sth = $dbh->prepare($q);
+      "select distinct batch_id from $table order by batch_id desc limit 1";
+    my $sth = C4::Context->dbh->prepare($q);
     $sth->execute();
-    my $data = $sth->fetchrow_hashref;
-    $sth->finish;
-
-    if ( !$data->{'batch_id'} ) {
-        $new_batch = 1;
-    }
-    else {
-        $new_batch =  $data->{'batch_id'};
-    }
-
-    return $new_batch;
+    my $data = $sth->fetchrow_hashref or return 1;
+	return ($data->{'batch_id'} || 1);
 }
 
 
-sub get_batches {
-	# my $q   = "SELECT batch_id, COUNT(*) AS num FROM " . shift . " GROUP BY batch_id";
-    # FIXEDME:  There is only ONE table with batch_id, so why try to select a different one?
-	# get_batches() was frequently being called w/ no args, crashing DBD
-    my $q   = "SELECT batch_id, COUNT(*) AS num FROM labels GROUP BY batch_id";
+sub get_batches (;$) {
+	my $table = (@_ and 'patroncards' eq shift) ? 'patroncards' : 'labels';
+    my $q   = "SELECT batch_id, COUNT(*) AS num FROM $table GROUP BY batch_id";
     my $sth = C4::Context->dbh->prepare($q);
     $sth->execute();
 	my $batches = $sth->fetchall_arrayref({});
