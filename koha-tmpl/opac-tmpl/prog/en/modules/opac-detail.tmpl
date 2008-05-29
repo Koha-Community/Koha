@@ -18,6 +18,7 @@
 		});
 		
 	    <!-- TMPL_IF NAME="GoogleJackets" -->KOHA.Google.GetCoverFromIsbn();<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="TagsEnabled" -->$(".tagbutton").click(KOHA.Tags.add_tag_button);<!-- /TMPL_IF -->
 
 	}); 
 //]]>
@@ -193,13 +194,13 @@
 		<span class="label" id="addtagl"><a href="#">Add</a></span>
          <form name="tagform<!-- TMPL_VAR NAME="biblionumber" -->" method="post" action="/cgi-bin/koha/opac-tags.pl" id="tagform">
                 <label for="newtag<!-- TMPL_VAR NAME="biblionumber" -->">New:</label><input name="newtag<!-- TMPL_VAR NAME="biblionumber" -->" id="newtag<!-- TMPL_VAR NAME="biblionumber" -->" maxlength="100" />
-                <input name="tagbutton" class="input tagbutton" type="submit" value="Add" />
+                <input name="tagbutton" class="input tagbutton" title="<!-- TMPL_VAR NAME="biblionumber" -->" type="submit" value="Add" />
 				<a href="#">Cancel</a>
             </form>
-            <br />
-            <span id="tagstatus<!-- TMPL_VAR NAME="biblionumber" -->" class="tagstatus" style="display:none;">
+            <span id="newtag<!-- TMPL_VAR NAME="biblionumber" -->_status" class="tagstatus" style="display:none;">
                 Tag status here.
             </span>
+            <br />
         <!-- /TMPL_IF -->
         </div>
     <!-- /TMPL_IF -->

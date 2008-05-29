@@ -69,7 +69,7 @@ KOHA.Tags = {
 	scrubbed_all_bad : function(arg) {return ("Error! Your tag was entirely markup code.  It was NOT added.  Please try again with plain text.");},
 	badparam : function(arg) {return ("Error! Illegal parameter '" +arg+ "'.");},
 	scrubbed : function(arg) {return ("Note: your tag contained markup code that was removed. The tag was added as '" +arg+ "'.");},
-    failed_add_tag : function(arg) {return ("Error! The add_tag operation failed on '" +arg+ "'.");},
+    failed_add_tag : function(arg) {return ("Error! The add_tag operation failed on '" +arg+ "'.  Note: you can only tag an item with a given term once.  Check 'My Tags' to see your current tags.");},
     failed_delete  : function(arg) {return ("Error! You cannot delete the tag '" +arg+ "'.  Note: you can only delete your own tags.");},
 	},
 };

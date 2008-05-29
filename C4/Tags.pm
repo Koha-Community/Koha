@@ -531,18 +531,25 @@ sub add_tag ($$;$$) {	# biblionumber,term,[borrowernumber,approvernumber]
 	my $biblionumber = shift or return undef;
 	my $term         = shift or return undef;
 	my $borrowernumber = (@_) ? shift : 0;		# the user, default to kohaadmin
-
-	# first, add to tags regardless of approaval
+	$term =~ s/^\s+//;
+	$term =~ s/\s+$//;
+	($term) or return undef;	# must be more than whitespace
+	my $rows = get_tag_rows({biblionumber=>$biblionumber, borrowernumber=>$borrowernumber, term=>$term, limit=>1});
 	my $query = "INSERT INTO tags_all
 	(borrowernumber,biblionumber,term,date_created)
 	VALUES (?,?,?,NOW())";
 	$debug and print STDERR "add_tag query:\n $query\n",
 							"add_tag query args: ($borrowernumber,$biblionumber,$term)\n";
+	if (scalar @$rows) {
+		$debug and carp "Duplicate tag detected.  Tag not added.";	
+		return undef;
+	}
+	# add to tags_all regardless of approaval
 	my $sth = C4::Context->dbh->prepare($query);
 	$sth->execute($borrowernumber,$biblionumber,$term);
 
 	# then 
-	if (@_) { 	# if an arg remains, it is the borrowernumber of the approver: tag is pre-approved.
+	if (@_) { 	# if an arg remains, it is the borrowernumber of the approver: tag is pre-approved.  Note, whitelist unaffected.
 		my $approver = shift;
 		add_tag_approval($term,$approver);
 		add_tag_index($term,$biblionumber,$approver);
@@ -620,12 +627,19 @@ trying to calculate that and the "weight" (number of times a tag appears) on the
 	biblionumber   - book record it is attached to
 	weight         - number of times tag applied by any user
 
-tags_blacklist - TODO
+tags_blacklist - A set of regular expression filters.  Unsurprisingly, these should be perl-
+compatible (PCRE) for your version of perl.  Since this is a blacklist, a term will be
+blocked if it matches any of the given patterns.  WARNING: do not add blacklist regexps
+if you do not understand their operation and interaction.  It is quite easy to define too
+simple or too complex a regexp and effectively block all terms.  The blacklist operation is 
+fairly resource intensive, since every line of tags_blacklist will need to be read and compared.
+It is recommended that tags_blacklist be used minimally, and only by an administrator with an
+understanding of regular expression syntax and performance.
 
-So the best way to think about the different tabes is that they are each tailored to a certain
+So the best way to think about the different tables is that they are each tailored to a certain
 use.  Note that tags_approval and tags_index do not rely on the user's borrower mapping, so
-the tag population can continue to grow even if a user is removed, along with the corresponding
-rows in tags_all.  
+the tag population can continue to grow even if a user (along with their corresponding
+rows in tags_all) is removed.  
 
 =head2 Tricks
 
@@ -664,8 +678,10 @@ mysql> select biblionumber from biblio where title LIKE "%Health%";
 +--------------+
 26 rows in set (0.00 sec)
 
-Then, take those numbers and type them into this perl command line:
+Then, take those numbers and type/pipe them into this perl command line:
 perl -ne 'use C4::Tags qw(get_tags add_tag); use Data::Dumper;chomp; add_tag($_,"health",51,1); print Dumper get_tags({limit=>5,term=>"health",});'
+
+Note, the borrowernumber in this example is 51.  Use your own or any arbitrary valid borrowernumber.
 
 =cut
 
