@@ -144,7 +144,7 @@ if (alreadyreserved > "0"){
       <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="borrowerfirstname" --> <!-- TMPL_VAR NAME="borrowersurname" --> </a>'s <strong>account has expired</strong></li>
     <!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="diffbranch" --><h3>Branch Mismatch</h3>
+<!-- TMPL_IF NAME="diffbranch" --><h3>Pickup Library Mismatch</h3>
       <li> <strong>Pickup library is different</strong> than <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="borrowerfirstname" --> <!-- TMPL_VAR NAME="borrowersurname" --> </a>'s home library (<!-- TMPL_VAR NAME="borrower_branchname" --> / <!-- TMPL_VAR NAME="borrower_branchcode" --> )</li>
     <!-- /TMPL_IF -->
 </ul></div>

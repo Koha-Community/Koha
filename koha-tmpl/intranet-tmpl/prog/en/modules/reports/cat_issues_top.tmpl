@@ -192,14 +192,14 @@ function Dopop(link) {
 									}
 								);
 							</script></li>
-				<li><label for="branch">Branch: </label>
-<select name="Filter" id="branch"><option value="" > Any Branch</option>
+				<li><label for="branch">Library: </label>
+<select name="Filter" id="branch"><option value="" > Any Library</option>
     <!--TMPL_LOOP Name="branchloop"-->
         <option value="<!--TMPL_VAR Name="value"-->" ><!--TMPL_VAR Name="branchname"--> </option>  
      <!--/TMPL_LOOP --> 
     </select>     </li>
       <li> 
-        <label for="documenttype">Document Type: </label><select name="Filter" id="documenttype"><option value="" > Any Document type</option>
+        <label for="documenttype">Item Type: </label><select name="Filter" id="documenttype"><option value="" > Any item type</option>
     <!--TMPL_LOOP Name="itemtypeloop"-->
         <option value="<!--TMPL_VAR Name="value"-->" ><!--TMPL_VAR Name="description"--> </option>  
      <!--/TMPL_LOOP --> 
@@ -233,7 +233,7 @@ function Dopop(link) {
 					</select></li>
 	<li><label for="criteria">By: </label><select name="Criteria" id="criteria">
 						<option value ="" selected="selected">None</option>
-						<option value ="issuingbranch">Branch</option>
+						<option value ="issuingbranch">Library</option>
 						<option value ="categorycode">Categorycode</option>
 						<option value ="itemtype">Itemtype</option>
 						<option value ="Day">Day</option>
