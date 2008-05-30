@@ -1,0 +1,49 @@
+if you
+- just installed a fresh debian etch
+- want to install koha
+- don't want to strugle with apt configuration, weird dependancies conflit,
+  and cpan install modules
+this script does it for you
+
+note:
+    french doc. is more detailled for the moment (i apologize).
+
+warning:
+    Even if etch is always prefered, this script installs some lenny packages. 
+    If you don't want to mix distribs for any reason, please don't use this script.
+
+required:
+	locales have to be allready configured configured
+
+recommends:
+
+	 .
+	/!\ koha needs a local MTA. By default, courier-mta will be installed.
+	    I recommend postfix but i won't decide for you (the choice of the MTA
+	    relies on too many parameters).
+
+	if you want to know the alternatives, type
+	aptitude search '~Dprovides:mail-transport-agent'
+
+go:
+	- edit the first lines of the script to set some environement variables
+	  (you can also use export to set variables out of the script)
+	- from the shell, type
+		sh install_koha_from_on_fesh_etch [install flags]
+
+		flags are
+		t: install koha from release or beta tarballs (default is git)
+		b: install koha from beta tarballs (default is git)
+		c: debian is still configured. It means that you exactly know the
+		    required sources and the script asumes that those sources are
+		    configured
+
+	- answer to the questions
+
+it's ready to use ...
+
+TODO:
+- improve this documentation
+
+
+

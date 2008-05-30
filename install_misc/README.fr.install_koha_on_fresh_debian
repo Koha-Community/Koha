@@ -1,0 +1,84 @@
+Ce script installe koha3 sur une debian etch (stable) nouvellement installée.
+
+1. Avertissement
+
+Ce script configure automatiquement le comportement du gestionnaire de paquet comme suit:
+
+- permet l'installation de paquets en provenance de lenny (debian testing)
+- configure aptitude pour préférer les paquets etch
+- configure aptitude pour ignorer les paquets recommandés par les dépendances
+  (ils ne seront ni installés, ni déinstallés automatiquement), ce qui correspond
+  au comportement standard des apt-tools.
+
+Si, pour l'une ou l'autre raison, vous ne souhaitez pas mélanger les distributions:
+  NE PAS UTILISER CE SCRIPT
+
+Toutefois, il est recommandé par les développeurs koha d'utiliser au maximum
+les paquets debian. Ce que fait ce script.
+
+Si vous avez deja configuré les sources à votre convenance et que les sources
+d'indexdata et de lenny sont bien disponibles, utilisez le modificateur c.
+Votre configuration ne sera alors pas altérée.
+
+    sh install_koha_on_fresh_debian g
+
+2. Prérequis
+
+Les locales doivent être correctement configurées.
+
+Il est fortement conseillé d'installer un MTA (nécessaire à koha) avant de lancer
+l'installation de koha. Cela vous permet de faire votre choix.
+
+Sachant que:
+- debian installe courier par defaut
+- je vous conseillerais postfix
+- un puriste exigerait sendmail
+- en pratique, le choix se fait en fonction des spécificités de votre site parmis
+  les nombreux MTA proposés par debian
+
+  pour voir la liste des MTA:
+
+	aptitude search '~Dprovides:mail-transport-agent'
+  
+  pour voir si un MTA est deja installé 
+
+	aptitude search '~i~Dprovides:mail-transport-agent'
+  
+3. Installation de koha
+
+Le script nécessite les droits root. lancer l'installation:
+
+    sh install_koha_on_fresh_debian [modificateurs]
+
+les modificateurs sont:
+
+b: installer koha grace au tarball du site koha.org
+c: ne pas configurer le systeme de paquet debian
+
+ils sont regroupés (sans espace), ainsi
+
+    sh install_koha_on_fresh_debian cb
+
+prend les deux modificateurs en compte
+
+    sh install_koha_on_fresh_debian c b # FAUX
+
+ne prend que c en compte
+
+Par défaut, le script utilise git pour télécharger les sources de koha. Nous
+conseillons de conserver ce paramètre et de selectionner [dev] comme type
+d'installation lorsque cela vous sera demandé. Ce choix vous permet de mettre
+koha à jour par un simple git pull.
+
+Si vous préférez utiliser le tarball disponible sur le site de koha.org,
+utilisez le modificateur b: 
+
+    sh install_koha_on_fresh_debian b
+
+	- answer to the questions
+
+4. Questions, contact
+
+N'hésitez pas à me contacter (marc.chantreux [at] biblibre.com) pour toute
+question relative à l'utilisation de ce script ou a consulter
+http://www.biblibre.com pour obtenir un support professionel pour koha.

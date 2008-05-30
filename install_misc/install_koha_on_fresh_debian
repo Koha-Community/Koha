@@ -1,0 +1,533 @@
+# $Id:$ vim: fdm=marker
+
+# Licensed under the GPL
+# Copyright 2008 Biblibre.com
+# Koha library project  www.koha.org
+#
+# this script follow all the installtion procedure described in INSTALL.Debian
+# with some additions to use lenny packages.
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+#
+# TODO:
+# - search and destroy all TODO in this file
+# - detect country or locale to choose lang and marc by default for koha install
+#   (fr, unimarc) 
+# - detect country or locale to choose translator
+
+# abort if anything wrong
+set -e
+
+: ${DB_TYPE:=mysql}
+: ${DB_HOST:=localhost}
+: ${DB_NAME:=koha}    
+: ${DB_USER:=kohaadmin}
+: ${DB_PASS:=katikoan}
+
+: ${INSTALL_ZEBRA:=yes}
+: ${INSTALL_SRU:=yes}
+: ${INSTALL_PAZPAR2:=no}
+: ${AUTH_INDEX_MODE:=grs1}
+
+: ${INSTALL_MODE:=standard}
+
+: ${ZEBRA_MARC_FORMAT:=marc21}
+: ${ZEBRA_LANGUAGE:=en}
+: ${ZEBRA_USER:=kohauser}
+: ${ZEBRA_PASS:=zebrastripes}
+: ${ZEBRA_SRU_HOST:=localhost}
+: ${ZEBRA_SRU_BIBLIOS_PORT:=9998}
+: ${ZEBRA_SRU_AUTHORITIES_PORT:=9999}
+
+: ${KOHA_USER:=koha}
+: ${KOHA_GROUP:=koha}
+
+
+: ${MERGE_SERVER_HOST:=localhost}
+: ${MERGE_SERVER_PORT:=11001}
+
+: ${PAZPAR2_HOST:=localhost}
+: ${PAZPAR2_PORT:=11002}
+
+: ${KOHA_SRC_DIR:=/usr/local/src}
+: ${KOHA_SRC_BASE:=koha}
+KOHA_SRC_PATH="$KOHA_SRC_DIR/$KOHA_SRC_BASE"
+: ${GET_KOHA_SRC_METHOD:=git}
+
+# repo that is used by configure_lenny_sources
+# FIXME: comment this before update
+LENNY_FLAVORS="testing main non-free contrib" 
+
+GET_KOHA_LOG=/dev/null
+
+# functions declarations {{{
+
+ask_yn () {
+	local ans
+	echo
+	echo
+	echo "$*" 
+	while echo '(y/n)' && read ans; do
+		[ x"$ans" = xn ] && return 1
+		[ x"$ans" = xy ] && return 0
+	done
+}
+
+# perlish warn
+warn () { echo "$*" >&2
+}
+
+# $1 is errorlevel
+# the rest is an error message
+die () {
+    err=$1
+    shift
+    warn "$*"
+    exit $err
+}
+
+add_package () {
+# add a list of names of packages to be installed 
+# exemple: add_package screen zsh 
+# or     : echo screen zsh | add_package 
+	local deb 
+	if [ "$1" ]; then
+	    for deb in $@; do
+		    echo $deb >&3
+	    done
+	else
+	    cat >&3
+	fi
+}
+
+open_package_list () {
+    PACKAGELIST=$(mktemp)
+    # write in fd3 to add a name of required package
+    exec 3>$PACKAGELIST
+}
+
+install_package_list () {
+    # close the list
+    exec 3>&-
+    # install it
+    xargs -a $PACKAGELIST aptitude install
+    # remove it
+    rm $PACKAGELIST
+}
+
+configure_indexdata_sources () {
+    
+    # Add indexdata packages to the apt sources
+    echo ' # Sources for yaz and idzebra
+    deb http://ftp.indexdata.dk/debian etch main
+    ' > /etc/apt/sources.list.d/indexdata.sources.list
+    
+    # install indexdata key (to make indexdata sources usable)
+    wget -O- http://ftp.indexdata.dk/debian/indexdata.asc |
+	    apt-key add - || die 1 "can't get indexdata sources"
+
+}
+
+configure_lenny_using_apt_spy () {
+    dpkg -l apt-spy ||
+	aptitude -y install apt-spy
+    apt-spy -d lenny
+}
+
+# TODO:
+# configure_lenny_using_etch_mirror () { 
+# sed /etc/apt/sources.list > \
+# /etc/apt/sources.list.d/testing.sources.list
+# need to handle $@ for this 
+# }
+
+add_default_lenny_repro () {
+    echo "deb $LENNY_REPO $LENNY_FLAVORS" > \
+	/etc/apt/sources.list.d/testing.sources.list
+}
+
+ask_for_lenny_repo () {
+	echo 'type the url of the repository to use for lenny packages. Be sure that is a valid debian repository.
+	for example http://ftp.fr.debian.org/debian/'
+	read LENNY_REPO
+	add_default_lenny_repro
+}
+
+configure_lenny () {
+    local howto
+    if [ "$LENNY_REPO" ]; then
+	add_default_lenny_repro
+    else
+	echo '$LENNY_REPO not set, what do you want to do now'
+	select howto in \
+		'manually set LENNY_REPO
+		' \
+		'get and use apt-spy to automatically find a repository
+		(it can take some times)
+		' \
+		'let sources.list as it (still configured)' \
+		'leave the installation' 
+	do
+		case "$howto" in
+
+			*manually*)
+				ask_for_lenny_repo
+				break
+			;;
+
+			*automatically*)
+				configure_lenny_using_apt_spy
+				break
+			;;
+
+			*configured*)
+				break
+			;;
+
+			*leave*)
+				exit
+			;;
+		esac
+	done
+    fi
+}
+
+configure_aptitude_correctly () {
+# configure aptitude to behave as old apt tools and
+# use etch packages by default
+cat << CONFAPT >  /etc/apt/apt.conf.d/Apt
+APT {
+    Default-Release "stable";
+    Cache-Limit 20000000;
+}
+
+Aptitude {
+    Recommends-Important false;
+    Keep-Recommends false;
+}
+CONFAPT
+}
+
+
+set_libxml_parser () {
+    # TODO: update-perl-sax-parsers --priority since lib-xml-sax-perl 0.16
+	sed -i '
+		# when XML::LibXML::SAX::Parser header detected
+		# move the 2 lines in the hold space
+		/[[]XML::LibXML::SAX::Parser[]]/ {
+			N;H;d
+		}
+
+		# replace end of file by hold space
+		$ { p;x }
+	' /etc/perl/XML/SAX/ParserDetails.ini
+}
+
+verify_sax_parser () {
+    local r
+    r=`perl -MXML::SAX::ParserFactory -e 'print ref XML::SAX::ParserFactory->parser'`
+    test "$r" = XML::LibXML::SAX::Parser || set_libxml_parser
+}
+
+create_debian_koha_user() {
+# TODO: use $KOHA_GROUP
+echo ----------------------
+echo add the system user and group for koha.
+echo your choice: $1
+echo ----------------------
+adduser $1
+}
+
+apache_add_ports () {
+	local ports ports_conf needed
+	ports_conf="${1:-/etc/apache2/ports.conf}"
+	ports=`sed -n 's/Listen[\t ]\([0-9]\+\)/\1/p' "$ports_conf"` 
+	{ for needed in 80 8080; do
+		expr "$ports" : '.*\<\('$needed'\)\>.*' > /dev/null ||
+			echo "# Added by koha installer
+Listen $needed
+"
+	done } >> "$ports_conf" 
+}
+
+get_koha_git_clone () {
+    # /!\ be carrefull to be in the good directory
+    # /usr/local/src/ recommended
+    local base="${1:-koha}"
+
+    dpkg -l git-core ||
+	aptitude -y  install git-core git-email
+    git clone git://git.koha.org/pub/scm/koha.git "$base"
+}
+
+get_koha_release () {
+    wget -O- http://download.koha.org/koha-3.00.00.tar.gz |
+	tar xzf - 
+}
+
+get_koha_beta () {
+    # /!\ be carrefull to be in the good directory
+    # /usr/local/src/ recommended
+
+    local method base
+    base="$1"
+    method="${2:-beta}"
+
+    get_koha_release "$base" && return 0
+    [ $method = tar ] && return 1 
+
+    local i basename; i=2
+    while [ $i != 11 ]; do
+	basename=koha-3.00.00-beta$i
+	wget -O- http://download.koha.org/$basename.tar.gz |
+	    tar xzf - &&
+		mv $basename "$base" &&
+		return 0
+	let i+=1
+    done
+
+    return 1 
+}
+
+get_koha_sources () {
+    # /!\ be carrefull to be in the good directory
+    # /usr/local/src/ recommended
+    local method base
+    method="${2:-git}"
+    base="$1"
+
+    case "$method" in
+	git) get_koha_git_clone $base
+	;;
+	tar)
+		get_koha_release "$base" ||
+			die 1 koha not found
+	;;
+	beta) get_koha_beta "$base" "$method" ||
+			die 1 koha not found
+	;;
+	*) : # TODO: error message and exit 
+	;;
+    esac
+}
+
+# end of function declarations }}}
+
+if [ -e "$KOHA_SRC_PATH" ];then
+    if ask_yn "$KOHA_SRC_PATH still exists. use it ?"; then
+	    ask_yn "download the sources again ?" ||
+		PLEASE_DONT_GET=1
+    else 
+	    exit
+    fi
+else 
+	[ -d "$KOHA_SRC_DIR" ] ||
+		die 1 "$KOHA_SRC_DIR is not a directory"
+fi
+
+# parsing arguments {{{
+# TODO: document it
+# TODO: this won't work with real bourne shell (use expr instead)
+if [ "$1" ]; then
+    [ "$1" = *b* ] && GET_KOHA_SRC_METHOD=beta
+    [ "$1" = *t* ] && GET_KOHA_SRC_METHOD=tar
+    [ "$1" = *c* ] && DEBIAN_STILL_CONFIGURED=yes
+fi
+
+# TODO: remove it ? 
+goto_koha_path () {
+    cd $KOHA_SRC_PATH && return 0
+    cd $KOHA_SRC_DIR
+    local candidate
+    local done
+    done=no
+    for candidate in koha?*; do
+	if [ $done = no ]; then
+	    mv $candidate $KOHA_SRC_BASE
+	else
+	    die 1 "more than one koha candidate into $KOHA_SRC_DIR, please clean up" 
+	fi
+    done 
+    cd $KOHA_SRC_PATH && die 1 "can't cd to $KOHA_SRC_PATH"
+}
+
+mysql_create_base () {
+	# TODO: what if non mysql backend ? so code ! 
+	# try to create or try to find the base
+	mysqladmin -uroot create "$1" || 
+		echo show databases   |
+			mysql         |
+			grep -q "^$1$"
+}
+
+mysql_grant_access () { 
+	local base login password
+	base="$1" login="$2" password="$3"
+cat << GRANTACCESS | mysql 
+grant all on $base.* to '$login'@'localhost' identified by '$password';
+flush privileges;
+GRANTACCESS
+}
+
+verify_etch_sources () {
+	local current backup
+	current=/etc/apt/sources.list 
+	backup=/etc/apt/sources.list.bak 
+	if [ ! -e $current ] || [ ! -s $current ]; then
+		[ -e $backup ] && mv $backup $current || die 1 "can't find etch"
+	fi
+}
+
+# }}}
+
+cd "$KOHA_SRC_DIR"
+[ "$PLEASE_DONT_GET" ] ||
+	get_koha_sources "$KOHA_SRC_BASE" "$GET_KOHA_SRC_METHOD" > $GET_KOHA_LOG 2>&1  & 
+
+[ $DEBIAN_STILL_CONFIGURED ] || {
+    configure_indexdata_sources  # to install yaz and iezebra
+    configure_lenny              # because etch lacks some packages
+    configure_aptitude_correctly # to solve dependancies and conflicts
+    verify_etch_sources
+}
+
+# update the system
+aptitude update
+aptitude upgrade
+
+open_package_list           # now we can add packages with add_package command
+# this would be installed by dependances but it needs to be
+# installed first to autoconfigure perl sax parser
+add_package libxml-libxml-perl
+# libyaz-dev required to build Net::Z3950::ZOOM from cpan
+# can be removed when debian package will be usefull
+add_package libyaz-dev
+# lot of koha dependancies
+cat << PACKAGES | add_package
+idzebra-2.0
+yaz
+libmail-sendmail-perl
+libhtml-scrubber-perl
+libmarc-record-perl/testing
+libmarc-charset-perl/testing
+libmarc-crosswalk-dublincore-perl
+libpdf-reuse-perl
+libpdf-reuse-barcode-perl
+libdata-ical-perl
+libxml-rss-perl/testing
+libpoe-perl/testing
+libschedule-at-perl
+apache2
+daemon
+libgcrypt11
+libgcrypt11-dev
+gcc
+make
+mysql-server
+libcgi-session-perl
+libdate-calc-perl
+libdate-manip-perl
+libdate-ical-perl
+libdatetime-format-mail-perl
+liblingua-stem-perl
+libdatetime-format-strptime-perl
+libdatetime-format-w3cdtf-perl
+libdbi-perl
+libmysqlclient15-dev
+libnet-ldap-perl
+liblocale-po-perl
+libpdf-api2-perl
+libpoe-perl/testing
+libtext-csv-perl/testing
+libtext-charwidth-perl
+libtime-duration-perl
+libtime-format-perl
+libunix-syslog-perl
+libxml-dom-perl
+libxml-dumper-perl
+libxml-simple-perl
+libxml-regexp-perl
+libxml-xslt-perl/testing
+libxml-libxslt-perl
+libxml2-utils
+libxslt1-dev
+libyaml-syck-perl
+libhtml-template-pro-perl
+libdbd-mysql-perl/testing
+libimage-magick-perl
+liblist-moreutils-perl
+libtext-iconv-perl/testing
+libalgorithm-checkdigits-perl
+libmarc-xml-perl
+PACKAGES
+
+# no more "path not found" message during cpan configuration
+add_package unzip lynx ncftp ftp
+
+# just because it ease the life of the sysop
+add_package screen zsh less lsof strace
+
+# every selected packages will now be installed
+install_package_list
+# something wrong with libyaz-dev... KISS workaround is reinstall
+aptitude install libyaz-dev
+
+# those perl libs have no statisfying debian packages
+# so they are installed via cpan.
+cpan Net::Z3950::ZOOM Biblio::EndnoteStyle
+
+getent passwd $KOHA_USER ||
+    create_debian_koha_user $KOHA_USER ||
+    die 1 "can't create $KOHA_USER"
+
+mysql_create_base "$DB_NAME" ||
+	die 1 "can't create or find $DB_NAME"
+mysql_grant_access "$DB_NAME" "$DB_USER" "$DB_PASS" ||
+	die 1 "can't grant access to $DB_USER"
+
+echo "please wait while i'm downloading koha sources"
+wait
+cd "$KOHA_SRC_PATH"
+
+verify_sax_parser 
+
+perl Makefile.PL
+make
+make test
+make install
+apache_add_ports
+
+makefile_value () {
+    sed -n ' s/^'"$1"' = //T;p;q'  Makefile
+}
+
+koha_conf=`makefile_value KOHA_DEST_KOHA_CONF_DIR`
+ln -s "$koha_conf"/koha-httpd.conf /etc/apache2/sites-available/koha
+
+a2enmod rewrite
+a2ensite koha
+invoke-rc.d apache2 reload
+
+koha_script=`makefile_value KOHA_DEST_SCRIPT_DIR`
+ln -s "$koha_script"/koha-zebraqueue-ctl.sh  /etc/init.d/koha-zebraqueue-daemon
+update-rc.d koha-zebraqueue-daemon defaults
+
+# TODO:
+# - add translator
+# if cd misc/translator; then
+#     ./tmpl_process3 install -s po/fr-FR... -i ../../koha-tmpl/opac-tmpl/prog/en -o ../../koha-tmpl/opac-tmpl/prog/fr-FR
+#     cd -
+# fi
