@@ -365,11 +365,13 @@ sub batch_info {
     $template->param(upload_timestamp => $batch->{'upload_timestamp'});
     $template->param(num_biblios => $batch->{'num_biblios'});
     $template->param(num_items => $batch->{'num_biblios'});
-    if ($batch->{'import_status'} eq 'staged' or $batch->{'import_status'} eq 'reverted') {
-        $template->param(can_commit => 1);
-    }
-    if ($batch->{'import_status'} eq 'imported') {
-        $template->param(can_revert => 1);
+    if ($batch->{'num_biblios'} > 0) {
+        if ($batch->{'import_status'} eq 'staged' or $batch->{'import_status'} eq 'reverted') {
+            $template->param(can_commit => 1);
+        }
+        if ($batch->{'import_status'} eq 'imported') {
+            $template->param(can_revert => 1);
+        }
     }
     if (defined $batch->{'matcher_id'}) {
         my $matcher = C4::Matcher->fetch($batch->{'matcher_id'});
