@@ -545,6 +545,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
             $ri{borfirstname}   = $borrower->{'firstname'};
             $ri{borsurname}     = $borrower->{'surname'};
             $ri{bortitle}       = $borrower->{'title'};
+            $ri{bornote}        = $borrower->{'borrowernotes'};
         }
         else {
             $ri{borrowernumber} = $riborrowernumber{$_};

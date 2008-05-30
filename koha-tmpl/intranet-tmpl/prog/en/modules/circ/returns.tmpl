@@ -330,7 +330,7 @@ function Dopop(link) {
 <!-- TMPL_IF Name="riloop" -->
     <h2>Checked-In items</h2>
     <table>
-	<tr><th>Due Date</th>	<th>Title</th>	<th>Author</th>	<th>Barcode</th>	<th>Type</th>	<th>Patron</th></tr>
+	<tr><th>Due Date</th>	<th>Title</th>	<th>Author</th>	<th>Barcode</th>	<th>Type</th>	<th>Patron</th><th>Note</th></tr>
         
         <!-- TMPL_LOOP Name="riloop" -->
             <tr>
@@ -345,6 +345,8 @@ function Dopop(link) {
                     <!-- TMPL_VAR Name="borsurname" -->, <!-- TMPL_VAR Name="borfirstname" -->
                 </a>
             <!-- TMPL_ELSE -->Not checked out<!-- /TMPL_IF --></td>
+            <td><!-- TMPL_IF name="bornote" --><span class="circ-hlt"><!-- TMPL_VAR name="bornote" --></span><!-- /TMPL_IF -->
+            </td>
            </tr>
         <!-- /TMPL_LOOP -->
     </table></div>
