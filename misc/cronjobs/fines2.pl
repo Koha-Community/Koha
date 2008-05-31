@@ -88,6 +88,7 @@ sub insert_fine ($$$$$$) {
 	return $fine_sth->execute(@_);
 }
 
+my $circcontrol = C4::Context->preference('CircControl');
 foreach (@$data){
 	my $date_due = $_->{date_due};
 	$verbose and print "date_due: $date_due ", ($date_due le $today_iso ? 'fine!' : 'ok'), "\n";
@@ -99,16 +100,18 @@ foreach (@$data){
     my $borrower = BorType($borrowernumber);
     ($date_due le $today_iso) or next;		# it is valid to string compare ISO dates.
 	$overdueItemsCounted++ if $verbose;
+	my $branchcode = ($circcontrol eq 'PatronLibrary'  ) ? $borrower->{branchcode} : 
+					 ($circcontrol eq 'ItemHomeLibrary') ?        $_->{homebranch} :
+					 									          $_->{branchcode} ; # Last option: Pickup Library.
 	my $difference=$date-$date2;
 	my (@calc_returns) = CalcFine(
-		$_, $borrower->{categorycode}, $_->{homebranch},
-		undef, undef, C4::Dates->new($date_due,'iso'), $today_obj 
+		$_, $borrower->{categorycode}, $branchcode,undef,undef, C4::Dates->new($date_due,'iso'), $today_obj 
 	);
 	if ($verbose) {
 		my $dump = Dumper($_);
 		$dump =~ s/;/,/;
 		$verbose and print "CalcFine($dump" .
-			"\t$borrower->{categorycode}, $_->{homebranch},undef,undef,[$date_due],[today]) returns:\n" . Dumper(\@calc_returns), "\n";
+			"\t$borrower->{categorycode}, $branchcode,undef,undef,[$date_due],[today]) returns:\n" . Dumper(\@calc_returns), "\n";
 	}
 	my ($amount,$type,$printout) = @calc_returns[0..2];
 	# ($amount,$chargename,$daycount,$daycounttotal)=&CalcFine($itemnumber,$categorycode,$branch,$days_overdue,$description, $start_date, $end_date );
@@ -116,8 +119,8 @@ foreach (@$data){
 	($amount > $maxFine) and $amount = $maxFine;
 	if ($amount > 0) {
 		UpdateFine($itemnumber,$borrowernumber,$amount,$type,$due);
-		if ($borrower->{'guarantor'}) {
-			$borrower->{'phone'} = get_guarantor_phone($borrower->{'guarantor'}) || $borrower->{'phone'};
+		if ($borrower->{'guarantorid'}) {
+			$borrower->{'phone'} = get_guarantor_phone($borrower->{'guarantorid'}) || $borrower->{'phone'};
 		}
 		print "$printout\t$borrower->{'cardnumber'}\t$borrower->{'categorycode'}\t$borrower->{'firstname'}\t$borrower->{'surname'}\t",
 		"$_->{'date_due'}\t$type\t$difference\t",
