@@ -1,17 +1,18 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo;  ISBD
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" DEFAULT="Koha Online" --> Catalog &rsaquo;  ISBD
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
-	<!-- TMPL_IF NAME="OpacNav" --><div id="doc3" class="yui-t1"><!-- TMPL_ELSE --><div id="doc3" class="yui-t7"><!-- /TMPL_IF -->
-   <div id="bd">
+<div id="doc3" class="yui-t<!-- TMPL_IF NAME="OpacNav" -->1<!-- TMPL_ELSE -->7<!-- /TMPL_IF -->">
+  <div id="bd">
 <!-- TMPL_INCLUDE name="masthead.inc" -->
 
 	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g">
-
-   <div id="subjectcloud" class="container"> <h1>Subject cloud</h1>
-    <p>This "cloud" show you the most used topics in our catalog. Click on any
-subject below to see the items in our collection.</p>
+	  <div class="yui-b"><div class="yui-g">
+		<div id="subjectcloud" class="container"> <h1>Subject cloud</h1>
+	<!-- TMPL_IF NAME="OpacCloud" -->
+		<!-- TMPL_IF NAME="LOOP" -->
+    	<p>This &quot;cloud&quot; shows the most used topics in our catalog.
+		Click on any subject below to see the items in our collection.</p>
         <fieldset>
         <legend>Show</legend>
         <form action="/cgi-bin/koha/opac-tags_subject.pl" method="post">
@@ -21,15 +22,21 @@ subject below to see the items in our collection.</p>
 
         <!-- TMPL_LOOP name="LOOP" -->
             <a href="/cgi-bin/koha/opac-search.pl?q=su:<!-- TMPL_VAR name="entry" ESCAPE="HTML" -->" style="font-size:<!-- TMPL_VAR name="weight" -->px;"><!-- TMPL_VAR name="entry" --></a>
-        <!-- /TMPL_LOOP --></div>
-
-</div>
-</div>
-</div><!-- TMPL_IF NAME="OpacNav" -->
-<div class="yui-b">
-<div class="container">
-<!--TMPL_INCLUDE NAME="navigation.inc" -->
-</div>
-</div><!-- /TMPL_IF -->
+        <!-- /TMPL_LOOP -->
+		<!-- TMPL_ELSE -->
+			<p>Note: This feature only available to French catalogs where ISBD subjects have been populated, and an index built by separate script.</p>
+		<!-- /TMPL_IF -->
+	<!-- TMPL_ELSE -->
+		<p>The ISBD cloud is not enabled.</p>
+	<!-- /TMPL_IF -->
+		</div>
+	  </div></div>
+	</div>
+	<!-- TMPL_IF NAME="OpacNav" -->
+	<div class="yui-b"><div class="container">
+	<!--TMPL_INCLUDE NAME="navigation.inc" -->
+	</div></div>
+	<!-- /TMPL_IF -->
+  </div>
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
