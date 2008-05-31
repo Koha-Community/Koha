@@ -243,18 +243,17 @@ $(document).ready(function(){
 
 				<!-- /TMPL_IF -->
 				
-				<span class="results_summary">
-				</span>	
 				<!-- TMPL_IF NAME="TagsEnabled" -->
                 <!-- TMPL_IF NAME="TagsShowOnList" -->
-						<div class="results_summary">
                 <!-- TMPL_IF NAME="TagLoop" -->
+					<div class="results_summary">
                         <span class="label">Tags:</span>
                         <ul style="display: inline; list-style: none;"><!-- TMPL_LOOP NAME="TagLoop" --><li style="display: inline; list-style: none;"><a href="/cgi-bin/koha/opac-search.pl?tag=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->&amp;q=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="term" --></a> <span class="weight">(<!-- TMPL_VAR NAME="weight_total" -->)</span></li>
                             <!-- /TMPL_LOOP -->
                         </ul>
                	<!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="TagsInputOnList" -->
+					<!-- TMPL_IF NAME="loggedinusername" -->
                     <form name="tagform<!-- TMPL_VAR NAME="biblionumber" -->" method="post" action="/cgi-bin/koha/opac-tags.pl">
                         <label for="newtag<!-- TMPL_VAR NAME="biblionumber" -->">New tag:</label>
                         <input name="newtag<!-- TMPL_VAR NAME="biblionumber" -->" id="newtag<!-- TMPL_VAR NAME="biblionumber" -->" maxlength="100" />
@@ -263,8 +262,11 @@ $(document).ready(function(){
                     <span id="newtag<!-- TMPL_VAR NAME="biblionumber" -->_status" class="tagstatus" style="display:none;">
                         Tag status here.
                     </span>
+                   	<!-- TMPL_ELSIF NAME="__first__" --><span class="tagstatus" id="login4tags">Log in to add tags.</span>
+                	<!-- /TMPL_IF -->
                 <!-- /TMPL_IF -->
-					</div>
+                	<!-- TMPL_IF NAME="TagLoop" -->
+					</div><!-- /TMPL_IF -->
 				<!-- /TMPL_IF -->
                 <!-- /TMPL_IF -->
 				<!-- TMPL_IF Name="searchhighlightblob" --><span class="results_summary"><span class="label">Match:</span> <!-- TMPL_VAR NAME="searchhighlightblob" --></span><!-- /TMPL_IF -->

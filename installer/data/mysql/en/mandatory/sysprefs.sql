@@ -185,8 +185,26 @@ INSERT INTO `systempreferences` (variable, value,options,type, explanation) VALU
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ExtendedPatronAttributes','0','Use extended patron IDs and attributes',NULL,'YesNo');
 
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('RenewSerialAddsSuggestion','0','If ON, adds a new suggestion at serial subscription renewal',NULL,'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('GoogleJackets','0','if ON, displays jacket covers from Google Books API',NULL,'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('RandomizeHoldsQueueWeight','0','if ON, the holds queue in circulation will be randomized, either based on all location codes, or by the location codes specified in StaticHoldsQueueWeight',NULL,'YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('StaticHoldsQueueWeight','0','Specify a list of library location codes separated by commas -- the list of codes will be traversed and weighted with first values given higher weight for holds fulfillment -- alternatively, if RandomizeHoldsQueueWeight is set, the list will be randomly selective',NULL,'TextArea');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('GoogleJackets','0','if ON, displays jacket covers from Google Books API',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('RandomizeHoldsQueueWeight','0','if ON, the holds queue in circulation will be randomized, either based on all location codes, or by the location codes specified in StaticHoldsQueueWeight',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('StaticHoldsQueueWeight','0','Specify a list of library location codes separated by commas -- the list of codes will be traversed and weighted with first values given higher weight for holds fulfillment -- alternatively, if RandomizeHoldsQueueWeight is set, the list will be randomly selective',NULL,'TextArea');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AutoEmailOpacUser','0','Sends notification emails containing new account details to patrons - when account is created.',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AutoEmailPrimaryAddress','0','Defines the default email address where \'Account Details\' emails are sent.','email|emailpro|B_email|cardnumber|OFF','Choice');
+
+-- Tags and BakerTaylor (note field order differs from above)
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES
+	('BakerTaylorBookstoreURL','','','URL template for \"My Libary Bookstore\" links, to which the \"key\" value is appended, and \"https://\" is prepended.  It should include your hostname and \"Parent Number\".  Make this variable empty to turn MLB links off.<br /> Example: ocls.mylibrarybookstore.com/MLB/actions/searchHandler.do?nextPage=bookDetails&parentNum=10923&key=',''),
+	('BakerTaylorEnabled','0','','Enable or disable all Baker & Taylor features.','YesNo'),
+	('BakerTaylorPassword','','','Baker & Taylor Password for Content Cafe (external content)','Textarea'),
+	('BakerTaylorUsername','','','Baker & Taylor Username for Content Cafe (external content)','Textarea'),
+	('TagsEnabled','1','','Enables or disables all tagging features.  This is the main switch for tags.','YesNo'),
+	('TagsExternalDictionary',NULL,'','Path on server to local ispell executable, used to set $Lingua::Ispell::path <br />This dictionary is used as a \"whitelist\" of pre-allowed tags.',''),
+	('TagsInputOnDetail','1','','Allow users to input tags from the detail page.',         'YesNo'),
+	('TagsInputOnList',  '0','','Allow users to input tags from the search results list.', 'YesNo'),
+	('TagsModeration',  NULL,'','Require tags from patrons to be approved before becoming visible.','YesNo'),
+	('TagsShowOnDetail','10','','Number of tags to display on detail page.  0 is off.',        'Integer'),
+	('TagsShowOnList',   '6','','Number of tags to display on search results list.  0 is off.','Integer');
+
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('OPACShelfBrowser','1','','Enable/disable Shelf Browser on item details page','YesNo');
+
+-- FIXME: add FrameworksLoaded, noOPACUserLogin, ReadingHistory ?

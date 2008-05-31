@@ -191,6 +191,7 @@
             </ul><!-- TMPL_ELSE -->No tags for this title. 
         <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="TagsInputOnDetail" -->
+			<!-- TMPL_IF NAME="loggedinusername" -->
 		<span class="label" id="addtagl"><a href="#">Add</a></span>
          <form name="tagform<!-- TMPL_VAR NAME="biblionumber" -->" method="post" action="/cgi-bin/koha/opac-tags.pl" id="tagform">
                 <label for="newtag<!-- TMPL_VAR NAME="biblionumber" -->">New:</label><input name="newtag<!-- TMPL_VAR NAME="biblionumber" -->" id="newtag<!-- TMPL_VAR NAME="biblionumber" -->" maxlength="100" />
@@ -201,6 +202,9 @@
                 Tag status here.
             </span>
             <br />
+        	<!-- TMPL_ELSE -->
+				<span id="login4tags" class="tagstatus">Log in to add tags.</span>
+        	<!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
         </div>
     <!-- /TMPL_IF -->

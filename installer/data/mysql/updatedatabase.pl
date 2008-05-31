@@ -1386,7 +1386,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 		('TagsExternalDictionary',NULL,'','Path on server to local ispell executable, used to set $Lingua::Ispell::path <br />This dictionary is used as a \"whitelist\" of pre-allowed tags.',''),
 		('TagsInputOnDetail','1','','Allow users to input tags from the detail page.',         'YesNo'),
 		('TagsInputOnList',  '0','','Allow users to input tags from the search results list.', 'YesNo'),
-		('TagsModeration',  NULL,'','(unimplemented) Requires tags from patrons to be approved before becoming visible.','YesNo'),
+		('TagsModeration',  NULL,'','Require tags from patrons to be approved before becoming visible.','YesNo'),
 		('TagsShowOnDetail','10','','Number of tags to display on detail page.  0 is off.',        'Integer'),
 		('TagsShowOnList',   '6','','Number of tags to display on search results list.  0 is off.','Integer')
 	#);
