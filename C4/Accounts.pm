@@ -308,24 +308,24 @@ sub manualinvoice {
           fixcredit( $borrowernumber, $amount2, $itemnum, $type, $user );
     }
     if ( $type eq 'N' ) {
-        $desc .= "New Card";
+        $desc .= " New Card";
     }
     if ( $type eq 'F' ) {
-        $desc .= "Fine";
+        $desc .= " Fine";
     }
     if ( $type eq 'A' ) {
-        $desc .= "Account Management fee";
+        $desc .= " Account Management fee";
     }
     if ( $type eq 'M' ) {
-        $desc .= "Sundry";
+        $desc .= " Sundry";
     }
 
     if ( $type eq 'L' && $desc eq '' ) {
 
-        $desc = "Lost Item";
+        $desc = " Lost Item";
     }
     if ( $type eq 'REF' ) {
-        $desc .= "Cash Refund";
+        $desc .= " Cash Refund";
         $amountleft = refund( '', $borrowernumber, $amount );
     }
     if (   ( $type eq 'L' )
