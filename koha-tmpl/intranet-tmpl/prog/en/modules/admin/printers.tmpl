@@ -80,10 +80,7 @@
 	<div class="yui-b">
 
 <!-- TMPL_IF NAME="add_form" -->
-        
 
-
-        
 <!-- TMPL_IF NAME="searchfield" -->
 		<h1>Modify printer</h1>
 	<!-- TMPL_ELSE -->
@@ -100,19 +97,14 @@
 <ol>	<!-- TMPL_IF NAME="searchfield" -->
 		<li>
 			<span class="label">Printer Name: </span>
-			
 				<input type="hidden" name="printername" id="" value="<!-- TMPL_VAR NAME="searchfield" -->" /><!-- TMPL_VAR NAME="searchfield" -->
-			
 		</li>
 	<!-- TMPL_ELSE -->
 		<li>
 			<label for="printername">Printer Name: </label>
-			
 				<input type="text" name="printername" id="printername" size="50" maxlength="50" />
-			
 		</li>
 	<!-- /TMPL_IF -->
-
         	<li>
 			<label for="printqueue">Queue: </label>
 			<input type="text" name="printqueue" id="printqueue" size="50" maxlength="50" value="<!-- TMPL_VAR NAME="printqueue" -->" /> 
@@ -173,12 +165,9 @@
 	//<![CDATA[
 	// prepare DOM for YUI Toolbar
 	 $(document).ready(function() {
-	    yuiToolbar();
-	 });
-	// YUI Toolbar Functions
-	function yuiToolbar() {
 	    new YAHOO.widget.Button("newprinter");
-	}	//]]>
+	 });
+	//]]>
 	</script>
 	<ul class="toolbar">
 	<li><a id="newprinter" href="/cgi-bin/koha/admin/printers.pl?op=add_form">New Printer</a></li>
@@ -197,7 +186,7 @@
 			<th>&nbsp;</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="loop" -->
-		<tr>
+		<tr<!-- TMPL_UNLESS NAME="__odd__" --> class="highlight"<!-- /TMPL_UNLESS -->>
 			<td><!-- TMPL_VAR NAME="printername" --></td>
 			<td><!-- TMPL_VAR NAME="printqueue" --></td>
 			<td><!-- TMPL_VAR NAME="printtype" --></td>
@@ -214,7 +203,6 @@
 		<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->">Next &gt;&gt;</a>	
 	<!-- /TMPL_iF -->
 <!-- /TMPL_IF -->
-
 
 </div>
 </div>

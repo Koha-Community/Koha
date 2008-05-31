@@ -52,24 +52,14 @@ sub StringSearch  {
 		WHERE (printername like ?) order by printername
 	");
 	$sth->execute("$data[0]%");
-	my @results;
-	my $cnt=0;
-	while (my $data=$sth->fetchrow_hashref){
-		push(@results,$data);
-		$cnt ++;
-	}
-	#  $sth->execute;
-	$sth->finish;
-	return ($cnt,\@results);
+	my $data=$sth->fetchall_arrayref({});
+	return (scalar(@$data),$data);
 }
 
 my $input = new CGI;
 my $searchfield=$input->param('searchfield');
-my $pkfield="";
-my $reqsel="";
-my $reqdel="";
 #my $branchcode=$input->param('branchcode');
-my $offset=$input->param('offset');
+my $offset=$input->param('offset') || 0;
 my $script_name="/cgi-bin/koha/admin/printers.pl";
 
 my $pagesize=20;
@@ -85,12 +75,12 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
 		       debug => 1,
 });
 
-
 $template->param(searchfield => $searchfield,
 		 script_name => $script_name);
 
 #start the page and read in includes
 
+my $dbh = C4::Context->dbh;
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
 if ($op eq 'add_form') {
@@ -98,11 +88,9 @@ if ($op eq 'add_form') {
 	#---- if primkey exists, it's a modify action, so read values to modify...
 	my $data;
 	if ($searchfield) {
-		my $dbh = C4::Context->dbh;
 		my $sth=$dbh->prepare("SELECT printername,printqueue,printtype from printers where printername=?");
 		$sth->execute($searchfield);
 		$data=$sth->fetchrow_hashref;
-		$sth->finish;
 	}
 
 	$template->param(printqueue => $data->{'printqueue'},
@@ -112,55 +100,37 @@ if ($op eq 'add_form') {
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	$template->param(add_validate => 1);
-	my $dbh = C4::Context->dbh;
 	if ($input->param('add')){
 		my $sth=$dbh->prepare("INSERT INTO printers (printername,printqueue,printtype) VALUES (?,?,?)");
 		$sth->execute($input->param('printername'),$input->param('printqueue'),$input->param('printtype'));
-		$sth->finish;
-	}
-	else {
+	} else {
 		my $sth=$dbh->prepare("UPDATE printers SET printqueue=?,printtype=? WHERE printername=?");
 		$sth->execute($input->param('printqueue'),$input->param('printtype'),$input->param('printername'));
-		$sth->finish;
 	}
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
 	$template->param(delete_confirm => 1);
-	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("select printername,printqueue,printtype from printers where printername=?");
 	$sth->execute($searchfield);
 	my $data=$sth->fetchrow_hashref;
-	$sth->finish;
 	$template->param(printqueue => $data->{'printqueue'},
 			 printtype  => $data->{'printtype'});
-	
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
 	$template->param(delete_confirmed => 1);
-
-	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("delete from printers where printername=?");
 	$sth->execute($searchfield);
-	$sth->finish;
 													# END $OP eq DELETE_CONFIRMED
-################## DEFAULT ##################################
+################## DEFAULT ###########################################
 } else { # DEFAULT
 	$template->param(else => 1);
 	my ($count,$results)=StringSearch($searchfield,'web');
-	my $toggle="white";
-	my @loop;
-	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-		my %row = ( printername => $results->[$i]{'printername'},
-			    printqueue  => $results->[$i]{'printqueue'},
-			    printtype   => $results->[$i]{'printtype'},
-			    toggle      => $toggle);
-		push @loop, \%row;
-		$toggle = ($toggle eq 'white') ? '#ffffcc' : 'white';
-	}
+	my $max = ($offset+$pagesize < $count) ? $offset+$pagesize : $count;
+	my @loop = (@$results)[$offset..$max];
 	
 	$template->param(loop => \@loop);
 	
@@ -168,7 +138,6 @@ if ($op eq 'add_form') {
 		$template->param(offsetgtzero => 1,
 				 prevpage => $offset-$pagesize);
 	}
-	print "&nbsp;" x 6;
 	if ($offset+$pagesize<$count) {
 		$template->param(ltcount => 1,
 				 nextpage => $offset+$pagesize);
