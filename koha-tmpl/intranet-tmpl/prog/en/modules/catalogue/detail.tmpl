@@ -83,6 +83,18 @@ function verify_images() {
                 <!-- TMPL_IF name="pages" --> <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" --> <!-- TMPL_IF NAME="illus" --><!-- TMPL_VAR NAME="illus" --><!-- /TMPL_IF -->
                 <!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" -->
         </li>
+<!-- TMPL_IF name="MARCURLS" --><li>
+    
+	<strong>Online Resources:</strong>
+    <ul>    <!-- TMPL_LOOP name="MARCURLS" -->
+		<li><!-- TMPL_IF NAME="part" --><!-- TMPL_VAR NAME="part" -->
+			<br /><!-- /TMPL_IF --> 
+		<!-- here you might do a tmpl_if name="toc" and use greybox or equivalent for table of contents -->
+		<a href="<!-- TMPL_VAR NAME="MARCURL" -->" title="<!-- TMPL_VAR NAME="MARCURL" -->"><!-- TMPL_VAR NAME="linktext" --></a>
+			<!-- TMPL_IF NAME="notes" --><ul><!-- TMPL_LOOP NAME="notes" --><li><!-- TMPL_VAR NAME="note" --></li><!-- /TMPL_LOOP --></ul><!-- /TMPL_IF --></li>
+            <!-- /TMPL_LOOP --></ul>
+</li>
+    <!-- /TMPL_IF -->
         </ul>
         </div>
         
@@ -130,7 +142,6 @@ function verify_images() {
         <!-- /TMPL_IF -->
         </ul>
 </div>
-
 </div>
 
 <div id="bibliodetails" class="toptabs">

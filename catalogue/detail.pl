@@ -63,6 +63,7 @@ my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );
 my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
 my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
 my $marcseriesarray  = GetMarcSeries($record,$marcflavour);
+my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
 my $subtitle         = C4::Biblio::get_koha_field_from_marc('bibliosubtitle', 'subtitle', $record, '');
 
 # Get Branches, Itemtypes and Locations
@@ -160,6 +161,7 @@ $template->param( norequests => $norequests );
         MARCSUBJCTS => $marcsubjctsarray,
         MARCAUTHORS => $marcauthorsarray,
         MARCSERIES  => $marcseriesarray,
+        MARCURLS => $marcurlsarray,
         subtitle    => $subtitle,
     );
 
