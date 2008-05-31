@@ -1273,7 +1273,7 @@ sub AddReturn {
         if ($doreturn) {
 			my $circControlBranch;
 			if($dropbox) {
-				# don't allow dropbox mode to create an invalid entry in issues ( issuedate > returndate)
+				# don't allow dropbox mode to create an invalid entry in issues (issuedate > returndate) FIXME: actually checks eq, not gt
 				undef($dropbox) if ( $iteminformation->{'issuedate'} eq C4::Dates->today('iso') );
 				if (C4::Context->preference('CircControl') eq 'ItemHomeBranch' ) {
 					$circControlBranch = $iteminformation->{homebranch};
