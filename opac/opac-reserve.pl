@@ -16,7 +16,6 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-require Exporter;
 use CGI;
 use C4::Biblio;
 use C4::Items;
@@ -29,7 +28,7 @@ use C4::Dates qw/format_date/;
 use C4::Context;
 use C4::Members;
 use C4::Branch; # GetBranches
-use Data::Dumper;
+# use Data::Dumper;
 
 my $MAXIMUM_NUMBER_OF_RESERVES = C4::Context->preference("maxreserves");
 
@@ -45,6 +44,11 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
+sub get_out ($$$) {
+	output_html_with_http_headers(shift,shift,shift); # $query, $cookie, $template->output;
+	exit;
+}
+
 # get borrower information ....
 my ( $borr, $flags ) = GetMemberDetails( $borrowernumber );
 
@@ -54,10 +58,19 @@ my $itemtypes = GetItemTypes();
 
 # get biblionumber.....
 my $biblionumber = $query->param('biblionumber');
+my $bibdata;
+if (! $biblionumber) {
+	$template->param(message=>1,no_biblionumber=>1);
+	&get_out($query, $cookie, $template->output);
+}
+$template->param( biblionumber => $biblionumber );
 
 my $bibdata = GetBiblioData($biblionumber);
-$template->param($bibdata);
-$template->param( biblionumber => $biblionumber );
+if (! $bibdata) {
+	$template->param(message=>1,bad_biblionumber=>$biblionumber);
+	&get_out($query, $cookie, $template->output);
+}
+$template->param($bibdata);		# FIXME: bad form.
 
 # get the rank number....
 my ( $rank, $reserves ) = GetReservesFromBiblionumber( $biblionumber);

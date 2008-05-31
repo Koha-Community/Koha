@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo;  Reserving <!-- TMPL_VAR NAME="title" --> for <!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --><!-- /TMPL_LOOP -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" DEFAULT="Koha Online" --> Catalog &rsaquo;  Reserving <!-- TMPL_VAR NAME="title" --> for <!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --><!-- /TMPL_LOOP -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
@@ -55,6 +55,12 @@
         You must select a library for pickup.
     </div>
     <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="no_biblionumber" -->
+    <div class="dialog alert">ERROR: No biblionumber received.</div>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="bad_biblionumber" -->
+    <div class="dialog alert">ERROR: No biblio record found for biblionumber <!-- TMPL_VAR NAME="bad_biblionumber" -->.</div>
+    <!-- /TMPL_IF -->
 </div>
 <!-- /TMPL_IF -->
 
@@ -79,7 +85,8 @@
              <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branchcode" -->"/>
             <!-- /TMPL_IF -->
             <!-- /TMPL_LOOP --></li>
-            <li><span class="label">Priority:</span><!-- TMPL_VAR Name="fixedRank" --> out of ?</li> 
+            <li><span class="label">Priority:</span><!-- TMPL_VAR Name="rank" DEFAULT="?" --> out of <!-- TMPL_VAR Name="reservecount" DEFAULT="?" -->
+			</li> 
             <!-- TMPL_UNLESS NAME="singleBranchMode" -->
             <li><label for="branch">Pick up from:</label> <select name="branch" id="branch">
                     <!-- TMPL_LOOP NAME="CGIbranch" -->
@@ -115,7 +122,7 @@
 				<th>&nbsp;</th>
 	            <!-- TMPL_IF NAME="item-level_itypes" -->
                 <th>Hold</th>
-                <!-- TMPL_IF NAME="item-level_itypes" --><th>Item Type</th><!-- /TMPL_IF -->
+                <th>Item Type</th>
                 <!-- /TMPL_IF -->
                 <th>Barcode</th>
                 <!-- TMPL_UNLESS NAME="singleBranchMode" -->
@@ -140,29 +147,18 @@
             <img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->">
             </td>
             <!-- /TMPL_IF -->
-
-            <td>
-                    <!-- TMPL_VAR NAME="barcode" -->
-            </td>
+            <td><!-- TMPL_VAR NAME="barcode"           --></td>
             <!-- TMPL_UNLESS NAME="singleBranchMode" -->
-            <td>
-            <!-- TMPL_VAR NAME="homebranchname" -->
-            </td>
-            <td>
-            <!-- TMPL_VAR NAME="holdingbranchname" -->
-            </td>
+            <td><!-- TMPL_VAR NAME="homebranchname"    --></td>
+            <td><!-- TMPL_VAR NAME="holdingbranchname" --></td>
             <!-- /TMPL_UNLESS -->
-            <td>
-            <!-- TMPL_VAR NAME="itemcallnumber" -->
-            </td>
+            <td><!-- TMPL_VAR NAME="itemcallnumber"    --></td>
             <td>
         <!-- TMPL_IF Name="date_due" -->
             <span class="checkedout">Due <!-- TMPL_VAR NAME="date_due" --></span>
-			<!-- TMPL_ELSE -->
-        <!-- TMPL_IF Name="transfertwhen" -->
+        <!-- TMPL_ELSIF Name="transfertwhen" -->
             <span class="intransit">In transit from <!-- TMPL_VAR NAME="transfertfrom" -->,
             to <!-- TMPL_VAR NAME="transfertto" -->, since <!-- TMPL_VAR NAME="transfertwhen" --></span>
-        <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
 
         <!-- TMPL_IF Name="message" -->
