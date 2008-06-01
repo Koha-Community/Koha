@@ -108,19 +108,6 @@ if ($do_it) {
 	# $req = $dbh->prepare("select count(dewey) from biblioitems ");
 	# $req->execute;
 	my $hasdewey = 0;
-# 	push @select,"";
-# 	while (my ($value) =$req->fetchrow) {
-# 		if (($value>2) and (! $hasdewey)) {
-# 			$hasdewey =1;
-# 			$count++;
-# 		}
-#		push @select, $value;
-# 	}
-# 	my $CGIdewey=CGI::scrolling_list( -name     => 'Filter',
-# 				-id => 'Filter',
-# 				-values   => \@select,
-# 				-size     => 1,
-# 				-multiple => 0 );
 
 # (rch) biblioitems.lccn is mapped to lccn MARC21 010$a in default framework.
 # This is not the LC Classification.  It's the Control Number.
@@ -147,32 +134,6 @@ if ($do_it) {
 #
 	 my $hascote = 1;
 	 my $highcote = 5;
-
-#	$req = $dbh->prepare("select count(itemcallnumber) from items");
-#	$req->execute;
-#	my $hlghtcote;
-#	while (my ($value) =$req->fetchrow) {
-#		$hascote =1 if (($value>2) and (! $hascote));
-#		$count++ if (($value) and (! $hascote));
-#		$hlghtcote = (($hasdewey) and ($haslccn)) or (!($hasdewey) and !($haslccn));
-##		push @select, $value;
-#	}
-# 	my $CGIcote=CGI::scrolling_list( -name     => 'Filter',
-# 				-id => 'Filter',
-# 				-values   => \@select,
-# 				-size     => 1,
-# 				-multiple => 0 );
-#	my $hglghtDT  = ++$count % 2;
-#	my $hglghtPub = ++$count % 2;
-#	my $hglghtPY  = ++$count % 2;
-#	my $hglghtHB  = ++$count % 2;
-#	my $hglghtLOC = ++$count % 2;
-#	warn "highlightDT "  .$hglghtDT;
-#	warn "highlightPub " .$hglghtPub;
-#	warn "highlightPY "  .$hglghtPY;
-#	warn "highlightHB "  .$hglghtHB;
-#	warn "highlightLOC " .$hglghtLOC;
-	
 	
 	$req = $dbh->prepare("select itemtype, description from itemtypes order by description");
 	$req->execute;
@@ -184,18 +145,6 @@ if ($do_it) {
 		push @authvals, { code => $_, description => $authvals->{$_} };
 	}
 	
-# 	$req = $dbh->prepare("select distinctrow left(publishercode,75) from biblioitems order by publishercode");
-# 	$req->execute;
-# 	undef @select;
-# 	push @select,"";
-# 	while (my ($value) =$req->fetchrow) {
-# 		push @select, $value;
-# 	}
-# 	my $CGIpublisher=CGI::scrolling_list( -name     => 'Filter',
-# 				-id => 'Filter',
-# 				-values   => \@select,
-# 				-size     => 1,
-# 				-multiple => 0 );
 
 	my $branches=GetBranches();
 	my @branchloop;
@@ -208,9 +157,6 @@ if ($do_it) {
 		push @branchloop, \%row;
 	}
 
-	$req = $dbh->prepare("select distinctrow location from items order by location");
-	$req->execute;
-	my $locationloop = $req->fetchall_arrayref({});
 	my $locations = GetKohaAuthorisedValues("items.location");
 	my @locations;
 	foreach (sort keys %$locations) {
@@ -221,25 +167,9 @@ if ($do_it) {
 	my @delim = ( map { +{delim=>$_} } (split //,C4::Context->preference("delimiter")) );
 	
 	$template->param(hasdewey=>$hasdewey,
-#					CGIFromDeweyClass => $CGIdewey,
-#					CGIToDeweyClass => $CGIdewey,
 					haslccn   => $haslccn,
-#					hlghtlccn => $hlghtlccn,
-#					CGIFromLoCClass => $CGIlccn,
-#					CGIToLoCClass => $CGIlccn,
 					hascote   => $hascote,
-#					hlghtcote => $hlghtcote,
-#					hglghtDT  => $hglghtDT,
-#					hglghtPub => $hglghtPub,
-#					hglghtPY  => $hglghtPY,
-#					hglghtHB  => $hglghtHB,
-#					hglghtLOC => $hglghtLOC,
-#					CGIFromCoteClass => $CGIcote,
-#					CGIToCoteClass => $CGIcote,
 					CGIItemType => $CGIitemtype,
-# 					CGIFromPublicationYear => $CGIpublicationyear,
-# 					CGIToPublicationYear => $CGIpublicationyear,
-#					CGIPublisher => $CGIpublisher,
 					CGIBranch    => \@branchloop,
 					locationloop => \@locations,
 					authvals     => \@authvals,
