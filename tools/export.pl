@@ -45,6 +45,16 @@ my ($template, $loggedinuser, $cookie)
             }
     );
 
+	my $limit_ind_branch=(C4::Context->preference('IndependantBranches') &&
+              C4::Context->userenv &&
+              C4::Context->userenv->{flags} !=1  &&
+              C4::Context->userenv->{branch}?1:0);
+	my $branches = GetBranches($limit_ind_branch);    
+    my $branch                = $query->param("branch");
+	if ( C4::Context->preference("IndependantBranches") ) {
+    	$branch = C4::Context->userenv->{'branch'};
+	}
+
 if ($op eq "export") {
     binmode(STDOUT,":utf8");
 	print $query->header(   -type => 'application/octet-stream', 
@@ -54,11 +64,13 @@ if ($op eq "export") {
     my $StartingBiblionumber  = $query->param("StartingBiblionumber");
     my $EndingBiblionumber    = $query->param("EndingBiblionumber");
     my $output_format         = $query->param("output_format");
-    my $branch                = $query->param("branch");
     my $itemtype              = $query->param("itemtype");
     my $start_callnumber      = $query->param("start_callnumber");
     my $end_callnumber        = $query->param("end_callnumber");
+    my $start_accession      = ($query->param("start_accession")) ? C4::Dates->new($query->param("start_accession")) : '' ;
+    my $end_accession        = ($query->param("end_accession")) ? C4::Dates->new($query->param("end_accession")) : '' ;
     my $dont_export_items     = $query->param("dont_export_item");
+    my $strip_nonlocal_items   = $query->param("strip_nonlocal_items");
     my $dont_export_fields    = $query->param("dont_export_fields");
     my @sql_params;
     my $query = " SELECT DISTINCT biblioitems.biblionumber
@@ -89,25 +101,31 @@ if ($op eq "export") {
         $query .= " AND biblioitems.biblionumber = items.biblionumber AND itemcallnumber >= ? ";
         push @sql_params, $end_callnumber;
     }
+    if ( $start_accession ) {
+        $query .= " AND biblioitems.biblionumber = items.biblionumber AND dateaccessioned >= ? ";
+        push @sql_params,$start_accession->output('iso');
+    }
+    
+    if ( $end_accession ) {
+        $query .= " AND biblioitems.biblionumber = items.biblionumber AND dateaccessioned <= ? ";
+        push @sql_params, $end_accession->output('iso');
+    }
     
     if ( $itemtype ) {
         $query .= " AND biblioitems.itemtype = ?";
         push @sql_params, $itemtype;
     }
-
     my $sth = $dbh->prepare($query);
     $sth->execute(@sql_params);
     
     while (my ($biblionumber) = $sth->fetchrow) {
         my $record = GetMarcBiblio($biblionumber);
-        if ( $dont_export_items ) {
-            # now, find where the itemnumber is stored & extract only the item
-            my ( $itemnumberfield, $itemnumbersubfield ) =
-                GetMarcFromKohaField( 'items.itemnumber', '' );
-
-            # and delete it.
-            foreach ($record->field($itemnumberfield)){
-                $record->delete_field($record->field($itemnumberfield));
+        my ( $homebranchfield, $homebranchsubfield ) =  GetMarcFromKohaField( 'items.homebranch', '' );
+        if ( $dont_export_items || $strip_nonlocal_items || $limit_ind_branch) {
+			for my $itemfield ($record->field($homebranchfield)){
+				# if stripping nonlocal items, use loggedinuser's branch if they didn't select one
+				$branch = C4::Context->userenv->{'branch'} unless $branch;
+                $record->delete_field($itemfield) if($dont_export_items || ($itemfield->subfield($homebranchsubfield) ne $branch) ) ;
             }
         }
         
@@ -148,11 +166,8 @@ else {
             );
        push @itemtypesloop, \%row;
     }
-    
-    my $branches = GetBranches;
-    my $branch   = GetBranch($query,$branches);
     my @branchloop;
-    foreach my $thisbranch (keys %$branches) {
+	for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
         my $selected = 1 if $thisbranch eq $branch;
         my %row = (
             value => $thisbranch,
@@ -164,7 +179,8 @@ else {
     
     $template->param(
         branchloop   => \@branchloop,
-        itemtypeloop => \@itemtypesloop
+        itemtypeloop => \@itemtypesloop,
+		DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
     );
     
     output_html_with_http_headers $query, $cookie, $template->output;

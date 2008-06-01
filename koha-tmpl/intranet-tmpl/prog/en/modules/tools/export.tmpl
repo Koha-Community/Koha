@@ -1,6 +1,10 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Tools &rsaquo; MARC Export</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-en.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -31,7 +35,7 @@
         </li>
         
         <li>
-            <label for="itemtype">Document type: </label>
+            <label for="itemtype">Item type: </label>
             <select name="itemtype" id="itemtype">
                 <option value="">-- All --</option>
                 <!-- TMPL_LOOP NAME="itemtypeloop" -->
@@ -63,13 +67,47 @@
         <li>
             <label for="endcn">To itemcallnumber: </label>
             <input id="endcn" type="text" name="end_callnumber" size="5" />
-        </li></ol>
+        </li>
+	<li>Accession date (inclusive):
+		<ul><li>
+		<label for="start_accession">Start date:</label>
+		<input type="text" size="10" id="start_accession" name="start_accession" value="<!-- TMPL_VAR NAME="from" -->" />
+		<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif"  border="0" id="openCalendarFrom" style="cursor: pointer;" alt="" />
+			<script language="JavaScript" type="text/javascript">
+Calendar.setup(
+        {
+        inputField : "start_accession",
+        ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+        button : "openCalendarFrom",
+        }
+);
+</script></li>
+<li><label for="end_accession">
+    End date:
+</label>
+<input size="10" id="end_accession" name="end_accession" value="<!-- TMPL_VAR NAME="end_accession" -->" type="text" />
+<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="" id="openCalendarTo" style="cursor: pointer;" border="0" />
+<script type="text/javascript">
+
+        Calendar.setup(
+                {
+                    inputField : "end_accession",
+                    ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+                    button : "openCalendarTo",
+                }
+        );
+</script></li>
+</ul></li>
     </fieldset>
     <fieldset class="rows">
     <legend> Options</legend>
 <ol>        <li>
         <label for="dont_export_item">Don't export items</label>
         <input id="dont_export_item" type="checkbox" name="dont_export_item" />
+        </li>
+        <li>
+        <label for="strip_nonlocal_items">Remove non-local items</label>
+        <input id="strip_nonlocal_items" type="checkbox" name="strip_nonlocal_items" />
         </li>
         <li>
         <label for="dont_export_fields">Don't export fields</label>
