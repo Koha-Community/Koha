@@ -1116,9 +1116,7 @@ sub GetMarcUrls {
         if($marcflavour eq 'MARC21') {
             my $s3 = $field->subfield('3');
             my $link = $field->subfield('y');
-			warn $url;
 			unless($url =~ /^\w+:/) {
-			warn $field->indicator(1);
 				if($field->indicator(1) eq '7') {
 					$url = $field->subfield('2') . "://" . $url;
 				} elsif ($field->indicator(1) eq '1') {
