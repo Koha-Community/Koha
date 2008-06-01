@@ -78,7 +78,7 @@ elsif ($op eq 'add') {
 }
 my $branches = GetBranches();
 my @branchloop;
-foreach my $thisbranch (keys %$branches) {
+for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
     my $selected = 1 if $thisbranch eq $branch;
     my %row =(value => $thisbranch,
                 selected => $selected,

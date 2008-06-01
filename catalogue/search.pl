@@ -208,7 +208,7 @@ if (C4::Context->preference("marcflavour") eq "UNIMARC" ) {
 my $branches = GetBranches();
 my @branch_loop;
 
-for my $branch_hash (sort keys %$branches) {
+for my $branch_hash (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
     push @branch_loop, {value => "$branch_hash" , branchname => $branches->{$branch_hash}->{'branchname'}, };
 }
 

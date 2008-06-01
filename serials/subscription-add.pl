@@ -99,7 +99,7 @@ my $onlymine=C4::Context->preference('IndependantBranches') &&
              C4::Context->userenv->{branch};
 my $branches = GetBranches($onlymine);
 my @branchloop;
-foreach my $thisbranch (keys %$branches) {
+for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
     my $selected = 1 if $thisbranch eq C4::Context->userenv->{'branch'};
     my %row =(value => $thisbranch,
                 selected => $selected,

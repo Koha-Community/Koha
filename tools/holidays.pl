@@ -22,7 +22,7 @@ use CGI;
 use C4::Auth;
 use C4::Output;
 
-
+use C4::Branch; # GetBranches
 use C4::Calendar;
 
 my $input = new CGI;
@@ -43,30 +43,25 @@ my ($template, $loggedinuser, $cookie)
                            });
 
 # Set all the branches.
-my $branches = $dbh->prepare("select branchcode, branchname from branches");
-$branches->execute;
-# It creates a list of branches
-my %list;
-while (my ($branchcode, $branchname) = $branches->fetchrow) {
-    $list{$branchcode} = $branchname;
-}
-my @listValues = keys(%list);
-if (!defined($branch)) {
-    $branch =$listValues[4];
-}
-my $branchesList = CGI::scrolling_list(-name => 'branch',
-                                       -values => \@listValues,
-                                       -labels => \%list,
-                                       -size => 1,
-                                       -default => [$branch],
-                                       -multiple => 0,
-                                       -id => "branch");
-
-$branches->finish;
-
+my $onlymine=(C4::Context->preference('IndependantBranches') &&
+              C4::Context->userenv &&
+              C4::Context->userenv->{flags} !=1  &&
+              C4::Context->userenv->{branch}?1:0);
 if ( C4::Context->preference("IndependantBranches") ) { 
     $branch = C4::Context->userenv->{'branch'};
 }
+my $branches = GetBranches($onlymine);
+my @branchloop;
+for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
+    my $selected = 1 if $thisbranch eq $branch;
+    my %row =(value => $thisbranch,
+                selected => $selected,
+                branchname => $branches->{$thisbranch}->{'branchname'},
+            );
+    push @branchloop, \%row;
+}
+
+
 # Get all the holidays
 
 my $calendar = C4::Calendar->new(branchcode => $branch);
@@ -111,20 +106,13 @@ foreach my $yearMonthDay (keys %$single_holidays) {
     push @holidays, \%holiday;
 }
 
-# Replace the template values with the real ones
-# If we have independent branches on we need to only let the user set holidays for their branch
-# (except if the user is superlibrarian, in which case he can choose the branch anyway)
-if ( C4::Context->preference("IndependantBranches") && !(C4::Context->userenv->{'flags'} % 2) ) { 
-	$template->param(BRANCHES => C4::Context->userenv->{'branchname'}."<input type='hidden' id='branch' value='".C4::Context->userenv->{'branch'}."'>");
-}
-else {
-	$template->param(BRANCHES => $branchesList);
-}
-$template->param(WEEK_DAYS_LOOP => \@week_days);
-$template->param(HOLIDAYS_LOOP => \@holidays);
-$template->param(EXCEPTION_HOLIDAYS_LOOP => \@exception_holidays);
-$template->param(DAY_MONTH_HOLIDAYS_LOOP => \@day_month_holidays);
-$template->param(branch => $branch);
+$template->param(WEEK_DAYS_LOOP => \@week_days,
+				branchloop => \@branchloop, 
+				HOLIDAYS_LOOP => \@holidays,
+				EXCEPTION_HOLIDAYS_LOOP => \@exception_holidays,
+				DAY_MONTH_HOLIDAYS_LOOP => \@day_month_holidays,
+				branch => $branch
+	);
 
 # Shows the template with the real values replaced
 output_html_with_http_headers $input, $cookie, $template->output;

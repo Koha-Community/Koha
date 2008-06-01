@@ -67,7 +67,7 @@ my $oldprinter = $printer;
 my $branchcount  = 0;
 my $printercount = 0;
 my @branchloop;
-foreach my $br ( sort keys %$branches ) {
+for my $br (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
     next unless $br =~ /\S/; # next unless $br is not blank.
 
     $branchcount++;

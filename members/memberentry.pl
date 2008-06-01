@@ -455,7 +455,7 @@ my $onlymine=(C4::Context->preference('IndependantBranches') &&
 my $branches=GetBranches($onlymine);
 my $default;
 
-foreach my $branch (sort keys %$branches) {
+for my $branch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
     push @select_branch,$branch;
     $select_branches{$branch} = $branches->{$branch}->{'branchname'};
     $default = C4::Context->userenv->{'branch'} if (C4::Context->userenv && C4::Context->userenv->{'branch'});
