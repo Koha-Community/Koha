@@ -1,5 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Cataloguing</title>
+<!-- TMPL_INCLUDE NAME="greybox.inc" -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -35,6 +36,8 @@
         <tr>
             <th>Title</th>
             <th>Location</th>
+            <th>preview</th>
+            <th>&nbsp;</th>
             <th>&nbsp;</th>
         </tr>
     <!-- TMPL_LOOP NAME="resultsloop" -->
@@ -90,8 +93,13 @@
                         <!-- TMPL_IF NAME="orderedcount" --> On order (<!-- TMPL_VAR NAME="orderedcount" -->)<!-- /TMPL_IF -->
                     </span>
                 </td>
+				<td> <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=<!-- TMPL_VAR NAME="biblionumber" -->" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&id=<!-- TMPL_VAR NAME="biblionumber" -->" title="MARC" rel="gb_page_center[600,500]">Card</a>
+                </td>
                 <td>
-                    <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Edit biblio</a>
+                    <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" <!-- TMPL_UNLESS NAME="CAN_user_editcatalogue" --> class="disabled" onclick="return false;"<!-- /TMPL_UNLESS -->>Edit biblio</a>
+                </td>
+                <td>
+                    <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Add holdings</a>
                 </td>
             </tr>
     <!-- /TMPL_LOOP -->
@@ -115,7 +123,7 @@
                 <th>Title</th>
                 <th>ISBN</th>
                 <th>coming from</th>
-                <th>&nbsp;</th>
+                <th>preview</th>
                 <th>&nbsp;</th>
             </tr>
             <!-- TMPL_LOOP NAME="breeding_loop" -->
@@ -124,11 +132,12 @@
                 <!-- TMPL_VAR NAME="author" --></td>
                 <td><!-- TMPL_VAR NAME="isbn" --></td>
                 <td><!-- TMPL_VAR NAME="file" --></td>
-                <!-- TMPL_IF NAME="NOTMARC" -->
-                                    
+                <td> <a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=<!-- TMPL_VAR NAME="id" -->" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&importid=<!-- TMPL_VAR NAME="id" -->" title="MARC" rel="gb_page_center[600,500]">Card</a>
+				</td>
+                <td><!-- TMPL_IF NAME="NOTMARC" -->
                 <!-- TMPL_ELSE -->
-                <td><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?breedingid=<!-- TMPL_VAR NAME="id" -->">Add biblio</a></td>
-                <!-- /TMPL_IF -->
+                	<a href="/cgi-bin/koha/cataloguing/addbiblio.pl?breedingid=<!-- TMPL_VAR NAME="id" -->" <!-- TMPL_UNLESS NAME="CAN_user_editcatalogue" --> class="disabled" onclick="return false;"<!-- /TMPL_UNLESS -->>Add biblio</a>
+                <!-- /TMPL_IF --></td>
             </tr>
             <!-- /TMPL_LOOP -->
         </table>
