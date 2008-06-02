@@ -304,9 +304,9 @@
         <option value="">All libraries</option>
         <!-- TMPL_LOOP NAME="branchloop" -->
         <!--TMPL_IF Name="selected"-->
-        <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
+        <option value="branch:<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
         <!--TMPL_ELSE-->    
-        <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
+        <option value="branch:<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
         <!--/TMPL_IF-->    
         <!-- /TMPL_LOOP -->
         </select>
