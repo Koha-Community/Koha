@@ -23,7 +23,9 @@ if ($id && $format) {
         $id =~ s/koha:isbn://;
 
         # two ways to do this, one via the SRU Zebra server (fast)
-        my $url = "http://$baseurl:9998/biblios?version=1.1&operation=searchRetrieve&query=$id&startRecord=1&maximumRecords=20&recordSchema=$format";
+        # FIXME - getting the SRU URL this way is purely guesswork
+        $baseurl =~ s/:\d+$//; # parse off OPAC port
+        my $url = "$baseurl:9998/biblios?version=1.1&operation=searchRetrieve&query=$id&startRecord=1&maximumRecords=20&recordSchema=$format";
         my $content= get($url);
 
         # the other via XSL parsing (not as fast)
