@@ -35,7 +35,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
     # set the version for version checking
-    $VERSION = 3.02;
+    $VERSION = 3.03;
     require Exporter;
     @ISA    = qw(Exporter);
 	@EXPORT_OK = qw(&output_ajax_with_http_headers &is_ajax); # More stuff should go here instead
@@ -342,18 +342,25 @@ sub pagination_bar {
 
 =item output_html_with_http_headers
 
-   &output_html_with_http_headers($query, $cookie, $html)
+   &output_html_with_http_headers($query, $cookie, $html[, $content_type])
 
 Outputs the HTML page $html with the appropriate HTTP headers,
 with the authentication cookie $cookie and a Content-Type that
 corresponds to the HTML page $html.
 
+If the optional C<$content_type> parameter is called, set the
+response's Content-Type to that value instead of "text/html".
+
 =cut
 
-sub output_html_with_http_headers ($$$) {
-    my($query, $cookie, $html) = @_;
+sub output_html_with_http_headers ($$$;$) {
+    my $query = shift;
+    my $cookie = shift;
+    my $html = shift;
+    my $content_type = @_ ? shift : "text/html";
+    $content_type = "text/html" unless $content_type =~ m!/!; # very basic sanity check
     print $query->header(
-        -type    => 'text/html',
+        -type    => $content_type,
         -charset => 'UTF-8',
         -cookie  => $cookie,
         -Pragma => 'no-cache',

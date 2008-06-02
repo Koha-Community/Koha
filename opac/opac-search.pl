@@ -577,4 +577,7 @@ if ( C4::Context->preference("kohaspsuggest") ) {
 }
 
 # VI. BUILD THE TEMPLATE
-output_html_with_http_headers $cgi, $cookie, $template->output;
+my $content_type = $cgi->param('format') =~ /rss/ ? "application/rss+xml" :
+                   $cgi->param('format') =~ /atom/ ? "application/atom+xml" :
+                   "text/html";
+output_html_with_http_headers $cgi, $cookie, $template->output, $content_type;
