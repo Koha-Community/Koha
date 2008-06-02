@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='utf-8'  ?>
 <!-- TMPL_IF NAME="opensearchdescription" -->
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
-   <ShortName><!-- TMPL_VAR NAME="LibraryName" --> Search</ShortName>
-   <Description>Search the <!-- TMPL_VAR NAME="LibraryName" --></Description>
-   <Tags>koha opac <!-- TMPL_VAR NAME="LibraryName" --></Tags>
-   <Contact><!-- TMPL_VAR NAME="KohaAdminEmailAddress" --></Contact>
+   <ShortName><!-- TMPL_VAR NAME="LibraryName" ESCAPE="html" --> Search</ShortName>
+   <Description>Search the <!-- TMPL_VAR NAME="LibraryName" ESCAPE="html" --></Description>
+   <Tags>koha opac <!-- TMPL_VAR NAME="LibraryName" ESCAPE="html" --></Tags>
+   <Contact><!-- TMPL_VAR NAME="KohaAdminEmailAddress" ESCAPE="html" --></Contact>
    <Url type="application/rss+xml" 
-        template="http://<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?q={searchTerms}&amp;pw={startPage?}&amp;format=rss2"/>
+        template="<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?q={searchTerms}&amp;pw={startPage?}&amp;format=rss2"/>
 </OpenSearchDescription>
 
 <!-- TMPL_ELSE -->
@@ -16,21 +16,27 @@
       xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/"
       xmlns:atom="http://www.w3.org/2005/Atom">
    <channel>
-     <title><!-- TMPL_VAR NAME="LibraryName" --> Search <!-- TMPL_IF NAME="query_desc" -->for '<!-- TMPL_VAR NAME="query_desc" -->'<!-- /TMPL_IF --><!-- TMPL_IF NAME="limit_desc" -->&nbsp;with limit(s):&nbsp;'<!-- TMPL_VAR NAME="limit_desc" -->'<!-- /TMPL_IF --></title>
-     <link>http://<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR name="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi"  ESCAPE="HTML" -->&amp;format=rss2</link>
-     <description> Search results <!-- TMPL_IF NAME="query_desc" -->for '<!-- TMPL_VAR NAME="query_desc" -->'<!-- /TMPL_IF --><!-- TMPL_IF NAME="limit_desc" -->&nbsp;with limit(s):&nbsp;'<!-- TMPL_VAR NAME="limit_desc" -->'<!-- /TMPL_IF --> at <!-- TMPL_VAR NAME="LibraryName" --></description>
+     <title><!-- TMPL_VAR NAME="LibraryName" ESCAPE="html" --> Search <!-- TMPL_IF NAME="query_desc" ESCAPE="html" -->for '<!-- TMPL_VAR NAME="query_desc" ESCAPE="html" -->'<!-- /TMPL_IF --><!-- TMPL_IF NAME="limit_desc" ESCAPE="html" -->&nbsp;with limit(s):&nbsp;'<!-- TMPL_VAR NAME="limit_desc" ESCAPE="html" -->'<!-- /TMPL_IF --></title>
+     <link><!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR name="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi"  ESCAPE="HTML" -->&amp;format=rss2</link>
+     <atom:link rel="self" type="application/rss+xml" href="<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?<!-- TMPL_VAR name="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi"  ESCAPE="HTML" -->&amp;format=rss2" />
+     <description> Search results <!-- TMPL_IF NAME="query_desc" -->for '<!-- TMPL_VAR NAME="query_desc" ESCAPE="html" -->'<!-- /TMPL_IF --><!-- TMPL_IF NAME="limit_desc" -->&nbsp;with limit(s):&nbsp;'<!-- TMPL_VAR NAME="limit_desc" ESCAPE="html" -->'<!-- /TMPL_IF --> at <!-- TMPL_VAR NAME="LibraryName" ESCAPE="html" --></description>
      <opensearch:totalResults><!-- TMPL_VAR NAME="total" --></opensearch:totalResults>
-     <opensearch:startIndex><!-- TMPL_VAR NAME="page" --></opensearch:startIndex>
-     <opensearch:itemsPerPage><!-- TMPL_VAR NAME="count" --></opensearch:itemsPerPage>
-     <atom:link rel="search" type="application/opensearchdescription+xml" href="/cgi-bin/koha/opac-search.pl?format=opensearchdescription"/>
-     <opensearch:Query role="request" searchTerms="<!-- TMPL_VAR NAME="query_desc" --> <!-- TMPL_VAR NAME="limit_desc" -->" startPage="<!-- TMPL_VAR NAME="page" -->" />
+     <opensearch:startIndex><!-- TMPL_VAR NAME="offset" --></opensearch:startIndex>
+     <!-- TMPL_IF NAME="results_per_page" -->
+       <opensearch:itemsPerPage><!-- TMPL_VAR NAME="results_per_page" --></opensearch:itemsPerPage>
+     <!-- TMPL_ELSE -->
+       <opensearch:itemsPerPage>20</opensearch:itemsPerPage>
+     <!-- /TMPL_IF -->
+     <atom:link rel="search" type="application/opensearchdescription+xml" href="<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?format=opensearchdescription"/>
+     <opensearch:Query role="request" searchTerms="<!-- TMPL_VAR NAME="query_desc" ESCAPE="html" --> <!-- TMPL_VAR NAME="limit_desc" ESCAPE="html" -->" startPage="<!-- TMPL_VAR NAME="page" -->" />
 	 <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
      <item>
-       <title><!-- TMPL_VAR NAME="title" --></title>
-       <link>http://<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" --></link>
+       <title><!-- TMPL_VAR NAME="title" ESCAPE="html" --></title>
+       <link><!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" --></link>
        <description>
-		<!-- TMPL_IF name="pages" -->- <!-- TMPL_VAR name="pages" --><!-- /TMPL_IF -->
+		<!-- TMPL_IF name="pages" -->- <!-- TMPL_VAR name="pages" ESCAPE="html" --><!-- /TMPL_IF -->
        </description>
+       <guid><!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" --></guid>
      </item>
 	 <!-- /TMPL_LOOP -->
    </channel>
@@ -40,33 +46,39 @@
 <!-- TMPL_IF NAME="atom" -->
 <feed xmlns="http://www.w3.org/2005/Atom" 
        xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">
-   <title><!-- TMPL_VAR NAME="LibraryName" --> Search <!-- TMPL_IF NAME="query_desc" -->for '<!-- TMPL_VAR NAME="query_desc" -->'<!-- /TMPL_IF --><!-- TMPL_IF NAME="limit_desc" -->&nbsp;with limit(s):&nbsp;'<!-- TMPL_VAR NAME="limit_desc" -->'<!-- /TMPL_IF --></title>
-    <link href="http://<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR name="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi"  ESCAPE="HTML" -->&amp;format=rss2"/>
+   <id><!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?<!-- TMPL_VAR name="query_cgi" ESCAPE="html" --><!-- TMPL_VAR NAME="limit_cgi" ESCAPE="html" -->&amp;format=atom</id>
+   <title><!-- TMPL_VAR NAME="LibraryName" ESCAPE="html" --> Search <!-- TMPL_IF NAME="query_desc" -->for '<!-- TMPL_VAR NAME="query_desc" ESCAPE="html" -->'<!-- /TMPL_IF --><!-- TMPL_IF NAME="limit_desc" -->&nbsp;with limit(s):&nbsp;'<!-- TMPL_VAR NAME="limit_desc" ESCAPE="html" -->'<!-- /TMPL_IF --></title>
+    <link href="<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR name="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi"  ESCAPE="HTML" -->&amp;format=rss2"/>
    <updated><!-- TMPL_VAR NAME="timestamp" --></updated>
    <author> 
-     <name><!-- TMPL_VAR NAME="LibraryName" --></name>
+     <name><!-- TMPL_VAR NAME="LibraryName" ESCAPE="html" --></name>
    </author> 
    <!-- <id>urn:uuid:60a76c80-d399-11d9-b93C-0003939e0af6</id> -->
    <opensearch:totalResults><!-- TMPL_VAR NAME="total" --></opensearch:totalResults>
    <opensearch:startIndex><!-- TMPL_VAR NAME="page" --></opensearch:startIndex>
-   <opensearch:itemsPerPage><!-- TMPL_VAR NAME="count" --></opensearch:itemsPerPage>
-   <opensearch:Query role="request" searchTerms="<!-- TMPL_VAR NAME="query_desc" --> <!-- TMPL_VAR NAME="limit_desc" -->" startPage="<!-- TMPL_VAR NAME="page" -->" />
-   <link rel="alternate" href="http://<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR name="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi"  ESCAPE="HTML" -->pw=<!-- TMPL_VAR NAME="page" -->" type="text/html"/>
-   <link rel="self" href="http://<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR name="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi"  ESCAPE="HTML" -->pw=<!-- TMPL_VAR NAME="page" -->&amp;format=atom" type="application/atom+xml"/>
-   <link rel="first" href="http://<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR name="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi"  ESCAPE="HTML" -->pw=1&amp;format=atom" type="application/atom+xml"/>
-   <link rel="previous" href="http://<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR name="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi"  ESCAPE="HTML" -->pw=2&amp;format=atom" type="application/atom+xml"/>
-   <link rel="next" href="http://<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR name="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi"  ESCAPE="HTML" -->pw=4&amp;format=atom" type="application/atom+xml"/>
-   <link rel="last" href="http://<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR name="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi"  ESCAPE="HTML" -->pw=42299&amp;format=atom" type="application/atom+xml"/>
-   <link rel="search" type="application/opensearchdescription+xml" href="http://<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?format=opensearchdescription"/>
+   <!-- TMPL_IF NAME="results_per_page" -->
+     <opensearch:itemsPerPage><!-- TMPL_VAR NAME="results_per_page" --></opensearch:itemsPerPage>
+   <!-- TMPL_ELSE -->
+     <opensearch:itemsPerPage>20</opensearch:itemsPerPage>
+   <!-- /TMPL_IF -->
+   <opensearch:Query role="request" searchTerms="<!-- TMPL_VAR NAME="query_desc" ESCAPE="html" --> <!-- TMPL_VAR NAME="limit_desc" ESCAPE="html" -->" startPage="<!-- TMPL_VAR NAME="page" ESCAPE="html" -->" />
+   <link rel="alternate" href="<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?<!-- TMPL_VAR name="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi"  ESCAPE="HTML" -->pw=<!-- TMPL_VAR NAME="page" -->" type="text/html"/>
+   <link rel="self" href="<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?<!-- TMPL_VAR name="query_cgi" --><!-- TMPL_VAR NAME="limit_cgi" -->&amp;format=atom" type="application/atom+xml"/>
+   <link rel="first" href="<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?<!-- TMPL_VAR name="query_cgi" --><!-- TMPL_VAR NAME="limit_cgi" -->pw=1&amp;format=atom" type="application/atom+xml"/>
+   <link rel="previous" href="<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?<!-- TMPL_VAR name="query_cgi" --><!-- TMPL_VAR NAME="limit_cgi" -->pw=2&amp;format=atom" type="application/atom+xml"/>
+   <link rel="next" href="<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?<!-- TMPL_VAR name="query_cgi" --><!-- TMPL_VAR NAME="limit_cgi" -->pw=4&amp;format=atom" type="application/atom+xml"/>
+   <link rel="last" href="<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?<!-- TMPL_VAR name="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi"  ESCAPE="HTML" -->pw=42299&amp;format=atom" type="application/atom+xml"/>
+   <link rel="search" type="application/opensearchdescription+xml" href="<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?format=opensearchdescription"/>
 
    <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
    <entry>
-     <title><!-- TMPL_VAR NAME="title" --></title>
-     <link href="http://<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"/>
+     <title><!-- TMPL_VAR NAME="title" ESCAPE="html" --></title>
+     <link href="<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"/>
      <!-- <id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a</id> -->
      <updated><!-- TMPL_VAR NAME="timestamp" --></updated>
      <content type="text"><!-- put content here -->
      </content>
+     <id><!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" --></id>
    </entry>
    <!-- /TMPL_LOOP -->
  </feed>

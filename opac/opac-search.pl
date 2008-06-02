@@ -14,7 +14,7 @@ use C4::Search;
 use C4::Biblio;  # GetBiblioData
 use C4::Koha;
 use C4::Tags qw(get_tags);
-use POSIX qw(ceil floor);
+use POSIX qw(ceil floor strftime);
 use C4::Branch; # GetBranches
 
 # create a new CGI object
@@ -63,6 +63,9 @@ if ($cgi->param("format") eq 'rss2') {
 }
 elsif ($cgi->param("format") eq 'atom') {
 	$template->param("atom" => 1);
+    # FIXME - the timestamp is a hack - the biblio update timestamp should be used for each
+    # entry, but not sure if that's worth an extra database query for each bib
+    $template->param(timestamp => strftime("%Y-%m-%dT%H:%M:%S-00:00", gmtime));
 }
 elsif ($cgi->param("format") eq 'opensearchdescription') {
 	$template->param("opensearchdescription" => 1);
