@@ -5,7 +5,7 @@ KOHA_DATE=`date '+%y%m%d'`
 KOHA_DUMP=/tmp/koha-$KOHA_DATE.dump
 KOHA_BACKUP=/tmp/koha-$KOHA_DATE.dump.gz
 
-mysqldump -u koha -ppassword koha > $KOHA_DUMP &&
+mysqldump --single-transaction -u koha -ppassword koha > $KOHA_DUMP &&
 gzip -f $KOHA_DUMP &&
 # Creates the dump file and compresses it;
 # -u is the Koha user, -p is the password for that user.
