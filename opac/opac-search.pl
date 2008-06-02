@@ -577,7 +577,8 @@ if ( C4::Context->preference("kohaspsuggest") ) {
 }
 
 # VI. BUILD THE TEMPLATE
-my $content_type = $cgi->param('format') =~ /rss/ ? "application/rss+xml" :
-                   $cgi->param('format') =~ /atom/ ? "application/atom+xml" :
+# NOTE: not using application/atom+xml or application/rss+xml beccause of Internet Explorer 6;
+# see bug 2078.
+my $content_type = $cgi->param('format') =~ /rss|atom/ ? "application/xml" :
                    "text/html";
 output_html_with_http_headers $cgi, $cookie, $template->output, $content_type;
