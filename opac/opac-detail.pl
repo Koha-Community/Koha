@@ -93,8 +93,7 @@ my $collections =  GetKohaAuthorisedValues('items.ccode',$dat->{'frameworkcode'}
 
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
-my @subscriptions       =
-  GetSubscriptions( $dat->{title}, $dat->{issn}, $biblionumber );
+my @subscriptions       = GetSubscriptions( $dat->{title}, $dat->{issn}, $biblionumber );
 my @subs;
 $dat->{'serial'}=1 if $subscriptionsnumber;
 foreach my $subscription (@subscriptions) {
@@ -381,7 +380,7 @@ if (C4::Context->preference('TagsEnabled') and $tag_quantity = C4::Context->pref
 		TagsShowOnDetail => $tag_quantity,
 		TagsInputOnDetail => C4::Context->preference('TagsInputOnDetail')
 	);
-	$template->param(TagLoop => get_tags({biblionumber=>$biblionumber,
+	$template->param(TagLoop => get_tags({biblionumber=>$biblionumber, approved=>1,
 								'sort'=>'-weight', limit=>$tag_quantity}));
 }
 

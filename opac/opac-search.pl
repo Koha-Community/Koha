@@ -346,7 +346,7 @@ my @results_array;
 my $results_hashref;
 
 if ($tag) {
-	my $taglist = get_tags({term=>$tag});
+	my $taglist = get_tags({term=>$tag, approved=>1});
 	$results_hashref->{biblioserver}->{hits} = scalar (@$taglist);
 	my @biblist  = (map {GetBiblioData($_->{biblionumber})} @$taglist);
 	my @marclist = (map {$_->{marc}} @biblist );
@@ -401,7 +401,7 @@ for (my $i=0;$i<=@servers;$i++) {
 			$tag_quantity = C4::Context->preference('TagsShowOnList')) {
 			foreach (@newresults) {
 				my $bibnum = $_->{biblionumber} or next;
-				$_ ->{'TagLoop'} = get_tags({biblionumber=>$bibnum, 'sort'=>'-weight',
+				$_ ->{'TagLoop'} = get_tags({biblionumber=>$bibnum, approved=>1, 'sort'=>'-weight',
 										limit=>$tag_quantity });
 			}
 		}

@@ -192,7 +192,7 @@ sub get_tag_rows ($) {
 
 sub get_tags (;$) {		# i.e., from tags_index
 	my $hash = shift || {};
-	my @ok_fields = qw(term biblionumber weight limit sort);
+	my @ok_fields = qw(term biblionumber weight limit sort approved);
 	my $wheres;
 	my $limit  = "";
 	my $order  = "";
@@ -234,7 +234,8 @@ sub get_tags (;$) {		# i.e., from tags_index
 			
 		} else {
 			my $whereval = $hash->{$key};
-			my $longkey = ($key eq 'term') ? 'tags_index.term' : $key;
+			my $longkey = ($key eq 'term'    ) ? 'tags_index.term'        :
+				 		  ($key eq 'approved') ? 'tags_approval.approved' : $key;
 			my $op = ($whereval =~ s/^(>=|<=)// or
 					  $whereval =~ s/^(>|=|<)//   ) ? $1 : '=';
 			$wheres .= ($wheres) ? " AND    $longkey $op ?\n" : " WHERE  $longkey $op ?\n";
