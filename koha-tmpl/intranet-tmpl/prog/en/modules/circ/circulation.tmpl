@@ -421,7 +421,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
     <tr class="highlight">
     <!-- /TMPL_IF -->
         <td><!-- TMPL_VAR NAME="dd" --></td>
-        <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra"><!-- TMPL_VAR NAME="title" --></a><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="itemnotes" -->- <!-- TMPL_VAR name="itemnotes" --><!-- /TMPL_IF --></td>
+        <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra"><!-- TMPL_VAR NAME="title" --></a><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="itemnotes" -->- <span class="circ-hlt"><!-- TMPL_VAR name="itemnotes" --></span><!-- /TMPL_IF --></td>
         <td>
             <!-- TMPL_VAR NAME="itemtype" -->
            <!-- TMPL_UNLESS NAME="noItemTypeImages" --> <!-- TMPL_IF NAME="itemtype_image" -->
