@@ -319,7 +319,7 @@ sub get_template_and_user {
 			AuthorisedValueImages => C4::Context->preference("AuthorisedValueImages"),
 			OPACBaseURL=> ($in->{'query'}->https() ? "https://" : "http://") .
                           $ENV{'SERVER_NAME'} . 
-                          ($ENV{'SERVER_PORT'} eq "80" ? '' : ":$ENV{'SERVER_PORT'}"),
+                          ($ENV{'SERVER_PORT'} eq ($in->{'query'}->https() ? "443" : "80") ? '' : ":$ENV{'SERVER_PORT'}"),
         );
     }
 	$template->param(listloop=>[{shelfname=>"Freelist", shelfnumber=>110}]);
