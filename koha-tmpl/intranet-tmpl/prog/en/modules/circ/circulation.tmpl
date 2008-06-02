@@ -330,7 +330,15 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
             <!-- /TMPL_IF -->
 			
         	<!-- TMPL_IF NAME="charges" -->
-			<li><span class="circ-hlt">Fines:</span> Patron has  <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->">Outstanding fines</a>.
+                <!-- TMPL_IF NAME="charges_is_blocker" -->
+			        <li class="blocker">
+                <!-- TMPL_ELSE -->
+			        <li>
+                <!-- /TMPL_IF -->
+            <span class="circ-hlt">Fines:</span> Patron has  <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->">Outstanding fines</a>.
+                <!-- TMPL_IF NAME="charges_is_blocker" -->
+                    Checkouts are blocked because fine balance is over the limit.
+                <!-- /TMPL_IF -->
             Make <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->">Payment</a></li>
 			<!-- /TMPL_IF -->
 
