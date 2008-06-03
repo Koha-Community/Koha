@@ -159,32 +159,35 @@ function verify_images() {
             <tr>
                 <!-- TMPL_IF NAME="item-level_itypes" --><th>Item type</th><!-- /TMPL_IF -->
                 <th>Location</th>
-                <th>Collection</th>
+                <!-- TMPL_IF NAME="itemdata_ccode" --><th>Collection</th><!-- /TMPL_IF -->
                 <th>Call Number</th>
                 <th>Status</th>
                 <th>Last seen</th>
                 <th>Barcode</th>
-                <th>Volume</th>
+                <!-- TMPL_IF NAME="itemdata_enumchron" --><th>Publication Details</th>
+				<!-- TMPL_ELSIF NAME="serial" --><th>Volume</th>
+				<!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="itemdata_copynumber" --><th>Copy No.</th><!-- /TMPL_IF -->
             </tr>
             <!-- TMPL_LOOP NAME="itemloop" -->
                 <tr>
-                    <!-- TMPL_IF NAME="item-level_itypes" --><td><!-- TMPL_IF NAME="noItemTypeImages" --><!-- TMPL_VAR NAME="description" --><!-- TMPL_ELSE --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->"><!-- /TMPL_IF --></td><!-- /TMPL_IF -->
-                    <td><!-- TMPL_UNLESS NAME="singlebranchmode" --><!-- TMPL_VAR NAME="branchname" --><!-- /TMPL_UNLESS --> <!-- TMPL_VAR NAME="location" --> </td>
-                    <td><!-- TMPL_VAR name="ccode" --></td>
-                    <td><!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --></td>
-                    <td>
+                    <!-- TMPL_IF NAME="item-level_itypes" --><td class="itype"><!-- TMPL_IF NAME="noItemTypeImages" --><!-- TMPL_VAR NAME="description" --><!-- TMPL_ELSE --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->"><!-- /TMPL_IF --></td><!-- /TMPL_IF -->
+                    <td class="location"><!-- TMPL_UNLESS NAME="singlebranchmode" --><!-- TMPL_VAR NAME="branchname" --><!-- /TMPL_UNLESS --> <!-- TMPL_VAR NAME="location" --> </td>
+                    <!-- TMPL_IF NAME="itemdata_ccode" --><td><!-- TMPL_VAR name="ccode" --></td><!-- /TMPL_IF -->
+                    <td class="itemcallnumber"><!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --></td>
+                    <td class="status">
 
                 <!-- TMPL_IF name="datedue" -->
-                    <!-- TMPL_IF  NAME="NOTSAMEBRANCH" -->
-                                        <span class="datedue">Checked out, due <!-- TMPL_VAR NAME="datedue" --></span>
-                    <!-- TMPL_ELSE -->
-                                        <span class="datedue">Checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a>, due <!-- TMPL_VAR NAME="datedue" --></span>
-                    <!-- /TMPL_IF -->
-					<!-- TMPL_ELSE -->
-                <!-- TMPL_IF Name="transfertwhen" -->
-                                        In transit from <!-- TMPL_VAR NAME="transfertfrom" -->,
-                                        to <!-- TMPL_VAR NAME="transfertto" -->, since <!-- TMPL_VAR NAME="transfertwhen" -->
-                <!-- /TMPL_IF -->
+						<span class="datedue">Checked out
+                    <!-- TMPL_UNLESS  NAME="NOTSAMEBRANCH" -->
+                          to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a>
+                    <!-- /TMPL_UNLESS -->
+						: due <!-- TMPL_VAR NAME="datedue" -->
+						</span>
+                <!-- TMPL_ELSIF Name="transfertwhen" -->
+                           In transit from <!-- TMPL_VAR NAME="transfertfrom" -->,
+                           to <!-- TMPL_VAR NAME="transfertto" -->, since <!-- TMPL_VAR NAME="transfertwhen" -->
+							<!-- FIXME: the "since" clause is redundant w/ lastseen field -->
                 <!-- /TMPL_IF -->
 
                 <!-- TMPL_IF NAME="itemlost" -->
@@ -244,13 +247,16 @@ function verify_images() {
                 <!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS -->
                         
                     </td>
-                    <td><!-- TMPL_VAR NAME="datelastseen" --></td>
+                    <td class="datelastseen"><!-- TMPL_VAR NAME="datelastseen" --></td>
                     <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?type=<!-- TMPL_VAR NAME="type" -->&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->#item<!-- TMPL_VAR NAME="itemnumber">"><!-- TMPL_VAR NAME="barcode" --></a></td>
-                    <!-- TMPL_IF NAME="serial" -->
-					 <td><!-- TMPL_VAR NAME="serialseq" --><!-- TMPL_IF NAME="publisheddate" --> (<!-- TMPL_VAR NAME="publisheddate" -->)<!-- /TMPL_IF --></td>
-					<!-- TMPL_ELSE -->
-					 <td><!-- TMPL_VAR NAME="enumchron" --></td>
-					<!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="itemdata_enumchron" -->
+					<td class="enumchron"><!-- TMPL_VAR NAME="enumchron" --></td>
+                <!-- TMPL_ELSIF NAME="serial" -->
+					<td class="serialseq"><!-- TMPL_VAR NAME="serialseq" --><!-- TMPL_IF NAME="publisheddate" --> (<!-- TMPL_VAR NAME="publisheddate" -->)<!-- /TMPL_IF --></td>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="itemdata_copynumber" -->
+					<td class="copynumber"><!-- TMPL_VAR NAME="copynumber" --></td>
+				<!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="type" -->
                     <td><a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemtype" -->">Fix Itemtype</a></td>
                 <!-- /TMPL_IF -->
@@ -258,6 +264,14 @@ function verify_images() {
                 </tr>
             <!-- /TMPL_LOOP -->
         </table>
+		<!-- TMPL_IF NAME="debug_display" -->
+		<br /><br />
+		<table>
+			<tr><td>itemdata_enumchron</td><td><!-- TMPL_VAR NAME="itemdata_enumchron" --></td></tr>
+			<tr><td>itemdata_copynumber</td><td><!-- TMPL_VAR NAME="itemdata_copynumber" --></td></tr>
+			<tr><td>serial</td><td><!-- TMPL_VAR NAME="serial" --></td></tr>
+		</table>
+		<!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
     <p>No physical items for this record</p>
 <!-- /TMPL_IF -->

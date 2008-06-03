@@ -80,23 +80,24 @@ my $dat = &GetBiblioData($biblionumber);
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
 my @subscriptions       = GetSubscriptions( $dat->{title}, $dat->{issn}, $biblionumber );
-
-
-
 my @subs;
+$dat->{'serial'}=1 if $subscriptionsnumber;
 foreach my $subscription (@subscriptions) {
     my %cell;
     $cell{subscriptionid}    = $subscription->{subscriptionid};
     $cell{subscriptionnotes} = $subscription->{notes};
-
+	$cell{branchcode}        = $subscription->{branchcode};
+	$cell{hasalert}          = $subscription->{hasalert};
     #get the three latest serials.
     $cell{latestserials} =
       GetLatestSerials( $subscription->{subscriptionid}, 3 );
     push @subs, \%cell;
 }
 $dat->{imageurl} = getitemtypeimagesrc() . "/".$itemtypes->{ $dat->{itemtype} }{imageurl};
-$dat->{'count'} = @items;
-my @itemloop;
+$dat->{'count'} = scalar @items;
+my $shelflocations = GetKohaAuthorisedValues('items.location', $fw);
+my $collections    = GetKohaAuthorisedValues('items.ccode'   , $fw);
+my (@itemloop, %itemfields);
 my $norequests = 1;
 foreach my $item (@items) {
 
@@ -106,21 +107,22 @@ foreach my $item (@items) {
     # format some item fields for display
     $item->{ $item->{'publictype'} } = 1;
     $item->{imageurl} = getitemtypeimagesrc() . "/".$itemtypes->{ $item->{itype} }{imageurl};
-    $item->{datedue} = format_date($item->{datedue});
-    $item->{datelastseen} = format_date($item->{datelastseen});
-    $item->{onloan} = format_date($item->{onloan});
+	foreach (qw(datedue datelastseen onloan)) {
+		$item->{$_} = format_date($item->{$_});
+	}
     # item damaged, lost, withdrawn loops
     $item->{itemlostloop}= GetAuthorisedValues(GetAuthValCode('items.itemlost',$fw),$item->{itemlost}) if GetAuthValCode('items.itemlost',$fw);
     if ($item->{damaged}) {
         $item->{itemdamagedloop}= GetAuthorisedValues(GetAuthValCode('items.damaged',$fw),$item->{damaged}) if GetAuthValCode('items.damaged',$fw);
     }
     #get shelf location and collection code description if they are authorised value.
-	my $shelflocations = GetKohaAuthorisedValues('items.location',$fw );
 	my $shelfcode= $item->{'location'};
 	$item->{'location'} = $shelflocations->{$shelfcode} if(defined($shelflocations) && exists($shelflocations->{$shelfcode})); 
-    my $collections =  GetKohaAuthorisedValues('items.ccode',$fw );
 	my $ccode= $item->{'ccode'};
 	$item->{'ccode'} = $collections->{$ccode} if(defined($collections) && exists($collections->{$ccode})); 
+	foreach (qw(ccode enumchron copynumber)) {
+		$itemfields{$_} = 1 if($item->{$_});
+	}
 
     # checking for holds
     my ($reservedate,$reservedfor,$expectedAt) = GetReservesFromItemnumber($item->{itemnumber});
@@ -131,7 +133,7 @@ foreach my $item (@items) {
         $item->{reservedate}     = format_date($reservedate);
         $item->{ReservedForBorrowernumber}     = $reservedfor;
         $item->{ReservedForSurname}     = $ItemBorrowerReserveInfo->{'surname'};
-        $item->{ReservedForFirstname}     = $ItemBorrowerReserveInfo->{'firstname'};
+        $item->{ReservedForFirstname}   = $ItemBorrowerReserveInfo->{'firstname'};
         $item->{ExpectedAtLibrary}     = $branches->{$expectedAt}{branchname};
     }
 
@@ -140,7 +142,7 @@ foreach my $item (@items) {
     if ( $transfertwhen ne '' ) {
         $item->{transfertwhen} = format_date($transfertwhen);
         $item->{transfertfrom} = $branches->{$transfertfrom}{branchname};
-        $item->{transfertto} = $branches->{$transfertto}{branchname};
+        $item->{transfertto}   = $branches->{$transfertto}{branchname};
         $item->{nocancel} = 1;
     }
 
@@ -155,15 +157,17 @@ foreach my $item (@items) {
 }
 
 $template->param( norequests => $norequests );
-
-    $template->param(
-        MARCNOTES   => $marcnotesarray,
-        MARCSUBJCTS => $marcsubjctsarray,
-        MARCAUTHORS => $marcauthorsarray,
-        MARCSERIES  => $marcseriesarray,
-        MARCURLS => $marcurlsarray,
-        subtitle    => $subtitle,
-    );
+$template->param(
+	MARCNOTES   => $marcnotesarray,
+	MARCSUBJCTS => $marcsubjctsarray,
+	MARCAUTHORS => $marcauthorsarray,
+	MARCSERIES  => $marcseriesarray,
+	MARCURLS => $marcurlsarray,
+	subtitle    => $subtitle,
+	itemdata_ccode      => $itemfields{ccode},
+	itemdata_enumchron  => $itemfields{enumchron},
+	itemdata_copynumber => $itemfields{copynumber},
+);
 
 my @results = ( $dat, );
 foreach ( keys %{$dat} ) {
@@ -178,6 +182,8 @@ $template->param(
     subscriptionsnumber => $subscriptionsnumber,
     subscriptiontitle   => $dat->{title},
 );
+
+# $debug and $template->param(debug_display => 1);
 
 # XISBN Stuff
 my $xisbn=$dat->{'isbn'};
