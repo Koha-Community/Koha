@@ -63,6 +63,9 @@
 	var failure_test    = function(tag){
 		$('#verdict').html(tag + ' is prohibited!');
 	};
+	var indeterminate_test = function(tag){
+		$('#verdict').html(tag + ' is neither permitted nor prohibited!');
+	};
 
 	var success_test_call = function() {
 		$('#test_button').removeAttr("disabled");
@@ -350,6 +353,8 @@ Calendar.setup({
 		&quot;<!-- TMPL_VAR NAME="test_term" -->&quot; is permitted.
 	<!-- TMPL_ELSIF NAME="verdict_rej" -->
 		&quot;<!-- TMPL_VAR NAME="test_term" -->&quot; is prohibited.
+	<!-- TMPL_ELSIF NAME="verdict_indeterminate" -->
+		&quot;<!-- TMPL_VAR NAME="test_term" -->&quot; is neither permitted nor prohibited.
 	<!-- /TMPL_IF -->
 	<!-- /TMPL_IF -->
    </div>

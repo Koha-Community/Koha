@@ -62,7 +62,9 @@ if (is_ajax()) {
 	$debug and print STDERR "op: " . Dumper($operator) . "\n";
 	my ($tag, $js_reply);
 	if ($tag = $input->param('test')) {
-		$js_reply = ( is_approved(          $tag) ? 'success' : 'failure') . "_test('$tag');\n";
+		my $check = is_approved($tag);
+		$js_reply = ( $check >=  1 ? 'success' :
+					  $check <= -1 ? 'failure' : 'indeterminate' ) . "_test('$tag');\n";
 	}
 	if ($tag = $input->param('ok')) {
 		$js_reply = (   whitelist($operator,$tag) ? 'success' : 'failure') . "_approve('$tag');\n";
@@ -102,9 +104,11 @@ $borrowernumber == 0 and push @errors, {op_zero=>1};
 } elsif ($op eq 'test'   ) {
 	my $tag = $input->param('test');
 	push @tags, $tag;
+	my $check = is_approved($tag);
 	$template->param(
 		test_term => $tag,
-		(is_approved($tag) ? 'verdict_ok' : 'verdict_rej') => 1,
+		( $check >=  1 ? 'verdict_ok' :
+		  $check <= -1 ? 'verdict_rej' : 'verdict_indeterminate' ) => 1,
 	);
 }
 

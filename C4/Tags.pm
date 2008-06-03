@@ -339,9 +339,9 @@ sub is_approved ($) {
 	$sth->execute($term);
 	unless ($sth->rows) {
 		$ext_dict and return (spellcheck($term) ? 0 : 1);	# spellcheck returns empty on OK word
-		return undef;
+		return 0;
 	}
-	return $sth->fetch;
+	return $sth->fetchrow;
 }
 
 sub get_tag_index ($;$) {
@@ -550,11 +550,11 @@ sub add_tag ($$;$$) {	# biblionumber,term,[borrowernumber,approvernumber]
 	$sth->execute($borrowernumber,$biblionumber,$term);
 
 	# then 
-	if (@_) { 	# if an arg remains, it is the borrowernumber of the approver: tag is pre-approved.  Note, whitelist unaffected.
+	if (scalar @_) { 	# if arg remains, it is the borrowernumber of the approver: tag is pre-approved.
 		my $approver = shift;
 		add_tag_approval($term,$approver);
 		add_tag_index($term,$biblionumber,$approver);
-	} elsif (is_approved($term)) {
+	} elsif (is_approved($term) >= 1) {
 		add_tag_approval($term,1);
 		add_tag_index($term,$biblionumber,1);
 	} else {
