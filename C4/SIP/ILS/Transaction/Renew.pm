@@ -16,36 +16,42 @@ use C4::Members;
 our @ISA = qw(ILS::Transaction);
 
 my %fields = (
-	      renewal_ok => 0,
-	      );
+	renewal_ok => 0,
+);
 
 sub new {
-    my $class = shift;;
-    my $self = $class->SUPER::new();
-    my $element;
+	my $class = shift;
+	my $self = $class->SUPER::new();
+	my $element;
 
-    foreach $element (keys %fields) {
-	$self->{_permitted}->{$element} = $fields{$element};
-    }
+	foreach $element (keys %fields) {
+		$self->{_permitted}->{$element} = $fields{$element};
+	}
 
-    @{$self}{keys %fields} = values %fields;
+	@{$self}{keys %fields} = values %fields;	# overkill?
+	return bless $self, $class;
+}
 
-    return bless $self, $class;
+sub do_renew_for ($$) {
+	my $self = shift;
+	my $borrower = shift;
+	my ($renewokay,$renewerror) = CanBookBeRenewed($borrower->{borrowernumber},$self->{item}->{itemnumber});
+	if ($renewokay){
+		my $datedue = AddIssue( $borrower, $self->{item}->id, undef, 0 );
+		$self->{due} = $datedue;
+		$self->renewal_ok(1);
+	} else {
+		$self->screen_msg(($self->screen_msg || '') . " " . $renewerror);
+		$self->renewal_ok(0);
+	}
+	$self->ok(1) unless $!;
+	return $self;
 }
 
 sub do_renew {
 	my $self = shift;
-	my $borrower = my $borrower = GetMember( $self->{patron}->id, 'cardnumber');
-	my ($renewokay,$renewerror) = CanBookBeRenewed($borrower->{borrowernumber},$self->{item}->{itemnumber});
-	if ($renewokay){
-		my $datedue = AddIssue( $borrower, $self->{item}->id, undef, 0 );
-		$self->{'due'} = $datedue;
-		$self->ok(1);
-		$self->renewal_ok(1);
-	}
-	else {
-		$self->ok(0);
-	}
-	return $self;
+	my $borrower = GetMember( $self->{patron}->id, 'cardnumber');
+	return $self->do_renew_for($borrower);
 }	
+
 1;
