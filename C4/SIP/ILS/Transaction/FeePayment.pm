@@ -1,4 +1,4 @@
-package ILS::Transaction::FeePaid;
+package ILS::Transaction::FeePayment;
 
 use Exporter;
 use warnings;
@@ -10,3 +10,5 @@ use ILS::Transaction;
 our @ISA = qw(Exporter ILS::Transaction);
 
 1;
+__END__
+
