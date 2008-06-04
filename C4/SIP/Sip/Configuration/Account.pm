@@ -8,7 +8,7 @@ package Sip::Configuration::Account;
 use strict;
 use warnings;
 use English;
-use Exporter;
+# use Exporter;
 
 sub new {
     my ($class, $obj) = @_;
@@ -24,19 +24,16 @@ sub new {
 
 sub id {
     my $self = shift;
-
     return $self->{id};
 }
 
 sub institution {
     my $self = shift;
-
     return $self->{institution};
 }
 
 sub password {
     my $self = shift;
-
     return $self->{password};
 }
 
