@@ -17,11 +17,16 @@ use Sip::Constants qw(:all);
 use Sip::Checksum qw(verify_cksum);
 
 use Data::Dumper;
+use CGI;
+use C4::Auth qw(&check_api_auth);
 
-our (@ISA, @EXPORT_OK);
+use vars qw(@ISA $VERSION @EXPORT_OK);
 
-@ISA = qw(Exporter);
-@EXPORT_OK = qw(handle);
+BEGIN {
+	$VERSION = 1.00;
+	@ISA = qw(Exporter);
+	@EXPORT_OK = qw(handle);
+}
 
 # Predeclare handler subroutines
 use subs qw(handle_patron_status handle_checkout handle_checkin
@@ -265,7 +270,6 @@ my %handlers = (
 #
 foreach my $i (keys(%handlers)) {
     if (!exists($handlers{$i}->{protocol}->{2})) {
-
 	$handlers{$i}->{protocol}->{2} = $handlers{$i}->{protocol}->{1};
     }
 }
@@ -275,26 +279,24 @@ sub new {
     my $self = {};
     my $msgtag = substr($msg, 0, 2);
 
-    syslog("LOG_DEBUG", "Sip::MsgType::new('%s', '%s', '%s'): msgtag '%s'",
-	   $class, substr($msg, 0, 10), $msgtag, $seqno);
     if ($msgtag eq LOGIN) {
 	# If the client is using the 2.00-style "Login" message
 	# to authenticate to the server, then we get the Login message
 	# _before_ the client has indicated that it supports 2.00, but
-	# it's using the 2.00 login process, so it must support 2.00,
-	# so we'll just do it.
-	$protocol_version = 2;
+	# it's using the 2.00 login process, so it must support 2.00.
+		$protocol_version = 2;
     }
-#warn "PROTOCOL: $protocol_version";	
+    syslog("LOG_DEBUG", "Sip::MsgType::new('%s', '%s...', '%s'): msgtag '%s', protocol %s",
+		$class, substr($msg, 0, 10), $msgtag, $seqno, $protocol_version);
+	# warn "SIP PROTOCOL: $protocol_version";	
     if (!exists($handlers{$msgtag})) {
-	syslog("LOG_WARNING",
-	       "new Sip::MsgType: Skipping message of unknown type '%s' in '%s'",
+		syslog("LOG_WARNING", "new Sip::MsgType: Skipping message of unknown type '%s' in '%s'",
 	       $msgtag, $msg);
-	return(undef);
+		return(undef);
     } elsif (!exists($handlers{$msgtag}->{protocol}->{$protocol_version})) {
-	syslog("LOG_WARNING", "new Sip::MsgType: Skipping message '%s' unsupported by protocol rev. '%d'",
+		syslog("LOG_WARNING", "new Sip::MsgType: Skipping message '%s' unsupported by protocol rev. '%d'",
 	       $msgtag, $protocol_version);
-	return(undef);
+		return(undef);
     }
 
     bless $self, $class;
@@ -306,49 +308,49 @@ sub new {
 }
 
 sub _initialize {
-    my ($self, $msg, $control_block) = @_;
-    my ($fs, $fn, $fe);
-    my $proto = $control_block->{protocol}->{$protocol_version};
+	my ($self, $msg, $control_block) = @_;
+	my ($fs, $fn, $fe);
+	my $proto = $control_block->{protocol}->{$protocol_version};
 
-    $self->{name} = $control_block->{name};
-    $self->{handler} = $control_block->{handler};
+	$self->{name}    = $control_block->{name};
+	$self->{handler} = $control_block->{handler};
 
-    $self->{fields} = {};
-    $self->{fixed_fields} = [];
+	$self->{fields}       = {};
+	$self->{fixed_fields} = [];
 
-    syslog("LOG_DEBUG", "Sip::MsgType:_initialize('%s', '%s...')",
-	   $self->{name}, substr($msg, 0, 20));
+	chomp($msg);
+	$msg =~ tr/\cM//d;
+	$msg =~ s/\^M$//;
+	chomp($msg);
 
-    foreach my $field (@{$proto->{fields}}) {
-	$self->{fields}->{$field} = undef;
-    }
+	# syslog("LOG_DEBUG", "Sip::MsgType::_initialize('%s', '%s...')", $self->{name}, substr($msg, 0, 20));
 
-    syslog("LOG_DEBUG",
-	   "Sip::MsgType::_initialize('%s', '%s', '%s', '%s', ...",
-	   $self->{name}, $msg, $proto->{template},
-	   $proto->{template_len});
+	foreach my $field (@{$proto->{fields}}) {
+		$self->{fields}->{$field} = undef;
+	}
+
+    syslog("LOG_DEBUG", "Sip::MsgType::_initialize('%s', '%s', '%s', '%s', ...)",
+		$self->{name}, $msg, $proto->{template}, $proto->{template_len});
 
     $self->{fixed_fields} = [ unpack($proto->{template}, $msg) ];
 
     # Skip over the fixed fields and the split the rest of
     # the message into fields based on the delimiter and parse them
     foreach my $field (split(quotemeta($field_delimiter), substr($msg, $proto->{template_len}))) {
-	$fn = substr($field, 0, 2);
+		$fn = substr($field, 0, 2);
 
 	if (!exists($self->{fields}->{$fn})) {
-	    syslog("LOG_WARNING",
-		   "Unsupported field '%s' in %s message '%s'",
-		   $fn, $self->{name}, $msg);
+		syslog("LOG_WARNING", "Unsupported field '%s' in %s message '%s'",
+			$fn, $self->{name}, $msg);
 	} elsif (defined($self->{fields}->{$fn})) {
-	    syslog("LOG_WARNING",
-		   "Duplicate field '%s' (previous value '%s') in %s message '%s'",
-		   $fn, $self->{fields}->{$fn}, $self->{name}, $msg);
+		syslog("LOG_WARNING", "Duplicate field '%s' (previous value '%s') in %s message '%s'",
+			$fn, $self->{fields}->{$fn}, $self->{name}, $msg);
 	} else {
-	    $self->{fields}->{$fn} = substr($field, 2);
+		$self->{fields}->{$fn} = substr($field, 2);
 	}
-    }
+	}
 
-    return($self);
+	return($self);
 }
 
 sub handle {
@@ -356,27 +358,25 @@ sub handle {
     my $config = $server->{config};
     my $self;
 
-
     #
     # What's the field delimiter for variable length fields?
     # This can't be based on the account, since we need to know
     # the field delimiter to parse a SIP login message
     #
-    if (defined($server->{config}->{delimiter})) {
-	$field_delimiter = $server->{config}->{delimiter};
-    }
+	if (defined($server->{config}->{delimiter})) {
+		$field_delimiter = $server->{config}->{delimiter};
+	}
 
     # error detection is active if this is a REQUEST_ACS_RESEND
     # message with a checksum, or if the message is long enough
     # and the last nine characters begin with a sequence number
     # field
     if ($msg eq REQUEST_ACS_RESEND_CKSUM) {
-	# Special case
-
-	$error_detection = 1;
-	$self = new Sip::MsgType ((REQUEST_ACS_RESEND), 0);
+		# Special case
+		$error_detection = 1;
+		$self = new Sip::MsgType ((REQUEST_ACS_RESEND), 0);
     } elsif((length($msg) > 11) && (substr($msg, -9, 2) eq "AY")) {
-	$error_detection = 1;
+		$error_detection = 1;
 
 	if (!verify_cksum($msg)) {
 	    syslog("LOG_WARNING", "Checksum failed on message '%s'", $msg);
@@ -390,22 +390,27 @@ sub handle {
 	    $self = new Sip::MsgType (substr($msg, 0, -9), substr($msg, -7, 1));
 	}
     } elsif ($error_detection) {
-	# We've receive a non-ED message when ED is supposed
-	# to be active.  Warn about this problem, then process
-	# the message anyway.
-	syslog("LOG_WARNING",
+	# We received a non-ED message when ED is supposed to be active.
+	# Warn about this problem, then process the message anyway.
+		syslog("LOG_WARNING",
 	       "Received message without error detection: '%s'", $msg);
-	$error_detection = 0;
-	$self = new Sip::MsgType ($msg, 0);
+		$error_detection = 0;
+		$self = new Sip::MsgType ($msg, 0);
     } else {
-	$self = new Sip::MsgType ($msg, 0);
+		$self = new Sip::MsgType ($msg, 0);
     }
 
-    if ((substr($msg, 0, 2) ne REQUEST_ACS_RESEND) &&
-	$req && (substr($msg, 0, 2) ne $req)) {
-	return substr($msg, 0, 2);
-    }
-    return($self->{handler}->($self, $server));
+	if ((substr($msg, 0, 2) ne REQUEST_ACS_RESEND) &&
+		$req && (substr($msg, 0, 2) ne $req)) {
+		return substr($msg, 0, 2);
+	}
+	unless ($self->{handler}) {
+		syslog("LOG_WARNING", "No handler defined for '%s'", $msg);
+		return undef;
+	}
+    return($self->{handler}->($self, $server));  # FIXME
+	# FIXME: Use of uninitialized value in subroutine entry
+	# Can't use string ("") as a subroutine ref while "strict refs" in use
 }
 
 ##
@@ -462,40 +467,30 @@ sub build_patron_status {
 	# just echo it back
 	$resp .= add_field(FID_PATRON_ID, $fields->{(FID_PATRON_ID)});
 
-	if ($protocol_version >= 2) {
-	    $resp .= add_field(FID_VALID_PATRON, 'N');
-	}
+	($protocol_version >= 2) and 
+		$resp .= add_field(FID_VALID_PATRON, 'N');
     }
 
     $resp .= add_field(FID_INST_ID, $fields->{(FID_INST_ID)});
-
     return $resp;
 }
 
-use Data::Dumper;
 sub handle_patron_status {
-    my ($self, $server) = @_;
-#warn Dumper($server);  
-  my $ils = $server->{ils};
-    my ($lang, $date);
-    my $fields;
-    my $patron;
-    my $resp = (PATRON_STATUS_RESP);
-    my $account = $server->{account};
-
-    ($lang, $date) = @{$self->{fixed_fields}};
-    $fields = $self->{fields};
-#warn Dumper($fields);
-#warn FID_INST_ID;
-#warn $fields->{(FID_INST_ID)};
+	my ($self, $server) = @_;
+	#warn Dumper($server);  
+	my $ils = $server->{ils};
+	my $patron;
+	my $resp = (PATRON_STATUS_RESP);
+	my $account = $server->{account};
+    my ($lang, $date) = @{$self->{fixed_fields}};
+    my $fields = $self->{fields};
+	#warn Dumper($fields);
+	#warn FID_INST_ID;
+	#warn $fields->{(FID_INST_ID)};
     $ils->check_inst_id($fields->{(FID_INST_ID)}, "handle_patron_status");
-
     $patron = $ils->find_patron($fields->{(FID_PATRON_ID)});
-
     $resp = build_patron_status($patron, $lang, $fields);
-
     $self->write_msg($resp);
-
     return (PATRON_STATUS_REQ);
 }
 
@@ -515,13 +510,13 @@ sub handle_checkout {
     $fields = $self->{fields};
 
     $patron_id = $fields->{(FID_PATRON_ID)};
-    $item_id = $fields->{(FID_ITEM_ID)};
+    $item_id   = $fields->{(FID_ITEM_ID)};
 
 
     if ($no_block eq 'Y') {
 	# Off-line transactions need to be recorded, but there's
 	# not a lot we can do about it
-	syslog("LOG_WARN", "received no-block checkout from terminal '%s'",
+	syslog("LOG_WARNING", "received no-block checkout from terminal '%s'",
 	       $account->{id});
 
 	$status = $ils->checkout_no_block($patron_id, $item_id,
@@ -530,9 +525,8 @@ sub handle_checkout {
     } else {
 	# Does the transaction date really matter for items that are
 	# checkout out while the terminal is online?  I'm guessing 'no'
-	$status = $ils->checkout($patron_id, $item_id, $sc_renewal_policy);
+		$status = $ils->checkout($patron_id, $item_id, $sc_renewal_policy);
     }
-
 
     $item = $status->item;
     $patron = $status->patron;
@@ -617,28 +611,24 @@ sub handle_checkout {
 sub handle_checkin {
     my ($self, $server) = @_;
     my $account = $server->{account};
-    my $ils = $server->{ils};
-    my ($no_block, $trans_date, $return_date);
-    my $fields;
+    my $ils     = $server->{ils};
     my ($current_loc, $inst_id, $item_id, $terminal_pwd, $item_props, $cancel);
+    my ($patron, $item, $status);
     my $resp = CHECKIN_RESP;
-    my ($patron, $item);
-    my $status;
+    my ($no_block, $trans_date, $return_date) = @{$self->{fixed_fields}};
+	my $fields = $self->{fields};
 
-    ($no_block, $trans_date, $return_date) = @{$self->{fixed_fields}};
-    $fields = $self->{fields};
-
-    $current_loc = $fields->{(FID_CURRENT_LOCN)};
-    $inst_id = $fields->{(FID_INST_ID)};
-    $item_id = $fields->{(FID_ITEM_ID)};
-    $item_props = $fields->{(FID_ITEM_PROPS)};
-    $cancel = $fields->{(FID_CANCEL)};
+	$current_loc = $fields->{(FID_CURRENT_LOCN)};
+	$inst_id     = $fields->{(FID_INST_ID)};
+	$item_id     = $fields->{(FID_ITEM_ID)};
+	$item_props  = $fields->{(FID_ITEM_PROPS)};
+	$cancel      = $fields->{(FID_CANCEL)};
 
     $ils->check_inst_id($inst_id, "handle_checkin");
 
     if ($no_block eq 'Y') {
 	# Off-line transactions, ick.
-	syslog("LOG_WARN", "received no-block checkin from terminal '%s'",
+	syslog("LOG_WARNING", "received no-block checkin from terminal '%s'",
 	       $account->{id});
 	$status = $ils->checkin_no_block($item_id, $trans_date,
 					 $return_date, $item_props, $cancel);
@@ -648,16 +638,16 @@ sub handle_checkin {
     }
 
     $patron = $status->patron;
-    $item = $status->item;
+    $item   = $status->item;
 
     $resp .= $status->ok ? '1' : '0';
     $resp .= $status->resensitize ? 'Y' : 'N';
     if ($item && $ils->supports('magnetic media')) {
-	$resp .= sipbool($item->magnetic);
+		$resp .= sipbool($item->magnetic);
     } else {
 	# The item barcode was invalid or the system doesn't support
 	# the 'magnetic media' indicator
-	$resp .= 'U';
+		$resp .= 'U';
     }
     $resp .= $status->alert ? 'Y' : 'N';
     $resp .= Sip::timestamp;
@@ -694,23 +684,22 @@ sub handle_block_patron {
     my $ils = $server->{ils};
     my ($card_retained, $trans_date);
     my ($inst_id, $blocked_card_msg, $patron_id, $terminal_pwd);
-    my $fields;
-    my $resp;
-    my $patron;
+    my ($fields,$resp,$patron);
 
     ($card_retained, $trans_date) = @{$self->{fixed_fields}};
     $fields = $self->{fields};
-    $inst_id = $fields->{(FID_INST_ID)};
+    $inst_id          = $fields->{(FID_INST_ID)};
     $blocked_card_msg = $fields->{(FID_BLOCKED_CARD_MSG)};
-    $patron_id = $fields->{(FID_PATRON_ID)};
-    $terminal_pwd = $fields->{(FID_TERMINAL_PWD)};
+    $patron_id        = $fields->{(FID_PATRON_ID)};
+    $terminal_pwd     = $fields->{(FID_TERMINAL_PWD)};
 
     # Terminal passwords are different from account login
     # passwords, but I have no idea what to do with them.  So,
     # I'll just ignore them for now.
+	
+	# FIXME ???
 
     $ils->check_inst_id($inst_id, "block_patron");
-
     $patron = $ils->find_patron($patron_id);
 
     # The correct response for a "Block Patron" message is a
@@ -722,48 +711,46 @@ sub handle_block_patron {
     # we'll just say, "Unspecified", as per the spec.  Let the
     # terminal default to something that, one hopes, will be
     # intelligible
-    if ($patron) {
-	# Valid patron id
-	$patron->block($card_retained, $blocked_card_msg);
-    }
+	if ($patron) {
+		# Valid patron id
+		$patron->block($card_retained, $blocked_card_msg);
+	}
 
     $resp = build_patron_status($patron, $patron->language, $fields);
-
     $self->write_msg($resp);
     return(BLOCK_PATRON);
 }
 
 sub handle_sc_status {
     my ($self, $server) = @_;
-    my ($status, $print_width, $sc_protocol_version, $new_proto);
+	($server) or warn "handle_sc_status error: no \$server argument received.";
+	my ($status, $print_width, $sc_protocol_version) = @{$self->{fixed_fields}};
+	my ($new_proto);
 
-    ($status, $print_width, $sc_protocol_version) = @{$self->{fixed_fields}};
+	if ($sc_protocol_version =~ /^1\./) {
+		$new_proto = 1;
+	} elsif ($sc_protocol_version =~ /^2\./) {
+		$new_proto = 2;
+	} else {
+		syslog("LOG_WARNING", "Unrecognized protocol revision '%s', falling back to '1'", $sc_protocol_version);
+		$new_proto = 1;
+	}
 
-    if ($sc_protocol_version =~ /^1\./) {
-	$new_proto = 1;
-    } elsif ($sc_protocol_version =~ /^2\./) {
-	$new_proto = 2;
-    } else {
-	syslog("LOG_WARNING", "Unrecognized protocol revision '%s', falling back to '1'", $sc_protocol_version);
-	$new_proto = 1;
-    }
-
-    if ($new_proto != $protocol_version) {
-	syslog("LOG_INFO", "Setting protocol level to $new_proto");
-	$protocol_version = $new_proto;
-    }
+	if ($new_proto != $protocol_version) {
+		syslog("LOG_INFO", "Setting protocol level to $new_proto");
+		$protocol_version = $new_proto;
+	}
 
     if ($status == SC_STATUS_PAPER) {
-	syslog("LOG_WARN", "Self-Check unit '%s@%s' out of paper",
+	syslog("LOG_WARNING", "Self-Check unit '%s@%s' out of paper",
 	       $self->{account}->{id}, $self->{account}->{institution});
     } elsif ($status == SC_STATUS_SHUTDOWN) {
-	syslog("LOG_WARN", "Self-Check unit '%s@%s' shutting down",
+	syslog("LOG_WARNING", "Self-Check unit '%s@%s' shutting down",
 	       $self->{account}->{id}, $self->{account}->{institution});
     }
 
     $self->{account}->{print_width} = $print_width;
-
-    return send_acs_status($self, $server) ? SC_STATUS : '';
+    return (send_acs_status($self, $server) ? SC_STATUS : '');
 }
 
 sub handle_request_acs_resend {
@@ -779,13 +766,11 @@ sub handle_request_acs_resend {
 	# a sequence number, even if the original had one (p. 4).
 	# If the last message didn't have a sequence number, then
 	# we can just send it.
-	print("$last_response\r");
+	print("$last_response\r");	# not write_msg?
     } else {
-	my $rebuilt;
-
 	# Cut out the sequence number and checksum, since the old
 	# checksum is wrong for the resent message.
-	$rebuilt = substr($last_response, 0, -9);
+	my $rebuilt = substr($last_response, 0, -9);
 	$self->write_msg($rebuilt);
     }
 
@@ -807,53 +792,53 @@ sub handle_login {
     $pwd = $fields->{(FID_LOGIN_PWD)};
 
     if ($uid_algorithm || $pwd_algorithm) {
-	syslog("LOG_ERR", "LOGIN: Can't cope with non-zero encryption methods: uid = $uid_algorithm, pwd = $pwd_algorithm");
-	$status = 0;
+		syslog("LOG_ERR", "LOGIN: Unsupported non-zero encryption method(s): uid = $uid_algorithm, pwd = $pwd_algorithm");
+		$status = 0;
     }
 
     if (!exists($server->{config}->{accounts}->{$uid})) {
-	syslog("LOG_WARNING", "MsgType::handle_login: Unknown login '$uid'");
-	$status = 0;
+		syslog("LOG_WARNING", "MsgType::handle_login: Unknown login '$uid'");
+		$status = 0;
     } elsif ($server->{config}->{accounts}->{$uid}->{password} ne $pwd) {
-	syslog("LOG_WARNING",
-	       "MsgType::handle_login: Invalid password for login '$uid'");
-	$status = 0;
+		syslog("LOG_WARNING", "MsgType::handle_login: Invalid password for login '$uid'");
+		$status = 0;
     } else {
 	# Store the active account someplace handy for everybody else to find.
-	$server->{account} = $server->{config}->{accounts}->{$uid};
-	$inst = $server->{account}->{institution};
-	$server->{institution} = $server->{config}->{institutions}->{$inst};
-	$server->{policy} = $server->{institution}->{policy};
+		$server->{account} = $server->{config}->{accounts}->{$uid};
+		$inst = $server->{account}->{institution};
+		$server->{institution} = $server->{config}->{institutions}->{$inst};
+		$server->{policy} = $server->{institution}->{policy};
+		$server->{sip_username} = $uid;
+		$server->{sip_password} = $pwd;
 
+		my $auth_status = api_auth($uid,$pwd);
+		if (!$auth_status or $auth_status !~ /^ok$/i) {
+			syslog("LOG_WARNING", "api_auth failed for SIP terminal '%s' of '%s': %s",
+						$uid, $inst, ($auth_status||'unknown'));
+			$status = 0;
+		} else {
+			syslog("LOG_INFO", "Successful login/auth for '%s' of '%s'", $server->{account}->{id}, $inst);
+			#
+			# initialize connection to ILS
+			#
+			my $module = $server->{config}->{institutions}->{$inst}->{implementation};
+			syslog("LOG_DEBUG", 'handle_login: ' . Dumper($module));
+			$module->use;
+			if ($@) {
+				syslog("LOG_ERR", "%s: Loading ILS implementation '%s' for institution '%s' failed",
+						$server->{service}, $module, $inst);
+				die("Failed to load ILS implementation '$module' for $inst");
+			}
 
-	syslog("LOG_INFO", "Successful login for '%s' of '%s'",
-	       $server->{account}->{id}, $inst);
-	#
-	# initialize connection to ILS
-	#
-	my $module = $server->{config}
-	  ->{institutions}
-	    ->{ $inst }
-	      ->{implementation};
-	$module->use;
-
-	if ($@) {
-	    syslog("LOG_ERR", "%s: Loading ILS implementation '%s' for institution '%s' failed",
-		   $server->{service}, $module, $inst);
-	    die("Failed to load ILS implementation '$module'");
+			# like   ILS->new(), I think.
+			$server->{ils} = $module->new($server->{institution}, $server->{account});
+			if (!$server->{ils}) {
+			    syslog("LOG_ERR", "%s: ILS connection to '%s' failed", $server->{service}, $inst);
+			    die("Unable to connect to ILS '$inst'");
+			}
+		}
 	}
-
-	$server->{ils} = $module->new($server->{institution}, $server->{account});
-
-	if (!$server->{ils}) {
-	    syslog("LOG_ERR", "%s: ILS connection to '%s' failed",
-		   $server->{service}, $inst);
-	    die("Unable to connect to ILS '$inst'");
-	}
-    }
-
     $self->write_msg(LOGIN_RESP . $status);
-
     return $status ? LOGIN : '';
 }
 
@@ -899,7 +884,7 @@ sub summary_info {
 	   $summary_type, $summary_map[$summary_type]->{fid});
 
     $func = $summary_map[$summary_type]->{func};
-    $fid = $summary_map[$summary_type]->{fid};
+    $fid  = $summary_map[$summary_type]->{fid};
     $itemlist = &$func($patron, $start, $end);
 
     syslog("LOG_DEBUG", "summary_info: list = (%s)", join(", ", @{$itemlist}));
@@ -918,12 +903,12 @@ sub handle_patron_info {
     my ($inst_id, $patron_id, $terminal_pwd, $patron_pwd, $start, $end);
     my ($resp, $patron, $count);
 
-    $inst_id = $fields->{(FID_INST_ID)};
-    $patron_id = $fields->{(FID_PATRON_ID)};
+    $inst_id      = $fields->{(FID_INST_ID)};
+    $patron_id    = $fields->{(FID_PATRON_ID)};
     $terminal_pwd = $fields->{(FID_TERMINAL_PWD)};
-    $patron_pwd = $fields->{(FID_PATRON_PWD)};
-    $start = $fields->{(FID_START_ITEM)};
-    $end = $fields->{(FID_END_ITEM)};
+    $patron_pwd   = $fields->{(FID_PATRON_PWD)};
+    $start        = $fields->{(FID_START_ITEM)};
+    $end          = $fields->{(FID_END_ITEM)};
 
     $patron = $ils->find_patron($patron_id);
 
@@ -1102,13 +1087,13 @@ sub handle_item_information {
 	$resp .= $item->sip_fee_type;
 	$resp .= Sip::timestamp;
 
-	$resp .= add_field(FID_ITEM_ID, $item->id);
+	$resp .= add_field(FID_ITEM_ID,  $item->id);
 	$resp .= add_field(FID_TITLE_ID, $item->title_id);
 
-	$resp .= maybe_add(FID_MEDIA_TYPE, $item->sip_media_type);
-	$resp .= maybe_add(FID_PERM_LOCN, $item->permanent_location);
+	$resp .= maybe_add(FID_MEDIA_TYPE,   $item->sip_media_type);
+	$resp .= maybe_add(FID_PERM_LOCN,    $item->permanent_location);
 	$resp .= maybe_add(FID_CURRENT_LOCN, $item->current_location);
-	$resp .= maybe_add(FID_ITEM_PROPS, $item->sip_item_properties);
+	$resp .= maybe_add(FID_ITEM_PROPS,   $item->sip_item_properties);
 
 	if (($i = $item->fee) != 0) {
 	    $resp .= add_field(FID_CURRENCY, $item->fee_currency);
@@ -1154,12 +1139,12 @@ sub handle_item_status_update {
     $item_id = $fields->{(FID_ITEM_ID)};
     $item_props = $fields->{(FID_ITEM_PROPS)};
 
-    if (!defined($item_id)) {
-	syslog("LOG_WARNING",
-	       "handle_item_status: received message without Item ID field");
+	if (!defined($item_id)) {
+		syslog("LOG_WARNING",
+			"handle_item_status: received message without Item ID field");
     } else {
-	$item = $ils->find_item($item_id);
-    }
+		$item = $ils->find_item($item_id);
+	}
 
     if (!$item) {
 	# Invalid Item ID
@@ -1252,58 +1237,52 @@ sub handle_hold {
 
     $ils->check_inst_id($fields->{(FID_INST_ID)}, "handle_hold");
 
-    $patron_id = $fields->{(FID_PATRON_ID)};
-    $expiry_date = $fields->{(FID_EXPIRATION)} || '';
+    $patron_id   = $fields->{(FID_PATRON_ID)  };
+    $expiry_date = $fields->{(FID_EXPIRATION) } || '';
     $pickup_locn = $fields->{(FID_PICKUP_LOCN)} || '';
-    $hold_type = $fields->{(FID_HOLD_TYPE)} || '2'; # Any copy of title
-    $patron_pwd = $fields->{(FID_PATRON_PWD)};
-    $item_id = $fields->{(FID_ITEM_ID)} || '';
-    $title_id = $fields->{(FID_TITLE_ID)} || '';
-    $fee_ack = $fields->{(FID_FEE_ACK)} || 'N';
+    $hold_type   = $fields->{(FID_HOLD_TYPE)  } || '2'; # Any copy of title
+    $patron_pwd  = $fields->{(FID_PATRON_PWD) };
+    $item_id     = $fields->{(FID_ITEM_ID)    } || '';
+    $title_id    = $fields->{(FID_TITLE_ID)   } || '';
+    $fee_ack     = $fields->{(FID_FEE_ACK)    } || 'N';
 
     if ($hold_mode eq '+') {
-	$status = $ils->add_hold($patron_id, $patron_pwd,
-				 $item_id, $title_id,
-				 $expiry_date, $pickup_locn, $hold_type,
-				 $fee_ack);
+	$status = $ils->add_hold($patron_id, $patron_pwd, $item_id, $title_id,
+						$expiry_date, $pickup_locn, $hold_type, $fee_ack);
     } elsif ($hold_mode eq '-') {
-	$status = $ils->cancel_hold($patron_id, $patron_pwd,
-				    $item_id, $title_id);
+	$status = $ils->cancel_hold($patron_id, $patron_pwd, $item_id, $title_id);
     } elsif ($hold_mode eq '*') {
-	$status = $ils->alter_hold($patron_id, $patron_pwd,
-				   $item_id, $title_id,
-				   $expiry_date, $pickup_locn, $hold_type,
-				   $fee_ack);
+	$status = $ils->alter_hold($patron_id, $patron_pwd, $item_id, $title_id,
+						$expiry_date, $pickup_locn, $hold_type, $fee_ack);
     } else {
 	syslog("LOG_WARNING", "handle_hold: Unrecognized hold mode '%s' from terminal '%s'",
 	       $hold_mode, $server->{account}->{id});
-	$status = $ils->Transaction::Hold;
-	$status->screen_msg("System error. Please contact library status");
+	$status = $ils->Transaction::Hold;		# new?
+	$status->screen_msg("System error. Please contact library staff.");
     }
 
     $resp .= $status->ok;
-    $resp .= sipbool($status->item && $status->item->available($patron_id));
+    $resp .= sipbool($status->item  &&  $status->item->available($patron_id));
     $resp .= Sip::timestamp;
 
     if ($status->ok) {
-	$resp .= add_field(FID_PATRON_ID, $status->patron->id);
+	$resp .= add_field(FID_PATRON_ID,   $status->patron->id);
 
-	if ($status->expiration_date) {
-	    $resp .= maybe_add(FID_EXPIRATION,
-			       Sip::timestamp($status->expiration_date));
-	}
-	$resp .= maybe_add(FID_QUEUE_POS, $status->queue_position);
+	($status->expiration_date) and
+	$resp .= maybe_add(FID_EXPIRATION,
+			             Sip::timestamp($status->expiration_date));
+	$resp .= maybe_add(FID_QUEUE_POS,   $status->queue_position);
 	$resp .= maybe_add(FID_PICKUP_LOCN, $status->pickup_location);
-	$resp .= maybe_add(FID_ITEM_ID, $status->item->id);
-	$resp .= maybe_add(FID_TITLE_ID, $status->item->title_id);
+	$resp .= maybe_add(FID_ITEM_ID,     $status->item->id);
+	$resp .= maybe_add(FID_TITLE_ID,    $status->item->title_id);
     } else {
 	# Not ok.  still need required fields
-	$resp .= add_field(FID_PATRON_ID, $patron_id);
+	$resp .= add_field(FID_PATRON_ID,   $patron_id);
     }
 
-    $resp .= add_field(FID_INST_ID, $ils->institution);
-    $resp .= maybe_add(FID_SCREEN_MSG, $status->screen_msg);
-    $resp .= maybe_add(FID_PRINT_LINE, $status->print_line);
+    $resp .= add_field(FID_INST_ID,     $ils->institution);
+    $resp .= maybe_add(FID_SCREEN_MSG,  $status->screen_msg);
+    $resp .= maybe_add(FID_PRINT_LINE,  $status->print_line);
 
     $self->write_msg($resp);
 
@@ -1331,19 +1310,19 @@ sub handle_renew {
 	       $server->{account}->{id});
     }
 
-    $patron_id = $fields->{(FID_PATRON_ID)};
+    $patron_id  = $fields->{(FID_PATRON_ID)};
     $patron_pwd = $fields->{(FID_PATRON_PWD)};
-    $item_id = $fields->{(FID_ITEM_ID)};
-    $title_id = $fields->{(FID_TITLE_ID)};
+    $item_id    = $fields->{(FID_ITEM_ID)};
+    $title_id   = $fields->{(FID_TITLE_ID)};
     $item_props = $fields->{(FID_ITEM_PROPS)};
-    $fee_ack = $fields->{(FID_FEE_ACK)};
+    $fee_ack    = $fields->{(FID_FEE_ACK)};
 
     $status = $ils->renew($patron_id, $patron_pwd, $item_id, $title_id,
 			  $no_block, $nb_due_date, $third_party,
 			  $item_props, $fee_ack);
 
     $patron = $status->patron;
-    $item = $status->item;
+    $item   = $status->item;
 
     if ($status->ok) {
 	$resp .= '1';
@@ -1356,7 +1335,7 @@ sub handle_renew {
 	$resp .= sipbool($status->desensitize);
 	$resp .= Sip::timestamp;
 	$resp .= add_field(FID_PATRON_ID, $patron->id);
-	$resp .= add_field(FID_ITEM_ID, $item->id);
+	$resp .= add_field(FID_ITEM_ID,  $item->id);
 	$resp .= add_field(FID_TITLE_ID, $item->title_id);
 	$resp .= add_field(FID_DUE_DATE, Sip::timestamp($item->due_date));
 	if ($ils->supports('security inhibit')) {
@@ -1373,14 +1352,14 @@ sub handle_renew {
 	# If we found the patron or the item, the return the ILS
 	# information, otherwise echo back the infomation we received
 	# from the terminal
-	$resp .= add_field(FID_PATRON_ID, $patron ? $patron->id : $patron_id);
-	$resp .= add_field(FID_ITEM_ID, $item ? $item->id : $item_id);
-	$resp .= add_field(FID_TITLE_ID, $item ? $item->title_id : $title_id);
+	$resp .= add_field(FID_PATRON_ID, $patron ? $patron->id     : $patron_id);
+	$resp .= add_field(FID_ITEM_ID,     $item ? $item->id       : $item_id  );
+	$resp .= add_field(FID_TITLE_ID,    $item ? $item->title_id : $title_id );
 	$resp .= add_field(FID_DUE_DATE, '');
     }
 
     if ($status->fee_amount) {
-	$resp .= add_field(FID_FEE_AMT, $status->fee_amount);
+	$resp .= add_field(FID_FEE_AMT,  $status->fee_amount);
 	$resp .= maybe_add(FID_CURRENCY, $status->sip_currency);
 	$resp .= maybe_add(FID_FEE_TYPE, $status->sip_fee_type);
 	$resp .= maybe_add(FID_TRANSACTION_ID, $status->transaction_id);
@@ -1396,6 +1375,8 @@ sub handle_renew {
 }
 
 sub handle_renew_all {
+    # my ($third_party, $no_block, $nb_due_date, $fee_ack, $patron);
+
     my ($self, $server) = @_;
     my $ils = $server->{ils};
     my ($trans_date, $patron_id, $patron_pwd, $terminal_pwd, $fee_ack);
@@ -1408,31 +1389,31 @@ sub handle_renew_all {
 
     ($trans_date) = @{$self->{fixed_fields}};
 
-    $patron_id = $fields->{(FID_PATRON_ID)};
-    $patron_pwd = $fields->{(FID_PATRON_PWD)};
+    $patron_id    = $fields->{(FID_PATRON_ID)};
+    $patron_pwd   = $fields->{(FID_PATRON_PWD)};
     $terminal_pwd = $fields->{(FID_TERMINAL_PWD)};
-    $fee_ack = $fields->{(FID_FEE_ACK)};
+    $fee_ack      = $fields->{(FID_FEE_ACK)};
 
     $status = $ils->renew_all($patron_id, $patron_pwd, $fee_ack);
 
     $resp .= $status->ok ? '1' : '0';
 
-    if (!$status->ok) {
-	$resp .= add_count("renew_all/renewed_count", 0);
-	$resp .= add_count("renew_all/unrenewed_count", 0);
-	@renewed = [];
-	@unrenewed = [];
-    } else {
-	@renewed = @{$status->renewed};
-	@unrenewed = @{$status->unrenewed};
-	$resp .= add_count("renew_all/renewed_count", scalar @renewed);
-	$resp .= add_count("renew_all/unrenewed_count", scalar @unrenewed);
-    }
+	if (!$status->ok) {
+		$resp .= add_count("renew_all/renewed_count"  , 0);
+		$resp .= add_count("renew_all/unrenewed_count", 0);
+		@renewed = ();
+		@unrenewed = ();
+	} else {
+		@renewed   = (@{$status->renewed});
+		@unrenewed = (@{$status->unrenewed});
+		$resp .= add_count("renew_all/renewed_count"  , scalar @renewed  );
+		$resp .= add_count("renew_all/unrenewed_count", scalar @unrenewed);
+	}
 
     $resp .= Sip::timestamp;
     $resp .= add_field(FID_INST_ID, $ils->institution);
 
-    $resp .= join('', map(add_field(FID_RENEWED_ITEMS, $_), @renewed));
+    $resp .= join('', map(add_field(FID_RENEWED_ITEMS  , $_), @renewed  ));
     $resp .= join('', map(add_field(FID_UNRENEWED_ITEMS, $_), @unrenewed));
 
     $resp .= maybe_add(FID_SCREEN_MSG, $status->screen_msg);
@@ -1472,17 +1453,18 @@ my @message_type_names = (
 sub send_acs_status {
     my ($self, $server, $screen_msg, $print_line) = @_;
     my $msg = ACS_STATUS;
-    my $account = $server->{account};
-    my $policy = $server->{policy};
-    my $ils = $server->{ils};
+	($server) or die "send_acs_status error: no \$server argument received";
+    my $account = $server->{account} or die "send_acs_status error: no 'account' in \$server object:\n" . Dumper($server);
+    my $policy  = $server->{policy}  or die "send_acs_status error: no 'policy' in \$server object:\n" . Dumper($server);
+    my $ils     = $server->{ils}     or die "send_acs_status error: no 'ils' in \$server object:\n" . Dumper($server);
     my ($online_status, $checkin_ok, $checkout_ok, $ACS_renewal_policy);
     my ($status_update_ok, $offline_ok, $timeout, $retries);
 
     $online_status = 'Y';
     $checkout_ok = sipbool($ils->checkout_ok);
-    $checkin_ok = sipbool($ils->checkin_ok);
+    $checkin_ok  = sipbool($ils->checkin_ok);
     $ACS_renewal_policy = sipbool($policy->{renewal});
-    $status_update_ok = sipbool($ils->status_update_ok);
+    $status_update_ok   = sipbool($ils->status_update_ok);
     $offline_ok = sipbool($ils->offline_ok);
     $timeout = sprintf("%03d", $policy->{timeout});
     $retries = sprintf("%03d", $policy->{retries});
@@ -1508,7 +1490,7 @@ sub send_acs_status {
     } elsif ($protocol_version == 2) {
 	$msg .= '2.00';
     } else {
-	syslog("LOG_ERROR",
+	syslog("LOG_ERR",
 	       'Bad setting for $protocol_version, "%s" in send_acs_status',
 	       $protocol_version);
 	$msg .= '1.00';
@@ -1529,7 +1511,7 @@ sub send_acs_status {
 	    }
 	}
 	if (length($supported_msgs) < 16) {
-	    syslog("LOG_ERROR", 'send_acs_status: supported messages "%s" too short', $supported_msgs);
+	    syslog("LOG_ERR", 'send_acs_status: supported messages "%s" too short', $supported_msgs);
 	}
 	$msg .= add_field(FID_SUPPORTED_MSGS, $supported_msgs);
     }
@@ -1579,4 +1561,19 @@ sub patron_status_string {
     return $patron_status;
 }
 
+sub api_auth($$) {
+	# AUTH
+	my ($username,$password) = (shift,shift);
+	$ENV{REMOTE_USER} = $username;
+	my $query = CGI->new();
+	$query->param(userid   => $username);
+	$query->param(password => $password);
+	my ($status, $cookie, $sessionID) = check_api_auth($query, {circulate=>1}, "intranet");
+	print STDERR "check_api_auth returns " . ($status || 'undef') . "\n";
+	# print "api_auth userenv = " . &dump_userenv;
+	return $status;
+}
+
 1;
+__END__
+
