@@ -1118,14 +1118,14 @@ sub get_session {
     my $dbh = C4::Context->dbh;
     my $session;
     if ($storage_method eq 'mysql'){
-        $session = new CGI::Session("driver:MySQL;serializer:yaml", $sessionID, {Handle=>$dbh});
+        $session = new CGI::Session("driver:MySQL;serializer:yaml;id:md5", $sessionID, {Handle=>$dbh});
     }
     elsif ($storage_method eq 'Pg') {
-        $session = new CGI::Session("driver:PostgreSQL;serializer:yaml", $sessionID, {Handle=>$dbh});
+        $session = new CGI::Session("driver:PostgreSQL;serializer:yaml;id:md5", $sessionID, {Handle=>$dbh});
     }
     else {
         # catch all defaults to tmp should work on all systems
-        $session = new CGI::Session("driver:File;serializer:yaml", $sessionID, {Directory=>'/tmp'});
+        $session = new CGI::Session("driver:File;serializer:yaml;id:md5", $sessionID, {Directory=>'/tmp'});
     }
     return $session;
 }
