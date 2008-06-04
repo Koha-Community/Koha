@@ -263,18 +263,17 @@ if ($op eq 'serialchangestatus') {
 
      my $redirect ="serials-collection.pl?";
      my %hashsubscription;
-     map{$hashsubscription{$_}=1} @subscriptionids;       
+	 foreach (@subscriptionids) {
+     	$hashsubscription{$_}=1;
+	 }
      $redirect.=join("&",map{"subscriptionid=".$_} sort keys %hashsubscription);
     print $query->redirect("$redirect");
 }
 
-$template->param(serialsadditems =>C4::Context->preference("serialsadditems"));
-
-
-
 $template->param(
-            bibliotitle => $bibdata->{'title'},
-            biblionumber =>$serialdatalist[0]->{'biblionumber'},
-            serialslist => \@serialdatalist,
-        );
+	serialsadditems => C4::Context->preference("serialsadditems"),
+	bibliotitle  => $bibdata->{'title'},
+	biblionumber => $serialdatalist[0]->{'biblionumber'},
+	serialslist  => \@serialdatalist,
+);
 output_html_with_http_headers $query, $cookie, $template->output;
