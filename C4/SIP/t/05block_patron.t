@@ -7,13 +7,13 @@ use Clone qw(clone);
 
 use Sip::Constants qw(:all);
 
-use SIPtest qw($datepat $textpat $instid $user_barcode $user_fullname);
+use SIPtest qw(:basic :user1);
 
 my $block_patron_test_template = {
     id => 'Block Patron: valid patron, card not retained',
-    msg => "01N20060102    084238AO$instid|ALHe's a jerk|AA$user_barcode|ACterminal password|",
+    msg => "01N20060102    084238AO$instid|ALThis card is blocked.|AA$user_barcode|AC$password|",
     # response to block patron is a patron status message
-    pat => qr/^24Y[ Y]{13}000$datepat/o,
+    pat => qr/^24Y[ Y]{13}000$datepat/,
     fields => [
 	       $SIPtest::field_specs{(FID_INST_ID)},
 	       $SIPtest::field_specs{(FID_SCREEN_MSG)},

@@ -6,45 +6,43 @@ use warnings;
 use Clone qw(clone);
 
 use Sip::Constants qw(:all);
-
-use SIPtest qw($datepat $textpat $instid $user_barcode
-	       $item_barcode $item_title);
+use SIPtest qw(:basic :user1 :item1);
 
 my $checkin_test_template = {
-    id => 'Checkin: Item is checked out',
-    msg => "09N20060102    08423620060113    084235APUnder the bed|AO$instid|AB$item_barcode|ACterminal password|",
-    pat => qr/^101YNN$datepat/o,
+    id => "Checkin: Item ($item_barcode) is checked out",
+    msg => "09N20060102    08423620060113    084235APUnder the bed|AO$instid|AB$item_barcode|AC$password|",
+    pat => qr/^101YNN$datepat/,
     fields => [
 	       $SIPtest::field_specs{(FID_INST_ID)},
 	       $SIPtest::field_specs{(FID_SCREEN_MSG)},
 	       $SIPtest::field_specs{(FID_PRINT_LINE)},
 	       { field    => FID_PATRON_ID,
-		 pat      => qr/^$user_barcode$/o,
+		 pat      => qr/^$user_barcode$/,
 		 required => 1, },
 	       { field    => FID_ITEM_ID,
-		 pat      => qr/^$item_barcode$/o,
+		 pat      => qr/^$item_barcode$/,
 		 required => 1, },
 	       { field    => FID_PERM_LOCN,
 		 pat      => $textpat,
 		 required => 1, },
 	       { field    => FID_TITLE_ID,
-		 pat      => qr/^$item_title\s*$/o,
+		 pat      => qr/^$item_title\s*$/,
 		 required => 1, }, # not required by the spec.
 	       ],};
 
 my $checkout_template = {
-    id => 'Checkin: prep: check out item',
+    id => "Checkin: prep: check out item ($item_barcode)",
     msg => "11YN20060329    203000                  AO$instid|AA$user_barcode|AB$item_barcode|AC|",
-    pat => qr/^121NNY$datepat/o,
+    pat => qr/^121NNY$datepat/,
     fields => [],
 };
 
 my @tests = (
-	     $SIPtest::login_test,
-	     $SIPtest::sc_status_test,
-	     $checkout_template,
-	     $checkin_test_template,
-	     );
+	$SIPtest::login_test,
+	$SIPtest::sc_status_test,
+	$checkout_template,
+	$checkin_test_template,
+	);
 
 my $test;
 

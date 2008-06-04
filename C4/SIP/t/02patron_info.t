@@ -7,9 +7,7 @@ use Clone qw(clone);
 
 use Sip::Constants qw(:all);
 
-use SIPtest qw($datepat $textpat $instid $currency $user_barcode $user_pin
-	       $user_fullname $user_homeaddr $user_email $user_phone
-	       $user_birthday $user_ptype $user_inet);
+use SIPtest qw(:basic :user1);
 
 # This is a template test case for the Patron Information
 # message handling.  Because of the large number of fields,
@@ -17,7 +15,7 @@ use SIPtest qw($datepat $textpat $instid $currency $user_barcode $user_pin
 # situations: valid patron no details, valid patron with each
 # individual detail requested, invalid patron, invalid patron
 # password, etc.
-my $patron_info_test_template = {
+our $patron_info_test_template = {
     id => 'valid Patron Info no details',
     msg => "6300020060329    201700          AO$instid|AA$user_barcode|",
     pat => qr/^64 [ Y]{13}\d{3}$datepat(\d{4}){6}/,
@@ -65,11 +63,11 @@ my $patron_info_test_template = {
 		 required => 1, },
 	      ], };
 
-my @tests = (
+our @tests = (
 	     $SIPtest::login_test,
 	     $SIPtest::sc_status_test,
 	     clone($patron_info_test_template),
-	     );
+	);
 
 
 # Create the test cases for the various summary detail fields
@@ -110,7 +108,7 @@ sub create_patron_summary_tests {
 	    . $patron_info_summary_tests[$i]->{field};
 	push @{$test->{fields}}, $patron_info_summary_tests[$i];
 	push @tests, $test;
-    }
+	}
 }
 
 sub create_invalid_patron_tests {
@@ -164,9 +162,6 @@ sub create_invalid_patron_tests {
 }
 
 create_patron_summary_tests;
-
 create_invalid_patron_tests;
-
 SIPtest::run_sip_tests(@tests);
-
 1;

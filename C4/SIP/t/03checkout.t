@@ -5,12 +5,14 @@ use strict;
 use warnings;
 use Clone qw(clone);
 
-use Sip::Constants qw(:all);
+use CGI;
 
-use SIPtest qw($datepat $textpat $instid $currency $user_barcode
-	       $item_barcode $item_title
-	       $item_diacritic_barcode $item_diacritic_title
-	       $item_diacritic_owner);
+use Sip::Constants qw(:all);
+use SIPtest qw(
+		:basic
+		$user_barcode $item_barcode $item_title
+		:diacritic
+	);
 
 my $patron_enable_template = {
     id => 'Renew All: prep: enable patron permissions',
@@ -21,17 +23,18 @@ my $patron_enable_template = {
 
 my $patron_disable_template = {
     id => 'Checkout: block patron (prep to test checkout denied)',
-    msg => "01N20060102    084238AO$instid|ALHe's a jerk|AA$user_barcode|",
+    msg => "01N20060102    084238AO$instid|ALFees overrun|AA$user_barcode|",
     # response to block patron is a patron status message
     pat => qr/^24Y{4}[ Y]{10}000$datepat/o,
-    fields => [], };
+    fields => [],
+};
 
 my $checkin_template = {
-			id => 'Checkout: cleanup: check in item',
-			msg => "09N20050102    08423620060113    084235APUnder the bed|AO$instid|AB$item_barcode|ACterminal password|",
-			pat => qr/^101YNN$datepat/o,
-			fields => [],
-		       };
+	id => 'Checkout: cleanup: check in item',
+	msg => "09N20050102    08423620060113    084235APUnder the bed|AO$instid|AB$item_barcode|ACterminal password|",
+	pat => qr/^101YNN$datepat/o,
+	fields => [],
+};
 
 my $checkout_test_template = {
     id => 'Checkout: valid item, valid patron',
@@ -92,7 +95,7 @@ my $test;
 #$test = clone($checkout_test_template);
 #$test->{id} = 'Checkout: patron renewal';
 #$test->{pat} = qr/^121YNY$datepat/;
-#
+
 #push @tests, $test;
 
 # NOW check it in
@@ -100,28 +103,28 @@ my $test;
 push @tests, $checkin_template;
 
 # Valid Patron, item with diacritical in the title
-$test = clone($checkout_test_template);
+#$test = clone($checkout_test_template);
+#
+#$test->{id} = 'Checkout: valid patron, diacritical character in title';
+#$test->{msg} =~ s/AB$item_barcode/AB$item_diacritic_barcode/;
 
-$test->{id} = 'Checkout: valid patron, diacritical character in title';
-$test->{msg} =~ s/AB$item_barcode/AB$item_diacritic_barcode/;
+#foreach my $i (0 .. (scalar @{$test->{fields}})-1) {
+#    my $field =  $test->{fields}[$i];
 
-foreach my $i (0 .. (scalar @{$test->{fields}})-1) {
-    my $field =  $test->{fields}[$i];
+#    if ($field->{field} eq FID_ITEM_ID) {
+#	$field->{pat} = qr/^$item_diacritic_barcode$/;
+#    } elsif ($field->{field} eq FID_TITLE_ID) {
+#	$field->{pat} = qr/^$item_diacritic_title\s*$/;
+#    } elsif ($field->{field} eq FID_OWNER) {
+#	$field->{pat} = qr/^$item_diacritic_owner$/;
+#    }
+#}
 
-    if ($field->{field} eq FID_ITEM_ID) {
-	$field->{pat} = qr/^$item_diacritic_barcode$/;
-    } elsif ($field->{field} eq FID_TITLE_ID) {
-	$field->{pat} = qr/^$item_diacritic_title\s*$/;
-    } elsif ($field->{field} eq FID_OWNER) {
-	$field->{pat} = qr/^$item_diacritic_owner$/;
-    }
-}
+#push @tests, $test;
 
-push @tests, $test;
-
-$test = clone($checkin_template);
-$test->{msg} =~ s/AB$item_barcode/AB$item_diacritic_barcode/;
-push @tests, $test;
+#$test = clone($checkin_template);
+#$test->{msg} =~ s/AB$item_barcode/AB$item_diacritic_barcode/;
+#push @tests, $test;
 
 # Valid Patron, Invalid Item_id
 $test = clone($checkout_test_template);

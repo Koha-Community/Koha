@@ -6,15 +6,13 @@ use strict;
 use warnings;
 
 use Sip::Constants qw(:all);
-use SIPtest qw($datepat $instid $currency $user_barcode $user_pin
-	       $user_fullname $user_homeaddr $user_email $user_phone
-	       $user_birthday);
+use SIPtest qw($datepat $instid $currency :user1);
 
 my @tests = (
 	     $SIPtest::login_test,
 	     $SIPtest::sc_status_test,
 	     { id => 'valid Patron Status',
-	       msg => "2300120060101    084237AO$SIPtest::instid|AA$user_barcode|AD$user_pin|AC|",
+	       msg => "2300120060101    084237AO$instid|AA$user_barcode|AD$user_pin|AC|",
 	       pat => qr/^24 [ Y]{13}\d{3}$datepat/,
 	       fields => [
 			  $SIPtest::field_specs{(FID_INST_ID)},
