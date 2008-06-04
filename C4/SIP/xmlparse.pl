@@ -25,6 +25,6 @@ my $parser = new XML::Simple( KeyAttr   => { login => '+id',
 					     'min_servers' => 'value',
 					     'max_servers' => 'value'} );
 
-my $ref = $parser->XMLin($ARGV[0]);
+my $ref = $parser->XMLin(@ARGV ? shift : 'SIPconfig.xml');
 
 print Dumper($ref); 
