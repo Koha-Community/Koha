@@ -1,5 +1,5 @@
 <acsconfig xmlns="http://openncip.org/acs-config/1.0/">
-
+<!-- FIXME: above address gets nothing? -->
   <error-detect enabled="true" />
 
 <!-- Set Net::Server::PreFork runtime parameters -->
@@ -7,17 +7,17 @@
            min_servers='1'
            min_spare_servers='0' /> -->
   
-  
   <listeners>
-    <service
+<!-- vestigial HTTP, never implemented: just use the OPAC!
+	<service
       port="0:8080/tcp"
       transport="http"
       protocol="NCIP/1.0" />
-
+-->
     <service
       port="8023/tcp"
       transport="telnet"
-      protocol="SIP/1.00"
+      protocol="SIP/2.00"
       timeout="60" />
 
     <service
@@ -28,8 +28,9 @@
   </listeners>
 
   <accounts>
-      <login id="koha" password="koha" delimiter="|" error-detect="enabled" institution="kohalibrary" />
-      <login id="koha2" password="koha" institution="kohalibrary2" />
+      <login id="term1"  password="term1" delimiter="|" error-detect="enabled" institution="CPL" />
+      <login id="koha"   password="koha"  delimiter="|" error-detect="enabled" institution="kohalibrary" />
+      <login id="koha2"  password="koha" institution="kohalibrary2" />
       <login id="lpl-sc" password="1234" institution="LPL" />
       <login id="lpl-sc-beacock" password="xyzzy"
              delimiter="|" error-detect="enabled" institution="LPL" />
@@ -41,19 +42,33 @@
 <!-- needs to be one institution stanza for each institution -->
 <!-- named in the accounts above. -->
 <institutions>
+    <institution id="MAIN" implementation="ILS" parms="">
+          <policy checkin="true" renewal="true"
+	  	  status_update="false" offline="false"
+		  timeout="100"
+	  	  retries="5" />
+    </institution>
+    <institution id="CPL" implementation="ILS" parms="">
+          <policy checkin="true" renewal="true"
+	  	  status_update="false" offline="false"
+		  timeout="25"
+	  	  retries="5" />
+    </institution>
     <institution id="kohalibrary" implementation="ILS" parms="">
           <policy checkin="true" renewal="false"
 	  	  status_update="false" offline="false"
-		  timeout="600"
+		  timeout="100"
 	  	  retries="5" />
     </institution>
     <institution id="kohalibrary2" implementation="ILS" parms="">
           <policy checkin="true" renewal="false"
-		  timeout="600"
+		  timeout="100"
 	  	  retries="3" />
     </institution>
-
     <institution id="LPL" implementation="ILS">
+          <policy checkin="true" renewal="false"
+		  timeout="100"
+	  	  retries="5" />
     </institution>
 </institutions>
 </acsconfig>
