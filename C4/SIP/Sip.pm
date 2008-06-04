@@ -48,7 +48,6 @@ our $last_response = '';
 
 sub timestamp {
     my $time = $_[0] || time();
-
     return strftime(SIP_DATETIME, localtime($time));
 }
 
@@ -63,7 +62,7 @@ sub add_field {
     if (!defined($value)) {
 	syslog("LOG_DEBUG", "add_field: Undefined value being added to '%s'",
 	       $field_id);
-	$value = '';
+		$value = '';
     }
 
     # Replace any occurences of the field delimiter in the
@@ -71,7 +70,7 @@ sub add_field {
     $ent = sprintf("&#%d;", ord($field_delimiter));
 
     while (($i = index($value, $field_delimiter)) != ($[-1)) {
-	substr($value, $i, 1) = $ent;
+		substr($value, $i, 1) = $ent;
     }
 
     return $field_id . $value . $field_delimiter;
@@ -83,7 +82,6 @@ sub add_field {
 #
 sub maybe_add {
     my ($fid, $value) = @_;
-
     return (defined($value) && $value) ? add_field($fid, $value) : '';
 }
 
@@ -98,14 +96,14 @@ sub add_count {
     # If the field is unsupported, it will be undef, return blanks
     # as per the spec.
     if (!defined($count)) {
-	return ' ' x 4;
+		return ' ' x 4;
     }
 
     $count = sprintf("%04d", $count);
     if (length($count) != 4) {
-	syslog("LOG_WARNING", "handle_patron_info: %s wrong size: '%s'",
+		syslog("LOG_WARNING", "handle_patron_info: %s wrong size: '%s'",
 	       $label, $count);
-	$count = ' ' x 4;
+		$count = ' ' x 4;
     }
     return $count;
 }
@@ -120,13 +118,11 @@ sub add_count {
 #
 sub denied {
     my $bool = shift;
-
     return boolspace(!$bool);
 }
 
 sub sipbool {
     my $bool = shift;
-
     return $bool ? 'Y' : 'N';
 }
 
@@ -135,7 +131,6 @@ sub sipbool {
 #
 sub boolspace {
     my $bool = shift;
-
     return $bool ? 'Y' : ' ';
 }
 
@@ -145,12 +140,19 @@ sub boolspace {
 # Read a packet from $file, using the correct record separator
 #
 sub read_SIP_packet {
-    my $file = shift;
     my $record;
-    local $/ = "\r";
-
-    $record = readline($file);
-    syslog("LOG_INFO", "INPUT MSG: '$record'") if $record;
+	{		# adapted from http://perldoc.perl.org/5.8.8/functions/readline.html
+		undef $!;
+    	local $/ = "\r";
+		unless (defined($record = readline(shift))) {
+			if ($!) {
+    			syslog("LOG_ERR", "read_SIP_packet ERROR: $!");
+				die "read_SIP_packet ERROR: $!";
+			}
+			# else reached EOF
+		}
+	}
+    syslog("LOG_INFO", "read_SIP_packet, INPUT MSG: '$record'") if $record;
     return $record;
 }
 
@@ -170,20 +172,20 @@ sub write_msg {
     my $cksum;
 
     if ($error_detection) {
-	if (defined($self->{seqno})) {
-	    $msg .= 'AY' . $self->{seqno};
-	}
-	$msg .= 'AZ';
-	$cksum = checksum($msg);
-	$msg .= sprintf('%04.4X', $cksum);
+		if (defined($self->{seqno})) {
+		    $msg .= 'AY' . $self->{seqno};
+		}
+		$msg .= 'AZ';
+		$cksum = checksum($msg);
+		$msg .= sprintf('%04.4X', $cksum);
     }
 
 
     if ($file) {
-	print $file "$msg\r";
+		print $file "$msg\r";
     } else {
-	print "$msg\r";
-	syslog("LOG_INFO", "OUTPUT MSG: '$msg'");
+		print "$msg\r";
+		syslog("LOG_INFO", "OUTPUT MSG: '$msg'");
     }
 
     $last_response = $msg;
