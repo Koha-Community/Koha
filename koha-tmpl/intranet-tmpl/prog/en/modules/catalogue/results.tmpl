@@ -145,11 +145,7 @@ $(window).load(function() {
                     <th>Count</th>
                 </tr>
                 <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
-                <!-- TMPL_IF name="even" -->
-                    <tr class="highlight">
-                <!-- TMPL_ELSE -->
-                    <tr>
-                <!-- /TMPL_IF -->
+                    <tr<!-- TMPL_UNLESS name="__odd__" --> class="highlight"<!-- /TMPL_UNLESS -->>
                         <td>
                             <a href="/cgi-bin/koha/catalogue/search.pl?q=<!-- TMPL_VAR NAME="scan_use" escape="url" -->&quot;<!-- TMPL_VAR NAME="title_nospan" -->&quot;"><!-- TMPL_VAR NAME="title" --></a>
                         </td>
@@ -245,11 +241,7 @@ $(window).load(function() {
                     </tr>
                         <!-- Actual Search Results -->
                         <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
-                            <!-- TMPL_IF name="even" -->
-                                <tr class="highlight">
-                            <!-- TMPL_ELSE -->
-                                <tr>
-                            <!-- /TMPL_IF -->
+                                <tr<!-- TMPL_UNLESS NAME="__odd__" --> class="highlight"<!-- /TMPL_UNLESS -->>
                             <!-- TMPL_IF NAME="AmazonContent" -->
                                 <td>
                                     <a class="p1" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
@@ -267,10 +259,11 @@ $(window).load(function() {
                                             <a class="title" href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
                                                 <!-- TMPL_VAR NAME="title" --> 
                                             </a> <!-- TMPL_VAR NAME="subtitle" --><!-- TMPL_IF name="volume" -->,<!-- TMPL_VAR name="volume" --><!-- /TMPL_IF --> <!-- TMPL_IF name="volumeddesc" -->, <!-- TMPL_VAR name="volumeddesc" --><!-- /TMPL_IF -->
-                                        <!-- TMPL_ELSE -->
+                                    <!-- TMPL_ELSE -->
                                             <a class="title" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
                                                 <!-- TMPL_VAR NAME="title" --> 
-                                            </a> <!-- TMPL_VAR NAME="subtitle" --><!-- TMPL_IF name="volume" -->,<!-- TMPL_VAR name="volume" --><!-- /TMPL_IF --> <!-- TMPL_IF name="volumeddesc" -->, <!-- TMPL_VAR name="volumeddesc" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+                                            </a> <!-- TMPL_VAR NAME="subtitle" --><!-- TMPL_IF name="volume" -->,<!-- TMPL_VAR name="volume" --><!-- /TMPL_IF --> <!-- TMPL_IF name="volumeddesc" -->, <!-- TMPL_VAR name="volumeddesc" --><!-- /TMPL_IF -->
+									<!-- /TMPL_IF -->
                                 </p>
                                 <!-- TMPL_IF name="summary" -->
                                     <p><!-- TMPL_VAR name="summary" --></p>
