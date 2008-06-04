@@ -29,6 +29,7 @@ use C4::Items;
 use C4::Search;
 use C4::Letters;
 use C4::Log; # logaction
+use C4::Debug;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -261,7 +262,7 @@ sub GetSerialInformation {
 
                 #It is ASSUMED that GetMarcItem ALWAYS WORK...
                 #Maybe GetMarcItem should return values on failure
-#                 warn "itemnumber :$itemnum, bibnum :".$data->{'biblionumber'};
+                $debug and warn "itemnumber :$itemnum, bibnum :".$data->{'biblionumber'};
                 my $itemprocessed =
                   PrepareItemrecordDisplay( $data->{'biblionumber'}, $itemnum );
                 $itemprocessed->{'itemnumber'}   = $itemnum;
@@ -374,15 +375,13 @@ sub GetSubscription {
 #     if (C4::Context->preference('IndependantBranches') && 
 #         C4::Context->userenv && 
 #         C4::Context->userenv->{'flags'} != 1){
-# #       warn "flags: ".C4::Context->userenv->{'flags'};
+# #       $debug and warn "flags: ".C4::Context->userenv->{'flags'};
 #       $query.=" AND subscription.branchcode IN ('".C4::Context->userenv->{'branch'}."',\"\")";
 #     }
-#        warn "query : $query";
+	$debug and warn "query : $query\nsubsid :$subscriptionid";
     my $sth = $dbh->prepare($query);
-#       warn "subsid :$subscriptionid";
     $sth->execute($subscriptionid);
-    my $subs = $sth->fetchrow_hashref;
-    return $subs;
+    return $sth->fetchrow_hashref;
 }
 
 =head2 GetFullSubscription
@@ -429,11 +428,10 @@ sub GetFullSubscription {
           IF(serial.publisheddate="00-00-0000",serial.planneddate,serial.publisheddate) DESC,
           serial.subscriptionid
           |;
-#     warn $query;   
+	$debug and warn "GetFullSubscription query: $query";   
     my $sth = $dbh->prepare($query);
     $sth->execute($subscriptionid);
-    my $subs = $sth->fetchall_arrayref({});
-    return $subs;
+    return $sth->fetchall_arrayref({});
 }
 
 
@@ -614,8 +612,7 @@ sub GetFullSubscriptionsFromBiblionumber {
           |;
     my $sth = $dbh->prepare($query);
     $sth->execute($biblionumber);
-    my $subs= $sth->fetchall_arrayref({});
-    return $subs;
+    return $sth->fetchall_arrayref({});
 }
 
 =head2 GetSubscriptions
@@ -645,7 +642,7 @@ sub GetSubscriptions {
             WHERE biblio.biblionumber=?
         );
         $query.=" ORDER BY title";
-#         warn "query :$query";
+        $debug and warn "GetSubscriptions query: $query";
         $sth = $dbh->prepare($query);
         $sth->execute($biblionumber);
     }
@@ -658,6 +655,7 @@ sub GetSubscriptions {
                 LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
                 WHERE (biblioitems.issn = ? or|. join('and ',map{"biblio.title LIKE \"%$_%\""}split (" ",$title))." )";
             $query.=" ORDER BY title";
+        	$debug and warn "GetSubscriptions query: $query";
             $sth = $dbh->prepare($query);
             $sth->execute( $ISSN );
         }
@@ -671,7 +669,7 @@ sub GetSubscriptions {
                     WHERE biblioitems.issn LIKE ?
                 );
                 $query.=" ORDER BY title";
-#         warn "query :$query";
+        		$debug and warn "GetSubscriptions query: $query";
                 $sth = $dbh->prepare($query);
                 $sth->execute( "%" . $ISSN . "%" );
             }
@@ -685,7 +683,7 @@ sub GetSubscriptions {
                     ).($title?" and ":""). join('and ',map{"biblio.title LIKE \"%$_%\""} split (" ",$title) );
                 
                 $query.=" ORDER BY title";
-#                 warn $query;       
+        		$debug and warn "GetSubscriptions query: $query";
                 $sth = $dbh->prepare($query);
                 $sth->execute;
             }
@@ -698,13 +696,12 @@ sub GetSubscriptions {
         if ( $previoustitle eq $line->{title} ) {
             $line->{title}  = "";
             $line->{issn}   = "";
-            $line->{toggle} = 1 if $odd == 1;
         }
         else {
             $previoustitle = $line->{title};
             $odd           = -$odd;
-            $line->{toggle} = 1 if $odd == 1;
         }
+        $line->{toggle} = 1 if $odd == 1;
         $line->{'cannotedit'}=(C4::Context->preference('IndependantBranches') && 
                 C4::Context->userenv && 
                 C4::Context->userenv->{flags} !=1  && 
@@ -797,7 +794,7 @@ sub GetSerials2 {
                  WHERE    subscriptionid=$subscription AND status IN ($status)
                  ORDER BY publisheddate,serialid DESC
                     |;
-#     warn $query;
+	$debug and warn "GetSerials2 query: $query";
     my $sth=$dbh->prepare($query);
     $sth->execute;
     my @serials;
@@ -1755,7 +1752,7 @@ sub HasSubscriptionExpired {
 	      return 0;
       }
     }
-    return 0;
+    return 0;	# Notice that you'll never get here.
 }
 
 =head2 SetDistributedto
