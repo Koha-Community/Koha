@@ -39,7 +39,7 @@ my @checkin_templates = (
 );
 
 my $renew_all_test_template = {
-	 id => "Renew All: patron ($user_barcode) with 1 item checked out, no patron password",
+	 id => "Renew All: patron ($user_barcode) with 1 item ($item_barcode) checked out, no patron password",
 	msg => "6520060102    084236AO$instid|AA$user_barcode|",
 	pat => qr/^66100010000$datepat/,
 	fields => [
@@ -63,19 +63,17 @@ my @tests = (
 
 my $test;
 
-#$test = clone($renew_all_test_template);
-#$test->{id} = 'Renew All: Valid patron, two items checked out';
-#$test->{pat} = qr/^66100020000$datepat/;
-#foreach my $i (0 .. (scalar @{$test->{fields}})-1) {
-#    my $field =  $test->{fields}[$i];
-#
-#    if ($field->{field} eq FID_RENEWED_ITEMS) {
-#	$field->{pat} = qr/^$item_barcode\|$item2_barcode$/;
-#    }
-#}
-#
-#push @tests, $checkout_templates[0], $checkout_templates[1],
-#  $renew_all_test_template, $checkin_templates[0], $checkin_templates[1];
+$test = clone($renew_all_test_template);
+$test->{id} = 'Renew All: Valid patron, two items checked out';
+$test->{pat} = qr/^66100020000$datepat/;
+foreach my $i (0 .. (scalar @{$test->{fields}})-1) {
+	my $field =  $test->{fields}[$i];
+	if ($field->{field} eq FID_RENEWED_ITEMS) {
+		$field->{pat} = qr/^$item_barcode\|$item2_barcode$/;
+	}
+}
+
+#push @tests, @checkout_templates[0..1], $renew_all_test_template, @checkin_templates[0..1];
 
 $test = clone($renew_all_test_template);
 $test->{id} = 'Renew All: valid patron, invalid patron password';

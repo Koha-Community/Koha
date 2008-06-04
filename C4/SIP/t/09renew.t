@@ -10,14 +10,14 @@ use Sip::Constants qw(:all);
 use SIPtest qw(:basic :user1 :item1);
 
 my $checkout_template = {
-	id => "Renew: prep: check out item ($item_barcode) to patron ($user_barcode)",
+	id => "Renew:    prep: check out item ($item_barcode) to patron ($user_barcode)",
 	msg => "11YN20060329    203000                  AO$instid|AA$user_barcode|AB$item_barcode|AC|",
 	pat => qr/^121NNY$datepat/,
 	fields => [],
 };
 
 my $checkin_template = {
-	id => "Renew: prep: check in item ($item_barcode)",
+	id => "Renew: cleanup: check in item ($item_barcode)",
 	msg => "09N20060102    08423620060113    084235APUnder the bed|AO$instid|AB$item_barcode|AC$password|",
 	pat => qr/^101YNN$datepat/,
 	fields => [],
@@ -39,9 +39,9 @@ my $checkin_template = {
 #
 
 my $renew_test_template = {
-	id => "Renew: item ($item_barcode) to patron ($user_barcode), renewal OK, no 3rd party, no fees",
+	id => "Renew: RENEW 1, item ($item_barcode) to patron ($user_barcode), renewal OK, no 3rd party, no fees",
 	msg => "29NN20060102    084236                  AO$instid|AA$user_barcode|AB$item_barcode|",
-	pat => qr/^301YNN$datepat/,
+	pat => qr/^301Y[UN][UN]$datepat/,
 	fields => [
 	      $SIPtest::field_specs{(FID_INST_ID)},
 	      $SIPtest::field_specs{(FID_SCREEN_MSG)},
