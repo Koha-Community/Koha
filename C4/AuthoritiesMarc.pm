@@ -223,7 +223,7 @@ sub SearchAuthorities {
             if (@$value[$i]){
             ##If mainentry search $a tag
                 if (@$tags[$i] eq "mainmainentry") {
-                $attr =" \@attr 1=Heading ";
+                $attr =" \@attr 1=Heading-Main ";
                 }elsif (@$tags[$i] eq "mainentry") {
                 $attr =" \@attr 1=Heading ";
                 }else{
