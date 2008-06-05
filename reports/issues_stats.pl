@@ -58,7 +58,6 @@ my $output = $input->param("output");
 my $basename = $input->param("basename");
 my $mime = $input->param("MIME");
 my $del = $input->param("sep");
-#warn "calcul : ".$calc;
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => $fullreportname,
                             query => $input,
@@ -336,10 +335,9 @@ sub calculate {
         $strsth .=" group by $linefield";
         $strsth .=" order by $lineorder";
         $debug and warn $strsth;
-        
         my $sth = $dbh->prepare( $strsth );
         if (( @linefilter ) and ($linefilter[1])){
-                $sth->execute("'".$linefilter[0]."'","'".$linefilter[1]."'");
+                $sth->execute($linefilter[0],$linefilter[1]);
         } elsif ($linefilter[0]) {
                 $sth->execute($linefilter[0]);
         } else {
@@ -470,18 +468,16 @@ sub calculate {
                 $ft{totalcol} = 0;
                 push @loopcol, \%cell;
         }
-#	warn "fin des titres colonnes";
 
         my $i=0;
         my @totalcol;
         
         #Initialization of cell values.....
         my %table;
-#	warn "init table";
         foreach my $row ( @loopline ) {
                 foreach my $col ( @loopcol ) {
 				$debug and warn " init table : $row->{rowtitle} ( $row->{rowtitle_display} ) / $col->{coltitle} ( $col->{coltitle_display} )  ";
-                        $table{$row->{rowtitle}}->{$col->{coltitle}}=0;
+						$table{$row->{rowtitle}}->{$col->{coltitle}}=0;
                 }
                 $table{$row->{rowtitle}}->{totalrow}=0;
         }
@@ -538,7 +534,6 @@ sub calculate {
         ($debug) and warn "". $strcalc;
         my $dbcalc = $dbh->prepare($strcalc);
         $dbcalc->execute;
-# 	warn "filling table";
         my ($emptycol,$emptyrow); 
         while (my ($row, $col, $value) = $dbcalc->fetchrow) {
                 ($debug) and warn "filling table $row / $col / $value ";
@@ -571,14 +566,12 @@ sub calculate {
                                 'totalrow' => $table{($row->{rowtitle} eq "NULL")?"zzEMPTY":$row->{rowtitle}}->{totalrow}
                                                 };
         }
-#	warn "footer processing";
         for my $col ( @loopcol ) {
                 my $total=0;
                 foreach my $row ( @looprow ) {
                         $total += $table{($row->{rowtitle} eq "NULL")?"zzEMPTY":$row->{rowtitle}}->{($col->{coltitle} eq "NULL")?"zzEMPTY":$col->{coltitle}};
 			$debug and warn "value added ".$table{$row->{rowtitle}}->{$col->{coltitle}}. "for line ".$row->{rowtitle};
                 }
-#		warn "summ for column ".$col->{coltitle}."  = ".$total;
                 push @loopfooter, {'totalcol' => $total};
         }
                         
