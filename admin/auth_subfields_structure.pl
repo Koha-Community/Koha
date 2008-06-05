@@ -1,5 +1,4 @@
-
-
+#!/usr/bin/perl
 
 # Copyright 2000-2002 Katipo Communications
 #
