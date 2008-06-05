@@ -69,6 +69,7 @@ my %tabsysprefs;
     $tabsysprefs{gist}="Acquisitions";
     $tabsysprefs{emailPurchaseSuggestions}="Acquisitions";
 	$tabsysprefs{RenewSerialAddsSuggestion}="Acquisitions";
+    $tabsysprefs{serialsadditems}="Acquisitions";
 
 # Admin
     $tabsysprefs{singleBranchMode}="Admin";
@@ -179,6 +180,8 @@ my %tabsysprefs;
     $tabsysprefs{AddPatronLists}="Patrons";
     $tabsysprefs{PatronsPerPage}="Patrons";
     $tabsysprefs{ExtendedPatronAttributes}="Patrons";
+    $tabsysprefs{AutoEmailOpacUser}="Patrons";
+    $tabsysprefs{AutoEmailPrimaryAddress}="Patrons";
 
 # I18N/L10N
     $tabsysprefs{dateformat}="I18N/L10N";
@@ -281,6 +284,7 @@ my %tabsysprefs;
     $tabsysprefs{OpacBrowser}="OPAC";
     $tabsysprefs{kohaspsuggest} = "OPAC";
     $tabsysprefs{OpacRenewalAllowed} = "OPAC";
+    $tabsysprefs{OPACItemHolds} = "OPAC";
 
 # LOGFeatures
     $tabsysprefs{CataloguingLog}  = "Logs";
