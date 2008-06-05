@@ -79,7 +79,6 @@ sub gettemplate {
         $htdocs = C4::Context->config('intrahtdocs');
     }
     my $path = C4::Context->preference('intranet_includes') || 'includes';
-
     my ( $theme, $lang ) = themelanguage( $htdocs, $tmplbase, $interface, $query );
     my $opacstylesheet = C4::Context->preference('opacstylesheet');
 
@@ -140,7 +139,12 @@ sub themelanguage {
     # But, if there's a cookie set, obey it
     $lang = $query->cookie('KohaOpacLanguage') if $query->cookie('KohaOpacLanguage');
     # Fall back to English
-    my @languages = split " ", C4::Context->preference("opaclanguages");
+    my @languages;
+    if ($interface eq 'intranet') {
+        @languages = split " ", C4::Context->preference("language");
+    } else {
+        @languages = split " ", C4::Context->preference("opaclanguages");
+    }
     if ($lang){  
         @languages=($lang,@languages);
     } else {
