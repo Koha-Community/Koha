@@ -31,14 +31,14 @@
             <tr>
                 <th><!-- TMPL_VAR name="line" --> / <!-- TMPL_VAR name="column" --></th>
                 <!-- TMPL_LOOP NAME="loopcol" -->
-                    <th><!-- TMPL_VAR NAME="coltitle" --></th>
+                    <th><!-- TMPL_VAR NAME="coltitle_display" --></th>
                 <!-- /TMPL_LOOP -->
                 <th>TOTAL</th>
                 </tr>
                     <!-- TMPL_LOOP NAME="looprow" -->
                         <tr>
                             <!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
-                            <!-- TMPL_VAR NAME="rowtitle" --></td>
+                            <!-- TMPL_VAR NAME="rowtitle_display" --></td>
                             <!-- TMPL_LOOP NAME="loopcell" -->
                                 <!-- TMPL_IF NAME="hilighted" --><td><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
                                 <!-- TMPL_IF NAME="value" --><!-- TMPL_VAR NAME="value" -->
@@ -186,18 +186,6 @@
                 </td>
         </tr>
         <tr>
-            <td>Library</td>
-            <td><input type="radio" name="Line" value="branch" /></td>
-            <td><input type="radio" name="Column" value="branch" /></td>
-           <td><select name="Filter" id="branch">
-               <option value=""> </option>
-               <!-- TMPL_LOOP NAME="branchloop" -->
-                 <option value="<!-- TMPL_VAR NAME='code' -->" <!-- TMPL_IF NAME='selected' -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="description" --></option>
-               <!-- /TMPL_LOOP -->
-               </select>
-             </td> 
-        </tr>
-        <tr>
             <td>Patron Category</td>
             <td><input type="radio" name="Line" value="borrowers.categorycode" /></td>
             <td><input type="radio" name="Column" value="borrowers.categorycode" /></td>
@@ -208,6 +196,18 @@
             <td><input type="radio" name="Line" value="itemtype" /></td>
             <td><input type="radio" name="Column" value="itemtype" /></td>
             <td><!-- TMPL_VAR NAME="CGIItemType" --></td>
+        </tr>
+        <tr>
+            <td>Library</td>
+            <td><input type="radio" name="Line" value="branch" /></td>
+            <td><input type="radio" name="Column" value="branch" /></td>
+           <td><select name="Filter" id="branch">
+               <option value=""> </option>
+               <!-- TMPL_LOOP NAME="branchloop" -->
+                 <option value="<!-- TMPL_VAR NAME='code' -->" <!-- TMPL_IF NAME='selected' -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="description" --></option>
+               <!-- /TMPL_LOOP -->
+               </select>
+             </td> 
         </tr>
             <tr>
                 <td>Collection</td>
@@ -223,8 +223,8 @@
             </tr>
         <tr>
             <td>Shelving Location</td>
-            <td><input type="radio" name="Line" value="location" /></td>
-            <td><input type="radio" name="Column" value="location" /></td>
+            <td><input type="radio" name="Line" value="items.location" /></td>
+            <td><input type="radio" name="Column" value="items.location" /></td>
            <td><select name="Filter" id="location">
                <option value=""> </option>
                <!-- TMPL_LOOP NAME="locationloop" -->
@@ -258,8 +258,8 @@
         </tbody>
     </table><br /></fieldset>
 
-<fieldset class="rows"><legend>Cell value </legend><ol><li><label for="cellvalue1">Count checkouts</label> <input type="radio" name="Cellvalue" value="1" id="cellvalue1" checked="checked" /> </li>
-            <li><label for="cellvalue3">Circulation rate</label> <input type="radio" name="Cellvalue" id="cellvalue3" value="3" /> </li></ol></fieldset>
+<fieldset class="rows"><legend>Cell value </legend><ol><li><label for="cellvalue1">Count total items</label> <input type="radio" name="Cellvalue" value="1" id="cellvalue1" checked="checked" /> </li>
+            <li><label for="cellvalue3">Count unique items</label> <input type="radio" name="Cellvalue" id="cellvalue3" value="3" /> </li></ol></fieldset>
 			
 	<fieldset class="rows">
 	<legend>Output</legend>

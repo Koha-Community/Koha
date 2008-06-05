@@ -69,6 +69,11 @@ my ($template, $borrowernumber, $cookie)
 $template->param(do_it => $do_it,
         DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
                 );
+
+
+my $ccodes = GetKohaAuthorisedValues("items.ccode");
+my $locations = GetKohaAuthorisedValues("items.location");
+
 if ($do_it) {
 # Displaying results
     my $results = calculate($line, $column, $podsp, $type, $daysel, $monthsel, $calc, \@filters);
@@ -165,6 +170,7 @@ if ($do_it) {
         push @branchloop, \%row;
     }
 
+	#FIXME - we have an auth val for these now.
     $req = $dbh->prepare("select distinctrow sort1 from borrowers where sort1 is not null order by sort1");
     $req->execute;
     undef @select;
@@ -197,13 +203,11 @@ if ($do_it) {
                             -size     => 1,
                             -multiple => 0 );
     # location list
-    my $locations = GetKohaAuthorisedValues("items.location");
     my @locations;
     foreach (sort keys %$locations) {
         push @locations, { code => $_, description => "$_ - " . $locations->{$_} };
     }
     
-	my $ccodes = GetKohaAuthorisedValues("items.ccode");
     my @ccodes;
     foreach (keys %$ccodes) {
         push @ccodes, { code => $_, description => $ccodes->{$_} };
@@ -263,7 +267,7 @@ sub calculate {
 # Checking filters
 #
         my @loopfilter;
-        for (my $i=0;$i<=9;$i++) {
+        for (my $i=0;$i<=10;$i++) {
                 my %cell;
                 if ( @$filters[$i] ) {
                         if (($i==1) and (@$filters[$i-1])) {
@@ -277,15 +281,16 @@ sub calculate {
                         }
                         $cell{crit} .="Period From" if ($i==0);
                         $cell{crit} .="Period To" if ($i==1);
-                        $cell{crit} .="Borrower Cat=" if ($i==2);
-                        $cell{crit} .="Doc Type=" if ($i==3);
-                        $cell{crit} .="Branch=" if ($i==4);
-                        $cell{crit} .="Location=" if ($i==5);
-                        $cell{crit} .="Item callnumber>=" if ($i==6);
-                        $cell{crit} .="Item callnumber<" if ($i==7);
-                        $cell{crit} .="sort1=" if ($i==8);
-                        $cell{crit} .="sort2=" if ($i==9);
-
+                        $cell{crit} .="Patron Category=" if ($i==2);
+                        $cell{crit} .="Item Type=" if ($i==3);
+                        $cell{crit} .="Library=" if ($i==4);
+                        $cell{crit} .="Collection=" if ($i==5);
+                        $cell{crit} .="Location=" if ($i==6);
+                        $cell{crit} .="Item callnumber>=" if ($i==7);
+                        $cell{crit} .="Item callnumber<" if ($i==8);
+                        $cell{crit} .="sort1=" if ($i==9);
+                        $cell{crit} .="sort2=" if ($i==10);
+						# FIXME - no translation mechanism !
                         push @loopfilter, \%cell;
                 }
         }
@@ -296,19 +301,23 @@ sub calculate {
         
         
         my @linefilter;
-#	warn "filtres ".@filters[0];
-#	warn "filtres ".@filters[1];
-#	warn "filtres ".@filters[2];
-#	warn "filtres ".@filters[3];
-        
+      $debug and warn "filtres ". join "|", @filters;
+        my ($colsource, $linesource);
         $linefilter[0] = @$filters[0] if ($line =~ /datetime/ )  ;
         $linefilter[1] = @$filters[1] if ($line =~ /datetime/ )  ;
         $linefilter[0] = @$filters[2] if ($line =~ /category/ )  ;
         $linefilter[0] = @$filters[3] if ($line =~ /itemtype/ )  ;
         $linefilter[0] = @$filters[4] if ($line =~ /branch/ )  ;
-        $linefilter[0] = @$filters[5] if ($line =~ /location/ ) ;
-        $linefilter[0] = @$filters[6] if ($line =~ /sort1/ ) ;
-        $linefilter[0] = @$filters[7] if ($line =~ /sort2/ ) ;
+		if ($line =~ /ccode/ ) {
+        	$linefilter[0] = @$filters[5] ;
+			$linesource = 'items';
+		}
+		if ($line =~ /location/ ) {
+        	$linefilter[0] = @$filters[6] ;
+			$linesource = 'items';
+		}
+        $linefilter[0] = @$filters[9] if ($line =~ /sort1/ ) ;
+        $linefilter[0] = @$filters[10] if ($line =~ /sort2/ ) ;
 
         my @colfilter ;
         $colfilter[0] = @$filters[0] if ($column =~ /datetime/) ;
@@ -316,9 +325,16 @@ sub calculate {
         $colfilter[0] = @$filters[2] if ($column =~ /category/) ;
         $colfilter[0] = @$filters[3] if ($column =~ /itemtype/) ;
         $colfilter[0] = @$filters[4] if ($column =~ /branch/ )  ;
-        $colfilter[0] = @$filters[5] if ($column =~ /location/  )  ;
-        $colfilter[0] = @$filters[6] if ($column =~ /sort1/  )  ;
-        $colfilter[0] = @$filters[7] if ($column =~ /sort2/  )  ;
+		if ($column =~ /ccode/ ) {
+        	$colfilter[0] = @$filters[5] ;
+			$colsource = 'items';
+		}
+		if ($column =~ /location/ ) {
+        	$colfilter[0] = @$filters[6] ;
+			$colsource = 'items';
+		}
+        $colfilter[0] = @$filters[9] if ($column =~ /sort1/  )  ;
+        $colfilter[0] = @$filters[10] if ($column =~ /sort2/  )  ;
 # 1st, loop rows.                             
         my $linefield;                               
         if (($line =~/datetime/) and ($dsp == 1)) {
@@ -341,7 +357,12 @@ sub calculate {
         $lineorder = $linefield if (not ($linefield =~ "^month") and not($linefield =~ /dayname/));
 
         my $strsth;
-        $strsth .= "select distinctrow $linefield from statistics, borrowers where (statistics.borrowernumber=borrowers.borrowernumber) and $line is not null ";
+        $strsth .= "select distinctrow $linefield from statistics, ";
+		# get stats on items if ccode or location, otherwise borrowers.
+		$strsth .= ($linesource eq 'items' ) ? 
+						"items where (statistics.itemnumber=items.itemnumber) " 
+						: " borrowers where (statistics.borrowernumber=borrowers.borrowernumber) ";
+		$strsth .= " and $line is not null ";
         
         if ($line=~/datetime/) {
                 if ($linefilter[1] and ($linefilter[0])){
@@ -373,6 +394,13 @@ sub calculate {
         
         while ( my ($celvalue) = $sth->fetchrow) {
                 my %cell;
+				if($line =~ /ccode/) {
+					$cell{rowtitle_display} = $ccodes->{$celvalue};
+				} elsif($line=~/location/) {
+					 $cell{rowtitle_display} = $locations->{$celvalue};
+				} else {
+               		$cell{rowtitle_display} = $celvalue;
+				}					
                 if ($celvalue) {
                         $cell{rowtitle} = $celvalue;
                 } else {
@@ -403,8 +431,13 @@ sub calculate {
         $colorder = "month($line)" if $colfield =~ "^month";
         $colorder = $colfield if (not ($colfield =~ "^month") and not($colfield =~ "^dayname"));
         
-        my $strsth2;
-        $strsth2 .= "select distinctrow $colfield from statistics, borrowers where (statistics.borrowernumber=borrowers.borrowernumber) and $column is not null ";
+        my $strsth2; 
+        $strsth2 .= "select distinctrow $colfield from statistics, ";
+		# get stats on items if ccode or location, otherwise borrowers.
+		$strsth2 .= ($colsource eq 'items' ) ? 
+						"items where (statistics.itemnumber=items.itemnumber) " 
+						: " borrowers where (statistics.borrowernumber=borrowers.borrowernumber) ";
+		$strsth2 .= " and $column is not null ";
         
         if ($column=~/datetime/){
                 if (($colfilter[1]) and ($colfilter[0])){
@@ -423,7 +456,6 @@ sub calculate {
         }
         $strsth2 .=" group by $colfield";
         $strsth2 .=" order by $colorder";
-	warn $strsth2;
         
         my $sth2 = $dbh->prepare( $strsth2 );
         if (( @colfilter ) and ($colfilter[1])){
@@ -438,8 +470,15 @@ sub calculate {
         while (my ($celvalue) = $sth2->fetchrow) {
                 my %cell;
                 my %ft;
-#				$debug and warn "coltitle :".$celvalue;
-                $cell{coltitle} = $celvalue;
+				if($column =~ /ccode/) {
+					$cell{coltitle_display} = $ccodes->{$celvalue};
+				} elsif($column=~/location/) {
+					 $cell{coltitle_display} = $locations->{$celvalue};
+				} else {
+               		$cell{coltitle_display} = $celvalue;
+				}					
+               	$cell{coltitle} = $celvalue;
+				# we leave this as 'coltitle' since we use it as hash key when filling the table, and add a title_display key.
                 $ft{totalcol} = 0;
                 push @loopcol, \%cell;
         }
@@ -454,7 +493,7 @@ sub calculate {
 #	warn "init table";
         foreach my $row ( @loopline ) {
                 foreach my $col ( @loopcol ) {
-				$debug and warn " init table : $row->{rowtitle} / $col->{coltitle} ";
+				$debug and warn " init table : $row->{rowtitle} ( $row->{rowtitle_display} ) / $col->{coltitle} ( $col->{coltitle_display} )  ";
                         $table{$row->{rowtitle}}->{$col->{coltitle}}=0;
                 }
                 $table{$row->{rowtitle}}->{totalrow}=0;
@@ -479,7 +518,7 @@ sub calculate {
         }
         $strcalc .= "FROM statistics ";
         $strcalc .= "LEFT JOIN borrowers ON statistics.borrowernumber=borrowers.borrowernumber ";
-        $strcalc .= "LEFT JOIN items ON statistics.itemnumber=items.itemnumber " if @$filters[5] or @$filters[6];
+        $strcalc .= "LEFT JOIN items ON statistics.itemnumber=items.itemnumber " if ( ($colsource eq 'items') || @$filters[5] || @$filters[6] ||@$filters[7] || @$filters[8] );
         
         $strcalc .= "WHERE 1=1 ";
         @$filters[0]=~ s/\*/%/g if (@$filters[0]);
@@ -493,15 +532,17 @@ sub calculate {
         @$filters[4]=~ s/\*/%/g if (@$filters[4]);
         $strcalc .= " AND statistics.branch like '" . @$filters[4] ."'" if ( @$filters[4] );
         @$filters[5]=~ s/\*/%/g if (@$filters[5]);
-        $strcalc .= " AND items.location like '" . @$filters[5] ."'" if ( @$filters[5] );
+        $strcalc .= " AND items.ccode like '" . @$filters[5] ."'" if ( @$filters[5] );
         @$filters[6]=~ s/\*/%/g if (@$filters[6]);
-        $strcalc .= " AND items.itemcallnumber >='" . @$filters[6] ."'" if ( @$filters[6] );
+        $strcalc .= " AND items.location like '" . @$filters[6] ."'" if ( @$filters[6] );
         @$filters[7]=~ s/\*/%/g if (@$filters[7]);
-        $strcalc .= " AND items.itemcallnumber <'" . @$filters[7] ."'" if ( @$filters[7] );
+        $strcalc .= " AND items.itemcallnumber >='" . @$filters[7] ."'" if ( @$filters[7] );
         @$filters[8]=~ s/\*/%/g if (@$filters[8]);
-        $strcalc .= " AND borrowers.sort1 like '" . @$filters[8] ."'" if ( @$filters[8] );
+        $strcalc .= " AND items.itemcallnumber <'" . @$filters[8] ."'" if ( @$filters[8] );
         @$filters[9]=~ s/\*/%/g if (@$filters[9]);
-        $strcalc .= " AND borrowers.sort2 like '" . @$filters[9] ."'" if ( @$filters[9] );
+        $strcalc .= " AND borrowers.sort1 like '" . @$filters[9] ."'" if ( @$filters[9] );
+        @$filters[10]=~ s/\*/%/g if (@$filters[10]);
+        $strcalc .= " AND borrowers.sort2 like '" . @$filters[10] ."'" if ( @$filters[10] );
         $strcalc .= " AND dayname(datetime) like '" . $daysel ."'" if ( $daysel );
         $strcalc .= " AND monthname(datetime) like '" . $monthsel ."'" if ( $monthsel );
         $strcalc .= " AND statistics.type like '" . $type ."'" if ( $type );
@@ -533,6 +574,7 @@ sub calculate {
                         push @loopcell, {value => $value  } ;
                 }
                 push @looprow,{ 'rowtitle' => ($row->{rowtitle} eq "NULL")?"zzEMPTY":$row->{rowtitle},
+								'rowtitle_display' => ($row->{rowtitle_display} eq "NULL")?"zzEMPTY":$row->{rowtitle_display},
                                 'loopcell' => \@loopcell,
                                 'hilighted' => ($hilighted >0),
                                 'totalrow' => $table{($row->{rowtitle} eq "NULL")?"zzEMPTY":$row->{rowtitle}}->{totalrow}
