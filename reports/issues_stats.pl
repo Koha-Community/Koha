@@ -39,6 +39,7 @@ plugin that shows a stats on borrowers
 
 =cut
 
+my $debug = 1;
 my $input = new CGI;
 my $do_it=$input->param('do_it');
 my $fullreportname = "reports/issues_stats.tmpl";
@@ -63,7 +64,7 @@ my ($template, $borrowernumber, $cookie)
                             type => "intranet",
                             authnotrequired => 0,
                             flagsrequired => {reports => 1},
-                            debug => 1,
+                            debug => 0,
                             });
 $template->param(do_it => $do_it,
         DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
@@ -152,6 +153,18 @@ if ($do_it) {
                             -size     => 1,
                             -multiple => 0 );
     
+    my $branches=GetBranches();
+	my @branchloop;
+    foreach (keys %$branches) {
+        my $thisbranch = ''; 
+        my %row = (branchcode => $_,
+            selected => ($thisbranch eq $_ ? 1 : 0),
+            code => $branches->{$_}->{'branchcode'},
+            description => $branches->{$_}->{'branchname'},
+        );
+        push @branchloop, \%row;
+    }
+
     $req = $dbh->prepare("select distinctrow sort1 from borrowers where sort1 is not null order by sort1");
     $req->execute;
     undef @select;
@@ -161,22 +174,6 @@ if ($do_it) {
         $hassort1 =1 if ($value);
         push @select, $value;
     }
-    my $branches=GetBranches();
-    my @select_branch;
-    my %select_branches;
-    push @select_branch,"";
-    $select_branches{""} = "";
-    foreach my $branch (keys %$branches) {
-        push @select_branch, $branch;
-        $select_branches{$branch} = $branches->{$branch}->{'branchname'};
-    }
-    my $CGIBranch=CGI::scrolling_list( -name     => 'Filter',
-                            -id => 'branch',
-                            -values   => \@select_branch,
-                            -labels   => \%select_branches,
-                            -size     => 1,
-                            -multiple => 0 );
-    
     my $CGISort1=CGI::scrolling_list( -name     => 'Filter',
                             -id => 'sort1',
                             -values   => \@select,
@@ -200,18 +197,12 @@ if ($do_it) {
                             -size     => 1,
                             -multiple => 0 );
     # location list
-    $req = $dbh->prepare("select distinctrow location from items order by location");
-    $req->execute;
-    undef @select;
-    push @select,"";
-    while (my ($value) =$req->fetchrow) {
-        push @select, $value;
+    my $locations = GetKohaAuthorisedValues("items.location");
+    my @locations;
+    foreach (sort keys %$locations) {
+        push @locations, { code => $_, description => "$_ - " . $locations->{$_} };
     }
-    my $CGIlocation=CGI::scrolling_list( -name     => 'Filter',
-                            -id => 'location',
-                            -values   => \@select,
-                            -size     => 1,
-                            -multiple => 0 );
+
     # various
     my @mime = ( C4::Context->preference("MIME") );
     
@@ -229,11 +220,10 @@ if ($do_it) {
                             -values   => \@dels,
                             -size     => 1,
                             -multiple => 0 );
-    
+ 
     $template->param(
         CGIBorCat => $CGIBorCat,
         CGIItemType => $CGIItemTypes,
-        CGIBranch => $CGIBranch,
         hassort1=> $hassort1,
         hassort2=> $hassort2,
         HlghtSort2 => $hglghtsort2,
@@ -241,7 +231,8 @@ if ($do_it) {
         CGISort2 => $CGISort2,
         CGIextChoice => $CGIextChoice,
         CGIsepChoice => $CGIsepChoice,
-        CGILocation => $CGIlocation,
+        locationloop => \@locations,
+        branchloop => \@branchloop,
         );
     output_html_with_http_headers $input, $cookie, $template->output;
 }
@@ -328,7 +319,7 @@ sub calculate {
                 $linefield .="dayname($line)";  
         } elsif (($line=~/datetime/) and ($dsp == 2)) {
                 #Display by Month
-                $linefield .="monthname($line)";  
+                $linefield .="monthname($line) ";  
         } elsif (($line=~/datetime/) and ($dsp == 3)) {
                 #Display by Year
                 $linefield .="Year($line)";
@@ -362,7 +353,7 @@ sub calculate {
         }
         $strsth .=" group by $linefield";
         $strsth .=" order by $lineorder";
-#         warn "". $strsth;
+        $debug and warn $strsth;
         
         my $sth = $dbh->prepare( $strsth );
         if (( @linefilter ) and ($linefilter[1])){
@@ -425,7 +416,7 @@ sub calculate {
         }
         $strsth2 .=" group by $colfield";
         $strsth2 .=" order by $colorder";
-#	warn "". $strsth2;
+	warn $strsth2;
         
         my $sth2 = $dbh->prepare( $strsth2 );
         if (( @colfilter ) and ($colfilter[1])){
@@ -440,7 +431,7 @@ sub calculate {
         while (my ($celvalue) = $sth2->fetchrow) {
                 my %cell;
                 my %ft;
-#		warn "coltitle :".$celvalue;
+#				$debug and warn "coltitle :".$celvalue;
                 $cell{coltitle} = $celvalue;
                 $ft{totalcol} = 0;
                 push @loopcol, \%cell;
@@ -456,7 +447,7 @@ sub calculate {
 #	warn "init table";
         foreach my $row ( @loopline ) {
                 foreach my $col ( @loopcol ) {
-#			warn " init table : $row->{rowtitle} / $col->{coltitle} ";
+				$debug and warn " init table : $row->{rowtitle} / $col->{coltitle} ";
                         $table{$row->{rowtitle}}->{$col->{coltitle}}=0;
                 }
                 $table{$row->{rowtitle}}->{totalrow}=0;
@@ -509,13 +500,13 @@ sub calculate {
         $strcalc .= " AND statistics.type like '" . $type ."'" if ( $type );
         
         $strcalc .= " group by $linefield, $colfield order by $lineorder,$colorder";
-        warn "". $strcalc;
+        ($debug) and warn "". $strcalc;
         my $dbcalc = $dbh->prepare($strcalc);
         $dbcalc->execute;
 # 	warn "filling table";
         my $emptycol; 
         while (my ($row, $col, $value) = $dbcalc->fetchrow) {
-#                 warn "filling table $row / $col / $value ";
+                ($debug) and warn "filling table $row / $col / $value ";
                 $emptycol = 1 if ($col eq undef);
                 $col = "zzEMPTY" if ($col eq undef);
                 $row = "zzEMPTY" if ($row eq undef);

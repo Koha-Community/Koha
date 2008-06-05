@@ -192,28 +192,40 @@
             <td><!-- TMPL_VAR NAME="CGIBorCat" --></td>
         </tr>
         <tr class="hilighted">
-            <td>Document Type</td>
+            <td>Item Type</td>
             <td><input type="radio" name="Line" value="itemtype" /></td>
             <td><input type="radio" name="Column" value="itemtype" /></td>
             <td><!-- TMPL_VAR NAME="CGIItemType" --></td>
         </tr>
         <tr>
-            <td>Branch</td>
+            <td>Library</td>
             <td><input type="radio" name="Line" value="branch" /></td>
             <td><input type="radio" name="Column" value="branch" /></td>
-            <td><!-- TMPL_VAR NAME="CGIBranch" --></td>
+           <td><select name="Filter" id="branch">
+               <option value=""> </option>
+               <!-- TMPL_LOOP NAME="branchloop" -->
+                 <option value="<!-- TMPL_VAR NAME='code' -->" <!-- TMPL_IF NAME='selected' -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="description" --></option>
+               <!-- /TMPL_LOOP -->
+               </select>
+             </td> 
         </tr>
         <tr>
-            <td>Location</td>
+            <td>Shelving Location</td>
             <td><input type="radio" name="Line" value="location" /></td>
             <td><input type="radio" name="Column" value="location" /></td>
-            <td><!-- TMPL_VAR NAME="CGILocation" --></td>
+           <td><select name="Filter" id="location">
+               <option value=""> </option>
+               <!-- TMPL_LOOP NAME="locationloop" -->
+                 <option value="<!-- TMPL_VAR NAME='code' -->" <!-- TMPL_IF NAME='selected' -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="description" --></option>
+               <!-- /TMPL_LOOP -->
+               </select>
+             </td> 
         </tr>
         <tr>
-            <td>Item Callnumber</td>
+            <td>Item Call Number</td>
             <td></td>
             <td></td>
-            <td>From <input type="text" name="Filter" size="10" /> (included) to <input type="text" name="Filter" size="10" /> (excluded) </td>
+            <td>From <input type="text" name="Filter" size="10" /> (inclusive) to <input type="text" name="Filter" size="10" /> (exclusive) </td>
         </tr>
         <!-- TMPL_IF Name="hassort1" -->
             <tr class="hilighted"> 
