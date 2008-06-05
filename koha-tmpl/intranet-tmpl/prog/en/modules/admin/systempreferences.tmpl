@@ -249,7 +249,7 @@
     <tbody><!-- TMPL_LOOP NAME="loop" -->
     <tr<!-- TMPL_IF NAME="toggle" --> class="highlight"<!-- /TMPL_IF -->>
 
-        <td><strong><a href="<!-- TMPL_VAR NAME="edit" -->"><!-- TMPL_VAR NAME="variable" --></a></strong></td><td> <!-- TMPL_VAR NAME="explanation" --></td>
+        <td><strong><a href="<!-- TMPL_VAR NAME="edit" -->"><!-- TMPL_VAR NAME="variable" --></a></strong></td><td> <!-- TMPL_VAR NAME="explanation" ESCAPE="HTML" --></td>
         <td><!-- TMPL_IF NAME="yesno" -->
         <!-- TMPL_IF NAME="yes" -->ON<!-- TMPL_ELSE -->OFF<!-- /TMPL_IF -->
         <!-- TMPL_ELSE --><!-- TMPL_VAR NAME="value" --><!-- /TMPL_IF --></td>
