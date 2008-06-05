@@ -63,7 +63,7 @@ if ( $op eq "do_search" ) {
     my @value = $query->param('value');
 
     $resultsperpage = $query->param('resultsperpage');
-    $resultsperpage = 19 if ( !defined $resultsperpage );
+    $resultsperpage = 20 if ( !defined $resultsperpage );
     my @tags;
     my ( $results, $total, @fields ) =
       SearchAuthorities( \@marclist, \@and_or, \@excluding, \@operator,
