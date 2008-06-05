@@ -27,7 +27,7 @@ use C4::Calendar;
 
 my $input = new CGI;
 
-my $branch=C4::Context->preference('defaultbranch') || $input->param('branch');
+my $branch= $input->param('branch') || C4::Context->userenv->{'branch'};
 
 
 
@@ -47,7 +47,7 @@ my $onlymine=(C4::Context->preference('IndependantBranches') &&
               C4::Context->userenv &&
               C4::Context->userenv->{flags} !=1  &&
               C4::Context->userenv->{branch}?1:0);
-if ( C4::Context->preference("IndependantBranches") ) { 
+if ( $onlymine ) { 
     $branch = C4::Context->userenv->{'branch'};
 }
 my $branches = GetBranches($onlymine);

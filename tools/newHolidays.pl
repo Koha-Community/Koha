@@ -27,10 +27,14 @@ if ($description) {
 } else {
 	$description = '';
 }
-
 my $calendar = C4::Calendar->new(branchcode => $branchcode);
 
 if ($input->param('newOperation') eq 'weekday') {
+	unless ( $weekday && ($weekday ne '') ) { 
+		# was dow calculated by javascript?  original code implies it was supposed to be.
+		# if not, we need it.
+		$weekday = &Date::Calc::Day_of_Week($year, $month, $day) % 7 unless($weekday);
+	}
 	$calendar->insert_week_day_holiday(weekday => $weekday,
 							           title => $title,
 							           description => $description);
