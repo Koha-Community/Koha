@@ -189,13 +189,25 @@
             <td>Patron Category</td>
             <td><input type="radio" name="Line" value="borrowers.categorycode" /></td>
             <td><input type="radio" name="Column" value="borrowers.categorycode" /></td>
-            <td><!-- TMPL_VAR NAME="CGIBorCat" --></td>
+           <td><select name="Filter" id="borcat">
+               <option value=""> </option>
+               <!-- TMPL_LOOP NAME="categoryloop" -->
+                 <option value="<!-- TMPL_VAR NAME='categorycode' -->" <!-- TMPL_IF NAME='selected' -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="description" --></option>
+               <!-- /TMPL_LOOP -->
+               </select>
+             </td> 
         </tr>
         <tr class="hilighted">
             <td>Item Type</td>
             <td><input type="radio" name="Line" value="itemtype" /></td>
             <td><input type="radio" name="Column" value="itemtype" /></td>
-            <td><!-- TMPL_VAR NAME="CGIItemType" --></td>
+           <td><select name="Filter" id="itemtype">
+               <option value=""> </option>
+               <!-- TMPL_LOOP NAME="itemtypeloop" -->
+                 <option value="<!-- TMPL_VAR NAME='code' -->" <!-- TMPL_IF NAME='selected' -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="description" --></option>
+               <!-- /TMPL_LOOP -->
+               </select>
+             </td> 
         </tr>
         <tr>
             <td>Library</td>
@@ -240,19 +252,30 @@
             <td>From <input type="text" name="Filter" size="10" /> (inclusive) to <input type="text" name="Filter" size="10" /> (exclusive) </td>
         </tr>
         <!-- TMPL_IF Name="hassort1" -->
-            <tr class="hilighted"> 
+            <tr> 
                     <td>Patron sort1</td>
                     <td><input type="radio" name="Line" value="borrowers.sort1" /></td>
                     <td><input type="radio" name="Column" value="borrowers.sort1" /></td>
-                    <td><!-- TMPL_VAR NAME="CGISort1" --> </td>
+           <td><select name="Filter" id="sort1">
+               <option value=""> </option>
+               <!-- TMPL_LOOP NAME="Bsort1" -->
+                 <option value="<!-- TMPL_VAR NAME='authorised_value' -->" <!-- TMPL_IF NAME='selected' -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="lib" --></option>
+               <!-- /TMPL_LOOP -->
+               </select>
+             </td> 
             </tr>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF Name="hassort2" -->
-            <!-- TMPL_IF Name="HglghtSort2"--><tr class="hilighted"> <!-- TMPL_ELSE --><tr><!--/TMPL_IF --> 
-                <td>Patron sort2</td>
+                <tr> <td>Patron sort2</td>
                 <td><input type="radio" name="Line" value="borrowers.sort2" /></td>
                 <td><input type="radio" name="Column" value="borrowers.sort2" /></td>
-                <td><!-- TMPL_VAR NAME="CGISort2" --> </td>
+           		<td><select name="Filter" id="sort1">
+               <option value=""> </option>
+               <!-- TMPL_LOOP NAME="Bsort2" -->
+                 <option value="<!-- TMPL_VAR NAME='authorised_value' -->" <!-- TMPL_IF NAME='selected' -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="lib" --></option>
+               <!-- /TMPL_LOOP -->
+               </select>
+             </td> 
             </tr>
         <!-- /TMPL_IF -->
         </tbody>

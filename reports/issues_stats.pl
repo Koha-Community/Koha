@@ -27,6 +27,7 @@ use C4::Koha;
 use C4::Output;
 use C4::Circulation;
 use C4::Dates qw/format_date format_date_in_iso/;
+use C4::Members;
 use Date::Manip;
 
 =head1 NAME
@@ -70,9 +71,18 @@ $template->param(do_it => $do_it,
         DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
                 );
 
+my $itemtypes = GetItemTypes();
+my $categoryloop = GetBorrowercategoryList;
 
 my $ccodes = GetKohaAuthorisedValues("items.ccode");
 my $locations = GetKohaAuthorisedValues("items.location");
+
+my $Bsort1 = GetAuthorisedValues("Bsort1");
+my $Bsort2 = GetAuthorisedValues("Bsort2");
+my ($hassort1,$hassort2);
+$hassort1=1 if $Bsort1;
+$hassort2=1 if $Bsort2;
+
 
 if ($do_it) {
 # Displaying results
@@ -124,39 +134,12 @@ if ($do_it) {
     my @values;
     my %labels;
     my %select;
-    my $req;
-    $req = $dbh->prepare("select distinctrow categorycode,description from categories order by description");
-    $req->execute;
-    my @select;
-    push @select,"";
-    $select{""}="";
-    while (my ($value, $desc) =$req->fetchrow) {
-        push @select, $value;
-        $select{$value}=$desc;
-    }
-    my $CGIBorCat=CGI::scrolling_list( -name     => 'Filter',
-                            -id => 'borcat',
-                            -values   => \@select,
-                            -labels   => \%select,
-                            -size     => 1,
-                            -multiple => 0 );
-    
-    $req = $dbh->prepare( "select distinctrow itemtype,description from itemtypes order by description");
-    $req->execute;
-    undef @select;
-    undef %select;
-    push @select,"";
-    $select{""}="";
-    while (my ($value,$desc) =$req->fetchrow) {
-        push @select, $value;
-        $select{$value}=$desc;
-    }
-    my $CGIItemTypes=CGI::scrolling_list( -name     => 'Filter',
-                            -id => 'itemtype',
-                            -values   => \@select,
-                            -labels    => \%select,
-                            -size     => 1,
-                            -multiple => 0 );
+
+   # create itemtype arrayref for <select>.
+   my @itemtypeloop;
+    for my $itype ( keys(%$itemtypes)) {
+		push @itemtypeloop, { code => $itype , description => $itemtypes->{$itype}->{description} } ;
+	}
     
     my $branches=GetBranches();
 	my @branchloop;
@@ -170,38 +153,6 @@ if ($do_it) {
         push @branchloop, \%row;
     }
 
-	#FIXME - we have an auth val for these now.
-    $req = $dbh->prepare("select distinctrow sort1 from borrowers where sort1 is not null order by sort1");
-    $req->execute;
-    undef @select;
-    push @select,"";
-    my $hassort1;
-    while (my ($value) =$req->fetchrow) {
-        $hassort1 =1 if ($value);
-        push @select, $value;
-    }
-    my $CGISort1=CGI::scrolling_list( -name     => 'Filter',
-                            -id => 'sort1',
-                            -values   => \@select,
-                            -size     => 1,
-                            -multiple => 0 );
-    
-    $req = $dbh->prepare("select distinctrow sort2 from borrowers where sort2 is not null order by sort2");
-    $req->execute;
-    undef @select;
-    push @select,"";
-    my $hassort2;
-    my $hglghtsort2;
-    while (my ($value) =$req->fetchrow) {
-        $hassort2 =1 if ($value);
-        $hglghtsort2= !($hassort1);
-        push @select, $value;
-    }
-    my $CGISort2=CGI::scrolling_list( -name     => 'Filter',
-                            -id => 'sort2',
-                            -values   => \@select,
-                            -size     => 1,
-                            -multiple => 0 );
     # location list
     my @locations;
     foreach (sort keys %$locations) {
@@ -232,13 +183,12 @@ if ($do_it) {
                             -multiple => 0 );
  
     $template->param(
-        CGIBorCat => $CGIBorCat,
-        CGIItemType => $CGIItemTypes,
-        hassort1=> $hassort1,
+        categoryloop => $categoryloop,
+		itemtypeloop => \@itemtypeloop,
+		hassort1=> $hassort1,
         hassort2=> $hassort2,
-        HlghtSort2 => $hglghtsort2,
-        CGISort1 => $CGISort1,
-        CGISort2 => $CGISort2,
+		Bsort1 => $Bsort1,
+		Bsort2 => $Bsort2,
         CGIextChoice => $CGIextChoice,
         CGIsepChoice => $CGIsepChoice,
         locationloop => \@locations,
@@ -305,8 +255,12 @@ sub calculate {
         my ($colsource, $linesource);
         $linefilter[0] = @$filters[0] if ($line =~ /datetime/ )  ;
         $linefilter[1] = @$filters[1] if ($line =~ /datetime/ )  ;
-        $linefilter[0] = @$filters[2] if ($line =~ /category/ )  ;
-        $linefilter[0] = @$filters[3] if ($line =~ /itemtype/ )  ;
+		if ($line =~ /category/ )  {
+        	$linefilter[0] = @$filters[2] ;
+		}
+		if ($line =~ /itemtype/ ) {
+        	$linefilter[0] = @$filters[3] ;
+		}
         $linefilter[0] = @$filters[4] if ($line =~ /branch/ )  ;
 		if ($line =~ /ccode/ ) {
         	$linefilter[0] = @$filters[5] ;
@@ -398,6 +352,23 @@ sub calculate {
 					$cell{rowtitle_display} = $ccodes->{$celvalue};
 				} elsif($line=~/location/) {
 					 $cell{rowtitle_display} = $locations->{$celvalue};
+				} elsif($line=~/sort1/) {
+					for my $s (@$Bsort1) {
+						$cell{rowtitle_display} = $s->{lib} if ($celvalue eq $s->{authorised_value});
+					}
+					$cell{rowtitle_display} = $celvalue unless  $cell{rowtitle_display};
+				} elsif($line=~/sort2/) {
+					for my $s (@$Bsort2) {
+						$cell{rowtitle_display} = $s->{lib} if ($celvalue eq $s->{authorised_value});
+					}
+					$cell{rowtitle_display} = $celvalue unless  $cell{rowtitle_display};
+				} elsif($line=~/categorycode/) {
+					for my $s (@$categoryloop) { 
+						$cell{rowtitle_display} = $s->{description} if ($celvalue eq $s->{categorycode});
+					}
+					$cell{rowtitle_display} = $celvalue unless  $cell{rowtitle_display};
+				} elsif($line=~/itemtype/) {
+					$cell{rowtitle_display} = $itemtypes->{$celvalue}->{description};
 				} else {
                		$cell{rowtitle_display} = $celvalue;
 				}					
@@ -474,6 +445,23 @@ sub calculate {
 					$cell{coltitle_display} = $ccodes->{$celvalue};
 				} elsif($column=~/location/) {
 					 $cell{coltitle_display} = $locations->{$celvalue};
+				} elsif($column=~/itemtype/) {
+					$cell{coltitle_display} = $itemtypes->{$celvalue}->{description};
+				} elsif($column=~/sort1/) {
+					for my $s (@$Bsort1) {
+						$cell{coltitle_display} = $s->{lib} if ($celvalue eq $s->{authorised_value});
+					}
+					$cell{coltitle_display} = $celvalue unless  $cell{coltitle_display};
+				} elsif($column=~/sort2/) {
+					for my $s (@$Bsort2) {
+						$cell{coltitle_display} = $s->{lib} if ($celvalue eq $s->{authorised_value});
+					}
+					$cell{coltitle_display} = $celvalue unless  $cell{coltitle_display};
+				} elsif($column=~/category/) {
+					for my $s (@$categoryloop) {
+						$cell{coltitle_display} = $s->{description} if ($celvalue eq $s->{categorycode});
+					}
+					$cell{coltitle_display} = $celvalue unless  $cell{coltitle_display};
 				} else {
                		$cell{coltitle_display} = $celvalue;
 				}					
@@ -486,7 +474,6 @@ sub calculate {
 
         my $i=0;
         my @totalcol;
-        my $hilighted=-1;
         
         #Initialization of cell values.....
         my %table;
@@ -552,18 +539,23 @@ sub calculate {
         my $dbcalc = $dbh->prepare($strcalc);
         $dbcalc->execute;
 # 	warn "filling table";
-        my $emptycol; 
+        my ($emptycol,$emptyrow); 
         while (my ($row, $col, $value) = $dbcalc->fetchrow) {
                 ($debug) and warn "filling table $row / $col / $value ";
-                $emptycol = 1 if ($col eq undef);
-                $col = "zzEMPTY" if ($col eq undef);
-                $row = "zzEMPTY" if ($row eq undef);
-                
+				if ($col eq undef) {
+                	$emptycol = 1; 
+                	$col = "zzEMPTY" ;
+				}
+				if ($row eq undef) {
+					$emptyrow = 1;
+                	$row = "zzEMPTY"; 
+                }
                 $table{$row}->{$col}+=$value;
                 $table{$row}->{totalrow}+=$value;
                 $grantotal += $value;
         }
-        push @loopcol,{coltitle => "NULL"} if ($emptycol);
+        push @loopcol,{coltitle => "NULL", coltitle_display => 'NULL'} if ($emptycol);
+        push @loopline,{rowtitle => "NULL", rowtitle_display => 'NULL'} if ($emptyrow);
 
         foreach my $row (@loopline) {
                 my @loopcell;
@@ -573,21 +565,18 @@ sub calculate {
                         my $value =$table{($row->{rowtitle} eq "NULL")?"zzEMPTY":$row->{rowtitle}}->{($col->{coltitle} eq "NULL")?"zzEMPTY":$col->{coltitle}};
                         push @loopcell, {value => $value  } ;
                 }
-                push @looprow,{ 'rowtitle' => ($row->{rowtitle} eq "NULL")?"zzEMPTY":$row->{rowtitle},
-								'rowtitle_display' => ($row->{rowtitle_display} eq "NULL")?"zzEMPTY":$row->{rowtitle_display},
+                push @looprow,	{ 'rowtitle' => ($row->{rowtitle} eq "NULL")?"zzEMPTY":$row->{rowtitle},
+								'rowtitle_display' => ($row->{rowtitle_display} eq "NULL")?"NULL":$row->{rowtitle_display},
                                 'loopcell' => \@loopcell,
-                                'hilighted' => ($hilighted >0),
                                 'totalrow' => $table{($row->{rowtitle} eq "NULL")?"zzEMPTY":$row->{rowtitle}}->{totalrow}
                                                 };
-                $hilighted = -$hilighted;
         }
-        
 #	warn "footer processing";
-        foreach my $col ( @loopcol ) {
+        for my $col ( @loopcol ) {
                 my $total=0;
                 foreach my $row ( @looprow ) {
                         $total += $table{($row->{rowtitle} eq "NULL")?"zzEMPTY":$row->{rowtitle}}->{($col->{coltitle} eq "NULL")?"zzEMPTY":$col->{coltitle}};
-#			warn "value added ".$table{$row->{rowtitle}}->{$col->{coltitle}}. "for line ".$row->{rowtitle};
+			$debug and warn "value added ".$table{$row->{rowtitle}}->{$col->{coltitle}}. "for line ".$row->{rowtitle};
                 }
 #		warn "summ for column ".$col->{coltitle}."  = ".$total;
                 push @loopfooter, {'totalcol' => $total};
