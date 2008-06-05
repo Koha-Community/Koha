@@ -127,6 +127,7 @@ if ( $op eq "do_search" ) {
     }
     $template->param( result => $results ) if $results;
     $template->param( FIELDS => \@fields );
+    $template->param( orderby => $orderby );
     $template->param(
         startfrom      => $startfrom,
         displaynext    => $displaynext,
