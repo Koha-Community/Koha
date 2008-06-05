@@ -202,6 +202,12 @@ if ($do_it) {
     foreach (sort keys %$locations) {
         push @locations, { code => $_, description => "$_ - " . $locations->{$_} };
     }
+    
+	my $ccodes = GetKohaAuthorisedValues("items.ccode");
+    my @ccodes;
+    foreach (keys %$ccodes) {
+        push @ccodes, { code => $_, description => $ccodes->{$_} };
+    }
 
     # various
     my @mime = ( C4::Context->preference("MIME") );
@@ -232,6 +238,7 @@ if ($do_it) {
         CGIextChoice => $CGIextChoice,
         CGIsepChoice => $CGIsepChoice,
         locationloop => \@locations,
+		ccodeloop => \@ccodes,
         branchloop => \@branchloop,
         );
     output_html_with_http_headers $input, $cookie, $template->output;

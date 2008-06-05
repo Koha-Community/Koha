@@ -186,18 +186,6 @@
                 </td>
         </tr>
         <tr>
-            <td>Patron Category</td>
-            <td><input type="radio" name="Line" value="borrowers.categorycode" /></td>
-            <td><input type="radio" name="Column" value="borrowers.categorycode" /></td>
-            <td><!-- TMPL_VAR NAME="CGIBorCat" --></td>
-        </tr>
-        <tr class="hilighted">
-            <td>Item Type</td>
-            <td><input type="radio" name="Line" value="itemtype" /></td>
-            <td><input type="radio" name="Column" value="itemtype" /></td>
-            <td><!-- TMPL_VAR NAME="CGIItemType" --></td>
-        </tr>
-        <tr>
             <td>Library</td>
             <td><input type="radio" name="Line" value="branch" /></td>
             <td><input type="radio" name="Column" value="branch" /></td>
@@ -209,6 +197,30 @@
                </select>
              </td> 
         </tr>
+        <tr>
+            <td>Patron Category</td>
+            <td><input type="radio" name="Line" value="borrowers.categorycode" /></td>
+            <td><input type="radio" name="Column" value="borrowers.categorycode" /></td>
+            <td><!-- TMPL_VAR NAME="CGIBorCat" --></td>
+        </tr>
+        <tr class="hilighted">
+            <td>Item Type</td>
+            <td><input type="radio" name="Line" value="itemtype" /></td>
+            <td><input type="radio" name="Column" value="itemtype" /></td>
+            <td><!-- TMPL_VAR NAME="CGIItemType" --></td>
+        </tr>
+            <tr>
+                <td>Collection</td>
+                <td><input type="radio" name="Line"   value="items.ccode" /></td>
+                <td><input type="radio" name="Column" value="items.ccode" /></td>
+                <td><select name="Filter" id="ccode">
+                    <option value=""> </option>
+                    <!-- TMPL_LOOP NAME="ccodeloop" -->
+                    <option value="<!-- TMPL_VAR NAME='code' -->" <!-- TMPL_IF NAME='selected' -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="description" --></option>
+                    <!-- /TMPL_LOOP -->
+                    </select>
+                </td>
+            </tr>
         <tr>
             <td>Shelving Location</td>
             <td><input type="radio" name="Line" value="location" /></td>
