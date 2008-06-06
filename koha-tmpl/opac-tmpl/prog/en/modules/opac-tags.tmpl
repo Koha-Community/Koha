@@ -36,6 +36,7 @@
 	  <!-- /TMPL_IF -->
 	<!-- /TMPL_IF -->
 
+	<!-- TMPL_UNLESS NAME="hidemytags" -->
 	<!-- TMPL_IF NAME="MY_TAGS" -->
 		<form method="post" action="opac-tags.pl">
 		<h2>My Tags</h2>
@@ -58,20 +59,22 @@
 	<!-- TMPL_ELSE -->
 		<div class="msg">To see any of your own saved tags, first log in.</div>
 	<!-- /TMPL_IF -->
+	<!-- /TMPL_UNLESS -->
 
 	<h1>All Tags</h1>
 	<div id="action">
-		<form method="post" action="opac-tags.pl">
-		<p>Show up to <input name="limit" maxlength="4" size="4" value="100" />
+		<form method="get" action="opac-tags.pl">
+		<p>Show up to <input name="limit" style="text-align: right;" maxlength="4" size="4" value="<!-- TMPL_VAR NAME="limit" DEFAULT="100" -->" />
 			tags from other users.
+			<input type="hidden" name="hidemytags" value="1" />
 			<input type="submit" value="OK" />
 		</p>
 		</form>
 	</div>
-	<!-- TMPL_IF NAME="TAGLOOP" --> Results:<ul>
+	<!-- TMPL_IF NAME="TAGLOOP" --> <!-- TMPL_VAR NAME="TAGLOOP_COUNT" --> Results:<ul>
 	<!-- TMPL_LOOP NAME="TAGLOOP" -->
 	<li><a href="/cgi-bin/koha/opac-search.pl?tag=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->&amp;q=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->">
-		<!-- TMPL_VAR NAME="term" ESCAPE="HTML" --></a> (<!-- TMPL_VAR NAME="weight_total" -->)</li>
+		<!-- TMPL_VAR NAME="term" ESCAPE="HTML" --></a> (<!-- TMPL_VAR NAME="weight_total" -->) <!-- (<!-- TMPL_VAR NAME="cloudweight" -->) --> </li>
 	<!-- /TMPL_LOOP -->
 	</ul>
 	<!-- /TMPL_IF -->

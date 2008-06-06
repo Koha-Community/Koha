@@ -38,7 +38,7 @@ use C4::Output 3.02 qw(:html :ajax pagination_bar);
 use C4::Dates qw(format_date);
 use C4::Scrubber;
 use C4::Biblio;
-use C4::Tags qw(add_tag get_tags get_tag_rows remove_tag);
+use C4::Tags qw(add_tag get_approval_rows get_tag_rows remove_tag);
 
 my %newtags = ();
 my @deltags = ();
@@ -172,7 +172,7 @@ if ($is_ajax) {
 my $results = [];
 my $my_tags = [];
 
-if ($loggedinuser) {
+if ($loggedinuser and not $query->param('hidemytags')) {
 	$my_tags = get_tag_rows({borrowernumber=>$loggedinuser});
 	foreach (@$my_tags) {
 		my $biblio = GetBiblioData($_->{biblionumber});
@@ -194,23 +194,48 @@ if ($add_op) {
 		deleted_count => $dels,
 	);
 } else {
-	my ($arg,$limit,$tmpresults);
+	my ($arg,$limit);
 	my $hardmax = 100;	# you might disagree what this value should be, but there definitely should be a max
 	$limit = $query->param('limit') || $hardmax;
 	($limit =~ /^\d+$/ and $limit <= $hardmax) or $limit = $hardmax;
+	$template->param(limit => $limit);
 	if ($arg = $query->param('tag')) {
-		$tmpresults = get_tags({term => $arg, limit=>$limit, 'sort'=>'-weight'});
+		$results = get_approval_rows({term => $arg, approved=>1, limit=>$limit, 'sort'=>'-weight_total'});
 	} elsif ($arg = $query->param('biblionumber')) {
-		$tmpresults = get_tags({biblionumber => $arg, limit=>$limit, 'sort'=>'-weight'});
+		$results = get_approval_rows({biblionumber => $arg, approved=>1, limit=>$limit, 'sort'=>'-weight_total'});
 	} else {
-		$tmpresults = get_tags({limit=>$limit, 'sort'=>'-weight'});
+		$results = get_approval_rows({limit=>$limit, approved=>1, 'sort'=>'-weight_total'});
 	}
-	my %uniq;
-	foreach (@$tmpresults) {
-		$uniq{$_->{term}}++ and next;
-		push @$results, $_;
+
+	my $count = scalar @$results;
+	$template->param(TAGLOOP_COUNT => $count);
+	# Here we make a halfhearted attempt to separate the tags into "strata" based on weight_total
+	# FIXME: code4lib probably has a better algorithm, iirc
+	# FIXME: when we get a better algorithm, move to C4
+	my $maxstrata = 5;
+	my $strata = 1;
+	my $previous = 0;
+	my $chunk = ($count/$maxstrata)/2;
+	my $total = 0;
+	my %cloud;
+	foreach (reverse @$results) {
+		my $current = $_->{weight_total};
+		$total++;
+		$cloud{$strata}++;
+		if ($current == $previous) {
+			$_->{cloudweight} = $strata;
+			next;
+		} 
+		if ($strata < $maxstrata and 
+			($cloud{$strata} > $chunk or 
+			$count-$total <= $maxstrata-$strata)) {
+			$strata++;
+		}
+		$_->{cloudweight} = $strata;
+		$previous = $current;
 	}
 }
+$query->param('hidemytags') and $template->param(hidemytags => 1);
 (scalar @errors  ) and $template->param(ERRORS  => \@errors);
 (scalar @$results) and $template->param(TAGLOOP => $results);
 (scalar @$my_tags) and $template->param(MY_TAGS => $my_tags);
