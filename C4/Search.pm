@@ -227,6 +227,7 @@ sub SimpleSearch {
         # FIXME hardcoded value. See catalog/search.pl & opac-search.pl too.
         my @servers = defined ( $servers ) ? @$servers : ( "biblioserver" );
         my @results;
+        my @zoom_queries;
         my @tmpresults;
         my @zconns;
         my $total_hits;
@@ -236,9 +237,8 @@ sub SimpleSearch {
         for ( my $i = 0 ; $i < @servers ; $i++ ) {
             eval {
                 $zconns[$i] = C4::Context->Zconn( $servers[$i], 1 );
-                $tmpresults[$i] =
-                  $zconns[$i]
-                  ->search( new ZOOM::Query::CCL2RPN( $query, $zconns[$i] ) );
+                $zoom_queries[$i] = new ZOOM::Query::CCL2RPN( $query, $zconns[$i]);
+                $tmpresults[$i] = $zconns[$i]->search( $zoom_queries[$i] );
 
                 # error handling
                 my $error =
@@ -278,6 +278,13 @@ sub SimpleSearch {
                     push @results, $record;
                 }
             }
+        }
+
+        foreach my $result (@tmpresults) {
+            $result->destroy();
+        }
+        foreach my $zoom_query (@zoom_queries) {
+            $zoom_query->destroy();
         }
 
         return ( undef, \@results, $total_hits );
