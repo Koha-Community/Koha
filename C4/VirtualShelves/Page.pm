@@ -195,6 +195,7 @@ SWITCH: {
 				unless (scalar grep {/^CONFIRM-$number$/} $query->param()) {
 					push(@paramsloop, {need_confirm=>$shelflist->{$number}->{shelfname}, count=>$count});
 					$shelflist->{$number}->{confirm} = $number;
+					$stay = 0;
 					next;
 				}
 			} 
