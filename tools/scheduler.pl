@@ -21,14 +21,14 @@ use strict;
 use C4::Context;
 use C4::Scheduler;
 use C4::Reports;
-use C4::Auth;                                                                                                                                              
-use CGI;                                                                                                                                                   
-use C4::Output;                                                                                                                                            
+use C4::Auth;
+use CGI;
+use C4::Output;
 
 my $input = new CGI;
 
 my $base = C4::Context->config('intranetdir');
-my $CONFIG_NAME="/home/crc/koha/etc/koha-production.xml";
+my $CONFIG_NAME = $ENV{'KOHA_CONF'};
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 	    {
@@ -42,6 +42,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 	);
 
 my $mode=$input->param('mode');
+my $id = $input->param('id');
 
 if ($mode eq 'job_add') {
 	my $startday   = $input->param('startday');
@@ -60,7 +61,9 @@ if ($mode eq 'job_add') {
 	    add_cron_job($start,$command);
 	}
 	else {
-	    add_at_job($start,$command);
+	    unless (add_at_job($start,$command)) {
+            $template->param(job_add_failed => 1);
+        }
 	}
 }
 
@@ -78,7 +81,14 @@ my @jobloop;
 }
 
 @jobloop = sort {$a->{TIME} cmp $b->{TIME}} @jobloop;
-my $reports = get_saved_reports();                                                                                                                     
+
+my $reports = get_saved_reports();
+if (defined $id) {
+    foreach my $report (@$reports) {
+        $report->{'selected'} = 1 if $report->{'id'} eq $id;
+    }
+}
+
 $template->param( 'savedreports' => $reports ); 
 $template->param(JOBS => \@jobloop);
 my $time = localtime(time);

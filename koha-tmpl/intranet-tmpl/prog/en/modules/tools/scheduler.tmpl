@@ -15,6 +15,11 @@
     <div class="yui-b">
 
 <div id="main">
+
+<!-- TMPL_IF NAME="job_add_failed" -->
+<div class="dialog message">Failed to add scheduled task</div>
+<!-- /TMPL_IF -->
+
 <form name="form1" action="scheduler.pl" method="post">
 <input type="hidden" name="mode" value="job_add" />
 
@@ -84,8 +89,12 @@
 </li>
 <li><label for="report">Report:</label>
 <select name="report" id="report">
-<!-- TMPL_LOOP NAME="savedreports" -->                                   
-<option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="report_name"--></option>                  
+<!-- TMPL_LOOP NAME="savedreports" -->
+    <!-- TMPL_IF NAME="selected" -->
+        <option value="<!-- TMPL_VAR NAME="id" -->" selected="selected"><!-- TMPL_VAR NAME="report_name"--></option>
+    <!-- TMPL_ELSE -->
+        <option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="report_name"--></option>
+    <!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
 </select>
 </li>
@@ -117,7 +126,7 @@
 <tr>
 <td><!-- TMPL_VAR NAME="TIME" --></td>
 <td><!-- TMPL_VAR NAME="TAG" --></td>
-<td><input type="submit" value="Edit"/>&nbsp;<input type="submit" name="delete" value="Delete" /></td>
+<td><input type="submit" name="delete" value="Delete" /></td>
 </tr>
 <input type="hidden" name="jobid" value="<!-- TMPL_VAR NAME="JOBID" -->" />
 </form>

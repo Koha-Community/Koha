@@ -85,13 +85,47 @@ sub get_at_job {
 
 =item add_at_job ($time,$command)
 
-Given a timestamp and a command this will schedule the job to run at that time
+Given a timestamp and a command this will schedule the job to run at that time.
+
+Returns true if the job is added to the queue and false otherwise.
 
 =cut
 
 sub add_at_job {
 	my ($time,$command) = @_;
+    # FIXME - a description of the task to be run 
+    # may be a better tag, since the tag is displayed
+    # in the job list that the administrator sees - e.g.,
+    # "run report foo, send to foo@bar.com"
 	Schedule::At::add(TIME => $time, COMMAND => $command, TAG => $command);
+
+    # FIXME - this method of checking whether the job was added
+    # to the queue is less than perfect:
+    #
+    # 1. Since the command is the tag, it is possible that there is
+    #    already a job in the queue with the same tag.  However, since
+    #    the tag is what displays in the job list, we can't just
+    #    give it a unique ID.
+    # 2. Schedule::At::add() is supposed to return a non-zero
+    #    value if it fails to add a job - however, it does
+    #    not check all error conditions - in particular, it does
+    #    not check the return value of the "at" run; it basically
+    #    complains only if it can't find at.
+    # 3. Similary, Schedule::At::add() does not do something more useful,
+    #    such as returning the job ID.  To be fair, it is possible
+    #    that 'at' does not allow this in any portable way.
+    # 4. Although unlikely, it is possible that a job could be added
+    #    and completed instantly, thus dropping off the queue.
+    my $job_found = 0;
+    eval {
+	    my %jobs = Schedule::At::getJobs(TAG => $command);
+        $job_found = scalar(keys %jobs) > 0;
+    };
+    if ($@) {
+        return 0;
+    } else {
+        return $job_found;
+    }
 }
 
 sub remove_at_job {
@@ -101,6 +135,24 @@ sub remove_at_job {
 
 1;
 __END__
+
+=head1 BUGS
+
+At some point C<C4::Scheduler> should be refactored:
+
+=over 4
+
+=item At and C<Schedule::At> does not work on Win32.
+
+=item At is not installed by default on all platforms.
+
+=item The At queue used by Koha is owned by the httpd user.  If multiple
+Koha databases share an Apache instance on a server, everybody can
+see everybody's jobs.
+
+=item There is no support for scheduling a job to run more than once.
+
+=back
 
 =head1 AUTHOR
 
