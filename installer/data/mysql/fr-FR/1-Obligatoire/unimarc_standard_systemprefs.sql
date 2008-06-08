@@ -191,3 +191,19 @@ INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('StaticHoldsQueueWeight','0','Specify a list of library location codes separated by commas -- the list of codes will be traversed and weighted with first values given higher weight for holds fulfillment -- alternatively, if RandomizeHoldsQueueWeight is set, the list will be randomly selective',NULL,'TextArea');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AutoEmailOpacUser','0','Sends notification emails containing new account details to patrons - when account is created.',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AutoEmailPrimaryAddress','0','Defines the default email address where \'Acount Details\' emails are sent.','email|emailpro|B_email|cardnumber|OFF','Choice');
+
+-- Tags and BakerTaylor (note field order differs from above)
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES
+	('BakerTaylorBookstoreURL','','','URL template for \"My Libary Bookstore\" links, to which the \"key\" value is appended, and \"https://\" is prepended.  It should include your hostname and \"Parent Number\".  Make this variable empty to turn MLB links off.<br /> Example: ocls.mylibrarybookstore.com/MLB/actions/searchHandler.do?nextPage=bookDetails&parentNum=10923&key=',''),
+	('BakerTaylorEnabled','0','','Enable or disable all Baker & Taylor features.','YesNo'),
+	('BakerTaylorPassword','','','Baker & Taylor Password for Content Cafe (external content)','Textarea'),
+	('BakerTaylorUsername','','','Baker & Taylor Username for Content Cafe (external content)','Textarea'),
+	('TagsEnabled','1','','Active les fonctionnalités de tags.','YesNo'),
+	('TagsExternalDictionary',NULL,'','Chemin d\'accès sur le serveur au programme ispell pour déterminer $Lingua::Ispell::path <br />Ce dictionnaire est utilisé comme une liste de tags prédéfinis',''),
+	('TagsInputOnDetail','1','','Permet aux utilisateurs de saisir des tags sur la page de détail.',         'YesNo'),
+	('TagsInputOnList',  '0','','Permet aux utilisateurs de saisir des tags sur la page de résultat.', 'YesNo'),
+	('TagsModeration',  NULL,'','Demande que les tags soient approuvés avant d\'être visibles.','YesNo'),
+	('TagsShowOnDetail','10','','Nombre de tags à afficher sur la page de détail, 0 désactivant l\'affichage.',        'Integer'),
+	('TagsShowOnList',   '6','','Nombre de tags à afficher sur la page de résultat, 0 désactivant l\'affichage.','Integer');
+
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('OPACShelfBrowser','1','','Active le parcours des rayonnages sur la page de détail','YesNo');
