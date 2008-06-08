@@ -411,7 +411,7 @@ function vShelfAdd() {
 
 YAHOO.util.Event.onAvailable("cartDetails", function () {
 	$("#cartDetails").css("display","block").css("visibility","hidden").after("<div id=\"cc\" style=\"visibility: hidden\"></div>");
-	$("#cmspan").html("<a href=\"#\" id=\"cartmenulink\" class=\"\"><i></i><span><i></i><span></span><img src=\"/opac-tmpl/prog/images/cart.gif\" width=\"14\" height=\"14\" alt=\"\" border=\"0\" /> Cart<span id=\"basket\"></span></span></a>");
+	$("#cmspan").html("<a href=\"#\" id=\"cartmenulink\" class=\"\"><i></i><span><i></i><span></span><img src=\"/opac-tmpl/prog/images/cart.gif\" width=\"14\" height=\"14\" alt=\"\" border=\"0\" />" + $("#cmspan").text() + "<span id=\"basket\"></span></span></a>");
 	if(basketcount){ updateBasket(basketcount) }	
 });
 
