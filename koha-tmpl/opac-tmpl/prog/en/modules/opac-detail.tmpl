@@ -78,7 +78,9 @@
     <!-- TMPL_IF name="MARCAUTHORS" -->
     <span class="results_summary"><span class="label">Authors:</span>
 				<!-- TMPL_LOOP NAME="MARCAUTHORS" -->
-                <!-- TMPL_LOOP NAME="MARCAUTHOR_SUBFIELDS_LOOP" --><!-- TMPL_VAR NAME="separator" --><a title="‡<!-- TMPL_VAR NAME=code --> <!-- TMPL_VAR NAME=value -->" href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_LOOP NAME=link_loop --><!-- TMPL_VAR NAME=operator --><!-- TMPL_VAR NAME='limit' -->:<!-- TMPL_VAR NAME=link --><!-- /TMPL_LOOP -->"><!-- TMPL_VAR NAME="value" --></a><!-- /TMPL_LOOP -->
+                <!-- TMPL_LOOP NAME="MARCAUTHOR_SUBFIELDS_LOOP" --><!-- TMPL_VAR NAME="separator" --><a title="‡<!-- TMPL_VAR NAME=code --> <!-- TMPL_VAR NAME=value -->" href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_LOOP NAME=link_loop --><!-- TMPL_VAR NAME=operator --><!-- TMPL_VAR NAME='limit' -->:<!-- TMPL_VAR NAME=link --><!-- /TMPL_LOOP -->"><!-- TMPL_VAR NAME="value" --></a><!-- /TMPL_LOOP --> 
+		<TMPL_UNLESS NAME="__last__">|
+</TMPL_UNLESS>
                 <!-- /TMPL_LOOP -->
     </span>
     <!-- /TMPL_IF -->
