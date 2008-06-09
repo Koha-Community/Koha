@@ -27,10 +27,6 @@ use C4::Calendar;
 
 my $input = new CGI;
 
-my $branch= $input->param('branch') || C4::Context->userenv->{'branch'};
-
-
-
 my $dbh = C4::Context->dbh();
 # Get the template to use
 my ($template, $loggedinuser, $cookie)
@@ -42,6 +38,7 @@ my ($template, $loggedinuser, $cookie)
                              debug => 1,
                            });
 
+my $branch= $input->param('branch') || C4::Context->userenv->{'branch'};
 # Set all the branches.
 my $onlymine=(C4::Context->preference('IndependantBranches') &&
               C4::Context->userenv &&
