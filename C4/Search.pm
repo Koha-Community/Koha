@@ -747,6 +747,13 @@ sub _build_stemmed_operand {
     my ($operand) = @_;
     my $stemmed_operand;
 
+    # If operand contains a digit, it is almost certainly an identifier, and should
+    # not be stemmed.  This is particularly relevant for ISBNs and ISSNs, which
+    # can contain the letter "X" - for example, _build_stemmend_operand would reduce 
+    # "014100018X" to "x ", which for a MARC21 database would bring up irrelevant
+    # results (e.g., "23 x 29 cm." from the 300$c).  Bug 2098.
+    return $operand if $operand =~ /\d/;
+
 # FIXME: the locale should be set based on the user's language and/or search choice
     my $stemmer = Lingua::Stem->new( -locale => 'EN-US' );
 
