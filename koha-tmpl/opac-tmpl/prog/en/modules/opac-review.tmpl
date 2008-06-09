@@ -49,6 +49,7 @@
 <body id="comment"> 
 <div id="custom-doc" class="yui-t7"> 
 <div class="container">
+<!-- TMPL_IF NAME="cgi_debug" --><div class="debug">CGI debug is on.</div><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="ERRORS" -->
 	<div class="error">
 	<!-- TMPL_LOOP NAME="ERRORS" -->
@@ -64,7 +65,7 @@
 	<!-- TMPL_IF NAME="WINDOW_CLOSE" -->Note: this window will close automatically in 5 seconds<!-- /TMPL_IF -->
 	</div>
 <!-- /TMPL_IF -->
-<form id="reviewf" action="/cgi-bin/koha/opac-review.pl" method="post"> 
+<form id="reviewf" action="/cgi-bin/koha/opac-review.pl<!-- TMPL_IF NAME="cgi_debug" -->?debug=1<!-- /TMPL_IF -->" method="post"> 
     <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
 	<fieldset class="brief">
 	<legend>Comments on <i><!--TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" --></i><!-- TMPL_IF NAME="author" -->by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --></legend>
