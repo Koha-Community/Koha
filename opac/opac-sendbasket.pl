@@ -136,6 +136,7 @@ $boundary
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
+$email_header
 $body
 $boundary
 Content-Type: application/octet-stream; name="basket.iso2709"
