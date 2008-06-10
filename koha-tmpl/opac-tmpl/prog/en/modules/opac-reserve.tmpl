@@ -119,9 +119,8 @@
             <table id="requestspecific">
 			<caption>Place a hold on a specific copy</caption>
             <tr>
-				<th>&nbsp;</th>
-	            <!-- TMPL_IF NAME="item-level_itypes" -->
                 <th>Hold</th>
+	            <!-- TMPL_IF NAME="item-level_itypes" -->
                 <th>Item Type</th>
                 <!-- /TMPL_IF -->
                 <th>Barcode</th>
@@ -141,7 +140,6 @@
             <input DISABLED type="checkbox" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
             <!-- /TMPL_IF -->
             </td>
-			<td>&nbsp;</td>
             <!-- TMPL_IF NAME="item-level_itypes" -->
             <td>
             <img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->">
