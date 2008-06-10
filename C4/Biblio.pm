@@ -1487,7 +1487,21 @@ sub TransformHtmlToXml {
 sub TransformHtmlToMarc {
     my $params = shift;
     my $cgi    = shift;
-    
+   
+    # explicitly turn on the UTF-8 flag for all
+    # 'tag_' parameters to avoid incorrect character
+    # conversion later on
+    my $cgi_params = $cgi->Vars;
+    foreach my $param_name (keys %$cgi_params) {
+        if ($param_name =~ /^tag_/) {
+            my $param_value = $cgi_params->{$param_name};
+            if (utf8::decode($param_value)) {
+                $cgi_params->{$param_name} = $param_value;
+            } 
+            # FIXME - need to do something if string is not valid UTF-8
+        }
+    }
+   
     # creating a new record
     my $record  = MARC::Record->new();
     my $i=0;
@@ -1527,7 +1541,7 @@ sub TransformHtmlToMarc {
                 if ($tag eq '000' ) {
                     $record->leader($cgi->param($params->[$j+1])) if length($cgi->param($params->[$j+1]))==24;
     # between 001 and 009 (included)
-                } else {
+                } elsif ($cgi->param($params->[$j+1]) ne '') {
                     $newfield = MARC::Field->new(
                         $tag,
                         $cgi->param($params->[$j+1]),
@@ -1538,13 +1552,13 @@ sub TransformHtmlToMarc {
                 while($params->[$j] =~ /_code_/){ # browse all it's subfield
                     my $inner_param = $params->[$j];
                     if ($newfield){
-                        if($cgi->param($params->[$j+1])){  # only if there is a value (code => value)
+                        if($cgi->param($params->[$j+1]) ne ''){  # only if there is a value (code => value)
                             $newfield->add_subfields(
                                 $cgi->param($inner_param) => $cgi->param($params->[$j+1])
                             );
                         }
                     } else {
-                        if ( $cgi->param($params->[$j+1]) ) { # creating only if there is a value (code => value)
+                        if ( $cgi->param($params->[$j+1]) ne '' ) { # creating only if there is a value (code => value)
                             $newfield = MARC::Field->new(
                                 $tag,
                                 ''.$ind1,
