@@ -35,41 +35,6 @@ use vars qw( $is_a_modif );
 
 my $itemtype; # created here because it can be used in build_authorized_values_list sub
 our($authorised_values_sth,$is_a_modif,$usedTagsLib,$mandatory_z3950);
-=item find_value
-
-    ($indicators, $value) = find_value($tag, $subfield, $record,$encoding);
-
-Find the given $subfield in the given $tag in the given
-MARC::Record $record.  If the subfield is found, returns
-the (indicators, value) pair; otherwise, (undef, undef) is
-returned.
-
-=cut
-
-sub find_value {
-    my ($tagfield,$insubfield,$record,$encoding) = @_;
-    my @result;
-    my $indicator;
-    if ($tagfield <10) {
-        if ($record->field($tagfield)) {
-            push @result, $record->field($tagfield)->data();
-        } else {
-            push @result,"";
-        }
-    } else {
-        foreach my $field ($record->field($tagfield)) {
-            my @subfields = $field->subfields();
-            foreach my $subfield (@subfields) {
-                if (@$subfield[0] eq $insubfield) {
-                    push @result,@$subfield[1];
-                    $indicator = $field->indicator(1).$field->indicator(2);
-                }
-            }
-        }
-    }
-    return($indicator,@result);
-}
-
 
 =item build_authorized_values_list
 
