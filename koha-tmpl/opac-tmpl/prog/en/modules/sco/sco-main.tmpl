@@ -78,6 +78,7 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	<!-- TMPL_UNLESS NAME="validuser" -->
 	<div class="sco_entry" >
 	<form id="mainform" action="/cgi-bin/koha/sco/sco-main.pl" name="myForm" method="post">
+      <input type="hidden" name="koha_login_context" value="sco" />
 	<p class="checkout"><label for="userid">Please enter your cardnumber:</label> 
 	<input type="text" id="userid" class="firstField" size="10" name="userid" onblur="ValidateCode();" />
  	<!-- TMPL_LOOP NAME="INPUTS" --><input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->"><!-- /TMPL_LOOP -->

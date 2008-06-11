@@ -119,19 +119,24 @@ SWITCH: {
 			last SWITCH;
 		}
 		if ( $op eq 'modifsave' ) {
-			ModShelf(
-				$shelfnumber, $query->param('shelfname'), $loggedinuser,
-				$query->param('category'), $query->param('sortfield')
-			);
+			my $shelf = {
+    			'shelfname'		=> $query->param('shelfname'),
+				'category'		=> $query->param('category'),
+				'sortfield'		=> $query->param('sortfield'),
+			};
+			$shelf->{'owner'} = $loggedinuser if $type eq 'intranet';	#we only overwrite the list owner if &ModShelf was called from the staff client
+
+			ModShelf( $shelfnumber, $shelf );
 			$shelflist = GetShelves( $loggedinuser, 2 );    # refresh after mods
 		} elsif ( $op eq 'modif' ) {
-			my ( $shelfnumber2, $shelfname, $owner, $category, $sortfield ) =GetShelf( $query->param('shelfnumber') );
+			my ( $shelfnumber2, $shelfname, $owner, $category, $sortfield ) =GetShelf( $shelfnumber );
 			$template->param(
 				edit                => 1,
 				shelfnumber         => $shelfnumber2,
 				shelfname           => $shelfname,
 				owner               => $owner,
-				"category$category" => 1,
+				"category$category"	=> 1,
+				category			=> $category,
 				"sort_$sortfield"   => 1,
 			);
 		}
@@ -139,12 +144,12 @@ SWITCH: {
 	}
     if ($shelfnumber = $query->param('viewshelf') ) {
         #check that the user can view the shelf
-        if ( ShelfPossibleAction( $loggedinuser, $shelfnumber, 'view' ) ) {
-            my $items = GetShelfContents($shelfnumber);
-            for my $this_item (@$items) {
-                $this_item->{imageurl} = $imgdir."/".$itemtypes->{ $this_item->{itemtype}  }->{'imageurl'};
-                $this_item->{'description'} = $itemtypes->{ $this_item->{itemtype} }->{'description'};
-            }
+		if ( ShelfPossibleAction( $loggedinuser, $shelfnumber, 'view' ) ) {
+			my $items = GetShelfContents($shelfnumber);
+			for my $this_item (@$items) {
+				$this_item->{imageurl} = $imgdir."/".$itemtypes->{ $this_item->{itemtype}  }->{'imageurl'};
+				$this_item->{'description'} = $itemtypes->{ $this_item->{itemtype} }->{'description'};
+			}
 			$showadd = 1;
 			my $i = 0;
 			foreach (grep {$i++ % 2} @$items) {     # every other item
@@ -152,14 +157,14 @@ SWITCH: {
 			}
 			# my $manageshelf = &ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' );
 			# ($manageshelf) and $showadd = 1;
-            $template->param(
-                shelfname   => $shelflist->{$shelfnumber}->{'shelfname'},
-                shelfnumber => $shelfnumber,
-                viewshelf   => $shelfnumber,
-                manageshelf => &ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' ),
-                itemsloop => $items,
-            );
-        } else { push @paramsloop, {nopermission=>$shelfnumber}; }
+			$template->param(
+				shelfname   => $shelflist->{$shelfnumber}->{'shelfname'},
+				shelfnumber => $shelfnumber,
+				viewshelf   => $shelfnumber,
+				manageshelf => &ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' ),
+				itemsloop => $items,
+			);
+		} else { push @paramsloop, {nopermission=>$shelfnumber} };
         last SWITCH;
     }
     if ( $query->param('shelves') ) {
@@ -234,7 +239,7 @@ foreach my $element (sort { lc($shelflist->{$a}->{'shelfname'}) cmp lc($shelflis
 		$shelflist->{$element}->{'mine'} = 1;
 	} 
 	my $member = GetMember($owner,'borrowernumber');
-	$shelflist->{$element}->{ownername} = $member->{firstname} . " " . $member->{surname};
+	$shelflist->{$element}->{ownername} = defined($member) ? $member->{firstname} . " " . $member->{surname} : '';
 	$numberCanManage++ if $canmanage;	# possibly outmoded
 	if ($shelflist->{$element}->{'category'} eq '1') {
 		(scalar(@shelveslooppriv) % 2) and $shelflist->{$element}->{toggle} = 1;

@@ -40,7 +40,7 @@
 <!-- /TMPL_IF -->
 
 <form action="<!-- TMPL_VAR NAME="url" -->" name="auth" id="auth" method="post">
-
+  <input type="hidden" name="koha_login_context" value="opac" />
 <fieldset class="brief"><!-- TMPL_LOOP NAME="INPUTS" -->
   <input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->" />
 <!-- /TMPL_LOOP -->

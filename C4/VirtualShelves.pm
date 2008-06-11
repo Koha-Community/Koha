@@ -25,6 +25,8 @@ use strict;
 use Carp;
 use C4::Context;
 use C4::Circulation;
+use C4::Debug;
+
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
 BEGIN {
@@ -341,21 +343,51 @@ sub AddToShelfFromBiblio {
 
 =item ModShelf
 
-ModShelf($shelfnumber, $shelfname, $owner, $category )
+ModShelf($shelfnumber, $hashref)
 
-Modify the value into virtualshelves table with values given on input arg.
+Where $hashref->{column} = param
+
+Modify the value into virtualshelves table with values given 
+from hashref, which each key of the hashref should be
+the name of a column of virtualshelves.
 
 =cut
 
 sub ModShelf {
-    my ( $shelfnumber, $shelfname, $owner, $category, $sortfield ) = @_;
-    my $query = qq(
-        UPDATE virtualshelves
-        SET    shelfname=?,owner=?,category=?,sortfield=?
-        WHERE  shelfnumber=?
-    );
+    my $shelfnumber = shift;
+    my $shelf = shift;
+
+    if (exists $shelf->{shelfnumber}) {
+        carp "Should not use ModShelf to change shelfnumber";
+        return;
+    }
+    unless (defined $shelfnumber and $shelfnumber =~ /^\d+$/) {
+        carp "Invalid shelfnumber passed to ModShelf: $shelfnumber";
+        return;
+    }
+
+	my $query = "UPDATE virtualshelves SET ";
+    my @bind_params = ();
+    my @set_clauses = ();
+
+	foreach my $column (keys %$shelf) {
+        push @set_clauses, "$column = ?";
+        push @bind_params, $shelf->{$column};
+    }
+
+    if ($#set_clauses == -1) {
+        carp "No columns to update passed to ModShelf";
+        return;
+    }
+    $query .= join(", ", @set_clauses);
+
+    $query .= " WHERE shelfnumber = ? ";
+    push @bind_params, $shelfnumber;
+
+    $debug and warn "ModShelf query:\n $query\n",
+	                "ModShelf query args: ", join(',', @bind_params), "\n";
 	my $sth = $dbh->prepare($query);
-    $sth->execute( $shelfname, $owner, $category, $sortfield, $shelfnumber );
+   	$sth->execute( @bind_params );
 }
 
 =item ShelfPossibleAction
