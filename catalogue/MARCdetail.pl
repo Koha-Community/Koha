@@ -225,7 +225,10 @@ for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
                 }
                 else {
                     $tag_data{tag} =
-                        $fields[$x_i]->tag() . ' -'
+                        $fields[$x_i]->tag() 
+                      . ' '
+                      . C4::Koha::display_marc_indicators($fields[$x_i])
+                      . ' - '
                       . $tagslib->{ $fields[$x_i]->tag() }->{lib};
                 }
             }

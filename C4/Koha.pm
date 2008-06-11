@@ -1098,6 +1098,30 @@ sub base64_to_str {
     return decode("UTF-8", decode_base64($in));
 }
 
+=head2 display_marc_indicators
+
+=over 4
+
+# field is a MARC::Field object
+my $display_form = C4::Koha::display_marc_indicators($field);
+
+=back
+
+Generate a display form of the indicators of a variable
+MARC field, replacing any blanks with '#'.
+
+=cut
+
+sub display_marc_indicators {
+    my $field = shift;
+    my $indicators = '';
+    if ($field->tag() >= 10) {
+        $indicators = $field->indicator(1) . $field->indicator(2);
+        $indicators =~ s/ /#/g;
+    }
+    return $indicators;
+}
+
 1;
 
 __END__

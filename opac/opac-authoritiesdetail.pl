@@ -155,7 +155,10 @@ foreach my $field (@fields) {
     if ( $#subfields_data >= 0 ) {
         my %tag_data;
         $tag_data{tag} =
-          $field->tag() . ' -' . $tagslib->{ $field->tag() }->{lib};
+          $field->tag() 
+          . ' '
+          . C4::Koha::display_marc_indicators($field)
+          . ' - ' . $tagslib->{ $field->tag() }->{lib};
         $tag_data{subfield} = \@subfields_data;
         push( @loop_data, \%tag_data );
     }
