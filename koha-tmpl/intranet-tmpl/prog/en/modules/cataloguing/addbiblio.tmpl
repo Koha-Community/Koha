@@ -547,15 +547,19 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
             <!-- TMPL_UNLESS name="hide_marc" -->
                 <span class="tagnum" title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --></span>
                 <!-- TMPL_IF NAME="fixedfield" -->
-	                <input tabindex="1" class="indicator flat" type="text" style="display:none;" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->" size="2" maxlength="2" value="<!-- TMPL_VAR NAME="indicator" -->" />
+	                <input tabindex="1" class="indicator flat" type="text" style="display:none;" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator1_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->" size="1" maxlength="1" value="<!-- TMPL_VAR NAME="indicator1" -->" />
+	                <input tabindex="1" class="indicator flat" type="text" style="display:none;" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator2_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->" size="1" maxlength="1" value="<!-- TMPL_VAR NAME="indicator2" -->" />
                 <!-- TMPL_ELSE -->
-        	        <input tabindex="1" class="indicator flat" type="text" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->" size="2" maxlength="2" value="<!-- TMPL_VAR NAME="indicator" -->" />
+        	        <input tabindex="1" class="indicator flat" type="text" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator1_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->" size="1" maxlength="1" value="<!-- TMPL_VAR NAME="indicator1" -->" />
+        	        <input tabindex="1" class="indicator flat" type="text" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator2_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->" size="1" maxlength="1" value="<!-- TMPL_VAR NAME="indicator2" -->" />
                 <!-- /TMPL_IF --> -
             <!-- TMPL_ELSE -->
                 <!-- TMPL_IF NAME="fixedfield" -->
-                    <input tabindex="1" type="hidden" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->" value="<!-- TMPL_VAR NAME="indicator" -->" />
+                    <input tabindex="1" type="hidden" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator1_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->" value="<!-- TMPL_VAR NAME="indicator1" -->" />
+                    <input tabindex="1" type="hidden" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator2_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->" value="<!-- TMPL_VAR NAME="indicator2" -->" />
                 <!-- TMPL_ELSE -->
-                    <input tabindex="1" type="hidden" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->" value="<!-- TMPL_VAR NAME="indicator" -->" />
+                    <input tabindex="1" type="hidden" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator1_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->" value="<!-- TMPL_VAR NAME="indicator1" -->" />
+                    <input tabindex="1" type="hidden" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator2_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->" value="<!-- TMPL_VAR NAME="indicator2" -->" />
                 <!-- /TMPL_IF -->
             <!-- /TMPL_UNLESS -->
 

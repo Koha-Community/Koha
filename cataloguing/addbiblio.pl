@@ -482,6 +482,22 @@ sub create_input {
     return \%subfield_data;
 }
 
+
+=item format_indicator
+
+Translate indicator value for output form - specifically, map
+indicator = ' ' to ''.  This is for the convenience of a cataloger
+using a mouse to select an indicator input.
+
+=cut
+
+sub format_indicator {
+    my $ind_value = shift;
+    return '' if not defined $ind_value;
+    return '' if $ind_value eq ' ';
+    return $ind_value;
+}
+
 sub build_tabs ($$$$$) {
     my ( $template, $record, $dbh, $encoding,$input ) = @_;
 
@@ -522,7 +538,7 @@ sub build_tabs ($$$$$) {
         foreach my $tag (@tab_data) {
             $i++;
             next if ! $tag;
-            my $indicator;
+            my ($indicator1, $indicator2);
             my $index_tag = CreateKey;
 
             # if MARC::Record is not empty =>use it as master loop, then add missing subfields that should be in the tab.
@@ -612,7 +628,8 @@ sub build_tabs ($$$$$) {
                             random        => CreateKey,
                         );
                         if ($tag >= 010){ # no indicator for theses tag
-                           $tag_data{indicator} = $field->indicator(1).$field->indicator(2);
+                           $tag_data{indicator1} = format_indicator($field->indicator(1)),
+                           $tag_data{indicator2} = format_indicator($field->indicator(2)),
                         }
                         push( @loop_data, \%tag_data );
                     }
@@ -644,7 +661,8 @@ sub build_tabs ($$$$$) {
                         index            => $index_tag,
                         tag_lib          => $tagslib->{$tag}->{lib},
                         repeatable       => $tagslib->{$tag}->{repeatable},
-                        indicator        => $indicator,
+                        indicator1       => $indicator1,
+                        indicator2       => $indicator2,
                         subfield_loop    => \@subfields_data,
                         tagfirstsubfield => $subfields_data[0],
                         fixedfield       => $tag < 10?1:0,

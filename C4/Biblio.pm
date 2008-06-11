@@ -1466,10 +1466,12 @@ sub TransformHtmlToXml {
     L<$record> = TransformHtmlToMarc(L<$params>,L<$cgi>)
     L<$params> is a ref to an array as below:
     {
-        'tag_010_indicator_531951' ,
+        'tag_010_indicator1_531951' ,
+        'tag_010_indicator2_531951' ,
         'tag_010_code_a_531951_145735' ,
         'tag_010_subfield_a_531951_145735' ,
-        'tag_200_indicator_873510' ,
+        'tag_200_indicator1_873510' ,
+        'tag_200_indicator2_873510' ,
         'tag_200_code_a_873510_673465' ,
         'tag_200_subfield_a_873510_673465' ,
         'tag_200_code_b_873510_704318' ,
@@ -1528,13 +1530,13 @@ sub TransformHtmlToMarc {
             }
             push @fields,$newfield if($newfield);
         } 
-        elsif ($param =~ /^tag_(\d*)_indicator_/){ # new field start when having 'input name="..._indicator_..."
+        elsif ($param =~ /^tag_(\d*)_indicator1_/){ # new field start when having 'input name="..._indicator1_..."
             my $tag  = $1;
             
             my $ind1 = substr($cgi->param($param),0,1);
-            my $ind2 = substr($cgi->param($param),1,1);
+            my $ind2 = substr($cgi->param($params->[$i+1]),0,1);
             $newfield=0;
-            my $j=$i+1;
+            my $j=$i+2;
             
             if($tag < 10){ # no code for theses fields
     # in MARC editor, 000 contains the leader.
