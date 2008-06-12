@@ -57,7 +57,9 @@ my $op             = $input->param('op');
 
 if ( $op eq 'multi' ) {
     my ( $catcodes, $labels ) =
-      GetborCatFromCatType( 'C', 'WHERE category_type <> ?' );
+		# FIXME - what are the possible upgrade paths?  C -> A , C -> S ...
+		#   currently just allowing C -> A because of limitation of API.
+      GetborCatFromCatType( 'A', 'WHERE category_type = ?' );
     my @rows;
     foreach my $k ( keys %$labels ) {
         my $row;

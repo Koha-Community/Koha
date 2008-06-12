@@ -131,19 +131,18 @@ $data->{'ethnicity'} = fixEthnicity( $data->{'ethnicity'} );
 $data->{ "sex_".$data->{'sex'}."_p" } = 1;
 
 my $catcode;
-if ( $category_type eq 'C' and $data->{'guarantorid'} ne '0' ) {
-    my $data2 = GetMember( $data->{'guarantorid'} ,'borrowernumber');
-    foreach (qw(address city B_address B_city phone mobile zipcode)) {
-        $data->{$_} = $data2->{$_};
-    }
-    my  ( $catcodes, $labels ) = 
-        GetborCatFromCatType( 'A', 'WHERE category_type = ?' );
-    my $cnt = scalar(@$catcodes);
+if ( $category_type eq 'C') {
+	if ($data->{'guarantorid'} ne '0' ) {
+    	my $data2 = GetMember( $data->{'guarantorid'} ,'borrowernumber');
+    	foreach (qw(address city B_address B_city phone mobile zipcode)) {
+    	    $data->{$_} = $data2->{$_};
+    	}
+   }
+   my  ( $catcodes, $labels ) =  GetborCatFromCatType( 'A', 'WHERE category_type = ?' );
+   my $cnt = scalar(@$catcodes);
 
-#     $cnt  =  1;
-    $template->param( 'CATCODE_MULTI' => 1) if $cnt > 1;
-	
-    $template->param( 'catcode' =>    $catcodes->[0])  if $cnt == 1;
+   $template->param( 'CATCODE_MULTI' => 1) if $cnt > 1;
+   $template->param( 'catcode' =>    $catcodes->[0])  if $cnt == 1;
 }
 
 

@@ -1322,13 +1322,14 @@ to category descriptions.
 #'
 sub GetborCatFromCatType {
     my ( $category_type, $action ) = @_;
+	# FIXME - This API  seems both limited and dangerous. 
     my $dbh     = C4::Context->dbh;
     my $request = qq|   SELECT categorycode,description 
             FROM categories 
             $action
             ORDER BY categorycode|;
     my $sth = $dbh->prepare($request);
-    if ($action) {
+	if ($action) {
         $sth->execute($category_type);
     }
     else {
