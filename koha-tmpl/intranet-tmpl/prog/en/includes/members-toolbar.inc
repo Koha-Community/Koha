@@ -11,7 +11,7 @@ function confirm_deletion() {
     }
 }
 function confirm_updatechild() {
-    var is_confirmed = window.confirm('Are you sure you want to update this child to an Adult catergory? This cannot be undone.');
+    var is_confirmed = window.confirm('Are you sure you want to update this child to an Adult category?  This cannot be undone.');
    
     if (is_confirmed) {
             window.location='/cgi-bin/koha/members/update-child.pl?op=update&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&catcode=<!-- TMPL_VAR NAME="catcode" -->&catcode_multi=<!-- TMPL_VAR NAME="CATCODE_MULTI" -->';
