@@ -182,8 +182,9 @@ sub _get_search_heading {
     my $first = 1;
     for (my $i = 0; $i <= $#subfields; $i++) {
         my $code = $subfields[$i]->[0];
+        my $code_re = quotemeta $code;
         my $value = $subfields[$i]->[1];
-        next unless $subfields =~ qr/$code/;
+        next unless $subfields =~ qr/$code_re/;
         if ($first) {
             $first = 0;
             $heading = $value;
