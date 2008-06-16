@@ -32,6 +32,7 @@ if (not $result or $want_help) {
 
 my $num_bibs_processed = 0;
 my $num_bibs_modified = 0;
+my $num_bad_bibs = 0;
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 process_bibs();
@@ -62,6 +63,7 @@ Bib authority heading linking report
 ------------------------------------
 Number of bibs checked:       $num_bibs_processed
 Number of bibs modified:      $num_bibs_modified
+Number of bibs with errors:   $num_bad_bibs
 _SUMMARY_
 }
 
@@ -69,6 +71,12 @@ sub process_bib {
     my $biblionumber = shift;
 
     my $bib = GetMarcBiblio($biblionumber);
+    unless (defined $bib) {
+        print "\nCould not retrieve bib $biblionumber from the database - record is corrupt.\n";
+        $num_bad_bibs++;
+        return;
+    }
+
     my $headings_changed = LinkBibHeadingsToAuthorities($bib);
 
     if ($headings_changed) {   
