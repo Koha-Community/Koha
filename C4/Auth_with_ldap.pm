@@ -20,6 +20,7 @@ package C4::Auth_with_ldap;
 use strict;
 use Digest::MD5 qw(md5_base64);
 
+use C4::Debug;
 use C4::Context;
 use C4::Members qw(AddMember changepassword);
 use C4::Utils qw( :all );
@@ -30,8 +31,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug);
 
 BEGIN {
 	require Exporter;
-	$VERSION = 3.02;	# set the version for version checking
-	$debug = $ENV{DEBUG} || 0;
+	$VERSION = 3.03;	# set the version for version checking
 	@ISA    = qw(Exporter);
 	@EXPORT = qw( checkpw_ldap );
 }
@@ -49,7 +49,7 @@ sub ldapserver_error ($) {
 
 use vars qw($mapping @ldaphosts $base $ldapname $ldappassword);
 my $context = C4::Context->new() 	or die 'C4::Context->new failed';
-my $ldap = $context->{server}->{ldapserver} 	or die 'No "ldapserver" in server hash from KOHA_CONF: ' . $ENV{KOHA_CONF};
+my $ldap = C4::Context->config("ldapserver") or die 'No "ldapserver" in server hash from KOHA_CONF: ' . $ENV{KOHA_CONF};
 my $prefhost  = $ldap->{hostname}	or die ldapserver_error('hostname');
 my $base      = $ldap->{base}		or die ldapserver_error('base');
 $ldapname     = $ldap->{user}		or die ldapserver_error('user');
@@ -303,30 +303,33 @@ C4::Auth - Authenticates Koha users
 
 =head1 KOHA_CONF and field mapping
 
-Example XML stanza for LDAP configuration in KOHA_CONF:
+Example XML stanza for LDAP configuration in KOHA_CONF.
 
-	<!-- LDAP SERVER (optional) -->
-	<server id="ldapserver"  listenref="ldapserver">
-		<hostname>localhost</hostname>
-		<base>dc=metavore,dc=com</base>
-		<user>cn=Manager,dc=metavore,dc=com</user>             <!-- DN, if not anonymous -->
-		<pass>metavore</pass>      <!-- password, if not anonymous -->
-		<replicate>1</replicate>   <!-- add new users from LDAP to Koha database -->
-		<update>1</update>         <!-- update existing users in Koha database -->
-		<mapping>                  <!-- match koha SQL field names to your LDAP record field names -->
-		<firstname    is="givenname"      ></firstname>
-		<surname      is="sn"             ></surname>
-		<address      is="postaladdress"  ></address>
-		<city         is="l"              >Athens, OH</city>
-		<zipcode      is="postalcode"     ></zipcode>
-		<branchcode   is="branch"         >MAIN</branchcode>
-		<userid       is="uid"            ></userid>
-		<password     is="userpassword"   ></password>
-		<email        is="mail"           ></email>
-		<categorycode is="employeetype"   >PT</categorycode>
-		<phone        is="telephonenumber"></phone>
-		</mapping>
-	</server>
+ <config>
+  ...
+  <!-- LDAP SERVER (optional) -->
+  <ldapserver id="ldapserver">
+    <hostname>localhost</hostname>
+    <base>dc=metavore,dc=com</base>
+    <user>cn=Manager,dc=metavore,dc=com</user>             <!-- DN, if not anonymous -->
+    <pass>metavore</pass>      <!-- password, if not anonymous -->
+    <replicate>1</replicate>   <!-- add new users from LDAP to Koha database -->
+    <update>1</update>         <!-- update existing users in Koha database -->
+    <mapping>                  <!-- match koha SQL field names to your LDAP record field names -->
+      <firstname    is="givenname"      ></firstname>
+      <surname      is="sn"             ></surname>
+      <address      is="postaladdress"  ></address>
+      <city         is="l"              >Athens, OH</city>
+      <zipcode      is="postalcode"     ></zipcode>
+      <branchcode   is="branch"         >MAIN</branchcode>
+      <userid       is="uid"            ></userid>
+      <password     is="userpassword"   ></password>
+      <email        is="mail"           ></email>
+      <categorycode is="employeetype"   >PT</categorycode>
+      <phone        is="telephonenumber"></phone>
+    </mapping> 
+  </ldapserver> 
+ </config>
 
 The <mapping> subelements establish the relationship between mysql fields and LDAP attributes. The element name
 is the column in mysql, with the "is" characteristic set to the LDAP attribute name.  Optionally, any content
