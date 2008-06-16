@@ -206,5 +206,8 @@ INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES
 	('TagsShowOnList',   '6','','Number of tags to display on search results list.  0 is off.','Integer');
 
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('OPACShelfBrowser','1','','Enable/disable Shelf Browser on item details page','YesNo');
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES
+('XSLTDetailsDisplay','0','','Enable XSL stylesheet control over details page display on OPAC WARNING: MARC21 Only','YesNo'),
+('XSLTResultsDisplay','0','','Enable XSL stylesheet control over results page display on OPAC WARNING: MARC21 Only','YesNo');
 
 -- FIXME: add FrameworksLoaded, noOPACUserLogin, ReadingHistory ?
