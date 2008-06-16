@@ -143,7 +143,14 @@ my $newexpiry      = $query->param('dateexpiry');
 my ($datedue,$invalidduedate);
 if ($duedatespec) {
 	if ($duedatespec =~ C4::Dates->regexp('syspref')) {
-		$datedue = C4::Dates->new($duedatespec);
+		my $tempdate = C4::Dates->new($duedatespec);
+		if ($tempdate and $tempdate->output('iso') gt C4::Dates->new()->output('iso')) {
+			# i.e., it has to be later than today/now
+			$datedue = $tempdate;
+		} else {
+			$invalidduedate = 1;
+			$template->param(IMPOSSIBLE=>1, INVALID_DATE=>$duedatespec);
+		}
 	} else {
 		$invalidduedate = 1;
 		$template->param(IMPOSSIBLE=>1, INVALID_DATE=>$duedatespec);
