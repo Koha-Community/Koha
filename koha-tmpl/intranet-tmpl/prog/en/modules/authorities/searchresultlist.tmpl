@@ -55,7 +55,6 @@ function searchauthority() {
 <!-- TMPL_UNLESS name="isEDITORS" -->
       <th>Used in</th>
 <!-- /TMPL_UNLESS -->
-      <th>View</th>
       <th>Delete</th>
     </tr>
 <!-- TMPL_LOOP NAME="result" -->
@@ -66,9 +65,6 @@ function searchauthority() {
         <a href="../catalogue/search.pl?type=intranet&amp;op=do_search&amp;idx=an&amp;q=<!--TMPL_VAR Name="authid" -->" class="button"><!-- TMPL_VAR NAME="used" --> biblio(s)</a>
       </td>
   <!-- /TMPL_UNLESS -->
-      <td>
-        <a href="detail.pl?authid=<!-- TMPL_VAR NAME="authid" -->">Authority number <!-- TMPL_VAR NAME="authid" --></a>
-      </td>
       <td>
   <!-- TMPL_UNLESS name="used" -->
         <a href="javascript:confirm_deletion(<!-- TMPL_VAR NAME="authid" -->)">Delete</a>
