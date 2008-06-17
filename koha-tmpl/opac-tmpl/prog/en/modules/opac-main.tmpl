@@ -9,12 +9,20 @@
 
 	<div id="yui-main">
 
-	<div class="yui-b"><div class="yui-ge">
+	<div class="yui-b">
 		<!-- TMPL_IF NAME="opacuserlogin" -->
-	    <!-- TMPL_UNLESS NAME="loggedinusername" -->		
-    <div class="yui-u first">
-    <!-- /TMPL_UNLESS -->
-<!-- /TMPL_IF -->	
+	    <!-- TMPL_IF NAME="loggedinusername" -->
+			<div class="yui-g">
+			<div>
+			<!-- TMPL_ELSE -->
+		<div class="yui-ge">
+		<div class="yui-u first">
+    <!-- /TMPL_IF -->
+	<!-- TMPL_ELSE -->
+		<div class="yui-g">
+		<div>
+	<!-- /TMPL_IF -->
+	
 	<!-- TMPL_IF name="koha_news_count" -->
 <div id="news" class="container">
     <table>
@@ -28,6 +36,7 @@
 <!-- /TMPL_IF -->
 
 	<!-- TMPL_IF NAME="OpacMainUserBlock" --><div class="container"><!-- TMPL_VAR NAME="OpacMainUserBlock" --></div><!-- /TMPL_IF -->
+
 <!-- TMPL_IF NAME="recentacquiloop"-->
     <div class="searchresults">
         <table>
@@ -80,13 +89,12 @@
         </table>
      </div>
 <!-- /TMPL_IF -->
-
-	    </div>
+</div>
+		
 	<!-- TMPL_IF NAME="opacuserlogin" -->
     <!-- TMPL_UNLESS NAME="loggedinusername" -->
     <div class="yui-u">
-	
-<div id="login" class="container">
+	<div id="login" class="container">
 	<form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth">
 	<fieldset class="brief">
 		<legend>Log in to Your Account:</legend>
@@ -96,11 +104,11 @@
 		</ol>	 <fieldset class="action">
 	 <input type="submit" value="Log In" class="submit" />
 	 </fieldset></fieldset>
-
-	 </form>
-</div>
-	    </div>
+	</form>
+	</div>
+	 </div>
     <!-- /TMPL_UNLESS -->
+	
 <!-- /TMPL_IF -->
 </div>
 </div>
