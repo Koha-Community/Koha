@@ -83,9 +83,9 @@ $(document).ready(function(){
                 <option value="">Filter location</option>
         <!-- TMPL_LOOP NAME="authorised_values" -->
             <!-- TMPL_IF name="selected" -->
-                <option value="<!-- TMPL_VAR NAME='authorised_value' -->" selected="selected"><!-- TMPL_VAR NAME='lib' --></option>
+                <option value="<!-- TMPL_VAR NAME="authorised_value" -->" selected="selected"><!-- TMPL_VAR NAME="lib" --></option>
             <!-- TMPL_ELSE -->
-                <option value="<!-- TMPL_VAR NAME='authorised_value' -->"><!-- TMPL_VAR NAME='lib' --></option>
+                <option value="<!-- TMPL_VAR NAME="authorised_value" -->"><!-- TMPL_VAR NAME="lib" --></option>
             <!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
         </select>        </li>
@@ -176,7 +176,7 @@ $(document).ready(function(){
                 <!-- TMPL_VAR NAME="barcode" -->
             </td>
             <td>
-                <p><b><!-- TMPL_VAR NAME="itemcallnumber" --></b> - <a href=# onclick="window.open('/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!--TMPL_VAR Name="biblionumber"-->','Catalogue -- Biblio <!--TMPL_VAR Name="biblionumber"-->','width=800,height=600,toolbar=false');"><!-- TMPL_VAR NAME="title" --></a></p>
+                <p><b><!-- TMPL_VAR NAME="itemcallnumber" --></b> - <a href=# onclick="window.open('/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!--TMPL_VAR Name="biblionumber"-->','marcview','width=800,height=600,toolbar=0,scrollbars=1');"><!-- TMPL_VAR NAME="title" --></a></p>
                 <p><!-- TMPL_VAR NAME="author" --></p>
             </td>
             <td>
@@ -218,7 +218,7 @@ $(document).ready(function(){
 
 </div>
 </div>
-<div class="yui-b noprint">
+<div class="yui-b">
 <!-- TMPL_INCLUDE NAME="tools-menu.inc" -->
 </div>
 </div>
