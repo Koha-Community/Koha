@@ -186,7 +186,7 @@
 			<th>&nbsp;</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="loop" -->
-		<tr<!-- TMPL_UNLESS NAME="__odd__" --> class="highlight"<!-- /TMPL_UNLESS -->>
+		<!-- TMPL_IF NAME="__odd__" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
 			<td><!-- TMPL_VAR NAME="printername" --></td>
 			<td><!-- TMPL_VAR NAME="printqueue" --></td>
 			<td><!-- TMPL_VAR NAME="printtype" --></td>

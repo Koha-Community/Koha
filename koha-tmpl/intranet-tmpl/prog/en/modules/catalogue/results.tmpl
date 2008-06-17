@@ -145,7 +145,7 @@ $(window).load(function() {
                     <th>Count</th>
                 </tr>
                 <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
-                    <tr<!-- TMPL_UNLESS name="__odd__" --> class="highlight"<!-- /TMPL_UNLESS -->>
+                    <!-- TMPL_IF NAME="__odd__" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
                         <td>
                             <a href="/cgi-bin/koha/catalogue/search.pl?q=<!-- TMPL_VAR NAME="scan_use" escape="url" -->&quot;<!-- TMPL_VAR NAME="title_nospan" -->&quot;"><!-- TMPL_VAR NAME="title" --></a>
                         </td>
@@ -241,7 +241,7 @@ $(window).load(function() {
                     </tr>
                         <!-- Actual Search Results -->
                         <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
-                                <tr<!-- TMPL_UNLESS NAME="__odd__" --> class="highlight"<!-- /TMPL_UNLESS -->>
+                         <!-- TMPL_IF NAME="__odd__" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
                             <!-- TMPL_IF NAME="AmazonContent" -->
                                 <td>
                                     <a class="p1" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
