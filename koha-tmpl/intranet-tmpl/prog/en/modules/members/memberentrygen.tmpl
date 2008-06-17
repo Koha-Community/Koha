@@ -263,9 +263,18 @@
 <!-- /TMPL_IF -->
        	</li>
     <!--/TMPL_UNLESS-->
+		</ol>
+	</fieldset>
+	
 <!--TMPL_IF Name="showguarantor"--><input type="hidden" name="guarantorid"   value="<!-- TMPL_VAR NAME="guarantorid" -->" />
-  <li><label for="">Guarantor: </label>
-  <!-- TMPL_IF name="relshiploop" -->
+	<fieldset class="rows">
+	<legend>Guarantor Information</legend>
+	<ol>
+	<li>
+		<label for="contactname">First Name: </label><input name="contactname" id="contactname" type="text"  size="20" value="<!-- TMPL_VAR NAME="contactname" -->" />
+	</li>
+	<li><label for="contactfirstname">Last Name: </label><input name="contactfirstname" id="contactfirstname" type="text"  size="20" value="<!-- TMPL_VAR NAME="contactfirstname" -->" /></li>
+  <!-- TMPL_IF name="relshiploop" --><li><label for="relationship">Relationship: </label>
   <select name="relationship" id="relationship" >
     <!-- TMPL_LOOP name="relshiploop" -->
         <!-- TMPL_IF name="selected" -->
@@ -274,19 +283,17 @@
             <option value="<!-- TMPL_VAR name="relationship" -->"><!-- TMPL_VAR name="relationship" --></option>
         <!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
-    </select>
+    </select></li>
   <!-- /TMPL_IF -->
-  <input name="contactname" id="contactname" type="text"  size="20" value="<!-- TMPL_VAR NAME="contactname" -->" />
-  <input name="contactfirstname" id="contactfirstname" type="text"  size="20" value="<!-- TMPL_VAR NAME="contactfirstname" -->" />
-  <!-- TMPL_IF NAME="guarantorid"-->  
-    <input id="guarantorsearch" type="button" value="Modify Guarantor" onclick="Dopopguarantor('guarantor_search.pl');" />
+	<li><span class="label">&nbsp;</span><!-- TMPL_IF NAME="guarantorid"-->  
+    <input id="guarantorsearch" type="button" value="Change Guarantor" onclick="Dopopguarantor('guarantor_search.pl');" />
   <!-- TMPL_ELSE -->
-    <input id="guarantorsearch" type="button" value="Find guarantor" onclick="Dopopguarantor('guarantor_search.pl');" />
-  <!-- /TMPL_IF --> <input id="guarantordelete" type="button" value="Delete Guarantor" />
-  </li>
-<!--/TMPL_IF-->  
-		</ol>
+    <input id="guarantorsearch" type="button" value="Find Guarantor" onclick="Dopopguarantor('guarantor_search.pl');" />
+  <!-- /TMPL_IF --> <input id="guarantordelete" type="button" value="Delete Guarantor" /></li>
+	</ol>
 	</fieldset>
+
+<!--/TMPL_IF-->
 <fieldset class="rows">
     <legend>Main address</legend><ol>
     <li>
