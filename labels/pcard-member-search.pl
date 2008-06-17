@@ -135,7 +135,8 @@ my $base_url =
         { term => 'member',         val => $member         },
         { term => 'orderby',        val => $orderby        },
         { term => 'resultsperpage', val => $resultsperpage },
-        { term => 'type',           val => 'intranet'      },
+        { term => 'type',           val => $batch_type     },
+        { term => 'batch_id',       val => $batch_id       },
     )
   );
 
