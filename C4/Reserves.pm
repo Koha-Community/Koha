@@ -638,7 +638,7 @@ sub CheckReserves {
 
     # get the reserves...
     # Find this item in the reserves
-    my @reserves = _Findgroupreserve( $bibitem, $biblio );
+    my @reserves = _Findgroupreserve( $bibitem, $biblio, $item );
     my $count    = scalar @reserves;
 
     # $priority and $highest are used to find the most important item
@@ -1169,7 +1169,7 @@ sub _FixPriority {
 
 =item _Findgroupreserve
 
-  @results = &_Findgroupreserve($biblioitemnumber, $biblionumber);
+  @results = &_Findgroupreserve($biblioitemnumber, $biblionumber, $itemnumber);
 
 ****** FIXME ******
 I don't know what this does, because I don't understand how reserve
@@ -1186,7 +1186,7 @@ C<biblioitemnumber>.
 =cut
 
 sub _Findgroupreserve {
-    my ( $bibitem, $biblio ) = @_;
+    my ( $bibitem, $biblio, $itemnumber ) = @_;
     my $dbh   = C4::Context->dbh;
     my $query = qq/
         SELECT reserves.biblionumber AS biblionumber,
@@ -1207,9 +1207,10 @@ sub _Findgroupreserve {
           AND reserves.borrowernumber = reserveconstraints.borrowernumber
           AND reserves.reservedate    =reserveconstraints.reservedate )
           OR  reserves.constrainttype='a' )
+          AND (reserves.itemnumber IS NULL OR reserves.itemnumber = ?)
     /;
     my $sth = $dbh->prepare($query);
-    $sth->execute( $biblio, $bibitem );
+    $sth->execute( $biblio, $bibitem, $itemnumber );
     my @results;
     while ( my $data = $sth->fetchrow_hashref ) {
         push( @results, $data );
