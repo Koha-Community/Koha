@@ -130,7 +130,9 @@
 				<td><select name="Filter" id="itemtype">
 					<option value=""> </option>
 					<!-- TMPL_LOOP NAME="CGIItemType" -->
-					<option value="<!-- TMPL_VAR NAME='itemtype' -->" <!-- TMPL_IF NAME='selected' -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="description" --></option>
+					<!-- TMPL_IF NAME="selected" -->
+					<option value="<!-- TMPL_VAR NAME="itemtype" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="itemtype" -->"><!-- TMPL_VAR NAME="description" --></option><!-- /TMPL_IF -->
+
 					<!-- /TMPL_LOOP -->
 					</select>
 				</td>
@@ -154,7 +156,7 @@
 				<td><select name="Filter" id="branch">
 					<option value=""> </option>
 					<!-- TMPL_LOOP NAME="CGIBranch" -->
-					<option value="<!-- TMPL_VAR NAME='branchcode' -->" <!-- TMPL_IF NAME='selected' -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="branchname" --></option>
+					<!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="branchcode" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="branchcode" -->"><!-- TMPL_VAR NAME="branchname" --></option><!-- /TMPL_IF -->
 					<!-- /TMPL_LOOP -->
 					</select>
 				</td>
@@ -166,7 +168,7 @@
 				<td><select name="Filter" id="location">
 					<option value=""> </option>
 					<!-- TMPL_LOOP NAME="locationloop" -->
-					<option value="<!-- TMPL_VAR NAME='code' -->" <!-- TMPL_IF NAME='selected' -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="description" --></option>
+					<!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="code" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="code" -->"><!-- TMPL_VAR NAME="description" --></option><!-- /TMPL_IF -->
 					<!-- /TMPL_LOOP -->
 					</select>
 				</td>
@@ -178,7 +180,7 @@
 				<td><select name="Filter" id="ccode">
 					<option value=""> </option>
 					<!-- TMPL_LOOP NAME="authvals" -->
-					<option value="<!-- TMPL_VAR NAME='code' -->" <!-- TMPL_IF NAME='selected' -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="description" --></option>
+					<!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="code" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="code" -->"><!-- TMPL_VAR NAME="description" --></option><!-- /TMPL_IF -->
 					<!-- /TMPL_LOOP -->
 					</select>
 				</td>

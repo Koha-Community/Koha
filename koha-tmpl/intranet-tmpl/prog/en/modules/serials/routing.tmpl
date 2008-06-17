@@ -43,10 +43,9 @@ function search_member(subscriptionid){
 
 <select name="date_selected">
 <!-- TMPL_LOOP NAME="dates" -->
-<option value="<!-- TMPL_VAR NAME="serialseq" --> (<!-- TMPL_VAR NAME="planneddate" -->)" <!-- TMPL_IF NAME="selected" --> selected="selected" <!-- /TMPL_IF -->><!-- TMPL_VAR NAME="serialseq" --> (<!-- TMPL_VAR NAME="planneddate" -->)</option>
+<!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="serialseq" --> (<!-- TMPL_VAR NAME="planneddate" -->)" selected="selected"><!-- TMPL_VAR NAME="serialseq" --> (<!-- TMPL_VAR NAME="planneddate" -->)</option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="serialseq" --> (<!-- TMPL_VAR NAME="planneddate" -->)"><!-- TMPL_VAR NAME="serialseq" --> (<!-- TMPL_VAR NAME="planneddate" -->)</option><!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
 </select>
-
 
 <!-- TMPL_VAR NAME="issue" --></p>
 

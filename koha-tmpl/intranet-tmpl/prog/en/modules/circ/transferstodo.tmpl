@@ -51,7 +51,7 @@ $.tablesorter.addParser({
                 <th>Action</th>
             </tr></thead>
             <tbody><!-- TMPL_LOOP NAME="reserv" -->
-                <tr <!-- TMPL_IF NAME="messcompa" --> class="problem" <!-- /TMPL_IF -->>
+                <!-- TMPL_IF NAME="messcompa" --><tr class="problem"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
                     <td><p><!-- TMPL_VAR NAME="reservedate" --></p> <!-- TMPL_IF NAME="messcompa" --> Hold over <!-- /TMPL_IF --></td>
                     <td><!-- TMPL_IF name="BiblioDefaultViewmarc" -->
 <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>

@@ -265,7 +265,7 @@ $(document).ready(function(){
 <table>
 <tr><th>Name</th><th>Owner</th><th>Category</th><th>Items</th><th>&nbsp;</th></tr>
 <!-- TMPL_LOOP NAME="shelvesloopall" -->
-<tr<!-- TMPL_IF NAME="toggle" --> class="highlight"<!-- /TMPL_IF -->>
+<!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
 <td><a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" --></a></td>
 <td><!-- TMPL_IF NAME="owner" --><!-- TMPL_VAR NAME="ownername" --><!-- TMPL_ELSE -->Koha Admin<!-- /TMPL_IF -->
 </td>

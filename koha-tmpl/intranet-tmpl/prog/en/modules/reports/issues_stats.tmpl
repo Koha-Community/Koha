@@ -192,7 +192,8 @@
            <td><select name="Filter" id="borcat">
                <option value=""> </option>
                <!-- TMPL_LOOP NAME="categoryloop" -->
-                 <option value="<!-- TMPL_VAR NAME='categorycode' -->" <!-- TMPL_IF NAME='selected' -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="description" --></option>
+                 <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="categorycode" -->" selected=
+				 selected"><!-- TMPL_VAR NAME="description" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="categorycode" -->"><!-- TMPL_VAR NAME="description" --></option><!-- /TMPL_IF -->
                <!-- /TMPL_LOOP -->
                </select>
              </td> 
@@ -204,7 +205,7 @@
            <td><select name="Filter" id="itemtype">
                <option value=""> </option>
                <!-- TMPL_LOOP NAME="itemtypeloop" -->
-                 <option value="<!-- TMPL_VAR NAME='code' -->" <!-- TMPL_IF NAME='selected' -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="description" --></option>
+                 <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="code" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="code" -->"><!-- TMPL_VAR NAME="description" --></option><!-- /TMPL_IF -->
                <!-- /TMPL_LOOP -->
                </select>
              </td> 
@@ -216,8 +217,8 @@
            <td><select name="Filter" id="branch">
                <option value=""> </option>
                <!-- TMPL_LOOP NAME="branchloop" -->
-                 <option value="<!-- TMPL_VAR NAME='code' -->" <!-- TMPL_IF NAME='selected' -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="description" --></option>
-               <!-- /TMPL_LOOP -->
+<!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="code" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="code" -->"><!-- TMPL_VAR NAME="description" --></option><!-- /TMPL_IF -->
+				<!-- /TMPL_LOOP -->
                </select>
              </td> 
         </tr>
@@ -228,7 +229,9 @@
                 <td><select name="Filter" id="ccode">
                     <option value=""> </option>
                     <!-- TMPL_LOOP NAME="ccodeloop" -->
-                    <option value="<!-- TMPL_VAR NAME='code' -->" <!-- TMPL_IF NAME='selected' -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="description" --></option>
+					
+                   <!-- TMPL_IF NAME="selected" --> <option value="<!-- TMPL_VAR NAME="code" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="code" -->"><!-- TMPL_VAR NAME="description" --></option><!-- /TMPL_IF -->
+
                     <!-- /TMPL_LOOP -->
                     </select>
                 </td>
@@ -240,8 +243,8 @@
            <td><select name="Filter" id="location">
                <option value=""> </option>
                <!-- TMPL_LOOP NAME="locationloop" -->
-                 <option value="<!-- TMPL_VAR NAME='code' -->" <!-- TMPL_IF NAME='selected' -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="description" --></option>
-               <!-- /TMPL_LOOP -->
+				<!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="code" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="code" -->"><!-- TMPL_VAR NAME="description" --></option><!-- /TMPL_IF -->
+				<!-- /TMPL_LOOP -->
                </select>
              </td> 
         </tr>
@@ -259,7 +262,7 @@
            <td><select name="Filter" id="sort1">
                <option value=""> </option>
                <!-- TMPL_LOOP NAME="Bsort1" -->
-                 <option value="<!-- TMPL_VAR NAME='authorised_value' -->" <!-- TMPL_IF NAME='selected' -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="lib" --></option>
+                 <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="authorised_value" -->" selected="selected"><!-- TMPL_VAR NAME="lib" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="authorised_value" -->" ><!-- TMPL_VAR NAME="lib" --></option><!-- /TMPL_IF -->
                <!-- /TMPL_LOOP -->
                </select>
              </td> 
@@ -272,7 +275,7 @@
            		<td><select name="Filter" id="sort1">
                <option value=""> </option>
                <!-- TMPL_LOOP NAME="Bsort2" -->
-                 <option value="<!-- TMPL_VAR NAME='authorised_value' -->" <!-- TMPL_IF NAME='selected' -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="lib" --></option>
+                 <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="authorised_value" -->" selected="selected"><!-- TMPL_VAR NAME="lib" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="authorised_value" -->"><!-- TMPL_VAR NAME="lib" --></option><!-- /TMPL_IF -->
                <!-- /TMPL_LOOP -->
                </select>
              </td> 

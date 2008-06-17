@@ -313,7 +313,7 @@ if (alreadyreserved > "0"){
             <option value="W" selected="selected">Waiting</option>
     <!-- /TMPL_IF -->
 	<!-- TMPL_LOOP Name="optionloop" -->                 
-	<option value="<!-- TMPL_VAR NAME="num" -->" <!-- TMPL_IF Name="selected" --> selected <!-- /TMPL_IF -->><!-- TMPL_VAR NAME="num" --></option> 
+	<!-- TMPL_IF Name="selected" --><option value="<!-- TMPL_VAR NAME="num" -->" selected="selected"><!-- TMPL_VAR NAME="num" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="num" -->"><!-- TMPL_VAR NAME="num" --></option><!-- /TMPL_IF --> 
 	<!-- /TMPL_LOOP -->  
             <option value="del">del</option>
           </select>

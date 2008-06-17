@@ -27,7 +27,7 @@
 	</tr>
 
 	<!-- TMPL_loop name="issueloop" -->
-	<tr<!-- TMPL_IF name="red" --> class="overdue"</TMPL_IF>>
+	<!-- TMPL_IF name="red" --><tr class="overdue"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF-->
 		<td>
 		<!-- TMPL_VAR NAME="title" -->
 		<a href="/cgi-bin/koha/catalogue/detail.pl?item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->">

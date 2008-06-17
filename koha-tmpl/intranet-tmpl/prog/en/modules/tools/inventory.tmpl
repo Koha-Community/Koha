@@ -47,22 +47,26 @@ $(document).ready(function(){
         <fieldset class="rows">
         <legend>Select items you want to check</legend>
         <ol><li>
-        <label for="branchloop">Library</label><select id="branchloop" name="branchcode">
+        <label for="branchloop">Library</label><select id="branchloop" name="branchcode" style="width:12em;">
         <!-- TMPL_LOOP NAME="branchloop" -->
             <!-- TMPL_IF name="selected" -->
-                <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME='branchname' --></option>
+                <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
             <!-- TMPL_ELSE -->
-                <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME='branchname' --></option>
+                <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
             <!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
         </select>
         </li>
         <li>
         <label for="itemtype">Item type</label>
-        <select name="itemtype" id="itemtype">
+        <select name="itemtype" id="itemtype" style="width:12em;">
             <option value="">Any</option>
         <!-- TMPL_LOOP name="itemtypeloop" -->
-            <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="description" --></option>
+            <!-- TMPL_IF name="selected" -->
+                <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option>
+            <!-- TMPL_ELSE -->
+                <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="description" --></option>
+            <!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
         </select>
         </li>

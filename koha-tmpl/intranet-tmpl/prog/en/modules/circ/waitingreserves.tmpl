@@ -68,7 +68,7 @@ $.tablesorter.addParser({
                         <th>Action</th>
                 </tr></thead>
                         <tbody><!-- TMPL_LOOP NAME="reserveloop" -->
-                                <tr <!-- TMPL_IF NAME="messcompa" --> class="problem" <!-- /TMPL_IF -->>
+                        <!-- TMPL_IF NAME="messcompa" --><tr class="problem"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
                                         <td><p><!-- TMPL_VAR NAME="waitingdate" --></p> <!-- TMPL_IF NAME="messcompa" --> Hold Over <!-- /TMPL_IF --></td>
                                         <td>
 

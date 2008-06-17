@@ -26,8 +26,8 @@
 		<th>Subject headings</th>
 	</tr>
 <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
-	<tr>
-		<td<!-- TMPL_IF NAME="even" --> class="hilighted"<!-- /TMPL_IF -->>
+	<!-- TMPL_IF NAME="even" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+		<td>
 			<a href="/cgi-bin/koha/search.pl?type=<!-- TMPL_IF NAME="opac" -->opac<!-- TMPL_ELSE -->intra<!-- /TMPL_IF -->&amp;subjectitems=<!-- TMPL_VAR NAME="subject2" ESCAPE="HTML" -->"><!-- TMPL_VAR NAME="subject" --></a>
 		</td>
 	</tr>

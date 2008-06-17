@@ -266,7 +266,7 @@
 		<label for="categorytype">Category Type: </label>
             <select id="categorytype" name="categorytype">
             <!-- TMPL_LOOP NAME="categorytype" -->
-                <option value="<!-- TMPL_VAR NAME="type" -->" <!-- TMPL_IF NAME="selected" -->selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="type" --></option>
+                <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="type" -->" selected="selected"><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="type" -->"><!-- /TMPL_IF --><!-- TMPL_VAR NAME="type" --></option>
                 <!-- /TMPL_LOOP -->
             </select>
 		</li>

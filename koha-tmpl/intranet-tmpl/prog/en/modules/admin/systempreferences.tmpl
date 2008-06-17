@@ -247,7 +247,7 @@
         <th>Delete</th>
     </tr></thead>
     <tbody><!-- TMPL_LOOP NAME="loop" -->
-    <tr<!-- TMPL_IF NAME="toggle" --> class="highlight"<!-- /TMPL_IF -->>
+    <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
 
         <td><strong><a href="<!-- TMPL_VAR NAME="edit" -->"><!-- TMPL_VAR NAME="variable" --></a></strong></td><td> <!-- TMPL_VAR NAME="explanation" ESCAPE="HTML" --></td>
         <td><!-- TMPL_IF NAME="yesno" -->

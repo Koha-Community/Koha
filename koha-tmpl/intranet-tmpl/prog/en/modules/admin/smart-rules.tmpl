@@ -49,7 +49,7 @@ $(document).ready(function() {
             <select name="branch" id="branch" style="width:20em;">
                 <option value="">Default</option>
             <!-- TMPL_LOOP NAME="branchloop" -->
-                <option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF NAME="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="branchname" --></option>
+				<!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option><!-- /TMPL_IF -->
             <!-- /TMPL_LOOP -->
             </select>
         </form>

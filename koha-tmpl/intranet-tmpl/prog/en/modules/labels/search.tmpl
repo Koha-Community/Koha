@@ -21,36 +21,92 @@ to add to Batch <!-- TMPL_VAR NAME="batch_id" -->
 	<fieldset class="rows">
 <ol><li>
   <select name="idx" disabled="disabled"><!-- FIXME: script does keyword search regardless -->
-    <option value="kw" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Keyword</option>
-    <option value="au" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Author</option>
-    <option value="yr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Publication Date</option>
-    <option value="sn" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Standard Number</option>
-    <option value="nb" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>ISBN</option>
-    <option value="ns" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>ISSN</option>
-    <option value="lcn,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Call Number</option>
-    <option value="su" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Subject</option>
-   <option value="ti" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Title</option>
-    <option value="ti,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Title Phrase</option>
-    <option value="se" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Series Title</option>
-    <option value="bc" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Barcode</option>
-    <option value="acqdate" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Acquisition Date</option>
+
+<!-- TMPL_IF NAME="selected" --><option value="kw" selected="selected">Keyword</option>
+<!-- TMPL_ELSE --><option value="kw">Keyword</option><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" --><option value="au" selected="selected">Author</option>
+<!-- TMPL_ELSE --><option value="au">Author</option><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" --><option value="yr" selected="selected">Publication Date</option>
+<!-- TMPL_ELSE --><option value="yr">Publication Date</option><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" --><option value="sn" selected="selected">Standard Number</option>
+<!-- TMPL_ELSE --><option value="sn">Standard Number</option><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" --><option value="nb" selected="selected">ISBN</option>
+<!-- TMPL_ELSE --><option value="nb">ISBN</option><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" --><option value="ns" selected="selected">ISSN</option>
+<!-- TMPL_ELSE --><option value="ns">ISSN</option><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" --><option value="lcn,phr" selected="selected">Call Number</option>
+<!-- TMPL_ELSE --><option value="lcn,phr">Call Number</option><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" --><option value="su" selected="selected">Subject</option>
+<!-- TMPL_ELSE --><option value="su">Subject</option><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" -->
+   <option value="ti" selected="selected">Title</option>
+<!-- TMPL_ELSE -->
+   <option value="ti" selected="selected">Title</option><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" --><option value="ti,phr" selected="selected">Title Phrase</option>
+<!-- TMPL_ELSE --><option value="ti,phr">Title Phrase</option><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" --><option value="se" selected="selected">Series Title</option>
+<!-- TMPL_ELSE --><option value="se">Series Title</option><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" --><option value="bc" selected="selected">Barcode</option>
+<!-- TMPL_ELSE --><option value="bc">Barcode</option><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" --><option value="acqdate" selected="selected">Acquisition Date</option>
+<!-- TMPL_ELSE --><option value="acqdate">Acquisition Date</option><!-- /TMPL_IF -->
 </select>
    <input type="text" size="30" id="marclist" name="marclist" class="focus" title="Enter search terms" value=""/>  
 </li><!-- FIXME: script does keyword search regardless<li>
 <select name="idx" disabled="disabled">
-    <option value="kw" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Keyword</option>
-    <option value="au" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Author</option>
-    <option value="yr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Publication Date</option>
-    <option value="sn" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Standard Number</option>
-    <option value="nb" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>ISBN</option>
-    <option value="ns" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>ISSN</option>
-    <option value="lcn,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Call Number</option>
-    <option value="su" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Subject</option>
-   <option value="ti" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Title</option>
-    <option value="ti,phr" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Title Phrase</option>
-    <option value="se" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Series Title</option>
-    <option value="bc" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Barcode</option>
-    <option value="acqdate" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->>Acquisition Date</option>
+
+<!-- TMPL_IF NAME="selected" --><option value="kw" selected="selected">Keyword</option>
+<!-- TMPL_ELSE --><option value="kw">Keyword</option><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" --><option value="au" selected="selected">Author</option>
+<!-- TMPL_ELSE --><option value="au">Author</option><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" --><option value="yr" selected="selected">Publication Date</option>
+<!-- TMPL_ELSE --><option value="yr">Publication Date</option><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" --><option value="sn" selected="selected">Standard Number</option>
+<!-- TMPL_ELSE --><option value="sn">Standard Number</option><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" --><option value="nb" selected="selected">ISBN</option>
+<!-- TMPL_ELSE --><option value="nb">ISBN</option><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" --><option value="ns" selected="selected">ISSN</option>
+<!-- TMPL_ELSE --><option value="ns">ISSN</option><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" --><option value="lcn,phr" selected="selected">Call Number</option>
+<!-- TMPL_ELSE --><option value="lcn,phr">Call Number</option><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" --><option value="su" selected="selected">Subject</option>
+<!-- TMPL_ELSE --><option value="su">Subject</option><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" -->
+   <option value="ti" selected="selected">Title</option>
+<!-- TMPL_ELSE -->
+   <option value="ti" selected="selected">Title</option><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" --><option value="ti,phr" selected="selected">Title Phrase</option>
+<!-- TMPL_ELSE --><option value="ti,phr">Title Phrase</option><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" --><option value="se" selected="selected">Series Title</option>
+<!-- TMPL_ELSE --><option value="se">Series Title</option><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" --><option value="bc" selected="selected">Barcode</option>
+<!-- TMPL_ELSE --><option value="bc">Barcode</option><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="selected" --><option value="acqdate" selected="selected">Acquisition Date</option>
+<!-- TMPL_ELSE --><option value="acqdate">Acquisition Date</option><!-- /TMPL_IF -->
 </select>
    <input type="text" size="30" name="q" title="Enter search terms" value="" disabled="disabled" />  FIXME: script doesn't "catch" q param
 </li> -->
@@ -61,13 +117,16 @@ to add to Batch <!-- TMPL_VAR NAME="batch_id" -->
 <fieldset><legend>Sort by: </legend>
     <p><select id="sort_by" name="sort_by">
         <option value="">Field-weighted, Relevance Ranked</option>
+<!-- TMPL_ELSE --><!-- /TMPL_IF -->
         <!-- TMPL_LOOP NAME="sort_by_loop" -->
-        <option value="<!-- TMPL_VAR NAME="value" -->" <!-- TMPL_IF NAME="selected" -->selected="<!-- TMPL_VAR NAME="selected" -->"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="label" --></option>
+        
+<!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="label" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="label" --></option><!-- /TMPL_IF -->
+
+<!-- TMPL_ELSE --><!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
     </select>
         </p>
-</fieldset>
-<!-- /TMPL_IF -->
+</fieldset><!-- /TMPL_IF -->
 
 
 	
@@ -120,12 +179,14 @@ to add to Batch <!-- TMPL_VAR NAME="batch_id" -->
                 <td colspan="2">
                     <select name="Filter" disabled="disabled">
                         <option value="">All Item Types</option>
+<!-- TMPL_ELSE --><!-- /TMPL_IF -->
                         <!-- TMPL_LOOP name="itemtypeloop" -->
                             <!-- TMPL_IF name="selected" -->
                                 <option value="<!-- TMPL_VAR name="value" -->"  selected="selected" >
                             <!-- TMPL_ELSE -->
                                 <option value="<!-- TMPL_VAR name="value" -->">
                             <!-- /TMPL_IF --><!-- TMPL_VAR name="description" --></option>
+<!-- TMPL_ELSE --><!-- /TMPL_IF -->
                         <!-- /TMPL_LOOP -->
                     </select>
                 </td>

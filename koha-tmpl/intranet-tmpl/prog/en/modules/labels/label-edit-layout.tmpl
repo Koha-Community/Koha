@@ -261,9 +261,11 @@ Bibliographic Data to Print
 </fieldset>
 <br />
 <input type="radio" name="layoutchoice" value="layout_string" <!-- TMPL_IF NAME="layout_string" -->checked="checked"<!-- /TMPL_IF --> onclick="chooselayoutspec(this);"> List Fields </input>
-<fieldset id="layout_string" <!-- TMPL_UNLESS NAME="layout_string" -->class="disabled"<!-- /TMPL_UNLESS -->>
+<!-- TMPL_IF NAME="layout_string" --><fieldset id="layout_string"><!-- TMPL_ELSE --><fieldset id="layout_string" class="disabled"><!-- /TMPL_IF -->
 <label for="layoutname">Data Fields</label>
-   <input type="text" name="formatstring" id="formatstring" size="60" value="<!-- TMPL_VAR NAME="formatstring" -->" <!-- TMPL_UNLESS NAME="layout_string" -->disabled="true"<!-- /TMPL_UNLESS --> />
+  
+<!-- TMPL_IF NAME="layout_string" --><input type="text" name="formatstring" id="formatstring" size="60" value="<!-- TMPL_VAR NAME="formatstring" -->" /><!-- TMPL_ELSE --><input type="text" name="formatstring" id="formatstring" size="60" value="<!-- TMPL_VAR NAME="formatstring" -->" disabled="disabled" /><!-- /TMPL_IF -->
+
    <div class="help">
    <p>Enter a comma separated list of fields to print.  You may include any <em>Koha field</em> or MARC subfield.</p>
    <p>See online help for advanced options</p>

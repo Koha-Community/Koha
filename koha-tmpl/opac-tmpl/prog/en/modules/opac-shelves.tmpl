@@ -157,9 +157,9 @@ $.tablesorter.addParser({
             <li><label for="shelfname">List Name: </label><input type="text" id="shelfname" name="shelfname" size="60" value="<!-- TMPL_VAR NAME="shelfname" ESCAPE="html" -->" /></li>
             <li><label for="sortfield" >Sort this list by: </label>
             <select name="sortfield">
-            <option value="title" <!-- TMPL_IF NAME="sort_title" -->selected="1"<!-- /TMPL_IF -->>title</option>
-            <option value="author" <!-- TMPL_IF NAME="sort_author" -->selected="1"<!-- /TMPL_IF -->>author</option>
-            <option value="copyrightdate" <!-- TMPL_IF NAME="sort_copyrightdate" -->selected="1"<!-- /TMPL_IF -->>copyrightdate</option>
+            <!-- TMPL_IF NAME="sort_title" --><option value="title" selected="selected">Title</option><!-- TMPL_ELSE --><option value="title">Title</option><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="sort_author" --><option value="author" selected="selected">Author</option><!-- TMPL_ELSE --><option value="author">Author</option><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="sort_copyrightdate" --><option value="copyrightdate" selected="selected">Copyrightdate</option><!-- TMPL_ELSE --><option value="copyrightdate">Copyrightdate</option><!-- /TMPL_IF -->
             </select></li>
             </ol>
             </fieldset>
