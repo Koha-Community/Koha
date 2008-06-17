@@ -51,8 +51,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $reserveinfo = GetReserveInfo($borrowernumber,$biblionumber );
 my $pulldate = C4::Dates->new();
-use Data::Dumper;
-warn Dumper($reserveinfo);
 $reserveinfo->{'pulldate'} = $pulldate->output();
 $reserveinfo->{'branchname'} = GetBranchName($reserveinfo->{'branchcode'});
 $reserveinfo->{'transferrequired'} = $transfer;
