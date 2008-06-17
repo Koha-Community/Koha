@@ -138,6 +138,23 @@ foreach my $issue ( @$issues ) {
     $issue->{date_due} = format_date($issue->{date_due});
     push @issuedat, $issue;
     $count++;
+	
+		# XISBN Stuff
+	my $xisbn=$issue->{'isbn'};
+	$xisbn =~ /(\d*[X]*)/;
+	$issue->{amazonisbn} = $1;		# FIXME: so it is OK if the ISBN = 'XXXXX' ?
+	my ($clean, $amazonisbn);
+	$amazonisbn = $1;
+	# these might be overkill, but they are better than the regexp above.
+	if (
+		$amazonisbn =~ /\b(\d{13})\b/ or
+		$amazonisbn =~ /\b(\d{10})\b/ or 
+		$amazonisbn =~ /\b(\d{9}X)\b/i
+	) {
+		$clean = $1;
+		$issue->{clean_isbn} = $1;
+	}
+	
 }
 
 $template->param( ISSUES       => \@issuedat );

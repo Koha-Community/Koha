@@ -1,6 +1,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Cataloguing Authority Plugin</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<style type="text/css">
+#custom-doc { width:51.46em;*width:50.17em;min-width:675px; margin:auto; text-align:left; } 
+</style>
 <script type="text/javascript">
 
 function jumpfull(page)
@@ -10,7 +13,7 @@ function jumpfull(page)
 </script>
 </head>
 <body>
-<div id="doc3" class="yui-t2">
+<div id="custom-doc" class="yui-t7">
 
    <div id="bd">
            <div id="yui-main">
@@ -18,9 +21,8 @@ function jumpfull(page)
 
     	<h1>Authority search results</h1>
     	<!-- TMPL_INCLUDE NAME="auth-finder-search.inc" -->
-    	<div id="resultnumber">
-            <div>
-                <!-- TMPL_IF name="displayprev" -->
+    	<!-- TMPL_IF name="total" --><div id="resultnumber">
+            <!-- TMPL_IF name="displayprev" -->
                     <a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" --><!-- TMPL_LOOP name="searchdata"-->&amp;<!-- TMPL_VAR name="term" -->=<!-- TMPL_VAR name="val"--><!-- /TMPL_LOOP -->&amp;op=do_search&amp;type=intranet&amp;index=<!-- TMPL_VAR name="index" -->&amp;tagid=<!-- TMPL_VAR name="tagid" -->">
                         &lt;&lt;
                     </a>
@@ -37,16 +39,15 @@ function jumpfull(page)
                     <a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" --><!-- TMPL_LOOP name="searchdata"-->&amp;<!-- TMPL_VAR name="term" -->=<!-- TMPL_VAR name="val"--><!-- /TMPL_LOOP -->&amp;op=do_search&amp;type=intranet&amp;index=<!-- TMPL_VAR name="index" -->&amp;tagid=<!-- TMPL_VAR name="tagid" -->">
                         &gt;&gt;</a>
                 <!-- /TMPL_IF -->
-            </div>
             <div>
-                <!-- TMPL_IF name="total" -->
-                    &nbsp;<b>Results <!-- TMPL_VAR NAME="from" --> to <!-- TMPL_VAR NAME="to" --> of <!-- TMPL_VAR NAME="total" --></b><br /><br />
+                
+                    <p><b>Results <!-- TMPL_VAR NAME="from" --> to <!-- TMPL_VAR NAME="to" --> of <!-- TMPL_VAR NAME="total" --></b></p>
                 <!-- TMPL_ELSE -->
-                    &nbsp; No results found<br />
-                <!-- /TMPL_IF -->
-            </div>
+                    
+                
+            </div><p>No results found</p><!-- /TMPL_IF -->
         </div>
-        <div id="resultlist">
+        <!-- TMPL_IF NAME="result" --><div id="resultlist">
             <table>
                 <tr>
                     <th>Summary</th>
@@ -74,8 +75,7 @@ function jumpfull(page)
     
         </div>
         <div id="resultnumber">
-            <div>
-                <!-- TMPL_IF name="displayprev" -->
+            <!-- TMPL_IF name="displayprev" -->
                     <a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" --><!-- TMPL_LOOP name="searchdata"-->&amp;<!-- TMPL_VAR name="term" -->=<!-- TMPL_VAR name="val"--><!-- /TMPL_LOOP -->&amp;op=do_search&amp;type=intranetamp;&amp;index=<!-- TMPL_VAR name="index" -->&amp;tagid=<!-- TMPL_VAR name="tagid" -->">
                         &lt;&lt;
                     </a>
@@ -92,10 +92,9 @@ function jumpfull(page)
                     <a href="auth_finder.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" --><!-- TMPL_LOOP name="searchdata"-->&<!-- TMPL_VAR name="term" -->=<!-- TMPL_VAR name="val"--><!-- /TMPL_LOOP -->&amp;op=do_search&amp;type=intranet&amp;index=<!-- TMPL_VAR name="index" -->&amp;tagid=<!-- TMPL_VAR name="tagid" -->">
                         &gt;&gt;</a>
                 <!-- /TMPL_IF -->
-            </div>
-        </div>
+        </div><!-- /TMPL_IF -->
 </div>
 </div>
 </div>
 </div>
-<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

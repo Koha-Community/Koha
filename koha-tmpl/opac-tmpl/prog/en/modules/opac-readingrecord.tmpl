@@ -1,5 +1,12 @@
 <!-- TMPL_INCLUDE name="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo;  Account for <!-- TMPL_LOOP name="BORROWER_INFO" --><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --><!-- /TMPL_LOOP -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_IF NAME="GoogleJackets" --><script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+    KOHA.Google.GetCoverFromIsbn();
+});
+//]]>
+</script><!-- /TMPL_IF -->
 </head>
 <body>
 <div id="doc3" class="yui-t1">
