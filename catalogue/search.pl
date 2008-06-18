@@ -219,6 +219,8 @@ $template->param(branchloop => \@branch_loop, searchdomainloop => $categories);
 # load the Type stuff
 # load the Type stuff
 my $itemtypes = GetItemTypes;
+# the index parameter is different for item-level itemtypes
+my $itype_or_itemtype = (C4::Context->preference("item-level_itypes"))?'itype':'itemtype';
 my @itemtypesloop;
 my $selected=1;
 my $cnt;
@@ -228,7 +230,7 @@ my $advanced_search_types = C4::Context->preference("AdvancedSearchTypes");
 if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {                                                                 foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
     my %row =(  number=>$cnt++,
                 imageurl=> $itemtypes->{$thisitemtype}->{'imageurl'}?($imgdir."/".$itemtypes->{$thisitemtype}->{'imageurl'}):"",
-                ccl => 'itemtype',
+                ccl => $itype_or_itemtype,
                 code => $thisitemtype,
                 selected => $selected,
                 description => $itemtypes->{$thisitemtype}->{'description'},
