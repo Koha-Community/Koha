@@ -204,11 +204,10 @@ function addSelRecords(valSel) { // function for adding a selection of biblios t
 }
 
 function showCartUpdate(msg){
-	cartUpdate.setBody(msg);
-	cartUpdate.render("cc");
-	cartUpdate.show();
-	YAHOO.util.Event.addListener("cartUpdate", "click", cartUpdate.hide, cartUpdate, true);
-	setTimeout("cartUpdate.hide()",5000);	
+	// set body of popup window
+	$("#cartDetails").html(msg);
+	showCart();
+	setTimeout("hideCart()",2000);	
 }
 
 function selRecord(num, status) {
@@ -367,10 +366,10 @@ function showLess() {
 
 function updateBasket(updated_value,target) {
 	if(target){
-	target.$('#basket').html("<span>"+updated_value+"</span>");
+	target.$('#basketcount').html("<span>"+updated_value+"</span>");
 	target.$('#cartDetails').html(_("Your cart contains ")+updated_value+_(" items"));
 	} else {
-	$('#basket').html("<span>"+updated_value+"</span>");
+	$('#basketcount').html("<span>"+updated_value+"</span>");
 	$('#cartDetails').html(_("Your cart contains ")+updated_value+_(" items"));
 	}
 	var basketcount = updated_value;
@@ -409,24 +408,30 @@ function vShelfAdd() {
         }
 }
 
-YAHOO.util.Event.onAvailable("cartDetails", function () {
-	$("#cartDetails").css("display","block").css("visibility","hidden").after("<div id=\"cc\" style=\"visibility: hidden\"></div>");
-	$("#cmspan").html("<a href=\"#\" id=\"cartmenulink\" class=\"\"><i></i><span><i></i><span></span><img src=\"/opac-tmpl/prog/images/cart.gif\" width=\"14\" height=\"14\" alt=\"\" border=\"0\" />" + $("#cmspan").text() + "<span id=\"basket\"></span></span></a>");
-	if(basketcount){ updateBasket(basketcount) }	
-});
-
-function cartMenuInit() {
-	$('#cartmenulink').click(function(){
-		openBasket(); return false;
-	});
-	// Build cartOverlay based on markup
-	$("#cartDetails").css("display","block");
-	cartOverlay = new YAHOO.widget.Overlay("cartDetails", { context:["cartmenulink","tr","br"],																							  visible:false,width:"200px",effect:{effect:YAHOO.widget.ContainerEffect.FADE,duration:0.25} } );
-	cartOverlay.render();
-	YAHOO.util.Event.addListener("cartmenulink", "mouseover", cartOverlay.show, cartOverlay, true);
-	YAHOO.util.Event.addListener("cartmenulink", "mouseout", cartOverlay.hide, cartOverlay, true);
-	YAHOO.util.Event.addListener("cartmenulink", "click", cartOverlay.hide, cartOverlay, true);
-	
-	cartUpdate = new YAHOO.widget.Panel("cartUpdate", { context:["cartmenulink","tr","br"],																							  visible:false,draggable:false, close:false,width:"200px",effect:{effect:YAHOO.widget.ContainerEffect.FADE,duration:0.25} } );
+function showCart(){
+		var position = $("#cartmenulink").offset({border: true,margin:false});
+		var top = position.top + 16; // $("#cartmenulink").outerHeight();
+		var left = position.left - 105;
+		$("#cartDetails").css("position","absolute").css("top",top);
+		$("#cartDetails").css("position","absolute").css("left",left);
+		$("#cartDetails").fadeIn("fast",function(){
+  			$("#cartDetails").dropShadow({left: 3, top: 3, blur: 0,  color: "#000", opacity: 0.1});
+		});	
 }
-YAHOO.util.Event.addListener(window, "load", cartMenuInit);
+
+function hideCart(){
+		 $(".dropShadow").hide();
+		 $("#cartDetails").fadeOut("fast");
+}
+
+$("#cartDetails").ready(function(){
+	$("#cmspan").html("<a href=\"#\" id=\"cartmenulink\" class=\"\"><i></i><span><i></i><span></span><img src=\"/opac-tmpl/prog/images/cart.gif\" width=\"14\" height=\"14\" alt=\"\" border=\"0\" /> Cart<span id=\"basketcount\"></span></span></a>");
+	$("#cartDetails,#cartmenulink").click(function(){ hideCart(); });
+	$("#cartmenulink").click(function(){ openBasket(); return false; });
+	$("#cartmenulink").hoverIntent(function(){
+		showCart();
+	},function(){
+		hideCart();
+	});
+	if(basketcount){ updateBasket(basketcount) }
+});
