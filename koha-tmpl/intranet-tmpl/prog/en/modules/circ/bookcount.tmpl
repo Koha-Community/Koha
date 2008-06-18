@@ -18,7 +18,26 @@
 <h1>
 <!-- TMPL_VAR Name="title" --> <!-- TMPL_IF NAME="author" -->(<!-- TMPL_VAR Name="author" -->)<!-- /TMPL_IF --></a></h1>
 <h2>Barcode <!-- TMPL_VAR Name="barcode" --></h2>
-<div class="tabitem"><form action="/cgi-bin/koha/catalogue/detail.pl" method="get"><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" /><input type="hidden" name="type" value="intra" /><input type="submit" class="submit" value="Brief Display" /></form> <form action="/cgi-bin/koha/catalogue/moredetail.pl" method="get"><input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" /><input type="hidden" name="item" value="<!-- TMPL_VAR NAME="itemnumber" -->" /><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><input type="hidden" name="bi" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" /> <input type="submit" class="submit" value="Item Details" /></form><!-- TMPL_IF NAME="norequests" --><!-- TMPL_ELSE --> <form action="/cgi-bin/koha/reserve/request.pl" method="get"><input type="hidden" value="<!-- TMPL_VAR name="biblionumber" -->" name="biblionumber"> <input type="submit" value="Place Reserve" class="submit" /></form><!-- /TMPL_IF --></div>
+<div class="tabitem">
+  <form action="/cgi-bin/koha/catalogue/detail.pl" method="get">
+    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
+    <input type="hidden" name="type" value="intra" />
+    <input type="submit" class="submit" value="Brief Display" />
+  </form>
+  <form action="/cgi-bin/koha/catalogue/moredetail.pl" method="get">
+    <input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" />
+    <input type="hidden" name="item" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+    <input type="hidden" name="bi" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" /> <input type="submit" class="submit" value="Item Details" />
+  </form>
+  <!-- TMPL_IF NAME="norequests" -->
+  <!-- TMPL_ELSE -->
+  <form action="/cgi-bin/koha/reserve/request.pl" method="get">
+    <input type="hidden" value="<!-- TMPL_VAR name="biblionumber" -->" name="biblionumber">
+    <input type="submit" value="Place Reserve" class="submit" />
+  </form>
+  <!-- /TMPL_IF -->
+</div>
 <table>
 		<tr><th>Home Library: </th><td> <!-- TMPL_VAR Name="homebranch" --> </td></tr>
 		<tr><th>Current Library: </th><td> <!-- TMPL_VAR Name="holdingbranch" --></td></tr>

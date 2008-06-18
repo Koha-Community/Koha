@@ -27,8 +27,21 @@ function displayMoreConstraint(numlayer){
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC Frameworks</a> &rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->&searchfield=<!-- TMPL_VAR name="tagfield" -->"><!-- TMPL_VAR NAME="frameworkcode" --> Framework Structure</a> &rsaquo; <!-- TMPL_IF name="add_form" --><!-- TMPL_IF NAME="use-heading-flags-p" --><!-- TMPL_IF NAME="heading-edit-subfields-p" --> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">Tag <!-- TMPL_VAR NAME="tagfield" --> Subfield Structure</a> &rsaquo; Edit subfields constraints<!-- /TMPL_IF --><!-- TMPL_ELSE --> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">Tag <!-- TMPL_VAR NAME="tagfield" --> Subfield Structure</a> &rsaquo; <!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirm" --> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">Tag <!-- TMPL_VAR NAME="tagfield" --> Subfield Structure</a> &rsaquo; Confirm Deletion of Subfield <!-- TMPL_VAR NAME="tagsubfield" --><!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirmed" --> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">Tag <!-- TMPL_VAR NAME="tagfield" --> Subfield Structure</a> &rsaquo; Subfield Deleted<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->Tag <!-- TMPL_VAR NAME="tagfield" --> Subfield Structure<!-- /TMPL_IF --></div>
+<div id="breadcrumbs">
+  <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC Frameworks</a> &rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->&searchfield=<!-- TMPL_VAR name="tagfield" -->"><!-- TMPL_VAR NAME="frameworkcode" --> Framework Structure</a> &rsaquo;
+  <!-- TMPL_IF name="add_form" -->
+  <!-- TMPL_IF NAME="use-heading-flags-p" -->
+  <!-- TMPL_IF NAME="heading-edit-subfields-p" --> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">Tag <!-- TMPL_VAR NAME="tagfield" --> Subfield Structure</a> &rsaquo; Edit subfields constraints
+  <!-- /TMPL_IF -->
+  <!-- TMPL_ELSE --> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">Tag <!-- TMPL_VAR NAME="tagfield" --> Subfield Structure</a> &rsaquo; <!-- TMPL_VAR NAME="action" -->
+  <!-- /TMPL_IF -->
+  <!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirm" --> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">Tag <!-- TMPL_VAR NAME="tagfield" --> Subfield Structure</a> &rsaquo; Confirm Deletion of Subfield <!-- TMPL_VAR NAME="tagsubfield" -->
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="delete_confirmed" --> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">Tag <!-- TMPL_VAR NAME="tagfield" --> Subfield Structure</a> &rsaquo; Subfield Deleted
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="else" -->Tag <!-- TMPL_VAR NAME="tagfield" --> Subfield Structure<!-- /TMPL_IF -->
+</div>
 
 <div id="doc" class="yui-t7">
    

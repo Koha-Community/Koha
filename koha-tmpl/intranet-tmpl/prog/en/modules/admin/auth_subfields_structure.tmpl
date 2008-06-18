@@ -26,7 +26,18 @@ function displayMoreConstraint(numlayer){
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="else" -->Authority MARC subfield structure<!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;tagsubfield=<!-- TMPL_VAR NAME="tagsubfield" -->&amp;authtypecode=<!-- TMPL_VAR NAME="authtypecode" -->">Authority MARC subfield structure</a> &rsaquo; <!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion of Subfield <!-- TMPL_VAR NAME="tagsubfield" -->?<!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirmed" -->Data deleted<!-- /TMPL_IF --><!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="use-heading-flags-p" --><!-- TMPL_IF NAME="heading-edit-subfields-p" -->Edit MARC subfields constraints<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF --><!-- /TMPL_IF --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
+  <!-- TMPL_IF NAME="else" -->Authority MARC subfield structure
+  <!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;tagsubfield=<!-- TMPL_VAR NAME="tagsubfield" -->&amp;authtypecode=<!-- TMPL_VAR NAME="authtypecode" -->">Authority MARC subfield structure</a> &rsaquo;
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion of Subfield <!-- TMPL_VAR NAME="tagsubfield" -->?<!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME="delete_confirmed" -->Data deleted<!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME="add_form" -->
+  <!-- TMPL_IF NAME="use-heading-flags-p" -->
+  <!-- TMPL_IF NAME="heading-edit-subfields-p" -->Edit MARC subfields constraints<!-- /TMPL_IF -->
+  <!-- TMPL_ELSE --><!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF -->
+  <!-- /TMPL_IF -->
+</div>
 
 <div id="doc3" class="yui-t2">
 

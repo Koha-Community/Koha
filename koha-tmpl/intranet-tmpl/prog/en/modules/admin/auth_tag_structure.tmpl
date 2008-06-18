@@ -64,7 +64,20 @@ return false;
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="use-heading-flags-p" -->
     <!-- TMPL_IF NAME="heading-modify-tag-p" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Authority MARC Framework</a> &rsaquo; <!-- TMPL_IF NAME="authtypecode" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=<!-- TMPL_VAR NAME="authtypecode" -->"><!-- TMPL_VAR NAME="authtypecode" --> Framework</a><!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default Framework</a><!-- /TMPL_IF --> &rsaquo; Modify tag<!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="heading-add-tag-p" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Authority MARC Framework</a> &rsaquo; <!-- TMPL_IF NAME="authtypecode" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=<!-- TMPL_VAR NAME="authtypecode" -->"><!-- TMPL_VAR NAME="authtypecode" --> Framework</a><!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default Framework</a><!-- /TMPL_IF --> &rsaquo; New tag<!-- /TMPL_IF -->
-    <!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Authority MARC Framework</a> &rsaquo; <!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="delete_confirm" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Authority MARC Framework</a> &rsaquo; <!-- TMPL_IF NAME="authtypecode" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=<!-- TMPL_VAR NAME="authtypecode" -->"><!-- TMPL_VAR NAME="authtypecode" --> Framework</a><!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default Framework</a><!-- /TMPL_IF --> &rsaquo; Confirm Deletion<!-- TMPL_ELSE --><!-- TMPL_IF NAME="delete_confirmed" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Authority MARC Framework</a> &rsaquo; Data Deleted<!-- TMPL_ELSE -->Authority MARC Framework: <!-- TMPL_IF NAME="authtypecode" --><!-- TMPL_VAR NAME="authtypecode" --> Framework<!-- TMPL_ELSE -->Default Framework<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF --></div>
+    <!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Authority MARC Framework</a> &rsaquo; <!-- TMPL_VAR NAME="action" -->
+    <!-- /TMPL_IF -->
+    <!-- TMPL_ELSE -->
+    <!-- TMPL_IF NAME="delete_confirm" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Authority MARC Framework</a> &rsaquo;
+    <!-- TMPL_IF NAME="authtypecode" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=<!-- TMPL_VAR NAME="authtypecode" -->"><!-- TMPL_VAR NAME="authtypecode" --> Framework</a>
+    <!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default Framework</a><!-- /TMPL_IF --> &rsaquo; Confirm Deletion
+    <!-- TMPL_ELSE -->
+    <!-- TMPL_IF NAME="delete_confirmed" --><a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Authority MARC Framework</a> &rsaquo; Data Deleted
+    <!-- TMPL_ELSE -->Authority MARC Framework: <!-- TMPL_IF NAME="authtypecode" --><!-- TMPL_VAR NAME="authtypecode" --> Framework
+    <!-- TMPL_ELSE -->Default Framework<!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->
+</div>
 
 <div id="doc3" class="yui-t2">
    

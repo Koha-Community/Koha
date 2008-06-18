@@ -128,8 +128,18 @@
 		<h2>Search results</h2>
 		<div id="unimarc_field_4XX_resultnumber">
 			<p><!-- TMPL_IF NAME="displayprev" --> <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=<!--TMPL_VAR Name="index"-->&amp;startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;search=<!-- TMPL_VAR NAME="search" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">&lt;&lt; Previous</a><!-- /TMPL_IF -->
-				<!-- TMPL_LOOP NAME="numbers" --><!-- TMPL_IF NAME="highlight" --> <span class="highlight"><!-- TMPL_VAR NAME="number" --></span><!-- TMPL_ELSE --> <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=<!--TMPL_VAR Name="index"-->&amp;startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;search=<!-- TMPL_VAR NAME="search" ESCAPE=URL -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME="number" --></a><!-- /TMPL_IF --><!-- /TMPL_LOOP --> <!-- TMPL_IF NAME="displaynext" --><a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=<!--TMPL_VAR Name="index"-->&amp;startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;search=<!-- TMPL_VAR NAME="search" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">Next&gt;&gt;</a><!-- /TMPL_IF --></p>
-			<p class="resultcount"><!-- TMPL_IF NAME="total" -->Results <!-- TMPL_VAR NAME="from" --> to <!-- TMPL_VAR NAME="to" --> of <!-- TMPL_VAR NAME="total" --><!-- TMPL_ELSE -->No results found<!-- /TMPL_IF --></p></div>
+				<!-- TMPL_LOOP NAME="numbers" -->
+                                <!-- TMPL_IF NAME="highlight" --> <span class="highlight"><!-- TMPL_VAR NAME="number" --></span>
+                                <!-- TMPL_ELSE --> <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=<!--TMPL_VAR Name="index"-->&amp;startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;search=<!-- TMPL_VAR NAME="search" ESCAPE=URL -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search"><!-- TMPL_VAR NAME="number" --></a>
+                                <!-- /TMPL_IF -->
+                                <!-- /TMPL_LOOP -->
+                                <!-- TMPL_IF NAME="displaynext" -->
+                                  <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=<!--TMPL_VAR Name="index"-->&amp;startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;search=<!-- TMPL_VAR NAME="search" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=intranet&amp;op=do_search">Next&gt;&gt;</a>
+                                <!-- /TMPL_IF --></p>
+			<p class="resultcount">
+                          <!-- TMPL_IF NAME="total" -->Results <!-- TMPL_VAR NAME="from" --> to <!-- TMPL_VAR NAME="to" --> of <!-- TMPL_VAR NAME="total" -->
+                          <!-- TMPL_ELSE -->No results found
+                          <!-- /TMPL_IF --></p></div>
 		<div id="resultlist">
 			<table>
 				<tr>

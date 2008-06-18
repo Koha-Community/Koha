@@ -42,9 +42,40 @@ There is a problem with your account.  Please ask for help at the circulation de
 		<h3>Issuing Question</h3>
 		<p>Attempting to issue <!-- TMPL_VAR name="title" -->
 							by <!-- TMPL_VAR name="author" --> to <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" -->.</p>
-							<p><!-- TMPL_VAR name="question" --></p><form action="/cgi-bin/koha/sco/circulation.pl" method="get"><input type="hidden" name="borrnumber" value="<!-- TMPL_VAR name="borrowernumber" -->" /><input type="hidden" name="barcode" value="<!-- TMPL_VAR name="barcode" -->" /><input type="hidden" name="questionnumber" value="<!-- TMPL_VAR name="questionnumber" -->" /><input type="hidden" name="day" value="<!-- TMPL_VAR name="day" -->" /><input type="hidden" name="month" value="<!-- TMPL_VAR name="month" -->" /><input type="hidden" name="year" value="<!-- TMPL_VAR name="year" -->" /><input type="hidden" name="stickyduedate" value="<!-- TMPL_VAR name="stickyduedate" -->" /><input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->" /><input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->"><!-- TMPL_LOOP NAME="responseloop" --><input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->" /><!-- /TMPL_LOOP --><input type="hidden" name="answer" value="Y" /><input type="submit" value="  Yes  " class="confirm"></form>
+							<p><!-- TMPL_VAR name="question" --></p>
+          <form action="/cgi-bin/koha/sco/circulation.pl" method="get">
+            <input type="hidden" name="borrnumber" value="<!-- TMPL_VAR name="borrowernumber" -->" />
+            <input type="hidden" name="barcode" value="<!-- TMPL_VAR name="barcode" -->" />
+            <input type="hidden" name="questionnumber" value="<!-- TMPL_VAR name="questionnumber" -->" />
+            <input type="hidden" name="day" value="<!-- TMPL_VAR name="day" -->" />
+            <input type="hidden" name="month" value="<!-- TMPL_VAR name="month" -->" />
+            <input type="hidden" name="year" value="<!-- TMPL_VAR name="year" -->" />
+            <input type="hidden" name="stickyduedate" value="<!-- TMPL_VAR name="stickyduedate" -->" />
+            <input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->" />
+            <input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->">
+            <!-- TMPL_LOOP NAME="responseloop" -->
+              <input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->" />
+            <!-- /TMPL_LOOP -->
+            <input type="hidden" name="answer" value="Y" />
+            <input type="submit" value="  Yes  " class="confirm">
+          </form>
 
-<form action="/cgi-bin/koha/sco/circulation.pl" method="get"><input type="hidden" name="borrnumber" value="<!-- TMPL_VAR name="borrowernumber" -->" /><input type="hidden" name="barcode" value="<!-- TMPL_VAR name="barcode" -->" /><input type="hidden" name="questionnumber" value="<!-- TMPL_VAR name="questionnumber" -->" /><input type="hidden" name="day" value="<!-- TMPL_VAR name="day" -->" /><input type="hidden" name="month" value="<!-- TMPL_VAR name="month" -->" /><input type="hidden" name="year" value="<!-- TMPL_VAR name="year" -->" /><input type="hidden" name="stickyduedate" value="<!-- TMPL_VAR name="stickyduedate" -->" /><input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->" /><input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->" /><!-- TMPL_LOOP NAME="responseloop" --><input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->" /><!-- /TMPL_LOOP --><input type="hidden" name="answer" value="N" /><input type="submit" value=" No " class="reject"></form>
+          <form action="/cgi-bin/koha/sco/circulation.pl" method="get">
+            <input type="hidden" name="borrnumber" value="<!-- TMPL_VAR name="borrowernumber" -->" />
+            <input type="hidden" name="barcode" value="<!-- TMPL_VAR name="barcode" -->" />
+            <input type="hidden" name="questionnumber" value="<!-- TMPL_VAR name="questionnumber" -->" />
+            <input type="hidden" name="day" value="<!-- TMPL_VAR name="day" -->" />
+            <input type="hidden" name="month" value="<!-- TMPL_VAR name="month" -->" />
+            <input type="hidden" name="year" value="<!-- TMPL_VAR name="year" -->" />
+            <input type="hidden" name="stickyduedate" value="<!-- TMPL_VAR name="stickyduedate" -->" />
+            <input type="hidden" name="branch" value="<!-- TMPL_VAR name="branch" -->" />
+            <input type="hidden" name="printer" value="<!-- TMPL_VAR name="printer" -->" />
+            <!-- TMPL_LOOP NAME="responseloop" -->
+             <input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->" />
+            <!-- /TMPL_LOOP -->
+            <input type="hidden" name="answer" value="N" />
+            <input type="submit" value=" No " class="reject">
+          </form>
 	</div>
 	<!-- /TMPL_IF -->
 
