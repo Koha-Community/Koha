@@ -410,8 +410,8 @@ function vShelfAdd() {
 
 function showCart(){
 		var position = $("#cartmenulink").offset({border: true,margin:false});
-		var top = position.top + $("#cartmenulink").outerHeight();
-		var left = position.left;
+		var top = position.top + 16; // $("#cartmenulink").outerHeight();
+		var left = position.left - 105;
 		$("#cartDetails").css("position","absolute").css("top",top);
 		$("#cartDetails").css("position","absolute").css("left",left);
 		$("#cartDetails").fadeIn("fast",function(){
