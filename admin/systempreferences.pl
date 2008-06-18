@@ -320,7 +320,7 @@ sub StringSearch  {
         while (my $data=$sth->fetchrow_hashref){
             $data->{value} =~ s/</&lt;/g;
             $data->{value} =~ s/>/&gt;/g;
-            $data->{value}=substr($data->{value},0,100)."..." if length($data->{value}) >100;
+            $data->{value}=substr($data->{value},0,60)."..." if length($data->{value}) >60;
             push(@results,$data);
             $cnt++;
         }
@@ -334,7 +334,7 @@ sub StringSearch  {
                 while (my $data=$sth->fetchrow_hashref){
                     $data->{value} =~ s/</&lt;/g;
                     $data->{value} =~ s/>/&gt;/g;
-                    $data->{value}=substr($data->{value},0,100)."..." if length($data->{value}) >100;
+                    $data->{value}=substr($data->{value},0,60)."..." if length($data->{value}) >60;
                     push(@results,$data);
                     $cnt++;
                 }
@@ -351,7 +351,7 @@ sub StringSearch  {
         my $sth=$dbh->prepare($strsth);
         $sth->execute();
         while (my $data=$sth->fetchrow_hashref){
-            $data->{value}=substr($data->{value},0,100);
+            $data->{value}=substr($data->{value},0,60);
             push(@results,$data);
             $cnt++;
         }
