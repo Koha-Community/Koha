@@ -125,25 +125,44 @@ my $categories = GetBranchCategories(undef,'searchdomain');
 
 $template->param(branchloop => \@branch_loop, searchdomainloop => $categories);
 
-# load the itemtypes
+# load the Type stuff
 my $itemtypes = GetItemTypes;
 my @itemtypesloop;
 my $selected=1;
 my $cnt;
 my $imgdir = getitemtypeimagesrc('opac');
+my $advanced_search_types = C4::Context->preference("AdvancedSearchTypes");
 
-foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
+if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {
+	foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
     my %row =(  number=>$cnt++,
                 imageurl=> $itemtypes->{$thisitemtype}->{'imageurl'}?($imgdir."/".$itemtypes->{$thisitemtype}->{'imageurl'}):"",
+				ccl => 'itemtype',
                 code => $thisitemtype,
                 selected => $selected,
                 description => $itemtypes->{$thisitemtype}->{'description'},
                 count5 => $cnt % 4,
             );
-    $selected = 0 if ($selected) ;
-    push @itemtypesloop, \%row;
+    	$selected = 0 if ($selected) ;
+    	push @itemtypesloop, \%row;
+	}
+	$template->param(itemtypeloop => \@itemtypesloop);
+} else {
+    my $advsearchtypes = GetAuthorisedValues($advanced_search_types);
+	for my $thisitemtype (@$advsearchtypes) {
+		my %row =(
+				number=>$cnt++,
+                imageurl=> $imgdir."/".$thisitemtype->{'imageurl'},
+				ccl => $advanced_search_types,
+                code => $thisitemtype->{authorised_value},
+                selected => $selected,
+                description => $thisitemtype->{'lib'},
+                count5 => $cnt % 4,
+            );
+		push @itemtypesloop, \%row;
+	}
+	$template->param(itemtypeloop => \@itemtypesloop);
 }
-$template->param(itemtypeloop => \@itemtypesloop);
 
 # # load the itypes (Called item types in the template -- just authorized values for searching)
 # my ($itypecount,@itype_loop) = GetCcodes();

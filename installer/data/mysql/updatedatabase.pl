@@ -1622,6 +1622,12 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.089";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do("INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('AdvancedSearchTypes','itemtypes','itemtypes|ccode','Select which set of fields comprise the Type limit in the advanced search','Choice')");
+	print "Upgrade to $DBversion done (added new AdvancedSearchTypes syspref)\n";
+    SetVersion ($DBversion);
+}
 
 =item DropAllForeignKeys($table)
 
