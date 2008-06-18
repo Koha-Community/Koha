@@ -85,6 +85,11 @@ sub process_bib {
             print "Bib $biblionumber ($title): $headings_changed headings changed\n";
         }
         if (not $test_only) {
+            # delete any item tags
+            my ($itemtag, $itemsubfield) = GetMarcFromKohaField("items.itemnumber", '');
+            foreach my $field ($bib->field($itemtag)) {
+                $bib->delete_field($field);
+            }
             ModBiblio($bib, $biblionumber, GetFrameworkCode($biblionumber));
             $num_bibs_modified++;
         }
@@ -111,10 +116,6 @@ Parameters:
     --test                  only test the authority linking
                             and report the results; do not
                             change the bib records.
-    --comment <comment>     optional comment to describe
-                            the record batch; if the comment
-                            has spaces in it, surround the
-                            comment with quotation marks.
     --help or -h            show this message.
 _USAGE_
 }
