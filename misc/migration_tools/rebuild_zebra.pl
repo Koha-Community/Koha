@@ -106,18 +106,14 @@ if ($do_munge) {
     munge_config();
 }
 
-$dbh->{AutoCommit} = 0; # don't autocommit - want a consistent view of the zebraqueue table
-
 if ($authorities) {
     index_records('authority', $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $do_not_clear_zebraqueue);
-    $dbh->commit(); # commit changes to zebraqueue, if any
 } else {
     print "skipping authorities\n";
 }
 
 if ($biblios) {
     index_records('biblio', $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $do_not_clear_zebraqueue);
-    $dbh->commit(); # commit changes to zebraqueue, if any
 } else {
     print "skipping biblios\n";
 }
@@ -163,21 +159,21 @@ sub index_records {
         mkdir "$directory" unless (-d $directory);
         mkdir "$directory/$record_type" unless (-d "$directory/$record_type");
         if ($process_zebraqueue) {
-            my $sth = select_zebraqueue_records($record_type, 'deleted');
+            my $entries = select_zebraqueue_records($record_type, 'deleted');
             mkdir "$directory/del_$record_type" unless (-d "$directory/del_$record_type");
-            $num_records_deleted = generate_deleted_marc_records($record_type, $sth, "$directory/del_$record_type", $as_xml);
-            mark_zebraqueue_done($record_type, 'deleted');
-            $sth = select_zebraqueue_records($record_type, 'updated');
+            $num_records_deleted = generate_deleted_marc_records($record_type, $entries, "$directory/del_$record_type", $as_xml);
+            mark_zebraqueue_batch_done($entries);
+            $entries = select_zebraqueue_records($record_type, 'updated');
             mkdir "$directory/upd_$record_type" unless (-d "$directory/upd_$record_type");
-            $num_records_exported = export_marc_records($record_type, $sth, "$directory/upd_$record_type", $as_xml, $noxml);
-            mark_zebraqueue_done($record_type, 'updated');
+            $num_records_exported = export_marc_records_from_list($record_type, 
+                                                                  $entries, "$directory/upd_$record_type", $as_xml, $noxml);
+            mark_zebraqueue_batch_done($entries);
         } else {
             my $sth = select_all_records($record_type);
+            $num_records_exported = export_marc_records_from_sth($record_type, $sth, "$directory/$record_type", $as_xml, $noxml);
             unless ($do_not_clear_zebraqueue) {
-                mark_zebraqueue_done($record_type, 'deleted');
-                mark_zebraqueue_done($record_type, 'updated');
+                mark_all_zebraqueue_done($record_type);
             }
-            $num_records_exported = export_marc_records($record_type, $sth, "$directory/$record_type", $as_xml, $noxml);
         }
     }
     
@@ -205,44 +201,37 @@ sub select_zebraqueue_records {
     my $server = ($record_type eq 'biblio') ? 'biblioserver' : 'authorityserver';
     my $op = ($update_type eq 'deleted') ? 'recordDelete' : 'specialUpdate';
 
-    my $sth = $dbh->prepare("SELECT DISTINCT biblio_auth_number 
+    my $sth = $dbh->prepare("SELECT id, biblio_auth_number 
                              FROM zebraqueue
                              WHERE server = ?
                              AND   operation = ?
-                             AND   done = 0");
+                             AND   done = 0
+                             ORDER BY id DESC");
     $sth->execute($server, $op);
-    return $sth;
+    my $entries = $sth->fetchall_arrayref({});
 }
 
-sub mark_zebraqueue_done {
-    my ($record_type, $update_type) = @_;
+sub mark_all_zebraqueue_done {
+    my ($record_type) = @_;
 
     my $server = ($record_type eq 'biblio') ? 'biblioserver' : 'authorityserver';
-    my $op = ($update_type eq 'deleted') ? 'recordDelete' : 'specialUpdate';
 
-    if ($op eq 'recordDelete') {
-        my $sth = $dbh->prepare("UPDATE zebraqueue SET done = 1
-                                 WHERE id IN (
-                                    SELECT id FROM (
-                                        SELECT z1.id
-                                        FROM zebraqueue z1
-                                        JOIN zebraqueue z2 ON z2.biblio_auth_number = z1.biblio_auth_number
-                                        WHERE z1.done = 0
-                                        AND   z1.server = ?
-                                        AND   z2.done = 0
-                                        AND   z2.server = ?
-                                        AND   z1.operation = ?
-                                    ) d2
-                                 )
-                                ");
-        $sth->execute($server, $server, $op); # if we've deleted a record, any prior specialUpdates are void
-    } else {
-        my $sth = $dbh->prepare("UPDATE zebraqueue SET done = 1
-                                 WHERE server = ?
-                                 AND   operation = ?
-                                 AND   done = 0");
-        $sth->execute($server, $op); 
+    my $sth = $dbh->prepare("UPDATE zebraqueue SET done = 1
+                             WHERE server = ?
+                             AND done = 0");
+    $sth->execute($server);
+}
+
+sub mark_zebraqueue_batch_done {
+    my ($entries) = @_;
+
+    $dbh->{AutoCommit} = 0;
+    my $sth = $dbh->prepare("UPDATE zebraqueue SET done = 1 WHERE id = ?");
+    $dbh->commit();
+    foreach my $id (map { $_->{id} } @$entries) {
+        $sth->execute($id);
     }
+    $dbh->{AutoCommit} = 1;
 }
 
 sub select_all_records {
@@ -262,7 +251,7 @@ sub select_all_biblios {
     return $sth;
 }
 
-sub export_marc_records {
+sub export_marc_records_from_sth {
     my ($record_type, $sth, $directory, $as_xml, $noxml) = @_;
 
     my $num_exported = 0;
@@ -287,13 +276,41 @@ sub export_marc_records {
     return $num_exported;
 }
 
-sub generate_deleted_marc_records {
-    my ($record_type, $sth, $directory, $as_xml) = @_;
+sub export_marc_records_from_list {
+    my ($record_type, $entries, $directory, $as_xml, $noxml) = @_;
 
     my $num_exported = 0;
     open (OUT, ">:utf8 ", "$directory/exported_records") or die $!;
     my $i = 0;
-    while (my ($record_number) = $sth->fetchrow_array) {
+    my %found = ();
+    foreach my $record_number ( map { $_->{biblio_auth_number} }
+                                grep { !$found{ $_->{biblio_auth_number} }++ }
+                                @$entries ) {
+        print ".";
+        print "\r$i" unless ($i++ %100);
+        my ($marc) = get_corrected_marc_record($record_type, $record_number, $noxml);
+        if (defined $marc) {
+            # FIXME - when more than one record is exported and $as_xml is true,
+            # the output file is not valid XML - it's just multiple <record> elements
+            # strung together with no single root element.  zebraidx doesn't seem
+            # to care, though, at least if you're using the GRS-1 filter.  It does
+            # care if you're using the DOM filter, which requires valid XML file(s).
+            print OUT ($as_xml) ? $marc->as_xml_record() : $marc->as_usmarc();
+            $num_exported++;
+        }
+    }
+    print "\nRecords exported: $num_exported\n";
+    close OUT;
+    return $num_exported;
+}
+
+sub generate_deleted_marc_records {
+    my ($record_type, $entries, $directory, $as_xml) = @_;
+
+    my $num_exported = 0;
+    open (OUT, ">:utf8 ", "$directory/exported_records") or die $!;
+    my $i = 0;
+    foreach my $record_number (map { $_->{biblio_auth_number} } @$entries ) {
         print "\r$i" unless ($i++ %100);
         print ".";
 
@@ -348,21 +365,26 @@ sub get_raw_marc_record {
             $fetch_sth->execute($record_number);
             if (my ($blob) = $fetch_sth->fetchrow_array) {
                 $marc = MARC::Record->new_from_usmarc($blob);
+                $fetch_sth->finish();
             } else {
-                warn "failed to retrieve biblio $record_number";
+                return; # failure to find a bib is not a problem -
+                        # a delete could have been done before
+                        # trying to process a record update
             }
-            $fetch_sth->finish();
         } else {
             eval { $marc = GetMarcBiblio($record_number); };
             if ($@) {
-                warn "failed to retrieve biblio $record_number";
+                # here we do warn since catching an exception
+                # means that the bib was found but failed
+                # to be parsed
+                warn "error retrieving biblio $record_number";
                 return;
             }
         }
     } else {
         eval { $marc = GetAuthority($record_number); };
         if ($@) {
-            warn "failed to retrieve authority $record_number";
+            warn "error retrieving authority $record_number";
             return;
         }
     }
