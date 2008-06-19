@@ -70,8 +70,6 @@ my $check_member=$input->param('check_member');
 my $name_city=$input->param('name_city');
 my $nodouble=$input->param('nodouble');
 my $select_city=$input->param('select_city');
-my $zipcode=$input->param('zipcode');
-my $city=$input->param('city');
 my $nok=$input->param('nok');
 my $guarantorinfo=$input->param('guarantorinfo');
 my $step=$input->param('step') || 0;
@@ -171,9 +169,10 @@ if (($category_type eq 'C' || $category_type eq 'P') and $guarantorid ne '' ){
 }
 
 ###############test to take the right zipcode and city name ##############
-if ( $guarantorid eq ''){
-    $newdata{'city'}= $city;
-    $newdata{'zipcode'}=$zipcode; 
+if ($guarantorid eq '') {
+    # set only if parameter was passed from the form
+    $newdata{'city'}    = $input->param('city')    if defined($input->param('city'));
+    $newdata{'zipcode'} = $input->param('zipcode') if defined($input->param('zipcode'));
 }
 
 #builds default userid
