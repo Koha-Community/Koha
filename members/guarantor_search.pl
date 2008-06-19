@@ -81,6 +81,7 @@ if ($member ne ''){
 		categorycode => $results->[$i]{'categorycode'},
 		address => $results->[$i]{'address'},
 		city => $results->[$i]{'city'},
+		zipcode => $results->[$i]{'zipcode'},
 		branchcode => $results->[$i]{'branchcode'},
 		guarantorinfo =>$guarantorinfo,
 		#op
