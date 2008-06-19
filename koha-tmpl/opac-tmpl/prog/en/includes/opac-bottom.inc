@@ -7,12 +7,12 @@
 </div>
 <!-- TMPL_IF NAME="opaclanguagesdisplay" -->
 <!-- TMPL_IF NAME="languages_loop" -->
-        <div id="changelanguage" class="ft">
-        <ul id="i18nMenu" class="footermenu">
+        <div id="changelanguage" class="ft"><strong>Languages: </strong>
         <!-- TMPL_LOOP NAME="languages_loop" -->
             <!-- TMPL_IF NAME="group_enabled" -->
             <!-- TMPL_IF NAME="plural" -->
-            <li class="more"><a id="showlang" href="#"><!-- TMPL_IF NAME="native_description" --><!-- TMPL_VAR NAME="native_description" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="rfc4646_subtag" --><!-- /TMPL_IF --></a><div id="sublangs">
+            <a id="show<!-- TMPL_VAR NAME="rfc4646_subtag" -->" class="sublangs more" href="#"><!-- TMPL_IF NAME="native_description" --><!-- TMPL_VAR NAME="native_description" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="rfc4646_subtag" --><!-- /TMPL_IF --></a>
+			<div id="sub<!-- TMPL_VAR NAME="rfc4646_subtag" -->">
             <div class="bd"><ul>
             <!-- TMPL_LOOP NAME="sublanguages_loop" -->
 		<!-- TMPL_IF NAME="enabled" -->
@@ -23,22 +23,23 @@
                 <!-- /TMPL_IF -->
 		<!-- /TMPL_IF -->
             <!-- /TMPL_LOOP -->
-            </ul></div></div></li>
+            </ul>
+			</div>
+			</div>
 
             <!-- TMPL_ELSE -->
             <!-- TMPL_UNLESS NAME="one_language_enabled" -->
 	    	<!-- TMPL_IF NAME="group_enabled" -->
                 <!-- TMPL_IF NAME="current" -->
-                    <li><!-- TMPL_IF NAME="native_description" --><!-- TMPL_VAR NAME="native_description" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="rfc4646_subtag" --><!-- /TMPL_IF --></li>
+                    <!-- TMPL_IF NAME="native_description" --><!-- TMPL_VAR NAME="native_description" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="rfc4646_subtag" --><!-- /TMPL_IF -->
                 <!-- TMPL_ELSE -->
-                    <li><a href="/cgi-bin/koha/opac-changelanguage.pl?language=<!-- TMPL_VAR NAME="rfc4646_subtag" -->"><!-- TMPL_IF NAME="native_description" --><!-- TMPL_VAR NAME="native_description" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="rfc4646_subtag" --><!-- /TMPL_IF --></a></li>
+                    <a href="/cgi-bin/koha/opac-changelanguage.pl?language=<!-- TMPL_VAR NAME="rfc4646_subtag" -->"><!-- TMPL_IF NAME="native_description" --><!-- TMPL_VAR NAME="native_description" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="rfc4646_subtag" --><!-- /TMPL_IF --></a>
                 <!-- /TMPL_IF -->
 		<!-- /TMPL_IF -->
             <!-- /TMPL_IF -->
             <!-- /TMPL_UNLESS -->
-            <!-- /TMPL_IF -->
+            <!-- /TMPL_IF --><!-- TMPL_UNLESS NAME="__last__" --> | <!-- /TMPL_UNLESS -->
         <!-- /TMPL_LOOP -->
-        </ul>
         </div>
 <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
