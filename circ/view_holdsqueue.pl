@@ -39,7 +39,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { circulation => 1 },
+        flagsrequired   => { circulate => 1 },
         debug           => 1,
     }
 );
