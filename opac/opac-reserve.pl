@@ -58,7 +58,6 @@ my $itemtypes = GetItemTypes();
 
 # get biblionumber.....
 my $biblionumber = $query->param('biblionumber');
-my $bibdata;
 if (! $biblionumber) {
 	$template->param(message=>1,no_biblionumber=>1);
 	&get_out($query, $cookie, $template->output);
@@ -169,7 +168,6 @@ foreach my $itm (@items) {
     push @duedates, { date_due => format_date( $itm->{'date_due'} ) }
       if defined $itm->{'date_due'};
     $itm->{ $itm->{'publictype'} } = 1;
-	warn $itm->{'notforloan'};
     my $fee = GetReserveFee( undef, $borrowernumber, $itm->{'biblionumber'},
         'a', ( $itm->{'biblioitemnumber'} ) );
     $fee = sprintf "%.02f", $fee;
@@ -412,16 +410,7 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
         # If there is no loan, return and transfer, we show a checkbox.
         $item->{notforloan} = $item->{notforloan} || 0;
 
-	# FIXME: every library will define this differently
-        # An item is available only if:
-        if (
-            not defined $reservedate    # not reserved yet
-            and $issues->{'date_due'} eq ''         # not currently on loan
-            and not $item->{itemlost}   # not lost
-            and not $item->{notforloan} # not forbidden to loan
-            and $transfertwhen eq ''    # not currently on transfert
-          )
-        {
+        if (IsAvailableForItemLevelRequest($itemnumber)) {
             $item->{available} = 1;
         }
 

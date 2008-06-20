@@ -341,19 +341,9 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
         }
     }
 
-    # FIXME: every library will define this differently
-        # An item is available only if:
-        if (
-            not defined $reservedate    # not reserved yet
-            and $issues->{'date_due'} eq ''         # not currently on loan
-            and not $item->{itemlost}   # not lost
-            and not $item->{notforloan} # not forbidden to loan
-        and not $item->{cantreserve}
-            and $transfertwhen eq ''    # not currently on transfert
-          )
-        {
-            $item->{available} = 1;
-        }
+    if (IsAvailableForItemLevelRequest($itemnumber) and not $item->{cantreserve}) {
+        $item->{available} = 1;
+    }
 
     # FIXME: move this to a pm
     my $sth2 = $dbh->prepare("SELECT * FROM reserves WHERE borrowernumber=? AND itemnumber=? AND found='W'");

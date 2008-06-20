@@ -107,6 +107,8 @@ BEGIN {
         
         &CheckReserves
         &CancelReserve
+
+        &IsAvailableForItemLevelRequest
     );
 }    
 
@@ -1073,6 +1075,81 @@ sub GetReserveInfo {
 	my $data = $sth->fetchrow_hashref;
 	return $data;
 
+}
+
+=item IsAvailableForItemLevelRequest
+
+=over 4
+
+my $is_available = IsAvailableForItemLevelRequest($itemnumber);
+
+=back
+
+Checks whether a given item record is available for an
+item-level hold request.  An item is available if
+
+* it is not lost AND 
+* it is not damaged AND 
+* it is not withdrawn AND 
+* it is not marked as not for loan
+
+Whether or not the item is currently on loan is 
+also checked - if the AllowOnShelfHolds system preference
+is ON, an item can be requested even if it is currently
+on loan to somebody else.  If the system preference
+is OFF, an item that is currently checked out cannot
+be the target of an item-level hold request.
+
+Note that IsAvailableForItemLevelRequest() does not
+check if the staff operator is authorized to place
+a request on the item - in particular,
+this routine does not check IndependantBranches
+and canreservefromotherbranches.
+
+=cut
+
+sub IsAvailableForItemLevelRequest {
+    my $itemnumber = shift;
+   
+    my $item = GetItem($itemnumber);
+
+    # must check the notforloan setting of the itemtype
+    # FIXME - a lot of places in the code do this
+    #         or something similar - need to be
+    #         consolidated
+    my $dbh = C4::Context->dbh;
+    my $notforloan_query;
+    if (C4::Context->preference('item-level_itypes')) {
+        $notforloan_query = "SELECT itemtypes.notforloan
+                             FROM items
+                             JOIN itemtypes ON (itemtypes.itemtype = items.itype)
+                             WHERE itemnumber = ?";
+    } else {
+        $notforloan_query = "SELECT itemtypes.notforloan
+                             FROM items
+                             JOIN biblioitems USING (biblioitemnumber)
+                             JOIN itemtypes USING (itemtype)
+                             WHERE itemnumber = ?";
+    }
+    my $sth = $dbh->prepare($notforloan_query);
+    $sth->execute($itemnumber);
+    my $notforloan_per_itemtype = 0;
+    if (my ($notforloan) = $sth->fetchrow_array) {
+        $notforloan_per_itemtype = 1 if $notforloan;
+    }
+
+    my $available_per_item = 1;
+    $available_per_item = 0 if $item->{itemlost} or
+                               $item->{notforloan} or
+                               ($item->{damaged} and not C4::Context->preference('AllowHoldsOnDamagedItems')) or
+                               $item->{wthdrawn} or
+                               $notforloan_per_itemtype;
+
+    if (C4::Context->preference('AllowOnShelfHolds')) {
+        return $available_per_item;
+    } else {
+        return ($available_per_item and $item->{onloan}); 
+    }
 }
 
 =item _FixPriority
