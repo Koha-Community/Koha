@@ -145,12 +145,14 @@ sub get_template_and_user {
         $template->param( loggedinusername => $user );
         $template->param( sessionID        => $sessionID );
 
-		my ($pubshelves, $barshelves);
-		if (($pubshelves, $barshelves) = C4::Context->get_shelves_userenv()) {
-        	$template->param( barshelves     => scalar (@$barshelves));
+		my ($pubshelves, $barshelves) = C4::Context->get_shelves_userenv();
+		if (defined($pubshelves)) {
         	$template->param( pubshelves     => scalar (@$pubshelves));
-        	$template->param( barshelvesloop => $barshelves);
         	$template->param( pubshelvesloop => $pubshelves);
+		}
+		if (defined($barshelves)) {
+        	$template->param( barshelves     => scalar (@$barshelves));
+        	$template->param( barshelvesloop => $barshelves);
 		}
 
         $borrowernumber = getborrowernumber($user);
@@ -239,8 +241,8 @@ sub get_template_and_user {
 
         $template->param( sessionID        => $sessionID );
 		
-		my ($pubshelves);	# an anonymous user has no 'barshelves'...
-		if (($pubshelves) = C4::Context->get_shelves_userenv()) {
+		my ($pubshelves) = C4::Context->get_shelves_userenv();	# an anonymous user has no 'barshelves'...
+		if (defined(($pubshelves))) {
         	$template->param( pubshelves     => scalar (@$pubshelves));
         	$template->param( pubshelvesloop => $pubshelves);
 		}
