@@ -184,6 +184,7 @@ my %tabsysprefs;
     $tabsysprefs{ExtendedPatronAttributes}="Patrons";
     $tabsysprefs{AutoEmailOpacUser}="Patrons";
     $tabsysprefs{AutoEmailPrimaryAddress}="Patrons";
+    $tabsysprefs{EnhancedMessagingPreferences}="Patrons";
 
 # I18N/L10N
     $tabsysprefs{dateformat}="I18N/L10N";
@@ -207,6 +208,7 @@ my %tabsysprefs;
     $tabsysprefs{sortbynonfiling}="Searching";
     $tabsysprefs{QueryAutoTruncate}="Searching";
     $tabsysprefs{QueryRemoveStopwords}="Searching";
+    $tabsysprefs{AdvancedSearchTypes}="Searching";
 
 # EnhancedContent
    $tabsysprefs{AmazonContent}="EnhancedContent";
@@ -216,6 +218,7 @@ my %tabsysprefs;
    $tabsysprefs{AmazonSimilarItems}="EnhancedContent";
    $tabsysprefs{OPACAmazonContent}="EnhancedContent";
    $tabsysprefs{OPACAmazonSimilarItems}="EnhancedContent";
+
 # Baker & Taylor 
    $tabsysprefs{BakerTaylorBookstoreURL} = 'EnhancedContent';
    $tabsysprefs{BakerTaylorEnabled}      = 'EnhancedContent';
@@ -238,6 +241,7 @@ my %tabsysprefs;
    $tabsysprefs{TagsShowOnList}         = 'EnhancedContent';
    $tabsysprefs{TagsModeration}         = 'EnhancedContent';
    $tabsysprefs{GoogleJackets} 			= 'EnhancedContent';
+   $tabsysprefs{AuthorisedValueImages}  = "EnhancedContent";
 
 # OPAC
     $tabsysprefs{BiblioDefaultView}="OPAC";
@@ -253,7 +257,7 @@ my %tabsysprefs;
     $tabsysprefs{opacuserjs}="OPAC";
     $tabsysprefs{SubscriptionHistory}="OPAC";
     $tabsysprefs{opacheader}="OPAC";
-
+    $tabsysprefs{noOPACUserLogin}="OPAC";
     $tabsysprefs{hideBiblioNumber}="OPAC";
     $tabsysprefs{OPACDisplayExtendedSubInfo}="OPAC";
     $tabsysprefs{OpacMainUserBlock}="OPAC";
@@ -287,6 +291,9 @@ my %tabsysprefs;
     $tabsysprefs{kohaspsuggest} = "OPAC";
     $tabsysprefs{OpacRenewalAllowed} = "OPAC";
     $tabsysprefs{OPACItemHolds} = "OPAC";
+    $tabsysprefs{OPACGroupResults}="OPAC";
+    $tabsysprefs{XSLTDetailsDisplay}="OPAC";
+    $tabsysprefs{XSLTResultsDisplay}="OPAC";
 
 # LOGFeatures
     $tabsysprefs{CataloguingLog}  = "Logs";
