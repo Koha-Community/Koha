@@ -142,6 +142,7 @@ for my $itm (@items) {
 	$itemfields{ccode} = 1 if($itm->{ccode});
 	$itemfields{enumchron} = 1 if($itm->{enumchron});
 	$itemfields{copynumber} = 1 if($itm->{copynumber});
+	$itemfields{itemnotes} = 1 if($itm->{itemnotes});
 
      # walk through the item-level authorised values and populate some images
      my $item_authorised_value_images = C4::Items::get_authorised_value_images( C4::Items::get_item_authorised_values( $itm->{'itemnumber'} ) );
@@ -184,6 +185,7 @@ my $subtitle         = C4::Biblio::get_koha_field_from_marc('bibliosubtitle', 's
                      itemdata_ccode          => $itemfields{ccode},
                      itemdata_enumchron      => $itemfields{enumchron},
                      itemdata_copynumber     => $itemfields{copynumber},
+                     itemdata_itemnotes          => $itemfields{itemnotes},
                      authorised_value_images => $biblio_authorised_value_images,
                      subtitle                => $subtitle,
     );

@@ -248,6 +248,7 @@
 	    <th>Serial Data</th>
             <th>Published</th><!-- /TMPL_IF -->
             <th>Status</th>
+			<!-- TMPL_IF NAME="itemdata_itemnotes" --><th>Notes</th><!-- /TMPL_IF -->
             <th>Date Due</th>
         </tr>
         <!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
@@ -288,6 +289,7 @@
                         <!-- /TMPL_IF -->
                     <!-- /TMPL_IF -->
                 <!-- /TMPL_IF --></td>
+				<!-- TMPL_IF NAME="itemdata_itemnotes" --><td><!-- TMPL_VAR NAME="itemnotes" --></td><!-- /TMPL_IF -->
             <td><!-- TMPL_VAR NAME="datedue" --></td>
             <!-- TMPL_IF NAME="type" -->
             <td><a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemtype" -->">Fix Itemtype</a></td>
