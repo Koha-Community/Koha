@@ -572,6 +572,49 @@ sub load_sql {
     return $error;
 }
 
+=head2 get_file_path_from_name
+
+=over 4
+
+my $filename = $installer->get_file_path_from_name('script_name');
+
+=back
+
+searches through the set of known SQL scripts and finds the fully
+qualified path name for the script that mathches the input.
+
+returns undef if no match was found.
+
+
+=cut
+
+sub get_file_path_from_name {
+    my $self = shift;
+    my $partialname = shift;
+
+    my $lang = 'en'; # FIXME: how do I know what language I want?
+    
+    my ($defaulted_to_en, $list) = $self->sample_data_sql_list($lang);
+    # warn( Data::Dumper->Dump( [ $list ], [ 'list' ] ) );
+
+    my @found;
+    foreach my $frameworklist ( @$list ) {
+        push @found, grep { $_->{'fwkfile'} =~ /$partialname$/ } @{$frameworklist->{'frameworks'}};
+    }
+
+    # warn( Data::Dumper->Dump( [ \@found ], [ 'found' ] ) );
+    if ( 0 == scalar @found ) {
+        return;
+    } elsif ( 1 < scalar @found ) {
+        warn "multiple results found for $partialname";
+        return;
+    } else {
+        return $found[0]->{'fwkfile'};
+    }
+
+}
+
+
 =head1 AUTHOR
 
 C4::Installer is a refactoring of logic originally from installer/installer.pl, which was

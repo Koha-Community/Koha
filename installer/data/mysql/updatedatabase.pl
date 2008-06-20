@@ -22,6 +22,7 @@ use DBI;
 use Getopt::Long;
 # Koha modules
 use C4::Context;
+use C4::Installer;
 
 use MARC::Record;
 use MARC::File::XML ( BinaryEncoding => 'utf8' );
@@ -1762,6 +1763,30 @@ INSERT INTO `systempreferences`
 VALUES
 ('EnhancedMessagingPreferences',0,'If ON, allows patrons to select to receive additional messages about items due or nearly due.','','YesNo')
 END_SQL
+
+    $dbh->do( <<'END_SQL');
+INSERT INTO `letter`
+(module, code, name, title, content)
+VALUES
+('circulation','DUE','Item Due Reminder','Item Due Reminder','Dear <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nThe following item is now due:\r\n\r\n<<biblio.title>> by <<biblio.author>>'),
+('circulation','DUEDGST','Item Due Reminder (Digest)','Item Due Reminder','You have <<count>> items due'),
+('circulation','PREDUE','Advance Notice of Item Due','Advance Notice of Item Due','Dear <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nThe following item will be due soon:\r\n\r\n<<biblio.title>> by <<biblio.author>>'),
+('circulation','PREDUEDGST','Advance Notice of Item Due (Digest)','Advance Notice of Item Due','You have <<count>> items due soon'),
+('circulation','EVENT','Upcoming Library Event','Upcoming Library Event','Dear <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nThis is a reminder of an upcoming library event in which you have expressed interest.');
+END_SQL
+
+    my @sql_scripts = ( 
+        'installer/data/mysql/en/mandatory/message_transport_types.sql',
+        'installer/data/mysql/en/optional/sample_notices_message_attributes.sql',
+        'installer/data/mysql/en/optional/sample_notices_message_transports.sql',
+    );
+
+    my $installer = C4::Installer->new();
+    foreach my $script ( @sql_scripts ) {
+        my $full_path = $installer->get_file_path_from_name($script);
+        my $error = $installer->load_sql($full_path);
+        warn $error if $error;
+    }
 
     print "Upgrade to $DBversion done (Table structure for table `message_queue`, `message_transport_types`, `message_attributes`, `message_transports`, `borrower_message_preferences`, and `borrower_message_transport_preferences`.  Alter `borrowers` table,\n";
     SetVersion ($DBversion);
