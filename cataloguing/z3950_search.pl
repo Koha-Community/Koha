@@ -63,6 +63,7 @@ my $oldbiblio;
 my $errmsg;
 my @serverloop = ();
 my @serverhost;
+my @servername;
 my @breeding_loop = ();
 
 my $DEBUG = 0;    # if set to 1, many debug message are send on syslog.
@@ -146,6 +147,7 @@ warn "query ".$query  if $DEBUG;
         my $sth = $dbh->prepare("select * from z3950servers where id=?");
         $sth->execute($servid);
         while ( $server = $sth->fetchrow_hashref ) {
+            warn "serverinfo ".join(':',%$server) if $DEBUG;
             my $noconnection = 0;
             my $option1      = new ZOOM::Options();
             $option1->option( 'async' => 1 );
@@ -163,6 +165,7 @@ warn "query ".$query  if $DEBUG;
               || $DEBUG
               && warn( "" . $oConnection[$s]->errmsg() );
             $serverhost[$s] = $server->{host};
+            $servername[$s] = $server->{name};
             $encoding[$s]   = ($server->{encoding}?$server->{encoding}:"iso-5426");
             $s++;
         }    ## while fetch
@@ -212,40 +215,45 @@ warn "query ".$query  if $DEBUG;
                   )
                 {
                     my $rec = $oResult[$k]->record($i);
-                    my $marcrecord;
-                    $marcdata   = $rec->raw();
+                    if ($rec) {
+                        my $marcrecord;
+                        $marcdata   = $rec->raw();
 
-                    my ($charset_result, $charset_errors);
-                    ($marcrecord, $charset_result, $charset_errors) = 
-                        MarcToUTF8Record($marcdata, C4::Context->preference('marcflavour'), $encoding[$k]);
+                        my ($charset_result, $charset_errors);
+                        ($marcrecord, $charset_result, $charset_errors) = 
+                          MarcToUTF8Record($marcdata, C4::Context->preference('marcflavour'), $encoding[$k]);
 ####WARNING records coming from Z3950 clients are in various character sets MARC8,UTF8,UNIMARC etc
 ## In HEAD i change everything to UTF-8
 # In rel2_2 i am not sure what encoding is so no character conversion is done here
 ##Add necessary encoding changes to here -TG
-                    my $oldbiblio = TransformMarcToKoha( $dbh, $marcrecord, "" );
-                    $oldbiblio->{isbn}   =~ s/ |-|\.//g,
-                      $oldbiblio->{issn} =~ s/ |-|\.//g,
-                      my (
-                        $notmarcrecord, $alreadyindb, $alreadyinfarm,
-                        $imported,      $breedingid
-                      )
-                      = ImportBreeding( $marcdata, 2, $serverhost[$k], $encoding[$k], $random, 'z3950' );
-                    my %row_data;
-                    if ( $i % 2 ) {
-                        $toggle = 1;
-                    }
-                    else {
-                        $toggle = 0;
-                    }
-                    $row_data{toggle}       = $toggle;
-                    $row_data{server}       = $serverhost[$k];
-                    $row_data{isbn}         = $oldbiblio->{isbn};
-                    $row_data{lccn}         = $oldbiblio->{lccn};
-                    $row_data{title}        = $oldbiblio->{title};
-                    $row_data{author}       = $oldbiblio->{author};
-                    $row_data{breedingid}   = $breedingid;
-                    $row_data{biblionumber} = $biblionumber;
-                    push( @breeding_loop, \%row_data );
+                        my $oldbiblio = TransformMarcToKoha( $dbh, $marcrecord, "" );
+                        $oldbiblio->{isbn}   =~ s/ |-|\.//g,
+                          $oldbiblio->{issn} =~ s/ |-|\.//g,
+                          my (
+                            $notmarcrecord, $alreadyindb, $alreadyinfarm,
+                            $imported,      $breedingid
+                          )
+                          = ImportBreeding( $marcdata, 2, $serverhost[$k], $encoding[$k], $random, 'z3950' );
+                        my %row_data;
+                        if ( $i % 2 ) {
+                            $toggle = 1;
+                        }
+                        else {
+                            $toggle = 0;
+                        }
+                        $row_data{toggle}       = $toggle;
+                        $row_data{server}       = $servername[$k];
+                        $row_data{isbn}         = $oldbiblio->{isbn};
+                        $row_data{lccn}         = $oldbiblio->{lccn};
+                        $row_data{title}        = $oldbiblio->{title};
+                        $row_data{author}       = $oldbiblio->{author};
+                        $row_data{breedingid}   = $breedingid;
+                        $row_data{biblionumber} = $biblionumber;
+                        push( @breeding_loop, \%row_data );
+		            
+                    } else {
+                        push(@breeding_loop,{'toggle'=>($i % 2)?1:0,'server'=>$servername[$k],'title'=>join(': ',$oConnection[$k]->error_x()),'breedingid'=>-1,'biblionumber'=>-1});
+                    } # $rec
                 }    # upto 5 results
             }    #$numresults
         }
@@ -253,7 +261,7 @@ warn "query ".$query  if $DEBUG;
     $numberpending = $nremaining - 1;
     $template->param(
         breeding_loop => \@breeding_loop,
-        server        => $serverhost[$k],
+        server        => $servername[$k],
         numberpending => $numberpending,
     );
     
