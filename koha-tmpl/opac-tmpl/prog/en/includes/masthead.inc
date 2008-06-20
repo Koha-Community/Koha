@@ -93,6 +93,8 @@
 			<!-- TMPL_UNLESS NAME="private" --><li class="yuimenuitem"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelfnumber" -->"><!-- TMPL_VAR NAME="shelfname"  ESCAPE="html" --></a></li><!-- /TMPL_UNLESS -->
 			<!-- /TMPL_LOOP -->
 			</ul>   
+		<!-- TMPL_ELSE -->
+			No Public Lists
 		<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="opacuserlogin" -->
 <!-- TMPL_IF NAME="loggedinusername" -->
@@ -103,6 +105,8 @@
 			<!-- TMPL_IF NAME="private" --><li class="yuimenuitem"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelfnumber" -->"><!-- TMPL_VAR NAME="shelfname"  ESCAPE="html" --></a></li><!-- /TMPL_IF -->
 			<!-- /TMPL_LOOP -->
 			</ul>   
+		<!-- TMPL_ELSE -->
+			No Private Lists
 		<!-- /TMPL_IF -->
 
 			<ul class="second-of-type">
