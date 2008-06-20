@@ -83,7 +83,7 @@ my $gst          = $input->param('gst');
 my @results = SearchOrder( $search, $supplierid, $biblionumber, $catview );
 my $count   = scalar @results;
 
-my @booksellers = GetBookSeller( $results[0]->{'booksellerid'} );
+my $bookseller = GetBookSellerFromId( $results[0]->{'booksellerid'} );
 
 my $date = $results[0]->{'entrydate'};
 
@@ -177,7 +177,7 @@ if ( $count == 1 ) {
         freight               => $freight,
         gst                   => $gst,
         catview               => ( $catview ne 'yes' ? 1 : 0 ),
-        name                  => $booksellers[0]->{'name'},
+        name                  => $bookseller->{'name'},
         date                  => format_date($date),
         title                 => $results[0]->{'title'},
         author                => $results[0]->{'author'},
@@ -216,7 +216,7 @@ else {
         loop                    => \@loop,
         date                    => format_date($date),
         datereceived            => $datereceived->output(),
-        name                    => $booksellers[0]->{'name'},
+        name                    => $bookseller->{'name'},
         supplierid              => $supplierid,
         invoice                 => $invoice,
     );

@@ -78,8 +78,6 @@ my $datefrom=$input->param('datefrom');
 my $dateto=$input->param('dateto');
 my $resultsperpage = $input->param('resultsperpage');
 
-my @booksellers=GetBookSeller($supplierid);
-my $count = scalar @booksellers;
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/parcels.tmpl",
@@ -91,9 +89,10 @@ my ($template, $loggedinuser, $cookie)
 });
 
 
+my $bookseller=GetBookSellerFromId($supplierid);
 $resultsperpage = 20 unless ($resultsperpage);
 my @results =GetParcels($supplierid, $order, $code,$datefrom,$dateto);
-$count = scalar @results;
+my $count = scalar @results;
 
 # multi page display gestion
 $startfrom=0 unless ($startfrom);
@@ -136,11 +135,6 @@ my @loopres;
 
 my $hilighted=0;
 for (my $i=$startfrom;$i<=($startfrom+$resultsperpage-1<$count-1?$startfrom+$resultsperpage-1:$count-1);$i++){
-### startfrom: $startfrom
-### resultsperpage: $resultsperpage
-### count: $count
-### code: $results[$i]->{booksellerinvoicenumber}
-### datereceived: $results[$i]->{datereceived}
 
     my %cell;
     $cell{number}=$i+1;
@@ -159,7 +153,7 @@ for (my $i=$startfrom;$i<=($startfrom+$resultsperpage-1<$count-1?$startfrom+$res
 $template->param(searchresults=>\@loopres, count=>$count) if ($count);
 $template->param(orderby=>$order, filter=>$code, datefrom=>$datefrom,dateto=>$dateto, resultsperpage=>$resultsperpage);
 $template->param(
-        name => $booksellers[0]->{'name'},
+        name => $bookseller->{'name'},
         DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
 		supplierid => $supplierid,
 	    GST => C4::Context->preference("gist"),
