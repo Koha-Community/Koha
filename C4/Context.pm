@@ -77,6 +77,7 @@ use DBI;
 use ZOOM;
 use XML::Simple;
 use C4::Boolean;
+use C4::Debug;
 
 =head1 NAME
 
@@ -911,7 +912,7 @@ sub set_shelves_userenv ($$) {
 sub get_shelves_userenv () {
 	my $active;
 	unless ($active = $context->{userenv}->{$context->{activeuser}}) {
-		warn "get_shelves_userenv cannot retrieve context->{userenv}->{context->{activeuser}}";
+		$debug and warn "get_shelves_userenv cannot retrieve context->{userenv}->{context->{activeuser}}";
 		return undef;
 	}
 	my $pubshelves = $active->{pubshelves} or undef;
