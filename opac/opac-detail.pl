@@ -28,6 +28,7 @@ use C4::Serials;    #uses getsubscriptionfrom biblionumber
 use C4::Output;
 use C4::Biblio;
 use C4::Items;
+use C4::Circulation;
 use C4::Tags qw(get_tags);
 use C4::Dates qw/format_date/;
 use C4::XISBN qw(get_xisbns get_biblionumber_from_isbn get_biblio_from_xisbn);
@@ -120,6 +121,7 @@ if (C4::Context->preference("RequestOnOpac")) {
 my $biblio_authorised_value_images = C4::Items::get_authorised_value_images( C4::Biblio::get_biblio_authorised_values( $biblionumber ) );
 
 my $norequests = 1;
+my $branches = GetBranches();
 my %itemfields;
 for my $itm (@items) {
      $norequests = 0 && $norequests
@@ -151,6 +153,13 @@ for my $itm (@items) {
          $itm->{'lostimagelabel'} = $lostimageinfo->{ 'label' };
      }
 
+    
+     my ( $transfertwhen, $transfertfrom, $transfertto ) = GetTransfers($itm->{itemnumber});
+     if ( $transfertwhen ne '' ) {
+        $itm->{transfertwhen} = format_date($transfertwhen);
+        $itm->{transfertfrom} = $branches->{$transfertfrom}{branchname};
+        $itm->{transfertto}   = $branches->{$transfertto}{branchname};
+     }
 }
 
 ## get notes and subjects from MARC record
@@ -289,7 +298,6 @@ $template->param( OpenOPACShelfBrowser => 1) if $starting_itemnumber;
 my ($starting_cn_sort, $starting_homebranch, $starting_location);
 my $sth_get_cn_sort = $dbh->prepare("SELECT cn_sort,homebranch,location from items where itemnumber=?");
 $sth_get_cn_sort->execute($starting_itemnumber);
-my $branches = GetBranches();
 while (my $result = $sth_get_cn_sort->fetchrow_hashref()) {
     $starting_cn_sort = $result->{'cn_sort'};
     $starting_homebranch->{code} = $result->{'homebranch'};
