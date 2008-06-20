@@ -207,7 +207,7 @@ if ( $quantity ne '0' ) {
             $biblionumber,  $basketno, $booksellerid, $loggedinuser,
             $notes,   $bookfund, $bibitemnum,   $rrp,
             $ecost,   $gst,      $budget,       $cost,
-            $invoice, $sort1,    $sort2,		$purchaseorder
+            $invoice, $sort1,    $sort2,		$purchaseorder, $branch
         );
     }
     else { # else, it's a new line

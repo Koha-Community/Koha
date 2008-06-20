@@ -471,7 +471,7 @@ sub NewOrder {
 &ModOrder($title, $ordernumber, $quantity, $listprice,
     $biblionumber, $basketno, $supplier, $who, $notes,
     $bookfundid, $bibitemnum, $rrp, $ecost, $gst, $budget,
-    $unitprice, $booksellerinvoicenumber);
+    $unitprice, $booksellerinvoicenumber, $branchcode);
 
 Modifies an existing order. Updates the order with order number
 C<$ordernumber> and biblionumber C<$biblionumber>. All other arguments
@@ -479,7 +479,7 @@ update the fields with the same name in the aqorders table of the Koha
 database.
 
 Entries with order number C<$ordernumber> in the aqorderbreakdown
-table are also updated to the new book fund ID.
+table are also updated to the new book fund ID or branchcode.
 
 =back
 
@@ -490,9 +490,10 @@ sub ModOrder {
         $title,      $ordnum,   $quantity, $listprice, $bibnum,
         $basketno,   $supplier, $who,      $notes,     $bookfund,
         $bibitemnum, $rrp,      $ecost,    $gst,       $budget,
-        $cost,       $invoice,  $sort1,    $sort2,     $purchaseorder
+        $cost,       $invoice,  $sort1,    $sort2,     $purchaseorder, $branchcode
       )
       = @_;
+ # FIXME : Refactor to pass a hashref instead of fifty params.
     my $dbh = C4::Context->dbh;
     my $query = "
         UPDATE aqorders
@@ -510,7 +511,6 @@ sub ModOrder {
 		$ordnum,   $bibnum
     );
     $sth->finish;
-    my $branchcode;  
     $query = "
         UPDATE aqorderbreakdown
         SET    bookfundid=?,branchcode=?
@@ -518,8 +518,8 @@ sub ModOrder {
     ";
     $sth = $dbh->prepare($query);
 
-    unless ( $sth->execute( $bookfund,$branchcode, $ordnum ) )
-    {    # zero rows affected [Bug 734]
+    my $rv = $sth->execute( $bookfund,$branchcode, $ordnum );
+    unless($rv && ( $rv ne '0E0' ))   {    # zero rows affected [Bug 734]
         my $query ="
             INSERT INTO aqorderbreakdown
                      (ordernumber,branchcode,bookfundid)

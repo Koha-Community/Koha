@@ -162,6 +162,7 @@ foreach my $thisbranch ( sort keys %$branches ) {
         value      => $thisbranch,
         branchname => $branches->{$thisbranch}->{'branchname'},
     );
+	$row{'selected'} = 1 if( $thisbranch eq $data->{branchcode}) ;
     push @branchloop, \%row;
 }
 $template->param( branchloop => \@branchloop , itypeloop => \@itemtypesloop );
