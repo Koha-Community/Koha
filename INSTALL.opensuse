@@ -1,0 +1,2686 @@
+====== Installation Guide for Installing Koha 3 on openSUSE 11 ======
+
+Original version created by Ricardo Dias Marques - koha@ricmarques.net
+
+No liability for the contents of this document can be accepted.
+
+Feedback/bug reports: Koha Developer's List: 
+
+http://lists.koha.org/mailman/listinfo/koha-devel
+
+This document last modified: 20 June 2008
+
+
+===== Installation Instructions =====
+
+This document was prepared in order to help you discover (or test) Koha (Integrated Library System).
+
+The installation of Linux system described below is a basic, it is not designed for a production server (e.g., security, load balancing ... are not described).
+
+This document describes the different stages of installing the software Koha 3 on the openSUSE 11 Linux distribution 
+in a "new" computer, that is, a computer that will have its hard disk contents COMPLETELY ERASED to install openSUSE and Koha!
+
+In this example, it's assumed that your server gets an IP address by DHCP that will be later changed to 192.168.0.2. 
+
+You'll have to change this to the real IP address that your machine should get (or use DHCP, if that's the case).
+
+This tutorial assumes a Koha installation that does NOT use Zebra ("Zebra is a high-performance, general-purpose structured text indexing and retrieval engine" - http://www.indexdata.dk/zebra/). Additional steps would be required to set up Zebra for Koha.
+
+==== LINUX System Installation ====
+
+
+Download openSUSE 11 DVD at: 
+http://software.opensuse.org/
+
+Place the DVD in the drive and restart the machine.
+
+
+After the "Welcome" screen, you'll get a First menu, with the following options:
+
+----
+Boot from Hard Disk 
+
+Installation
+
+Repair Installed System
+
+Rescue System
+
+Firmware Test 
+
+Memory Test
+----
+
+Choose "Installation" (second command)
+
+
+=== "Initializing" screen ===
+
+(Dialog box appears saying "Probing Mouse")
+
+
+=== "Welcome" screen ===
+
+You'll see two Dropdown Lists: "Language" and "Keyboard Layout"
+
+This depends of your place and preference, naturally. 
+I live in Portugal, so I want a Portuguese Keyboard Layout but I prefer an Operating System in English. 
+So I leave the default option selected for "Language" (English (US)) 
+and change "Keyboard Layout" to "Portuguese".
+
+Check the "I Agree to the License Terms" checkbox (under the "License Agreement" textbox).
+
+Click the "Next" button.
+
+
+
+=== "System Probing" screen ===
+
+
+[just watch it...]
+
+
+
+=== "Installation Mode" screen ===
+
+
+Leave "New Installation" radio button checked
+
+Click the "Next" button
+
+
+=== "Initializing" screen ===
+
+
+[just watch it...]
+
+
+
+=== "Clock and Time Zone" screen ===
+
+
+Again, I live in Portugal, so I select the following options:
+
+"Region" listbox: click on "Europe"
+
+"Time Zone" listbox: click on "Portugal"
+
+"Hardware Clock Set To" dropdown list: I leave "UTC" selected
+
+Click the "Next" button
+
+
+=== "Desktop Selection" screen ===
+
+
+You should see four radio buttons: "GNOME", "KDE 4.0", "KDE 3.5" and "Other".
+
+Click on the "Other" radio button.
+
+Three radio buttons should become visible then:
+
+"XFCE Desktop"
+
+"Minimal X Window"
+
+"Minimal Server Selection (Text Mode)"
+
+click on this last "Minimal Server Selection (Text Mode)" radio button.
+
+Click the "Next" button
+
+
+
+=== "Suggested Partitioning" screen ===
+
+
+Partitioning choices are really up to you. In this example, I will create a 9 GB / ("root") partition and a 712 Swap Megs partition.
+
+So, to do this I click on the "Create Partition Setup..." button.
+
+=== "Preparing Hard Disk: Step 1" screen ===
+
+
+I click on the first radio button:
+"1: 1.IDE 10.0 GB,/dev/sda"
+
+I click the "Next" button
+
+
+=== "Preparing Hard Disk: Step 2" screen ===
+
+
+I uncheck the "Propose separate Home Partition" checkbox.
+
+I click the "Next" button.
+
+This takes me back to the Suggested Partitioning screen.
+
+
+=== "Suggested Partitioning" screen ===
+
+
+In my case, I now have this:
+
+- Create swap partition /dev/sda1 (760.8 MB)
+
+- Create root partition /dev/sda2 (9.2 GB with ext3)
+
+I click the "Next" button.
+
+
+=== "Create New User" screen ===
+
+
+I use this screen to create a regular user.
+
+User's full name: Your Full name (e.g: John Smith)
+
+Username: Your preferred username (e.g.: jsmith)
+
+Password:
+
+Confirm Password:
+
+I uncheck the "Use this password for System Administrator" checkbox.
+
+I uncheck the "Automatic Login" checkbox.
+
+I click the "Next" button (you may be "nagged" with a dialog box by the YAST2 installer warning that you selected a password that it considers to be too simple. Click "Yes" to keep the password you chose, or "No" to change it).
+
+
+=== "Installation Settings" screen ===
+
+
+Scroll down to the "User Settings" section and click on the "Root Password" link to change the root password.
+
+
+=== Password for the System Administrator "root" screen ===
+
+
+Enter your password (in the "Password for root User" text box) and repeat it (in the "Confirm Password" text box).
+
+Click the "Accept" button to return to the "Installation Settings" screen.
+
+
+=== "Installation Settings" screen ===
+
+
+Click on the "Software" link
+
+
+=== "Software Selection and System Tasks" screen ===
+
+
+Scroll down the listbox (that begins with the "Base Technologies" group) until you find the "Server Functions" group.
+
+In that "Server Functions" group click on the "Web and LAMP Server" checkbox (to check it)
+
+Click on the "OK" button to return to "Installation Settings"
+
+
+
+=== "Installation Settings" screen ===
+
+
+Click on the "Install" button (placed in the same place where usually appear the "Accept" or "Next" button).
+
+You should see a "Confirm Installation" dialog box. Click on the "Install" button of that dialog box.
+
+
+=== "Preparing Your Hard Disk" screen ===
+
+
+[just watch it...]
+
+
+=== "Deploying Installation Images" screen ===
+
+
+[just watch it... ]
+
+
+
+=== "Package Installation" screen ===
+
+
+
+[just watch it... or click on the "Details" tab if you want to see what packages are being installed.]
+
+
+=== "Finishing Basic Installation" screen ===
+
+
+[just watch it... ]
+
+After some time you'll see a dialog box warning that the system will reboot in 10 seconds.
+
+
+
+=== After reboot ===
+
+
+Leave "Boot from Hard Disk" selected and click ENTER
+
+You'll have to wait a while (or press ESC to see what the operating system is "doing"). After some moments, you'll 
+be taken to the "Yast2 - installation @ Linux" screen (a text installer).
+
+
+=== "Writing the System Configuration" screen ===
+
+
+[just watch it... ]
+
+After a while you'll see a prompt:
+|--------------------
+Welcome to openSUSE 11.0 (i586) - Kernel 2.6.25.4-8-default (tty1)
+
+linux-3r10 login:
+|--------------------
+
+You may now login with your "root" user.
+
+
+
+==== Changing the Hostname and Domain Name ====
+ 
+
+I want to change my hostname, domain name and switch from DHCP to a Static IP address.
+
+So, the first thing I do, is to run yast (the setup tool) by entering the yast command in the command prompt:
+|--------------------
+linux-3r10:~ # yast
+|--------------------
+
+Yast should appear.
+
+On the listbox of the left hand side select "Network Devices" (press TAB to turn focus on that listbox, and press the down arrow key several times to reach it). Then, on the listbox of the righ hand side, select "Network Settings" (you'll have again to press TAB to turn focus on that listbox, and press the down arrow key several times to reach it).
+
+Press the ENTER key.
+
+
+=== "Initializing Network Configuration" screen ===
+
+
+[just watch it...]
+
+=== "Network Settings" screen ===
+
+
+I want to disable IPv6, so I first go to the "Global Options" section (by pushing the key combination ALT+G to press the "G" letter in Global Options that is highlighted). In the next screen, I push ALT+E to uncheck the "Enable IPv6" checkbox. I'll get a dialog box with a Warning saying that "To apply this change a reboot is needed.". I just press ENTER on that dialog box, but I do NOT reboot (at least not yet). 
+
+Then I press Alt+O to go to the "Overview" (still in "Network Settings"). Then I press ALT+i to "Edit" the information for this Network Card.
+
+=== "Network Card Setup" screen ===
+
+
+I check the "Statically assigned IP Address" checkbox, and enter the following info for "IP Address", "Subnet Mask" and "Hostname" (you should use the values defined by your network administrator):
+
+IP Address: 192.168.0.2
+Subnet Mask: 255.255.255.0
+Hostname: myhost
+
+Then I press ALT+N to click the "Next" button. After a few seconds, I will be taken again to the "Network Settings" screen.
+
+
+=== "Network Settings" screen ===
+
+
+I press ALT+s to go to the "Hostname/DNS" screen.
+
+I check the "Change /etc/resolv.conf manually" checkbox and enter the IP Address of my DNS Server in the "Name Server 1" text box:
+
+
+Name Server 1: 192.168.0.1
+
+Then I press ALT+u to go to the "Routing" configuration.
+
+=== "Routing" screen ===
+
+
+In the "Default Gateway" text box, I enter the IP Address of my Default Gateway:
+
+Default Gateway: 192.168.0.1
+
+Then I press ALT+F to Finish
+
+
+
+=== "Saving Network Configuration" screen ===
+
+
+[just watch it...]
+
+
+After a few seconds, you should be taken back to the "YaST2 Control Center" screen.
+
+
+
+==== Enabling access to SSH (Secure Shell) and Apache2 (Web Server) ====
+
+I want to administer remotely this server with a SSH (Secure Shell) client. So, while still in the "YaST2 Control Center, I will enable SSH in the Firewall (running by default). In the listbox of the left hand side, I select "Security and Users" and then, on the listbox of the right side, I select "Firewall" (first option) and press the ENTER key.
+
+----
+
+"yast2 - firewall" screen
+
+
+In the list box of the left side, I select "Allowed Services" and press ENTER.
+
+Then, on the "Service to Allow" dropdown list (on the right side), I leave the "Apache 2" option selected and press "ALt+A" to add it. After adding Apache, I'll press "Alt+S" to see the available services to add. Then, I use the down key in that list until I see "Secure Shell Server" and press ENTER to select it. This will close that list and put "Secure Shell Server" as the selected option. I'll press Alt+A again to add it.
+
+Then I click on ALT+N click on the "Next" button.
+
+----
+
+"Firewall Configuration: Summary" screen
+
+Click on the "Finish" button.
+
+When you get sent back to the "YaST2 Control Center" screen, press ALT+Q to Quit Yast.
+
+
+This time seems to be a good time to reboot your server:
+|--------------------
+linux-3r10:~ # reboot
+|--------------------
+After rebooting the machine, if you wish, you may go to another machine and connect to your newly created server using a SSH (Secure Shell) client. In Windows, I like to use putty to do ssh sessions to my Linux servers.
+
+==== Configure Software Repositories ===
+
+Later on, you will need to add some software packages from the openSUSE 11 Distribution. Some of those packages are NOT available in the openSUSE 11.0 DVD (libyaz-devel is one of those packages). So, we'll now set up openSUSE to add the "Official openSUSE 11.0 OSS (Open Source Software) Repository" using yast.
+
+First, run the yast command in the Linux command line (shell):
+
+|--------------------
+# yast
+|--------------------
+
+Inside yast, select Software -> Software Repositories
+
+=== "Configured Software Repositories" screen ===
+
+Click on the "Add" button.
+
+
+=== "Media type" screen ===
+
+
+Click on the Specify URL... radio button.
+
+Click on the "Next" button.
+
+
+=== "Repository URL" screen ===
+
+
+In the "Repository Name" textbox enter some descriptive text like:
+openSUSE 11.0 Official OSS Repository
+
+In the "URL" textbox enter:
+http://download.opensuse.org/distribution/11.0/repo/oss/
+
+
+Click on the "Next" button.
+
+
+=== "License Agreement" screen ===
+
+
+Check the "Yes, I Agree to the License Agreement" radio button.
+
+Click on the "Next" button to return to the "Configured Software Repositories" screen.
+
+
+=== "Configured Software Repositories" screen ===
+
+
+You should see now the "openSUSE 11 Official OSS Repository" listed as an entry.
+
+Click on the "Finish" button.
+
+When you get sent back to the "Yast Control Center" click on the "Quit" button (to return to the shell).
+
+
+==== Install some useful / necessary programs ===
+
+By this time, I'll install some of the programs I regularly use, by using yast:
+
+
+  * To install locate:
+|--------------------
+# yast -i findutils-locate
+|--------------------
+A YaST screen may appear saying:
+|--------------------
+Starting the Package Manager.
+|--------------------
+If that screen appears, it will download some information from http://download.opensuse.org (and set several Software Repositories "behind the scenes)
+
+
+  * To install ncftp (command-line ftp client):
+|--------------------
+# yast -i ncftp
+|--------------------
+
+
+Install some packages that are needed to install Koha:
+
+  * To install make :
+|--------------------
+# yast -i make
+|--------------------
+
+  * To install gcc :
+|--------------------
+# yast -i gcc
+|--------------------
+(this will also install some packages that gcc depend on, like glibc-devel).
+
+
+==== Download Koha ====
+
+|--------------------
+# wget http://download.koha.org/koha-3.00.00.tar.gz
+|--------------------
+
+[FIXME: Check what will be the exact URL of the .tar.gz file for Koha 3]
+
+
+==== Extract Koha ====
+
+|--------------------
+# tar -xzvf koha-3.00.00.tar.gz
+|--------------------
+
+
+==== Set up Locale for root user ====
+
+If you run the locale command, you'll probably get this output:
+|--------------------
+# locale
+LANG=POSIX
+LC_CTYPE=en_US.UTF-8
+LC_NUMERIC="POSIX"
+LC_TIME="POSIX"
+LC_COLLATE="POSIX"
+LC_MONETARY="POSIX"
+LC_MESSAGES="POSIX"
+LC_PAPER="POSIX"
+LC_NAME="POSIX"
+LC_ADDRESS="POSIX"
+LC_TELEPHONE="POSIX"
+LC_MEASUREMENT="POSIX"
+LC_IDENTIFICATION="POSIX"
+LC_ALL=
+|--------------------
+
+We want to have en_US.UTF-8 in all LC_* variables. So, we'll do the following:
+|--------------------
+# yast
+|--------------------
+System -> Language
+
+The "Languages" screen should appear. 
+
+In the first section (Primary Language Settings):
+
+Leave "English (US)" selected as the option for Primary Language
+
+
+Click on the "Details..." link
+
+Change the Locale Settings for user root from the default option ("ctype Only") to "Yes"
+
+Make sure the "Use UTF-8 Encoding" checkbox is checked (it should already be).
+
+Leave the "Detailed Locale Setting" en_US selected
+
+Click on the OK button to return to the "Languages" screen
+
+Click on the "Accept" button.
+
+
+
+When you get back to the "Yast2 Control Center" screen, click on the "Quit" button
+
+
+
+==== Putty configuration to use Unicode (UTF-8 encoding) ====
+
+If you use Putty, set up Putty to use UTF-8 encoding. To do this, click on the upper left corner of the PuTTy window, 
+to expand the menu. Scroll down until you find the "Change Settings..." command and click on it.
+
+This should open the "PuTTy Reconfiguration" screen. Here expand the "Window" category and click on "Translation"
+
+When you do this, you'll see that the "Received data assumed to be in which character set" dropdown list probably reads:
+
+"ISO-8859-1:1998 (Latin-1, West Europe)
+
+change it to: "UTF-8"
+
+Click on the "Apply" button
+
+
+Now, it's a good time to SAVE this PuTTy session. To do this, click again on the upper left corner of the PuTTy window, to expand the menu, and click on the "Change Settings..." command like you did before.
+
+This should open the "PuTTy Reconfiguration" screen. Go to the right hand side of that screen and type a name in the "Saved Sessions" textbox (e.g: koha). Then click on the "Save" button and, after doing that, click on the "Apply" button.
+
+
+IMPORTANT!!! Now it's the time to EXIT the login shell, by typing the exit command:
+|--------------------
+# exit
+|--------------------
+
+Now you'll reopen PuTTy, but when you do that, open the Saved Session that you have created in order to use the "UTF-8" configuration you have done.
+
+
+After logging in again with the root user, type the locale command again. Now it should read like the following:
+
+|--------------------
+# locale
+LANG=en_US.UTF-8
+LC_CTYPE="en_US.UTF-8"
+LC_NUMERIC="en_US.UTF-8"
+LC_TIME="en_US.UTF-8"
+LC_COLLATE="en_US.UTF-8"
+LC_MONETARY="en_US.UTF-8"
+LC_MESSAGES="en_US.UTF-8"
+LC_PAPER="en_US.UTF-8"
+LC_NAME="en_US.UTF-8"
+LC_ADDRESS="en_US.UTF-8"
+LC_TELEPHONE="en_US.UTF-8"
+LC_MEASUREMENT="en_US.UTF-8"
+LC_IDENTIFICATION="en_US.UTF-8"
+LC_ALL=
+|--------------------
+
+
+==== Apache configuration (for UTF-8) ====
+
+Create a file called /etc/apache2/httpd.conf.local with vim (or your preferred text editor):
+|--------------------
+myhost:~ # vim /etc/apache2/httpd.conf.local
+|--------------------
+Add this line:
+|--------------------
+AddDefaultCharset UTF-8
+|--------------------
+
+
+==== Configure Apache to start at boot time and start the service ====
+|--------------------
+# chkconfig apache2 on
+
+# service apache2 start
+Starting httpd2 (prefork)                                            done
+|--------------------
+
+Go to a browser and type:
+
+http://192.168.0.2
+
+You should see a page that reads:
+
+"It works!"
+
+
+
+==== MySQL configuration ====
+
+1 - Configure MySQL to start at boot time and start the service:
+|--------------------
+# chkconfig mysql on
+
+# service mysql start
+|--------------------
+
+2 - Change the password for the "root" user of MySQL:
+|--------------------
+# /usr/bin/mysqladmin -u root password 'chosenpassword'
+|--------------------
+
+3 - Check the encoding variables of MySQL
+
+To check the encoding variables of MySQL, will type the 
+show variables like 'char%'; command in a mysql prompt:
+|--------------------
+# mysql -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 7
+Server version: 5.0.51a SUSE MySQL RPM
+
+
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+mysql> show variables like 'char%';
++--------------------------+----------------------------+
+| Variable_name            | Value                      |
++--------------------------+----------------------------+
+| character_set_client     | latin1                     |
+| character_set_connection | latin1                     |
+| character_set_database   | latin1                     |
+| character_set_filesystem | binary                     |
+| character_set_results    | latin1                     |
+| character_set_server     | latin1                     |
+| character_set_system     | utf8                       |
+| character_sets_dir       | /usr/share/mysql/charsets/ |
++--------------------------+----------------------------+
+8 rows in set (0.00 sec)
+
+mysql> quit
+Bye
+|--------------------
+
+We want to have utf8 in the above character_set_* variables above (and NOT latin1)!
+
+In order to do this:
+
+1 - Create a backup of the MySQL configuration file (my.cnf):
+|--------------------
+# cd /etc
+myhost:/etc # cp my.cnf my.cnf.ORIG
+|--------------------
+
+2 - Use vim to add these 3 lines in the section [mysqld] of the my.cnf file:
+|--------------------
+default-character-set = utf8
+character-set-server = utf8
+skip-character-set-client-handshake
+|--------------------
+
+3 - Restart MySQL:
+|--------------------
+myhost:/etc # service mysql restart
+Restarting service MySQL
+Shutting down service MySQL                                           done
+Starting service MySQL                                                done
+|--------------------
+
+Now, let's type again the show variables like 'char%' mysql command to see if 
+the character_set_variables have changed from latin1 to utf8 (character_set_filesystem 
+will still read "binary" but I think that's OK:
+|--------------------
+myhost:/etc # mysql -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 1
+Server version: 5.0.51a SUSE MySQL RPM
+
+
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+mysql> show variables like 'char%';
++--------------------------+----------------------------+
+| Variable_name            | Value                      |
++--------------------------+----------------------------+
+| character_set_client     | utf8                       |
+| character_set_connection | utf8                       |
+| character_set_database   | utf8                       |
+| character_set_filesystem | binary                     |
+| character_set_results    | utf8                       |
+| character_set_server     | utf8                       |
+| character_set_system     | utf8                       |
+| character_sets_dir       | /usr/share/mysql/charsets/ |
++--------------------------+----------------------------+
+8 rows in set (0.01 sec)
+
+mysql> quit
+Bye
+|--------------------
+
+==== Create the Koha database ====
+
+=== Create the koha database and user with associated privileges ===
+|--------------------
+# mysqladmin -uroot create koha -p 
+|--------------------
+(you may name the koha database something different from koha)
+
+
+=== Grant privileges to a MySQL user to the koha database === 
+
+Assuming that you want to have a MySQL user called "kohaadmin" to administer a database called "koha" with the password "kohapassword", you'd enter this:
+|--------------------
+myhost:~ # mysql -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 3
+Server version: 5.0.51a SUSE MySQL RPM
+
+Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
+
+mysql> grant all on koha.* to 'kohaadmin'@'localhost' identified by 'kohapassword';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> flush privileges;
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> quit
+Bye
+|--------------------
+
+
+==== Test your SAX Parser and correct where necessary ====
+
+
+  * Install the XML::SAX and XML::LibXML perl Modules:
+|--------------------
+# yast -i perl-XML-SAX 
+
+# yast -i perl-XML-LibXML
+|--------------------
+
+You must be sure you're using the XML::LibXML SAX parser, not Expat or PurePerl, both of which have outstanding bugs with pre-composed characters. You can test your SAX parser by running:
+|--------------------
+# cd /root/koha-3.00.00/
+
+myhost:~/koha-3.00.00 # misc/sax_parser_print.pl 
+|--------------------
+
+You will probably see this:
+|--------------------
+XML::SAX::PurePerl=HASH(0x8356a4c)
+|--------------------
+
+If you're using PurePerl (you probably are) or Expat, you'll need to edit your ParserDetails.ini file to use the LibXML Parser. 
+To find the ParserDetails.ini file, you may use locate. To do this, first update the locate database by running the updatedb command:
+|--------------------
+# updatedb
+|--------------------
+
+Then find ParserDetails.ini using locate:
+|--------------------
+# locate ParserDetails.ini
+/usr/lib/perl5/vendor_perl/5.10.0/XML/SAX/ParserDetails.ini
+|--------------------
+
+OK. So, let's first do a backup of this ini file:
+|--------------------
+ # cd /usr/lib/perl5/vendor_perl/5.10.0/XML/SAX/
+
+myhost:/usr/lib/perl5/vendor_perl/5.10.0/XML/SAX # cp ParserDetails.ini ParserDetails.ini.ORIG
+|--------------------
+
+Edit this ParserDetails.ini file (with vim or other editor)
+
+See if the first line contains this:
+|--------------------
+[XML::SAX::PurePerl]
+|--------------------
+If it does, replace this first line by the following:
+|--------------------
+[XML::LibXML::SAX::Parser]
+|--------------------
+
+Run the /root/koha-3.00.00/misc/sax_parser_print.pl command again. This time, you should get the following output:
+|--------------------
+XML::LibXML::SAX::Parser=HASH(0x8356e0c)
+|--------------------
+
+
+==== Run Koha's perl installer ====
+|--------------------
+myhost:/usr/lib/perl5/vendor_perl/5.10.0/XML/SAX # cd /root/koha-3.00.00
+|--------------------
+We will now run perl Makefile.PL to run the installer. 
+
+My installation is a UNIMARC installation, so I'm answering unimarc to the "MARC format for Zebra indexing (marc21, unimarc) [marc21]" question below. If your Library uses the MARC21 format instead of UNIMARC, you should press ENTER to accept the default (which is marc21).
+
+|--------------------
+myhost:~/koha-3.00.00 # perl Makefile.PL
+
+By default, Koha can be installed in one of three ways:
+
+standard: Install files in conformance with the Filesystem
+          Hierarchy Standard (FHS).  This is the default mode
+          and should be used when installing a production
+          Koha system.  On Unix systems, root access is
+          needed to complete a standard installation.
+
+single:   Install files under a single directory.  This option
+          is useful for installing Koha without root access, e.g.,
+          on a web host that allows CGI scripts and MySQL databases
+          but requires the user to keep all files under the user's
+          HOME directory.
+
+dev:      Create a set of symbolic links and configuration files to
+          allow Koha to run directly from the source distribution.
+          This mode is useful for developers who want to run
+          Koha from a git clone.
+
+Installation mode (dev, single, standard) [standard]
+
+
+Please specify the directory under which most Koha files
+will be installed.
+
+Note that if you are planning in installing more than
+one instance of Koha, you may want to modify the last
+component of the directory path, which will be used
+as the package name in the FHS layout.
+
+Base installation directory [/usr/share/koha]
+
+
+Since you are using the 'standard' install
+mode, you should run 'make install' as root.
+However, it is recommended that a non-root
+user (on Unix and Linux platforms) have
+ownership of Koha's files, including the
+Zebra indexes if applicable.
+
+Please specify a user account.  This
+user account does not need to exist
+right now, but it needs to exist
+before you run 'make install'.  Please
+note that for security reasons, this
+user should not be the same as the user
+account Apache runs under.
+
+User account [koha]
+
+Please specify the group that should own
+Koha's files.  As above, this group need
+not exist right now, but should be created
+before you run 'make install'.
+
+Group [koha]
+
+Please specify which database engine you will use
+to store data in Koha.  The choices are MySQL and
+PostgreSQL; please note that at the moment
+PostgreSQL support is highly experimental.
+
+DBMS to use (Pg, mysql) [mysql]
+
+
+Please specify the name or address of your
+database server.  Note that the database
+does not have to exist at this point, it
+can be created after running 'make install'
+and before you try using Koha for the first time.
+
+Database server [localhost]
+
+Please specify the port used to connect to the
+DMBS [3306]
+
+Please specify the name of the database to be
+used by Koha [koha]
+
+Please specify the user that owns the database to be
+used by Koha [kohaadmin]
+
+Please specify the password of the user that owns the
+database to be used by Koha [katikoan] kohapassword
+
+Koha can use the Zebra search engine for high-performance
+searching of bibliographic and authority records.  If you
+have installed the Zebra software and would like to use it,
+please answer 'yes' to the following question.  Otherwise,
+Koha will default to using its internal search engine.
+
+Please note that if you choose *NOT* to install Zebra,
+koha-conf.xml will still contain some references to Zebra
+settings.  Those references will be ignored by Koha.
+
+Install the Zebra configuration files? (no, yes) [yes] yes
+
+
+Since you've chosen to use Zebra with Koha,
+you must specify the primary MARC format of the
+records to be indexed by Zebra.
+
+Koha provides Zebra configuration files for MARC 21
+and UNIMARC.
+
+MARC format for Zebra indexing (marc21, unimarc) [marc21] unimarc
+
+
+Koha supplies Zebra configuration files tuned for
+searching either English (en) or French (fr) MARC
+records.
+
+Primary language for Zebra indexing (en, fr) [en] fr
+
+Koha can use one of  two different indexing modes
+for the MARC authorities records:
+
+grs1 - uses the Zebra GRS-1 filter, available
+       for legacy support
+dom  - uses the DOM XML filter; offers improved
+       functionality.
+
+Authorities indexing mode (dom, grs1) [grs1] dom
+
+
+Please specify Zebra database user [kohauser]
+
+
+Please specify the Zebra database password [zebrastripes] zebrapassword
+
+
+Since you've chosen to use Zebra, you can enable the SRU/
+Z39.50 Server if you so choose, but you must specify a
+few configuration options for it.
+
+Please note that if you choose *NOT* to configure SRU,
+koha-conf.xml will still contain some references to SRU
+settings.  Those references will be ignored by Koha.
+
+Install the SRU configuration files? (no, yes) [yes] no
+
+
+Since you've chosen to use Zebra, you can also choose to
+install PazPar2, which is a metasearch tool.  With PazPar2,
+Koha can perform on-the-fly merging of bibliographic
+records during searching, allowing for FRBRization of
+the results list.
+
+Install the PazPar2 configuration files? [no]
+
+Would you like to run the database-dependent test suite? (no, yes) [no]
+
+
+
+Koha will be installed with the following configuration parameters:
+
+AUTH_INDEX_MODE          dom
+DB_HOST                  localhost
+DB_NAME                  koha
+DB_PASS                  kohapassword
+DB_PORT                  3306
+DB_TYPE                  mysql
+DB_USER                  kohaadmin
+INSTALL_BASE             /usr/share/koha
+INSTALL_MODE             standard
+INSTALL_PAZPAR2          no
+INSTALL_SRU              no
+INSTALL_ZEBRA            yes
+KOHA_GROUP               koha
+KOHA_INSTALLED_VERSION   3.00.00.087
+KOHA_USER                koha
+RUN_DATABASE_TESTS       no
+ZEBRA_LANGUAGE           fr
+ZEBRA_MARC_FORMAT        unimarc
+ZEBRA_PASS               zebrapassword
+ZEBRA_USER               kohauser
+
+and in the following directories:
+
+DOC_DIR                  /usr/share/koha/doc
+INTRANET_CGI_DIR         /usr/share/koha/intranet/cgi-bin
+INTRANET_TMPL_DIR        /usr/share/koha/intranet/htdocs/intranet-tmpl
+INTRANET_WWW_DIR         /usr/share/koha/intranet/htdocs
+KOHA_CONF_DIR            /etc/koha
+LOG_DIR                  /var/log/koha
+MAN_DIR                  /usr/share/koha/man
+MISC_DIR                 /usr/share/koha/misc
+OPAC_CGI_DIR             /usr/share/koha/opac/cgi-bin
+OPAC_TMPL_DIR            /usr/share/koha/opac/htdocs/opac-tmpl
+OPAC_WWW_DIR             /usr/share/koha/opac/htdocs
+PAZPAR2_CONF_DIR         /etc/koha/pazpar2
+PERL_MODULE_DIR          /usr/share/koha/lib
+SCRIPT_DIR               /usr/share/koha/bin
+SCRIPT_NONDEV_DIR        /usr/share/koha/bin
+ZEBRA_CONF_DIR           /etc/koha/zebradb
+ZEBRA_DATA_DIR           /var/lib/koha/zebradb
+ZEBRA_LOCK_DIR           /var/lock/koha/zebradb
+ZEBRA_RUN_DIR            /var/run/koha/zebradb
+
+
+To change any configuration setting, please run
+perl Makefile.PL again.  To override one of the target
+directories, you can do so on the command line like this:
+
+perl Makefile.PL PERL_MODULE_DIR=/usr/share/perl/5.8
+
+You can also set different default values for parameters
+or override directory locations by using environment variables.
+
+For example:
+
+export DB_USER=my_koha
+perl Makefile.PL
+
+or
+
+DB_USER=my_koha DOC_DIR=/usr/local/info perl Makefile.PL
+
+If installing on a Win32 platform, be sure to use:
+'dmake -x MAXLINELENGTH=300000'
+
+Warning: prerequisite Biblio::EndnoteStyle 0.05 not found.
+[Sun Jun  1 18:45:44 2008] Makefile.PL: Warning: prerequisite CGI::Session 4.10 not found.
+[Sun Jun  1 18:45:44 2008] Makefile.PL: Warning: prerequisite Class::Accessor 0.3 not found.
+[Sun Jun  1 18:45:44 2008] Makefile.PL: Warning: prerequisite Class::Factory::Util 1.6 not found.
+[Sun Jun  1 18:45:44 2008] Makefile.PL: Warning: prerequisite DBD::mysql 4.004 not found.
+[Sun Jun  1 18:45:44 2008] Makefile.PL: Warning: prerequisite Data::ICal 0.13 not found.
+[Sun Jun  1 18:45:44 2008] Makefile.PL: Warning: prerequisite Date::Calc 5.4 not found.
+[Sun Jun  1 18:45:44 2008] Makefile.PL: Warning: prerequisite Date::ICal 1.72 not found.
+[Sun Jun  1 18:45:44 2008] Makefile.PL: Warning: prerequisite Date::Manip 5.44 not found.
+[Sun Jun  1 18:45:44 2008] Makefile.PL: Warning: prerequisite GD::Barcode::UPCE 1.1 not found.
+[Sun Jun  1 18:45:44 2008] Makefile.PL: Warning: prerequisite HTML::Scrubber 0.08 not found.
+[Sun Jun  1 18:45:44 2008] Makefile.PL: Warning: prerequisite HTML::Template::Pro 0.69 not found.
+[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite Image::Magick 6.2 not found.
+[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite Lingua::Stem 0.82 not found.
+[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite List::MoreUtils 0.21 not found.
+[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite MARC::Charset 0.98 not found.
+[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite MARC::Crosswalk::DublinCore 0.02 not found.
+[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite MARC::File::XML 0.88 not found.
+[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite MARC::Record 2 not found.
+[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite Mail::Sendmail 0.79 not found.
+[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite Net::LDAP 0.33 not found.
+[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite Net::LDAP::Filter 0.14 not found.
+[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite Net::Z3950::ZOOM 1.16 not found.
+[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite PDF::API2 2 not found.
+[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite PDF::API2::Page 2 not found.
+[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite PDF::API2::Util 2 not found.
+[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite PDF::Reuse 0.33 not found.
+[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite PDF::Reuse::Barcode 0.05 not found.
+[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite POE 0.9999 not found.
+[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite Schedule::At 1.06 not found.
+[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite Text::CSV 0.01 not found.
+[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite Text::CSV_XS 0.32 not found.
+[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite Text::Iconv 1.7 not found.
+[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite XML::Dumper 0.81 not found.
+[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite XML::LibXSLT 1.59 not found.
+[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite XML::RSS 1.31 not found.
+[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite YAML::Syck 0.71 not found.
+Writing Makefile for koha
+
+myhost:~/koha-3.00.00 #
+|--------------------
+
+OK... Lots of missing dependencies (Perl Modules). Let's build some of these modules in CPAN to fix this:
+
+
+==== CPAN Configuration ====
+If you don't already know, "CPAN is the Comprehensive Perl Archive Network, a large collection of Perl software and documentation". For additional info, you may browse the official CPAN web site is at http://www.cpan.org/
+
+Enter the "cpan" command to configure CPAN:
+|--------------------
+myhost:~/koha-3.00.00 # cpan
+
+
+CPAN is the world-wide archive of perl resources. It consists of about
+300 sites that all replicate the same contents around the globe. Many
+countries have at least one CPAN site already. The resources found on
+CPAN are easily accessible with the CPAN.pm module. If you want to use
+CPAN.pm, lots of things have to be configured. Fortunately, most of
+them can be determined automatically. If you prefer the automatic
+configuration, answer 'yes' below.
+
+If you prefer to enter a dialog instead, you can answer 'no' to this
+question and I'll let you configure in small steps one thing after the
+other. (Note: you can revisit this dialog anytime later by typing 'o
+conf init' at the cpan prompt.)
+Would you like me to configure as much as possible automatically? [yes]
+|--------------------
+
+[Just press ENTER here to set all CPAN settings to the default values. 
+After doing this CPAN will scroll lots of messages with questions that 
+it will automatically answer]
+
+[Let's now set up CPAN for Internet access to enable it to download packages. 
+Because I live in Portugal, I'm choosing Portuguese mirrors here. Choose the 
+mirrors that are nearer to you:]
+
+|--------------------
+cpan[2]> o conf init urllist
+You have no /root/.cpan/sources/MIRRORED.BY
+  I'm trying to fetch one
+CPAN: LWP::UserAgent loaded ok (v5.810)
+
+I would like to connect to one of the following sites to get 'MIRRORED.BY':
+
+ http://www.perl.org/CPAN/
+ ftp://ftp.perl.org/pub/CPAN/
+
+Is it OK to try to connect to the Internet? [yes]
+Fetching with LWP:
+  http://www.perl.org/CPAN/MIRRORED.BY
+
+
+Now we need to know where your favorite CPAN sites are located. Push
+a few sites onto the array (just in case the first on the array won't
+work). If you are mirroring CPAN to your local workstation, specify a
+file: URL.
+
+First, pick a nearby continent and country by typing in the number(s)
+in front of the item(s) you want to select. You can pick several of
+each, separated by spaces. Then, you will be presented with a list of
+URLs of CPAN mirrors in the countries you selected, along with
+previously selected URLs. Select some of those URLs, or just keep the
+old list. Finally, you will be prompted for any extra URLs -- file:,
+ftp:, or http: -- that host a CPAN mirror.
+
+(1) Africa
+(2) Asia
+(3) Central America
+(4) Europe
+(5) North America
+(6) Oceania
+(7) South America
+Select your continent (or several nearby continents) [] 4
+
+(1) Austria
+(2) Belgium
+(3) Bosnia and Herzegovina
+(4) Bulgaria
+(5) Croatia
+(6) Czech Republic
+(7) Denmark
+(8) Finland
+(9) France
+(10) Germany
+(11) Greece
+(12) Hungary
+(13) Iceland
+(14) Ireland
+(15) Italy
+(16) Latvia
+15 more items, hit RETURN to show them
+Select your country (or several nearby countries) []
+Sorry! since you don't have any existing picks, you must make a
+geographic selection.
+
+(17) Lithuania
+(18) Malta
+(19) Netherlands
+(20) Norway
+(21) Poland
+(22) Portugal
+(23) Romania
+(24) Russia
+(25) Slovakia
+(26) Slovenia
+(27) Spain
+(28) Sweden
+(29) Switzerland
+(30) Ukraine
+(31) United Kingdom
+Select your country (or several nearby countries) [] 22
+
+(1) ftp://cpan.ip.pt/pub/cpan/
+(2) ftp://ftp.dei.uc.pt/pub/CPAN
+(3) ftp://ftp.isr.ist.utl.pt/pub/CPAN/
+(4) ftp://ftp.nfsi.pt/pub/cpan/
+(5) ftp://neacm.fe.up.pt/pub/CPAN/
+(6) ftp://perl.di.uminho.pt/pub/CPAN/
+(7) http://cpan.dcc.fc.up.pt/
+Select as many URLs as you like (by number),
+put them on one line, separated by blanks, hyphenated ranges allowed
+ e.g. '1 4 5' or '7 1-4 8' [] 3 2 6 4 5 7 1
+
+Enter another URL or RETURN to quit: []
+New set of picks:
+  ftp://ftp.isr.ist.utl.pt/pub/CPAN/
+  ftp://ftp.dei.uc.pt/pub/CPAN
+  ftp://perl.di.uminho.pt/pub/CPAN/
+  ftp://ftp.nfsi.pt/pub/cpan/
+  ftp://neacm.fe.up.pt/pub/CPAN/
+  http://cpan.dcc.fc.up.pt/
+  ftp://cpan.ip.pt/pub/cpan/
+
+
+Please remember to call 'o conf commit' to make the config permanent!
+
+
+cpan[3]> o conf commit
+commit: wrote '/usr/lib/perl5/5.10.0/CPAN/Config.pm'
+
+cpan[4]> quit
+Lockfile removed.
+|--------------------
+
+==== Installing Prerequisite Modules ====
+|--------------------
+myhost:~/koha-3.00.00 # cpan
+CPAN: File::HomeDir loaded ok (v0.69)
+
+cpan shell -- CPAN exploration and modules installation (v1.9205)
+ReadLine support enabled
+|--------------------
+=== Install Biblio::EndnoteStyle ===
+[Let's install the first package called "Biblio::EndnoteStyle". Here I will leave the complete output. For the next installations, I will only show the prompts for dependencies and snip out the remaining output]:
+|--------------------
+cpan[1]> install Biblio::EndnoteStyle
+CPAN: Storable loaded ok (v2.18)
+CPAN: LWP::UserAgent loaded ok (v5.810)
+CPAN: Time::HiRes loaded ok (v1.9711)
+Fetching with LWP:
+  ftp://ftp.isr.ist.utl.pt/pub/CPAN/authors/01mailrc.txt.gz
+Going to read /root/.cpan/sources/authors/01mailrc.txt.gz
+CPAN: Compress::Zlib loaded ok (v2.008)
+............................................................................DONE
+Fetching with LWP:
+  ftp://ftp.isr.ist.utl.pt/pub/CPAN/modules/02packages.details.txt.gz
+Going to read /root/.cpan/sources/modules/02packages.details.txt.gz
+  Database was generated on Sun, 01 Jun 2008 02:07:07 GMT
+............................................................................DONE
+Fetching with LWP:
+  ftp://ftp.isr.ist.utl.pt/pub/CPAN/modules/03modlist.data.gz
+Going to read /root/.cpan/sources/modules/03modlist.data.gz
+............................................................................DONE
+Going to write /root/.cpan/Metadata
+Running install for module 'Biblio::EndnoteStyle'
+CPAN: Data::Dumper loaded ok (v2.121_14)
+'YAML' not installed, falling back to Data::Dumper and Storable to read prefs '/root/.cpan/prefs'
+Running make for M/MI/MIRK/Biblio-EndnoteStyle-0.05.tar.gz
+Fetching with LWP:
+  ftp://ftp.isr.ist.utl.pt/pub/CPAN/authors/id/M/MI/MIRK/Biblio-EndnoteStyle-0.05.tar.gz
+CPAN: Digest::SHA loaded ok (v5.45)
+Fetching with LWP:
+  ftp://ftp.isr.ist.utl.pt/pub/CPAN/authors/id/M/MI/MIRK/CHECKSUMS
+Checksum for /root/.cpan/sources/authors/id/M/MI/MIRK/Biblio-EndnoteStyle-0.05.tar.gz ok
+Scanning cache /root/.cpan/build for sizes
+DONE
+Biblio-EndnoteStyle-0.05/
+Biblio-EndnoteStyle-0.05/README
+Biblio-EndnoteStyle-0.05/Changes
+Biblio-EndnoteStyle-0.05/META.yml
+Biblio-EndnoteStyle-0.05/MANIFEST
+Biblio-EndnoteStyle-0.05/MANIFEST.SKIP
+Biblio-EndnoteStyle-0.05/Makefile.PL
+Biblio-EndnoteStyle-0.05/t/
+Biblio-EndnoteStyle-0.05/t/Biblio-EndnoteStyle.t
+Biblio-EndnoteStyle-0.05/bin/
+Biblio-EndnoteStyle-0.05/bin/endnote-format
+Biblio-EndnoteStyle-0.05/lib/
+Biblio-EndnoteStyle-0.05/lib/Biblio/
+Biblio-EndnoteStyle-0.05/lib/Biblio/EndnoteStyle.pm
+CPAN: File::Temp loaded ok (v0.18)
+Warning (usually harmless): 'YAML' not installed, will not store persistent state
+
+  CPAN.pm: Going to build M/MI/MIRK/Biblio-EndnoteStyle-0.05.tar.gz
+
+Checking if your kit is complete...
+Looks good
+Writing Makefile for Biblio::EndnoteStyle
+Could not read '/root/.cpan/build/Biblio-EndnoteStyle-0.05-vQLGoS/META.yml'. Falling back to other methods to determine prerequisites
+cp lib/Biblio/EndnoteStyle.pm blib/lib/Biblio/EndnoteStyle.pm
+cp bin/endnote-format blib/script/endnote-format
+/usr/bin/perl "-MExtUtils::MY" -e "MY->fixin(shift)" blib/script/endnote-format
+Manifying blib/man3/Biblio::EndnoteStyle.3pm
+  MIRK/Biblio-EndnoteStyle-0.05.tar.gz
+  /usr/bin/make -- OK
+Warning (usually harmless): 'YAML' not installed, will not store persistent state
+Running make test
+PERL_DL_NONLAZY=1 /usr/bin/perl "-MExtUtils::Command::MM" "-e" "test_harness(0, 'blib/lib', 'blib/arch')" t/*.t
+t/Biblio-EndnoteStyle....ok
+All tests successful.
+Files=1, Tests=11,  0 wallclock secs ( 0.09 cusr +  0.12 csys =  0.21 CPU)
+  MIRK/Biblio-EndnoteStyle-0.05.tar.gz
+  /usr/bin/make test -- OK
+Warning (usually harmless): 'YAML' not installed, will not store persistent state
+Running make install
+Prepending /root/.cpan/build/Biblio-EndnoteStyle-0.05-vQLGoS/blib/arch 
+
+/root/.cpan/build/Biblio-EndnoteStyle-0.05-vQLGoS/blib/lib to PERL5LIB for 'install'
+Installing /usr/lib/perl5/site_perl/5.10.0/Biblio/EndnoteStyle.pm
+Installing /usr/share/man/man3/Biblio::EndnoteStyle.3pm
+Installing /usr/bin/endnote-format
+Writing /usr/lib/perl5/site_perl/5.10.0/i586-linux-thread-multi/auto/Biblio/EndnoteStyle/.packlist
+Appending installation info to /usr/lib/perl5/5.10.0/i586-linux-thread-multi/perllocal.pod
+  MIRK/Biblio-EndnoteStyle-0.05.tar.gz
+  /usr/bin/make install  -- OK
+Warning (usually harmless): 'YAML' not installed, will not store persistent state
+|--------------------
+
+=== Install the "CGI::Session::Serialize::yaml" Perl Module ===
+
+[Install CGI::Session::Serialize::yaml "instead" of CGI::Session to avoid problems later on. Don't worry: by installing CGI::Session::Serialize::yaml you are also installing CGI::Session]:
+|--------------------
+cpan[2]> install CGI::Session::Serialize::yaml
+
+
+cpan[3]> quit
+Lockfile removed.
+|--------------------
+
+=== Install some "Class" Perl Modules ===
+To install the Class::Accessor Perl Module we'll use the available software package in openSUSE 11.0 (using yast) instead of downloading it from CPAN:
+|--------------------
+myhost:~/Koha-3.00.00 # yast -i perl-Class-Accessor
+|--------------------
+
+[this will also install a dependency: perl-Carp-Assert]
+
+|--------------------
+myhost:~/Koha-3.00.00 # cpan
+
+cpan shell -- CPAN exploration and modules installation (v1.9205)
+ReadLine support enabled
+
+cpan[1]> install Class::Factory::Util
+
+cpan[2]> quit
+Lockfile removed.
+|--------------------
+[this will also install a dependency: perl-Data-Showtable]
+
+=== Install DBD::MySQL ===
+|--------------------
+myhost:~/koha-3.00.00 # yast -i perl-DBD-mysql
+|--------------------
+
+=== Install some "Data" Perl Modules ===
+|--------------------
+myhost:~/koha-3.00.00 # cpan
+CPAN: File::HomeDir loaded ok (v0.69)
+
+cpan shell -- CPAN exploration and modules installation (v1.9205)
+ReadLine support enabled
+
+cpan[1]> install Data::ICal
+
+CPAN: File::Temp loaded ok (v0.18)
+Warning (usually harmless): 'YAML' not installed, will not store persistent state
+
+  CPAN.pm: Going to build J/JE/JESSE/Data-ICal-0.13.tar.gz
+
+*** Module::AutoInstall version 1.03
+*** Checking for Perl dependencies...
+[Core Features]
+- Test::More          ...loaded. (0.72)
+- Test::Warn          ...missing.
+- Test::NoWarnings    ...missing.
+- Test::LongString    ...missing.
+- Class::Accessor     ...loaded. (0.31)
+- Text::vFile::asData ...missing.
+- MIME::QuotedPrint   ...loaded. (3.07)
+- Class::ReturnValue  ...missing.
+==> Auto-install the 5 mandatory module(s) from CPAN? [y]
+
+*** Since we're running under CPANPLUS, I'll just let it take care
+    of the dependency's installation later.
+*** Module::AutoInstall configuration finished.
+Checking if your kit is complete...
+Looks good
+Warning: prerequisite Class::ReturnValue 0 not found.
+Warning: prerequisite Test::LongString 0 not found.
+Warning: prerequisite Test::NoWarnings 0 not found.
+Warning: prerequisite Test::Warn 0 not found.
+Warning: prerequisite Text::vFile::asData 0 not found.
+Writing Makefile for Data::ICal
+Could not read '/root/.cpan/build/Data-ICal-0.13-X1jsxc/META.yml'. Falling back to other methods to determine prerequisites
+---- Unsatisfied dependencies detected during ----
+----        JESSE/Data-ICal-0.13.tar.gz       ----
+    Test::LongString [requires]
+    Class::ReturnValue [requires]
+    Test::NoWarnings [requires]
+    Text::vFile::asData [requires]
+    Test::Warn [requires]
+Shall I follow them and prepend them to the queue
+of modules we are processing right now? [yes]
+
+---- Unsatisfied dependencies detected during ----
+----    JESSE/Class-ReturnValue-0.55.tar.gz   ----
+    Devel::StackTrace [requires]
+Shall I follow them and prepend them to the queue
+of modules we are processing right now? [yes]
+
+Warning: prerequisite Test::Tester 0.103 not found.
+Writing Makefile for Test::NoWarnings
+Could not read '/root/.cpan/build/Test-NoWarnings-0.084-DMJBk3/META.yml'. Falling back to other methods to determine 
+
+prerequisites
+---- Unsatisfied dependencies detected during ----
+----    FDALY/Test-NoWarnings-0.084.tar.gz    ----
+    Test::Tester [requires]
+Shall I follow them and prepend them to the queue
+of modules we are processing right now? [yes]
+Running install for module 'Text::vFile::asData'
+'YAML' not installed, falling back to Data::Dumper and Storable to read prefs '/root/.cpan/prefs'
+---- Unsatisfied dependencies detected during ----
+----   RCLAMP/Text-vFile-asData-0.05.tar.gz   ----
+    Class::Accessor::Chained [requires]
+Shall I follow them and prepend them to the queue
+of modules we are processing right now? [yes]
+
+
+Warning: prerequisite Array::Compare 0 not found.
+Warning: prerequisite Sub::Uplevel 0.12 not found.
+Warning: prerequisite Test::Exception 0 not found.
+Warning: prerequisite Tree::DAG_Node 0 not found.
+Writing Makefile for Test::Warn
+Could not read '/root/.cpan/build/Test-Warn-0.10-9ekdi2/META.yml'. Falling back to other methods to determine prerequisites
+---- Unsatisfied dependencies detected during ----
+----       CHORNY/Test-Warn-0.10.tar.gz       ----
+    Test::Exception [requires]
+    Sub::Uplevel [requires]
+    Array::Compare [requires]
+    Tree::DAG_Node [requires]
+Shall I follow them and prepend them to the queue
+of modules we are processing right now? [yes]
+
+
+---- Unsatisfied dependencies detected during ----
+----      ADIE/Test-Exception-0.27.tar.gz     ----
+    Sub::Uplevel [requires]
+Shall I follow them and prepend them to the queue
+of modules we are processing right now? [yes]
+
+
+cpan[2]> quit
+Lockfile removed.
+|--------------------
+
+=== Install some "Date" Perl Modules ===
+
+myhost:~/koha-3.00.00 # yast -i perl-Date-Calc
+|--------------------
+[This will also install 2 other dependencies: perl-Carp-Clan and perl-Bit-Vector]
+
+|--------------------
+myhost:~/koha-3.00.00 # cpan
+
+cpan shell -- CPAN exploration and modules installation (v1.9205)
+ReadLine support enabled
+
+cpan[1]> install Date::ICal
+
+
+Warning: prerequisite Date::Leapyear 1.03 not found.
+Writing Makefile for Date::ICal
+---- Unsatisfied dependencies detected during ----
+----        RBOW/Date-ICal-1.72.tar.gz        ----
+    Date::Leapyear [requires]
+Shall I follow them and prepend them to the queue
+of modules we are processing right now? [yes]
+
+
+cpan[2]> quit
+Lockfile removed.
+
+myhost:~/koha-3.00.00 # yast -i perl-DateManip
+|--------------------
+
+=== Install the "GD::Barcode::UPCE" Perl Module ===
+|--------------------
+myhost:~/Koha # cpan
+
+cpan shell -- CPAN exploration and modules installation (v1.9205)
+ReadLine support enabled
+
+cpan[1]> install GD::Barcode::UPCE
+|--------------------
+
+=== Install the "HTML::Template::Pro" Perl Module ===
+
+In the same CPAN prompt, type the following command:
+|--------------------
+cpan[2]> install HTML::Template::Pro
+
+cpan[3]> quit
+Lockfile removed.
+|--------------------
+
+
+=== Install ImageMagick ===
+|--------------------
+myhost:~/koha-3.00.00 # yast -i perl-PerlMagick
+|--------------------
+
+[This will install 3 other dependencies: libMagickCore1, libMagickWand1 and ImageMagick]
+
+=== Install the "Lingua::Stem" Perl Module ===
+|--------------------
+myhost:~ # cpan
+
+cpan shell -- CPAN exploration and modules installation (v1.9205)
+ReadLine support enabled
+
+cpan[1]> install Lingua::Stem
+
+
+Checking prerequisites...
+ - ERROR: Lingua::PT::Stemmer is not installed
+ - ERROR: Lingua::Stem::It is not installed
+ - ERROR: Lingua::Stem::Snowball::No is not installed
+ - ERROR: Text::German is not installed
+ - ERROR: Lingua::Stem::Snowball::Se is not installed
+ - ERROR: Lingua::Stem::Fr is not installed
+ - ERROR: Lingua::GL::Stemmer is not installed
+ - ERROR: Lingua::Stem::Snowball::Da is not installed
+ - ERROR: Lingua::Stem::Ru is not installed
+
+ERRORS/WARNINGS FOUND IN PREREQUISITES.  You may wish to install the versions
+of the modules indicated above before proceeding with this installation
+
+Creating new 'Build' script for 'Lingua-Stem' version '0.83'
+Could not read '/root/.cpan/build/Lingua-Stem-0.83-cmPLcK/META.yml'. Falling back to other methods to determine prerequisites
+---- Unsatisfied dependencies detected during ----
+----     SNOWHARE/Lingua-Stem-0.83.tar.gz     ----
+    Lingua::PT::Stemmer [requires]
+    Lingua::Stem::It [requires]
+    Lingua::Stem::Snowball::No [requires]
+    Text::German [requires]
+    Lingua::Stem::Snowball::Se [requires]
+    Lingua::Stem::Fr [requires]
+    Lingua::GL::Stemmer [requires]
+    Lingua::Stem::Snowball::Da [requires]
+    Lingua::Stem::Ru [requires]
+Shall I follow them and prepend them to the queue
+of modules we are processing right now? [yes]
+|--------------------
+
+=== Install the "HTML::Scruber" Perl Module ===
+In the same CPAN prompt, type the following command:
+|--------------------
+cpan[2]> install HTML::Scrubber
+
+
+cpan[3]> quit
+Lockfile removed.
+|--------------------
+
+=== Install the "List::MoreUtils" Perl Module ===
+|--------------------
+myhost:~ # yast -i perl-List-MoreUtils
+|--------------------
+(If the above command does not work, you probably did not set up the "Official openSUSE 11.0 OSS Repository". See the "Configure Software Repositories" section earlier in this document that explains how you set up it inside yast).
+
+=== Install some "MARC" Perl Modules ===
+|--------------------
+myhost:~ # cpan
+
+cpan shell -- CPAN exploration and modules installation (v1.9205)
+ReadLine support enabled
+
+cpan[1]> install MARC::Charset
+
+cpan[2]> install MARC::Crosswalk::DublinCore
+
+
+Checking prerequisites...
+ - ERROR: DublinCore::Record is not installed
+ - ERROR: MARC::Record is not installed
+
+ERRORS/WARNINGS FOUND IN PREREQUISITES.  You may wish to install the versions
+of the modules indicated above before proceeding with this installation
+
+Creating new 'Build' script for 'MARC-Crosswalk-DublinCore' version '0.02'
+Could not read '/root/.cpan/build/MARC-Crosswalk-DublinCore-0.02-xrMlqr/META.yml'. Falling back to other methods to determine 
+
+prerequisites
+----   Unsatisfied dependencies detected during   ----
+---- BRICAS/MARC-Crosswalk-DublinCore-0.02.tar.gz ----
+    DublinCore::Record [requires]
+    MARC::Record [requires]
+Shall I follow them and prepend them to the queue
+of modules we are processing right now? [yes]
+
+
+cpan[3]> install MARC::File::XML
+
+
+cpan[4]> install MARC::Record
+MARC::Record is up to date (2.0.0).
+
+
+cpan[3]> quit
+Lockfile removed.
+|--------------------
+
+=== Install the "Mail::Sendmail" Perl Module ===
+|--------------------
+myhost:~ # yast -i perl-Mail-Sendmail
+|--------------------
+(If the above command does not work, you probably did not set up the "Official openSUSE 11.0 OSS Repository". See the "Configure Software Repositories" section earlier in this document that explains how you set up it inside yast).
+
+=== Install some "Net" Perl Modules ===
+|--------------------
+myhost:~ # cpan
+
+cpan shell -- CPAN exploration and modules installation (v1.9205)
+ReadLine support enabled
+
+cpan[1]> install Net::LDAP
+
+
+*** Module::AutoInstall version 1.03
+*** Checking for Perl dependencies...
+[Core Features]
+- Convert::ASN1    ...missing. (would need 0.07)
+==> Auto-install the 1 mandatory module(s) from CPAN? [y]
+[SASL authentication]
+- Authen::SASL     ...missing. (would need 2.00)
+==> Auto-install the 1 optional module(s) from CPAN? [n]
+[LDAP URLs]
+- URI::ldap        ...loaded. (1.11 >= 1.1)
+[LDAPS]
+- IO::Socket::SSL  ...missing. (would need 0.81)
+==> Auto-install the 1 optional module(s) from CPAN? [n]
+[Read/Write DSML files]
+- MIME::Base64     ...loaded. (3.07_01)
+- XML::SAX::Writer ...missing.
+==> Auto-install the 1 optional module(s) from CPAN? [n]
+[Read/Write LDIF files]
+- MIME::Base64     ...loaded. (3.07_01)
+
+*** Since we're running under CPANPLUS, I'll just let it take care
+    of the dependency's installation later.
+*** Module::AutoInstall configuration finished.
+
+*** Since we're running under CPANPLUS, I'll just let it take care
+    of the dependency's installation later.
+Checking if your kit is complete...
+Looks good
+Warning: prerequisite Convert::ASN1 0.07 not found.
+Writing Makefile for Net::LDAP
+Could not read '/root/.cpan/build/perl-ldap-0.36-gUbl59/META.yml'. Falling back to other methods to determine prerequisites
+---- Unsatisfied dependencies detected during ----
+----        GBARR/perl-ldap-0.36.tar.gz       ----
+    Convert::ASN1 [requires]
+Shall I follow them and prepend them to the queue
+of modules we are processing right now? [yes]
+
+
+cpan[16]> install Net::LDAP::Filter
+Net::LDAP::Filter is up to date (0.15).
+
+
+cpan[7]> install Net::Z3950::ZOOM
+Running install for module 'Net::Z3950::ZOOM'
+'YAML' not installed, falling back to Data::Dumper and Storable to read prefs '/root/.cpan/prefs'
+Running make for M/MI/MIRK/Net-Z3950-ZOOM-1.21.tar.gz
+Fetching with LWP:
+  ftp://ftp.isr.ist.utl.pt/pub/CPAN/authors/id/M/MI/MIRK/Net-Z3950-ZOOM-1.21.tar.gz
+Checksum for /root/.cpan/sources/authors/id/M/MI/MIRK/Net-Z3950-ZOOM-1.21.tar.gz ok
+Net-Z3950-ZOOM-1.21/
+Net-Z3950-ZOOM-1.21/samples/
+Net-Z3950-ZOOM-1.21/samples/zoom/
+Net-Z3950-ZOOM-1.21/samples/zoom/trivial-async.pl
+Net-Z3950-ZOOM-1.21/samples/zoom/zdump.pl
+Net-Z3950-ZOOM-1.21/samples/zoom/async.pl
+Net-Z3950-ZOOM-1.21/samples/zoom/zoomscan.pl
+Net-Z3950-ZOOM-1.21/samples/zoom/zhello.pl
+Net-Z3950-ZOOM-1.21/samples/zoom/zoomtst1.pl
+Net-Z3950-ZOOM-1.21/samples/zoom/zselect
+Net-Z3950-ZOOM-1.21/samples/zoom/update.pl
+Net-Z3950-ZOOM-1.21/samples/zoom/zoomtst3.pl
+Net-Z3950-ZOOM-1.21/samples/README
+Net-Z3950-ZOOM-1.21/samples/net-z3950/
+Net-Z3950-ZOOM-1.21/samples/net-z3950/zoomtst1.pl
+Net-Z3950-ZOOM-1.21/samples/records/
+Net-Z3950-ZOOM-1.21/samples/records/esdd0006.grs
+Net-Z3950-ZOOM-1.21/samples/ccl/
+Net-Z3950-ZOOM-1.21/samples/ccl/default.bib
+Net-Z3950-ZOOM-1.21/samples/cql/
+Net-Z3950-ZOOM-1.21/samples/cql/pqf.properties
+Net-Z3950-ZOOM-1.21/samples/net-z3950-zoom/
+Net-Z3950-ZOOM-1.21/samples/net-z3950-zoom/async.pl
+Net-Z3950-ZOOM-1.21/samples/net-z3950-zoom/zoomtst1.pl
+Net-Z3950-ZOOM-1.21/samples/net-z3950-zoom/zoomtst3.pl
+Net-Z3950-ZOOM-1.21/README
+Net-Z3950-ZOOM-1.21/Changes
+Net-Z3950-ZOOM-1.21/META.yml
+Net-Z3950-ZOOM-1.21/MANIFEST
+Net-Z3950-ZOOM-1.21/ZOOM.xs
+Net-Z3950-ZOOM-1.21/MANIFEST.SKIP
+Net-Z3950-ZOOM-1.21/Makefile.PL
+Net-Z3950-ZOOM-1.21/t/
+Net-Z3950-ZOOM-1.21/t/29-events.t
+Net-Z3950-ZOOM-1.21/t/11-option-callback.t
+Net-Z3950-ZOOM-1.21/t/15-scan.t
+Net-Z3950-ZOOM-1.21/t/16-packages.t
+Net-Z3950-ZOOM-1.21/t/13-resultset.t
+Net-Z3950-ZOOM-1.21/t/24-sorting.t
+Net-Z3950-ZOOM-1.21/t/17-logging.t
+Net-Z3950-ZOOM-1.21/t/20-options.t
+Net-Z3950-ZOOM-1.21/t/12-query.t
+Net-Z3950-ZOOM-1.21/t/10-options.t
+Net-Z3950-ZOOM-1.21/t/1-Net-Z3950-ZOOM.t
+Net-Z3950-ZOOM-1.21/t/22-query.t
+Net-Z3950-ZOOM-1.21/t/27-logging.t
+Net-Z3950-ZOOM-1.21/t/25-scan.t
+Net-Z3950-ZOOM-1.21/t/19-events.t
+Net-Z3950-ZOOM-1.21/t/14-sorting.t
+Net-Z3950-ZOOM-1.21/t/28-charset.t
+Net-Z3950-ZOOM-1.21/t/23-resultset.t
+Net-Z3950-ZOOM-1.21/t/26-packages.t
+Net-Z3950-ZOOM-1.21/t/18-charset.t
+Net-Z3950-ZOOM-1.21/t/2-ZOOM.t
+Net-Z3950-ZOOM-1.21/t/21-option-callback.t
+Net-Z3950-ZOOM-1.21/typemap
+Net-Z3950-ZOOM-1.21/lib/
+Net-Z3950-ZOOM-1.21/lib/ZOOM.pm
+Net-Z3950-ZOOM-1.21/lib/ZOOM.pod
+Net-Z3950-ZOOM-1.21/lib/Net/
+Net-Z3950-ZOOM-1.21/lib/Net/Z3950/
+Net-Z3950-ZOOM-1.21/lib/Net/Z3950/ZOOM.pm
+Net-Z3950-ZOOM-1.21/lib/Net/Z3950.pm
+Warning (usually harmless): 'YAML' not installed, will not store persistent state
+
+  CPAN.pm: Going to build M/MI/MIRK/Net-Z3950-ZOOM-1.21.tar.gz
+
+ERROR: Unable to call script: yaz-config
+If you are using a YAZ installation from the Debian package "yaz", you
+will also need to install "libyaz-dev" in order to build this module.
+Warning: No success on command[/usr/bin/perl Makefile.PL]
+Warning (usually harmless): 'YAML' not installed, will not store persistent state
+  MIRK/Net-Z3950-ZOOM-1.21.tar.gz
+  /usr/bin/perl Makefile.PL -- NOT OK
+Running make test
+  Make had some problems, won't test
+Running make install
+  Make had some problems, won't install
+Could not read '/root/.cpan/build/Net-Z3950-ZOOM-1.21-gHBrEl/META.yml'. Falling back to other methods to determine 
+
+prerequisites
+Failed during this command:
+ MIRK/Net-Z3950-ZOOM-1.21.tar.gz              : writemakefile NO '/usr/bin/perl Makefile.PL' returned status 512
+|--------------------
+
+  * Installing libyaz and libyaz-devel for Net::Z3950::ZOOM
+OK... So we ran through a problem with a missing "yaz-config" while installing Net::Z3950::ZOOM. To solve this, let's first install the libyaz package:
+|--------------------
+# yast -i libyaz
+|--------------------
+[This will also install 1 dependency: libxslt]
+
+We also have to install another package:libyaz-devel. libyaz-devel is NOT available in the openSUSE 11 DVD but it is available in the Official openSUSE 11 OSS Repository. If you have skipped that step, add that repository in yast first.
+
+  * Install the libyaz-devel package:
+|--------------------
+# yast -i libyaz-devel
+|--------------------
+(If the above command does not work, you probably did not set up the "Official openSUSE 11.0 OSS Repository". See the "Configure Software Repositories" section earlier in this document that explains how you set up it inside yast).
+
+Installing libyaz-devel will also add some other packages that libyaz-devel depends on, namely: 
+zlib-devel, tcpd-devel, tack, libgpg-error-devel, ncurses-devel, libopenssl-devel, libgcrypt-devel, readline-devel, libxml2-devel and libxslt-devel.
+
+
+Let's now install the Net::Z3950::ZOOM Module
+
+|--------------------
+myhost:~ # cpan
+
+cpan shell -- CPAN exploration and modules installation (v1.9205)
+ReadLine support enabled
+
+cpan[1]> install Net::Z3950::ZOOM
+cpan[2]> quit
+Lockfile removed.
+|--------------------
+
+=== Install some "PDF" Perl Modules ===
+
+|--------------------
+myhost:~ # yast -i perl-PDF-API2
+
+myhost:~ # cpan
+
+cpan shell -- CPAN exploration and modules installation (v1.9205)
+ReadLine support enabled
+
+cpan[1]> install PDF::API2::Page
+PDF::API2::Page is up to date (2.001).
+
+cpan[2]> install PDF::API2::Util
+PDF::API2::Util is up to date (2.000).
+
+
+cpan[3]> install PDF::Reuse
+
+
+cpan[4]> install PDF::Reuse::Barcode
+
+Warning: prerequisite Barcode::Code128 0 not found.
+Writing Makefile for PDF::Reuse::Barcode
+---- Unsatisfied dependencies detected during ----
+----  LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz  ----
+    Barcode::Code128 [requires]
+Shall I follow them and prepend them to the queue
+of modules we are processing right now? [yes]
+
+
+Checking if your kit is complete...
+Looks good
+Writing Makefile for Barcode::Code128
+cp lib/Barcode/Code128.pm blib/lib/Barcode/Code128.pm
+Manifying blib/man3/Barcode::Code128.3pm
+  WRW/Barcode-Code128-2.01.tar.gz
+  /usr/bin/make -- OK
+Running make test
+PERL_DL_NONLAZY=1 /usr/bin/perl "-MExtUtils::Command::MM" "-e" "test_harness(0, 'blib/lib', 'blib/arch')" t/*.t
+t/barcode......ok
+t/gif..........skipped: (no reason given)
+t/png..........skipped: (no reason given)
+
+Test Summary Report
+-------------------
+t/gif.t    (Wstat: 0 Tests: 1 Failed: 1)
+  Failed test:  1
+  Parse errors: Bad plan.  You planned 0 tests but ran 1.
+t/png.t    (Wstat: 0 Tests: 1 Failed: 1)
+  Failed test:  1
+  Parse errors: Bad plan.  You planned 0 tests but ran 1.
+Files=3, Tests=4,  0 wallclock secs ( 0.04 usr  0.07 sys +  0.08 cusr  0.07 csys =  0.26 CPU)
+Result: FAIL
+Failed 2/3 test programs. 2/4 subtests failed.
+make: *** [test_dynamic] Error 255
+  WRW/Barcode-Code128-2.01.tar.gz
+  /usr/bin/make test -- NOT OK
+//hint// to see the cpan-testers results for installing this module, try:
+  reports WRW/Barcode-Code128-2.01.tar.gz
+Running make install
+  make test had returned bad status, won't install without force
+Running make for L/LA/LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz
+  Has already been unwrapped into directory /root/.cpan/build/PDF-Reuse-Barcode-0.05-ahdM1s
+
+  CPAN.pm: Going to build L/LA/LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz
+
+Warning: Prerequisite 'Barcode::Code128 => 0' for 'L/LA/LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz' failed when processing 
+
+'W/WR/WRW/Barcode-Code128-2.01.tar.gz' with 'make_test => NO'. Continuing, but chances to succeed are limited.
+cp Barcode.pm blib/lib/PDF/Reuse/Barcode.pm
+Manifying blib/man3/PDF::Reuse::Barcode.3pm
+  LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz
+  /usr/bin/make -- OK
+Running make test
+PERL_DL_NONLAZY=1 /usr/bin/perl "-Iblib/lib" "-Iblib/arch" test.pl
+1..15
+# Running under perl version 5.008008 for linux
+# Current time local: Thu May  8 00:11:00 2008
+# Current time GMT:   Wed May  7 23:11:00 2008
+# Using Test.pm version 1.25
+ok 1
+ok 2
+ok 3
+ok 4
+ok 5
+ok 6
+ok 7
+ok 8
+ok 9
+ok 10
+ok 11
+ok 12
+ok 13
+Can't find Barcode::Code128 - can't produce those barcodes
+not ok 14
+# Failed test 14 in test.pl at line 18
+#  test.pl line 18 is: ok(find('Barcode::Code128'));
+ok 15
+  LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz
+Tests succeeded but one dependency not OK (Barcode::Code128)
+  LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz
+  [dependencies] -- NA
+Running make install
+  make test had returned bad status, won't install without force
+Failed during this command:
+ WRW/Barcode-Code128-2.01.tar.gz              : make_test NO
+ LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz       : make_test NO one dependency not OK (Barcode::Code128)
+|--------------------
+
+
+[Strangely enough, simply repeating the installation of PDF::Reuse::Barcode will solve the problem:]
+
+|--------------------
+cpan[5]> install PDF::Reuse::Barcode
+
+Warning: prerequisite Barcode::Code128 0 not found.
+Writing Makefile for PDF::Reuse::Barcode
+---- Unsatisfied dependencies detected during ----
+----  LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz  ----
+    Barcode::Code128 [requires]
+Shall I follow them and prepend them to the queue
+of modules we are processing right now? [yes]
+
+Running make test
+PERL_DL_NONLAZY=1 /usr/bin/perl "-MExtUtils::Command::MM" "-e" "test_harness(0, 'blib/lib', 'blib/arch')" t/*.t
+t/barcode....ok
+t/gif........ok 1/0skipped
+        all skipped: no reason given
+t/png........ok 1/0skipped
+        all skipped: no reason given
+All tests successful, 2 tests skipped.
+Files=3, Tests=2,  0 wallclock secs ( 0.08 cusr +  0.12 csys =  0.20 CPU)
+  WRW/Barcode-Code128-2.01.tar.gz
+  /usr/bin/make test -- OK
+Warning (usually harmless): 'YAML' not installed, will not store persistent state
+Running make install
+Prepending /root/.cpan/build/Barcode-Code128-2.01-e04Iz4/blib/arch /root/.cpan/build/Barcode-Code128-2.01-e04Iz4/blib/lib to 
+
+PERL5LIB for 'install'
+Installing /usr/lib/perl5/site_perl/5.10.0/Barcode/Code128.pm
+Installing /usr/share/man/man3/Barcode::Code128.3pm
+Writing /usr/lib/perl5/site_perl/5.10.0/i586-linux-thread-multi/auto/Barcode/Code128/.packlist
+Appending installation info to /usr/lib/perl5/5.10.0/i586-linux-thread-multi/perllocal.pod
+  WRW/Barcode-Code128-2.01.tar.gz
+  /usr/bin/make install  -- OK
+Warning (usually harmless): 'YAML' not installed, will not store persistent state
+Running make for L/LA/LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz
+  Has already been unwrapped into directory /root/.cpan/build/PDF-Reuse-Barcode-0.05-tGszYX
+
+  CPAN.pm: Going to build L/LA/LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz
+
+cp Barcode.pm blib/lib/PDF/Reuse/Barcode.pm
+Manifying blib/man3/PDF::Reuse::Barcode.3pm
+  LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz
+  /usr/bin/make -- OK
+Warning (usually harmless): 'YAML' not installed, will not store persistent state
+Running make test
+PERL_DL_NONLAZY=1 /usr/bin/perl "-Iblib/lib" "-Iblib/arch" test.pl
+1..15
+# Running under perl version 5.010000 for linux
+# Current time local: Sun Jun  1 20:25:57 2008
+# Current time GMT:   Sun Jun  1 19:25:57 2008
+# Using Test.pm version 1.25
+ok 1
+ok 2
+ok 3
+ok 4
+ok 5
+ok 6
+ok 7
+ok 8
+ok 9
+ok 10
+ok 11
+ok 12
+ok 13
+ok 14
+ok 15
+  LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz
+  /usr/bin/make test -- OK
+Warning (usually harmless): 'YAML' not installed, will not store persistent state
+Running make install
+Prepending /root/.cpan/build/PDF-Reuse-Barcode-0.05-tGszYX/blib/arch /root/.cpan/build/PDF-Reuse-Barcode-0.05-tGszYX/blib/lib 
+
+to PERL5LIB for 'install'
+Installing /usr/lib/perl5/site_perl/5.10.0/PDF/Reuse/Barcode.pm
+Installing /usr/share/man/man3/PDF::Reuse::Barcode.3pm
+Writing /usr/lib/perl5/site_perl/5.10.0/i586-linux-thread-multi/auto/PDF/Reuse/Barcode/.packlist
+Appending installation info to /usr/lib/perl5/5.10.0/i586-linux-thread-multi/perllocal.pod
+  LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz
+  /usr/bin/make install  -- OK
+Warning (usually harmless): 'YAML' not installed, will not store persistent state
+|--------------------
+
+
+=== Install the "POE" Perl Module ===
+In the same CPAN prompt, type the following command:
+|--------------------
+cpan[7]> install POE
+
+
+Some of POE's tests require a functional network.
+You can skip these tests if you'd like.
+
+Would you like to skip the network tests? [n]
+
+*** Some optional features may not be available:
+***   Curses 1.08 could not be loaded.
+***   Event 1 could not be loaded.
+***   Gtk 0.7009 could not be loaded.
+***   IO::Pty 1.02 could not be loaded.
+***   Socket6 0.14 could not be loaded.
+***   Tk 800.027 could not be loaded.
+Checking if your kit is complete...
+Looks good
+Writing Makefile for POE
+|--------------------
+
+
+=== Install the "Schedule::At" Perl Module ===
+
+  * Install "at":
+|--------------------
+# yast -i at
+|--------------------
+  * Install the Schedule::At Perl module:
+|--------------------
+myhost:~ # cpan
+
+cpan shell -- CPAN exploration and modules installation (v1.9205)
+ReadLine support enabled
+
+cpan[1]> install Schedule::At
+|--------------------
+
+=== Install some "Text" Perl Modules ===
+In the same CPAN prompt, type the following command:
+|--------------------
+cpan[2]> install Text::CSV
+
+
+cpan[3]> install Text::CSV_XS
+
+
+cpan[4]> install Text::Iconv
+
+cpan[5]> quit
+Lockfile removed.
+|--------------------
+
+=== Install some "XML" Perl Modules ===
+|--------------------
+myhost:~ # yast -i perl-XML-Dumper
+
+myhost:~ # yast -i perl-XML-LibXSLT
+
+
+myhost:~ # cpan
+
+cpan shell -- CPAN exploration and modules installation (v1.9205)
+ReadLine support enabled
+
+
+cpan[1]> install XML::RSS
+
+Warning: prerequisite DateTime 0 not found.
+Warning: prerequisite DateTime::Format::Mail 0 not found.
+Warning: prerequisite DateTime::Format::W3CDTF 0 not found.
+Warning: prerequisite Test::Manifest 0.9 not found.
+Writing Makefile for XML::RSS
+Could not read '/root/.cpan/build/XML-RSS-1.32-7BXl7q/META.yml'. Falling back to other methods to determine prerequisites
+---- Unsatisfied dependencies detected during ----
+----        SHLOMIF/XML-RSS-1.32.tar.gz       ----
+    DateTime [requires]
+    DateTime::Format::W3CDTF [requires]
+    Test::Manifest [requires]
+    DateTime::Format::Mail [requires]
+Shall I follow them and prepend them to the queue
+of modules we are processing right now? [yes]
+
+Warning: prerequisite DateTime::Locale 0.4 not found.
+Warning: prerequisite DateTime::TimeZone 0.59 not found.
+Warning: prerequisite Params::Validate 0.76 not found.
+Writing Makefile for DateTime
+Could not read '/root/.cpan/build/DateTime-0.4302-YXqzkk/META.yml'. Falling back to other methods to determine prerequisites
+---- Unsatisfied dependencies detected during ----
+----      DROLSKY/DateTime-0.4302.tar.gz      ----
+    DateTime::Locale [requires]
+    DateTime::TimeZone [requires]
+    Params::Validate [requires]
+Shall I follow them and prepend them to the queue
+of modules we are processing right now? [yes]
+
+
+Checking prerequisites...
+ - ERROR: Params::Validate is not installed
+
+ERRORS/WARNINGS FOUND IN PREREQUISITES.  You may wish to install the versions
+of the modules indicated above before proceeding with this installation
+
+Creating new 'Build' script for 'DateTime-Locale' version '0.4001'
+Could not read '/root/.cpan/build/DateTime-Locale-0.4001-ThLGMW/META.yml'. Falling back to other methods to determine 
+
+prerequisites
+---- Unsatisfied dependencies detected during ----
+----   DROLSKY/DateTime-Locale-0.4001.tar.gz  ----
+    Params::Validate [requires]
+Shall I follow them and prepend them to the queue
+of modules we are processing right now? [yes]
+
+
+Checking prerequisites...
+ - ERROR: Class::Singleton is not installed
+
+ERRORS/WARNINGS FOUND IN PREREQUISITES.  You may wish to install the versions
+of the modules indicated above before proceeding with this installation
+
+Creating new 'Build' script for 'DateTime-TimeZone' version '0.77'
+Could not read '/root/.cpan/build/DateTime-TimeZone-0.77-MPrKnn/META.yml'. Falling back to other methods to determine 
+
+prerequisites
+---- Unsatisfied dependencies detected during ----
+----   DROLSKY/DateTime-TimeZone-0.77.tar.gz  ----
+    Class::Singleton [requires]
+Shall I follow them and prepend them to the queue
+of modules we are processing right now? [yes]
+
+
+cpan[2]> quit
+Lockfile removed.
+|--------------------
+
+=== Install the "YAML::Syck" Perl Module ===
+|--------------------
+myhost:~ # yast -i perl-YAML-Syck
+|--------------------
+
+
+==== Create the Koha User and Group ====
+
+|--------------------
+# useradd koha
+
+# passwd koha
+Changing password for koha.
+New Password:
+Reenter New Password:
+Password changed.
+
+# groupadd koha
+|--------------------
+
+==== Run make test ====
+|--------------------
+myhost:~/Koha # make test
+cp koha-tmpl/opac-tmpl/prog/famfamfam/silk/error_go.png blib/OPAC_TMPL_DIR/prog/famfamfam/silk/error_go.png
+cp opac/opac-changelanguage.pl blib/OPAC_CGI_DIR/opac/opac-changelanguage.pl
+cp koha-tmpl/intranet-tmpl/prog/img/itemtypeimg/liblime-kids/card.gif 
+
+blib/INTRANET_TMPL_DIR/prog/img/itemtypeimg/liblime-kids/card.gif
+cp koha-tmpl/opac-tmpl/prog/famfamfam/mini/note.gif blib/OPAC_TMPL_DIR/prog/famfamfam/mini/note.gif
+|--------------------
+[many more lines beginning with "cp" should appear...]
+
+|--------------------
+cp koha-tmpl/opac-tmpl/prog/famfamfam/silk/shape_rotate_clockwise.png 
+
+blib/OPAC_TMPL_DIR/prog/famfamfam/silk/shape_rotate_clockwise.png
+cp koha-tmpl/opac-tmpl/prog/famfamfam/mini/page_text.gif blib/OPAC_TMPL_DIR/prog/famfamfam/mini/page_text.gif
+PERL_DL_NONLAZY=1 KOHA_CONF=blib/KOHA_CONF_DIR/koha-conf.xml /usr/bin/perl "-MExtUtils::Command::MM" "-e" "test_harness(0, 
+
+'blib/PERL_MODULE_DIR', 'blib/arch')" t/*.t
+t/Amazon....................ok
+t/Barcodes_PrinterConfig....ok
+t/Bookfund..................ok
+t/Bookseller................ok
+t/Boolean...................ok
+t/Branch....................ok
+t/Calendar..................ok
+t/Charset...................ok
+t/Date......................ok 1/4Use of uninitialized value $db_driver in concatenation (.) or string at 
+
+/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628.
+Can't connect to data source 'dbname=__DB_NAME__;host=__DB_HOST__;port=__DB_PORT__' because I can't work out what driver to 
+
+use (it doesn't seem to contain a 'dbi:driver:' prefix and the DBI_DRIVER env var is not set) at 
+
+/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628
+# Looks like you planned 4 tests but only ran 1.
+# Looks like your test died just after 1.
+t/Date......................dubious
+        Test returned status 255 (wstat 65280, 0xff00)
+DIED. FAILED tests 2-4
+        Failed 3/4 tests, 25.00% okay
+t/Dates.....................ok 1/126#
+#  Testing Legacy Functions: format_date and format_date_in_iso
+Use of uninitialized value $db_driver in concatenation (.) or string at /root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628.
+Can't connect to data source 'dbname=__DB_NAME__;host=__DB_HOST__;port=__DB_PORT__' because I can't work out what driver to use (it doesn't seem to contain a 'dbi:driver:' prefix and the DBI_DRIVER env var is not set) at 
+
+/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628
+# Looks like you planned 126 tests but only ran 1.
+# Looks like your test died just after 1.
+t/Dates.....................dubious
+        Test returned status 255 (wstat 65280, 0xff00)
+DIED. FAILED tests 2-126
+        Failed 125/126 tests, 0.79% okay
+t/Debug.....................# BEFORE use:     $debug is not defined
+# BEFORE use: $cgi_debug is not defined
+t/Debug.....................ok 1/3#  AFTER use:     $debug is 0
+#  AFTER use: $cgi_debug is 0
+# Done.
+t/Debug.....................ok
+t/dummy.....................ok
+t/icondirectories...........Use of uninitialized value $src in string eq at /root/Koha/blib/PERL_MODULE_DIR/C4/Koha.pm line 465.
+Use of uninitialized value $db_driver in concatenation (.) or string at /root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628.
+Can't connect to data source 'dbname=__DB_NAME__;host=__DB_HOST__;port=__DB_PORT__' because I can't work out what driver to use (it doesn't seem to contain a 'dbi:driver:' prefix and the DBI_DRIVER env var is not set) at 
+
+/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628
+# Looks like your test died before it could output anything.
+t/icondirectories...........dubious
+        Test returned status 255 (wstat 65280, 0xff00)
+DIED. FAILED test 1
+        Failed 1/1 tests, 0.00% okay
+t/Input.....................ok
+t/Items.....................Use of uninitialized value $db_driver in concatenation (.) or string at 
+
+/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628.
+t/Items.....................NOK 1/28
+#   Failed test 'use C4::Items;'
+#   at t/Items.t line 11.
+#     Tried to use 'C4::Items'.
+#     Error:  Can't connect to data source 'dbname=__DB_NAME__;host=__DB_HOST__;port=__DB_PORT__' because I can't work out what driver to use (it doesn't seem to contain a 'dbi:driver:' prefix and the DBI_DRIVER env var is not set) at 
+
+/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628
+# Compilation failed in require at /root/Koha/blib/PERL_MODULE_DIR/C4/Items.pm line 30.
+# Compilation failed in require at (eval 5) line 2.
+# BEGIN failed--compilation aborted at t/Items.t line 11.
+t/Items.....................ok 2/28Use of uninitialized value $db_driver in concatenation (.) or string at 
+
+/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628.
+Can't connect to data source 'dbname=__DB_NAME__;host=__DB_HOST__;port=__DB_PORT__' because I can't work out what driver to use (it doesn't seem to contain a 'dbi:driver:' prefix and the DBI_DRIVER env var is not set) at 
+
+/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628
+# Looks like you planned 28 tests but only ran 13.
+# Looks like you failed 1 test of 13 run.
+# Looks like your test died just after 13.
+t/Items.....................dubious
+        Test returned status 255 (wstat 65280, 0xff00)
+DIED. FAILED tests 1, 14-28
+        Failed 16/28 tests, 42.86% okay
+t/Koha......................ok
+t/Labels....................NOK 1/1
+#   Failed test 'use C4::Labels;'
+#   at t/Labels.t line 12.
+#     Tried to use 'C4::Labels'.
+#     Error:  Can't locate Algorithm/CheckDigits.pm in @INC (@INC contains: /root/Koha/blib/PERL_MODULE_DIR 
+
+/root/Koha/blib/arch /usr/lib/perl5/5.10.0/i586-linux-thread-multi /usr/lib/perl5/5.10.0/i586-linux-thread-multi 
+
+/usr/lib/perl5/5.10.0 /usr/lib/perl5/site_perl/5.10.0/i586-linux-thread-multi 
+
+/usr/lib/perl5/site_perl/5.10.0/i586-linux-thread-multi /usr/lib/perl5/site_perl/5.10.0 
+
+/usr/lib/perl5/vendor_perl/5.10.0/i586-linux-thread-multi /usr/lib/perl5/vendor_perl/5.10.0/i586-linux-thread-multi 
+
+/usr/lib/perl5/vendor_perl/5.10.0 /usr/lib/perl5/vendor_perl/5.10.0/i586-linux-thread-multi /usr/lib/perl5/vendor_perl/5.10.0 
+
+/usr/lib/perl5/vendor_perl . /usr/lib/perl5/5.10.0/i586-linux-thread-multi /usr/lib/perl5/5.10.0 
+
+/usr/lib/perl5/site_perl/5.10.0/i586-linux-thread-multi /usr/lib/perl5/site_perl/5.10.0 
+
+/usr/lib/perl5/vendor_perl/5.10.0/i586-linux-thread-multi /usr/lib/perl5/vendor_perl/5.10.0 /usr/lib/perl5/vendor_perl .) at 
+
+/root/Koha/blib/PERL_MODULE_DIR/C4/Labels.pm line 25.
+# BEGIN failed--compilation aborted at t/Labels.t line 12.
+# Compilation failed in require at (eval 3) line 2.
+# BEGIN failed--compilation aborted at (eval 3) line 2.
+# Looks like you failed 1 test of 1.
+t/Labels....................dubious
+        Test returned status 1 (wstat 256, 0x100)
+DIED. FAILED test 1
+        Failed 1/1 tests, 0.00% okay
+t/Languages.................ok
+t/Maintainance..............ok
+t/Output....................ok
+t/Record....................ok
+t/Review....................ok
+t/Scrubber..................ok 1/10# Note: scrubber test output will have whitespace collapsed for readability
+# done.
+t/Scrubber..................ok
+t/Stats.....................ok
+Failed Test         Stat Wstat Total Fail  List of Failed
+-------------------------------------------------------------------------------
+t/Date.t             255 65280     4    6  2-4
+t/Dates.t            255 65280   126  250  2-126
+t/Items.t            255 65280    28   31  1 14-28
+t/Labels.t             1   256     1    1  1
+t/icondirectories.t  255 65280     1    2  1
+Failed 5/24 test scripts. 146/207 subtests failed.
+Files=24, Tests=207, 13 wallclock secs ( 5.96 cusr +  5.52 csys = 11.48 CPU)
+Failed 5/24 test programs. 146/207 subtests failed.
+make: *** [test_dynamic] Error 255
+|--------------------
+
+=== Install the "Algorithm::CheckDigits" Perl Module ===
+
+Hmmm... Algorithm::CheckDigits seems to not have been installed. Let's install it:
+
+|--------------------
+myhost:~ # cpan
+CPAN: File::HomeDir loaded ok (v0.69)
+
+cpan shell -- CPAN exploration and modules installation (v1.9205)
+ReadLine support enabled
+
+                                                                                                                            
+cpan[1]> install Algorithm::CheckDigits
+
+cpan[2]> quit
+Lockfile removed.
+|--------------------
+
+
+=== Run "make test" again ===
+
+Don't worry! It will run a LOT faster this time!  :)
+|--------------------
+myhost:~/Koha-3.00.00 # make test
+PERL_DL_NONLAZY=1 KOHA_CONF=blib/KOHA_CONF_DIR/koha-conf.xml /usr/bin/perl "-MExtUtils::Command::MM" "-e" "test_harness(0, 
+
+'blib/PERL_MODULE_DIR', 'blib/arch')" t/*.t
+t/Amazon....................ok
+t/Barcodes_PrinterConfig....ok
+t/Bookfund..................ok
+t/Bookseller................ok
+t/Boolean...................ok
+t/Branch....................ok
+t/Calendar..................ok
+t/Charset...................ok
+t/Date......................ok 1/4Use of uninitialized value $db_driver in concatenation (.) or string at 
+
+/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628.
+Can't connect to data source 'dbname=__DB_NAME__;host=__DB_HOST__;port=__DB_PORT__' because I can't work out what driver to use (it doesn't seem to contain a 'dbi:driver:' prefix and the DBI_DRIVER env var is not set) at 
+
+/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628
+# Looks like you planned 4 tests but only ran 1.
+# Looks like your test died just after 1.
+t/Date......................dubious
+        Test returned status 255 (wstat 65280, 0xff00)
+DIED. FAILED tests 2-4
+        Failed 3/4 tests, 25.00% okay
+t/Dates.....................ok 1/126#
+#  Testing Legacy Functions: format_date and format_date_in_iso
+Use of uninitialized value $db_driver in concatenation (.) or string at /root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628.
+Can't connect to data source 'dbname=__DB_NAME__;host=__DB_HOST__;port=__DB_PORT__' because I can't work out what driver to use (it doesn't seem to contain a 'dbi:driver:' prefix and the DBI_DRIVER env var is not set) at 
+
+/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628
+# Looks like you planned 126 tests but only ran 1.
+# Looks like your test died just after 1.
+t/Dates.....................dubious
+        Test returned status 255 (wstat 65280, 0xff00)
+DIED. FAILED tests 2-126
+        Failed 125/126 tests, 0.79% okay
+t/Debug.....................# BEFORE use:     $debug is not defined
+# BEFORE use: $cgi_debug is not defined
+t/Debug.....................ok 1/3#  AFTER use:     $debug is 0
+#  AFTER use: $cgi_debug is 0
+# Done.
+t/Debug.....................ok
+t/dummy.....................ok
+t/icondirectories...........Use of uninitialized value $src in string eq at /root/Koha/blib/PERL_MODULE_DIR/C4/Koha.pm line 465.
+Use of uninitialized value $db_driver in concatenation (.) or string at /root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628.
+Can't connect to data source 'dbname=__DB_NAME__;host=__DB_HOST__;port=__DB_PORT__' because I can't work out what driver to use (it doesn't seem to contain a 'dbi:driver:' prefix and the DBI_DRIVER env var is not set) at 
+
+/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628
+# Looks like your test died before it could output anything.
+t/icondirectories...........dubious
+        Test returned status 255 (wstat 65280, 0xff00)
+DIED. FAILED test 1
+        Failed 1/1 tests, 0.00% okay
+t/Input.....................ok
+t/Items.....................Use of uninitialized value $db_driver in concatenation (.) or string at 
+
+/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628.
+t/Items.....................NOK 1/28
+#   Failed test 'use C4::Items;'
+#   at t/Items.t line 11.
+#     Tried to use 'C4::Items'.
+#     Error:  Can't connect to data source 'dbname=__DB_NAME__;host=__DB_HOST__;port=__DB_PORT__' because I can't work out what driver to use (it doesn't seem to contain a 'dbi:driver:' prefix and the DBI_DRIVER env var is not set) at 
+
+/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628
+# Compilation failed in require at /root/Koha/blib/PERL_MODULE_DIR/C4/Items.pm line 30.
+# Compilation failed in require at (eval 5) line 2.
+# BEGIN failed--compilation aborted at t/Items.t line 11.
+t/Items.....................ok 2/28Use of uninitialized value $db_driver in concatenation (.) or string at 
+
+/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628.
+Can't connect to data source 'dbname=__DB_NAME__;host=__DB_HOST__;port=__DB_PORT__' because I can't work out what driver to use (it doesn't seem to contain a 'dbi:driver:' prefix and the DBI_DRIVER env var is not set) at 
+
+/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628
+# Looks like you planned 28 tests but only ran 13.
+# Looks like you failed 1 test of 13 run.
+# Looks like your test died just after 13.
+t/Items.....................dubious
+        Test returned status 255 (wstat 65280, 0xff00)
+DIED. FAILED tests 1, 14-28
+        Failed 16/28 tests, 42.86% okay
+t/Koha......................ok
+t/Labels....................Use of uninitialized value $db_driver in concatenation (.) or string at 
+
+/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628.
+t/Labels....................NOK 1/1
+#   Failed test 'use C4::Labels;'
+#   at t/Labels.t line 12.
+#     Tried to use 'C4::Labels'.
+#     Error:  Can't connect to data source 'dbname=__DB_NAME__;host=__DB_HOST__;port=__DB_PORT__' because I can't work out what driver to use (it doesn't seem to contain a 'dbi:driver:' prefix and the DBI_DRIVER env var is not set) at 
+
+/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628
+# Compilation failed in require at /root/Koha/blib/PERL_MODULE_DIR/C4/Circulation.pm line 25.
+# BEGIN failed--compilation aborted at t/Labels.t line 12.
+# Compilation failed in require at /root/Koha/blib/PERL_MODULE_DIR/C4/Overdues.pm line 24.
+# BEGIN failed--compilation aborted at /root/Koha/blib/PERL_MODULE_DIR/C4/Overdues.pm line 24.
+# Compilation failed in require at /root/Koha/blib/PERL_MODULE_DIR/C4/Members.pm line 27.
+# BEGIN failed--compilation aborted at /root/Koha/blib/PERL_MODULE_DIR/C4/Members.pm line 27.
+# Compilation failed in require at /root/Koha/blib/PERL_MODULE_DIR/C4/Labels.pm line 26.
+# BEGIN failed--compilation aborted at /root/Koha/blib/PERL_MODULE_DIR/C4/Labels.pm line 26.
+# Compilation failed in require at (eval 3) line 2.
+# BEGIN failed--compilation aborted at (eval 3) line 2.
+# Looks like you failed 1 test of 1.
+t/Labels....................dubious
+        Test returned status 1 (wstat 256, 0x100)
+DIED. FAILED test 1
+        Failed 1/1 tests, 0.00% okay
+t/Languages.................ok
+t/Maintainance..............ok
+t/Output....................ok
+t/Record....................ok
+t/Review....................ok
+t/Scrubber..................ok 1/10# Note: scrubber test output will have whitespace collapsed for readability
+# done.
+t/Scrubber..................ok
+t/Stats.....................ok
+Failed Test         Stat Wstat Total Fail  List of Failed
+-------------------------------------------------------------------------------
+t/Date.t             255 65280     4    6  2-4
+t/Dates.t            255 65280   126  250  2-126
+t/Items.t            255 65280    28   31  1 14-28
+t/Labels.t             1   256     1    1  1
+t/icondirectories.t  255 65280     1    2  1
+Failed 5/24 test scripts. 146/207 subtests failed.
+Files=24, Tests=207, 14 wallclock secs ( 6.93 cusr +  6.06 csys = 12.99 CPU)
+Failed 5/24 test programs. 146/207 subtests failed.
+make: *** [test_dynamic] Error 255
+|--------------------
+
+== Run "make install" ==
+
+Even with these errors in C4::Labels, we will run make install:
+
+|--------------------
+myhost:~/Koha # make install
+|--------------------
+[Several lines starting with "Manifying" and many lines starting with "Installing" will scroll by...]
+|--------------------
+Installing /usr/share/koha/man/man3/cataloguing::value_builder::marc21_leader_computerfile.3pm
+Installing /usr/share/koha/man/man3/opac::opac-tags.3pm
+Installing /usr/share/koha/man/man3/cataloguing::value_builder::unimarc_field_123j.3pm
+Installing /usr/share/koha/man/man3/cataloguing::value_builder::marc21_field_003.3pm
+Installing /usr/share/koha/man/man3/authorities::detail.3pm
+
+Koha's files have now been installed.
+
+In order to use Koha's command-line batch jobs,
+you should set the following environment variables:
+
+export KOHA_CONF=/etc/koha/koha-conf.xml
+export PERL5LIB=/usr/share/koha/lib
+
+For other post-installation tasks, please consult the README.
+
+
+# cd /etc
+myhost:/etc #
+|--------------------
+
+==== Create /etc/bash.bashrc.local ====
+Create a file called bash.bashrc.local in the /etc directory:
+|--------------------
+myhost:/etc # vim /etc/bash.bashrc.local
+|--------------------
+add these 2 lines in the file:
+|--------------------
+export KOHA_CONF=/etc/koha/koha-conf.xml
+export PERL5LIB=/usr/share/koha/lib
+|--------------------
+
+- EXIT THE SHELL AND LOG BACK IN.
+|--------------------
+myhost:/etc # exit
+|--------------------
+After logging back in, type the following commands to check if 
+the KOHA_CONF and PERL5LIB environment variables have been correctly set:
+|--------------------
+myhost:~ # env | grep KOHA
+KOHA_CONF=/etc/koha/koha-conf.xml
+
+myhost:~ # env | grep PERL5LIB
+PERL5LIB=/usr/share/koha/lib
+|--------------------
+
+=== Koha's Web Installer ===
+
+Access Koha's web installer at:
+
+http://192.168.0.2:8080/
+
+Your browser will probably say that:
+|--------------------
+" The server at 192.168.0.2 is taking too long to respond."
+|--------------------
+OK... It seems that we have to do some things yet.
+
+
+== Create a symbolic link to /etc/koha/koha-httpd.conf ==
+
+Let's create a symbolic link to the /etc/koha/koha-httpd.conf file in the /etc/apache2/vhosts.d directory:
+|--------------------
+myhost:~ # cd /etc/apache2/vhosts.d/
+
+myhost:/etc/apache2/vhosts.d # ln -s /etc/koha/koha-httpd.conf koha-httpd.conf
+|--------------------
+
+  * Restart Apache
+|--------------------
+myhost:/etc/apache2/conf.d # service apache2 restart
+Syntax error on line 28 of /etc/apache2/conf.d/koha-httpd.conf:
+Invalid command 'RewriteEngine', perhaps misspelled or defined by a module not included in the server configuration
+|--------------------
+
+
+== Enable the mod_rewrite Apache module ==
+
+OK... It seems that we need to enable the mod_rewrite Apache module:
+|--------------------
+myhost:/etc/sysconfig # a2enmod rewrite
+|--------------------
+[If the above command seems NOT to work, for some reason, do this - edit /etc/sysconfig/apache2 and add rewrite at the end of the APACHE_MODULES line, right before the right quote]
+|--------------------
+myhost:/etc/sysconfig # service apache2 restart
+Syntax OK
+Shutting down httpd2 (waiting for all children to terminate)         done
+Starting httpd2 (prefork)                                            done
+|--------------------
+
+== Change koha-httpd.conf ==
+
+If you browsed again to http://192.168.0.2:8080 you would still get no answer. This is because we still have to do some changes to the koha-httpd.conf file.
+
+First, let's create a backup of this file:
+|--------------------
+myhost:/etc/apache2/vhosts.d # cp koha-httpd.conf koha-httpd.conf.ORIG
+
+
+myhost:/etc/koha # vim koha-httpd.conf
+|--------------------
+
+At the beginning of the koha-httpd.conf file, under the commented NameVirtualHost line, add the following line:
+|--------------------
+Listen 8080
+|--------------------
+In that file, you should find two VirtualHost sections: one for the OPAC area of Koha and the other one for the Intranet. 
+If the two virtualHost directives - the lines that start with <nowiki><VirtualHost</nowiki> - in that file are set for the IP Address 127.0.0.2, replace them by the correct IP address of your server.
+
+That file will have 2 ServerName directives (one for each of the 2 VirtualHosts). In those directives, you should have the IP of your server -or- the FQDN of your server (example: ServerName www.koha.test).
+
+|--------------------
+myhost:/etc/koha # service apache2 restart
+Syntax OK
+Shutting down httpd2 (waiting for all children to terminate)         done
+Starting httpd2 (prefork)                                            done
+|--------------------
+
+
+Try to access the web page:
+
+http://192.168.0.2/
+
+If you get again the "It Works!" web page, you'll probably have to Refresh/Reload the page in your browser (press the F5 key).
+
+After reloading the page, you should get the following error:
+|--------------------
+Forbidden
+
+You don't have permission to access / on this server.
+
+Additionally, a 403 Forbidden error was encountered while trying to use an ErrorDocument to handle the request.
+Apache/2.2.4 (Linux/SUSE) Server at 192.168.0.2 Port 8080
+|--------------------
+
+OK. Let's add then the following directive at the end of the koha-httpd.conf file:
+|--------------------
+<Directory /usr/share/koha>
+        Order allow,deny
+        Allow from all
+</Directory>
+|--------------------
+
+Restart Apache:
+|--------------------
+myhost:/etc/apache2/vhosts.d # service apache2 restart
+Syntax OK
+Shutting down httpd2 (waiting for all children to terminate)         done
+Starting httpd2 (prefork)                                            done
+|--------------------
+
+OK. Load again the following page in your web browser:
+
+http://192.168.0.2
+
+After some seconds you should be redirected to:
+
+http://192.168.0.2/cgi-bin/koha/maintenance.pl
+
+
+and see a Koha page saying:
+|--------------------
+"System Maintenance ... we'll be back soon! If you have any questions, please contact the Site Administrator"
+|--------------------
+
+This is actually GOOD NEWS!  :)  It's now time to set up Koha in the Intranet interface.
+
+
+To do that, browse to:
+
+
+http://192.168.0.2:8080
+
+== Enable port 8080 in the firewall ==
+
+After a while the page will probably time out. This is because we now have to allow the 8080 port in the firewall.
+
+Let's run yast and do that:
+|--------------------
+myhost:/etc/apache2/vhosts.d # yast
+|--------------------
+Inside yast, go to "Security and Users" -> "Firewall"
+
+Scroll down to "Allowed Services" on the right side and press ENTER
+
+Press TAB several times until you reach the "Apache2" allowed service on the right side. When you do that, 
+press Alt+d to click the "Advanced..." button.
+
+A new window should open. Press Alt+T to go to the "TCP Ports" text box and enter the following values in that box:
+80 8080
+
+Press Alt+O to click the OK button. That will send you back to the "Firewall Configuration:Allowed Services" 
+screen. Press Alt+N to click the "Next" button. 
+
+You should now be in the "Firewall Configuration: Summary" screen. Press "Alt+F" to Finish.
+
+You should now be again in the "YaST Control Center" screen. Press "Alt+Q" to quit yast.
+
+
+Go again to:
+
+http://192.168.0.2:8080/
+
+... you should get redirected to:
+
+http://192.168.0.2:8080/cgi-bin/koha/installer/install.pl
+
+... and see a page with the Koha Logo and the heading: "Welcome to the Koha Web Installer"!  :)
+
+
+You may now login with your koha administrator username and password and reply to the several questions you will be asked.
