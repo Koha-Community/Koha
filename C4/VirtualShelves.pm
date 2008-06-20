@@ -217,12 +217,12 @@ sub GetShelfContents {
     my ( $shelfnumber ,$sortfield) = @_;
     my $dbh=C4::Context->dbh();
 	if(!$sortfield) {
-		my $sthsort = $dbh->prepare('select sortfield from virtualshelves where shelfnumber=?');
+		my $sthsort = $dbh->prepare('SELECT sortfield FROM virtualshelves WHERE shelfnumber=?');
 		$sthsort->execute($shelfnumber);
 		($sortfield) = $sthsort->fetchrow_array;
 	}
     my $query =
-       " SELECT vc.biblionumber, vc.shelfnumber,
+       " SELECT vc.biblionumber, vc.shelfnumber, vc.dateadded,
 	   			biblio.*, biblioitems.itemtype, itemtypes.*
          FROM   virtualshelfcontents vc
 		 LEFT JOIN biblio      ON      vc.biblionumber =      biblio.biblionumber

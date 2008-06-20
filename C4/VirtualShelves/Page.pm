@@ -30,6 +30,7 @@ use C4::Koha;
 use C4::Auth qw/get_session/;
 use C4::Members;
 use C4::Output;
+use C4::Date qw/format_date/;
 use Exporter;
 
 use vars qw($debug @EXPORT @ISA $VERSION);
@@ -149,6 +150,7 @@ SWITCH: {
 			for my $this_item (@$items) {
 				$this_item->{imageurl} = $imgdir."/".$itemtypes->{ $this_item->{itemtype}  }->{'imageurl'};
 				$this_item->{'description'} = $itemtypes->{ $this_item->{itemtype} }->{'description'};
+				$this_item->{'dateadded'} = format_date($this_item->{'dateadded'});
 			}
 			$showadd = 1;
 			my $i = 0;
