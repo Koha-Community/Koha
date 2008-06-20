@@ -22,9 +22,6 @@ use strict;
 use C4::Context;
 use C4::Output;
 
-use MIME::Base64 qw(encode_base64 decode_base64);
-use Encode qw(encode decode);
-
 use vars qw($VERSION @ISA @EXPORT $DEBUG);
 
 BEGIN {
@@ -55,8 +52,6 @@ BEGIN {
 		&GetKohaAuthorisedValues
 		&GetAuthValCode
 		&GetManagedTagSubfields
-        &str_to_base64
-        &base64_to_str
 
 		$DEBUG
 	);
@@ -1058,44 +1053,6 @@ ORDER BY marc_subfield_structure.tagfield, tagsubfield|);
   $rq->execute;
   my $data=$rq->fetchall_arrayref({});
   return $data;
-}
-
-=head2 str_to_base64
-
-=over 4
-
-my $base64 = str_to_base64($string_containing_unicode);
-
-=back
-
-Get a Base64 version of a string that is in UTF-8.  This
-function can be used to convert an arbitrary coded value
-(like a branch code) into a form that can be safely concatenated
-with similarly encoded values for a HTML form input name, as
-in admin/issuingrules.pl.
-
-=cut
-
-sub str_to_base64 {
-    my $in = shift;
-    return encode_base64(encode("UTF-8", $in), '');
-}
-
-=head2 base64_to_str
-
-=over 4
-
-my $base64 = base64_to_str($string_containing_unicode);
-
-=back
-
-Converse of C<str_to_base64()>.
-
-=cut
-
-sub base64_to_str {
-    my $in = shift;
-    return decode("UTF-8", decode_base64($in));
 }
 
 =head2 display_marc_indicators
