@@ -235,6 +235,11 @@ foreach ( @$alerts ) {
     $_->{ $_->{type} } = 1;
     $_->{relatedto} = findrelatedto( $_->{type}, $_->{externalid} );
 }
+if (C4::Context->preference("AmazonContent"     ) or 
+	C4::Context->preference("GoogleJackets"     ) or
+	C4::Context->preference("BakerTaylorEnabled")   ) {
+		$template->param(JacketImages=>1);
+}
 
 $template->param(
     waiting_count      => $wcount,

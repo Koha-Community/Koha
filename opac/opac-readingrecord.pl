@@ -109,7 +109,7 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
     $line{biblionumber}   = $issues->[$i]->{'biblionumber'};
     $line{title}          = $issues->[$i]->{'title'};
     $line{author}         = $issues->[$i]->{'author'};
-    $line{isbn}         = $issues->[$i]->{'isbn'};
+    $line{isbn}           = $issues->[$i]->{'isbn'};
     $line{itemcallnumber} = $issues->[$i]->{'itemcallnumber'};
     $line{date_due}       = format_date( $issues->[$i]->{'date_due'} );
     $line{returndate}     = format_date( $issues->[$i]->{'returndate'} );
@@ -122,6 +122,7 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
 
 if (C4::Context->preference('BakerTaylorEnabled')) {
 	$template->param(
+		JacketImages=>1,
 		BakerTaylorEnabled  => 1,
 		BakerTaylorImageURL => &image_url(),
 		BakerTaylorLinkURL  => &link_url(),
@@ -134,6 +135,12 @@ BEGIN {
 		require C4::External::BakerTaylor;
 		import C4::External::BakerTaylor qw(&image_url &link_url);
 	}
+}
+
+for(qw(AmazonContent GoogleJackets)) {	# BakerTaylorEnabled handled above
+	C4::Context->preference($_) or next;
+	$template->param($_=>1);
+	$template->param(JacketImages=>1);
 }
 
 $template->param(
