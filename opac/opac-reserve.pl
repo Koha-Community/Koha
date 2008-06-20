@@ -28,6 +28,7 @@ use C4::Dates qw/format_date/;
 use C4::Context;
 use C4::Members;
 use C4::Branch; # GetBranches
+use C4::Debug;
 # use Data::Dumper;
 
 my $MAXIMUM_NUMBER_OF_RESERVES = C4::Context->preference("maxreserves");
@@ -168,6 +169,7 @@ foreach my $itm (@items) {
     push @duedates, { date_due => format_date( $itm->{'date_due'} ) }
       if defined $itm->{'date_due'};
     $itm->{ $itm->{'publictype'} } = 1;
+	$debug and warn $itm->{'notforloan'};
     my $fee = GetReserveFee( undef, $borrowernumber, $itm->{'biblionumber'},
         'a', ( $itm->{'biblioitemnumber'} ) );
     $fee = sprintf "%.02f", $fee;
