@@ -319,7 +319,12 @@ $.tablesorter.addParser({
                             Item in transit to <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value="<!-- TMPL_VAR NAME="wbrcd" -->" />
                         <!-- /TMPL_IF -->
                     <!-- TMPL_ELSE -->
-                            Item waiting to be pulled
+                            <!-- TMPL_IF NAME="intransit" -->
+                                Item in transit from <b> <!-- TMPL_VAR NAME="frombranch" --></b> since 
+                                <!-- TMPL_VAR NAME="datesent" -->
+                            <!-- TMPL_ELSE -->
+                                Item waiting to be pulled
+                            <!-- /TMPL_IF -->
                     <!-- /TMPL_IF -->
                 </td>
 		<td>

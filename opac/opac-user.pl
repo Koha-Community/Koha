@@ -221,6 +221,13 @@ foreach my $res (@reserves) {
             }
             # set found to 1 if reserve is waiting for patron pickup
             $res->{'found'} = 1 if $res->{'found'} eq 'W';
+        } else {
+            my ($transfertwhen, $transfertfrom, $transfertto) = GetTransfers( $res->{'itemnumber'} );
+            if ($transfertwhen) {
+                $res->{intransit} = 1;
+                $res->{datesent}   = format_date($transfertwhen);
+                $res->{frombranch} = GetBranchName($transfertfrom);
+            }
         }
         push @waiting, $res;
         $wcount++;
