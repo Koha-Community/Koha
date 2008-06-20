@@ -92,7 +92,7 @@ while ( my $data = $sth->fetchrow_hashref ) {
 }
 
 $template->param(
-    COMMITEDLOOP => \@commited_loop,
+    COMMITTEDLOOP => \@commited_loop,
     total        => $total
 );
 $sth->finish;
