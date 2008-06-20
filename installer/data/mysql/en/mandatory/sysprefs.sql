@@ -93,7 +93,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SpecifyDueDate',1,'Define whether to display \"Specify Due Date\" form in Circulation','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SubscriptionHistory',';','Define the display preference for serials issue history in OPAC','simplified|full','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SubscriptionLog',1,'If ON, enables subscriptions log',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('suggestion',1,'If ON, enables patron suggestions feature in OPAC','','free');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('suggestion',1,'If ON, enables patron suggestions feature in OPAC','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('template','prog','Define the preferred staff interface template','','Themes');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('TemplateEncoding','utf-8','Globally define the default character encoding','iso-8859-1|utf-8','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('timeout',12000000,'Inactivity timeout for cookies authentication (in seconds)',NULL,'Integer');
