@@ -66,8 +66,7 @@ use strict;
 
 my $input=new CGI;
 my $supplierid=$input->param('supplierid');
-my @booksellers=GetBookSeller($supplierid);
-my $count = scalar @booksellers;
+my $bookseller=GetBookSellerFromId($supplierid);
 
 my $invoice=$input->param('invoice') || '';
 my $freight=$input->param('freight');
@@ -121,8 +120,6 @@ for (my $i=0;$i<$countlines;$i++){
      if ( $i > 0 && $totalfreight != $parcelitems[$i]->{'freight'}) {
                warn "FREIGHT CHARGE MISMATCH!!";
        }
-       $totalfreight=$parcelitems[$i]->{'freight'};
-    #$totalfreight+=$parcelitems[$i]->{'freight'};
     $totalfreight=$parcelitems[$i]->{'freight'};
     $totalquantity+=$parcelitems[$i]->{'quantityreceived'};
     $tototal+=$total;
@@ -163,14 +160,14 @@ for (my $i=0;$i<$countpendings;$i++){
     push @loop_orders, \%line;
 }
 $freight = $totalfreight unless $freight;
-$totalfreight=$freight;
+#$totalfreight=$freight;
 $tototal=$tototal+$freight;
 
 $template->param(invoice => $invoice,
                 datereceived => $datereceived->output('iso'),
                 invoicedatereceived => $datereceived->output('iso'), 
                 formatteddatereceived => $datereceived->output(),
-                name => $booksellers[0]->{'name'},
+                name => $bookseller->{'name'},
                 supplierid => $supplierid,
                 gst => $gst,
                 freight => $freight,
