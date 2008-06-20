@@ -223,7 +223,7 @@ $(document).ready(function(){
 		<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR name="shelfnumber" -->" />
 		<legend>Edit List <i><!-- TMPL_VAR name="shelfname" --></i></legend>
 		<ol>
-		<li><label for="shelfname">Name: </label><input type="text" id="shelfname" name="shelfname" size="25" value='<!-- TMPL_VAR name="shelfname"-->' /></li>
+		<li><label for="shelfname">Name: </label><input type="text" id="shelfname" name="shelfname" size="25" value='<!-- TMPL_VAR name="shelfname" ESCAPE="HTML" -->' /></li>
 		<li><label for="owner">Owner: </label><input type="hidden" id="owner" name="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->" /><!-- TMPL_VAR NAME="loggedinusername" --></li>
 		<li><label for="category">Category: </label>
 			<select id="category" name="category">
