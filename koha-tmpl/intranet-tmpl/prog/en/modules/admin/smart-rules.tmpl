@@ -64,11 +64,11 @@ $(document).ready(function() {
             <tr>
                 <th>Patron Category</th>
                 <th>Item Type</th>
-                <th>Amount</th>
-                <th>Grace Period</th>
-                <th>Charging Interval</th>
-                <th>Amoun Loanable</th>
-                <th>Loan time</th><th>&nbsp;</th>
+                <th>Fine Amount</th>
+                <th>Fine Grace Period</th>
+                <th>Fine Charging Interval</th>
+                <th>Current Checkouts Allowed</th>
+                <th>Loan Period</th><th>&nbsp;</th>
             </tr>
             <!-- TMPL_LOOP NAME="rules" -->
                 <tr>
@@ -121,6 +121,49 @@ $(document).ready(function() {
             </table>
         </form>
     </div>
+    <!-- TMPL_IF NAME="show_branch_cat_rule_form" -->
+    <div class="help">
+        <p>For this library, you can specify the maximum number of loans that 
+            a patron of a given category can make, regardless of the item type.
+        </p>
+        <p>If the total amount loanable for a given patron category is left blank,
+           no limit applies, except possibly for a limit you define for a specific item type.
+        </p>
+    </div>
+    <div>
+        <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
+            <input type="hidden" name="op" value="add-branch-cat" />
+            <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->"/>
+            <table>
+                <tr>
+                    <th>Patron Category</th>
+                    <th>Total Current Checkouts Allowed</th>
+                    <th>&nbsp;</th>
+                </tr>
+                <!-- TMPL_LOOP NAME="branch_cat_rule_loop" -->
+                    <tr>
+                        <td><!-- TMPL_VAR NAME="humancategorycode" --></td>
+                        <td><!-- TMPL_VAR NAME="maxissueqty" --></td>
+                        <td>
+                            <a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->&amp;branch=<!-- TMPL_VAR NAME="branch" -->">Delete</a>
+                        </td>
+                    </tr>
+                <!-- /TMPL_LOOP -->
+                <tr>
+                    <td>
+                        <select name="categorycode">
+                        <!-- TMPL_LOOP NAME="categoryloop" -->
+                            <option value="<!-- TMPL_VAR NAME="categorycode" -->"><!-- TMPL_VAR NAME="description" --></option>
+                        <!-- /TMPL_LOOP -->
+                        </select>
+                    </td>
+                    <td><input name="maxissueqty" size="3" /></td>
+                    <td><input type="submit" value="Add" class="submit" /></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <!-- /TMPL_IF -->
 </div>
 
 </div>
