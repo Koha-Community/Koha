@@ -94,16 +94,6 @@ my $onlymine=C4::Context->preference('IndependantBranches') &&
              C4::Context->userenv->{branch};
 my $branches = GetBranches($onlymine);
 my @branchloop;
-my @selectflags;
-push @selectflags, " ";#
-push @selectflags,"gonenoaddress";#
-push @selectflags,"debarred";#
-push @selectflags,"lost";#
-my $CGIflags=CGI::scrolling_list( -name     => 'borflags',
-            -id =>'borflags',
-            -values   => \@selectflags,
-            -size     => 1,
-            -multiple => 0 );
 
 foreach my $thisbranch ( sort keys %$branches ) {
      my %row = (
@@ -120,7 +110,6 @@ $template->param( branchloop => \@branchloop,
 $template->param(borcatloop=> \@borcatloop,
           itemtypeloop => \@itemtypeloop,
           branchloop=> \@branchloop,
-          CGIflags     => $CGIflags,
           borname => $bornamefilter,
           order => $order,
           showall => $showall);

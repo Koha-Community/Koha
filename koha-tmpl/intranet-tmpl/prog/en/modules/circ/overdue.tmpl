@@ -60,7 +60,14 @@
       <!-- /TMPL_LOOP -->
       </select>
     </li>
-    <li><label>Patron flags:</label><!--TMPL_VAR Name="CGIflags" --></li>
+    <li><label>Patron flags:</label>
+        <select name="borflags" size="1" id="borflags">
+            <option value=" "> </option>
+            <option value="gonenoaddress">Address in question</option>
+            <option value="debarred">Debarred</option>
+            <option value="lost">Lost Card</option>
+        </select>
+    </li>
     <li><label>Item type:</label><select name="itemtype" id="itemtype"><option value="">Any</option>
       <!-- TMPL_LOOP name="itemtypeloop" --><!-- TMPL_IF NAME="selected" -->
         <option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="itemtypename" --></option><!-- TMPL_ELSE -->
