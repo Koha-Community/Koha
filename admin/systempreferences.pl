@@ -248,7 +248,6 @@ my %tabsysprefs;
     $tabsysprefs{LibraryName}="OPAC";
     $tabsysprefs{opaccolorstylesheet}="OPAC";
     $tabsysprefs{opaccredits}="OPAC";
-    $tabsysprefs{opaclargeimage}="OPAC";
     $tabsysprefs{opaclayoutstylesheet}="OPAC";
     $tabsysprefs{OpacNav}="OPAC";
     $tabsysprefs{opacsmallimage}="OPAC";

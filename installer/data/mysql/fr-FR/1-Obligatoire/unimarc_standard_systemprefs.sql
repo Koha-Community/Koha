@@ -177,7 +177,6 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OAI-PMH:Subset','itemtype=\'BOOK\'','Exprime le sous ensemble des éléments de la table biblioitem à exporter (expérimental)',NULL,'Free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('language','fr-FR','Définit les langues accessibles dans l''interface professionnelle',NULL,'Languages');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacheader','','HTML spécifique à ajouter à l''OPAC','30|10','Textarea');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opaclargeimage','','Définit l''URL d''une image à afficher au lieu du logo Koha à l''OPAC',NULL,'free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('QueryAutoTruncate',1,'Si activé, la troncature est activée par défaut',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('QueryRemoveStopwords',0,'Si activé, les mots vides listés dans l''interface d''administration sont supprimés des requètes',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('CircControl',"ItemHomeLibrary",'Précise la bibliothèque qui contrôle les règles de prêt et d''amende',"PickupLibrary|PatronLibrary|ItemHomeLibrary",'Choice');
