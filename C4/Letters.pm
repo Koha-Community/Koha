@@ -24,6 +24,7 @@ use Mail::Sendmail;
 # use C4::Suggestions;
 use C4::Members;
 use C4::Log;
+use C4::SMS;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -581,17 +582,104 @@ sub SendQueuedMessages {
     return scalar( @$unsent_messages );
 }
 
-sub _get_unsent_messages {
+=head2 GetRSSMessages
+
+=over 4
+
+my $message_list = GetRSSMessages( { limit => 10, borrowernumber => '14' } )
+
+returns a listref of all queued RSS messages for a particular person.
+
+=back
+
+=cut
+
+sub GetRSSMessages {
+    my $params = shift;
+
+    return unless $params;
+    return unless ref $params;
+    return unless $params->{'borrowernumber'};
+    
+    return _get_unsent_messages( { message_transport_type => 'rss',
+                                   limit                  => $params->{'limit'},
+                                   borrowernumber         => $params->{'borrowernumber'}, } );
+}
+
+=head2 GetQueuedMessages
+
+=over 4
+
+my $messages = GetQueuedMessage( { borrowernumber => '123', limit => 20 } );
+
+fetches messages out of the message queue.
+
+returns:
+list of hashes, each has represents a message in the message queue.
+
+=back
+
+=cut
+
+sub GetQueuedMessages {
+    my $params = shift;
 
     my $dbh = C4::Context->dbh();
     my $statement = << 'ENDSQL';
-SELECT message_id, borrowernumber, subject, content, type, status, time_queued
+SELECT message_id, borrowernumber, subject, content, message_transport_type, status, time_queued
+FROM message_queue
+ENDSQL
+
+    my @query_params;
+    my @whereclauses;
+    if ( exists $params->{'borrowernumber'} ) {
+        push @whereclauses, ' borrowernumber = ? ';
+        push @query_params, $params->{'borrowernumber'};
+    }
+
+    if ( @whereclauses ) {
+        $statement .= ' WHERE ' . join( 'AND', @whereclauses );
+    }
+
+    if ( defined $params->{'limit'} ) {
+        $statement .= ' LIMIT ? ';
+        push @query_params, $params->{'limit'};
+    }
+
+    my $sth = $dbh->prepare( $statement );
+    my $result = $sth->execute( @query_params );
+    my $messages = $sth->fetchall_arrayref({});
+    return $messages;
+}
+
+sub _get_unsent_messages {
+    my $params = shift;
+
+    my $dbh = C4::Context->dbh();
+    my $statement = << 'ENDSQL';
+SELECT message_id, borrowernumber, subject, content, message_transport_type, status, time_queued
 FROM message_queue
 WHERE status = 'pending'
 ENDSQL
 
+    my @query_params;
+    if ( ref $params ) {
+        if ( $params->{'message_transport_type'} ) {
+            $statement .= ' AND message_transport_type = ? ';
+            push @query_params, $params->{'message_transport_type'};
+        }
+        if ( $params->{'borrowernumber'} ) {
+            $statement .= ' AND borrowernumber = ? ';
+            push @query_params, $params->{'borrowernumber'};
+        }
+        if ( $params->{'limit'} ) {
+            $statement .= ' limit ? ';
+            push @query_params, $params->{'limit'};
+        }
+    }
+    
     my $sth = $dbh->prepare( $statement );
-    my $result = $sth->execute();
+    my $result = $sth->execute( @query_params );
     my $unsent_messages = $sth->fetchall_arrayref({});
     return $unsent_messages;
 }

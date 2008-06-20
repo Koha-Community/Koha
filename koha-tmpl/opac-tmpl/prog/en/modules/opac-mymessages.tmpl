@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+   <channel>
+      <title></title>
+      <link></link>
+      <description></description>
+      <language></language>
+      <pubDate></pubDate>
+      <lastBuildDate></lastBuildDate>
+      <docs></docs>
+      <generator></generator>
+      <managingEditor></managingEditor>
+      <webMaster></webMaster>
+      <!-- TMPL_LOOP NAME="message_list" -->
+      <item>
+        <title><!-- TMPL_VAR ESCAPE=HTML NAME="subject" --></title>
+        <link><!-- TMPL_VAR ESCAPE=HTML NAME="title" --></link>
+        <description><!-- TMPL_VAR ESCAPE=HTML NAME="content"--></description>
+        <pubDate><!-- TMPL_VAR ESCAPE=HTML NAME="time_queued" --></pubDate>
+        <guid><!-- TMPL_VAR ESCAPE=HTML NAME="title" --></guid>
+      </item>
+      <!-- /TMPL_LOOP -->
+   </channel>
+</rss>
