@@ -1169,12 +1169,12 @@ sub GetHistory {
         }            
 
         if ( defined $from_placed_on ) {
-            $query .= " AND creationdate > ? ";
+            $query .= " AND creationdate >= ? ";
             push @query_params, $from_placed_on;
         }
 
         if ( defined $to_placed_on ) {
-            $query .= " AND creationdate < ? ";
+            $query .= " AND creationdate <= ? ";
             push @query_params, $to_placed_on;
         }
 
