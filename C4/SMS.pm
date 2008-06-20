@@ -1,140 +1,109 @@
 package C4::SMS;
-#Written by tgarip@neu.edu.tr for SMS message sending and other SMS related services
+
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+
+=head1 NAME
+
+C4::SMS - send SMS messages
+
+=head1 SYNOPSIS
+
+my $success = C4::SMS->send_sms( message     => 'This is my text message',
+                                 destination => '212-555-1212' );
+
+=head1 DESCRIPTION
+
+
+
+=cut
 
 use strict;
 use warnings;
 
-use LWP::UserAgent;
 use C4::Context;
+use SMS::Send;
 
-use vars qw($VERSION @ISA @EXPORT);
+use vars qw( $VERSION );
 
 BEGIN {
-	require Exporter;
-	@ISA = qw(Exporter);
-	$VERSION = 0.03;
-	@EXPORT = qw(
-		&get_sms_auth 
-		&send_sms 
-		&read_sms
-		&error_codes
-		&parse_phone
-		&parse_message
-		&write_sms
-		&mod_sms
-		&kill_sms
-	);
+    $VERSION = 0.03;
 }
 
-our $user = C4::Context->config('smsuser');
-our $pwd  = C4::Context->config('smspass');
-our $uri  = "https://spgw.kktcell.com/smshttpproxy/SmsHttpProxyServlet";
+=head1 METHODS
 
+=cut
 
-sub get_sms_auth {
-    my $ua = LWP::UserAgent->new;
-	my $commands;
-	my $res=$ua->post($uri,[cmd=>'REGISTER',pUser=>$user,pPwd=>$pwd]);
-	if ($res->is_success){	
-		$commands=parse_content($res->content);
-	}
-	return($commands,$ua);
-}
+# The previous implmentation used username and password.
+# our $user = C4::Context->config('smsuser');
+# our $pwd  = C4::Context->config('smspass');
+
+=head2 send_sms
+
+=over4
+
+=back
+
+=cut
 
 sub send_sms {
-	my $ua = shift or return undef;
-	my $phone=shift;
-	my $message=shift;
-	my $session=shift;
-	my $res=$ua->post($uri,[cmd=>'SENDSMS',pUser=>$user,pPwd=>$pwd,pSessionId=>$session,pService_Code=>4130,pMsisdn=>$phone,
-		pContent=>$message]);
-	return parse_content($res->content);
+    my $self = shift;
+    my $params= shift;
+
+    foreach my $required_parameter ( qw( message destination ) ) {
+        # Should I warn in some way?
+        return unless defined $params->{ $required_parameter };
+    }
+
+    # This allows the user to override the driver. See SMS::Send::Test
+    my $driver = exists $params->{'driver'} ? $params->{'driver'} : $self->driver();
+    return unless $driver;
+
+    # warn "using driver: $driver to send message to $params->{'destination'}";
+    
+    # Create a sender
+    my $sender = SMS::Send->new( $driver,
+                                 _login    => C4::Context->preference('SMSSendUsername'),
+                                 _password => C4::Context->preference('SMSSendPassword'),
+                            );
+    
+    # Send a message
+    my $sent = $sender->send_sms( to   => $params->{'destination'},
+                                  text => $params->{'message'},
+                             );
+    # warn 'failure' unless $sent;
+    return $sent;
 }
 
-sub read_sms {
-	my $ua = shift or return undef;
-	my $session=shift;
-	my $res=$ua->post($uri,[cmd=>'GETSMS',pUser=>$user,pPwd=>$pwd,pSessionId=>$session,pService_Code=>4130]);
-	return parse_content($res->content);
+=head2 driver
+
+=over 4
+
+=back
+
+=cut
+
+sub driver {
+    my $self = shift;
+
+    # return 'US::SprintPCS';
+    return C4::Context->preference('SMSSendDriver');
+
 }
 
-sub parse_content {
-	my $content = shift;
-	my %commands;
-	my @attributes = split /&/,$content;
-	foreach my $params(@attributes){
-		my (@param) = split /=/,$params;
-		$commands{$param[0]}=$param[1];
-	}
-	return(\%commands);
-}
-
-sub error_codes {
-	my $error = shift;
-	($error==    -1) and return	"Closed session - Retry";
-	($error==    -2) and return	"Invalid session - Retry";
-	($error==    -3) and return	"Invalid password";
-	($error==  -103) and return	"Invalid user";
-	($error==  -422) and return	"Invalid Parameter";
-	($error==  -426) and return	"User does not have permission to send message";
-	($error==  -700) and return	"No permission";
-	($error==  -801) and return	"Msdisn count differs - warn administartor";
-	($error==  -803) and return	"Content count differs from XSER count";
-	($error== -1101) and return	"Insufficient Credit -  Do not retry";
-	($error== -1104) and return	"Invalid Phone number";
-	($error==-10001) and return	"Internal system error - Notify provider";
-	($error== -9005) and return	"No messages to read";
-	if ($error){
-		warn "Unknown SMS error '$error' occured";
-		return	"Unknown SMS error '$error' occured";
-	}
-}
-
-sub parse_phone {
-	## checks acceptable phone numbers
-	## FIXME: accept Telsim when available (542 numbers)
-	my $phone=shift;
-	$phone=~s/^0//g;
-	$phone=~s/ //g;
-	my $length=length($phone);
-	if ($length==10 || $length==12){
-		my $code=substr($phone,0,3) if $length==10;
-		   $code=substr($phone,0,5) if $length==12;
-		if ($code=~/533/){
-			return $phone;
-		}
-	}
-	return 0;
-}
-
-sub parse_message {
-	my $message = shift;
-	$message =~ s/  / /g;
-	my @parsed = split / /, $message;
-	return (@parsed);
-}
-
-sub write_sms {
-	my ($userid,$message,$phone)=@_;
-	my $dbh=C4::Context->dbh;
-	my $sth=$dbh->prepare("INSERT into sms_messages(userid,message,user_phone,date_received) values(?,?,?,now())");
-	$sth->execute($userid,$message,$phone);
-	$sth->finish;
-	return $dbh->{'mysql_insertid'};	# FIXME: mysql specific
-}
-
-sub mod_sms {
-	my ($smsid,$message)=@_;
-	my $dbh=C4::Context->dbh;
-	my $sth=$dbh->prepare("UPDATE sms_messages set reply=?, date_replied=now() where smsid=?");
-	$sth->execute($message,$smsid);
-}
-
-sub kill_sms {
-	#end a session
-	my $ua = shift or return undef;
-	my $session = shift;
-	my $res = $ua->post($uri,[cmd=>'KILLSESSION',pSessionId=>$session]);
-}
 1;
+
 __END__
+

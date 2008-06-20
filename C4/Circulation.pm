@@ -1782,6 +1782,40 @@ sub GetBiblioIssues {
     return \@issues;
 }
 
+=head2 GetUpcomingDueIssues
+
+=over 4
+ 
+my $upcoming_dues = GetUpcomingDueIssues( { days_in_advance => 4 } );
+
+=back
+
+=cut
+
+sub GetUpcomingDueIssues {
+    my $params = shift;
+
+    $params->{'days_in_advance'} = 7 unless exists $params->{'days_in_advance'};
+    my $dbh = C4::Context->dbh;
+
+    my $statement = <<END_SQL;
+SELECT issues.*, items.itype as itemtype, items.homebranch, TO_DAYS( date_due )-TO_DAYS( NOW() ) as days_until_due
+FROM issues 
+LEFT JOIN items USING (itemnumber)
+WhERE returndate is NULL
+AND ( TO_DAYS( NOW() )-TO_DAYS( date_due ) ) < ?
+END_SQL
+
+    my @bind_parameters = ( $params->{'days_in_advance'} );
+    
+    my $sth = $dbh->prepare( $statement );
+    $sth->execute( @bind_parameters );
+    my $upcoming_dues = $sth->fetchall_arrayref({});
+    $sth->finish;
+
+    return $upcoming_dues;
+}
+
 =head2 CanBookBeRenewed
 
 ($ok,$error) = &CanBookBeRenewed($borrowernumber, $itemnumber);

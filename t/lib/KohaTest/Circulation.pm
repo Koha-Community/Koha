@@ -29,6 +29,7 @@ sub methods : Test( 1 ) {
                       GetItemIssue 
                       GetItemIssues 
                       GetBiblioIssues 
+                      GetUpcomingDueIssues
                       CanBookBeRenewed 
                       AddRenewal 
                       GetRenewCount 

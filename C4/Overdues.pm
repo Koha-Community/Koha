@@ -105,7 +105,7 @@ overdue items. It is primarily used by the 'misc/fines2.pl' script.
 
 =item Getoverdues
 
-  ($overdues) = &Getoverdues();
+  $overdues = Getoverdues( { minimumdays => 1, maximumdays => 30 } );
 
 Returns the list of all overdue books, with their itemtype.
 
@@ -117,23 +117,42 @@ Koha database.
 
 #'
 sub Getoverdues {
+    my $params = shift;
+
     my $dbh = C4::Context->dbh;
-    my $sth =  (C4::Context->preference('item-level_itypes')) ? 
-				$dbh->prepare(
-        			"SELECT issues.*,items.itype as itemtype, items.homebranch FROM issues 
-                	 LEFT JOIN items USING (itemnumber)
-                	 WHERE date_due < now() 
-                	 ORDER BY borrowernumber " )
-				:
- 				$dbh->prepare(
-                    "SELECT issues.*,biblioitems.itemtype,items.itype, items.homebranch  FROM issues 
-                     LEFT JOIN items USING (itemnumber)
-                     LEFT JOIN biblioitems USING (biblioitemnumber)
-                     WHERE date_due < now() 
-                     ORDER BY borrowernumber " );
-    $sth->execute;
-	return $sth->fetchall_arrayref({});
+    my $statement;
+    if ( C4::Context->preference('item-level_itypes') ) {
+        $statement = "
+SELECT issues.*,items.itype as itemtype, items.homebranch FROM issues 
+LEFT JOIN items USING (itemnumber)
+WHERE date_due < now() 
+";
+    } else {
+        $statement = "
+SELECT issues.*,biblioitems.itemtype,items.itype, items.homebranch  FROM issues 
+  LEFT JOIN items USING (itemnumber)
+  LEFT JOIN biblioitems USING (biblioitemnumber)
+  WHERE date_due < now() 
+";
+    }
+
+    my @bind_parameters;
+    if ( exists $params->{'minimumdays'} and exists $params->{'maximumdays'} ) {
+        $statement .= ' AND TO_DAYS( NOW() )-TO_DAYS( date_due ) BETWEEN ? and ? ';
+        push @bind_parameters, $params->{'minimumdays'}, $params->{'maximumdays'};
+    } elsif ( exists $params->{'minimumdays'} ) {
+        $statement .= ' AND ( TO_DAYS( NOW() )-TO_DAYS( date_due ) ) > ? ';
+        push @bind_parameters, $params->{'minimumdays'};
+    } elsif ( exists $params->{'maximumdays'} ) {
+        $statement .= ' AND ( TO_DAYS( NOW() )-TO_DAYS( date_due ) ) < ? ';
+        push @bind_parameters, $params->{'maximumdays'};
+    }
+    $statement .= 'ORDER BY borrowernumber';
+    my $sth = $dbh->prepare( $statement );
+    $sth->execute( @bind_parameters );
+    return $sth->fetchall_arrayref({});
 }
+
 
 =head2 checkoverdues
 

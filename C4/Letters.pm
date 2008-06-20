@@ -206,6 +206,7 @@ sub getalert {
 	In the table alert, a "id" is stored in the externalid field. This "id" is related to another table, depending on the type of the alert.
 	When type=issue, the id is related to a subscriptionid and this sub returns the name of the biblio.
 	When type=virtual, the id is related to a virtual shelf and this sub returns the name of the sub
+
 =cut
 
 sub findrelatedto {
@@ -503,6 +504,157 @@ sub parseletter {
         $letter->{content} =~ s/$replacefield/$replacedby/g;
     }
 }
+
+=head2 EnqueueLetter
+
+=over 4
+
+my $success = EnqueueLetter( { letter => $letter, borrowernumber => '12', message_transport_type => 'email' } )
+
+places a letter in the message_queue database table, which will
+eventually get processed (sent) by the process_message_queue.pl
+cronjob when it calls SendQueuedMessages.
+
+return true on success
+
+=back
+
+=cut
+
+sub EnqueueLetter {
+    my $params = shift;
+
+    return unless exists $params->{'letter'};
+    return unless exists $params->{'borrowernumber'};
+    return unless exists $params->{'message_transport_type'};
+    
+    my $dbh = C4::Context->dbh();
+    my $statement = << 'ENDSQL';
+INSERT INTO message_queue
+( borrowernumber, subject, content, message_transport_type, status, time_queued )
+VALUES
+( ?,              ?,       ?,       ?,                      ?,      NOW() )
+ENDSQL
+
+    my $sth = $dbh->prepare( $statement );
+    my $result = $sth->execute( $params->{'borrowernumber'},         # borrowernumber
+                                $params->{'letter'}->{'title'},      # subject
+                                $params->{'letter'}->{'content'},    # content
+                                $params->{'message_transport_type'}, # message_transport_type
+                                'pending',                           # status
+                           );
+    return $result;
+}
+
+=head2 SendQueuedMessages
+
+=over 4
+
+SendQueuedMessages()
+
+sends all of the 'pending' items in the message queue.
+
+my $sent = SendQueuedMessages( { verbose => 1 } )
+
+returns number of messages sent.
+
+=back
+
+=cut
+
+sub SendQueuedMessages {
+    my $params = shift;
+
+    my $unsent_messages = _get_unsent_messages();
+    MESSAGE: foreach my $message ( @$unsent_messages ) {
+        # warn Data::Dumper->Dump( [ $message ], [ 'message' ] );
+        warn "sending $message->{'message_transport_type'} message to patron $message->{'borrowernumber'}" if $params->{'verbose'};
+        # This is just begging for subclassing
+        next MESSAGE if ( lc( $message->{'message_transport_type'} eq 'rss' ) );
+        if ( lc( $message->{'message_transport_type'} ) eq 'email' ) {
+            _send_message_by_email( $message );
+        }
+        if ( lc( $message->{'message_transport_type'} ) eq 'sms' ) {
+            _send_message_by_sms( $message );
+        }
+    }
+    return scalar( @$unsent_messages );
+}
+
+sub _get_unsent_messages {
+
+    my $dbh = C4::Context->dbh();
+    my $statement = << 'ENDSQL';
+SELECT message_id, borrowernumber, subject, content, type, status, time_queued
+FROM message_queue
+WHERE status = 'pending'
+ENDSQL
+
+    my $sth = $dbh->prepare( $statement );
+    my $result = $sth->execute();
+    my $unsent_messages = $sth->fetchall_arrayref({});
+    return $unsent_messages;
+}
+
+sub _send_message_by_email {
+    my $message = shift;
+
+    my $member = C4::Members::GetMember( $message->{'borrowernumber'} );
+    return unless $member->{'email'};
+
+    my $success = sendmail( To      => $member->{'email'},
+                            From    => C4::Context->preference('KohaAdminEmailAddress'),
+                            Subject => $message->{'subject'},
+                            Message => $message->{'content'},
+                       );
+    if ( $success ) {
+        # warn "OK. Log says:\n", $Mail::Sendmail::log;
+        _set_message_status( { message_id => $message->{'message_id'},
+                               status     => 'sent' } );
+        return $success;
+    } else {
+        # warn $Mail::Sendmail::error;
+        _set_message_status( { message_id => $message->{'message_id'},
+                               status     => 'failed' } );
+        return;
+    }
+}
+
+sub _send_message_by_sms {
+    my $message = shift;
+
+    my $member = C4::Members::GetMember( $message->{'borrowernumber'} );
+    return unless $member->{'smsalertnumber'};
+
+    my $success = C4::SMS->send_sms( { destination => $member->{'smsalertnumber'},
+                                       message     => $message->{'content'},
+                                     } );
+    if ( $success ) {
+        _set_message_status( { message_id => $message->{'message_id'},
+                               status     => 'sent' } );
+        return $success;
+    } else {
+        _set_message_status( { message_id => $message->{'message_id'},
+                               status     => 'failed' } );
+        return;
+    }
+}
+
+sub _set_message_status {
+    my $params = shift;
+
+    foreach my $required_parameter ( qw( message_id status ) ) {
+        return unless exists $params->{ $required_parameter };
+    }
+
+    my $dbh = C4::Context->dbh();
+    my $statement = 'UPDATE message_queue SET status= ? WHERE message_id = ?';
+    my $sth = $dbh->prepare( $statement );
+    my $result = $sth->execute( $params->{'status'},
+                                $params->{'message_id'} );
+    return $result;
+}
+
 
 1;
 __END__
