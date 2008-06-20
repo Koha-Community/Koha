@@ -52,14 +52,15 @@ C<op> can be equal to:
 
 use strict;
 use CGI;
-use C4::Branch; # GetBranches
 use List::Util qw/min/;
+use C4::Branch; # GetBranches
 use C4::Auth;
 use C4::Koha;
 use C4::Context;
 use C4::Bookfund;
 use C4::Output;
 use C4::Dates;
+use C4::Debug;
 
 # use Smart::Comments;
 
@@ -167,29 +168,22 @@ elsif ($op eq 'add_validate') {
 #-----############# MOD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 elsif ($op eq 'mod_validate') {
-### mod ddddddddddddddddd
-
 	my $bookfundid  = uc $input->param('bookfundid');
 	my $bookfundname   = $input->param('bookfundname');
 	my $branchcode     = $input->param('branchcode'    ) || undef;
 	my $current_branch = $input->param('current_branch') || undef;
-	warn "$bookfundid, $bookfundname, $branchcode";
+	$debug and warn "$bookfundid, $bookfundname, $branchcode";
 
 	my $number = Countbookfund($bookfundid,$branchcodeid);
-### $number
-
-
     if ($number < 2)  {
-         warn "name :$bookfundname branch:$branchcode";
+         $debug and warn "name :$bookfundname branch:$branchcode";
         ModBookFund($bookfundname,$bookfundid,$current_branch, $branchcode);
     }
    $input->redirect('aqbookfund.pl');
-# END $OP eq ADD_VALIDATE
 }
 
 #-----############# DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
-
 elsif ($op eq 'delete_confirm') {
     my $data = GetBookFund($bookfundid,$branchcodeid);
 	$template->param(bookfundid => $bookfundid);
@@ -197,14 +191,12 @@ elsif ($op eq 'delete_confirm') {
 	$template->param(branchcode => $data->{'branchcode'});
 } # END $OP eq DELETE_CONFIRM
 
-
 #-----############# DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 elsif ($op eq 'delete_confirmed') {
     DelBookFund(uc($input->param('bookfundid')),$branchcodeid);
 
 }# END $OP eq DELETE_CONFIRMED
-
 
 #-----############# DEFAULT ##################################
 else { # DEFAULT
