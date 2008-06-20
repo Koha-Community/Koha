@@ -147,7 +147,7 @@ $(window).load(function() {
                 <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
                     <!-- TMPL_IF NAME="__odd__" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
                         <td>
-                            <a href="/cgi-bin/koha/catalogue/search.pl?q=<!-- TMPL_VAR NAME="scan_use" escape="url" -->&quot;<!-- TMPL_VAR NAME="title_nospan" -->&quot;"><!-- TMPL_VAR NAME="title" --></a>
+                            <a href="/cgi-bin/koha/catalogue/search.pl?idx=<!-- TMPL_VAR name="scan_index" -->&amp;q=<!-- TMPL_VAR NAME="scan_use" escape="url" -->&quot;<!-- TMPL_VAR NAME="title_nospan" -->&quot;"><!-- TMPL_VAR NAME="title" --></a>
                         </td>
                         <td>
                             <!-- TMPL_VAR NAME="author" -->

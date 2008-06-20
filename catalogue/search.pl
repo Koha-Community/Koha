@@ -414,6 +414,8 @@ my @results;
 
 ## parse the query_cgi string and put it into a form suitable for <input>s
 my @query_inputs;
+my $scan_index;
+
 for my $this_cgi ( split('&',$query_cgi) ) {
     next unless $this_cgi;
     $this_cgi =~ m/(.*=)(.*)/;
@@ -421,8 +423,10 @@ for my $this_cgi ( split('&',$query_cgi) ) {
     my $input_value = $2;
     $input_name =~ s/=$//;
     push @query_inputs, { input_name => $input_name, input_value => $input_value };
+    $scan_index = $input_value unless $scan_index;
 }
-$template->param ( QUERY_INPUTS => \@query_inputs );
+$template->param ( QUERY_INPUTS => \@query_inputs,
+                   scan_index => $scan_index );
 
 ## parse the limit_cgi string and put it into a form suitable for <input>s
 my @limit_inputs;
