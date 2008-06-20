@@ -266,7 +266,18 @@ $(window).load(function() {
 									<!-- /TMPL_IF -->
                                 </p>
                                 <!-- TMPL_IF name="summary" -->
-                                    <p><!-- TMPL_VAR name="summary" --></p>
+                                        <!-- TMPL_IF NAME="author" -->
+                                            <a href="/cgi-bin/koha/catalogue/search.pl?q=au:<!-- TMPL_VAR NAME="author_nospan" ESCAPE="URL" -->" title="Search for this Author"><!-- TMPL_VAR NAME="author" --></a>
+                                        <!-- TMPL_ELSE -->
+                                            &nbsp;
+                                        <!-- /TMPL_IF -->
+                                    <p>
+                                    <!-- TMPL_UNLESS NAME="item-level_itypes" -->
+                                    <!-- TMPL_UNLESS NAME="noItemTypeImages" --><!-- TMPL_IF name="imageurl" -->
+                                    <img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" style="float: left; margin: .1em;" alt="img" />
+                                    <!-- /TMPL_IF --><!-- /TMPL_UNLESS -->
+                                    <!-- /TMPL_UNLESS -->
+                                    <!-- TMPL_VAR name="summary" --></p>
                                 <!-- TMPL_ELSE -->
                                     <p>
                                     <!-- TMPL_UNLESS NAME="item-level_itypes" -->
