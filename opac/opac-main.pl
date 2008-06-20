@@ -22,7 +22,6 @@ use CGI;
 use C4::Auth;    # get_template_and_user
 use C4::Output;
 use C4::VirtualShelves;
-use C4::Languages qw/getTranslatedLanguages/;
 use C4::Branch;          # GetBranches
 use C4::Members;         # GetMember
 use C4::NewsChannels;    # get_opac_news
@@ -42,33 +41,13 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 my $borrower = GetMember( $borrowernumber, 'borrowernumber' );
-my @languages;
-my $counter   = 0;
-my $langavail = getTranslatedLanguages('opac');
-foreach my $language (@$langavail) {
-
-#   next if $currently_selected_languages->{$language};
-#   FIXME: could incorporate language_name and language_locale_name for better display
-    push @languages,
-      { language => $language->{'language_code'}, counter => $counter, selected=>($input->cookie('KohaOpacLanguage') ? $language->{'language_code'} eq $input->cookie('KohaOpacLanguage')
-  : $language->{'language_code'} eq C4::Context->preference('opaclanguages')) };
-    $counter++;
-}
-
-# Template params
-if ( $counter > 1 ) {
-    $template->param( languages => \@languages )
-      if C4::Context->preference('opaclanguagesdisplay');
-}
-
 $template->param(
     textmessaging        => $borrower->{textmessaging},
 );
 
 # display news
 # use cookie setting for language, bug default to syspref if it's not set
-my $news_lang = $input->cookie('KohaOpacLanguage')
-  || C4::Context->preference('opaclanguages');
+my $news_lang = $input->cookie('KohaOpacLanguage') || 'en';
 my $all_koha_news   = &GetNewsToDisplay($news_lang);
 my $koha_news_count = scalar @$all_koha_news;
 
