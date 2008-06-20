@@ -44,9 +44,9 @@ my ($template, $loggedinuser, $cookie)
                             debug => 1,
                             });
 
-if ($op =~ /delete-(.+)-(.+)/) {
-    my $itemtype = $1;
-    my $categorycode = $2;
+if ($op eq 'delete') {
+    my $itemtype     = $input->param('itemtype');
+    my $categorycode = $input->param('categorycode');
     $debug and warn "deleting $1 $2 $branch";
 
     my $sth_Idelete = $dbh->prepare("delete from issuingrules where branchcode=? and categorycode=? and itemtype=?");
@@ -94,9 +94,6 @@ while (my $data=$sth->fetchrow_hashref){
     push @category_loop,$data;
 }
 
-my %row = (categorycode => "*", description => 'Any');
-push @category_loop, \%row;
-
 $sth->finish;
 $sth=$dbh->prepare("SELECT description,itemtype FROM itemtypes ORDER BY description");
 $sth->execute;
@@ -107,8 +104,6 @@ my @itemtypes;
 while (my $row=$sth->fetchrow_hashref){
     push @itemtypes,$row;
 }
-my %row = (itemtype => '*', description => 'Any');
-push @itemtypes,\%row;
 
 my $sth2 = $dbh->prepare("
     SELECT issuingrules.*, itemtypes.description AS humanitemtype, categories.description AS humancategorycode
@@ -123,9 +118,9 @@ $sth2->execute($branch);
 
 while (my $row = $sth2->fetchrow_hashref) {
     $row->{'humanitemtype'} ||= $row->{'itemtype'};
-    $row->{'humanitemtype'} = 'Any' if $row->{'humanitemtype'} eq '*';
+    $row->{'default_humanitemtype'} = 1 if $row->{'humanitemtype'} eq '*';
     $row->{'humancategorycode'} ||= $row->{'categorycode'};
-    $row->{'humancategorycode'} = 'Any' if $row->{'humancategorycode'} eq '*';
+    $row->{'default_humancategorycode'} = 1 if $row->{'humancategorycode'} eq '*';
     $row->{'fine'} = sprintf('%.2f', $row->{'fine'});
     push @row_loop, $row;
 }
