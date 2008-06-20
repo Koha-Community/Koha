@@ -21,6 +21,7 @@ sub methods : Test( 1 ) {
                       AddIssue 
                       GetLoanLength 
                       GetIssuingRule 
+                      GetBranchBorrowerCircRule
                       AddReturn 
                       MarkIssueReturned 
                       FixOverduesOnReturn 

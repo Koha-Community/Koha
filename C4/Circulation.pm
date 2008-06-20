@@ -70,6 +70,7 @@ BEGIN {
 		&GetBorrowerIssues
 		&GetIssuingCharges
 		&GetIssuingRule
+        &GetBranchBorrowerCircRule
 		&GetBiblioIssues
 		&AnonymiseIssueHistory
 	);
@@ -1158,6 +1159,93 @@ sub GetIssuingRule {
 
     # if no rule matches,
     return undef;
+}
+
+=head2 GetBranchBorrowerCircRule
+
+=over 4
+
+my $branch_cat_rule = GetBranchBorrowerCircRule($branchcode, $categorycode);
+
+=back
+
+Retrieves circulation rule attributes that apply to the given
+branch and patron category, regardless of item type.  
+The return value is a hashref containing the following key:
+
+maxissueqty - maximum number of loans that a
+patron of the given category can have at the given
+branch.  If the value is undef, no limit.
+
+This will first check for a specific branch and
+category match from branch_borrower_circ_rules. 
+
+If no rule is found, it will then check default_branch_circ_rules
+(same branch, default category).  If no rule is found,
+it will then check default_borrower_circ_rules (default 
+branch, same category), then failing that, default_circ_rules
+(default branch, default category).
+
+If no rule has been found in the database, it will default to
+the buillt in rule:
+
+maxissueqty - undef
+
+C<$branchcode> and C<$categorycode> should contain the
+literal branch code and patron category code, respectively - no
+wildcards.
+
+=cut
+
+sub GetBranchBorrowerCircRule {
+    my $branchcode = shift;
+    my $categorycode = shift;
+
+    my $branch_cat_query = "SELECT maxissueqty
+                            FROM branch_borrower_circ_rules
+                            WHERE branchcode = ?
+                            AND   categorycode = ?";
+    my $dbh = C4::Context->dbh();
+    my $sth = $dbh->prepare($branch_cat_query);
+    $sth->execute($branchcode, $categorycode);
+    my $result;
+    if ($result = $sth->fetchrow_hashref()) {
+        return $result;
+    }
+
+    # try same branch, default borrower category
+    my $branch_query = "SELECT maxissueqty
+                        FROM default_branch_circ_rules
+                        WHERE branchcode = ?";
+    $sth = $dbh->prepare($branch_query);
+    $sth->execute($branchcode);
+    if ($result = $sth->fetchrow_hashref()) {
+        return $result;
+    }
+
+    # try default branch, same borrower category
+    my $category_query = "SELECT maxissueqty
+                          FROM default_borrower_circ_rules
+                          WHERE categorycode = ?";
+    $sth = $dbh->prepare($category_query);
+    $sth->execute($categorycode);
+    if ($result = $sth->fetchrow_hashref()) {
+        return $result;
+    }
+  
+    # try default branch, default borrower category
+    my $default_query = "SELECT maxissueqty
+                          FROM default_circ_rules";
+    $sth = $dbh->prepare($default_query);
+    $sth->execute();
+    if ($result = $sth->fetchrow_hashref()) {
+        return $result;
+    }
+    
+    # built-in default circulation rule
+    return {
+        maxissueqty => undef,
+    };
 }
 
 =head2 AddReturn
