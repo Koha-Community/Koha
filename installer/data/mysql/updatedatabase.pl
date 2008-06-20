@@ -1676,32 +1676,8 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 $DBversion = "3.00.00.091";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do(<<'END_SQL');
-CREATE TABLE `message_queue` (
-  `message_id` int(11) NOT NULL auto_increment,
-  `borrowernumber` int(11) NOT NULL,
-  `subject` text,
-  `content` text,
-  `message_transport_type` varchar(20) NOT NULL,
-  `status` enum('sent','pending','failed','deleted') NOT NULL default 'pending',
-  `time_queued` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  KEY `message_id` (`message_id`),
-  KEY `borrowernumber` (`borrowernumber`),
-  KEY `message_transport_type` (`message_transport_type`),
-  CONSTRAINT `messageq_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `messageq_ibfk_2` FOREIGN KEY (`message_transport_type`) REFERENCES `message_transport_types` (`message_transport_type`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
-END_SQL
-
-    $dbh->do(<<'END_SQL');
 ALTER TABLE borrowers
 ADD `smsalertnumber` varchar(50) default NULL
-END_SQL
-
-    $dbh->do(<<'END_SQL');
-CREATE TABLE `message_transport_types` (
-  `message_transport_type` varchar(20) NOT NULL,
-  PRIMARY KEY  (`message_transport_type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 END_SQL
 
     $dbh->do(<<'END_SQL');
@@ -1712,6 +1688,13 @@ CREATE TABLE `message_attributes` (
   PRIMARY KEY  (`message_attribute_id`),
   UNIQUE KEY `message_name` (`message_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+END_SQL
+
+    $dbh->do(<<'END_SQL');
+CREATE TABLE `message_transport_types` (
+  `message_transport_type` varchar(20) NOT NULL,
+  PRIMARY KEY  (`message_transport_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 END_SQL
 
     $dbh->do(<<'END_SQL');
@@ -1753,6 +1736,23 @@ CREATE TABLE `borrower_message_transport_preferences` (
   KEY `message_transport_type` (`message_transport_type`),
   CONSTRAINT `borrower_message_transport_preferences_ibfk_1` FOREIGN KEY (`borrower_message_preference_id`) REFERENCES `borrower_message_preferences` (`borrower_message_preference_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `borrower_message_transport_preferences_ibfk_2` FOREIGN KEY (`message_transport_type`) REFERENCES `message_transport_types` (`message_transport_type`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+END_SQL
+
+    $dbh->do(<<'END_SQL');
+CREATE TABLE `message_queue` (
+  `message_id` int(11) NOT NULL auto_increment,
+  `borrowernumber` int(11) NOT NULL,
+  `subject` text,
+  `content` text,
+  `message_transport_type` varchar(20) NOT NULL,
+  `status` enum('sent','pending','failed','deleted') NOT NULL default 'pending',
+  `time_queued` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  KEY `message_id` (`message_id`),
+  KEY `borrowernumber` (`borrowernumber`),
+  KEY `message_transport_type` (`message_transport_type`),
+  CONSTRAINT `messageq_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `messageq_ibfk_2` FOREIGN KEY (`message_transport_type`) REFERENCES `message_transport_types` (`message_transport_type`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 END_SQL
 
