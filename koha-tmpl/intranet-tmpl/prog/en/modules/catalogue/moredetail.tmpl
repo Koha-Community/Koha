@@ -50,7 +50,7 @@
             <!-- TMPL_IF NAME="copyvol" --><li><span class="label">Copy / Vol :</span> <!-- TMPL_VAR NAME="copyvol" -->&nbsp;</li> <!-- /TMPL_IF -->  
             <!-- TMPL_IF NAME="replacementprice" --><li><span class="label">Replacement Price:</span> <!-- TMPL_VAR NAME="replacementprice" -->&nbsp;</li> <!-- /TMPL_IF -->
             </ol></div>
-           <div class="listgroup"><h4>Statuses <!-- TMPL_IF EXPR="notforloantext || itemlost || damaged || wthdrawn" -->( 
+           <div class="listgroup"><h4>Statuses <!-- TMPL_IF NAME="status_advisory" -->( 
                 <!-- TMPL_IF name="notforloantext" --><!-- TMPL_VAR name="notforloantext" --> <!-- /TMPL_IF -->
                 <!-- TMPL_IF name="itemlost"-->Lost<!-- /TMPL_IF --> 
                 <!-- TMPL_IF NAME="damaged" -->Damaged<!-- /TMPL_IF -->
