@@ -59,20 +59,26 @@ $(document).ready(function() {
             <input type="hidden" name="op" value="add" />
             <table>
             <tr>
-                <th>Item Type</th><th>Patron Category</th><th>Amount</th><th>Grace<br />Period</th><th>Charging<br />Interval</th><th>Amount<br />Loanable</th><th>Loan time</th><th>&nbsp;</th>
+                <th>Patron Category</th>
+                <th>Item Type</th>
+                <th>Amount</th>
+                <th>Grace Period</th>
+                <th>Charging Interval</th>
+                <th>Amoun Loanable</th>
+                <th>Loan time</th><th>&nbsp;</th>
             </tr>
             <!-- TMPL_LOOP NAME="rules" -->
                 <tr>
-                    <td><!-- TMPL_IF NAME="default_humanitemtype" -->
-                            Any
-                        <!-- TMPL_ELSE -->
-                            <!-- TMPL_VAR NAME="humanitemtype" -->
-                        <!-- /TMPL_IF -->
-                    </td>
                     <td><!-- TMPL_IF NAME="default_humancategorycode" -->
                             Any
                         <!-- TMPL_ELSE -->
                             <!-- TMPL_VAR NAME="humancategorycode" -->
+                        <!-- /TMPL_IF -->
+                    </td>
+                    <td><!-- TMPL_IF NAME="default_humanitemtype" -->
+                            Any
+                        <!-- TMPL_ELSE -->
+                            <!-- TMPL_VAR NAME="humanitemtype" -->
                         <!-- /TMPL_IF -->
                     </td>
                     <td>$<!-- TMPL_VAR NAME="fine" --></td>
@@ -87,18 +93,18 @@ $(document).ready(function() {
             <!-- /TMPL_LOOP -->
                 <tr>
                     <td>
-                        <select name="itemtype" style="width:13em;">
-                            <option value="*">Any</option>
-                        <!-- TMPL_LOOP NAME="itemtypeloop" -->
-                            <option value="<!-- TMPL_VAR NAME="itemtype" -->"><!-- TMPL_VAR NAME="description" --></option>
+                        <select name="categorycode">
+                            <option value="*">Default</option>
+                        <!-- TMPL_LOOP NAME="categoryloop" -->
+                            <option value="<!-- TMPL_VAR NAME="categorycode" -->"><!-- TMPL_VAR NAME="description" --></option>
                         <!-- /TMPL_LOOP -->
                         </select>
                     </td>
                     <td>
-                        <select name="categorycode">
-                            <option value="*">Any</option>
-                        <!-- TMPL_LOOP NAME="categoryloop" -->
-                            <option value="<!-- TMPL_VAR NAME="categorycode" -->"><!-- TMPL_VAR NAME="description" --></option>
+                        <select name="itemtype" style="width:13em;">
+                            <option value="*">Default</option>
+                        <!-- TMPL_LOOP NAME="itemtypeloop" -->
+                            <option value="<!-- TMPL_VAR NAME="itemtype" -->"><!-- TMPL_VAR NAME="description" --></option>
                         <!-- /TMPL_LOOP -->
                         </select>
                     </td>

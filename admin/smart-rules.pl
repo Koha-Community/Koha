@@ -125,11 +125,46 @@ while (my $row = $sth2->fetchrow_hashref) {
     push @row_loop, $row;
 }
 $sth->finish;
+
+my @sorted_row_loop = sort by_category_and_itemtype @row_loop;
+
 $template->param(categoryloop => \@category_loop,
                         itemtypeloop => \@itemtypes,
-                        rules => \@row_loop,
+                        rules => \@sorted_row_loop,
                         branchloop => \@branchloop,
                         humanbranch => ($branch ne '*' ? $branches->{$branch}->{branchname} : ''),
                         branch => $branch
                         );
 output_html_with_http_headers $input, $cookie, $template->output;
+
+exit 0;
+
+# sort by patron category, then item type, putting
+# default entries at the bottom
+sub by_category_and_itemtype {
+    unless (by_category($a, $b)) {
+        return by_itemtype($a, $b);
+    }
+}
+
+sub by_category {
+    my ($a, $b) = @_;
+    if ($a->{'default_humancategorycode'}) {
+        return ($b->{'default_humancategorycode'} ? 0 : 1);
+    } elsif ($b->{'default_humancategorycode'}) {
+        return -1;
+    } else {
+        return $a->{'humancategorycode'} cmp $b->{'humancategorycode'};
+    }
+}
+
+sub by_itemtype {
+    my ($a, $b) = @_;
+    if ($a->{'default_humanitemtype'}) {
+        return ($b->{'default_humanitemtype'} ? 0 : 1);
+    } elsif ($b->{'default_humanitemtype'}) {
+        return -1;
+    } else {
+        return $a->{'humanitemtype'} cmp $b->{'humanitemtype'};
+    }
+}
