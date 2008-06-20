@@ -47,7 +47,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('kohaspsuggest','','Track search queries, turn on by defining host:dbname:user:pass','','');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('LabelMARCView','standard','Define how a MARC record will display','standard|economical','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('LetterLog',1,'If ON, log all notices sent',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('LibraryName','','Define library name as shown on main opac page','','');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('LibraryName','','Define the library name as displayed on the OPAC','','');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('marc',1,'Turn on MARC support',NULL,'YesNo');
 
 -- this is selected by the web installer now
