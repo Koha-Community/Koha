@@ -35,17 +35,20 @@ $(document).ready(function() {
     <div class="help">
         <p>The rules are applied from most specific to less specific, using the first found in this order:</p>
         <ul>
-            <li>same branch, same borrower type, same item type</li>
-            <li>same branch, same borrower type, default item type</li>
-            <li>same branch, default borrower type, same item type</li>
-            <li>default branch, same borrower type, same item type</li>
-            <li>anything else</li>
+            <li>same library, same patron type, same item type</li>
+            <li>same library, same patron type, default item type</li>
+            <li>same library, default patron type, same item type</li>
+            <li>same library, default patron type, default item type</li>
+            <li>default library, same patron type, same item type</li>
+            <li>default library, same patron type, default item type</li>
+            <li>default library, default patron type, same item type</li>
+            <li>default library, default patron type, default item type</li>
         </ul>
-        <p>To modify a rule, create a new one with the same borrower type and item type.</p>
+        <p>To modify a rule, create a new one with the same patron type and item type.</p>
     </div>
     <div id="bloc100">
         <form method="get" action="/cgi-bin/koha/admin/smart-rules.pl" id="selectlibrary">
-        Select a branch :
+        Select a library :
             <select name="branch" id="branch" style="width:20em;">
                 <option value="*">Default</option>
             <!-- TMPL_LOOP NAME="branchloop" -->
@@ -70,13 +73,13 @@ $(document).ready(function() {
             <!-- TMPL_LOOP NAME="rules" -->
                 <tr>
                     <td><!-- TMPL_IF NAME="default_humancategorycode" -->
-                            Any
+                            <em>Default</em>
                         <!-- TMPL_ELSE -->
                             <!-- TMPL_VAR NAME="humancategorycode" -->
                         <!-- /TMPL_IF -->
                     </td>
                     <td><!-- TMPL_IF NAME="default_humanitemtype" -->
-                            Any
+                            <em>Default</em>
                         <!-- TMPL_ELSE -->
                             <!-- TMPL_VAR NAME="humanitemtype" -->
                         <!-- /TMPL_IF -->

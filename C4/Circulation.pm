@@ -1066,11 +1066,6 @@ sub GetLoanLength {
     return $loanlength->{issuelength}
       if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
 
-    $sth->execute( $borrowertype, $itemtype, "*" );
-    $loanlength = $sth->fetchrow_hashref;
-    return $loanlength->{issuelength}
-      if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
-
     $sth->execute( $borrowertype, "*", $branchcode );
     $loanlength = $sth->fetchrow_hashref;
     return $loanlength->{issuelength}
@@ -1081,12 +1076,17 @@ sub GetLoanLength {
     return $loanlength->{issuelength}
       if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
 
-    $sth->execute( $borrowertype, "*", "*" );
+    $sth->execute( "*", "*", $branchcode );
     $loanlength = $sth->fetchrow_hashref;
     return $loanlength->{issuelength}
       if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
 
-    $sth->execute( "*", "*", $branchcode );
+    $sth->execute( $borrowertype, $itemtype, "*" );
+    $loanlength = $sth->fetchrow_hashref;
+    return $loanlength->{issuelength}
+      if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
+
+    $sth->execute( $borrowertype, "*", "*" );
     $loanlength = $sth->fetchrow_hashref;
     return $loanlength->{issuelength}
       if defined($loanlength) && $loanlength->{issuelength} ne 'NULL';
@@ -1128,10 +1128,6 @@ sub GetIssuingRule {
     $irule = $sth->fetchrow_hashref;
     return $irule if defined($irule) ;
 
-    $sth->execute( $borrowertype, $itemtype, "*" );
-    $irule = $sth->fetchrow_hashref;
-    return $irule if defined($irule) ;
-
     $sth->execute( $borrowertype, "*", $branchcode );
     $irule = $sth->fetchrow_hashref;
     return $irule if defined($irule) ;
@@ -1140,11 +1136,15 @@ sub GetIssuingRule {
     $irule = $sth->fetchrow_hashref;
     return $irule if defined($irule) ;
 
-    $sth->execute( $borrowertype, "*", "*" );
+    $sth->execute( "*", "*", $branchcode );
     $irule = $sth->fetchrow_hashref;
     return $irule if defined($irule) ;
 
-    $sth->execute( "*", "*", $branchcode );
+    $sth->execute( $borrowertype, $itemtype, "*" );
+    $irule = $sth->fetchrow_hashref;
+    return $irule if defined($irule) ;
+
+    $sth->execute( $borrowertype, "*", "*" );
     $irule = $sth->fetchrow_hashref;
     return $irule if defined($irule) ;
 
