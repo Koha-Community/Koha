@@ -159,8 +159,10 @@ function CloneField(index) {
     
     <!-- TMPL_UNLESS NAME='hide_marc'--> // No indicator if hide_marc
         // setting a new name for the new indicator
-        var indicator = clone.getElementsByTagName('input')[0];
-        indicator.setAttribute('name',indicator.getAttribute('name')+new_key);
+        for(var i=0; i < 2; i++) {
+            var indicator = clone.getElementsByTagName('input')[i];
+            indicator.setAttribute('name',indicator.getAttribute('name')+new_key);
+        }
     <!-- /TMPL_UNLESS -->
         
     // settings all subfields
@@ -274,6 +276,7 @@ function CloneField(index) {
             if(divs[i].getAttribute('id').match(/^div_indicator/)){
                 var inputs = divs[i].getElementsByTagName('input');
                 inputs[0].setAttribute('id',inputs[0].getAttribute('id')+new_key);
+                inputs[1].setAttribute('id',inputs[1].getAttribute('id')+new_key);
                 
                 var CloneButtonPlus;
                 try {
