@@ -116,12 +116,13 @@
             <input type="text" size="20" id="gst" name="gst" />
         </li>
 		<!--/TMPL_IF-->
-        <li>
+      <!--  // Removing freight input until shipping can be proplerly handled .
+	  <li>
             <label for="freight">Shipping:</label>
             <input type="text" size="20" id="freight" name="freight" />
-        </li>
+        </li> -->
          <li><label for="datereceived">Shipment date: </label>
-            <input type="text" id="datereceived" name="datereceived"  maxlength="10" size="10"  value="<!-- TMPL_VAR NAME="datereceived" -->" />
+            <input type="text" id="datereceived" name="datereceived"  maxlength="10" size="10"  value="<!-- TMPL_VAR NAME="datereceived_today" -->" />
             <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="datereceived_button" alt="Show Calendar" />
       <script language="JavaScript" type="text/javascript">
         Calendar.setup(
