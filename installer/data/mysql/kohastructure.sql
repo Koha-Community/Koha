@@ -486,6 +486,7 @@ CREATE TABLE `borrowers` (
   `altcontactaddress3` varchar(255) default NULL,
   `altcontactzipcode` varchar(50) default NULL,
   `altcontactphone` varchar(50) default NULL,
+  `smsalertnumber` varchar(50) default NULL,
   UNIQUE KEY `cardnumber` (`cardnumber`),
   PRIMARY KEY `borrowernumber` (`borrowernumber`),
   KEY `categorycode` (`categorycode`),
@@ -2169,6 +2170,100 @@ CREATE TABLE `tmp_holdsqueue` (
   `holdingbranch` varchar(10) default NULL,
   `pickbranch` varchar(10) default NULL,
   `notes` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `message_queue`
+--
+
+DROP TABLE if EXISTS `message_queue`;
+CREATE TABLE `message_queue` (
+  `message_id` int(11) NOT NULL auto_increment,
+  `borrowernumber` int(11) NOT NULL,
+  `subject` text,
+  `content` text,
+  `message_transport_type` varchar(20) NOT NULL,
+  `status` enum('sent','pending','failed','deleted') NOT NULL default 'pending',
+  `time_queued` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  KEY `message_id` (`message_id`),
+  KEY `borrowernumber` (`borrowernumber`),
+  KEY `message_transport_type` (`message_transport_type`),
+  CONSTRAINT `messageq_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `messageq_ibfk_2` FOREIGN KEY (`message_transport_type`) REFERENCES `message_transport_types` (`message_transport_type`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `message_transport_types`
+--
+
+DROP TABLE IF EXISTS `message_transport_types`;
+CREATE TABLE `message_transport_types` (
+  `message_transport_type` varchar(20) NOT NULL,
+  PRIMARY KEY  (`message_transport_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `message_attributes`
+--
+
+DROP TABLE IF EXISTS `message_attributes`;
+CREATE TABLE `message_attributes` (
+  `message_attribute_id` int(11) NOT NULL auto_increment,
+  `message_name` varchar(20) NOT NULL default '',
+  `takes_days` tinyint(1) NOT NULL default '0',
+  PRIMARY KEY  (`message_attribute_id`),
+  UNIQUE KEY `message_name` (`message_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `message_transports`
+--
+
+DROP TABLE IF EXISTS `message_transports`;
+CREATE TABLE `message_transports` (
+  `message_attribute_id` int(11) NOT NULL,
+  `message_transport_type` varchar(20) NOT NULL,
+  `is_digest` tinyint(1) NOT NULL default '0',
+  `letter_module` varchar(20) NOT NULL default '',
+  `letter_code` varchar(20) NOT NULL default '',
+  PRIMARY KEY  (`message_attribute_id`,`message_transport_type`,`is_digest`),
+  KEY `message_transport_type` (`message_transport_type`),
+  KEY `letter_module` (`letter_module`,`letter_code`),
+  CONSTRAINT `message_transports_ibfk_1` FOREIGN KEY (`message_attribute_id`) REFERENCES `message_attributes` (`message_attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `message_transports_ibfk_2` FOREIGN KEY (`message_transport_type`) REFERENCES `message_transport_types` (`message_transport_type`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `message_transports_ibfk_3` FOREIGN KEY (`letter_module`, `letter_code`) REFERENCES `letter` (`module`, `code`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `borrower_message_preferences`
+--
+
+DROP TABLE IF EXISTS `borrower_message_preferences`;
+CREATE TABLE `borrower_message_preferences` (
+  `borrower_message_preference_id` int(11) NOT NULL auto_increment,
+  `borrowernumber` int(11) NOT NULL default '0',
+  `message_attribute_id` int(11) default '0',
+  `days_in_advance` int(11) default '0',
+  `wants_digest` tinyint(1) NOT NULL default '0',
+  PRIMARY KEY  (`borrower_message_preference_id`),
+  KEY `borrowernumber` (`borrowernumber`),
+  KEY `message_attribute_id` (`message_attribute_id`),
+  CONSTRAINT `borrower_message_preferences_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `borrower_message_preferences_ibfk_2` FOREIGN KEY (`message_attribute_id`) REFERENCES `message_attributes` (`message_attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `borrower_message_transport_preferences`
+--
+
+DROP TABLE IF EXISTS `borrower_message_transport_preferences`;
+CREATE TABLE `borrower_message_transport_preferences` (
+  `borrower_message_preference_id` int(11) NOT NULL default '0',
+  `message_transport_type` varchar(20) NOT NULL default '0',
+  PRIMARY KEY  (`borrower_message_preference_id`,`message_transport_type`),
+  KEY `message_transport_type` (`message_transport_type`),
+  CONSTRAINT `borrower_message_transport_preferences_ibfk_1` FOREIGN KEY (`borrower_message_preference_id`) REFERENCES `borrower_message_preferences` (`borrower_message_preference_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `borrower_message_transport_preferences_ibfk_2` FOREIGN KEY (`message_transport_type`) REFERENCES `message_transport_types` (`message_transport_type`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

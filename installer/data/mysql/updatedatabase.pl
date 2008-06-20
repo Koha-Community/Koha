@@ -12,9 +12,10 @@
 
 # NOTE:  If you do something more than once in here, make it table driven.
 
-# NOTE: Please keep the version in C4/Context.pm up-to-date!
+# NOTE: Please keep the version in kohaversion.pl up-to-date!
 
 use strict;
+# use warnings;
 
 # CPAN modules
 use DBI;
@@ -1668,6 +1669,101 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
     print "Upgrade to $DBversion done (added several circ rules tables)\n";
+    SetVersion ($DBversion);
+}
+
+
+$DBversion = "3.00.00.091";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(<<'END_SQL');
+CREATE TABLE `message_queue` (
+  `message_id` int(11) NOT NULL auto_increment,
+  `borrowernumber` int(11) NOT NULL,
+  `subject` text,
+  `content` text,
+  `message_transport_type` varchar(20) NOT NULL,
+  `status` enum('sent','pending','failed','deleted') NOT NULL default 'pending',
+  `time_queued` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  KEY `message_id` (`message_id`),
+  KEY `borrowernumber` (`borrowernumber`),
+  KEY `message_transport_type` (`message_transport_type`),
+  CONSTRAINT `messageq_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `messageq_ibfk_2` FOREIGN KEY (`message_transport_type`) REFERENCES `message_transport_types` (`message_transport_type`) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+END_SQL
+
+    $dbh->do(<<'END_SQL');
+ALTER TABLE borrowers
+ADD `smsalertnumber` varchar(50) default NULL
+END_SQL
+
+    $dbh->do(<<'END_SQL');
+CREATE TABLE `message_transport_types` (
+  `message_transport_type` varchar(20) NOT NULL,
+  PRIMARY KEY  (`message_transport_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+END_SQL
+
+    $dbh->do(<<'END_SQL');
+CREATE TABLE `message_attributes` (
+  `message_attribute_id` int(11) NOT NULL auto_increment,
+  `message_name` varchar(20) NOT NULL default '',
+  `takes_days` tinyint(1) NOT NULL default '0',
+  PRIMARY KEY  (`message_attribute_id`),
+  UNIQUE KEY `message_name` (`message_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+END_SQL
+
+    $dbh->do(<<'END_SQL');
+CREATE TABLE `message_transports` (
+  `message_attribute_id` int(11) NOT NULL,
+  `message_transport_type` varchar(20) NOT NULL,
+  `is_digest` tinyint(1) NOT NULL default '0',
+  `letter_module` varchar(20) NOT NULL default '',
+  `letter_code` varchar(20) NOT NULL default '',
+  PRIMARY KEY  (`message_attribute_id`,`message_transport_type`,`is_digest`),
+  KEY `message_transport_type` (`message_transport_type`),
+  KEY `letter_module` (`letter_module`,`letter_code`),
+  CONSTRAINT `message_transports_ibfk_1` FOREIGN KEY (`message_attribute_id`) REFERENCES `message_attributes` (`message_attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `message_transports_ibfk_2` FOREIGN KEY (`message_transport_type`) REFERENCES `message_transport_types` (`message_transport_type`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `message_transports_ibfk_3` FOREIGN KEY (`letter_module`, `letter_code`) REFERENCES `letter` (`module`, `code`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+END_SQL
+
+    $dbh->do(<<'END_SQL');
+CREATE TABLE `borrower_message_preferences` (
+  `borrower_message_preference_id` int(11) NOT NULL auto_increment,
+  `borrowernumber` int(11) NOT NULL default '0',
+  `message_attribute_id` int(11) default '0',
+  `days_in_advance` int(11) default '0',
+  `wants_digets` tinyint(1) NOT NULL default '0',
+  PRIMARY KEY  (`borrower_message_preference_id`),
+  KEY `borrowernumber` (`borrowernumber`),
+  KEY `message_attribute_id` (`message_attribute_id`),
+  CONSTRAINT `borrower_message_preferences_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `borrower_message_preferences_ibfk_2` FOREIGN KEY (`message_attribute_id`) REFERENCES `message_attributes` (`message_attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+END_SQL
+
+    $dbh->do(<<'END_SQL');
+CREATE TABLE `borrower_message_transport_preferences` (
+  `borrower_message_preference_id` int(11) NOT NULL default '0',
+  `message_transport_type` varchar(20) NOT NULL default '0',
+  PRIMARY KEY  (`borrower_message_preference_id`,`message_transport_type`),
+  KEY `message_transport_type` (`message_transport_type`),
+  CONSTRAINT `borrower_message_transport_preferences_ibfk_1` FOREIGN KEY (`borrower_message_preference_id`) REFERENCES `borrower_message_preferences` (`borrower_message_preference_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `borrower_message_transport_preferences_ibfk_2` FOREIGN KEY (`message_transport_type`) REFERENCES `message_transport_types` (`message_transport_type`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+END_SQL
+
+    $dbh->do(<<'END_SQL');
+INSERT INTO `systempreferences`
+  (variable,value,explanation,options,type)
+VALUES
+('EnhancedMessagingPreferences',0,'If ON, allows patrons to select to receive additional messages about items due or nearly due.','','YesNo')
+END_SQL
+
+    print "Upgrade to $DBversion done (Table structure for table `message_queue`, `message_transport_types`, `message_attributes`, `message_transports`, `borrower_message_preferences`, and `borrower_message_transport_preferences`.  Alter `borrowers` table,\n";
     SetVersion ($DBversion);
 }
 
