@@ -22,6 +22,7 @@ use C4::Branch;
 use C4::Items;
 use C4::Koha;
 use C4::Biblio;
+use C4::Circulation;
 use XML::LibXML;
 use XML::LibXSLT;
 
@@ -132,9 +133,14 @@ sub buildKohaItemsNamespace {
     my $xml;
     for my $item (@items) {
         my $status;
-        if ( $item->{notforloan} == -1 || $item->{onloan} || $item->{wthdrawn} || $item->{itemlost} || $item->{damaged}) {
+        my ( $transfertwhen, $transfertfrom, $transfertto ) = C4::Circulation::GetTransfers($item->{itemnumber});
+        if ( $item->{notforloan} == -1 || $item->{onloan} || $item->{wthdrawn} || $item->{itemlost} || $item->{damaged} ||
+             ($transfertwhen ne '') || $item->{itemnotforloan} ) {
             if ( $item->{notforloan} == -1) {
                 $status = "On order";
+            } 
+            if ( $item->{itemnotforloan} ) {
+                $status = "Not for loan";
             }
             if ($item->{onloan}) {
                 $status = "Checked out";
@@ -147,6 +153,9 @@ sub buildKohaItemsNamespace {
             }
             if ($item->{damaged}) {
                 $status = "Damaged"; 
+            }
+            if ($transfertwhen ne '') {
+                $status = 'In transit';
             }
         } else {
             $status = "available";

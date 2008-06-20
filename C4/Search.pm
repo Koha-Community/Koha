@@ -1354,17 +1354,18 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
         my $onloan_items;
         my $other_items;
 
-        my $ordered_count     = 0;
-        my $available_count   = 0;
-        my $onloan_count      = 0;
-        my $longoverdue_count = 0;
-        my $other_count       = 0;
-        my $wthdrawn_count    = 0;
-        my $itemlost_count    = 0;
-        my $itembinding_count = 0;
-        my $itemdamaged_count = 0;
-        my $can_place_holds   = 0;
-        my $items_count       = scalar(@fields);
+        my $ordered_count         = 0;
+        my $available_count       = 0;
+        my $onloan_count          = 0;
+        my $longoverdue_count     = 0;
+        my $other_count           = 0;
+        my $wthdrawn_count        = 0;
+        my $itemlost_count        = 0;
+        my $itembinding_count     = 0;
+        my $itemdamaged_count     = 0;
+        my $item_in_transit_count = 0;
+        my $can_place_holds       = 0;
+        my $items_count           = scalar(@fields);
         my $items_counter;
         my $maxitems =
           ( C4::Context->preference('maxItemsinSearchResults') )
@@ -1418,15 +1419,42 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
                     $ordered_count++;
                 }
 
+                # is item in transit?
+                my $transfertwhen = '';
+                my ($transfertfrom, $transfertto);
+                
+                unless ($item->{wthdrawn}
+                        || $item->{itemlost}
+                        || $item->{damaged}
+                        || $item->{notforloan}
+                        || $items_count > 20) {
+
+                    # A couple heuristics to limit how many times
+                    # we query the database for item transfer information, sacrificing
+                    # accuracy in some cases for speed;
+                    #
+                    # 1. don't query if item has one of the other statuses
+                    # 2. don't check transit status if the bib has
+                    #    more than 20 items
+                    #
+                    # FIXME: to avoid having the query the database like this, and to make
+                    #        the in transit status count as unavailable for search limiting,
+                    #        should map transit status to record indexed in Zebra.
+                    #
+                    ($transfertwhen, $transfertfrom, $transfertto) = C4::Circulation::GetTransfers($item->{itemnumber});
+                }
+
                 # item is withdrawn, lost or damaged
                 if (   $item->{wthdrawn}
                     || $item->{itemlost}
                     || $item->{damaged}
-                    || $item->{notforloan} )
+                    || $item->{notforloan} 
+                    || ($transfertwhen ne ''))
                 {
-                    $wthdrawn_count++    if $item->{wthdrawn};
-                    $itemlost_count++    if $item->{itemlost};
-                    $itemdamaged_count++ if $item->{damaged};
+                    $wthdrawn_count++        if $item->{wthdrawn};
+                    $itemlost_count++        if $item->{itemlost};
+                    $itemdamaged_count++     if $item->{damaged};
+                    $item_in_transit_count++ if $transfertwhen ne '';
                     $item->{status} = $item->{wthdrawn} . "-" . $item->{itemlost} . "-" . $item->{damaged} . "-" . $item->{notforloan};
                     $other_count++;
 
@@ -1434,6 +1462,7 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
 					foreach (qw(wthdrawn itemlost damaged branchname itemcallnumber)) {
                     	$other_items->{$key}->{$_} = $item->{$_};
 					}
+                    $other_items->{$key}->{intransit} = ($transfertwhen ne '') ? 1 : 0;
 					$other_items->{$key}->{notforloan} = GetAuthorisedValueDesc('','',$item->{notforloan},'','',$notforloan_authorised_value) if $notforloan_authorised_value;
 					$other_items->{$key}->{count}++ if $item->{homebranch};
 					$other_items->{$key}->{location} = $shelflocations->{ $item->{location} };
@@ -1494,6 +1523,7 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
         $oldbiblio->{wthdrawncount}        = $wthdrawn_count;
         $oldbiblio->{itemlostcount}        = $itemlost_count;
         $oldbiblio->{damagedcount}         = $itemdamaged_count;
+        $oldbiblio->{intransitcount}       = $item_in_transit_count;
         $oldbiblio->{orderedcount}         = $ordered_count;
         $oldbiblio->{isbn} =~
           s/-//g;    # deleting - in isbn to enable amazon content
