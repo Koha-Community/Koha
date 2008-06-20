@@ -155,6 +155,7 @@ $template->param(orderby=>$order, filter=>$code, datefrom=>$datefrom,dateto=>$da
 $template->param(
         name => $bookseller->{'name'},
         DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
+		datereceived_today => C4::Dates->new()->output(),
 		supplierid => $supplierid,
 	    GST => C4::Context->preference("gist"),
         );
