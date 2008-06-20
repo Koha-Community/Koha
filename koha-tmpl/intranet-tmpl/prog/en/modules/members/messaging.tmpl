@@ -1,0 +1,228 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Patrons &rsaquo; <!-- TMPL_IF NAME="unknowuser" -->Patron does not exist<!-- TMPL_ELSE -->Patron Details for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)<!-- /TMPL_IF --></title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="calendar.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.pack.js"></script>
+<script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+$.tablesorter.addParser({
+    id: 'articles', 
+    is: function(s) {return false;  }, 
+    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
+    type: 'text' 
+});
+$(document).ready(function() {
+	$('#finesholdsissues > ul').tabs();
+	$("#issuest").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
+		dateFormat: 'uk',<!-- /TMPL_IF -->
+		sortList: [[1,0]],
+		headers: { 1: { sorter: 'articles' },4:{sorter:false},5: { sorter: false },6:{sorter:false},7:{sorter:false}}
+	}); 
+	$("#holdst").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
+		dateFormat: 'uk',<!-- /TMPL_IF -->
+		sortList: [[0,0]],
+		headers: { 1: { sorter: 'articles' },6: { sorter: false }}
+	}); 
+	$('#manage-patron-image').find("input[@value*=Delete]").click(function(){
+		 return confirm('Are you sure you want to delete this patron image? This cannot be undone.');
+	});<!-- TMPL_IF NAME="picture" -->
+	$('#manage-patron-image').find("input[@value*=Upload]").click(function(){
+		if($("#uploadfile").val() == ""){
+			alert("Please choose a file to upload");
+			return false;
+			} else {
+		 return confirm('Are you sure you want to replace the current patron image? This cannot be undone.');
+		 }
+	});<!-- /TMPL_IF -->
+	$("#renew_all").click(function(){ $(".checkboxed").checkCheckboxes(":not(input[@name*=barcodes])"); $(".checkboxed").unCheckCheckboxes(":not(input[@name*=items])"); });
+	$("#return_all").click(function(){ $(".checkboxed").checkCheckboxes(":not(input[@name*=items])"); $(".checkboxed").unCheckCheckboxes(":not(input[@name*=barcodes])"); });
+	$("#CheckAllitems").click(function(){ $(".checkboxed").checkCheckboxes(":not(input[@name*=barcodes])"); $(".checkboxed").unCheckCheckboxes(":not(input[@name*=items])"); return false; });
+    $("#CheckNoitems").click(function(){ $(".checkboxed").unCheckCheckboxes(":not(input[@name*=barcodes])"); return false; });
+	$("#CheckAllreturns").click(function(){ $(".checkboxed").checkCheckboxes(":not(input[@name*=items])"); $(".checkboxed").unCheckCheckboxes(":not(input[@name*=barcodes])"); return false; });
+    $("#CheckNoreturns").click(function(){ $(".checkboxed").unCheckCheckboxes(":not(input[@name*=items])"); return false; });
+ });
+function uncheck_sibling(me){
+nodename=me.getAttribute("name");
+if (nodename =="barcodes[]"){
+    var Node=me.parentNode.previousSibling;
+    while (Node.nodeName!="TD"){Node=Node.previousSibling}
+    var Nodes=Node.childNodes;
+    for (var i=0;i<Nodes.length;i++){
+      if (Nodes[i].nodeName=="INPUT" && Nodes[i].getAttribute("type")=="checkbox"){
+        Nodes[i].checked=false;
+      }     
+   }   
+
+}else {
+    var Node=me.parentNode.nextSibling;
+    while (Node.nodeName!="TD"){Node=Node.nextSibling}
+    var Nodes=Node.childNodes;
+    for (var i=0;i<Nodes.length;i++){
+      if (Nodes[i].nodeName=="INPUT" && Nodes[i].getAttribute("type")=="checkbox"){
+        Nodes[i].checked=false;
+      }     
+   }   
+}
+}
+//]]>
+</script>
+
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="patron-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; <!-- TMPL_IF NAME="unknowuser" -->Patron does not exist<!-- TMPL_ELSE -->Patron Details for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)<!-- /TMPL_IF --> </div>
+
+<div id="doc3" class="yui-t1">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="members-toolbar.inc" -->
+<!-- TMPL_IF NAME="error" -->
+<div class="dialog alert">
+<!-- TMPL_IF NAME="AUTH_UPDATE_FAILED" -->
+<h3>Userid / Password update failed</h3>
+<strong>Insufficient privileges.</strong>
+<p>Other fields updated.</p>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="CANT_DELETE_STAFF" -->
+<h3>Unable to delete staff user</h3>
+<p>Insufficient privileges.</p>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="CANT_DELETE_OTHERLIBRARY" -->
+<h3>Unable to delete patrons from other libraries with current settings</h3>
+<p>Insufficient privileges.</p>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="CANT_DELETE" -->
+<h3>Unable to delete patron:</h3>
+<p>Insufficient privileges.</p>
+<!-- /TMPL_IF -->
+</div>
+<!-- /TMPL_IF -->
+<div class="yui-g">
+<!-- TMPL_IF NAME="unknowuser" -->
+   <div class="dialog message">
+   	 This patron does not exist.
+   </div>
+<!-- TMPL_ELSE -->
+
+ <div class="yui-u first">
+
+<form method="get" name="messaging">
+
+<input type="hidden" name="modify" value="yes" />
+<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+<fieldset class="brief"><legend>Manage patron messaging settings</legend>
+  <!-- TMPL_IF NAME= "settings_updated" -->
+  <div class="dialog message"><h1>Settings Updated</h1>
+    The patron settings have been updated</div>
+  <!-- /TMPL_IF -->
+  <table>
+    <tr><TH></TH><TH># days in advance</TH><TH>sms</TH><TH>email</TH><TH>Digests only?</TH><TH>rss</TH><TH>do not notify</TH></tr>
+    <!-- TMPL_LOOP name="messaging_preferences" -->
+    <tr>
+      <td><label for="firstname"><!-- TMPL_VAR NAME="message_name" --></label></td>
+      <!-- TMPL_IF NAME="takes_days" -->
+      <td><SELECT name="<!-- TMPL_VAR NAME="message_attribute_id" -->-DAYS" id="<!-- TMPL_VAR NAME="message_name" -->-DAYS" >
+          <!-- TMPL_LOOP name="select_days" -->
+          <OPTION VALUE="<!-- TMPL_VAR NAME="day" -->"  <!-- TMPL_VAR NAME="selected"  --> ><!-- TMPL_VAR NAME="day" --></OPTION>
+          <!-- /TMPL_LOOP -->
+        </SELECT>
+      </td>
+      <!-- TMPL_ELSE -->
+      <td>-</td>
+      <!-- /TMPL_IF -->
+      <!-- TMPL_IF NAME="transport-sms" -->
+      <td><input type="checkbox"
+                 id="sms<!-- TMPL_VAR NAME="message_attribute_id" -->"
+                 name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
+                 value="sms" <!-- TMPL_VAR NAME="transport-sms"   -->
+                 onclick = "document.messaging.none<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;">
+      </td>
+      <!-- TMPL_ELSE -->
+      <td>-</td>
+      <!-- /TMPL_IF -->
+
+      <!-- TMPL_IF NAME="transport-email" -->
+      <td><input type="checkbox"
+                 id="email<!-- TMPL_VAR NAME="message_attribute_id" -->"
+                 name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
+                 value="email"   <!-- TMPL_VAR NAME="transport-email"   -->
+                 onclick = "document.messaging.none<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;">
+      </td>
+      <!-- TMPL_ELSE -->
+      <td>-</td>
+      <!-- /TMPL_IF -->
+
+      <!-- TMPL_IF NAME="has_digest" -->
+      <td><input type="checkbox"
+                 id="digest<!-- TMPL_VAR NAME="message_attribute_id" -->"
+                 value="<!-- TMPL_VAR NAME="message_attribute_id" -->"
+                 name="digest"   <!-- TMPL_VAR NAME="digest" -->
+                 onclick = "document.messaging.none<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;">
+      </td>
+      <!-- TMPL_ELSE -->
+      <td>-</td>
+      <!-- /TMPL_IF -->
+
+      <!-- TMPL_IF NAME="transport-rss" -->
+      <td><input type="checkbox"
+                 id="rss<!-- TMPL_VAR NAME="message_attribute_id" -->"
+                 name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
+                 value="rss"  <!-- TMPL_VAR NAME="transport-rss"   -->
+                 onclick = "document.messaging.none<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;">
+      </td>
+      <!-- TMPL_ELSE -->
+      <td>-</td>
+      <!-- /TMPL_IF -->
+
+      <td><input type="checkbox" id="none<!-- TMPL_VAR NAME="message_attribute_id" -->"
+                 onclick = "if ( document.messaging.none<!-- TMPL_VAR NAME="message_attribute_id" -->.checked == true ) {
+                            document.messaging.sms<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;
+                            document.messaging.email<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;
+                            document.messaging.digest<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;
+                            document.messaging.rss<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false; }" /></td>
+    </tr>
+    <!-- /TMPL_LOOP -->
+  </table>
+SMS number: <input type="text" name="SMSnumber" value="<!-- TMPL_VAR NAME="SMSnumber"  -->" />
+
+</fieldset>
+
+
+<fieldset class="action">
+  <input type="submit" value="Submit Changes" /> <a class="cancel" href="/cgi-bin/koha/opac-user.pl">Cancel</a>
+</fieldset>
+<br />
+
+<!-- TMPL_IF NAME="message_queue" -->
+<table>
+  <CAPTION>Message Queue</CAPTION>
+  <tr><tH>Type</TH><TH>Subject</TH><TH>Status</TH><TH>Time Prepared</TH></tr>
+<!-- TMPL_LOOP name="message_queue" -->
+  <tr><td><!-- TMPL_VAR NAME="message_transport_type" --></td><td><!-- TMPL_VAR NAME="subject" --></td><td><!-- TMPL_VAR NAME="status" --></td><td><!-- TMPL_VAR NAME="time_queued" --></td></tr>
+<!-- /TMPL_LOOP -->
+</table>
+<!-- /TMPL_IF -->
+
+</form>
+
+<!--  -->
+
+
+</div>
+</div>
+
+<!-- /TMPL_IF --> <!-- unknowuser -->
+
+
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
