@@ -476,7 +476,7 @@ my $tag;
 
 my $authtypes = getauthtypes;
 my @authtypesloop;
-foreach my $thisauthtype (keys %$authtypes) {
+foreach my $thisauthtype (sort { $authtypes->{$b} cmp $authtypes->{$a} } keys %$authtypes) {
 	my $selected = 1 if $thisauthtype eq $authtypecode;
 	my %row =(value => $thisauthtype,
 				selected => $selected,
