@@ -19,7 +19,6 @@
 	<li><a href="/cgi-bin/koha/admin/patron-attr-types.pl">Patron attribute types</a></li>
 	<li><a href="/cgi-bin/koha/admin/issuingrules.pl">Circulation rules</a></li>
 	<li><a href="/cgi-bin/koha/admin/smart-rules.pl">Alternate circulation rules</a></li>
-	<li><a href="/cgi-bin/koha/admin/finesrules.pl">Fines rules</a></li>
 </ul>
 
 <h5>Catalogue</h5>
