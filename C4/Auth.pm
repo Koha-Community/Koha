@@ -250,16 +250,17 @@ sub get_template_and_user {
     # these template parameters are set the same regardless of $in->{'type'}
     $template->param(
             "BiblioDefaultView".C4::Context->preference("BiblioDefaultView")         => 1,
-            GoogleJackets         => C4::Context->preference("GoogleJackets"),
-            KohaAdminEmailAddress => "" . C4::Context->preference("KohaAdminEmailAddress"),
-            LoginBranchcode       => (C4::Context->userenv?C4::Context->userenv->{"branch"}:"insecure"),
-            LoginFirstname        => (C4::Context->userenv?C4::Context->userenv->{"firstname"}:"Bel"),
-            LoginSurname          => C4::Context->userenv?C4::Context->userenv->{"surname"}:"Inconnu",
-            TagsEnabled           => C4::Context->preference("TagsEnabled"),
-            hide_marc             => C4::Context->preference("hide_marc"),
-            'item-level_itypes'   => C4::Context->preference('item-level_itypes'),
-            patronimages          => C4::Context->preference("patronimages"),
-            singleBranchMode      => C4::Context->preference("singleBranchMode"),
+            EnhancedMessagingPreferences => C4::Context->preference('EnhancedMessagingPreferences'),
+            GoogleJackets                => C4::Context->preference("GoogleJackets"),
+            KohaAdminEmailAddress        => "" . C4::Context->preference("KohaAdminEmailAddress"),
+            LoginBranchcode              => (C4::Context->userenv?C4::Context->userenv->{"branch"}:"insecure"),
+            LoginFirstname               => (C4::Context->userenv?C4::Context->userenv->{"firstname"}:"Bel"),
+            LoginSurname                 => C4::Context->userenv?C4::Context->userenv->{"surname"}:"Inconnu",
+            TagsEnabled                  => C4::Context->preference("TagsEnabled"),
+            hide_marc                    => C4::Context->preference("hide_marc"),
+            'item-level_itypes'          => C4::Context->preference('item-level_itypes'),
+            patronimages                 => C4::Context->preference("patronimages"),
+            singleBranchMode             => C4::Context->preference("singleBranchMode"),
                  );
 
     if ( $in->{'type'} eq "intranet" ) {

@@ -1,4 +1,5 @@
-<!-- TMPL_IF NAME="loggedinusername" --><div id="menu">
+<!-- TMPL_IF NAME="loggedinusername" -->
+<div id="menu">
 <ul>
   <!-- TMPL_IF NAME="userview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-user.pl">my summary</a></li>
   <!-- TMPL_IF NAME="accountview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-account.pl">my fines</a></li>
@@ -17,5 +18,10 @@
       <!-- TMPL_IF NAME="suggestionsview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-suggestions.pl">my purchase suggestions</a></li>
     <!-- /TMPL_UNLESS -->
   <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME="EnhancedMessagingPreferences" -->
+    <!-- TMPL_IF NAME="messagingview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-messaging.pl">my messaging</a></li>
+  <!-- /TMPL_IF -->
 </ul>
-</div><!-- /TMPL_IF -->
+</div>
+<!-- /TMPL_IF -->
+

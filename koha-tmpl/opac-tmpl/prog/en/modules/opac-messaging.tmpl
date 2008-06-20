@@ -1,0 +1,116 @@
+<!-- TMPL_INCLUDE name="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo;  Updating Details for <!-- TMPL_LOOP name="BORROWER_INFO" --><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --><!-- /TMPL_LOOP -->
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE name="masthead.inc" -->
+
+<div id="doc3" class="yui-t1">
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g" id="userupdate">
+
+<div class="container" style="overflow:auto;">
+<!-- TMPL_LOOP name="BORROWER_INFO" -->
+<h3><a href="/cgi-bin/koha/opac-user.pl"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->'s account</a> <img src="<!-- TMPL_VAR NAME="themelang" -->../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Your Messaging Settings</h3>
+<!-- /TMPL_LOOP -->
+
+<form action="/cgi-bin/koha/opac-messaging.pl" method="get" name="opacmessaging">
+<div class="yui-u first">
+
+<input type="hidden" name="modify" value="yes" />
+
+<fieldset class="brief"><legend>Mange your Messaging settings</legend>
+  <!-- TMPL_IF NAME="settings_updated" -->
+  <div class="dialog message"><h1>Settings Updated</h1></div>
+  <!-- /TMPL_IF -->
+  <table>
+    <tr><TH></TH><TH># days in advance</TH><TH>sms</TH><TH>email</TH><TH>Digests only?</TH><TH>rss</TH><TH>do not notify</TH></tr>
+    <!-- TMPL_LOOP name="messaging_preferences" -->
+    <tr>
+      <td><label for="firstname"><!-- TMPL_VAR NAME="message_name" --></label></td>
+      <!-- TMPL_IF NAME="takes_days" -->
+      <td><SELECT name="<!-- TMPL_VAR NAME="message_attribute_id" -->-DAYS" id="<!-- TMPL_VAR NAME="message_name" -->-DAYS" >
+          <!-- TMPL_LOOP name="select_days" -->
+          <OPTION VALUE="<!-- TMPL_VAR NAME="day" -->"  <!-- TMPL_VAR NAME="selected"  --> ><!-- TMPL_VAR NAME="day" --></OPTION>
+          <!-- /TMPL_LOOP -->
+        </SELECT>
+      </td>
+      <!-- TMPL_ELSE -->
+      <td>-</td>
+      <!-- /TMPL_IF -->
+      <!-- TMPL_IF NAME="transport-sms" -->
+      <td><input type="checkbox"
+                 id="sms<!-- TMPL_VAR NAME="message_attribute_id" -->"
+                 name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
+                 value="sms" <!-- TMPL_VAR NAME="transport-sms"   -->
+                 onclick = "document.opacmessaging.none<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;">
+      </td>
+      <!-- TMPL_ELSE -->
+      <td>-</td>
+      <!-- /TMPL_IF -->
+
+      <!-- TMPL_IF NAME="transport-email" -->
+      <td><input type="checkbox"
+                 id="email<!-- TMPL_VAR NAME="message_attribute_id" -->"
+                 name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
+                 value="email"   <!-- TMPL_VAR NAME="transport-email"   -->
+                 onclick = "document.opacmessaging.none<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;">
+      </td>
+      <!-- TMPL_ELSE -->
+      <td>-</td>
+      <!-- /TMPL_IF -->
+
+      <!-- TMPL_IF NAME="has_digest" -->
+      <td><input type="checkbox"
+                 id="digest<!-- TMPL_VAR NAME="message_attribute_id" -->"
+                 value="<!-- TMPL_VAR NAME="message_attribute_id" -->"
+                 name="digest"   <!-- TMPL_VAR NAME="digest" -->
+                 onclick = "document.opacmessaging.none<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;">
+      </td>
+      <!-- TMPL_ELSE -->
+      <td>-</td>
+      <!-- /TMPL_IF -->
+
+      <!-- TMPL_IF NAME="transport-rss" -->
+      <td><input type="checkbox"
+                 id="rss<!-- TMPL_VAR NAME="message_attribute_id" -->"
+                 name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
+                 value="rss"  <!-- TMPL_VAR NAME="transport-rss"   -->
+                 onclick = "document.opacmessaging.none<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;">
+      </td>
+      <!-- TMPL_ELSE -->
+      <td>-</td>
+      <!-- /TMPL_IF -->
+
+      <td><input type="checkbox" id="none<!-- TMPL_VAR NAME="message_attribute_id" -->"
+                 onclick = "if ( document.opacmessaging.none<!-- TMPL_VAR NAME="message_attribute_id" -->.checked == true ) {
+                            document.opacmessaging.sms<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;
+                            document.opacmessaging.email<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;
+                            document.opacmessaging.digest<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;
+                            document.opacmessaging.rss<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false; }" /></td>
+    </tr>
+    <!-- /TMPL_LOOP -->
+  </table>
+SMS number: <input type="text" name="SMSnumber" value="<!-- TMPL_VAR NAME="SMSnumber"  -->" />
+
+</fieldset>
+
+</div>
+
+<fieldset class="action">
+  <input type="submit" value="Submit Changes" /> <a class="cancel" href="/cgi-bin/koha/opac-user.pl">Cancel</a>
+</fieldset>
+
+</form>
+</div>
+</div>
+</div>
+</div>
+<div class="yui-b">
+<div class="container">
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+<!-- TMPL_INCLUDE name="usermenu.inc" -->
+</div>
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
