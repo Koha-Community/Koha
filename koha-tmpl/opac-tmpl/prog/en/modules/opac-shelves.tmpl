@@ -194,9 +194,9 @@ $.tablesorter.addParser({
 		<!-- /TMPL_IF -->
         
 		<!-- TMPL_IF NAME="loggedinusername" -->
-        <table>
-        <tr><th>List Name</th><th>Contents</th><th>Sort by</th><th>Type</th><th>&nbsp;</th></tr>
             <!-- TMPL_IF NAME="shelveslooppriv" -->
+        		<table>
+        		<tr><th>List Name</th><th>Contents</th><th>Sort by</th><th>Type</th><th>&nbsp;</th></tr>
                 <!-- TMPL_LOOP NAME="shelveslooppriv" -->
                     <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!--TMPL_ELSE--><tr><!-- /TMPL_IF -->
         <td><a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"  --></a></td>
