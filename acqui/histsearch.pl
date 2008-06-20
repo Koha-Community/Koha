@@ -81,8 +81,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $from_iso = ($from_placed_on->output('iso') || 0);
-my   $to_iso = (  $to_placed_on->output('iso') || 0);
+my $from_iso = C4::Dates->new($input->param('from'))->output('iso') if $input->param('from');
+my   $to_iso =   C4::Dates->new($input->param('to'))->output('iso') if $input->param('iso');
 my ( $order_loop, $total_qty, $total_price, $total_qtyreceived ) =
   &GetHistory( $title, $author, $name, $from_iso, $to_iso );
   
