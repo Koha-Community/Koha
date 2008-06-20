@@ -181,6 +181,7 @@ sub one_msg {
 
 	chomp($resp);
 	$resp =~ tr/\cM//d;
+	$resp =~ s/\015?\012$//;
 	chomp($resp);
 
 	if (!verify_cksum($resp)) {
@@ -248,7 +249,7 @@ sub run_sip_tests {
     my ($sock, $seqno);
 
     $Sip::error_detection = 1;
-    $/ = "\r";
+    $/ = "\015\012";	# must use correct record separator
 
     $sock = new IO::Socket::INET(PeerAddr => $server,
 				 Type     => SOCK_STREAM);

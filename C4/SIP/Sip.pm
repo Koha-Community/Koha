@@ -11,6 +11,7 @@ use Exporter;
 
 use Sys::Syslog qw(syslog);
 use POSIX qw(strftime);
+use Socket qw(:crlf);
 
 use Sip::Constants qw(SIP_DATETIME);
 use Sip::Checksum qw(checksum);
@@ -135,24 +136,46 @@ sub boolspace {
 }
 
 
-# read_SIP_packet($file)
-#
 # Read a packet from $file, using the correct record separator
 #
 sub read_SIP_packet {
     my $record;
+	my $fh = shift or syslog("LOG_ERR", "read_SIP_packet: no filehandle argument!");
+	my $len1 = 999;
+	# local $/ = "\012";	# Internet Record Separator (lax version)
 	{		# adapted from http://perldoc.perl.org/5.8.8/functions/readline.html
-		undef $!;
-    	local $/ = "\r";
-		unless (defined($record = readline(shift))) {
-			if ($!) {
-    			syslog("LOG_ERR", "read_SIP_packet ERROR: $!");
-				die "read_SIP_packet ERROR: $!";
+		for (my $tries=1; $tries<=3; $tries++) {
+			undef $!;
+			$record = readline($fh);
+			if (defined($record)) {
+				while(chomp($record)){1;}
+				$len1 = length($record);
+				syslog("LOG_DEBUG", "read_SIP_packet, INPUT MSG: '$record'");
+				$record =~ s/^\s*[^A-z0-9]+//s;
+				$record =~ s/[^A-z0-9]+$//s;
+				$record =~ s/\015?\012//g;
+				$record =~ s/\015?\012//s;
+				$record =~ s/\015*\012*$//s;	# treat as one line to include the extra linebreaks we are trying to remove!
+				while(chomp($record)){1;}
+				if ($record) {
+					last;	# success
+				}
+			} else {
+				if ($!) {
+    				syslog("LOG_DEBUG", "read_SIP_packet (try #$tries) ERROR: $!");
+					# die "read_SIP_packet ERROR: $!";
+					warn "read_SIP_packet ERROR: $!";
+				}
 			}
-			# else reached EOF
 		}
 	}
-    syslog("LOG_INFO", "read_SIP_packet, INPUT MSG: '$record'") if $record;
+	if ($record) {
+		my $len2 = length($record);
+		syslog("LOG_INFO", "read_SIP_packet, INPUT MSG: '$record'") if $record;
+		($len1 != $len2) and syslog("LOG_DEBUG", "read_SIP_packet, trimmed %s character(s) (after chomps).", $len1-$len2);
+	} else {
+		syslog("LOG_WARNING", "read_SIP_packet input %s, end of input.", (defined($record)? "empty ($record)" : 'undefined')); 
+	}
     return $record;
 }
 
@@ -180,13 +203,13 @@ sub write_msg {
 		$msg .= sprintf('%04.4X', $cksum);
     }
 
-
     if ($file) {
-		print $file "$msg\r";
+		print $file "$msg$CRLF";
+		syslog("LOG_DEBUG", "write_msg outputting to $file");
     } else {
-		print "$msg\r";
-		syslog("LOG_INFO", "OUTPUT MSG: '$msg'");
+		print "$msg$CRLF";
     }
+	syslog("LOG_INFO", "OUTPUT MSG: '$msg'");
 
     $last_response = $msg;
 }

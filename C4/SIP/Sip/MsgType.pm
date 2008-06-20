@@ -286,7 +286,7 @@ sub new {
 	# it's using the 2.00 login process, so it must support 2.00.
 		$protocol_version = 2;
     }
-    syslog("LOG_DEBUG", "Sip::MsgType::new('%s', '%s...', '%s'): msgtag '%s', protocol %s",
+    syslog("LOG_DEBUG", "Sip::MsgType::new('%s', '%s...', '%s'): seq.no '%s', protocol %s",
 		$class, substr($msg, 0, 10), $msgtag, $seqno, $protocol_version);
 	# warn "SIP PROTOCOL: $protocol_version";	
     if (!exists($handlers{$msgtag})) {
@@ -318,12 +318,10 @@ sub _initialize {
 	$self->{fields}       = {};
 	$self->{fixed_fields} = [];
 
-	chomp($msg);
+	chomp($msg);		# These four are probably unnecessary now.
 	$msg =~ tr/\cM//d;
 	$msg =~ s/\^M$//;
 	chomp($msg);
-
-	# syslog("LOG_DEBUG", "Sip::MsgType::_initialize('%s', '%s...')", $self->{name}, substr($msg, 0, 20));
 
 	foreach my $field (@{$proto->{fields}}) {
 		$self->{fields}->{$field} = undef;
@@ -477,7 +475,7 @@ sub build_patron_status {
 
 sub handle_patron_status {
 	my ($self, $server) = @_;
-	#warn Dumper($server);  
+	warn "handle_patron_status server: " . Dumper(\$server);  
 	my $ils = $server->{ils};
 	my $patron;
 	my $resp = (PATRON_STATUS_RESP);
@@ -777,6 +775,56 @@ sub handle_request_acs_resend {
     return REQUEST_ACS_RESEND;
 }
 
+sub login_core ($$$) {
+	my $server = shift or return undef;
+	my $uid = shift;
+	my $pwd = shift;
+    my $status = 1;		# Assume it all works
+    if (!exists($server->{config}->{accounts}->{$uid})) {
+		syslog("LOG_WARNING", "MsgType::login_core: Unknown login '$uid'");
+		$status = 0;
+    } elsif ($server->{config}->{accounts}->{$uid}->{password} ne $pwd) {
+		syslog("LOG_WARNING", "MsgType::login_core: Invalid password for login '$uid'");
+		$status = 0;
+    } else {
+	# Store the active account someplace handy for everybody else to find.
+		$server->{account} = $server->{config}->{accounts}->{$uid};
+		my $inst = $server->{account}->{institution};
+		$server->{institution} = $server->{config}->{institutions}->{$inst};
+		$server->{policy} = $server->{institution}->{policy};
+		$server->{sip_username} = $uid;
+		$server->{sip_password} = $pwd;
+
+		my $auth_status = api_auth($uid,$pwd);
+		if (!$auth_status or $auth_status !~ /^ok$/i) {
+			syslog("LOG_WARNING", "api_auth failed for SIP terminal '%s' of '%s': %s",
+						$uid, $inst, ($auth_status||'unknown'));
+			$status = 0;
+		} else {
+			syslog("LOG_INFO", "Successful login/auth for '%s' of '%s'", $server->{account}->{id}, $inst);
+			#
+			# initialize connection to ILS
+			#
+			my $module = $server->{config}->{institutions}->{$inst}->{implementation};
+			syslog("LOG_DEBUG", 'login_core: ' . Dumper($module));
+			$module->use;
+			if ($@) {
+				syslog("LOG_ERR", "%s: Loading ILS implementation '%s' for institution '%s' failed",
+						$server->{service}, $module, $inst);
+				die("Failed to load ILS implementation '$module' for $inst");
+			}
+
+			# like   ILS->new(), I think.
+			$server->{ils} = $module->new($server->{institution}, $server->{account});
+			if (!$server->{ils}) {
+			    syslog("LOG_ERR", "%s: ILS connection to '%s' failed", $server->{service}, $inst);
+			    die("Unable to connect to ILS '$inst'");
+			}
+		}
+	}
+	return $status;
+}
+
 sub handle_login {
     my ($self, $server) = @_;
     my ($uid_algorithm, $pwd_algorithm);
@@ -788,14 +836,15 @@ sub handle_login {
     $fields = $self->{fields};
     ($uid_algorithm, $pwd_algorithm) = @{$self->{fixed_fields}};
 
-    $uid = $fields->{(FID_LOGIN_UID)};
-    $pwd = $fields->{(FID_LOGIN_PWD)};
+    $uid = $fields->{(FID_LOGIN_UID)}; # Terminal ID, not patron ID.
+    $pwd = $fields->{(FID_LOGIN_PWD)}; # Terminal PWD, not patron PWD.
 
     if ($uid_algorithm || $pwd_algorithm) {
 		syslog("LOG_ERR", "LOGIN: Unsupported non-zero encryption method(s): uid = $uid_algorithm, pwd = $pwd_algorithm");
 		$status = 0;
     }
-
+	else { $status = login_core($server,$uid,$pwd); }
+=doc 
     if (!exists($server->{config}->{accounts}->{$uid})) {
 		syslog("LOG_WARNING", "MsgType::handle_login: Unknown login '$uid'");
 		$status = 0;
@@ -838,7 +887,8 @@ sub handle_login {
 			}
 		}
 	}
-    $self->write_msg(LOGIN_RESP . $status);
+=cut	
+	$self->write_msg(LOGIN_RESP . $status);
     return $status ? LOGIN : '';
 }
 

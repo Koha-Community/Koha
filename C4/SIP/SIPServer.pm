@@ -6,7 +6,7 @@ use warnings;
 use Sys::Syslog qw(syslog);
 use Net::Server::PreFork;
 use IO::Socket::INET;
-use Socket;
+use Socket qw(:DEFAULT :crlf);
 use Data::Dumper;		# For debugging
 require UNIVERSAL::require;
 
@@ -70,7 +70,7 @@ if (defined($config->{'server-params'})) {
     }
 }
 
-print "Params for Net::Server::PreFork : \n" . Dumper(@parms);
+print "Params for Net::Server::PreFork : \n" . Dumper(\@parms);
 
 #
 # This is the main event.
@@ -124,7 +124,7 @@ sub raw_transport {
     my $strikes = 3;
 
     eval {
-		local $SIG{ALRM} = sub { die "Timed Out!\n"; };
+		local $SIG{ALRM} = sub { die "raw_transport Timed Out!\n"; };
 		syslog("LOG_DEBUG", "raw_transport: timeout is %d", $service->{timeout});
 		while ($strikes--) {
 		    alarm $service->{timeout};
@@ -135,7 +135,7 @@ sub raw_transport {
 				syslog("LOG_INFO", "raw_transport: shutting down: EOF during login");
 				return;
 		    }
-		    $input =~ s/[\r\n]+$//sm;	# Strip off trailing line terminator
+		    $input =~ s/[\r\n]+$//sm;	# Strip off trailing line terminator(s)
 		    last if Sip::MsgType::handle($input, $self, LOGIN);
 		}
 	};
@@ -156,6 +156,30 @@ sub raw_transport {
     syslog("LOG_INFO", "raw_transport: shutting down");
 }
 
+sub get_clean_string ($) {
+	my $string = shift;
+	if (defined $string) {
+		syslog("LOG_DEBUG", "get_clean_string  pre-clean(length %s): %s", length($string), $string);
+		chomp($string);
+		$string =~ s/^[^A-z0-9]+//;
+		$string =~ s/[^A-z0-9]+$//;
+		syslog("LOG_DEBUG", "get_clean_string post-clean(length %s): %s", length($string), $string);
+	} else {
+		syslog("LOG_INFO", "get_clean_string called on undefined");
+	}
+	return $string;
+}
+
+sub get_clean_input {
+	local $/ = "\012";
+	my $in = <STDIN>;
+	$in = get_clean_string($in);
+	while (my $extra = <STDIN>){
+		syslog("LOG_ERR", "get_clean_input got extra lines: %s", $extra);
+	}
+	return $in;
+}
+
 sub telnet_transport {
     my $self = shift;
     my ($uid, $pwd);
@@ -164,46 +188,44 @@ sub telnet_transport {
     my $input;
     my $config  = $self->{config};
 	my $timeout = $self->{service}->{timeout} || $config->{timeout} || 30;
-	# syslog("LOG_DEBUG", "telnet_transport: timeout is %s", $timeout);
+	syslog("LOG_DEBUG", "telnet_transport: timeout is %s", $timeout);
 
     eval {
-	local $SIG{ALRM} = sub { die "Timed Out ($timeout seconds)!\n"; };
+	local $SIG{ALRM} = sub { die "telnet_transport: Timed Out ($timeout seconds)!\n"; };
 	local $| = 1;			# Unbuffered output
+	$/ = "\015";		# Internet Record Separator (lax version)
     # Until the terminal has logged in, we don't trust it
     # so use a timeout to protect ourselves from hanging.
 
 	while ($strikes--) {
 	    print "login: ";
 		alarm $timeout;
+		# $uid = &get_clean_input;
 		$uid = <STDIN>;
-		alarm 0;
-
-		if (defined $uid) {
 	    print "password: ";
-		alarm $timeout;
-	    $pwd = <STDIN> || '';
+	    # $pwd = &get_clean_input || '';
+		$pwd = <STDIN>;
 		alarm 0;
 
 		syslog("LOG_DEBUG", "telnet_transport 1: uid length %s, pwd length %s", length($uid), length($pwd));
-		while (chomp($uid)) {1;}
-		while (chomp($pwd)) {1;}
+		$uid = get_clean_string ($uid);
+		$pwd = get_clean_string ($pwd);
 		syslog("LOG_DEBUG", "telnet_transport 2: uid length %s, pwd length %s", length($uid), length($pwd));
-		$uid =~ s/^\s+//;			# 
-		$pwd =~ s/^\s+//;			# 
-	    $uid =~ s/[\r\n]+$//gms;	# 
-	    $pwd =~ s/[\r\n]+$//gms;	# 
-	    $uid =~ s/[[:cntrl:]]//g;	# 
-	    $pwd =~ s/[[:cntrl:]]//g;	# 
-		syslog("LOG_DEBUG", "telnet_transport 3: uid length %s, pwd length %s", length($uid), length($pwd));
+		# $uid =~ s/^\s+//;			# 
+		# $pwd =~ s/^\s+//;			# 
+	    # $uid =~ s/[\r\n]+$//gms;	# 
+	    # $pwd =~ s/[\r\n]+$//gms;	# 
+	    # $uid =~ s/[[:cntrl:]]//g;	# 
+	    # $pwd =~ s/[[:cntrl:]]//g;	# 
+		# syslog("LOG_DEBUG", "telnet_transport 3: uid length %s, pwd length %s", length($uid), length($pwd));
 
 	    if (exists ($config->{accounts}->{$uid})
 		&& ($pwd eq $config->{accounts}->{$uid}->password())) {
 			$account = $config->{accounts}->{$uid};
-			last;
+			Sip::MsgType::login_core($self,$uid,$pwd) and last;
 	    }
-		}
 		syslog("LOG_WARNING", "Invalid login attempt: '%s'", ($uid||''));
-		print("Invalid login\n");
+		print("Invalid login$CRLF");
 	}
     }; # End of eval
 
@@ -214,7 +236,7 @@ sub telnet_transport {
 		syslog("LOG_ERR", "telnet_transport: Login Failed");
 		die "Login Failure";
     } else {
-		print "Login OK.  Initiating SIP\n";
+		print "Login OK.  Initiating SIP$CRLF";
     }
 
     $self->{account} = $account;
@@ -233,26 +255,27 @@ sub sip_protocol_loop {
 	my $service = $self->{service};
 	my $config  = $self->{config};
 	my $input;
-    # Now that the terminal has logged in, the first message
-    # we recieve must be an SC_STATUS message.  But it might be
-    # an SC_REQUEST_RESEND.  So, as long as we keep receiving
-    # SC_REQUEST_RESEND, we keep waiting for an SC_STATUS
+
+    # The spec says the first message will be:
+	# 	SIP v1: SC_STATUS
+	# 	SIP v2: LOGIN (or SC_STATUS via telnet?)
+    # But it might be SC_REQUEST_RESEND.  As long as we get
+    # SC_REQUEST_RESEND, we keep waiting.
 
     # Comprise reports that no other ILS actually enforces this
-    # constraint, so we'll relax about it too.  As long as everybody
-    # uses the SIP "raw" login process, rather than telnet, this
-    # will be fine, becaues the LOGIN protocol exchange will force
-    # us into SIP 2.00 anyway.  Machines that want to log in using
-    # telnet MUST send an SC Status message first, even though we're
-    # not enforcing it.
-    # 
-    #my $expect = SC_STATUS;
+    # constraint, so we'll relax about it too.
+    # Using the SIP "raw" login process, rather than telnet,
+    # requires the LOGIN message and forces SIP 2.00.  In that
+	# case, the LOGIN message has already been processed (above).
+	# 
+	# In short, we'll take any valid message here.
+	#my $expect = SC_STATUS;
     my $expect = '';
     my $strikes = 3;
     while ($input = Sip::read_SIP_packet(*STDIN)) {
-		# begin cheap input hacks
-		$input =~ s/^\s+//;			# Kill leading whitespace... a cheap stand in for better Telnet layer
-		$input =~ s/[\r\n]+$//sm;	# Strip off any trailing line ends (chomp?)
+		# begin input hacks ...  a cheap stand in for better Telnet layer
+		$input =~ s/^[^A-z0-9]+//s;	# Kill leading bad characters... like Telnet handshakers
+		$input =~ s/[^A-z0-9]+$//s;	# Same on the end, should get DOSsy ^M line-endings too.
 		while (chomp($input)) {warn "Extra line ending on input";}
 		unless ($input) {
 			if ($strikes--) {
