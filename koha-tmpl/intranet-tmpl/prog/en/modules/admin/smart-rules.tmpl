@@ -87,7 +87,12 @@ $(document).ready(function() {
                     <td>$<!-- TMPL_VAR NAME="fine" --></td>
                     <td><!-- TMPL_IF NAME="firstremind" --><!-- TMPL_VAR NAME="firstremind" --> day(s)<!-- /TMPL_IF --></td>
                     <td><!-- TMPL_IF NAME="chargeperiod" --><!-- TMPL_VAR NAME="chargeperiod" --> day(s)<!-- /TMPL_IF --></td>
-                    <td><!-- TMPL_VAR NAME="maxissueqty" --></td>
+                    <td><!-- TMPL_IF NAME="unlimited_maxissueqty" -->
+                            Unlimited
+                        <!-- TMPL_ELSE -->
+                            <!-- TMPL_VAR NAME="maxissueqty" -->
+                        <!-- /TMPL_IF -->
+                    </td>
                     <td><!-- TMPL_IF NAME="issuelength" --><!-- TMPL_VAR NAME="issuelength" --> day(s)<!-- /TMPL_IF --></td>
                     <td>
                         <a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=<!-- TMPL_VAR NAME="itemtype" -->&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->&amp;branch=<!-- TMPL_VAR NAME="branch" -->">Delete</a>
@@ -142,8 +147,18 @@ $(document).ready(function() {
                 </tr>
                 <!-- TMPL_LOOP NAME="branch_cat_rule_loop" -->
                     <tr>
-                        <td><!-- TMPL_VAR NAME="humancategorycode" --></td>
-                        <td><!-- TMPL_VAR NAME="maxissueqty" --></td>
+                        <td><!-- TMPL_IF NAME="default_humancategorycode" -->
+                                <em>Default</em>
+                            <!-- TMPL_ELSE -->
+                                <!-- TMPL_VAR NAME="humancategorycode" -->
+                            <!-- /TMPL_IF -->
+                        </td>
+                        <td><!-- TMPL_IF NAME="unlimited_maxissueqty" -->
+                                Unlimited
+                            <!-- TMPL_ELSE -->
+                                <!-- TMPL_VAR NAME="maxissueqty" -->
+                            <!-- /TMPL_IF -->
+                        </td>
                         <td>
                             <a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->&amp;branch=<!-- TMPL_VAR NAME="branch" -->">Delete</a>
                         </td>
@@ -152,6 +167,7 @@ $(document).ready(function() {
                 <tr>
                     <td>
                         <select name="categorycode">
+                            <option value="*">Default</option>
                         <!-- TMPL_LOOP NAME="categoryloop" -->
                             <option value="<!-- TMPL_VAR NAME="categorycode" -->"><!-- TMPL_VAR NAME="description" --></option>
                         <!-- /TMPL_LOOP -->
