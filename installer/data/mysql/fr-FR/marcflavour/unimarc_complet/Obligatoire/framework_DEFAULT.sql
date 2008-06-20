@@ -1904,9 +1904,12 @@ INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VA
 INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VALUES (3603, 'qualif', '295', 'Donneur de grades');
 INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VALUES (3604, 'qualif', '010', 'Adaptateur');
 INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VALUES (3607, 'LOC', 'En reliure', 'En reliure');
-INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VALUES (3608, 'SUGGEST', 'Not enoug budget', 'This book it too much expensive');
+
 INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VALUES (3609, 'SUGGEST', 'Excellente proposition !', 'Excellente proposition !');
+INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VALUES (3609, 'SUGGEST', "Ce document n'entre pas dans notre politique d'acquisition", "Ce document n'entre pas dans notre politique d'acquisition");
+INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VALUES (3609, 'SUGGEST', "Le document est déjà disponible", "Le document est déjà disponible");
+INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VALUES (3609, 'SUGGEST', "Ce document est trop cher", "Ce document est trop cher");
+INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VALUES (3609, 'SUGGEST', "Il n'y a plus d'acquisitions cette année (budget épuisé)", "Il n'y a plus d'acquisitions cette année (budget épuisé)");
+
 INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VALUES (3610, 'Asort1', 'test 1', 'test 1');
 INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VALUES (3611, 'Asort1', 'test 2', 'test 2');
-INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VALUES (3612, 'SUGGEST', 'Not enough budget', 'This book it too much expensive');
-INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VALUES (3613, 'SUGGEST', 'Not enough budget', 'This book it too much expensive');
