@@ -416,127 +416,107 @@ sub TooMany {
 	my $type = (C4::Context->preference('item-level_itypes')) 
   			? $item->{'itype'}         # item-level
 			: $item->{'itemtype'};     # biblio-level
-  
-	my $sth =
-      $dbh->prepare(
-                'SELECT * FROM issuingrules 
-                        WHERE categorycode = ? 
-                            AND itemtype = ? 
-                            AND branchcode = ?'
-      );
+ 
+    # given branch, patron category, and item type, determine
+    # applicable issuing rule
+    my $issuing_rule = GetIssuingRule($cat_borrower, $type, $branch);
 
-    my $query2 = "SELECT  COUNT(*) FROM issues i, biblioitems s1, items s2 
-                WHERE i.borrowernumber = ? 
-                    AND i.itemnumber = s2.itemnumber 
-                    AND s1.biblioitemnumber = s2.biblioitemnumber";
-    if (C4::Context->preference('item-level_itypes')){
-	   $query2.=" AND s2.itype=? ";
-    } else { 
-	   $query2.=" AND s1.itemtype= ? ";
-    }
-    my $sth2=  $dbh->prepare($query2);
-    my $sth3 =
-      $dbh->prepare(
-            'SELECT COUNT(*) FROM issues
-                WHERE borrowernumber = ?'
-            );
-    my $alreadyissued;
+    # if a rule is found and has a loan limit set, count
+    # how many loans the patron already has that meet that
+    # rule
+    if (defined($issuing_rule) and defined($issuing_rule->{'maxissueqty'})) {
+        my @bind_params;
+        my $count_query = "SELECT COUNT(*) FROM issues
+                           JOIN items USING (itemnumber) ";
 
-    # check the 3 parameters (branch / itemtype / category code
-    $sth->execute( $cat_borrower, $type, $branch );
-    my $result = $sth->fetchrow_hashref;
-#     warn "$cat_borrower, $type, $branch = ".Data::Dumper::Dumper($result);
-    if ( $result->{maxissueqty} ne '' ) {
-#         warn "checking on everything set";
-        $sth2->execute( $borrower->{'borrowernumber'}, $type );
-        my $alreadyissued = $sth2->fetchrow;
-        if ( $result->{'maxissueqty'} <= $alreadyissued ) {
-            return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on branch/category/itemtype failed)" );
+        my $rule_itemtype = $issuing_rule->{itemtype};
+        if ($rule_itemtype eq "*") {
+            # matching rule has the default item type, so count only
+            # those existing loans that don't fall under a more
+            # specific rule
+            if (C4::Context->preference('item-level_itypes')) {
+                $count_query .= " WHERE items.itype NOT IN (
+                                    SELECT itemtype FROM issuingrules
+                                    WHERE branchcode = ?
+                                    AND   (categorycode = ? OR categorycode = ?)
+                                    AND   itemtype <> '*'
+                                  ) ";
+            } else { 
+                $count_query .= " JOIN  biblioitems USING (biblionumber) 
+                                  WHERE biblioitems.itemtype NOT IN (
+                                    SELECT itemtype FROM issuingrules
+                                    WHERE branchcode = ?
+                                    AND   (categorycode = ? OR categorycode = ?)
+                                    AND   itemtype <> '*'
+                                  ) ";
+            }
+            push @bind_params, $issuing_rule->{branchcode};
+            push @bind_params, $issuing_rule->{categorycode};
+            push @bind_params, $cat_borrower;
+        } else {
+            # rule has specific item type, so count loans of that
+            # specific item type
+            if (C4::Context->preference('item-level_itypes')) {
+                $count_query .= " WHERE items.itype = ? ";
+            } else { 
+                $count_query .= " JOIN  biblioitems USING (biblionumber) 
+                                  WHERE biblioitems.itemtype= ? ";
+            }
+            push @bind_params, $type;
         }
-        # now checking for total
-        $sth->execute( $cat_borrower, '*', $branch );
-        my $result = $sth->fetchrow_hashref;
-        if ( $result->{maxissueqty} ne '' ) {
-            $sth3->execute( $borrower->{'borrowernumber'} );
-            my $alreadyissued = $sth3->fetchrow;
-            if ( $result->{'maxissueqty'} <= $alreadyissued ) {
-                return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on branch/category/total failed)"  );
+
+        $count_query .= " AND borrowernumber = ? ";
+        push @bind_params, $borrower->{'borrowernumber'};
+        my $rule_branch = $issuing_rule->{branchcode};
+        if ($rule_branch ne "*") {
+            if (C4::Context->preference('CircControl') eq 'PickupLibrary') {
+                $count_query .= " AND issues.branchcode = ? ";
+                push @bind_params, $branch;
+            } elsif (C4::Context->preference('CircControl') eq 'PatronLibrary') {
+                ; # if branch is the patron's home branch, then count all loans by patron
+            } else {
+                $count_query .= " AND items.homebranch = ? ";
+                push @bind_params, $branch;
             }
         }
-    }
 
-    # check the 2 parameters (branch / itemtype / default categorycode
-    $sth->execute( '*', $type, $branch );
-    $result = $sth->fetchrow_hashref;
-#     warn "*, $type, $branch = ".Data::Dumper::Dumper($result);
+        my $count_sth = $dbh->prepare($count_query);
+        $count_sth->execute(@bind_params);
+        my ($current_loan_count) = $count_sth->fetchrow_array;
 
-    if ( $result->{maxissueqty} ne '' ) {
-#         warn "checking on 2 parameters (default categorycode)";
-        $sth2->execute( $borrower->{'borrowernumber'}, $type );
-        my $alreadyissued = $sth2->fetchrow;
-        if ( $result->{'maxissueqty'} <= $alreadyissued ) {
-            return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on branch / default category / itemtype failed)"  );
-        }
-        # now checking for total
-        $sth->execute( '*', '*', $branch );
-        my $result = $sth->fetchrow_hashref;
-        if ( $result->{maxissueqty} ne '' ) {
-            $sth3->execute( $borrower->{'borrowernumber'} );
-            my $alreadyissued = $sth3->fetchrow;
-            if ( $result->{'maxissueqty'} <= $alreadyissued ) {
-                return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on branch / default category / total failed)" );
-            }
-        }
-    }
-    
-    # check the 1 parameters (default branch / itemtype / categorycode
-    $sth->execute( $cat_borrower, $type, '*' );
-    $result = $sth->fetchrow_hashref;
-#     warn "$cat_borrower, $type, * = ".Data::Dumper::Dumper($result);
-    
-    if ( $result->{maxissueqty} ne '' ) {
-#         warn "checking on 1 parameter (default branch + categorycode)";
-        $sth2->execute( $borrower->{'borrowernumber'}, $type );
-        my $alreadyissued = $sth2->fetchrow;
-        if ( $result->{'maxissueqty'} <= $alreadyissued ) {
-            return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on default branch/category/itemtype failed)"  );
-        }
-        # now checking for total
-        $sth->execute( $cat_borrower, '*', '*' );
-        my $result = $sth->fetchrow_hashref;
-        if ( $result->{maxissueqty} ne '' ) {
-            $sth3->execute( $borrower->{'borrowernumber'} );
-            my $alreadyissued = $sth3->fetchrow;
-            if ( $result->{'maxissueqty'} <= $alreadyissued ) {
-                return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on default branch / category / total failed)"  );
-            }
+        my $max_loans_allowed = $issuing_rule->{'maxissueqty'};
+        if ($current_loan_count >= $max_loans_allowed) {
+            return "$current_loan_count / $max_loans_allowed";
         }
     }
 
-    # check the 0 parameters (default branch / itemtype / default categorycode
-    $sth->execute( '*', $type, '*' );
-    $result = $sth->fetchrow_hashref;
-#     warn "*, $type, * = ".Data::Dumper::Dumper($result);
+    # Now count total loans against the limit for the branch
+    my $branch_borrower_circ_rule = GetBranchBorrowerCircRule($branch, $cat_borrower);
+    if (defined($branch_borrower_circ_rule->{maxissueqty})) {
+        my @bind_params = ();
+        my $branch_count_query = "SELECT COUNT(*) FROM issues 
+                                  JOIN items USING (itemnumber)
+                                  WHERE borrowernumber = ? ";
+        push @bind_params, $borrower->{borrowernumber};
 
-    if ( $result->{maxissueqty} ne '' ) {
-#         warn "checking on default branch and default categorycode";
-        $sth2->execute( $borrower->{'borrowernumber'}, $type );
-        my $alreadyissued = $sth2->fetchrow;
-        if ( $result->{'maxissueqty'} <= $alreadyissued ) {
-            return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on default branch / default category / itemtype failed)"  );
+        if (C4::Context->preference('CircControl') eq 'PickupLibrary') {
+            $branch_count_query .= " AND issues.branchcode = ? ";
+            push @bind_params, $branch;
+        } elsif (C4::Context->preference('CircControl') eq 'PatronLibrary') {
+            ; # if branch is the patron's home branch, then count all loans by patron
+        } else {
+            $branch_count_query .= " AND items.homebranch = ? ";
+            push @bind_params, $branch;
         }
-	}
-    # now checking for total
-    $sth->execute( '*', '*', '*' );
-    $result = $sth->fetchrow_hashref;
-    if ( $result->{maxissueqty} ne '' ) {
-		warn "checking total";
-		$sth2->execute( $borrower->{'borrowernumber'}, $type );
-		my $alreadyissued = $sth2->fetchrow;
-		if ( $result->{'maxissueqty'} <= $alreadyissued ) {
-			return ( "$alreadyissued / ".( $result->{maxissueqty} + 0 )." (rule on default branch / default category / total failed)"  );
-		}
-	}
+        my $branch_count_sth = $dbh->prepare($branch_count_query);
+        $branch_count_sth->execute(@bind_params);
+        my ($current_loan_count) = $branch_count_sth->fetchrow_array;
+
+        my $max_loans_allowed = $branch_borrower_circ_rule->{maxissueqty};
+        if ($current_loan_count >= $max_loans_allowed) {
+            return "$current_loan_count / $max_loans_allowed";
+        }
+    }
 
     # OK, the patron can issue !!!
     return;
