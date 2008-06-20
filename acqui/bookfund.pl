@@ -84,7 +84,7 @@ while ( my $data = $sth->fetchrow_hashref ) {
     }
     if ( $left && $left > 0 ) {
         my $subtotal = $left * $data->{'ecost'};
-        $data->{subtotal} = $subtotal;
+        $data->{subtotal} = sprintf("%.2f",$subtotal);
         $data->{'left'} = $left;
         push @commited_loop, $data;
         $total += $subtotal;
@@ -93,7 +93,7 @@ while ( my $data = $sth->fetchrow_hashref ) {
 
 $template->param(
     COMMITTEDLOOP => \@commited_loop,
-    total        => $total
+    total        =>  sprintf("%.2f",$total),
 );
 $sth->finish;
 $dbh->disconnect;
