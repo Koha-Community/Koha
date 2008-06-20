@@ -634,6 +634,59 @@ CREATE TABLE `categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Table structure for table `borrower_branch_circ_rules`
+--
+
+DROP TABLE IF EXISTS `branch_borrower_circ_rules`;
+CREATE TABLE `branch_borrower_circ_rules` (
+  `branchcode` VARCHAR(10) NOT NULL,
+  `categorycode` VARCHAR(10) NOT NULL,
+  `maxissueqty` int(4) default NULL,
+  PRIMARY KEY (`categorycode`, `branchcode`),
+  CONSTRAINT `branch_borrower_circ_rules_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `branch_borrower_circ_rules_ibfk_2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `default_borrower_circ_rules`
+--
+
+DROP TABLE IF EXISTS `default_borrower_circ_rules`;
+CREATE TABLE `default_borrower_circ_rules` (
+  `categorycode` VARCHAR(10) NOT NULL,
+  `maxissueqty` int(4) default NULL,
+  PRIMARY KEY (`categorycode`),
+  CONSTRAINT `borrower_borrower_circ_rules_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `default_branch_circ_rules`
+--
+
+DROP TABLE IF EXISTS `default_branch_circ_rules`;
+CREATE TABLE `default_branch_circ_rules` (
+  `branchcode` VARCHAR(10) NOT NULL,
+  `maxissueqty` int(4) default NULL,
+  PRIMARY KEY (`branchcode`),
+  CONSTRAINT `default_branch_circ_rules_ibfk_1` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `default_circ_rules`
+--
+
+DROP TABLE IF EXISTS `default_circ_rules`;
+CREATE TABLE `default_circ_rules` (
+    `singleton` enum('singleton') NOT NULL default 'singleton',
+    `maxissueqty` int(4) default NULL,
+    PRIMARY KEY (`singleton`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
 -- Table structure for table `cities`
 --
 

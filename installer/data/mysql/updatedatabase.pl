@@ -1611,7 +1611,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-
 $DBversion = "3.00.00.088";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do("INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('OPACShelfBrowser','1','','Enable/disable Shelf Browser on item details page','YesNo')");
@@ -1626,6 +1625,49 @@ $DBversion = "3.00.00.089";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do("INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('AdvancedSearchTypes','itemtypes','itemtypes|ccode','Select which set of fields comprise the Type limit in the advanced search','Choice')");
 	print "Upgrade to $DBversion done (added new AdvancedSearchTypes syspref)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.00.00.090";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("
+        CREATE TABLE `branch_borrower_circ_rules` (
+          `branchcode` VARCHAR(10) NOT NULL,
+          `categorycode` VARCHAR(10) NOT NULL,
+          `maxissueqty` int(4) default NULL,
+          PRIMARY KEY (`categorycode`, `branchcode`),
+          CONSTRAINT `branch_borrower_circ_rules_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`)
+            ON DELETE CASCADE ON UPDATE CASCADE,
+          CONSTRAINT `branch_borrower_circ_rules_ibfk_2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`)
+            ON DELETE CASCADE ON UPDATE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    "); 
+    $dbh->do("
+        CREATE TABLE `default_borrower_circ_rules` (
+          `categorycode` VARCHAR(10) NOT NULL,
+          `maxissueqty` int(4) default NULL,
+          PRIMARY KEY (`categorycode`),
+          CONSTRAINT `borrower_borrower_circ_rules_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`)
+            ON DELETE CASCADE ON UPDATE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    "); 
+    $dbh->do("
+        CREATE TABLE `default_branch_circ_rules` (
+          `branchcode` VARCHAR(10) NOT NULL,
+          `maxissueqty` int(4) default NULL,
+          PRIMARY KEY (`branchcode`),
+          CONSTRAINT `default_branch_circ_rules_ibfk_1` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`)
+            ON DELETE CASCADE ON UPDATE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    "); 
+    $dbh->do("
+        CREATE TABLE `default_circ_rules` (
+            `singleton` enum('singleton') NOT NULL default 'singleton',
+            `maxissueqty` int(4) default NULL,
+            PRIMARY KEY (`singleton`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    ");
+    print "Upgrade to $DBversion done (added several circ rules tables)\n";
     SetVersion ($DBversion);
 }
 
