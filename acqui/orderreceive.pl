@@ -147,12 +147,11 @@ if ( $count == 1 ) {
         push @branchloop, \%row;
     }
 
-    my $auto_barcode = C4::Context->boolean_preference("autoBarcode") || 0;
-
-    # See whether barcodes should be automatically allocated.
-    # Defaults to 0, meaning "no".
     my $barcode;
-    if ( $auto_barcode ) {
+    # See whether barcodes should be automatically allocated.
+	# FIXME : only incremental is implemented here, and it creates a race condition.
+	#
+    if ( C4::Context->preference('autoBarcode') eq 'incremental' ) {
         my $sth = $dbh->prepare("Select max(barcode) from items");
         $sth->execute;
         my $data = $sth->fetchrow_hashref;
