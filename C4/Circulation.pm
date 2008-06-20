@@ -701,7 +701,7 @@ sub CanBookBeIssued {
     }
     else {
         if ( $amount > 0 ) {
-            $needsconfirmation{DEBT} = $amount;
+            $needsconfirmation{DEBT} = sprintf( "%.2f", $amount );
         }
     }
 
