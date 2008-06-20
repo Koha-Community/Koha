@@ -48,21 +48,14 @@ to filter on ended date.
 =cut
 
 use strict;
-require Exporter;
 use CGI;
 use C4::Auth;    # get_template_and_user
 use C4::Output;
 use C4::Acquisition;
 use C4::Dates;
-
-use vars qw($debug);
-
-BEGIN {
-        $debug = $ENV{DEBUG} || 0;
-}
+use C4::Debug;
 
 my $input          = new CGI;
-$debug or $debug = $input->param('debug') || 0;
 my $title          = $input->param( 'title');
 my $author         = $input->param('author');
 my $name           = $input->param( 'name' );
@@ -99,7 +92,7 @@ $template->param(
     to_placed_on            =>   $to_placed_on->output('syspref'),
     DHTMLcalendar_dateformat=> C4::Dates->DHTMLcalendar(),
 	dateformat              => C4::Dates->new()->format(),
-    debug                   => $debug,
+    debug                   => $debug || $input->param('debug') || 0,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
