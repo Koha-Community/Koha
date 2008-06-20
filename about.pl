@@ -111,6 +111,7 @@ PDF::Reuse::Barcode
 POE
 POSIX
 Schedule::At
+SMS::Send
 Term::ANSIColor
 Test
 Test::Harness
