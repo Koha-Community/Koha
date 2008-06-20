@@ -91,7 +91,7 @@ $.tablesorter.addParser({
 		<!-- TMPL_IF NAME="manageshelf" --><div><span class="checkall"></span>
 		<span class="clearall"></span> | <a class="editshelf" href="/cgi-bin/koha/opac-shelves.pl?shelfnumber=<!-- TMPL_VAR NAME="shelfnumber" -->&amp;op=modif">Edit List</a> <form method="post" action="opac-shelves.pl">
 <input type="hidden" value="1" name="shelves"/>
-<input type="hidden" value="1" name="DEL-1"/>
+<input type="hidden" value="1" name="DEL-<!-- TMPL_VAR NAME="shelfnumber" -->"/>
 <input type="submit" class="deleteshelf" value="Delete List" onclick="return confirmDelete(_('Are you sure you want to remove this List?'));"/></form>
 </div><!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="manageshelf" --><form action="/cgi-bin/koha/opac-shelves.pl" method="post" name="myform" class="checkboxed">

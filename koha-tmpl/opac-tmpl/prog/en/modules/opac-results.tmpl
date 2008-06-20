@@ -19,7 +19,7 @@ $(document).ready(function(){
     });
 	$("span.clearall").html("<a id=\"CheckNone\" href=\"#\">Clear All</a>");
 	$("span.checkall").html("<a id=\"CheckAll\" href=\"#\">Select All</a>");
-	$("span.addto").html("<label for=\"addto\">Add to: </label><select name=\"addto\" id=\"addto\"><option value=\"\"></option><!-- TMPL_IF name="opacbookbag" --><option value=\"addtocart\">Cart</option><!-- /TMPL_IF --><!-- TMPL_IF NAME="virtualshelves" --><!-- TMPL_IF NAME="loggedinusername" --><optgroup label=\"Lists:\"><!-- TMPL_IF NAME="barshelves" --><!-- TMPL_LOOP NAME="barshelvesloop" --><!-- TMPL_IF EXPR="category == 1" --><option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--></option><!-- /TMPL_IF --><!-- /TMPL_LOOP --><!-- /TMPL_IF --><option value=\"newlist\">[ New List ]</option></optgroup><!-- TMPL_ELSE --><option value=\"newlist\">List</option><!-- /TMPL_IF --><!-- /TMPL_IF --></select> <input type=\"submit\" class=\"submit\" value=\"Save\" />");
+	$("span.addto").html("<label for=\"addto\">Add to: </label><select name=\"addto\" id=\"addto\"><option value=\"\"></option><!-- TMPL_IF name="opacbookbag" --><option value=\"addtocart\">Cart</option><!-- /TMPL_IF --><!-- TMPL_IF NAME="virtualshelves" --><!-- TMPL_IF NAME="loggedinusername" --><optgroup label=\"Your Lists:\"><!-- TMPL_IF NAME="barshelves" --><!-- TMPL_LOOP NAME="barshelvesloop" --><!-- TMPL_IF EXPR="category == 1" --><option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--></option><!-- /TMPL_IF --><!-- /TMPL_LOOP --><!-- /TMPL_IF --></optgroup><optgroup label=\"Public Lists:\"><!-- TMPL_IF NAME="pubshelves" --><!-- TMPL_LOOP NAME="pubshelvesloop" --><option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--></option><!-- /TMPL_LOOP --><!-- /TMPL_IF --></optgroup><option value=\"newlist\">[ New List ]</option><!-- TMPL_ELSE --><optgroup label=\"Public Lists:\"><!-- TMPL_IF NAME="pubshelves" --><!-- TMPL_LOOP NAME="pubshelvesloop" --><option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--></option><!-- /TMPL_LOOP --><!-- /TMPL_IF --></optgroup><!-- /TMPL_IF --><!-- /TMPL_IF --></select> <input type=\"submit\" class=\"submit\" value=\"Save\" />");
 	$("#addto").change(function(){
 		cartList();
 	});
@@ -30,9 +30,9 @@ $(document).ready(function(){
 	function cartList(){
 			if($("#addto").find("option:selected").attr("value") == "addtolist"){
 			var shelfnumber = $("#addto").find("option:selected").attr("id").replace("s","");
-			<!-- TMPL_IF NAME="loggedinusername" -->if (vShelfAdd()) {
+			if (vShelfAdd()) {
 			Dopop('/cgi-bin/koha/opac-addbybiblionumber.pl?selectedshelf='+shelfnumber+'&' + vShelfAdd());
-			}<!-- TMPL_ELSE --> alert('You must be logged in to create or add to Lists'); <!-- /TMPL_IF -->
+			}
 			return false;			
 		} else if($("#addto").find("option:selected").attr("value") == "newlist"){
 			<!-- TMPL_IF NAME="loggedinusername" -->if (vShelfAdd()) {

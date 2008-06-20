@@ -8,6 +8,7 @@
 <body id="addtolist">
 <div id="custom-doc" class="yui-t7">
 <div class="container">
+<!-- TMPL_IF NAME="authorized" -->
 <!-- TMPL_UNLESS NAME="newshelf" --><!-- TMPL_IF NAME="multiple"-->
     <h1>Add <!-- TMPL_VAR NAME="total"--> items to <!-- TMPL_IF NAME="singleshelf" --><em><!-- TMPL_VAR NAME="shelfname" --></em>: <!-- TMPL_ELSE -->a list:<!-- /TMPL_IF --></h1>
 <!-- TMPL_ELSE -->
@@ -55,9 +56,14 @@
  <!-- TMPL_LOOP NAME="biblios" --> <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><!-- /TMPL_LOOP -->
     <fieldset class="action"><input type="submit" value="Save" class="submit" /> <a class="close cancel" href="#">Cancel</a></fieldset>
 </form><!-- /TMPL_UNLESS -->
-
+<!-- TMPL_ELSE -->
 <p align="center">
-    <a href="#" class="close">close this window.</a>
+	This is not an open list.
+	Items cannot be added to it.
+</p>
+<!-- /TMPL_IF -->
+<p align="center">
+    <a href="#" class="close">Close this window.</a>
 </p>
 </div></div>
 </body>

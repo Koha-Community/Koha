@@ -26,7 +26,6 @@ use strict;
 use C4::Biblio;
 use CGI;
 use C4::VirtualShelves;
-# use C4::Circulation;	# not really used
 use C4::Auth;
 use C4::Output;
 
@@ -49,6 +48,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 $shelfnumber = AddShelf(  $newvirtualshelf, $loggedinuser, $category ) if $newvirtualshelf;
 
+# verify user is authorized to perform the action on the shelf...
+my $authorized = 1 if ( (ShelfPossibleAction( $loggedinuser, $selectedshelf )) );
+
 # multiple bibs might come in as '/' delimited string (from where, i don't see), or as array.
 
 my $multiple = 0;
@@ -59,7 +61,7 @@ if (scalar(@biblionumber) == 1) {
 if ($shelfnumber && ($shelfnumber != -1)) {
 	for my $bib (@biblionumber){
 		&AddToShelfFromBiblio($bib,$shelfnumber);
-	}
+	}	
 	print $query->header;
 	print "<html><body onload=\"window.close();\"><div>Please close this window to continue.</div></body></html>";
 	exit;
@@ -116,6 +118,7 @@ else {
 		multiple => (scalar(@biblios) > 1),
 		total    => scalar @biblios,
 		biblios  => \@biblios,
+		authorized	=> $authorized,
 	);
 
 	output_html_with_http_headers $query, $cookie, $template->output;

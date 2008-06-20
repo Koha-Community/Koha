@@ -58,6 +58,7 @@ else {
     authnotrequired => 1,
     }
 );
+
 if ($cgi->param("format") eq 'rss2') {
 	$template->param("rss2" => 1);
 }

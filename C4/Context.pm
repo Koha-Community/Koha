@@ -901,20 +901,22 @@ sub set_userenv{
     return $cell;
 }
 
-sub set_shelves_userenv ($) {
-	my $lists = shift or return undef;
+sub set_shelves_userenv ($$) {
+	my ($type, $shelves) = @_ or return undef;
 	my $activeuser = $context->{activeuser} or return undef;
-	$context->{userenv}->{$activeuser}->{shelves} = $lists;
-	# die "set_shelves_userenv: $lists";
+	$context->{userenv}->{$activeuser}->{barshelves} = $shelves if $type eq 'bar';
+	$context->{userenv}->{$activeuser}->{pubshelves} = $shelves if $type eq 'pub';
 }
+
 sub get_shelves_userenv () {
 	my $active;
 	unless ($active = $context->{userenv}->{$context->{activeuser}}) {
 		warn "get_shelves_userenv cannot retrieve context->{userenv}->{context->{activeuser}}";
 		return undef;
 	}
-	my $lists = $active->{shelves} or return undef;#  die "get_shelves_userenv: activeenv has no ->{shelves}";
-	return $lists;
+	my $pubshelves = $active->{pubshelves} or undef;
+	my $barshelves = $active->{barshelves} or undef;#  die "get_shelves_userenv: activeenv has no ->{shelves}";
+	return $pubshelves, $barshelves;
 }
 
 =item _new_userenv

@@ -144,10 +144,13 @@ sub get_template_and_user {
         # user info
         $template->param( loggedinusername => $user );
         $template->param( sessionID        => $sessionID );
-		my $shelves;
-		if ($shelves = C4::Context->get_shelves_userenv()) {
-        	$template->param( barshelves     => scalar (@$shelves));
-        	$template->param( barshelvesloop => $shelves);
+
+		my ($pubshelves, $barshelves);
+		if (($pubshelves, $barshelves) = C4::Context->get_shelves_userenv()) {
+        	$template->param( barshelves     => scalar (@$barshelves));
+        	$template->param( pubshelves     => scalar (@$pubshelves));
+        	$template->param( barshelvesloop => $barshelves);
+        	$template->param( pubshelvesloop => $pubshelves);
 		}
 
         $borrowernumber = getborrowernumber($user);
@@ -235,11 +238,13 @@ sub get_template_and_user {
         $template->param( js_widgets => $in->{'js_widgets'} );
 
         $template->param( sessionID        => $sessionID );
-		my $shelves;
-		if ($shelves = C4::Context->get_shelves_userenv()) {
-        	$template->param( barshelves     => scalar (@$shelves));
-        	$template->param( barshelvesloop => $shelves);
+		
+		my ($pubshelves);	# an anonymous user has no 'barshelves'...
+		if (($pubshelves) = C4::Context->get_shelves_userenv()) {
+        	$template->param( pubshelves     => scalar (@$pubshelves));
+        	$template->param( pubshelvesloop => $pubshelves);
 		}
+
 	}
 
     if ( $in->{'type'} eq "intranet" ) {
@@ -491,7 +496,7 @@ sub checkauth {
     # state variables
     my $loggedin = 0;
     my %info;
-    my ( $userid, $cookie, $sessionID, $flags, $shelves );
+    my ( $userid, $cookie, $sessionID, $flags, $barshelves, $pubshelves );
     my $logout = $query->param('logout.x');
 
     if ( $userid = $ENV{'REMOTE_USER'} ) {
@@ -515,7 +520,8 @@ sub checkauth {
                 $session->param('branchname'),   $session->param('flags'),
                 $session->param('emailaddress'), $session->param('branchprinter')
             );
-            C4::Context::set_shelves_userenv($session->param('shelves'));
+            C4::Context::set_shelves_userenv('bar',$session->param('barshelves'));
+            C4::Context::set_shelves_userenv('pub',$session->param('pubshelves'));
             $debug and printf STDERR "AUTH_SESSION: (%s)\t%s %s - %s\n", map {$session->param($_)} qw(cardnumber firstname surname branch) ;
             $ip       = $session->param('ip');
             $lasttime = $session->param('lasttime');
@@ -695,9 +701,16 @@ sub checkauth {
 					$session->param('branchname'),   $session->param('flags'),
 					$session->param('emailaddress'), $session->param('branchprinter')
 				);
-				$shelves = GetShelvesSummary($borrowernumber,2,10);
-				$session->param('shelves', $shelves);
-				C4::Context::set_shelves_userenv($shelves);
+
+				# Grab borrower's shelves and add to the session...
+				$barshelves = GetShelvesSummary($borrowernumber,2,10);
+				$session->param('barshelves', $barshelves);
+				C4::Context::set_shelves_userenv('bar',$barshelves);
+
+				# Grab the public shelves and add to the session...
+				$pubshelves = GetShelvesSummary(0,2,10);
+				$session->param('pubshelves', $pubshelves);
+				C4::Context::set_shelves_userenv('pub',$pubshelves);
 			}
         	else {
             	if ($userid) {
@@ -710,9 +723,12 @@ sub checkauth {
             # if we are here this is an anonymous session; add public lists to it and a few other items...
             # anonymous sessions are created only for the OPAC
 			$debug and warn "Initiating an anonymous session...";
-			$shelves = GetShelvesSummary(0,2,10);
-			$session->param('shelves', $shelves);
-			C4::Context::set_shelves_userenv($shelves);
+
+			# Grab the public shelves and add to the session...
+			$pubshelves = GetShelvesSummary(0,2,10);
+			$session->param('pubshelves', $pubshelves);
+			C4::Context::set_shelves_userenv('pub',$pubshelves);
+			
 			# setting a couple of other session vars...
 			$session->param('ip',$session->remote_addr());
 			$session->param('lasttime',time());

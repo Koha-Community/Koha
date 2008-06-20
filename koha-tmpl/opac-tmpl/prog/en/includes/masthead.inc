@@ -88,9 +88,9 @@
 <div id="listsmenu" class="yuimenu" style="display: none">
     <div class="bd">
 	<h4>Public Lists</h4>
-		<!-- TMPL_IF NAME="barshelves" -->
+		<!-- TMPL_IF NAME="pubshelves" -->
 			<ul class="first-of-type">
-			<!-- TMPL_LOOP NAME="barshelvesloop" -->
+			<!-- TMPL_LOOP NAME="pubshelvesloop" -->
 			<!-- TMPL_UNLESS NAME="private" --><li class="yuimenuitem"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelfnumber" -->"><!-- TMPL_VAR NAME="shelfname"  ESCAPE="html" --></a></li><!-- /TMPL_UNLESS -->
 			<!-- /TMPL_LOOP -->
 			</ul>   
