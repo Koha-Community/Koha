@@ -150,6 +150,8 @@ my %tabsysprefs;
     $tabsysprefs{HomeOrHoldingBranch}="Circulation";
 	$tabsysprefs{RandomizeHoldsQueueWeight}="Circulation";
 	$tabsysprefs{StaticHoldsQueueWeight}="Circulation";
+    $tabsysprefs{AllowOnShelfHolds}="Circulation";
+    $tabsysprefs{AllowHoldsOnDamagedItems}="Circulation";
 
 # Staff Client
     $tabsysprefs{TemplateEncoding}="StaffClient";
