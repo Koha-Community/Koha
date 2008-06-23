@@ -607,7 +607,7 @@ sub CheckReserves {
         my $qitem = $dbh->quote($item);
         # Look up the item by itemnumber
         my $query = "
-            SELECT items.biblionumber, items.biblioitemnumber, itemtypes.notforloan
+            SELECT items.biblionumber, items.biblioitemnumber, itemtypes.notforloan, items.notforloan AS itemnotforloan
             FROM   items
             LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
             LEFT JOIN itemtypes ON biblioitems.itemtype = itemtypes.itemtype
@@ -619,7 +619,7 @@ sub CheckReserves {
         my $qbc = $dbh->quote($barcode);
         # Look up the item by barcode
         my $query = "
-            SELECT items.biblionumber, items.biblioitemnumber, itemtypes.notforloan
+            SELECT items.biblionumber, items.biblioitemnumber, itemtypes.notforloan, items.notforloan AS itemnotforloan
             FROM   items
             LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
             LEFT JOIN itemtypes ON biblioitems.itemtype = itemtypes.itemtype
@@ -632,11 +632,11 @@ sub CheckReserves {
         # FIXME - This function uses $item later on. Ought to set it here.
     }
     $sth->execute;
-    my ( $biblio, $bibitem, $notforloan ) = $sth->fetchrow_array;
+    my ( $biblio, $bibitem, $notforloan_per_itemtype, $notforloan_per_item ) = $sth->fetchrow_array;
     $sth->finish;
 
     # if item is not for loan it cannot be reserved either.....
-    return ( 0, 0 ) if $notforloan;
+    return ( 0, 0 ) if $notforloan_per_item or $notforloan_per_itemtype;
 
     # get the reserves...
     # Find this item in the reserves
