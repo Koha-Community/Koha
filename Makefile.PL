@@ -554,7 +554,7 @@ WriteMakefile(
                             'HTML::Scrubber'                   => 0.08,
                             'HTTP::Cookies'                    => 1.39,
                             'HTTP::Request::Common'            => 1.26,
-                            'Image::Magick'                    => 6.2,
+                            'Image::Magick'                    => 6.2, # optional
                             'LWP::Simple'                      => 1.41,
                             'LWP::UserAgent'                   => 2.033,
                             'Lingua::Stem'                     => 0.82,
@@ -568,8 +568,8 @@ WriteMakefile(
                             'MIME::Base64'                     => 3.07,
                             'MIME::QuotedPrint'                => 3.07,
                             'Mail::Sendmail'                   => 0.79,
-                            'Net::LDAP'                        => 0.33,
-                            'Net::LDAP::Filter'                => 0.14,
+                            'Net::LDAP'                        => 0.33, # optional
+                            'Net::LDAP::Filter'                => 0.14, # optional
                             'Net::Z3950::ZOOM'                 => 1.16,
                             'PDF::API2'                        => 2.000,
                             'PDF::API2::Page'                  => 2.000,
@@ -579,7 +579,7 @@ WriteMakefile(
                             'POE'                              => 0.9999,
                             'POSIX'                            => 1.09,
                             'Schedule::At'                     => 1.06,
-                            'SMS::Send'                        => 0.05,
+                            'SMS::Send'                        => 0.05, # optional
                             'Term::ANSIColor'                  => 1.10,
                             'Test'                             => 1.25,
                             'Test::Harness'                    => 2.56,
