@@ -455,8 +455,26 @@ sub getitemtypeimagesrcfromurl {
     return $imageurl;
 }
 
+=head2 getitemtypeimagedir
+
+=over
+
+=item 4
+
+  my $directory = getitemtypeimagedir( 'opac' );
+
+pass in 'opac' or 'intranet'. Defaults to 'opac'.
+
+returns the full path to the appropriate directory containing images.
+
+=back
+
+=cut
+
 sub getitemtypeimagedir {
 	my $src = shift;
+        $src = 'opac' unless defined $src;
+
 	if ($src eq 'intranet') {
 		return C4::Context->config('intrahtdocs') . '/' .C4::Context->preference('template') . '/img/itemtypeimg';
 	}

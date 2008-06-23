@@ -24,8 +24,8 @@ use Data::Dumper;
 use File::Find;
 use Test::More tests => 1;
 
-my $opac_icon_directory = getitemtypeimagedir();
-my $staff_icon_directory = getitemtypeimagedir( 'intranet' );
+my $opac_icon_directory  = getitemtypeimagedir('opac');
+my $staff_icon_directory = getitemtypeimagedir('intranet');
 
 my $opac_icons; # hashref of filenames to sizes
 sub opac_wanted {
