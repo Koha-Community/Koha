@@ -531,9 +531,7 @@ WriteMakefile(
               AUTHOR       => 'Koha Developers <koha-devel@nongnu.org>',
               NO_META      => 1,
               PREREQ_PM => {
-                            # awaiting package maintainer's use of $VERSION
-                            #'Algorithm::CheckDigits'          => 0.48,
-                            #'Algorithm::CheckDigits::M43_001' => 0.48,
+                            'Algorithm::CheckDigits'          => 0.50,
                             'Biblio::EndnoteStyle'             => 0.05,
                             'CGI'                              => 3.15,
                             'CGI::Carp'                        => 1.29,
