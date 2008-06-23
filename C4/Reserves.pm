@@ -653,7 +653,7 @@ sub CheckReserves {
         foreach my $res (@reserves) {
             # FIXME - $item might be undefined or empty: the caller
             # might be searching by barcode.
-            if ( $res->{'itemnumber'} == $item ) {
+            if ( $res->{'itemnumber'} == $item && $res->{'priority'} == 0) {
                 # Found it
                 return ( "Waiting", $res );
             }
