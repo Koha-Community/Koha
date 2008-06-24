@@ -850,9 +850,8 @@ sub AddIssue {
 	my $barcodecheck=CheckValidBarcode($barcode);
 	if ($borrower and $barcode and $barcodecheck ne '0'){
 		# find which item we issue
-		my $item = GetItem('', $barcode);
+		my $item = GetItem('', $barcode) or return undef;	# if we don't get an Item, abort.
 		my $datedue; 
-		
 		my $branch;
 		# Get which branchcode we need
 		if (C4::Context->preference('CircControl') eq 'PickupLibrary'){
