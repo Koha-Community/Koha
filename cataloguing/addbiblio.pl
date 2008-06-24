@@ -339,6 +339,25 @@ sub create_input {
           build_authorized_values_list( $tag, $subfield, $value, $dbh,
             $authorised_values_sth,$index_tag,$index_subfield );
 
+    # it's a subfield $9 linking to an authority record - see bug 2206
+    }
+    elsif ($subfield eq "9" and
+           exists($tagslib->{$tag}->{'a'}->{authtypecode}) and
+           defined($tagslib->{$tag}->{'a'}->{authtypecode}) and
+           $tagslib->{$tag}->{'a'}->{authtypecode} ne '') {
+
+        $subfield_data{marc_value} =
+            "<input type=\"text\"
+                    id=\"".$subfield_data{id}."\"
+                    name=\"".$subfield_data{id}."\"
+                    value=\"$value\"
+                    class=\"input_marceditor\"
+                    tabindex=\"1\"
+                    size=\"5\"
+                    maxlength=\"255\" 
+                    readonly=\"readonly\"
+                    \/>";
+
     # it's a thesaurus / authority field
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{authtypecode} ) {
@@ -602,8 +621,15 @@ sub build_tabs ($$$$$) {
                         next if ( $tag < 10 );
                         next
                           if ( ( $tagslib->{$tag}->{$subfield}->{hidden} <= -4 )
-                            or ( $tagslib->{$tag}->{$subfield}->{hidden} >= 5 )
-                          );    #check for visibility flag
+                            or ( $tagslib->{$tag}->{$subfield}->{hidden} >= 5 ) )
+                            and not ( $subfield eq "9" and
+                                      exists($tagslib->{$tag}->{'a'}->{authtypecode}) and
+                                      defined($tagslib->{$tag}->{'a'}->{authtypecode}) and
+                                      $tagslib->{$tag}->{'a'}->{authtypecode} ne ""
+                                    )
+                          ;    #check for visibility flag
+                               # if subfield is $9 in a field whose $a is authority-controlled,
+                               # always include in the form regardless of the hidden setting - bug 2206
                         next if ( defined( $field->subfield($subfield) ) );
                         push(
                             @subfields_data,
@@ -644,7 +670,14 @@ sub build_tabs ($$$$$) {
                     next
                       if ( ( $tagslib->{$tag}->{$subfield}->{hidden} <= -5 )
                         or ( $tagslib->{$tag}->{$subfield}->{hidden} >= 4 ) )
+                      and not ( $subfield eq "9" and
+                                exists($tagslib->{$tag}->{'a'}->{authtypecode}) and
+                                defined($tagslib->{$tag}->{'a'}->{authtypecode}) and
+                                $tagslib->{$tag}->{'a'}->{authtypecode} ne ""
+                              )
                       ;    #check for visibility flag
+                           # if subfield is $9 in a field whose $a is authority-controlled,
+                           # always include in the form regardless of the hidden setting - bug 2206
                     next
                       if ( $tagslib->{$tag}->{$subfield}->{tab} ne $tabloop );
                     push(
