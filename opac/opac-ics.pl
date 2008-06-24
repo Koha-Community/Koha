@@ -45,7 +45,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 # get borrower information ....
-my ( $borr, $flags ) =  GetMemberDetails( $borrowernumber );
+my ( $borr ) =  GetMemberDetails( $borrowernumber );
 
 # Create Calendar
 my $calendar = Data::ICal->new();

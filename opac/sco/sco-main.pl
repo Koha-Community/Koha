@@ -44,10 +44,10 @@ my %confirmation_strings = ( RENEW_ISSUE => "This item is already checked out to
 my $issuenoconfirm = 1; #don't need to confirm on issue.
 my $cnt = 0;
 #warn "issuerid: " . $issuerid;
-my ($issuer, $flags) = GetMemberDetails($issuerid);
+my ($issuer) = GetMemberDetails($issuerid);
 my $item = GetItem(undef,$barcode);
 my $borrower;
-($borrower, $flags) = GetMemberDetails(undef,$userid);
+($borrower) = GetMemberDetails(undef,$userid);
 
 my $branch = $issuer->{branchcode};
 my $confirm_required = 0;
@@ -60,7 +60,7 @@ if ($op eq "logout") {
   if ($op eq "returnbook") {
       my ($doreturn ) = AddReturn($barcode, $branch);
      #warn "returnbook: " . $doreturn;
-    ($borrower, $flags) = GetMemberDetails(undef, $userid);
+    ($borrower) = GetMemberDetails(undef, $userid);
   }
   
   if ($op eq "checkout" ) {

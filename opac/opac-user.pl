@@ -47,7 +47,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my $patronupdate = $query->param('patronupdate');
 
 # get borrower information ....
-my ( $borr, $flags ) = GetMemberDetails( $borrowernumber );
+my ( $borr ) = GetMemberDetails( $borrowernumber );
 
 $borr->{'dateenrolled'} = format_date( $borr->{'dateenrolled'} );
 $borr->{'expiry'}       = format_date( $borr->{'expiry'} );

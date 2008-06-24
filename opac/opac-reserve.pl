@@ -51,7 +51,7 @@ sub get_out ($$$) {
 }
 
 # get borrower information ....
-my ( $borr, $flags ) = GetMemberDetails( $borrowernumber );
+my ( $borr ) = GetMemberDetails( $borrowernumber );
 
 # get branches and itemtypes
 my $branches = GetBranches();

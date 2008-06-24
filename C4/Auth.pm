@@ -156,8 +156,7 @@ sub get_template_and_user {
 		}
 
         $borrowernumber = getborrowernumber($user);
-        my ( $borr, $alternativeflags ) =
-          GetMemberDetails( $borrowernumber );
+        my ( $borr ) = GetMemberDetails( $borrowernumber );
         my @bordat;
         $bordat[0] = $borr;
         $template->param( "USER_INFO" => \@bordat );

@@ -46,7 +46,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 # get borrower information ....
-my ( $borr, $flags ) = GetMemberDetails( $borrowernumber );
+my ( $borr ) = GetMemberDetails( $borrowernumber );
 my $lib = GetBranchDetail($borr->{'branchcode'});
 
 # handle the new information....

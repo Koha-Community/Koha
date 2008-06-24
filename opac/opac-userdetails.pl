@@ -41,7 +41,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 # get borrower information ....
-my ( $borr, $flags ) = GetMemberDetails( $borrowernumber );
+my ( $borr ) = GetMemberDetails( $borrowernumber );
 
 $borr->{'dateenrolled'} = format_date( $borr->{'dateenrolled'} );
 $borr->{'dateexpiry'}       = format_date( $borr->{'dateexpiry'} );

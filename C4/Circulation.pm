@@ -788,7 +788,7 @@ sub CanBookBeIssued {
     my ( $restype, $res ) = C4::Reserves::CheckReserves( $item->{'itemnumber'} );
     if ($restype) {
 		my $resbor = $res->{'borrowernumber'};
-		my ( $resborrower, $flags ) = GetMemberDetails( $resbor, 0 );
+		my ( $resborrower ) = GetMemberDetails( $resbor, 0 );
 		my $branches  = GetBranches();
 		my $branchname = $branches->{ $res->{'branchcode'} }->{'branchname'};
         if ( $resbor ne $borrower->{'borrowernumber'} && $restype eq "Waiting" )
@@ -910,7 +910,7 @@ sub AddIssue {
 					# warn "Waiting";
 					# The item is on reserve and waiting, but has been
 					# reserved by some other patron.
-					my ( $resborrower, $flags ) = GetMemberDetails( $resbor, 0 );
+					my ( $resborrower ) = GetMemberDetails( $resbor, 0 );
 					my $branches   = GetBranches();
 					my $branchname =
 					  $branches->{ $res->{'branchcode'} }->{'branchname'};
@@ -919,8 +919,7 @@ sub AddIssue {
 
 					# warn "Reserved";
 					# The item is reserved by someone else.
-					my ( $resborrower, $flags ) =
-					  GetMemberDetails( $resbor, 0 );
+					my ( $resborrower ) = GetMemberDetails( $resbor, 0 );
 					my $branches   = GetBranches();
 					my $branchname =  $branches->{ $res->{'branchcode'} }->{'branchname'};
 					if ($cancelreserve) { # cancel reserves on this item

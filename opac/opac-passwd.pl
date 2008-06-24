@@ -44,7 +44,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 # get borrower information ....
-my ( $borr, $flags ) = GetMemberDetails( $borrowernumber );
+my ( $borr ) = GetMemberDetails( $borrowernumber );
 my $sth =  $dbh->prepare("UPDATE borrowers SET password = ? WHERE borrowernumber=?");
 my $minpasslen = C4::Context->preference("minPasswordLength");
 if (   $query->param('Oldkey')
