@@ -195,7 +195,6 @@ my %tabsysprefs;
 # Searching
     $tabsysprefs{defaultSortField}="Searching";
     $tabsysprefs{defaultSortOrder}="Searching";
-    $tabsysprefs{maxItemsInSearchResults}="Searching";
     $tabsysprefs{numSearchResults}="Searching";
     $tabsysprefs{OPACdefaultSortField}="Searching";
     $tabsysprefs{OPACdefaultSortOrder}="Searching";
