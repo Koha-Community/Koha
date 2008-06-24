@@ -127,6 +127,8 @@ This module contains routines for adding, modifying and deleting members/patrons
 
   ($count, $borrowers) = &SearchMember($searchstring, $type,$category_type,$filter,$showallbranches);
 
+=back
+
 Looks up patrons (borrowers) by name.
 
 BUGFIX 499: C<$type> is now used to determine type of search.
@@ -246,7 +248,7 @@ AND attribute like ?
 
 =head2 GetMemberDetails
 
-($borrower, $flags) = &GetMemberDetails($borrowernumber, $cardnumber);
+($borrower) = &GetMemberDetails($borrowernumber, $cardnumber);
 
 Looks up a patron and returns information about him or her. If
 C<$borrowernumber> is true (nonzero), C<&GetMemberDetails> looks
@@ -337,6 +339,12 @@ available items. Each element is a reference-to-hash whose keys are
 fields from the reserves table of the Koha database.
 
 =back
+
+C<$borrower-E<gt>{authflags}> is a hash giving more detailed information
+about the top-level permissions flags set for the borrower.  For example,
+if a user has the "editcatalogue" permission,
+C<$borrower-E<gt>{authflags}-E<gt>{editcatalogue}> will exist and have
+the value "1".
 
 =cut
 
@@ -493,7 +501,7 @@ sub patronflags {
 }
 
 
-=item GetMember
+=head2 GetMember
 
   $borrower = &GetMember($information, $type);
 
@@ -539,7 +547,7 @@ LEFT JOIN categories on borrowers.categorycode=categories.categorycode
     return undef;        
 }
 
-=item GetMemberIssuesAndFines
+=head2 GetMemberIssuesAndFines
 
   ($overdue_count, $issue_count, $total_fines) = &GetMemberIssuesAndFines($borrowernumber);
 
@@ -584,7 +592,7 @@ sub GetMemberIssuesAndFines {
 
 =head2
 
-=item ModMember
+=head2 ModMember
 
   &ModMember($borrowernumber);
 
@@ -657,7 +665,7 @@ sub ModMember {
 
 =head2
 
-=item AddMember
+=head2 AddMember
 
   $borrowernumber = &AddMember(%borrower);
 
@@ -806,7 +814,7 @@ sub changepassword {
 
 
 
-=item fixup_cardnumber
+=head2 fixup_cardnumber
 
 Warning: The caller is responsible for locking the members table in write
 mode, to avoid database corruption.
@@ -2015,8 +2023,6 @@ END { }    # module clean-up code here (global destructor)
 1;
 
 __END__
-
-=back
 
 =head1 AUTHOR
 
