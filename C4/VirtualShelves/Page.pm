@@ -129,6 +129,7 @@ SWITCH: {
 
 			ModShelf( $shelfnumber, $shelf );
 			$shelflist = GetShelves( $loggedinuser, 2 );    # refresh after mods
+		
 		} elsif ( $op eq 'modif' ) {
 			my ( $shelfnumber2, $shelfname, $owner, $category, $sortfield ) =GetShelf( $shelfnumber );
 			$template->param(
@@ -271,10 +272,12 @@ if ($template->param( 'shelves' ) or
 
 my $sessionID = $query->cookie("CGISESSID") ;
 my $session = get_session($sessionID);
-my $shelves = GetShelvesSummary($loggedinuser, 2, 10);
-$session->param('shelves', $shelves);
-$template->param( barshelves     => scalar (@$shelves));
-$template->param( barshelvesloop => $shelves);
+my $barshelves = GetShelvesSummary($loggedinuser, 2, 10);
+if (defined($barshelves)) {
+	$session->param('barshelves', $barshelves);
+	$template->param( barshelves     => scalar (@$barshelves));
+	$template->param( barshelvesloop => $barshelves);
+}
 
 output_html_with_http_headers $query, $cookie, $template->output;
 }	
