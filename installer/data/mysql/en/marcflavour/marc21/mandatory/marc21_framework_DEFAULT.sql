@@ -2742,7 +2742,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('811', '6', 'Linkage', 'Linkage', 0, 0, NULL, 8, NULL, NULL, '', NULL, -6, '', '', '', NULL),
 		('811', '8', 'Field link and sequence number ', 'Field link and sequence number ', 1, 0, NULL, 8, NULL, NULL, '', NULL, -6, '', '', '', NULL),
 		('811', '9', '9 (RLIN)', '9 (RLIN)', 0, 0, '', 8, '', '', '', 0, -5, '', '', '', NULL),
-		('811', 'a', 'Meeting name or jurisdiction name as entry element', 'Meeting name or jurisdiction name as entry element', 0, 0, NULL, 8, NULL, 'Meeting Name', '', NULL, -1, '', '', '', NULL),
+		('811', 'a', 'Meeting name or jurisdiction name as entry element', 'Meeting name or jurisdiction name as entry element', 0, 0, NULL, 8, NULL, 'MEETI_NAME', '', NULL, -1, '', '', '', NULL),
 		('811', 'b', 'Number (BK CF MP MU SE VM MX) [OBSOLETE]', 'Number (BK CF MP MU SE VM MX) [OBSOLETE]', 0, 0, NULL, 8, NULL, NULL, '', NULL, -6, '', '', '', NULL),
 		('811', 'c', 'Location of meeting', 'Location of meeting', 0, 0, NULL, 8, NULL, NULL, '', NULL, -1, '', '', '', NULL),
 		('811', 'd', 'Date of meeting', 'Date of meeting', 0, 0, NULL, 8, NULL, NULL, '', NULL, -1, '', '', '', NULL),
