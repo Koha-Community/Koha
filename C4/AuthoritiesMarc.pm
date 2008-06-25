@@ -698,13 +698,13 @@ sub GetAuthority {
 
 =over 4
 
-$result= &GetAuthType( $authtypecode)
-If $authtypecode is not "" then 
-  Returns hashref to authtypecode information
-else 
-  returns ref to array of hashref information of all Authtypes
+$result = &GetAuthType($authtypecode)
 
 =back
+
+If the authority type specified by C<$authtypecode> exists,
+returns a hashref of the type's fields.  If the type
+does not exist, returns undef.
 
 =cut
 
@@ -713,19 +713,14 @@ sub GetAuthType {
     my $dbh=C4::Context->dbh;
     my $sth;
     if (defined $authtypecode){ # NOTE - in MARC21 framework, '' is a valid authority 
-                                # type
-      $sth=$dbh->prepare("select * from auth_types where authtypecode=?");
-      $sth->execute($authtypecode);
-    } else {
-      $sth=$dbh->prepare("select * from auth_types");
-      $sth->execute;
+                                # type (FIXME but why?)
+        $sth=$dbh->prepare("select * from auth_types where authtypecode=?");
+        $sth->execute($authtypecode);
+        if (my $res = $sth->fetchrow_hashref) {
+            return $res; 
+        }
     }
-    my $res=$sth->fetchall_arrayref({});
-    if (scalar(@$res)==1){
-      return $res->[0];
-    } else {
-      return $res;
-    }
+    return;
 }
 
 
