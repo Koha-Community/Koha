@@ -274,9 +274,14 @@ $.tablesorter.addParser({
 				<input id="addshelf" type="text" name="addshelf" size="60" />
 				<!-- /TMPL_IF -->
 				<input type="hidden" name="owner" id="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->" /></li>
+		        <li><label for="category">Category:</label>
+	            <select name="category" id="category">
+	            	<option value="1">Private</option>
+	            	<option value="2">Public</option>
+	            </select></li>
 </ol>
 		</fieldset>
-            <fieldset class="action"><input type="hidden" name="category" value="1" /><input type="submit" value="Save" class="submit" /> <a class="cancel" href="/cgi-bin/koha/opac-shelves.pl">Cancel</a></fieldset>
+            <fieldset class="action"><input type="submit" value="Save" class="submit" /> <a class="cancel" href="/cgi-bin/koha/opac-shelves.pl">Cancel</a></fieldset>
         </form>    </div>
 	<!-- /TMPL_IF --><!-- /showadd -->
     </div></div>
