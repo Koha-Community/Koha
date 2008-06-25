@@ -28,6 +28,7 @@ use CGI;
 use C4::VirtualShelves;
 use C4::Auth;
 use C4::Output;
+use C4::Auth qw/get_session/;
 
 my $query        = new CGI;
 my @biblionumber = $query->param('biblionumber');
@@ -49,7 +50,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 $shelfnumber = AddShelf(  $newvirtualshelf, $loggedinuser, $category ) if $newvirtualshelf;
 
 # verify user is authorized to perform the action on the shelf...
-my $authorized = 1 if ( (ShelfPossibleAction( $loggedinuser, $selectedshelf )) );
+my $authorized = 1;
+if ($selectedshelf) {
+	$authorized = 0 unless ShelfPossibleAction( $loggedinuser, $selectedshelf );
+}
 
 # multiple bibs might come in as '/' delimited string (from where, i don't see), or as array.
 
@@ -61,7 +65,7 @@ if (scalar(@biblionumber) == 1) {
 if ($shelfnumber && ($shelfnumber != -1)) {
 	for my $bib (@biblionumber){
 		&AddToShelfFromBiblio($bib,$shelfnumber);
-	}	
+	}
 	print $query->header;
 	print "<html><body onload=\"window.close();\"><div>Please close this window to continue.</div></body></html>";
 	exit;
