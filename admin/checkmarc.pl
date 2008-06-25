@@ -208,7 +208,7 @@ if ($res) {
 	$total++;
 }
 
-# verify that all of a field's subfields (except the ones explicitly ignore) 
+# verify that all of a field's subfields (except the ones explicitly ignored)
 # are in the same tab
 $sth = $dbh->prepare("SELECT tagfield, frameworkcode, frameworktext, GROUP_CONCAT(DISTINCT tab) AS tabs
                       FROM marc_subfield_structure
@@ -222,6 +222,23 @@ if (scalar(@$inconsistent_tabs) > 0) {
     $total++;
     $template->param(inconsistent_tabs => 1);
     $template->param(tab_info => $inconsistent_tabs);
+}
+
+# verify that authtypecodes used in the framework 
+# are defined in auth_types
+$sth = $dbh->prepare("SELECT frameworkcode, frameworktext, tagfield, tagsubfield, authtypecode
+                      FROM marc_subfield_structure
+                      LEFT JOIN biblio_framework USING (frameworkcode)
+                      WHERE authtypecode IS NOT NULL
+                      AND authtypecode <> ''
+                      AND authtypecode NOT IN (SELECT authtypecode FROM auth_types)
+                      ORDER BY frameworkcode, tagfield, tagsubfield");
+$sth->execute;
+my $invalid_authtypecodes = $sth->fetchall_arrayref({});
+if (scalar(@$invalid_authtypecodes) > 0) {
+    $total++;
+    $template->param(invalid_authtypecodes => 1);
+    $template->param(authtypecode_info => $invalid_authtypecodes);
 }
 
 $template->param(total => $total,
