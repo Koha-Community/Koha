@@ -72,10 +72,9 @@ Class::Accessor
 Compress::Zlib
 DBD::mysql
 DBI
-Data::Ical
 Data::Dumper
 Date::Calc
-Date::Ical
+Data::ICal
 Date::Manip
 Digest::MD5
 File::Temp
