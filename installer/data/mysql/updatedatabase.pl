@@ -1825,6 +1825,16 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.096";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $sth = $dbh->prepare("SHOW COLUMNS FROM borrower_message_preferences LIKE 'wants_digets'");
+    $sth->execute();
+    if (my $row = $sth->fetchrow_hashref) {
+        $dbh->do("ALTER TABLE borrower_message_preferences CHANGE wants_digets wants_digest tinyint(1) NOT NULL default 0");
+    }
+	print "Upgrade to $DBversion done (fix name borrower_message_preferences.wants_digest)\n";
+    SetVersion ($DBversion);
+}
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
