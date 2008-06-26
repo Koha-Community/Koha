@@ -71,6 +71,7 @@ my $biblionumber    = $query->param('biblionumber');
 my $shelfnumber     = $query->param('shelfnumber');
 my $newvirtualshelf = $query->param('newvirtualshelf');
 my $category        = $query->param('category');
+my $sortfield		= $query->param('sortfield');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -82,10 +83,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-$shelfnumber = AddShelf( $newvirtualshelf, $loggedinuser, $category )
+$shelfnumber = AddShelf( $newvirtualshelf, $loggedinuser, $category, $sortfield )
   if $newvirtualshelf;
 if ( $shelfnumber || ( $shelfnumber == -1 ) ) {    # the shelf already exist.
-    &AddToShelfFromBiblio( $biblionumber, $shelfnumber );
+    AddToShelfFromBiblio( $biblionumber, $shelfnumber );
     print
 "Content-Type: text/html\n\n<html><body onload=\"window.close()\"></body></html>";
     exit;
@@ -93,13 +94,20 @@ if ( $shelfnumber || ( $shelfnumber == -1 ) ) {    # the shelf already exist.
 else {    # this shelf doesn't already exist.
     my ( $bibliocount, @biblios ) = GetBiblio($biblionumber);
 
-    my ($shelflist) = GetShelves( $loggedinuser, 3 );
+	my $limit = 10;
+	my ($shelflist) = GetRecentShelves(1, $limit, $loggedinuser);
     my @shelvesloop;
     my %shelvesloop;
-    foreach my $element ( sort keys %$shelflist ) {
-        push( @shelvesloop, $element );
-        $shelvesloop{$element} = $shelflist->{$element}->{'shelfname'};
-    }
+    for my $shelf ( @{${@$shelflist}[0]} ) {
+        push( @shelvesloop, $shelf->{shelfnumber} );
+		$shelvesloop{$shelf->{shelfnumber}} = $shelf->{shelfname};
+	}
+	# then open shelves...
+	my ($shelflist) = GetRecentShelves(3, $limit, undef);
+    for my $shelf ( @{${@$shelflist}[0]} ) {
+        push( @shelvesloop, $shelf->{shelfnumber} );
+		$shelvesloop{$shelf->{shelfnumber}} = $shelf->{shelfname};
+	}
 	if(@shelvesloop gt 0){
     my $CGIvirtualshelves = CGI::scrolling_list(
         -name     => 'shelfnumber',
@@ -122,56 +130,3 @@ else {    # this shelf doesn't already exist.
 
     output_html_with_http_headers $query, $cookie, $template->output;
 }
-
-# Revision 1.8  2007/04/24 13:54:29  hdl
-# functions that were in C4::Interface::CGI::Output are now in C4::Output.
-# So this implies quite a change for files.
-# Sorry about conflicts which will be caused.
-# directory Interface::CGI should now be dropped.
-# I noticed that many scripts (reports ones, but also some circ/stats.pl or opac-topissues) still use Date::Manip.
-#
-# Revision 1.7  2007/04/04 16:46:22  tipaul
-# HUGE COMMIT : code cleaning circulation.
-#
-# some stuff to do, i'll write a mail on koha-devel NOW !
-#
-# Revision 1.6  2007/03/09 14:32:26  tipaul
-# rel_3_0 moved to HEAD
-#
-# Revision 1.4.2.6  2006/12/18 16:35:17  toins
-# removing use HTML::Template from *.pl.
-#
-# Revision 1.4.2.5  2006/12/05 11:35:29  toins
-# Biblio.pm cleaned.
-# additionalauthors, bibliosubject, bibliosubtitle tables are now unused.
-# Some functions renamed according to the coding guidelines.
-#
-# Revision 1.4.2.4  2006/11/30 18:23:51  toins
-# theses scripts don't need to use C4::Search.
-#
-# Revision 1.4.2.3  2006/10/30 09:48:19  tipaul
-# samll bugfix to create a virtualshelf correctly
-#
-# Revision 1.4.2.2  2006/08/30 16:13:54  toins
-# correct an error in the "if condition".
-#
-# Revision 1.4.2.1  2006/08/30 15:59:14  toins
-# Code cleaned according to coding guide lines.
-#
-# Revision 1.4  2006/07/04 14:36:51  toins
-# Head & rel_2_2 merged
-#
-# Revision 1.3.2.4  2006/06/20 16:21:42  oleonard
-# Adding "tabindex=''" to CGI:scrolling_lists to prevent incorrect tabbing. See Bug 1098
-#
-# Revision 1.3.2.3  2006/02/05 21:59:21  kados
-# Adds script support for IntranetNav ... see mail to koha-devel for
-# details
-#
-# Revision 1.3.2.2  2006/02/05 21:45:25  kados
-# Adds support for intranetstylesheet system pref in Koha scripts
-#
-
-# Local Variables:
-# tab-width: 4
-# End:

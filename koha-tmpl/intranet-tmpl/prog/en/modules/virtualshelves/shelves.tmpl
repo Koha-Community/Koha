@@ -76,7 +76,6 @@ $(document).ready(function(){
   <div id="yui-main">
    <div class="yui-g"><!-- TMPL_INCLUDE NAME="virtualshelves-toolbar.inc" -->
    </div>
-
 <!-- TMPL_IF NAME="paramsloop" -->
 <!-- TMPL_LOOP NAME="paramsloop" -->
 <div class="yui-ge">
@@ -114,10 +113,11 @@ $(document).ready(function(){
         <input type="hidden" name="modifyshelfcontents" value="1" />
  <fieldset>
   <legend>Contents of <i><!-- TMPL_VAR NAME="shelfname" --></i></legend>
-  <p><span class="checkall"></span><span class="clearall"></span></p>
+ <!--TMPL_IF NAME="manageshelf" --><p><span class="checkall"></span><span class="clearall"></span></p><!-- /TMPL_IF -->
+ <!-- TMPL_VAR name='pagination_bar'-->
     <table>
             <tr>
-                <th class="checkall">&nbsp;</th>
+                <!--TMPL_IF NAME="manageshelf" --><th class="checkall">&nbsp;</th><!-- /TMPL_IF -->
                 <!-- TMPL_UNLESS NAME="item-level_itypes" --><th>Item Type</th><!-- /TMPL_UNLESS -->
                 <th>Title</th>
                 <th>Author</th>
@@ -130,6 +130,7 @@ $(document).ready(function(){
 			<!-- TMPL_ELSE -->
 			<tr>
 			<!-- /TMPL_IF -->
+			<!--TMPL_IF NAME="manageshelf" -->
 			<td>
 				<!-- TMPL_IF NAME="confirm" -->
 				<input type="hidden"   name="CONFIRM-<!-- TMPL_VAR NAME="confirm" -->" />
@@ -138,6 +139,7 @@ $(document).ready(function(){
 				<input type="checkbox" name="REM-<!-- TMPL_VAR NAME="biblionumber" -->" />
 				<!-- /TMPL_IF -->
 			</td>
+			<!-- /TMPL_IF -->
 			<!-- TMPL_UNLESS NAME="item-level_itypes" --><td>
                 <img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /><!-- TMPL_VAR NAME="description" -->
 			<!-- /TMPL_UNLESS --></td>
@@ -210,11 +212,17 @@ $(document).ready(function(){
         <ol>
         <li><label for="addshelf">Name: </label><input id="addshelf" type="text" name="addshelf" size="25" /></li>
         <li><span class="label">Owner: </span><input type="hidden" name="owner" id="owner" value="<!-- TMPL_VAR name="loggedinuser" -->" /><!-- TMPL_VAR name="loggedinusername" --></li>
+		<li><label for="sortfield" >Sort this list by: </label>
+		<select name="sortfield">
+		<!-- TMPL_IF NAME="sort_title" --><option value="title" selected="selected">Title</option><!-- TMPL_ELSE --><option value="title">Title</option><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="sort_author" --><option value="author" selected="selected">Author</option><!-- TMPL_ELSE --><option value="author">Author</option><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="sort_copyrightdate" --><option value="copyrightdate" selected="selected">Copyrightdate</option><!-- TMPL_ELSE --><option value="copyrightdate">Copyrightdate</option><!-- /TMPL_IF -->
+		</select></li>
         <li><label for="category">Category: </label>
 			<select name="category" id="category">
                   <option value="1">Private</option>
                   <option value="2">Public</option>
-                  <option value="3">Free</option>
+                  <option value="3">Open</option>
 			</select></li></ol>
     <!-- /TMPL_IF -->
 
@@ -225,6 +233,12 @@ $(document).ready(function(){
 		<ol>
 		<li><label for="shelfname">Name: </label><input type="text" id="shelfname" name="shelfname" size="25" value='<!-- TMPL_VAR name="shelfname" ESCAPE="HTML" -->' /></li>
 		<li><label for="owner">Owner: </label><input type="hidden" id="owner" name="owner" value="<!-- TMPL_IF NAME="owner" --><!-- TMPL_VAR NAME="ownername" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="loggedinusername" --><!-- /TMPL_IF -->" /><!-- TMPL_IF NAME="owner" --><!-- TMPL_VAR NAME="ownername" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="loggedinusername" --><!-- /TMPL_IF --></li>
+		<li><label for="sortfield" >Sort this list by: </label>
+		<select name="sortfield">
+		<!-- TMPL_IF NAME="sort_title" --><option value="title" selected="selected">Title</option><!-- TMPL_ELSE --><option value="title">Title</option><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="sort_author" --><option value="author" selected="selected">Author</option><!-- TMPL_ELSE --><option value="author">Author</option><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="sort_copyrightdate" --><option value="copyrightdate" selected="selected">Copyrightdate</option><!-- TMPL_ELSE --><option value="copyrightdate">Copyrightdate</option><!-- /TMPL_IF -->
+		</select></li>
 		<li><label for="category">Category: </label>
 			<select id="category" name="category">
 			<!-- TMPL_IF name="category1" -->
@@ -253,49 +267,120 @@ $(document).ready(function(){
         <div class="help"><ul>
             <li>A <b>Private</b> List is managed by you and can be seen only by you.</li>
             <li> A <b>Public</b> List can be seen by everybody, but managed only by you.</li>
-            <li> A <b>Free</b> List can be seen and managed by everybody.</li>
+            <li> A <b>Open</b> List can be seen and managed by everybody.</li>
         </ul></div>
     </div>
 </div>
 <!-- /TMPL_IF --><!-- /seflag -->
 
 <!-- TMPL_UNLESS NAME="vseflag" -->
-<!-- TMPL_IF NAME="shelvesloopall" -->
-<h3>Lists</h3>
-<table>
-<tr><th>Name</th><th>Owner</th><th>Category</th><th>Items</th><th>&nbsp;</th></tr>
-<!-- TMPL_LOOP NAME="shelvesloopall" -->
-<!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
-<td><a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" --></a></td>
-<td><!-- TMPL_IF NAME="owner" --><!-- TMPL_VAR NAME="ownername" --><!-- TMPL_ELSE -->Koha Admin<!-- /TMPL_IF -->
-</td>
-<td>
-  <!-- TMPL_IF NAME="viewcategory1" -->Private<!-- /TMPL_IF -->
-  <!-- TMPL_IF NAME="viewcategory2" -->Public<!-- /TMPL_IF -->
-  <!-- TMPL_IF NAME="viewcategory3" -->Open<!-- /TMPL_IF -->
-</td>
-<td><!-- TMPL_VAR NAME="count" --></td>
-<td>
-	<form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="get">
-		<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelf" -->" />
-		<input type="hidden" name="op" value="modif" />
-		<input type="submit" value="Edit" />
-	</form>
-	<form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post">
-		<input type="hidden" name="shelves" value="1" />
-		<input type="hidden" name="DEL-<!-- TMPL_VAR NAME="shelf" -->" value="1" />
-		<!-- TMPL_IF NAME="confirm" -->
-		<input type="hidden" name="CONFIRM-<!-- TMPL_VAR NAME="confirm" -->" value="1" />
-		<input type="submit" class="confirm" value="Confirm" />
+        <h2>Lists</h2>
+        <ul class="link-tabs">
+        <!-- TMPL_IF NAME="showprivateshelves" -->
+            <li id="privateshelves_tab" class="on"><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves">Your Lists</a></li>
+        <!-- TMPL_ELSE -->
+            <li id="privateshelves_tab" class="off"><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves">Your Lists</a></li>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="showpublicshelves" -->
+            <li id="publicshelves_tab" class="on"><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=publicshelves">Public Lists</a></li>
+        <!-- TMPL_ELSE -->
+            <li id="publicshelves_tab" class="off"><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=publicshelves">Public Lists</a></li>
+        <!-- /TMPL_IF -->
+        </ul>
+        <!-- TMPL_IF NAME="showprivateshelves" -->
+		<div id="privateshelves" class="tab-container" style="display:block;">
 		<!-- TMPL_ELSE -->
-		<input type="submit" onclick='return confirmDelete(_("Are you sure you want to remove this List?"));' value="Delete" />
+		<div id="privateshelves" class="tab-container" style="display:none;">
 		<!-- /TMPL_IF -->
-	</form>
-</td>
-</tr>
-<!-- /TMPL_LOOP -->
-</table>
-<!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="shelveslooppriv" -->
+			<!-- TMPL_VAR name='pagination_bar'-->
+        		<table>
+        		<tr><th>List Name</th><th>Contents</th><th>Sort by</th><th>Type</th><th>Options</th></tr>
+                <!-- TMPL_LOOP NAME="shelveslooppriv" -->
+                    <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!--TMPL_ELSE--><tr><!-- /TMPL_IF -->
+        <td><a href="shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"  --></a></td>
+        <td><!-- TMPL_VAR NAME="count" --> item(s)</td>
+        <td><!-- TMPL_VAR NAME="sortfield" --></td>
+        <td><!-- TMPL_IF NAME="viewcategory1" -->Private<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="viewcategory2" -->Public<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="viewcategory3" -->Open<!-- /TMPL_IF -->
+		</td>
+        <td>
+            <!-- TMPL_IF NAME="mine" -->
+				<form action="shelves.pl" method="get">
+					<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelf" -->" />
+					<input type="hidden" name="op" value="modif" />
+					<input type="submit" class="editshelf" value="Edit" />
+				</form>
+				<form action="shelves.pl" method="post">
+					<input type="hidden" name="shelves" value="1" />
+					<input type="hidden" name="DEL-<!-- TMPL_VAR NAME="shelf" -->" value="1" />
+					<!-- TMPL_IF NAME="confirm" -->
+					<input type="hidden" name="CONFIRM-<!-- TMPL_VAR NAME="confirm" -->" value="1" />
+					<input type="submit" class="confirm" value="Confirm" />
+					<!-- TMPL_ELSE -->
+					<input type="submit" class="deleteshelf" onclick="return confirmDelete(_('Are you sure you want to remove this List?'));" value="Delete" />
+					<!-- /TMPL_IF -->
+				</form>
+			<!-- TMPL_ELSE -->
+				None
+			<!-- /TMPL_IF -->
+		</td>
+		</tr>
+                <!-- /TMPL_LOOP -->
+            <!-- TMPL_ELSE -->
+            <tr><td colspan="4">No Private Lists.</td></tr>
+            <!-- /TMPL_IF --><!-- /shelveslooppriv -->
+        </table>
+		<a class="newshelf" href="/cgi-bin/koha/virtualshelves/shelves.pl?shelves=1">New List</a>
+		</div><!-- /privateshelves -->
+
+        <!-- TMPL_IF NAME="showpublicshelves" -->
+		<div id="publicshelves" class="tab-container" style="display:block;">
+		<!-- TMPL_ELSE -->
+		<div id="publicshelves" class="tab-container" style="display:none;">
+		<!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="shelvesloop" -->
+		<!-- TMPL_VAR name='pagination_bar'-->
+        <table>
+        <tr><th>List Name</th><th>Contents</th><th>Sort By</th><th>Type</th><th>Options</th></tr>
+            <!-- TMPL_LOOP NAME="shelvesloop" -->
+                <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!--TMPL_ELSE--><tr><!-- /TMPL_IF -->
+		<td><a href="shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"  --></a></td>
+		<td><!-- TMPL_VAR NAME="count" --> item(s)</td>
+        <td><!-- TMPL_VAR NAME="sortfield" --></td>
+        <td><!-- TMPL_IF NAME="viewcategory1" -->Private<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="viewcategory2" -->Public<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="viewcategory3" -->Open<!-- /TMPL_IF -->
+		</td>
+        <td>
+            <!-- TMPL_IF NAME="manageshelf" -->
+				<form action="shelves.pl" method="get">
+					<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelf" -->" />
+					<input type="hidden" name="op" value="modif" />
+					<input type="submit" class="editshelf" value="Edit" />
+				</form>
+				<form action="shelves.pl" method="post">
+					<input type="hidden" name="shelves" value="1" />
+					<input type="hidden" name="DEL-<!-- TMPL_VAR NAME="shelf" -->" value="1" />
+					<!-- TMPL_IF NAME="confirm" -->
+					<input type="hidden" name="CONFIRM-<!-- TMPL_VAR NAME="confirm" -->" value="1" />
+					<input type="submit" class="confirm" value="Confirm" />
+					<!-- TMPL_ELSE -->
+					<input type="submit" class="deleteshelf" onclick="return confirmDelete(_('Are you sure you want to remove this List?'));" value="Delete" />
+					<!-- /TMPL_IF -->
+				</form>
+			<!-- TMPL_ELSE -->
+				None
+			<!-- /TMPL_IF -->
+		</td>
+		</tr>
+            <!-- /TMPL_LOOP -->
+        </table>
+        <!-- TMPL_ELSE -->
+        	<!-- TMPL_IF NAME="showpublicshelves" -->No Public Lists.<!-- /TMPL_IF -->
+        <!-- /TMPL_IF --><!-- /shelvesloop -->
+        </div><!-- /publicshelves -->
 <!-- /TMPL_UNLESS -->
 
 </div>

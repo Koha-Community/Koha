@@ -97,6 +97,7 @@ $.tablesorter.addParser({
     <!-- TMPL_IF NAME="manageshelf" --><form action="/cgi-bin/koha/opac-shelves.pl" method="post" name="myform" class="checkboxed">
         <input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->" />
         <input type="hidden" name="modifyshelfcontents" value="1" /><!-- /TMPL_IF -->
+		<!-- TMPL_VAR name='pagination_bar'-->
 <table id="listcontents">
         <thead><tr>
             <!-- TMPL_IF NAME="manageshelf" --><th>&nbsp;</th><!-- /TMPL_IF -->
@@ -167,9 +168,15 @@ $.tablesorter.addParser({
             <!-- TMPL_IF NAME="sort_author" --><option value="author" selected="selected">Author</option><!-- TMPL_ELSE --><option value="author">Author</option><!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="sort_copyrightdate" --><option value="copyrightdate" selected="selected">Copyrightdate</option><!-- TMPL_ELSE --><option value="copyrightdate">Copyrightdate</option><!-- /TMPL_IF -->
             </select></li>
+			<li><label for="category">Category: </label>
+				<select name="category" id="category">
+					  <option value="1">Private</option>
+					  <option value="2">Public</option>
+				</select>
+			</li>
             </ol>
             </fieldset>
-            <fieldset class="action"><input type="hidden" name="category" value="<!-- TMPL_VAR NAME="category" -->" /><input type="submit" value="Save" class="submit" /> <a class="cancel" href="/cgi-bin/koha/opac-shelves.pl?shelfnumber=<!-- TMPL_VAR NAME="shelfnumber" -->">Cancel</a></fieldset>
+            <fieldset class="action"><input type="submit" value="Save" class="submit" /> <a class="cancel" href="/cgi-bin/koha/opac-shelves.pl?shelfnumber=<!-- TMPL_VAR NAME="shelfnumber" -->">Cancel</a></fieldset>
         </form>
     <!-- /TMPL_IF -->
 
@@ -195,6 +202,7 @@ $.tablesorter.addParser({
         
 		<!-- TMPL_IF NAME="loggedinusername" -->
             <!-- TMPL_IF NAME="shelveslooppriv" -->
+			<!-- TMPL_VAR name='pagination_bar'-->
         		<table>
         		<tr><th>List Name</th><th>Contents</th><th>Sort by</th><th>Type</th><th>&nbsp;</th></tr>
                 <!-- TMPL_LOOP NAME="shelveslooppriv" -->
@@ -243,6 +251,7 @@ $.tablesorter.addParser({
 		<div id="publicshelves" class="tab-container" style="display:none;">
 		<!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="shelvesloop" -->
+		<!-- TMPL_VAR name='pagination_bar'-->
         <table>
         <tr><th>List Name</th><th>Contents</th><th>Type</th></tr>
             <!-- TMPL_LOOP NAME="shelvesloop" -->
@@ -274,6 +283,12 @@ $.tablesorter.addParser({
 				<input id="addshelf" type="text" name="addshelf" size="60" />
 				<!-- /TMPL_IF -->
 				<input type="hidden" name="owner" id="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->" /></li>
+				<li><label for="sortfield" >Sort this list by: </label>
+				<select name="sortfield">
+				<!-- TMPL_IF NAME="sort_title" --><option value="title" selected="selected">Title</option><!-- TMPL_ELSE --><option value="title">Title</option><!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="sort_author" --><option value="author" selected="selected">Author</option><!-- TMPL_ELSE --><option value="author">Author</option><!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="sort_copyrightdate" --><option value="copyrightdate" selected="selected">Copyrightdate</option><!-- TMPL_ELSE --><option value="copyrightdate">Copyrightdate</option><!-- /TMPL_IF -->
+				</select></li>
 		        <li><label for="category">Category:</label>
 	            <select name="category" id="category">
 	            	<option value="1">Private</option>

@@ -90,11 +90,16 @@
 		<!-- TMPL_IF NAME="pubshelves" -->
 			<ul class="first-of-type">
 			<!-- TMPL_LOOP NAME="pubshelvesloop" -->
-			<!-- TMPL_UNLESS NAME="private" --><li class="yuimenuitem"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelfnumber" -->"><!-- TMPL_VAR NAME="shelfname"  ESCAPE="html" --></a></li><!-- /TMPL_UNLESS -->
+			<li class="yuimenuitem"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelfnumber" -->"><!-- TMPL_VAR NAME="shelfname"  ESCAPE="html" --></a></li>
 			<!-- /TMPL_LOOP -->
 			</ul>   
 		<!-- TMPL_ELSE -->
 			No Public Lists
+		<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="pubtotal" -->
+			<ul class="second-of-type">
+            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl?display=publicshelves">View all <!--TMPL_VAR NAME="pubtotal" --> public lists</a></li>
+			</ul>
 		<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="opacuserlogin" -->
 <!-- TMPL_IF NAME="loggedinusername" -->
@@ -102,15 +107,19 @@
 		<!-- TMPL_IF NAME="barshelves" -->
 			<ul class="first-of-type">
 			<!-- TMPL_LOOP NAME="barshelvesloop" -->
-			<!-- TMPL_IF NAME="private" --><li class="yuimenuitem"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelfnumber" -->"><!-- TMPL_VAR NAME="shelfname"  ESCAPE="html" --></a></li><!-- /TMPL_IF -->
+			<li class="yuimenuitem"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelfnumber" -->"><!-- TMPL_VAR NAME="shelfname"  ESCAPE="html" --></a></li>
 			<!-- /TMPL_LOOP -->
 			</ul>   
 		<!-- TMPL_ELSE -->
 			No Private Lists
 		<!-- /TMPL_IF -->
-
+		<!-- TMPL_IF NAME="bartotal" -->
 			<ul class="second-of-type">
-            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl">Manage Lists</a></li>
+            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">View all <!--TMPL_VAR NAME="bartotal" --> of your lists</a></li>
+			</ul>
+		<!-- /TMPL_IF -->
+		<ul class="second-of-type">
+        <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl">Manage Lists</a></li>
         </ul>
 		<!-- TMPL_ELSE --><ul class="first-of-type"><li><a href="/cgi-bin/koha/opac-user.pl">Log in to Create Your Own Lists</a></li></ul><!-- /TMPL_IF -->
 <!-- /TMPL_IF -->

@@ -9,7 +9,7 @@ use strict;            # always use
 ## load Koha modules
 use C4::Context;
 use C4::Output;
-use C4::Auth;
+use C4::Auth qw(:DEFAULT get_session);
 use C4::Search;
 use C4::Biblio;  # GetBiblioData
 use C4::Koha;
@@ -603,4 +603,25 @@ if ( C4::Context->preference("kohaspsuggest") ) {
 # see bug 2078.
 my $content_type = $cgi->param('format') =~ /rss|atom/ ? "application/xml" :
                    "text/html";
+
+# Build drop-down list for 'Add To:' menu...
+my $session = get_session($cgi->cookie("CGISESSID"));
+my @addpubshelves;
+my $pubshelves = $session->param('pubshelves');
+my $barshelves = $session->param('barshelves');
+foreach my $shelf (@$pubshelves) {
+	next if ( ($shelf->{'owner'} != ($borrowernumber ? $borrowernumber : -1)) && ($shelf->{'category'} < 3) );
+	push (@addpubshelves, $shelf);
+}
+
+if (defined @addpubshelves) {
+	$template->param( addpubshelves     => scalar (@addpubshelves));
+	$template->param( addpubshelvesloop => \@addpubshelves);
+}
+
+if (defined $barshelves) {
+	$template->param( addbarshelves     => scalar (@$barshelves));
+	$template->param( addbarshelvesloop => $barshelves);
+}
+
 output_html_with_http_headers $cgi, $cookie, $template->output, $content_type;

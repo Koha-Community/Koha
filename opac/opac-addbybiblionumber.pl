@@ -29,14 +29,15 @@ use C4::VirtualShelves;
 use C4::Auth;
 use C4::Output;
 use C4::Auth qw/get_session/;
+use C4::Debug;
 
-my $query        = new CGI;
-my @biblionumber = $query->param('biblionumber');
-my $selectedshelf = $query->param('selectedshelf');
-my $newshelf = $query->param('newshelf');
-my $shelfnumber  = $query->param('shelfnumber');
-my $newvirtualshelf = $query->param('newvirtualshelf');
-my $category     = $query->param('category');
+my $query        	= new CGI;
+my @biblionumber 	= $query->param('biblionumber');
+my $selectedshelf 	= $query->param('selectedshelf');
+my $newshelf 		= $query->param('newshelf');
+my $shelfnumber  	= $query->param('shelfnumber');
+my $newvirtualshelf	= $query->param('newvirtualshelf');
+my $category     	= $query->param('category');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -47,7 +48,13 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-$shelfnumber = AddShelf(  $newvirtualshelf, $loggedinuser, $category ) if $newvirtualshelf;
+if ($newvirtualshelf) {
+	$shelfnumber = AddShelf(  $newvirtualshelf, $loggedinuser, $category );
+	RefreshShelvesSummary($query->cookie("CGISESSID"),$loggedinuser,($loggedinuser == -1 ? 20 : 10));
+	print $query->header;
+	print "<html><body onload=\"window.opener.location.reload(true);self.close();\"></body></html>";
+	exit;
+}
 
 # verify user is authorized to perform the action on the shelf...
 my $authorized = 1;
@@ -64,10 +71,11 @@ if (scalar(@biblionumber) == 1) {
 }
 if ($shelfnumber && ($shelfnumber != -1)) {
 	for my $bib (@biblionumber){
-		&AddToShelfFromBiblio($bib,$shelfnumber);
+		AddToShelfFromBiblio($bib,$shelfnumber);
 	}
+	RefreshShelvesSummary($query->cookie("CGISESSID"),$loggedinuser,($loggedinuser == -1 ? 20 : 10));
 	print $query->header;
-	print "<html><body onload=\"window.close();\"><div>Please close this window to continue.</div></body></html>";
+	print "<html><body onload=\"window.opener.location.reload(true);self.close();\"></body></html>";
 	exit;
 }
 else {
@@ -82,13 +90,21 @@ else {
 			);
 	} else {
 	# offer choice of shelves
-    my ($shelflist) = GetShelves( $loggedinuser, 3 );
+	# first private shelves...
+	my $limit = 10;
+	my ($shelflist) = GetRecentShelves(1, $limit, $loggedinuser);
     my @shelvesloop;
     my %shelvesloop;
-    foreach my $element ( sort keys %$shelflist ) {
-        push( @shelvesloop, $element );
-		$shelvesloop{$element} = $shelflist->{$element}->{'shelfname'};
-
+    for my $shelf ( @{${@$shelflist}[0]} ) {
+        push( @shelvesloop, $shelf->{shelfnumber} );
+		$shelvesloop{$shelf->{shelfnumber}} = $shelf->{shelfname};
+	}
+	# then open shelves...
+	my ($shelflist) = GetRecentShelves(3, $limit, undef);
+    for my $shelf ( @{${@$shelflist}[0]} ) {
+        push( @shelvesloop, $shelf->{shelfnumber} );
+		$shelvesloop{$shelf->{shelfnumber}} = $shelf->{shelfname};
+	}
     my $CGIvirtualshelves;
     if ( @shelvesloop > 0 ) {
         $CGIvirtualshelves = CGI::scrolling_list (
@@ -104,7 +120,6 @@ else {
 	$template->param (
 		CGIvirtualshelves       => $CGIvirtualshelves,
 	);
-    }
     }
 	}
 

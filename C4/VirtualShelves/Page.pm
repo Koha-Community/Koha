@@ -23,7 +23,7 @@ package C4::VirtualShelves::Page;
 use strict;
 use warnings;
 use CGI;
-use C4::VirtualShelves qw/:DEFAULT GetShelvesSummary/;
+use C4::VirtualShelves;
 use C4::Biblio;
 use C4::Items;
 use C4::Koha;
@@ -32,6 +32,7 @@ use C4::Members;
 use C4::Output;
 use C4::Dates qw/format_date/;
 use Exporter;
+use Data::Dumper;
 
 use vars qw($debug @EXPORT @ISA $VERSION);
 
@@ -58,11 +59,22 @@ sub shelfpage ($$$$$) {
 	$template or die "No template";
 	$template->param( { loggedinuser => $loggedinuser } );
 	my @paramsloop;
+	my $totitems;
+	my $shelfoff = ($query->param('shelfoff') ? $query->param('shelfoff') : 1);
+	my $itemoff = ($query->param('itemoff') ? $query->param('itemoff') : 1);
+	my $displaymode = ($query->param('display') ? $query->param('display') : 'publicshelves');
+	my ($shelflimit, $shelfoffset, $shelveslimit, $shelvesoffset);
+	# FIXME: These limits should not be hardcoded...
+	$shelflimit = 20;	# Limits number of items returned for a given query
+	$shelfoffset = (($itemoff == 1) ? 0 : ($itemoff * 10));		# Sets the offset to begin retrieving items at
+	$shelveslimit = 20;	# Limits number of shelves returned for a given query (row_count)
+	$shelvesoffset = (($shelfoff == 1) ? 0 : ($shelfoff * 10));		# Sets the offset to begin retrieving shelves at (offset)
 	# getting the Shelves list
-	my $shelflist = GetShelves( $loggedinuser, 2 );
+	my $category = (($displaymode eq 'privateshelves') ? 1 : 2);
+	my ($shelflist, $totshelves) = GetShelves( $category, $shelveslimit, $shelvesoffset, $loggedinuser );
 	my $op = $query->param('op');
-    my $imgdir = getitemtypeimagesrc();
-    my $itemtypes = GetItemTypes();
+#    my $imgdir = getitemtypeimagesrc();
+#    my $itemtypes = GetItemTypes();
     
 # the format of this is unindented for ease of diff comparison to the old script
 # Note: do not mistake the assignment statements below for comparisons!
@@ -92,7 +104,7 @@ if ( $query->param('modifyshelfcontents') ) {
 
 my $showadd = 1;
 # set the default tab, etc. (for OPAC)
-my $shelf_type = $query->param('display');
+my $shelf_type = ($query->param('display') ? $query->param('display') : 'publicshelves');
 if (defined $shelf_type) {
 	if ($shelf_type eq 'privateshelves')  {
 		$template->param(showprivateshelves => 1);
@@ -102,6 +114,8 @@ if (defined $shelf_type) {
 	} else {
 		$debug and warn "Invalid 'display' param ($shelf_type)";
 	}
+} elsif ($loggedinuser == -1) {
+	$template->param(showpublicshelves => 1);
 } else {
 	$template->param(showprivateshelves => 1);
 }
@@ -109,9 +123,11 @@ if (defined $shelf_type) {
 my($okmanage, $okview);
 my $shelfnumber = $query->param('shelfnumber') || $query->param('viewshelf');
 if ($shelfnumber) {
-	$okmanage = &ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' );
-	$okview   = &ShelfPossibleAction( $loggedinuser, $shelfnumber, 'view' );
+	$okmanage = ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' );
+	$okview   = ShelfPossibleAction( $loggedinuser, $shelfnumber, 'view' );
 }
+
+my $delflag = 0;
 
 SWITCH: {
 	if ( $op ) {
@@ -127,8 +143,7 @@ SWITCH: {
 			};
 
 			ModShelf( $shelfnumber, $shelf );
-			$shelflist = GetShelves( $loggedinuser, 2 );    # refresh after mods; this also retrieves all public shelves
-		
+
 		} elsif ( $op eq 'modif' ) {
 			my ( $shelfnumber2, $shelfname, $owner, $category, $sortfield ) =GetShelf( $shelfnumber );
 			my $member = GetMember($owner,'borrowernumber');
@@ -149,10 +164,13 @@ SWITCH: {
     if ($shelfnumber = $query->param('viewshelf') ) {
         #check that the user can view the shelf
 		if ( ShelfPossibleAction( $loggedinuser, $shelfnumber, 'view' ) ) {
-			my $items = GetShelfContents($shelfnumber);
+			my $items;
+			($items, $totitems) = GetShelfContents($shelfnumber, $shelflimit, $shelfoffset);
 			for my $this_item (@$items) {
-				$this_item->{imageurl} = $imgdir."/".$itemtypes->{ $this_item->{itemtype}  }->{'imageurl'};
-				$this_item->{'description'} = $itemtypes->{ $this_item->{itemtype} }->{'description'};
+				# the virtualshelfcontents table does not store these columns nor are they retrieved from the items
+				# and itemtypes tables, so I'm commenting them out for now to quiet the log -crn
+				#$this_item->{imageurl} = $imgdir."/".$itemtypes->{ $this_item->{itemtype}  }->{'imageurl'};
+				#$this_item->{'description'} = $itemtypes->{ $this_item->{itemtype} }->{'description'};
 				$this_item->{'dateadded'} = format_date($this_item->{'dateadded'});
 			}
 			$showadd = 1;
@@ -160,13 +178,12 @@ SWITCH: {
 			foreach (grep {$i++ % 2} @$items) {     # every other item
 				$_->{toggle} = 1;
 			}
-			# my $manageshelf = &ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' );
-			# ($manageshelf) and $showadd = 1;
+			my $manageshelf = ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' );
 			$template->param(
 				shelfname   => $shelflist->{$shelfnumber}->{'shelfname'},
 				shelfnumber => $shelfnumber,
 				viewshelf   => $shelfnumber,
-				manageshelf => &ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' ),
+				manageshelf => $manageshelf,
 				itemsloop => $items,
 			);
 		} else { push @paramsloop, {nopermission=>$shelfnumber} };
@@ -179,7 +196,8 @@ SWITCH: {
             my $shelfnumber = AddShelf(
                 $newshelf,
                 $query->param('owner'),
-                $query->param('category')
+                $query->param('category'),
+                $query->param('sortfield')
             );
 			$stay = 1;
             if ( $shelfnumber == -1 ) {    #shelf already exists.
@@ -193,6 +211,7 @@ SWITCH: {
         }
 		foreach ($query->param()) {
 			/DEL-(\d+)/ or next;
+			$delflag = 1;
 			my $number = $1;
 			unless (defined $shelflist->{$number}) {
 				push(@paramsloop, {unrecognized=>$number}); last;
@@ -200,7 +219,8 @@ SWITCH: {
 			unless (ShelfPossibleAction($loggedinuser, $number, 'manage')) {
 				push(@paramsloop, {nopermission=>$shelfnumber}); last;
 			}
-			my $contents = GetShelfContents($number);
+			my $contents;
+			($contents, $totshelves) = GetShelfContents($number, $shelveslimit, $shelvesoffset);
 			if (my $count = scalar @$contents){
 				unless (scalar grep {/^CONFIRM-$number$/} $query->param()) {
 					push(@paramsloop, {need_confirm=>$shelflist->{$number}->{shelfname}, count=>$count});
@@ -225,13 +245,13 @@ SWITCH: {
 }
 
 (@paramsloop) and $template->param(paramsloop => \@paramsloop);
-# rebuild shelflist in case a shelf has been added
-# $shelflist = GetShelves( $loggedinuser, 2 );
 $showadd and $template->param(showadd => 1);
 my @shelvesloop;
 my @shelveslooppriv;
 my $numberCanManage = 0;
 
+# rebuild shelflist in case a shelf has been added
+($shelflist, $totshelves) = GetShelves( $category, $shelveslimit, $shelvesoffset, $loggedinuser ) unless $delflag;
 foreach my $element (sort { lc($shelflist->{$a}->{'shelfname'}) cmp lc($shelflist->{$b}->{'shelfname'}) } keys %$shelflist) {
 	my %line;
 	$shelflist->{$element}->{shelf} = $element;
@@ -239,7 +259,7 @@ foreach my $element (sort { lc($shelflist->{$a}->{'shelfname'}) cmp lc($shelflis
 	my $owner    = $shelflist->{$element}->{ 'owner'  };
 	my $canmanage = ShelfPossibleAction( $loggedinuser, $element, 'manage' );
 	$shelflist->{$element}->{"viewcategory$category"} = 1;
-	$shelflist->{$element}->{canmanage} = $canmanage;
+	$shelflist->{$element}->{manageshelf} = $canmanage;
 	if ($owner eq $loggedinuser or $canmanage) {
 		$shelflist->{$element}->{'mine'} = 1;
 	} 
@@ -254,7 +274,14 @@ foreach my $element (sort { lc($shelflist->{$a}->{'shelfname'}) cmp lc($shelflis
 		push (@shelvesloop, $shelflist->{$element});
 	}
 }
-
+my $url = $type eq 'opac' ? "/cgi-bin/koha/opac-shelves.pl" : "/cgi-bin/koha/virtualshelves/shelves.pl";
+$url .= "?display=" . $query->param('display') if $query->param('display');
+$url .= "?viewshelf=" . $query->param('viewshelf') if $query->param('viewshelf');
+if ($query->param('viewshelf')) {
+	$template->param( {pagination_bar => pagination_bar($url, (int($totitems/$shelflimit)) + (($totitems % $shelflimit) > 0 ? 1 : 0), $itemoff, "itemoff")} );
+} else {
+	$template->param( {pagination_bar => pagination_bar($url, (int($totshelves/$shelveslimit)) + (($totshelves % $shelveslimit) > 0 ? 1 : 0), $shelfoff, "shelfoff")} );
+}
 $template->param(
     shelveslooppriv => \@shelveslooppriv,
     shelvesloop     => \@shelvesloop,
@@ -272,13 +299,25 @@ if ($template->param( 'shelves' ) or
 	$template->param( seflag => 1);
 }
 
-my $sessionID = $query->cookie("CGISESSID") ;
-my $session = get_session($sessionID);
-my $barshelves = GetShelvesSummary($loggedinuser, 2, 10);
-if (defined($barshelves)) {
-	$session->param('barshelves', $barshelves);
-	$template->param( barshelves     => scalar (@$barshelves));
-	$template->param( barshelvesloop => $barshelves);
+#FIXME:	This refresh really only needs to happen when there is a modification of some sort
+#		to the shelves, but the above code is so convoluted in its handling of the various
+#		options, it is easier to do this refresh every time C4::VirtualShelves::Page.pm is
+#		called
+
+my ($total, $pubshelves, $barshelves) = RefreshShelvesSummary($query->cookie("CGISESSID"),$loggedinuser,($loggedinuser == -1 ? 20 : 10));
+
+if (defined $barshelves) {
+	$template->param( 	barshelves     	=> scalar (@{${@$barshelves}[0]}),
+						barshelvesloop 	=> ${@$barshelves}[0],
+					);
+	$template->param(	bartotal		=> $total->{'bartotal'}, ) if ($total->{'bartotal'} > scalar (@{${@$barshelves}[0]}));
+}
+
+if (defined $pubshelves) {
+	$template->param( 	pubshelves     	=> scalar (@{${@$pubshelves}[0]}),
+						pubshelvesloop 	=> ${@$pubshelves}[0],
+					);
+	$template->param(	pubtotal		=> $total->{'pubtotal'}, ) if ($total->{'pubtotal'} > scalar (@{${@$pubshelves}[0]}));
 }
 
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -913,6 +913,7 @@ sub set_shelves_userenv ($$) {
 	my $activeuser = $context->{activeuser} or return undef;
 	$context->{userenv}->{$activeuser}->{barshelves} = $shelves if $type eq 'bar';
 	$context->{userenv}->{$activeuser}->{pubshelves} = $shelves if $type eq 'pub';
+	$context->{userenv}->{$activeuser}->{totshelves} = $shelves if $type eq 'tot';
 }
 
 sub get_shelves_userenv () {
@@ -921,9 +922,10 @@ sub get_shelves_userenv () {
 		$debug and warn "get_shelves_userenv cannot retrieve context->{userenv}->{context->{activeuser}}";
 		return undef;
 	}
+	my $totshelves = $active->{totshelves} or undef;
 	my $pubshelves = $active->{pubshelves} or undef;
-	my $barshelves = $active->{barshelves} or undef;#  die "get_shelves_userenv: activeenv has no ->{shelves}";
-	return $pubshelves, $barshelves;
+	my $barshelves = $active->{barshelves} or undef;
+	return ($totshelves, $pubshelves, $barshelves);
 }
 
 =item _new_userenv

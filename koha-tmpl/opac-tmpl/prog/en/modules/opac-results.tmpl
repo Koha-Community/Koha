@@ -13,13 +13,15 @@
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function(){
+	var param1 = "<label for=\"addto\">Add to: </label><select name=\"addto\" id=\"addto\"><option value=\"\"></option>"<!-- TMPL_IF name="opacbookbag" -->+"<option value=\"addtocart\">Cart</option>"+<!-- /TMPL_IF --><!-- TMPL_IF NAME="virtualshelves" --><!-- TMPL_IF NAME="loggedinusername" -->"<optgroup label=\"Your Lists:\">"+<!-- TMPL_IF NAME="addbarshelves" --><!-- TMPL_LOOP NAME="addbarshelvesloop" -->"<option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--></option>"+<!-- /TMPL_LOOP --><!-- /TMPL_IF -->"</optgroup>";
+	param1 += "<optgroup label=\"Public Lists:\">"+<!-- TMPL_IF NAME="addpubshelves" --><!-- TMPL_LOOP NAME="addpubshelvesloop" -->"<option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--></option>"+<!-- /TMPL_LOOP --><!-- /TMPL_IF -->"</optgroup><option value=\"newlist\">[ New List ]</option>"+<!-- TMPL_ELSE -->"<optgroup label=\"Public Lists:\">"+<!-- TMPL_IF NAME="addpubshelves" --><!-- TMPL_LOOP NAME="addpubshelvesloop" -->"<option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--></option>"+<!-- /TMPL_LOOP --><!-- /TMPL_IF -->"</optgroup>"+<!-- /TMPL_IF --><!-- /TMPL_IF -->"</select> <input type=\"submit\" class=\"submit\" value=\"Save\" />";
 	$('#sortsubmit').hide();
     $('#sort_by').change(function() {
         $('#bookbag_form').submit();
     });
 	$("span.clearall").html("<a id=\"CheckNone\" href=\"#\">Clear All</a>");
 	$("span.checkall").html("<a id=\"CheckAll\" href=\"#\">Select All</a>");
-	$("span.addto").html("<label for=\"addto\">Add to: </label><select name=\"addto\" id=\"addto\"><option value=\"\"></option><!-- TMPL_IF name="opacbookbag" --><option value=\"addtocart\">Cart</option><!-- /TMPL_IF --><!-- TMPL_IF NAME="virtualshelves" --><!-- TMPL_IF NAME="loggedinusername" --><optgroup label=\"Your Lists:\"><!-- TMPL_IF NAME="barshelves" --><!-- TMPL_LOOP NAME="barshelvesloop" --><!-- TMPL_IF EXPR="category == 1" --><option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--></option><!-- /TMPL_IF --><!-- /TMPL_LOOP --><!-- /TMPL_IF --></optgroup><optgroup label=\"Public Lists:\"><!-- TMPL_IF NAME="pubshelves" --><!-- TMPL_LOOP NAME="pubshelvesloop" --><option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--></option><!-- /TMPL_LOOP --><!-- /TMPL_IF --></optgroup><option value=\"newlist\">[ New List ]</option><!-- TMPL_ELSE --><optgroup label=\"Public Lists:\"><!-- TMPL_IF NAME="pubshelves" --><!-- TMPL_LOOP NAME="pubshelvesloop" --><option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--></option><!-- /TMPL_LOOP --><!-- /TMPL_IF --></optgroup><!-- /TMPL_IF --><!-- /TMPL_IF --></select> <input type=\"submit\" class=\"submit\" value=\"Save\" />");
+	$("span.addto").html(param1);
 	$("#addto").change(function(){
 		cartList();
 	});
