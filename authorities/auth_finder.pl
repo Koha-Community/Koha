@@ -63,7 +63,7 @@ if ( $op eq "do_search" ) {
     my $orderby   = $query->param('orderby');
 
     $resultsperpage = $query->param('resultsperpage');
-    $resultsperpage = 19 if ( !defined $resultsperpage );
+    $resultsperpage = 20 if ( !defined $resultsperpage );
 
     my ( $results, $total ) =
       SearchAuthorities( \@marclist, \@and_or, \@excluding, \@operator, \@value,
