@@ -170,13 +170,13 @@ $(document).ready(function(){
         </td></tr>
             <!-- Actual Search Results -->
             <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
-            <!-- TMPL_IF name="even" -->
+            <!-- TMPL_UNLESS name="__odd__" -->
                 <tr class="highlight">
             <!-- TMPL_ELSE -->
                 <tr>
-            <!-- /TMPL_IF -->
+            <!-- /TMPL_UNLESS -->
 
-                <td class="select selectcol"><!--TMPL_IF EXPR="opacbookbag || virtualshelves" --><input type="checkbox" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" title="Click to add to cart" /> <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"><!-- /TMPL_IF --><!--TMPL_IF EXPR="opacbookbag || virtualshelves" --></label><!-- /TMPL_IF --></td>
+                <td class="select selectcol"><!--TMPL_IF EXPR="opacbookbag || virtualshelves" --><input type="checkbox" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" title="Click to add to cart" /> <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"></label><!-- /TMPL_IF --></td>
                 <td class="select selectcol"><!-- TMPL_VAR NAME="result_number" -->.</td>
 
 				<!-- TMPL_UNLESS NAME="item-level_itypes" -->
