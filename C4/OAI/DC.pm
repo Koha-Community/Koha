@@ -103,7 +103,6 @@ and the I<cursor> keys set.
 
 package C4::OAI::DC;
 
-use Encode;
 use C4::OAI::DP;
 use vars ('@ISA');
 @ISA = ("C4::OAI::DP");
@@ -161,7 +160,7 @@ sub Archive_FormatRecord
    my $footer = "</oaidc:dc>\n";
    my $metadata = '';
 
-   $metadata = $header . encode("utf8", decode( "iso-8859-1",$self->{'utility'}->FormatXML($dc))) . $footer if( $dc );
+   $metadata = $header . $self->{'utility'}->FormatXML($dc) . $footer if( $dc );
 
    $self->FormatRecord ($hashref->Identifier()->[0] ,
                         $hashref->DateStamp(),

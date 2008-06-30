@@ -10,6 +10,15 @@
 #  -----------------------------------------+-------------+-------------
 #   Virginia Polytechnic Institute and State University   |  www.vt.edu  
 #  -------------------------------------------------------+-------------
+#    January 2008
+#  ------------------+--------------------------------------------------
+#   Ph. Jaillon      | 
+#  ------------------+----------------------+---------------------------
+#   Department of Computer Science          |      
+#  -----------------------------------------+-------------+-------------
+#   Ecole Nationale Superieure des Mines de St-Etienne    |  www.emse.fr 
+#  -------------------------------------------------------+-------------
+
 
 $VERSION = '1.0.0';
 
@@ -41,6 +50,8 @@ use POSIX;
 use CGI;
 use C4::OAI::Utility;
 
+# setting binmode to utf8 (any characters printed on STDOUT are utf8 encoded)
+binmode(STDOUT, ":utf8");
 
 # constructor
 sub new
@@ -498,16 +509,27 @@ sub Identify
          },
          {
             'title'    => 'VTOAI Perl Data Provider',
-            'author'   => {
-               'name' => 'Hussein Suleman',
-               'email' => 'hussein@vt.edu',
-               'institution' => 'Virginia Tech',
-               'mdorder' => [ qw ( name email institution ) ],
-             },
+            'author'   => [
+		     {
+		       'name' => 'Hussein Suleman',
+		       'email' => 'hussein@vt.edu',
+		       'institution' => 'Virginia Tech',
+		       'mdorder' => [ qw ( name email institution ) ],
+		     },
+		     {
+		       'name' => 'Philippe Jaillon',
+		       'email' => 'jaillon@emse.fr',
+		       'institution' => 'École Nationale Supérieure des Mines de Saint-Étienne',
+		       'mdorder' => [ qw ( name email institution ) ],
+		     }
+	     ],
             'version'  => '3.05',
-            'URL'      => 'http://www.dlib.vt.edu/projects/OAI/',
+            'URL'      => [
+		'http://www.dlib.vt.edu/projects/OAI/',
+            	'http://oai-pmh.emse.fr/'
+	     ],
             'mdorder'  => [ qw ( title author version URL ) ]
-         } 
+         },
       ]]
    };
    push (@{$identity->{'description'}}, $desc);

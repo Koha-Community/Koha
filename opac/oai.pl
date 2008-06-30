@@ -30,7 +30,8 @@ use MARC::File::USMARC;
 
 sub new { # Get a MAR::Record as parameter and bless it as MARC::Record::KOHADC
 	shift;
-	bless shift;
+	my $marc = shift;
+	bless $marc  if( ref( $marc ) );
 }
 
 sub subfield {
@@ -61,6 +62,15 @@ my @result = ();
 	\@result;
 }  
 
+sub XMLescape {
+my ($t) = shift;
+
+	foreach (@$t ) {
+        	s/\&/\&amp;/g; s/</&lt;/g;
+	}
+	$t;
+} 
+
 sub Status {
   my $self = shift;
 	undef;
@@ -68,17 +78,17 @@ sub Status {
 
 sub Title {
   my $self = shift;
-	$self->getfields('biblio.title');
+	&XMLescape( $self->getfields('biblio.title') );
 }
 
 sub Creator {
   my $self = shift;
-	$self->getfields('biblio.author');
+	&XMLescape( $self->getfields('biblio.author') );
 }
 
 sub Subject {
   my $self = shift;
-	$self->getfields('bibliosubject.subject');
+	&XMLescape( $self->getfields('bibliosubject.subject') );
 }
 
 sub DateStamp {
@@ -125,12 +135,12 @@ sub Language {
 
 sub Type {
   my $self = shift;
-	$self->getfields('biblioitems.itemtype');
+	&XMLescape( $self->getfields('biblioitems.itemtype') );
 }
 
 sub Publisher {
   my $self = shift;
-	$self->getfields('biblioitems.publishercode');
+	&XMLescape( $self->getfields('biblioitems.publishercode') );
 }
 
 sub Set {
@@ -285,8 +295,13 @@ sub Archive_GetRecord
 
    if( my $r = $sth->fetchrow_hashref() ) {
    	my $marc = new MARC::Record::KOHADC( ::GetMarcBiblio( $identifier ) );
-	$marc->{'biblio.timestamp'} = $r->{'timestamp'};
-   	return $marc ;
+	if( $marc ) {
+		$marc->{'biblio.timestamp'} = $r->{'timestamp'};
+   		return $marc ;
+	}
+	else {
+		warn("Archive_GetRecord : no MARC record for " . C4::Context->preference("OAI-PMH:archiveID") . ":" . $identifier);
+	}
    }
 
    $self->AddError ('idDoesNotExist', 'The value of the identifier argument is unknown or illegal in this repository');
@@ -316,11 +331,15 @@ sub Archive_ListRecords
 
         ($metadataPrefix, $offset, $from, $until ) = &parseResumptionToken($from, $until, $metadataPrefix, $resumptionToken);
 
-warn( "Archive_ListRecords : $set, $from, $until, $metadataPrefix, $resumptionToken\n");
+#warn( "Archive_ListRecords : $set, $from, $until, $metadataPrefix, $resumptionToken\n");
    	$sth->execute( $from,$until,$self->{'MaxCount'}?$self->{'MaxCount'}:100000, $offset );
 
 	while( my $r = $sth->fetchrow_hashref() ) { 
 		my $marc = new MARC::Record::KOHADC( ::GetMarcBiblio( $r->{'biblionumber'} ) );
+		unless( $marc ) { # somme time there is problems within koha, and we can't get valid marc record
+			warn("Archive_ListRecords : no MARC record for " . C4::Context->preference("OAI-PMH:archiveID") .":" . $r->{'biblionumber'} );
+			next;
+		}
 		$marc->{'biblio.timestamp'} = $r->{'timestamp'};
 		push( @allrows, $marc );
 	} 
