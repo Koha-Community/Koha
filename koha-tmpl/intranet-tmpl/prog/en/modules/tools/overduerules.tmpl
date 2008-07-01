@@ -52,10 +52,13 @@ $(document).ready(function() {
                 <p>The following fields have a forbidden value. Correct them and press OK again :</p>
                 <ul>
                 <!-- TMPL_IF NAME="ERRORDELAY" -->
-                    <li>Delay <!--TMPL_VAR Name="ERRORDELAY"--> for <!--TMPL_VAR Name="bor"--> borrower category has some unexpected characters. There should be only numerical characters. </li>
+                    <li>Delay <!--TMPL_VAR Name="ERRORDELAY"--> for <!--TMPL_VAR Name="BORERR"--> borrower category has some unexpected characters. There should be only numerical characters. </li>
+                <!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="ERRORUSELESSDELAY" -->
+                    <li>No letter or debar action specified for delay <!--TMPL_VAR Name="ERRORUSELESSDELAY"--> for <!--TMPL_VAR Name="BORERR"--> borrower category.  If a delay is supplied, either a letter, debar action, or both should be specified.</li>
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="ERRORORDER" -->
-                    <li>Delay1 should be less than Delay2 which should be less than Delay3 for <!--TMPL_VAR Name="bor"--> borrower category </li>
+                    <li>Delay1 should be less than Delay2 which should be less than Delay3 for <!--TMPL_VAR Name="BORERR"--> borrower category </li>
                 <!-- /TMPL_IF -->
                 </ul>
             </div>
@@ -67,7 +70,7 @@ $(document).ready(function() {
                 <table>
                     <caption>Rules for overdue actions: <!--TMPL_IF Name="branch"--><!-- TMPL_VAR NAME="branch" --><!--TMPL_ELSE--> default library <!--/TMPL_IF-->
                     <!--TMPL_IF Name="datasaved"-->
-                        <br /><h3 align="center">INPUT SAVED</h3>
+                        <br /><div class="dialog message">INPUT SAVED</div>
                     <!--/TMPL_IF -->
                     </caption>
                     <tr>
