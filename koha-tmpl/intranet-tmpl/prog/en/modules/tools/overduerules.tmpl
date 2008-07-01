@@ -51,6 +51,7 @@
             <!-- TMPL_IF name="table" -->
             <form method="post" action="/cgi-bin/koha/tools/overduerules.pl">
                 <input type="hidden" name="op" value="save" />
+                <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
                 <table>
                     <caption>Rules for overdue actions: <!--TMPL_IF Name="branch"--><!-- TMPL_VAR NAME="branch" --><!--TMPL_ELSE--> default library <!--/TMPL_IF-->
                     <!--TMPL_IF Name="datasaved"-->
