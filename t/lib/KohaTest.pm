@@ -435,27 +435,15 @@ sub add_biblios {
         }
         push @{$self->{'biblios'}}, $biblionumber;
     }
-    
+   
+    $self->reindex_marc(); 
     my $query = 'Finn Test';
-
-    # XXX we're going to repeatedly try to fetch the marc records that
-    # we inserted above. It may take a while before they all show
-    # up. why?
-    my $tries = 30;
-    DELAY: foreach my $trial ( 1..$tries ) {
-        diag "waiting for zebra indexing. Trial: $trial of $tries";
-        my ( $error, $results ) = SimpleSearch( $query );
-        if ( $param{'count'} <= scalar( @$results ) ) {
-            ok( $tries, "found all $param{'count'} titles after $trial tries" );
-            last DELAY;
-        }
-        sleep( 3 );
-    } continue {
-        if ( $trial == $tries ) {
-            fail( "we never found all $param{'count'} titles even after $tries tries." );
-        }
+    my ( $error, $results ) = SimpleSearch( $query );
+    if ( $param{'count'} <= scalar( @$results ) ) {
+        pass( "found all $param{'count'} titles" );
+    } else {
+        fail( "we never found all $param{'count'} titles" );
     }
-
     
 }
 
