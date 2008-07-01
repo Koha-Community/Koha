@@ -20,10 +20,14 @@ These get run once, before the main test methods in this module
 sub insert_test_data : Test( startup => 71 ) {
     my $self = shift;
     
+    # get original 'Finn Test' count
+    my $query = 'Finn Test';
+    my ( $error, $results ) = SimpleSearch( $query );
+    $self->{'orig_finn_test_hits'} = scalar(@$results);
+
     # I'm going to add a bunch of biblios so that I can search for them.
     $self->add_biblios( count     => 10,
                         add_items => 1 );
-    
 
 }
 
@@ -100,7 +104,8 @@ sub limits : Test( 8 ) {
     {
         my ( $error, $results ) = SimpleSearch( $query );
         ok( ! defined $error, 'no error found during search' );
-        is( scalar @$results, 10, 'found all 10 results.' )
+        my $expected_hits = 10 + $self->{'orig_finn_test_hits'};
+        is( scalar @$results, $expected_hits, "found all $expected_hits results." )
           or diag( Data::Dumper->Dump( [ $results ], [ 'results' ] ) );
     }
     
@@ -108,7 +113,8 @@ sub limits : Test( 8 ) {
     {
         my ( $error, $results ) = SimpleSearch( $query, $offset );
         ok( ! defined $error, 'no error found during search' );
-        is( scalar @$results, 6, 'found 6 results.' )
+        my $expected_hits = 6 + $self->{'orig_finn_test_hits'};
+        is( scalar @$results, $expected_hits, "found $expected_hits results." )
           or diag( Data::Dumper->Dump( [ $results ], [ 'results' ] ) );
     }
 
