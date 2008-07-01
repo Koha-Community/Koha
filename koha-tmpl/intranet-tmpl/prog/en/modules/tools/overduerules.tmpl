@@ -1,6 +1,18 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Tools &rsaquo; Notice Triggers</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function() {
+        $('#selectlibrary').find("input:submit").hide();
+        $('#branch').change(function() {
+                $('#selectlibrary').submit();
+        });
+});
+//]]>
+</script>
+
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -20,7 +32,7 @@
             <p>If you want Koha to trigger an action (send a letter or debar member), a delay value is required.</p>
             <p>Columns must be filled left to right: if the first column is blank, other columns will be ignored. </p>
         </div>
-            <form method="post" action="/cgi-bin/koha/tools/overduerules.pl">
+            <form method="post" action="/cgi-bin/koha/tools/overduerules.pl" id="selectlibrary">
             <label for="branch">Select a library:</label>
                 <select id="branch" name="branch">
                     <option value="">Default</option>
