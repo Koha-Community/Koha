@@ -121,7 +121,7 @@ if ($op eq 'save') {
 }
 my $branches = GetBranches();
 my @branchloop;
-foreach my $thisbranch (keys %$branches) {
+foreach my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
         my $selected = 1 if $thisbranch eq $branch;
         my %row =(value => $thisbranch,
                                 selected => $selected,
@@ -155,7 +155,7 @@ while (my $data=$sth->fetchrow_hashref){
             $row{"debarred$i"}=$temphash{$data->{'categorycode'}}->{"debarred$i"};
             if ($countletters){
                 my @letterloop;
-                foreach my $thisletter (keys %$letters) {
+                foreach my $thisletter (sort { $letters->{$a} cmp $letters->{$b} } keys %$letters) {
                     my $selected = 1 if $thisletter eq $temphash{$data->{'categorycode'}}->{"letter$i"};
                     my %letterrow =(value => $thisletter,
                                     selected => $selected,
@@ -177,7 +177,7 @@ while (my $data=$sth->fetchrow_hashref){
         for (my $i=1;$i<=3;$i++){
             if ($countletters){
                 my @letterloop;
-                foreach my $thisletter (keys %$letters) {
+                foreach my $thisletter (sort { $letters->{$a} cmp $letters->{$b} } keys %$letters) {
                     my $selected = 1 if $thisletter eq $dat->{"letter$i"};
                     my %letterrow =(value => $thisletter,
                                     selected => $selected,
