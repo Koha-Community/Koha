@@ -2316,7 +2316,7 @@ sub _AddBiblioNoZebra {
             my $tag = $field->tag();
             my $subfieldcode = $subfield->[0];
             my $indexed=0;
-            warn "INDEXING :".$subfield->[1];
+#             warn "INDEXING :".$subfield->[1];
             # check each index to see if the subfield is stored somewhere
             # otherwise, store it in __RAW__ index
             foreach my $key (keys %index) {
