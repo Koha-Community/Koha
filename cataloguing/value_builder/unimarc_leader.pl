@@ -47,9 +47,9 @@ return 1;
 }
 
 function Blur$function_name(subfield_managed) {
-	var leader_lenght = document.getElementById(\"$field_number\").value.length;
-    if (leader_lenght != 25) {
-        alert(_('leader has an incorrect size: ' + leader_lenght + ' instead of 25 chars'));
+	var leader_length = document.getElementById(\"$field_number\").value.length;
+    if (leader_length != 24 && leader_length !=0) {
+        alert(_('leader has an incorrect size: ' + leader_length + ' instead of 24 chars'));
     }
     return 1;
 }
