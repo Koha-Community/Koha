@@ -42,12 +42,6 @@ my $input = new CGI;
 my $theme = $input->param('theme');    # only used if allowthemeoverride is set
 my $itemnumber = $input->param('itemnumber');
 
-
-# if we have a resturn of the form to delete the transfer, we launch the subrroutine
-if ($itemnumber) {
-    C4::Circulation::Circ2::DeleteTransfer($itemnumber);
-}
-
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "circ/transferstoreceive.tmpl",

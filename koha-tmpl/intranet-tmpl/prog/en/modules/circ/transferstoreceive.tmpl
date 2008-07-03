@@ -49,7 +49,6 @@ $.tablesorter.addParser({
                     <th>Title</th>
                     <th>Reserved by </th>
                     <th>Localisation</th>
-                    <th>Action</th>
                 </tr></thead>
                 <tbody><!-- TMPL_LOOP NAME="reserv" -->
 				<!-- TMPL_IF NAME="messcompa" -->
@@ -84,12 +83,6 @@ $.tablesorter.addParser({
                         <!-- /TMPL_IF -->
                         </td>
                         <td><!-- TMPL_VAR NAME="homebranch" --> <!-- TMPL_VAR NAME="itemcallnumber" --></td>
-                        <td>
-                        <!--<form name="dotransfer" action="currenttransfers.pl" method="post">
-                                        <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->">
-                        <input type="submit" value="Cancel this transfer">
-                        </form>-->
-                        </td>	
                     </tr>
                 <!-- /TMPL_LOOP -->	</tbody>
                 </table>
