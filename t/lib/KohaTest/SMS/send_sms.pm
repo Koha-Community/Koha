@@ -10,7 +10,7 @@ use C4::SMS;
 sub testing_class { 'C4::SMS' };
 
 
-sub send_a_message : Test( 2 ) {
+sub send_a_message : Test( 1 ) {
     my $self = shift;
 
     my $success = C4::SMS->send_sms( { destination => '+1 212-555-1111',

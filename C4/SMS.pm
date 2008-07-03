@@ -34,7 +34,6 @@ use strict;
 use warnings;
 
 use C4::Context;
-use SMS::Send;
 
 use vars qw( $VERSION );
 
@@ -65,6 +64,12 @@ sub send_sms {
     foreach my $required_parameter ( qw( message destination ) ) {
         # Should I warn in some way?
         return unless defined $params->{ $required_parameter };
+    }
+
+    eval { require SMS::Send; };
+    if ( $@ ) {
+        # we apparently don't have SMS::Send. Return a failure.
+        return;
     }
 
     # This allows the user to override the driver. See SMS::Send::Test
