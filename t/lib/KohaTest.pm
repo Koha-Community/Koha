@@ -19,11 +19,27 @@ use C4::Search;
 use C4::Installer;
 use C4::Languages;
 use File::Temp qw/ tempdir /;
+use CGI;
 
 # Since this is an abstract base class, this prevents these tests from
 # being run directly unless we're testing a subclass. It just makes
 # things faster.
 __PACKAGE__->SKIP_CLASS( 1 );
+
+INIT {
+    if ($ENV{SINGLE_TEST}) {
+        # if we're running the tests in one
+        # or more test files specified via
+        #
+        #   make single-test TEST_FILES=lib/KohaTest/Foo.pm
+        #
+        # use this INIT trick taken from the POD for
+        # Test::Class::Load.
+        start_zebrasrv();
+        Test::Class->runtests;
+        stop_zebrasrv();
+    }
+}
 
 use Attribute::Handlers;
 
