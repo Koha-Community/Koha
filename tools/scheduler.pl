@@ -24,73 +24,87 @@ use C4::Reports;
 use C4::Auth;
 use CGI;
 use C4::Output;
+use C4::Dates;
+
+use vars qw($debug);
+
+BEGIN {
+    $debug = $ENV{DEBUG} || 0;
+}
 
 my $input = new CGI;
 
-my $base = C4::Context->config('intranetdir');
+my $base        = C4::Context->config('intranetdir');
 my $CONFIG_NAME = $ENV{'KOHA_CONF'};
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-	    {
-		template_name   => "tools/scheduler.tmpl",
-		query           => $input,
-		type            => "intranet",
-		authnotrequired => 0,
-		flagsrequired   => { tools => 'schedule_tasks' },
-		debug           => 1,
-	    }
-	);
+    {
+        template_name   => "tools/scheduler.tmpl",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { tools => 'schedule_tasks' },
+        debug           => 1,
+    }
+);
 
-my $mode=$input->param('mode');
-my $id = $input->param('id');
+my $mode = $input->param('mode');
+my $id   = $input->param('id');
 
-if ($mode eq 'job_add') {
-	my $startday   = $input->param('startday');
-	my $startmonth = $input->param('startmonth');
-	my $startyear  = $input->param('startyear');
-	my $starttime  = $input->param('starttime');
-	my $recurring = $input->param('recurring');	
-	$starttime  =~ s/\://g;
-	my $start = $startyear . $startmonth . $startday . $starttime;
-	my $report=$input->param('report');
-	my $format=$input->param('format');
-	my $email=$input->param('email');
-	my $command = "EXPORT KOHA_CONF=\"$CONFIG_NAME\"; ".$base."/tools/runreport.pl $report $format $email";
-	if ($recurring){
-	    my $frequency = $input->param('frequency');
-	    add_cron_job($start,$command);
-	}
-	else {
-	    unless (add_at_job($start,$command)) {
-            $template->param(job_add_failed => 1);
+if ( $mode eq 'job_add' ) {
+    my $startdate =
+      join( '', ( split m|/|, $input->param('startdate') )[ 2, 0, 1 ] );
+    my $starttime = $input->param('starttime');
+    my $recurring = $input->param('recurring');
+    $starttime =~ s/\://g;
+    my $start  = $startdate . $starttime;
+    my $report = $input->param('report');
+    my $format = $input->param('format');
+    my $email  = $input->param('email');
+    my $command =
+        "EXPORT KOHA_CONF=\"$CONFIG_NAME\"; " . $base
+      . "/tools/runreport.pl $report $format $email";
+
+    if ($recurring) {
+        my $frequency = $input->param('frequency');
+        add_cron_job( $start, $command );
+    }
+    else {
+        unless ( add_at_job( $start, $command ) ) {
+            $template->param( job_add_failed => 1 );
         }
-	}
+    }
 }
 
-if ($mode eq 'job_change'){
-	my $jobid = $input->param('jobid');
-	if ($input->param('delete')){
-		remove_at_job($jobid);
-	}
+if ( $mode eq 'job_change' ) {
+    my $jobid = $input->param('jobid');
+    if ( $input->param('delete') ) {
+        remove_at_job($jobid);
+    }
 }
 
 my $jobs = get_jobs();
 my @jobloop;
- foreach my $job (values %$jobs) {
-     push @jobloop,$job;
+foreach my $job ( values %$jobs ) {
+    push @jobloop, $job;
 }
 
-@jobloop = sort {$a->{TIME} cmp $b->{TIME}} @jobloop;
+@jobloop = sort { $a->{TIME} cmp $b->{TIME} } @jobloop;
 
 my $reports = get_saved_reports();
-if (defined $id) {
+if ( defined $id ) {
     foreach my $report (@$reports) {
         $report->{'selected'} = 1 if $report->{'id'} eq $id;
     }
 }
 
-$template->param( 'savedreports' => $reports ); 
-$template->param(JOBS => \@jobloop);
+$template->param( 'savedreports' => $reports );
+$template->param( JOBS           => \@jobloop );
 my $time = localtime(time);
-$template->param('time' => $time);
+$template->param( 'time' => $time );
+$template->param(
+    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
+    dateformat               => C4::Dates->new()->format(),
+    debug                    => $debug,
+);
 output_html_with_http_headers $input, $cookie, $template->output;
