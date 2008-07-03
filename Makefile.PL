@@ -298,6 +298,7 @@ my $target_map = {
   './suggestion'                => 'INTRANET_CGI_DIR',
   './svc'                       => 'INTRANET_CGI_DIR',
   './t'                         => 'NONE',
+  './tags'                      => 'INTRANET_CGI_DIR',
   './tmp'                       => 'NONE', # FIXME need to determine whether 
                                            # Koha generates any persistent temp files
                                            # that should go in /var/tmp/koha
