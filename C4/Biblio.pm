@@ -246,8 +246,25 @@ sub AddBiblio {
 
 =head2 ModBiblio
 
+=over 4
+
     ModBiblio( $record,$biblionumber,$frameworkcode);
-    Exported function (core API) to modify a biblio
+
+=back
+
+Replace an existing bib record identified by C<$biblionumber>
+with one supplied by the MARC::Record object C<$record>.  The embedded
+item, biblioitem, and biblionumber fields from the previous
+version of the bib record replace any such fields of those tags that
+are present in C<$record>.  Consequently, ModBiblio() is not
+to be used to try to modify item records.
+
+C<$frameworkcode> specifies the MARC framework to use
+when storing the modified bib record; among other things,
+this controls how MARC fields get mapped to display columns
+in the C<biblio> and C<biblioitems> tables, as well as
+which fields are used to store embedded item, biblioitem,
+and biblionumber data for indexing.
 
 =cut
 
@@ -265,6 +282,13 @@ sub ModBiblio {
     # get the items before and append them to the biblio before updating the record, atm we just have the biblio
     my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField("items.itemnumber",$frameworkcode);
     my $oldRecord = GetMarcBiblio( $biblionumber );
+
+    # delete any item fields from incoming record to avoid
+    # duplication or incorrect data - use AddItem() or ModItem()
+    # to change items
+    foreach my $field ($record->field($itemtag)) {
+        $record->delete_field($field);
+    }
     
     # parse each item, and, for an unknown reason, re-encode each subfield 
     # if you don't do that, the record will have encoding mixed
