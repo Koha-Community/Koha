@@ -63,14 +63,7 @@ sub _get_filepath ($;$) {
     $referer =~ /.*koha\/(.+)\.pl.*/;
     my $from   = "help/$1.tmpl";
     my $htdocs = C4::Context->config('intrahtdocs');
-	my ($theme, $lang);
-	# This split behavior was part of the old script.  I'm not sure why.  -atz
-	if (@_) {
-		($theme, $lang) = themelanguage( $htdocs, $from, "intranet", $input );
-	} else {
-		$theme = C4::Context->preference('template');
-   		$lang  = C4::Context->preference('language') || 'en';
-	}
+    my ($theme, $lang) = themelanguage( $htdocs, $from, "intranet", $input );
 	$debug and print STDERR "help filepath: $htdocs/$theme/$lang/modules/$from";
 	return "$htdocs/$theme/$lang/modules/$from";
 }
