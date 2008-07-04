@@ -256,17 +256,18 @@ sub GetSerialInformation {
     my $data = $rq->fetchrow_hashref;
     # create item information if we have serialsadditems for this subscription
     if ( $data->{'serialsadditems'} ) {
-        if ( $data->{'itemnumber'} ) {
-            my @itemnumbers = split /,/, $data->{'itemnumber'};
-            foreach my $itemnum (@itemnumbers) {
-
+        my $queryitem=$dbh->prepare("SELECT itemnumber from serialitems where serialid=?");
+        $queryitem->execute($serialid);
+        my $itemnumbers=$queryitem->fetchall_arrayref([0]);
+        if (scalar(@$itemnumbers)>0){
+            foreach my $itemnum (@$itemnumbers) {
                 #It is ASSUMED that GetMarcItem ALWAYS WORK...
                 #Maybe GetMarcItem should return values on failure
-                $debug and warn "itemnumber :$itemnum, bibnum :".$data->{'biblionumber'};
+                $debug and warn "itemnumber :$itemnum->[0], bibnum :".$data->{'biblionumber'};
                 my $itemprocessed =
-                  PrepareItemrecordDisplay( $data->{'biblionumber'}, $itemnum );
-                $itemprocessed->{'itemnumber'}   = $itemnum;
-                $itemprocessed->{'itemid'}       = $itemnum;
+                  PrepareItemrecordDisplay( $data->{'biblionumber'}, $itemnum->[0] );
+                $itemprocessed->{'itemnumber'}   = $itemnum->[0];
+                $itemprocessed->{'itemid'}       = $itemnum->[0];
                 $itemprocessed->{'serialid'}     = $serialid;
                 $itemprocessed->{'biblionumber'} = $data->{'biblionumber'};
                 push @{ $data->{'items'} }, $itemprocessed;
