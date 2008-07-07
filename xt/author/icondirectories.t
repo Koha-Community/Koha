@@ -45,7 +45,7 @@ sub staff_wanted {
 }
 find( \&staff_wanted, $staff_icon_directory );
 
-is_deeply( $opac_icons, $staff_icons )
+is_deeply( $opac_icons, $staff_icons, "staff and OPAC icon directories have same contents" )
   or diag( Data::Dumper->Dump( [ $opac_icons ], [ 'opac_icons' ] ) );
 
 
