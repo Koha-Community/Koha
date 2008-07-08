@@ -120,6 +120,14 @@ sub create_input {
 
     $value =~ s/"/&quot;/g;
 
+    # determine maximum length; 9999 bytes per ISO 2709 except for leader and MARC21 008
+    my $max_length = 9999;
+    if ($tag eq '000') {
+        $max_length = 24;
+    } elsif ($tag eq '008' and C4::Context->preference('marcflavour') eq 'MARC21')  {
+        $max_length = 40;
+    }
+
     # if there is no value provided but a default value in parameters, get it
     unless ($value) {
         $value = $tagslib->{$tag}->{$subfield}->{defaultvalue};
@@ -203,7 +211,7 @@ sub create_input {
                     type=\"text\"
                     id=\"".$subfield_data{id}."\"
                     size=\"67\"
-                    maxlength=\"255\" 
+                    maxlength=\"$max_length\"
                     name=\"".$subfield_data{id}."\"
                     value=\"$value\"
                     class=\"input_marceditor\"
@@ -220,7 +228,7 @@ sub create_input {
                     id=\"".$subfield_data{id}."\"
                     name=\"".$subfield_data{id}."\"
                     size=\"67\"
-                    maxlength=\"255\" 
+                    maxlength=\"$max_length\"
                     value=\"$value\" \/>
             ";
     }
@@ -232,7 +240,7 @@ sub create_input {
                     class=\"input_marceditor\"
                     tabindex=\"1\"
                     size=\"67\"
-                    maxlength=\"255\" 
+                    maxlength=\"$max_length\"
                     value=\"$value\"
             \/>";
 
@@ -257,7 +265,7 @@ sub create_input {
                         class=\"input_marceditor\"
                         tabindex=\"1\"
                         size=\"67\"
-                        maxlength=\"255\" 
+                        maxlength=\"$max_length\"
                         >$value</textarea>
                 ";
         }
@@ -269,7 +277,7 @@ sub create_input {
                         value=\"$value\"
                         tabindex=\"1\"
                         size=\"67\"
-                        maxlength=\"255\" 
+                        maxlength=\"$max_length\"
                         class=\"input_marceditor\"
                 \/>
                 ";
