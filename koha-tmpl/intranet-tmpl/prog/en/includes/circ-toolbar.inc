@@ -12,12 +12,29 @@ function confirm_deletion() {
 	}
 }
 
+function confirm_updatechild() {
+    var is_confirmed = window.confirm('Are you sure you want to update this child to an Adult category?  This cannot be undone.');
+   
+    if (is_confirmed) {
+            window.location='/cgi-bin/koha/members/update-child.pl?op=update&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&catcode=<!-- TMPL_VAR NAME="catcode" -->&catcode_multi=<!-- TMPL_VAR NAME="CATCODE_MULTI" -->';
+    }
+}
+
 function confirm_reregistration() {
     var is_confirmed = window.confirm('Are you sure you want to renew this patron\'s registration?');
     var borrowernumbervalue1 = $("#borrowernumber").attr("value");
     if (is_confirmed) {
 	window.location = '/cgi-bin/koha/members/setstatus.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&amp;destination=circ&amp;reregistration=y';
     }
+}
+
+function update_child() {
+    var borrowernumbervalue= $("#borrowernumber").attr("value"); 
+<!-- TMPL_IF NAME="CATCODE_MULTI" -->
+ window.open('/cgi-bin/koha/members/update-child.pl?op=multi&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->','UpdateChild','width=400,height=300,toolbar=no,scrollbars=no,resizable=yes');
+<!-- TMPL_ELSE -->
+ confirm_updatechild();
+<!-- /TMPL_IF -->
 }
 
 	// prepare DOM for YUI Toolbar
@@ -50,7 +67,8 @@ function confirm_reregistration() {
                     <!-- TMPL_UNLESS NAME="CAN_user_staffaccess" -->, disabled: true<!-- /TMPL_UNLESS-->
                     <!-- TMPL_ELSE --><!-- /TMPL_IF -->
                 <!-- TMPL_ELSE -->, disabled: true<!-- /TMPL_IF-->},
-            { text: _("Delete"), <!-- TMPL_IF NAME="StaffMember" --><!-- TMPL_UNLESS NAME="CAN_user_staffaccess" -->disabled: true, <!-- /TMPL_UNLESS --><!-- /TMPL_IF --> onclick: { fn: confirm_deletion } }
+            { text: _("Delete"), <!-- TMPL_IF NAME="StaffMember" --><!-- TMPL_UNLESS NAME="CAN_user_staffaccess" -->disabled: true, <!-- /TMPL_UNLESS --><!-- /TMPL_IF --> onclick: { fn: confirm_deletion } },
+			{ text: _("Update Child to Adult Patron") , onclick: { fn: update_child }<!-- TMPL_UNLESS NAME="is_child" -->, disabled: true<!-- /TMPL_UNLESS -->}
 		];
 
 	    new YAHOO.widget.Button({

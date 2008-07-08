@@ -1,15 +1,25 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Choose Adult category</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
+<style type="text/css"> 
+	   #custom-doc { width:29em;*width:28.3em;min-width:377px; margin:auto; text-align:left; } 
+</style> 
 </head>
 <body>
 
-<div id="doc" class="yui-t7">
+<div id="custom-doc" class="yui-t7">
 <div id="bd">
 
 <!--TMPL_IF NAME="CONFIRM" -->
 <script language="javascript" type="text/javascript">
+function confirm_updatechild() {
+    var is_confirmed = window.confirm('Are you sure you want to update this child to an Adult category?  This cannot be undone.');
+   
+    if (is_confirmed) {
+            window.location='/cgi-bin/koha/members/update-child.pl?op=update&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&catcode=<!-- TMPL_VAR NAME="catcode" -->&catcode_multi=<!-- TMPL_VAR NAME="CATCODE_MULTI" -->';
+    }
+}
+
 confirm_updatechild(<!-- TMPL_VAR NAME="borrowernumber" -->);
 </script>
 <!-- /TMPL_IF  -->
@@ -25,22 +35,24 @@ window.close();
 
 <!--TMPL_IF NAME="MULTI" -->
 
-<h1> Choose Adult category </h1>
+<h3> Choose Adult category </h3>
 
 <!--TMPL_IF NAME="CAT_LOOP" -->
+
 <form method="post" action="update-child.pl">
+<fieldset>
 <table>
 <tr>
-<th> </th>
-<th>CODE</th>
-<th>DESC</th>
+<th>&nbsp;</th>
+<th>Code</th>
+<th>Description</th>
 </tr>
 <!-- TMPL_LOOP NAME="CAT_LOOP" -->
 <tr>
 <td>
-<input type="radio" id="catcode" name="catcode" value="<!-- TMPL_VAR NAME="catcode" -->" />
+<input type="radio" id="catcode<!-- TMPL_VAR NAME="catcode" -->" name="catcode" value="<!-- TMPL_VAR NAME="catcode" -->" />
 <td><!-- TMPL_VAR NAME="catcode" --></td>
-<td><b><!-- TMPL_VAR NAME="catdesc" --></b></td> 
+<td><label for="catcode<!-- TMPL_VAR NAME="catcode" -->"><strong><!-- TMPL_VAR NAME="catdesc" --></strong></label></td> 
 </tr>
 <!-- /TMPL_LOOP -->
 </table>
@@ -49,12 +61,12 @@ window.close();
 <input type="hidden" name="catcode" value="<!-- TMPL_VAR NAME="catcode" -->" />
 <input type="hidden" name="cattype" value="<!-- TMPL_VAR NAME="cattype" -->" />
 <input type="hidden" name="catcode_multi" value="<!-- TMPL_VAR NAME="CATCODE_MULTI" -->" />
-<input class="submit" type="submit" value="Submit"/>
-<script language="javascript" type="text/javascript">
-</script>
-
+<fieldset class="action"><input class="submit" type="submit" value="Submit" /> <a href="#" class="cancel close">Cancel</a></fieldset>
 <!--/TMPL_IF-->
+</fieldset>
 </form>
+<!-- /TMPL_IF -->
+
 
 
 

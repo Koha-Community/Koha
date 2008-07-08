@@ -124,6 +124,15 @@ PREF: foreach my $option ( @$messaging_options ) {
     $option->{'digest'} = 'CHECKED' if $pref->{'wants_digest'};
 }
 
+    if ( $borrower->{'category_type'} eq 'C') {
+        my  ( $catcodes, $labels ) =  GetborCatFromCatType( 'A', 'WHERE category_type = ?' );
+        my $cnt = scalar(@$catcodes);
+        $template->param( 'CATCODE_MULTI' => 1) if $cnt > 1;
+        $template->param( 'catcode' =>    $catcodes->[0])  if $cnt == 1;
+    }
+	
+my ($picture, $dberror) = GetPatronImage($borrower->{'cardnumber'});
+$template->param( picture => 1 ) if $picture;
 
 # get some recent messages sent to this borrower for display:
 my $message_queue = C4::Letters::GetQueuedMessages( { borrowernumber => $query->param('borrowernumber') } );

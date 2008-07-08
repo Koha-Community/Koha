@@ -77,6 +77,13 @@ for (my $i=0;$i<$count;$i++){
 	push(@loop_reading,\%line);
 }
 
+if ( $data->{'category_type'} eq 'C') {
+    my  ( $catcodes, $labels ) =  GetborCatFromCatType( 'A', 'WHERE category_type = ?' );
+    my $cnt = scalar(@$catcodes);
+    $template->param( 'CATCODE_MULTI' => 1) if $cnt > 1;
+    $template->param( 'catcode' =>    $catcodes->[0])  if $cnt == 1;
+}
+
 $template->param( adultborrower => 1 ) if ( $data->{'category_type'} eq 'A' );
 if (! $limit){ 
 	$limit = 'full'; 

@@ -634,6 +634,13 @@ foreach $flag ( sort keys %$flags ) {
 my $amountold = $borrower->{flags}->{'CHARGES'}->{'message'} || 0;
 my @temp = split( /\$/, $amountold );
 
+    if ( $borrower->{'category_type'} eq 'C') {
+        my  ( $catcodes, $labels ) =  GetborCatFromCatType( 'A', 'WHERE category_type = ?' );
+        my $cnt = scalar(@$catcodes);
+        $template->param( 'CATCODE_MULTI' => 1) if $cnt > 1;
+        $template->param( 'catcode' =>    $catcodes->[0])  if $cnt == 1;
+    }
+
 my $CGIorganisations;
 my $member_of_institution;
 if ( C4::Context->preference("memberofinstitution") ) {
