@@ -182,7 +182,7 @@
         </select>
         <input type="text" size="30" name="q" title="Enter search terms" value="" />
         <!-- TMPL_IF NAME="expanded_options" -->
-            <!-- TMPL_IF NAME="scan_index" --><input type="checkbox" name="scan" id="scan" value="1" /> Scan Indexes<!-- /TMPL_IF -->
+          <!--   <!-- TMPL_IF NAME="scan_index" --><input type="checkbox" name="scan" id="scan" value="1" /> Scan Indexes<!-- /TMPL_IF --> -->
             <!-- TMPL_IF NAME="add_field" --><a href="JavaScript:add_field();" id="ButtonPlus" title="Add another field">[+]</a><!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
         </p>
@@ -195,7 +195,7 @@
     <table>
         <tr>
       <!--TMPL_LOOP Name="itemtypeloop"-->
-        <td><input type="checkbox" id="<!-- TMPL_VAR NAME="ccl" -->-<!--TMPL_VAR Name="number" -->" name="limit" value="<!-- TMPL_VAR NAME="ccl" -->:<!--TMPL_VAR Name="code" -->"/><!-- TMPL_IF name="imageurl"--><img border="0" src="<!--TMPL_VAR Name="imageurl" -->" alt="<!--TMPL_VAR Name="description" -->" /><!-- /TMPL_IF -->&nbsp;
+        <td><input type="checkbox" id="<!-- TMPL_VAR NAME="ccl" -->-<!--TMPL_VAR Name="number" -->" name="limit" value="<!-- TMPL_VAR NAME="ccl" -->:<!--TMPL_VAR Name="code" -->"/><!-- TMPL_IF name="imageurl"--><!-- TMPL_IF NAME="imageurl" --><img border="0" src="<!--TMPL_VAR Name="imageurl" -->" alt="<!--TMPL_VAR Name="description" -->" /><!-- /TMPL_IF --><!-- /TMPL_IF -->&nbsp;
         <!--TMPL_VAR Name="description" --></td>
         <!-- TMPL_UNLESS name="count5" --></tr><tr><!-- /TMPL_UNLESS -->
       <!--/TMPL_LOOP-->
