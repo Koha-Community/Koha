@@ -252,8 +252,8 @@ sub create_input {
             or
             ( C4::Context->preference("marcflavour") eq "UNIMARC" && $tag >= 300
                 and $tag < 400 && $subfield eq 'a' )
-            or (    $tag >= 500
-                and $tag < 600
+            or (    $tag >= 600
+                and $tag < 700
                 && C4::Context->preference("marcflavour") eq "MARC21" )
         )
         {
