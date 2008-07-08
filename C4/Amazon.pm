@@ -86,7 +86,7 @@ sub get_amazon_details {
     my $response = $xmlsimple->XMLin(
         $content,
         forcearray => [ qw(SimilarProduct EditorialReview Review) ],
-    );
+    ) unless !$content;
     return $response;
 }
 
