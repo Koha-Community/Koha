@@ -6,8 +6,25 @@
 <script type="text/javascript">
 //<![CDATA[
 
+     var fields_in_use = {};
 	 $(document).ready(function() {
  		$('#authoritytabs > ul').tabs();
+        $('.tag').each(function() {
+            var field_id = this.getAttribute('id').substring(0, 7);
+            if (field_id in fields_in_use) {
+                fields_in_use[field_id]++;
+            } else {
+                fields_in_use[field_id] = 1;
+            }
+        });
+        $('.subfield_line').each(function() {
+            var field_id = this.getAttribute('id').substring(0, 12);
+            if (field_id in fields_in_use) {
+                fields_in_use[field_id]++;
+            } else {
+                fields_in_use[field_id] = 1;
+            }
+        });
 		$("#f").submit(function(){
 			return $(this).Check();
 		});
@@ -90,6 +107,7 @@ function ExpandField(index) {
  */ 
 function CloneField(index) {
     var original = document.getElementById(index); //original <div>
+    fields_in_use[index.substr(0, 7)]++;
     var clone = original.cloneNode(true);
     var new_key = CreateKey();
     var new_id  = original.getAttribute('id')+new_key;
@@ -149,14 +167,15 @@ function CloneField(index) {
                 imgs[0].setAttribute('onclick',"upSubfield(\'"+divs[i].getAttribute('id')+"\');");
             <!-- /TMPL_UNLESS -->
             
-            // setting its '+' button
-            var CloneButtonPlus=0;
+            // setting its '+' and '-' buttons
             try {
-                CloneButtonPlus = divs[i].getElementsByTagName('span')[0];
-                if(CloneButtonPlus.getAttribute('class') == 'buttonPlus'){
-                    CloneButtonPlus.setAttribute('onclick',"CloneSubfield('" + divs[i].getAttribute('id') + "')");
-                } else {
-                    CloneButtonPlus = 0;
+                var spans = divs[i].getElementsByTagName('span');
+                for (var j = 0; j < spans.length; j++) {
+                    if(spans[j].getAttribute('class') == 'buttonPlus'){
+                        spans[j].setAttribute('onclick',"CloneSubfield('" + divs[i].getAttribute('id') + "')");
+                    } else if (spans[j].getAttribute('class') == 'buttonMinus') {
+                        spans[j].setAttribute('onclick',"UnCloneField('" + divs[i].getAttribute('id') + "')");
+                    }
                 }
             }
             catch(e){
@@ -222,8 +241,14 @@ function CloneField(index) {
                 
                 var CloneButtonPlus;
                 try {
-                    CloneButtonPlus = divs[i].getElementsByTagName('span')[1]; // 0 is the title
-                    CloneButtonPlus.setAttribute('onclick',"CloneField('" + divs[i].parentNode.getAttribute('id') + "')");
+                    var anchors = divs[i].getElementsByTagName('span');
+                    for (var j = 0; j < anchors.length; j++) {
+                        if (anchors[j].getAttribute('class') == 'buttonPlus') {
+                            anchors[j].setAttribute('onclick',"CloneField('" + new_id + "')");
+                        } else if (anchors[j].getAttribute('class') == 'buttonMinus') {
+                            anchors[j].setAttribute('onclick',"UnCloneField('" + new_id + "')");
+                        }
+                    }
                 }
                 catch(e){
                     // do nothig CloneButtonPlus doesn't exist.
@@ -249,6 +274,7 @@ function CloneField(index) {
 
 function CloneSubfield(index){
     var original = document.getElementById(index); //original <div>
+    fields_in_use[index.substr(0, 12)]++;
     var clone = original.cloneNode(true);
     var new_key = CreateKey();
     var new_id  = original.getAttribute('id')+new_key;
@@ -289,16 +315,16 @@ function CloneSubfield(index){
     // setting a new if for the parent div
     clone.setAttribute('id',new_id);
     
-    var CloneButtonPlus;
     try {
+      var buttonUp = clone.getElementsByTagName('img')[0];
+      buttonUp.setAttribute('onclick',"upSubfield('" + new_id + "')");
       var spans = clone.getElementsByTagName('span');
       if(spans.length){
           for(var i = 0 ,lenspans = spans.length ; i < lenspans ; i++){
             if(spans[i].getAttribute('class') == 'buttonPlus'){
-                    CloneButtonPlus = spans[i];
-                    CloneButtonPlus.setAttribute('onclick',"CloneSubfield('" + new_id + "')");
-                    var buttonUp = clone.getElementsByTagName('img')[0];
-                    buttonUp.setAttribute('onclick',"upSubfield('" + new_id + "')");
+                    spans[i].setAttribute('onclick',"CloneSubfield('" + new_id + "')");
+                } else if (spans[i].getAttribute('class') == 'buttonMinus') {
+                    spans[i].setAttribute('onclick',"UnCloneField('" + new_id + "')");
                 }
             }
         }
@@ -309,6 +335,40 @@ function CloneSubfield(index){
     // insert this line on the page
     original.parentNode.insertBefore(clone,original.nextSibling);
 }
+
+ /**
+ * This function removes or clears unwanted subfields
+ */
+function UnCloneField(index) {
+    var original = document.getElementById(index);
+    var field_id;
+    if (index.match("tag")) {
+        field_id = index.substr(0, 7);
+    } else {
+        field_id = index.substr(0, 12);
+    }
+    if (1 == fields_in_use[field_id]) {
+        // clear inputs, but don't delete
+        $(":input.input_marceditor", original).each(function(){
+            // thanks to http://www.learningjquery.com/2007/08/clearing-form-data for
+            // hint about clearing selects correctly
+            var type = this.type;
+            var tag = this.tagName.toLowerCase();
+            if (type == 'text' || type == 'password' || tag == 'textarea') {
+                this.value = "";
+            } else if (type == 'checkbox' || type == 'radio') {
+                this.checked = false;
+            } else if (tag == 'select') {
+                this.selectedIndex = -1;
+            }
+        });
+        $(":input.indicator", original).val("");
+    } else {
+        original.parentNode.removeChild(original);
+        fields_in_use[field_id]--;
+    }
+}
+
 
 /**
  * This function create a random number
@@ -531,6 +591,9 @@ function searchauthority() {
                 <!-- TMPL_IF name="repeatable" -->
                     <span class="buttonPlus" onclick="CloneField('tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->')">+</span>
                 <!-- /TMPL_IF -->
+                <!-- TMPL_UNLESS NAME="mandatory" -->
+                    <span class="buttonMinus" onclick="UnCloneField('tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->')">&#8722;</span>
+                <!-- /TMPL_UNLESS -->
                 
             </div>
     
@@ -575,6 +638,9 @@ function searchauthority() {
                     <!-- TMPL_IF NAME="repeatable" -->
                         <span class="buttonPlus" onclick="CloneSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' -->')">+</span>
                     <!-- /TMPL_IF -->
+                    <!-- TMPL_UNLESS NAME="mandatory" -->
+                        <span class="buttonMinus" onclick="UnCloneField('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->')">&#8722;</span>
+                    <!-- /TMPL_UNLESS -->
                     
                 </div>
                 <!-- End of the line -->
