@@ -509,7 +509,7 @@ for (my $i=0;$i<@servers;$i++) {
     if ($server =~/biblioserver/) { # this is the local bibliographic server
         $hits = $results_hashref->{$server}->{"hits"};
         my $page = $cgi->param('page') || 0;
-        my @newresults = searchResults( $query_desc,$hits,$results_per_page,$offset,@{$results_hashref->{$server}->{"RECORDS"}});
+        my @newresults = searchResults( $query_desc,$hits,$results_per_page,$offset,$scan,@{$results_hashref->{$server}->{"RECORDS"}});
         $total = $total + $results_hashref->{$server}->{"hits"};
         ## If there's just one result, redirect to the detail page
         if ($total == 1) {         

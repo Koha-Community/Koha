@@ -1179,7 +1179,7 @@ Format results in a form suitable for passing to the template
 # IMO this subroutine is pretty messy still -- it's responsible for
 # building the HTML output for the template
 sub searchResults {
-    my ( $searchdesc, $hits, $results_per_page, $offset, @marcresults ) = @_;
+    my ( $searchdesc, $hits, $results_per_page, $offset, $scan, @marcresults ) = @_;
     my $dbh = C4::Context->dbh;
     my $even = 1;
     my @newresults;
@@ -1500,7 +1500,7 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
         }
 
         # XSLT processing of some stuff
-        if (C4::Context->preference("XSLTResultsDisplay") ) {
+        if (C4::Context->preference("XSLTResultsDisplay") && !$scan) {
             my $newxmlrecord = XSLTParse4Display($oldbiblio->{biblionumber},C4::Context->config('opachtdocs')."/prog/en/xslt/MARC21slim2OPACResults.xsl");
             $oldbiblio->{XSLTResultsRecord} = $newxmlrecord;
         }

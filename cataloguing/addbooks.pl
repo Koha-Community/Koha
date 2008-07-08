@@ -79,7 +79,7 @@ if ($query) {
     
     # format output
     my $total = scalar @$marcresults;
-    my @newresults = searchResults( $query, $total, $results_per_page, $page-1, @$marcresults );
+    my @newresults = searchResults( $query, $total, $results_per_page, $page-1, 0, @$marcresults );
     $template->param(
         total       => $total,
         query       => $query,
