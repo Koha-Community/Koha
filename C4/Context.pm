@@ -249,11 +249,11 @@ sub db_scheme2dbi {
 sub import {
     my $package = shift;
     my $conf_fname = shift;        # Config file name
-    my $context;
+    $context;
 
     # Create a new context from the given config file name, if
     # any, then set it as the current context.
-    $context = new C4::Context($conf_fname);
+    $context = new C4::Context($conf_fname) unless $context;
     return undef if !defined($context);
     $context->set_context;
 }
