@@ -690,6 +690,7 @@ $template->param(
     inprocess         => $inprocess,
     memberofinstution => $member_of_institution,
     CGIorganisations  => $CGIorganisations,
+	is_child        => ($borrower->{'category_type'} eq 'C'),
   circview => 1,
   
 );

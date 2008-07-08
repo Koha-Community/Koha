@@ -106,6 +106,7 @@ $template->param(
 						phone => $data->{'phone'},
 						email => $data->{'email'},
 			   			branchcode => $data->{'branchcode'},
+			   			is_child        => ($data->{'category_type'} eq 'C'),
 			   			branchname => GetBranchName($data->{'branchcode'}),
 						showfulllink => ($count > 50),					
 						loop_reading => \@loop_reading);

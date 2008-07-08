@@ -97,6 +97,7 @@ $template->param( picture => 1 ) if $picture;
 	    branchcode => $bor->{'branchcode'},
 	    userid      => $bor->{'userid'},
 	    destination => $destination,
+		is_child        => ($bor->{'category_type'} eq 'C'),
 	    defaultnewpassword => $defaultnewpassword 
 	);
 

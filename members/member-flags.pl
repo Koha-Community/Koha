@@ -173,6 +173,7 @@ $template->param(
 		email => $bor->{'email'},
 		branchcode => $bor->{'branchcode'},
 		loop => \@loop,
+		is_child        => ($bor->{'category_type'} eq 'C'),
 		);
 
     output_html_with_http_headers $input, $cookie, $template->output;

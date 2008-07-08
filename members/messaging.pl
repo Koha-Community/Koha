@@ -145,6 +145,7 @@ $messaging_preferences->{'SMSnumber'}{'value'} = defined $borrower->{'smsalertnu
 $template->param( BORROWER_INFO         => [ $borrower ],
                   messagingview         => 1,
                   messaging_preferences => $messaging_options,
+				  is_child        => ($borrower->{'category_type'} eq 'C'),
                   SMSnumber             => defined $borrower->{'smsalertnumber'} ? $borrower->{'smsalertnumber'} : $borrower->{'mobile'} );
 
 output_html_with_http_headers $query, $cookie, $template->output;

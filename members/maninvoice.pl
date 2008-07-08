@@ -90,6 +90,7 @@ if ($add){
 					zipcode => $data->{'zipcode'},
 					phone => $data->{'phone'},
 					email => $data->{'email'},
+					is_child        => ($data->{'category_type'} eq 'C'),
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 }

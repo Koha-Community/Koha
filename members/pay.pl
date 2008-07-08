@@ -151,6 +151,7 @@ $template->param( picture => 1 ) if $picture;
 		phone => $data->{'phone'},
 		email => $data->{'email'},
 	    branchcode => $data->{'branchcode'},
+		is_child        => ($data->{'category_type'} eq 'C'),
         total          => sprintf( "%.2f", $total )
     );
     output_html_with_http_headers $input, $cookie, $template->output;
