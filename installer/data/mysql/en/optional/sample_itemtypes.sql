@@ -1,8 +1,8 @@
-INSERT INTO `itemtypes` VALUES ('BKS', 'Books, Booklets, Workbooks',5,0,0,'Non-fiction.gif','');
-INSERT INTO `itemtypes` VALUES ('CF', 'CD-ROMs, DVD-ROMs, General Online Resources',5,0,0,'CDM.gif','');
-INSERT INTO `itemtypes` VALUES ('SR', 'Audio Cassettes, CDs',5,0,0,'AVNF.gif','');
-INSERT INTO `itemtypes` VALUES ('VR', 'DVDs, VHS',5,0,0,'Video-disc.gif','');
-INSERT INTO `itemtypes` VALUES ('AR', 'Models',5,0,1,'EASY.gif','');
-INSERT INTO `itemtypes` VALUES ('KT', 'Kits',5,0,0,'KIT.gif','');
-INSERT INTO `itemtypes` VALUES ('IR', 'Binders',5,0,0,'Faculty-Course-Materials.gif','');
-INSERT INTO `itemtypes` VALUES ('SER', 'Serials',5,0,0,'MZ.gif','');
+INSERT INTO `itemtypes` VALUES ('BK', 'Books',5,0,0,'bridge/book.gif','');
+INSERT INTO `itemtypes` VALUES ('MX', 'Mixed Materials',5,0,0,'bridge/kit.gif','');
+INSERT INTO `itemtypes` VALUES ('CF', 'Computer Files',5,0,0,'bridge/computer_file.gif','');
+INSERT INTO `itemtypes` VALUES ('MP', 'Maps',5,0,0,'bridge/map.gif','');
+INSERT INTO `itemtypes` VALUES ('VM', 'Visual Materials',5,0,1,'bridge/dvd.gif','');
+INSERT INTO `itemtypes` VALUES ('MU', 'Music',5,0,0,'bridge/sound.gif','');
+INSERT INTO `itemtypes` VALUES ('CR', 'Continuing Resources',5,0,0,'bridge/periodical.gif','');
+INSERT INTO `itemtypes` VALUES ('REF', 'Reference',0,0,1,'','');
