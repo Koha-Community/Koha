@@ -144,9 +144,9 @@ sub themelanguage {
     # Fall back to English
     my @languages;
     if ($interface eq 'intranet') {
-        @languages = split " ", C4::Context->preference("language");
+        @languages = split ",", C4::Context->preference("language");
     } else {
-        @languages = split " ", C4::Context->preference("opaclanguages");
+        @languages = split ",", C4::Context->preference("opaclanguages");
     }
     if ($lang){  
         @languages=($lang,@languages);
