@@ -31,7 +31,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
         type            => "opac",
         authnotrequired => 1,
     });
-
+$template->param(listsview => 1);
 # if $loggedinuser is not defined, set it to -1, which should
 # not correspond to any real borrowernumber.  
 # FIXME: this is a hack to temporarily avoid changing several

@@ -21,6 +21,10 @@
   <!-- TMPL_IF NAME="EnhancedMessagingPreferences" -->
     <!-- TMPL_IF NAME="messagingview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-messaging.pl">my messaging</a></li>
   <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME="virtualshelves" --> 
+  <!-- TMPL_IF NAME="listsview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">my lists</a></li>
+  <!-- /TMPL_IF -->
+
 </ul>
 </div>
 <!-- /TMPL_IF -->
