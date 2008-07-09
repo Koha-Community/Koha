@@ -328,11 +328,10 @@ sub plugin {
     elsif ( $op eq "do_search" ) {
         my $search         = $query->param('search');
         my $startfrom      = $query->param('startfrom');
-        my $resultsperpage = $query->param('resultsperpage');
+        my $resultsperpage = $query->param('resultsperpage') || 20;
         my $orderby;
-        my ( $errors, $results, $total_hits ) = SimpleSearch($search);
+        my ( $errors, $results, $total_hits ) = SimpleSearch($search, $startfrom, $resultsperpage );
         my $total = scalar(@$results);
-        $resultsperpage = 20 unless $resultsperpage;
 
         #        warn " biblio count : ".$total;
 

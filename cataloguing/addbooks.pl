@@ -68,7 +68,7 @@ foreach my $thisframeworkcode ( keys %$frameworks ) {
 if ($query) {
 
     # find results
-    my ( $error, $marcresults, $total_hits ) = SimpleSearch($query);
+    my ( $error, $marcresults, $total_hits ) = SimpleSearch($query, $results_per_page * ($page - 1), $results_per_page);
 
     if ( defined $error ) {
         $template->param( error => $error );
@@ -81,15 +81,11 @@ if ($query) {
     my $total = scalar @$marcresults;
     my @newresults = searchResults( $query, $total, $results_per_page, $page-1, 0, @$marcresults );
     $template->param(
-        total       => $total,
-        query       => $query,
-        resultsloop => \@newresults,
-        pagination_bar => pagination_bar(
-				"/cgi-bin/koha/cataloguing/addbooks.pl?q=$query&",
-				 getnbpages( $total, $results_per_page ),
-    	    	$page,
-        		'page'
-        	),
+        total          => $total_hits,
+        query          => $query,
+        resultsloop    => \@newresults,
+        # FIXME: pagination_bar doesn't work right with only one pair of CGI params, so I put two in.
+        pagination_bar => pagination_bar( "/cgi-bin/koha/cataloguing/addbooks.pl?bug=fix&q=$query&", getnbpages( $total_hits, $results_per_page ), $page, 'page' ),
     );
 }
 

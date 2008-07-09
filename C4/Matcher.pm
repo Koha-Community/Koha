@@ -661,7 +661,7 @@ sub get_matches {
         # build query
         my $query = join(" or ", map { "$matchpoint->{'index'}=$_" } @source_keys);
         # FIXME only searching biblio index at the moment
-        my ($error, $searchresults, $total_hits) = SimpleSearch($query);
+        my ($error, $searchresults, $total_hits) = SimpleSearch($query, 0, $max_matches);
 
         warn "search failed ($query) $error" if $error;
         foreach my $matched (@$searchresults) {

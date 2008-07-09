@@ -69,14 +69,13 @@ my $input = new CGI;
 #getting all CGI params into a hash.
 my $params = $input->Vars;
 
-my $offset = $params->{'offset'} || 0;
-my $query = $params->{'q'};
-my $num = $params->{'num'};
-$num = 20 unless $num;
+my $page             = $params->{'page'} || 1;
+my $query            = $params->{'q'};
+my $results_per_page = $params->{'num'} || 20;
 
 my $booksellerid = $params->{'booksellerid'};
-my $basketno = $params->{'basketno'};
-my $sub      = $params->{'sub'};
+my $basketno     = $params->{'basketno'};
+my $sub          = $params->{'sub'};
 
 # getting the template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -90,7 +89,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 # Searching the catalog.
-my ($error, $marcresults) = SimpleSearch($query);
+my ($error, $marcresults, $total_hits) = SimpleSearch($query, $results_per_page * ($page - 1), $results_per_page);
 
 if (defined $error) {
     $template->param(query_error => $error);
@@ -99,10 +98,9 @@ if (defined $error) {
     exit;
 }
 
-my $hits = scalar @$marcresults;
 my @results;
 
-for(my $i=0;$i<$hits;$i++) {
+foreach my $i ( 0 .. scalar @$marcresults ) {
     my %resultsloop;
     my $marcrecord = MARC::File::USMARC::decode($marcresults->[$i]);
     my $biblio = TransformMarcToKoha(C4::Context->dbh,$marcrecord,'');
@@ -115,20 +113,22 @@ for(my $i=0;$i<$hits;$i++) {
 }
 
 $template->param(
-            basketno => $basketno,
-            booksellerid => $booksellerid,
-            resultsloop => \@results,
-            total => $hits,
-            query => $query,
-            virtualshelves => C4::Context->preference("virtualshelves"),
-            LibraryName => C4::Context->preference("LibraryName"),
-            OpacNav => C4::Context->preference("OpacNav"),
-            opaccredits => C4::Context->preference("opaccredits"),
-            AmazonContent => C4::Context->preference("AmazonContent"),
-            opacsmallimage => C4::Context->preference("opacsmallimage"),
-            opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
-            opaccolorstylesheet => C4::Context->preference("opaccolorstylesheet"),
-            "BiblioDefaultView".C4::Context->preference("IntranetBiblioDefaultView") => 1,
+    basketno             => $basketno,
+    booksellerid         => $booksellerid,
+    resultsloop          => \@results,
+    total                => $total_hits,
+    query                => $query,
+    virtualshelves       => C4::Context->preference("virtualshelves"),
+    LibraryName          => C4::Context->preference("LibraryName"),
+    OpacNav              => C4::Context->preference("OpacNav"),
+    opaccredits          => C4::Context->preference("opaccredits"),
+    AmazonContent        => C4::Context->preference("AmazonContent"),
+    opacsmallimage       => C4::Context->preference("opacsmallimage"),
+    opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
+    opaccolorstylesheet  => C4::Context->preference("opaccolorstylesheet"),
+    "BiblioDefaultView".C4::Context->preference("IntranetBiblioDefaultView") => 1,
+    # FIXME: pagination_bar doesn't work right with only one pair of CGI params, so I put two in.
+    pagination_bar       => pagination_bar( "$ENV{'SCRIPT_NAME'}?bug=fix&q=$query&", getnbpages( $total_hits, $results_per_page ), $page, 'page' ),
 );
 
 # BUILD THE TEMPLATE

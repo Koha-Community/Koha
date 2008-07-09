@@ -78,7 +78,7 @@ if ($op eq "do_search" && $query) {
     $resultsperpage= $input->param('resultsperpage');
     $resultsperpage = 19 if(!defined $resultsperpage);
 
-    my ($error, $marcrecords, $total_hits) = SimpleSearch($query);
+    my ($error, $marcrecords, $total_hits) = SimpleSearch($query, $startfrom, $resultsperpage);
     my $total = scalar @$marcrecords;
 
     if (defined $error) {

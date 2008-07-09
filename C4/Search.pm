@@ -158,7 +158,7 @@ sub FindDuplicate {
 
 =head2 SimpleSearch
 
-($error,$results) = SimpleSearch( $query, $offset, $max_results, [ @servers ] );
+( $error, $results, $total_hits ) = SimpleSearch( $query, $offset, $max_results, [@servers] );
 
 This function provides a simple search API on the bibliographic catalog
 
@@ -172,15 +172,17 @@ This function provides a simple search API on the bibliographic catalog
     * $max_results - if present, determines the maximum number of records to fetch. undef is All. defaults to undef.
 
 
-=item C<Output arg:>
+=item C<Output:>
+
     * $error is a empty unless an error is detected
     * \@results is an array of records.
+    * $total_hits is the number of hits that would have been returned with no limit
 
 =item C<usage in the script:>
 
 =back
 
-my ($error, $marcresults) = SimpleSearch($query);
+my ( $error, $marcresults, $total_hits ) = SimpleSearch($query);
 
 if (defined $error) {
     $template->param(query_error => $error);
@@ -192,7 +194,7 @@ if (defined $error) {
 my $hits = scalar @$marcresults;
 my @results;
 
-for(my $i=0;$i<$hits;$i++) {
+for my $i (0..$hits) {
     my %resultsloop;
     my $marcrecord = MARC::File::USMARC::decode($marcresults->[$i]);
     my $biblio = TransformMarcToKoha(C4::Context->dbh,$marcrecord,'');
