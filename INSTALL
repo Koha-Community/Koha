@@ -16,7 +16,10 @@ how to customise CPAN-installed modules, the same things should work
 for you with Koha.  If not, don't worry.  If you want to customise the
 installation more than described below, run "man ExtUtils::MakeMaker"
 
-You need to have a server running MySQL 5 or PostgreSQL 8.2.5, Zebra
+You need to have a server running Perl 5.8 (a library Koha depends on,
+MARC::File::XML may not work with Perl 5.10, see:
+http://bugs.koha.org/cgi-bin/bugzilla/show_bug.cgi?id=2309),
+MySQL 5 or PostgreSQL 8.2.5, Zebra
 2.0.22 or greater and a webserver (preferably Apache2) before installing
 Koha.
  
