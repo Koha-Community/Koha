@@ -8,7 +8,7 @@ Feedback/bug reports: Koha Developer's List:
 
 http://lists.koha.org/mailman/listinfo/koha-devel
 
-This document last modified: 20 June 2008
+This document last modified: 07 July 2008
 
 
 ===== Installation Instructions =====
@@ -96,6 +96,7 @@ Click the "Next" button
 
 
 
+
 === "Clock and Time Zone" screen ===
 
 
@@ -105,7 +106,7 @@ Again, I live in Portugal, so I select the following options:
 
 "Time Zone" listbox: click on "Portugal"
 
-"Hardware Clock Set To" dropdown list: I leave "UTC" selected
+I leave the "Hardware Clock Set To UTC" checkbox checked.
 
 Click the "Next" button
 
@@ -189,10 +190,7 @@ I uncheck the "Automatic Login" checkbox.
 I click the "Next" button (you may be "nagged" with a dialog box by the YAST2 installer warning that you selected a password that it considers to be too simple. Click "Yes" to keep the password you chose, or "No" to change it).
 
 
-=== "Installation Settings" screen ===
 
-
-Scroll down to the "User Settings" section and click on the "Root Password" link to change the root password.
 
 
 === Password for the System Administrator "root" screen ===
@@ -282,6 +280,7 @@ You may now login with your "root" user.
 
 
 
+
 ==== Changing the Hostname and Domain Name ====
  
 
@@ -294,7 +293,7 @@ linux-3r10:~ # yast
 
 Yast should appear.
 
-On the listbox of the left hand side select "Network Devices" (press TAB to turn focus on that listbox, and press the down arrow key several times to reach it). Then, on the listbox of the righ hand side, select "Network Settings" (you'll have again to press TAB to turn focus on that listbox, and press the down arrow key several times to reach it).
+On the listbox of the left hand side select "Network Devices" (press TAB to turn focus on that listbox, and press the down arrow key several times to reach it). Then, on the listbox of the right hand side, select "Network Settings" (you'll have again to press TAB to turn focus on that listbox, and press the down arrow key several times to reach it).
 
 Press the ENTER key.
 
@@ -356,14 +355,12 @@ After a few seconds, you should be taken back to the "YaST2 Control Center" scre
 
 
 
+
 ==== Enabling access to SSH (Secure Shell) and Apache2 (Web Server) ====
 
 I want to administer remotely this server with a SSH (Secure Shell) client. So, while still in the "YaST2 Control Center, I will enable SSH in the Firewall (running by default). In the listbox of the left hand side, I select "Security and Users" and then, on the listbox of the right side, I select "Firewall" (first option) and press the ENTER key.
 
-----
-
-"yast2 - firewall" screen
-
+=== "yast2 - firewall" screen ===
 
 In the list box of the left side, I select "Allowed Services" and press ENTER.
 
@@ -371,9 +368,9 @@ Then, on the "Service to Allow" dropdown list (on the right side), I leave the "
 
 Then I click on ALT+N click on the "Next" button.
 
-----
 
-"Firewall Configuration: Summary" screen
+=== "Firewall Configuration: Summary" screen ===
+
 
 Click on the "Finish" button.
 
@@ -386,7 +383,10 @@ linux-3r10:~ # reboot
 |--------------------
 After rebooting the machine, if you wish, you may go to another machine and connect to your newly created server using a SSH (Secure Shell) client. In Windows, I like to use putty to do ssh sessions to my Linux servers.
 
+
 ==== Configure Software Repositories ===
+
+After the system has rebooted, log in as root.
 
 Later on, you will need to add some software packages from the openSUSE 11 Distribution. Some of those packages are NOT available in the openSUSE 11.0 DVD (libyaz-devel is one of those packages). So, we'll now set up openSUSE to add the "Official openSUSE 11.0 OSS (Open Source Software) Repository" using yast.
 
@@ -398,10 +398,16 @@ First, run the yast command in the Linux command line (shell):
 
 Inside yast, select Software -> Software Repositories
 
+
 === "Configured Software Repositories" screen ===
 
-Click on the "Add" button.
+If on this screen, you already see a table that has: 
 
+  * as configured repositories (in the "Name" column) - "openSUSE-DVD 11.0", "openSUSE-11.0-Non.Oss", "openSUSE-11.0-Debug" and "openSUSE-11.0-Oss" ... 
+  * ... and, at least "openSUSE-DVD 11.0" and "openSUSE-11.0-Oss" have an "x" in the "Enabled" column ... 
+  * ... then you may leave yast, as the required repositories have already been configured.
+
+If not, you'll have to add the "openSUSE-11.0-Oss" repository. Click on the "Add" button.
 
 === "Media type" screen ===
 
@@ -484,6 +490,7 @@ Install some packages that are needed to install Koha:
 # wget http://download.koha.org/koha-3.00.00-stableRC1.tar.gz
 |--------------------
 
+[FIXME: Check what will be the exact URL of the .tar.gz file for Koha 3.0 Final] 
 
 
 ==== Extract Koha ====
@@ -819,13 +826,22 @@ XML::LibXML::SAX::Parser=HASH(0x8356e0c)
 |--------------------
 
 
+
+
+
 ==== Run Koha's perl installer ====
 |--------------------
 myhost:/usr/lib/perl5/vendor_perl/5.10.0/XML/SAX # cd /root/koha-3.00.00
 |--------------------
 We will now run perl Makefile.PL to run the installer. 
 
-My installation is a UNIMARC installation, so I'm answering unimarc to the "MARC format for Zebra indexing (marc21, unimarc) [marc21]" question below. If your Library uses the MARC21 format instead of UNIMARC, you should press ENTER to accept the default (which is marc21).
+My installation is a UNIMARC installation, so I'm answering unimarc to the "MARC format for Zebra indexing (marc21, unimarc) [marc21]" question below. If your Library uses the MARC21 format instead of UNIMARC, you should press ENTER to accept the default (which is marc21). 
+
+Because my bibliographic catalog will have mainly records in Portuguese, and Portuguese is more similar to French than to English, I'm answering "fr" (French) to the "Primary language for Zebra indexing (en, fr) [en]" question below.
+
+Although I'm NOT using Zebra, I'm answering "yes" (the default choice) to the "Install the Zebra configuration files? (no, yes) [yes]" so I can set up Zebra later, if I decide to.
+
+OK. So here's the result of running the  perl Makefile.PL  command (including my answers to the several questions):
 
 |--------------------
 myhost:~/koha-3.00.00 # perl Makefile.PL
@@ -851,7 +867,6 @@ dev:      Create a set of symbolic links and configuration files to
 
 Installation mode (dev, single, standard) [standard]
 
-
 Please specify the directory under which most Koha files
 will be installed.
 
@@ -861,7 +876,6 @@ component of the directory path, which will be used
 as the package name in the FHS layout.
 
 Base installation directory [/usr/share/koha]
-
 
 Since you are using the 'standard' install
 mode, you should run 'make install' as root.
@@ -894,7 +908,6 @@ PostgreSQL support is highly experimental.
 
 DBMS to use (Pg, mysql) [mysql]
 
-
 Please specify the name or address of your
 database server.  Note that the database
 does not have to exist at this point, it
@@ -925,7 +938,11 @@ Please note that if you choose *NOT* to install Zebra,
 koha-conf.xml will still contain some references to Zebra
 settings.  Those references will be ignored by Koha.
 
-Install the Zebra configuration files? (no, yes) [yes] yes
+Install the Zebra configuration files? (no, yes) [yes]
+
+Unable to find the Zebra programs 'zebrasrv' and 'zebraidx'
+in your PATH or in some of the usual places.  If you haven't
+installed Zebra yet, please do so and run Makefile.PL again.
 
 
 Since you've chosen to use Zebra with Koha,
@@ -936,7 +953,6 @@ Koha provides Zebra configuration files for MARC 21
 and UNIMARC.
 
 MARC format for Zebra indexing (marc21, unimarc) [marc21] unimarc
-
 
 Koha supplies Zebra configuration files tuned for
 searching either English (en) or French (fr) MARC
@@ -954,12 +970,9 @@ dom  - uses the DOM XML filter; offers improved
 
 Authorities indexing mode (dom, grs1) [grs1] dom
 
-
 Please specify Zebra database user [kohauser]
 
-
 Please specify the Zebra database password [zebrastripes] zebrapassword
-
 
 Since you've chosen to use Zebra, you can enable the SRU/
 Z39.50 Server if you so choose, but you must specify a
@@ -971,16 +984,16 @@ settings.  Those references will be ignored by Koha.
 
 Install the SRU configuration files? (no, yes) [yes] no
 
-
 Since you've chosen to use Zebra, you can also choose to
 install PazPar2, which is a metasearch tool.  With PazPar2,
 Koha can perform on-the-fly merging of bibliographic
 records during searching, allowing for FRBRization of
 the results list.
 
-Install the PazPar2 configuration files? [no]
+Install the PazPar2 configuration files? [no] no
 
 Would you like to run the database-dependent test suite? (no, yes) [no]
+
 
 
 
@@ -999,7 +1012,7 @@ INSTALL_PAZPAR2          no
 INSTALL_SRU              no
 INSTALL_ZEBRA            yes
 KOHA_GROUP               koha
-KOHA_INSTALLED_VERSION   3.00.00.087
+KOHA_INSTALLED_VERSION   3.00.00.096
 KOHA_USER                koha
 RUN_DATABASE_TESTS       no
 ZEBRA_LANGUAGE           fr
@@ -1051,44 +1064,47 @@ DB_USER=my_koha DOC_DIR=/usr/local/info perl Makefile.PL
 If installing on a Win32 platform, be sure to use:
 'dmake -x MAXLINELENGTH=300000'
 
+Warning: prerequisite Algorithm::CheckDigits 0.5 not found.
 Warning: prerequisite Biblio::EndnoteStyle 0.05 not found.
-[Sun Jun  1 18:45:44 2008] Makefile.PL: Warning: prerequisite CGI::Session 4.10 not found.
-[Sun Jun  1 18:45:44 2008] Makefile.PL: Warning: prerequisite Class::Accessor 0.3 not found.
-[Sun Jun  1 18:45:44 2008] Makefile.PL: Warning: prerequisite Class::Factory::Util 1.6 not found.
-[Sun Jun  1 18:45:44 2008] Makefile.PL: Warning: prerequisite DBD::mysql 4.004 not found.
-[Sun Jun  1 18:45:44 2008] Makefile.PL: Warning: prerequisite Data::ICal 0.13 not found.
-[Sun Jun  1 18:45:44 2008] Makefile.PL: Warning: prerequisite Date::Calc 5.4 not found.
-[Sun Jun  1 18:45:44 2008] Makefile.PL: Warning: prerequisite Date::ICal 1.72 not found.
-[Sun Jun  1 18:45:44 2008] Makefile.PL: Warning: prerequisite Date::Manip 5.44 not found.
-[Sun Jun  1 18:45:44 2008] Makefile.PL: Warning: prerequisite GD::Barcode::UPCE 1.1 not found.
-[Sun Jun  1 18:45:44 2008] Makefile.PL: Warning: prerequisite HTML::Scrubber 0.08 not found.
-[Sun Jun  1 18:45:44 2008] Makefile.PL: Warning: prerequisite HTML::Template::Pro 0.69 not found.
-[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite Image::Magick 6.2 not found.
-[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite Lingua::Stem 0.82 not found.
-[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite List::MoreUtils 0.21 not found.
-[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite MARC::Charset 0.98 not found.
-[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite MARC::Crosswalk::DublinCore 0.02 not found.
-[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite MARC::File::XML 0.88 not found.
-[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite MARC::Record 2 not found.
-[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite Mail::Sendmail 0.79 not found.
-[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite Net::LDAP 0.33 not found.
-[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite Net::LDAP::Filter 0.14 not found.
-[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite Net::Z3950::ZOOM 1.16 not found.
-[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite PDF::API2 2 not found.
-[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite PDF::API2::Page 2 not found.
-[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite PDF::API2::Util 2 not found.
-[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite PDF::Reuse 0.33 not found.
-[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite PDF::Reuse::Barcode 0.05 not found.
-[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite POE 0.9999 not found.
-[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite Schedule::At 1.06 not found.
-[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite Text::CSV 0.01 not found.
-[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite Text::CSV_XS 0.32 not found.
-[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite Text::Iconv 1.7 not found.
-[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite XML::Dumper 0.81 not found.
-[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite XML::LibXSLT 1.59 not found.
-[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite XML::RSS 1.31 not found.
-[Sun Jun  1 18:45:45 2008] Makefile.PL: Warning: prerequisite YAML::Syck 0.71 not found.
+[Tue Jul  8 00:41:15 2008] Makefile.PL: Warning: prerequisite CGI::Session 4.10 not found.
+[Tue Jul  8 00:41:15 2008] Makefile.PL: Warning: prerequisite Class::Accessor 0.3 not found.
+[Tue Jul  8 00:41:15 2008] Makefile.PL: Warning: prerequisite Class::Factory::Util 1.6 not found.
+[Tue Jul  8 00:41:15 2008] Makefile.PL: Warning: prerequisite DBD::mysql 4.004 not found.
+[Tue Jul  8 00:41:15 2008] Makefile.PL: Warning: prerequisite Data::ICal 0.13 not found.
+[Tue Jul  8 00:41:15 2008] Makefile.PL: Warning: prerequisite Date::Calc 5.4 not found.
+[Tue Jul  8 00:41:15 2008] Makefile.PL: Warning: prerequisite Date::ICal 1.72 not found.
+[Tue Jul  8 00:41:15 2008] Makefile.PL: Warning: prerequisite Date::Manip 5.44 not found.
+[Tue Jul  8 00:41:15 2008] Makefile.PL: Warning: prerequisite GD::Barcode::UPCE 1.1 not found.
+[Tue Jul  8 00:41:15 2008] Makefile.PL: Warning: prerequisite HTML::Scrubber 0.08 not found.
+[Tue Jul  8 00:41:15 2008] Makefile.PL: Warning: prerequisite HTML::Template::Pro 0.69 not found.
+[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite Image::Magick 6.2 not found.
+[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite Lingua::Stem 0.82 not found.
+[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite List::MoreUtils 0.21 not found.
+[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite MARC::Charset 0.98 not found.
+[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite MARC::Crosswalk::DublinCore 0.02 not found.
+[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite MARC::File::XML 0.88 not found.
+[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite MARC::Record 2 not found.
+[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite Mail::Sendmail 0.79 not found.
+[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite Net::LDAP 0.33 not found.
+[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite Net::LDAP::Filter 0.14 not found.
+[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite Net::Z3950::ZOOM 1.16 not found.
+[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite PDF::API2 2 not found.
+[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite PDF::API2::Page 2 not found.
+[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite PDF::API2::Util 2 not found.
+[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite PDF::Reuse 0.33 not found.
+[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite PDF::Reuse::Barcode 0.05 not found.
+[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite POE 0.9999 not found.
+[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite SMS::Send 0.05 not found.
+[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite Schedule::At 1.06 not found.
+[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite Text::CSV 0.01 not found.
+[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite Text::CSV_XS 0.32 not found.
+[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite Text::Iconv 1.7 not found.
+[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite XML::Dumper 0.81 not found.
+[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite XML::LibXSLT 1.59 not found.
+[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite XML::RSS 1.31 not found.
+[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite YAML::Syck 0.71 not found.
 Writing Makefile for koha
+
 
 myhost:~/koha-3.00.00 #
 |--------------------
@@ -1243,10 +1259,11 @@ CPAN: File::HomeDir loaded ok (v0.69)
 cpan shell -- CPAN exploration and modules installation (v1.9205)
 ReadLine support enabled
 |--------------------
-=== Install Biblio::EndnoteStyle ===
-[Let's install the first package called "Biblio::EndnoteStyle". Here I will leave the complete output. For the next installations, I will only show the prompts for dependencies and snip out the remaining output]:
+
+=== Install Algorithm::CheckDigits ===
+[Let's install the first package called "Algorithm::CheckDigits". Here I will leave the complete output. For the next installations, I will only show the prompts for dependencies and snip out the remaining output]:
 |--------------------
-cpan[1]> install Biblio::EndnoteStyle
+cpan[1]> install Algorithm::CheckDigits
 CPAN: Storable loaded ok (v2.18)
 CPAN: LWP::UserAgent loaded ok (v5.810)
 CPAN: Time::HiRes loaded ok (v1.9711)
@@ -1258,87 +1275,322 @@ CPAN: Compress::Zlib loaded ok (v2.008)
 Fetching with LWP:
   ftp://ftp.isr.ist.utl.pt/pub/CPAN/modules/02packages.details.txt.gz
 Going to read /root/.cpan/sources/modules/02packages.details.txt.gz
-  Database was generated on Sun, 01 Jun 2008 02:07:07 GMT
+  Database was generated on Mon, 07 Jul 2008 04:02:45 GMT
 ............................................................................DONE
 Fetching with LWP:
   ftp://ftp.isr.ist.utl.pt/pub/CPAN/modules/03modlist.data.gz
 Going to read /root/.cpan/sources/modules/03modlist.data.gz
 ............................................................................DONE
 Going to write /root/.cpan/Metadata
-Running install for module 'Biblio::EndnoteStyle'
+Running install for module 'Algorithm::CheckDigits'
 CPAN: Data::Dumper loaded ok (v2.121_14)
 'YAML' not installed, falling back to Data::Dumper and Storable to read prefs '/root/.cpan/prefs'
-Running make for M/MI/MIRK/Biblio-EndnoteStyle-0.05.tar.gz
+Running make for M/MA/MAMAWE/Algorithm-CheckDigits-0.50.tar.gz
 Fetching with LWP:
-  ftp://ftp.isr.ist.utl.pt/pub/CPAN/authors/id/M/MI/MIRK/Biblio-EndnoteStyle-0.05.tar.gz
+  ftp://ftp.isr.ist.utl.pt/pub/CPAN/authors/id/M/MA/MAMAWE/Algorithm-CheckDigits-0.50.tar.gz
 CPAN: Digest::SHA loaded ok (v5.45)
 Fetching with LWP:
-  ftp://ftp.isr.ist.utl.pt/pub/CPAN/authors/id/M/MI/MIRK/CHECKSUMS
-Checksum for /root/.cpan/sources/authors/id/M/MI/MIRK/Biblio-EndnoteStyle-0.05.tar.gz ok
+  ftp://ftp.isr.ist.utl.pt/pub/CPAN/authors/id/M/MA/MAMAWE/CHECKSUMS
+Checksum for /root/.cpan/sources/authors/id/M/MA/MAMAWE/Algorithm-CheckDigits-0.50.tar.gz ok
 Scanning cache /root/.cpan/build for sizes
 DONE
-Biblio-EndnoteStyle-0.05/
-Biblio-EndnoteStyle-0.05/README
-Biblio-EndnoteStyle-0.05/Changes
-Biblio-EndnoteStyle-0.05/META.yml
-Biblio-EndnoteStyle-0.05/MANIFEST
-Biblio-EndnoteStyle-0.05/MANIFEST.SKIP
-Biblio-EndnoteStyle-0.05/Makefile.PL
-Biblio-EndnoteStyle-0.05/t/
-Biblio-EndnoteStyle-0.05/t/Biblio-EndnoteStyle.t
-Biblio-EndnoteStyle-0.05/bin/
-Biblio-EndnoteStyle-0.05/bin/endnote-format
-Biblio-EndnoteStyle-0.05/lib/
-Biblio-EndnoteStyle-0.05/lib/Biblio/
-Biblio-EndnoteStyle-0.05/lib/Biblio/EndnoteStyle.pm
+Algorithm-CheckDigits-0.50/
+Algorithm-CheckDigits-0.50/t/
+Algorithm-CheckDigits-0.50/t/valid.data
+Algorithm-CheckDigits-0.50/t/valid.t
+Algorithm-CheckDigits-0.50/t/iban.t
+Algorithm-CheckDigits-0.50/t/isbn13.t
+Algorithm-CheckDigits-0.50/t/ecno.t
+Algorithm-CheckDigits-0.50/t/upc.t
+Algorithm-CheckDigits-0.50/t/imei.t
+Algorithm-CheckDigits-0.50/t/pod-coverage.t
+Algorithm-CheckDigits-0.50/t/pod.t
+Algorithm-CheckDigits-0.50/t/checkdigits.t
+Algorithm-CheckDigits-0.50/CheckDigits.pm
+Algorithm-CheckDigits-0.50/Changes
+Algorithm-CheckDigits-0.50/CheckDigits/
+Algorithm-CheckDigits-0.50/CheckDigits/MXX_005.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M10_005.pm
+Algorithm-CheckDigits-0.50/CheckDigits/MBase_002.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M97_001.pm
+Algorithm-CheckDigits-0.50/CheckDigits/MBase_003.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M10_006.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M11_012.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M10_010.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M11_015.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M07_001.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M10_002.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M11_008.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M23_001.pm
+Algorithm-CheckDigits-0.50/CheckDigits/MXX_004.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M11_001.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M11_003.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M11_013.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M11_009.pm
+Algorithm-CheckDigits-0.50/CheckDigits/MXX_002.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M10_001.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M09_001.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M11_006.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M16_001.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M10_003.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M10_008.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M11_002.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M11_016.pm
+Algorithm-CheckDigits-0.50/CheckDigits/MXX_003.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M11_011.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M23_002.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M43_001.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M11_017.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M11_007.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M10_011.pm
+Algorithm-CheckDigits-0.50/CheckDigits/MXX_006.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M89_001.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M10_004.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M97_002.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M11_004.pm
+Algorithm-CheckDigits-0.50/CheckDigits/MBase_001.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M11_010.pm
+Algorithm-CheckDigits-0.50/CheckDigits/M10_009.pm
+Algorithm-CheckDigits-0.50/CheckDigits/MXX_001.pm
+Algorithm-CheckDigits-0.50/META.yml
+Algorithm-CheckDigits-0.50/.perltidyrc
+Algorithm-CheckDigits-0.50/README
+Algorithm-CheckDigits-0.50/MANIFEST
+Algorithm-CheckDigits-0.50/Makefile.PL
 CPAN: File::Temp loaded ok (v0.18)
 Warning (usually harmless): 'YAML' not installed, will not store persistent state
 
-  CPAN.pm: Going to build M/MI/MIRK/Biblio-EndnoteStyle-0.05.tar.gz
+  CPAN.pm: Going to build M/MA/MAMAWE/Algorithm-CheckDigits-0.50.tar.gz
 
 Checking if your kit is complete...
 Looks good
-Writing Makefile for Biblio::EndnoteStyle
-Could not read '/root/.cpan/build/Biblio-EndnoteStyle-0.05-vQLGoS/META.yml'. Falling back to other methods to determine prerequisites
-cp lib/Biblio/EndnoteStyle.pm blib/lib/Biblio/EndnoteStyle.pm
-cp bin/endnote-format blib/script/endnote-format
-/usr/bin/perl "-MExtUtils::MY" -e "MY->fixin(shift)" blib/script/endnote-format
-Manifying blib/man3/Biblio::EndnoteStyle.3pm
-  MIRK/Biblio-EndnoteStyle-0.05.tar.gz
+Writing Makefile for Algorithm::CheckDigits
+Could not read '/root/.cpan/build/Algorithm-CheckDigits-0.50-mL1o1L/META.yml'. Falling back to other methods to determine prerequisites
+cp CheckDigits/M11_001.pm blib/lib/Algorithm/CheckDigits/M11_001.pm
+cp CheckDigits/M11_010.pm blib/lib/Algorithm/CheckDigits/M11_010.pm
+cp CheckDigits/M97_002.pm blib/lib/Algorithm/CheckDigits/M97_002.pm
+cp CheckDigits/M23_001.pm blib/lib/Algorithm/CheckDigits/M23_001.pm
+cp CheckDigits/M97_001.pm blib/lib/Algorithm/CheckDigits/M97_001.pm
+cp CheckDigits/M16_001.pm blib/lib/Algorithm/CheckDigits/M16_001.pm
+cp CheckDigits/M10_006.pm blib/lib/Algorithm/CheckDigits/M10_006.pm
+cp CheckDigits/M11_013.pm blib/lib/Algorithm/CheckDigits/M11_013.pm
+cp CheckDigits/M07_001.pm blib/lib/Algorithm/CheckDigits/M07_001.pm
+cp CheckDigits/MXX_006.pm blib/lib/Algorithm/CheckDigits/MXX_006.pm
+cp CheckDigits/M10_008.pm blib/lib/Algorithm/CheckDigits/M10_008.pm
+cp CheckDigits/M11_017.pm blib/lib/Algorithm/CheckDigits/M11_017.pm
+cp CheckDigits/M10_003.pm blib/lib/Algorithm/CheckDigits/M10_003.pm
+cp CheckDigits/M11_016.pm blib/lib/Algorithm/CheckDigits/M11_016.pm
+cp CheckDigits/M11_003.pm blib/lib/Algorithm/CheckDigits/M11_003.pm
+cp CheckDigits/MXX_002.pm blib/lib/Algorithm/CheckDigits/MXX_002.pm
+cp CheckDigits/M10_001.pm blib/lib/Algorithm/CheckDigits/M10_001.pm
+cp CheckDigits/M10_004.pm blib/lib/Algorithm/CheckDigits/M10_004.pm
+cp CheckDigits/MXX_004.pm blib/lib/Algorithm/CheckDigits/MXX_004.pm
+cp CheckDigits/MBase_003.pm blib/lib/Algorithm/CheckDigits/MBase_003.pm
+cp CheckDigits/M43_001.pm blib/lib/Algorithm/CheckDigits/M43_001.pm
+cp CheckDigits/M10_005.pm blib/lib/Algorithm/CheckDigits/M10_005.pm
+cp CheckDigits/MXX_005.pm blib/lib/Algorithm/CheckDigits/MXX_005.pm
+cp CheckDigits/M11_006.pm blib/lib/Algorithm/CheckDigits/M11_006.pm
+cp CheckDigits/M11_004.pm blib/lib/Algorithm/CheckDigits/M11_004.pm
+cp CheckDigits/M11_012.pm blib/lib/Algorithm/CheckDigits/M11_012.pm
+cp CheckDigits/M09_001.pm blib/lib/Algorithm/CheckDigits/M09_001.pm
+cp CheckDigits/MXX_003.pm blib/lib/Algorithm/CheckDigits/MXX_003.pm
+cp CheckDigits/M11_008.pm blib/lib/Algorithm/CheckDigits/M11_008.pm
+cp CheckDigits/M89_001.pm blib/lib/Algorithm/CheckDigits/M89_001.pm
+cp CheckDigits/MBase_002.pm blib/lib/Algorithm/CheckDigits/MBase_002.pm
+cp CheckDigits/M11_011.pm blib/lib/Algorithm/CheckDigits/M11_011.pm
+cp CheckDigits/MBase_001.pm blib/lib/Algorithm/CheckDigits/MBase_001.pm
+cp CheckDigits/M10_009.pm blib/lib/Algorithm/CheckDigits/M10_009.pm
+cp CheckDigits/M11_002.pm blib/lib/Algorithm/CheckDigits/M11_002.pm
+cp CheckDigits.pm blib/lib/Algorithm/CheckDigits.pm
+cp CheckDigits/MXX_001.pm blib/lib/Algorithm/CheckDigits/MXX_001.pm
+cp CheckDigits/M10_011.pm blib/lib/Algorithm/CheckDigits/M10_011.pm
+cp CheckDigits/M11_007.pm blib/lib/Algorithm/CheckDigits/M11_007.pm
+cp CheckDigits/M11_015.pm blib/lib/Algorithm/CheckDigits/M11_015.pm
+cp CheckDigits/M23_002.pm blib/lib/Algorithm/CheckDigits/M23_002.pm
+cp CheckDigits/M10_002.pm blib/lib/Algorithm/CheckDigits/M10_002.pm
+cp CheckDigits/M11_009.pm blib/lib/Algorithm/CheckDigits/M11_009.pm
+cp CheckDigits/M10_010.pm blib/lib/Algorithm/CheckDigits/M10_010.pm
+Manifying blib/man3/Algorithm::CheckDigits::M11_001.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M11_010.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M97_002.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M23_001.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M97_001.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M16_001.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M10_006.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M11_013.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M07_001.3pm
+Manifying blib/man3/Algorithm::CheckDigits::MXX_006.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M10_008.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M11_017.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M10_003.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M11_016.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M11_003.3pm
+Manifying blib/man3/Algorithm::CheckDigits::MXX_002.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M10_001.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M10_004.3pm
+Manifying blib/man3/Algorithm::CheckDigits::MXX_004.3pm
+Manifying blib/man3/Algorithm::CheckDigits::MBase_003.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M43_001.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M10_005.3pm
+Manifying blib/man3/Algorithm::CheckDigits::MXX_005.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M11_006.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M11_004.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M11_012.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M09_001.3pm
+Manifying blib/man3/Algorithm::CheckDigits::MXX_003.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M11_008.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M89_001.3pm
+Manifying blib/man3/Algorithm::CheckDigits::MBase_002.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M11_011.3pm
+Manifying blib/man3/Algorithm::CheckDigits::MBase_001.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M10_009.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M10_011.3pm
+Manifying blib/man3/Algorithm::CheckDigits::MXX_001.3pm
+Manifying blib/man3/Algorithm::CheckDigits.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M11_002.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M11_007.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M11_015.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M11_009.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M10_002.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M23_002.3pm
+Manifying blib/man3/Algorithm::CheckDigits::M10_010.3pm
+  MAMAWE/Algorithm-CheckDigits-0.50.tar.gz
   /usr/bin/make -- OK
 Warning (usually harmless): 'YAML' not installed, will not store persistent state
 Running make test
 PERL_DL_NONLAZY=1 /usr/bin/perl "-MExtUtils::Command::MM" "-e" "test_harness(0, 'blib/lib', 'blib/arch')" t/*.t
-t/Biblio-EndnoteStyle....ok
-All tests successful.
-Files=1, Tests=11,  0 wallclock secs ( 0.09 cusr +  0.12 csys =  0.21 CPU)
-  MIRK/Biblio-EndnoteStyle-0.05.tar.gz
+t/checkdigits.....ok
+t/ecno............ok
+t/iban............ok
+t/imei............ok
+t/isbn13..........ok
+t/pod-coverage....skipped
+        all skipped: Test::Pod::Coverage 1.00 required for testing POD coverage
+t/pod.............skipped
+        all skipped: Test::Pod 1.00 required for testing POD
+t/upc.............ok
+t/valid...........ok
+All tests successful, 2 tests skipped.
+Files=9, Tests=448,  2 wallclock secs ( 0.35 cusr +  0.80 csys =  1.15 CPU)
+  MAMAWE/Algorithm-CheckDigits-0.50.tar.gz
   /usr/bin/make test -- OK
 Warning (usually harmless): 'YAML' not installed, will not store persistent state
 Running make install
-Prepending /root/.cpan/build/Biblio-EndnoteStyle-0.05-vQLGoS/blib/arch 
-
-/root/.cpan/build/Biblio-EndnoteStyle-0.05-vQLGoS/blib/lib to PERL5LIB for 'install'
-Installing /usr/lib/perl5/site_perl/5.10.0/Biblio/EndnoteStyle.pm
-Installing /usr/share/man/man3/Biblio::EndnoteStyle.3pm
-Installing /usr/bin/endnote-format
-Writing /usr/lib/perl5/site_perl/5.10.0/i586-linux-thread-multi/auto/Biblio/EndnoteStyle/.packlist
+Prepending /root/.cpan/build/Algorithm-CheckDigits-0.50-mL1o1L/blib/arch /root/.cpan/build/Algorithm-CheckDigits-0.50-mL1o1L/blib/lib to PERL5LIB for 'install'
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M11_011.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/MBase_002.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/MXX_005.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M11_009.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M10_002.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/MXX_001.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/MXX_004.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M43_001.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M10_010.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M10_004.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M11_003.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/MBase_003.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/MXX_002.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M11_004.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M11_010.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M11_006.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M23_002.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M09_001.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M11_013.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M11_008.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M11_002.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M07_001.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M10_003.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M23_001.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/MBase_001.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M11_016.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M11_017.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M11_001.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M97_001.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M11_007.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M10_006.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M10_008.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M10_001.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M11_015.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M16_001.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/MXX_003.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M10_011.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M10_005.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M89_001.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M10_009.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/MXX_006.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M97_002.pm
+Installing /usr/lib/perl5/site_perl/5.10.0/Algorithm/CheckDigits/M11_012.pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M11_016.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::MXX_002.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M10_003.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::MBase_002.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::MXX_001.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M11_006.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::MBase_001.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M11_009.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M11_004.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M11_015.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M10_001.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M10_011.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M09_001.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M11_002.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M11_013.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M10_006.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M10_010.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::MBase_003.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M11_017.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M97_001.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::MXX_005.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M23_001.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::MXX_003.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M10_008.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M10_009.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::MXX_006.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M23_002.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M43_001.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M07_001.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M11_003.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M16_001.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M11_011.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M10_002.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M10_005.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M11_008.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M11_007.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M11_010.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M89_001.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M11_012.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M11_001.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M10_004.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::M97_002.3pm
+Installing /usr/share/man/man3/Algorithm::CheckDigits::MXX_004.3pm
+Writing /usr/lib/perl5/site_perl/5.10.0/i586-linux-thread-multi/auto/Algorithm/CheckDigits/.packlist
 Appending installation info to /usr/lib/perl5/5.10.0/i586-linux-thread-multi/perllocal.pod
-  MIRK/Biblio-EndnoteStyle-0.05.tar.gz
+  MAMAWE/Algorithm-CheckDigits-0.50.tar.gz
   /usr/bin/make install  -- OK
 Warning (usually harmless): 'YAML' not installed, will not store persistent state
 |--------------------
 
+
+=== Install Biblio::EndnoteStyle ===
+|--------------------
+cpan[2]> install Biblio::EndnoteStyle
+|--------------------
+
+
+
 === Install the "CGI::Session::Serialize::yaml" Perl Module ===
 
-[Install CGI::Session::Serialize::yaml "instead" of CGI::Session to avoid problems later on. Don't worry: by installing CGI::Session::Serialize::yaml you are also installing CGI::Session]:
+[Install CGI::Session::Serialize::yaml "instead" of CGI::Session to avoid problems related to JSON::Syck when installing CGI::Session. Don't worry: by installing CGI::Session::Serialize::yaml you are also installing CGI::Session]:
 |--------------------
-cpan[2]> install CGI::Session::Serialize::yaml
+cpan[3]> install CGI::Session::Serialize::yaml
 
 
-cpan[3]> quit
+cpan[4]> quit
 Lockfile removed.
 |--------------------
+
 
 === Install some "Class" Perl Modules ===
 To install the Class::Accessor Perl Module we'll use the available software package in openSUSE 11.0 (using yast) instead of downloading it from CPAN:
@@ -1359,12 +1611,14 @@ cpan[1]> install Class::Factory::Util
 cpan[2]> quit
 Lockfile removed.
 |--------------------
-[this will also install a dependency: perl-Data-Showtable]
+
+
 
 === Install DBD::MySQL ===
 |--------------------
 myhost:~/koha-3.00.00 # yast -i perl-DBD-mysql
 |--------------------
+[this will also install a dependency: perl-Data-Showtable]
 
 === Install some "Data" Perl Modules ===
 |--------------------
@@ -1468,8 +1722,9 @@ cpan[2]> quit
 Lockfile removed.
 |--------------------
 
-=== Install some "Date" Perl Modules ===
 
+=== Install some "Date" Perl Modules ===
+|--------------------
 myhost:~/koha-3.00.00 # yast -i perl-Date-Calc
 |--------------------
 [This will also install 2 other dependencies: perl-Carp-Clan and perl-Bit-Vector]
@@ -1526,6 +1781,7 @@ myhost:~/koha-3.00.00 # yast -i perl-PerlMagick
 
 [This will install 3 other dependencies: libMagickCore1, libMagickWand1 and ImageMagick]
 
+
 === Install the "Lingua::Stem" Perl Module ===
 |--------------------
 myhost:~ # cpan
@@ -1567,7 +1823,8 @@ Shall I follow them and prepend them to the queue
 of modules we are processing right now? [yes]
 |--------------------
 
-=== Install the "HTML::Scruber" Perl Module ===
+
+=== Install the "HTML::Scrubber" Perl Module ===
 In the same CPAN prompt, type the following command:
 |--------------------
 cpan[2]> install HTML::Scrubber
@@ -1807,6 +2064,8 @@ cpan[2]> quit
 Lockfile removed.
 |--------------------
 
+
+
 === Install some "PDF" Perl Modules ===
 
 |--------------------
@@ -1826,6 +2085,17 @@ PDF::API2::Util is up to date (2.000).
 
 cpan[3]> install PDF::Reuse
 
+Warning: prerequisite Font::TTF 0 not found.
+Warning: prerequisite Text::PDF::TTFont0 0 not found.
+Writing Makefile for PDF::Reuse
+Could not read '/root/.cpan/build/PDF-Reuse-0.35-rBhjys/META.yml'. Falling back to other methods to determine prerequisites
+---- Unsatisfied dependencies detected during ----
+----      LARSLUND/PDF-Reuse-0.35.tar.gz      ----
+    Text::PDF::TTFont0 [requires]
+    Font::TTF [requires]
+Shall I follow them and prepend them to the queue
+of modules we are processing right now? [yes]
+
 
 cpan[4]> install PDF::Reuse::Barcode
 
@@ -1837,176 +2107,16 @@ Writing Makefile for PDF::Reuse::Barcode
 Shall I follow them and prepend them to the queue
 of modules we are processing right now? [yes]
 
-
-Checking if your kit is complete...
-Looks good
-Writing Makefile for Barcode::Code128
-cp lib/Barcode/Code128.pm blib/lib/Barcode/Code128.pm
-Manifying blib/man3/Barcode::Code128.3pm
-  WRW/Barcode-Code128-2.01.tar.gz
-  /usr/bin/make -- OK
-Running make test
-PERL_DL_NONLAZY=1 /usr/bin/perl "-MExtUtils::Command::MM" "-e" "test_harness(0, 'blib/lib', 'blib/arch')" t/*.t
-t/barcode......ok
-t/gif..........skipped: (no reason given)
-t/png..........skipped: (no reason given)
-
-Test Summary Report
--------------------
-t/gif.t    (Wstat: 0 Tests: 1 Failed: 1)
-  Failed test:  1
-  Parse errors: Bad plan.  You planned 0 tests but ran 1.
-t/png.t    (Wstat: 0 Tests: 1 Failed: 1)
-  Failed test:  1
-  Parse errors: Bad plan.  You planned 0 tests but ran 1.
-Files=3, Tests=4,  0 wallclock secs ( 0.04 usr  0.07 sys +  0.08 cusr  0.07 csys =  0.26 CPU)
-Result: FAIL
-Failed 2/3 test programs. 2/4 subtests failed.
-make: *** [test_dynamic] Error 255
-  WRW/Barcode-Code128-2.01.tar.gz
-  /usr/bin/make test -- NOT OK
-//hint// to see the cpan-testers results for installing this module, try:
-  reports WRW/Barcode-Code128-2.01.tar.gz
-Running make install
-  make test had returned bad status, won't install without force
-Running make for L/LA/LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz
-  Has already been unwrapped into directory /root/.cpan/build/PDF-Reuse-Barcode-0.05-ahdM1s
-
-  CPAN.pm: Going to build L/LA/LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz
-
-Warning: Prerequisite 'Barcode::Code128 => 0' for 'L/LA/LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz' failed when processing 
-
-'W/WR/WRW/Barcode-Code128-2.01.tar.gz' with 'make_test => NO'. Continuing, but chances to succeed are limited.
-cp Barcode.pm blib/lib/PDF/Reuse/Barcode.pm
-Manifying blib/man3/PDF::Reuse::Barcode.3pm
-  LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz
-  /usr/bin/make -- OK
-Running make test
-PERL_DL_NONLAZY=1 /usr/bin/perl "-Iblib/lib" "-Iblib/arch" test.pl
-1..15
-# Running under perl version 5.008008 for linux
-# Current time local: Thu May  8 00:11:00 2008
-# Current time GMT:   Wed May  7 23:11:00 2008
-# Using Test.pm version 1.25
-ok 1
-ok 2
-ok 3
-ok 4
-ok 5
-ok 6
-ok 7
-ok 8
-ok 9
-ok 10
-ok 11
-ok 12
-ok 13
-Can't find Barcode::Code128 - can't produce those barcodes
-not ok 14
-# Failed test 14 in test.pl at line 18
-#  test.pl line 18 is: ok(find('Barcode::Code128'));
-ok 15
-  LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz
-Tests succeeded but one dependency not OK (Barcode::Code128)
-  LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz
-  [dependencies] -- NA
-Running make install
-  make test had returned bad status, won't install without force
-Failed during this command:
- WRW/Barcode-Code128-2.01.tar.gz              : make_test NO
- LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz       : make_test NO one dependency not OK (Barcode::Code128)
 |--------------------
 
 
-[Strangely enough, simply repeating the installation of PDF::Reuse::Barcode will solve the problem:]
 
-|--------------------
-cpan[5]> install PDF::Reuse::Barcode
-
-Warning: prerequisite Barcode::Code128 0 not found.
-Writing Makefile for PDF::Reuse::Barcode
----- Unsatisfied dependencies detected during ----
-----  LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz  ----
-    Barcode::Code128 [requires]
-Shall I follow them and prepend them to the queue
-of modules we are processing right now? [yes]
-
-Running make test
-PERL_DL_NONLAZY=1 /usr/bin/perl "-MExtUtils::Command::MM" "-e" "test_harness(0, 'blib/lib', 'blib/arch')" t/*.t
-t/barcode....ok
-t/gif........ok 1/0skipped
-        all skipped: no reason given
-t/png........ok 1/0skipped
-        all skipped: no reason given
-All tests successful, 2 tests skipped.
-Files=3, Tests=2,  0 wallclock secs ( 0.08 cusr +  0.12 csys =  0.20 CPU)
-  WRW/Barcode-Code128-2.01.tar.gz
-  /usr/bin/make test -- OK
-Warning (usually harmless): 'YAML' not installed, will not store persistent state
-Running make install
-Prepending /root/.cpan/build/Barcode-Code128-2.01-e04Iz4/blib/arch /root/.cpan/build/Barcode-Code128-2.01-e04Iz4/blib/lib to 
-
-PERL5LIB for 'install'
-Installing /usr/lib/perl5/site_perl/5.10.0/Barcode/Code128.pm
-Installing /usr/share/man/man3/Barcode::Code128.3pm
-Writing /usr/lib/perl5/site_perl/5.10.0/i586-linux-thread-multi/auto/Barcode/Code128/.packlist
-Appending installation info to /usr/lib/perl5/5.10.0/i586-linux-thread-multi/perllocal.pod
-  WRW/Barcode-Code128-2.01.tar.gz
-  /usr/bin/make install  -- OK
-Warning (usually harmless): 'YAML' not installed, will not store persistent state
-Running make for L/LA/LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz
-  Has already been unwrapped into directory /root/.cpan/build/PDF-Reuse-Barcode-0.05-tGszYX
-
-  CPAN.pm: Going to build L/LA/LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz
-
-cp Barcode.pm blib/lib/PDF/Reuse/Barcode.pm
-Manifying blib/man3/PDF::Reuse::Barcode.3pm
-  LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz
-  /usr/bin/make -- OK
-Warning (usually harmless): 'YAML' not installed, will not store persistent state
-Running make test
-PERL_DL_NONLAZY=1 /usr/bin/perl "-Iblib/lib" "-Iblib/arch" test.pl
-1..15
-# Running under perl version 5.010000 for linux
-# Current time local: Sun Jun  1 20:25:57 2008
-# Current time GMT:   Sun Jun  1 19:25:57 2008
-# Using Test.pm version 1.25
-ok 1
-ok 2
-ok 3
-ok 4
-ok 5
-ok 6
-ok 7
-ok 8
-ok 9
-ok 10
-ok 11
-ok 12
-ok 13
-ok 14
-ok 15
-  LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz
-  /usr/bin/make test -- OK
-Warning (usually harmless): 'YAML' not installed, will not store persistent state
-Running make install
-Prepending /root/.cpan/build/PDF-Reuse-Barcode-0.05-tGszYX/blib/arch /root/.cpan/build/PDF-Reuse-Barcode-0.05-tGszYX/blib/lib 
-
-to PERL5LIB for 'install'
-Installing /usr/lib/perl5/site_perl/5.10.0/PDF/Reuse/Barcode.pm
-Installing /usr/share/man/man3/PDF::Reuse::Barcode.3pm
-Writing /usr/lib/perl5/site_perl/5.10.0/i586-linux-thread-multi/auto/PDF/Reuse/Barcode/.packlist
-Appending installation info to /usr/lib/perl5/5.10.0/i586-linux-thread-multi/perllocal.pod
-  LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz
-  /usr/bin/make install  -- OK
-Warning (usually harmless): 'YAML' not installed, will not store persistent state
-|--------------------
 
 
 === Install the "POE" Perl Module ===
 In the same CPAN prompt, type the following command:
 |--------------------
-cpan[7]> install POE
+cpan[5]> install POE
 
 
 Some of POE's tests require a functional network.
@@ -2023,9 +2133,40 @@ Would you like to skip the network tests? [n]
 ***   Tk 800.027 could not be loaded.
 Checking if your kit is complete...
 Looks good
+Warning: prerequisite POE::Test::Loops 1.002 not found.
 Writing Makefile for POE
+Could not read '/root/.cpan/build/POE-1.003-0euNum/META.yml'. Falling back to other methods to determine prerequisites
+---- Unsatisfied dependencies detected during ----
+----         RCAPUTO/POE-1.003.tar.gz         ----
+    POE::Test::Loops [requires]
+Shall I follow them and prepend them to the queue
+of modules we are processing right now? [yes]
 |--------------------
 
+
+=== Install the "SMS::Send" Perl Module ===
+
+In the same CPAN prompt, type the following command:
+|--------------------
+cpan[6]> install SMS::Send
+
+Checking if your kit is complete...
+Looks good
+Warning: prerequisite Class::Adapter 1.00 not found.
+Warning: prerequisite Params::Util 0.14 not found.
+Writing Makefile for SMS::Send
+Could not read '/root/.cpan/build/SMS-Send-0.05-xGdd7H/META.yml'. Falling back to other methods to determine prerequisites
+---- Unsatisfied dependencies detected during ----
+----        ADAMK/SMS-Send-0.05.tar.gz        ----
+    Params::Util [requires]
+    Class::Adapter [requires]
+Shall I follow them and prepend them to the queue
+of modules we are processing right now? [yes]
+
+cpan[7]> quit
+Lockfile removed.
+
+|--------------------
 
 === Install the "Schedule::At" Perl Module ===
 
@@ -2160,6 +2301,7 @@ Password changed.
 # groupadd koha
 |--------------------
 
+
 ==== Run make test ====
 |--------------------
 myhost:~/Koha # make test
@@ -2173,14 +2315,15 @@ cp koha-tmpl/opac-tmpl/prog/famfamfam/mini/note.gif blib/OPAC_TMPL_DIR/prog/famf
 [many more lines beginning with "cp" should appear...]
 
 |--------------------
-cp koha-tmpl/opac-tmpl/prog/famfamfam/silk/shape_rotate_clockwise.png 
-
-blib/OPAC_TMPL_DIR/prog/famfamfam/silk/shape_rotate_clockwise.png
-cp koha-tmpl/opac-tmpl/prog/famfamfam/mini/page_text.gif blib/OPAC_TMPL_DIR/prog/famfamfam/mini/page_text.gif
-PERL_DL_NONLAZY=1 KOHA_CONF=blib/KOHA_CONF_DIR/koha-conf.xml /usr/bin/perl "-MExtUtils::Command::MM" "-e" "test_harness(0, 
-
-'blib/PERL_MODULE_DIR', 'blib/arch')" t/*.t
 t/Amazon....................ok
+t/Barcodes..................ok 1/126Use of uninitialized value $db_driver in concatenation (.) or string at /root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 629.
+Can't connect to data source 'dbname=__DB_NAME__;host=__DB_HOST__;port=__DB_PORT__' because I can't work out what driver to use (it doesn't seem to contain a 'dbi:driver:' prefix and the DBI_DRIVER env var is not set) at /root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 629
+# Looks like you planned 126 tests but only ran 1.
+# Looks like your test died just after 1.
+t/Barcodes..................dubious
+        Test returned status 255 (wstat 65280, 0xff00)
+DIED. FAILED tests 2-126
+        Failed 125/126 tests, 0.79% okay
 t/Barcodes_PrinterConfig....ok
 t/Bookfund..................ok
 t/Bookseller................ok
@@ -2188,32 +2331,14 @@ t/Boolean...................ok
 t/Branch....................ok
 t/Calendar..................ok
 t/Charset...................ok
-t/Date......................ok 1/4Use of uninitialized value $db_driver in concatenation (.) or string at 
-
-/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628.
-Can't connect to data source 'dbname=__DB_NAME__;host=__DB_HOST__;port=__DB_PORT__' because I can't work out what driver to 
-
-use (it doesn't seem to contain a 'dbi:driver:' prefix and the DBI_DRIVER env var is not set) at 
-
-/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628
+t/Date......................ok 1/4Use of uninitialized value $db_driver in concatenation (.) or string at /root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 629.
+Can't connect to data source 'dbname=__DB_NAME__;host=__DB_HOST__;port=__DB_PORT__' because I can't work out what driver to use (it doesn't seem to contain a 'dbi:driver:' prefix and the DBI_DRIVER env var is not set) at /root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 629
 # Looks like you planned 4 tests but only ran 1.
 # Looks like your test died just after 1.
 t/Date......................dubious
         Test returned status 255 (wstat 65280, 0xff00)
 DIED. FAILED tests 2-4
         Failed 3/4 tests, 25.00% okay
-t/Dates.....................ok 1/126#
-#  Testing Legacy Functions: format_date and format_date_in_iso
-Use of uninitialized value $db_driver in concatenation (.) or string at /root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628.
-Can't connect to data source 'dbname=__DB_NAME__;host=__DB_HOST__;port=__DB_PORT__' because I can't work out what driver to use (it doesn't seem to contain a 'dbi:driver:' prefix and the DBI_DRIVER env var is not set) at 
-
-/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628
-# Looks like you planned 126 tests but only ran 1.
-# Looks like your test died just after 1.
-t/Dates.....................dubious
-        Test returned status 255 (wstat 65280, 0xff00)
-DIED. FAILED tests 2-126
-        Failed 125/126 tests, 0.79% okay
 t/Debug.....................# BEFORE use:     $debug is not defined
 # BEFORE use: $cgi_debug is not defined
 t/Debug.....................ok 1/3#  AFTER use:     $debug is 0
@@ -2221,75 +2346,8 @@ t/Debug.....................ok 1/3#  AFTER use:     $debug is 0
 # Done.
 t/Debug.....................ok
 t/dummy.....................ok
-t/icondirectories...........Use of uninitialized value $src in string eq at /root/Koha/blib/PERL_MODULE_DIR/C4/Koha.pm line 465.
-Use of uninitialized value $db_driver in concatenation (.) or string at /root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628.
-Can't connect to data source 'dbname=__DB_NAME__;host=__DB_HOST__;port=__DB_PORT__' because I can't work out what driver to use (it doesn't seem to contain a 'dbi:driver:' prefix and the DBI_DRIVER env var is not set) at 
-
-/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628
-# Looks like your test died before it could output anything.
-t/icondirectories...........dubious
-        Test returned status 255 (wstat 65280, 0xff00)
-DIED. FAILED test 1
-        Failed 1/1 tests, 0.00% okay
 t/Input.....................ok
-t/Items.....................Use of uninitialized value $db_driver in concatenation (.) or string at 
-
-/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628.
-t/Items.....................NOK 1/28
-#   Failed test 'use C4::Items;'
-#   at t/Items.t line 11.
-#     Tried to use 'C4::Items'.
-#     Error:  Can't connect to data source 'dbname=__DB_NAME__;host=__DB_HOST__;port=__DB_PORT__' because I can't work out what driver to use (it doesn't seem to contain a 'dbi:driver:' prefix and the DBI_DRIVER env var is not set) at 
-
-/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628
-# Compilation failed in require at /root/Koha/blib/PERL_MODULE_DIR/C4/Items.pm line 30.
-# Compilation failed in require at (eval 5) line 2.
-# BEGIN failed--compilation aborted at t/Items.t line 11.
-t/Items.....................ok 2/28Use of uninitialized value $db_driver in concatenation (.) or string at 
-
-/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628.
-Can't connect to data source 'dbname=__DB_NAME__;host=__DB_HOST__;port=__DB_PORT__' because I can't work out what driver to use (it doesn't seem to contain a 'dbi:driver:' prefix and the DBI_DRIVER env var is not set) at 
-
-/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628
-# Looks like you planned 28 tests but only ran 13.
-# Looks like you failed 1 test of 13 run.
-# Looks like your test died just after 13.
-t/Items.....................dubious
-        Test returned status 255 (wstat 65280, 0xff00)
-DIED. FAILED tests 1, 14-28
-        Failed 16/28 tests, 42.86% okay
 t/Koha......................ok
-t/Labels....................NOK 1/1
-#   Failed test 'use C4::Labels;'
-#   at t/Labels.t line 12.
-#     Tried to use 'C4::Labels'.
-#     Error:  Can't locate Algorithm/CheckDigits.pm in @INC (@INC contains: /root/Koha/blib/PERL_MODULE_DIR 
-
-/root/Koha/blib/arch /usr/lib/perl5/5.10.0/i586-linux-thread-multi /usr/lib/perl5/5.10.0/i586-linux-thread-multi 
-
-/usr/lib/perl5/5.10.0 /usr/lib/perl5/site_perl/5.10.0/i586-linux-thread-multi 
-
-/usr/lib/perl5/site_perl/5.10.0/i586-linux-thread-multi /usr/lib/perl5/site_perl/5.10.0 
-
-/usr/lib/perl5/vendor_perl/5.10.0/i586-linux-thread-multi /usr/lib/perl5/vendor_perl/5.10.0/i586-linux-thread-multi 
-
-/usr/lib/perl5/vendor_perl/5.10.0 /usr/lib/perl5/vendor_perl/5.10.0/i586-linux-thread-multi /usr/lib/perl5/vendor_perl/5.10.0 
-
-/usr/lib/perl5/vendor_perl . /usr/lib/perl5/5.10.0/i586-linux-thread-multi /usr/lib/perl5/5.10.0 
-
-/usr/lib/perl5/site_perl/5.10.0/i586-linux-thread-multi /usr/lib/perl5/site_perl/5.10.0 
-
-/usr/lib/perl5/vendor_perl/5.10.0/i586-linux-thread-multi /usr/lib/perl5/vendor_perl/5.10.0 /usr/lib/perl5/vendor_perl .) at 
-
-/root/Koha/blib/PERL_MODULE_DIR/C4/Labels.pm line 25.
-# BEGIN failed--compilation aborted at t/Labels.t line 12.
-# Compilation failed in require at (eval 3) line 2.
-# BEGIN failed--compilation aborted at (eval 3) line 2.
-# Looks like you failed 1 test of 1.
-t/Labels....................dubious
-        Test returned status 1 (wstat 256, 0x100)
-DIED. FAILED test 1
-        Failed 1/1 tests, 0.00% okay
 t/Languages.................ok
 t/Maintainance..............ok
 t/Output....................ok
@@ -2299,184 +2357,40 @@ t/Scrubber..................ok 1/10# Note: scrubber test output will have whites
 # done.
 t/Scrubber..................ok
 t/Stats.....................ok
-Failed Test         Stat Wstat Total Fail  List of Failed
+Failed Test  Stat Wstat Total Fail  List of Failed
 -------------------------------------------------------------------------------
-t/Date.t             255 65280     4    6  2-4
-t/Dates.t            255 65280   126  250  2-126
-t/Items.t            255 65280    28   31  1 14-28
-t/Labels.t             1   256     1    1  1
-t/icondirectories.t  255 65280     1    2  1
-Failed 5/24 test scripts. 146/207 subtests failed.
-Files=24, Tests=207, 13 wallclock secs ( 5.96 cusr +  5.52 csys = 11.48 CPU)
-Failed 5/24 test programs. 146/207 subtests failed.
+t/Barcodes.t  255 65280   126  250  2-126
+t/Date.t      255 65280     4    6  2-4
+Failed 2/21 test scripts. 128/177 subtests failed.
+Files=21, Tests=177, 10 wallclock secs ( 4.76 cusr +  4.54 csys =  9.30 CPU)
+Failed 2/21 test programs. 128/177 subtests failed.
 make: *** [test_dynamic] Error 255
 |--------------------
 
-=== Install the "Algorithm::CheckDigits" Perl Module ===
-
-Hmmm... Algorithm::CheckDigits seems to not have been installed. Let's install it:
-
-|--------------------
-myhost:~ # cpan
-CPAN: File::HomeDir loaded ok (v0.69)
-
-cpan shell -- CPAN exploration and modules installation (v1.9205)
-ReadLine support enabled
-
-                                                                                                                            
-cpan[1]> install Algorithm::CheckDigits
-
-cpan[2]> quit
-Lockfile removed.
-|--------------------
 
 
-=== Run "make test" again ===
 
-Don't worry! It will run a LOT faster this time!  :)
-|--------------------
-myhost:~/Koha-3.00.00 # make test
-PERL_DL_NONLAZY=1 KOHA_CONF=blib/KOHA_CONF_DIR/koha-conf.xml /usr/bin/perl "-MExtUtils::Command::MM" "-e" "test_harness(0, 
 
-'blib/PERL_MODULE_DIR', 'blib/arch')" t/*.t
-t/Amazon....................ok
-t/Barcodes_PrinterConfig....ok
-t/Bookfund..................ok
-t/Bookseller................ok
-t/Boolean...................ok
-t/Branch....................ok
-t/Calendar..................ok
-t/Charset...................ok
-t/Date......................ok 1/4Use of uninitialized value $db_driver in concatenation (.) or string at 
 
-/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628.
-Can't connect to data source 'dbname=__DB_NAME__;host=__DB_HOST__;port=__DB_PORT__' because I can't work out what driver to use (it doesn't seem to contain a 'dbi:driver:' prefix and the DBI_DRIVER env var is not set) at 
 
-/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628
-# Looks like you planned 4 tests but only ran 1.
-# Looks like your test died just after 1.
-t/Date......................dubious
-        Test returned status 255 (wstat 65280, 0xff00)
-DIED. FAILED tests 2-4
-        Failed 3/4 tests, 25.00% okay
-t/Dates.....................ok 1/126#
-#  Testing Legacy Functions: format_date and format_date_in_iso
-Use of uninitialized value $db_driver in concatenation (.) or string at /root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628.
-Can't connect to data source 'dbname=__DB_NAME__;host=__DB_HOST__;port=__DB_PORT__' because I can't work out what driver to use (it doesn't seem to contain a 'dbi:driver:' prefix and the DBI_DRIVER env var is not set) at 
 
-/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628
-# Looks like you planned 126 tests but only ran 1.
-# Looks like your test died just after 1.
-t/Dates.....................dubious
-        Test returned status 255 (wstat 65280, 0xff00)
-DIED. FAILED tests 2-126
-        Failed 125/126 tests, 0.79% okay
-t/Debug.....................# BEFORE use:     $debug is not defined
-# BEFORE use: $cgi_debug is not defined
-t/Debug.....................ok 1/3#  AFTER use:     $debug is 0
-#  AFTER use: $cgi_debug is 0
-# Done.
-t/Debug.....................ok
-t/dummy.....................ok
-t/icondirectories...........Use of uninitialized value $src in string eq at /root/Koha/blib/PERL_MODULE_DIR/C4/Koha.pm line 465.
-Use of uninitialized value $db_driver in concatenation (.) or string at /root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628.
-Can't connect to data source 'dbname=__DB_NAME__;host=__DB_HOST__;port=__DB_PORT__' because I can't work out what driver to use (it doesn't seem to contain a 'dbi:driver:' prefix and the DBI_DRIVER env var is not set) at 
 
-/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628
-# Looks like your test died before it could output anything.
-t/icondirectories...........dubious
-        Test returned status 255 (wstat 65280, 0xff00)
-DIED. FAILED test 1
-        Failed 1/1 tests, 0.00% okay
-t/Input.....................ok
-t/Items.....................Use of uninitialized value $db_driver in concatenation (.) or string at 
 
-/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628.
-t/Items.....................NOK 1/28
-#   Failed test 'use C4::Items;'
-#   at t/Items.t line 11.
-#     Tried to use 'C4::Items'.
-#     Error:  Can't connect to data source 'dbname=__DB_NAME__;host=__DB_HOST__;port=__DB_PORT__' because I can't work out what driver to use (it doesn't seem to contain a 'dbi:driver:' prefix and the DBI_DRIVER env var is not set) at 
+=== Run "make install" ===
 
-/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628
-# Compilation failed in require at /root/Koha/blib/PERL_MODULE_DIR/C4/Items.pm line 30.
-# Compilation failed in require at (eval 5) line 2.
-# BEGIN failed--compilation aborted at t/Items.t line 11.
-t/Items.....................ok 2/28Use of uninitialized value $db_driver in concatenation (.) or string at 
-
-/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628.
-Can't connect to data source 'dbname=__DB_NAME__;host=__DB_HOST__;port=__DB_PORT__' because I can't work out what driver to use (it doesn't seem to contain a 'dbi:driver:' prefix and the DBI_DRIVER env var is not set) at 
-
-/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628
-# Looks like you planned 28 tests but only ran 13.
-# Looks like you failed 1 test of 13 run.
-# Looks like your test died just after 13.
-t/Items.....................dubious
-        Test returned status 255 (wstat 65280, 0xff00)
-DIED. FAILED tests 1, 14-28
-        Failed 16/28 tests, 42.86% okay
-t/Koha......................ok
-t/Labels....................Use of uninitialized value $db_driver in concatenation (.) or string at 
-
-/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628.
-t/Labels....................NOK 1/1
-#   Failed test 'use C4::Labels;'
-#   at t/Labels.t line 12.
-#     Tried to use 'C4::Labels'.
-#     Error:  Can't connect to data source 'dbname=__DB_NAME__;host=__DB_HOST__;port=__DB_PORT__' because I can't work out what driver to use (it doesn't seem to contain a 'dbi:driver:' prefix and the DBI_DRIVER env var is not set) at 
-
-/root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 628
-# Compilation failed in require at /root/Koha/blib/PERL_MODULE_DIR/C4/Circulation.pm line 25.
-# BEGIN failed--compilation aborted at t/Labels.t line 12.
-# Compilation failed in require at /root/Koha/blib/PERL_MODULE_DIR/C4/Overdues.pm line 24.
-# BEGIN failed--compilation aborted at /root/Koha/blib/PERL_MODULE_DIR/C4/Overdues.pm line 24.
-# Compilation failed in require at /root/Koha/blib/PERL_MODULE_DIR/C4/Members.pm line 27.
-# BEGIN failed--compilation aborted at /root/Koha/blib/PERL_MODULE_DIR/C4/Members.pm line 27.
-# Compilation failed in require at /root/Koha/blib/PERL_MODULE_DIR/C4/Labels.pm line 26.
-# BEGIN failed--compilation aborted at /root/Koha/blib/PERL_MODULE_DIR/C4/Labels.pm line 26.
-# Compilation failed in require at (eval 3) line 2.
-# BEGIN failed--compilation aborted at (eval 3) line 2.
-# Looks like you failed 1 test of 1.
-t/Labels....................dubious
-        Test returned status 1 (wstat 256, 0x100)
-DIED. FAILED test 1
-        Failed 1/1 tests, 0.00% okay
-t/Languages.................ok
-t/Maintainance..............ok
-t/Output....................ok
-t/Record....................ok
-t/Review....................ok
-t/Scrubber..................ok 1/10# Note: scrubber test output will have whitespace collapsed for readability
-# done.
-t/Scrubber..................ok
-t/Stats.....................ok
-Failed Test         Stat Wstat Total Fail  List of Failed
--------------------------------------------------------------------------------
-t/Date.t             255 65280     4    6  2-4
-t/Dates.t            255 65280   126  250  2-126
-t/Items.t            255 65280    28   31  1 14-28
-t/Labels.t             1   256     1    1  1
-t/icondirectories.t  255 65280     1    2  1
-Failed 5/24 test scripts. 146/207 subtests failed.
-Files=24, Tests=207, 14 wallclock secs ( 6.93 cusr +  6.06 csys = 12.99 CPU)
-Failed 5/24 test programs. 146/207 subtests failed.
-make: *** [test_dynamic] Error 255
-|--------------------
-
-== Run "make install" ==
-
-Even with these errors in C4::Labels, we will run make install:
+Even with these "Can't connect to data source" errors, we will run make install:
 
 |--------------------
 myhost:~/Koha # make install
 |--------------------
 [Several lines starting with "Manifying" and many lines starting with "Installing" will scroll by...]
 |--------------------
-Installing /usr/share/koha/man/man3/cataloguing::value_builder::marc21_leader_computerfile.3pm
-Installing /usr/share/koha/man/man3/opac::opac-tags.3pm
-Installing /usr/share/koha/man/man3/cataloguing::value_builder::unimarc_field_123j.3pm
-Installing /usr/share/koha/man/man3/cataloguing::value_builder::marc21_field_003.3pm
-Installing /usr/share/koha/man/man3/authorities::detail.3pm
+Installing /usr/share/koha/man/man3/reports::catalogue_out.3pm
+Installing /usr/share/koha/man/man3/reports::dictionary.3pm
+Installing /usr/share/koha/man/man3/C4::Search::PazPar2.3pm
+Installing /usr/share/koha/man/man3/C4::Scrubber.3pm
+Installing /usr/share/koha/man/man3/reports::itemslost.3pm
+Installing /usr/share/koha/man/man3/C4::Barcodes::PrinterConfig.3pm
 
 Koha's files have now been installed.
 
@@ -2487,7 +2401,6 @@ export KOHA_CONF=/etc/koha/koha-conf.xml
 export PERL5LIB=/usr/share/koha/lib
 
 For other post-installation tasks, please consult the README.
-
 
 # cd /etc
 myhost:/etc #
@@ -2562,6 +2475,7 @@ Shutting down httpd2 (waiting for all children to terminate)         done
 Starting httpd2 (prefork)                                            done
 |--------------------
 
+
 == Change koha-httpd.conf ==
 
 If you browsed again to http://192.168.0.2:8080 you would still get no answer. This is because we still have to do some changes to the koha-httpd.conf file.
@@ -2583,6 +2497,7 @@ If the two virtualHost directives - the lines that start with <nowiki><VirtualHo
 
 That file will have 2 ServerName directives (one for each of the 2 VirtualHosts). In those directives, you should have the IP of your server -or- the FQDN of your server (example: ServerName www.koha.test).
 
+Now, restart again Apache:
 |--------------------
 myhost:/etc/koha # service apache2 restart
 Syntax OK
@@ -2645,6 +2560,7 @@ To do that, browse to:
 
 http://192.168.0.2:8080
 
+
 == Enable port 8080 in the firewall ==
 
 After a while the page will probably time out. This is because we now have to allow the 8080 port in the firewall.
@@ -2655,7 +2571,7 @@ myhost:/etc/apache2/vhosts.d # yast
 |--------------------
 Inside yast, go to "Security and Users" -> "Firewall"
 
-Scroll down to "Allowed Services" on the right side and press ENTER
+Scroll down to "Allowed Services" on the left side and press ENTER
 
 Press TAB several times until you reach the "Apache2" allowed service on the right side. When you do that, 
 press Alt+d to click the "Advanced..." button.
