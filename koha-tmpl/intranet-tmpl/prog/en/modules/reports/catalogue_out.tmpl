@@ -1,6 +1,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Reports &rsaquo; Items with no checkouts</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<style type="text/css">
+	.sql {display: none;}
+</style>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -9,41 +12,76 @@
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; Items with no checkouts</div>
 
 <div id="doc3" class="yui-t2">
-   
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
 
 <!-- TMPL_IF NAME="do_it" -->
+	<h1>Items with no checkouts</h1>
 	<!-- TMPL_LOOP NAME="mainloop" -->
-		<h1>Items with no checkouts</h1>
 		<!-- TMPL_IF NAME="loopfilter"-->
 			<p>Filtered on</p>
 			<!-- TMPL_LOOP NAME="loopfilter" -->
-					<p><!-- TMPL_IF NAME="err" -->  <!--/TMPL_IF --><!-- TMPL_VAR NAME="crit"--> =<!-- TMPL_VAR NAME="filter"--><!-- TMPL_IF NAME="err" -->  <!--/TMPL_IF --></p>
+				<!-- TMPL_IF NAME="err" --><p class="error">Error: 
+				<!-- TMPL_ELSE --><p>
+				<!-- /TMPL_IF -->
+					<!-- TMPL_IF NAME="sql" --><span class="sql"><!--/TMPL_IF -->
+					<!-- TMPL_VAR NAME="crit"--> = <!-- TMPL_VAR NAME="filter"-->
+					<!-- TMPL_IF NAME="sql" --></span><!--/TMPL_IF -->
+				</p>
 			<!-- /TMPL_LOOP -->
 		<!-- /TMPL_IF-->
 		
+		<!-- TMPL_IF NAME="looptables"-->
+			<h3><a name="summary" id="summary"></a>Summary</h3>
+			<table id="summary_table">
+				<tr><th>Group</th><th>Call Number Range</th><th>Number of Items Displayed</th><th>Total Items in Group</th>
+				</tr>
+			<!-- TMPL_LOOP NAME="looptables" -->
+				<tr><td><a href="#table<!-- TMPL_VAR NAME="coltitle" -->"><!-- TMPL_VAR NAME="coltitle" --></a></td>
+					<td><!-- TMPL_IF NAME="looptable_count" -->
+						<!-- TMPL_VAR NAME="looptable_first" --> to <!-- TMPL_VAR NAME="looptable_last" -->
+						<!-- /TMPL_IF -->
+					</td>
+					<td><!-- TMPL_VAR NAME="looptable_count" --></td>
+					<td><!-- TMPL_VAR NAME="coltitle_count" --></td>
+				</tr>
+			<!-- /TMPL_LOOP -->
+				<tr><th>TOTAL</th><th></th><th><!-- TMPL_VAR NAME="total_looptable_count" --></th><th><!-- TMPL_VAR NAME="total_coltitle_count" --></th>
+				</tr>
+			</table>
+			<hr />
+		<!-- /TMPL_IF-->
+		<!-- TMPL_LOOP NAME="looptables" -->
+		<h3><a name="table<!-- TMPL_VAR NAME="coltitle" -->"></a>
+			Table <!-- TMPL_VAR NAME="__counter__"--> - <!-- TMPL_VAR NAME="coltitle" -->
+		</h3>
 		<table>
 			<tr>
-				<th>Num/Items</th>
-				<!-- TMPL_LOOP NAME="loopcol" -->
-					<th><!-- TMPL_VAR NAME="coltitle" --></th>
-				<!-- /TMPL_LOOP -->
+				<th>#</th>
+				<th>Call Number</th>
+				<th>Barcode</th>
+				<th>Item Details</th>
 			</tr>
+				<!-- TMPL_IF NAME="looprow"-->
 				<!-- TMPL_LOOP NAME="looprow" -->
-					<tr>
-						<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
-						<!-- TMPL_VAR NAME="rowtitle" --></td>
-						<!-- TMPL_LOOP NAME="loopcell" -->
-							<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td ><!-- /TMPL_IF -->
-							<p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR name="title" --></a></p>
-							<!-- TMPL_VAR name="author" --> <!--TMPL_IF name="barcode" -->Barcode : <!-- TMPL_VAR name="barcode" --><!-- /TMPL_IF -->
-							</td>
-						<!-- /TMPL_LOOP -->
+					<tr<!-- TMPL_UNLESS NAME="__odd__" --> class="highlight"<!-- /TMPL_UNLESS -->>
+						<td><!-- TMPL_VAR NAME="__counter__" --></td>
+						<td><!-- TMPL_VAR NAME="itemcallnumber" DEFAULT="No Call Number" --></td>
+						<td><!-- TMPL_VAR NAME="barcode" DEFAULT="No Barcode" --></td>
+						<td><p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR name="title" DEFAULT="NO TITLE" --></a></p>
+							<!-- TMPL_VAR NAME="author" DEFAULT="" -->
+							<!--TMPL_IF NAME="branch" -->at <!-- TMPL_VAR NAME="branch" --><!-- /TMPL_IF -->
+						</td>
 					</tr>
 				<!-- /TMPL_LOOP -->
+				<!-- TMPL_ELSE-->
+					<tr><td colspan="4">No items for <!-- TMPL_VAR NAME="coltitle" --></td>
+					</tr>
+				<!-- /TMPL_IF-->
 		</table>
+		<hr />
+		<!-- /TMPL_LOOP -->
 	<!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
 	<h1>Items with no checkouts</h1>
@@ -51,16 +89,18 @@
 	
 	<fieldset class="rows">
 		<ol>
-			<li>        <label for="branch">Library: </label>
-<select name="Filter" id="branch"><option value="" > Any Library</option>
+			<li><label for="branch">Library: </label>
+	<select name="Filter" id="branch">
+		<option value="">Any Library</option>
     <!--TMPL_LOOP Name="branchloop"-->
-        <option value="<!--TMPL_VAR Name="value"-->" ><!--TMPL_VAR Name="branchname"--> </option>  
+        <option value="<!--TMPL_VAR Name="value"-->"><!--TMPL_VAR Name="branchname"--></option>  
      <!--/TMPL_LOOP --> 
-    </select>     </li>
+    </select></li>
       <li> 
-        <label for="documenttype">Document Type: </label><select name="Filter" id="documenttype"><option value="" > Any Document type</option>
+        <label for="documenttype">Document Type: </label><select name="Filter" id="documenttype">
+		<option value="">Any Document type</option>
     <!--TMPL_LOOP Name="itemtypeloop"-->
-        <option value="<!--TMPL_VAR Name="value"-->" ><!--TMPL_VAR Name="description"--> </option>  
+        <option value="<!--TMPL_VAR Name="value"-->"><!--TMPL_VAR Name="description"--></option>  
      <!--/TMPL_LOOP --> 
     </select>
     </li>
@@ -84,7 +124,7 @@
 		<li><label for="criteria">By: </label><select name="Criteria" id="criteria">
 						<option value ="" selected="selected">None</option>
 						<option value ="homebranch">Library</option>
-						<option value ="itemtype">Itemtype</option>
+						<option value ="itype">Itemtype</option>
 					</select></li>
 		</ol>
 	</fieldset>
@@ -92,9 +132,11 @@
 	<fieldset class="rows">
 	<legend>Output</legend>
 <ol><li><label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> </li>
-<li><label for="outputfile">To a file:</label> 		<input type="radio" name="output" value="file" id="outputfile" /> <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" /> <label class="inline" for="MIME">Into an application  
-		</label><!-- TMPL_VAR NAME="CGIextChoice" -->
-		<!-- TMPL_VAR NAME="CGIsepChoice" --></li></ol>
+	<li><label for="outputfile">To a file: </label><input type="radio" name="output" value="file" id="outputfile" disabled="disabled" /><!-- FIXME: Not implemented -->
+		<label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" />
+		<label class="inline" for="MIME">Into an application </label><!-- TMPL_VAR NAME="CGIextChoice" --> <!-- TMPL_VAR NAME="CGIsepChoice" -->
+	</li>
+</ol>
 	</fieldset>
 
 	<fieldset class="action">

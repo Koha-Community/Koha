@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -22,62 +21,55 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Context;
+use C4::Debug;
 use C4::Branch; # GetBranches
 use C4::Output;
 use C4::Koha;
 use C4::Circulation;
 use Date::Manip;
+use Data::Dumper;
 
-=head1 NAME
+=head1 catalogue_out
 
-plugin that shows a stats on borrowers
-
-=head1 DESCRIPTION
-
-=over 2
+Report that shows unborrowed items.
 
 =cut
 
 my $input = new CGI;
-my $do_it=$input->param('do_it');
 my $fullreportname = "reports/catalogue_out.tmpl";
-my $limit = $input->param("Limit");
-my $column = $input->param("Criteria");
-my @filters = $input->param("Filter");
-my $output = $input->param("output");
-my $basename = $input->param("basename");
-my $mime = $input->param("MIME");
-my $del = $input->param("sep");
-#warn "calcul : ".$calc;
+my $do_it    = $input->param('do_it');
+my $limit    = $input->param("Limit");
+my $column   = $input->param("Criteria");
+my @filters  = $input->param("Filter");
+my $output   = $input->param("output");
+my $basename = $input->param("basename") || 'catalogue_out';
+my $mime     = $input->param("MIME");
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => $fullreportname,
-                query => $input,
-                type => "intranet",
-                authnotrequired => 0,
-                flagsrequired => {reports => 1},
-                debug => 1,
-                });
-$template->param(do_it => $do_it,
-        );
+        query => $input,
+        type => "intranet",
+        authnotrequired => 0,
+        flagsrequired => {reports => 1},
+        debug => 1,
+    });
+$template->param(do_it => $do_it);
 if ($do_it) {
-# Displaying results
     my $results = calculate($limit, $column, \@filters);
-    if ($output eq "screen"){
-# Printing results to screen
-        $template->param(mainloop => $results);
+    if ($output eq "screen") {
+		# Printing results to screen
+		$template->param(mainloop => $results);
         output_html_with_http_headers $input, $cookie, $template->output;
-        exit(1);
     } else {
-# Printing to a csv file
-        print $input->header(-type => 'application/vnd.sun.xml.calc',
-                                    -encoding    => 'utf-8',
+		# Printing to a csv file	FIXME: This is broken rather badly, if it ever worked at all here.
+        print $input->header(
+			-type => 'application/vnd.sun.xml.calc',
+            -encoding  => 'utf-8',
             -attachment=>"$basename.csv",
-            -filename=>"$basename.csv" );
-        my $cols = @$results[0]->{loopcol};
+            -filename  =>"$basename.csv" );
+        my $cols  = @$results[0]->{loopcol};
         my $lines = @$results[0]->{looprow};
-        my $sep;
-        $sep =C4::Context->preference("delimiter");
-# header top-right
+        my $sep = $input->param("sep") || C4::Context->preference("delimiter");
+# header
         print "num /". @$results[0]->{column} .$sep;
 # Other header
         foreach my $col ( @$cols ) {
@@ -86,96 +78,78 @@ if ($do_it) {
         print "Total\n";
 # Table
         foreach my $line ( @$lines ) {
-            my $x = $line->{loopcell};
+            my $x = $line->{loopcell};	# FIXME: No Such thing.
             print $line->{rowtitle}.$sep;
             foreach my $cell (@$x) {
                 print $cell->{value}.$sep;
             }
-            print $line->{totalrow};
-            print "\n";
+            print $line->{totalrow}, "\n";
         }
 # footer
         print "TOTAL";
-        $cols = @$results[0]->{loopfooter};
         foreach my $col ( @$cols ) {
             print $sep.$col->{totalcol};
         }
         print $sep.@$results[0]->{total};
-        exit(1);
     }
-# Displaying choices
-} else {
-    my $dbh = C4::Context->dbh;
-    my @values;
-    my %labels;
-    my %select;
-    my $req;
-    
-    my @mime = ( C4::Context->preference("MIME") );
-#	foreach my $mime (@mime){
-#		warn "".$mime;
-#	}
-    
-    my $CGIextChoice=CGI::scrolling_list(
-                -name     => 'MIME',
-                -id       => 'MIME',
-                -values   => \@mime,
-                -size     => 1,
-                -multiple => 0 );
-    
-    my @dels = ( C4::Context->preference("delimiter") );
-    my $CGIsepChoice=CGI::scrolling_list(
-                -name     => 'sep',
-                -id       => 'sep',
-                -values   => \@dels,
-                -size     => 1,
-                -multiple => 0 );
-    #doctype
-    my $itemtypes = GetItemTypes;
-    my @itemtypeloop;
-    foreach my $thisitemtype (keys %$itemtypes) {
-# 			my $selected = 1 if $thisbranch eq $branch;
-            my %row =(value => $thisitemtype,
-# 									selected => $selected,
-                                    description => $itemtypes->{$thisitemtype}->{'description'},
-                            );
-            push @itemtypeloop, \%row;
-    }
-        
-    #branch
-    my $branches = GetBranches;
-    my @branchloop;
-    foreach my $thisbranch (keys %$branches) {
-# 			my $selected = 1 if $thisbranch eq $branch;
-            my %row =(value => $thisbranch,
-# 									selected => $selected,
-                                    branchname => $branches->{$thisbranch}->{'branchname'},
-                            );
-            push @branchloop, \%row;
-    }
-    
-    $template->param(
-                    CGIextChoice => $CGIextChoice,
-                    CGIsepChoice => $CGIsepChoice,
-                    itemtypeloop =>\@itemtypeloop,
-                    branchloop =>\@branchloop,
-                    );
-output_html_with_http_headers $input, $cookie, $template->output;
+	exit(1); # in either case, exit after do_it
 }
 
+# Displaying choices (i.e., not do_it)
+my $dbh = C4::Context->dbh;
+my @values;
+my %select;
 
+my @mime = (C4::Context->preference("MIME"));
+my $CGIextChoice = CGI::scrolling_list(
+		-name     => 'MIME',
+		-id       => 'MIME',
+		-values   => \@mime,
+		-size     => 1,
+		-multiple => 0 );
+
+my @dels = (C4::Context->preference("delimiter"));
+my $CGIsepChoice = CGI::scrolling_list(
+		-name     => 'sep',
+		-id       => 'sep',
+		-values   => \@dels,
+		-size     => 1,
+		-multiple => 0 );
+
+my $itemtypes = GetItemTypes;
+my @itemtypeloop;
+foreach (keys %$itemtypes) {
+	push @itemtypeloop, {
+		value => $_,
+# 		selected => ($_ eq $itemtype) ? 1 : 0,
+		description => $itemtypes->{$_}->{'description'},
+   };
+}
+my $branches = GetBranches;
+my @branchloop;
+foreach (keys %$branches) {
+	push @branchloop, {
+		value => $_,
+#		selected => ($_ eq $branch) ? 1 : 0,
+		branchname => $branches->{$_}->{'branchname'},
+	};
+}
+
+$template->param(
+	CGIextChoice => $CGIextChoice,
+	CGIsepChoice => $CGIsepChoice,
+	itemtypeloop =>\@itemtypeloop,
+	branchloop   =>\@branchloop,
+);
+output_html_with_http_headers $input, $cookie, $template->output;
 
 
 sub calculate {
-    my ($line, $column, $filters) = @_;
-    my @mainloop;
-    my @loopfooter;
-    my @loopcol;
+    my ($limit, $column, $filters) = @_;
     my @loopline;
     my @looprow;
     my %globalline;
-    my $grantotal =0;
-# extract parameters
+	my %columns = ();
     my $dbh = C4::Context->dbh;
 
 # Filters
@@ -183,164 +157,135 @@ sub calculate {
 #
     my @loopfilter;
     for (my $i=0;$i<=6;$i++) {
-        my %cell;
         if ( @$filters[$i] ) {
+        	my %cell = (filter=>@$filters[$i]);
             if (($i==1) and (@$filters[$i-1])) {
                 $cell{err} = 1 if (@$filters[$i]<@$filters[$i-1]) ;
             }
-            $cell{filter} .= @$filters[$i];
-            $cell{crit} .="Branch" if ($i==0);
-            $cell{crit} .="Doc Type" if ($i==1);
+            $cell{crit} = "Branch"   if ($i==0);
+            $cell{crit} = "Doc Type" if ($i==1);
             push @loopfilter, \%cell;
         }
     }
-    my $colfield;
-    my $colorder;
+	push @loopfilter, {crit=>'limit', filter=>$limit} if ($limit);
     if ($column){
-        $column = "issues.".$column if (($column=~/branchcode/) or ($column=~/timestamp/));
-        $column = "biblioitems.".$column if $column=~/itemtype/;
-        $column = "borrowers.".$column if $column=~/categorycode/;
-        my @colfilter ;
-        $colfilter[0] = @$filters[0] if ($column =~ /branch/ )  ;
-        $colfilter[0] = @$filters[1] if ($column =~ /itemtype/ )  ;
-                                                
-    # loop cols.
-        $colfield .= $column;
-        $colorder .= $column;
-        
-        my $strsth2;
-        $strsth2 .= "select distinctrow $colfield 
-          FROM `old_issues` 
-            LEFT JOIN borrowers ON borrowers.borrowernumber=old_issues.borrowernumber 
-            LEFT JOIN items ON old_issues.itemnumber=items.itemnumber 
-            LEFT JOIN biblioitems ON biblioitems.biblioitemnumber=items.biblioitemnumber  
-            WHERE old_issues.itemnumber=items.itemnumber 
-            AND old_issues.borrowernumber=borrowers.borrowernumber";
-        if ($colfilter[0]) {
-            $colfilter[0] =~ s/\*/%/g;
-            $strsth2 .= " AND $column LIKE '$colfilter[0]' " ;
+		push @loopfilter, {crit=>'by', filter=>$column};
+		my $tablename = ($column =~ /branchcode/) ? 'branches' : 'items';
+		$column = ($column =~ /branchcode/ or $column =~ /itype/) ? "$tablename.$column" : $column;
+        my $strsth2 = ($tablename eq 'branches') ?
+		"SELECT $column as coltitle, count(items.itemnumber) AS coltitle_count FROM $tablename LEFT JOIN items ON items.homebranch=$column " :
+		"SELECT $column as coltitle, count(*)                AS coltitle_count FROM $tablename " ;
+        if ($tablename eq 'branches') {
+			my $f = @$filters[0];
+            $f =~ s/\*/%/g;
+            $strsth2 .= " AND $column LIKE '$f' " ;
         }
-        $strsth2 .=" GROUP BY $colfield";
-        $strsth2 .=" ORDER BY $colorder";
-        warn "". $strsth2;
-        
-        my $sth2 = $dbh->prepare( $strsth2 );
+        $strsth2 .=" GROUP BY $column ORDER BY $column ";	# needed for count
+		push @loopfilter, {crit=>'SQL', sql=>1, filter=>$strsth2};
+        $debug and warn "catalogue_out SQL: ". $strsth2;
+        my $sth2 = $dbh->prepare($strsth2);
         $sth2->execute;
-
-        
     
-        while (my ($celvalue) = $sth2->fetchrow) {
-            my %cell;
-    #		my %ft;
-    #		warn "coltitle :".$celvalue;
-            $cell{coltitle} = $celvalue;
-    #		$ft{totalcol} = 0;
-            push @loopcol, \%cell;
-        }
-    #	warn "fin des titres colonnes";
-    }
-    
-    my $i=0;
-#	my @totalcol;
-    my $hilighted=-1;
-    
-    #Initialization of cell values.....
-    my @table;
-    
-#	warn "init table";
-    for (my $i=1;$i<=$line;$i++) {
-        foreach my $col ( @loopcol ) {
-#			warn " init table : $row->{rowtitle} / $col->{coltitle} ";
-            $table[$i]->{($col->{coltitle})?$col->{coltitle}:"Global"}=0;
+        while (my ($celvalue, $count) = $sth2->fetchrow) {
+			($celvalue) or $celvalue = 'UNKNOWN';
+			$columns{$celvalue} = $count;
         }
     }
-
+    
+	my %tables = (map {$_=>[]} keys %columns);
 
 # preparing calculation
-    my $strcalc ;
+	my @exe_args = ();
+    my $query = "
+        SELECT items.barcode    as barcode,
+               items.homebranch as branch,
+               items.itemcallnumber as itemcallnumber,
+               biblio.title     as title,
+               biblio.biblionumber  as biblionumber,
+               biblio.author    as author";
+	($column) and $query .= ",\n$column as col ";
+	$query .= "
+        FROM items
+        LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber
+        LEFT JOIN biblio      ON biblio.biblionumber   = items.biblionumber
+        LEFT JOIN old_issues  ON old_issues.itemnumber = items.itemnumber
+        WHERE old_issues.itemnumber IS NULL
+	";
+	if ($filters->[0]) {
+    	$filters->[0]=~ s/\*/%/g;
+		push @exe_args, $filters->[0]; 
+    	$query .= " AND items.homebranch     LIKE ?";
+	}
+	if ($filters->[1]) {
+    	$filters->[1]=~ s/\*/%/g;
+		push @exe_args, $filters->[1]; 
+    	$query .= " AND biblioitems.itemtype LIKE ?";
+	}
+	if ($column) {
+		$query .= " AND $column = ? GROUP BY items.itemnumber, $column ";	# placeholder handled below
+    } else {
+		$query .= " GROUP BY items.itemnumber ";
+	}
+	$query .= " ORDER BY items.itemcallnumber DESC, barcode";
+    $query .= " LIMIT 0,$limit" if ($limit);
+    $debug and warn "SQL : $query";
+    # warn "SQL : $query";
+	push @loopfilter, {crit=>'SQL', sql=>1, filter=>$query};
+    my $dbcalc = $dbh->prepare($query);
+
+	if ($column) {
+		foreach (sort keys %columns) {
+			my (@more_exe_args) = @exe_args;	# execute(@exe_args,$_) would fail when the array is empty.
+			push @more_exe_args, $_;			# but @more_exe_args will work
+			$dbcalc->execute(@more_exe_args) or die "Query execute(@more_exe_args) failed: $query";
+    		while (my $data = $dbcalc->fetchrow_hashref) {
+				my $col = $data->{col} || 'NULL';
+				$tables{$col} or $tables{$col} = [];
+				push @{$tables{$col}}, $data;
+			}
+		}
+	} else {
+    	(scalar @exe_args) ? $dbcalc->execute(@exe_args) : $dbcalc->execute;
+		while (my $data = $dbcalc->fetchrow_hashref) {
+			my $col = $data->{col} || 'NULL';
+			$tables{$col} or $tables{$col} = [];
+			push @{$tables{$col}}, $data;
+		}
+	}
     
-# Processing average loanperiods
-    $strcalc .= "SELECT items.barcode, biblio.title, biblio.biblionumber, biblio.author";
-    $strcalc .= " , $colfield " if ($colfield);
-    $strcalc .= " FROM (items 
-                        LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber  
-                        LEFT JOIN biblio ON biblio.biblionumber=items.biblionumber) 
-                  LEFT JOIN old_issues ON  old_issues.itemnumber=items.itemnumber 
-                  WHERE old_issues.itemnumber is null";
-    @$filters[0]=~ s/\*/%/g if (@$filters[0]);
-    $strcalc .= " AND items.homebranch like '" . @$filters[0] ."'" if ( @$filters[0] );
-    @$filters[1]=~ s/\*/%/g if (@$filters[1]);
-    $strcalc .= " AND biblioitems.itemtype like '" . @$filters[1] ."'" if ( @$filters[1] );
-    
-    $strcalc .= " GROUP BY items.itemnumber";
-    $strcalc .= ", $colfield"          if ($column);
-    $strcalc .= " ORDER BY $colfield " if ($colfield);
-    my $max = (@loopcol) ? $line*@loopcol : $line ;
-    $strcalc .= " LIMIT 0,$max"        if ($line);
-    warn "SQL :". $strcalc;
-    
-    my $dbcalc = $dbh->prepare($strcalc);
-    $dbcalc->execute;
-# 	warn "filling table";
-    my $previous_col;
-    $i=1;
-    while (my  @data = $dbcalc->fetchrow) {
-        my ($barcode,$title,$biblionumber,$author, $col )=@data;
-        $col = "zzEMPTY" if ($col eq undef);
-        $i=1 if (($previous_col) and not($col eq $previous_col));
-        $table[$i]->{$col}->{'barcode'}=$barcode;
-        $table[$i]->{$col}->{'title'}=$title;
-        $table[$i]->{$col}->{'biblionumber'}=$biblionumber;
-        $table[$i]->{$col}->{'author'}=$author;
-#		warn " ".$i." ".$col. " ".$row;
-        $i++;
-        $previous_col=$col;
-    }
-    
-    push @loopcol,{coltitle => "Global"} if not($column);
-    
-    $max =(($line)?$line:@table);
-    for ($i=1; $i<=$max;$i++) {
-        my @loopcell;
-        #@loopcol ensures the order for columns is common with column titles
-        # and the number matches the number of columns
-        my $colcount=0;
-        foreach my $col ( @loopcol ) {
-            my ($barcode, $author, $title, $biblionumber);
-            if (@loopcol){
-                $barcode =$table[$i]->{(($col->{coltitle} eq "NULL") or ($col->{coltitle} eq "Global"))?"zzEMPTY":$col->{coltitle}}->{'barcode'};
-                $title =$table[$i]->{(($col->{coltitle} eq "NULL") or ($col->{coltitle} eq "Global"))?"zzEMPTY":$col->{coltitle}}->{'title'};
-                $author =$table[$i]->{(($col->{coltitle} eq "NULL") or ($col->{coltitle} eq "Global"))?"zzEMPTY":$col->{coltitle}}->{'author'};
-                $biblionumber =$table[$i]->{(($col->{coltitle} eq "NULL") or ($col->{coltitle} eq "Global"))?"zzEMPTY":$col->{coltitle}}->{'biblionumber'};
-            } else {
-                $barcode =$table[$i]->{"zzEMPTY"}->{'barcode'};
-                $title =$table[$i]->{"zzEMPTY"}->{'title'};
-                $author =$table[$i]->{"zzEMPTY"}->{'author'};
-                $biblionumber =$table[$i]->{"zzEMPTY"}->{'biblionumber'};
-            }
-            push @loopcell, {author=> $author, title=>$title,biblionumber=>$biblionumber,barcode=>$barcode} ;
-        }
-        push @looprow,{ 'rowtitle' => $i ,
-                        'loopcell' => \@loopcell,
-                        'hilighted' => ($hilighted >0),
-                    };
-        $hilighted = -$hilighted;
-    }
-    
-            
+	foreach my $tablename (sort keys %tables) {
+		my (@temptable);
+		my $i=0;
+		foreach my $cell (@{$tables{$tablename}}) {
+			if (0 == $i++ and $debug) {
+				my $dump = Dumper($cell);
+				$dump =~ s/\n/ /gs;
+				$dump =~ s/\s+/ /gs;
+				print STDERR "first cell for $tablename: $dump";
+			}
+			push @temptable, $cell;
+		}
+		my $count = scalar(@temptable);
+		my $allitems = $columns{$tablename};
+		$globalline{total_looptable_count} += $count;
+		$globalline{total_coltitle_count}  += $allitems;
+    	push @{$globalline{looptables}}, {
+			looprow  => \@temptable,
+			coltitle => $tablename,
+			coltitle_count  => $allitems,
+			looptable_count => $count,
+			looptable_first => ($count) ? $temptable[ 0]->{itemcallnumber} : '',
+			looptable_last  => ($count) ? $temptable[-1]->{itemcallnumber} : '',
+		};
+	}
 
     # the header of the table
     $globalline{loopfilter}=\@loopfilter;
-    # the core of the table
-    $globalline{looprow} = \@looprow;
-    $globalline{loopcol} = \@loopcol;
-# 	# the foot (totals by borrower type)
-    $globalline{loopfooter} = \@loopfooter;
-    $globalline{total}= $grantotal;
-    $globalline{line} = $line;
-    $globalline{column} = $column;
-    push @mainloop,\%globalline;
-    return \@mainloop;
+    $globalline{limit}   = $limit;
+    $globalline{column}  = $column;
+    return [(\%globalline)]; #	reference to array of reference to hash
 }
 
 1;
+__END__
+
