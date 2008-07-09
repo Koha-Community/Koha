@@ -83,7 +83,7 @@ function displayMoreConstraint(numlayer){
         
                <fieldset class="rows"><legend>Basic constraints</legend>
                 	<ol>
-                		<!-- TMPL_IF name="subfieldcode" -->
+                		<!-- TMPL_IF EXPR="subfieldcode eq 0 || subfieldcode" --> 
                 		<li><span class="label">Subfield code:</span> <!-- TMPL_VAR NAME="subfieldcode" --> <input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="subfieldcode" -->" /></li>
                 		<!-- TMPL_ELSE -->
                 		<li><span class="label">Subfield code:</span> <input type="text" name="tagsubfield" value="<!-- TMPL_VAR NAME="subfieldcode" -->" /></li>
