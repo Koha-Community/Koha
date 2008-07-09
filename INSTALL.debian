@@ -112,9 +112,17 @@ Run the following command:
                 PDF::Reuse PDF::Reuse::Barcode Data::ICal GD::Barcode::UPCE \
                 XML::RSS Algorithm::CheckDigits::M43_001 Biblio::EndnoteStyle POE Schedule::At
 
-There is a known but benign error in the test case for Barcode::Code128, 
-which is required by PDF::Reuse::Barcode.  If this module is not installed, 
-you can do a forced installation of Barcode::Code128.
+  WARNINGS:
+  1.6.1 A Perl library Koha depends on, MARC::File::XML may not work with Perl
+    5.10, see: http://bugs.koha.org/cgi-bin/bugzilla/show_bug.cgi?id=2309),
+
+  1.6.2 Recent versions of CGI::Session have caused some issues for users;
+  as of this release date, we suggest downloading the CGI::Session::serialize::yaml
+  tarball direct from CPAN and install it directly rather than using the cpan command
+
+  1.6.3 There is a known but benign error in the test case for Barcode::Code128, 
+  which is required by PDF::Reuse::Barcode.  If this module is not installed, 
+  you can do a forced installation of Barcode::Code128.
 
 Note: you may need to run CPAN initialization if you've not run cpan
 before:

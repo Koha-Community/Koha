@@ -16,13 +16,10 @@ how to customise CPAN-installed modules, the same things should work
 for you with Koha.  If not, don't worry.  If you want to customise the
 installation more than described below, run "man ExtUtils::MakeMaker"
 
-You need to have a server running Perl 5.8 (a library Koha depends on,
-MARC::File::XML may not work with Perl 5.10, see:
-http://bugs.koha.org/cgi-bin/bugzilla/show_bug.cgi?id=2309),
-MySQL 5 or PostgreSQL 8.2.5, Zebra
+You need to have a server running Perl 5.8, MySQL 5 or PostgreSQL 8.2.5, Zebra
 2.0.22 or greater and a webserver (preferably Apache2) before installing
 Koha.
- 
+
 MySQL 5: Create a database called 'koha,' owned by 'kohaadmin'
 user, with a password set. Note: kohaadmin must have at least the
 following privileges: SELECT, INSERT, UPDATE, DELETE, CREATE, DROP,
@@ -30,12 +27,23 @@ ALTER, and LOCK TABLES.
 
 PostgreSQL 8.2.5: Create a database called 'koha,' owned by 'kohaadmin' 
 user, with a password set. Note: kohaadmin must be a superuser. You
-must also add plpgsql to the koha database.
+must also add plpgsql to the koha database. NOTE: PostgreSQL support in
+Koha is experimental and should not be attempted for production systems
+without a heavy investment in testing
 
 Default installation instructions:
 
 1. perl Makefile.PL
-  (you will be prompted to answer a number of questions)
+  (you will be prompted to answer a number of questions and you will
+  need to install some Perl dependencies)
+  WARNING:
+  1.1 A Perl library Koha depends on, MARC::File::XML may not work with Perl
+    5.10, see: http://bugs.koha.org/cgi-bin/bugzilla/show_bug.cgi?id=2309),
+
+  1.2 recent versions of CGI::Session have caused some issues for users;
+  as of this release date, we suggest downloading the CGI::Session::serialize::yaml
+  tarball direct from CPAN and install it directly rather than using the cpan command
+
 2. make
 3.(optional) make test 
 4. sudo make install
