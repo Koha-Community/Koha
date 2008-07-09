@@ -1835,6 +1835,19 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	print "Upgrade to $DBversion done (fix name borrower_message_preferences.wants_digest)\n";
     SetVersion ($DBversion);
 }
+
+$DBversion = '3.00.00.097';
+if ( C4::Context->preference('Version') < TransformToNum($DBversion) ) {
+
+    $dbh->do('ALTER TABLE message_queue ADD to_address   mediumtext default NULL');
+    $dbh->do('ALTER TABLE message_queue ADD from_address mediumtext default NULL');
+    $dbh->do('ALTER TABLE message_queue ADD content_type text');
+    $dbh->do('ALTER TABLE message_queue CHANGE borrowernumber borrowernumber int(11) default NULL');
+
+    print "Upgrade to $DBversion done (updating 4 fields in message_queue table)\n";
+    SetVersion($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table

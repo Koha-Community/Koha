@@ -2176,15 +2176,17 @@ CREATE TABLE `tmp_holdsqueue` (
 -- Table structure for table `message_queue`
 --
 
-DROP TABLE if EXISTS `message_queue`;
 CREATE TABLE `message_queue` (
   `message_id` int(11) NOT NULL auto_increment,
-  `borrowernumber` int(11) NOT NULL,
+  `borrowernumber` int(11) default NULL,
   `subject` text,
   `content` text,
   `message_transport_type` varchar(20) NOT NULL,
   `status` enum('sent','pending','failed','deleted') NOT NULL default 'pending',
   `time_queued` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `to_address` mediumtext,
+  `from_address` mediumtext,
+  `content_type` text,
   KEY `message_id` (`message_id`),
   KEY `borrowernumber` (`borrowernumber`),
   KEY `message_transport_type` (`message_transport_type`),
