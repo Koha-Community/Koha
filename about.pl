@@ -97,6 +97,7 @@ MARC::Charset
 MARC::File::XML
 MARC::Record
 MIME::Base64
+MIME::Lite
 MIME::QuotedPrint
 Mail::Sendmail
 Net::LDAP

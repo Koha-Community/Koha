@@ -567,6 +567,7 @@ WriteMakefile(
                             'MARC::File::XML'                  => 0.88,
                             'MARC::Record'                     => 2.00,
                             'MIME::Base64'                     => 3.07,
+                            'MIME::Lite'                       => 3.01,
                             'MIME::QuotedPrint'                => 3.07,
                             'Mail::Sendmail'                   => 0.79,
                             'Net::LDAP'                        => 0.33, # optional
