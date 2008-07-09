@@ -594,9 +594,16 @@ sub GetMemberIssuesAndFines {
 
 =head2 ModMember
 
-  &ModMember($borrowernumber);
+=over 4
+
+my $success = ModMember(borrowernumber => $borrowernumber, [ field => value ]... );
 
 Modify borrower's data.  All date fields should ALREADY be in ISO format.
+
+return :
+true on success, or false on failure
+
+=back
 
 =cut
 
@@ -647,7 +654,7 @@ sub ModMember {
     push @parameters, $data{'borrowernumber'};
     $debug and print STDERR "$query (executed w/ arg: $data{'borrowernumber'})";
     $sth = $dbh->prepare($query);
-    $sth->execute(@parameters);
+    my $execute_success = $sth->execute(@parameters);
     $sth->finish;
 
 # ok if its an adult (type) it may have borrowers that depend on it as a guarantor
@@ -660,6 +667,8 @@ sub ModMember {
     }
     logaction("MEMBERS", "MODIFY", $data{'borrowernumber'}, "$query (executed w/ arg: $data{'borrowernumber'})") 
         if C4::Context->preference("BorrowersLog");
+
+    return $execute_success;
 }
 
 
@@ -2018,6 +2027,34 @@ sub GetBorrowersNamesAndLatestIssue {
     my $results = $sth->fetchall_arrayref({});
     return $results;
 }
+
+=head2 DebarMember
+
+=over 4
+
+my $success = DebarMember( $borrowernumber );
+
+marks a Member as debarred, and therefore unable to checkout any more
+items.
+
+return :
+true on success, false on failure
+
+=back
+
+=cut
+
+sub DebarMember {
+    my $borrowernumber = shift;
+
+    return unless defined $borrowernumber;
+    return unless $borrowernumber =~ /^\d+$/;
+
+    return ModMember( borrowernumber => $borrowernumber,
+                      debarred       => 1 );
+    
+}
+
 END { }    # module clean-up code here (global destructor)
 
 1;

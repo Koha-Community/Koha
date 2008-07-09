@@ -285,6 +285,32 @@ sub startup_22_add_bookfund : Test(startup => 2) {
     return;
 }
 
+=head2 startup_24_add_branch
+
+=cut
+
+sub startup_24_add_branch : Test(startup => 1) {
+    my $self = shift;
+
+    my $branch_info = {
+        add            => 1,
+        branchcode     => $self->random_string(3),
+        branchname     => $self->random_string(),
+        branchaddress1 => $self->random_string(),
+        branchaddress2 => $self->random_string(),
+        branchaddress3 => $self->random_string(),
+        branchphone    => $self->random_phone(),
+        branchfax      => $self->random_phone(),
+        brancemail     => $self->random_email(),
+        branchip       => $self->random_ip(),
+        branchprinter  => $self->random_string(),
+      };
+    C4::Branch::ModBranch($branch_info);
+    $self->{'branchcode'} = $branch_info->{'branchcode'};
+    ok( $self->{'branchcode'}, "created branch: $self->{'branchcode'}" );
+
+}
+
 =head2 startup_24_add_member
 
 Add a patron/member for the tests to use
@@ -377,7 +403,7 @@ like arbitrary.
 sub random_string {
     my $self = shift;
 
-    my $wordsize = 6;  # how many letters in your string?
+    my $wordsize = shift || 6;  # how many letters in your string?
 
     # leave out these characters: "oOlL10". They're too confusing.
     my @alphabet = ( 'a'..'k','m','n','p'..'z', 'A'..'K','M','N','P'..'Z', 2..9 );
@@ -389,6 +415,47 @@ sub random_string {
     return $randomstring;
     
 }
+
+=head3 random_phone
+
+generates a random phone number. Currently, it's not actually random. It's an unusable US phone number
+
+=cut
+
+sub random_phone {
+    my $self = shift;
+
+    return '212-555-5555';
+    
+}
+
+=head3 random_email
+
+generates a random email address. They're all in the unusable
+'example.com' domain that is designed for this purpose.
+
+=cut
+
+sub random_email {
+    my $self = shift;
+
+    return $self->random_string() . '@example.com';
+    
+}
+
+=head3 random_ip
+
+returns an IP address suitable for testing purposes.
+
+=cut
+
+sub random_ip {
+    my $self = shift;
+
+    return '127.0.0.2';
+    
+}
+
 
 =head3 add_biblios
 

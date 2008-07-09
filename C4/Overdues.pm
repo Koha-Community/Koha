@@ -958,6 +958,27 @@ sub GetOverdueDelays {
         return(@delays);
 }
 
+=head2 GetBranchcodesWithOverdueRules
+
+=over 4
+
+my @branchcodes = C4::Overdues::GetBranchcodesWithOverdueRules()
+
+returns a list of branch codes for branches with overdue rules defined.
+
+=back
+
+=cut
+
+sub GetBranchcodesWithOverdueRules {
+    my $dbh               = C4::Context->dbh;
+    my $rqoverduebranches = $dbh->prepare("SELECT DISTINCT branchcode FROM overduerules WHERE delay1 IS NOT NULL");
+    $rqoverduebranches->execute;
+    my @branches = map { shift @$_ } @{ $rqoverduebranches->fetchall_arrayref };
+    $rqoverduebranches->finish;
+    return @branches;
+}
+
 =item CheckAccountLineLevelInfo
 
 ($exist) = &CheckAccountLineLevelInfo($borrowernumber,$itemnumber,$accounttype,notify_level);

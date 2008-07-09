@@ -18,10 +18,8 @@ package C4::Letters;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use MIME::Lite;
 use Mail::Sendmail;
-# use C4::Date;
-# use Date::Manip;
-# use C4::Suggestions;
 use C4::Members;
 use C4::Log;
 use C4::SMS;
@@ -528,22 +526,36 @@ sub EnqueueLetter {
     return unless exists $params->{'letter'};
     return unless exists $params->{'borrowernumber'};
     return unless exists $params->{'message_transport_type'};
-    
-    my $dbh = C4::Context->dbh();
+
+    # If we have any attachments we should encode then into the body.
+    if ( $params->{'attachments'} ) {
+        $params->{'letter'} = _add_attachments(
+            {   letter      => $params->{'letter'},
+                attachments => $params->{'attachments'},
+                message     => MIME::Lite->new( Type => 'multipart/mixed' ),
+            }
+        );
+    }
+
+    my $dbh       = C4::Context->dbh();
     my $statement = << 'ENDSQL';
 INSERT INTO message_queue
-( borrowernumber, subject, content, message_transport_type, status, time_queued )
+( borrowernumber, subject, content, message_transport_type, status, time_queued, to_address, from_address, content_type )
 VALUES
-( ?,              ?,       ?,       ?,                      ?,      NOW() )
+( ?,              ?,       ?,       ?,                      ?,      NOW(),       ?,          ?,            ? )
 ENDSQL
 
-    my $sth = $dbh->prepare( $statement );
-    my $result = $sth->execute( $params->{'borrowernumber'},         # borrowernumber
-                                $params->{'letter'}->{'title'},      # subject
-                                $params->{'letter'}->{'content'},    # content
-                                $params->{'message_transport_type'}, # message_transport_type
-                                'pending',                           # status
-                           );
+    my $sth    = $dbh->prepare($statement);
+    my $result = $sth->execute(
+        $params->{'borrowernumber'},              # borrowernumber
+        $params->{'letter'}->{'title'},           # subject
+        $params->{'letter'}->{'content'},         # content
+        $params->{'message_transport_type'},      # message_transport_type
+        'pending',                                # status
+        $params->{'to_address'},                  # to_address
+        $params->{'from_address'},                # from_address
+        $params->{'letter'}->{'content-type'},    # content_type
+    );
     return $result;
 }
 
@@ -569,7 +581,10 @@ sub SendQueuedMessages {
     my $unsent_messages = _get_unsent_messages();
     MESSAGE: foreach my $message ( @$unsent_messages ) {
         # warn Data::Dumper->Dump( [ $message ], [ 'message' ] );
-        warn "sending $message->{'message_transport_type'} message to patron $message->{'borrowernumber'}" if $params->{'verbose'};
+        warn sprintf( 'sending %s message to patron: %s',
+                      $message->{'message_transport_type'},
+                      $message->{'borrowernumber'} || 'Admin' )
+          if $params->{'verbose'};
         # This is just begging for subclassing
         next MESSAGE if ( lc( $message->{'message_transport_type'} eq 'rss' ) );
         if ( lc( $message->{'message_transport_type'} ) eq 'email' ) {
@@ -652,12 +667,57 @@ ENDSQL
     return $messages;
 }
 
+=head2 _add_attachements
+
+named parameters:
+letter - the standard letter hashref
+attachments - listref of attachments. each attachment is a hashref of:
+  type - the mime type, like 'text/plain'
+  content - the actual attachment
+  filename - the name of the attachment.
+message - a MIME::Lite object to attach these to.
+
+returns your letter object, with the content updated.
+
+=cut
+
+sub _add_attachments {
+    my $params = shift;
+
+    return unless 'HASH' eq ref $params;
+    foreach my $required_parameter (qw( letter attachments message )) {
+        return unless exists $params->{$required_parameter};
+    }
+    return $params->{'letter'} unless @{ $params->{'attachments'} };
+
+    # First, we have to put the body in as the first attachment
+    $params->{'message'}->attach(
+        Type => 'TEXT',
+        Data => $params->{'letter'}->{'content'},
+    );
+
+    foreach my $attachment ( @{ $params->{'attachments'} } ) {
+        $params->{'message'}->attach(
+            Type     => $attachment->{'type'},
+            Data     => $attachment->{'content'},
+            Filename => $attachment->{'filename'},
+        );
+    }
+    # we're forcing list context here to get the header, not the count back from grep.
+    ( $params->{'letter'}->{'content-type'} ) = grep( /^Content-Type:/, split( /\n/, $params->{'message'}->header_as_string ) );
+    $params->{'letter'}->{'content-type'} =~ s/^Content-Type:\s+//;
+    $params->{'letter'}->{'content'} = $params->{'message'}->body_as_string;
+
+    return $params->{'letter'};
+
+}
+
 sub _get_unsent_messages {
     my $params = shift;
 
     my $dbh = C4::Context->dbh();
     my $statement = << 'ENDSQL';
-SELECT message_id, borrowernumber, subject, content, message_transport_type, status, time_queued
+SELECT message_id, borrowernumber, subject, content, message_transport_type, status, time_queued, from_address, to_address, content_type
 FROM message_queue
 WHERE status = 'pending'
 ENDSQL
@@ -688,13 +748,18 @@ sub _send_message_by_email {
     my $message = shift;
 
     my $member = C4::Members::GetMember( $message->{'borrowernumber'} );
-    return unless $member->{'email'};
 
-    my $success = sendmail( To      => $member->{'email'},
-                            From    => C4::Context->preference('KohaAdminEmailAddress'),
-                            Subject => $message->{'subject'},
-                            Message => $message->{'content'},
-                       );
+    my %sendmail_params = (
+        To   => $message->{'to_address'}   || $member->{'email'},
+        From => $message->{'from_address'} || C4::Context->preference('KohaAdminEmailAddress'),
+        Subject => $message->{'subject'},
+        Message => $message->{'content'},
+    );
+    if ($message->{'content_type'}) {
+        $sendmail_params{'content-type'} = $message->{'content_type'};
+    }
+    my $success = sendmail( %sendmail_params );
+
     if ( $success ) {
         # warn "OK. Log says:\n", $Mail::Sendmail::log;
         _set_message_status( { message_id => $message->{'message_id'},
