@@ -634,9 +634,9 @@ sub CheckReserves {
     $sth->execute;
     my ( $biblio, $bibitem, $notforloan_per_itemtype, $notforloan_per_item ) = $sth->fetchrow_array;
     $sth->finish;
-
     # if item is not for loan it cannot be reserved either.....
-    return ( 0, 0 ) if $notforloan_per_item or $notforloan_per_itemtype;
+    #    execption to notforloan is where items.notforloan < 0 :  This indicates the item is holdable. 
+    return ( 0, 0 ) if  ( $notforloan_per_item > 0 ) or $notforloan_per_itemtype;
 
     # get the reserves...
     # Find this item in the reserves
