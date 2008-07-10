@@ -30,7 +30,7 @@ use C4::Koha;
 use C4::Auth qw/get_session/;
 use C4::Members;
 use C4::Output;
-use C4::Date qw/format_date/;
+use C4::Dates qw/format_date/;
 use Exporter;
 
 use vars qw($debug @EXPORT @ISA $VERSION);
