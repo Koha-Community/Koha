@@ -99,7 +99,11 @@
                 
                     <select name="tobranchcd" id="tobranchcd">
                         <!-- TMPL_LOOP Name="branchoptionloop" -->
-                            <option value="<!-- TMPL_VAR Name="code" -->" <!-- TMPL_VAR Name="selected" -->>
+						<!-- TMPL_IF NAME="selected" -->
+                            <option value="<!-- TMPL_VAR Name="code" -->" selected="selected">
+						<!-- TMPL_ELSE -->
+                            <option value="<!-- TMPL_VAR Name="code" -->">
+						<!-- /TMPL_IF -->
                                 <!-- TMPL_VAR Name="name" -->
                             </option>
                         <!-- /TMPL_LOOP -->
