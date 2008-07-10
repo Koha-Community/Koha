@@ -1091,7 +1091,7 @@ item-level hold request.  An item is available if
 * it is not lost AND 
 * it is not damaged AND 
 * it is not withdrawn AND 
-* it is not marked as not for loan
+* does not have a not for loan value > 0
 
 Whether or not the item is currently on loan is 
 also checked - if the AllowOnShelfHolds system preference
@@ -1140,7 +1140,7 @@ sub IsAvailableForItemLevelRequest {
 
     my $available_per_item = 1;
     $available_per_item = 0 if $item->{itemlost} or
-                               $item->{notforloan} or
+                               ( $item->{notforloan} > 0 ) or
                                ($item->{damaged} and not C4::Context->preference('AllowHoldsOnDamagedItems')) or
                                $item->{wthdrawn} or
                                $notforloan_per_itemtype;
