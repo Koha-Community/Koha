@@ -329,6 +329,7 @@ sub startup_24_add_member : Test(startup => 1) {
                        categorycode => 'PT',  # PT  => PaTron
                        dateexpiry   => '2010-01-01',
                        password     => 'testpassword',
+                       dateofbirth  => $self->random_date(),
                   };
 
     my $borrowernumber = AddMember( %$memberinfo );
@@ -456,6 +457,23 @@ sub random_ip {
     
 }
 
+=head3 random_date
+
+returns a somewhat random date in the iso (yyyy-mm-dd) format.
+
+=cut
+
+sub random_date {
+    my $self = shift;
+
+    my $year  = 1800 + int( rand(300) );    # 1800 - 2199
+    my $month = 1 + int( rand(12) );        # 1 - 12
+    my $day   = 1 + int( rand(28) );        # 1 - 28
+                                            # stop at the 28th to keep us from generating February 31st and such.
+
+    return sprintf( '%04d-%02d-%02d', $year, $month, $day );
+
+}
 
 =head3 add_biblios
 

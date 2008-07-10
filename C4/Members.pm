@@ -624,7 +624,7 @@ sub ModMember {
         }
     }
     if (!$data{'dateofbirth'}){
-        undef $data{'dateofbirth'};
+        delete $data{'dateofbirth'};
     }
     my $qborrower=$dbh->prepare("SHOW columns from borrowers");
     $qborrower->execute;
