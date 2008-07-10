@@ -240,7 +240,7 @@ sub pagination_bar {
 	$base_url =~ s/$delim;//g;		# remove empties
 	$base_url =~ s/$delim$//;		# remove trailing delim
 
-    my $url = $base_url . ( $base_url =~ m/$delim/ ? '&amp;' : '?' ) . $startfrom_name . '=';
+    my $url = $base_url . (($base_url =~ m/$delim/ or $base_url =~ m/\?/) ? '&amp;' : '?' ) . $startfrom_name . '=';
     my $pagination_bar = '';
 
     # navigation bar useful only if more than one page to display !
