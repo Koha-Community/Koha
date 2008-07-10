@@ -356,7 +356,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 		    <h4>Holds waiting:</h4>
 			        <!-- TMPL_LOOP NAME="WaitingReserveLoop" -->
 			            <ul> 
-			                <li> <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title"--></a> (<!-- TMPL_VAR NAME="itemtype"-->), <!-- TMPL_IF NAME="author" -->by <!-- TMPL_VAR NAME="author"--><!-- /TMPL_IF --> Reserved on <!-- TMPL_VAR NAME="reservedate"-->.
+			                <li> <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title"--></a> (<!-- TMPL_VAR NAME="itemtype"-->), <!-- TMPL_IF NAME="author" -->by <!-- TMPL_VAR NAME="author"--><!-- /TMPL_IF --> Hold placed on <!-- TMPL_VAR NAME="reservedate"-->.
 			            <!-- TMPL_IF NAME="waitingat" -->
 			                <br /><!-- TMPL_IF NAME="waitinghere" --><strong class="waitinghere"><!-- TMPL_ELSE --><strong><!-- /TMPL_IF -->Waiting at <!-- TMPL_VAR NAME="waitingat" --></strong>	
 			            <!-- /TMPL_IF -->
