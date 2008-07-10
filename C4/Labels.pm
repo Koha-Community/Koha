@@ -21,7 +21,7 @@ use strict;
 use vars qw($VERSION @ISA @EXPORT);
 
 use PDF::Reuse;
-#use Text::Wrap;
+use Text::Wrap;
 use Algorithm::CheckDigits;
 use C4::Members;
 use C4::Branch;
@@ -1000,13 +1000,11 @@ sub DrawSpineText {
                 }
             } else {
                 $str =~ s/\/$//g;    # Here we will strip out all trailing '/' in fields other than the call number...
-                if ( length($str) > $text_wrap_cols ) {    # wrap lines greater than $text_wrap_cols width...
-                    my $wrap = substr($str, ($text_wrap_cols - length($str)), $text_wrap_cols, "");
-                    push @strings, $str;
-                    push @strings, $wrap;
-                } else {
-                    push @strings, $str;
-                }
+                # Wrap text lines exceeding $text_wrap_cols length, truncating all text beyond the second line...
+                $Text::Wrap::columns = $text_wrap_cols;
+                my @title = split(/\n/ ,wrap('', '', $str));
+                pop @title if scalar(@title) > 2;
+                push(@strings, @title);
             }
             # loop for each string line
             foreach my $str (@strings) {
