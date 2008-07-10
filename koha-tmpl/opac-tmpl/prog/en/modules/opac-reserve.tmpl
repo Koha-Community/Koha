@@ -1,5 +1,31 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" DEFAULT="Koha Online" --> Catalog &rsaquo;  Reserving <!-- TMPL_VAR NAME="title" --> for <!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --><!-- /TMPL_LOOP -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript">
+// <![CDATA[ 
+ $(document).ready(function() {
+ 	$("#requestany").click(function() {
+		if(this.checked){
+		$("input[@name=checkitem]").each(function() {
+			$(this).attr("checked","");
+		});
+		}
+	});
+ 	$("input[@name=checkitem]").click(function() {
+		onechecked = 0;
+		$("input[@name=checkitem]").each(function() {
+			if(this.checked){
+				onechecked = 1;
+			}
+		});
+		if(onechecked == 1){
+			$("#requestany").attr("checked","");
+		} else {
+			$("#requestany").attr("checked","checked");
+		}
+	});
+ });
+// ]]>
+</script>
 </head>
 <body>
 <div id="doc3" class="yui-t7">
@@ -102,7 +128,7 @@
 			
 			<!-- TMPL_IF NAME="forloan" -->
             <!-- TMPL_IF NAME="OPACItemHolds" --><li> <label for="requestany">Place a hold on the next available copy </label>
-            <input type="checkbox" id="requestany" name="request" checked="checked" value="Any" />
+            <input type="checkbox" id="requestany" name="request" id="requestany" checked="checked" value="Any" />
             </li><!-- TMPL_ELSE --><input type="hidden" name="request" value="Any" /><!-- /TMPL_IF -->
 			</ol>
 		</fieldset>
@@ -135,14 +161,14 @@
         <tr class="<!-- TMPL_VAR NAME="backgroundcolor" -->">
             <td>
             <!-- TMPL_IF NAME="available" -->
-            <input type="checkbox" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+            <input type="radio" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
             <!-- TMPL_ELSE -->
-            <input DISABLED type="checkbox" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+            <input disabled="disabled" type="radio" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
             <!-- /TMPL_IF -->
             </td>
             <!-- TMPL_IF NAME="item-level_itypes" -->
             <td>
-            <img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->">
+            <img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" />
             </td>
             <!-- /TMPL_IF -->
             <td><!-- TMPL_VAR NAME="barcode"           --></td>
