@@ -44,6 +44,10 @@ use Date::Calc qw(
   Date_to_Days
 );
 
+use Date::Manip qw(
+  Date_Cmp
+);
+
 
 #
 # PARAMETERS READING
@@ -450,9 +454,7 @@ if ($borrower) {
     ($restype) and $it->{'can_renew'} = 0;
 
     $it->{'dd'} = format_date($it->{'date_due'});
-        my $datedue = $it->{'date_due'};
-        $datedue =~ s/-//g;
-    $it->{'od'} = ($datedue < $todaysdate) ? 1 : 0 ;
+    $it->{'od'} = Date_Cmp($todaysdate, $it->{'date_due'}) == 1 ? 1 : 0 ;
         ($it->{'author'} eq '') and $it->{'author'} = ' ';
         $it->{'renew_failed'} = $renew_failed[$it->{'itemnumber'}];
         # ADDED BY JF: NEW ITEMTYPE COUNT DISPLAY
