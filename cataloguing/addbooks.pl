@@ -84,8 +84,7 @@ if ($query) {
         total          => $total_hits,
         query          => $query,
         resultsloop    => \@newresults,
-        # FIXME: pagination_bar doesn't work right with only one pair of CGI params, so I put two in.
-        pagination_bar => pagination_bar( "/cgi-bin/koha/cataloguing/addbooks.pl?bug=fix&q=$query&", getnbpages( $total_hits, $results_per_page ), $page, 'page' ),
+        pagination_bar => pagination_bar( "/cgi-bin/koha/cataloguing/addbooks.pl?q=$query&", getnbpages( $total_hits, $results_per_page ), $page, 'page' ),
     );
 }
 
