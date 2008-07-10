@@ -249,7 +249,6 @@ sub db_scheme2dbi {
 sub import {
     my $package = shift;
     my $conf_fname = shift;        # Config file name
-    $context;
 
     # Create a new context from the given config file name, if
     # any, then set it as the current context.
