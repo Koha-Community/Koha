@@ -711,8 +711,8 @@
 			<!--TMPL_ELSE-->
 			<label for="dateexpiry">
 			<!-- /TMPL_IF-->
-			Expiry date: </label>
-			<input type="text" id="dateexpiry" name="dateexpiry" maxlength="10"  size="10" <!-- TMPL_IF NAME="metric" -->onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');"<!-- /TMPL_IF--> value="<!-- TMPL_VAR NAME="dateexpiry" -->" />
+			Expiry date (leave blank for auto calc) </label>
+			<input type="text" id="dateexpiry" name="dateexpiry" maxlength="10"  size="10" <!-- TMPL_IF NAME="metric" -->onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');"<!-- /TMPL_IF--> value="<!-- TMPL_UNLESS NAME="opadd" --><!-- TMPL_VAR NAME="dateexpiry" --><!-- /TMPL_UNLESS -->" />
             <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="dateexpiry_button" alt="Show Calendar" />
       <script language="JavaScript" type="text/javascript">
         Calendar.setup(
