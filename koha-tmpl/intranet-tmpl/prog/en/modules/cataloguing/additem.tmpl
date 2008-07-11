@@ -143,6 +143,7 @@ function CreateKey(){
 
 //]]>
 </script>
+<link rel="stylesheet" href="<!-- TMPL_VAR NAME="themelang" -->/css/addbiblio.css" />
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -194,10 +195,12 @@ function CreateKey(){
     <!-- TMPL_ELSE -->
         <h2>Edit Item</h2>
     <!-- /TMPL_IF -->	
+	<fieldset class="rows">
+	<ol>
         <!-- TMPL_LOOP NAME="item" -->
-               <div class="subfield_line" style="<!-- TMPL_VAR NAME='visibility' -->;" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
+               <li><div class="subfield_line" style="<!-- TMPL_VAR NAME='visibility' -->;" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
    
-                <label><!-- TMPL_VAR NAME="subfield" --> - <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR NAME="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></label>
+               <label><!-- TMPL_VAR NAME="subfield" --> - <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR NAME="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></label>
                 <!-- TMPL_VAR NAME="marc_value" -->
                 <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->" />
                 <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" />
@@ -206,20 +209,22 @@ function CreateKey(){
                     <span class="buttonPlus" onclick="CloneSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->')">+</span>
                 <!-- /TMPL_IF -->
    
-            </div>   
+            </div></li>
         <!-- /tmpl_loop -->
+		</ol>
+		</fieldset>
     <input type="hidden" name="indicator" value=" " />
     <input type="hidden" name="indicator" value=" " />
     <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
 
-    <!-- TMPL_IF name="opisadd" -->
+<fieldset class="action">    <!-- TMPL_IF name="opisadd" -->
     <input type="submit" value="Add item" onclick="return Check(this.form)" />
     <!-- TMPL_ELSE -->
     <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="itemtagfield" -->" />
     <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="itemtagsubfield" -->" />
     <input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
     <input type="submit" value="Save Changes" onclick="return Check(this.form)" /> 
-    <!-- /TMPL_IF -->
+    <!-- /TMPL_IF --></fieldset>
 
     </form>
 </div>
