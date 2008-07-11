@@ -999,12 +999,23 @@ sub DrawSpineText {
                     push @strings, $str;    # if $nowrap == 1 do not wrap or remove segmentation markers...
                 }
             } else {
-                $str =~ s/\/$//g;    # Here we will strip out all trailing '/' in fields other than the call number...
-                # Wrap text lines exceeding $text_wrap_cols length, truncating all text beyond the second line...
+                $str =~ s/\/$//g;       # Here we will strip out all trailing '/' in fields other than the call number...
+                $str =~ s/\(/\\\(/g;    # Escape '(' and ')' for the postscript stream...
+                $str =~ s/\)/\\\)/g;
+                # Wrap text lines exceeding $text_wrap_cols length...
                 $Text::Wrap::columns = $text_wrap_cols;
-                my @title = split(/\n/ ,wrap('', '', $str));
-                pop @title if scalar(@title) > 2;
-                push(@strings, @title);
+                my @line = split(/\n/ ,wrap('', '', $str));
+                # If this is a title field, limit to two lines; all others limit to one...
+                if ($field->{code} eq 'title' && scalar(@line) >= 2) {
+                    while (scalar(@line) > 2) {
+                        pop @line;
+                    }
+                } else {
+                    while (scalar(@line) > 1) {
+                        pop @line;
+                    }
+                }
+                push(@strings, @line);
             }
             # loop for each string line
             foreach my $str (@strings) {
