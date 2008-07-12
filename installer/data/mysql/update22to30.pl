@@ -445,10 +445,10 @@ my $DBversion = "3.00.00.000";
         {
                 uniquefieldrequired => 'variable',
                 variable            => 'OpacTopissue',
-                value               => '1',
+                value               => '0',
                 forceupdate         => { 'explanation' => 1,
                                         'type' => 1},
-                explanation         => 'Enable / Disable the top issue link on OPAC',
+                explanation         => 'If ON, enables the \'most popular items\' link on OPAC. Warning, this is an EXPERIMENTAL feature, turning ON may overload your server',
                 type                => 'YesNo',
             },
         {
