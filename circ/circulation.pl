@@ -434,9 +434,6 @@ if ($borrower) {
         # set itemtype per item-level_itype syspref - FIXME this is an ugly hack
         $it->{'itemtype'} = (C4::Context->preference('item-level_itypes')) ? $it->{'itype'} : $it->{'itemtype'};
 
-        my $issuedate = $it->{'issuedate'};
-        $issuedate =~ s/-//g;
-        $issuedate = substr( $issuedate, 0, 8 );
     ($it->{'charge'}, $it->{'itemtype_charge'}) = GetIssuingCharges(
             $it->{'itemnumber'}, $borrower->{'borrowernumber'}
     );
@@ -450,15 +447,13 @@ if ($borrower) {
     ($restype) and $it->{'can_renew'} = 0;
 
     $it->{'dd'} = format_date($it->{'date_due'});
-        my $datedue = $it->{'date_due'};
-        $datedue =~ s/-//g;
-    $it->{'od'} = ($datedue < $todaysdate) ? 1 : 0 ;
+    $it->{'od'} = ($it->{'date_due'} lt $todaysdate) ? 1 : 0 ;
         ($it->{'author'} eq '') and $it->{'author'} = ' ';
         $it->{'renew_failed'} = $renew_failed[$it->{'itemnumber'}];
         # ADDED BY JF: NEW ITEMTYPE COUNT DISPLAY
         $issued_itemtypes_count->{ $it->{'itemtype'} }++;
 
-        if ( $todaysdate == $issuedate ) {
+        if ( $todaysdate == $it->{'issuedate'} ) {
             push @todaysissues, $it;
         } else {
             push @previousissues, $it;
