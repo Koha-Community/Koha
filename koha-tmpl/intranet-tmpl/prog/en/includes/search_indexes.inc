@@ -1,13 +1,13 @@
 <select name="idx">
 <!-- TMPL_IF NAME="selected" --><option value="kw" selected="selected">Keyword</option><!-- TMPL_ELSE --><option value="kw">Keyword</option><!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="selected" --><option value="au" selected="selected">Author</option><!-- TMPL_ELSE --><option value="au">Author</option><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="selected" --><option value="au,wrdl" selected="selected">Author</option><!-- TMPL_ELSE --><option value="au">Author</option><!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="selected" --><option value="au,phr" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; Author as Phrase</option><!-- TMPL_ELSE --><option value="au,phr">&nbsp;&nbsp;&nbsp;&nbsp; Author as Phrase</option><!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="selected" --><option value="cpn" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; Corporate Name</option><!-- TMPL_ELSE --><option value="cpn">&nbsp;&nbsp;&nbsp;&nbsp; Corporate Name</option><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="selected" --><option value="cpn,wrdl" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; Corporate Name</option><!-- TMPL_ELSE --><option value="cpn">&nbsp;&nbsp;&nbsp;&nbsp; Corporate Name</option><!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="selected" --><option value="cfn" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; Conference Name</option><!-- TMPL_ELSE --><option value="cfn">&nbsp;&nbsp;&nbsp;&nbsp; Conference Name</option><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="selected" --><option value="cfn,wrdl" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; Conference Name</option><!-- TMPL_ELSE --><option value="cfn">&nbsp;&nbsp;&nbsp;&nbsp; Conference Name</option><!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="selected" --><option value="cpn,phr" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; Corporate Name as Phrase</option><!-- TMPL_ELSE --><option value="cpn,phr">&nbsp;&nbsp;&nbsp;&nbsp; Corporate Name as Phrase</option><!-- /TMPL_IF -->
 
