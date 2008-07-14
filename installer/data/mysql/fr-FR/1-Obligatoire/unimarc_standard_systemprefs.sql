@@ -24,7 +24,6 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('checkdigit','none','If ON, enable checks on patron cardnumber: none or \"Katipo\" style checks','none|katipo','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('dateformat', 'us', 'Ce paramètre définit le format d''affichage des dates (us mm/jj/aaaa, metric jj/mm/aaaa, ISO aaaa/mm/jj)', 'metric|us|iso', 'Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('delimiter', ';', 'Ce paramètre définit le séparateur par défaut lors des exports (au format csv) de données (Rapports, statistiques...)', ';|tabulation|,|/|\\|#', 'Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('Disable_Dictionary','1','Désactive ou non la recherche dictionnaire à l''OPAC','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('EnhancedMessagingPreferences',0,'If ON, allows patrons to select to receive additional messages about items due or nearly due.','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('expandedSearchOption', '1', 'active par défaut la recherche la plus avancée', '', 'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('FinesLog', '0', 'Activer ce paramètre pour enregistrer les actions sur les pénalités financières', '', 'YesNo');

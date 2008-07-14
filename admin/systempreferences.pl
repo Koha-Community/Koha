@@ -268,7 +268,6 @@ my %tabsysprefs;
 
 # OPAC
     $tabsysprefs{SearchMyLibraryFirst}="OPAC";
-    $tabsysprefs{Disable_Dictionary}="OPAC";
     $tabsysprefs{hidelostitems}="OPAC";
     $tabsysprefs{opacbookbag}="OPAC";
     $tabsysprefs{opaclanguagesdisplay}="OPAC";

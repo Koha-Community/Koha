@@ -56,8 +56,4 @@ $template->param(
     koha_news_count => $koha_news_count
 );
 
-$template->param(
-    'Disable_Dictionary' => C4::Context->preference("Disable_Dictionary") )
-  if ( C4::Context->preference("Disable_Dictionary") );
-
 output_html_with_http_headers $input, $cookie, $template->output;
