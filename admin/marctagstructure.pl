@@ -37,6 +37,7 @@ my $frameworkinfo = getframeworkinfo($frameworkcode);
 my $searchfield=$input->param('searchfield');
 $searchfield=0 unless $searchfield;
 $searchfield=~ s/\,//g;
+my $last_searchfield=$input->param('searchfield');
 
 my $offset=$input->param('offset') || 0;
 my $op = $input->param('op') || '';
@@ -186,7 +187,7 @@ if ($op eq 'add_form') {
         }
         $sth->finish;
 	}
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marctagstructure.pl?searchfield=$tagfield&frameworkcode=$frameworkcode\"></html>";
+    print $input->redirect("/cgi-bin/koha/admin/marctagstructure.pl?searchfield=$tagfield&frameworkcode=$frameworkcode");
 	exit;
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
@@ -208,6 +209,9 @@ if ($op eq 'add_form') {
 		$dbh->do("delete from marc_tag_structure where tagfield='$searchfield' and frameworkcode='$frameworkcode'");
 		$dbh->do("delete from marc_subfield_structure where tagfield='$searchfield' and frameworkcode='$frameworkcode'");
 	}
+	$template->param(searchfield => $searchfield,
+							frameworkcode => $frameworkcode,
+							);
 													# END $OP eq DELETE_CONFIRMED
 ################## ITEMTYPE_CREATE ##################################
 # called automatically if an unexisting  frameworkis selected
