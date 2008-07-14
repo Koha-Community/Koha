@@ -173,20 +173,35 @@ Returns a reference to an array of hashes:
 sub getAllLanguages {
     my @languages_loop;
     my $dbh=C4::Context->dbh;
-    my $current_language = 'en';
+    my $current_language = shift || 'en';
     my $sth = $dbh->prepare('SELECT * FROM language_subtag_registry WHERE type=\'language\'');
     $sth->execute();
     while (my $language_subtag_registry = $sth->fetchrow_hashref) {
 
         # pull out all the script descriptions for each language
-        my $sth2= $dbh->prepare("SELECT * FROM language_descriptions LEFT JOIN language_rfc4646_to_iso639 on language_rfc4646_to_iso639.rfc4646_subtag = language_descriptions.subtag WHERE type='language' AND subtag =?");
-        $sth2->execute($language_subtag_registry->{subtag});
+        my $sth2= $dbh->prepare("SELECT * FROM language_descriptions LEFT JOIN language_rfc4646_to_iso639 on language_rfc4646_to_iso639.rfc4646_subtag = language_descriptions.subtag WHERE type='language' AND subtag =? AND language_descriptions.lang = ?");
+        $sth2->execute($language_subtag_registry->{subtag},$current_language);
+
+        my $sth3 = $dbh->prepare("SELECT description FROM language_descriptions WHERE type='language' AND subtag=? AND lang=?");
 
         # add the correct description info
         while (my $language_descriptions = $sth2->fetchrow_hashref) {
-        # fill in the ISO6329 code
-        $language_subtag_registry->{iso639_2_code} = $language_descriptions->{iso639_2_code};
-            $language_subtag_registry->{language_description} = $language_descriptions->{description};
+            $sth3->execute($language_subtag_registry->{subtag},$language_subtag_registry->{subtag});
+            my $native_description;
+            while (my $description = $sth3->fetchrow_hashref) {
+                $native_description = $description->{description};
+            }
+
+            # fill in the ISO6329 code
+            $language_subtag_registry->{iso639_2_code} = $language_descriptions->{iso639_2_code};
+            # fill in the native description of the language, as well as the current language's translation of that if it exists
+            if ($native_description) {
+                $language_subtag_registry->{language_description} = $native_description;
+                $language_subtag_registry->{language_description}.=" ($language_descriptions->{description})" if $language_descriptions->{description};
+            }
+            else {
+                $language_subtag_registry->{language_description} = $language_descriptions->{description};
+            }
         }
         push @languages_loop, $language_subtag_registry;
     }
