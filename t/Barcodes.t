@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 126;
+use Test::More tests => 49;
 BEGIN {
 	use FindBin;
 	use lib $FindBin::Bin;
@@ -22,16 +22,19 @@ my @formats = sort keys %thash;
 foreach (@formats) {
 	my $pre = sprintf '(%-12s)', $_;
 	ok($obj1 = C4::Barcodes->new($_),           "$pre Barcode Creation : new($_)");
+	SKIP: {
+		skip "No Object Returned by new($_)", 17 unless $obj1;
 	ok($_ eq ($format = $obj1->autoBarcode()),  "$pre autoBarcode()    : " . ($format || 'FAILED') );
 	ok($initial= $obj1->initial(),              "$pre initial()        : " . ($initial|| 'FAILED') );
-	ok($temp   = $obj1->db_max(),               "$pre db_max()         : " . ($temp   || 'Database Empty or No Matches') );
+	$temp = $obj1->db_max();
+	diag ".    $pre db_max()         : " . ($temp   || 'Database Empty or No Matches') ;
 	ok($temp   = $obj1->max(),                  "$pre max()            : " . ($temp   || 'FAILED') );
 	ok($value  = $obj1->value(),                "$pre value()          : " . ($value  || 'FAILED') );
 	ok($serial = $obj1->serial(),               "$pre serial()         : " . ($serial || 'FAILED') );
 	ok($temp   = $obj1->is_max(),               "$pre obj1->is_max() [obj1 should currently be max]");
 	diag "Creating new Barcodes object (obj2) based on the old one (obj1)\n";
 	ok($obj2   = $obj1->new(),                  "$pre Barcode Creation : obj2 = obj1->new()");
-	diag "$pre obj2->value: " . $obj2->value . "\n";
+	diag ".    $pre obj2->value: " . $obj2->value . "\n";
 	ok(not($obj1->is_max()),                    "$pre obj1->is_max() [obj1 should no longer be max]");
 	ok(    $obj2->is_max(),                     "$pre obj2->is_max() [obj2 should currently be max]");
 	ok($obj2->serial == $obj1->serial + 1,      "$pre obj2->serial()   : " . ($obj2->serial || 'FAILED'));
@@ -39,6 +42,7 @@ foreach (@formats) {
 	ok($next     = $obj1->next(),               "$pre obj1->next()     : " . ($next         || 'FAILED'));
 	ok($next->previous()->value() eq $obj1->value(),  "$pre Roundtrip, value : " . ($obj1->value || 'FAILED'));
 	ok($previous->next()->value() eq $obj2->value(),  "$pre Roundtrip, value : " . ($obj2->value || 'FAILED'));
+	}
 	print "\n";
 }
 
