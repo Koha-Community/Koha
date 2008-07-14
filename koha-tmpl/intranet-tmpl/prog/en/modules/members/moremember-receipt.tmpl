@@ -15,35 +15,42 @@ Issued To <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR 
 <!-- TMPL_VAR NAME="todaysdate" --><br />
 
 <table>
-	<caption>Issues</caption>
-	<tr>
-		<th>Date Due</th>
-		<th>Title</th>
-	</tr>
+    <caption>Issues</caption>
+    <tr>
+        <th>Date Due</th>
+        <th>Title</th>
+        <th>Barcode</th>
+    </tr>
 
-	<!-- TMPL_loop name="issueloop" -->
-	<!-- TMPL_IF name="red" --><!-- TMPL_ELSE -->
-		<tr>
-		<td><!-- TMPL_VAR NAME="date_due" --></td>
-		<td><a href="/cgi-bin/koha/catalogue/detail.pl?item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
-		</tr>
-	<!-- /TMPL_IF -->
-	<!-- /TMPL_LOOP -->
+    <!-- TMPL_loop name="issueloop" -->
+    <!-- TMPL_IF name="red" --><!-- TMPL_ELSE -->
+    <tr>
+        <td><!-- TMPL_VAR NAME="date_due" --></td>
+        <td><a href="/cgi-bin/koha/catalogue/detail.pl?item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+        <td><!-- TMPL_VAR NAME="barcode" --></td>
+    </tr>
+    <!-- /TMPL_IF -->
+    <!-- /TMPL_LOOP -->
 </table>
-	
-	<table>
-	<caption>Overdues</caption>
-	<tr>
-	<th>Date Due</th>
-	<th>Title</th>
-	</tr>
-	<!-- TMPL_LOOP NAME="issueloop" -->
-	<!-- TMPL_IF NAME="red" --><tr>
-	<td><!-- TMPL_VAR NAME="date_due" --></td>
-	<td><a href="/cgi-bin/koha/catalogue/detail.pl?item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
-	</tr>
-	<!-- /TMPL_IF -->
-	<!-- /TMPL_LOOP -->
-	</table>
+
+<!-- TMPL_IF NAME="overdues_exist" -->
+<table>
+    <caption>Overdues</caption>
+    <tr>
+        <th>Date Due</th>
+        <th>Title</th>
+        <th>Barcode</th>
+    </tr>
+    <!-- TMPL_LOOP NAME="issueloop" -->
+    <!-- TMPL_IF NAME="red" -->
+    <tr>
+        <td><!-- TMPL_VAR NAME="date_due" --></td>
+        <td><a href="/cgi-bin/koha/catalogue/detail.pl?item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="title" --></a></td>
+    <td><!-- TMPL_VAR NAME="barcode" --></td>
+    </tr>
+    <!-- /TMPL_IF -->
+    <!-- /TMPL_LOOP -->
+</table>
+<!-- /TMPL_IF -->
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

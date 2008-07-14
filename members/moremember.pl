@@ -218,6 +218,7 @@ my ( $count, $issue ) = GetPendingIssues($borrowernumber);
 my $roaddetails = &GetRoadTypeDetails( $data->{'streettype'} );
 my $today       = POSIX::strftime("%Y-%m-%d", localtime);	# iso format
 my @issuedata;
+my $overdues_exist = 0;
 my $totalprice = 0;
 my $toggle     = 0;
 for ( my $i = 0 ; $i < $count ; $i++ ) {
@@ -228,6 +229,7 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
     $totalprice += $issue->[$i]{'replacementprice'};
     $row{'replacementprice'} = $issue->[$i]{'replacementprice'};
     if ( $datedue lt $today ) {
+        $overdues_exist = 1;
         $row{'red'} = 1;    #print "<font color=red>";
 	}
     $row{toggle} = $toggle++ % 2;
@@ -350,6 +352,7 @@ $template->param(
     totalprice       => sprintf( "%.2f", $totalprice ),
     totaldue         => sprintf( "%.2f", $total ),
     issueloop        => \@issuedata,
+    overdues_exist   => $overdues_exist,
     unvalidlibrarian => $unvalidlibrarian,
    	error	         => $error,
 	$error			=> 1,
