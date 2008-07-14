@@ -1851,6 +1851,7 @@ $DBversion = '3.00.00.098';
 if ( C4::Context->preference('Version') < TransformToNum($DBversion) ) {
 
     $dbh->do(q(DELETE FROM message_transport_types WHERE message_transport_type = 'rss'));
+    $dbh->do(q(DELETE FROM message_transports WHERE message_transport_type = 'rss'));
 
     print "Upgrade to $DBversion done (removing unused RSS message_transport_type)\n";
     SetVersion($DBversion);
