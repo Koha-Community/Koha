@@ -357,6 +357,11 @@ my @operators;
 my @indexes;
 @indexes = split("\0",$params->{'idx'});
 
+# if a simple index (only one)  display the index used in the top search box
+if ($indexes[0] && !$indexes[1]) {
+    $template->param("ms_".$indexes[0] => 1);}
+
+
 # an operand can be a single term, a phrase, or a complete ccl query
 my @operands;
 @operands = split("\0",$params->{'q'}) if $params->{'q'};
@@ -414,7 +419,7 @@ my @results;
 
 ## parse the query_cgi string and put it into a form suitable for <input>s
 my @query_inputs;
-my $scan_index;
+my $scan_index_to_use;
 
 for my $this_cgi ( split('&',$query_cgi) ) {
     next unless $this_cgi;
@@ -423,10 +428,12 @@ for my $this_cgi ( split('&',$query_cgi) ) {
     my $input_value = $2;
     $input_name =~ s/=$//;
     push @query_inputs, { input_name => $input_name, input_value => $input_value };
-    $scan_index = $input_value unless $scan_index;
+	if ($input_name eq 'idx') {
+    	$scan_index_to_use = $input_value; # unless $scan_index_to_use;
+	}
 }
 $template->param ( QUERY_INPUTS => \@query_inputs,
-                   scan_index => $scan_index );
+                   scan_index_to_use => $scan_index_to_use );
 
 ## parse the limit_cgi string and put it into a form suitable for <input>s
 my @limit_inputs;

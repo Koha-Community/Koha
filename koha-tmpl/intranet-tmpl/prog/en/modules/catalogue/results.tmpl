@@ -119,18 +119,18 @@ $(window).load(function() {
                         <label for="scan-index">Indexed in:</label>
                         <select name="idx" id="scan-index">
                             <option value="">Any Word</option>
-                            <option value="any,phr:">Any Phrase</option>
-                            <option value="ti:">Title</option>
-                            <option value="ti,phr:">Title Phrase</option>
-                            <option value="au,phr:">Author</option>
-                            <option value="su:">Subject</option>
-                            <option value="su,phr:">Subject Phrase</option>
-                            <option value="se:">Series</option>
-                            <option value="pb:">Publisher</option>
-                            <option value="nt:">Notes</option>
-                            <option value="se:">Series Title</option>
-                            <option value="sn:">ISBN</option>
-                            <option value="ss:">ISSN</option>
+                            <option <!-- TMPL_IF NAME="ms_any,phr" --> selected="selected" <!-- /TMPL_IF --> value="any,phr">Any Phrase</option>
+                            <option <!-- TMPL_IF NAME="ms_ti" --> selected="selected" <!-- /TMPL_IF --> value="ti">Title</option>
+                            <option <!-- TMPL_IF NAME="ms_ti,phr" --> selected="selected" <!-- /TMPL_IF --> value="ti,phr">Title Phrase</option>
+                            <option <!-- TMPL_IF NAME="ms_au,phr" --> selected="selected" <!-- /TMPL_IF --> value="au,phr">Author</option>
+                            <option <!-- TMPL_IF NAME="ms_su" --> selected="selected" <!-- /TMPL_IF --> value="su">Subject</option>
+                            <option <!-- TMPL_IF NAME="ms_su,phr" --> selected="selected" <!-- /TMPL_IF --> value="su,phr">Subject Phrase</option>
+                            <option <!-- TMPL_IF NAME="ms_se" --> selected="selected" <!-- /TMPL_IF --> value="se">Series</option>
+                            <option <!-- TMPL_IF NAME="ms_pb" --> selected="selected" <!-- /TMPL_IF --> value="pb">Publisher</option>
+                            <option <!-- TMPL_IF NAME="ms_nt" --> selected="selected" <!-- /TMPL_IF --> value="nt">Notes</option>
+                            <option <!-- TMPL_IF NAME="ms_se" --> selected="selected" <!-- /TMPL_IF --> value="se">Series Title</option>
+                            <option <!-- TMPL_IF NAME="ms_sn" --> selected="selected" <!-- /TMPL_IF --> value="sn">ISBN</option>
+                            <option <!-- TMPL_IF NAME="ms_ss" --> selected="selected" <!-- /TMPL_IF --> value="ss">ISSN</option>
                         </select>
                         <input type="hidden" name="scan" value="1" />
                     </td>
@@ -147,7 +147,7 @@ $(window).load(function() {
                 <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
                     <!-- TMPL_IF NAME="__odd__" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
                         <td>
-                            <a href="/cgi-bin/koha/catalogue/search.pl?idx=<!-- TMPL_VAR name="scan_index" -->&amp;q=<!-- TMPL_VAR NAME="scan_use" escape="url" -->&quot;<!-- TMPL_VAR NAME="title_nospan" -->&quot;"><!-- TMPL_VAR NAME="title" --></a>
+                            <a href="/cgi-bin/koha/catalogue/search.pl?idx=<!-- TMPL_VAR name="scan_index_to_use" -->&amp;q=<!-- TMPL_VAR NAME="scan_use" escape="url" -->&quot;<!-- TMPL_VAR NAME="title_nospan" -->&quot;"><!-- TMPL_VAR NAME="title" --></a>
                         </td>
                         <td>
                             <!-- TMPL_VAR NAME="author" -->
