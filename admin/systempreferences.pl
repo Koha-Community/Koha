@@ -56,19 +56,19 @@ use C4::Output;
 # FIXME, shouldnt we store this stuff in the systempreferences table? 
 
 # FIXME: This uses hash in a backwards way.  What we really want is:
-# 		$tabsysprefs{key} = $array_ref;
-# 				like
-# 		$tabsysprefs{Cataloguing} = [qw(autoBarcode ISBD marc ...)];
+#       $tabsysprefs{key} = $array_ref;
+#               like
+#       $tabsysprefs{Cataloguing} = [qw(autoBarcode ISBD marc ...)];
 #
-# 	Because some things *should* be on more than one tab.
-# 	And the tabname is the unique part (the key).
+#   Because some things *should* be on more than one tab.
+#   And the tabname is the unique part (the key).
 
 my %tabsysprefs;
 # Acquisitions
     $tabsysprefs{acquisitions}="Acquisitions";
     $tabsysprefs{gist}="Acquisitions";
     $tabsysprefs{emailPurchaseSuggestions}="Acquisitions";
-	$tabsysprefs{RenewSerialAddsSuggestion}="Acquisitions";
+    $tabsysprefs{RenewSerialAddsSuggestion}="Acquisitions";
     $tabsysprefs{serialsadditems}="Acquisitions";
 
 # Admin
@@ -119,6 +119,7 @@ my %tabsysprefs;
     $tabsysprefs{DefaultClassificationSource}="Cataloguing";
     $tabsysprefs{RoutingSerials}="Cataloguing";
     $tabsysprefs{'item-level_itypes'}="Cataloguing";
+    $tabsysprefs{OpacSuppression}="Cataloguing"; 
 
 # Circulation
     $tabsysprefs{maxoutstanding}="Circulation";
@@ -147,8 +148,8 @@ my %tabsysprefs;
     $tabsysprefs{previousIssuesDefaultSortOrder}="Circulation";
     $tabsysprefs{todaysIssuesDefaultSortOrder}="Circulation";
     $tabsysprefs{HomeOrHoldingBranch}="Circulation";
-	$tabsysprefs{RandomizeHoldsQueueWeight}="Circulation";
-	$tabsysprefs{StaticHoldsQueueWeight}="Circulation";
+    $tabsysprefs{RandomizeHoldsQueueWeight}="Circulation";
+    $tabsysprefs{StaticHoldsQueueWeight}="Circulation";
     $tabsysprefs{AllowOnShelfHolds}="Circulation";
     $tabsysprefs{AllowHoldsOnDamagedItems}="Circulation";
 
@@ -238,7 +239,7 @@ my %tabsysprefs;
    $tabsysprefs{TagsShowOnDetail}       = 'EnhancedContent';
    $tabsysprefs{TagsShowOnList}         = 'EnhancedContent';
    $tabsysprefs{TagsModeration}         = 'EnhancedContent';
-   $tabsysprefs{GoogleJackets} 			= 'EnhancedContent';
+   $tabsysprefs{GoogleJackets}          = 'EnhancedContent';
    $tabsysprefs{AuthorisedValueImages}  = "EnhancedContent";
 
 # OPAC
@@ -434,16 +435,16 @@ if ($op eq 'update_and_reedit') {
             my $sth=$dbh->prepare("update systempreferences set value=?,explanation=?,type=?,options=? where variable=?");
             $sth->execute($value, $input->param('explanation'), $input->param('variable'), $input->param('preftype'), $input->param('prefoptions'));
             $sth->finish;
-			warn "logaction !! mod ";
-			logaction('SYSTEMPREFERENCE','MODIFY',undef, $input->param('variable') . " | " . $value );
+            warn "logaction !! mod ";
+            logaction('SYSTEMPREFERENCE','MODIFY',undef, $input->param('variable') . " | " . $value );
         }
     } else {
         unless (C4::Context->config('demo') eq 1) {
             my $sth=$dbh->prepare("insert into systempreferences (variable,value,explanation) values (?,?,?,?,?)");
             $sth->execute($input->param('variable'), $input->param('value'), $input->param('explanation'), $input->param('preftype'), $input->param('prefoptions'));
             $sth->finish;
-			warn "logaction !! add ";
-			logaction('SYSTEMPREFERENCE','ADD',undef, $input->param('variable') . " | " . $input->param('value') );
+            warn "logaction !! add ";
+            logaction('SYSTEMPREFERENCE','ADD',undef, $input->param('variable') . " | " . $input->param('value') );
         }
     }
     $sth->finish;
@@ -522,27 +523,27 @@ if ($op eq 'add_form') {
             $counter++; 
         }
     } elsif ($data->{'type'} eq 'Languages') {
-	my $currently_selected_languages;
+    my $currently_selected_languages;
         foreach my $language (split /\s+/, $data->{'value'}) {
             $currently_selected_languages->{$language}=1;
         }
-	# current language
+    # current language
         my $lang = $template->param('lang');
         my $theme;
-	my $interface;
-	if ($data->{'variable'} =~ /opac/) {
-		# this is the OPAC
-		$interface = 'opac';
-        	$theme = C4::Context->preference('opacthemes');
-	}
-	else {
-		# this is the staff client	
-		$interface = 'intranet';
-		$theme = C4::Context->preference('template');
-	}
-	my $languages_loop = getTranslatedLanguages($interface,$theme,$lang,$currently_selected_languages);
+    my $interface;
+    if ($data->{'variable'} =~ /opac/) {
+        # this is the OPAC
+        $interface = 'opac';
+            $theme = C4::Context->preference('opacthemes');
+    }
+    else {
+        # this is the staff client  
+        $interface = 'intranet';
+        $theme = C4::Context->preference('template');
+    }
+    my $languages_loop = getTranslatedLanguages($interface,$theme,$lang,$currently_selected_languages);
 
-    	$template->param('languages_loop' => $languages_loop);
+        $template->param('languages_loop' => $languages_loop);
         $template->param('type-langselector' => 1);
     } else {
         $template->param('type-free' => 1);
@@ -568,7 +569,7 @@ if ($op eq 'add_form') {
     my $params = $input->Vars;
     my @values = split("\0",$params->{'value'}) if $params->{'value'};
     for my $vl (@values) {
-    	$value .= "$vl,";
+        $value .= "$vl,";
     }
     $value =~ s/,$//;
     if ($sth->rows) {
@@ -576,14 +577,14 @@ if ($op eq 'add_form') {
             my $sth=$dbh->prepare("update systempreferences set value=?,explanation=?,type=?,options=? where variable=?");
             $sth->execute($value, $input->param('explanation'), $input->param('preftype'), $input->param('prefoptions'), $input->param('variable'));
             $sth->finish;
-			logaction('SYSTEMPREFERENCE','MODIFY',undef, $input->param('variable') . " | " . $value );
+            logaction('SYSTEMPREFERENCE','MODIFY',undef, $input->param('variable') . " | " . $value );
         }
     } else {
         unless (C4::Context->config('demo') eq 1) {
             my $sth=$dbh->prepare("insert into systempreferences (variable,value,explanation,type,options) values (?,?,?,?,?)");
             $sth->execute($input->param('variable'), $value, $input->param('explanation'), $input->param('preftype'), $input->param('prefoptions'));
             $sth->finish;
-			logaction('SYSTEMPREFERENCE','ADD',undef, $input->param('variable') . " | " . $value );
+            logaction('SYSTEMPREFERENCE','ADD',undef, $input->param('variable') . " | " . $value );
         }
     }
     $sth->finish;
@@ -608,8 +609,8 @@ if ($op eq 'add_form') {
     my $dbh = C4::Context->dbh;
     my $sth=$dbh->prepare("delete from systempreferences where variable=?");
     $sth->execute($searchfield);
-	my $logstring =  $searchfield . " | " . $Tvalue ;
-	logaction('SYSTEMPREFERENCE','DELETE',undef,$logstring);
+    my $logstring =  $searchfield . " | " . $Tvalue ;
+    logaction('SYSTEMPREFERENCE','DELETE',undef,$logstring);
     $sth->finish;
 
                                                     # END $OP eq DELETE_CONFIRMED

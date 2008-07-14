@@ -1857,6 +1857,14 @@ if ( C4::Context->preference('Version') < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = '3.00.00.099';
+if ( C4::Context->preference('Version') < TransformToNum($DBversion) ) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type) VALUES('OpacSuppression', '0', '', 'Turn ON the OPAC Suppression feature, requires further setup, ask your system administrator for details', 'YesNo')");
+    print "Upgrade to $DBversion done (Adding OpacSuppression syspref)\n";
+    SetVersion($DBversion);
+}
+
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
