@@ -350,8 +350,8 @@ if ($ethnicitycategoriescount>=0) {
 }
 
 my @typeloop;
-foreach ( ($category_type) ? ($category_type) : qw(C A S P I X)){
-	my $action="WHERE category_type=?";
+foreach (qw(C A S P I X)) {
+    my $action="WHERE category_type=?";
 	($categories,$labels)=GetborCatFromCatType($_,$action);
 	my @categoryloop;
 	foreach my $cat (@$categories){
