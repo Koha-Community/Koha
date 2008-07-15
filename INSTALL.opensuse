@@ -8,7 +8,7 @@ Feedback/bug reports: Koha Developer's List:
 
 http://lists.koha.org/mailman/listinfo/koha-devel
 
-This document last modified: 07 July 2008
+This document last modified: 15 July 2008
 
 
 ===== Installation Instructions =====
@@ -2032,8 +2032,10 @@ Failed during this command:
  MIRK/Net-Z3950-ZOOM-1.21.tar.gz              : writemakefile NO '/usr/bin/perl Makefile.PL' returned status 512
 |--------------------
 
-  * Installing libyaz and libyaz-devel for Net::Z3950::ZOOM
+  * Installing libyaz, libyaz-devel and yaz for Net::Z3950::ZOOM
 OK... So we ran through a problem with a missing "yaz-config" while installing Net::Z3950::ZOOM. To solve this, let's first install the libyaz package:
+
+  * Install the libyaz package:
 |--------------------
 # yast -i libyaz
 |--------------------
@@ -2050,6 +2052,12 @@ We also have to install another package:libyaz-devel. libyaz-devel is NOT availa
 Installing libyaz-devel will also add some other packages that libyaz-devel depends on, namely: 
 zlib-devel, tcpd-devel, tack, libgpg-error-devel, ncurses-devel, libopenssl-devel, libgcrypt-devel, readline-devel, libxml2-devel and libxslt-devel.
 
+  * Install the yaz package:
+|--------------------
+# yast -i yaz
+|--------------------
+
+(//15-Jul-2008: Thanks to Bob Ewart for catching this missing step of installing yaz//)
 
 Let's now install the Net::Z3950::ZOOM Module
 
