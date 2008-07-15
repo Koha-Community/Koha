@@ -53,10 +53,8 @@ my @barcode=$input->param('barcode');
 my @ccode=$input->param('ccode');
 my @itemtype=$input->param('itemtype');
 my @location=$input->param('location');
+my @enumchron=$input->param('volinf');
 my $cnt = 0;
-# if ($quantityrec != 0){
-# 	$cost /= $quantityrec;
-# }
 
 if ($quantityrec > $origquantityrec ) {
     # save the quantity recieved.
@@ -75,9 +73,11 @@ if ($quantityrec > $origquantityrec ) {
                     "items.ccode"          => $ccode[$cnt],
                     "items.itype"          => $itemtype[$cnt],
                     "items.location"          => $location[$cnt],
+                    "items.enumchron"          => $enumchron[$cnt], # FIXME : No integration here with serials module.
                     "items.loan"             => 0, });
-        AddItemFromMarc($itemRecord,$biblionumber);
-    }
+		AddItemFromMarc($itemRecord,$biblionumber);
+		$cnt++;
+	}
 }
     print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoice=$invoiceno&supplierid=$supplierid&freight=$freight&gst=$gst&datereceived=$datereceived");
 #} else {
