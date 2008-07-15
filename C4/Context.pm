@@ -26,8 +26,15 @@ BEGIN {
         #  "Note that fatalsToBrowser does not work with mod_perl version 2.0 and higher."
 		import CGI::Carp qw(fatalsToBrowser);
 			sub handle_errors {
-				my $msg = shift;
-				my $debug_level =  C4::Context->preference("DebugLevel");
+			    my $msg = shift;
+			    my $debug_level;
+			    eval {C4::Context->dbh();};
+			    if ($@){
+				$debug_level = 1;
+			    } 
+			    else {
+				$debug_level =  C4::Context->preference("DebugLevel");
+			    }
 
                 print q(<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
                             "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -626,7 +633,7 @@ sub _new_dbh
     my $db_passwd = $context->config("pass");
     # MJR added or die here, as we can't work without dbh
     my $dbh= DBI->connect("DBI:$db_driver:dbname=$db_name;host=$db_host;port=$db_port",
-         $db_user, $db_passwd) or die $DBI::errstr;
+	$db_user, $db_passwd) or die $DBI::errstr;
     if ( $db_driver eq 'mysql' ) { 
         # Koha 3.0 is utf-8, so force utf8 communication between mySQL and koha, whatever the mysql default config.
         # this is better than modifying my.cnf (and forcing all communications to be in utf8)
