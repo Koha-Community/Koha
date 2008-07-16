@@ -73,9 +73,17 @@ if ($op eq "export") {
     my $strip_nonlocal_items   = $query->param("strip_nonlocal_items");
     my $dont_export_fields    = $query->param("dont_export_fields");
     my @sql_params;
-    my $query = " SELECT DISTINCT biblioitems.biblionumber
-                  FROM biblioitems,items
-                  WHERE biblioitems.biblionumber=items.biblionumber ";
+    
+    my $items_filter =
+        $branch || $start_callnumber || $end_callnumber ||  
+        $start_accession || $end_accession || 
+        ($itemtype && C4::Context->preference('item-level_itypes'));
+    my $query = $items_filter ?
+        "SELECT DISTINCT biblioitems.biblionumber
+         FROM biblioitems,items
+         WHERE biblioitems.biblionumber=items.biblionumber "
+        :
+        "SELECT biblioitems.biblionumber FROM biblioitems WHERE biblionumber >0 ";
                   
     if ( $StartingBiblionumber ) {
         $query .= " AND biblioitems.biblionumber >= ? ";
@@ -120,8 +128,10 @@ if ($op eq "export") {
     
     while (my ($biblionumber) = $sth->fetchrow) {
         my $record = GetMarcBiblio($biblionumber);
-        my ( $homebranchfield, $homebranchsubfield ) =  GetMarcFromKohaField( 'items.homebranch', '' );
+
         if ( $dont_export_items || $strip_nonlocal_items || $limit_ind_branch) {
+            my ( $homebranchfield, $homebranchsubfield ) =
+                GetMarcFromKohaField( 'items.homebranch', '' );
 			for my $itemfield ($record->field($homebranchfield)){
 				# if stripping nonlocal items, use loggedinuser's branch if they didn't select one
 				$branch = C4::Context->userenv->{'branch'} unless $branch;
