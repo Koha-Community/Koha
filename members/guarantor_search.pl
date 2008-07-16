@@ -79,6 +79,7 @@ if ($member ne ''){
 		surname => $results->[$i]{'surname'},
 		firstname => $results->[$i]{'firstname'},
 		categorycode => $results->[$i]{'categorycode'},
+		streetnumber => $results->[$i]{'streetnumber'},
 		address => $results->[$i]{'address'},
 		city => $results->[$i]{'city'},
 		zipcode => $results->[$i]{'zipcode'},

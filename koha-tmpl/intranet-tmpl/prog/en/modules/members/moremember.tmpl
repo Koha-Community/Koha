@@ -175,13 +175,13 @@ if (nodename =="barcodes[]"){
     <li><span class="label">Ethnicity:</span><!-- TMPL_VAR NAME="ethnicity" --></li>
     <li><span class="label">Ethnicity notes: </span><!-- TMPL_VAR NAME="ethnotes" --></li>
     <!-- /TMPL_IF -->
-   <!-- TMPL_IF name="isguarantee" -->
+   <!-- TMPL_IF NAME="isguarantee" -->
             <!-- TMPL_IF NAME="guaranteeloop" -->
-                <li><span class="label">Guarantees:</span><ul><!-- tmpl_loop name="guaranteeloop" --><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="name" -->  </a></li><!-- /tmpl_loop --></ul></li>
+                <li><span class="label">Guarantees:</span><ul><!-- TMPL_LOOP NAME="guaranteeloop" --><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="name" -->  </a></li><!-- /tmpl_loop --></ul></li>
             <!-- /TMPL_IF -->
         <!-- TMPL_ELSE -->
             <!-- TMPL_IF name="guarantorborrowernumber" -->
-                <li><span class="label">Guarantor:</span><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->"><!-- TMPL_VAR NAME="guarantorsurname" --> <!-- TMPL_VAR NAME="guarantorfirstname" --></a></li>
+                <li><span class="label">Guarantor:</span><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->"><!-- TMPL_VAR NAME="guarantorsurname" -->, <!-- TMPL_VAR NAME="guarantorfirstname" --></a></li>
             <!-- /TMPL_IF -->
      <!-- /TMPL_IF  -->
 </ol>
@@ -298,8 +298,8 @@ if (nodename =="barcodes[]"){
   <!-- /TMPL_UNLESS -->
     <!-- /TMPL_UNLESS -->
      <!-- TMPL_IF NAME="C" -->
-   <div class="rows"> <ol><li><span class="label">Name: </span><!-- TMPL_VAR NAME="contactname" --></li>
-    <li><span class="label">Firstname: </span><!-- TMPL_VAR NAME="firstname" --></li>    
+   <div class="rows"> <ol><li><span class="label">Surname: </span><!-- TMPL_VAR NAME="contactname" --></li>
+    <li><span class="label">First name: </span><!-- TMPL_VAR NAME="contactfirstname" --></li>    
     <li><span class="label">Phone: </span><!-- TMPL_VAR NAME="phone" --></li>
     <li><span class="label">Email: </span><!-- TMPL_VAR NAME="email" --></li>
     <li><span class="label">Relationship: </span><!-- TMPL_VAR NAME="relationship" --></li></ol></div>
@@ -309,11 +309,11 @@ if (nodename =="barcodes[]"){
  <div id="patron-alternative-contact" style="padding-top: 1em;">
  <h3>Alternative Contact</h3>	
    <div class="rows"> <ol><li><span class="label">Surname: </span><!-- TMPL_VAR NAME="altcontactsurname" --></li>
-    <li><span class="label">Firstname: </span><!-- TMPL_VAR NAME="altcontactfirstname" --></li>    
-    <li><span class="label">Address1: </span><!-- TMPL_VAR NAME="altcontactaddress1" --></li>
-    <li><span class="label">Address2: </span><!-- TMPL_VAR NAME="altcontactaddress2" --></li>
-	<li><span class="label">City,State: </span><!-- TMPL_VAR NAME="altcontactaddress3" --></li>
-	<li><span class="label">Zip/Post Code: </span><!-- TMPL_VAR NAME="altcontactzipcode" --></li>
+    <li><span class="label">First name: </span><!-- TMPL_VAR NAME="altcontactfirstname" --></li>    
+    <li><span class="label">Address: </span><!-- TMPL_VAR NAME="altcontactaddress1" --></li>
+    <li><span class="label">Address (cont.): </span><!-- TMPL_VAR NAME="altcontactaddress2" --></li>
+	<li><span class="label">City, State: </span><!-- TMPL_VAR NAME="altcontactaddress3" --></li>
+	<li><span class="label">Zip/Postal Code: </span><!-- TMPL_VAR NAME="altcontactzipcode" --></li>
     <li><span class="label">Phone: </span><!-- TMPL_VAR NAME="altcontactphone" --></li></ol></div>
 </div>
 <div class="action"><a href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=2">Edit</a></div>

@@ -159,9 +159,9 @@ if (($category_type eq 'C' || $category_type eq 'P') and $guarantorid ne '' ){
   my $guarantordata=GetMember($guarantorid);
   $guarantorinfo=$guarantordata->{'surname'}." , ".$guarantordata->{'firstname'};
   if (($data{'contactname'} eq '' or $data{'contactname'} ne $guarantordata->{'surname'})) {
-    $data{'contactfirstname'}= $guarantordata->{'firstname'}; 
+    $data{'contactfirstname'}= $guarantordata->{'firstname'};
     $data{'contactname'}     = $guarantordata->{'surname'};
-    $data{'contacttitle'}    = $guarantordata->{'title'};  
+    $data{'contacttitle'}    = $guarantordata->{'title'};
 	  foreach (qw(streetnumber address streettype address2 zipcode city phone phonepro mobile fax email emailpro branchcode)) {
 		$data{$_} = $guarantordata->{$_};
 	}
@@ -555,7 +555,7 @@ $template->param(
   nodouble  => $nodouble,
   borrowernumber  => $borrowernumber,#register number
   "contacttitle_".$data{'contacttitle'} => "SELECTED" ,
-  guarantorid => $guarantorid,
+  guarantorid => $borrower_data ? $borrower_data->{'guarantorid'} : $guarantorid,
   ethcatpopup => $ethcatpopup,
   relshiploop => \@relshipdata,
   citypopup => $citypopup,

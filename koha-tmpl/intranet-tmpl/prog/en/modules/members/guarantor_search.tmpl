@@ -1,9 +1,43 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Guarantor Search</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-   <style type="text/css">
-   #custom-doc { width:44.46em;*width:43.39em;min-width:578px; margin:auto; text-align:left; }
-   </style>
+    <style type="text/css">
+    #custom-doc { width:44.46em;*width:43.39em;min-width:578px; margin:auto; text-align:left; }
+    </style>
+    <script type="text/javascript">
+        <!--
+        function fillguarantor(id, surname, firstname, streetnumber, address, city, zipcode) {
+            var $ = window.opener.$;
+            var form = $('#entryform').get(0);
+
+            if (form.guarantorid.value) {
+                $("#contact-details").find('a').remove();
+                $("#contactname, #contactfirstname").parent().find('span').remove();
+            }
+
+            form.guarantorid.value = id;
+            $('#contact-details')
+                .show()
+                .find('span')
+                .after('<a target="blank" href="/cgi-bin/koha/members/moremember.pl?bornum=' + id + '">' + id + '</a>');
+
+            $(form.contactname)
+                .val(surname)
+                .before('<span>' + surname + '</span>').get(0).type = 'hidden';
+            $(form.contactfirstname)
+                .val(firstname)
+                .before('<span>' + firstname + '</span>').get(0).type = 'hidden';
+
+            form.streetnumber.value = streetnumber;
+            form.address.value = address;
+            form.city.value = city;
+            form.zipcode.value = zipcode;
+
+            form.guarantorsearch.value = 'Change';
+            self.close();
+        }
+        // -->
+    </script>
 </head>
 
 <div id="custom-doc" class="yui-t7">
@@ -29,13 +63,21 @@
 			<th>Name</th>
 			<th>Date of birth</th>
 			<th>Address</th>
+            <th>Select?</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="resultsloop" -->
 			<tr>
 				<td><!-- TMPL_VAR NAME="cardnumber" --></td>
-				<td><a href="javascript:window.opener.document.form.guarantorid.value=<!-- TMPL_VAR NAME="borrowernumber" -->;window.opener.document.form.guarantorsearch.value='Modify Guarantor';window.opener.document.form.contactname.value='<!-- TMPL_VAR NAME="surname" ESCAPE=JS -->';window.opener.document.form.contactfirstname.value='<!-- TMPL_VAR NAME="firstname" ESCAPE=JS -->';window.opener.document.form.address.value='<!-- TMPL_VAR NAME="address" ESCAPE=JS -->';window.opener.document.form.city.value='<!-- TMPL_VAR NAME="city" ESCAPE=JS -->';window.opener.document.form.zipcode.value='<!-- TMPL_VAR NAME="zipcode" ESCAPE=JS -->';self.close();"><!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --></a></td> 
+                <td>
+                    <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" -->
+                </td> 
 				<td><!-- TMPL_VAR NAME="dateofbirth" --></td>
 				<td><p><!-- TMPL_VAR NAME="address" --> <!-- TMPL_VAR NAME="city" --></p></td>
+                <td>
+                    <form action="">
+                        <input type="button" onclick="fillguarantor('<!-- TMPL_VAR NAME="borrowernumber" -->', '<!-- TMPL_VAR NAME="surname" ESCAPE=JS -->', '<!-- TMPL_VAR NAME="firstname" ESCAPE=JS -->', '<!-- TMPL_VAR NAME="streetnumber" ESCAPE=JS -->', '<!-- TMPL_VAR NAME="address" ESCAPE=JS -->', '<!-- TMPL_VAR NAME="city" ESCAPE=JS -->', '<!-- TMPL_VAR NAME="zipcode" ESCAPE=JS -->'); return false;" value="Select"/>
+                    </form>
+                </td>
 			</tr>
 		<!-- /TMPL_LOOP -->
 	</table>

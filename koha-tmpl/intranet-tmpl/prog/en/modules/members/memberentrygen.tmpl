@@ -6,20 +6,22 @@
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
-	 $(document).ready(function() {
- 		$("#guarantordelete").click(function() {
-			$("#guarantorid").attr("value","");
-			$("#contactname").attr("value","");
-			$("#contactfirstname").attr("value","");
-			$("#guarantorsearch").attr("value","Find guarantor");
-		});
-			$("#select_city").change(function(){
-				var myRegEx=new RegExp(/(.*)\|(.*)/);
-		        document.form.select_city.value.match(myRegEx);
-		        document.form.zipcode.value=RegExp.$1;
-		        document.form.city.value=RegExp.$2;					
-		});
-	 });
+    $(document).ready(function() {
+        $("#guarantordelete").click(function() {
+            $("#contact-details").hide().find('a').remove();
+            $("#guarantorid, #contactname, #contactfirstname").each(function () { this.value = "" });
+            $("#contactname, #contactfirstname")
+                .each(function () { this.type = 'text' })
+                .parent().find('span').remove();
+            $("#guarantorsearch").val("Set to Patron");
+        });
+        $("#select_city").change(function(){
+            var myRegEx=new RegExp(/(.*)\|(.*)/);
+            document.form.select_city.value.match(myRegEx);
+            document.form.zipcode.value=RegExp.$1;
+            document.form.city.value=RegExp.$2;
+        });
+    });
 
     function clear_entry(node) {
         var original = node.parentNode.parentNode;
@@ -138,7 +140,7 @@
 	<!-- /TMPL_IF -->
 	
   
-<form name="form"  action="/cgi-bin/koha/members/memberentry.pl" method="post"> 
+<form name="form" id="entryform"  action="/cgi-bin/koha/members/memberentry.pl" method="post"> 
 <!--    field always hidden in different form (1,2,3) -->
 <input type="hidden" name="BorrowerMandatoryField" value="<!--TMPL_VAR NAME="BorrowerMandatoryField"-->" />
 <input type="hidden" name="category_type" value="<!-- TMPL_VAR name="category_type" -->" />
@@ -190,7 +192,7 @@
                 <!-- TMPL_ELSE -->
                 <label for="firstname">
                 <!-- /TMPL_IF-->
-                Firstname: </label>
+                First name: </label>
                 <input type="text" id="firstname" name="firstname" size="20"  value="<!-- TMPL_VAR NAME="firstname" -->" />
                 <!-- TMPL_IF NAME="mandatoryfirstname" --><span class="required">Required</span><!-- /TMPL_IF -->
             </li>
@@ -267,31 +269,59 @@
 	</fieldset>
 	
 <!--TMPL_IF Name="showguarantor"--><input type="hidden" id="guarantorid" name="guarantorid"   value="<!-- TMPL_VAR NAME="guarantorid" -->" />
-	<fieldset class="rows">
-	<legend>Guarantor Information</legend>
-	<ol>
-	<li>
-		<label for="contactname">First Name: </label><input name="contactname" id="contactname" type="text"  size="20" value="<!-- TMPL_VAR NAME="contactname" -->" />
-	</li>
-	<li><label for="contactfirstname">Last Name: </label><input name="contactfirstname" id="contactfirstname" type="text"  size="20" value="<!-- TMPL_VAR NAME="contactfirstname" -->" /></li>
-  <!-- TMPL_IF name="relshiploop" --><li><label for="relationship">Relationship: </label>
-  <select name="relationship" id="relationship" >
-    <!-- TMPL_LOOP name="relshiploop" -->
-        <!-- TMPL_IF name="selected" -->
-            <option value="<!-- TMPL_VAR name="relationship" -->" selected="selected" ><!-- TMPL_VAR name="relationship" --></option>
+    <fieldset class="rows">
+        <legend>Guarantor Information</legend>
+        <ol>
+        <!-- TMPL_IF NAME="guarantorid" -->
+        <li id="contact-details">
         <!-- TMPL_ELSE -->
-            <option value="<!-- TMPL_VAR name="relationship" -->"><!-- TMPL_VAR name="relationship" --></option>
+        <li id="contact-details" style="display: none">
         <!-- /TMPL_IF -->
-    <!-- /TMPL_LOOP -->
-    </select></li>
-  <!-- /TMPL_IF -->
-	<li><span class="label">&nbsp;</span><!-- TMPL_IF NAME="guarantorid"-->  
-    <input id="guarantorsearch" type="button" value="Change Guarantor" onclick="Dopopguarantor('guarantor_search.pl');" />
-  <!-- TMPL_ELSE -->
-    <input id="guarantorsearch" type="button" value="Find Guarantor" onclick="Dopopguarantor('guarantor_search.pl');" />
-  <!-- /TMPL_IF --> <input id="guarantordelete" type="button" value="Delete Guarantor" /></li>
-	</ol>
-	</fieldset>
+            <span class="label">Patron #:</span> <!-- TMPL_IF NAME="guarantorid" --> <a href="/cgi-bin/koha/members/moremember.pl?bornum=<!-- TMPL_VAR NAME="guarantorid" -->" target="blank"><!-- TMPL_VAR NAME="guarantorid" --></a><!-- /TMPL_IF -->
+        </li>
+        <li>
+            <label for="contactname">Surname: </label>
+            <!-- TMPL_IF NAME="guarantorid" -->
+            <span><!-- TMPL_VAR NAME="contactname" --></span>
+            <input name="contactname" id="contactname" type="hidden" size="20" value="<!-- TMPL_VAR NAME="contactname" -->" />
+            <!-- TMPL_ELSE -->
+            <input name="contactname" id="contactname" type="text" size="20" value="<!-- TMPL_VAR NAME="contactname" -->" />
+            <!-- /TMPL_IF -->
+        </li>
+        <li>
+            <label for="contactfirstname">First name: </label>
+            <!-- TMPL_IF NAME="guarantorid" -->
+            <span><!-- TMPL_VAR NAME="contactfirstname" --></span>
+            <input name="contactfirstname" id="contactfirstname" type="hidden" size="20" value="<!-- TMPL_VAR NAME="contactfirstname" -->" />
+            <!-- TMPL_ELSE -->
+            <input name="contactfirstname" id="contactfirstname" type="text" size="20" value="<!-- TMPL_VAR NAME="contactfirstname" -->" />
+            <!-- /TMPL_IF -->
+        </li>
+        <!-- TMPL_IF name="relshiploop" -->
+        <li>
+            <label for="relationship">Relationship: </label>
+            <select name="relationship" id="relationship" >
+                <!-- TMPL_LOOP name="relshiploop" -->
+                <!-- TMPL_IF name="selected" -->
+                <option value="<!-- TMPL_VAR name="relationship" -->" selected="selected" ><!-- TMPL_VAR name="relationship" --></option>
+                <!-- TMPL_ELSE -->
+                <option value="<!-- TMPL_VAR name="relationship" -->"><!-- TMPL_VAR name="relationship" --></option>
+                <!-- /TMPL_IF -->
+                <!-- /TMPL_LOOP -->
+            </select>
+        </li>
+        <!-- /TMPL_IF -->
+        <li>
+            <span class="label">&nbsp;</span>
+            <!-- TMPL_IF NAME="guarantorid" -->
+            <input id="guarantorsearch" type="button" value="Change" onclick="Dopopguarantor('guarantor_search.pl');" />
+            <!-- TMPL_ELSE -->
+            <input id="guarantorsearch" type="button" value="Set to Patron" onclick="Dopopguarantor('guarantor_search.pl');" />
+            <!-- /TMPL_IF -->
+            <input id="guarantordelete" type="button" value="Delete" />
+        </li>
+        </ol>
+    </fieldset>
 
 <!--/TMPL_IF-->
 <fieldset class="rows">
@@ -516,7 +546,7 @@
 				<!-- TMPL_ELSE -->
 				<label for="altcontactfirstname">
 				<!-- /TMPL_IF -->
-				Firstname:</label>
+				First name:</label>
 				<input type="text" name="altcontactfirstname" id="altcontactfirstname" value="<!-- TMPL_VAR NAME="altcontactfirstname" -->" />
 				<!-- TMPL_IF NAME="mandatoryaltcontactfirstname" --><span class="required">Required</span><!-- /TMPL_IF -->
 			</li>
