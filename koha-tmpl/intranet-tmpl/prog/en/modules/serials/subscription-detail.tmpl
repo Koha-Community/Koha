@@ -117,9 +117,9 @@ function popup(subscriptionid) {
         <li><span class="label">Biblio:</span> <i>(<!-- TMPL_VAR name="bibnum" -->)</i> <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="bibnum" -->"><!-- TMPL_VAR name="bibliotitle" --></a></li><br />
 <!-- TMPL_IF name="branchcode" --><li><span class="label">Library:</span> <!-- TMPL_VAR name="branchcode" -->&nbsp;</li><!-- /TMPL_IF -->
         <!-- TMPL_IF name="serialsadditems" -->
-            <li>Serial recieve create an item</li>
+            <li>Serial receipt creates an item record.</li>
         <!-- TMPL_ELSE -->
-            <li>Serial recieve don't create an item</li>
+            <li>Serial receipt does not create an item record.</li>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF name="callnumber" --><li><span class="label">Call Number:</span> <!-- TMPL_VAR name="callnumber" -->&nbsp;</li><!-- /TMPL_IF -->
         <!-- TMPL_IF name="letter" --><li><span class="label">Patron alert with:</span> <!-- TMPL_VAR name="letter" -->&nbsp;</li><!-- /TMPL_IF -->
