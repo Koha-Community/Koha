@@ -74,6 +74,7 @@ if ($input->param('newduedate')){
 #
 my $cardnumber = $input->param("cardnumber");
 my $borrowernumber = $input->param("borrowernumber");
+my $exemptfine = $input->param("exemptfine") || 0;
 my $failedrenews;
 foreach my $itemno (@data) {
     # check status before renewing issue
@@ -87,9 +88,9 @@ foreach my $itemno (@data) {
 }
 my $failedreturn;
 foreach my $barcode (@barcodes) {
-    # check status before renewing issue  
+    # check status before renewing issue
    my ( $returned, $messages, $issueinformation, $borrower ) = 
-    AddReturn($barcode,$branch,1);
+    AddReturn($barcode, $branch, $exemptfine);
    $failedreturn.="&failedreturn=$barcode" unless ($returned);
 }
 

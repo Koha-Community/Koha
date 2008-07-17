@@ -351,8 +351,8 @@ if (nodename =="barcodes[]"){
             <th scope="col">Date due</th>
             <th scope="col">Charge</th>
             <th scope="col">Price</th>
-            <th scope="col">Renew <p style="font-size: 80%;"><a href="#" id="CheckAllitems">select all</a> | <a href="#" id="CheckNoitems">none</a></p></th>
-            <th scope="col">Return <p style="font-size: 80%;"><a href="#" id="CheckAllreturns">select all</a> | <a href="#" id="CheckNoreturns">none</a></p></th>
+            <th scope="col">Renew <p class="column-tool"><a href="#" id="CheckAllitems">select all</a> | <a href="#" id="CheckNoitems">none</a></p></th>
+            <th scope="col">Return <p class="column-tool"><a href="#" id="CheckAllreturns">select all</a> | <a href="#" id="CheckNoreturns">none</a></p></th>
         </tr></thead>
     
        <tbody> <!-- TMPL_LOOP name="issueloop" -->
@@ -408,17 +408,22 @@ if (nodename =="barcodes[]"){
             <td colspan="5" style="text-align: right; font-weight:bold;">Total replacement cost:</td>
             <td><!-- TMPL_VAR NAME="totalprice" --></td>
             <td colspan="2">      
-            renewal due date :<input type="text" size="8" id="newduedate" name="newduedate" value="<!-- TMPL_VAR Name="newduedate" -->" />
-      <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="newduedate_button" alt="Show Calendar" />
-      <script type="text/javascript">
-       //<![CDATA[
-        Calendar.setup({
-            inputField : "newduedate",
-            ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
-            button : "newduedate_button"
-          });
-      //]]>
-      </script>
+                <p>
+                    Renewal due date: <input type="text" size="8" id="newduedate" name="newduedate" value="<!-- TMPL_VAR Name="newduedate" -->" />
+                    <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="newduedate_button" alt="Show Calendar" />
+                    <script type="text/javascript">
+                        //<![CDATA[
+                        Calendar.setup({
+                            inputField : "newduedate",
+                            ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+                            button : "newduedate_button"
+                        });
+                        //]]>
+                    </script>
+                </p>
+                <p>
+                    Forgive fines on return: <input type="checkbox" name="exemptfine" value="1" />
+                </p>
             </td>
         </tr>
         </table>
