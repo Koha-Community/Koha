@@ -68,10 +68,10 @@ function displayMoreConstraint(numlayer){
         <!-- TMPL_LOOP NAME="loop" -->
             <!-- TMPL_IF NAME="new_subfield" -->
                 <!-- TMPL_IF EXPR="tagfield >=10" --><!-- display new only for > 10 fields -->
-                <li><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl#sub<!-- TMPL_VAR NAME="subfieldcode" -->field" title="<!-- TMPL_VAR NAME="liblibrarian" -->">New</a></li>
+                <li><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl#sub<!-- TMPL_VAR NAME="urisubfieldcode" -->field" title="<!-- TMPL_VAR NAME="liblibrarian" -->">New</a></li>
                 <!-- /TMPL_IF -->
             <!-- TMPL_ELSE -->
-                <li><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl#sub<!-- TMPL_VAR NAME="subfieldcode" -->field" title="<!-- TMPL_VAR NAME="liblibrarian" -->">
+                <li><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl#sub<!-- TMPL_VAR NAME="urisubfieldcode" -->field" title="<!-- TMPL_VAR NAME="liblibrarian" -->">
                     <!-- TMPL_VAR NAME="subfieldcode" -->
                </a></li>
             <!-- /TMPL_IF --></li>
@@ -79,7 +79,7 @@ function displayMoreConstraint(numlayer){
     </ul>
     
     <!-- TMPL_LOOP NAME="loop" --> 
-        <div id="sub<!-- TMPL_VAR NAME="subfieldcode" -->field">
+        <div id="sub<!-- TMPL_VAR NAME="urisubfieldcode" -->field">
         
                <fieldset class="rows"><legend>Basic constraints</legend>
                 	<ol>
@@ -96,8 +96,8 @@ function displayMoreConstraint(numlayer){
                 	</ol>
             </fieldset>
 			
-            <a href="javascript:displayMoreConstraint('more<!-- TMPL_VAR NAME="subfieldcode" -->')">display more constraints</a>
-            <div id="more<!-- TMPL_VAR NAME="subfieldcode" -->" class="content_hidden" style="clear: both">
+            <a href="javascript:displayMoreConstraint('more<!-- TMPL_VAR NAME="urisubfieldcode" -->')">display more constraints</a>
+            <div id="more<!-- TMPL_VAR NAME="urisubfieldcode" -->" class="content_hidden" style="clear: both">
              <fieldset class="rows" id="advanced-constraints">
 				<legend>Advanced constraints:</legend>
                 <ol><li><label for="defaultvalue">Default value:</label>

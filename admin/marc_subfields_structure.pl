@@ -207,6 +207,7 @@ if ( $op eq 'add_form' ) {
           . $data->{'tagsubfield'}
           . "\" id=\"tagsubfield\" />";
         $row_data{subfieldcode} = $data->{'tagsubfield'} eq '@'?'_':$data->{'tagsubfield'};
+        $row_data{urisubfieldcode} = $row_data{subfieldcode} eq '%' ? 'pct' : $row_data{subfieldcode};
         $row_data{liblibrarian} = CGI::escapeHTML( $data->{'liblibrarian'} );
         $row_data{libopac}      = CGI::escapeHTML( $data->{'libopac'} );
         $row_data{seealso}      = CGI::escapeHTML( $data->{'seealso'} );
