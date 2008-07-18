@@ -112,7 +112,8 @@ $.tablesorter.addParser({
     <input type="hidden" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->" />
     <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
     <input type="hidden" name="issueconfirmed" value="1" />
-	<input type="hidden" name="duedatespec" value="<!-- TMPL_VAR NAME="duedatespec" -->" />
+    <!-- TMPL_IF NAME="DEBT" --><input type="hidden" name="debt_confirmed" value="1" /><!-- /TMPL_IF -->
+    <input type="hidden" name="duedatespec" value="<!-- TMPL_VAR NAME="duedatespec" -->" />
     <input type="hidden" name="day" value="<!-- TMPL_VAR name="day" -->" />
     <input type="hidden" name="month" value="<!-- TMPL_VAR name="month" -->" />
     <input type="hidden" name="year" value="<!-- TMPL_VAR name="year" -->" />
@@ -171,10 +172,10 @@ $.tablesorter.addParser({
         <!-- TMPL_IF NAME="EXPIRED" -->
             <li>Patron's card is expired</li>
         <!-- /TMPL_IF -->
-	
-	<!-- TMPL_IF NAME="NOTSAMEBRANCH" -->
-	     <li>This item belongs to <!-- TMPL_VAR NAME="itemhomebranch" --> and cannot be issued from this location.</li>
-	<!-- /TMPL_IF -->	 
+
+        <!-- TMPL_IF NAME="NOTSAMEBRANCH" -->
+            <li>This item belongs to <!-- TMPL_VAR NAME="itemhomebranch" --> and cannot be issued from this location.</li>
+        <!-- /TMPL_IF --> 
         </ul>
 
     <!-- TMPL_IF NAME="memberofinstution" -->
@@ -273,6 +274,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
           <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
           <input type="hidden" name="printer" value="<!-- TMPL_VAR NAME="printer" -->" />
           <input type="hidden" name="print" value="maybe" />
+          <input type="hidden" name="debt_confirmed" value="<!-- TMPL_VAR NAME="debt_confirmed" -->" />
                 <!-- TMPL_IF NAME="CHARGES" -->
                         <input type="hidden" name="charges" value="yes" />
                         <input type="hidden" name="oldamount" value="<!-- TMPL_VAR NAME="amountold" -->" />
