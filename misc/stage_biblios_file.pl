@@ -21,11 +21,13 @@ my $add_items = 0;
 my $input_file = "";
 my $batch_comment = "";
 my $want_help = 0;
+my $no_replace ;
 
 my $result = GetOptions(
     'file:s'        => \$input_file,
     'match-bibs:s'    => \$match_bibs,
     'add-items'     => \$add_items,
+    'no-replace'    => \$no_replace,
     'comment:s'     => \$batch_comment,
     'h|help'        => \$want_help
 );
@@ -84,7 +86,7 @@ sub process_batch {
             SetImportBatchMatcher($batch_id, $match_bibs);
         }
         # set default record overlay behavior
-        SetImportBatchOverlayAction($batch_id, 'replace');
+        SetImportBatchOverlayAction($batch_id, ($no_replace) ? 'ignore' : 'replace');
         SetImportBatchNoMatchAction($batch_id, 'create_new');
         SetImportBatchItemAction($batch_id, 'always_add');
         print "... looking for matches with records already in database\n";
@@ -146,6 +148,8 @@ Parameters:
     --add-items             use this option to specify that
                             item data is embedded in the MARC
                             bibs and should be parsed.
+    --no-replace            overlay action for bib record: default is to 
+                            replace extant bib with the imported record.
     --comment <comment>     optional comment to describe
                             the record batch; if the comment
                             has spaces in it, surround the
