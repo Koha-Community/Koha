@@ -6,7 +6,7 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Late orders</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="lateorders.pl">Late orders</a></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -17,14 +17,17 @@
 <h1><!-- TMPL_IF name="Supplier" --><!-- TMPL_VAR name="Supplier" --> : <!--/TMPL_IF -->Late orders</h1>
 <div id="acqui_lateorders">
 
-<!-- TMPL_IF NAME="lateorders" --><form action="lateorders.pl" name="claim" method="post">
-<input type="hidden" name="op" value="send_alert" />
-<!-- TMPL_IF NAME="letters" --><p><label for="letter_code">Claim using notice: </label><select name="letter_code" id="letter_code">
-                        <!--TMPL_LOOP Name="letters"-->
-                            <option value="<!--TMPL_VAR Name="code"-->"><!--TMPL_VAR Name="name"--></option>
-                        <!--/TMPL_LOOP -->
-                    </select>
-					</p><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="lateorders" -->
+<form action="lateorders.pl" name="claim" method="post">
+  <input type="hidden" name="op" value="send_alert" />
+	<!-- TMPL_IF NAME="letters" -->
+	<p><label for="letter_code">Claim using notice: </label><select name="letter_code" id="letter_code">
+	  <!--TMPL_LOOP Name="letters"-->
+		<option value="<!--TMPL_VAR Name="code"-->"><!--TMPL_VAR Name="name"--></option>
+	  <!--/TMPL_LOOP -->
+	  </select>
+	</p>
+	<!-- /TMPL_IF -->
     <table>
         <tr>
             <th>Order Date</th>
@@ -34,72 +37,74 @@
             <th>Basket</th>
             <th>&nbsp;</th>
         </tr>
-        <!-- TMPL_LOOP name="lateorders" -->
-            <!--TMPL_IF Name="hilighted" -->
-                <tr class="highlight"> 
-            <!--TMPL_ELSE-->
-                <tr>
-            <!-- /TMPL_IF -->
-                <td>
-                    <!-- TMPL_VAR name="orderdate" -->
-                    (<!-- TMPL_VAR name="latesince" --> days)
-                </td>
-                <td>
-                        <!-- TMPL_VAR name="supplier" -->
-                </td>
-                <td>
-                    <b><!-- TMPL_VAR name="title" --></b>
-                    <!-- TMPL_IF name="author" --><br/><i>Author:</i> <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
-                    <!-- TMPL_IF name="publisher" -->
+    <!-- TMPL_LOOP name="lateorders" -->
+        <tr<!-- TMPL_UNLESS NAME="__odd__" --> class="highlight"<!-- /TMPL_UNLESS -->> 
+            <td>
+                <!-- TMPL_VAR name="orderdate" -->
+                (<!-- TMPL_VAR name="latesince" --> days)
+            </td>
+            <td>
+                <!-- TMPL_VAR name="supplier" -->
+            </td>
+            <td>
+                <b><!-- TMPL_VAR name="title" --></b>
+                   <!-- TMPL_IF name="author" --><br/><i>Author:</i> <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
+                   <!-- TMPL_IF name="publisher" -->
                         <br/><i>Published by:</i> <!-- TMPL_VAR NAME="publisher" -->
                         <!-- TMPL_IF name="publicationyear" -->
                             <i> in </i><!-- TMPL_VAR name="publicationyear" -->
                         <!-- /TMPL_IF -->
-                    <!-- /TMPL_IF -->
-                </td>
-                <td>
-                    <!-- TMPL_VAR name="unitpricesupplier" -->x<!-- TMPL_VAR name="quantity" --> = 
-                    <!-- TMPL_VAR name="subtotal" -->
+                   <!-- /TMPL_IF -->
+            </td>
+            <td>
+                   <!-- TMPL_VAR name="unitpricesupplier" -->x<!-- TMPL_VAR name="quantity" --> = 
+                   <!-- TMPL_VAR name="subtotal" -->
                     <p title="budget"><!-- TMPL_VAR name="budget" --></p>
-                </td>
-                <td>
-                    <p><a href="basket.pl?basketno=<!-- TMPL_VAR name="basketno" -->" title="basket">
+            </td>
+            <td>
+                 <p><a href="basket.pl?basketno=<!-- TMPL_VAR name="basketno" -->" title="basket">
                         <!-- TMPL_VAR name="basketno" -->
-                    </a>
-                    </p>
-                    <p title="branch"><!-- TMPL_VAR name="branch" --></p>
-                </td>
-                <td>
-                    <input type="checkbox" name="claim_for" value="<!--TMPL_VAR Name="ordernumber" -->" />
-                </td>
-            </tr>
+                 	</a>
+                 </p>
+                 <p title="branch"><!-- TMPL_VAR name="branch" --></p>
+            </td>
+            <td>
+                <input type="checkbox" name="claim_for" value="<!--TMPL_VAR Name="ordernumber" -->" />
+            </td>
+        </tr>
         <!-- /TMPL_LOOP -->
         <tr> 
-            <th>
-                Total
-            </th>
-            <th colspan="2">
-                &nbsp;
-            </th>
-            <th>
-                <!-- TMPL_VAR name="total" -->
-            </th>
-            <th> &nbsp;</th>
+            <th>Total</th>
+            <th colspan="2">&nbsp;</th>
+            <th><!-- TMPL_VAR name="total" --></th>
+            <th>&nbsp;</th>
             <td>
                 <input type="submit" value="Claim Order" />
             </td>
         </tr>
     </table>
-                </form><!-- TMPL_ELSE --><p>There are no late orders.</p><!-- /TMPL_IF -->
+     </form>
+<!-- TMPL_ELSE --><p>There are no late orders.</p>
+<!-- /TMPL_IF -->
 </div>
 </div>
 </div>
 <div class="yui-b">
-<form action="lateorders.pl" method="post">
+<form action="lateorders.pl" method="get">
 <fieldset class="brief">
 <h4>Filter Results:</h4>
-<ol>	<li><label for="delay">Order date:</label><input size="3" maxlength="3" id="delay" type="text" name="delay" value="<!--TMPL_VAR Name="delay" -->" /> days ago</li>
-	<li><label for="supplierid">Vendor:</label><!-- TMPL_VAR name="CGIsupplier" --></li></ol>
+<!-- TMPL_LOOP NAME="ERROR_LOOP" -->
+<!-- TMPL_IF NAME="delay_digits" --><p class="error">The number of days (<!-- TMPL_VAR NAME="bad_delay" -->) must be a number between 0 and 999.</p><!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+<ol><li><label for="delay">Order date:</label><input size="3" maxlength="3" id="delay" type="text" name="delay" value="<!--TMPL_VAR Name="delay" -->" /> days ago</li>
+	<li><label for="supplierid">Vendor:</label>
+		<select id="supplierid" size="1" tabindex="" name="supplierid">
+			<option value=""/>
+			<!-- TMPL_LOOP NAME="SUPPLIER_LOOP" -->
+			<option value="<!-- TMPL_VAR NAME='id' -->"<!-- TMPL_IF NAME="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="name" --></option>
+        	<!-- /TMPL_LOOP -->
+		</select>
+</ol>
 	<fieldset class="action"><input type="submit" value="filter" /></fieldset>
 </fieldset>
     </form>

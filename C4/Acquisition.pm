@@ -20,6 +20,7 @@ package C4::Acquisition;
 
 use strict;
 use C4::Context;
+use C4::Debug;
 use C4::Dates qw(format_date);
 use MARC::Record;
 use C4::Suggestions;
@@ -977,107 +978,81 @@ sub GetLateOrders {
     my $dbh = C4::Context->dbh;
 
     #BEWARE, order of parenthesis and LEFT JOIN is important for speed
-    my $strsth;
     my $dbdriver = C4::Context->config("db_scheme") || "mysql";
 
-    my @query_params = ();
-
-    #    warn " $dbdriver";
-    if ( $dbdriver eq "mysql" ) {
-        $strsth = "
-            SELECT aqbasket.basketno,aqorders.ordernumber,
-                DATE(aqbasket.closedate) AS orderdate,
-                aqorders.quantity - IFNULL(aqorders.quantityreceived,0) AS quantity,
-                aqorders.rrp AS unitpricesupplier,
-                aqorders.ecost AS unitpricelib,
-                (aqorders.quantity - IFNULL(aqorders.quantityreceived,0)) * aqorders.rrp AS subtotal,
-                aqbookfund.bookfundname AS budget,
-                borrowers.branchcode AS branch,
-                aqbooksellers.name AS supplier,
-                aqorders.title,
-                biblio.author,
-                biblioitems.publishercode AS publisher,
-                biblioitems.publicationyear,
-                DATEDIFF(CURDATE( ),closedate) AS latesince
-            FROM  (((
-                (aqorders LEFT JOIN biblio ON biblio.biblionumber = aqorders.biblionumber)
-            LEFT JOIN biblioitems ON  biblioitems.biblionumber=biblio.biblionumber)
-            LEFT JOIN aqorderbreakdown ON aqorders.ordernumber = aqorderbreakdown.ordernumber)
-            LEFT JOIN aqbookfund ON aqorderbreakdown.bookfundid = aqbookfund.bookfundid),
-            (aqbasket LEFT JOIN borrowers ON aqbasket.authorisedby = borrowers.borrowernumber)
-            LEFT JOIN aqbooksellers ON aqbasket.booksellerid = aqbooksellers.id
-            WHERE aqorders.basketno = aqbasket.basketno
-            AND (closedate <= DATE_SUB(CURDATE( ),INTERVAL ? DAY))
-            AND ((datereceived = '' OR datereceived is null)
-            OR (aqorders.quantityreceived < aqorders.quantity) )
-        ";
-
-        push @query_params, $delay;
-    
-        if ( defined $supplierid ) {
-            $strsth .= ' AND aqbasket.booksellerid = ? ';
-            push @query_params, $supplierid;
-        }
-        
-        if ( defined $branch ) {
-            $strsth .= ' AND borrowers.branchcode like ? ';
-            push @query_params, $branch;
-        }
-
-        if ( C4::Context->preference("IndependantBranches")
+    my @query_params = ($delay);	# delay is the first argument regardless
+	my $select = "
+      SELECT aqbasket.basketno,
+          aqorders.ordernumber,
+          DATE(aqbasket.closedate)  AS orderdate,
+          aqorders.rrp              AS unitpricesupplier,
+          aqorders.ecost            AS unitpricelib,
+          aqbookfund.bookfundname   AS budget,
+          borrowers.branchcode      AS branch,
+          aqbooksellers.name        AS supplier,
+          aqorders.title,
+          biblio.author,
+          biblioitems.publishercode AS publisher,
+          biblioitems.publicationyear,
+	";
+	my $from = "
+      FROM (((
+          (aqorders LEFT JOIN biblio     ON biblio.biblionumber         = aqorders.biblionumber)
+          LEFT JOIN biblioitems          ON biblioitems.biblionumber    = biblio.biblionumber)
+          LEFT JOIN aqorderbreakdown     ON aqorders.ordernumber        = aqorderbreakdown.ordernumber)
+          LEFT JOIN aqbookfund           ON aqorderbreakdown.bookfundid = aqbookfund.bookfundid),
+          (aqbasket LEFT JOIN borrowers  ON aqbasket.authorisedby       = borrowers.borrowernumber)
+          LEFT JOIN aqbooksellers        ON aqbasket.booksellerid       = aqbooksellers.id
+          WHERE aqorders.basketno = aqbasket.basketno
+          AND ( (datereceived = '' OR datereceived IS NULL)
+              OR (aqorders.quantityreceived < aqorders.quantity)
+          )
+    ";
+	my $having = "";
+    if ($dbdriver eq "mysql") {
+		$select .= "
+           aqorders.quantity - IFNULL(aqorders.quantityreceived,0)                 AS quantity,
+          (aqorders.quantity - IFNULL(aqorders.quantityreceived,0)) * aqorders.rrp AS subtotal,
+          DATEDIFF(CURDATE( ),closedate) AS latesince
+		";
+        $from .= " AND (closedate <= DATE_SUB(CURDATE( ),INTERVAL ? DAY)) ";
+		$having = "
+         HAVING quantity          <> 0
+            AND unitpricesupplier <> 0
+            AND unitpricelib      <> 0
+		";
+    } else {
+		# FIXME: account for IFNULL as above
+        $select .= "
+                aqorders.quantity                AS quantity,
+                aqorders.quantity * aqorders.rrp AS subtotal,
+                (CURDATE - closedate)            AS latesince
+		";
+        $from .= " AND (closedate <= (CURDATE -(INTERVAL ? DAY)) ";
+    }
+    if (defined $supplierid) {
+		$from .= ' AND aqbasket.booksellerid = ? ';
+        push @query_params, $supplierid;
+    }
+    if (defined $branch) {
+        $from .= ' AND borrowers.branchcode LIKE ? ';
+        push @query_params, $branch;
+    }
+    if (C4::Context->preference("IndependantBranches")
              && C4::Context->userenv
              && C4::Context->userenv->{flags} != 1 ) {
-            $strsth .= ' AND borrowers.branchcode like ? ';
-            push @query_params, C4::Context->userenv->{branch};
-        }
-        
-        $strsth .= " HAVING quantity       <> 0
-                     AND unitpricesupplier <> 0
-                     AND unitpricelib      <> 0
-                     ORDER BY latesince, basketno, borrowers.branchcode, supplier ";
-    } else {
-        $strsth = "
-            SELECT aqbasket.basketno,
-                   DATE(aqbasket.closedate) AS orderdate,
-                    aqorders.quantity, aqorders.rrp AS unitpricesupplier,
-                    aqorders.ecost as unitpricelib,
-                    aqorders.quantity * aqorders.rrp AS subtotal
-                    aqbookfund.bookfundname AS budget,
-                    borrowers.branchcode AS branch,
-                    aqbooksellers.name AS supplier,
-                    biblio.title,
-                    biblio.author,
-                    biblioitems.publishercode AS publisher,
-                    biblioitems.publicationyear,
-                    (CURDATE -  closedate) AS latesince
-                    FROM(( (
-                        (aqorders LEFT JOIN biblio on biblio.biblionumber = aqorders.biblionumber)
-                        LEFT JOIN biblioitems on  biblioitems.biblionumber=biblio.biblionumber)
-                        LEFT JOIN aqorderbreakdown on aqorders.ordernumber = aqorderbreakdown.ordernumber)
-                        LEFT JOIN aqbookfund ON aqorderbreakdown.bookfundid = aqbookfund.bookfundid),
-                        (aqbasket LEFT JOIN borrowers on aqbasket.authorisedby = borrowers.borrowernumber) LEFT JOIN aqbooksellers ON aqbasket.booksellerid = aqbooksellers.id
-                    WHERE aqorders.basketno = aqbasket.basketno
-                    AND (closedate <= (CURDATE -(INTERVAL $delay DAY))
-                    AND ((datereceived = '' OR datereceived is null)
-                    OR (aqorders.quantityreceived < aqorders.quantity) ) ";
-        $strsth .= " AND aqbasket.booksellerid = $supplierid " if ($supplierid);
-
-        $strsth .= " AND borrowers.branchcode like \'" . $branch . "\'" if ($branch);
-        $strsth .=" AND borrowers.branchcode like \'". C4::Context->userenv->{branch} . "\'"
-            if (C4::Context->preference("IndependantBranches") && C4::Context->userenv->{flags} != 1 );
-        $strsth .=" ORDER BY latesince,basketno,borrowers.branchcode, supplier";
+        $from .= ' AND borrowers.branchcode LIKE ? ';
+        push @query_params, C4::Context->userenv->{branch};
     }
-    my $sth = $dbh->prepare($strsth);
-    $sth->execute( @query_params );
+	my $query = "$select $from $having\nORDER BY latesince, basketno, borrowers.branchcode, supplier";
+	$debug and print STDERR "GetLateOrders query: $query\nGetLateOrders args: " . join(" ",@query_params);
+    my $sth = $dbh->prepare($query);
+    $sth->execute(@query_params);
     my @results;
-    my $hilighted = 1;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        $data->{hilighted} = $hilighted if ( $hilighted > 0 );
-        $data->{orderdate} = format_date( $data->{orderdate} );
+    while (my $data = $sth->fetchrow_hashref) {
+        $data->{orderdate} = format_date($data->{orderdate});
         push @results, $data;
-        $hilighted = -$hilighted;
     }
-    $sth->finish;
     return @results;
 }
 

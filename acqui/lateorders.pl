@@ -43,6 +43,7 @@ To know on which branch this script have to display late order.
 =cut
 
 use strict;
+use warnings;
 use CGI;
 use C4::Bookseller;
 use C4::Auth;
@@ -54,67 +55,61 @@ use C4::Letters;
 use C4::Branch; # GetBranches
 
 my $input = new CGI;
-my ($template, $loggedinuser, $cookie)
-= get_template_and_user(
-                {template_name => "acqui/lateorders.tmpl",
-				query => $input,
-				type => "intranet",
-				authnotrequired => 0,
-				flagsrequired => {acquisition => 1},
-				debug => 1,
-				});
+my ($template, $loggedinuser, $cookie) = get_template_and_user({
+	template_name => "acqui/lateorders.tmpl",
+	query => $input,
+	 type => "intranet",
+	authnotrequired => 0,
+	  flagsrequired => {acquisition => 1},
+	debug => 1,
+});
 
-my $supplierid = $input->param('supplierid');
-my $delay = $input->param('delay');
-my $branch = $input->param('branch');
+my $supplierid = $input->param('supplierid') || undef; # we don't want "" or 0
+my $delay      = $input->param('delay');
+my $branch     = $input->param('branch');
+my $op         = $input->param('op');
 
-#default value for delay
-$delay = 30 unless $delay;
-
-my %supplierlist = GetBooksellersWithLateOrders($delay,$branch);
-my @select_supplier;
-push @select_supplier,"";
-foreach my $supplierid (keys %supplierlist){
-	push @select_supplier, $supplierid;
+my @errors = ();
+$delay = 30 unless defined $delay;
+unless ($delay =~ /^\d{1,3}$/) {
+	push @errors, {delay_digits => 1, bad_delay => $delay};
+	$delay = 30;	#default value for delay
 }
 
-my $CGIsupplier=CGI::scrolling_list( -name     => 'supplierid',
-			-values   => \@select_supplier,
-			-default  => $supplierid,
-			-id        => 'supplierid',
-			-labels   => \%supplierlist,
-			-size     => 1,
-			-tabindex=>'',
-			-multiple => 0 );
-
+my %supplierlist = GetBooksellersWithLateOrders($delay,$branch);
+my (@sloopy);	# supplier loop
+foreach (keys %supplierlist){
+	push @sloopy, (($supplierid and $supplierid eq $_ )            ? 
+					{id=>$_, name=>$supplierlist{$_}, selected=>1} :
+					{id=>$_, name=>$supplierlist{$_}} )            ;
+}
+$template->param(SUPPLIER_LOOP => \@sloopy);
 $template->param(Supplier=>$supplierlist{$supplierid}) if ($supplierid);
 
 my @lateorders = GetLateOrders($delay,$supplierid,$branch);
-my $count = scalar @lateorders;
 
 my $total;
-foreach my $lateorder (@lateorders){
-	$total+=$lateorder->{subtotal};
+foreach (@lateorders){
+	$total += $_->{subtotal};
 }
 
 my @letters;
 my $letters=GetLetters("claimacquisition");
 foreach (keys %$letters){
- push @letters ,{code=>$_,name=>$letters->{$_}};
+	push @letters, {code=>$_,name=>$letters->{$_}};
 }
-
 $template->param(letters=>\@letters) if (@letters);
-my $op=$input->param("op");
-if ($op eq "send_alert"){
-  my @ordernums=$input->param("claim_for");
-  SendAlerts('claimacquisition',\@ordernums,$input->param("letter_code"));
+
+if ($op and $op eq "send_alert"){
+	my @ordernums = $input->param("claim_for");									# FIXME: Fallback values?
+	SendAlerts('claimacquisition',\@ordernums,$input->param("letter_code"));	# FIXME: Fallback value?
 }
 
-$template->param(delay=>$delay) if ($delay);
+$template->param(ERROR_LOOP => \@errors) if (@errors);
 $template->param(
-	CGIsupplier => $CGIsupplier,
 	lateorders => \@lateorders,
-	total=>$total,
+	delay => $delay,
+	total => $total,
 	intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-	);
+);
 output_html_with_http_headers $input, $cookie, $template->output;
