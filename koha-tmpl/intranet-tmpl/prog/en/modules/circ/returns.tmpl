@@ -214,10 +214,12 @@ function Dopop(link) {
         <form method="post" action="returns.pl" class="confirm">
             <!-- TMPL_IF name="transfertodo" -->
                 <input type="submit" class="approve" value="Confirm hold and transfer" />
-			<input type="submit" value="Print Slip and Confirm" class="print" onclick="Dopop('hold-transfer-slip.pl?transfer=1&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;op=slip'); this.form.submit();" />
+                <input type="submit" value="Print Slip and Confirm" class="print" onclick="Dopop('hold-transfer-slip.pl?transfer=1&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;op=slip'); this.form.submit();" />
             <!-- TMPL_ELSE -->
                 <input type="submit" class="approve" value="Confirm hold" />
+                <input type="submit" value="Print Slip and Confirm" class="print" onclick="Dopop('hold-transfer-slip.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;op=slip'); this.form.submit();" />
             <!-- /TMPL_IF -->
+                <input type="submit" class="deny" value="Ignore" onclick="$('.dialog:visible').hide('slow'); return false;" />
             <!-- TMPL_LOOP Name="inputloop" -->
 	<input type="hidden" name="ri-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
 	<input type="hidden" name="dd-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="duedate" -->" />
