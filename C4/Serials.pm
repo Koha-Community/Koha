@@ -1746,7 +1746,7 @@ sub HasSubscriptionExpired {
     } else {
       if ($subscription->{'numberlength'}){
         my $countreceived=countissuesfrom($subscriptionid,$subscription->{'startdate'});
-      	return 1 if ($countreceived >$subscription->{'numberlentgh'});
+      	return 1 if ($countreceived >$subscription->{'numberlength'});
 	      return 0;
       } else {
 	      return 0;
