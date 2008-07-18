@@ -606,7 +606,7 @@ sub getRecords {
                             expandable => $expandable,
                             expand     => $link_value,
                         }
-                      );
+                      ) unless ( ($facets_info->{$link_value}->{'label_value'} =~ /Libraries/) and (C4::Context->preference('singleBranchMode')) );
                 }
             }
         }
