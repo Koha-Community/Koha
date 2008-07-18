@@ -137,8 +137,7 @@ for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
                     $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }->{tab}
                     ne $tabloop );
                 next
-                  if ( $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }
-                    ->{hidden} > 0 );
+                  if ( $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }->{hidden} > 0 ); 
                 my %subfield_data;
                 $subfield_data{marc_lib} =
                   $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }->{lib};
@@ -221,8 +220,10 @@ foreach my $field (@fields) {
     # loop through each subfield
     for my $i ( 0 .. $#subf ) {
         next if ( $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{tab} ne 10 );
+		next if ( $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{hidden} > 0 );
         $witness{ $subf[$i][0] } =
           $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{lib};
+
         if ( $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{isurl} ) {
             $this_row{ $subf[$i][0] } =
               "<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";

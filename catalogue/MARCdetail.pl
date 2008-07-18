@@ -148,7 +148,7 @@ for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
             next
               if (
                 $tagslib->{ $fields[$x_i]->tag() }->{'@'}->{tab} ne $tabloop );
-            next if ( $tagslib->{ $fields[$x_i]->tag() }->{'@'}->{hidden} );
+            next if ( $tagslib->{ $fields[$x_i]->tag() }->{'@'}->{hidden}==(-7|-4|-3|-2|2|3|5|8));
             my %subfield_data;
             $subfield_data{marc_lib} =
               $tagslib->{ $fields[$x_i]->tag() }->{'@'}->{lib};
@@ -169,7 +169,7 @@ for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
                     ne $tabloop );
                 next
                   if ( $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }
-                    ->{hidden} );
+                    ->{hidden}==(-7|-4|-3|-2|2|3|5|8));
                 my %subfield_data;
                 $subfield_data{short_desc} = substr(
                     $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }->{lib},
@@ -258,7 +258,7 @@ foreach my $field (@fields) {
     # loop through each subfield
     for my $i ( 0 .. $#subf ) {
         next if ( $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{tab} ne 10 );
-        next if ( $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{hidden} );
+        next if ( $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{hidden}==(-7|-4|-3|-2|2|3|5|8));
         $witness{ $subf[$i][0] } =
         $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{lib};
         $this_row{ $subf[$i][0] } = GetAuthorisedValueDesc( $field->tag(),

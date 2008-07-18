@@ -296,7 +296,7 @@ foreach my $tag (sort keys %{$tagslib}) {
         $value =~ s/MM/$month/g;
         $value =~ s/DD/$day/g;
     }
-    $subfield_data{visibility} = "display:none;" if (($tagslib->{$tag}->{$subfield}->{hidden} % 2 == 1));
+    $subfield_data{visibility} = "display:none;" if (($tagslib->{$tag}->{$subfield}->{hidden} > 4) || ($tagslib->{$tag}->{$subfield}->{hidden} < -4));
     #testing branch value if IndependantBranches.
     my $test = (C4::Context->preference("IndependantBranches")) &&
               ($tag eq $branchtagfield) && ($subfield eq $branchtagsubfield) &&
