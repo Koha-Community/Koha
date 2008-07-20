@@ -98,6 +98,7 @@
         <li><label for="branchfax">Fax</label><input type="text" name="branchfax" id="branchfax" value="<!-- TMPL_VAR name="branchfax" escape="HTML" -->" /></li>
         <li><label for="branchemail">E-mail</label><input type="text" name="branchemail" id="branchemail" value="<!-- TMPL_VAR name="branchemail" escape="HTML" -->" /></li>
         <li><label for="branchip">IP</label><input type="text" name="branchip" id="branchip" value="<!-- TMPL_VAR name="branchip" escape="HTML" -->" /> <span class="hint">Can be entered as a single IP, or a subnet such as 192.168.1.*</span></li>
+		<!--
         <li><label for="branchprinter">Library Printer</label>
             <select id="branchprinter" name="branchprinter">
                 <option value="">None</option>
@@ -108,8 +109,10 @@
 				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchprinter" --></option>
 				<!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
-            </select></li></ol>
-			</fieldset>
+            </select></li>
+			-->
+        </ol>
+        </fieldset>
         <fieldset class="action"><input type="submit" value="Submit" /></fieldset>
     </form>
 <!-- /TMPL_IF -->
@@ -144,7 +147,7 @@
             <th>Address</th>
             <th>Properties</th>
             <th>IP</th>
-            <th>Printer</th>
+            <!-- <th>Printer</th> -->
             <th colspan="2">&nbsp;</th>
         </tr></thead><tbody>
         <!-- TMPL_LOOP name="branches" -->
@@ -184,9 +187,9 @@
                 <td>
                     <!-- TMPL_VAR NAME="branchip" -->
                 </td>
-                <td>
+                <!-- <td>
                     <!-- TMPL_VAR NAME="branchprinter" -->
-                </td>
+                </td> -->
                 <td>
                     <a href="<!-- TMPL_VAR name="action" -->?op=edit&amp;branchcode=<!-- TMPL_VAR name="value" escape="HTML" -->">Edit</a>
                 </td>
