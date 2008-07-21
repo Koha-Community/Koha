@@ -2,12 +2,16 @@
 <title>Koha &rsaquo; Reports <!-- TMPL_IF NAME="do_it" -->&rsaquo; Patrons statistics &rsaquo; Results<!-- TMPL_ELSE -->&rsaquo; Patrons statistics<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
+<style type="text/css">
+	.sql {display:none;}
+	.debug {display:none;}
+</style>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> <!-- TMPL_IF NAME="do_it" -->&rsaquo; <a href="/cgi-bin/koha/reports/borrowers_stats.pl">Patrons statistics</a> &rsaquo; Results<!-- TMPL_ELSE -->&rsaquo; Patrons statistics<!-- /TMPL_IF --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; <a href="/cgi-bin/koha/reports/borrowers_stats.pl">Patrons statistics</a><!-- TMPL_IF NAME="do_it"--> &rsaquo; Results<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -21,40 +25,35 @@
 		<!-- TMPL_IF NAME="loopfilter"-->
 			<p>Filtered on</p>
 			<!-- TMPL_LOOP NAME="loopfilter" -->
-					<p> <!-- TMPL_VAR NAME="crit"--> =<!-- TMPL_VAR NAME="filter"--></p>
+				<p<!-- TMPL_IF NAME="debug"--> class="debug"<!-- TMPL_ELSIF NAME="sql" --> class="sql"<!-- /TMPL_IF -->>
+					<!-- TMPL_VAR NAME="crit"--> = <!-- TMPL_VAR NAME="filter"-->
+				</p>
 			<!-- /TMPL_LOOP -->
 		<!-- /TMPL_IF -->
 		<table>
 			<tr>
 				<th><!-- TMPL_VAR name="line" --> / <!-- TMPL_VAR name="column" --></th>
 				<!-- TMPL_LOOP NAME="loopcol" -->
-					<th><!-- TMPL_VAR NAME="coltitle" --></th>
+					<th><!-- TMPL_IF NAME="coltitle_display" --><!-- TMPL_VAR NAME="coltitle_display" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="coltitle" --><!-- /TMPL_IF -->
+					</th>
 				<!-- /TMPL_LOOP -->
 				<th>TOTAL</th>
 			</tr>
 				<!-- TMPL_LOOP NAME="looprow" -->
-					<tr>
-						<!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
-						<!-- TMPL_VAR NAME="rowtitle" --></td>
-						<!-- TMPL_LOOP NAME="loopcell" -->
-							<!-- TMPL_IF NAME="hilighted" --><td><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
-								<!--TMPL_IF NAME="value" --><!-- TMPL_VAR NAME="value" -->
-								<!--TMPL_ELSE-->
-									&nbsp;
-								<!--/TMPL_IF-->
-								</td>
-						<!-- /TMPL_LOOP -->
-						<!-- TMPL_IF NAME="hilighted" --><td><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
-							<!-- TMPL_VAR NAME="totalrow" -->
+					<tr<!-- TMPL_UNLESS NAME="__odd__" --> class="highlight"<!-- /TMPL_UNLESS -->>
+						<td><!-- TMPL_IF NAME="rowtitle_display" --><!-- TMPL_VAR NAME="rowtitle_display" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="rowtitle" --><!-- /TMPL_IF -->
 						</td>
+						<!-- TMPL_LOOP NAME="loopcell" -->
+						<td><!-- TMPL_IF NAME="value" --><!-- TMPL_VAR NAME="value" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+						</td>
+						<!-- /TMPL_LOOP -->
+						<td><!-- TMPL_VAR NAME="totalrow" --></td>
 					</tr>
-				<!-- /TMPL_LOOP  -->
+				<!-- /TMPL_LOOP -->
 				<tr>
 					<th>TOTAL</th>
 					<!-- TMPL_LOOP NAME="loopfooter" -->
-						<th>
-							<!-- TMPL_VAR NAME="totalcol" -->
-						</th>
+						<th><!-- TMPL_VAR NAME="totalcol" --></th>
 					<!-- /TMPL_LOOP -->
 					<th><!-- TMPL_VAR NAME="total" --></th>
 				</tr>
@@ -74,47 +73,48 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr class="hilighted">
+			<tr class="highlight">
 			<td>Patron category</td>
 			<td><input type="radio" name="Line" value="categorycode" /></td>
 			<td><input type="radio" name="Column" value="categorycode" /></td>
-			<td ><!-- TMPL_VAR NAME="CGICatCode" --></td>
+			<td><select name="Filter"  size="1" id="catcode">
+				<option value=""></option>
+				<!-- TMPL_LOOP NAME="CAT_LOOP" -->
+				<option value="<!-- TMPL_VAR NAME="categorycode" -->"><!-- TMPL_VAR NAME="description" --></option>
+				<!-- /TMPL_LOOP  -->
+				</select>
+			</td>
 			</tr>
 			<tr>
 			<td>Patron status</td>
-			<td></td>
-			<td></td>
-			<td ><select name="status"><option value=""> </option><option value="debarred">debarred</option><option value="gonenoadress">gone no adress</option><option value="lost">lost</option></select></td>
+			<td colspan="2"></td>
+			<td ><select name="status"><option value=""> </option><option value="debarred">debarred</option><option value="gonenoadress">gone no address</option><option value="lost">lost</option></select></td>
 			</tr>
-			<tr>
+			<tr class="highlight">
 			<td>Patron activity</td>
-			<td></td>
-			<td></td>
-			<td ><select name="activity"><option value=""> </option><option value="active">active</option><option value="nonactive">no active</option></select></td>
-			</tr>
-
-			<tr class="hilighted">
-			<td>&nbsp;</td>
 			<td colspan="2"><select name="period" id="period">
-			<option value ="1">1</option>
-			<option value ="2">2</option>
-			<option value ="3">3</option>
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
 			</select>
 			<label for="period">years of activity</label> 
 			</td>
-			<td>&nbsp;</td>
+			<td><select name="activity"><option value=""> </option><option value="active">active</option><option value="nonactive">no active</option></select></td>
 			</tr>
 
-			<tr class="hilighted">
-			<td>
-			Zip Code
-			</td>
+			<tr>
+			<td rowspan="2">Zip Code</td>
 			<td><input type="radio" name="Line" value="zipcode" /></td>
 			<td><input type="radio" name="Column" value="zipcode" /></td>
-			<td><!-- TMPL_VAR NAME="CGIZipCode" --></td>
+			<td><select name="Filter"  size="1" id="zipcode">
+				<option value=""> </option>
+				<!-- TMPL_LOOP NAME="ZIP_LOOP" -->
+				<option value="<!-- TMPL_VAR NAME="zipcode" -->"><!-- TMPL_VAR NAME="zipcode" --></option>
+				<!-- /TMPL_LOOP -->
+				</select>
+			</td>
 			</tr>
-			<tr class="hilighted">
-			<td>&nbsp;</td>
+			<tr>
 			<td colspan="2"><select name="digits" id="digits">
 			<option value=""> </option>
 			<option value ="1">1</option>
@@ -132,20 +132,24 @@
 			</td>
 			<td>&nbsp;</td>
 			</tr>
-			<tr class="hilighted">
-			<td>
-			Library
-			</td>
-			<td><input type="radio" name="Line" value="branchcode" /></td>
-			<td><input type="radio" name="Column" value="branchcode" /></td>
-			<td><!-- TMPL_VAR NAME="CGIBranch" --></td>
-			</tr>
 
-		          <tr class="hilighted">
-                <td>Date of Birth</td>
-                <td></td>
-                <td></td>
-                <td > <label for="from">From</label> <input type="text" readonly="readonly" size="10" id="from" name="Filter" />
+			<tr class="highlight">
+			<td>Library</td>
+			<td><input type="radio" name="Line"   value="branchcode" /></td>
+			<td><input type="radio" name="Column" value="branchcode" /></td>
+			<td>
+				<select name="Filter"  size="1" id="branch">
+				<option value=""></option>
+				<!-- TMPL_LOOP NAME="BRANCH_LOOP" -->
+					<option value="<!-- TMPL_VAR NAME="branchcode" -->"><!-- TMPL_VAR NAME="branchcode" --> - <!-- TMPL_VAR NAME="branchname" --></option>
+				<!-- /TMPL_LOOP -->
+				</select>
+			</td>
+			</tr>
+		    <tr>
+            <td>Date of Birth</td>
+            <td colspan="2"></td>
+                <td><label for="from">From</label> <input type="text" readonly="readonly" size="10" id="from" name="Filter" />
                     <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="openCalendarFrom" style="cursor: pointer;" />
                    <script type="text/javascript">
 				   //<![CDATA[
@@ -163,16 +167,14 @@
                         } else {
                                 return false;
                         }
-                        }
-                    Calendar.setup(
-                        {
+                    }
+                    Calendar.setup({
                             inputField : "from",
                             ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
                             button : "openCalendarFrom",
                             disableFunc : validate1,
                             dateStatusFunc : validate1
-                        }
-                    );
+                    });
 					//]]>
                     </script>
                     <label for="to">To</label> <input readonly="readonly" size="10" id="to" name="Filter" value="" type="text" />
@@ -195,34 +197,45 @@
                                 }
                             }
 
-                            Calendar.setup(
-                                {
+                            Calendar.setup({
                                     inputField : "to",
                                     ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
                                     button : "openCalendarTo",
                                     disableFunc : validate2,
                                     dateStatusFunc : validate2
-                                }
-                            );
+                            });
 							//]]>
                         </script>
                     </td>
                 </tr>
 
-			<!-- TMPL_IF name="hassort1" -->
-				<tr>
+			<!-- TMPL_IF name="SORT1_LOOP" -->
+				<tr class="highlight">
 				<td>Sort1</td>
 				<td><input type="radio" name="Line" value="sort1" /></td>
 				<td><input type="radio" name="Column" value="sort1" /></td>
-				<td ><!-- TMPL_VAR NAME="CGISort1" --></td>
+				<td>
+					<select id="sort1" size="1" name="Filter">
+					<option value=""/>
+					<!-- TMPL_LOOP NAME="SORT1_LOOP" -->
+						<option value="<!-- TMPL_VAR NAME="authorized_value" -->"><!-- TMPL_VAR NAME="lib" --></option>
+					<!-- /TMPL_LOOP -->
+					</select>
+				</td>
 				</tr>
 			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="hassort2" -->
-				<tr class="hilighted" >
+			<!-- TMPL_IF name="SORT2_LOOP" -->
+				<tr<!-- TMPL_UNLESS NAME="SORT1_LOOP" --> class="highlight"<!-- /TMPL_UNLESS -->>
 				<td>Sort2</td>
 				<td><input type="radio" name="Line" value="sort2" /></td>
 				<td><input type="radio" name="Column" value="sort2" /></td>
-				<td><!-- TMPL_VAR NAME="CGISort2" --></td>
+				<td>
+					<select id="sort2" size="1" name="Filter">
+					<option value=""/>
+					<!-- TMPL_LOOP NAME="SORT2_LOOP" -->
+						<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="value" --></option>
+					<!-- /TMPL_LOOP -->
+					</select>
 				</tr>
 			<!-- /TMPL_IF -->
 		</tbody>
