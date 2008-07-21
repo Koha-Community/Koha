@@ -105,7 +105,7 @@ if ( $request eq 'KillReserved' ) {
 
 # set up the branchselect options....
 my @branchoptionloop;
-foreach my $br ( keys %$branches ) {
+foreach my $br (sort {$branches->{$a}->{branchname} cmp $branches->{$b}->{branchname}} keys %$branches ) {
     my %branch;
     $branch{selected} = ( $br eq $tobranchcd );
     $branch{code}     = $br;
