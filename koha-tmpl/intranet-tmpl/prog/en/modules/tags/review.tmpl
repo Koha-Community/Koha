@@ -2,11 +2,13 @@
 <title>Home &rsaquo; Tools &rsaquo; Tags &rsaquo; <!-- TMPL_IF NAME="do_it" -->Review &rsaquo; <!-- TMPL_ELSE -->Review Tags<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.pack.js"></script>
 <style type="text/css">
 .setlabel {width: 6em; font-family: courier; background-color:#E8E8E8;}
 .red      {color:darkred;   background-color: pink;}
 .green    {color:darkgreen; background-color: #D1EFD5; text-align: center;}
 .pending  {background-color: lightyellow;}
+td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 </style>
 <script type="text/javascript">
 //<![CDATA[
@@ -81,14 +83,21 @@
 			}
 		return null;
 	}
-	function check_all() {
-		$(':checkbox').each(function(){this.checked="checked"});
-	}
-	function uncheck_all() {
-		$(':checkbox').each(function(){this.checked=""});
-	}
 	$(document).ready(function() {
 		$('.ajax_buttons' ).css({visibility:"visible"});
+		$("p.check").html("<strong>Select: </strong><a id=\"CheckAll\" href=\"/cgi-bin/koha/tags/review.pl\">All</a> <a id=\"CheckPending\" href=\"/cgi-bin/koha/tags/review.pl\">Pending</a> <a id=\"CheckNone\" href=\"/cgi-bin/koha/tags/review.pl\">None</a>");
+	    $("#CheckAll").click(function(){
+	        $(".checkboxed").checkCheckboxes();
+	        return false;
+	    });
+	    $("#CheckNone").click(function(){
+	        $(".checkboxed").unCheckCheckboxes();
+	        return false;
+	    });
+	    $("#CheckPending").click(function(){
+	        $(".checkboxed").checkCheckboxes(".pending");
+	        return false;
+	    });
 		$('body').click(function(event) {
 			pull_counts();
 			// window.alert("Click detected on " + event.target + ": " + $(event.target).html);
@@ -97,9 +106,8 @@
 					"data": {ok: $(event.target).attr("title"), CGISESSID: readCookie('CGISESSID')},
 					"success": count_approve // success_approve
 				});
-				$(event.target).next(".rej").removeAttr("disabled");
-				$(event.target).attr(   "value","approved");
-				$(event.target).attr("disabled","disabled");
+				$(event.target).next(".rej").removeAttr("disabled").attr("value","Reject").css("color","#000");
+				$(event.target).attr(   "value","Approved").attr("disabled","disabled").css("color","#666");
 				return false;	// cancel submit
 			}
 			if ($(event.target).is('.rej')) {
@@ -107,14 +115,12 @@
 					"data": {rej: $(event.target).attr("title"), CGISESSID: readCookie('CGISESSID')},
 					"success": count_reject // success_reject
 				});
-				$(event.target).prev(".ok").removeAttr("disabled");
-				$(event.target).attr(   "value","rejected");
-				$(event.target).attr("disabled","disabled");
+				$(event.target).prev(".ok").removeAttr("disabled").attr("value","Approve").css("color","#000");
+				$(event.target).attr(   "value","Rejected").attr("disabled","disabled").css("color","#666");
 				return false;	// cancel submit
 			}
 			if ($(event.target).is('#test_button')) {
-				$(event.target).attr(   "value","testing...");
-				$(event.target).attr("disabled","disabled");
+				$(event.target).attr(   "value","Testing...").attr("disabled","disabled");
 				$.ajax({
 					"data": {test: $('#test').attr("value")},
 					"success": success_test_call // success_reject
@@ -133,20 +139,19 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tags/review.pl">Tags</a> &rsaquo; Review Tags</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; Tags</div>
 
 <div id="doc3" class="yui-t2">
  <div id="bd">
   <div id="yui-main">
    <div class="yui-b">
+   
+<h1>Tags</h1>
 
 <form method="post" action="/cgi-bin/koha/tags/review.pl">
 <fieldset>
   <legend>Filters</legend>
-	<input type="submit" value="Apply Filter(s)" />
-  <br />
-  <br />
-  <table>
+	<table>
     <tr>
 		<th>Term</th>
 		<th>Status</th>
@@ -176,6 +181,7 @@
 	    </td>
 	</tr>
   </table>
+ <fieldset class="action"><input type="submit" value="Apply Filter(s)" /></fieldset>
 </fieldset>
 </form>
 <script type="text/javascript">
@@ -216,7 +222,7 @@ Calendar.setup({
 });
 //]]>
 </script>
-<form method="post" action="/cgi-bin/koha/tags/review.pl">
+<form method="post" action="/cgi-bin/koha/tags/review.pl" class="checkboxed">
   <h4>Displaying 
 	<!-- TMPL_IF NAME="filter_approved_all"     -->ALL<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="filter_approved_ok"      -->Approved<!-- /TMPL_IF -->
@@ -224,12 +230,7 @@ Calendar.setup({
 	<!-- TMPL_IF NAME="filter_approved_rej"     -->Rejected<!-- /TMPL_IF -->
 	Terms
   </h4>
-  <p>
-   <input type="submit" value="approve" id="approve_button" name="op" />
-   <input type="submit" value="reject"  id="reject_button"  name="op" />
-   <input type="button" value="check all" class="ajax_buttons" onclick="check_all()" />
-   <input type="button" value="uncheck all" class="ajax_buttons" onclick="uncheck_all()" />
-  </p>
+
   <!-- TMPL_IF NAME="op_count" -->
   <div class="message" id="main_status">
   		<!-- TMPL_IF EXPR="op eq 'approve'" -->		Approved
@@ -265,6 +266,7 @@ Calendar.setup({
   </div>
   <!-- /TMPL_IF -->
   <!-- TMPL_IF NAME="tagloop" -->
+  <p class="check"></p>
   <table>
     <tr>
     	<th>&nbsp;</th>
@@ -280,7 +282,7 @@ Calendar.setup({
 	<tr>
 	    <td class="count"><!-- TMPL_VAR EXPR="offset + __counter__" -->
 	    </td>
-	    <td><span><input type="checkbox" value="<!-- TMPL_VAR NAME="term"-->" name="tags" /></span>
+	    <td><span><input type="checkbox" value="<!-- TMPL_VAR NAME="term"-->" name="tags" <!-- TMPL_IF EXPR="approved == 0" --> class="pending"<!-- /TMPL_IF --> /></span>
 	    </td>
 	    <!-- TMPL_IF EXPR="approved == -1" --><td class="red">rejected
 		<!-- TMPL_ELSIF EXPR="approved == 1" --><td class="green"><img alt="OK" src="/intranet-tmpl/prog/img/approve.gif" />
@@ -294,22 +296,23 @@ Calendar.setup({
 		<!-- TMPL_IF NAME="approved" -->
 	    <td><span class="ajax_buttons" style="visibility:hidden">
 			<!-- TMPL_IF EXPR="approved == -1" -->
-			<input class="ok"  type="submit" title="<!-- TMPL_VAR NAME="term"-->" value="approve" name="approve" />
-			<input class="rej" disabled="disabled" type="submit" title="<!-- TMPL_VAR NAME="term"-->" value="reject" name="reject" />
+			<input class="ok"  type="submit" title="<!-- TMPL_VAR NAME="term"-->" value="Approve" name="approve" />
+			<input class="rej" disabled="disabled" type="submit" title="<!-- TMPL_VAR NAME="term"-->" value="Rejected" name="reject" />
 			<!-- TMPL_ELSE -->
-			<input class="ok"  disabled="disabled" type="submit" title="<!-- TMPL_VAR NAME="term"-->" value="approve" name="approve" />
-			<input class="rej" type="submit" title="<!-- TMPL_VAR NAME="term"-->" value="reject" name="reject" />
+			<input class="ok"  disabled="disabled" type="submit" title="<!-- TMPL_VAR NAME="term"-->" value="Approved" name="approve" />
+			<input class="rej" type="submit" title="<!-- TMPL_VAR NAME="term"-->" value="Reject" name="reject" />
 			<!-- /TMPL_IF -->
 			</span>
 	    </td>
-	    <td><a href="?approved_by=<!-- TMPL_VAR NAME="approved_by" -->&amp;approved=all"><!-- TMPL_VAR NAME="approved_by_name" --></a>
+	    <td><!-- TMPL_IF NAME="approved_by_name" --><a href="/cgi-bin/koha/tags/review.pl?approved_by=<!-- TMPL_VAR NAME="approved_by" -->&amp;approved=all"><!-- TMPL_VAR NAME="approved_by_name" --></a><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
 	    </td>
 		<!-- TMPL_ELSE -->
-		<td colspan="2"><span class="ajax_buttons" style="visibility:hidden">
-	    	<input class="ok"  type="submit" title="<!-- TMPL_VAR NAME="term"-->" value="approve" name="approve" />
-			<input class="rej" type="submit" title="<!-- TMPL_VAR NAME="term"-->" value="reject" name="reject" />
+		<td><span class="ajax_buttons" style="visibility:hidden">
+	    	<input class="ok"  type="submit" title="<!-- TMPL_VAR NAME="term"-->" value="Approve" name="approve" />
+			<input class="rej" type="submit" title="<!-- TMPL_VAR NAME="term"-->" value="Reject" name="reject" />
 			</span>
 	    </td>
+		<td>&nbsp;</td>
 		<!-- /TMPL_IF -->
 	    <td><!-- TMPL_VAR NAME="date_approved"-->
 	    </td>
@@ -317,36 +320,39 @@ Calendar.setup({
 	<!-- /TMPL_LOOP -->
   </table>
   <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="tagloop" --><fieldset class="action">
+   <input type="submit" value="Approve" id="approve_button" name="op" />
+   <input type="submit" value="Reject"  id="reject_button"  name="op" />
+  </fieldset><!-- /TMPL_IF -->
   </form>
   </div>
  </div>
- <div class="yui-b noprint">
-<h1>Tags</h1>
+ <div class="yui-b">
 
-  <fieldset>
-  <legend>Terms Summary</legend>
-  <table class="summary">
-  	<tr><td><a href="review.pl?approved=1">Approved</a>:</td>
-		<td><span id="terms_summary_approved_count"><!-- TMPL_VAR NAME="approved_count" --></span></td>
-  	</tr>
-  	<tr><td><a href="review.pl?approved=-1">Rejected</a>:</td>
-		<td><span id="terms_summary_rejected_count"><!-- TMPL_VAR NAME="rejected_count" --></span></td>
-  	</tr>
-	<tr><td><a href="review.pl?approved=0">Pending</a>:</td>
-		<td><span id="terms_summary_unapproved_count"><!-- TMPL_VAR NAME="unapproved_count" --></span></td>
-  	</tr>
-	<tr><td><a href="review.pl?approved=all">Total</a>:</td>
-		<td><span id="terms_summary_approved_total"><!-- TMPL_VAR NAME="approved_total" --></span></td>
-  	</tr>
-  </table>
+  <fieldset class="brief">
+  <h4>Terms Summary</h4>
+  <ul>
+  	<li><a href="/cgi-bin/koha/tags/review.pl?approved=1">Approved</a>:
+		<span id="terms_summary_approved_count"><!-- TMPL_VAR NAME="approved_count" --></span>
+  	</li>
+  	<li><a href="/cgi-bin/koha/tags/review.pl?approved=-1">Rejected</a>:
+		<span id="terms_summary_rejected_count"><!-- TMPL_VAR NAME="rejected_count" --></span>
+  	</li>
+	<li><a href="/cgi-bin/koha/tags/review.pl?approved=0">Pending</a>:
+		<span id="terms_summary_unapproved_count"><!-- TMPL_VAR NAME="unapproved_count" --></span>
+  	</li>
+	<li><a href="/cgi-bin/koha/tags/review.pl?approved=all">Total</a>:
+		<span id="terms_summary_approved_total"><!-- TMPL_VAR NAME="approved_total" --></span>
+  	</li>
+  </ul>
   <span id="terms_summary_status">&nbsp;</span>
   </fieldset>
-  <fieldset>
-   <legend>Test Blacklist</legend>
-   <div class="description">Enter a word or phrase here to test against your whitelist/blacklist.</div>
+  <fieldset class="brief">
+   <h4>Test Blacklist</h4>
+   <div class="description">Enter a word or phrase here to test against your whitelist/blacklist: </div>
    <form method="post" action="/cgi-bin/koha/tags/review.pl">
    <input type="text" size="14" name="test" id="test" />
-   <input type="submit" value="test" id="test_button" name="op" />
+   <fieldset class="action"><input type="submit" value="Test" id="test_button" name="op" /></fieldset>
    <div id="verdict">
 	<!-- TMPL_IF NAME="test_term" -->
 	<!-- TMPL_IF NAME="verdict_ok" -->
