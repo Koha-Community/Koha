@@ -1864,6 +1864,12 @@ if ( C4::Context->preference('Version') < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = '3.00.00.100';
+if ( C4::Context->preference('Version') < TransformToNum($DBversion) ) {
+	$dbh->do('ALTER TABLE virtualshelves ADD COLUMN lastmodified timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP');
+    print "Upgrade to $DBversion done (Adding lastmodified column to virtualshelves)\n";
+    SetVersion($DBversion);
+}
 
 =item DropAllForeignKeys($table)
 
