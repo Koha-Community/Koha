@@ -409,24 +409,27 @@ sub remove_filter {
 }
 
 sub add_tag_approval ($;$$) {	# or disapproval
+	$debug and warn "add_tag_approval(" . join(", ",map {defined($_) ? $_ : 'UNDEF'} @_) . ")";
 	my $term = shift or return undef;
 	my $query = "SELECT * FROM tags_approval WHERE term = ?";
 	my $sth = C4::Context->dbh->prepare($query);
 	$sth->execute($term);
 	($sth->rows) and return increment_weight_total($term);
-	my $operator = (@_ ? shift : 0);
+	my $operator = shift || 0;
+	my $approval = (@_ ? shift : 0);	# default is unapproved
+	my @exe_args = ($term);		# all 3 queries will use this argument
 	if ($operator) {
-		my $approval = (@_ ? shift : 1); # default is to approve
 		$query = "INSERT INTO tags_approval (term,approved_by,approved,date_approved) VALUES (?,?,?,NOW())";
-		$debug and print STDERR "add_tag_approval query:\n$query\nadd_tag_approval args: ($term,$operator,$approval)\n";
-		$sth = C4::Context->dbh->prepare($query);
-		$sth->execute($term,$operator,$approval);
+		push @exe_args, $operator, $approval;
+	} elsif ($approval) {
+		$query = "INSERT INTO tags_approval (term,approved,date_approved) VALUES (?,?,NOW())";
+		push @exe_args, $approval;
 	} else {
 		$query = "INSERT INTO tags_approval (term,date_approved) VALUES (?,NOW())";
-		$debug and print STDERR "add_tag_approval query:\n$query\nadd_tag_approval args: ($term)\n";
-		$sth = C4::Context->dbh->prepare($query);
-		$sth->execute($term);
 	}
+	$debug and print STDERR "add_tag_approval query: $query\nadd_tag_approval args: (" . join(", ", @exe_args) . ")\n";
+	$sth = C4::Context->dbh->prepare($query);
+	$sth->execute(@exe_args);
 	return $sth->rows;
 }
 
@@ -434,9 +437,9 @@ sub mod_tag_approval ($$$) {
 	my $operator = shift;
 	defined $operator or return undef; # have to test defined to allow =0 (kohaadmin)
 	my $term     = shift or return undef;
-	my $approval = (@_ ? shift : 1);	# default is to approve
+	my $approval = (scalar @_ ? shift : 1);	# default is to approve
 	my $query = "UPDATE tags_approval SET approved_by=?, approved=?, date_approved=NOW() WHERE term = ?";
-	$debug and print STDERR "mod_tag_approval query:\n$query\nmod_tag_approval args: ($operator,$approval,$term)\n";
+	$debug and print STDERR "mod_tag_approval query: $query\nmod_tag_approval args: ($operator,$approval,$term)\n";
 	my $sth = C4::Context->dbh->prepare($query);
 	$sth->execute($operator,$approval,$term);
 }
@@ -449,7 +452,7 @@ sub add_tag_index ($$;$) {
 	$sth->execute($term,$biblionumber);
 	($sth->rows) and return increment_weight($term,$biblionumber);
 	$query = "INSERT INTO tags_index (term,biblionumber) VALUES (?,?)";
-	$debug and print "add_tag_index query:\n$query\nadd_tag_index args: ($term,$biblionumber)\n";
+	$debug and print STDERR "add_tag_index query: $query\nadd_tag_index args: ($term,$biblionumber)\n";
 	$sth = C4::Context->dbh->prepare($query);
 	$sth->execute($term,$biblionumber);
 	return $sth->rows;
@@ -539,7 +542,7 @@ sub add_tag ($$;$$) {	# biblionumber,term,[borrowernumber,approvernumber]
 	my $query = "INSERT INTO tags_all
 	(borrowernumber,biblionumber,term,date_created)
 	VALUES (?,?,?,NOW())";
-	$debug and print STDERR "add_tag query:\n $query\n",
+	$debug and print STDERR "add_tag query: $query\n",
 							"add_tag query args: ($borrowernumber,$biblionumber,$term)\n";
 	if (scalar @$rows) {
 		$debug and carp "Duplicate tag detected.  Tag not added.";	
@@ -552,12 +555,15 @@ sub add_tag ($$;$$) {	# biblionumber,term,[borrowernumber,approvernumber]
 	# then 
 	if (scalar @_) { 	# if arg remains, it is the borrowernumber of the approver: tag is pre-approved.
 		my $approver = shift;
-		add_tag_approval($term,$approver);
+		$debug and print STDERR "term '$term' pre-approved by borrower #$approver\n";
+		add_tag_approval($term,$approver,1);
 		add_tag_index($term,$biblionumber,$approver);
 	} elsif (is_approved($term) >= 1) {
-		add_tag_approval($term,1);
+		$debug and print STDERR "term '$term' approved by whitelist\n";
+		add_tag_approval($term,0,1);
 		add_tag_index($term,$biblionumber,1);
 	} else {
+		$debug and print STDERR "term '$term' NOT approved (yet)\n";
 		add_tag_approval($term);
 		add_tag_index($term,$biblionumber);
 	}
@@ -587,6 +593,10 @@ preference "TagsExternalDictionary".
 Using external Ispell is recommended for both ease of use and performance.  Note that any
 language version of Ispell can be installed.  It is also possible to modify the dictionary 
 at the command line to affect the desired content.
+
+WARNING: The default Ispell dictionary includes (properly spelled) obscenities!  Users 
+should build their own wordlist and recompile Ispell based on it.  See man ispell for 
+instructions.
 
 =head2 Table Structure
 

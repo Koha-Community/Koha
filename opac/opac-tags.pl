@@ -132,13 +132,13 @@ if (scalar @newtags_keys) {
 				}
 			}
 			my $result = ($openadds) ?
-				add_tag($biblionumber,$clean_tag,$loggedinuser,0) : # pre-approved
+				add_tag($biblionumber,$clean_tag,$loggedinuser,$loggedinuser) : # pre-approved
 				add_tag($biblionumber,$clean_tag,$loggedinuser)   ;
 			if ($result) {
 				$counts{$biblionumber}++;
 			} else {
 				push @errors, {failed_add_tag=>$clean_tag};
-				warn "add_tag($biblionumber,$clean_tag,$loggedinuser...) returned bad result ($result)";
+				warn "add_tag($biblionumber,$clean_tag,$loggedinuser...) returned bad result (" . (defined $result ? $result : 'UNDEF') .")";
 			}
 		}
 	}
