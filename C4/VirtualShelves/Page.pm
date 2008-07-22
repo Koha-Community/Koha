@@ -125,18 +125,20 @@ SWITCH: {
 				'category'		=> $query->param('category'),
 				'sortfield'		=> $query->param('sortfield'),
 			};
-			$shelf->{'owner'} = $loggedinuser if $type eq 'intranet';	#we only overwrite the list owner if &ModShelf was called from the staff client
 
 			ModShelf( $shelfnumber, $shelf );
-			$shelflist = GetShelves( $loggedinuser, 2 );    # refresh after mods
+			$shelflist = GetShelves( $loggedinuser, 2 );    # refresh after mods; this also retrieves all public shelves
 		
 		} elsif ( $op eq 'modif' ) {
 			my ( $shelfnumber2, $shelfname, $owner, $category, $sortfield ) =GetShelf( $shelfnumber );
+			my $member = GetMember($owner,'borrowernumber');
+			my $ownername = defined($member) ? $member->{firstname} . " " . $member->{surname} : '';
 			$template->param(
 				edit                => 1,
 				shelfnumber         => $shelfnumber2,
 				shelfname           => $shelfname,
 				owner               => $owner,
+				ownername			=> $ownername,
 				"category$category"	=> 1,
 				category			=> $category,
 				"sort_$sortfield"   => 1,

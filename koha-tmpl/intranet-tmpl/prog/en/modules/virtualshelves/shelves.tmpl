@@ -224,7 +224,7 @@ $(document).ready(function(){
 		<legend>Edit List <i><!-- TMPL_VAR name="shelfname" --></i></legend>
 		<ol>
 		<li><label for="shelfname">Name: </label><input type="text" id="shelfname" name="shelfname" size="25" value='<!-- TMPL_VAR name="shelfname" ESCAPE="HTML" -->' /></li>
-		<li><label for="owner">Owner: </label><input type="hidden" id="owner" name="owner" value="<!-- TMPL_VAR NAME="loggedinuser" -->" /><!-- TMPL_VAR NAME="loggedinusername" --></li>
+		<li><label for="owner">Owner: </label><input type="hidden" id="owner" name="owner" value="<!-- TMPL_IF NAME="owner" --><!-- TMPL_VAR NAME="ownername" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="loggedinusername" --><!-- /TMPL_IF -->" /><!-- TMPL_IF NAME="owner" --><!-- TMPL_VAR NAME="ownername" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="loggedinusername" --><!-- /TMPL_IF --></li>
 		<li><label for="category">Category: </label>
 			<select id="category" name="category">
 			<!-- TMPL_IF name="category1" -->

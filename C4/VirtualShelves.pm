@@ -26,6 +26,7 @@ use Carp;
 use C4::Context;
 use C4::Circulation;
 use C4::Debug;
+use C4::Members;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
@@ -413,9 +414,11 @@ sub ShelfPossibleAction {
     my $sth = $dbh->prepare($query);
     $sth->execute($shelfnumber);
     my ( $owner, $category ) = $sth->fetchrow;
-    return 1 if ( $category >= 3);							# open list
+	my $borrower = GetMemberDetails($user);
+	return 1 if ( $category >= 3);							# open list
     return 1 if (($category >= 2) and
 				defined($action) and $action eq 'view');	# public list, anybody can view
+    return 1 if (($category >= 2) and defined($user) and $borrower->{authflags}->{superlibrarian});	# public list, superlibrarian can edit/delete
     return 1 if (defined($user)  and $owner  eq $user );	# user owns this list.  Check last.
     return 0;
 }
