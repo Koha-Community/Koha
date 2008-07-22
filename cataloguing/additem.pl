@@ -96,8 +96,10 @@ if ($op eq "additem") {
     my @indicator = $input->param('indicator');
     my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag, 'ITEM');
         my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
-    # if autoBarcode is ON, calculate barcode...
-    if (C4::Context->preference('autoBarcode')) {
+    # if autoBarcode is set to 'incremental', calculate barcode...
+	# NOTE: This code is subject to change in 3.2 with the implemenation of ajax based autobarcode code
+	# NOTE: 'incremental' is the ONLY autoBarcode option available to those not using javascript
+    if (C4::Context->preference('autoBarcode') eq 'incremental') {
         my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.barcode",$frameworkcode);
         unless ($record->field($tagfield)->subfield($tagsubfield)) {
             my $sth_barcode = $dbh->prepare("select max(abs(barcode)) from items");
