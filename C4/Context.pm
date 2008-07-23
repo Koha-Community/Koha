@@ -456,15 +456,15 @@ sub preference
 {
     my $self = shift;
     my $var = shift;        # The system preference to return
-    my $retval;            # Return value
     my $dbh = C4::Context->dbh or return 0;
     # Look up systempreferences.variable==$var
-    $retval = $dbh->selectrow_array(<<EOT);
+    my $sql = <<'END_SQL';
         SELECT    value
         FROM    systempreferences
-        WHERE    variable='$var'
+        WHERE    variable=?
         LIMIT    1
-EOT
+END_SQL
+    my $retval = $dbh->selectrow_array($sql, {}, $var);
     return $retval;
 }
 
