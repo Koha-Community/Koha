@@ -476,7 +476,7 @@ sub ShelfPossibleAction {
 	return 1 if ( $category >= 3);							# open list
     return 1 if (($category >= 2) and
 				defined($action) and $action eq 'view');	# public list, anybody can view
-    return 1 if (($category >= 2) and defined($user) and $borrower->{authflags}->{superlibrarian});	# public list, superlibrarian can edit/delete
+    return 1 if (($category >= 2) and defined($user) and ($borrower->{authflags}->{superlibrarian} || $user == 0));	# public list, superlibrarian can edit/delete
     return 1 if (defined($user)  and $owner  eq $user );	# user owns this list.  Check last.
     return 0;
 }
