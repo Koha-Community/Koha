@@ -842,7 +842,7 @@ CREATE TABLE `deletedborrowers` (
   `B_phone` mediumtext,
   `dateofbirth` date default NULL,
   `branchcode` varchar(10) NOT NULL default '',
-  `categorycode` varchar(2) default NULL,
+  `categorycode` varchar(10) default NULL,
   `dateenrolled` date default NULL,
   `dateexpiry` date default NULL,
   `gonenoaddress` tinyint(1) default NULL,
@@ -1508,7 +1508,7 @@ CREATE TABLE `opac_news` (
 DROP TABLE IF EXISTS `overduerules`;
 CREATE TABLE `overduerules` (
   `branchcode` varchar(10) NOT NULL default '',
-  `categorycode` varchar(2) NOT NULL default '',
+  `categorycode` varchar(10) NOT NULL default '',
   `delay1` int(4) default 0,
   `letter1` varchar(20) default NULL,
   `debarred1` varchar(1) default 0,
