@@ -440,23 +440,28 @@ sub ModZebrations {
 
 =item preference
 
-  $sys_preference = C4::Context->preference("some_variable");
+  $sys_preference = C4::Context->preference('some_variable');
 
 Looks up the value of the given system preference in the
 systempreferences table of the Koha database, and returns it. If the
-variable is not set, or in case of error, returns the undefined value.
+variable is not set or does not exist, undef is returned.
+
+In case of an error, this may return 0.
+
+Note: It is impossible to tell the difference between system
+preferences which do not exist, and those whose values are set to NULL
+with this method.
 
 =cut
 
-#'
 # FIXME - The preferences aren't likely to change over the lifetime of
 # the script (and things might break if they did change), so perhaps
 # this function should cache the results it finds.
-sub preference
-{
+sub preference {
     my $self = shift;
-    my $var = shift;        # The system preference to return
-    my $dbh = C4::Context->dbh or return 0;
+    my $var  = shift;                          # The system preference to return
+    my $dbh  = C4::Context->dbh or return 0;
+
     # Look up systempreferences.variable==$var
     my $sql = <<'END_SQL';
         SELECT    value
@@ -464,7 +469,7 @@ sub preference
         WHERE    variable=?
         LIMIT    1
 END_SQL
-    my $retval = $dbh->selectrow_array($sql, {}, $var);
+    my $retval = $dbh->selectrow_array( $sql, {}, $var );
     return $retval;
 }
 
