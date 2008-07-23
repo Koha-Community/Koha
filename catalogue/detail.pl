@@ -167,6 +167,7 @@ $template->param(
 	itemdata_ccode      => $itemfields{ccode},
 	itemdata_enumchron  => $itemfields{enumchron},
 	itemdata_copynumber => $itemfields{copynumber},
+	volinfo				=> $itemfields{enumchron} || $dat->{'serial'} ,
 );
 
 my @results = ( $dat, );

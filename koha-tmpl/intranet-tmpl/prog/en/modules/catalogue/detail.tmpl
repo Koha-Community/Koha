@@ -164,9 +164,7 @@ function verify_images() {
                 <th>Status</th>
                 <th>Last seen</th>
                 <th>Barcode</th>
-                <!-- TMPL_IF NAME="itemdata_enumchron" --><th>Publication Details</th>
-				<!-- TMPL_ELSIF NAME="serial" --><th>Volume</th>
-				<!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="volinfo" --><th>Publication Details</th><!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="itemdata_copynumber" --><th>Copy No.</th><!-- /TMPL_IF -->
             </tr>
             <!-- TMPL_LOOP NAME="itemloop" -->
@@ -249,11 +247,14 @@ function verify_images() {
                     </td>
                     <td class="datelastseen"><!-- TMPL_VAR NAME="datelastseen" --></td>
                     <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?type=<!-- TMPL_VAR NAME="type" -->&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->#item<!-- TMPL_VAR NAME="itemnumber">"><!-- TMPL_VAR NAME="barcode" --></a></td>
-				<!-- TMPL_IF NAME="itemdata_enumchron" -->
-					<td class="enumchron"><!-- TMPL_VAR NAME="enumchron" --></td>
-                <!-- TMPL_ELSIF NAME="serial" -->
-					<td class="serialseq"><!-- TMPL_VAR NAME="serialseq" --><!-- TMPL_IF NAME="publisheddate" --> (<!-- TMPL_VAR NAME="publisheddate" -->)<!-- /TMPL_IF --></td>
-				<!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="volinfo" -->	<td class="enumchron">
+					<!-- TMPL_IF NAME="itemdata_enumchron" -->
+						<!-- TMPL_IF NAME="enumchron" -->
+						<!-- TMPL_VAR NAME="enumchron" --><!-- TMPL_IF NAME="serialseq" --> -- <!-- /TMPL_IF -->
+						<!-- /TMPL_IF -->
+					<!-- /TMPL_IF -->
+					<!-- TMPL_VAR NAME="serialseq" --><!-- TMPL_IF NAME="publisheddate" --> (<!-- TMPL_VAR NAME="publisheddate" -->)<!-- /TMPL_IF -->
+				</td><!-- /TMPL_IF -->
 				<!-- TMPL_IF NAME="itemdata_copynumber" -->
 					<td class="copynumber"><!-- TMPL_VAR NAME="copynumber" --></td>
 				<!-- /TMPL_IF -->
