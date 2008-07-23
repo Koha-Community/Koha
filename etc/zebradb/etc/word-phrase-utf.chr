@@ -1,41 +1,250 @@
-# Generic character map.
-#
-# $Id: word-phrase-utf.chr,v 1.1.2.1 2006/07/03 21:56:45 kados Exp $
+# Generic search equivanence character map for Latin languages (English, French, etc.)
 
 # Define the basic value-set. *Beware* of changing this without re-indexing
 # your databases.
-lowercase {0-9}{a-y}�z�����
-uppercase {0-9}{A-Y}�Z�����
+encoding utf-8
+
+# basic character set
+lowercase {0-9}{a-z}
+uppercase {0-9}{A-Z}
 
 # Breaking characters
-
 space {\001-\040}!"#$%&'\()*+,-./:;<=>?@\[\\]^_`\{|}~
 
-# Characters to be considered equivalent for searching purposes.
-
-# equivalent ��(ae)
-# equivalent ��(oe)
-# equivalent �(aa)
-# equivalent u�
+# Characters to be considered equivalent for searching purposes
+equivalent aáàãåâăąȧǎȁȃ
+equivalent ӕä(ae)
+equivalent ā(aa)
+equivalent iíìîịĩĭįǐȉȋ
+equivalent ï(ie)
+equivalent ī(ii)
+equivalent uúùûũŭųűǔȕȗ
+equivalent ü(ue)
+equivalent ū(uu)
+equivalent eéèêẽĕęėěȅȇ
+equivalent ëē(ee)
+equivalent oóòõôŏǫȯőǒȍȏ
+equivalent öø(oe)
+equivalent ō(oo)
 
 # Supplemental mappings
-
-#map (&auml;)       �
-#map (&aelig;)      �
-#map (&oslash;)     �
-#map (&aring;)      �
-#map (&ouml;)       �
-#map (&Auml;)       �
-#map (&Aelig;)      �
-#map (&Oslash;)     �
-#map (&Aring;)      �
-#map (&Ouml;)       �
-
-#map ��		e
-#map �		a
-#map �		o
-#map �		i
-
-#map (Aa)	(AA)
-
-#map (aa)        a
+# mapping diacritics to plain ASCII
+# A
+map ā			a
+map Ā			a
+map á			a
+map Á			a
+map à			a
+map À			a
+map ã			a
+map Ã			a
+map å			a
+map Å			a
+map â			a
+map Â			a
+map ä			a
+map Ä			a
+map ă			a
+map Ă			a
+map ą			a
+map Ą			a
+map ȧ			a
+map Ȧ			a
+map ǎ			a
+map Ǎ			a
+map ȁ			a
+map Ȁ			a
+map ȃ			a
+map Ȃ			a
+# AE 
+map ӕ			(ae)
+map Ӕ			(ae)
+# I 
+map ī			i
+map Ī			i
+map ï			i
+map Ï			i
+map î			i
+map Î			i
+map í			i
+map Í			i
+map ì			i
+map Ì			i
+map ị			i
+map Ị			i
+map ĩ			i
+map Ĩ			i
+map ĭ			i
+map Ĭ			i
+map į			i
+map Į			i
+map ǐ			i
+map Ǐ			i
+map ȉ			i
+map Ȉ			i
+map ȋ			i
+map Ȋ			i
+# U  
+map ū			u
+map Ū			u
+map ü			u
+map Ü			u
+map ù			u
+map Ù			u
+map ú			u
+map Ú			u
+map û			u
+map Û			u
+map ũ			u
+map Ũ			u
+map ŭ			u
+map Ŭ			u
+map ų			u
+map Ų			u
+map ű			u
+map Ű			u
+map ǔ			u
+map Ǔ			u
+map ȕ			u
+map Ȕ			u
+map ȗ			u
+map Ȗ			u
+# E  
+map ê			e
+map Ê			e
+map ë			e
+map Ë			e
+map é			e
+map É			e
+map è			e
+map È			e
+map ē			e
+map Ē			e
+map ẽ			e
+map Ẽ			e
+map ĕ			e
+map Ĕ			e
+map ę			e
+map Ę			e
+map ė			e
+map Ė			e
+map ě			e
+map Ě			e
+map ȅ			e
+map Ȅ			e
+map ȇ			e
+map Ȇ			e
+# O  
+map ô			o
+map Ô			o
+map ó			o
+map Ó			o
+map ò			o
+map Ò			o
+map ö			o
+map Ö			o
+map õ			o
+map Õ			o
+map ø			o
+map Ø			o
+map ō			o
+map Ō			o
+map ǒ			o
+map Ǒ			o
+map ŏ			o
+map Ŏ			o
+map ǫ			o
+map Ǫ			o
+map ȯ			o
+map Ȯ			o
+map ő			o
+map Ő			o
+map ȍ			o
+map Ȍ			o
+map ȏ			o
+map Ȏ			o
+# R  
+map ṛ			r
+map Ṛ			r
+map r̥			r
+map R̥			r
+map ṝ			r
+map Ṝ			r
+map ř			r
+map Ř			r
+map ṟ			r
+# L 
+map ḷ			l
+map Ḷ			l
+map ḹ			l
+map Ḹ			l
+map ḻ			l
+map Ḻ			l
+# N  
+map ṅ			n
+map Ṅ			n
+map ñ			n
+map Ñ			n
+map ǹ			n
+map Ǹ			n
+map ń			n
+map Ń			n
+map ṉ			n
+map Ṉ			n
+map ṇ			n
+map Ṇ			n
+# T  
+map ṭ			t
+map Ṭ			t
+# D 
+map ḍ			d
+map Ḍ			d
+# S  
+map ś			s
+map Ś			s
+map ṣ			s
+map Ṣ			s
+map ş			s
+map Ş			s
+map š			s
+map Š			s
+map ṡ			s
+map Ṡ			s
+# M 
+map ṁ			m
+map Ṁ			m
+map ṃ			m
+map Ṃ			m
+# H  
+map ḥ			h
+map Ḥ			h
+map ẖ			h
+# Z 
+map ź			z
+map Ź			z
+map ẓ			z
+map Ẓ			z
+map ż			z
+map Ż			z
+#C 
+map ç			c
+map Ç			c
+map ć			c
+map Ć			c
+map č			c
+map Č			c
+# G 
+map ǥ			g
+map Ǥ			g
+map ġ			g
+map Ġ			g
+map ǧ			g
+map Ǧ			g
+map ğ			g
+map Ğ			g
+# K 
+map ḵ			k
+map Ḵ			k
+# Y  
+map ý			y
+map Ý			y
