@@ -1261,7 +1261,7 @@ sub GetItemsInfo {
     }
     $sth->finish;
 	if($serial) {
-		return( sort { $b->{'publisheddate'} cmp $a->{'publisheddate'} } @results );
+		return( sort { ($b->{'publisheddate'} || $b->{'enumchron'}) cmp ($a->{'publisheddate'} || $a->{'enumchron'}) } @results );
 	} else {
     	return (@results);
 	}
