@@ -46,7 +46,7 @@
 	<li><a href="/cgi-bin/koha/tools/import_borrowers.pl">Import patrons</a></li>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="CAN_user_tools_delete_anonymize_patrons" -->
-	<li><a href="/cgi-bin/koha/tools/cleanborrowers.pl">Patrons (anonomize, bulk-delete)</a></li>
+	<li><a href="/cgi-bin/koha/tools/cleanborrowers.pl">Patrons (anonymize, bulk-delete)</a></li>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="CAN_user_tools_batch_upload_patron_images" -->
 	<li><a href="/cgi-bin/koha/tools/picture-upload.pl">Upload Patron Images</a></li>
