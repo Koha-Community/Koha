@@ -371,10 +371,9 @@ foreach my $tag (sort keys %{$tagslib}) {
                           ($class_source eq $default_source);
               push @authorised_values, $class_source;
               $authorised_lib{$class_source} = $class_sources->{$class_source}->{'description'};
-              $value = $class_source unless ($value);
-              $value = $default_source unless ($value);
           }
-  
+		  $value = $default_source unless ($value);
+
           #---- "true" authorised value
       }
       else {
