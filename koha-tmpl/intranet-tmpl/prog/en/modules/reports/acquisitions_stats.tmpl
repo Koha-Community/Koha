@@ -19,9 +19,9 @@
 	<!-- TMPL_LOOP NAME="mainloop" -->
 		<h1>Acquisitions statistics </h1>
      		<!-- TMPL_IF NAME="loopfilter" -->
-			<p>Filtered on</p>
+			<p><b>Filtered on:</b></p>
 			<!-- TMPL_LOOP NAME="loopfilter" -->
-					<p><!-- TMPL_VAR NAME="crit"--> =<!--  TMPL_VAR NAME="filter" --></p>
+					<p><!-- TMPL_VAR NAME="crit"-->: <!--  TMPL_VAR NAME="filter" --></p>
 			<!-- /TMPL_LOOP -->
 		<!-- /TMPL_IF-->
 		
@@ -77,8 +77,8 @@
 			<tr class="hilighted">
 				<td>Placed On</td>
 				<td><input type="radio" name="Line" value="aqbasket.closedate" /></td>
-				<td><input type="radio" name="Column" value="aqbasket.closedate" /> </td>
-				<td> From <input type="text" readonly="readonly" size="10" id="from" name="Filter" />
+				<td><input type="radio" checked="checked" name="Column" value="aqbasket.closedate" /> </td>
+				<td> From <input type="text" size="10" id="from" name="Filter" value="" />
 							<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="openCalendarFrom" style="cursor: pointer;" />
 									<script type="text/javascript">
 									//<![CDATA[
@@ -109,7 +109,7 @@
 									);
 									//]]>
 								</script>
-					To <input readonly="readonly" size="10" id="to" name="Filter" value="" type="text" />
+					To <input size="10" id="to" name="Filter" type="text" value="" />
 						<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" id="openCalendarTo" style="cursor: pointer;" border="0" />
 							<script type="text/javascript">
 							//<![CDATA[
@@ -158,7 +158,7 @@
 				<td>Received On</td>
 				<td><input type="radio" name="Line" value="aqorderdelivery.deliverydate" /></td>
 				<td><input type="radio" name="Column" value="aqorderdelivery.deliverydate" /></td>
-				<td> From <input type="text" readonly="readonly" size="10" id="fromRO" name="Filter" />
+				<td> From <input type="text" size="10" id="fromRO" name="Filter" value="" />
 							<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="openCalendarFromRO" style="cursor: pointer;" />
 									<script type="text/javascript">
 									//<![CDATA[
@@ -189,7 +189,7 @@
 									);
 									//]]>
 									</script>
-					To <input type="text" readonly="readonly" size="10" id="toRO" name="Filter" value="" />
+					To <input type="text" size="10" id="toRO" name="Filter" value="" />
 						<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" id="openCalendarToRO" style="cursor: pointer;" border="0" />
 								<script type="text/javascript">
 								//<![CDATA[
@@ -236,9 +236,15 @@
 			</tr>
 			<tr class="hilighted">
 				<td>Supplier</td>
-				<td><input type="radio" name="Line" value="aqbooksellers.name" /></td>
+				<td><input type="radio" checked="checked" name="Line" value="aqbooksellers.name" /></td>
 				<td><input type="radio" name="Column" value="aqbooksellers.name" /></td>
 				<td><!-- TMPL_VAR NAME="CGIBookSeller" --></td>
+			</tr>
+			<tr>
+				<td>Item Type</td>
+				<td><input type="radio" name="Line" value="biblioitems.itemtype" /></td>
+				<td><input type="radio" name="Column" value="biblioitems.itemtype" /></td>
+				<td><!-- TMPL_VAR NAME="CGIItemType" --></td>
 			</tr>
 			<tr>
 				<td>Budget</td>
