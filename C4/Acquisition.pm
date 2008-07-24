@@ -370,7 +370,7 @@ sub GetOrder {
   &NewOrder($basket, $biblionumber, $title, $quantity, $listprice,
     $booksellerid, $who, $notes, $bookfund, $biblioitemnumber, $rrp,
     $ecost, $gst, $budget, $unitprice, $subscription,
-    $booksellerinvoicenumber, $purchaseorder);
+    $booksellerinvoicenumber, $purchaseorder, $branchcode);
 
 Adds a new order to the database. Any argument that isn't described
 below is the new value of the field with the same name in the aqorders
@@ -398,7 +398,8 @@ sub NewOrder {
         $listprice, $booksellerid, $authorisedby, $notes,
         $bookfund,  $bibitemnum,   $rrp,          $ecost,
         $gst,       $budget,       $cost,         $sub,
-        $invoice,   $sort1,        $sort2,        $purchaseorder
+        $invoice,   $sort1,        $sort2,        $purchaseorder,
+		$branchcode
       )
       = @_;
 
@@ -454,11 +455,11 @@ sub NewOrder {
     #get ordnum MYSQL dependant, but $dbh->last_insert_id returns null
     my $ordnum = $dbh->{'mysql_insertid'};
     $query = "
-        INSERT INTO aqorderbreakdown (ordernumber,bookfundid)
-        VALUES (?,?)
+        INSERT INTO aqorderbreakdown (ordernumber,bookfundid, branchcode)
+        VALUES (?,?,?)
     ";
     $sth = $dbh->prepare($query);
-    $sth->execute( $ordnum, $bookfund );
+    $sth->execute( $ordnum, $bookfund, $branchcode );
     $sth->finish;
     return ( $basketno, $ordnum );
 }

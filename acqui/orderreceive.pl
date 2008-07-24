@@ -82,6 +82,7 @@ my $gst          = $input->param('gst');
 
 my @results = SearchOrder( $search, $supplierid, $biblionumber, $catview );
 my $count   = scalar @results;
+my $order 	= GetOrder($search);
 
 my $bookseller = GetBookSellerFromId( $results[0]->{'booksellerid'} );
 
@@ -144,6 +145,7 @@ if ( $count == 1 ) {
             value      => $thisbranch,
             description => $branches->{$thisbranch}->{'branchname'},
         );
+	    $row{'selected'} = 1 if( $thisbranch eq $order->{branchcode}) ;
         push @branchloop, \%row;
     }
 

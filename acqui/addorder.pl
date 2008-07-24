@@ -216,7 +216,8 @@ if ( $quantity ne '0' ) {
             $listprice, $booksellerid, $loggedinuser, $notes,
             $bookfund,  $bibitemnum,   $rrp,          $ecost,
             $gst,       $budget,       $cost,         $sub,
-            $invoice,   $sort1,        $sort2,		$purchaseorder
+            $invoice,   $sort1,        $sort2,		$purchaseorder,
+			$branch
         );
     }
 }

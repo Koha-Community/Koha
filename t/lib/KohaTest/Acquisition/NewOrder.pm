@@ -44,7 +44,8 @@ sub new_order_no_budget : Test( 4 ) {
                                           $invoice, # $invoice,
                                           undef, # $sort1,
                                           undef, # $sort2,
-                                          undef, # $purchaseorder
+                                          undef, # $purchaseorder,
+										  undef, # $branchcode
                                      );
     ok( $basketno, "my basket number is $basketno" );
     ok( $ordnum,   "my order number is $ordnum" );
@@ -91,7 +92,8 @@ sub new_order_set_budget : Test( 4 ) {
                                           $invoice, # $invoice,
                                           undef, # $sort1,
                                           undef, # $sort2,
-                                          undef, # $purchaseorder
+                                          undef, # $purchaseorder,
+										  undef, # $branchcode
                                      );
     ok( $basketno, "my basket number is $basketno" );
     ok( $ordnum,   "my order number is $ordnum" );
