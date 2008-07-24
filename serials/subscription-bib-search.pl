@@ -88,7 +88,6 @@ if ($op eq "do_search" && $query) {
         exit;
     }
     my @results;
-    warn "total=".$total;
     
     for(my $i=0;$i<$total;$i++) {
         my %resultsloop;
