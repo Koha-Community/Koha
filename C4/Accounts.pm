@@ -73,7 +73,7 @@ will be credited to the next one.
 #'
 sub recordpayment {
 
-    #here we update both the accountoffsets and the account lines
+    #here we update the account lines
     my ( $borrowernumber, $data ) = @_;
     my $dbh        = C4::Context->dbh;
     my $newamtos   = 0;
@@ -109,13 +109,13 @@ sub recordpayment {
         );
         $usth->execute( $newamtos, $borrowernumber, $thisacct );
         $usth->finish;
-        $usth = $dbh->prepare(
-            "INSERT INTO accountoffsets
-     (borrowernumber, accountno, offsetaccount,  offsetamount)
-     VALUES (?,?,?,?)"
-        );
-        $usth->execute( $borrowernumber, $accdata->{'accountno'},
-            $nextaccntno, $newamtos );
+#        $usth = $dbh->prepare(
+#            "INSERT INTO accountoffsets
+#     (borrowernumber, accountno, offsetaccount,  offsetamount)
+#     VALUES (?,?,?,?)"
+#        );
+#        $usth->execute( $borrowernumber, $accdata->{'accountno'},
+#            $nextaccntno, $newamtos );
         $usth->finish;
     }
 
@@ -176,12 +176,12 @@ sub makepayment {
     );
 
     #  print $updquery;
-    $dbh->do( "
-        INSERT INTO     accountoffsets
-                        (borrowernumber, accountno, offsetaccount,
-                         offsetamount)
-        VALUES          ($borrowernumber, $accountno, $nextaccntno, $newamtos)
-        " );
+#    $dbh->do( "
+#        INSERT INTO     accountoffsets
+#                        (borrowernumber, accountno, offsetaccount,
+#                         offsetamount)
+#        VALUES          ($borrowernumber, $accountno, $nextaccntno, $newamtos)
+#        " );
 
     # create new line
     my $payment = 0 - $amount;
@@ -287,7 +287,17 @@ should be the empty string.
 =cut
 
 #'
-# FIXME - Okay, so what does this function do, really?
+# FIXME: In Koha 3.0 , the only account adjustment 'types' passed to this function
+# are :  
+# 		'C' = CREDIT
+# 		'FOR' = FORGIVEN  (Formerly 'F', but 'F' is taken to mean 'FINE' elsewhere)
+# 		'N' = New Card fee
+# 		'F' = Fine
+# 		'A' = Account Management fee
+# 		'M' = Sundry
+# 		'L' = Lost Item
+#
+
 sub manualinvoice {
     my ( $borrowernumber, $itemnum, $desc, $type, $amount, $user ) = @_;
     my $dbh      = C4::Context->dbh;
@@ -297,16 +307,16 @@ sub manualinvoice {
     my $accountno  = getnextacctno($borrowernumber);
     my $amountleft = $amount;
 
-    if (   $type eq 'CS'
-        || $type eq 'CB'
-        || $type eq 'CW'
-        || $type eq 'CF'
-        || $type eq 'CL' )
-    {
-        my $amount2 = $amount * -1;    # FIXME - $amount2 = -$amount
-        $amountleft =
-          fixcredit( $borrowernumber, $amount2, $itemnum, $type, $user );
-    }
+#    if (   $type eq 'CS'
+#        || $type eq 'CB'
+#        || $type eq 'CW'
+#        || $type eq 'CF'
+#        || $type eq 'CL' )
+#    {
+#        my $amount2 = $amount * -1;    # FIXME - $amount2 = -$amount
+#        $amountleft =
+#          fixcredit( $borrowernumber, $amount2, $itemnum, $type, $user );
+#    }
     if ( $type eq 'N' ) {
         $desc .= " New Card";
     }
@@ -324,10 +334,10 @@ sub manualinvoice {
 
         $desc = " Lost Item";
     }
-    if ( $type eq 'REF' ) {
-        $desc .= " Cash Refund";
-        $amountleft = refund( '', $borrowernumber, $amount );
-    }
+#    if ( $type eq 'REF' ) {
+#        $desc .= " Cash Refund";
+#        $amountleft = refund( '', $borrowernumber, $amount );
+#    }
     if (   ( $type eq 'L' )
         or ( $type eq 'F' )
         or ( $type eq 'A' )
@@ -355,14 +365,15 @@ sub manualinvoice {
     return 0;
 }
 
-=head2 fixcredit
+=head2 fixcredit #### DEPRECATED
 
  $amountleft = &fixcredit($borrowernumber, $data, $barcode, $type, $user);
 
  This function is only used internally, not exported.
- FIXME - Figure out what this function does, and write it down.
 
 =cut
+
+# This function is deprecated in 3.0
 
 sub fixcredit {
 
@@ -466,7 +477,10 @@ sub fixcredit {
 
 =head2 refund
 
-# FIXME - Figure out what this function does, and write it down.
+#FIXME : DEPRECATED SUB
+ This subroutine tracks payments and/or credits against fines/charges
+   using the accountoffsets table, which is not used consistently in
+   Koha's fines management, and so is not used in 3.0 
 
 =cut 
 
