@@ -415,11 +415,12 @@ sub calculate {
       "SELECT DISTINCTROW $linefield FROM (aqorders, aqbasket,aqorderbreakdown)
                 LEFT JOIN items ON (aqorders.biblionumber= items.biblionumber)
                 LEFT JOIN biblioitems ON (aqorders.biblionumber= biblioitems.biblionumber)
-                LEFT JOIN aqorderdelivery ON (aqorders.ordernumber =aqorderdelivery.ordernumber )
                 LEFT JOIN aqbooksellers ON (aqbasket.booksellerid=aqbooksellers.id) WHERE (aqorders.basketno=aqbasket.basketno)
                 AND (aqorderbreakdown.ordernumber=aqorders.ordernumber) AND $line IS NOT NULL ";
 
-    if (@linefilter) {
+#				LEFT JOIN aqorderdelivery ON (aqorders.ordernumber =aqorderdelivery.ordernumber )
+    
+	if (@linefilter) {
         if ( $linefilter[1] ) {
             if ( $linefilter[0] ) {
                 $strsth .= " AND $line BETWEEN ? AND ? ";
@@ -526,10 +527,11 @@ sub calculate {
       "SELECT distinctrow $colfield FROM (aqorders, aqbasket,aqorderbreakdown)
                  LEFT JOIN items ON (aqorders.biblionumber= items.biblionumber)
                  LEFT JOIN biblioitems ON (aqorders.biblionumber= biblioitems.biblionumber)
-                 LEFT JOIN aqorderdelivery ON (aqorders.ordernumber =aqorderdelivery.ordernumber )
                  LEFT JOIN aqbooksellers ON (aqbasket.booksellerid=aqbooksellers.id)
                  WHERE (aqorders.basketno=aqbasket.basketno) AND (aqorderbreakdown.ordernumber=aqorders.ordernumber)
                  AND $column IS NOT NULL";
+
+#				LEFT JOIN aqorderdelivery ON (aqorders.ordernumber =aqorderdelivery.ordernumber )
 
     if (@colfilter) {
         if ( $colfilter[1] ) {
@@ -606,21 +608,22 @@ sub calculate {
     $strcalc .= "FROM (aqorders, aqbasket,aqorderbreakdown)
                  LEFT JOIN items ON (aqorders.biblionumber= items.biblionumber)
                  LEFT JOIN biblioitems ON (aqorders.biblionumber= biblioitems.biblionumber)
-                 LEFT JOIN aqorderdelivery ON (aqorders.ordernumber =aqorderdelivery.ordernumber )
                  LEFT JOIN aqbooksellers ON (aqbasket.booksellerid=aqbooksellers.id) WHERE (aqorders.basketno=aqbasket.basketno)
                       AND (aqorderbreakdown.ordernumber=aqorders.ordernumber) ";
 
-    @$filters[0] =~ s/\*/%/g if ( @$filters[0] );
+#                 LEFT JOIN aqorderdelivery ON (aqorders.ordernumber =aqorderdelivery.ordernumber )
+    
+	@$filters[0] =~ s/\*/%/g if ( @$filters[0] );
     $strcalc .= " AND aqbasket.closedate >= '" . @$filters[0] . "'"
       if ( @$filters[0] );
     @$filters[1] =~ s/\*/%/g if ( @$filters[1] );
     $strcalc .= " AND aqbasket.closedate <= '" . @$filters[1] . "'"
       if ( @$filters[1] );
     @$filters[2] =~ s/\*/%/g if ( @$filters[2] );
-    $strcalc .= " AND aqorderdelivery.deliverydate >= '" . @$filters[2] . "'"
+    $strcalc .= " AND aqorderbreakdown.datereceived >= '" . @$filters[2] . "'"
       if ( @$filters[2] );
     @$filters[3] =~ s/\*/%/g if ( @$filters[3] );
-    $strcalc .= " AND aqorderdelivery.deliverydate <= '" . @$filters[3] . "'"
+    $strcalc .= " AND aqorderbreakdown.datereceived <= '" . @$filters[3] . "'"
       if ( @$filters[3] );
 #    @$filters[4] =~ s/\*/%/g if ( @$filters[4] );
 #    $strcalc .= " AND aqbasket.closedate >= '" . @$filters[4] . "'"
