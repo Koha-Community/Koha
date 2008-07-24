@@ -127,7 +127,7 @@ $template->param(
     opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
     opaccolorstylesheet  => C4::Context->preference("opaccolorstylesheet"),
     "BiblioDefaultView".C4::Context->preference("IntranetBiblioDefaultView") => 1,
-    pagination_bar       => pagination_bar( "$ENV{'SCRIPT_NAME'}?q=$query&", getnbpages( $total_hits, $results_per_page ), $page, 'page' ),
+    pagination_bar       => pagination_bar( "$ENV{'SCRIPT_NAME'}?q=$query&booksellerid=$booksellerid&", getnbpages( $total_hits, $results_per_page ), $page, 'page' ),
 );
 
 # BUILD THE TEMPLATE
