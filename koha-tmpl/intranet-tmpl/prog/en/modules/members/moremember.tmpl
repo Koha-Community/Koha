@@ -218,8 +218,9 @@ if (nodename =="barcodes[]"){
                          </li>
     	             </ol>
                     <fieldset class="action">
-                        <input name="op" type="submit" value="Upload" class="submit" />
-                        <!-- TMPL_IF NAME="picture" --><input name="op" type="submit" value="Delete" class="submit" /><!-- /TMPL_IF -->
+                        <input type="submit" value="Upload" class="submit" />
+                        <input name="op" type="hidden" value="Upload" />
+                        <!-- TMPL_IF NAME="picture" --><a href="/cgi-bin/koha/tools/picture-upload.pl?op=Delete&cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" class="delete">Delete</a><!-- /TMPL_IF -->
                     </fieldset>
                 </fieldset>
                 </form>

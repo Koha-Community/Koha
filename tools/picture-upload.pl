@@ -52,7 +52,7 @@ my $op                  = $input->param('op');
 #       Other parts of this code could be optimized as well, I think. Perhaps the file upload could be done with YUI's upload
 #       coded. -fbcit
 
-$debug and warn "Params are: filetype=$filetype, cardnumber=$cardnumber, uploadfile=$uploadfilename";
+$debug and warn "Params are: filetype=$filetype, cardnumber=$cardnumber, borrowernumber=$borrowernumber, uploadfile=$uploadfilename";
 
 =head1 NAME
 
@@ -140,11 +140,9 @@ if ( ($op eq 'Upload') && $uploadfile ) {       # Case is important in these ope
     $template->param(filetype => $filetype);
 } elsif ( $op eq 'Delete' ) {
     my $dberror = RmPatronImage($cardnumber);
+	$debug and warn "Patron image deleted for $cardnumber";
     warn "Database returned $dberror" if $dberror;
-} elsif ( $op eq 'Cancel' ) {
-    print $input->redirect ("/cgi-bin/koha/tools/picture-upload.pl");
 }
-
 if ( $borrowernumber && !$errors && !$template->param('ERRORS') ) {
     print $input->redirect ("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
 } else {
