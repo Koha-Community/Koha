@@ -1,8 +1,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo; Details for: <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
-	 $(document).ready(function() {
+	 $(document).ready(function() {	
 	 	$("#tagform").hide();
 		$("#addtagl").show();
 		$('#bibliodescriptions > ul').tabs();
@@ -15,6 +16,11 @@
 			$("#addtagl").show();
 			$("#tagform").hide();
 			return false;
+		});
+		$("#holdingst").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
+	dateFormat: 'uk',<!-- /TMPL_IF -->
+			widgets : ['zebra'],
+			sortList: [[0,0]]
 		});
 		
 	    <!-- TMPL_IF NAME="GoogleJackets" -->KOHA.Google.GetCoverFromIsbn();<!-- /TMPL_IF -->
@@ -236,8 +242,8 @@
 
 <div id="holdings">
 <!-- TMPL_IF name="count" -->
-    <table>
-        <tr>
+    <table id="holdingst">
+        <thead><tr>
             <!-- TMPL_IF NAME="OPACDisplayItypes" --><!-- TMPL_IF NAME="item-level_itypes" --><th>Item type</th><!-- /TMPL_IF --><!-- /TMPL_IF -->
             <th>Location</th>
 	    <!-- TMPL_IF NAME="itemdata_ccode" --><th>Collection</th><!-- /TMPL_IF -->
@@ -250,12 +256,9 @@
             <th>Status</th>
 			<!-- TMPL_IF NAME="itemdata_itemnotes" --><th>Notes</th><!-- /TMPL_IF -->
             <th>Date Due</th>
-        </tr>
-        <!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
-        <tr>
-
-            <!-- TMPL_IF NAME="item-level_itypes" --><!-- TMPL_IF NAME="OPACDisplayItypes" --><td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR NAME="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="description" -->
-                    </td><!-- /TMPL_IF --><!-- /TMPL_IF -->
+        </tr></thead>
+        <tbody><!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+        <tr><!-- TMPL_IF NAME="item-level_itypes" --><!-- TMPL_IF NAME="OPACDisplayItypes" --><td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR NAME="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="description" --></td><!-- /TMPL_IF --><!-- /TMPL_IF -->
 			<td><!-- TMPL_UNLESS NAME="singleBranchMode" --><!-- TMPL_VAR NAME="branchname" --><!-- /TMPL_UNLESS --> <!-- TMPL_VAR NAME="location_description" --> </td>
 			<!-- TMPL_IF NAME="itemdata_ccode" --><td><!-- TMPL_VAR NAME="ccode" --></td><!-- /TMPL_IF -->
 			<td><!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="OPACShelfBrowser" -->(<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser">Browse Shelf</a>)<!-- /TMPL_IF --></td>
@@ -295,7 +298,7 @@
             <td><a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemtype" -->">Fix Itemtype</a></td>
             <!-- /TMPL_IF -->
         </tr>
-        <!-- /TMPL_LOOP -->
+        <!-- /TMPL_LOOP --></tbody>
     </table>
 <!-- TMPL_ELSE -->
 <p>No physical items for this record</p>
