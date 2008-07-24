@@ -275,22 +275,23 @@ $(document).ready(function(){
 
 <!-- TMPL_UNLESS NAME="vseflag" -->
         <h2>Lists</h2>
-        <ul class="link-tabs">
+		<div class="toptabs">
+        <ul class="ui-tabs-nav">
         <!-- TMPL_IF NAME="showprivateshelves" -->
-            <li id="privateshelves_tab" class="on"><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves">Your Lists</a></li>
+            <li id="privateshelves_tab" class="ui-tabs-selected"><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves">Your Lists</a></li>
         <!-- TMPL_ELSE -->
-            <li id="privateshelves_tab" class="off"><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves">Your Lists</a></li>
+            <li id="privateshelves_tab" class=""><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves">Your Lists</a></li>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="showpublicshelves" -->
-            <li id="publicshelves_tab" class="on"><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=publicshelves">Public Lists</a></li>
+            <li id="publicshelves_tab" class="ui-tabs-selected"><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=publicshelves">Public Lists</a></li>
         <!-- TMPL_ELSE -->
-            <li id="publicshelves_tab" class="off"><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=publicshelves">Public Lists</a></li>
+            <li id="publicshelves_tab" class=""><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=publicshelves">Public Lists</a></li>
         <!-- /TMPL_IF -->
         </ul>
         <!-- TMPL_IF NAME="showprivateshelves" -->
-		<div id="privateshelves" class="tab-container" style="display:block;">
+		<div id="privateshelves" class="ui-tabs-panel" style="display:block;">
 		<!-- TMPL_ELSE -->
-		<div id="privateshelves" class="tab-container" style="display:none;">
+		<div id="privateshelves" class="ui-tabs-panel" style="display:none;">
 		<!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="shelveslooppriv" -->
 			<!-- TMPL_VAR name='pagination_bar'-->
@@ -332,13 +333,12 @@ $(document).ready(function(){
             <tr><td colspan="4">No Private Lists.</td></tr>
             <!-- /TMPL_IF --><!-- /shelveslooppriv -->
         </table>
-		<a class="newshelf" href="/cgi-bin/koha/virtualshelves/shelves.pl?shelves=1">New List</a>
 		</div><!-- /privateshelves -->
 
         <!-- TMPL_IF NAME="showpublicshelves" -->
-		<div id="publicshelves" class="tab-container" style="display:block;">
+		<div id="publicshelves" class="ui-tabs-panel" style="display:block;">
 		<!-- TMPL_ELSE -->
-		<div id="publicshelves" class="tab-container" style="display:none;">
+		<div id="publicshelves" class="ui-tabs-panel" style="display:none;">
 		<!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="shelvesloop" -->
 		<!-- TMPL_VAR name='pagination_bar'-->
@@ -381,6 +381,7 @@ $(document).ready(function(){
         	<!-- TMPL_IF NAME="showpublicshelves" -->No Public Lists.<!-- /TMPL_IF -->
         <!-- /TMPL_IF --><!-- /shelvesloop -->
         </div><!-- /publicshelves -->
+		</div>
 <!-- /TMPL_UNLESS -->
 
 </div>
