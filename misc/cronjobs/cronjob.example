@@ -1,0 +1,45 @@
+# Koha Example Crontab File
+# Author: Joe Atzberger <atz@liblime.com>
+#
+# This is an example of a crontab file for Debian.  It may not work 
+# in other versions of crontab, like on Solaris 8, for example.
+# 
+# While similar in strcture, 
+# this is NOT an example for cron (as root).  Cron takes an extra
+# argument per line to designate the user to run as.  You could 
+# reasonably extrapoloate the needed info from here though.
+#
+# WARNING: These jobs will do things like charge fines, send
+# potentially VERY MANY emails to patrons and even debar offending
+# users.  DO NOT RUN OR SCHEDULE these jobs without being sure you
+# really intend to.  Make sure the relevant message templates are
+# configured to your liking before scheduling messages to be sent.
+#
+# ENVIRONMENT:
+# First, establish Koha's two important ENV variables.
+
+PERL5LIB=/home/liblime/kohaclone
+KOHA_CONF=/home/liblime/kohaclone/etc/koha-conf.xml
+
+#
+# MULTIPLE KOHA SUPPORT:
+# You can still run jobs for this user's additional koha installs.
+#
+# For example, on the same codebase:
+# */10 * * * *    KOHA_CONF=/home/liblime/koha-test/etc/koha-conf.xml /home/liblime/kohaclone/misc/migration_tools/rebuild_zebra.pl -b -z >/dev/null
+#
+# For example, on a separate codebase:
+# */10 * * * *    KOHA_CONF=/home/liblime/koha-test/etc/koha-conf.xml PERL5LIB=/home/liblime/koha-test /home/liblime/koha-test/misc/migration_tools/rebuild_zebra.pl -b -z >/dev/null
+# 
+#
+# SCHEDULED JOBS:
+# Don't forget to keep the empty line at the bottom. 
+# Cron/crontab will choke without it.
+#
+# m h  dom mon dow   command
+0  1 * * *  /home/liblime/kohaclone/misc/cronjobs/overdue_notices.pl
+5  1 * * *  /home/liblime/kohaclone/misc/cronjobs/fines-ll.pl
+10 1 * * *  /home/liblime/kohaclone/misc/cronjobs/advance_notices.pl -c
+15 * * * *  /home/liblime/kohaclone/misc/cronjobs/process_message_queue.pl
+*/10 * * * *   /home/liblime/kohaclone/misc/migration_tools/rebuild_zebra.pl -b -z >/dev/null
+
