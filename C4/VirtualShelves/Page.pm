@@ -307,17 +307,17 @@ if ($template->param( 'shelves' ) or
 my ($total, $pubshelves, $barshelves) = RefreshShelvesSummary($query->cookie("CGISESSID"),$loggedinuser,($loggedinuser == -1 ? 20 : 10));
 
 if (defined $barshelves) {
-	$template->param( 	barshelves     	=> scalar (@{${@$barshelves}[0]}),
-						barshelvesloop 	=> ${@$barshelves}[0],
+	$template->param( 	barshelves     	=> scalar (@{$barshelves->[0]}),
+						barshelvesloop 	=> $barshelves->[0],
 					);
-	$template->param(	bartotal		=> $total->{'bartotal'}, ) if ($total->{'bartotal'} > scalar (@{${@$barshelves}[0]}));
+	$template->param(	bartotal		=> $total->{'bartotal'}, ) if ($total->{'bartotal'} > scalar (@{$barshelves->[0]}));
 }
 
 if (defined $pubshelves) {
-	$template->param( 	pubshelves     	=> scalar (@{${@$pubshelves}[0]}),
-						pubshelvesloop 	=> ${@$pubshelves}[0],
+	$template->param( 	pubshelves     	=> scalar (@{$pubshelves->[0]}),
+						pubshelvesloop 	=> $pubshelves->[0],
 					);
-	$template->param(	pubtotal		=> $total->{'pubtotal'}, ) if ($total->{'pubtotal'} > scalar (@{${@$pubshelves}[0]}));
+	$template->param(	pubtotal		=> $total->{'pubtotal'}, ) if ($total->{'pubtotal'} > scalar (@{$pubshelves->[0]}));
 }
 
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -715,12 +715,12 @@ sub checkauth {
 				$total->{'bartotal'} = $totshelves;
 				($pubshelves, $totshelves) = GetRecentShelves(2, $row_count, undef);
 				$total->{'pubtotal'} = $totshelves;
-				$session->param('barshelves', ${@$barshelves}[0]);
-				$session->param('pubshelves', ${@$pubshelves}[0]);
+				$session->param('barshelves', $barshelves->[0]);
+				$session->param('pubshelves', $pubshelves->[0]);
 				$session->param('totshelves', $total);
 				
-				C4::Context::set_shelves_userenv('bar',${@$barshelves}[0]);
-				C4::Context::set_shelves_userenv('pub',${@$pubshelves}[0]);
+				C4::Context::set_shelves_userenv('bar',$barshelves->[0]);
+				C4::Context::set_shelves_userenv('pub',$pubshelves->[0]);
 				C4::Context::set_shelves_userenv('tot',$total);
 			}
         	else {
@@ -740,9 +740,9 @@ sub checkauth {
 			my ($total, $totshelves, $pubshelves);
 			($pubshelves, $totshelves) = GetRecentShelves(2, $row_count, undef);
 			$total->{'pubtotal'} = $totshelves;
-			$session->param('pubshelves', ${@$pubshelves}[0]);
+			$session->param('pubshelves', $pubshelves->[0]);
 			$session->param('totshelves', $total);
-			C4::Context::set_shelves_userenv('pub',${@$pubshelves}[0]);
+			C4::Context::set_shelves_userenv('pub',$pubshelves->[0]);
 			C4::Context::set_shelves_userenv('tot',$total);
 			
 			# setting a couple of other session vars...

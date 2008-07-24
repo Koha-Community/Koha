@@ -555,13 +555,13 @@ sub RefreshShelvesSummary ($$$) {
 	$total->{'pubtotal'} = $totshelves;
 
 	# Update the current session with the latest shelves...
-	$session->param('barshelves', ${@$barshelves}[0]);
-	$session->param('pubshelves', ${@$pubshelves}[0]);
+	$session->param('barshelves', $barshelves->[0]);
+	$session->param('pubshelves', $pubshelves->[0]);
 	$session->param('totshelves', $total);
 
 	# likewise the userenv...
-	C4::Context->set_shelves_userenv('bar',${@$barshelves}[0]);
-	C4::Context->set_shelves_userenv('pub',${@$pubshelves}[0]);
+	C4::Context->set_shelves_userenv('bar',$barshelves->[0]);
+	C4::Context->set_shelves_userenv('pub',$pubshelves->[0]);
 	C4::Context::set_shelves_userenv('tot',$total);
 
 	return ($total, $pubshelves, $barshelves);
