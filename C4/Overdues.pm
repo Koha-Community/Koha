@@ -279,6 +279,7 @@ sub CalcFine {
     } else {
         # a zero (or null)  chargeperiod means no charge.
     }
+	$amount = C4::Context->preference('maxFine') if(C4::Context->preference('maxFine') && ( $amount > C4::Context->preference('maxFine')));
     return ( $amount, $data->{'chargename'}, $days_minus_grace, $daystocharge);
 }
 
