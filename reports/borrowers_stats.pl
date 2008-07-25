@@ -327,9 +327,9 @@ sub calculate {
 	my $emptycol; 
 	while (my ($row, $col, $value) = $dbcalc->fetchrow) {
 #		warn "filling table $row / $col / $value ";
-		$emptycol = 1 if ($col eq undef);
-		$col = "zzEMPTY" if ($col eq undef);
-		$row = "zzEMPTY" if ($row eq undef);
+		$emptycol = 1 if (!defined($col));
+		$col = "zzEMPTY" if (!defined($col));
+		$row = "zzEMPTY" if (!defined($row));
 		
 		$table{$row}->{$col}+=$value;
 		$table{$row}->{totalrow}+=$value;

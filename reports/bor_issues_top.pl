@@ -340,7 +340,7 @@ sub calculate {
 	# 	)
     while (my @data = $dbcalc->fetchrow) {
         my ($row, $rank, $id, $col) = @data;
-        $col = "zzEMPTY" if ($col eq undef);
+        $col = "zzEMPTY" if (!defined($col));
 		unless ($patrons{$id}) {
 			$patrons{$id} = {name=>$row, allcols=>{}, newcols=>{}, oldcols=>{}};
 		}
@@ -356,7 +356,7 @@ sub calculate {
     $debug and print DEBUG "rows: ", $dbcalc->rows, "\n";
     while (my @data = $dbcalc->fetchrow) {
         my ($row, $rank, $id, $col) = @data;
-        $col = "zzEMPTY" if ($col eq undef);
+        $col = "zzEMPTY" if (!defined($col));
 		unless ($patrons{$id}) {
 			$patrons{$id} = {name=>$row, allcols=>{}, newcols=>{}, oldcols=>{}};
 		}

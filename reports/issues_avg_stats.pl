@@ -543,9 +543,9 @@ sub calculate {
     while (my  @data = $dbcalc->fetchrow) {
         my ($row, $col, $issuedate, $returndate, $weight)=@data;
 #		warn "filling table $row / $col / $issuedate / $returndate /$weight";
-        $emptycol=1 if ($col eq undef);
-        $col = "zzEMPTY" if ($col eq undef);
-        $row = "zzEMPTY" if ($row eq undef);
+        $emptycol=1 if (!defined($col));
+        $col = "zzEMPTY" if (!defined($col));
+        $row = "zzEMPTY" if (!defined($row));
         # fill returndate to avoid an error with date calc (needed for all non returned issues)
         $returndate= join '-',Date::Calc::Today if $returndate eq '0000-00-00';
     #  DateCalc returns => 0:0:WK:DD:HH:MM:SS   the weeks, days, hours, minutes,

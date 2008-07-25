@@ -378,7 +378,7 @@ sub calculate {
     my %indice;
     while (my  @data = $dbcalc->fetchrow) {
         my ($row, $rank, $id, $col )=@data;
-        $col = "zzEMPTY" if ($col eq undef);
+        $col = "zzEMPTY" if (!defined($col));
         $indice{$col}=1 if (not($indice{$col}));
         $table[$indice{$col}]->{$col}->{'name'}=$row;
         $table[$indice{$col}]->{$col}->{'count'}=$rank;

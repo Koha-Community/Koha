@@ -84,7 +84,7 @@ sub MARCfindbreeding {
             }
         }
 		
-        if ( ref($record) eq undef ) {
+        if ( !defined(ref($record)) ) {
             return -1;
         }
         else {

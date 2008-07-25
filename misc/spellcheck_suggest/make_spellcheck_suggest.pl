@@ -83,7 +83,7 @@ use C4::Context;
  # and uncomment the one after it, adding your site info (check out GRANT
  # syntax in the mysql manual if you're unsure how enable authentication)
 #
-my dbh2 = C4::Context->dbh;
+my $dbh2 = C4::Context->dbh;
 #
 #my $dbh2=DBI->connect("DBI:mysql:<add your database name here>:localhost","<add your mysql user here>","<add your password here>");
 ########################################################################
@@ -97,12 +97,10 @@ my $counter = 0;
 print "Step 1 of 5: Checking to make sure suggest tables exist\n";
 my $check_tables_query = "select distinct resultcount from ?";
 my @tables = ("notdistinctspchk", "notdistinctsugg", "spellcheck", "suggestions");
-my %tables = ( notdistinctspchk => "( display varchar(40) not null default,
-				suggestion varchar(40) not null default,
 foreach my $table (@tables) {
   my $sth_check=$dbh2->prepare($check_tables_query) || die "cant prepare query: $DBI::errstr";
   my $rv = $sth_check->execute($table);
-  if($rv eq undef) {
+  if(!defined($rv)) {
     print "$table missing ... creating it now\n";
     my $create_this = "CREATE TABLE \'$table\' \(
   			display varchar\(40\) NOT NULL default \'\',

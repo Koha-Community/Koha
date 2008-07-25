@@ -152,7 +152,7 @@ sub randarray {
         $rand[$randnum] = shift(@array);
         while (1) {
                 my $randnum = int(rand($seed));
-                if ($rand[$randnum] eq undef) {
+                if (!defined($rand[$randnum])) {
                         $rand[$randnum] = shift(@array);
                 }
                 last if ($#array == -1);

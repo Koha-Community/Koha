@@ -273,7 +273,7 @@ sub calculate {
     $i=1;
     while (my  @data = $dbcalc->fetchrow) {
         my ($row, $col )=@data;
-        $col = "zzEMPTY" if ($col eq undef);
+        $col = "zzEMPTY" if (!defined($col));
         $i=1 if (($previous_col) and not($col eq $previous_col));
         $table[$i]->{$col}=$row;
 #		warn " $i $col $row";
