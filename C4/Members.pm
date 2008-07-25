@@ -771,7 +771,7 @@ sub AddMember {
     $sth = $dbh->prepare("SELECT enrolmentfee FROM categories WHERE categorycode=?");
     $sth->execute($data{'categorycode'});
     my ($enrolmentfee) = $sth->fetchrow;
-    if ($enrolmentfee) {
+    if ($enrolmentfee && $enrolmentfee > 0) {
         # insert fee in patron debts
         manualinvoice($data{'borrowernumber'}, '', '', 'A', $enrolmentfee);
     }
