@@ -60,15 +60,40 @@ sub calculate {
 	my $dbh = C4::Context->dbh;
 	my $sth;
 	if ($branch) {
-		$sth = $dbh->prepare("select description, biblioitems.itemtype, count(*) as total from itemtypes, biblioitems, items 
-						where biblioitems.itemtype=itemtypes.itemtype 
-							and items.biblioitemnumber=biblioitems.biblioitemnumber
-							and items.holdingbranch=?
-						group by biblioitems.itemtype");
+		if (C4::Context->preference('item-level_itypes')) {
+		$sth = $dbh->prepare("
+        SELECT description, items.itype as itemtype, COUNT(*) AS total 
+			FROM itemtypes,items         
+		WHERE items.itype=itemtypes.itemtype         
+		AND items.holdingbranch=?            
+		GROUP BY  items.itype");
+
+		}
+		else {
+		$sth = $dbh->prepare("
+		SELECT description, biblioitems.itemtype, COUNT(*) AS total 
+			FROM itemtypes, biblioitems, items 
+		WHERE biblioitems.itemtype=itemtypes.itemtype 
+		AND items.biblioitemnumber=biblioitems.biblioitemnumber
+		AND items.holdingbranch=?
+			GROUP BY  biblioitems.itemtype");
+		}
 		$sth->execute($branch);
 	} else {
-		$sth = $dbh->prepare("select description, biblioitems.itemtype, count(*) as total from itemtypes, biblioitems,items where biblioitems.itemtype=itemtypes.itemtype 
-                                      and biblioitems.biblioitemnumber = items.biblioitemnumber group by biblioitems.itemtype");
+		if (C4::Context->preference('item-level_itypes')) {
+		$sth = $dbh->prepare("
+		SELECT description,items.itype AS itemtype, COUNT(*) AS total 
+			FROM itemtypes,items
+		WHERE items.itype=itemtypes.itemtype
+			GROUP BY items.itype");
+		}
+		else {
+		$sth = $dbh->prepare("SELECT description, biblioitems.itemtype, COUNT(*) AS total
+			FROM itemtypes, biblioitems,items 
+		WHERE biblioitems.itemtype=itemtypes.itemtype 
+		AND biblioitems.biblioitemnumber = items.biblioitemnumber
+			GROUP BY biblioitems.itemtype");
+		}
 		$sth->execute;
 	}
 	my ($description,$biblioitems,$total);
