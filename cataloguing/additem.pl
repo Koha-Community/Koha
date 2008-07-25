@@ -209,10 +209,12 @@ foreach my $field (@fields) {
                 && $subf[$i][0] ne $itemtagsubfield));
 
         $witness{$subf[$i][0]} = $tagslib->{$field->tag()}->{$subf[$i][0]}->{lib} if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  eq 10);
+		if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  eq 10) {
+        	$this_row{$subf[$i][0]}=GetAuthorisedValueDesc( $field->tag(),
+                        $subf[$i][0], $subf[$i][1], '', $tagslib) 
+						|| $subf[$i][1];
+		}
 
-        $this_row{$subf[$i][0]}=GetAuthorisedValueDesc( $field->tag(),
-                        $subf[$i][0], $subf[$i][1], '', $tagslib) if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  eq 10);
-        
         if (($field->tag eq $branchtagfield) && ($subf[$i][$0] eq $branchtagsubfield) && C4::Context->preference("IndependantBranches")) {
             #verifying rights
             my $userenv = C4::Context->userenv();
