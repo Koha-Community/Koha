@@ -261,16 +261,17 @@ sub GetItemTypes {
 sub get_itemtypeinfos_of {
     my @itemtypes = @_;
 
-    my $query = '
+    my $placeholders = join( ', ', map { '?' } @itemtypes );
+    my $query = <<"END_SQL";
 SELECT itemtype,
        description,
        imageurl,
        notforloan
   FROM itemtypes
-  WHERE itemtype IN (' . join( ',', map( { "'" . $_ . "'" } @itemtypes ) ) . ')
-';
+  WHERE itemtype IN ( $placeholders )
+END_SQL
 
-    return get_infos_of( $query, 'itemtype' );
+    return get_infos_of( $query, 'itemtype', undef, \@itemtypes );
 }
 
 # this is temporary until we separate collection codes and item types
@@ -788,9 +789,12 @@ sub getFacets {
 
 =head2 get_infos_of
 
-Return a href where a key is associated to a href. You give a query, the
-name of the key among the fields returned by the query. If you also give as
-third argument the name of the value, the function returns a href of scalar.
+Return a href where a key is associated to a href. You give a query,
+the name of the key among the fields returned by the query. If you
+also give as third argument the name of the value, the function
+returns a href of scalar. The optional 4th argument is an arrayref of
+items passed to the C<execute()> call. It is designed to bind
+parameters to any placeholders in your SQL.
 
   my $query = '
 SELECT itemnumber,
@@ -810,12 +814,12 @@ SELECT itemnumber,
 =cut
 
 sub get_infos_of {
-    my ( $query, $key_name, $value_name ) = @_;
+    my ( $query, $key_name, $value_name, $bind_params ) = @_;
 
     my $dbh = C4::Context->dbh;
 
     my $sth = $dbh->prepare($query);
-    $sth->execute();
+    $sth->execute( @$bind_params );
 
     my %infos_of;
     while ( my $row = $sth->fetchrow_hashref ) {
