@@ -2133,13 +2133,15 @@ CREATE TABLE `permissions` (
     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS serialitems;
-CREATE TABLE serialitems (
-        serialid int(11) NOT NULL,
-        itemnumber int(11) NOT NULL,
-        UNIQUE KEY `serialididx` (`serialid`)
+DROP TABLE IF EXISTS `serialitems`;
+CREATE TABLE `serialitems` (
+	`itemnumber` int(11) NOT NULL,
+	`serialid` int(11) NOT NULL,
+	UNIQUE KEY `serialitemsidx` (`itemnumber`),
+	KEY `serialitems_sfk_1` (`serialid`),
+	CONSTRAINT `serialitems_sfk_1` FOREIGN KEY (`serialid`) REFERENCES `serial` (`serialid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+		  
 DROP TABLE IF EXISTS `user_permissions`;
 CREATE TABLE `user_permissions` (
   `borrowernumber` int(11) NOT NULL DEFAULT 0,
