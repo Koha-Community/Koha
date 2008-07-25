@@ -126,10 +126,12 @@ my %itemfields;
 for my $itm (@items) {
      $norequests = 0 && $norequests
        if ( (not $itm->{'wthdrawn'} )
-         || (not $itm->{'itemlost'} )
-         || (not $itm->{'itemnotforloan'} )
-         || ($itm->{'itemnumber'} ) );
-        $itm->{ $itm->{'publictype'} } = 1;
+         && (not $itm->{'itemlost'} )
+         && ($itm->{'itemnotforloan'}<0 || not $itm->{'itemnotforloan'} )
+		 && (not $itemtypes->{$itm->{'itype'}}->{notforloan} )
+         && ($itm->{'itemnumber'} ) );
+
+    $itm->{ $itm->{'publictype'} } = 1;
     $itm->{datedue} = format_date($itm->{datedue});
     $itm->{datelastseen} = format_date($itm->{datelastseen});
 

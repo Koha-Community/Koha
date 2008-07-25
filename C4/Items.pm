@@ -1219,6 +1219,7 @@ sub GetItemsInfo {
             my ($lib) = $sthnflstatus->fetchrow;
             $data->{notforloanvalue} = $lib;
         }
+		$data->{itypenotforloan} = $data->{notforloan} if (C4::Context->preference('item-level_itypes'));
 
         # my stack procedures
         my $stackstatus = $dbh->prepare(
