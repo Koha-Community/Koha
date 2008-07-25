@@ -69,7 +69,6 @@ my %tabsysprefs;
     $tabsysprefs{gist}="Acquisitions";
     $tabsysprefs{emailPurchaseSuggestions}="Acquisitions";
     $tabsysprefs{RenewSerialAddsSuggestion}="Acquisitions";
-    $tabsysprefs{serialsadditems}="Acquisitions";
 
 # Admin
     $tabsysprefs{singleBranchMode}="Admin";

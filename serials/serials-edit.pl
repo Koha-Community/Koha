@@ -270,7 +270,7 @@ if ($op eq 'serialchangestatus') {
 }
 
 $template->param(
-	serialsadditems => C4::Context->preference("serialsadditems"),
+	serialsadditems => $serialdatalist[0]->{'serialsadditems'},
 	bibliotitle  => $bibdata->{'title'},
 	biblionumber => $serialdatalist[0]->{'biblionumber'},
 	serialslist  => \@serialdatalist,

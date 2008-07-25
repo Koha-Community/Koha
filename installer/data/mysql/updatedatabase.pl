@@ -1875,7 +1875,7 @@ $DBversion = '3.00.00.101';
 if ( C4::Context->preference('Version') < TransformToNum($DBversion) ) {
 	$dbh->do('ALTER TABLE `overduerules` CHANGE `categorycode` `categorycode` VARCHAR(10) NOT NULL');
 	$dbh->do('ALTER TABLE `deletedborrowers` CHANGE `categorycode` `categorycode` VARCHAR(10) NOT NULL');
-    print "Upgrade to $DBversion done (Updating columnd definitions for patron category codes in notice/statsu triggers and deletedborrowers tables.\n";
+    print "Upgrade to $DBversion done (Updating columnd definitions for patron category codes in notice/statsu triggers and deletedborrowers tables.)\n";
     SetVersion($DBversion);
 }
 
@@ -1885,8 +1885,15 @@ if ( C4::Context->preference('Version') < TransformToNum($DBversion) ) {
 	$dbh->do('ALTER TABLE serialitems DROP KEY serialididx' );
 	$dbh->do('ALTER TABLE serialitems ADD CONSTRAINT UNIQUE KEY serialitemsidx (itemnumber)' );
 	$dbh->do('ALTER TABLE serialitems ADD CONSTRAINT serialitems_sfk_1 FOREIGN KEY (serialid) REFERENCES serial (serialid) ON DELETE CASCADE ON UPDATE CASCADE' );
-    print "Upgrade to $DBversion done (Updating serialitems table to allow for mulitple items per serial fixing kohabug 2380\n";
+    print "Upgrade to $DBversion done (Updating serialitems table to allow for mulitple items per serial fixing kohabug 2380)\n";
     SetVersion($DBversion);
+}
+
+$DBversion = "3.00.00.103";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("DELETE FROM systempreferences WHERE variable='serialsadditems'");
+    print "Upgrade to $DBversion done ( Verifying the removal of serialsadditems from syspref fixing kohabug 2219)\n";
+    SetVersion ($DBversion);
 }
 
 =item DropAllForeignKeys($table)
