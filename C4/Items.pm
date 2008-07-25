@@ -915,16 +915,17 @@ sub GetLostItems {
 
 =over 4
 
-$itemlist = GetItemsForInventory($minlocation,$maxlocation,$datelastseen,$offset,$size)
+$itemlist = GetItemsForInventory($minlocation, $maxlocation, $location, $itemtype $datelastseen, $branch, $offset, $size);
 
 =back
 
 Retrieve a list of title/authors/barcode/callnumber, for biblio inventory.
 
-The sub returns a list of hashes, containing itemnumber, author, title, barcode & item callnumber.
-It is ordered by callnumber,title.
+The sub returns a reference to a list of hashes, each containing
+itemnumber, author, title, barcode, item callnumber, and date last
+seen. It is ordered by callnumber then title.
 
-The minlocation & maxlocation parameters are used to specify a range of item callnumbers
+The required minlocation & maxlocation parameters are used to specify a range of item callnumbers
 the datelastseen can be used to specify that you want to see items not seen since a past date only.
 offset & size can be used to retrieve only a part of the whole listing (defaut behaviour)
 
