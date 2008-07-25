@@ -620,10 +620,10 @@ sub calculate {
     $strcalc .= " AND aqbasket.closedate <= '" . @$filters[1] . "'"
       if ( @$filters[1] );
     @$filters[2] =~ s/\*/%/g if ( @$filters[2] );
-    $strcalc .= " AND aqorderbreakdown.datereceived >= '" . @$filters[2] . "'"
+    $strcalc .= " AND aqorders.datereceived >= '" . @$filters[2] . "'"
       if ( @$filters[2] );
     @$filters[3] =~ s/\*/%/g if ( @$filters[3] );
-    $strcalc .= " AND aqorderbreakdown.datereceived <= '" . @$filters[3] . "'"
+    $strcalc .= " AND aqorders.datereceived <= '" . @$filters[3] . "'"
       if ( @$filters[3] );
 #    @$filters[4] =~ s/\*/%/g if ( @$filters[4] );
 #    $strcalc .= " AND aqbasket.closedate >= '" . @$filters[4] . "'"
@@ -655,6 +655,7 @@ sub calculate {
     #       warn "filling table";
     my $emptycol;
     while ( my ( $row, $col, $value ) = $dbcalc->fetchrow ) {
+		next if ($row eq undef || $col eq undef);
 		#warn "filling table $row / $col / $value ";
         $emptycol = 1         if ( $col eq undef );
         $col      = "zzEMPTY" if ( $col eq undef );
