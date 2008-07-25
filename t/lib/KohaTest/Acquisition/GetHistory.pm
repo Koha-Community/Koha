@@ -5,7 +5,6 @@ use strict;
 use warnings;
 
 use Test::More;
-use Time::localtime;
 
 use C4::Acquisition;
 use C4::Context;
@@ -104,11 +103,8 @@ sub one_order : Test( 50 ) {
 
     # searching by from_date
     {
-        my $tomorrowseconds = time + 60*60*24;
-        my $tomorrow = sprintf( '%04d-%02d-%02d',
-                                 localtime( $tomorrowseconds )->year() + 1900,
-                                 localtime( $tomorrowseconds )->mon() + 1,
-                                 localtime( $tomorrowseconds )->mday() );
+        my $tomorrow = $self->tomorrow();
+        # diag( "tomorrow is $tomorrow" );
 
         my ( $order_loop, $total_qty, $total_price, $total_qtyreceived) = GetHistory( undef, undef, undef, undef, $tomorrow );
         # diag( Data::Dumper->Dump( [ $order_loop, $total_qty, $total_price, $total_qtyreceived ], [ qw( order_loop total_qty total_price total_qtyreceived ) ] ) );
@@ -121,11 +117,7 @@ sub one_order : Test( 50 ) {
 
     # searching by from_date
     {
-        my $yesterdayseconds = time - 60*60*24;
-        my $yesterday = sprintf( '%04d-%02d-%02d',
-                                 localtime( $yesterdayseconds )->year() + 1900,
-                                 localtime( $yesterdayseconds )->mon() + 1,
-                                 localtime( $yesterdayseconds )->mday() );
+        my $yesterday = $self->yesterday();
         # diag( "yesterday was $yesterday" );
     
         my ( $order_loop, $total_qty, $total_price, $total_qtyreceived) = GetHistory( undef, undef, undef, $yesterday );

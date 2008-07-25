@@ -20,6 +20,7 @@ use C4::Installer;
 use C4::Languages;
 use File::Temp qw/ tempdir /;
 use CGI;
+use Time::localtime;
 
 # Since this is an abstract base class, this prevents these tests from
 # being run directly unless we're testing a subclass. It just makes
@@ -475,6 +476,50 @@ sub random_date {
 
 }
 
+=head3 tomorrow
+
+returns tomorrow's date as YYYY-MM-DD.
+
+=cut
+
+sub tomorrow {
+    my $self = shift;
+
+    return $self->days_from_now( 1 );
+
+}
+
+=head3 yesterday
+
+returns yesterday's date as YYYY-MM-DD.
+
+=cut
+
+sub yesterday {
+    my $self = shift;
+
+    return $self->days_from_now( -1 );
+}
+
+
+=head3 days_from_now
+
+returns an arbitrary date based on today in YYYY-MM-DD format.
+
+=cut
+
+sub days_from_now {
+    my $self = shift;
+    my $days = shift or return;
+
+    my $seconds = time + $days * 60*60*24;
+    my $yyyymmdd = sprintf( '%04d-%02d-%02d',
+                            localtime( $seconds )->year() + 1900,
+                            localtime( $seconds )->mon() + 1,
+                            localtime( $seconds )->mday() );
+    return $yyyymmdd;
+}
+
 =head3 add_biblios
 
   $self->add_biblios( count     => 10,
@@ -507,21 +552,25 @@ sub add_biblios {
     foreach my $counter ( 1..$param{'count'} ) {
         my $marcrecord  = MARC::Record->new();
         isa_ok( $marcrecord, 'MARC::Record' );
-        my $appendedfieldscount = $marcrecord->append_fields( MARC::Field->new( '100', '1', '0',
-                                                                                a => 'Twain, Mark',
-                                                                                d => "1835-1910." ),
-                                                              MARC::Field->new( '245', '1', '4',
-                                                                                a => sprintf( 'The Adventures of Huckleberry Finn Test %s', $counter ),
-                                                                                c => "Mark Twain ; illustrated by E.W. Kemble." ),
-                                                              MARC::Field->new( '952', '0', '0',
-                                                                                p => '12345678' . $self->random_string() ),   # barcode
-                                                              MARC::Field->new( '952', '0', '0',
-                                                                                a => 'CPL',
-                                                                                b => 'CPL' ),
-                                                         );
+        my @marc_fields = ( MARC::Field->new( '100', '1', '0',
+                                              a => 'Twain, Mark',
+                                              d => "1835-1910." ),
+                            MARC::Field->new( '245', '1', '4',
+                                              a => sprintf( 'The Adventures of Huckleberry Finn Test %s', $counter ),
+                                              c => "Mark Twain ; illustrated by E.W. Kemble." ),
+                            MARC::Field->new( '952', '0', '0',
+                                              p => '12345678' . $self->random_string() ),   # barcode
+                            MARC::Field->new( '952', '0', '0',
+                                              o => $self->random_string() ),   # callnumber
+                            MARC::Field->new( '952', '0', '0',
+                                              a => 'CPL',
+                                              b => 'CPL' ),
+                       );
+
+        my $appendedfieldscount = $marcrecord->append_fields( @marc_fields );
         
         diag $MARC::Record::ERROR if ( $MARC::Record::ERROR );
-        is( $appendedfieldscount, 4, 'added 4 fields' );
+        is( $appendedfieldscount, scalar @marc_fields, 'added correct number of MARC fields' );
         
         my $frameworkcode = ''; # XXX I'd like to put something reasonable here.
         my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $marcrecord, $frameworkcode );
