@@ -35,3 +35,19 @@ function cloneItemBlock(index) {
     original.parentNode.insertBefore(clone,original.nextSibling);
     countItemBlocks();
 }
+function check_additem() {
+	var	barcodes = document.getElementsByName('barcode');
+	var success = true;
+	for(i=0;i<barcodes.length;i++){
+		for(j=0;j<barcodes.length;j++){
+			if( (i > j) && (barcodes[i].value == barcodes[j].value) ) {
+				barcodes[i].className='error';
+				barcodes[j].className='error';
+				success = false;
+			}
+		}
+	}
+	// TODO : Add AJAX function to test against barcodes already in the database, not just 
+	// duplicates within the form.  
+	return success;
+}

@@ -124,7 +124,7 @@
 
 </div>
 </div><div class="yui-g"><fieldset class="action"><!-- TMPL_IF name="catview" -->
-        <input type="submit"  name="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/acqui/parcel.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->">Cancel</a>
+        <input type="button"  value="Save" onclick="javascript:if(check_additem()) { this.form.submit(); } else { alert( _('Duplicate barcodes detected.  Please correct the errors and resubmit.') ); return false };" /> <a class="cancel" href="/cgi-bin/koha/acqui/parcel.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->">Cancel</a>
     <!-- TMPL_ELSE -->
         <a href="/cgi-bin/koha/acqui/neworderempty.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&amp;id=<!-- TMPL_VAR NAME="booksellerid" -->">Edit</a>
     <!-- /TMPL_IF --></fieldset></div>    </form>

@@ -75,6 +75,8 @@ my $datereceived =  ($input->param('op') eq 'new') ? C4::Dates->new($input->para
 					:  C4::Dates->new($input->param('datereceived'), 'iso')   ;
 $datereceived = C4::Dates->new() unless $datereceived;
 my $code=$input->param('code');
+my @rcv_err = $input->param('error');
+my @rcv_err_barcode = $input->param('error_bc');
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/parcel.tmpl",
@@ -84,6 +86,20 @@ my ($template, $loggedinuser, $cookie)
                  flagsrequired => {acquisition => 1},
                  debug => 1,
 });
+
+# If receiving error, report the error (coming from finishrecieve.pl(sic)).
+if( scalar(@rcv_err) ) {
+	my $cnt=0;
+	my $error_loop;
+	for my $err (@rcv_err) {
+		push @$error_loop, { "error_$err" => 1 , barcode => $rcv_err_barcode[$cnt] };
+		$cnt++;
+	}
+	$template->param( receive_error => 1 ,
+						error_loop => $error_loop,
+					);
+}
+
 my $cfstr = "%.2f";  # currency format string -- could get this from currency table.
 my @parcelitems=GetParcel($supplierid,$invoice,$datereceived->output('iso'));
 my $countlines = scalar @parcelitems;

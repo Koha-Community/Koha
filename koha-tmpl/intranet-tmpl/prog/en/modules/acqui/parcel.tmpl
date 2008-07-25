@@ -8,7 +8,7 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;  <!-- TMPL_IF name="date" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;  <!-- TMPL_IF name="datereceived" -->
             Receipt Summary for <i><!-- TMPL_VAR NAME="name" --></i> <!--TMPL_IF Name="invoice"--><i>[ <!-- TMPL_VAR NAME="invoice" --> ]</i><!--/TMPL_IF --> on <i><!-- TMPL_VAR NAME="formatteddatereceived" --></i>
         <!-- TMPL_ELSE -->
             Receive orders from <!-- TMPL_VAR NAME="name" -->
@@ -19,7 +19,15 @@
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
-	
+	<!-- TMPL_IF NAME="receive_error" -->
+	<div id="page_error" class="error">
+	<h3>Error adding items:</h3>
+	<ul>
+	<!-- TMPL_LOOP NAME="error_loop" -->
+		<li><!-- TMPL_VAR NAME="error_param" --> : <!-- TMPL_IF NAME="error_duplicate_barcode" -->Duplicate Barcode<!-- /TMPL_IF --> <!-- todo: other error conditions come here. --></li>
+	<!-- /TMPL_LOOP -->
+	</div>
+	<!-- /TMPL_IF -->
     <h1>
         <!-- TMPL_IF name="datereceived" -->
             Receipt Summary for <i><!-- TMPL_VAR NAME="name" --></i> <!--TMPL_IF Name="invoice"--> <i> [ <!-- TMPL_VAR NAME="invoice" --> ] </i><!--/TMPL_IF --> on <i><!-- TMPL_VAR NAME="formatteddatereceived" --></i>
