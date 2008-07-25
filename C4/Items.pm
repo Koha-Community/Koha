@@ -933,39 +933,42 @@ offset & size can be used to retrieve only a part of the whole listing (defaut b
 sub GetItemsForInventory {
     my ( $minlocation, $maxlocation,$location, $itemtype, $datelastseen, $branch, $offset, $size ) = @_;
     my $dbh = C4::Context->dbh;
-    my $sth;
+
+    my $query = <<'END_SQL';
+SELECT itemnumber, barcode, itemcallnumber, title, author, biblio.biblionumber, datelastseen
+FROM items
+  LEFT JOIN biblio ON items.biblionumber = biblio.biblionumber
+  LEFT JOIN biblioitems on items.biblionumber = biblioitems.biblionumber
+WHERE itemcallnumber >= ?
+  AND itemcallnumber <= ?
+END_SQL
+    my @bind_params = ( $minlocation, $maxlocation );
+
     if ($datelastseen) {
-        $datelastseen=format_date_in_iso($datelastseen);  
-        my $query =
-                "SELECT itemnumber,barcode,itemcallnumber,title,author,biblio.biblionumber,datelastseen
-                 FROM items
-                   LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber
-                   LEFT JOIN biblioitems on items.biblionumber=biblioitems.biblionumber
-                 WHERE itemcallnumber>= ?
-                   AND itemcallnumber <=?
-                   AND (datelastseen< ? OR datelastseen IS NULL)";
-        $query.= " AND items.location=".$dbh->quote($location) if $location;
-        $query.= " AND items.homebranch=".$dbh->quote($branch) if $branch;
-        $query.= " AND biblioitems.itemtype=".$dbh->quote($itemtype) if $itemtype;
-        $query .= " ORDER BY itemcallnumber,title";
-        $sth = $dbh->prepare($query);
-        $sth->execute( $minlocation, $maxlocation, $datelastseen );
+        $datelastseen = format_date_in_iso($datelastseen);  
+        $query .= ' AND (datelastseen < ? OR datelastseen IS NULL) ';
+        push @bind_params, $datelastseen;
     }
-    else {
-        my $query ="
-                SELECT itemnumber,barcode,itemcallnumber,biblio.biblionumber,title,author,datelastseen
-                FROM items 
-                    LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber 
-                   LEFT JOIN biblioitems on items.biblionumber=biblioitems.biblionumber
-                WHERE itemcallnumber>= ?
-                  AND itemcallnumber <=?";
-        $query.= " AND items.location=".$dbh->quote($location) if $location;
-        $query.= " AND items.homebranch=".$dbh->quote($branch) if $branch;
-        $query.= " AND biblioitems.itemtype=".$dbh->quote($itemtype) if $itemtype;
-        $query .= " ORDER BY itemcallnumber,title";
-        $sth = $dbh->prepare($query);
-        $sth->execute( $minlocation, $maxlocation );
+
+    if ( $location ) {
+        $query.= ' AND items.location = ? ';
+        push @bind_params, $location;
     }
+    
+    if ( $branch ) {
+        $query.= ' AND items.homebranch = ? ';
+        push @bind_params, $branch;
+    }
+    
+    if ( $itemtype ) {
+        $query.= ' AND biblioitems.itemtype = ? ';
+        push @bind_params, $itemtype;
+    }
+
+    $query .= ' ORDER BY itemcallnumber, title';
+    my $sth = $dbh->prepare($query);
+    $sth->execute( @bind_params );
+
     my @results;
     $size--;
     while ( my $row = $sth->fetchrow_hashref ) {
