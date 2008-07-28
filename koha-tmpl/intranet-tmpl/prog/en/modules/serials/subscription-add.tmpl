@@ -835,10 +835,10 @@ window.onload = irregular_order();
             <input type="text" name="aqbooksellerid" id="aqbooksellerid" value="<!-- TMPL_VAR name="aqbooksellerid" -->" size="8" /> (<input type="text" name="aqbooksellername" value="<!-- TMPL_VAR name="aqbooksellername" -->" disabled="disabled" readonly="readonly" />) <div class="inputnote"><a href="#" onclick="FindAcqui(f)">Search for a vendor</a></div>
         </li>
         <li>
-            <label for="biblionumber">Biblio: (*)</label>
+            <label for="biblionumber" class="required" title="Subscriptions must be associated with a bibliographic record">Biblio:</label>
             
                 <input type="text" name="biblionumber" id="biblionumber" value="<!-- TMPL_VAR name="bibnum" -->" size="8" /> 
-                (<input type="text" name="title" value="<!-- TMPL_VAR name="bibliotitle" -->" disabled="disabled" readonly="readonly" />)
+                (<input type="text" name="title" value="<!-- TMPL_VAR name="bibliotitle" -->" disabled="disabled" readonly="readonly" />) <span class="required" title="Subscriptions must be associated with a bibliographic record">Required</span>
                <div class="inputnote"> <a href="#" onclick="Plugin(f)">Search for Biblio</a> | <!--TMPL_IF Name="mod"--><a href="#" onclick="addbiblioPopup(<!-- TMPL_VAR NAME="bibnum" -->); return false;">Edit biblio</a><!-- TMPL_ELSE -->
                 <a href="#" onclick="addbiblioPopup(); return false;">Create Biblio</a><!--/TMPL_IF--></div>
             
@@ -853,11 +853,11 @@ window.onload = irregular_order();
             <!-- /TMPL_IF -->
         </li>
         <li>
-            <label for="callnumber">Call Number</label>
+            <label for="callnumber">Call Number:</label>
             <input type="text" name="callnumber" id="callnumber" value="<!-- TMPL_VAR name="callnumber" -->" size="20" />
         </li>
         <li>
-            <label for="branchcode">Library</label>
+            <label for="branchcode">Library:</label>
             
                 <select name="branchcode" id="branchcode" style="width: 20em;">
                     <!-- TMPL_UNLESS NAME="Independantbranches" --><option value="">None</option><!-- /TMPL_UNLESS -->
@@ -870,15 +870,15 @@ window.onload = irregular_order();
             
         </li>
         <li>
-            <label for="notes">Public note</label>
+            <label for="notes">Public note:</label>
             <textarea name="notes" id="notes" cols="30" rows="2"><!-- TMPL_VAR name="notes" --></textarea>
         </li>
         <li>
-            <label for="internalnotes">Nonpublic note</label>
+            <label for="internalnotes">Nonpublic note:</label>
             <textarea name="internalnotes" id="internalnotes" cols="30" rows="2"><!-- TMPL_VAR name="internalnotes" --></textarea>
         </li>
         <li>
-            <label for="letter">Patron notification </label>
+            <label for="letter">Patron notification: </label>
             
                <!-- TMPL_IF NAME="letterloop" -->
 			   <select name="letter" id="letter">
@@ -891,18 +891,18 @@ window.onload = irregular_order();
 <!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
                 </select> 
-				<div class="inputnote">Select a notice and patrons on the routing list will be notified when new issues are received.</div>
+				<div class="hint">Select a notice and patrons on the routing list will be notified when new issues are received.</div>
             	<!-- TMPL_ELSE -->
-				<div class="inputnote">To notify patrons of new serial issues, you must <a href="/cgi-bin/koha/tools/letter.pl">define a notice</a>.</div>
+				<div class="hint">To notify patrons of new serial issues, you must <a href="/cgi-bin/koha/tools/letter.pl">define a notice</a>.</div>
 				<!-- /TMPL_IF -->
         </li>
 	</ol>
 
-            <div class="warning"><b>Note:</b>
+            <div style="float:left;clear:left;margin:1em;"><strong>Note:</strong>
             
                 <ul>
-                    <li>The subscription <b>must</b> be associated with a bibliographic record.</li>
-                    <li>You <b>must</b> select a vendor if you wish to generate claims.</li>
+                    <li>The subscription <strong>must</strong> be associated with a bibliographic record.</li>
+                    <li>You <strong>must</strong> select a vendor if you wish to generate claims.</li>
                 </ul></div>
             
             
