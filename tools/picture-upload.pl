@@ -22,13 +22,12 @@
 use File::Temp;
 use File::Copy;
 use CGI;
-use Image::Magick;
+use GD;
 use C4::Context;
 use C4::Auth;
 use C4::Output;
 use C4::Members;
 use C4::Debug;
-#use Data::Dumper;
 
 my $input = new CGI;
 
@@ -91,7 +90,6 @@ if ( ($op eq 'Upload') && $uploadfile ) {       # Case is important in these ope
 	while ( <$uploadfile> ) {
 	    print $tfh $_;
         }
-
         close $tfh;
         if ( $filetype eq 'zip' ) {
             unless (system("unzip $tempfile -d $dirname") == 0) {
@@ -124,14 +122,17 @@ if ( ($op eq 'Upload') && $uploadfile ) {       # Case is important in these ope
         if ( %$results || %errors ) {
             $template->param( ERRORS => [ \%$results ] );
         } else {
-            $debug and warn "Total files processed: $total";
-            warn "Errors in \$errors." if $errors;
+			my $filecount;
+			map {$filecount += $_->{count}} @counts;
+            $debug and warn "Total directories processed: $total";
+            $debug and warn "Total files processed: $filecount";
             $template->param(
-    		 TOTAL => $total,
-		 HANDLED => $handled,
-		 COUNTS => \@counts,
-		 TCOUNTS => scalar(@counts),
+		 	TOTAL => $total,
+		 	HANDLED => $handled,
+		 	COUNTS => \@counts,
+			TCOUNTS => ($filecount > 0 ? $filecount : undef),
             );
+			$template->param( borrowernumber => $borrowernumber ) if $borrowernumber;
         }   
     }
 } elsif ( ($op eq 'Upload') && !$uploadfile ) {
@@ -210,76 +211,86 @@ sub handle_file {
         $debug and warn "Source: $source";
         my $size = (stat($source))[7];
             if ($size > 100000) {    # This check is necessary even with image resizing to avoid possible security/performance issues...
-                warn "$filename is TOO BIG!!! I refuse to beleagur my database with that much data. Try reducing the pixel dimensions and I\'ll reconsider.";
                 $filerrors{'OVRSIZ'} = 1;
                 push my @filerrors, \%filerrors;
                 push @{ $count{filenames} }, { filerrors => \@filerrors, source => $filename, cardnumber => $cardnumber };
                 $template->param( ERRORS => 1 );
                 return %count;    # this one is fatal so bail here...
             }
-        my $image = Image::Magick->new;
+        my ($srcimage, $image);
         if (open (IMG, "$source")) {
-            $image->Read(file=>\*IMG);
+            $srcimage = GD::Image->new(*IMG);
             close (IMG);
-            my $mimetype = $image->Get('mime');
-            # Check the pixel size of the image we are about to import...
-            my ($height, $width) = $image->Get('height', 'width');
-            $debug and warn "$filename is $width pix X $height pix.";
-            if ($width > 140 || $height > 200) {    # MAX pixel dims are 140 X 200...
-                warn "$filename exceeds the maximum pixel dimensions of 140 X 200. Resizing...";
-                my $percent_reduce;    # Percent we will reduce the image dimensions by...
-                if ($width > 140) {
-                    $percent_reduce = sprintf("%.5f",(140/$width));    # If the width is oversize, scale based on width overage...
-                } else {
-                    $percent_reduce = sprintf("%.5f",(200/$height));    # otherwise scale based on height overage.
-                }
-                my $width_reduce = sprintf("%.0f", ($width * $percent_reduce));
-                my $height_reduce = sprintf("%.0f", ($height * $percent_reduce));
-                warn "Reducing $filename by " . ($percent_reduce * 100) . "\% or to $width_reduce pix X $height_reduce pix";
-                $image->Resize(width=>$width_reduce, height=>$height_reduce);
-                my @img = $image->ImageToBlob();
-                $imgfile = $img[0];
-                warn "$filename is " . length($imgfile) . " bytes after resizing.";
-                undef $image;    # This object can get big...
-            } else {
-                my @img = $image->ImageToBlob();
-                $imgfile = $img[0];
-                $debug and warn "$filename is " . length($imgfile) . " bytes.";
-                undef $image;
-            }
-            $debug and warn "Image is of mimetype $mimetype";
-            my $dberror = PutPatronImage($cardnumber,$mimetype, $imgfile) if $mimetype;
-	    if ( !$dberror && $mimetype ) { # Errors from here on are fatal only to the import of a particular image, so don't bail, just note the error and keep going
-	        $count{count}++;
-	        push @{ $count{filenames} }, { source => $filename, cardnumber => $cardnumber };
-	    } elsif ( $dberror ) {
-                warn "Database returned error: $dberror";
-                ($dberror =~ /patronimage_fk1/) ? $filerrors{'IMGEXISTS'} = 1 : $filerrors{'DBERR'} = 1;
-                push my @filerrors, \%filerrors;
-	        push @{ $count{filenames} }, { filerrors => \@filerrors, source => $filename, cardnumber => $cardnumber };
-                $template->param( ERRORS => 1 );
-            } elsif ( !$mimetype ) {
-                warn "Unable to determine mime type of $filename. Please verify mimetype and add to \%mimemap if necessary.";
-                $filerrors{'MIMERR'} = 1;
-                push my @filerrors, \%filerrors;
-	        push @{ $count{filenames} }, { filerrors => \@filerrors, source => $filename, cardnumber => $cardnumber };
-                $template->param( ERRORS => 1 );
-            }
-        } else {
-            warn "Opening $dir/$filename failed!";
-            $filerrors{'OPNERR'} = 1;
-            push my @filerrors, \%filerrors;
-	    push @{ $count{filenames} }, { filerrors => \@filerrors, source => $filename, cardnumber => $cardnumber };
-            $template->param( ERRORS => 1 );
-        }
+			if (defined $srcimage) {
+				my $mimetype = 'image/jpeg';	# GD autodetects three basic image formats: PNG, JPEG, XPM; we will convert all to JPEG...
+				# Check the pixel size of the image we are about to import...
+				my ($width, $height) = $srcimage->getBounds();
+				$debug and warn "$filename is $width pix X $height pix.";
+				if ($width > 140 || $height > 200) {    # MAX pixel dims are 140 X 200...
+					$debug and warn "$filename exceeds the maximum pixel dimensions of 140 X 200. Resizing...";
+					my $percent_reduce;    # Percent we will reduce the image dimensions by...
+					if ($width > 140) {
+						$percent_reduce = sprintf("%.5f",(140/$width));    # If the width is oversize, scale based on width overage...
+					} else {
+						$percent_reduce = sprintf("%.5f",(200/$height));    # otherwise scale based on height overage.
+					}
+					my $width_reduce = sprintf("%.0f", ($width * $percent_reduce));
+					my $height_reduce = sprintf("%.0f", ($height * $percent_reduce));
+					$debug and warn "Reducing $filename by " . ($percent_reduce * 100) . "\% or to $width_reduce pix X $height_reduce pix";
+					$image = GD::Image->new($width_reduce, $height_reduce, 1); #'1' creates true color image...
+					$image->copyResampled($srcimage,0,0,0,0,$width_reduce,$height_reduce,$width,$height);
+					$imgfile = $image->jpeg(100);
+					$debug and warn "$filename is " . length($imgfile) . " bytes after resizing.";
+					undef $image;
+					undef $srcimage;    # This object can get big...
+				} else {
+					$image = $srcimage;
+					$imgfile = $image->jpeg();
+					$debug and warn "$filename is " . length($imgfile) . " bytes.";
+					undef $image;
+					undef $srcimage;    # This object can get big...
+				}
+				$debug and warn "Image is of mimetype $mimetype";
+				my $dberror = PutPatronImage($cardnumber,$mimetype, $imgfile) if $mimetype;
+				if ( !$dberror && $mimetype ) { # Errors from here on are fatal only to the import of a particular image, so don't bail, just note the error and keep going
+					$count{count}++;
+					push @{ $count{filenames} }, { source => $filename, cardnumber => $cardnumber };
+				} elsif ( $dberror ) {
+						warn "Database returned error: $dberror";
+						($dberror =~ /patronimage_fk1/) ? $filerrors{'IMGEXISTS'} = 1 : $filerrors{'DBERR'} = 1;
+						push my @filerrors, \%filerrors;
+						push @{ $count{filenames} }, { filerrors => \@filerrors, source => $filename, cardnumber => $cardnumber };
+						$template->param( ERRORS => 1 );
+				} elsif ( !$mimetype ) {
+					warn "Unable to determine mime type of $filename. Please verify mimetype.";
+					$filerrors{'MIMERR'} = 1;
+					push my @filerrors, \%filerrors;
+					push @{ $count{filenames} }, { filerrors => \@filerrors, source => $filename, cardnumber => $cardnumber };
+					$template->param( ERRORS => 1 );
+				}
+			} else {
+				warn "Contents of $filename corrupted!";
+			#	$count{count}--;
+				$filerrors{'CORERR'} = 1;
+				push my @filerrors, \%filerrors;
+				push @{ $count{filenames} }, { filerrors => \@filerrors, source => $filename, cardnumber => $cardnumber };
+				$template->param( ERRORS => 1 );
+			}
+		} else {
+			warn "Opening $dir/$filename failed!";
+			$filerrors{'OPNERR'} = 1;
+			push my @filerrors, \%filerrors;
+			push @{ $count{filenames} }, { filerrors => \@filerrors, source => $filename, cardnumber => $cardnumber };
+			$template->param( ERRORS => 1 );
+		}
     } else {    # The need for this seems a bit unlikely, however, to maximize error trapping it is included
         warn "Missing " . ($cardnumber ? "filename" : ($filename ? "cardnumber" : "cardnumber and filename"));
         $filerrors{'CRDFIL'} = ($cardnumber ? "filename" : ($filename ? "cardnumber" : "cardnumber and filename")); 
         push my @filerrors, \%filerrors;
-	push @{ $count{filenames} }, { filerrors => \@filerrors, source => $filename, cardnumber => $cardnumber };
+		push @{ $count{filenames} }, { filerrors => \@filerrors, source => $filename, cardnumber => $cardnumber };
         $template->param( ERRORS => 1 );
     }
-    return %count;
+    return (%count);
 }
 
 =back

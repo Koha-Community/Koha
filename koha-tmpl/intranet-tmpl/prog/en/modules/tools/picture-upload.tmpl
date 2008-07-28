@@ -27,20 +27,25 @@
         <div class="yui-g">
             <div class="yui-u first">
             <!-- TMPL_IF name="ERRORS" -->
-                <div class="dialog alert">
-                <h3>Patron Image(s) Uploaded With Some Errors</h3>
+				<!-- TMPL_IF name = "TCOUNTS" -->
+					<div class="dialog alert">
+					<h3>Patron Image(s) Uploaded With Some Errors</h3>
+				<!-- TMPL_ELSE -->
+					<div class="dialog alert">
+					<h3>Patron Image Failed to Upload</h3>
+				<!-- /TMPL_IF -->
             <!-- TMPL_ELSE -->
                 <div class="dialog message">
                 <h3>Patron Image(s) Successfully Uploaded</h3>
             <!-- /TMPL_IF -->
 	        <ul class="data">
 	            <li>Unpacking completed</li>
-                  <li><!-- TMPL_VAR NAME ="TOTAL" --> directories scanned.</li>
-                    <li><!-- TMPL_VAR NAME="HANDLED" --> directories processed.</li>
+                  <li><!-- TMPL_VAR NAME ="TOTAL" --> directorie(s) scanned.</li>
+                    <li><!-- TMPL_VAR NAME="HANDLED" --> directorie(s) processed.</li>
                 </ul>
                 <!-- TMPL_LOOP name="COUNTS" -->
 	            <ul class="data">
-                        <li><!-- TMPL_VAR name="TCOUNTS" --> image(s) moved into the database:</li>
+                        <!-- TMPL_IF name = "TCOUNTS" --><li><!-- TMPL_VAR name="TCOUNTS" --> image(s) moved into the database:</li><!-- /TMPL_IF -->
                         <!-- TMPL_LOOP name="filenames" -->
                             <li><!-- TMPL_VAR name="source" --> - Cardnumber: <!-- TMPL_VAR name="cardnumber" -->
                                     <!-- TMPL_IF NAME="filerrors" --><br /> <b>WARNING:</b> This image <i>not</i> imported because 
@@ -48,6 +53,7 @@
                                         <!-- TMPL_IF NAME="DBERR" -->the database returned an error. Please refer to the error log for more details.</li>
                                         <!-- TMPL_ELSIF NAME="IMGEXISTS" -->this patron does not exist in the database.</li>
                                         <!-- TMPL_ELSIF NAME="MIMERR" -->the image format is unrecognized.</li>
+                                        <!-- TMPL_ELSIF NAME="CORERR" -->the image file is corrupted.</li>
                                         <!-- TMPL_ELSIF NAME="OPNERR" -->Koha was unable to open the image for reading.</li>
                                         <!-- TMPL_ELSIF NAME="OVRSIZ" -->the image file is too big.</li>
                                         <!-- TMPL_ELSIF NAME="CRDFIL" -->the <!-- TMPL_VAR NAME="CRDFIL" --> is missing.</li>
@@ -60,8 +66,12 @@
                 <!-- /TMPL_LOOP -->
 
 				</div>
-                <a id="uploadmore" href="/cgi-bin/koha/tools/picture-upload.pl">Upload More Images</a>
-                <a id="doneupload" href="/cgi-bin/koha/tools/tools-home.pl">Return to Tools</a>
+				<!-- TMPL_IF name = "borrowernumber" -->
+					<a id="member" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR name = "borrowernumber" -->">Return to Patron Detail</a>
+				<!-- TMPL_ELSE -->
+					<a id="uploadmore" href="/cgi-bin/koha/tools/picture-upload.pl">Upload More Images</a>
+					<a id="doneupload" href="/cgi-bin/koha/tools/tools-home.pl">Return to Tools</a>
+            	<!-- /TMPL_IF -->
             </div>
 <!-- TMPL_ELSE -->
     <div class="yui-b">
@@ -78,12 +88,13 @@
                         <!-- TMPL_ELSIF name="OPNIMG" --><li><b>Cannot open <!-- TMPL_VAR NAME="OPNIMG" --> to read.<br />Please verify that it exists.</b></li>
                         <!-- TMPL_ELSIF name="DELERR" --><li><b>Unrecognized or missing field delimeter.<br />Please verify that you are using either a single quote or a tab.</b></li>
                         <!-- TMPL_ELSIF name="UZIPFAIL" --><li><b><!-- TMPL_VAR name="UZIPFAIL" --> failed to unpack.<br />Please verify the integrity of the zip file and retry.</b></li>
-                        <!-- TMPL_ELSE --><li><b>An unknown error has occurred.<br />Please review the error log for more details.</b></li><!-- /TMPL_IF -->
+                        <!-- TMPL_ELSE --><li><b><!-- TMPL_VAR name ="CORERR" --> An unknown error has occurred.<br />Please review the error log for more details.</b></li><!-- /TMPL_IF -->
                     <!-- /TMPL_LOOP -->
                 </div>
                 <!-- /TMPL_IF -->
 	        <form method="post" action="/cgi-bin/koha/tools/picture-upload.pl" enctype="multipart/form-data">
 	            <fieldset class="brief">
+			 <div class="hint"><b>NOTE:</b> Only PNG, GIF, JPEG, XPM formats are supported.</div>
                         <ol class="radio">
                             <li class="radio">
                                 <label for="zipfile"><input type="radio" id="zipfile" name="filetype" value="zip" checked="checked" /> zip file</label></li>

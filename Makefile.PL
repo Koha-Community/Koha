@@ -548,6 +548,7 @@ WriteMakefile(
                             'Date::Manip'                      => 5.44,
                             'Digest::MD5'                      => 2.36,
                             'File::Temp'                       => 0.16,
+							'GD'								=> 2.34, #optional
                             'GD::Barcode::UPCE'                => 1.1,
                             'Getopt::Long'                     => 2.35,
                             'Getopt::Std'                      => 1.05,
@@ -555,7 +556,6 @@ WriteMakefile(
                             'HTML::Scrubber'                   => 0.08,
                             'HTTP::Cookies'                    => 1.39,
                             'HTTP::Request::Common'            => 1.26,
-                            'Image::Magick'                    => 6.2, # optional
                             'LWP::Simple'                      => 1.41,
                             'LWP::UserAgent'                   => 2.033,
                             'Lingua::Stem'                     => 0.82,

@@ -1783,7 +1783,7 @@ sub GetPatronImage {
     my ($cardnumber) = @_;
     warn "Cardnumber passed to GetPatronImage is $cardnumber" if $debug;
     my $dbh = C4::Context->dbh;
-    my $query = "SELECT mimetype, imagefile FROM patronimage WHERE cardnumber = ?;";
+    my $query = 'SELECT mimetype, imagefile FROM patronimage WHERE cardnumber = ?';
     my $sth = $dbh->prepare($query);
     $sth->execute($cardnumber);
     my $imagedata = $sth->fetchrow_hashref;

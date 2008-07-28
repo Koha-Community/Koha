@@ -203,11 +203,11 @@ if (nodename =="barcodes[]"){
 	        <form method="post" action="/cgi-bin/koha/tools/picture-upload.pl" enctype="multipart/form-data">
                 <!-- TMPL_IF NAME="picture" -->
                     <fieldset class="brief"><legend>Manage Patron Image</legend>
-                        <div class="hint">To update the image for <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="surname" -->, enter the name of the new image file to upload and click 'Upload.' <br />Click the 'Delete' button to remove the current image.</div>
+                        <div class="hint">To update the image for <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="surname" -->, enter the name of the new image file to upload and click 'Upload.' <br />Click the 'Delete' button to remove the current image. <br /> Only PNG, GIF, JPEG, XPM formats are supported.</div>
                 <!-- /TMPL_IF -->
                 <!-- TMPL_UNLESS NAME="picture" -->
                     <fieldset class="brief"><legend>Upload Patron Image</legend>
-                        <div class="hint"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> does not currently have an image available. To import an image for <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="surname" -->, enter the name of an image file to upload.</div>
+                        <div class="hint"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> does not currently have an image available. To import an image for <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="surname" -->, enter the name of an image file to upload. <br /> Only PNG, JPEG, XPM formats are supported.</div>
                 <!-- /TMPL_UNLESS -->
 		    <input type="hidden" id="image" name="filetype" value="image" />
 		    <input type="hidden" id="cardnumber" name="cardnumber" value="<!-- TMPL_VAR NAME="cardnumber" -->" />

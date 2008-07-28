@@ -78,6 +78,7 @@ Data::ICal
 Date::Manip
 Digest::MD5
 File::Temp
+GD
 GD::Barcode::UPCE
 Getopt::Long
 Getopt::Std
@@ -85,7 +86,6 @@ HTML::Template::Pro
 HTTP::Cookies
 HTTP::Request::Common
 HTML::Scrubber
-Image::Magick
 LWP::Simple
 LWP::UserAgent
 Lingua::Stem
