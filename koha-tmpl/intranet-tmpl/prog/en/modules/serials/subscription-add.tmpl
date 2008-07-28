@@ -939,7 +939,7 @@ window.onload = irregular_order();
            
         </li>
         <li>
-            <label for="periodicity">Frequency: (*)</label>
+            <label for="periodicity" class="required">Frequency:</label>
             
                 <select name="periodicity" size="1" id="periodicity" onchange="javascript:document.getElementsByName('manualhist')[0].checked=(this.value==1); num_pattern();">
                 <option value="" selected="selected">-- please choose --</option>
@@ -1026,7 +1026,7 @@ window.onload = irregular_order();
                 <!-- TMPL_ELSE -->
                     <option value="11">1/2 years</option>
                 <!-- /TMPL_IF -->
-                </select></li>
+                </select> <span class="required">Required</span></li>
 				<li><label for="manuallist"> Manual history:</label> <input type="checkbox" name="manualhist" id="manuallist" value="1" /></li>
         <li>
            <label for="numberpattern"> Numbering pattern:</label>
@@ -1079,7 +1079,7 @@ window.onload = irregular_order();
                 <li id="irregularity"></li>
    	           <li id="displayexample"></li>
         <li>
-           <label for="startdate"> Subscription start date: (*)</label>
+           <label for="startdate" class="required"> Subscription start date:</label>
             
                 <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="button1" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />
                 <input type="text" name="startdate" value="<!-- TMPL_VAR name="startdate" -->" size="13" maxlength="10" id="beginning_date" style="border-width: 0px;" />
@@ -1100,10 +1100,10 @@ window.onload = irregular_order();
                         align        : "Tl"
                     });
                 </script>
-            
+            <span class="required">Required</span>
         </li>
         <li>
-            <label for="subtype">Subscription length:</label>
+            <label for="subtype" class="required">Subscription length:</label>
             
                 <select name="subtype" id="subtype">
                     <!-- TMPL_LOOP NAME="subtype" -->
@@ -1116,8 +1116,8 @@ window.onload = irregular_order();
                         </option>
                     <!-- /TMPL_LOOP -->
                 </select>
-                <input type="text" name="sublength" value="<!-- TMPL_VAR name="sublength" -->" size="3" onkeypress="return check_input(event)" /> (*) (enter amount in numerals)
-            
+                <input type="text" name="sublength" value="<!-- TMPL_VAR name="sublength" -->" size="3" onkeypress="return check_input(event)" /> (enter amount in numerals)
+            <span class="required">Required</span>
         </li>
     <li><label for="numberingmethod">Numbering formula:</label> <input type="text" name="numberingmethod" id="numberingmethod" value="<!-- TMPL_VAR name="numberingmethod" -->" />
     </li>
