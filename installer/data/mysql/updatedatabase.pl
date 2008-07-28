@@ -1896,6 +1896,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.00.104";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("DELETE FROM systempreferences WHERE variable='noOPACHolds'");
+    print "Upgrade to $DBversion done (remove superseded 'noOPACHolds' system preference per bug 2413)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
