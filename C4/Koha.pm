@@ -889,42 +889,40 @@ SELECT lib,
 
 sub displayServers {
     my ( $position, $type ) = @_;
-    my $dbh    = C4::Context->dbh;
+    my $dbh = C4::Context->dbh;
 
     my $strsth = 'SELECT * FROM z3950servers';
     my @where_clauses;
     my @bind_params;
 
-    if ( $position ) {
-        push @bind_params, $position;
+    if ($position) {
+        push @bind_params,   $position;
         push @where_clauses, ' position = ? ';
     }
 
-    if ( $type ) {
-        push @bind_params, $type;
+    if ($type) {
+        push @bind_params,   $type;
         push @where_clauses, ' type = ? ';
     }
 
-    if ( @where_clauses ) {
+    # reassemble where clause from where clause pieces
+    if (@where_clauses) {
         $strsth .= ' WHERE ' . join( ' AND ', @where_clauses );
     }
 
     my $rq = $dbh->prepare($strsth);
-    $rq->execute( @bind_params );
+    $rq->execute(@bind_params);
     my @primaryserverloop;
 
     while ( my $data = $rq->fetchrow_hashref ) {
         push @primaryserverloop,
-          {
-            label => $data->{description},
-            id    => $data->{name},
-            name  => "server",
-            value => $data->{host} . ":"
-              . $data->{port} . "/"
-              . $data->{database},
-            encoding   => ($data->{encoding}?$data->{encoding}:"iso-5426"),
-            checked    => "checked",
-            icon       => $data->{icon},
+          { label    => $data->{description},
+            id       => $data->{name},
+            name     => "server",
+            value    => $data->{host} . ":" . $data->{port} . "/" . $data->{database},
+            encoding => ( $data->{encoding} ? $data->{encoding} : "iso-5426" ),
+            checked  => "checked",
+            icon     => $data->{icon},
             zed        => $data->{type} eq 'zed',
             opensearch => $data->{type} eq 'opensearch'
           };
