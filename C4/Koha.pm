@@ -890,11 +890,22 @@ SELECT lib,
 sub displayServers {
     my ( $position, $type ) = @_;
     my $dbh    = C4::Context->dbh;
+
     my $strsth = "SELECT * FROM z3950servers where 1";
-    $strsth .= " AND position=\"$position\"" if ($position);
-    $strsth .= " AND type=\"$type\""         if ($type);
+    my @bind_params;
+
+    if ( $position ) {
+        push @bind_params, $position;
+        $strsth .= ' AND position = ? ';
+    }
+
+    if ( $type ) {
+        push @bind_params, $type;
+        $strsth .= ' AND type = ? ';
+    }
+
     my $rq = $dbh->prepare($strsth);
-    $rq->execute;
+    $rq->execute( @bind_params );
     my @primaryserverloop;
 
     while ( my $data = $rq->fetchrow_hashref ) {
