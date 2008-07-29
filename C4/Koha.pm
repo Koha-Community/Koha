@@ -914,15 +914,6 @@ sub displayServers {
     my @primaryserverloop;
 
     while ( my $data = $rq->fetchrow_hashref ) {
-        my %cell;
-        $cell{label} = $data->{'description'};
-        $cell{id}    = $data->{'name'};
-        $cell{value} =
-            $data->{host}
-          . ( $data->{port} ? ":" . $data->{port} : "" ) . "/"
-          . $data->{database}
-          if ( $data->{host} );
-        $cell{checked} = $data->{checked};
         push @primaryserverloop,
           {
             label => $data->{description},
