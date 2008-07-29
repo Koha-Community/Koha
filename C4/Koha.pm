@@ -887,6 +887,37 @@ SELECT lib,
     return \%notforloan_label_of;
 }
 
+=head2 displayServers
+
+=over 4
+
+my $servers = displayServers();
+
+my $servers = displayServers( $position );
+
+my $servers = displayServers( $position, $type );
+
+=back
+
+displayServers returns a listref of hashrefs, each containing
+information about available z3950 servers. Each hashref has a format
+like:
+
+    {
+      'checked'    => 'checked',
+      'encoding'   => 'MARC-8'
+      'icon'       => undef,
+      'id'         => 'LIBRARY OF CONGRESS',
+      'label'      => '',
+      'name'       => 'server',
+      'opensearch' => '',
+      'value'      => 'z3950.loc.gov:7090/',
+      'zed'        => 1,
+    },
+
+
+=cut
+
 sub displayServers {
     my ( $position, $type ) = @_;
     my $dbh = C4::Context->dbh;
