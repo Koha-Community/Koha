@@ -891,17 +891,22 @@ sub displayServers {
     my ( $position, $type ) = @_;
     my $dbh    = C4::Context->dbh;
 
-    my $strsth = "SELECT * FROM z3950servers where 1";
+    my $strsth = 'SELECT * FROM z3950servers';
+    my @where_clauses;
     my @bind_params;
 
     if ( $position ) {
         push @bind_params, $position;
-        $strsth .= ' AND position = ? ';
+        push @where_clauses, ' position = ? ';
     }
 
     if ( $type ) {
         push @bind_params, $type;
-        $strsth .= ' AND type = ? ';
+        push @where_clauses, ' type = ? ';
+    }
+
+    if ( @where_clauses ) {
+        $strsth .= ' WHERE ' . join( ' AND ', @where_clauses );
     }
 
     my $rq = $dbh->prepare($strsth);
