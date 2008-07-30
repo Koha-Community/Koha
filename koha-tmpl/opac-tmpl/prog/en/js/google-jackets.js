@@ -40,10 +40,12 @@ KOHA.Google = {
             $("#"+book.bib_key).each(function() {
                 var a = document.createElement("a");
                 a.href = book.info_url;
-                var img = document.createElement("img");
-                img.src = book.thumbnail_url;
-                a.appendChild(img);
-                $(this).append(a);
+	            var img = document.createElement("img");
+				if(typeof(book.thumbnail_url) != "undefined"){
+	                img.src = book.thumbnail_url;
+		            a.appendChild(img);
+	                $(this).append(a);
+				}
             });
         }
     }
