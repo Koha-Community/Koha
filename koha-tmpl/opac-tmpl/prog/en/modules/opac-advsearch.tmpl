@@ -8,9 +8,8 @@
 <!-- TMPL_INCLUDE name="masthead.inc" -->
 
 <form action="/cgi-bin/koha/opac-search.pl" method="get">
-	<div class="yui-gc">
-<div class="yui-u first">
-    <!-- TMPL_IF NAME="if_expanded_options_actually_worked" -->
+	<div class="yui-g">
+<!-- TMPL_IF NAME="if_expanded_options_actually_worked" -->
        <div id="databases" class="container"> <!-- TMPL_IF NAME="outer_servers_loop" -->
             <!-- DATABASES -->
             
@@ -189,19 +188,23 @@
     <!-- /TMPL_LOOP -->
 
     </fieldset></div>
+	</div>
+	<div class="yui-g">
 <!-- /BOOLEAN SEARCH OPTIONS -->
     <div id="advsearch-itemtype" class="container">
-    <h3>Limit type to: match any of the following:</h3>
+	<fieldset>
+    <legend>Limit type to: match any of the following:</legend>
     <table>
         <tr>
       <!--TMPL_LOOP Name="itemtypeloop"-->
-        <td><input type="checkbox" id="<!-- TMPL_VAR NAME="ccl" -->-<!--TMPL_VAR Name="number" -->" name="limit" value="mc-<!-- TMPL_VAR NAME="ccl" -->:<!--TMPL_VAR Name="code" -->"/><!-- TMPL_IF name="imageurl"--><!-- TMPL_IF NAME="imageurl" --><img border="0" src="<!--TMPL_VAR Name="imageurl" -->" alt="<!--TMPL_VAR Name="description" -->" /><!-- /TMPL_IF --><!-- /TMPL_IF -->&nbsp;
-        <!--TMPL_VAR Name="description" --></td>
+        <td><input type="checkbox" id="<!-- TMPL_VAR NAME="ccl" -->-<!--TMPL_VAR Name="number" -->" name="limit" value="mc-<!-- TMPL_VAR NAME="ccl" -->:<!--TMPL_VAR Name="code" -->"/><label for="<!-- TMPL_VAR NAME="ccl" -->-<!--TMPL_VAR Name="number" -->"><!-- TMPL_IF name="imageurl"--><!-- TMPL_IF NAME="imageurl" --><img border="0" src="<!--TMPL_VAR Name="imageurl" -->" alt="<!--TMPL_VAR Name="description" -->" /><!-- /TMPL_IF --><!-- /TMPL_IF -->&nbsp;
+        <!--TMPL_VAR Name="description" --></label></td>
         <!-- TMPL_UNLESS name="count5" --></tr><tr><!-- /TMPL_UNLESS -->
       <!--/TMPL_LOOP-->
 	  <!-- FIXME: for validation, avoid generating emtpy row -->
 		</tr>
     </table>
+	</fieldset>
     </div>
 <!-- TMPL_IF NAME="expanded_options" -->
     <!-- BASIC LIMITS -->
@@ -210,8 +213,8 @@
             <legend>Limit type to: match any of the following</legend>
             <table class="itemtypes">
                 <tr>
-                    <td><input type="checkbox" id="mc-bks" name="limit" value="mc:t"/><label for="mc-bks" title="Books, Pamphlets, Technical reports, Manuscripts, Legal papers, Theses and dissertations"><img border="0" src="/intranet-tmpl/prog/en/images/AF.gif" alt="Books" />Books</label></td>
-                    <td><input type="checkbox" id="mc-vis" name="limit" value="mc:v"/><label for="mc-vis" title="Motion pictures, Videorecordings, Filmstrips, Slides, Transparencies, Photos, Cards, Charts, Drawings" /><img border="0" src="/intranet-tmpl/prog/en/images/AV Aids.gif" alt="Visual Materials" />Visual Materials</label></td>
+                    <td><input type="checkbox" id="mc-bks" name="limit" value="mc:t" /><label for="mc-bks" title="Books, Pamphlets, Technical reports, Manuscripts, Legal papers, Theses and dissertations"><img border="0" src="/intranet-tmpl/prog/en/images/AF.gif" alt="Books" />Books</label></td>
+                    <td><input type="checkbox" id="mc-vis" name="limit" value="mc:v" /><label for="mc-vis" title="Motion pictures, Videorecordings, Filmstrips, Slides, Transparencies, Photos, Cards, Charts, Drawings"><img border="0" src="/intranet-tmpl/prog/en/images/AV Aids.gif" alt="Visual Materials" />Visual Materials</label></td>
                     <td><input type="checkbox" id="mc-sr" name="limit" value="mc-rtype:i" /><label for="mc-sr" title="Spoken, Books on CD and Cassette"><img border="0" src="/intranet-tmpl/prog/en/images/AF.gif" alt="Books on Tape" />Books on Tape</label></td>
                 </tr>
                 <tr>
@@ -295,13 +298,16 @@
     <!-- TMPL_INCLUDE NAME="subtypes_unimarc.inc" --></div>
     <!--/TMPL_IF-->
 <!--/TMPL_IF-->
+        
 </div>
-        <div class="yui-u">
+<div class="yui-g">
+
+<div class="yui-u first">
 <!-- AVAILABILITY LIMITS -->
 	<!-- TMPL_UNLESS NAME="singleBranchMode" -->
     <div id="location" class="container"><fieldset><legend>Location and availability: </legend>
         
-        <select name="limit" id="branchloop" style="width: 20em;">
+        <select name="limit" id="branchloop">
         <option value="">All libraries</option>
         <!-- TMPL_LOOP NAME="branchloop" -->
         <!--TMPL_IF Name="selected"-->
@@ -317,10 +323,11 @@
     </fieldset></div>
 	<!-- /TMPL_UNLESS -->
 <!-- /AVAILABILITY LIMITS -->
-
+</div>
+<div class="yui-u">
 <!-- RANK LIMITS -->
     <div id="sortby" class="container"><fieldset><legend>Sort by: </legend>
-        <select id="sort_by" name="sort_by" style="width:20em;">
+        <select id="sort_by" name="sort_by">
 <!--TMPL_INCLUDE NAME="resort_form.inc" -->
 </select></fieldset></div>
 <!-- RANK LIMITS -->
@@ -329,7 +336,7 @@
 
 <div class="yui-g" style="text-align: center;"><div class="container"><!-- SEARCH BUTTONS -->
 
-    <input class="submit" type="submit" accesskey="s" name="do" title="Search" value="OK" />
+    <input class="submit" type="submit" accesskey="s" name="do" title="Search" value="Search" />
     <!-- TMPL_IF NAME="expanded_options" -->
         <a href="/cgi-bin/koha/opac-search.pl?expanded_options=0">[Fewer Options]</a>
     <!-- TMPL_ELSE -->
