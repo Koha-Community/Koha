@@ -1884,8 +1884,10 @@ if ( C4::Context->preference('Version') < TransformToNum($DBversion) ) {
 	$dbh->do('ALTER TABLE serialitems MODIFY `serialid` int(11) NOT NULL AFTER itemnumber' );
 	$dbh->do('ALTER TABLE serialitems DROP KEY serialididx' );
 	$dbh->do('ALTER TABLE serialitems ADD CONSTRAINT UNIQUE KEY serialitemsidx (itemnumber)' );
+	# before setting constraint, delete any unvalid data
+	$dbh->do('DELETE from serialitems WHERE serialid not in (SELECT serial.serialid FROM serial)');
 	$dbh->do('ALTER TABLE serialitems ADD CONSTRAINT serialitems_sfk_1 FOREIGN KEY (serialid) REFERENCES serial (serialid) ON DELETE CASCADE ON UPDATE CASCADE' );
-    print "Upgrade to $DBversion done (Updating serialitems table to allow for mulitple items per serial fixing kohabug 2380)\n";
+    print "Upgrade to $DBversion done (Updating serialitems table to allow for multiple items per serial fixing kohabug 2380)\n";
     SetVersion($DBversion);
 }
 
