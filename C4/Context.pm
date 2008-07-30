@@ -254,14 +254,21 @@ sub db_scheme2dbi {
 }
 
 sub import {
-    my $package = shift;
-    my $conf_fname = shift;        # Config file name
+    # Create the default context ($C4::Context::Context)
+    # the first time the module is called
+    # (a config file can be optionaly passed)
 
-    # Create a new context from the given config file name, if
-    # any, then set it as the current context.
-    $context = new C4::Context($conf_fname) unless $context;
-    return undef if !defined($context);
-    $context->set_context;
+    # default context allready exists? 
+    return if $context;
+
+    # no ? so load it!
+    my ($pkg,$config_file) = @_ ;
+    my $new_ctx = __PACKAGE__->new($config_file);
+    return unless $new_ctx;
+
+    # if successfully loaded, use it by default
+    $new_ctx->set_context;
+    1;
 }
 
 =item new
