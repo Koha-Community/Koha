@@ -469,6 +469,7 @@ sub BatchCommitBibRecords {
         }
         if ($rowref->{'status'} eq 'error' or $rowref->{'status'} eq 'imported') {
             $num_ignored++;
+            next;
         }
 
         my $marc_record = MARC::Record->new_from_usmarc($rowref->{'marc'});
@@ -627,6 +628,7 @@ sub BatchRevertBibRecords {
     while (my $rowref = $sth->fetchrow_hashref) {
         if ($rowref->{'status'} eq 'error' or $rowref->{'status'} eq 'reverted') {
             $num_ignored++;
+            next;
         }
 
         my $bib_result = _get_revert_action($overlay_action, $rowref->{'overlay_status'}, $rowref->{'status'});
