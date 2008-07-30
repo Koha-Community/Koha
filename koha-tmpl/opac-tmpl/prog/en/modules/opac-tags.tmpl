@@ -1,5 +1,43 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo; Tags
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" DEFAULT="Koha Online" --> Catalog &rsaquo; Tags
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<style type="text/css">
+	#tagcloud    {background-color: #F3F3F3; text-align: justify;}
+	.tag a       {text-decoration: none;}
+	.tag a:hover {text-decoration: underline;}
+	.tag         {display: block; padding-left: 1em;}
+	.tagcount    {display: none;}
+	.cloudweight {display: none;}
+	.tagweight {
+		display: none;
+		position: relative;
+		bottom: 0.4em;
+		color: red;
+		font-size: 12px;
+	}
+</style>
+<script type="text/javascript">
+	var fontsizes = new Array (12,14,16,18,20,22,24,26,28,30);
+	var fontcount = fontsizes.length;
+	var maxcloudweight = 1;
+	$(document).ready(function() {
+		// $('#tagcloud').css('background-color','lightgrey');
+		// $('#tagcloud .tag').css('border','1px solid black');
+		$('#tagcloud .tag').each(function() {
+			if (maxcloudweight < this.title) { maxcloudweight = this.title; }
+			// have to run through the set of tags once to get the max: cannot be combined w/ 2nd pass
+		});
+		$('#tagcloud .tag').each(function(i) {
+			var pos = this.id;
+			var weight = this.title;	// "cloudweight"
+			weight = (! weight) ? 1 : (weight > maxcloudweight) ? maxcloudweight : weight ;
+			var index = Math.round(fontcount * weight/maxcloudweight) - 1;
+			index  = (! index ) ? 0 : ( index > fontcount     ) ? fontcount      : index  ;
+			var newsize = fontsizes[index];
+			// alert(pos+ " (" +i+ ") weight = " +weight+ " of " +maxcloudweight+ ", fontsize[" +index+ " of " +fontcount+ "] = " +newsize);
+			$('#' + pos).css({"font-size":(newsize + 'pt'), display:"inline"});
+		});
+	});
+</script>
 </head>
 <body>
 <div id="doc3" class="yui-t1">
@@ -71,12 +109,15 @@
 		</p>
 		</form>
 	</div>
-	<!-- TMPL_IF NAME="TAGLOOP" --> <!-- TMPL_VAR NAME="TAGLOOP_COUNT" --> Results:<ul>
+	<!-- TMPL_IF NAME="TAGLOOP" --> <!-- TMPL_VAR NAME="TAGLOOP_COUNT" --> Results:<div id="tagcloud">
 	<!-- TMPL_LOOP NAME="TAGLOOP" -->
-	<li><a href="/cgi-bin/koha/opac-search.pl?tag=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->&amp;q=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->">
-		<!-- TMPL_VAR NAME="term" ESCAPE="HTML" --></a> (<!-- TMPL_VAR NAME="weight_total" -->) <!-- (<!-- TMPL_VAR NAME="cloudweight" -->) --> </li>
+	<span class="tag" id="tag<!-- TMPL_VAR NAME="__counter__" -->" title="<!-- TMPL_VAR NAME="cloudweight" -->">
+		<a href="/cgi-bin/koha/opac-search.pl?tag=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->&amp;q=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->">
+		<!-- TMPL_VAR NAME="term" ESCAPE="HTML" --></a>
+			<span class="tagweight"><!-- TMPL_VAR NAME="weight_total" --></span>
+	</span>
 	<!-- /TMPL_LOOP -->
-	</ul>
+	</div>
 	<!-- /TMPL_IF -->
 </div>
 </div>

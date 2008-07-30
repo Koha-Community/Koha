@@ -199,13 +199,14 @@ if ($add_op) {
 	$limit = $query->param('limit') || $hardmax;
 	($limit =~ /^\d+$/ and $limit <= $hardmax) or $limit = $hardmax;
 	$template->param(limit => $limit);
+	my $arghash = {approved=>1, limit=>$limit, 'sort'=>'-weight_total'};
+	# ($openadds) or $arghash->{approved} = 1;
 	if ($arg = $query->param('tag')) {
-		$results = get_approval_rows({term => $arg, approved=>1, limit=>$limit, 'sort'=>'-weight_total'});
+		$arghash->{term} = $arg;
 	} elsif ($arg = $query->param('biblionumber')) {
-		$results = get_approval_rows({biblionumber => $arg, approved=>1, limit=>$limit, 'sort'=>'-weight_total'});
-	} else {
-		$results = get_approval_rows({limit=>$limit, approved=>1, 'sort'=>'-weight_total'});
+		$arghash->{biblionumber} = $arg;
 	}
+	$results = get_approval_rows($arghash);
 
 	my $count = scalar @$results;
 	$template->param(TAGLOOP_COUNT => $count);
