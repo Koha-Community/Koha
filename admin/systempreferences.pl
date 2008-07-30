@@ -184,6 +184,7 @@ my %tabsysprefs;
     $tabsysprefs{AutoEmailOpacUser}="Patrons";
     $tabsysprefs{AutoEmailPrimaryAddress}="Patrons";
     $tabsysprefs{EnhancedMessagingPreferences}="Patrons";
+    $tabsysprefs{'SMSSendDriver'}             = 'Patrons';
 
 # I18N/L10N
     $tabsysprefs{dateformat}="I18N/L10N";

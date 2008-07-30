@@ -210,3 +210,5 @@ INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('AllowHoldsOnDamagedItems', '1', '', 'Allow hold requests to be placed on damaged items', 'YesNo');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('OpacSuppression', '0', '', 'Turn ON the OPAC Suppression feature, requires further setup, ask your system administrator for details', 'YesNo');
 -- FIXME: add FrameworksLoaded, noOPACUserLogin, ReadingHistory ?
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('SMSSendDriver','','','Sets which SMS::Send driver is used to send SMS messages.','free');
+

@@ -1903,6 +1903,22 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.00.00.105';
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+
+    # it is possible that this syspref is already defined since the feature was added some time ago.
+    unless ( $dbh->do(q(SELECT variable FROM systempreferences WHERE variable = 'SMSSendDriver')) ) {
+        $dbh->do(<<'END_SQL');
+INSERT INTO `systempreferences`
+  (variable,value,explanation,options,type)
+VALUES
+('SMSSendDriver','','Sets which SMS::Send driver is used to send SMS messages.','','free')
+END_SQL
+    }
+    print "Upgrade to $DBversion done (added SMSSendDriver system preference)\n";
+    SetVersion($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
