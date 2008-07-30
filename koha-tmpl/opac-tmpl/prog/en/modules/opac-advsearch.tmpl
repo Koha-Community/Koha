@@ -220,6 +220,7 @@
     <div id="advsearch-itemtype" class="container">
 	<fieldset>
     <legend>Limit to any of the following:</legend>
+    <legend>Limit type to: match any of the following:</legend>
     <table>
         <tr>
       <!--TMPL_LOOP Name="itemtypeloop"-->
@@ -233,6 +234,28 @@
     </div>
 <!-- TMPL_IF NAME="expanded_options" -->
     <!--TMPL_IF Name="usmarc"-->
+        <fieldset>
+            <legend>Limit type to: match any of the following</legend>
+            <table class="itemtypes">
+                <tr>
+                    <td><input type="checkbox" id="mc-bks" name="limit" value="mc:t" /><label for="mc-bks" title="Books, Pamphlets, Technical reports, Manuscripts, Legal papers, Theses and dissertations"><img border="0" src="/intranet-tmpl/prog/en/images/AF.gif" alt="Books" />Books</label></td>
+                    <td><input type="checkbox" id="mc-vis" name="limit" value="mc:v" /><label for="mc-vis" title="Motion pictures, Videorecordings, Filmstrips, Slides, Transparencies, Photos, Cards, Charts, Drawings"><img border="0" src="/intranet-tmpl/prog/en/images/AV Aids.gif" alt="Visual Materials" />Visual Materials</label></td>
+                    <td><input type="checkbox" id="mc-sr" name="limit" value="mc-rtype:i" /><label for="mc-sr" title="Spoken, Books on CD and Cassette"><img border="0" src="/intranet-tmpl/prog/en/images/AF.gif" alt="Books on Tape" />Books on Tape</label></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" id="mc-cf" name="limit" value="mc:c" /><label for="mc-cf" title="Computer files, Data, Software"><img border="0" src="/intranet-tmpl/prog/en/images/CD-ROM software.gif" alt="Computer Files" />Computer Files</label></td>
+                    <td><input type="checkbox" id="mc-lh" name="limit" value="mc-collection:LH" /><label for="mc-lh" title="Local History Materials"><img border="0" src="/intranet-tmpl/prog/en/images/Local history.gif" alt="Local History Materials" />Local History Materials</label></td>
+                    <td><input type="checkbox" id="mc-map" name="limit" value="mc:a" /><label for="mc-map" title="Maps, Globes"><img border="0" src="/intranet-tmpl/prog/en/images/PF.gif " alt="Maps" />Maps</label></td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" id="mc-mus" name="limit" value="mc-rtype:j" /><label for="mc-mus" title="Music"><img border="0" src="/intranet-tmpl/prog/en/images/CDM.gif" alt="Music" />Music</label></td>
+                    <td><input type="checkbox" id="mc-kit" name="limit" value="mc-rtype:o" /><label for="mc-kit" title="Kits"><img border="0" src="/intranet-tmpl/prog/en/images/KIT.gif" alt="Kits" />Kits</label></td>
+                    <td><input type="checkbox" id="mc-ref" name="limit" value="mc-collection:REF" /><label for="mc-ref" title="Reference"><img border="0" src="/intranet-tmpl/prog/en/images/REF.gif" alt="Reference" />Reference</label></td></tr>
+                
+                </table>
+        </fieldset>
+        <!-- /BASIC LIMITS -->
+
         <!-- SUBTYPE LIMITS -->
             <div id="subtypes" class="container"><fieldset>
             <legend>Subtype limits</legend><select name="limit" class="subtype">
