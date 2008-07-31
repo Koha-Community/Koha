@@ -85,8 +85,8 @@
     <span class="results_summary"><span class="label">Authors:</span>
                 <!-- TMPL_LOOP NAME="MARCAUTHORS" -->
                 <!-- TMPL_LOOP NAME="MARCAUTHOR_SUBFIELDS_LOOP" --><!-- TMPL_VAR NAME="separator" --><a title="‡<!-- TMPL_VAR NAME=code --> <!-- TMPL_VAR NAME=value -->" href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_LOOP NAME=link_loop --><!-- TMPL_VAR NAME=operator --><!-- TMPL_VAR NAME='limit' -->:<!-- TMPL_VAR NAME=link --><!-- /TMPL_LOOP -->"><!-- TMPL_VAR NAME="value" --></a><!-- /TMPL_LOOP --> 
-        <TMPL_UNLESS NAME="__last__">|
-</TMPL_UNLESS>
+        <!-- TMPL_UNLESS NAME="__last__" -->|
+<!-- /TMPL_UNLESS -->
                 <!-- /TMPL_LOOP -->
     </span>
     <!-- /TMPL_IF -->
@@ -181,7 +181,7 @@
         <!-- TMPL_IF NAME="authorised_value_images" -->
         <div class="authorised_value_images">
           <!-- TMPL_LOOP NAME="authorised_value_images" -->
-          <img src="<!-- TMPL_VAR name="imageurl" -->" alt="<!-- TMPL_VAR name="label" -->" title="<!-- TMPL_VAR name="label" -->">
+          <img src="<!-- TMPL_VAR name="imageurl" -->" alt="<!-- TMPL_VAR name="label" -->" title="<!-- TMPL_VAR name="label" -->" />
           <!-- /TMPL_LOOP -->
         </div>
         <!-- /TMPL_IF -->
@@ -317,7 +317,7 @@
         <td> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser">
 
     <!-- TMPL_IF NAME="AmazonContent" -->
-    <img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn"-->.01._AA75_PU_PU-5_.jpg" alt="Cover Image" /><!-- /TMPL_IF -->
+    <img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn"-->.01._AA75_PU_PU-5_.jpg" alt="" /><!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="GoogleJackets" --><div style="block" title="<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" id="<!-- TMPL_VAR NAME="isbn" -->" class="gbs-thumbnail"></div><!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="BakerTaylorEnabled" --><!-- TMPL_IF NAME="isbn" -->
     <img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="isbn" -->" /><!-- /TMPL_IF --><!-- /TMPL_IF -->
@@ -329,7 +329,7 @@
        <td> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser">
 
     <!-- TMPL_IF NAME="AmazonContent" -->
-    <img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn"-->.01._AA75_PU_PU-5_.jpg" alt="Cover Image" /><!-- /TMPL_IF -->
+    <img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn"-->.01._AA75_PU_PU-5_.jpg" alt="" /><!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="GoogleJackets" --><div style="block" title="<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" id="<!-- TMPL_VAR NAME="isbn" -->" class="gbs-thumbnail"></div><!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="BakerTaylorEnabled" --><!-- TMPL_IF NAME="isbn" -->
     <img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="isbn" -->" /><!-- /TMPL_IF --><!-- /TMPL_IF -->
