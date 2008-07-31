@@ -47,12 +47,12 @@ my $letter=((scalar(@letters)>1) || ($letters[0]->{name}||$letters[0]->{code}));
 my ($count2, @missingissues) = GetLateOrMissingIssues($supplierid,$serialid,$order) if $supplierid;
 
 my $CGIsupplier=CGI::scrolling_list( -name     => 'supplierid',
+			-id        => 'supplierid',
 			-values   => \@select_supplier,
 			-default  => $supplierid,
 			-labels   => \%supplierlist,
 			-size     => 1,
-			-multiple => 0 
-            -onChange => 'onchange="submit();"');
+			-multiple => 0 );
 
 my ($singlesupplier,@supplierinfo);
 if($supplierid){

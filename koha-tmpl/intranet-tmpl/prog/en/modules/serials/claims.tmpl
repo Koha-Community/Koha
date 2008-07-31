@@ -1,23 +1,25 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
     <title>Koha &rsaquo; Serials &rsaquo; Claims</title>
     <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-    <script type="text/javascript">
-<!-- TMPL_UNLESS NAME="preview" -->
-    function Setorder(myorder){
-        if (document.claims.elements['order'].value == myorder){
-        document.claims.elements['order'].value=myorder+' desc';
-        } else {
-        document.claims.elements['order'].value=myorder;
-        }
-        document.claims.elements['op'].value="";
-        document.claims.submit();
-    }
-<!-- /TMPL_UNLESS -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+	 $(document).ready(function() {
+		<!-- TMPL_UNLESS NAME="preview" -->$("#claimst").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
+			dateFormat: 'uk',<!-- /TMPL_IF -->
+			headers: { 0: { sorter: false },1:{sorter:false},2: { sorter: false },3:{sorter:false},6:{sorter:false}}
+		});<!-- /TMPL_UNLESS -->
+	    $('#supplierid').change(function() {
+    	    $('#claims').submit();
+	    });
+	 });
+
 		function popup(supplierid,serialid){
 			window.open('claims.pl?supplierid='+ supplierid +'&amp;serialid='+ serialid +'&amp;op=preview' ,'popup', 'width=600,height=400,toolbar=no,scrollbars=yes');
 		}
-		//-->
-    </script>
+//]]>
+</script>
 </head>
 <body>
     <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -35,44 +37,40 @@
 	<div id="yui-main">
 	<div class="yui-b">
 
-	<!-- TMPL_UNLESS NAME="letter" --><div class="dialog alert">No claims notice defined. Please Define One</div><!-- /TMPL_UNLESS -->
     <h1>Claims</h1>
-    <form name="claims" action="claims.pl" method="post">
-    <p>
+
+<!-- TMPL_IF NAME="letter" --><!-- TMPL_UNLESS NAME="missingissues" --><!-- TMPL_IF NAME="supplierid" --> <div class="dialog alert">No missing issues found.</div><!-- TMPL_ELSE --><div class="dialog message">Please choose a supplier.</div><!-- /TMPL_IF --><!-- /TMPL_UNLESS --><!-- /TMPL_IF -->
+	
+	<!-- TMPL_UNLESS NAME="letter" --><div class="dialog alert">No claims notice defined. <a href="/cgi-bin/koha/tools/letter.pl">Please define one</a>.</div><!-- /TMPL_UNLESS -->
+    <form id="claims" name="claims" action="claims.pl" method="post">
+    <fieldset><label for="supplierid">View: </label>
         <!-- TMPL_VAR name="CGIsupplier" -->
         <input type="submit" value="OK" />
         <!-- TMPL_IF name="phone" -->Phone: <!-- TMPL_VAR name="phone" --><!-- /TMPL_IF -->
         <!-- TMPL_IF name="booksellerfax" -->Fax: <!-- TMPL_VAR name="booksellerfax" --><!-- /TMPL_IF -->
         <!-- TMPL_IF name="bookselleremail" --></p><p><a href="mailto:<!-- TMPL_VAR name="bookselleremail" -->"><!-- TMPL_VAR name="bookselleremail" --></a><!-- /TMPL_IF -->
-    </p>
-    <p>
-        <!-- TMPL_IF NAME="letter" -->
-            Select notice:
-            <select name="letter_code">
-                <!-- TMPL_LOOP name="letters" -->
-                    <option value="<!--TMPL_VAR Name="code"-->"><!--TMPL_VAR Name="name"--></option>
-                <!--/TMPL_LOOP-->
-            </select>
-        <!--/TMPL_IF-->
-    </p> 
+    </fieldset>
+</form>
+
+   <!-- TMPL_IF NAME="missingissues" -->	
+    <form action="claims.pl" method="post">
         <input type="hidden" name="order" value="<!--TMPL_VAR Name="order"-->" />
         <input type="hidden" name="op" value="" />
-        <!-- TMPL_IF NAME="missingissues" -->
             <h3>Missing Issues</h3>
-            <table>
-                <tr>
+            <table id="claimst">
+                <thead><tr>
                     <!--TMPL_IF NAME="letter"-->
                     <th>Claim</th>
                     <!--/TMPL_IF-->
                     <th>Supplier</th>
                     <th>Title</th>
                     <th>Issue number</th>
-                    <th>Status <a href="javascript:Setorder('status');">sort</a></th>
-                    <th>Since <a href="javascript:Setorder('planneddate');">sort</a></th>
-                    <th></th>
-                <th>Began Claim</th>
-                </tr>
-                <!-- TMPL_LOOP name="missingissues" -->
+                    <th>Status</th>
+                    <th>Since</th>
+                    <th>&nbsp;</th>
+                <th>Begin Claim</th>
+                </tr></thead>
+                <tbody><!-- TMPL_LOOP name="missingissues" -->
                     <tr>
                         <!--TMPL_IF NAME="letter" -->
                             <td>
@@ -83,7 +81,7 @@
                         <!-- TMPL_VAR name="name" -->
                         </td>
                         <td>
-                        <!-- TMPL_VAR name="title" -->
+                        <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->"><!-- TMPL_VAR name="title" --></a>
                         </td>
                         <td>
                         <!-- TMPL_VAR name="serialseq" -->
@@ -105,20 +103,23 @@
                             <a href="/cgi-bin/koha/serials/lateissues-excel.pl?supplierid=<!-- TMPL_VAR name="supplieri" -->&amp;serialid=<!-- TMPL_VAR name="serialid" -->&amp;op=claims">Export item data</a>
                         </td>
                     </tr>
-                <!-- /TMPL_LOOP -->
+                <!-- /TMPL_LOOP --></tbody>
             </table>
-        <!-- TMPL_ELSE -->
-            <p>Select a supplier</p>
-        <!-- /TMPL_IF -->
-
         <!-- TMPL_IF Name="singlesupplier"-->
             <input type="hidden" name="supplierid" value="<!--TMPL_VAR NAME="supplierid"-->" />
             <!-- <a href="claims.pl?supplierid=<!-- TMPL_VAR name="supplierid" -->&amp;op=preview" onclick="popup(<!-- TMPL_VAR name="supplierid" -->,''); return false" class="button">Supplier Group Claim Notice</a></p> -->
         <!-- /TMPL_IF -->
 
 <!--TMPL_IF Name="letter" -->
-                <input type="submit" name="submit" class="button" value="Send letter" />
+        <fieldset class="action"> <label for="letter_code">Select notice:</label>
+            <select name="letter_code" id="letter_code">
+                <!-- TMPL_LOOP name="letters" -->
+                    <option value="<!--TMPL_VAR Name="code"-->"><!--TMPL_VAR Name="name"--></option>
+                <!--/TMPL_LOOP-->
+            </select> <input type="submit" name="submit" class="button" value="Send letter" /></fieldset>
             <!--/TMPL_IF-->
+<!-- /TMPL_IF -->
+
         </form>
 <!-- TMPL_ELSE -->
 
@@ -181,7 +182,7 @@
         </table>
         <!-- /TMPL_IF -->
 
-<p class="noprint"><a href="javascript:window.print()">Print</a> &nbsp; <a href="javascript:window.close()">Close</a></p>
+<p class="noprint"><a href="#" onclick="window.print(); return false;">Print</a> &nbsp; <a href="#" class="close">Close</a></p>
 <!-- /TMPL_UNLESS -->
 
 </div>
