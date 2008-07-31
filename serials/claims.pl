@@ -88,5 +88,6 @@ $template->param(
         claimletter => $claimletter,
         singlesupplier => $singlesupplier,
         supplierloop => \@supplierinfo,
+        dateformat    => C4::Context->preference("dateformat"),
         );
 output_html_with_http_headers $input, $cookie, $template->output;
