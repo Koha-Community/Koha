@@ -582,6 +582,11 @@ sub add_biblios {
             is( $iteminfo[0], $biblionumber,     "biblionumber is $biblionumber" );
             is( $iteminfo[1], $biblioitemnumber, "biblioitemnumber is $biblioitemnumber" );
             ok( $iteminfo[2], "itemnumber is $iteminfo[2]" );
+        push @{ $self->{'items'} },
+          { biblionumber     => $iteminfo[0],
+            biblioitemnumber => $iteminfo[1],
+            itemnumber       => $iteminfo[2],
+          };
         }
         push @{$self->{'biblios'}}, $biblionumber;
     }
