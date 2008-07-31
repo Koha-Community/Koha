@@ -1,7 +1,9 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" DEFAULT="Koha Online" --> Catalog &rsaquo; Tags
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo; Tags
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <style type="text/css">
-	#tagcloud    {background-color: #F3F3F3; text-align: justify;}
+	fieldset { padding : .3em;margin:.3em 0;}
+	#tagcloud    {background-color: #F3F3F3; text-align: justify;padding:7px;}
 	.tag a       {text-decoration: none;}
 	.tag a:hover {text-decoration: underline;}
 	.tag         {display: block; padding-left: 1em;}
@@ -16,6 +18,7 @@
 	}
 </style>
 <script type="text/javascript">
+//<![CDATA[
 	var fontsizes = new Array (12,14,16,18,20,22,24,26,28,30);
 	var fontcount = fontsizes.length;
 	var maxcloudweight = 1;
@@ -34,13 +37,20 @@
 			index  = (! index ) ? 0 : ( index > fontcount     ) ? fontcount      : index  ;
 			var newsize = fontsizes[index];
 			// alert(pos+ " (" +i+ ") weight = " +weight+ " of " +maxcloudweight+ ", fontsize[" +index+ " of " +fontcount+ "] = " +newsize);
-			$('#' + pos).css({"font-size":(newsize + 'pt'), display:"inline"});
+			$('#' + pos).css({"font-size":(newsize + 'px'), display:"inline"});
 		});
+		$("#mytagst").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
+    dateFormat: 'uk',<!-- /TMPL_IF -->
+            widgets : ['zebra'],
+			headers: { 3: { sorter: false }},
+            sortList: [[2,0]]
+        });
 	});
+//]]>
 </script>
 </head>
 <body>
-<div id="doc3" class="yui-t1">
+<!-- TMPL_IF EXPR="OpacNav||loggedinusername" --><div id="doc3" class="yui-t1"><!-- TMPL_ELSE --><div id="doc3" class="yui-t7"><!-- /TMPL_IF -->
 <div id="bd">
 <!-- TMPL_INCLUDE NAME="masthead.inc" -->
 
@@ -49,7 +59,7 @@
 	<div class="container">
 	<!-- TMPL_IF NAME="ERRORS" -->
 	<!-- TMPL_LOOP NAME="ERRORS" -->
-		<div class="error">There was a problem with this operation:
+		<div class="dialog alert">There was a problem with this operation:
 		<!-- TMPL_IF NAME="tagsdisabled" -->Sorry, tags are not enabled on this system.
 		<!-- TMPL_ELSIF NAME="badparam" -->ERROR: illegal parameter <!-- TMPL_VAR NAME="badparam" -->
 		<!-- TMPL_ELSIF NAME="login"    -->ERROR: You must log in to complete that action.
@@ -67,10 +77,10 @@
 
 	<!-- TMPL_IF NAME="add_op" -->
 	  <!-- TMPL_IF NAME="added_count" -->
-		<h3><!-- TMPL_VAR NAME="added_count" --> tag(s) successfully added.</h3>
+		<div class="dialog message"><!-- TMPL_VAR NAME="added_count" --> <!-- TMPL_IF EXPR="added_count ==1" --> tag<!-- TMPL_ELSE -->tags<!-- /TMPL_IF --> successfully added.</div>
 	  <!-- /TMPL_IF -->
 	  <!-- TMPL_IF NAME="deleted_count" -->
-		<h3><!-- TMPL_VAR NAME="deleted_count" --> tag(s) successfully deleted.</h3>
+		<div class="dialog message"><!-- TMPL_VAR NAME="deleted_count" --><!-- TMPL_IF EXPR="deleted_count ==1" --> tag<!-- TMPL_ELSE -->tags<!-- /TMPL_IF --> successfully deleted.</div>
 	  <!-- /TMPL_IF -->
 	<!-- /TMPL_IF -->
 
@@ -78,38 +88,35 @@
 	<!-- TMPL_IF NAME="MY_TAGS" -->
 		<form method="post" action="opac-tags.pl">
 		<h2>My Tags</h2>
-		<table>
-		<tr><th>Term</th><th>Title</th><th>Date/Time Added</th><th>Delete</th>
-		</tr>
-	<!-- TMPL_LOOP NAME="MY_TAGS" -->
+		<table id="mytagst">
+		<thead><tr><th>Term</th><th>Title</th><th>Date Added</th><th>Delete</th>
+		</tr></thead>
+	<tbody><!-- TMPL_LOOP NAME="MY_TAGS" -->
 		<tr><td><a href="/cgi-bin/koha/opac-search.pl?tag=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->&amp;q=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->">
 				<!-- TMPL_VAR NAME="term" ESCAPE="HTML" --></a>
 			</td>
 			<td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
 				<!-- TMPL_VAR NAME="bib_summary" ESCAPE="HTML" --></a></td>
-			<td><!-- TMPL_VAR NAME="date_created_display" -->
-				<span class="time" style="background-color:lightgray;"><!-- TMPL_VAR NAME="time_created_display" --></span></td>
+			<td><!-- TMPL_VAR NAME="date_created_display" --></td>
 			<td><input type="submit" name="del<!-- TMPL_VAR NAME="tag_id" -->" value="Delete" /></td>
 		</tr>
-	<!-- /TMPL_LOOP -->
+	<!-- /TMPL_LOOP --></tbody>
 		</table>
 		</form>
-	<!-- TMPL_ELSE -->
-		<div class="msg">To see any of your own saved tags, first log in.</div>
 	<!-- /TMPL_IF -->
 	<!-- /TMPL_UNLESS -->
 
 	<h1>All Tags</h1>
-	<div id="action">
+	
 		<form method="get" action="opac-tags.pl">
-		<p>Show up to <input name="limit" style="text-align: right;" maxlength="4" size="4" value="<!-- TMPL_VAR NAME="limit" DEFAULT="100" -->" />
+		<fieldset>Show up to <input name="limit" style="text-align: right;" maxlength="4" size="4" value="<!-- TMPL_VAR NAME="limit" DEFAULT="100" -->" />
 			tags from other users.
 			<input type="hidden" name="hidemytags" value="1" />
-			<input type="submit" value="OK" />
-		</p>
+			<input type="submit" value="OK" /> <!-- TMPL_UNLESS NAME="MY_TAGS" --><a href="/cgi-bin/koha/opac-user.pl">Log in</a> to see your own saved tags.<!-- /TMPL_UNLESS --></fieldset>
 		</form>
-	</div>
-	<!-- TMPL_IF NAME="TAGLOOP" --> <!-- TMPL_VAR NAME="TAGLOOP_COUNT" --> Results:<div id="tagcloud">
+	
+	<!-- TMPL_IF NAME="TAGLOOP" -->
+	<div id="tagcloud">
 	<!-- TMPL_LOOP NAME="TAGLOOP" -->
 	<span class="tag" id="tag<!-- TMPL_VAR NAME="__counter__" -->" title="<!-- TMPL_VAR NAME="cloudweight" -->">
 		<a href="/cgi-bin/koha/opac-search.pl?tag=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->&amp;q=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->">
@@ -123,11 +130,12 @@
 </div>
 </div>
 </div>
-<div class="yui-b">
-<div class="container">
+<!-- TMPL_IF EXPR="OpacNav||loggedinusername" -->
+<div class="yui-b"><div class="container">
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
-<!-- TMPL_INCLUDE name="usermenu.inc" -->
-</div>
-</div>
+<!--TMPL_INCLUDE NAME="usermenu.inc" -->
+</div></div>
+<!-- /TMPL_IF -->
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+

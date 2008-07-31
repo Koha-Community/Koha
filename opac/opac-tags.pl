@@ -184,7 +184,10 @@ if ($loggedinuser and not $query->param('hidemytags')) {
 		$_->{date_created_display} = format_date($_->{date_created});
 	}
 }
-$template->param(tagsview => 1,);
+
+$template->param(tagsview => 1,
+dateformat => C4::Context->preference("dateformat"));
+
 if ($add_op) {
 	my $adds = 0;
 	for (values %counts) {$adds += $_;}
