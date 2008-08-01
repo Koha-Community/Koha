@@ -308,6 +308,9 @@ sub create_input {
         $value =~ s/YYYY/$year/g;
         $value =~ s/MM/$month/g;
         $value =~ s/DD/$day/g;
+        my $username=(C4::Context->userenv?C4::Context->userenv->{'surname'}:"superlibrarian");    
+        $value=~s/user/$username/g;
+    
     }
     my $dbh = C4::Context->dbh;
 
