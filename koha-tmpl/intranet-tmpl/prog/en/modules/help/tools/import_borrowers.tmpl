@@ -1,3 +1,31 @@
 <!-- TMPL_INCLUDE NAME="help-top.inc" -->
-<div class="main"> <font size="4" id="f7o96"><strong>Patron Import</strong></font><br /><br /><ul><li>Create a CSV file for your patron data<br /><ul><li>Format your file with the following fields<ul><li>'cardnumber',    'surname',      'firstname',        'title',     'othernames',    'initials',     'streetnumber',     'streettype',     'address',       'address2',     'city',             'zipcode',     'email',         'phone',        'mobile',           'fax',     'emailpro',      'phonepro',     'B_streetnumber',   'B_streettype',     'B_address',     'B_city',       'B_zipcode',        'B_email',     'B_phone',       'dateofbirth',  'branchcode',       'categorycode',     'dateenrolled',  'dateexpiry',   'gonenoaddress',    'lost',     'debarred',      'contactname',  'contactfirstname', 'contacttitle',     'borrowernotes', 'relationship', 'ethnicity',        'ethnotes',     'sex',           'userid',       'opacnote',         'contactnote',     'password',      'sort1',        'sort2'<ul><li><span style="background-color: #ffe599">TIP: Consult your system administrator if you are unsure of how to fill in the above fields.</span></li><li><font id="f7o926" color="#ff0000">IMPORTANT: Make sure the 'branchcode' and 'categorycode' are valid entries in your database.</font></li><li>Passwords should be stored in plain text, and will be encrypted as they're imported<ul><li><span style="background-color: #ffe599">TIP: If your passwords are already encrypted, talk to your systems administrator about options.</span></li></ul></li></ul></li></ul></li></ul></li><li>Select a file to import into the borrowers table</li><li>If a cardnumber exists in the table, you can choose whether to ignore the new one or overwrite the old one.</li><li>Click 'Import'</li><li>You will be brought to a confirmation screen.</li></ul> </div> 
-<!-- TMPL_INCLUDE NAME="help-bottom.inc" -->
+
+<h1>Patron Import</h1>
+
+		<ul>
+			<li>Create a CSV file for your patron data<br/>
+			<ul>
+				<li>Format your file with the following fields
+				<ul>
+					<li>'cardnumber',    'surname',      'firstname',        'title',     'othernames',    'initials',     'streetnumber',     'streettype',     'address',       'address2',     'city',             'zipcode',     'email',         'phone',        'mobile',           'fax',     'emailpro',      'phonepro',     'B_streetnumber',   'B_streettype',     'B_address',     'B_city',       'B_zipcode',        'B_email',     'B_phone',       'dateofbirth',  'branchcode',       'categorycode',     'dateenrolled',  'dateexpiry',   'gonenoaddress',    'lost',     'debarred',      'contactname',  'contactfirstname', 'contacttitle',     'borrowernotes', 'relationship', 'ethnicity',        'ethnotes',     'sex',           'userid',       'opacnote',         'contactnote',     'password',      'sort1',        'sort2'
+					<ul>
+						<li>
+					    <span style="background-color: #ffe599">
+TIP: Consult your system administrator if you are unsure of how to fill in the above fields.</span></li>
+						<li>					   
+					   IMPORTANT: Make sure the 'branchcode' and 'categorycode' are valid entries in your database.</li>
+						<li>Passwords should be stored in plain text, and will be encrypted as they're imported
+						<ul>
+							<li>
+						    <span style="background-color: #ffe599">
+TIP: If your passwords are already encrypted, talk to your systems administrator about options.</span></li>
+						</ul></li>
+					</ul></li>
+				</ul></li>
+			</ul></li>
+			<li>Select a file to import into the borrowers table</li>
+			<li>If a cardnumber exists in the table, you can choose whether to ignore the new one or overwrite the old one.</li>
+			<li>Click 'Import'</li>
+			<li>You will be brought to a confirmation screen.</li>
+		</ul>
+	</div>	<!-- TMPL_INCLUDE NAME="help-bottom.inc" -->

@@ -1,3 +1,43 @@
 <!-- TMPL_INCLUDE NAME="help-top.inc" -->
-	<h1>Authority types</h1> 	<p>You can define as many Authority types as you want.</p> 	<ul> 		<li>with the MARC structure button, you can define the MARC structure of a given authority type</li> 		<li>The tag reported must contain a MARC tag number. Every subfield in the selected tag will be copied to the &quot;destination tag&quot; in the biblio. for example, in UNIMARC, the tag 200 ot personal authority will be reported to 600, 700, 701, depending on what is cliqued in the biblio MARC editor.</li> 		<li>The summary contains an &quot;ISBD&quot; like description to explain how the entry must be shown in the result list. The syntax is :  		<ul> 			<li>[xxxFFFSyyy] where xxx are up to 3 digits BEFORE the field, FFF the field number, S the subfield code, yyy up to 3 digits AFTER the field.</li> 			<li>things outside [] are kept as is (including HTML)</li> 			<li>repeatable fields are managed.<ul> 	</ul></li> 		 	<p>IMPORTANT</p> 	<p> 		In the biblio framework, the reported tag <strong>MUST</strong> contain a $9 subfield, activated in the tab where the tag is, and hidden (hidden maybe omitted, but the field has no reason to appear anywhere). The $9 subfield in the biblio will contain the Authority number (the internal Koha number) 	</p></ul></li></ul><h1 id="v65u"><font size="4" id="pok7"><font id="j73r"><font id="dtv:1" color="#990000"><font id="hd0y" color="#000000">Create Authority Types<br /></font></font></font></font></h1>Create and manage Authorities frameworks that define the characteristics of your MARC Records (field and subfield definitions).<br /><br />To create a new framework...<br /> <br /> <ul><li>     Go to the 'Administration' module.   </li><li>     Select 'Authority types'</li><li>Click 'New Authority Framework'</li><li>Fill in the fields that describe your new authority type<br /><ul><li><span style="background-color: #ffe599">TIP: In the 'Authority field to copy', enter the authority field that should be copied from the authority record to the bibliographic record. e.g., in MARC21, field 100 in the authority record should be copied to field 100 in the bibliographic record</span></li></ul></li><li>Click 'Submit'</li><li>To update the MARC Framework for your new authority type, click 'MARC structure' next to the authority</li><li>From the following screen you can alter fields, subfields and add additional tags</li><li>By clicking on the 'edit' link you will be able to alter information related to the field</li><li>By clicking the 'subfields' link you will be able to alter all of the subfields associated with that field</li><li>By clicking 'Edit subfields' at the bottom of the screen you can alter the information for each subfield</li><li>After making your changes, click 'Save Changes' at the top of the screen</li><li>To delete a subfield, just click the 'delete' link next to the field you'd like to edit</li></ul> 
-<!-- TMPL_INCLUDE NAME="help-bottom.inc" -->
+
+<h1>Authority types</h1>
+
+<p>You can define as many Authority types as you want.</p>
+	<ul>
+		<li>with the MARC structure button, you can define the MARC structure of a given authority type</li>
+		<li>The tag reported must contain a MARC tag number. Every subfield in the selected tag will be copied to the &quot;destination tag&quot; in the biblio. for example, in UNIMARC, the tag 200 ot personal authority will be reported to 600, 700, 701, depending on what is cliqued in the biblio MARC editor.</li>
+		<li>The summary contains an &quot;ISBD&quot; like description to explain how the entry must be shown in the result list. The syntax is :
+		<ul>
+			<li>[xxxFFFSyyy] where are up to 3 digits BEFORE the field, FFF the field number, S the subfield code, yyy up to 3 digits AFTER the field.</li>
+			<li>things outside [] are kept as is (including HTML)</li>
+			<li>repeatable fields are managed.
+			<ul>
+			</ul></li>
+<p>IMPORTANT</p>
+<p>In the biblio framework, the reported tag <strong>MUST</strong> contain a $9 subfield, activated in the tab where the tag is, and hidden (hidden maybe omitted, but the field has no reason to appear anywhere). The $9 subfield in the biblio will contain the Authority number (the internal Koha number)</p>
+		</ul></li>
+	</ul>
+	<h1>Create Authority Types</h1>
+
+<p>Create and manage Authorities frameworks that define the characteristics of your MARC Records (field and subfield definitions).
+To create a new framework...</p>
+
+	<ul>
+		<li>Go to the 'Administration' module.</li>
+		<li>Select 'Authority types'</li>
+		<li>Click 'New Authority Framework'</li>
+		<li>Fill in the fields that describe your new authority type<br/>
+		<ul>
+			<li>
+		    <span style="background-color: #ffe599">
+TIP: In the 'Authority field to copy', enter the authority field that should be copied from the authority record to the bibliographic record. e.g., in MARC21, field 100 in the authority record should be copied to field 100 in the bibliographic record</span></li>
+		</ul></li>
+		<li>Click 'Submit'</li>
+		<li>To update the MARC Framework for your new authority type, click 'MARC structure' next to the authority</li>
+		<li>From the following screen you can alter fields, subfields and add additional tags</li>
+		<li>By clicking on the 'edit' link you will be able to alter information related to the field</li>
+		<li>By clicking the 'subfields' link you will be able to alter all of the subfields associated with that field</li>
+		<li>By clicking 'Edit subfields' at the bottom of the screen you can alter the information for each subfield</li>
+		<li>After making your changes, click 'Save Changes' at the top of the screen</li>
+		<li>To delete a subfield, just click the 'delete' link next to the field you'd like to edit</li>
+	</ul><!-- TMPL_INCLUDE NAME="help-bottom.inc" -->

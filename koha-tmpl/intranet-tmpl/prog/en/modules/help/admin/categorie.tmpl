@@ -1,3 +1,33 @@
 <!-- TMPL_INCLUDE NAME="help-top.inc" -->
-<h1>Patron Categories</h1>  <p>This is where you define the types of users of your library and how they will be handled.</p>  <h2>Categories, Descriptions and Types</h2> <p>Start by assigning a Category Code and a Description to each patron category. Each Category can be one of five types:</p> <ul> 	<li>Adult Patrons: can be linked as &quot;guarantors&quot; to other patrons who are their dependents.  This is the default patron type.</li> 	<li>Child Patrons: a patron category that has a &quot;guarantor&quot;.</li> 	<li>Organizational Patrons: can be used for institutional members, e.g. other libraries that borrow from you, in which case Koha expects slightly different information about the institution.</li> 	<li>Professional Patrons: can also be associated with a guarantor (usually an organisation). </li> 	<li>Staff Members: A member of the library staff. </li> 	<li>Statistical Patrons: checking out to this patron type creates a statistical (local use) record but does not actually circulate materials.</li> </ul> <h3>Note on Permissions</h3> <p>Patrons in any category type may be assigned permissions in the staff interface.  The Staff patron type has additional security features over the other types.</p> <h2>Enrollment Period (months)</h2> <p>Enrollment period is a number indicating the length in months of a patron enrollment. If enrollments never expire, set this to an impossibly high number ( &gt;= 99).</p>  <h2>Upper Age Limit and Age Required</h2> <p>Upper Age Limit and Age Required set the age parameters for this type of user. If you issue children's cards to users between the ages of 2 and 18, for example, then Age Required would be &quot;2&quot; and Upper Age Limit would be &quot;18.&quot; If there is no upper age limit, set this value to 999 (the highest allowed).</p>  <h2>Enrollment Fee and Reserve Fee</h2> <p>Enrollment Fee and Reserve Fee (if any) should be entered either as whole numbers or with (up to) six decimal places, with no currency notation (e.g. &quot;1.250000&quot; instead of &quot;$1.25&quot;).</p>  <h2>Overdue Notice Required</h2> <p>Overdue Notice Required lets you bypass generating overdue notices for this user type.</p>  
+
+<h1>Patron Categories</h1>
+
+<p>This is where you define the types of users of your library and how they will be handled.</p>
+
+<h2>Categories, Descriptions and Types</h2>
+<p>Start by assigning a Category Code and a Description to each patron category. Each Category can be one of five types:</p>
+	<ul>
+		<li>Adult Patrons: can be linked as &quot;guarantors&quot; to other patrons who are their dependents.  This is the default patron type.</li>
+		<li>Child Patrons: a patron category that has a &quot;guarantor&quot;.</li>
+		<li>Organizational Patrons: can be used for institutional members, e.g. other libraries that borrow from you, in which case Koha expects slightly different information about the institution.</li>
+		<li>Professional Patrons: can also be associated with a guarantor (usually an organisation).</li>
+		<li>Staff Members: A member of the library staff.</li>
+		<li>Statistical Patrons: checking out to this patron type creates a statistical (local use) record but does not actually circulate materials.</li>
+	</ul>
+	
+<h3>Note on Permissions</h3>
+<p>Patrons in any category type may be assigned permissions in the staff interface.  The Staff patron type has additional security features over the other types.</p>
+
+<h2>Enrollment Period (months)</h2>
+<p>Enrollment period is a number indicating the length in months of a patron enrollment. If enrollments never expire, set this to an impossibly high number ( &gt;= 99).</p>
+
+<h2>Upper Age Limit and Age Required</h2>
+<p>Upper Age Limit and Age Required set the age parameters for this type of user. If you issue children's cards to users between the ages of 2 and 18, for example, then Age Required would be &quot;2&quot; and Upper Age Limit would be &quot;18.&quot; If there is no upper age limit, set this value to 999 (the highest allowed).</p>
+
+<h2>Enrollment Fee and Reserve Fee</h2>
+<p>Enrollment Fee and Reserve Fee (if any) should be entered either as whole numbers or with (up to) six decimal places, with no currency notation (e.g. &quot;1.250000&quot; instead of &quot;$1.25&quot;).</p>
+
+<h2>Overdue Notice Required</h2>
+<p>Overdue Notice Required lets you bypass generating overdue notices for this user type.</p>
+
 <!-- TMPL_INCLUDE NAME="help-bottom.inc" -->

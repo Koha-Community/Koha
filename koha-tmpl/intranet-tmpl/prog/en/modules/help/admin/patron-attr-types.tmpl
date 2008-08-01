@@ -1,3 +1,33 @@
 <!-- TMPL_INCLUDE NAME="help-top.inc" -->
-<h1>Patron attribute types</h1><br />A patron attribute (or extended patron attribute) is an additional piece of information associated with a patron record.&nbsp; Each attribute has a type that specifies whether the attribute is repeatable, can serve as a unique identifier, can take a password, and whether it can be used to search for patron records in the staff interface.<br /><br />The list of attribute types is controlled by staff with 'superlibrarian' permissions. <br /><ul><li>Get there: Patrons &gt; Patron Record &gt; More &gt; Set Permissions</li></ul><br />Once an attribute type is defined, values for that attribute can be added to the patron record via the staff interface or the batch patron import.<br /><br />Two uses of extended attributes are:<br /><br /><ul><li>defining additional unique identifiers, such as a campus student ID number, a library staff HR number, and so on.&nbsp; These IDs can be used for searching or matching and overlaying records during a batch import.</li><li>additional statistical categories.&nbsp; For example, a library could define an attribute type for tracking the academic major of a student patron. Any number of attributes of this sort could be defined.</li></ul><br />The extended attributes feature is completely optional.&nbsp; If the 'ExtendPatronAttributes' system preference is OFF, customizable patron attributes will not be usable.<br /><br /><h2>Add Patron Attribute</h2><ul><li>Click 'Patron attribute types'</li><li><font color="#990000">IMPORTANT: You will need to have ExtendedPatronAttributes turned on</font><ul><li>Get there: More &gt; Administration &gt; General system preferences &gt; Patrons &gt; ExtendedPatronAttributes</li></ul></li><li>To add a new Patron Attribute, click 'New Patron Attribute Type'</li><li>The 'Patron attribute type code' should be unique and is the only required field<ul><li>TIP: This field is not editable once it is set</li></ul></li><li>Fill in all of the fields you need for your attribute<ul><li>TIP: The repeatibility and unique_id settings of an attribute type cannot be changed after creation - this is to avoid having to deal with changing constraints if an attribute type is already in use by patron records</li></ul></li><li>Click 'Save'</li><li>TIP: An attribute type cannot be deleted if it is used by any patron records</li></ul>
-<!-- TMPL_INCLUDE NAME="help-bottom.inc" -->
+
+<h1>Patron attribute types</h1>A patron attribute (or extended patron attribute) is an additional piece of information associated with a patron record.  Each attribute has a type that specifies whether the attribute is repeatable, can serve as a unique identifier, can take a password, and whether it can be used to search for patron records in the staff interface.
+The list of attribute types is controlled by staff with 'superlibrarian' permissions.<br/>
+	<ul>
+		<li>Get there: Patrons &gt; Patron Record &gt; More &gt; Set Permissions</li>
+	</ul>Once an attribute type is defined, values for that attribute can be added to the patron record via the staff interface or the batch patron import.
+Two uses of extended attributes are:
+
+	<ul>
+		<li>defining additional unique identifiers, such as a campus student ID number, a library staff HR number, and so on.  These IDs can be used for searching or matching and overlaying records during a batch import.</li>
+		<li>additional statistical categories.  For example, a library could define an attribute type for tracking the academic major of a student patron. Any number of attributes of this sort could be defined.</li>
+	</ul>The extended attributes feature is completely optional.  If the 'ExtendPatronAttributes' system preference is OFF, customizable patron attributes will not be usable.
+<h2>Add Patron Attribute</h2>
+	<ul>
+		<li>Click 'Patron attribute types'</li>
+		<li>	   
+	   IMPORTANT: You will need to have ExtendedPatronAttributes turned on
+		<ul>
+			<li>Get there: More &gt; Administration &gt; General system preferences &gt; Patrons &gt; ExtendedPatronAttributes</li>
+		</ul></li>
+		<li>To add a new Patron Attribute, click 'New Patron Attribute Type'</li>
+		<li>The 'Patron attribute type code' should be unique and is the only required field
+		<ul>
+			<li>TIP: This field is not editable once it is set</li>
+		</ul></li>
+		<li>Fill in all of the fields you need for your attribute
+		<ul>
+			<li>TIP: The repeatibility and unique_id settings of an attribute type cannot be changed after creation - this is to avoid having to deal with changing constraints if an attribute type is already in use by patron records</li>
+		</ul></li>
+		<li>Click 'Save'</li>
+		<li>TIP: An attribute type cannot be deleted if it is used by any patron records</li>
+	</ul><!-- TMPL_INCLUDE NAME="help-bottom.inc" -->

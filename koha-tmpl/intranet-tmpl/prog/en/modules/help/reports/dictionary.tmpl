@@ -1,3 +1,41 @@
 <!-- TMPL_INCLUDE NAME="help-top.inc" -->
-<h1>Reports Dictionary Help</h1>  <h2>What is the Reports Dictionary</h2> <p>The dictionary provides a way that you can define custom criteria for reporting by combining existing criteria.</p>  <h2>Adding A New Definition</h2> <h3>Step 1 of 4 Name</h3> <p>At this step you will need to fill out the following details:</p> <ol> 	<li><p>Definition Name: Short name that is used for display and selection</p></li><li><p>Definition Description: Used within the dictionary only to provide further detail about the definition</p></li> 	 </ol> <h3>Step 2 of 4 Area</h3> <p>Now you will need to select the area that you are binding the definition to. Definitions can only be bound to one area. If you wish to use a similar definition in say, Circulation and Patrons, you will need to create two definitions - one for each area</p> <h3>Step 3 of 4 Columns</h3> <p>Now select the criteria that you wish to use to build your definition. Click on the database column name and then press the add button. Once you have selected all your desired columns, press Next.</p> <p>Note: Definitions can be deleted easily, and if you are still learning the structure of the Koha data, it may take a little while to sort out which fields you require. Some trial and error may be required.</p> <h3>Step 4 of 4 Values</h3> <p>Now you need to select the values for each column that will make up your new criteria. There are different ways to define the values, based on the type of data in the column you have selected</p> <ul> 	<li><strong>Search String Matches</strong> For free text fields in that database, enter a string/phrase for the criteria to match on</li> 	<li><strong>Date</strong> For date fields you can either select: 		<ol> 			<li>Date Range: enter values in both date fields</li> 			<li>All Data Before A Given Date: enter a value in the XXX field only</li> 			<li>All Data After A Given Date: enter a value in the XXX field only</li> 		</ol> 	</li><li><strong>Select From Database Value</strong> For data that is given an authorised value in the Koha database, you the drop down list to select one value</li> </ul>  <h2>Using A Definition</h2> <p>Once you have created your new definition and it shows on in the Dictionary, you can use the definition for reporting. When you go to create a new report, the criteria for the area you are reporting on will automatically show as limits in the Guided Reports wizard</p>  
+
+<h1>Reports Dictionary Help</h1>
+
+<h2>What is the Reports Dictionary</h2>
+<p>The dictionary provides a way that you can define custom criteria for reporting by combining existing criteria.</p>
+
+<h2>Adding A New Definition</h2>
+<h3>Step 1 of 4 Name</h3>
+<p>At this step you will need to fill out the following details:</p>
+	<ol>
+		<li>
+<p>Definition Name: Short name that is used for display and selection</p></li>
+		<li>
+<p>Definition Description: Used within the dictionary only to provide further detail about the definition</p></li>
+	</ol>
+	
+	<h3>Step 2 of 4 Area</h3>
+<p>Now you will need to select the area that you are binding the definition to. Definitions can only be bound to one area. If you wish to use a similar definition in say, Circulation and Patrons, you will need to create two definitions - one for each area</p>
+
+<h3>Step 3 of 4 Columns</h3>
+<p>Now select the criteria that you wish to use to build your definition. Click on the database column name and then press the add button. Once you have selected all your desired columns, press Next.</p>
+<p>Note: Definitions can be deleted easily, and if you are still learning the structure of the Koha data, it may take a little while to sort out which fields you require. Some trial and error may be required.</p>
+
+<h3>Step 4 of 4 Values</h3>
+<p>Now you need to select the values for each column that will make up your new criteria. There are different ways to define the values, based on the type of data in the column you have selected</p>
+	<ul>
+		<li><strong>Search String Matches</strong> For free text fields in that database, enter a string/phrase for the criteria to match on</li>
+		<li><strong>Date</strong> For date fields you can either select:
+		<ol>
+			<li>Date Range: enter values in both date fields</li>
+			<li>All Data Before A Given Date: enter a value in the field only</li>
+			<li>All Data After A Given Date: enter a value in the field only</li>
+		</ol></li>
+		<li><strong>Select From Database Value</strong> For data that is given an authorised value in the Koha database, you the drop down list to select one value</li>
+	</ul>
+	
+<h2>Using A Definition</h2>
+<p>Once you have created your new definition and it shows on in the Dictionary, you can use the definition for reporting. When you go to create a new report, the criteria for the area you are reporting on will automatically show as limits in the Guided Reports wizard</p>
+
 <!-- TMPL_INCLUDE NAME="help-bottom.inc" -->

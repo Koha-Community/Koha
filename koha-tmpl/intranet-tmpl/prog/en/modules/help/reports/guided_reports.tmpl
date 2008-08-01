@@ -1,3 +1,56 @@
 <!-- TMPL_INCLUDE NAME="help-top.inc" -->
-<a name="#top" title="#top"></a> <h1>Guided Reports Help</h1>  <ul> 	<li><a href="#new">Building A New Report</a></li> 	<li><a href="#save">Saving A Report</a></li> 	<li><a href="#sql">Generating A New Report From SQL</a></li> 	<li><a href="#scheduler">Scheduling A Report</a></li><li> <ul><li>&nbsp;<ul> 	<li><strong>Tabular:</strong>Simple report of columns only.</li> 	<li><strong>Matrix:</strong><em>Not finished</em></li> 	<li><strong>Summary:</strong><em>Not finished</em></li> </ul><ul> 	<li><strong>System Generated Criteria</strong> These criteria are known to the system and are drawn from your system preferences</li> 	<li><strong>Dictionary Criteria</strong> These are custom defined criteria defined for your Koha in the Reports Dictionary</li> </ul><ul> 	<li>Count : Returns a count of each value</li> 	<li>Sum : Returns the sum of all values</li> 	<li>Average : Returns the average value</li> 	<li>Min : Returns the lowest value</li> 	<li>Max : Returns the highest value</li> </ul></li>  <p>For help with the Reports Dictionary - see online help within the Dictionary Pages</p>  <hr /> <a name="#new" title="#new"></a> <h2>Building A New Report</h2> <h3>Step 1 of 6: Choose a Module to Report on</h3> <p>Select one of the module areas to report on. Guided reports can only generate reports from within one module. For reports across modules, you will need to use either a compound report, or build a custom report using SQL statements.</p>  <h3>Step 2 of 6: Pick a Report Type</h3> <p>There are 3 types of reports that can be generated:</p>   <h3>Step 3 of 6: Select Columns for Display</h3> <p>Select the columns to draw the report data from. Click the column to add in the left hand box and then click the &quot;Add&quot; button. Your column will now show up in the right hand box. To remove a selected column, click the column name on the right hand side and then click the delete button. Once you are happy with the columns, select the &quot;Choose Columns&quot; button to proceed to the next step.</p>  <p><strong>Be careful selecting columns.</strong> The guided reports feature expects that you have some knowledge of the Koha database structure and what each field is used for. Be careful selecting columns as a poor choice may lead to a report that is so large that it either times out before it can be generated, or it will require a large amount of system resources to generate and slow down the operation of Koha.</p>  <p>There is no sanity checker in the reports engine</p>  <h3>Step 4 of 6: Select Criteria to Limit on </h3> <p>Criteria allow you to limit your report to display results to a given criteria.Criteria are bound to a specific reporting area.</p>  																	  <h3>Step 5 of 6: Pick which columns to total</h3> <p>Now choose operations that you want to preform on each column. The operations that can be selected are:</p> .	  <h3>Step 6 of 6: Select how you want the report ordered</h3> <p>Select how you wish to order the report. You can select multiple criteria to order against and the hierarchy that the are applied. For example order alphabetically by Surname, and then alphabetically by First Name</p>  <br /><a href="#top">Back To Top</a>  <hr />  <a name="#save" title="#save"></a> <h2>Saving A Report</h2> <p>Once you have generated a report, you can now choose to save the report definition so that you can run it again when required, or setup the Task Scheduler to run the report for you.</p>  <br /><a href="#top">Back To Top</a>  <hr />  <a name="#sql" title="#sql"></a> <h2>Generating A New Report From SQL</h2> <p>A report can be generated directly using from an SQL statement. On the &quot;Create from SQL&quot; page, give the report a Title and Description (using the notes field) and then paste your SQL statement into the text area.</p>  <br /><a href="#top">Back To Top</a> <hr />   <a name="#scheduler" title="#scheduler"></a> <h2>Scheduling A Report</h2> <p>Reports can be scheduled to run either at a one off time, or repeatedly at a defined period using the task scheduler. The task scheduler is found under Tools &gt;Task Scheduler</p> <br /><a href="#top">Back To Top</a>    </ul></li></ul>
-<!-- TMPL_INCLUDE NAME="help-bottom.inc" -->
+<a name="#top" title="#top"></a>
+<h1>Guided Reports Help</h1>
+	<ul>
+		<li><a href="#new">Building A New Report</a></li>
+		<li><a href="#save">Saving A Report</a></li>
+		<li><a href="#sql">Generating A New Report From SQL</a></li>
+		<li><a href="#scheduler">Scheduling A Report</a></li>
+		<li>
+		<ul>
+			<li> 
+			<ul>
+				<li><strong>Tabular:</strong>Simple report of columns only.</li>
+				<li><strong>Matrix:</strong><em>Not finished</em></li>
+				<li><strong>Summary:</strong><em>Not finished</em></li>
+			</ul>
+			<ul>
+				<li><strong>System Generated Criteria</strong> These criteria are known to the system and are drawn from your system preferences</li>
+				<li><strong>Dictionary Criteria</strong> These are custom defined criteria defined for your Koha in the Reports Dictionary</li>
+			</ul>
+			<ul>
+				<li>Count : Returns a count of each value</li>
+				<li>Sum : Returns the sum of all values</li>
+				<li>Average : Returns the average value</li>
+				<li>Min : Returns the lowest value</li>
+				<li>Max : Returns the highest value</li>
+			</ul></li>
+<p>For help with the Reports Dictionary - see online help within the Dictionary Pages</p>
+<hr/><a name="#new" title="#new"></a><h2>Building A New Report</h2> <h3>Step 1 of 6: Choose a Module to Report on</h3>
+<p>Select one of the module areas to report on. Guided reports can only generate reports from within one module. For reports across modules, you will need to use either a compound report, or build a custom report using SQL statements.</p><h3>Step 2 of 6: Pick a Report Type</h3>
+<p>There are 3 types of reports that can be generated:</p><h3>Step 3 of 6: Select Columns for Display</h3>
+<p>Select the columns to draw the report data from. Click the column to add in the left hand box and then click the &quot;Add&quot; button. Your column will now show up in the right hand box. To remove a selected column, click the column name on the right hand side and then click the delete button. Once you are happy with the columns, select the &quot;Choose Columns&quot; button to proceed to the next step.</p>
+<p><strong>Be careful selecting columns.</strong> The guided reports feature expects that you have some knowledge of the Koha database structure and what each field is used for. Be careful selecting columns as a poor choice may lead to a report that is so large that it either times out before it can be generated, or it will require a large amount of system resources to generate and slow down the operation of Koha.</p>
+<p>There is no sanity checker in the reports engine</p><h3>Step 4 of 6: Select Criteria to Limit on </h3>
+<p>Criteria allow you to limit your report to display results to a given criteria.Criteria are bound to a specific reporting area.</p><h3>Step 5 of 6: Pick which columns to total</h3>
+<p>Now choose operations that you want to preform on each column. The operations that can be selected are:</p>.	  <h3>Step 6 of 6: Select how you want the report ordered</h3>
+<p>Select how you wish to order the report. You can select multiple criteria to order against and the hierarchy that the are applied. For example order alphabetically by Surname, and then alphabetically by First Name</p><br/><a href="#top">
+Back To Top
+</a>
+<hr/><a name="#save" title="#save">
+</a><h2>Saving A Report</h2>
+<p>Once you have generated a report, you can now choose to save the report definition so that you can run it again when required, or setup the Task Scheduler to run the report for you.</p><br/><a href="#top">
+Back To Top
+</a>
+<hr/><a name="#sql" title="#sql">
+</a><h2>Generating A New Report From SQL</h2>
+<p>A report can be generated directly using from an SQL statement. On the &quot;Create from SQL&quot; page, give the report a Title and Description (using the notes field) and then paste your SQL statement into the text area.</p><br/><a href="#top">
+Back To Top
+</a>
+<hr/><a name="#scheduler" title="#scheduler">
+</a><h2>Scheduling A Report</h2>
+<p>Reports can be scheduled to run either at a one off time, or repeatedly at a defined period using the task scheduler. The task scheduler is found under Tools &gt;Task Scheduler</p><br/><a href="#top">
+Back To Top
+</a>
+		</ul></li>
+	</ul><!-- TMPL_INCLUDE NAME="help-bottom.inc" -->
