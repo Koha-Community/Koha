@@ -5,13 +5,13 @@
 # be used freely wherever it is useful.
 
 # Uncomment this to turn on verbose mode.
-#export DH_VERBOSE=1
+export DH_VERBOSE=1
 
 # If set to a true value then MakeMaker's prompt function will
 # always return the default without waiting for user input.
 export PERL_MM_USE_DEFAULT=1
 
-PACKAGE=$(shell dh_listpackages)
+PACKAGE=libkoha-perl
 
 ifndef PERL
 PERL = /usr/bin/perl
@@ -70,7 +70,7 @@ binary-indep: build install
 	dh_compress
 	dh_fixperms
 	dh_installdeb
-	dh_gencontrol
+	dh_gencontrol --dpkg-gencontrol-params=-plibkoha-perl
 	dh_md5sums
 	dh_builddeb
 
