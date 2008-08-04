@@ -548,7 +548,7 @@ WriteMakefile(
                             'Date::Manip'                      => 5.44,
                             'Digest::MD5'                      => 2.36,
                             'File::Temp'                       => 0.16,
-							'GD'								=> 2.34, #optional
+                            'GD'                               => 2.39,    #optional
                             'GD::Barcode::UPCE'                => 1.1,
                             'Getopt::Long'                     => 2.35,
                             'Getopt::Std'                      => 1.05,
