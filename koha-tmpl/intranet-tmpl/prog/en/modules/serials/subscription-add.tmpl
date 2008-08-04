@@ -88,19 +88,21 @@ IrregularPattern.prototype.update = function() {
 		// else irregular array is list of issues to skip
 		var summary_str = '';
 		this.numskipped = 0;
-        for( var i in document.f.irregularity_select.options ) {
-           if( document.f.irregularity_select.options[i].selected ) {
-                this.skipped[cnt] = document.f.irregularity_select.options[i].value ;
-                summary_str += document.f.irregularity_select.options[i].text + "\n" ;
-				cnt++;
-				this.numskipped++;
-			}
-		}
-		var summary = document.getElementById("irregularity_summary");
-		if(summary) {
-			summary.value = summary_str;
-			summary.rows= ( cnt > 6 ) ? cnt : 6 ;
-		}
+        if(document.f.irregularity_select) {
+            for( var i in document.f.irregularity_select.options ) {
+                if( document.f.irregularity_select.options[i].selected ) {
+                    this.skipped[cnt] = document.f.irregularity_select.options[i].value ;
+                    summary_str += document.f.irregularity_select.options[i].text + "\n" ;
+				    cnt++;
+				    this.numskipped++;
+			    }
+		    }
+		    var summary = document.getElementById("irregularity_summary");
+		    if(summary) {
+			    summary.value = summary_str;
+			    summary.rows= ( cnt > 6 ) ? cnt : 6 ;
+		    }
+        }
 }
 
 IrregularPattern.prototype.irregular = function(index) { 
@@ -223,7 +225,7 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.setto1.value=0;
         document.f.setto2.value='1';
         document.f.setto3.value='';
-        document.f.lastvaluetemp1.value=sYear;
+        document.f.lastvalue1temp.value=sYear;
         document.f.periodicity.value='8';
         document.f.numberingmethod.value=_("{Y} {X}");
         moreoptions_seasons(text[15],sYear);
@@ -295,7 +297,7 @@ var patternchoice = document.getElementById("numberpattern").value;
             default:
           } 
         }    
-        //         document.f.lastvalue2.value=document.f.lastvaluetemp2.value;
+        //         document.f.lastvalue2.value=document.f.lastvalue2temp.value;
         document.f.lastvalue3.value='';
         document.f.numberingmethod.value=_("{X}/{Y}");
         moreoptions(text[16],text[0]);
@@ -371,14 +373,14 @@ function set_num_pattern_from_template_vars() {
         more_strZ="Z";
     }
     <!-- /TMPL_IF -->
-    document.f.lastvaluetemp1.value='<!-- TMPL_VAR NAME="lastvalue1" -->';
+    document.f.lastvalue1temp.value='<!-- TMPL_VAR NAME="lastvalue1" -->';
     if(more_strY){
-        document.f.lastvaluetemp2.value='<!-- TMPL_VAR NAME="lastvalue2" -->';
-    document.f.whenmorethantemp2.value='<!-- TMPL_VAR NAME="whenmorethan2" -->';
+        document.f.lastvalue2temp.value='<!-- TMPL_VAR NAME="lastvalue2" -->';
+    document.f.whenmorethan2temp.value='<!-- TMPL_VAR NAME="whenmorethan2" -->';
     }
     if(more_strZ){
-        document.f.lastvaluetemp3.value='<!-- TMPL_VAR NAME="lastvalue3" -->';
-    document.f.whenmorethantemp3.value='<!-- TMPL_VAR NAME="whenmorethan3" -->';
+        document.f.lastvalue3temp.value='<!-- TMPL_VAR NAME="lastvalue3" -->';
+    document.f.whenmorethan3temp.value='<!-- TMPL_VAR NAME="whenmorethan3" -->';
     }
 }
 
@@ -419,24 +421,24 @@ var textbox = '';
             }
         }
         textbox +="<\/tr>\n";
-        textbox +="<tr><th scope=\"row\">"+text[5]+"<\/td><td><input type='text' name='lastvaluetemp1' size='4' onkeyup='moreoptionsupdate(\"lastvalue1\")' value=\"" + document.f.lastvalue1.value +  "\" /><\/td>\n";
+        textbox +="<tr><th scope=\"row\">"+text[5]+"<\/td><td><input type='text' name='lastvalue1temp' id='lastvalue1temp' size='4' onkeyup='moreoptionsupdate(this)' value=\"" + document.f.lastvalue1.value +  "\" /><\/td>\n";
         if(y){
-            textbox +="<td><input type='text' name='lastvaluetemp2' size='4' onkeyup='moreoptionsupdate(\"lastvalue2\")' value=\"" + document.f.lastvalue2.value + "\" /><\/td>\n";
+            textbox +="<td><input type='text' name='lastvalue2temp' id='lastvalue2temp' size='4' onkeyup='moreoptionsupdate(this)' value=\"" + document.f.lastvalue2.value + "\" /><\/td>\n";
             if(z){
-                textbox +="<td><input type='text' name='lastvaluetemp3' size='4' onkeyup='moreoptionsupdate(\"lastvalue3\")' value=\"" + document.f.lastvalue3.value + "\" /><\/td>\n";
+                textbox +="<td><input type='text' name='lastvalue3temp' id='lastvalue3temp' size='4' onkeyup='moreoptionsupdate(this)' value=\"" + document.f.lastvalue3.value + "\" /><\/td>\n";
             }
         }
         textbox +="<\/tr>\n";
         if(y){
             textbox +="<tr><th scope=\"row\">"+text[6]+"<\/th>";
             textbox +="<td>&nbsp;<\/td>\n";
-            textbox +="<td><input type='text' name='whenmorethantemp2' size='4' onkeyup='moreoptionsupdate(\"whenmorethan2\",1)'><\/td>\n";
+            textbox +="<td><input type='text' name='whenmorethan2temp' id='whenmorethan2temp' size='4' onkeyup='moreoptionsupdate(this,1)'><\/td>\n";
             if(z){
-                textbox +="<td><input type='text' name='whenmorethantemp3' size='4' onkeyup='moreoptionsupdate(\"whenmorethan3\",1)'><\/td>\n";
+                textbox +="<td><input type='text' name='whenmorethan3temp' id='whenmorethan3temp' size='4' onkeyup='moreoptionsupdate(this,1)'><\/td>\n";
             }
             textbox +="<\/tr>";
         } else {
-          textbox +="<tr> <td>"+_("issues expected")+"</td><td><input type='text' name='issuesexpectedtemp1' size='4' onkeyup='moreoptionsupdate(\"issuesexpected1\",0)' value=\"" + document.f.issuesexpected1.value + "\" ></td></tr>";
+          textbox +="<tr> <td>"+_("issues expected")+"</td><td><input type='text' name='issuesexpected1temp' id='issuesexpected1temp' size='4' onkeyup='moreoptionsupdate(this,0)' value=\"" + document.f.issuesexpected1.value + "\" ></td></tr>";
         }
         textbox +="<\/table>\n";
     }
@@ -489,17 +491,17 @@ var textbox = '';
         textbox +="<table><tr><th>&nbsp;<\/th><th>"+x+"<\/th>";
         textbox +="<th>"+text[16]+"<\/th>";
         textbox +="<\/tr>\n";
-        textbox +="<tr><th scope=\"row\">"+text[5]+"<\/th><td><select name='lastvaluetemp2' id='season1' onchange='moreoptionsupdate(\"lastvalue2\")'>";
+        textbox +="<tr><th scope=\"row\">"+text[5]+"<\/th><td><select name='lastvalue2temp' id='lastvalue2temp' id='season1' onchange='moreoptionsupdate(this)'>";
         for(var j = 1; j <= 4; j++){
             textbox +="<option value='"+j+"'>"+text[j+10]+"<\/option>";
         }
-        textbox +="<\/select><\/td><td><select name='lastvaluetemp1' onchange='moreoptionsupdate(\"lastvalue1\")'>";
+        textbox +="<\/select><\/td><td><select name='lastvalue1temp' id='lastvalue1temp' onchange='moreoptionsupdate(this)'>";
         for(var k = parseInt(y); k <= parseInt(y)+15; k++){
             textbox +="<option value='"+k+"'>"+k+"<\/option>";
         }
         textbox +="<\/select><\/td><\/tr>\n";
         textbox +="<tr><th scope=\"row\">"+text[6]+"<\/th>";
-        textbox +="<td><input type='text' name='whenmorethantemp2' size='4' onkeyup='moreoptionsupdate(\"whenmorethan2\",1)'><\/td>\n";
+        textbox +="<td><input type='text' name='whenmorethan2temp' id='whenmorethan2temp' size='4' onkeyup='moreoptionsupdate(this,1)'><\/td>\n";
                 textbox +="<\/tr><\/table>\n";
 
     }
@@ -514,11 +516,12 @@ function irregularity_check(){
       rollover = document.f.whenmorethan2.value;
     }
     if((document.f.whenmorethan3) && document.f.whenmorethan3.value > 0 ){
-        // FIXME: This assumes that whenmorethan3 issues are published in one year.
-		//   the other option is that whenmorethan3 * whenmorethan2 issues are published,
-		//  e.g. where there are two volumes of six issues each in one year. 
+        // FIXME: Irregularity check assumes that the full prediction pattern repeats each year.
+		//  In cases where the outermost periodicity is > 1 year,  
+		//  e.g. where a volume spans two years, the irregularity check will be incorrect, 
+        // but you can safely ignore the check, submit the form, and the prediction pattern should be correct.
 		//  a way to distinguish between these two cases is needed.
-		rollover = document.f.whenmorethan3.value;
+		rollover = document.f.whenmorethan3.value * document.f.whenmorethan2.value;
     }
     var error='';
     var toobig;
@@ -787,28 +790,35 @@ else
     return true;
 }
 
-function moreoptionsupdate(fieldnames,rollover){
-    fieldname = fieldnames;
-    fld = fieldname.length;
-    fld = fld-1;
-    fieldnametempnumber = fieldname.substr(fld);
-    //alert(fieldnametempnumber);
-    fieldnametemp = fieldname.slice(0,-1)+"temp"+fieldnametempnumber;
-    // alert(fieldnametemp);
-    eval("document.f."+fieldname+".value = document.f."+fieldnametemp+".value");
-//     alert (fieldname+" : "+eval("document.f."+fieldname+".value") +' '+fieldnametemp+' : ' +eval("document.f."+fieldnametemp+".value"));
+function moreoptionsupdate(inputfield,rollover){
+    fieldname = inputfield.name;
+    // find parent element in base table by stripping 'temp' from element name.
+    basefield = document.getElementById(fieldname.slice(0,-4));
+    var fieldnumber = fieldname.slice(-5,-4);
+
+//    fieldnametemp = fieldname.slice(0,-1)+"temp"+fieldnametempnumber;
+//    eval("document.f."+fieldname+".value = document.f."+fieldnametemp+".value");
+    basefield.value = inputfield.value;
     var patternchoice = document.getElementById("numberpattern").value;
     switch(patternchoice){
     case "2":
     case "4":
     case "5":
     case "8":
-       if (document.f.lastvaluetemp2.value>0){document.f.innerloop1.value = document.f.lastvaluetemp2.value - 1;}
+       if (document.f.lastvalue2temp.value>0){document.f.innerloop1.value = document.f.lastvalue2temp.value - 1;}
       break;   
     }  
     if(rollover){
-        eval("document.f.every"+(fieldnametempnumber-1)+".value = document.f."+fieldnametemp+".value");
-    }
+//        eval("document.f.every"+(fieldnametempnumber-1)+".value = document.f."+fieldnametemp+".value");
+       // calculate rollover  for higher level of periodicity.
+       // FIXME: This calculation only works if addN = 1 , that is, the X,Y,and Z each only increment by zero or one on each issue.
+
+       // if there are two levels of periodicity, (e.g. vol{X},num{Y},issue{Z}, then every1=every2*whenmorethan2 
+       // otherwise, every2 == 1.
+       var addN = (document.getElementById('add'+fieldnumber)) ? document.getElementById('add'+fieldnumber).value : 1 ;
+       var everyN = (document.getElementById('every'+fieldnumber)) ? document.getElementById('every'+fieldnumber).value : 1 ;
+       document.getElementById('every'+(fieldnumber-1)).value = basefield.value * everyN / addN ;
+     }
 }
 
 
@@ -913,7 +923,7 @@ $('#numberpattern').change( function() {
 <!-- /TMPL_IF -->
 <input type="hidden" name="user" value="<!-- TMPL_VAR name="loggedinusername" -->" />
 <input type="hidden" name="irreg_check" value="0" />
-<input type="hidden" name="issuesexpected1" value="0" />
+<input type="hidden" name="issuesexpected1" id="issuesexpected1" value="0" />
 
 	<div class="yui-u first">
     <fieldset id="subscription_add_information" class="rows">
@@ -1239,38 +1249,38 @@ $('#numberpattern').change( function() {
                 <tr>
                     <td>Add</td>
                     <td>
-                        <input type="text" name="add1" value="<!-- TMPL_VAR name="add1" -->" />
+                        <input type="text" name="add1" id="add1" value="<!-- TMPL_VAR name="add1" -->" />
                     </td>
                     <td>
-                        <input type="text" name="add2" value="<!-- TMPL_VAR name="add2" -->" />
+                        <input type="text" name="add2" id="add2" value="<!-- TMPL_VAR name="add2" -->" />
                     </td>
                     <td>
-                        <input type="text" name="add3" value="<!-- TMPL_VAR name="add3" -->" />
+                        <input type="text" name="add3" id="add3" value="<!-- TMPL_VAR name="add3" -->" />
                     </td>
                 </tr>
                 <tr>
                     <td>once every</td>
-                    <td><input type="text" name="every1" value="<!-- TMPL_VAR name="every1" -->" /></td>
-                    <td><input type="text" name="every2" value="<!-- TMPL_VAR name="every2" -->" /></td>
-                    <td><input type="text" name="every3" value="<!-- TMPL_VAR name="every3" -->" /></td>
+                    <td><input type="text" name="every1" id="every1" value="<!-- TMPL_VAR name="every1" -->" /></td>
+                    <td><input type="text" name="every2" id="every2" value="<!-- TMPL_VAR name="every2" -->" /></td>
+                    <td><input type="text" name="every3" id="every3" value="<!-- TMPL_VAR name="every3" -->" /></td>
                 </tr>
                 <tr>
                     <td>When more than</td>
-                    <td><input type="text" name="whenmorethan1" value="<!-- TMPL_VAR name="whenmorethan1" -->" /></td>
-                    <td><input type="text" name="whenmorethan2" value="<!-- TMPL_VAR name="whenmorethan2" -->" /></td>
-                    <td><input type="text" name="whenmorethan3" value="<!-- TMPL_VAR name="whenmorethan3" -->" /></td>
+                    <td><input type="text" name="whenmorethan1" id="whenmorethan1" value="<!-- TMPL_VAR name="whenmorethan1" -->" /></td>
+                    <td><input type="text" name="whenmorethan2" id="whenmorethan2" value="<!-- TMPL_VAR name="whenmorethan2" -->" /></td>
+                    <td><input type="text" name="whenmorethan3" id="whenmorethan3" value="<!-- TMPL_VAR name="whenmorethan3" -->" /></td>
                 </tr>
                 <tr>
                     <td>inner counter</td>
-                    <td><input type="text" name="innerloop1" value="<!-- TMPL_VAR name="innerloop1" -->" /></td>
-                    <td><input type="text" name="innerloop2" value="<!-- TMPL_VAR name="innerloop2" -->" /></td>
-                    <td><input type="text" name="innerloop3" value="<!-- TMPL_VAR name="innerloop3" -->" /></td>
+                    <td><input type="text" name="innerloop1" id="innerloop1" value="<!-- TMPL_VAR name="innerloop1" -->" /></td>
+                    <td><input type="text" name="innerloop2" id="innerloop2" value="<!-- TMPL_VAR name="innerloop2" -->" /></td>
+                    <td><input type="text" name="innerloop3" id="innerloop3" value="<!-- TMPL_VAR name="innerloop3" -->" /></td>
                 </tr>
                 <tr>
                     <td>Set back to</td>
-                    <td><input type="text" name="setto1" value="<!-- TMPL_VAR name="setto1" -->" /></td>
-                    <td><input type="text" name="setto2" value="<!-- TMPL_VAR name="setto2" -->" /></td>
-                    <td><input type="text" name="setto3" value="<!-- TMPL_VAR name="setto3" -->" /></td>
+                    <td><input type="text" name="setto1" id="setto1" value="<!-- TMPL_VAR name="setto1" -->" /></td>
+                    <td><input type="text" name="setto2" id="setto2" value="<!-- TMPL_VAR name="setto2" -->" /></td>
+                    <td><input type="text" name="setto3" id="setto3" value="<!-- TMPL_VAR name="setto3" -->" /></td>
                 </tr>
                 <tr>
                     <td>
@@ -1280,9 +1290,9 @@ $('#numberpattern').change( function() {
                             Begins with
                         <!-- /TMPL_IF -->
                     </td>
-                    <td><input type="text" name="lastvalue1" value="<!-- TMPL_VAR name="lastvalue1" -->" /></td>
-                    <td><input type="text" name="lastvalue2" value="<!-- TMPL_VAR name="lastvalue2" -->" /></td>
-                    <td><input type="text" name="lastvalue3" value="<!-- TMPL_VAR name="lastvalue3" -->" /></td>
+                    <td><input type="text" name="lastvalue1" id="lastvalue1" value="<!-- TMPL_VAR name="lastvalue1" -->" /></td>
+                    <td><input type="text" name="lastvalue2" id="lastvalue2" value="<!-- TMPL_VAR name="lastvalue2" -->" /></td>
+                    <td><input type="text" name="lastvalue3" id="lastvalue3" value="<!-- TMPL_VAR name="lastvalue3" -->" /></td>
                 </tr>
             </table>
         </div>
