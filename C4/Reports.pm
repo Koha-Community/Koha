@@ -25,6 +25,7 @@ use C4::Context;
 use C4::Output;
 use XML::Simple;
 use XML::Dumper;
+use C4::Debug;
 # use Smart::Comments;
 # use Data::Dumper;
 
@@ -328,18 +329,56 @@ sub get_criteria {
     return ( \@criteria_array );
 }
 
-sub execute_query {
-    my ( $sql, $type, $format, $id ) = @_;
-    my $dbh = C4::Context->dbh();
+=item execute_query
 
-    # take this line out when in production
-	if ($format eq 'csv' or $format eq 'tab'){
-		}
-	else {
-		$sql .= " LIMIT 20";
-	}
+=head2 ($results, $total) = execute_query($sql, $type, $offset, $limit, $format, $id)
+
+    When passed C<$sql>, this function returns an array ref containing a result set
+    suitably formatted for display in html or for output as a flat file when passed in
+    C<$format> and C<$id>.  Valid values for C<$format> are 'text,' 'tab,' 'csv,' or 'url.
+    C<$sql>, C<$type>, C<$offset>, and C<$limit> are required parameters. If a valid
+    C<$format> is passed in, C<$offset> and C<$limit> are ignored for obvious reasons.
+    A LIMIT specified by the user in a user-supplied SQL query WILL apply in any case.
+
+=cut
+
+sub execute_query ($$$$;$$) {
+    my ( $sql, $type, $offset, $limit, $format, $id ) = @_;
+    my @params;
+    my $total = 0;
+    my ($useroffset, $userlimit);
+    my $dbh = C4::Context->dbh();
+    unless ($format eq 'text' || $format eq 'tab' || $format eq 'csv' || $format eq 'url'){
+        # Grab offset/limit from user supplied LIMIT and drop the LIMIT so we can control pagination
+        if ($sql =~ /LIMIT/i) {
+            $sql =~ s/LIMIT\W?(\d+)?\,?\W+?(\d+)//ig;
+            $debug and warn "User has supplied LIMIT\n";
+            $useroffset = $1;
+            $userlimit = $2;
+            $debug and warn "User supplied offset = $useroffset, limit = $userlimit\n";
+            $offset += $useroffset if $useroffset;
+            # keep track of where we are if there is a user supplied LIMIT
+            if ( $offset + $limit > $userlimit ) {
+                $limit = $userlimit - $offset;
+            }
+        }
+        my $countsql = $sql;
+        $sql .= " LIMIT ?, ?";
+        $debug and warn "Passing query with params offset = $offset, limit = $limit\n";
+        @params = ($offset, $limit);
+        # Modify the query passed in to create a count query... (I think this covers all cases -crn)
+        $countsql =~ s/\bSELECT\W+(?:\w+\W+){1,}?FROM\b|\bSELECT\W\*\WFROM\b/SELECT count(*) FROM /ig;
+        $debug and warn "original query: $sql\n";
+        $debug and warn "count query: $countsql\n";
+        my $sth1 = $dbh->prepare($countsql);
+        $sth1->execute();
+        $total = $sth1->fetchrow();
+        $debug and warn "total records for this query: $total\n";
+        $total = $userlimit if defined($userlimit) and $userlimit < $total;     # we will never exceed a user defined LIMIT and...
+        $userlimit = $total if defined($userlimit) and $userlimit > $total;     # we will never exceed the total number of records available to satisfy the query
+    }
     my $sth = $dbh->prepare($sql);
-    $sth->execute();
+    $sth->execute(@params);
     my $colnames=$sth->{'NAME'};
     my @results;
     my $row;
@@ -349,6 +388,12 @@ sub execute_query {
     $temphash{'row'} = $row;
     push @results, \%temphash;
     my $string;
+    if ($format eq 'tab') {
+        $string = join("\t",@$colnames);
+    }
+    if ($format eq 'csv') {
+        $string = join(",",@$colnames);
+    }
     my @xmlarray;
     while ( my @data = $sth->fetchrow_array() ) {
         # if the field is a date field, it needs formatting
@@ -357,43 +402,41 @@ sub execute_query {
             my $date = C4::Dates->new($data, "iso");
             $data = $date->output();
         }
-            # tabular
-            my %temphash;
-            my $row = join( '</td><td>', @data );
-            $row = "<tr><td>$row</td></tr>";
-            $temphash{'row'} = $row;
-            if ( $format eq 'text' ) {
-                $string .= "\n" . $row;
-            }
-			if ($format eq 'tab' ){
-				$row = join("\t",@data);
-				$string .="\n" . $row;
-			}
-			if ($format eq 'csv' ){
-				$row = join(",",@data);
-				$string .="\n" . $row;
-			}
-		if ($format eq 'url'){
-			my $temphash;
-			@$temphash{@$colnames}=@data;
-			push @xmlarray,$temphash;
-		}
-            push @results, \%temphash;
-#        }
+        # tabular
+        my %temphash;
+        my $row = join( '</td><td>', @data );
+        $row = "<tr><td>$row</td></tr>";
+        $temphash{'row'} = $row;
+        if ( $format eq 'text' ) {
+            $string .= "\n" . $row;
+        }
+        if ($format eq 'tab' ){
+            $row = join("\t",@data);
+            $string .="\n" . $row;
+        }
+        if ($format eq 'csv' ){
+            $row = join(",",@data);
+            $string .="\n" . $row;
+        }
+        if ($format eq 'url'){
+            my $temphash;
+            @$temphash{@$colnames}=@data;
+            push @xmlarray,$temphash;
+        }
+        push @results, \%temphash;
     }
-    $sth->finish();
     if ( $format eq 'text' || $format eq 'tab' || $format eq 'csv' ) {
         return $string;
     }
-	elsif ($format eq 'url') {
-		my $url = "/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&id=$id";
-		my $dump = new XML::Dumper;
-		my $xml = $dump->pl2xml( \@xmlarray );
-		store_results($id,$xml);
-		return $url;
-	}
+    elsif ($format eq 'url') {
+        my $url = "/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&id=$id";
+        my $dump = new XML::Dumper;
+        my $xml = $dump->pl2xml( \@xmlarray );
+        store_results($id,$xml);
+        return $url;
+    }
     else {
-        return ( \@results );
+        return ( \@results, $total );
     }
 }
 
