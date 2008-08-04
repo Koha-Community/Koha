@@ -53,27 +53,6 @@ my ($template, $loggedinuser, $cookie)
 				});
 
 
-my $weekarrayjs='';
-my $count = 0;
-# FIXME - This assumes first pub date of today().
-# You can't enter past-date irregularities.
-my ($year, $month, $day) = Today;
-my $firstday   =  Day_of_Year($year,$month,$day);
-my ($wkno,$yr) = Week_of_Year($year,$month,$day); # week starting monday
-my $weekno = $wkno;
-for(my $i=$firstday;$i<($firstday+365);$i=$i+7){
-        #$count = $i;
-        #if($wkno > 52){$year++; $wkno=1;}
-        #if($count>365){$count=$i-365;}    
-        my ($y,$m,$d) = Add_Delta_Days($year,1,1,$i - 1);
-#warn "$y-$m-$d";
-        #BUGFIX padding add_delta_days() date
-        my $output  =  sprintf("%04d-%02d-%02d",$y , $m, $d );
-        $weekarrayjs .= "'Wk $wkno: ". format_date($output) ."',";
-        $wkno++;    
-}
-chop($weekarrayjs);
-# warn $weekarrayjs;
 
 my $sub_on;
 my @subscription_types = (
@@ -110,22 +89,25 @@ for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{b
 $template->param(branchloop => \@branchloop,
     DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
 );
-
+my $subscriptionid;
+my $subs;
+my $firstissuedate;
 if ($op eq 'mod'||$op eq 'dup') {
 
-    my $subscriptionid = $query->param('subscriptionid');
-#     warn "irregularity :$irregularity numberpattern : $numberpattern, callnumber :$callnumber, firstacquidate :$firstacquidate";
-    my $subs = &GetSubscription($subscriptionid);
+    $subscriptionid = $query->param('subscriptionid');
+    $subs = &GetSubscription($subscriptionid);
 ## FIXME : Check rights to edit if mod. Could/Should display an error message.
     if ($subs->{'cannotedit'} && $op eq 'mod'){
       warn "Attempt to modify subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
       print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
-    }  
-	for (qw(startdate firstacquidate histstartdate enddate histenddate)) {
+    } 
+$firstissuedate = $subs->{firstacquidate};  # in iso format.
+for (qw(startdate firstacquidate histstartdate enddate histenddate)) {
+	# TODO : Handle date formats properly.
          if ($subs->{$_} eq '0000-00-00') {
             $subs->{$_} = ''
     	} else {
-            $subs->{$_} = format_date($subs->{$_});
+            $subs->{$_} = format_date($subs->{$_});  
         }
 	}
     $subs->{'letter'}='' unless($subs->{'letter'});
@@ -167,6 +149,21 @@ if ($op eq 'mod'||$op eq 'dup') {
                 "numberpattern".$subs->{'numberpattern'} => 1,
                 );
 }
+my $weekarrayjs='';
+my $count = 0;
+# FIXME: 
+my ($year, $month, $day) = ($firstissuedate) ? split(/-/,$firstissuedate) : Today ;
+my $firstday   =  Day_of_Year($year,$month,$day);
+my ($wkno,$yr) = Week_of_Year($year,$month,$day); # week starting monday
+my $weekno = $wkno;
+for(my $i=$firstday;$i<($firstday+365);$i=$i+7){
+        my ($y,$m,$d) = Add_Delta_Days($year,1,1,$i - 1);
+        my $output  =  sprintf("%04d-%02d-%02d",$y , $m, $d );
+        $weekarrayjs .= "'Wk $wkno: ". format_date($output) ."',";
+        $wkno++;    
+}
+chop($weekarrayjs);
+# warn $weekarrayjs;
 
 if ($op eq 'addsubscription') {
     my $auser = $query->param('user');
@@ -178,7 +175,7 @@ if ($op eq 'addsubscription') {
     my $firstacquidate = $query->param('firstacquidate');    
     my $periodicity = $query->param('periodicity');
     my $dow = $query->param('dow');
-    my @irregularity = $query->param('irregular');
+    my @irregularity = $query->param('irregularity_select');
     my $numberlength = 0;
     my $weeklength = 0;
     my $monthlength = 0;
@@ -234,14 +231,7 @@ if ($op eq 'addsubscription') {
     print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
 } elsif ($op eq 'modsubscription') {
     my $subscriptionid = $query->param('subscriptionid');
-    my @irregular = $query->param('irregular');
-    my $irregular_count = @irregular;
-    for(my $i =0;$i<$irregular_count;$i++){
-      $irregularity .=$irregular[$i].",";
-      warn "irregular : $irregular[$i] string :$irregularity";
-    }
-    $irregularity =~ s/\,$//;
-
+	my @irregularity = $query->param('irregularity_select');
     my $auser = $query->param('user');
     my $librarian => $query->param('librarian'),
     my $branchcode = $query->param('branchcode');
@@ -300,13 +290,15 @@ if ($op eq 'addsubscription') {
     my $opacnote = $query->param('opacnote');
     my $librariannote = $query->param('librariannote');
     my $history_only = $query->param('history_only');
+	# FIXME:  If it's  a mod, we need to check the current 'expected' issue, and mod it in the serials table if necessary.
+	#
     if ($history_only) {
         ModSubscriptionHistory ($subscriptionid,$histstartdate,$histenddate,$recievedlist,$missinglist,$opacnote,$librariannote);
     } else {
         &ModSubscription(
             $auser,           $branchcode,   $aqbooksellerid, $cost,
             $aqbudgetid,      $startdate,    $periodicity,    $firstacquidate,
-            $dow,             $irregularity, $numberpattern,  $numberlength,
+            $dow,             join(",",@irregularity), $numberpattern,  $numberlength,
             $weeklength,      $monthlength,  $add1,           $every1,
             $whenmorethan1,   $setto1,       $lastvalue1,     $innerloop1,
             $add2,            $every2,       $whenmorethan2,  $setto2,

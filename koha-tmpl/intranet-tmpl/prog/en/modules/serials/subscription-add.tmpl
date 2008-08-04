@@ -11,6 +11,39 @@ var text = new Array(_("Number"),_("Volume"),_("Issue"),_("Month"),_("Week"),_("
 _("Autumn"),_("Winter"),_("Spring"),_("Summer"),_("Fall"),_("Season"),_("Year"));
 var is_season = 0;
 var is_hemisphere = 1;
+var irregular_issues;   // will hold irregularity object.
+
+<!-- TMPL_IF NAME="weekarrayjs" -->
+    var weeks = new Array(<!-- TMPL_VAR NAME="weekarrayjs" -->); 
+<!-- /TMPL_IF -->
+
+function formatDate(myDate) {
+    var d = new Array( myDate.getFullYear(), myDate.getMonth() + 1 ,myDate.getDate());
+    if(d[1].toString().length == 1) { d[1] = '0'+d[1] };
+    if(d[2].toString().length == 1) { d[2] = '0'+d[2] };
+    <!-- TMPL_IF NAME="dateformat_us" -->
+        return(d[1] + '/' + d[2] + '/' + d[0]) ;
+    <!-- TMPL_ELSIF NAME="dateformat_metric" -->
+        return(d[2] + '/' + d[1] + '/' + d[0]) ;
+    <!-- TMPL_ELSE -->
+        return(''+d[0] + '-' + d[1] + '-' + d[2]) ;
+    <!-- /TMPL_IF -->    
+}
+
+Date.prototype.addDays = function(days) {
+    this.setDate(this.getDate()+days);
+}
+
+function getWeeksArray(startDate) {
+// returns a 52 element array with dates starting with startDate.
+    var weeksArray = new Array;
+    var myDate = new Date;
+    for(var i=0;i<52;i++) {
+        startDate.addDays( 7 ); 
+        weeksArray[i] = formatDate(startDate);
+    }
+    return weeksArray;
+}
 
 function YMDaToYWDa(S) {
     with (new Date(Date.UTC(S[0], S[1] - 1, S[2]))) {
@@ -33,8 +66,64 @@ return ddiff+1;
 }
 
 
+// create irregularity object.
+function IrregularPattern() {
+	this.months = new Array(_("January"),_("February"),_("March"),_("April"),_("May"),_("June"),_("July"),_("August"),_("September"),_("October"),_("November"),_("December"));
+	this.seasons = new Array(_("Autumn"),_("Winter"),_("Spring"),_("Summer"),_("Fall"));
+    this.daynames = new Array(_("Monday"),_("Tuesday"),_("Wednesday"),_("Thursday"),_("Friday"),_("Saturday"),_("Sunday"));
+	<!-- TMPL_IF NAME="weekarrayjs" -->
+    	this.weeks = new Array(<!-- TMPL_VAR NAME="weekarrayjs" -->); 
+	<!-- /TMPL_IF -->
+	this.numskipped = 0;
+    // init:
+	var irregular = '<!-- TMPL_VAR NAME="irregularity" -->';
+   //  var periodicity = document.f.periodicity.value;
+    this.skipped = irregular.split(',');
+}
+
+IrregularPattern.prototype.update = function() {
+		this.skipped= new Array;
+		var cnt = 0;
+		// daily periodicity, we interpret irregular array as which days of week to skip.
+		// else irregular array is list of issues to skip
+		var summary_str = '';
+		this.numskipped = 0;
+        for( var i in document.f.irregularity_select.options ) {
+           if( document.f.irregularity_select.options[i].selected ) {
+                this.skipped[cnt] = document.f.irregularity_select.options[i].value ;
+                summary_str += document.f.irregularity_select.options[i].text + "\n" ;
+				cnt++;
+				this.numskipped++;
+			}
+		}
+		var summary = document.getElementById("irregularity_summary");
+		if(summary) {
+			summary.value = summary_str;
+			summary.rows= ( cnt > 6 ) ? cnt : 6 ;
+		}
+}
+
+IrregularPattern.prototype.irregular = function(index) { 
+	for( var i in this.skipped) {
+			if( this.skipped[i] == index) {
+				return true;
+			}
+	}
+	return false;
+}
+
+function init_pattern() {
+	irregular_issues = new IrregularPattern();
+}
+function reset_pattern() {
+	document.getElementById("numberpattern").value = '';
+//	document.getElementById("numberpattern").value = '';
+	init_pattern();
+	reset_num_pattern();
+
+}
 // common pre defined number patterns
-function num_pattern() {
+function reset_num_pattern() {
 var patternchoice = document.getElementById("numberpattern").value;
     switch(patternchoice){
     case "2":
@@ -50,9 +139,9 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.setto1.value=0;
         document.f.setto2.value=1;
         document.f.setto3.value=1;
-/*        document.f.lastvalue1.value=1;
+        document.f.lastvalue1.value=1;
         document.f.lastvalue2.value=1;
-        document.f.lastvalue3.value=1;*/
+        document.f.lastvalue3.value=1;
         document.f.numberingmethod.value=_("Vol {X}, No {Y}, Issue {Z}");
         moreoptions(text[1],text[0],text[2]);
         display_table(0); // toggle info box on (1) or off (0)
@@ -70,9 +159,9 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.setto1.value=0;
         document.f.setto2.value=1;
         document.f.setto3.value='';
-/*        document.f.lastvalue1.value=1;
+        document.f.lastvalue1.value=1;
         document.f.lastvalue2.value=1;
-        document.f.lastvalue3.value='';*/
+        document.f.lastvalue3.value='';
         document.f.numberingmethod.value=_("Vol {X}, No {Y}");
         moreoptions(text[1],text[0]);
         display_table(0);
@@ -90,6 +179,9 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.setto1.value=0;
         document.f.setto2.value=1;
         document.f.setto3.value='';
+        document.f.lastvalue1.value=1;
+        document.f.lastvalue2.value=1;
+        document.f.lastvalue3.value='';
         document.f.numberingmethod.value=_("Vol {X}, Issue {Y}");
         moreoptions(text[1],text[2]);
         display_table(0);
@@ -158,7 +250,6 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.setto1.value=0;
         document.f.setto2.value=1;
         document.f.setto3.value='';
-//         document.f.setto3.value='';
         if (document.f.lastvalue1.value==0){document.f.lastvalue1.value=sYear};
         if (document.f.lastvalue2.value==0 ||document.f.lastvalue2.value=='' ){    
           switch (document.f.periodicity.value){
@@ -223,11 +314,12 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.setto1.value=0;
         document.f.setto2.value='';
         document.f.setto3.value='';
-/*        document.f.lastvalue1.value=1;
+        document.f.lastvalue1.value=1;
         document.f.lastvalue2.value='';
-        document.f.lastvalue3.value='';*/
+        document.f.lastvalue3.value='';
         document.f.numberingmethod.value='{X}';
-        moreoptions_daily_check(text[0]);
+//        moreoptions_daily_check(text[0]);
+        moreoptions(text[0]);
         document.f.irreg_check.value=1;
         display_table(0);
         break;
@@ -237,15 +329,18 @@ var patternchoice = document.getElementById("numberpattern").value;
 function display_table(n) {
     if(n==1){
         document.getElementById("basetable").style.display = 'block';
-    } else {
+    } else if(n==0){
         document.getElementById("basetable").style.display = 'none';
-    }
+    } else {
+		var disp_val = ( document.getElementById("basetable").style.display == 'none' ) ? 'block' : 'none' ;
+			document.getElementById("basetable").style.display = disp_val;
+	}
 }
 
-function modify_num_pattern() {
+function set_num_pattern_from_template_vars() {
 	if(!document.getElementById("numberpattern")){ return false; }
     document.getElementById("numberpattern").value = '<!-- TMPL_VAR NAME="numberpattern" -->';
-    num_pattern();
+    reset_num_pattern();
     
     document.f.add1.value='<!-- TMPL_VAR NAME="add1" -->';
     document.f.add2.value='<!-- TMPL_VAR NAME="add2" -->';
@@ -276,7 +371,6 @@ function modify_num_pattern() {
         more_strZ="Z";
     }
     <!-- /TMPL_IF -->
-
     document.f.lastvaluetemp1.value='<!-- TMPL_VAR NAME="lastvalue1" -->';
     if(more_strY){
         document.f.lastvaluetemp2.value='<!-- TMPL_VAR NAME="lastvalue2" -->';
@@ -289,15 +383,15 @@ function modify_num_pattern() {
 }
 
 // a pre check with more options to see if 'number' and '1/day' are chosen
+
 function moreoptions_daily_check(x) {
     var periodicity = document.f.periodicity.value;
     var errortext='';
-    if(periodicity == 1){
+    if(periodicity == 1){ // i.e. daily
         document.getElementById("irregularity").innerHTML = '';
-        var daynames = new Array(_("Monday"),_("Tuesday"),_("Wednesday"),_("Thursday"),_("Friday"),_("Saturday"),_("Sunday"));
         errortext =_("Please indicate which days of the week you <b>DO NOT<\/b> expect to receive issues.<br \/>");
-        for(var j=0;j<daynames.length;j++){
-            errortext +="<input type='checkbox' name='irregular' id='irregular"+(j+1)+"' value='"+(j+1)+"' />"+daynames[j]+" &nbsp; ";
+        for(var j=0;j<irregular_issues.daynames.length;j++){
+            errortext +="<input type='checkbox' name='irregular' id='irregular"+(j+1)+"' value='"+(j+1)+"' />"+irregular_issues.daynames[j]+" &nbsp; ";
         }
         var error = errortext;
         moreoptions(x);
@@ -308,6 +402,7 @@ function moreoptions_daily_check(x) {
         moreoptions(x);
     }
 }
+
 
 // to dispaly the more options section
 function moreoptions(x,y,z){
@@ -334,14 +429,14 @@ var textbox = '';
         textbox +="<\/tr>\n";
         if(y){
             textbox +="<tr><th scope=\"row\">"+text[6]+"<\/th>";
-            textbox +="<td><a href='javascript:irregularity_check()'>"+_("Irregularity?")+"<\/a><\/td>\n";
+            textbox +="<td>&nbsp;<\/td>\n";
             textbox +="<td><input type='text' name='whenmorethantemp2' size='4' onkeyup='moreoptionsupdate(\"whenmorethan2\",1)'><\/td>\n";
             if(z){
                 textbox +="<td><input type='text' name='whenmorethantemp3' size='4' onkeyup='moreoptionsupdate(\"whenmorethan3\",1)'><\/td>\n";
             }
             textbox +="<\/tr>";
         } else {
-          textbox +="<tr> <td>"+_("issues expected")+"</td><td><input type='text' name='issuesexpectedtemp1' size='4' onkeyup='moreoptionsupdate(\"issuesexpected1\",0)' value=\"" + document.f.issuesexpected1.value + "\" ><br/><a href='javascript:irregularity_check()'>"+_("Irregularity?")+"</a></td></tr>";
+          textbox +="<tr> <td>"+_("issues expected")+"</td><td><input type='text' name='issuesexpectedtemp1' size='4' onkeyup='moreoptionsupdate(\"issuesexpected1\",0)' value=\"" + document.f.issuesexpected1.value + "\" ></td></tr>";
         }
         textbox +="<\/table>\n";
     }
@@ -354,7 +449,7 @@ var selbox = document.getElementById("season1");
     var selboxselected = selbox.options[selbox.selectedIndex].value;
     selbox.options.length = 0;
 
-    if (chosen == "1") {
+    if ( (chosen == "1") || ( ! (chosen) && is_hemisphere == 1 )) {
         selbox.options[selbox.options.length] = new Option(text[11],'1');
         selbox.options[selbox.options.length] = new Option(text[12],'2');
         selbox.options[selbox.options.length] = new Option(text[13],'3');
@@ -363,7 +458,7 @@ var selbox = document.getElementById("season1");
         selbox.options[selboxselected-1].selected = true;
     }
 
-    if (chosen == "2") {
+    if ( (chosen == "2") || ( ! (chosen) && is_hemisphere == 2 )) {
         selbox.options[selbox.options.length] = new Option(text[13],'1');
         selbox.options[selbox.options.length] = new Option(text[10],'2');
         selbox.options[selbox.options.length] = new Option(text[11],'3');
@@ -374,7 +469,7 @@ var selbox = document.getElementById("season1");
     }
 }
 
-// to dispaly the more options section for seasons
+// to display the more options section for seasons
 function moreoptions_seasons(x,y){
 document.getElementById("irregularity").innerHTML = '';
 document.getElementById("more_options").innerHTML = '';
@@ -404,7 +499,6 @@ var textbox = '';
         }
         textbox +="<\/select><\/td><\/tr>\n";
         textbox +="<tr><th scope=\"row\">"+text[6]+"<\/th>";
-        textbox +="<td><a href='javascript:irregularity_check()'>"+_("Irregularity?")+"<\/a><\/td>\n";
         textbox +="<td><input type='text' name='whenmorethantemp2' size='4' onkeyup='moreoptionsupdate(\"whenmorethan2\",1)'><\/td>\n";
                 textbox +="<\/tr><\/table>\n";
 
@@ -416,11 +510,15 @@ function irregularity_check(){
     document.f.irreg_check.value = 1; // Irregularity button now pushed
     var periodicity = document.f.periodicity.value;
 	var rollover = document.f.issuesexpected1.value;
-    if(document.f.whenmorethantemp2){
-      rollover = document.f.whenmorethantemp2.value;
+    if( (document.f.whenmorethan2) && ( document.f.whenmorethan2.value > 0) ){
+      rollover = document.f.whenmorethan2.value;
     }
-    if(document.f.whenmorethantemp3){
-        rollover = document.f.whenmorethantemp3.value;
+    if((document.f.whenmorethan3) && document.f.whenmorethan3.value > 0 ){
+        // FIXME: This assumes that whenmorethan3 issues are published in one year.
+		//   the other option is that whenmorethan3 * whenmorethan2 issues are published,
+		//  e.g. where there are two volumes of six issues each in one year. 
+		//  a way to distinguish between these two cases is needed.
+		rollover = document.f.whenmorethan3.value;
     }
     var error='';
     var toobig;
@@ -515,24 +613,19 @@ function irregularity_check(){
         break;
     }
     if(expected){
-        if(expected == 365 || expected==730){
-            var daynames = new Array(_("Monday"),_("Tuesday"),_("Wednesday"),_("Thursday"),_("Friday"),_("Saturday"),_("Sunday"));
+        if(expected == 365 || expected==730){  // what about leap years ?
+			// FIXME:  We interpret irregularity as which days per week for periodicity==1.
+			//  We need two cases: one in which we're published n days/week, in which case irregularity should be per week,
+			//  and a regular daily pub, where irregularity should be per year.
             errortext += _("Please indicate which days of the week you <b>DO NOT<\/b> expect to receive issues.<br \/>");
-            for(var j=0;j<daynames.length;j++){
-                errortext +="<input type='checkbox' name='irregular' id='irregular"+(j+1)+"' value='"+(j+1)+"' />"+daynames[j]+" &nbsp; ";
-            }
-            error=errortext;
         } else {
             errortext +=expected+_(" issues expected, ")+rollover+_(" were entered. <br \/>Please indicate which date(s) an issue is not expected<br \/>");
-            var count=0;
-            for(var i=rollover;i<expected;i++){
-                errortext +="<select name='irregular' id='irregular"+count+"' onchange='display_example(expected)'>\n";
-                errortext +=irregular_options(periodicity);
-                errortext +="<\/select>\n";
-                count++;
-            }
-            error=errortext;
-        }
+            irregular_issues.numskipped = expected - rollover;
+		}
+        errortext +="<select multiple id='irregularity_select' name='irregularity_select' onchange='irregular_issues.update();'>\n"; 
+		errortext +=irregular_options(periodicity);
+		errortext += "</select>\n <textarea rows='6' width='18' id='irregularity_summary' name='irregularity_summary' value='foo' />";
+        error=errortext;
     }
     if(toobig){
         errortext +=expectedover+_(" issues expected, ")+rollover+_(" were entered.<br \/> You seem to have indicated more issues per year than expected.");
@@ -541,18 +634,14 @@ function irregularity_check(){
     if(error.length ==0){
         error=_("No irregularities noticed");
     }
-    display_example(expected);
+	display_example(expected);
     document.getElementById("irregularity").innerHTML = error;
+	irregular_issues.update();
 }
 
 function irregular_options(periodicity){
     var titles;
     var count;
-<!-- TMPL_IF NAME="weekarrayjs" -->
-    var weeks = new Array(<!-- TMPL_VAR NAME="weekarrayjs" -->); 
-<!-- /TMPL_IF -->
-    var months = new Array(_("January"),_("February"),_("March"),_("April"),_("May"),_("June"),_("July"),_("August"),_("September"),_("October"),_("November"),_("December"));
-    var seasons = new Array(_("Autumn"),_("Winter"),_("Spring"),_("Summer"),_("Fall"));
     var errortext='';
     if(periodicity == 1) {
         expected = 366;
@@ -561,20 +650,21 @@ function irregular_options(periodicity){
     }
     if(periodicity == 2 || periodicity == 3 || periodicity == 4) { 
         expected = 52;
-    <!-- TMPL_IF NAME="weekarrayjs" -->
-        titles = weeks;
-        count = <!-- TMPL_VAR NAME="weekno" -->;
-    <!-- TMPL_ELSE -->
-        titles = "Week";
-        count = 1;
-    <!-- /TMPL_IF -->
+        titles = irregular_issues.weeks;
+        <!-- TMPL_IF NAME="weekno" -->
+		count = 1;  // This doesn't make sense given the behavior of the script.
+		// we should count from the first serial date, not from this week!
+		// <!-- TMPL_VAR NAME="weekno" -->;
+		<!-- TMPL_ELSE -->
+		count = 1;
+		<!-- /TMPL_IF -->
     }
     if(periodicity == 5 || periodicity == 6 || periodicity == 7 || periodicity == 8 || periodicity == 9) {
         if(periodicity == 8) {
             is_season = 1; // setting up from edit page
         } 
         if(is_season){
-            titles = seasons;
+            titles = irregular_issues.seasons;
             expected = 4;
             if(is_hemisphere == 2){
                 count = 2;
@@ -582,11 +672,14 @@ function irregular_options(periodicity){
                 count = 1;
             }
         } else {
-            titles = months;
+            titles = irregular_issues.months;
             expected = 12;
             count = 1;
         }
     }
+	if( !expected) {
+		return '';   // don't know how to deal with irregularity.
+	} 	
     for(var j=1;j<=expected;j++){
         if(isArray(titles)){
             if(count>expected){
@@ -599,30 +692,20 @@ function irregular_options(periodicity){
                 errortext +="<option value='"+((count*3)-2)+"'>"+titles[j-1]+"<\/option>\n";
 // alert("value: "+((count*3)-2)+" title: "+titles[j-1]);
             } else {
-                errortext +="<option value='"+count+"'>"+titles[j-1]+"<\/option>\n";
+                errortext += "<option value='" + count ;
+				if(irregular_issues.irregular(j)) {
+					errortext += "' selected='selected" ;
+				}
+				errortext += "'>"+titles[j-1]+"<\/option>\n";
             }
             count++;
-        } else {
+        } else { 
             errortext +="<option value='"+j+"'>"+titles+" "+j+"<\/option>\n";
         }
     }
     return errortext;
 }
 
-function irregular_order(){
-    var irregular = '<!-- TMPL_VAR NAME="irregularity" -->';
-    var periodicity = document.f.periodicity.value;
-    var irregarray = irregular.split(',');
-    if(periodicity ==1){
-        for(j=0;j<irregarray.length;j++){
-        document.getElementById("irregular"+irregarray[j]).checked = true; 
-        }
-    } else {
-        for(i=0;i<irregarray.length;i++){    
-            document.getElementById("irregular"+i).value = irregarray[i];
-        }
-    }
-}
 
 function display_example(expected){
     var startfrom1 = parseInt(document.f.lastvalue1.value);
@@ -636,11 +719,11 @@ function display_example(expected){
     var whenmorethan3 = parseInt(document.f.whenmorethan3.value);
     var setto2 = parseInt(document.f.setto2.value);
     var setto3 = parseInt(document.f.setto3.value);
-    var displaytext = _("Based on the information<br \/>entered the Numbering Pattern<br \/>will look like this<br \/>\n");
+    var displaytext = _("Based on the information entered, the Numbering Pattern will look like this: <br \/><ul class=\"numpattern_preview\">");
     if(startfrom3>0){
         var count=startfrom3-1;
         var count2=startfrom2;
-        for(var i=0;i<12;i++){
+        for(var i = 0 ; i < 12; i++){
             if(count>=whenmorethan3){
                 count=setto3;
                 if(count2>=whenmorethan2){
@@ -652,9 +735,9 @@ function display_example(expected){
             } else {
                 count++;
             }
-            displaytext += numberpattern.replace(/{Z}/,count)+'\n';
-            displaytext = displaytext.replace(/{Y}/,count2)+'<br \/>\n';
-            displaytext = displaytext.replace(/{X}/,startfrom1)+'<br \/>\n';
+            displaytext += '<li>' + numberpattern.replace(/{Z}/,count) + '</li>\n';
+            displaytext = displaytext.replace(/{Y}/,count2);
+            displaytext = displaytext.replace(/{X}/,startfrom1);
 
         }
     }
@@ -693,7 +776,7 @@ function display_example(expected){
             displaytext += numberpattern.replace(/{X}/,i)+'<br \/>\n';
         }
     }
-    displaytext = "<div style='padding: 5px; background-color: #CCCCCC'>"+displaytext+"<\/div>";
+   //  displaytext = "<div style='padding: 5px; background-color: #CCCCCC'>"+displaytext+"<\/div>";
     document.getElementById("displayexample").innerHTML = displaytext;
 }
 
@@ -779,24 +862,34 @@ function Check(f) {
             if(f.numbering_pattern.value == ''){
                 alert(_("Please choose a numbering pattern"));
             } else {
-                alert(_("Please check for irregularity by clicking 'Irregularity?'"));
+                alert(_("Please check for irregularity by clicking 'Test Prediction Pattern'"));
             }
         }
     } else {
         alert(_("You must choose a start date and a subscription length"));
     }
+	if(irregular_issues.numskipped < irregular_issues.skipped.length ) {
+		alert(_("You have not accounted for all missing issues."));
+	}
     return false;
 }
+
+$(document).ready(function() {
 <!-- TMPL_IF name="mod" -->
-window.onload = modify_num_pattern();
+    set_num_pattern_from_template_vars();
     <!-- TMPL_IF name="hemisphere" -->
-    window.onload = hemispheres(<!-- TMPL_VAR NAME="hemisphere" -->);
+	is_hemisphere = <!-- TMPL_VAR NAME="hemisphere" --> ;
+    hemispheres();
     <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="irregularity" -->
-window.onload = irregularity_check();
-window.onload = irregular_order();
+    irregularity_check();
 <!-- /TMPL_IF -->
+init_pattern();
+$('#numberpattern').change( function() { 
+    reset_num_pattern(); 
+    });
+});
 -->
 </script>
 </head>
@@ -918,7 +1011,7 @@ window.onload = irregular_order();
            <label for="firstacquidate"> First issue publication date:</label>
             
                 <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="button2" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />
-                <input type="text" name="firstacquidate" value="<!-- TMPL_VAR name="firstacquidate" -->" size="13" maxlength="10" id="acqui_date" style="border-width: 0px;" />
+                <input type="text" name="firstacquidate" value="<!-- TMPL_VAR name="firstacquidate" -->" size="13" maxlength="10" id="acqui_date" style="border-width: 0px;"  />
                 <!-- both scripts for calendar must follow the input field --> 
                 <script type="text/javascript">
                     Calendar.setup({
@@ -933,15 +1026,17 @@ window.onload = irregular_order();
                         inputField     :   "acqui_date",
                         ifFormat       :   "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
                         button         :   "acqui_date",
-                        align          :   "Tl"
-                    });
+                        align          :   "Tl",
+                        onUpdate        :    function(cal) { weeks = getWeeksArray(cal.date);
+                                                        } 
+                        });
                 </script>
            
         </li>
         <li>
             <label for="periodicity" class="required">Frequency:</label>
             
-                <select name="periodicity" size="1" id="periodicity" onchange="javascript:document.getElementsByName('manualhist')[0].checked=(this.value==1); num_pattern();">
+                <select name="periodicity" size="1" id="periodicity" onchange="javascript:document.getElementsByName('manualhist')[0].checked=(this.value==1); reset_num_pattern();">
                 <option value="" selected="selected">-- please choose --</option>
                 <!-- TMPL_IF name="periodicity16" -->
                 <option value="16" selected="selected">Without periodicity</option>
@@ -1031,7 +1126,7 @@ window.onload = irregular_order();
         <li>
            <label for="numberpattern"> Numbering pattern:</label>
             
-                <select name="numbering_pattern" size="1" id="numberpattern" onchange="num_pattern()">
+                <select name="numbering_pattern" size="1" id="numberpattern" onchange="reset_num_pattern()">
                     <option value="" selected="selected">-- please choose --</option>
                     <!-- TMPL_IF name="numberpattern1" -->
                         <option value="1" selected="selected">Number</option>
@@ -1121,10 +1216,21 @@ window.onload = irregular_order();
         </li>
     <li><label for="numberingmethod">Numbering formula:</label> <input type="text" name="numberingmethod" id="numberingmethod" value="<!-- TMPL_VAR name="numberingmethod" -->" />
     </li>
-    <li>
-           <div id="basetable" style="display: none;">
+    </ol>
+	</fieldset>
+</div>
+	<fieldset class="action">
+	<input type="button" class="action_test" value="Test Prediction Pattern" onclick="javascript:irregularity_check()" />
+	<input type="button" class="action_reset" value="Reset Pattern" onclick="javascript:reset_pattern()" />
+    <input type="button" class="action_save"  value="Save subscription" onclick="Check(this.form)" accesskey="w" />
+	</fieldset>
+    <fieldset class="action">
+    <input type="button" class="action_advanced" value="Show/Hide Advanced Pattern" onclick="javascript:display_table()" />
+    </fieldset>
+           <div id="basetable"  style="display: none;">
             <table class="small">
-                <tr>
+                <tr><th colspan="4">Advanced Prediction Pattern</th></tr>
+				<tr>
                     <th>&nbsp;</th>
                     <th>X</th>
                     <th>Y</th>
@@ -1180,12 +1286,7 @@ window.onload = irregular_order();
                 </tr>
             </table>
         </div>
-        </li>
-    </ol>
-	</fieldset>
-</div>
-	<fieldset class="action">
-    <input type="button" value="Save subscription" onclick="Check(this.form)" accesskey="w" /></fieldset>
+
 </div>
 
 </form>
@@ -1198,7 +1299,7 @@ window.onload = irregular_order();
         <input type="hidden" name="op" value="modsubscription" />
         <input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" />
         <input type="hidden" name="history_only" value="1" />
-        <p>Hint : you can update the serial history manually. This can be useful for an old subscription or to clean the existing history. Modify those fields with care, as future serial recieve will continue to update them automatically.</p>
+        <p>Hint : you can update the serial history manually. This can be useful for an old subscription or to clean the existing history. Modify these fields with care, as future serial receive will continue to update them automatically.</p>
         <table>
             <tr>
             <td>Subscription start date</td>
