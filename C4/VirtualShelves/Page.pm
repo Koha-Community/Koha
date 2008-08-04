@@ -23,7 +23,7 @@ package C4::VirtualShelves::Page;
 use strict;
 use warnings;
 use CGI;
-use C4::VirtualShelves;
+use C4::VirtualShelves qw/:DEFAULT RefreshShelvesSummary/;
 use C4::Biblio;
 use C4::Items;
 use C4::Koha;

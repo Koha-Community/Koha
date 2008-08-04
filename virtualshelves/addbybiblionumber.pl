@@ -58,7 +58,7 @@ use strict;
 use C4::Biblio;
 use CGI;
 use C4::Output;
-use C4::VirtualShelves;
+use C4::VirtualShelves qw/:DEFAULT GetRecentShelves/;
 use C4::Circulation;
 use C4::Auth;
 

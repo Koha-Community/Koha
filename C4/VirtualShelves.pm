@@ -36,18 +36,16 @@ BEGIN {
 	require Exporter;
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
-        &GetShelves &GetShelfContents &GetShelf
-		&GetRecentShelves &GetShelvesSummary
-
-        &AddToShelf &AddToShelfFromBiblio &AddShelf
-
-		&SetShelvesLimit
-		&RefreshShelvesSummary
-
-        &ModShelf
-        &ShelfPossibleAction
-        &DelFromShelf &DelShelf
+            &GetShelves &GetShelfContents &GetShelf
+            &AddToShelf &AddToShelfFromBiblio &AddShelf
+            &ModShelf
+            &ShelfPossibleAction
+            &DelFromShelf &DelShelf
 	);
+        @EXPORT_OK = qw(
+            &GetShelvesSummary &GetRecentShelves
+            &RefreshShelvesSummary &SetShelvesLimit
+        );
 }
 
 use C4::Auth qw(get_session);

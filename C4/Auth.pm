@@ -31,7 +31,7 @@ use C4::Output;    # to get the template
 use C4::Members;
 use C4::Koha;
 use C4::Branch; # GetBranches
-use C4::VirtualShelves;
+use C4::VirtualShelves qw/GetRecentShelves/;
 
 # use utf8;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug $ldap);
