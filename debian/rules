@@ -74,7 +74,8 @@ binary-indep: build install
 	dh_compress
 	dh_fixperms
 	dh_installdeb
-	dh_gencontrol --dpkg-gencontrol-params=-plibkoha-perl
+#	dh_gencontrol -u-plibkoha-perl -u-pv$(VERSION)
+	dh_gencontrol 
 	dh_md5sums
 	dh_builddeb
 
