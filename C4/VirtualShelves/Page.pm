@@ -66,9 +66,9 @@ sub shelfpage ($$$$$) {
 	my ($shelflimit, $shelfoffset, $shelveslimit, $shelvesoffset);
 	# FIXME: These limits should not be hardcoded...
 	$shelflimit = 20;	# Limits number of items returned for a given query
-	$shelfoffset = (($itemoff == 1) ? 0 : ($itemoff * 10));		# Sets the offset to begin retrieving items at
+	$shelfoffset = ($itemoff - 1) * 20;		# Sets the offset to begin retrieving items at
 	$shelveslimit = 20;	# Limits number of shelves returned for a given query (row_count)
-	$shelvesoffset = (($shelfoff == 1) ? 0 : ($shelfoff * 10));		# Sets the offset to begin retrieving shelves at (offset)
+	$shelvesoffset = ($shelfoff - 1) * 20;		# Sets the offset to begin retrieving shelves at (offset)
 	# getting the Shelves list
 	my $category = (($displaymode eq 'privateshelves') ? 1 : 2);
 	my ($shelflist, $totshelves) = GetShelves( $category, $shelveslimit, $shelvesoffset, $loggedinuser );
