@@ -152,8 +152,7 @@ reports</p>
 <input type="submit" name="submit" value="Next &gt;&gt;" /></fieldset>
 </form>
 </div>
-<div class="yui-gb"><div class="yui-u first">Tabular:
-<img src="<!-- TMPL_VAR name="themelang" -->/../img/reports-tabular-graphic.gif" alt="" /></div>
+<div class="yui-gb"><div class="yui-u first"></div>
 
 <!--- Summary and Matrix reports have not yet been implemented-->
 <!--<div class="yui-u">Summary:
@@ -230,9 +229,9 @@ NAME="name" -->"><!-- TMPL_VAR NAME="description" --> </label>
 /><img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="buttonfrom<!-- TMPL_VAR NAME="name" -->" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />                 
 <script type="text/javascript">   
 Calendar.setup({  
-inputField     : "<!-- TMPL_VAR NAME="name" -->_value",                               
-ifFormat       : "%Y-%m-%d",                               
-button         : "buttonfrom<!-- TMPL_VAR NAME="name" -->",                               
+inputField     : "<!-- TMPL_VAR NAME="name" -->_value",
+ifFormat       : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+button         : "buttonfrom<!-- TMPL_VAR NAME="name" -->",
 align          : "Tl" 
 });     
 </script>          

@@ -204,7 +204,7 @@ Filter by area <select name="areas">
 <script type="text/javascript">                            
 Calendar.setup({             
 inputField     : "<!-- TMPL_VAR NAME="name" -->_start_value",    
-ifFormat       : "%Y-%m-%d",                         
+ifFormat       : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
 button         : "buttonfrom1",                            
 align          : "Tl"                  
 });
@@ -215,12 +215,12 @@ align          : "Tl"
 <td>End of date range</td>
 <td>
 <input type="text" size="10" id="<!-- TMPL_VAR NAME="name" -->_end_value" name="<!-- TMPL_VAR NAME="name" -->_end_value" value="" />      
-<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="buttonfrom1" style="cursor: pointer;"  />    
+<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="buttonfrom2" style="cursor: pointer;"  />
 <script type="text/javascript">                            
 Calendar.setup({             
 inputField     : "<!-- TMPL_VAR NAME="name" -->_end_value",    
-ifFormat       : "%Y-%m-%d",                         
-button         : "buttonfrom1",                            
+ifFormat       : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+button         : "buttonfrom2",
 align          : "Tl"                  
 });
 </script>

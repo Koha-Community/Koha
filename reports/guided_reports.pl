@@ -22,6 +22,8 @@ use CGI;
 use C4::Reports;
 use C4::Auth;
 use C4::Output;
+use C4::Dates qw( DHTMLcalendar );
+
 =head1 NAME
 
 Script to control the guided report creation
@@ -172,6 +174,10 @@ elsif ( $phase eq 'Choose these criteria' ) {
     foreach my $crit (@criteria) {
         my $value = $input->param( $crit . "_value" );
         if ($value) {
+            if ($value =~ C4::Dates->regexp(C4::Context->preference('dateformat'))) { 
+                my $date = C4::Dates->new($value);
+                $value = $date->output("iso");
+            }
             $query_criteria .= " AND $crit='$value'";
         }
     }
@@ -181,7 +187,7 @@ elsif ( $phase eq 'Choose these criteria' ) {
         'area'           => $area,
         'type'           => $type,
         'column'         => $column,
-		'definition'     => $definition,
+        'definition'     => $definition,
         'criteriastring' => $query_criteria,
     );
 
@@ -239,7 +245,7 @@ elsif ( $phase eq 'Choose These Operations' ) {
         'column'         => $column,
         'criteriastring' => $criteria,
         'totals'         => $totals,
-		'definition'    => $definition,
+        'definition'    => $definition,
     );
 
     # get columns
@@ -331,7 +337,7 @@ elsif ( $phase eq 'Execute' ) {
     my $results = execute_query($sql,$type);
     $template->param(
         'results' => $results,
-		'sql' => $sql,
+        'sql' => $sql,
         'execute' => 1
     );
 }
@@ -341,13 +347,13 @@ elsif ($phase eq 'Run this report'){
 	my $report = $input->param('reports');
 	my ($sql,$type,$name,$notes) = get_saved_report($report);
 	my $results = execute_query($sql,$type);
-    $template->param(
-        'results' => $results,
-		'sql' => $sql,
-        'execute' => 1,
-		'name' => $name,
-		'notes' => $notes,
-    );
+        $template->param(
+            'results' => $results,
+            'sql' => $sql,
+            'execute' => 1,
+            'name' => $name,
+            'notes' => $notes,
+        );
 }	
 
 elsif ($phase eq 'Export'){
@@ -389,7 +395,9 @@ elsif ($phase eq 'Save Compound'){
 }
 
 
-$template->param( 'referer' => $referer );
+$template->param(   'referer' => $referer,
+                    'DHTMLcalendar_dateformat' => C4::Dates->DHTMLcalendar(),
+                );
 
 
 if (!$no_html){

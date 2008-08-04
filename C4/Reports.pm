@@ -340,18 +340,23 @@ sub execute_query {
 	}
     my $sth = $dbh->prepare($sql);
     $sth->execute();
-	my $colnames=$sth->{'NAME'};
-	my @results;
-	my $row;
-	my %temphash;
-	$row = join ('</th><th>',@$colnames);
-	$row = "<tr><th>$row</th></tr>";
-	$temphash{'row'} = $row;
-	push @results, \%temphash;
+    my $colnames=$sth->{'NAME'};
+    my @results;
+    my $row;
+    my %temphash;
+    $row = join ('</th><th>',@$colnames);
+    $row = "<tr><th>$row</th></tr>";
+    $temphash{'row'} = $row;
+    push @results, \%temphash;
     my $string;
-	my @xmlarray;
+    my @xmlarray;
     while ( my @data = $sth->fetchrow_array() ) {
-
+        # if the field is a date field, it needs formatting
+        foreach my $data (@data) {
+            next unless $data =~ C4::Dates->regexp("iso");
+            my $date = C4::Dates->new($data, "iso");
+            $data = $date->output();
+        }
             # tabular
             my %temphash;
             my $row = join( '</td><td>', @data );
