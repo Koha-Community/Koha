@@ -241,7 +241,10 @@ if ($op eq 'serialchangestatus') {
   #           push @errors,"barcode_not_unique" if($exists);
             $template->param("barcode_not_unique" => 1,'errserialseq'=>$serialseqs[$index]);
             # if barcode exists, don't create, but report The problem.
-			unless ($exists){
+			if ($exists){
+              $url_error_str = "rcv_error=barcode_not_unique&rcv_error_param=$serialseqs[$index]";
+              $template->param("barcode_not_unique" => 1,'errserialseq'=>$serialseqs[$index]);
+            } else {
               my ($biblionumber,$bibitemnum,$itemnumber) = AddItemFromMarc($record,$itemhash{$item}->{'bibnum'});
               AddItem2Serial($itemhash{$item}->{'serial'},$itemnumber);
             }
