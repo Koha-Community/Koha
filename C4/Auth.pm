@@ -31,7 +31,7 @@ use C4::Output;    # to get the template
 use C4::Members;
 use C4::Koha;
 use C4::Branch; # GetBranches
-use C4::VirtualShelves qw/GetRecentShelves/;
+use C4::VirtualShelves;
 
 # use utf8;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug $ldap);
@@ -711,9 +711,9 @@ sub checkauth {
 				# and the number of lists to be displayed of each type in the 'Lists' button drop down
 				my $row_count = 10; # FIXME:This probably should be a syspref
 				my ($total, $totshelves, $barshelves, $pubshelves);
-				($barshelves, $totshelves) = GetRecentShelves(1, $row_count, $borrowernumber);
+				($barshelves, $totshelves) = C4::VirtualShelves::GetRecentShelves(1, $row_count, $borrowernumber);
 				$total->{'bartotal'} = $totshelves;
-				($pubshelves, $totshelves) = GetRecentShelves(2, $row_count, undef);
+				($pubshelves, $totshelves) = C4::VirtualShelves::GetRecentShelves(2, $row_count, undef);
 				$total->{'pubtotal'} = $totshelves;
 				$session->param('barshelves', $barshelves->[0]);
 				$session->param('pubshelves', $pubshelves->[0]);
@@ -738,7 +738,7 @@ sub checkauth {
 			# Grab the public shelves and add to the session...
 			my $row_count = 20; # FIXME:This probably should be a syspref
 			my ($total, $totshelves, $pubshelves);
-			($pubshelves, $totshelves) = GetRecentShelves(2, $row_count, undef);
+			($pubshelves, $totshelves) = C4::VirtualShelves::GetRecentShelves(2, $row_count, undef);
 			$total->{'pubtotal'} = $totshelves;
 			$session->param('pubshelves', $pubshelves->[0]);
 			$session->param('totshelves', $total);
