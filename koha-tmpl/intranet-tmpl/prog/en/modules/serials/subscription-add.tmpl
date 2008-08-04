@@ -9,13 +9,10 @@
 // the english words used in display purposes
 var text = new Array(_("Number"),_("Volume"),_("Issue"),_("Month"),_("Week"),_("Starting with:"),_("Rollover at:"),_("Choose Hemisphere:"),_("Northern"),_("Southern"),
 _("Autumn"),_("Winter"),_("Spring"),_("Summer"),_("Fall"),_("Season"),_("Year"));
+var weekno_label = _("Week # ");
 var is_season = 0;
 var is_hemisphere = 1;
 var irregular_issues;   // will hold irregularity object.
-
-<!-- TMPL_IF NAME="weekarrayjs" -->
-    var weeks = new Array(<!-- TMPL_VAR NAME="weekarrayjs" -->); 
-<!-- /TMPL_IF -->
 
 function formatDate(myDate) {
     var d = new Array( myDate.getFullYear(), myDate.getMonth() + 1 ,myDate.getDate());
@@ -34,13 +31,22 @@ Date.prototype.addDays = function(days) {
     this.setDate(this.getDate()+days);
 }
 
-function getWeeksArray(startDate) {
-// returns a 52 element array with dates starting with startDate.
+function getWeeksArray(startDate,periodicity) {
+// returns an array of syspref-formatted dates starting at the first day of startDate's year.
+// This prediction method will not accurately predict irregularites beyond the first year.
+// FIXME : Should replace with ajax query to get the first Monday of the year so that week numbers have correct dates.
+    var incr=1;
+    if(periodicity==3) {  // 1/2 wks
+        incr=2;
+    } else if(periodicity == 4) { // 1/3 wks
+        incr=3;
+    }
     var weeksArray = new Array;
-    var myDate = new Date;
+    startDate.setDate(1);
+    startDate.setMonth(0);
     for(var i=0;i<52;i++) {
+        weeksArray[i] = formatDate(startDate) + ' ' + weekno_label + (i + 1);
         startDate.addDays( 7 ); 
-        weeksArray[i] = formatDate(startDate);
     }
     return weeksArray;
 }
@@ -71,13 +77,18 @@ function IrregularPattern() {
 	this.months = new Array(_("January"),_("February"),_("March"),_("April"),_("May"),_("June"),_("July"),_("August"),_("September"),_("October"),_("November"),_("December"));
 	this.seasons = new Array(_("Autumn"),_("Winter"),_("Spring"),_("Summer"),_("Fall"));
     this.daynames = new Array(_("Monday"),_("Tuesday"),_("Wednesday"),_("Thursday"),_("Friday"),_("Saturday"),_("Sunday"));
-	<!-- TMPL_IF NAME="weekarrayjs" -->
-    	this.weeks = new Array(<!-- TMPL_VAR NAME="weekarrayjs" -->); 
-	<!-- /TMPL_IF -->
-	this.numskipped = 0;
+    // create weeks irregularity selection array:
+    this.firstissue = new Date();
+    this.firstissue.setDate(1);
+    this.firstissue.setMonth(0);
+    <!-- TMPL_IF NAME='firstacquiyear' --> // it's a mod, we already have a start date.
+        this.firstissue.setFullYear( <!-- TMPL_VAR NAME="firstacquiyear" --> );
+    <!-- /TMPL_IF -->
+   	this.weeks = getWeeksArray(this.firstissue); 
+
+    this.numskipped = 0;
     // init:
 	var irregular = '<!-- TMPL_VAR NAME="irregularity" -->';
-   //  var periodicity = document.f.periodicity.value;
     this.skipped = irregular.split(',');
 }
 
@@ -85,7 +96,8 @@ IrregularPattern.prototype.update = function() {
 		this.skipped= new Array;
 		var cnt = 0;
 		// daily periodicity, we interpret irregular array as which days of week to skip.
-		// else irregular array is list of issues to skip
+		// else if weekly periodicity, week numbers (starting from 01 Jan) to skip.
+        // else  irregular array is list of issues to skip
 		var summary_str = '';
 		this.numskipped = 0;
         if(document.f.irregularity_select) {
@@ -100,7 +112,7 @@ IrregularPattern.prototype.update = function() {
 		    var summary = document.getElementById("irregularity_summary");
 		    if(summary) {
 			    summary.value = summary_str;
-			    summary.rows= ( cnt > 6 ) ? cnt : 6 ;
+			    summary.rows= ( cnt > 6 ) ? cnt : 6 ; // textarea will bre resized, but not more than 6 lines will show.
 		    }
         }
 }
@@ -119,7 +131,7 @@ function init_pattern() {
 }
 function reset_pattern() {
 	document.getElementById("numberpattern").value = '';
-//	document.getElementById("numberpattern").value = '';
+    document.getElementById("irregularity").innerHTML = '';
 	init_pattern();
 	reset_num_pattern();
 
@@ -225,10 +237,10 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.setto1.value=0;
         document.f.setto2.value='1';
         document.f.setto3.value='';
-        document.f.lastvalue1temp.value=sYear;
         document.f.periodicity.value='8';
         document.f.numberingmethod.value=_("{Y} {X}");
         moreoptions_seasons(text[15],sYear);
+        document.f.lastvalue1temp.value=document.f.lastvalue1.value=sYear;
         display_table(0);
         is_season = 1;
         break;
@@ -237,8 +249,8 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.getElementById("more_options").innerHTML = '';
         document.f.irreg_check.value=1; 
         break;
-    case "8":
-        var d = new Date(document.f.startdate.value);
+    case "8":  // Year/Number
+        var d = (document.f.firstacquidate.value) ? new Date( document.f.firstacquidate.value) : new Date() ;
         var sYear = d.getFullYear();
         document.f.add1.value=1;
         document.f.add2.value=1;
@@ -252,29 +264,22 @@ var patternchoice = document.getElementById("numberpattern").value;
         document.f.setto1.value=0;
         document.f.setto2.value=1;
         document.f.setto3.value='';
-        if (document.f.lastvalue1.value==0){document.f.lastvalue1.value=sYear};
-        if (document.f.lastvalue2.value==0 ||document.f.lastvalue2.value=='' ){    
+        document.f.lastvalue1.value=sYear;
           switch (document.f.periodicity.value){
             case 1:              
               var doy = dayofyear(d);
-              //var Weeknumber=YWDA[1];
               document.f.lastvalue2.value=doy; 
+              document.f.whenmorethan2.value=365; 
               break;      
             case 12:     
               var doy = dayofyear(d);
-              //var Weeknumber=YWDA[1];
               document.f.lastvalue2.value=doy*2; 
-              break;      
-            case 13:     
-              var doy = dayofyear(d);
-              //var Weeknumber=YWDA[1];
-              document.f.lastvalue2.value=doy/3; 
+              document.f.whenmorethan2.value=730; 
               break;      
             case 2:
             case 3:
             case 4:
               var YWDa = YMDaToYWDa(d);
-              //var Weeknumber=YWDA[1];
               document.f.lastvalue2.value=YWDA[1]/(document.f.periodicity.value-1); 
               break;      
             case 5:
@@ -284,23 +289,26 @@ var patternchoice = document.getElementById("numberpattern").value;
             case 6:
               var smonth = d.getMonth();
               document.f.lastvalue2.value=smonth/2;
+              document.f.whenmorethan2.value=6;
               break;      
             case 7:
             case 8:      
               var smonth = d.getMonth();
               document.f.lastvalue2.value=smonth/3;
+              document.f.whenmorethan2.value=4;
               break;      
             case 9:                        
               var smonth = d.getMonth();
               document.f.lastvalue2.value=smonth/6;
+              document.f.whenmorethan2.value=2;
               break;      
             default:
           } 
-        }    
-        //         document.f.lastvalue2.value=document.f.lastvalue2temp.value;
         document.f.lastvalue3.value='';
-        document.f.numberingmethod.value=_("{X}/{Y}");
+        document.f.numberingmethod.value=_("{X} / {Y}");
         moreoptions(text[16],text[0]);
+     //   document.f.lastvalue1temp.value=sYear;
+     //   document.f.lastvalue2temp.value=document.f.lastvalue2.value;
         display_table(0);
         break;
     default:
@@ -385,7 +393,7 @@ function set_num_pattern_from_template_vars() {
 }
 
 // a pre check with more options to see if 'number' and '1/day' are chosen
-
+<!-- 
 function moreoptions_daily_check(x) {
     var periodicity = document.f.periodicity.value;
     var errortext='';
@@ -404,6 +412,7 @@ function moreoptions_daily_check(x) {
         moreoptions(x);
     }
 }
+-->
 
 
 // to dispaly the more options section
@@ -413,7 +422,7 @@ document.getElementById("more_options").innerHTML = '';
 var textbox = '';
     // alert("X: "+x+"Y: "+y+"Z: "+z);
     if(x){
-        textbox +="<table>\n<tr><th>&nbsp;<\/th><th>"+x+"<\/th>";
+        textbox +="<table id='irregularity_table'>\n<tr><th>&nbsp;<\/th><th>"+x+"<\/th>";
         if(y){
             textbox +="<th>"+y+"<\/th>";
             if(z){
@@ -473,6 +482,7 @@ var selbox = document.getElementById("season1");
 
 // to display the more options section for seasons
 function moreoptions_seasons(x,y){
+// x = 'Season'.  y = 'Year'.
 document.getElementById("irregularity").innerHTML = '';
 document.getElementById("more_options").innerHTML = '';
 var textbox = '';
@@ -488,18 +498,16 @@ var textbox = '';
             textbox +=">"+text[i+7]+"<\/option>";
         }
         textbox +="<\/li>\n";
-        textbox +="<table><tr><th>&nbsp;<\/th><th>"+x+"<\/th>";
+        textbox +="<table id='seasonal_irregularity'><tr><th>&nbsp;<\/th><th>"+x+"<\/th>";
         textbox +="<th>"+text[16]+"<\/th>";
         textbox +="<\/tr>\n";
         textbox +="<tr><th scope=\"row\">"+text[5]+"<\/th><td><select name='lastvalue2temp' id='lastvalue2temp' id='season1' onchange='moreoptionsupdate(this)'>";
         for(var j = 1; j <= 4; j++){
-            textbox +="<option value='"+j+"'>"+text[j+10]+"<\/option>";
+            textbox +="<option value='"+j+"'>"+text[j+9]+"<\/option>";
         }
-        textbox +="<\/select><\/td><td><select name='lastvalue1temp' id='lastvalue1temp' onchange='moreoptionsupdate(this)'>";
-        for(var k = parseInt(y); k <= parseInt(y)+15; k++){
-            textbox +="<option value='"+k+"'>"+k+"<\/option>";
-        }
-        textbox +="<\/select><\/td><\/tr>\n";
+        textbox +="<\/select><\/td>";
+        var isyr = irregular_issues.firstissue;
+        textbox += "<td>" + irregular_issues.firstissue.getFullYear() + "<\/td><\/tr>\n";
         textbox +="<tr><th scope=\"row\">"+text[6]+"<\/th>";
         textbox +="<td><input type='text' name='whenmorethan2temp' id='whenmorethan2temp' size='4' onkeyup='moreoptionsupdate(this,1)'><\/td>\n";
                 textbox +="<\/tr><\/table>\n";
@@ -539,13 +547,6 @@ function irregularity_check(){
         if(rollover < 365) expected =365;
         if(rollover > 365) {
             expectedover=365;
-            toobig=1;
-        }
-        break;
-    case "13":
-        if(rollover < 156) expected =156;
-        if(rollover > 156) {
-            expectedover=156;
             toobig=1;
         }
         break;
@@ -631,7 +632,7 @@ function irregularity_check(){
         error=errortext;
     }
     if(toobig){
-        errortext +=expectedover+_(" issues expected, ")+rollover+_(" were entered.<br \/> You seem to have indicated more issues per year than expected.");
+        errortext +=expectedover+_(" issues expected, ")+rollover+_(" were entered.<p class='warning'> You seem to have indicated more issues per year than expected.</p>");
         error=errortext;
     }
     if(error.length ==0){
@@ -647,23 +648,23 @@ function irregular_options(periodicity){
     var count;
     var errortext='';
     if(periodicity == 1) {
-        expected = 366;
-        titles = "Day";
+        expected = 7;
+        titles = irregular_issues.daynames;
         count = 1;
     }
     if(periodicity == 2 || periodicity == 3 || periodicity == 4) { 
-        expected = 52;
         titles = irregular_issues.weeks;
-        <!-- TMPL_IF NAME="weekno" -->
-		count = 1;  // This doesn't make sense given the behavior of the script.
-		// we should count from the first serial date, not from this week!
-		// <!-- TMPL_VAR NAME="weekno" -->;
-		<!-- TMPL_ELSE -->
 		count = 1;
-		<!-- /TMPL_IF -->
+        if(periodicity==3) {  // 1/2 wks
+            expected = 26;
+        } else if(periodicity == 4) { // 1/3 wks
+            expected = 17;
+        } else {
+            expected = 52;
+        }
     }
     if(periodicity == 5 || periodicity == 6 || periodicity == 7 || periodicity == 8 || periodicity == 9) {
-        if(periodicity == 8) {
+        if(periodicity == 8 && numberpattern==8) {
             is_season = 1; // setting up from edit page
         } 
         if(is_season){
@@ -683,7 +684,7 @@ function irregular_options(periodicity){
 	if( !expected) {
 		return '';   // don't know how to deal with irregularity.
 	} 	
-    for(var j=1;j<=expected;j++){
+    for(var j=0;j<expected;j++){   // rch - changed frrom (1..expected).
         if(isArray(titles)){
             if(count>expected){
                 count = count-expected;
@@ -694,12 +695,18 @@ function irregular_options(periodicity){
             } else if(is_season && is_hemisphere == 2){
                 errortext +="<option value='"+((count*3)-2)+"'>"+titles[j-1]+"<\/option>\n";
 // alert("value: "+((count*3)-2)+" title: "+titles[j-1]);
-            } else {
-                errortext += "<option value='" + count ;
-				if(irregular_issues.irregular(j)) {
+            } else {  // all non-seasonal periodicities:
+                var incr=1; // multiplier for ( 1/n weeks)  patterns; in this case the irreg calc relies on the week# , not the issue#.
+                if(periodicity==3) {  // 1/2 wks
+                    incr=2;
+                } else if(periodicity == 4) { // 1/3 wks
+                    incr=3;
+                }
+                errortext += "<option value='" + (1+j*incr) ;  
+				if(irregular_issues.irregular(1+incr*j)) {
 					errortext += "' selected='selected" ;
 				}
-				errortext += "'>"+titles[j-1]+"<\/option>\n";
+				errortext += "'>"+titles[incr*j]+"<\/option>\n";
             }
             count++;
         } else { 
@@ -804,7 +811,7 @@ function moreoptionsupdate(inputfield,rollover){
     case "2":
     case "4":
     case "5":
-    case "8":
+    case "8": // Year, Number.  -- Why not just use Vol, Number withvol==year??
        if (document.f.lastvalue2temp.value>0){document.f.innerloop1.value = document.f.lastvalue2temp.value - 1;}
       break;   
     }  
@@ -1019,30 +1026,46 @@ $('#numberpattern').change( function() {
     <ol>
         <li>
            <label for="firstacquidate"> First issue publication date:</label>
-            
-                <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="button2" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />
-                <input type="text" name="firstacquidate" value="<!-- TMPL_VAR name="firstacquidate" -->" size="13" maxlength="10" id="acqui_date" style="border-width: 0px;"  />
+                <!-- TMPL_UNLESS NAME="mod" --><img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="acqui_button" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" /><!-- /TMPL_UNLESS -->
+                <input type="text" name="firstacquidate" value="<!-- TMPL_VAR name="firstacquidate" -->"  size="13" maxlength="10" id="acqui_date" <!-- TMPL_IF NAME="mod" -->disabled="true"<!-- /TMPL_IF --> style="border-width: 0px;"  />
+        </li>
+           <!-- TMPL_IF NAME="mod" --><li><label for="nextacquidate"> Next issue publication date:</label>
+                <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="next_acqui_button" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />
+                <input type="text" name="nextacquidate" value="<!-- TMPL_VAR name="nextacquidate" -->" size="13" maxlength="10" id="next_acqui_date" style="border-width: 0px;"  />
+                </li><!-- /TMPL_IF -->
                 <!-- both scripts for calendar must follow the input field --> 
                 <script type="text/javascript">
                     Calendar.setup({
-                        inputField:"acqui_date",
+                        inputField      :   "<!-- TMPL_IF NAME="mod" -->next_<!-- /TMPL_IF -->acqui_date",
                         ifFormat       :   "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
-                        button         :   "button2",
-                        align          :   "Tl"
-                    });
-                </script>
-                <script type="text/javascript">
-                    Calendar.setup({
-                        inputField     :   "acqui_date",
-                        ifFormat       :   "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
-                        button         :   "acqui_date",
+                        button         :   "<!-- TMPL_IF NAME="mod" -->next_<!-- /TMPL_IF -->acqui_button",
                         align          :   "Tl",
-                        onUpdate        :    function(cal) { weeks = getWeeksArray(cal.date);
+                        onUpdate        :    function(cal) { irregular_issues.weeks = getWeeksArray(cal.date);
+                                                            irregular_issues.firstissue = cal.date;
+                                                            if(document.irregularity_summary) {
+                                                                irregular_issues.update();
+                                                            }
+                                                            if(document.getElementById("seasonal_irregularity")) {
+                                                                moreoptions_seasons(text[15]);
+                                                            }
+                                                        } 
+                        });
+                    Calendar.setup({
+                        inputField      :   "<!-- TMPL_IF NAME="mod" -->next_<!-- /TMPL_IF -->acqui_date",
+                        ifFormat       :   "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+                        button         :   "<!-- TMPL_IF NAME="mod" -->next_<!-- /TMPL_IF -->acqui_date",
+                        align          :   "Tl",
+                        onUpdate        :    function(cal) { irregular_issues.weeks = getWeeksArray(cal.date);
+                                                            irregular_issues.firstissue = cal.date;
+                                                            if(document.irregularity_summary) {
+                                                                irregular_issues.update();
+                                                            }
+                                                            if(document.getElementById("seasonal_irregularity")) {
+                                                                moreoptions_seasons(text[15]);
+                                                            }
                                                         } 
                         });
                 </script>
-           
-        </li>
         <li>
             <label for="periodicity" class="required">Frequency:</label>
             
@@ -1070,14 +1093,9 @@ $('#numberpattern').change( function() {
                     <option value="12">2/day</option>
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF name="periodicity1" -->
-                    <option value="1" selected="selected">1/day</option>
+                    <option value="1" selected="selected">daily (n/week)</option>
                 <!-- TMPL_ELSE -->
-                    <option value="1">1/day</option>
-                <!-- /TMPL_IF -->
-                <!-- TMPL_IF name="periodicity13" -->
-                    <option value="13" selected="selected">3/week</option>
-                <!-- TMPL_ELSE -->
-                    <option value="13">3/week</option>
+                    <option value="1">daily (n/week)</option>
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF name="periodicity2" -->
                     <option value="2" selected="selected">1/week</option>
@@ -1136,7 +1154,7 @@ $('#numberpattern').change( function() {
         <li>
            <label for="numberpattern"> Numbering pattern:</label>
             
-                <select name="numbering_pattern" size="1" id="numberpattern" onchange="reset_num_pattern()">
+                <select name="numbering_pattern" size="1" id="numberpattern" >
                     <option value="" selected="selected">-- please choose --</option>
                     <!-- TMPL_IF name="numberpattern1" -->
                         <option value="1" selected="selected">Number</option>
