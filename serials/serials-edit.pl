@@ -85,10 +85,11 @@ my @status = $query->param('status');
 my @notes = $query->param('notes');
 my @subscriptionids = $query->param('subscriptionid');
 my $op = $query->param('op');
-# warn "op : $op";
 if (scalar(@subscriptionids)==1 && index($subscriptionids[0],",")>0){
   @subscriptionids =split /,/,$subscriptionids[0];
 }
+my @errors;
+my @errseq;
 my $redirectstring;
 # If user comes from subscription details
 unless (@serialids){
@@ -119,35 +120,44 @@ my ($template, $loggedinuser, $cookie)
                 });
 
 my @serialdatalist;
+my %processedserialid;
 foreach my $tmpserialid (@serialids){
-  my $data=GetSerialInformation($tmpserialid);
-  $data->{publisheddate}=format_date($data->{publisheddate});
-  $data->{planneddate}=format_date($data->{planneddate});
-  $data->{'editdisable'}=((HasSubscriptionExpired($data->{subscriptionid})&& $data->{'status1'})||$data->{'cannotedit'});
-  push @serialdatalist,$data;
+    #filtering serialid for duplication
+    #NEW serial should appear only once and are created afterwards
+    next unless (defined($tmpserialid) && $tmpserialid =~/^[0-9]+$/ && !$processedserialid{$tmpserialid});
+    my $data=GetSerialInformation($tmpserialid);
+    $data->{publisheddate}=format_date($data->{publisheddate});
+    $data->{planneddate}=format_date($data->{planneddate});
+    $data->{'editdisable'}=((HasSubscriptionExpired($data->{subscriptionid})&& $data->{'status1'})||$data->{'cannotedit'});
+    push @serialdatalist,$data;
+    $processedserialid{$tmpserialid}=1;  
 }
 my $bibdata=GetBiblioData($serialdatalist[0]->{'biblionumber'});
 
 my @newserialloop;
 my @subscriptionloop;
 # check, for each subscription edited, that we have an empty item line if applicable for the subscription
+my %processedsubscriptionid;
 foreach my $subscriptionid (@subscriptionids){
-  my $cell;
-  if ($serialdatalist[0]->{'serialsadditems'}){
-  #Create New empty item  
-    $cell =
-    PrepareItemrecordDisplay( $serialdatalist[0]->{'biblionumber'} );
-    $cell->{serialsadditems} = 1;
-  }
-  $cell->{'subscriptionid'}=$subscriptionid;
-  $cell->{'itemid'}       = "NNEW";
-  $cell->{'serialid'}     = "NEW";
-  $cell->{'issuesatonce'}   = 1;
-  push @newserialloop,$cell;
-  push @subscriptionloop, {'subscriptionid'=>$subscriptionid,
-                           'abouttoexpire'=>abouttoexpire($subscriptionid),
-                           'subscriptionexpired'=>HasSubscriptionExpired($subscriptionid),
-  };
+    #Donot process subscriptionid twice if it was already processed.
+    next unless (defined($subscriptionid) && !$processedsubscriptionid{$subscriptionid});
+    my $cell;
+    if ($serialdatalist[0]->{'serialsadditems'}){
+    #Create New empty item  
+        $cell =
+        PrepareItemrecordDisplay( $serialdatalist[0]->{'biblionumber'} );
+        $cell->{serialsadditems} = 1;
+    }
+    $cell->{'subscriptionid'}=$subscriptionid;
+    $cell->{'itemid'}       = "NNEW";
+    $cell->{'serialid'}     = "NEW";
+    $cell->{'issuesatonce'}   = 1;
+    push @newserialloop,$cell;
+    push @subscriptionloop, {'subscriptionid'=>$subscriptionid,
+                            'abouttoexpire'=>abouttoexpire($subscriptionid),
+                            'subscriptionexpired'=>HasSubscriptionExpired($subscriptionid),
+    };
+    $processedsubscriptionid{$subscriptionid}=1;  
 }
 $template->param(newserialloop=>\@newserialloop);
 $template->param(subscriptions=>\@subscriptionloop);
@@ -226,22 +236,24 @@ if ($op eq 'serialchangestatus') {
             #New Item
 			
             # if autoBarcode is set to 'incremental', calculate barcode...
-            my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.barcode");
+            my ($barcodetagfield,$barcodetagsubfield) = &GetMarcFromKohaField("items.barcode");
             if (C4::Context->preference("autoBarcode") eq 'incremental'  ) {
-              if (!$record->field($tagfield)->subfield($tagsubfield)) {
+              if (!$record->field($barcodetagfield)->subfield($barcodetagsubfield)) {
                 my $sth_barcode = $dbh->prepare("select max(abs(barcode)) from items");
                 $sth_barcode->execute;
                 my ($newbarcode) = $sth_barcode->fetchrow;
                 # OK, we have the new barcode, add the entry in MARC record # FIXME -> should be  using barcode plugin here.
-                $record->field($tagfield)->update( $tagsubfield => ++$newbarcode );
+                $record->field($barcodetagfield)->update( $barcodetagsubfield => ++$newbarcode );
               }
             }
             # check for item barcode # being unique
-            my $exists = GetItemnumberFromBarcode($record->subfield($tagfield,$tagsubfield)) if ($record->subfield($tagfield,$tagsubfield));
+            my $exists = GetItemnumberFromBarcode($record->subfield($barcodetagfield,$barcodetagsubfield)) if ($record->subfield($barcodetagfield,$barcodetagsubfield));
   #           push @errors,"barcode_not_unique" if($exists);
-            $template->param("barcode_not_unique" => 1,'errserialseq'=>$serialseqs[$index]);
             # if barcode exists, don't create, but report The problem.
-			unless ($exists){
+			      if ($exists){
+              push @errors,"barcode_not_unique" if($exists);
+              push @errseq,{"serialseq"=>$serialseqs[$index]};
+            } else {
               my ($biblionumber,$bibitemnum,$itemnumber) = AddItemFromMarc($record,$itemhash{$item}->{'bibnum'});
               AddItem2Serial($itemhash{$item}->{'serial'},$itemnumber);
             }
@@ -260,13 +272,21 @@ if ($op eq 'serialchangestatus') {
 #     $redirect.="&".join("&",map{"status=".$_} @status);
 #     $redirect.="&".join("&",map{"notes=".$_} @notes);
 
-     my $redirect ="serials-collection.pl?";
-     my %hashsubscription;
-	 foreach (@subscriptionids) {
-     	$hashsubscription{$_}=1;
-	 }
-     $redirect.=join("&",map{"subscriptionid=".$_} sort keys %hashsubscription);
-    print $query->redirect("$redirect");
+   if (scalar(@errors)>0){
+        $template->param("Errors" => 1);
+        if (scalar(@errseq)>0){
+            $template->param("barcode_not_unique" => 1);
+            $template->param('errseq'=>\@errseq); 
+        }    
+   } else { 
+        my $redirect ="serials-collection.pl?";
+        my %hashsubscription;
+	      foreach (@subscriptionids) {
+            $hashsubscription{$_}=1;
+	      }
+        $redirect.=join("&",map{"subscriptionid=".$_} sort keys %hashsubscription);
+        print $query->redirect("$redirect");
+   }  
 }
 
 $template->param(

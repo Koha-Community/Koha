@@ -165,8 +165,12 @@ function CloneSubfield(index){
       <!--/TMPL_LOOP-->
     <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" title="go to <!-- TMPL_VAR name="bibliotitle" -->">Show Biblio</a></li></ul>
 </div>
-<!--TMPL_IF Name="barcode_not_unique" -->
-Error : Barcode Not Unique For serialseq <!--TMPL_VAR Name="errserialseq"-->
+<!--TMPL_IF Name="Errors" -->
+<div class="dialog alert">
+<ul>
+<!--TMPL_IF name="barcode_not_unique"--><li>Error : Barcode Not Unique For <!--TMPL_LOOP Name="errseq"-->serialseq <!--TMPL_VAR Name="serialseq"--><br/><!--/TMPL_LOOP --></li><!--/TMPL_IF-->
+</ul>
+</div>
 <!--/TMPL_IF -->
 
  <input type="hidden" name="op" value="serialchangestatus" />
