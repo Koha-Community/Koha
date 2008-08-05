@@ -1880,7 +1880,7 @@ Returns a hash with all the fields for Display a given item data in a template
 
 sub PrepareItemrecordDisplay {
 
-    my ( $bibnum, $itemnum ) = @_;
+    my ( $bibnum, $itemnum, $defaultvalues ) = @_;
 
     my $dbh = C4::Context->dbh;
     my $frameworkcode = &GetFrameworkCode( $bibnum );
@@ -1937,6 +1937,26 @@ sub PrepareItemrecordDisplay {
                     my $temp = $itemrecord->field($CNtag) if ($itemrecord);
                     if ($temp) {
                         $value = $temp->subfield($CNsubfield);
+                    }
+                }
+                if ( $tagslib->{$tag}->{$subfield}->{kohafield} eq
+                    'items.itemcallnumber'
+                    && $defaultvalues->{'callnumber'} )
+                {
+                    my $temp = $itemrecord->field($subfield) if ($itemrecord);
+                    unless ($temp) {
+                        $value = $defaultvalues->{'callnumber'};
+                    }
+                }
+                if ( ($tagslib->{$tag}->{$subfield}->{kohafield} eq
+                    'items.holdingbranch' ||
+                    $tagslib->{$tag}->{$subfield}->{kohafield} eq
+                    'items.homebranch')          
+                    && $defaultvalues->{'branchcode'} )
+                {
+                    my $temp = $itemrecord->field($subfield) if ($itemrecord);
+                    unless ($temp) {
+                        $value = $defaultvalues->{branchcode};
                     }
                 }
                 if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {

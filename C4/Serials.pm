@@ -265,7 +265,7 @@ sub GetSerialInformation {
                 #Maybe GetMarcItem should return values on failure
                 $debug and warn "itemnumber :$itemnum->[0], bibnum :".$data->{'biblionumber'};
                 my $itemprocessed =
-                  PrepareItemrecordDisplay( $data->{'biblionumber'}, $itemnum->[0] );
+                  PrepareItemrecordDisplay( $data->{'biblionumber'}, $itemnum->[0] , $data );
                 $itemprocessed->{'itemnumber'}   = $itemnum->[0];
                 $itemprocessed->{'itemid'}       = $itemnum->[0];
                 $itemprocessed->{'serialid'}     = $serialid;
@@ -275,7 +275,7 @@ sub GetSerialInformation {
         }
         else {
             my $itemprocessed =
-              PrepareItemrecordDisplay( $data->{'biblionumber'} );
+              PrepareItemrecordDisplay( $data->{'biblionumber'}, '', $data );
             $itemprocessed->{'itemid'}       = "N$serialid";
             $itemprocessed->{'serialid'}     = $serialid;
             $itemprocessed->{'biblionumber'} = $data->{'biblionumber'};

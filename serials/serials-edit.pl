@@ -145,7 +145,7 @@ foreach my $subscriptionid (@subscriptionids){
     if ($serialdatalist[0]->{'serialsadditems'}){
     #Create New empty item  
         $cell =
-        PrepareItemrecordDisplay( $serialdatalist[0]->{'biblionumber'} );
+        PrepareItemrecordDisplay( $serialdatalist[0]->{'biblionumber'},'', GetSubscription($subscriptionid));
         $cell->{serialsadditems} = 1;
     }
     $cell->{'subscriptionid'}=$subscriptionid;
