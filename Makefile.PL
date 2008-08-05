@@ -547,6 +547,7 @@ WriteMakefile(
                             'Date::ICal'                       => 1.72,
                             'Date::Manip'                      => 5.44,
                             'Digest::MD5'                      => 2.36,
+                            'Email::Date'                      => 1.103,
                             'File::Temp'                       => 0.16,
                             'GD'                               => 2.39,    #optional
                             'GD::Barcode::UPCE'                => 1.1,

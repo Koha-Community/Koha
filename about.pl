@@ -77,6 +77,7 @@ Date::Calc
 Data::ICal
 Date::Manip
 Digest::MD5
+Email::Date
 File::Temp
 GD
 GD::Barcode::UPCE
