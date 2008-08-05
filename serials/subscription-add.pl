@@ -116,10 +116,8 @@ if ($op eq 'mod' || $op eq 'dup' || $op eq 'modsubscription') {
     $irregularity   = $subs->{'irregularity'};
     $numberpattern  = $subs->{'numberpattern'};
     $nextexpected = GetNextExpected($subscriptionid);
-    $nextexpected->{ isfirstissue => ($nextexpected->{planneddate}->output('iso') eq $firstissuedate)};
-    # firstacquidate is taken to be the upcoming issue's planned date if we're modifying the sub
+    $nextexpected->{'isfirstissue'} = $nextexpected->{planneddate}->output('iso') eq $firstissuedate ;
     $subs->{nextacquidate} = $nextexpected->{planneddate}->output()  if($op eq 'mod');
-
   unless($op eq 'modsubscription') {
     if($subs->{numberlength} > 0){
         $sublength = $subs->{numberlength};
@@ -287,11 +285,10 @@ if ($op eq 'addsubscription') {
     my $librariannote = $query->param('librariannote');
     my $history_only = $query->param('history_only');
 	#  If it's  a mod, we need to check the current 'expected' issue, and mod it in the serials table if necessary.
-    #  Here firstacquidate is interpreted as nextacquidate.	
-
     if ( $nextacquidate ne $nextexpected->{planneddate}->output('iso') ) {
         ModNextExpected($subscriptionid,C4::Dates->new($nextacquidate,'iso'));
-        $firstissuedate = $nextexpected->{planneddate}->output('iso') if($nextexpected->{isfirstissue});
+        # if we have not received any issues yet, then we also must change the firstacquidate for the subs.
+        $firstissuedate = $nextacquidate if($nextexpected->{isfirstissue});
     }
     
     if ($history_only) {

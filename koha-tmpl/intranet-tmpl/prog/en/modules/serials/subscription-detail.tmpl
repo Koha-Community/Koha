@@ -24,61 +24,6 @@ var textbox = '';
     }
 }
 
-function irregularity(){
-    var periodicity = '<!-- TMPL_VAR NAME="periodicity"-->';
-    switch(periodicity){
-    case "1":
-        var names = new Array(_("Monday"),_("Tuesday"),_("Wednesday"),_("Thursday"),_("Friday"),_("Saturday"),_("Sunday"));
-        break;
-    case "2":
-        <!-- TMPL_IF NAME="weekarrayjs" -->
-        var names = new Array(<!-- TMPL_VAR NAME="weekarrayjs" -->); 
-        <!-- /TMPL_IF -->
-        break;
-    case "3":
-        <!-- TMPL_IF NAME="weekarrayjs" -->
-        var names = new Array(<!-- TMPL_VAR NAME="weekarrayjs" -->); 
-        <!-- /TMPL_IF -->
-        break;
-    case "4":
-        <!-- TMPL_IF NAME="weekarrayjs" -->
-        var names = new Array(<!-- TMPL_VAR NAME="weekarrayjs" -->); 
-        <!-- /TMPL_IF -->
-        break;
-    case "5":
-        var names = new Array(_("January"),_("February"),_("March"),_("April"),_("May"),_("June"),_("July"),_("August"),_("September"),_("October"),_("November"),_("December"));
-        break;
-    case "6":
-        var names = new Array(_("January"),_("February"),_("March"),_("April"),_("May"),_("June"),_("July"),_("August"),_("September"),_("October"),_("November"),_("December"));
-        break;
-    case "7":
-        var names = new Array(_("January"),_("February"),_("March"),_("April"),_("May"),_("June"),_("July"),_("August"),_("September"),_("October"),_("November"),_("December"));
-        break;
-    case "8":
-        var names = new Array(_("Autumn"),_("Winter"),_("Spring"),_("Summer"),_("Fall"));
-        break;
-    case "9":
-        var names = new Array(_("January"),_("February"),_("March"),_("April"),_("May"),_("June"),_("July"),_("August"),_("September"),_("October"),_("November"),_("December"));
-        break;
-    case "10":
-        expected =1;
-        break;
-    default:
-        break;
-    }
-
-    <!-- TMPL_IF NAME="irregularity" -->
-    var irregular = '<!-- TMPL_VAR NAME="irregularity" -->';
-    var irregarray = irregular.split('|');
-    var irregtext = '<p>';
-    for(var i=0;i<irregarray.length;i++){
-        irregtext += names[i]+' &nbsp;';
-    }
-    irregtext += '</p>';
-    document.getElementById("irreg").innerHTML = irregtext;
-    <!-- /TMPL_IF -->
-}
-
 function confirm_deletion() {
     var is_confirmed = confirm(_("Are you sure you want to delete this subscription?"));
     if (is_confirmed) {
@@ -241,13 +186,11 @@ function popup(subscriptionid) {
             <!--/TMPL_IF-->
             </tr>
             </table>
-            <!-- TMPL_IF NAME="irregularity" -->
-            <p><label>Irregularity:</label>
-                <div id="irreg"></div>
+            <!-- TMPL_IF NAME="irregular_issues" -->
+            <p><label>Irregularity:</label> <!-- TMPL_VAR name="irregular_issues" --> issues
             </p>
             <!-- /TMPL_IF -->
-            <p><label>First arrival:</label>
-                <!--TMPL_VAR name="firstacquidate" -->
+            <p><label>First arrival:</label> <!--TMPL_VAR name="firstacquidate" -->
             </p>
         <!-- TMPL_IF name="numberlength" --><p><label>Number of issues:</label> <!-- TMPL_VAR name="numberlength" --></p><!-- /TMPL_IF -->
         <!-- TMPL_IF name="weeklength" --><p><label>Number of weeks:</label> <!-- TMPL_VAR name="weeklength" --></p><!-- /TMPL_IF -->

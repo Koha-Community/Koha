@@ -892,6 +892,7 @@ function Check(f) {
 }
 
 $(document).ready(function() {
+init_pattern();
 <!-- TMPL_IF name="mod" -->
     set_num_pattern_from_template_vars();
     <!-- TMPL_IF name="hemisphere" -->
@@ -902,7 +903,6 @@ $(document).ready(function() {
 <!-- TMPL_IF name="irregularity" -->
     irregularity_check();
 <!-- /TMPL_IF -->
-init_pattern();
 $('#numberpattern').change( function() { 
     reset_num_pattern(); 
     });

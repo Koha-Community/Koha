@@ -1262,8 +1262,6 @@ C<$date> is a C4::Dates object.
 
 sub ModNextExpected($$) {
     my ($subscriptionid,$date) = @_;
-    warn $subscriptionid;
-    warn $date->output('iso');
     my $dbh = C4::Context->dbh;
     #FIXME: Would expect to only set planneddate, but we set both on new issue creation, so updating it here
     my $sth = $dbh->prepare('UPDATE serial SET planneddate=?,publisheddate=? WHERE subscriptionid=? AND status=?');

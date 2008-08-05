@@ -64,24 +64,6 @@ my ($user, $sessionID, $flags);
 ($user, $cookie, $sessionID, $flags)
     = checkauth($query, 0, {catalogue => 1}, "intranet");
 
-my $weekarrayjs='';
-my $count = 0;
-my ($year, $month, $day) = Today;
-my $firstday = Day_of_Year($year,$month,$day);
-my ($wkno,$yr) = Week_of_Year($year,$month,$day); # week starting monday
-my $weekno = $wkno;
-for(my $i=$firstday;$i<($firstday+365);$i=$i+7){
-            $count = $i;
-            if($wkno > 52){$year++; $wkno=1;}
-            if($count>365){$count=$i-365;}
-            my ($y,$m,$d) =  Add_Delta_Days($year,1,1, $count - 1);#Date_NthDayOfYear($year,$count);
-            # padding Add_Delta_Days;
-            my $output  = sprintf("%04d-%02d-%02d",$y , $m, $d );
-            $weekarrayjs .= "'Wk $wkno: ".format_date($output)."',";
-            $wkno++;
-    }
-chop($weekarrayjs);
-
 # COMMENT hdl : IMHO, we should think about passing more and more data hash to template->param rather than duplicating code a new coding Guideline ?
 
 $subs->{startdate}      = format_date($subs->{startdate});
@@ -110,13 +92,12 @@ $template->param(
                 C4::Context->userenv->{flags} !=1  && 
                 C4::Context->userenv->{branch} && $subs->{branchcode} &&
                 (C4::Context->userenv->{branch} ne $subs->{branchcode})),
+    "periodicity".($subs->{periodicity}?$subs->{periodicity}:'0') => 1,
+    "arrival".$subs->{dow} => 1,
+    "numberpattern".$subs->{numberpattern} => 1,
+    intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+    intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"), 
+    irregular_issues => scalar(split(/,/,$subs->{irregularity})),
     );
-$template->param(
-            "periodicity".($subs->{periodicity}?$subs->{periodicity}:'0') => 1,
-            "arrival".$subs->{dow} => 1,
-            "numberpattern".$subs->{numberpattern} => 1,
-            intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-            intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"), 
-            );
 
 output_html_with_http_headers $query, $cookie, $template->output;
