@@ -1,0 +1,38 @@
+#!/bin/sh
+set -e
+
+# Load the debconf library - this must come FIRST; do not insert any other
+# commands before this
+. /usr/share/debconf/confmodule
+
+echo "INFO: postinst as '$1'"
+
+case "$1" in
+  configure)
+    echo "Configuring..."
+    
+    # set up logrotate
+    # remove first in case we are reconfiguring
+    rm /etc/logrotate.d/koha
+    
+    # add logrotate
+    ln -s /etc/koha/koha.logrotate /etc/logrotate.d/koha
+    
+    # reload apache
+    /etc/init.d/apache2 reload
+    ;;
+    
+  abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+    
+  *)
+    echo "postinst called with unknown argument \$1'" >&2
+    exit 0
+    ;;
+esac
+
+#DEBHELPER#
+
+# finish up
+db_stop
+exit 0
