@@ -266,7 +266,7 @@ sub GetOrders {
     my $dbh   = C4::Context->dbh;
     my $query  ="
          SELECT  aqorderbreakdown.*,
-                biblio.*,biblioitems.publishercode,
+                biblio.*,biblioitems.*,
                 aqorders.*,
                 aqbookfund.bookfundname,
                 biblio.title
