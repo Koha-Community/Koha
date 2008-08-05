@@ -973,7 +973,7 @@ returns a list of branch codes for branches with overdue rules defined.
 
 sub GetBranchcodesWithOverdueRules {
     my $dbh               = C4::Context->dbh;
-    my $rqoverduebranches = $dbh->prepare("SELECT DISTINCT branchcode FROM overduerules WHERE delay1 IS NOT NULL");
+    my $rqoverduebranches = $dbh->prepare("SELECT DISTINCT branchcode FROM overduerules WHERE delay1 IS NOT NULL AND branchcode <> ''");
     $rqoverduebranches->execute;
     my @branches = map { shift @$_ } @{ $rqoverduebranches->fetchall_arrayref };
     $rqoverduebranches->finish;
