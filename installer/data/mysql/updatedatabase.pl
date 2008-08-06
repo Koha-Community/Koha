@@ -1937,6 +1937,30 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.00.00.107';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(<<'END_SQL');
+UPDATE systempreferences
+  SET explanation = CONCAT( explanation, '. WARNING: this feature is very resource consuming on collections with large numbers of items.' )
+  WHERE variable = 'OPACShelfBrowser'
+    AND explanation NOT LIKE '%WARNING%'
+END_SQL
+    $dbh->do(<<'END_SQL');
+UPDATE systempreferences
+  SET explanation = CONCAT( explanation, '. WARNING: this feature is very resource consuming.' )
+  WHERE variable = 'CataloguingLog'
+    AND explanation NOT LIKE '%WARNING%'
+END_SQL
+    $dbh->do(<<'END_SQL');
+UPDATE systempreferences
+  SET explanation = CONCAT( explanation, '. WARNING: using NoZebra on even modest sized collections is very slow.' )
+  WHERE variable = 'NoZebra'
+    AND explanation NOT LIKE '%WARNING%'
+END_SQL
+    print "Upgrade to $DBversion done (warning added to OPACShelfBrowser system preference)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
