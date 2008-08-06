@@ -1909,11 +1909,7 @@ sub PrepareItemrecordDisplay {
                   $tagslib->{$tag}->{$subfield}->{'kohafield'};
 
          #        $subfield_data{marc_lib}=$tagslib->{$tag}->{$subfield}->{lib};
-                $subfield_data{marc_lib} =
-                    "<span id=\"error\" title=\""
-                  . $tagslib->{$tag}->{$subfield}->{lib} . "\">"
-                  . substr( $tagslib->{$tag}->{$subfield}->{lib}, 0, 12 )
-                  . "</span>";
+                $subfield_data{marc_lib} = $tagslib->{$tag}->{$subfield}->{lib};
                 $subfield_data{mandatory} =
                   $tagslib->{$tag}->{$subfield}->{mandatory};
                 $subfield_data{repeatable} =
@@ -2048,7 +2044,7 @@ sub PrepareItemrecordDisplay {
                 }
                 elsif ( $tagslib->{$tag}->{$subfield}->{thesaurus_category} ) {
                     $subfield_data{marc_value} =
-"<input type=\"text\" name=\"field_value\"  size=47 maxlength=255> <a href=\"javascript:Dopop('cataloguing/thesaurus_popup.pl?category=$tagslib->{$tag}->{$subfield}->{thesaurus_category}&index=',)\">...</a>";
+"<input type=\"text\" name=\"field_value\"  size=\"47\" maxlength=\"255\" /> <a href=\"javascript:Dopop('cataloguing/thesaurus_popup.pl?category=$tagslib->{$tag}->{$subfield}->{thesaurus_category}&index=',)\">...</a>";
 
 #"
 # COMMENTED OUT because No $i is provided with this API.
@@ -2063,7 +2059,7 @@ sub PrepareItemrecordDisplay {
                 }
                 else {
                     $subfield_data{marc_value} =
-"<input type=\"text\" name=\"field_value\" value=\"$value\" size=50 maxlength=255>";
+"<input type=\"text\" name=\"field_value\" value=\"$value\" size=\"50\" maxlength=\"255\" />";
                 }
                 push( @loop_data, \%subfield_data );
             }

@@ -138,6 +138,17 @@ function CloneSubfield(index){
 }
 //]]>
 </script>
+<style type="text/css">#serials_edit fieldset.rows label, #serials_edit fieldset.rows span.label {
+	font-size : 100%;
+	width : 25%;
+}
+#serials_edit fieldset.rows select { max-width : 15em; }
+#serials_edit fieldset.rows li {
+	padding-bottom : 3px;
+}
+#serials_edit .input_marceditor {
+	width : auto;
+}</style>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -152,19 +163,9 @@ function CloneSubfield(index){
 	<div class="yui-b">
 
 <h1>Serial Edition <i><!-- TMPL_VAR name="bibliotitle" --></i></h1>
-<form method="post" name="f" action="serials-edit.pl">
+<form method="post" name="f" action="serials-edit.pl" id="serials_edit">
 <!--onsubmit="return barcode_check()">-->
-<div id="action">
-    <ul>
-    <!--TMPL_LOOP Name="subscriptions"-->
-    
-	<li><a href="serials-collection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" title="serial collection for <!--TMPL_VAR Name="bibliotitle"-->">Serial collection</a></li>
-	<li><a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" title="detail of the subscription">Subscription #<!-- TMPL_VAR name="subscriptionid" --></a></li>
-        <!--TMPL_IF name="abouttoexpire"--><a href="#" onclick="javascript:popup(<!--TMPL_VAR Name="subscriptionid"-->)">Renew <!--TMPL_VAR Name="subscriptionid"--></a>
-        <!--/TMPL_IF-->
-      <!--/TMPL_LOOP-->
-    <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" title="go to <!-- TMPL_VAR name="bibliotitle" -->">Show Biblio</a></li></ul>
-</div>
+
 <!--TMPL_IF Name="Errors" -->
 <div class="dialog alert">
 <ul>
@@ -255,15 +256,15 @@ function CloneSubfield(index){
           <td colspan="5">
       <a id="label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->" style="color: grey; font-size: 80%; cursor: pointer;"  onclick="unHideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')">
              Click to add item</a>
-        <fieldset style="display:none;" id="items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->">
+        <fieldset class="rows" style="display:none;" id="items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->">
         <legend><a style="cursor: pointer;"  onclick="HideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')">
                 Item</a>
         </legend>
-          <div id="cataloguing_additem_itemlist">
+          <div class="cataloguing_additem_itemlist">
         <!-- TMPL_LOOP NAME="items" -->
         <div id="item<!-- TMPL_VAR NAME="serialid" --><!-- TMPL_VAR NAME="countitems" -->" class="items">
-        <!-- TMPL_LOOP NAME="iteminformation" -->
-               <div name="line" class="subfield_line" style="<!-- TMPL_VAR NAME='hidden' -->;" id="subfield<!-- TMPL_VAR NAME='serialid' --><!-- TMPL_VAR NAME='countitems' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
+        <ol><!-- TMPL_LOOP NAME="iteminformation" --><li>
+               <div class="subfield_line" style="<!-- TMPL_VAR NAME='hidden' -->;" id="subfield<!-- TMPL_VAR NAME='serialid' --><!-- TMPL_VAR NAME='countitems' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
                               
                 <label><!-- TMPL_VAR NAME="subfield" --> - <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR NAME="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></label>
                 <!-- TMPL_VAR NAME="marc_value" -->
@@ -276,8 +277,8 @@ function CloneSubfield(index){
                     <span class="buttonPlus" onclick="CloneSubfield('subfield<!-- TMPL_VAR NAME='serialid' --><!-- TMPL_VAR NAME='countitems' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->')">+</span>
                 <!-- /TMPL_IF -->
         
-            </div>
-        <!-- /tmpl_loop --><!-- /iteminformation -->
+            </div></li>
+        <!-- /TMPL_LOOP--></ol></div><!-- /iteminformation -->
         
         <input type="hidden" name="moditem" value="" /> 
         <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="itemtagfield" -->" />
@@ -286,7 +287,6 @@ function CloneSubfield(index){
         <input type="hidden" name="bibnum" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
         <input type="hidden" name="itemid" value="<!-- TMPL_VAR NAME="itemid" -->" />
         <input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
-        </div>
         <!--/TMPL_LOOP--> <!-- /items -->
         </div>
         </fieldset>
@@ -360,14 +360,14 @@ function CloneSubfield(index){
           <td colspan="5">
       <a id="label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->" style="color: grey; font-size: 80%; cursor: pointer;"  onclick="unHideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')">
              Click to add item</a>
-        <fieldset style="display:none;" id="items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->">
+        <fieldset  class="rows" style="display:none;" id="items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->">
         <legend><a style="cursor: pointer;"  onclick="HideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')">
                 Item</a>
         </legend>
-          <div id="cataloguing_additem_itemlist">
+          <div class="cataloguing_additem_itemlist">
         <div id="item<!-- TMPL_VAR NAME="serialid" --><!-- TMPL_VAR NAME="countitems" -->" class="items">
-        <!-- TMPL_LOOP NAME="iteminformation" -->
-               <div name="line" class="subfield_line" style="<!-- TMPL_VAR NAME='hidden' -->;" id="subfield<!-- TMPL_VAR NAME='serialid' --><!-- TMPL_VAR NAME='countitems' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
+        <ol><!-- TMPL_LOOP NAME="iteminformation" --><li>
+               <div class="subfield_line" style="<!-- TMPL_VAR NAME='hidden' -->;" id="subfield<!-- TMPL_VAR NAME='serialid' --><!-- TMPL_VAR NAME='countitems' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
    
                 <label><!-- TMPL_VAR NAME="subfield" --> - <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR NAME="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></label>
                 <!-- TMPL_VAR NAME="marc_value" -->
@@ -380,7 +380,7 @@ function CloneSubfield(index){
                     <span class="buttonPlus" onclick="CloneSubfield('subfield<!-- TMPL_VAR NAME='serialid' --><!-- TMPL_VAR NAME='countitems' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->')">+</span>
                 <!-- /TMPL_IF -->
         </div>
-        <!-- /tmpl_loop -->
+       </li><!-- /TMPL_LOOP --></ol>
         
         <input type="hidden" name="moditem" value="" /> 
         <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="itemtagfield" -->" />
@@ -399,7 +399,7 @@ function CloneSubfield(index){
 <!-- /TMPL_LOOP -->
 
 </table>
-    <input type="submit" value="Save"  class="button" accesskey="w" /> <!--onclick="Check(this.form)" -->
+    <fieldset class="action"><input type="submit" value="Save"  class="button" accesskey="w" /> <!--onclick="Check(this.form)" --></fieldset>
 </form>
 
 </div>
@@ -407,6 +407,15 @@ function CloneSubfield(index){
 
 <div class="yui-b">
 <!-- TMPL_INCLUDE NAME="serials-menu.inc" -->
+<ul>
+    <!--TMPL_LOOP Name="subscriptions"-->
+    
+	<li><a href="serials-collection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" title="serial collection for <!--TMPL_VAR Name="bibliotitle"-->">Serial collection</a></li>
+	<li><a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" title="detail of the subscription">Subscription #<!-- TMPL_VAR name="subscriptionid" --></a></li>
+        <!--TMPL_IF name="abouttoexpire"--><a href="#" onclick="javascript:popup(<!--TMPL_VAR Name="subscriptionid"-->)">Renew <!--TMPL_VAR Name="subscriptionid"--></a>
+        <!--/TMPL_IF-->
+      <!--/TMPL_LOOP-->
+    <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" title="go to <!-- TMPL_VAR name="bibliotitle" -->">Show Biblio</a></li></ul>
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
