@@ -32,6 +32,7 @@ use C4::Koha;    # XXX subfield_is_koha_internal_p
 use C4::Branch;    # XXX subfield_is_koha_internal_p
 use C4::ClassSource;
 use C4::ImportBatch;
+use C4::Charset;
 
 use Date::Calc qw(Today);
 use MARC::File::USMARC;
@@ -782,7 +783,19 @@ AND (authtypecode IS NOT NULL AND authtypecode<>\"\")|);
          my $authfield=MARC::Field->new($authtypedata->{auth_tag_to_report},'','',"a"=>"".$field->subfield('a'));
          map { $authfield->add_subfields($_->[0]=>$_->[1]) if ($_->[0]=~/[A-z]/ && $_->[0] ne "a" )}  $field->subfields();
          $marcrecordauth->insert_fields_ordered($authfield);
+
+         # bug 2317: ensure new authority knows it's using UTF-8; currently
+         # only need to do this for MARC21, as MARC::Record->as_xml_record() handles
+         # automatically for UNIMARC (by not transcoding)
+         # FIXME: AddAuthority() instead should simply explicitly require that the MARC::Record
+         # use UTF-8, but as of 2008-08-05, did not want to introduce that kind
+         # of change to a core API just before the 3.0 release.
+         if (C4::Context->preference('marcflavour') eq 'MARC21') {
+            SetMarcUnicodeFlag($marcrecordauth, 'MARC21');
+         }
+
 #          warn "AUTH RECORD ADDED : ".$marcrecordauth->as_formatted;
+
          my $authid=AddAuthority($marcrecordauth,'',$data->{authtypecode});
          $countcreated++;
          $field->add_subfields('9'=>$authid);
