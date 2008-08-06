@@ -1,12 +1,16 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Cataloging &rsaquo; Import Patrons <!-- TMPL_IF NAME="uploadborrowers" -->&rsaquo; Results<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<style type="text/css">
+    .yui-u fieldset.rows label.widelabel { width: 12em; }
+    code { background-color: yellow; }
+</style>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="patron-search.inc"-->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <!-- TMPL_IF name="uploadborrowers" --><a href="/cgi-bin/koha/tools/import_borrowers.pl">Import Patrons</a> &rsaquo; Results<!-- TMPL_ELSE -->Import Patrons<!-- /TMPL_IF --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/tools/import_borrowers.pl">Import Patrons</a><!-- TMPL_IF name="uploadborrowers" --> &rsaquo; Results<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -17,15 +21,37 @@
 <div class="yui-u first">
 <h1>Import Patrons</h1>
 <!-- TMPL_IF name="uploadborrowers" -->
-<p>Import results :</p>
+<h5>Import results :</h5>
 <ul>
-	<li><!-- TMPL_VAR name="imported" --> imported records</li>
-	<li><!-- TMPL_VAR name="overwritten" --> overwritten</li>
-	<li><!-- TMPL_VAR name="alreadyindb" --> not imported because already in borrowers table and overwrite disabled</li>
-	<li><!-- TMPL_VAR name="invalid" --> not imported because they are not in the expected format</li>
-	<li><!-- TMPL_VAR name="total" -->  records parsed</li>
-	<li><a href="/cgi-bin/koha/tools/tools-home.pl">Back</a></li>
+	<li><!-- TMPL_VAR name="imported" --> imported records <!-- TMPL_IF name="lastimported" -->(last was <!-- TMPL_VAR name="lastimported" -->)<!-- /TMPL_IF --></li>
+	<li><!-- TMPL_VAR name="overwritten" --> overwritten <!-- TMPL_IF name="lastoverwritten" -->(last was <!-- TMPL_VAR name="lastoverwritten" -->)<!-- /TMPL_IF --></li>
+	<li><!-- TMPL_VAR name="alreadyindb" --> not imported because already in borrowers table and overwrite disabled <!-- TMPL_IF name="lastalreadyindb" -->(last was <!-- TMPL_VAR name="lastalreadyindb" -->)<!-- /TMPL_IF --></li>
+	<li><!-- TMPL_VAR name="invalid" --> not imported because they are not in the expected format <!-- TMPL_IF name="lastinvalid" -->(last was <!-- TMPL_VAR name="lastinvalid" -->)<!-- /TMPL_IF --></li>
+	<li><!-- TMPL_VAR name="total" --> records parsed</li>
+	<li><a href="/cgi-bin/koha/tools/tools-home.pl">Back to Tools</a></li>
 </ul>
+  <!-- TMPL_IF NAME="ERRORS" -->
+  <br /><br />
+    <div>
+    <h5>Error analysis:</h5>
+    <ul>
+    <!-- TMPL_LOOP NAME="ERRORS" -->
+        <!-- TMPL_IF NAME="badheader" --><li>Header row could not be parsed</li><!-- /TMPL_IF -->
+        <!-- TMPL_LOOP NAME="missing_criticals" -->
+        <li>
+            <!-- TMPL_IF NAME="badparse" -->
+                Line <span class="linenumber"><!-- TMPL_VAR NAME="line" --></span> could not be parsed!
+            <!-- TMPL_ELSE -->
+                Critical field &quot;<!-- TMPL_VAR NAME="key" -->&quot; missing on line <span class="linenumber"><!-- TMPL_VAR NAME="line" --></span>
+                (borrowernumber: <!-- TMPL_VAR NAME="borrowernumber" -->; surname: <!-- TMPL_VAR NAME="surname" -->).
+            <!-- /TMPL_IF -->
+            <br /><code><!-- TMPL_VAR NAME="lineraw" --></code>
+        </li>
+        <!-- /TMPL_LOOP -->
+    <!-- /TMPL_LOOP -->
+    </ul>
+    </div>
+  <!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
 <ul>
 	<li>Select a file to import into the borrowers table</li>
@@ -53,42 +79,43 @@
             </li>
         </ol>
     </fieldset>
+<fieldset class="rows">
+<legend>Default values</legend>
+<ol>
+    <!-- TMPL_LOOP NAME="columnkeys" -->
+	<li>
+		<label class="widelabel" for="<!-- TMPL_VAR NAME="key" -->"><!-- TMPL_VAR NAME="key" --></label>
+		<input id="<!-- TMPL_VAR NAME="key" -->" name="<!-- TMPL_VAR NAME="key" -->" />
+	</li>
+    <!-- /TMPL_LOOP -->
+</ol></fieldset>
 	<fieldset class="rows">
 	<legend>If matching record is already in the borrowers table:</legend><ol><li class="radio">
 		 
 		<input type="radio" id="overwrite_cardnumberno" name="overwrite_cardnumber" value="0" checked="checked" /><label for="overwrite_cardnumberno">Ignore this one, keep the existing one</label></li>
 <li class="radio">
 			<input type="radio" id="overwrite_cardnumberyes" name="overwrite_cardnumber" value="1" /><label for="overwrite_cardnumberyes">Overwrite the existing one with this</label>
-	</li></ol></fieldset><fieldset class="action"><input type="submit" value="Import" /></fieldset>
+	</li></ol></fieldset>
+	<fieldset class="action"><input type="submit" value="Import" /></fieldset>
 </form>
 <!-- /TMPL_IF -->
 </div>
 <div class="yui-u">
 <h2>Notes:</h2>
 <ul>
-<li>Format the file in CSV format with the following fields:</li>
-<li>
-    'cardnumber',    'surname',      'firstname',        'title',
-    'othernames',    'initials',     'streetnumber',     'streettype',
-    'address',       'address2',     'city',             'zipcode',
-    'email',         'phone',        'mobile',           'fax',
-    'emailpro',      'phonepro',     'B_streetnumber',   'B_streettype',
-    'B_address',     'B_city',       'B_zipcode',        'B_email',
-    'B_phone',       'dateofbirth',  'branchcode',       'categorycode',
-    'dateenrolled',  'dateexpiry',   'gonenoaddress',    'lost',
-    'debarred',      'contactname',  'contactfirstname', 'contacttitle',
-    'borrowernotes', 'relationship', 'ethnicity',        'ethnotes',
-    'sex',           'userid',       'opacnote',         'contactnote',
-    'password',      'sort1',        'sort2'<!-- TMPL_IF NAME="ExtendedPatronAttributes" -->, 'patron_attributes'<!-- /TMPL_IF -->
-</li>
+<li><b>Download a starter CSV file with all the columns <a href="?sample=1">here</a>.</b>  Values are comma-separated.</li>
+<li>OR format your file in CSV format with the following fields:</li>
+<ul><li>
+    <!-- TMPL_LOOP name="columnkeys" -->'<!-- TMPL_VAR name="key" -->', <!-- /TMPL_LOOP -->
+</li></ul>
 <!-- TMPL_IF NAME="ExtendedPatronAttributes" -->
 <li>If loading patron attributes, the 'patron_attributes' field should contain a comma-separated list of attribute types 
 and values.  The attribute type code and a ':' should precede each value. For example: &quot;INSTID:12345,LANG:fr&quot;.  This
 means that if an input record has more than one attribute, the 'patron_attributes' field must be wrapped in double quotation marks.
 <li>
 <!-- /TMPL_IF -->
-<li>Please make sure the 'branchcode' and 'categorycode' are valid entries in your database.</li>
-<li>password should be stored in plaintext, and will be converted to a md5 hash (if your passwords are already encrypted, talk to your systems administrator about options).</li>
+<li>The fields 'branchcode' and 'categorycode' are <b>required</b> and <b>must match</b> valid entries in your database.</li>
+<li>'password' should be stored in plaintext, and will be converted to a md5 hash (if your passwords are already encrypted, talk to your systems administrator about options).</li>
 </ul>
 </div>
 </div>

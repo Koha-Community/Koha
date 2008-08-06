@@ -590,6 +590,10 @@ sub GetMemberIssuesAndFines {
     return ($overdue_count, $issue_count, $total_fines);
 }
 
+sub columns(;$) {
+    return @{C4::Context->dbh->selectcol_arrayref("SHOW columns from borrowers")};
+}
+
 =head2
 
 =head2 ModMember
@@ -607,7 +611,6 @@ true on success, or false on failure
 
 =cut
 
-#'
 sub ModMember {
     my (%data) = @_;
     my $dbh = C4::Context->dbh;
@@ -616,41 +619,43 @@ sub ModMember {
         if (my $tempdate = $data{$_}) {                                 # assignment, not comparison
             ($tempdate =~ /$iso_re/) and next;                          # Congatulations, you sent a valid ISO date.
             warn "ModMember given $_ not in ISO format ($tempdate)";
-            if (my $tempdate2 = format_date_in_iso($tempdate)) {        # assignment, not comparison
-                $data{$_} = $tempdate2;
-            } else {
-                warn "ModMember cannot convert '$tempdate' (from syspref)";
+            my $tempdate2 = format_date_in_iso($tempdate);
+            if (!$tempdate2 or $tempdate2 eq '0000-00-00') {
+                warn "ModMember cannot convert '$tempdate' (from syspref to ISO)";
+                next;
             }
+            $data{$_} = $tempdate2;
         }
     }
     if (!$data{'dateofbirth'}){
         delete $data{'dateofbirth'};
     }
-    my $qborrower=$dbh->prepare("SHOW columns from borrowers");
-    $qborrower->execute;
-    my %hashborrowerfields;  
-    while (my ($field)=$qborrower->fetchrow){
-      $hashborrowerfields{$field}=1;
-    }  
+    my @columns = &columns;
+    my %hashborrowerfields = (map {$_=>1} @columns);
     my $query = "UPDATE borrowers SET \n";
     my $sth;
     my @parameters;  
     
     # test to know if you must update or not the borrower password
-    if ( exists $data{'password'} ) {
-        if ( $data{'password'} eq '****' ) {
-            delete $data{'password'};
+    if (exists $data{password}) {
+        if ($data{password} eq '****' or $data{password} eq '') {
+            delete $data{password};
         } else {
-            $data{'password'} = md5_base64( $data{'password'} ) if ( $data{'password'} ne "" );
-            delete $data{'password'} if ( $data{password} eq "" );
+            $data{password} = md5_base64($data{password});
         }
     }
-    foreach (keys %data){  
-        if ($_ ne 'borrowernumber' and $_ ne 'flags' and $hashborrowerfields{$_}){
-          $query .= " $_=?, "; 
-          push @parameters,$data{$_};
+    my @badkeys;
+    foreach (keys %data) {  
+        next if ($_ eq 'borrowernumber' or $_ eq 'flags');
+        if ($hashborrowerfields{$_}){
+            $query .= " $_=?, "; 
+            push @parameters,$data{$_};
+        } else {
+            push @badkeys, $_;
+            delete $data{$_};
         }
     }
+    (@badkeys) and warn scalar(@badkeys) . " Illegal key(s) passed to ModMember: " . join(',',@badkeys);
     $query =~ s/, $//;
     $query .= " WHERE borrowernumber=?";
     push @parameters, $data{'borrowernumber'};

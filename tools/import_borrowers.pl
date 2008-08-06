@@ -45,37 +45,37 @@ use C4::Members::AttributeTypes;
 use Text::CSV;
 use CGI;
 
-my @columnkeys = (
-    'cardnumber',    'surname',      'firstname',        'title',
-    'othernames',    'initials',     'streetnumber',     'streettype',
-    'address',       'address2',     'city',             'zipcode',
-    'email',         'phone',        'mobile',           'fax',
-    'emailpro',      'phonepro',     'B_streetnumber',   'B_streettype',
-    'B_address',     'B_city',       'B_zipcode',        'B_email',
-    'B_phone',       'dateofbirth',  'branchcode',       'categorycode',
-    'dateenrolled',  'dateexpiry',   'gonenoaddress',    'lost',
-    'debarred',      'contactname',  'contactfirstname', 'contacttitle',
-    'borrowernotes', 'relationship', 'ethnicity',        'ethnotes',
-    'sex',           'userid',       'opacnote',         'contactnote',
-    'password',      'sort1',        'sort2'
-);
-if (C4::Context->preference('ExtendedPatronAttributes')) {
+my @errors;
+my $extended = C4::Context->preference('ExtendedPatronAttributes');
+my @columnkeys = C4::Members->columns;
+if ($extended) {
     push @columnkeys, 'patron_attributes';
 }
+my $columnkeystpl = [ map { {'key' => $_} } @columnkeys ];  # ref. to array of hashrefs.
 
-my $input = new CGI;
+my $input = CGI->new();
+my $csv   = Text::CSV->new();
 
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
         template_name   => "tools/import_borrowers.tmpl",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
         flagsrequired   => { tools => 'import_patrons' },
         debug           => 1,
-    }
-);
+});
 
+$template->param(columnkeys => $columnkeystpl);
+
+if ($input->param('sample')) {
+    print $input->header(
+        -type       => 'application/vnd.sun.xml.calc', # 'application/vnd.ms-excel' ?
+        -attachment => 'patron_import.csv',
+    );
+    $csv->combine(@columnkeys);
+    print $csv->string, "\n";
+    exit 1;
+}
 my $uploadborrowers      = $input->param('uploadborrowers');
 my $matchpoint           = $input->param('matchpoint');
 if ($matchpoint) {
@@ -85,89 +85,140 @@ my $overwrite_cardnumber = $input->param('overwrite_cardnumber');
 
 $template->param( SCRIPT_NAME => $ENV{'SCRIPT_NAME'} );
 
-if (C4::Context->preference('ExtendedPatronAttributes')) {
-    $template->param(ExtendedPatronAttributes => 1);
-}
+($extended) and $template->param(ExtendedPatronAttributes => 1);
 
 if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
-    my $csv         = Text::CSV->new();
     my $imported    = 0;
     my $alreadyindb = 0;
     my $overwritten = 0;
     my $invalid     = 0;
     my $matchpoint_attr_type; 
+    my %defaults = $input->Vars;
 
-    if (C4::Context->preference('ExtendedPatronAttributes')) {
+    # use header line to construct key to column map
+    my $borrowerline = <$uploadborrowers>;
+    my $status = $csv->parse($borrowerline);
+    ($status) or push @errors, {badheader=>1,line=>$., lineraw=>$borrowerline};
+    my @csvcolumns = $csv->fields();
+    my %csvkeycol;
+    my $col = 0;
+    foreach my $keycol (@csvcolumns) {
+    	# columnkeys don't contain whitespace, but some stupid tools add it
+    	$keycol =~ s/ +//g;
+        $csvkeycol{$keycol} = $col++;
+    }
+    #warn($borrowerline);
+
+    if ($extended) {
         $matchpoint_attr_type = C4::Members::AttributeTypes->fetch($matchpoint);
     }
 
-    while ( my $borrowerline = <$uploadborrowers> ) {
+    my @criticals = qw(surname);    # there probably should be others
+    my @errors;
+    LINE: while ( my $borrowerline = <$uploadborrowers> ) {
+        my %borrower;
+        my @missing_criticals;
+        my $patron_attributes;
         my $status  = $csv->parse($borrowerline);
         my @columns = $csv->fields();
-        my %borrower;
-        my $patron_attributes;
-        if ( @columns == @columnkeys ) {
+        if (! $status) {
+            push @missing_criticals, {badparse=>1, line=>$., lineraw=>$borrowerline};
+        } elsif (@columns == @columnkeys) {
             @borrower{@columnkeys} = @columns;
-            my @attrs;
-            if (C4::Context->preference('ExtendedPatronAttributes')) {
-                my $attr_str = $borrower{patron_attributes};
-                delete $borrower{patron_attributes};
-                my $ok = $csv->parse($attr_str);
-                my @list = $csv->fields();
-                # FIXME error handling
-                $patron_attributes = [ map { map { my @arr = split /:/, $_, 2; { code => $arr[0], value => $arr[1] } } $_ } @list ];
-            }
-			foreach (qw(dateofbirth dateenrolled dateexpiry)) {
-				my $tempdate = $borrower{$_} or next;
-				$borrower{$_} = format_date_in_iso($tempdate) || '';
-			}
-            my $borrowernumber;
-            if ($matchpoint eq 'cardnumber') {
-                my $member = GetMember( $borrower{'cardnumber'}, 'cardnumber' );
-                if ($member) {
-                    $borrowernumber = $member->{'borrowernumber'};
-                }
-            } elsif (C4::Context->preference('ExtendedPatronAttributes')) {
-                if (defined($matchpoint_attr_type)) {
-                    foreach my $attr (@$patron_attributes) {
-                        if ($attr->{code} eq $matchpoint and $attr->{value} ne '') {
-                            my @borrowernumbers = $matchpoint_attr_type->get_patrons($attr->{value});
-                            $borrowernumber = $borrowernumbers[0] if scalar(@borrowernumbers) == 1;
-                            last;
-                        }
-                    }
-                }
-            }
-            
-            if ( $borrowernumber) 
-            {
-                # borrower exists
-                if ($overwrite_cardnumber) {
-                    $borrower{'borrowernumber'} = $borrowernumber;
-                    ModMember(%borrower);
-                    if (C4::Context->preference('ExtendedPatronAttributes')) {
-                        C4::Members::Attributes::SetBorrowerAttributes($borrower{'borrowernumber'}, $patron_attributes);
-                    }
-                    $overwritten++;
-                } else {
-                    $alreadyindb++;
-                }
-            }
-            else {
-                if ($borrowernumber = AddMember(%borrower)) {
-                    if (C4::Context->preference('ExtendedPatronAttributes')) {
-                        C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $patron_attributes);
-                    }
-                    $imported++;
-                } else {
-                    $invalid++;		# was just "$invalid", I assume incrementing was the point --atz
-                }
-            }
         } else {
+            # MJR: try to recover gracefully by using default values
+            foreach my $key (@columnkeys) {
+            	if (defined($csvkeycol{$key}) and $columns[$csvkeycol{$key}] =~ /\S/) { 
+            	    $borrower{$key} = $columns[$csvkeycol{$key}];
+            	} elsif ( $defaults{$key} ) {
+            	    $borrower{$key} = $defaults{$key};
+            	} elsif ( scalar grep {$key eq $_} @criticals ) {
+            	    # a critical field is undefined
+            	    push @missing_criticals, {key=>$key, line=>$., lineraw=>$borrowerline};
+            	} else {
+            		$borrower{$key} = '';
+            	}
+            }
+        }
+        #warn join(':',%borrower);
+        if (@missing_criticals) {
+            foreach (@missing_criticals) {
+                $_->{borrowernumber} = $borrower{borrowernumber} || 'UNDEF';
+                $_->{surname}        = $borrower{surname} || 'UNDEF';
+            }
             $invalid++;
+            (25 > scalar @errors) and push @errors, {missing_criticals=>\@missing_criticals};
+            # The first 25 errors are enough.  Keeping track of 30,000+ would destroy performance.
+            next LINE;
+        }
+        my @attrs;
+        if ($extended) {
+            my $attr_str = $borrower{patron_attributes};
+            delete $borrower{patron_attributes};
+            my $ok = $csv->parse($attr_str);
+            my @list = $csv->fields();
+            # FIXME error handling
+            $patron_attributes = [ map { map { my @arr = split /:/, $_, 2; { code => $arr[0], value => $arr[1] } } $_ } @list ];
+        }
+        foreach (qw(dateofbirth dateenrolled dateexpiry)) {
+            my $tempdate = $borrower{$_} or next;
+            $borrower{$_} = format_date_in_iso($tempdate) || '';
+        }
+        my $borrowernumber;
+        if ($matchpoint eq 'cardnumber') {
+            my $member = GetMember( $borrower{'cardnumber'}, 'cardnumber' );
+            if ($member) {
+                $borrowernumber = $member->{'borrowernumber'};
+            }
+        } elsif ($extended) {
+            if (defined($matchpoint_attr_type)) {
+                foreach my $attr (@$patron_attributes) {
+                    if ($attr->{code} eq $matchpoint and $attr->{value} ne '') {
+                        my @borrowernumbers = $matchpoint_attr_type->get_patrons($attr->{value});
+                        $borrowernumber = $borrowernumbers[0] if scalar(@borrowernumbers) == 1;
+                        last;
+                    }
+                }
+            }
+        }
+            
+        if ($borrowernumber) {
+            # borrower exists
+            unless ($overwrite_cardnumber) {
+                $alreadyindb++;
+                $template->param('lastalreadyindb'=>$borrower{'surname'}.' / '.$borrowernumber);
+                next LINE;
+            }
+            $borrower{'borrowernumber'} = $borrowernumber;
+            unless (ModMember(%borrower)) {
+                $invalid++;
+                $template->param('lastinvalid'=>$borrower{'surname'}.' / '.$borrowernumber);
+                next LINE;
+            }
+            if ($extended) {
+                C4::Members::Attributes::SetBorrowerAttributes($borrower{'borrowernumber'}, $patron_attributes);
+            }
+            $overwritten++;
+            $template->param('lastoverwritten'=>$borrower{'surname'}.' / '.$borrowernumber);
+        } else {
+            # FIXME: fixup_cardnumber says to lock table, but the web interface doesn't so this doesn't either.
+            # At least this is closer to AddMember than in members/memberentry.pl
+            if (!$borrower{'cardnumber'}) {
+                $borrower{'cardnumber'} = fixup_cardnumber('');
+            }
+            if ($borrowernumber = AddMember(%borrower)) {
+                if ($extended) {
+                    C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $patron_attributes);
+                }
+                $imported++;
+                $template->param('lastimported'=>$borrower{'surname'}.' / '.$borrowernumber);
+            } else {
+                $invalid++;		# was just "$invalid", I assume incrementing was the point --atz
+                $template->param('lastinvalid'=>$borrower{'surname'}.' / AddMember');
+            }
         }
     }
-    $template->param( 'uploadborrowers' => 1 );
+    (@errors) and $template->param(ERRORS=>\@errors);
     $template->param(
         'uploadborrowers' => 1,
         'imported'        => $imported,
@@ -178,7 +229,7 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
     );
 
 } else {
-    if (C4::Context->preference('ExtendedPatronAttributes')) {
+    if ($extended) {
         my @matchpoints = ();
         my @attr_types = C4::Members::AttributeTypes::GetAttributeTypes();
         foreach my $type (@attr_types) {
