@@ -50,7 +50,11 @@ onclick: {fn:function(){popup(<!--TMPL_VAR Name="subscriptionid"-->)}}
 	//]]>
 	</script>
 <ul class="toolbar">
-	<li><a id="newsubscription" href="/cgi-bin/koha/serials/subscription-add.pl">New Subscription</a></li>
+    <!-- TMPL_IF NAME="biblionumber_for_new_subscription" -->
+	    <li><a id="newsubscription" href="/cgi-bin/koha/serials/subscription-add.pl?biblionumber_for_new_subscription=<!-- TMPL_VAR NAME="biblionumber_for_new_subscription" -->">New Subscription</a></li>
+    <!-- TMPL_ELSE -->
+	    <li><a id="newsubscription" href="/cgi-bin/koha/serials/subscription-add.pl">New Subscription</a></li>
+    <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="subscriptionid" -->
         <!-- TMPL_UNLESS name="cannotedit" -->
             <li id="editmenuc"><a id="edit" href="/cgi-bin/koha/serials/subscription-add.pl?op=mod&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Edit</a></li>

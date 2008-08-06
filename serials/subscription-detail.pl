@@ -80,6 +80,7 @@ $subs->{abouttoexpire}  = abouttoexpire($subs->{subscriptionid});
 #         (C4::Context->userenv->{branch} ne $subs->{branchcode}));
 
 $template->param($subs);
+$template->param(biblionumber_for_new_subscription => $subs->{bibnum});
 
 $template->param(
 	subscriptionid => $subscriptionid,

@@ -324,5 +324,14 @@ if ($op eq 'addsubscription') {
         }    
     $template->param(subtype => \@sub_type_data,
 	);
+
+    my $new_biblionumber = $query->param('biblionumber_for_new_subscription');
+    if (defined $new_biblionumber) {
+        my $bib = GetBiblioData($new_biblionumber);
+        if (defined $bib) {
+            $template->param(bibnum      => $new_biblionumber);
+            $template->param(bibliotitle => $bib->{title});
+        }
+    }
 	output_html_with_http_headers $query, $cookie, $template->output;
 }
