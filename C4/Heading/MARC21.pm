@@ -52,6 +52,7 @@ my $bib_heading_fields = {
     '110' => { auth_type => 'CORPO_NAME', subfields => 'abcdefghklmnoprst', main_entry => 1 },
     '111' => { auth_type => 'MEETI_NAME', subfields => 'acdefghjklnpqst', main_entry => 1 },
     '130' => { auth_type => 'UNIF_TITLE', subfields => 'adfghklmnoprst', main_entry => 1 },
+    '440' => { auth_type => 'UNIF_TITLE', subfields => 'anp', series => 1 },
     '600' => { auth_type => 'PERSO_NAME', subfields => 'abcdefghjklmnopqrstvxyz', subject => 1 },
     '610' => { auth_type => 'CORPO_NAME', subfields => 'abcdefghklmnoprstvxyz', subject => 1 },
     '611' => { auth_type => 'MEETI_NAME', subfields => 'acdefghjklnpqstvxyz', subject => 1 },
