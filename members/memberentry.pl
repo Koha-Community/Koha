@@ -379,7 +379,7 @@ my($cityid);
 $template->param( city_cgipopup => 1) if ($cityid );
 my $citypopup = CGI::popup_menu(-name=>'select_city',
         -id => 'select_city',
-        -values=>$name_city,
+        '-values' =>$cityid,
         -labels=>$name_city,
         -default=>$default_city,
         );  
