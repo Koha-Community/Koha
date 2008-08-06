@@ -72,23 +72,6 @@ foreach my $thisletter (keys %$letters) {
 }
 $template->param(letterloop => \@letterloop);
 
-my $onlymine=C4::Context->preference('IndependantBranches') && 
-             C4::Context->userenv && 
-             C4::Context->userenv->{flags}!=1 && 
-             C4::Context->userenv->{branch};
-my $branches = GetBranches($onlymine);
-my @branchloop;
-for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
-    my $selected = 1 if $thisbranch eq C4::Context->userenv->{'branch'};
-    my %row =(value => $thisbranch,
-                selected => $selected,
-                branchname => $branches->{$thisbranch}->{'branchname'},
-            );
-    push @branchloop, \%row;
-}
-$template->param(branchloop => \@branchloop,
-    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
-);
 my $subscriptionid;
 my $subs;
 my $firstissuedate;
@@ -111,49 +94,67 @@ if ($op eq 'mod' || $op eq 'dup' || $op eq 'modsubscription') {
     	} else {
             $subs->{$_} = format_date($subs->{$_});  
         }
-	}
+	  }
     $subs->{'letter'}='' unless($subs->{'letter'});
     $irregularity   = $subs->{'irregularity'};
     $numberpattern  = $subs->{'numberpattern'};
     $nextexpected = GetNextExpected($subscriptionid);
     $nextexpected->{'isfirstissue'} = $nextexpected->{planneddate}->output('iso') eq $firstissuedate ;
     $subs->{nextacquidate} = $nextexpected->{planneddate}->output()  if($op eq 'mod');
-  unless($op eq 'modsubscription') {
-    if($subs->{numberlength} > 0){
-        $sublength = $subs->{numberlength};
-        $sub_on = $subscription_types[0];
-    } elsif ($subs->{weeklength}>0){
-        $sublength = $subs->{weeklength};
-        $sub_on = $subscription_types[1];
-    } else {
-        $sublength = $subs->{monthlength};
-        $sub_on = $subscription_types[2];
-    }
-    while (@subscription_types) {
-        my $sub_type = shift @subscription_types;
-        my %row = ( 'name' => $sub_type );
-        if ( $sub_on eq $sub_type ) {
-            $row{'selected'} = ' selected';
+    unless($op eq 'modsubscription') {
+        if($subs->{numberlength} > 0){
+            $sublength = $subs->{numberlength};
+            $sub_on = $subscription_types[0];
+        } elsif ($subs->{weeklength}>0){
+            $sublength = $subs->{weeklength};
+            $sub_on = $subscription_types[1];
         } else {
-            $row{'selected'} = '';
+            $sublength = $subs->{monthlength};
+            $sub_on = $subscription_types[2];
         }
-        push( @sub_type_data, \%row );
+        while (@subscription_types) {
+            my $sub_type = shift @subscription_types;
+            my %row = ( 'name' => $sub_type );
+            if ( $sub_on eq $sub_type ) {
+                $row{'selected'} = ' selected';
+            } else {
+                $row{'selected'} = '';
+            }
+            push( @sub_type_data, \%row );
+        }
+    
+        $template->param($subs);
+        $template->param(
+                    $op => 1,
+                    subtype => \@sub_type_data,
+                    sublength =>$sublength,
+                    history => ($op eq 'mod' && ($subs->{recievedlist}||$subs->{missinglist}||$subs->{opacnote}||$subs->{librariannote})),
+                    "periodicity".$subs->{'periodicity'} => 1,
+                    "dow".$subs->{'dow'} => 1,
+                    "numberpattern".$subs->{'numberpattern'} => 1,
+                    firstacquiyear => substr($firstissuedate,0,4),
+                    );
     }
-
-    $template->param($subs);
-    $template->param(
-                $op => 1,
-                subtype => \@sub_type_data,
-                sublength =>$sublength,
-                history => ($op eq 'mod' && ($subs->{recievedlist}||$subs->{missinglist}||$subs->{opacnote}||$subs->{librariannote})),
-                "periodicity".$subs->{'periodicity'} => 1,
-                "dow".$subs->{'dow'} => 1,
-                "numberpattern".$subs->{'numberpattern'} => 1,
-                firstacquiyear => substr($firstissuedate,0,4),
-                );
-  }
 }
 
+my $onlymine=C4::Context->preference('IndependantBranches') && 
+             C4::Context->userenv && 
+             C4::Context->userenv->{flags}!=1 && 
+             C4::Context->userenv->{branch};
+my $branches = GetBranches($onlymine);
+my @branchloop;
+for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
+    my $selected = 1 if ($thisbranch eq C4::Context->userenv->{'branch'});
+    my $selected = 1 if (defined($subs) && $thisbranch eq $subs->{'branchcode'});
+    my %row =(value => $thisbranch,
+                selected => $selected,
+                branchname => $branches->{$thisbranch}->{'branchname'},
+            );
+    push @branchloop, \%row;
+}
+$template->param(branchloop => \@branchloop,
+    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
+);
 my $count = 0;
 # prepare template variables common to all $op conditions:
 $template->param(  'dateformat_' . C4::Context->preference('dateformat') => 1 ,
@@ -225,7 +226,7 @@ if ($op eq 'addsubscription') {
     print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
 } elsif ($op eq 'modsubscription') {
     my $subscriptionid = $query->param('subscriptionid');
-	my @irregularity = $query->param('irregularity_select');
+	  my @irregularity = $query->param('irregularity_select');
     my $auser = $query->param('user');
     my $librarian => $query->param('librarian'),
     my $branchcode = $query->param('branchcode');
