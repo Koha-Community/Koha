@@ -42,16 +42,15 @@
                         <option value="start">starts with</option>
                         <option value="is">is exactly</option>
                     </select>
-                    </select>
                     <input type="text" name="value" value="<!-- TMPL_VAR name="anystring" -->" />
                 </li>
 		<li>
-		 <label for="orderby">Sort by </label>
+		<label for="orderby">Sort by </label>
 		<select name="orderby" id="orderby">
-		<option value="">No order</option>
-            	<option value="HeadingAsc" selected="selected">Heading Ascendant</option>
-            	<option value="HeadingDsc">Heading Descendant</option>
-          	</select>
+		    <option value="">No order</option>
+            <option value="HeadingAsc" selected="selected">Heading Ascendant</option>
+            <option value="HeadingDsc">Heading Descendant</option>
+        </select>
 		</li></ol></fieldset>
             <fieldset class="action"> <input type="submit" value="Start search" class="submit" /> <a class="cancel close" href="#">Cancel</a></fieldset>
-        </form>
+</form>
