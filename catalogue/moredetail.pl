@@ -94,9 +94,10 @@ foreach my $item (@items){
     $item->{'datelastseen'} = format_date($item->{'datelastseen'});
     $item->{'ordernumber'} = $ordernum;
     $item->{'booksellerinvoicenumber'} = $order->{'booksellerinvoicenumber'};
-	if ($item->{notforloantext} or $item->{itemlost} or $item->{damaged} or $item->{wthdrawn}) {
-		$item->{status_advisory} = 1;
-	}
+    $item->{'copyvol'} = $item->{'copynumber'};
+    if ($item->{notforloantext} or $item->{itemlost} or $item->{damaged} or $item->{wthdrawn}) {
+        $item->{status_advisory} = 1;
+    }
 
     if (C4::Context->preference("IndependantBranches")) {
         #verifying rights

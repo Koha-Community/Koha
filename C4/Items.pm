@@ -1790,9 +1790,10 @@ sub _koha_new_item {
             ccode               = ?,
             itype               = ?,
             materials           = ?,
-			uri                 = ?,
+            uri = ?,
             enumchron           = ?,
-			more_subfields_xml  = ?
+            more_subfields_xml  = ?,
+            copynumber          = ?
           ";
     my $sth = $dbh->prepare($query);
    $sth->execute(
@@ -1827,7 +1828,8 @@ sub _koha_new_item {
             $item->{'materials'},
             $item->{'uri'},
             $item->{'enumchron'},
-			$item->{'more_subfields_xml'},
+            $item->{'more_subfields_xml'},
+            $item->{'copynumber'},
     );
     my $itemnumber = $dbh->{'mysql_insertid'};
     if ( defined $sth->errstr ) {
