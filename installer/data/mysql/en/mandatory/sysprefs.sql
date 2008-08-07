@@ -189,12 +189,12 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 
 -- Tags and BakerTaylor (note field order differs from above)
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES
-	('BakerTaylorBookstoreURL','','','URL template for \"My Libary Bookstore\" links, to which the \"key\" value is appended, and \"https://\" is prepended.  It should include your hostname and \"Parent Number\".  Make this variable empty to turn MLB links off.<br /> Example: ocls.mylibrarybookstore.com/MLB/actions/searchHandler.do?nextPage=bookDetails&parentNum=10923&key=',''),
+	('BakerTaylorBookstoreURL','','','URL template for \"My Libary Bookstore\" links, to which the \"key\" value is appended, and \"https://\" is prepended.  It should include your hostname and \"Parent Number\".  Make this variable empty to turn MLB links off.  Example: ocls.mylibrarybookstore.com/MLB/actions/searchHandler.do?nextPage=bookDetails&parentNum=10923&key=',''),
 	('BakerTaylorEnabled','0','','Enable or disable all Baker & Taylor features.','YesNo'),
 	('BakerTaylorPassword','','','Baker & Taylor Password for Content Cafe (external content)','Textarea'),
 	('BakerTaylorUsername','','','Baker & Taylor Username for Content Cafe (external content)','Textarea'),
 	('TagsEnabled','1','','Enables or disables all tagging features.  This is the main switch for tags.','YesNo'),
-	('TagsExternalDictionary',NULL,'','Path on server to local ispell executable, used to set $Lingua::Ispell::path <br />This dictionary is used as a \"whitelist\" of pre-allowed tags.',''),
+	('TagsExternalDictionary',NULL,'','Path on server to local ispell executable, used to set $Lingua::Ispell::path  This dictionary is used as a \"whitelist\" of pre-allowed tags.',''),
 	('TagsInputOnDetail','1','','Allow users to input tags from the detail page.',         'YesNo'),
 	('TagsInputOnList',  '0','','Allow users to input tags from the search results list.', 'YesNo'),
 	('TagsModeration',  NULL,'','Require tags from patrons to be approved before becoming visible.','YesNo'),
