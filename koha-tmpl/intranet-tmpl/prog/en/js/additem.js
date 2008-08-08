@@ -40,7 +40,7 @@ function check_additem() {
 	var success = true;
 	for(i=0;i<barcodes.length;i++){
 		for(j=0;j<barcodes.length;j++){
-			if( (i > j) && (barcodes[i].value == barcodes[j].value) ) {
+			if( (i > j) && (barcodes[i].value == barcodes[j].value) && barcodes[i].value !='') {
 				barcodes[i].className='error';
 				barcodes[j].className='error';
 				success = false;
