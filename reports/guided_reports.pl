@@ -323,12 +323,34 @@ elsif ( $phase eq 'Save Report' ) {
     # save the sql pasted in by a user 
     my $sql  = $input->param('sql');
     my $name = $input->param('reportname');
-    my $type = $input->param('type');
-	my $notes = $input->param('notes');
-    save_report( $sql, $name, $type, $notes );
-	$template->param(
-		'save_successful' => 1,
-	);
+    my $type = $input->param('types');
+    my $notes = $input->param('notes');
+    my @errors = ();
+    my $error = {};
+    if ($sql =~ /;?\W?(UPDATE|DELETE|DROP|INSERT|SHOW|CREATE)\W/i) {
+        $error->{'sqlerr'} = $1;
+        push @errors, $error;
+    }
+    elsif ($sql !~ /^(SELECT)/i) {
+        $error->{'queryerr'} = 1;
+        push @errors, $error;
+    }
+    if (@errors) {
+        $template->param(
+            'save_successful'       => 1,
+            'errors'    => \@errors,
+            'sql'       => $sql,
+            'reportname'=> $name,
+            'type'      => $type,
+            'notes'     => $notes,
+        );
+    }
+    else {
+        save_report( $sql, $name, $type, $notes );
+        $template->param(
+            'save_successful'       => 1,
+        );
+    }
 }
 
 # This condition is not used currently
@@ -336,7 +358,7 @@ elsif ( $phase eq 'Save Report' ) {
 #    # run the sql, and output results in a template	
 #    my $sql     = $input->param('sql');
 #    my $type    = $input->param('type');
-#    my $results = execute_query($sql, $type);
+#    my ($results, $total, $errors) = execute_query($sql, $type);
 #    $template->param(
 #        'results' => $results,
 #        'sql' => $sql,
@@ -346,18 +368,19 @@ elsif ( $phase eq 'Save Report' ) {
 
 elsif ($phase eq 'Run this report'){
     # execute a saved report
-    # FIXME: The default limit should not be hardcoded...
+    # FIXME The default limit should not be hardcoded...
     my $limit = 20;
     my $offset;
     my $report = $input->param('reports');
     # offset algorithm
     if ($input->param('page')) {
         $offset = ($input->param('page') - 1) * 20;
-    } else {
+    }
+    else {
         $offset = 0;
     }
     my ($sql,$type,$name,$notes) = get_saved_report($report);
-    my ($results, $total) = execute_query($sql, $type, $offset, $limit);
+    my ($results, $total, $errors) = execute_query($sql, $type, $offset, $limit);
     my $totpages = int($total/$limit) + (($total % $limit) > 0 ? 1 : 0);
     my $url = "/cgi-bin/koha/reports/guided_reports.pl?reports=$report&phase=Run%20this%20report";
     $template->param(
@@ -367,25 +390,50 @@ elsif ($phase eq 'Run this report'){
         'name'          => $name,
         'notes'         => $notes,
         'pagination_bar' => pagination_bar($url, $totpages, $input->param('page'), "page"),
+        'errors'        => $errors,
     );
 }	
 
 elsif ($phase eq 'Export'){
 	# export results to tab separated text
-	my $sql     = $input->param('sql');
-	$no_html=1;
-	print $input->header(   -type => 'application/octet-stream',
-	          -attachment=>'reportresults.csv');
-	my $format=$input->param('format');
-	my $results = execute_query($sql,1,0,0,$format);
-	print $results;
-	
+	my $sql = $input->param('sql');
+        my $format = $input->param('format');
+	my ($results, $total, $errors) = execute_query($sql,1,0,0,$format);
+        if (!defined($errors)) {
+            $no_html=1;
+            print $input->header(       -type => 'application/octet-stream',
+                                        -attachment=>'reportresults.csv'
+                                );
+	    print $results;
+        } else {
+            $template->param(
+                'results'       => $results,
+                'sql'           => $sql,
+                'execute'       => 1,
+                'name'          => 'Error exporting report!',
+                'notes'         => '',
+                'pagination_bar' => '',
+                'errors'        => $errors,
+            );
+        }
 }
 
-elsif ($phase eq 'Create report from SQL'){
-	# alllow the user to paste in sql 
+elsif ($phase eq 'Create report from SQL') {
+	# allow the user to paste in sql
+        if ($input->param('sql')) {
+            $template->param(
+                'sql'           => $input->param('sql'),
+                'reportname'    => $input->param('reportname'),
+                'notes'         => $input->param('notes'),
+            );
+        }
 	$template->param('create' => 1);
-	 my $types = C4::Reports::get_report_types();
+	my $types = C4::Reports::get_report_types();
+        if (my $type = $input->param('type')) {
+            for my $i ( 0 .. $#{@$types}) {
+                @$types[$i]->{'selected'} = 1 if @$types[$i]->{'id'} eq $type;
+            }
+        }
 	$template->param( 'types' => $types ); 
 }
 
