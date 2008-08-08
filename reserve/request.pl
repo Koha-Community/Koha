@@ -93,7 +93,6 @@ if ($findborrower) {
 
 if ($cardnumber) {
     my $borrowerinfo = GetMemberDetails( 0, $cardnumber );
-    my $expiry;
     my $diffbranch;
     my @getreservloop;
     my $count_reserv = 0;
@@ -110,16 +109,11 @@ if ($cardnumber) {
         $maxreserves = 1;
     }
 
-    # we check the date expiricy of the borrower (only if there is an expiry date, otherwise, set to 1 (warn)
-    if ($borrowerinfo->{'dateexpiry'} ne '0000-00-00') {
-        my $warning = (Date_to_Days(split /-/,$date) > Date_to_Days( split /-/,$borrowerinfo->{'dateexpiry'}));
-        if ( $warning > 0 ) {
-			$messages = 1;
-            $expiry = 1;
-        }
-    } else {
-		$messages = 1;
-        $expiry = 1;
+    # we check the date expiry of the borrower (only if there is an expiry date, otherwise, set to 1 (warn)
+    my $expiry = $borrowerinfo->{dateexpiry};
+    unless ($expiry and $expiry ne '0000-00-00' and
+            Date_to_Days(split /-/,$date) > Date_to_Days(split /-/,$expiry)) {
+		$messages = $expiry = 1;
     }
      
 
