@@ -53,6 +53,7 @@ function jumpfull(page)
                     <th>Summary</th>
                     <th>Used</th>
                     <th>Get It!</th>
+                    <th>Other action</th>
                 </tr>
                 <tr>
                     <td>&nbsp;</td>
@@ -62,6 +63,7 @@ function jumpfull(page)
                             Clear
                         </a>
                     </td>
+                    <td>&nbsp;</td>
                 </tr>
                 <!-- TMPL_LOOP NAME="result" -->
                     <tr>
@@ -70,6 +72,7 @@ function jumpfull(page)
                         <td>
                             <a href="javascript:jumpfull('blinddetail-biblio-search.pl?authid=<!-- TMPL_VAR NAME="authid" -->&amp;index=<!-- TMPL_VAR NAME="index" -->')">choose</a>
                         </td>
+                        <td><a href="authorities.pl?authid=<!-- TMPL_VAR NAME="authid" -->">Edit authority</a></td>
                     </tr>
                 <!-- /TMPL_LOOP -->
             </table>
