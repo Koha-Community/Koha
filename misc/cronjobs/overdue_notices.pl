@@ -53,6 +53,7 @@ overdue_notices.pl [ -n ] [ -library <branchcode> ] [ -max <number of days> ] [ 
    -library      <branchname>     only deal with overdues from this library
    -csv          <filename>       populate CSV file
    -itemscontent <list of fields> item information in templates
+   -v				  verbose ( use multiple times to increase verbosity )
 
 =head1 OPTIONS
 
@@ -218,7 +219,7 @@ my $itemscontent = join( ',', qw( issuedate title barcode author ) );
 GetOptions(
     'help|?'         => \$help,
     'man'            => \$man,
-    'v'              => \$verbose,
+    'v+'              => \$verbose,
     'n'              => \$nomail,
     'max=s'          => \$MAX,
     'library=s'      => \$mybranch,
@@ -227,7 +228,6 @@ GetOptions(
 ) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
-
 if ( defined $csvfilename && $csvfilename =~ /^-/ ) {
     warn qq(using "$csvfilename" as filename, that seems odd);
 }
@@ -339,10 +339,10 @@ END_SQL
             push @borrower_parameters, $mindays, $maxdays;
             my $sth = $dbh->prepare($borrower_sql);
             $sth->execute(@borrower_parameters);
-            $verbose and warn $borrower_sql . "\n\n ($mindays, $maxdays)\nreturns " . $sth->rows . " rows";
+            ($verbose>1) and warn $borrower_sql . "\n\n ($mindays, $maxdays)\nreturns " . $sth->rows . " rows";
 
             while ( my ( $itemcount, $borrowernumber, $firstname, $lastname, $address1, $address2, $city, $postcode, $email ) = $sth->fetchrow ) {
-                warn "borrower $firstname, $lastname ($borrowernumber) has $itemcount items overdue." if $verbose;
+                warn "borrower $firstname, $lastname ($borrowernumber) [ $email ] has $itemcount items overdue." if $verbose;
 
                 my $letter = C4::Letters::getletter( 'circulation', $overdue_rules->{"letter$i"} );
                 unless ($letter) {
@@ -409,6 +409,7 @@ END_SQL
                             {   letter                 => $letter,
                                 borrowernumber         => $borrowernumber,
                                 message_transport_type => 'email',
+                                to_address           => $email,
                                 from_address           => $admin_email_address,
                             }
                         );
@@ -464,6 +465,7 @@ END_SQL
                     message_transport_type => 'email',
                     attachments            => [$attachment],
                     to_address             => $admin_email_address,
+                    from_address           => $admin_email_address,
                 }
             );
         }
