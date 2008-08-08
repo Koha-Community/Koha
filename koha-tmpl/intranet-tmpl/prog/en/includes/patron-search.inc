@@ -90,7 +90,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 			<ul>
 			<li><a href="/cgi-bin/koha/members/members-home.pl#patron_search">Search Patrons</a></li>
 			<!-- TMPL_IF NAME="CAN_user_circulate" --><li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li><!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="CAN_user_catalogue" --><li><a href="/cgi-bin/koha/catalogue/advsearch.pl#catalog_search">Search the Catalog</a></li><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="CAN_user_catalogue" --><li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the Catalog</a></li><!-- /TMPL_IF -->
 			</ul>	
 </div>
 <!-- End Patrons Resident Search Box -->
