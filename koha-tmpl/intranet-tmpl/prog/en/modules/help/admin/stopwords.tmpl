@@ -3,7 +3,10 @@
 <h1>Stop word administration page</h1>
 
 <p>Here you should list all of the words you wish Koha to ignore when performing catalog searches or building the keyword index.</p>
+<h3>Koha with Zebra</h3>
+<p>Zebra handles stopwords internally, and does so effectively and efficiently.  In normal circumstances, there should be no reason for Koha to remove stopwords prior to submitting the search query to Zebra, and in most cases doing so will actually negatively affect relevance ranking and phrase searching without giving any performance benefit.</p>
 
+<h3>Koha without Zebra</h3>
 <p>Normally, you will not want Koha to save keyword references to articles like "The" and "A" and other very common words. Saving keyword references to these words does not help to limit a search and will make the keyword index very large and "cluttered" with words that are not really useful. The "stopwords" list defines these unnecessary words for your installation.</p>
 
 <p>(Hint: If you are proficient at MySQL, it is often faster and easier to find an existing stopwords list, edit it, put it in the correct format, and use the MySQL "Load Data Infile" command to import the list into the stopwords table. Many academic libraries publish their stopwords list on the Internet, or you can ask other Koha libraries if they would share their stopword list.)</p>
