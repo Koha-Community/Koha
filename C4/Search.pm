@@ -33,7 +33,7 @@ BEGIN {
     $VERSION = 3.01;
     $DEBUG = ($ENV{DEBUG}) ? 1 : 0;
 }
-
+$DEBUG=1;
 =head1 NAME
 
 C4::Search - Functions for searching the Koha catalog.
@@ -702,11 +702,12 @@ sub _remove_stopwords {
         foreach ( keys %{ C4::Context->stopwords } ) {
             next if ( $_ =~ /(and|or|not)/ );    # don't remove operators
             if ( $operand =~
-                /(\P{IsAlpha}$_\P{IsAlpha}|^$_\P{IsAlpha}|\P{IsAlpha}$_$)/ )
+                /(\P{IsAlpha}$_\P{IsAlpha}|^$_\P{IsAlpha}|\P{IsAlpha}$_$|^$_$)/ )
             {
                 $operand =~ s/\P{IsAlpha}$_\P{IsAlpha}/ /gi;
                 $operand =~ s/^$_\P{IsAlpha}/ /gi;
                 $operand =~ s/\P{IsAlpha}$_$/ /gi;
+				$operand =~ s/$1//gi;
                 push @stopwords_removed, $_;
             }
         }
