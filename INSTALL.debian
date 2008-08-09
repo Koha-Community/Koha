@@ -350,18 +350,25 @@ Koha's command-line scripts are installed, e.g., /usr/share/koha/bin.
       (note: use the correct path to your koha-conf.xml)
 
 7.1 Import:
+    Bibliographic data in MARC21 format
     $ misc/migration-tools/bulkmarcimport.pl -file /path/to/marc.iso2709
+    Authority data in MARC21 format
+	$ misc/migration-tools/bulkauthimport.pl -file /path/to/auth.iso2709
 
 7.2 Fast Index:
     $ misc/migration-tools/rebuild_zebra.pl -b -w
 
     Once the indexing has completed, you will be able to search for records in your
-    system. NOTE: if you don't run the Fast Index utility, and you have the zebraqueue
-    daemon running, the indexin process will happen in the background, but it will be
-    orders of magnitude slower.
+    system. NOTE: if you don't run the Fast Index utility, and you have the index
+	updates scheduled as per 7.3 the indexing process will happen in the background,
+	but it will be orders of magnitude slower.
 
-    To enable the SRU servers, you'll need to edit your koha-conf.xml and change the
-    <listen> options to listen on a TCP port; then restart the zebra daemon.
+7.3 Schedule regular index updates
+    run rebuild_zebra.pl -b -a -z as a regular cron job, check misc/cronjobs/crontab.example
+	for usage examples
+    
+7.4 To enable public Z39.50/SRU servers, you'll need to edit your koha-conf.xml and
+    change the <listen> options to listen on a TCP port; then restart the zebra daemon.
 
 UPGRADE
 =======
@@ -381,11 +388,9 @@ Uninstall Instructions
    $ sudo apache2ctl restart
 
    $ sudo update-rc.d koha-zebra-daemon remove
-   $ sudo update-rc.d koha-zebraqueue-daemon remove
    $ sudo rm /etc/init.d/koha-zebra-daemon
-   $ sudo rm /etc/init.d/koha-zebraqueue-daemon
 
-2) Remove Koha Databases
+2) Remove Database and Indexes
 
    # MySQL
    $ mysql -u<kohauser> -p<kohapassword>
@@ -396,6 +401,7 @@ Uninstall Instructions
    $ zebraidx -c <prefix>/etc/zebradb/zebra-authorities.cfg -g iso2709 -d authorities init
 
 3) Remove Koha Install Directories and Configuration Files
+   Don't forget about any crontab entries
 
 Tested on the following operating environments
 ==============================================

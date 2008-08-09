@@ -29,7 +29,7 @@ PostgreSQL 8.2.5: Create a database called 'koha,' owned by 'kohaadmin'
 user, with a password set. Note: kohaadmin must be a superuser. You
 must also add plpgsql to the koha database. NOTE: PostgreSQL support in
 Koha is experimental and should not be attempted for production systems
-without a heavy investment in testing
+without a heavy investment in testing.
 
 Default installation instructions:
 
@@ -82,6 +82,43 @@ use the following:
  make
  make test
  sudo make upgrade
+
+WHAT NEXT?
+
+1. Running the Web Installer allows you to install sample data for libraries, patrons, etc.
+    but you may want to install additional data such as bibliographic and authorities.
+
+    Once the installer has completed, you can import and index MARC records from the
+    command line thusly (Note: you can also use the 'Stage MARC records for import' from
+    the Tools area of Koha's Staff Client to import a batch of MARC records):
+
+    $ export KOHA_CONF=/usr/share/koha/etc/koha-conf.xml
+      (note: use the correct path to your koha-conf.xml)
+
+2. Import:
+    Bibliographic data in MARC21 format
+    $ misc/migration-tools/bulkmarcimport.pl -file /path/to/marc.iso2709
+    Authority data in MARC21 format
+    $ misc/migration-tools/bulkauthimport.pl -file /path/to/auth.iso2709
+
+3. Fast Index:
+    $ misc/migration-tools/rebuild_zebra.pl -b -w
+
+    Once the indexing has completed, you will be able to search for records in your
+    system. NOTE: if you don't run the Fast Index utility, and you have the index
+    updates scheduled as per 7.3 the indexing process will happen in the background,
+    Once the indexing has completed, you will be able to search for records in your
+    system. NOTE: if you don't run the Fast Index utility, and you have the index
+    updates scheduled as per 7.3 the indexing process will happen in the background,
+    but it will be orders of magnitude slower.
+
+4. Schedule regular index updates
+    run rebuild_zebra.pl -b -a -z as a regular cron job, check misc/cronjobs/crontab.example
+    for usage examples
+
+5. To enable public Z39.50/SRU servers, you'll need to edit your koha-conf.xml and
+    change the <listen> options to listen on a TCP port; then restart the zebra daemon.
+
 
 IF YOU HAVE PROBLEMS
 ====================
