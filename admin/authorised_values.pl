@@ -110,6 +110,7 @@ if ($op eq 'add_form') {
     my $new_category = $input->param('category');
     my $new_authorised_value = $input->param('authorised_value');
     my $imageurl=$input->param( 'imageurl' )|'';   
+	$imageurl = '' if $imageurl =~ /removeImage/;
     my $duplicate_entry = 0;
 
     if ( $id ) { # Update

@@ -155,7 +155,7 @@ if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {
 	for my $thisitemtype (@$advsearchtypes) {
 		my %row =(
 				number=>$cnt++,
-                imageurl=> $imgdir."/".$thisitemtype->{'imageurl'},
+                imageurl=> $thisitemtype->{'imageurl'}?($imgdir."/".$thisitemtype->{'imageurl'}):"",
 				ccl => $advanced_search_types,
                 code => $thisitemtype->{authorised_value},
                 selected => $selected,
