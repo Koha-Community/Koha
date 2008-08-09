@@ -538,8 +538,7 @@ sub AddAuthority {
               ,'a'=>$date."afrey50      ba0")
           );
         }      
-  }    
-
+  }
   my ($auth_type_tag, $auth_type_subfield) = get_auth_type_location($authtypecode);
   if (!$authid and $format eq "MARC21") {
     # only need to do this fix when modifying an existing authority
@@ -604,12 +603,8 @@ sub DelAuthority {
 sub ModAuthority {
   my ($authid,$record,$authtypecode,$merge)=@_;
   my $dbh=C4::Context->dbh;
-#   my ($oldrecord)=&GetAuthority($authid);
-#   if ($oldrecord eq $record) {
-#       return;
-#   }
-#   my $sth=$dbh->prepare("update auth_header set marc=?,marcxml=? where authid=?");
   #Now rewrite the $record to table with an add
+  my $oldrecord=GetAuthority($authid);
   $authid=AddAuthority($record,$authid,$authtypecode);
 
 ### If a library thinks that updating all biblios is a long process and wishes to leave that to a cron job to use merge_authotities.p
@@ -628,7 +623,7 @@ sub ModAuthority {
       print AUTH $authid;
       close AUTH;
   } else {
-#        &merge($authid,$record,$authid,$record);
+      &merge($authid,$oldrecord,$authid,$record);
   }
   return $authid;
 }
@@ -1149,14 +1144,15 @@ Then we should add some new parameter : bibliotargettag, authtargettag
 
 sub merge {
     my ($mergefrom,$MARCfrom,$mergeto,$MARCto) = @_;
+    my ($counteditedbiblio,$countunmodifiedbiblio,$counterrors)=(0,0,0);        
     my $dbh=C4::Context->dbh;
     my $authtypecodefrom = GetAuthTypeCode($mergefrom);
     my $authtypecodeto = GetAuthTypeCode($mergeto);
     # return if authority does not exist
     my @X = $MARCfrom->fields();
-    return if $#X == -1;
+    return "error MARCFROM not a marcrecord ".Data::Dumper::Dumper($MARCfrom) if $#X == -1;
     @X = $MARCto->fields();
-    return if $#X == -1;
+    return "error MARCTO not a marcrecord".Data::Dumper::Dumper($MARCto) if $#X == -1;
     # search the tag to report
     my $sth = $dbh->prepare("select auth_tag_to_report from auth_types where authtypecode=?");
     $sth->execute($authtypecodefrom);
@@ -1167,62 +1163,82 @@ sub merge {
     my @record_from;
     @record_from = $MARCfrom->field($auth_tag_to_report)->subfields() if $MARCfrom->field($auth_tag_to_report);
     
+    my @reccache;
     # search all biblio tags using this authority.
+    #Getting marcbiblios impacted by the change.
+    if (C4::Context->preference('NoZebra')) {
+        #nozebra way    
+        my $dbh=C4::Context->dbh;
+        my $rq=$dbh->prepare(qq(SELECT biblionumbers from nozebra where indexname="an" and server="biblioserver" and value="$mergefrom" ));
+        $rq->execute;
+        while (my $biblionumbers=$rq->fetchrow){
+            my @biblionumbers=split /;/,$biblionumbers;
+            map {
+                my $biblionumber=$1 if ($_=~/(\d+),.*/);
+                my $marc=GetMarcBiblio($biblionumber);        
+                push @reccache,$marc;        
+            } @biblionumbers;
+        }
+    } else {
+        #zebra connection  
+        my $oConnection=C4::Context->Zconn("biblioserver",0);
+        my $query;
+        $query= "an=".$mergefrom;
+        my $oResult = $oConnection->search(new ZOOM::Query::CCL2RPN( $query, $oConnection ));
+        my $count=$oResult->size() if  ($oResult);
+        my $z=0;
+        while ( $z<$count ) {
+            my $rec;
+            $rec=$oResult->record($z);
+            my $marcdata = $rec->raw();
+            push @reccache, $marcdata;
+        $z++;
+        }
+        $oConnection->destroy();    
+    }
+    warn scalar(@reccache)." biblios to update";
+    # Get All candidate Tags for the change 
+    # (This will reduce the search scope in marc records).
     $sth = $dbh->prepare("select distinct tagfield from marc_subfield_structure where authtypecode=?");
     $sth->execute($authtypecodefrom);
     my @tags_using_authtype;
     while (my ($tagfield) = $sth->fetchrow) {
-        push @tags_using_authtype,$tagfield."9" ;
+        push @tags_using_authtype,$tagfield ;
     }
-
-    if (C4::Context->preference('NoZebra')) {
-        warn "MERGE TO DO";
-    } else {
-        # now, find every biblio using this authority
-        my $oConnection=C4::Context->Zconn("biblioserver");
-        my $query;
-        $query= "an= ".$mergefrom;
-        my $oResult = $oConnection->search(new ZOOM::Query::CCL2RPN( $query, $oConnection ));
-        my $count=$oResult->size() if  ($oResult);
-        my @reccache;
-        my $z=0;
-        while ( $z<$count ) {
-        my $rec;
-                $rec=$oResult->record($z);
-            my $marcdata = $rec->raw();
-        push @reccache, $marcdata;
-        $z++;
-        }
-        $oResult->destroy();
-        foreach my $marc(@reccache){
-            my $update;
-            my $marcrecord;
-            $marcrecord = MARC::File::USMARC::decode($marc);
-            foreach my $tagfield (@tags_using_authtype){
-            $tagfield=substr($tagfield,0,3);
-            my @tags = $marcrecord->field($tagfield);
-            foreach my $tag (@tags){
-                my $tagsubs=$tag->subfield("9");
-            #warn "$tagfield:$tagsubs:$mergefrom";
-                if ($tagsubs== $mergefrom) {
-                $tag->update("9" =>$mergeto);
-                foreach my $subfield (@record_to) {
-            #        warn "$subfield,$subfield->[0],$subfield->[1]";
-                    $tag->update($subfield->[0] =>$subfield->[1]);
-                }#for $subfield
+    my $tag_to=0;  
+    if ($authtypecodeto ne $authtypecodefrom){  
+        # If many tags, take the first
+        $sth->execute($authtypecodeto);    
+        $tag_to=$sth->fetchrow;
+        warn $tag_to;    
+    }  
+    # BulkEdit marc records
+    # May be used as a template for a bulkedit field  
+    foreach my $marcrecord(@reccache){
+        my $update;           
+        $marcrecord= MARC::File::USMARC::decode($marcrecord) unless(C4::Context->preference('NoZebra'));
+        foreach my $tagfield (@tags_using_authtype){
+            foreach my $field ($marcrecord->field($tagfield)){
+                my $auth_number=$field->subfield("9");
+                my $tag=$field->tag();          
+                if ($auth_number==$mergefrom) {
+                    my $field_to=MARC::Field->new(($tag_to?$tag_to:$tag),$field->indicator(1),$field->indicator(2),"9"=>$mergeto);
+                    foreach my $subfield (@record_to) {
+                        $field_to->add_subfields($subfield->[0] =>$subfield->[1]);
+                    }
+                    $field->replace_with($field_to);            
+                    $update=1;
                 }
-                $marcrecord->delete_field($tag);
-                $marcrecord->add_fields($tag);
-                $update=1;
             }#for each tag
-            }#foreach tagfield
-            my $oldbiblio = TransformMarcToKoha($dbh,$marcrecord,"") ;
-            if ($update==1){
+        }#foreach tagfield
+        my $oldbiblio = TransformMarcToKoha($dbh,$marcrecord,"") ;
+        if ($update==1){
             &ModBiblio($marcrecord,$oldbiblio->{'biblionumber'},GetFrameworkCode($oldbiblio->{'biblionumber'})) ;
-            }
-            
-        }#foreach $marc
-    }
+            $counteditedbiblio++;
+            warn $counteditedbiblio if (($counteditedbiblio % 10) and $ENV{DEBUG});
+        }    
+    }#foreach $marc
+    return $counteditedbiblio;  
   # now, find every other authority linked with this authority
 #   my $oConnection=C4::Context->Zconn("authorityserver");
 #   my $query;

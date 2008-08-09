@@ -580,7 +580,7 @@ if ($op eq "add") {
     # it is not a duplicate (determined either by Koha itself or by user checking it's not a duplicate)
     if (!$duplicateauthid or $confirm_not_duplicate) {
         if ($is_a_modif ) {	
-            ModAuthority($authid,$record,$authtypecode,1);
+            ModAuthority($authid,$record,$authtypecode);
         } else {
             ($authid) = AddAuthority($record,$authid,$authtypecode);
         }
@@ -597,7 +597,7 @@ if ($op eq "add") {
     }
 } elsif ($op eq "delete") {
 #------------------------------------------------------------------------------------------------------------------------------
-        &AUTHdelauthority($authid);
+        &DelAuthority($authid);
         if ($nonav){
             print $input->redirect("auth_finder.pl");
         }else{

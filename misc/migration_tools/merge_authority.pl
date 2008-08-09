@@ -11,18 +11,20 @@ BEGIN {
 
 # Koha modules used
 use C4::Context;
+use C4::Search;
 use C4::Biblio;
 use C4::AuthoritiesMarc;
 use Time::HiRes qw(gettimeofday);
 
 use Getopt::Long;
-my ($version, $verbose, $mergefrom,$mergeto,$noconfirm);
+my ($version, $verbose, $mergefrom,$mergeto,$noconfirm,$batch);
 GetOptions(
     'h' => \$version,
     'f:s' => \$mergefrom,
     't:s' => \$mergeto,
     'v' => \$verbose,
     'n' => \$noconfirm,
+    'b' => \$batch, 
 );
 
 if ($version || ($mergefrom eq '')) {
@@ -34,6 +36,7 @@ parameters :
 \tf : the authority number to merge (the one that can be deleted after the merge).
 \tt : the authority number where to merge
 \tn : don't ask for confirmation (useful for batch mergings, should not be used on command line)
+\tb : batch Merging
 
 All biblios with the authority in -t will be modified to be "connected" to authority -f
 SAMPLE :
@@ -49,11 +52,11 @@ my $dbh = C4::Context->dbh;
 # my @subf = $subfields =~ /(##\d\d\d##.)/g;
 
 $|=1; # flushes output
-my $authfrom = AUTHgetauthority($mergefrom);
-my $authto = AUTHgetauthority($mergeto);
+my $authfrom = GetAuthority($mergefrom);
+my $authto = GetAuthority($mergeto);
 
-my $authtypecodefrom = AUTHfind_authtypecode($mergefrom);
-my $authtypecodeto = AUTHfind_authtypecode($mergeto);
+my $authtypecodefrom = GetAuthTypeCode($mergefrom);
+my $authtypecodeto = GetAuthTypeCode($mergeto);
 
 unless ($noconfirm) {
     print "************\n";
@@ -71,49 +74,29 @@ unless ($noconfirm) {
 }
 my $starttime = gettimeofday;
 print "Merging\n" unless $noconfirm;
-
-# search the tag to report
-my $sth = $dbh->prepare("select auth_tag_to_report from auth_types where authtypecode=?");
-$sth->execute($authtypecodefrom);
-my ($auth_tag_to_report) = $sth->fetchrow;
-# my $record_to_report = $authto->field($auth_tag_to_report);
-print "Reporting authority tag $auth_tag_to_report :\n" if $verbose;
-my @record_to = $authto->field($auth_tag_to_report)->subfields();
-my @record_from = $authfrom->field($auth_tag_to_report)->subfields();
-
-# search all biblio tags using this authority.
-$sth = $dbh->prepare("select distinct tagfield from marc_subfield_structure where authtypecode=?");
-$sth->execute($authtypecodefrom);
-my $tags_using_authtype;
-while (my ($tagfield) = $sth->fetchrow) {
-    $tags_using_authtype.= "'".$tagfield."',";
-}
-chop $tags_using_authtype;
-# now, find every biblio using this authority
-my $query = "select bibid,tag,tag_indicator,tagorder,subfieldcode,subfieldorder from marc_subfield_table where tag in ($tags_using_authtype) and subfieldcode='9' and subfieldvalue='$mergefrom'";
-$sth = $dbh->prepare($query);
-$sth->execute;
-my $nbdone;
-# and delete entries before recreating them
-while (my ($bibid,$tag,$tag_indicator,$tagorder,$subfieldcode,$subfieldorder) = $sth->fetchrow) {
-    my $biblio = GetMarcBiblio($bibid);
-    print "BEFORE : ".$biblio->as_formatted."\n" if $verbose;
-    # now, we know what uses the authority & where.
-    # delete all subfields that are in the same tag/tagorder and that are in the authority (& that are not in tab ignore in the biblio)
-    # then recreate them with the new authority.
-    foreach my $subfield (@record_from) {
-        &MARCdelsubfield($bibid,$tag,$tagorder,$subfield->[0]);
+if ($batch) {
+  my @authlist;
+  my $cgidir = C4::Context->intranetdir ."/cgi-bin";
+  unless (opendir(DIR, "$cgidir/localfile/modified_authorities")) {
+    $cgidir = C4::Context->intranetdir;
+    opendir(DIR, "$cgidir/localfile/modified_authorities") || die "can't opendir $cgidir/localfile/modified_authorities: $!";
+  } 
+  while (my $authid = readdir(DIR)) {
+    if ($authid =~ /\.authid$/) {
+      $authid =~ s/\.authid$//;
+      print "managing $authid\n" if $verbose;
+      my $MARCauth = GetAuthority($authid);
+      merge($authid,$MARCauth,$authid,$MARCauth) if ($MARCauth);
+      unlink $cgidir.'/localfile/modified_authorities/'.$authid.'.authid';
     }
-    &MARCdelsubfield($dbh,$bibid,$tag,$tagorder,'9');
-    foreach my $subfield (@record_to) {
-        &MARCaddsubfield($bibid,$tag,$tag_indicator,$tagorder,$subfield->[0],$subfieldorder,$subfield->[1]);
-    }
-    &MARCaddsubfield($bibid,$tag,$tag_indicator,$tagorder,'9',$subfieldorder,$mergeto);
-    $biblio = GetMarcBiblio($bibid);
-    print "AFTER : ".$biblio->as_formatted."\n" if $verbose;
-    $nbdone++;
-#     &MARCdelsubfield($dbh,$bibid,$tag,$tagorder,$subfieldcode,$subfieldorder);
-    
+  }
+  closedir DIR;
+} else {
+  my $MARCfrom = GetAuthority($mergefrom);
+  my $MARCto = GetAuthority($mergeto);
+  &merge($mergefrom,$MARCfrom,$mergeto,$MARCto);
+  #Could add mergefrom authority to mergeto rejected forms before deletion 
+  DelAuthority($mergefrom);
 }
 my $timeneeded = gettimeofday - $starttime;
-print "$nbdone authorities done in $timeneeded seconds" unless $noconfirm;
+print "Done in $timeneeded seconds" unless $noconfirm;

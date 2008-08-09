@@ -2140,8 +2140,8 @@ sub ModZebra {
         # lock the nozebra table : we will read index lines, update them in Perl process
         # and write everything in 1 transaction.
         # lock the table to avoid someone else overwriting what we are doing
-        $dbh->do('LOCK TABLES nozebra WRITE,biblio WRITE,biblioitems WRITE, systempreferences WRITE, auth_types WRITE, auth_header WRITE');
-        my %result; # the result hash that will be builded by deletion / add, and written on mySQL at the end, to improve speed
+        $dbh->do('LOCK TABLES nozebra WRITE,biblio WRITE,biblioitems WRITE, systempreferences WRITE, auth_types WRITE, auth_header WRITE, auth_subfield_structure READ');
+        my %result; # the result hash that will be built by deletion / add, and written on mySQL at the end, to improve speed
         if ($op eq 'specialUpdate') {
             # OK, we have to add or update the record
             # 1st delete (virtually, in indexes), if record actually exists
@@ -2163,7 +2163,6 @@ sub ModZebra {
             }
         }
         $dbh->do('UNLOCK TABLES');
-
     } else {
         #
         # we use zebra, just fill zebraqueue table
