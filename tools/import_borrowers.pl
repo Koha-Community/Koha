@@ -38,6 +38,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Dates qw(format_date_in_iso);
 use C4::Context;
+use C4::Branch qw(GetBranchName);
 use C4::Members;
 use C4::Members::Attributes;
 use C4::Members::AttributeTypes;
@@ -51,7 +52,7 @@ my @columnkeys = C4::Members->columns;
 if ($extended) {
     push @columnkeys, 'patron_attributes';
 }
-my $columnkeystpl = [ map { {'key' => $_} } @columnkeys ];  # ref. to array of hashrefs.
+my $columnkeystpl = [ map { {'key' => $_} }  grep {$_ ne 'borrowernumber' && $_ ne 'cardnumber'} @columnkeys ];  # ref. to array of hashrefs.
 
 my $input = CGI->new();
 my $csv   = Text::CSV->new();
@@ -108,12 +109,11 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
         $csvkeycol{$keycol} = $col++;
     }
     #warn($borrowerline);
-
     if ($extended) {
         $matchpoint_attr_type = C4::Members::AttributeTypes->fetch($matchpoint);
     }
 
-    my @criticals = qw(surname);    # there probably should be others
+    my @criticals = qw(cardnumber surname categorycode);    # there probably should be others
     my @errors;
     LINE: while ( my $borrowerline = <$uploadborrowers> ) {
         my %borrower;
@@ -141,6 +141,8 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
             }
         }
         #warn join(':',%borrower);
+	push @missing_criticals, {key=>'categorycode' , line=>$. , lineraw=>$borrowerline } unless(  GetBorrowercategory($borrower{categorycode}) );
+	push @missing_criticals, {key=>'branchcode' , line=>$. , lineraw=>$borrowerline } unless(  GetBranchName($borrower{branchcode}) );
         if (@missing_criticals) {
             foreach (@missing_criticals) {
                 $_->{borrowernumber} = $borrower{borrowernumber} || 'UNDEF';
@@ -160,13 +162,17 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
             # FIXME error handling
             $patron_attributes = [ map { map { my @arr = split /:/, $_, 2; { code => $arr[0], value => $arr[1] } } $_ } @list ];
         }
+	# FIXME date handling.  Popular spreadsheet applications make it difficult to force date outputs to be zero-padded, but we require it.
         foreach (qw(dateofbirth dateenrolled dateexpiry)) {
             my $tempdate = $borrower{$_} or next;
             $borrower{$_} = format_date_in_iso($tempdate) || '';
         }
+	$borrower{dateenrolled} = C4::Dates->new()->output('iso') unless $borrower{dateenrolled};
+	$borrower{dateexpiry} = GetExpiryDate($borrower{categorycode},$borrower{dateenrolled}) unless $borrower{dateexpiry}; 
         my $borrowernumber;
+        my $member;
         if ($matchpoint eq 'cardnumber') {
-            my $member = GetMember( $borrower{'cardnumber'}, 'cardnumber' );
+            $member = GetMember( $borrower{'cardnumber'}, 'cardnumber' );
             if ($member) {
                 $borrowernumber = $member->{'borrowernumber'};
             }
@@ -190,6 +196,13 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
                 next LINE;
             }
             $borrower{'borrowernumber'} = $borrowernumber;
+	    for my $col ( keys %borrower) {
+            # use values from extant patron unless our csv file includes this column or we provided a default.
+            # FIXME : You cannot update a field with a  perl-evaluated false value using the defaults.
+            unless(exists($csvkeycol{$col}) || $defaults{$col}) {
+                $borrower{$col} = $member->{$col} if($member->{$col}) ;
+            }
+        }
             unless (ModMember(%borrower)) {
                 $invalid++;
                 $template->param('lastinvalid'=>$borrower{'surname'}.' / '.$borrowernumber);

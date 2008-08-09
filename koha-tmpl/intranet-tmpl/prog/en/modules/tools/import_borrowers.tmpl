@@ -116,6 +116,8 @@ means that if an input record has more than one attribute, the 'patron_attribute
 <!-- /TMPL_IF -->
 <li>The fields 'branchcode' and 'categorycode' are <b>required</b> and <b>must match</b> valid entries in your database.</li>
 <li>'password' should be stored in plaintext, and will be converted to a md5 hash (if your passwords are already encrypted, talk to your systems administrator about options).</li>
+<li>Date formats should match your system preference, and <b>must</b> be zero-padded, e.g. '01/02/2008'.</li>
+<li>You may optionally include a header row, defining which columns you are supplying in the import file.</li>
 </ul>
 </div>
 </div>
