@@ -27,6 +27,7 @@ use C4::Log; # logaction
 use C4::Overdues;
 use C4::Reserves;
 use C4::Accounts;
+use C4::Biblio;
 
 our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,$debug);
 
@@ -1145,6 +1146,8 @@ sub GetMemberAccountRecords {
     $sth->execute( @bind );
     my $total = 0;
     while ( my $data = $sth->fetchrow_hashref ) {
+		my $biblio = GetBiblioFromItemNumber($data->{itemnumber}) if $data->{itemnumber};
+		$data->{biblionumber} = $biblio->{biblionumber};
         $acctlines[$numlines] = $data;
         $numlines++;
         $total += $data->{'amountoutstanding'};

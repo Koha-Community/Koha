@@ -28,6 +28,8 @@ use CGI;
 
 use C4::Members;
 use C4::Accounts;
+use C4::Items;
+
 my $input=new CGI;
 
 my $borrowernumber=$input->param('borrowernumber');
@@ -37,7 +39,8 @@ my $data=GetMember($borrowernumber,'borrowernumber');
 my $add=$input->param('add');
 
 if ($add){
-    my $itemnum=$input->param('itemnum');
+    my $barcode=$input->param('barcode');
+    my $itemnum = GetItemnumberFromBarcode($barcode) if $barcode;
     my $desc=$input->param('desc');
     my $amount=$input->param('amount');
     $amount = -$amount;
