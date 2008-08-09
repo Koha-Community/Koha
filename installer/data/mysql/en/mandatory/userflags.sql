@@ -1,7 +1,7 @@
 INSERT INTO `userflags` VALUES(0,'superlibrarian','Access to all librarian functions',0);
 INSERT INTO `userflags` VALUES(1,'circulate','Circulate books',0);
 INSERT INTO `userflags` VALUES(2,'catalogue','View Catalogue (Librarian Interface)',0);
-INSERT INTO `userflags` VALUES(3,'parameters','Set Koha system paramters',0);
+INSERT INTO `userflags` VALUES(3,'parameters','Set Koha system parameters',0);
 INSERT INTO `userflags` VALUES(4,'borrowers','Add or modify borrowers',0);
 INSERT INTO `userflags` VALUES(5,'permissions','Set user permissions',0);
 INSERT INTO `userflags` VALUES(6,'reserveforothers','Reserve books for patrons',0);
