@@ -28,7 +28,7 @@ use C4::Branch;
 use C4::Debug;
 use C4::Biblio;
 use Text::CSV_XS;
-#use Data::Dumper;
+use Data::Dumper;
 
 BEGIN {
 	$VERSION = 0.03;
@@ -744,15 +744,18 @@ sub GetLabelItems {
     my $sth;
     
     if ($batch_id) {
-        my $query3 = "SELECT *
-                        FROM labels
-                        WHERE batch_id = ?
-                        ORDER BY labelid";
+        my $query3 = "
+            SELECT *
+            FROM labels
+            WHERE batch_id = ?
+            ORDER BY labelid";
         $sth = $dbh->prepare($query3);
         $sth->execute($batch_id);
     }
     else {
-        my $query3 = "Select * from labels";
+        my $query3 = "
+            SELECT *
+            FROM labels";
         $sth = $dbh->prepare($query3);
         $sth->execute();
     }
@@ -761,12 +764,13 @@ sub GetLabelItems {
     while ( my $data = $sth->fetchrow_hashref ) {
 
         # lets get some summary info from each item
-        my $query1 = "
-        select i.*, bi.*, b.*  from items i,biblioitems bi,biblio b 
-		where itemnumber=? and  i.biblioitemnumber=bi.biblioitemnumber and                  
-		bi.biblionumber=b.biblionumber"; 
-     
-	my $sth1 = $dbh->prepare($query1);
+        my $query1 =
+#            FIXME This makes for a very bulky data structure; data from tables w/duplicate col names also gets overwritten...
+#            SELECT i.barcode, i.itemcallnumber, i.itype, bi.isbn, bi.issn, b.title, b.author
+           "SELECT i.*, bi.*, b.*
+            FROM items AS i, biblioitems AS bi ,biblio AS b
+            WHERE itemnumber=? AND i.biblioitemnumber=bi.biblioitemnumber AND bi.biblionumber=b.biblionumber";
+        my $sth1 = $dbh->prepare($query1);
         $sth1->execute( $data->{'itemnumber'} );
 
         my $data1 = $sth1->fetchrow_hashref();
@@ -787,9 +791,10 @@ sub GetLabelItems {
 
 sub GetItemFields {
     my @fields = qw (
-      barcode title subtitle
-      dewey isbn issn author class
-      itemtype subclass itemcallnumber
+      barcode           title
+      isbn              issn
+      author            itemtype
+      itemcallnumber
     );
     return @fields;
 }
@@ -804,27 +809,43 @@ and return string from koha tables or MARC record.
 =cut
 #'
 sub GetBarcodeData {
-	my ($f,$item,$record) = @_;
-	my $kohatables= &_descKohaTables();
-	my $datastring;
-	my $last_f = $f;
-	my $match_kohatable = join('|', (@{$kohatables->{biblio}},@{$kohatables->{biblioitems}},@{$kohatables->{items}}) );
-	while( $f ) {
-		if( $f =~ /^'(.*)'.*/ ) {
-			# single quotes indicate a static text string.
-			$datastring .= $1 ;
-			$f = $';
-		} elsif ( $f =~ /^($match_kohatable).*/ ) { 
-			# grep /$f/, (@$kohatables->{biblio},@$kohatables->{biblioitems},@$kohatables->{items}) ) {
-			$datastring .= $item->{$f};
-			$f = $';
-		} elsif ( $f =~ /^([0-9a-z]{3})(\w)(\W*).*/ ) {
-			$datastring .= $record->subfield($1,$2) . $3 if($record->subfield($1,$2)) ;
-			$f = $';
-		} 
-		last if ( $f eq $last_f ); # failed to match
-	}
-	return $datastring;
+    my ( $f, $item, $record ) = @_;
+    my $kohatables = &_descKohaTables();
+    my $datastring = '';
+    my $match_kohatable = join(
+        '|',
+        (
+            @{ $kohatables->{biblio} },
+            @{ $kohatables->{biblioitems} },
+            @{ $kohatables->{items} }
+        )
+    );
+    while ($f) {
+        $f =~ s/^\s?//;
+        if ( $f =~ /^'(.*)'.*/ ) {
+            # single quotes indicate a static text string.
+            $datastring .= $1;
+            $f = $';
+        }
+        elsif ( $f =~ /^($match_kohatable).*/ ) {
+            $datastring .= $item->{$f};
+            $f = $';
+        }
+        elsif ( $f =~ /^([0-9a-z]{3})(\w)(\W?).*?/ ) {
+            my $marc_field = $1;
+            foreach my $subfield ($record->field($marc_field)) {
+                if ( $subfield->subfield('9') eq $item->{'itemnumber'} ) {
+                    $datastring .= $subfield->subfield($2 ) . $3;
+                    last;
+                }
+            }
+            $f = $';
+        }
+        else {
+            last;    # Failed to match
+        }
+    }
+    return $datastring;
 }
 
 =head descKohaTables
@@ -910,10 +931,8 @@ sub deduplicate_batch {
 
 sub split_lccn {
     my ($lccn) = @_;    
-    my ( $ll, $wnl, $dec, $cutter, $pubdate);
-
+    my ($ll, $wnl, $dec, $cutter, $pubdate) = (0, 0, 0, 0, 0);
     $_ = $lccn;
-
     # lccn example 'HE8700.7 .P6T44 1983';
     my    @splits   = m/
         (^[a-zA-Z]+)            # HE
@@ -982,7 +1001,7 @@ sub DrawSpineText {
     # TODO - add a GetMarcBiblio1item(bibnum,itemnum) or a GetMarcItem(itemnum).
 
     my $old_fontname = $fontname; # We need to keep track of the original font passed in...
-    my $cn_source = $$item->{'cn_source'}; 
+    my $cn_source = $record->subfield('952','2');
     for my $field (@str_fields) {
         $field->{'code'} or warn "get_text_fields($layout_id, 'codes') element missing 'code' field";
         if ($$conf_data->{'formatstring'}) {
@@ -1000,6 +1019,7 @@ sub DrawSpineText {
         my $font = prFont($fontname);
         # if the display option for this field is selected in the DB,
         # and the item record has some values for this field, display it.
+        # Or if there is a csv list of fields to display, display them.
         if ( ($$conf_data->{'formatstring'}) || ( $$conf_data->{$field->{code}} && $$item->{$field->{code}} ) ) {
             # get the string
             my $str = $field->{data} ;
@@ -1007,7 +1027,8 @@ sub DrawSpineText {
             $str =~ s/\n//g;
             $str =~ s/\r//g;
             my @strings;
-            if ($field->{code} eq 'itemcallnumber' and $printingtype eq 'BIB') { # If the field contains the call number, we do some special processing on it here...
+            my @callnumber_list = ('itemcallnumber', '050a', '050b', '082a', '952o'); # Fields which hold call number data
+            if ((grep {$field->{code} =~ m/$_/} @callnumber_list) and ($printingtype eq 'BIB')) { # If the field contains the call number, we do some sp
                 if ($cn_source eq 'lcc') {
                     @strings = split_lccn($str);
                 } elsif ($cn_source eq 'ddc') {
