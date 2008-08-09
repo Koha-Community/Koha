@@ -1226,7 +1226,8 @@ sub merge {
                     foreach my $subfield (@record_to) {
                         $field_to->add_subfields($subfield->[0] =>$subfield->[1]);
                     }
-                    $field->replace_with($field_to);            
+                    $marcrecord->delete_field($field);
+                    $marcrecord->insert_grouped_field($field_to);            
                     $update=1;
                 }
             }#for each tag
