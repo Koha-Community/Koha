@@ -1196,7 +1196,7 @@ sub merge {
         }
         $oConnection->destroy();    
     }
-    warn scalar(@reccache)." biblios to update";
+    #warn scalar(@reccache)." biblios to update";
     # Get All candidate Tags for the change 
     # (This will reduce the search scope in marc records).
     $sth = $dbh->prepare("select distinct tagfield from marc_subfield_structure where authtypecode=?");
@@ -1210,7 +1210,7 @@ sub merge {
         # If many tags, take the first
         $sth->execute($authtypecodeto);    
         $tag_to=$sth->fetchrow;
-        warn $tag_to;    
+        #warn $tag_to;    
     }  
     # BulkEdit marc records
     # May be used as a template for a bulkedit field  
