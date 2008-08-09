@@ -209,8 +209,10 @@ if ( C4::Context->preference("AmazonContent") == 1 ) {
         # do we have any of these isbns in our collection?
         my $similar_biblionumbers = get_biblionumber_from_isbn($similar_product->{ASIN});
         # verify that there is at least one similar item
-        $similar_products_exist++ if ${@$similar_biblionumbers}[0];
-        push @similar_products, +{ similar_biblionumbers => $similar_biblionumbers, title => $similar_product->{Title}, ASIN => $similar_product->{ASIN}  };
+		if (scalar(@$similar_biblionumbers)){            
+			$similar_products_exist++ if ($similar_biblionumbers && $similar_biblionumbers->[0]);
+            push @similar_products, +{ similar_biblionumbers => $similar_biblionumbers, title => $similar_product->{Title}, ASIN => $similar_product->{ASIN}  };
+        }
     }
     my $editorial_reviews = \@{$amazon_details->{Items}->{Item}->{EditorialReviews}->{EditorialReview}};
     my $average_rating = $amazon_details->{Items}->{Item}->{CustomerReviews}->{AverageRating};

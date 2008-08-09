@@ -49,10 +49,7 @@ sub get_biblionumber_from_isbn {
     my $query = "SELECT biblionumber FROM biblioitems WHERE isbn LIKE ? LIMIT 10";
     my $sth = $dbh->prepare($query);
     $sth->execute($isbn);
-    while ( my $biblionumber = $sth->fetchrow_hashref() ) {
-        push (@biblionumbers, $biblionumber);
-    }
-    return \@biblionumbers;
+	return $sth->fetchall_arrayref({});
 }
 =head1 NAME
 
