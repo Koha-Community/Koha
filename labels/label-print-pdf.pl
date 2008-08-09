@@ -13,7 +13,6 @@ use PDF::Reuse;
 use PDF::Reuse::Barcode;
 use POSIX;
 use Data::Dumper;
-#use Smart::Comments;
 
 my $DEBUG = 0;
 my $DEBUG_LPT = 0;
@@ -24,8 +23,6 @@ print $cgi->header( -type => 'application/pdf', -attachment => 'barcode.pdf' );
 
 my $spine_text = "";
 
-#warn "label-print-pdf ***";
-
 # get the printing settings
 my $template    = GetActiveLabelTemplate();
 my $conf_data   = get_label_options();
@@ -33,8 +30,6 @@ my $profile     = GetAssociatedProfile($template->{'tmpl_id'});
 
 my $batch_id =   $cgi->param('batch_id');
 my @resultsloop;
-
-#$DB::single = 1;
 
 my $batch_type   = $conf_data->{'type'};
 my $barcodetype  = $conf_data->{'barcodetype'};
@@ -112,9 +107,6 @@ my $upperRightY = $page_height;
 
 prMbox( $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY );
 
-#warn "STARTROW = $startrow\n";
-
-#my $page_break_count = $startrow;
 my $codetype; # = 'Code39';
 
 #do page border
@@ -158,8 +150,6 @@ if ( $DEBUG && $profile->{'prof_id'} ) {
 my $item;
 my ( $i, $i2 );    # loop counters
 
-# big row loop
-
 #warn " $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY";
 #warn "$label_rows, $label_cols\n";
 #warn "$label_height, $label_width\n";
@@ -175,29 +165,16 @@ if ( $start_label eq 1 ) {
 }
 
 else {
-
-    #eval {
     $rowcount = ceil( $start_label / $label_cols );
-
-    #} ;
-    #$rowcount = 1 if $@;
-
     $colcount = ( $start_label - ( ( $rowcount - 1 ) * $label_cols ) );
-
     $x_pos = $left_margin + ( $label_width * ( $colcount - 1 ) ) +
       ( $colspace * ( $colcount - 1 ) );
-
     $y_pos = $page_height - $top_margin - ( $label_height * $rowcount ) -
       ( $rowspace * ( $rowcount - 1 ) );
-
     warn "Start label specified: $start_label Beginning in row $rowcount, column $colcount" if $DEBUG;
     warn "X position = $x_pos Y position = $y_pos" if $DEBUG;
     warn "Rowspace = $rowspace Label height = $label_height" if $DEBUG;
 }
-
-#warn "ROW COL $rowcount, $colcount";
-
-#my $barcodetype; # = 'Code39';
 
 #
 #    main foreach loop
@@ -222,7 +199,7 @@ foreach $item (@resultsloop) {
         DrawBarcode( $x_pos, $barcode_y, $barcode_height, $label_width,
             $item->{'barcode'}, $barcodetype );
         DrawSpineText( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize,
-            $left_text_margin, $text_wrap_cols, \$item, \$conf_data, $printingtype, '1' );
+            $left_text_margin, $text_wrap_cols, \$item, \$conf_data, $printingtype );
 
         CalcNextLabelPos();
 
@@ -233,7 +210,7 @@ foreach $item (@resultsloop) {
         DrawBarcode( $x_pos, $y_pos, $barcode_height, $label_width, $item->{'barcode'},
             $barcodetype );
         DrawSpineText( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize,
-            $left_text_margin, $text_wrap_cols, \$item, \$conf_data, $printingtype, '1' );
+            $left_text_margin, $text_wrap_cols, \$item, \$conf_data, $printingtype );
 
         CalcNextLabelPos();
     }
@@ -245,7 +222,7 @@ foreach $item (@resultsloop) {
         CalcNextLabelPos();
         drawbox( $x_pos, $y_pos, $label_width, $label_height ) if $guidebox;
         DrawSpineText( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize,
-            $left_text_margin, $text_wrap_cols, \$item, \$conf_data, $printingtype, '1' );
+            $left_text_margin, $text_wrap_cols, \$item, \$conf_data, $printingtype );
 
         CalcNextLabelPos();
     }
@@ -254,7 +231,7 @@ foreach $item (@resultsloop) {
     elsif ( $printingtype eq 'BIB' ) {
         drawbox( $x_pos, $y_pos, $label_width, $label_height ) if $guidebox;
         DrawSpineText( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize,
-            $left_text_margin, $text_wrap_cols, \$item, \$conf_data, $printingtype, '0' );
+            $left_text_margin, $text_wrap_cols, \$item, \$conf_data, $printingtype );
         CalcNextLabelPos();
     }
 
@@ -268,7 +245,7 @@ foreach $item (@resultsloop) {
             $patron_data->{'branchname'}   => ($fontsize + 3),
         };
 
-        warn "Generating patron card for cardnumber $patron_data->{'cardnumber'}";
+        $DEBUG and warn "Generating patron card for cardnumber $patron_data->{'cardnumber'}";
 
         drawbox( $x_pos, $y_pos, $label_width, $label_height ) if $guidebox;
         my $barcode_height = $label_height / 2.75; #FIXME: Scaling barcode height; this needs to be a user parameter.
@@ -278,25 +255,9 @@ foreach $item (@resultsloop) {
             $left_text_margin, $text_wrap_cols, $text, $printingtype );
         CalcNextLabelPos();
     }
-
-
-
-
-
-
-
-
-
-
-
 }    # end for item loop
 prEnd();
 
-#
-#
-#
-#
-#
 sub CalcNextLabelPos {
     if ( $colcount lt $label_cols ) {
 

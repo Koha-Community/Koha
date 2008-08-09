@@ -28,7 +28,7 @@ use C4::Branch;
 use C4::Debug;
 use C4::Biblio;
 use Text::CSV_XS;
-use Data::Dumper;
+#use Data::Dumper;
 # use Smart::Comments;
 
 BEGIN {
@@ -89,8 +89,6 @@ sub get_label_options {
 }
 
 sub get_layouts {
-
-## FIXME: this if/else could be compacted...
     my $dbh = C4::Context->dbh;
     my @data;
     my $query = " Select * from labels_conf";
@@ -103,9 +101,6 @@ sub get_layouts {
         push( @resultsloop, $data );
     }
     $sth->finish;
-
-    # @resultsloop
-
     return @resultsloop;
 }
 
@@ -208,7 +203,7 @@ sub get_text_fields {
 		}
 	} else {
     # These fields are hardcoded based on the template for label-edit-layout.pl
-		my @text_fields = (
+            my @text_fields = (
      	{
         code  => 'itemtype',
         desc  => "Item Type",
@@ -787,8 +782,8 @@ sub GetLabelItems {
     while ( my $data = $sth->fetchrow_hashref ) {
 
         # lets get some summary info from each item
-        my $query1 = " 
-	 select i.*, bi.*, b.*  from items i,biblioitems bi,biblio b 
+        my $query1 = "
+        select i.*, bi.*, b.*  from items i,biblioitems bi,biblio b 
 		where itemnumber=? and  i.biblioitemnumber=bi.biblioitemnumber and                  
 		bi.biblionumber=b.biblionumber"; 
      
@@ -817,7 +812,6 @@ sub GetItemFields {
       barcode title subtitle
       dewey isbn issn author class
       itemtype subclass itemcallnumber
-
     );
     return @fields;
 }
@@ -936,11 +930,56 @@ sub deduplicate_batch {
 	return $killed, undef;
 }
 
+sub split_lccn {
+    my ($lccn) = @_;    
+    my ( $ll, $wnl, $dec, $cutter, $pubdate);
+
+    $_ = $lccn;
+
+    # lccn example 'HE8700.7 .P6T44 1983';
+    my    @splits   = m/
+        (^[a-zA-Z]+)            # HE
+        ([0-9]+\.*[0-9]*)             # 8700.7
+        \s*
+        (\.*[a-zA-Z0-9]*)       # P6T44
+        \s*
+        ([0-9]*)                # 1983
+        /x;  
+
+    # strip something occuring spaces too
+    $splits[0] =~ s/\s+$//;
+    $splits[1] =~ s/\s+$//;
+    $splits[2] =~ s/\s+$//;
+
+    # if the regex fails, then just return the whole string, 
+    # better than nothing
+    # FIXME It seems we should handle all cases, have some graceful error handling, or at least inform the caller of the failure to split
+    $splits[0] = $lccn if  $splits[0]  eq '' ;
+    return @splits;
+}
+
+sub split_ddcn {
+    my ($ddcn) = @_;
+    $ddcn =~ s/\///g;   # in theory we should be able to simply remove all segmentation markers and arrive at the correct call number...
+    $_ = $ddcn;
+    # ddcn example R220.3 H2793Z H32 c.2
+    my @splits = m/^([A-Z]{0,3})                # R (OS, REF, etc. up do three letters)
+                    ([0-9]+\.[0-9]*)            # 220.3
+                    \s?                         # space (not requiring anything beyond the call number)
+                    ([a-zA-Z0-9]*\.?[a-zA-Z0-9])# cutter number... maybe, but if so it is in this position (Z indicates literary criticism)
+                    \s?                         # space if it exists
+                    ([a-zA-Z]*\.?[0-9]*)        # other indicators such as cutter for author of literary criticism in this example if it exists
+                    \s?                         # space if ie exists
+                    ([a-zA-Z]*\.?[0-9]*)        # other indicators such as volume number, copy number, edition date, etc. if it exists
+                    /x;
+    return @splits;
+}
+
 sub DrawSpineText {
 
     my ( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize, $left_text_margin,
-        $text_wrap_cols, $item, $conf_data, $printingtype, $nowrap ) = @_;
-
+        $text_wrap_cols, $item, $conf_data, $printingtype ) = @_;
+    
     # Replaced item's itemtype with the more user-friendly description...
     my $dbh = C4::Context->dbh;
     my %itemtypes;
@@ -960,20 +999,19 @@ sub DrawSpineText {
     my $vPos = ( $y_pos + ( $label_height - $top_text_margin ) );
 
     my @str_fields = get_text_fields($layout_id, 'codes' );
-	my $record = GetMarcBiblio($$item->{biblionumber});
-	# FIXME - returns all items, so you can't get data from an embedded holdings field.
-	# TODO - add a GetMarcBiblio1item(bibnum,itemnum) or a GetMarcItem(itemnum).
+    my $record = GetMarcBiblio($$item->{biblionumber});
+    # FIXME - returns all items, so you can't get data from an embedded holdings field.
+    # TODO - add a GetMarcBiblio1item(bibnum,itemnum) or a GetMarcItem(itemnum).
 
     my $old_fontname = $fontname; # We need to keep track of the original font passed in...
-    
+    my $cn_source = $$item->{'cn_source'}; 
     for my $field (@str_fields) {
-		$field->{'code'} or warn "get_text_fields($layout_id, 'codes') element missing 'code' field";
-		if ($$conf_data->{'formatstring'}) {
-			$field->{'data'} =  GetBarcodeData($field->{'code'},$$item,$record) ;
-		} else {
-			$field->{data} =   $$item->{$field->{'code'}}  ;
-		}
-
+        $field->{'code'} or warn "get_text_fields($layout_id, 'codes') element missing 'code' field";
+        if ($$conf_data->{'formatstring'}) {
+                $field->{'data'} =  GetBarcodeData($field->{'code'},$$item,$record) ;
+        } else {
+                $field->{data} =   $$item->{$field->{'code'}}  ;
+        }
         # This allows us to print the title in italic (oblique) type... (Times Roman has a different nomenclature.)
         # It seems there should be a better way to handle fonts in the label/patron card tool altogether -fbcit
         ($field->{code} eq 'title') ? (($old_fontname =~ /T/) ? ($fontname = 'TI') : ($fontname = ($old_fontname . 'O'))) : ($fontname = $old_fontname);
@@ -987,16 +1025,14 @@ sub DrawSpineText {
             $str =~ s/\n//g;
             $str =~ s/\r//g;
             my @strings;
-            if ($field->{code} eq 'itemcallnumber') { # If the field contains the call number, we do some special processing on it here...
-                if (($nowrap == 0) || (!$nowrap)) { # wrap lines based on segmentation markers: '/' (other types of segmentation markers can be added as needed here or this could be added as a syspref.)
-                    while ( $str =~ /\// ) {
-                        $str =~ /^(.*)\/(.*)$/;
-                        unshift @strings, $2;
-                        $str = $1;
-                    }   
-                    unshift @strings, $str;
+            if ($field->{code} eq 'itemcallnumber' and $printingtype eq 'BIB') { # If the field contains the call number, we do some special processing on it here...
+                if ($cn_source eq 'lcc') {
+                    @strings = split_lccn($str);
+                } elsif ($cn_source eq 'ddc') {
+                    @strings = split_ddcn($str);
                 } else {
-                    push @strings, $str;    # if $nowrap == 1 do not wrap or remove segmentation markers...
+                    # FIXME Need error trapping here; something to be informative to the user perhaps -crn
+                    push @strings, $str;
                 }
             } else {
                 $str =~ s/\/$//g;       # Here we will strip out all trailing '/' in fields other than the call number...
@@ -1032,8 +1068,8 @@ sub DrawSpineText {
                 PrintText( $hPos, $vPos, $font, $fontsize, $str );
                 $vPos = $vPos - $line_spacer;
             }
-    	} 
-	}	#foreach field
+    	}
+    }	#foreach field
 }
 
 sub PrintText {
