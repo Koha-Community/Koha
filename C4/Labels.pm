@@ -765,9 +765,10 @@ sub GetLabelItems {
 
         # lets get some summary info from each item
         my $query1 =
-#            FIXME This makes for a very bulky data structure; data from tables w/duplicate col names also gets overwritten...
+#            FIXME This makes for a very bulky data structure; data from tables w/duplicate col names also gets overwritten.
+#            Something like this, perhaps, but this also causes problems because we need more fields sometimes.
 #            SELECT i.barcode, i.itemcallnumber, i.itype, bi.isbn, bi.issn, b.title, b.author
-           "SELECT i.*, bi.*, b.*
+           "SELECT bi.*, i.*, b.*
             FROM items AS i, biblioitems AS bi ,biblio AS b
             WHERE itemnumber=? AND i.biblioitemnumber=bi.biblioitemnumber AND bi.biblionumber=b.biblionumber";
         my $sth1 = $dbh->prepare($query1);
@@ -948,10 +949,6 @@ sub split_lccn {
     $splits[1] =~ s/\s+$//;
     $splits[2] =~ s/\s+$//;
 
-    # if the regex fails, then just return the whole string, 
-    # better than nothing
-    # FIXME It seems we should handle all cases, have some graceful error handling, or at least inform the caller of the failure to split
-    $splits[0] = $lccn if  $splits[0]  eq '' ;
     return @splits;
 }
 
@@ -970,6 +967,23 @@ sub split_ddcn {
                     ([a-zA-Z]*\.?[0-9]*)        # other indicators such as volume number, copy number, edition date, etc. if it exists
                     /x;
     return @splits;
+}
+
+sub split_fcn {
+    my ($fcn) = @_;
+    my @fcn_split = ();
+    # Split fiction call numbers based on spaces
+    SPLIT_FCN:
+    while ($fcn) {
+        if ($fcn =~ m/([A-Za-z0-9]+)(\W?).*?/x) {
+            push (@fcn_split, $1);
+            $fcn = $';
+        }
+        else {
+            last SPLIT_FCN;     # No match, break out of the loop
+        }
+    }
+    return @fcn_split;
 }
 
 sub DrawSpineText {
@@ -1001,17 +1015,20 @@ sub DrawSpineText {
     # TODO - add a GetMarcBiblio1item(bibnum,itemnum) or a GetMarcItem(itemnum).
 
     my $old_fontname = $fontname; # We need to keep track of the original font passed in...
-    my $cn_source = $record->subfield('952','2');
+
+    # Grab the cn_source and if that is NULL, the DefaultClassificationSource syspref
+    my $cn_source = ($$item->{'cn_source'} ? $$item->{'cn_source'} : C4::Context->preference('DefaultClassificationSource'));
+
     for my $field (@str_fields) {
         $field->{'code'} or warn "get_text_fields($layout_id, 'codes') element missing 'code' field";
         if ($$conf_data->{'formatstring'}) {
-                $field->{'data'} =  GetBarcodeData($field->{'code'},$$item,$record) ;
+            $field->{'data'} =  GetBarcodeData($field->{'code'},$$item,$record) ;
         }
         elsif ($field->{'code'} eq 'itemtype') {
             $field->{'data'} = C4::Context->preference('item-level_itypes') ? $$item->{'itype'} : $$item->{'itemtype'};
         }
         else {
-                $field->{data} =   $$item->{$field->{'code'}}  ;
+            $field->{data} =   $$item->{$field->{'code'}}  ;
         }
         # This allows us to print the title in italic (oblique) type... (Times Roman has a different nomenclature.)
         # It seems there should be a better way to handle fonts in the label/patron card tool altogether -fbcit
@@ -1031,8 +1048,12 @@ sub DrawSpineText {
             if ((grep {$field->{code} =~ m/$_/} @callnumber_list) and ($printingtype eq 'BIB')) { # If the field contains the call number, we do some sp
                 if ($cn_source eq 'lcc') {
                     @strings = split_lccn($str);
+                    @strings = split_fcn($str) if !@strings;    # If it was not a true lccn, try it as a fiction call number
+                    push (@strings, $str) if !@strings;         # If it was not that, send it on unsplit
                 } elsif ($cn_source eq 'ddc') {
                     @strings = split_ddcn($str);
+                    @strings = split_fcn($str) if !@strings;
+                    push (@strings, $str) if !@strings;
                 } else {
                     # FIXME Need error trapping here; something to be informative to the user perhaps -crn
                     push @strings, $str;
