@@ -102,23 +102,6 @@ Bibliographic Data to Print
             </select>
         <label for="tx_title">Title</label>
         </td>
-            <td>
-        <select name="tx_subtitle" id="tx_subtitle">
-                 <!-- TMPL_LOOP Name="tx_subtitle" -->
-         <!-- TMPL_IF Name="selected" -->
-				<option value="<!-- TMPL_VAR Name="num" -->" selected="selected">
-                    <!-- TMPL_VAR Name="num" -->
-                </option>
-			<!-- TMPL_ELSE -->	
-                <option value="<!-- TMPL_VAR Name="num" -->">
-                    <!-- TMPL_VAR Name="num" -->
-                </option>
-			<!-- /TMPL_IF -->	
-            <!-- /TMPL_LOOP -->
-      </select>
-        <label for="tx_subtitle">Subtitle</label>
-        </td> 
-
         <td>
         <select name="tx_author" id="tx_author">
              <!-- TMPL_LOOP Name="tx_author" -->
@@ -135,8 +118,6 @@ Bibliographic Data to Print
             </select>
        <label for="tx_author">Author</label>
         </td>
-</tr> 
- <tr>
         <td>
         <select name="tx_isbn" id="tx_isbn">
               <!-- TMPL_LOOP Name="tx_isbn" -->
@@ -153,7 +134,8 @@ Bibliographic Data to Print
             </select>
       <label for="tx_isbn">ISBN</label>
         </td>
-
+</tr>
+<tr>
         <td>
         <select name="tx_issn" id="tx_issn">
                <!-- TMPL_LOOP Name="tx_issn" -->
@@ -186,8 +168,6 @@ Bibliographic Data to Print
             </select>
    <label for="tx_itemtype">Itemtype</label>
         </td>
-  </tr>
-<tr>
         <td>
         <select name="tx_barcode">
                  <!-- TMPL_LOOP Name="tx_barcode" -->
@@ -203,38 +183,6 @@ Bibliographic Data to Print
             <!-- /TMPL_LOOP -->
       </select>
         <label for="tx_barcode">Barcode (as text)</label>
-        </td>
-        <td>
-        <select name="tx_classif" id="tx_classif">
-                  <!-- TMPL_LOOP Name="tx_classif" -->
-		<!-- TMPL_IF Name="selected" -->		    
-                <option value="<!-- TMPL_VAR Name="num" -->" selected="selected">
-                    <!-- TMPL_VAR Name="num" -->
-                </option>
-			<!-- TMPL_ELSE -->	  
-                <option value="<!-- TMPL_VAR Name="num" -->">
-                    <!-- TMPL_VAR Name="num" -->
-                </option>
-		<!-- /TMPL_IF -->		
-            <!-- /TMPL_LOOP -->
-     </select>
-        <label for="tx_classif">Classification</label>
-        </td>
-        <td>
-        <select name="tx_subclass" id="tx_subclass">
-                  <!-- TMPL_LOOP Name="tx_subclass" -->
-		<!-- TMPL_IF Name="selected" -->		  
-                <option value="<!-- TMPL_VAR Name="num" -->" selected="selected">
-                    <!-- TMPL_VAR Name="num" -->
-                </option>
-			<!-- TMPL_ELSE -->	  
-                <option value="<!-- TMPL_VAR Name="num" -->">
-                    <!-- TMPL_VAR Name="num" -->
-                </option>
-			<!-- /TMPL_IF -->	
-            <!-- /TMPL_LOOP -->
-     </select>
-        <label for="tx_subclass">Subclass</label>
         </td>
 </tr> 
  <tr>

@@ -29,7 +29,6 @@ use C4::Debug;
 use C4::Biblio;
 use Text::CSV_XS;
 #use Data::Dumper;
-# use Smart::Comments;
 
 BEGIN {
 	$VERSION = 0.03;
@@ -80,7 +79,6 @@ Return a pointer on a hash list containing info from labels_conf table in Koha D
 
 =cut
 
-#'
 sub get_label_options {
     my $query2 = " SELECT * FROM labels_conf where active = 1";		# FIXME: exact same as get_active_layout
     my $sth    = C4::Context->dbh->prepare($query2);
@@ -138,7 +136,7 @@ sub delete_layout {
 sub get_printingtypes {
     my ($layout_id) = @_;
     my @printtypes;
-# FIXME: hard coded print types
+# FIXME hard coded print types
     push( @printtypes, { code => 'BAR',    desc => "barcode only" } );
     push( @printtypes, { code => 'BIB',    desc => "biblio only" } );
     push( @printtypes, { code => 'BARBIB', desc => "barcode / biblio" } );
@@ -165,11 +163,7 @@ sub get_printingtypes {
 #
 sub build_text_dropbox {
     my ($order) = @_;
-
-    #  my @fields      = get_text_fields();
-    #    my $field_count = scalar @fields;
-    my $field_count = 10;    # <-----------       FIXME hard coded
-
+    my $field_count = 7;    # <-----------       FIXME hard coded
     my @lines;
     !$order
       ? push( @lines, { num => '', selected => '1' } )
@@ -179,102 +173,85 @@ sub build_text_dropbox {
         $line->{'selected'} = 1 if $i eq $order;
         push( @lines, $line );
     }
-
-    # add a blank row too
-
     return @lines;
 }
 
 sub get_text_fields {
-    my ($layout_id, $sorttype) = @_;
-	my @sorted_fields;
-	my $error;
+    my ( $layout_id, $sorttype ) = @_;
+    my @sorted_fields;
+    my $error;
     my $sortorder = get_layout($layout_id);
-	if(  $sortorder->{formatstring}) {
-		if(! $sorttype) {
-		return $sortorder->{formatstring} ;
-		} else {
-		   	my $csv = Text::CSV_XS->new( { allow_whitespace => 1 } ) ;
-			my $line= $sortorder->{formatstring}  ;
-		    my $status =  $csv->parse( $line );
-			@sorted_fields = map {{ 'code' => $_ , desc => $_ } } $csv->fields()  ;
-			$error = $csv->error_input();
-			warn $error if $error ;  # TODO - do more with this.
-		}
-	} else {
-    # These fields are hardcoded based on the template for label-edit-layout.pl
-            my @text_fields = (
-     	{
-        code  => 'itemtype',
-        desc  => "Item Type",
-        order => $sortorder->{'itemtype'}
-        },
-     	{
-        code  => 'dewey',
-        desc  => "Dewey",
-        order => $sortorder->{'dewey'}
-        },
-     	{
-        code => 'issn',
-        desc => "ISSN", 
-        order => $sortorder->{'issn'}
-        },
-     	{
-        code => 'isbn',
-        desc => "ISBN", 
-        order => $sortorder->{'isbn'}
-        },
-    	{
-        code  => 'class',
-        desc  => "Classification",
-        order => $sortorder->{'class'}
-        },
-    	{
-        code  => 'subclass',
-        desc  => "Sub-Class",
-        order => $sortorder->{'subclass'}
-        },
-    	{
-        code  => 'barcode',
-        desc  => "Barcode",
-        order => $sortorder->{'barcode'}
-        },
-    	{
-        code => 'author',
-        desc => "Author",
-        order => $sortorder->{'author'}
-        },
-    	{
-        code => 'title',
-        desc => "Title",
-        order => $sortorder->{'title'}
-        },
-    	{
-        code => 'itemcallnumber',
-        desc => "Call Number",
-        order => $sortorder->{'itemcallnumber'}
-        },
-    	{
-        code => 'subtitle',
-        desc => "Subtitle",
-        order => $sortorder->{'subtitle'}
+    if ( $sortorder->{formatstring} ) {
+        if ( !$sorttype ) {
+            return $sortorder->{formatstring};
         }
-		);
-    
-
-    	my @new_fields;
-    	foreach my $field (@text_fields) {
-    	    push( @new_fields, $field ) if $field->{'order'} > 0;
-    	}
-	
-     @sorted_fields = sort {  $$a{order} <=> $$b{order} } @new_fields;
+        else {
+            my $csv    = Text::CSV_XS->new( { allow_whitespace => 1 } );
+            my $line   = $sortorder->{formatstring};
+            my $status = $csv->parse($line);
+            @sorted_fields =
+              map { { 'code' => $_, desc => $_ } } $csv->fields();
+            $error = $csv->error_input();
+            warn $error if $error;    # TODO - do more with this.
+        }
     }
-	# if we have a 'formatstring', then we ignore these hardcoded fields.
+    else {
+
+     # These fields are hardcoded based on the template for label-edit-layout.pl
+        my @text_fields = (
+            {
+                code  => 'itemtype',
+                desc  => "Item Type",
+                order => $sortorder->{'itemtype'}
+            },
+            {
+                code  => 'issn',
+                desc  => "ISSN",
+                order => $sortorder->{'issn'}
+            },
+            {
+                code  => 'isbn',
+                desc  => "ISBN",
+                order => $sortorder->{'isbn'}
+            },
+            {
+                code  => 'barcode',
+                desc  => "Barcode",
+                order => $sortorder->{'barcode'}
+            },
+            {
+                code  => 'author',
+                desc  => "Author",
+                order => $sortorder->{'author'}
+            },
+            {
+                code  => 'title',
+                desc  => "Title",
+                order => $sortorder->{'title'}
+            },
+            {
+                code  => 'itemcallnumber',
+                desc  => "Call Number",
+                order => $sortorder->{'itemcallnumber'}
+            },
+        );
+
+        my @new_fields = ();
+        foreach my $field (@text_fields) {
+            push( @new_fields, $field ) if $field->{'order'} > 0;
+        }
+
+        @sorted_fields = sort { $$a{order} <=> $$b{order} } @new_fields;
+    }
+
+    # if we have a 'formatstring', then we ignore these hardcoded fields.
     my $active_fields;
 
-    if ($sorttype eq 'codes') { # FIXME: This sub should really always return the array of hashrefs and let the caller take what he wants from that -fbcit
+    if ( $sorttype eq 'codes' )
+    { # FIXME: This sub should really always return the array of hashrefs and let the caller take what he wants from that -fbcit
         return @sorted_fields;
-    } else {
+    }
+    else {
         foreach my $field (@sorted_fields) {
             $active_fields .= "$field->{'desc'} ";
         }
@@ -291,6 +268,7 @@ sub get_text_fields {
  else, return the next available batch_id.
 =return
 =cut
+
 sub add_batch ($;$) {
 	my $table = (@_ and 'patroncards' eq shift) ? 'patroncards' : 'labels';
     my $batch_list = (@_) ? shift : undef;
@@ -747,15 +725,15 @@ sub SetAssociatedProfile {
     $sth->finish;
 }
 
+
 =item GetLabelItems;
 
         $options = GetLabelItems()
 
-Returns an array of references-to-hash, whos keys are the field from the biblio, biblioitems, items and labels tables in the Koha database.
+Returns an array of references-to-hash, whos keys are the fields from the biblio, biblioitems, items and labels tables in the Koha database.
 
 =cut
 
-#'
 sub GetLabelItems {
     my ($batch_id) = @_;
     my $dbh = C4::Context->dbh;
@@ -764,15 +742,16 @@ sub GetLabelItems {
     my $count;
     my @data;
     my $sth;
-
+    
     if ($batch_id) {
-        my $query3 = "Select * from labels where batch_id = ? order by labelid ";
+        my $query3 = "SELECT *
+                        FROM labels
+                        WHERE batch_id = ?
+                        ORDER BY labelid";
         $sth = $dbh->prepare($query3);
         $sth->execute($batch_id);
-
     }
     else {
-
         my $query3 = "Select * from labels";
         $sth = $dbh->prepare($query3);
         $sth->execute();
@@ -787,15 +766,14 @@ sub GetLabelItems {
 		where itemnumber=? and  i.biblioitemnumber=bi.biblioitemnumber and                  
 		bi.biblionumber=b.biblionumber"; 
      
-	 	my $sth1 = $dbh->prepare($query1);
+	my $sth1 = $dbh->prepare($query1);
         $sth1->execute( $data->{'itemnumber'} );
 
         my $data1 = $sth1->fetchrow_hashref();
         $data1->{'labelno'}  = $i1;
         $data1->{'labelid'}  = $data->{'labelid'};
         $data1->{'batch_id'} = $batch_id;
-        $data1->{'summary'} =
-          "$data1->{'barcode'}, $data1->{'title'}, $data1->{'isbn'}";
+        $data1->{'summary'} = "$data1->{'barcode'}, $data1->{'title'}, $data1->{'isbn'}";
 
         push( @resultsloop, $data1 );
         $sth1->finish;
@@ -982,14 +960,14 @@ sub DrawSpineText {
     
     # Replaced item's itemtype with the more user-friendly description...
     my $dbh = C4::Context->dbh;
-    my %itemtypes;
     my $sth = $dbh->prepare("SELECT itemtype,description FROM itemtypes");
     $sth->execute();
     while ( my $data = $sth->fetchrow_hashref ) {
         $$item->{'itemtype'} = $data->{'description'} if ($$item->{'itemtype'} eq $data->{'itemtype'});
+        $$item->{'itype'} = $data->{'description'} if ($$item->{'itype'} eq $data->{'itemtype'});
     }
 
-    my $str;
+    my $str = '';
 
     my $top_text_margin = ( $fontsize + 3 );    #FIXME: This should be a template parameter and passed in...
     my $line_spacer = ( $fontsize * 1 );    # number of pixels between text rows (This is actually leading: baseline to baseline minus font size. Recommended starting point is 20% of font size.).
@@ -1009,7 +987,11 @@ sub DrawSpineText {
         $field->{'code'} or warn "get_text_fields($layout_id, 'codes') element missing 'code' field";
         if ($$conf_data->{'formatstring'}) {
                 $field->{'data'} =  GetBarcodeData($field->{'code'},$$item,$record) ;
-        } else {
+        }
+        elsif ($field->{'code'} eq 'itemtype') {
+            $field->{'data'} = C4::Context->preference('item-level_itypes') ? $$item->{'itype'} : $$item->{'itemtype'};
+        }
+        else {
                 $field->{data} =   $$item->{$field->{'code'}}  ;
         }
         # This allows us to print the title in italic (oblique) type... (Times Roman has a different nomenclature.)
@@ -1055,7 +1037,7 @@ sub DrawSpineText {
             }
             # loop for each string line
             foreach my $str (@strings) {
-                my $hPos;
+                my $hPos = 0;
                 if ( $printingtype eq 'BIB' ) { #FIXME: This is a hack and needs to be implimented as a text justification option in the template...
                     # some code to try and center each line on the label based on font size and string point width...
                     my $stringwidth = prStrWidth($str, $fontname, $fontsize);
@@ -1089,7 +1071,7 @@ sub DrawPatronCardText {
     my $vPos   = ( $y_pos + ( $label_height - $top_text_margin ) );
     my $font = prFont($fontname);
 
-    my $hPos;
+    my $hPos = 0;
 
     foreach my $line (keys %$text) {
         $debug and warn "Current text is \"$line\" and font size for \"$line\" is $text->{$line} points";
@@ -1120,10 +1102,10 @@ sub DrawBarcode {
     my ( $x_pos, $y_pos, $height, $width, $barcode, $barcodetype ) = @_;
     my $num_of_bars = length($barcode);
     my $bar_width   = $width * .8;        # %80 of length of label width
-    my $tot_bar_length;
-    my $bar_length;
+    my $tot_bar_length = 0;
+    my $bar_length = 0;
     my $guard_length = 10;
-    my $xsize_ratio;
+    my $xsize_ratio = 0;
 
     if ( $barcodetype eq 'CODE39' ) {
         $bar_length = '17.5';
