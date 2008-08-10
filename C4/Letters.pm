@@ -23,6 +23,7 @@ use Mail::Sendmail;
 use C4::Members;
 use C4::Log;
 use C4::SMS;
+use Encode;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -748,12 +749,13 @@ sub _send_message_by_email {
     my $message = shift;
 
     my $member = C4::Members::GetMember( $message->{'borrowernumber'} );
-
+	my $content = encode('utf8', $message->{'content'});
     my %sendmail_params = (
         To   => $message->{'to_address'}   || $member->{'email'},
         From => $message->{'from_address'} || C4::Context->preference('KohaAdminEmailAddress'),
         Subject => $message->{'subject'},
-        Message => $message->{'content'},
+		charset => 'utf8',
+        Message => $content,
     );
     if ($message->{'content_type'}) {
         $sendmail_params{'content-type'} = $message->{'content_type'};
