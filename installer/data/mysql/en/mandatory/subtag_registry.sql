@@ -172,6 +172,16 @@ VALUES( 'en', 'language', 'en', 'English');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'en', 'language', 'fr', 'Anglais');
 
+-- English
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'fi', 'language', 'Finnish','2005-10-16' );
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'fi', 'language', 'fi', 'suomi');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'fi', 'language', 'en', 'Finnish');
+
 -- French
 INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'fr', 'language', 'French','2005-10-16' );
@@ -187,6 +197,19 @@ VALUES( 'fr', 'language', 'fr', 'Fran&ccedil;ais');
 
 -- INSERT INTO language_descriptions(subtag, type, lang, description)
 -- VALUES( 'fr-CA', 'language', 'fr-CA', 'fran&ccedil;ais');
+
+-- Lao
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'lo', 'language', 'Lao','2005-10-16' );
+
+--INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+--VALUES( 'lo','nor'); ???
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'lo', 'language', 'lo', '&#3742;&#3762;&#3754;&#3762;&#3749;&#3762;&#3751;');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'lo', 'language', 'en', 'Lao');
 
 -- German
 INSERT INTO language_subtag_registry( subtag, type, description, added)
@@ -348,6 +371,20 @@ VALUES( 'la', 'language', 'en', 'Latin');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'la', 'language', 'fr', 'Latin');
 
+-- Galacian
+
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'gl', 'language', 'Galician','2005-10-16' );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES( 'gl','glg');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'gl', 'language', 'gl', 'Galego');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'gl', 'language', 'en', 'Galician');
+
 -- Norwegian
 INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'nb', 'language', 'Norwegian','2005-10-16' );
@@ -444,6 +481,16 @@ VALUES( 'ru', 'language', 'en', 'Russian');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'ru', 'language', 'fr', 'Russe');
 
+-- Serbian
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'sr', 'language', 'Serbian','2005-10-16' );
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'sr', 'language', 'sr', '&#1089;&#1088;&#1087;&#1089;&#1082;&#1080;');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'sr', 'language', 'en', 'Serbian');
+
 -- Spanish, Castilian
 INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'es', 'language', 'Spanish','2005-10-16' );
@@ -475,6 +522,16 @@ VALUES( 'sv', 'language', 'en', 'Swedish');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'sv', 'language', 'fr', 'Suédois');
+
+-- Tetum
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'tet', 'language', 'Tetum','2005-10-16' );
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'tet', 'language', 'tet', 'tetun');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'tet', 'language', 'en', 'Tetum');
 
 -- Thai
 INSERT INTO language_subtag_registry( subtag, type, description, added)
@@ -525,7 +582,15 @@ VALUES( 'uk', 'language', 'en', 'Ukranian');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'uk', 'language', 'fr', 'Ukrainien');
 
+-- English
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'ur', 'language', 'Urdu','2005-10-16' );
 
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'ur', 'language', 'en', 'Urdu');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'ur', 'language', 'ur', '&#1575;&#1585;&#1583;&#1608;');
 
 -- SCRIPTS
 -- Arabic
@@ -600,6 +665,16 @@ VALUES ( 'Hebr', 'script', 'Hebr', 'Hebrew');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'Hebr', 'script', 'en', 'Hebrew');
 
+-- Lao
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'Laoo', 'script', 'Lao','2005-10-16');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES ( 'Laoo', 'script', 'lo', 'Lao');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'Laoo', 'script', 'en', 'Lao');
+
 -- REGIONS
 -- Canada
 INSERT INTO language_subtag_registry( subtag, type, description, added)
@@ -607,6 +682,13 @@ VALUES ( 'CA', 'region', 'Canada','2005-10-16');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'CA', 'region', 'en', 'Canada');
+
+-- Denmark
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'DK', 'region', 'Denmark','2005-10-16');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'DK', 'region', 'dk', 'Danmark');
 
 -- France
 INSERT INTO language_subtag_registry( subtag, type, description, added)

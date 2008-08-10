@@ -1,10 +1,17 @@
 How to build a Koha release -- list of reminders for RMs
 
 Update and document the translations
+ ./update.pl will update all translations and you can check for
+ failed ones (a copy of the previous version of the po file is
+ stored with a ~ (tilda) sign after it, so any that don't have that
+ didn't succeed
 
 Install and test the translations
+ ./install.pl will install every translation in the po dir
 
 Upload the translations to translate.koha.org
+ This is generally done by deleting the database and importing
+ the po files using the import tool as part of kartouche
 
 Update the release notes (look at git logs for
 major improvements)
@@ -32,7 +39,6 @@ From a clone of the RM repo, run:
 From the gitweb repo, issue:
 
  $ git fetch --tags
-
 
  * update the website, trigger the change
  * email the list
