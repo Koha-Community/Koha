@@ -17,9 +17,12 @@ Update the release notes (look at git logs for
 major improvements)
 
 Alter the VERSION string in Makefile.PL and comment
-out VERSION_FROM
+out VERSION_FROM. For instance:
+ 				VERSION     => '3.00.00-stable',
+               #VERSION_FROM => 'kohaversion.pl',
 
 run perl Makefile.PL and then make manifest tardist
+
 Sign, MD5 the release, upload:
  put the tarball its own dir
  run the following
