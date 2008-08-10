@@ -812,8 +812,6 @@ and return string from koha tables or MARC record.
 sub GetBarcodeData {
     my ( $f, $item, $record ) = @_;
     my $kohatables = &_descKohaTables();
-use Data::Dumper;
-warn Dumper($kohatables);
     my $datastring = '';
     my $match_kohatable = join(
         '|',
@@ -823,7 +821,7 @@ warn Dumper($kohatables);
             @{ $kohatables->{items} }
         )
     );
-    while ($f) {  warn $f;
+    while ($f) {  
         $f =~ s/^\s?//;
         if ( $f =~ /^'(.*)'.*/ ) {
             # single quotes indicate a static text string.
@@ -835,12 +833,20 @@ warn Dumper($kohatables);
             $f = $';
         }
         elsif ( $f =~ /^([0-9a-z]{3})(\w)(\W?).*?/ ) {
-            my $marc_field = $1;
-            $datastring .= $record->subfield($1,$2) . $3 if($record->subfield($1,$2)) ;
-            foreach my $subfield ($record->field($marc_field)) {
-                if ( $subfield->subfield('9') eq $item->{'itemnumber'} ) {
-                    $datastring .= $subfield->subfield($2 ) . $3;
-                    last;
+            my ($field,$subf,$ws) = ($1,$2,$3);
+            my $subf_data;
+            my ($itemtag, $itemsubfieldcode) = &GetMarcFromKohaField("items.itemnumber",'');
+            my @marcfield = $record->field($field);
+            if(@marcfield) {
+                if($field eq $itemtag) {  # item-level data, we need to get the right item.
+                    foreach my $itemfield (@marcfield) {
+                        if ( $itemfield->subfield($itemsubfieldcode) eq $item->{'itemnumber'} ) {
+                            $datastring .= $itemfield->subfield($subf ) . $ws;
+                            last;
+                        }
+                    }
+                } else {  # bib-level data, we'll take the first matching tag/subfield.
+                    $datastring .= $marcfield[0]->subfield($subf) . $ws ;
                 }
             }
             $f = $';
