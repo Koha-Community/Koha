@@ -49,7 +49,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
 	query		=> $query,
 	type		=> "opac",
 	authnotrequired	=> 0,
-	flagsrequired	=> { selfcheckout => 1 },
+	flagsrequired	=> { circulate => 1 },
     });
 
 my $issuerid = $loggedinuser;

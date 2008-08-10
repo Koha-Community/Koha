@@ -47,7 +47,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user
 	query		=> $query,
 	type		=> "opac",
 	authnotrequired	=> 0,
-	flagsrequired	=> { borrow => 1 },
+	flagsrequired	=> { circulate => 1 },
 # End Code Modified by Christina Lee
     });
 

@@ -28,7 +28,7 @@ my ($template, $loggedinuser, $cookie)
                              query => $query,
                              type => "opac",
                              authnotrequired => 0,
-                             flagsrequired => { managesco => 1},
+                             flagsrequired => { circulate => 1 },
                              debug => 1,
                              });
 my $dbh = C4::Context->dbh;
