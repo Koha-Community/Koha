@@ -1,27 +1,36 @@
 # Koha Example Crontab File
-# Author: Joe Atzberger <atz@liblime.com>
+# Authors: Joe Atzberger <atz@liblime.com>
+#          Joshua Ferraro <jmf@liblime.com>
 #
 # This is an example of a crontab file for Debian.  It may not work 
 # in other versions of crontab, like on Solaris 8, for example.
 # 
-# While similar in strcture, 
-# this is NOT an example for cron (as root).  Cron takes an extra
-# argument per line to designate the user to run as.  You could 
-# reasonably extrapoloate the needed info from here though.
+# While similar in strcture, this is NOT an example for cron (as
+# $USER).  Cron takes an extra argument per line to designate the
+# user to run as.  You could  reasonably extrapoloate the needed
+# info from here though.
 #
 # WARNING: These jobs will do things like charge fines, send
 # potentially VERY MANY emails to patrons and even debar offending
 # users.  DO NOT RUN OR SCHEDULE these jobs without being sure you
 # really intend to.  Make sure the relevant message templates are
 # configured to your liking before scheduling messages to be sent.
-#
+
 # ENVIRONMENT:
-# First, establish Koha's two important ENV variables.
+# Standard Debian crontab settings
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+# Establish Koha's two important ENV variables.
 
 PERL5LIB=/home/liblime/kohaclone
 KOHA_CONF=/home/liblime/kohaclone/etc/koha-conf.xml
 
-#
+# Some additional variables to save you typing
+KOHA_CRON_PATH = /home/liblime/kohaclone/misc/cronjobs
+KOHA_USER = koha
+NOTICE_EMAIL = your.email@your.domain
+
 # MULTIPLE KOHA SUPPORT:
 # You can still run jobs for this user's additional koha installs.
 #
@@ -36,10 +45,53 @@ KOHA_CONF=/home/liblime/kohaclone/etc/koha-conf.xml
 # Don't forget to keep the empty line at the bottom. 
 # Cron/crontab will choke without it.
 #
-# m h  dom mon dow   command
-0  1 * * *  /home/liblime/kohaclone/misc/cronjobs/overdue_notices.pl
-5  1 * * *  /home/liblime/kohaclone/misc/cronjobs/fines-ll.pl
-10 1 * * *  /home/liblime/kohaclone/misc/cronjobs/advance_notices.pl -c
-15 * * * *  /home/liblime/kohaclone/misc/cronjobs/process_message_queue.pl
-*/10 * * * *   /home/liblime/kohaclone/misc/migration_tools/rebuild_zebra.pl -b -z >/dev/null
+##### Cheat Sheet
+# min (0-59), hr (0-23), day of mo (1-31), mo of yr (1-12), day of wk (0-6 with 0=Sunday), command
+#
+# Examples:
+# every 10 minutes
+# */10 *    * * *
+# every hour at 17 past
+# 17 *    * * *
+
+# ZEBRA INDEX UPDATES with -z option, incremental index updates throughout the day
+# for both authorities and bibs
+*/10 * * * * $USER $KOHA_CRON_PATH/../misc/migration_tools/rebuild_zebra.pl -b -a -z >/dev/null
+
+# Hourly holds queue updated
+# runs every hour, on the hour
+01 *  * * * $USER $KOHA_CRON_PATH/holds/build_holds_queue.pl
+# | mailx -s HoldsList $NOTICE_EMAIL
+
+# OVERDUE NOTICES
+# runs every morning at 6:01am
+01 6 * * * $USER $KOHA_CRON_PATH/overdue_notices.pl
+
+# ADVANCED NOTICES
+10 1 * * * $USER $KOHA_CRON_PATH/advance_notices.pl -c
+
+# SEND EMAILS
+# (run after overdue_notices.pl
+15 * * * * $USER $KOHA_CRON_PATH/process_message_queue.pl
+
+# PROCESS LONG OVERDUES
+# updates item status from available to longoverdue for items long overdue
+# runs every night, right before fines.pl
+10 21 * * 1 $USER $KOHA_CRON_PATH/longoverdue.pl --lost 20=2 --lost 100=1 --charge 1 --confirm
+
+# FINES
+# runs every night, right after longoverdue.pl
+10 22 * * 1 $USER $KOHA_CRON_PATH/longoverdue.pl
+
+## j2a -- updates juvennile patrons to adults
+# runs every night, right on time ;-)
+59 24 * * 1 $USER $KOHA_CRON_PATH/j2a.pl
+
+## services_throttle -- resets the xISBN service
+# runs every night, right on time ;-)
+59 23 * * 1 $USER $KOHA_CRON_PATH/services_throttle.pl
+
+# backups -- backs up the system 
+# runs every evening at 9:15
+15 21 * * * $USER $KOHA_CRON_PATH/backup.sh
 
