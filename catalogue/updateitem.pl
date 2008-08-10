@@ -74,42 +74,6 @@ if (defined $itemnotes) { # i.e., itemnotes parameter passed from form
 
 ModItem($item_changes, $biblionumber, $itemnumber);
 
-# check issues iff itemlost.
-# http://wiki.koha.org/doku.php?id=en:development:kohastatuses
-# lost ==1 Lost, lost==2 longoverdue, lost==3 lost and paid for
-# FIXME: itemlost should be set to 3 after payment is made, should be a warning to the interface that
-# a charge has been added
-# FIXME : if no replacement price, borrower just doesn't get charged?
-if ($itemlost==1) {
-    my $sth=$dbh->prepare("SELECT * FROM issues WHERE itemnumber=?");
-    $sth->execute($itemnumber);
-    my $issues=$sth->fetchrow_hashref();
-
-    # if a borrower lost the item, add a replacement cost to the their record
-    if ( ($issues->{borrowernumber}) && ($itemlost==1) ){
-
-        # first make sure the borrower hasn't already been charged for this item
-        my $sth1=$dbh->prepare("SELECT * from accountlines
-        WHERE borrowernumber=? AND itemnumber=?");
-        $sth1->execute($issues->{'borrowernumber'},$itemnumber);
-        my $existing_charge_hashref=$sth1->fetchrow_hashref();
-
-        # OK, they haven't
-        unless ($existing_charge_hashref) {
-            # This item is on issue ... add replacement cost to the borrower's record and mark it returned
-            my $accountno = getnextacctno($issues->{'borrowernumber'});
-            my $sth2=$dbh->prepare("INSERT INTO accountlines
-            (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding,itemnumber)
-            VALUES
-            (?,?,now(),?,?,'L',?,?)");
-            $sth2->execute($issues->{'borrowernumber'},$accountno,$item_data_hashref->{'replacementprice'},
-            "Lost Item $item_data_hashref->{'title'} $item_data_hashref->{'barcode'}",
-            $item_data_hashref->{'replacementprice'},$itemnumber);
-            $sth2->finish;
-        # FIXME: Log this ?
-        }
-    }
-    $sth->finish;
-}
+C4::Accounts::chargelostitem($itemnumber) if ($itemlost==1) ;
 
 print $cgi->redirect("moredetail.pl?biblionumber=$biblionumber&itemnumber=$itemnumber#item$itemnumber");
