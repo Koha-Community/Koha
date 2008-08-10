@@ -1,0 +1,23 @@
+<!-- TMPL_INCLUDE NAME="help-top.inc" -->
+
+<h1>Label Layouts</h1>
+
+<h3>Bibliographic Data to Print</h3>
+<p>This section determines what data will appear on the labels(s).  Choose one of the following two methods of entry:</p>
+<ul>
+<li>Choose Order of Text Fields to Print</li>
+  Any of the data fields listed may be included in the label by selecting a numeric value from the dropdown selections.  These values determine the order in which the data will print (one data field per line).
+<li>List Fields</li>
+  <dl>Enter a comma-separated list of fields to include on the label.  You may select :
+    <dt>any 'koha field'</dt>
+    <dd>These include any of the data fields that may be mapped to your MARC frameworks.  See <em>Home › Administration › MARC Links</em>  for valid kohafields. </dd>
+    <dt>MARC fields</dt>
+    <dd>Specify MARC subfields as a 4-character tag-subfield string, e.g. 254a </dd>
+    <dt>Concatenation of koha & MARC fields<dt>
+    <dd>Enclose a whitespace-separated list of fields to concatenate on one line in double quotes.  e.g. "099a 099b" or "itemcallnumber copynumber"</dd>
+    <dt>Static text strings</dt>
+    <dd>May be entered in single-quotes, e.g. 'My Short-Name_of_Library'</dd>
+  </dl>
+</ul>
+
+<!-- TMPL_INCLUDE name="help-bottom.inc" -->

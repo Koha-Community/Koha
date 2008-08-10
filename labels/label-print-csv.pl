@@ -37,9 +37,7 @@ my $csv = Text::CSV_XS->new();
 my @str_fields = get_text_fields($conf_data->{'id'}, 'codes' );
 for my $item (@resultsloop) {
     my $record = GetMarcBiblio($item->{biblionumber});
-    my @datafields = ($conf_data->{'formatstring'})  ?
-			map { C4::Labels::GetBarcodeData($_->{'code'},$item,$record) } @str_fields 
-		: map { $_->{'code'} } @str_fields ;
+    my @datafields = map { C4::Labels::GetBarcodeData($_->{'code'},$item,$record) } @str_fields ;
 	my $csvout ;
 	if($csv->combine(@datafields)) {
 		$csvout = $csv->string();

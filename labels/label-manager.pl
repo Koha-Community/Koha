@@ -29,10 +29,7 @@ my $subtitle       = $query->param('tx_subtitle');
 my $isbn           = $query->param('tx_isbn');
 my $issn           = $query->param('tx_issn');
 my $itemtype       = $query->param('tx_itemtype');
-my $dcn            = $query->param('tx_dewey');
-my $classif        = $query->param('tx_classif');
 my $itemcallnumber = $query->param('tx_itemcallnumber');
-my $subclass       = $query->param('tx_subclass');
 my $author         = $query->param('tx_author');
 my $tmpl_id        = $query->param('tmpl_id');
 my $summary        = $query->param('summary');
@@ -40,6 +37,8 @@ my $startlabel     = $query->param('startlabel');
 my $printingtype   = $query->param('printingtype');
 my $guidebox       = $query->param('guidebox');
 my $fontsize       = $query->param('fontsize');
+my $callnum_split  = $query->param('callnum_split');
+my $text_justify   = $query->param('text_justify');
 my $formatstring   = $query->param('formatstring');
 my $batch_type     = $query->param('type');
 ($batch_type and $batch_type eq 'patroncards') or $batch_type = 'labels';
@@ -74,22 +73,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-#if ( $op eq 'save_conf' ) {    # this early sub is depreciated, use save_layout()
-#	SaveConf(
-#		$barcodetype,    $title,  $isbn, 
-#		$issn,    $itemtype,         $bcn,            $dcn, 
-#		$classif, $subclass,         $itemcallnumber,      $author, 
-#		$tmpl_id, $printingtype,   $guidebox,       $startlabel, $layoutname
-#	);
-#	print $query->redirect("label-home.pl");
-#	exit;
-#}
-#elsif  ( $op eq 'save_layout' ) {
 if  ( $op eq 'save_layout' ) {
 	save_layout(
 		$barcodetype,    $title,  $subtitle, $isbn, 
-		$issn,    $itemtype,         $bcn,            $dcn, 
-		$classif, $subclass,         $itemcallnumber,      $author, 
+		$issn,    $itemtype,         $bcn,            $text_justify, 
+		$callnum_split, $itemcallnumber,      $author, 
 		$tmpl_id, $printingtype,   $guidebox,       $startlabel, $layoutname,
 		,  $formatstring , $layout_id	
 	);
@@ -100,8 +88,8 @@ if  ( $op eq 'save_layout' ) {
 elsif  ( $op eq 'add_layout' ) {
 	add_layout(
 		$barcodetype,    $title, $subtitle,  $isbn, 
-		$issn,    $itemtype,         $bcn,            $dcn, 
-		$classif, $subclass,         $itemcallnumber,      $author, 
+		$issn,    $itemtype,         $bcn,            $text_justify, 
+		$callnum_split, $itemcallnumber,      $author, 
 		$tmpl_id, $printingtype,   $guidebox,       $startlabel, $layoutname,
 		$formatstring , $layout_id
 	);

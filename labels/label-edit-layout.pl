@@ -61,7 +61,9 @@ $template->param(
 	layout_id     => $layout_id,
 	guidebox      => $guidebox,
 	startlabel    => $startlabel,
-
+    formatstring    =>  $layout->{'formatstring'},
+    callnum_split   =>  $layout->{'callnum_split'},
+    'justify_' . $layout->{'text_justify'} => 1,
     tx_title          => \@title,
     tx_subtitle       => \@subtitle,
     tx_author         => \@author,
