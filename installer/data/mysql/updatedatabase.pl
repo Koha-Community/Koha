@@ -1961,6 +1961,12 @@ END_SQL
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.01.00.000';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    print "Upgrade to $DBversion done (start of 3.1)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
