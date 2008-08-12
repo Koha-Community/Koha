@@ -331,7 +331,11 @@ sub get_criteria {
 
 =item execute_query
 
-=head2 ($results, $total) = execute_query($sql, $type, $offset, $limit, $format, $id)
+=over
+
+($results, $total) = execute_query($sql, $type, $offset, $limit, $format, $id)
+
+=back
 
     When passed C<$sql>, this function returns an array ref containing a result set
     suitably formatted for display in html or for output as a flat file when passed in
@@ -726,6 +730,8 @@ sub _get_column_defs {
 }
 1;
 __END__
+
+=back
 
 =head1 AUTHOR
 
