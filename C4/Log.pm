@@ -180,7 +180,7 @@ sub displaylog {
     return ($count, \@results);
 }
 
-=head2 GetLogs
+=item GetLogs
 
 $logs = GetLogs($datefrom,$dateto,$user,$module,$action,$object,$info);
 
