@@ -47,9 +47,7 @@ This module provides the functions needed to admin the news channels and its cat
 
 =head1 FUNCTIONS
 
-=over 2
-
-=item news_channels
+=head2 news_channels
 
   ($count, @channels) = &news_channels($channel_name, $id_category, $unclassified);
 
@@ -92,7 +90,7 @@ sub news_channels {
     return (scalar(@channels), @channels);
 }
 
-=item news_channels_by_category
+=head2 news_channels_by_category
 
   ($count, @results) = &news_channels_by_category();
 
@@ -113,6 +111,8 @@ The number of news channels in that category
 A reference to an array of references to hash which keys are the new_channels fields. 
 
 Additionally the last index of results has a reference to all the news channels which don't have a category 
+
+=back
 
 =cut
 
@@ -311,11 +311,11 @@ sub get_opac_news {
 }
 
 =head2 GetNewsToDisplay
-    
+
     $news = &GetNewsToDisplay($lang);
     C<$news> is a ref to an array which containts
     all news with expirationdate > today or expirationdate is null.
-    
+
 =cut
 
 sub GetNewsToDisplay {
@@ -414,8 +414,6 @@ sub get_opac_electronics {
 
 1;
 __END__
-
-=back
 
 =head1 AUTHOR
 
