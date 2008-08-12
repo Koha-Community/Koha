@@ -51,10 +51,6 @@ BEGIN {
 
 =head2 send_sms
 
-=over4
-
-=back
-
 =cut
 
 sub send_sms {
