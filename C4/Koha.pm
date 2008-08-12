@@ -73,9 +73,8 @@ BEGIN {
 
 =head1 FUNCTIONS
 
-=over 2
-
 =cut
+
 =head2 slashifyDate
 
   $slash_date = &slashifyDate($dash_date);
@@ -646,7 +645,7 @@ sub GetPrinter ($$) {
     return $printer;
 }
 
-=item getnbpages
+=head2 getnbpages
 
 Returns the number of pages to display in a pagination bar, given the number
 of items and the number of items per page.
@@ -659,7 +658,7 @@ sub getnbpages {
     return int( ( $nb_items - 1 ) / $nb_items_per_page ) + 1;
 }
 
-=item getallthemes
+=head2 getallthemes
 
   (@themes) = &getallthemes('opac');
   (@themes) = &getallthemes('intranet');
