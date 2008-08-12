@@ -62,11 +62,7 @@ orders, basket and parcels.
 
 =head1 FUNCTIONS
 
-=over 2
-
 =head2 FUNCTIONS ABOUT BASKETS
-
-=over 2
 
 =head3 GetBasket
 
@@ -78,8 +74,6 @@ get all basket informations in aqbasket for a given basket
 
 return :
 informations for a given basket returned as a hashref.
-
-=back
 
 =back
 
@@ -162,11 +156,7 @@ sub CloseBasket {
 
 #------------------------------------------------------------#
 
-=back
-
 =head2 FUNCTIONS ABOUT ORDERS
-
-=over 2
 
 =cut
 
@@ -300,9 +290,13 @@ sub GetOrders {
 
 $ordernumber = &GetOrderNumber($biblioitemnumber, $biblionumber);
 
+=back
+
 Looks up the ordernumber with the given biblionumber and biblioitemnumber.
 
 Returns the number of this order.
+
+=over 4
 
 =item C<$ordernumber> is the order number.
 
@@ -791,12 +785,7 @@ sub DelOrder {
     $sth->finish;
 }
 
-
-=back
-
 =head2 FUNCTIONS ABOUT PARCELS
-
-=over 2
 
 =cut
 
@@ -881,7 +870,11 @@ sub GetParcel {
 $results = &GetParcels($bookseller, $order, $code, $datefrom, $dateto);
 get a lists of parcels.
 
+=back
+
 * Input arg :
+
+=over 4
 
 =item $bookseller
 is the bookseller this function has to get parcels.
@@ -1207,8 +1200,6 @@ sub GetRecentAcqui {
 
 1;
 __END__
-
-=back
 
 =head1 AUTHOR
 
