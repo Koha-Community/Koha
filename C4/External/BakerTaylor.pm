@@ -119,12 +119,12 @@ These can be overridden for testing purposes using the initialize function.
 
 A request with failed authentication might see this back from Baker + Taylor: 
 
-<?xml version="1.0" encoding="utf-8"?>
-<InventoryAvailability xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" DateTime="2008-03-07T22:01:25.6520429-05:00" xmlns="http://ContentCafe2.btol.com">
-  <Key Type="Undefined">string</Key>
-  <Availability>false</Availability>
-  <Error>Invalid UserID</Error>
-</InventoryAvailability>
+ <?xml version="1.0" encoding="utf-8"?>
+ <InventoryAvailability xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" DateTime="2008-03-07T22:01:25.6520429-05:00" xmlns="http://ContentCafe2.btol.com">
+   <Key Type="Undefined">string</Key>
+   <Availability>false</Availability>
+   <Error>Invalid UserID</Error>
+ </InventoryAvailability>
 
 Such response will trigger a warning for each request (potentially many).  Point being, do not leave this module configured with incorrect username and password in production.
 
