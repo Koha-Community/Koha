@@ -101,9 +101,7 @@ overdue items. It is primarily used by the 'misc/fines2.pl' script.
 
 =head1 FUNCTIONS
 
-=over 2
-
-=item Getoverdues
+=head2 Getoverdues
 
   $overdues = Getoverdues( { minimumdays => 1, maximumdays => 30 } );
 
@@ -189,7 +187,7 @@ sub checkoverdues {
     return ( $count, \@overdueitems );
 }
 
-=item CalcFine
+=head2 CalcFine
 
   ($amount, $chargename, $daycount, $daycounttotal) =
     &CalcFine($item, $categorycode, $branch, $days_overdue, $description, $start_date, $end_date );
@@ -284,7 +282,7 @@ sub CalcFine {
 }
 
 
-=item GetSpecialHolidays
+=head2 GetSpecialHolidays
 
 &GetSpecialHolidays($date_dues,$itemnumber);
 
@@ -337,7 +335,7 @@ my $specialdaycount=scalar(@result_date);
 return $specialdaycount;
 }
 
-=item GetRepeatableHolidays
+=head2 GetRepeatableHolidays
 
 &GetRepeatableHolidays($date_dues, $itemnumber, $difference,);
 
@@ -375,7 +373,7 @@ return scalar(@dayclosedcount);
 }
 
 
-=item GetWayFromItemnumber
+=head2 GetWayFromItemnumber
 
 &Getwdayfromitemnumber($itemnumber);
 
@@ -405,7 +403,7 @@ return @result;
 }
 
 
-=item GetIssuesIteminfo
+=head2 GetIssuesIteminfo
 
 &GetIssuesIteminfo($itemnumber);
 
@@ -429,7 +427,7 @@ return $issuesinfo;
 }
 
 
-=item UpdateFine
+=head2 UpdateFine
 
   &UpdateFine($itemnumber, $borrowernumber, $amount, $type, $description);
 
@@ -556,7 +554,7 @@ sub UpdateFine {
         ) if C4::Context->preference("FinesLog");
 }
 
-=item BorType
+=head2 BorType
 
   $borrower = &BorType($borrowernumber);
 
@@ -584,7 +582,7 @@ sub BorType {
     return ($data);
 }
 
-=item ReplacementCost
+=head2 ReplacementCost
 
   $cost = &ReplacementCost($itemnumber);
 
@@ -606,7 +604,7 @@ sub ReplacementCost {
     return ( $data->{'replacementprice'} );
 }
 
-=item GetFine
+=head2 GetFine
 
 $data->{'sum(amountoutstanding)'} = &GetFine($itemnum,$borrowernumber);
 
@@ -632,7 +630,7 @@ sub GetFine {
 }
 
 
-=item GetIssuingRules
+=head2 GetIssuingRules
 
 FIXME - This sub should be deprecated and removed.
 It ignores branch and defaults.
@@ -682,7 +680,7 @@ sub ReplacementCost2 {
 }
 
 
-=item GetNextIdNotify
+=head2 GetNextIdNotify
 
 ($result) = &GetNextIdNotify($reference);
 
@@ -725,7 +723,7 @@ return $result;
 }
 
 
-=item NumberNotifyId
+=head2 NumberNotifyId
 
 (@notify) = &NumberNotifyId($borrowernumber);
 
@@ -754,7 +752,7 @@ sub NumberNotifyId{
 
 }
 
-=item AmountNotify
+=head2 AmountNotify
 
 ($totalnotify) = &AmountNotify($notifyid);
 
@@ -781,7 +779,7 @@ sub AmountNotify{
 }
 
 
-=item GetNotifyId
+=head2 GetNotifyId
 
 ($notify_id) = &GetNotifyId($borrowernumber,$itemnumber);
 
@@ -812,7 +810,7 @@ C<$notify_id> contains the file number for the borrower number nad item number
 
  }
 
-=item CreateItemAccountLine
+=head2 CreateItemAccountLine
 
 () = &CreateItemAccountLine($borrowernumber,$itemnumber,$date,$amount,$description,$accounttype,$amountoutstanding,$timestamp,$notify_id,$level);
 
@@ -859,7 +857,7 @@ C<$level> contains the file level
   $sth->finish;
  }
 
-=item UpdateAccountLines
+=head2 UpdateAccountLines
 
 () = &UpdateAccountLines($notify_id,$notify_level,$borrowernumber,$itemnumber);
 
@@ -911,7 +909,7 @@ if ($notify_id eq '')
 }
 
 
-=item GetItems
+=head2 GetItems
 
 ($items) = &GetItems($itemnumber);
 
@@ -937,7 +935,7 @@ sub GetItems {
     return($items);
 }
 
-=item GetOverdueDelays
+=head2 GetOverdueDelays
 
 (@delays) = &GetOverdueDelays($categorycode);
 
@@ -983,7 +981,7 @@ sub GetBranchcodesWithOverdueRules {
     return @branches;
 }
 
-=item CheckAccountLineLevelInfo
+=head2 CheckAccountLineLevelInfo
 
 ($exist) = &CheckAccountLineLevelInfo($borrowernumber,$itemnumber,$accounttype,notify_level);
 
@@ -1018,7 +1016,7 @@ sub CheckAccountLineLevelInfo {
         return($exist);
 }
 
-=item GetOverduerules
+=head2 GetOverduerules
 
 ($overduerules) = &GetOverduerules($categorycode);
 
@@ -1029,8 +1027,8 @@ C<$overduerules> return value of debbraed field in overduerules table
 C<$category> contains the borrower categorycode
 
 C<$notify_level> contains the notify level
-=cut
 
+=cut
 
 sub GetOverduerules{
     my($category,$notify_level) = @_;
@@ -1046,7 +1044,7 @@ sub GetOverduerules{
 }
 
 
-=item CheckBorrowerDebarred
+=head2 CheckBorrowerDebarred
 
 ($debarredstatus) = &CheckBorrowerDebarred($borrowernumber);
 
@@ -1077,7 +1075,7 @@ sub CheckBorrowerDebarred{
     }
 }
 
-=item UpdateBorrowerDebarred
+=head2 UpdateBorrowerDebarred
 
 ($borrowerstatut) = &UpdateBorrowerDebarred($borrowernumber);
 
@@ -1100,7 +1098,7 @@ sub UpdateBorrowerDebarred{
         return 1;
 }
 
-=item CheckExistantNotifyid
+=head2 CheckExistantNotifyid
 
   ($exist) = &CheckExistantNotifyid($borrowernumber,$itemnumber,$accounttype,$notify_id);
 
@@ -1135,7 +1133,7 @@ sub CheckExistantNotifyid {
     }
 }
 
-=item CheckAccountLineItemInfo
+=head2 CheckAccountLineItemInfo
 
   ($exist) = &CheckAccountLineItemInfo($borrowernumber,$itemnumber,$accounttype,$notify_id);
 
@@ -1363,8 +1361,6 @@ sub RemoveNotifyLine {
 
 1;
 __END__
-
-=back
 
 =head1 AUTHOR
 
