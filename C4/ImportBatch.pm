@@ -761,8 +761,6 @@ sub GetImportBatchRangeDesc {
 
 =head2 GetItemNumbersFromImportBatch
 
-=over 4
-=back
 =cut
 
 sub GetItemNumbersFromImportBatch {
