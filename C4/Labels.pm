@@ -69,9 +69,7 @@ C4::Labels - Functions for printing spine labels and barcodes in Koha
 
 =head1 FUNCTIONS
 
-=over 2
-
-=item get_label_options;
+=head2 get_label_options;
 
 	$options = get_label_options()
 
@@ -261,12 +259,16 @@ sub get_text_fields {
 }
 
 =head2 sub add_batch
+
 =over 4
+
  add_batch($batch_type,\@batch_list);
  if $batch_list is supplied,
    create a new batch with those items.
  else, return the next available batch_id.
-=return
+
+=back
+
 =cut
 
 sub add_batch ($;$) {
@@ -567,7 +569,7 @@ sub save_layout {
     return;
 }
 
-=item GetAllPrinterProfiles;
+=head2 GetAllPrinterProfiles;
 
     @profiles = GetAllPrinterProfiles()
 
@@ -591,7 +593,7 @@ sub GetAllPrinterProfiles {
     return @resultsloop;
 }
 
-=item GetSinglePrinterProfile;
+=head2 GetSinglePrinterProfile;
 
     $profile = GetSinglePrinterProfile()
 
@@ -610,7 +612,7 @@ sub GetSinglePrinterProfile {
     return $template;
 }
 
-=item SaveProfile;
+=head2 SaveProfile;
 
     SaveProfile('parameters')
 
@@ -634,7 +636,7 @@ sub SaveProfile {
     $sth->finish;
 }
 
-=item CreateProfile;
+=head2 CreateProfile;
 
     CreateProfile('parameters')
 
@@ -663,7 +665,7 @@ sub CreateProfile {
     return $error;
 }
 
-=item DeleteProfile;
+=head2 DeleteProfile;
 
     DeleteProfile(prof_id)
 
@@ -682,7 +684,7 @@ sub DeleteProfile {
     return $error;
 }
 
-=item GetAssociatedProfile;
+=head2 GetAssociatedProfile;
 
     $assoc_prof = GetAssociatedProfile(tmpl_id)
 
@@ -705,7 +707,7 @@ sub GetAssociatedProfile {
     return $assoc_prof;
 }
 
-=item SetAssociatedProfile;
+=head2 SetAssociatedProfile;
 
     SetAssociatedProfile($prof_id, $tmpl_id)
 
@@ -726,7 +728,7 @@ sub SetAssociatedProfile {
 }
 
 
-=item GetLabelItems;
+=head2 GetLabelItems;
 
         $options = GetLabelItems()
 
@@ -800,15 +802,18 @@ sub GetItemFields {
     return @fields;
 }
 
-=head GetBarcodeData
+=head2 GetBarcodeData
 
 =over 4
+
 Parse labels_conf.formatstring value
 (one value of the csv, which has already been split)
 and return string from koha tables or MARC record.
+
 =back
+
 =cut
-#'
+
 sub GetBarcodeData {
     my ( $f, $item, $record ) = @_;
     my $kohatables = &_descKohaTables();
@@ -859,9 +864,11 @@ sub GetBarcodeData {
     return $datastring;
 }
 
-=head descKohaTables
+=head2 descKohaTables
+
 Return a hashref of an array of hashes,
 with name,type keys.
+
 =cut
 
 sub _descKohaTables {
@@ -1278,7 +1285,7 @@ sub DrawBarcode {
     warn "BAR_WDTH = $bar_width, TOT.BAR.LGHT=$tot_bar_length  R*TOT.BAR =$moo2" if $debug;
 }
 
-=item build_circ_barcode;
+=head2 build_circ_barcode;
 
   build_circ_barcode( $x_pos, $y_pos, $barcode,
 	        $barcodetype, \$item);
@@ -1574,7 +1581,7 @@ sub build_circ_barcode {
 
 }
 
-=item draw_boundaries
+=head2 draw_boundaries
 
  sub draw_boundaries ($x_pos_spine, $x_pos_circ1, $x_pos_circ2,
                 $y_pos, $spine_width, $label_height, $circ_width)  
@@ -1608,7 +1615,7 @@ sub draw_boundaries {
     }
 }
 
-=item drawbox
+=head2 drawbox
 
 	sub drawbox { 	$lower_left_x, $lower_left_y, 
 			$upper_right_x, $upper_right_y )
@@ -1645,8 +1652,6 @@ END { }    # module clean-up code here (global destructor)
 
 1;
 __END__
-
-=back
 
 =head1 AUTHOR
 
