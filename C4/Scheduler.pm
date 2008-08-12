@@ -136,6 +136,8 @@ sub remove_at_job {
 1;
 __END__
 
+=back
+
 =head1 BUGS
 
 At some point C<C4::Scheduler> should be refactored:
