@@ -31,7 +31,8 @@ BEGIN {
 	@EXPORT_OK = qw();
 }
 
-=doc 
+=head2 EXAMPLE
+
 our %item_db = (
 		'1565921879' => {
 				 title => "Perl 5 desktop reference",
