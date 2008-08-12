@@ -336,7 +336,7 @@ sub charge_denied {
 1;
 __END__
 
-=doc 
+=head2 EXAMPLES
 
 our %patron_example = (
 		  djfiander => {
