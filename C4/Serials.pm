@@ -297,6 +297,7 @@ sub GetSerialInformation {
 
 $data = AddItem2Serial($serialid,$itemnumber);
 Adds an itemnumber to Serial record
+
 =back
 
 =cut
@@ -317,6 +318,7 @@ UpdateClaimdateIssues($serialids,[$date]);
 
 Update Claimdate for issues in @$serialids list with date $date 
 (Take Today if none)
+
 =back
 
 =cut
@@ -723,6 +725,7 @@ as well as the number of issues registered in the database (all types)
 this number is used to see if a subscription can be deleted (=it must have only 1 issue)
 
 FIXME: We should return \@serials.
+
 =back
 
 =cut
@@ -2113,6 +2116,7 @@ sub getsupplierbyserialid {
 
 this function checks to see if a serial has a routing list and returns the count of routingid
 used to show either an 'add' or 'edit' link
+
 =back
 
 =cut
@@ -2801,8 +2805,6 @@ sub itemdata {
 
 1;
 __END__
-
-=back
 
 =head1 AUTHOR
 
