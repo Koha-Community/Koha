@@ -244,8 +244,6 @@ sub new_object {
 1;
 __END__
 
-=doc
-
 =head1 Barcodes
 
 Note that the object returned by new is actually of the type requested (or set by syspref).
