@@ -127,7 +127,7 @@ sub new_object {
 1;
 __END__
 
-=doc 
+=head1 NOTICE 
 
 This format is deprecated and SHOULD NOT BE USED.
 
