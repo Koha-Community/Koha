@@ -20,50 +20,10 @@ to add to Batch <!-- TMPL_VAR NAME="batch_id" -->
 	<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" />
 	<fieldset class="rows">
 <ol><li>
-  <select name="idx" disabled="disabled"><!-- FIXME: script does keyword search regardless -->
-
-<!-- TMPL_IF NAME="selected" --><option value="kw" selected="selected">Keyword</option>
-<!-- TMPL_ELSE --><option value="kw">Keyword</option><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" --><option value="au" selected="selected">Author</option>
-<!-- TMPL_ELSE --><option value="au">Author</option><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" --><option value="yr" selected="selected">Publication Date</option>
-<!-- TMPL_ELSE --><option value="yr">Publication Date</option><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" --><option value="sn" selected="selected">Standard Number</option>
-<!-- TMPL_ELSE --><option value="sn">Standard Number</option><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" --><option value="nb" selected="selected">ISBN</option>
-<!-- TMPL_ELSE --><option value="nb">ISBN</option><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" --><option value="ns" selected="selected">ISSN</option>
-<!-- TMPL_ELSE --><option value="ns">ISSN</option><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" --><option value="lcn,phr" selected="selected">Call Number</option>
-<!-- TMPL_ELSE --><option value="lcn,phr">Call Number</option><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" --><option value="su" selected="selected">Subject</option>
-<!-- TMPL_ELSE --><option value="su">Subject</option><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" -->
-   <option value="ti" selected="selected">Title</option>
-<!-- TMPL_ELSE -->
-   <option value="ti" selected="selected">Title</option><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" --><option value="ti,phr" selected="selected">Title Phrase</option>
-<!-- TMPL_ELSE --><option value="ti,phr">Title Phrase</option><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" --><option value="se" selected="selected">Series Title</option>
-<!-- TMPL_ELSE --><option value="se">Series Title</option><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" --><option value="bc" selected="selected">Barcode</option>
-<!-- TMPL_ELSE --><option value="bc">Barcode</option><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" --><option value="acqdate" selected="selected">Acquisition Date</option>
-<!-- TMPL_ELSE --><option value="acqdate">Acquisition Date</option><!-- /TMPL_IF -->
-</select>
-   <input type="text" size="30" id="marclist" name="marclist" class="focus" title="Enter search terms" value=""/>  
+    <select name="idx" disabled="disabled"><!-- FIXME: script does keyword search regardless -->
+        <option value="kw" selected="selected">Keyword</option>
+    </select>
+    <input type="text" size="30" id="marclist" name="marclist" class="focus" title="Enter search terms" value=""/>  
 </li><!-- FIXME: script does keyword search regardless<li>
 <select name="idx" disabled="disabled">
 
