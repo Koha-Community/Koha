@@ -162,6 +162,8 @@ if ( $op eq "do_search" ) {
 }
 
 $template->param(
+    mainstring     => $query->param('mainstring')||"",
+    mainmainstring => $query->param('mainmainstring')|"",
     tagid         => $tagid,
     index         => $index,
     authtypesloop => \@authtypesloop,

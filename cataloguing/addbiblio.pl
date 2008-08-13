@@ -382,7 +382,7 @@ sub create_input {
                     maxlength=\"$max_length\"
                     \/>
                     <a href=\"#\" class=\"buttonDot\"
-                        onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&amp;index=$subfield_data{id}','$subfield_data{id}'); return false;\" title=\"Tag Editor\">...</a>
+                        onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&amp;index=$subfield_data{id}&amp;mainmainstring=$value','$subfield_data{id}'); return false;\" title=\"Tag Editor\">...</a>
             ";
       } else {
         $subfield_data{marc_value} =
@@ -397,7 +397,7 @@ sub create_input {
                     readonly=\"readonly\"
                     \/>
                     <a href=\"#\" class=\"buttonDot\"
-                        onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&amp;index=$subfield_data{id}','$subfield_data{id}'); return false;\" title=\"Tag Editor\">...</a>
+                        onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&amp;index=$subfield_data{id}&amp;mainmainstring=$value','$subfield_data{id}'); return false;\" title=\"Tag Editor\">...</a>
             ";
       }
     # it's a plugin field
