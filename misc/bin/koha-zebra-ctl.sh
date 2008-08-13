@@ -12,6 +12,7 @@ RUNDIR=__ZEBRA_RUN_DIR__
 LOCKDIR=__ZEBRA_LOCK_DIR__
 # you may need to change this depending on where zebrasrv is installed
 ZEBRASRV=__PATH_TO_ZEBRA__/zebrasrv
+ZEBRAOPTIONS="-v none,fatal,warn"
 
 test -f $ZEBRASRV || exit 0
 
@@ -44,7 +45,7 @@ case "$1" in
         fi
       fi
 
-      daemon --name=$NAME --errlog=$ERRLOG --stdout=$STDOUT --output=$OUTPUT --verbose=1 --respawn --delay=30 $OTHERUSER -- $ZEBRASRV -f $KOHA_CONF 
+      daemon --name=$NAME --errlog=$ERRLOG --stdout=$STDOUT --output=$OUTPUT --verbose=1 --respawn --delay=30 $OTHERUSER -- $ZEBRASRV $ZEBRAOPTIONS -f $KOHA_CONF 
       ;;
     stop)
       echo "Stopping Zebra Server"
