@@ -360,7 +360,21 @@ if (alreadyreserved > "0"){
           </a>
     <!-- TMPL_ELSE -->
       <!-- TMPL_IF Name="constrainttypea" -->
-          <i>Next available</i>
+            <!-- TMPL_IF Name="item_level_hold" -->
+                <i>Only item 
+                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME='biblionumber' -->">
+                     <!-- TMPL_IF NAME="barcodenumber" -->
+                         <!-- TMPL_VAR NAME="barcodenumber" -->
+                        <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+                    <!-- TMPL_ELSE -->
+                        No Barcode
+                    <!-- /TMPL_IF -->
+                </a>
+                </i>
+            <!-- TMPL_ELSE -->
+                <i>Next available</i>
+                 <input type="hidden" name="itemnumber" value="" />
+            <!-- /TMPL_IF -->
       <!-- TMPL_ELSE -->
         <!-- TMPL_IF Name="constrainttypeo" -->
           only this type :<b><!-- TMPL_VAR NAME="volumeddesc" --> <!-- TMPL_VAR NAME="itemtype" --></b>

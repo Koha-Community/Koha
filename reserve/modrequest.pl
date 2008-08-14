@@ -62,6 +62,7 @@ if ($CancelBorrowerNumber) {
 # 2) Cancel or modify the queue list of reserves (without item linked)
 else {
     for (my $i=0;$i<$count;$i++){
+        undef $itemnumber[$i] unless $itemnumber[$i] ne '';
         ModReserve($rank[$i],$biblionumber[$i],$borrower[$i],$branch[$i],$itemnumber[$i]); #from C4::Reserves
     }
 }

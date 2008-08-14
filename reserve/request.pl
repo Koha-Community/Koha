@@ -390,6 +390,13 @@ foreach my $res ( sort { $a->{found} cmp $b->{found} } @$reserves ) {
         }
         # set found to 1 if reserve is waiting for patron pickup
         $reserve{'found'} = 1 if $res->{'found'} eq 'W';
+    } elsif ($res->{priority} > 0) {
+        if (defined($res->{itemnumber})) {
+            my $item = GetItem($res->{itemnumber});
+            $reserve{'itemnumber'}  = $res->{'itemnumber'};
+            $reserve{'barcodenumber'}   = $item->{'barcode'};
+            $reserve{'item_level_hold'} = 1;
+        }
     }
     
 #     get borrowers reserve info
