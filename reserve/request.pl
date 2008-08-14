@@ -110,9 +110,10 @@ if ($cardnumber) {
     }
 
     # we check the date expiry of the borrower (only if there is an expiry date, otherwise, set to 1 (warn)
-    my $expiry = $borrowerinfo->{dateexpiry};
-    unless ($expiry and $expiry ne '0000-00-00' and
-            Date_to_Days(split /-/,$date) > Date_to_Days(split /-/,$expiry)) {
+    my $expiry_date = $borrowerinfo->{dateexpiry};
+    my $expiry = 0; # flag set if patron account has expired
+    if ($expiry_date and $expiry_date ne '0000-00-00' and
+            Date_to_Days(split /-/,$date) > Date_to_Days(split /-/,$expiry_date)) {
 		$messages = $expiry = 1;
     }
      
