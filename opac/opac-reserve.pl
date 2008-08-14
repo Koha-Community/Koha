@@ -189,7 +189,7 @@ foreach my $itm (@items) {
         }
     }
 	$itemhash{$itm->{'itemnumber'}}=$itm;
-	if (!$itm->{'notforloan'} && !$itm->{'itemnotforloan'}){
+	if (!$itm->{'notforloan'} && !($itm->{'itemnotforloan'} > 0)){
 		$forloan=1;
 	}
 }
