@@ -785,7 +785,36 @@ sub CancelReserve {
 
 =item ModReserve
 
-&ModReserve($rank,$biblio,$borrower,$branch)
+=over 4
+
+ModReserve($rank, $biblio, $borrower, $branch[, $itemnumber])
+
+=back
+
+Change a hold request's priority or cancel it.
+
+C<$rank> specifies the effect of the change.  If C<$rank>
+is 'W' or 'n', nothing happens.  This corresponds to leaving a
+request alone when changing its priority in the holds queue
+for a bib.
+
+If C<$rank> is 'del', the hold request is cancelled.
+
+If C<$rank> is an integer greater than zero, the priority of
+the request is set to that value.  Since priority != 0 means
+that the item is not waiting on the hold shelf, setting the 
+priority to a non-zero value also sets the request's found
+status and waiting date to NULL. 
+
+The optional C<$itemnumber> parameter is used only when
+C<$rank> is a non-zero integer; if supplied, the itemnumber 
+of the hold request is set accordingly; if omitted, the itemnumber
+is cleared.
+
+FIXME: Note that the forgoing can have the effect of causing
+item-level hold requests to turn into title-level requests.  This
+will be fixed once reserves has separate columns for requested
+itemnumber and supplying itemnumber.
 
 =cut
 
@@ -823,9 +852,9 @@ sub ModReserve {
         $sth->execute( $biblio, $borrower );
         
     }
-    else {
+    elsif ($rank =~ /^\d+/ and $rank > 0) {
         my $query = qq/
-        UPDATE reserves SET priority = ? ,branchcode = ?, itemnumber = ?, found = NULL
+        UPDATE reserves SET priority = ? ,branchcode = ?, itemnumber = ?, found = NULL, waitingdate = NULL
             WHERE biblionumber   = ?
              AND borrowernumber = ?
         /;
