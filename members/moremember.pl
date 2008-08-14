@@ -272,9 +272,10 @@ if ($borrowernumber) {
 				$getreserv{$_} = 0;
 		}
         $getreserv{reservedate}  = C4::Dates->new($num_res->{'reservedate'},'iso')->output('syspref');
-		foreach (qw(biblionumber title author barcodereserv itemcallnumber )) {
+		foreach (qw(biblionumber title author itemcallnumber )) {
 				$getreserv{$_} = $getiteminfo->{$_};
 		}
+        $getreserv{barcodereserv}  = $getiteminfo->{'barcode'};
         $getreserv{itemtype}  = $itemtypeinfo->{'description'};
 
         # 		check if we have a waitin status for reservations
@@ -305,12 +306,12 @@ if ($borrowernumber) {
             my $getbibtype = getitemtypeinfo( $getbibinfo->{'itemtype'} );
             $getreserv{color}           = 'inwait';
             $getreserv{title}           = $getbibinfo->{'title'};
-            $getreserv{waitingposition} = $num_res->{'priority'};
             $getreserv{nottransfered}   = 0;
             $getreserv{itemtype}        = $getbibtype->{'description'};
             $getreserv{author}          = $getbibinfo->{'author'};
             $getreserv{biblionumber}  = $num_res->{'biblionumber'};	
         }
+        $getreserv{waitingposition} = $num_res->{'priority'};
 
         push( @reservloop, \%getreserv );
     }
