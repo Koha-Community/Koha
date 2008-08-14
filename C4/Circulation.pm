@@ -909,18 +909,11 @@ sub AddIssue {
 					# warn "Waiting";
 					# The item is on reserve and waiting, but has been
 					# reserved by some other patron.
-					my ( $resborrower ) = GetMemberDetails( $resbor, 0 );
-					my $branches   = GetBranches();
-					my $branchname =
-					  $branches->{ $res->{'branchcode'} }->{'branchname'};
 				}
 				elsif ( $restype eq "Reserved" ) {
 
 					# warn "Reserved";
 					# The item is reserved by someone else.
-					my ( $resborrower ) = GetMemberDetails( $resbor, 0 );
-					my $branches   = GetBranches();
-					my $branchname =  $branches->{ $res->{'branchcode'} }->{'branchname'};
 					if ($cancelreserve) { # cancel reserves on this item
 						CancelReserve( 0, $res->{'itemnumber'},
 							$res->{'borrowernumber'} );
