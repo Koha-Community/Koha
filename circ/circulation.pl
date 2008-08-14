@@ -390,12 +390,12 @@ if ($borrowernumber) {
             my $getbibtype = getitemtypeinfo( $getbibinfo->{'itemtype'} );  # fixme - we should have item-level reserves here ?
             $getreserv{color}           = 'inwait';
             $getreserv{title}           = $getbibinfo->{'title'};
-            $getreserv{waitingposition} = $num_res->{'priority'};
             $getreserv{nottransfered}   = 0;
             $getreserv{itemtype}        = $getbibtype->{'description'};
             $getreserv{author}          = $getbibinfo->{'author'};
           $getreserv{biblionumber}    = $num_res->{'biblionumber'};
         }
+        $getreserv{waitingposition} = $num_res->{'priority'};
         push( @reservloop, \%getreserv );
 
 #         if we have a reserve waiting, initiate waitingreserveloop
