@@ -136,8 +136,8 @@ foreach my $itm (@items) {
     $itm->{'itemtype'} = $itm->{'itype'} if(C4::Context->preference('item-level_itypes')); 	
 	$itemhash{$itm->{'itemnumber'}}=$itm;
     if (!$itm->{'notforloan'} && !($itm->{'itemnotforloan'} > 0)){
-		$forloan=1;
-	}
+	$forloan=1;
+    }
 }
 
 if ( $query->param('place_reserve') ) {
