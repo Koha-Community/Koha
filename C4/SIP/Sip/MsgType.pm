@@ -10,7 +10,6 @@ use strict;
 use warnings;
 use Exporter;
 use Sys::Syslog qw(syslog);
-use UNIVERSAL qw(can);
 
 use Sip qw(:all);
 use Sip::Constants qw(:all);
@@ -19,6 +18,8 @@ use Sip::Checksum qw(verify_cksum);
 use Data::Dumper;
 use CGI;
 use C4::Auth qw(&check_api_auth);
+
+use UNIVERSAL qw(can);	# make sure this is *after* C4 modules.
 
 use vars qw(@ISA $VERSION @EXPORT_OK);
 
