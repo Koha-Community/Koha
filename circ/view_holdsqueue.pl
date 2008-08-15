@@ -23,6 +23,7 @@ This script displays items in the tmp_holdsqueue table
 =cut
 
 use strict;
+use warnings;
 use CGI;
 use C4::Auth;
 use C4::Output;
@@ -92,10 +93,20 @@ $template->param( branchloop     => \@branchloop,
 sub GetHoldsQueueItems {
 	my ($branchlimit,$itemtypelimit) = @_;
 	my $dbh = C4::Context->dbh;
-	my $query = "SELECT * FROM tmp_holdsqueue";
-	$query.=" WHERE holdingbranch = \"$branchlimit\"" if $branchlimit;
+
+    my @bind_params = ();
+	my $query = q/SELECT tmp_holdsqueue.*, biblio.author, items.ccode, items.location, items.enumchron, items.cn_sort
+                  FROM tmp_holdsqueue
+                  JOIN biblio USING (biblionumber)
+                  LEFT JOIN items USING (itemnumber)
+                /;
+    if ($branchlimit) {
+	    $query .=" WHERE holdingbranch = ?";
+        push @bind_params, $branchlimit;
+    }
+    $query .= " ORDER BY ccode, location, cn_sort, author, title, pickbranch, reservedate";
 	my $sth = $dbh->prepare($query);
-	$sth->execute();
+	$sth->execute(@bind_params);
 	my $items = [];
     while ( my $row = $sth->fetchrow_hashref ){
 		$row->{reservedate} = format_date($row->{reservedate});
