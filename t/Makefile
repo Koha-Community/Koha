@@ -7,6 +7,7 @@ MKDIR = /bin/mkdir
 CP = cp
 SED = /bin/sed
 CHMOD = chmod
+RM = /bin/rm
 
 # some of these are pretty questionable.
 PERL = /usr/bin/perl
@@ -32,6 +33,11 @@ SCRIPTS = koha-zebra-ctl.sh koha-pazpar2-ctl.sh koha-zebraqueue-ctl.sh zebraqueu
 SRC_SCRIPT_DIR = ../misc/bin
 TEST_SCRIPT_DIR = run/bin
 
+SMOLDER_SERVER = 72.232.235.42:8000
+SMOLDER_REPORT_FILENAME = kohatests.txt
+SMOLDER_REPORT_TARBALL = kohatests.tar.gz
+SMOLDER_PROJECT_NAME = Koha
+SMOLDER_SMOKE_SIGNAL = ./smolder_smoke_signal
 
 all ::
 	$(NOECHO) $(ECHO) RUNNING THIS MAKEFILE MAY CAUSE LOSS OF DATA
@@ -86,4 +92,20 @@ test_run_dirs ::
 	$(MKPATH) run/var/run/zebradb
 	$(MKPATH) run/var/log/zebradb
 	$(MKPATH) run/bin
+
+submit_report :: $(SMOLDER_REPORT_TARBALL)
+	$(SMOLDER_SMOKE_SIGNAL) --server $(SMOLDER_SERVER) --file $(SMOLDER_REPORT_TARBALL) --project $(SMOLDER_PROJECT_NAME) --anonymous
+#	$(RM) $(SMOLDER_REPORT_TARBALL)
+
+submit :: submit_report
+
+$(SMOLDER_REPORT_TARBALL) :: $(SMOLDER_REPORT_FILENAME)
+	tar zcvf $(SMOLDER_REPORT_TARBALL) kohatests.txt
+	$(RM) $(SMOLDER_REPORT_FILENAME)
+
+$(SMOLDER_REPORT_FILENAME) :: report
+
+report :: config_file $(ZEBRA_CONF_FILES) $(SCRIPTS)
+	KOHA_CONF=$(TEST_CONF_FILE) PERL5LIB=$(PERL5LIB) TEST_CLASS=$(TEST_CLASS) RUN_EXPENSIVE_TESTS=$(RUN_EXPENSIVE_TESTS) \
+		$(PROVE) $(PROVE_FLAGS) $(TEST_FILES) > $(SMOLDER_REPORT_FILENAME)
 

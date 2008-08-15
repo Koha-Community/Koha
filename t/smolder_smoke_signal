@@ -1,0 +1,279 @@
+#!/usr/bin/perl
+
+# This file was copied from the smolder distribution and modified.
+# the copyright and license from the original distribution are
+# included below.
+# 
+# Copyright (c) 2007, Michael Peters
+# All rights reserved.
+# 
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 
+#     * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+# 
+#     * Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+# 
+#     * Neither the name of the Smolder nor the names of its
+#     contributors may be used to endorse or promote products derived from
+#     this software without specific prior written permission.
+# 
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+# TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+# PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+# LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+# NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+use strict;
+use warnings;
+use Getopt::Long;
+use Pod::Usage;
+use File::Spec::Functions qw(catdir catfile splitdir);
+use File::Basename;
+
+BEGIN {
+    eval { require WWW::Mechanize };
+    if( $@ ) {
+        warn "\nCannot load WWW::Mechanize. " .
+            "\nPlease install it before using smolder_smoke_signal.\n";
+        exit(1);
+    }
+}
+
+=pod
+
+=head1 NAME
+
+smolder_smoke_signal
+
+=head1 SYNOPSIS
+
+    ./bin/smolder_smoke_signal --server smolder.foo.com \
+        --username myself --password s3cr3t --file test_report.xml \
+        --project MyProject
+
+=head1 DESCRIPTION
+
+Script used to upload a Smoke test report to a running smolder server.
+This is extremely useful for scripted/automatic test runs but also
+helpful when using a CLI makes things faster.
+
+=head1 OPTIONS
+
+=head2 REQUIRED
+
+=over
+
+=item server
+
+This is the hostname (and port if not 80) of the running Smolder server.
+
+=item project
+
+The name of the Smolder project to use for the upload.
+
+=item file
+
+The name of the file to upload. Please see F<docs/upload_file_format.pod>
+for more details about the format that Smolder expects this file to
+take.
+
+=back
+
+=head2 OPTIONAL
+
+=over
+
+=item username
+
+The name of the Smolder user to use for the upload.
+
+=item password
+
+The password for the Smolder user given by C<username>.
+
+=item anonymous
+
+This option takes no arguments and indicates that the report should be
+submitted anonymously to a public project. Either the anonymous option
+is required or C<username> and C<password> are required.
+
+=item architecture
+
+The architecture for the given smoke test run. If none is given
+it will use the default architecture for the project.
+
+=item platform
+
+The platform for the given smoke test run. If none is given
+it will use the default platform for the project.
+
+=item tags
+
+A comma separated list of tags that are given for this smoke report run.
+
+    ./bin/smolder_smoke_signal --server smolder.foo.com \
+        --username myself --password s3cr3t --file test_report.xml \
+        --project MyProject --tags "Foo, My Bar"
+
+=item comments
+
+Any comments that you want to associate with the smoke test run.
+
+=item verbose
+
+Print verbose output of our actions to STDOUT.
+
+=cut
+
+# default options
+our ( $server, $project, $user, $pw, $anonymous, $file, $arch, $platform, $tags, $comments, $verbose );
+my ( $help, $man );
+
+GetOptions(
+    'server=s'       => \$server,
+    'project=s'      => \$project,
+    'username=s'     => \$user,
+    'password=s'     => \$pw,
+    'anonymous'      => \$anonymous,
+    'file=s'         => \$file,
+    'architecture=s' => \$arch,
+    'platform=s'     => \$platform,
+    'tags=s'         => \$tags,
+    'comments=s'     => \$comments,
+    'verbose!'       => \$verbose,
+    'help'           => \$help,
+    'man'            => \$man,
+  )
+  || pod2usage();
+
+if ($help) {
+    pod2usage(
+        -exitval => 0,
+        -verbose => 1,
+    );
+} elsif ($man) {
+    pod2usage(
+        -exitval => 0,
+        -verbose => 2,
+    );
+}
+
+# make sure all the required fields are there
+_missing_required('server')   unless $server;
+_missing_required('project')  unless $project;
+_missing_required('username') unless $user or $anonymous;
+_missing_required('password') unless $pw   or $anonymous;
+_missing_required('file')     unless $file;
+
+# make sure our file is there and is of the right type
+if ( -r $file ) {
+    unless( $file =~ /\.tar(\.gz)?$/ ) {
+        warn "File '$file' is not of the correct type!\n";
+        exit(1);
+    }
+} else {
+    warn "File '$file' does not exist, or is not readable!\n";
+    exit(1);
+}
+
+# try and reach the smolder server
+print "Trying to reach Smolder server at $server.\n" if ($verbose);
+my $mech     = WWW::Mechanize->new();
+my $base_url = "http://$server/app";
+$mech->get($base_url);
+unless ( $mech->status eq '200' ) {
+    warn "Could not reach $server successfully. Received status " . $mech->status . "\n";
+    exit(1);
+}
+
+my $content; # holds the content of the current page from $mech
+if ( $user ) {
+# now login
+    print "Trying to login with username '$user'.\n" if ($verbose);
+    $mech->get( $base_url . '/public_auth/login' );
+    my $form = $mech->form_name('login');
+    if ( $mech->status ne '200' || !$form ) {
+        warn "Could not reach Smolder login form. Are you sure $server is a Smolder server?\n";
+        exit(1);
+    }
+    $mech->set_fields(
+                      username => $user,
+                      password => $pw,
+                  );
+    $mech->submit();
+    $content = $mech->content;
+    if ( $mech->status ne '200' || $content !~ /Welcome \Q$user\E/ ) {
+        warn "Could not login with username '$user' and password '$pw'!\n";
+        exit(1);
+    }
+}
+
+# now go to this project's page
+printf( "Retrieving project listing for %s\n", $user ? "user '$user'" : 'anonymous' ) if ($verbose);
+$mech->get( $base_url . _url_base() );
+$content = $mech->content;
+$content =~ />\Q$project\E<!--ID:(\d+)-->/;
+my $project_id = $1;
+if ( $mech->status ne '200' || !$project_id ) {
+    warn
+      "Could not get your project listing, or you are not a member of the '$project' project!\n";
+    exit(1);
+}
+
+# now go to the add-smoke-report page for this project
+print "Adding smoke report to project '$project' (id: #$project_id).\n" if ($verbose);
+$mech->get( $base_url . _url_base() . "/add_report/$project_id" );
+$content = $mech->content;
+if ( $mech->status ne '200' || $content !~ /New Smoke Report/ ) {
+    warn "Could not reach the Add Smoke Report form!\n";
+    exit(1);
+}
+$mech->form_name('add_report');
+my %fields = (report_file => $file);
+$fields{platform}     = $platform if ($platform);
+$fields{architecture} = $arch     if ($arch);
+$fields{tags}         = $tags     if ($tags);
+$fields{comments}     = $comments if ($comments);
+$mech->set_fields(%fields);
+$mech->submit();
+
+$content = $mech->content;
+if ( $mech->status ne '200' || $content !~ /Recent Smoke Reports/ ) {
+    warn "Could not upload smoke report with the given information!\n";
+    exit(1);
+}
+$content =~ /#(\d+) Added/;
+my $report_id = $1;
+
+print "\nReport successfully uploaded as #$report_id.\n";
+
+##########################################################
+# helper methods
+##########################################################
+sub _missing_required {
+    my $field = shift;
+    warn "Missing required field '$field'!\n";
+    pod2usage();
+}
+
+# returns the piece of the URL that points to the appropriate part of
+# the URL structure based on whether this is an anonymous submission
+sub _url_base {
+    if ( $anonymous ) {
+        return '/public_projects';
+    } else {
+        return '/developer_projects';
+    }
+}
