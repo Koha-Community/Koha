@@ -15,7 +15,7 @@
 # NOTE: Please keep the version in kohaversion.pl up-to-date!
 
 use strict;
-# use warnings;
+use warnings;
 
 # CPAN modules
 use DBI;
@@ -1968,6 +1968,38 @@ if (C4::Context->preference("Version") =~/3\.00/) {
 		print STDERR "cannot read file $ENV{'PERL5LIB'}/installer/data/mysql/updatedatabase30.pl : $@ \n" if ($@);
 	}
 }
+
+$DBversion = '3.00.02.001';
+if ( C4::Context->preference('Version') < TransformToNum($DBversion) ) {
+    $dbh->do("
+        CREATE TABLE hold_fill_targets (
+            `borrowernumber` int(11) NOT NULL,
+            `biblionumber` int(11) NOT NULL,
+            `itemnumber` int(11) NOT NULL,
+            `source_branchcode`  varchar(10) default NULL,
+            `item_level_request` tinyint(4) NOT NULL default 0,
+            PRIMARY KEY `itemnumber` (`itemnumber`),
+            KEY `bib_branch` (`biblionumber`, `source_branchcode`),
+            CONSTRAINT `hold_fill_targets_ibfk_1` FOREIGN KEY (`borrowernumber`) 
+                REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+            CONSTRAINT `hold_fill_targets_ibfk_2` FOREIGN KEY (`biblionumber`) 
+                REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+            CONSTRAINT `hold_fill_targets_ibfk_3` FOREIGN KEY (`itemnumber`) 
+                REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+            CONSTRAINT `hold_fill_targets_ibfk_4` FOREIGN KEY (`source_branchcode`) 
+                REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    ");
+    $dbh->do("
+        ALTER TABLE tmp_holdsqueue
+            ADD item_level_request tinyint(4) NOT NULL default 0
+    ");
+
+    print "Upgrade to $DBversion done (add hold_fill_targets table and a column to tmp_holdsqueue)";
+    SetVersion($DBversion);
+}
+
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
