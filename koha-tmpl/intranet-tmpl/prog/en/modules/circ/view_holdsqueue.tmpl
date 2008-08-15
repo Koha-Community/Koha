@@ -4,20 +4,20 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
-$.tablesorter.addParser({
-    id: 'articles', 
-    is: function(s) {return false;  }, 
-    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
-    type: 'text' 
-});
-	 $(document).ready(function() {
-		$.tablesorter.defaults.widgets = ['zebra']; 
-		$("#holdst").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
-		dateFormat: 'uk',<!-- /TMPL_IF -->
-		sortList: [[1,0]],
-		headers: { 0: { sorter: 'articles' }}
-		});
-	 });
+//$.tablesorter.addParser({
+//    id: 'articles', 
+//    is: function(s) {return false;  }, 
+//    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
+//    type: 'text' 
+//});
+//	 $(document).ready(function() {
+//		$.tablesorter.defaults.widgets = ['zebra']; 
+//		$("#holdst").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
+//		dateFormat: 'uk',<!-- /TMPL_IF -->
+//		sortList: [[1,0]],
+//		headers: { 0: { sorter: 'articles' }}
+//		});
+//	 });
 //]]>
 </script>
 </head>
@@ -50,22 +50,33 @@ $.tablesorter.addParser({
 	<thead>
 	<tr>
         <th>Title</th>
+        <th>Author</th>
+        <th>Collection</th>
+        <th>Shelving Location</th>
         <th>Call Number</th>
-        <th>Patron</th>
-        <th>Phone Number</th>
-        <th>Date</th>
+        <th>Barcode</th>
+        <th>Enumeration</th>
         <th>Send To</th>
+        <th>Date</th>
     </tr>
 	</thead>
      <tbody><!-- TMPL_LOOP NAME="itemsloop"-->
         <tr>
-            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->"><!-- TMPL_VAR NAME="title"--></a> (<!-- TMPL_VAR NAME="barcode" -->)</td>
+            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->"><!-- TMPL_VAR NAME="title"--></a></td>
+            <td><!-- TMPL_VAR NAME="author" --></td>
+            <td><!-- TMPL_VAR NAME="ccode" --></td>
+            <td><!-- TMPL_VAR NAME="location" --></td>
             <td><!-- TMPL_VAR NAME="itemcallnumber"--></td>
-            <td><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->"><!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --></a> (<!-- TMPL_VAR NAME="cardnumber"-->)</td>
-
-            <td><!-- TMPL_VAR NAME="phone"--></td>
-            <td><!-- TMPL_VAR NAME="reservedate" --></td>
+            <td>
+                <!-- TMPL_IF NAME="item_level_request" -->
+                    <!-- TMPL_VAR NAME="barcode" -->
+                <!-- TMPL_ELSE -->
+                    <em>Any available copy</em>
+                <!-- /TMPL_IF -->
+            </td>
+            <td><!-- TMPL_VAR NAME="enumchron" --></td>
             <td><!-- TMPL_VAR NAME="pickbranch" --></td>
+            <td><!-- TMPL_VAR NAME="reservedate" --></td>
         </tr>
     <!-- /TMPL_LOOP --></tbody>
     </table>
