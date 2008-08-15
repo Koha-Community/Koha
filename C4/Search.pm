@@ -33,7 +33,7 @@ BEGIN {
     $VERSION = 3.01;
     $DEBUG = ($ENV{DEBUG}) ? 1 : 0;
 }
-$DEBUG=1;
+
 =head1 NAME
 
 C4::Search - Functions for searching the Koha catalog.
