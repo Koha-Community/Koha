@@ -162,18 +162,22 @@ sub GetItemsAvailableToFillHoldRequestsForBib {
         $items_query .=   "JOIN biblioitems USING (biblioitemnumber)
                            LEFT JOIN itemtypes USING (itemtype) ";
     }
-    $items_query .=   "LEFT JOIN reserves USING (itemnumber)
-                       WHERE items.notforloan = 0
+    $items_query .=   "WHERE items.notforloan = 0
                        AND holdingbranch IS NOT NULL
                        AND itemlost = 0
                        AND wthdrawn = 0
                        AND items.onloan IS NULL
                        AND (itemtypes.notforloan IS NULL OR itemtypes.notforloan = 0)
-                       AND (priority IS NULL OR priority > 0)
-                       AND found IS NULL
+                       AND itemnumber NOT IN (
+                           SELECT itemnumber
+                           FROM reserves
+                           WHERE biblionumber = ?
+                           AND itemnumber IS NOT NULL
+                           AND (found IS NOT NULL OR priority = 0)
+                        )
                        AND biblionumber = ?";
     my $sth = $dbh->prepare($items_query);
-    $sth->execute($biblionumber);
+    $sth->execute($biblionumber, $biblionumber);
 
     my $items = $sth->fetchall_arrayref({});
     return [ grep { my @transfers = GetTransfers($_->{itemnumber}); $#transfers == -1; } @$items ]; 
