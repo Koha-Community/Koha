@@ -939,6 +939,28 @@ CREATE TABLE `ethnicity` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Table structure for table `hold_fill_targets`
+--
+
+CREATE TABLE hold_fill_targets (
+  `borrowernumber` int(11) NOT NULL,
+  `biblionumber` int(11) NOT NULL,
+  `itemnumber` int(11) NOT NULL,
+  `source_branchcode`  varchar(10) default NULL,
+  `item_level_request` tinyint(4) NOT NULL default 0,
+  PRIMARY KEY `itemnumber` (`itemnumber`),
+  KEY `bib_branch` (`biblionumber`, `source_branchcode`),
+  CONSTRAINT `hold_fill_targets_ibfk_1` FOREIGN KEY (`borrowernumber`) 
+    REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `hold_fill_targets_ibfk_2` FOREIGN KEY (`biblionumber`) 
+    REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `hold_fill_targets_ibfk_3` FOREIGN KEY (`itemnumber`) 
+    REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `hold_fill_targets_ibfk_4` FOREIGN KEY (`source_branchcode`) 
+    REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
 -- Table structure for table `import_batches`
 --
 
@@ -2172,7 +2194,8 @@ CREATE TABLE `tmp_holdsqueue` (
   `itemcallnumber` varchar(30) default NULL,
   `holdingbranch` varchar(10) default NULL,
   `pickbranch` varchar(10) default NULL,
-  `notes` text
+  `notes` text,
+  `item_level_request` tinyint(4) NOT NULL default 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
