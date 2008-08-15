@@ -86,7 +86,7 @@ sub set_overdue_item_lost : Test( 12 ) {
     is( $issued_item->{'itemlost'}, 0, 'the item is not lost' );
     # diag( Data::Dumper->Dump( [ $issued_item ], [ 'issued_item' ] ) );
 
-    qx( ../misc/cronjobs/longoverdue.pl );
+    qx( ../misc/cronjobs/longoverdue.pl --lost 90=2 --confirm );
 
     my $lost_item = C4::Items::GetItem( $self->{'overdueitemnumber'} );
     is( $lost_item->{'onloan'}, $duedateyyyymmdd, "the item is checked out and due $duedatestring" );
