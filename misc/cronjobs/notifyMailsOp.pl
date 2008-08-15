@@ -1,3 +1,4 @@
+#!/usr/bin/perl
 use strict;
 BEGIN {
     # find Koha's Perl modules
