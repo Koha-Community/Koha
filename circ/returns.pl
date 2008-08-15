@@ -129,7 +129,7 @@ if ( $query->param('resbarcode') ) {
     
 #     addin in ModReserveAffect the possibility to check if the document is expected in this library or not,
 # if not we send a value in reserve waiting for not implementting waiting status
-    if ($diffBranchReturned) {
+    if (C4::Context->userenv->{'branch'} ne $diffBranchReturned) {
         $diffBranchSend = $diffBranchReturned;
     }
     else {

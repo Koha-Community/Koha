@@ -1058,16 +1058,7 @@ sub ModReserveMinusPriority {
     $sth_upd->execute( $itemnumber, $borrowernumber, $biblionumber );
     $sth_upd->finish;
     # second step update all others reservs
-    $query = "
-            UPDATE reserves
-            SET    priority = priority-1
-            WHERE  biblionumber = ?
-            AND priority > 0
-    ";
-    $sth_upd = $dbh->prepare($query);
-    $sth_upd->execute( $biblionumber );
-    $sth_upd->finish;
-    $sth_upd->finish;
+    _FixPriority($biblionumber, $borrowernumber, '0');
 }
 
 =item GetReserveInfo
@@ -1294,6 +1285,65 @@ C<biblioitemnumber>.
 sub _Findgroupreserve {
     my ( $bibitem, $biblio, $itemnumber ) = @_;
     my $dbh   = C4::Context->dbh;
+
+    # check for exact targetted match
+    my $item_level_target_query = qq/
+        SELECT reserves.biblionumber AS biblionumber,
+               reserves.borrowernumber AS borrowernumber,
+               reserves.reservedate AS reservedate,
+               reserves.branchcode AS branchcode,
+               reserves.cancellationdate AS cancellationdate,
+               reserves.found AS found,
+               reserves.reservenotes AS reservenotes,
+               reserves.priority AS priority,
+               reserves.timestamp AS timestamp,
+               biblioitems.biblioitemnumber AS biblioitemnumber,
+               reserves.itemnumber AS itemnumber
+        FROM reserves
+        JOIN biblioitems USING (biblionumber)
+        JOIN hold_fill_targets USING (biblionumber, borrowernumber, itemnumber)
+        WHERE found IS NULL
+        AND priority > 0
+        AND item_level_request = 1
+        AND itemnumber = ?
+    /;
+    my $sth = $dbh->prepare($item_level_target_query);
+    $sth->execute($itemnumber);
+    my @results;
+    if ( my $data = $sth->fetchrow_hashref ) {
+        push( @results, $data );
+    }
+    return @results if @results;
+    
+    # check for title-level targetted match
+    my $title_level_target_query = qq/
+        SELECT reserves.biblionumber AS biblionumber,
+               reserves.borrowernumber AS borrowernumber,
+               reserves.reservedate AS reservedate,
+               reserves.branchcode AS branchcode,
+               reserves.cancellationdate AS cancellationdate,
+               reserves.found AS found,
+               reserves.reservenotes AS reservenotes,
+               reserves.priority AS priority,
+               reserves.timestamp AS timestamp,
+               biblioitems.biblioitemnumber AS biblioitemnumber,
+               reserves.itemnumber AS itemnumber
+        FROM reserves
+        JOIN biblioitems USING (biblionumber)
+        JOIN hold_fill_targets USING (biblionumber, borrowernumber)
+        WHERE found IS NULL
+        AND priority > 0
+        AND item_level_request = 0
+        AND hold_fill_targets.itemnumber = ?
+    /;
+    $sth = $dbh->prepare($title_level_target_query);
+    $sth->execute($itemnumber);
+    @results = ();
+    if ( my $data = $sth->fetchrow_hashref ) {
+        push( @results, $data );
+    }
+    return @results if @results;
+
     my $query = qq/
         SELECT reserves.biblionumber AS biblionumber,
                reserves.borrowernumber AS borrowernumber,
@@ -1315,9 +1365,9 @@ sub _Findgroupreserve {
           OR  reserves.constrainttype='a' )
           AND (reserves.itemnumber IS NULL OR reserves.itemnumber = ?)
     /;
-    my $sth = $dbh->prepare($query);
+    $sth = $dbh->prepare($query);
     $sth->execute( $biblio, $bibitem, $itemnumber );
-    my @results;
+    @results = ();
     while ( my $data = $sth->fetchrow_hashref ) {
         push( @results, $data );
     }
