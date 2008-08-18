@@ -27,8 +27,7 @@
 use strict;
 
 # standard or CPAN modules used
-use CGI qw(:standard);
-use DBI;
+use CGI;
 
 # Koha modules used
 use C4::Context;
@@ -43,50 +42,42 @@ my $userid = $ENV{'REMOTE_USER'};
 
 my $input       = new CGI;
 my $biblionumber = $input->param('id');
-my $importid		=	$input->param('importid');
+my $importid	= $input->param('importid');
 my $view		= $input->param('viewas');
 
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
         template_name   => "opac-showmarc.tmpl",
         query           => $input,
         type            => "opac",
         authnotrequired => 1,
         debug           => 1,
-    }
-);
+});
 
 $template->param( SCRIPT_NAME => $ENV{'SCRIPT_NAME'}, );
 my ($record, $xmlrecord);
-if($importid) {
+if ($importid) {
 	my ($marc,$encoding) = GetImportRecordMarc($importid);
-		$record = MARC::Record->new_from_usmarc($marc) ;
+	$record = MARC::Record->new_from_usmarc($marc) ;
  	if($view eq 'card') {
 		$xmlrecord = $record->as_xml();
 	} 
 }
 		
-if($view eq 'card') {
+if ($view eq 'card') {
 $xmlrecord = GetXmlBiblio($biblionumber) unless $xmlrecord;
-
 my $xslfile = C4::Context->config('intranetdir')."/koha-tmpl/intranet-tmpl/prog/en/xslt/compact.xsl";
 my $parser = XML::LibXML->new();
-my $xslt = XML::LibXSLT->new();
+my $xslt   = XML::LibXSLT->new();
 my $source = $parser->parse_string($xmlrecord);
 my $style_doc = $parser->parse_file($xslfile);
 my $stylesheet = $xslt->parse_stylesheet($style_doc);
 my $results = $stylesheet->transform($source);
 my $newxmlrecord = $stylesheet->output_string($results);
 #warn $newxmlrecord;
-print "Content-type: text/html\n\n";
-print $newxmlrecord;
-
+print $input->header(), $newxmlrecord;
+    exit;
 } else {
-
-$record =GetMarcBiblio($biblionumber) unless $record; 
-
-my $formatted = $record->as_formatted;
-$template->param( MARC_FORMATTED => $formatted );
-
-output_html_with_http_headers $input, $cookie, $template->output;
+    $record =GetMarcBiblio($biblionumber) unless $record; 
+    $template->param( MARC_FORMATTED => $record->as_formatted );
+    output_html_with_http_headers $input, $cookie, $template->output;
 }
