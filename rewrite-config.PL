@@ -64,7 +64,11 @@ $myhost = hostname();
 $mydomain = $myhost;
 $mydomain =~ s/^.*?\.//;
 # This is set here to rescue systems with broken DNS
-$myip = $ENV{'WEBSERVER_IP'} || inet_ntoa(scalar gethostbyname($myhost||'localhost')) || die "Cannot get our own IP address: DNS fault?";
+if ( !gethostbyname( $myhost || 'localhost' ) ) {
+    die 'Could not get the IP address of ' . ( $myhost || 'localhost' ) . ', DNS fault?';
+}
+
+$myip = $ENV{'WEBSERVER_IP'} || inet_ntoa( scalar gethostbyname( $myhost||'localhost' ) );
 $prefix = $ENV{'INSTALL_BASE'} || "/usr";
 
 # These are our configuration guesses
