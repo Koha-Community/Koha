@@ -368,7 +368,6 @@ if (C4::Context->preference("OPACShelfBrowser")) {
             ((cn_sort = ? AND itemnumber >= ?) OR cn_sort > ?) AND
             homebranch = ? AND location = ?
         ORDER BY cn_sort, itemnumber LIMIT 3
-        ");
       $sth_shelfbrowse_next->execute($starting_cn_sort, $starting_itemnumber, $starting_cn_sort, $starting_homebranch->{code}, $starting_location->{code});
     } else {
       $sth_shelfbrowse_next = $dbh->prepare("
@@ -397,7 +396,6 @@ if (C4::Context->preference("OPACShelfBrowser")) {
     }
 
 
-    
     # alas, these won't auto-vivify, see http://www.perlmonks.org/?node_id=508481
     my $shelfbrowser_next_itemnumber = $next_items[-1]->{itemnumber} if @next_items;
     my $shelfbrowser_next_biblionumber = $next_items[-1]->{biblionumber} if @next_items;
