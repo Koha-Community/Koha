@@ -395,6 +395,8 @@ if (C4::Context->preference("OPACShelfBrowser")) {
         }
         push @next_items, $this_item;
     }
+
+
     
     # alas, these won't auto-vivify, see http://www.perlmonks.org/?node_id=508481
     my $shelfbrowser_next_itemnumber = $next_items[-1]->{itemnumber} if @next_items;
