@@ -7,8 +7,8 @@
 
 $(document).ready(function(){
 	$("#addbarcode").focus();
-	$("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/shelves.pl\">Clear All</a>");
-	$("span.checkall").html("<a id=\"CheckAll\" href=\"/cgi-bin/koha/shelves.pl\">Select All</a>");
+	$("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/shelves.pl\">Clear All<\/a>");
+	$("span.checkall").html("<a id=\"CheckAll\" href=\"/cgi-bin/koha/shelves.pl\">Select All<\/a>");
     $("#CheckAll").click(function(){
         $(".checkboxed").checkCheckboxes();
         return false;
@@ -142,7 +142,7 @@ $(document).ready(function(){
 			<!-- /TMPL_IF -->
 			<!-- TMPL_UNLESS NAME="item-level_itypes" --><td>
                 <img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /><!-- TMPL_VAR NAME="description" -->
-			<!-- /TMPL_UNLESS --></td>
+			</td><!-- /TMPL_UNLESS -->
 			<td>
 			<!-- TMPL_IF name="BiblioDefaultViewmarc" -->
 				<a class="title" href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
