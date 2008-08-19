@@ -233,7 +233,7 @@ $(document).ready(function(){
                     <!-- /TMPL_IF -->
 
                     <!-- TMPL_IF name="OPACItemsResultsDisplay" -->
-                        <!-- TMPL_IF NAME="location" --><!-- TMPL_VAR NAME="location" --><!-- /TMPL_IF -->
+					    <!-- TMPL_UNLESS NAME="singleBranchMode" --><!-- TMPL_VAR NAME="location" --><!-- /TMPL_UNLESS -->
                         <!-- TMPL_IF NAME="itemcallnumber" -->[<a href="/cgi-bin/koha/opac-search.pl?q=callnum:<!-- TMPL_VAR NAME="itemcallnumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="itemcallnumber" --></a>]<!-- /TMPL_IF -->
                     <!-- /TMPL_IF -->
                     (<!-- TMPL_VAR NAME="count" -->),
