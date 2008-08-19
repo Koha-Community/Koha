@@ -297,74 +297,93 @@ if ( C4::Context->preference("OPACAmazonContent") == 1 ) {
 }
 # Shelf Browser Stuff
 if (C4::Context->preference("OPACShelfBrowser")) {
-# pick the first itemnumber unless one was selected by the user
-my $starting_itemnumber = $query->param('shelfbrowse_itemnumber'); # || $items[0]->{itemnumber};
-$template->param( OpenOPACShelfBrowser => 1) if $starting_itemnumber;
-# find the right cn_sort value for this item
-my ($starting_cn_sort, $starting_homebranch, $starting_location);
-my $sth_get_cn_sort = $dbh->prepare("SELECT cn_sort,homebranch,location from items where itemnumber=?");
-$sth_get_cn_sort->execute($starting_itemnumber);
-while (my $result = $sth_get_cn_sort->fetchrow_hashref()) {
-    $starting_cn_sort = $result->{'cn_sort'};
-    $starting_homebranch->{code} = $result->{'homebranch'};
-    $starting_homebranch->{description} = $branches->{$result->{'homebranch'}}{branchname};
-    $starting_location->{code} = $result->{'location'};
-    $starting_location->{description} = GetAuthorisedValueDesc('','',   $result->{'location'} ,'','','LOC');
-
-}
-
-## List of Previous Items
-# order by cn_sort, which should include everything we need for ordering purposes (though not
-# for limits, those need to be handled separately
-my $sth_shelfbrowse_previous = $dbh->prepare("SELECT * FROM items WHERE CONCAT(cn_sort,itemnumber) <= ? AND homebranch=? AND location=? ORDER BY CONCAT(cn_sort,itemnumber) DESC LIMIT 3");
-$sth_shelfbrowse_previous->execute($starting_cn_sort.$starting_itemnumber, $starting_homebranch->{code}, $starting_location->{code});
-my @previous_items;
-while (my $this_item = $sth_shelfbrowse_previous->fetchrow_hashref()) {
-    my $sth_get_biblio = $dbh->prepare("SELECT biblio.*,biblioitems.isbn AS isbn FROM biblio LEFT JOIN biblioitems ON biblio.biblionumber=biblioitems.biblionumber WHERE biblio.biblionumber=?");
-    $sth_get_biblio->execute($this_item->{biblionumber});
-    while (my $this_biblio = $sth_get_biblio->fetchrow_hashref()) {
-        $this_item->{'title'} = $this_biblio->{'title'};
-		if ($clean2 = isbn_cleanup($this_biblio->{'isbn'})) {
-        	$this_item->{'isbn'} = $clean2;
-		} else { 
-			$this_item->{'isbn'} = $this_biblio->{'isbn'};
-		}
+    # pick the first itemnumber unless one was selected by the user
+    my $starting_itemnumber = $query->param('shelfbrowse_itemnumber'); # || $items[0]->{itemnumber};
+    $template->param( OpenOPACShelfBrowser => 1) if $starting_itemnumber;
+    # find the right cn_sort value for this item
+    my ($starting_cn_sort, $starting_homebranch, $starting_location);
+    my $sth_get_cn_sort = $dbh->prepare("SELECT cn_sort,homebranch,location from items where itemnumber=?");
+    $sth_get_cn_sort->execute($starting_itemnumber);
+    while (my $result = $sth_get_cn_sort->fetchrow_hashref()) {
+        $starting_cn_sort = $result->{'cn_sort'};
+        $starting_homebranch->{code} = $result->{'homebranch'};
+        $starting_homebranch->{description} = $branches->{$result->{'homebranch'}}{branchname};
+        $starting_location->{code} = $result->{'location'};
+        $starting_location->{description} = GetAuthorisedValueDesc('','',   $result->{'location'} ,'','','LOC');
+    
     }
-    unshift @previous_items, $this_item;
-}
-my $throwaway = pop @previous_items;
-## List of Next Items
-my $sth_shelfbrowse_next = $dbh->prepare("SELECT * FROM items WHERE CONCAT(cn_sort,itemnumber) >= ? AND homebranch=? AND location=? ORDER BY CONCAT(cn_sort,itemnumber) ASC LIMIT 3");
-$sth_shelfbrowse_next->execute($starting_cn_sort.$starting_itemnumber, $starting_homebranch->{code}, $starting_location->{code});
-my @next_items;
-while (my $this_item = $sth_shelfbrowse_next->fetchrow_hashref()) {
-    my $sth_get_biblio = $dbh->prepare("SELECT biblio.*,biblioitems.isbn AS isbn FROM biblio LEFT JOIN biblioitems ON biblio.biblionumber=biblioitems.biblionumber WHERE biblio.biblionumber=?");
-    $sth_get_biblio->execute($this_item->{biblionumber});
-    while (my $this_biblio = $sth_get_biblio->fetchrow_hashref()) {
-        $this_item->{'title'} = $this_biblio->{'title'};
-		if ($clean2 = isbn_cleanup($this_biblio->{'isbn'})) {
-        	$this_item->{'isbn'} = $clean2;
-		} else { 
-			$this_item->{'isbn'} = $this_biblio->{'isbn'};
-		}
+    
+    ## List of Previous Items
+    # order by cn_sort, which should include everything we need for ordering purposes (though not
+    # for limits, those need to be handled separately
+    my $sth_shelfbrowse_previous = $dbh->prepare("
+        SELECT *
+        FROM items
+        WHERE
+            ((cn_sort = ? AND itemnumber < ?) OR cn_sort < ?) AND
+            homebranch = ? AND location = ?
+        ORDER BY cn_sort DESC, itemnumber ASC LIMIT 3
+        ");
+    $sth_shelfbrowse_previous->execute($starting_cn_sort, $starting_itemnumber, $starting_cn_sort, $starting_homebranch->{code}, $starting_location->{code});
+    my @previous_items;
+    while (my $this_item = $sth_shelfbrowse_previous->fetchrow_hashref()) {
+        my $sth_get_biblio = $dbh->prepare("SELECT biblio.*,biblioitems.isbn AS isbn FROM biblio LEFT JOIN biblioitems ON biblio.biblionumber=biblioitems.biblionumber WHERE biblio.biblionumber=?");
+        $sth_get_biblio->execute($this_item->{biblionumber});
+        while (my $this_biblio = $sth_get_biblio->fetchrow_hashref()) {
+            $this_item->{'title'} = $this_biblio->{'title'};
+            if ($clean2 = isbn_cleanup($this_biblio->{'isbn'})) {
+                $this_item->{'isbn'} = $clean2;
+            } else { 
+                $this_item->{'isbn'} = $this_biblio->{'isbn'};
+            }
+        }
+        unshift @previous_items, $this_item;
+        warn "p$this_item->{itemnumber}" . '@' . "$this_item->{biblionumber}: $this_item->{cn_sort}";
     }
-    push @next_items, $this_item;
-}
-
-# alas, these won't auto-vivify, see http://www.perlmonks.org/?node_id=508481
-my $shelfbrowser_next_itemnumber = $next_items[-1]->{itemnumber} if @next_items;
-my $shelfbrowser_next_biblionumber = $next_items[-1]->{biblionumber} if @next_items;
-
-$template->param(
-    starting_homebranch => $starting_homebranch->{description},
-    starting_location => $starting_location->{description},
-    shelfbrowser_prev_itemnumber => $previous_items[0]->{itemnumber},
-    shelfbrowser_next_itemnumber => $shelfbrowser_next_itemnumber,
-    shelfbrowser_prev_biblionumber => $previous_items[0]->{biblionumber},
-    shelfbrowser_next_biblionumber => $shelfbrowser_next_biblionumber,
-    PREVIOUS_SHELF_BROWSE => \@previous_items,
-    NEXT_SHELF_BROWSE => \@next_items,
-);
+    warn "p: " . (@previous_items ? 'yes' : 'no');
+    
+    ## List of Next Items; this also intentionally catches the current item
+    my $sth_shelfbrowse_next = $dbh->prepare("
+        SELECT *
+        FROM items
+        WHERE
+            ((cn_sort = ? AND itemnumber >= ?) OR cn_sort > ?) AND
+            homebranch = ? AND location = ?
+        ORDER BY cn_sort DESC, itemnumber ASC LIMIT 3
+        ");
+    $sth_shelfbrowse_next->execute($starting_cn_sort, $starting_itemnumber, $starting_cn_sort, $starting_homebranch->{code}, $starting_location->{code});
+    my @next_items;
+    while (my $this_item = $sth_shelfbrowse_next->fetchrow_hashref()) {
+        my $sth_get_biblio = $dbh->prepare("SELECT biblio.*,biblioitems.isbn AS isbn FROM biblio LEFT JOIN biblioitems ON biblio.biblionumber=biblioitems.biblionumber WHERE biblio.biblionumber=?");
+        $sth_get_biblio->execute($this_item->{biblionumber});
+        while (my $this_biblio = $sth_get_biblio->fetchrow_hashref()) {
+            $this_item->{'title'} = $this_biblio->{'title'};
+            if ($clean2 = isbn_cleanup($this_biblio->{'isbn'})) {
+                $this_item->{'isbn'} = $clean2;
+            } else { 
+                $this_item->{'isbn'} = $this_biblio->{'isbn'};
+            }
+        }
+        push @next_items, $this_item;
+        warn "n$this_item->{itemnumber}" . '@' . "$this_item->{biblionumber}: $this_item->{cn_sort}";
+    }
+    warn "n: " . (@next_items ? 'yes' : 'no');
+    
+    # alas, these won't auto-vivify, see http://www.perlmonks.org/?node_id=508481
+    my $shelfbrowser_next_itemnumber = $next_items[-1]->{itemnumber} if @next_items;
+    my $shelfbrowser_next_biblionumber = $next_items[-1]->{biblionumber} if @next_items;
+    
+    $template->param(
+        starting_homebranch => $starting_homebranch->{description},
+        starting_location => $starting_location->{description},
+        starting_itemnumber => $starting_itemnumber,
+        shelfbrowser_prev_itemnumber => (@previous_items ? $previous_items[0]->{itemnumber} : 0),
+        shelfbrowser_next_itemnumber => $shelfbrowser_next_itemnumber,
+        shelfbrowser_prev_biblionumber => (@previous_items ? $previous_items[0]->{biblionumber} : 0),
+        shelfbrowser_next_biblionumber => $shelfbrowser_next_biblionumber,
+        PREVIOUS_SHELF_BROWSE => \@previous_items,
+        NEXT_SHELF_BROWSE => \@next_items,
+    );
 }
 
 if (C4::Context->preference("BakerTaylorEnabled")) {
