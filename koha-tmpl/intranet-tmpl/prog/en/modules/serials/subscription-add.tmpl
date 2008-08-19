@@ -42,11 +42,13 @@ function getWeeksArray(startDate,periodicity) {
         incr=3;
     }
     var weeksArray = new Array;
-    startDate.setDate(1);
-    startDate.setMonth(0);
+    var jan01 = new Date();
+    jan01.setDate(1);
+    jan01.setMonth(0);
+    jan01.setFullYear(startDate.getFullYear());
     for(var i=0;i<52;i++) {
-        weeksArray[i] = formatDate(startDate) + ' ' + weekno_label + (i + 1);
-        startDate.addDays( 7 ); 
+        weeksArray[i] = formatDate(jan01) + ' ' + weekno_label + (i + 1);
+        jan01.addDays( 7 ); 
     }
     return weeksArray;
 }
@@ -1040,7 +1042,8 @@ $('#numberpattern').change( function() {
                         ifFormat       :   "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
                         button         :   "<!-- TMPL_IF NAME="mod" -->next_<!-- /TMPL_IF -->acqui_button",
                         align          :   "Tl",
-                        onUpdate        :    function(cal) { irregular_issues.weeks = getWeeksArray(cal.date);
+                        onUpdate        :    function(cal) { 
+                                                             irregular_issues.weeks = getWeeksArray(cal.date);
                                                             irregular_issues.firstissue = cal.date;
                                                             if(document.irregularity_summary) {
                                                                 irregular_issues.update();
