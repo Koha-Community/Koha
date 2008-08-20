@@ -255,7 +255,7 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
     {
         my $item = $iteminfos_of->{$itemnumber};
     $item->{itypename} = $itemtypes->{ $item->{itype} }{description};
-    $item->{imageurl} = getitemtypeimagesrc() . "/".$itemtypes->{ $item->{itype} }{imageurl};
+    $item->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtypes->{ $item->{itype} }{imageurl} );
         $item->{homebranchname} =
           $branches->{ $item->{homebranch} }{branchname};
 

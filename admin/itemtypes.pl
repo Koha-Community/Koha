@@ -244,7 +244,7 @@ else {    # DEFAULT
     my @loop;
     foreach my $itemtype ( @{$results}[ $first .. $last ] ) {
         $itemtype->{toggle} = ($toggle++ % 2) ? 0 : 1 ;
-        $itemtype->{imageurl} = getitemtypeimagesrc('intranet') . "/$itemtype->{imageurl}";
+        $itemtype->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtype->{imageurl} );
         $itemtype->{rentalcharge} = sprintf( '%.2f', $itemtype->{rentalcharge} );
         push( @loop, $itemtype );
     }

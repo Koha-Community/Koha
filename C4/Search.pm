@@ -1262,15 +1262,8 @@ sub searchResults {
         $oldbiblio->{result_number} = $i + 1;
 
         # add imageurl to itemtype if there is one
-        if ( $itemtypes{ $oldbiblio->{itemtype} }->{imageurl} =~ /^http:/ ) {
-            $oldbiblio->{imageurl} =
-              $itemtypes{ $oldbiblio->{itemtype} }->{imageurl};
-        } else {
-            $oldbiblio->{imageurl} =
-              getitemtypeimagesrc() . "/"
-              . $itemtypes{ $oldbiblio->{itemtype} }->{imageurl}
-              if ( $itemtypes{ $oldbiblio->{itemtype} }->{imageurl} );
-        }
+        $oldbiblio->{imageurl} = getitemtypeimagelocation( 'opac', $itemtypes{ $oldbiblio->{itemtype} }->{imageurl} );
+
 		my $biblio_authorised_value_images = C4::Items::get_authorised_value_images( C4::Biblio::get_biblio_authorised_values( $oldbiblio->{biblionumber} ) );
 		$oldbiblio->{authorised_value_images} = $biblio_authorised_value_images;
         my $aisbn = $oldbiblio->{'isbn'};
@@ -1404,7 +1397,7 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
 				$onloan_items->{$key}->{branchname} = $item->{branchname};
 				$onloan_items->{$key}->{location} = $shelflocations->{ $item->{location} };
 				$onloan_items->{$key}->{itemcallnumber} = $item->{itemcallnumber};
-				$onloan_items->{$key}->{imageurl} = getitemtypeimagesrc() . "/" . $itemtypes{ $item->{itype} }->{imageurl};
+				$onloan_items->{$key}->{imageurl} = getitemtypeimagelocation( 'opac', $itemtypes{ $item->{itype} }->{imageurl} );
                 # if something's checked out and lost, mark it as 'long overdue'
                 if ( $item->{itemlost} ) {
                     $onloan_items->{$prefix}->{longoverdue}++;
@@ -1469,7 +1462,7 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
 					$other_items->{$key}->{notforloan} = GetAuthorisedValueDesc('','',$item->{notforloan},'','',$notforloan_authorised_value) if $notforloan_authorised_value;
 					$other_items->{$key}->{count}++ if $item->{homebranch};
 					$other_items->{$key}->{location} = $shelflocations->{ $item->{location} };
-					$other_items->{$key}->{imageurl} = getitemtypeimagesrc() . "/" . $itemtypes{ $item->{itype} }->{imageurl};
+					$other_items->{$key}->{imageurl} = getitemtypeimagelocation( 'opac', $itemtypes{ $item->{itype} }->{imageurl} );
                 }
                 # item is available
                 else {
@@ -1480,7 +1473,7 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
                     	$available_items->{$prefix}->{$_} = $item->{$_};
 					}
 					$available_items->{$prefix}->{location} = $shelflocations->{ $item->{location} };
-					$available_items->{$prefix}->{imageurl} = getitemtypeimagesrc() . "/" . $itemtypes{ $item->{itype} }->{imageurl};
+					$available_items->{$prefix}->{imageurl} = getitemtypeimagelocation( 'opac', $itemtypes{ $item->{itype} }->{imageurl} );
                 }
             }
         }    # notforloan, item level and biblioitem level

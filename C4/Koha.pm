@@ -21,6 +21,7 @@ package C4::Koha;
 use strict;
 use C4::Context;
 use C4::Output;
+use URI::Split qw(uri_split);
 
 use vars qw($VERSION @ISA @EXPORT $DEBUG);
 
@@ -47,6 +48,7 @@ BEGIN {
 		&get_notforloan_label_of
 		&getitemtypeimagedir
 		&getitemtypeimagesrc
+		&getitemtypeimagelocation
 		&GetAuthorisedValues
 		&GetAuthorisedValueCategories
 		&GetKohaAuthorisedValues
@@ -491,6 +493,18 @@ sub getitemtypeimagesrc {
 	else {
 		return '/opac-tmpl' . '/' . C4::Context->preference('template') . '/itemtypeimg';
 	}
+}
+
+sub getitemtypeimagelocation($$) {
+	my ( $src, $image ) = @_;
+
+	return if ( !$image );
+
+	my $scheme = ( uri_split( $image ) )[0];
+
+	return $image if ( $scheme );
+
+	return getitemtypeimagesrc( $src ) . '/' . $image;
 }
 
 =head3 _getImagesFromDirectory

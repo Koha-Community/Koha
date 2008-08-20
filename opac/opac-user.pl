@@ -88,7 +88,6 @@ my $toggle = 0;
 my $overdues_count = 0;
 my @overdues;
 my @issuedat;
-my $imgdir = getitemtypeimagesrc();
 my $itemtypes = GetItemTypes();
 foreach my $issue ( @$issues ) {
 	if($count%2 eq 0){ $issue->{'toggle'} = 1; } else { $issue->{'toggle'} = 0; }
@@ -132,7 +131,7 @@ foreach my $issue ( @$issues ) {
     # imageurl:
     my $itemtype = $issue->{'itemtype'};
     if ( $itemtype ) {
-        $issue->{'imageurl'}    = $imgdir."/".$itemtypes->{$itemtype}->{'imageurl'};
+        $issue->{'imageurl'}    = getitemtypeimagelocation( 'opac', $itemtypes->{$itemtype}->{'imageurl'} );
         $issue->{'description'} = $itemtypes->{$itemtype}->{'description'};
     }
     $issue->{date_due} = format_date($issue->{date_due});

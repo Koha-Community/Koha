@@ -1419,7 +1419,7 @@ sub get_authorised_value_images {
              && $authorised_values->{ $this_authorised_value->{'category'} } eq $this_authorised_value->{'authorised_value'} ) {
             # warn ( Data::Dumper->Dump( [ $this_authorised_value ], [ 'this_authorised_value' ] ) );
             if ( defined $this_authorised_value->{'imageurl'} ) {
-                push @imagelist, { imageurl => C4::Koha::getitemtypeimagesrc( 'intranet' ) . '/' . $this_authorised_value->{'imageurl'},
+                push @imagelist, { imageurl => C4::Koha::getitemtypeimagelocation( 'intranet', $this_authorised_value->{'imageurl'} ),
                                    label    => $this_authorised_value->{'lib'},
                                    category => $this_authorised_value->{'category'},
                                    value    => $this_authorised_value->{'authorised_value'}, };
