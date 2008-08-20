@@ -80,6 +80,7 @@ while ( my $line = <$file> ) {
   } elsif ( $circ->{ 'type' } eq 'return' ) {
     kocReturnItem( $circ );
   } elsif ( $circ->{ 'type' } eq 'payment' ) {
+      $circ->{'payment_amount'} = delete $circ->{'barcode'};
     kocMakePayment( $circ );
   }
 }
@@ -104,7 +105,7 @@ sub kocIssueItem {
   my $issuelength = $issuingrule->{ 'issuelength' };
   my ( $year, $month, $day ) = split( /-/, $circ->{'date'} );
   ( $year, $month, $day ) = Add_Delta_Days( $year, $month, $day, $issuelength );
-  my $date_due = "$year-$month-$day";
+  my $date_due = sprintf("%04d-%02d-%02d", $year, $month, $day);
   
   if ( $issue->{ 'date_due' } ) { ## Item is currently checked out to another person.
 warn "Item Currently Issued.";
@@ -113,12 +114,18 @@ warn "Item Currently Issued.";
     if ( $issue->{'borrowernumber'} eq $borrower->{'borrowernumber'} ) { ## Issued to this person already, renew it.
 warn "Item issued to this member already, renewing.";
     
-      my $renewals = $issue->{'renewals'} + 1;
-      ForceRenewal( $item->{'itemnumber'}, $circ->{'date'}, $date_due ) unless ( DEBUG );
+    my $date_due_object = C4::Dates->new($date_due ,'iso');
+    C4::Circulation::AddRenewal(
+        $issue->{'borrowernumber'},    # borrowernumber
+        $item->{'itemnumber'},         # itemnumber
+        undef,                         # branch
+        $date_due_object,              # datedue
+        $circ->{'date'},               # issuedate
+    ) unless ($DEBUG);
 
       push( @output, { message => "Renewed $item->{ 'title' } ( $item->{ 'barcode' } ) to $borrower->{ 'firstname' } $borrower->{ 'surename' } ( $borrower->{'cardnumber'} ) : $circ->{ 'datetime' }\n" } );
 
-    } else { 
+    } else {
 warn "Item issued to a different member.";
 warn "Date of previous issue: $issue->{'issuedate'}";
 warn "Date of this issue: $circ->{'date'}";
@@ -126,13 +133,7 @@ warn "Date of this issue: $circ->{'date'}";
       my ( $c_y, $c_m, $c_d ) = split( /-/, $circ->{'date'} );
       
       if ( Date_to_Days( $i_y, $i_m, $i_d ) < Date_to_Days( $c_y, $c_m, $c_d ) ) { ## Current issue to a different persion is older than this issue, return and issue.
-warn "Current issue to another member is older, returning and issuing";
-        push( @output, { message => "$item->{ 'title' } ( $item->{'barcode'} ) currently issued, returning item.\n" } );
-        ## AddReturnk() should be replaced with a custom function, as it will make the return date today, should be before the issue date of the current circ
-        AddReturn( $circ->{ 'barcode' }, $branchcode ) unless ( DEBUG );
-
-        ForceIssue( $borrower->{ 'borrowernumber' }, $item->{ 'itemnumber' }, $date_due, $branchcode, $circ->{'date'} ) unless ( DEBUG );
-
+        C4::Circulation::AddIssue( $borrower, $circ->{'barcode'}, $date_due ) unless ( DEBUG );
         push( @output, { message => "Issued $item->{ 'title' } ( $item->{ 'barcode' } ) to $borrower->{ 'firstname' } $borrower->{ 'surename' } ( $borrower->{'cardnumber'} ) : $circ->{ 'datetime' }\n" } );
 
       } else { ## Current issue is *newer* than this issue, write a 'returned' issue, as the item is most likely in the hands of someone else now.
@@ -143,29 +144,27 @@ warn "Current issue to another member is newer. Doing nothing";
     
     }
   } else { ## Item is not checked out to anyone at the moment, go ahead and issue it
-    ForceIssue( $borrower->{ 'borrowernumber' }, $item->{ 'itemnumber' }, $date_due, $branchcode, $circ->{'date'} ) unless ( DEBUG );
+      C4::Circulation::AddIssue( $borrower, $circ->{'barcode'}, $date_due ) unless ( DEBUG );
     push( @output, { message => "Issued $item->{ 'title' } ( $item->{ 'barcode' } ) to $borrower->{ 'firstname' } $borrower->{ 'surename' } ( $borrower->{'cardnumber'} ) : $circ->{ 'datetime' }\n" } );
   }  
 }
 
 sub kocReturnItem {
   my ( $circ ) = @_;
-  ForceReturn( $circ->{'barcode'}, $circ->{'date'}, $branchcode );
+  my $borrower = GetMember( $circ->{ 'cardnumber' }, 'cardnumber' );
+  my $item = GetBiblioFromItemNumber( undef, $circ->{ 'barcode' } );
+  C4::Circulation::MarkIssueReturned( $borrower->{'borrowernumber'},
+                                      $item->{'itemnumber'},
+                                      undef,
+                                      $circ->{'date'} );
   
-  my $item = GetBiblioFromItemNumber( undef, $circ->{'barcode'} );
-  
-  ## FIXME: Is there a way to get the borrower of an item through the Koha API?
-  my $sth=$dbh->prepare( "SELECT borrowernumber FROM issues WHERE itemnumber = ? AND returndate IS NULL");
-  $sth->execute( $item->{'itemnumber'} );
-  my ( $borrowernumber ) = $sth->fetchrow;
-  $sth->finish();
-
-  push( @output, { message => "Returned $item->{ 'title' } ( $item->{ 'barcode' } ) From borrower number $borrowernumber : $circ->{ 'datetime' }\n" } ); 
+  push( @output, { message => "Returned $item->{ 'title' } ( $item->{ 'barcode' } ) From borrower number $borrower->{'borrowernumber'} : $circ->{ 'datetime' }\n" } ); 
 }
 
 sub kocMakePayment {
   my ( $circ ) = @_;
   my $borrower = GetMember( $circ->{ 'cardnumber' }, 'cardnumber' );
-  recordpayment( my $env, $borrower->{'borrowernumber'}, $circ->{'barcode'} );
+  recordpayment( $borrower->{'borrowernumber'}, $circ->{'payment_amount'} );
+  push( @output, { message => "accepted payment ($circ->{'payment_amount'}) from cardnumber ($circ->{'cardnumber'}), borrower ($borrower->{'borrowernumber'})" } );
 }
 

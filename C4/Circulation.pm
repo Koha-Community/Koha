@@ -63,9 +63,7 @@ BEGIN {
 		&CanBookBeIssued
 		&CanBookBeRenewed
 		&AddIssue
-                &ForceIssue
 		&AddRenewal
-                &ForceRenewal
 		&GetRenewCount
 		&GetItemIssue
                 &GetOpenIssue
@@ -81,7 +79,6 @@ BEGIN {
 	# subs to deal with returns
 	push @EXPORT, qw(
 		&AddReturn
-                &ForceReturn
         &MarkIssueReturned
 	);
 
@@ -1020,29 +1017,6 @@ sub AddIssue {
   }
 }
 
-=head2 ForceIssue
-
-ForceIssue()
-
-Issues an item to a member, ignoring any problems that would normally dissallow the issue.
-
-=cut
-
-sub ForceIssue {
-  my ( $borrowernumber, $itemnumber, $date_due, $branchcode, $date ) = @_;
-warn "ForceIssue( $borrowernumber, $itemnumber, $date_due, $branchcode, $date );";
-  my $dbh = C4::Context->dbh;
-  my $sth = $dbh->prepare( "INSERT INTO `issues` ( `borrowernumber`, `itemnumber`, `date_due`, `branchcode`, `issuingbranch`, `returndate`, `lastreneweddate`, `return`,  `renewals`, `timestamp`, `issuedate` )
-                            VALUES ( ?, ?, ?, ?, ?, NULL, NULL, NULL, NULL, NOW(), ? )" );
-  $sth->execute( $borrowernumber, $itemnumber, $date_due, $branchcode, $branchcode, $date );
-  $sth->finish();
-
-  my $item = GetBiblioFromItemNumber( $itemnumber );
-
-  UpdateStats( $branchcode, 'issue', undef, undef, $itemnumber, $item->{ 'itemtype' }, $borrowernumber );
-}
-
-
 =head2 GetLoanLength
 
 Get loan length for an itemtype, a borrower type and a branch
@@ -1473,51 +1447,6 @@ sub AddReturn {
     }
     return ( $doreturn, $messages, $iteminformation, $borrower );
 }
-
-=head2 ForceReturn
-
-ForceReturn( $barcode, $date, $branchcode );
-
-Returns an item is if it were returned on C<$date>.
-
-This function is non-interactive and does not check for reserves.
-
-C<$barcode> is the barcode of the item being returned.
-
-C<$date> is the date of the actual return, in the format YYYY-MM-DD.
-
-C<$branchcode> is the branchcode for the library the item was returned to.
-
-=cut
-
-sub ForceReturn {
-  my ( $barcode, $date, $branchcode ) = @_;
-  my $dbh = C4::Context->dbh;
-    
-  my $item = GetBiblioFromItemNumber( undef, $barcode );
-      
-  ## FIXME: Is there a way to get the borrower of an item through the Koha API?
-  my $sth=$dbh->prepare( "SELECT borrowernumber FROM issues WHERE itemnumber = ? AND returndate IS NULL");
-  $sth->execute( $item->{'itemnumber'} );
-  my ( $borrowernumber ) = $sth->fetchrow;
-  $sth->finish();
-                
-  ## Move the issue from issues to old_issues
-  $sth = $dbh->prepare( "INSERT INTO old_issues ( SELECT * FROM issues WHERE itemnumber = ? AND returndate IS NULL )" );
-  $sth->execute( $item->{'itemnumber'} );
-  $sth->finish();
-  ## Delete the row in issues
-  $sth = $dbh->prepare( "DELETE FROM issues WHERE itemnumber = ? AND returndate IS NULL" );
-  $sth->execute( $item->{'itemnumber'} );
-  $sth->finish();
-  ## Now set the returndate
-  $sth = $dbh->prepare( 'UPDATE old_issues SET returndate = ? WHERE itemnumber = ? AND returndate IS NULL' );
-  $sth->execute( $date, $item->{'itemnumber'} );
-  $sth->finish();
-                                          
-  UpdateStats( $branchcode, 'return', my $amount, my $other, $item->{ 'itemnumber' }, $item->{ 'itemtype' }, $borrowernumber );
-}
-
 
 =head2 MarkIssueReturned
 
@@ -2095,40 +2024,6 @@ sub AddRenewal {
     # Log the renewal
     UpdateStats( $branch, 'renew', $charge, '', $itemnumber, $item->{itype}, $borrowernumber);
 }
-
-
-=head2 ForceRenewal
-
-ForRenewal( $itemnumber, $date, $date_due );
-
-Renews an item for the given date. This function should only be used to update renewals that have occurred in the past.
-
-C<$itemnumber> is the itemnumber of the item being renewed.
-
-C<$date> is the date the renewal took place, in the format YYYY-MM-DD
-
-C<$date_due> is the date the item is now due to be returned, in the format YYYY-MM-DD
-
-=cut
-
-sub ForceRenewal {
-  my ( $itemnumber, $date, $date_due ) = @_;
-  my $dbh = C4::Context->dbh;
-
-  my $sth = $dbh->prepare("SELECT * FROM issues WHERE itemnumber = ? AND returndate IS NULL");
-  $sth->execute( $itemnumber );
-  my $issue = $sth->fetchrow_hashref();
-  $sth->finish();
-  
-
-  $sth = $dbh->prepare('UPDATE issues SET renewals = ?, lastreneweddate = ?, date_due = ? WHERE itemnumber = ? AND returndate IS NULL');
-  $sth->execute( $issue->{'renewals'} + 1, $date, $date_due, $itemnumber );
-  $sth->finish();
-  
-  my $item = GetBiblioFromItemNumber( $itemnumber );
-  UpdateStats( $issue->{'branchcode'}, 'renew', undef, undef, $itemnumber, $item->{ 'itemtype' }, $issue->{'borrowernumber'} );
-}
-
 
 sub GetRenewCount {
     # check renewal status
