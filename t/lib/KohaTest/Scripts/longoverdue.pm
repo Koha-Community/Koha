@@ -37,7 +37,7 @@ sub create_overdue_item : Test( startup => 12 ) {
     
 }
 
-sub set_overdue_item_lost : Test( 12 ) {
+sub set_overdue_item_lost : Test( 13 ) {
     my $self = shift;
 
     my $item = C4::Items::GetItem( $self->{'overdueitemnumber'} );
@@ -69,10 +69,8 @@ sub set_overdue_item_lost : Test( 12 ) {
     is( keys %$needsconfirmation, 0, 'issuing needs no confirmation' );
 
     my $issue_due_date = C4::Circulation::AddIssue( $borrower, $item->{'barcode'}, $duedate );
-    TODO: {
-        local $TODO = 'C4::Circulation::AddIssue returns undef insead of the due date';
-        ok( $issue_due_date, 'due date' );
-    }
+    ok( $issue_due_date, 'due date' );
+    is( $issue_due_date, $duedate, 'AddIssue returned the same date we passed to it' );
     
     # I have to make this in a different format since that's how the database holds it.
     my $duedateyyyymmdd = sprintf( '%04d-%02d-%02d',
