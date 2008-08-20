@@ -20,7 +20,7 @@ sub startup_init_constants : Tests(startup => 0) {
     $self->{formats} = [ sort keys %{ $self->{thash} } ];
 }
 
-sub check_formats : Test( 10 ) {
+sub check_formats : Test( 8 ) {
     my $self = shift;
 
     my $syspref = C4::Dates->new->format();
