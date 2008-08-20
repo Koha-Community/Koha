@@ -39,13 +39,13 @@
             <tr>
                 <th><!-- TMPL_VAR name="line" --> / <!-- TMPL_VAR name="column" --></th>
                 <!-- TMPL_LOOP NAME="loopcol" -->
-                    <th><!-- TMPL_VAR NAME="coltitle_display" --></th>
+                    <th><!-- TMPL_VAR ESCAPE="HTML" NAME="coltitle_display" --></th>
                 <!-- /TMPL_LOOP -->
                 <th>TOTAL</th>
                 </tr>
                 <!-- TMPL_LOOP NAME="looprow" -->
                     <tr<!-- TMPL_UNLESS NAME="__odd__" --> class="highlight"<!-- /TMPL_UNLESS -->>
-                        <td><!-- TMPL_VAR NAME="rowtitle_display" DEFAULT="UNKNOWN VALUE"--></td>
+                        <td><!-- TMPL_VAR ESCAPE="HTML" NAME="rowtitle_display" DEFAULT="UNKNOWN VALUE" --></td>
                     <!-- TMPL_LOOP NAME="loopcell" -->
 						<td><!-- TMPL_VAR NAME="value" DEFAULT="&nbsp;" --></td>
                     <!-- /TMPL_LOOP -->
