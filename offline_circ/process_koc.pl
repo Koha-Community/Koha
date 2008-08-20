@@ -36,7 +36,10 @@ use Date::Calc qw( Add_Delta_Days Date_to_Days );
 
 use constant DEBUG => 0;
 
-our $query = new CGI;
+# this is the file version number that we're coded against.
+my $FILE_VERSION = '1.0';
+
+our $query = CGI->new;
 
 my ($template, $loggedinuser, $cookie)
   = get_template_and_user( { template_name => "offline_circ/process_koc.tmpl",
@@ -48,41 +51,38 @@ my ($template, $loggedinuser, $cookie)
 
 ## 'Local' globals.
 our $dbh = C4::Context->dbh();
-
-our $branchcode = C4::Context->userenv->{branch};
-
-warn "Branchcode: $branchcode";
-
 our @output; ## For storing messages to be displayed to the user
 
 $query::POST_MAX = 1024 * 10000;
-
 my $file = $query->param("kocfile");
 $file=~m/^.*(\\|\/)(.*)/; # strip the remote path and keep the filename 
-my $name = $file; 
 
-my $header = <$file>;
+my $header_line = <$file>;
+my $file_info   = parse_header_line($header_line);
+if ($file_info->{'Version'} ne $FILE_VERSION) {
+    push( @output, { message => "Warning: This file is version '$file_info->{'Version'}', but I only know how to import version '$FILE_VERSION'. I'll try my best." } );
+}
+
 
 while ( my $line = <$file> ) {
-  my ( $type, $cardnumber, $barcode, $datetime ) = split( /\t/, $line );
-  ( $datetime ) = split( /\+/, $datetime );
-  my ( $date ) = split( / /, $datetime );
 
-  my $circ;
-  $circ->{ 'type' } = $type;
-  $circ->{ 'cardnumber' } = $cardnumber;
-  $circ->{ 'barcode' } = $barcode;
-  $circ->{ 'datetime' } = $datetime;
-  $circ->{ 'date' } = $date;
-  
-  if ( $circ->{ 'type' } eq 'issue' ) {
-    kocIssueItem( $circ, $branchcode );
-  } elsif ( $circ->{ 'type' } eq 'return' ) {
-    kocReturnItem( $circ );
-  } elsif ( $circ->{ 'type' } eq 'payment' ) {
-      $circ->{'payment_amount'} = delete $circ->{'barcode'};
-    kocMakePayment( $circ );
-  }
+    # my ( $date, $time, $command, @arguments ) = parse_command_line( $line );
+    my $command_line = parse_command_line($line);
+
+    # map command names in the file to subroutine names
+    my %dispatch_table = (
+        issue   => \&kocIssueItem,
+        return  => \&kocReturnItem,
+        payment => \&kocMakePayment,
+    );
+
+    # call the right sub name, passing the hashref of command_line to it.
+    if ( exists $dispatch_table{ $command_line->{'command'} } ) {
+        $dispatch_table{ $command_line->{'command'} }->($command_line);
+    } else {
+        warn "unknown command: '$command_line->{command}' not processed";
+    }
+
 }
 
 $template->param(
@@ -94,9 +94,86 @@ $template->param(
 	);
 output_html_with_http_headers $query, $cookie, $template->output;
 
-sub kocIssueItem {
-  my ( $circ, $branchcode ) = @_;
+=head3 parse_header_line
 
+parses the header line from a .koc file. This is the line that
+specifies things such as the file version, and the name and version of
+the offline circulation tool that generated the file. See
+L<http://wiki.koha.org/doku.php?id=koha_offline_circulation_file_format>
+for more information.
+
+pass in a string containing the header line (the first line from th
+file).
+
+returns a hashref containing the information from the header.
+
+=cut
+
+sub parse_header_line {
+    my $header_line = shift;
+    chomp($header_line);
+
+    my @fields = split( /\t/, $header_line );
+    my %header_info = map { split( /=/, $_ ) } @fields;
+    return \%header_info;
+}
+
+=head3 parse_command_line
+
+=cut
+
+sub parse_command_line {
+    my $command_line = shift;
+    chomp($command_line);
+
+    my ( $timestamp, $command, @args ) = split( /\t/, $command_line );
+    my ( $date,      $time,    $id )   = split( /\s/, $timestamp );
+
+    my %command = (
+        date    => $date,
+        time    => $time,
+        id      => $id,
+        command => $command,
+    );
+
+    # set the rest of the keys using a hash slice
+    my $argument_names = arguments_for_command($command);
+    @command{@$argument_names} = @args;
+
+    return \%command;
+
+}
+
+=head3 arguments_for_command
+
+fetches the names of the columns (and function arguments) found in the
+.koc file for a particular command name. For instance, the C<issue>
+command requires a C<cardnumber> and C<barcode>. In that case this
+function returns a reference to the list C<qw( cardnumber barcode )>.
+
+parameters: the command name
+
+returns: listref of column names.
+
+=cut
+
+sub arguments_for_command {
+    my $command = shift;
+
+    # define the fields for this version of the file.
+    my %format = (
+        issue   => [qw( cardnumber barcode )],
+        return  => [qw( barcode )],
+        payment => [qw( cardnumber amount )],
+    );
+
+    return $format{$command};
+}
+
+sub kocIssueItem {
+  my $circ = shift;
+
+  my $branchcode = C4::Context->userenv->{branch};
   my $borrower = GetMember( $circ->{ 'cardnumber' }, 'cardnumber' );
   my $item = GetBiblioFromItemNumber( undef, $circ->{ 'barcode' } );
   my $issue = GetItemIssue( $item->{'itemnumber'} );
@@ -151,20 +228,45 @@ warn "Current issue to another member is newer. Doing nothing";
 
 sub kocReturnItem {
   my ( $circ ) = @_;
-  my $borrower = GetMember( $circ->{ 'cardnumber' }, 'cardnumber' );
   my $item = GetBiblioFromItemNumber( undef, $circ->{ 'barcode' } );
-  C4::Circulation::MarkIssueReturned( $borrower->{'borrowernumber'},
+  warn( Data::Dumper->Dump( [ $circ, $item ], [ qw( circ item ) ] ) );
+  my $borrowernumber = _get_borrowernumber_from_barcode( $circ->{'barcode'} );
+  unless ( $borrowernumber ) {
+      push( @output, { message => "Warning: unable to determine borrower from item ($item->{'barcode'}). Cannot mark returned\n" } );
+  }
+  C4::Circulation::MarkIssueReturned( $borrowernumber,
                                       $item->{'itemnumber'},
                                       undef,
                                       $circ->{'date'} );
   
-  push( @output, { message => "Returned $item->{ 'title' } ( $item->{ 'barcode' } ) From borrower number $borrower->{'borrowernumber'} : $circ->{ 'datetime' }\n" } ); 
+  push( @output, { message => "Returned $item->{ 'title' } ( $item->{ 'barcode' } ) From borrower number $borrowernumber : $circ->{ 'datetime' }\n" } ); 
 }
 
 sub kocMakePayment {
   my ( $circ ) = @_;
   my $borrower = GetMember( $circ->{ 'cardnumber' }, 'cardnumber' );
-  recordpayment( $borrower->{'borrowernumber'}, $circ->{'payment_amount'} );
-  push( @output, { message => "accepted payment ($circ->{'payment_amount'}) from cardnumber ($circ->{'cardnumber'}), borrower ($borrower->{'borrowernumber'})" } );
+  recordpayment( $borrower->{'borrowernumber'}, $circ->{'amount'} );
+  push( @output, { message => "accepted payment ($circ->{'amount'}) from cardnumber ($circ->{'cardnumber'}), borrower ($borrower->{'borrowernumber'})" } );
 }
 
+=head3 _get_borrowernumber_from_barcode
+
+pass in a barcode
+get back the borrowernumber of the patron who has it checked out.
+undef if that can't be found
+
+=cut
+
+sub _get_borrowernumber_from_barcode {
+    my $barcode = shift;
+
+    return unless $barcode;
+
+    my $item = GetBiblioFromItemNumber( undef, $barcode );
+    return unless $item->{'itemnumber'};
+    
+    my $issue = C4::Circulation::GetItemIssue( $item->{'itemnumber'} );
+    return unless $issue->{'borrowernumber'};
+    return $issue->{'borrowernumber'};
+    
+}
