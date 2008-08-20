@@ -1266,7 +1266,7 @@ sub searchResults {
         (my $aisbn) = $oldbiblio->{isbn} =~ /([\d-]*[X]*)/;
         $aisbn =~ s/-//g;
         $oldbiblio->{amazonisbn} = $aisbn;
-		$oldbiblio->{description} = $itemtypes{ $oldbiblio->{itemtype} }->{description};
+	$oldbiblio->{description} = $itemtypes{ $oldbiblio->{itemtype} }->{description};
  # Build summary if there is one (the summary is defined in the itemtypes table)
  # FIXME: is this used anywhere, I think it can be commented out? -- JF
         if ( $itemtypes{ $oldbiblio->{itemtype} }->{summary} ) {
@@ -1469,7 +1469,6 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
                     	   $other_items->{$key}->{$_} = $item->{$_};
 					    }
 					}
-
 					if($item->{notforloan} == 1){
                         $notforloan_count++;
 

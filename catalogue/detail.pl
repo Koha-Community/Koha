@@ -115,9 +115,9 @@ foreach my $item (@items) {
     $item->{imageurl} = defined $item->{itype} ? getitemtypeimagelocation('intranet', $itemtypes->{ $item->{itype} }{imageurl})
                                                : '';
 
-	foreach (qw(datedue datelastseen onloan)) {
-		$item->{$_} = format_date($item->{$_});
-	}
+    foreach (qw(datedue datelastseen onloan)) {
+	$item->{$_} = format_date($item->{$_});
+    }
     # item damaged, lost, withdrawn loops
     $item->{itemlostloop} = GetAuthorisedValues($authvalcode_items_itemlost, $item->{itemlost}) if $authvalcode_items_itemlost;
     if ($item->{damaged}) {

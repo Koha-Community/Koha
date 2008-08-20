@@ -485,7 +485,7 @@ sub getitemtypeimagesrc {
 sub getitemtypeimagelocation($$) {
 	my ( $src, $image ) = @_;
 
-	return '' if ( !$image );
+	return if ( !$image );
 
 	my $scheme = ( uri_split( $image ) )[0];
 
