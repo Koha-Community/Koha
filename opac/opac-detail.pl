@@ -81,12 +81,11 @@ if (!$dat) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
-my $imgdir = getitemtypeimagesrc();
 my $itemtypes = GetItemTypes();
 # imageurl:
 my $itemtype = $dat->{'itemtype'};
 if ( $itemtype ) {
-    $dat->{'imageurl'}    = $imgdir."/".$itemtypes->{$itemtype}->{'imageurl'};
+    $dat->{'imageurl'}    = getitemtypeimagelocation( 'opac', $itemtypes->{$itemtype}->{'imageurl'} );
     $dat->{'description'} = $itemtypes->{$itemtype}->{'description'};
 }
 my $shelflocations =GetKohaAuthorisedValues('items.location',$dat->{'frameworkcode'});
@@ -139,7 +138,7 @@ for my $itm (@items) {
 	my $ccode= $itm->{'ccode'};
 	$itm->{'ccode'} = $collections->{$ccode} if(defined($collections) && exists($collections->{$ccode}));
     $itm->{'location_description'} = $shelflocations->{$itm->{'location'} };
-    $itm->{'imageurl'}    = $imgdir."/".$itemtypes->{ $itm->{itype} }->{'imageurl'};     
+    $itm->{'imageurl'}    = getitemtypeimagelocation( 'opac', $itemtypes->{ $itm->{itype} }->{'imageurl'} );
     $itm->{'description'} = $itemtypes->{$itemtype}->{'description'};
 	$itemfields{ccode} = 1 if($itm->{ccode});
 	$itemfields{enumchron} = 1 if($itm->{enumchron});

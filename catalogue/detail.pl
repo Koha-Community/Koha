@@ -93,7 +93,7 @@ foreach my $subscription (@subscriptions) {
       GetLatestSerials( $subscription->{subscriptionid}, 3 );
     push @subs, \%cell;
 }
-$dat->{imageurl} = getitemtypeimagesrc() . "/".$itemtypes->{ $dat->{itemtype} }{imageurl};
+$dat->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtypes->{ $dat->{itemtype} }{imageurl} );
 $dat->{'count'} = scalar @items;
 my $shelflocations = GetKohaAuthorisedValues('items.location', $fw);
 my $collections    = GetKohaAuthorisedValues('items.ccode'   , $fw);
@@ -106,7 +106,7 @@ foreach my $item (@items) {
 
     # format some item fields for display
     $item->{ $item->{'publictype'} } = 1;
-    $item->{imageurl} = getitemtypeimagesrc() . "/".$itemtypes->{ $item->{itype} }{imageurl};
+    $item->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtypes->{ $item->{itype} }{imageurl} );
 	foreach (qw(datedue datelastseen onloan)) {
 		$item->{$_} = format_date($item->{$_});
 	}

@@ -180,7 +180,6 @@ if ($op eq "do_search" && $query) {
     my @itemtypesloop;
     my $selected=1;
     my $cnt;
-    my $imgdir = getitemtypeimagesrc('intranet');
     foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
         my %row =(
                     code => $thisitemtype,
@@ -207,7 +206,6 @@ if ($op eq "do_search" && $query) {
     my @itemtypesloop;
     my $selected=1;
     my $cnt;
-    my $imgdir = getitemtypeimagesrc('intranet');
     foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
         my %row =(
                     code => $thisitemtype,

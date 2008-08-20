@@ -45,7 +45,6 @@ my ( $borr ) = GetMemberDetails( $borrowernumber );
 
 $template->param($borr);
 
-my $imgdir = getitemtypeimagesrc();
 my $itemtypes = GetItemTypes();
 
 # get the record
@@ -116,7 +115,7 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
     $line{volumeddesc}    = $issues->[$i]->{'volumeddesc'};
     $line{counter}        = $i + 1;
     $line{'description'} = $itemtypes->{ $issues->[$i]->{'itemtype'} }->{'description'};
-    $line{imageurl}       = $imgdir."/".$itemtypes->{ $issues->[$i]->{'itemtype'}  }->{'imageurl'}; 
+    $line{imageurl}       = getitemtypeimagelocation( 'opac', $itemtypes->{ $issues->[$i]->{'itemtype'}  }->{'imageurl'} );
     push( @loop_reading, \%line );
 }
 
