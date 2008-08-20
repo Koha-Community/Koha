@@ -310,94 +310,6 @@ sub transferbook {
     return ( $dotransfer, $messages, $biblio );
 }
 
-=head2 CanBookBeIssued
-
-Check if a book can be issued.
-
-my ($issuingimpossible,$needsconfirmation) = CanBookBeIssued($borrower,$barcode,$year,$month,$day);
-
-=over 4
-
-=item C<$borrower> hash with borrower informations (from GetMemberDetails)
-
-=item C<$barcode> is the bar code of the book being issued.
-
-=item C<$year> C<$month> C<$day> contains the date of the return (in case it's forced by "stickyduedate".
-
-=back
-
-Returns :
-
-=over 4
-
-=item C<$issuingimpossible> a reference to a hash. It contains reasons why issuing is impossible.
-Possible values are :
-
-=back
-
-=head3 INVALID_DATE 
-
-sticky due date is invalid
-
-=head3 GNA
-
-borrower gone with no address
-
-=head3 CARD_LOST
-
-borrower declared it's card lost
-
-=head3 DEBARRED
-
-borrower debarred
-
-=head3 UNKNOWN_BARCODE
-
-barcode unknown
-
-=head3 NOT_FOR_LOAN
-
-item is not for loan
-
-=head3 WTHDRAWN
-
-item withdrawn.
-
-=head3 RESTRICTED
-
-item is restricted (set by ??)
-
-C<$issuingimpossible> a reference to a hash. It contains reasons why issuing is impossible.
-Possible values are :
-
-=head3 DEBT
-
-borrower has debts.
-
-=head3 RENEW_ISSUE
-
-renewing, not issuing
-
-=head3 ISSUED_TO_ANOTHER
-
-issued to someone else.
-
-=head3 RESERVED
-
-reserved for someone else.
-
-=head3 INVALID_DATE
-
-sticky due date is invalid
-
-=head3 TOO_MANY
-
-if the borrower borrows to much things
-
-=cut
-
-# check if a book can be issued.
-
 
 sub TooMany {
     my $borrower        = shift;
@@ -639,10 +551,91 @@ sub itemissues {
 
 =head2 CanBookBeIssued
 
-( $issuingimpossible, $needsconfirmation ) = 
-        CanBookBeIssued( $borrower, $barcode, $duedatespec, $inprocess );
-C<$duedatespec> is a C4::Dates object.
+Check if a book can be issued.
+
+( $issuingimpossible, $needsconfirmation ) =  CanBookBeIssued( $borrower, $barcode, $duedatespec, $inprocess );
+
 C<$issuingimpossible> and C<$needsconfirmation> are some hashref.
+
+=over 4
+
+=item C<$borrower> hash with borrower informations (from GetMemberDetails)
+
+=item C<$barcode> is the bar code of the book being issued.
+
+=item C<$duedatespec> is a C4::Dates object.
+
+=item C<$inprocess>
+
+=back
+
+Returns :
+
+=over 4
+
+=item C<$issuingimpossible> a reference to a hash. It contains reasons why issuing is impossible.
+Possible values are :
+
+=back
+
+=head3 INVALID_DATE 
+
+sticky due date is invalid
+
+=head3 GNA
+
+borrower gone with no address
+
+=head3 CARD_LOST
+
+borrower declared it's card lost
+
+=head3 DEBARRED
+
+borrower debarred
+
+=head3 UNKNOWN_BARCODE
+
+barcode unknown
+
+=head3 NOT_FOR_LOAN
+
+item is not for loan
+
+=head3 WTHDRAWN
+
+item withdrawn.
+
+=head3 RESTRICTED
+
+item is restricted (set by ??)
+
+C<$issuingimpossible> a reference to a hash. It contains reasons why issuing is impossible.
+Possible values are :
+
+=head3 DEBT
+
+borrower has debts.
+
+=head3 RENEW_ISSUE
+
+renewing, not issuing
+
+=head3 ISSUED_TO_ANOTHER
+
+issued to someone else.
+
+=head3 RESERVED
+
+reserved for someone else.
+
+=head3 INVALID_DATE
+
+sticky due date is invalid
+
+=head3 TOO_MANY
+
+if the borrower borrows to much things
 
 =cut
 
@@ -830,6 +823,8 @@ Issue a book. Does no check, they are done in CanBookBeIssued. If we reach this 
 =item C<$barcode> is the bar code of the book being issued.
 
 =item C<$date> contains the max date of return. calculated if empty.
+
+=item C<$cancelreserve>
 
 AddIssue does the following things :
 - step 01: check that there is a borrowernumber & a barcode provided
@@ -1253,13 +1248,22 @@ sub GetBranchBorrowerCircRule {
 
 Returns a book.
 
-C<$barcode> is the bar code of the book being returned. C<$branch> is
-the code of the branch where the book is being returned.  C<$exemptfine>
-indicates that overdue charges for the item will be removed.  C<$dropbox>
-indicates that the check-in date is assumed to be yesterday, or the last
-non-holiday as defined in C4::Calendar .  If overdue
-charges are applied and C<$dropbox> is true, the last charge will be removed.
-This assumes that the fines accrual script has run for _today_.
+=over 4
+
+=item C<$barcode> is the bar code of the book being returned.
+
+=item C<$branch> is the code of the branch where the book is being returned.
+
+=item C<$exemptfine> indicates that overdue charges for the item will be
+removed.
+
+=item C<$dropbox> indicates that the check-in date is assumed to be
+yesterday, or the last non-holiday as defined in C4::Calendar .  If
+overdue charges are applied and C<$dropbox> is true, the last charge
+will be removed.  This assumes that the fines accrual script has run
+for _today_.
+
+=back
 
 C<&AddReturn> returns a list of four items:
 
@@ -1720,6 +1724,15 @@ Returns patrons currently having a book. nothing if item is not issued atm
 C<$itemnumber> is the itemnumber
 
 Returns an array of hashes
+
+FIXME: Though the above says that this function returns nothing if the
+item is not issued, this actually returns a hasref that looks like
+this:
+    {
+      itemnumber => 1,
+      overdue    => 1
+    }
+
 
 =cut
 
