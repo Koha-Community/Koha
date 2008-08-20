@@ -826,6 +826,8 @@ Issue a book. Does no check, they are done in CanBookBeIssued. If we reach this 
 
 =item C<$cancelreserve>
 
+=item C<$issuedate> the date to issue the item in iso format (YYYY-MM-DD). Defaults to today.
+
 AddIssue does the following things :
 - step 01: check that there is a borrowernumber & a barcode provided
 - check for RENEWAL (book issued & being issued to the same patron)
@@ -844,13 +846,17 @@ AddIssue does the following things :
 =cut
 
 sub AddIssue {
-    my ( $borrower, $barcode, $date, $cancelreserve ) = @_;
+    my ( $borrower, $barcode, $datedue, $cancelreserve, $issuedate ) = @_;
     my $dbh = C4::Context->dbh;
 	my $barcodecheck=CheckValidBarcode($barcode);
+
+    # $issuedate defaults to today.
+    if ( ! defined $issuedate ) {
+        $issuedate = strftime( "%Y-%m-%d", localtime );
+    }
 	if ($borrower and $barcode and $barcodecheck ne '0'){
 		# find which item we issue
 		my $item = GetItem('', $barcode) or return undef;	# if we don't get an Item, abort.
-		my $datedue; 
 		my $branch;
 		# Get which branchcode we need
 		if (C4::Context->preference('CircControl') eq 'PickupLibrary'){
@@ -878,7 +884,8 @@ sub AddIssue {
 				$borrower->{'borrowernumber'},
 				$item->{'itemnumber'},
 				$branch,
-				$date
+				$datedue,
+                                   $issuedate,
 			);
 
 		}
@@ -955,27 +962,26 @@ sub AddIssue {
                     (borrowernumber, itemnumber,issuedate, date_due, branchcode)
                 VALUES (?,?,?,?,?)"
           );
-		my $dateduef;
-        if ($date) {
-            $dateduef = $date;
+        my $dateduef;
+        if ($datedue) {
+            $dateduef = $datedue;
         } else {
-			my $itype=(C4::Context->preference('item-level_itypes')) ?  $biblio->{'itype'} : $biblio->{'itemtype'} ;
-        	my $loanlength = GetLoanLength(
-        	    $borrower->{'categorycode'},
-        	    $itype,
-                $branch
-        	);
-			$dateduef = CalcDateDue(C4::Dates->new(),$loanlength,$branch);
-		# if ReturnBeforeExpiry ON the datedue can't be after borrower expirydate
-        	if ( C4::Context->preference('ReturnBeforeExpiry') && $dateduef->output('iso') gt $borrower->{dateexpiry} ) {
-        	    $dateduef = C4::Dates->new($borrower->{dateexpiry},'iso');
-        	}
-        };
-		$sth->execute(
-            $borrower->{'borrowernumber'},
-            $item->{'itemnumber'},
-            strftime( "%Y-%m-%d", localtime ),$dateduef->output('iso'), C4::Context->userenv->{'branch'}
-        );
+            my $itype = ( C4::Context->preference('item-level_itypes') ) ? $biblio->{'itype'} : $biblio->{'itemtype'};
+            my $loanlength = GetLoanLength( $borrower->{'categorycode'}, $itype, $branch );
+            $dateduef = CalcDateDue( C4::Dates->new( $issuedate, 'iso' ), $loanlength, $branch );
+
+            # if ReturnBeforeExpiry ON the datedue can't be after borrower expirydate
+            if ( C4::Context->preference('ReturnBeforeExpiry') && $dateduef->output('iso') gt $borrower->{dateexpiry} ) {
+                $dateduef = C4::Dates->new( $borrower->{dateexpiry}, 'iso' );
+            }
+        }
+                        $sth->execute(
+                            $borrower->{'borrowernumber'},      # borrowernumber
+                            $item->{'itemnumber'},              # itemnumber
+                            $issuedate,                         # issuedate
+                            $dateduef->output('iso'),           # date_due
+                            C4::Context->userenv->{'branch'}    # branchcode
+                        );
         $sth->finish;
         $item->{'issues'}++;
         ModItem({ issues           => $item->{'issues'},
@@ -1517,7 +1523,7 @@ sub ForceReturn {
 
 =over 4
 
-MarkIssueReturned($borrowernumber, $itemnumber, $dropbox_branch);
+MarkIssueReturned($borrowernumber, $itemnumber, $dropbox_branch, $returndate);
 
 =back
 
@@ -1525,8 +1531,11 @@ Unconditionally marks an issue as being returned by
 moving the C<issues> row to C<old_issues> and
 setting C<returndate> to the current date, or
 the last non-holiday date of the branccode specified in
-C<dropbox> .  Assumes you've already checked that 
+C<dropbox_branch> .  Assumes you've already checked that 
 it's safe to do this, i.e. last non-holiday > issuedate.
+
+if C<$returndate> is specified (in iso format), it is used as the date
+of the return. It is ignored when a dropbox_branch is passed in.
 
 Ideally, this function would be internal to C<C4::Circulation>,
 not exported, but it is currently needed by one 
@@ -1535,19 +1544,23 @@ routine in C<C4::Accounts>.
 =cut
 
 sub MarkIssueReturned {
-    my ($borrowernumber, $itemnumber, $dropbox_branch ) = @_;
-	my $dbh = C4::Context->dbh;
-	my $query = "UPDATE issues SET returndate=";
-	my @bind = ($borrowernumber,$itemnumber);
-	if($dropbox_branch) {
-		my $calendar = C4::Calendar->new(  branchcode => $dropbox_branch );
-		my $dropboxdate = $calendar->addDate(C4::Dates->new(), -1 );
-		unshift @bind, $dropboxdate->output('iso') ;
-		$query .= " ? "
-	} else {
-		$query .= " now() ";
-	}
-	$query .=  " WHERE  borrowernumber = ?  AND itemnumber = ?";
+    my ( $borrowernumber, $itemnumber, $dropbox_branch, $returndate ) = @_;
+    my $dbh   = C4::Context->dbh;
+    my $query = "UPDATE issues SET returndate=";
+    my @bind;
+    if ($dropbox_branch) {
+        my $calendar = C4::Calendar->new( branchcode => $dropbox_branch );
+        my $dropboxdate = $calendar->addDate( C4::Dates->new(), -1 );
+        $query .= " ? ";
+        push @bind, $dropboxdate->output('iso');
+    } elsif ($returndate) {
+        $query .= " ? ";
+        push @bind, $returndate;
+    } else {
+        $query .= " now() ";
+    }
+    $query .= " WHERE  borrowernumber = ?  AND itemnumber = ?";
+    push @bind, $borrowernumber, $itemnumber;
     # FIXME transaction
     my $sth_upd  = $dbh->prepare($query);
     $sth_upd->execute(@bind);
@@ -1992,7 +2005,7 @@ sub CanBookBeRenewed {
 
 =head2 AddRenewal
 
-&AddRenewal($borrowernumber, $itemnumber, $branch, [$datedue]);
+&AddRenewal($borrowernumber, $itemnumber, $branch, [$datedue], [$issuedate]);
 
 Renews a loan.
 
@@ -2005,6 +2018,8 @@ C<$branch> is the library branch.  Defaults to the homebranch of the ITEM.
 
 C<$datedue> can be a C4::Dates object used to set the due date.
 
+C<$issuedate> can be a iso formatted date to use for the issuedate.
+
 If C<$datedue> is the empty string, C<&AddRenewal> will calculate the due date automatically
 from the book's item type.
 
@@ -2016,10 +2031,11 @@ sub AddRenewal {
     my $item   = GetItem($itemnumber) or return undef;
     my $biblio = GetBiblioFromItemNumber($itemnumber) or return undef;
     my $branch  = (@_) ? shift : $item->{homebranch};	# opac-renew doesn't send branch
-    my $datedue;
+    my $datedue = shift;
+        my $issuedate = shift;
     # If the due date wasn't specified, calculate it by adding the
     # book's loan length to today's date.
-    unless (@_ and $datedue = shift and $datedue->output('iso')) {
+    unless ($datedue && $datedue->output('iso')) {
 
         my $borrower = C4::Members::GetMemberDetails( $borrowernumber, 0 ) or return undef;
         my $loanlength = GetLoanLength(
@@ -2046,11 +2062,11 @@ sub AddRenewal {
     # Update the issues record to have the new due date, and a new count
     # of how many times it has been renewed.
     my $renews = $issuedata->{'renewals'} + 1;
-    $sth = $dbh->prepare("UPDATE issues SET date_due = ?, renewals = ?, lastreneweddate = CURRENT_DATE
+    $sth = $dbh->prepare("UPDATE issues SET date_due = ?, renewals = ?, lastreneweddate = CURRENT_DATE, issuedate = ?
                             WHERE borrowernumber=? 
                             AND itemnumber=?"
     );
-    $sth->execute( $datedue->output('iso'), $renews, $borrowernumber, $itemnumber );
+    $sth->execute( $datedue->output('iso'), $renews, $issuedate, $borrowernumber, $itemnumber );
     $sth->finish;
 
     # Update the renewal count on the item, and tell zebra to reindex
