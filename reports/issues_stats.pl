@@ -442,7 +442,9 @@ sub calculate {
         FROM statistics
         LEFT JOIN borrowers ON statistics.borrowernumber=borrowers.borrowernumber
 	";
-	$strcalc .= "LEFT JOIN items ON statistics.itemnumber=items.itemnumber " if (($colsource eq 'items')||@$filters[5]||@$filters[6]||@$filters[7]||@$filters[8]);
+	$strcalc .= "LEFT JOIN items ON statistics.itemnumber=items.itemnumber "
+        if ($linefield =~ /^items\./ or $colfield =~ /^items\./ or ($colsource eq 'items')
+            ||@$filters[5]||@$filters[6]||@$filters[7]||@$filters[8]);
         
 	$strcalc .= "WHERE 1=1 ";
 	@$filters = map {defined($_) and s/\*/%/g; $_} @$filters;
