@@ -210,7 +210,8 @@ warn "Date of this issue: $circ->{'date'}";
       my ( $c_y, $c_m, $c_d ) = split( /-/, $circ->{'date'} );
       
       if ( Date_to_Days( $i_y, $i_m, $i_d ) < Date_to_Days( $c_y, $c_m, $c_d ) ) { ## Current issue to a different persion is older than this issue, return and issue.
-        C4::Circulation::AddIssue( $borrower, $circ->{'barcode'}, $date_due ) unless ( DEBUG );
+        my $date_due_object = C4::Dates->new($date_due ,'iso');
+        C4::Circulation::AddIssue( $borrower, $circ->{'barcode'}, $date_due_object ) unless ( DEBUG );
         push( @output, { message => "Issued $item->{ 'title' } ( $item->{ 'barcode' } ) to $borrower->{ 'firstname' } $borrower->{ 'surename' } ( $borrower->{'cardnumber'} ) : $circ->{ 'datetime' }\n" } );
 
       } else { ## Current issue is *newer* than this issue, write a 'returned' issue, as the item is most likely in the hands of someone else now.
@@ -221,7 +222,8 @@ warn "Current issue to another member is newer. Doing nothing";
     
     }
   } else { ## Item is not checked out to anyone at the moment, go ahead and issue it
-      C4::Circulation::AddIssue( $borrower, $circ->{'barcode'}, $date_due ) unless ( DEBUG );
+      my $date_due_object = C4::Dates->new($date_due ,'iso');
+      C4::Circulation::AddIssue( $borrower, $circ->{'barcode'}, $date_due_object ) unless ( DEBUG );
     push( @output, { message => "Issued $item->{ 'title' } ( $item->{ 'barcode' } ) to $borrower->{ 'firstname' } $borrower->{ 'surename' } ( $borrower->{'cardnumber'} ) : $circ->{ 'datetime' }\n" } );
   }  
 }
