@@ -209,16 +209,16 @@ $.tablesorter.addParser({
             </tr>
         <!-- /TMPL_LOOP --></tbody>
         </table>
-        <!-- FIXME: See bug 1101 <!--TMPL_IF Name="OpacRenewalAllowed"-->
-            <form action="/cgi-bin/koha/opac-renew.pl" method="post">
-                <input type="hidden" name="from" value="opac_user" />
-                <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
-                <!-- TMPL_LOOP NAME="ISSUES" -->
-                <input type="hidden" name="item" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
-                <!-- /TMPL_LOOP -->
-                <input type="submit" value="Renew All" />
-            </form>
-        <!--/TMPL_IF--> -->
+		<!-- TMPL_IF name="OpacRenewalAllowed" -->
+		<form action="/cgi-bin/koha/opac-renew.pl" method="post">
+			<input type="hidden" name="from" value="opac_user" />
+			<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+			<!-- TMPL_LOOP NAME="ISSUES" -->
+			<input type="hidden" name="item" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+			<!-- /TMPL_LOOP -->
+			<input type="submit" value="Renew All" />
+		</form>
+		<!-- /TMPL_IF -->
     <!-- TMPL_ELSE -->
         <table>
             <tr><td>You have nothing checked out</td></tr>
