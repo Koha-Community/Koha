@@ -1,5 +1,3 @@
-#!/usr/bin/perl
-
 package C4::Barcodes::incremental;
 
 # Copyright 2008 LibLime
