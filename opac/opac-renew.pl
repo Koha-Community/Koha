@@ -20,12 +20,14 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 		  debug           => 1,
 	}
 ); 
-my $itemnumber     = $query->param('item');
+my @items          = $query->param('item');
 my $borrowernumber = $query->param('borrowernumber') || $query->param('bornum');
 
-my ($status,$error) = CanBookBeRenewed( $borrowernumber, $itemnumber );
-if ( $status == 1 ) {
-    AddRenewal( $borrowernumber, $itemnumber );
+for my $itemnumber ( @items ) {
+    my ($status,$error) = CanBookBeRenewed( $borrowernumber, $itemnumber );
+    if ( $status == 1 ) {
+        AddRenewal( $borrowernumber, $itemnumber );
+    }
 }
 # FIXME: else return ERROR to user!!
 
