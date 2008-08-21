@@ -1,5 +1,3 @@
-#!/usr/bin/perl
-
 package C4::Barcodes::hbyymmincr;
 
 # Copyright 2008 LibLime
