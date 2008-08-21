@@ -185,11 +185,11 @@ sub kocIssueItem {
   my $date_due = sprintf("%04d-%02d-%02d", $year, $month, $day);
   
   if ( $issue->{ 'date_due' } ) { ## Item is currently checked out to another person.
-warn "Item Currently Issued.";
+#warn "Item Currently Issued.";
     my $issue = GetOpenIssue( $item->{'itemnumber'} );
 
     if ( $issue->{'borrowernumber'} eq $borrower->{'borrowernumber'} ) { ## Issued to this person already, renew it.
-warn "Item issued to this member already, renewing.";
+#warn "Item issued to this member already, renewing.";
     
     my $date_due_object = C4::Dates->new($date_due ,'iso');
     C4::Circulation::AddRenewal(
@@ -203,9 +203,9 @@ warn "Item issued to this member already, renewing.";
       push( @output, { message => "Renewed $item->{ 'title' } ( $item->{ 'barcode' } ) to $borrower->{ 'firstname' } $borrower->{ 'surename' } ( $borrower->{'cardnumber'} ) : $circ->{ 'datetime' }\n" } );
 
     } else {
-warn "Item issued to a different member.";
-warn "Date of previous issue: $issue->{'issuedate'}";
-warn "Date of this issue: $circ->{'date'}";
+#warn "Item issued to a different member.";
+#warn "Date of previous issue: $issue->{'issuedate'}";
+#warn "Date of this issue: $circ->{'date'}";
       my ( $i_y, $i_m, $i_d ) = split( /-/, $issue->{'issuedate'} );
       my ( $c_y, $c_m, $c_d ) = split( /-/, $circ->{'date'} );
       
@@ -215,7 +215,7 @@ warn "Date of this issue: $circ->{'date'}";
         push( @output, { message => "Issued $item->{ 'title' } ( $item->{ 'barcode' } ) to $borrower->{ 'firstname' } $borrower->{ 'surename' } ( $borrower->{'cardnumber'} ) : $circ->{ 'datetime' }\n" } );
 
       } else { ## Current issue is *newer* than this issue, write a 'returned' issue, as the item is most likely in the hands of someone else now.
-warn "Current issue to another member is newer. Doing nothing";
+#warn "Current issue to another member is newer. Doing nothing";
         ## This situation should only happen of the Offline Circ data is *really* old.
         ## FIXME: write line to old_issues and statistics
       }
@@ -231,7 +231,7 @@ warn "Current issue to another member is newer. Doing nothing";
 sub kocReturnItem {
   my ( $circ ) = @_;
   my $item = GetBiblioFromItemNumber( undef, $circ->{ 'barcode' } );
-  warn( Data::Dumper->Dump( [ $circ, $item ], [ qw( circ item ) ] ) );
+  #warn( Data::Dumper->Dump( [ $circ, $item ], [ qw( circ item ) ] ) );
   my $borrowernumber = _get_borrowernumber_from_barcode( $circ->{'barcode'} );
   unless ( $borrowernumber ) {
       push( @output, { message => "Warning: unable to determine borrower from item ($item->{'barcode'}). Cannot mark returned\n" } );
