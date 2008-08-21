@@ -52,7 +52,6 @@ my $biblionumber=$query->param('biblionumber');
 my $title=$query->param('title');
 my $itemnumber=$query->param('itemnumber');
 my $bi=$query->param('bi');
-# $bi = $biblionumber unless $bi;
 my $data=GetBiblioData($biblionumber);
 my $dewey = $data->{'dewey'};
 
@@ -85,6 +84,10 @@ $data->{'itemtypename'} = $itemtypes->{$data->{'itemtype'}}->{'description'};
 $results[0]=$data;
 ($itemnumber) and @items = (grep {$_->{'itemnumber'} == $itemnumber} @items);
 foreach my $item (@items){
+    if ( $itemnumber && $itemnumber != $item->{'itemnumber'} ) {
+	undef $item;
+	next;
+    }
     $item->{itemlostloop}= GetAuthorisedValues(GetAuthValCode('items.itemlost',$fw),$item->{itemlost}) if GetAuthValCode('items.itemlost',$fw);
     $item->{itemdamagedloop}= GetAuthorisedValues(GetAuthValCode('items.damaged',$fw),$item->{damaged}) if GetAuthValCode('items.damaged',$fw);
     $item->{'collection'} = $ccodes->{$item->{ccode}};
