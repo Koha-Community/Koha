@@ -59,7 +59,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my $biblionumber = $query->param('biblionumber') || $query->param('bib');
 $template->param( biblionumber => $biblionumber );
 # XSLT processing of some stuff
-if (C4::Context->preference("XSLTResultsDisplay") ) {
+if (C4::Context->preference("XSLTDetailsDisplay") ) {
     my $newxmlrecord = XSLTParse4Display($biblionumber,C4::Context->config('opachtdocs')."/prog/en/xslt/MARC21slim2OPACDetail.xsl");
     $template->param('XSLTBloc' => $newxmlrecord);
 }
