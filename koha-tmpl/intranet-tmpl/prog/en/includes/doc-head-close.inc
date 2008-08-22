@@ -52,3 +52,8 @@
 <script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/menu/menu-min.js"></script> 
 <!-- koha core js -->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/js/staff-global.js"></script>
+<!-- TMPL_IF NAME="intranetuserjs" --><script type="text/javascript">
+//<![CDATA[
+<!-- TMPL_VAR NAME="intranetuserjs" -->
+//]]>
+</script><!-- /TMPL_IF -->
