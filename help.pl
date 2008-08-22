@@ -54,7 +54,7 @@ sub gethelptemplate {
           C4::Context->preference("intranetcolorstylesheet"),
         intranetstylesheet => C4::Context->preference("intranetstylesheet"),
         IntranetNav        => C4::Context->preference("IntranetNav"),
-        yuipath        => C4::Context->preference("yuipath"),
+		yuipath => (C4::Context->preference("yuipath") eq "local"?"/intranet-tmpl/$theme/$lang/lib/yui":C4::Context->preference("yuipath")),
         referer            => $refer,
     );
     return $template;
