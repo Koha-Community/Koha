@@ -539,7 +539,7 @@ sub GetBiblioItemData {
     my ($biblioitemnumber) = @_;
     my $dbh       = C4::Context->dbh;
     my $query = "SELECT *,biblioitems.notes AS bnotes
-        FROM biblio LEFT JOIN biblioitems on biblio.biblionumber=biblioitems.biblioitemnumber ";
+        FROM biblio LEFT JOIN biblioitems on biblio.biblionumber=biblioitems.biblionumber ";
     unless(C4::Context->preference('item-level_itypes')) { 
         $query .= "LEFT JOIN itemtypes on biblioitems.itemtype=itemtypes.itemtype ";
     }    
