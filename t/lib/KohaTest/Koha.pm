@@ -22,9 +22,9 @@ sub methods : Test( 1 ) {
       getframeworks
       getframeworkinfo
       getitemtypeinfo
-      getitemtypeimagesrcfromurl
       getitemtypeimagedir
       getitemtypeimagesrc
+      getitemtypeimagelocation
       _getImagesFromDirectory
       _getSubdirectoryNames
       getImageSets

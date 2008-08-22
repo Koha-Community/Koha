@@ -43,7 +43,6 @@ BEGIN {
 		&getFacets
 		&displayServers
 		&getnbpages
-		&getitemtypeimagesrcfromurl
 		&get_infos_of
 		&get_notforloan_label_of
 		&getitemtypeimagedir
@@ -442,19 +441,9 @@ sub getitemtypeinfo {
     $sth->execute($itemtype);
     my $res = $sth->fetchrow_hashref;
 
-    $res->{imageurl} = getitemtypeimagesrcfromurl( $res->{imageurl} );
+    $res->{imageurl} = getitemtypeimagelocation( 'intranet', $res->{imageurl} );
 
     return $res;
-}
-
-sub getitemtypeimagesrcfromurl {
-    my ($imageurl) = @_;
-
-    if ( defined $imageurl and $imageurl !~ m/^http/ ) {
-        $imageurl = getitemtypeimagesrc() . '/' . $imageurl;
-    }
-
-    return $imageurl;
 }
 
 =head2 getitemtypeimagedir
