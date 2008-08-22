@@ -240,7 +240,7 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
 
     my $itemtypeinfo = getitemtypeinfo($itemtype);
     $row{'itemtype_description'} = $itemtypeinfo->{description};
-    $row{'itemtype_image'}       = getitemtypelocation( 'opac', $itemtypeinfo->{imageurl} );
+    $row{'itemtype_image'}       = $itemtypeinfo->{imageurl};
 
     $row{'charge'} = sprintf( "%.2f", $charge );
 
