@@ -561,6 +561,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
         $ri{itemtype}         = $biblio->{'itemtype'};
         $ri{itemnote}         = $biblio->{'itemnotes'};
         $ri{ccode}            = $biblio->{'ccode'};
+	$ri{itemnumber}       = $biblio->{'itemnumber'};
         $ri{barcode}          = $barcode;
     }
     else {
