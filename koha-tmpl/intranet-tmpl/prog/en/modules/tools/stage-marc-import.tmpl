@@ -39,13 +39,13 @@ function CheckForm(f) {
 	<li><!-- TMPL_VAR name="import_errors" --> records not staged because of MARC error</li>
 	<li><!-- TMPL_VAR name="staged" --> records staged</li>
     <!-- TMPL_IF name="checked_matches" -->
-	<li><!-- TMPL_VAR name="matched" --> records with at least one match in catalogue per matching rule 
+	<li><!-- TMPL_VAR name="matched" --> records with at least one match in catalog per matching rule 
         &quot;<!-- TMPL_VAR name="matcher_code" -->&quot;</li>
     <!-- TMPL_ELSE -->
         <!-- TMPL_IF name="matcher_failed" -->
           <li>Record matching failed -- unable to retrieve selected matching rule.</li>
         <!-- TMPL_ELSE -->
-          <li>Did not check for matches with existing records in catalogue</li>
+          <li>Did not check for matches with existing records in catalog</li>
         <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
 	<li><!-- TMPL_VAR name="num_items" --> item records found and staged</li>
@@ -57,7 +57,7 @@ function CheckForm(f) {
 </ul>
 <!-- TMPL_ELSE -->
 <ul>
-	<li>Select a MARC file to stage in the import reservoir.  It will be parsed, and each valid record staged for later import into the catalogue.</li>
+	<li>Select a MARC file to stage in the import reservoir.  It will be parsed, and each valid record staged for later import into the catalog.</li>
 	<li>You can enter a name for this import. It may be useful, when creating a biblio, to remember where the suggested MARC data comes from!</li>
 </ul>
 <fieldset class="rows">
@@ -91,7 +91,7 @@ function CheckForm(f) {
 	</li>
 </ol></fieldset>
   <fieldset class="rows">
-    <legend>Look for existing records in catalogue?</legend>
+    <legend>Look for existing records in catalog?</legend>
     <ol><li><label for="matcher">Record matching rule:</label>
     <select name="matcher" id="matcher">
        <option value="">Do not look for matching records</option> 

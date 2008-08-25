@@ -29,7 +29,7 @@
     
     <!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="CAN_user_catalogue" -->
-                <li><a href="/cgi-bin/koha/catalogue/search.pl">Catalogue</a><ul>
+                <li><a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a><ul>
                     <li>
                         <form name="searchform" method="get" action="/cgi-bin/koha/catalogue/search.pl" id="searchform">
                         <input type="hidden" name="idx" value="" />
@@ -44,7 +44,7 @@
                 
                 <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="CAN_user_editcatalogue" -->
-    <li><a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloguing</a><ul>
+    <li><a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a><ul>
         <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl">Add MARC Record</a></li>
         <li><a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a></li>
         <li><a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a></li>

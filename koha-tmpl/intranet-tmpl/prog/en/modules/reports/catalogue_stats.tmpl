@@ -1,12 +1,12 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Reports <!-- TMPL_IF NAME="do_it" -->&rsaquo; Catalogue statistics &rsaquo; Results<!-- TMPL_ELSE -->&rsaquo; Catalogue statistics<!-- /TMPL_IF --></title>
+<title>Koha &rsaquo; Reports <!-- TMPL_IF NAME="do_it" -->&rsaquo; Catalog statistics &rsaquo; Results<!-- TMPL_ELSE -->&rsaquo; Catalog statistics<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> <!-- TMPL_IF NAME="do_it" -->&rsaquo; <a href="/cgi-bin/koha/reports/catalogue_stats.pl">Catalogue statistics</a> &rsaquo; Results<!-- TMPL_ELSE -->&rsaquo; Catalogue statistics<!-- /TMPL_IF --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> <!-- TMPL_IF NAME="do_it" -->&rsaquo; <a href="/cgi-bin/koha/reports/catalogue_stats.pl">Catalog statistics</a> &rsaquo; Results<!-- TMPL_ELSE -->&rsaquo; Catalog statistics<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -16,7 +16,7 @@
 
 <!-- TMPL_IF NAME="do_it" -->
 	<!-- TMPL_LOOP NAME="mainloop" -->
-		<h1>Catalogue statistics</h1>
+		<h1>Catalog statistics</h1>
 		<!-- TMPL_IF NAME="loopfilter"-->
 			<p>Filtered on</p>
 			<!-- TMPL_LOOP NAME="loopfilter" -->
@@ -63,7 +63,7 @@
 
 	<form method="post" action="/cgi-bin/koha/reports/catalogue_stats.pl">
 	<fieldset class="rows">
-	<legend>Catalogue statistics</legend>
+	<legend>Catalog statistics</legend>
 	<table>
 		<thead>
 			<tr>

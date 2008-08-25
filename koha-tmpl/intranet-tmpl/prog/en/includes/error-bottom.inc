@@ -2,7 +2,7 @@
 
 <div class="center">
 <a href="/cgi-bin/koha/mainpage.pl">Home</a> ||
-<a href="/cgi-bin/koha/catalogue/search.pl">Catalogue</a> ||
+<a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a> ||
 <a href="/cgi-bin/koha/members/members-home.pl">Members</a> ||
 <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> ||
 <a href="/cgi-bin/koha/circ/circulation.pl">Circulation</a> ||

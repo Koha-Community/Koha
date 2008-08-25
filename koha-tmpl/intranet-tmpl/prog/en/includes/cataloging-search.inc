@@ -10,7 +10,7 @@
 </div>
     <!-- TMPL_INCLUDE NAME="patron-search-box.inc" -->
 			<ul>
-			<li><a href="/cgi-bin/koha/catalogue/search.pl#addbooks_search">Cataloguing Search</a></li>
+			<li><a href="/cgi-bin/koha/catalogue/search.pl#addbooks_search">Cataloging Search</a></li>
 			<!-- TMPL_IF NAME="CAN_user_circulate" --><li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li><!-- /TMPL_IF -->
 			</ul>	
 </div>
