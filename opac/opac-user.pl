@@ -82,6 +82,7 @@ $template->param(   BORROWER_INFO  => \@bordat,
 
 #get issued items ....
 my ($countissues,$issues) = GetPendingIssues($borrowernumber);
+my @issue_list = sort { $b->{'date_due'} cmp $a->{'date_due'} } @$issues;
 
 my $count          = 0;
 my $toggle = 0;
@@ -89,7 +90,7 @@ my $overdues_count = 0;
 my @overdues;
 my @issuedat;
 my $itemtypes = GetItemTypes();
-foreach my $issue ( @$issues ) {
+foreach my $issue ( @issue_list ) {
 	if($count%2 eq 0){ $issue->{'toggle'} = 1; } else { $issue->{'toggle'} = 0; }
     # check for reserves
     my ( $restype, $res ) = CheckReserves( $issue->{'itemnumber'} );
