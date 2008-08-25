@@ -1800,7 +1800,7 @@ sub GetBiblioIssues {
             LEFT JOIN borrowers ON borrowers.borrowernumber = issues.borrowernumber
             LEFT JOIN items ON issues.itemnumber = items.itemnumber
             LEFT JOIN biblioitems ON items.itemnumber = biblioitems.biblioitemnumber
-            LEFT JOIN biblio ON biblio.biblionumber = items.biblioitemnumber
+            LEFT JOIN biblio ON biblio.biblionumber = items.biblionumber
         WHERE biblio.biblionumber = ?
         UNION ALL
         SELECT old_issues.*,items.barcode,biblio.biblionumber,biblio.title, biblio.author,borrowers.cardnumber,borrowers.surname,borrowers.firstname
@@ -1808,7 +1808,7 @@ sub GetBiblioIssues {
             LEFT JOIN borrowers ON borrowers.borrowernumber = old_issues.borrowernumber
             LEFT JOIN items ON old_issues.itemnumber = items.itemnumber
             LEFT JOIN biblioitems ON items.itemnumber = biblioitems.biblioitemnumber
-            LEFT JOIN biblio ON biblio.biblionumber = items.biblioitemnumber
+            LEFT JOIN biblio ON biblio.biblionumber = items.biblionumber
         WHERE biblio.biblionumber = ?
         ORDER BY timestamp
     ";
