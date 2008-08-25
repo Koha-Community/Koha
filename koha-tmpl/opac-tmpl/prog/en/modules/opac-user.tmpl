@@ -202,6 +202,7 @@ $.tablesorter.addParser({
 
 <!-- TMPL_IF NAME="AmazonContent" --><!-- TMPL_IF NAME="amazonisbn" --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="amazonisbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link" title="View at Amazon.com"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="amazonisbn" -->.01.THUMBZZZ.jpg" alt="Cover Image" /></a><!-- TMPL_ELSE --><a href="#"><span class="no-image">No cover image available</span></a><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
+
 <!-- TMPL_IF NAME="GoogleJackets" --><!-- TMPL_IF NAME="amazonisbn" --><div style="display:block;" title="Click to view in Google Books" class="<!-- TMPL_VAR NAME="amazonisbn" -->" id="gbs-thumbnail<!--TMPL_VAR NAME="__counter__"-->"></div><!-- TMPL_ELSE --><a href="http://books.google.com/books?q=<!-- TMPL_VAR NAME="title" escape="url" -->"><span class="no-image">No cover image available</span></a><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="BakerTaylorEnabled" --><!-- TMPL_IF NAME="clean_isbn" --><a href="https://<!-- TMPL_VAR NAME="BakerTaylorBookstoreURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="clean_isbn" -->"><img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="clean_isbn" -->" /></a><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- BakerTaylor needs clean_isbn! --><!-- /TMPL_IF --><!-- /TMPL_IF -->
