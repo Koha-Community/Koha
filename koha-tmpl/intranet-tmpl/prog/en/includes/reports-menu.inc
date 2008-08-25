@@ -29,7 +29,5 @@
 	<ul>
 		<li><a href="/cgi-bin/koha/reports/itemslost.pl">Lost Items</a></li>
 		<li><a href="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">Catalogue by Item Type</a></li>
-		<li><a href="/cgi-bin/koha/reports/manager.pl?report_name=issues_by_borrower_category">Checkouts by patron category</a></li>
 		<li><a href="/cgi-bin/koha/reports/issues_avg_stats.pl">Average loan time</a></li>
-		<li><a href="/cgi-bin/koha/reports/stats.screen.pl">Till Reconciliation</a></li>
 	</ul>
