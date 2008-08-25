@@ -42,6 +42,26 @@ $.tablesorter.addParser({
 					<!-- /TMPL_IF -->
 				<!-- /TMPL_IF -->
 			}); 
+			$("#overduest").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
+		dateFormat: 'uk',<!-- /TMPL_IF -->
+				widgets : ['zebra'],
+				<!-- TMPL_IF NAME="JacketImages" -->
+					sortList: [[1,0]],
+						<!-- TMPL_IF NAME="item-level_itypes" -->
+							headers: { 0: { sorter: false }, 1: { sorter: 'articles' },4: { sorter: false },5: { sorter: false }}
+						<!-- TMPL_ELSE -->
+							headers: { 0: { sorter: false }, 1: { sorter: 'articles' },5: { sorter: false },6: { sorter: false }}
+						<!-- /TMPL_IF -->
+				<!-- TMPL_ELSE -->
+						<!-- TMPL_IF NAME="item-level_itypes" -->
+							sortList: [[0,0]],
+							headers: { 0: { sorter: 'articles' },3: { sorter: false }}
+						<!-- TMPL_ELSE -->
+							sortList: [[0,0]],
+							headers: { 0: { sorter: 'articles' },1: { sorter: false },3: { sorter: false }}
+					<!-- /TMPL_IF -->
+				<!-- /TMPL_IF -->
+			});
 <!-- TMPL_IF NAME="GoogleJackets" -->KOHA.Google.GetCoverFromIsbn();<!-- /TMPL_IF -->
             });
 //]]>
@@ -128,12 +148,12 @@ $.tablesorter.addParser({
     <div id="opac-user-waiting">
         <table id="waitingt">
             <caption>Holds Waiting</caption>
-            <tr>
+           <thead> <tr>
                 <th colspan="2">Title</th>
                 <th>Hold date</th>
                 <th>Pick Up Library</th>
-            </tr>
-            <!-- TMPL_LOOP NAME="WAITING" -->
+            </tr></thead>
+            <tbody><!-- TMPL_LOOP NAME="WAITING" -->
                 <tr>
                     <td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="itemtype" -->" title="<!-- TMPL_VAR NAME="itemtype" -->" /></td>
                     <td><a href="opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
@@ -147,7 +167,7 @@ $.tablesorter.addParser({
                         In transit from <!-- TMPL_VAR NAME="holdingbranch" --> to <!-- TMPL_VAR NAME="branch" -->
                         <!-- /TMPL_IF --></td>
                 </tr>
-            <!-- /TMPL_LOOP -->
+            <!-- /TMPL_LOOP --></tbody>
         </table></div>
         <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
@@ -156,7 +176,8 @@ $.tablesorter.addParser({
         <table id="checkoutst">
         <caption><!-- TMPL_VAR NAME="issues_count" --> Items Checked Out</caption>
        <thead><tr>
-        <th colspan="2">Title</th>
+		<th>&nbsp;</th>
+        <th>Title</th>
 		<!-- TMPL_UNLESS NAME="item-level_itypes" --><th>Item Type</th> <!-- /TMPL_UNLESS -->
         <th>Call No.</th>
         <th>Due</th>
@@ -178,7 +199,6 @@ $.tablesorter.addParser({
         <tr<!-- TMPL_IF NAME="overdue" --> class="overdue"<!-- /TMPL_IF -->>
 
 <td class="jacketcell">
-<!-- TMPL_UNLESS NAME="JacketImages" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_UNLESS -->
 
 <!-- TMPL_IF NAME="AmazonContent" --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="amazonisbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="amazonisbn" -->.01.THUMBZZZ.jpg" alt="Cover Image" /></a><!-- /TMPL_IF -->
 
@@ -230,20 +250,20 @@ $.tablesorter.addParser({
 <div id="opac-user-overdues"><table id="overduest">
 <caption>Overdues <span class="count">(<!-- TMPL_VAR NAME="overdues_count" --> total)</span></caption>
 <!-- OVERDUES TABLE ROWS -->
-<tr>
-<th colspan="2">Title</th>
+<thead><tr>
+<th>&nbsp;</th>
+<th>Title</th>
 <!-- TMPL_UNLESS NAME="item-level_itypes" --><th>Item Type</th> <!-- /TMPL_UNLESS -->
 <th>Call No.</th>
 <th>Due</th>
-<th>Renew</th>
-<!-- <th>Fine to Date</th> -->
-</tr>
+<!-- TMPL_IF name="OpacRenewalAllowed" -->
+                    <!-- TMPL_UNLESS name="patron_flagged" --><th>Renew</th><!-- /TMPL_IF --><!-- /TMPL_UNLESS -->
+<th>Fines</th>
+</tr></thead>
 
-<!-- TMPL_LOOP NAME="OVERDUES" -->
+<tbody><!-- TMPL_LOOP NAME="OVERDUES" -->
 <tr>
 <td class="jacketcell">
-
-<!-- TMPL_UNLESS NAME="JacketImages" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_UNLESS -->
 
 <!-- TMPL_IF NAME="AmazonContent" --><!-- TMPL_IF NAME="amazonisbn" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="amazonisbn" -->.01.THUMBZZZ.jpg" alt="" class="thumbnail" /></a><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
@@ -256,6 +276,8 @@ $.tablesorter.addParser({
 <!-- TMPL_UNLESS NAME="item-level_itypes" --><td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR name="description" --></td><!-- /TMPL_UNLESS -->
 <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
 <td><!-- TMPL_VAR NAME="date_due" --></td>
+                <!-- TMPL_IF name="OpacRenewalAllowed" -->
+                    <!-- TMPL_UNLESS name="patron_flagged" -->
 <td>
 <!-- TMPL_IF NAME="debarred" -->Account Frozen
 <!-- TMPL_ELSIF NAME="status" -->
@@ -263,10 +285,10 @@ $.tablesorter.addParser({
 <!-- TMPL_ELSIF NAME="onreserve" -->On Reserve
 <!-- TMPL_ELSE -->No renewals left
 <!-- /TMPL_IF -->
-</td>
-<!-- <td><!-- TMPL_VAR NAME="charges" --></td> -->
+</td><!-- /TMPL_IF --><!-- /TMPL_UNLESS -->
+<td><!-- TMPL_IF NAME="charges" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
 </tr>
-<!-- /TMPL_LOOP -->
+<!-- /TMPL_LOOP --></tbody>
 </table></div>
 <!-- /TMPL_IF -->
     
