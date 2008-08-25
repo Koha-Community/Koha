@@ -180,9 +180,9 @@ $(document).ready(function() {
 				<label for="module">Koha module:</label>
 				<select name="module" id="module">
                                     <!--TMPL_IF Name="catalogue"-->
-                                    <option value="catalogue" selected="selected">Catalogue</option>
+                                    <option value="catalogue" selected="selected">Catalog</option>
                                     <!--TMPL_ELSE-->
-                                    <option value="catalogue" >Catalogue</option>
+                                    <option value="catalogue" >Catalog</option>
                                     <!--/TMPL_IF-->
                                     <!--TMPL_IF Name="Serial"-->
                                     <option value="serial" selected="selected">Serials (Routing List)</option>
@@ -221,9 +221,9 @@ $(document).ready(function() {
 				<label for="module">Koha module:</label>
 				<select name="module" id="module" onchange="javascript:window.location.href = unescape(window.location.pathname)+'?op=add_form&amp;module='+this.value+'&amp;content='+window.document.forms['Aform'].elements['content'].value;">
 						<!--TMPL_IF Name="catalogue"-->
-                        <option value="catalogue" selected="selected">Catalogue</option>
+                        <option value="catalogue" selected="selected">Catalog</option>
 						<!--TMPL_ELSE-->
-                        <option value="catalogue" >Catalogue</option>
+                        <option value="catalogue" >Catalog</option>
                         <!--/TMPL_IF-->
 						<!--TMPL_IF Name="serial"-->
 						<option value="serial" selected="selected">Serials (Routing List)</option>

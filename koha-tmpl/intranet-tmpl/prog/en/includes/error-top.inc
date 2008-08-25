@@ -2,7 +2,7 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>KOHA: INTRANET: Catalogue</title>
+<title>KOHA: INTRANET: Catalog</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 <script language="JavaScript">
@@ -42,7 +42,7 @@ a.catalogue:hover {
 	<span class="koha">KOHA</span>
 	<span class="koha"><a class="home" href="/cgi-bin/koha/mainpage.pl">Koha</a></span>
 	<a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
-	<a href="/cgi-bin/koha/catalogue/search.pl">Catalogue</a>
+	<a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
 	<a  href="/cgi-bin/koha/circ/circulation.pl">Circulation</a>
 	<a class="members" href="/cgi-bin/koha/members/members-home.pl">Members</a>
 	<a class="authority" href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a>

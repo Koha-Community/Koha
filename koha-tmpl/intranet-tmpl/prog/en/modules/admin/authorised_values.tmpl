@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration &rsaquo; Authorized Values <!-- TMPL_IF name="add_form" --> &rsaquo; <!-- TMPL_IF name="action_modify" -->Modify authorised value<!-- /TMPL_IF -->
-	   <!-- TMPL_IF name="action_add_value" --> &rsaquo;  New authorised value<!-- /TMPL_IF -->
+<title>Koha &rsaquo; Administration &rsaquo; Authorized Values <!-- TMPL_IF name="add_form" --> &rsaquo; <!-- TMPL_IF name="action_modify" -->Modify authorized value<!-- /TMPL_IF -->
+	   <!-- TMPL_IF name="action_add_value" --> &rsaquo;  New authorized value<!-- /TMPL_IF -->
 	   <!-- TMPL_IF name="action_add_category" --> &rsaquo; New category<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF name="delete_confirm" --> &rsaquo; Confirm Deletion<!-- /TMPL_IF -->
 <!-- TMPL_IF name="else" -->Authorized values<!-- /TMPL_IF --></title>
@@ -10,8 +10,8 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" --> <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized Values</a> &rsaquo; <!-- TMPL_IF name="action_modify" -->Modify authorised value<!-- /TMPL_IF -->
-	   <!-- TMPL_IF name="action_add_value" -->New authorised value<!-- /TMPL_IF -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" --> <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized Values</a> &rsaquo; <!-- TMPL_IF name="action_modify" -->Modify authorized value<!-- /TMPL_IF -->
+	   <!-- TMPL_IF name="action_add_value" -->New authorized value<!-- /TMPL_IF -->
 	   <!-- TMPL_IF name="action_add_category" -->New category<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF name="delete_confirm" --> <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized Values</a> &rsaquo; Confirm Deletion<!-- /TMPL_IF -->
 <!-- TMPL_IF name="else" -->Authorized values<!-- /TMPL_IF --></div>
@@ -24,8 +24,8 @@
 
 <!-- TMPL_IF name="add_form" -->
 	<h1>
-	   <!-- TMPL_IF name="action_modify" -->Modify authorised value<!-- /TMPL_IF -->
-	   <!-- TMPL_IF name="action_add_value" -->New authorised value<!-- /TMPL_IF -->
+	   <!-- TMPL_IF name="action_modify" -->Modify authorized value<!-- /TMPL_IF -->
+	   <!-- TMPL_IF name="action_add_value" -->New authorized value<!-- /TMPL_IF -->
 	   <!-- TMPL_IF name="action_add_category" -->New category<!-- /TMPL_IF -->
 	</h1>
 	<form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
@@ -146,16 +146,16 @@ the subfield is not entered through a free field, but though a list of authorize
 <!-- /TMPL_IF -->
 <form action="/cgi-bin/koha/admin/authorised_values.pl" method="post" id="category"><label for="searchfield">Show Category: </label><!-- TMPL_VAR name="tab_list" --> <input type="submit" value="Submit" /></form>
 <!-- TMPL_IF EXPR="category eq 'Bsort1'" -->
-    <p>Bsort1 is an authorised value attached to patrons, that can be used for stats purposes</p>
+    <p>Bsort1 is an authorized value attached to patrons, that can be used for stats purposes</p>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF EXPR="category eq 'Bsort2'" -->
-    <p>Bsort2 is an authorised value attached to patrons, that can be used for stats purposes</p>
+    <p>Bsort2 is an authorized value attached to patrons, that can be used for stats purposes</p>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF EXPR="category eq 'Asort1'" -->
-    <p>Asort1 is an authorised value attached to acquisitions, that can be used for stats purposes</p>
+    <p>Asort1 is an authorized value attached to acquisitions, that can be used for stats purposes</p>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF EXPR="category eq 'Asort2'" -->
-    <p>Asort2 is an authorised value attached to acquisitions, that can be used for stats purposes</p>
+    <p>Asort2 is an authorized value attached to acquisitions, that can be used for stats purposes</p>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF EXPR="category eq 'SUGGEST'" -->
     <p>The list of patron suggestion reject or accept reasons</p>

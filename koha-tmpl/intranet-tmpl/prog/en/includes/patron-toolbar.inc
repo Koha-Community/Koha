@@ -28,7 +28,7 @@
 			{ text: _("Adult Patron"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=A" },
 			{ text: _("Child Patron"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=C" },
 			{ text: _("Professional Patron"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=P" },
-			{ text: _("Organisation"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=I" },
+			{ text: _("Organization"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=I" },
 			{ text: _("Staff"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=S" },
 			{ text: _("Statistical"),  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;category_type=X" },
 <!--/TMPL_IF-->
@@ -57,7 +57,7 @@
 				<option value="A">Adult Patron</option>
 				<option value="C">Child Patron</option>
 				<option value="P">Professional Patron</option>
-				<option value="I">Organisation</option>
+				<option value="I">Organization</option>
 				<option value="S">Staff</option>
 				<option value="X">Statistical</option>
 			<!--/TMPL_IF-->
