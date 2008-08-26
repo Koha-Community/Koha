@@ -285,6 +285,11 @@ Run the following commands:
     $ sudo a2ensite koha
     $ sudo apache2ctl restart
 
+Note: you may still see the usual Apache default site if your VirtualHost
+configuration isn't correct.  The command "sudo a2dissite default" may be a
+quick fix, but may have side-effects.  See the Apache HTTPD manual section on
+virtual hosts for full instructions.
+
 5. Configure and start Zebra
 
 Note: it's recommended that you daemonize the Zebra process and add it to your
