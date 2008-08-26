@@ -90,7 +90,7 @@ for (my $i=0; $i<scalar(@$data); $i++) {
     my $datedue_days = Date_to_Days(split(/-/,$datedue->output('iso')));
     my $due_str = $datedue->output();
     unless (defined $data->[$i]->{'borrowernumber'}) {
-        print STDERR "ERROR in Getoverdues line $i: issues.borrowernumber IS NULL.  Repair 'issues' table now!  Skipping record.\n";
+        warn "ERROR in Getoverdues line $i: issues.borrowernumber IS NULL.  Repair 'issues' table now!  Skipping record.\n";
         next;   # Note: this doesn't solve everything.  After NULL borrowernumber, multiple issues w/ real borrowernumbers can pile up.
     }
     my $borrower = BorType($data->[$i]->{'borrowernumber'});
