@@ -356,7 +356,48 @@ C<MARC::Record> object containing an embedded item field.
 This API is meant for the use of C<additem.pl>; for 
 other purposes, C<ModItem> should be used.
 
+This function uses the hash %default_values_for_mod_from_marc,
+which contains default values for item fields to
+apply when modifying an item.  This is needed beccause
+if an item field's value is cleared, TransformMarcToKoha
+does not include the column in the
+hash that's passed to ModItem, which without
+use of this hash makes it impossible to clear
+an item field's value.  See bug 2466.
+
+Note that only columns that can be directly
+changed from the cataloging and serials
+item editors are included in this hash.
+
 =cut
+
+my %default_values_for_mod_from_marc = (
+    barcode              => undef, 
+    booksellerid         => undef, 
+    ccode                => undef, 
+    'items.cn_source'    => undef, 
+    copynumber           => undef, 
+    damaged              => 0,
+    dateaccessioned      => undef, 
+    enumchron            => undef, 
+    holdingbranch        => undef, 
+    homebranch           => undef, 
+    itemcallnumber       => undef, 
+    itemlost             => 0,
+    itemnotes            => undef, 
+    itype                => undef, 
+    location             => undef, 
+    materials            => undef, 
+    notforloan           => 0,
+    paidfor              => undef, 
+    price                => undef, 
+    replacementprice     => undef, 
+    replacementpricedate => undef, 
+    restricted           => undef, 
+    stack                => undef, 
+    uri                  => undef, 
+    wthdrawn             => 0,
+);
 
 sub ModItemFromMarc {
     my $item_marc = shift;
@@ -366,6 +407,9 @@ sub ModItemFromMarc {
     my $dbh = C4::Context->dbh;
     my $frameworkcode = GetFrameworkCode( $biblionumber );
     my $item = &TransformMarcToKoha( $dbh, $item_marc, $frameworkcode );
+    foreach my $item_field (keys %default_values_for_mod_from_marc) {
+        $item->{$item_field} = $default_values_for_mod_from_marc{$item_field} unless exists $item->{$item_field};
+    }
     my $unlinked_item_subfields = _get_unlinked_item_subfields($item_marc, $frameworkcode);
    
     return ModItem($item, $biblionumber, $itemnumber, $dbh, $frameworkcode, $unlinked_item_subfields); 
