@@ -10,11 +10,12 @@
 	<div class="yui-b"><div class="yui-g">
 <div class="container">
     <h1>Browse our catalogue</h1>
-        <!-- TMPL_IF name="HIERARCHY_LOOP" -->
+        <!-- TMPL_IF name="LEVEL_LOOP" -->
         <ul>
         <li>
             <!-- TMPL_VAR name="description" --> <a href="opac-browser.pl">Top level</a>
         </li>
+        <!-- TMPL_IF name="HIERARCHY_LOOP" -->
         <ul>
         <!-- TMPL_LOOP name="HIERARCHY_LOOP" -->
                 <li>
@@ -22,6 +23,11 @@
                 </li>
             <ul>
         <!-- /TMPL_LOOP -->
+        <!-- TMPL_LOOP name="HIERARCHY_LOOP" -->
+            </ul>
+        <!-- /TMPL_LOOP -->
+	</ul>
+        <!-- /TMPL_IF -->
         <table><tr>
         <!-- TMPL_LOOP name="LEVEL_LOOP" -->
                 <td width="33%">
@@ -35,10 +41,6 @@
                 </td>
                 <!-- TMPL_IF name="count3" --></tr><tr><!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
-        <!-- TMPL_LOOP name="HIERARCHY_LOOP" -->
-            </ul>
-        <!-- /TMPL_LOOP -->
-        </ul>
         <!-- TMPL_ELSE -->
             <div class="warning">The browser table is empty. this feature is not fully set-up. See the <a href="http://wiki.koha.org/doku.php?id=opacbrowser">Koha Wiki</a> for more information on what it does and how to configure it.</div>
         <!-- /TMPL_IF -->
