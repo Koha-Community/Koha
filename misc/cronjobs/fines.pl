@@ -26,83 +26,107 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 
+# FIXME: use FinesMode as described or change syspref description
 use strict;
+
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
     use FindBin;
     eval { require "$FindBin::Bin/kohalib.pl" };
 }
+
+use Date::Calc qw/Date_to_Days/;
+
 use C4::Context;
 use C4::Circulation;
 use C4::Overdues;
-use C4::Calendar;
-use Date::Calc qw/Date_to_Days/;
+use C4::Calendar qw();  # don't need any exports from Calendar
 use C4::Biblio;
+use C4::Debug;  # supplying $debug and $cgi_debug
 
+use vars qw(@borrower_fields @item_fields @other_fields);
+use vars qw($fldir $libname $control $mode $delim $dbname $today $today_iso $today_days);
+use vars qw($filename $summary);
 
-my $fldir = "/tmp" ;
+CHECK {
+    @borrower_fields = qw(cardnumber categorycode surname firstname email phone address citystate);
+        @item_fields = qw(itemnumber barcode date_due);
+       @other_fields = qw(type days_overdue fine);
+    $libname = C4::Context->preference('LibraryName');
+    $control = C4::Context->preference('CircControl');
+    $mode    = C4::Context->preference('finesMode');
+    $dbname  = C4::Context->config('database');
+    $delim   = "\t"; # ?  C4::Context->preference('delimiter') || "\t";
 
-my $libname=C4::Context->preference('LibraryName');
-my $dbname= C4::Context->config('database');
-
-my $today = C4::Dates->new();
-my $datestr = $today->output('iso');
-my $today_days= Date_to_Days(split(/-/,$today->output('iso')));
-my $filename= $dbname;
-$filename =~ s/\W//;
-$filename = $fldir . '/'. $filename . $datestr . ".log";
-open (FILE,">$filename") || die "Can't open LOG";
-print FILE "cardnumber\tcategory\tsurname\tfirstname\temail\tphone\taddress\tcitystate\tbarcode\tdate_due\ttype\titemnumber\tdays_overdue\tfine\n";
-
-
-my $DEBUG =1;
-
-my $data=Getoverdues();
-my $overdueItemsCounted=0 ;
-my $borrowernumber;
-
-for (my $i=0;$i<scalar(@$data);$i++){
-  my $datedue=C4::Dates->new($data->[$i]->{'date_due'},'iso');
-  my $datedue_days = Date_to_Days(split(/-/,$datedue->output('iso')));
-  my $due_str=$datedue->output();
-  my $borrower=BorType($data->[$i]->{'borrowernumber'});
-  my $branchcode;
-  if ( C4::Context->preference('CircControl') eq 'ItemHomeLibrary' ) {
-  	$branchcode = $data->[$i]->{'homebranch'};
-  } elsif ( C4::Context->preference('CircControl') eq 'PatronLibrary' ) {
-  	$branchcode = $borrower->{'branchcode'};
-} else {
-  	# CircControl must be PickupLibrary. (branchcode comes from issues table here).
-	$branchcode =  $data->[$i]->{'branchcode'};
-  }
-  my $calendar = C4::Calendar->new( branchcode => $branchcode );
-
-  my $isHoliday = $calendar->isHoliday( split( '/', C4::Dates->new()->output('metric') ) );
-      
- if ($datedue_days <= $today_days){
-    $overdueItemsCounted++ if $DEBUG;
-    my $difference=$today_days - $datedue_days;
-    my ($amount,$type,$printout,$daycounttotal,$daycount)=
-  		CalcFine($data->[$i], $borrower->{'categorycode'}, $branchcode,undef,undef, $datedue ,$today);
-    my ($delays1,$delays2,$delays3)=GetOverdueDelays($borrower->{'categorycode'});
-
-	# Don't update the fine if today is a holiday.  
-  	# This ensures that dropbox mode will remove the correct amount of fine.
-	if( (C4::Context->preference('finesMode') eq 'production') &&  ! $isHoliday ) {
-		# FIXME - $type is always null, afaict.
-		UpdateFine($data->[$i]->{'itemnumber'},$data->[$i]->{'borrowernumber'},$amount,$type,$due_str) if( $amount > 0 ) ;
- 	}
- 	print FILE "$printout\t$borrower->{'cardnumber'}\t$borrower->{'categorycode'}\t$borrower->{'surname'}\t$borrower->{'firstname'}\t$borrower->{'email'}\t$borrower->{'phone'}\t$borrower->{'address'}\t$borrower->{'city'}\t$data->[$i]->{'barcode'}\t$data->[$i]->{'date_due'}\t$type\t$data->[$i]->{'itemnumber'}\t$daycounttotal\t$amount\n";
- }
+    $today = C4::Dates->new();
+    $today_iso = $today->output('iso');
+    $today_days = Date_to_Days(split(/-/,$today_iso));
+    $fldir = $ENV{TMPDIR} || "/tmp"; # TODO: use GetOpt
+    $filename = $dbname;
+    $filename =~ s/\W//;
+    $filename = $fldir . '/'. $filename . '_' .  $today_iso . ".log";
+    $summary = 1;  # TODO: use GetOpt
 }
 
-my $numOverdueItems=scalar(@$data);
-if ($DEBUG) {
-   print <<EOM
+INIT {
+    $debug and print "Each line will contain the following fields:\n",
+        "From borrowers : ", join(', ', @borrower_fields), "\n",
+        "From items : ", join(', ', @item_fields), "\n",
+        "Per overdue: ", join(', ', @other_fields), "\n",
+        "Delimiter: '$delim'\n";
+}
 
-Number of Overdue Items counted $overdueItemsCounted
-Number of Overdue Items reported $numOverdueItems
+open (FILE, ">$filename") or die "Cannot write file $filename: $!";
+print FILE join $delim, (@borrower_fields, @item_fields, @other_fields);
+print FILE "\n";
+
+my $data = Getoverdues();
+my $overdueItemsCounted = 0;
+my %calendars = ();
+
+for (my $i=0; $i<scalar(@$data); $i++) {
+    my $datedue = C4::Dates->new($data->[$i]->{'date_due'},'iso');
+    my $datedue_days = Date_to_Days(split(/-/,$datedue->output('iso')));
+    my $due_str = $datedue->output();
+    my $borrower = BorType($data->[$i]->{'borrowernumber'});
+    my $branchcode = ($control eq 'ItemHomeLibrary') ? $data->[$i]->{homebranch} :
+                     ($control eq 'PatronLibrary'  ) ?   $borrower->{branchcode} :
+                                                       $data->[$i]->{branchcode} ;
+    # In final case, CircControl must be PickupLibrary. (branchcode comes from issues table here).
+    my $calendar;
+    unless (defined ($calendars{$branchcode})) {
+        $calendars{$branchcode} = C4::Calendar->new(branchcode => $branchcode);
+    }
+    $calendar = $calendars{$branchcode};
+    my $isHoliday = $calendar->isHoliday(split '/', $today->output('metric'));
+      
+    ($datedue_days <= $today_days) or next; # or it's not overdue, right?
+
+    $overdueItemsCounted++;
+    my ($amount,$type,$daycounttotal,$daycount)=
+  		CalcFine($data->[$i], $borrower->{'categorycode'}, $branchcode,undef,undef, $datedue, $today);
+        # FIXME: $type NEVER gets populated by anything.
+    (defined $type) or $type = '';
+	# Don't update the fine if today is a holiday.  
+  	# This ensures that dropbox mode will remove the correct amount of fine.
+	if ($mode eq 'production' and  ! $isHoliday) {
+		UpdateFine($data->[$i]->{'itemnumber'},$data->[$i]->{'borrowernumber'},$amount,$type,$due_str) if( $amount > 0 ) ;
+ 	}
+    my @cells = ();
+    push @cells, map {$borrower->{$_}} @borrower_fields;
+    push @cells, map {$data->[$i]->{$_}} @item_fields;
+    push @cells, $type, $daycounttotal, $amount;
+    print FILE join($delim, @cells), "\n";
+}
+
+my $numOverdueItems = scalar(@$data);
+if ($summary) {
+   print <<EOM;
+Fines assessment -- $today_iso -- Saved to $filename
+Number of Overdue Items:
+     counted $overdueItemsCounted
+    reported $numOverdueItems
 
 EOM
 }

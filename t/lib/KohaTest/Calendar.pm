@@ -13,8 +13,6 @@ sub testing_class { 'C4::Calendar' };
 sub methods : Test( 1 ) {
     my $self = shift;
     my @methods = qw( new
-                      _init
-                      change_branchcode
                       get_week_days_holidays
                       get_day_month_holidays
                       get_exception_holidays

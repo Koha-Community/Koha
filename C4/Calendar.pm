@@ -16,13 +16,32 @@ package C4::Calendar;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-require Exporter;
 use vars qw($VERSION @EXPORT);
 
+use Carp;
 use Date::Calc qw( Date_to_Days );
 
-# set the version for version checking
-$VERSION = 3.00;
+use C4::Context;
+
+BEGIN {
+    # set the version for version checking
+    $VERSION = 3.01;
+    require Exporter;
+    @EXPORT = qw(
+        &get_week_days_holidays
+        &get_day_month_holidays
+        &get_exception_holidays 
+        &get_single_holidays
+        &insert_week_day_holiday
+        &insert_day_month_holiday
+        &insert_single_holiday
+        &insert_exception_holiday
+        &delete_holiday
+        &isHoliday
+        &addDate
+        &daysBetween
+    );
+}
 
 =head1 NAME
 
@@ -40,123 +59,73 @@ This package is used to deal with holidays. Through this package, you can set al
 
 =over 2
 
-=cut
-
-@EXPORT = qw(&new 
-             &change_branchcode 
-             &get_week_days_holidays
-             &get_day_month_holidays
-             &get_exception_holidays 
-             &get_single_holidays
-             &insert_week_day_holiday
-             &insert_day_month_holiday
-             &insert_single_holiday
-             &insert_exception_holiday
-             &delete_holiday
-             &isHoliday
-             &addDate
-             &daysBetween);
-
 =item new
 
     $calendar = C4::Calendar->new(branchcode => $branchcode);
 
-C<$branchcode> Is the branch code wich you want to use calendar.
+Each library branch has its own Calendar.  
+C<$branchcode> specifies which Calendar you want.
 
 =cut
 
 sub new {
     my $classname = shift @_;
     my %options = @_;
-
-    my %hash;
-    my $self = bless(\%hash, $classname);
-
+    my $self = bless({}, $classname);
     foreach my $optionName (keys %options) {
         $self->{lc($optionName)} = $options{$optionName};
     }
-
-    $self->_init;
-
+    defined($self->{branchcode}) or croak "No branchcode argument to new.  Should be C4::Calendar->new(branchcode => \$branchcode)";
+    $self->_init($self->{branchcode});
     return $self;
 }
 
 sub _init {
     my $self = shift @_;
-
+    my $branch = shift;
+    defined($branch) or die "No branchcode sent to _init";  # must test for defined here and above to allow ""
     my $dbh = C4::Context->dbh();
-    my $week_days_sql = $dbh->prepare( 'SELECT weekday, title, description
-                                          FROM repeatable_holidays
-                                          WHERE ( branchcode = ? )
-                                            AND (NOT(ISNULL(weekday)))' );
-    $week_days_sql->execute( $self->{'branchcode'} );
+    my $repeatable = $dbh->prepare( 'SELECT *
+                                       FROM repeatable_holidays
+                                      WHERE ( branchcode = ? )
+                                        AND (ISNULL(weekday) = ?)' );
+    $repeatable->execute($branch,0);
     my %week_days_holidays;
-    while (my ($weekday, $title, $description) = $week_days_sql->fetchrow) {
-        $week_days_holidays{$weekday}{title} = $title;
-        $week_days_holidays{$weekday}{description} = $description;
+    while (my $row = $repeatable->fetchrow_hashref) {
+        my $key = $row->{weekday};
+        $week_days_holidays{$key}{title}       = $row->{title};
+        $week_days_holidays{$key}{description} = $row->{description};
     }
-    $week_days_sql->finish;
     $self->{'week_days_holidays'} = \%week_days_holidays;
 
-    my $day_month_sql = $dbh->prepare( 'SELECT day, month, title, description
-                                         FROM repeatable_holidays
-                                         WHERE ( branchcode = ? )
-                                           AND ISNULL(weekday)' );
-    $day_month_sql->execute( $self->{'branchcode'} );
+    $repeatable->execute($branch,1);
     my %day_month_holidays;
-    while (my ($day, $month, $title, $description) = $day_month_sql->fetchrow) {
-        $day_month_holidays{"$month/$day"}{title} = $title;
-        $day_month_holidays{"$month/$day"}{description} = $description;
+    while (my $row = $repeatable->fetchrow_hashref) {
+        my $key = $row->{month} . "/" . $row->{day};
+        $day_month_holidays{$key}{title}       = $row->{title};
+        $day_month_holidays{$key}{description} = $row->{description}
     }
-    $day_month_sql->finish;
     $self->{'day_month_holidays'} = \%day_month_holidays;
 
-    my $exception_holidays_sql = $dbh->prepare( 'SELECT day, month, year, title, description
-                                                   FROM special_holidays
-                                                   WHERE ( branchcode = ? )
-                                                     AnD (isexception = 1)' );
-    $exception_holidays_sql->execute( $self->{'branchcode'} );
+    my $special = $dbh->prepare( 'SELECT day, month, year, title, description
+                                    FROM special_holidays
+                                   WHERE ( branchcode = ? )
+                                     AND (isexception = ?)' );
+    $special->execute($branch,1);
     my %exception_holidays;
-    while (my ($day, $month, $year, $title, $description) = $exception_holidays_sql->fetchrow) {
+    while (my ($day, $month, $year, $title, $description) = $special->fetchrow) {
         $exception_holidays{"$year/$month/$day"}{title} = $title;
         $exception_holidays{"$year/$month/$day"}{description} = $description;
     }
-    $exception_holidays_sql->finish;
     $self->{'exception_holidays'} = \%exception_holidays;
 
-    my $holidays_sql = $dbh->prepare( 'SELECT day, month, year, title, description
-                                         FROM special_holidays
-                                         WHERE ( branchcode = ? )
-                                           AND (isexception = 0)' );
-    $holidays_sql->execute( $self->{'branchcode'} );
+    $special->execute($branch,0);
     my %single_holidays;
-    while (my ($day, $month, $year, $title, $description) = $holidays_sql->fetchrow) {
+    while (my ($day, $month, $year, $title, $description) = $special->fetchrow) {
         $single_holidays{"$year/$month/$day"}{title} = $title;
         $single_holidays{"$year/$month/$day"}{description} = $description;
     }
-    $holidays_sql->finish;
     $self->{'single_holidays'} = \%single_holidays;
-}
-
-=item change_branchcode
-
-    $calendar->change_branchcode(branchcode => $branchcode)
-
-Change the calendar branch code. This means to change the holidays structure.
-
-C<$branchcode> Is the branch code wich you want to use calendar.
-
-=cut
-
-sub change_branchcode {
-    my ($self, $branchcode) = @_;
-    my %options = @_;
-
-    foreach my $optionName (keys %options) {
-        $self->{lc($optionName)} = $options{$optionName};
-    }
-    $self->_init;
-
     return $self;
 }
 
@@ -456,10 +425,10 @@ sub isHoliday {
 	$year=$year+0;
 	$day=$day+0;
     my $weekday = &Date::Calc::Day_of_Week($year, $month, $day) % 7; 
-    my $weekDays = $self->get_week_days_holidays();
-    my $dayMonths = $self->get_day_month_holidays();
+    my $weekDays   = $self->get_week_days_holidays();
+    my $dayMonths  = $self->get_day_month_holidays();
     my $exceptions = $self->get_exception_holidays();
-    my $singles = $self->get_single_holidays();
+    my $singles    = $self->get_single_holidays();
     if (defined($exceptions->{"$year/$month/$day"})) {
         return 0;
     } else {
