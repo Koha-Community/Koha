@@ -116,21 +116,22 @@ Koha database.
 #'
 sub Getoverdues {
     my $params = shift;
-
     my $dbh = C4::Context->dbh;
     my $statement;
     if ( C4::Context->preference('item-level_itypes') ) {
         $statement = "
-SELECT issues.*,items.itype as itemtype, items.homebranch FROM issues 
-LEFT JOIN items USING (itemnumber)
-WHERE date_due < now() 
+   SELECT issues.*, items.itype as itemtype, items.homebranch, items.barcode
+     FROM issues 
+LEFT JOIN items       USING (itemnumber)
+    WHERE date_due < now() 
 ";
     } else {
         $statement = "
-SELECT issues.*,biblioitems.itemtype,items.itype, items.homebranch  FROM issues 
-  LEFT JOIN items USING (itemnumber)
-  LEFT JOIN biblioitems USING (biblioitemnumber)
-  WHERE date_due < now() 
+   SELECT issues.*, biblioitems.itemtype, items.itype, items.homebranch, items.barcode
+     FROM issues 
+LEFT JOIN items       USING (itemnumber)
+LEFT JOIN biblioitems USING (biblioitemnumber)
+    WHERE date_due < now() 
 ";
     }
 
@@ -237,11 +238,10 @@ or "Final Notice".  But CalcFine never defined any value.
 
 =cut
 
-#'
 sub CalcFine {
     my ( $item, $bortype, $branchcode, $difference ,$dues , $start_date, $end_date  ) = @_;
 	$debug and warn sprintf("CalcFine(%s, %s, %s, %s, %s, %s, %s)",
-			($item    ? '{item}' : 'UNDEF'), 
+			($item ? '{item}' : 'UNDEF'), 
 			($bortype    || 'UNDEF'), 
 			($branchcode || 'UNDEF'), 
 			($difference || 'UNDEF'), 
@@ -253,7 +253,8 @@ sub CalcFine {
     my $amount = 0;
 	my $daystocharge;
 	# get issuingrules (fines part will be used)
-    my $data = C4::Circulation::GetIssuingRule($bortype, $item->{'itemtype'},$branchcode);
+    $debug and warn sprintf("CalcFine calling GetIssuingRule(%s, %s, %s)", $bortype, $item->{'itemtype'}, $branchcode);
+    my $data = C4::Circulation::GetIssuingRule($bortype, $item->{'itemtype'}, $branchcode);
 	if($difference) {
 		# if $difference is supplied, the difference has already been calculated, but we still need to adjust for the calendar.
     	# use copy-pasted functions from calendar module.  (deprecated -- these functions will be removed from C4::Overdues ).
@@ -264,7 +265,7 @@ sub CalcFine {
 	} else {
 		# if $difference is not supplied, we have C4::Dates objects giving us the date range, and we use the calendar module.
 		if(C4::Context->preference('finesCalendar') eq 'noFinesWhenClosed') {
-			my $calendar = C4::Calendar->new(  branchcode => $branchcode );
+			my $calendar = C4::Calendar->new( branchcode => $branchcode );
 			$daystocharge = $calendar->daysBetween( $start_date, $end_date );
 		} else {
 			$daystocharge = Date_to_Days(split('-',$end_date->output('iso'))) - Date_to_Days(split('-',$start_date->output('iso')));
@@ -278,7 +279,9 @@ sub CalcFine {
         # a zero (or null)  chargeperiod means no charge.
     }
 	$amount = C4::Context->preference('maxFine') if(C4::Context->preference('maxFine') && ( $amount > C4::Context->preference('maxFine')));
-    return ( $amount, $data->{'chargename'}, $days_minus_grace, $daystocharge);
+	$debug and warn sprintf("CalcFine returning (%s, %s, %s, %s)", $amount, $data->{'chargename'}, $days_minus_grace, $daystocharge);
+    return ($amount, $data->{'chargename'}, $days_minus_grace, $daystocharge);
+    # FIXME: chargename is NEVER populated anywhere.
 }
 
 
