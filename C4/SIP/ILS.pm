@@ -146,7 +146,7 @@ sub checkout {
     } else {
 		$circ->do_checkout();
 		if ($circ->ok){
-			warn "circ is ok";
+			$debug and warn "circ is ok";
 			# If the item is already associated with this patron, then
 			# we're renewing it.
 			$circ->renew_ok($item->{patron} && ($item->{patron} eq $patron_id));
@@ -160,7 +160,7 @@ sub checkout {
 				$patron_id, join(', ', @{$patron->{items}}));
 		}
 		else {
-			syslog("LOG_DEBUG", "ILS::Checkout Issue failed");
+			syslog("LOG_ERR", "ILS::Checkout Issue failed");
 		}
     }
     # END TRANSACTION
