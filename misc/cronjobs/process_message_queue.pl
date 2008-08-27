@@ -43,8 +43,8 @@ you run this regularly from cron, especially if you are using the
 advance_notices.pl script.
 
 This script has the following parameters :
-	-n help: this message
-        -v verbose
+    -h help: this message
+    -v verbose
 
 ENDUSAGE
 
