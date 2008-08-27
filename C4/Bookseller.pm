@@ -24,6 +24,7 @@ use vars qw($VERSION @ISA @EXPORT);
 BEGIN {
 	# set the version for version checking
 	$VERSION = 3.01;
+    require Exporter;
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
 		&GetBookSeller &GetBooksellersWithLateOrders &GetBookSellerFromId
@@ -195,6 +196,7 @@ sub AddBookseller {
     );
 
     # return the id of this new supplier
+    # FIXME: no protection against simultaneous addition: max(id) might be wrong!
     $query = "
         SELECT max(id)
         FROM   aqbooksellers
