@@ -525,6 +525,7 @@ if ($borrowerslist) {
         -id       => 'borrowernumber',
         -values   => \@values,
         -labels   => \%labels,
+	-onclick  => "window.location = '/cgi-bin/koha/circ/circulation.pl?borrowernumber=' + this.value;",
         -size     => 7,
         -tabindex => '',
         -multiple => 0
