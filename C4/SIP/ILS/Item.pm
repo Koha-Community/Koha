@@ -82,7 +82,7 @@ sub new {
 	$item->{patron} = $borrower->{'cardnumber'};
 	my @reserves = (@{ GetReservesFromBiblionumber($item->{biblionumber}) });
 	$item->{hold_queue} = [ sort priority_sort @reserves ];
-	$item->{joetest} = 111;
+	# $item->{joetest} = 111;
 	$self = $item;
 	bless $self, $type;
 
@@ -209,7 +209,7 @@ sub print_line {
 sub available {
 	my ($self, $for_patron) = @_;
 	my $count = (defined $self->{hold_queue}) ? scalar @{$self->{hold_queue}} : 0;
-	print STDERR "availability check: hold_queue size $count\n";
+	$debug and print STDERR "availability check: hold_queue size $count\n";
     if (defined($self->{patron_id})) {
 	 	($self->{patron_id} eq $for_patron) or return 0;
 		return ($count ? 0 : 1);
