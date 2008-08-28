@@ -88,6 +88,7 @@ if ($src eq 'circ') {   # if we were called from circulation, use the circulatio
                         address         => $data->{'address'},
                         address2        => $data->{'address2'},
                         city            => $data->{'city'},
+			zipcode		=> $data->{'zipcode'},
                         phone           => $data->{'phone'},
                         phonepro        => $data->{'phonepro'},
                         email           => $data->{'email'},
