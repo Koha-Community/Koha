@@ -88,7 +88,7 @@ $.tablesorter.addParser({
                 Suggested by:
                 </th>
                 <td>
-                    <select name="suggestedbyme">
+                    <select name="suggestedby">
                         <option value="0">Anyone</option>
                         <option value="1">Me</option>
                     </select>
@@ -109,7 +109,7 @@ $.tablesorter.addParser({
             <!-- TMPL_IF NAME="loggedinusername" --><th>&nbsp;</th><!-- /TMPL_IF -->
             <th>Summary</th>
             <th>Note</th>
-            <!-- TMPL_IF NAME="OPACViewOthersSuggestions" --><th>Suggested by</th><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="OPACViewOthersSuggestions" --><th>Suggested For</th><!-- /TMPL_IF -->
             <th>Managed by</th>
             <th>Status</th>
         </tr></thead>
@@ -129,7 +129,7 @@ $.tablesorter.addParser({
                     <!-- TMPL_VAR name="note" -->
                 </td>
                 <!-- TMPL_IF NAME="OPACViewOthersSuggestions" --><td>
-                    <!-- TMPL_IF NAME="surnamesuggestedby" --><!-- TMPL_VAR name="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamesuggestedby" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="branchcodesuggestedby" --><!-- TMPL_VAR name="branchcodesuggestedby" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
                 </td><!-- /TMPL_IF -->
                 <td>
 					<!-- TMPL_IF NAME="surnamemanagedby" --><!-- TMPL_VAR name="surnamemanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamemanagedby" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
