@@ -89,6 +89,7 @@ sub SearchSuggestion  {
     my $dbh = C4::Context->dbh;
     my $query = "
     SELECT suggestions.*,
+        U1.branchcode   AS branchcodesuggestedby,
         U1.surname   AS surnamesuggestedby,
         U1.firstname AS firstnamesuggestedby,
         U1.borrowernumber AS borrnumsuggestedby,
@@ -223,6 +224,7 @@ sub GetSuggestionByStatus {
     my $query = qq(SELECT suggestions.*,
                         U1.surname   AS surnamesuggestedby,
                         U1.firstname AS firstnamesuggestedby,
+            U1.branchcode AS branchcodesuggestedby,
 						U1.borrowernumber AS borrnumsuggestedby,
                         U2.surname   AS surnamemanagedby,
                         U2.firstname AS firstnamemanagedby,
