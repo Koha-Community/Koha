@@ -683,6 +683,7 @@ $template->param(
     emailpro          => $borrower->{'emailpro'},
     borrowernotes     => $borrower->{'borrowernotes'},
     city              => $borrower->{'city'},
+    zipcode	      => $borrower->{'zipcode'},
     phone             => $borrower->{'phone'} || $borrower->{'mobile'},
     cardnumber        => $borrower->{'cardnumber'},
     amountold         => $amountold,
