@@ -258,7 +258,7 @@ if ( $op eq 'add_form' ) {
             -id       => "repeatable$i"
         );
         $row_data{mandatory} = CGI::checkbox(
-            -name     => "mandatory$i",
+            -name     => "mandatory",
             -checked  => $data->{'mandatory'} ? 'checked' : '',
             -value    => 1,
             -label    => '',
