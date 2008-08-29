@@ -7,9 +7,17 @@
 
 	 $(document).ready(function() {
  		$('#subfieldtabs > ul').tabs();
+		$("a.displaymore").click(function(){
+			$("#"+$(this).attr("href").replace("#","")).toggle();
+			if($(this).html() == "display more constraints"){
+				$(this).html("hide constraints");
+			} else {
+				$(this).html("display more constraints");
+			}
+		});
 	 });
 
-function displayMoreConstraint(numlayer){
+/*function displayMoreConstraint(numlayer){
     var thisdiv = document.getElementById(numlayer);
     if(thisdiv.getAttribute("class") == "content_hidden"){
         thisdiv.removeAttribute('class');
@@ -18,7 +26,7 @@ function displayMoreConstraint(numlayer){
         thisdiv.removeAttribute('class');
         thisdiv.setAttribute("class","content_hidden");
     }
-}
+}*/
 
 //]]>
 </script>
@@ -28,7 +36,7 @@ function displayMoreConstraint(numlayer){
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
 <div id="breadcrumbs">
-  <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC Frameworks</a> &rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->&searchfield=<!-- TMPL_VAR name="tagfield" -->"><!-- TMPL_VAR NAME="frameworkcode" --> Framework Structure</a> &rsaquo;
+  <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC Frameworks</a> &rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->&amp;searchfield=<!-- TMPL_VAR name="tagfield" -->"><!-- TMPL_VAR NAME="frameworkcode" --> Framework Structure</a> &rsaquo;
   <!-- TMPL_IF name="add_form" -->
   <!-- TMPL_IF NAME="use-heading-flags-p" -->
   <!-- TMPL_IF NAME="heading-edit-subfields-p" --> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">Tag <!-- TMPL_VAR NAME="tagfield" --> Subfield Structure</a> &rsaquo; Edit subfields constraints
@@ -74,7 +82,7 @@ function displayMoreConstraint(numlayer){
                 <li><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl#sub<!-- TMPL_VAR NAME="urisubfieldcode" -->field" title="<!-- TMPL_VAR NAME="liblibrarian" -->">
                     <!-- TMPL_VAR NAME="subfieldcode" -->
                </a></li>
-            <!-- /TMPL_IF --></li>
+            <!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
     </ul>
     
@@ -86,7 +94,7 @@ function displayMoreConstraint(numlayer){
                 		<!-- TMPL_IF EXPR="subfieldcode eq 0 || subfieldcode" --> 
                 		<li><span class="label">Subfield code:</span> <!-- TMPL_VAR NAME="subfieldcode" --> <input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="subfieldcode" -->" /></li>
                 		<!-- TMPL_ELSE -->
-                		<li><span class="label">Subfield code:</span> <input type="text" name="tagsubfield" value="<!-- TMPL_VAR NAME="subfieldcode" -->" /></li>
+                		<li><label for="tagsubfield<!-- TMPL_VAR NAME="row" -->">Subfield code:</label> <input type="text" id="tagsubfield<!-- TMPL_VAR NAME="row" -->" name="tagsubfield" value="<!-- TMPL_VAR NAME="subfieldcode" -->" /></li>
                 		<!-- /TMPL_IF -->
                 		<li><label for="liblibrarian<!-- TMPL_VAR NAME="row" -->">Text for librarian: </label><input id="liblibrarian<!-- TMPL_VAR NAME="row" -->" type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" -->" size="40" maxlength="80" /></li>
                 		<li><label for="libopac<!-- TMPL_VAR NAME="row" -->">Text for OPAC: </label><input type="text" id="libopac<!-- TMPL_VAR NAME="row" -->" name="libopac" value="<!-- TMPL_VAR NAME="libopac" -->" size="40" maxlength="80" /></li>
@@ -96,24 +104,25 @@ function displayMoreConstraint(numlayer){
                 	</ol>
             </fieldset>
 			
-            <a href="javascript:displayMoreConstraint('more<!-- TMPL_VAR NAME="urisubfieldcode" -->')">display more constraints</a>
-            <div id="more<!-- TMPL_VAR NAME="urisubfieldcode" -->" class="content_hidden" style="clear: both">
-             <fieldset class="rows" id="advanced-constraints">
+            <a class="displaymore" href="#more<!-- TMPL_VAR NAME="urisubfieldcode" -->">display more constraints</a>
+            <div id="more<!-- TMPL_VAR NAME="urisubfieldcode" -->" style="display:none; clear: both">
+             <fieldset class="rows">
 				<legend>Advanced constraints:</legend>
-                <ol><li><label for="defaultvalue">Default value:</label>
-                    <input type="text" name="defaultvalue" id="defaultvalue" value="<!-- TMPL_VAR NAME="defaultvalue" -->" /></li>
+                <ol><li><label for="defaultvalue<!-- TMPL_VAR NAME="row" -->">Default value:</label>
+                    <input type="text" name="defaultvalue" id="defaultvalue<!-- TMPL_VAR NAME="row" -->" value="<!-- TMPL_VAR NAME="defaultvalue" -->" /></li>
                 <li><label for="hidden<!-- TMPL_VAR NAME="row" -->">hidden</label><input type="text" id="hidden<!-- TMPL_VAR NAME="row" -->" name="hidden" value="<!-- TMPL_VAR name="hidden" -->" size="2" /> (see online help)</li>
                 <li><label for="isurl<!-- TMPL_VAR NAME="row" -->">Is a URL:</label><!-- TMPL_VAR NAME="isurl" --> (if checked, it means that the subfield is a URL and can be clicked)</li>
-                <li><label for="link">Link:</label><input type="text" id="link" name="link" value="<!-- TMPL_VAR NAME="link" -->" size="10" maxlength="80" /> (e.g., Title or Local-Number) <span class="error"><em>Warning: This value should not change after data has been added to your catalog</em></span></li>
-                <li><span class="label">Others Options:</span> (choose one)
-                    	<ol>
-                    		<li><label for="authorised_value">Authorized value:</label><!-- TMPL_VAR NAME="authorised_value" --></li>
-                    		<li><label for="authtypecode">Thesaurus:</label><!-- TMPL_VAR NAME="authtypes" --></li>
-                    		<li><label for="value_builder">Plugin:</label><!-- TMPL_VAR NAME="value_builder" --></li>
-                    	</ol>
-                </li>
+                <li><label for="link<!-- TMPL_VAR NAME="row" -->">Link:</label><input type="text" id="link<!-- TMPL_VAR NAME="row" -->" name="link" value="<!-- TMPL_VAR NAME="link" -->" size="10" maxlength="80" /> (e.g., Title or Local-Number) <span class="error"><em>Warning: This value should not change after data has been added to your catalog</em></span></li>
                 <li><label for="kohafield<!-- TMPL_VAR NAME="row" -->">Koha link:</label><!-- TMPL_VAR NAME="kohafield" --></li>
-				</ol>
+			</ol>
+	</fieldset>
+	 <fieldset class="rows">
+                <legend>Other Options: (choose one)</legend>
+                    	<ol>
+                    		<li><label for="authorised_value<!-- TMPL_VAR NAME="row" -->">Authorized value:</label><!-- TMPL_VAR NAME="authorised_value" --></li>
+                    		<li><label for="authtypecode<!-- TMPL_VAR NAME="row" -->">Thesaurus:</label><!-- TMPL_VAR NAME="authtypes" --></li>
+                    		<li><label for="value_builder<!-- TMPL_VAR NAME="row" -->">Plugin:</label><!-- TMPL_VAR NAME="value_builder" --></li>
+                    	</ol>
 				</fieldset>
             </div><br class="clear" /><!-- /more  -->
         </div><!-- /content_sub -->
