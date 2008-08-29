@@ -5,6 +5,18 @@
 <!-- TMPL_IF name="delete_confirm" --> &rsaquo; Confirm Deletion<!-- /TMPL_IF -->
 <!-- TMPL_IF name="else" -->Authorized values<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+     $(document).ready(function() {
+        $('#icons > ul').tabs();
+     });
+//]]>
+</script>
+<style type="text/css">
+	fieldset.rows div.toptabs li { clear:none;margin-right:.5em;padding-bottom:0;width:auto; }
+	fieldset.rows div.toptabs .ui-tabs-nav li.ui-tabs-selected {background-color : transparent; }
+	fieldset.rows .ui-tabs-panel { margin-right : 10px; margin-left : 10px;margin-bottom:10px;}
+</style>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -47,11 +59,22 @@
             <label for="lib">Description</label>
             <input type="text" name="lib" id="lib" value="<!-- TMPL_VAR name="lib" -->" />
         </li>
-        <li>
-            <label for="lib">Icon</label>
-            <ul>
+		</ol>
+		<div id="icons" class="toptabs">
+		<h5 style="margin-left:10px;">Choose an Icon:</h5>
+			<ul>
+					<li><a href="/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=<!-- TMPL_VAR NAME="category" -->#none">None</a></li>
+				  <!-- TMPL_LOOP NAME="imagesets" -->
+				  	<li><a href="/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=<!-- TMPL_VAR NAME="category" -->#<!-- TMPL_VAR NAME="imagesetname" -->"><!-- TMPL_VAR name="imagesetname" --></a></li>
+				  <!-- /TMPL_LOOP -->
+			</ul>
+		</div>
+  <div id="none"><ul>
+  <li><label for="noimage">No image: </label><input type="radio" name="imageurl" id="noimage" value="removeImage" /></li>
+  </ul>
+  <br class="clear" /></div>
   <!-- TMPL_LOOP NAME="imagesets" -->
-  <li>Icons from collection <b><!-- TMPL_VAR name="imagesetname" --></b>:</li>
+  <div id="<!-- TMPL_VAR NAME="imagesetname" -->"><ul>
   <!-- TMPL_LOOP NAME="images" -->
   			<li style="float: none; display: inline; clear : none; width: auto;">
             <label> <!-- TMPL_IF NAME="StaffImageUrl" -->
@@ -67,14 +90,12 @@
     <!-- /TMPL_IF -->
             </label>
 			</li>
+  <!-- /TMPL_LOOP --></ul>
+  <br class="clear" />
+  </div>
   <!-- /TMPL_LOOP -->
-  <!-- /TMPL_LOOP -->
-  </ul><ul>
-  <li><label for="noimage">No image: </label><input type="radio" name="imageurl" id="noimage" value="removeImage" /></li>
-  </ul>
-
-        
-        </ol></fieldset>
+  
+        </fieldset>
        <fieldset class="action"> <input type="hidden" name="id" value="<!-- TMPL_VAR name="id" -->" />
         <input type="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=<!-- TMPL_VAR NAME="category" -->">Cancel</a></fieldset>
     </form>
@@ -180,7 +201,7 @@ the subfield is not entered through a free field, but though a list of authorize
 	<td><!-- TMPL_VAR name="category" --></td>
 	<td><!-- TMPL_VAR name="authorised_value" --></td>
 	<td><!-- TMPL_VAR name="lib" --></td>
-	<td><img src="<!-- TMPL_VAR name="imageurl" -->" alt=""/></td>
+	<td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR name="imageurl" -->" alt=""/><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
 	<td><a href="<!-- TMPL_VAR name="edit" -->">Edit</a></td>
 	<td><a href="<!-- TMPL_VAR name="delete" -->">Delete</a></td>
 </tr>
