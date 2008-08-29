@@ -526,10 +526,7 @@ my %labels;
 my $CGIselectborrower;
 if ($borrowerslist) {
     foreach (
-        sort {
-                lc $a->{'surname'}
-              . lc $a->{'firstname'} cmp lc $b->{'surname'}
-              . lc $b->{'firstname'}
+        sort {(lc $a->{'surname'} cmp lc $b->{'surname'} ?lc $a->{'surname'} cmp lc $b->{'surname'}:lc $a->{'firstname'} cmp lc $b->{'firstname'})
         } @$borrowerslist
       )
     {
