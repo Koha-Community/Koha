@@ -144,6 +144,9 @@ function CheckRuleForm(f) {
 
 //]]>
 </script>
+<style type="text/css">
+	fieldset.rows fieldset {font-size:100%;}
+</style>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -211,8 +214,8 @@ function CheckRuleForm(f) {
         <label for="mp_<!-- TMPL_VAR name="mp_num" -->_search_index">Search index: </label>
         <input type ="text" id="mp_<!-- TMPL_VAR name="mp_num" -->_search_index" 
                name="mp_<!-- TMPL_VAR name="mp_num" -->_search_index" size="20" 
-               value="<!-- TMPL_VAR name="index" -->"
-          maxlegnth="30" escape="HTML" />
+               value="<!-- TMPL_VAR name="index" escape="HTML" -->"
+          maxlegnth="30" />
       </li>
       <li>
         <label for="mp_<!-- TMPL_VAR name="mp_num" -->_score">Score: </label>
@@ -572,7 +575,7 @@ function CheckRuleForm(f) {
 <div class="paginationBar"><!-- TMPL_VAR NAME="pagination_bar" --></div>
 
 <!-- /TMPL_IF -->
- 
+ <!-- TMPL_IF name="matching_rule_form" -->
 <div id="mp_template" style="display:none">
   <fieldset class="rows">
     <legend><a class="button" onclick="DeleteMatchpoint(this)">Remove this matchpoint</a></legend>
@@ -685,6 +688,7 @@ function CheckRuleForm(f) {
   </ol>
 </fieldset>
 </div>
+<!-- /TMPL_IF -->
 
 </div>
 </div>

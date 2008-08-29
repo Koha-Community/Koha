@@ -89,7 +89,6 @@ if ( $op eq 'add_form' ) {
             -default =>
               "$defaulttagfield $defaulttagsubfield - $defaultliblibrarian",
             -size     => 1,
-            -tabindex => '',
             -multiple => 0,
         );
         $template->param( "marclist$i" => $marclist );
@@ -173,7 +172,6 @@ else {    # DEFAULT
             ],
             -default  => $tablename,
             -size     => 1,
-            -tabindex => '',
             -multiple => 0
         )
     );
