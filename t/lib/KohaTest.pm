@@ -32,7 +32,7 @@ INIT {
         # if we're running the tests in one
         # or more test files specified via
         #
-        #   make single-test TEST_FILES=lib/KohaTest/Foo.pm
+        #   make test-single TEST_FILES=lib/KohaTest/Foo.pm
         #
         # use this INIT trick taken from the POD for
         # Test::Class::Load.
