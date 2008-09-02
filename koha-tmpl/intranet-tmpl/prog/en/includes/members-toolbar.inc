@@ -50,8 +50,8 @@ function update_child() {
 
 	function yuiToolbar() {
 	    var printmenu = [
-	        { text: _("Print Page"), onclick: {fn: function(){printx_window("page")}}, },
-	        { text: _("Print Slip"), onclick: {fn: function(){printx_window("slip")}}, }
+	        { text: _("Print Page"), onclick: {fn: function(){printx_window("page")}} },
+	        { text: _("Print Slip"), onclick: {fn: function(){printx_window("slip")}} }
 	    ];
 	
 		var moremenu = [
