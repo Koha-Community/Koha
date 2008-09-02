@@ -107,7 +107,6 @@ if ($do_it) {
 
     my $results = GetLogs($datefrom,$dateto,$user,$module,$action,$object,$info);
     my $total = scalar @$results;
-    warn "Total records retrieved = $total";
     foreach my $result (@$results){
 	if ($result->{'info'} eq 'item'){
 	    # get item information so we can create a working link
