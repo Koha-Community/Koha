@@ -121,9 +121,6 @@ $printer = C4::Context->userenv->{'branchprinter'};
 my $barcode        = $query->param('barcode') || '';
 
 $barcode = barcodedecode($barcode) if( $barcode && C4::Context->preference('itemBarcodeInputFilter'));
-my $year           = $query->param('year');
-my $month          = $query->param('month');
-my $day            = $query->param('day');
 my $stickyduedate  = $query->param('stickyduedate');
 my $duedatespec    = $query->param('duedatespec');
 my $issueconfirmed = $query->param('issueconfirmed');
