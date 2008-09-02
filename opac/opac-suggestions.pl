@@ -19,6 +19,7 @@ use strict;
 
 use CGI;
 use C4::Auth;    # get_template_and_user
+use C4::Branch;
 use C4::Output;
 use C4::Suggestions;
 
@@ -95,6 +96,7 @@ if ( $op eq "delete_confirm" ) {
 my $suggestions_loop =
   &SearchSuggestion( $borrowernumber, $author, $title, $publishercode, $status,
     $suggestedbyme );
+map{ $_->{'branchcodesuggestedby'}=GetBranchInfo($_->{'branchcodesuggestedby'})->[0]->{'branchname'}} @$suggestions_loop;  
 $template->param(
     suggestions_loop => $suggestions_loop,
     title            => $title,
