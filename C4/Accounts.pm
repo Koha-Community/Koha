@@ -313,6 +313,8 @@ sub chargelostitem{
         #FIXME : Should probably have a way to distinguish this from an item that really was returned.
         warn " $issues->{'borrowernumber'}  /  $itemnumber ";
         C4::Circulation::MarkIssueReturned($issues->{borrowernumber},$itemnumber);
+	#  Shouldn't MarkIssueReturned do this?
+        ModItem({ onloan => undef }, undef, $itemnumber);
     }
     $sth->finish;
 }
