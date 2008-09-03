@@ -215,14 +215,14 @@ function CheckRuleForm(f) {
         <input type ="text" id="mp_<!-- TMPL_VAR name="mp_num" -->_search_index" 
                name="mp_<!-- TMPL_VAR name="mp_num" -->_search_index" size="20" 
                value="<!-- TMPL_VAR name="index" escape="HTML" -->"
-          maxlegnth="30" />
+          maxlength="30" />
       </li>
       <li>
         <label for="mp_<!-- TMPL_VAR name="mp_num" -->_score">Score: </label>
         <input type ="text" id="mp_<!-- TMPL_VAR name="mp_num" -->_score" 
                name="mp_<!-- TMPL_VAR name="mp_num" -->_score" size="5"
-               value="<!-- TMPL_VAR name="score" -->" 
-               maxlegnth="5" escape="HTML" />
+               value="<!-- TMPL_VAR name="score" escape="HTML" -->" 
+               maxlength="5" />
       </li>
       <!-- TMPL_LOOP name="components" -->
       <div id="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->">
@@ -232,29 +232,29 @@ function CheckRuleForm(f) {
             <label for="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_tag">Tag: </label>
             <input type="text" id="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_tag" 
                    name="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_tag" 
-                   value="<!-- TMPL_VAR name="tag" -->"
-                   size="3" maxlength="3" escape="HTML" />
+                   value="<!-- TMPL_VAR name="tag" escape="HTML" -->"
+                   size="3" maxlength="3" />
           </li>
           <li>
             <label for="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_subfields">Subfields: </label>
             <input type="text" id="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_subfields" 
                    name="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_subfields" 
-                   value="<!-- TMPL_VAR name="subfields" -->"
-                   size="10" maxlength="40" escape="HTML" />
+                   value="<!-- TMPL_VAR name="subfields" escape="HTML" -->"
+                   size="10" maxlength="40" />
           </li>
           <li>
             <label for="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_offset">Offset: </label>
             <input type="text" id="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_offset" 
                    name="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_offset" 
-                   value="<!-- TMPL_VAR name="offset" -->"
-                   size="5" maxoffset="5" escape="HTML" />
+                   value="<!-- TMPL_VAR name="offset" escape="HTML" -->"
+                   size="5" maxlength="5" />
           </li>
           <li>
             <label for="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_length">Length: </label>
             <input type="text" id="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_length" 
                    name="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_length" 
-                   value="<!-- TMPL_VAR name="length" -->"
-                   size="5" maxlength="5" escape="HTML" />
+                   value="<!-- TMPL_VAR name="length" escape="HTML" -->"
+                   size="5" maxlength="5" />
           </li>
           <!-- TMPL_LOOP name="norms" -->
           <div id="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_n_<!-- TMPL_VAR name="norm_num"-->">
@@ -262,8 +262,8 @@ function CheckRuleForm(f) {
                 <label for="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_n__<!-- TMPL_VAR name="norm_num"-->">Normalization rule: </label>
                 <input type="text" id="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_n__<!-- TMPL_VAR name="norm_num"-->_norm" 
                        name="mp_<!-- TMPL_VAR name="mp_num" -->_c_<!-- TMPL_VAR name="comp_num" -->_n_<!-- TMPL_VAR name="norm_num"-->_norm" 
-                       value="<!-- TMPL_VAR name="norm" -->"
-                       size="20" maxnorms="50" escape="HTML" />
+                       value="<!-- TMPL_VAR name="norm" escape="HTML" -->"
+                       size="20" maxlength="50" />
               </li>
           </div>
           <!-- /TMPL_LOOP -->
@@ -283,35 +283,35 @@ function CheckRuleForm(f) {
       <li>
         <label for="mp_1_search_index">Search index: </label>
         <input type ="text" id="mp_1_search_index" name="mp_1_search_index" size="20" 
-          maxlegnth="30" escape="HTML" />
+          maxlength="30" />
       </li>
       <li>
         <label for="mp_1_score">Score: </label>
-        <input type ="text" id="mp_1_score" name="mp_1_score" size="5" maxlegnth="5" escape="HTML" />
+        <input type ="text" id="mp_1_score" name="mp_1_score" size="5" maxlength="5" />
       </li>
       <div id="mp_1_c_1">
       <fieldset class="rows">
         <ol>
           <li>
             <label for="mp_1_c_1_tag">Tag: </label>
-            <input type="text" id="mp_1_c_1_tag" name="mp_1_c_1_tag" size="3" maxlength="3" escape="HTML" />
+            <input type="text" id="mp_1_c_1_tag" name="mp_1_c_1_tag" size="3" maxlength="3" />
           </li>
           <li>
             <label for="mp_1_c_1_subfields">Subfields: </label>
-            <input type="text" id="mp_1_c_1_subfields" name="mp_1_c_1_subfields" size="10" maxlength="40" escape="HTML" />
+            <input type="text" id="mp_1_c_1_subfields" name="mp_1_c_1_subfields" size="10" maxlength="40" />
           </li>
           <li>
             <label for="mp_1_c_1_offset">Offset: </label>
-            <input type="text" id="mp_1_c_1_offset" name="mp_1_c_1_offset" size="5" maxoffset="5" escape="HTML" />
+            <input type="text" id="mp_1_c_1_offset" name="mp_1_c_1_offset" size="5" maxlength="5" />
           </li>
           <li>
             <label for="mp_1_c_1_length">Length: </label>
-            <input type="text" id="mp_1_c_1_length" name="mp_1_c_1_length" size="5" maxlength="5" escape="HTML" />
+            <input type="text" id="mp_1_c_1_length" name="mp_1_c_1_length" size="5" maxlength="5" />
           </li>
           <div id="mp_1_c_1_n_1">
             <li>
               <label for="mp_1_c_1_n_1_norm">Normalization rule: </label>
-              <input type="text" id="mp_1_c_1_n_1_norm" name="mp_1_c_1_n_1_norm" size="20" maxnorms="50" escape="HTML" />
+              <input type="text" id="mp_1_c_1_n_1_norm" name="mp_1_c_1_n_1_norm" size="20" maxlength="50" />
             </li>
           </div>
         </ol>
@@ -340,29 +340,29 @@ function CheckRuleForm(f) {
             <label for="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_tag">Tag: </label>
             <input type="text" id="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_tag" 
                    name="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_tag" 
-                   value="<!-- TMPL_VAR name="tag" -->"
-                   size="3" maxlength="3" escape="HTML" />
+                   value="<!-- TMPL_VAR name="tag" escape="HTML" -->"
+                   size="3" maxlength="3" />
           </li>
           <li>
             <label for="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_subfields">Subfields: </label>
             <input type="text" id="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_subfields" 
                    name="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_subfields" 
-                   value="<!-- TMPL_VAR name="subfields" -->"
-                   size="10" maxlength="40" escape="HTML" />
+                   value="<!-- TMPL_VAR name="subfields" escape="HTML" -->"
+                   size="10" maxlength="40" />
           </li>
           <li>
             <label for="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_offset">Offset: </label>
             <input type="text" id="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_offset" 
                    name="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_offset" 
-                   value="<!-- TMPL_VAR name="offset" -->"
-                   size="5" maxoffset="5" escape="HTML" />
+                   value="<!-- TMPL_VAR name="offset" escape="HTML" -->"
+                   size="5" maxlength="5" />
           </li>
           <li>
             <label for="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_length">Length: </label>
             <input type="text" id="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_length" 
                    name="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_length" 
-                   value="<!-- TMPL_VAR name="length" -->"
-                   size="5" maxlength="5" escape="HTML" />
+                   value="<!-- TMPL_VAR name="length" escape="HTML" -->"
+                   size="5" maxlength="5" />
           </li>
           <!-- TMPL_LOOP name="norms" -->
           <div id="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_n_<!-- TMPL_VAR name="norm_num" -->">
@@ -370,8 +370,8 @@ function CheckRuleForm(f) {
               <label for="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_n_<!-- TMPL_VAR name="norm_num" -->_norm">Normalization rule: </label>
               <input type="text" id="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_n_<!-- TMPL_VAR name="norm_num" -->_norm" 
                      name="mc_<!-- TMPL_VAR name="mc_num" -->_src_c_<!-- TMPL_VAR name="comp_num" -->_n_<!-- TMPL_VAR name="norm_num" -->_norm" 
-                    value="<!-- TMPL_VAR name="norm" -->"
-                    size="20" maxnorms="50" escape="HTML" />
+                    value="<!-- TMPL_VAR name="norm" escape="HTML" -->"
+                    size="20" maxlength="50" />
             </li>
           </div>
           <!-- /TMPL_LOOP -->
@@ -388,29 +388,29 @@ function CheckRuleForm(f) {
             <label for="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_tag">Tag: </label>
             <input type="text" id="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_tag" 
                    name="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_tag" 
-                   value="<!-- TMPL_VAR name="tag" -->"
-                   size="3" maxlength="3" escape="HTML" />
+                   value="<!-- TMPL_VAR name="tag" escape="HTML" -->"
+                   size="3" maxlength="3" />
           </li>
           <li>
             <label for="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_subfields">Subfields: </label>
             <input type="text" id="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_subfields" 
                    name="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_subfields" 
-                   value="<!-- TMPL_VAR name="subfields" -->"
-                   size="10" maxlength="40" escape="HTML" />
+                   value="<!-- TMPL_VAR name="subfields" escape="HTML" -->"
+                   size="10" maxlength="40" />
           </li>
           <li>
             <label for="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_offset">Offset: </label>
             <input type="text" id="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_offset" 
                    name="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_offset" 
-                   value="<!-- TMPL_VAR name="offset" -->"
-                   size="5" maxoffset="5" escape="HTML" />
+                   value="<!-- TMPL_VAR name="offset" escape="HTML" -->"
+                   size="5" maxlength="5" />
           </li>
           <li>
             <label for="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_length">Length: </label>
             <input type="text" id="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_length" 
                    name="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_length" 
-                   value="<!-- TMPL_VAR name="length" -->"
-                   size="5" maxlength="5" escape="HTML" />
+                   value="<!-- TMPL_VAR name="length" escape="HTML" -->"
+                   size="5" maxlength="5" />
           </li>
           <!-- TMPL_LOOP name="norms" -->
           <div id="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_n_<!-- TMPL_VAR name="norm_num" -->">
@@ -418,8 +418,8 @@ function CheckRuleForm(f) {
               <label for="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_n_<!-- TMPL_VAR name="norm_num" -->_norm">Normalization rule: </label>
               <input type="text" id="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_n_<!-- TMPL_VAR name="norm_num" -->_norm" 
                      name="mc_<!-- TMPL_VAR name="mc_num" -->_tgt_c_<!-- TMPL_VAR name="comp_num" -->_n_<!-- TMPL_VAR name="norm_num" -->_norm" 
-                    value="<!-- TMPL_VAR name="norm" -->"
-                    size="20" maxnorms="50" escape="HTML" />
+                    value="<!-- TMPL_VAR name="norm" escape="HTML" -->"
+                    size="20" maxlength="50" />
             </li>
           </div>
           <!-- /TMPL_LOOP -->
@@ -443,24 +443,24 @@ function CheckRuleForm(f) {
         <ol>
           <li>
             <label for="mc_1_src_c_1_tag">Tag: </label>
-            <input type="text" id="mc_1_src_c_1_tag" name="mc_1_src_c_1_tag" size="3" maxlength="3" escape="HTML" />
+            <input type="text" id="mc_1_src_c_1_tag" name="mc_1_src_c_1_tag" size="3" maxlength="3" />
           </li>
           <li>
             <label for="mc_1_src_c_1_subfields">Subfields: </label>
-            <input type="text" id="mc_1_src_c_1_subfields" name="mc_1_src_c_1_subfields" size="10" maxlength="40" escape="HTML" />
+            <input type="text" id="mc_1_src_c_1_subfields" name="mc_1_src_c_1_subfields" size="10" maxlength="40" />
           </li>
           <li>
             <label for="mc_1_src_c_1_offset">Offset: </label>
-            <input type="text" id="mc_1_src_c_1_offset" name="mc_1_src_c_1_offset" size="5" maxoffset="5" escape="HTML" />
+            <input type="text" id="mc_1_src_c_1_offset" name="mc_1_src_c_1_offset" size="5" maxlength="5" />
           </li>
           <li>
             <label for="mc_1_src_c_1_length">Length: </label>
-            <input type="text" id="mc_1_src_c_1_length" name="mc_1_src_c_1_length" size="5" maxlength="5" escape="HTML" />
+            <input type="text" id="mc_1_src_c_1_length" name="mc_1_src_c_1_length" size="5" maxlength="5" />
           </li>
           <div id="mc_1_src_c_1_n_1">
             <li>
               <label for="mc_1_src_c_1_n_1_norm">Normalization rule: </label>
-              <input type="text" id="mc_1_src_c_1_n_1_norm" name="mc_1_src_c_1_n_1_norm" size="20" maxnorms="50" escape="HTML" />
+              <input type="text" id="mc_1_src_c_1_n_1_norm" name="mc_1_src_c_1_n_1_norm" size="20" maxlength="50" />
             </li>
           </div>
         </ol>
@@ -472,24 +472,24 @@ function CheckRuleForm(f) {
         <ol>
           <li>
             <label for="mc_1_tgt_c_1_tag">Tag: </label>
-            <input type="text" id="mc_1_tgt_c_1_tag" name="mc_1_tgt_c_1_tag" size="3" maxlength="3" escape="HTML" />
+            <input type="text" id="mc_1_tgt_c_1_tag" name="mc_1_tgt_c_1_tag" size="3" maxlength="3" />
           </li>
           <li>
             <label for="mc_1_tgt_c_1_subfields">Subfields: </label>
-            <input type="text" id="mc_1_tgt_c_1_subfields" name="mc_1_tgt_c_1_subfields" size="10" maxlength="40" escape="HTML" />
+            <input type="text" id="mc_1_tgt_c_1_subfields" name="mc_1_tgt_c_1_subfields" size="10" maxlength="40" />
           </li>
           <li>
             <label for="mc_1_tgt_c_1_offset">Offset: </label>
-            <input type="text" id="mc_1_tgt_c_1_offset" name="mc_1_tgt_c_1_offset" size="5" maxoffset="5" escape="HTML" />
+            <input type="text" id="mc_1_tgt_c_1_offset" name="mc_1_tgt_c_1_offset" size="5" maxlength="5" />
           </li>
           <li>
             <label for="mc_1_tgt_c_1_length">Length: </label>
-            <input type="text" id="mc_1_tgt_c_1_length" name="mc_1_tgt_c_1_length" size="5" maxlength="5" escape="HTML" />
+            <input type="text" id="mc_1_tgt_c_1_length" name="mc_1_tgt_c_1_length" size="5" maxlength="5" />
           </li>
           <div id="mc_1_tgt_c_1_n_1">
             <li>
               <label for="mc_1_tgt_c_1_n_1_norm">Normalization rule: </label>
-              <input type="text" id="mc_1_tgt_c_1_n_1_norm" name="mc_1_tgt_c_1_n_1_norm" size="20" maxnorms="50" escape="HTML" />
+              <input type="text" id="mc_1_tgt_c_1_n_1_norm" name="mc_1_tgt_c_1_n_1_norm" size="20" maxlength="50" />
             </li>
           </div>
         </ol>
@@ -583,35 +583,35 @@ function CheckRuleForm(f) {
       <li>
         <label for="mp_num_search_index">Search index: </label>
         <input type ="text" id="mp_num_search_index" name="mp_num_search_index" size="20" 
-          maxlegnth="30" escape="HTML" />
+          maxlength="30" />
       </li>
       <li>
         <label for="mp_num_score">Score: </label>
-        <input type ="text" id="mp_num_score" name="mp_num_score" size="5" maxlegnth="5" escape="HTML" />
+        <input type ="text" id="mp_num_score" name="mp_num_score" size="5" maxlength="5" />
       </li>
       <div id="mp_num_c_1">
       <fieldset class="rows">
         <ol>
           <li>
             <label for="mp_num_c_1_tag">Tag: </label>
-            <input type="text" id="mp_num_c_1_tag" name="mp_num_c_1_tag" size="3" maxlength="3" escape="HTML" />
+            <input type="text" id="mp_num_c_1_tag" name="mp_num_c_1_tag" size="3" maxlength="3" />
           </li>
           <li>
             <label for="mp_num_c_1_subfields">Subfields: </label>
-            <input type="text" id="mp_num_c_1_subfields" name="mp_num_c_1_subfields" size="10" maxlength="40" escape="HTML" />
+            <input type="text" id="mp_num_c_1_subfields" name="mp_num_c_1_subfields" size="10" maxlength="40" />
           </li>
           <li>
             <label for="mp_num_c_1_offset">Offset: </label>
-            <input type="text" id="mp_num_c_1_offset" name="mp_num_c_1_offset" size="5" maxoffset="5" escape="HTML" />
+            <input type="text" id="mp_num_c_1_offset" name="mp_num_c_1_offset" size="5" maxlength="5" />
           </li>
           <li>
             <label for="mp_num_c_1_length">Length: </label>
-            <input type="text" id="mp_num_c_1_length" name="mp_num_c_1_length" size="5" maxlength="5" escape="HTML" />
+            <input type="text" id="mp_num_c_1_length" name="mp_num_c_1_length" size="5" maxlength="5" />
           </li>
           <div id="mp_num_c_1_n_1">
             <li>
               <label for="mp_num_c_1_n_1_norm">Normalization rule: </label>
-              <input type="text" id="mp_num_c_1_n_1_norm" name="mp_num_c_1_n_1_norm" size="20" maxnorms="50" escape="HTML" />
+              <input type="text" id="mp_num_c_1_n_1_norm" name="mp_num_c_1_n_1_norm" size="20" maxlength="50" />
             </li>
           </div>
         </ol>
@@ -633,24 +633,24 @@ function CheckRuleForm(f) {
       <ol>
         <li>
           <label for="mc_num_src_c_1_tag">Tag: </label>
-          <input type="text" id="mc_num_src_c_1_tag" name="mc_num_src_c_1_tag" size="3" maxlength="3" escape="HTML" />
+          <input type="text" id="mc_num_src_c_1_tag" name="mc_num_src_c_1_tag" size="3" maxlength="3" />
         </li>
         <li>
           <label for="mc_num_src_c_1_subfields">Subfields: </label>
-          <input type="text" id="mc_num_src_c_1_subfields" name="mc_num_src_c_1_subfields" size="10" maxlength="40" escape="HTML" />
+          <input type="text" id="mc_num_src_c_1_subfields" name="mc_num_src_c_1_subfields" size="10" maxlength="40" />
         </li>
         <li>
           <label for="mc_num_src_c_1_offset">Offset: </label>
-          <input type="text" id="mc_num_src_c_1_offset" name="mc_num_src_c_1_offset" size="5" maxoffset="5" escape="HTML" />
+          <input type="text" id="mc_num_src_c_1_offset" name="mc_num_src_c_1_offset" size="5" maxlength="5" />
         </li>
         <li>
           <label for="mc_num_src_c_1_length">Length: </label>
-          <input type="text" id="mp_num_c_1_length" name="mp_num_c_1_length" size="5" maxlength="5" escape="HTML" />
+          <input type="text" id="mp_num_c_1_length" name="mp_num_c_1_length" size="5" maxlength="5" />
         </li>
         <div id="mc_num_src_c_1_n_1">
           <li>
             <label for="mc_num_src_c_1_n_1_norm">Normalization rule: </label>
-            <input type="text" id="mc_num_src_c_1_n_1_norm" name="mc_num_src_c_1_n_1_norm" size="20" maxnorms="50" escape="HTML" />
+            <input type="text" id="mc_num_src_c_1_n_1_norm" name="mc_num_src_c_1_n_1_norm" size="20" maxlength="50" />
           </li>
         </div>
       </ol>
@@ -662,24 +662,24 @@ function CheckRuleForm(f) {
       <ol>
         <li>
           <label for="mc_num_tgt_c_1_tag">Tag: </label>
-          <input type="text" id="mc_num_tgt_c_1_tag" name="mc_num_tgt_c_1_tag" size="3" maxlength="3" escape="HTML" />
+          <input type="text" id="mc_num_tgt_c_1_tag" name="mc_num_tgt_c_1_tag" size="3" maxlength="3" />
         </li>
         <li>
           <label for="mc_num_tgt_c_1_subfields">Subfields: </label>
-          <input type="text" id="mc_num_tgt_c_1_subfields" name="mc_num_tgt_c_1_subfields" size="10" maxlength="40" escape="HTML" />
+          <input type="text" id="mc_num_tgt_c_1_subfields" name="mc_num_tgt_c_1_subfields" size="10" maxlength="40" />
         </li>
         <li>
           <label for="mc_num_tgt_c_1_offset">Offset: </label>
-          <input type="text" id="mc_num_tgt_c_1_offset" name="mc_num_tgt_c_1_offset" size="5" maxoffset="5" escape="HTML" />
+          <input type="text" id="mc_num_tgt_c_1_offset" name="mc_num_tgt_c_1_offset" size="5" maxlength="5" />
         </li>
         <li>
           <label for="mc_num_tgt_c_1_length">Length: </label>
-          <input type="text" id="mp_num_c_1_length" name="mp_num_c_1_length" size="5" maxlength="5" escape="HTML" />
+          <input type="text" id="mp_num_c_1_length" name="mp_num_c_1_length" size="5" maxlength="5" />
         </li>
         <div id="mc_num_tgt_c_1_n_1">
           <li>
             <label for="mc_num_tgt_c_1_n_1_norm">Normalization rule: </label>
-            <input type="text" id="mc_num_tgt_c_1_n_1_norm" name="mc_num_tgt_c_1_n_1_norm" size="20" maxnorms="50" escape="HTML" />
+            <input type="text" id="mc_num_tgt_c_1_n_1_norm" name="mc_num_tgt_c_1_n_1_norm" size="20" maxlength="50" />
           </li>
         </div>
       </ol>
