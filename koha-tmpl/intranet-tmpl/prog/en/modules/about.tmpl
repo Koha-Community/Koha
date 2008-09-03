@@ -51,12 +51,12 @@
         </div>
         <div id="perl">
             <table>
-                    <caption>Perl modules</caption>
-                    <tr>
+                <caption>Perl modules</caption>
+                <tr>
                 <!-- TMPL_LOOP name="components" -->
-                        <th scope="row"><!-- TMPL_VAR NAME="name" --></th>
-                        <td><!-- TMPL_VAR NAME="version" --></td>
-                    <!-- TMPL_UNLESS name="counter" --></tr><tr><!-- /TMPL_UNLESS -->
+                    <th scope="row"><!-- TMPL_VAR NAME="name" --></th>
+                    <td><!-- TMPL_VAR NAME="version" --></td>
+                    <!-- TMPL_IF name="newrow" --></tr><!-- TMPL_UNLESS NAME="__last__" --><tr><!-- /TMPL_UNLESS --><!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
             </table>
         </div>
@@ -82,7 +82,7 @@
                 <li><strong>Katipo Communications </strong>, New Zealand (Koha 1.0 and 1.2 Release Manager)</li>
                 <li><strong>SAN-Ouest Provence (Bruno Toumi and Arnaud Laurin)</strong>, France</li>
         <li><strong>Nelsonville Public Library (Owen Leonard)</strong>, Ohio, USA (Interface Design)</li>
-        <li><strong>MJ Ray </li>
+        <li><strong>MJ Ray</strong></li>
             </ul>
 			<h2>Documentation</h2>
 			<ul>
@@ -147,21 +147,17 @@
             <a href="http://developer.yahoo.com/auth/license.txt">BSD License</a>
             </p> 
             <h2>Famfamfam iconset</h2>
-            <p>
               <ul>
                 <li><a href="http://www.famfamfam.com/lab/icons/silk/">FamFamFam Site</a></li>
                 <li><a href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5 License</a></li>
               </ul>
-            </p>
             <h2>The Bridge Material Type Icon Set</h2>
-            <p>
               <ul>
                 <li><a href="http://apps.carleton.edu/campus/library/bridge_icons/">Bridge Material Type Icons Project</a></li>
                 <li>The Bridge Material Type Icon Set is licensed under a
                   <a rel="license" href="http://creativecommons.org/licenses/by-sa/2.5/">Creative Commons Attribution-ShareAlike 2.5 License</a>
                   by the Bridge Consortium of Carleton College and St. Olaf College.</li>
               </ul>
-            </p>
         </div>
         <div id="translations">
             <h2>Translation</h2>

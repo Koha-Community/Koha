@@ -147,14 +147,12 @@ foreach my $component ( sort @component_names ) {
     else {
         $version = 'module is missing';
     }
-    $counter++;
-    $counter=0 if $counter >3;
     push(
         @components,
         {
             name    => $component,
             version => $version,
-            counter => $counter,
+            newrow  => (++$counter % 4) ? 0 : 1,
         }
     );
 }
