@@ -1997,6 +1997,42 @@ if ( C4::Context->preference('Version') < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = '3.01.00.002';
+if ( C4::Context->preference('Version') < TransformToNum($DBversion) ) {
+    # use statistics where available
+    $dbh->do("
+        ALTER TABLE statistics ADD KEY  tmp_stats (type, itemnumber, borrowernumber)
+    ");
+    $dbh->do("
+        UPDATE issues iss
+        SET issuedate = (
+            SELECT max(datetime)
+            FROM statistics 
+            WHERE type = 'issue'
+            AND itemnumber = iss.itemnumber
+            AND borrowernumber = iss.borrowernumber
+        )
+        WHERE issuedate IS NULL;
+    ");  
+    $dbh->do("ALTER TABLE statistics DROP KEY tmp_stats");
+
+    # default to last renewal date
+    $dbh->do("
+        UPDATE issues
+        SET issuedate = lastreneweddate
+        WHERE issuedate IS NULL
+        and lastreneweddate IS NOT NULL
+    ");
+
+    my $num_bad_issuedates = $dbh->selectrow_array("SELECT COUNT(*) FROM issues WHERE issuedate IS NULL");
+    if ($num_bad_issuedates > 0) {
+        print STDERR "After the upgrade to $DBversion, there are still $num_bad_issuedates loan(s) with a NULL (blank) loan date. ",
+                     "Please check the issues table in your database.";
+    }
+    print "Upgrade to $DBversion done (bug 2582: set null issues.issuedate to lastreneweddate)";
+    SetVersion($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
