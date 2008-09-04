@@ -882,7 +882,7 @@ sub AddIssue {
 				$item->{'itemnumber'},
 				$branch,
 				$datedue,
-                                   $issuedate,
+                $issuedate, # here interpreted as the renewal date
 			);
 
 		}
@@ -1934,7 +1934,7 @@ sub CanBookBeRenewed {
 
 =head2 AddRenewal
 
-&AddRenewal($borrowernumber, $itemnumber, $branch, [$datedue], [$issuedate]);
+&AddRenewal($borrowernumber, $itemnumber, $branch, [$datedue], [$lastreneweddate]);
 
 Renews a loan.
 
@@ -1947,7 +1947,8 @@ C<$branch> is the library branch.  Defaults to the homebranch of the ITEM.
 
 C<$datedue> can be a C4::Dates object used to set the due date.
 
-C<$issuedate> can be a iso formatted date to use for the issuedate.
+C<$lastreneweddate> is an optional ISO-formatted date used to set issues.lastreneweddate.  If
+this parameter is not supplied, lastreneweddate is set to the current date.
 
 If C<$datedue> is the empty string, C<&AddRenewal> will calculate the due date automatically
 from the book's item type.
@@ -1961,7 +1962,8 @@ sub AddRenewal {
     my $biblio = GetBiblioFromItemNumber($itemnumber) or return undef;
     my $branch  = (@_) ? shift : $item->{homebranch};	# opac-renew doesn't send branch
     my $datedue = shift;
-        my $issuedate = shift;
+    my $lastreneweddate = shift;
+
     # If the due date wasn't specified, calculate it by adding the
     # book's loan length to today's date.
     unless ($datedue && $datedue->output('iso')) {
@@ -1975,6 +1977,11 @@ sub AddRenewal {
 		#FIXME -- use circControl?
 		$datedue =  CalcDateDue(C4::Dates->new(),$loanlength,$branch);	# this branch is the transactional branch.
 								# The question of whether to use item's homebranch calendar is open.
+    }
+
+    # $lastreneweddate defaults to today.
+    unless (defined $lastreneweddate) {
+        $lastreneweddate = strftime( "%Y-%m-%d", localtime );
     }
 
     my $dbh = C4::Context->dbh;
@@ -1991,11 +1998,11 @@ sub AddRenewal {
     # Update the issues record to have the new due date, and a new count
     # of how many times it has been renewed.
     my $renews = $issuedata->{'renewals'} + 1;
-    $sth = $dbh->prepare("UPDATE issues SET date_due = ?, renewals = ?, lastreneweddate = CURRENT_DATE, issuedate = ?
+    $sth = $dbh->prepare("UPDATE issues SET date_due = ?, renewals = ?, lastreneweddate = ?
                             WHERE borrowernumber=? 
                             AND itemnumber=?"
     );
-    $sth->execute( $datedue->output('iso'), $renews, $issuedate, $borrowernumber, $itemnumber );
+    $sth->execute( $datedue->output('iso'), $renews, $lastreneweddate, $borrowernumber, $itemnumber );
     $sth->finish;
 
     # Update the renewal count on the item, and tell zebra to reindex
