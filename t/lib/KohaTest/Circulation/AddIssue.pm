@@ -93,7 +93,7 @@ sub set_issuedate : Test( 7 ) {
     is( $loanlength, $self->{'loanlength'} );
 }
 
-sub set_issuedate_on_renewal : Test( 6 ) {
+sub set_lastreneweddate_on_renewal : Test( 6 ) {
     my $self = shift;
 
     my $before_issues = C4::Circulation::GetItemIssue( $self->{'items'}[0]{'itemnumber'} );
@@ -112,7 +112,7 @@ sub set_issuedate_on_renewal : Test( 6 ) {
     my $after_issues = C4::Circulation::GetItemIssue( $self->{'items'}[0]{'itemnumber'} );
     is( $after_issues->{'borrowernumber'}, $self->{'memberid'}, 'We found this item checked out to our member.' )
       or diag( Data::Dumper->Dump( [ $after_issues ], [ 'issues' ] ) );
-    is( $after_issues->{'issuedate'}, $issuedate, "...and it was issued on $issuedate" )
+    is( $after_issues->{'lastreneweddate'}, $issuedate, "...and it was renewed on $issuedate" )
       or diag( Data::Dumper->Dump( [ $after_issues ], [ 'after_issues' ] ) );
     
 }
