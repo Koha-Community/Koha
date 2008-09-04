@@ -11,6 +11,7 @@ use C4::Output;
 use C4::Auth qw(:DEFAULT :EditPermissions);
 use C4::Context;
 use C4::Members;
+use C4::Branch;
 #use C4::Acquisitions;
 
 use C4::Output;
@@ -171,7 +172,7 @@ $template->param(
 		firstname => $bor->{'firstname'},
 		categorycode => $bor->{'categorycode'},
 		category_type => $bor->{'category_type'},
-		category_description => $bor->{'description'},
+		categoryname => $bor->{'description'},
 		address => $bor->{'address'},
 		address2 => $bor->{'address2'},
 		city => $bor->{'city'},
@@ -179,6 +180,7 @@ $template->param(
 		phone => $bor->{'phone'},
 		email => $bor->{'email'},
 		branchcode => $bor->{'branchcode'},
+		branchname => GetBranchName($bor->{'branchcode'}),
 		loop => \@loop,
 		is_child        => ($bor->{'category_type'} eq 'C'),
 		);
