@@ -355,11 +355,11 @@ sub GetMemberDetails {
     my $query;
     my $sth;
     if ($borrowernumber) {
-        $sth = $dbh->prepare("select borrowers.*,category_type from borrowers left join categories on borrowers.categorycode=categories.categorycode where  borrowernumber=?");
+        $sth = $dbh->prepare("select borrowers.*,category_type,categories.description from borrowers left join categories on borrowers.categorycode=categories.categorycode where  borrowernumber=?");
         $sth->execute($borrowernumber);
     }
     elsif ($cardnumber) {
-        $sth = $dbh->prepare("select borrowers.*,category_type from borrowers left join categories on borrowers.categorycode=categories.categorycode where cardnumber=?");
+        $sth = $dbh->prepare("select borrowers.*,category_type,categories.description from borrowers left join categories on borrowers.categorycode=categories.categorycode where cardnumber=?");
         $sth->execute($cardnumber);
     }
     else {

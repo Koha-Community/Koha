@@ -673,7 +673,7 @@ $template->param(
     dateexpiry        => format_date($newexpiry),
     expiry            => format_date($borrower->{'dateexpiry'}),
     categorycode      => $borrower->{'categorycode'},
-    categoryname      => $borrowercategory->{description},
+    categoryname      => $borrower->{description},
     address           => $borrower->{'address'},
     address2          => $borrower->{'address2'},
     email             => $borrower->{'email'},

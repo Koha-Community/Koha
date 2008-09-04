@@ -27,6 +27,7 @@ use C4::Output;
 use CGI;
 
 use C4::Members;
+use C4::Branch;
 use C4::Accounts;
 use C4::Items;
 
@@ -75,13 +76,15 @@ if ($add){
 		    cardnumber => $data->{'cardnumber'},
 		    categorycode => $data->{'categorycode'},
 		    category_type => $data->{'category_type'},
-		    category_description => $data->{'description'},
+		    categoryname  => $data->{'description'},
 		    address => $data->{'address'},
 		    address2 => $data->{'address2'},
 		    city => $data->{'city'},
 		    zipcode => $data->{'zipcode'},
 		    phone => $data->{'phone'},
 		    email => $data->{'email'},
+		    branchcode => $data->{'branchcode'},
+		    branchname => GetBranchName($data->{'branchcode'}),
 		    is_child        => ($data->{'category_type'} eq 'C'),
         );
     output_html_with_http_headers $input, $cookie, $template->output;
