@@ -1393,7 +1393,7 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
                 $onloan_count++;
 				my $key = $prefix . $item->{due_date};
 				$onloan_items->{$key}->{due_date} = format_date($item->{onloan});
-				$onloan_items->{$key}->{count}++ if $item->{homebranch};
+				$onloan_items->{$key}->{count}++ if $item->{$hbranch};
 				$onloan_items->{$key}->{branchname} = $item->{branchname};
 				$onloan_items->{$key}->{location} = $shelflocations->{ $item->{location} };
 				$onloan_items->{$key}->{itemcallnumber} = $item->{itemcallnumber};
@@ -1460,7 +1460,7 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
 					}
                     $other_items->{$key}->{intransit} = ($transfertwhen ne '') ? 1 : 0;
 					$other_items->{$key}->{notforloan} = GetAuthorisedValueDesc('','',$item->{notforloan},'','',$notforloan_authorised_value) if $notforloan_authorised_value;
-					$other_items->{$key}->{count}++ if $item->{homebranch};
+					$other_items->{$key}->{count}++ if $item->{$hbranch};
 					$other_items->{$key}->{location} = $shelflocations->{ $item->{location} };
 					$other_items->{$key}->{imageurl} = getitemtypeimagelocation( 'opac', $itemtypes{ $item->{itype} }->{imageurl} );
                 }
@@ -1468,7 +1468,7 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
                 else {
                     $can_place_holds = 1;
                     $available_count++;
-					$available_items->{$prefix}->{count}++ if $item->{homebranch};
+					$available_items->{$prefix}->{count}++ if $item->{$hbranch};
 					foreach (qw(branchname itemcallnumber)) {
                     	$available_items->{$prefix}->{$_} = $item->{$_};
 					}
