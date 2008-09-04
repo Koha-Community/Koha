@@ -1957,6 +1957,22 @@ sub AddRenewal {
     my $branch  = (@_) ? shift : $item->{homebranch};	# opac-renew doesn't send branch
     my $datedue = shift;
     my $lastreneweddate = shift;
+
+    # If the due date wasn't specified, calculate it by adding the
+    # book's loan length to today's date.
+    unless ($datedue && $datedue->output('iso')) {
+
+        my $borrower = C4::Members::GetMemberDetails( $borrowernumber, 0 ) or return undef;
+        my $loanlength = GetLoanLength(
+            $borrower->{'categorycode'},
+             (C4::Context->preference('item-level_itypes')) ? $biblio->{'itype'} : $biblio->{'itemtype'} ,
+			$item->{homebranch}			# item's homebranch determines loanlength OR do we want the branch specified by the AddRenewal argument?
+        );
+		#FIXME -- use circControl?
+		$datedue =  CalcDateDue(C4::Dates->new(),$loanlength,$branch);	# this branch is the transactional branch.
+								# The question of whether to use item's homebranch calendar is open.
+    }
+
     # $lastreneweddate defaults to today.
     unless (defined $lastreneweddate) {
         $lastreneweddate = strftime( "%Y-%m-%d", localtime );
