@@ -92,7 +92,9 @@ sub new {
 		($flags->{$_}) or next;
 		$ilspatron{screen_msg} .= ($flags->{$_}->{message} || '') ;
 		if ($flags->{$_}->{noissues}){
-			$ilspatron{qw(charge_ok renew_ok recall_ok hold_ok)} = (0,0,0,0);
+			foreach my $toggle (qw(charge_ok renew_ok recall_ok hold_ok)) {
+				$ilspatron{$toggle} = 0;
+			}
 		}
 	}
 
