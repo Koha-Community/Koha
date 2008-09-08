@@ -228,7 +228,6 @@ my $advanced_search_types = C4::Context->preference("AdvancedSearchTypes");
 
 if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {                                                                 foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
     my %row =(  number=>$cnt++,
-                imageurl=> getitemtypeimagelocation( 'intranet', $itemtypes->{$thisitemtype}->{'imageurl'} ),
                 ccl => $itype_or_itemtype,
                 code => $thisitemtype,
                 selected => $selected,
@@ -245,7 +244,6 @@ if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {         
     for my $thisitemtype (@$advsearchtypes) {
         my %row =(
                 number=>$cnt++,
-                imageurl=> getitemtypeimagelocation( 'intranet', $thisitemtype->{'imageurl'} ),
                 ccl => $advanced_search_types,
                 code => $thisitemtype->{authorised_value},
                 selected => $selected,
