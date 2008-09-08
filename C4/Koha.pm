@@ -463,23 +463,19 @@ returns the full path to the appropriate directory containing images.
 =cut
 
 sub getitemtypeimagedir {
-	my $src = shift;
-        $src = 'opac' unless defined $src;
-
+	my $src = shift || 'opac';
 	if ($src eq 'intranet') {
 		return C4::Context->config('intrahtdocs') . '/' .C4::Context->preference('template') . '/img/itemtypeimg';
-	}
-	else {
+	} else {
 		return C4::Context->config('opachtdocs') . '/' . C4::Context->preference('template') . '/itemtypeimg';
 	}
 }
 
 sub getitemtypeimagesrc {
-	 my $src = shift;
+	my $src = shift || 'opac';
 	if ($src eq 'intranet') {
 		return '/intranet-tmpl' . '/' .	C4::Context->preference('template') . '/img/itemtypeimg';
-	} 
-	else {
+	} else {
 		return '/opac-tmpl' . '/' . C4::Context->preference('template') . '/itemtypeimg';
 	}
 }
@@ -995,18 +991,16 @@ sub GetAuthValCode {
 
 =head2 GetAuthorisedValues
 
-$authvalues = GetAuthorisedValues($category);
+$authvalues = GetAuthorisedValues([$category], [$selected]);
 
-this function get all authorised values from 'authosied_value' table into a reference to array which
-each value containt an hashref.
+This function returns all authorised values from the'authosied_value' table in a reference to array of hashrefs.
 
-Set C<$category> on input args if you want to limits your query to this one. This params is not mandatory.
+C<$category> returns authorised values for just one category (optional).
 
 =cut
 
 sub GetAuthorisedValues {
     my ($category,$selected) = @_;
-	my $count = 0;
 	my @results;
     my $dbh      = C4::Context->dbh;
     my $query    = "SELECT * FROM authorised_values";
@@ -1018,8 +1012,7 @@ sub GetAuthorisedValues {
 		if ($selected eq $data->{'authorised_value'} ) {
 			$data->{'selected'} = 1;
 		}
-		$results[$count] = $data;
-		$count++;
+        push @results, $data;
 	}
     #my $data = $sth->fetchall_arrayref({});
     return \@results; #$data;
