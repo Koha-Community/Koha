@@ -138,12 +138,12 @@ my $advanced_search_types = C4::Context->preference("AdvancedSearchTypes");
 if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {
 	foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
     my %row =(  number=>$cnt++,
-                imageurl=> getitemtypeimagelocation( 'opac', $itemtypes->{$thisitemtype}->{'imageurl'} ),
 				ccl => $itype_or_itemtype,
                 code => $thisitemtype,
                 selected => $selected,
                 description => $itemtypes->{$thisitemtype}->{'description'},
                 count5 => $cnt % 4,
+                imageurl=> getitemtypeimagelocation( 'opac', $itemtypes->{$thisitemtype}->{'imageurl'} ),
             );
     	$selected = 0 if ($selected) ;
     	push @itemtypesloop, \%row;
@@ -154,12 +154,12 @@ if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {
 	for my $thisitemtype (@$advsearchtypes) {
 		my %row =(
 				number=>$cnt++,
-                imageurl=> getitemtypeimagelocation( 'opac', $thisitemtype->{'imageurl'} ),
 				ccl => $advanced_search_types,
                 code => $thisitemtype->{authorised_value},
                 selected => $selected,
                 description => $thisitemtype->{'lib'},
                 count5 => $cnt % 4,
+                imageurl=> getitemtypeimagelocation( 'opac', $thisitemtype->{'imageurl'} ),
             );
 		push @itemtypesloop, \%row;
 	}
