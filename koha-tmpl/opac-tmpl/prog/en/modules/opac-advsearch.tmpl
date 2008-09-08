@@ -197,11 +197,10 @@
     <table>
         <tr>
       <!--TMPL_LOOP Name="itemtypeloop"-->
-        <td><input type="checkbox" id="<!-- TMPL_VAR NAME="ccl" -->-<!--TMPL_VAR Name="number" -->" name="limit" value="mc-<!-- TMPL_VAR NAME="ccl" -->:<!--TMPL_VAR Name="code" -->"/><label for="<!-- TMPL_VAR NAME="ccl" -->-<!--TMPL_VAR Name="number" -->"><!-- TMPL_IF name="imageurl"--><!-- TMPL_IF NAME="imageurl" --><img border="0" src="<!--TMPL_VAR Name="imageurl" -->" alt="<!--TMPL_VAR Name="description" -->" /><!-- /TMPL_IF --><!-- /TMPL_IF -->&nbsp;
+        <td><input type="checkbox" id="<!-- TMPL_VAR NAME="ccl" -->-<!--TMPL_VAR Name="number" -->" name="limit" value="mc-<!-- TMPL_VAR NAME="ccl" -->:<!--TMPL_VAR Name="code" -->"/><label for="<!-- TMPL_VAR NAME="ccl" -->-<!--TMPL_VAR Name="number" -->"><!-- TMPL_IF name="imageurl"--><img border="0" src="<!--TMPL_VAR Name="imageurl" -->" alt="<!--TMPL_VAR Name="description" -->" /><!-- /TMPL_IF -->&nbsp;
         <!--TMPL_VAR Name="description" --></label></td>
-        <!-- TMPL_UNLESS name="count5" --></tr><tr><!-- /TMPL_UNLESS -->
+        <!-- TMPL_UNLESS name="count5" --><!-- TMPL_UNLESS name="__last__" --></tr><tr><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS -->
       <!--/TMPL_LOOP-->
-	  <!-- FIXME: for validation, avoid generating emtpy row -->
 		</tr>
     </table>
 	</fieldset>
