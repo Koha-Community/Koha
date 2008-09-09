@@ -85,7 +85,7 @@ td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 	}
 	$(document).ready(function() {
 		$('.ajax_buttons' ).css({visibility:"visible"});
-		$("p.check").html("<strong>Select: </strong><a id=\"CheckAll\" href=\"/cgi-bin/koha/tags/review.pl\">All</a> <a id=\"CheckPending\" href=\"/cgi-bin/koha/tags/review.pl\">Pending</a> <a id=\"CheckNone\" href=\"/cgi-bin/koha/tags/review.pl\">None</a>");
+		$("p.check").html("<strong>Select: <\/strong><a id=\"CheckAll\" href=\"/cgi-bin/koha/tags/review.pl\">All<\/a> <a id=\"CheckPending\" href=\"/cgi-bin/koha/tags/review.pl\">Pending<\/a> <a id=\"CheckNone\" href=\"/cgi-bin/koha/tags/review.pl\">None<\/a>");
 	    $("#CheckAll").click(function(){
 	        $(".checkboxed").checkCheckboxes();
 	        return false;
@@ -242,10 +242,10 @@ Calendar.setup({
   </div>
   <!-- /TMPL_IF -->
   <!-- TMPL_IF NAME="message_loop" -->
-  <div class="error" id="main_error">
+  <div class="dialog alert" id="main_error">
 	<!-- TMPL_LOOP NAME="message_loop" -->
-		<!-- TMPL_IF    NAME="date_from"  -->ERROR: Date from is not a legal value (<!-- TMPL_VAR NAME="date_from" -->).
-		<!-- TMPL_ELSIF NAME="date_to"    -->ERROR: Date to is not a legal value (<!-- TMPL_VAR NAME="date_to" -->).
+		<!-- TMPL_IF    NAME="date_from"  -->ERROR: <em>Date from</em> is not a legal value ("<!-- TMPL_VAR NAME="date_from" -->").
+		<!-- TMPL_ELSIF NAME="date_to"    -->ERROR: <em>Date to</em> is not a legal value ("<!-- TMPL_VAR NAME="date_to" -->").
 		<!-- TMPL_ELSIF NAME="failed_ok"  -->ERROR: Failed to approve term (<!-- TMPL_VAR NAME="failed_ok" -->).
 		<!-- TMPL_ELSIF NAME="failed_rej" -->ERROR: Failed to reject term (<!-- TMPL_VAR NAME="failed_rej" -->).
 		<!-- TMPL_ELSIF NAME="approver"   -->ERROR: No match for user (<!-- TMPL_VAR NAME="approver" -->). FILTER REQUIRES BORROWERNUMBER (not name).

@@ -109,9 +109,9 @@
 </div>
 <!-- TMPL_ELSE -->
     <!-- TMPL_IF name='query'-->
-        <b>No results found</b>
+        <!-- TMPL_IF NAME="error" --><div class="dialog alert"><!-- /TMPL_IF --><b>No results found</b>
         <!-- TMPL_IF NAME="error" -->
-            Error: <span class="error"><!-- TMPL_VAR NAME="error" --></span>
+            Error: <span class="error"><!-- TMPL_VAR NAME="error" --></span></div>
         <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->

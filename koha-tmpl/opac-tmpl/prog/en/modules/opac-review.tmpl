@@ -11,7 +11,7 @@
 			<!-- TMPL_IF NAME="cgi_debug" -->alert("injecting OLD comment: " +comment);<!-- /TMPL_IF -->
 			parent.opener.$('#c<!-- TMPL_VAR NAME="reviewid" --> p').prev("small").prev("h5").html("Your Edited Comment (preview, pending approval)");
 			parent.opener.$('#c<!-- TMPL_VAR NAME="reviewid" --> p').html(comment);
-			parent.opener.$('#c<!-- TMPL_VAR NAME="reviewid" --> p').append(" <a href=\"#comment\" onclick=\"Dopop(\'/cgi-bin/koha/opac-review.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->&amp;reviewid=<!-- TMPL_VAR NAME="reviewid" -->\');\">Edit</a>");
+			parent.opener.$('#c<!-- TMPL_VAR NAME="reviewid" --> p').append(" <a href=\"#comment\" onclick=\"Dopop(\'/cgi-bin/koha/opac-review.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->&amp;reviewid=<!-- TMPL_VAR NAME="reviewid" -->\');\">Edit<\/a>");
 			<!-- /TMPL_IF -->
 			return 1;
 		};
@@ -19,9 +19,9 @@
 			<!-- TMPL_IF NAME="cgi_debug" -->alert("injecting NEW comment: " +comment);<!-- /TMPL_IF -->
 			parent.opener.$('#newcomment').attr("class","yours");
 			parent.opener.$('#newcomment').html(
-				"<h5>Your Comment (preview, pending approval)</h5>" +
-				"<p>"+comment+"</p>" +
-				"<a href=\"#comment\" onclick=\"Dopop(\'/cgi-bin/koha/opac-review.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->\');\">Edit</a></p>"
+				"<h5>Your Comment (preview, pending approval)<\/h5>" +
+				"<p>"+comment+"<\/p>" +
+				"<a href=\"#comment\" onclick=\"Dopop(\'/cgi-bin/koha/opac-review.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->\');\">Edit<\/a><\/p>"
 			);
 			parent.opener.$("#addcomment").prev("p").remove();
 			parent.opener.$("#addcomment").remove();
