@@ -34,6 +34,7 @@
 
 <!-- TMPL_IF Name="printerloop" -->
     <li><label for="printer">Choose a network printer:</label>
+    <input type="hidden" name="setcookies" value="1" />
     <!--printerselection-->
     <select name="printer" id="printer">
         <!-- TMPL_LOOP Name="printerloop" -->
@@ -43,8 +44,7 @@
 				<!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
         </select></li>
-<!-- /TMPL_IF -->
-    <input type="hidden" name="setcookies" value="1" /></ol>
+<!-- /TMPL_IF --></ol>
 </fieldset>    <fieldset class="action"><input type="submit" value="Submit" name="changesettings" /></fieldset>
 </form>
 

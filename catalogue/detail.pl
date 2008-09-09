@@ -188,8 +188,8 @@ $template->param(
 
 # XISBN Stuff
 my $xisbn=$dat->{'isbn'};
-$xisbn =~ s/(p|-| |:)//g;
-$template->param(amazonisbn => $xisbn);
+$xisbn =~ /(\d*[X]*)/;
+$template->param(amazonisbn => $1);		# FIXME: so it is OK if the ISBN = 'XXXXX' ?
 if (C4::Context->preference("FRBRizeEditions")==1) {
     eval {
         $template->param(

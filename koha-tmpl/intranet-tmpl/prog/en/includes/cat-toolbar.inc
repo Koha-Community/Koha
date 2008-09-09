@@ -39,7 +39,7 @@ function confirm_deletion() {
 		$("#addtoshelfc").empty();
 		$("#printbiblioc").empty();
 		$("#export").remove();
-		$("#addtoshelfc").before("<li id=\"savemenuc\"></li>");
+		$("#addtoshelfc").before("<li id=\"savemenuc\"><\/li>");
 	    yuiToolbar();
 	 });
 
