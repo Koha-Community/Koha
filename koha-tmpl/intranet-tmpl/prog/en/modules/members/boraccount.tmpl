@@ -39,7 +39,7 @@
 
    <!-- TMPL_IF NAME="toggle" --> <tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
       <td><!-- TMPL_VAR NAME="date" --></td>
-      <td><!-- TMPL_VAR NAME="description" -->&nbsp;<!-- TMPL_IF NAME="itemnumber" --><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">View item</a>&nbsp;<!-- /TMPL_IF --><!-- TMPL_IF NAME="printtitle" --> <!-- TMPL_VAR NAME="title" --><!-- /TMPL_IF --></td>
+      <td><!-- TMPL_VAR NAME="description" -->&nbsp;<!-- TMPL_IF NAME="itemnumber" --><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">View item</a>&nbsp;<!-- /TMPL_IF --><!-- TMPL_IF NAME="printtitle" --> <!-- TMPL_VAR NAME="title" --><!-- /TMPL_IF --></td>
       <!-- TMPL_IF NAME="amountcredit" --><td class="credit"><!-- TMPL_ELSE --><td class="debit"><!-- /TMPL_IF -->$<!-- TMPL_VAR NAME="amount" --></td>
       <!-- TMPL_IF NAME="amountoutstandingcredit" --><td class="credit"><!-- TMPL_ELSE --><td class="debit"><!-- /TMPL_IF -->$<!-- TMPL_VAR NAME="amountoutstanding" --></td>
     </tr>

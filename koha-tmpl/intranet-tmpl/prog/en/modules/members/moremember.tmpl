@@ -220,7 +220,7 @@ if (nodename =="barcodes[]"){
                     <fieldset class="action">
                         <input type="submit" value="Upload" class="submit" />
                         <input name="op" type="hidden" value="Upload" />
-                        <!-- TMPL_IF NAME="picture" --><a href="/cgi-bin/koha/tools/picture-upload.pl?op=Delete&cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" class="delete">Delete</a><!-- /TMPL_IF -->
+                        <!-- TMPL_IF NAME="picture" --><a href="/cgi-bin/koha/tools/picture-upload.pl?op=Delete&amp;cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" class="delete">Delete</a><!-- /TMPL_IF -->
                     </fieldset>
                 </fieldset>
                 </form>
@@ -370,7 +370,7 @@ if (nodename =="barcodes[]"){
                 <img src="<!-- TMPL_VAR NAME="itemtype_image" -->" alt="" />
                 <!-- /TMPL_IF --><!-- /TMPL_UNLESS -->
                 <!-- TMPL_VAR NAME="itemtype_description" --></td>
-            <td><!-- TMPL_IF NAME="red" --><a class="overdue" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><!-- TMPL_ELSE --><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><!-- /TMPL_IF --> <!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR name="author" --><!-- /TMPL_IF --> <!-- TMPL_IF name="publishercode" -->; <!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF --> <!-- TMPL_IF name="publicationyear" -->, <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF --> <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#item<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
+            <td><!-- TMPL_IF NAME="red" --><a class="overdue" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html"--></a><!-- TMPL_ELSE --><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a><!-- /TMPL_IF --> <!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR name="author" --><!-- /TMPL_IF --> <!-- TMPL_IF name="publishercode" -->; <!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF --> <!-- TMPL_IF name="publicationyear" -->, <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF --> <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#item<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
             <td><!-- TMPL_VAR NAME="issuedate" --></td>
             <td><!-- TMPL_IF NAME="red" --><span class="overdue"><!-- TMPL_VAR NAME="date_due" --></span><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="date_due" --><!-- /TMPL_IF --></td>
             <td><!-- TMPL_VAR NAME="charge" --></td>
@@ -457,7 +457,7 @@ if (nodename =="barcodes[]"){
 						<!-- TMPL_VAR NAME="reservedate" -->
 					</td>
 					<td>
-						<a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
+						<a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
                         
 					</td>
 					<td><!-- TMPL_VAR NAME="itemtype" --></td>

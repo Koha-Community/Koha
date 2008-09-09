@@ -19,7 +19,7 @@
 
 <div id="catalogue_detail_biblio">
     <!-- TMPL_LOOP NAME="BIBITEM_DATA" -->
-    <h2><!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --></h2>
+    <h2><!-- TMPL_VAR NAME="title" ESCAPE="html" --> <!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --></h2>
     <ol class="bibliodetails">
         <li><span class="label">Biblionumber:</span> <!-- TMPL_VAR NAME="biblionumber" -->&nbsp;</li>
         <!-- TMPL_UNLESS NAME="item-level_itypes" -->
@@ -28,7 +28,7 @@
         <!-- deprecated? <li><span class="label">Loan length:</span> <!-- TMPL_VAR NAME="loanlength" -->&nbsp;</li> -->
         <li><span class="label">Rental charge:</span>$<!-- TMPL_VAR NAME="rentalcharge" -->&nbsp;</li>
         <li><span class="label">ISBN:</span> <!-- TMPL_VAR NAME="isbn" -->&nbsp;</li>
-        <li><span class="label">Publisher:</span><!-- TMPL_VAR NAME="place" --> <!-- TMPL_VAR NAME="publishercode" --> <!-- TMPL_VAR NAME="publicationyear" -->&nbsp;</li>
+        <li><span class="label">Publisher:</span><!-- TMPL_VAR NAME="place" --> <!-- TMPL_VAR NAME="publishercode" ESCAPE="html" --> <!-- TMPL_VAR NAME="publicationyear" -->&nbsp;</li>
         <!-- TMPL_IF NAME="volumeddesc" --><li><span class="label">Volume:</span> <!-- TMPL_VAR NAME="volumeddesc" --></li><!-- /TMPL_IF -->
         <li><span class="label">Physical Details:</span> <!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" -->&nbsp;</li>
         <!-- TMPL_IF NAME="bnotes" --><li><span class="label">Notes:</span> <!-- TMPL_VAR NAME="bnotes" --></li><!-- /TMPL_IF -->
@@ -37,7 +37,7 @@
     <!-- /TMPL_LOOP -->
     <br clear="all" />
     <!-- TMPL_IF NAME="ONLY_ONE" -->
-        <div class="alert">You are only viewing one item.  <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->#item<!-- TMPL_VAR NAME="itemnumber">">View All</a></div>
+        <div class="dialog message">You are only viewing one item.  <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->#item<!-- TMPL_VAR NAME="itemnumber">">View All</a></div>
     <!-- /TMPL_IF -->
     <!-- TMPL_LOOP NAME="ITEM_DATA" -->
     <div class="yui-g">

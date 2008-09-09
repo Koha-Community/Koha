@@ -42,8 +42,6 @@ my $params = $query->Vars;
 
 my $biblionumber = $params->{'biblionumber'};
 my $itemnumber   = $params->{'itemnumber'};
-my $title        = $params->{'title'};
-my $author       = $params->{'author'};
 
 my ($issues,$biblio,$barcode);
 if ($itemnumber){

@@ -54,12 +54,12 @@
  <h3>Manage patron messaging settings</h3>
 
   <table>
-    <tr><th></th><th># days in advance</th><th>sms</th><th>email</th><th>Digests only?</th><th>rss</th><th>do not notify</th></tr>
+    <tr><th></th><th>Days in advance</th><th>SMS</th><th>Email</th><th>Digests only?</th><th>RSS</th><th>Do not notify</th></tr>
     <!-- TMPL_LOOP name="messaging_preferences" -->
     <tr>
       <td><!-- TMPL_VAR NAME="message_name" --></td>
       <!-- TMPL_IF NAME="takes_days" -->
-      <td><select name="<!-- TMPL_VAR NAME="message_attribute_id" -->-DAYS" id="<!-- TMPL_VAR NAME="message_name" -->-DAYS" >
+      <td><td><select name="<!-- TMPL_VAR NAME="message_attribute_id" -->-DAYS">
           <!-- TMPL_LOOP name="select_days" -->
           <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="day" -->" selected="selected"><!-- TMPL_VAR NAME="day" --></option><!-- TMPL_ELSE -->
           <option value="<!-- TMPL_VAR NAME="day" -->"><!-- TMPL_VAR NAME="day" --></option>
