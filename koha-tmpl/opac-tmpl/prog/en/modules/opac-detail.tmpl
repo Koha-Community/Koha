@@ -54,10 +54,10 @@
     <div id="catalogue_detail_biblio">
 
     <div id="bookcover">
-    <!-- TMPL_IF NAME="AmazonContent" --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="amazonisbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="amazonisbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Cover Image" /></a><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="AmazonContent" --><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="amazonisbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link" target="_blank"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="amazonisbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Cover Image" /></a><!-- TMPL_ELSE --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="amazonisbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="amazonisbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Cover Image" /></a><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
     <!-- TMPL_IF NAME="GoogleJackets" --><div style="block" title="<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" id="<!-- TMPL_VAR NAME="amazonisbn" -->" class="gbs-thumbnail"></div><!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="BakerTaylorEnabled" --><!-- TMPL_IF NAME="clean_isbn" --><a href="https://<!-- TMPL_VAR NAME="BakerTaylorBookstoreURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="clean_isbn" -->"><img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="clean_isbn" -->" /></a><!-- /TMPL_IF --><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="BakerTaylorEnabled" --><!-- TMPL_IF NAME="clean_isbn" --><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a href="https://<!-- TMPL_VAR NAME="BakerTaylorBookstoreURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="clean_isbn" -->" target="_blank"><img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="clean_isbn" -->" /></a><!-- TMPL_ELSE --><a href="https://<!-- TMPL_VAR NAME="BakerTaylorBookstoreURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="clean_isbn" -->"><img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="clean_isbn" -->" /></a><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
     </div>
 
     <!-- TMPL_IF NAME="XSLTDetailsDisplay" -->
@@ -219,7 +219,7 @@
 
     <!-- TMPL_IF NAME="BakerTaylorContentURL" -->
         <span class="results_summary">
-        <span class="label">Enhanced Content:</span><a href="<!-- TMPL_VAR NAME="BakerTaylorContentURL" ESCAPE="HTML" -->">Content Cafe</a>
+        <span class="label">Enhanced Content:</span><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a href="<!-- TMPL_VAR NAME="BakerTaylorContentURL" ESCAPE="HTML" -->" target="_blank">Content Cafe</a><!-- TMPL_ELSE --><a href="<!-- TMPL_VAR NAME="BakerTaylorContentURL" ESCAPE="HTML" -->">Content Cafe</a><!-- /TMPL_IF -->
         </span>
     <!-- /TMPL_IF -->
 </div>
@@ -496,7 +496,7 @@
 <!-- Amazon Reviews -->
 <div id="amazonreviews">
         <!-- TMPL_IF NAME="amazon_average_rating" -->
-            <div class="clearfix"><h3 style="float: left;">Average Rating (from Amazon.com): </h3><span class="starMT" style="float: left;"><span class="starFull" style="float: left; width:<!-- TMPL_VAR EXPR="amazon_average_rating / 2" -->px"></span></span> <!-- TMPL_IF NAME="isbn" --><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&amp;asin=<!-- TMPL_VAR NAME="amazonisbn" -->&amp;store=books">Add your own review</a><!-- /TMPL_IF --></div>
+            <div class="clearfix"><h3 style="float: left;">Average Rating (from Amazon.com): </h3><span class="starMT" style="float: left;"><span class="starFull" style="float: left; width:<!-- TMPL_VAR EXPR="amazon_average_rating / 2" -->px"></span></span> <!-- TMPL_IF NAME="isbn" --><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&amp;asin=<!-- TMPL_VAR NAME="amazonisbn" -->&amp;store=books" target="_blank">Add your own review</a><!-- TMPL_ELSE --><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&amp;asin=<!-- TMPL_VAR NAME="amazonisbn" -->&amp;store=books">Add your own review</a><!-- /TMPL_IF --><!-- /TMPL_IF --></div>
 
         <!-- TMPL_LOOP NAME="AMAZON_CUSTOMER_REVIEWS" -->
             <div class="content_set">
@@ -508,7 +508,7 @@
         <!-- /TMPL_LOOP -->
         <!-- TMPL_ELSE -->
 
-    <p> Sorry, there are no reviews available for this title. <!-- TMPL_IF NAME="isbn" --><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&amp;asin=<!-- TMPL_VAR NAME="amazonisbn" -->&amp;store=books">Add your own review</a><!-- /TMPL_IF --></p>
+    <p> Sorry, there are no reviews available for this title. <!-- TMPL_IF NAME="isbn" --><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&amp;asin=<!-- TMPL_VAR NAME="amazonisbn" -->&amp;store=books" target="_blank">Add your own review</a><!-- TMPL_ELSE --><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&amp;asin=<!-- TMPL_VAR NAME="amazonisbn" -->&amp;store=books">Add your own review</a><!-- /TMPL_IF --><!-- /TMPL_IF --></p>
 
         <!-- /TMPL_IF -->
 </div>
