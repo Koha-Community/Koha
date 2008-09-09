@@ -206,7 +206,7 @@ sub populate_borrowers_table {
     my $sth_sqlite = $dbh_sqlite->prepare($sql);
 
     my $sth_mysql    = $dbh_mysql->prepare(<<'END_SQL');
-SELECT borrowers.borrowernumber, sum( accountlines.amountoutstanding ) as total_fines
+SELECT borrowers.*, sum( accountlines.amountoutstanding ) as total_fines
 FROM borrowers
 LEFT JOIN accountlines
   ON borrowers.borrowernumber = accountlines.borrowernumber
