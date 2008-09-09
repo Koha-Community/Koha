@@ -52,10 +52,10 @@
 	<!-- TMPL_IF NAME="sort_loop" -->
 		<!-- TMPL_LOOP NAME="sort_loop" -->
 			<!-- TMPL_IF name="error" -->
-			<div class="error">ERROR: Illegal sort requested by &quot;<!-- TMPL_VAR NAME="string" -->&quot;.
-				<br />You will need to use valid sort criteria to return valid results.</div>
+			<div class="dialog alert">ERROR: Illegal sort requested by &quot;<!-- TMPL_VAR NAME="string" -->&quot;.
+				<br />Please use valid sort criteria. <a href="/cgi-bin/koha/acqui/basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->">Return to default results.</a></div>
 			<!-- TMPL_ELSE -->
-			<div class="sortmsg">Sorted by &quot;<!-- TMPL_VAR NAME="string" -->&quot;.</div>
+			<div class="dialog message">Sorted by &quot;<!-- TMPL_VAR NAME="string" -->&quot;.</div>
 			<!-- /TMPL_IF -->
 		<!-- /TMPL_LOOP -->
 	<!-- /TMPL_IF -->

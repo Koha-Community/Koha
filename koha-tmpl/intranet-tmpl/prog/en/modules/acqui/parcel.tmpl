@@ -20,12 +20,13 @@
 	<div id="yui-main">
 	<div class="yui-b">
 	<!-- TMPL_IF NAME="receive_error" -->
-	<div id="page_error" class="error">
+	<div class="dialog alert">
 	<h3>Error adding items:</h3>
 	<ul>
 	<!-- TMPL_LOOP NAME="error_loop" -->
-		<li><!-- TMPL_VAR NAME="error_param" --> : <!-- TMPL_IF NAME="error_duplicate_barcode" -->Duplicate Barcode<!-- /TMPL_IF --> <!-- todo: other error conditions come here. --></li>
+		<li><!-- TMPL_VAR NAME="error_param" --><!-- TMPL_IF NAME="error_duplicate_barcode" -->Duplicate Barcode<!-- /TMPL_IF --> <!-- todo: other error conditions come here. --></li>
 	<!-- /TMPL_LOOP -->
+	</ul>
 	</div>
 	<!-- /TMPL_IF -->
     <h1>
@@ -132,7 +133,7 @@
                 <!-- TMPL_IF NAME="author" --><br />author :<!-- TMPL_VAR NAME="author" --><!--/TMPL_IF-->
                 <!-- TMPL_IF NAME="publishercode" --><br />Publisher :<!-- TMPL_VAR NAME="publishercode" --><!--/TMPL_IF-->
                 </td>
-                <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=<!-- TMPL_VAR NAME="biblionumber" -->" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&id=<!-- TMPL_VAR NAME="biblionumber" -->" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
+                <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=<!-- TMPL_VAR NAME="biblionumber" -->" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=<!-- TMPL_VAR NAME="biblionumber" -->" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
                 <td> <!-- TMPL_VAR NAME="quantity" --></td>
                 <td><!-- TMPL_VAR NAME="ecost" --></td>
                 <td><!-- TMPL_VAR NAME="ordertotal" --></td>

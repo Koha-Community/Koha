@@ -82,16 +82,16 @@
             <label for="branchname">Name</label>
             <input type="text" name="branchname" id="branchname" size="40" maxlength="80" value="<!-- TMPL_VAR name="branch_name" escape="HTML" -->" />&nbsp;
         </li>
-		<li><fieldset><legend>Group(s):</legend>
+		<!-- TMPL_IF NAME="categoryloop" --><li><fieldset><legend>Group(s):</legend>
         <ol>
 		<!-- TMPL_LOOP name="categoryloop" -->
             <li><label for="<!-- TMPL_VAR name="categorycode" -->"><!-- TMPL_VAR name="categoryname" --></label>
                 <input type="checkbox" id="<!-- TMPL_VAR name="categorycode" -->" name="<!-- TMPL_VAR name="categorycode" -->" <!-- TMPL_VAR name="checked" --> /> <span class="hint"><!-- TMPL_VAR name="codedescription" --></span>
             </li>
-        <!-- /TMPL_LOOP --></fieldset>
+        <!-- /TMPL_LOOP -->
 		</ol>
-		</li>
-        <li><label for="branchaddress1">Address Line 1</label><input type="text" name="branchaddress1" id="branchaddress1" value="<!-- TMPL_VAR name="branchaddress1" escape="HTML" -->" /></li>
+        </fieldset></li><!-- /TMPL_IF -->
+		<li><label for="branchaddress1">Address Line 1</label><input type="text" name="branchaddress1" id="branchaddress1" value="<!-- TMPL_VAR name="branchaddress1" escape="HTML" -->" /></li>
         <li><label for="branchaddress2">Address Line 2</label><input type="text" name="branchaddress2" id="branchaddress2" value="<!-- TMPL_VAR name="branchaddress2" escape="HTML" -->" /></li>
         <li><label for="branchaddress3">Address Line 3</label><input type="text" name="branchaddress3" id="branchaddress3" value="<!-- TMPL_VAR name="branchaddress3" escape="HTML" -->" /></li>
         <li><label for="branchphone">Phone</label><input type="text" name="branchphone" id="branchphone" value="<!-- TMPL_VAR name="branchphone" escape="HTML" -->" /></li>
@@ -113,7 +113,7 @@
 			-->
         </ol>
         </fieldset>
-        <fieldset class="action"><input type="submit" value="Submit" /></fieldset>
+        <fieldset class="action"><input type="submit" value="Submit" /> <a class="cancel" href="/cgi-bin/koha/admin/branches.pl">Cancel</a></fieldset>
     </form>
 <!-- /TMPL_IF -->
 
@@ -191,10 +191,10 @@
                     <!-- TMPL_VAR NAME="branchprinter" -->
                 </td> -->
                 <td>
-                    <a href="<!-- TMPL_VAR name="action" -->?op=edit&amp;branchcode=<!-- TMPL_VAR name="value" escape="HTML" -->">Edit</a>
+                    <a href="<!-- TMPL_VAR name="action" -->?op=edit&amp;branchcode=<!-- TMPL_VAR name="value" escape="url" -->">Edit</a>
                 </td>
                 <td>
-                    <a href="<!-- TMPL_VAR name="action" -->?branchcode=<!-- TMPL_VAR name="value" escape="HTML" -->&amp;branchname=<!-- TMPL_VAR NAME="branch_name" escape="HTML" -->&amp;op=delete">Delete</a>
+                    <a href="<!-- TMPL_VAR name="action" -->?branchcode=<!-- TMPL_VAR name="value" escape="url" -->&amp;branchname=<!-- TMPL_VAR NAME="branch_name" escape="url" -->&amp;op=delete">Delete</a>
                 </td>
             </tr>
         <!-- /TMPL_LOOP --></tbody>
