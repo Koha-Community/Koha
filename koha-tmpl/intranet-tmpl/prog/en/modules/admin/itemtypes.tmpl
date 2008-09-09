@@ -73,8 +73,17 @@ function Check(f) {
 		alert(alertString2);
 	}
 }
+     $(document).ready(function() {
+        $('#icons > ul').tabs();
+		alert($("input:radio[@name=image]:checked").parents("div:first").attr("id"));
+     });
 //]]>
 </script>
+<style type="text/css">
+	fieldset.rows div.toptabs li { clear:none;margin-right:.5em;padding-bottom:0;width:auto; }
+	fieldset.rows div.toptabs .ui-tabs-nav li.ui-tabs-selected {background-color : transparent; }
+	fieldset.rows .ui-tabs-panel { margin-right : 10px; margin-left : 10px;margin-bottom:10px;}
+</style>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -154,13 +163,25 @@ Item Types Administration
       <li>
           <label for="description">Description</label><input type="text" id="description" name="description" size="48" maxlength="80" value="<!-- TMPL_VAR name="description" escape="HTML" -->" />      </li>
      <!-- TMPL_IF NAME="noItemTypeImages" -->
-	 <li><span class="label">Image: </span>Item type images are disabled. To enable them, turn off the <a href="/cgi-bin/koha/admin/systempreferences.pl?tab=all&searchfield=noItemTypeImages">noItemTypeImages system preference</a></li>
-	 <!-- TMPL_ELSE --> <li><fieldset>
-	  <legend>Images: </legend>
+	 <li><span class="label">Image: </span>Item type images are disabled. To enable them, turn off the <a href="/cgi-bin/koha/admin/systempreferences.pl?tab=all&searchfield=noItemTypeImages">noItemTypeImages system preference</a></li></ol>
+	 <!-- TMPL_ELSE --></ol>
+		<div id="icons" class="toptabs">
+		<h5 style="margin-left:10px;">Choose an Icon:</h5>
+			<ul>
+					<li><a href="/cgi-bin/koha/admin/itemtypes.pl#none">None</a></li>
+				  <!-- TMPL_LOOP NAME="imagesets" -->
+				  	<li><a href="/cgi-bin/koha/admin/itemtypes.pl#<!-- TMPL_VAR NAME="imagesetname" -->"><!-- TMPL_VAR name="imagesetname" --></a></li>
+				  <!-- /TMPL_LOOP -->
+				  <li><a href="/cgi-bin/koha/admin/itemtypes.pl#remote">Remote Image</a></li>
+			</ul>
+		</div>
+  <div id="none"><ul>
+  <li><label for="noimage">No image: </label><input type="radio" name="image" id="noimage" value="removeImage" /></li>
+  </ul>
+  <br class="clear" /></div>
         
-          <ol>
   <!-- TMPL_LOOP NAME="imagesets" -->
-  <li>Icons from collection <b><!-- TMPL_VAR name="imagesetname" --></b>:</li>
+  <div id="<!-- TMPL_VAR NAME="imagesetname" -->"><ul>
   <!-- TMPL_LOOP NAME="images" -->
   			<li style="float: none; display: inline; clear : none; width: auto;">
             <label> <!-- TMPL_IF NAME="StaffImageUrl" -->
@@ -177,28 +198,24 @@ Item Types Administration
             </label>
 			</li>
   <!-- /TMPL_LOOP -->
+  </ul>
+  <br class="clear" />
+  </div>
   <!-- /TMPL_LOOP -->
-	<li>
-            <label for="remote_image_check"> Remote image:</label>
+<div id="remote"><ul>
+<li> <label for="remote_image_check"> Remote image:</label>
   <!-- TMPL_IF name="remote_image" -->
             <input type="radio" id="remote_image_check" name="image" value="remoteImage" checked="checked" />
   <!-- TMPL_ELSE -->
             <input type="radio" id="remote_image_check" name="image" value="remoteImage" />
-  <!-- /TMPL_IF -->
-           
-            <input type="text" name="remoteImage" size="48" maxlength="200" value="<!-- TMPL_VAR name="remote_image" -->" onmousedown="document.getElementById('remote_image_check').checked = true;" />
-
-  <!-- TMPL_IF name="remote_image" -->
+  <!-- /TMPL_IF --><input type="text" name="remoteImage" size="48" maxlength="200" value="<!-- TMPL_VAR name="remote_image" -->" onmousedown="document.getElementById('remote_image_check').checked = true;" /> <!-- TMPL_IF name="remote_image" -->
             <img src="<!-- TMPL_VAR name="remote_image" -->" alt="" />
-  <!-- /TMPL_IF -->
-          </li>
-          <li>
-            <label for="noimage">No image: </label><input type="radio" name="image" id="noimage" value="removeImage" />
-          </li>
-        
-          </ol>
-		  </fieldset>
-      </li><!-- /TMPL_IF -->
+  <!-- /TMPL_IF --></li>
+</ul>
+  <br class="clear" />
+</div>
+<!-- /TMPL_IF -->
+<ol>
       <li>
           <label for="notforloan">Not for loan</label>   <!-- TMPL_IF name="notforloan" -->
                 <input type="checkbox" id="notforloan" name="notforloan" checked="checked" value="1" />
