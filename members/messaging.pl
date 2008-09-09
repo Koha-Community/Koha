@@ -100,7 +100,7 @@ if ( defined $query->param('modify') && $query->param('modify') eq 'yes' ) {
             }
         }
 
-        warn( 'calling SetMessaginPreferencse with ' . Data::Dumper->Dump( [ $updater ], [ 'updater' ] ) );
+        #warn( 'calling SetMessaginPreferencse with ' . Data::Dumper->Dump( [ $updater ], [ 'updater' ] ) );
         C4::Members::Messaging::SetMessagingPreference( $updater );
     }
 
@@ -112,7 +112,7 @@ if ( defined $query->param('modify') && $query->param('modify') eq 'yes' ) {
 PREF: foreach my $option ( @$messaging_options ) {
     my $pref = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber     => $borrower->{'borrowernumber'},
                                                                   message_name       => $option->{'message_name'} } );
-    warn( Data::Dumper->Dump( [ $pref ], [ 'pref' ] ) );
+    #warn( Data::Dumper->Dump( [ $pref ], [ 'pref' ] ) );
     # make a hashref of the days, selecting one.
     if ( $option->{'takes_days'} ) {
         @{$option->{'select_days'}} = map {; { day        => $_,
