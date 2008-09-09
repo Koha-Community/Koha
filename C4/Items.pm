@@ -1184,7 +1184,7 @@ If this is set, it is set to C<One Order>.
 sub GetItemsInfo {
     my ( $biblionumber, $type ) = @_;
     my $dbh   = C4::Context->dbh;
-    my $query = "SELECT *,items.notforloan as itemnotforloan
+    my $query = "SELECT items.*,biblio.*,biblioitems.volume,biblioitems.number,biblioitems.itemtype,biblioitems.isbn,biblioitems.issn,biblioitems.publicationyear,biblioitems.publishercode,biblioitems.volumedate,biblioitems.volumedesc,biblioitems.lccn,biblioitems.url,items.notforloan as itemnotforloan
                  FROM items 
                  LEFT JOIN biblio ON biblio.biblionumber = items.biblionumber
                  LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber";
