@@ -171,10 +171,7 @@ for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
                   if ( $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }
                     ->{hidden}==(-7|-4|-3|-2|2|3|5|8));
                 my %subfield_data;
-                $subfield_data{short_desc} = substr(
-                    $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }->{lib},
-                    0, 20
-                );
+                $subfield_data{short_desc} = $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }->{lib};
                 $subfield_data{long_desc} =
                   $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }->{lib};
                 $subfield_data{link} =
@@ -192,7 +189,7 @@ for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
                 {
 
 #                    warn " tag : ".$tagslib->{$fields[$x_i]->tag()}." subfield :".$tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}. "ISBN : ".$subf[$i][1]."PosttraitementISBN :".DisplayISBN($subf[$i][1]);
-                    $subfield_data{marc_value} = DisplayISBN( $subf[$i][1] );
+                    $subfield_data{marc_value} = $subf[$i][1];
                 }
                 else {
                     if ( $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }
