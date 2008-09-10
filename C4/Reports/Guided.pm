@@ -646,6 +646,7 @@ sub get_from_dictionary {
 		push @loop,$data;
 		
 	}
+	$sth->finish();
 	return (\@loop);
 }
 
