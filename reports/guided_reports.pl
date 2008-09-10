@@ -19,7 +19,7 @@
 
 use strict;
 use CGI;
-use C4::Reports;
+use C4::Reports::Guided;
 use C4::Auth;
 use C4::Output;
 use C4::Dates;
@@ -65,7 +65,7 @@ elsif ( $phase eq 'Build new' ) {
     $template->param( 'build1' => 1 );
 
     # get report areas
-    my $areas = C4::Reports::get_report_areas();
+    my $areas = get_report_areas();
     $template->param( 'areas' => $areas );
 
 }
@@ -123,7 +123,7 @@ elsif ( $phase eq 'Report on this Area' ) {
     );
 
     # get report types
-    my $types = C4::Reports::get_report_types();
+    my $types = get_report_types();
     $template->param( 'types' => $types );
 }
 
@@ -430,7 +430,7 @@ elsif ($phase eq 'Create report from SQL') {
             );
         }
 	$template->param('create' => 1);
-	my $types = C4::Reports::get_report_types();
+	my $types = get_report_types();
         if (my $type = $input->param('type')) {
             for my $i ( 0 .. $#{@$types}) {
                 @$types[$i]->{'selected'} = 1 if @$types[$i]->{'id'} eq $type;

@@ -25,6 +25,7 @@ use C4::Context;
 use C4::Branch; # GetBranches
 use C4::Output;
 use C4::Koha;
+use C4::Reports;
 use C4::Circulation;
 
 =head1 NAME
@@ -50,7 +51,8 @@ my $cotedigits  = $input->param("cotedigits");
 my $output      = $input->param("output");
 my $basename    = $input->param("basename");
 my $mime        = $input->param("MIME");
-my $del         = $input->param("sep");
+our $sep     = $input->param("sep");
+$sep = "\t" if ($sep eq 'tabulation');
 
 my ($template, $borrowernumber, $cookie)
 	= get_template_and_user({template_name => $fullreportname,
@@ -74,7 +76,6 @@ if ($do_it) {
 							 -name=>"$basename.csv" );
 		my $cols  = @$results[0]->{loopcol};
 		my $lines = @$results[0]->{looprow};
-		my $sep = C4::Context->preference("delimiter");
 		print @$results[0]->{line} ."/". @$results[0]->{column} .$sep;
 		foreach my $col ( @$cols ) {
 			print $col->{coltitle}.$sep;
@@ -164,7 +165,6 @@ if ($do_it) {
 	}
 	
 	my @mime  = ( map { +{type =>$_} } (split /[;:]/,C4::Context->preference("MIME")) );
-	my @delim = ( map { +{delim=>$_} } (split //,C4::Context->preference("delimiter")) );
 	
 	$template->param(hasdewey=>$hasdewey,
 					haslccn   => $haslccn,
@@ -174,7 +174,7 @@ if ($do_it) {
 					locationloop => \@locations,
 					authvals     => \@authvals,
 					CGIextChoice => \@mime,
-					CGIsepChoice => \@delim,
+					CGIsepChoice => GetDelimiterChoices,
 					);
 
 }

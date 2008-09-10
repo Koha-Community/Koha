@@ -21,7 +21,7 @@ use strict;
 use C4::Auth;
 use CGI;
 use C4::Output;
-use C4::Reports;
+use C4::Reports::Guided;
 use C4::Dates;
 
 =head1 NAME
@@ -53,7 +53,7 @@ my 	( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 if ($phase eq 'View Dictionary'){
 	# view the dictionary we use to set up abstract variables such as all borrowers over fifty who live in a certain town
-	my $areas = C4::Reports::get_report_areas();
+	my $areas = get_report_areas();
 	my $definitions = get_from_dictionary();
 	$template->param( 'areas' => $areas ,
 		'start_dictionary' => 1,
@@ -68,7 +68,7 @@ elsif ($phase eq 'Add New Definition'){
 
 elsif ($phase eq 'New Term step 2'){
 	# Choosing the area
-	my $areas = C4::Reports::get_report_areas();
+	my $areas = C4::Reports::Guided::get_report_areas();
 	my $definition_name=$input->param('definition_name');
 	my $definition_description=$input->param('definition_description');		
 	$template->param( 'step_2' => 1,
@@ -134,7 +134,7 @@ elsif ($phase eq 'New Term step 4'){
 
 elsif ($phase eq 'New Term step 5'){
 	# Confirmation screen
-	my $areas = C4::Reports::get_report_areas();
+	my $areas = C4::Reports::Guided::get_report_areas();
 	my $area = $input->param('area');
     my $areaname = $areas->[$area - 1]->{'name'};
 	my $columnstring = $input->param('columnstring');

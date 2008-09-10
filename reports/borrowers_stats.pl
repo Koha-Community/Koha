@@ -26,6 +26,7 @@ use C4::Koha;
 use C4::Dates;
 use C4::Acquisition;
 use C4::Output;
+use C4::Reports;
 use C4::Circulation;
 use Date::Calc qw(
   Today
@@ -55,7 +56,8 @@ my $borstat1 = $input->param("activity");
 my $output = $input->param("output");
 my $basename = $input->param("basename");
 my $mime = $input->param("MIME");
-my $del = $input->param("sep");
+our $sep     = $input->param("sep");
+$sep = "\t" if ($sep eq 'tabulation');
 my $selected_branch; # = $input->param("?");
 
 our $branches = GetBranches;
@@ -81,8 +83,6 @@ if ($do_it) {
                        -attachment => "$basename.csv");
 		my $cols = @$results[0]->{loopcol};
 		my $lines = @$results[0]->{looprow};
-		my $sep;
-		$sep =C4::Context->preference("delimiter");
 		print @$results[0]->{line} ."/". @$results[0]->{column} .$sep;
 		foreach my $col ( @$cols ) {
 			print $col->{coltitle}.$sep;
@@ -135,13 +135,7 @@ if ($do_it) {
 				-values   => \@mime,
 				-size     => 1,
 				-multiple => 0 );
-	my @dels = ( C4::Context->preference("delimiter") );
-	my $CGIsepChoice=CGI::scrolling_list(
-				-name => 'sep',
-				-id => 'sep',
-				-values   => \@dels,
-				-size     => 1,
-				-multiple => 0 );
+	my $CGIsepChoice=GetDelimiterChoices;
 	$template->param(
 		CGIextChoice => $CGIextChoice,
 		CGIsepChoice => $CGIsepChoice,
