@@ -62,7 +62,7 @@
             
             <ol class="bibliodetails">
             <li><span class="label">Current Location:</span> <!-- TMPL_VAR NAME="holdingbranchname" -->&nbsp;</li>
-            <li><span class="label">Circulation Status:</span> <!-- TMPL_IF NAME="issue" -->Checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="cardnumber" --></a>, Due back on <!-- TMPL_VAR NAME="onloan" --><!-- TMPL_ELSE -->Not Checked out <!-- /TMPL_IF --></li>
+            <li><span class="label">Checkout Status:</span> <!-- TMPL_IF NAME="issue" -->Checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="cardnumber" --></a>, Due back on <!-- TMPL_VAR NAME="onloan" --><!-- TMPL_ELSE -->Not Checked out <!-- /TMPL_IF --></li>
             <li><span class="label">Lost Status:</span>
                 <!-- TMPL_IF NAME="CAN_user_circulate" -->
                     <form action="updateitem.pl" method="post">
@@ -143,7 +143,7 @@
 
                 <li><span class="label">Total Renewals:</span> <!-- TMPL_VAR NAME="renewals" -->&nbsp;</li>
 
-                <li><span class="label">Total Checkouts:</span><!-- TMPL_IF NAME="issues" --><!-- TMPL_VAR NAME="issues" --><!-- TMPL_ELSE -->0<!-- /TMPL_IF -->  (<a href="/cgi-bin/koha/circ/bookcount.pl?&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;itm=<!-- TMPL_VAR NAME="itemnumber" -->">View Circulation History</a>)</li>
+                <li><span class="label">Total Checkouts:</span><!-- TMPL_IF NAME="issues" --><!-- TMPL_VAR NAME="issues" --><!-- TMPL_ELSE -->0<!-- /TMPL_IF -->  (<a href="/cgi-bin/koha/circ/bookcount.pl?&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;itm=<!-- TMPL_VAR NAME="itemnumber" -->">View item's checkout history</a>)</li>
 
 
                 <li><span class="label">Last seen:</span> <!-- TMPL_VAR NAME="datelastseen" -->&nbsp;</li>
