@@ -998,7 +998,7 @@ sub GetPendingIssues {
     my $dbh              = C4::Context->dbh;
 
     my $sth              = $dbh->prepare(
-   "SELECT * FROM issues 
+   "SELECT *,issues.timestamp as timestamp FROM issues 
       LEFT JOIN items ON issues.itemnumber=items.itemnumber
       LEFT JOIN biblio ON     items.biblionumber=biblio.biblionumber 
       LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber
