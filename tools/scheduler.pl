@@ -20,7 +20,7 @@
 use strict;
 use C4::Context;
 use C4::Scheduler;
-use C4::Reports;
+use C4::Reports::Guided;
 use C4::Auth;
 use CGI;
 use C4::Output;

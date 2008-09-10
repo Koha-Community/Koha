@@ -26,6 +26,7 @@ use C4::Branch; # GetBranches
 use C4::Koha;
 use C4::Circulation;
 use C4::Members;
+use C4::Reports;
 use C4::Debug;
 use C4::Dates qw(format_date format_date_in_iso);
 
@@ -54,7 +55,6 @@ foreach ( @filters[0..3] ) {
 my $output   = $input->param("output");
 my $basename = $input->param("basename");
 # my $mime     = $input->param("MIME");
-my $del      = $input->param("sep");
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => $fullreportname,
                 query => $input,
@@ -63,6 +63,8 @@ my ($template, $borrowernumber, $cookie)
                 flagsrequired => {reports => 1},
                 debug => 1,
                 });
+our $sep     = $input->param("sep");
+$sep = "\t" if ($sep eq 'tabulation');
 $template->param(do_it => $do_it,
         DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
         );
@@ -81,8 +83,6 @@ if ($do_it) {
                             -filename=>"$basename.csv" );
         my $cols  = @$results[0]->{loopcol};
         my $lines = @$results[0]->{looprow};
-        my $sep;
-        $sep =C4::Context->preference("delimiter");
 # header top-right
         print @$results[0]->{line} ."/". @$results[0]->{column} .$sep;
 # Other header
@@ -110,7 +110,7 @@ my @values;
 
 # here each element returned by map is a hashref, get it?
 my @mime  = ( map { +{type =>$_} } (split /[;:]/,C4::Context->preference("MIME")) );
-my @delim = ( map { +{delim=>$_} } (split //,C4::Context->preference("delimiter")) );
+my $delims = GetDelimiterChoices;
 my $branches = GetBranches;
 my @branchloop;
 foreach (sort keys %$branches) {
@@ -142,7 +142,7 @@ foreach (sort keys %$labels) {
     
 $template->param(
 	    mimeloop => \@mime,
-	     seploop => \@delim,
+	  CGIseplist => $delims,
 	  branchloop => \@branchloop,
 	itemtypeloop => \@itemtypeloop,
 	  borcatloop => \@borcatloop,

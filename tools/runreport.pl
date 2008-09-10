@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 # fix this line
-use C4::Reports;
+use C4::Reports::Guided;
 use C4::Context;
 
 use Mail::Sendmail;

@@ -30,6 +30,7 @@ use C4::Branch; # GetBranches
 use C4::Koha;
 use C4::Output;
 use C4::Circulation;
+use C4::Reports;
 use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Members;
 
@@ -60,7 +61,6 @@ my $calc     = $input->param("Cellvalue");
 my $output   = $input->param("output");
 my $basename = $input->param("basename");
 my $mime     = $input->param("MIME");
-my $del      = $input->param("sep");
 my ($template, $borrowernumber, $cookie) = get_template_and_user({
 	template_name => $fullreportname,
 	query => $input,
@@ -69,6 +69,8 @@ my ($template, $borrowernumber, $cookie) = get_template_and_user({
 	flagsrequired => {reports => 1},
 	debug => 0,
 });
+our $sep     = $input->param("sep");
+$sep = "\t" if ($sep eq 'tabulation');
 $template->param(do_it => $do_it,
 	DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
 );
@@ -101,7 +103,6 @@ if ($do_it) {
                             -filename=>"$basename.csv" );
 		my $cols  = @$results[0]->{loopcol};
 		my $lines = @$results[0]->{looprow};
-		my $sep = C4::Context->preference("delimiter");
 # header top-right
 		print @$results[0]->{line} ."/". @$results[0]->{column} .$sep;
 # Other header
@@ -170,13 +171,7 @@ my $CGIextChoice=CGI::scrolling_list(
 	-size     => 1,
 	-multiple => 0 );
     
-my @dels = ( C4::Context->preference("delimiter") );
-my $CGIsepChoice=CGI::scrolling_list(
-	-name     => 'sep',
-	-id       => 'sep',
-	-values   => \@dels,
-	-size     => 1,
-	-multiple => 0 );
+my $CGIsepChoice=GetDelimiterChoices;
  
 $template->param(
 	categoryloop => $categoryloop,
