@@ -22,8 +22,7 @@
         <p><b>Has been checked out <!-- TMPL_VAR NAME="total" --> times</b></p>
         <table>
             <tr><th>Date</th>
-            <th>Surname</th>
-            <th>Firstname</th>
+            <th>Name</th>
             <th>Barcode</th>
             <th>Library</th>
             <th>Issuing Library</th>
@@ -37,20 +36,9 @@
                     <!-- TMPL_ELSE -->
                         &nbsp;
                     <!-- /TMPL_IF --></td>
-                <td><!-- TMPL_IF NAME="surname" -->
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">
-                            <!-- TMPL_VAR NAME="surname" -->
-                        </a>
-                    <!-- TMPL_ELSE -->
-                        &nbsp;
-                    <!-- /TMPL_IF --></td>
-                <td><!-- TMPL_IF NAME="firstname" -->
-                        <!-- TMPL_VAR NAME="firstname" -->
-                    <!-- TMPL_ELSE -->
-                        &nbsp;
-                    <!-- /TMPL_IF --></td>
+                <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="surname" --><!-- TMPL_IF NAME="firstname" -->, <!-- TMPL_VAR NAME="firstname" --><!-- /TMPL_IF --></a></td>
                 <td><!-- TMPL_IF NAME="barcode" -->
-                        <!-- TMPL_VAR NAME="barcode" -->
+                        <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a>
                     <!-- TMPL_ELSE -->
                         &nbsp;
                     <!-- /TMPL_IF --></td>

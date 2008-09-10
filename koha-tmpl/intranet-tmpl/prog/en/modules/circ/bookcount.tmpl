@@ -14,58 +14,33 @@
 	<div id="yui-main">
 	<div class="yui-b">
 
-
-<h1>
-<!-- TMPL_VAR Name="title" --> <!-- TMPL_IF NAME="author" -->(<!-- TMPL_VAR Name="author" -->)<!-- /TMPL_IF --></a></h1>
-<h2>Barcode <!-- TMPL_VAR Name="barcode" --></h2>
-<div class="tabitem">
-  <form action="/cgi-bin/koha/catalogue/detail.pl" method="get">
-    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
-    <input type="hidden" name="type" value="intra" />
-    <input type="submit" class="submit" value="Brief Display" />
-  </form>
-  <form action="/cgi-bin/koha/catalogue/moredetail.pl" method="get">
-    <input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" />
-    <input type="hidden" name="item" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
-    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
-    <input type="hidden" name="bi" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" /> <input type="submit" class="submit" value="Item Details" />
-  </form>
-  <!-- TMPL_IF NAME="norequests" -->
-  <!-- TMPL_ELSE -->
-  <form action="/cgi-bin/koha/reserve/request.pl" method="get">
-    <input type="hidden" value="<!-- TMPL_VAR name="biblionumber" -->" name="biblionumber">
-    <input type="submit" value="Place Reserve" class="submit" />
-  </form>
-  <!-- /TMPL_IF -->
-</div>
+<h2>
+<!-- TMPL_VAR Name="title" --> <!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR Name="author" --><!-- /TMPL_IF --></h2>
+<h3>Barcode <!-- TMPL_VAR Name="barcode" --></h3>
 <table>
-		<tr><th>Home Library: </th><td> <!-- TMPL_VAR Name="homebranch" --> </td></tr>
-		<tr><th>Current Library: </th><td> <!-- TMPL_VAR Name="holdingbranch" --></td></tr>
-		<tr><th>Date arrived at current library: </th><td> <!-- TMPL_VAR Name="lastdate" --> </td></tr>
-		<tr><th>Number of issues since since the above date :</th><td> <!-- TMPL_VAR Name="count" --> </td></tr>
+		<tr><th>Home Library</th><th>Current Library</th><th>Date arrived at current library </th><th>Number of issues since since last transfer</th></tr>
+		
+		<tr><td> <!-- TMPL_VAR Name="homebranch" --> </td><td> <!-- TMPL_VAR Name="holdingbranch" --></td><td> <!-- TMPL_VAR Name="lastdate" --> </td><td> <!-- TMPL_VAR Name="count" --> </td></tr>
 </table>
 <table>
 			<tr>
 				<th>Library</th>
 				<th>No. of times checked out</th>
-				<th>Library last seen at</th>
+				<th>Last Seen</th>
 			</tr>
 			<!-- TMPL_LOOP Name="branchloop" -->
 				<tr>
-					<td class="data"><!-- TMPL_VAR Name="branchname" --> </td>
-					<td class="data"><!-- TMPL_VAR Name="issues" --> </td>
-					<td class="data"><!-- TMPL_VAR Name="seen" --> </td>
+					<td><!-- TMPL_VAR Name="branchname" --> </td>
+					<td><!-- TMPL_VAR Name="issues" --> </td>
+					<td><!-- TMPL_VAR Name="seen" --> </td>
 				</tr>
 			<!-- /TMPL_LOOP -->
 		</table>
-		</td>
-	</tr>
-</table>
 
 </div>
 </div>
 <div class="yui-b">
-<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
+<!-- TMPL_INCLUDE NAME="biblio-view-menu.inc" -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
