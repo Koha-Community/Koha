@@ -999,6 +999,7 @@ The keys include C<biblioitems> fields except marc and marcxml.
 #'
 sub GetPendingIssues {
     my ($borrowernumber) = @_;
+<<<<<<< HEAD:C4/Members.pm
     # must avoid biblioitems.* to prevent large marc and marcxml fields from killing performance
     # FIXME: namespace collision: each table has "timestamp" fields.  Which one is "timestamp" ?
     # FIXME: circ/ciculation.pl tries to sort by timestamp!
