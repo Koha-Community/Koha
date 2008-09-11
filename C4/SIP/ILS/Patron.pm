@@ -25,7 +25,7 @@ use Digest::MD5 qw(md5_base64);
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
 BEGIN {
-	$VERSION = 2.01;
+	$VERSION = 2.02;
 	@ISA = qw(Exporter);
 	@EXPORT_OK = qw(invalid_patron);
 }
@@ -37,19 +37,19 @@ sub new {
     my $type = ref($class) || $class;
     my $self;
 	$kp = GetMember($patron_id,'cardnumber');
-	$debug and warn "new Patron: " . Dumper($kp);
+	$debug and warn "new Patron (GetMember): " . Dumper($kp);
     unless (defined $kp) {
 		syslog("LOG_DEBUG", "new ILS::Patron(%s): no such patron", $patron_id);
 		return undef;
 	}
 	$kp = GetMemberDetails(undef,$patron_id);
-	$debug and warn "new Patron: " . Dumper($kp);
+	$debug and warn "new Patron (GetMemberDetails): " . Dumper($kp);
 	my $pw = $kp->{password};    ## FIXME - md5hash -- deal with . 
 	my $dob= $kp->{dateofbirth};
 	my $fines_out = GetMemberAccountRecords($kp->{borrowernumber});
 	my $flags = $kp->{flags}; # or warn "Warning: No flags from patron object for '$patron_id'"; 
 	my $debarred = $kp->{debarred}; ### 1 if ($kp->{flags}->{DBARRED}->{noissues});
-	$debug and warn "Debarred: $debarred = " . Dumper(%{$kp->{flags}});
+	$debug and warn sprintf("Debarred = %s : ",($debarred||'undef')) . Dumper(%{$kp->{flags}});
 	my %ilspatron;
 	my $adr     = $kp->{streetnumber} || '';
 	my $address = $kp->{address}      || ''; 
@@ -58,6 +58,7 @@ sub new {
 	no warnings;	# any of these $kp->{fields} being concat'd could be undef
 	$dob =~ s/\-//g;
 	%ilspatron = (
+	  getmemberdetails_object => $kp,
 		name => $kp->{firstname} . " " . $kp->{surname},
 		  id => $kp->{cardnumber},			# to SIP, the id is the BARCODE, not userid
 		  password => $pw,
@@ -221,6 +222,10 @@ sub excessive_fees {
 sub too_many_billed {
     my $self = shift;
     return $self->{too_many_billed};
+}
+sub getmemberdetails_object {
+    my $self = shift;
+    return $self->{getmemberdetails_object};
 }
 
 #
