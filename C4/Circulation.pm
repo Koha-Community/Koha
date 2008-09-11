@@ -19,7 +19,7 @@ package C4::Circulation;
 
 
 use strict;
-require Exporter;
+#use warnings;  # soon!
 use C4::Context;
 use C4::Stats;
 use C4::Reserves;
@@ -48,8 +48,8 @@ use Data::Dumper;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
-	# set the version for version checking
-	$VERSION = 3.01;
+	require Exporter;
+	$VERSION = 3.02;	# for version checking
 	@ISA    = qw(Exporter);
 
 	# FIXME subs that should probably be elsewhere
@@ -811,19 +811,21 @@ sub CanBookBeIssued {
 
 Issue a book. Does no check, they are done in CanBookBeIssued. If we reach this sub, it means the user confirmed if needed.
 
-&AddIssue($borrower,$barcode,$date)
+&AddIssue($borrower, $barcode, [$datedue], [$cancelreserve], [$issuedate])
 
 =over 4
 
-=item C<$borrower> hash with borrower informations (from GetMemberDetails)
+=item C<$borrower> is a hash with borrower informations (from GetMemberDetails).
 
-=item C<$barcode> is the bar code of the book being issued.
+=item C<$barcode> is the barcode of the item being issued.
 
-=item C<$date> contains the max date of return. calculated if empty.
+=item C<$datedue> is a C4::Dates object for the max date of return, i.e. the date due (optional).
+Calculated if empty.
 
-=item C<$cancelreserve>
+=item C<$cancelreserve> is 1 to override and cancel any pending reserves for the item (optional).
 
-=item C<$issuedate> the date to issue the item in iso format (YYYY-MM-DD). Defaults to today.
+=item C<$issuedate> is the date to issue the item in iso (YYYY-MM-DD) format (optional).
+Defaults to today.  Unlike C<$datedue>, NOT a C4::Dates object, unfortunately.
 
 AddIssue does the following things :
 - step 01: check that there is a borrowernumber & a barcode provided
@@ -876,15 +878,14 @@ sub AddIssue {
 		#
 		# check if we just renew the issue.
 		#
-		if ( $actualissue->{borrowernumber} eq $borrower->{'borrowernumber'} ) {
-			AddRenewal(
+		if ($actualissue->{borrowernumber} eq $borrower->{'borrowernumber'}) {
+			$datedue = AddRenewal(
 				$borrower->{'borrowernumber'},
 				$item->{'itemnumber'},
 				$branch,
 				$datedue,
                 $issuedate, # here interpreted as the renewal date
 			);
-
 		}
 		else {
         # it's NOT a renewal
@@ -959,33 +960,30 @@ sub AddIssue {
                     (borrowernumber, itemnumber,issuedate, date_due, branchcode)
                 VALUES (?,?,?,?,?)"
           );
-        my $dateduef;
-        if ($datedue) {
-            $dateduef = $datedue;
-        } else {
+        unless ($datedue) {
             my $itype = ( C4::Context->preference('item-level_itypes') ) ? $biblio->{'itype'} : $biblio->{'itemtype'};
             my $loanlength = GetLoanLength( $borrower->{'categorycode'}, $itype, $branch );
-            $dateduef = CalcDateDue( C4::Dates->new( $issuedate, 'iso' ), $loanlength, $branch );
+            $datedue = CalcDateDue( C4::Dates->new( $issuedate, 'iso' ), $loanlength, $branch );
 
             # if ReturnBeforeExpiry ON the datedue can't be after borrower expirydate
-            if ( C4::Context->preference('ReturnBeforeExpiry') && $dateduef->output('iso') gt $borrower->{dateexpiry} ) {
-                $dateduef = C4::Dates->new( $borrower->{dateexpiry}, 'iso' );
+            if ( C4::Context->preference('ReturnBeforeExpiry') && $datedue->output('iso') gt $borrower->{dateexpiry} ) {
+                $datedue = C4::Dates->new( $borrower->{dateexpiry}, 'iso' );
             }
         }
-                        $sth->execute(
-                            $borrower->{'borrowernumber'},      # borrowernumber
-                            $item->{'itemnumber'},              # itemnumber
-                            $issuedate,                         # issuedate
-                            $dateduef->output('iso'),           # date_due
-                            C4::Context->userenv->{'branch'}    # branchcode
-                        );
+        $sth->execute(
+            $borrower->{'borrowernumber'},      # borrowernumber
+            $item->{'itemnumber'},              # itemnumber
+            $issuedate,                         # issuedate
+            $datedue->output('iso'),            # date_due
+            C4::Context->userenv->{'branch'}    # branchcode
+        );
         $sth->finish;
         $item->{'issues'}++;
         ModItem({ issues           => $item->{'issues'},
                   holdingbranch    => C4::Context->userenv->{'branch'},
                   itemlost         => 0,
                   datelastborrowed => C4::Dates->new()->output('iso'),
-                  onloan           => $dateduef->output('iso'),
+                  onloan           => $datedue->output('iso'),
                 }, $item->{'biblionumber'}, $item->{'itemnumber'});
         ModDateLastSeen( $item->{'itemnumber'} );
         
@@ -1013,8 +1011,8 @@ sub AddIssue {
     
     logaction("CIRCULATION", "ISSUE", $borrower->{'borrowernumber'}, $biblio->{'biblionumber'}) 
         if C4::Context->preference("IssueLog");
-    return ($datedue);
   }
+  return ($datedue);	# not necessarily the same as when it came in!
 }
 
 =head2 GetLoanLength
@@ -2030,6 +2028,7 @@ sub AddRenewal {
     }
     # Log the renewal
     UpdateStats( $branch, 'renew', $charge, '', $itemnumber, $item->{itype}, $borrowernumber);
+	return $datedue;
 }
 
 sub GetRenewCount {

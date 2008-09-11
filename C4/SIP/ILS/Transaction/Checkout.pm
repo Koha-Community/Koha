@@ -18,13 +18,13 @@ use ILS::Transaction;
 use C4::Context;
 use C4::Circulation;
 use C4::Members;
+use C4::Debug;
 
 use vars qw($VERSION @ISA $debug);
 
 BEGIN {
-	$VERSION = 1.01;
+	$VERSION = 1.02;
 	@ISA = qw(ILS::Transaction);
-	$debug = 0;
 }
 
 # Most fields are handled by the Transaction superclass
@@ -53,7 +53,10 @@ sub do_checkout {
 	my $barcode        = $self->{item}->id;
 	my $patron_barcode = $self->{patron}->id;
 	$debug and warn "do_checkout: patron (" . $patron_barcode . ")";
-	my $borrower = GetMember( $patron_barcode, 'cardnumber' );
+	# my $borrower = GetMember( $patron_barcode, 'cardnumber' );
+	# my $borrower = $self->{patron};
+	# my $borrower = GetMemberDetails(undef, $patron_barcode);
+	my $borrower = $self->{patron}->getmemberdetails_object();
 	$debug and warn "do_checkout borrower: . " . Dumper $borrower;
 	my ($issuingimpossible,$needsconfirmation) = CanBookBeIssued( $borrower, $barcode );
 	my $noerror=1;
@@ -83,7 +86,11 @@ sub do_checkout {
 	$debug and warn "do_checkout: calling AddIssue(\$borrower,$barcode, undef, 0)\n"
 		# . "w/ \$borrower: " . Dumper($borrower)
 		. "w/ C4::Context->userenv: " . Dumper(C4::Context->userenv);
-	$self->{'due'} = AddIssue( $borrower, $barcode, undef, 0 );
+	my $c4due  = AddIssue( $borrower, $barcode, undef, 0 );
+	my $due  = $c4due->output('iso') || undef;
+	$debug and warn "Item due: $due";
+	$self->{'due'} = $due;
+	$self->{item}->due_date($due);
 	$self->ok(1);
 	return $self;
 }
