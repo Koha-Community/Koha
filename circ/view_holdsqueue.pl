@@ -65,7 +65,7 @@ if ( $run_report ) {
 my $branches = GetBranches;
 my $branch   = C4::Context->userenv->{"branchname"};
 my @branchloop;
-foreach my $thisbranch ( keys %$branches ) {
+foreach my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches ) {
     my $selected = 1 if $thisbranch eq $branch;
     my %row = (
         value      => $thisbranch,
