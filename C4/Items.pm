@@ -224,6 +224,12 @@ sub AddItem {
     _set_derived_columns_for_add($item);
     $item->{'more_subfields_xml'} = _get_unlinked_subfields_xml($unlinked_item_subfields);
     # FIXME - checks here
+    unless ( $item->{itype} ) {  # default to biblioitem.itemtype if no itype
+        my $itype_sth = $dbh->prepare("SELECT itemtype FROM biblioitems WHERE biblionumber = ?");
+        $itype_sth->execute( $item->{'biblionumber'} );
+        ( $item->{'itype'} ) = $itype_sth->fetchrow_array;
+    }
+
 	my ( $itemnumber, $error ) = _koha_new_item( $item, $item->{barcode} );
     $item->{'itemnumber'} = $itemnumber;
 
