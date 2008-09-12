@@ -333,7 +333,16 @@ foreach my $tag (sort keys %{$tagslib}) {
               push @authorised_values, $itemtype;
               $authorised_lib{$itemtype} = $description;
           }
-          $value = $itemtype unless ($value);
+
+          unless ( $value ) {
+              my $default_itemtype;
+              my $itype_sth = $dbh->prepare("SELECT itemtype FROM biblioitems WHERE biblionumber = ?");
+              $itype_sth->execute( $biblionumber );
+              ( $default_itemtype ) = $itype_sth->fetchrow_array;
+              $value = $default_itemtype;
+          }
+  
+          #---- class_sources
       }
       elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "cn_source" ) {
           push @authorised_values, "" unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
