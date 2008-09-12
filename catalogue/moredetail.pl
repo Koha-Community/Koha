@@ -19,7 +19,6 @@
 
 
 use strict;
-require Exporter;
 use C4::Koha;
 use CGI;
 use C4::Biblio;
