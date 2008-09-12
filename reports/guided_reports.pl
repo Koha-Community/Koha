@@ -22,7 +22,7 @@ use CGI;
 use C4::Reports;
 use C4::Auth;
 use C4::Output;
-use C4::Dates qw( DHTMLcalendar );
+use C4::Dates;
 use C4::Debug;
 
 =head1 NAME

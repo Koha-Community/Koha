@@ -30,7 +30,7 @@ use C4::Biblio;
 use C4::Items;
 use C4::Acquisition;
 use C4::Search;
-use C4::Dates qw( DHTMLcalendar );
+use C4::Dates;
 use C4::Koha;    # XXX subfield_is_koha_internal_p
 use C4::Debug;
 use List::Util qw( max min );
@@ -209,12 +209,8 @@ else {
             debug           => 1,
         }
     );
-
-   #using old rel2.2 getitemtypes for testing!!!!, not devweek's GetItemTypes()
-
     my $itemtypes = GetItemTypes;
     my @itemtypeloop;
-    my ($thisitemtype );
     foreach my $thisitemtype (keys %$itemtypes) {
             my %row =(value => $thisitemtype,
                            description => $itemtypes->{$thisitemtype}->{'description'},
