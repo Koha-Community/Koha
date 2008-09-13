@@ -25,9 +25,45 @@
 	    <input type="hidden" name="action" value="<!--TMPL_VAR NAME="action" -->" />
 	    <input type="hidden" name="object" value="<!--TMPL_VAR NAME="object" -->" />
 -->	    <input type="hidden" name="src" value="<!--TMPL_VAR NAME="src" -->" />
-<fieldset>
-    <legend>Additional parameters</legend>
-        <p>
+<fieldset class="rows">
+<ol>
+	    <li>
+	       <label for="user">Librarian:</label> <input type="text" name="user" id="user" value="<!-- TMPL_VAR NAME="user"-->" />
+	    </li>
+	    <li>
+		<label for="module">Module:</label>
+	        <select name="module" id="module">
+			    <option value="" selected="selected">All</option>
+			    <option value ="CATALOGUING">Catalog</option>
+				<option value ="MEMBERS">Members</option>
+				<option value ="ACQUISITION">Acquisitions</option>
+				<option value ="SERIAL">Serial</option>
+				<option value="CIRCULATION">Circulation</option>
+				<option value="LETTER">Letter</option>
+				<option value="FINES">Fines</option>
+				<option value="SYSTEMPREFERENCE">System Prefs</option>
+			</select>
+	    </li>
+	    <li>
+		<label for="action">Action:</label>
+	        <select name="action" id="action">
+    			<option value ="">All</option>
+				<option value ="add">Add</option>
+				<option value ="del">Delete</option>
+				<option value ="mod">Modify</option>
+				<option value="issue">Issue</option>
+				<option value="return">Return</option>
+			</select>
+	    </li>
+	    <li>
+		<label for="object">Object</label>
+	        <input type="text" id="object" name="object" value="<!-- TMPL_VAR NAME="object"-->" />
+	    </li>
+	    <li>
+		<label for="info">Info:</label>
+	        <input type="text" name="info" value="<!-- TMPL_VAR NAME="info"-->" />
+	    </li>
+        <li>
         <label for="from"> Display from</label> <input type="text" size="10" id="from" name="from" value="<!-- TMPL_VAR NAME="datefrom"-->" />
 		<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" alt="Show Calendar" id="openCalendarFrom" style="cursor: pointer;" />
 		<label for="to">to</label> <input size="10" id="to" name="to" type="text" value="<!-- TMPL_VAR NAME="dateto"-->" />
@@ -70,21 +106,27 @@
 				});
 //]]>
 		    </script>
-		</p>
-
-		<p><b>Export</b></p>
-        <p><input id="screen" type="radio" checked="checked" name="output" value="screen" />
-        <label for="screen" >To screen in the browser</label></p>
-		<p>
+		</li>
+		</ol>
+		</fieldset>
+	<fieldset class="rows">
+		<legend>Output</legend>
+		<ol>
+        <li><label for="screen" >To screen in the browser:</label> <input id="screen" type="radio" checked="checked" name="output" value="screen" />
+        </li>
+		<li><label for="file">To a file:</label>
 		<input id="file" type="radio" name="output" value="file" />
-		 <label for="file">To file</label>
-		<input type="text" name="basename" value="Export" /> into an application  
+		 <label class="inline" for="basename">Named:</label>
+		<input type="text" name="basename" id="basename" value="Export" />
+		<label for="MIME" class="inline">Into an application:</label>
 		<!-- TMPL_VAR NAME="CGIextChoice" -->
 		<!-- TMPL_VAR NAME="CGIsepChoice" -->
 	    <input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->" />
-	    <input type="submit" value=" GO " />
-	    </p>
+	    </li>
+		</ol>
 </fieldset>
+<fieldset class="action"><input type="submit" value="Submit" />
+            <input type="hidden" name="do_it" value="1" /></fieldset>
     
     <!-- TMPL_IF NAME="do_it" -->
         <!-- TMPL_IF NAME="total" -->
@@ -94,7 +136,10 @@
 			<!-- TMPL_IF EXPR="module eq 'CATALOGUING'" -->for <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="object" -->">Bibliographic Record <!-- TMPL_VAR NAME="object" --></a><!-- /TMPL_IF --><!-- TMPL_IF EXPR="module eq 'MEMBERS'" -->for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="object" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</a><!-- /TMPL_IF -->
 			.</div>
         <!-- /TMPL_IF -->
-    <!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->    
+	
+    <!-- TMPL_IF NAME="do_it" -->
+        <!-- TMPL_IF NAME="total" -->
     <table>
     <tr>
         <th>Date</th>
@@ -104,44 +149,7 @@
 		<th>Object</th>
 		<th>Info</th>
 	</tr>
-	<tr>
-	    <td>
-            <input type="submit" value="Apply Filter" />
-            <input type="hidden" name="do_it" value="1" />
-	    </td>
-	    <td>
-	        <input type="text" name="user" value="<!-- TMPL_VAR NAME="user"-->" />
-	    </td>
-	    <td>
-	        <select name="module">
-			    <option value="" selected="selected">All</option>
-			    <option value ="CATALOGUING">Catalog</option>
-				<option value ="MEMBERS">Members</option>
-				<option value ="ACQUISITION">Acquisitions</option>
-				<option value ="SERIAL">Serial</option>
-				<option value="CIRCULATION">Circulation</option>
-				<option value="LETTER">Letter</option>
-				<option value="FINES">Fines</option>
-				<option value="SYSTEMPREFERENCE">System Prefs</option>
-			</select>
-	    </td>
-	    <td>
-	        <select name="action">
-    			<option value ="">All</option>
-				<option value ="add">Add</option>
-				<option value ="del">Delete</option>
-				<option value ="mod">Modify</option>
-				<option value="issue">Issue</option>
-				<option value="return">Return</option>
-			</select>
-	    </td>
-	    <td>
-	        <input type="text" name="object" value="<!-- TMPL_VAR NAME="object"-->" />
-	    </td>
-	    <td>
-	        <input type="text" name="info" value="<!-- TMPL_VAR NAME="info"-->" />
-	    </td>
-	</tr>
+	
 	    <!-- TMPL_LOOP NAME="looprow" -->
 					<tr>
 						<td><!-- TMPL_VAR NAME="timestamp" --></td>
@@ -183,14 +191,16 @@
 						</td>
 						<td>
 						    <!-- TMPL_IF NAME="CIRCULATION" -->
-						         <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="info" -->" title="Display detail for this biblio">biblio <!-- TMPL_VAR NAME="info" --></a>
+						         <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="info" -->" title="Display detail for this biblio">biblio <!-- TMPL_VAR NAME="info" escape="html" --></a>
     						<!-- TMPL_ELSE -->
-    						    <!-- TMPL_VAR NAME="info" -->
+    						    <!-- TMPL_VAR NAME="info" escape="html"-->
     						<!-- /TMPL_IF -->
 						</td>
 					</tr>
 		<!-- /TMPL_LOOP -->
     </table>
+<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
 	</form>
 </div>
 </div>
