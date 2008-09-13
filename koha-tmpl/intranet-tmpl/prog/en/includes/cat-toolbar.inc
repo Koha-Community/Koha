@@ -63,7 +63,7 @@ function confirm_deletion() {
 		{ text: _("Dublin Core (XML)"), url: "/cgi-bin/koha/catalogue/export.pl?format=dc&op=export&bib=<!-- TMPL_VAR NAME="biblionumber" -->" },
 		{ text: _("MARCXML"), url: "/cgi-bin/koha/catalogue/export.pl?format=marcxml&op=export&bib=<!-- TMPL_VAR NAME="biblionumber" -->" },
 		{ text: _("MARC (non-Unicode/MARC-8)"), url: "/cgi-bin/koha/catalogue/export.pl?format=marc8&op=export&bib=<!-- TMPL_VAR NAME="biblionumber" -->" },
-		{ text: _("MARC (Unicode/UTF-8)"), url: "/cgi-bin/koha/catalogue/export.pl?format=utf8&op=export&bib=<!-- TMPL_VAR NAME="biblionumber" -->" },
+		{ text: _("MARC (Unicode/UTF-8)"), url: "/cgi-bin/koha/catalogue/export.pl?format=utf8&op=export&bib=<!-- TMPL_VAR NAME="biblionumber" -->" }
 		];
 
 	    new YAHOO.widget.Button({
@@ -79,7 +79,7 @@ function confirm_deletion() {
 	        label: _("Edit"),
 	        name: "editmenubutton",
 	        menu: editmenu,
-	        container: "editmenuc",
+	        container: "editmenuc"
 	    });
 	    
 		new YAHOO.widget.Button({
@@ -87,7 +87,7 @@ function confirm_deletion() {
 	        label: _("New"),
 	        name: "newmenubutton",
 	        menu: newmenu,
-	        container: "newmenuc",
+	        container: "newmenuc"
 	    });
 		
 		var addtoshelfButton = new YAHOO.widget.Button({
