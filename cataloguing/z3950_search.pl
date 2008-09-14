@@ -263,6 +263,7 @@ warn "query ".$query  if $DEBUG;
         breeding_loop => \@breeding_loop,
         server        => $servername[$k],
         numberpending => $numberpending,
+		biblionumber  => $biblionumber,
     );
     
     output_html_with_http_headers $input, $cookie, $template->output if $numberpending == 0;
