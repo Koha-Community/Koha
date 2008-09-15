@@ -3,6 +3,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 //<![CDATA[
+$(document).ready(function(){
+		$("fieldset.rows input").keydown(function(e){ return checkEnter(e); });
+});
 function active(numlayer)
 {
     for (i=10; i < 11 ; i++ ) {
