@@ -805,9 +805,13 @@ function moreoptionsupdate(inputfield,rollover){
     basefield = document.getElementById(fieldname.slice(0,-4));
     var fieldnumber = fieldname.slice(-5,-4);
 
-//    fieldnametemp = fieldname.slice(0,-1)+"temp"+fieldnametempnumber;
-//    eval("document.f."+fieldname+".value = document.f."+fieldnametemp+".value");
     basefield.value = inputfield.value;
+    if(basefield.name.slice(0,-1) == 'lastvalue') {
+        // lastvalue seems to mean 'begins with', tracking the first received issue so
+        // we can recreate the whole historeven after receiving.  innerloop is the var that
+        // actually tracks which issue we're on, though.
+        document.getElementById('innerloop'+fieldnumber).value = inputfield.value;
+    }
     var patternchoice = document.getElementById("numberpattern").value;
     switch(patternchoice){
     case "2":
@@ -818,16 +822,14 @@ function moreoptionsupdate(inputfield,rollover){
       break;   
     }  
     if(rollover){
-//        eval("document.f.every"+(fieldnametempnumber-1)+".value = document.f."+fieldnametemp+".value");
        // calculate rollover  for higher level of periodicity.
-       // FIXME: This calculation only works if addN = 1 , that is, the X,Y,and Z each only increment by zero or one on each issue.
-
        // if there are two levels of periodicity, (e.g. vol{X},num{Y},issue{Z}, then every1=every2*whenmorethan2 
        // otherwise, every2 == 1.
        var addN = (document.getElementById('add'+fieldnumber)) ? document.getElementById('add'+fieldnumber).value : 1 ;
        var everyN = (document.getElementById('every'+fieldnumber)) ? document.getElementById('every'+fieldnumber).value : 1 ;
        document.getElementById('every'+(fieldnumber-1)).value = basefield.value * everyN / addN ;
      }
+     //FIXME : add checks for innerloop || lastvalue  > rollover  
 }
 
 
