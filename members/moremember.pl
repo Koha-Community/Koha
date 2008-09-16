@@ -302,7 +302,7 @@ if ($borrowernumber) {
 
 # 		if we don't have a reserv on item, we put the biblio infos and the waiting position
         if ( $getiteminfo->{'title'} eq '' ) {
-            my $getbibinfo = GetBiblioItemData( $num_res->{'biblionumber'} );
+            my $getbibinfo = GetBiblioData( $num_res->{'biblionumber'} );
             my $getbibtype = getitemtypeinfo( $getbibinfo->{'itemtype'} );
             $getreserv{color}           = 'inwait';
             $getreserv{title}           = $getbibinfo->{'title'};
