@@ -19,7 +19,7 @@
 #
 
 use strict;
-require Exporter;
+use warnings;
 
 use CGI;
 use C4::Output;
@@ -31,6 +31,8 @@ use C4::Accounts;
 use C4::Circulation;
 use C4::Members;
 use C4::Stats;
+use C4::UploadedFile;
+use C4::BackgroundJob;
 
 use Date::Calc qw( Add_Delta_Days Date_to_Days );
 
@@ -49,49 +51,107 @@ my ($template, $loggedinuser, $cookie)
 				debug => 1,
 				});
 
+
+my $fileID=$query->param('uploadedfileid');
+my $runinbackground = $query->param('runinbackground');
+my $completedJobID = $query->param('completedJobID');
+my %cookies = parse CGI::Cookie($cookie);
+my $sessionID = $cookies{'CGISESSID'}->value;
 ## 'Local' globals.
 our $dbh = C4::Context->dbh();
-our @output; ## For storing messages to be displayed to the user
-
-$query::POST_MAX = 1024 * 10000;
-my $file = $query->param("kocfile");
-$file=~m/^.*(\\|\/)(.*)/; # strip the remote path and keep the filename 
-
-my $header_line = <$file>;
-my $file_info   = parse_header_line($header_line);
-if ($file_info->{'Version'} ne $FILE_VERSION) {
-    push( @output, { message => "Warning: This file is version '$file_info->{'Version'}', but I only know how to import version '$FILE_VERSION'. I'll try my best." } );
-}
+our @output = (); ## For storing messages to be displayed to the user
 
 
-while ( my $line = <$file> ) {
+if ($completedJobID) {
+    my $job = C4::BackgroundJob->fetch($sessionID, $completedJobID);
+    my $results = $job->results();
+    $template->param(transactions_loaded => 1);
+    $template->param(messages => $results->{results});
+} elsif ($fileID) {
+    my $uploaded_file = C4::UploadedFile->fetch($sessionID, $fileID);
+    my $fh = $uploaded_file->fh();
+    my @input_lines = <$fh>;
+  
+    my $filename = $uploaded_file->name(); 
+    my $job = undef;
 
-    # my ( $date, $time, $command, @arguments ) = parse_command_line( $line );
-    my $command_line = parse_command_line($line);
+    if ($runinbackground) {
+        my $job_size = scalar(@input_lines);
+        $job = C4::BackgroundJob->new($sessionID, $filename, $ENV{'SCRIPT_NAME'}, $job_size);
+        my $jobID = $job->id();
 
-    # map command names in the file to subroutine names
-    my %dispatch_table = (
-        issue   => \&kocIssueItem,
-        return  => \&kocReturnItem,
-        payment => \&kocMakePayment,
-    );
+        # fork off
+        if (my $pid = fork) {
+            # parent
+            # return job ID as JSON
 
-    # call the right sub name, passing the hashref of command_line to it.
-    if ( exists $dispatch_table{ $command_line->{'command'} } ) {
-        $dispatch_table{ $command_line->{'command'} }->($command_line);
-    } else {
-        warn "unknown command: '$command_line->{command}' not processed";
+            # prevent parent exiting from
+            # destroying the kid's database handle
+            # FIXME: according to DBI doc, this may not work for Oracle
+            $dbh->{InactiveDestroy}  = 1;
+
+            my $reply = CGI->new("");
+            print $reply->header(-type => 'text/html');
+            print "{ jobID: '$jobID' }";
+            exit 0;
+        } elsif (defined $pid) {
+            # child
+            # close STDOUT to signal to Apache that
+            # we're now running in the background
+            close STDOUT;
+            close STDERR;
+        } else {
+            # fork failed, so exit immediately
+            # fork failed, so exit immediately
+            warn "fork failed while attempting to run $ENV{'SCRIPT_NAME'} as a background job";
+            exit 0;
+        }
+
+        # if we get here, we're a child that has detached
+        # itself from Apache
+
+    }     
+
+    my $header_line = shift @input_lines;
+    my $file_info   = parse_header_line($header_line);
+    if ($file_info->{'Version'} ne $FILE_VERSION) {
+        push( @output, { message => "Warning: This file is version '$file_info->{'Version'}', but I only know how to import version '$FILE_VERSION'. I'll try my best." } );
+    }
+    
+    
+    my $i = 0;
+    foreach  my $line (@input_lines)  {
+    
+        $i++;
+        my $command_line = parse_command_line($line);
+        
+        # map command names in the file to subroutine names
+        my %dispatch_table = (
+            issue     => \&kocIssueItem,
+            'return'  => \&kocReturnItem,
+            payment   => \&kocMakePayment,
+        );
+
+        # call the right sub name, passing the hashref of command_line to it.
+        if ( exists $dispatch_table{ $command_line->{'command'} } ) {
+            $dispatch_table{ $command_line->{'command'} }->($command_line);
+        } else {
+            warn "unknown command: '$command_line->{command}' not processed";
+        }
+
+        if ($runinbackground) {
+            $job->progress($i);
+        }
     }
 
+    if ($runinbackground) {
+        $job->finish({ results => \@output }) if defined($job);
+    } else {
+        $template->param(transactions_loaded => 1);
+        $template->param(messages => \@output);
+    }
 }
 
-$template->param(
-		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
-
-                messages => \@output,
-	);
 output_html_with_http_headers $query, $cookie, $template->output;
 
 =head3 parse_header_line

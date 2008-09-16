@@ -1,19 +1,56 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Circulation &rsaquo; Offline Circulation File Processing</title>
+<title>Koha &rsaquo; Circulation &rsaquo; Offline Circulation File Upload</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="file-upload.inc" -->
+<!-- TMPL_INCLUDE NAME="background-job.inc" -->
+<script type="text/javascript">
+//<![CDATA[
+
+function CheckForm(f) {
+    if (f.uploadedfileid.value == '') {
+        alert('Please upload a file first.');
+    } else {
+        return submitBackgroundJob(f);
+    }
+    return false;
+}
+
+//]]>
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="circ-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Offline Circulation File Uplaod</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Offline Circulation File Upload</div>
 
-<h2>Koha Offline Circulation</h2>
-<p>Your data was processed. Here are the results.</p>
+<!-- TMPL_IF NAME="transactions_loaded" -->
+  <h2>Koha Offline Circulation</h2>
+  <p>Your data was processed. Here are the results.</p>
+  <!-- TMPL_LOOP NAME="messages" -->
+    <p><!-- TMPL_VAR NAME="message" --></p>
+  <!-- /TMPL_LOOP -->
+<!-- TMPL_ELSE -->
+  <h2>Upload Offline Circulation Data</h2>
+   <div id="fileuploadform">
+     <form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->" enctype="multipart/form-data">
+       <label for="fileToUpload">Choose .koc File: </label>
+       <input type="file" id="fileToUpload" name="fileToUpload" /><br />
+       <button class="input" onclick="return ajaxFileUpload();">Upload file</button>
+     </form>
+     <div id="fileuploadstatus" style="display:none">Upload progress: <span id="fileuploadprogress">0</span>%</div>
+     <div id="fileuploadfailed" style="display:none"></div>
+   </div>
+   <form action="process_koc.pl" method="post" enctype="multipart/form-data">
+     <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
+     <input type="hidden" name="runinbackground" id="runinbackground" value="" />
+     <input type="hidden" name="completedJobID" id="completedJobID" value="" />
+     <input type="submit" value="Process offline circulation file" onclick="return CheckForm(this.form);" id="mainformsubmit" />
+     <div id="jobstatus" style="display:none">Job progress: <span id="jobprogress">0</span>%</div>
+     <div id="jobfailed" style="display:none"></div>
+   </form>
+<!-- /TMPL_IF -->
 
-<!-- TMPL_LOOP NAME="messages" -->
-  <p><!-- TMPL_VAR NAME="message" --></p>
-<!-- /TMPL_LOOP -->
 
 </body>
 </html>
