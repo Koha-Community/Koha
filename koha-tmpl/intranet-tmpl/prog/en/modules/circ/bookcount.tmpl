@@ -1,12 +1,12 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Circulation &rsaquo; Circulation Statistics for <!-- TMPL_VAR Name="title" --></title>
+<title>Koha &rsaquo; Circulation &rsaquo; Circulation Statistics for <!-- TMPL_VAR Name="title" escape="html" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="circ-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Circulation Statistics for <!-- TMPL_VAR Name="title" --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Circulation Statistics for <!-- TMPL_VAR Name="title" escape="html" --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -15,7 +15,7 @@
 	<div class="yui-b">
 
 <h2>
-<!-- TMPL_VAR Name="title" --> <!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR Name="author" --><!-- /TMPL_IF --></h2>
+<!-- TMPL_VAR Name="title" escape="html" --> <!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR Name="author" --><!-- /TMPL_IF --></h2>
 <h3>Barcode <!-- TMPL_VAR Name="barcode" --></h3>
 <table>
 		<tr><th>Home Library</th><th>Current Library</th><th>Date arrived at current library </th><th>Number of issues since since last transfer</th></tr>

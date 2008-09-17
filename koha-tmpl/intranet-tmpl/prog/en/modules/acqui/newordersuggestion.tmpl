@@ -27,7 +27,7 @@
         <!-- TMPL_LOOP NAME="suggestions_loop" -->
             <tr>
                 <td>
-                    <p><!-- TMPL_VAR NAME="title" --> - <!-- TMPL_VAR NAME="author" --></p>
+                    <p><!-- TMPL_VAR NAME="title" escape="html" --> - <!-- TMPL_VAR NAME="author" --></p>
                     <p>
                         <!-- TMPL_IF name="copyrightdate" -->copy. year:<!-- TMPL_VAR NAME="copyrightdate" --> <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="volumedesc" -->volume:<i><!-- TMPL_VAR NAME="volumedesc" --></i> <!-- /TMPL_IF -->

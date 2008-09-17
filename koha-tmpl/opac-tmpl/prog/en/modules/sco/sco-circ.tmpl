@@ -39,7 +39,7 @@ There is a problem with your account.  Please ask for help at the circulation de
 <!-- TMPL_IF name="confirm" -->
 	<div class="error">
 		<h3>Warning:</h3>
-		<p>Attempting to issue <!-- TMPL_VAR name="title" --> <br />
+		<p>Attempting to issue <!-- TMPL_VAR name="title" escape="html" --> <br />
 			to <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" -->.</p>
 		<p><!-- TMPL_VAR name="confirm" --></p>
 		<form action="/cgi-bin/koha/sco/sco-circ.pl" method="get">
@@ -87,7 +87,7 @@ There is a problem with your account.  Please ask for help at the circulation de
 <!-- TMPL_LOOP NAME="ISSUES" -->
 <!-- TMPL_IF NAME="overdue" --><tr class="overdue"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
 <td><!-- TMPL_IF NAME="itemtypeimages" --> <img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --></td>
-<td><!-- TMPL_IF NAME="amazonimages" --> <!-- TMPL_IF NAME="isbn" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.THUMBZZZ.jpg" alt="Book Cover Image" class="thumbnail" /></a><!-- /TMPL_IF --> <!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><span class="item-details">
+<td><!-- TMPL_IF NAME="amazonimages" --> <!-- TMPL_IF NAME="isbn" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.THUMBZZZ.jpg" alt="Book Cover Image" class="thumbnail" /></a><!-- /TMPL_IF --> <!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a><span class="item-details">
 <!-- TMPL_VAR NAME="author" --></span></td>
 <td><!-- TMPL_VAR NAME="classification" --></td>
 <!-- TMPL_IF NAME="overdue" --><td class="overdue"><!-- TMPL_VAR NAME="date_due" --></td><!-- TMPL_ELSE --><td><!-- TMPL_VAR NAME="date_due" --></td><!-- /TMPL_IF -->

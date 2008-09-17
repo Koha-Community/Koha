@@ -58,7 +58,7 @@ function Dopop(link) {
             </tr></thead>
                 <tbody><!-- TMPL_LOOP NAME="results_loop" -->
                     <tr>
-                        <td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR name="title" --></a><p><!-- TMPL_VAR NAME="author" -->
+                        <td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR name="title" escape="html" --></a><p><!-- TMPL_VAR NAME="author" -->
                         <!-- TMPL_IF name="publicationyear" --> - <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="publishercode" -->- <!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF --> <!-- TMPL_IF name="seriestitle" -->(<!-- TMPL_VAR name="seriestitle" -->)<!-- /TMPL_IF -->
                         <!-- TMPL_IF name="place" --> ; <!-- TMPL_VAR name="place" --><!-- /TMPL_IF -->

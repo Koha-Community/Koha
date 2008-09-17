@@ -38,7 +38,7 @@ function search_member(subscriptionid){
 <form method="post" action="routing.pl">
 <input type="hidden" name="op" value="save" />
 <input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR NAME="subscriptionid" -->" />
-<p><b>Serial Title:</b> <!-- TMPL_VAR NAME="title" --></p>
+<p><b>Serial Title:</b> <!-- TMPL_VAR NAME="title" escape="html" --></p>
 <p><b>Issue:</b> 
 
 <select name="date_selected">

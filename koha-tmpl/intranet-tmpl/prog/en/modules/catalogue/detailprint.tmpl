@@ -10,7 +10,7 @@
 <div id="main">
 <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
 	<table class="list">
-	<caption><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" --></caption>
+	<caption><!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_VAR NAME="subtitle" --></caption>
 	<tr><th>Biblio Record Number: </th><td> <!-- TMPL_VAR NAME="biblionumber" -->	</td></tr>
 <!-- TMPL_IF NAME="author" --><tr><th>Author: </th><td><!-- TMPL_VAR NAME="author" --></td></tr><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="additional" --><tr><th>Additional Author: </th><td><!-- TMPL_VAR NAME="additional" --></td></tr><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->

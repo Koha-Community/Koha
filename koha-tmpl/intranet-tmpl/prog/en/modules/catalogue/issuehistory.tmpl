@@ -7,7 +7,7 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Checkout History for <i><!-- TMPL_VAR NAME="title" --></i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Checkout History for <i><!-- TMPL_VAR NAME="title" escape="html" --></i></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -15,7 +15,7 @@
 	<div id="yui-main">
 	<div class="yui-b">
 
-<h1>Checkout history for <!-- TMPL_VAR NAME="title" --> <!-- TMPL_IF NAME="author" -->(<!-- TMPL_VAR NAME="author" -->)<!-- /TMPL_IF --> </h1>
+<h1>Checkout history for <!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_IF NAME="author" -->(<!-- TMPL_VAR NAME="author" -->)<!-- /TMPL_IF --> </h1>
 
 <div class="searchresults">
     <!-- TMPL_IF NAME="issues" -->
@@ -77,7 +77,7 @@
 		</table>
     <!-- TMPL_ELSE -->
         <p>
-        <b><!-- TMPL_VAR NAME="title" -->(<!-- TMPL_VAR NAME="author" -->)</b> <span class="problem">has never been checked out.</span></p>
+        <b><!-- TMPL_VAR NAME="title" escape="html" -->(<!-- TMPL_VAR NAME="author" -->)</b> <span class="problem">has never been checked out.</span></p>
         
     <!-- /TMPL_IF -->
 </div>
