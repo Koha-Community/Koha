@@ -35,7 +35,7 @@ This script needs a biblionumber as parameter
 =cut
 
 use strict;
-require Exporter;
+
 use C4::Auth;
 use C4::Context;
 use C4::Output;

@@ -17,7 +17,6 @@
 #
 
 use strict;
-require Exporter;
 
 use CGI;
 use C4::Output;

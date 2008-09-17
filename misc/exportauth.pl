@@ -10,7 +10,7 @@ BEGIN {
     use FindBin;
     eval { require "$FindBin::Bin/kohalib.pl" };
 }
-require Exporter;
+
 use C4::Context;
 use C4::Output;  # contains gettemplate
 use C4::Biblio;

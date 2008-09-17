@@ -42,7 +42,6 @@ the items attached to the biblio
 =cut
 
 use strict;
-require Exporter;
 use C4::Auth;
 use C4::Context;
 use C4::Output;
