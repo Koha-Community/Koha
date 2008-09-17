@@ -45,7 +45,7 @@ Id of the subscription this script has to renew
 =cut
 
 use strict;
-require Exporter;
+
 use CGI;
 use C4::Koha;
 use C4::Auth;

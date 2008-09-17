@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 use strict;
-require Exporter;
+
 use CGI;
 use XML::LibXSLT;
 use XML::LibXML;

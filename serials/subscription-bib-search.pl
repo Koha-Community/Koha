@@ -48,7 +48,7 @@ to multipage gestion.
 
 
 use strict;
-require Exporter;
+
 use CGI;
 use C4::Koha;
 use C4::Auth;

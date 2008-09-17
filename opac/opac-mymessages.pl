@@ -17,7 +17,7 @@
 
 use strict;
 use warnings;
-require Exporter;
+
 use CGI;
 
 use C4::Auth;

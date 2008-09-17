@@ -6,7 +6,7 @@
 # issue items to that borrower.
 #
 use strict;
-require Exporter;
+
 use CGI;
 
 #use C4::Authsco;

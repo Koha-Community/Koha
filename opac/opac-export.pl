@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use HTML::Template::Pro;
 use strict;
-require Exporter;
+
 use C4::Record;
 use C4::Auth;
 use C4::Output;
