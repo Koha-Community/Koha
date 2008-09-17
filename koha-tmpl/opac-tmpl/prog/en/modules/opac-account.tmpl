@@ -37,7 +37,7 @@
                     <!-- TMPL_IF NAME="odd" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
                         <td><!-- TMPL_VAR NAME="date" --></td>
                         <td><!-- TMPL_VAR NAME="description" -->
-                        <!-- TMPL_IF NAME="print_title" --><!-- TMPL_VAR NAME="title" --><!-- /TMPL_IF --></td>
+                        <!-- TMPL_IF NAME="print_title" --><!-- TMPL_VAR NAME="title" escape="html" --><!-- /TMPL_IF --></td>
                         <!-- TMPL_IF NAME="amountcredit" --><td class="credit"><!-- TMPL_ELSE --><td class="debit"><!-- /TMPL_IF -->$<!-- TMPL_VAR NAME="amount" --></td>
                         <!-- TMPL_IF NAME="amountoutstandingcredit" --><td class="credit"><!-- TMPL_ELSE --><td class="debit"><!-- /TMPL_IF -->$<!-- TMPL_VAR NAME="amountoutstanding" --></td>
                     </tr>

@@ -34,7 +34,7 @@
         <!-- TMPL_LOOP NAME="resultsloop" -->
         <tr>
             <td><!-- TMPL_VAR NAME="labelno" --></td>
-            <td><b><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"> <!-- TMPL_VAR NAME="title" --></a></b> : <!-- TMPL_VAR NAME="author" --> : <!-- TMPL_VAR NAME="isbn" --></td>
+            <td><b><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"> <!-- TMPL_VAR NAME="title" escape="html" --></a></b> : <!-- TMPL_VAR NAME="author" --> : <!-- TMPL_VAR NAME="isbn" --></td>
             <td><!-- TMPL_VAR NAME="itemtype" --></td>
             <td><!-- TMPL_VAR NAME="barcode" --></td>
             <td><a href="/cgi-bin/koha/labels/label-manager.pl?op=delete&amp;labelid=<!-- TMPL_VAR NAME="labelid" -->&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=labels">Delete</a></td>

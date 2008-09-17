@@ -74,11 +74,11 @@ $.tablesorter.addParser({
 
 
 <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
-<a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>
+<a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a>
 <!-- TMPL_ELSIF NAME="BiblioDefaultViewisbd" -->
-<a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" --></a>
+<a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a>
 <!-- TMPL_ELSE -->
-<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" -->  <!-- TMPL_VAR NAME="subtitle" --></a><!-- /TMPL_IF --> &nbsp; (<b><!-- TMPL_VAR NAME="itemtype" --></b>)
+<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" -->  <!-- TMPL_VAR NAME="subtitle" --></a><!-- /TMPL_IF --> &nbsp; (<b><!-- TMPL_VAR NAME="itemtype" --></b>)
                                                         <br />Barcode : <!-- TMPL_VAR NAME="barcode" -->
                                         </td>
                                         <td>

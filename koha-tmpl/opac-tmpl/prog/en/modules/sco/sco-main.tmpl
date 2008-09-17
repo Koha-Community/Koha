@@ -11,7 +11,7 @@
 
 <!-- TMPL_IF NAME="impossible" --><!-- We tried to issue, but failed. -->
 <div class="error"><h3>Item cannot be issued.</h3><p>Sorry, This item cannot be checked out at this station.  </p>
-<p><em>Title:</em> <!-- TMPL_VAR NAME="title" --> </p>
+<p><em>Title:</em> <!-- TMPL_VAR NAME="title" escape="html" --> </p>
 <p><em>Error type:</em> <!-- TMPL_VAR NAME="impossible" --></p>
 <form action="/cgi-bin/koha/sco/sco-main.pl" name="errorForm" method="post">
 <input type="hidden" name="op" value="login" />
@@ -110,7 +110,7 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	<!-- TMPL_LOOP NAME="ISSUES" -->
 	<!-- TMPL_IF NAME="overdue" --><tr class="overdue"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
 	<td><!-- TMPL_IF NAME="itemtypeimages" --> <img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --></td>
-	<td><!-- TMPL_IF NAME="amazonimages" --> <!-- TMPL_IF NAME="isbn" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.THUMBZZZ.jpg" alt="Book Cover Image" class="thumbnail" /></a><!-- /TMPL_IF --> <!-- /TMPL_IF --><!-- TMPL_UNLESS NAME="noitemlinks" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="title" --><!-- /TMPL_UNLESS --><span class="item-details">
+	<td><!-- TMPL_IF NAME="amazonimages" --> <!-- TMPL_IF NAME="isbn" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.THUMBZZZ.jpg" alt="Book Cover Image" class="thumbnail" /></a><!-- /TMPL_IF --> <!-- /TMPL_IF --><!-- TMPL_UNLESS NAME="noitemlinks" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="title" escape="html" --><!-- /TMPL_UNLESS --><span class="item-details">
 	<!-- TMPL_VAR NAME="author" --></span></td>
 	<td><!-- TMPL_VAR NAME="classification" --></td>
 	<!-- TMPL_IF NAME="overdue" --><td class="overdue"><!-- TMPL_VAR NAME="date_due" --></td><!-- TMPL_ELSE --><td><!-- TMPL_VAR NAME="date_due" --></td><!-- /TMPL_IF -->

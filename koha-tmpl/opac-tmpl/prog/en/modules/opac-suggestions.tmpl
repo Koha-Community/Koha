@@ -119,7 +119,7 @@ $.tablesorter.addParser({
                     <input type="checkbox" name="delete_field" value="<!--TMPL_VAR name="suggestionid" -->" />
                 </td><!-- /TMPL_IF -->
                 <td>
-                    <p><strong><!-- TMPL_VAR NAME="title" --></strong></p>
+                    <p><strong><!-- TMPL_VAR NAME="title" escape="html" --></strong></p>
                     <p><!-- TMPL_IF name="author" --><!-- TMPL_VAR NAME="author" -->,<!-- /TMPL_IF -->
                         <!-- TMPL_IF name="copyrightdate" --> - <!-- TMPL_VAR NAME="copyrightdate" -->,<!-- /TMPL_IF --> 
                         <!-- TMPL_IF name="publishercode" --> - <!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF -->

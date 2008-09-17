@@ -48,7 +48,7 @@
         <!-- /TMPL_IF -->
             <td>
                 <p>
-                    <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
+                    <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a>
                 <!-- TMPL_VAR NAME="subtitle" --></p>
                 <!-- TMPL_IF name="summary" -->
                     <p><!-- TMPL_VAR name="summary" --></p>
@@ -130,7 +130,7 @@
             </tr>
             <!-- TMPL_LOOP NAME="breeding_loop" -->
             <!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="hilighted"><!-- /TMPL_IF -->
-                <td><!-- TMPL_VAR NAME="title" -->
+                <td><!-- TMPL_VAR NAME="title" escape="html" -->
                 <!-- TMPL_VAR NAME="author" --></td>
                 <td><!-- TMPL_VAR NAME="isbn" --></td>
                 <td><!-- TMPL_VAR NAME="file" --></td>

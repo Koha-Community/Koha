@@ -358,7 +358,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 		    <h4>Holds waiting:</h4>
 			        <!-- TMPL_LOOP NAME="WaitingReserveLoop" -->
 			            <ul> 
-			                <li> <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title"--></a> (<!-- TMPL_VAR NAME="itemtype"-->), <!-- TMPL_IF NAME="author" -->by <!-- TMPL_VAR NAME="author"--><!-- /TMPL_IF --> Hold placed on <!-- TMPL_VAR NAME="reservedate"-->.
+			                <li> <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a> (<!-- TMPL_VAR NAME="itemtype"-->), <!-- TMPL_IF NAME="author" -->by <!-- TMPL_VAR NAME="author"--><!-- /TMPL_IF --> Hold placed on <!-- TMPL_VAR NAME="reservedate"-->.
 			            <!-- TMPL_IF NAME="waitingat" -->
 			                <br /><!-- TMPL_IF NAME="waitinghere" --><strong class="waitinghere"><!-- TMPL_ELSE --><strong><!-- /TMPL_IF -->Waiting at <!-- TMPL_VAR NAME="waitingat" --></strong>	
 			            <!-- /TMPL_IF -->
@@ -423,7 +423,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
     <tr class="highlight">
     <!-- /TMPL_IF -->
         <td><!-- TMPL_VAR NAME="dd" --></td>
-        <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra"><!-- TMPL_VAR NAME="title" --></a><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="itemnotes" -->- <span class="circ-hlt"><!-- TMPL_VAR name="itemnotes" --></span><!-- /TMPL_IF --></td>
+        <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra"><!-- TMPL_VAR NAME="title" escape="html" --></a><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="itemnotes" -->- <span class="circ-hlt"><!-- TMPL_VAR name="itemnotes" --></span><!-- /TMPL_IF --></td>
         <td>
             <!-- TMPL_VAR NAME="itemtype" -->
            <!-- TMPL_UNLESS NAME="noItemTypeImages" --> <!-- TMPL_IF NAME="itemtype_image" -->
@@ -470,7 +470,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <!-- TMPL_IF NAME="od" --><td class="od"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
         <!-- TMPL_VAR NAME="dd" -->
         </td>
-        <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra"><!-- TMPL_VAR NAME="title" --></a><br /><!-- TMPL_IF NAME="author" --><!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="itemnotes" -->- <!-- TMPL_VAR name="itemnotes" --><!-- /TMPL_IF --></td>
+        <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra"><!-- TMPL_VAR NAME="title" escape="html" --></a><br /><!-- TMPL_IF NAME="author" --><!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="itemnotes" -->- <!-- TMPL_VAR name="itemnotes" --><!-- /TMPL_IF --></td>
         <td>
             <!-- TMPL_VAR NAME="itemtype" -->
             <!-- TMPL_IF NAME="itemtype_image" -->
@@ -535,7 +535,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <!-- TMPL_LOOP NAME="reservloop" -->
         <tr class="<!-- TMPL_VAR NAME="color" -->">
                     <td><!-- TMPL_VAR NAME="reservedate" --></td>
-                    <td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --></td>
+                    <td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --></td>
 					<td><!-- TMPL_VAR NAME="itemtype" --></td>
                     <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
 					<td><em><!-- TMPL_IF name="barcodereserv" -->Item <!-- TMPL_VAR NAME="barcodereserv" -->

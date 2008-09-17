@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Circulation &rsaquo; Check In <!-- TMPL_VAR Name="title" --></title>
+<title>Koha &rsaquo; Circulation &rsaquo; Check In <!-- TMPL_VAR Name="title" escape="html" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 //<![CDATA[
@@ -58,7 +58,7 @@ function Dopop(link) {
 </div>
 <!-- /TMPL_IF -->
 <!-- case of a mistake in transfer loop -->
-<!-- TMPL_IF Name="WrongTransfer" --><div class="dialog message"><!-- WrongTransfer --><h3>Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a> to <!-- TMPL_VAR Name="TransferWaitingAt" --></h3>
+<!-- TMPL_IF Name="WrongTransfer" --><div class="dialog message"><!-- WrongTransfer --><h3>Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" escape="html" --></a> to <!-- TMPL_VAR Name="TransferWaitingAt" --></h3>
 <!-- TMPL_IF Name="wborcnum"--><h5>Hold for:</h5> 
         <ul><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">
             <!-- TMPL_VAR Name="borsurname" -->, <!-- TMPL_VAR Name="borfirstname" --></a> (<!-- TMPL_VAR Name="borcnum" -->)</li>
@@ -85,7 +85,7 @@ function Dopop(link) {
     <!-- TMPL_IF Name="waiting" -->
 	<!-- waiting -->
 <div class="dialog message">
-        <h3>Hold Found (item is already waiting):  <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a></h3>
+        <h3>Hold Found (item is already waiting):  <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" escape="html" --></a></h3>
         <h4>Hold for:</h4>
 			<ul>
             <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR Name="borsurname" -->, <!-- TMPL_VAR Name="borfirstname" --></a> (<!-- TMPL_VAR Name="borcnum" -->)</li>
@@ -115,7 +115,7 @@ function Dopop(link) {
     <!-- TMPL_IF Name="diffbranch" -->
 		<!-- diffbranch -->
         <div class="dialog message">
-		<h3>Hold needing transfer found: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a></h3>
+		<h3>Hold needing transfer found: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" escape="html" --></a></h3>
                 <h4>Hold for: </h4>
                     <ul>
                         <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR Name="borsurname" -->, <!-- TMPL_VAR Name="borfirstname" --></a> (<!-- TMPL_VAR Name="borcnum" -->)</li>
@@ -147,7 +147,7 @@ function Dopop(link) {
     <!-- TMPL_IF Name="transfer" -->
 	<!-- transfer -->
 	<div class="dialog message">
-	  <h3>Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a> to <!-- TMPL_VAR Name="homebranch" --></h3></div><!-- /TMPL_IF -->
+	  <h3>Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" escape="html" --></a> to <!-- TMPL_VAR Name="homebranch" --></h3></div><!-- /TMPL_IF -->
     
     <!-- TMPL_IF Name="needstransfer" -->
 	<!-- transfer -->
@@ -171,7 +171,7 @@ function Dopop(link) {
 	<!-- diffbranch -->
         <h3>Item Consigned:</h3>
         <table>
-        <caption><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a></caption>
+        <caption><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" escape="html" --></a></caption>
         <tr>
             <th>Hold for:</th>
             <td><!-- TMPL_VAR Name="name" --></td>
@@ -194,7 +194,7 @@ function Dopop(link) {
     <!-- TMPL_IF Name="reserved" -->
 	<!--  reserved  -->
 	<div class="dialog message">
-	  <h3>Hold Found: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" --></a></h3>
+	  <h3>Hold Found: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" escape="html" --></a></h3>
         <h5>Hold for:</h5>
 		<ul>
             <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">
@@ -336,14 +336,14 @@ function Dopop(link) {
 <!-- TMPL_IF Name="riloop" -->
     <h2>Checked-In items</h2>
     <table>
-	<tr><th>Due Date</th>	<th>Title</th>	<th>Author</th>	<th>Barcode</th>	<th>Type</th>	<th>Patron</th><th>Note</th></tr>
+	<tr><th>Due Date</th><th>Title</th>	<th>Author</th>	<th>Barcode</th><th>Type</th>	<th>Patron</th><th>Note</th></tr>
         
         <!-- TMPL_LOOP Name="riloop" -->
             <tr>
             <td><!-- TMPL_IF Name="duedate" --><!-- TMPL_VAR NAME="duedate" --><!-- TMPL_ELSE -->Not checked out<!-- /TMPL_IF --></td>
             <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR Name="itembiblionumber" -->">
                     <!-- TMPL_VAR Name="itemtitle" escape="html" --></a></td>
-			<td><!-- TMPL_VAR Name="itemauthor" escape--></td>
+			<td><!-- TMPL_VAR Name="itemauthor" --></td>
             <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#item<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_VAR Name="barcode" --></a></td>
             <td><!-- TMPL_VAR Name="itemtype" --> <!-- TMPL_VAR Name="ccode" --></td>
 			 <td><!-- TMPL_IF Name="duedate" -->

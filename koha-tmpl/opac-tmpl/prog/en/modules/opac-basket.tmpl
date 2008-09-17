@@ -67,7 +67,7 @@
                 <!-- TMPL_IF name="subtitle" --> <!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF -->
         <!-- TMPL_ELSE -->
                 <input type="checkbox" value="<!-- TMPL_VAR NAME="biblionumber" -->" name="bib<!-- TMPL_VAR NAME="biblionumber" -->" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" onclick="selRecord(value,checked)" />
-                <!-- TMPL_VAR NAME="title" -->
+                <!-- TMPL_VAR NAME="title" escape="html" -->
                 <!-- TMPL_IF name="subtitle" --> <!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
     </h3>
@@ -214,7 +214,7 @@
                    
                 </td> <!-- /TMPL_UNLESS -->
             <td><a href="#" onclick="openBiblio('<!-- TMPL_VAR name="dest" -->',<!-- TMPL_VAR name="biblionumber" -->)">
-                        <!-- TMPL_VAR NAME="title" -->
+                        <!-- TMPL_VAR NAME="title" escape="html" -->
                     </a>
                         <!-- TMPL_VAR NAME="author" -->
                         <p><!-- TMPL_IF name="publishercode" -->- <!-- TMPL_VAR name="publishercode" -->

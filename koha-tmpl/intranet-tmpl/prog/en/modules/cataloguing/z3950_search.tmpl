@@ -98,7 +98,7 @@ $.tablesorter.addParser({
 		
         <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
             <td><!-- TMPL_VAR name="server" --></td>
-            <td><!-- TMPL_VAR NAME="title" --></td>
+            <td><!-- TMPL_VAR NAME="title" escape="html" --></td>
             <td><!-- TMPL_VAR NAME="author" --></td>
             <td><!-- TMPL_VAR NAME="isbn" --></td>
             <td><!-- TMPL_VAR NAME="lccn" --></td>

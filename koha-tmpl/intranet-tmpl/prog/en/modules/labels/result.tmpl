@@ -82,7 +82,7 @@ function add_item3(i_itemnumber){
 			<tr>
 		<!-- /TMPL_IF -->
 			<td colspan="5">
-					<label style="font-weight:bold;"><!-- TMPL_VAR NAME="title" --></label> by <!-- TMPL_VAR NAME="author" --><br />
+					<label style="font-weight:bold;"><!-- TMPL_VAR NAME="title" escape="html" --></label> by <!-- TMPL_VAR NAME="author" --><br />
                                       [<!-- TMPL_VAR NAME="itemtype" -->], <!-- TMPL_IF name="publishercode" --><!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF --><!-- TMPL_IF name="place" --><!-- TMPL_VAR name="place" --> <!-- /TMPL_IF --><!-- TMPL_IF name="copyrightdate" --><!-- TMPL_VAR name="copyrightdate" -->, <!-- /TMPL_IF --><!-- TMPL_IF name="pages" --><!-- TMPL_VAR name="pages" --><!-- /TMPL_IF --><!-- TMPL_IF name="isbn" -->, <b>ISBN: </b><!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF --><!-- TMPL_IF name="notes" -->,<br /><!-- TMPL_VAR name="notes" --><!-- /TMPL_IF -->
 			</td>
                         </tr>

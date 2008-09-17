@@ -122,7 +122,7 @@ if (quantity ==0) {
         <ol><li>
             <!-- TMPL_IF name="biblionumber" -->
 			<span class="label">Title</span>
-                <input type="hidden" size="20" name="title" value="<!-- TMPL_VAR NAME="title" -->" /> <span class="title"><!-- TMPL_VAR NAME="title" --></span>
+                <input type="hidden" size="20" name="title" value="<!-- TMPL_VAR NAME="title" -->" /> <span class="title"><!-- TMPL_VAR NAME="title" escape="html" --></span>
             <!-- TMPL_ELSE -->
             <label for="entertitle" class="required">Title: </label>
                 <input type="text" id="entertitle" size="20" name="title" value="<!-- TMPL_VAR NAME="title" -->" />

@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" DEFAULT="Koha Online" --> Catalog &rsaquo;  Reserving <!-- TMPL_VAR NAME="title" --> for <!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --><!-- /TMPL_LOOP -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" DEFAULT="Koha Online" --> Catalog &rsaquo;  Reserving <!-- TMPL_VAR NAME="title" escape="html" --> for <!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --><!-- /TMPL_LOOP -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 // <![CDATA[ 
@@ -95,7 +95,7 @@
     <form action="/cgi-bin/koha/opac-reserve.pl" method="post">
         <input type="hidden" name="item_types_selected" value="1" />
         <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
-        <h3>Place a hold on <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><!-- TMPL_IF NAME="author" -->,  by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --></h3>
+        <h3>Place a hold on <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a><!-- TMPL_IF NAME="author" -->,  by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --></h3>
 
 <!-- TMPL_IF NAME="OPACItemHolds" --> <!-- TMPL_LOOP name="bibitemloop" --> 
             <!-- TMPL_UNLESS NAME="item-level_itypes" -->
@@ -218,7 +218,7 @@
 <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><h3>Confirm Reservation</h3>
 <div class="details">
     <table>
-        <tr><th>Title: </th><td><span class="title"><!-- TMPL_VAR NAME="title" --></span></td></tr>
+        <tr><th>Title: </th><td><span class="title"><!-- TMPL_VAR NAME="title" escape="html" --></span></td></tr>
 
 <!-- TMPL_IF NAME="all" -->
         <tr><th>Item Type: </th><td>Any<input type="hidden" name="all" value="1" /></td></tr>

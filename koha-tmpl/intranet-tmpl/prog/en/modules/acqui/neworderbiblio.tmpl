@@ -49,7 +49,7 @@
     <!-- TMPL_LOOP NAME="resultsloop" -->
         <tr>
             <td>
-                <p><span class="title"><!-- TMPL_VAR NAME="title" --></span>
+                <p><span class="title"><!-- TMPL_VAR NAME="title" escape="html" --></span>
                 <!-- TMPL_IF name="author" -->  by <span class="author"><!-- TMPL_VAR NAME="author" --></span>,<!-- /TMPL_IF --></p>
                 <p><!-- TMPL_IF name="isbn" --> <!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF -->
                 <!-- TMPL_IF name="pages" --> - <!-- TMPL_VAR name="pages" --><!-- /TMPL_IF -->

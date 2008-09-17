@@ -40,7 +40,7 @@ There is a problem with your account.  Please ask for help at the circulation de
 <!-- TMPL_IF name="question" -->
 	<div class="error">
 		<h3>Issuing Question</h3>
-		<p>Attempting to issue <!-- TMPL_VAR name="title" -->
+		<p>Attempting to issue <!-- TMPL_VAR name="title" escape="html" -->
 							by <!-- TMPL_VAR name="author" --> to <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" -->.</p>
 							<p><!-- TMPL_VAR name="question" --></p>
           <form action="/cgi-bin/koha/sco/circulation.pl" method="get">
@@ -143,7 +143,7 @@ function closeThis()
 	 	
 		<td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" align="left" title="<!-- TMPL_VAR NAME="itemtype" -->" alt="" /></td>
 	 	<!-- <td><!-- TMPL_VAR NAME="barcode" --></td> -->
-	    <td><!-- TMPL_VAR NAME="title" --></td>
+	    <td><!-- TMPL_VAR NAME="title" escape="html" --></td>
 	    <td><!-- TMPL_VAR NAME="author" --></td>
 		<td><!-- TMPL_VAR NAME="classification" --></td><td><!-- TMPL_VAR NAME="dd" --></td>		
 	</tr>
@@ -162,7 +162,7 @@ function closeThis()
 			
 			<!-- <td><!-- TMPL_VAR NAME="barcode" --></td> -->
 			<td><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" align="left" title="<!-- TMPL_VAR NAME="itemtype" -->" alt="" /></td>
-			<td><!-- TMPL_VAR NAME="title" --></td>
+			<td><!-- TMPL_VAR NAME="title" escape="html" --></td>
 			<td><!-- TMPL_IF NAME="author" --><!-- TMPL_VAR NAME="author" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
 			<td><!-- TMPL_IF NAME="classification" --><!-- TMPL_VAR NAME="classification" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td><td><!-- TMPL_IF NAME="od" --><font color="red"><!-- /TMPL_IF --><!-- TMPL_VAR NAME="dd" --><!-- TMPL_IF NAME="od" --></font><!-- /TMPL_IF --></td>
 		</tr><!-- /TMPL_LOOP --></table>

@@ -176,7 +176,7 @@ $(document).ready(function(){
                 <!-- TMPL_VAR NAME="barcode" -->
             </td>
             <td>
-                <p><b><!-- TMPL_VAR NAME="itemcallnumber" --></b> - <a href=# onclick="window.open('/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!--TMPL_VAR Name="biblionumber"-->','marcview','width=800,height=600,toolbar=0,scrollbars=1');"><!-- TMPL_VAR NAME="title" --></a></p>
+                <p><b><!-- TMPL_VAR NAME="itemcallnumber" --></b> - <a href="#" onclick="window.open('/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!--TMPL_VAR Name="biblionumber"-->','marcview','width=800,height=600,toolbar=0,scrollbars=1');"><!-- TMPL_VAR NAME="title" escape="html" --></a></p>
                 <p><!-- TMPL_VAR NAME="author" --></p>
             </td>
             <td>
