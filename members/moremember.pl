@@ -66,8 +66,8 @@ my @failedreturns = $input->param('failedreturn');
 my $error = $input->param('error');
 my @renew_failed;
 for my $renew (@failedrenews) { $renew_failed[$renew] = 1; }
-my @return_failed;
-for my $failedret (@failedreturns) { $return_failed[$failedret] = 1; }
+my %return_failed;
+for my $failedret (@failedreturns) { $return_failed{$failedret} = 1; }
 
 my $template_name;
 
@@ -248,7 +248,7 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
 	$row{'norenew'} = !$renewokay;
 	$row{"norenew_reason_$renewerror"} = 1 if $renewerror;
 	$row{'renew_failed'} = $renew_failed[$issue->[$i]{'itemnumber'}];		
-	$row{'return_failed'} = $return_failed[$issue->[$i]{'barcode'}];   
+	$row{'return_failed'} = $return_failed{$issue->[$i]{'barcode'}};   
     push( @issuedata, \%row );
 }
 
