@@ -269,7 +269,7 @@ Finally, remove the test database:
     ( answer questions )
     $ make
     $ make test
-    $ sudo make install
+    $ sudo make install  #If doing a -dev install, skip the sudo!
 
 4. Configure and start Apache
     $ sudo ln -s /etc/koha/koha-httpd.conf /etc/apache2/sites-available/koha
@@ -279,7 +279,11 @@ Finally, remove the test database:
 Add the following lines to /etc/apache2/ports.conf:
 
     Listen 80
-    Listen 8080
+	Listen 8080
+
+(Note: It may be productive to use different DNS entries and NamedVirtualHosts
+directives in Apache to separate the staff and OPAC clients, to eliminate a 
+cross-client authentication nuisance, but it will work fine like this.)
 
 Run the following commands:
 
