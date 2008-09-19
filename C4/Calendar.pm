@@ -16,6 +16,7 @@ package C4::Calendar;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
 use vars qw($VERSION @EXPORT);
 
 use Carp;
@@ -211,8 +212,6 @@ sub insert_week_day_holiday {
     my $dbh = C4::Context->dbh();
     my $insertHoliday = $dbh->prepare("insert into repeatable_holidays (id,branchcode,weekday,day,month,title,description) values ( '',?,?,NULL,NULL,?,? )"); 
 	$insertHoliday->execute( $self->{branchcode}, $options{weekday},$options{title}, $options{description});
-    $insertHoliday->finish;
-
     $self->{'week_days_holidays'}->{$options{weekday}}{title} = $options{title};
     $self->{'week_days_holidays'}->{$options{weekday}}{description} = $options{description};
     return $self;
@@ -244,8 +243,6 @@ sub insert_day_month_holiday {
     my $dbh = C4::Context->dbh();
     my $insertHoliday = $dbh->prepare("insert into repeatable_holidays (id,branchcode,weekday,day,month,title,description) values ('', ?, NULL, ?, ?, ?,? )");
 	$insertHoliday->execute( $self->{branchcode}, $options{day},$options{month},$options{title}, $options{description});
-    $insertHoliday->finish;
-
     $self->{'day_month_holidays'}->{"$options{month}/$options{day}"}{title} = $options{title};
     $self->{'day_month_holidays'}->{"$options{month}/$options{day}"}{description} = $options{description};
     return $self;
@@ -281,8 +278,6 @@ sub insert_single_holiday {
     my $isexception = 0;
     my $insertHoliday = $dbh->prepare("insert into special_holidays (id,branchcode,day,month,year,isexception,title,description) values ('', ?,?,?,?,?,?,?)");
 	$insertHoliday->execute( $self->{branchcode}, $options{day},$options{month},$options{year}, $isexception, $options{title}, $options{description});
-    $insertHoliday->finish;
-
     $self->{'single_holidays'}->{"$options{year}/$options{month}/$options{day}"}{title} = $options{title};
     $self->{'single_holidays'}->{"$options{year}/$options{month}/$options{day}"}{description} = $options{description};
     return $self;
@@ -318,8 +313,6 @@ sub insert_exception_holiday {
     my $isexception = 1;
     my $insertException = $dbh->prepare("insert into special_holidays (id,branchcode,day,month,year,isexception,title,description) values ('', ?,?,?,?,?,?,?)");
 	$insertException->execute( $self->{branchcode}, $options{day},$options{month},$options{year}, $isexception, $options{title}, $options{description});
-    $insertException->finish;
-
     $self->{'exception_holidays'}->{"$options{year}/$options{month}/$options{day}"}{title} = $options{title};
     $self->{'exception_holidays'}->{"$options{year}/$options{month}/$options{day}"}{description} = $options{description};
     return $self;
@@ -354,49 +347,45 @@ sub delete_holiday {
     # ok just deleting it.
 
     my $dbh = C4::Context->dbh();
-    my $isSingleHoliday = $dbh->prepare("select id from special_holidays where (branchcode = '$self->{branchcode}') and (day = $options{day}) and (month = $options{month}) and (year = $options{year})");
-    $isSingleHoliday->execute;
+    my $isSingleHoliday = $dbh->prepare("SELECT id FROM special_holidays WHERE (branchcode = ?) AND (day = ?) AND (month = ?) AND (year = ?)");
+    $isSingleHoliday->execute($self->{branchcode}, $options{day}, $options{month}, $options{year});
     if ($isSingleHoliday->rows) {
         my $id = $isSingleHoliday->fetchrow;
         $isSingleHoliday->finish; # Close the last query
 
-        my $deleteHoliday = $dbh->prepare("delete from special_holidays where (id = $id)");
-        $deleteHoliday->execute;
-        $deleteHoliday->finish; # Close the last query
+        my $deleteHoliday = $dbh->prepare("SELECT FROM special_holidays WHERE id = ?");
+        $deleteHoliday->execute($id);
         delete($self->{'single_holidays'}->{"$options{year}/$options{month}/$options{day}"});
     } else {
         $isSingleHoliday->finish; # Close the last query
 
-        my $isWeekdayHoliday = $dbh->prepare("select id from repeatable_holidays where (branchcode = '$self->{branchcode}') and (weekday = $options{weekday})");
-        $isWeekdayHoliday->execute;
+        my $isWeekdayHoliday = $dbh->prepare("SELECT id FROM repeatable_holidays WHERE branchcode = ? AND weekday = ?");
+        $isWeekdayHoliday->execute($self->{branchcode}, $options{weekday});
         if ($isWeekdayHoliday->rows) {
             my $id = $isWeekdayHoliday->fetchrow;
             $isWeekdayHoliday->finish; # Close the last query
 
-            my $updateExceptions = $dbh->prepare("update special_holidays set isexception = 0 where (WEEKDAY(CONCAT(special_holidays.year,'-',special_holidays.month,'-',special_holidays.day)) = $options{weekday}) and (branchcode = '$self->{branchcode}')");
-            $updateExceptions->execute;
+            my $updateExceptions = $dbh->prepare("UPDATE special_holidays SET isexception = 0 WHERE (WEEKDAY(CONCAT(special_holidays.year,'-',special_holidays.month,'-',special_holidays.day)) = ?) AND (branchcode = ?)");
+            $updateExceptions->execute($options{weekday}, $self->{branchcode});
             $updateExceptions->finish; # Close the last query
 
-            my $deleteHoliday = $dbh->prepare("delete from repeatable_holidays where (id = $id)");
-            $deleteHoliday->execute;
-            $deleteHoliday->finish;
+            my $deleteHoliday = $dbh->prepare("DELETE FROM repeatable_holidays WHERE id = ?");
+            $deleteHoliday->execute($id);
             delete($self->{'week_days_holidays'}->{$options{weekday}});
         } else {
             $isWeekdayHoliday->finish; # Close the last query
 
-            my $isDayMonthHoliday = $dbh->prepare("select id from repeatable_holidays where (branchcode = '$self->{branchcode}') and (day = '$options{day}') and (month = '$options{month}')");
-            $isDayMonthHoliday->execute;
+            my $isDayMonthHoliday = $dbh->prepare("SELECT id FROM repeatable_holidays WHERE (branchcode = ?) AND (day = ?) AND (month = ?)");
+            $isDayMonthHoliday->execute($self->{branchcode}, $options{day}, $options{month});
             if ($isDayMonthHoliday->rows) {
                 my $id = $isDayMonthHoliday->fetchrow;
                 $isDayMonthHoliday->finish;
-                my $updateExceptions = $dbh->prepare("update special_holidays set isexception = 0 where (special_holidays.branchcode = '$self->{branchcode}') and (special_holidays.day = '$options{day}') and (special_holidays.month = '$options{month}')");
-                $updateExceptions->execute;
+                my $updateExceptions = $dbh->prepare("UPDATE special_holidays SET isexception = 0 WHERE (special_holidays.branchcode = ?) AND (special_holidays.day = ?) and (special_holidays.month = ?)");
+                $updateExceptions->execute($self->{branchcode}, $options{day}, $options{month});
                 $updateExceptions->finish; # Close the last query
 
-                my $deleteHoliday = $dbh->prepare("delete from repeatable_holidays where (id = '$id')");
-                $deleteHoliday->execute;
-                $deleteHoliday->finish; # Close the last query
-                $isDayMonthHoliday->finish; # Close the last query
+                my $deleteHoliday = $dbh->prepare("DELETE FROM repeatable_holidays WHERE (id = ?)");
+                $deleteHoliday->execute($id);
                 delete($self->{'day_month_holidays'}->{"$options{month}/$options{day}"});
             }
         }
@@ -465,11 +454,11 @@ sub addDate {
     if ($daysMode eq 'Datedue') {
         ($year, $month, $day) = &Date::Calc::Add_Delta_Days($year, $month, $day, $offset );
 	 	while ($self->isHoliday($day, $month, $year)) {
-                ($year, $month, $day) = &Date::Calc::Add_Delta_Days($year, $month, $day, $daystep);
+            ($year, $month, $day) = &Date::Calc::Add_Delta_Days($year, $month, $day, $daystep);
         }
     } elsif($daysMode eq 'Calendar') {
         while ($offset !=  0) {
-                ($year, $month, $day) = &Date::Calc::Add_Delta_Days($year, $month, $day, $daystep);
+            ($year, $month, $day) = &Date::Calc::Add_Delta_Days($year, $month, $day, $daystep);
             if (!($self->isHoliday($day, $month, $year))) {
                 $offset = $offset - $daystep;
 			}
@@ -482,33 +471,31 @@ sub addDate {
 
 =item daysBetween
 
-    my $daysBetween = $calendar->daysBetween($startdate, $enddate )
+    my $daysBetween = $calendar->daysBetween($startdate, $enddate)
 
-C<$startdate>  and C<$enddate> are C4::Dates objects that define the interval.
+C<$startdate> and C<$enddate> are C4::Dates objects that define the interval.
 
 Returns the number of non-holiday days in the interval.
 useDaysMode syspref has no effect here.
 =cut
 
-sub daysBetween {
-    my ( $self, $startdate, $enddate ) = @_ ; 
+sub daysBetween ($$$) {
+    my $self      = shift or return undef;
+    my $startdate = shift or return undef;
+    my $enddate   = shift or return undef;
 	my ($yearFrom,$monthFrom,$dayFrom) = split("-",$startdate->output('iso'));
-	my ($yearTo,$monthTo,$dayTo) = split("-",$enddate->output('iso'));
+	my ($yearTo,  $monthTo,  $dayTo  ) = split("-",  $enddate->output('iso'));
 	if (Date_to_Days($yearFrom,$monthFrom,$dayFrom) > Date_to_Days($yearTo,$monthTo,$dayTo)) {
 		return 0;
 		# we don't go backwards  ( FIXME - handle this error better )
 	}
     my $count = 0;
-    my $continue = 1;
-    while ($continue) {
-        if (($yearFrom != $yearTo) || ($monthFrom != $monthTo) || ($dayFrom != $dayTo)) {
-            if (!($self->isHoliday($dayFrom, $monthFrom, $yearFrom))) {
-                $count++;
-            }
-            ($yearFrom, $monthFrom, $dayFrom) = &Date::Calc::Add_Delta_Days($yearFrom, $monthFrom, $dayFrom, 1);
-        } else {
-            $continue = 0;
+    while (1) {
+        ($yearFrom != $yearTo or $monthFrom != $monthTo or $dayFrom != $dayTo) or last; # if they all match, it's the last day
+        unless ($self->isHoliday($dayFrom, $monthFrom, $yearFrom)) {
+            $count++;
         }
+        ($yearFrom, $monthFrom, $dayFrom) = &Date::Calc::Add_Delta_Days($yearFrom, $monthFrom, $dayFrom, 1);
     }
     return($count);
 }
