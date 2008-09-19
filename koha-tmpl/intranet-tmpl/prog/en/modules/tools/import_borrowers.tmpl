@@ -3,6 +3,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <style type="text/css">
     .yui-u fieldset.rows label.widelabel { width: 12em; }
+    .line_error { width: 100%; }
     code { background-color: yellow; }
 </style>
 </head>
@@ -13,12 +14,11 @@
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/tools/import_borrowers.pl">Import Patrons</a><!-- TMPL_IF name="uploadborrowers" --> &rsaquo; Results<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
-<div class="yui-g">
-<div class="yui-u first">
+ <div id="bd">
+  <div id="yui-main">
+   <div class="yui-b">
+    <div class="yui-g">
+     <div class="yui-u first">
 <h1>Import Patrons</h1>
 <!-- TMPL_IF name="uploadborrowers" -->
 <h5>Import results :</h5>
@@ -30,6 +30,23 @@
 	<li><!-- TMPL_VAR name="total" --> records parsed</li>
 	<li><a href="/cgi-bin/koha/tools/tools-home.pl">Back to Tools</a></li>
 </ul>
+  <!-- TMPL_IF NAME="FEEDBACK" -->
+  <br /><br />
+    <div>
+    <h5>Feedback:</h5>
+    <ul class="feedback">
+    <!-- TMPL_LOOP NAME="FEEDBACK" -->
+    <li>
+        <!-- TMPL_IF NAME="filename" -->Parsing upload file <span class="filename"><!-- TMPL_VAR NAME="filename" --></span>
+        <!-- TMPL_ELSIF NAME="backend" -->Upload parsed using <!-- TMPL_VAR NAME="backend" -->
+        <!-- TMPL_ELSIF NAME="headerrow" -->These fields found: <!-- TMPL_VAR NAME="value" -->
+        <!-- TMPL_ELSE --><!-- TMPL_VAR NAME="name" --> : <!-- TMPL_VAR NAME="value" -->
+        <!-- /TMPL_IF -->
+    </li>
+    <!-- /TMPL_LOOP -->
+    </ul>
+    </div>
+  <!-- /TMPL_IF -->
   <!-- TMPL_IF NAME="ERRORS" -->
   <br /><br />
     <div>
@@ -38,11 +55,18 @@
     <!-- TMPL_LOOP NAME="ERRORS" -->
         <!-- TMPL_IF NAME="badheader" --><li>Header row could not be parsed</li><!-- /TMPL_IF -->
         <!-- TMPL_LOOP NAME="missing_criticals" -->
-        <li>
+        <li class="line_error">
+            Line <span class="linenumber"><!-- TMPL_VAR NAME="line" --></span>
             <!-- TMPL_IF NAME="badparse" -->
-                Line <span class="linenumber"><!-- TMPL_VAR NAME="line" --></span> could not be parsed!
+                could not be parsed!
+            <!-- TMPL_ELSIF NAME="bad_date" -->
+                has &quot;<!-- TMPL_VAR NAME="key" -->&quot; in unrecognized format: &quot;<!-- TMPL_VAR NAME="value" -->&quot;
             <!-- TMPL_ELSE -->
-                Critical field &quot;<!-- TMPL_VAR NAME="key" -->&quot; missing on line <span class="linenumber"><!-- TMPL_VAR NAME="line" --></span>
+                Critical field &quot;<!-- TMPL_VAR NAME="key" -->&quot;
+                <!-- TMPL_IF NAME="branch_map" -->has unrecognized value &quot;<!-- TMPL_VAR NAME="value" -->&quot;
+                <!-- TMPL_ELSIF NAME="category_map" -->has unrecognized value &quot;<!-- TMPL_VAR NAME="value" -->&quot;
+                <!-- TMPL_ELSE -->missing
+                <!-- /TMPL_IF -->
                 (borrowernumber: <!-- TMPL_VAR NAME="borrowernumber" -->; surname: <!-- TMPL_VAR NAME="surname" -->).
             <!-- /TMPL_IF -->
             <br /><code><!-- TMPL_VAR NAME="lineraw" --></code>
@@ -105,9 +129,10 @@
 <ul>
 <li><b>Download a starter CSV file with all the columns <a href="?sample=1">here</a>.</b>  Values are comma-separated.</li>
 <li>OR format your file in CSV format with the following fields:</li>
-<ul><li>
+<li><ul><li>
     <!-- TMPL_LOOP name="columnkeys" -->'<!-- TMPL_VAR name="key" -->', <!-- /TMPL_LOOP -->
 </li></ul>
+</li>
 <!-- TMPL_IF NAME="ExtendedPatronAttributes" -->
 <li>If loading patron attributes, the 'patron_attributes' field should contain a comma-separated list of attribute types 
 and values.  The attribute type code and a ':' should precede each value. For example: &quot;INSTID:12345,LANG:fr&quot;.  This
@@ -119,13 +144,13 @@ means that if an input record has more than one attribute, the 'patron_attribute
 <li>Date formats should match your system preference, and <b>must</b> be zero-padded, e.g. '01/02/2008'.</li>
 <li>You may optionally include a header row, defining which columns you are supplying in the import file.</li>
 </ul>
-</div>
-</div>
 
-</div>
-</div>
-<div class="yui-b noprint">
+     </div>
+    </div>
+   </div>
+  </div>
+  <div class="yui-b noprint">
 <!-- TMPL_INCLUDE NAME="tools-menu.inc" -->
-</div>
-</div>
+  </div>
+ </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
