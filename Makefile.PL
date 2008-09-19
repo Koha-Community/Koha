@@ -1587,7 +1587,7 @@ sub postamble {
 
             # these directories will be relocated to the 't' directory
             foreach my $dirname ( keys %$target_directories ) {
-                my $dir = $target_directories->{$dirname};
+                my $dir = main::_strip_destdir( $target_directories->{$dirname} );
                 if ( exists $test_suite_override_dirs{$dirname} ) {
                     $dir = main::get_test_dir($dirname);
                 }
