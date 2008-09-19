@@ -26,12 +26,12 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use vars qw($debug $cgi_debug);
 
 BEGIN {
-	$VERSION = 0.03;
+	$VERSION = 0.04;
 	@ISA = qw(Exporter);
-	@EXPORT_OK = qw(DHTMLcalendar format_date_in_iso format_date);
+	@EXPORT_OK = qw(format_date_in_iso format_date);
 }
 
-my $prefformat;
+use vars qw($prefformat);
 sub _prefformat {
     unless (defined $prefformat) {
         $prefformat = C4::Context->preference('dateformat');
@@ -39,13 +39,10 @@ sub _prefformat {
     return $prefformat;
 }
 
-# print STDERR " Dates :      \$debug is '$debug'\n";
-# print STDERR " Dates :  \$cgi_debug is '$cgi_debug'\n";
-
 our %format_map = ( 
-	  iso  => 'yyyy-mm-dd',
-	metric => 'dd/mm/yyyy',
-	  us   => 'mm/dd/yyyy',
+	  iso  => 'yyyy-mm-dd', # plus " HH:MM:SS"
+	metric => 'dd/mm/yyyy', # plus " HH:MM:SS"
+	  us   => 'mm/dd/yyyy', # plus " HH:MM:SS"
 	  sql  => 'yyyymmdd    HHMMSS',
 );
 our %posix_map = (
@@ -57,9 +54,9 @@ our %posix_map = (
 
 our %dmy_subs = (			# strings to eval  (after using regular expression returned by regexp below)
 							# make arrays for POSIX::strftime()
-	  iso  => '[(0,0,0,$3, $2 - 1, $1 - 1900)]',		
-	metric => '[(0,0,0,$1, $2 - 1, $3 - 1900)]',
-	  us   => '[(0,0,0,$2, $1 - 1, $3 - 1900)]',
+	  iso  => '[(($6||0),($5||0),($4||0),$3, $2 - 1, $1 - 1900)]',		
+	metric => '[(($6||0),($5||0),($4||0),$1, $2 - 1, $3 - 1900)]',
+	  us   => '[(($6||0),($5||0),($4||0),$2, $1 - 1, $3 - 1900)]',
 	  sql  => '[(($6||0),($5||0),($4||0),$3, $2 - 1, $1 - 1900)]',
 );
 
@@ -70,7 +67,7 @@ sub regexp ($;$) {
 	($format eq 'sql') and 
 	return qr/^(\d{4})(\d{2})(\d{2})(?:\s{4}(\d{2})(\d{2})(\d{2}))?/;
 	($format eq 'iso') and 
-	return qr/^(\d{4})$delim(\d{2})$delim(\d{2})(?:\s{1}(\d{2})\:?(\d{2})\:?(\d{2}))?/;
+	return qr/^(\d{4})$delim(\d{2})$delim(\d{2})(?:(?:\s{1}|T)(\d{2})\:?(\d{2})\:?(\d{2}))?Z?/;
 	return qr/^(\d{2})$delim(\d{2})$delim(\d{4})(?:\s{1}(\d{2})\:?(\d{2})\:?(\d{2}))?/;  # everything else
 }
 
@@ -185,6 +182,12 @@ the script level, for example in initial form values or checks for min/max date.
 reason is clear when you consider string '07/01/2004'.  Depending on the format, it 
 represents July 1st (us), or January 7th (metric), or an invalid value (iso).
 
+The formats supported by Koha are:
+    iso - ISO 8601 (extended)
+    us - U.S. standard
+    metric - European standard (slight misnomer, not really decimalized metric)
+    sql - log format, not really for human consumption
+
 =head2 ->new([string_date,][date_format])
 
 Arguments to new() are optional.  If string_date is not supplied, the present system date is
@@ -204,7 +207,7 @@ invoked when displaying it.
 		my $date = C4::Dates->new();    # say today is July 12th, 2010
 		print $date->output("iso");     # prints "2010-07-12"
 		print "\n";
-		print $date->output("metric");  # prints "12-07-2007"
+		print $date->output("metric");  # prints "12-07-2010"
 
 However, it is still necessary to know the format of any incoming date value (e.g., 
 setting the value of an object with new()).  Like new(), output() assumes the system preference
@@ -291,11 +294,6 @@ To validate before creating a new object, use the regexp method of the class:
 
 More verbose debugging messages are sent in the presence of non-zero $ENV{"DEBUG"}.
 
-=head3 TO DO
-
-If the date format is not in <systempreference>, we should send an error back to the user. 
-This kind of check should be centralized somewhere.  Probably not here, though.
-
 Notes: if the date in the db is null or empty, interpret null expiration to mean "never expires".
 
 =head3 _prefformat()
@@ -308,6 +306,11 @@ This replaces using the package variable $prefformat directly, and
 specifically, doing a call to C4::Context->preference() during
 module initialization.  That way, C4::Dates no longer has a
 compile-time dependency on having a valid $dbh.
+
+=head3 TO DO
+
+If the date format is not in <systempreference>, we should send an error back to the user. 
+This kind of check should be centralized somewhere.  Probably not here, though.
 
 =cut
 
