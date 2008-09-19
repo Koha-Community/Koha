@@ -67,14 +67,22 @@
 
 <!--TMPL_IF NAME="virtualshelves" --><a href="/cgi-bin/koha/opac-shelves.pl" id="listsmenulink" class=""><i></i><span><i></i><span></span>Lists </span></a><!-- /TMPL_IF -->
     </form>
-
-<div id="moresearches"><a href="/cgi-bin/koha/opac-search.pl">Advanced Search</a><!-- TMPL_IF name="OpacBrowser" --> | <a href="/cgi-bin/koha/opac-browser.pl">Browse by Hierarchy</a><!-- /TMPL_IF --><!-- TMPL_IF name="OpacAuthorities" --> | <a href="/cgi-bin/koha/opac-authorities-home.pl">Browse by Subject</a><!-- /TMPL_IF --><!-- TMPL_IF NAME="TagsEnabled" --> | <a href="/cgi-bin/koha/opac-tags.pl">Tag Cloud</a><!-- /TMPL_IF --><!-- TMPL_IF name="OpacCloud" --> | <a href="/cgi-bin/koha/opac-tags_subject.pl">Subject Cloud</a><!-- /TMPL_IF --><!-- TMPL_IF name="OpacTopissue" --> | <a href="/cgi-bin/koha/opac-topissues.pl">Most Popular</a><!-- /TMPL_IF --><!-- TMPL_IF NAME="suggestion" --><!-- TMPL_IF NAME="AnonSuggestions" --> | <a href="/cgi-bin/koha/opac-suggestions.pl">Purchase Suggestions</a><!-- TMPL_ELSIF NAME="OPACViewOthersSuggestions" --> | <a href="/cgi-bin/koha/opac-suggestions.pl">Purchase Suggestions</a><!-- /TMPL_IF --><!-- /TMPL_IF --></div>
-<!-- TMPL_ELSE -->
-
-<div id="moresearches"><!-- TMPL_IF name="OpacBrowser" --> | <a href="/cgi-bin/koha/opac-browser.pl">Browse by Hierarchy</a><!-- /TMPL_IF --><!-- TMPL_IF name="OpacAuthorities" --> | <a href="/cgi-bin/koha/opac-authorities-home.pl">Browse by Subject</a><!-- /TMPL_IF --> | <a href="/cgi-bin/koha/opac-tags.pl">Tag Cloud</a><!-- TMPL_IF name="OpacCloud" --> | <a href="/cgi-bin/koha/opac-tags_subject.pl">Subject Cloud</a><!-- /TMPL_IF --><!-- TMPL_IF name="OpacTopissue" --> | <a href="/cgi-bin/koha/opac-topissues.pl">Most Popular</a><!-- /TMPL_IF --><!-- TMPL_IF NAME="suggestion" --><!-- TMPL_IF NAME="AnonSuggestions" --> | <a href="/cgi-bin/koha/opac-suggestions.pl">Purchase Suggestions</a><!-- TMPL_ELSIF NAME="OPACViewOthersSuggestions" --> | <a href="/cgi-bin/koha/opac-suggestions.pl">Purchase Suggestions</a><!-- /TMPL_IF --><!-- /TMPL_IF --></div>
 <!-- /TMPL_UNLESS -->
 
+<div id="moresearches">
+<a href="/cgi-bin/koha/opac-search.pl">Advanced Search</a>
+<!-- TMPL_IF NAME="OpacBrowser"     --><span class="pipe"> | </span><a href="/cgi-bin/koha/opac-browser.pl">Browse by Hierarchy</a><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="OpacAuthorities" --><span class="pipe"> | </span><a href="/cgi-bin/koha/opac-authorities-home.pl">Browse by Subject</a><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="TagsEnabled"     --><span class="pipe"> | </span><a href="/cgi-bin/koha/opac-tags.pl">Tag Cloud</a><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="OpacCloud"       --><span class="pipe"> | </span><a href="/cgi-bin/koha/opac-tags_subject.pl">Subject Cloud</a><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="OpacTopissue"    --><span class="pipe"> | </span><a href="/cgi-bin/koha/opac-topissues.pl">Most Popular</a><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="suggestion" -->
+  <!-- TMPL_IF NAME="AnonSuggestions" --><span class="pipe"> | </span><a href="/cgi-bin/koha/opac-suggestions.pl">Purchase Suggestions</a>
+  <!-- TMPL_ELSIF NAME="OPACViewOthersSuggestions" --><span class="pipe"> | </span><a href="/cgi-bin/koha/opac-suggestions.pl">Purchase Suggestions</a>
+  <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
 </div>
+ </div>
 </div>
 
 <!-- TMPL_IF NAME="opacbookbag" --><div id="cartDetails">Your cart is empty.</div><!-- /TMPL_IF -->
