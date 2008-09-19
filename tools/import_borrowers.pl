@@ -34,6 +34,8 @@
 # branchcode and categorycode need to be valid
 
 use strict;
+use warnings;
+
 use C4::Auth;
 use C4::Output;
 use C4::Dates qw(format_date_in_iso);
@@ -44,9 +46,14 @@ use C4::Members::Attributes;
 use C4::Members::AttributeTypes;
 
 use Text::CSV;
-use CGI;
+# Text::CSV::Unicode, even in binary mode, fails to parse lines with these diacriticals:
+# ė
+# č
 
-my @errors;
+use CGI;
+# use encoding 'utf8';    # don't do this
+
+my (@errors, @feedback);
 my $extended = C4::Context->preference('ExtendedPatronAttributes');
 my @columnkeys = C4::Members->columns;
 if ($extended) {
@@ -55,7 +62,8 @@ if ($extended) {
 my $columnkeystpl = [ map { {'key' => $_} }  grep {$_ ne 'borrowernumber' && $_ ne 'cardnumber'} @columnkeys ];  # ref. to array of hashrefs.
 
 my $input = CGI->new();
-my $csv   = Text::CSV->new();
+my $csv   = Text::CSV->new({binary => 1});  # binary needed for non-ASCII Unicode
+# push @feedback, {feedback=>1, name=>'backend', value=>$csv->backend, backend=>$csv->backend};
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
         template_name   => "tools/import_borrowers.tmpl",
@@ -77,8 +85,8 @@ if ($input->param('sample')) {
     print $csv->string, "\n";
     exit 1;
 }
-my $uploadborrowers      = $input->param('uploadborrowers');
-my $matchpoint           = $input->param('matchpoint');
+my $uploadborrowers = $input->param('uploadborrowers');
+my $matchpoint      = $input->param('matchpoint');
 if ($matchpoint) {
     $matchpoint =~ s/^patron_attribute_//;
 }
@@ -89,6 +97,12 @@ $template->param( SCRIPT_NAME => $ENV{'SCRIPT_NAME'} );
 ($extended) and $template->param(ExtendedPatronAttributes => 1);
 
 if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
+    push @feedback, {feedback=>1, name=>'filename', value=>$uploadborrowers, filename=>$uploadborrowers};
+    my $handle = $input->upload('uploadborrowers');
+    my $uploadinfo = $input->uploadInfo($uploadborrowers);
+    foreach (keys %$uploadinfo) {
+        push @feedback, {feedback=>1, name=>$_, value=>$uploadinfo->{$_}, $_=>$uploadinfo->{$_}};
+    }
     my $imported    = 0;
     my $alreadyindb = 0;
     my $overwritten = 0;
@@ -97,7 +111,7 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
     my %defaults = $input->Vars;
 
     # use header line to construct key to column map
-    my $borrowerline = <$uploadborrowers>;
+    my $borrowerline = <$handle>;
     my $status = $csv->parse($borrowerline);
     ($status) or push @errors, {badheader=>1,line=>$., lineraw=>$borrowerline};
     my @csvcolumns = $csv->fields();
@@ -113,9 +127,13 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
         $matchpoint_attr_type = C4::Members::AttributeTypes->fetch($matchpoint);
     }
 
+    push @feedback, {feedback=>1, name=>'headerrow', value=>join(', ', @csvcolumns)};
+    my $today_iso = C4::Dates->new()->output('iso');
     my @criticals = qw(cardnumber surname categorycode);    # there probably should be others
-    my @errors;
-    LINE: while ( my $borrowerline = <$uploadborrowers> ) {
+    my @bad_dates;  # I've had a few.
+    my $date_re = C4::Dates->new->regexp('syspref');
+    my  $iso_re = C4::Dates->new->regexp('iso');
+    LINE: while ( my $borrowerline = <$handle> ) {
         my %borrower;
         my @missing_criticals;
         my $patron_attributes;
@@ -141,8 +159,18 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
             }
         }
         #warn join(':',%borrower);
-	push @missing_criticals, {key=>'categorycode' , line=>$. , lineraw=>$borrowerline } unless(  GetBorrowercategory($borrower{categorycode}) );
-	push @missing_criticals, {key=>'branchcode' , line=>$. , lineraw=>$borrowerline } unless(  GetBranchName($borrower{branchcode}) );
+        if ($borrower{categorycode}) {
+            push @missing_criticals, {key=>'categorycode', line=>$. , lineraw=>$borrowerline, value=>$borrower{categorycode}, category_map=>1}
+                unless GetBorrowercategory($borrower{categorycode});
+        } else {
+            push @missing_criticals, {key=>'categorycode', line=>$. , lineraw=>$borrowerline};
+        }
+        if ($borrower{branchcode}) {
+            push @missing_criticals, {key=>'branchcode', line=>$. , lineraw=>$borrowerline, value=>$borrower{branchcode}, branch_map=>1}
+                unless GetBranchName($borrower{branchcode});
+        } else {
+            push @missing_criticals, {key=>'branchcode', line=>$. , lineraw=>$borrowerline};
+        }
         if (@missing_criticals) {
             foreach (@missing_criticals) {
                 $_->{borrowernumber} = $borrower{borrowernumber} || 'UNDEF';
@@ -162,12 +190,19 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
             # FIXME error handling
             $patron_attributes = [ map { map { my @arr = split /:/, $_, 2; { code => $arr[0], value => $arr[1] } } $_ } @list ];
         }
-	# FIXME date handling.  Popular spreadsheet applications make it difficult to force date outputs to be zero-padded, but we require it.
+	# Popular spreadsheet applications make it difficult to force date outputs to be zero-padded, but we require it.
         foreach (qw(dateofbirth dateenrolled dateexpiry)) {
             my $tempdate = $borrower{$_} or next;
-            $borrower{$_} = format_date_in_iso($tempdate) || '';
+            if ($tempdate =~ /$date_re/) {
+                $borrower{$_} = format_date_in_iso($tempdate);
+            } elsif ($tempdate =~ /$iso_re/) {
+                $borrower{$_} = $tempdate;
+            } else {
+                $borrower{$_} = '';
+                push @missing_criticals, {key=>$_, line=>$. , lineraw=>$borrowerline, bad_date=>1};
+            }
         }
-	$borrower{dateenrolled} = C4::Dates->new()->output('iso') unless $borrower{dateenrolled};
+	$borrower{dateenrolled} = $today_iso unless $borrower{dateenrolled};
 	$borrower{dateexpiry} = GetExpiryDate($borrower{categorycode},$borrower{dateenrolled}) unless $borrower{dateexpiry}; 
         my $borrowernumber;
         my $member;
@@ -231,7 +266,8 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
             }
         }
     }
-    (@errors) and $template->param(ERRORS=>\@errors);
+    (@errors  ) and $template->param(  ERRORS=>\@errors  );
+    (@feedback) and $template->param(FEEDBACK=>\@feedback);
     $template->param(
         'uploadborrowers' => 1,
         'imported'        => $imported,
