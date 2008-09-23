@@ -44,10 +44,7 @@ sub basic_usage : Test( 11 ) {
       or diag( Data::Dumper->Dump( [ $issuingimpossible, $needsconfirmation ], [ qw( issuingimpossible needsconfirmation ) ] ) );
 
     my $datedue = C4::Circulation::AddIssue( $borrower, $barcode );
-    {
-        local $TODO = 'AddIssue does not actually return the due date';
-        ok( $datedue, "the item has been issued and it is due: $datedue" );
-    }
+    ok( $datedue, "the item has been issued and it is due: $datedue" );
     
     my $after_issues = C4::Circulation::GetItemIssue( $self->{'items'}[0]{'itemnumber'} );
     is( $after_issues->{'borrowernumber'}, $borrowernumber, '...and now it is checked out to our borrower' )
