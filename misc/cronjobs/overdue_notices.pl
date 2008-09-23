@@ -258,6 +258,7 @@ if ($mybranch) {
 my @item_content_fields = split( /,/, $itemscontent );
 
 my $dbh = C4::Context->dbh();
+binmode( STDOUT, ":utf8" );
 
 our $csv;       # the Text::CSV_XS object
 our $csv_fh;    # the filehandle to the CSV file.
