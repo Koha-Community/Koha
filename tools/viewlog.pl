@@ -28,23 +28,20 @@ use C4::Output;
 use C4::Log;
 use C4::Items;
 use C4::Branch;
-use Data::Dumper;
+use C4::Debug;
+# use Data::Dumper;
 
-use vars qw($debug);
-
-BEGIN {
-	$debug = $ENV{DEBUG} || 0;
-}
+use vars qw($debug $cgi_debug);
 
 =head1 viewlog.pl
 
-plugin that shows a stats on borrowers
+plugin that shows stats
 
 =cut
 
 my $input    = new CGI;
 
-$debug or $debug = $input->param('debug') || 0;
+$debug or $debug = $cgi_debug;
 my $do_it    = $input->param('do_it');
 my $module   = $input->param("module");
 my $user     = $input->param("user");
