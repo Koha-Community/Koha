@@ -1266,9 +1266,9 @@ sub searchResults {
 
 		my $biblio_authorised_value_images = C4::Items::get_authorised_value_images( C4::Biblio::get_biblio_authorised_values( $oldbiblio->{biblionumber} ) );
 		$oldbiblio->{authorised_value_images} = $biblio_authorised_value_images;
-        my $aisbn = $oldbiblio->{'isbn'};
-        $aisbn =~ /(\d*[X]*)/;
-        $oldbiblio->{amazonisbn} = $1;
+        (my $aisbn) = $oldbiblio->{isbn} =~ /([\d-]*[X]*)/;
+        $aisbn =~ s/-//g;
+        $oldbiblio->{amazonisbn} = $aisbn;
 		$oldbiblio->{description} = $itemtypes{ $oldbiblio->{itemtype} }->{description};
  # Build summary if there is one (the summary is defined in the itemtypes table)
  # FIXME: is this used anywhere, I think it can be commented out? -- JF
