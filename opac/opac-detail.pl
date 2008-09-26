@@ -250,8 +250,9 @@ sub isbn_cleanup ($) {
 
 # XISBN Stuff
 my $xisbn=$dat->{'isbn'};
-$xisbn =~ /(\d*[X]*)/;
-$template->param(amazonisbn => $1);		# FIXME: so it is OK if the ISBN = 'XXXXX' ?
+(my $aisbn) = $xisbn =~ /([\d-]*[X]*)/;
+$aisbn =~ s/-//g;
+$template->param(amazonisbn => $aisbn);		# FIXME: so it is OK if the ISBN = 'XXXXX' ?
 my ($clean,$clean2);
 # these might be overkill, but they are better than the regexp above.
 if ($clean = isbn_cleanup($xisbn)){
