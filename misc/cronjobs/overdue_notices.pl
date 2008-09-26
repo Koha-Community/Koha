@@ -363,7 +363,7 @@ END_SQL
                 $sth2->execute( $borrowernumber, $mindays, $maxdays );
                 my $titles = "";
                 while ( my $item_info = $sth2->fetchrow_hashref() ) {
-                    my @item_info = map { $_ =~ /date$/ ? format_date( $item_info->{$_} ) : $item_info->{$_} || '' } @item_content_fields;
+                    my @item_info = map { $_ =~ /^date|date$/ ? format_date( $item_info->{$_} ) : $item_info->{$_} || '' } @item_content_fields;
                     $titles .= join("\t", @item_info) . "\n";
                 }
                 $sth2->finish;
