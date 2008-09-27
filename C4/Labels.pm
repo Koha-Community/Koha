@@ -275,7 +275,9 @@ sub add_batch ($;$) {
 	my $table = (@_ and 'patroncards' eq shift) ? 'patroncards' : 'labels';
     my $batch_list = (@_) ? shift : undef;
     my $dbh = C4::Context->dbh;
-    my $q ="SELECT MAX(DISTINCT batch_id) FROM $table";
+    # FIXME : batch_id  should be an auto_incr INT.  Temporarily casting as int ( see koha bug 2555 )
+    # until a label_batches table is added, and we can convert batch_id to int.
+    my $q ="SELECT MAX( CAST(batch_id AS SIGNED) ) FROM $table";
     my $sth = $dbh->prepare($q);
     $sth->execute();
     my ($batch_id) = $sth->fetchrow_array || 0;
