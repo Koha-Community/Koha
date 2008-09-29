@@ -39,19 +39,12 @@ my $function_name= "328".(int(rand(100000))+1);
 my $res="
 <script type=\"text/javascript\">
 //<![CDATA[
-
-function Focus$function_name(subfield_managed) {
-return 1;
-}
-
-function Blur$function_name(subfield_managed) {
-	return 1;
-}
-
+function Focus$function_name(subfield_managed) {return 1;}
+function Blur$function_name(subfield_managed) {return 1;}
 function Clic$function_name(i) {
-	defaultvalue=document.f.field_value[i].value;
-	newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=labs_theses.pl&cat_auth=LABTHE&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 328\",'width=700,height=700,toolbar=false,scrollbars=yes');
-
+	defaultvalue=document.getElementById(i).value;
+	newin=window.open(\"plugin_launcher.pl?plugin_name=labs_theses.pl&cat_auth=LABTHE&index=\"+i+\"&result=\"+defaultvalue,\"unimarc_field_328\",'width=700,height=700,toolbar=false,scrollbars=yes');
+  return false; 
 }
 //]]>
 </script>
@@ -94,9 +87,9 @@ sub plugin {
 		my $total;
 		while (my $data = $sth->fetchrow_hashref){
 			my $libjs=$data->{'lib'};
-			$libjs=~s#\'#\\\'#g;
+# 			$libjs=~s#\'#\\\'#g;
 			my $authjs=$data->{'authorised_value'};
-			$authjs=~s#\'#\\\'#g;
+# 			$authjs=~s#\'#\\\'#g;
 			push @results, {'libjs'=>$libjs,
 							'lib'=>$data->{'lib'},
 							'authjs'=>$authjs,
@@ -106,7 +99,7 @@ sub plugin {
 		}
 		
 		($template, $loggedinuser, $cookie)
-			= get_template_and_user({template_name => "value_builder/labs_theses.tmpl",
+			= get_template_and_user({template_name => "cataloguing/value_builder/labs_theses.tmpl",
 					query => $query,
 					type => 'intranet',
 					authnotrequired => 1,
@@ -163,7 +156,7 @@ sub plugin {
 	
 	} else {
 		($template, $loggedinuser, $cookie)
-			= get_template_and_user({template_name => "value_builder/labs_theses.tmpl",
+			= get_template_and_user({template_name => "cataloguing/value_builder/labs_theses.tmpl",
 						query => $query,
 						type => "intranet",
 						authnotrequired => 1,

@@ -81,8 +81,8 @@ a.catalogue:hover {
 						<!-- TMPL_VAR NAME="lib" -->
 						</td>
 						<td>
-							<a  href="javascript:SelectEntry('<!-- TMPL_VAR NAME="libjs" ESCAPE="URL" -->','<!-- TMPL_VAR NAME="authjs" ESCAPE="URL" -->',<!-- TMPL_VAR NAME="index" ESCAPE="URL"  -->,0)" class="button">Select</a>
-							<a  href="javascript:SelectEntry('<!-- TMPL_VAR NAME="libjs" ESCAPE="URL" -->','<!-- TMPL_VAR NAME="authjs" ESCAPE="URL" -->',<!-- TMPL_VAR NAME="index" ESCAPE="URL"  -->,1)" class="button">Sel&amp;close</a>
+							<a  href="javascript:SelectEntry('<!-- TMPL_VAR NAME="libjs" ESCAPE="JS" -->','<!-- TMPL_VAR NAME="authjs" ESCAPE="JS" -->','<!-- TMPL_VAR NAME="index" ESCAPE="URL" -->',0)" class="button">Select</a>
+							<a  href="javascript:SelectEntry('<!-- TMPL_VAR NAME="libjs" ESCAPE="JS" -->','<!-- TMPL_VAR NAME="authjs" ESCAPE="JS" -->','<!-- TMPL_VAR NAME="index" ESCAPE="URL" -->',1)" class="button">Sel&amp;close</a>
 						</td>
 					</tr>
 				<!-- /TMPL_LOOP -->
@@ -111,11 +111,13 @@ a.catalogue:hover {
 		</div>
 	<script language="JavaScript" type="text/javascript">
 	function SelectEntry(myentry, mycode, myindex, wclose){
-		if (opener.document.f.field_value[myindex].value!=""){ 
-			opener.document.f.field_value[myindex].value=opener.document.f.field_value[myindex].value+"|"+myentry
-		} else {
-			opener.document.f.field_value[myindex].value=myentry
-		}
+    with(opener.document){
+		    if (getElementById(myindex).value!=""){ 
+			  getElementById(myindex).value=getElementById(myindex).value+"|"+myentry
+		    } else {
+			  getElementById(myindex).value=myentry
+		    }
+    }  
 		if (wclose == 1) {
 	// 	alert("closing")
 			self.close();
