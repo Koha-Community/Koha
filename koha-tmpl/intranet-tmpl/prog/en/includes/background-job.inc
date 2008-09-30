@@ -15,7 +15,10 @@
             if (json.job_status == 'completed') {
                 percentage = 100;
             }
-            $("#jobprogress").text(percentage);
+				var bgproperty = (parseInt(percentage)-300)+"px 0px";
+                $("#jobprogress").css("background-position",bgproperty);
+				$("#jobprogresspercent").text(percentage);
+
             if (percentage == 100) {
                 clearInterval(backgroundJobProgressTimer); // just in case form submission fails
                 completeJob();
@@ -57,6 +60,7 @@
             });
 
             // and submit the request
+			$("#jobpanel").show();
             $("#jobstatus").show();
             $.ajax({
                 data: inputs.join('&'),

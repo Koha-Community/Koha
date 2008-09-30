@@ -3,11 +3,20 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="file-upload.inc" -->
 <!-- TMPL_INCLUDE NAME="background-job.inc" -->
+<style type="text/css">
+	#uploadpanel,#fileuploadstatus,#fileuploadfailed,#jobpanel,#jobstatus,#jobfailed { display : none; }
+	#fileuploadstatus,#jobstatus { margin:.4em; }
+	#fileuploadprogress,#jobprogress{ width:150px;height:10px;border:1px solid #666;background:url('/intranet-tmpl/prog/img/progress.png') -300px 0px no-repeat; }</style>
 <script type="text/javascript">
 //<![CDATA[
-
+$(document).ready(function(){
+	$("#processfile").hide();
+	$("#uploadfile").submit(function(){
+		alert("Hey!");
+	});
+});
 function CheckForm(f) {
-    if (f.uploadedfileid.value == '') {
+    if ($("#fileToUpload").value == '') {
         alert('Please upload a file first.');
     } else {
         return submitBackgroundJob(f);
@@ -22,7 +31,7 @@ function CheckForm(f) {
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; Stage MARC Records For Import</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <!-- TMPL_IF name="uploadmarc" --><a href="/cgi-bin/koha/tools/stage-marc-import.pl">Stage MARC Records For Import</a> &rsaquo; Upload Results<!-- TMPL_ELSE -->Stage MARC Records For Import<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -31,7 +40,6 @@ function CheckForm(f) {
 	<div class="yui-b">
 
 <h1>Stage MARC Records For Import</h1>
-
 <!-- TMPL_IF name="uploadmarc" -->
 <p>MARC Staging results :</p>
 <ul>
@@ -60,21 +68,24 @@ function CheckForm(f) {
 	<li>Select a MARC file to stage in the import reservoir.  It will be parsed, and each valid record staged for later import into the catalog.</li>
 	<li>You can enter a name for this import. It may be useful, when creating a biblio, to remember where the suggested MARC data comes from!</li>
 </ul>
-<fieldset class="rows">
-<legend>Stage records into the reservoir</legend><ol>
+<form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->" id="uploadfile" enctype="multipart/form-data">
+<fieldset class="rows" id="uploadform">
+<legend>Stage records into the reservoir</legend>
+<ol>
 	<li>
         <div id="fileuploadform">
-        <form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->" enctype="multipart/form-data">
 		<label for="fileToUpload">Select the file to stage: </label>
-		<input type="file" id="fileToUpload" name="fileToUpload" /><br />
-        <button class="input" onclick="return ajaxFileUpload();">Upload file</button>
-		</form>
-        <div id="fileuploadstatus" style="display:none">Upload progress: <span id="fileuploadprogress">0</span>%</div>
-        <div id="fileuploadfailed" style="display:none"></div>
-        </div>
-	</li>
-</ol></fieldset>
-    <form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->" enctype="multipart/form-data">
+		<input type="file" id="fileToUpload" name="fileToUpload" />
+        </div>	</li>
+</ol>
+        <fieldset class="action"><button class="submit" onclick="return ajaxFileUpload();">Upload file</button></fieldset>
+</fieldset>
+		
+        <div id="uploadpanel"><div id="fileuploadstatus">Upload progress: <div id="fileuploadprogress"></div> <span id="fileuploadpercent">0</span>%</div>
+        <div id="fileuploadfailed"></div></div>
+</form>
+
+    <form method="post" id="processfile" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->" enctype="multipart/form-data">
 <fieldset class="rows">
         <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
         <input type="hidden" name="runinbackground" id="runinbackground" value="" />
@@ -128,8 +139,10 @@ function CheckForm(f) {
     </ol>
   </fieldset>
   <fieldset class="action"><input type="button" id="mainformsubmit" onclick="return CheckForm(this.form);" value="Stage for import" /></fieldset>
-  <div id="jobstatus" style="display:none">Job progress: <span id="jobprogress">0</span>%</div>
-  <div id="jobfailed" style="display:none"></div>
+ 
+       <div id="jobpanel"><div id="jobstatus">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
+     <div id="jobfailed"></div></div>
+  
 </form>
 <!-- /TMPL_IF -->
 
