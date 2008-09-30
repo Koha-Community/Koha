@@ -347,7 +347,6 @@ sub get_template_and_user {
             virtualshelves            => "" . C4::Context->preference("virtualshelves"),
         );
     }
-	$template->param(listloop=>[{shelfname=>"Freelist", shelfnumber=>110}]);
     return ( $template, $borrowernumber, $cookie, $flags);
 }
 
