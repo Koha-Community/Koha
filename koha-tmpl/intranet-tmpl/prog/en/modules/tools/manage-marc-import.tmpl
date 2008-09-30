@@ -7,6 +7,10 @@
 <!-- TMPL_INCLUDE NAME="greybox.inc" -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="background-job.inc" -->
+<style type="text/css">
+	#jobpanel,#jobstatus,#jobfailed { display : none; }
+	#jobstatus { margin:.4em; }
+	#jobprogress{ width:150px;height:10px;border:1px solid #666;background:url('/intranet-tmpl/prog/img/progress.png') -300px 0px no-repeat; }</style>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -48,31 +52,31 @@
 
 <!-- TMPL_IF name="batch_info" -->
 <fieldset class="rows">
-  <ul>
-    <li><label>File name</label> <!-- TMPL_VAR name="file_name" --></li>
-    <li><label>Comments</label> <!-- TMPL_VAR name="comments" --></li>
-    <li><label>Staged</label> <!-- TMPL_VAR name="upload_timestamp" --></li>
-    <li><label>Status</label> <!-- TMPL_VAR name="import_status" --></li>
-    <li><label>Matching rule applied</label> 
+  <ol>
+    <li><span class="label">File name</span> <!-- TMPL_VAR name="file_name" --></li>
+    <li><span class="label">Comments</span> <!-- TMPL_IF NAME="comments" --><!-- TMPL_VAR name="comments" -->(none)<!-- /TMPL_IF --></li>
+    <li><span class="label">Staged</span> <!-- TMPL_VAR name="upload_timestamp" --></li>
+    <li><span class="label">Status</span> <!-- TMPL_VAR name="import_status" --></li>
+    <li><span class="label">Matching rule applied</span> 
 <!-- TMPL_IF name="current_matcher_id" -->
   <!-- TMPL_VAR name="current_matcher_code" --> (<!-- TMPL_VAR name="current_matcher_description" -->)
 <!-- TMPL_ELSE -->
   No matching rule in effect
 <!-- /TMPL_IF -->
     </li>
-    <li><label>Action if matching record found</label> <!-- TMPL_VAR NAME="overlay_action" --></li>
-    <li><label>Action if no match found</label> <!-- TMPL_VAR NAME="nomatch_action" --></li>
-    <li><label>Item processing</label> <!-- TMPL_VAR NAME="item_action" --></li>
-  </ul>
+    <li><span class="label">Action if matching record found</span> <!-- TMPL_VAR NAME="overlay_action" --></li>
+    <li><span class="label">Action if no match found</span> <!-- TMPL_VAR NAME="nomatch_action" --></li>
+    <li><span class="label">Item processing</span> <!-- TMPL_VAR NAME="item_action" --></li>
+  </ol>
 </fieldset>
 <!-- TMPL_IF name="can_commit" -->
-<div>
-  <fieldset class="rows">
+<div id="matchingrules">
   <form action="<!-- TMPL_VAR name="script_name" -->" method="post">
+  <fieldset class="rows">
     <input type="hidden" name="op" value="redo-matching" />
     <input type="hidden" name="import_batch_id" value="<!-- TMPL_VAR name="import_batch_id" -->" />
     <input type="hidden" name="current_matcher_id" value="<!-- TMPL_VAR name="current_matcher_id" -->" />
-    <ul>
+    <ol>
     <li><label for name="new_matcher_id">New matching rule</label>
     <select name="new_matcher_id" id="new_matcher_id">
        <option value="">Do not look for matching records</option> 
@@ -98,42 +102,41 @@
     <li><label for="overlay_action">Item processing</label>
      <!-- TMPL_INCLUDE NAME="tools-item-action.inc" -->
     </li>
-    </ul>
-    <input type="submit" class="button" value="Apply different matching rule" />
+    </ol>
+    <fieldset class="action"><input type="submit" class="button" value="Apply different matching rule" /></fieldset>
+    </fieldset>
   </form>
   <!-- TMPL_IF name="rematch_attempted" -->
     <!-- TMPL_IF name="rematch_failed" -->
-      <p><span class="problem">Failed to apply different matching rule</span></p>
+      <div class="dialog alert">Failed to apply different matching rule</div>
     <!-- TMPL_ELSE -->
-      <p><span class="problem">Applied different matching rule.  Number of records matched now
+      <div class="dialog message">Applied different matching rule.  Number of records matched now
        <!-- TMPL_VAR name="num_with_matches" -->
-      </span></p>
+      </div>
     <!-- /TMPL_IF -->
   <!-- /TMPL_IF -->
   <!-- TMPL_IF name="changed_overlay_action" -->
-      <p><span class="problem">Changed action if matching record found</span></p>
+      <div class="dialog message">Changed action if matching record found</div>
   <!-- /TMPL_IF -->
   <!-- TMPL_IF name="changed_nomatch_action" -->
-      <p><span class="problem">Changed action if no match found</span></p>
+      <div class="dialog message">Changed action if no match found</div>
   <!-- /TMPL_IF -->
   <!-- TMPL_IF name="changed_item_action" -->
-      <p><span class="problem">Changed item processing option</span></p>
+      <div class="dialog message">Changed item processing option</div>
   <!-- /TMPL_IF -->
-    </fieldset>
 </div>
 <!-- /TMPL_IF -->
 <div>
-  <fieldset class="rows">
   <!-- TMPL_IF name="can_commit" -->
   <form action="<!-- TMPL_VAR name="script_name" -->" method="post">
     <input type="hidden" name="op" value="commit-batch" />
     <input type="hidden" name="runinbackground" value="" />
     <input type="hidden" name="completedJobID" value="" />
     <input type="hidden" name="import_batch_id" value="<!-- TMPL_VAR name="import_batch_id" -->" />
-    <input type="submit" class="button" name="mainformsubmit" value="Import into catalogue" onclick="return submitBackgroundJob(this.form);" />
+    <fieldset class="action"><input type="submit" class="button" name="mainformsubmit" value="Import into catalogue" onclick="return submitBackgroundJob(this.form);" /></fieldset>
   </form>
-  <div id="jobstatus" style="display:none">Job progress: <span id="jobprogress">0</span>%</div>
-  <div id="jobfailed" style="display:none"></div>
+  <div id="jobpanel"><div id="jobstatus">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
+     <div id="jobfailed"></div></div>
   <!-- /TMPL_IF -->
   <!-- TMPL_IF name="can_revert" -->
   <form action="<!-- TMPL_VAR name="script_name" -->" method="post">
@@ -141,15 +144,14 @@
     <input type="hidden" name="runinbackground" value="" />
     <input type="hidden" name="completedJobID" value="" />
     <input type="hidden" name="import_batch_id" value="<!-- TMPL_VAR name="import_batch_id" -->" />
-    <input type="submit" class="button" name="mainformsubmit" value="Undo import into catalogue" onclick="return submitBackgroundJob(this.form);" />
+    <fieldset class="action"><input type="submit" class="button" name="mainformsubmit" value="Undo import into catalogue" onclick="return submitBackgroundJob(this.form);" /></fieldset>
   </form>
-  <div id="jobstatus" style="display:none">Job progress: <span id="jobprogress">0</span>%</div>
-  <div id="jobfailed" style="display:none"></div>
+  <div id="jobpanel"><div id="jobstatus">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
+     <div id="jobfailed"></div></div>
   <!-- /TMPL_IF -->
-  </fieldset>
 </div>
   <!-- TMPL_IF name="did_commit" -->
-  <p><span class="problem">Completed import of records</span></p>
+  <div class="dialog message">Completed import of records</div>
   <table>
   <tr><td>Number of records added</td><td><!-- TMPL_VAR name="num_added" --></td></tr>
   <tr><td>Number of records updated</td><td><!-- TMPL_VAR name="num_updated" --></td></tr>
@@ -159,7 +161,7 @@
   </table>
   <!-- /TMPL_IF -->
   <!-- TMPL_IF name="did_revert" -->
-  <p><span class="problem">Undid import of records</span></p>
+  <div class="dialog message">Undid import of records</div>
   <table>
   <tr><td>Number of records deleted</td><td><!-- TMPL_VAR name="num_deleted" --></td></tr>
   <tr><td>Number of items deleted</td><td><!-- TMPL_VAR name="num_items_deleted" --></td></tr>
@@ -228,7 +230,7 @@ Page
       <!-- TMPL_IF name="current_page" -->
       <span class="current"><!-- TMPL_VAR name="page_number" --></span>
       <!-- TMPL_ELSE -->
-      <a class="nav" href="<!-- TMPL_VAR name="script_name" -->?import_batch_id=<!-- TMPL_VAR name="import_batch_id" -->&offset=<!-- TMPL_VAR name="offset" -->"><!-- TMPL_VAR name="page_number" --></a>
+      <a class="nav" href="<!-- TMPL_VAR name="script_name" -->?import_batch_id=<!-- TMPL_VAR name="import_batch_id" -->&amp;offset=<!-- TMPL_VAR name="offset" -->"><!-- TMPL_VAR name="page_number" --></a>
       <!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
 </div>
@@ -242,8 +244,8 @@ Page
   </tr>
   <!-- TMPL_LOOP name="biblio_list" -->
   <tr>
-    <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=<!-- TMPL_VAR name='import_record_id' -->" rel="gb_page_center[600,500]"><!-- TMPL_VAR name="record_sequence"--></a></td>
-    <td><!-- TMPL_VAR name="citation"--></td>
+    <td><!-- TMPL_VAR name="record_sequence"--></td>
+    <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=<!-- TMPL_VAR name='import_record_id' -->" rel="gb_page_center[600,500]"><!-- TMPL_VAR name="citation"--></a></td>
     <td><!-- TMPL_VAR name="status"--></td>
     <td><!-- TMPL_VAR name="overlay_status"--></td>
   </tr>
@@ -262,21 +264,21 @@ Page
       <!-- TMPL_IF name="current_page" -->
       <span class="current"><!-- TMPL_VAR name="page_number" --></span>
       <!-- TMPL_ELSE -->
-      <a class="nav" href="<!-- TMPL_VAR name="script_name" -->?import_batch_id=<!-- TMPL_VAR name="import_batch_id" -->&offset=<!-- TMPL_VAR name="offset" -->"><!-- TMPL_VAR name="page_number" --></a>
+      <a class="nav" href="<!-- TMPL_VAR name="script_name" -->?import_batch_id=<!-- TMPL_VAR name="import_batch_id" -->&amp;offset=<!-- TMPL_VAR name="offset" -->"><!-- TMPL_VAR name="page_number" --></a>
       <!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
 </div>
   <!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
   <!-- TMPL_IF name="batch_info" -->
-    <span class="problem">There are no records in this batch to import.</span>
+    <div class="dialog alert">There are no records in this batch to import.</div>
     <a href="/cgi-bin/koha/tools/manage-marc-import.pl">Manage staged MARC records</a>.
   <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
 </div>
 </div>
-<div class="yui-b noprint">
+<div class="yui-b">
 <!-- TMPL_INCLUDE NAME="tools-menu.inc" -->
 </div>
 </div>
