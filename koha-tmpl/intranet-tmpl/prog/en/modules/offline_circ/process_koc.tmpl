@@ -1,0 +1,78 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Circulation &rsaquo; Offline Circulation File Upload</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="file-upload.inc" -->
+<!-- TMPL_INCLUDE NAME="background-job.inc" -->
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+	$("#processfile").hide();
+});
+function CheckUpload(f){
+	if(f.fileToUpload.value == ""){
+		alert("Please choose a file to upload");
+	} else {
+		return ajaxFileUpload()
+	}
+		return false;
+}
+function CheckForm(f) {
+    if (f.uploadedfileid.value == '') {
+        alert('Please upload a file first.');
+    } else {
+		$("#fileuploadstatus").hide();
+		$("#fileuploadform").slideUp();
+        return submitBackgroundJob(f);
+    }
+    return false;
+}
+
+//]]>
+</script>
+<style type="text/css">
+	#fileuploadstatus,#jobstatus { margin:.4em; }
+	#fileuploadprogress,#jobprogress{ width:150px;height:10px;border:1px solid #666;background:url('/intranet-tmpl/prog/img/progress.png') -300px 0px no-repeat; }
+</style>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="circ-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Offline Circulation File Upload</div>
+
+<div id="doc" class="yui-t7">
+   
+   <div id="bd">
+
+<!-- TMPL_IF NAME="transactions_loaded" -->
+  <h2>Koha Offline Circulation</h2>
+  <p>Your data was processed. Here are the results.</p>
+  <!-- TMPL_LOOP NAME="messages" -->
+    <p><!-- TMPL_VAR NAME="message" --></p>
+  <!-- /TMPL_LOOP -->
+<!-- TMPL_ELSE -->
+  <h2>Upload Offline Circulation Data</h2>
+   <div id="fileuploadform">
+     <form method="post" action="<!-- TMPL_VAR name="SCRIPT_NAME" -->" enctype="multipart/form-data">
+		<fieldset class="brief">
+       <ol><li><label for="fileToUpload">Choose .koc File: </label>
+       <input type="file" id="fileToUpload" size="50" name="fileToUpload" /></li></ol>
+	   <fieldset class="action"><input type="button" class="submit" value="Upload file" onclick="CheckUpload(this.form);" /></fieldset>
+	   </fieldset>
+     </form>
+     <div id="fileuploadstatus" style="display:none">Upload progress: <div id="fileuploadprogress"></div> <span id="fileuploadpercent">0</span>%</div>
+     <div id="fileuploadfailed" style="display:none"></div>
+   </div>
+   <form action="process_koc.pl" id="processfile" method="post" enctype="multipart/form-data">
+     <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
+     <input type="hidden" name="runinbackground" id="runinbackground" value="" />
+     <input type="hidden" name="completedJobID" id="completedJobID" value="" />
+     <input type="submit" value="Process offline circulation file" onclick="return CheckForm(this.form);" id="mainformsubmit" />
+     <div id="jobstatus" style="display:none">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
+     <div id="jobfailed" style="display:none"></div>
+   </form>
+<!-- /TMPL_IF -->
+
+
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

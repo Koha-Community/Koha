@@ -59,6 +59,7 @@
             });
 
             // and submit the request
+			$("#jobpanel").show();
             $("#jobstatus").show();
             $.ajax({
                 data: inputs.join('&'),

@@ -24,6 +24,7 @@
     function ajaxFileUpload()
     {
         fileUploadProgressTimerCanceled = false;
+		$("#uploadpanel").show();
         $("#fileuploadstatus").show();
         fileUploadProgressTimer = setInterval("updateProgress()",500);
         $.ajaxFileUpload (
@@ -48,7 +49,9 @@
                         $("#fileuploadfailed").text("Upload failed -- database in maintenance state");
                     } else {
                          $("#uploadedfileid").val(data.fileid);
-                         $("#fileuploadprogress").text("100");
+                         $("#fileuploadprogress").css("background-position","0px 0px");
+						 $("#processfile").show();
+                        $("#fileuploadpercent").text("100");
                     }
                     fileUploadProgressTimerCanceled = true;
                     clearInterval(fileUploadProgressTimer);
