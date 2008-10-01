@@ -29,6 +29,8 @@ my $want_help;
 my $as_xml;
 my $process_zebraqueue;
 my $do_not_clear_zebraqueue;
+my $verbose_logging;
+my $zebraidx_log_opt = " -v none,fatal,warn ";
 my $result = GetOptions(
     'd:s'           => \$directory,
     'reset'         => \$reset,
@@ -43,6 +45,7 @@ my $result = GetOptions(
 	'x'				=> \$as_xml,
     'y'             => \$do_not_clear_zebraqueue,
     'z'             => \$process_zebraqueue,
+    'v'             => \$verbose_logging,
 );
 
 
@@ -78,6 +81,13 @@ if ($process_zebraqueue and $do_not_clear_zebraqueue) {
 if ($noshadow) {
     $noshadow = ' -n ';
 }
+
+#  -v is for verbose, which seems backwards here because of how logging is set
+#    on the CLI of zebraidx.  It works this way.  The default is to not log much
+if ($verbose_logging) {
+    $zebraidx_log_opt = '';
+}
+
 my $use_tempdir = 0;
 unless ($directory) {
     $use_tempdir = 1;
@@ -93,35 +103,39 @@ my $dbh = C4::Context->dbh;
 my ($biblionumbertagfield,$biblionumbertagsubfield) = &GetMarcFromKohaField("biblio.biblionumber","");
 my ($biblioitemnumbertagfield,$biblioitemnumbertagsubfield) = &GetMarcFromKohaField("biblioitems.biblioitemnumber","");
 
-print "Zebra configuration information\n";
-print "================================\n";
-print "Zebra biblio directory      = $biblioserverdir\n";
-print "Zebra authorities directory = $authorityserverdir\n";
-print "Koha directory              = $kohadir\n";
-print "BIBLIONUMBER in :     $biblionumbertagfield\$$biblionumbertagsubfield\n";
-print "BIBLIOITEMNUMBER in : $biblioitemnumbertagfield\$$biblioitemnumbertagsubfield\n";
-print "================================\n";
+if ( $verbose_logging ) {
+    print "Zebra configuration information\n";
+    print "================================\n";
+    print "Zebra biblio directory      = $biblioserverdir\n";
+    print "Zebra authorities directory = $authorityserverdir\n";
+    print "Koha directory              = $kohadir\n";
+    print "BIBLIONUMBER in :     $biblionumbertagfield\$$biblionumbertagsubfield\n";
+    print "BIBLIOITEMNUMBER in : $biblioitemnumbertagfield\$$biblioitemnumbertagsubfield\n";
+    print "================================\n";
+}
 
 if ($do_munge) {
     munge_config();
 }
 
 if ($authorities) {
-    index_records('authority', $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $do_not_clear_zebraqueue);
+    index_records('authority', $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt);
 } else {
     print "skipping authorities\n";
 }
 
 if ($biblios) {
-    index_records('biblio', $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $do_not_clear_zebraqueue);
+    index_records('biblio', $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt);
 } else {
     print "skipping biblios\n";
 }
 
 
-print "====================\n";
-print "CLEANING\n";
-print "====================\n";
+if ( $verbose_logging ) {
+    print "====================\n";
+    print "CLEANING\n";
+    print "====================\n";
+}
 if ($keep_export) {
     print "NOTHING cleaned : the export $directory has been kept.\n";
     print "You can re-run this script with the -s ";
@@ -144,18 +158,20 @@ if ($keep_export) {
 }
 
 sub index_records {
-    my ($record_type, $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $do_not_clear_zebraqueue) = @_;
+    my ($record_type, $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt) = @_;
 
     my $num_records_exported = 0;
     my $num_records_deleted = 0;
-    if ($skip_export) {
+    if ($skip_export && $verbose_logging) {
         print "====================\n";
         print "SKIPPING $record_type export\n";
         print "====================\n";
     } else {
-        print "====================\n";
-        print "exporting $record_type\n";
-        print "====================\n";
+        if ( $verbose_logging ) {
+            print "====================\n";
+            print "exporting $record_type\n";
+            print "====================\n";
+        }
         mkdir "$directory" unless (-d $directory);
         mkdir "$directory/$record_type" unless (-d "$directory/$record_type");
         if ($process_zebraqueue) {
@@ -180,17 +196,19 @@ sub index_records {
     #
     # and reindexing everything
     #
-    print "====================\n";
-    print "REINDEXING zebra\n";
-    print "====================\n";
+    if ( $verbose_logging ) {
+        print "====================\n";
+        print "REINDEXING zebra\n";
+        print "====================\n";
+    }
 	my $record_fmt = ($as_xml) ? 'marcxml' : 'iso2709' ;
     if ($process_zebraqueue) {
-        do_indexing($record_type, 'delete', "$directory/del_$record_type", $reset, $noshadow, $record_fmt) 
+        do_indexing($record_type, 'delete', "$directory/del_$record_type", $reset, $noshadow, $record_fmt, $zebraidx_log_opt) 
             if $num_records_deleted;
-        do_indexing($record_type, 'update', "$directory/upd_$record_type", $reset, $noshadow, $record_fmt)
+        do_indexing($record_type, 'update', "$directory/upd_$record_type", $reset, $noshadow, $record_fmt, $zebraidx_log_opt)
             if $num_records_exported;
     } else {
-        do_indexing($record_type, 'update', "$directory/$record_type", $reset, $noshadow, $record_fmt)
+        do_indexing($record_type, 'update', "$directory/$record_type", $reset, $noshadow, $record_fmt, $zebraidx_log_opt)
             if $num_records_exported;
     }
 }
@@ -258,8 +276,8 @@ sub export_marc_records_from_sth {
     open (OUT, ">:utf8 ", "$directory/exported_records") or die $!;
     my $i = 0;
     while (my ($record_number) = $sth->fetchrow_array) {
-        print ".";
-        print "\r$i" unless ($i++ %100);
+        print "." if ( $verbose_logging );
+        print "\r$i" unless ($i++ %100 or !$verbose_logging);
         my ($marc) = get_corrected_marc_record($record_type, $record_number, $noxml);
         if (defined $marc) {
             # FIXME - when more than one record is exported and $as_xml is true,
@@ -271,7 +289,7 @@ sub export_marc_records_from_sth {
             $num_exported++;
         }
     }
-    print "\nRecords exported: $num_exported\n";
+    print "\nRecords exported: $num_exported\n" if ( $verbose_logging );
     close OUT;
     return $num_exported;
 }
@@ -286,8 +304,8 @@ sub export_marc_records_from_list {
     foreach my $record_number ( map { $_->{biblio_auth_number} }
                                 grep { !$found{ $_->{biblio_auth_number} }++ }
                                 @$entries ) {
-        print ".";
-        print "\r$i" unless ($i++ %100);
+        print "." if ( $verbose_logging );
+        print "\r$i" unless ($i++ %100 or !$verbose_logging);
         my ($marc) = get_corrected_marc_record($record_type, $record_number, $noxml);
         if (defined $marc) {
             # FIXME - when more than one record is exported and $as_xml is true,
@@ -299,7 +317,7 @@ sub export_marc_records_from_list {
             $num_exported++;
         }
     }
-    print "\nRecords exported: $num_exported\n";
+    print "\nRecords exported: $num_exported\n" if ( $verbose_logging );
     close OUT;
     return $num_exported;
 }
@@ -311,8 +329,8 @@ sub generate_deleted_marc_records {
     open (OUT, ">:utf8 ", "$directory/exported_records") or die $!;
     my $i = 0;
     foreach my $record_number (map { $_->{biblio_auth_number} } @$entries ) {
-        print "\r$i" unless ($i++ %100);
-        print ".";
+        print "\r$i" unless ($i++ %100 or !$verbose_logging);
+        print "." if ( $verbose_logging );
 
         my $marc = MARC::Record->new();
         if ($record_type eq 'biblio') {
@@ -327,7 +345,7 @@ sub generate_deleted_marc_records {
         print OUT ($as_xml) ? $marc->as_xml_record() : $marc->as_usmarc();
         $num_exported++;
     }
-    print "\nRecords exported: $num_exported\n";
+    print "\nRecords exported: $num_exported\n" if ( $verbose_logging );
     close OUT;
     return $num_exported;
     
@@ -475,16 +493,16 @@ sub fix_unimarc_100 {
 }
 
 sub do_indexing {
-    my ($record_type, $op, $record_dir, $reset_index, $noshadow, $record_format) = @_;
+    my ($record_type, $op, $record_dir, $reset_index, $noshadow, $record_format, $zebraidx_log_opt) = @_;
 
     my $zebra_server  = ($record_type eq 'biblio') ? 'biblioserver' : 'authorityserver';
     my $zebra_db_name = ($record_type eq 'biblio') ? 'biblios' : 'authorities';
     my $zebra_config  = C4::Context->zebraconfig($zebra_server)->{'config'};
     my $zebra_db_dir  = C4::Context->zebraconfig($zebra_server)->{'directory'};
 
-    system("zebraidx -c $zebra_config -g $record_format -d $zebra_db_name init") if $reset_index;
-    system("zebraidx -c $zebra_config $noshadow -g $record_format -d $zebra_db_name $op $record_dir");
-    system("zebraidx -c $zebra_config -g $record_format -d $zebra_db_name commit") unless $noshadow;
+    system("zebraidx -c $zebra_config $zebraidx_log_opt -g $record_format -d $zebra_db_name init") if $reset_index;
+    system("zebraidx -c $zebra_config $zebraidx_log_opt $noshadow -g $record_format -d $zebra_db_name $op $record_dir");
+    system("zebraidx -c $zebra_config $zebraidx_log_opt -g $record_format -d $zebra_db_name commit") unless $noshadow;
 
 }
 
@@ -538,6 +556,9 @@ Parameters:
                             a running zebraqueue_daemon doesn't try to reindex
                             the same records - specify -y to override this.  
                             Cannot be used with -z.
+
+    -v                      increase the amount of logging.  Normally only 
+                            warnings and errors from the indexing are shown.
 
     -munge-config           Deprecated option to try
                             to fix Zebra config files.
@@ -630,9 +651,11 @@ print "Info: tab dir : $tabdir\n";
 #
 my $created_dir_or_file = 0;
 if ($authorities) {
-    print "====================\n";
-    print "checking directories & files for authorities\n";
-    print "====================\n";
+    if ( $verbose_logging ) {
+        print "====================\n";
+        print "checking directories & files for authorities\n";
+        print "====================\n";
+    }
     unless (-d "$authorityserverdir") {
         system("mkdir -p $authorityserverdir");
         print "Info: created $authorityserverdir\n";
@@ -771,10 +794,12 @@ rank:rank-1
     
 }
 if ($biblios) {
-    print "====================\n";
-    print "checking directories & files for biblios\n";
-    print "====================\n";
-    
+    if ( $verbose_logging ) {
+        print "====================\n";
+        print "checking directories & files for biblios\n";
+        print "====================\n";
+    }
+
     #
     # BIBLIOS : creating directory structure
     #
