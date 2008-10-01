@@ -1295,6 +1295,7 @@ sub GetItemsInfo {
         my $sth2 = $dbh->prepare("SELECT * FROM old_issues,borrowers
                                     WHERE itemnumber = ?
                                     AND old_issues.borrowernumber = borrowers.borrowernumber
+                                    ORDER BY returndate DESC
                                     LIMIT 3");
         $sth2->execute($data->{'itemnumber'});
         my $ii = 0;
