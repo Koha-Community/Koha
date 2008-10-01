@@ -49,6 +49,13 @@
     <!-- TMPL_LOOP NAME="search_boxes_loop" -->
         <p>
         <!-- TMPL_IF NAME="expanded_options" -->
+             <!-- TMPL_IF NAME="boolean" -->
+                  <select name="op">
+                       <option value="and" selected="selected">and</option>
+                       <option value="or">or</option>
+                       <option value="not">not</option>
+                   </select>
+               <!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="search_boxes_label" -->
                 <!-- p tag was here -->
             <!-- TMPL_ELSE -->
