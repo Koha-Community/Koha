@@ -84,6 +84,9 @@ my $userenv = C4::Context->userenv;
 
 $template->param("uppercasesurnames" => C4::Context->preference('uppercasesurnames'));
 
+my $minpw = C4::Context->preference('minPasswordLength');
+$template->param("minPasswordLength" => $minpw);
+
 # function to designate mandatory fields (visually with css)
 my $check_BorrowerMandatoryField=C4::Context->preference("BorrowerMandatoryField");
 my @field_check=split(/\|/,$check_BorrowerMandatoryField);
@@ -212,6 +215,9 @@ if ($op eq 'save' || $op eq 'insert'){
     push @errors, "ERROR_login_exist";
     $loginexist=1; 
   }
+  
+  my $password = $input->param('password');
+    push @errors, "ERROR_short_password" if( $password && $minpw & (length($password) < $minpw ) );
 
   if (C4::Context->preference('ExtendedPatronAttributes')) {
     $extended_patron_attributes = parse_extended_patron_attributes($input);
