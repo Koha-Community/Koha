@@ -132,6 +132,9 @@
 			<!-- TMPL_IF NAME="ERROR_dateexpiry" -->
 				<li id="ERROR_dateexpiry">Date of expiration is invalid.</li>
 			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="ERROR_short_password" -->
+				<li id="ERROR_short_password">Password must be at least <!-- TMPL_VAR NAME="minPasswordLength" --> characters long.</li>
+			<!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="ERROR_extended_unique_id_failed" -->
                 <li id="ERROR_extended_unique_id_failed">The attribute value 
                     <!-- TMPL_VAR NAME="ERROR_extended_unique_id_failed" --> is already is use by another patron record.</li>
@@ -825,7 +828,7 @@
 				<!-- /TMPL_IF -->
 			<!--/TMPL_IF-->
 			<!--/TMPL_IF-->
-	  <!-- TMPL_IF NAME="mandatorypassword" --><span class="required">Required</span><!-- /TMPL_IF -->
+	  <!-- TMPL_IF NAME="mandatorypassword" --><span class="required">Required</span><!-- /TMPL_IF --><div class="hint">Minimum password length: <!-- TMPL_VAR NAME="minPasswordLength" --></div>
 		</li></ol>
 		</fieldset>
 		<!--this zones are not necessary in modif mode -->
