@@ -115,7 +115,11 @@ if ($completedJobID) {
     my $header_line = shift @input_lines;
     my $file_info   = parse_header_line($header_line);
     if ($file_info->{'Version'} ne $FILE_VERSION) {
-        push( @output, { message => "Warning: This file is version '$file_info->{'Version'}', but I only know how to import version '$FILE_VERSION'. I'll try my best." } );
+      push( @output, { message => 1,
+      ERROR_file_version => 1,
+      upload_version => $file_info->{'Version'},
+      current_version => $FILE_VERSION
+      } );
     }
     
     
@@ -260,7 +264,16 @@ sub kocIssueItem {
         $circ->{'date'},               # issuedate
     ) unless ($DEBUG);
 
-      push( @output, { message => "Renewed $item->{ 'title' } ( $item->{ 'barcode' } ) to $borrower->{ 'firstname' } $borrower->{ 'surename' } ( $borrower->{'cardnumber'} ) : $circ->{ 'datetime' }\n" } );
+      push( @output, { renew => 1,
+    title => $item->{ 'title' },
+    biblionumber => $item->{'biblionumber'},
+    barcode => $item->{ 'barcode' },
+    firstname => $borrower->{ 'firstname' },
+    surname => $borrower->{ 'surname' },
+    borrowernumber => $borrower->{'borrowernumber'},
+    cardnumber => $borrower->{'cardnumber'},
+    datetime => $circ->{ 'datetime' }
+    } );
 
     } else {
 #warn "Item issued to a different member.";
@@ -272,7 +285,16 @@ sub kocIssueItem {
       if ( Date_to_Days( $i_y, $i_m, $i_d ) < Date_to_Days( $c_y, $c_m, $c_d ) ) { ## Current issue to a different persion is older than this issue, return and issue.
         my $date_due_object = C4::Dates->new($date_due ,'iso');
         C4::Circulation::AddIssue( $borrower, $circ->{'barcode'}, $date_due_object ) unless ( DEBUG );
-        push( @output, { message => "Issued $item->{ 'title' } ( $item->{ 'barcode' } ) to $borrower->{ 'firstname' } $borrower->{ 'surename' } ( $borrower->{'cardnumber'} ) : $circ->{ 'datetime' }\n" } );
+        push( @output, { issue => 1,
+    title => $item->{ 'title' },
+    biblionumber => $item->{'biblionumber'},
+    barcode => $item->{ 'barcode' },
+    firstname => $borrower->{ 'firstname' },
+    surname => $borrower->{ 'surname' },
+    borrowernumber => $borrower->{'borrowernumber'},
+    cardnumber => $borrower->{'cardnumber'},
+    datetime => $circ->{ 'datetime' }
+    } );
 
       } else { ## Current issue is *newer* than this issue, write a 'returned' issue, as the item is most likely in the hands of someone else now.
 #warn "Current issue to another member is newer. Doing nothing";
@@ -284,8 +306,17 @@ sub kocIssueItem {
   } else { ## Item is not checked out to anyone at the moment, go ahead and issue it
       my $date_due_object = C4::Dates->new($date_due ,'iso');
       C4::Circulation::AddIssue( $borrower, $circ->{'barcode'}, $date_due_object ) unless ( DEBUG );
-    push( @output, { message => "Issued $item->{ 'title' } ( $item->{ 'barcode' } ) to $borrower->{ 'firstname' } $borrower->{ 'surename' } ( $borrower->{'cardnumber'} ) : $circ->{ 'datetime' }\n" } );
-  }  
+    push( @output, { issue => 1,
+    title => $item->{ 'title' },
+    biblionumber => $item->{'biblionumber'},
+    barcode => $item->{ 'barcode' },
+    firstname => $borrower->{ 'firstname' },
+    surname => $borrower->{ 'surname' },
+    borrowernumber => $borrower->{'borrowernumber'},
+    cardnumber => $borrower->{'cardnumber'},
+    datetime =>$circ->{ 'datetime' }
+    } );
+	 }  
 }
 
 sub kocReturnItem {
@@ -293,22 +324,43 @@ sub kocReturnItem {
   my $item = GetBiblioFromItemNumber( undef, $circ->{ 'barcode' } );
   #warn( Data::Dumper->Dump( [ $circ, $item ], [ qw( circ item ) ] ) );
   my $borrowernumber = _get_borrowernumber_from_barcode( $circ->{'barcode'} );
-  unless ( $borrowernumber ) {
-      push( @output, { message => "Warning: unable to determine borrower from item ($item->{'barcode'}). Cannot mark returned\n" } );
-  }
-  C4::Circulation::MarkIssueReturned( $borrowernumber,
+  if ( $borrowernumber ) {
+  my $borrower = GetMember( $borrowernumber, 'borrowernumber' );
+    C4::Circulation::MarkIssueReturned( $borrowernumber,
                                       $item->{'itemnumber'},
                                       undef,
                                       $circ->{'date'} );
   
-  push( @output, { message => "Returned $item->{ 'title' } ( $item->{ 'barcode' } ) From borrower number $borrowernumber : $circ->{ 'datetime' }\n" } ); 
+  push( @output, { return => 1,
+    title => $item->{ 'title' },
+    biblionumber => $item->{'biblionumber'},
+    barcode => $item->{ 'barcode' },
+    borrowernumber => $borrower->{'borrowernumber'},
+    firstname => $borrower->{'firstname'},
+    surname => $borrower->{'surname'},
+    cardnumber => $borrower->{'cardnumber'},
+    datetime => $circ->{ 'datetime' }
+    } ); 
+  } else {
+    push( @output, { ERROR_no_borrower_from_item => 1,
+    badbarcode => $circ->{'barcode'}
+    } );
+  
+  }
+
 }
 
 sub kocMakePayment {
   my ( $circ ) = @_;
   my $borrower = GetMember( $circ->{ 'cardnumber' }, 'cardnumber' );
   recordpayment( $borrower->{'borrowernumber'}, $circ->{'amount'} );
-  push( @output, { message => "accepted payment ($circ->{'amount'}) from cardnumber ($circ->{'cardnumber'}), borrower ($borrower->{'borrowernumber'})" } );
+  push( @output, { payment => 1,
+    amount => $circ->{'amount'},
+    firstname => $borrower->{'firstname'},
+    surname => $borrower->{'surname'},
+    cardnumber => $circ->{'cardnumber'},
+    borrower => $borrower->{'borrowernumber'}
+    } );
 }
 
 =head3 _get_borrowernumber_from_barcode
