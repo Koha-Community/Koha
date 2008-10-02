@@ -10,7 +10,7 @@
 <style type="text/css">
 	#jobpanel,#jobstatus,#jobfailed { display : none; }
 	#jobstatus { margin:.4em; }
-	#jobprogress{ width:150px;height:10px;border:1px solid #666;background:url('/intranet-tmpl/prog/img/progress.png') -300px 0px no-repeat; }</style>
+	#jobprogress{ width:200px;height:10px;border:1px solid #666;background:url('/intranet-tmpl/prog/img/progress.png') -300px 0px no-repeat; }</style>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -38,7 +38,7 @@
 <!-- /TMPL_IF -->
 </h1>
 <!-- TMPL_IF name="label_batch" -->
-<div class="alert">
+<div class="dialog message">
 <p>Label batch created, with id: <!-- TMPL_VAR name="label_batch" --> </p>
 </div>
 <!-- /TMPL_IF -->
@@ -69,6 +69,7 @@
     <li><span class="label">Item processing</span> <!-- TMPL_VAR NAME="item_action" --></li>
   </ol>
 </fieldset>
+
 <!-- TMPL_IF name="can_commit" -->
 <div id="matchingrules">
   <form action="<!-- TMPL_VAR name="script_name" -->" method="post">
@@ -171,7 +172,7 @@
   </table>
   <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
-<br />
+<br style="clear:both;" />
 
 <!-- TMPL_IF name="batch_list" -->
   <!-- TMPL_IF name="pages" -->
@@ -198,13 +199,13 @@ Page
   </tr>
   <!-- TMPL_LOOP name="batch_list" -->
   <tr>
-    <td><a href="<!-- TMPL_VAR name="script_name" -->?import_batch_id=<!-- TMPL_VAR name="import_batch_id" -->"><!-- TMPL_VAR name="import_batch_id" --></a></td>
-    <td><!-- TMPL_VAR name="file_name" --></td>
+    <td><!-- TMPL_VAR name="import_batch_id" --></td>
+    <td><a href="<!-- TMPL_VAR name="script_name" -->?import_batch_id=<!-- TMPL_VAR name="import_batch_id" -->"><!-- TMPL_VAR name="file_name" --></a></td>
     <td><!-- TMPL_VAR name="comments" --></td>
     <td><!-- TMPL_VAR name="import_status" --></td>
     <td><!-- TMPL_VAR name="upload_timestamp" --></td>
     <td><!-- TMPL_VAR name="num_biblios" --></td>
-    <td><!-- TMPL_VAR name="num_items" --><!-- TMPL_IF NAME="num_items" --><a href="<!-- TMPL_VAR name="script_name" -->?import_batch_id=<!-- TMPL_VAR name="import_batch_id" -->&op=create_labels">(Create Label Batch)</a><!-- /TMPL_IF --></td>
+    <td><!-- TMPL_VAR name="num_items" --><!-- TMPL_IF NAME="num_items" --> <a href="<!-- TMPL_VAR name="script_name" -->?import_batch_id=<!-- TMPL_VAR name="import_batch_id" -->&amp;op=create_labels">(Create Label Batch)</a><!-- /TMPL_IF --></td>
   </tr>
   <!-- /TMPL_LOOP -->
 </table>
@@ -271,8 +272,9 @@ Page
   <!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
   <!-- TMPL_IF name="batch_info" -->
-    <div class="dialog alert">There are no records in this batch to import.</div>
-    <a href="/cgi-bin/koha/tools/manage-marc-import.pl">Manage staged MARC records</a>.
+    <div class="dialog alert">There are no records in this batch to import.
+    <a href="/cgi-bin/koha/tools/manage-marc-import.pl">Manage staged MARC records</a>.</div>
+
   <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
