@@ -31,14 +31,14 @@ function CheckForm(f) {
 </script>
 <style type="text/css">
 	#fileuploadstatus,#jobstatus { margin:.4em; }
-	#fileuploadprogress,#jobprogress{ width:150px;height:10px;border:1px solid #666;background:url('/intranet-tmpl/prog/img/progress.png') -300px 0px no-repeat; }
+	#fileuploadprogress,#jobprogress{ width:200px;height:10px;border:1px solid #666;background:url('/intranet-tmpl/prog/img/progress.png') -300px 0px no-repeat; }
 </style>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="circ-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Offline Circulation File Upload</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; <!-- TMPL_IF NAME="transactions_loaded" --> <a href="/cgi-bin/koha/offline_circ/process_koc.pl">Offline Circulation File Upload</a> &rsaquo; Results<!-- TMPL_ELSE --> Offline Circulation File Upload<!-- /TMPL_IF --></div>
 
 <div id="doc" class="yui-t7">
    
@@ -46,9 +46,18 @@ function CheckForm(f) {
 
 <!-- TMPL_IF NAME="transactions_loaded" -->
   <h2>Koha Offline Circulation</h2>
-  <p>Your data was processed. Here are the results.</p>
+  <p>Your data was processed. Here are the results:</p>
   <!-- TMPL_LOOP NAME="messages" -->
-    <p><!-- TMPL_VAR NAME="message" --></p>
+    <!-- TMPL_IF NAME="message" -->
+	<div class="dialog alert">
+		<!-- TMPL_IF NAME="ERROR_file_version" --><p>Warning: This file is version <!-- TMPL_VAR NAME="upload_version" -->, but I only know how to import version <!-- TMPL_VAR NAME="current_version" -->. I'll try my best.</p><!-- /TMPL_IF -->
+	</div>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="ERROR_no_borrower_from_item" --><p>Warning: Unable to determine patron from item barcode (<!-- TMPL_VAR NAME="badbarcode" -->). Cannot check in.</p><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="issue" --><p>Checked out <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> (<!-- TMPL_VAR NAME="barcode" -->) to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a> (<!-- TMPL_VAR NAME="cardnumber" -->): <!-- TMPL_VAR NAME="datetime" --></p><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="renew" --><p>Renewed <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>  (<!-- TMPL_VAR NAME="barcode" -->) for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a> (<!-- TMPL_VAR NAME="cardnumber" -->): <!-- TMPL_VAR NAME="datetime" --></p><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="return" --><p>Checked in <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> (<!-- TMPL_VAR NAME="barcode" -->) from <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a> (<!-- TMPL_VAR NAME="cardnumber" -->): <!-- TMPL_VAR NAME="datetime" --></p><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="payment" --><p>Accepted payment (<!-- TMPL_VAR NAME="amount" -->) from <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a> (<!-- TMPL_VAR NAME="cardnumber" -->): <!-- TMPL_VAR NAME="datetime" --></p><!-- /TMPL_IF -->
   <!-- /TMPL_LOOP -->
 <!-- TMPL_ELSE -->
   <h2>Upload Offline Circulation Data</h2>
