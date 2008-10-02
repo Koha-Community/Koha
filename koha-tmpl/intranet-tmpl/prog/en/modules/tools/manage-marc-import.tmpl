@@ -10,7 +10,7 @@
 <style type="text/css">
 	#jobpanel,#jobstatus,#jobfailed { display : none; }
 	#jobstatus { margin:.4em; }
-	#jobprogress{ width:150px;height:10px;border:1px solid #666;background:url('/intranet-tmpl/prog/img/progress.png') -300px 0px no-repeat; }</style>
+	#jobprogress{ width:200px;height:10px;border:1px solid #666;background:url('/intranet-tmpl/prog/img/progress.png') -300px 0px no-repeat; }</style>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -278,8 +278,9 @@ Page
   <!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
   <!-- TMPL_IF name="batch_info" -->
-    <div class="dialog alert">There are no records in this batch to import.</div>
-    <a href="/cgi-bin/koha/tools/manage-marc-import.pl">Manage staged MARC records</a>.
+    <div class="dialog alert">There are no records in this batch to import.
+    <a href="/cgi-bin/koha/tools/manage-marc-import.pl">Manage staged MARC records</a>.</div>
+
   <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
