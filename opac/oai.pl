@@ -56,6 +56,7 @@ my @result = ();
 
         foreach my $kohafield ( @_ ) {
                 my ( $field, $subfield ) = ::GetMarcFromKohaField( $kohafield, '' );
+                next unless defined $field; # $kohafield not defined in framework
                 push( @result, $field < 10 ? $marc->field( $field )->as_string() : $marc->subfield( $field, $subfield ) );
         }
 #        @result>1 ? \@result : $result[0];
