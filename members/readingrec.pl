@@ -73,6 +73,8 @@ for (my $i=0;$i<$count;$i++){
 	$line{classification} = $issues->[$i]->{'classification'} || $issues->[$i]->{'itemcallnumber'};
 	$line{date_due}=format_date($issues->[$i]->{'date_due'});
 	$line{returndate}=format_date($issues->[$i]->{'returndate'});
+	$line{renewals}=$issues->[$i]->{'renewals'};
+	$line{barcode}=$issues->[$i]->{'barcode'};
 	$line{volumeddesc}=$issues->[$i]->{'volumeddesc'};
 	push(@loop_reading,\%line);
 }

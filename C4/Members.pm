@@ -1049,14 +1049,14 @@ sub GetAllIssues {
     my $dbh   = C4::Context->dbh;
     my $count = 0;
     my $query =
-  "SELECT *,items.timestamp AS itemstimestamp 
+  "SELECT *,issues.renewals AS renewals,items.renewals AS totalrenewals,items.timestamp AS itemstimestamp 
   FROM issues 
   LEFT JOIN items on items.itemnumber=issues.itemnumber
   LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber
   LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber
   WHERE borrowernumber=? 
   UNION ALL
-  SELECT *,items.timestamp AS itemstimestamp 
+  SELECT *,old_issues.renewals AS renewals,items.renewals AS totalrenewals,items.timestamp AS itemstimestamp 
   FROM old_issues 
   LEFT JOIN items on items.itemnumber=old_issues.itemnumber
   LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber
