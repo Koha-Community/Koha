@@ -45,7 +45,7 @@ if(( $member ne $loggedinuser ) && ($bor->{'category_type'} eq 'S' ) ) {
 }
 my $newpassword = $input->param('newpassword');
 my $minpw = C4::Context->preference('minPasswordLength');
-$errormsg = 'SHORTPASSWORD' if( $newpassword && $minpw & (length($newpassword) < $minpw ) );
+$errormsg = 'SHORTPASSWORD' if( $newpassword && $minpw && (length($newpassword) < $minpw ) );
 
 if ( $newpassword  && ! $errormsg ) {
     my $digest=md5_base64($input->param('newpassword'));
