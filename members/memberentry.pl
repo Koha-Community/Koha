@@ -217,7 +217,7 @@ if ($op eq 'save' || $op eq 'insert'){
   }
   
   my $password = $input->param('password');
-    push @errors, "ERROR_short_password" if( $password && $minpw & (length($password) < $minpw ) );
+    push @errors, "ERROR_short_password" if( $password && $minpw && (length($password) < $minpw ) );
 
   if (C4::Context->preference('ExtendedPatronAttributes')) {
     $extended_patron_attributes = parse_extended_patron_attributes($input);
