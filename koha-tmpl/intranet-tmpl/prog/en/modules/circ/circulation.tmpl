@@ -480,7 +480,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
             <!-- /TMPL_IF -->
         </td>
         <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
-        <td><!-- TMPL_VAR NAME="barcode" --></td>
+        <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#item<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
         <td>
 		<!-- TMPL_IF NAME="can_renew" -->
             <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
