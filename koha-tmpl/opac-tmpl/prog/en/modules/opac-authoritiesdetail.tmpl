@@ -27,13 +27,13 @@ function showChildren(mynumber) {
 <!--/TMPL_IF-->
 </head>
 <body>
-<!-- TMPL_INCLUDE name="masthead.inc" -->
 
 <div id="doc3" class="yui-t1">
    <div id="bd">
+<!-- TMPL_INCLUDE name="masthead.inc" -->
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
-
+<div class="container">
 
 <!-- TMPL_IF Name="displayhierarchy"-->
 
@@ -60,12 +60,10 @@ function showChildren(mynumber) {
 <!--/TMPL_LOOP-->
 </div>
 <!-- /TMPL_IF -->
-<div class="tabbed">
-	<h1>Authority #<!-- TMPL_VAR NAME="authid" --> (<!-- TMPL_VAR name="authtypetext" -->)</h1>
-	<a href="opac-search.pl?type=opac&amp;q=<!-- TMPL_VAR NAME="authid" -->&amp;idx=an"><!-- TMPL_VAR name="count" --> biblios</a>
-</div>
-<table border="0"><!-- TMPL_LOOP name="0XX" -->
-        <tr noborder ><td colspan="3" class="marctag"><b><!-- TMPL_VAR name="tag" --></b></td></tr>
+<h1>Authority #<!-- TMPL_VAR NAME="authid" --> (<!-- TMPL_VAR name="authtypetext" -->)</h1>
+	<p>Used in <a href="opac-search.pl?type=opac&amp;q=<!-- TMPL_VAR NAME="authid" -->&amp;idx=an"><!-- TMPL_VAR name="count" --> records</a></p>
+<table><!-- TMPL_LOOP name="0XX" -->
+        <tr><td colspan="3" class="marctag"><b><!-- TMPL_VAR name="tag" --></b></td></tr>
         <!-- TMPL_LOOP name="subfield" -->
                 <tr><td class="marcsubfieldletter" ><!-- TMPL_VAR name="marc_subfield" --></td>
                     <td class="marcsubfieldname" ><!-- TMPL_VAR name="marc_lib" --></td>
@@ -79,11 +77,11 @@ function showChildren(mynumber) {
 </div>
 </div>
 </div>
+<!-- TMPL_IF NAME="OpacNav" -->
 <div class="yui-b">
 <div class="container">
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
-<!-- TMPL_INCLUDE name="usermenu.inc" -->
 </div>
-</div>
+</div><!-- /TMPL_IF -->
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

@@ -29,9 +29,9 @@
 		</div>
 		<div id="results">
 			<!-- TMPL_IF name="total" -->
-			&nbsp;<b>Results <!-- TMPL_VAR NAME="from" --> to <!-- TMPL_VAR NAME="to" --> of <!-- TMPL_VAR NAME="total" --></b><br><br>
+			<b>Results <!-- TMPL_VAR NAME="from" --> to <!-- TMPL_VAR NAME="to" --> of <!-- TMPL_VAR NAME="total" --></b>
 			<!-- TMPL_ELSE -->
-			&nbsp;No results found.<br>
+			No results found.
 			<!-- /TMPL_IF -->
 		</div>
 
@@ -39,12 +39,12 @@
 <div class="searchresults">
 		<table>
 			<tr>
-				<th width="70%">Authorized Headings</th>
-				<th width="10%">Type of Heading</th>
+				<th>Authorized Headings</th>
+				<th>Type of Heading</th>
 				<!-- TMPL_UNLESS name="isEDITORS" -->
-					<th width="10%">Biblio records</th>
+					<th>Biblio records</th>
 				<!-- /TMPL_UNLESS -->
-				<th width="10%">Full Heading</th>				
+				<th>Full Heading</th>				
 			</tr>
 			<!-- TMPL_LOOP NAME="result" -->
 				<tr>
@@ -55,7 +55,7 @@
 						</td>
 					<!-- TMPL_UNLESS name="isEDITORS" -->
 						<td>
-							 <a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;op=do_search&amp;q=an=<!--TMPL_VAR Name="authid" -->" class="button authority"><!-- TMPL_VAR NAME="used" --> biblios</a>
+							 <a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;op=do_search&amp;q=an=<!--TMPL_VAR Name="authid" -->"><!-- TMPL_VAR NAME="used" --> biblios</a>
 						</td>
 					<!-- /TMPL_UNLESS -->
 						<td>
@@ -66,7 +66,6 @@
 		</table>
 	</div>
 	<div id="resultnumber">
-		<p>
 			<!-- TMPL_IF name="displayprev" -->
 				<a href="opac-authorities-home.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=opac&amp;op=do_search&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" -->&amp;orderby=<!-- TMPL_VAR name="orderby" -->">&lt;&lt;</a>
 			<!-- /TMPL_IF -->
@@ -78,7 +77,6 @@
 			<!-- TMPL_IF name="displaynext" -->
 				<a href="opac-authorities-home.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME="searchdata" --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR NAME="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;type=opac&amp;op=do_search&amp;authtypecode=<!-- TMPL_VAR name="authtypecode" -->&amp;orderby=<!-- TMPL_VAR name="orderby" -->">&gt;&gt;</a>
 				<!-- /TMPL_IF -->
-		</p>
 	</div>	
 			<!-- /TMPL_IF -->
 </div>
