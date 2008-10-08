@@ -101,7 +101,7 @@ sub GetHoldsQueueItems {
                   LEFT JOIN items USING (itemnumber)
                 /;
     if ($branchlimit) {
-	    $query .=" WHERE holdingbranch = ?";
+	    $query .=" WHERE tmp_holdsqueue.holdingbranch = ?";
         push @bind_params, $branchlimit;
     }
     $query .= " ORDER BY ccode, location, cn_sort, author, title, pickbranch, reservedate";
