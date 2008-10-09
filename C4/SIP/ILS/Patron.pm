@@ -319,7 +319,7 @@ sub enable {
     syslog("LOG_DEBUG", "Patron(%s)->enable: charge: %s, renew:%s, recall:%s, hold:%s",
 	   $self->{id}, $self->{charge_ok}, $self->{renew_ok},
 	   $self->{recall_ok}, $self->{hold_ok});
-    $self->{screen_msg} = "All privileges restored.";
+    $self->{screen_msg} = "All privileges restored.";   # FIXME: not really affecting patron record
     return $self;
 }
 

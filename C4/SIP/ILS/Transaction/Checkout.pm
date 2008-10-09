@@ -23,7 +23,7 @@ use C4::Debug;
 use vars qw($VERSION @ISA $debug);
 
 BEGIN {
-	$VERSION = 1.02;
+	$VERSION = 1.03;
 	@ISA = qw(ILS::Transaction);
 }
 
@@ -62,23 +62,31 @@ sub do_checkout {
 	my $noerror=1;
 	foreach ( keys %$issuingimpossible ) {
 		# do something here so we pass these errors
-		$self->screen_msg($issuingimpossible->{$_});
+		$self->screen_msg($_ . ': ' . $issuingimpossible->{$_});
 		$noerror = 0;
 	}
 	foreach my $confirmation ( keys %$needsconfirmation ) {
 		if ($confirmation eq 'RENEW_ISSUE'){
-			my ($renewokay,$renewerror)= CanBookBeRenewed($borrower->{borrowernumber},$self->{item}->{itemnumber});
-			if (! $renewokay){
-				$noerror = 0;
-				warn "cannot renew $borrower->{borrowernumber} $self->{item}->{itemnumber} $renewerror";
-			}
-		} else {
+			$self->screen_msg("Item already checked out to you: renewing item.");
+		} elsif ($confirmation eq 'RESERVED' or $confirmation eq 'RESERVE_WAITING') {
+            my $x = $self->{item}->available($patron_barcode);
+            if ($x) {
+                $self->screen_msg("Item was reserved for you.");
+            } else {
+                $self->screen_msg("Item is reserved for another patron.");
+                $noerror = 0;
+            }
+		} elsif ($confirmation eq 'ISSUED_TO_ANOTHER') {
+            $self->screen_msg("Item already checked out to another patron.  Please return item for check-in.");
+			$noerror = 0;
+		} elsif ($confirmation eq 'DEBT') {     # don't do anything, it's the minor debt, and alarms fire elsewhere
+        } else {
 			$self->screen_msg($needsconfirmation->{$confirmation});
 			$noerror = 0;
 		}
 	}
 	unless ($noerror) {
-		warn "cannot issue: " . Dumper $issuingimpossible . "\n" . $needsconfirmation;
+		warn "cannot issue: " . Dumper($issuingimpossible) . "\n" . Dumper($needsconfirmation);
 		$self->ok(0);
 		return $self;
 	}
