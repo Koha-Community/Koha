@@ -782,7 +782,7 @@ sub CanBookBeIssued {
     my ( $restype, $res ) = C4::Reserves::CheckReserves( $item->{'itemnumber'} );
     if ($restype) {
 		my $resbor = $res->{'borrowernumber'};
-		my ( $resborrower ) = GetMemberDetails( $resbor, 0 );
+		my ( $resborrower ) = C4::Members::GetMemberDetails( $resbor, 0 );
 		my $branches  = GetBranches();
 		my $branchname = $branches->{ $res->{'branchcode'} }->{'branchname'};
         if ( $resbor ne $borrower->{'borrowernumber'} && $restype eq "Waiting" )
