@@ -25,6 +25,7 @@ use C4::Branch;          # GetBranches
 use C4::Members;         # GetMember
 use C4::NewsChannels;    # get_opac_news
 use C4::Acquisition;     # GetRecentAcqui
+use C4::Languages qw(getTranslatedLanguages);
 
 my $input = new CGI;
 my $dbh   = C4::Context->dbh;
@@ -46,7 +47,28 @@ $template->param(
 
 # display news
 # use cookie setting for language, bug default to syspref if it's not set
-my $news_lang = $input->cookie('KohaOpacLanguage') || 'en';
+(my $theme) = themelanguage(C4::Context->config('opachtdocs'),'opac-main.tmpl','opac',$input);
+
+my $translations = getTranslatedLanguages('opac',$theme);
+my @languages = ();
+foreach my $trans (@$translations)
+{
+    push(@languages, $trans->{rfc4646_subtag});
+}
+
+my $news_lang;
+if($input->cookie('KohaOpacLanguage')){
+    $news_lang = $input->cookie('KohaOpacLanguage');
+}else{
+    while( !$news_lang && ( $ENV{HTTP_ACCEPT_LANGUAGE} =~ m/([a-zA-Z]{2,}-?[a-zA-Z]*)(;|,)?/g ) ){
+        if( my @lang = grep { /^$1$/i } @languages ) {
+            $news_lang = $lang[0];
+        }
+    }
+}
+
+$news_lang = $news_lang ? $news_lang : 'en' ;
+
 my $all_koha_news   = &GetNewsToDisplay($news_lang);
 my $koha_news_count = scalar @$all_koha_news;
 
