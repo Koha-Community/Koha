@@ -237,8 +237,8 @@ sub available {
 sub barcode_to_borrowernumber ($) {
     my $known = shift;
     (defined($known)) or return undef;
-    my $member = GetMember($known) or return undef; # borrowernumber is default type for GetMember lookup
-    return $member->{cardnumber};
+    my $member = GetMember($known, 'cardnumber') or return undef; # borrowernumber is default type for GetMember lookup
+    return $member->{borrowernumber};
 }
 sub barcode_is_borrowernumber ($$$) {    # because hold_queue only has borrowernumber...
     my $self = shift;   # not really used
