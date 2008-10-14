@@ -568,6 +568,7 @@ foreach $flag ( sort keys %$flags ) {
             $template->param(
                 charges    => 'true',
                 chargesmsg => $flags->{'CHARGES'}->{'message'},
+                chargesamount => $flags->{'CHARGES'}->{'amount'},
                 charges_is_blocker => 1
             );
         }
@@ -583,7 +584,8 @@ foreach $flag ( sort keys %$flags ) {
             $template->param(
                 charges    => 'true',
                 flagged    => 1,
-                chargesmsg => $flags->{'CHARGES'}->{'message'}
+                chargesmsg => $flags->{'CHARGES'}->{'message'},
+                chargesamount => $flags->{'CHARGES'}->{'amount'},
             );
         }
         if ( $flag eq 'CREDITS' ) {

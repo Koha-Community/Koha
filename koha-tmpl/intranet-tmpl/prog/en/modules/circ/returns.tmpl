@@ -327,7 +327,9 @@ function Dopop(link) {
                 <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR Name="riborrowernumber" -->"><!-- TMPL_VAR Name="riborsurname" -->, <!-- TMPL_VAR Name="ribortitle" --> <!-- TMPL_VAR Name="riborfirstname" --></a> (<!-- TMPL_VAR Name="riborcnum" -->)
                 <!-- TMPL_IF Name="flagset" -->
                 (<!-- TMPL_LOOP Name="flagloop" -->
-                <!-- TMPL_VAR Name="flag" -->, 
+                <!-- TMPL_VAR Name="flag" -->
+		<!-- TMPL_IF NAME="charges" --> of <!-- TMPL_VAR NAME="chargeamount" --> <!-- /TMPL_IF -->
+		,
                 <!-- /TMPL_LOOP -->)<!-- /TMPL_IF -->
             </td>
         </tr>

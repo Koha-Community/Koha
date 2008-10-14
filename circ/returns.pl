@@ -456,6 +456,7 @@ if ($borrower) {
         if ( $flag eq 'CHARGES' ) {
             $flaginfo{msg}            = $flag;
             $flaginfo{charges}        = 1;
+            $flaginfo{chargeamount}   = $flags->{$flag}->{amount};
             $flaginfo{borrowernumber} = $borrower->{borrowernumber};
         }
         elsif ( $flag eq 'WAITING' ) {
