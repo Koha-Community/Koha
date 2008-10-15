@@ -93,15 +93,15 @@ $op   = $input->param('op') || 'none';
 @tags = $input->param('tags');
 
 $borrowernumber == 0 and push @errors, {op_zero=>1};
-     if ($op eq 'approve') {
+     if (lc($op) eq 'approve') {
 	foreach (@tags) {
 	 	whitelist($borrowernumber,$_) or push @errors, {failed_ok=>$_};
 	}
-} elsif ($op eq 'reject' ) {
+} elsif (lc($op) eq 'reject' ) {
 	foreach (@tags) {
 	 	blacklist($borrowernumber,$_) or push @errors, {failed_rej=>$_};
 	}
-} elsif ($op eq 'test'   ) {
+} elsif (lc($op) eq 'test'   ) {
 	my $tag = $input->param('test');
 	push @tags, $tag;
 	my $check = is_approved($tag);
@@ -205,7 +205,7 @@ $debug and print STDERR "number of approval_rows: " . scalar(@$tagloop) . "rows\
 $template->param(
 	DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
 	offset => $offset,	# req'd for EXPR
-	op => $op,
+	op => lc($op),
 	op_count => scalar(@tags),
 	script_name => $script_name,
 	approved => 0,		# dummy value (also EXPR)

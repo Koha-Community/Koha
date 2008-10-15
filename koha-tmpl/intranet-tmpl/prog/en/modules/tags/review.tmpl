@@ -232,11 +232,11 @@ Calendar.setup({
   </h4>
 
   <!-- TMPL_IF NAME="op_count" -->
-  <div class="message" id="main_status">
+  <div class="dialog message" id="main_status">
   		<!-- TMPL_IF EXPR="op eq 'approve'" -->		Approved
   		<!-- TMPL_ELSIF EXPR="op eq 'reject'" -->	Rejected
   		<!-- TMPL_ELSIF EXPR="op eq 'test'" -->		Tested
-  		<!-- TMPL_ELSE -->							Unkown Operation (<!-- TMPL_VAR NAME="op" -->) on
+  		<!-- TMPL_ELSE -->Unknown Operation (<!-- TMPL_VAR NAME="op" -->) on
   		<!-- /TMPL_IF -->
 	<!-- TMPL_VAR NAME="op_count" --> Term(s).
   </div>
