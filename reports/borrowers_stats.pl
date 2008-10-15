@@ -187,18 +187,20 @@ sub calculate {
  	$linefilter = @$filters[0] if ($line =~ /categorycode/ )  ;
  	$linefilter = @$filters[1] if ($line =~ /zipcode/ )  ;
  	$linefilter = @$filters[2] if ($line =~ /branchcode/ ) ;
- 	$linefilter = @$filters[5] if ($line =~ /sort1/ ) ;
- 	$linefilter = @$filters[6] if ($line =~ /sort2/ ) ;
+ 	$linefilter = @$filters[5] if ($line =~ /sex/);
+ 	$linefilter = @$filters[6] if ($line =~ /sort1/ ) ;
+    $linefilter = @$filters[7] if ($line =~ /sort2/ ) ;
 # 
  	my $colfilter = "";
  	$colfilter = @$filters[0] if ($column =~ /categorycode/);
  	$colfilter = @$filters[1] if ($column =~ /zipcode/);
  	$colfilter = @$filters[2] if ($column =~ /branchcode/);
- 	$colfilter = @$filters[5] if ($column =~ /sort1/);
- 	$colfilter = @$filters[6] if ($column =~ /sort2/);
+    $colfilter = @$filters[5] if ($column =~ /sex/);
+    $colfilter = @$filters[6] if ($column =~ /sort1/);
+ 	$colfilter = @$filters[7] if ($column =~ /sort2/);
 
 	my @loopfilter;
-	for (my $i=0;$i<=6;$i++) {
+	for (my $i=0;$i<=7;$i++) {
 		my %cell;
 		if ( @$filters[$i] ) {
 			$cell{filter} .= @$filters[$i];
@@ -207,8 +209,9 @@ sub calculate {
 			$cell{crit} .="Branchcode" if ($i==2);
 			$cell{crit} .="Date of Birth" if ($i==3);
 			$cell{crit} .="Date of Birth" if ($i==4);
-			$cell{crit} .="Sort1" if ($i==5);
-			$cell{crit} .="Sort2" if ($i==6);
+            $cell{crit} .="Sex" if ($i==5);
+			$cell{crit} .="Sort1" if ($i==6);
+			$cell{crit} .="Sort2" if ($i==7);
 			push @loopfilter, \%cell;
 		}
 	}
@@ -312,10 +315,12 @@ sub calculate {
 	$strcalc .= " AND dateofbirth > '" . @$filters[3] ."'" if ( @$filters[3] );
 	@$filters[4]=~ s/\*/%/g if (@$filters[4]);
 	$strcalc .= " AND dateofbirth < '" . @$filters[4] ."'" if ( @$filters[4] );
-	@$filters[5]=~ s/\*/%/g if (@$filters[5]);
-	$strcalc .= " AND sort1 like '" . @$filters[5] ."'" if ( @$filters[5] );
-	@$filters[6]=~ s/\*/%/g if (@$filters[6]);
-	$strcalc .= " AND sort2 like '" . @$filters[6] ."'" if ( @$filters[6] );
+    @$filters[5]=~ s/\*/%/g if (@$filters[5]);
+    $strcalc .= " AND sex like '" . @$filters[5] ."'" if ( @$filters[5] );
+    @$filters[6]=~ s/\*/%/g if (@$filters[6]);
+	$strcalc .= " AND sort1 like '" . @$filters[6] ."'" if ( @$filters[6] );
+	@$filters[7]=~ s/\*/%/g if (@$filters[7]);
+	$strcalc .= " AND sort2 like '" . @$filters[7] ."'" if ( @$filters[7] );
 	$strcalc .= " AND borrowernumber in (select distinct(borrowernumber) from old_issues where issuedate > '" . $newperioddate . "')" if ($activity eq 'active');
 	$strcalc .= " AND borrowernumber not in (select distinct(borrowernumber) from old_issues where issuedate > '" . $newperioddate . "')" if ($activity eq 'nonactive');
 	$strcalc .= " AND $status='1' " if ($status);
