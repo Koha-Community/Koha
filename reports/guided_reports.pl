@@ -401,7 +401,7 @@ elsif ($phase eq 'Export'){
 	my $sql = $input->param('sql');
         my $format = $input->param('format');
 	my ($results, $total, $errors) = execute_query($sql,1,0,0,$format);
-        if ($#$errors == -1) {
+        if (!@$errors) {
             $no_html=1;
             print $input->header(       -type => 'application/octet-stream',
                                         -attachment=>'reportresults.csv'
