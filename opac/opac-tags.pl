@@ -155,15 +155,18 @@ foreach (@deltags) {
 if ($is_ajax) {
 	my $sum = 0;
 	foreach (values %counts) {$sum += $_;}
-	my $js_reply = sprintf("response = {\n\tadded: %d,\n\tdeleted: %d,\n\terrors: %d,",$sum,$dels,scalar @errors);
+	my $js_reply = sprintf("response = {\n\tadded: %d,\n\tdeleted: %d,\n\terrors: %d",$sum,$dels,scalar @errors);
 	my $err_string = '';
 	if (scalar @errors) {
-		$err_string = "\n\talerts: [";	# open response_function
+		$err_string = ",\n\talerts: [";	# open response_function
+		my $i = 1;
 		foreach (@errors) {
 			my $key = (keys %$_)[0];
-			$err_string .= "\n\t\t KOHA.Tags.tag_message.$key(\"" . $_->{$key} . '"),';
+			$err_string .= "\n\t\t KOHA.Tags.tag_message.$key(\"" . $_->{$key} . '")';
+			if($i < scalar @errors){ $err_string .= ","; }
+			$i++;
 		}
-		$err_string .= "\n\t],\n";	# close response_function
+		$err_string .= "\n\t]\n";	# close response_function
 	}
 	output_ajax_with_http_headers($query, "$js_reply\n$err_string};");
 	exit;
