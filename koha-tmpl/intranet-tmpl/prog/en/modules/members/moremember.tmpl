@@ -231,6 +231,7 @@ if (nodename =="barcodes[]"){
 <!-- End Upload Patron Image Section -->
 
 <!-- TMPL_IF NAME="ExtendedPatronAttributes" -->
+<!-- TMPL_IF NAME="patron_attributes" -->
 <div id="patron-extended-attributes" style="padding-top: 1em;">
 <h3>Additional attributes and identifiers</h3>
 <table>
@@ -252,7 +253,7 @@ if (nodename =="barcodes[]"){
 </div>
 <div class="action"><a href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=4">Edit</a></div>
 <!-- /TMPL_IF -->
-
+<!-- /TMPL_IF -->
 </div>
  <div class="yui-u"> 
  <div id="patron-library-details">

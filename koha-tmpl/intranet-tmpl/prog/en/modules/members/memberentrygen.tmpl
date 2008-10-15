@@ -865,13 +865,10 @@
 		<!-- /TMPL_UNLESS -->	
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="step_4" --><!-- TMPL_IF NAME="ExtendedPatronAttributes" -->
+<!-- TMPL_IF NAME="step_4" --><!-- TMPL_IF NAME="ExtendedPatronAttributes" --><!-- TMPL_UNLESS NAME="no_patron_attribute_types" -->
   <fieldset class="rows" id="memberentry_patron_attributes">
     <input type="hidden" name="setting_extended_patron_attributes" value="1" />
     <legend>Additional attributes and identifiers</legend>
-    <!-- TMPL_IF NAME="no_patron_attribute_types" -->
-    No patron attribute types defined.
-    <!-- TMPL_ELSE -->
     <table>
         <tr>
             <th>Type</th>
@@ -917,9 +914,8 @@
         </tr>
         <!-- /TMPL_LOOP -->
     </table>
-    <!-- /TMPL_IF -->
   </fieldset>
-<!-- /TMPL_IF--><!-- /TMPL_IF -->
+<!-- /TMPL_IF--><!-- /TMPL_IF --><!-- /TMPL_UNLESS -->
 
     <fieldset class="action">
         <input type="submit" name="save" onclick="return check_form_borrowers();" value="Save" />
