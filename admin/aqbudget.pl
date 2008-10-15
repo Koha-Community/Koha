@@ -168,8 +168,8 @@ SELECT branchcode,
     $template->param(
         dateformat => C4::Dates->new()->visual(),
         aqbudgetid => $dataaqbudget->{'aqbudgetid'},
-        startdate => $dataaqbudget->{'startdate'},
-          enddate => $dataaqbudget->{'enddate'},
+        startdate => format_date($dataaqbudget->{'startdate'}),
+          enddate => format_date($dataaqbudget->{'enddate'}),
         budgetamount => $dataaqbudget->{'budgetamount'},
         branches => \@branches,
     );

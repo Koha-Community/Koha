@@ -3,11 +3,11 @@
 <div id="header_search" class="residentsearch">
     <div id="authority_search" class="residentsearch">
     <p class="tip">Enter authority heading ($a):</p>
-    <form name="f" action="/cgi-bin/koha/authorities/authorities-home.pl" method="get">
+    <form action="/cgi-bin/koha/authorities/authorities-home.pl" method="get">
         <input type="hidden" name="op" value="do_search" />
         <input type="hidden" name="type" value="intranet" />
         <input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
-        <select id="authtypecode" name="authtypecode">
+        <select name="authtypecode">
         <!-- TMPL_LOOP NAME="authtypesloop" -->
             <!-- TMPL_IF name="selected" -->
             <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="authtypetext" --></option>
@@ -33,11 +33,11 @@
     </div>
     <div id="main_heading" class="residentsearch" style="display:none;">
     <p class="tip">Enter authority heading:</p>
-    <form name="f" action="/cgi-bin/koha/authorities/authorities-home.pl" method="get">
+    <form action="/cgi-bin/koha/authorities/authorities-home.pl" method="get">
         <input type="hidden" name="op" value="do_search" />
         <input type="hidden" name="type" value="intranet" />
         <input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
-        <select id="authtypecode" name="authtypecode">
+        <select  name="authtypecode">
         <!-- TMPL_LOOP NAME="authtypesloop" -->
             <!-- TMPL_IF name="selected" -->
             <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="authtypetext" --></option>
@@ -65,11 +65,11 @@
     </div>
     <div id="all_headings" class="residentsearch" style="display:none;">
     <p class="tip">Enter any authority field:</p>
-    <form name="f" action="/cgi-bin/koha/authorities/authorities-home.pl" method="get">
+    <form action="/cgi-bin/koha/authorities/authorities-home.pl" method="get">
         <input type="hidden" name="op" value="do_search" />
         <input type="hidden" name="type" value="intranet" />
         <input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
-        <select id="authtypecode" name="authtypecode">
+        <select name="authtypecode">
         <!-- TMPL_LOOP NAME="authtypesloop" -->
             <!-- TMPL_IF name="selected" -->
             <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="authtypetext" --></option>

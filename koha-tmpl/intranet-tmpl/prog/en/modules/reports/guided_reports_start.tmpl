@@ -108,7 +108,7 @@ reports</p>
 <td><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&amp;phase=Show%20SQL">Show SQL</a></td>
 <td><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&amp;phase=Run%20this%20report">Run this Report</a></td>
 <td><a href="/cgi-bin/koha/tools/scheduler.pl?id=<!-- TMPL_VAR NAME="id" -->">Schedule this Report</a></td>
-<td><a class="confirmdelete" title="delete this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&amp;phase=Delete%20Saved">Delete</a></td></tr>
+<td><a class="confirmdelete" title="Delete this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&amp;phase=Delete%20Saved">Delete</a></td></tr>
 <!-- /TMPL_LOOP -->
 </table>
 </form>
@@ -358,7 +358,7 @@ NAME="name" -->"><!-- TMPL_VAR NAME="name"--></label></td><td>
 
 <!-- TMPL_IF NAME="execute" -->
 <h1><!-- TMPL_VAR NAME="name" --></h1>
-<p><!-- TMPL_VAR NAME="notes" --></p>
+<!-- TMPL_IF NAME="notes" --><p><!-- TMPL_VAR NAME="notes" --></p><!-- /TMPL_IF -->
 <!-- TMPL_IF name="pagination_bar" --><!-- TMPL_VAR name='pagination_bar'--><!-- /TMPL_IF -->
 <!-- TMPL_UNLESS name="errors" -->
 <table>
@@ -457,9 +457,9 @@ Sub report:<select name="subreport">
 <h2>Your report has been saved</h2>
 <p>The report you have created has now been saved. You can now</p>
 <ul>
-	<li>Access this report from the: <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Used+saved">Saved Reports Page</a></li>
+	<li>Access this report from the: <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Used%20saved">Saved Reports Page</a></li>
 	<li>Schedule this report to run using the: <a href="/cgi-bin/koha/tools/scheduler.pl">Scheduler Tool</a></li>
-	<li>Return to: <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Used+saved">Guided Reports</a></li>
+	<li>Return to: <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Used%20saved">Guided Reports</a></li>
 </ul>
 <!-- /TMPL_UNLESS -->
 <!-- TMPL_IF NAME="errors" -->

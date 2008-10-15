@@ -12,7 +12,7 @@ function add_member(subscriptionid,borrowernumber){
 //-->
 </script>
 <style type="text/css">
-   #custom-doc { width:38.46em;*width:37.53em;min-width:500px; margin:auto; text-align:left; }
+   #custom-doc { width:37.46em;*width:36.53em;min-width:430px; margin:auto; text-align:left; }
    </style>
 </head>
 <body>
@@ -41,7 +41,7 @@ function add_member(subscriptionid,borrowernumber){
 <!-- TMPL_LOOP NAME="memberloop" -->
 <tr><td><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></td>
     <td><!-- TMPL_VAR NAME="streetaddress" --></td>
-    <td><a href="#" onclick="add_member(<!-- TMPL_VAR
+    <td><a onclick="add_member(<!-- TMPL_VAR
 NAME="subscriptionid" -->,<!-- TMPL_VAR NAME="borrowernumber" -->); return false" href="/cgi-bin/koha/serials/routing.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;op=add">Add</a></td></tr>
 <!-- /TMPL_LOOP -->
         </table>
@@ -52,7 +52,7 @@ NAME="subscriptionid" -->,<!-- TMPL_VAR NAME="borrowernumber" -->); return false
     <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
-<p><a href="javascript:window.close()" class="button">Close</a></p>
+<p><a href="#" class="button close">Close</a></p>
 
 </div>
 
