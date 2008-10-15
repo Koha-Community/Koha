@@ -82,7 +82,9 @@
             <label for="branchname">Name</label>
             <input type="text" name="branchname" id="branchname" size="40" maxlength="80" value="<!-- TMPL_VAR name="branch_name" escape="HTML" -->" />&nbsp;
         </li>
-		<!-- TMPL_IF NAME="categoryloop" --><li><fieldset><legend>Group(s):</legend>
+	</ol>
+	</fieldset>
+	<!-- TMPL_IF NAME="categoryloop" --><fieldset class="rows"><legend>Group(s):</legend>
         <ol>
 		<!-- TMPL_LOOP name="categoryloop" -->
             <li><label for="<!-- TMPL_VAR name="categorycode" -->"><!-- TMPL_VAR name="categoryname" --></label>
@@ -90,8 +92,10 @@
             </li>
         <!-- /TMPL_LOOP -->
 		</ol>
-        </fieldset></li><!-- /TMPL_IF -->
-		<li><label for="branchaddress1">Address Line 1</label><input type="text" name="branchaddress1" id="branchaddress1" value="<!-- TMPL_VAR name="branchaddress1" escape="HTML" -->" /></li>
+</fieldset><!-- /TMPL_IF -->
+	<fieldset class="rows">
+	<ol>
+        <li><label for="branchaddress1">Address Line 1</label><input type="text" name="branchaddress1" id="branchaddress1" value="<!-- TMPL_VAR name="branchaddress1" escape="HTML" -->" /></li>
         <li><label for="branchaddress2">Address Line 2</label><input type="text" name="branchaddress2" id="branchaddress2" value="<!-- TMPL_VAR name="branchaddress2" escape="HTML" -->" /></li>
         <li><label for="branchaddress3">Address Line 3</label><input type="text" name="branchaddress3" id="branchaddress3" value="<!-- TMPL_VAR name="branchaddress3" escape="HTML" -->" /></li>
         <li><label for="branchphone">Phone</label><input type="text" name="branchphone" id="branchphone" value="<!-- TMPL_VAR name="branchphone" escape="HTML" -->" /></li>
@@ -220,9 +224,9 @@
         <td><!-- TMPL_VAR name="categoryname" --></td>
         <td><!-- TMPL_VAR name="categorycode" --></td>
         <td><!-- TMPL_VAR name="codedescription" --></td>
-        <td><a href="<!-- TMPL_VAR name="action" -->?op=editcategory&amp;categorycode=<!-- TMPL_VAR name="categorycode" escape="HTML" -->">Edit</a>
+        <td><a href="<!-- TMPL_VAR name="action" -->?op=editcategory&amp;categorycode=<!-- TMPL_VAR name="categorycode" escape="url" -->">Edit</a>
         </td>
-        <td><a href="<!-- TMPL_VAR name="action" -->?op=delete_category&amp;categorycode=<!-- TMPL_VAR name="categorycode" escape="HTML" -->">Delete</a>
+        <td><a href="<!-- TMPL_VAR name="action" -->?op=delete_category&amp;categorycode=<!-- TMPL_VAR name="categorycode" escape="url" -->">Delete</a>
         </td>
         </tr>
     <!-- /TMPL_LOOP --><!-- TMPL_ELSE --><tr><td colspan="5">No <!-- TMPL_IF NAME="properties" -->Properties<!-- TMPL_ELSE --><!-- TMPL_IF NAME="searchdomain" -->Search Domain<!-- /TMPL_IF --><!-- /TMPL_IF --> Defined</td></tr><!-- /TMPL_IF -->

@@ -1,10 +1,10 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Serials &rsaquo; <!-- TMPL_IF name="mod" --> Modify subscription to <!-- TMPL_VAR name="bibliotitle" --><!-- TMPL_ELSE -->New subscription<!-- /TMPL_IF --></title>
+<title>Koha &rsaquo; Serials &rsaquo; <!-- TMPL_IF name="mod" --><!-- TMPL_VAR name="bibliotitle" escape="html" --> &rsaquo; Modify subscription<!-- TMPL_ELSE -->New subscription<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 
 <script type="text/javascript">
-<!--
+//<![CDATA[
 
 // the english words used in display purposes
 var text = new Array(_("Number"),_("Volume"),_("Issue"),_("Month"),_("Week"),_("Starting with:"),_("Rollover at:"),_("Choose Hemisphere:"),_("Northern"),_("Southern"),
@@ -449,7 +449,7 @@ var textbox = '';
             }
             textbox +="<\/tr>";
         } else {
-          textbox +="<tr> <td>"+_("issues expected")+"</td><td><input type='text' name='issuesexpected1temp' id='issuesexpected1temp' size='4' onkeyup='moreoptionsupdate(this,0)' value=\"" + document.f.issuesexpected1.value + "\" ></td></tr>";
+          textbox +="<tr> <td>"+_("issues expected")+"<\/td><td><input type='text' name='issuesexpected1temp' id='issuesexpected1temp' size='4' onkeyup='moreoptionsupdate(this,0)' value=\"" + document.f.issuesexpected1.value + "\" ><\/td><\/tr>";
         }
         textbox +="<\/table>\n";
     }
@@ -630,11 +630,11 @@ function irregularity_check(){
 		}
         errortext +="<select multiple id='irregularity_select' name='irregularity_select' onchange='irregular_issues.update();'>\n"; 
 		errortext +=irregular_options(periodicity);
-		errortext += "</select>\n <textarea rows='6' width='18' id='irregularity_summary' name='irregularity_summary' value='foo' />";
+		errortext += "<\/select>\n <textarea rows='6' width='18' id='irregularity_summary' name='irregularity_summary' value='foo' />";
         error=errortext;
     }
     if(toobig){
-        errortext +=expectedover+_(" issues expected, ")+rollover+_(" were entered.<p class='warning'> You seem to have indicated more issues per year than expected.</p>");
+        errortext +=expectedover+_(" issues expected, ")+rollover+_(" were entered.<p class='warning'> You seem to have indicated more issues per year than expected.<\/p>");
         error=errortext;
     }
     if(error.length ==0){
@@ -747,7 +747,7 @@ function display_example(expected){
             } else {
                 count++;
             }
-            displaytext += '<li>' + numberpattern.replace(/{Z}/,count) + '</li>\n';
+            displaytext += '<li>' + numberpattern.replace(/{Z}/,count) + '<\/li>\n';
             displaytext = displaytext.replace(/{Y}/,count2);
             displaytext = displaytext.replace(/{X}/,startfrom1);
 
@@ -911,20 +911,20 @@ $('#numberpattern').change( function() {
     reset_num_pattern(); 
     });
 });
--->
+//]]>
 </script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="serials-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; <!-- TMPL_IF name="mod" --> Modify subscription for <span class="title"><!-- TMPL_VAR name="bibliotitle" --></span><!-- TMPL_ELSE -->New subscription<!-- /TMPL_IF --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; <!-- TMPL_IF name="mod" --><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->"><i><!-- TMPL_VAR NAME="bibliotitle" escape="html" --></i></a> &rsaquo; Modify subscription<!-- TMPL_ELSE -->New subscription<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t7">
    
    <div id="bd">
    <div class="yui-g">
-<h1><!-- TMPL_IF name="mod" --> Modify subscription for <i><!-- TMPL_VAR name="bibliotitle" --></i><!-- TMPL_ELSE -->Add a new subscription<!-- /TMPL_IF --></h1>
+<h1><!-- TMPL_IF name="mod" --> Modify subscription for <i><!-- TMPL_VAR name="bibliotitle" escape="html" --></i><!-- TMPL_ELSE -->Add a new subscription<!-- /TMPL_IF --></h1>
     <form method="post" name="f" action="/cgi-bin/koha/serials/subscription-add.pl">
 <!-- TMPL_IF name="mod" -->
         <input type="hidden" name="op" value="modsubscription" />
@@ -1037,7 +1037,8 @@ $('#numberpattern').change( function() {
                 <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="next_acqui_button" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />
                 <input type="text" name="nextacquidate" value="<!-- TMPL_VAR name="nextacquidate" -->" size="13" maxlength="10" id="next_acqui_date" style="border-width: 0px;"  />
                 </li><!-- /TMPL_IF -->
-                <!-- both scripts for calendar must follow the input field --> 
+                
+        <li><!-- both scripts for calendar must follow the input field --> 
                 <script type="text/javascript">
                     Calendar.setup({
                         inputField      :   "<!-- TMPL_IF NAME="mod" -->next_<!-- /TMPL_IF -->acqui_date",
@@ -1071,7 +1072,6 @@ $('#numberpattern').change( function() {
                                                         } 
                         });
                 </script>
-        <li>
             <label for="periodicity" class="required">Frequency:</label>
             
                 <select name="periodicity" size="1" id="periodicity" onchange="javascript:document.getElementsByName('manualhist')[0].checked=(this.value==1); reset_num_pattern();">
@@ -1333,33 +1333,35 @@ $('#numberpattern').change( function() {
         <input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" />
         <input type="hidden" name="history_only" value="1" />
         <p>Hint : you can update the serial history manually. This can be useful for an old subscription or to clean the existing history. Modify these fields with care, as future serial receive will continue to update them automatically.</p>
-        <table>
-            <tr>
-            <td>Subscription start date</td>
-            <td><input type="text" name="histstartdate" value="<!-- TMPL_VAR name="histstartdate" -->" /> (start date of the 1st subscription)</td>
-            </tr>
-            <tr>
-            <td>Subscription end date</td>
-            <td><input type="text" name="histenddate" value="<!-- TMPL_VAR name="histenddate" -->" />(if empty, subscription is still active)</td>
-            </tr>
-            <tr>
-                <td>Received issues</td>
-                <td><textarea name="recievedlist" cols="60" rows="5"><!-- TMPL_VAR name="recievedlist" --></textarea></td>
-            </tr>
-            <tr>
-                <td>Missing issues</td>
-                <td><textarea name="missinglist" cols="60" rows="5"><!-- TMPL_VAR name="missinglist" --></textarea></td>
-            </tr>
-            <tr>
-                <td>Note for OPAC</td>
-                <td><textarea name="opacnote" cols="60" rows="5"><!-- TMPL_VAR name="opacnote" --></textarea></td>
-            </tr>
-            <tr>
-                <td>Note for staff</td>
-                <td><textarea name="librariannote" cols="60" rows="5"><!-- TMPL_VAR name="librariannote" --></textarea></td>
-            </tr>
-        </table>
-    <input type="submit" value="Save subscription history"  />
+        <fieldset class="rows">
+		<ol>
+            <li>
+            <label for="histstartdate">Subscription start date</label>
+            <input type="text" name="histstartdate" id="histstartdate" value="<!-- TMPL_VAR name="histstartdate" -->" /><div class="hint"> (start date of the 1st subscription)</div>
+            </li>
+            <li>
+            <label for="histenddate">Subscription end date</label>
+            <input type="text" name="histenddate" id="histenddate" value="<!-- TMPL_VAR name="histenddate" -->" /> <div class="hint">(if empty, subscription is still active)</div>
+            </li>
+            <li>
+                <label for="recievedlist">Received issues</label>
+            <textarea name="recievedlist" id="recievedlist" cols="60" rows="5"><!-- TMPL_VAR name="recievedlist" --></textarea>
+            </li>
+            <li>
+                <label for="missinglist">Missing issues</label>
+            <textarea name="missinglist" id="missinglist" cols="60" rows="5"><!-- TMPL_VAR name="missinglist" --></textarea>
+            </li>
+            <li>
+                <label for="opacnote">Note for OPAC</label>
+            <textarea name="opacnote" id="opacnote" cols="60" rows="5"><!-- TMPL_VAR name="opacnote" --></textarea>
+            </li>
+            <li>
+                <label for="librariannote">Note for staff</label>
+            <textarea name="librariannote" id="librariannote" cols="60" rows="5"><!-- TMPL_VAR name="librariannote" --></textarea>
+            </li>
+		</ol>
+        </fieldset>
+    <fieldset class="action"><input type="submit" value="Save subscription history"  /></fieldset>
     </form>
 </div>
 <!--/TMPL_IF-->

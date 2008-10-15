@@ -531,16 +531,14 @@ function searchauthority() {
                 <!-- TMPL_UNLESS name="hide_marc" -->
                     <span title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --></span>
                     <!-- TMPL_IF NAME="fixedfield" -->
-                    <input tabindex="1"
-                                class="indicator flat"
+                    <input class="indicator flat"
                                 type="text"
                                 style="display:none;"
                                 name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator1_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->"
                                 size="1"
                                 maxlength="1"
                                 value="<!-- TMPL_VAR NAME="indicator1" -->" />
-                    <input tabindex="1"
-                                class="indicator flat"
+                    <input class="indicator flat"
                                 type="text"
                                 style="display:none;"
                                 name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator2_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->"
@@ -548,15 +546,13 @@ function searchauthority() {
                                 maxlength="1"
                                 value="<!-- TMPL_VAR NAME="indicator2" -->" />
                     <!-- TMPL_ELSE -->
-                    <input tabindex="1"
-                                class="indicator flat"
+                    <input class="indicator flat"
                                 type="text"
                                 name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator1_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->"
                                 size="1"
                                 maxlength="1"
                                 value="<!-- TMPL_VAR NAME="indicator1" -->" />
-                    <input tabindex="1"
-                                class="indicator flat"
+                    <input class="indicator flat"
                                 type="text"
                                 name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator2_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->"
                                 size="1"
@@ -565,21 +561,17 @@ function searchauthority() {
                     <!-- /TMPL_IF --> -
                 <!-- TMPL_ELSE -->
                     <!-- TMPL_IF NAME="fixedfield" -->
-                        <input tabindex="1"
-                            type="hidden"
+                        <input type="hidden"
                             name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator1_<!-- TMPL_VAR NAME='index'-->"
                             value="<!-- TMPL_VAR NAME="indicator1" --><!-- TMPL_VAR name="random" -->" />
-                        <input tabindex="1"
-                            type="hidden"
+                        <input type="hidden"
                             name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator2_<!-- TMPL_VAR NAME='index'-->"
                             value="<!-- TMPL_VAR NAME="indicator2" --><!-- TMPL_VAR name="random" -->" />
                     <!-- TMPL_ELSE -->
-                        <input tabindex="1"
-                            type="hidden"
+                        <input type="hidden"
                             name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator1_<!-- TMPL_VAR NAME='index'-->"
                             value="<!-- TMPL_VAR NAME="indicator1" --><!-- TMPL_VAR name="random" -->" />
-                        <input tabindex="1"
-                            type="hidden"
+                        <input type="hidden"
                             name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator2_<!-- TMPL_VAR NAME='index'-->"
                             value="<!-- TMPL_VAR NAME="indicator2" --><!-- TMPL_VAR name="random" -->" />
                     <!-- /TMPL_IF -->
@@ -619,7 +611,7 @@ function searchauthority() {
                                 size="1"
                                 maxlength="1"
                                 class="flat"
-                                tabindex="-1" />
+                                tabindex="0" />
                     <!-- TMPL_ELSE -->
                         <input type="hidden"
                             name="tag_<!-- TMPL_VAR NAME='tag'-->_code_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->"
@@ -677,11 +669,10 @@ function searchauthority() {
     <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="oldauthtypetagsubfield" -->" />
     <input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
 <!-- /TMPL_IF -->
-<div id="action">
+<fieldset class="action">
         <input type="button" id="addauth2" value="Save" onclick="Check(this.form)" accesskey="w" />
-</div>
-</form>
 </fieldset>
+</form>
 </div>
 </div>
 

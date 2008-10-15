@@ -20,8 +20,8 @@ YAHOO.util.Event.onContentReady("header_search", function() {
                 address,
                 ", ",
                 city,
-                "</small>",
-                "</div>"];
+                "<\/small>",
+                "<\/div>"];
             return (aMarkup.join(""));
         };
 

@@ -17,5 +17,5 @@
 	//]]>
 	</script>
 	<ul class="toolbar">
-	<li><a id="newdictionary" href="/cgi-bin/koha/reports/dictionary.pl?phase=Add New Definition">New Definition</a></li>
+	<li><a id="newdictionary" href="/cgi-bin/koha/reports/dictionary.pl?phase=Add%20New%20Definition">New Definition</a></li>
 </ul></div>

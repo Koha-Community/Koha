@@ -227,7 +227,6 @@ sub default_form {
 			-values=> \@category_list,
 			-default=>"",
 			-size=>1,
- 			-tabindex=>'',
 			-multiple=>0,
 			);
 	if (!$searchfield) {

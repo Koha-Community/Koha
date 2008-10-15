@@ -142,9 +142,11 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="add_validate" -->
+<div class="dialog message">
 <h3>Data Recorded</h3>
-<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="OK" />
+<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" class="approve"  value="OK" />
         </form>
+</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirm" -->
@@ -180,10 +182,10 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirmed" -->
-<h3>Currency Deleted</h3>
+<div class="dialog message"><h3>Currency Deleted</h3>
 <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-		<input type="submit" value="OK" />
-	</form>
+		<input type="submit" class="approve" value="OK" />
+	</form></div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="else" -->
