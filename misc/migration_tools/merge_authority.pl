@@ -27,7 +27,7 @@ GetOptions(
     'b' => \$batch, 
 );
 
-if ($version || ($mergefrom eq '')) {
+if ($version || ($mergefrom eq '' && !$batch)) {
     print <<EOF
 Script to merge an authority into another
 parameters :
@@ -49,7 +49,6 @@ die;
 }#/'
 
 my $dbh = C4::Context->dbh;
-# my @subf = $subfields =~ /(##\d\d\d##.)/g;
 
 $|=1; # flushes output
 my $authfrom = GetAuthority($mergefrom);
@@ -58,7 +57,7 @@ my $authto = GetAuthority($mergeto);
 my $authtypecodefrom = GetAuthTypeCode($mergefrom);
 my $authtypecodeto = GetAuthTypeCode($mergeto);
 
-unless ($noconfirm) {
+unless ($noconfirm || $batch) {
     print "************\n";
     print "You will merge authority : $mergefrom ($authtypecodefrom)\n".$authfrom->as_formatted;
     print "\n*************\n";
@@ -85,7 +84,8 @@ if ($batch) {
     if ($authid =~ /\.authid$/) {
       $authid =~ s/\.authid$//;
       print "managing $authid\n" if $verbose;
-      my $MARCauth = GetAuthority($authid);
+      my $MARCauth = GetAuthority($authid) ;
+      next unless ($MARCauth);
       merge($authid,$MARCauth,$authid,$MARCauth) if ($MARCauth);
       unlink $cgidir.'/localfile/modified_authorities/'.$authid.'.authid';
     }
