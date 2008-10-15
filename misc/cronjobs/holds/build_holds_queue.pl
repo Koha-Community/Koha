@@ -20,7 +20,8 @@ use C4::Branch;
 use C4::Circulation;
 use C4::Members;
 use C4::Biblio;
-use Data::Dumper;
+
+use List::Util qw(shuffle);
 
 my $bibs_with_pending_requests = GetBibsWithPendingHoldRequests();
 
@@ -32,13 +33,16 @@ my $total_bibs = 0;
 my $total_requests = 0;
 my $total_available_items = 0;
 my $num_items_mapped = 0;
+
+my @branches_to_use = _get_branches_to_pull_from();
+
 foreach my $biblionumber (@$bibs_with_pending_requests) {
     $total_bibs++;
     my $hold_requests =   GetPendingHoldRequestsForBib($biblionumber);
     $total_requests += scalar(@$hold_requests);
-    my $available_items = GetItemsAvailableToFillHoldRequestsForBib($biblionumber);
+    my $available_items = GetItemsAvailableToFillHoldRequestsForBib($biblionumber, @branches_to_use);
     $total_available_items += scalar(@$available_items);
-    my $item_map = MapItemsToHoldRequests($hold_requests, $available_items);
+    my $item_map = MapItemsToHoldRequests($hold_requests, $available_items, @branches_to_use);
     if (defined($item_map)) {
         $num_items_mapped += scalar(keys %$item_map);
         CreatePicklistFromItemMap($item_map);
@@ -151,6 +155,7 @@ to fill a hold request if and only if:
 
 sub GetItemsAvailableToFillHoldRequestsForBib {
     my $biblionumber = shift;
+    my @branches_to_use = @_;
 
     my $dbh = C4::Context->dbh;
     my $items_query = "SELECT itemnumber, homebranch, holdingbranch
@@ -176,8 +181,13 @@ sub GetItemsAvailableToFillHoldRequestsForBib {
                            AND (found IS NOT NULL OR priority = 0)
                         )
                        AND biblionumber = ?";
+    my @params = ($biblionumber, $biblionumber);
+    if ($#branches_to_use > -1) {
+        $items_query .= " AND holdingbranch IN (" . join (",", map { "?" } @branches_to_use) . ")";
+        push @params, @branches_to_use;
+    }
     my $sth = $dbh->prepare($items_query);
-    $sth->execute($biblionumber, $biblionumber);
+    $sth->execute(@params);
 
     my $items = $sth->fetchall_arrayref({});
     return [ grep { my @transfers = GetTransfers($_->{itemnumber}); $#transfers == -1; } @$items ]; 
@@ -196,6 +206,7 @@ MapItemsToHoldRequests($hold_requests, $available_items);
 sub MapItemsToHoldRequests {
     my $hold_requests = shift;
     my $available_items = shift;
+    my @branches_to_use = @_;
 
     # handle trival cases
     return unless scalar(@$hold_requests) > 0;
@@ -271,8 +282,14 @@ sub MapItemsToHoldRequests {
                                              };
             $num_items_remaining--;
         } else {
-            # FIXME implement static, random options
-            foreach my $branch (sort keys %items_by_branch) {
+            my @pull_branches = ();
+            if ($#branches_to_use > -1) {
+                @pull_branches = @branches_to_use;
+            } else {
+                @pull_branches = sort keys %items_by_branch;
+            }
+            foreach my $branch (@pull_branches) {
+                next unless exists $items_by_branch{$branch};
                 my $item = pop @{ $items_by_branch{$branch} };
                 delete $items_by_branch{$branch} if scalar(@{ $items_by_branch{$branch} }) == 0;
                 $item_map{$item->{itemnumber}} = { 
@@ -357,4 +374,24 @@ sub AddToHoldTargetMap {
         $sth_insert->execute($mapped_item->{borrowernumber}, $mapped_item->{biblionumber}, $itemnumber,
                              $mapped_item->{holdingbranch}, $mapped_item->{item_level});
     }
+}
+
+=head2 _get_branches_to_pull_from
+
+Query system preferences to get ordered list of
+branches to use to fill hold requests.
+
+=cut
+
+sub _get_branches_to_pull_from {
+    my @branches_to_use = ();
+  
+    my $static_branch_list = C4::Context->preference("StaticHoldsQueueWeight");
+    if ($static_branch_list) {
+        @branches_to_use = map { s/^\s+//; s/\s+$//; $_; } split /,/, $static_branch_list;
+    }
+
+    @branches_to_use = shuffle(@branches_to_use) if  C4::Context->preference("RandomizeHoldsQueueWeight");
+
+    return @branches_to_use;
 }
