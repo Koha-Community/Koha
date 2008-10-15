@@ -154,7 +154,7 @@ for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
                 {
 
 #                    warn " tag : ".$tagslib->{$fields[$x_i]->tag()}." subfield :".$tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}. "ISBN : ".$subf[$i][1]."PosttraitementISBN :".DisplayISBN($subf[$i][1]);
-                    $subfield_data{marc_value} = DisplayISBN( $subf[$i][1] );
+                    $subfield_data{marc_value} = $subf[$i][1];
                 }
                 else {
                     if ( $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }
@@ -230,7 +230,7 @@ foreach my $field (@fields) {
         elsif ( $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{kohafield} eq
             "biblioitems.isbn" )
         {
-            $this_row{ $subf[$i][0] } = DisplayISBN( $subf[$i][1] );
+            $this_row{ $subf[$i][0] } = $subf[$i][1];
         }
         else {
             $this_row{ $subf[$i][0] } =
