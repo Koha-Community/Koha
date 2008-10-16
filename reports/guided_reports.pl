@@ -367,6 +367,8 @@ elsif ( $phase eq 'Save Report' ) {
 #}
 
 elsif ($phase eq 'Run this report'){
+    binmode STDOUT, ':utf8';
+
     # execute a saved report
     # FIXME The default limit should not be hardcoded...
     my $limit = 20;
