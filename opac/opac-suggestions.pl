@@ -34,7 +34,7 @@ my $publicationyear = $input->param('publicationyear');
 my $place           = $input->param('place');
 my $isbn            = $input->param('isbn');
 my $status          = $input->param('status');
-my $suggestedbyme   = (defined $input->param('suggestedbyme')? $input->param('suggestedbyme'):1);
+my $suggestedbyme   = (defined $input->param('suggestedby')? $input->param('suggestedby'):1);
 my $op              = $input->param('op');
 $op = 'else' unless $op;
 
