@@ -395,6 +395,8 @@ elsif ($phase eq 'Run this report'){
 }	
 
 elsif ($phase eq 'Export'){
+    binmode STDOUT, ':utf8';
+
 	# export results to tab separated text
 	my $sql = $input->param('sql');
         my $format = $input->param('format');
