@@ -138,7 +138,7 @@ if (scalar @newtags_keys) {
 				$counts{$biblionumber}++;
 			} else {
 				push @errors, {failed_add_tag=>$clean_tag};
-				warn "add_tag($biblionumber,$clean_tag,$loggedinuser...) returned bad result (" . (defined $result ? $result : 'UNDEF') .")";
+				$debug and warn "add_tag($biblionumber,$clean_tag,$loggedinuser...) returned bad result (" . (defined $result ? $result : 'UNDEF') .")";
 			}
 		}
 	}
