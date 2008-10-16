@@ -86,6 +86,17 @@ if ( $op eq "do_search" ) {
 }
 
 if ( $show_results ) {
+  ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {
+            template_name   => "labels/result.tmpl",
+            query           => $query,
+            type            => "intranet",
+            authnotrequired => 0,
+            flagsrequired   => { catalogue => 1 },
+            debug           => 1,
+        }
+    );
+
 	my $hits = $show_results;
         my (@results, @items);
         # This code needs to be refactored using these subs...
@@ -126,18 +137,6 @@ if ( $show_results ) {
         $debug and warn "**********\@results**********\n";
         $debug and warn Dumper(@results);
   
-  ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-        {
-            template_name   => "labels/result.tmpl",
-            query           => $query,
-            type            => "intranet",
-            authnotrequired => 0,
-            flagsrequired   => { borrowers => 1 },
-            flagsrequired   => { catalogue => 1 },
-            debug           => 1,
-        }
-    );
-
     my @field_data = ();
 
 	# FIXME: this relies on symmetric order of CGI params that IS NOT GUARANTEED by spec.
