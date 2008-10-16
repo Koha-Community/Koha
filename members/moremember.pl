@@ -38,6 +38,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Members;
 use C4::Members::Attributes;
+use C4::Members::AttributeTypes;
 use C4::Dates;
 use C4::Reserves;
 use C4::Circulation;
@@ -340,6 +341,10 @@ $template->param($data);
 if (C4::Context->preference('ExtendedPatronAttributes')) {
     $template->param(ExtendedPatronAttributes => 1);
     $template->param(patron_attributes => C4::Members::Attributes::GetBorrowerAttributes($borrowernumber));
+    my @types = C4::Members::AttributeTypes::GetAttributeTypes();
+    if (scalar(@types) == 0) {
+        $template->param(no_patron_attribute_types => 1);
+    }
 }
 
 $template->param(
