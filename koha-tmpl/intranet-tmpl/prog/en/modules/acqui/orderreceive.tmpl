@@ -1,7 +1,13 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Acquisitions &rsaquo; Receipt summary for : <!-- TMPL_VAR NAME="name" --> <!-- TMPL_IF NAME="invoice" -->invoice, <!-- TMPL_VAR NAME="invoice" --><!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<script type="text/javascript" src="<!-- TMPL_VAR NAME='themelang' -->/js/additem.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR NAME='themelang' -->/js/additem.js">
+</script>
+<style type="text/css">
+a.cloneItemBlock { cursor: pointer; color: grey; font-size: 180%; padding:.5em;text-decoration:none;}
+a.deleteItemBlock { display:none; cursor: pointer; color: grey; font-size: 180%;padding:.5em;text-decoration:none; }
+fieldset.rows .itemblock fieldset.action { padding:.5em; }
+</style>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -24,7 +30,7 @@
     
     <fieldset class="rows">
     <legend>Catalog Details</legend>
-    <ul><li><span class="label">Title: </span><span class="title"><!-- TMPL_VAR NAME="title" escape="html" --></span></li>
+    <ol><li><span class="label">Title: </span><span class="title"><!-- TMPL_VAR NAME="title" escape="html" --></span></li>
     <li> <span class="label">Author: </span>
         <!-- TMPL_VAR NAME="author" --></li>
     <li><span class="label">Copyright: </span>
@@ -33,12 +39,12 @@
         <!-- TMPL_VAR NAME="isbn" --></li>
     <li> <span class="label">Series: </span>
         <!-- TMPL_VAR NAME="seriestitle" --></li>
-    </ul>
+    </ol>
 	</fieldset>
 	<fieldset class="rows">
-	<legend>Item details (n):  (add to catalog)</legend>
+	<legend>Item details:  (add to catalog)</legend>
   <div id="outeritemblock">
-	<div id="itemblock">
+	<div class="itemblock">
 	<ol>
 	<li> <label for="volinf">Volume/Copy (for serials): </label>
         <input type="text" size="20" name="volinf" id="volinf" /></li>
@@ -82,9 +88,9 @@
             <!-- /TMPL_LOOP -->
             </select></li>
    <!-- /TMPL_IF -->
-   </ol>
-<a style="cursor: pointer; color: grey; font-size: 180%;" onclick="cloneItemBlock('itemblock<!-- TMPL_VAR name="itemBlockIndex" -->')">+</a>
- <a style="display:none; cursor: pointer; color: grey; font-size: 180%;" onclick="deleteItemBlock('itemblock<!-- TMPL_VAR name="itemBlockIndex" -->')">-</a>
+   </ol><!-- TMPL_VAR name="itemBlockIndex" -->
+<fieldset class="action"><a href="#" class="cloneItemBlock">[+]</a>
+ <a href="#" class="deleteItemBlock">[-]</a></fieldset>
     </div>
 	</div>
 	<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
