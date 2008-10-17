@@ -128,7 +128,7 @@ if ($op eq 'mod' || $op eq 'dup' || $op eq 'modsubscription') {
                     $op => 1,
                     subtype => \@sub_type_data,
                     sublength =>$sublength,
-                    history => ($op eq 'mod' && ($subs->{recievedlist}||$subs->{missinglist}||$subs->{opacnote}||$subs->{librariannote})),
+                    history => ($op eq 'mod' && $subs->{manualhistory} == 1 ),
                     "periodicity".$subs->{'periodicity'} => 1,
                     "dow".$subs->{'dow'} => 1,
                     "numberpattern".$subs->{'numberpattern'} => 1,
@@ -235,7 +235,9 @@ if ($op eq 'addsubscription') {
     my $biblionumber = $query->param('biblionumber');
     my $aqbudgetid = $query->param('aqbudgetid');
     my $startdate = format_date_in_iso($query->param('startdate'));
-    my $nextacquidate = format_date_in_iso($query->param('nextacquidate'));    
+    my $nextacquidate = $query->param('nextacquidate') ?
+                            format_date_in_iso($query->param('nextacquidate')):
+                            format_date_in_iso($query->param('startdate'));
     my $periodicity = $query->param('periodicity');
     my $dow = $query->param('dow');
     my $sublength = $query->param('sublength');

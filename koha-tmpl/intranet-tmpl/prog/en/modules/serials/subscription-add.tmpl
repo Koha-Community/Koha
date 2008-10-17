@@ -1170,7 +1170,14 @@ $('#numberpattern').change( function() {
                     <option value="11">1/2 years</option>
                 <!-- /TMPL_IF -->
                 </select> <span class="required">Required</span></li>
-				<li><label for="manuallist"> Manual history:</label> <input type="checkbox" name="manualhist" id="manuallist" value="1" /></li>
+                <li>
+                    <label for="manuallist"> Manual history:</label>
+                    <!-- TMPL_IF name="manualhistory" -->
+                        <input type="checkbox" name="manualhist" id="manuallist" value="1" checked="checked" />
+                    <!-- TMPL_ELSE -->
+                        <input type="checkbox" name="manualhist" id="manuallist" value="1" />
+                    <!-- /TMPL_IF -->
+                </li>
         <li>
            <label for="numberpattern"> Numbering pattern:</label>
             
