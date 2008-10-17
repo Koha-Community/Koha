@@ -104,6 +104,23 @@ defaults to issuedate,title,barcode,author
 Other possible values come from fields in the biblios, items, and
 issues tables.
 
+=item B<-t> | B<--triggered>
+
+This option causes a notice to be generated if and only if 
+an item is overdue by the number of days defined in a notice trigger.
+
+By default, a notice is sent each time the script runs, which is suitable for 
+less frequent run cron script, but requires syncing notice triggers with 
+the  cron schedule to ensure proper behavior.
+Add the --triggered option for daily cron, at the risk of no notice 
+being generated if the cron fails to run on time.
+
+=item B<-list-all>
+
+Default items.content lists only those items that fall in the 
+range of the currently processing notice.
+Choose list-all to include all overdue items in the list (limited by B<-max> setting).
+
 =back
 
 =head1 DESCRIPTION
@@ -213,6 +230,8 @@ my $nomail  = 0;
 my $MAX     = 90;
 my $mybranch;
 my $csvfilename;
+my $triggered = 0;
+my $listall = 0;
 my $itemscontent = join( ',', qw( issuedate title barcode author ) );
 
 GetOptions(
@@ -224,6 +243,8 @@ GetOptions(
     'library=s'      => \$mybranch,
     'csv:s'          => \$csvfilename,    # this optional argument gets '' if not supplied.
     'itemscontent=s' => \$itemscontent,
+    'list-all'      => \$listall,
+    't|triggered'             => \$triggered,
 ) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
@@ -285,7 +306,7 @@ foreach my $branchcode (@branches) {
     $verbose and warn sprintf "branchcode : '%s' using %s\n", $branchcode, $admin_email_address;
 
     my $sth2 = $dbh->prepare( <<'END_SQL' );
-SELECT biblio.*, items.*, issues.*
+SELECT biblio.*, items.*, issues.*, TO_DAYS(NOW())-TO_DAYS(date_due) AS days_overdue
   FROM issues,items,biblio
   WHERE items.itemnumber=issues.itemnumber
     AND biblio.biblionumber   = items.biblionumber
@@ -315,6 +336,7 @@ END_SQL
             # $letter->{'content'} is the text of the mail that is sent.
             # this text contains fields that are replaced by their value. Those fields must be written between brackets
             # The following fields are available :
+	    # itemcount is interpreted here as the number of items in the overdue range defined by the current notice or all overdues < max if(-list-all).
             # <date> <itemcount> <firstname> <lastname> <address1> <address2> <address3> <city> <postcode>
 
             my $borrower_sql = <<'END_SQL';
@@ -332,42 +354,48 @@ END_SQL
                 $borrower_sql .= ' AND borrowers.categorycode=? ';
                 push @borrower_parameters, $overdue_rules->{categorycode};
             }
-            $borrower_sql .= <<'END_SQL';
-AND    categories.overduenoticerequired=1
-GROUP BY issues.borrowernumber
-HAVING TO_DAYS(NOW())-TO_DAYS(longest_issue) BETWEEN ? and ?
-END_SQL
-            push @borrower_parameters, $mindays, $maxdays;
-            my $sth = $dbh->prepare($borrower_sql);
+            $borrower_sql .= '  AND categories.overduenoticerequired=1
+                                GROUP BY issues.borrowernumber ';
+            if($triggered) {
+                $borrower_sql .= ' HAVING TO_DAYS(NOW())-TO_DAYS(longest_issue) = ?';
+                push @borrower_parameters, $mindays;
+            } else {
+                $borrower_sql .= ' HAVING TO_DAYS(NOW())-TO_DAYS(longest_issue) BETWEEN ? and ? ' ;
+                push @borrower_parameters, $mindays, $maxdays;
+            }
+
+            # $sth gets borrower info iff at least one overdue item has triggered the overdue action.
+	        my $sth = $dbh->prepare($borrower_sql);
             $sth->execute(@borrower_parameters);
-            $verbose and warn $borrower_sql . "\n\n ($mindays, $maxdays)\nreturns " . $sth->rows . " rows";
+            $verbose and warn $borrower_sql . "\n $branchcode | " . $overdue_rules->{'categorycode'} . "\n ($mindays, $maxdays)\nreturns " . $sth->rows . " rows";
 
-            while ( my ( $itemcount, $borrowernumber, $firstname, $lastname, $address1, $address2, $city, $postcode, $email ) = $sth->fetchrow ) {
-                warn "borrower $firstname, $lastname ($borrowernumber) has $itemcount items overdue." if $verbose;
-
+            while( my ( $itemcount, $borrowernumber, $firstname, $lastname, $address1, $address2, $city, $postcode, $email ) = $sth->fetchrow ) {
+                $verbose and warn "borrower $firstname, $lastname ($borrowernumber) has $itemcount items triggering level $i.";
+    
                 my $letter = C4::Letters::getletter( 'circulation', $overdue_rules->{"letter$i"} );
                 unless ($letter) {
                     $verbose and warn "Message '$overdue_rules->{letter$i}' content not found";
-
+    
                     # might as well skip while PERIOD, no other borrowers are going to work.
+                    # FIXME : Does this mean a letter must be defined in order to trigger a debar ?
                     next PERIOD;
                 }
-
+    
                 if ( $overdue_rules->{"debarred$i"} ) {
-
+    
                     #action taken is debarring
                     C4::Members::DebarMember($borrowernumber);
                     $verbose and warn "debarring $borrowernumber $firstname $lastname\n";
                 }
-
-                $sth2->execute( $borrowernumber, $mindays, $maxdays );
+                $sth2->execute( ($listall) ? ( $borrowernumber , 1 , $MAX ) : ( $borrowernumber, $mindays, $maxdays ) );
+                my $itemcount = 0;
                 my $titles = "";
                 while ( my $item_info = $sth2->fetchrow_hashref() ) {
                     my @item_info = map { $_ =~ /^date|date$/ ? format_date( $item_info->{$_} ) : $item_info->{$_} || '' } @item_content_fields;
                     $titles .= join("\t", @item_info) . "\n";
                 }
                 $sth2->finish;
-
+    
                 $letter = parse_letter(
                     {   letter         => $letter,
                         borrowernumber => $borrowernumber,
@@ -378,16 +406,16 @@ END_SQL
                         }
                     }
                 );
-
+    
                 my @misses = grep { /./ } map { /^([^>]*)[>]+/; ( $1 || '' ); } split /\</, $letter->{'content'};
                 if (@misses) {
                     $verbose and warn "The following terms were not matched and replaced: \n\t" . join "\n\t", @misses;
                 }
                 $letter->{'content'} =~ s/\<[^<>]*?\>//g;    # Now that we've warned about them, remove them.
                 $letter->{'content'} =~ s/\<[^<>]*?\>//g;    # 2nd pass for the double nesting.
-
+    
                 if ($nomail) {
-
+    
                     push @output_chunks,
                       prepare_letter_for_printing(
                         {   letter         => $letter,
@@ -414,7 +442,7 @@ END_SQL
                             }
                         );
                     } else {
-
+    
                         # If we don't have an email address for this patron, send it to the admin to deal with.
                         push @output_chunks,
                           prepare_letter_for_printing(
@@ -434,7 +462,6 @@ END_SQL
                           );
                     }
                 }
-
             }
             $sth->finish;
         }
