@@ -106,6 +106,7 @@ else {
     my @id = $input->param('id');
     my @oConnection;
     my @oResult;
+    my @errconn;
     my $s = 0;
     my $query;
     my $nterms;
@@ -199,6 +200,9 @@ warn "query ".$query  if $DEBUG;
         my ( $error, $errmsg, $addinfo, $diagset ) =
           $oConnection[$k]->error_x();
         if ($error) {
+            if ($error =~ m/^(10000|10007)$/ ) {
+                push(@errconn, {'server' => $serverhost[$k]});
+            }
             warn "$k $serverhost[$k] error $query: $errmsg ($error) $addinfo\n"
               if $DEBUG;
 
@@ -263,7 +267,8 @@ warn "query ".$query  if $DEBUG;
         breeding_loop => \@breeding_loop,
         server        => $servername[$k],
         numberpending => $numberpending,
-		biblionumber  => $biblionumber,
+        biblionumber  => $biblionumber,
+        errconn       => \@errconn
     );
     
     output_html_with_http_headers $input, $cookie, $template->output if $numberpending == 0;

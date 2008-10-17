@@ -109,6 +109,9 @@ $.tablesorter.addParser({
     <!-- /TMPL_LOOP --></tbody>
 </table>
     <!-- TMPL_ELSE -->
+        <!-- TMPL_LOOP name="errconn" -->
+            Connection failed to <!-- TMPL_VAR NAME="server" -->
+        <!-- /TMPL_LOOP -->
 	<p>Nothing found. <a href="/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Try another search</a>.</p>
     <!-- /TMPL_IF -->
 
