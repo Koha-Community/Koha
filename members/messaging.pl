@@ -143,10 +143,11 @@ $template->param( messagingview               => 1,
                   DHTMLcalendar_dateformat    => C4::Dates->DHTMLcalendar(), 
                   borrowernumber              => $borrowernumber,
                   branchcode                  => $borrower->{'branchcode'},
-		  branchname		      => GetBranchName($borrower->{'branchcode'}),
+                  branchname		      => GetBranchName($borrower->{'branchcode'}),
                   dateformat                  => C4::Context->preference("dateformat"),
                   categoryname                => $borrower->{'description'},
                   $borrower->{'categorycode'} => 1,
+                  SMSSendDriver                =>  C4::Context->preference("SMSSendDriver")
 );
 
 $messaging_preferences->{'SMSnumber'}{'value'} = defined $borrower->{'smsalertnumber'}
