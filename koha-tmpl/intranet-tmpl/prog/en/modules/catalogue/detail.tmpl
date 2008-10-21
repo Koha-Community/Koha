@@ -58,10 +58,10 @@ function verify_images() {
         
     <h3><!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_VAR NAME="subtitle" --></h3> 
             <!-- TMPL_UNLESS NAME="item-level_itypes" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->"><!-- /TMPL_UNLESS -->
-            <!-- TMPL_IF name="volume" --> <!-- TMPL_VAR name="volume" --><!-- /TMPL_IF -->
-            <!-- TMPL_IF name="volumedesc" -->, <!-- TMPL_VAR name="volumedesc" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="number" --> <!-- TMPL_VAR NAME="number" --> <!-- /TMPL_IF -->
+<p>            <!-- TMPL_IF name="volume" --> <!-- TMPL_VAR name="volume" --><!-- /TMPL_IF -->
+            <!-- TMPL_IF name="volumedesc" -->, <!-- TMPL_VAR name="volumedesc" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="number" --> <!-- TMPL_VAR NAME="number" --> <!-- /TMPL_IF --></p>
             <!-- TMPL_IF name="unititle" -->, <!-- TMPL_VAR name="unititle" escape="html" -->/<!-- /TMPL_IF -->
-            <!-- TMPL_IF NAME="author" -->By <a href="/cgi-bin/koha/catalogue/search.pl?q=au:<!-- TMPL_VAR NAME="author" ESCAPE="url" -->"><!-- TMPL_VAR NAME="author" --></a><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="author" --><p>By <a href="/cgi-bin/koha/catalogue/search.pl?q=au:<!-- TMPL_VAR NAME="author" ESCAPE="url" -->"><!-- TMPL_VAR NAME="author" --></a></p><!-- /TMPL_IF -->
         <ul>
         <!-- TMPL_IF name="MARCAUTHORS" -->
             <li><strong>Additional Authors:</strong><ul>
