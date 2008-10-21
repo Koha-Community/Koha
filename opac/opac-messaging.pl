@@ -117,6 +117,7 @@ PREF: foreach my $option ( @$messaging_options ) {
 $template->param( BORROWER_INFO         => [ $borrower ],
                   messagingview         => 1,
                   messaging_preferences => $messaging_options,
-                  SMSnumber => defined $borrower->{'smsalertnumber'} ? $borrower->{'smsalertnumber'} : $borrower->{'mobile'} );
+                  SMSnumber => defined $borrower->{'smsalertnumber'} ? $borrower->{'smsalertnumber'} : $borrower->{'mobile'},
+                  SMSSendDriver                =>  C4::Context->preference("SMSSendDriver") );
 
 output_html_with_http_headers $query, $cookie, $template->output;

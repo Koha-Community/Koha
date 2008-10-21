@@ -1,5 +1,20 @@
 <!-- TMPL_INCLUDE name="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo;  Updating Details for <!-- TMPL_LOOP name="BORROWER_INFO" --><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --><!-- /TMPL_LOOP -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript">//<![CDATA[
+	$(document).ready(function(){
+		$(".none").click(function(){
+			if($(this).attr("checked")){
+				var rowid = $(this).attr("id");
+				newid = Number(rowid.replace("none","")) 
+			  	$("#sms"+newid).attr("checked","");
+			  	$("#email"+newid).attr("checked","");
+			  	$("#digest"+newid).attr("checked","");
+			  	$("#rss"+newid).attr("checked","");
+			}
+		});
+	});
+//]]>
+</script>
 </head>
 <body id="opac-messaging">
 <!-- TMPL_INCLUDE name="masthead.inc" -->
@@ -19,30 +34,32 @@
 
 <input type="hidden" name="modify" value="yes" />
 
-<fieldset class="brief"><legend>Manage your Messaging settings</legend>
+<fieldset class="rows">
   <!-- TMPL_IF NAME="settings_updated" -->
-  <div class="dialog message"><h1>Settings Updated</h1></div>
+  <div class="dialog message"><h3>Settings Updated</h3></div>
   <!-- /TMPL_IF -->
-  <table>
-    <tr><TH></TH><TH># days in advance</TH><TH>sms</TH><TH>email</TH><TH>Digests only?</TH><TH>rss</TH><TH>do not notify</TH></tr>
+  <table style="margin-right:1em;">
+    <tr><th>&nbsp;</th><th>Days in advance</th><!-- TMPL_IF NAME="SMSSendDriver" --><th>SMS</th><!-- /TMPL_IF --><th>Email</th><th>Digests only?</th><th>RSS</th><th>Do not notify</th></tr>
     <!-- TMPL_LOOP name="messaging_preferences" -->
     <tr>
-      <td><label for="firstname"><!-- TMPL_VAR NAME="message_name" --></label></td>
+      <td><!-- TMPL_VAR NAME="message_name" --></td>
       <!-- TMPL_IF NAME="takes_days" -->
-      <td><SELECT name="<!-- TMPL_VAR NAME="message_attribute_id" -->-DAYS" id="<!-- TMPL_VAR NAME="message_name" -->-DAYS" >
+      <td><select name="<!-- TMPL_VAR NAME="message_attribute_id" -->-DAYS">
           <!-- TMPL_LOOP name="select_days" -->
-          <OPTION VALUE="<!-- TMPL_VAR NAME="day" -->"  <!-- TMPL_VAR NAME="selected"  --> ><!-- TMPL_VAR NAME="day" --></OPTION>
+          <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="day" -->" selected="selected"><!-- TMPL_VAR NAME="day" --></option>
+          <!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="day" -->"><!-- TMPL_VAR NAME="day" --></option>
+<!-- /TMPL_IF -->
           <!-- /TMPL_LOOP -->
-        </SELECT>
+        </select>
       </td>
       <!-- TMPL_ELSE -->
       <td>-</td>
       <!-- /TMPL_IF -->
       <!-- TMPL_IF NAME="transport-sms" -->
-      <td><input type="checkbox"
+      <!-- TMPL_IF NAME="SMSSendDriver" --><td><input type="checkbox"
                  id="sms<!-- TMPL_VAR NAME="message_attribute_id" -->"
                  name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 value="sms" <!-- TMPL_VAR NAME="transport-sms"   --> onclick = "document.opacmessaging.none<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;">
+                 value="sms" <!-- TMPL_VAR NAME="transport-sms"   --> onclick = "document.opacmessaging.none<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;" /><!-- /TMPL_IF -->
       </td>
       <!-- TMPL_ELSE -->
       <td>-</td>
@@ -52,7 +69,7 @@
       <td><input type="checkbox"
                  id="email<!-- TMPL_VAR NAME="message_attribute_id" -->"
                  name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 value="email"   <!-- TMPL_VAR NAME="transport-email"   --> onclick = "document.opacmessaging.none<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;">
+                 value="email"   <!-- TMPL_VAR NAME="transport-email"   --> onclick = "document.opacmessaging.none<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;" />
       </td>
       <!-- TMPL_ELSE -->
       <td>-</td>
@@ -62,7 +79,7 @@
       <td><input type="checkbox"
                  id="digest<!-- TMPL_VAR NAME="message_attribute_id" -->"
                  value="<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 name="digest"   <!-- TMPL_VAR NAME="digest" --> onclick = "document.opacmessaging.none<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;">
+                 name="digest"   <!-- TMPL_VAR NAME="digest" --> onclick = "document.opacmessaging.none<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;" />
       </td>
       <!-- TMPL_ELSE -->
       <td>-</td>
@@ -72,22 +89,17 @@
       <td><input type="checkbox"
                  id="rss<!-- TMPL_VAR NAME="message_attribute_id" -->"
                  name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 value="rss"  <!-- TMPL_VAR NAME="transport-rss"   --> onclick = "document.opacmessaging.none<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;">
+                 value="rss"  <!-- TMPL_VAR NAME="transport-rss"   --> onclick = "document.opacmessaging.none<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;" />
       </td>
       <!-- TMPL_ELSE -->
       <td>-</td>
       <!-- /TMPL_IF -->
 
-      <td><input type="checkbox" id="none<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 onclick = "if ( document.opacmessaging.none<!-- TMPL_VAR NAME="message_attribute_id" -->.checked == true ) {
-                            document.opacmessaging.sms<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;
-                            document.opacmessaging.email<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;
-                            document.opacmessaging.digest<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;
-                            document.opacmessaging.rss<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false; }" /></td>
+      <td><input type="checkbox" class="none" id="none<!-- TMPL_VAR NAME="message_attribute_id" -->" /></td>
     </tr>
     <!-- /TMPL_LOOP -->
   </table>
-SMS number: <input type="text" name="SMSnumber" value="<!-- TMPL_VAR NAME="SMSnumber"  -->" />
+<!-- TMPL_IF NAME="SMSSendDriver" --><ol><li><label for="SMSnumber">SMS number:</label> <input type="text" id="SMSnumber" name="SMSnumber" value="<!-- TMPL_VAR NAME="SMSnumber"  -->" /></li></ol><!-- /TMPL_IF -->
 
 </fieldset>
 
