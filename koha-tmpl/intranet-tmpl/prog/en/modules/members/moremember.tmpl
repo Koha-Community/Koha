@@ -35,12 +35,12 @@ $(document).ready(function() {
 		 return confirm('Are you sure you want to replace the current patron image? This cannot be undone.');
 		 }
 	});<!-- /TMPL_IF -->
-	$("#renew_all").click(function(){ $(".checkboxed").checkCheckboxes(":not(input[@name*=barcodes])"); $(".checkboxed").unCheckCheckboxes(":not(input[@name*=items])"); });
-	$("#return_all").click(function(){ $(".checkboxed").checkCheckboxes(":not(input[@name*=items])"); $(".checkboxed").unCheckCheckboxes(":not(input[@name*=barcodes])"); });
-	$("#CheckAllitems").click(function(){ $(".checkboxed").checkCheckboxes(":not(input[@name*=barcodes])"); $(".checkboxed").unCheckCheckboxes(":not(input[@name*=items])"); return false; });
-    $("#CheckNoitems").click(function(){ $(".checkboxed").unCheckCheckboxes(":not(input[@name*=barcodes])"); return false; });
-	$("#CheckAllreturns").click(function(){ $(".checkboxed").checkCheckboxes(":not(input[@name*=items])"); $(".checkboxed").unCheckCheckboxes(":not(input[@name*=barcodes])"); return false; });
-    $("#CheckNoreturns").click(function(){ $(".checkboxed").unCheckCheckboxes(":not(input[@name*=items])"); return false; });
+	$("#renew_all").click(function(){ $(".checkboxed").checkCheckboxes(":input[@name*=items]"); $(".checkboxed").unCheckCheckboxes(":input[@name*=barcodes]"); });
+	$("#return_all").click(function(){ $(".checkboxed").checkCheckboxes(":input[@name*=barcodes]"); $(".checkboxed").unCheckCheckboxes(":input[@name*=items]"); });
+	$("#CheckAllitems").click(function(){ $(".checkboxed").checkCheckboxes(":input[@name*=items]"); $(".checkboxed").unCheckCheckboxes(":input[@name*=barcodes]"); return false; });
+    $("#CheckNoitems").click(function(){ $(".checkboxed").unCheckCheckboxes(":input[@name*=items]"); return false; });
+	$("#CheckAllreturns").click(function(){ $(".checkboxed").checkCheckboxes(":input[@name*=barcodes]"); $(".checkboxed").unCheckCheckboxes(":input[@name*=items]"); return false; });
+    $("#CheckNoreturns").click(function(){ $(".checkboxed").unCheckCheckboxes(":input[@name*=barcodes]"); return false; });
 
     <!-- TMPL_IF NAME="AllowRenewalLimitOverride" -->
     $( '#override_limit' ).click( function () {
@@ -392,7 +392,7 @@ if (nodename =="barcodes[]"){
       <!-- TMPL_ELSE -->
             <td>
             <!-- TMPL_IF name="norenew" -->
-                <!-- TMPL_IF NAME="can_confirm" --><span class="renewals-allowed content_hidden">
+                <!-- TMPL_IF NAME="can_confirm" --><span class="renewals-allowed" style="display: none">
                     <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
                     <!-- TMPL_IF NAME="od" -->
                         <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
