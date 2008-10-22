@@ -41,6 +41,16 @@ $(document).ready(function() {
     $("#CheckNoitems").click(function(){ $(".checkboxed").unCheckCheckboxes(":not(input[@name*=barcodes])"); return false; });
 	$("#CheckAllreturns").click(function(){ $(".checkboxed").checkCheckboxes(":not(input[@name*=items])"); $(".checkboxed").unCheckCheckboxes(":not(input[@name*=barcodes])"); return false; });
     $("#CheckNoreturns").click(function(){ $(".checkboxed").unCheckCheckboxes(":not(input[@name*=items])"); return false; });
+
+    <!-- TMPL_IF NAME="AllowRenewalLimitOverride" -->
+    $( '#override_limit' ).click( function () {
+        if ( this.checked ) {
+           $( '.renewals-allowed' ).show(); $( '.renewals-disabled' ).hide();
+        } else {
+           $( '.renewals-allowed' ).hide(); $( '.renewals-disabled' ).show();
+        }
+    } ).attr( 'checked', false );
+    <!-- /TMPL_IF -->
  });
 function uncheck_sibling(me){
 nodename=me.getAttribute("name");
@@ -65,6 +75,7 @@ if (nodename =="barcodes[]"){
    }   
 }
 }
+
 //]]>
 </script>
 
@@ -381,12 +392,25 @@ if (nodename =="barcodes[]"){
       <!-- TMPL_ELSE -->
             <td>
             <!-- TMPL_IF name="norenew" -->
+                <!-- TMPL_IF NAME="can_confirm" --><span class="renewals-allowed content_hidden">
+                    <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
+                    <!-- TMPL_IF NAME="od" -->
+                        <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
+                    <!-- TMPL_ELSE -->
+                        <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+                    <!-- /TMPL_IF -->
+                    </span>
+                    <span class="renewals-disabled">
+                <!-- /TMPL_IF -->
 			      <!-- TMPL_IF NAME="norenew_reason_on_reserve" -->
               <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">On Hold</a>
 				    <!-- /TMPL_IF -->
 				    <!-- TMPL_IF NAME="norenew_reason_too_many" -->
 				        Too Many Renewals
 				    <!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="can_confirm" -->
+                    </span>
+                <!-- /TMPL_IF -->
             <!-- TMPL_ELSE -->
             <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
             <!-- TMPL_IF NAME="red" -->
@@ -430,6 +454,10 @@ if (nodename =="barcodes[]"){
         </tr>
         </table>
         <fieldset class="action">
+        <!-- TMPL_IF NAME="AllowRenewalLimitOverride" -->
+        <label for="override_limit">Override Renewal Limit:</label>
+        <input type="checkbox" name="override_limit" id="override_limit" value="1" />
+        <!-- /TMPL_IF -->
         <input type="submit" name="renew_checked" value="Renew or Return checked items" />
         <input type="submit" id="renew_all" name="renew_all" value="Renew all" />
         <input type="submit" id="return_all" name="return_all" value="Return all" />

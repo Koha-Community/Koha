@@ -438,13 +438,14 @@ if ($borrower) {
             $it->{'itemnumber'}, $borrower->{'borrowernumber'}
         );
         $it->{'charge'} = sprintf("%.2f", $it->{'charge'});
-        my $can_renew_error;
-        ($it->{'can_renew'}, $can_renew_error) = CanBookBeRenewed( 
+        my ($can_renew, $can_renew_error) = CanBookBeRenewed( 
             $borrower->{'borrowernumber'},$it->{'itemnumber'}
         );
         $it->{"renew_error_${can_renew_error}"} = 1 if defined $can_renew_error;
         my ( $restype, $reserves ) = CheckReserves( $it->{'itemnumber'} );
-        ( $restype ) and $it->{'can_renew'} = 0;
+		$it->{'can_renew'} = $can_renew;
+		$it->{'can_confirm'} = !$can_renew && !$restype;
+		$it->{'renew_error'} = $restype;
 
         $it->{'dd'} = format_date($it->{'date_due'});
         $it->{'od'} = ( $it->{'date_due'} lt $todaysdate ) ? 1 : 0 ;
@@ -711,10 +712,11 @@ $template->param( picture => 1 ) if $picture;
 
 
 $template->param(
-    debt_confirmed           => $debt_confirmed,
-    SpecifyDueDate           => C4::Context->preference("SpecifyDueDate"),
-    CircAutocompl            => C4::Context->preference("CircAutocompl"),
-    dateformat               => C4::Context->preference("dateformat"),
-    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
+    debt_confirmed            => $debt_confirmed,
+    SpecifyDueDate            => C4::Context->preference("SpecifyDueDate"),
+    CircAutocompl             => C4::Context->preference("CircAutocompl"),
+	AllowRenewalLimitOverride => C4::Context->preference("AllowRenewalLimitOverride"),
+    dateformat                => C4::Context->preference("dateformat"),
+    DHTMLcalendar_dateformat  => C4::Dates->DHTMLcalendar(),
 );
 output_html_with_http_headers $query, $cookie, $template->output;

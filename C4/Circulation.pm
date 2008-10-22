@@ -1877,7 +1877,7 @@ already renewed the loan. $error will contain the reason the renewal can not pro
 sub CanBookBeRenewed {
 
     # check renewal status
-    my ( $borrowernumber, $itemnumber ) = @_;
+    my ( $borrowernumber, $itemnumber, $override_limit ) = @_;
     my $dbh       = C4::Context->dbh;
     my $renews    = 1;
     my $renewokay = 0;
@@ -1912,7 +1912,7 @@ sub CanBookBeRenewed {
         if ( my $data2 = $sth2->fetchrow_hashref ) {
             $renews = $data2->{'renewalsallowed'};
         }
-        if ( $renews && $renews > $data1->{'renewals'} ) {
+        if ( ( $renews && $renews > $data1->{'renewals'} ) || $override_limit ) {
             $renewokay = 1;
         }
         else {

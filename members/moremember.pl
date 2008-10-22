@@ -62,6 +62,7 @@ my $dbh = C4::Context->dbh;
 my $input = new CGI;
 $debug or $debug = $input->param('debug') || 0;
 my $print = $input->param('print');
+my $override_limit = $input->param("override_limit") || 0;
 my @failedrenews = $input->param('failedrenew');
 my @failedreturns = $input->param('failedreturn');
 my $error = $input->param('error');
@@ -245,8 +246,9 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
 
     $row{'charge'} = sprintf( "%.2f", $charge );
 
-	my ( $renewokay,$renewerror ) = CanBookBeRenewed( $borrowernumber, $issue->[$i]{'itemnumber'});
+	my ( $renewokay,$renewerror ) = CanBookBeRenewed( $borrowernumber, $issue->[$i]{'itemnumber'}, $override_limit );
 	$row{'norenew'} = !$renewokay;
+	$row{'can_confirm'} = ( !$renewokay && $renewerror ne 'on_reserve' );
 	$row{"norenew_reason_$renewerror"} = 1 if $renewerror;
 	$row{'renew_failed'} = $renew_failed{ $issue->[$i]{'itemnumber'} };
 	$row{'return_failed'} = $return_failed{$issue->[$i]{'barcode'}};   
@@ -349,6 +351,7 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
 
 $template->param(
 	detailview => 1,
+    AllowRenewalLimitOverride => C4::Context->preference("AllowRenewalLimitOverride"),
   DHTMLcalendar_dateformat=>C4::Dates->DHTMLcalendar(), 
     roaddetails      => $roaddetails,
     borrowernumber   => $borrowernumber,
