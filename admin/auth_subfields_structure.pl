@@ -447,8 +447,7 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'delete_confirm') {
 	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("select * from auth_subfield_structure where tagfield=? and tagsubfield=? and authtypecode=?");
-	#FIXME : called with 2 bind variables when 3 are needed
-	$sth->execute($tagfield,$tagsubfield);
+	$sth->execute($tagfield,$tagsubfield,$authtypecode);
 	my $data=$sth->fetchrow_hashref;
 	$sth->finish;
 	$template->param(liblibrarian => $data->{'liblibrarian'},
