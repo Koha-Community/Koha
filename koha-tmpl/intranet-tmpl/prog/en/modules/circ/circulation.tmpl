@@ -453,7 +453,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
             <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
         <!-- /TMPL_IF -->
         <!-- TMPL_ELSE -->
-            <!-- TMPL_IF NAME="can_confirm" --><span class="renewals-allowed content_hidden">
+            <!-- TMPL_IF NAME="can_confirm" --><span class="renewals-allowed" style="display: none">
                 <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
                 <!-- TMPL_IF NAME="od" -->
                     <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
@@ -513,7 +513,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
             <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
         <!-- /TMPL_IF -->
         <!-- TMPL_ELSE -->
-            <!-- TMPL_IF NAME="can_confirm" --><span class="renewals-allowed content_hidden">
+            <!-- TMPL_IF NAME="can_confirm" --><span class="renewals-allowed" style="display: none">
                 <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
                 <!-- TMPL_IF NAME="od" -->
                     <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
