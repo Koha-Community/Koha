@@ -48,7 +48,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 	<div id="z3950_search" class="residentsearch">
 	<p class="tip">Z39.50 Server Search:</p>
 	<form action="/cgi-bin/koha/admin/z3950servers.pl" method="post">
-                <input type="text" name="description" size="40" value="<!-- TMPL_VAR NAME="searchfield" -->" />
+                <input type="text" name="searchfield" size="40" value="<!-- TMPL_VAR name="searchfield" -->" />
                 <input type="submit" class="submit" name="search" value="Search" />
         </form>
 	</div>
