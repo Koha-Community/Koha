@@ -353,7 +353,7 @@ sub delete_holiday {
         my $id = $isSingleHoliday->fetchrow;
         $isSingleHoliday->finish; # Close the last query
 
-        my $deleteHoliday = $dbh->prepare("SELECT FROM special_holidays WHERE id = ?");
+        my $deleteHoliday = $dbh->prepare("DELETE FROM special_holidays WHERE id = ?");
         $deleteHoliday->execute($id);
         delete($self->{'single_holidays'}->{"$options{year}/$options{month}/$options{day}"});
     } else {
