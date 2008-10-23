@@ -26,6 +26,7 @@ use C4::Branch; # GetBranches
 use C4::Output;
 use C4::Koha;
 use C4::Circulation;
+use C4::Reports;
 use C4::Dates qw/format_date format_date_in_iso/;
 use Date::Calc qw(Delta_Days);
 
