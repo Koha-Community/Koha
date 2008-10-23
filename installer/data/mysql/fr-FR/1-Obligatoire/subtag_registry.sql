@@ -433,7 +433,7 @@ INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'es', 'language', 'Spanish','2005-10-16' );
 
 INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
-VALUES( 'es','rus');
+VALUES( 'es','spa');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'es', 'language', 'es', 'Espa&ntilde;ol');
