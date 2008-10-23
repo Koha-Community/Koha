@@ -25,11 +25,6 @@ use C4::Accounts;
 use C4::Debug;
 use Date::Manip;
 
-#use HTML::Template;
-#use Text::CSV_XS;
-#use Data::Dumper;
-
-
 my $input = new CGI;
 my $time  = $input->param('time');
 my $time2 = $input->param('time2');
@@ -41,7 +36,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $input,
         type            => "intranet",
         authnotrequired => 1,
-        flagsrequired   => { borrowers => 1 },
+        flagsrequired   => { reports => 1 },
         debug           => 1,
     }
 );
