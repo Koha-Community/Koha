@@ -31,6 +31,19 @@ use C4::Output;
 use C4::Auth qw/get_session/;
 use C4::Debug;
 
+#splits incoming biblionumber(s) to array and adds each to shelf.
+sub AddBibliosToShelf {
+    my ($shelfnumber,@biblionumber)=@_;
+
+    # multiple bibs might come in as '/' delimited string (from where, i don't see), or as array.
+    if (scalar(@biblionumber) == 1) {
+        @biblionumber = (split /\//,$biblionumber[0]);
+    }
+    for my $bib (@biblionumber){
+        AddToShelfFromBiblio($bib, $shelfnumber);
+    }
+}
+
 my $query        	= new CGI;
 my @biblionumber 	= $query->param('biblionumber');
 my $selectedshelf 	= $query->param('selectedshelf');
@@ -50,6 +63,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 if ($newvirtualshelf) {
 	$shelfnumber = AddShelf(  $newvirtualshelf, $loggedinuser, $category );
+	AddBibliosToShelf($shelfnumber, @biblionumber);
 	RefreshShelvesSummary($query->cookie("CGISESSID"),$loggedinuser,($loggedinuser == -1 ? 20 : 10));
 	print $query->header;
 	print "<html><body onload=\"window.opener.location.reload(true);self.close();\"></body></html>";
@@ -62,17 +76,8 @@ if ($selectedshelf) {
 	$authorized = 0 unless ShelfPossibleAction( $loggedinuser, $selectedshelf );
 }
 
-# multiple bibs might come in as '/' delimited string (from where, i don't see), or as array.
-
-my $multiple = 0;
-my @bibs;
-if (scalar(@biblionumber) == 1) {
-	@biblionumber =  (split /\//,$biblionumber[0]);
-}
 if ($shelfnumber && ($shelfnumber != -1)) {
-	for my $bib (@biblionumber){
-		AddToShelfFromBiblio($bib,$shelfnumber);
-	}
+	AddBibliosToShelf($shelfnumber,@biblionumber);
 	RefreshShelvesSummary($query->cookie("CGISESSID"),$loggedinuser,($loggedinuser == -1 ? 20 : 10));
 	print $query->header;
 	print "<html><body onload=\"window.opener.location.reload(true);self.close();\"></body></html>";
