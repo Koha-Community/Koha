@@ -30,6 +30,28 @@ use C4::Members;
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
 
+my @categories = @{$dbh->selectall_arrayref(
+    'SELECT description, categorycode FROM categories WHERE overduenoticerequired > 0',
+    { Slice => {} }
+)};
+my @category_codes  = map { $_->{categorycode} } @categories;
+my @rule_params     = qw(delay letter debarred);
+
+# blank_row($category_code) - return true if the entire row is blank.
+sub blank_row {
+    my ($category_code) = @_;
+    for my $rp (@rule_params) {
+        for my $n (1 .. 3) {
+            my $key   = "${rp}${n}-$category_code";
+            my $value = $input->param($key);
+            if ($value) {
+                return 0;
+            }
+        }
+    }
+    return 1;
+}
+
 my $type=$input->param('type');
 my $branch = $input->param('branch');
 $branch="" unless $branch;
@@ -66,6 +88,10 @@ if ($op eq 'save') {
                     $temphash{$bor}->{"$type$num"}=$input->param("$key") if (($input->param("$key") ne "") or ($input->param("$key")>0));
             }
     }
+
+    # figure out which rows need to be deleted
+    my @rows_to_delete = grep { blank_row($_) } @category_codes;
+
     foreach my $bor (keys %temphash){
         # get category name if we need it for an error message
         my $bor_category = GetBorrowercategory($bor);
@@ -133,7 +159,10 @@ if ($op eq 'save') {
         }
     }
     unless ($err) {
-        $template->param(datasaved=>1);
+        for my $category_code (@rows_to_delete) {
+            $sth_delete->execute($branch, $category_code);
+        }
+        $template->param(datasaved => 1);
         $input_saved = 1;
     }
 }
@@ -152,21 +181,20 @@ my $letters = GetLetters("circulation");
 
 my $countletters = scalar $letters;
 
-my $sth=$dbh->prepare("SELECT description,categorycode FROM categories WHERE overduenoticerequired>0 ORDER BY description");
-$sth->execute;
 my @line_loop;
-my $toggle= 1;
-# my $i=0;
-while (my $data=$sth->fetchrow_hashref){
+my $toggle = 1;
+
+for my $data (@categories) {
     if ( $toggle eq 1 ) {
         $toggle = 0;
     } else {
         $toggle = 1;
     }
-    my %row = ( overduename => $data->{'categorycode'},
-                toggle => $toggle,
-                line => $data->{'description'}
-                );
+    my %row = (
+        overduename => $data->{'categorycode'},
+        toggle      => $toggle,
+        line        => $data->{'description'}
+    );
     if (%temphash and not $input_saved){
         # if we managed to save the form submission, don't
         # reuse %temphash, but take the values from the
@@ -219,7 +247,6 @@ while (my $data=$sth->fetchrow_hashref){
     }
     push @line_loop,\%row;
 }
-$sth->finish;
 
 $template->param(table=> \@line_loop,
                 branchloop => \@branchloop,
