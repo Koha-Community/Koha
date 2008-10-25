@@ -620,9 +620,7 @@ Converts a string from ISO-5426 to UTF-8.
 
 =cut
 
-sub char_decode5426 {
-    my ( $string) = @_;
-    my $result;
+
 my %chars;
 $chars{0xb0}=0x0101;#3/0ayn[ain]
 $chars{0xb1}=0x0623;#3/1alif/hamzah[alefwithhamzaabove]
@@ -995,6 +993,11 @@ $chars{0xda20}=0x02cc; #
         # 5/14 right half of ligature sign
         # 5/15 right half of double tilde
 #     map {printf "%x :%x\n",$_,$chars{$_};}keys %chars;
+
+sub char_decode5426 {
+    my ( $string) = @_;
+    my $result;
+
     my @data = unpack("C*", $string);
     my @characters;
     my $length=scalar(@data);
