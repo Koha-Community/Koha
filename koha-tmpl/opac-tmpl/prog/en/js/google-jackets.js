@@ -55,7 +55,9 @@ KOHA.Google = {
 					$(message).attr("class","no-image");
 					$(message).html(NO_GOOGLE_JACKET);
 					$(this).append(message);
+
 				}
+					$(this).append(a);
             });
         }
     }
