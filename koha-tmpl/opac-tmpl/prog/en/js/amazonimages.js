@@ -5,9 +5,9 @@ function verify_images() {
             w = this.width;
             h = this.height;
             if ((w == 1) || (h == 1)) {
-                this.src = 'http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
+				$(this).parent().html("<span class=\"no-image\">"+NO_AMAZON_IMAGE+"</span>");
             } else if ((this.complete != null) && (!this.complete)) {
-                this.src = 'http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
+				$(this).parent().html("<span class=\"no-image\">"+NO_AMAZON_IMAGE+"</span>");
             }
         }
 		});

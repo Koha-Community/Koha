@@ -17,17 +17,18 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.dimensions-min.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.hoverIntent.minified.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.dropshadow-min.js"></script>
-<!-- TMPL_IF NAME="AmazonContent" --><script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/amazonimages.js"></script><!-- /TMPL_IF -->
 <script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/script.js"></script>
+<!-- TMPL_IF NAME="AmazonContent" -->
+<script type="text/javascript" language="javascript">//<![CDATA[
+		var NO_AMAZON_IMAGE = _("No cover image available");
+	//]]>
+</script>
+<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/amazonimages.js"></script><!-- /TMPL_IF -->
 <script type="text/javascript" language="javascript"
 <!-- TMPL_IF NAME="opacbookbag" -->src="<!-- TMPL_VAR NAME="themelang" -->/js/basket.js"><!-- TMPL_ELSE -->>var readCookie;<!-- /TMPL_IF --></script>
 <!-- TMPL_IF NAME="TagsEnabled" --><script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/tags.js"></script><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="GoogleJackets" -->
-<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/google-jackets.js"></script>
-<!-- /TMPL_IF -->
 <script type="text/javascript" language="javascript">
 	//<![CDATA[
-    function _(s) { return s } // dummy function for gettext
     <!-- TMPL_IF NAME="opacbookbag" -->var MSG_BASKET_EMPTY = _("Your cart is currently empty");
     var MSG_RECORD_IN_BASKET = _("This item is already in your cart");
     var MSG_RECORD_ADDED = _("This item has been added to your cart");
@@ -42,5 +43,20 @@
 		 });<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="opacuserjs" --><!-- TMPL_VAR NAME="opacuserjs" --><!-- /TMPL_IF -->
 	//]]>
+</script><!-- TMPL_IF NAME="GoogleJackets" -->
+<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/google-jackets.js"></script>
+<script type="text/javascript" language="javascript">
+	//<![CDATA[
+	var NO_GOOGLE_JACKET = _("No cover image available");
+	//]]>
 </script>
+<!-- /TMPL_IF --><!-- TMPL_IF NAME="BakerTaylorEnabled" --><script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/bakertaylorimages.js"></script>
+<script type="text/javascript" language="javascript">
+	//<![CDATA[
+	var NO_BAKERTAYLOR_IMAGE = _("No cover image available");
+	$(window).load(function(){
+		bt_verify_images();
+	});
+	//]]>
+</script><!-- /TMPL_IF -->
 <link rel="unapi-server" type="application/xml" title="unAPI" href="/cgi-bin/koha/unapi" />

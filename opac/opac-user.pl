@@ -33,6 +33,14 @@ use C4::Letters;
 use C4::Branch; # GetBranches
 
 my $query = new CGI;
+
+BEGIN {
+	if (C4::Context->preference('BakerTaylorEnabled')) {
+		require C4::External::BakerTaylor;
+		import C4::External::BakerTaylor qw(&image_url &link_url);
+	}
+}
+
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
         template_name   => "opac-user.tmpl",
@@ -242,6 +250,16 @@ foreach ( @$alerts ) {
     $_->{ $_->{type} } = 1;
     $_->{relatedto} = findrelatedto( $_->{type}, $_->{externalid} );
 }
+
+if (C4::Context->preference('BakerTaylorEnabled')) {
+	$template->param(
+		BakerTaylorEnabled  => 1,
+		BakerTaylorImageURL => &image_url(),
+		BakerTaylorLinkURL  => &link_url(),
+		BakerTaylorBookstoreURL => C4::Context->preference('BakerTaylorBookstoreURL'),
+	);
+}
+
 if (C4::Context->preference("AmazonContent"     ) or 
 	C4::Context->preference("GoogleJackets"     ) or
 	C4::Context->preference("BakerTaylorEnabled")   ) {

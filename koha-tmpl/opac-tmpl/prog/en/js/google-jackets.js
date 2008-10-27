@@ -17,8 +17,8 @@ KOHA.Google = {
      */
     GetCoverFromIsbn: function() {
         var bibkeys = [];
-        $(".gbs-thumbnail").each(function(i) {
-            bibkeys.push(this.id); // id=isbn
+        $("div [id^=gbs-thumbnail]").each(function(i) {
+            bibkeys.push($(this).attr("class")); // id=isbn
         });
         bibkeys = bibkeys.join(',');
         var scriptElement = document.createElement("script");
@@ -37,15 +37,20 @@ KOHA.Google = {
     gbsCallBack: function(booksInfo) {
         for (id in booksInfo) {
             var book = booksInfo[id];
-            $("#"+book.bib_key).each(function() {
+            $("."+book.bib_key).each(function() {
                 var a = document.createElement("a");
                 a.href = book.info_url;
-	            var img = document.createElement("img");
 				if(typeof(book.thumbnail_url) != "undefined"){
+	            	var img = document.createElement("img");
 	                img.src = book.thumbnail_url;
 		            a.appendChild(img);
-	                $(this).append(a);
+				} else {
+					var message = document.createElement("span");
+					$(message).attr("class","no-image");
+					$(message).html(NO_GOOGLE_JACKET);
+					a.appendChild(message);
 				}
+					$(this).append(a);
             });
         }
     }

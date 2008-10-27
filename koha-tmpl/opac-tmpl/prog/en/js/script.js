@@ -1,3 +1,4 @@
+function _(s) { return s } // dummy function for gettext
 function confirmDelete(message) {
 	return (confirm(message) ? true : false);
 }

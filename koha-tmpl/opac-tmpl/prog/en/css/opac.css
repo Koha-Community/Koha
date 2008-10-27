@@ -1660,6 +1660,7 @@ a#MARCview, a#ISBDview, a#Normalview {
 }
 #shelfbrowser a {
 	font-size : 110%;
+	text-decoration : none;
 }
 #shelfbrowser td, #shelfbrowser th {
 	vertical-align : bottom;
@@ -1667,6 +1668,9 @@ a#MARCview, a#ISBDview, a#Normalview {
 }
 #shelfbrowser td.top {
 	vertical-align : top;
+}
+#shelfbrowser td.top a {
+	text-decoration : underline;
 }
 #shelfbrowser a {
 	display : block;
@@ -1732,4 +1736,43 @@ table#items th {
 }
 #action {
 	margin-top: 0;
+}
+.results_summary img {
+	margin : 0 5px;
+}
+span.no-image {
+	background-color : #FFF;
+	border: 1px solid #979797;
+	color : #AAA;
+	display:block;
+	font-size : 86%;
+	font-weight : bold;
+	text-align : center;
+	width : 75px;
+}
+#bookcover span.no-image {
+	margin-right : 10px;
+	margin-bottom : 10px;
+}
+#shelfbrowser a:link span.no-image,
+#shelfbrowser a:visited span.no-image,
+#shelfbrowser a:hover span.no-image,
+#shelfbrowser a:active span.no-image {
+	font-size : 95%;
+}
+#shelfbrowser a:link span.no-image,
+#shelfbrowser a:visited span.no-image,
+#shelfbrowser a:hover span.no-image,
+#shelfbrowser a:active span.no-image,
+td.jacketcell a:link,
+td.jacketcell a:visited,
+td.jacketcell a:hover,
+td.jacketcell a:active,
+a.p1:link,
+a.p1:visited,
+a.p1:hover,
+a.p1:active {
+	color : #AAA;
+	text-decoration : none;
+	font-weight : bold;
 }

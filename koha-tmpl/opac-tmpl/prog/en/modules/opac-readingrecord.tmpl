@@ -49,11 +49,11 @@ TMPL_ELSE -->Title<!-- /TMPL_UNLESS --></th>
 
 <!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="AmazonContent" --><td><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="amazonisbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="amazonisbn" -->.01.THUMBZZZ.jpg" alt="Cover Image" /></a></td><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="AmazonContent" --><td><!-- TMPL_IF NAME="amazonisbn" --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="amazonisbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="amazonisbn" -->.01.THUMBZZZ.jpg" alt="Cover Image" /></a><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- /TMPL_IF --></td><!-- /TMPL_IF -->
 
-    <!-- TMPL_IF NAME="GoogleJackets" --><td><div style="block" title="<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" id="<!-- TMPL_VAR NAME="amazonisbn" -->" class="gbs-thumbnail"></div></td><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="GoogleJackets" --><td><!-- TMPL_IF NAME="amazonisbn" --><div style="block" title="<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" class="<!-- TMPL_VAR name="amazonisbn" -->" id="gbs-thumbnail<!--TMPL_VAR NAME="__counter__"-->"></div><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- /TMPL_IF --></td><!-- /TMPL_IF -->
 
-    <!-- TMPL_IF NAME="BakerTaylorEnabled" --><td><!-- TMPL_IF NAME="clean_isbn" --><a href="https://<!-- TMPL_VAR NAME="BakerTaylorBookstoreURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="clean_isbn" -->"><img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="clean_isbn" -->" /></a><!-- /TMPL_IF --></td><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="BakerTaylorEnabled" --><td><!-- TMPL_IF NAME="clean_isbn" --><a href="https://<!-- TMPL_VAR NAME="BakerTaylorBookstoreURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="clean_isbn" -->"><img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="clean_isbn" -->" /></a><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- /TMPL_IF --></td><!-- /TMPL_IF -->
 
 <td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
                     <span class="item-details">
