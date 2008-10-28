@@ -862,29 +862,22 @@ AddIssue does the following things :
 =cut
 
 sub AddIssue {
-    my ( $borrower, $barcode, $datedue, $cancelreserve, $issuedate ) = @_;
+    my ( $borrower, $barcode, $datedue, $cancelreserve, $issuedate, $sipmode) = @_;
     my $dbh = C4::Context->dbh;
 	my $barcodecheck=CheckValidBarcode($barcode);
 
     # $issuedate defaults to today.
     if ( ! defined $issuedate ) {
         $issuedate = strftime( "%Y-%m-%d", localtime );
+        # TODO: for hourly circ, this will need to be a C4::Dates object
+        # and all calls to AddIssue including issuedate will need to pass a Dates object.
     }
 	if ($borrower and $barcode and $barcodecheck ne '0'){
 		# find which item we issue
 		my $item = GetItem('', $barcode) or return undef;	# if we don't get an Item, abort.
-		my $branch;
-		# Get which branchcode we need
-		if (C4::Context->preference('CircControl') eq 'PickupLibrary'){
-			$branch = C4::Context->userenv->{'branch'}; 
-		}
-		elsif (C4::Context->preference('CircControl') eq 'PatronLibrary'){
-			$branch = $borrower->{'branchcode'}; 
-		}
-		else {
-			# items home library
-			$branch = $item->{'homebranch'};
-		}
+		my $branch = (C4::Context->preference('CircControl') eq 'PickupLibrary') ? C4::Context->userenv->{'branch'} :
+                     (C4::Context->preference('CircControl') eq 'PatronLibrary') ? $borrower->{'branchcode'}        : 
+                     $item->{'homebranch'};     # fallback to item's homebranch
 		
 		# get actual issuing if there is one
 		my $actualissue = GetItemIssue( $item->{itemnumber});
@@ -921,28 +914,23 @@ sub AddIssue {
 			if ($restype) {
 				my $resbor = $res->{'borrowernumber'};
 				if ( $resbor eq $borrower->{'borrowernumber'} ) {
-
 					# The item is reserved by the current patron
 					ModReserveFill($res);
 				}
 				elsif ( $restype eq "Waiting" ) {
-
 					# warn "Waiting";
 					# The item is on reserve and waiting, but has been
 					# reserved by some other patron.
 				}
 				elsif ( $restype eq "Reserved" ) {
-
 					# warn "Reserved";
 					# The item is reserved by someone else.
 					if ($cancelreserve) { # cancel reserves on this item
-						CancelReserve( 0, $res->{'itemnumber'},
-							$res->{'borrowernumber'} );
+						CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
 					}
 				}
 				if ($cancelreserve) {
-					CancelReserve( $res->{'biblionumber'}, 0,
-                    $res->{'borrowernumber'} );
+					CancelReserve($res->{'biblionumber'}, 0, $res->{'borrowernumber'});
 				}
 				else {
 					# set waiting reserve to first in reserve queue as book isn't waiting now
@@ -957,8 +945,8 @@ sub AddIssue {
 			# Starting process for transfer job (checking transfert and validate it if we have one)
             my ($datesent) = GetTransfers($item->{'itemnumber'});
             if ($datesent) {
-        # 	updating line of branchtranfert to finish it, and changing the to branch value, implement a comment for lisibility of this case (maybe for stats ....)
-            my $sth =
+        # 	updating line of branchtranfert to finish it, and changing the to branch value, implement a comment for visibility of this case (maybe for stats ....)
+                my $sth =
                     $dbh->prepare(
                     "UPDATE branchtransfers 
                         SET datearrived = now(),
@@ -966,8 +954,7 @@ sub AddIssue {
                         comments = 'Forced branchtransfer'
                     WHERE itemnumber= ? AND datearrived IS NULL"
                     );
-                    $sth->execute(C4::Context->userenv->{'branch'},$item->{'itemnumber'});
-                    $sth->finish;
+                $sth->execute(C4::Context->userenv->{'branch'},$item->{'itemnumber'});
             }
 
         # Record in the database the fact that the book was issued.
@@ -1020,8 +1007,8 @@ sub AddIssue {
         # Record the fact that this book was issued.
         &UpdateStats(
             C4::Context->userenv->{'branch'},
-            'issue',                        $charge,
-            '',                             $item->{'itemnumber'},
+            'issue', $charge,
+            ($sipmode ? "SIP-$sipmode" : ''), $item->{'itemnumber'},
             $item->{'itype'}, $borrower->{'borrowernumber'}
         );
     }
