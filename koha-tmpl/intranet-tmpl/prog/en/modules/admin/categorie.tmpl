@@ -120,7 +120,7 @@
 						<option value="1">Yes</option>
 			<!-- /TMPL_IF -->
 					</select></li>
-	<li><label for="reservefee">Reserve fee: </label>$<input type="text" name="reservefee" id="reservefee" size="6" value="<!-- TMPL_VAR NAME="reservefee" -->" /></li>
+	<li><label for="reservefee">Hold fee: </label>$<input type="text" name="reservefee" id="reservefee" size="6" value="<!-- TMPL_VAR NAME="reservefee" -->" /></li>
 	<li><label for="category_type">Category type: </label> &nbsp; <select name="category_type" id="category_type">
 						<!-- TMPL_IF NAME="type_n" --><option value="" selected="selected">Select a Category type</option><!-- TMPL_ELSE --><option value="">Select a Category type</option><!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="type_A" --><option value="A" selected="selected">Adult</option><!-- TMPL_ELSE --><option value="A">Adult</option><!-- /TMPL_IF -->
@@ -158,12 +158,12 @@ Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" --><!-- /TMPL_IF 
 	<table>
 	<tr><th scope="row">Category code: </th><td><!-- TMPL_VAR NAME="categorycode" --></td></tr>
 	<tr><th scope="row">Description: </th><td><!-- TMPL_VAR NAME="description" --></td></tr>
-	<tr><th scope="row">Enrolment period: </th><td><!-- TMPL_VAR NAME="enrolmentperiod" --> months</td></tr>
+	<tr><th scope="row">Enrollment period: </th><td><!-- TMPL_VAR NAME="enrolmentperiod" --> months</td></tr>
 	<tr><th scope="row">Age required: </th><td><!-- TMPL_VAR NAME="dateofbirthrequired" --> years</td></tr>
 	<tr><th scope="row">Upperage limit: </th><td><!-- TMPL_VAR NAME="upperagelimit" --> years</td></tr>
-	<tr><th scope="row">Enrolment fee: </th><td>$<!-- TMPL_VAR NAME="enrolmentfee" --></td></tr>
+	<tr><th scope="row">Enrollment fee: </th><td>$<!-- TMPL_VAR NAME="enrolmentfee" --></td></tr>
 	<tr><th scope="row">Receives overdue notices: </th><td><!-- TMPL_IF NAME="overduenoticerequired" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td></tr>
-	<tr><th scope="row">Reserve fee: </th><td>$<!-- TMPL_VAR NAME="reservefee" --></td></tr>
+	<tr><th scope="row">Hold fee: </th><td>$<!-- TMPL_VAR NAME="reservefee" --></td></tr>
 </table>
 		<fieldset class="action"><!-- TMPL_IF NAME="totalgtzero" -->
 <input type="submit" value="OK" /></form>
@@ -220,7 +220,7 @@ Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" --><!-- /TMPL_IF 
 			<th scope="col">Upper age limit:</th>
 			<th scope="col">Enrollment fee:</th>
 			<th scope="col">Overdue:</th>
- 			<th scope="col">Reservation fee:</th>
+ 			<th scope="col">Hold fee:</th>
 			<th scope="col" colspan="2">&nbsp; </th>
 		</tr>
 		<!-- TMPL_LOOP NAME="loop" -->
