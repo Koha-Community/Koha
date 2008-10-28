@@ -51,9 +51,6 @@ my ($template, $loggedinuser, $cookie)
               C4::Context->userenv->{branch}?1:0);
 	my $branches = GetBranches($limit_ind_branch);    
     my $branch                = $query->param("branch");
-	if ( C4::Context->preference("IndependantBranches") ) {
-    	$branch = C4::Context->userenv->{'branch'};
-	}
 
 if ($op eq "export") {
     binmode(STDOUT,":utf8");
@@ -80,8 +77,8 @@ if ($op eq "export") {
         ($itemtype && C4::Context->preference('item-level_itypes'));
     my $query = $items_filter ?
         "SELECT DISTINCT biblioitems.biblionumber
-         FROM biblioitems,items
-         WHERE biblioitems.biblionumber=items.biblionumber "
+         FROM biblioitems JOIN items
+         USING (biblionumber) WHERE 1"
         :
         "SELECT biblioitems.biblionumber FROM biblioitems WHERE biblionumber >0 ";
                   
@@ -123,6 +120,7 @@ if ($op eq "export") {
         $query .= (C4::Context->preference('item-level_itypes')) ? " AND items.itype = ? " : " AND biblioitems.itemtype = ?";
         push @sql_params, $itemtype;
     }
+    warn "$query, @sql_params";
     my $sth = $dbh->prepare($query);
     $sth->execute(@sql_params);
     
