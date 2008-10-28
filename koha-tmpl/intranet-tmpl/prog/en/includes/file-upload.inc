@@ -14,7 +14,9 @@
         inFileUploadProgressTimer = true;
         $.getJSON("/cgi-bin/koha/tools/upload-file-progress.pl", function(json) {
             if (!fileUploadProgressTimerCanceled) {
-                $("#fileuploadprogress").text(json.progress);
+		var bgproperty = (parseInt(json.progress)*2-300)+"px 0px";
+                $("#fileuploadprogress").css("background-position",bgproperty);
+		$("#fileuploadpercent").text(json.progress);
             }
             inFileUploadProgressTimer = false;
         });
