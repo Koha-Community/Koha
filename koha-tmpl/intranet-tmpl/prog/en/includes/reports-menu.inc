@@ -7,7 +7,7 @@
 	<ul>
 		<li><a href="/cgi-bin/koha/reports/acquisitions_stats.pl">Acquisitions</a></li>
 		<li><a href="/cgi-bin/koha/reports/borrowers_stats.pl">Patrons</a></li>
-		<li><a href="/cgi-bin/koha/reports/catalogue_stats.pl">Catalogue</a></li>
+		<li><a href="/cgi-bin/koha/reports/catalogue_stats.pl">Catalog</a></li>
 		<li><a href="/cgi-bin/koha/reports/issues_stats.pl">Circulation</a></li>
 	</ul>
 
@@ -28,6 +28,6 @@
 	<h5>Other</h5>
 	<ul>
 		<li><a href="/cgi-bin/koha/reports/itemslost.pl">Lost Items</a></li>
-		<li><a href="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">Catalogue by Item Type</a></li>
+		<li><a href="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">Catalog by Item Type</a></li>
 		<li><a href="/cgi-bin/koha/reports/issues_avg_stats.pl">Average loan time</a></li>
 	</ul>
