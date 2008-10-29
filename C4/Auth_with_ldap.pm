@@ -100,10 +100,20 @@ sub checkpw_ldap {
 	}
 
 	my $userldapentry = $search->shift_entry;
-	my $cmpmesg = $db->compare( $userldapentry, attr=>'userpassword', value => $password );
-	if ($cmpmesg->code != 6) {
-		warn "LDAP Auth rejected : invalid password for user '$userid'. " . description($cmpmesg);
-		return 0;
+	if ( $ldap->{auth_by_bind} ) {
+		my $user_ldapname = $userldapentry->dn();
+		my $user_db = Net::LDAP->new( [$prefhost] );
+		$res = $user_db->bind( $user_ldapname, password => $password );
+		if ( $res->code ) {
+			$debug and warn "Bind as user failed ". description( $res );
+			return 0;
+		}
+	} else {
+		my $cmpmesg = $db->compare( $userldapentry, attr=>'userpassword', value => $password );
+		if ($cmpmesg->code != 6) {
+			warn "LDAP Auth rejected : invalid password for user '$userid'. " . description($cmpmesg);
+			return 0;
+		}
 	}
 	unless ($config{update} or $config{replicate}) {
 		return 1;
