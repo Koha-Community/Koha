@@ -527,7 +527,7 @@ SELECT borrowers.*, categories.category_type, categories.description
 FROM borrowers 
 LEFT JOIN categories on borrowers.categorycode=categories.categorycode 
 ";
-    if ( defined $type && ( $type eq 'cardnumber' || $type eq 'firstname'|| $type eq 'userid'|| $type eq 'borrowernumber' ) ){
+    if (defined($type) and ( $type eq 'cardnumber' || $type eq 'firstname'|| $type eq 'userid'|| $type eq 'borrowernumber' ) ){
         $information = uc $information;
         $sth = $dbh->prepare("$select WHERE $type=?");
     } else {
@@ -535,14 +535,12 @@ LEFT JOIN categories on borrowers.categorycode=categories.categorycode
     }
     $sth->execute($information);
     my $data = $sth->fetchrow_hashref;
-    $sth->finish;
     ($data) and return ($data);
 
-    if ($type eq 'cardnumber' || $type eq 'firstname') {    # otherwise, try with firstname
+    if (defined($type) and ($type eq 'cardnumber' || $type eq 'firstname')) {    # otherwise, try with firstname
         $sth = $dbh->prepare("$select WHERE firstname like ?");
         $sth->execute($information);
         $data = $sth->fetchrow_hashref;
-        $sth->finish;
         ($data) and return ($data);
     }
     return undef;        
