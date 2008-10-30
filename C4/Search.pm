@@ -950,19 +950,19 @@ sub buildQuery {
                 # Date of Publication
                 if ( $index eq 'yr' ) {
                     $index .= ",st-numeric";
-                    $indexes_set++;
+#                     $indexes_set++;
 					$stemming = $auto_truncation = $weight_fields = $fuzzy_enabled = $remove_stopwords = 0;
                 }
 
                 # Date of Acquisition
                 elsif ( $index eq 'acqdate' ) {
                     $index .= ",st-date-normalized";
-                    $indexes_set++;
+#                     $indexes_set++;
 					$stemming = $auto_truncation = $weight_fields = $fuzzy_enabled = $remove_stopwords = 0;
                 }
                 # ISBN,ISSN,Standard Number, don't need special treatment
                 elsif ( $index eq 'nb' || $index eq 'ns' ) {
-                    $indexes_set++;
+#                     $indexes_set++;
                     (   
                         $stemming,      $auto_truncation,
                         $weight_fields, $fuzzy_enabled,
@@ -1124,10 +1124,12 @@ sub buildQuery {
 
         # Regular old limits
         else {
-            $limit .= " and " if $limit || $query;
-            $limit      .= "$this_limit";
-            $limit_cgi  .= "&limit=$this_limit";
-            $limit_desc .= " $this_limit";
+            if ($this_limit){
+                $limit .= " and " if $limit || $query;
+                $limit      .= "$this_limit";
+                $limit_cgi  .= "&limit=$this_limit";
+                $limit_desc .= " $this_limit";
+            }      
         }
     }
     if ($group_OR_limits) {
