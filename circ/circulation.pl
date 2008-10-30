@@ -56,7 +56,6 @@ my $query = new CGI;
 my $branch = $query->param('branch');
 if ($branch){
     # update our session so the userenv is updated
-    my $dbh=C4::Context->dbh;
     my $sessionID = $query->cookie("CGISESSID") ;
     my $session = get_session($sessionID);
     $session->param('branch',$branch);
@@ -67,7 +66,6 @@ if ($branch){
 my $printer = $query->param('printer');
 if ($printer){
     # update our session so the userenv is updated
-  my $dbh=C4::Context->dbh;
   my $sessionID = $query->cookie("CGISESSID") ;
   my $session = get_session($sessionID);
   $session->param('branchprinter',$printer);
@@ -94,7 +92,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
 );
 
 my $branches = GetBranches();
-
 my $printers = GetPrinters();
 
 my @failedrenews = $query->param('failedrenew');
@@ -358,10 +355,10 @@ if ($borrowernumber) {
             $getreserv{waiting} = 1;
 #     genarate information displaying only waiting reserves
         $getWaitingReserveInfo{title}        = $getiteminfo->{'title'};
-        $getWaitingReserveInfo{biblionumber}   = $getiteminfo->{'biblionumber'};
-        $getWaitingReserveInfo{itemtype}    = $itemtypeinfo->{'description'};
-        $getWaitingReserveInfo{author}        = $getiteminfo->{'author'};
-        $getWaitingReserveInfo{reservedate}    = format_date( $num_res->{'reservedate'} );
+        $getWaitingReserveInfo{biblionumber} = $getiteminfo->{'biblionumber'};
+        $getWaitingReserveInfo{itemtype}     = $itemtypeinfo->{'description'};
+        $getWaitingReserveInfo{author}       = $getiteminfo->{'author'};
+        $getWaitingReserveInfo{reservedate}  = format_date( $num_res->{'reservedate'} );
         $getWaitingReserveInfo{waitingat}    = GetBranchName( $num_res->{'branchcode'} );
       if($num_res->{'branchcode'} eq $branch){ $getWaitingReserveInfo{waitinghere} = 1; }
         }
@@ -472,14 +469,6 @@ if ($borrower) {
     else {
         @previousissues = sort { $b->{'date_due'} cmp $a->{'date_due'} } @previousissues;
     }
-    my $i = 1;
-    foreach my $book ( @todaysissues ) {
-        $book->{'togglecolor'} = ( ++$i % 2 ) ? 0 : 1 ;
-    }
-    $i = 1;
-    foreach my $book ( @previousissues ) {
-        $book->{'togglecolor'} = ( ++$i % 2 ) ? 0 : 1 ;
-    }
 }
 
 #### ADDED BY JF FOR COUNTS BY ITEMTYPE RULES
@@ -524,7 +513,7 @@ my %labels;
 my $CGIselectborrower;
 if ($borrowerslist) {
     foreach (
-        sort {(lc $a->{'surname'} cmp lc $b->{'surname'} ?lc $a->{'surname'} cmp lc $b->{'surname'}:lc $a->{'firstname'} cmp lc $b->{'firstname'})
+        sort {(lc $a->{'surname'} cmp lc $b->{'surname'} || lc $a->{'firstname'} cmp lc $b->{'firstname'})
         } @$borrowerslist
       )
     {
@@ -629,12 +618,12 @@ foreach $flag ( sort keys %$flags ) {
 my $amountold = $borrower->{flags}->{'CHARGES'}->{'message'} || 0;
 my @temp = split( /\$/, $amountold );
 
-    if ( $borrower->{'category_type'} eq 'C') {
-        my  ( $catcodes, $labels ) =  GetborCatFromCatType( 'A', 'WHERE category_type = ?' );
-        my $cnt = scalar(@$catcodes);
-        $template->param( 'CATCODE_MULTI' => 1) if $cnt > 1;
-        $template->param( 'catcode' =>    $catcodes->[0])  if $cnt == 1;
-    }
+if ( $borrower->{'category_type'} eq 'C') {
+    my  ( $catcodes, $labels ) =  GetborCatFromCatType( 'A', 'WHERE category_type = ?' );
+    my $cnt = scalar(@$catcodes);
+    $template->param( 'CATCODE_MULTI' => 1) if $cnt > 1;
+    $template->param( 'catcode' =>    $catcodes->[0])  if $cnt == 1;
+}
 
 my $CGIorganisations;
 my $member_of_institution;
@@ -658,7 +647,6 @@ if ( C4::Context->preference("memberofinstitution") ) {
 
 $amountold = $temp[1];
 
-
 $template->param(
     issued_itemtypes_count_loop => $issued_itemtypes_loop,
     findborrower                => $findborrower,
@@ -680,7 +668,7 @@ $template->param(
     emailpro          => $borrower->{'emailpro'},
     borrowernotes     => $borrower->{'borrowernotes'},
     city              => $borrower->{'city'},
-    zipcode	      => $borrower->{'zipcode'},
+    zipcode	          => $borrower->{'zipcode'},
     phone             => $borrower->{'phone'} || $borrower->{'mobile'},
     cardnumber        => $borrower->{'cardnumber'},
     amountold         => $amountold,
@@ -693,9 +681,8 @@ $template->param(
     inprocess         => $inprocess,
     memberofinstution => $member_of_institution,
     CGIorganisations  => $CGIorganisations,
-	is_child        => ($borrower->{'category_type'} eq 'C'),
-  circview => 1,
-  
+	is_child          => ($borrower->{'category_type'} eq 'C'),
+    circview => 1,
 );
 
 # set return date if stickyduedate
