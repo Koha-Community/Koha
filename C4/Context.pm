@@ -461,12 +461,19 @@ with this method.
 
 =cut
 
-# FIXME - The preferences aren't likely to change over the lifetime of
-# the script (and things might break if they did change), so perhaps
-# this function should cache the results it finds.
+# FIXME: running this under mod_perl will require a means of
+# flushing the caching mechanism.
+
+my %sysprefs;
+
 sub preference {
     my $self = shift;
     my $var  = shift;                          # The system preference to return
+
+    if (exists $sysprefs{$var}) {
+        return $sysprefs{$var};
+    }
+
     my $dbh  = C4::Context->dbh or return 0;
 
     # Look up systempreferences.variable==$var
@@ -476,8 +483,8 @@ sub preference {
         WHERE    variable=?
         LIMIT    1
 END_SQL
-    my $retval = $dbh->selectrow_array( $sql, {}, $var );
-    return $retval;
+    $sysprefs{$var} = $dbh->selectrow_array( $sql, {}, $var );
+    return $sysprefs{$var};
 }
 
 sub boolean_preference ($) {
@@ -681,9 +688,8 @@ sub dbh
     my $self = shift;
     my $sth;
 
-    if (defined($context->{"dbh"})) {
-        $sth=$context->{"dbh"}->prepare("select 1");
-        return $context->{"dbh"} if (defined($sth->execute));
+    if (defined($context->{"dbh"}) && $context->{"dbh"}->ping()) {
+	return $context->{"dbh"};
     }
 
     # No database handle or it died . Create one.
