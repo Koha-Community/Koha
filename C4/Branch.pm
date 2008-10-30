@@ -32,6 +32,7 @@ BEGIN {
 		&GetBranchName
 		&GetBranch
 		&GetBranches
+		&GetBranchesLoop
 		&GetBranchDetail
 		&get_branchinfos_of
 		&ModBranch
@@ -130,6 +131,21 @@ sub GetBranches {
         $branches{ $branch->{'branchcode'} } = $branch;
     }
     return ( \%branches );
+}
+
+sub GetBranchesLoop ($$) {  # since this is what most pages want anyway
+    my $branch   = shift or return undef;
+    my $onlymine = shift || 0;
+    my $branches = GetBranches($onlymine);
+    my @loop;
+    foreach (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
+        push @loop, {
+            value => $_,
+            selected => ($_ eq $branch) ? 1 : 0, 
+            branchname => $branches->{$_}->{branchname},
+        };
+    }
+    return \@loop;
 }
 
 =head2 GetBranchName
