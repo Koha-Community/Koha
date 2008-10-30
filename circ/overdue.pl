@@ -56,7 +56,8 @@ my $dbh = C4::Context->dbh;
 # download the complete CSV
 if ($op eq 'csv') {
 warn "BRANCH : $branchfilter";
-    my $csv = `../misc/cronjobs/overdue_notices.pl -csv -n -library $branchfilter`;
+    my $lib = $branchfilter ? "-library $branchfilter" :'';
+    my $csv = `../misc/cronjobs/overdue_notices.pl -csv -n $lib`;
     print $input->header(-type => 'application/vnd.sun.xml.calc',
                         -encoding    => 'utf-8',
                         -attachment=>"overdues.csv",
