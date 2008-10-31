@@ -117,25 +117,25 @@ if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
         $newdata{$key} = $input->param($key) if (defined $input->param($key));
         $newdata{$key} =~ s/\"/&quot;/gg unless $key eq 'borrowernotes' or $key eq 'opacnote';
     }
-	my $dateobject = C4::Dates->new();
-	my $syspref = $dateobject->regexp();		# same syspref format for all 3 dates
-	my $iso     = $dateobject->regexp('iso');	# 
-	foreach (qw(dateenrolled dateexpiry dateofbirth)) {
-		my $userdate = $newdata{$_} or next;
-		if ($userdate =~ /$syspref/) {
-			$newdata{$_} = format_date_in_iso($userdate);	# if they match syspref format, then convert to ISO
-		} elsif ($userdate =~ /$iso/) {
-			warn "Date $_ ($userdate) is already in ISO format";
-		} else {
-			($userdate eq '0000-00-00') and warn "Data error: $_ is '0000-00-00'";
-			$template->param( "ERROR_$_" => 1 );	# else ERROR!
-			push(@errors,"ERROR_$_");
-		}
-	}
+    my $dateobject = C4::Dates->new();
+    my $syspref = $dateobject->regexp();		# same syspref format for all 3 dates
+    my $iso     = $dateobject->regexp('iso');	#
+    foreach (qw(dateenrolled dateexpiry dateofbirth)) {
+        my $userdate = $newdata{$_} or next;
+        if ($userdate =~ /$syspref/) {
+            $newdata{$_} = format_date_in_iso($userdate);	# if they match syspref format, then convert to ISO
+        } elsif ($userdate =~ /$iso/) {
+            warn "Date $_ ($userdate) is already in ISO format";
+        } else {
+            ($userdate eq '0000-00-00') and warn "Data error: $_ is '0000-00-00'";
+            $template->param( "ERROR_$_" => 1 );	# else ERROR!
+            push(@errors,"ERROR_$_");
+        }
+    }
   # check permission to modify login info.
     if (ref($borrower_data) && ($borrower_data->{'category_type'} eq 'S') && ! (C4::Auth::haspermission($dbh,$userenv->{'id'},{'staffaccess'=>1})) )  {
-		$NoUpdateLogin =1;
-	}
+        $NoUpdateLogin =1;
+    }
 }
 
 #############test for member being unique #############
@@ -230,7 +230,7 @@ if ($op eq 'save' || $op eq 'insert'){
   }
 }
 
-if ($op eq 'modify' || $op eq 'insert'){
+if ($op eq 'modify' || $op eq 'insert' || $op eq 'save' ){
   unless ($newdata{'dateexpiry'}){
 	my $arg2 = $newdata{'dateenrolled'} || C4::Dates->today('iso');
     $newdata{'dateexpiry'} = GetExpiryDate($newdata{'categorycode'},$arg2);
@@ -321,11 +321,10 @@ if (C4::Context->preference("IndependantBranches")) {
   }
 }
 if ($op eq 'add'){
-	my $arg2 = $newdata{'dateenrolled'} || C4::Dates->today('iso');
-	$data{'dateexpiry'} = GetExpiryDate($newdata{'categorycode'},$arg2);
-	$template->param( updtype => 'I',step_1=>1,step_2=>1,step_3=>1, step_4 => 1);
-	
-} 
+    my $arg2 = $newdata{'dateenrolled'} || C4::Dates->today('iso');
+    $data{'dateexpiry'} = GetExpiryDate($newdata{'categorycode'},$arg2);
+    $template->param( updtype => 'I',step_1=>1,step_2=>1,step_3=>1, step_4 => 1);
+}
 if ($op eq "modify")  {
   $template->param( updtype => 'M',modify => 1 );
   $template->param( step_1=>1,step_2=>1,step_3=>1, step_4 => 1) unless $step;
