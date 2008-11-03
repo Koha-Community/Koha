@@ -252,8 +252,10 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 
 	<input type="text" name="barcode" id="barcode" class="barcode focus" size="14" /> <input type="submit" value="Check Out" />
 
-    <div class="date-select">
-        <div class="hint">Specify Due Date:</div><input type="text" size="10" id="duedatespec" name="duedatespec" value="<!-- TMPL_VAR NAME="duedatespec" -->" />
+    <!-- TMPL_IF NAME="SpecifyDueDate" --><div class="date-select">
+        <div class="hint">Specify Due Date:</div>
+		<!-- TMPL_IF NAME="stickyduedate" --><input type="text" size="10" id="duedatespec" name="duedatespec" value="<!-- TMPL_VAR NAME="duedatespec" -->" /><!-- TMPL_ELSE --><input type="text" size="10" id="duedatespec" name="duedatespec" value="" />
+<!-- /TMPL_IF -->
 		<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar"  border="0" id="CalendarDueDate" style="cursor: pointer;" />
              <script language="JavaScript" type="text/javascript">
 			 //<![CDATA[
@@ -285,11 +287,12 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 
           <label for="stickyduedate"> Remember for Session:</label>
 <!-- TMPL_IF NAME="stickyduedate" -->
-<input type="checkbox" id="stickyduedate" onclick="this.form.barcode.focus();" name="stickyduedate" checked="1" />
+<input type="checkbox" id="stickyduedate" onclick="this.form.barcode.focus();" name="stickyduedate" checked="checked" />
 <!-- TMPL_ELSE -->
 <input type="checkbox" id="stickyduedate" onclick="this.form.barcode.focus();" name="stickyduedate" />
 <!-- /TMPL_IF -->
           <input type="button" class="action" id="cleardate" value="Clear" name="cleardate" onclick="this.checked = false; this.form.duedatespec.value = ''; this.form.stickyduedate.checked = false; this.form.barcode.focus(); return false;" />
+</div><!-- /TMPL_IF -->
           <input type="hidden" name="borrowernumber" id="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
           <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
           <input type="hidden" name="printer" value="<!-- TMPL_VAR NAME="printer" -->" />
@@ -299,7 +302,6 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
                         <input type="hidden" name="charges" value="yes" />
                         <input type="hidden" name="oldamount" value="<!-- TMPL_VAR NAME="amountold" -->" />
                 <!-- /TMPL_IF -->
-</div>
 </fieldset>
 </form></div><!-- /TMPL_UNLESS --><!-- /unless noissues -->
 
