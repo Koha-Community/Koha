@@ -149,7 +149,45 @@
 		<th>Object</th>
 		<th>Info</th>
 	</tr>
-	
+	<tr>
+	    <td>
+            <input type="submit" value="Apply Filter" />
+            <input type="hidden" name="do_it" value="1" />
+	    </td>
+	    <td>
+	        <input type="text" name="user" value="<!-- TMPL_VAR NAME="user"-->" />
+	    </td>
+	    <td>
+	        <select name="module">
+			    <option value="" selected="selected">All</option>
+			    <option value ="CATALOGUING">Catalog</option>
+				<option value ="MEMBERS">Members</option>
+				<option value ="ACQUISITION">Acquisitions</option>
+				<option value ="SERIAL">Serial</option>
+				<option value="CIRCULATION">Circulation</option>
+				<option value="LETTER">Letter</option>
+				<option value="FINES">Fines</option>
+				<option value="SYSTEMPREFERENCE">System Prefs</option>
+			</select>
+	    </td>
+	    <td>
+	        <select name="action">
+    			<option value ="">All</option>
+				<option value ="add">Add</option>
+				<option value ="del">Delete</option>
+				<option value ="mod">Modify</option>
+				<option value="issue">Issue</option>
+				<option value="return">Return</option>
+			</select>
+	    </td>
+	    <td>
+	        <input type="text" name="object" value="<!-- TMPL_VAR NAME="object"-->" />
+	    </td>
+	    <td>
+	        <input type="text" name="info" value="<!-- TMPL_VAR NAME="info"-->" />
+	    </td>
+	</tr>
+>>>>>>> a83f798... Spelling corrections: organisation->organization, authorise->authorize, catalogue->catalog:koha-tmpl/intranet-tmpl/prog/en/modules/tools/viewlog.tmpl
 	    <!-- TMPL_LOOP NAME="looprow" -->
 					<tr>
 						<td><!-- TMPL_VAR NAME="timestamp" --></td>
