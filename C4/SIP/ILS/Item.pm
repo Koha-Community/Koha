@@ -234,10 +234,10 @@ sub available {
 	return 0;
 }
 
-sub barcode_to_borrowernumber ($) {
+sub _barcode_to_borrowernumber ($) {
     my $known = shift;
     (defined($known)) or return undef;
-    my $member = GetMember($known, 'cardnumber') or return undef; # borrowernumber is default type for GetMember lookup
+    my $member = GetMember($known,'cardnumber') or return undef;
     return $member->{borrowernumber};
 }
 sub barcode_is_borrowernumber ($$$) {    # because hold_queue only has borrowernumber...
@@ -245,7 +245,7 @@ sub barcode_is_borrowernumber ($$$) {    # because hold_queue only has borrowern
     my $barcode = shift;
     my $number  = shift or return undef;    # can't be zero
     (defined($barcode)) or return undef;    # might be 0 or 000 or 000000
-    my $converted = barcode_to_borrowernumber($barcode) or return undef;
+    my $converted = _barcode_to_borrowernumber($barcode) or return undef;
     return ($number eq $converted); # even though both *should* be numbers, eq is safer.
 }
 1;
