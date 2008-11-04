@@ -138,7 +138,7 @@ my $advanced_search_types = C4::Context->preference("AdvancedSearchTypes");
 if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {
 	foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
     my %row =(  number=>$cnt++,
-				ccl => $itype_or_itemtype,
+		ccl => $itype_or_itemtype,
                 code => $thisitemtype,
                 selected => $selected,
                 description => $itemtypes->{$thisitemtype}->{'description'},
@@ -153,8 +153,8 @@ if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {
     my $advsearchtypes = GetAuthorisedValues($advanced_search_types);
 	for my $thisitemtype (@$advsearchtypes) {
 		my %row =(
-				number=>$cnt++,
-				ccl => $advanced_search_types,
+		number=>$cnt++,
+		ccl => $advanced_search_types,
                 code => $thisitemtype->{authorised_value},
                 selected => $selected,
                 description => $thisitemtype->{'lib'},
