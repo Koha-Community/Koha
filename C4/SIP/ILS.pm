@@ -138,8 +138,9 @@ sub checkout {
 		$circ->screen_msg("Patron Blocked");
     } elsif (!$item) {
 		$circ->screen_msg("Invalid Item");
-    } elsif ($item->hold_queue && @{$item->hold_queue} && ! $item->barcode_is_borrowernumber($patron_id, $item->hold_queue->[0]->{borrowernumber})) {
-		$circ->screen_msg("Item on Hold for Another User");
+    # holds checked inside do_checkout
+    # } elsif ($item->hold_queue && @{$item->hold_queue} && ! $item->barcode_is_borrowernumber($patron_id, $item->hold_queue->[0]->{borrowernumber})) {
+	#	$circ->screen_msg("Item on Hold for Another User");
     } elsif ($item->{patron} && ($item->{patron} ne $patron_id)) {
 	# I can't deal with this right now
 		$circ->screen_msg("Item checked out to another patron");

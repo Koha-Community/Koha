@@ -65,6 +65,7 @@ sub new {
 		     ptype => $kp->{categorycode}, # 'A'dult.  Whatever.
 		 birthdate => $kp->{dateofbirth}, ##$dob,
 		branchcode => $kp->{branchcode},
+	borrowernumber => $kp->{borrowernumber},
 		   address => $adr,
 		home_phone => $kp->{phone},
 		email_addr => $kp->{email},
@@ -99,7 +100,7 @@ sub new {
 		}
 	}
 
-	# FIXME: populate items fine_items recall_items
+	# FIXME: populate fine_items recall_items
 #   $ilspatron{hold_items}    = (GetReservesFromBorrowernumber($kp->{borrowernumber},'F'));
 	$ilspatron{unavail_holds} = [(GetReservesFromBorrowernumber($kp->{borrowernumber}))];
 	my ($count,$issues) = GetPendingIssues($kp->{borrowernumber});
