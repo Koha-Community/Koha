@@ -46,12 +46,12 @@ fieldset.rows .itemblock fieldset.action { padding:.5em; }
   <div id="outeritemblock">
 	<div class="itemblock">
 	<ol>
-	<li> <label for="volinf">Volume/Copy (for serials): </label>
-        <input type="text" size="20" name="volinf" id="volinf" /></li>
-    <li> <label for="barcode">Item barcode: </label>
-        <input type="text" size="20" name="barcode" id="barcode" value="<!-- TMPL_VAR NAME="barcode" -->" /></li>
-    <li> <label for="homebranch">Home library: </label>
-            <select name="homebranch" id="homebranch">            <!-- TMPL_LOOP name="branchloop" -->
+	<li> <label for="volinf1">Volume/Copy (for serials): </label>
+        <input type="text" size="20" name="volinf" id="volinf1" /></li>
+    <li> <label for="barcode1">Item barcode: </label>
+        <input type="text" size="20" name="barcode" id="barcode1" value="<!-- TMPL_VAR NAME="barcode" -->" /></li>
+    <li> <label for="homebranch1">Home library: </label>
+            <select name="homebranch" id="homebranch1">            <!-- TMPL_LOOP name="branchloop" -->
                 <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option>
                 <!-- TMPL_ELSE -->
                 <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="description" --></option>
@@ -59,8 +59,8 @@ fieldset.rows .itemblock fieldset.action { padding:.5em; }
             <!-- /TMPL_LOOP -->
             </select></li>
     <!-- TMPL_IF NAME="locationloop" -->
-		<li> <label for="location">Shelf location: </label>
-            <select name="location" id="location">            <!-- TMPL_LOOP name="locationloop" -->
+		<li> <label for="location1">Shelf location: </label>
+            <select name="location" id="location1"><!-- TMPL_LOOP name="locationloop" -->
                 <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option>
                 <!-- TMPL_ELSE -->
                 <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="description" --></option>
@@ -69,8 +69,8 @@ fieldset.rows .itemblock fieldset.action { padding:.5em; }
             </select></li>
    <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="itype" -->
-    <li> <label for="itemtype">Item type: </label>
-            <select name="itemtype" id="itemtype"><!-- TMPL_LOOP name="itemtypeloop" -->
+    <li> <label for="itemtype1">Item type: </label>
+            <select name="itemtype" id="itemtype1"><!-- TMPL_LOOP name="itemtypeloop" -->
                 <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option>
                 <!-- TMPL_ELSE -->
                 <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="description" --></option>
@@ -79,8 +79,8 @@ fieldset.rows .itemblock fieldset.action { padding:.5em; }
             </select></li>
    <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="ccodeloop" -->
-    <li> <label for="ccode">Collection: </label>
-            <select name="ccode" id="ccode">            <!-- TMPL_LOOP name="ccodeloop" -->
+    <li> <label for="ccode1">Collection: </label>
+            <select name="ccode" id="ccode1">            <!-- TMPL_LOOP name="ccodeloop" -->
                 <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option>
                 <!-- TMPL_ELSE -->
                 <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="description" --></option>
