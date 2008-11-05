@@ -66,6 +66,7 @@ Biblio::EndnoteStyle
 CGI
 CGI::Carp
 CGI::Session
+CGI::Session::Serialize::yaml
 Class::Factory::Util
 Class::Accessor
 Compress::Zlib
