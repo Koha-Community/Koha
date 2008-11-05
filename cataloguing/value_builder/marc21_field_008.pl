@@ -111,6 +111,10 @@ sub plugin {
 	my $f38 = substr($result,38,1);
 	my $f39 = substr($result,39,1);
 
+	# bug 2563
+	$f710  = "" if ($f710  =~ /^\s*$/);
+	$f1114 = "" if ($f1114 =~ /^\s*$/);
+
 if ((!$f1) ||($f1 =~ m/ /)){
 	$f1=$dateentered;
 }

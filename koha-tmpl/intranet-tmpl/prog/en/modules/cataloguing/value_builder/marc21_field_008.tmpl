@@ -607,15 +607,33 @@
 </table>
 </form>
 <script>
+
+// Pad the string with spaces so that it is 4 characters long.
+// Also, truncate strings that are longer than 4 characters.
+function pad4(s) {
+	var pad = "";
+	if (s.length < 4) {
+		var padLength = 4 - s.length;
+		for (var i = 0; i < 4 - s.length; i++) {
+			pad += " ";
+		}
+		s += pad;
+	} else {
+		s = s.substring(0, 4);
+	}
+	return s;
+}
+
 function report() {
             var doc   = opener.document; 
             var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
-        
             field.value = 
 			document.f_pop.f1.value+
 			document.f_pop.f6.value+
-			document.f_pop.f710.value+
-			document.f_pop.f1114.value+
+			// bug 2563 {
+			( document.f_pop.f710.value.match(/^\s*$/)  ? "    " : pad4(document.f_pop.f710.value)  )+
+			( document.f_pop.f1114.value.match(/^\s*$/) ? "    " : pad4(document.f_pop.f1114.value) )+
+			// }
 			document.f_pop.f1517.value+
 			document.f_pop.f1821.value+
 			document.f_pop.f22.value+
