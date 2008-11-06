@@ -234,16 +234,16 @@ sub update_channel_category {
 }
 
 sub add_opac_new {
-    my ($title, $new, $lang, $expirationdate, $number) = @_;
+    my ($title, $new, $lang, $expirationdate, $timestamp, $number) = @_;
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("INSERT INTO opac_news (title, new, lang, expirationdate, number) VALUES (?,?,?,?,?)");
-    $sth->execute($title, $new, $lang, $expirationdate, $number);
+    my $sth = $dbh->prepare("INSERT INTO opac_news (title, new, lang, expirationdate, timestamp, number) VALUES (?,?,?,?,?,?)");
+    $sth->execute($title, $new, $lang, $expirationdate, $timestamp, $number);
     $sth->finish;
     return 1;
 }
 
 sub upd_opac_new {
-    my ($idnew, $title, $new, $lang, $expirationdate, $number) = @_;
+    my ($idnew, $title, $new, $lang, $expirationdate, $timestamp,$number) = @_;
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("
         UPDATE opac_news SET 
@@ -251,10 +251,11 @@ sub upd_opac_new {
             new = ?,
             lang = ?,
             expirationdate = ?,
+            timestamp = ?,
             number = ?
         WHERE idnew = ?
     ");
-    $sth->execute($title, $new, $lang, $expirationdate,$number,$idnew);
+    $sth->execute($title, $new, $lang, $expirationdate, $timestamp,$number,$idnew);
     $sth->finish;
     return 1;
 }
@@ -280,6 +281,7 @@ sub get_opac_new {
     my $data = $sth->fetchrow_hashref;
     $data->{$data->{'lang'}} = 1;
     $data->{expirationdate} = format_date($data->{expirationdate});
+    $data->{timestamp}      = format_date($data->{timestamp});
     $sth->finish;
     return $data;
 }
@@ -330,6 +332,7 @@ sub GetNewsToDisplay {
         OR    expirationdate IS NULL
         OR    expirationdate = '00-00-0000'
       )
+      AND   `timestamp` < CURRENT_DATE()
       AND   lang = ?
       ORDER BY number
     ";				# expirationdate field is NOT in ISO format?

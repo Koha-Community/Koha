@@ -65,13 +65,27 @@ Edit News Item<!-- TMPL_ELSE -->Add News Item<!-- /TMPL_IF --><!-- TMPL_ELSE -->
                 <input id="title" size="30" type="text" name="title" value="<!-- TMPL_VAR NAME="title" -->" />
             </li>
             <li>
-                <label for="expirationdate">Expiration date</label>
-                <input id="expirationdate" type="text" name="expirationdate" size="15" value="<!-- TMPL_VAR NAME="expirationdate" -->" />
-				<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="openCalendar" style="cursor: pointer;" />
+                <label for="timestamp">Publication date</label>
+                <input id="timestamp" type="text" name="timestamp" size="15" value="<!-- TMPL_VAR NAME="timestamp" -->" />
+                <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="timestampButton" style="cursor: pointer;" />
                 <script type="text/javascript">
                     Calendar.setup(
                     {
-						button : "openCalendar",
+                        button : "timestampButton",
+                        inputField : "timestamp",
+                        ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+                    }
+                    );
+                </script>
+            </li>
+            <li>
+                <label for="expirationdate">Expiration date</label>
+                <input id="expirationdate" type="text" name="expirationdate" size="15" value="<!-- TMPL_VAR NAME="expirationdate" -->" />
+                <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="openCalendar" style="cursor: pointer;" />
+                <script type="text/javascript">
+                    Calendar.setup(
+                    {
+                        button : "openCalendar",
                         inputField : "expirationdate",
                         ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
                     }
