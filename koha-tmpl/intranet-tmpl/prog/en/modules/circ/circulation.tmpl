@@ -41,6 +41,13 @@ $.tablesorter.addParser({
             }
         } ).attr( 'checked', false );
         <!-- /TMPL_IF -->
+		$("td").click(function(e){
+			if(e.target.tagName.toLowerCase() == 'td'){
+            $(this).find("input:checkbox").each( function() {
+                $(this).attr('checked', !$(this).attr('checked'));
+            });
+			}
+		});
 	 });
 //]]>
 </script>

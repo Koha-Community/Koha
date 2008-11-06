@@ -51,6 +51,18 @@ $(document).ready(function() {
         }
     } ).attr( 'checked', false );
     <!-- /TMPL_IF -->
+	$("td").click(function(e){
+		if(e.target.tagName.toLowerCase() == 'td'){
+           $(this).find("input:checkbox").each( function() {
+               $(this).attr('checked', !$(this).attr('checked'));
+			   if($(this).attr('checked')){
+			   	$(this).parent().siblings().find("input:checkbox").each(function(){
+	               if($(this).attr('checked')){ $(this).attr('checked',''); }
+	           });
+			   }
+           });
+		}
+	});
  });
 function uncheck_sibling(me){
 nodename=me.getAttribute("name");
