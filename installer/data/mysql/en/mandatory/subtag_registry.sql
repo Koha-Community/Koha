@@ -202,8 +202,8 @@ VALUES( 'fr', 'language', 'fr', 'Fran&ccedil;ais');
 INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'lo', 'language', 'Lao','2005-10-16' );
 
---INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
---VALUES( 'lo','nor'); ???
+-- INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+-- VALUES( 'lo','nor'); ???
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'lo', 'language', 'lo', '&#3742;&#3762;&#3754;&#3762;&#3749;&#3762;&#3751;');
