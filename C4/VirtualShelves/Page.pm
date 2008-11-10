@@ -177,6 +177,7 @@ SWITCH: {
 				#$this_item->{imageurl} = $imgdir."/".$itemtypes->{ $this_item->{itemtype}  }->{'imageurl'};
 				#$this_item->{'description'} = $itemtypes->{ $this_item->{itemtype} }->{'description'};
 				$this_item->{'dateadded'} = format_date($this_item->{'dateadded'});
+                $this_item->{'imageurl'} = getitemtypeinfo($this_item->{'itemtype'})->{'imageurl'};
 			}
 			push @paramsloop, {display => 'privateshelves'} if $category == 1;
 			$showadd = 1;
