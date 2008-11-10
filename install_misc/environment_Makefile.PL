@@ -13,7 +13,7 @@ export KOHA_USER='koha'
 export KOHA_GROUP='koha'
 
 # default root to install config files
-#export INSTALL_BASE=/etc/koha
+export DESTDIR=$HOME
 
 # from now, commented export directives are alternatives
 # uncomment one of them to choose it
