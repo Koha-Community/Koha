@@ -115,8 +115,10 @@ if ($cardnumber) {
     if ($expiry_date and $expiry_date ne '0000-00-00' and
             Date_to_Days(split /-/,$date) > Date_to_Days(split /-/,$expiry_date)) {
 		$messages = $expiry = 1;
+    }else{
+        $expiry = 0;
     }
-     
+
 
     # check if the borrower make the reserv in a different branch
     if ( $borrowerinfo->{'branchcode'} ne C4::Context->userenv->{'branch'} ) {
