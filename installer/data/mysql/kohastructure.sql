@@ -944,6 +944,7 @@ CREATE TABLE `ethnicity` (
 -- Table structure for table `hold_fill_targets`
 --
 
+DROP TABLE IF EXISTS `hold_fill_targets`;
 CREATE TABLE hold_fill_targets (
   `borrowernumber` int(11) NOT NULL,
   `biblionumber` int(11) NOT NULL,
