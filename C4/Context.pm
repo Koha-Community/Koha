@@ -494,7 +494,7 @@ sub boolean_preference ($) {
     return defined($it)? C4::Boolean::true_p($it): undef;
 }
 
-=head3 clear_syspref_cache
+=item clear_syspref_cache
 
   C4::Context->clear_syspref_cache();
 
