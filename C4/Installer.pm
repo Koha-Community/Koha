@@ -517,6 +517,7 @@ sub set_version_syspref {
         my $finish=$self->{'dbh'}->prepare("INSERT into systempreferences (variable,value,explanation) values ('Version',?,'The Koha database version. WARNING: Do not change this value manually, it is maintained by the webinstaller')");
         $finish->execute($kohaversion);
     }
+    C4::Context->clear_syspref_cache();
 }
 
 =head2 load_sql

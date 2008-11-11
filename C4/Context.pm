@@ -494,6 +494,20 @@ sub boolean_preference ($) {
     return defined($it)? C4::Boolean::true_p($it): undef;
 }
 
+=head3 clear_syspref_cache
+
+  C4::Context->clear_syspref_cache();
+
+  cleans the internal cache of sysprefs. Please call this method if
+  you update the systempreferences table. Otherwise, your new changes
+  will not be seen by this process.
+
+=cut
+
+sub clear_syspref_cache {
+    %sysprefs = ();
+}
+
 # AUTOLOAD
 # This implements C4::Config->foo, and simply returns
 # C4::Context->config("foo"), as described in the documentation for
