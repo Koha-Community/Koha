@@ -2,7 +2,7 @@
 <style type="text/css">#custom-doc { width:46.23em;*width:45.04em;min-width:610px; margin:auto;margin-top: .4em; text-align:left; }</style>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.pack.js"></script>
 <script type="text/javascript">
-//<![CDATA[ 
+//<![CDATA[
 $(document).ready(function(){
     $("#CheckAll").click(function(){
 		$(".checkboxed").checkCheckboxes();
@@ -16,7 +16,7 @@ $(document).ready(function(){
 function add_item(itemnum,batch_id,type_id){
  var getstr='';
  if (itemnum == 'checked') {
-    itms= new Array;        
+    itms= new Array;
     if(document.resultform.i_itemnumber.length > 0) {
         for (var i=0; i < document.resultform.i_itemnumber.length; i++) {
             if (document.resultform.i_itemnumber[i].checked) {
@@ -29,8 +29,8 @@ function add_item(itemnum,batch_id,type_id){
     }
   } else {
 		getstr = "itemnumber="+itemnum;
-} 
- 	var myurl = "label-manager.pl?op=add&batch_id="+batch_id+
+}
+	var myurl = "label-manager.pl?op=add&batch_id="+batch_id+
 									// "&type="+type_id+	// The template variable NAME="TYPE" is RESERVED ('opac' or 'intranet').
 									"&"+getstr;
 	window.opener.location.href = myurl;
@@ -47,23 +47,27 @@ function add_item3(i_itemnumber){
 <div id="custom-doc" class="yui-t7">
    <div id="bd">
 <h1>Search results</h1>
+
+
 	<div class="results">
 		<!-- TMPL_IF EXPR="displayprev || displaynext" --><p>
 			<!-- TMPL_IF NAME="displayprev" -->
-				<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">&lt;&lt;</a>
+					<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;ccl_query=<!-- TMPL_VAR NAME="ccl_query" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">&lt;&lt;</a>
 			<!-- /TMPL_IF -->
+
 			<!-- TMPL_LOOP NAME="numbers" -->
 				<!-- TMPL_IF NAME="highlight" -->
 					<span class="current"><!-- TMPL_VAR NAME="number" --></span>
 				<!-- TMPL_ELSE -->
-					<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->"><!-- TMPL_VAR NAME="number" --></a>
+					<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;ccl_query=<!-- TMPL_VAR NAME="ccl_query" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->"><!-- TMPL_VAR NAME="number" --></a>
 				<!-- /TMPL_IF -->
 			<!-- /TMPL_LOOP -->
+
 			<!-- TMPL_IF NAME="displaynext" -->
-				<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">&gt;&gt;</a>
+					<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;ccl_query=<!-- TMPL_VAR NAME="ccl_query" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">&gt;&gt;</a>
 				<!-- /TMPL_IF -->
 		</p><!-- /TMPL_IF -->
-		<p>
+
 			<!-- TMPL_IF name="result" -->
 			<strong>Results <!-- TMPL_VAR name="from" --> through <!-- TMPL_VAR name="to" --> <!-- TMPL_IF NAME="total" --> of <!-- TMPL_VAR name="total" --><!-- /TMPL_IF --></strong>
 			<!-- TMPL_ELSE -->
@@ -71,8 +75,13 @@ function add_item3(i_itemnumber){
 			<!-- /TMPL_IF -->
 		</p>
 	</div>
+
+
 <div id="breadcrumbs"><a href="/cgi-bin/koha/labels/label-item-search.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->">Search for Items for Batch <!-- TMPL_VAR NAME="batch_id" --></a> &rsaquo; Search results</div>
 <form name="resultform" class="checkboxed"><div style="float: right; margin-top: .5em;"><input type="submit" class="icon addchecked" value="Add checked" onclick="add_item('checked',<!-- TMPL_VAR NAME="batch_id" -->,'<!-- TMPL_VAR NAME="type" -->'); return false" /> <input type="button" class="close" value="Done" /></div><div style="line-height: 2em; margin-left: .7em;"><a id="CheckAll" href="/cgi-bin/koha/labels/label-item-search.pl">Select All</a></span><span class="clearall"><a id="CheckNone" href="/cgi-bin/koha/labels/label-item-search.pl">Clear All</a></div>
+
+<input type="hidden" name="ccl_query" value="<!-- TMPL_VAR name="ccl_query" -->" />
+
 
 	<!-- TMPL_LOOP name="result" -->
 	<table width="610 pixels" frame="border" border="2" style="float: left; margin: .5em 0;">
@@ -99,7 +108,7 @@ function add_item3(i_itemnumber){
 					<!-- TMPL_IF name="i_itemcallnumber" --><td align="center"><!-- TMPL_VAR name="i_itemcallnumber" --><br /></td><!-- /TMPL_IF -->
 					<!-- TMPL_IF name="i_dateaccessioned" --><td align="center"><!-- TMPL_VAR name="i_dateaccessioned" --><br /></td><!-- /TMPL_IF -->
 					<!-- TMPL_IF name="i_barcode" --><td align="center"><!-- TMPL_VAR name="i_barcode" --></td><!-- /TMPL_IF -->
-					<!-- TMPL_IF name="i_itemnumber2" --><td align="center"> 
+					<!-- TMPL_IF name="i_itemnumber2" --><td align="center">
 					<a onclick="add_item('<!-- TMPL_VAR NAME="i_itemnumber2" -->',<!-- TMPL_VAR NAME="batch_id" -->, '<!-- TMPL_VAR NAME="type" -->'); return false" href="/cgi-bin/koha/barcodes/label-manager.pl?itemnumber=<!-- TMPL_VAR NAME="i_itemnumber2" -->&amp;batch_id=<!-- TMPL_VAR name="batch_id" -->&amp;op=add">Add</a></td>
 		                        <!-- /TMPL_IF -->
 <!-- /NEW -->
@@ -108,22 +117,27 @@ function add_item3(i_itemnumber){
 	 </table>
 	<!-- /TMPL_LOOP -->
 </form>
+
 	<div class="results">
-		<p>
+		<!-- TMPL_IF EXPR="displayprev || displaynext" --><p>
 			<!-- TMPL_IF NAME="displayprev" -->
-			<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search>&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">&lt;&lt;</a>
+					<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;ccl_query=<!-- TMPL_VAR NAME="ccl_query" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">&lt;&lt;</a>
 			<!-- /TMPL_IF -->
+
 			<!-- TMPL_LOOP NAME="numbers" -->
 				<!-- TMPL_IF NAME="highlight" -->
-				<span class="current"><!-- TMPL_VAR NAME="number" --></span>
+					<span class="current"><!-- TMPL_VAR NAME="number" --></span>
 				<!-- TMPL_ELSE -->
-				<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME=startfrom -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->"><!-- TMPL_VAR NAME="number" --></a>
+					<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;ccl_query=<!-- TMPL_VAR NAME="ccl_query" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->"><!-- TMPL_VAR NAME="number" --></a>
 				<!-- /TMPL_IF -->
 			<!-- /TMPL_LOOP -->
+
 			<!-- TMPL_IF NAME="displaynext" -->
-			<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;<!-- TMPL_LOOP NAME=searchdata --><!-- TMPL_VAR NAME="term" -->=<!-- TMPL_VAR name="val" ESCAPE=URL -->&amp;<!-- /TMPL_LOOP -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">&gt;&gt;</a>
+					<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;ccl_query=<!-- TMPL_VAR NAME="ccl_query" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">&gt;&gt;</a>
 				<!-- /TMPL_IF -->
-		</p>
+		</p><!-- /TMPL_IF -->
 	</div>
+
+
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
