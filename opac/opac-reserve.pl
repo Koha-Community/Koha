@@ -118,108 +118,27 @@ foreach my $branch ( keys %$branches ) {
 my $CGIbranchloop = \@CGIbranchlooparray;
 $template->param( CGIbranch => $CGIbranchloop );
 
-#### THIS IS A BIT OF A HACK BECAUSE THE BIBLIOITEMS DATA IS A LITTLE MESSED UP!
-# get the itemtype data....
 my @items = GetItemsInfo($biblionumber);
-#######################################################
-# old version, add so that old templates still work
-my %types_old;
-foreach my $itm (@items) {
-    my $ity = $itm->{'itemtype'};
-    unless ( $types_old{$ity} ) {
-        $types_old{$ity}->{'itemtype'} = $ity;
-        $types_old{$ity}->{'branchinfo'}->{ $itm->{'branchcode'} } = 1;
-        $types_old{$ity}->{'description'} = $itm->{'description'};
-    }
-    else {
-        $types_old{$ity}->{'branchinfo'}->{ $itm->{'branchcode'} }++;
-    }
-}
 
-foreach my $type ( values %types_old ) {
-    my $copies = "";
-    foreach my $bc ( keys %{ $type->{'branchinfo'} } ) {
-        $copies .=
-            $branches->{$bc}->{'branchname'} . "("
-          . $type->{'branchinfo'}->{$bc} . ")";
-    }
-    $type->{'copies'} = $copies;
-}
+# an item was previously required to have an itemtype in order to be reserved.
+# this behavior removed to fix bug 1891 .
+# my @items = grep { (C4::Context->preference('item-level_itypes') ? $_->{'itype'} : $_->{'itemtype'} ) } @all_items ;
 
-my @types_old = values %types_old;
+$template->param( itemcount => scalar(@items) );
 
-# end old version
-################################
-
-my @temp;
-foreach my $itm (@items) {
-    push @temp, $itm if $itm->{'itemtype'};
-}
-@items = @temp;
-my $itemcount = @items;
-$template->param( itemcount => $itemcount );
-
-my %types;
-my %itemtypes;
-my @duedates;
-#die @items;
 my %itemhash;
 my $forloan;
 foreach my $itm (@items) {
-    push @duedates, { date_due => format_date( $itm->{'date_due'} ) }
-      if defined $itm->{'date_due'};
-    $itm->{ $itm->{'publictype'} } = 1;
 	$debug and warn $itm->{'notforloan'};
-    my $fee = GetReserveFee( undef, $borrowernumber, $itm->{'biblionumber'},
-        'a', ( $itm->{'biblioitemnumber'} ) );
-    $fee = sprintf "%.02f", $fee;
-    $itm->{'reservefee'} = $fee;
-    my $pty = $itm->{'publictype'};
-    $itemtypes{ $itm->{'itemtype'} } = $itm;
-    unless ( $types{$pty} ) {
-        $types{$pty}->{'count'} = 1;
-        $types{$pty}->{ $itm->{'itemtype'} } = 1;
-        push @{ $types{$pty}->{'items'} }, $itm;
-    }
-    else {
-        unless ( $types{$pty}->{ $itm->{'itemtype'} } ) {
-            $types{$pty}->{'count'}++;
-            $types{$pty}->{ $itm->{'itemtype'} } = 1;
-            push @{ $types{$pty}->{'items'} }, $itm;
-        }
-    }
+    my $fee = GetReserveFee( undef, $borrowernumber, $itm->{'biblionumber'}, 'a', ( $itm->{'biblioitemnumber'} ) );
+    $itm->{'reservefee'} = sprintf "%.02f", $fee;
+    # pass itype to itemtype for display purposes.  
+    $itm->{'itemtype'} = $itm->{'itype'} if(C4::Context->preference('item-level_itypes')); 	
 	$itemhash{$itm->{'itemnumber'}}=$itm;
-	if (!$itm->{'notforloan'} && !($itm->{'itemnotforloan'} > 0)){
+    if (!$itm->{'notforloan'} && !($itm->{'itemnotforloan'} > 0)){
 		$forloan=1;
 	}
 }
-
-$template->param( ITEMS => \@duedates );
-
-my $width = keys %types;
-my @publictypes = sort { $b->{'count'} <=> $a->{'count'} } values %types;
-my $typecount;
-foreach my $pt (@publictypes) {
-    $typecount += $pt->{'count'};
-}
-$template->param( onlyone => 1 ) if $typecount == 1;
-
-my @typerows;
-for ( my $rownum = 0 ; $rownum < $publictypes[0]->{'count'} ; $rownum++ ) {
-    my @row;
-    foreach my $pty (@publictypes) {
-        my @items = @{ $pty->{'items'} };
-        push @row, $items[$rownum] if defined $items[$rownum];
-    }
-    my $last = @row;
-    $row[ $last - 1 ]->{'last'} = 1 if $last == $width;
-    my $fill = ( $width - $last ) * 2;
-    $fill-- if $fill;
-    push @typerows, { ROW => \@row, fill => $fill };
-}
-$template->param( TYPE_ROWS => \@typerows );
-$width = 2 * $width - 1;
-$template->param( totalwidth => 2 * $width - 1, );
 
 if ( $query->param('place_reserve') ) {
     my @bibitems=$query->param('biblioitem');
@@ -306,7 +225,6 @@ else {
         }
     }
     unless ($noreserves) {
-        $template->param( TYPES             => \@types_old );
         $template->param( select_item_types => 1 );
     }
 }
