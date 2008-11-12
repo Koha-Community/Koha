@@ -534,6 +534,9 @@ for (my $i=0;$i<@servers;$i++) {
             } 
             exit;
         }
+
+
+
         if ($hits) {
             $template->param(total => $hits);
             my $limit_cgi_not_availablity = $limit_cgi;
@@ -580,6 +583,9 @@ for (my $i=0;$i<@servers;$i++) {
                 }
                         
             }
+
+
+
             # now, show twenty pages, with the current one smack in the middle
             else {
                 for (my $i=$current_page_number; $i<=($current_page_number + 20 );$i++) {
@@ -597,10 +603,20 @@ for (my $i=0;$i<@servers;$i++) {
                                 previous_page_offset => $previous_page_offset) unless $pages < 2;
             $template->param(   next_page_offset => $next_page_offset) unless $pages eq $current_page_number;
         }
+
+
+
+
+
         # no hits
         else {
             $template->param(searchdesc => 1,query_desc => $query_desc,limit_desc => $limit_desc);
         }
+
+
+
+
+
     } # end of the if local
 
     # asynchronously search the authority server
