@@ -6,6 +6,7 @@
 <!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.pack.js"></script>
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
 $.tablesorter.addParser({
@@ -28,7 +29,24 @@ $.tablesorter.addParser({
 		dateFormat: 'uk',<!-- /TMPL_IF -->
 			sortList: [[0,0]],
 			headers: { 1: { sorter: 'articles' }}
-		}); 
+		});
+
+        <!-- TMPL_IF NAME="AllowRenewalLimitOverride" -->
+        $( '#override_limit' ).click( function () {
+            if ( this.checked ) {
+                $( '.renewals-allowed' ).show(); $( '.renewals-disabled' ).hide();
+            } else {
+                $( '.renewals-allowed' ).hide(); $( '.renewals-disabled' ).show();
+            }
+        } ).attr( 'checked', false );
+        <!-- /TMPL_IF -->
+		$("td").click(function(e){
+			if(e.target.tagName.toLowerCase() == 'td'){
+            $(this).find("input:checkbox").each( function() {
+                $(this).attr('checked', !$(this).attr('checked'));
+            });
+			}
+		});
 	 });
 //]]>
 </script>
