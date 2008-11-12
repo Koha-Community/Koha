@@ -25,7 +25,7 @@ use C4::Reserves;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
 BEGIN {
-	$VERSION = 2.00;
+	$VERSION = 2.10;
 	require Exporter;
 	@ISA = qw(Exporter);
 	@EXPORT_OK = qw();
@@ -34,34 +34,47 @@ BEGIN {
 =head2 EXAMPLE
 
 our %item_db = (
-		'1565921879' => {
-				 title => "Perl 5 desktop reference",
-				 id => '1565921879',
-				 sip_media_type => '001',
-				 magnetic_media => 0,
-				 hold_queue => [],
-				},
-		'0440242746' => {
-				 title => "The deep blue alibi",
-				 id => '0440242746',
-				 sip_media_type => '001',
-				 magnetic_media => 0,
-				 hold_queue => [],
-		},
-		'660' => {
-				 title => "Harry Potter y el cáliz de fuego",
-				 id => '660',
-				 sip_media_type => '001',
-				 magnetic_media => 0,
-				 hold_queue => [],
-			 },
-		);
+    '1565921879' => {
+        title => "Perl 5 desktop reference",
+        id => '1565921879',
+        sip_media_type => '001',
+        magnetic_media => 0,
+        hold_queue => [],
+    },
+    '0440242746' => {
+        title => "The deep blue alibi",
+        id => '0440242746',
+        sip_media_type => '001',
+        magnetic_media => 0,
+        hold_queue => [
+            {
+            itemnumber => '823',
+            priority => '1',
+            reservenotes => undef,
+            constrainttype => 'a',
+            reservedate => '2008-10-09',
+            found => undef,
+            rtimestamp => '2008-10-09 11:15:06',
+            biblionumber => '406',
+            borrowernumber => '756',
+            branchcode => 'CPL'
+            }
+        ],
+    },
+    '660' => {
+        title => "Harry Potter y el cáliz de fuego",
+        id => '660',
+        sip_media_type => '001',
+        magnetic_media => 0,
+        hold_queue => [],
+    },
+);
 =cut
 
 sub priority_sort {
-	defined $a->{priority} or return -1;
-	defined $b->{priority} or return 1;
-	return $a->{priority} <=> $b->{priority};
+    defined $a->{priority} or return -1;
+    defined $b->{priority} or return 1;
+    return $a->{priority} <=> $b->{priority};
 }
 
 sub new {
@@ -105,7 +118,7 @@ sub sip_item_properties {
     return $self->{sip_item_properties};
 }
 
-sub status_update {
+sub status_update {     # FIXME: this looks unimplemented
     my ($self, $props) = @_;
     my $status = new ILS::Transaction;
     $self->{sip_item_properties} = $props;
@@ -133,19 +146,19 @@ sub current_location {
 sub sip_circulation_status {
     my $self = shift;
     if ($self->{patron}) {
-		return '04';
+		return '04';    # charged
     } elsif (scalar @{$self->{hold_queue}}) {
-		return '08';
+		return '08';    # waiting on hold shelf
     } else {
-		return '03';
-    }
+		return '03';    # available
+    }                   # FIXME: 01-13 enumerated in spec.
 }
 
 sub sip_security_marker {
-    return '02';
+    return '02';	# FIXME? 00-other; 01-None; 02-Tattle-Tape Security Strip (3M); 03-Whisper Tape (3M)
 }
 sub sip_fee_type {
-    return '01';
+    return '01';    # FIXME? 01-09 enumerated in spec.  We just use O1-other/unknown.
 }
 
 sub fee {
@@ -173,8 +186,8 @@ sub hold_queue_position {
 	foreach (@{$self->{hold_queue}}) {
 		$i++;
 		$_->{patron_id} or next;
-		if ($_->{patron_id} eq $patron_id) {
-			return $i;
+		if ($self->barcode_is_borrowernumber($patron_id, $_->{borrowernumber})) {
+			return $i;  # maybe should return $_->{priority}
 		}
 	}
     return 0;
@@ -201,6 +214,7 @@ sub print_line {
 	return $self->{print_line} || '';
 }
 
+# This is a partial check of "availability".  It is not supposed to check everything here.
 # An item is available for a patron if it is:
 # 1) checked out to the same patron and there's no hold queue
 # OR
@@ -215,11 +229,25 @@ sub available {
 		return ($count ? 0 : 1);
 	} else {	# not checked out
 		($count) or return 1;
-		($self->{hold_queue}[0] eq $for_patron) and return 1;
+		($self->barcode_is_borrowernumber($for_patron, $self->{hold_queue}[0]->{borrowernumber})) and return 1;
 	}
 	return 0;
 }
 
+sub barcode_to_borrowernumber ($) {
+    my $known = shift;
+    (defined($known)) or return undef;
+    my $member = GetMember($known) or return undef; # borrowernumber is default type for GetMember lookup
+    return $member->{cardnumber};
+}
+sub barcode_is_borrowernumber ($$$) {    # because hold_queue only has borrowernumber...
+    my $self = shift;   # not really used
+    my $barcode = shift;
+    my $number  = shift or return undef;    # can't be zero
+    (defined($barcode)) or return undef;    # might be 0 or 000 or 000000
+    my $converted = barcode_to_borrowernumber($barcode) or return undef;
+    return ($number eq $converted); # even though both *should* be numbers, eq is safer.
+}
 1;
 __END__
 
