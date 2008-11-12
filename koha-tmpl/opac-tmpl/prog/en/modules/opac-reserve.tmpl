@@ -220,13 +220,6 @@
     <table>
         <tr><th>Title: </th><td><span class="title"><!-- TMPL_VAR NAME="title" escape="html" --></span></td></tr>
 
-<!-- TMPL_IF NAME="all" -->
-        <tr><th>Item Type: </th><td>Any<input type="hidden" name="all" value="1" /></td></tr>
-<!-- TMPL_ELSE -->
-        <tr><th>Item Types: </th><td><!-- TMPL_LOOP NAME="TYPES" -->
-<input type="hidden" name="itemtype" value="<!-- TMPL_VAR NAME="itemtype" -->" /><!-- TMPL_VAR NAME="description" -->;
-<!-- /TMPL_LOOP --></td></tr>
-
 <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="singleBranchMode" -->
         <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
