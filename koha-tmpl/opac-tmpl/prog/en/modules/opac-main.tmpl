@@ -61,7 +61,7 @@
                     <!-- TMPL_ELSE -->
                     <!-- TMPL_IF name="BiblioDefaultViewisbd" -->
                     <a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                    <!-- TMPL_IF NAME="title" escape="html"-->
+                    <!-- TMPL_IF NAME="title" -->
                         <!-- TMPL_VAR NAME="title" -->
                     <!-- TMPL_ELSE -->
                         <span class="problem">(no title)</span>
@@ -69,7 +69,7 @@
                     </a>
                     <!-- TMPL_ELSE -->
                     <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                    <!-- TMPL_IF NAME="title" escape="html" -->
+                    <!-- TMPL_IF NAME="title" -->
                         <!-- TMPL_VAR NAME="title" -->
                     <!-- TMPL_ELSE -->
                         <span class="problem">(no title)</span>
