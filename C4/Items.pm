@@ -49,6 +49,7 @@ BEGIN {
         ModDateLastSeen
         ModItemTransfer
         DelItem
+        DelItemCheck
     
         CheckItemPreSave
     
@@ -584,6 +585,47 @@ sub DelItem {
     }
     &ModBiblioMarc( $record, $biblionumber, $frameworkcode );
     logaction("CATALOGUING", "DELETE", $itemnumber, "item") if C4::Context->preference("CataloguingLog");
+}
+
+=head2 DelItemCheck
+
+=over 4
+
+DelItemCheck($dbh, $biblionumber, $itemnumber);
+
+=back
+
+Exported function (core API) for deleting an item record in Koha if there no current issue.
+
+=cut
+
+sub DelItemCheck {
+    my ( $dbh, $biblionumber, $itemnumber ) = @_;
+    my $error;
+
+    # check that there is no issue on this item before deletion.
+    my $sth=$dbh->prepare("select * from issues i where i.itemnumber=?");
+    $sth->execute($itemnumber);
+
+    my $onloan=$sth->fetchrow;
+
+    $sth->finish();
+    if ($onloan){
+        $error = "book_on_loan" 
+    }else{
+        # check it doesnt have a waiting reserve
+        $sth=$dbh->prepare("SELECT * FROM reserves WHERE found = 'W' AND itemnumber = ?");
+        $sth->execute($itemnumber);
+        my $reserve=$sth->fetchrow;
+        $sth->finish();
+        if ($reserve){
+            $error = "book_reserved";
+        }else{
+            DelItem($dbh, $biblionumber, $itemnumber);
+            return 1;
+        }
+    }
+    return $error;
 }
 
 =head2 CheckItemPreSave
