@@ -1936,6 +1936,7 @@ CREATE TABLE `tags` (
 -- Table structure for table `tags_all`
 --
 
+DROP TABLE IF EXISTS `tags_all`;
 CREATE TABLE `tags_all` (
   `tag_id`         int(11) NOT NULL auto_increment,
   `borrowernumber` int(11) NOT NULL,
@@ -1956,6 +1957,7 @@ CREATE TABLE `tags_all` (
 -- Table structure for table `tags_approval`
 --
 
+DROP TABLE IF EXISTS `tags_approval`;
 CREATE TABLE `tags_approval` (
   `term`   varchar(255) NOT NULL,
   `approved`     int(1) NOT NULL default '0',
@@ -1972,6 +1974,7 @@ CREATE TABLE `tags_approval` (
 -- Table structure for table `tags_index`
 --
 
+DROP TABLE IF EXISTS `tags_index`;
 CREATE TABLE `tags_index` (
   `term`    varchar(255) NOT NULL,
   `biblionumber` int(11) NOT NULL,
@@ -2179,6 +2182,7 @@ CREATE TABLE `tmp_holdsqueue` (
 -- Table structure for table `message_queue`
 --
 
+DROP TABLE IF EXISTS `message_queue`;
 CREATE TABLE `message_queue` (
   `message_id` int(11) NOT NULL auto_increment,
   `borrowernumber` int(11) default NULL,
