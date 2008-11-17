@@ -91,6 +91,9 @@ $.tablesorter.addParser({
         <!-- TMPL_IF NAME="manageshelf" --><div><span class="checkall"></span>
         <span class="clearall"></span> | <a class="editshelf" href="/cgi-bin/koha/opac-shelves.pl?shelfnumber=<!-- TMPL_VAR NAME="shelfnumber" -->&amp;op=modif">Edit List</a> <form method="post" action="opac-shelves.pl">
 <input type="hidden" value="1" name="shelves"/>
+<!-- TMPL_IF NAME="showprivateshelves" -->
+<input type="hidden" name="display" value="privateshelves" />
+<!-- /TMPL_IF -->
 <input type="hidden" value="1" name="DEL-<!-- TMPL_VAR NAME="shelfnumber" -->"/>
 <input type="submit" class="deleteshelf" value="Delete List" onclick="return confirmDelete(_('Are you sure you want to remove this List?'));"/></form>
 </div><!-- /TMPL_IF -->
@@ -207,7 +210,7 @@ $.tablesorter.addParser({
                 <tr><th>List Name</th><th>Contents</th><th>Sort by</th><th>Type</th><th>&nbsp;</th></tr>
                 <!-- TMPL_LOOP NAME="shelveslooppriv" -->
                     <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!--TMPL_ELSE--><tr><!-- /TMPL_IF -->
-        <td><a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"  --></a></td>
+        <td><a href="opac-shelves.pl?display=privateshelves&viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"  --></a></td>
         <td><!-- TMPL_VAR NAME="count" --> item(s)</td>
         <td><!-- TMPL_VAR NAME="sortfield" --></td>
         <td><!-- TMPL_IF NAME="viewcategory1" -->Private<!-- /TMPL_IF -->
@@ -218,13 +221,14 @@ $.tablesorter.addParser({
             <!-- TMPL_IF NAME="mine" -->
                 <form action="opac-shelves.pl" method="get">
                     <input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelf" -->" />
+                    <input type="hidden" name="display" value="privateshelves" />
                     <input type="hidden" name="op" value="modif" />
                     <input type="submit" class="editshelf" value="Edit" />
                 </form>
                 <form action="opac-shelves.pl" method="post">
                     <input type="hidden" name="shelves" value="1" />
-                    <input type="hidden" name="DEL-<!-- TMPL_VAR NAME="shelf" -->" value="1" />
                     <input type="hidden" name="display" value="privateshelves" />
+                    <input type="hidden" name="DEL-<!-- TMPL_VAR NAME="shelf" -->" value="1" />
                     <!-- TMPL_IF NAME="confirm" -->
                     <input type="hidden" name="CONFIRM-<!-- TMPL_VAR NAME="confirm" -->" value="1" />
                     <input type="submit" class="confirm" value="Confirm" />

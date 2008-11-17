@@ -72,6 +72,11 @@ sub shelfpage ($$$$$) {
 	# getting the Shelves list
 	my $category = (($displaymode eq 'privateshelves') ? 1 : 2);
 	my ($shelflist, $totshelves) = GetShelves( $category, $shelveslimit, $shelvesoffset, $loggedinuser );
+	#Get a list of private shelves for possible deletion. Only do this when we've defaulted to public shelves
+    my ($privshelflist, $privtotshelves); 
+    if ($category == 2) {
+        ($privshelflist, $privtotshelves) = GetShelves( 1, $shelveslimit, $shelvesoffset, $loggedinuser );
+    }
 	my $op = $query->param('op');
 #    my $imgdir = getitemtypeimagesrc();
 #    my $itemtypes = GetItemTypes();
@@ -173,6 +178,7 @@ SWITCH: {
 				#$this_item->{'description'} = $itemtypes->{ $this_item->{itemtype} }->{'description'};
 				$this_item->{'dateadded'} = format_date($this_item->{'dateadded'});
 			}
+			push @paramsloop, {display => 'privateshelves'} if $category == 1;
 			$showadd = 1;
 			my $i = 0;
 			foreach (grep {$i++ % 2} @$items) {     # every other item
@@ -180,7 +186,7 @@ SWITCH: {
 			}
 			my $manageshelf = ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' );
 			$template->param(
-				shelfname   => $shelflist->{$shelfnumber}->{'shelfname'},
+				shelfname   => $shelflist->{$shelfnumber}->{'shelfname'} || $privshelflist->{$shelfnumber}->{'shelfname'},
 				shelfnumber => $shelfnumber,
 				viewshelf   => $shelfnumber,
 				manageshelf => $manageshelf,
@@ -213,7 +219,7 @@ SWITCH: {
 			/DEL-(\d+)/ or next;
 			$delflag = 1;
 			my $number = $1;
-			unless (defined $shelflist->{$number}) {
+			unless (defined $shelflist->{$number} || defined $privshelflist->{$number}) {
 				push(@paramsloop, {unrecognized=>$number}); last;
 	  		}
 			unless (ShelfPossibleAction($loggedinuser, $number, 'manage')) {
@@ -223,17 +229,28 @@ SWITCH: {
 			($contents, $totshelves) = GetShelfContents($number, $shelveslimit, $shelvesoffset);
 			if (my $count = scalar @$contents){
 				unless (scalar grep {/^CONFIRM-$number$/} $query->param()) {
-					push(@paramsloop, {need_confirm=>$shelflist->{$number}->{shelfname}, count=>$count});
-					$shelflist->{$number}->{confirm} = $number;
+					if (defined $shelflist->{$number}) {
+						push(@paramsloop, {need_confirm=>$shelflist->{$number}->{shelfname}, count=>$count});
+						$shelflist->{$number}->{confirm} = $number;
+					} else {
+						push(@paramsloop, {need_confirm=>$privshelflist->{$number}->{shelfname}, count=>$count});
+						$privshelflist->{$number}->{confirm} = $number;
+					}
 					$stay = 0;
 					next;
 				}
 			} 
-			my $name = $shelflist->{$number}->{'shelfname'};
+			my $name;
+			if (defined $shelflist->{$number}) {
+				$name = $shelflist->{$number}->{'shelfname'};
+				delete $shelflist->{$number};
+			} else {
+				$name = $privshelflist->{$number}->{'shelfname'};
+				delete $privshelflist->{$number};
+			}
 			unless (DelShelf($number)) {
 				push(@paramsloop, {delete_fail=>$name}); last;
 			}
-			delete $shelflist->{$number};
 			push(@paramsloop, {delete_ok=>$name});
 			# print $query->redirect($pages{$type}->{redirect}); exit;
 			$stay = 0;
