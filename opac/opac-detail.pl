@@ -238,6 +238,8 @@ $template->param(
 
 sub isbn_cleanup ($) {
 	my $isbn=shift;
+    ($isbn) = $isbn =~ /([\d-]*[X]*)/;
+    $isbn =~ s/-//g;
 	if (
 		$isbn =~ /\b(\d{13})\b/ or
 		$isbn =~ /\b(\d{10})\b/ or 
