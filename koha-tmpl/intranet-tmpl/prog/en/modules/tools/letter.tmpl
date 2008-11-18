@@ -291,17 +291,17 @@ $(document).ready(function() {
 	<!-- TMPL_IF NAME="delete_confirm" -->
 	<div class="dialog alert"><h3>Delete Notice?</h3>
 	<table>
+        <thead>
 		<tr>
-			<td>
-				<b>module / Code</b>
-			</td>
-			<td>
-				<b><!-- TMPL_VAR name="module"--> / <!-- TMPL_VAR NAME="code" --></b>
-			</td>
+			<th>Module</th>
+			<th>Code</th>
+			<th>Name</th>
 		</tr>
+        </thead>
 		<tr>
-			<td>Name</td>
-			<td><!-- TMPL_VAR NAME="Name" --></td>
+			<td><!-- TMPL_VAR NAME="module"--></td>
+            <td><!-- TMPL_VAR NAME="code" --></td>
+			<td><!-- TMPL_VAR NAME="name" --></td>
 		</tr>
 	</table>
 		<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
