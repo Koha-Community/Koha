@@ -37,41 +37,51 @@
 =cut
 
 use strict;
+use warnings;
 use CGI;
-use C4::Dates;
 use C4::Auth;
 use C4::Context;
 use C4::Output;
 
 sub StringSearch {
-    my ( $searchstring, $type ) = @_;
+    my ($searchstring) = @_;
     my $dbh = C4::Context->dbh;
     $searchstring =~ s/\'/\\\'/g;
     my @data = split( ' ', $searchstring );
-    my $count = @data;
-    my $sth =
-      $dbh->prepare(
-        "Select * from letter where (code like ?) order by module,code");
-    $sth->execute("$data[0]%");
-    my @results;
-    my $cnt = 0;
+    my $sth = $dbh->prepare("SELECT * FROM letter WHERE (code LIKE ?) ORDER BY module, code");
+    $sth->execute("$data[0]%");     # slightly bogus, only searching on first string.
+    return $sth->fetchall_arrayref({});
+}
 
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data );
-        $cnt++;
+our %column_map = (
+    aqbooksellers => 'BOOKSELLERS',
+    aqorders => 'ORDERS',
+    serial => 'SEREIALS',
+);
+
+sub column_picks ($) {
+    # returns @array of values
+    my $table = shift or return ();
+    my $sth = C4::Context->dbh->prepare("SHOW COLUMNS FROM $table");
+    $sth->execute;
+    my @SQLfieldname = ();
+    push @SQLfieldname, {'value' => "", 'text' => '---' . uc($column_map{$table} || $table) . '---'};
+    while (my ($field) = $sth->fetchrow_array) {
+        push @SQLfieldname, {
+            value => $table . ".$field",
+             text => $table . ".$field"
+        };
     }
-    $sth->finish;
-    return ( $cnt, \@results );
+    return @SQLfieldname;
 }
 
 my $input       = new CGI;
 my $searchfield = $input->param('searchfield');
-my $offset      = $input->param('offset');
+# my $offset      = $input->param('offset'); # pagination not implemented
 my $script_name = "/cgi-bin/koha/tools/letter.pl";
 my $code        = $input->param('code');
 my $module      = $input->param('module');
 my $content     = $input->param('content');
-my $pagesize    = 20;
 my $op          = $input->param('op');
 $searchfield =~ s/\,//g;
 my $dbh = C4::Context->dbh;
@@ -105,107 +115,38 @@ if ( $op eq 'add_form' ) {
     #---- if primkey exists, it's a modify action, so read values to modify...
     my $letter;
     if ($code) {
-        my $sth = $dbh->prepare("select * from letter where module=? and code=?");
+        my $sth = $dbh->prepare("SELECT * FROM letter WHERE module=? AND code=?");
         $sth->execute( $module, $code );
         $letter = $sth->fetchrow_hashref;
-        $sth->finish;
     }
 
     # build field list
     my @SQLfieldname;
-    push @SQLfieldname, { 'value' => "LibrarianFirstname",    'text' => 'LibrarianFirstname'    };
-    push @SQLfieldname, { 'value' => "LibrarianSurname",      'text' => 'LibrarianSurname'      };
-    push @SQLfieldname, { 'value' => "LibrarianEmailaddress", 'text' => 'LibrarianEmailaddress' };
-    my $sth2 = $dbh->prepare("SHOW COLUMNS from branches");
-    $sth2->execute;
-    push @SQLfieldname, { 'value' => "", 'text' => '---BRANCHES---' };
-
-    while ( ( my $field ) = $sth2->fetchrow_array ) {
-        push @SQLfieldname, { 'value' => "branches." . $field, 'text' => "branches." . $field };
+    foreach (qw(LibrarianFirstname LibrarianSurname LibrarianEmailaddress)) {
+        push @SQLfieldname, {value => $_, text => $_};
     }
+    push @SQLfieldname, column_picks('branches');
 
     # add acquisition specific tables
     if ( index( $module, "acquisition" ) > 0 ) {	# FIXME: imprecise comparison
-        $sth2 = $dbh->prepare("SHOW COLUMNS from aqbooksellers");
-        $sth2->execute;
-        push @SQLfieldname, { 'value' => "", 'text' => '---BOOKSELLERS---' };
-        while ( ( my $field ) = $sth2->fetchrow_array ) {
-            push @SQLfieldname, {
-                'value' => "aqbooksellers." . $field,
-                'text'  => "aqbooksellers." . $field
-            };
-        }
-        $sth2 = $dbh->prepare("SHOW COLUMNS from aqorders");
-        $sth2->execute;
-        push @SQLfieldname, { 'value' => "", 'text' => '---ORDERS---' };
-        while ( ( my $field ) = $sth2->fetchrow_array ) {
-            push @SQLfieldname, {
-                'value' => "aqorders." . $field,
-                'text'  => "aqorders." . $field
-            };
-        }
-
+        push @SQLfieldname, column_picks('aqbooksellers'), column_picks('aqorders');
         # add issues specific tables
     }
     elsif ( index( $module, "issues" ) > 0 ) {	# FIXME: imprecise comparison
-        $sth2 = $dbh->prepare("SHOW COLUMNS from aqbooksellers");
-        $sth2->execute;
-        push @SQLfieldname, { 'value' => "", 'text' => '---BOOKSELLERS---' };
-        while ( ( my $field ) = $sth2->fetchrow_array ) {
-            push @SQLfieldname, {
-                'value' => "aqbooksellers." . $field,
-                'text'  => "aqbooksellers." . $field
-            };
-        }
-        $sth2 = $dbh->prepare("SHOW COLUMNS from serial");
-        $sth2->execute;
-        push @SQLfieldname, { 'value' => "", 'text' => '---SERIALS---' };
-        while ( ( my $field ) = $sth2->fetchrow_array ) {
-            push @SQLfieldname, { 'value' => "serial." . $field, 'text' => "serial." . $field };
-        }
-        $sth2 = $dbh->prepare("SHOW COLUMNS from subscription");
-        $sth2->execute;
-        push @SQLfieldname, { 'value' => "", 'text' => '---SUBSCRIPTION---' };
-        while ( ( my $field ) = $sth2->fetchrow_array ) {
-            push @SQLfieldname, {
-                'value' => "subscription." . $field,
-                'text'  => "subscription." . $field
-            };
-        }
-        push @SQLfieldname, { 'value' => "",             'text' => '---Biblio---' };
+        push @SQLfieldname, column_picks('aqbooksellers'),
+            column_picks('serial'),
+            column_picks('subscription'),
+            {value => "", text => '---BIBLIO---'};
 		foreach(qw(title author serial)) {
-        	push @SQLfieldname, { 'value' => "biblio.$_", 'text' => ucfirst($_) };
+        	push @SQLfieldname, {value => "biblio.$_", text => ucfirst($_) };
 		}
     }
     else {
-        $sth2 = $dbh->prepare("SHOW COLUMNS from biblio");
-        $sth2->execute;
-        push @SQLfieldname, { 'value' => "", 'text' => '---BIBLIO---' };
-
-        while ( ( my $field ) = $sth2->fetchrow_array ) {
-            push @SQLfieldname, { 'value' => "biblio." . $field, 'text' => "biblio." . $field };
-        }
-        $sth2 = $dbh->prepare("SHOW COLUMNS from biblioitems");
-        $sth2->execute;
-        push @SQLfieldname, { 'value' => "", 'text' => '---BIBLIOITEMS---' };
-        while ( ( my $field ) = $sth2->fetchrow_array ) {
-            push @SQLfieldname, {
-                'value' => "biblioitems." . $field,
-                'text'  => "biblioitems." . $field
-            };
-        }
-        push @SQLfieldname, { 'value' => "", 'text' => '---ITEMS---' };
-        push @SQLfieldname, { 'value' => "items.content", 'text' => 'items.content' };
-
-        $sth2 = $dbh->prepare("SHOW COLUMNS from borrowers");
-        $sth2->execute;
-        push @SQLfieldname, { 'value' => "", 'text' => '---BORROWERS---' };
-        while ( ( my $field ) = $sth2->fetchrow_array ) {
-            push @SQLfieldname, {
-                'value' => "borrowers." . $field,
-                'text'  => "borrowers." . $field
-            };
-        }
+        push @SQLfieldname, column_picks('biblio'),
+            column_picks('biblioitems'),
+            {value => "",              text => '---ITEMS---'  },
+            {value => "items.content", text => 'items.content'},
+            column_picks('borrowers');
     }
     if ($code) {
         $template->param( modify => 1 );
@@ -226,15 +167,13 @@ if ( $op eq 'add_form' ) {
 }
 elsif ( $op eq 'add_validate' ) {
     my $dbh = C4::Context->dbh;
-    my $sth =
-      $dbh->prepare(
-        "replace letter (module,code,name,title,content) values (?,?,?,?,?)");
+    my $sth = $dbh->prepare(
+        "REPLACE letter (module,code,name,title,content) VALUES (?,?,?,?,?)");
     $sth->execute(
         $input->param('module'), $input->param('code'),
         $input->param('name'),   $input->param('title'),
         $input->param('content')
     );
-    $sth->finish;
     print $input->redirect("letter.pl");
     exit;
 ################## DELETE_CONFIRM ##################################
@@ -242,10 +181,9 @@ elsif ( $op eq 'add_validate' ) {
 }
 elsif ( $op eq 'delete_confirm' ) {
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("select * from letter where code=?");
+    my $sth = $dbh->prepare("SELECT * FROM letter WHERE code=?");
     $sth->execute($code);
     my $data = $sth->fetchrow_hashref;
-    $sth->finish;
     $template->param( code => $code );
 	foreach (qw(module name content)) {
     	$template->param( $_ => $data->{$_} );
@@ -257,11 +195,10 @@ elsif ( $op eq 'delete_confirmed' ) {
     my $dbh    = C4::Context->dbh;
     my $code   = uc( $input->param('code') );
     my $module = $input->param('module');
-    my $sth    = $dbh->prepare("delete from letter where module=? and code=?");
+    my $sth    = $dbh->prepare("DELETE FROM letter WHERE module=? AND code=?");
     $sth->execute( $module, $code );
-    $sth->finish;
     print $input->redirect("/cgi-bin/koha/tools/letter.pl");
-    return;
+    exit;
 ################## DEFAULT ##################################
 }
 else {    # DEFAULT
@@ -269,22 +206,14 @@ else {    # DEFAULT
         $template->param( search      => 1 );
         $template->param( searchfield => $searchfield );
     }
-    my ( $count, $results ) = StringSearch( $searchfield, 'web' );
-    my $toggle    = 0;
+    my ($results) = StringSearch($searchfield);
     my @loop_data = ();
-    for (
-        my $i = $offset ;
-        $i < ( $offset + $pagesize < $count ? $offset + $pagesize : $count ) ;
-        $i++
-      )
-    {
-		$toggle = ($toggle) ? 0 : 1;
+    foreach my $result (@$results) {
         my %row_data;
-        $row_data{toggle} = $toggle;
-		foreach (qw(module code name)) {
-        	$row_data{$_} = $results->[$i]{$_};
+		foreach my $key (qw(module code name)) {
+        	$row_data{$key} = $result->{$key};
 		}
-        push( @loop_data, \%row_data );
+        push(@loop_data, \%row_data );
     }
     $template->param( letter => \@loop_data );
 }    #---- END $OP eq DEFAULT
