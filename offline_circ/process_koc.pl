@@ -47,8 +47,8 @@ my ($template, $loggedinuser, $cookie)
   = get_template_and_user( { template_name => "offline_circ/process_koc.tmpl",
 				query => $query,
 				type => "intranet",
-				authnotrequired => 1,
-				debug => 1,
+				authnotrequired => 0,
+				 flagsrequired   => { circulate => 1 },
 				});
 
 
