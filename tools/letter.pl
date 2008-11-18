@@ -56,7 +56,7 @@ sub StringSearch {
 our %column_map = (
     aqbooksellers => 'BOOKSELLERS',
     aqorders => 'ORDERS',
-    serial => 'SEREIALS',
+    serial => 'SERIALS',
 );
 
 sub column_picks ($) {
