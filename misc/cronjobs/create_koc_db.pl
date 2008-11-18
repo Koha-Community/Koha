@@ -74,10 +74,10 @@ but any similar tool could use the database that is produced.
 
 =cut
 
-$|++;
-
 use strict;
 use warnings;
+
+$|++;
 
 use DBI;
 use Getopt::Long;
@@ -101,6 +101,9 @@ GetOptions(
 pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
 
+my %wanted_borrowers_columns = map { $_ => 1 } qw/borrowernumber cardnumber surname  firstname address city phone dateofbirth/; 
+my %wanted_issues_columns    = map { $_ => 1 } qw/borrowernumber date_due itemcallnumber title itemtype/;
+
 prepare_file_for_writing($filename)
   or die "file: '$filename' already exists. Use --force to overwrite\n";
 
@@ -109,6 +112,7 @@ verify_dbd_sqlite();
 ## Create DB Connections
 my $dbh_mysql = C4::Context->dbh;
 my $dbh_sqlite = DBI->connect( "dbi:SQLite:dbname=$filename", "", "" );
+$dbh_sqlite->{AutoCommit} = 0;
 
 create_borrowers_table();
 populate_borrowers_table();
@@ -173,8 +177,9 @@ sub create_borrowers_table {
 
     my %borrowers_info = get_columns_and_types_of_table( 'borrowers' );
     my $sqlite_create_sql = "CREATE TABLE borrowers ( \n";
-    
-    $sqlite_create_sql .= join(',', map{ $_ . ' ' . $borrowers_info{$_} } keys %borrowers_info);
+  
+    $sqlite_create_sql .= join(',', map{ $_ . ' ' . $borrowers_info{$_} } 
+                                    grep { exists($wanted_borrowers_columns{$_}) } keys %borrowers_info);
     
     $sqlite_create_sql .= " , \n total_fines decimal(28,6) ";    ## Extra field to store the total fines for a borrower in.
     $sqlite_create_sql .= " ) ";
@@ -195,7 +200,7 @@ Import the data from the koha.borrowers table into our sqlite table
 
 sub populate_borrowers_table {
 
-    my @borrower_fields = get_columns_of_table( 'borrowers' );
+    my @borrower_fields = grep { exists($wanted_borrowers_columns{$_}) } get_columns_of_table( 'borrowers' );
     push @borrower_fields, 'total_fines';
     
     my $sql = "INSERT INTO borrowers ( ";
@@ -206,10 +211,17 @@ sub populate_borrowers_table {
     my $sth_sqlite = $dbh_sqlite->prepare($sql);
 
     my $sth_mysql    = $dbh_mysql->prepare(<<'END_SQL');
-SELECT borrowers.*, sum( accountlines.amountoutstanding ) as total_fines
+SELECT borrowernumber,
+       cardnumber,
+       surname,
+       firstname,
+       address,
+       city,
+       phone,
+       dateofbirth,
+       sum( accountlines.amountoutstanding ) as total_fines
 FROM borrowers
-LEFT JOIN accountlines
-  ON borrowers.borrowernumber = accountlines.borrowernumber
+LEFT JOIN accountlines USING (borrowernumber)
 GROUP BY borrowernumber;
 END_SQL
 
@@ -225,7 +237,9 @@ END_SQL
         }
         $sth_sqlite->execute( @$borrower{ @borrower_fields } );
         $sth_sqlite->finish();
+        $dbh_sqlite->commit() if ( 0 == $count % 1000 );
     }
+    $dbh_sqlite->commit();
     print "inserted $count borrowers\n" if $verbose;
     # add_fines_to_borrowers_table();
 }
@@ -308,11 +322,16 @@ sub populate_issues_table {
 
     print "preparing to populate ISSUES table\n" if $verbose;
     my $sth_mysql = $dbh_mysql->prepare(
-        "SELECT * FROM issues, items, biblioitems, biblio
-                                    WHERE issues.itemnumber = items.itemnumber
-                                    AND items.biblionumber = biblioitems.biblionumber
-                                    AND items.biblionumber = biblio.biblionumber
-                                    AND returndate IS NULL"
+        "SELECT issues.borrowernumber,
+                issues.date_due,
+                items.itemcallnumber,
+                biblio.title,
+                biblioitems.itemtype
+         FROM   issues, items, biblioitems, biblio
+         WHERE issues.itemnumber = items.itemnumber
+         AND items.biblionumber = biblioitems.biblionumber
+         AND items.biblionumber = biblio.biblionumber
+         AND returndate IS NULL"
     );
     $sth_mysql->execute();
 
@@ -337,7 +356,9 @@ sub populate_issues_table {
 
         $sth_sqlite->execute( @$result{ @$column_names } );
         $sth_sqlite->finish();
+        $dbh_sqlite->commit() if ( 0 == $count % 1000 );
     }
+    $dbh_sqlite->commit();
     print "inserted $count issues\n" if ( $verbose && $count );
 }
 
@@ -391,7 +412,7 @@ sub get_columns_for_issues_table {
       my %table_info = get_columns_and_types_of_table( $table );
       %fields = ( %fields, %table_info );
   }
-  return \%fields;
+  return { map { $_ => $fields{$_} } grep { exists($wanted_issues_columns{$_}) } keys %fields };
 }
 
 1;
