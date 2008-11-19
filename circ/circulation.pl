@@ -140,21 +140,37 @@ if ( $barcode ) {
 # }
 #
 
-my ($datedue,$invalidduedate);
-if ($duedatespec) {
-	if ($duedatespec =~ C4::Dates->regexp('syspref')) {
-		my $tempdate = C4::Dates->new($duedatespec);
-		if ($tempdate and $tempdate->output('iso') gt C4::Dates->new()->output('iso')) {
-			# i.e., it has to be later than today/now
-			$datedue = $tempdate;
-		} else {
-			$invalidduedate = 1;
-			$template->param(IMPOSSIBLE=>1, INVALID_DATE=>$duedatespec);
-		}
-	} else {
-		$invalidduedate = 1;
-		$template->param(IMPOSSIBLE=>1, INVALID_DATE=>$duedatespec);
-	}
+my ($datedue,$invalidduedate,$globalduedate);
+
+if(C4::Context->preference('globalDueDate') && (C4::Context->preference('globalDueDate') =~ C4::Dates->regexp('syspref'))){
+        $globalduedate = C4::Dates->new(C4::Context->preference('globalDueDate'));
+}
+my $duedatespec_allow = C4::Context->preference('SpecifyDueDate');
+if($duedatespec_allow){
+    if ($duedatespec) {
+    	if ($duedatespec =~ C4::Dates->regexp('syspref')) {
+    		my $tempdate = C4::Dates->new($duedatespec);
+    		if ($tempdate and $tempdate->output('iso') gt C4::Dates->new()->output('iso')) {
+    			# i.e., it has to be later than today/now
+    			$datedue = $tempdate;
+    		} else {
+    			$invalidduedate = 1;
+    			$template->param(IMPOSSIBLE=>1, INVALID_DATE=>$duedatespec);
+    		}
+    	} else {
+    		$invalidduedate = 1;
+    		$template->param(IMPOSSIBLE=>1, INVALID_DATE=>$duedatespec);
+    	}
+    } else {
+        # pass global due date to tmpl if specifyduedate is true 
+        # and we have no barcode (loading circ page but not checking out)
+        if($globalduedate &&  ! $barcode ){
+            $duedatespec = $globalduedate->output();
+            $stickyduedate = 1;
+        }
+    }
+} else {
+    $datedue = $globalduedate if($globalduedate);
 }
 
 my $todaysdate = C4::Dates->new->output('iso');
@@ -165,7 +181,6 @@ if ( $barcode eq '' && $print eq 'maybe' ) {
 }
 
 my $inprocess = ($barcode eq '') ? '' : $query->param('inprocess');
-
 if ( $barcode eq '' && $query->param('charges') eq 'yes' ) {
     $template->param(
         PAYCHARGES     => 'yes',
@@ -268,7 +283,7 @@ if ($barcode) {
   # always check for blockers on issuing
   my ( $error, $question ) =
     CanBookBeIssued( $borrower, $barcode, $datedue , $inprocess );
-  my $noerror = $invalidduedate ? 0 : 1;
+  my $blocker = $invalidduedate ? 1 : 0;
 
   delete $question->{'DEBT'} if ($debt_confirmed);
   foreach my $impossible ( keys %$error ) {
@@ -325,11 +340,9 @@ if ($barcode) {
         );
     }
     
-# FIXME If the issue is confirmed, we launch another time borrdata2, now display the issue count after issue 
-        my ( $od, $issue, $fines ) = GetMemberIssuesAndFines( $borrowernumber );
-        $template->param(
-        issuecount   => $issue,
-        );
+    # FIXME If the issue is confirmed, we launch another time GetMemberIssuesAndFines, now display the issue count after issue 
+    my ( $od, $issue, $fines ) = GetMemberIssuesAndFines( $borrowernumber );
+    $template->param( issuecount   => $issue );
 }
 
 # reload the borrower info for the sake of reseting the flags.....
@@ -696,6 +709,7 @@ $template->param(
     amountold         => $amountold,
     barcode           => $barcode,
     stickyduedate     => $stickyduedate,
+    duedatespec       => $duedatespec,
     message           => $message,
     CGIselectborrower => $CGIselectborrower,
     todayissues       => \@todaysissues,
@@ -722,7 +736,7 @@ $template->param( picture => 1 ) if $picture;
 
 $template->param(
     debt_confirmed            => $debt_confirmed,
-    SpecifyDueDate            => C4::Context->preference("SpecifyDueDate"),
+    SpecifyDueDate            => $duedatespec_allow,
     CircAutocompl             => C4::Context->preference("CircAutocompl"),
 	AllowRenewalLimitOverride => C4::Context->preference("AllowRenewalLimitOverride"),
     dateformat                => C4::Context->preference("dateformat"),
