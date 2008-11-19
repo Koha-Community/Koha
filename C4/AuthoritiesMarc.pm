@@ -832,7 +832,8 @@ sub FindDuplicateAuthority {
 #     warn "record :".$record->as_formatted."  auth_tag_to_report :$auth_tag_to_report";
     # build a request for SearchAuthorities
     my $query='at='.$authtypecode.' ';
-    map {$query.= " and he=\"".$_->[1]."\"" if ($_->[0]=~/[A-z]/)}  $record->field($auth_tag_to_report)->subfields() if $record->field($auth_tag_to_report);
+    my $filtervalues=qr([\001-\040\!\'\"\`\#\$\%\&\*\+,\-\./:;<=>\?\@\(\)\{\[\]\}_\|\~]);
+    map {$_->[1]=~s/$filtervalues/ /g; $query.= " and he,wrdl=\"".$_->[1]."\"" if ($_->[0]=~/[A-z]/)}  $record->field($auth_tag_to_report)->subfields() if $record->field($auth_tag_to_report);
     my ($error, $results, $total_hits)=SimpleSearch( $query, 0, 1, [ "authorityserver" ] );
     # there is at least 1 result => return the 1st one
     if (@$results>0) {
@@ -1188,7 +1189,7 @@ sub merge {
     my $dbh=C4::Context->dbh;
     my $authtypecodefrom = GetAuthTypeCode($mergefrom);
     my $authtypecodeto = GetAuthTypeCode($mergeto);
-    warn "mergefrom : $authtypecodefrom $mergefrom mergeto : $authtypecodeto $mergeto ";
+#     warn "mergefrom : $authtypecodefrom $mergefrom mergeto : $authtypecodeto $mergeto ";
     # return if authority does not exist
     my @X = $MARCfrom->fields();
     return "error MARCFROM not a marcrecord ".Data::Dumper::Dumper($MARCfrom) if $#X == -1;
@@ -1262,7 +1263,7 @@ sub merge {
         my $update;           
         $marcrecord= MARC::Record->new_from_xml($marcrecord,"utf8",C4::Context->preference("marcflavour")) unless(C4::Context->preference('NoZebra'));
         foreach my $tagfield (@tags_using_authtype){
-            warn "tagfield : $tagfield ";
+#             warn "tagfield : $tagfield ";
             foreach my $field ($marcrecord->field($tagfield)){
                 my $auth_number=$field->subfield("9");
                 my $tag=$field->tag();          
