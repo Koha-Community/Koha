@@ -1624,7 +1624,8 @@ sub TransformMarcToKoha {
     my ( $dbh, $record, $frameworkcode, $limit_table ) = @_;
 
     my $result;
-
+    $limit_table=$limit_table||0;
+    
     unless (defined $inverted_field_map) {
         $inverted_field_map = _get_inverted_marc_field_map();
     }
@@ -2333,6 +2334,7 @@ sub _AddBiblioNoZebra {
     my $sth2=$dbh->prepare('SELECT biblionumbers FROM nozebra WHERE server=? AND indexname=? AND value=?');
     foreach my $field ($record->fields()) {
         #parse each subfield
+        ###FIXME: impossible to index a 001-009 value with NoZebra
         next if $field->tag <10;
         foreach my $subfield ($field->subfields()) {
             my $tag = $field->tag();
@@ -2353,9 +2355,9 @@ sub _AddBiblioNoZebra {
                         next unless $_; # skip  empty values (multiple spaces)
                         # if the entry is already here, improve weight
 #                         warn "managing $_";
-                        if ($result{$key}->{"$_"} =~ /$biblionumber,\Q$title\E\-(\d);/) { 
-                            my $weight=$1+1;
-                            $result{$key}->{"$_"} =~ s/$biblionumber,\Q$title\E\-(\d);//;
+                        if ($result{$key}->{"$_"} =~ /$biblionumber,\Q$title\E\-(\d+);/) { 
+                            my $weight=$1 + 1;
+                            $result{$key}->{"$_"} =~ s/$biblionumber,\Q$title\E\-(\d+);//g;
                             $result{$key}->{"$_"} .= "$biblionumber,$title-$weight;";
                         } else {
                             # get the value if it exist in the nozebra table, otherwise, create it
@@ -2364,8 +2366,8 @@ sub _AddBiblioNoZebra {
                             # it exists
                             if ($existing_biblionumbers) {
                                 $result{$key}->{"$_"} =$existing_biblionumbers;
-                                my $weight=$1+1;
-                                $result{$key}->{"$_"} =~ s/$biblionumber,\Q$title\E\-(\d);//;
+                                my $weight=$1 + 1;
+                                $result{$key}->{"$_"} =~ s/$biblionumber,\Q$title\E\-(\d+);//g;
                                 $result{$key}->{"$_"} .= "$biblionumber,$title-$weight;";
                             # create a new ligne for this entry
                             } else {
@@ -2385,9 +2387,9 @@ sub _AddBiblioNoZebra {
                 foreach (split / /,$line) {
                     next unless $_; # skip  empty values (multiple spaces)
                     # if the entry is already here, improve weight
-                    if ($result{'__RAW__'}->{"$_"} =~ /$biblionumber,\Q$title\E\-(\d);/) { 
+                    if ($result{'__RAW__'}->{"$_"} =~ /$biblionumber,\Q$title\E\-(\d+);/) { 
                         my $weight=$1+1;
-                        $result{'__RAW__'}->{"$_"} =~ s/$biblionumber,\Q$title\E\-(\d);//;
+                        $result{'__RAW__'}->{"$_"} =~ s/$biblionumber,\Q$title\E\-(\d+);//;
                         $result{'__RAW__'}->{"$_"} .= "$biblionumber,$title-$weight;";
                     } else {
                         # get the value if it exist in the nozebra table, otherwise, create it
@@ -2397,7 +2399,7 @@ sub _AddBiblioNoZebra {
                         if ($existing_biblionumbers) {
                             $result{'__RAW__'}->{"$_"} =$existing_biblionumbers;
                             my $weight=$1+1;
-                            $result{'__RAW__'}->{"$_"} =~ s/$biblionumber,\Q$title\E\-(\d);//;
+                            $result{'__RAW__'}->{"$_"} =~ s/$biblionumber,\Q$title\E\-(\d+);//;
                             $result{'__RAW__'}->{"$_"} .= "$biblionumber,$title-$weight;";
                         # create a new ligne for this entry
                         } else {
