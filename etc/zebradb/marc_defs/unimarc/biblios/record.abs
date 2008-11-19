@@ -24,6 +24,9 @@ all any
 melm 001        Local-number,Local-number:n
 # Local-number (biblionumber can be either in 090$9 or, on some setup, on 001)
 melm 090$9      Local-number,Local-number:n
+melm 099$c      date-entered-on-file:s,date-entered-on-file:n,date-entered-on-file:y
+melm 099$d      Date/time-last-modified:s,Date/time-last-modified:n,Date/time-last-modified:y
+
 
 melm 010$a    ISBN:w
 # wrong ISBN
@@ -37,7 +40,7 @@ melm 011$z    ISSN:w,Identifier-standard:w
 melm 200$b      itemtype:w
 melm 995$r      itype:w
 
-melm 100$a      date-entered-on-file:n:range(data,0,8),date-entered-on-file:s:range(data,0,8),tpubdate:s:range(data,8,1),ta:w:range(data,17,1),ta:w:range(data,18,1),ta:w:range(data,19,1),Modified-code:n:range(data,21,1),ln:s:range(data,22,3),char-encoding:n:range(data,26,2),char-encoding:n:range(data,28,2),char-encoding:n:range(data,30,2),script-Title:n:range(data,34,2)
+melm 100$a      tpubdate:s:range(data,8,1),ta:w:range(data,17,1),ta:w:range(data,18,1),ta:w:range(data,19,1),Modified-code:n:range(data,21,1),ln:s:range(data,22,3),char-encoding:n:range(data,26,2),char-encoding:n:range(data,28,2),char-encoding:n:range(data,30,2),script-Title:n:range(data,34,2)
 melm 101$a     ln
 melm 102$a     Country-heading
 
@@ -316,6 +319,7 @@ melm 646        Subject,Subject:p
 melm 676$a		Dewey-classification:w,Dewey-classification:s
 
 #############"# item information (based on 995) ###############
+melm 995$2		lost,lost:n
 melm 995$a		homebranch,Host-item
 melm 995$b		homebranch,Host-item
 melm 995$c		holdingbranch,Record-Source
