@@ -395,9 +395,8 @@ sub create_input {
                     size=\"67\"
                     maxlength=\"$max_length\"
                     readonly=\"readonly\"
-                    \/>
-                    <a href=\"#\" class=\"buttonDot\"
-                        onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&amp;index=$subfield_data{id}','$subfield_data{id}'); return false;\" title=\"Tag Editor\">...</a>
+                    \/><a href=\"#\" class=\"buttonDot\"
+                        onclick=\"openAuth('".$subfield_data{id}."','".$tagslib->{$tag}->{$subfield}->{authtypecode}."'); return false;\" title=\"Tag Editor\">...</a>
             ";
       }
     # it's a plugin field
