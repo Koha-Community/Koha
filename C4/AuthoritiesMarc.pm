@@ -1219,6 +1219,7 @@ sub merge {
     } else {
         #zebra connection  
         my $oConnection=C4::Context->Zconn("biblioserver",0);
+        $oConnection->option("preferredRecordSyntax"=>"XML");
         my $query;
         $query= "an=".$mergefrom;
         my $oResult = $oConnection->search(new ZOOM::Query::CCL2RPN( $query, $oConnection ));
@@ -1253,30 +1254,37 @@ sub merge {
     # May be used as a template for a bulkedit field  
     foreach my $marcrecord(@reccache){
         my $update;           
-        $marcrecord= MARC::File::USMARC::decode($marcrecord) unless(C4::Context->preference('NoZebra'));
+        $marcrecord= MARC::Record->new_from_xml($marcrecord,"utf8",C4::Context->preference("marcflavour")) unless(C4::Context->preference('NoZebra'));
         foreach my $tagfield (@tags_using_authtype){
+            warn "tagfield : $tagfield ";
             foreach my $field ($marcrecord->field($tagfield)){
                 my $auth_number=$field->subfield("9");
                 my $tag=$field->tag();          
                 if ($auth_number==$mergefrom) {
-                    my $field_to=MARC::Field->new(($tag_to?$tag_to:$tag),$field->indicator(1),$field->indicator(2),"9"=>$mergeto);
-                    foreach my $subfield (@record_to) {
-                        $field_to->add_subfields($subfield->[0] =>$subfield->[1]);
-                    }
-                    $marcrecord->delete_field($field);
-                    $marcrecord->insert_grouped_field($field_to);            
-                    $update=1;
+                my $field_to=MARC::Field->new(($tag_to?$tag_to:$tag),$field->indicator(1),$field->indicator(2),"9"=>$mergeto);
+                foreach my $subfield (@record_to) {
+                    $field_to->add_subfields($subfield->[0] =>$subfield->[1]);
+                }
+                $marcrecord->delete_field($field);
+                $marcrecord->insert_grouped_field($field_to);            
+                $update=1;
                 }
             }#for each tag
         }#foreach tagfield
-        my $oldbiblio = TransformMarcToKoha($dbh,$marcrecord,"") ;
+        my ($bibliotag,$bibliosubf) = GetMarcFromKohaField("biblio.biblionumber","") ;
+        my $biblionumber=$marcrecord->subfield($bibliotag,$bibliosubf);
+        unless ($biblionumber){
+            warn "pas de numéro de notice bibliographique dans : ".$marcrecord->as_formatted;
+            next;
+        }
         if ($update==1){
-            &ModBiblio($marcrecord,$oldbiblio->{'biblionumber'},GetFrameworkCode($oldbiblio->{'biblionumber'})) ;
+            &ModBiblio($marcrecord,$biblionumber,GetFrameworkCode($biblionumber)) ;
             $counteditedbiblio++;
             warn $counteditedbiblio if (($counteditedbiblio % 10) and $ENV{DEBUG});
         }    
     }#foreach $marc
     return $counteditedbiblio;  
+  # now, find every other authority linked with this authority
   # now, find every other authority linked with this authority
 #   my $oConnection=C4::Context->Zconn("authorityserver");
 #   my $query;
