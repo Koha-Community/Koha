@@ -1798,9 +1798,9 @@ sub HasSubscriptionExpired {
       my ($res) = $sth->fetchrow  ;
       my @res=split (/-/,$res);
       my @endofsubscriptiondate=split(/-/,$expirationdate);
-      map{
+      foreach (@res,@endofsubscriptiondate){
         return 2 unless $_ ;
-      } (@res,@endofsubscriptiondate);     
+      } 
       return 1 if ( (@endofsubscriptiondate && Delta_Days($res[0],$res[1],$res[2],
                   $endofsubscriptiondate[0],$endofsubscriptiondate[1],$endofsubscriptiondate[2]) <= 0)
                   || (!$res));
