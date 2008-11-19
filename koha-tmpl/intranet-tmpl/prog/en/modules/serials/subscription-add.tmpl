@@ -806,30 +806,45 @@ function moreoptionsupdate(inputfield,rollover){
     var fieldnumber = fieldname.slice(-5,-4);
 
     basefield.value = inputfield.value;
-    if(basefield.name.slice(0,-1) == 'lastvalue') {
-        // lastvalue seems to mean 'begins with', tracking the first received issue so
-        // we can recreate the whole historeven after receiving.  innerloop is the var that
-        // actually tracks which issue we're on, though.
-        document.getElementById('innerloop'+fieldnumber).value = inputfield.value;
-    }
     var patternchoice = document.getElementById("numberpattern").value;
     switch(patternchoice){
     case "2":
     case "4":
     case "5":
     case "8": // Year, Number.  -- Why not just use Vol, Number withvol==year??
-       if (document.f.lastvalue2temp.value>0){document.f.innerloop1.value = document.f.lastvalue2temp.value - 1;}
+                //  FIXME: this my conflict with innerloop calc below.
+       if (document.f.lastvalue2temp.value > 0){document.f.innerloop1.value = document.f.lastvalue2temp.value - 1;}
       break;   
     }  
-    if(rollover){
+    if(basefield.name.slice(0,-1) == 'lastvalue' || 'whenmorethan' ) {
+        // The enumeration string is held in a positional numeral notation with three positions, X,Y,Z.
+        // The last values lastvalue1, lastvalue2,lastvalue3 should match the last received serial's X,Y,Z enumeration.
+        // make array indexes start with 1 for consistency with variable names.
+        var innerloop = new Array( undefined, document.getElementById('innerloop1'), document.getElementById('innerloop2'), document.getElementById('innerloop3') );
+        var lastvalue = new Array( undefined, document.getElementById('lastvalue1').value *1 , document.getElementById('lastvalue2').value *1 , document.getElementById('lastvalue3').value *1  );
+        var every = new Array( undefined, document.getElementById('every1').value *1 , document.getElementById('every2').value *1 , document.getElementById('every3').value *1  );
+        var add = new Array( undefined, document.getElementById('add1').value *1 , document.getElementById('add2').value *1 , document.getElementById('add3').value *1  );
+        var whenmorethan = new Array( undefined, document.getElementById('whenmorethan1').value *1 , document.getElementById('whenmorethan2').value *1 , document.getElementById('whenmorethan3').value *1  );
+        
+       if(rollover){
        // calculate rollover  for higher level of periodicity.
-       // if there are two levels of periodicity, (e.g. vol{X},num{Y},issue{Z}, then every1=every2*whenmorethan2 
-       // otherwise, every2 == 1.
-       var addN = (document.getElementById('add'+fieldnumber)) ? document.getElementById('add'+fieldnumber).value : 1 ;
-       var everyN = (document.getElementById('every'+fieldnumber)) ? document.getElementById('every'+fieldnumber).value : 1 ;
-       document.getElementById('every'+(fieldnumber-1)).value = basefield.value * everyN / addN ;
-     }
-     //FIXME : add checks for innerloop || lastvalue  > rollover  
+       // if there are two levels of periodicity, (e.g. vol{X},num{Y},issue{Z}, then every1=every2*whenmorethan2 / add2 .
+          for(var N=3;N>1;N--){
+            if( add[N] > 0){
+                var addN = (add[N]) ? add[N] : 1 ;
+                var everyN = (document.getElementById('every'+N)) ? document.getElementById('every'+N).value : 1 ;
+                document.getElementById('every'+(N-1)).value = whenmorethan[N] * everyN / addN ;
+            }
+          }
+        }
+        innerloop[3].value = ( every[3] > 1 ) ? lastvalue[3] % every[3] : 0 ;
+        innerloop[2].value = ( every[2] > 1 ) ? lastvalue[3] - 1 : 0 ;
+        innerloop[1].value = ( every[1] > 1 ) ? 
+                                    ( whenmorethan[3] > 0 ) ?  (lastvalue[2] - 1) * every[2] + 1* innerloop[2].value 
+                                                            : lastvalue[2] - 1
+                                               : 0 ;
+    }
+     //FIXME : add checks for innerloop || lastvalue .gt. rollover  
 }
 
 
