@@ -522,8 +522,8 @@ DROP TABLE IF EXISTS `borrower_attributes`;
 CREATE TABLE `borrower_attributes` (
   `borrowernumber` int(11) NOT NULL,
   `code` varchar(10) NOT NULL,
-  `attribute` varchar(30) default NULL,
-  `password` varchar(30) default NULL,
+  `attribute` varchar(64) default NULL,
+  `password` varchar(64) default NULL,
   KEY `borrowernumber` (`borrowernumber`),
   KEY `code_attribute` (`code`, `attribute`),
   CONSTRAINT `borrower_attributes_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`)
