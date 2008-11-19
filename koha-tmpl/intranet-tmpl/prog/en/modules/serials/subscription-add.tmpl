@@ -811,12 +811,6 @@ function moreoptionsupdate(inputfield,rollover){
     var fieldnumber = fieldname.slice(-5,-4);
 
     basefield.value = inputfield.value;
-    if(basefield.name.slice(0,-1) == 'lastvalue') {
-        // lastvalue seems to mean 'begins with', tracking the first received issue so
-        // we can recreate the whole historeven after receiving.  innerloop is the var that
-        // actually tracks which issue we're on, though.
-        document.getElementById('innerloop'+fieldnumber).value = inputfield.value;
-    }
     var patternchoice = document.getElementById("numberpattern").value;
     switch(patternchoice){
     case "2":
