@@ -254,7 +254,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 
     <!-- TMPL_IF NAME="SpecifyDueDate" --><div class="date-select">
         <div class="hint">Specify Due Date:</div>
-		<!-- TMPL_IF NAME="stickyduedate" --><input type="text" size="10" id="duedatespec" name="duedatespec" value="<!-- TMPL_VAR NAME="duedatespec" -->" /><!-- TMPL_ELSE --><input type="text" size="10" id="duedatespec" name="duedatespec" value="" />
+		<!-- TMPL_IF NAME="duedatespec" --><input type="text" size="10" id="duedatespec" name="duedatespec" value="<!-- TMPL_VAR NAME="duedatespec" -->" /><!-- TMPL_ELSE --><input type="text" size="10" id="duedatespec" name="duedatespec" value="" />
 <!-- /TMPL_IF -->
 		<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar"  border="0" id="CalendarDueDate" style="cursor: pointer;" />
              <script language="JavaScript" type="text/javascript">
