@@ -2180,13 +2180,11 @@ sub ModZebra {
 sub GetNoZebraIndexes {
     my $index = C4::Context->preference('NoZebraIndexes');
     my %indexes;
-    foreach my $line (split /('|"),/,$index) {
+    foreach my $line (split /('|"),[\n\r]*/,$index) {
         $line =~ /(.*)=>(.*)/;
-        my $index = substr($1,1); # get the index, don't forget to remove initial ' or "
+        my $index = $1; # initial ' or " is removed afterwards
         my $fields = $2;
         $index =~ s/'|"|\s//g;
-
-
         $fields =~ s/'|"|\s//g;
         $indexes{$index}=$fields;
     }
