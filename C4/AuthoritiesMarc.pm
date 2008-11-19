@@ -711,8 +711,9 @@ sub GetAuthority {
     my $sth=$dbh->prepare("select authtypecode, marcxml from auth_header where authid=?");
     $sth->execute($authid);
     my ($authtypecode, $marcxml) = $sth->fetchrow;
-    my $record=MARC::Record->new_from_xml(StripNonXmlChars($marcxml),'UTF-8',
-        (C4::Context->preference("marcflavour") eq "UNIMARC"?"UNIMARCAUTH":C4::Context->preference("marcflavour")));
+    my $record=eval {MARC::Record->new_from_xml(StripNonXmlChars($marcxml),'UTF-8',
+        (C4::Context->preference("marcflavour") eq "UNIMARC"?"UNIMARCAUTH":C4::Context->preference("marcflavour")))};
+    return undef if ($@);
     $record->encoding('UTF-8');
     if (C4::Context->preference("marcflavour") eq "MARC21") {
       my ($auth_type_tag, $auth_type_subfield) = get_auth_type_location($authtypecode);
