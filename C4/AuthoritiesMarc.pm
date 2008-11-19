@@ -118,10 +118,8 @@ sub SearchAuthorities {
         for(my $i = 0 ; $i <= $#{$value} ; $i++)
         {
             if (@$value[$i]){
-                if (@$tags[$i] eq "mainmainentry") {
-                    $query .=" AND mainmainentry";
-                }elsif (@$tags[$i] eq "mainentry") {
-                    $query .=" AND mainentry";
+                if (@$tags[$i] =~/mainentry|mainmainentry/) {
+                    $query .= qq( AND @$tags[$i] );
                 } else {
                     $query .=" AND ";
                 }
@@ -216,7 +214,7 @@ sub SearchAuthorities {
         }
         
         my $dosearch;
-        my $and;
+        my $and=" \@and " ;
         my $q2;
         for(my $i = 0 ; $i <= $#{$value} ; $i++)
         {
@@ -242,7 +240,6 @@ sub SearchAuthorities {
                 } else {
                     $attr .=" \@attr 5=1 \@attr 4=6 ";## Word list, right truncated, anywhere
                 }
-                $and .=" \@and " ;
                 $attr =$attr."\"".@$value[$i]."\"";
                 $q2 .=$attr;
             $dosearch=1;
@@ -408,7 +405,7 @@ sub GetAuthTypeCode {
   my $dbh=C4::Context->dbh;
   my $sth = $dbh->prepare("select authtypecode from auth_header where authid=?");
   $sth->execute($authid);
-  my ($authtypecode) = $sth->fetchrow;
+  my $authtypecode = $sth->fetchrow;
   return $authtypecode;
 }
  
@@ -580,11 +577,14 @@ sub AddAuthority {
     # only need to do this fix when modifying an existing authority
     C4::AuthoritiesMarc::MARC21::fix_marc21_auth_type_location($record, $auth_type_tag, $auth_type_subfield);
   } 
-
-  unless ($record->field($auth_type_tag) && $record->subfield($auth_type_tag, $auth_type_subfield)) {
+  if (my $field=$record->field($auth_type_tag)){
+    $field->update($auth_type_subfield=>$authtypecode);
+  }
+  else {
     $record->add_fields($auth_type_tag,'','', $auth_type_subfield=>$authtypecode); 
   }
 
+  my $auth_exists=0;
   my $oldRecord;
   if (!$authid) {
     my $sth=$dbh->prepare("select max(authid) from auth_header");
@@ -596,19 +596,22 @@ sub AddAuthority {
         $record->delete_field($record->field('001'));
         $record->insert_fields_ordered(MARC::Field->new('001',$authid));
     }
-#     warn $record->as_formatted;
-    $sth=$dbh->prepare("insert into auth_header (authid,datecreated,authtypecode,marc,marcxml) values (?,now(),?,?,?)");
+  } else {
+    $auth_exists=$dbh->do(qq(select authid from auth_header where authid=?),undef,$authid);
+#     warn "auth_exists = $auth_exists";
+  }
+  if ($auth_exists>0){
+      $oldRecord=GetAuthority($authid);
+      $record->add_fields('001',$authid) unless ($record->field('001'));
+#       warn "\n\n\n enregistrement".$record->as_formatted;
+      my $sth=$dbh->prepare("update auth_header set authtypecode=?,marc=?,marcxml=? where authid=?");
+      $sth->execute($authtypecode,$record->as_usmarc,$record->as_xml_record($format),$authid) or die $sth->errstr;
+      $sth->finish;
+  }
+  else {
+    my $sth=$dbh->prepare("insert into auth_header (authid,datecreated,authtypecode,marc,marcxml) values (?,now(),?,?,?)");
     $sth->execute($authid,$authtypecode,$record->as_usmarc,$record->as_xml_record($format));
     $sth->finish;
-  }else{
-      if (C4::Context->preference('NoZebra')) {
-        $oldRecord = GetAuthority($authid);
-      }
-      $record->add_fields('001',$authid) unless ($record->field('001'));
-      my $sth=$dbh->prepare("update auth_header set marc=?,marcxml=? where authid=?");
-      $sth->execute($record->as_usmarc,$record->as_xml_record($format),$authid);
-      $sth->finish;
-      $dbh->do("unlock tables");
   }
   ModZebra($authid,'specialUpdate',"authorityserver",$oldRecord,$record);
   return ($authid);
@@ -646,7 +649,9 @@ sub ModAuthority {
 ### If a library thinks that updating all biblios is a long process and wishes to leave that to a cron job to use merge_authotities.p
 ### they should have a system preference "dontmerge=1" otherwise by default biblios will be updated
 ### the $merge flag is now depreceated and will be removed at code cleaning
-  if (C4::Context->preference('dontmerge') ){
+  if (C4::Context->preference('MergeAuthoritiesOnUpdate') ){
+      &merge($authid,$oldrecord,$authid,$record);
+  } else {
   # save the file in tmp/modified_authorities
       my $cgidir = C4::Context->intranetdir ."/cgi-bin";
       unless (opendir(DIR,"$cgidir")) {
@@ -658,8 +663,6 @@ sub ModAuthority {
       open AUTH, "> $filename";
       print AUTH $authid;
       close AUTH;
-  } else {
-      &merge($authid,$oldrecord,$authid,$record);
   }
   return $authid;
 }
@@ -1185,20 +1188,23 @@ sub merge {
     my $dbh=C4::Context->dbh;
     my $authtypecodefrom = GetAuthTypeCode($mergefrom);
     my $authtypecodeto = GetAuthTypeCode($mergeto);
+    warn "mergefrom : $authtypecodefrom $mergefrom mergeto : $authtypecodeto $mergeto ";
     # return if authority does not exist
     my @X = $MARCfrom->fields();
     return "error MARCFROM not a marcrecord ".Data::Dumper::Dumper($MARCfrom) if $#X == -1;
-    @X = $MARCto->fields();
+    my @X = $MARCto->fields();
     return "error MARCTO not a marcrecord".Data::Dumper::Dumper($MARCto) if $#X == -1;
     # search the tag to report
     my $sth = $dbh->prepare("select auth_tag_to_report from auth_types where authtypecode=?");
     $sth->execute($authtypecodefrom);
-    my ($auth_tag_to_report) = $sth->fetchrow;
+    my ($auth_tag_to_report_from) = $sth->fetchrow;
+    $sth->execute($authtypecodeto);
+    my ($auth_tag_to_report_to) = $sth->fetchrow;
     
     my @record_to;
-    @record_to = $MARCto->field($auth_tag_to_report)->subfields() if $MARCto->field($auth_tag_to_report);
+    @record_to = $MARCto->field($auth_tag_to_report_to)->subfields() if $MARCto->field($auth_tag_to_report_to);
     my @record_from;
-    @record_from = $MARCfrom->field($auth_tag_to_report)->subfields() if $MARCfrom->field($auth_tag_to_report);
+    @record_from = $MARCfrom->field($auth_tag_to_report_from)->subfields() if $MARCfrom->field($auth_tag_to_report_from);
     
     my @reccache;
     # search all biblio tags using this authority.
@@ -1272,7 +1278,13 @@ sub merge {
             }#for each tag
         }#foreach tagfield
         my ($bibliotag,$bibliosubf) = GetMarcFromKohaField("biblio.biblionumber","") ;
-        my $biblionumber=$marcrecord->subfield($bibliotag,$bibliosubf);
+        my $biblionumber;
+        if ($bibliotag<10){
+            $biblionumber=$marcrecord->field($bibliotag)->data;
+        }
+        else {
+            $biblionumber=$marcrecord->subfield($bibliotag,$bibliosubf);
+        }
         unless ($biblionumber){
             warn "pas de numéro de notice bibliographique dans : ".$marcrecord->as_formatted;
             next;
