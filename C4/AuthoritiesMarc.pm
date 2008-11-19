@@ -234,7 +234,7 @@ sub SearchAuthorities {
                 }elsif (@$operator[$i] eq "="){
                     $attr.=" \@attr 4=107 ";           #Number Exact match
                 }elsif (@$operator[$i] eq "start"){
-                    $attr.=" \@attr 4=1 \@attr 5=1 ";#Phrase, Right truncated
+                    $attr.=" \@attr 3=2 \@attr 4=1 \@attr 5=1 ";#Firstinfield Phrase, Right truncated
                 } else {
                     $attr .=" \@attr 5=1 \@attr 4=6 ";## Word list, right truncated, anywhere
                 }
