@@ -48,6 +48,7 @@ sub StringSearch {
     my $dbh = C4::Context->dbh;
     $searchstring =~ s/\'/\\\'/g;
     my @data = split( ' ', $searchstring );
+    $data[0] = '' unless @data;
     my $sth = $dbh->prepare("SELECT * FROM letter WHERE (code LIKE ?) ORDER BY module, code");
     $sth->execute("$data[0]%");     # slightly bogus, only searching on first string.
     return $sth->fetchall_arrayref({});
@@ -77,12 +78,15 @@ sub column_picks ($) {
 
 my $input       = new CGI;
 my $searchfield = $input->param('searchfield');
+$searchfield = '' unless defined($searchfield);
 # my $offset      = $input->param('offset'); # pagination not implemented
 my $script_name = "/cgi-bin/koha/tools/letter.pl";
 my $code        = $input->param('code');
 my $module      = $input->param('module');
+$module = '' unless defined($module);
 my $content     = $input->param('content');
 my $op          = $input->param('op');
+$op = '' unless defined($op);
 $searchfield =~ s/\,//g;
 my $dbh = C4::Context->dbh;
 
