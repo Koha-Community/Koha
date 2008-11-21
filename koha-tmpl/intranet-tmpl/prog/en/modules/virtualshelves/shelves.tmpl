@@ -59,7 +59,7 @@ $(document).ready(function(){
 </script>
 <style type="text/css">
 	input.confirm {
-		background:lightblue url(../../img/button-bg.gif) repeat-x scroll left top;
+		background:lightblue repeat-x scroll left top;
 		border-width:2pt;
 	}
 </style>
@@ -299,7 +299,7 @@ $(document).ready(function(){
         		<tr><th>List Name</th><th>Contents</th><th>Sort by</th><th>Type</th><th>Options</th></tr>
                 <!-- TMPL_LOOP NAME="shelveslooppriv" -->
                     <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!--TMPL_ELSE--><tr><!-- /TMPL_IF -->
-        <td><a href="shelves.pl?<!-- TMPL_IF NAME="showprivateshelves" -->display=privateshelves&<!-- /TMPL_IF -->viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"  --></a></td>
+        <td><a href="shelves.pl?<!-- TMPL_IF NAME="showprivateshelves" -->display=privateshelves&amp;<!-- /TMPL_IF -->viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"  --></a></td>
         <td><!-- TMPL_VAR NAME="count" --> item(s)</td>
         <td><!-- TMPL_VAR NAME="sortfield" --></td>
         <td><!-- TMPL_IF NAME="viewcategory1" -->Private<!-- /TMPL_IF -->
