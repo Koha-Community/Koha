@@ -121,13 +121,13 @@ if ($do_munge) {
 if ($authorities) {
     index_records('authority', $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt);
 } else {
-    print "skipping authorities\n";
+    print "skipping authorities\n" if ( $verbose_logging );
 }
 
 if ($biblios) {
     index_records('biblio', $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt);
 } else {
-    print "skipping biblios\n";
+    print "skipping biblios\n" if ( $verbose_logging );
 }
 
 
