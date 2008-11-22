@@ -833,7 +833,11 @@ sub FindDuplicateAuthority {
     # build a request for SearchAuthorities
     my $query='at='.$authtypecode.' ';
     my $filtervalues=qr([\001-\040\!\'\"\`\#\$\%\&\*\+,\-\./:;<=>\?\@\(\)\{\[\]\}_\|\~]);
-    map {$_->[1]=~s/$filtervalues/ /g; $query.= " and he,wrdl=\"".$_->[1]."\"" if ($_->[0]=~/[A-z]/)}  $record->field($auth_tag_to_report)->subfields() if $record->field($auth_tag_to_report);
+    if ($record->field($auth_tag_to_report)) {
+      foreach ($record->field($auth_tag_to_report)->subfields()) {
+        $_->[1]=~s/$filtervalues/ /g; $query.= " and he,wrdl=\"".$_->[1]."\"" if ($_->[0]=~/[A-z]/);
+      }
+    }
     my ($error, $results, $total_hits)=SimpleSearch( $query, 0, 1, [ "authorityserver" ] );
     # there is at least 1 result => return the 1st one
     if (@$results>0) {
@@ -1217,11 +1221,11 @@ sub merge {
         $rq->execute;
         while (my $biblionumbers=$rq->fetchrow){
             my @biblionumbers=split /;/,$biblionumbers;
-            map {
+            foreach (@biblionumbers) {
                 my $biblionumber=$1 if ($_=~/(\d+),.*/);
                 my $marc=GetMarcBiblio($biblionumber);        
                 push @reccache,$marc;        
-            } @biblionumbers;
+            }
         }
     } else {
         #zebra connection  
