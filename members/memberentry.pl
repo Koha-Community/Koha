@@ -58,22 +58,22 @@ my ($template, $loggedinuser, $cookie)
            authnotrequired => 0,
            flagsrequired => {borrowers => 1},
            debug => ($debug) ? 1 : 0,
-           });
-my $guarantorid=$input->param('guarantorid');
-my $borrowernumber=$input->param('borrowernumber');
-my $actionType=$input->param('actionType') || '';
-my $modify=$input->param('modify');
-my $delete=$input->param('delete');
-my $op=$input->param('op');
-my $destination=$input->param('destination');
-my $cardnumber=$input->param('cardnumber');
-my $check_member=$input->param('check_member');
-my $name_city=$input->param('name_city');
-my $nodouble=$input->param('nodouble');
-my $select_city=$input->param('select_city');
-my $nok=$input->param('nok');
-my $guarantorinfo=$input->param('guarantorinfo');
-my $step=$input->param('step') || 0;
+       });
+my $guarantorid    = $input->param('guarantorid');
+my $borrowernumber = $input->param('borrowernumber');
+my $actionType     = $input->param('actionType') || '';
+my $modify         = $input->param('modify');
+my $delete         = $input->param('delete');
+my $op             = $input->param('op');
+my $destination    = $input->param('destination');
+my $cardnumber     = $input->param('cardnumber');
+my $check_member   = $input->param('check_member');
+my $name_city      = $input->param('name_city');
+my $nodouble       = $input->param('nodouble');
+my $select_city    = $input->param('select_city');
+my $nok            = $input->param('nok');
+my $guarantorinfo  = $input->param('guarantorinfo');
+my $step           = $input->param('step') || 0;
 my @errors;
 my $default_city;
 # $check_categorytype contains the value of duplicate borrowers category type to redirect in good template in step =2
@@ -97,14 +97,14 @@ foreach (@field_check) {
 $template->param("add"=>1) if ($op eq 'add');
 $template->param("checked" => 1) if ($nodouble eq 1);
 ($borrower_data = GetMember($borrowernumber,'borrowernumber')) if ($op eq 'modify' or $op eq 'save');
-my $categorycode = $input->param('categorycode') || $borrower_data->{'categorycode'};
+my $categorycode  = $input->param('categorycode') || $borrower_data->{'categorycode'};
 my $category_type = $input->param('category_type');
 my $new_c_type = $category_type; #if we have input param, then we've already chosen the cat_type.
 unless ($category_type or !($categorycode)){
-  my $borrowercategory= GetBorrowercategory($categorycode);
-  $category_type = $borrowercategory->{'category_type'};
-  my $category_name = $borrowercategory->{'description'}; 
-  $template->param("categoryname"=>$category_name);
+    my $borrowercategory = GetBorrowercategory($categorycode);
+    $category_type    = $borrowercategory->{'category_type'};
+    my $category_name = $borrowercategory->{'description'}; 
+    $template->param("categoryname"=>$category_name);
 }
 $category_type="A" unless $category_type; # FIXME we should display a error message instead of a 500 error !
 
@@ -135,7 +135,7 @@ if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
     }
   # check permission to modify login info.
     if (ref($borrower_data) && ($borrower_data->{'category_type'} eq 'S') && ! (C4::Auth::haspermission($dbh,$userenv->{'id'},{'staffaccess'=>1})) )  {
-        $NoUpdateLogin =1;
+        $NoUpdateLogin = 1;
     }
 }
 
@@ -182,12 +182,12 @@ if ($guarantorid eq '') {
 #builds default userid
 if ( (defined $newdata{'userid'}) && ($newdata{'userid'} eq '')){
   my $onefirstnameletter = substr($data{'firstname'},0,1);
-  my  $fivesurnameletter = substr($data{'surname'},0,9);
+  my  $fivesurnameletter = substr($data{'surname'}  ,0,9);
   $newdata{'userid'}=lc($onefirstnameletter.$fivesurnameletter);
 }
   
 $debug and warn join "\t", map {"$_: $newdata{$_}"} qw(dateofbirth dateenrolled dateexpiry);
-my $loginexist=0;
+my $loginexist = 0;
 my $extended_patron_attributes = ();
 if ($op eq 'save' || $op eq 'insert'){
   if (checkcardnumber($newdata{cardnumber},$newdata{borrowernumber})){ 
@@ -232,10 +232,10 @@ if ($op eq 'save' || $op eq 'insert'){
 }
 
 if ($op eq 'modify' || $op eq 'insert' || $op eq 'save' ){
-  unless ($newdata{'dateexpiry'}){
-	my $arg2 = $newdata{'dateenrolled'} || C4::Dates->today('iso');
-    $newdata{'dateexpiry'} = GetExpiryDate($newdata{'categorycode'},$arg2);
-  }
+    unless ($newdata{'dateexpiry'}){
+        my $arg2 = $newdata{'dateenrolled'} || C4::Dates->today('iso');
+        $newdata{'dateexpiry'} = GetExpiryDate($newdata{'categorycode'},$arg2);
+    }
 }
 
 ###  Error checks should happen before this line.
@@ -304,40 +304,40 @@ if ($delete){
 }
 
 if ($nok){
-  $op="add" if ($op eq "insert");
-  $op="modify" if ($op eq "save");
-  %data=%newdata; 
-  $template->param( updtype => ($op eq 'add' ?'I':'M'));	# used to check for $op eq "insert"... but we just changed $op!
-  unless ($step){  
-    $template->param( step_1 => 1,step_2 => 1,step_3 => 1, step_4 => 1);
-  }  
+    $op="add" if ($op eq "insert");
+    $op="modify" if ($op eq "save");
+    %data=%newdata; 
+    $template->param( updtype => ($op eq 'add' ?'I':'M'));	# used to check for $op eq "insert"... but we just changed $op!
+    unless ($step){  
+        $template->param( step_1 => 1,step_2 => 1,step_3 => 1, step_4 => 1);
+    }  
 } 
 if (C4::Context->preference("IndependantBranches")) {
-  my $userenv = C4::Context->userenv;
-  if ($userenv->{flags} != 1 && $data{branchcode}){
-    unless ($userenv->{branch} eq $data{'branchcode'}){
-      print $input->redirect("/cgi-bin/koha/members/members-home.pl");
-	  exit;
+    my $userenv = C4::Context->userenv;
+    if ($userenv->{flags} != 1 && $data{branchcode}){
+        unless ($userenv->{branch} eq $data{'branchcode'}){
+            print $input->redirect("/cgi-bin/koha/members/members-home.pl");
+            exit;
+        }
     }
-  }
 }
 if ($op eq 'add'){
     my $arg2 = $newdata{'dateenrolled'} || C4::Dates->today('iso');
     $data{'dateexpiry'} = GetExpiryDate($newdata{'categorycode'},$arg2);
-    $template->param( updtype => 'I',step_1=>1,step_2=>1,step_3=>1, step_4 => 1);
+    $template->param( updtype => 'I', step_1=>1, step_2=>1, step_3=>1, step_4=>1);
 }
 if ($op eq "modify")  {
-  $template->param( updtype => 'M',modify => 1 );
-  $template->param( step_1=>1,step_2=>1,step_3=>1, step_4 => 1) unless $step;
+    $template->param( updtype => 'M',modify => 1 );
+    $template->param( step_1=>1, step_2=>1, step_3=>1, step_4=>1) unless $step;
 }
 # my $cardnumber=$data{'cardnumber'};
 $data{'cardnumber'}=fixup_cardnumber($data{'cardnumber'}) if $op eq 'add';
 if ($data{'sex'} eq 'F'){
-  $template->param(female => 1);
+    $template->param(female => 1);
 } elsif ($data{'sex'} eq 'M'){
-    $template->param(male => 1);
+    $template->param(  male => 1);
 } else {
-    $template->param(none => 1);
+    $template->param(  none => 1);
 }
 
 ##Now all the data to modify a member.
@@ -413,7 +413,7 @@ my $borrotitlepopup = CGI::popup_menu(-name=>'title',
         -default=>$default_borrowertitle
         );    
 
-my @relationships = split /,|\|/,C4::Context->preference('BorrowerRelationship');
+my @relationships = split /,|\|/, C4::Context->preference('BorrowerRelationship');
 my @relshipdata;
 while (@relationships) {
   my $relship = shift @relationships || '';
@@ -500,20 +500,19 @@ if (C4::Context->preference("memberofinstitution")){
     );
 }
 
-
 # --------------------------------------------------------------------------------------------------------
 
 my $CGIsort = buildCGIsort("Bsort1","sort1",$data{'sort1'});
 if ($CGIsort) {
-  $template->param(CGIsort1 => $CGIsort);
+    $template->param(CGIsort1 => $CGIsort);
 }
 $template->param( sort1 => $data{'sort1'});		# shouldn't this be in an "else" statement like the 2nd one?
 
 $CGIsort = buildCGIsort("Bsort2","sort2",$data{'sort2'});
 if ($CGIsort) {
-  $template->param(CGIsort2 => $CGIsort);
+    $template->param(CGIsort2 => $CGIsort);
 } else {
-  $template->param( sort2 => $data{'sort2'});
+    $template->param( sort2 => $data{'sort2'});
 }
 
 if ($nok) {
@@ -592,7 +591,7 @@ sub  parse_extended_patron_attributes {
         my $value = $input->param($key);
         next unless defined($value) and $value ne '';
         my $password = $input->param("${key}_password");
-        my $code = $input->param("${key}_code");
+        my $code     = $input->param("${key}_code");
         next if exists $dups{$code}->{$value};
         $dups{$code}->{$value} = 1;
         push @attr, { code => $code, value => $value, password => $password };
