@@ -4,84 +4,83 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>UNIMARC_constructeur champ 121b</title>
+<title>UNIMARC_Field 121b builder</title>
 </head>
 <body>
 <form name="f_pop">
 <table>
 	<tr>
-		<td>Altitude du capteur:</td>
+		<td>Altitude of Sensor</td>
 		<td>
 			<select name="f1" size="1">
 			<!-- TMPL_IF name="f1a" -->
-				<option value="a" SELECTED>Terrestre</option>
+				<option value="a" SELECTED>terrestrial</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Terrestre</option>
+				<option value="a">terrestrial</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1b" -->
-				<option value="b" SELECTED>Aerienne</option>
+				<option value="b" SELECTED>aerial</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Aerienne</option>
+				<option value="b">aerial</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1c" -->
-				<option value="c" SELECTED>Spatiale</option>
+				<option value="c" SELECTED>space</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Spatiale</option>
+				<option value="c">space</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr><tr>
-		<td>Orientation du capteur :</td>
+		<td>Attitude of sensor</td>
 		<td>
 			<select name="f2" size="1">
                         
 			<!-- TMPL_IF name="f2a" -->
-				<option value="a" SELECTED>Oblique faible</option>
+				<option value="a" SELECTED>low oblique</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Oblique faible</option>
+				<option value="a">low oblique</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2b" -->
-				<option value="b" SELECTED>Oblique forte</option>
+				<option value="b" SELECTED>high oblique</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Oblique forte</option>
+				<option value="b">high oblique</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2c" -->
-				<option value="c" SELECTED>Verticale</option>
+				<option value="c" SELECTED>vertical</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Verticale</option>
+				<option value="c">vertical</option>
 			<!-- /TMPL_IF -->
-		</td></tr><tr>		<td>Bandes spectrales (nombre
-		a deux chiffres 01->99 ou xx (ecrire 01 pour 1):</td>
+		</td></tr><tr>		<td>Spectral bands : 01 to 99 = number of bands, xx = not applicable</td>
 		   <td><input type="text" name="f3" maxlength=2 size=3
 		   value="<!-- TMPL_VAR name="f3" -->">
 		</td></tr>
 <tr>
-		<td>Qualite de l'image:</td>
+		<td>Quality of image</td>
 		<td>
 			<select name="f4" size="1">
 			
 			<!-- TMPL_IF name="f4a" -->
-				<option value="a" SELECTED>Faible</option>
+				<option value="a" SELECTED>poor</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Faible</option>
+				<option value="a">poor</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f4b" -->
-				<option value="b" SELECTED>Acceptable</option>
+				<option value="b" SELECTED>fair</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Acceptable</option>
+				<option value="b">fair</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f4c" -->
-				<option value="c" SELECTED>Bonne</option>
+				<option value="c" SELECTED>good</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Bonne</option>
+				<option value="c">good</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f4d" -->
-				<option value="d" SELECTED>Tres bonne</option>
+				<option value="d" SELECTED>very good</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">Tres bonne</option>
+				<option value="d">very good</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr><tr>
-		<td>Couverture nuageuse exprimee en huitieme:</td>
+		<td>Cloud cover</td>
 		<td>
 			<select name="f5" size="1">
 
@@ -121,20 +120,20 @@
 				<option value="7">7/8</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f58" -->
-				<option value="8" SELECTED>Couverture totale</option>
+				<option value="8" SELECTED>completely covered by clouds</option>
 			<!-- TMPL_ELSE -->
-				<option value="8">Couverture totale</option>
+				<option value="8">completely covered by clouds</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr><tr>
 
-		       <td>Qualite de l'image:</td>
+		       <td>Mean value of ground resolution</td>
                 <td>
                         <select name="f6" size="1">
                         <!-- TMPL_IF name="f6-" -->
-                                <option value="-" SELECTED>Inferieure au cm</option>
+                                <option value="-" SELECTED>less than 1 centimetre</option>
                         <!-- TMPL_ELSE -->
-                                <option value="-">Inferieure au cm</option>
+                                <option value="-">less than 1 centimetre</option>
                         <!-- /TMPL_IF -->
                         
                         <!-- TMPL_IF name="f61" -->
@@ -192,15 +191,15 @@
                         <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="f6+" -->
                                 <option value="+"
-                SELECTED>1</option>
+                SELECTED>greater than 9 kilometres</option>
                         <!-- TMPL_ELSE -->
-                                <option value="+">+</option>
+                                <option value="+">greater than 9 kilometres</option>
                         <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="f6x" -->
                                 <option value="x"
-                SELECTED>1</option>
+                SELECTED>not applicable</option>
                         <!-- TMPL_ELSE -->
-                                <option value="x">x</option>
+                                <option value="x">not applicable</option>
                         <!-- /TMPL_IF -->
                         </select>
                 
@@ -227,9 +226,9 @@
 				<option value="d">Decametres</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7h" -->
-				<option value="h" SELECTED>Hectometres</option>
+				<option value="h" SELECTED>Hectametres</option>
 			<!-- TMPL_ELSE -->
-				<option value="h">Hectometres</option>
+				<option value="h">Hectametres</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7k" -->
 				<option value="k" SELECTED>Kilometres</option>
@@ -237,9 +236,9 @@
 				<option value="k">Kilometres</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7x" -->
-				<option value="x" SELECTED>Non applicable</option>
+				<option value="x" SELECTED>not applicable</option>
 			<!-- TMPL_ELSE -->
-				<option value="x">Non applicable</option>
+				<option value="x">not applicable</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td>

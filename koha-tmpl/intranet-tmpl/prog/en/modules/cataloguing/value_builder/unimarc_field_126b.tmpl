@@ -4,132 +4,132 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>UNIMARC_constructeur champ 126b</title>
+<title>UNIMARC_Field 126b builder</title>
 </head>
 <body>
 <form name="f_pop">
 <table>
 	<tr>
-		<td>Type de disque, cylindre ou bande magnetique:</td>
+		<td>Kind of disc, cylinder or tape:</td>
 		<td>
 			<select name="f1" size="1">
 
 			<!-- TMPL_IF name="f1a" -->
-				<option value="a" SELECTED>Gravure directe</option>
+				<option value="a" SELECTED>instantaneous (unique, cut on the spot)</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Gravure directe</option>
+				<option value="a">instantaneous (unique, cut on the spot)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1b" -->
-				<option value="b" SELECTED>Production industrielle</option>
+				<option value="b" SELECTED>mass produced</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Production industrielle</option>
+				<option value="b">mass produced</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1c" -->
-				<option value="c" SELECTED>Bande "Master"</option>
+				<option value="c" SELECTED>master tape</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Bande "Master"</option>
+				<option value="c">master tape</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1d" -->
-				<option value="d" SELECTED>Bande reproduite a partir du "master"</option>
+				<option value="d" SELECTED>tape duplication master</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">Bande reproduite a partir du master</option>
+				<option value="d">tape duplication master</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1e" -->
-				<option value="e" SELECTED>Disque "pere" (negatif)</option>
+				<option value="e" SELECTED>disc master (negative)</option>
 			<!-- TMPL_ELSE -->
-				<option value="e">Disque "pere" (negatif)</option>
+				<option value="e">disc master (negative)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1f" -->
-				<option value="f" SELECTED>Disque "mere" (positif)</option>
+				<option value="f" SELECTED>mother (positive)</option>
 			<!-- TMPL_ELSE -->
-				<option value="f">Disque "mere" (positif)</option>
+				<option value="f">mother (positive)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1g" -->
-				<option value="g" SELECTED>Matrice (negatif)</option>
+				<option value="g" SELECTED>stamper (negative)</option>
 			<!-- TMPL_ELSE -->
-				<option value="g">Matrice (negatif)</option>
+				<option value="g">stamper (negative)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1h" -->
-				<option value="h" SELECTED>Pressage de test</option>
+				<option value="h" SELECTED>test pressing</option>
 			<!-- TMPL_ELSE -->
-				<option value="h">Pressage de test</option>
+				<option value="h">test pressing</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1u" -->
-				<option value="u" SELECTED>Inconnu</option>
+				<option value="u" SELECTED>unknown</option>
 			<!-- TMPL_ELSE -->
-				<option value="u">Inconnu</option>
+				<option value="u">unknown</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1z" -->
-				<option value="z" SELECTED>Autre</option>
+				<option value="z" SELECTED>other</option>
 			<!-- TMPL_ELSE -->
-				<option value="z">Autre</option>
+				<option value="z">other</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>
 	<tr>
-		<td>Type de document:</td>
+		<td>Kind of material:</td>
 		<td>
 			<select name="f2" size="1">
 
 			<!-- TMPL_IF name="f2u" -->
-				<option value="u" SELECTED>Inconnu</option>
+				<option value="u" SELECTED>unknown</option>
 			<!-- TMPL_ELSE -->
-				<option value="u">Inconnu</option>
+				<option value="u">unknown</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2x" -->
-				<option value="x" SELECTED>Non applicable</option>
+				<option value="x" SELECTED>not applicable</option>
 			<!-- TMPL_ELSE -->
-				<option value="x">Non applicable</option>
+				<option value="x">not applicable</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2z" -->
-				<option value="z" SELECTED>Autre</option>
+				<option value="z" SELECTED>other</option>
 			<!-- TMPL_ELSE -->
-				<option value="z">Autre</option>
+				<option value="z">other</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2g" -->
-				<option value="g" SELECTED>Cire (gravure directe)</option>
+				<option value="g" SELECTED>wax (instantaneous)</option>
 			<!-- TMPL_ELSE -->
-				<option value="g">Cire (gravure directe)</option>
+				<option value="g">wax (instantaneous)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2h" -->
-				<option value="h" SELECTED>Plastique</option>
+				<option value="h" SELECTED>plastic (mass produced)</option>
 			<!-- TMPL_ELSE -->
-				<option value="h">Plastique</option>
+				<option value="h">plastic (mass produced)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2a" -->
-				<option value="a" SELECTED>Laque</option>
+				<option value="a" SELECTED>lacquered (e.g. acetate)</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Laque</option>
+				<option value="a">lacquered (e.g. acetate)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2b" -->
-				<option value="b" SELECTED>Metal</option>
+				<option value="b" SELECTED>metal (e.g. aluminium)</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Metal</option>
+				<option value="b">metal (e.g. aluminium)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2c" -->
-				<option value="c" SELECTED>Pressage laque</option>
+				<option value="c" SELECTED>shellac pressing</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Pressage laque</option>
+				<option value="c">shellac pressing</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2d" -->
-				<option value="d" SELECTED>Pressage plastique</option>
+				<option value="d" SELECTED>plastic pressing</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">Pressage plastique</option>
+				<option value="d">plastic pressing</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2e" -->
-				<option value="e" SELECTED>Metal et plastique</option>
+				<option value="e" SELECTED>metal and plastic (compact discs)</option>
 			<!-- TMPL_ELSE -->
-				<option value="e">Metal et plastique</option>
+				<option value="e">metal and plastic (compact discs)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2i" -->
-				<option value="i" SELECTED>Dos papier</option>
+				<option value="i" SELECTED>paper backed</option>
 			<!-- TMPL_ELSE -->
-				<option value="i">Dos papier</option>
+				<option value="i">paper backed</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2j" -->
-				<option value="j" SELECTED>Acetate</option>
+				<option value="j" SELECTED>acetate</option>
 			<!-- TMPL_ELSE -->
-				<option value="j">Acetate</option>
+				<option value="j">acetate</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2k" -->
 				<option value="k" SELECTED>P.V.C.</option>
@@ -137,35 +137,35 @@
 				<option value="k">P.V.C.</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2l" -->
-				<option value="l" SELECTED>Polyester</option>
+				<option value="l" SELECTED>polyester</option>
 			<!-- TMPL_ELSE -->
-				<option value="l">Polyester</option>
+				<option value="l">polyester</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>
 	<tr>
-		<td>Type de gravure:</td>
+		<td>Kind of cutting:</td>
 		<td>
 			<select name="f3" size="1">
 			<!-- TMPL_IF name="f3a" -->
-				<option value="a" SELECTED>Gravure laterale ou combinee</option>
+				<option value="a" SELECTED>lateral or combined cutting</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Gravure laterale ou combinee</option>
+				<option value="a">lateral or combined cutting</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f3b" -->
-				<option value="b" SELECTED>Gravure verticale</option>
+				<option value="b" SELECTED>vertical (hill and dale) cutting</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Gravure verticale</option>
+				<option value="b">vertical (hill and dale) cutting</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f3u" -->
-				<option value="u" SELECTED>Gravure inconnue</option>
+				<option value="u" SELECTED>unknown</option>
 			<!-- TMPL_ELSE -->
-				<option value="u">Gravure inconnue</option>
+				<option value="u">unknown</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f3x" -->
-				<option value="x" SELECTED>Non applicable</option>
+				<option value="x" SELECTED>not applicable</option>
 			<!-- TMPL_ELSE -->
-				<option value="x">Non applicable</option>
+				<option value="x">not applicable</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>

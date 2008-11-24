@@ -4,364 +4,364 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>UNIMARC_constructeur champ 128a</title>
+<title>UNIMARC_Field 128a builder</title>
 </head>
 <body>
 <form name="f_pop">
 <table>
 	<tr>
-		<td>Forme de la composition:</td>
+		<td>Form of Musical Work:</td>
 		<td>
 			<select name="f1" size="1">
 			<!-- TMPL_IF name="f1ai" -->
-				<option value="ai" SELECTED>Airs</option>
+				<option value="ai#" SELECTED>air</option>
 			<!-- TMPL_ELSE -->
-				<option value="ai">Airs</option>
+				<option value="ai#">air</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1an" -->
-				<option value="an" SELECTED>Hymnes</option>
+				<option value="an#" SELECTED>anthem </option>
 			<!-- TMPL_ELSE -->
-				<option value="an">Hymnes</option>
+				<option value="an#">anthem </option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ar" -->
-				<option value="ar" SELECTED>Arias</option>
+				<option value="ar#" SELECTED>aria</option>
 			<!-- TMPL_ELSE -->
-				<option value="ar">Arias</option>
+				<option value="ar#">aria</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1bt" -->
-				<option value="bt" SELECTED>Ballets</option>
+				<option value="bt#" SELECTED>ballet</option>
 			<!-- TMPL_ELSE -->
-				<option value="bt">Ballets</option>
+				<option value="bt#">ballet</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1bd" -->
-				<option value="bd" SELECTED>Ballades</option>
+				<option value="bd#" SELECTED>ballad</option>
 			<!-- TMPL_ELSE -->
-				<option value="bd">Ballades</option>
+				<option value="bd#">ballad</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1bg" -->
-				<option value="bg" SELECTED>Bluegrass</option>
+				<option value="bg#" SELECTED>bluegrass</option>
 			<!-- TMPL_ELSE -->
-				<option value="bg">Bluegrass</option>
+				<option value="bg#">bluegrass</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1bl" -->
-				<option value="bl" SELECTED>Blues</option>
+				<option value="bl#" SELECTED>blues</option>
 			<!-- TMPL_ELSE -->
-				<option value="bl">Blues</option>
+				<option value="bl#">blues</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1cb" -->
-				<option value="cb" SELECTED>Chant (non chretien)</option>
+				<option value="cb# SELECTED>chant, non christian</option>
 			<!-- TMPL_ELSE -->
-				<option value="cb">Chant (non chretien)</option>
+				<option value="cb#">chant, non christian</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1cc" -->
-				<option value="cc" SELECTED>Chant (chretien)</option>
+				<option value="cc#" SELECTED>chant, christian</option>
 			<!-- TMPL_ELSE -->
-				<option value="cc">Chant (chretien)</option>
+				<option value="cc#">chant, christian</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1cl" -->
-				<option value="cl" SELECTED>Chorale-prelude</option>
+				<option value="cl#" SELECTED>choral-prelude</option>
 			<!-- TMPL_ELSE -->
-				<option value="cl">Chorale-prelude</option>
+				<option value="cl#">choral-prelude</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1cg" -->
-				<option value="cg" SELECTED>Concerto grosso</option>
+				<option value="cg#" SELECTED>concerto grosso</option>
 			<!-- TMPL_ELSE -->
-				<option value="cg">Concerto grosso</option>
+				<option value="cg#">concerto grosso</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ch" -->
-				<option value="ch" SELECTED>Chorales</option>
+				<option value="ch#" SELECTED>choral</option>
 			<!-- TMPL_ELSE -->
-				<option value="ch">Chorales</option>
+				<option value="ch#">choral</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1cn" -->
-				<option value="cn" SELECTED>Canons</option>
+				<option value="cn#" SELECTED>canon</option>
 			<!-- TMPL_ELSE -->
-				<option value="cn">Canons</option>
+				<option value="cn#">canon</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1co" -->
-				<option value="co" SELECTED>Concertos</option>
+				<option value="co#" SELECTED>concerto</option>
 			<!-- TMPL_ELSE -->
-				<option value="co">Concertos</option>
+				<option value="co#">concerto</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1cp" -->
-				<option value="cp" SELECTED>Chansons (Polyphoniques)</option>
+				<option value="cp#" SELECTED>chanson, polyphonic</option>
 			<!-- TMPL_ELSE -->
-				<option value="cp">Chansons (Polyphoniques)</option>
+				<option value="cp#">chanson, polyphonic</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1cr" -->
-				<option value="cr" SELECTED>Chant de noel</option>
+				<option value="cr#" SELECTED>carol</option>
 			<!-- TMPL_ELSE -->
-				<option value="cr">Chant de noel</option>
+				<option value="cr#">carol</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1cs" -->
-				<option value="cs" SELECTED>Musique aleatoire</option>
+				<option value="cs#" SELECTED>chance composition / aleatoric music</option>
 			<!-- TMPL_ELSE -->
-				<option value="cs">Musique aleatoire</option>
+				<option value="cs#">chance composition / aleatoric music</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ct" -->
-				<option value="ct" SELECTED>Cantates</option>
+				<option value="ct#" SELECTED>cantata</option>
 			<!-- TMPL_ELSE -->
-				<option value="ct">Cantates</option>
+				<option value="ct#">cantata</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1cy" -->
-				<option value="cy" SELECTED>Country music</option>
+				<option value="cy#" SELECTED>country music</option>
 			<!-- TMPL_ELSE -->
-				<option value="cy">Country music</option>
+				<option value="cy#">country music</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1cz" -->
-				<option value="cz" SELECTED>Canzones</option>
+				<option value="cz#" SELECTED>canzona</option>
 			<!-- TMPL_ELSE -->
-				<option value="cz">Canzones</option>
+				<option value="cz#">canzona</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1df" -->
-				<option value="df" SELECTED>Danse</option>
+				<option value="df#" SELECTED>danse form</option>
 			<!-- TMPL_ELSE -->
-				<option value="df">Danse</option>
+				<option value="df#">danse form</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1dv" -->
-				<option value="dv" SELECTED>Divertimentos</option>
+				<option value="dv#" SELECTED>divertimento</option>
 			<!-- TMPL_ELSE -->
-				<option value="dv">Divertimentos</option>
+				<option value="dv#">divertimento</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1fg" -->
-				<option value="fg" SELECTED>Fugues</option>
+				<option value="fg#" SELECTED>fugue</option>
 			<!-- TMPL_ELSE -->
-				<option value="fg">Fugues</option>
+				<option value="fg#">fugue</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1fm" -->
-				<option value="fm" SELECTED>Musique Folklorique</option>
+				<option value="fm#" SELECTED>folk music</option>
 			<!-- TMPL_ELSE -->
-				<option value="fm">Musique Folklorique</option>
+				<option value="fm#">folk music</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ft" -->
-				<option value="ft" SELECTED>Fantaisies</option>
+				<option value="ft#" SELECTED>fantasia</option>
 			<!-- TMPL_ELSE -->
-				<option value="ft">Fantaisies</option>
+				<option value="ft#">fantasia</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1gm" -->
-				<option value="gm" SELECTED>Gospel</option>
+				<option value="gm#" SELECTED>gospel music</option>
 			<!-- TMPL_ELSE -->
-				<option value="gm">Gospel</option>
+				<option value="gm#">gospel music</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1hy" -->
-				<option value="hy" SELECTED>Hymnes</option>
+				<option value="hy#" SELECTED>hymn</option>
 			<!-- TMPL_ELSE -->
-				<option value="hy">Hymnes</option>
+				<option value="hy#">hymn</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1in" -->
-				<option value="in" SELECTED>Intermezzos</option>
+				<option value="in#" SELECTED>intermezzo</option>
 			<!-- TMPL_ELSE -->
-				<option value="in">Intermezzos</option>
+				<option value="in#">intermezzo</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1jz" -->
-				<option value="jz" SELECTED>Jazz</option>
+				<option value="jz#" SELECTED>jazz</option>
 			<!-- TMPL_ELSE -->
-				<option value="jz">Jazz</option>
+				<option value="jz#">jazz</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1li" -->
-				<option value="li" SELECTED>Lieder</option>
+				<option value="li#" SELECTED>lied</option>
 			<!-- TMPL_ELSE -->
-				<option value="li">Lieder</option>
+				<option value="li#">lied</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1mc" -->
-				<option value="mc" SELECTED>Comedies musicales,revues</option>
+				<option value="mc#" SELECTED>musical revue and comedy</option>
 			<!-- TMPL_ELSE -->
-				<option value="mc">Comedies musicales, revues</option>
+				<option value="mc#">musical revue and comedy</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1md" -->
-				<option value="md" SELECTED>Madrigaux</option>
+				<option value="md#" SELECTED>madrigal</option>
 			<!-- TMPL_ELSE -->
-				<option value="md">Madrigaux</option>
+				<option value="md#">madrigal</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1mi" -->
-				<option value="mi" SELECTED>Menuets</option>
+				<option value="mi#" SELECTED>minuet</option>
 			<!-- TMPL_ELSE -->
-				<option value="mi">Menuets</option>
+				<option value="mi#">minuet</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1mr" -->
-				<option value="mr" SELECTED>Marches</option>
+				<option value="mr#" SELECTED>march</option>
 			<!-- TMPL_ELSE -->
-				<option value="mr">Marches</option>
+				<option value="mr#">march</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ms" -->
-				<option value="ms" SELECTED>Messes</option>
+				<option value="ms#" SELECTED>mass</option>
 			<!-- TMPL_ELSE -->
-				<option value="ms">Messes</option>
+				<option value="ms#">mass</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1mo" -->
-				<option value="mo" SELECTED>Motets</option>
+				<option value="mo#" SELECTED>motet</option>
 			<!-- TMPL_ELSE -->
-				<option value="mo">Motets</option>
+				<option value="mo#">motet</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1mp" -->
-				<option value="mp" SELECTED>Bande originale du film</option>
+				<option value="mp#" SELECTED>moving picture music</option>
 			<!-- TMPL_ELSE -->
-				<option value="mp">Bande originale du film</option>
+				<option value="mp#">moving picture music</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1mu" -->
-				<option value="mu" SELECTED>Formes multiples</option>
+				<option value="mu#" SELECTED>multiple forms</option>
 			<!-- TMPL_ELSE -->
-				<option value="mu">Formes multiples</option>
+				<option value="mu#">multiple forms</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1mz" -->
-				<option value="mz" SELECTED>Mazurkas</option>
+				<option value="mz#" SELECTED>mazurka</option>
 			<!-- TMPL_ELSE -->
-				<option value="mz">Mazurkas</option>
+				<option value="mz#">mazurka</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1nc" -->
-				<option value="nc" SELECTED>Nocturnes</option>
+				<option value="nc#" SELECTED>nocturne</option>
 			<!-- TMPL_ELSE -->
-				<option value="nc">Nocturnes</option>
+				<option value="nc#">nocturne</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1op" -->
-				<option value="op" SELECTED>Operas, operettes</option>
+				<option value="op#" SELECTED>opera</option>
 			<!-- TMPL_ELSE -->
-				<option value="op">Operas, operettes</option>
+				<option value="op#">opera</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1or" -->
-				<option value="or" SELECTED>Oratorios</option>
+				<option value="or#" SELECTED>oratorio</option>
 			<!-- TMPL_ELSE -->
-				<option value="or">Oratorios</option>
+				<option value="or#">oratorio</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ov" -->
-				<option value="ov" SELECTED>Ouvertures</option>
+				<option value="ov#" SELECTED>overture</option>
 			<!-- TMPL_ELSE -->
-				<option value="ov">Ouvertures</option>
+				<option value="ov#">overture</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1pf" -->
-				<option value="pf" SELECTED>Prelude et fugue</option>
+				<option value="pf#" SELECTED>prelude and fugue</option>
 			<!-- TMPL_ELSE -->
-				<option value="pf">Prelude et fugue</option>
+				<option value="pf#">prelude and fugue</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1pg" -->
-				<option value="pg" SELECTED>Musique descriptive</option>
+				<option value="pg#" SELECTED>programme music</option>
 			<!-- TMPL_ELSE -->
-				<option value="pg">Musique descriptive</option>
+				<option value="pg#">programme music</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1pm" -->
-				<option value="pm" SELECTED>Passions</option>
+				<option value="pm#" SELECTED>passion music</option>
 			<!-- TMPL_ELSE -->
-				<option value="pm">Passions</option>
+				<option value="pm#">passion music</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1po" -->
-				<option value="po" SELECTED>Polonaises</option>
+				<option value="po#" SELECTED>polonaise</option>
 			<!-- TMPL_ELSE -->
-				<option value="po">Polonaises</option>
+				<option value="po#">polonaise</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1pp" -->
-				<option value="pp" SELECTED>Musique populaire</option>
+				<option value="pp#" SELECTED>popular music</option>
 			<!-- TMPL_ELSE -->
-				<option value="pp">Musique populaire</option>
+				<option value="pp#">popular music</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ps" -->
-				<option value="ps" SELECTED>Passacailles</option>
+				<option value="ps#" SELECTED>passacaglia</option>
 			<!-- TMPL_ELSE -->
-				<option value="ps">Passacailles</option>
+				<option value="ps#">passacaglia</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1pt" -->
-				<option value="pt" SELECTED>Chant</option>
+				<option value="p#" SELECTED>partsong</option>
 			<!-- TMPL_ELSE -->
-				<option value="pt">Chant</option>
+				<option value="pt#">partsong</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1pv" -->
-				<option value="pv" SELECTED>Pavanes</option>
+				<option value="pv#" SELECTED>pavan</option>
 			<!-- TMPL_ELSE -->
-				<option value="pv">Pavanes</option>
+				<option value="pv#">pavan</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1rc" -->
-				<option value="rc" SELECTED>Rock</option>
+				<option value="rc#" SELECTED>rock music</option>
 			<!-- TMPL_ELSE -->
-				<option value="rc">Rock</option>
+				<option value="rc#">rock music</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1rd" -->
-				<option value="rd" SELECTED>Rondos</option>
+				<option value="rd#" SELECTED>rondo</option>
 			<!-- TMPL_ELSE -->
-				<option value="rd">Rondos</option>
+				<option value="rd#">rondo</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1rg" -->
-				<option value="rg" SELECTED>Ragtime</option>
+				<option value="rg#" SELECTED>ragtime</option>
 			<!-- TMPL_ELSE -->
-				<option value="rg">Ragtime</option>
+				<option value="rg#">ragtime</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ri" -->
-				<option value="ri" SELECTED>Ricercari</option>
+				<option value="ri#" SELECTED>ricercare</option>
 			<!-- TMPL_ELSE -->
-				<option value="ri">Ricercari</option>
+				<option value="ri#">ricercare</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1rp" -->
-				<option value="rp" SELECTED>Rhapsodies</option>
+				<option value="rp#" SELECTED>rhapsody</option>
 			<!-- TMPL_ELSE -->
-				<option value="rp">Rhapsodies</option>
+				<option value="rp#">rhapsody</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1rq" -->
-				<option value="rq" SELECTED>Requiem</option>
+				<option value="rq#" SELECTED>requiem mass</option>
 			<!-- TMPL_ELSE -->
-				<option value="rq">Requiem</option>
+				<option value="rq#">requiem mass</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1sg" -->
-				<option value="sg" SELECTED>Chansons, melodies</option>
+				<option value="sg#" SELECTED>song</option>
 			<!-- TMPL_ELSE -->
-				<option value="sg">Chansons, melodies</option>
+				<option value="sg#">song</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1si" -->
-				<option value="si" SELECTED>Sinfonias</option>
+				<option value="si#" SELECTED>sinfonia</option>
 			<!-- TMPL_ELSE -->
-				<option value="si">Sinfonias</option>
+				<option value="si#">sinfonia</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1sn" -->
-				<option value="sn" SELECTED>Sonates</option>
+				<option value="sn#" SELECTED>sonata</option>
 			<!-- TMPL_ELSE -->
-				<option value="sn">Sonates</option>
+				<option value="sn#">sonata</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1sp" -->
-				<option value="sp" SELECTED>Poemes symphoniques</option>
+				<option value="sp#" SELECTED>symphonic poem</option>
 			<!-- TMPL_ELSE -->
-				<option value="sp">Poemes symphoniques</option>
+				<option value="sp#">symphonic poem</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1sq" -->
-				<option value="sq" SELECTED>Square dance</option>
+				<option value="sq#" SELECTED>square dance</option>
 			<!-- TMPL_ELSE -->
-				<option value="sq">Square dance</option>
+				<option value="sq#">square dance</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1st" -->
-				<option value="st" SELECTED>Etudes et exercices</option>
+				<option value="st#" SELECTED>study, exercise</option>
 			<!-- TMPL_ELSE -->
-				<option value="st">Etudes et exercices</option>
+				<option value="st#">study, exercise</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1su" -->
-				<option value="su" SELECTED>Suites</option>
+				<option value="su#" SELECTED>suite</option>
 			<!-- TMPL_ELSE -->
-				<option value="su">Suites</option>
+				<option value="su#">suite</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1sy" -->
-				<option value="sy" SELECTED>Symphonies</option>
+				<option value="sy#" SELECTED>symphony</option>
 			<!-- TMPL_ELSE -->
-				<option value="sy">Symphonies</option>
+				<option value="sy#">symphony</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1tc" -->
-				<option value="tc" SELECTED>Toccatas</option>
+				<option value="tc#" SELECTED>toccata</option>
 			<!-- TMPL_ELSE -->
-				<option value="tc">Toccatas</option>
+				<option value="tc#">toccata</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ts" -->
-				<option value="ts" SELECTED>Sonates en trio</option>
+				<option value="ts#" SELECTED>triosonata</option>
 			<!-- TMPL_ELSE -->
-				<option value="ts">Sonates en trio</option>
+				<option value="ts#">triosonata</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1vr" -->
-				<option value="vr" SELECTED>Variations</option>
+				<option value="vr#" SELECTED>variation</option>
 			<!-- TMPL_ELSE -->
-				<option value="vr">Variations</option>
+				<option value="vr#">variation</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1wz" -->
-				<option value="wz" SELECTED>Valses</option>
+				<option value="wz#" SELECTED>waltz</option>
 			<!-- TMPL_ELSE -->
-				<option value="wz">Valses</option>
+				<option value="wz#">waltz</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1zz" -->
-				<option value="zz" SELECTED>Variations</option>
+				<option value="zz#" SELECTED>other form</option>
 			<!-- TMPL_ELSE -->
-				<option value="zz">Variations</option>
+				<option value="zz#">other form</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>

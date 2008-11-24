@@ -4,91 +4,131 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>UNIMARC_constructeur champ 125a</title>
+<title>UNIMARC_Field 125a builder</title>
 </head>
 <body>
 <form name="f_pop">
 <table>
 	<tr>
-		<td>Type de partition:</td>
+		<td>Type of Score:</td>
 		<td>
 			<select name="f1" size="1">
 			<!-- TMPL_IF name="f1a" -->
-				<option value="a" SELECTED>Partition d'orchestre</option>
+				<option value="a" SELECTED>full score, graphic score</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Partition d'orchestre</option>
+				<option value="a">full score, graphic score</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1b" -->
-				<option value="b" SELECTED>Partition miniature ou d'etude</option>
+				<option value="b" SELECTED>score (miniature or study size)</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Partition miniature ou d'etude</option>
+				<option value="b">score (miniature or study size)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1c" -->
-				<option value="c" SELECTED>Partition chant, accompagnement reduit pour le piano</option>
+				<option value="c" SELECTED>vocal score, accompaniment reduced for keyboard</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Partition chant, accompagnement reduit pour le piano</option>
+				<option value="c">vocal score, accompaniment reduced for keyboard</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1d" -->
-				<option value="d" SELECTED>Partition vocale, partition chorale, sans accompagnement</option>
+				<option value="d" SELECTED>voice score, chorus score, accompaniment has been dropped</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">Partition vocale, partition chorale, sans accompagnement</option>
+				<option value="d">voice score, chorus score, accompaniment has been dropped</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1e" -->
-				<option value="e" SELECTED>Partition condensee, partition de direction a partir du piano</option>
+				<option value="e" SELECTED>condensed score, pianoconductor score</option>
 			<!-- TMPL_ELSE -->
-				<option value="e">Partition condensee, partition de direction a partir du piano</option>
+				<option value="e">condensed score, pianoconductor score</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1f" -->
+				<option value="f" SELECTED>graphic score</option>
+			<!-- TMPL_ELSE -->
+				<option value="f">graphic score</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1g" -->
-				<option value="g" SELECTED>Partition combinee dans laquelle plusieurs voix sont sur la meme portee</option>
+				<option value="g" SELECTED>close score (e.g. hymnals)</option>
 			<!-- TMPL_ELSE -->
-				<option value="g">Partition combinee dans laquelle plusieurs voix sont sur la meme portee</option>
+				<option value="g">close score (e.g. hymnals)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1h" -->
+				<option value="h" SELECTED>tablature</option>
+			<!-- TMPL_ELSE -->
+				<option value="h">tablature</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1i" -->
+				<option value="i" SELECTED>choir-book</option>
+			<!-- TMPL_ELSE -->
+				<option value="i">choir-book</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1j" -->
+				<option value="j" SELECTED>compressed score</option>
+			<!-- TMPL_ELSE -->
+				<option value="j">compressed score</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1k" -->
+				<option value="k" SELECTED>pseudo-score</option>
+			<!-- TMPL_ELSE -->
+				<option value="k">pseudo-score</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1l" -->
+				<option value="l" SELECTED>solo part</option>
+			<!-- TMPL_ELSE -->
+				<option value="l">solo part</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1m" -->
-				<option value="m" SELECTED>Formes diverses</option>
+				<option value="m" SELECTED>multiple formats</option>
 			<!-- TMPL_ELSE -->
-				<option value="m">Formes diverses</option>
+				<option value="m">multiple formats</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1u" -->
-				<option value="u" SELECTED>Inconnu</option>
+				<option value="u" SELECTED>unknown</option>
 			<!-- TMPL_ELSE -->
-				<option value="u">Inconnu</option>
+				<option value="u">unknown</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1x" -->
-				<option value="x" SELECTED>Non applicable ce n'est pas une partition</option>
+				<option value="x" SELECTED>not applicable, not a score</option>
 			<!-- TMPL_ELSE -->
-				<option value="x">Non applicable ce n'est pas une partition</option>
+				<option value="x">not applicable, not a score</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1z" -->
-				<option value="z" SELECTED>Autre</option>
+				<option value="z" SELECTED>other</option>
 			<!-- TMPL_ELSE -->
-				<option value="z">Autre</option>
+				<option value="z">other</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>
 	<tr>
-		<td>Indicateur de parties:</td>
+		<td>Parts Indicator:</td>
 		<td>
 			<select name="f2" size="1">
 
 			<!-- TMPL_IF name="f2a" -->
-				<option value="a" SELECTED>Parties existantes</option>
+				<option value="a" SELECTED>parts exist (vocal and instrumental)</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Parties existantes</option>
+				<option value="a">parts exist (vocal and instrumental)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2b" -->
+				<option value="b" SELECTED>instrumental parts</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">instrumental parts</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f2c" -->
+				<option value="c" SELECTED>vocal parts</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">vocal parts</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2u" -->
-				<option value="u" SELECTED>Inconnu</option>
+				<option value="u" SELECTED>unknown</option>
 			<!-- TMPL_ELSE -->
-				<option value="u">Inconnu</option>
+				<option value="u">unknown</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2x" -->
-				<option value="x" SELECTED>Non applicable</option>
+				<option value="x" SELECTED>not applicable</option>
 			<!-- TMPL_ELSE -->
-				<option value="x">Non applicable</option>
+				<option value="x">not applicable</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2y" -->
-				<option value="y" SELECTED>Parties inexistantes</option>
+				<option value="y" SELECTED>parts not present</option>
 			<!-- TMPL_ELSE -->
-				<option value="y">Parties inexistantes</option>
+				<option value="y">parts not present</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>

@@ -10,316 +10,316 @@
 <form name="f_pop">
 <table>
 	<tr>
-		<td>Type de publication en serie</td>
+		<td>Type of continuing resource designator</td>
 		<td>
 			<select name="f1" size="1">
 			<!-- TMPL_IF name="f1|" -->
-                            <option value="|" selected="selected">|- Caractère de remplissage</option>
+                            <option value="|" selected="selected">|- Filling character</option>
                         <!-- TMPL_ELSE -->
-                            <option value="|">|- Caractère de remplissage</option>
+                            <option value="|">|- Filling character</option>
                         <!-- /TMPL_IF -->
             
 			<!-- TMPL_IF name="f1a" -->
-				<option value="a" selected="selected">Periodique</option>
+				<option value="a" selected="selected">periodical</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Periodique</option>
+				<option value="a">periodical</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1b" -->
-				<option value="b" selected="selected">Collection des monographies</option>
+				<option value="b" selected="selected">monographic series</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Collection des monographies</option>
+				<option value="b">monographic series</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1c" -->
-				<option value="c" selected="selected">Journal</option>
+				<option value="c" selected="selected">newspaper</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Journal</option>
+				<option value="c">newspaper</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f1z" -->
-				<option value="z" selected="selected">autres</option>
+				<option value="z" selected="selected">other</option>
 			<!-- TMPL_ELSE -->
-				<option value="z">autres</option>
+				<option value="z">other</option>
 			<!-- /TMPL_IF -->
 				</select>
 		</td>
 	</tr>
 
 	<tr>
-		<td>Periodicite</td>
+		<td>Frequency of issue</td>
 		<td>
 			<select name="f2" size="1">
 			<!-- TMPL_IF name="f2|" -->
-                            <option value="|" selected="selected">|- Caractère de remplissage</option>
+                            <option value="|" selected="selected">|- Filling character</option>
                         <!-- TMPL_ELSE -->
-                            <option value="|">|- Caractère de remplissage</option>
+                            <option value="|">|- Filling character</option>
                         <!-- /TMPL_IF -->
             
 			<!-- TMPL_IF name="f2a" -->
-				<option value="a" selected="selected">Quotidien</option>
+				<option value="a" selected="selected">daily</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Quotidien</option>
+				<option value="a">daily</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2b" -->
-				<option value="b" selected="selected">Bihebdomadaire</option>
+				<option value="b" selected="selected">semiweekly (twice a week)</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Bihebdomadaire</option>
+				<option value="b">semiweekly (twice a week)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2c" -->
-				<option value="c" selected="selected">Hebdomadaire</option>
+				<option value="c" selected="selected">weekly</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Hebdomadaire</option>
+				<option value="c">weekly</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f2d" -->
-				<option value="d" selected="selected">Toutes les deux semaines</option>
+				<option value="d" selected="selected">biweekly (every two weeks)</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">Toutes les deux semaines</option>
+				<option value="d">biweekly (every two weeks)</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f2e" -->
-				<option value="e" selected="selected">Deux fois par mois</option>
+				<option value="e" selected="selected">semimonthly (twice a month)</option>
 			<!-- TMPL_ELSE -->
-				<option value="e">Deux fois par mois</option>
+				<option value="e">semimonthly (twice a month)</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f2f" -->
-				<option value="f" selected="selected">Mensuel</option>
+				<option value="f" selected="selected">monthly</option>
 			<!-- TMPL_ELSE -->
-				<option value="f">Mensuel</option>
+				<option value="f">monthly</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f2g" -->
-				<option value="g" selected="selected">Bimestriel</option>
+				<option value="g" selected="selected">bimonthly (every two months)</option>
 			<!-- TMPL_ELSE -->
-				<option value="g">Bimestriel</option>
+				<option value="g">bimonthly (every two months)</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f2h" -->
-				<option value="h" selected="selected">Trimestriel</option>
+				<option value="h" selected="selected">quarterly</option>
 			<!-- TMPL_ELSE -->
-				<option value="h">Trimestriel</option>
+				<option value="h">quarterly</option>
 			<!-- /TMPL_IF -->
 
  			<!-- TMPL_IF name="f2i" -->
-				<option value="i" selected="selected">Trois fois par an</option>
+				<option value="i" selected="selected">three times a year</option>
 			<!-- TMPL_ELSE -->
-				<option value="i">Trois fois par an</option>
+				<option value="i">three times a year</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f2j" -->
-				<option value="j" selected="selected">Semestriel</option>
+				<option value="j" selected="selected">semiannual (twice a year)</option>
 			<!-- TMPL_ELSE -->
-				<option value="j">Semestriel</option>
+				<option value="j">semiannual (twice a year)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2k" -->
-				<option value="k" selected="selected">Annuel</option>
+				<option value="k" selected="selected">annual</option>
 			<!-- TMPL_ELSE -->
-				<option value="k">Annuel</option>
+				<option value="k">annual</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2l" -->
-				<option value="l" selected="selected">Bisanuel</option>
+				<option value="l" selected="selected">biennial (every two years)</option>
 			<!-- TMPL_ELSE -->
-				<option value="l">Bisanuel</option>
+				<option value="l">biennial (every two years)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2m" -->
-				<option value="m" selected="selected">Triennal</option>
+				<option value="m" selected="selected">triennial (every three years)</option>
 			<!-- TMPL_ELSE -->
-				<option value="m">Triennal</option>
+				<option value="m">triennial (every three years)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2n" -->
-				<option value="n" selected="selected">Trois fois par semaine</option>
+				<option value="n" selected="selected">three times a week</option>
 			<!-- TMPL_ELSE -->
-				<option value="n">Trois fois par semaine</option>
+				<option value="n">three times a week</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2o" -->
-				<option value="o" selected="selected">Trois fois par mois</option>
+				<option value="o" selected="selected">three times a month</option>
 			<!-- TMPL_ELSE -->
-				<option value="o">Trois fois par mois</option>
+				<option value="o">three times a month</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2u" -->
-				<option value="u" selected="selected">Inconnue</option>
+				<option value="u" selected="selected">unknown</option>
 			<!-- TMPL_ELSE -->
-				<option value="u">Inconnue</option>
+				<option value="u">unknown</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2y" -->
-				<option value="y" selected="selected">Sans periodicite</option>
+				<option value="y" selected="selected">no frequency (i.e. irregular)</option>
 			<!-- TMPL_ELSE -->
-				<option value="y">Sans periodicite</option>
+				<option value="y">no frequency (i.e. irregular)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2i" -->
-				<option value="i" selected="selected">Autre</option>
+				<option value="i" selected="selected">other</option>
 			<!-- TMPL_ELSE -->
-				<option value="i">Autre</option>
+				<option value="i">other</option>
 			<!-- /TMPL_IF -->
 				</select>
 		</td>
 	</tr>
 	<tr>
-		<td>Regularite</td>
+		<td>Regularity</td>
 		<td>
 			<select name="f3" size="1">
 			<!-- TMPL_IF name="f3|" -->
-                            <option value="|" selected="selected">|- Caractère de remplissage</option>
+                            <option value="|" selected="selected">|- Filling character</option>
                         <!-- TMPL_ELSE -->
-                            <option value="|">|- Caractère de remplissage</option>
+                            <option value="|">|- Filling character</option>
                         <!-- /TMPL_IF -->
             
 			<!-- TMPL_IF name="f3u" -->
-				<option value="u" selected="selected">Inconnu</option>
+				<option value="u" selected="selected">not known</option>
 			<!-- TMPL_ELSE -->
-				<option value="u">Inconnu</option>
+				<option value="u">not known</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f3a" -->
-				<option value="a" selected="selected">Regulier</option>
+				<option value="a" selected="selected">regular</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Regulier</option>
+				<option value="a">regular</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f3b" -->
-				<option value="b" selected="selected">Normalement irregulier</option>
+				<option value="b" selected="selected">normalised irregular</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Normalement irregulier</option>
+				<option value="b">normalised irregular</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f3y" -->
-				<option value="y" selected="selected">Irregulier</option>
+				<option value="y" selected="selected">irregular</option>
 			<!-- TMPL_ELSE -->
-				<option value="y">Irregulier</option>
+				<option value="y">irregular</option>
 			<!-- /TMPL_IF -->
 				</select>
 		</td>
 	</tr>
 
 	<tr>
-		<td>Type d'ouvrage de reference</td>
+		<td>Type of material code</td>
 		<td>
 			<select name="f4" size="1">
 			<!-- TMPL_IF name="f4|" -->
-                            <option value="|" selected="selected">|- Caractère de remplissage</option>
+                            <option value="|" selected="selected">|- Filling character</option>
                         <!-- TMPL_ELSE -->
-                            <option value="|">|- Caractère de remplissage</option>
+                            <option value="|">|- Filling character</option>
                         <!-- /TMPL_IF -->
             
                     <!-- TMPL_IF name="f4 " -->
-                        <option value=" " selected="selected">valeur non requise</option>
+                        <option value=" " selected="selected">non required value</option>
                         <!-- TMPL_ELSE -->
-                        <option value=" ">valeur non requise</option>
+                        <option value=" ">non required value</option>
                     <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f4a" -->
-				<option value="a" selected="selected">Bibliographie</option>
+				<option value="a" selected="selected">bibliography</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Bibliographie</option>
+				<option value="a">bibliography</option>
 	
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f4b" -->
-				<option value="b" selected="selected">Catalogue</option>
+				<option value="b" selected="selected">catalogue</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Catalogue</option>
+				<option value="b">catalogue</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f4c" -->
-				<option value="c" selected="selected">Index</option>
+				<option value="c" selected="selected">index</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Index</option>
+				<option value="c">index</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f4d" -->
-				<option value="d" selected="selected">Resume ou extraits</option>
+				<option value="d" selected="selected">abstract or summary</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">Resume ou extraits</option>
+				<option value="d">abstract or summary</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f4e" -->
-				<option value="e" selected="selected">Dictionnaire</option>
+				<option value="e" selected="selected">dictionary</option>
 			<!-- TMPL_ELSE -->
-				<option value="e">Dictionnaire</option>
+				<option value="e">dictionary</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f4f" -->
-				<option value="f" selected="selected">Encyclopedie</option>
+				<option value="f" selected="selected">encyclopaedia</option>
 			<!-- TMPL_ELSE -->
-				<option value="f">Encyclopedie</option>
+				<option value="f">encyclopaedia</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f4g" -->
-				<option value="g" selected="selected">Repertoire</option>
+				<option value="g" selected="selected">directory</option>
 			<!-- TMPL_ELSE -->
-				<option value="g">Repertoire</option>
+				<option value="g">directory</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f4h" -->
-				<option value="h" selected="selected">Annuaire</option>
+				<option value="h" selected="selected">yearbook</option>
 			<!-- TMPL_ELSE -->
-				<option value="h">Annuaire</option>
+				<option value="h">yearbook</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f4i" -->
-				<option value="i" selected="selected">Statistiques</option>
+				<option value="i" selected="selected">statistics</option>
 			<!-- TMPL_ELSE -->
-				<option value="i">Statistiques</option>
+				<option value="i">statistics</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f4j" -->
-				<option value="j" selected="selected">Manuel d'enseignement programme</option>
+				<option value="j" selected="selected">programmed texts</option>
 			<!-- TMPL_ELSE -->
-				<option value="j">Manuel d'enseignement programme</option>
+				<option value="j">programmed texts</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f4k" -->
-				<option value="k" selected="selected">Revue critique</option>
+				<option value="k" selected="selected">reviews</option>
 			<!-- TMPL_ELSE -->
-				<option value="k">Revue critique</option>
+				<option value="k">reviews</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f4l" -->
-				<option value="l" selected="selected">Journal officiel</option>
+				<option value="l" selected="selected">laws and legislation</option>
 			<!-- TMPL_ELSE -->
-				<option value="l">Journal officiel</option>
+				<option value="l">laws and legislation</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f4m" -->
-				<option value="m" selected="selected">Jurisprudence</option>
+				<option value="m" selected="selected">law reports and digests</option>
 			<!-- TMPL_ELSE -->
-				<option value="m">Jurisprudence</option>
+				<option value="m">law reports and digests</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f4n" -->
-				<option value="n" selected="selected">Article juridique</option>
+				<option value="n" selected="selected">legal articles</option>
 			<!-- TMPL_ELSE -->
-				<option value="n">Article juridique</option>
+				<option value="n">legal articles</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f4o" -->
-				<option value="o" selected="selected">Procès et compte rendu judiciaire</option>
+				<option value="o" selected="selected">legal cases and case notes</option>
 			<!-- TMPL_ELSE -->
-				<option value="o">Procès et compte rendu judiciaire</option>
+				<option value="o">legal cases and case notes</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f4p" -->
-				<option value="p" selected="selected">Biographie</option>
+				<option value="p" selected="selected">biography</option>
 			<!-- TMPL_ELSE -->
-				<option value="p">Biographie</option>
+				<option value="p">biography</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f4r" -->
-				<option value="r" selected="selected">Synthese bibliographique</option>
+				<option value="r" selected="selected">literature surveys/reviews</option>
 			<!-- TMPL_ELSE -->
-				<option value="r">Synthese bibliographique</option>
+				<option value="r">literature surveys/reviews</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f4t" -->
-				<option value="t" selected="selected">Dessin humoristique ou B.D.</option>
+				<option value="t" selected="selected">cartoons or comic strips</option>
 			<!-- TMPL_ELSE -->
-				<option value="t">Dessin humoristique ou B.D.</option>
+				<option value="t">cartoons or comic strips</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f4z" -->
-				<option value="z" selected="selected">Autre forme de contenu</option>
+				<option value="z" selected="selected">other kinds of contents</option>
 			<!-- TMPL_ELSE -->
-				<option value="z">Autre forme de contenu</option>
+				<option value="z">other kinds of contents</option>
 			<!-- /TMPL_IF -->
 
 				</select>
@@ -327,111 +327,111 @@
 
         </tr>
    <tr>
-                <td>Nature du contenu</td>
+                <td>Nature of contents code</td>
                 <td><input type="text" name="f5" maxlength="3" size="4" value="<!-- TMPL_VAR name="f5" -->"></td>
 
 	</tr>
 	<tr>
-		<td>Colloque ou congres</td>
+		<td>Conference publication indicator</td>
 		<td>
 			<select name="f6" size="1">
 			<!-- TMPL_IF name="f6|" -->
-                            <option value="|" selected="selected">|- Caractère de remplissage</option>
+                            <option value="|" selected="selected">|- Filling character</option>
                         <!-- TMPL_ELSE -->
-                            <option value="|">|- Caractère de remplissage</option>
+                            <option value="|">|- Filling character</option>
                         <!-- /TMPL_IF -->
                         
 			<!-- TMPL_IF name="f60" -->
-				<option value="0" selected="selected">Il ne s'agit pas d'une publication de congres</option>
+				<option value="0" selected="selected">not a conference publication</option>
 			<!-- TMPL_ELSE -->
-				<option value="0">Il ne s'agit pas d'une publication de congres</option>
+				<option value="0">not a conference publication</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f61" -->
-				<option value="1" selected="selected">Il s'agit d'une publication de congres</option>
+				<option value="1" selected="selected">conference publication</option>
 			<!-- TMPL_ELSE -->
-				<option value="1">Il s'agit d'une publication de congres</option>
+				<option value="1">conference publication</option>
 			<!-- /TMPL_IF -->
 				</select>
 		</td>
 	</tr>
 
-			<td>existence de la page de titre</td>
+			<td>Title-page availability code</td>
 		<td>
 			<select name="f7" size="1">
 			<!-- TMPL_IF name="f7|" -->
-                            <option value="|" selected="selected">|- Caractère de remplissage</option>
+                            <option value="|" selected="selected">|- Filling character</option>
                         <!-- TMPL_ELSE -->
-                            <option value="|">|- Caractère de remplissage</option>
+                            <option value="|">|- Filling character</option>
                         <!-- /TMPL_IF -->
                         
 			<!-- TMPL_IF name="f7a" -->
-				<option value="a" selected="selected">Dans le dernier fascicule - volante</option>
+				<option value="a" selected="selected">in last issue of volume - loose</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Dans le dernier fascicule - volante</option>
+				<option value="a">in last issue of volume - loose</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f7b" -->
-				<option value="b" selected="selected">Dans le dernier fascicule - reliee</option>
+				<option value="b" selected="selected">in last issue of volume - attached</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Dans le dernier fascicule - reliee</option>
+				<option value="b">in last issue of volume - attached</option>
 			<!-- /TMPL_IF -->
 
 
 			<!-- TMPL_IF name="f7c" -->
-				<option value="c" selected="selected">Dans le premier fascicule du volume suivant - volante</option>
+				<option value="c" selected="selected">in first issue of next volume - loose</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Dans le premier fascicule du volume suivant - volante</option>
+				<option value="c">in first issue of next volume - loose</option>
 			<!-- /TMPL_IF -->
 
 
 			<!-- TMPL_IF name="f7d" -->
-				<option value="d" selected="selected">Dans le premier fascicule du volume suivant - reliee</option>
+				<option value="d" selected="selected">in first issue of next volume - attached</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">Dans le premier fascicule du volume suivant - reliee</option>
+				<option value="d">in first issue of next volume - attached</option>
 			<!-- /TMPL_IF -->
 
 
 			<!-- TMPL_IF name="f7e" -->
-				<option value="e" selected="selected">Editee separement - gratuitement, sur commande</option>
+				<option value="e" selected="selected">published separately - free upon request</option>
 			<!-- TMPL_ELSE -->
-				<option value="e">Editee separement - gratuitement, sur commande</option>
+				<option value="e">published separately - free upon request</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f7f" -->
-				<option value="f" selected="selected">Editee separement - gratuitement, envoi automatique</option>
+				<option value="f" selected="selected">published separately-free - sent automatically</option>
 			<!-- TMPL_ELSE -->
-				<option value="f">Editee separement - gratuitement, envoi automatique</option>
+				<option value="f">published separately-free - sent automatically</option>
 			<!-- /TMPL_IF -->
 
 
 			<!-- TMPL_IF name="f7g" -->
-				<option value="g" selected="selected">Editee separement - sur commande, a titre onereux</option>
+				<option value="g" selected="selected">published separately - purchase-request</option>
 			<!-- TMPL_ELSE -->
-				<option value="g">Editee separement - sur commande, a titre onereux</option>
+				<option value="g">published separately - purchase-request</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f7u" -->
-				<option value="u" selected="selected">Inconnue a la creation de la notice</option>
+				<option value="u" selected="selected">unknown at time of record creation</option>
 			<!-- TMPL_ELSE -->
-				<option value="u">Inconnue a la creation de la notice</option>
+				<option value="u">unknown at time of record creation</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f7x" -->
-				<option value="x" selected="selected">Non applicable</option>
+				<option value="x" selected="selected">not applicable</option>
 			<!-- TMPL_ELSE -->
-				<option value="x">Non applicable</option>
+				<option value="x">not applicable</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f7y" -->
-				<option value="y" selected="selected">Pas de page de titre parue</option>
+				<option value="y" selected="selected">no title-page issued</option>
 			<!-- TMPL_ELSE -->
-				<option value="y">Pas de page de titre parue</option>
+				<option value="y">no title-page issued</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f7z" -->
-				<option value="z" selected="selected">Autre</option>
+				<option value="z" selected="selected">other</option>
 			<!-- TMPL_ELSE -->
-				<option value="z">Autre</option>
+				<option value="z">other</option>
 			<!-- /TMPL_IF -->
 
 				</select>
@@ -439,154 +439,154 @@
 	</tr>
 
 	<tr>
-		<td>Existence d'un index</td>
+		<td>Index availability code</td>
 		<td>
 			<select name="f8" size="1">
 			<!-- TMPL_IF name="f8|" -->
-                            <option value="|" selected="selected">|- Caractère de remplissage</option>
+                            <option value="|" selected="selected">|- Filling character</option>
                         <!-- TMPL_ELSE -->
-                            <option value="|">|- Caractère de remplissage</option>
+                            <option value="|">|- Filling character</option>
                         <!-- /TMPL_IF -->
             
 			<!-- TMPL_IF name="f8a" -->
-				<option value="a" selected="selected">Chaque fascicule contient son propre index - volant</option>
+				<option value="a" selected="selected">each issue contains an index to its own contents - loose</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Chaque fascicule contient son propre index - volant</option>
+				<option value="a">each issue contains an index to its own contents - loose</option>
 			<!-- /TMPL_IF -->
 
 
 			<!-- TMPL_IF name="f8b" -->
-				<option value="b" selected="selected">Dans le dernier fascicule - volant - pagination separee</option>
+				<option value="b" selected="selected">in last issue of volume-loose - separately paged</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Dans le dernier fascicule - volant - pagination separee</option>
+				<option value="b">in last issue of volume-loose - separately paged</option>
 			<!-- /TMPL_IF -->
 
 
 			<!-- TMPL_IF name="f8c" -->
-				<option value="c" selected="selected">Dans le dernier fascicule - volant - Non pagine</option>
+				<option value="c" selected="selected">in last issue of volume - unpaged</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Dans le dernier fascicule - volant - Non pagine</option>
+				<option value="c">in last issue of volume - unpaged</option>
 			<!-- /TMPL_IF -->
 
 
 			<!-- TMPL_IF name="f8d" -->
-				<option value="d" selected="selected">Dans le dernier fascicule - relie</option>
+				<option value="d" selected="selected">in last issue of volume - attached</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">Dans le dernier fascicule - relie</option>
+				<option value="d">in last issue of volume - attached</option>
 			<!-- /TMPL_IF -->
 
 
 			<!-- TMPL_IF name="f8e" -->
-				<option value="b" selected="selected">Dans le dernier fascicule - volant - pagination separee</option>
+				<option value="e" selected="selected">in first issue of next volume loose - separately paged</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Dans le dernier fascicule - volant - pagination separee</option>
+				<option value="e">in first issue of next volume loose - separately paged</option>
 			<!-- /TMPL_IF -->
 				
 
 			<!-- TMPL_IF name="f8f" -->
-				<option value="f" selected="selected">Dans le dernier fascicule - volant - non pagine</option>
+				<option value="f" selected="selected">in first issue of next volume loose - unpaged</option>
 			<!-- TMPL_ELSE -->
-				<option value="f">Dans le dernier fascicule - volant - non pagine</option>
+				<option value="f">in first issue of next volume loose - unpaged</option>
 			<!-- /TMPL_IF -->
 				
 
 			<!-- TMPL_IF name="f8g" -->
-				<option value="g" selected="selected">dans le premier fascicule relié</option>
+				<option value="g" selected="selected">in first issue of next volume - attached</option>
 			<!-- TMPL_ELSE -->
-				<option value="g">dans le premier fascicule relié/option>
+				<option value="g">in first issue of next volume - attached</option>
 			<!-- /TMPL_IF -->
 				
 
 			<!-- TMPL_IF name="f8h" -->
-				<option value="h" selected="selected">Edite separement - gratuit - envoit automatique</option>
+				<option value="h" selected="selected">published separately free - sent automatically</option>
 			<!-- TMPL_ELSE -->
-				<option value="h">Edite separement - gratuit - envoit automatique</option>
+				<option value="h">published separately free - sent automatically</option>
 			<!-- /TMPL_IF -->
 				
 
 			<!-- TMPL_IF name="f8i" -->
-				<option value="i" selected="selected">Edite separement - gratuit sur demande</option>
+				<option value="i" selected="selected">published separately - free upon request</option>
 			<!-- TMPL_ELSE -->
-				<option value="i">Edite separement - gratuit sur demande</option>
+				<option value="i">published separately - free upon request</option>
 			<!-- /TMPL_IF -->
 				
 
 			<!-- TMPL_IF name="f8j" -->
-				<option value="j" selected="selected">Edite separement - reliure d'editeur - gratuit - envoit automatique</option>
+				<option value="j" selected="selected">   published separately - bound from publisher free - sent automatically</option>
 			<!-- TMPL_ELSE -->
-				<option value="j">Edite separement - reliure d'editeur - gratuit - envoit automatique</option>
+				<option value="j">   published separately - bound from publisher free - sent automatically</option>
 			<!-- /TMPL_IF -->
 				
 
 			<!-- TMPL_IF name="f8k" -->
-				<option value="k" selected="selected">Edite separement - reliure d'editeur - gratuit sur demande</option>
+				<option value="k" selected="selected">    published separately-bound from publisher - free upon request</option>
 			<!-- TMPL_ELSE -->
-				<option value="k">Edite separement - reliure d'editeur - gratuit sur demande</option>
+				<option value="k">    published separately-bound from publisher - free upon request</option>
 			<!-- /TMPL_IF -->
 				
 
 			<!-- TMPL_IF name="f8l" -->
-				<option value="l" selected="selected">Edite separement - reliure d'editeur - commande a titre onereux</option>
+				<option value="l" selected="selected">   published separately-bound from publisher - purchase uponrequest</option>
 			<!-- TMPL_ELSE -->
-				<option value="l">Edite separement - reliure d'editeur - commande a titre onereux</option>
+				<option value="l">   published separately-bound from publisher - purchase uponrequest</option>
 			<!-- /TMPL_IF -->
 				
 
 			<!-- TMPL_IF name="f8m" -->
-				<option value="m" selected="selected">Supplement ou sous-serie indexe dans la publication mere</option>
+				<option value="m" selected="selected">    this continuing resource is a supplement or subseries indexed in its parent continuing resource</option>
 			<!-- TMPL_ELSE -->
-				<option value="m">Supplement ou sous-serie indexe dans la publication mere</option>
+				<option value="m">    this continuing resource is a supplement or subseries indexed in its parent continuing resource</option>
 			<!-- /TMPL_IF -->
 				
 
 			<!-- TMPL_IF name="f8u" -->
-				<option value="u" selected="selected">Inconnu</option>
+				<option value="u" selected="selected">unknown at time of record creation</option>
 			<!-- TMPL_ELSE -->
-				<option value="u">Inconnu</option>
+				<option value="u">unknown at time of record creation</option>
 			<!-- /TMPL_IF -->
 				
 
 			<!-- TMPL_IF name="f8x" -->
-				<option value="x" selected="selected">Non applicable</option>
+				<option value="x" selected="selected">not applicable</option>
 			<!-- TMPL_ELSE -->
-				<option value="x">Non applicable</option>
+				<option value="x">not applicable</option>
 			<!-- /TMPL_IF -->
 				
 
 			<!-- TMPL_IF name="f8y" -->
-				<option value="y" selected="selected">index indisponible</option>
+				<option value="y" selected="selected">index is not available</option>
 			<!-- TMPL_ELSE -->
-				<option value="y">index indisponible</option>
+				<option value="y">index is not available</option>
 			<!-- /TMPL_IF -->
 				
 
 			<!-- TMPL_IF name="f8z" -->
-				<option value="z" selected="selected">Autre</option>
+				<option value="z" selected="selected">other</option>
 			<!-- TMPL_ELSE -->
-				<option value="z">Autre</option>
+				<option value="z">other</option>
 			<!-- /TMPL_IF -->
 				</select>
 		</td>
 	</tr>
 	<tr>
-		<td>Existence d'un index cumulatif</td>
+		<td>Cumulative index availability code</td>
 		<td>
 			<select name="f9" size="1">
 			<!-- TMPL_IF name="f9|" -->
-                            <option value="|" selected="selected">|- Caractère de remplissage</option>
+                            <option value="|" selected="selected">|- Filling character</option>
                         <!-- TMPL_ELSE -->
-                            <option value="|">|- Caractère de remplissage</option>
+                            <option value="|">|- Filling character</option>
                         <!-- /TMPL_IF -->
             
 			<!-- TMPL_IF name="f90" -->
-				<option value="0" selected="selected">Pas d'index cumulatif ou de table des matieres</option>
+				<option value="0" selected="selected">no cumulative index or table of contents</option>
 			<!-- TMPL_ELSE -->
-				<option value="0">Pas d'index cumulatif ou de table des matieres </option>
+				<option value="0">no cumulative index or table of contents</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f91" -->
-				<option value="1" selected="selected">Index cumulatif ou table des matieres</option>
+				<option value="1" selected="selected">cumulative index or table of contents available</option>
 			<!-- TMPL_ELSE -->
-				<option value="1">Index cumulatif ou table des matieres</option>
+				<option value="1">cumulative index or table of contents available</option>
 			<!-- /TMPL_IF -->
 				</select>
 		</td>

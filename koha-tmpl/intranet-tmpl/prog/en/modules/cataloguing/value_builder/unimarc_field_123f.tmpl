@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>UNIMARC_constructeur champ 123f</title>
+<title>UNIMARC_Field 123f builder</title>
 </head>
 <body>
 <form name="f_pop">
@@ -14,39 +14,39 @@
 		<td>
 			<select name="f1" size="1">            
 			<!-- TMPL_IF name="f1w" -->
-				<option value="w" SELECTED>Ouest</option>
+				<option value="w" SELECTED>west</option>
 			<!-- TMPL_ELSE -->
-				<option value="w">Ouest</option>
+				<option value="w">west</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1e" -->
-				<option value="e" SELECTED>Est</option>
+				<option value="e" SELECTED>east</option>
 			<!-- TMPL_ELSE -->
-				<option value="e">Est</option>
+				<option value="e">east</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1n" -->
-				<option value="n" SELECTED>Nord</option>
+				<option value="n" SELECTED>north</option>
 			<!-- TMPL_ELSE -->
-				<option value="n">Nord</option>
+				<option value="n">north</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1s" -->
-				<option value="s" SELECTED>Sud</option>
+				<option value="s" SELECTED>south</option>
 			<!-- TMPL_ELSE -->
-				<option value="s">Sud</option>
+				<option value="s">south</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>
 
-<tr>          <td>Degres (completer avec des 0):</td>
+<tr>          <td>Degree (complete with 0):</td>
                          <td><input type="text" name="f2" maxlength=3
                          size=4
                    value="<!-- TMPL_VAR name="f2" -->"></td>
 </tr>
-<tr>          <td>Minutes (completer avec des 0):</td>
+<tr>          <td>Minute (complete with 0):</td>
                          <td><input type="text" name="f3" maxlength=2
                          size=3
                    value="<!-- TMPL_VAR name="f3" -->"></td>
 </tr>
-<tr>          <td>Secondes (completer avec des 0):</td>
+<tr>          <td>Second (complete with 0):</td>
                          <td><input type="text" name="f4" maxlength=2
                          size=3
                    value="<!-- TMPL_VAR name="f4" -->"></td>
