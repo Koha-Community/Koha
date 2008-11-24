@@ -138,12 +138,40 @@ function Changefwk(FwkList) {
 
 }
 
-function openAuth(tagid,authtype,X) {
-// 	defaultid=document.getElementById(subfieldid);
-//     alert("X"+X);
-    Y=X.parentNode.getAttribute("id");
-//     alert("tagid"+Y);
-	newin=window.open("../authorities/auth_finder.pl?authtypecode="+  authtype+ "&tagid="+Y, "value builder",'width=700,height=550,toolbar=false,scrollbars=yes');
+// returns the subfieldcode based upon subfieldid writing
+function getSubfieldcode(tagsubfieldid){
+    // 3 : tag +3 : tagnumber +4 : number of _ +8 subfield -1 begins at 0  
+    return tagsubfieldid.substr(3+3+4+8-1,1);
+}
+
+// Take the base of tagsubfield information (removing the subfieldcodes and subfieldindexes)
+// returns the filter
+function getTagInputnameFilter(tagsubfieldid){
+    var tagsubfield=tagsubfieldid.substr(0,tagsubfieldid.lastIndexOf("_"));  
+    var tagcode=tagsubfield.substr(tagsubfield.lastIndexOf("_"));
+    tagsubfield=tagsubfield.substr(0,tagsubfield.lastIndexOf("_"));
+    tagsubfield=tagsubfield.substr(0,tagsubfield.lastIndexOf("_"));
+    tagsubfield=tagsubfield+"_."+tagcode;
+    return tagsubfield;  
+}
+
+function openAuth(tagsubfieldid,authtype) {
+    // let's take the base of tagsubfield information (removing the indexes and the codes
+    var element=document.getElementById(tagsubfieldid);
+    var tagsubfield=getTagInputnameFilter(tagsubfieldid);
+    var elementsubfcode=getSubfieldcode(element.name);
+    var mainmainstring=element.value;
+    var mainstring="";  
+    var inputs = document.getElementsByTagName("input");
+    for (var myindex =0; myindex<inputs.length;myindex++){
+        if (inputs[myindex].name && inputs[myindex].name.match(tagsubfield)){
+            var subfieldcode=getSubfieldcode(inputs[myindex].name);  
+            if (isNaN(parseInt(subfieldcode)) && inputs[myindex].value != "" && subfieldcode!=elementsubfcode){
+                mainstring=inputs[myindex].value+" "+mainstring;
+            }      
+        }
+    }           
+	newin=window.open("../authorities/auth_finder.pl?authtypecode="+  authtype+ "&index="+tagsubfieldid+"&mainmainstring="+encodeURI(mainmainstring)+"&mainstring="+encodeURI(mainstring), "value builder",'width=700,height=550,toolbar=false,scrollbars=yes');
 }
 
 
