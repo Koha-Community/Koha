@@ -4,46 +4,45 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>UNIMARC_constructeur champ 122</title>
+<title>UNIMARC_Field 122 builder</title>
 </head>
 <body>
 <form name="f_pop">
 <table>
 	<tr>
-		<td>Ere code:</td>
+		<td>Era identifier</td>
 		<td>
 		<select name="f1" size="1">
                     <!-- TMPL_IF name="f1c" -->
-                            <option value="c" SELECTED>La date
-                            tombe avant l'an 1 du calendrier gregorien</option>
+                            <option value="c" SELECTED>   date falls before the year 1 in the Gregorian calendar, i.e. B.C.</option>
                     <!-- TMPL_ELSE -->
-                            <option value="c">La date tombe avant l'an 1 du calendrier gregorien</option>
+                            <option value="c">   date falls before the year 1 in the Gregorian calendar, i.e. B.C.</option>
                     <!-- /TMPL_IF -->
                     <!-- TMPL_IF name="f1d" -->
-                            <option value="d" SELECTED>La date tombe apres l'an 1</option>
+                            <option value="d" SELECTED>date falls after the year 1 in the Gregorian calendar, i.e. A.D.</option>
                     <!-- TMPL_ELSE -->
-                            <option value="d">La date tombe apres l'an 1</option>
+                            <option value="d">date falls after the year 1 in the Gregorian calendar, i.e. A.D.</option>
                     <!-- /TMPL_IF -->
 
                 </select>
 		</td>
                 </tr>
                 <tr>
-                <td>Annee:</td>
+                <td>Year</td>
 		   <td><input type="text" name="f2" maxlength=4 size=5
 		   value="<!-- TMPL_VAR name="f2" -->">
 		</td>
 
-		<td>Mois:</td>
+		<td>Month</td>
 		         <td><input type="text" name="f3" maxlength=2
 		         size=3
                    value="<!-- TMPL_VAR name="f3" -->"></td>
-		<td>Jour:</td>
+		<td>Day</td>
 		         <td><input type="text" name="f4" maxlength=2
 		         size=3
                    value="<!-- TMPL_VAR name="f4" -->"></td>
 
-		<td>Heure:</td>
+		<td>Time</td>
 		         <td><input type="text" name="f5" maxlength=2
 		         size=3
                    value="<!-- TMPL_VAR name="f5" -->"></td>

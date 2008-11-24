@@ -10,29 +10,29 @@
 <form name="f_pop">
 <table>
 	<tr>
-		<td>Type de document</td>
+		<td>Type of material</td>
 		<td>
 			<select name="f1" size="1">
 			<!-- TMPL_IF name="f1|" -->
-            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            	<option value="|" SELECTED>|- Filling character</option>
             <!-- TMPL_ELSE -->
-            	<option value="|">|- Caractère de remplissage</option>
+            	<option value="|">|- Filling character</option>
             <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f1a" -->
-				<option value="a" SELECTED>Film</option>
+				<option value="a" SELECTED>motion picture</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Film</option>
+				<option value="a">motion picture</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1b" -->
-				<option value="b" SELECTED>Document a projeter</option>
+				<option value="b" SELECTED>visual projection</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Document a projeter</option>
+				<option value="b">visual projection</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1c" -->
-				<option value="c" SELECTED>Enregistrement video</option>
+				<option value="c" SELECTED>videorecording</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Enregistrement video</option>
+				<option value="c">videorecording</option>
 	
 			<!-- /TMPL_IF -->
 
@@ -41,52 +41,52 @@
 	</tr>
 
    <tr>
-                <td>Longueur</td>
+                <td>Lenght</td>
                 <td><input type="text" name="f2" maxlength=3 size=4 value="<!-- TMPL_VAR name="f2" -->"></td>
 
 	</tr>
 
 
 	<tr>
-		<td>Couleur</td>
+		<td>Colour indicator</td>
 		<td>
 	<select name="f3" size="1">
 			<!-- TMPL_IF name="f1|" -->
-            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            	<option value="|" SELECTED>|- Filling character</option>
             <!-- TMPL_ELSE -->
-            	<option value="|">|- Caractère de remplissage</option>
+            	<option value="|">|- Filling character</option>
             <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f3a" -->
-				<option value="a" SELECTED>Noir et blanc</option>
+				<option value="a" SELECTED>black and white</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Noir et blanc</option>
+				<option value="a">black and white</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f3b" -->
-				<option value="b" SELECTED>Couleur</option>
+				<option value="b" SELECTED>colour</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Couleur</option>
+				<option value="b">colour</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f3c" -->
-				<option value="c" SELECTED>Combinaison de noir et blanc et de couleur</option>
+				<option value="c" SELECTED>combination of black and white and colour</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Combinaison de noir et blanc et de couleur</option>
+				<option value="c">combination of black and white and colour</option>
 	
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f3u" -->
-				<option value="u" SELECTED>Inconnu</option>
+				<option value="u" SELECTED>unknown</option>
 			<!-- TMPL_ELSE -->
-				<option value="u">Inconnu</option>
+				<option value="u">unknown</option>
 	
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f3z" -->
-				<option value="z" SELECTED>Autre (sepia, colorie)</option>
+				<option value="z" SELECTED>other (sepia, tinted, etc.)</option>
 			<!-- TMPL_ELSE -->
-				<option value="z">Autre (sepia, colorie)</option>
+				<option value="z">other (sepia, tinted, etc.)</option>
 	
 			<!-- /TMPL_IF -->
 
@@ -95,37 +95,37 @@
 	</tr>
 
 	<tr>
-		<td>Son</td>
+		<td>Sound indicator</td>
 		<td>
 			<select name="f4" size="1">
 			<!-- TMPL_IF name="f4|" -->
-            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            	<option value="|" SELECTED>|- Filling character</option>
             <!-- TMPL_ELSE -->
-            	<option value="|">|- Caractère de remplissage</option>
+            	<option value="|">|- Filling character</option>
             <!-- /TMPL_IF -->
                 	<!-- TMPL_IF name="f4a" -->
-				<option value="a" SELECTED>Son sur le document</option>
+				<option value="a" SELECTED>sound on medium</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Son sur le document</option>
+				<option value="a">sound on medium</option>
 	
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f4b" -->
-				<option value="b" SELECTED>Piste sonore separee</option>
+				<option value="b" SELECTED>soundtrack separate</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Piste sonore separee</option>
+				<option value="b">soundtrack separate</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f4u" -->
-				<option value="u" SELECTED>Inconnu</option>
+				<option value="u" SELECTED>unknown</option>
 			<!-- TMPL_ELSE -->
-				<option value="u">Inconnu</option>
+				<option value="u">unknown</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f4y" -->
-				<option value="y" SELECTED>Muet</option>
+				<option value="y" SELECTED>no sound</option>
 			<!-- TMPL_ELSE -->
-				<option value="y">Muet</option>
+				<option value="y">no sound</option>
 
 			<!-- /TMPL_IF -->
 				</select>
@@ -134,91 +134,91 @@
 
 
 	<tr>
-		<td>Support son</td>
+		<td>Media for sound</td>
 		<td>
 			<select name="f5" size="1">
 			<!-- TMPL_IF name="f5|" -->
-            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            	<option value="|" SELECTED>|- Filling character</option>
             <!-- TMPL_ELSE -->
-            	<option value="|">|- Caractère de remplissage</option>
+            	<option value="|">|- Filling character</option>
             <!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5a" -->
-				<option value="a" SELECTED>Piste son optique sur le film</option>
+				<option value="a" SELECTED>optical sound track on motion picture film</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Piste son optique sur le film</option>
+				<option value="a">optical sound track on motion picture film</option>
 	
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f5b" -->
-				<option value="b" SELECTED>Piste son magnetique</option>
+				<option value="b" SELECTED>magnetic sound track on motion picture film</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Piste son magnetique</option>
+				<option value="b">magnetic sound track on motion picture film</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f5c" -->
-				<option value="c" SELECTED>Bande magnetique audio en cartouche</option>
+				<option value="c" SELECTED>magnetic audio tape in cartridge</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Bande magnetique audio en cartouche</option>
+				<option value="c">magnetic audio tape in cartridge</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f5d" -->
-				<option value="d" SELECTED>Disque sonore</option>
+				<option value="d" SELECTED>sound disc</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">Disque sonore</option>
+				<option value="d">sound disc</option>
 
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f5g" -->
-				<option value="g" SELECTED>Piste son optique et magnetique sur le film</option>
+				<option value="g" SELECTED>optical and magnetic sound track on motion picture film</option>
 			<!-- TMPL_ELSE -->
-				<option value="g">Piste son optique et magnetique sur le film</option>
+				<option value="g">optical and magnetic sound track on motion picture film</option>
 
 			<!-- /TMPL_IF -->
 			
 			<!-- TMPL_IF name="f5h" -->
-				<option value="h" SELECTED>Bande video</option>
+				<option value="h" SELECTED>videotape</option>
 			<!-- TMPL_ELSE -->
-				<option value="h">Bande video</option>
+				<option value="h">videotape</option>
 
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f5i" -->
-				<option value="i" SELECTED>Videodisque</option>
+				<option value="i" SELECTED>videodisc</option>
 			<!-- TMPL_ELSE -->
-				<option value="i">Videodisque</option>
+				<option value="i">videodisc</option>
 
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f5u" -->
-				<option value="u" SELECTED>Inconnu</option>
+				<option value="u" SELECTED>unknown</option>
 			<!-- TMPL_ELSE -->
-				<option value="u">Inconnu</option>
+				<option value="u">unknown</option>
 
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f5e" -->
-				<option value="e" SELECTED>Bande magnetique audio en bobine</option>
+				<option value="e" SELECTED>magnetic audio tape on reel</option>
 			<!-- TMPL_ELSE -->
-				<option value="e">Bande magnetique audio en bobine</option>
+				<option value="e">magnetic audio tape on reel</option>
 
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f5f" -->
-				<option value="f" SELECTED>Bande magnetique audio en cassette</option>
+				<option value="f" SELECTED>magnetic audio tape in cassette</option>
 			<!-- TMPL_ELSE -->
-				<option value="f">Bande magnetique audio en cassette</option>
+				<option value="f">magnetic audio tape in cassette</option>
 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5x" -->
-				<option value="x" SELECTED>Muet</option>
+				<option value="x" SELECTED>no sound</option>
 			<!-- TMPL_ELSE -->
-				<option value="x">Muet</option>
+				<option value="x">no sound</option>
 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5z" -->
-				<option value="z" SELECTED>Autre</option>
+				<option value="z" SELECTED>other</option>
 			<!-- TMPL_ELSE -->
-				<option value="z">Autre</option>
+				<option value="z">other</option>
 
 			<!-- /TMPL_IF -->
 				</select>
@@ -226,283 +226,283 @@
         </tr>
 
 	<tr>
-		<td>Largeur ou dimension</td>
+		<td>Width or dimensions</td>
 		<td>
 			<select name="f6" size="1">
 			<!-- TMPL_IF name="f6|" -->
-            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            	<option value="|" SELECTED>|- Filling character</option>
             <!-- TMPL_ELSE -->
-            	<option value="|">|- Caractère de remplissage</option>
+            	<option value="|">|- Filling character</option>
             <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f6a" -->
-				<option value="a" SELECTED>Films et bandes de film => 8 mm</option>
+				<option value="a" SELECTED>Motion pictures and filmstrips => 8 mm</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Films et bandes de film => 8mm</option>
+				<option value="a">Motion pictures and filmstrips => 8mm</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f6b" -->
-				<option value="b" SELECTED>Films et bandes de film => Super 8 mm</option>
+				<option value="b" SELECTED>Motion pictures and filmstrips => Super 8 mm</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Films et bandes de film => Super 8 mm</option>
+				<option value="b">Motion pictures and filmstrips => Super 8 mm</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f6c" -->
-				<option value="c" SELECTED>Films et bandes de film => 9.5 mm</option>
+				<option value="c" SELECTED>Motion pictures and filmstrips => 9.5 mm</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Films et bandes de film => 9.5 mm</option>
+				<option value="c">Motion pictures and filmstrips => 9.5 mm</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f6d" -->
-				<option value="d" SELECTED>Films et bandes de film => 16 mm</option>
+				<option value="d" SELECTED>Motion pictures and filmstrips => 16 mm</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">Films et bandes de film => 16 mm</option>
+				<option value="d">Motion pictures and filmstrips => 16 mm</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f6e" -->
-				<option value="e" SELECTED>Films et bandes de film => 28 mm</option>
+				<option value="e" SELECTED>Motion pictures and filmstrips => 28 mm</option>
 			<!-- TMPL_ELSE -->
-				<option value="e">Films et bandes de film => 28 mm</option>
+				<option value="e">Motion pictures and filmstrips => 28 mm</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f6f" -->
-				<option value="f" SELECTED>Films et bandes de film => 35 mm</option>
+				<option value="f" SELECTED>Motion pictures and filmstrips => 35 mm</option>
 			<!-- TMPL_ELSE -->
-				<option value="f">Films et bandes de film => 35 mm</option>
+				<option value="f">Motion pictures and filmstrips => 35 mm</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f6g" -->
-				<option value="g" SELECTED>Films et bandes de film => 70 mm</option>
+				<option value="g" SELECTED>Motion pictures and filmstrips => 70 mm</option>
 			<!-- TMPL_ELSE -->
-				<option value="g">Films et bandes de film => 70 mm</option>
+				<option value="g">Motion pictures and filmstrips => 70 mm</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f6k" -->
-				<option value="k" SELECTED>Diapositives (5.5*5.5 cm)</option>
+				<option value="k" SELECTED>Slides 21⁄4 x 21⁄4 in. (5.5*5.5 cm)</option>
 			<!-- TMPL_ELSE -->
-				<option value="k">Diapositives (5.5*5.5 cm)</option>
+				<option value="k">Slides 21⁄4 x 21⁄4 in. (5.5*5.5 cm)</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f6l" -->
-				<option value="l" SELECTED>Diapositives (5*5 cm)</option>
+				<option value="l" SELECTED>Slides 2 x 2in. (5*5 cm)</option>
 			<!-- TMPL_ELSE -->
-				<option value="l">Diapositives (5*5 cm)</option>
+				<option value="l">Slides 2 x 2in. (5*5 cm)</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f6m" -->
-				<option value="m" SELECTED>Bandes video 3/4 de pouce (2 cm)</option>
+				<option value="m" SELECTED>Videotapes 1/4 in. (2 cm)</option>
 			<!-- TMPL_ELSE -->
-				<option value="m">Bandes video 3/4 de pouce (2 cm)</option>
+				<option value="m">Videotapes 1/4 in. (2 cm)</option>
 			<!-- /TMPL_IF -->
 			
 			<!-- TMPL_IF name="f6n" -->
-				<option value="n" SELECTED>Bandes video 1/4 de pouce (1/2 cm)</option>
+				<option value="n" SELECTED>Videotapes 1/4 in. (1/2 cm)</option>
 			<!-- TMPL_ELSE -->
-				<option value="n">Bandes video 1/4 de pouce (1/2 cm)</option>
+				<option value="n">Videotapes 1/4 in. (1/2 cm)</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f6o" -->
-				<option value="o" SELECTED>Bandes video 2 pouces (1 cm 1/3) </option>
+				<option value="o" SELECTED>Videotapes 1/2 in. (1 cm 1/3) </option>
 			<!-- TMPL_ELSE -->
-				<option value="o">Bandes video 2 pouces (1 cm 1/3)</option>
+				<option value="o">Videotapes 1/2 in. (1 cm 1/3)</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f6p" -->
-				<option value="p" SELECTED>Bandes video 1 pouce (2 cm 1/2)</option>
+				<option value="p" SELECTED>Videotapes 1 in. (2 cm 1/2)</option>
 			<!-- TMPL_ELSE -->
-				<option value="p">Bandes video 1 pouce (2 cm 1/2)</option>
+				<option value="p">Videotapes 1 in. (2 cm 1/2)</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f6q" -->
-				<option value="q" SELECTED>Bandes video 2 pouces (5 cm)</option>
+				<option value="q" SELECTED>Videotapes 2 in. (5 cm)</option>
 			<!-- TMPL_ELSE -->
-				<option value="q">Bandes video 2 pouces (5 cm)</option>
+				<option value="q">Videotapes 2 in. (5 cm)</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f6r" -->
-				<option value="r" SELECTED>Transparents 8 * 10 pouces (20 * 25 cm)</option>
+				<option value="r" SELECTED>Transparencies 8 * 10 in. (20 * 25 cm)</option>
 			<!-- TMPL_ELSE -->
-				<option value="r">Transparents 8 * 10 pouces (20 * 25 cm)</option>
+				<option value="r">Transparencies 8 * 10 in. (20 * 25 cm)</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f6s" -->
-				<option value="s" SELECTED>Transparents 4 * 5 pouces (10 * 12.5 cm)</option>
+				<option value="s" SELECTED>Transparencies 4 * 5 in. (10 * 12.5 cm)</option>
 			<!-- TMPL_ELSE -->
-				<option value="s">Transparents 4 * 5 pouces (10 * 12.5 cm)</option>
+				<option value="s">Transparencies 4 * 5 in. (10 * 12.5 cm)</option>
 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6t" -->
-				<option value="t" SELECTED>Transparents 5 * 7 pouces (12.5 * 17.5 cm)</option>
+				<option value="t" SELECTED>Transparencies 5 * 7 in. (12.5 * 17.5 cm)</option>
 			<!-- TMPL_ELSE -->
-				<option value="t">Transparents 5 * 7 pouces (12.5 * 17.5 cm)</option>
+				<option value="t">Transparencies 5 * 7 in. (12.5 * 17.5 cm)</option>
 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6u" -->
-				<option value="u" SELECTED>Transparents 7 * 7 pouces (17.5 * 17.5 cm)</option>
+				<option value="u" SELECTED>Transparencies 7 * 7 in. (17.5 * 17.5 cm)</option>
 			<!-- TMPL_ELSE -->
-				<option value="u">Transparents 7 * 7 pouces (17.5 * 17.5 cm)</option>
+				<option value="u">Transparencies 7 * 7 in. (17.5 * 17.5 cm)</option>
 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6v" -->
-				<option value="v" SELECTED>Transparents 8 * 8 pouces (20 * 20 cm)</option>
+				<option value="v" SELECTED>Transparencies 8 * 8 in. (20 * 20 cm)</option>
 			<!-- TMPL_ELSE -->
-				<option value="v">Transparents 8 * 8 pouces (20 * 20 cm)</option>
+				<option value="v">Transparencies 8 * 8 in. (20 * 20 cm)</option>
 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6w" -->
-				<option value="w" SELECTED>Transparents 9 * 9 pouces (22.5 * 22.5 cm)</option>
+				<option value="w" SELECTED>Transparencies 9 * 9 in. (22.5 * 22.5 cm)</option>
 			<!-- TMPL_ELSE -->
-				<option value="w">Transparents 8 * 10 pouces (20 * 25 cm)</option>
+				<option value="w">Transparencies 8 * 10 in. (20 * 25 cm)</option>
 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6x" -->
-				<option value="x" SELECTED>Transparents 10 * 10 pouces (25 * 25 cm)</option>
+				<option value="x" SELECTED>Transparencies 10 * 10 in. (25 * 25 cm)</option>
 			<!-- TMPL_ELSE -->
-				<option value="x">Transparents 10 * 10 pouces (25 * 25 cm)</option>
+				<option value="x">Transparencies 10 * 10 in. (25 * 25 cm)</option>
 			<!-- /TMPL_IF -->
 				</select>
 		</td>
         </tr>
 
 	<tr>
-		<td>Presentation materielle</td>
+		<td>Form of release - visual projection, motion picture</td>
 		<td>
 			<select name="f7" size="1">
 			<!-- TMPL_IF name="f7|" -->
-            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            	<option value="|" SELECTED>|- Filling character</option>
             <!-- TMPL_ELSE -->
-            	<option value="|">|- Caractère de remplissage</option>
+            	<option value="|">|- Filling character</option>
             <!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7a" -->
-				<option value="a" SELECTED>Film en bobine</option>
+				<option value="a" SELECTED>film reel</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Film en bobine</option>
+				<option value="a">film reel</option>
 	
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f7b" -->
-				<option value="b" SELECTED>Film en cartouche</option>
+				<option value="b" SELECTED>film cartridge</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Film en cartouche</option>
+				<option value="b">film cartridge</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f7c" -->
-				<option value="c" SELECTED>Film en cassette</option>
+				<option value="c" SELECTED>film cassette</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Film en cassette</option>
+				<option value="c">film cassette</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f7d" -->
-				<option value="d" SELECTED>autre type de film</option>
+				<option value="d" SELECTED>other film type/option>
 			<!-- TMPL_ELSE -->
-				<option value="d">autre type de film</option>
+				<option value="d">other film type</option>
 
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f7g" -->
-				<option value="g" SELECTED>Film fixe en cartouche</option>
+				<option value="g" SELECTED>filmstrip cartridge</option>
 			<!-- TMPL_ELSE -->
-				<option value="g">Film fixe en cartouche</option>
+				<option value="g">filmstrip cartridge</option>
 
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f7h" -->
-				<option value="h" SELECTED>Film en courtes bandes</option>
+				<option value="h" SELECTED>filmslip</option>
 			<!-- TMPL_ELSE -->
-				<option value="h">Films en courtes bandes</option>
+				<option value="h">filmslip</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f7i" -->
-				<option value="i" SELECTED>Autres types de films fixes</option>
+				<option value="i" SELECTED>other filmstrip type</option>
 			<!-- TMPL_ELSE -->
-				<option value="i">Autres types de films fixes</option>
+				<option value="i">other filmstrip type</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f7j" -->
-				<option value="j" SELECTED>Film fixe en rouleau</option>
+				<option value="j" SELECTED>film strip roll</option>
 			<!-- TMPL_ELSE -->
-				<option value="j">Film fixe en rouleau</option>
+				<option value="j">film strip roll</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f7k" -->
-				<option value="k" SELECTED>Diapositives, jeu de diapositives, vues stereoscopiques</option>
+				<option value="k" SELECTED>slide, slide set, stereograph</option>
 			<!-- TMPL_ELSE -->
-				<option value="k">Diapositives, jeu de diapositives, vues stereoscopiques</option>
+				<option value="k">slide, slide set, stereograph</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f7l" -->
-				<option value="l" SELECTED>Transparents</option>
+				<option value="l" SELECTED>transparency</option>
 			<!-- TMPL_ELSE -->
-				<option value="l">Transparents</option>
+				<option value="l">transparency</option>
 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7u" -->
-				<option value="u" SELECTED>Inconnu</option>
+				<option value="u" SELECTED>unknown</option>
 			<!-- TMPL_ELSE -->
-				<option value="u">Inconnu</option>
+				<option value="u">unknown</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f7x" -->
-				<option value="x" SELECTED>Ce n'est pas un film ou un document projetable</option>
+				<option value="x" SELECTED>not a motion picture or visual projection</option>
 			<!-- TMPL_ELSE -->
-				<option value="x">Ce n'est pas un film ou un document projetable</option>
+				<option value="x">not a motion picture or visual projection</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f7z" -->
-				<option value="z" SELECTED>Autres presentations materielles</option>
+				<option value="z" SELECTED>other forms of release</option>
 			<!-- TMPL_ELSE -->
-				<option value="z">Autres presentations materielles</option>
+				<option value="z">other forms of release</option>
 			<!-- /TMPL_IF -->
 				</select>
 		</td>
         </tr>
 
 	<tr>
-		<td>Technique: video, film</td>
+		<td>Technique - videorecording, motion picture</td>
 		<td>
 		<select name="f8" size="1">
 			<!-- TMPL_IF name="f8|" -->
-            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            	<option value="|" SELECTED>|- Filling character</option>
             <!-- TMPL_ELSE -->
-            	<option value="|">|- Caractère de remplissage</option>
+            	<option value="|">|- Filling character</option>
             <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8a" -->
-				<option value="a" SELECTED>Animation</option>
+				<option value="a" SELECTED>animation</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Animation</option>
+				<option value="a">animation</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8b" -->
-				<option value="b" SELECTED>Prise de vue en direct</option>
+				<option value="b" SELECTED>live action</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Prise de vue en direct</option>
+				<option value="b">live action</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8c" -->
-				<option value="c" SELECTED>Animation et prise de vue en direct</option>
+				<option value="c" SELECTED>animation and live action</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Animation et prise de vue en direct</option>
+				<option value="c">animation and live action</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8u" -->
-				<option value="u" SELECTED>Non precise/inconnu</option>
+				<option value="u" SELECTED>unspecified/unknown</option>
 			<!-- TMPL_ELSE -->
-				<option value="u">Non precise/inconnu</option>
+				<option value="u">unspecified/unknown</option>
 
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8x" -->
-				<option value="x" SELECTED>Ce n'est pas un film ou une video</option>
+				<option value="x" SELECTED>not a motion picture or video recording</option>
 			<!-- TMPL_ELSE -->
-				<option value="x">Ce n'est pas un film ou une video</option>
+				<option value="x">not a motion picture or video recording</option>
 
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8z" -->
-				<option value="z" SELECTED>Autres</option>
+				<option value="z" SELECTED>other</option>
 			<!-- TMPL_ELSE -->
-				<option value="z">Autres</option>
+				<option value="z">other</option>
 
 			<!-- /TMPL_IF -->
 
@@ -512,25 +512,25 @@
         </tr>
 
 	<tr>
-		<td>Format du film</td>
+		<td>Presentation format - motion picture</td>
 		<td>
 			<select name="f9" size="1">
 			<!-- TMPL_IF name="f9|" -->
-            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            	<option value="|" SELECTED>|- Filling character</option>
             <!-- TMPL_ELSE -->
-            	<option value="|">|- Caractère de remplissage</option>
+            	<option value="|">|- Filling character</option>
             <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9a" -->
-				<option value="a" SELECTED>Format normalise avec son (format reduit)</option>
+				<option value="a" SELECTED>standard sound aperture (reduced format)</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Format normalise avec son (format reduit)</option>
+				<option value="a">standard sound aperture (reduced format)</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9b" -->
-				<option value="b" SELECTED>Sans anamorphose (ecran panoramique)</option>
+				<option value="b" SELECTED>non-anamorphic (wide screen)</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Sans anamorphose (ecran panoramique)</option>
+				<option value="b">non-anamorphic (wide screen)</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9c" -->
@@ -540,33 +540,33 @@
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9d" -->
-				<option value="d" SELECTED>Anamorphose (ecran panoramique)</option>
+				<option value="d" SELECTED>anamorphic (wide screen)</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">Anamorphose (ecran panoramique)</option>
+				<option value="d">anamorphic (wide screen)</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9e" -->
-				<option value="e" SELECTED>Format normalise muet</option>
+				<option value="e" SELECTED>standard silent aperture</option>
 			<!-- TMPL_ELSE -->
-				<option value="e">Format normalise muet</option>
+				<option value="e">standard silent aperture</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9f" -->
-				<option value="f" SELECTED>Autre format en grand ecran</option>
+				<option value="f" SELECTED>other wide screen format</option>
 			<!-- TMPL_ELSE -->
-				<option value="f">Autre format en grand ecran</option>
+				<option value="f">other wide screen format</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9x" -->
-				<option value="x" SELECTED>Ce n'est pas un film</option>
+				<option value="x" SELECTED>not a motion picture</option>
 			<!-- TMPL_ELSE -->
-				<option value="x">Ce n'es pas un film</option>
+				<option value="x">not a motion picture</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9u" -->
-				<option value="u" SELECTED>Inconnu</option>
+				<option value="u" SELECTED>unknown</option>
 			<!-- TMPL_ELSE -->
-				<option value="u">Inconnu</option>
+				<option value="u">unknown</option>
 			<!-- /TMPL_IF -->
 
 				</select>
@@ -574,137 +574,137 @@
         </tr>
 
 	<tr>
-		<td>Materiel d'accompagnement 1</td>
+		<td>Accompanying material 1</td>
 		<td>
 			<select name="f10" size="1">
 			<!-- TMPL_IF name="f10|" -->
-            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            	<option value="|" SELECTED>|- Filling character</option>
             <!-- TMPL_ELSE -->
-            	<option value="|">|- Caractère de remplissage</option>
+            	<option value="|">|- Filling character</option>
             <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10a" -->
-				<option value="a" SELECTED>Cliche tire du film</option>
+				<option value="a" SELECTED>stills</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Cliche tire du film</option>
+				<option value="a">stills</option>
 	
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10b" -->
-				<option value="b" SELECTED>Script</option>
+				<option value="b" SELECTED>script material</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Script</option>
+				<option value="b">script material</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10c" -->
-				<option value="c" SELECTED>Affiche</option>
+				<option value="c" SELECTED>posters</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Affiche</option>
+				<option value="c">posters</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10d" -->
-				<option value="d" SELECTED>Programme et pressbook</option>
+				<option value="d" SELECTED>programmes and pressbooks</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">Programme et pressbook</option>
+				<option value="d">programmes and pressbooks</option>
 
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10e" -->
-				<option value="e" SELECTED>Lobby CaRD</option>
+				<option value="e" SELECTED>lobby cards</option>
 			<!-- TMPL_ELSE -->
-				<option value="e">Lobby CaRD</option>
+				<option value="e">lobby cards</option>
 
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10f" -->
-				<option value="f" SELECTED>Manuel d'instruction</option>
+				<option value="f" SELECTED>instructional materials</option>
 			<!-- TMPL_ELSE -->
-				<option value="f">Manuel d'instruction</option>
+				<option value="f">instructional materials</option>
 
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10g" -->
-				<option value="g" SELECTED>Partition ou autre presentation de musique</option>
+				<option value="g" SELECTED>score or other music format</option>
 			<!-- TMPL_ELSE -->
-				<option value="g">Partition ou autre presentation de musique</option>
+				<option value="g">score or other music format</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10h" -->
-				<option value="h" SELECTED>Esquisse ou projet de costumes</option>
+				<option value="h" SELECTED>set or costume designs</option>
 			<!-- TMPL_ELSE -->
-				<option value="h">Esquisse ou projet de costumes</option>
+				<option value="h">set or costume designs</option>
 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f10z" -->
-				<option value="z" SELECTED>Autres materiels d'accompagnement</option>
+				<option value="z" SELECTED>other accompanying material</option>
 			<!-- TMPL_ELSE -->
-				<option value="z">Autres materiels d'accompagnement</option>
+				<option value="z">other accompanying material</option>
 			<!-- /TMPL_IF -->
 
 				</select>
 		</td>
-		<td>Materiel d'accompagnement 2</td>
+		<td>Accompanying material 2</td>
 		<td>
 			<select name="f11" size="1">
 			<!-- TMPL_IF name="f11|" -->
-            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            	<option value="|" SELECTED>|- Filling character</option>
             <!-- TMPL_ELSE -->
-            	<option value="|">|- Caractère de remplissage</option>
+            	<option value="|">|- Filling character</option>
             <!-- /TMPL_IF -->
             
 			<!-- TMPL_IF name="f11a" -->
-				<option value="a" SELECTED>Cliche tire du film</option>
+				<option value="a" SELECTED>stills</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Cliche tire du film</option>
+				<option value="a">stills</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f11b" -->
-				<option value="b" SELECTED>Script</option>
+				<option value="b" SELECTED>script material</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Script</option>
+				<option value="b">script material</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f11c" -->
-				<option value="c" SELECTED>Affiche</option>
+				<option value="c" SELECTED>posters</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Affiche</option>
+				<option value="c">posters</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f11d" -->
-				<option value="d" SELECTED>Programme et pressbook</option>
+				<option value="d" SELECTED>programmes and pressbooks</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">Programme et pressbook</option>
+				<option value="d">programmes and pressbooks</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f11e" -->
-				<option value="e" SELECTED>Lobby CaRD</option>
+				<option value="e" SELECTED>lobby cards</option>
 			<!-- TMPL_ELSE -->
-				<option value="e">Lobby CaRD</option>
+				<option value="e">lobby cards</option>
 
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f11f" -->
-				<option value="f" SELECTED>Manuel d'instruction</option>
+				<option value="f" SELECTED>instructional materials</option>
 			<!-- TMPL_ELSE -->
-				<option value="f">Manuel d'instruction</option>
+				<option value="f">instructional materials</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f11g" -->
-				<option value="g" SELECTED>Partition ou autre presentation de musique</option>
+				<option value="g" SELECTED>score or other music format</option>
 			<!-- TMPL_ELSE -->
-				<option value="g">Partition ou autre presentation de musique</option>
+				<option value="g">score or other music format</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f11h" -->
-				<option value="h" SELECTED>Esquisse ou projet de costumes</option>
+				<option value="h" SELECTED>set or costume designs</option>
 			<!-- TMPL_ELSE -->
-				<option value="h">Esquisse ou projet de costumes</option>
+				<option value="h">set or costume designs</option>
 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f11z" -->
-				<option value="z" SELECTED>Autres materiels d'accompagnement</option>
+				<option value="z" SELECTED>other accompanying material</option>
 			<!-- TMPL_ELSE -->
-				<option value="z">Autres materiels d'accompagnement</option>
+				<option value="z">other accompanying material</option>
 
 			<!-- /TMPL_IF -->
 
@@ -713,140 +713,140 @@
         </tr>
 
 	<tr>
-		<td>Materiel d'accompagnement 3</td>
+		<td>Accompanying material 3</td>
 		<td>
 			<select name="f12" size="1">
 			<!-- TMPL_IF name="f12|" -->
-            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            	<option value="|" SELECTED>|- Filling character</option>
             <!-- TMPL_ELSE -->
-            	<option value="|">|- Caractère de remplissage</option>
+            	<option value="|">|- Filling character</option>
             <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f12a" -->
-				<option value="a" SELECTED>Cliche tire du film</option>
+				<option value="a" SELECTED>stills</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Cliche tire du film</option>
+				<option value="a">stills</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f12b" -->
-				<option value="b" SELECTED>Script</option>
+				<option value="b" SELECTED>script material</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Script</option>
+				<option value="b">script material</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f12c" -->
-				<option value="c" SELECTED>Affiche</option>
+				<option value="c" SELECTED>posters</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Affiche</option>
+				<option value="c">posters</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f12d" -->
-				<option value="d" SELECTED>Programme et pressbook</option>
+				<option value="d" SELECTED>programmes and pressbooks</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">Programme et pressbook</option>
+				<option value="d">programmes and pressbooks</option>
 
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f12e" -->
-				<option value="e" SELECTED>Lobby CaRD</option>
+				<option value="e" SELECTED>lobby cards</option>
 			<!-- TMPL_ELSE -->
-				<option value="e">Lobby CaRD</option>
+				<option value="e">lobby cards</option>
 
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f12f" -->
-				<option value="f" SELECTED>Manuel d'instruction</option>
+				<option value="f" SELECTED>instructional materials</option>
 			<!-- TMPL_ELSE -->
-				<option value="f">Manuel d'instruction</option>
+				<option value="f">instructional materials</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f12g" -->
-				<option value="g" SELECTED>Partition ou autre presentation de musique</option>
+				<option value="g" SELECTED>score or other music format</option>
 			<!-- TMPL_ELSE -->
-				<option value="g">Partition ou autre presentation de musique</option>
+				<option value="g">score or other music format</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f12h" -->
-				<option value="h" SELECTED>Esquisse ou projet de costumes</option>
+				<option value="h" SELECTED>set or costume designs</option>
 			<!-- TMPL_ELSE -->
-				<option value="h">Esquisse ou projet de costumes</option>
+				<option value="h">set or costume designs</option>
 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f12z" -->
-				<option value="z" SELECTED>Autres materiels d'accompagnement</option>
+				<option value="z" SELECTED>other accompanying material</option>
 			<!-- TMPL_ELSE -->
-				<option value="z">Autres materiels d'accompagnement</option>
+				<option value="z">other accompanying material</option>
 			<!-- /TMPL_IF -->
 
 				</select>
 		</td>
-		<td>Materiel d'accompagnement 4</td>
+		<td>Accompanying material 4</td>
 		<td>
 			<select name="f13" size="1">
 			<!-- TMPL_IF name="f13|" -->
-            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            	<option value="|" SELECTED>|- Filling character</option>
             <!-- TMPL_ELSE -->
-            	<option value="|">|- Caractère de remplissage</option>
+            	<option value="|">|- Filling character</option>
             <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f13a" -->
-				<option value="a" SELECTED>Cliche tire du film</option>
+				<option value="a" SELECTED>stills</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Cliche tire du film</option>
+				<option value="a">stills</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f13b" -->
-				<option value="b" SELECTED>Script</option>
+				<option value="b" SELECTED>script material</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Script</option>
+				<option value="b">script material</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f13c" -->
-				<option value="c" SELECTED>Affiche</option>
+				<option value="c" SELECTED>posters</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Affiche</option>
+				<option value="c">posters</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f13d" -->
-				<option value="d" SELECTED>Programme et pressbook</option>
+				<option value="d" SELECTED>programmes and pressbooks</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">Programme et pressbook</option>
+				<option value="d">programmes and pressbooks</option>
 
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f13e" -->
-				<option value="e" SELECTED>Lobby CaRD</option>
+				<option value="e" SELECTED>lobby cards</option>
 			<!-- TMPL_ELSE -->
-				<option value="e">Lobby CaRD</option>
+				<option value="e">lobby cards</option>
 
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f13f" -->
-				<option value="f" SELECTED>Manuel d'instruction</option>
+				<option value="f" SELECTED>instructional materials</option>
 			<!-- TMPL_ELSE -->
-				<option value="f">Manuel d'instruction</option>
+				<option value="f">instructional materials</option>
 
 			<!-- /TMPL_IF -->
 
 
 			<!-- TMPL_IF name="f13g" -->
-				<option value="g" SELECTED>Partition ou autre presentation de musique</option>
+				<option value="g" SELECTED>score or other music format</option>
 			<!-- TMPL_ELSE -->
-				<option value="g">Partition ou autre presentation de musique</option>
+				<option value="g">score or other music format</option>
 
 			<!-- /TMPL_IF -->
 
 
 			<!-- TMPL_IF name="f13h" -->
-				<option value="h" SELECTED>Esquisse ou projet de costumes</option>
+				<option value="h" SELECTED>set or costume designs</option>
 			<!-- TMPL_ELSE -->
-				<option value="h">Esquisse ou projet de costumes</option>
+				<option value="h">set or costume designs</option>
 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f13z" -->
-				<option value="z" SELECTED>Autres materiels d'accompagnement</option>
+				<option value="z" SELECTED>other accompanying material</option>
 			<!-- TMPL_ELSE -->
-				<option value="z">Autres materiels d'accompagnement</option>
+				<option value="z">other accompanying material</option>
 
 			<!-- /TMPL_IF -->
 
@@ -855,67 +855,67 @@
 
         </tr>
 
-<tr>		<td>Presentation materielle: video</td>
+<tr>		<td>Form of release - videorecording</td>
 		<td>
 			<select name="f14" size="1">
 			<!-- TMPL_IF name="f14|" -->
-            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            	<option value="|" SELECTED>|- Filling character</option>
             <!-- TMPL_ELSE -->
-            	<option value="|">|- Caractère de remplissage</option>
+            	<option value="|">|- Filling character</option>
             <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f14a" -->
-				<option value="a" SELECTED>Cartouche video</option>
+				<option value="a" SELECTED>videocartridge</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Cartouche video</option>
+				<option value="a">videocartridge</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f14b" -->
-				<option value="b" SELECTED>Videodisque</option>
+				<option value="b" SELECTED>videodisc</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Videodisque</option>
+				<option value="b">videodisc</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f14c" -->
-				<option value="c" SELECTED>Video cassette</option>
+				<option value="c" SELECTED>videocassette</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Video cassette</option>
+				<option value="c">videocassette</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f14d" -->
-				<option value="d" SELECTED>bobine video</option>
+				<option value="d" SELECTED>videoreel</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">bobine video</option>
+				<option value="d">videoreel</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f14e" -->
-				<option value="e" SELECTED>enregistrement ou autre presentation video electronique (EVR)</option>
+				<option value="e" SELECTED>electronic videorecording (EVR)</option>
 			<!-- TMPL_ELSE -->
-				<option value="e">enregistrement ou autre presentation video electronique (EVR)</option>
+				<option value="e">electronic videorecording (EVR)</option>
 
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f14x" -->
-				<option value="x" SELECTED>Ce n'est pas une video</option>
+				<option value="x" SELECTED>not a videorecording</option>
 			<!-- TMPL_ELSE -->
-				<option value="x">Ce n'est pas une video</option>
+				<option value="x">not a videorecording</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f14z" -->
-				<option value="z" SELECTED>Autre type de video</option>
+				<option value="z" SELECTED>other videotype</option>
 			<!-- TMPL_ELSE -->
-				<option value="z">Autre type de video</option>
+				<option value="z">other videotype</option>
 			<!-- /TMPL_IF -->
 				</select>
 		</td>
 </tr>	
-<tr>		<td>Format : video</td>
+<tr>		<td>Presentation format - videorecording</td>
 		<td>
 			<select name="f15" size="1">
 			<!-- TMPL_IF name="f15|" -->
-            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            	<option value="|" SELECTED>|- Filling character</option>
             <!-- TMPL_ELSE -->
-            	<option value="|">|- Caractère de remplissage</option>
+            	<option value="|">|- Filling character</option>
             <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f15a" -->
@@ -937,224 +937,230 @@
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f15d" -->
-				<option value="d" SELECTED>EIAJ</option>
+				<option value="d" SELECTED>EIAJ (reel)</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">EIAJ</option>
+				<option value="d">EIAJ (reel)</option>
 
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f15e" -->
-				<option value="e" SELECTED>Type C (bobine)</option>
+				<option value="e" SELECTED>Type C (reel)</option>
 			<!-- TMPL_ELSE -->
-				<option value="e">Type C (bobine)</option>
+				<option value="e">Type C (reel)</option>
 
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f15f" -->
-				<option value="f" SELECTED>Quadruplex</option>
+				<option value="f" SELECTED>Quadruplex (reel)</option>
 			<!-- TMPL_ELSE -->
-				<option value="f">Quadruplex</option>
+				<option value="f">Quadruplex (reel)</option>
 			<!-- /TMPL_IF -->
 
 
 			<!-- TMPL_IF name="f15g" -->
-				<option value="g" SELECTED>Videodisque laser (reflechissant)</option>
+				<option value="g" SELECTED>Laser optical (Reflective) videodisc</option>
 			<!-- TMPL_ELSE -->
-				<option value="g">Videodisque laser (reflechissant)</option>
+				<option value="g">Laser optical (Reflective) videodisc</option>
 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f15h" -->
-				<option value="h" SELECTED>Videodisque a lecture capacitive</option>
+				<option value="h" SELECTED>CED (capacitance electronic disk) videodisc</option>
 			<!-- TMPL_ELSE -->
-				<option value="h">Videodisque a lecture capacitive</option>
+				<option value="h">CED (capacitance electronic disk) videodisc</option>
 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f15i" -->
-				<option value="i" SELECTED>V2000 (cassette video)</option>
+				<option value="i" SELECTED>V2000 (videocassette)</option>
 			<!-- TMPL_ELSE -->
-				<option value="i">V2000 (cassette video)</option>
+				<option value="i">V2000 (videocassette)</option>
 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f15j" -->
-				<option value="j" SELECTED>Video 8 (cassette video)</option>
+				<option value="j" SELECTED>Video8 (videocassette)</option>
 			<!-- TMPL_ELSE -->
-				<option value="j">Video 8 (cassette video)</option>
+				<option value="j">Video8 (videocassette)</option>
+				
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f15k" -->
+				<option value="k" SELECTED>DVD-Video</option>
+			<!-- TMPL_ELSE -->
+				<option value="k">DVD-Video</option>
 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f15u" -->
-				<option value="u" SELECTED>Inconnu</option>
+				<option value="u" SELECTED>unknown</option>
 			<!-- TMPL_ELSE -->
-				<option value="u">Inconnu</option>
+				<option value="u">unknown</option>
 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f15x" -->
-				<option value="x" SELECTED>Ce n'est pas une video</option>
+				<option value="x" SELECTED>not a videorecording</option>
 			<!-- TMPL_ELSE -->
-				<option value="x">Ce n'est pas une video</option>
+				<option value="x">not a videorecording</option>
 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f15z" -->
-				<option value="z" SELECTED>Autre</option>
+				<option value="z" SELECTED>other</option>
 			<!-- TMPL_ELSE -->
-				<option value="z">Autre</option>
+				<option value="z">other</option>
 			<!-- /TMPL_IF -->
 				</select>
 		</td>
 </tr>	
-<tr>		<td>Support de l'emulsion</td>
+<tr>		<td>Base of emulsion material - visual projection</td>
 		<td>
 			<select name="f16" size="1">
 				<!-- TMPL_IF name="f16|" -->
-            		<option value="|" SELECTED>|- Caractère de remplissage</option>
+            		<option value="|" SELECTED>|- Filling character</option>
 	            <!-- TMPL_ELSE -->
-    	        	<option value="|">|- Caractère de remplissage</option>
+    	        	<option value="|">|- Filling character</option>
         	    <!-- /TMPL_IF -->
 
 				<!-- TMPL_IF name="f16a" -->
-					<option value="a" SELECTED>Film de securite</option>
+					<option value="a" SELECTED>safety film</option>
 				<!-- TMPL_ELSE -->
-					<option value="a">Film de securite</option>
+					<option value="a">safety film</option>
 				<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f16b" -->
-				<option value="b" SELECTED>Support film autre que film de securite</option>
+				<option value="b" SELECTED>film base other than safety film</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Support film autre que film de securite</option>
+				<option value="b">film base other than safety film</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f16c" -->
-				<option value="c" SELECTED>Synthetique</option>
+				<option value="c" SELECTED>synthetics (plastic, vinyl, etc.)</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Synthetique</option>
+				<option value="c">synthetics (plastic, vinyl, etc.)</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f16u" -->
-				<option value="u" SELECTED>Inconnu</option>
+				<option value="u" SELECTED>unknown</option>
 			<!-- TMPL_ELSE -->
-				<option value="u">Inconnu</option>
+				<option value="u">unknown</option>
 
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f16v" -->
-				<option value="v" SELECTED>Supports varies</option>
+				<option value="v" SELECTED>mixed collection (containing more than one type of base)</option>
 			<!-- TMPL_ELSE -->
-				<option value="v">Supports varies</option>
+				<option value="v">mixed collection (containing more than one type of base)</option>
 
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f16x" -->
-				<option value="x" SELECTED>Ce n'est pas une image projetee</option>
+				<option value="x" SELECTED>not a visual projection</option>
 			<!-- TMPL_ELSE -->
-				<option value="x">Ce n'est pas une image projetee</option>
+				<option value="x">not a visual projection</option>
 
 			<!-- /TMPL_IF -->
 
 
 			<!-- TMPL_IF name="f16z" -->
-				<option value="z" SELECTED>Autre</option>
+				<option value="z" SELECTED>other</option>
 			<!-- TMPL_ELSE -->
-				<option value="z">Autre</option>
+				<option value="z">other</option>
 
 			<!-- /TMPL_IF -->
 				</select>
 		</td>
 </tr>	
-<tr>		<td>Support secondaire</td>
+<tr>		<td>Secondary support material - visual projection</td>
 		<td>
 			<select name="f17" size="1">
 			<!-- TMPL_IF name="f17|" -->
-            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            	<option value="|" SELECTED>|- Filling character</option>
             <!-- TMPL_ELSE -->
-            	<option value="|">|- Caractère de remplissage</option>
+            	<option value="|">|- Filling character</option>
             <!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f17a" -->
-				<option value="a" SELECTED>Carton</option>
+				<option value="a" SELECTED>cardboard</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Carton</option>
+				<option value="a">cardboard</option>
 	
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f17b" -->
-				<option value="b" SELECTED>Verre</option>
+				<option value="b" SELECTED>glass</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Verre</option>
+				<option value="b">glass</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f17c" -->
-				<option value="c" SELECTED>Synthetique</option>
+				<option value="c" SELECTED>synthetics (plastic, vinyl, etc.)</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Synthetique</option>
+				<option value="c">synthetics (plastic, vinyl, etc.)</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f17d" -->
-				<option value="d" SELECTED>Metal</option>
+				<option value="d" SELECTED>metall</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">Metal</option>
+				<option value="d">metal</option>
 
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f17e" -->
-				<option value="e" SELECTED>Metal et verre</option>
+				<option value="e" SELECTED>metal and glass</option>
 			<!-- TMPL_ELSE -->
-				<option value="e">Metal et verre</option>
+				<option value="e">metal and glass</option>
 
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f17f" -->
-				<option value="f" SELECTED>Synthetique</option>
+				<option value="f" SELECTED>synthetics (plastic, vinyl, etc.) and glass</option>
 			<!-- TMPL_ELSE -->
-				<option value="f">Synthetique</option>
+				<option value="f">synthetics (plastic, vinyl, etc.) and glass</option>
 
 			<!-- /TMPL_IF -->
 
 
 			<!-- TMPL_IF name="f17u" -->
-				<option value="u" SELECTED>Inconnu</option>
+				<option value="u" SELECTED>unknown</option>
 			<!-- TMPL_ELSE -->
-				<option value="u">Inconnu</option>
+				<option value="u">unknown</option>
 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f17x" -->
-				<option value="x" SELECTED>Ce n'est pas une image projetee</option>
+				<option value="x" SELECTED>not a visual projection</option>
 			<!-- TMPL_ELSE -->
-				<option value="x">Ce n'est pas une image projetee</option>
+				<option value="x">not a visual projection</option>
 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f17y" -->
-				<option value="y" SELECTED>Non present</option>
+				<option value="y" SELECTED>not present (no secondary support)</option>
 			<!-- TMPL_ELSE -->
-				<option value="y">Non present</option>
+				<option value="y">not present (no secondary support)</option>
 
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f17z" -->
-				<option value="z" SELECTED>Autre</option>
+				<option value="z" SELECTED>other</option>
 			<!-- TMPL_ELSE -->
-				<option value="z">Autre</option>
+				<option value="z">other</option>
 
 			<!-- /TMPL_IF -->
 				</select>
 		</td>
 </tr>	
-<tr>		<td>Normes de diffusion des enregistrements video</td>
+<tr>		<td>Broadcast standard - videorecording</td>
 		<td>
 			<select name="f18" size="1">
 			<!-- TMPL_IF name="f18|" -->
-            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            	<option value="|" SELECTED>|- Filling character</option>
             <!-- TMPL_ELSE -->
-            	<option value="|">|- Caractère de remplissage</option>
+            	<option value="|">|- Filling character</option>
             <!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f18a" -->
-				<option value="a" SELECTED>405 lignes</option>
+				<option value="a" SELECTED>405</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">405 lignes</option>
+				<option value="a">405</option>
 	
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f18b" -->
-				<option value="b" SELECTED>525</option>
+				<option value="b" SELECTED>525 (e.g. NSTC)</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">525</option>
+				<option value="b">525 (e.g. NSTC)</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f18c" -->
@@ -1171,9 +1177,9 @@
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f18g" -->
-				<option value="g" SELECTED>1125 lignes</option>
+				<option value="g" SELECTED>1125</option>
 			<!-- TMPL_ELSE -->
-				<option value="g">1125 lignes</option>
+				<option value="g">1125</option>
 
 			<!-- /TMPL_IF -->
 				</select>

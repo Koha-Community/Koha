@@ -10,61 +10,74 @@
 <form name="f_pop">
 <table>
 	<tr>
-		<td>Texte presentation physique</td>
+		<td>Form of item: Coded Data: Medium Designator (Not repeatable)</td>
 		<td>
 			<select name="f1" size="1">
             
 			<!-- TMPL_IF name="f1r" -->
-				<option value="r" selected="selected">Impression normale</option>
+				<option value="r" selected="selected">regular print</option>
 			<!-- TMPL_ELSE -->
-				<option value="r">Impression normale</option>
+				<option value="r">regular print</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1b" -->
-				<option value="d" selected="selected">Impression
-				en gros caractere</option>
+				<option value="d" selected="selected">large print</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">Impression en gros caractere</option>
+				<option value="d">large print</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1e" -->
-				<option value="e" selected="selected">Journal</option>
+				<option value="e" selected="selected">newspaper format</option>
 			<!-- TMPL_ELSE -->
-				<option value="e">Journal</option>
+				<option value="e">newspaper format</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f1f" -->
-				<option value="f" selected="selected">Caractere braille et moon</option>
+				<option value="f" selected="selected">Braille or Moon script</option>
 			<!-- TMPL_ELSE -->
-				<option value="f">Caractere braille et moon</option>
+				<option value="f">Braille or Moon script</option>
 	
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1g" -->
-				<option value="g" selected="selected">Micro-impression</option>
+				<option value="g" selected="selected">microprint</option>
 			<!-- TMPL_ELSE -->
-				<option value="g">Micro-impression</option>
+				<option value="g">microprint</option>
 	
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1h" -->
-				<option value="h" selected="selected">Manuscrit</option>
+				<option value="h" selected="selected">handwritten</option>
 			<!-- TMPL_ELSE -->
-				<option value="h">Manuscrit</option>
+				<option value="h">handwritten</option>
 	
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1i" -->
-				<option value="i" selected="selected">Multimedia</option>
+				<option value="i" selected="selected">multimedia (e.g. an item in regular print with a microfiche
+supplement)</option>
 			<!-- TMPL_ELSE -->
-				<option value="i">Multimedia</option>
+				<option value="i">multimedia (e.g. an item in regular print with a microfiche
+supplement)</option>
 	
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1j" -->
-				<option value="j" selected="selected">Impression en reduction</option>
+				<option value="j" selected="selected">mini-print</option>
 			<!-- TMPL_ELSE -->
-				<option value="j">Impression en reduction</option>
+				<option value="j">mini-print</option>
+				
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1s" -->
+				<option value="s" selected="selected">electronic</option>
+			<!-- TMPL_ELSE -->
+				<option value="s">electronic</option>
+				
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f1t" -->
+				<option value="t" selected="selected">microform</option>
+			<!-- TMPL_ELSE -->
+				<option value="t">microform</option>
 	
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1z" -->
-				<option value="z" selected="selected">Autres formes de presentation</option>
+				<option value="z" selected="selected">other form of material</option>
 			<!-- TMPL_ELSE -->
-				<option value="z">Autres formes de presentation</option>
+				<option value="z">other form of material</option>
 	
 			<!-- /TMPL_IF -->
 			</select>

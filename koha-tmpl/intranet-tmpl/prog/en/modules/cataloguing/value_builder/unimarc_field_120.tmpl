@@ -4,435 +4,385 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>UNIMARC_constructeur champ 120</title>
+<title>UNIMARC_Field 120 builder</title>
 </head>
 <body>
 <form name="f_pop">
 <table>
 	<tr>
-		<td>Indicateur de couleur:</td>
+		<td>Colour indicator</td>
 		<td>
 			<select name="f1" size="1">
 			<!-- TMPL_IF name="f1a" -->
-				<option value="a" SELECTED>Monochrome</option>
+				<option value="a" SELECTED>one colour</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Monochrome</option>
+				<option value="a">one colour</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1b" -->
-				<option value="b" SELECTED>Polychrome</option>
+				<option value="b" SELECTED>multi-colour</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Polychrome</option>
+				<option value="b">multi-colour</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr><tr>
-		<td>Indicateur d'index:</td>
+		<td>Index indicator</td>
 		<td>
 			<select name="f2" size="1">
 			<!-- TMPL_IF name="f2a" -->
-				<option value="a" SELECTED>Index ou
-				liste present dans le document
-				cartographique meme</option>
+				<option value="a" SELECTED>index or name list on cartographic item itself</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Index ou liste
-				present dans le document
-				cartographique meme</option>
+				<option value="a">index or name list on cartographic item itself</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2b" -->
-				<option value="b" SELECTED>Index ou
-				liste accompagnant le document
-				cartographique sous forme de livret...</option>
+				<option value="b" SELECTED>   index or name list accompanying cartographic item in booklet...</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Index ou liste
-				accompagnant le document
-				cartographique sous forme de livret...</option>
+				<option value="b">   index or name list accompanying cartographic item in booklet...</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2c" -->
-				<option value="c" SELECTED>Index ou
-				liste present sans localisation</option>
+				<option value="c" SELECTED>index or name list present but location not specified</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Index ou liste
-				present sans localisation</option>
+				<option value="c">index or name list present but location not specified</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2y" -->
-				<option value="y" SELECTED>Pas d'index
-				ou de liste de noms</option>
+				<option value="y" SELECTED>no index or name lis</option>
 			<!-- TMPL_ELSE -->
-				<option value="y">Pas d'index ou de
-				liste de noms</option>
+				<option value="y">no index or name lis</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr><tr>
-		<td>Indicateur de texte:</td>
+		<td>Narrative text indicator</td>
 		<td>
 			<select name="f3" size="1">
 
 			<!-- TMPL_IF name="f3a" -->
-				<option value="a" SELECTED>Texte sur
-				le document meme</option>
+				<option value="a" SELECTED>text on cartographic item itself</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Texte sur le
-				document meme</option>
+				<option value="a">text on cartographic item itself</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f3b" -->
-				<option value="b" SELECTED>Texte
-				accompagnant le document
-				cartographique sous forme de livret, opuscule</option>
+				<option value="b" SELECTED>text accompanying cartographic item in booklet, pamphlet...</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Texte accompagnant
-				le document cartographique sous forme
-				de livret, opuscule</option>
+				<option value="b">text accompanying cartographic item in booklet, pamphlet...</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f3y" -->
-				<option value="y" SELECTED>Pas de texte</option>
+				<option value="y" SELECTED>no narrative tex</option>
 			<!-- TMPL_ELSE -->
-				<option value="y">Pas de texte</option>
+				<option value="y">no narrative tex</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr><tr>
-		<td>Code de representation du relief 1:</td>
+		<td>Relief codes 1:</td>
 		<td>
 			<select name="f4" size="1">
 			<!-- TMPL_IF name="f4 " -->
-				<option value=" " SELECTED>valeur non requise</option>
+				<option value=" " SELECTED>non required value</option>
 			<!-- TMPL_ELSE -->
-				<option value=" ">valeur non requise</option>
+				<option value=" ">non required value</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f4a" -->
-				<option value="a" SELECTED>Courbes de niveau</option>
+				<option value="a" SELECTED>contours</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Courbes de niveau</option>
+				<option value="a">contours</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f4b" -->
-				<option value="b" SELECTED>Relief par estompage</option>
+				<option value="b" SELECTED>continuous tone shaded relief</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Relief par estompage</option>
+				<option value="b">continuous tone shaded relief</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f4c" -->
-				<option value="c" SELECTED>Teintes
-				hypsometriques - procede par couches</option>
+				<option value="c" SELECTED>hypsometric tints - layer method</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Teintes
-				hypsometriques - procede par couches</option>
+				<option value="c">hypsometric tints - layer method</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f4d" -->
-				<option value="d" SELECTED>Hachures</option>
+				<option value="d" SELECTED>hachures</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">Hachures</option>
+				<option value="d">hachures</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f4e" -->
-				<option value="e" SELECTED>Bathymetrie
-				- sonar</option>
+				<option value="e" SELECTED>bathymetry - soundings</option>
 			<!-- TMPL_ELSE -->
-				<option value="e">Bathymetrie - sonar</option>
+				<option value="e">bathymetry - soundings</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f4f" -->
-				<option value="f" SELECTED>Courbes figuratives</option>
+				<option value="f" SELECTED>form lines</option>
 			<!-- TMPL_ELSE -->
-				<option value="f">Courbes figuratives</option>
+				<option value="f">form lines</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f4g" -->
-				<option value="g" SELECTED>Points cotes</option>
+				<option value="g" SELECTED>spot heights</option>
 			<!-- TMPL_ELSE -->
-				<option value="g">Points cotes</option>
+				<option value="g">spot heights</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f4h" -->
-				<option value="h" SELECTED>Autres
-				procedes en couleur</option>
+				<option value="h" SELECTED>other methods in colour</option>
 			<!-- TMPL_ELSE -->
-				<option value="h">Autres procedes en couleur</option>
+				<option value="h">other methods in colour</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f4i" -->
-				<option value="i" SELECTED>Images en
-				elevation ou en perspective</option>
+				<option value="i" SELECTED>pictorially</option>
 			<!-- TMPL_ELSE -->
-				<option value="i">Images en elevation
-				ou en perspective</option>
+				<option value="i">pictorially</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f4j" -->
-				<option value="j" SELECTED>Morphographie</option>
+				<option value="j" SELECTED>landforms</option>
 			<!-- TMPL_ELSE -->
-				<option value="j">Morphographie</option>
+				<option value="j">landforms</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f4k" -->
-				<option value="k" SELECTED>Bathymetrie</option>
+				<option value="k" SELECTED>bathymetry - isolines</option>
 			<!-- TMPL_ELSE -->
-				<option value="k">Bathymetrie</option>
+				<option value="k">bathymetry - isolines</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f4x" -->
-				<option value="x" SELECTED>Non applicable</option>
+				<option value="x" SELECTED>not applicable</option>
 			<!-- TMPL_ELSE -->
-				<option value="x">Non applicable</option>
+				<option value="x">not applicable</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f4z" -->
 				<option value="z"
-				SELECTED>Autre procede de presentation
-				du relief</option>
+				SELECTED>other methods of relief representation</option>
 			<!-- TMPL_ELSE -->
-				<option value="z">Autre procede de
-				presentation du relief</option>
+				<option value="z">other methods of relief representation</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td>
 	</tr><tr>
-		<td>Code de representation du relief 2:</td>
+		<td>Relief codes 2:</td>
 		<td>
 			<select name="f5" size="1">
 			<!-- TMPL_IF name="f5 " -->
-				<option value=" " SELECTED>valeur non requise</option>
+				<option value=" " SELECTED>non required value</option>
 			<!-- TMPL_ELSE -->
-				<option value=" ">valeur non requise</option>
+				<option value=" ">non required value</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5a" -->
-				<option value="a" SELECTED>Courbes de niveau</option>
+				<option value="a" SELECTED>contours</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Courbes de niveau</option>
+				<option value="a">contours</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5b" -->
-				<option value="b" SELECTED>Relief par estompage</option>
+				<option value="b" SELECTED>continuous tone shaded relief</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Relief par estompage</option>
+				<option value="b">continuous tone shaded relief</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5c" -->
-				<option value="c" SELECTED>Teintes
-				hypsometriques - procede par couches</option>
+				<option value="c" SELECTED>hypsometric tints - layer method</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Teintes
-				hypsometriques - procede par couches</option>
+				<option value="c">hypsometric tints - layer method</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5d" -->
-				<option value="d" SELECTED>Hachures</option>
+				<option value="d" SELECTED>hachures</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">Hachures</option>
+				<option value="d">hachures</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5e" -->
-				<option value="e" SELECTED>Bathymetrie
-				- sonar</option>
+				<option value="e" SELECTED>bathymetry - soundings</option>
 			<!-- TMPL_ELSE -->
-				<option value="e">Bathymetrie - sonar</option>
+				<option value="e">bathymetry - soundings</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5f" -->
-				<option value="f" SELECTED>Courbes figuratives</option>
+				<option value="f" SELECTED>form lines</option>
 			<!-- TMPL_ELSE -->
-				<option value="f">Courbes figuratives</option>
+				<option value="f">form lines</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5g" -->
-				<option value="g" SELECTED>Points cotes</option>
+				<option value="g" SELECTED>spot heights</option>
 			<!-- TMPL_ELSE -->
-				<option value="g">Points cotes</option>
+				<option value="g">spot heights</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5h" -->
-				<option value="h" SELECTED>Autres
-				procedes en couleur</option>
+				<option value="h" SELECTED>other methods in colour</option>
 			<!-- TMPL_ELSE -->
-				<option value="h">Autres procedes en couleur</option>
+				<option value="h">other methods in colour</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5i" -->
-				<option value="i" SELECTED>Images en
-				elevation ou en perspective</option>
+				<option value="i" SELECTED>pictorially</option>
 			<!-- TMPL_ELSE -->
-				<option value="i">Images en elevation
-				ou en perspective</option>
+				<option value="i">pictorially</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5j" -->
-				<option value="j" SELECTED>Morphographie</option>
+				<option value="j" SELECTED>landforms</option>
 			<!-- TMPL_ELSE -->
-				<option value="j">Morphographie</option>
+				<option value="j">landforms</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5k" -->
-				<option value="k" SELECTED>Bathymetrie</option>
+				<option value="k" SELECTED>bathymetry - isolines</option>
 			<!-- TMPL_ELSE -->
-				<option value="k">Bathymetrie</option>
+				<option value="k">bathymetry - isolines</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5x" -->
-				<option value="x" SELECTED>Non applicable</option>
+				<option value="x" SELECTED>not applicable</option>
 			<!-- TMPL_ELSE -->
-				<option value="x">Non applicable</option>
+				<option value="x">not applicable</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5z" -->
 				<option value="z"
-				SELECTED>Autre procede de presentation
-				du relief</option>
+				SELECTED>other methods of relief representation</option>
 			<!-- TMPL_ELSE -->
-				<option value="z">Autre procede de
-				presentation du relief</option>
+				<option value="z">other methods of relief representation</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td>
 	</tr><tr>
-		<td>Code de representation du relief 3:</td>
+		<td>Relief codes 3:</td>
 		<td>
 			<select name="f6" size="1">
                         
                         <!-- TMPL_IF name="f6 " -->
-                                <option value=" " SELECTED>valeur non requise</option>
+                                <option value=" " SELECTED>non required value</option>
                         <!-- TMPL_ELSE -->
-                                <option value=" ">valeur non requise</option>
+                                <option value=" ">non required value</option>
                         <!-- /TMPL_IF -->
                         
 			<!-- TMPL_IF name="f6a" -->
-				<option value="a" SELECTED>Courbes de niveau</option>
+				<option value="a" SELECTED>contours</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Courbes de niveau</option>
+				<option value="a">contours</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6b" -->
-				<option value="b" SELECTED>Relief par estompage</option>
+				<option value="b" SELECTED>continuous tone shaded relief</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Relief par estompage</option>
+				<option value="b">continuous tone shaded relief</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6c" -->
-				<option value="c" SELECTED>Teintes
-				hypsometriques - procede par couches</option>
+				<option value="c" SELECTED>hypsometric tints - layer method</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Teintes
-				hypsometriques - procede par couches</option>
+				<option value="c">hypsometric tints - layer method</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6d" -->
-				<option value="d" SELECTED>Hachures</option>
+				<option value="d" SELECTED>hachures</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">Hachures</option>
+				<option value="d">hachures</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6e" -->
-				<option value="e" SELECTED>Bathymetrie
-				- sonar</option>
+				<option value="e" SELECTED>bathymetry - soundings</option>
 			<!-- TMPL_ELSE -->
-				<option value="e">Bathymetrie - sonar</option>
+				<option value="e">bathymetry - soundings</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6f" -->
-				<option value="f" SELECTED>Courbes figuratives</option>
+				<option value="f" SELECTED>form lines</option>
 			<!-- TMPL_ELSE -->
-				<option value="f">Courbes figuratives</option>
+				<option value="f">form lines</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6g" -->
-				<option value="g" SELECTED>Points cotes</option>
+				<option value="g" SELECTED>spot heights</option>
 			<!-- TMPL_ELSE -->
-				<option value="g">Points cotes</option>
+				<option value="g">spot heights</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6h" -->
-				<option value="h" SELECTED>Autres
-				procedes en couleur</option>
+				<option value="h" SELECTED>other methods in colour</option>
 			<!-- TMPL_ELSE -->
-				<option value="h">Autres procedes en couleur</option>
+				<option value="h">other methods in colour</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6i" -->
-				<option value="i" SELECTED>Images en
-				elevation ou en perspective</option>
+				<option value="i" SELECTED>pictorially</option>
 			<!-- TMPL_ELSE -->
-				<option value="i">Images en elevation
-				ou en perspective</option>
+				<option value="i">pictorially</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6j" -->
-				<option value="j" SELECTED>Morphographie</option>
+				<option value="j" SELECTED>landforms</option>
 			<!-- TMPL_ELSE -->
-				<option value="j">Morphographie</option>
+				<option value="j">landforms</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6k" -->
-				<option value="k" SELECTED>Bathymetrie</option>
+				<option value="k" SELECTED>bathymetry - isolines</option>
 			<!-- TMPL_ELSE -->
-				<option value="k">Bathymetrie</option>
+				<option value="k">bathymetry - isolines</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6x" -->
-				<option value="x" SELECTED>Non applicable</option>
+				<option value="x" SELECTED>not applicable</option>
 			<!-- TMPL_ELSE -->
-				<option value="x">Non applicable</option>
+				<option value="x">not applicable</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6z" -->
 				<option value="z"
-				SELECTED>Autre procede de presentation
-				du relief</option>
+				SELECTED>other methods of relief representation</option>
 			<!-- TMPL_ELSE -->
-				<option value="z">Autre procede de
-				presentation du relief</option>
+				<option value="z">other methods of relief representation</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td>
 	</tr><tr>
-		<td>Code de representation du relief 4:</td>
+		<td>Relief codes 4:</td>
 		<td>
 			<select name="f7" size="1">
                         <!-- TMPL_IF name="f7 " -->
-                                <option value=" " SELECTED>valeur non requise</option>
+                                <option value=" " SELECTED>non required value</option>
                         <!-- TMPL_ELSE -->
-                                <option value=" ">valeur non requise</option>
+                                <option value=" ">non required value</option>
                         <!-- /TMPL_IF -->
                         
 			<!-- TMPL_IF name="f7a" -->
-				<option value="a" SELECTED>Courbes de niveau</option>
+				<option value="a" SELECTED>contours</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Courbes de niveau</option>
+				<option value="a">contours</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7b" -->
-				<option value="b" SELECTED>Relief par estompage</option>
+				<option value="b" SELECTED>continuous tone shaded relief</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Relief par estompage</option>
+				<option value="b">continuous tone shaded relief</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7c" -->
-				<option value="c" SELECTED>Teintes
-				hypsometriques - procede par couches</option>
+				<option value="c" SELECTED>hypsometric tints - layer method</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Teintes
-				hypsometriques - procede par couches</option>
+				<option value="c">hypsometric tints - layer method</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7d" -->
-				<option value="d" SELECTED>Hachures</option>
+				<option value="d" SELECTED>hachures</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">Hachures</option>
+				<option value="d">hachures</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7e" -->
-				<option value="e" SELECTED>Bathymetrie
-				- sonar</option>
+				<option value="e" SELECTED>bathymetry - soundings</option>
 			<!-- TMPL_ELSE -->
-				<option value="e">Bathymetrie - sonar</option>
+				<option value="e">bathymetry - soundings</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7f" -->
-				<option value="f" SELECTED>Courbes figuratives</option>
+				<option value="f" SELECTED>form lines</option>
 			<!-- TMPL_ELSE -->
-				<option value="f">Courbes figuratives</option>
+				<option value="f">form lines</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7g" -->
-				<option value="g" SELECTED>Points cotes</option>
+				<option value="g" SELECTED>spot heights</option>
 			<!-- TMPL_ELSE -->
-				<option value="g">Points cotes</option>
+				<option value="g">spot heights</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7h" -->
-				<option value="h" SELECTED>Autres
-				procedes en couleur</option>
+				<option value="h" SELECTED>other methods in colour</option>
 			<!-- TMPL_ELSE -->
-				<option value="h">Autres procedes en couleur</option>
+				<option value="h">other methods in colour</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7i" -->
-				<option value="i" SELECTED>Images en
-				elevation ou en perspective</option>
+				<option value="i" SELECTED>pictorially</option>
 			<!-- TMPL_ELSE -->
-				<option value="i">Images en elevation
-				ou en perspective</option>
+				<option value="i">pictorially</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7j" -->
-				<option value="j" SELECTED>Morphographie</option>
+				<option value="j" SELECTED>landforms</option>
 			<!-- TMPL_ELSE -->
-				<option value="j">Morphographie</option>
+				<option value="j">landforms</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7k" -->
-				<option value="k" SELECTED>Bathymetrie</option>
+				<option value="k" SELECTED>bathymetry - isolines</option>
 			<!-- TMPL_ELSE -->
-				<option value="k">Bathymetrie</option>
+				<option value="k">bathymetry - isolines</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7x" -->
-				<option value="x" SELECTED>Non applicable</option>
+				<option value="x" SELECTED>not applicable</option>
 			<!-- TMPL_ELSE -->
-				<option value="x">Non applicable</option>
+				<option value="x">not applicable</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7z" -->
 				<option value="z"
-				SELECTED>Autre procede de presentation
-				du relief</option>
+				SELECTED>other methods of relief representation</option>
 			<!-- TMPL_ELSE -->
-				<option value="z">Autre procede de
-				presentation du relief</option>
+				<option value="z">other methods of relief representation</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td>
 	</tr>
-	<tr>		<td>Projection:</td>
+	<tr>		<td>Map projection</td>
 		<td>
 			<select name="f8" size="1">
 
@@ -442,51 +392,44 @@
 				<option value="aa">Aitoff</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f8bb" -->
-				<option value="bb" SELECTED>Gnomonique</option>
+				<option value="bb" SELECTED>gnomonic</option>
 			<!-- TMPL_ELSE -->
-				<option value="bb">Gnomonique</option>
+				<option value="bb">gnomonic</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f8ac" -->
-				<option value="ac" SELECTED>Azimutale
-				equivalente de Lambert</option>
+				<option value="ac" SELECTED>Lambert's azimuthal equal area</option>
 			<!-- TMPL_ELSE -->
-				<option value="ac">Azimutale
-				equivalente de Lambert</option>
+				<option value="ac">Lambert's azimuthal equal area</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f8ad" -->
-				<option value="ad" SELECTED>Orthographique</option>
+				<option value="ad" SELECTED>orthographic</option>
 			<!-- TMPL_ELSE -->
-				<option value="ad">Orthographique</option>
+				<option value="ad">orthographic</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f8ae" -->
-				<option value="ae" SELECTED>Equidistante</option>
+				<option value="ae" SELECTED>azimuthal equidistant</option>
 			<!-- TMPL_ELSE -->
-				<option value="ae">Equidistante</option>
+				<option value="ae">azimuthal equidistant</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f8af" -->
-				<option value="af" SELECTED>Stereographie</option>
+				<option value="af" SELECTED>stereographic</option>
 			<!-- TMPL_ELSE -->
-				<option value="af">Stereographie</option>
+				<option value="af">stereographic</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f8ag" -->
-				<option value="ag" SELECTED>Azimutale
-				par zones egales</option>
+				<option value="ag" SELECTED>azimuthal equal area</option>
 			<!-- TMPL_ELSE -->
-				<option value="ag">Azimutale par zone egales</option>
+				<option value="ag">azimuthal equal area</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f8au" -->
-				<option value="au" SELECTED>Azimutale,
-				de type specifique inconnu</option>
+				<option value="au" SELECTED>azimuthal, specific type unknown</option>
 			<!-- TMPL_ELSE -->
-				<option value="au">Azimutale, de type
-				specifique inconnu</option>
+				<option value="au">azimuthal, specific type unknown</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f8az" -->
-				<option value="az" SELECTED>Azimutale,
-				autre type specifique connu</option>
+				<option value="az" SELECTED>azimuthal, other known specific type</option>
 			<!-- TMPL_ELSE -->
-				<option value="az">Azimutale, autre
-				type specifique connu</option>
+				<option value="az">azimuthal, other known specific type</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f8ba" -->
 				<option value="ba" SELECTED>Gall</option>
@@ -495,14 +438,14 @@
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f8bb" -->
 				<option value="bb"
-				SELECTED>Homolographique de Goode</option>
+				SELECTED>Goode's homolographic</option>
 			<!-- TMPL_ELSE -->
-				<option value="bb">Homolographique de Goode</option>
+				<option value="bb">Goode's homolographic</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f8ca" -->
-				<option value="ca" SELECTED>Albers</option>
+				<option value="ca" SELECTED>Albers equal area</option>
 			<!-- TMPL_ELSE -->
-				<option value="ca">Albers</option>
+				<option value="ca">Albers equal area</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f8cb" -->
 				<option value="cb"
@@ -512,24 +455,21 @@
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8cc" -->
-				<option value="cc" SELECTED>Conique
-				conforme de Lambert</option>
+				<option value="cc" SELECTED>Lambert's conformal conict</option>
 			<!-- TMPL_ELSE -->
-				<option value="cc">Conique conforme de
-				Lambert</option>
+				<option value="cc">Lambert's conformal conic</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8cd" -->
-				<option value="cd" SELECTED>Conique (simple)</option>
+				<option value="cd" SELECTED>conic (simple)</option>
 			<!-- TMPL_ELSE -->
-				<option value="cd">Conique (simple)</option>
+				<option value="cd">conic (simple)</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8ce" -->
-				<option value="ce" SELECTED>Bipolaire
-				de Miller</option>
+				<option value="ce" SELECTED>Miller's bipolar oblique conformal conic</option>
 			<!-- TMPL_ELSE -->
-				<option value="ce">Bipolaire de Miller</option>
+				<option value="ce">Miller's bipolar oblique conformal conic</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8cf" -->
@@ -540,66 +480,55 @@
 
 			<!-- TMPL_IF name="f8cg" -->
 				<option value="cg"
-				SELECTED>Polyconique modifiee de la
-				Carte internationale du monde</option>
+				SELECTED>projection of the International Map of the World</option>
 			<!-- TMPL_ELSE -->
-				<option value="cg">Polyconique
-				modifiee de la Carte internationale du
-				monde</option>
+				<option value="cg">projection of the International Map of the World</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f8ch" -->
-				<option value="ch" SELECTED>Conique
-				conforme de Tissot</option>
+				<option value="ch" SELECTED>Tissot's conformal conic</option>
 			<!-- TMPL_ELSE -->
-				<option value="ch">Conique conforme de
-				Tissot</option>
+				<option value="ch">Tissot's conformal conic</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f8cp" -->
-				<option value="cp" SELECTED>Polyconique</option>
+				<option value="cp" SELECTED>polyconic</option>
 			<!-- TMPL_ELSE -->
-				<option value="cp">Polyconique</option>
+				<option value="cp">polyconic</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8cu" -->
-				<option value="cu" SELECTED>Conique,
-				de type specifique inconnu</option>
+				<option value="cu" SELECTED>conic, specific type unknown</option>
 			<!-- TMPL_ELSE -->
-				<option value="cu">Conique, de type
-				specifique inconnu</option>
+				<option value="cu">conic, specific type unknown</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8cz" -->
-				<option value="cz" SELECTED>Conique,
-				autre type specifique connu</option>
+				<option value="cz" SELECTED>conic, other known specific type</option>
 			<!-- TMPL_ELSE -->
-				<option value="cz">Conique, autre type
-				specifique connu</option>
+				<option value="cz">conic, other known specific type</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8da" -->
-				<option value="da" SELECTED>En tatou</option>
+				<option value="da" SELECTED>armadillo</option>
 			<!-- TMPL_ELSE -->
-				<option value="da">En tatou</option>
+				<option value="da">armadillo</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8db" -->
-				<option value="db" SELECTED>En papillon</option>
+				<option value="db" SELECTED>butterfly</option>
 			<!-- TMPL_ELSE -->
-				<option value="db">En papillon</option>
+				<option value="db">butterfly</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8bc" -->
-				<option value="bc" SELECTED>Equivalente
-				de Lambert</option>
+				<option value="bc" SELECTED>Lambert's cylindrical equal area</option>
 			<!-- TMPL_ELSE -->
-				<option value="bc">Equivalente de Lambert</option>
+				<option value="bc">Lambert's cylindrical equal area</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8bd" -->
-				<option value="bd" SELECTED>Conforme
-				de Mercator</option>
+				<option value="bd" SELECTED>Mercator</option>
 			<!-- TMPL_ELSE -->
-				<option value="bd">Conforme de Mercator</option>
+				<option value="bd">Mercator</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8be" -->
@@ -615,16 +544,15 @@
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8bg" -->
-				<option value="bg" SELECTED>Sinusoidale</option>
+				<option value="bg" SELECTED>sinusoidal</option>
 			<!-- TMPL_ELSE -->
-				<option value="bg">Sinusoidale</option>
+				<option value="bg">sinusoidal</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8bh" -->
-				<option value="bh" SELECTED>Traverse
-				de Mercator</option>
+				<option value="bh" SELECTED>transverse Mercator</option>
 			<!-- TMPL_ELSE -->
-				<option value="bh">Traverse de Mercator</option>
+				<option value="bh">transverse Mercator</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8bi" -->
@@ -640,9 +568,9 @@
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8bk" -->
-				<option value="bk" SELECTED>De Cassini</option>
+				<option value="bk" SELECTED>Cassini's</option>
 			<!-- TMPL_ELSE -->
-				<option value="bk">De Cassini</option>
+				<option value="bk">Cassini's</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8bl" -->
@@ -652,28 +580,23 @@
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8bm" -->
-				<option value="bm" SELECTED>Oblique de
-				Mercator</option>
+				<option value="bm" SELECTED>Oblique Mercator</option>
 			<!-- TMPL_ELSE -->
-				<option value="bm">Oblique de Mercator</option>
+				<option value="bm">Oblique Mercator</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8bu" -->
 				<option value="bu"
-				SELECTED>Cylindrique, de type
-				specifique inconnu</option>
+				SELECTED>cylindrical, specific type unknown</option>
 			<!-- TMPL_ELSE -->
-				<option value="bu">Cylindrique, de
-				type specifique inconnu</option>
+				<option value="bu">cylindrical, specific type unknown</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8bz" -->
 				<option value="bz"
-				SELECTED>Cylindrique, autre type
-				specifique connu</option>
+				SELECTED>cylindrical, other known specific type</option>
 			<!-- TMPL_ELSE -->
-				<option value="bz">Cylindrique, autre
-				type specifique connu</option>
+				<option value="bz">cylindrical, other known specific type</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8dc" -->
@@ -683,17 +606,15 @@
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8dd" -->
-				<option value="dd" SELECTED>Homolosine
-				de Goode</option>
+				<option value="dd" SELECTED>Goode's homolosine</option>
 			<!-- TMPL_ELSE -->
-				<option value="dd">Homolosine de Goode</option>
+				<option value="dd">Goode's homolosine</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8de" -->
-				<option value="de" SELECTED>Bipolaire
-				de Miller</option>
+				<option value="de" SELECTED>Miller's bipolar</option>
 			<!-- TMPL_ELSE -->
-				<option value="de">Bipolaire de Miller</option>
+				<option value="de">Miller's bipolar</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8df" -->
@@ -703,539 +624,518 @@
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8dg" -->
-				<option value="dg" SELECTED>Dymaxion</option>
+				<option value="dg" SELECTED>dimaxion</option>
 			<!-- TMPL_ELSE -->
-				<option value="dg">Dymaxion</option>
+				<option value="dg">dimaxion</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8dh" -->
-				<option value="dh" SELECTED>Cordiforme</option>
+				<option value="dh" SELECTED>cordiform</option>
 			<!-- TMPL_ELSE -->
-				<option value="dh">Cordiforme</option>
+				<option value="dh">cordiform</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8di" -->
-				<option value="di" SELECTED>Polyhedrique</option>
+				<option value="di" SELECTED>polyhedric</option>
 			<!-- TMPL_ELSE -->
-				<option value="di">Polyhedrique</option>
+				<option value="di">polyhedric</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8uu" -->
-				<option value="uu" SELECTED>Type inconnu</option>
+				<option value="uu" SELECTED>type of projection unknown</option>
 			<!-- TMPL_ELSE -->
-				<option value="uu">Type inconnu</option>
+				<option value="uu">type of projection unknown</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8xx" -->
-				<option value="xx" SELECTED>Non applicable</option>
+				<option value="xx" SELECTED>not applicable</option>
 			<!-- TMPL_ELSE -->
-				<option value="xx">Non applicable</option>
+				<option value="xx">not applicable</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f8zz" -->
-				<option value="zz" SELECTED>Autre type
-				connu</option>
+				<option value="zz" SELECTED>other known type</option>
 			<!-- TMPL_ELSE -->
-				<option value="zz">Autre type connu</option>
+				<option value="zz">other known type</option>
 			<!-- /TMPL_IF -->
 
 			</select>
 
-		</td></tr><tr><td>Meridien de reference 1:</td>
+		</td></tr><tr><td>Prime meridian 1:</td>
 		<td>
 			<select name="f9" size="1">
 			<!-- TMPL_IF name="f9  " -->
-				<option value="  " SELECTED>valeur non requise</option>
+				<option value="  " SELECTED>non required value</option>
 			<!-- TMPL_ELSE -->
-				<option value="  ">valeur non requise</option>
+				<option value="  ">non required value</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9aa" -->
 				<option value="aa"
-				SELECTED>Greenwich (G.B.)</option>
+				SELECTED>Greenwich, United Kingdom</option>
 			<!-- TMPL_ELSE -->
-				<option value="aa">Greenwich 
-(G.B.)</option>
+				<option value="aa">Greenwich, United Kingdom</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f9ab" -->
-				<option value="ab" SELECTED>Amsterdam
-				(Pays-bas)</option>
+				<option value="ab" SELECTED>Amsterdam, Netherlands</option>
 			<!-- TMPL_ELSE -->
-				<option value="ab">Amsterdam (Pays-bas)</option>
+				<option value="ab">Amsterdam, Netherlands</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f9ac" -->
-				<option value="ac" SELECTED>Athenes (Grece)</option>
+				<option value="ac" SELECTED>Athens, Greece</option>
 			<!-- TMPL_ELSE -->
-				<option value="ac">Athenes (Grece)</option>
+				<option value="ac">Athens, Greece</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f9ad" -->
-				<option value="ad" SELECTED>Djakarta (Indonesie)</option>
+				<option value="ad" SELECTED>Batavia (Djakarta), Indonesia</option>
 			<!-- TMPL_ELSE -->
-				<option value="ad">Djakarta (Indonesie)</option>
+				<option value="ad">Batavia (Djakarta), Indonesia</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f9ae" -->
-				<option value="ae" SELECTED>Berne (Suisse)</option>
+				<option value="ae" SELECTED>Berne, Switzerland</option>
 			<!-- TMPL_ELSE -->
-				<option value="ae">Berne (Suisse)</option>
+				<option value="ae">Berne, Switzerland</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f9af" -->
-				<option value="af" SELECTED>Bogota (Colombie)</option>
+				<option value="af" SELECTED>Bogota, Colombia</option>
 			<!-- TMPL_ELSE -->
-				<option value="af">Bogota (Colombie)</option>
+				<option value="af">Bogota, Colombia</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f9ag" -->
-				<option value="ag" SELECTED>Bombay (Inde)</option>
+				<option value="ag" SELECTED>Bombay, India</option>
 			<!-- TMPL_ELSE -->
-				<option value="ag">Bombay (Inde)</option>
+				<option value="ag">Bombay, India</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f9ah" -->
-				<option value="ah" SELECTED>Bruxelles (Belgique)</option>
+				<option value="ah" SELECTED>Brussels, Belgium</option>
 			<!-- TMPL_ELSE -->
-				<option value="ah">Bruxelles (Belgique)</option>
+				<option value="ah">Brussels, Belgium</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f9ai" -->
-				<option value="ai" SELECTED>Cadix (Espagne)</option>
+				<option value="ai" SELECTED>Cadiz, Spain</option>
 			<!-- TMPL_ELSE -->
-				<option value="ai">Cadix (Espagne)</option>
+				<option value="ai">Cadiz, Spain</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f9aj" -->
-				<option value="aj" SELECTED>Le Cap
-				(Afrique du sud)</option>
+				<option value="aj" SELECTED>Capetown, South Africa</option>
 			<!-- TMPL_ELSE -->
-				<option value="aj">Le Cap (Afrique du sud)</option>
+				<option value="aj">Capetown, South Africa</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f9ak" -->
-				<option value="ak" SELECTED>Caracas (Venezuela)</option>
+				<option value="ak" SELECTED>Caracas, Venezuela</option>
 			<!-- TMPL_ELSE -->
-				<option value="ak">Caracas (Venezuela)</option>
+				<option value="ak">Caracas, Venezuela</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f9al" -->
-				<option value="al" SELECTED>Copenhague
-				(Danemark)</option>
+				<option value="al" SELECTED>Copenhagen, Denmark</option>
 			<!-- TMPL_ELSE -->
-				<option value="al">Copenhague (Danemark)</option>
+				<option value="al">Copenhagen, Denmark</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f9am" -->
 				<option value="am"
-				SELECTED>Cordoba (Argentine)</option>
+				SELECTED>Cordoba, Argentina</option>
 			<!-- TMPL_ELSE -->
-				<option value="am">Cordoba (Argentine)</option>
+				<option value="am">Cordoba, Argentina</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f9an" -->
-				<option value="an" SELECTED>Ile de Fer
-				(Iles Canaries)</option>
+				<option value="an" SELECTED>Ferro, Canary Islands</option>
 			<!-- TMPL_ELSE -->
-				<option value="an">Ile de Fer (Iles Canaries)</option>
+				<option value="an">Ferro, Canary Islands</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9ao" -->
-				<option value="ao" SELECTED>Helsinky (Finlande)</option>
+				<option value="ao" SELECTED>Helsinki, Finland</option>
 			<!-- TMPL_ELSE -->
-				<option value="ao">Helsinky (Finlande)</option>
+				<option value="ao">Helsinki, Finland</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9ap" -->
-				<option value="ap" SELECTED>Istambul (Turquie)</option>
+				<option value="ap" SELECTED>Istanbul, Turkey</option>
 			<!-- TMPL_ELSE -->
-				<option value="ap">Istambul (Turquie)</option>
+				<option value="ap">Istanbul, Turkey</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9aq" -->
 				<option value="aq"
-				SELECTED>Julianehaab (Groenland)</option>
+				SELECTED>Julianehaab, Greenland</option>
 			<!-- TMPL_ELSE -->
-				<option value="aq">Julianehaab (Groenland)</option>
+				<option value="aq">Julianehaab, Greenland</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f9ar" -->
-				<option value="ar" SELECTED>Lisbonne (Portugal)</option>
+				<option value="ar" SELECTED>Lisbon, Portugal</option>
 			<!-- TMPL_ELSE -->
-				<option value="ar">Lisbonne (Portugal)</option>
+				<option value="ar">Lisbon, Portugal</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f9as" -->
-				<option value="as" SELECTED>Londres (G.B.)</option>
+				<option value="as" SELECTED>London, United Kingdom</option>
 			<!-- TMPL_ELSE -->
-				<option value="as">Londres (G.B.)</option>
+				<option value="as">London, United Kingdom</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f9at" -->
-				<option value="at" SELECTED>Madras (Inde)</option>
+				<option value="at" SELECTED>Madras, India</option>
 			<!-- TMPL_ELSE -->
-				<option value="at">Madras (Inde)</option>
+				<option value="at">Madras, India</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9ba" -->
-				<option value="ba" SELECTED>Madrid (Espagne)</option>
+				<option value="ba" SELECTED>Madrid, Spain</option>
 			<!-- TMPL_ELSE -->
-				<option value="ba">Madrid (Espagne)</option>
+				<option value="ba">Madrid, Spain</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9bb" -->
-				<option value="bb" SELECTED>Mexico (Mexique)</option>
+				<option value="bb" SELECTED>Mexico City, Mexico</option>
 			<!-- TMPL_ELSE -->
-				<option value="bb">Mexico (Mexique)</option>
+				<option value="bb">Mexico City, Mexico</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9bc" -->
-				<option value="bc" SELECTED>Moscou (Russie)</option>
+				<option value="bc" SELECTED>Moscow, Russia</option>
 			<!-- TMPL_ELSE -->
-				<option value="bc">Moscou (Russie)</option>
+				<option value="bc">Moscow, Russia</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9bd" -->
-				<option value="bd" SELECTED>Munich (Allemagne)</option>
+				<option value="bd" SELECTED>Munich, Germany</option>
 			<!-- TMPL_ELSE -->
-				<option value="bd">Munich (Allemagne)</option>
+				<option value="bd">Munich, Germany</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9be" -->
-				<option value="be" SELECTED>Naples (Italie)</option>
+				<option value="be" SELECTED>Naples, Italy</option>
 			<!-- TMPL_ELSE -->
-				<option value="be">Naples (Italie)</option>
+				<option value="be">Naples, Italy</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9bf" -->
-				<option value="bf" SELECTED>Oslo
-				(Christiana) (Norvege)</option>
+				<option value="bf" SELECTED>Oslo (Christiania), Norway</option>
 			<!-- TMPL_ELSE -->
-				<option value="bf">Oslo (Christiana) (Norvege)</option>
+				<option value="bf">Oslo (Christiania), Norway</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9bg" -->
-				<option value="bg" SELECTED>Paris (France)</option>
+				<option value="bg" SELECTED>Paris, France</option>
 			<!-- TMPL_ELSE -->
-				<option value="bg">Paris (France)</option>
+				<option value="bg">Paris, France</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9bh" -->
-				<option value="bh" SELECTED>Pekin (RP
-				de chine)</option>
+				<option value="bh" SELECTED>Peking, People's Republic of China</option>
 			<!-- TMPL_ELSE -->
-				<option value="bh">Pekin (RP de chine)</option>
+				<option value="bh">Peking, People's Republic of China</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9bi" -->
 				<option value="bi"
-				SELECTED>Philadelphie (USA)</option>
+				SELECTED>Philadelphia, USA</option>
 			<!-- TMPL_ELSE -->
-				<option value="bi">Philadelphie (USA)</option>
+				<option value="bi">Philadelphia, USA</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9bj" -->
-				<option value="bj" SELECTED>Pulkova
-				(St Petersbourg) (Russie)</option>
+				<option value="bj" SELECTED>Pulkova (Leningrad), Russia</option>
 			<!-- TMPL_ELSE -->
-				<option value="bj">Pulkova (St
-				Petersbourg) (Russie)</option>
+				<option value="bj">Pulkova (Leningrad), Russia</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9bk" -->
-				<option value="bk" SELECTED>Rio de
-				Janeiro (Bresil)</option>
+				<option value="bk" SELECTED>Rio de Janeiro, Brazil</option>
 			<!-- TMPL_ELSE -->
-				<option value="bk">Rio de Janeiro (Bresil)</option>
+				<option value="bk">Rio de Janeiro, Brazil</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9bl" -->
-				<option value="bl" SELECTED>Rome (Italie)</option>
+				<option value="bl" SELECTED>Rome, Italy</option>
 			<!-- TMPL_ELSE -->
-				<option value="bl">Rome (Italie)</option>
+				<option value="bl">Rome, Italy</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9bm" -->
-				<option value="bm" SELECTED>Santiago (Chili)</option>
+				<option value="bm" SELECTED>Santiago, Chile</option>
 			<!-- TMPL_ELSE -->
-				<option value="bm">Santiago (Chili)</option>
+				<option value="bm">Santiago, Chile</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9bn" -->
-				<option value="bn" SELECTED>Stockholm (Suede)</option>
+				<option value="bn" SELECTED>Stockholm, Sweden</option>
 			<!-- TMPL_ELSE -->
-				<option value="bn">Stockholm (Suede)</option>
+				<option value="bn">Stockholm, Sweden</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9bo" -->
-				<option value="bo" SELECTED>Sydney (Australie)</option>
+				<option value="bo" SELECTED>Sydney, Australia</option>
 			<!-- TMPL_ELSE -->
-				<option value="bo">Sydney (Australie)</option>
+				<option value="bo">Sydney, Australia</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9bp" -->
-				<option value="bp" SELECTED>Tirana (Albanie)</option>
+				<option value="bp" SELECTED>Tirana, Albania</option>
 			<!-- TMPL_ELSE -->
-				<option value="bp">Tirana (Albanie)</option>
+				<option value="bp">Tirana, Albania</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9bq" -->
-				<option value="bq" SELECTED>Tokyo (Japon)</option>
+				<option value="bq" SELECTED>Tokyo, Japan</option>
 			<!-- TMPL_ELSE -->
-				<option value="bq">Tokyo (Japon)</option>
+				<option value="bq">Tokyo, Japan</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9br" -->
-				<option value="br" SELECTED>Washington (USA)</option>
+				<option value="br" SELECTED>Washington, DC, USA</option>
 			<!-- TMPL_ELSE -->
-				<option value="br">Washington (USA)</option>
+				<option value="br">Washington, DC, USA</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9uu" -->
-				<option value="uu" SELECTED>Inconnu</option>
+				<option value="uu" SELECTED>unknown</option>
 			<!-- TMPL_ELSE -->
-				<option value="uu">Inconnu</option>
+				<option value="uu">unknown</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f9zz" -->
-				<option value="zz" SELECTED>Autre</option>
+				<option value="zz" SELECTED>other</option>
 			<!-- TMPL_ELSE -->
-				<option value="zz">Autre</option>
+				<option value="zz">other</option>
 			<!-- /TMPL_IF -->
 
 			</select>
 
-		</td></tr><tr>		<td>Meridien de reference 2:</td>
+		</td></tr><tr>		<td>Prime meridian 2:</td>
 		<td>
 			<select name="f10" size="1">
             
 			<!-- TMPL_IF name="f10  " -->
-				<option value="  " SELECTED>valeur non requise</option>
+				<option value="  " SELECTED>non required value</option>
 			<!-- TMPL_ELSE -->
-				<option value=" ">valeur non requise</option>
+				<option value=" ">non required value</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10aa" -->
 				<option value="aa"
-				SELECTED>Greenwich (G.B.)</option>
+				SELECTED>Greenwich, United Kingdom</option>
 			<!-- TMPL_ELSE -->
-				<option value="aa">Greenwich 
-(G.B.)</option>
+				<option value="aa">Greenwich, United Kingdom</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f10ab" -->
-				<option value="ab" SELECTED>Amsterdam
-				(Pays-bas)</option>
+				<option value="ab" SELECTED>Amsterdam, Netherlands</option>
 			<!-- TMPL_ELSE -->
-				<option value="ab">Amsterdam (Pays-bas)</option>
+				<option value="ab">Amsterdam, Netherlands</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f10ac" -->
-				<option value="ac" SELECTED>Athenes (Grece)</option>
+				<option value="ac" SELECTED>Athens, Greece</option>
 			<!-- TMPL_ELSE -->
-				<option value="ac">Athenes (Grece)</option>
+				<option value="ac">Athens, Greece</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f10ad" -->
-				<option value="ad" SELECTED>Djakarta (Indonesie)</option>
+				<option value="ad" SELECTED>Batavia (Djakarta), Indonesia</option>
 			<!-- TMPL_ELSE -->
-				<option value="ad">Djakarta (Indonesie)</option>
+				<option value="ad">Batavia (Djakarta), Indonesia</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f10ae" -->
-				<option value="ae" SELECTED>Berne (Suisse)</option>
+				<option value="ae" SELECTED>Berne, Switzerland</option>
 			<!-- TMPL_ELSE -->
-				<option value="ae">Berne (Suisse)</option>
+				<option value="ae">Berne, Switzerland</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f10af" -->
-				<option value="af" SELECTED>Bogota (Colombie)</option>
+				<option value="af" SELECTED>Bogota, Colombia</option>
 			<!-- TMPL_ELSE -->
-				<option value="af">Bogota (Colombie)</option>
+				<option value="af">Bogota, Colombia</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f10ag" -->
-				<option value="ag" SELECTED>Bombay (Inde)</option>
+				<option value="ag" SELECTED>Bombay, India</option>
 			<!-- TMPL_ELSE -->
-				<option value="ag">Bombay (Inde)</option>
+				<option value="ag">Bombay, India</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f10ah" -->
-				<option value="ah" SELECTED>Bruxelles (Belgique)</option>
+				<option value="ah" SELECTED>Brussels, Belgium</option>
 			<!-- TMPL_ELSE -->
-				<option value="ah">Bruxelles (Belgique)</option>
+				<option value="ah">Brussels, Belgium</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f10ai" -->
-				<option value="ai" SELECTED>Cadix (Espagne)</option>
+				<option value="ai" SELECTED>Cadiz, Spain</option>
 			<!-- TMPL_ELSE -->
-				<option value="ai">Cadix (Espagne)</option>
+				<option value="ai">Cadiz, Spain</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f10aj" -->
-				<option value="aj" SELECTED>Le Cap
-				(Afrique du sud)</option>
+				<option value="aj" SELECTED>Capetown, South Africa</option>
 			<!-- TMPL_ELSE -->
-				<option value="aj">Le Cap (Afrique du sud)</option>
+				<option value="aj">Capetown, South Africa</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f10ak" -->
-				<option value="ak" SELECTED>Caracas (Venezuela)</option>
+				<option value="ak" SELECTED>Caracas, Venezuela</option>
 			<!-- TMPL_ELSE -->
-				<option value="ak">Caracas (Venezuela)</option>
+				<option value="ak">Caracas, Venezuela</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f10al" -->
-				<option value="al" SELECTED>Copenhague
-				(Danemark)</option>
+				<option value="al" SELECTED>Copenhagen, Denmark</option>
 			<!-- TMPL_ELSE -->
-				<option value="al">Copenhague (Danemark)</option>
+				<option value="al">Copenhagen, Denmark</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f10am" -->
 				<option value="am"
-				SELECTED>Cordoba (Argentine)</option>
+				SELECTED>Cordoba, Argentina</option>
 			<!-- TMPL_ELSE -->
-				<option value="am">Cordoba (Argentine)</option>
+				<option value="am">Cordoba, Argentina</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f10an" -->
-				<option value="an" SELECTED>Ile de Fer
-				(Iles Canaries)</option>
+				<option value="an" SELECTED>Ferro, Canary Islands</option>
 			<!-- TMPL_ELSE -->
-				<option value="an">Ile de Fer (Iles Canaries)</option>
+				<option value="an">Ferro, Canary Islands</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10ao" -->
-				<option value="ao" SELECTED>Helsinky (Finlande)</option>
+				<option value="ao" SELECTED>Helsinki, Finland</option>
 			<!-- TMPL_ELSE -->
-				<option value="ao">Helsinky (Finlande)</option>
+				<option value="ao">Helsinki, Finland</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10ap" -->
-				<option value="ap" SELECTED>Istambul (Turquie)</option>
+				<option value="ap" SELECTED>Istanbul, Turkey</option>
 			<!-- TMPL_ELSE -->
-				<option value="ap">Istambul (Turquie)</option>
+				<option value="ap">Istanbul, Turkey</option>
 			<!-- /TMPL_IF -->
 			
 			<!-- TMPL_IF name="f10aq" -->
 				<option value="aq"
-				SELECTED>Julianehaab (Groenland)</option>
+				SELECTED>Julianehaab, Greenland</option>
 			<!-- TMPL_ELSE -->
-				<option value="aq">Julianehaab (Groenland)</option>
+				<option value="aq">Julianehaab, Greenland</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f10ar" -->
-				<option value="ar" SELECTED>Lisbonne (Portugal)</option>
+				<option value="ar" SELECTED>Lisbon, Portugal</option>
 			<!-- TMPL_ELSE -->
-				<option value="ar">Lisbonne (Portugal)</option>
+				<option value="ar">Lisbon, Portugal</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f10as" -->
-				<option value="as" SELECTED>Londres (G.B.)</option>
+				<option value="as" SELECTED>London, United Kingdom</option>
 			<!-- TMPL_ELSE -->
-				<option value="as">Londres (G.B.)</option>
+				<option value="as">London, United Kingdom</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f10at" -->
-				<option value="at" SELECTED>Madras (Inde)</option>
+				<option value="at" SELECTED>Madras, India</option>
 			<!-- TMPL_ELSE -->
-				<option value="at">Madras (Inde)</option>
+				<option value="at">Madras, India</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10ba" -->
-				<option value="ba" SELECTED>Madrid (Espagne)</option>
+				<option value="ba" SELECTED>Madrid, Spain</option>
 			<!-- TMPL_ELSE -->
-				<option value="ba">Madrid (Espagne)</option>
+				<option value="ba">Madrid, Spain</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10bb" -->
-				<option value="bb" SELECTED>Mexico (Mexique)</option>
+				<option value="bb" SELECTED>Mexico City, Mexico</option>
 			<!-- TMPL_ELSE -->
-				<option value="bb">Mexico (Mexique)</option>
+				<option value="bb">Mexico City, Mexico</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10bc" -->
-				<option value="bc" SELECTED>Moscou (Russie)</option>
+				<option value="bc" SELECTED>Moscow, Russia</option>
 			<!-- TMPL_ELSE -->
-				<option value="bc">Moscou (Russie)</option>
+				<option value="bc">Moscow, Russia</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10bd" -->
-				<option value="bd" SELECTED>Munich (Allemagne)</option>
+				<option value="bd" SELECTED>Munich, Germany</option>
 			<!-- TMPL_ELSE -->
-				<option value="bd">Munich (Allemagne)</option>
+				<option value="bd">Munich, Germany</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10be" -->
-				<option value="be" SELECTED>Naples (Italie)</option>
+				<option value="be" SELECTED>Naples, Italy</option>
 			<!-- TMPL_ELSE -->
-				<option value="be">Naples (Italie)</option>
+				<option value="be">Naples, Italy</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10bf" -->
-				<option value="bf" SELECTED>Oslo
-				(Christiana) (Norvege)</option>
+				<option value="bf" SELECTED>Oslo (Christiania), Norway</option>
 			<!-- TMPL_ELSE -->
-				<option value="bf">Oslo (Christiana) (Norvege)</option>
+				<option value="bf">Oslo (Christiania), Norway</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10bg" -->
-				<option value="bg" SELECTED>Paris (France)</option>
+				<option value="bg" SELECTED>Paris, France</option>
 			<!-- TMPL_ELSE -->
-				<option value="bg">Paris (France)</option>
+				<option value="bg">Paris, France</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10bh" -->
-				<option value="bh" SELECTED>Pekin (RP
-				de chine)</option>
+				<option value="bh" SELECTED>Peking, People's Republic of China</option>
 			<!-- TMPL_ELSE -->
-				<option value="bh">Pekin (RP de chine)</option>
+				<option value="bh">Peking, People's Republic of China</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10bi" -->
 				<option value="bi"
-				SELECTED>Philadelphie (USA)</option>
+				SELECTED>Philadelphia, USA</option>
 			<!-- TMPL_ELSE -->
-				<option value="bi">Philadelphie (USA)</option>
+				<option value="bi">Philadelphia, USA</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10bj" -->
-				<option value="bj" SELECTED>Pulkova
-				(St Petersbourg) (Russie)</option>
+				<option value="bj" SELECTED>Pulkova (Leningrad), Russia</option>
 			<!-- TMPL_ELSE -->
-				<option value="bj">Pulkova (St
-				Petersbourg) (Russie)</option>
+				<option value="bj">Pulkova (Leningrad), Russia</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10bk" -->
-				<option value="bk" SELECTED>Rio de
-				Janeiro (Bresil)</option>
+				<option value="bk" SELECTED>Rio de Janeiro, Brazil</option>
 			<!-- TMPL_ELSE -->
-				<option value="bk">Rio de Janeiro (Bresil)</option>
+				<option value="bk">Rio de Janeiro, Brazil</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10bl" -->
-				<option value="bl" SELECTED>Rome (Italie)</option>
+				<option value="bl" SELECTED>Rome, Italy</option>
 			<!-- TMPL_ELSE -->
-				<option value="bl">Rome (Italie)</option>
+				<option value="bl">Rome, Italy</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10bm" -->
-				<option value="bm" SELECTED>Santiago (Chili)</option>
+				<option value="bm" SELECTED>Santiago, Chile</option>
 			<!-- TMPL_ELSE -->
-				<option value="bm">Santiago (Chili)</option>
+				<option value="bm">Santiago, Chile</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10bn" -->
-				<option value="bn" SELECTED>Stockholm (Suede)</option>
+				<option value="bn" SELECTED>Stockholm, Sweden</option>
 			<!-- TMPL_ELSE -->
-				<option value="bn">Stockholm (Suede)</option>
+				<option value="bn">Stockholm, Sweden</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10bo" -->
-				<option value="bo" SELECTED>Sydney (Australie)</option>
+				<option value="bo" SELECTED>Sydney, Australia</option>
 			<!-- TMPL_ELSE -->
-				<option value="bo">Sydney (Australie)</option>
+				<option value="bo">Sydney, Australia</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10bp" -->
-				<option value="bp" SELECTED>Tirana (Albanie)</option>
+				<option value="bp" SELECTED>Tirana, Albania</option>
 			<!-- TMPL_ELSE -->
-				<option value="bp">Tirana (Albanie)</option>
+				<option value="bp">Tirana, Albania</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10bq" -->
-				<option value="bq" SELECTED>Tokyo (Japon)</option>
+				<option value="bq" SELECTED>Tokyo, Japan</option>
 			<!-- TMPL_ELSE -->
-				<option value="bq">Tokyo (Japon)</option>
+				<option value="bq">Tokyo, Japan</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10br" -->
-				<option value="br" SELECTED>Washington (USA)</option>
+				<option value="br" SELECTED>Washington, DC, USA</option>
 			<!-- TMPL_ELSE -->
-				<option value="br">Washington (USA)</option>
+				<option value="br">Washington, DC, USA</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10uu" -->
-				<option value="uu" SELECTED>Inconnu</option>
+				<option value="uu" SELECTED>unknown</option>
 			<!-- TMPL_ELSE -->
-				<option value="uu">Inconnu</option>
+				<option value="uu">unknown</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f10zz" -->
-				<option value="zz" SELECTED>Autre</option>
+				<option value="zz" SELECTED>other</option>
 			<!-- TMPL_ELSE -->
-				<option value="zz">Autre</option>
+				<option value="zz">other</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>

@@ -10,315 +10,299 @@
 <form name="f_pop">
 <table>
     <tr>
-        <td>Date d'enregistrement</td>
+        <td>Date entered on file</td>
         <td><input type="text" name="f1" maxlength="8" size="9" value="<!-- TMPL_VAR name="f1" -->"></td>
     </tr>
     <tr>
-        <td>Code de date de publication </td>
+        <td>Type of Publication Date: Publication Dates 1 and 2</td>
         <td>
             <select name="f2" size="1">
             <!-- TMPL_IF name="f2 " -->
-                <option value=" " selected="selected">Valeur non requise</option>
+                <option value=" " selected="selected">Non required value</option>
             <!-- TMPL_ELSE -->
-                <option value=" ">valeur non requise</option>
+                <option value=" ">Non required value</option>
             <!-- /TMPL_IF -->
             
             <!-- TMPL_IF name="f2a" -->
-                <option value="a" selected="selected">Periodique
-                en cours</option>
+                <option value="a" selected="selected">currently published continuing resource</option>
             <!-- TMPL_ELSE -->
-                <option value="a">Periodique en cours</option>
+                <option value="a">currently published continuing resource</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f2b" -->
-                <option value="b" selected="selected">Periodique mort</option>
+                <option value="b" selected="selected">continuing resource no longer being published</option>
             <!-- TMPL_ELSE -->
-                <option value="b">Periodique mort</option>
+                <option value="b">continuing resource no longer being published</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f2c" -->
-                <option value="c" selected="selected">Periodique
-                d'etat inconnu</option>
+                <option value="c" selected="selected">continuing resource of unknown status</option>
             <!-- TMPL_ELSE -->
-                <option value="c">Periodique d'etat inconnu</option>
+                <option value="c">continuing resource of unknown status</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f2d" -->
-                <option value="d" selected="selected">Monographie
-                complete</option>
+                <option value="d" selected="selected">monograph complete when issued, or issued within one calendar year</option>
             <!-- TMPL_ELSE -->
-                <option value="d">Monographie
-                complete</option>
+                <option value="d">monograph complete when issued, or issued within one calendar year</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f2e" -->
-                <option value="e" selected="selected">reproduction</option>
+                <option value="e" selected="selected">reproduction of a document</option>
             <!-- TMPL_ELSE -->
-                <option value="e">reproduction</option>
+                <option value="e">reproduction of a document</option>
             <!-- /TMPL_IF -->
     
             <!-- TMPL_IF name="f2f" -->
                 <option value="f"
-                selected="selected">monographie, date de
-                publication incertaine</option>
+                selected="selected">monograph, date of
+                publication uncertain</option>
             <!-- TMPL_ELSE -->
-                <option value="f">monographie, date de
-                publication incertaine</option>
+                <option value="f">monograph, date of
+                publication uncertain</option>
             <!-- /TMPL_IF -->
 
             <!-- TMPL_IF name="f2g" -->
                 <option value="g"
-                selected="selected">monographie dont la
-                publication s'etend sur plus d'un an</option>
+                selected="selected">monograph whose publication continues for more than a
+year</option>
             <!-- TMPL_ELSE -->
-                <option value="g">monographie dont la
-                publication s'etend sur plus d'un an</option>
+                <option value="g">monograph whose publication continues for more than a
+year</option>
             <!-- /TMPL_IF -->
     
             <!-- TMPL_IF name="f2h" -->
                 <option value="h"
-                selected="selected">monographie ayant a la fois
-                une date reelle et une date de
-                copyright ou de privilege</option>
+                selected="selected">monograph with both actual and copyright/privilege date</option>
             <!-- TMPL_ELSE -->
-                <option value="h">monographie ayant a la fois
-                une date reelle et une date de
-                copyright ou de privilege</option>
+                <option value="h">monograph with both actual and copyright/privilege date</option>
             <!-- /TMPL_IF -->
     
             <!-- TMPL_IF name="f2i" -->
                 <option value="i"
-                selected="selected">monographie ayant a la fois
-                une date d'edition ou de reedition et
-                une date de production</option>
+                selected="selected">monograph with both release/issue date and production date</option>
             <!-- TMPL_ELSE -->
-                <option value="i">monographie ayant a la fois
-                une date d'edition ou de reedition et
-                une date de production</option>
+                <option value="i">monograph with both release/issue date and production date</option>
             <!-- /TMPL_IF -->
     
             <!-- TMPL_IF name="f2j" -->
                 <option value="j"
-                selected="selected">monographie avec date
-                publication detaillee</option>
+                selected="selected">document with detailed date of publication</option>
             <!-- TMPL_ELSE -->
-                <option value="j">monographie avec date
-                publication detaillee </option>
+                <option value="j">document with detailed date of publication</option>
             <!-- /TMPL_IF -->
     
             </select>
         </td>
     </tr>
     <tr>
-        <td>Premiere date de publication</td>
+        <td>Publication Date 1</td>
         <td><input id="pubdate1" type="text" name="f3" maxlength="4" size="5" value="<!-- TMPL_VAR name="f3" -->" /></td>
     </tr>
     <tr>
-    <td>Deuxieme date de publication</td>
+    <td>Publication Date 2</td>
     <td><input id="pubdate2" type="text" name="f4" maxlength="4" size="5" value="<!-- TMPL_VAR name="f4" -->" /></td>
     </tr>
     <tr>
-        <td>Niveau intellectuel ou public destinataire 1</td>
+        <td>Target Audience Code</td>
         <td>
             <select name="f5" size="1">
             <!-- TMPL_IF name="f5|" -->
-                <option value="|" selected="selected">|- Caractère de remplissage</option>
+                <option value="|" selected="selected">|- Filling character</option>
             <!-- TMPL_ELSE -->
-                <option value="|">|- Caractère de remplissage</option>
+                <option value="|">|- Filling character</option>
             <!-- /TMPL_IF -->
             
             <!-- TMPL_IF name="f5a" -->
-                <option value="a" selected="selected">a- Jeunesse en
-    general </option>
+                <option value="a" selected="selected">a- juvenile, general</option>
             <!-- TMPL_ELSE -->
-                <option value="a">a- Jeunesse en general</option>
+                <option value="a">a- juvenile, general</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f5b" -->
                 <option value="b"
-    selected="selected">Pre-scolaire</option>
+    selected="selected">b- pre-primary, ages 0-5</option>
             <!-- TMPL_ELSE -->
-                <option value="b">b- Pre-scolaire</option>
+                <option value="b">b- pre-primary, ages 0-5</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f5c" -->
-                <option value="c" selected="selected">c- scolaire</option>
+                <option value="c" selected="selected">c- primary, ages 5-10</option>
             <!-- TMPL_ELSE -->
-                <option value="c">c- scolaire</option>
+                <option value="c">c- primary, ages 5-10</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f5d" -->
-                <option value="d" selected="selected">d- enfant</option>
+                <option value="d" selected="selected">d- children, ages 9-14</option>
             <!-- TMPL_ELSE -->
-                <option value="d">d- enfant</option>
+                <option value="d">d- children, ages 9-14</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f5e" -->
-                <option value="e" selected="selected">e- jeune adulte</option>
+                <option value="e" selected="selected">e- young adult, ages 14-20</option>
             <!-- TMPL_ELSE -->
-                <option value="e">e- jeune adulte</option>
+                <option value="e">e- young adult, ages 14-20</option>
             <!-- /TMPL_IF -->
     
             <!-- TMPL_IF name="f5k" -->
                 <option value="k"
-                selected="selected">k- adulte, haut niveau</option>
+                selected="selected">k- adult, serious</option>
             <!-- TMPL_ELSE -->
-                <option value="k">k- adulte, haut niveau</option>
+                <option value="k">k- adult, serious</option>
             <!-- /TMPL_IF -->
 
             <!-- TMPL_IF name="f5m" -->
                 <option value="m"
-                selected="selected">m- Adulte, grand public</option>
+                selected="selected">m- adult, general</option>
             <!-- TMPL_ELSE -->
-                <option value="m">m- Adulte, grand public</option>
+                <option value="m">m- adult, general</option>
             <!-- /TMPL_IF -->
     
             <!-- TMPL_IF name="f5u" -->
                 <option value="u"
-                selected="selected">u- inconnu</option>
+                selected="selected">u- unknown</option>
             <!-- TMPL_ELSE -->
-                <option value="u">u- inconnu</option>
+                <option value="u">u- unknown</option>
             <!-- /TMPL_IF -->
             </select>
         </td>
     </tr>
     <tr>
-        <td>Niveau intellectuel ou public destinataire 2</td>
+        <td>Target Audience Code 2</td>
         <td>
             <select name="f6" size="1">
             
             <!-- TMPL_IF name="f6|" -->
-            	<option value="|" selected="selected">|- Caractère de remplissage</option>
+            	<option value="|" selected="selected">|- Filling character</option>
             <!-- TMPL_ELSE -->
-            	<option value="|">|- Caractère de remplissage</option>
+            	<option value="|">|- Filling character</option>
             <!-- /TMPL_IF -->
             
             <!-- TMPL_IF name="f6a" -->
-                <option value="a" selected="selected">a- Jeunesse en general </option>
+                <option value="a" selected="selected">a- juvenile, general </option>
             <!-- TMPL_ELSE -->
-                <option value="a">a- Jeunesse en general</option>
+                <option value="a">a- juvenile, general</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f6b" -->
-                <option value="b"  selected="selected">b- Pre-scolaire</option>
+                <option value="b"  selected="selected">b- pre-primary, ages 0-5</option>
             <!-- TMPL_ELSE -->
-                <option value="b">b- Pre-scolaire</option>
+                <option value="b">b- pre-primary, ages 0-5</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f6c" -->
-                <option value="c" selected="selected">c- scolaire</option>
+                <option value="c" selected="selected">c- primary, ages 5-10</option>
             <!-- TMPL_ELSE -->
-                <option value="c">c- scolaire</option>
+                <option value="c">c- primary, ages 5-10</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f6d" -->
-                <option value="d" selected="selected">d- enfant</option>
+                <option value="d" selected="selected">d- children, ages 9-14</option>
             <!-- TMPL_ELSE -->
-                <option value="d">d- enfant</option>
+                <option value="d">d- children, ages 9-14</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f6e" -->
-                <option value="e" selected="selected">e- jeune adulte</option>
+                <option value="e" selected="selected">e- young adult, ages 14-20</option>
             <!-- TMPL_ELSE -->
-                <option value="e">e- jeune adulte</option>
+                <option value="e">e- young adult, ages 14-20</option>
             <!-- /TMPL_IF -->
     
             <!-- TMPL_IF name="f6k" -->
                 <option value="k"
-                selected="selected">k- adulte, haut niveau</option>
+                selected="selected">k- adult, serious</option>
             <!-- TMPL_ELSE -->
-                <option value="k">k- adulte, haut niveau</option>
+                <option value="k">k- adult, serious</option>
             <!-- /TMPL_IF -->
 
             <!-- TMPL_IF name="f6m" -->
                 <option value="m"
-                selected="selected">m- fiction ou vulg adulte</option>
+                selected="selected">m- adult, general</option>
             <!-- TMPL_ELSE -->
-                <option value="m">m- fiction ou vulg adulte</option>
+                <option value="m">m- adult, general</option>
             <!-- /TMPL_IF -->
     
             <!-- TMPL_IF name="f6u" -->
                 <option value="u"
-                selected="selected">u- inconnu</option>
+                selected="selected">u- unknown</option>
             <!-- TMPL_ELSE -->
-                <option value="u">u- inconnu</option>
+                <option value="u">u- unknown</option>
             <!-- /TMPL_IF -->
             </select>
         </td>
     </tr>
     <tr>
-        <td>Niveau intellectuel ou public destinataire 3</td>
+        <td>Target Audience Code 3</td>
         <td>
             <select name="f7" size="1">
             <!-- TMPL_IF name="f7|" -->
-            	<option value="|" selected="selected">|- Caractère de remplissage</option>
+            	<option value="|" selected="selected">|- Filling character</option>
             <!-- TMPL_ELSE -->
-            	<option value="|">|- Caractère de remplissage</option>
+            	<option value="|">|- Filling character</option>
             <!-- /TMPL_IF -->
             
             <!-- TMPL_IF name="f7a" -->
-                <option value="a" selected="selected">a- Jeunesse en
-    general </option>
+                <option value="a" selected="selected">a- juvenile, general </option>
             <!-- TMPL_ELSE -->
-                <option value="a">a- Jeunesse en general</option>
+                <option value="a">a- juvenile, general</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f7b" -->
                 <option value="b"
-    selected="selected">b- Pre-scolaire</option>
+    selected="selected">b- pre-primary, ages 0-5</option>
             <!-- TMPL_ELSE -->
-                <option value="b">b- Pre-scolaire</option>
+                <option value="b">b- pre-primary, ages 0-5</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f7c" -->
-                <option value="c" selected="selected">c- scolaire</option>
+                <option value="c" selected="selected">c- primary, ages 5-10</option>
             <!-- TMPL_ELSE -->
-                <option value="c">c- scolaire</option>
+                <option value="c">c- primary, ages 5-10</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f7d" -->
-                <option value="d" selected="selected">d- enfant</option>
+                <option value="d" selected="selected">d- children, ages 9-14</option>
             <!-- TMPL_ELSE -->
-                <option value="d">d- enfant</option>
+                <option value="d">d- children, ages 9-14</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f7e" -->
-                <option value="e" selected="selected">e- jeune adulte</option>
+                <option value="e" selected="selected">e- young adult, ages 14-20</option>
             <!-- TMPL_ELSE -->
-                <option value="e">e- jeune adulte</option>
+                <option value="e">e- young adult, ages 14-20</option>
             <!-- /TMPL_IF -->
     
             <!-- TMPL_IF name="f7k" -->
                 <option value="k"
-                selected="selected">k- adulte, haut niveau</option>
+                selected="selected">k- adult, serious</option>
             <!-- TMPL_ELSE -->
-                <option value="k">k- adulte, haut niveau</option>
+                <option value="k">k- adult, serious</option>
             <!-- /TMPL_IF -->
 
             <!-- TMPL_IF name="f7m" -->
                 <option value="m"
-                selected="selected">m- fiction ou vulg adulte</option>
+                selected="selected">m- adult, general</option>
             <!-- TMPL_ELSE -->
-                <option value="m">m- fiction ou vulg adulte</option>
+                <option value="m">m- adult, general</option>
             <!-- /TMPL_IF -->
     
             <!-- TMPL_IF name="f7u" -->
                 <option value="u"
-                selected="selected">u- inconnu</option>
+                selected="selected">u- unknown</option>
             <!-- TMPL_ELSE -->
-                <option value="u">u- inconnu</option>
+                <option value="u">u- unknown</option>
             <!-- /TMPL_IF -->
             </select>
         </td>
     </tr>
     <tr>
-        <td>Publication officielle</td>
+        <td>Government Publication</td>
         <td>
             <select name="f8" size="1">
             
             <!-- TMPL_IF name="f8u" -->
-            	<option value="u" selected="selected">u- Date de publication inconnu</option>
+            	<option value="u" selected="selected">u- unknown</option>
             <!-- TMPL_ELSE -->
-                <option value="u">u- Date de publication inconnu</option>
+                <option value="u">u- unknown</option>
             <!-- /TMPL_IF -->
        		<!-- TMPL_IF name="f8a" -->
-                <option value="a" selected="selected">a- Federal/national</option>
+                <option value="a" selected="selected">a- federal/national</option>
             <!-- TMPL_ELSE -->
-                <option value="a">a- Federal/national</option>
+                <option value="a">a- federal/national</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f8b" -->
-                <option value="b" selected="selected">b- etat/province</option>
+                <option value="b" selected="selected">b- state/province</option>
             <!-- TMPL_ELSE -->
-                <option value="b">b- etat/province</option>
+                <option value="b">b- state/province</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f8c" -->
-                <option value="c" selected="selected">c- comté/departement</option>
+                <option value="c" selected="selected">c- county/department</option>
             <!-- TMPL_ELSE -->
-                <option value="c">c- comté/departement</option>
+                <option value="c">c- county/department</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f8d" -->
                 <option value="d"
@@ -328,72 +312,69 @@
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f8e" -->
                 <option value="e"
-                selected="selected">e- multi-local(inter-departmental,
-                etc. sous le niveau national)</option>
+                selected="selected">e- multi-local (interstate departments, etc. below the national
+level)</option>
             <!-- TMPL_ELSE -->
-                <option value="e">e- multi-local(inter-departmental,
-                etc. sous le niveau national)</option>
+                <option value="e">e- multi-local (interstate departments, etc. below the national
+level)</option>
             <!-- /TMPL_IF -->
     
             <!-- TMPL_IF name="f8f" -->
                 <option value="f"
-                selected="selected">f- Inter-gouvernemental</option>
+                selected="selected">f- intergovernmental</option>
             <!-- TMPL_ELSE -->
-                <option value="f">f- Inter-gouvernemental</option>
+                <option value="f">f- intergovernmental</option>
             <!-- /TMPL_IF -->
 
             <!-- TMPL_IF name="f8g" -->
                 <option value="g"
-                selected="selected">g- gouvernement en exil ou clandestin</option>
+                selected="selected">g- government in exile or clandestine</option>
             <!-- TMPL_ELSE -->
-                <option value="g">g- gouvernement en exil
-                ou clandestin</option>
+                <option value="g">g- government in exile or clandestine</option>
             <!-- /TMPL_IF -->
 
             <!-- TMPL_IF name="f8h" -->
                 <option value="h"
-                selected="selected">h- Niveau indetermine</option>
+                selected="selected">h- level not determined</option>
             <!-- TMPL_ELSE -->
-                <option value="h">h- Niveau indetermine</option>
+                <option value="h">h- level not determined</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f8u" -->
                 <option value="u"
-                selected="selected">u- inconnu</option>
+                selected="selected">u- unknown</option>
             <!-- TMPL_ELSE -->
-                <option value="u">u- inconnu</option>
+                <option value="u">u- unknown</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f8y" -->
                 <option value="y"
-                selected="selected">y- il ne s'agit pas d'une
-                publication officielle</option>
+                selected="selected">y- not a government publication</option>
             <!-- TMPL_ELSE -->
-                <option value="y">y- il ne s'agit pas
-                d'une publication officielle</option>
+                <option value="y">y- not a government publication</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f8z" -->
                 <option value="z"
-                selected="selected">z- Autre instance officielle</option>
+                selected="selected">z- Other</option>
             <!-- TMPL_ELSE -->
-                <option value="z">z- Autre instance officielle</option>
+                <option value="z">z- Other</option>
             <!-- /TMPL_IF -->
             </select>
         </td>
     </tr>
 
     <tr>
-        <td>Code de modification de la notice</td>
+        <td>Modified Record Code</td>
         <td>
             <select name="f9" size="1">
             
             <!-- TMPL_IF name="f90" -->
-                <option value="0" selected="selected">0- Notice non modifiee</option>
+                <option value="0" selected="selected">0- unmodified record</option>
             <!-- TMPL_ELSE -->
-                <option value="0">0- Notice non modifiee</option>
+                <option value="0">0- unmodified record</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f91" -->
-                <option value="1" selected="selected">1- notice modifiee</option>
+                <option value="1" selected="selected">1- modified record</option>
             <!-- TMPL_ELSE -->
-                <option value="1">1- notice modifiee</option>
+                <option value="1">1- modified record</option>
             <!-- /TMPL_IF -->
             </select>
         </td>
@@ -401,215 +382,207 @@
 
 
     <tr>
-    <td>Langue de catalogage (obligatoire)</td>
+    <td>Language of Cataloguing (Mandatory)</td>
     <td><input type="text" name="f10" maxlength="3" size="4" value="<!-- TMPL_VAR name="f10" -->" /></td>
     </tr>
 
     <tr>
-        <td>Code de transliteration</td>
+        <td>Transliteration Code</td>
         <td>
             <select name="f11" size="1">
             
             <!-- TMPL_IF name="f11a" -->
-                <option value="a" selected="selected">a- Norme ISO
-        pour la translitteration</option>
+                <option value="a" selected="selected">a- ISO transliteration scheme</option>
             <!-- TMPL_ELSE -->
-                <option value="a">a- Norme ISO
-        pour la translitteration</option>
+                <option value="a">a- ISO transliteration scheme</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f11b" -->
-                <option value="b" selected="selected">b- autre</option>
+                <option value="b" selected="selected">b- other</option>
             <!-- TMPL_ELSE -->
-                <option value="b">b- autre</option>
+                <option value="b">b- other</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f11c" -->
                 <option value="c"
-        selected="selected">c- Translitterations multiples : ISO et autres regles</option>
+        selected="selected">c- multiple transliterations: ISO or other schemes</option>
             <!-- TMPL_ELSE -->
-                <option value="c">c- Translitterations multiples : ISO et autres regles</option>
+                <option value="c">c- multiple transliterations: ISO or other schemes</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f11y" -->
-                <option value="y" selected="selected">y- Sans regles
-        de translitteration</option>
+                <option value="y" selected="selected">y- no transliteration scheme used</option>
             <!-- TMPL_ELSE -->
-                <option value="y">y- Sans regles
-        de translitteration</option>
+                <option value="y">y- no transliteration scheme used</option>
             <!-- /TMPL_IF -->
             </select>
         </td>
     </tr>
     <tr>
-    <td>Jeux de caracteres (obligatoire) 1 </td>
+    <td>Character Sets (Mandatory) 1 </td>
         <td>
             <select name="f12" size="1">
             
             <!-- TMPL_IF name="f1201" -->
-                <option value="01" selected="selected">01- ISO 646,
-    version IRV (caracteres latins de base)</option>
+                <option value="01" selected="selected">01- ISO 646, IRV version (basic Latin set)</option>
             <!-- TMPL_ELSE -->
-                <option value="01">01- ISO 646,
-    version IRV (caracteres latins de base)</option>
+                <option value="01">01- ISO 646, IRV version (basic Latin set)</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f1202" -->
-                <option value="02" selected="selected">02- Registre
-    ISO #37 (caracteres cyrilliques de base)</option>
+                <option value="02" selected="selected">02- ISO Registration # 37 (basic Cyrillic set)</option>
             <!-- TMPL_ELSE -->
-                <option value="02">02- Registre
-    ISO #37 (caracteres cyrilliques de base)</option>
+                <option value="02">02- ISO Registration # 37 (basic Cyrillic set)</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f1203" -->
-                <option value="03" selected="selected">03- ISO 5426 (jeu de caractere latin etendu)</option>
+                <option value="03" selected="selected">03- ISO 5426 (extended Latin set)</option>
             <!-- TMPL_ELSE -->
-                <option value="03">03- ISO 5426 (jeu de caractere latin etendu)</option>
+                <option value="03">03- ISO 5426 (extended Latin set)</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f1204" -->
-                <option value="04" selected="selected">04- ISO DIS
-    5427 (jeu de caracteres cyrilliques etendu)</option>
+                <option value="04" selected="selected">04- ISO 5427 (extended Cyrillic set)</option>
             <!-- TMPL_ELSE -->
-                <option value="04">04- ISO DIS
-    5427 (jeu de caracteres cyrilliques etendu)</option>
+                <option value="04">04- ISO 5427 (extended Cyrillic set)</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f1205" -->
-                <option value="05" selected="selected">05- ISO  5428
-    (caracteres grecs)</option>
+                <option value="05" selected="selected">05- ISO 5428 (Greek set)</option>
             <!-- TMPL_ELSE -->
-                <option value="05">05- ISO  5428
-    (caracteres grecs)</option>
+                <option value="05">05- ISO 5428 (Greek set)</option>
             <!-- /TMPL_IF -->
             
             <!-- TMPL_IF name="f1206" -->
-                <option value="06" selected="selected">06- ISO 6438
-    (caracteres africains codes)</option>
+                <option value="06" selected="selected">06- ISO 6438 (African coded character set)</option>
             <!-- TMPL_ELSE -->
-                <option value="06">06- ISO 6438
-    (caracteres africains codes)</option>
+                <option value="06">06- ISO 6438 (African coded character set)</option>
             <!-- /TMPL_IF -->
             
              <!-- TMPL_IF name="f1207" -->
-                <option value="07" selected="selected">07- ISO 10586
-    (caracteres grégoriens)</option>
+                <option value="07" selected="selected">07- ISO 10586 (Georgian set)</option>
             <!-- TMPL_ELSE -->
-                <option value="07">07- ISO 10586
-    (caracteres grégoriens)</option>
+                <option value="07">07- ISO ISO 10586 (Georgian set)</option>
             <!-- /TMPL_IF -->
 
              <!-- TMPL_IF name="f1208" -->
-                <option value="08" selected="selected">08- ISO 8957
-    (caracteres hébreux) table 1</option>
+                <option value="08" selected="selected">08- ISO 8957 (Hebrew set) Table 1</option>
             <!-- TMPL_ELSE -->
-                <option value="08">08- ISO 8957
-    (caracteres hébreux table 1</option>
+                <option value="08">08- ISO 8957 (Hebrew set) Table 1</option>
             <!-- /TMPL_IF -->
 
              <!-- TMPL_IF name="f1209" -->
-                <option value="09" selected="selected">09- ISO 8957
-    (caracteres hébreux) table 2</option>
+                <option value="09" selected="selected">09- ISO 8957 (Hebrew set) Table 2</option>
             <!-- TMPL_ELSE -->
-                <option value="09">09- ISO 8957
-    (caracteres hébreux table 2</option>
+                <option value="09">09- ISO 8957 (Hebrew set) Table 2</option>
             <!-- /TMPL_IF -->
             
              <!-- TMPL_IF name="f1211 -->
-                <option value="11"  selected="selected">11- ISO 5426-2
-    (caractères latins utilisés dans des langues européennes mineures ou une typographie ancienne)</option>
+                <option value="11"  selected="selected">11- ISO 5426-2 (Latin characters used in minor European
+languages and obsolete typography)
+</option>
             <!-- TMPL_ELSE -->
-                <option value="11">11- ISO 6438
-    (caracteres africains codes)</option>
+                <option value="11">11- ISO 5426-2 (Latin characters used in minor European
+languages and obsolete typography)
+</option>
             <!-- /TMPL_IF -->
             
             <!-- TMPL_IF name="f1250" -->
-                <option value="50" selected="selected">50- ISO 10646
-                    (UNICODE)
+                <option value="50" selected="selected">50- ISO 10646 Level 3 (Unicode, UTF-8)
                 </option>
             <!-- TMPL_ELSE -->
-                <option value="50">50- ISO 10646
-                    (UNICODE)
-                </option>
+                <option value="50">50- ISO 10646 Level 3 (Unicode, UTF-8)</option>
             <!-- /TMPL_IF -->
             </select>
         </td>
 
     </tr>
     <tr>
-    <td>Jeux de caracteres (obligatoire) 2</td>
+    <td>Character Sets (Mandatory) 2</td>
         <td>
             <select name="f13" size="1">
             
             <!-- TMPL_IF name="f13  " -->
-                    <option value="  " selected="selected">valeur non requise</option>
+                    <option value="  " selected="selected">non required value</option>
             <!-- TMPL_ELSE -->
-                    <option value="  ">valeur non requise</option>
+                    <option value="  ">non required value</option>
             <!-- /TMPL_IF -->
 
             <!-- TMPL_IF name="f1301" -->
-                <option value="01" selected="selected">01- ISO 646,
-    version IRV (caracteres latins de base)</option>
+                <option value="01" selected="selected">01- ISO 646, IRV version (basic Latin set)</option>
             <!-- TMPL_ELSE -->
-                <option value="01">ISO 646,
-    version IRV (caracteres latins de base)</option>
+                <option value="01">01- ISO 646, IRV version (basic Latin set)</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f1302" -->
-                <option value="02" selected="selected">02- Registre
-    ISO #37 (caracteres cyrilliques de base)</option>
+                <option value="02" selected="selected">02- ISO Registration # 37 (basic Cyrillic set)</option>
             <!-- TMPL_ELSE -->
-                <option value="02">02- Registre
-    ISO #37 (caracteres cyrilliques de base)</option>
+                <option value="02">02- ISO Registration # 37 (basic Cyrillic set)</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f1303" -->
                 <option value="03"
-        selected="selected">03- ISO 5426 (jeu de caractere latin etendu)</option>
+        selected="selected">03- ISO 5426 (extended Latin set)</option>
             <!-- TMPL_ELSE -->
-                <option value="03">03- ISO 5426 (jeu de caractere latin etendu)</option>
+                <option value="03">03- ISO 5426 (extended Latin set)</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f1304" -->
-                <option value="04" selected="selected">04- ISO DIS
-    5427 (jeu de caracteres cyrilliques etendu)</option>
+                <option value="04" selected="selected">04- ISO 5427 (extended Cyrillic set)</option>
             <!-- TMPL_ELSE -->
-                <option value="04">04- ISO DIS
-    5427 (jeu de caracteres cyrilliques etendu)</option>
+                <option value="04">04- ISO 5427 (extended Cyrillic set)</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f1305" -->
-                <option value="05" selected="selected">05- ISO  5428
-    (caracteres grecs)</option>
+                <option value="05" selected="selected">05- ISO 5428 (Greek set)</option>
             <!-- TMPL_ELSE -->
-                <option value="05">05- ISO  5428
-    (caracteres grecs)</option>
+                <option value="05">05- ISO 5428 (Greek set)</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f1306" -->
-                <option value="06" selected="selected">06- ISO 6438
-    (caracteres africains codes)</option>
+                <option value="06" selected="selected">06- ISO 6438 (African coded character set)</option>
             <!-- TMPL_ELSE -->
-                <option value="06">06- ISO 6438
-    (caracteres africains codes)</option>
+                <option value="06">06- ISO 6438 (African coded character set)</option>
             <!-- /TMPL_IF -->
-            <!-- TMPL_IF name="f1250" -->
-                <option value="50" selected="selected">50- ISO 10646
-                    (UNICODE)
-                </option>
+	    
+	    <!-- TMPL_IF name="f1307" -->
+                <option value="07" selected="selected">07- ISO 10586 (Georgian set)</option>
             <!-- TMPL_ELSE -->
-                <option value="50">50- ISO 10646
-                    (UNICODE)
-                </option>
+                <option value="07">07- ISO ISO 10586 (Georgian set)</option>
+            <!-- /TMPL_IF -->
+
+             <!-- TMPL_IF name="f1308" -->
+                <option value="08" selected="selected">08- ISO 8957 (Hebrew set) Table 1</option>
+            <!-- TMPL_ELSE -->
+                <option value="08">08- ISO 8957 (Hebrew set) Table 1</option>
+            <!-- /TMPL_IF -->
+
+             <!-- TMPL_IF name="f1309" -->
+                <option value="09" selected="selected">09- ISO 8957 (Hebrew set) Table 2</option>
+            <!-- TMPL_ELSE -->
+                <option value="09">09- ISO 8957 (Hebrew set) Table 2</option>
+            <!-- /TMPL_IF -->
+            
+             <!-- TMPL_IF name="f1311 -->
+                <option value="11"  selected="selected">11- ISO 5426-2 (Latin characters used in minor European
+languages and obsolete typography)</option>
+            <!-- TMPL_ELSE -->
+                <option value="11">11- ISO 5426-2 (Latin characters used in minor European
+languages and obsolete typography)</option>
+            <!-- /TMPL_IF -->
+	    
+            <!-- TMPL_IF name="f1350" -->
+                <option value="50" selected="selected">50- ISO 10646 Level 3 (Unicode, UTF-8)</option>
+            <!-- TMPL_ELSE -->
+                <option value="50">ISO 10646 Level 3 (Unicode, UTF-8)</option>
             <!-- /TMPL_IF -->
             </select>
         </td>
     </tr>
 
     <tr>
-        <td>Jeu de caracteres additionnels</td>
+        <td>Additional Character Sets</td>
         <td>
             <input type="text" name="f14" maxlength="4" size="5" value="<!-- TMPL_VAR name="f14" -->" />
         </td>
     </tr>
 
     <tr>
-    <td>Alphabet du titre</td>
+    <td>Script of Title</td>
     <td>
     <select name="f15" size="1">
             <!-- TMPL_IF name="f15 " -->
-                    <option value=" " selected="selected">Valeur non requise</option>
+                    <option value=" " selected="selected">Non required value</option>
             <!-- TMPL_ELSE -->
-                    <option value=" ">valeur non requise</option>
+                    <option value=" ">Non required value</option>
             <!-- /TMPL_IF -->
             
             <!-- TMPL_IF name="f15ba" -->
@@ -618,50 +591,49 @@
                 <option value="ba">ba- Latin</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f15ca" -->
-                <option value="ca" selected="selected">ca- Cyrillique</option>
+                <option value="ca" selected="selected">ca- Cyrillic</option>
             <!-- TMPL_ELSE -->
-                <option value="ca">ca- Cyrillique</option>
+                <option value="ca">ca- Cyrillic</option>
             <!-- /TMPL_IF -->
 
             <!-- TMPL_IF name="f15da" -->
-                <option value="da" selected="selected">da- Japonais -
-                alphabet non precise</option>
+                <option value="da" selected="selected">da- Japanese - script unspecified</option>
             <!-- TMPL_ELSE -->
-                <option value="da">da- Japonais non precise</option>
+                <option value="da">da- Japanese - script unspecified</option>
             <!-- /TMPL_IF -->
 
             <!-- TMPL_IF name="f15db" -->
-                <option value="db" selected="selected">db- Japonais -
+                <option value="db" selected="selected">db- Japanese -
                 Kanji</option>
             <!-- TMPL_ELSE -->
-                <option value="db">db- Japonais - Kanji</option>
+                <option value="db">db- Japanese - Kanji</option>
             <!-- /TMPL_IF -->
 
             <!-- TMPL_IF name="f15dc" -->
-                <option value="dc" selected="selected">dc- Japonais -
+                <option value="dc" selected="selected">dc- Japanese -
                 Kana</option>
             <!-- TMPL_ELSE -->
-                <option value="dc">dc- Japonais - Kana</option>
+                <option value="dc">dc- Japanese - Kana</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f15ea" -->
-                <option value="ea" selected="selected">ea- Chinois</option>
+                <option value="ea" selected="selected">ea- Chinese</option>
             <!-- TMPL_ELSE -->
-                <option value="ea">ea- Chinois</option>
+                <option value="ea">ea- Chinese</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f15fa" -->
-                <option value="fa" selected="selected">fa- Arabe</option>
+                <option value="fa" selected="selected">fa- Arabic</option>
             <!-- TMPL_ELSE -->
-                <option value="fa">fa- Arabe</option>
+                <option value="fa">fa- Arabic</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f15ga" -->
-                <option value="ga" selected="selected">ga- Grec</option>
+                <option value="ga" selected="selected">ga- Greek</option>
             <!-- TMPL_ELSE -->
-                <option value="ga">ga- Grec</option>
+                <option value="ga">ga- Greek</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f15ha" -->
-                <option value="ha" selected="selected">ha- Hebreu</option>
+                <option value="ha" selected="selected">ha- Hebrew</option>
             <!-- TMPL_ELSE -->
-                <option value="ha">ha- Hebreu</option>
+                <option value="ha">ha- Hebrew</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f15ia" -->
                 <option value="ia" selected="selected">ia- Thai</option>
@@ -674,31 +646,31 @@
                 <option value="ja">ja- Devanagari</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f15ka" -->
-                <option value="ka" selected="selected">ka- Coreen</option>
+                <option value="ka" selected="selected">ka- Korean</option>
             <!-- TMPL_ELSE -->
-                <option value="ka">ka- Coreen</option>
+                <option value="ka">ka- Korean</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f15la" -->
-                <option value="la" selected="selected">la- Tamoul</option>
+                <option value="la" selected="selected">la- Tamil</option>
             <!-- TMPL_ELSE -->
-                <option value="la">la- Tamoul</option>
+                <option value="la">la- Tamil</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f15zz" -->
-                <option value="zz" selected="selected">zz- autres</option>
+                <option value="zz" selected="selected">zz- Other</option>
             <!-- TMPL_ELSE -->
-                <option value="zz">zz- autres</option>
+                <option value="zz">zz- Other</option>
             <!-- /TMPL_IF -->
             
             <!-- TMPL_IF name="f15ma" -->
-                <option value="ma" selected="selected">ma- grégorien</option>
+                <option value="ma" selected="selected">ma- Georgian</option>
             <!-- TMPL_ELSE -->
-                <option value="ma">ma- grégorien</option>
+                <option value="ma">ma- Georgian</option>
             <!-- /TMPL_IF -->
             
             <!-- TMPL_IF name="f15mb" -->
-                <option value="mb" selected="selected">mb- arménien</option>
+                <option value="mb" selected="selected">mb- Armenian</option>
             <!-- TMPL_ELSE -->
-                <option value="mb">mb- arménien</option>
+                <option value="mb">mb- Armenian</option>
             <!-- /TMPL_IF -->                        
             </select>
     </td>

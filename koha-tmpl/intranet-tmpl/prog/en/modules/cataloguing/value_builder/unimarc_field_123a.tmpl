@@ -4,29 +4,29 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>UNIMARC_constructeur champ 123a</title>
+<title>UNIMARC_Field 123a builder</title>
 </head>
 <body>
 <form name="f_pop">
 <table>
 	<tr>
-		<td>Type d'echelle:</td>
+		<td>Type of Scale:</td>
 		<td>
 			<select name="f1" size="1">
 			<!-- TMPL_IF name="f1a" -->
-				<option value="a" SELECTED>Echelle lineaire</option>
+				<option value="a" SELECTED>linear scale</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Echelle lineaire</option>
+				<option value="a">linear scale</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1b" -->
-				<option value="b" SELECTED>Echelle angulaire</option>
+				<option value="b" SELECTED>angular scale</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Echelle angulaire</option>
+				<option value="b">angular scale</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1z" -->
-				<option value="z" SELECTED>Autre type d'echelle</option>
+				<option value="z" SELECTED>other type of scale (e.g., time scale, quantitative statistical scale)</option>
 			<!-- TMPL_ELSE -->
-				<option value="z">Autre type d'echelle</option>
+				<option value="z">other type of scale (e.g., time scale, quantitative statistical scale)</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>

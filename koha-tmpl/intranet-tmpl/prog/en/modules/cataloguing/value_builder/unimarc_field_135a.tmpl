@@ -4,55 +4,55 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>UNIMARC_constructeur champ 135a</title>
+<title>UNIMARC_Field 135a builder</title>
 </head>
 <body>
 <form name="f_pop">
 <table>
 	<tr>
-		<td>Type de fichier informatique:</td>
+		<td>Type of electronic resource:</td>
 		<td>
 			<select name="f1" size="1">
             
 			<!-- TMPL_IF name="f1 " -->
-				<option value=" " SELECTED>valeur non requise</option>
+				<option value=" " SELECTED>non required value</option>
 			<!-- TMPL_ELSE -->
-				<option value=" ">valeur non requise</option>
+				<option value=" ">non required value</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1a" -->
-				<option value="a" SELECTED>Donnees numeriques</option>
+				<option value="a" SELECTED>numeric</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">Donnees numeriques</option>
+				<option value="a">numeric</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1b" -->
-				<option value="b" SELECTED>Programmes</option>
+				<option value="b" SELECTED>computer program(s)</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">Programmes</option>
+				<option value="b">computer program(s)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1c" -->
-				<option value="c" SELECTED>Representations</option>
+				<option value="c" SELECTED>representational</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">Representations</option>
+				<option value="c">representational</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1d" -->
-				<option value="d" SELECTED>Texte</option>
+				<option value="d" SELECTED>text</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">Texte</option>
+				<option value="d">text</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1u" -->
-				<option value="u" SELECTED>Inconnu</option>
+				<option value="u" SELECTED>unknown</option>
 			<!-- TMPL_ELSE -->
-				<option value="u">Inconnu</option>
+				<option value="u">unknown</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1v" -->
-				<option value="v" SELECTED>Combinaison de donnees</option>
+				<option value="v" SELECTED>combination</option>
 			<!-- TMPL_ELSE -->
-				<option value="v">Combinaison de donnees</option>
+				<option value="v">combination</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1z" -->
-				<option value="z" SELECTED>Autre</option>
+				<option value="z" SELECTED>other</option>
 			<!-- TMPL_ELSE -->
-				<option value="z">Autre</option>
+				<option value="z">other</option>
 			<!-- /TMPL_IF -->
 		</td></tr>
 	<tr><td colspan=2><input type="button" value="OK"  onClick="javascript:report()"></td></tr>
