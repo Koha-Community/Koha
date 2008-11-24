@@ -57,12 +57,6 @@ $(document).ready(function(){
     }
     //]]>
 </script>
-<style type="text/css">
-	input.confirm {
-		background:lightblue repeat-x scroll left top;
-		border-width:2pt;
-	}
-</style>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -319,7 +313,7 @@ $(document).ready(function(){
 					<input type="hidden" name="DEL-<!-- TMPL_VAR NAME="shelf" -->" value="1" />
 					<!-- TMPL_IF NAME="confirm" -->
 					<input type="hidden" name="CONFIRM-<!-- TMPL_VAR NAME="confirm" -->" value="1" />
-					<input type="submit" class="confirm" value="Confirm" />
+					<input type="submit" class="approve" value="Confirm" />
 					<!-- TMPL_ELSE -->
 					<input type="submit" class="deleteshelf" onclick="return confirmDelete(_('Are you sure you want to remove this List?'));" value="Delete" />
 					<!-- /TMPL_IF -->

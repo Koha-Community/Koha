@@ -30,7 +30,7 @@
 	<li><a id="newshelf" href="/cgi-bin/koha/virtualshelves/shelves.pl?shelves=1">New List</a></li>
 	<!-- TMPL_IF NAME="viewshelf" --><!-- TMPL_IF name="manageshelf" -->
 	<li><a id="editshelf" href="/cgi-bin/koha/virtualshelves/shelves.pl?shelfnumber=<!-- TMPL_VAR NAME="shelfnumber" -->&amp;op=modif">Edit List</a></li>
-	<li id="deleteshelfc"><a id="deleteshelf" href="/cgi-bin/koha/virtualshelves/shelves.pl?<!-- TMPL_IF NAME="showprivateshelves" -->display=privateshelves&<!-- /TMPL_IF -->shelves=1&amp;DEL-<!-- TMPL_VAR NAME="shelfnumber" -->=1">Delete List</a></li>
+	<li id="deleteshelfc"><!-- TMPL_IF NAME="showprivateshelves" --><a id="deleteshelf" href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves&amp;shelves=1&amp;DEL-<!-- TMPL_VAR NAME="shelfnumber" -->=1">Delete List</a><!-- TMPL_ELSE --><a id="deleteshelf" href="/cgi-bin/koha/virtualshelves/shelves.pl?shelves=1&amp;DEL-<!-- TMPL_VAR NAME="shelfnumber" -->=1">Delete List</a><!-- /TMPL_IF --></li>
 	<!-- /TMPL_IF --><!-- /TMPL_IF -->
 </ul>
 </div>
