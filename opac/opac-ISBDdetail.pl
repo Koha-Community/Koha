@@ -62,6 +62,7 @@ my $biblionumber = $query->param('biblionumber');
 my $itemtype     = &GetFrameworkCode($biblionumber);
 my $tagslib      = &GetMarcStructure( 1, $itemtype );
 
+my $marcflavour      = C4::Context->preference("marcflavour");
 my $record = GetMarcBiblio($biblionumber);
 
 #coping with subscriptions
@@ -234,7 +235,7 @@ if ( C4::Context->preference("AmazonContent") == 1 ) {
 
     $template->param( amazonisbn => $dat->{amazonisbn} );
 
-    my $amazon_details = &get_amazon_details( $dat->{amazonisbn} );
+    my $amazon_details = &get_amazon_details( $dat->{amazonisbn}, $record, $marcflavour );
 
     foreach my $result ( @{ $amazon_details->{Details} } ) {
         $template->param( item_description => $result->{ProductDescription} );
