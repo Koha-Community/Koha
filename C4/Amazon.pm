@@ -23,6 +23,7 @@ use LWP::UserAgent;
 use HTTP::Request::Common;
 
 use strict;
+use warnings;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -44,17 +45,54 @@ C4::Amazon - Functions for retrieving Amazon.com content in Koha
 
 This module provides facilities for retrieving Amazon.com content in Koha
 
-=head1 get_amazon_details($isbn);
+=head2 get_amazon_details
 
-=head2 $isbn is a isbn string
+=over 4
+
+my $amazon_details = &get_amazon_details( $xisbn, $record, $marcflavour );
+Get editorial reviews, customer reviews, and similar products using Amazon Web Services.
 
 =cut
 
 sub get_amazon_details {
-    my ( $isbn ) = @_;
+    my ( $isbn, $record, $marcflavour ) = @_;
+
     #normalize the ISBN
-    $isbn =~ /(\d*[X]*)/;
-    $isbn = $1;
+    $isbn = _normalize_match_point ($isbn);
+
+    my $upc = _get_amazon_upc($record,$marcflavour);
+    my $ean = _get_amazon_ean($record,$marcflavour);
+
+    # warn "ISBN: $isbn | UPC: $upc | EAN: $ean";
+
+    my ( $id_type, $item_id);
+    if (length($isbn) eq 13) { # if the isbn is 13-digit, search Amazon using EAN
+	$id_type = 'EAN';
+	$item_id = $isbn;
+    }
+    elsif ($isbn) {
+	$id_type = 'ASIN';
+	$item_id = $isbn;
+    }
+    elsif ($upc) {
+	$id_type = 'UPC';
+	$item_id = $upc;
+    }
+    elsif ($ean) {
+	$id_type = 'EAN';
+	$item_id = $upc;
+    }
+    else { # if no ISBN, UPC, or EAN exists, do not even attempt to query Amazon
+	return undef;
+    }
+
+    my $format = substr $record->leader(), 6, 1; # grab the item format to determine Amazon search index
+    my $formats;
+    $formats->{'a'} = 'Books';
+    $formats->{'g'} = 'Video';
+    $formats->{'j'} = 'Music';
+
+    my $search_index = $formats->{$format};
 
     # Determine which content to grab in the request
 
@@ -76,9 +114,11 @@ sub get_amazon_details {
 
     #grab the associates tag: mine is 'kadabox-20'
     my $af_tag=C4::Context->preference('AmazonAssocTag');
-    my $response_group = "Similarities,EditorialReview,Reviews,ItemAttributes";
-    my $asin=$isbn;
-    my $url = "http://ecs.amazonaws$tld/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=$aws_access_key_id&Operation=ItemLookup&AssociateTag=$af_tag&Version=2007-01-15&ItemId=$asin&ResponseGroup=$response_group";
+    my $response_group = "Similarities,EditorialReview,Reviews,ItemAttributes,Images";
+    my $url = "http://ecs.amazonaws$tld/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=$aws_access_key_id&Operation=ItemLookup&AssociateTag=$af_tag&Version=2007-01-15&ItemId=$item_id&IdType=$id_type&ResponseGroup=$response_group";
+    if ($id_type ne 'ASIN') {
+	$url .= "&SearchIndex=$search_index";
+    }
     # warn $url;
     my $content = get($url);
     warn "could not retrieve $url" unless $content;
@@ -110,6 +150,64 @@ sub check_search_inside {
             undef $available;
         }
         return $available;
+}
+
+sub _get_amazon_upc {
+	my ($record,$marcflavour) = @_;
+	my (@fields,$upc);
+
+	if ($marcflavour eq 'MARC21') {
+		@fields = $record->field('024');
+		foreach my $field (@fields) {
+			my $indicator = $field->indicator(1);
+			my $upc = _normalize_match_point($field->subfield('a'));
+			if ($indicator == 1 and $upc ne '') {
+				return $upc;
+			}
+		}
+	}
+	else { # assume unimarc if not marc21
+		@fields = $record->field('072');
+		foreach my $field (@fields) {
+			my $upc = _normalize_match_point($field->subfield('a'));
+			if ($upc ne '') {
+				return $upc;
+			}
+		}
+	}
+}
+
+sub _get_amazon_ean {
+	my ($record,$marcflavour) = @_;
+	my (@fields,$ean);
+
+	if ($marcflavour eq 'MARC21') {
+		@fields = $record->field('024');
+		foreach my $field (@fields) {
+			my $indicator = $field->indicator(1);
+			my $upc = _normalize_match_point($field->subfield('a'));
+			if ($indicator == 3 and $upc ne '') {
+				return $upc;
+			}
+		}
+	}
+	else { # assume unimarc if not marc21
+		@fields = $record->field('073');
+		foreach my $field (@fields) {
+			my $upc = _normalize_match_point($field->subfield('a'));
+			if ($upc ne '') {
+				return $upc;
+			}
+		}
+	}
+}
+
+sub _normalize_match_point {
+	my $match_point = shift;
+	(my $normalized_match_point) = $match_point =~ /([\d-]*[X]*)/;
+	$normalized_match_point =~ s/-//g;
+
+	return $normalized_match_point;
 }
 
 1;

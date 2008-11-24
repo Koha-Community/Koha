@@ -201,7 +201,7 @@ if (C4::Context->preference("FRBRizeEditions")==1) {
 }
 if ( C4::Context->preference("AmazonContent") == 1 ) {
     my $similar_products_exist;
-    my $amazon_details = &get_amazon_details( $xisbn );
+    my $amazon_details = &get_amazon_details( $xisbn, $record, $marcflavour );
     my $item_attributes = \%{$amazon_details->{Items}->{Item}->{ItemAttributes}};
     my $customer_reviews = \@{$amazon_details->{Items}->{Item}->{CustomerReviews}->{Review}};
     my @similar_products;

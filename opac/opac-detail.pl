@@ -273,7 +273,7 @@ if (C4::Context->preference("OPACFRBRizeEditions")==1) {
 # Amazon.com Stuff
 if ( C4::Context->preference("OPACAmazonContent") == 1 ) {
     my $similar_products_exist;
-    my $amazon_details = &get_amazon_details( $xisbn );
+    my $amazon_details = &get_amazon_details( $xisbn, $record, $marcflavour );
     my $item_attributes = \%{$amazon_details->{Items}->{Item}->{ItemAttributes}};
     my $customer_reviews = \@{$amazon_details->{Items}->{Item}->{CustomerReviews}->{Review}};
     for my $one_review (@$customer_reviews) {
