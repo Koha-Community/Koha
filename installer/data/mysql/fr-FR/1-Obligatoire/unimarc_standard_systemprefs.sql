@@ -195,19 +195,20 @@ INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES
 	('BakerTaylorPassword','','','Baker & Taylor Password for Content Cafe (external content)','Textarea'),
 	('BakerTaylorUsername','','','Baker & Taylor Username for Content Cafe (external content)','Textarea'),
 	('TagsEnabled','1','','Active les fonctionnalités de tags.','YesNo'),
-	('TagsExternalDictionary',NULL,'','Chemin d\'accès sur le serveur au programme ispell pour déterminer $Lingua::Ispell::path <br />Ce dictionnaire est utilisé comme une liste de tags prédéfinis',''),
+	('TagsExternalDictionary',NULL,'','Chemin d''accès sur le serveur au programme ispell pour déterminer $Lingua::Ispell::path <br />Ce dictionnaire est utilisé comme une liste de tags prédéfinis',''),
 	('TagsInputOnDetail','1','','Permet aux utilisateurs de saisir des tags sur la page de détail.',         'YesNo'),
 	('TagsInputOnList',  '0','','Permet aux utilisateurs de saisir des tags sur la page de résultat.', 'YesNo'),
-	('TagsModeration',  NULL,'','Demande que les tags soient approuvés avant d\'être visibles.','YesNo'),
-	('TagsShowOnDetail','10','','Nombre de tags à afficher sur la page de détail, 0 désactivant l\'affichage.',        'Integer'),
-	('TagsShowOnList',   '6','','Nombre de tags à afficher sur la page de résultat, 0 désactivant l\'affichage.','Integer');
+	('TagsModeration',  NULL,'','Demande que les tags soient approuvés avant d''être visibles.','YesNo'),
+	('TagsShowOnDetail','10','','Nombre de tags à afficher sur la page de détail, 0 désactivant l''affichage.',        'Integer'),
+	('TagsShowOnList',   '6','','Nombre de tags à afficher sur la page de résultat, 0 désactivant l''affichage.','Integer');
 
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('OPACShelfBrowser','1','','Active le parcours des rayonnages sur la page de détail','YesNo');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('XSLTDetailsDisplay','0','','Enable XSL stylesheet control over details page display on OPAC WARNING: MARC21 Only','YesNo');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('XSLTResultsDisplay','0','','Enable XSL stylesheet control over results page display on OPAC WARNING: MARC21 Only','YesNo');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('AdvancedSearchTypes','itemtypes','itemtypes|ccode','Select which set of fields comprise the Type limit in the advanced search','Choice');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('AllowOnShelfHolds', '0', '', 'Allow hold requests to be placed on items that are not on loan', 'YesNo');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('AllowHoldsOnDamagedItems', '1', '', 'Allow hold requests to be placed on damaged items', 'YesNo');
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('XSLTResultsDisplay','0','','Permet l''utilisation de Feuilles de style XSLT pour l''affichage des listes de résultat (MARC21)','YesNo');
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('AdvancedSearchTypes','itemtypes','itemtypes|ccode','Détermine quel index utiliser lors des recherches par type de document','Choice');
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('AllowOnShelfHolds', '0', '', 'Permet la réservation d''exemplaires non disponibles', 'YesNo');
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('AllowHoldsOnDamagedItems', '1', '', 'Permet les réservations sur des exemplaires endommagés', 'YesNo');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('OpacSuppression', '0', '', 'Turn ON the OPAC Suppression feature, requires further setup, ask your system administrator for details', 'YesNo');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('SMSSendDriver','','','D�termine le pilote utilis� par SMS::Send pour envoyer des SMS.','free');
-
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('SMSSendDriver','','','Détermine le pilote utilisé par SMS::Send pour envoyer des SMS.','free');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AllowRenewalLimitOverride', '1', 'Si Activé, permet que les périodes de renouvellement puisse être positionnée manuellement durant la circulation',NULL,'YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('MergeAuthoritiesOnUpdate', '0', 'Si Activé, met à jour toutes les notices bibliographiques afférentes dès la modification d''une autorité',NULL,'YesNo');

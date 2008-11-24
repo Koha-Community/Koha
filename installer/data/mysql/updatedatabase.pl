@@ -1960,7 +1960,14 @@ END_SQL
     print "Upgrade to $DBversion done (warning added to OPACShelfBrowser system preference)\n";
     SetVersion ($DBversion);
 }
-
+if (C4::Context->preference("Version") =~/3\.00/) {
+	warn "inside 3.00";
+	my $return=do qq($ENV{'PERL5LIB'}/installer/data/mysql/updatedatabase30.pl);
+	unless ($return){
+		print STDERR "cannot read file $ENV{'PERL5LIB'}/installer/data/mysql/updatedatabase30.pl : $! \n" if ($!);
+		print STDERR "cannot read file $ENV{'PERL5LIB'}/installer/data/mysql/updatedatabase30.pl : $@ \n" if ($@);
+	}
+}
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
