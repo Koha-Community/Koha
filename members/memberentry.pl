@@ -19,6 +19,7 @@
 
 # pragma
 use strict;
+# use warnings;  # FIXME: really.
 
 # external modules
 use CGI;
@@ -217,7 +218,7 @@ if ($op eq 'save' || $op eq 'insert'){
   }
   
   my $password = $input->param('password');
-    push @errors, "ERROR_short_password" if( $password && $minpw && (length($password) < $minpw ) );
+  push @errors, "ERROR_short_password" if( $password && $minpw && $password ne '****' && (length($password) < $minpw) );
 
   if (C4::Context->preference('ExtendedPatronAttributes')) {
     $extended_patron_attributes = parse_extended_patron_attributes($input);
