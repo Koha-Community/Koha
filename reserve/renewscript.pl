@@ -75,10 +75,11 @@ if ($input->param('newduedate')){
 my $cardnumber = $input->param("cardnumber");
 my $borrowernumber = $input->param("borrowernumber");
 my $exemptfine = $input->param("exemptfine") || 0;
+my $override_limit = $input->param("override_limit") || 0;
 my $failedrenews;
 foreach my $itemno (@data) {
     # check status before renewing issue
-	my ($renewokay,$error) = CanBookBeRenewed($borrowernumber,$itemno);
+	my ($renewokay,$error) = CanBookBeRenewed($borrowernumber,$itemno,$override_limit);
     if ($renewokay){
         AddRenewal($borrowernumber,$itemno,$branch,$datedue);
     }

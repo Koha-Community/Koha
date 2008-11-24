@@ -1833,7 +1833,7 @@ END_SQL
 
 =head2 CanBookBeRenewed
 
-($ok,$error) = &CanBookBeRenewed($borrowernumber, $itemnumber);
+($ok,$error) = &CanBookBeRenewed($borrowernumber, $itemnumber[, $override_limit]);
 
 Find out whether a borrowed item may be renewed.
 
@@ -1843,6 +1843,10 @@ C<$borrowernumber> is the borrower number of the patron who currently
 has the item on loan.
 
 C<$itemnumber> is the number of the item to renew.
+
+C<$override_limit>, if supplied with a true value, causes
+the limit on the number of times that the loan can be renewed
+(as controlled by the item type) to be ignored.
 
 C<$CanBookBeRenewed> returns a true value iff the item may be renewed. The
 item must currently be on loan to the specified borrower; renewals
@@ -1854,7 +1858,7 @@ already renewed the loan. $error will contain the reason the renewal can not pro
 sub CanBookBeRenewed {
 
     # check renewal status
-    my ( $borrowernumber, $itemnumber ) = @_;
+    my ( $borrowernumber, $itemnumber, $override_limit ) = @_;
     my $dbh       = C4::Context->dbh;
     my $renews    = 1;
     my $renewokay = 0;
@@ -1889,7 +1893,7 @@ sub CanBookBeRenewed {
         if ( my $data2 = $sth2->fetchrow_hashref ) {
             $renews = $data2->{'renewalsallowed'};
         }
-        if ( $renews && $renews > $data1->{'renewals'} ) {
+        if ( ( $renews && $renews > $data1->{'renewals'} ) || $override_limit ) {
             $renewokay = 1;
         }
         else {

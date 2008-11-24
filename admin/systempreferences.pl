@@ -135,6 +135,7 @@ my %tabsysprefs;
     $tabsysprefs{useDaysMode}="Circulation";
     $tabsysprefs{ReservesNeedReturns}="Circulation";
     $tabsysprefs{CircAutocompl}="Circulation";
+    $tabsysprefs{AllowRenewalLimitOverride}="Circulation";
     $tabsysprefs{canreservefromotherbranches}="Circulation";
     $tabsysprefs{finesMode}="Circulation";
     $tabsysprefs{emailLibrarianWhenHoldIsPlaced}="Circulation";

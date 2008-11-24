@@ -403,6 +403,12 @@ if (nodename =="barcodes[]"){
       <!-- TMPL_ELSE -->
             <td>
             <!-- TMPL_IF name="norenew" -->
+                <!-- TMPL_IF NAME="can_confirm" --><span class="renewals-allowed" style="display: none">
+                    <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
+                   <!-- TMPL_IF NAME="od" --><input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />                             <!-- TMPL_ELSE --><input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />                                                       <!-- /TMPL_IF -->
+                    </span>
+                    <span class="renewals-disabled">
+                <!-- /TMPL_IF -->
 			      <!-- TMPL_IF NAME="norenew_reason_on_reserve" -->
               <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">On Hold</a>
 				    <!-- /TMPL_IF -->
@@ -452,6 +458,10 @@ if (nodename =="barcodes[]"){
         </tr>
         </table>
         <fieldset class="action">
+        <!-- TMPL_IF NAME="AllowRenewalLimitOverride" -->
+        <label for="override_limit">Override Renewal Limit:</label>
+        <input type="checkbox" name="override_limit" id="override_limit" value="1" />
+        <!-- /TMPL_IF -->
         <input type="submit" name="renew_checked" value="Renew or Return checked items" />
         <input type="submit" id="renew_all" name="renew_all" value="Renew all" />
         <input type="submit" id="return_all" name="return_all" value="Return all" />
