@@ -1993,7 +1993,7 @@ if ( C4::Context->preference('Version') < TransformToNum($DBversion) ) {
             ADD item_level_request tinyint(4) NOT NULL default 0
     ");
 
-    print "Upgrade to $DBversion done (add hold_fill_targets table and a column to tmp_holdsqueue)";
+    print "Upgrade to $DBversion done (add hold_fill_targets table and a column to tmp_holdsqueue)\n";
     SetVersion($DBversion);
 }
 
@@ -2029,7 +2029,7 @@ if ( C4::Context->preference('Version') < TransformToNum($DBversion) ) {
         print STDERR "After the upgrade to $DBversion, there are still $num_bad_issuedates loan(s) with a NULL (blank) loan date. ",
                      "Please check the issues table in your database.";
     }
-    print "Upgrade to $DBversion done (bug 2582: set null issues.issuedate to lastreneweddate)";
+    print "Upgrade to $DBversion done (bug 2582: set null issues.issuedate to lastreneweddate)\n";
     SetVersion($DBversion);
 }
 
