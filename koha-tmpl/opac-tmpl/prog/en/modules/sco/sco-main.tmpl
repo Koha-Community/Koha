@@ -1,64 +1,76 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> -- Self Checkout 
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryName" --> &rsaquo; Self Checkout </title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Koha <!-- TMPL_VAR NAME="Version" -->" /> <!-- leave this for stats -->
+<link rel="shortcut icon" href="<!-- TMPL_VAR NAME="themelang" -->/includes/favicon.ico" type="image/x-icon" />
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="<TMPL_VAR NAME="themelang">/js/sco.js"></script>
+<script type="text/javascript">//<![CDATA[
+	$(document).ready(function(){
+		sco_init(1);
+		$(".unfocus").focus();
+	});
+//]]>
+</script>
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/css/sco.css" />
-<body <!-- TMPL_IF NAME="redirect" -->  onload="openWindow('<!-- TMPL_VAR NAME ="redirect" -->')"<!-- TMPL_ELSE --> onload="sco_init(1);"<!-- /TMPL_IF -->>
-<br />
-<div id="masthead"><h1><!-- TMPL_IF NAME="opacsmallimage" --><img alt="<!-- TMPL_VAR NAME="LibraryName" -->" src="<!-- TMPL_VAR NAME='opacsmallimage' -->" /><!-- /TMPL_IF -->
-<!-- TMPL_VAR NAME="LibraryName" --> Self Checkout System </h1>
-<br />
-</div>
-<div id="main">
+</head>
+<body>
+
+<div id="doc" class="yui-t7">
+
+<div id="masthead"><h1><!-- TMPL_VAR NAME="LibraryName" --> Self Checkout System </h1></div>
+
+   <div id="bd">
+	<div class="yui-g">
 
 <!-- TMPL_IF NAME="impossible" --><!-- We tried to issue, but failed. -->
-<div class="error"><h3>Item cannot be issued.</h3><p>Sorry, This item cannot be checked out at this station.  </p>
-<p><em>Title:</em> <!-- TMPL_VAR NAME="title" escape="html" --> </p>
+<div class="dialog alert"><h3>Item cannot be checked out.</h3><p>Sorry, This item cannot be checked out at this station.  </p>
+<!-- TMPL_IF NAME="title" --><p>Title: <em><!-- TMPL_VAR NAME="title" escape="html" --></em> </p><!-- /TMPL_IF -->
 <p><em>Error type:</em> <!-- TMPL_VAR NAME="impossible" --></p>
 <form action="/cgi-bin/koha/sco/sco-main.pl" name="errorForm" method="post">
 <input type="hidden" name="op" value="login" />
-<input type="hidden" name="userid" value='<!-- TMPL_VAR NAME="userid" -->' />
+<input type="hidden" name="userid" value="<!-- TMPL_VAR NAME="userid" -->" />
 <!-- TMPL_IF NAME="returnitem" -->
-<input type="hidden" name="barcode" value='<!-- TMPL_VAR NAME="barcode" -->' />
-<input type="button" name="returnbook" value="Return this item" class="submit" onclick="this.form.op.value='returnbook';this.form.submit();"  />
+<input type="hidden" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->" />
+<input type="button" name="returnbook" value="Return this item" class="return" onclick="this.form.op.value='returnbook';this.form.submit();"  />
 <!-- /TMPL_IF -->
-<input type="submit" name= "confirm" value="Return to Account Summary" class="submit" />
+<input type="submit" name= "confirm" value="Return to Account Summary" class="back" />
 </div>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="confirm" --><!-- We need to confirm the issue.. -->
-<div class="error"><h3>Please confirm the issue:</h3>
-<p><em><!-- TMPL_VAR NAME="confirm" --></em></p>
-<br />
+<div class="dialog alert"><h3>Please confirm the checkout:</h3>
+<p><!-- TMPL_IF NAME="confirm_renew_issue" -->This item is already checked out to you.  Return it?<!-- /TMPL_IF --></p>
+
 <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" method="post">
 <input type="hidden" id="op" name="op" value="checkout" />
-<input type="hidden" name="userid" value='<!-- TMPL_VAR NAME="userid" -->' />
-<input type="hidden" name="barcode" value='<!-- TMPL_VAR NAME="barcode" -->' />
+<input type="hidden" name="userid" value="<!-- TMPL_VAR NAME="userid" -->" />
+<input type="hidden" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->" />
 <input type="hidden" id="confirmation"  name="confirmed" value=""  />
 <!-- TMPL_IF NAME="renew" -->
-<input type="button" value="Return Item" name="confirm" class="submit" onclick="this.form.op.value='returnbook';this.form.submit();"  />
+<input type="button" value="Return Item" name="confirm" class="return" onclick="this.form.op.value='returnbook';this.form.submit();"  />
 <!-- /TMPL_IF -->
-<input type="button" value="Renew Item" <!-- TMPL_UNLESS NAME="renew" --> name="confirm"<!-- /TMPL_UNLESS --> class="submit" onclick="this.form.confirmed.value='1';this.form.submit();" />
-<input type="button" value="Cancel" class="submit" onclick="this.form.op.value='';this.form.submit();return true;"  />
+<input type="button" value="Renew Item" <!-- TMPL_UNLESS NAME="renew" --> name="confirm"<!-- /TMPL_UNLESS --> class="renew" onclick="this.form.confirmed.value='1';this.form.submit();" />
+<input type="button" value="Cancel" class="cancel" onclick="this.form.op.value='';this.form.submit();return true;"  />
 </form>
 </div>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="nopermission" --><!-- This is what is displayed if user doesnt have permission --><div class="error"><h3>Access Denied</h3>
+<!-- TMPL_IF NAME="nopermission" --><!-- This is what is displayed if user doesnt have permission --><div class="dialog alert"><h3>Access Denied</h3>
 Sorry, This Self-Checkout Station has lost authentication.  Please contact the administrator to resolve this problem. </div>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="timed_out" --><!-- This is what is displayed if login has timed out -->
-<div class="error"><h3>Session timed out</h3>Sorry, your session has timed out, please login again.</div><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="different_ip" --><!-- This is what is displayed if user doesnt have permission --><div class="error"><h3>Session Lost</h3>You are accessing koha from a different ip address! please login again.</div><!-- /TMPL_IF -->
+<div class="dialog alert"><h3>Session timed out</h3>Sorry, your session has timed out, please log in again.</div><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="different_ip" --><!-- This is what is displayed if user doesnt have permission --><div class="dialog alert"><h3>Session Lost</h3>You are accessing Self-Checkout from a different IP address! please log in again.</div><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="invalid_username_or_password" -->
-<!-- This is what is displayed if user doesnt have permission --><div class="error"><h3>Record not found</h3><p>Your Userid was not found in the database.  Please try again.</p></div><!-- /TMPL_IF -->
+<!-- This is what is displayed if user doesnt have permission --><div class="dialog alert"><h3>Record not found</h3><p>Your userid was not found in the database.  Please try again.</p></div><!-- /TMPL_IF -->
 
 
 <!-- TMPL_UNLESS NAME="hide_main" -->
-	<div id="content-block">
 	<div class="sco_head">
 	<!-- TMPL_UNLESS NAME="validuser" --> 
 	<h3> <!-- TMPL_VAR NAME="libraryname" --> Self Checkout </h3>
 	<!-- /TMPL_UNLESS -->
 	<div id="checkouthelp">
-		<p><a href="/cgi-bin/koha/sco/help.pl">HELP</a> with the self checkoutsystem</p>
+		<a href="/cgi-bin/koha/sco/help.pl">HELP</a> with the self checkout system
 	</div>
 
 	<!-- TMPL_IF NAME="userid" -->
@@ -77,42 +89,39 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	<!-- /TMPL_IF -->
 	<!-- TMPL_UNLESS NAME="validuser" -->
 	<div class="sco_entry" >
-	<form id="mainform" action="/cgi-bin/koha/sco/sco-main.pl" name="myForm" method="post">
+	<form id="mainform" action="/cgi-bin/koha/sco/sco-main.pl" name="mainform" method="post">
       <input type="hidden" name="koha_login_context" value="sco" />
-	<p class="checkout"><label for="userid">Please enter your cardnumber:</label> 
-	<input type="text" id="userid" class="firstField" size="10" name="userid" onblur="ValidateCode();" />
+	<fieldset class="checkout"><label for="userid">Please enter your card number:</label> 
+	<input type="text" id="userid" class="unfocus" size="20" name="userid" />
  	<!-- TMPL_LOOP NAME="INPUTS" --><input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->"><!-- /TMPL_LOOP -->
 	<input type="hidden" name="op" value="login" />
- 	<input	type="submit" value="Submit" class="submit" /></p></form>
+ 	<input	type="submit" value="Submit" class="submit" /></fieldset></form>
 	</div>
 	<!-- /TMPL_UNLESS -->
 	<!-- TMPL_IF NAME="validuser" -->
 	<div id="newcheckout" class="sco_entry">
-	<form id='mainform' name="scan_form" method="post" action="/cgi-bin/koha/sco/sco-main.pl" onsubmit=" if(this.valid_session == 0) { if(confirm('Session has expired.  Click \'OK\' to continue processing this item.  Click Cancel if you are not <!-- TMPL_VAR NAME="userid" -->.')){ this.op.value='logout'; this.userid.value=''; } return true;}; " >
-	<h4> Check out or return an item: </h4>
+	<form id="mainform" name="scan_form" method="post" action="/cgi-bin/koha/sco/sco-main.pl" onsubmit=" if(this.valid_session == 0) { if(confirm('Session has expired.  Click \'OK\' to continue processing this item.  Click Cancel if you are not <!-- TMPL_VAR NAME="userid" -->.')){ this.op.value='logout'; this.userid.value=''; } return true;}; " >
+	<fieldset><legend> Check out or return an item: </legend>
 	<label for="barcode">Scan a new item or enter its barcode:</label>
-	<input id="barcode" name="barcode" size="14" maxlength="14" class="unfocus" onfocus="this.className='focus';" onblur="this.className='unfocus';" />
+	<input id="barcode" name="barcode" size="20" class="unfocus" onfocus="this.className='focus';" onblur="this.className='unfocus';" />
 	<input type="hidden" name="op" value="checkout" />
 	<input type="hidden" name="userid" value="<!-- TMPL_VAR name="userid" -->" />
 	<input type="hidden" name="valid_session" value="1">
-	<input type="submit" value="Submit" class="submit" />
+	<input type="submit" value="Submit" class="submit" /></fieldset>
 	</form>
-	<p class='alert'><form method="post" action="/cgi-bin/koha/sco/sco-main.pl?op=logout" >Scan next item, or <input type="submit" value="Click here if done." class="submit" /></form></p>
-	</div> <!-- sco_entry -->
-	</div> <!-- newcheckout -->
+	<p class="alert"><form method="post" action="/cgi-bin/koha/sco/sco-main.pl?op=logout" >Scan next item, or <input type="submit" value="Click here if done." class="finish" /></form></p>
+	</div> <!-- sco_entry --> <!-- newcheckout -->
 
 	<div id="borrowerdetails">
-	<h2>Issues for <!-- TMPL_VAR NAME='borrowername' --></h2>
 	<!-- TMPL_IF NAME="issues_count" -->
-	<div class="table"><table><caption>Issues <span class="count">(<!-- TMPL_VAR NAME="issues_count" --> total)</span></caption>
+	<table><caption>Issues for <!-- TMPL_VAR NAME='borrowername' --> <span class="count">(<!-- TMPL_VAR NAME="issues_count" --> total)</span></caption>
 	<!-- ISSUES TABLE ROWS -->
-	<tr><th colspan="2">Title</th><th>Call No.</th><th>Due</th><th>Renew</th><!-- TMPL_UNLESS NAME="nofines" --><th>Fines</th><!-- /TMPL_UNLESS --></tr>
+	<tr><th>Title</th><th>Call No.</th><th>Due</th><th>Renew</th><!-- TMPL_UNLESS NAME="nofines" --><th>Fines</th><!-- /TMPL_UNLESS --></tr>
 	<!-- TMPL_LOOP NAME="ISSUES" -->
-	<!-- TMPL_IF NAME="overdue" --><tr class="overdue"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
-	<td><!-- TMPL_IF NAME="itemtypeimages" --> <img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --></td>
-	<td><!-- TMPL_IF NAME="amazonimages" --> <!-- TMPL_IF NAME="isbn" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.THUMBZZZ.jpg" alt="Book Cover Image" class="thumbnail" /></a><!-- /TMPL_IF --> <!-- /TMPL_IF --><!-- TMPL_UNLESS NAME="noitemlinks" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="title" escape="html" --><!-- /TMPL_UNLESS --><span class="item-details">
-	<!-- TMPL_VAR NAME="author" --></span></td>
-	<td><!-- TMPL_VAR NAME="classification" --></td>
+	<!-- TMPL_UNLESS name="__odd__" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_UNLESS -->
+	<td><!-- TMPL_IF NAME="amazonimages" --> <!-- TMPL_IF NAME="isbn" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.THUMBZZZ.jpg" alt="Book Cover Image" class="thumbnail" /></a><!-- /TMPL_IF --> <!-- /TMPL_IF --><!-- TMPL_UNLESS NAME="noitemlinks" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a><!-- TMPL_ELSE --><strong><!-- TMPL_VAR NAME="title" escape="html" --></strong><!-- /TMPL_UNLESS --><span class="item-details">
+	<!-- TMPL_VAR NAME="author" --></span> (<!-- TMPL_VAR NAME="barcode" -->)</td>
+	<td><!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
 	<!-- TMPL_IF NAME="overdue" --><td class="overdue"><!-- TMPL_VAR NAME="date_due" --></td><!-- TMPL_ELSE --><td><!-- TMPL_VAR NAME="date_due" --></td><!-- /TMPL_IF -->
 	<td>
 	<!-- TMPL_IF NAME="status" -->
@@ -123,7 +132,6 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	<!-- TMPL_UNLESS NAME="nofines" --><td><!-- TMPL_IF NAME="charges" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td><!-- /TMPL_UNLESS --></tr>
 	<!-- /TMPL_LOOP -->
 	</table>
-	</div>
 	<!-- TMPL_ELSE -->
 	<h3>You currently have nothing checked out.</h3>
 	<!-- /TMPL_IF -->
@@ -131,14 +139,8 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	<!-- /TMPL_IF -->
 <!-- /TMPL_UNLESS --> <!-- ( / hide main) -->	
 	
-	<div id="checkoutfooter">
-
 	</div>
 
+	</div>
 </div>
-</body>
-</html>
-
-
-
-
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

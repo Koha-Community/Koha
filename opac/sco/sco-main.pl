@@ -94,7 +94,8 @@ if ($op eq "logout") {
 	  #warn "renew confirmation";
            $template->param( renew => 1,
 	   		barcode => $barcode,
-	   		confirm => $confirmation_strings{RENEW_ISSUE},
+            confirm => 1,
+            confirm_renew_issue => 1,
 	 		hide_main => 1,
 			);
           }
