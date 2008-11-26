@@ -117,18 +117,10 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	<!-- ISSUES TABLE ROWS -->
 	<tr><th>Title</th><th>Call No.</th><th>Due</th><th>Renew</th><!-- TMPL_UNLESS NAME="nofines" --><th>Fines</th><!-- /TMPL_UNLESS --></tr>
 	<!-- TMPL_LOOP NAME="ISSUES" -->
-<<<<<<< HEAD:koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl
-	<!-- TMPL_IF NAME="overdue" --><tr class="overdue"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
-	<td><!-- TMPL_IF NAME="itemtypeimages" --> <img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --></td>
-	<td><!-- TMPL_IF NAME="amazonimages" --> <!-- TMPL_IF NAME="isbn" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.THUMBZZZ.jpg" alt="Book Cover Image" class="thumbnail" /></a><!-- /TMPL_IF --> <!-- /TMPL_IF --><!-- TMPL_UNLESS NAME="noitemlinks" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="title" --><!-- /TMPL_UNLESS --><span class="item-details">
-	<!-- TMPL_VAR NAME="author" --></span></td>
-	<td><!-- TMPL_VAR NAME="classification" --></td>
-=======
 	<!-- TMPL_UNLESS name="__odd__" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_UNLESS -->
 	<td><!-- TMPL_IF NAME="amazonimages" --> <!-- TMPL_IF NAME="isbn" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.THUMBZZZ.jpg" alt="Book Cover Image" class="thumbnail" /></a><!-- /TMPL_IF --> <!-- /TMPL_IF --><!-- TMPL_UNLESS NAME="noitemlinks" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a><!-- TMPL_ELSE --><strong><!-- TMPL_VAR NAME="title" escape="html" --></strong><!-- /TMPL_UNLESS --><span class="item-details">
 	<!-- TMPL_VAR NAME="author" --></span> (<!-- TMPL_VAR NAME="barcode" -->)</td>
 	<td><!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
->>>>>>> e8d14a6... Cleaning up Self-Checkout interface, adding some basic formatting based on other standard styles.:koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl
 	<!-- TMPL_IF NAME="overdue" --><td class="overdue"><!-- TMPL_VAR NAME="date_due" --></td><!-- TMPL_ELSE --><td><!-- TMPL_VAR NAME="date_due" --></td><!-- /TMPL_IF -->
 	<td>
 	<!-- TMPL_IF NAME="status" -->
