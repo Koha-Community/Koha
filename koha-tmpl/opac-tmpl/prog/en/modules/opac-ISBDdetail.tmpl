@@ -20,8 +20,10 @@
 	<div class="container">	
 	
 	
-    <div id="views"> <h1 style="display: inline;">ISBD</h1> <span class="views"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Normal View</a> <a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">MARC View</a> <span id="ISBDview">ISBD View</span></span></div>
-    <!-- TMPL_VAR name="ISBD" -->
+     <h1 style="float:left;margin:0 1em 1em 0;">ISBD</h1> <div id="views">
+	 <span class="view"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Normal View</a></span> <span class="view"><a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">MARC View</a></span> <span class="view"><span id="ISBDview">ISBD View</span></span>
+</div>
+    <div id="isbdcontents"><!-- TMPL_VAR name="ISBD" --></div>
 	
 		<div id="bibliodescriptions" class="toptabs">
 	<ul>   

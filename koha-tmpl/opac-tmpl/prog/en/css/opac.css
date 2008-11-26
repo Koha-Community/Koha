@@ -196,8 +196,7 @@ h2 {
 	font-size : 131%;
 }
 
-h2.author {
-	text-indent : .5em;
+h5.author {
 }
 
 h3 {
@@ -1058,6 +1057,7 @@ width: 100%;
 /* End hide from IE-mac */
 
 .results_summary {
+	clear : both;
 	display: block;
 	font-size : 85%;
 	color: #707070;
@@ -1602,19 +1602,19 @@ ul.ui-tabs-nav li.ui-tabs-selected a, ul.ui-tabs-nav li.ui-tabs-selected span.a 
 
 #views {
 	border-bottom : 1px solid #E8E8E8;
-}
-
-#views h1 {
-	display : inline;
-	margin-right : .7em;
-	margin-bottom : 1em;
-}
-
-.views {
+	float : left;
+	margin-bottom : .5em;
+	padding : 0 2em 0 0.2em;
 	white-space : nowrap;
 }
 
-#bibliodescriptions {
+span.view {
+	float : left;
+	padding : 0.2em .2em 2px .2em;
+}
+
+#bibliodescriptions,
+#isbdcontents {
 	clear : left;
 	margin-top : .5em;
 }
@@ -1645,7 +1645,7 @@ a#Normalview, span#Normalview {
 	padding-left : 15px;
 }
 
-a#MARCview, a#ISBDview, a#Normalview {
+a#MARCview, a#MARCviewPop, a#ISBDview, a#Normalview {
 	background-color : #F3F3F3;
 	border-left : 1px solid #E8E8E8;
 }

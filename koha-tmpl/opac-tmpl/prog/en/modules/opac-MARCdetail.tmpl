@@ -20,8 +20,11 @@
 </div>
 
     <div class="yui-g" style="margin-top : 1em;">
-	<div id="views"><h1 style="display: inline;">MARC View</h1> <span class="views"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Normal View</a> <span id="MARCview">MARC View</span> <!-- TMPL_IF NAME="ISBD" --><a id="ISBDview"  href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">ISBD View</a><!-- /TMPL_IF --></span></div>
-    <h1><!-- TMPL_VAR NAME="bibliotitle" --> (Record no. <!-- TMPL_VAR NAME="biblionumber" -->)</h1>
+	<h1 style="float:left;margin: 0 1em 1em 0;">MARC View</h1>
+	<div id="views">
+	<span class="view"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Normal View</a></span> <span class="view"><span id="MARCview">MARC View</span></span> <!-- TMPL_IF NAME="ISBD" --><span class="view"><a id="ISBDview"  href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">ISBD View</a></span><!-- /TMPL_IF -->
+</div>
+    <h1 style="clear:both;"><!-- TMPL_VAR NAME="bibliotitle" --> (Record no. <!-- TMPL_VAR NAME="biblionumber" -->)</h1>
 	<table id="marc">
         <!-- TMPL_LOOP name="0XX" -->
         <tr><th colspan="2"><!-- TMPL_VAR name="tag" --></th></tr>
