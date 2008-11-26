@@ -1,194 +1,215 @@
-input.focus {
-	background-color: #FFF;
-	border-bottom: 2px dashed #993300;
-}
+@import url("../../en/lib/yui/reset-fonts-grids.css");
+@import url("../../en/lib/yui/skin.css");
 
-input.unfocus {
-	background-color : #FFF;
-}
-
-div.sco_head { 
-  font-weight: bold;
-  width: 75%;
-  margin: 15px auto;
-  padding-left: 10px;
-}
-
-div#sco_main {
-	text-align: center;
-	}
-div#newcheckout {
-/*	margin : 20px 30px;
-/*  text-align: center;
-*/  padding: 10px 10px 10px 40px;
-/*  width: 80%;
-/*  min-width: 300px;
-*/  } 
-
-div#checkout h3 {
-/*  background: url(/opac-tmpl/npl/en/sco/images/checkout-top-right.gif) top right no-repeat;
-/*  border : 1px solid yellow;*/
-  font-size:1.3em;
-  padding: 15px 15px 0px 15px;
-  margin:0;
-  }
-
-div#borrowerdetails {
-  margin: 10px 5px 5px 5px;
-  }
-  
-div#borrowerdetails h2 {
-  font-style: italic;
-  border-bottom: 1px;
-  border-color: red;
-  margin: 5px;
-  }
-
-.submit {
- font-size: smaller;
- }
-
-.sco_entry {
-	background-color : #FFE;
-	text-align: left;
-	width : 75%;
-	margin: 15px auto;!important
-	padding: 10px;
-	border : 2px solid #CC3333;	
-}
-
-p.checkout {
-/*  background: url(/opac-tmpl/npl/en/sco/images/checkout-right.gif) top right repeat-y;
-/*  border : 1px solid lime;*/
-  margin: 5px;
-  padding: 5px 15px;
-  text-align: center;
-  }
-
-div#checkouthelp p {
-  text-align: center;
- 
-}
-div#checkoutfooter {
-/*  background: url(/opac-tmpl/npl/en/sco/images/checkout-bottom-left.gif) bottom left no-repeat;
-*/  border-top : 1px solid red;
-  }
-div#footerbody {
-/*  background: url(/opac-tmpl/npl/en/sco/images/checkout-bottom-right.gif) bottom right no-repeat;
-*/  padding:15px;
-  display:block;
-  margin: -1.1em 0 0 0;
-  }
-  
- input.confirm {
-	background-color: #009900;
-	color : #FFFFCC;
-	font-weight: bold;
-}
-
-input.reject {
-	background-color: #CC3333;
-	color : #FFFFCC;
-	font-weight: bold;
-} 
-
-div.sco_head p.alert {
-	width: 50%;
-	font-weight: bold;
-	background-color : #FFFF99;
-	font-size : 105%;
-	margin: 5px auto;
-	margin-bottom : 15px;
-	padding: 5px;
-	border :1px solid #CC3333;	
- }
-p.alert a{
-	font-weight: bold;
-}
-div.error {
-	background-color : #FFFF99;
-	font-size : 105%;
-/*	width : 50%;
-*/	margin: 5px auto;
-	margin-bottom : 15px;
-	padding: 5px;
-	border : 2px dashed #CC3333;	
-}
-
-div.error h3 {
-	color: #CC3333;
-	font-size : 110%;
-	padding-left : 63px;
-	height : 46px;
-}
-
-div.error p {
-	margin-top : 0px;
-	margin-left : 10px;
-}
-
-div#footerbody p {
-	background-color : #EFF1DC;
-	font-size : 80%;
-	width : 60%;
-	margin: 5px auto;
-	padding: 3px;
-	border : 1px dashed #CCCC99;
-	text-align: center;
-}
-
-div#complete {
-	float : right;
-	border : 0px solid lime;
-}
-
-div#complete input {
-	background-color : #009900;
-	color : #FEEDDB;
-	font-family : verdana,arial,hevetica;
-	font-size : small;
+a {
 	font-weight : bold;
-	margin: 0;
-	padding : 2px 32px 2px 2px;	
 }
 
-div#abort {
-	margin: 5px auto;
-	border : 0;
+a, a:visited {
+	color : #006699;
+}
+
+a:hover,input.editshelf:hover,a.editshelf:hover,input.deleteshelf:hover {
+	color : #990033;
+}
+
+body {
+	background-color : white;
+	text-align : left;
+	padding : 0 0 2.5em 0;
+}
+
+caption {
+	font-size : 110%;
+	text-align : left;
+	font-weight : bold;
+}
+
+fieldset {
+	background-color: #FFF;
+	border : 2px solid #EEEEEE;
+	margin : 1em 1em 1em 0;
+	padding : 1em;
+}
+
+h1,h2,h3,h4,h5,h6 {
+	font-weight : bold;
+	margin : .5em 0;
+}
+
+h1 {
+	font-size : 138.5%;
+}
+
+h2 {
+	font-size : 134%;
+}
+
+h3 {
+	font-size : 123.1%;
+}
+
+h4 {
+	font-size : 116%;
+}
+
+h5 {
+	font-size : 108%;
+}
+
+h6 {
+	font-size : 100%;
+}
+
+input[type=submit], input[type=button], input[type=reset] {
+	background : #b8d0e6 url(../../images/submit-bg.gif) repeat-x 0 0;
+	background-color : #b8d0e6;
+	border-top: 1px solid #cccccc;
+	border-left: 1px solid #cccccc;
+	border-right: 1px solid #eeeeee;
+	border-bottom: 1px solid #eeeeee;
+	color : #333;
+	font-size : 93%;
+	font-weight : bold;
+	padding : 4px;
+}
+
+input[type=submit]:active, input[type=button], input[type=reset] {
+	border: 1px inset #666666;
+	float : none;
+}
+.dialog {
+  border: 1px solid #bcbcbc;
+	padding : .5em;
+	margin : 1em auto;
+  width: 65%;
+  }
+  
+.dialog  h2, .dialog h3, .dialog h4 {
+  	margin : auto;
+	text-align : center;
+  }
+ 
+div.alert {
+  background : #FFC url(../../images/alert-bg.gif) repeat-x left 0;
+  text-align : center;
+}
+
+div.alert strong {
+	color : #900;
+}
+
+.dialog input {
+ 	background : #FFF none;
+ 	border : 1px solid #bcbcbc;
+	margin : .4em;
+	padding : .4em;
+ }
+
+ 
+.dialog input.back {
+ 	background : #FFF url(../../famfamfam/silk/arrow_left.png) no-repeat 4px center;
+	padding : .4em .4em .4em 25px;	
+ }
+ 
+.dialog input.return {
+ 	background : #FFF url(../../famfamfam/silk/book_previous.png) no-repeat 4px center;
+	padding : .4em .4em .4em 25px;	
+ }
+ 
+.dialog input.renew {
+ 	background : #FFF url(../../famfamfam/silk/arrow_refresh.png) no-repeat 4px center;
+	padding : .4em .4em .4em 25px;	
+ }
+ 
+.dialog input.cancel {
+ 	background : #FFF url(../../famfamfam/silk/cancel.png) no-repeat 4px center;
+	padding : .4em .4em .4em 25px;	
+ }
+
+input.finish {
+	background : #dbe7ff url(../../famfamfam/silk/stop.png) no-repeat 4px center;
+	border : 1px outset #666;
+	padding : .2em .2em .2em 25px;
+}
+ 
+table {
+	background-color: #FFF;
+	border-collapse : collapse;
+	margin : 1em 0;
+	border-right : 1px solid #dddddd;
+	border-top : 1px solid #dddddd;
+}
+
+td,th {
+	background-color: #FFF;
+	border-left : 1px solid #dddddd;
+	border-bottom : 1px solid #dddddd;
+	padding : 3px 3px;
+}
+
+th {
+	background-color:#EEE;
+	font-weight : bold;
+	padding : 2px 23px;
 	text-align : center;
 }
 
-div#abort input, .warning input {
-	background-color : #993300;
-	color : #FEEDDB;
-	font-family : verdana,arial,hevetica;
-	font-size : small;
+tr.highlight td, tr.highlight th, tr.odd td {
+	background-color : #F3F3F3;
+   border-top : 1px solid #DDDDDD;
+   border-bottom : 1px solid #DDDDDD;
+}
+
+tr.even td, tr.even.highlight td {
+	background-color: #FFF;
+}
+
+p {
+	margin: .7em 0;
+}
+
+strong {
 	font-weight : bold;
-	margin: 0;
-	padding : 2px 32px 2px 2px;	
 }
 
-.warning-header {
-	display : block;
-	color: #CC3333;
-	font-size : 110%;
+em {
+	font-style : italic;
 }
-
-input.back {
-	background-color : #936;
-	color : #ffffcc;
-	font-family : verdana,arial,hevetica;
-	font-size : small;
-	font-weight : bold;
-	margin: 0;
-	padding : 2px 2px 2px 32px;	
+#borrowerdetails {
+	margin-top : 1em;
 }
-
-p.checkout .warning {
-	display : block;
-	padding : 15px;
-	margin : 10px;
-	margin-bottom : 15px;
-	background-color : #FFFFCC;
-	border : 3px dashed #cc0000;
+#barcode,
+#userid {
+	font-size : 125%;
+	padding-bottom : 3px;
+}
+input.focus {
+	background-color : #FFC;
+	border : 2px inset #336699;
+}
+#checkouthelp {
+	background : #FFF url("../../famfamfam/silk/help.png") no-repeat 4px center;
+	padding : 3px 3px 3px 26px;
+	position : absolute;
+	top : 0;
+	right : 0;
+}
+div.button {
+	float : left;
+	margin-top : 2em;
+	padding : .4em 0;	
+}
+div.button a:link,
+div.button a:visited,
+div.button a:hover,
+div.button a:active {
+ 	background : #FFF url(../../famfamfam/silk/book_previous.png) no-repeat 4px center;
+	border : 1px outset #666;
+	color : #000;
+	padding : .4em .4em .4em 25px;	
+	text-decoration : none;
+}
+div.button a:active {
+	border : 1px inset #666;
 }
