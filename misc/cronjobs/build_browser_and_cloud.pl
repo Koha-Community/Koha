@@ -124,7 +124,7 @@ if ($browser_tag) {
     print "inserting datas in browser table\n";
     # read existing classification table is possible
     my $classification;
-    if (C4::Context->preference('opaclanguages') eq 'fr' && $browser_tag eq '676' & $browser_subfield eq 'a') {
+    if (C4::Context->preference('opaclanguages') =~ m/^fr/i && $browser_tag eq '676' & $browser_subfield eq 'a') {
         $classification = dewey_french();
     }
 
