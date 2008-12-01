@@ -316,7 +316,7 @@ END_SQL
 
     my $rqoverduerules = $dbh->prepare("SELECT * FROM overduerules WHERE delay1 IS NOT NULL AND branchcode = ? ");
     $rqoverduerules->execute($branchcode);
-    my $outfile = 'overdues_' . ( $mybranch || $branchcode || 'default' );
+    # my $outfile = 'overdues_' . ( $mybranch || $branchcode || 'default' );
     while ( my $overdue_rules = $rqoverduerules->fetchrow_hashref ) {
       PERIOD: foreach my $i ( 1 .. 3 ) {
 
