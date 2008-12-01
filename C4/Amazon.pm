@@ -50,6 +50,9 @@ This module provides facilities for retrieving Amazon.com content in Koha
 =over 4
 
 my $amazon_details = &get_amazon_details( $xisbn, $record, $marcflavour );
+
+=back
+
 Get editorial reviews, customer reviews, and similar products using Amazon Web Services.
 
 =cut
