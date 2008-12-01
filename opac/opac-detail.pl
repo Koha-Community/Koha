@@ -110,20 +110,13 @@ foreach my $subscription (@subscriptions) {
 
 $dat->{'count'} = scalar(@items);
 
-#adding RequestOnOpac filter to allow or not the display of plce reserve button
-# FIXME - use me or delete me.
-my $RequestOnOpac;
-if (C4::Context->preference("RequestOnOpac")) {
-    $RequestOnOpac = 1;
-}
-
 my $biblio_authorised_value_images = C4::Items::get_authorised_value_images( C4::Biblio::get_biblio_authorised_values( $biblionumber ) );
 
 my $norequests = 1;
 my $branches = GetBranches();
 my %itemfields;
 for my $itm (@items) {
-     $norequests = 0 && $norequests
+     $norequests = 0
        if ( (not $itm->{'wthdrawn'} )
          && (not $itm->{'itemlost'} )
          && ($itm->{'itemnotforloan'}<0 || not $itm->{'itemnotforloan'} )
@@ -131,7 +124,7 @@ for my $itm (@items) {
          && ($itm->{'itemnumber'} ) );
 
     $itm->{ $itm->{'publictype'} } = 1;
-    $itm->{datedue} = format_date($itm->{datedue});
+    $itm->{datedue}      = format_date($itm->{datedue});
     $itm->{datelastseen} = format_date($itm->{datelastseen});
 
     #get collection code description, too
@@ -140,10 +133,9 @@ for my $itm (@items) {
     $itm->{'location_description'} = $shelflocations->{$itm->{'location'} };
     $itm->{'imageurl'}    = getitemtypeimagelocation( 'opac', $itemtypes->{ $itm->{itype} }->{'imageurl'} );
     $itm->{'description'} = $itemtypes->{$itemtype}->{'description'};
-	$itemfields{ccode} = 1 if($itm->{ccode});
-	$itemfields{enumchron} = 1 if($itm->{enumchron});
-	$itemfields{copynumber} = 1 if($itm->{copynumber});
-	$itemfields{itemnotes} = 1 if($itm->{itemnotes});
+    foreach (qw(ccode enumchron copynumber itemnotes)) {
+        $itemfields{$_} = 1 if ($itm->{$_});
+    }
 
      # walk through the item-level authorised values and populate some images
      my $item_authorised_value_images = C4::Items::get_authorised_value_images( C4::Items::get_item_authorised_values( $itm->{'itemnumber'} ) );
@@ -182,7 +174,7 @@ my $subtitle         = C4::Biblio::get_koha_field_from_marc('bibliosubtitle', 's
                      MARCSERIES              => $marcseriesarray,
                      MARCURLS                => $marcurlsarray,
                      norequests              => $norequests,
-                     RequestOnOpac           => $RequestOnOpac,
+                     RequestOnOpac           => C4::Context->preference("RequestOnOpac"),
                      itemdata_ccode          => $itemfields{ccode},
                      itemdata_enumchron      => $itemfields{enumchron},
                      itemdata_copynumber     => $itemfields{copynumber},
