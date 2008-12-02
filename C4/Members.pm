@@ -97,15 +97,16 @@ BEGIN {
 	);
 
 	#Check data
-	push @EXPORT, qw(
-		&checkuniquemember 
-		&checkuserpassword
-		&Check_Userid
-		&fixEthnicity
-		&ethnicitycategories 
-		&fixup_cardnumber
-		&checkcardnumber
-	);
+    push @EXPORT, qw(
+        &checkuniquemember
+        &checkuserpassword
+        &Check_Userid
+        &Generate_Userid
+        &fixEthnicity
+        &ethnicitycategories
+        &fixup_cardnumber
+        &checkcardnumber
+    );
 }
 
 =head1 NAME
@@ -799,6 +800,21 @@ sub Check_Userid {
     }
 }
 
+sub Generate_Userid {
+  my ($borrowernumber, $firstname, $surname) = @_;
+  my $newuid;
+  my $offset = 0;
+  do {
+    $firstname =~ s/[[:digit:][:space:][:blank:][:punct:][:cntrl:]]//g;
+    $surname =~ s/[[:digit:][:space:][:blank:][:punct:][:cntrl:]]//g;
+    $newuid = lc("$firstname.$surname");
+    $newuid .= $offset unless $offset == 0;
+    $offset++;
+
+   } while (!Check_Userid($newuid,$borrowernumber));
+
+   return $newuid;
+}
 
 sub changepassword {
     my ( $uid, $member, $digest ) = @_;

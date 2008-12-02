@@ -181,13 +181,10 @@ if ($guarantorid eq '') {
 
 #builds default userid
 if ( (defined $newdata{'userid'}) && ($newdata{'userid'} eq '')){
-  my $onefirstnameletter = substr($data{'firstname'},0,1);
-  my  $fivesurnameletter = substr($data{'surname'}  ,0,9);
-  $newdata{'userid'}=lc($onefirstnameletter.$fivesurnameletter);
+    $newdata{'userid'} = Generate_Userid($borrowernumber, $newdata{'firstname'}, $newdata{'surname'});
 }
   
 $debug and warn join "\t", map {"$_: $newdata{$_}"} qw(dateofbirth dateenrolled dateexpiry);
-my $loginexist = 0;
 my $extended_patron_attributes = ();
 if ($op eq 'save' || $op eq 'insert'){
   if (checkcardnumber($newdata{cardnumber},$newdata{borrowernumber})){ 
@@ -214,7 +211,6 @@ if ($op eq 'save' || $op eq 'insert'){
   # Check if the userid is unique
   unless (Check_Userid($newdata{'userid'},$borrowernumber)) {
     push @errors, "ERROR_login_exist";
-    $loginexist=1; 
   }
   
   my $password = $input->param('password');
