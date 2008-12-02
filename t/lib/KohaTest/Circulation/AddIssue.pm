@@ -17,7 +17,7 @@ broken as we go along.
 
 =cut
 
-sub basic_usage : Test( 11 ) {
+sub basic_usage : Test( 13 ) {
     my $self = shift;
 
     my $borrowernumber = $self->{'memberid'};
@@ -42,6 +42,21 @@ sub basic_usage : Test( 11 ) {
       or diag( Data::Dumper->Dump( [ $issuingimpossible, $needsconfirmation ], [ qw( issuingimpossible needsconfirmation ) ] ) );
     is( scalar keys %$needsconfirmation, 0, '...and the transaction does not needsconfirmation' )
       or diag( Data::Dumper->Dump( [ $issuingimpossible, $needsconfirmation ], [ qw( issuingimpossible needsconfirmation ) ] ) );
+
+    # bug 2758 don't ask for confirmation if patron has $0.00 account balance
+    # and IssuingInProcess is on
+    my $orig_issuing_in_process = C4::Context->preference('IssuingInProcess');
+    my $dbh = C4::Context->dbh;
+    $dbh->do("UPDATE systempreferences SET value = 1 WHERE variable = 'IssuingInProcess'");
+    C4::Context->clear_syspref_cache(); # FIXME not needed after a syspref mutator is written
+    ( $issuingimpossible, $needsconfirmation ) = C4::Circulation::CanBookBeIssued( $borrower, $barcode );
+    is( scalar keys %$issuingimpossible, 0, 'the item CanBookBeIssued with IssuingInProcess ON (bug 2758)' )
+      or diag( Data::Dumper->Dump( [ $issuingimpossible, $needsconfirmation ], [ qw( issuingimpossible needsconfirmation ) ] ) );
+    is( scalar keys %$needsconfirmation, 0, 
+        '...and the transaction does not needsconfirmation with IssuingInProcess ON (bug 2758)' )
+      or diag( Data::Dumper->Dump( [ $issuingimpossible, $needsconfirmation ], [ qw( issuingimpossible needsconfirmation ) ] ) );
+    $dbh->do("UPDATE systempreferences SET value = ? WHERE variable = 'IssuingInProcess'", {}, $orig_issuing_in_process);
+    C4::Context->clear_syspref_cache(); # FIXME not needed after a syspref mutator is written
 
     my $datedue = C4::Circulation::AddIssue( $borrower, $barcode );
     ok( $datedue, "the item has been issued and it is due: $datedue" );
