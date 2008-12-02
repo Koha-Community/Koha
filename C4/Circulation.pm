@@ -689,7 +689,7 @@ sub CanBookBeIssued {
         if ( $amount > $amountlimit && !$inprocess ) {
             $issuingimpossible{DEBT} = sprintf( "%.2f", $amount );
         }
-        elsif ( $amount <= $amountlimit && !$inprocess ) {
+        elsif ( $amount > 0 && $amount <= $amountlimit && !$inprocess ) {
             $needsconfirmation{DEBT} = sprintf( "%.2f", $amount );
         }
     }
