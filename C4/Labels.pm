@@ -18,6 +18,7 @@ package C4::Labels;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+# use warnings;   # FIXME
 use vars qw($VERSION @ISA @EXPORT);
 
 use PDF::Reuse;
@@ -41,8 +42,11 @@ BEGIN {
 		&GetAllLabelTemplates &DeleteTemplate
 		&GetSingleLabelTemplate &SaveTemplate
 		&CreateTemplate &SetActiveTemplate
-		&SaveConf &DrawSpineText &GetTextWrapCols
-		&GetUnitsValue &DrawBarcode &DrawPatronCardText
+		&SaveConf &GetTextWrapCols
+		&GetUnitsValue
+        &DrawSpineText
+        &DrawBarcode
+        &DrawPatronCardText
 		&get_printingtypes &GetPatronCardItems
 		&get_layouts
 		&get_barcode_types
@@ -56,9 +60,9 @@ BEGIN {
 		&delete_layout &get_active_layout
 		&get_highest_batch
 		&deduplicate_batch
-                &GetAllPrinterProfiles &GetSinglePrinterProfile
-                &SaveProfile &CreateProfile &DeleteProfile
-                &GetAssociatedProfile &SetAssociatedProfile
+        &GetAllPrinterProfiles &GetSinglePrinterProfile
+        &SaveProfile &CreateProfile &DeleteProfile
+        &GetAssociatedProfile &SetAssociatedProfile
 	);
 }
 
@@ -86,30 +90,25 @@ sub get_label_options {
 
 sub get_layouts {
     my $dbh = C4::Context->dbh;
-    my @data;
     my $query = " Select * from labels_conf";
     my $sth   = $dbh->prepare($query);
     $sth->execute();
     my @resultsloop;
     while ( my $data = $sth->fetchrow_hashref ) {
-
         $data->{'fieldlist'} = get_text_fields( $data->{'id'} );
         push( @resultsloop, $data );
     }
-    $sth->finish;
     return @resultsloop;
 }
 
 sub get_layout {
     my ($layout_id) = @_;
     my $dbh = C4::Context->dbh;
-
     # get the actual items to be printed.
     my $query = " Select * from labels_conf where id = ?";
     my $sth   = $dbh->prepare($query);
     $sth->execute($layout_id);
     my $data = $sth->fetchrow_hashref;
-    $sth->finish;
     return $data;
 }
 
@@ -123,12 +122,10 @@ sub get_active_layout {
 sub delete_layout {
     my ($layout_id) = @_;
     my $dbh = C4::Context->dbh;
-
     # get the actual items to be printed.
     my $query = "delete from  labels_conf where id = ?";
     my $sth   = $dbh->prepare($query);
     $sth->execute($layout_id);
-    $sth->finish;
 }
 
 sub get_printingtypes {
@@ -255,7 +252,6 @@ sub get_text_fields {
         }
         return $active_fields;
     }
-
 }
 
 =head2 sub add_batch
@@ -319,12 +315,10 @@ sub get_batches (;$) {
 
 sub delete_batch {
     my ($batch_id, $batch_type) = @_;
-    warn "Deleteing batch of type $batch_type";
-    my $dbh        = C4::Context->dbh;
-    my $q          = "DELETE FROM $batch_type WHERE batch_id  = ?";
-    my $sth        = $dbh->prepare($q);
+    warn "Deleteing batch (id:$batch_id) of type $batch_type";
+    my $q   = "DELETE FROM $batch_type WHERE batch_id  = ?";
+    my $sth = C4::Context->dbh->prepare($q);
     $sth->execute($batch_id);
-    $sth->finish;
 }
 
 sub get_barcode_types {
@@ -342,7 +336,6 @@ sub get_barcode_types {
         if ( $line->{'code'} eq $barcode ) {
             $line->{'active'} = 1;
         }
-
     }
     return @array;
 }
@@ -350,7 +343,6 @@ sub get_barcode_types {
 sub GetUnitsValue {
     my ($units) = @_;
     my $unitvalue;
-
     $unitvalue = '1'          if ( $units eq 'POINT' );
     $unitvalue = '2.83464567' if ( $units eq 'MM' );
     $unitvalue = '28.3464567' if ( $units eq 'CM' );
@@ -381,7 +373,6 @@ sub GetActiveLabelTemplate {
     my $sth   = $dbh->prepare($query);
     $sth->execute();
     my $active_tmpl = $sth->fetchrow_hashref;
-    $sth->finish;
     return $active_tmpl;
 }
 
@@ -392,14 +383,11 @@ sub GetSingleLabelTemplate {
     my $sth       = $dbh->prepare($query);
     $sth->execute($tmpl_id);
     my $template = $sth->fetchrow_hashref;
-    $sth->finish;
     return $template;
 }
 
 sub SetActiveTemplate {
-
     my ($tmpl_id) = @_;
-  
     my $dbh   = C4::Context->dbh;
     my $query = " UPDATE labels_templates SET active = NULL";
     my $sth   = $dbh->prepare($query);
@@ -408,11 +396,9 @@ sub SetActiveTemplate {
     $query = "UPDATE labels_templates SET active = 1 WHERE tmpl_id = ?";
     $sth   = $dbh->prepare($query);
     $sth->execute($tmpl_id);
-    $sth->finish;
 }
 
 sub set_active_layout {
-
     my ($layout_id) = @_;
     my $dbh         = C4::Context->dbh;
     my $query       = " UPDATE labels_conf SET active = NULL";
@@ -422,7 +408,6 @@ sub set_active_layout {
     $query = "UPDATE labels_conf SET active = 1 WHERE id = ?";
     $sth   = $dbh->prepare($query);
     $sth->execute($layout_id);
-    $sth->finish;
 }
 
 sub DeleteTemplate {
@@ -431,7 +416,6 @@ sub DeleteTemplate {
     my $query     = " DELETE  FROM labels_templates where tmpl_id = ?";
     my $sth       = $dbh->prepare($query);
     $sth->execute($tmpl_id);
-    $sth->finish;
 }
 
 sub SaveTemplate {
@@ -458,7 +442,6 @@ sub SaveTemplate {
         $font,        $fontsize,     $units,      $tmpl_id
     );
     my $dberror = $sth->errstr;
-    $sth->finish;
     return $dberror;
 }
 
@@ -486,13 +469,11 @@ sub CreateTemplate {
         $font,        $fontsize,    $units
     );
     my $dberror = $sth->errstr;
-    $sth->finish;
     return $dberror;
 }
 
 sub GetAllLabelTemplates {
     my $dbh = C4::Context->dbh;
-
     # get the actual items to be printed.
     my @data;
     my $query = " Select * from labels_templates ";
@@ -502,8 +483,6 @@ sub GetAllLabelTemplates {
     while ( my $data = $sth->fetchrow_hashref ) {
         push( @resultsloop, $data );
     }
-    $sth->finish;
-
     #warn Dumper @resultsloop;
     return @resultsloop;
 }
@@ -530,15 +509,11 @@ sub add_layout {
     $sth2 = $dbh->prepare($query2);
     $sth2->execute(
         $barcodetype, $title, $subtitle, $isbn, $issn,
-
         $itemtype, $bcn,            $text_justify,    $callnum_split,
         $itemcallnumber, $author, $printingtype,
         $guidebox, $startlabel,     $layoutname, $formatstring
     );
-    $sth2->finish;
-
     SetActiveTemplate($tmpl_id);
-    return;
 }
 
 sub save_layout {
@@ -566,9 +541,6 @@ sub save_layout {
         $itemcallnumber, $author,     $printingtype,
         $guidebox,    $startlabel,     $layoutname, $formatstring,  $layout_id
     );
-    $sth2->finish;
-
-    return;
 }
 
 =head2 GetAllPrinterProfiles;
@@ -580,18 +552,15 @@ Returns an array of references-to-hash, whos keys are .....
 =cut
 
 sub GetAllPrinterProfiles {
-
     my $dbh = C4::Context->dbh;
     my @data;
-    my $query = "SELECT * FROM printers_profile AS pp INNER JOIN labels_templates AS lt ON pp.tmpl_id = lt.tmpl_id; ";
+    my $query = "SELECT * FROM printers_profile AS pp INNER JOIN labels_templates AS lt ON pp.tmpl_id = lt.tmpl_id";
     my $sth = $dbh->prepare($query);
     $sth->execute();
     my @resultsloop;
     while ( my $data = $sth->fetchrow_hashref ) {
         push( @resultsloop, $data );
     }
-    $sth->finish;
-
     return @resultsloop;
 }
 
@@ -605,12 +574,10 @@ Returns a hashref whos keys are...
 
 sub GetSinglePrinterProfile {
     my ($prof_id) = @_;
-    my $dbh       = C4::Context->dbh;
-    my $query     = " SELECT * FROM printers_profile WHERE prof_id = ?; ";
-    my $sth       = $dbh->prepare($query);
+    my $query     = "SELECT * FROM printers_profile WHERE prof_id = ?";
+    my $sth       = C4::Context->dbh->prepare($query);
     $sth->execute($prof_id);
     my $template = $sth->fetchrow_hashref;
-    $sth->finish;
     return $template;
 }
 
@@ -635,7 +602,6 @@ sub SaveProfile {
     $sth->execute(
         $offset_horz,   $offset_vert,   $creep_horz,    $creep_vert,    $units,         $prof_id
     );
-    $sth->finish;
 }
 
 =head2 CreateProfile;
@@ -663,7 +629,6 @@ sub CreateProfile {
         $offset_vert,   $creep_horz,    $creep_vert,    $units
     );
     my $error =  $sth->errstr;
-    $sth->finish;
     return $error;
 }
 
@@ -682,7 +647,6 @@ sub DeleteProfile {
     my $sth       = $dbh->prepare($query);
     $sth->execute($prof_id);
     my $error = $sth->errstr;
-    $sth->finish;
     return $error;
 }
 
@@ -702,8 +666,7 @@ sub GetAssociatedProfile {
     my $query = "SELECT * FROM labels_profile WHERE tmpl_id = ?";
     my $sth   = $dbh->prepare($query);
     $sth->execute($tmpl_id);
-    my $assoc_prof = $sth->fetchrow_hashref;
-    $sth->finish;
+    my $assoc_prof = $sth->fetchrow_hashref or return;
     # Then we retrieve that profile and return it to the caller...
     $assoc_prof = GetSinglePrinterProfile($assoc_prof->{'prof_id'});
     return $assoc_prof;
@@ -719,14 +682,11 @@ than one profile may be associated with any given template at the same time.
 =cut
 
 sub SetAssociatedProfile {
-
     my ($prof_id, $tmpl_id) = @_;
-  
     my $dbh = C4::Context->dbh;
     my $query = "INSERT INTO labels_profile (prof_id, tmpl_id) VALUES (?,?) ON DUPLICATE KEY UPDATE prof_id = ?";
     my $sth = $dbh->prepare($query);
     $sth->execute($prof_id, $tmpl_id, $prof_id);
-    $sth->finish;
 }
 
 
@@ -881,13 +841,11 @@ sub _descKohaTables {
 		while (my $info = $sth->fetchrow_hashref()){
 		        push @{$kohatables->{$table}} , $info->{'COLUMN_NAME'} ;
 		}
-		$sth->finish;
 	}
 	return $kohatables;
 }
 
 sub GetPatronCardItems {
-
     my ( $batch_id ) = @_;
     my @resultsloop;
     
@@ -906,9 +864,7 @@ sub GetPatronCardItems {
         push( @resultsloop, $patron_data );
         $cardno++;
     }
-    $sth->finish;
     return @resultsloop;
-
 }
 
 sub deduplicate_batch {
@@ -1005,24 +961,33 @@ sub split_fcn {
     return @fcn_split;
 }
 
-sub DrawSpineText {
+my %itemtypemap;
+# Class variable to avoid querying itemtypes for every DrawSpineText call!!
+sub get_itemtype_descriptions () {
+    unless (scalar keys %itemtypemap) {
+        my $sth = C4::Context->dbh->prepare("SELECT itemtype,description FROM itemtypes");
+        $sth->execute();
+        while (my $data = $sth->fetchrow_hashref) {
+            $itemtypemap{$data->{itemtype}} = $data->{description};
+        }
+    }
+    return \%itemtypemap;
+}
 
+sub DrawSpineText {
     my ( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize, $left_text_margin,
         $text_wrap_cols, $item, $conf_data, $printingtype ) = @_;
     
-    # Replaced item's itemtype with the more user-friendly description...
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT itemtype,description FROM itemtypes");
-    $sth->execute();
-    while ( my $data = $sth->fetchrow_hashref ) {
-        $$item->{'itemtype'} = $data->{'description'} if ($$item->{'itemtype'} eq $data->{'itemtype'});
-        $$item->{'itype'} = $data->{'description'} if ($$item->{'itype'} eq $data->{'itemtype'});
+    # Replace item's itemtype with the more user-friendly description...
+    my $descriptions = get_itemtype_descriptions();
+    foreach (qw(itemtype itype)) {
+        my $description = $descriptions->{$$item->{$_}} or next;
+        $$item->{$_} = $description;
     }
-
     my $str = '';
 
     my $top_text_margin = ( $fontsize + 3 );    #FIXME: This should be a template parameter and passed in...
-    my $line_spacer = ( $fontsize * 1 );    # number of pixels between text rows (This is actually leading: baseline to baseline minus font size. Recommended starting point is 20% of font size.).
+    my $line_spacer     = ( $fontsize * 1 );    # number of pixels between text rows (This is actually leading: baseline to baseline minus font size. Recommended starting point is 20% of font size.).
 
     my $layout_id = $$conf_data->{'id'};
 
@@ -1044,10 +1009,10 @@ sub DrawSpineText {
         }
         elsif ($$conf_data->{'formatstring'}) {
             # if labels_conf.formatstring has a value, then it overrides the  hardcoded option.
-            $field->{'data'} =  GetBarcodeData($field->{'code'},$$item,$record) ;
+            $field->{'data'} = GetBarcodeData($field->{'code'},$$item,$record) ;
         }
         else {
-            $field->{data} =   $$item->{$field->{'code'}}  ;
+            $field->{'data'} = $$item->{$field->{'code'}};
         }
         # This allows us to print the title in italic (oblique) type... (Times Roman has a different nomenclature.)
         # It seems there should be a better way to handle fonts in the label/patron card tool altogether -fbcit
@@ -1085,33 +1050,33 @@ sub DrawSpineText {
                 $Text::Wrap::columns = $text_wrap_cols;
                 my @line = split(/\n/ ,wrap('', '', $str));
                 # If this is a title field, limit to two lines; all others limit to one...
-                if ($field->{code} eq 'title' && scalar(@line) >= 2) {
-                    while (scalar(@line) > 2) {
-                        pop @line;
-                    }
-                } else {
-                    while (scalar(@line) > 1) {
-                        pop @line;
-                    }
+                my $limit = ($field->{code} eq 'title') ? 2 : 1;
+                while (scalar(@line) > $limit) {
+                    pop @line;
                 }
                 push(@strings, @line);
             }
             # loop for each string line
             foreach my $str (@strings) {
-                my $hPos = 0;
+                my $hPos = $x_pos;
                 my $stringwidth = prStrWidth($str, $fontname, $fontsize);
                 if ( $$conf_data->{'text_justify'} eq 'R' ) { 
-                    $hPos = $x_pos + $label_width - ( $left_text_margin + $stringwidth );
+                    $hPos += $label_width - ($left_text_margin + $stringwidth);
                 } elsif($$conf_data->{'text_justify'} eq 'C') {
-                     # some code to try and center each line on the label based on font size and string point width...
-                     my $whitespace = ( $label_width - ( $stringwidth + (2 * $left_text_margin) ) );
-                     $hPos = ( ( $whitespace  / 2 ) + $x_pos + $left_text_margin );
-                #warn "\$label_width=$label_width \$stringwidth=$stringwidth \$whitespace=$whitespace \$left_text_margin=$left_text_margin for $str\n";
+                    # some code to try and center each line on the label based on font size and string point width...
+                    my $whitespace = ( $label_width - ( $stringwidth + (2 * $left_text_margin) ) );
+                    $hPos += ($whitespace / 2) + $left_text_margin;
+                    #warn "\$label_width=$label_width \$stringwidth=$stringwidth \$whitespace=$whitespace \$left_text_margin=$left_text_margin for $str\n";
                 } else {
-                    $hPos = ( $x_pos + $left_text_margin );
+                    $hPos += $left_text_margin;
                 }
+# utf8::encode($str);
+# Say $str has a diacritical like: The séance 
+# WITOUT encode, PrintText crashes with: Wide character in syswrite at /usr/local/share/perl/5.8.8/PDF/Reuse.pm line 968
+# WITH   encode, PrintText prints: The seÌ•ancee
+# Neither is appropriate.
                 PrintText( $hPos, $vPos, $font, $fontsize, $str );
-                $vPos = $vPos - $line_spacer;
+                $vPos -= $line_spacer;
             }
     	}
     }	#foreach field
@@ -1124,7 +1089,6 @@ sub PrintText {
 }
 
 sub DrawPatronCardText {
-
     my ( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize, $left_text_margin,
         $text_wrap_cols, $text, $printingtype )
       = @_;
@@ -1160,7 +1124,6 @@ sub DrawPatronCardText {
 #}
 
 sub DrawBarcode {
-
     # x and y are from the top-left :)
     my ( $x_pos, $y_pos, $height, $width, $barcode, $barcodetype ) = @_;
     my $num_of_bars = length($barcode);
@@ -1185,13 +1148,8 @@ sub DrawBarcode {
                 hide_asterisk => 1,
             );
         };
-        if ($@) {
-            warn "$barcodetype, $barcode FAILED:$@";
-        }
     }
-
     elsif ( $barcodetype eq 'CODE39MOD' ) {
-
         # get modulo43 checksum
         my $c39 = CheckDigits('code_39');
         $barcode = $c39->complete($barcode);
@@ -1210,13 +1168,8 @@ sub DrawBarcode {
                 hide_asterisk => 1,
             );
         };
-
-        if ($@) {
-            warn "$barcodetype, $barcode FAILED:$@";
-        }
     }
     elsif ( $barcodetype eq 'CODE39MOD10' ) {
- 
         # get modulo43 checksum
         my $c39_10 = CheckDigits('visa');
         $barcode = $c39_10->complete($barcode);
@@ -1233,16 +1186,10 @@ sub DrawBarcode {
                 ySize         => ( .02 * $height ),
                 xSize         => $xsize_ratio,
                 hide_asterisk => 1,
-				text         => 0, 
+				text          => 0, 
             );
         };
-
-        if ($@) {
-            warn "$barcodetype, $barcode FAILED:$@";
-        }
     }
-
- 
     elsif ( $barcodetype eq 'COOP2OF5' ) {
         $bar_length = '9.43333333333333';
         $tot_bar_length =
@@ -1257,11 +1204,7 @@ sub DrawBarcode {
                 xSize => $xsize_ratio,
             );
         };
-        if ($@) {
-            warn "$barcodetype, $barcode FAILED:$@";
-        }
     }
-
     elsif ( $barcodetype eq 'INDUSTRIAL2OF5' ) {
         $bar_length = '13.1333333333333';
         $tot_bar_length =
@@ -1276,136 +1219,88 @@ sub DrawBarcode {
                 xSize => $xsize_ratio,
             );
         };
-        if ($@) {
-            warn "$barcodetype, $barcode FAILED:$@";
-        }
+    } # else {die "Unknown barcodetype '$barcodetype'";}
+
+    if ($@) {
+        warn "DrawBarcode (type: $barcodetype) FAILED for value '$barcode' :$@";
     }
 
     my $moo2 = $tot_bar_length * $xsize_ratio;
 
-    warn "$x_pos, $y_pos, $barcode, $barcodetype" if $debug;
-    warn "BAR_WDTH = $bar_width, TOT.BAR.LGHT=$tot_bar_length  R*TOT.BAR =$moo2" if $debug;
+    warn "x_pos,y_pos,barcode,barcodetype = $x_pos, $y_pos, $barcode, $barcodetype\n"
+        . "BAR_WDTH = $bar_width, TOT.BAR.LGHT=$tot_bar_length  R*TOT.BAR =$moo2" if $debug;
 }
 
 =head2 build_circ_barcode;
 
-  build_circ_barcode( $x_pos, $y_pos, $barcode,
-	        $barcodetype, \$item);
+  build_circ_barcode( $x_pos, $y_pos, $barcode, $barcodetype, \$item);
 
 $item is the result of a previous call to GetLabelItems();
 
 =cut
 
-#'
 sub build_circ_barcode {
     my ( $x_pos_circ, $y_pos, $value, $barcodetype, $item ) = @_;
 
     #warn Dumper \$item;
-
-    #warn "value = $value\n";
-
+    #warn "Barcode (type: $barcodetype) value = $value\n";
     #$DB::single = 1;
 
     if ( $barcodetype eq 'EAN13' ) {
-
         #testing EAN13 barcodes hack
         $value = $value . '000000000';
         $value =~ s/-//;
         $value = substr( $value, 0, 12 );
-
-        #warn $value;
+        #warn "revised value: $value";
         eval {
             PDF::Reuse::Barcode::EAN13(
                 x     => ( $x_pos_circ + 27 ),
                 y     => ( $y_pos + 15 ),
                 value => $value,
-
-                #            prolong => 2.96,
-                #            xSize   => 1.5,
-
+                # prolong => 2.96,
+                # xSize   => 1.5,
                 # ySize   => 1.2,
-
 # added for xpdf compat. doesnt use type3 fonts., but increases filesize from 20k to 200k
 # i think its embedding extra fonts in the pdf file.
 #  mode => 'graphic',
             );
         };
-        if ($@) {
-            $item->{'barcodeerror'} = 1;
-
-            #warn "EAN13BARCODE FAILED:$@";
-        }
-
-        #warn $barcodetype;
-
     }
     elsif ( $barcodetype eq 'Code39' ) {
-
         eval {
             PDF::Reuse::Barcode::Code39(
                 x     => ( $x_pos_circ + 9 ),
                 y     => ( $y_pos + 15 ),
                 value => $value,
-
-                #           prolong => 2.96,
+                # prolong => 2.96,
                 xSize => .85,
-
                 ySize => 1.3,
             );
         };
-        if ($@) {
-            $item->{'barcodeerror'} = 1;
-
-            #warn "CODE39BARCODE $value FAILED:$@";
-        }
-
-        #warn $barcodetype;
-
     }
-
     elsif ( $barcodetype eq 'Matrix2of5' ) {
-
-        #warn "MATRIX ELSE:";
-
-        #testing MATRIX25  barcodes hack
-        #    $value = $value.'000000000';
+        # testing MATRIX25  barcodes hack
+        # $value = $value.'000000000';
         $value =~ s/-//;
-
-        #    $value = substr( $value, 0, 12 );
-        #warn $value;
-
+        # $value = substr( $value, 0, 12 );
+        #warn "revised value: $value";
         eval {
             PDF::Reuse::Barcode::Matrix2of5(
                 x     => ( $x_pos_circ + 27 ),
                 y     => ( $y_pos + 15 ),
                 value => $value,
-
-                #        prolong => 2.96,
-                #       xSize   => 1.5,
-
+                # prolong => 2.96,
+                # xSize   => 1.5,
                 # ySize   => 1.2,
             );
         };
-        if ($@) {
-            $item->{'barcodeerror'} = 1;
-
-            #warn "BARCODE FAILED:$@";
-        }
-
-        #warn $barcodetype;
-
     }
-
     elsif ( $barcodetype eq 'EAN8' ) {
-
         #testing ean8 barcodes hack
         $value = $value . '000000000';
         $value =~ s/-//;
         $value = substr( $value, 0, 8 );
-
-        #warn $value;
-
-        #warn "EAN8 ELSEIF";
+        #warn "revised value: $value";
         eval {
             PDF::Reuse::Barcode::EAN8(
                 x       => ( $x_pos_circ + 42 ),
@@ -1413,21 +1308,10 @@ sub build_circ_barcode {
                 value   => $value,
                 prolong => 2.96,
                 xSize   => 1.5,
-
                 # ySize   => 1.2,
             );
         };
-
-        if ($@) {
-            $item->{'barcodeerror'} = 1;
-
-            #warn "BARCODE FAILED:$@";
-        }
-
-        #warn $barcodetype;
-
     }
-
     elsif ( $barcodetype eq 'UPC-E' ) {
         eval {
             PDF::Reuse::Barcode::UPCE(
@@ -1436,19 +1320,9 @@ sub build_circ_barcode {
                 value   => $value,
                 prolong => 2.96,
                 xSize   => 1.5,
-
                 # ySize   => 1.2,
             );
         };
-
-        if ($@) {
-            $item->{'barcodeerror'} = 1;
-
-            #warn "BARCODE FAILED:$@";
-        }
-
-        #warn $barcodetype;
-
     }
     elsif ( $barcodetype eq 'NW7' ) {
         eval {
@@ -1458,19 +1332,9 @@ sub build_circ_barcode {
                 value   => $value,
                 prolong => 2.96,
                 xSize   => 1.5,
-
                 # ySize   => 1.2,
             );
         };
-
-        if ($@) {
-            $item->{'barcodeerror'} = 1;
-
-            #warn "BARCODE FAILED:$@";
-        }
-
-        #warn $barcodetype;
-
     }
     elsif ( $barcodetype eq 'ITF' ) {
         eval {
@@ -1480,19 +1344,9 @@ sub build_circ_barcode {
                 value   => $value,
                 prolong => 2.96,
                 xSize   => 1.5,
-
                 # ySize   => 1.2,
             );
         };
-
-        if ($@) {
-            $item->{'barcodeerror'} = 1;
-
-            #warn "BARCODE FAILED:$@";
-        }
-
-        #warn $barcodetype;
-
     }
     elsif ( $barcodetype eq 'Industrial2of5' ) {
         eval {
@@ -1502,18 +1356,9 @@ sub build_circ_barcode {
                 value   => $value,
                 prolong => 2.96,
                 xSize   => 1.5,
-
                 # ySize   => 1.2,
             );
         };
-        if ($@) {
-            $item->{'barcodeerror'} = 1;
-
-            #warn "BARCODE FAILED:$@";
-        }
-
-        #warn $barcodetype;
-
     }
     elsif ( $barcodetype eq 'IATA2of5' ) {
         eval {
@@ -1523,20 +1368,10 @@ sub build_circ_barcode {
                 value   => $value,
                 prolong => 2.96,
                 xSize   => 1.5,
-
                 # ySize   => 1.2,
             );
         };
-        if ($@) {
-            $item->{'barcodeerror'} = 1;
-
-            #warn "BARCODE FAILED:$@";
-        }
-
-        #warn $barcodetype;
-
     }
-
     elsif ( $barcodetype eq 'COOP2of5' ) {
         eval {
             PDF::Reuse::Barcode::COOP2of5(
@@ -1545,21 +1380,11 @@ sub build_circ_barcode {
                 value   => $value,
                 prolong => 2.96,
                 xSize   => 1.5,
-
                 # ySize   => 1.2,
             );
         };
-        if ($@) {
-            $item->{'barcodeerror'} = 1;
-
-            #warn "BARCODE FAILED:$@";
-        }
-
-        #warn $barcodetype;
-
     }
     elsif ( $barcodetype eq 'UPC-A' ) {
-
         eval {
             PDF::Reuse::Barcode::UPCA(
                 x       => ( $x_pos_circ + 27 ),
@@ -1567,20 +1392,14 @@ sub build_circ_barcode {
                 value   => $value,
                 prolong => 2.96,
                 xSize   => 1.5,
-
                 # ySize   => 1.2,
             );
         };
-        if ($@) {
-            $item->{'barcodeerror'} = 1;
-
-            #warn "BARCODE FAILED:$@";
-        }
-
-        #warn $barcodetype;
-
     }
-
+    if ($@) {
+        $item->{'barcodeerror'} = 1;
+        #warn "BARCODE (type: $barcodetype) FAILED:$@";
+    }
 }
 
 =head2 draw_boundaries
@@ -1592,9 +1411,7 @@ This sub draws boundary lines where the label outlines are, to aid in printer te
 
 =cut
 
-#'
 sub draw_boundaries {
-
     my (
         $x_pos_spine, $x_pos_circ1,  $x_pos_circ2, $y_pos,
         $spine_width, $label_height, $circ_width
@@ -1605,15 +1422,11 @@ sub draw_boundaries {
     my $i             = 1;
 
     for ( $i = 1 ; $i <= 8 ; $i++ ) {
-
         &drawbox( $x_pos_spine, $y_pos, ($spine_width), ($label_height) );
-
    #warn "OLD BOXES  x=$x_pos_spine, y=$y_pos, w=$spine_width, h=$label_height";
         &drawbox( $x_pos_circ1, $y_pos, ($circ_width), ($label_height) );
         &drawbox( $x_pos_circ2, $y_pos, ($circ_width), ($label_height) );
-
         $y_pos = ( $y_pos - $label_height );
-
     }
 }
 
@@ -1630,10 +1443,8 @@ and $lower_left_x, $lower_left_y are ABSOLUTE, this caught me out!
 
 =cut
 
-#'
 sub drawbox {
     my ( $llx, $lly, $urx, $ury ) = @_;
-
     #    warn "llx,y= $llx,$lly  ,   urx,y=$urx,$ury \n";
 
     my $str = "q\n";    # save the graphic state
@@ -1647,10 +1458,7 @@ sub drawbox {
     $str .= "Q\n";                         # save the graphic state
 
     prAdd($str);
-
 }
-
-END { }    # module clean-up code here (global destructor)
 
 1;
 __END__
