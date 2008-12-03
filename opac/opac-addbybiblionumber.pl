@@ -95,21 +95,17 @@ else {
 			);
 	} else {
 	# offer choice of shelves
-	# first private shelves...
 	my $limit = 10;
-	my ($shelflist) = GetRecentShelves(1, $limit, $loggedinuser);
     my @shelvesloop;
     my %shelvesloop;
-    for my $shelf ( @{ $shelflist->[0] } ) {
-        push( @shelvesloop, $shelf->{shelfnumber} );
-		$shelvesloop{$shelf->{shelfnumber}} = $shelf->{shelfname};
-	}
-	# then open shelves...
-	my ($shelflist) = GetRecentShelves(3, $limit, undef);
-    for my $shelf ( @{ $shelflist->[0] } ) {
-        push( @shelvesloop, $shelf->{shelfnumber} );
-		$shelvesloop{$shelf->{shelfnumber}} = $shelf->{shelfname};
-	}
+    #grab each type of shelf, open (type 3) should not be limited by user.
+    foreach my $shelftype (1,2,3) {
+        my ($shelflist) = GetRecentShelves($shelftype, $limit, $shelftype == 3 ? undef : $loggedinuser);
+        for my $shelf (@{ $shelflist->[0] }) {
+            push(@shelvesloop, $shelf->{shelfnumber});
+            $shelvesloop{$shelf->{shelfnumber}} = $shelf->{shelfname};
+        }
+    }
     my $CGIvirtualshelves;
     if ( @shelvesloop > 0 ) {
         $CGIvirtualshelves = CGI::scrolling_list (
