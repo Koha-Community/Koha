@@ -48,6 +48,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 	<div id="suggestions_search" class="residentsearch">
 	<p class="tip">Suggestions Search:</p>
 	<form action="/cgi-bin/koha/acqui/newordersuggestion.pl" method="get">
+    <input type="hidden" name="booksellerid" value="<!-- TMPL_VAR NAME="supplierid" -->" />
 	<label for="searchtitle">Title:</label> <input type="text" id="searchtitle" name="title" size="10" value="<!-- TMPL_VAR NAME="title"-->" />
     <label for="searchauthor">Author:</label> <input type="text" id="searchauthor" name="author" size="10" value="<!-- TMPL_VAR NAME="author" -->" />
     <label for="searchpublishercode">Publisher:</label> <input type="text" id="searchpublishercode" name="publishercode" size="10" value="<!-- TMPL_VAR NAME="publishercode"-->" />
