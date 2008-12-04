@@ -1341,7 +1341,7 @@ sub get_user_subpermissions {
     my $userid = shift;
 
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT flag, code
+    my $sth = $dbh->prepare("SELECT flag, user_permissions.code
                              FROM user_permissions
                              JOIN permissions USING (module_bit, code)
                              JOIN userflags ON (module_bit = bit)
