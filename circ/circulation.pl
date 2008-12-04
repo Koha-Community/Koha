@@ -1,7 +1,5 @@
 #!/usr/bin/perl
 
-# Please use 8-character tabs for this file (indents are every 4 characters)
-
 # written 8/5/2002 by Finlay
 # script to execute issuing of books
 
@@ -23,6 +21,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+# use warnings;  # FIXME
 use CGI;
 use C4::Output;
 use C4::Print;
@@ -108,12 +107,9 @@ $printer = C4::Context->userenv->{'branchprinter'};
 
 
 # If Autolocated is not activated, we show the Circulation Parameters to chage settings of librarian
-    if (C4::Context->preference("AutoLocation") ne 1)
-        {
-            $template->param(
-            ManualLocation => 1,
-            );
-        }
+if (C4::Context->preference("AutoLocation") ne 1) { # FIXME: string comparison to number
+    $template->param(ManualLocation => 1);
+}
 
 my $barcode        = $query->param('barcode') || '';
 
