@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 126;
+use Test::More tests => 192;
 BEGIN {
 	use FindBin;
 	use lib $FindBin::Bin;
@@ -16,13 +16,16 @@ sub describe ($$) {
 	return  "$front : $tail";
 }
 
+# Keep the number of test elements per [array] equal or the predicted number of tests 
+# needs to be different for different (fake) sysprefs.
 my %thash = (
 	  iso  => ['2001-01-01','1989-09-21','1952-01-00', '1989-09-21 13:46:02'],
-	metric => ["01-01-2001",'21-09-1989','00-01-1952'],
-	   us  => ["01-01-2001",'09-21-1989','01-00-1952'],
+	metric => ["01-01-2001",'21-09-1989','00-01-1952', '21-09-1989 13:46:02'],
+	   us  => ["01-01-2001",'09-21-1989','01-00-1952', '09-21-1989 13:46:02'],
 	  sql  => ['20010101    010101',
 	  		   '19890921    143907',
-	  		   '19520100    000000'     ],
+	  		   '19520100    000000',
+	  		   '19890921    134602'     ],
 );
 
 my ($date, $format, $today, $today0, $val, $re, $syspref);
@@ -45,8 +48,9 @@ In order to run without DB access, this test will substitute '$fake_syspref'
 as your default date format.  Export environmental variable KOHA_TEST_DATE_FORMAT
 to override this default, or pass the value as an argument to this test script.
 
-NOTE: we test for the system handling dd=00 and 00 for TIME values,
-therefore you *should* see some warnings 'Illegal date specified' related to those.
+NOTE: we test for the system handling dd=00 and 00 for TIME values, therefore
+you SHOULD see some warnings like:
+Illegal date specified (year = 1952, month = 1, day = 00) at t/Dates.t ...
 
 Testing Legacy Functions: format_date and format_date_in_iso
 
@@ -79,7 +83,13 @@ foreach $format (@formats) {
   foreach my $testval (@{$thash{ $format }}) {
 	ok($date = C4::Dates->new($testval,$format),         "$pre Date Creation   : new('$testval','$format')");
 	ok($re   = $date->regexp,                            "$pre has regexp()" );
+	ok($testval =~ /^$re$/,                              "$pre has regexp() match $testval");
 	ok($val  = $date->output(),                 describe("$pre output()", $val) );
+    SKIP: {
+        skip("special case with explicit regexp('syspref') because $format isn't $syspref", 1) unless ($format eq $syspref);
+        my $re_syspref = C4::Dates->regexp('syspref');
+        ok($testval =~ /^$re_syspref$/,                  "$pre has regexp('syspref') match $testval");
+    }
 	foreach (grep {!/$format/} @formats) {
 		ok($today = $date->output($_),          describe(sprintf("$pre output(%8s)","'$_'"), $today) );
 	}
