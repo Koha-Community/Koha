@@ -155,8 +155,9 @@ $.tablesorter.addParser({
         <!-- /TMPL_IF -->
 
         <!-- TMPL_IF NAME="INVALID_DATE" -->
-            <li>The due date is invalid</li>
+            <li>The due date &quot;<!-- TMPL_VAR NAME="INVALID_DATE" -->&quot; is invalid</li>
         <!-- /TMPL_IF -->
+
         <!-- TMPL_IF NAME="UNKNOWN_BARCODE" -->
             <li>The barcode was not found</li>
         <!-- /TMPL_IF -->

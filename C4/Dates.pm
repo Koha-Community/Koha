@@ -63,7 +63,12 @@ our %dmy_subs = (			# strings to eval  (after using regular expression returned 
 sub regexp ($;$) {
 	my $self = shift;
 	my $delim = qr/:?\:|\/|-/;	# "non memory" cluster: no backreference
-	my $format = (@_) ? shift : $self->{'dateformat'};	# w/o arg. relies on dateformat being defined
+	my $format = (@_) ? _recognize_format(shift) : ($self->{'dateformat'} || _prefformat());
+
+    # Extra layer of checking $self->{'dateformat'}.
+    # Why?  Because it is assumed you might want to check regexp against an *instantiated* Dates object as a
+    # way of saying "does this string match *whatever* format that Dates object is?"
+
 	($format eq 'sql') and 
 	return qr/^(\d{4})(\d{2})(\d{2})(?:\s{4}(\d{2})(\d{2})(\d{2}))?/;
 	($format eq 'iso') and 
