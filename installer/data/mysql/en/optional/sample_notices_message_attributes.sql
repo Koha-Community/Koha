@@ -3,5 +3,6 @@ insert into `message_attributes`
 values
 (1, 'Item DUE', 0),
 (2, 'Advance Notice', 1),
-(3, 'Upcoming Events', 1);
+(3, 'Upcoming Events', 1),
+(4, 'Hold Filled', 0);
 

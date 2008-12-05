@@ -6,9 +6,10 @@ values
 (2, 'email', 0, 'circulation', 'PREDUE'),
 (2, 'email', 1, 'circulation', 'PREDUEDGST'),
 (3, 'email', 0, 'circulation', 'EVENT'),
+(4, 'email', 0, 'reserves',    'HOLD'),
 (1, 'sms',   0, 'circulation', 'DUE'),
 (1, 'sms',   1, 'circulation', 'DUEDGST'),
 (2, 'sms',   0, 'circulation', 'PREDUE'),
 (2, 'sms',   1, 'circulation', 'PREDUEDGST'),
-(3, 'sms',   0, 'circulation', 'EVENT');
-
+(3, 'sms',   0, 'circulation', 'EVENT'),
+(4, 'sms',   0, 'reserves',    'HOLD');
