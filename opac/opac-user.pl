@@ -52,6 +52,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
+my $OPACDisplayRequestPriority = (C4::Context->preference("OPACDisplayRequestPriority")) ? 1 : 0;
 my $patronupdate = $query->param('patronupdate');
 
 # get borrower information ....
@@ -195,6 +196,9 @@ foreach my $res (@reserves) {
     $res->{'branch'} = $branches->{ $res->{'branchcode'} }->{'branchname'};
     my $biblioData = GetBiblioData($res->{'biblionumber'});
     $res->{'reserves_title'} = $biblioData->{'title'};
+	if ($OPACDisplayRequestPriority) {
+		$res->{'priority'} = '' if $res->{'priority'} eq '0';
+	}
 }
 
 # use Data::Dumper;
@@ -202,6 +206,7 @@ foreach my $res (@reserves) {
 
 $template->param( RESERVES       => \@reserves );
 $template->param( reserves_count => $#reserves+1 );
+$template->param( showpriority=>1 ) if $OPACDisplayRequestPriority;
 
 my @waiting;
 my $wcount = 0;

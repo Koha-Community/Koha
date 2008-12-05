@@ -303,6 +303,9 @@ $.tablesorter.addParser({
                 <th>Title</th>
                 <th>Placed On</th>
                 <th>Pick Up Location</th>
+				<!-- TMPL_IF NAME="showpriority" -->
+				<th>Priority</th>
+				<!-- /TMPL_IF -->
                 <th>Status</th>
 		<th>Modify</th>
             </tr></thead>
@@ -326,6 +329,9 @@ $.tablesorter.addParser({
                 </td>
                 <td><!-- TMPL_VAR NAME="reservedate" --></td>
                 <td><!-- TMPL_VAR NAME="branch" --></td>
+				<!-- TMPL_IF NAME="showpriority" -->
+				<td><!-- TMPL_VAR NAME="priority" --> </td>
+				<!-- /TMPL_IF -->
                 <td>
                     <!-- TMPL_IF NAME="wait" -->
                         <!-- TMPL_IF NAME="atdestination" -->

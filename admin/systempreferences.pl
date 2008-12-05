@@ -267,6 +267,7 @@ my %tabsysprefs;
     $tabsysprefs{OPACViewOthersSuggestions}="OPAC";
     $tabsysprefs{URLLinkText}="OPAC";
     $tabsysprefs{OPACShelfBrowser}="OPAC";
+    $tabsysprefs{OPACDisplayRequestPriority}="OPAC";
 
 # OPAC
     $tabsysprefs{SearchMyLibraryFirst}="OPAC";
