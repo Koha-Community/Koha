@@ -2,7 +2,7 @@
 # This code has been modified by Trendsetters (originally from opac-user.pl)
 # This code has been modified by rch
 # We're going to authenticate a self-check user.  we'll add a flag to borrowers 'selfcheck'
-# We're in a controlled environment; we trust the user. so the selfcheck station will accept a userid and 
+# We're in a controlled environment; we trust the user. so the selfcheck station will accept a patronid and 
 # issue items to that borrower.
 #
 use strict;
@@ -34,8 +34,8 @@ my ($template, $loggedinuser, $cookie)
 my $dbh = C4::Context->dbh;
 
 my $issuerid = $loggedinuser;
-my ($op, $userid, $barcode, $confirmed, $timedout )= ($query->param("op"), 
-					 $query->param("userid"), 
+my ($op, $patronid, $barcode, $confirmed, $timedout )= ($query->param("op"), 
+					 $query->param("patronid"), 
 					$query->param("barcode"),
 					$query->param( "confirmed"),
 					$query->param( "timedout"), #not actually using this...
@@ -47,7 +47,7 @@ my $cnt = 0;
 my ($issuer) = GetMemberDetails($issuerid);
 my $item = GetItem(undef,$barcode);
 my $borrower;
-($borrower) = GetMemberDetails(undef,$userid);
+($borrower) = GetMemberDetails(undef,$patronid);
 
 my $branch = $issuer->{branchcode};
 my $confirm_required = 0;
@@ -55,12 +55,12 @@ my $return_only = 0;
 #warn "issuer cardnum: " . $issuer->{cardnumber};
 #warn "cardnumber= ".$borrower->{cardnumber};
 if ($op eq "logout") {
-        $query->param( userid => undef );
+        $query->param( patronid => undef );
 }
   if ($op eq "returnbook") {
       my ($doreturn ) = AddReturn($barcode, $branch);
      #warn "returnbook: " . $doreturn;
-    ($borrower) = GetMemberDetails(undef, $userid);
+    ($borrower) = GetMemberDetails(undef, $patronid);
   }
   
   if ($op eq "checkout" ) {
@@ -109,9 +109,9 @@ if ($op eq "logout") {
 	 if ( $confirmed || $issuenoconfirm ) {  # we'll want to call getpatroninfo again to get updated issues.
       	    #warn "issuing book?";
             AddIssue($borrower,$barcode);
-	#    ($borrower, $flags) = getpatroninformation(undef,undef, $userid);
+	#    ($borrower, $flags) = getpatroninformation(undef,undef, $patronid);
 		
-       #    $template->param( userid => $userid,
+       #    $template->param( patronid => $patronid,
 #			validuser => 1,
 #			);
          } else {
@@ -142,7 +142,7 @@ if ($borrower->{cardnumber}) {
    			borrowername => $borrowername,
 			issues_count => $cnt, 
 			ISSUES => \@issues,,
-			userid => $userid ,
+			patronid => $patronid ,
 			noitemlinks => 1 ,
 		);
    $cnt = 0;
@@ -161,8 +161,8 @@ $template->param( inputfocus => $inputfocus,
 
 } else {
 
- $template->param( userid => $userid,  nouser => $userid,
- 			inputfocus => 'userid', );
+ $template->param( patronid => $patronid,  nouser => $patronid,
+ 			inputfocus => 'patronid', );
 }
 
 output_html_with_http_headers $query, $cookie, $template->output;
