@@ -28,7 +28,7 @@
 <p><em>Error type:</em> <!-- TMPL_VAR NAME="impossible" --></p>
 <form action="/cgi-bin/koha/sco/sco-main.pl" name="errorForm" method="post">
 <input type="hidden" name="op" value="login" />
-<input type="hidden" name="userid" value="<!-- TMPL_VAR NAME="userid" -->" />
+<input type="hidden" name="patronid" value="<!-- TMPL_VAR NAME="patronid" -->" />
 <!-- TMPL_IF NAME="returnitem" -->
 <input type="hidden" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->" />
 <input type="button" name="returnbook" value="Return this item" class="return" onclick="this.form.op.value='returnbook';this.form.submit();"  />
@@ -42,7 +42,7 @@
 
 <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" method="post">
 <input type="hidden" id="op" name="op" value="checkout" />
-<input type="hidden" name="userid" value="<!-- TMPL_VAR NAME="userid" -->" />
+<input type="hidden" name="patronid" value="<!-- TMPL_VAR NAME="patronid" -->" />
 <input type="hidden" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->" />
 <input type="hidden" id="confirmation"  name="confirmed" value=""  />
 <!-- TMPL_IF NAME="renew" -->
@@ -73,13 +73,13 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 		<a href="/cgi-bin/koha/sco/help.pl">HELP</a> with the self checkout system
 	</div>
 
-	<!-- TMPL_IF NAME="userid" -->
+	<!-- TMPL_IF NAME="patronid" -->
 	<!-- TMPL_IF NAME="validuser" -->
 	<h3 class="warning">You are logged in as <!-- TMPL_VAR NAME="borrowername" -->.</h3>
 	<!-- /TMPL_IF -->
 	</div>
 	<!-- TMPL_IF NAME="nouser" -->
-	<div class="error"><h4>Sorry</h4><p>The userid <!-- TMPL_VAR NAME="userid" --> was not found in the database.  Please try again.</p></div>
+	<div class="error"><h4>Sorry</h4><p>The userid <!-- TMPL_VAR NAME="patronid" --> was not found in the database.  Please try again.</p></div>
 	<br />
 	<!-- /TMPL_IF -->
 	<!-- /TMPL_IF -->
@@ -90,9 +90,8 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	<!-- TMPL_UNLESS NAME="validuser" -->
 	<div class="sco_entry" >
 	<form id="mainform" action="/cgi-bin/koha/sco/sco-main.pl" name="mainform" method="post">
-      <input type="hidden" name="koha_login_context" value="sco" />
-	<fieldset class="checkout"><label for="userid">Please enter your card number:</label> 
-	<input type="text" id="userid" class="unfocus" size="20" name="userid" />
+	<fieldset class="checkout"><label for="patronid">Please enter your card number:</label> 
+	<input type="text" id="patronid" class="unfocus" size="20" name="patronid" />
  	<!-- TMPL_LOOP NAME="INPUTS" --><input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->"><!-- /TMPL_LOOP -->
 	<input type="hidden" name="op" value="login" />
  	<input	type="submit" value="Submit" class="submit" /></fieldset></form>
@@ -100,13 +99,13 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	<!-- /TMPL_UNLESS -->
 	<!-- TMPL_IF NAME="validuser" -->
 	<div id="newcheckout" class="sco_entry">
-	<form id="mainform" name="scan_form" method="post" action="/cgi-bin/koha/sco/sco-main.pl" onsubmit=" if(this.valid_session == 0) { if(confirm('Session has expired.  Click \'OK\' to continue processing this item.  Click Cancel if you are not <!-- TMPL_VAR NAME="userid" -->.')){ this.op.value='logout'; this.userid.value=''; } return true;}; " >
+	<form id="mainform" name="scan_form" method="post" action="/cgi-bin/koha/sco/sco-main.pl" onsubmit=" if(this.valid_session == 0) { if(confirm('Session has expired.  Click \'OK\' to continue processing this item.  Click Cancel if you are not <!-- TMPL_VAR NAME="patronid" -->.')){ this.op.value='logout'; this.patronid.value=''; } return true;}; " >
 	<fieldset><legend> Check out or return an item: </legend>
 	<label for="barcode">Scan a new item or enter its barcode:</label>
 	<input id="barcode" name="barcode" size="20" class="unfocus" onfocus="this.className='focus';" onblur="this.className='unfocus';" />
 	<input type="hidden" name="op" value="checkout" />
-	<input type="hidden" name="userid" value="<!-- TMPL_VAR name="userid" -->" />
-	<input type="hidden" name="valid_session" value="1">
+	<input type="hidden" name="patronid" value="<!-- TMPL_VAR name="patronid" -->" />
+	<input type="hidden" name="valid_session" value="1" />
 	<input type="submit" value="Submit" class="submit" /></fieldset>
 	</form>
 	<p class="alert"><form method="post" action="/cgi-bin/koha/sco/sco-main.pl?op=logout" >Scan next item, or <input type="submit" value="Click here if done." class="finish" /></form></p>
