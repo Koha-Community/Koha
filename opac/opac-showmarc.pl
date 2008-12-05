@@ -38,8 +38,6 @@ use C4::ImportBatch;
 use XML::LibXSLT;
 use XML::LibXML;
 
-my $userid = $ENV{'REMOTE_USER'};
-
 my $input       = new CGI;
 my $biblionumber = $input->param('id');
 my $importid	= $input->param('importid');
