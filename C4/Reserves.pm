@@ -31,6 +31,13 @@ use C4::Search;
 use C4::Circulation;
 use C4::Accounts;
 
+# for _koha_notify_reserve
+use C4::Members::Messaging;
+use C4::Members qw( GetMember );
+use C4::Letters;
+use C4::Branch qw( GetBranchDetail );
+use List::MoreUtils qw( firstidx );
+
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 my $library_name = C4::Context->preference("LibraryName");
@@ -1010,6 +1017,9 @@ sub ModReserveAffect {
     $sth = $dbh->prepare($query);
     $sth->execute( $itemnumber, $borrowernumber,$biblionumber);
     $sth->finish;
+    
+    _koha_notify_reserve( $itemnumber, $borrowernumber, $biblionumber ) if ( !$transferToDo );
+
     return;
 }
 
@@ -1373,6 +1383,72 @@ sub _Findgroupreserve {
     }
     $sth->finish;
     return @results;
+}
+
+=item _koha_notify_reserve
+
+=over 4
+
+_koha_notify_reserve( $itemnumber, $borrowernumber, $biblionumber );
+
+=back
+
+Sends a notification to the patron that their hold has been filled (through
+ModReserveAffect, _not_ ModReserveFill)
+
+=cut
+
+sub _koha_notify_reserve {
+    my ($itemnumber, $borrowernumber, $biblionumber) = @_;
+
+    my $dbh = C4::Context->dbh;
+    my $messagingprefs = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $borrowernumber, message_name => 'Hold Filled' } );
+
+    return if ( !defined( $messagingprefs->{'letter_code'} ) );
+
+    my $sth = $dbh->prepare("
+        SELECT *
+        FROM   reserves
+        WHERE  borrowernumber = ?
+            AND biblionumber = ?
+    ");
+    $sth->execute( $borrowernumber, $biblionumber );
+    my $reserve = $sth->fetchrow_hashref;
+    my $branch_details = GetBranchDetail( $reserve->{'branchcode'} );
+
+    my $admin_email_address = $branch_details->{'branchemail'} || C4::Context->preference('KohaAdminEmailAddress');
+
+    my $letter = getletter( 'reserves', $messagingprefs->{'letter_code'} );
+
+    C4::Letters::parseletter( $letter, 'branches', $reserve->{'branchcode'} );
+    C4::Letters::parseletter( $letter, 'borrowers', $reserve->{'borrowernumber'} );
+    C4::Letters::parseletter( $letter, 'biblio', $reserve->{'biblionumber'} );
+    C4::Letters::parseletter( $letter, 'reserves', $reserve->{'borrowernumber'}, $reserve->{'biblionumber'} );
+
+    if ( $reserve->{'itemnumber'} ) {
+        C4::Letters::parseletter( $letter, 'items', $reserve->{'itemnumber'} );
+    }
+    $letter->{'content'} =~ s/<<[a-z0-9_]+\.[a-z0-9]+>>//g; #remove any stragglers
+
+    if ( -1 !=  firstidx { $_ eq 'email' } @{$messagingprefs->{transports}} ) {
+        # aka, 'email' in ->{'transports'}
+        C4::Letters::EnqueueLetter(
+            {   letter                 => $letter,
+                borrowernumber         => $borrowernumber,
+                message_transport_type => 'email',
+                from_address           => $admin_email_address,
+            }
+        );
+    }
+
+    if ( -1 != firstidx { $_ eq 'sms' } @{$messagingprefs->{transports}} ) {
+        C4::Letters::EnqueueLetter(
+            {   letter                 => $letter,
+                borrowernumber         => $borrowernumber,
+                message_transport_type => 'sms',
+            }
+        );
+    }
 }
 
 =back

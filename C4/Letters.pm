@@ -467,27 +467,32 @@ sub SendAlerts {
 =cut
 
 sub parseletter {
-    my ( $letter, $table, $pk ) = @_;
+    my ( $letter, $table, $pk, $pk2 ) = @_;
 
     # 	warn "Parseletter : ($letter,$table,$pk)";
     my $dbh = C4::Context->dbh;
     my $sth;
     if ( $table eq 'biblio' ) {
         $sth = $dbh->prepare("select * from biblio where biblionumber=?");
-    }
-    elsif ( $table eq 'biblioitems' ) {
+    } elsif ( $table eq 'biblioitems' ) {
         $sth = $dbh->prepare("select * from biblioitems where biblionumber=?");
-    }
-    elsif ( $table eq 'borrowers' ) {
+    } elsif ( $table eq 'items' ) {
+        $sth = $dbh->prepare("select * from items where itemnumber=?");
+    } elsif ( $table eq 'reserves' ) {
+        $sth = $dbh->prepare("select * from reserves where borrowernumber = ? and biblionumber=?");
+    } elsif ( $table eq 'borrowers' ) {
         $sth = $dbh->prepare("select * from borrowers where borrowernumber=?");
-    }
-    elsif ( $table eq 'branches' ) {
+    } elsif ( $table eq 'branches' ) {
         $sth = $dbh->prepare("select * from branches where branchcode=?");
-    }
-    elsif ( $table eq 'aqbooksellers' ) {
+    } elsif ( $table eq 'aqbooksellers' ) {
         $sth = $dbh->prepare("select * from aqbooksellers where id=?");
     }
-    $sth->execute($pk);
+
+    if ( $pk2 ) {
+        $sth->execute($pk, $pk2);
+    } else {
+        $sth->execute($pk);
+    }
 
     # store the result in an hash
     my $values = $sth->fetchrow_hashref;
@@ -499,7 +504,6 @@ sub parseletter {
         my $replacefield = "<<$table.$field>>";
         my $replacedby   = $values->{$field};
 
-        # 		warn "REPLACE $replacefield by $replacedby";
         $letter->{title}   =~ s/$replacefield/$replacedby/g;
         $letter->{content} =~ s/$replacefield/$replacedby/g;
     }
@@ -749,6 +753,8 @@ sub _send_message_by_email {
     my $message = shift;
 
     my $member = C4::Members::GetMember( $message->{'borrowernumber'} );
+    return unless $message->{'to_address'} or $member->{'email'};
+
 	my $content = encode('utf8', $message->{'content'});
     my %sendmail_params = (
         To   => $message->{'to_address'}   || $member->{'email'},

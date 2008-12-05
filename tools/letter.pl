@@ -54,10 +54,12 @@ sub StringSearch {
     return $sth->fetchall_arrayref({});
 }
 
+# FIXME untranslateable
 our %column_map = (
     aqbooksellers => 'BOOKSELLERS',
     aqorders => 'ORDERS',
     serial => 'SERIALS',
+    reserves => 'HOLDS',
 );
 
 sub column_picks ($) {
@@ -132,7 +134,13 @@ if ( $op eq 'add_form' ) {
     push @SQLfieldname, column_picks('branches');
 
     # add acquisition specific tables
-    if ( index( $module, "acquisition" ) > 0 ) {	# FIXME: imprecise comparison
+    if ( $module eq "reserves" ) {
+        push @SQLfieldname, column_picks('borrowers'),
+                            column_picks('reserves'),
+                            column_picks('biblio'),
+                            column_picks('items');
+    }
+    elsif ( index( $module, "acquisition" ) > 0 ) {	# FIXME: imprecise comparison
         push @SQLfieldname, column_picks('aqbooksellers'), column_picks('aqorders');
         # add issues specific tables
     }

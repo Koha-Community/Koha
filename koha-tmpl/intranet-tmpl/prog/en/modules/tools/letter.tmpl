@@ -209,6 +209,11 @@ $(document).ready(function() {
                                     <!--TMPL_ELSE-->
                                     <option value="members">Members</option>
                                     <!--/TMPL_IF-->
+                                    <!--TMPL_IF Name="reserves"-->
+                                    <option value="reserves" selected="selected">Holds</option>
+                                    <!--TMPL_ELSE-->
+                                    <option value="reserves">Holds</option>
+                                    <!--/TMPL_IF-->
 				</select>
 			</li>
 			<li>
@@ -249,6 +254,11 @@ $(document).ready(function() {
 						<option value="members" selected="selected">Members</option>
 						<!--TMPL_ELSE-->
 						<option value="members">Members</option>
+						<!--/TMPL_IF-->
+						<!--TMPL_IF Name="reserves"-->
+						<option value="reserves" selected="selected">Holds</option>
+						<!--TMPL_ELSE-->
+						<option value="reserves">Holds</option>
 						<!--/TMPL_IF-->
 				</select>
 			</li>
