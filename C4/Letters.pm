@@ -762,6 +762,8 @@ sub _send_message_by_email ($) {
     my $message = shift or return undef;
 
     my $member = C4::Members::GetMember( $message->{'borrowernumber'} );
+    return unless $message->{'to_address'} or $member->{'email'};
+
 	my $content = encode('utf8', $message->{'content'});
     my %sendmail_params = (
         To   => $message->{'to_address'}   || $member->{'email'},

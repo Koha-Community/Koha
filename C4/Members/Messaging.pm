@@ -91,6 +91,7 @@ END_SQL
         # warn( Data::Dumper->Dump( [ $row ], [ 'row' ] ) );
         $return->{'days_in_advance'} = $row->{'days_in_advance'} if defined $row->{'days_in_advance'};
         $return->{'wants_digest'}    = $row->{'wants_digest'}    if defined $row->{'wants_digest'};
+		$return->{'letter_code'}     = $row->{'letter_code'};
         $transports{$row->{'message_transport_type'}} = 1;
     }
     @{$return->{'transports'}} = keys %transports;
