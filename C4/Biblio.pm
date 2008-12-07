@@ -21,7 +21,9 @@ use strict;
 # use utf8;
 use MARC::Record;
 use MARC::File::USMARC;
-use MARC::File::XML;
+# Force MARC::File::XML to use LibXML SAX Parser
+$XML::SAX::ParserPackage = "XML::LibXML::SAX";
+require MARC::File::XML;
 use ZOOM;
 
 use C4::Context;
