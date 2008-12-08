@@ -6,6 +6,7 @@
 # issue items to that borrower.
 #
 use strict;
+use warnings;
 
 use CGI;
 
@@ -34,12 +35,14 @@ my ($template, $loggedinuser, $cookie)
 my $dbh = C4::Context->dbh;
 
 my $issuerid = $loggedinuser;
-my ($op, $patronid, $barcode, $confirmed, $timedout )= ($query->param("op"), 
-					 $query->param("patronid"), 
-					$query->param("barcode"),
-					$query->param( "confirmed"),
-					$query->param( "timedout"), #not actually using this...
-					 );
+my ($op, $patronid, $barcode, $confirmed, $timedout) = (
+    $query->param("op")         || '',
+    $query->param("patronid")   || '',
+    $query->param("barcode")    || '',
+    $query->param( "confirmed") || '',
+    $query->param( "timedout")  || '', #not actually using this...
+);
+
 my %confirmation_strings = ( RENEW_ISSUE => "This item is already checked out to you.  Return it?", );
 my $issuenoconfirm = 1; #don't need to confirm on issue.
 my $cnt = 0;
