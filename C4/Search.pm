@@ -16,6 +16,7 @@ package C4::Search;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+# use warnings; # FIXME
 require Exporter;
 use C4::Context;
 use C4::Biblio;    # GetMarcFromKohaField
@@ -990,11 +991,8 @@ sub buildQuery {
                 }
 
                 # Detect Truncation
-                my ( $nontruncated, $righttruncated, $lefttruncated,
-                    $rightlefttruncated, $regexpr );
                 my $truncated_operand;
-                (
-                    $nontruncated, $righttruncated, $lefttruncated,
+                my( $nontruncated, $righttruncated, $lefttruncated,
                     $rightlefttruncated, $regexpr
                 ) = _detect_truncation( $operand, $index );
                 warn
@@ -1361,7 +1359,6 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
         my $item_in_transit_count = 0;
         my $can_place_holds       = 0;
         my $items_count           = scalar(@fields);
-        my $items_counter;
         my $maxitems =
           ( C4::Context->preference('maxItemsinSearchResults') )
           ? C4::Context->preference('maxItemsinSearchResults') - 1
@@ -1370,7 +1367,6 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
         # loop through every item
         foreach my $field (@fields) {
             my $item;
-            $items_counter++;
 
             # populate the items hash
             foreach my $code ( keys %subfieldstosearch ) {
