@@ -1279,6 +1279,10 @@ sub searchResults {
             foreach my $field (@fields) {
                 my $tag      = $field->tag();
                 my $tagvalue = $field->as_string();
+                if (! utf8::is_utf8($tagvalue)) {
+                    utf8::decode($tagvalue);
+                }
+
                 $summary =~
                   s/\[(.?.?.?.?)$tag\*(.*?)]/$1$tagvalue$2\[$1$tag$2]/g;
                 unless ( $tag < 10 ) {
@@ -1286,6 +1290,9 @@ sub searchResults {
                     for my $i ( 0 .. $#subf ) {
                         my $subfieldcode  = $subf[$i][0];
                         my $subfieldvalue = $subf[$i][1];
+                        if (! utf8::is_utf8($subfieldvalue)) {
+                            utf8::decode($subfieldvalue);
+                        }
                         my $tagsubf       = $tag . $subfieldcode;
                         $summary =~
 s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
