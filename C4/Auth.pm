@@ -1342,11 +1342,11 @@ sub get_user_subpermissions {
     my $userid = shift;
 
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT flag, code
+    my $sth = $dbh->prepare("SELECT flag, user_permissions.code as code
                              FROM user_permissions
                              JOIN permissions USING (module_bit, code)
-                             JOIN userflags ON (module_bit = bit)
-                             JOIN borrowers USING (borrowernumber)
+                             JOIN userflags ON (permissions.module_bit = userflags.bit)
+                             JOIN borrowers ON (user_permissions.borrowernumber=borrowers.borrowernumber)
                              WHERE userid = ?");
     $sth->execute($userid);
 
