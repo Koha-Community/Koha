@@ -192,8 +192,24 @@ sub calculate {
 	my @looprow;
 	my %globalline;
 	my $grantotal =0;
+    my $barcodelike   = @$filters[13];
+    my $barcodefilter = @$filters[14];
+    my $not;
+    
 # extract parameters
 	my $dbh = C4::Context->dbh;
+
+# if barcodefilter is empty set as %
+if($barcodefilter){
+    # Check if barcodefilter is "like" or "not like"
+    if(!$barcodelike){
+        $not = "not";
+    }
+    # Change * to %
+    $barcodefilter =~ s/\*/%/g;
+}else{
+    $barcodefilter = "%";
+}
 
 # Filters
 # Checking filters
@@ -269,7 +285,7 @@ sub calculate {
 	}
 
 	my $strsth;
-	$strsth .= "select distinctrow $linefield from biblioitems left join items on (items.biblioitemnumber = biblioitems.biblioitemnumber) where $line is not null ";
+	$strsth .= "select distinctrow $linefield from biblioitems left join items on (items.biblioitemnumber = biblioitems.biblioitemnumber) where barcode $not LIKE ? AND $line is not null ";
 	if ( @linefilter ) {
 		if ($linefilter[1]){
 			$strsth .= " and $line >= ? " ;
@@ -284,11 +300,11 @@ sub calculate {
 	
 	my $sth = $dbh->prepare( $strsth );
 	if (( @linefilter ) and ($linefilter[1])){
-		$sth->execute($linefilter[0],$linefilter[1]);
-	} elsif ($linefilter[0]) {
-		$sth->execute($linefilter[0]);
+		$sth->execute($barcodefilter,$linefilter[0],$linefilter[1]);
+	} elsif ($barcodefilter,$linefilter[0]) {
+		$sth->execute($barcodefilter,$linefilter[0]);
 	} else {
-		$sth->execute;
+		$sth->execute($barcodefilter);
 	}
  	while ( my ($celvalue) = $sth->fetchrow) {
  		my %cell;
@@ -318,7 +334,7 @@ sub calculate {
 	FROM   biblioitems
 	LEFT JOIN items
 		ON (items.biblioitemnumber = biblioitems.biblioitemnumber)
-	WHERE  $column IS NOT NULL ";
+	WHERE  barcode $not LIKE ? AND $column IS NOT NULL ";
 	if (( @colfilter ) and ($colfilter[1])) {
 		$strsth2 .= " and $column> ? and $column< ?";
 	}elsif ($colfilter[0]){
@@ -329,11 +345,11 @@ sub calculate {
 	$debug and print STDERR "SQL: $strsth2";
 	my $sth2 = $dbh->prepare( $strsth2 );
 	if ((@colfilter) and ($colfilter[1])) {
-		$sth2->execute($colfilter[0],$colfilter[1]);
+		$sth2->execute($barcodefilter,$colfilter[0],$colfilter[1]);
 	} elsif ($colfilter[0]){
-		$sth2->execute($colfilter[0]);
+		$sth2->execute($barcodefilter,$colfilter[0]);
 	} else {
-		$sth2->execute;
+		$sth2->execute($barcodefilter);
 	}
  	while (my ($celvalue) = $sth2->fetchrow) {
  		my %cell;
@@ -363,7 +379,7 @@ sub calculate {
 	}
 
 # preparing calculation
-	my $strcalc .= "SELECT $linefield, $colfield, count(*) FROM biblioitems LEFT JOIN  items ON (items.biblioitemnumber = biblioitems.biblioitemnumber) WHERE 1";
+	my $strcalc .= "SELECT $linefield, $colfield, count(*) FROM biblioitems LEFT JOIN  items ON (items.biblioitemnumber = biblioitems.biblioitemnumber) WHERE 1 AND barcode $not like ? ";
 	if (@$filters[0]){
 		@$filters[0]=~ s/\*/%/g;
 		$strcalc .= " AND dewey >" . @$filters[0];
@@ -426,7 +442,7 @@ sub calculate {
 	$strcalc .= " group by $linefield, $colfield order by $linefield,$colfield";
 	$debug and warn "SQL: $strcalc";
 	my $dbcalc = $dbh->prepare($strcalc);
-	$dbcalc->execute;
+	$dbcalc->execute($barcodefilter);
 #	warn "filling table";
 	
 	my $emptycol; 
