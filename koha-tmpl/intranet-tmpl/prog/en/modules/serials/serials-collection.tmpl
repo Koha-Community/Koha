@@ -140,7 +140,7 @@ $(document).ready(function() {
 			<td><a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->">Edit Routing List</a></td>
         <!--TMPL_IF name="abouttoexpire"--><td class="problem"> <a href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" onclick="popup(<!--TMPL_VAR Name="subscriptionid"-->); return false;">Renew</a></td>
         <!--TMPL_ELSE-->
-        <!--TMPL_IF name="subscriptionexpired"--><td class="problem"> <a href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" onclick="popup(<!--TMPL_VAR Name="subscriptionid"-->) return false;">Renew</a></td>
+        <!--TMPL_IF name="subscriptionexpired"--><td class="problem"> <a href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" onclick="popup(<!--TMPL_VAR Name="subscriptionid"-->); return false;">Renew</a></td>
         <!--TMPL_ELSE-->
         <td> &nbsp;</td>
         <!--/TMPL_IF-->
