@@ -19,12 +19,15 @@
 #
 
 use strict;
+use warnings;
+
 use CGI;
 use C4::Auth qw/check_api_auth/;
 use C4::Biblio;
 use XML::Simple;
 
 my $query = new CGI;
+binmode STDOUT, ":utf8";
 
 my ($status, $cookie, $sessionID) = check_api_auth($query, { editcatalogue => 1} );
 unless ($status eq "ok") {
