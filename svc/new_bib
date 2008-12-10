@@ -19,12 +19,16 @@
 #
 
 use strict;
+use warnings;
+
 use CGI;
 use C4::Auth qw/check_api_auth/;
 use C4::Biblio;
 use XML::Simple;
+use C4::Charset;
 
 my $query = new CGI;
+binmode STDOUT, ":utf8";
 
 my ($status, $cookie, $sessionID) = check_api_auth($query, { editcatalogue => 1} );
 unless ($status eq "ok") {
@@ -48,12 +52,19 @@ sub add_bib {
     my $inxml = $query->param('POSTDATA');
     print $query->header(-type => 'text/xml');
 
-    my $record = eval {MARC::Record::new_from_xml( $inxml, "utf8", C4::Context->preference('marcflavour'))};
+    my $marcflavour = C4::Context->preference('marcflavour') || 'MARC21';
+    my $record = eval {MARC::Record::new_from_xml( $inxml, "utf8", $marcflavour)};
     my $do_not_escape = 0;
     if ($@) {
         $result->{'status'} = "failed";
         $result->{'error'} = $@;
     } else {
+        # fix character set
+        if ($record->encoding() eq 'MARC-8') {
+            my ($guessed_charset, $charset_errors);
+            ($record, $guessed_charset, $charset_errors) = MarcToUTF8Record($record, $marcflavour);
+        }
+
         # delete any item tags
         my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField("items.itemnumber", '');
         foreach my $field ($record->field($itemtag)) {
