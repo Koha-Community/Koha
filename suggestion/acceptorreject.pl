@@ -65,6 +65,7 @@ op can be :
 =cut
 
 use strict;
+use warnings;
 
 use CGI;
 
@@ -139,7 +140,6 @@ if ( $op eq "aorr_confirm" ) {
     $op = "else";
     if (scalar(@deletelist)>0){  
         my $params = "&delete_field=".join ("&delete_field=",@deletelist);
-        warn $params;    
         print $input->redirect("/cgi-bin/koha/suggestion/acceptorreject.pl?op=delete_confirm$params");
     }  
 }
