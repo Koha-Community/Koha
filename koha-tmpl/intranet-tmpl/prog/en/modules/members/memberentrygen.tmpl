@@ -89,7 +89,7 @@
 				<h3>Duplicate suspected</h3>
 				<a href="javascript:Dopop('borrowers_details.pl?borrowernumber=<!--TMPL_VAR NAME="check_member"-->');" >Detail</a>
 				Duplicate ?
-				<a href="/cgi-bin/koha/members/memberentry.pl?borrowernumber=<!--TMPL_VAR NAME="check_member"-->&amp;category_type=<!--TMPL_VAR NAME="check_categorytype"-->">Yes</a> 
+				<a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;borrowernumber=<!--TMPL_VAR NAME="check_member"-->&amp;category_type=<!--TMPL_VAR NAME="check_categorytype"-->">Yes</a>
 				&nbsp;&nbsp;&nbsp; No, it is not
 				<!-- TMPL_IF NAME="checked"-->
 					<input type="checkbox" checked="checked" name="answernodouble" >
@@ -100,7 +100,7 @@
 		</form>
 		</p>
 	<!--/TMPL_IF-->
-		
+
 	<!-- TMPL_IF Name="debug" -->
 		<div id="debug">
 				<div>Debug is on (level <!-- TMPL_VAR NAME="debug" -->)</div>
