@@ -98,13 +98,13 @@ else {    # this shelf doesn't already exist.
 	my ($shelflist) = GetRecentShelves(1, $limit, $loggedinuser);
     my @shelvesloop;
     my %shelvesloop;
-    for my $shelf ( @{${@$shelflist}[0]} ) {
+    for my $shelf ( @{ $shelflist->[0] } ) {
         push( @shelvesloop, $shelf->{shelfnumber} );
 		$shelvesloop{$shelf->{shelfnumber}} = $shelf->{shelfname};
 	}
 	# then open shelves...
 	my ($shelflist) = GetRecentShelves(3, $limit, undef);
-    for my $shelf ( @{${@$shelflist}[0]} ) {
+    for my $shelf ( @{ $shelflist->[0] } ) {
         push( @shelvesloop, $shelf->{shelfnumber} );
 		$shelvesloop{$shelf->{shelfnumber}} = $shelf->{shelfname};
 	}
