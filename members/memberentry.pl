@@ -140,7 +140,7 @@ if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
 }
 
 #############test for member being unique #############
-if ($op eq 'insert'){
+if (($op eq 'insert') and !$nodouble){
         my $category_type_send=$category_type if ($category_type eq 'I'); 
         my $check_category; # recover the category code of the doublon suspect borrowers
 			#   ($result,$categorycode) = checkuniquemember($collectivity,$surname,$firstname,$dateofbirth)
@@ -150,8 +150,10 @@ if ($op eq 'insert'){
 			($newdata{firstname}   ? $newdata{firstname}   : $data{firstname}  ),
 			($newdata{dateofbirth} ? $newdata{dateofbirth} : $data{dateofbirth})
 		);
-          
-  #   recover the category type if the borrowers is a doublon 
+        if(!$check_member){
+            $nodouble = 1;
+        }
+  #   recover the category type if the borrowers is a doublon
     if ($check_category) {
       my $tmpborrowercategory=GetBorrowercategory($check_category);
       $check_categorytype=$tmpborrowercategory->{'category_type'};
@@ -235,9 +237,8 @@ if ($op eq 'modify' || $op eq 'insert' || $op eq 'save' ){
 }
 
 ###  Error checks should happen before this line.
-
 $nok = $nok || scalar(@errors);
-if ((!$nok) and ($op eq 'insert' or $op eq 'save')){
+if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
 	$debug and warn "$op dates: " . join "\t", map {"$_: $newdata{$_}"} qw(dateofbirth dateenrolled dateexpiry);
 	if ($op eq 'insert'){
 		# we know it's not a duplicate borrowernumber or there would already be an error
@@ -299,7 +300,7 @@ if ($delete){
 	exit;		# same as above
 }
 
-if ($nok){
+if ($nok or !$nodouble){
     $op="add" if ($op eq "insert");
     $op="modify" if ($op eq "save");
     %data=%newdata; 

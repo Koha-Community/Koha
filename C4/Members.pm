@@ -1235,12 +1235,17 @@ sub checkuniquemember {
     my $dbh = C4::Context->dbh;
     my $request = ($collectivity) ?
         "SELECT borrowernumber,categorycode FROM borrowers WHERE surname=? " :
-        "SELECT borrowernumber,categorycode FROM borrowers WHERE surname=? and firstname=? and dateofbirth=? ";
+            ($dateofbirth) ?
+            "SELECT borrowernumber,categorycode FROM borrowers WHERE surname=? and firstname=?  and dateofbirth=?" :
+            "SELECT borrowernumber,categorycode FROM borrowers WHERE surname=? and firstname=?";
     my $sth = $dbh->prepare($request);
+    warn $request;
     if ($collectivity) {
         $sth->execute( uc($surname) );
-    } else {
+    } elsif($dateofbirth){
         $sth->execute( uc($surname), ucfirst($firstname), $dateofbirth );
+    }else{
+        $sth->execute( uc($surname), ucfirst($firstname));
     }
     my @data = $sth->fetchrow;
     $sth->finish;
