@@ -69,5 +69,5 @@ if (lc(C4::Context->preference('marcflavour')) eq "unimarc"){
 process();
 } 
 else {
-	print "this script is UNIMARC only and should be used only on unimarc databases";
+	print "this script is UNIMARC only and should be used only on unimarc databases\n";
 }
