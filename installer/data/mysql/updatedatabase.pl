@@ -2060,6 +2060,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.01.00.006';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE `biblioitems` ADD KEY issn (issn)");
+    print "Upgrade to $DBversion done (add index on biblioitems.issn)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
