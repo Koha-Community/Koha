@@ -303,13 +303,13 @@ if ($delete){
 }
 
 if ($nok or !$nodouble){
-    $op="add" if ($op eq "insert");
-    $op="modify" if ($op eq "save");
-    %data=%newdata; 
-    $template->param( updtype => ($op eq 'add' ?'I':'M'));	# used to check for $op eq "insert"... but we just changed $op!
-    unless ($step){  
-        $template->param( step_1 => 1,step_2 => 1,step_3 => 1, step_4 => 1);
-    }  
+  $op="add" if ($op eq "insert");
+  $op="modify" if ($op eq "save");
+  %data=%newdata; 
+  $template->param( updtype => ($op eq 'add' ?'I':'M'));	# used to check for $op eq "insert"... but we just changed $op!
+  unless ($step){  
+    $template->param( step_1 => 1,step_2 => 1,step_3 => 1, step_4 => 1);
+  }  
 } 
 if (C4::Context->preference("IndependantBranches")) {
     my $userenv = C4::Context->userenv;
