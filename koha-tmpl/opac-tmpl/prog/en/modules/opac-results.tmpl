@@ -248,7 +248,7 @@ $(document).ready(function(){
 			<tr>
 			<!-- /TMPL_IF -->
                 <td>
-                    <a href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="scan_use" escape="url" -->&quot;<!-- TMPL_VAR NAME="title_nospan"  ESCAPE="URL" -->&quot;"><!-- TMPL_VAR NAME="title" --></a>
+                    <a href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="scan_use" escape="url" -->&quot;<!-- TMPL_VAR NAME="title_nospan"  ESCAPE="URL" -->&quot;"><!-- TMPL_IF NAME="title" --><!-- TMPL_VAR NAME="title" --><!-- TMPL_ELSE -->No title<!-- /TMPL_IF --></a>
                 </td>
                 <td>
                     <!-- TMPL_VAR NAME="author" -->
@@ -338,10 +338,10 @@ $(document).ready(function(){
 				<!-- TMPL_IF NAME="XSLTResultsDisplay" -->
                 <!-- TMPL_VAR NAME="XSLTResultsRecord" -->
 				<!-- TMPL_ELSE -->
-				<!-- TMPL_IF name="BiblioDefaultViewmarc" --><a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" title="View details for this title"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" --></a>
+				<!-- TMPL_IF name="BiblioDefaultViewmarc" --><a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" title="View details for this title"><!-- TMPL_IF NAME="title" --><!-- TMPL_VAR NAME="title" --><!-- TMPL_ELSE -->No title<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="subtitle" --></a>
                                 <!-- TMPL_ELSE -->
-                                <!-- TMPL_IF name="BiblioDefaultViewisbd" --><a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" title="View details for this title"><!-- TMPL_VAR NAME="title"  --> <!-- TMPL_VAR NAME="subtitle"  --></a>
-                                <!-- TMPL_ELSE --><a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" title="View details for this title"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle"  --></a>
+                                <!-- TMPL_IF name="BiblioDefaultViewisbd" --><a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" title="View details for this title"><!-- TMPL_IF NAME="title" --><!-- TMPL_VAR NAME="title" --><!-- TMPL_ELSE -->No title<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="subtitle"  --></a>
+                                <!-- TMPL_ELSE --><a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" title="View details for this title"><!-- TMPL_IF NAME="title" --><!-- TMPL_VAR NAME="title" --><!-- TMPL_ELSE -->No title<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="subtitle"  --></a>
                                 <!-- /TMPL_IF -->
                                 <!-- /TMPL_IF -->
                                 <!-- TMPL_IF NAME="author" -->by <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="author_nospan" ESCAPE="URL" -->" title="Search for works by this author"><!-- TMPL_VAR NAME="author" --></a>
