@@ -31,6 +31,7 @@ sub startup_50_init_nozebra : Test( startup => 3 ) {
     my $dbh = C4::Context->dbh;
     $dbh->do("UPDATE systempreferences SET value=1 WHERE variable='NoZebra'");
     $dbh->do("UPDATE systempreferences SET value=0 WHERE variable in ('QueryFuzzy','QueryWeightFields','QueryStemming')");
+    C4::Context->clear_syspref_cache();
     $using_nozebra = C4::Context->preference('NoZebra');
     ok($using_nozebra, "switched to NoZebra");
 
@@ -218,6 +219,7 @@ sub shutdown_50_init_nozebra : Test( shutdown => 3 ) {
     my $dbh = C4::Context->dbh;
     $dbh->do("UPDATE systempreferences SET value=0 WHERE variable='NoZebra'");
     $dbh->do("UPDATE systempreferences SET value=1 WHERE variable in ('QueryFuzzy','QueryWeightFields','QueryStemming')");
+    C4::Context->clear_syspref_cache();
     $using_nozebra = C4::Context->preference('NoZebra');
     ok(!$using_nozebra, "switched to Zebra");
 
