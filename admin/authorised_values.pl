@@ -18,6 +18,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+# use warnings; #FIXME
 use CGI;
 use C4::Auth;
 use C4::Context;
@@ -25,63 +26,50 @@ use C4::Koha;
 use C4::Output;
 
 
-sub AuthorizedValuesForCategory  {
-    my ($searchstring,$type)=@_;
+sub AuthorizedValuesForCategory ($) {
+    my ($searchstring) = shift or return;
     my $dbh = C4::Context->dbh;
     $searchstring=~ s/\'/\\\'/g;
     my @data=split(' ',$searchstring);
-    my $count=@data;
-    my $sth=$dbh->prepare( 'Select id, category, authorised_value, lib, imageurl
-                              from authorised_values
-                              where (category = ?)
-                              order by category,authorised_value' );
+    my $sth=$dbh->prepare('
+          SELECT  id, category, authorised_value, lib, imageurl
+            FROM  authorised_values
+           WHERE  (category = ?)
+        ORDER BY  category, authorised_value
+    ');
     $sth->execute("$data[0]");
-    my @results;
-    my $cnt=0;
-    while (my $data=$sth->fetchrow_hashref){
-	push(@results,$data);
-	$cnt ++;
-    }
-    $sth->finish;
-    return ($cnt,\@results);
+    return $sth->fetchall_arrayref({});
 }
 
 my $input = new CGI;
-my $searchfield=$input->param('searchfield');
+my $id          = $input->param('id');
+my $offset      = $input->param('offset');
+my $searchfield = $input->param('searchfield');
 $searchfield=~ s/\,//g;
-my $id = $input->param('id');
-my $offset=$input->param('offset');
-my $script_name="/cgi-bin/koha/admin/authorised_values.pl";
+my $script_name = "/cgi-bin/koha/admin/authorised_values.pl";
 my $dbh = C4::Context->dbh;
 
-my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "admin/authorised_values.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1},
-			     debug => 1,
-			     });
-my $pagesize=20;
+my ($template, $borrowernumber, $cookie)= get_template_and_user({
+      template_name => "admin/authorised_values.tmpl",
+    authnotrequired => 0,
+      flagsrequired => {parameters => 1},
+    query => $input,
+     type => "intranet",
+    debug => 1,
+});
+my $pagesize = 20;
 my $op = $input->param('op');
 
-if ($op) {
-$template->param(script_name => $script_name,
-						$op              => 1); # we show only the TMPL_VAR names $op
-} else {
-$template->param(script_name => $script_name,
-						else              => 1); # we show only the TMPL_VAR names $op
-}
+$template->param(  script_name => $script_name,
+                 ($op||'else') => 1 );
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
 if ($op eq 'add_form') {
 	my $data;
 	if ($id) {
-		my $dbh = C4::Context->dbh;
 		my $sth=$dbh->prepare("select id, category, authorised_value, lib, imageurl from authorised_values where id=?");
 		$sth->execute($id);
 		$data=$sth->fetchrow_hashref;
-		$sth->finish;
 	} else {
 		$data->{'category'} = $input->param('category');
 	}
@@ -106,10 +94,9 @@ if ($op eq 'add_form') {
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
-	my $dbh = C4::Context->dbh;
-    my $new_category = $input->param('category');
     my $new_authorised_value = $input->param('authorised_value');
-    my $imageurl=$input->param( 'imageurl' )|'';   
+    my $new_category = $input->param('category');
+    my $imageurl     = $input->param( 'imageurl' ) || '';
 	$imageurl = '' if $imageurl =~ /removeImage/;
     my $duplicate_entry = 0;
 
@@ -117,7 +104,6 @@ if ($op eq 'add_form') {
         my $sth = $dbh->prepare( "SELECT category, authorised_value FROM authorised_values WHERE id='$id' ");
         $sth->execute();
         my ($category, $authorised_value) = $sth->fetchrow_array();
-        $sth->finish;
         if ( $authorised_value ne $new_authorised_value ) {
             my $sth = $dbh->prepare_cached( "SELECT COUNT(*) FROM authorised_values " .
                 "WHERE category = '$new_category' AND authorised_value = '$new_authorised_value' and id<>$id");
@@ -144,7 +130,6 @@ if ($op eq 'add_form') {
             "WHERE category = '$new_category' AND authorised_value = '$new_authorised_value' ");
         $sth->execute();
         ($duplicate_entry) = $sth->fetchrow_array();
-        $sth->finish();
         unless ( $duplicate_entry ) {
             my $sth=$dbh->prepare( 'INSERT INTO authorised_values
                                     ( id, category, authorised_value, lib, imageurl )
@@ -152,7 +137,6 @@ if ($op eq 'add_form') {
     	    my $lib = $input->param('lib');
     	    undef $lib if ($lib eq ""); # to insert NULL instead of a blank string
     	    $sth->execute($id, $new_category, $new_authorised_value, $lib, $imageurl );
-    	    $sth->finish;
     	    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=".$input->param('category')."\"></html>";
     	    exit;
         }
@@ -167,11 +151,9 @@ if ($op eq 'add_form') {
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
-	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("select category,authorised_value,lib from authorised_values where id=?");
 	$sth->execute($id);
 	my $data=$sth->fetchrow_hashref;
-	$sth->finish;
 	$id = $input->param('id') unless $id;
 	$template->param(searchfield => $searchfield,
 							Tlib => $data->{'lib'},
@@ -183,14 +165,11 @@ if ($op eq 'add_form') {
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
-	my $dbh = C4::Context->dbh;
 	my $id = $input->param('id');
 	my $sth=$dbh->prepare("delete from authorised_values where id=?");
 	$sth->execute($id);
-	$sth->finish;
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=$searchfield\"></html>";
 	exit;
-
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
@@ -204,22 +183,17 @@ sub default_form {
 	# build categories list
 	my $sth = $dbh->prepare("select distinct category from authorised_values");
 	$sth->execute;
-	# the list
 	my @category_list;
-	# a hash, to check that some hardcoded categories exist.
-	my %categories;
+	my %categories;     # a hash, to check that some hardcoded categories exist.
 	while ( my ($category) = $sth->fetchrow_array) {
 		push(@category_list,$category);
 		$categories{$category} = 1;
 	}
 	# push koha system categories
-	push @category_list, 'Asort1' unless $categories{'Asort1'};
-	push @category_list, 'Asort2' unless $categories{'Asort2'};
-	push @category_list, 'Bsort1' unless $categories{'Bsort1'};
-	push @category_list, 'Bsort2' unless $categories{'Bsort2'};
-	push @category_list, 'SUGGEST' unless $categories{'SUGGEST'};
-	push @category_list, 'DAMAGED' unless $categories{'DAMAGED'};
-	push @category_list, 'LOST' unless $categories{'LOST'};
+    foreach (qw(Asort1 Asort2 Bsort1 Bsort2 SUGGEST DAMAGED LOST)) {
+        push @category_list, $_ unless $categories{$_};
+    }
+
 	#reorder the list
 	@category_list = sort {$a cmp $b} @category_list;
 	my $tab_list = CGI::scrolling_list(-name=>'searchfield',
@@ -232,16 +206,11 @@ sub default_form {
 	if (!$searchfield) {
 		$searchfield=$category_list[0];
 	}
-	my ($count,$results)=AuthorizedValuesForCategory($searchfield,'web');
-	my $toggle=1;
+    my ($results) = AuthorizedValuesForCategory($searchfield);
+    my $count = scalar(@$results);
 	my @loop_data = ();
 	# builds value list
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-	  	if ($toggle eq 1){
-			$toggle=1;
-	  	} else {
-			$toggle=0;
-	  	}
 		my %row_data;  # get a fresh hash for the row data
 		$row_data{category}         = $results->[$i]{'category'};
 		$row_data{authorised_value} = $results->[$i]{'authorised_value'};
