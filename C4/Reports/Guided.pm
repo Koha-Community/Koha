@@ -483,6 +483,7 @@ Given some sql and a name this will saved it so that it can resued
 sub save_report {
     my ( $sql, $name, $type, $notes ) = @_;
     my $dbh = C4::Context->dbh();
+    $sql =~ s/(\W*)$//;
     my $query =
 "INSERT INTO saved_sql (borrowernumber,date_created,last_modified,savedsql,report_name,type,notes)  VALUES (?,now(),now(),?,?,?,?)";
     my $sth = $dbh->prepare($query);
