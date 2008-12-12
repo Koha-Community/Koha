@@ -98,22 +98,14 @@ sub JS_MODE_P		() {'js-mode-p'}	# cdata-mode-p must also be true
 sub ALLOW_CFORMAT_P	() {'allow-cformat-p'}
 
 sub new {
-    my $this = shift;
-    my($input) = @_;
-    my $class = ref($this) || $this;
-    my $self = {};
-    bless $self, $class;
-
-    my $handle = sprintf('TMPLTOKENIZER%d', $serial);
-    $serial += 1;
-
-    no strict;
-    open($handle, "<$input") || die "$input: $!\n";
-    use strict;
-    $self->{+FILENAME} = $input;
-    $self->{+HANDLE} = $handle;
-    $self->{+READAHEAD} = [];
-    return $self;
+    shift;
+    my ($filename) = @_;
+    open my $handle,$filename or die "can't open $filename";
+    bless {
+	    filename => $filename
+	    , handle => $handle
+	    , readahead => []
+    } , __PACKAGE__;
 }
 
 ###############################################################################
@@ -122,12 +114,12 @@ sub new {
 
 sub filename {
     my $this = shift;
-    return $this->{+FILENAME};
+    return $this->{filename};
 }
 
 sub _handle {
     my $this = shift;
-    return $this->{+HANDLE};
+    return $this->{handle};
 }
 
 sub fatal_p {
@@ -142,12 +134,12 @@ sub syntaxerror_p {
 
 sub has_readahead_p {
     my $this = shift;
-    return @{$this->{+READAHEAD}};
+    return @{$this->{readahead}};
 }
 
 sub _peek_readahead {
     my $this = shift;
-    return $this->{+READAHEAD}->[$#{$this->{+READAHEAD}}];
+    return $this->{readahead}->[$#{$this->{readahead}}];
 }
 
 sub line_number_start {
@@ -201,24 +193,24 @@ sub _set_syntaxerror {
 
 sub _push_readahead {
     my $this = shift;
-    push @{$this->{+READAHEAD}}, $_[0];
+    push @{$this->{readahead}}, $_[0];
     return $this;
 }
 
 sub _pop_readahead {
     my $this = shift;
-    return pop @{$this->{+READAHEAD}};
+    return pop @{$this->{readahead}};
 }
 
 sub _append_readahead {
     my $this = shift;
-    $this->{+READAHEAD}->[$#{$this->{+READAHEAD}}] .= $_[0];
+    $this->{readahead}->[$#{$this->{readahead}}] .= $_[0];
     return $this;
 }
 
 sub _set_readahead {
     my $this = shift;
-    $this->{+READAHEAD}->[$#{$this->{+READAHEAD}}] = $_[0];
+    $this->{readahead}->[$#{$this->{readahead}}] = $_[0];
     return $this;
 }
 
