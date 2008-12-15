@@ -1,35 +1,112 @@
-<?xml version="1.0" encoding="UTF-8"?>
+#!/usr/bin/perl
 
-<!DOCTYPE rss PUBLIC "-//Netscape Communications/DTD RSS 0.91/EN"
-          "http://my.netscape.com/publish/formats/rss-0.91.dtd">
+# This script can be used to generate rss 0.91 files for syndication.
 
-<rss version="0.91">
+# it should be run from cron like:
+#
+#    rss.pl config.conf
+#
 
-<channel>
- <title><!-- TMPL_VAR name="CHANNELTITLE" --></title>
- <link><!-- TMPL_VAR name="CHANNELLINK" --></link>
- <description><!-- TMPL_VAR name="CHANNELDESC" --></description>
- <language><!-- TMPL_VAR name="CHANNELLANG" --></language>
- <lastBuildDate><!-- TMPL_VAR name="CHANNELLASTBUILD" --></lastBuildDate>
+# Copyright 2003 Katipo Communications
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
 
- <image>
-  <title><!-- TMPL_VAR name="IMAGETITLE" --></title>
-  <url><!-- TMPL_VAR name="IMAGEURL" --></url>
-  <link><!-- TMPL_VAR name="IMAGELINK" --></link>
- </image>
+use strict;
+use warnings;
 
-<!-- TMPL_LOOP NAME="ITEMS" -->
- <item>
-  <title><!-- TMPL_VAR name="TITLE" --><!-- TMPL_IF NAME="SUBTITLE" --> <!-- TMPL_VAR name="SUBTITLE" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="AUTHOR" -->, by <!-- TMPL_VAR name="AUTHOR" --><!-- /TMPL_IF --></title>
-        <category><!-- TMPL_VAR NAME="itemtype" --></category>
-        <description><![CDATA[Call Number: <!-- TMPL_VAR NAME="callno" --><br />
-        <!-- TMPL_IF NAME="notes" -->Notes: <!-- TMPL_VAR NAME="notes" --><br /><!-- /TMPL_IF -->
-<a href="https://libcat.nbbc.edu/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">View Details</a> <!-- TMPL_IF NAME="reservable" -->| <a href="https://libcat.nbbc.edu/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Reserve this Item</a><!-- /TMPL_IF -->]]>
-</description>
-  <link>https://libcat.nbbc.edu/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" --></link>
+use HTML::Template::Pro;
+use C4::Context;
+use Time::Local;
+use POSIX;
 
- </item>
-<!-- /TMPL_LOOP -->
+my $dbh     = C4::Context->dbh;
+my $file    = $ARGV[0];
+my %config  = getConf("config");
+my $outFile = $config{"output"};
+my $feed    = HTML::Template::Pro->new( filename => $config{"tmpl"} );
 
-</channel>
-</rss>
+my %channel = getConf("channel");
+$feed->param( CHANNELTITLE     => $channel{'title'} );
+$feed->param( CHANNELLINK      => $channel{'link'} );
+$feed->param( CHANNELDESC      => $channel{'desc'} );
+$feed->param( CHANNELLANG      => $channel{'lang'} );
+$feed->param( CHANNELLASTBUILD => getDate() );
+
+my %image = getConf("image");
+$feed->param( IMAGETITLE       => $image{'title'} );
+$feed->param( IMAGEURL         => $image{'url'} );
+$feed->param( IMAGELINK        => $image{'link'} );
+$feed->param( IMAGEDESCRIPTION => $image{'description'} );
+$feed->param( IMAGEWIDTH       => $image{'width'} );
+$feed->param( IMAGEHEIGHT      => $image{'height'} );
+
+#
+# handle the items
+#
+$feed->param( ITEMS => getItems( $config{'query'} ) );
+
+open( FILE, ">$outFile" ) or die "can't open $outFile";
+print FILE $feed->output();
+close FILE;
+
+sub getDate {
+
+    #    my $date = localtime(timelocal(localtime));
+    my $date = strftime( "%a, %d %b %Y %T %Z", localtime );
+    return $date;
+}
+
+sub getConf {
+    my $section = shift;
+    my %return;
+    my $inSection = 0;
+
+    open( FILE, $file ) or die "can't open $file";
+    while (<FILE>) {
+        if ($inSection) {
+            my @line = split( /=/, $_, 2 );
+            unless ( $line[1] ) {
+                $inSection = 0;
+            } else {
+                my ( $key, $value ) = @line;
+                chomp $value;
+                $return{$key} = $value;
+            }
+        } else {
+            if ( $_ eq "$section\n" ) { $inSection = 1 }
+        }
+    }
+    close FILE;
+    return %return;
+}
+
+sub getItems {
+    my $query = shift;
+    $query .= " limit 15";
+    my $sth = $dbh->prepare($query);
+    $sth->execute;
+    my @return;
+    while ( my $data = $sth->fetchrow_hashref ) {
+        foreach my $key ( keys %$data ) {
+            my $value = $data->{$key};
+            $value = '' unless defined $value;
+            $value =~ s/\&/\&amp;/g and $data->{$key} = $value;
+        }
+        push @return, $data;
+    }
+    $sth->finish;
+    return \@return;
+}
