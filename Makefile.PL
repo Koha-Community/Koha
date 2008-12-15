@@ -279,7 +279,6 @@ my $target_map = {
   './reviews'                   => 'INTRANET_CGI_DIR',
   './rewrite-config.PL'         => 'NONE',
   './reviews'                   => 'INTRANET_CGI_DIR',
-  './rss'                       => 'MISC_DIR', 
   './serials'                   => 'INTRANET_CGI_DIR',
   './skel'                      => 'NONE',
   './skel/var/log/koha'         => { target => 'LOG_DIR', trimdir => -1 },
