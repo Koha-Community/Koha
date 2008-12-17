@@ -142,6 +142,9 @@
                     <!-- TMPL_IF Name="errispermanent" -->
                             <li>Please return item to home library: <!-- TMPL_VAR Name="msg" --></li>
                     <!-- /TMPL_IF -->
+                    <!-- TMPL_IF Name="errnotallowed" -->
+                            <li>You cannot transfer items of type <b><!-- TMPL_VAR Name="itemtype" --></b> to <b><!-- TMPL_VAR Name="tbr" --></b></li>
+                    <!-- /TMPL_IF -->
                     <!-- TMPL_IF Name="errdesteqholding" -->
                         <li>Item is already at destination library.</li>
                     <!-- /TMPL_IF -->

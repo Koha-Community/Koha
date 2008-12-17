@@ -1628,4 +1628,19 @@ ALTER TABLE reserves ADD CONSTRAINT reserves_ibfk_4 FOREIGN KEY (branchcode) REF
 ALTER TABLE virtualshelfcontents ADD CONSTRAINT virtualshelfcontents_ibfk_1 FOREIGN KEY (shelfnumber) REFERENCES virtualshelves (shelfnumber) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE virtualshelfcontents ADD CONSTRAINT virtualshelfcontents_ibfk_2 FOREIGN KEY (biblionumber) REFERENCES biblio (biblionumber) ON DELETE CASCADE ON UPDATE CASCADE;
 
+
+--
+-- Table for branch_transfer_limits
+--
+CREATE SEQUENCE branch_transfer_limits_limitId_seq START 1;
+
+CREATE TABLE branch_transfer_limits (
+limitId int PRIMARY KEY DEFAULT nextval('branch_transfer_limits_limitId_seq'),
+toBranch varchar(4) NOT NULL,
+fromBranch varchar(4) NOT NULL,
+itemtype varchar(4) NOT NULL,
+PRIMARY KEY  (limitId)
+);
+
+
 --commit;

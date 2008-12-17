@@ -89,6 +89,9 @@ BEGIN {
 		&GetTransfersFromTo
 		&updateWrongTransfer
 		&DeleteTransfer
+                &IsBranchTransferAllowed
+                &CreateBranchTransferLimit
+                &DeleteBranchTransferLimits
 	);
 }
 
@@ -268,9 +271,23 @@ sub transferbook {
     my $hbr = $biblio->{'homebranch'};
     my $fbr = $biblio->{'holdingbranch'};
 
+    # if using Branch Transfer Limits
+    if ( C4::Context->preference("UseBranchTransferLimits") == 1 ) {
+        if ( C4::Context->preference("item-level_itypes") ) {
+            if ( ! IsBranchTransferAllowed( $tbr, $fbr, $biblio->{'itype'} ) ) {
+                $messages->{'NotAllowed'} = $tbr . "::" . $biblio->{'itype'};
+                $dotransfer = 0;
+            }
+        } elsif ( ! IsBranchTransferAllowed( $tbr, $fbr, $biblio->{'itemtype'} ) ) {
+            $messages->{'NotAllowed'} = $tbr . "::" . $biblio->{'itemtype'};
+            $dotransfer = 0;
+    	}
+    }
+
     # if is permanent...
     if ( $hbr && $branches->{$hbr}->{'PE'} ) {
         $messages->{'IsPermanent'} = $hbr;
+        $dotransfer = 0;
     }
 
     # can't transfer book if is already there....
@@ -1433,10 +1450,15 @@ sub AddReturn {
         #adding message if holdingbranch is non equal a userenv branch to return the document to homebranch
         #we check, if we don't have reserv or transfert for this document, if not, return it to homebranch .
         
-        if ( ($iteminformation->{'holdingbranch'} ne $iteminformation->{'homebranch'}) and not $messages->{'WrongTransfer'} and ($validTransfert ne 1) and ($reserveDone ne 1) ){
+        if ( ( $branch ne $iteminformation->{'homebranch'}) and not $messages->{'WrongTransfer'} and ($validTransfert ne 1) and ($reserveDone ne 1) ){
 			if (C4::Context->preference("AutomaticItemReturn") == 1) {
 				ModItemTransfer($iteminformation->{'itemnumber'}, C4::Context->userenv->{'branch'}, $iteminformation->{'homebranch'});
 				$messages->{'WasTransfered'} = 1;
+			} elsif ( C4::Context->preference("UseBranchTransferLimits") == 1 
+					&& ! IsTransferAllowed( $branch, $iteminformation->{'homebranch'}, $iteminformation->{'itemtype'} )
+				) {
+				ModItemTransfer($iteminformation->{'itemnumber'}, C4::Context->userenv->{'branch'}, $iteminformation->{'homebranch'});
+                                $messages->{'WasTransfered'} = 1;
 			}
 			else {
 				$messages->{'NeedsTransfer'} = 1;
@@ -2444,7 +2466,60 @@ $sth->finish;
 return $exist;
 }
 
-1;
+=head2 IsBranchTransferAllowed
+
+$allowed = IsBranchTransferAllowed( $toBranch, $fromBranch, $itemtype );
+
+=cut
+
+sub IsBranchTransferAllowed {
+	my ( $toBranch, $fromBranch, $itemtype ) = @_;
+    
+	if ( $toBranch eq $fromBranch ) { return 1; } ## Short circuit for speed.
+        
+	my $dbh = C4::Context->dbh;
+            
+	my $sth = $dbh->prepare('SELECT * FROM branch_transfer_limits WHERE toBranch = ? AND fromBranch = ? AND itemtype = ?');
+	$sth->execute( $toBranch, $fromBranch, $itemtype );
+	my $limit = $sth->fetchrow_hashref();
+                        
+	## If a row is found, then that combination is not allowed, if no matching row is found, then the combination *is allowed*
+	if ( $limit->{'limitId'} ) {
+		return 0;
+	} else {
+		return 1;
+	}
+}                                                        
+
+=head2 CreateBranchTransferLimit
+
+CreateBranchTransferLimit( $toBranch, $fromBranch, $itemtype );
+
+=cut
+
+sub CreateBranchTransferLimit {
+   my ( $toBranch, $fromBranch, $itemtype ) = @_;
+   
+   my $dbh = C4::Context->dbh;
+   
+   my $sth = $dbh->prepare("INSERT INTO branch_transfer_limits ( itemtype, toBranch, fromBranch ) VALUES ( ?, ?, ? )");
+   $sth->execute( $itemtype, $toBranch, $fromBranch );
+}
+
+=head2 DeleteBranchTransferLimits
+
+DeleteBranchTransferLimits();
+
+=cut
+
+sub DeleteBranchTransferLimits {
+   my $dbh = C4::Context->dbh;
+   my $sth = $dbh->prepare("TRUNCATE TABLE branch_transfer_limits");
+   $sth->execute();
+}
+
+
+  1;
 
 __END__
 

@@ -2309,3 +2309,15 @@ CREATE TABLE `borrower_message_transport_preferences` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
+--
+-- Table structure for the table branch_transfer_limits
+--
+
+CREATE TABLE branch_transfer_limits (
+    limitId int(8) NOT NULL auto_increment,
+    toBranch varchar(4) NOT NULL,
+    fromBranch varchar(4) NOT NULL,
+    itemtype varchar(4) NOT NULL,  
+    PRIMARY KEY  (limitId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+                                                                                                                                                            

@@ -202,6 +202,15 @@ foreach my $code ( keys %$messages ) {
         $err{errbadcode} = 1;
     }
 
+    if ( $code eq "NotAllowed" ) {
+    warn $messages->{'NotAllowed'};
+    warn  $branches->{ $messages->{'NotAllowed'} }->{'branchname'};
+        $err{errnotallowed} =  1;
+        my ( $tbr, $itemtype ) = split( /::/,  $messages->{'NotAllowed'} );
+        $err{tbr} = $branches->{ $tbr }->{'branchname'};
+        $err{itemtype} = $itemtype;
+    }
+    
     if ( $code eq 'IsPermanent' ) {
         $err{errispermanent} = 1;
         $err{msg} = $branches->{ $messages->{'IsPermanent'} }->{'branchname'};

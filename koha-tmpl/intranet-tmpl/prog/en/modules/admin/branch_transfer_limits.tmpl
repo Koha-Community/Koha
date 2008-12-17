@@ -1,0 +1,89 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Administration &rsaquo; Set Branch Transfer Limits</title>
+<script language="JavaScript" type="text/javascript">
+	function SwitchAll() {
+		count = document.mainform.elements.length;
+	    for (i=0; i < count; i++) {
+		    if(document.mainform.elements[i].checked == 1){
+				document.mainform.elements[i].checked = 0;
+			} else {
+				document.mainform.elements[i].checked = 1;
+			}
+		}
+	}
+ 
+	function CheckAll() {
+		count = document.mainform.elements.length;
+	    for (i=0; i < count; i++) {
+			document.mainform.elements[i].checked = 1;
+		}
+	}
+
+	function UncheckAll() {
+		count = document.mainform.elements.length;
+	    for (i=0; i < count; i++) {
+			document.mainform.elements[i].checked = 0;
+		}
+	}
+</script>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Set Branch Transfer Limits</div>
+
+      <div id="main">
+
+<p>Check the boxes for the items that should <i>not</i> be transferable.</p>
+<p>
+<input type=button name="CheckAll" value="Check All" onClick="CheckAll()">
+<input type=button name="UncheckAll" value="Uncheck All" onClick="UncheckAll()"
+<input type=button name="SwapAll" value="Swap All" onClick="SwitchAll()">
+</p>
+	<div class="table">
+		<form name="mainform" method="post" action="branch_transfer_limits.pl">
+		<table>
+			<thead>
+				<tr>
+					<th>To/From</th>
+					<TMPL_LOOP NAME="branchcode_loop">
+						<th><TMPL_VAR NAME="branchcode"></th>
+					</TMPL_LOOP>
+				</tr>
+			</thead>
+
+			<tbody>
+				<TMPL_LOOP NAME="itemtypes_loop">
+					<tr><th>Limits for Item Type: <TMPL_VAR NAME="itemtype"></th></tr>
+	
+					<TMPL_LOOP NAME="to_branch_loop">
+						<tr>
+							<td><TMPL_VAR NAME="toBranch"></td>
+							<TMPL_LOOP NAME="from_branc_loop">
+								<td>
+									<input 
+										name="<TMPL_VAR NAME="itemtype">_<TMPL_VAR NAME="toBranch">_<TMPL_VAR NAME="fromBranch">"
+										type="checkbox" 
+										value="1"
+										<TMPL_IF NAME="isChecked">checked</TMPL_IF>
+								    	>
+								</td>
+							</TMPL_LOOP>
+						<tr>
+					</TMPL_LOOP>
+				</TMPL_LOOP>
+			</tbody>
+		</table>
+		
+		<input type="hidden" name="updateLimits" value="1">
+		<input type="submit" value="Save Data">
+		</form>
+	</div>
+      </div>
+    </dd>
+  </dl>
+</body>
+</html>
