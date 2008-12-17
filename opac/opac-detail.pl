@@ -19,6 +19,7 @@
 
 
 use strict;
+use warnings;
 
 use CGI;
 use C4::Auth;
@@ -124,23 +125,27 @@ my $norequests = 1;
 my $branches = GetBranches();
 my %itemfields;
 for my $itm (@items) {
-     $norequests = 0
+    $norequests = 0
        if ( (not $itm->{'wthdrawn'} )
          && (not $itm->{'itemlost'} )
          && ($itm->{'itemnotforloan'}<0 || not $itm->{'itemnotforloan'} )
 		 && (not $itemtypes->{$itm->{'itype'}}->{notforloan} )
          && ($itm->{'itemnumber'} ) );
 
-    $itm->{ $itm->{'publictype'} } = 1;
+    if ( defined $itm->{'publictype'} ) {
+        # I can't actually find any case in which this is defined. --amoore 2008-12-09
+        $itm->{ $itm->{'publictype'} } = 1;
+    }
     $itm->{datedue}      = format_date($itm->{datedue});
     $itm->{datelastseen} = format_date($itm->{datelastseen});
 
-    #get collection code description, too
-	my $ccode= $itm->{'ccode'};
-	$itm->{'ccode'} = $collections->{$ccode} if(defined($collections) && exists($collections->{$ccode}));
-    $itm->{'location_description'} = $shelflocations->{$itm->{'location'} };
-    $itm->{'imageurl'}    = getitemtypeimagelocation( 'opac', $itemtypes->{ $itm->{itype} }->{'imageurl'} );
-    $itm->{'description'} = $itemtypes->{$itemtype}->{'description'};
+    # get collection code description, too
+    if ( my $ccode = $itm->{'ccode'} ) {
+        $itm->{'ccode'} = $collections->{$ccode} if ( defined($collections) && exists( $collections->{$ccode} ) );
+    }
+    if ( defined $itm->{'location'} ) {
+        $itm->{'location_description'} = $shelflocations->{ $itm->{'location'} };
+    }
     foreach (qw(ccode enumchron copynumber itemnotes)) {
         $itemfields{$_} = 1 if ($itm->{$_});
     }
@@ -161,7 +166,7 @@ for my $itm (@items) {
      }
     
      my ( $transfertwhen, $transfertfrom, $transfertto ) = GetTransfers($itm->{itemnumber});
-     if ( $transfertwhen ne '' ) {
+     if ( defined( $transfertwhen ) && $transfertwhen ne '' ) {
         $itm->{transfertwhen} = format_date($transfertwhen);
         $itm->{transfertfrom} = $branches->{$transfertfrom}{branchname};
         $itm->{transfertto}   = $branches->{$transfertto}{branchname};
@@ -195,7 +200,7 @@ my $subtitle         = C4::Biblio::get_koha_field_from_marc('bibliosubtitle', 's
     );
 
 foreach ( keys %{$dat} ) {
-    $template->param( "$_" => $dat->{$_} . "" );
+    $template->param( "$_" => defined $dat->{$_} ? $dat->{$_} : '' );
 }
 
 # some useful variables for enhanced content;
