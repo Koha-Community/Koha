@@ -2031,23 +2031,6 @@ if ( C4::Context->preference('Version') < TransformToNum($DBversion) ) {
     }
     print "Upgrade to $DBversion done (bug 2582: set null issues.issuedate to lastreneweddate)\n";
     SetVersion($DBversion);
-
-$DBversion = '3.01.00.008';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-
-    $dbh->do("CREATE TABLE branch_transfer_limits (
-                          limitId int(8) NOT NULL auto_increment,
-                          toBranch varchar(4) NOT NULL,
-                          fromBranch varchar(4) NOT NULL,
-                          itemtype varchar(4) NOT NULL,
-                          PRIMARY KEY  (limitId)
-                          ) ENGINE=InnoDB DEFAULT CHARSET=utf8"
-                        );
-
-    $dbh->do("INSERT INTO `systempreferences` ( `variable` , `value` , `options` , `explanation` , `type` ) VALUES ( 'UseBranchTransferLimits', '0', '', 'If ON, Koha will will use the rules defined in branch_transfer_limits to decide if an item transfer should be allowed.', 'YesNo')");
-
-    print "Upgrade to $DBversion done (added branch_transfer_limits table and UseBranchTransferLimits system preference)\n";
-    SetVersion ($DBversion);
 }
 
 $DBversion = "3.01.00.003";
@@ -2111,6 +2094,25 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (fix display of many sysprefs)\n";
     SetVersion ($DBversion);
 }
+
+$DBversion = '3.01.00.008';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+
+    $dbh->do("CREATE TABLE branch_transfer_limits (
+                          limitId int(8) NOT NULL auto_increment,
+                          toBranch varchar(4) NOT NULL,
+                          fromBranch varchar(4) NOT NULL,
+                          itemtype varchar(4) NOT NULL,
+                          PRIMARY KEY  (limitId)
+                          ) ENGINE=InnoDB DEFAULT CHARSET=utf8"
+                        );
+
+    $dbh->do("INSERT INTO `systempreferences` ( `variable` , `value` , `options` , `explanation` , `type` ) VALUES ( 'UseBranchTransferLimits', '0', '', 'If ON, Koha will will use the rules defined in branch_transfer_limits to decide if an item transfer should be allowed.', 'YesNo')");
+
+    print "Upgrade to $DBversion done (added branch_transfer_limits table and UseBranchTransferLimits system preference)\n";
+    SetVersion ($DBversion);
+}
+
 
 =item DropAllForeignKeys($table)
 
