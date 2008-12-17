@@ -41,6 +41,8 @@ ALGO :
 =cut
 
 use strict;
+use warnings;
+
 use CGI;
 use C4::Auth;
 use C4::Context;
@@ -328,7 +330,7 @@ sub StringSearch  {
                 $sth->execute($syspref);
                 while (my $data=$sth->fetchrow_hashref){
                     $data->{shortvalue} = $data->{value};
-                    $data->{shortvalue} = substr($data->{value},0,60)."..." if length($data->{value}) >60;
+                    $data->{shortvalue} = substr($data->{value},0,60)."..." if defined($data->{value}) and length($data->{value}) >60;
                     push(@results,$data);
                     $cnt++;
                 }
@@ -338,7 +340,7 @@ sub StringSearch  {
     } else {
 		my $sth;
 
-        if ($type eq 'all' ){
+        if ($type and $type eq 'all' ){
             $sth=$dbh->prepare("
             SELECT *
               FROM systempreferences 
@@ -376,26 +378,30 @@ sub GetPrefParams {
     if (defined $data->{'options'}) { 
         foreach my $option (split(/\|/, $data->{'options'})) {
             my $selected='0';
-            $option eq $data->{'value'} and $selected=1;
+            defined($data->{'value'}) and $option eq $data->{'value'} and $selected=1;
             push @options, { option => $option, selected => $selected };
         }
     }
 
     $params->{'prefoptions'} = $data->{'options'};
 
-    if ($data->{'type'} eq 'Choice') {
+    if (not defined($data->{'type'})) {
+        $params->{'type-free'} = 1;
+        $params->{'fieldlength'} = (defined($data->{'options'}) and $data->{'options'} and $data->{'options'}>0)
+    } elsif ($data->{'type'} eq 'Choice') {
         $params->{'type-choice'} = 1;
     } elsif ($data->{'type'} eq 'YesNo') {
         $params->{'type-yesno'} = 1;
         $data->{'value'}=C4::Context->boolean_preference($data->{'variable'});
-        if ($data->{'value'} eq '1') {
+        if (defined($data->{'value'}) and $data->{'value'} eq '1') {
             $params->{'value-yes'} = 1;
         } else {
             $params->{'value-no'} = 1;
         }
     } elsif ($data->{'type'} eq 'Integer' || $data->{'type'} eq 'Float') {
         $params->{'type-free'} = 1;
-        $params->{'fieldlength'} = $data->{'options'}>0 ? $data->{'options'} : 10;
+        $params->{'fieldlength'} = (defined($data->{'options'}) and $data->{'options'} and $data->{'options'}>0)
+                                   ? $data->{'options'} : 10;
     } elsif ($data->{'type'} eq 'Textarea') {
         $params->{'type-textarea'} = 1;
         $data->{options} =~ /(.*)\|(.*)/;
@@ -458,7 +464,8 @@ sub GetPrefParams {
         $params->{'type-langselector'} = 1;
     } else {
         $params->{'type-free'} = 1;
-        $params->{'fieldlength'} = $data->{'options'}>0 ? $data->{'options'} : 30;
+        $params->{'fieldlength'} = (defined($data->{'options'}) and $data->{'options'} and $data->{'options'}>0)
+                                   ? $data->{'options'} : 30;
     }
 
     if ( $params->{'type-choice'} || $params->{'type-free'} || $params->{'type-yesno'} ) {
@@ -472,7 +479,7 @@ sub GetPrefParams {
 }
 
 my $input = new CGI;
-my $searchfield = $input->param('searchfield');
+my $searchfield = $input->param('searchfield') || '';
 my $Tvalue = $input->param('Tvalue');
 my $offset = $input->param('offset') || 0;
 my $script_name="/cgi-bin/koha/admin/systempreferences.pl";
@@ -486,7 +493,7 @@ my ($template, $borrowernumber, $cookie)
                  debug => 1,
                  });
 my $pagesize=100;
-my $op = $input->param('op');
+my $op = $input->param('op') || '';
 $searchfield=~ s/\,//g;
 
 if ($op) {
@@ -536,14 +543,14 @@ if ($op eq 'update_and_reedit') {
     my $sth=$dbh->prepare($query);
     $sth->execute($input->param('variable'));
     if ($sth->rows) {
-        unless (C4::Context->config('demo') eq 1) {
+        unless (C4::Context->config('demo')) {
             my $sth=$dbh->prepare("update systempreferences set value=?,explanation=?,type=?,options=? where variable=?");
             $sth->execute($value, $input->param('explanation'), $input->param('variable'), $input->param('preftype'), $input->param('prefoptions'));
             $sth->finish;
             logaction('SYSTEMPREFERENCE','MODIFY',undef, $input->param('variable') . " | " . $value );
         }
     } else {
-        unless (C4::Context->config('demo') eq 1) {
+        unless (C4::Context->config('demo')) {
             my $sth=$dbh->prepare("insert into systempreferences (variable,value,explanation) values (?,?,?,?,?)");
             $sth->execute($input->param('variable'), $input->param('value'), $input->param('explanation'), $input->param('preftype'), $input->param('prefoptions'));
             $sth->finish;
@@ -594,14 +601,14 @@ if ($op eq 'add_form') {
     }
     $value =~ s/,$//;
     if ($sth->rows) {
-        unless (C4::Context->config('demo') eq 1) {
+        unless (C4::Context->config('demo')) {
             my $sth=$dbh->prepare("update systempreferences set value=?,explanation=?,type=?,options=? where variable=?");
             $sth->execute($value, $input->param('explanation'), $input->param('preftype'), $input->param('prefoptions'), $input->param('variable'));
             $sth->finish;
             logaction('SYSTEMPREFERENCE','MODIFY',undef, $input->param('variable') . " | " . $value );
         }
     } else {
-        unless (C4::Context->config('demo') eq 1) {
+        unless (C4::Context->config('demo')) {
             my $sth=$dbh->prepare("insert into systempreferences (variable,value,explanation,type,options) values (?,?,?,?,?)");
             $sth->execute($input->param('variable'), $value, $input->param('explanation'), $input->param('preftype'), $input->param('prefoptions'));
             $sth->finish;
@@ -644,7 +651,7 @@ if ($op eq 'add_form') {
     my $toggle=0;
     my @loop_data = ();
     for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-          if ($toggle eq 0){
+          if ($toggle == 0){
             $toggle=1;
           } else {
             $toggle=0;
