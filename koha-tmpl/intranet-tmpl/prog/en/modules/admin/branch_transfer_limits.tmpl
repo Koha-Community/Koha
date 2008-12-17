@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration &rsaquo; Set Branch Transfer Limits</title>
+<title>Koha &rsaquo; Administration &rsaquo; Library Transfer Limits</title>
 <script language="JavaScript" type="text/javascript">
 	function SwitchAll() {
 		count = document.mainform.elements.length;
@@ -33,57 +33,80 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Set Branch Transfer Limits</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Set Library Transfer Limits</div>
 
-      <div id="main">
+<div id="doc3" class="yui-t1">
 
-<p>Check the boxes for the items that should <i>not</i> be transferable.</p>
-<p>
-<input type=button name="CheckAll" value="Check All" onClick="CheckAll()">
-<input type=button name="UncheckAll" value="Uncheck All" onClick="UncheckAll()"
-<input type=button name="SwapAll" value="Swap All" onClick="SwitchAll()">
-</p>
+<div id="bd">
+     <div id="yui-main">
+    <div class="yui-b">
+
+<div id="toolbar">
+    <script type="text/javascript">
+    //<![CDATA[
+    // prepare DOM for YUI Toolbar
+     $(document).ready(function() {
+        yuiToolbar();
+     });
+    // YUI Toolbar Functions
+    function yuiToolbar() {
+        new YAHOO.widget.Button("CheckAll").addListener('click', CheckAll);
+        new YAHOO.widget.Button("UncheckAll").addListener('click', UncheckAll);
+        new YAHOO.widget.Button("SwapAll").addListener('click',SwitchAll);
+    }   //]]>
+    </script>
+    <ul class="toolbar">
+    <li><a id="CheckAll" href="#">Check All</a></li>
+    <li><a id="UncheckAll" href="#">Uncheck All</a></li>
+    <li><a id="SwapAll" href="#">Swap All</a></li>
+</ul></div>
+
+<h1 class="parameters">Library Transfer Limits</h1>
+<div class="help">Check the boxes for the items that should <em>not</em> be transferable.</div>
+
 	<div class="table">
 		<form name="mainform" method="post" action="branch_transfer_limits.pl">
 		<table>
 			<thead>
 				<tr>
 					<th>To/From</th>
-					<TMPL_LOOP NAME="branchcode_loop">
+					<!-- TMPL_LOOP NAME="branchcode_loop" -->
 						<th><TMPL_VAR NAME="branchcode"></th>
-					</TMPL_LOOP>
+					<!-- /TMPL_LOOP -->
 				</tr>
 			</thead>
 
 			<tbody>
-				<TMPL_LOOP NAME="itemtypes_loop">
-					<tr><th>Limits for Item Type: <TMPL_VAR NAME="itemtype"></th></tr>
+				<!-- TMPL_LOOP NAME="itemtypes_loop" -->
+					<tr><th>Limits for Item Type: <!-- TMPL_VAR NAME="itemtype" --></th></tr>
 	
-					<TMPL_LOOP NAME="to_branch_loop">
+					<!-- TMPL_LOOP NAME="to_branch_loop" -->
 						<tr>
-							<td><TMPL_VAR NAME="toBranch"></td>
-							<TMPL_LOOP NAME="from_branc_loop">
+							<td><!-- TMPL_VAR NAME="toBranch" --></td>
+							<!-- TMPL_LOOP NAME="from_branch_loop" -->
 								<td>
 									<input 
-										name="<TMPL_VAR NAME="itemtype">_<TMPL_VAR NAME="toBranch">_<TMPL_VAR NAME="fromBranch">"
+										name="<!-- TMPL_VAR NAME="itemtype" -->_<!-- TMPL_VAR NAME="toBranch" -->_<!-- TMPL_VAR NAME="fromBranch" -->"
 										type="checkbox" 
 										value="1"
-										<TMPL_IF NAME="isChecked">checked</TMPL_IF>
-								    	>
+										<!-- TMPL_IF NAME="isChecked" -->checked="checked"<!-- /TMPL_IF -->
+								    	/>
 								</td>
-							</TMPL_LOOP>
-						<tr>
-					</TMPL_LOOP>
-				</TMPL_LOOP>
+							<!-- /TMPL_LOOP -->
+						</tr>
+					<!-- /TMPL_LOOP -->
+				<!-- /TMPL_LOOP -->
 			</tbody>
 		</table>
 		
-		<input type="hidden" name="updateLimits" value="1">
-		<input type="submit" value="Save Data">
+		<input type="hidden" name="updateLimits" value="1" />
+		<input type="submit" value="Save Data" />
 		</form>
 	</div>
-      </div>
-    </dd>
-  </dl>
-</body>
-</html>
+  </div>
+</div>
+<div class="yui-b">
+  <!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

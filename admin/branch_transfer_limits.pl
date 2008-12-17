@@ -18,12 +18,15 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
+
 use CGI;
 use C4::Auth;
 use C4::Context;
 use C4::Output;
 use C4::Koha;
 use C4::Branch; 
+use C4::Circulation qw{ IsBranchTransferAllowed DeleteBranchTransferLimits CreateBranchTransferLimit };
 
 my $input = new CGI;
 
@@ -77,18 +80,18 @@ foreach my $branchcode ( @branchcodes ) {
 }
 
 ## Build the default data
-my @loop0;
+my @itemtypes_loop;
 foreach my $itemtype ( @itemtypes ) {
-	my @loop1;
+	my @to_branch_loop;
 	my %row_data;
 	$row_data{ itemtype } = $itemtype;
-	$row_data{ loop1 } = \@loop1;
+	$row_data{ to_branch_loop } = \@to_branch_loop;
 	foreach my $toBranch ( @branchcodes ) {
-		my @loop2;
+		my @from_branch_loop;
 		my %row_data;
 		$row_data{ itemtype } = $itemtype;
 		$row_data{ toBranch } = $toBranch;
-		$row_data{ loop2 } = \@loop2;
+		$row_data{ from_branch_loop } = \@from_branch_loop;
 		
 		foreach my $fromBranch ( @branchcodes ) {
 			my %row_data;
@@ -98,22 +101,19 @@ foreach my $itemtype ( @itemtypes ) {
 			$row_data{ fromBranch } = $fromBranch;
                         $row_data{ isChecked } = $isChecked;
 			
-			push( @loop2, \%row_data );
+			push( @from_branch_loop, \%row_data );
 		}
 		
-		push( @loop1, \%row_data );
+		push( @to_branch_loop, \%row_data );
 	}
 
-	push( @loop0, \%row_data );	
+	push( @itemtypes_loop, \%row_data );
 }
 
 
 $template->param(
-		loop0 => \@loop0,
+		itemtypes_loop => \@itemtypes_loop,
 		branchcode_loop => \@branchcode_loop,
-		intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),
-		intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-		IntranetNav => C4::Context->preference("IntranetNav"),
 		);
 
 output_html_with_http_headers $input, $cookie, $template->output;
