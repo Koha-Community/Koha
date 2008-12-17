@@ -594,12 +594,19 @@ if ($op eq 'add_form') {
     my $value;
     # handle multiple value strings (separated by ',')
     my $params = $input->Vars;
-    my @values = ();
-    @values = split("\0",$params->{'value'}) if $params->{'value'};
-    for my $vl (@values) {
-        $value .= "$vl,";
+    if (defined $params->{'value'}) {
+        my @values = ();
+        @values = split("\0",$params->{'value'}) if defined($params->{'value'});
+        if (@values) {
+            $value = "";
+            for my $vl (@values) {
+                $value .= "$vl,";
+            }
+            $value =~ s/,$//;
+        } else {
+            $value = $params->{'value'};
+        }
     }
-    $value =~ s/,$//;
     if ($sth->rows) {
         unless (C4::Context->config('demo')) {
             my $sth=$dbh->prepare("update systempreferences set value=?,explanation=?,type=?,options=? where variable=?");
