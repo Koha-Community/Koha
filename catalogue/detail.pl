@@ -17,6 +17,7 @@
 
 
 use strict;
+use warnings;
 
 use CGI;
 use C4::Auth;
@@ -93,7 +94,10 @@ foreach my $subscription (@subscriptions) {
       GetLatestSerials( $subscription->{subscriptionid}, 3 );
     push @subs, \%cell;
 }
-$dat->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtypes->{ $dat->{itemtype} }{imageurl} );
+
+if ( defined $dat->{'itemtype'} ) {
+    $dat->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtypes->{ $dat->{itemtype} }{imageurl} );
+}
 $dat->{'count'} = scalar @items;
 my $shelflocations = GetKohaAuthorisedValues('items.location', $fw);
 my $collections    = GetKohaAuthorisedValues('items.ccode'   , $fw);
@@ -105,7 +109,9 @@ foreach my $item (@items) {
     $norequests = 0 unless ( ( $item->{'notforloan'} > 0 ) || ( $item->{'itemnotforloan'} > 0 ) );
 
     # format some item fields for display
-    $item->{ $item->{'publictype'} } = 1;
+    if ( defined $item->{'publictype'} ) {
+        $item->{ $item->{'publictype'} } = 1;
+    }
     $item->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtypes->{ $item->{itype} }{imageurl} );
 	foreach (qw(datedue datelastseen onloan)) {
 		$item->{$_} = format_date($item->{$_});
@@ -116,13 +122,13 @@ foreach my $item (@items) {
         $item->{itemdamagedloop}= GetAuthorisedValues(GetAuthValCode('items.damaged',$fw),$item->{damaged}) if GetAuthValCode('items.damaged',$fw);
     }
     #get shelf location and collection code description if they are authorised value.
-	my $shelfcode= $item->{'location'};
-	$item->{'location'} = $shelflocations->{$shelfcode} if(defined($shelflocations) && exists($shelflocations->{$shelfcode})); 
-	my $ccode= $item->{'ccode'};
-	$item->{'ccode'} = $collections->{$ccode} if(defined($collections) && exists($collections->{$ccode})); 
-	foreach (qw(ccode enumchron copynumber)) {
-		$itemfields{$_} = 1 if($item->{$_});
-	}
+    my $shelfcode = $item->{'location'};
+    $item->{'location'} = $shelflocations->{$shelfcode} if ( defined( $shelfcode ) && defined($shelflocations) && exists( $shelflocations->{$shelfcode} ) );
+    my $ccode = $item->{'ccode'};
+    $item->{'ccode'} = $collections->{$ccode} if ( defined( $ccode ) && defined($collections) && exists( $collections->{$ccode} ) );
+    foreach (qw(ccode enumchron copynumber)) {
+        $itemfields{$_} = 1 if ( $item->{$_} );
+    }
 
     # checking for holds
     my ($reservedate,$reservedfor,$expectedAt) = GetReservesFromItemnumber($item->{itemnumber});
@@ -139,7 +145,7 @@ foreach my $item (@items) {
 
 	# Check the transit status
     my ( $transfertwhen, $transfertfrom, $transfertto ) = GetTransfers($item->{itemnumber});
-    if ( $transfertwhen ne '' ) {
+    if ( defined( $transfertwhen ) && ( $transfertwhen ne '' ) ) {
         $item->{transfertwhen} = format_date($transfertwhen);
         $item->{transfertfrom} = $branches->{$transfertfrom}{branchname};
         $item->{transfertto}   = $branches->{$transfertto}{branchname};
@@ -172,7 +178,7 @@ $template->param(
 
 my @results = ( $dat, );
 foreach ( keys %{$dat} ) {
-    $template->param( "$_" => $dat->{$_} . "" );
+    $template->param( "$_" => defined $dat->{$_} ? $dat->{$_} : '' );
 }
 
 $template->param(
@@ -188,7 +194,7 @@ $template->param(
 
 # XISBN Stuff
 my $xisbn=$dat->{'isbn'};
-$xisbn =~ /(\d*[X]*)/;
+$xisbn =~ /(\d*[X]*)/ if ( $xisbn );
 $template->param(amazonisbn => $1);		# FIXME: so it is OK if the ISBN = 'XXXXX' ?
 if (C4::Context->preference("FRBRizeEditions")==1) {
     eval {
