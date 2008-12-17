@@ -698,7 +698,10 @@ sub drop_all_foreign_keys {
         if ($id) {
             # we have found 1 foreign, drop it
             $dbh->do("ALTER TABLE $table DROP FOREIGN KEY $id");
-            $id="";
+            if ( $dbh->err ) {
+                diag "unable to DROP FOREIGN KEY '$id' on TABLE '$table' due to: " . $dbh->errstr();
+            }
+            undef $id;
         }
     }
 }
@@ -706,6 +709,9 @@ sub drop_all_foreign_keys {
 sub drop_table {
     my ($dbh, $table) = @_;
     $dbh->do("DROP TABLE $table");
+    if ( $dbh->err ) {
+        diag "unable to drop table: '$table' due to: " . $dbh->errstr();
+    }
 }
 
 =head3 create_test_database
