@@ -63,6 +63,13 @@
                 alert(alertString2);
             }
         }
+        $( function() {
+            $( '#sysprefst .expand-textarea' ).show().click( function () {
+                $( this ).hide().nextAll( 'textarea, input[type=submit]' ).show( 'slow' );
+
+                return false;
+            } ).nextAll( 'textarea, input[type=submit]' ).hide();
+        } );
         //]]>
 </script>
 </head>
@@ -111,9 +118,9 @@
                 <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="type-langselector" -->
         <!-- TMPL_IF NAME="languages_loop" -->
-	<table>
+    <table>
         <!-- TMPL_LOOP NAME="languages_loop" -->
-	    <tr><td>
+        <tr><td>
             <!-- TMPL_IF NAME="plural" -->
             <!-- TMPL_IF NAME="native_description" --><!-- TMPL_VAR NAME="native_description" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="rfc4646_subtag" --><!-- /TMPL_IF -->
             <!-- TMPL_LOOP NAME="sublanguages_loop" --><table><tr><td>
@@ -136,18 +143,23 @@
                     <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="value" id="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" <!-- TMPL_IF NAME="group_enabled" -->checked="checked"<!-- /TMPL_IF --> /> </label>
                 <!-- /TMPL_IF -->
             <!-- /TMPL_IF -->
-	    </td></tr>
+        </td></tr>
         <!-- /TMPL_LOOP -->
-	</table>
+    </table>
         <!-- /TMPL_IF -->
 
         <!-- /TMPL_IF -->
 
                 <!-- TMPL_IF NAME="type-yesno" -->
                     <!-- TMPL_IF NAME="value-yes" -->
-                    <input type="radio" name="value" id="value" value="1" checked="checked" /><!-- TMPL_ELSE --><input type="radio" name="value" id="value" value="1" /><!-- /TMPL_IF --> <label for="value" class="yesno">ON</label>
-                <!-- TMPL_IF NAME="value-no" -->    
-                    <input type="radio" name="value" id="value-no" value="0" checked="checked" /><!-- TMPL_ELSE --><input type="radio" name="value" id="value-no" value="0" /><!-- /TMPL_IF --> <label for="value-no" class="yesno">OFF</label><!-- /TMPL_IF -->
+                        <input type="radio" name="value" id="value" value="1" checked="checked" /><!-- TMPL_ELSE --><input type="radio" name="value" id="value" value="1" />
+                    <!-- /TMPL_IF -->
+                    <label for="value" class="yesno">ON</label>
+                    <!-- TMPL_IF NAME="value-no" -->    
+                        <input type="radio" name="value" id="value-no" value="0" checked="checked" /><!-- TMPL_ELSE --><input type="radio" name="value" id="value-no" value="0" />
+                    <!-- /TMPL_IF -->
+                    <label for="value-no" class="yesno">OFF</label>
+                <!-- /TMPL_IF -->
                 </li>
         </ol></fieldset>
         <fieldset class="action"><input type="submit" value="Save" /> 
@@ -195,11 +207,11 @@
         <!-- TMPL_VAR NAME="Tvalue" -->
         </td></tr></table>
         <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-		<input type="hidden" name="op" value="delete_confirmed" />
-		<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
-		<input type="hidden" name="Tvalue" value="<!-- TMPL_VAR NAME="Tvalue" -->" />
+        <input type="hidden" name="op" value="delete_confirmed" />
+        <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
+        <input type="hidden" name="Tvalue" value="<!-- TMPL_VAR NAME="Tvalue" -->" />
         <input type="submit"  value="Yes, Delete" /></form> 
-		<form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="No, Do not Delete" /></form>
+        <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="No, Do not Delete" /></form>
     
     
     <!-- /TMPL_IF -->
@@ -215,16 +227,16 @@
     <!-- TMPL_IF NAME="else" -->
     
     <div id="toolbar">
-	<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
     <script type="text/javascript">
     //<![CDATA[
     // prepare DOM for YUI Toolbar
      $(document).ready(function() {
         yuiToolbar();
-		<!-- TMPL_IF NAME="loop" -->$("#sysprefst").tablesorter({
-			sortList: [[0,0]],
-			headers: { 1: {sorter:false},2: { sorter: false },3: { sorter: false },4: { sorter: false }}
-		});<!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="loop" -->$("#sysprefst").tablesorter({
+            sortList: [[0,0]],
+            headers: { 1: {sorter:false},2: { sorter: false },3: { sorter: false },4: { sorter: false }}
+        });<!-- /TMPL_IF -->
      });
     // YUI Toolbar Functions
     function yuiToolbar() {
@@ -250,9 +262,83 @@
     <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
 
         <td><strong><a href="<!-- TMPL_VAR NAME="edit" -->"><!-- TMPL_VAR NAME="variable" --></a></strong></td><td> <!-- TMPL_VAR NAME="explanation" ESCAPE="HTML" --></td>
-        <td><!-- TMPL_IF NAME="yesno" -->
-        <!-- TMPL_IF NAME="yes" -->ON<!-- TMPL_ELSE -->OFF<!-- /TMPL_IF -->
-        <!-- TMPL_ELSE --><!-- TMPL_VAR NAME="value" --><!-- /TMPL_IF --></td>
+        <!-- TMPL_IF NAME="oneline" -->
+        <td class="single-line">
+        <!-- TMPL_ELSE -->
+        <td>
+        <!-- /TMPL_IF -->
+            <form action="/cgi-bin/koha/admin/systempreferences.pl" method="post">
+
+                <!-- TMPL_IF NAME="type-free" -->
+                <input type="text" name="value" size="<!-- TMPL_VAR NAME="fieldlength" -->" value="<!-- TMPL_VAR NAME="value" escape="HTML" -->" />
+                <!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="type-textarea" -->
+                <a class="expand-textarea" style="display: none" href="#">Click to Edit</a>
+                <textarea name="value" rows="<!--TMPL_VAR NAME="rows" -->" cols="<!-- TMPL_VAR NAME="cols" -->"><!-- TMPL_VAR NAME="value" escape="HTML" --></textarea>
+                <!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="type-choice" -->
+                <select name="value">
+                    <!-- TMPL_LOOP NAME="options" -->
+                        <!-- TMPL_IF NAME="selected" -->
+                            <option value="<!-- TMPL_VAR NAME="option" -->" selected="selected">
+                        <!-- TMPL_ELSE -->
+                            <option value="<!-- TMPL_VAR NAME="option" -->">
+                        <!-- /TMPL_IF --><!-- TMPL_VAR NAME="option" --></option>
+                    <!-- /TMPL_LOOP -->
+                </select>
+                <!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="type-langselector" -->
+                <!-- TMPL_IF NAME="languages_loop" -->
+                <table>
+                <!-- TMPL_LOOP NAME="languages_loop" -->
+                <tr><td>
+                    <!-- TMPL_IF NAME="plural" -->
+                    <!-- TMPL_IF NAME="native_description" --><!-- TMPL_VAR NAME="native_description" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="rfc4646_subtag" --><!-- /TMPL_IF -->
+                    <!-- TMPL_LOOP NAME="sublanguages_loop" --><table><tr><td>
+                        <!-- TMPL_IF NAME="sublanguage_current" -->
+                            <label for="<!-- TMPL_VAR NAME="rfc4646_subtag" -->"><!-- TMPL_VAR NAME="native_description" --> <!-- TMPL_VAR NAME="script_description" --> <!-- TMPL_VAR NAME="region_description" --> <!-- TMPL_VAR NAME="variant_description" -->(<!-- TMPL_VAR NAME="rfc4646_subtag" -->)
+                            <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="value" id="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" <!-- TMPL_IF NAME="enabled" -->checked="checked"<!-- /TMPL_IF --> /> </label>
+
+                        <!-- TMPL_ELSE -->
+                            <label for="<!-- TMPL_VAR NAME="rfc4646_subtag" -->"><!-- TMPL_VAR NAME="native_description" --> <!-- TMPL_VAR NAME="script_description" --> <!-- TMPL_VAR NAME="region_description" --> <!-- TMPL_VAR NAME="variant_description" -->(<!-- TMPL_VAR NAME="rfc4646_subtag" -->)
+                            <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="value" id="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" <!-- TMPL_IF NAME="enabled" -->checked="checked"<!-- /TMPL_IF --> /> </label>
+                        <!-- /TMPL_IF --></td></tr></table>
+                    <!-- /TMPL_LOOP -->
+
+                    <!-- TMPL_ELSE -->
+                        <!-- TMPL_IF NAME="current" -->
+                    <label for="<!-- TMPL_VAR NAME="rfc4646_subtag" -->"><!-- TMPL_VAR NAME="native_description" -->(<!-- TMPL_VAR NAME="rfc4646_subtag" -->)
+                            <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="value" id="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" <!-- TMPL_IF NAME="group_enabled" -->checked="checked"<!-- /TMPL_IF --> /> </label>
+                        <!-- TMPL_ELSE -->
+                    <label for="<!-- TMPL_VAR NAME="rfc4646_subtag" -->"><!-- TMPL_VAR NAME="native_description" -->(<!-- TMPL_VAR NAME="rfc4646_subtag" -->)
+                            <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="value" id="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" <!-- TMPL_IF NAME="group_enabled" -->checked="checked"<!-- /TMPL_IF --> /> </label>
+                        <!-- /TMPL_IF -->
+                    <!-- /TMPL_IF -->
+                </td></tr>
+                <!-- /TMPL_LOOP -->
+                </table>
+                <!-- /TMPL_IF -->
+
+                <!-- /TMPL_IF -->
+
+                <!-- TMPL_IF NAME="type-yesno" -->
+                    <!-- TMPL_IF NAME="value-yes" -->
+                        <input type="radio" name="value" value="1" checked="checked" /><!-- TMPL_ELSE --><input type="radio" name="value" value="1" />
+                    <!-- /TMPL_IF -->
+                    <label for="value" class="yesno">ON</label>
+                    <!-- TMPL_IF NAME="value-no" -->    
+                        <input type="radio" name="value" value="0" checked="checked" /><!-- TMPL_ELSE --><input type="radio" name="value" value="0" />
+                    <!-- /TMPL_IF -->
+                    <label for="value-no" class="yesno">OFF</label>
+                <!-- /TMPL_IF -->
+                <input type="hidden" name="op" value="add_validate" />
+                <input type="hidden" name="variable" value="<!-- TMPL_VAR NAME="variable" -->" />
+                <input type="hidden" name="prefoptions" value="<!-- TMPL_VAR NAME="prefoptions" escape="HTML" -->" />
+                <input type="hidden" name="preftype" value="<!-- TMPL_VAR NAME="type" -->" />
+                <input type="hidden" name="explanation" value="<!-- TMPL_VAR NAME="explanation" escape="HTML" -->" />
+                <input type="submit" value="Save" />
+            </form>
+        </td>
 
         <td><a href="<!-- TMPL_VAR NAME="edit" -->">Edit </a></td>
         <td><a href="<!-- TMPL_VAR NAME="delete" -->">Delete</a></td>
