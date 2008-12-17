@@ -71,7 +71,7 @@
 				<tr>
 					<th>To/From</th>
 					<!-- TMPL_LOOP NAME="branchcode_loop" -->
-						<th><TMPL_VAR NAME="branchcode"></th>
+						<th><!-- TMPL_VAR NAME="branchcode" --></th>
 					<!-- /TMPL_LOOP -->
 				</tr>
 			</thead>
@@ -85,12 +85,16 @@
 							<td><!-- TMPL_VAR NAME="toBranch" --></td>
 							<!-- TMPL_LOOP NAME="from_branch_loop" -->
 								<td>
+                                    <!-- TMPL_IF NAME="isChecked" -->
 									<input 
 										name="<!-- TMPL_VAR NAME="itemtype" -->_<!-- TMPL_VAR NAME="toBranch" -->_<!-- TMPL_VAR NAME="fromBranch" -->"
-										type="checkbox" 
-										value="1"
-										<!-- TMPL_IF NAME="isChecked" -->checked="checked"<!-- /TMPL_IF -->
-								    	/>
+										type="checkbox" value="1" checked="checked" />
+                                    <!-- TMPL_ELSE-->
+									<input 
+										name="<!-- TMPL_VAR NAME="itemtype" -->_<!-- TMPL_VAR NAME="toBranch" -->_<!-- TMPL_VAR NAME="fromBranch" -->"
+										type="checkbox" value="1" />
+                                    <!-- TMPL_ELSE-->
+                                    <!-- /TMPL_IF -->
 								</td>
 							<!-- /TMPL_LOOP -->
 						</tr>
