@@ -18,15 +18,14 @@ package C4::Biblio;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
 # use utf8;
 use MARC::Record;
 use MARC::File::USMARC;
 use MARC::File::XML;
 use ZOOM;
 
-use C4::Context;
 use C4::Koha;
-use C4::Branch;
 use C4::Dates qw/format_date/;
 use C4::Log; # logaction
 use C4::ClassSource;
@@ -106,12 +105,6 @@ BEGIN {
 		&GetNoZebraIndexes
 	);
 }
-
-# because of interdependencies between
-# C4::Search, C4::Heading, and C4::Biblio,
-# 'use C4::Heading' must occur after
-# the exports have been defined.
-use C4::Heading;
 
 =head1 NAME
 
@@ -1631,7 +1624,7 @@ sub TransformMarcToKoha {
     }
 
     my %tables = ();
-    if ($limit_table eq 'items') {
+    if ( defined $limit_table && $limit_table eq 'items') {
         $tables{'items'} = 1;
     } else {
         $tables{'items'} = 1;
@@ -2179,9 +2172,9 @@ sub ModZebra {
 =cut
 
 sub GetNoZebraIndexes {
-    my $index = C4::Context->preference('NoZebraIndexes');
+    my $no_zebra_indexes = C4::Context->preference('NoZebraIndexes');
     my %indexes;
-    foreach my $line (split /('|"),[\n\r]*/,$index) {
+    INDEX: foreach my $line (split /['"],[\n\r]*/,$no_zebra_indexes) {
         $line =~ /(.*)=>(.*)/;
         my $index = $1; # initial ' or " is removed afterwards
         my $fields = $2;
@@ -2258,7 +2251,7 @@ sub _DelBiblioNoZebra {
                     foreach (split / /,$line) {
                         next unless $_; # skip  empty values (multiple spaces)
                         # if the entry is already here, do nothing, the biblionumber has already be removed
-                        unless ($result{$key}->{$_} =~ /$biblionumber,$title\-(\d);/) {
+                        unless ( defined( $result{$key}->{$_} ) && ( $result{$key}->{$_} =~ /$biblionumber,$title\-(\d);/) ) {
                             # get the index value if it exist in the nozebra table and remove the entry, otherwise, do nothing
                             $sth2->execute($server,$key,$_);
                             my $existing_biblionumbers = $sth2->fetchrow;
@@ -2355,8 +2348,8 @@ sub _AddBiblioNoZebra {
                         next unless $_; # skip  empty values (multiple spaces)
                         # if the entry is already here, improve weight
 #                         warn "managing $_";
-                        if ($result{$key}->{"$_"} =~ /$biblionumber,\Q$title\E\-(\d+);/) { 
-                            my $weight=$1 + 1;
+                        if ( exists $result{$key}->{$_} && $result{$key}->{"$_"} =~ /$biblionumber,\Q$title\E\-(\d+);/) {
+                            my $weight = $1 + 1;
                             $result{$key}->{"$_"} =~ s/$biblionumber,\Q$title\E\-(\d+);//g;
                             $result{$key}->{"$_"} .= "$biblionumber,$title-$weight;";
                         } else {
@@ -2366,7 +2359,7 @@ sub _AddBiblioNoZebra {
                             # it exists
                             if ($existing_biblionumbers) {
                                 $result{$key}->{"$_"} =$existing_biblionumbers;
-                                my $weight=$1 + 1;
+                                my $weight = defined $1 ? $1 + 1 : 1;
                                 $result{$key}->{"$_"} =~ s/$biblionumber,\Q$title\E\-(\d+);//g;
                                 $result{$key}->{"$_"} .= "$biblionumber,$title-$weight;";
                             # create a new ligne for this entry
@@ -3176,7 +3169,7 @@ sub get_biblio_authorised_values {
         foreach my $subfield ( keys( %{$tagslib->{ $tag }} ) ) {
             # warn "checking $subfield. type is: " . ref $tagslib->{ $tag }{ $subfield };
             if ( 'HASH' eq ref $tagslib->{ $tag }{ $subfield } ) {
-                if ( exists $tagslib->{ $tag }{ $subfield }{'authorised_value'} && exists $bibliolevel_authorised_values->{ $tagslib->{ $tag }{ $subfield }{'authorised_value'} } ) {
+                if ( defined $tagslib->{ $tag }{ $subfield }{'authorised_value'} && exists $bibliolevel_authorised_values->{ $tagslib->{ $tag }{ $subfield }{'authorised_value'} } ) {
                     if ( defined $record->field( $tag ) ) {
                         my $this_subfield_value = $record->field( $tag )->subfield( $subfield );
                         if ( defined $this_subfield_value ) {
