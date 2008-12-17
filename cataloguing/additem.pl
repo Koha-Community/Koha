@@ -226,12 +226,7 @@ foreach my $field (@fields) {
         push(@big_array, \%this_row);
     }
 }
-#fill big_row with missing data
-foreach my $subfield_code  (keys(%witness)) {
-    for (my $i=0;$i<=$#big_array;$i++) {
-        $big_array[$i]{$subfield_code}="&nbsp;" unless ($big_array[$i]{$subfield_code});
-    }
-}
+
 my ($holdingbrtagf,$holdingbrtagsubf) = &GetMarcFromKohaField("items.holdingbranch",$frameworkcode);
 @big_array = sort {$a->{$holdingbrtagsubf} cmp $b->{$holdingbrtagsubf}} @big_array;
 
@@ -239,17 +234,13 @@ my ($holdingbrtagf,$holdingbrtagsubf) = &GetMarcFromKohaField("items.holdingbran
 # First, the existing items for display
 my @item_value_loop;
 my @header_value_loop;
-for (my $i=0;$i<=$#big_array; $i++) {
-    my $items_data;
-    foreach my $subfield_code (sort keys(%witness)) {
-        $items_data .="<td>".$big_array[$i]{$subfield_code}."</td>";
-    }
+for my $row ( @big_array ) {
     my %row_data;
-    $items_data =~ s/"/&quot;/g;
-    $row_data{item_value} = $items_data;
-    $row_data{itemnumber} = $big_array[$i]->{itemnumber};
+    my @item_fields = map +{ field => $_ || '' }, @$row{ sort keys(%witness) };
+    $row_data{item_value} = [ @item_fields ];
+    $row_data{itemnumber} = $row->{itemnumber};
     #reporting this_row values
-    $row_data{'nomod'}    = $big_array[$i]{'nomod'};
+    $row_data{'nomod'} = $row->{'nomod'};
     push(@item_value_loop,\%row_data);
 }
 foreach my $subfield_code (sort keys(%witness)) {
