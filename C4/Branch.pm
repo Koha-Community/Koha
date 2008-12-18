@@ -133,9 +133,9 @@ sub GetBranches {
     return ( \%branches );
 }
 
-sub GetBranchesLoop ($$) {  # since this is what most pages want anyway
+sub GetBranchesLoop ($;$) {  # since this is what most pages want anyway
     my $branch   = shift or return undef;
-    my $onlymine = shift || 0;
+    my $onlymine = shift || C4::Context->preference("IndependantBranches");
     my $branches = GetBranches($onlymine);
     my @loop;
     foreach (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
