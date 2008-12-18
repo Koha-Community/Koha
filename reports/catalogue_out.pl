@@ -18,16 +18,18 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
 use CGI;
+
 use C4::Auth;
 use C4::Context;
 use C4::Debug;
 use C4::Branch; # GetBranches
 use C4::Output;
-use C4::Koha;
-use C4::Reports;
+use C4::Koha;   # GetItemTypes
+use C4::Reports;    # GetDelimiterChoices
 use C4::Circulation;
-use Date::Manip;
+# use Date::Manip;  # TODO: add not borrowed since date X criteria
 use Data::Dumper;
 
 =head1 catalogue_out
@@ -37,7 +39,6 @@ Report that shows unborrowed items.
 =cut
 
 my $input = new CGI;
-my $fullreportname = "reports/catalogue_out.tmpl";
 my $do_it    = $input->param('do_it');
 my $limit    = $input->param("Limit");
 my $column   = $input->param("Criteria");
@@ -45,17 +46,17 @@ my @filters  = $input->param("Filter");
 my $output   = $input->param("output");
 my $basename = $input->param("basename") || 'catalogue_out';
 my $mime     = $input->param("MIME");
-my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => $fullreportname,
-        query => $input,
-        type => "intranet",
-        authnotrequired => 0,
-        flagsrequired => {reports => 1},
-        debug => 1,
-    });
+my ($template, $borrowernumber, $cookie) = get_template_and_user({
+    template_name => "reports/catalogue_out.tmpl",
+    query => $input,
+    type => "intranet",
+    authnotrequired => 0,
+    flagsrequired => {reports => 1},
+    debug => 1,
+});
 
 our $sep     = $input->param("sep");
-$sep = "\t" if ($sep eq 'tabulation');
+$sep = "\t" if ((! defined $sep) or $sep eq 'tabulation');
 
 $template->param(do_it => $do_it);
 if ($do_it) {
@@ -100,44 +101,24 @@ if ($do_it) {
 }
 
 # Displaying choices (i.e., not do_it)
-my $dbh = C4::Context->dbh;
 my @values;
 my %select;
 
-my @mime = (C4::Context->preference("MIME"));
-my $CGIextChoice = CGI::scrolling_list(
-		-name     => 'MIME',
-		-id       => 'MIME',
-		-values   => \@mime,
-		-size     => 1,
-		-multiple => 0 );
-
-my $CGIsepChoice = GetDelimiterChoices;
-
+my @mime  = ( map { +{type =>$_} } (split /[;:]/,C4::Context->preference("MIME")) );
 my $itemtypes = GetItemTypes;
 my @itemtypeloop;
-foreach (keys %$itemtypes) {
+foreach (sort {$itemtypes->{$a}->{description} cmp $itemtypes->{$b}->{description}} keys %$itemtypes) {
 	push @itemtypeloop, {
 		value => $_,
-# 		selected => ($_ eq $itemtype) ? 1 : 0,
 		description => $itemtypes->{$_}->{'description'},
    };
 }
-my $branches = GetBranches;
-my @branchloop;
-foreach (keys %$branches) {
-	push @branchloop, {
-		value => $_,
-#		selected => ($_ eq $branch) ? 1 : 0,
-		branchname => $branches->{$_}->{'branchname'},
-	};
-}
 
 $template->param(
-	CGIextChoice => $CGIextChoice,
-	CGIsepChoice => $CGIsepChoice,
-	itemtypeloop =>\@itemtypeloop,
-	branchloop   =>\@branchloop,
+	CGIextChoice => \@mime,
+	CGIsepChoice => GetDelimiterChoices,
+	itemtypeloop => \@itemtypeloop,
+	branchloop   => GetBranchesLoop($input->param("branch") || C4::Context->userenv->{branch}),
 );
 output_html_with_http_headers $input, $cookie, $template->output;
 
