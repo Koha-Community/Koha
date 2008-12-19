@@ -103,4 +103,27 @@ sub shutdown_50_remove_matcher : Test( shutdown => 6) {
     delete $self->{'matcher_id'};
 }
 
+=head2 UTILITY METHODS
+
+=cut
+
+sub add_import_batch {
+    my $self       = shift;
+    my $test_batch = shift
+      || {
+        overlay_action => 'create_new',
+        import_status  => 'staging',
+        batch_type     => 'batch',
+        file_name      => 'foo',
+        comments       => 'inserted during automated testing',
+      };
+    my $batch_id = AddImportBatch( $test_batch->{'overlay_action'},
+                                   $test_batch->{'import_status'},
+                                   $test_batch->{'batch_type'},
+                                   $test_batch->{'file_name'},
+                                   $test_batch->{'comments'}, );
+    return $batch_id;
+}
+
+
 1;
