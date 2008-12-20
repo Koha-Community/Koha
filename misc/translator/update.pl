@@ -11,10 +11,11 @@ opendir (DIR,$dir);
 while (defined($po = readdir(DIR))) {
     next if $po =~ /^\.\.?$/;
     print "processing $po...\n";
-    my $interface = 'intranet';
-    if ($po =~ /opac/) {
-        $interface = 'opac';
-    }
+    
+#    my $interface = 'intranet';
+#    if ($po =~ /opac/) {
+my        $interface = 'opac';
+#    }
     system("./tmpl_process3.pl update -i ../../koha-tmpl/$interface-tmpl/prog/en/ -s po/$po -r");
     print "Finished\n";
 }

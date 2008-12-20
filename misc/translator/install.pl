@@ -2,7 +2,7 @@
 # script to update all translations
 use strict;
 use warnings;
-use lib '/home/jmf/kohaclone';
+use lib '../../';
 use C4::Languages;
 # Go through the theme/module combinations we need to update.
 my $dir = "po";
