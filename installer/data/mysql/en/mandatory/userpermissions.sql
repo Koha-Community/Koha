@@ -1,4 +1,6 @@
 INSERT INTO permissions (module_bit, code, description) VALUES
+   ( 1, 'circulate_remaining_permissions', 'Remaining circulation permissions'),
+   ( 1, 'override_renewals', 'Override blocked renewals'),
    (13, 'edit_news', 'Write news for the OPAC and staff interfaces'),
    (13, 'label_creator', 'Create printable labels and barcodes from catalog and patron data'),
    (13, 'edit_calendar', 'Define days when the library is closed'),

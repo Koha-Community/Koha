@@ -2097,6 +2097,35 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+
+$DBversion = '3.00.04.008';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+
+    $dbh->do("CREATE TABLE branch_transfer_limits (
+                          limitId int(8) NOT NULL auto_increment,
+                          toBranch varchar(4) NOT NULL,
+                          fromBranch varchar(4) NOT NULL,
+                          itemtype varchar(4) NOT NULL,
+                          PRIMARY KEY  (limitId)
+                          ) ENGINE=InnoDB DEFAULT CHARSET=utf8"
+                        );
+
+    $dbh->do("INSERT INTO `systempreferences` ( `variable` , `value` , `options` , `explanation` , `type` ) VALUES ( 'UseBranchTransferLimits', '0', '', 'If ON, Koha will will use the rules defined in branch_transfer_limits to decide if an item transfer should be allowed.', 'YesNo')");
+
+    print "Upgrade to $DBversion done (added branch_transfer_limits table and UseBranchTransferLimits system preference)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.01.00.009";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE permissions MODIFY `code` varchar(64) DEFAULT NULL");
+    $dbh->do("ALTER TABLE user_permissions MODIFY `code` varchar(64) DEFAULT NULL");
+    $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES ( 1, 'circulate_remaining_permissions', 'Remaining circulation permissions')");
+    $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES ( 1, 'override_renewals', 'Override blocked renewals')");
+    print "Upgrade to $DBversion done (added subpermissions for circulate permission)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
