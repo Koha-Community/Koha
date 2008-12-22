@@ -29,7 +29,7 @@ my ($template, $loggedinuser, $cookie)
                              query => $query,
                              type => "opac",
                              authnotrequired => 0,
-                             flagsrequired => { circulate => 1 },
+                             flagsrequired => { circulate => "circulate_remaining_permissions" },
                              debug => 1,
                              });
 my $dbh = C4::Context->dbh;

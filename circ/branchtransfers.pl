@@ -59,7 +59,7 @@ my $user;
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { circulate => 1 },
+        flagsrequired   => { circulate => "circulate_remaining_permissions" },
     }
 );
 
