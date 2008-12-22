@@ -29,7 +29,7 @@ my ($template, $loggedinuser, $cookie)
 				query => $query,
 				type => "intranet",
 				authnotrequired => 0,
-				flagsrequired => {circulate => 1},
+				flagsrequired => {circulate => "circulate_remaining_permissions"},
 				});
 
 output_html_with_http_headers $query, $cookie, $template->output;
