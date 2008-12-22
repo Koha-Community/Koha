@@ -350,9 +350,9 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
 }
 
 $template->param(
-	detailview => 1,
+    detailview => 1,
     AllowRenewalLimitOverride => C4::Context->preference("AllowRenewalLimitOverride"),
-  DHTMLcalendar_dateformat=>C4::Dates->DHTMLcalendar(), 
+    DHTMLcalendar_dateformat=>C4::Dates->DHTMLcalendar(),
     roaddetails      => $roaddetails,
     borrowernumber   => $borrowernumber,
     categoryname	=> $data->{'description'},

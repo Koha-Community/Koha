@@ -432,8 +432,9 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <th>Item Type</th>
         <th>Call no</th>
         <th>Barcode</th>
+        <th>Renewals</th>
         <th>Renew?</th>
-		<th>Check In?</th>
+        <th>Check In?</th>
     </tr>
 <!-- TMPL_IF NAME="todayissues" --></thead>
 	<tbody>
@@ -454,6 +455,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         </td>
         <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
         <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#item<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
+        <td><!-- TMPL_VAR NAME="renewals" --></td>
         <td>
         <!-- TMPL_IF NAME="can_renew" -->
         <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
@@ -492,8 +494,8 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
     <!-- /TMPL_LOOP --> <!-- /loop todayissues -->
     <!-- /if todayissues --><!-- /TMPL_IF --> 
 <!-- TMPL_IF NAME="previssues" -->
-<!-- TMPL_IF NAME="todayissues" --><tr><th colspan="7"><a name="previous" id="previous"></a>Previous checkouts</th></tr><!-- TMPL_ELSE -->
-<tr><th class="{sorter: false}" colspan="7"><a name="previous" id="previous"></a>Previous checkouts</th></tr></thead>
+<!-- TMPL_IF NAME="todayissues" --><tr><th colspan="8"><a name="previous" id="previous"></a>Previous checkouts</th></tr><!-- TMPL_ELSE -->
+<tr><th class="{sorter: false}" colspan="8"><a name="previous" id="previous"></a>Previous checkouts</th></tr></thead>
 	<tbody>
 <!-- /TMPL_IF -->
     <!-- TMPL_LOOP NAME="previssues" -->
@@ -514,6 +516,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         </td>
         <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
         <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#item<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
+        <td><!-- TMPL_VAR NAME="renewals" --></td>
         <td>
         <!-- TMPL_IF NAME="can_renew" -->
         <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
@@ -552,18 +555,20 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
     </tr>
     <!-- /loop previssues --><!-- /TMPL_LOOP -->
 <!--/if previssues --><!-- /TMPL_IF -->
-	</tbody>
+      </tbody>
     </table>
     <!--TMPL_IF NAME="issuecount"-->
     <fieldset class="action">
-    <!-- TMPL_IF NAME="AllowRenewalLimitOverride" -->
+    <!-- TMPL_IF NAME="CAN_user_circulate_override_renewals" -->
+        <!-- TMPL_IF NAME="AllowRenewalLimitOverride" -->
         <label for="override_limit">Override Renewal Limit:</label>
         <input type="checkbox" name="override_limit" id="override_limit" value="1" />
+        <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
     <input type="submit" name="renew_checked" value="Renew Checked Items" />
     <input type="submit" name="renew_all" value="Renew All" />
     </fieldset>
-	<!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->
 </form>
 <!-- TMPL_ELSE -->
 <p>Patron has nothing checked out.</p>

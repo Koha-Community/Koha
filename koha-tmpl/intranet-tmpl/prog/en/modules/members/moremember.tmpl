@@ -42,6 +42,7 @@ $(document).ready(function() {
 	$("#CheckAllreturns").click(function(){ $(".checkboxed").checkCheckboxes(":input[@name*=barcodes]"); $(".checkboxed").unCheckCheckboxes(":input[@name*=items]"); return false; });
     $("#CheckNoreturns").click(function(){ $(".checkboxed").unCheckCheckboxes(":input[@name*=barcodes]"); return false; });
 
+    <!-- TMPL_IF NAME="CAN_user_circulate_override_renewals" -->
     <!-- TMPL_IF NAME="AllowRenewalLimitOverride" -->
     $( '#override_limit' ).click( function () {
         if ( this.checked ) {
@@ -50,6 +51,7 @@ $(document).ready(function() {
            $( '.renewals-allowed' ).hide(); $( '.renewals-disabled' ).show();
         }
     } ).attr( 'checked', false );
+    <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
 	$("td").click(function(e){
 		if(e.target.tagName.toLowerCase() == 'td'){
@@ -466,9 +468,11 @@ if (nodename =="barcodes[]"){
         </tr>
         </table>
         <fieldset class="action">
+        <!-- TMPL_IF NAME="CAN_user_circulate_override_renewals" -->
         <!-- TMPL_IF NAME="AllowRenewalLimitOverride" -->
         <label for="override_limit">Override Renewal Limit:</label>
         <input type="checkbox" name="override_limit" id="override_limit" value="1" />
+        <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
         <input type="submit" name="renew_checked" value="Renew or Return checked items" />
         <input type="submit" id="renew_all" name="renew_all" value="Renew all" />
