@@ -2153,7 +2153,7 @@ CREATE TABLE language_script_mapping (
 DROP TABLE IF EXISTS `permissions`;
 CREATE TABLE `permissions` (
   `module_bit` int(11) NOT NULL DEFAULT 0,
-  `code` varchar(30) DEFAULT NULL,
+  `code` varchar(64) DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
   PRIMARY KEY  (`module_bit`, `code`),
   CONSTRAINT `permissions_ibfk_1` FOREIGN KEY (`module_bit`) REFERENCES `userflags` (`bit`)
@@ -2173,7 +2173,7 @@ DROP TABLE IF EXISTS `user_permissions`;
 CREATE TABLE `user_permissions` (
   `borrowernumber` int(11) NOT NULL DEFAULT 0,
   `module_bit` int(11) NOT NULL DEFAULT 0,
-  `code` varchar(30) DEFAULT NULL,
+  `code` varchar(64) DEFAULT NULL,
   CONSTRAINT `user_permissions_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`)
     ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `user_permissions_ibfk_2` FOREIGN KEY (`module_bit`, `code`) REFERENCES `permissions` (`module_bit`, `code`)
