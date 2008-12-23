@@ -1459,22 +1459,23 @@ sub AddReturn {
 			}
             MarkIssueReturned($borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'},$circControlBranch);
             $messages->{'WasReturned'} = 1;    # FIXME is the "= 1" right?
-        }
+
     
-    # continue to deal with returns cases, but not only if we have an issue
-    
-        # the holdingbranch is updated if the document is returned in an other location .
-        if ( $iteminformation->{'holdingbranch'} ne C4::Context->userenv->{'branch'} ) {
-		        UpdateHoldingbranch(C4::Context->userenv->{'branch'},$iteminformation->{'itemnumber'});	
-		        #         	reload iteminformation holdingbranch with the userenv value
-		        $iteminformation->{'holdingbranch'} = C4::Context->userenv->{'branch'};
+            # continue to deal with returns cases, but not only if we have an issue
+        
+            # the holdingbranch is updated if the document is returned in an other location .
+            if ( $iteminformation->{'holdingbranch'} ne C4::Context->userenv->{'branch'} ) {
+		            UpdateHoldingbranch(C4::Context->userenv->{'branch'},$iteminformation->{'itemnumber'});
+		            #         	reload iteminformation holdingbranch with the userenv value
+		            $iteminformation->{'holdingbranch'} = C4::Context->userenv->{'branch'};
+            }
+            ModDateLastSeen( $iteminformation->{'itemnumber'} );
+            ModItem({ onloan => undef }, $biblio->{'biblionumber'}, $iteminformation->{'itemnumber'});
+          
+		        if ($iteminformation->{borrowernumber}){
+			    ($borrower) = C4::Members::GetMemberDetails( $iteminformation->{borrowernumber}, 0 );
+            }
         }
-        ModDateLastSeen( $iteminformation->{'itemnumber'} );
-        ModItem({ onloan => undef }, $biblio->{'biblionumber'}, $iteminformation->{'itemnumber'});
-		    
-		    if ($iteminformation->{borrowernumber}){
-			  ($borrower) = C4::Members::GetMemberDetails( $iteminformation->{borrowernumber}, 0 );
-        }       
         # fix up the accounts.....
         if ( $iteminformation->{'itemlost'} ) {
             $messages->{'WasLost'} = 1;
@@ -1555,7 +1556,7 @@ sub AddReturn {
         #adding message if holdingbranch is non equal a userenv branch to return the document to homebranch
         #we check, if we don't have reserv or transfert for this document, if not, return it to homebranch .
         
-        if ( ( $branch ne $iteminformation->{'homebranch'}) and not $messages->{'WrongTransfer'} and ($validTransfert ne 1) and ($reserveDone ne 1) ){
+        if ($doreturn and ($branch ne $iteminformation->{'homebranch'}) and not $messages->{'WrongTransfer'} and ($validTransfert ne 1) and ($reserveDone ne 1) ){
 			if (C4::Context->preference("AutomaticItemReturn") == 1) {
 				ModItemTransfer($iteminformation->{'itemnumber'}, C4::Context->userenv->{'branch'}, $iteminformation->{'homebranch'});
 				$messages->{'WasTransfered'} = 1;
