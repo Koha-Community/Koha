@@ -160,7 +160,10 @@ sub buildKohaItemsNamespace {
         } else {
             $status = "available";
         }
-        $xml.="<item><homebranch>".$branches->{$item->{homebranch}}->{'branchname'}."</homebranch>"."<status>$status</status></item>";
+        $xml.="<item><homebranch>".$branches->{$item->{homebranch}}->{'branchname'}."</homebranch>".
+		"<status>$status</status>".
+		"<itemcallnumber>".$item->{'itemcallnumber'}."</itemcallnumber></item>";
+
     }
     return "<items xmlns='http://www.koha.org/items'>".$xml."</items>";
 }
