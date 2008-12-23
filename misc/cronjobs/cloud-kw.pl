@@ -43,7 +43,7 @@ croak "Unable to read configuration file: $conf\n" if $@;
 
 for my $cloud ( @clouds ) {
     print "Create a cloud\n",
-          "  Koha conf file:  ", $cloud->{KohaConf}, "\n",
+          "  Koha conf file:  ", $cloud->{KohaConf} ? $cloud->{KohaConf} : "default", "\n",
           "  Zebra Index:     ", $cloud->{ZebraIndex}, "\n",
           "  Koha Keyword:    ", $cloud->{KohaIndex}, "\n",
           "  Count:           ", $cloud->{Count}, "\n",
@@ -51,9 +51,18 @@ for my $cloud ( @clouds ) {
           "  Output:          ", $cloud->{Output}, "\n",
       if $verbose;  
 
-    # Set Koha context
-    my $context = new C4::Context( $cloud->{KohaConf} );
-    $context->set_context();
+    # Set Koha context if KohaConf is present
+    my $set_new_context = 0;
+    if ( $cloud->{KohaConf} ) {
+        if ( -e $cloud->{KohaConf} ) {
+            my $context = C4::Context->new( $cloud->{KohaConf} );
+            $context->set_context();
+            $set_new_context = 1;
+        }
+        else {
+            carp "Koha conf file doesn't exist: ", $cloud->{KohaConf}, " ; use KOHA_CONF\n";
+        }
+    }
 
     my $index = new ZebraIndex( $cloud->{ZebraIndex} );
     $index->scan( $cloud->{Count} );
@@ -65,12 +74,17 @@ for my $cloud ( @clouds ) {
     $withcss =~ /^y/i;
     print $fh $index->html_cloud( $cloud->{KohaIndex}, $withcss );
     close $fh;
+    $set_new_context && restore_context C4::Context;
 }
 
 
 
 package ZebraIndex;
 
+use strict;
+use warnings;
+use diagnostics;
+use Carp;
 
 sub new {
     my $self = {};
@@ -79,6 +93,16 @@ sub new {
     $self->{ top_terms    } = undef;
     $self->{ levels_cloud } = 24;
     bless $self, $class;
+
+    # Test Zebra index
+    my $zbiblio = C4::Context->Zconn( "biblioserver" );
+    eval {
+        my $ss = $zbiblio->scan_pqf(
+            '@attr 1=' . $self->{ zebra_index } . ' @attr 4=1 @attr 6=3 "a"'
+        );
+    };
+    croak "Invalid Zebra index: ", $self->{ zebra_index } if $@;
+
     return $self;
 }
 
@@ -114,6 +138,7 @@ sub scan {
     my $min_occurence_index = -1;
     my $min_occurence;
     my $from = '0';
+
     while (1) {
         my $ss;
         eval {
@@ -168,13 +193,14 @@ sub scan {
 
     # Sort array of array by terms weight
     @terms = sort { @{$a}[1] <=> @{$b}[1] } @terms;
-    
+
     # A relatif weight to other set terms is added to each term
     my $min     = $terms[0][1];
     my $log_min = log( $min );
-    my $max     = $terms[$#terms-1][1];
+    my $max     = $terms[$#terms][1];
     my $log_max = log( $max );
     my $delta   = $max - $min;
+    $delta = 1 if $delta == 0; # Very unlikely
     my $factor;
     if ($log_max - $log_min == 0) {
         $log_min = $log_min - $self->{levels_cloud};
@@ -184,7 +210,7 @@ sub scan {
         $factor = $self->{levels_cloud} / ($log_max - $log_min);
     }
 
-    foreach (0..$#terms-1) {
+    foreach (0..$#terms) {
         my $count = @{ $terms[$_] }[1];
         my $weight = ( $count - $min ) / $delta;
         my $log_weight = int( (log($count) - $log_min) * $factor);
@@ -207,7 +233,9 @@ sub html_cloud {
     my $koha_index = shift;
     my $withcss = shift;
     my @terms = @{ $self->{top_terms} };
-    my $html = <<EOS;
+    my $html = '';
+    if ( $withcss ) {
+        $html = <<EOS;
 <style>
 .subjectcloud {
     text-align:  center; 
@@ -248,10 +276,12 @@ span.tagcloud24 { font-size: 36px;}
 </style>
 <div class="subjectcloud">
 EOS
-    for (0..$#terms-1) {   
+    }
+    for (0..$#terms) {
         my @term = @{ $terms[$_] };
         my $uri = $term[0];
         $uri =~ s/\(//g;
+        #print "  0=", $term[0]," - 1=", $term[1], " - 2=", $term[2], " - 3=", $term[3],"\n";
         $html = $html
             . '<span class="tagcloud'
             . $term[3]
@@ -279,7 +309,8 @@ cloud-kw.pl - Creates HTML keywords clouds from Koha Zebra Indexes
 
 =item cloud-kw.pl [--verbose|--help] --conf=F<cloud.conf> 
 
-Creates multiple HTML files containing kewords cloud.
+Creates multiple HTML files containing kewords cloud with top terms sorted
+by their logarithmic weight.
 F<cloud.conf> is a YAML configuration file driving cloud generation
 process.
 
@@ -309,14 +340,17 @@ Configuration file looks like that:
 
  --- 
   # Koha configuration file for a specific installation
+  # If not present, defaults to KOHA_CONF
   KohaConf: /home/koha/mylibray/etc/koha-conf.xml
   # Zebra index to scan
   ZebraIndex: Author
   # Koha index used to link found kewords with an opac search URL
   KohaIndex: au
-  # Number of top keyword to used for the cloud
+  # Number of top keyword to use for the cloud
   Count: 50
   # Include CSS style directives with the cloud
+  # This could be used as a model and then CSS directives are
+  # put in the appropriate CSS file directly.
   Withcss: Yes
   # HTML file where to output the cloud
   Output: /home/koha/mylibrary/koharoot/koha-tmpl/cloud-author.html
@@ -327,6 +361,35 @@ Configuration file looks like that:
   Count: 200
   Withcss: no
   Output: /home/koha/yourlibrary/koharoot/koha-tmpl/cloud-subject.html
+
+=head1 IMPROVEMENTS
+
+Generated top terms have more informations than those outputted from
+the time beeing. Some parameters could be easily added to improve
+this script:
+
+=over
+
+=item B<WithCount>
+
+In order to output terms with the number of occurences they
+have been found in Koha Catalogue by Zebra.
+
+=item B<CloudLevels>
+
+Number of levels in the cloud. Now 24 levels are hardcoded.
+
+=item B<Weithing>
+
+Weighting method used to distribute terms in the cloud. We could have two
+values: Logarithmic and Linear. Now it's Logarithmic by default.
+
+=item B<Order>
+
+Now terms are outputted in the lexical order. They could be sorted
+by their weight.
+
+=back
 
 =cut
 
