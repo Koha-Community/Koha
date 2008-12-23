@@ -1435,7 +1435,11 @@ sub AddReturn {
         #adding message if holdingbranch is non equal a userenv branch to return the document to homebranch
         #we check, if we don't have reserv or transfert for this document, if not, return it to homebranch .
         
+<<<<<<< HEAD:C4/Circulation.pm
         if ($doreturn and ($iteminformation->{'holdingbranch'} ne $iteminformation->{'homebranch'}) and not $messages->{'WrongTransfer'} and ($validTransfert ne 1) and ($reserveDone ne 1) ){
+=======
+        if ($doreturn and ($branch ne $iteminformation->{'homebranch'}) and not $messages->{'WrongTransfer'} and ($validTransfert ne 1) and ($reserveDone ne 1) ){
+>>>>>>> be5e89b... (bug #2750) Cannot return to another branch if the independantbranch option is set as ON:C4/Circulation.pm
 			if (C4::Context->preference("AutomaticItemReturn") == 1) {
 				ModItemTransfer($iteminformation->{'itemnumber'}, C4::Context->userenv->{'branch'}, $iteminformation->{'homebranch'});
 				$messages->{'WasTransfered'} = 1;
