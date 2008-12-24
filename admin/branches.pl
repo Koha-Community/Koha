@@ -44,6 +44,7 @@ FIXME: looped html (e.g., list of checkboxes) need to be properly
 =cut
 
 use strict;
+use warnings;
 use CGI;
 use C4::Auth;
 use C4::Context;
@@ -62,6 +63,10 @@ my $branchcode   = $input->param('branchcode');
 my $branchname   = $input->param('branchname');
 my $categorycode = $input->param('categorycode');
 my $op           = $input->param('op');
+
+if(!defined($op)){
+  $op = '';
+}
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -338,7 +343,7 @@ sub branchinfotable {
         $branchinfo = GetBranchInfo(undef,'properties');
     }
     my $toggle;
-    my $i;
+    my $i = 0;
     my @loop_data = ();
     foreach my $branch (@$branchinfo) {
         ( $i % 2 ) ? ( $toggle = 1 ) : ( $toggle = 0 );
