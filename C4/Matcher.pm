@@ -786,6 +786,11 @@ sub _get_match_keys {
                     }
                 }
                 $key = _normalize($key);
+                if ($component->{'length'}){
+                   if (length($key) > $component->{'length'}){
+                     $key = _normalize(substr($key,$component->{'offset'},$component{'length'}));
+                   }
+                }
             }
             if ($i == 0) {
                 push @keys, $key if $key;
@@ -815,10 +820,12 @@ sub _parse_match_component {
 # FIXME - default normalizer
 sub _normalize {
     my $value = uc shift;
+    $value =~ s/.;:,\]\[\)\(\/'"//g;
     $value =~ s/^\s+//;
-    $value =~ s/^\s+$//;
+    #$value =~ s/^\s+$//;
+    $value =~ s/\s+$//;
     $value =~ s/\s+/ /g;
-    $value =~ s/[.;,\]\[\)\(\/"']//g;
+    #$value =~ s/[.;,\]\[\)\(\/"']//g;
     return $value;
 }
 
