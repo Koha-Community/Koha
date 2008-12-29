@@ -63,7 +63,7 @@
             <input name="limit" value="<!-- TMPL_VAR name="LoginBranchcode" -->" type="hidden" />
         <!-- /TMPL_IF --><!-- /TMPL_IF -->
         <input type="submit" value="Go" id="searchsubmit" class="left" />
-<!-- TMPL_IF NAME="opacbookbag" --><span id="cmspan"></span><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="opacbookbag" --><span id="cmspan"><a href="#" id="cartmenulink" class=\"\"><i></i><span><i></i><span></span><img src="/opac-tmpl/prog/images/cart.gif" width="14" height="14" alt="" border="0" /> Cart<span id="basketcount"></span></span></a></span><!-- /TMPL_IF -->
 
 <!--TMPL_IF NAME="virtualshelves" --><a href="/cgi-bin/koha/opac-shelves.pl" id="listsmenulink" class=""><i></i><span><i></i><span></span>Lists </span></a><!-- /TMPL_IF -->
     </form>
