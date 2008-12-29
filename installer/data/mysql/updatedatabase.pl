@@ -2128,6 +2128,25 @@ if ( C4::Context->preference('Version') < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE `borrower_attributes` MODIFY COLUMN `attribute` VARCHAR(64) DEFAULT NULL");
     $dbh->do("ALTER TABLE `borrower_attributes` MODIFY COLUMN `password` VARCHAR(64) DEFAULT NULL");
     print "Upgrade to $DBversion done (bug 2687: increase length of borrower attribute fields)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = '3.01.00.011';
+if ( C4::Context->preference('Version') < TransformToNum($DBversion) ) {
+
+    # Yes, the old value was ^M terminated.
+    my $bad_value = "function prepareEmailPopup(){\r\n  if (!document.getElementById) return false;\r\n  if (!document.getElementById('reserveemail')) return false;\r\n  rsvlink = document.getElementById('reserveemail');\r\n  rsvlink.onclick = function() {\r\n      doReservePopup();\r\n      return false;\r\n	}\r\n}\r\n\r\nfunction doReservePopup(){\r\n}\r\n\r\nfunction prepareReserveList(){\r\n}\r\n\r\naddLoadEvent(prepareEmailPopup);\r\naddLoadEvent(prepareReserveList);";
+
+    my $intranetuserjs = C4::Context->preference('intranetuserjs');
+    if ( $intranetuserjs eq $bad_value ) {
+        my $sql = <<'END_SQL';
+UPDATE systempreferences
+SET value = ''
+WHERE variable = 'intranetuserjs'
+END_SQL
+        $dbh->do($sql);
+    }
+    print "Upgrade to $DBversion done (removed bogus intranetuserjs syspref)\n";
     SetVersion($DBversion);
 }
 
