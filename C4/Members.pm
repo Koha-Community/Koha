@@ -1248,7 +1248,6 @@ sub checkuniquemember {
             "SELECT borrowernumber,categorycode FROM borrowers WHERE surname=? and firstname=?  and dateofbirth=?" :
             "SELECT borrowernumber,categorycode FROM borrowers WHERE surname=? and firstname=?";
     my $sth = $dbh->prepare($request);
-    warn $request;
     if ($collectivity) {
         $sth->execute( uc($surname) );
     } elsif($dateofbirth){
