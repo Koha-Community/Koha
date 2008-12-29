@@ -425,7 +425,6 @@ function hideCart(){
 }
 
 $("#cartDetails").ready(function(){
-	$("#cmspan").html("<a href=\"#\" id=\"cartmenulink\" class=\"\"><i></i><span><i></i><span></span><img src=\"/opac-tmpl/prog/images/cart.gif\" width=\"14\" height=\"14\" alt=\"\" border=\"0\" /> "+_("Cart")+"<span id=\"basketcount\"></span></span></a>");
 	$("#cartDetails,#cartmenulink").click(function(){ hideCart(); });
 	$("#cartmenulink").click(function(){ openBasket(); return false; });
 	$("#cartmenulink").hoverIntent(function(){
