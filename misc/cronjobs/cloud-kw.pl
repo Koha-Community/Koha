@@ -70,8 +70,7 @@ for my $cloud ( @clouds ) {
     open my $fh, ">", $cloud->{Output}
         or croak "Unable to create file ", $cloud->{Output};
 
-    my $withcss = $cloud->{Withcss};
-    $withcss =~ /^y/i;
+    my $withcss = $cloud->{Withcss} =~ /^yes/i;
     print $fh $index->html_cloud( $cloud->{KohaIndex}, $withcss );
     close $fh;
     $set_new_context && restore_context C4::Context;
