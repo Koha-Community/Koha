@@ -2,12 +2,12 @@
 # Author: Joe Atzberger <atz@liblime.com>
 #
 # This is an example of a crontab file for Debian.  It may not work 
-# in other versions of crontab, like on Solaris 8, for example.
+# in other versions of crontab, like on Solaris 8 or BSD, for example.
 # 
-# While similar in strcture, 
+# While similar in structure, 
 # this is NOT an example for cron (as root).  Cron takes an extra
 # argument per line to designate the user to run as.  You could 
-# reasonably extrapoloate the needed info from here though.
+# reasonably extrapolate the needed info from here though.
 #
 # WARNING: These jobs will do things like charge fines, send
 # potentially VERY MANY emails to patrons and even debar offending
@@ -23,23 +23,31 @@ KOHA_CONF=/home/liblime/kohaclone/etc/koha-conf.xml
 
 #
 # MULTIPLE KOHA SUPPORT:
-# You can still run jobs for this user's additional koha installs.
+# You can still run jobs for this user's additional koha installs, 
+# by manipulating those variables in the command.
 #
 # For example, on the same codebase:
-# */10 * * * *    KOHA_CONF=/home/liblime/koha-test/etc/koha-conf.xml /home/liblime/kohaclone/misc/migration_tools/rebuild_zebra.pl -b -z >/dev/null
+# */10 * * * *    KOHA_CONF=/home/liblime/koha-test/etc/koha-conf.xml /home/liblime/kohaclone/misc/migration_tools/rebuild_zebra.pl -b -a -z >/dev/null
 #
 # For example, on a separate codebase:
-# */10 * * * *    KOHA_CONF=/home/liblime/koha-test/etc/koha-conf.xml PERL5LIB=/home/liblime/koha-test /home/liblime/koha-test/misc/migration_tools/rebuild_zebra.pl -b -z >/dev/null
+# */10 * * * *    KOHA_CONF=/home/liblime/koha-test/etc/koha-conf.xml PERL5LIB=/home/liblime/koha-test /home/liblime/koha-test/misc/migration_tools/rebuild_zebra.pl -b -a -z >/dev/null
 # 
+# ADDITIONAL INFO:
+# See the perldoc of individual scripts to determine what other options
+# are available.  Check the man page for crontab to understand the 
+# schedule syntax for your system.  
 #
-# SCHEDULED JOBS:
-# Don't forget to keep the empty line at the bottom. 
+# NOTE: Don't forget to keep the empty line at the bottom. 
 # Cron/crontab will choke without it.
 #
+# SCHEDULED JOBS:
 # m h  dom mon dow   command
-0  1 * * *  /home/liblime/kohaclone/misc/cronjobs/overdue_notices.pl
-5  1 * * *  /home/liblime/kohaclone/misc/cronjobs/fines-ll.pl
-10 1 * * *  /home/liblime/kohaclone/misc/cronjobs/advance_notices.pl -c
-15 * * * *  /home/liblime/kohaclone/misc/cronjobs/process_message_queue.pl
-*/10 * * * *   /home/liblime/kohaclone/misc/migration_tools/rebuild_zebra.pl -b -z >/dev/null
+0    1 * * *  /home/liblime/kohaclone/misc/cronjobs/overdue_notices.pl -t
+5    1 * * *  /home/liblime/kohaclone/misc/cronjobs/fines.pl
+10   1 * * *  /home/liblime/kohaclone/misc/cronjobs/advance_notices.pl -c
+# 19 1 * * *  /home/liblime/kohaclone/misc/cronjobs/longoverdue.pl --lost 90=1 --confirm
+15   * * * *  /home/liblime/kohaclone/misc/cronjobs/process_message_queue.pl
+52   * * * *  /home/liblime/kohaclone/misc/cronjobs/holds/build_holds_queue.pl >/dev/null 2>&1
+*/10 * * * *  /home/liblime/kohaclone/misc/migration_tools/rebuild_zebra.pl -b -a -z >/dev/null
+# 20 1 * * *  /usr/sbin/logrotate -s /home/liblime/koha-pro/var/run/zebradb/logstatus /home/liblime/koha-pro/etc/logrotate.conf
 
