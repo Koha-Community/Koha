@@ -70,6 +70,10 @@ my $cardnumber     = $input->param('cardnumber');
 my $check_member   = $input->param('check_member');
 my $name_city      = $input->param('name_city');
 my $nodouble       = $input->param('nodouble');
+$nodouble = 1 if $op eq 'modify'; # FIXME hack to represent fact that if we're
+                                  # modifying an existing patron, it ipso facto
+                                  # isn't a duplicate.  Marking FIXME because this
+                                  # script needs to be refactored.
 my $select_city    = $input->param('select_city');
 my $nok            = $input->param('nok');
 my $guarantorinfo  = $input->param('guarantorinfo');
