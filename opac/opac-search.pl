@@ -116,11 +116,12 @@ if (C4::Context->preference('TagsEnabled')) {
 
 # load the branches
 my $branches = GetBranches();
-my @branch_loop;
-
-for my $branch_hash (sort keys %$branches) {
-    push @branch_loop, {value => "$branch_hash" , branchname => $branches->{$branch_hash}->{'branchname'}, };
-}
+# FIXME: next line duplicates GetBranchesLoop(0,0);
+my @branch_loop = map {
+                    {value => $_, branchname => $branches->{$_}->{branchname}}
+                } sort {
+                    $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname}
+                } keys %$branches;
 
 my $categories = GetBranchCategories(undef,'searchdomain');
 
