@@ -12,7 +12,7 @@
         });
     });
 <!-- /TMPL_IF -->
-        //
+        // FIXME: many of these js functions appear unused
         function isNotNull(f,noalert) {
             if (f.value.length ==0) {
     return false;
@@ -88,24 +88,21 @@
 
 <!-- TMPL_IF NAME="add_form" -->
     
-        
         <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
                 
-        <fieldset class="rows"><legend><!-- TMPL_IF NAME="modify" -->
-            Modify a system preference
-        <!-- TMPL_ELSE -->
-            Add a system preference
-        <!-- /TMPL_IF --></legend><ol>
+        <fieldset class="rows"><legend>
+        <!-- TMPL_IF NAME="modify" -->Modify
+        <!-- TMPL_ELSE -->Add
+        <!-- /TMPL_IF --> a system preference</legend><ol>
             <li><label for="explanation">Explanation: </label><input type="text" name="explanation" id="explanation" size="60" value="<!-- TMPL_VAR NAME="explanation" escape="HTML" -->" /><input type="hidden" name="op" value="add_validate" /></li>
             <li><!-- TMPL_IF NAME="searchfield" --><span class="label">Variable: </span><!-- TMPL_VAR NAME="searchfield" --><input type="hidden" name="variable" value="<!-- TMPL_VAR NAME="searchfield" -->" />
             <!-- TMPL_ELSE --><label for="variable">Variable: </label><input type="text" name="variable" id="variable" size="60" /><!-- /TMPL_IF --></li>
-            <li><label for="value">Value: </label><!-- TMPL_IF NAME="type-free" -->
+            <li><label for="value">Value: </label>
+                <!-- TMPL_IF NAME="type-free" -->
                     <textarea id="value" name="value" cols="<!-- TMPL_VAR NAME="fieldlength" -->"><!-- TMPL_VAR NAME="value" escape="HTML" --></textarea>
-                <!-- /TMPL_IF -->
-                <!-- TMPL_IF NAME="type-textarea" -->
+                <!-- TMPL_ELSIF NAME="type-textarea" -->
                     <textarea name="value" id="value" rows="<!--TMPL_VAR NAME="rows" -->" cols="<!-- TMPL_VAR NAME="cols" -->"><!-- TMPL_VAR NAME="value" escape="HTML" --></textarea>
-                <!-- /TMPL_IF -->
-                <!-- TMPL_IF NAME="type-choice" -->
+                <!-- TMPL_ELSIF NAME="type-choice" -->
                     <select name="value" id="value">
                         <!-- TMPL_LOOP NAME="options" -->
                             <!-- TMPL_IF NAME="selected" -->
@@ -186,8 +183,6 @@
     <!-- /TMPL_IF -->
     
     <!-- TMPL_IF NAME="add_validate" -->
-    
-
         <h3>Data recorded</h3>
         
         <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
@@ -196,7 +191,6 @@
     <!-- /TMPL_IF -->
     
     <!-- TMPL_IF NAME="delete_confirm" -->
-    
     <table>
         <caption>Confirm Deletion of <!-- TMPL_VAR NAME="searchfield" -->?</caption>
         <tr>
@@ -212,15 +206,12 @@
         <input type="hidden" name="Tvalue" value="<!-- TMPL_VAR NAME="Tvalue" -->" />
         <input type="submit"  value="Yes, Delete" /></form> 
         <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="No, Do not Delete" /></form>
-    
-    
     <!-- /TMPL_IF -->
     
     <!-- TMPL_IF NAME="delete_confirmed" -->
-    
         <h3>Data deleted</h3>
         <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-        <input type="submit" value="Back to System Preferences" />
+            <input type="submit" value="Back to System Preferences" />
         </form>
     <!-- /TMPL_IF -->
    
@@ -244,14 +235,14 @@
     }   //]]>
     </script>
     <ul class="toolbar">
-    <li><a id="newstopword" href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form">New Preference</a></li>
-</ul></div>
+        <li><a id="newstopword" href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form">New Preference</a></li>
+    </ul></div>
     
     <h1>System preferences admin</h1>
     <h2><!-- TMPL_VAR name="tab" --> preferences</h2>
     <!-- TMPL_VAR NAME="searchfield" -->
     <table width="80%" id="sysprefst">
-<thead>    <tr>
+    <thead><tr>
         <th>Preference</th>
         <th>Explanation</th>
         <th>Value</th>
@@ -259,7 +250,7 @@
         <th>Delete</th>
     </tr></thead>
     <tbody><!-- TMPL_LOOP NAME="loop" -->
-    <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+    <!-- TMPL_UNLESS NAME="__odd__" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_UNLESS -->
 
         <td><strong><a href="<!-- TMPL_VAR NAME="edit" -->"><!-- TMPL_VAR NAME="variable" --></a></strong></td><td> <!-- TMPL_VAR NAME="explanation" ESCAPE="HTML" --></td>
         <!-- TMPL_IF NAME="oneline" -->
