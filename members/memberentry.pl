@@ -19,7 +19,7 @@
 
 # pragma
 use strict;
-use warnings;  # FIXME: really.
+use warnings;
 
 # external modules
 use CGI;
@@ -119,8 +119,10 @@ my %newdata;	# comes from $input->param()
 if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
     my @names= ($borrower_data && $op ne 'save') ? keys %$borrower_data : $input->param();
     foreach my $key (@names) {
-        $newdata{$key} = $input->param($key) if (defined $input->param($key));
-        $newdata{$key} =~ s/\"/&quot;/gg unless $key eq 'borrowernotes' or $key eq 'opacnote';
+        if (defined $input->param($key)) {
+            $newdata{$key} = $input->param($key);
+            $newdata{$key} =~ s/\"/&quot;/g unless $key eq 'borrowernotes' or $key eq 'opacnote';
+        }
     }
     my $dateobject = C4::Dates->new();
     my $syspref = $dateobject->regexp();		# same syspref format for all 3 dates
@@ -380,7 +382,7 @@ foreach (qw(C A S P I X)) {
 $template->param('typeloop' => \@typeloop);
 
 # test in city
-$select_city=getidcity($data{'city'}) if ($guarantorid ne '0');
+$select_city=getidcity($data{'city'}) if defined $guarantorid and ($guarantorid ne '0');
 ($default_city=$select_city) if ($step eq 0);
 if (!defined($select_city) or $select_city eq '' ){
 	$default_city = &getidcity($data{'city'});
