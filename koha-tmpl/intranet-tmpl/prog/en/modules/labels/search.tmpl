@@ -67,7 +67,7 @@ to add to Batch <!-- TMPL_VAR NAME="batch_id" -->
 
    <input type="text" size="30" id="ccl_textbox" name="ccl_textbox" class="focus" title="Enter search terms" value=""/>
 
-</li><!-- FIXME: script does keyword search regardless<li>
+</li>
 </ol>
 </fieldset>
 
@@ -93,7 +93,7 @@ to add to Batch <!-- TMPL_VAR NAME="batch_id" -->
 	    </th>
 	    <td>
   <input type="text" size="10" id="datefrom" name="datefrom" value="" />
-  <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" id="openCalendarFrom" style="cursor: pointer;" valign="top" />
+  <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" id="openCalendarFrom" alt="Show Calendar" />
 
 <script type="text/javascript">
     Calendar.setup({
@@ -117,7 +117,7 @@ to add to Batch <!-- TMPL_VAR NAME="batch_id" -->
 	    </th>
 	    <td>
   <input type="text" size="10" id="dateto" name="dateto" value="" />
-  <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" id="openCalendarTo" style="cursor: pointer;" valign="top" />
+  <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" id="openCalendarTo" alt="Show Calendar" />
 
 <script type="text/javascript">
     Calendar.setup({
@@ -128,28 +128,8 @@ to add to Batch <!-- TMPL_VAR NAME="batch_id" -->
     });
 </script>
 
-<!-- FIXME: script returns ALL type regardless
-    <tr><th scope="row">Document Type</th>
-                <td colspan="2">
-                    <select name="Filter" disabled="disabled">
-                        <option value="">All Item Types</option>
-<!-- TMPL_ELSE --><!-- /TMPL_IF -->
-                        <!-- TMPL_LOOP name="itemtypeloop" -->
-                            <!-- TMPL_IF name="selected" -->
-                                <option value="<!-- TMPL_VAR name="value" -->"  selected="selected" >
-                            <!-- TMPL_ELSE -->
-                                <option value="<!-- TMPL_VAR name="value" -->">
-                            <!-- /TMPL_IF --><!-- TMPL_VAR name="description" --></option>
-<!-- TMPL_ELSE --><!-- /TMPL_IF -->
-                        <!-- /TMPL_LOOP -->
-                    </select>
                 </td>
             </tr></table>
-
-
-
-
-
 
 
 
