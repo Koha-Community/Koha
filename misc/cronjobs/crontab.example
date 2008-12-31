@@ -21,6 +21,8 @@
 PERL5LIB=/home/liblime/kohaclone
 KOHA_CONF=/home/liblime/kohaclone/etc/koha-conf.xml
 
+# Some additional variables to save you typing
+KOHA_CRON_PATH = /home/liblime/kohaclone/misc/cronjobs
 #
 # MULTIPLE KOHA SUPPORT:
 # You can still run jobs for this user's additional koha installs, 
@@ -42,12 +44,34 @@ KOHA_CONF=/home/liblime/kohaclone/etc/koha-conf.xml
 #
 # SCHEDULED JOBS:
 # m h  dom mon dow   command
-0    1 * * *  /home/liblime/kohaclone/misc/cronjobs/overdue_notices.pl -t
-5    1 * * *  /home/liblime/kohaclone/misc/cronjobs/fines.pl
-10   1 * * *  /home/liblime/kohaclone/misc/cronjobs/advance_notices.pl -c
-# 19 1 * * *  /home/liblime/kohaclone/misc/cronjobs/longoverdue.pl --lost 90=1 --confirm
-15   * * * *  /home/liblime/kohaclone/misc/cronjobs/process_message_queue.pl
-52   * * * *  /home/liblime/kohaclone/misc/cronjobs/holds/build_holds_queue.pl >/dev/null 2>&1
-*/10 * * * *  /home/liblime/kohaclone/misc/migration_tools/rebuild_zebra.pl -b -a -z >/dev/null
-# 20 1 * * *  /usr/sbin/logrotate -s /home/liblime/koha-pro/var/run/zebradb/logstatus /home/liblime/koha-pro/etc/logrotate.conf
+
+# OVERDUE NOTICES
+0    1 * * *  $KOHA_CRON_PATH/overdue_notices.pl -t
+
+# FINES
+5    1 * * *  $KOHA_CRON_PATH/fines.pl
+
+# ADVANCE NOTICES
+10   1 * * *  $KOHA_CRON_PATH/advance_notices.pl -c
+
+# PROCESS LONG OVERDUES
+# updates item status from available to longoverdue for items long overdue
+# 19 1 * * *  $KOHA_CRON_PATH/longoverdue.pl --lost 90=1 --confirm
+
+# SEND EMAILS
+15   * * * *  $KOHA_CRON_PATH/process_message_queue.pl
+
+# Hourly holds queue updated
+52   * * * *  $KOHA_CRON_PATH/holds/build_holds_queue.pl >/dev/null 2>&1
+
+# ZEBRA INDEX UPDATES with -z option, incremental index updates throughout the day
+# for both authorities and bibs
+*/10 * * * *  $KOHA_CRON_PATH/../migration_tools/rebuild_zebra.pl -b -a -z >/dev/null
+
+# services_throttle -- resets the xISBN service
+59 23 * * *  $KOHA_CRON_PATH/services_throttle.pl > /dev/null 2>&1
+
+# ROTATE LOGS
+# Obviously, one needs logrotate(8) to do this
+# 20 1 * * *  /usr/sbin/logrotate -s /home/liblime/kohaclone/var/run/zebradb/logstatus /home/liblime/kohaclone/etc/logrotate.conf
 
