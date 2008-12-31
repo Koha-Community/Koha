@@ -67,52 +67,7 @@ to add to Batch <!-- TMPL_VAR NAME="batch_id" -->
 
    <input type="text" size="30" id="ccl_textbox" name="ccl_textbox" class="focus" title="Enter search terms" value=""/>
 
-</li><!-- FIXME: script does keyword search regardless<li>
-<select name="idx" disabled="disabled">
-
-<!-- TMPL_IF NAME="selected" --><option value="kw" selected="selected">Keyword</option>
-<!-- TMPL_ELSE --><option value="kw">Keyword</option><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" --><option value="au" selected="selected">Author</option>
-<!-- TMPL_ELSE --><option value="au">Author</option><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" --><option value="yr" selected="selected">Publication Date</option>
-<!-- TMPL_ELSE --><option value="yr">Publication Date</option><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" --><option value="sn" selected="selected">Standard Number</option>
-<!-- TMPL_ELSE --><option value="sn">Standard Number</option><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" --><option value="nb" selected="selected">ISBN</option>
-<!-- TMPL_ELSE --><option value="nb">ISBN</option><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" --><option value="ns" selected="selected">ISSN</option>
-<!-- TMPL_ELSE --><option value="ns">ISSN</option><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" --><option value="lcn,phr" selected="selected">Call Number</option>
-<!-- TMPL_ELSE --><option value="lcn,phr">Call Number</option><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" --><option value="su" selected="selected">Subject</option>
-<!-- TMPL_ELSE --><option value="su">Subject</option><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" -->
-   <option value="ti" selected="selected">Title</option>
-<!-- TMPL_ELSE -->
-   <option value="ti" selected="selected">Title</option><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" --><option value="ti,phr" selected="selected">Title Phrase</option>
-<!-- TMPL_ELSE --><option value="ti,phr">Title Phrase</option><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" --><option value="se" selected="selected">Series Title</option>
-<!-- TMPL_ELSE --><option value="se">Series Title</option><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" --><option value="bc" selected="selected">Barcode</option>
-<!-- TMPL_ELSE --><option value="bc">Barcode</option><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" --><option value="acqdate" selected="selected">Acquisition Date</option>
-<!-- TMPL_ELSE --><option value="acqdate">Acquisition Date</option><!-- /TMPL_IF -->
-</select>
-   <input type="text" size="30" name="q" title="Enter search terms" value="" disabled="disabled" />  FIXME: script doesn't "catch" q param
-</li> -->
+</li>
 </ol>
 </fieldset>
 
@@ -120,12 +75,10 @@ to add to Batch <!-- TMPL_VAR NAME="batch_id" -->
 <fieldset><legend>Sort by: </legend>
     <p><select id="sort_by" name="sort_by">
         <option value="">Field-weighted, Relevance Ranked</option>
-<!-- TMPL_ELSE --><!-- /TMPL_IF -->
         <!-- TMPL_LOOP NAME="sort_by_loop" -->
 
 <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="label" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="label" --></option><!-- /TMPL_IF -->
 
-<!-- TMPL_ELSE --><!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
     </select>
         </p>
@@ -140,7 +93,7 @@ to add to Batch <!-- TMPL_VAR NAME="batch_id" -->
 	    </th>
 	    <td>
   <input type="text" size="10" id="datefrom" name="datefrom" value="" />
-  <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" id="openCalendarFrom" style="cursor: pointer;" valign="top" />
+  <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" id="openCalendarFrom" alt="Show Calendar" />
 
 <script type="text/javascript">
     Calendar.setup({
@@ -164,7 +117,7 @@ to add to Batch <!-- TMPL_VAR NAME="batch_id" -->
 	    </th>
 	    <td>
   <input type="text" size="10" id="dateto" name="dateto" value="" />
-  <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" id="openCalendarTo" style="cursor: pointer;" valign="top" />
+  <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" id="openCalendarTo" alt="Show Calendar" />
 
 <script type="text/javascript">
     Calendar.setup({
@@ -175,23 +128,8 @@ to add to Batch <!-- TMPL_VAR NAME="batch_id" -->
     });
 </script>
 
-<!-- FIXME: script returns ALL type regardless
-    <tr><th scope="row">Document Type</th>
-                <td colspan="2">
-                    <select name="Filter" disabled="disabled">
-                        <option value="">All Item Types</option>
-<!-- TMPL_ELSE --><!-- /TMPL_IF -->
-                        <!-- TMPL_LOOP name="itemtypeloop" -->
-                            <!-- TMPL_IF name="selected" -->
-                                <option value="<!-- TMPL_VAR name="value" -->"  selected="selected" >
-                            <!-- TMPL_ELSE -->
-                                <option value="<!-- TMPL_VAR name="value" -->">
-                            <!-- /TMPL_IF --><!-- TMPL_VAR name="description" --></option>
-<!-- TMPL_ELSE --><!-- /TMPL_IF -->
-                        <!-- /TMPL_LOOP -->
-                    </select>
                 </td>
-            </tr></table></fieldset>-->
+            </tr></table>
 
 
 
