@@ -76,6 +76,7 @@ my $results_per_page = $params->{'num'} || 20;
 my $booksellerid = $params->{'booksellerid'};
 my $basketno     = $params->{'basketno'};
 my $sub          = $params->{'sub'};
+my $bookseller = GetBookSellerFromId($booksellerid);
 
 # getting the template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -92,8 +93,13 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my ($error, $marcresults, $total_hits) = SimpleSearch($query, $results_per_page * ($page - 1), $results_per_page);
 
 if (defined $error) {
-    $template->param(query_error => $error);
     warn "error: ".$error;
+    $template->param(
+        query_error => $error,
+        basketno             => $basketno,
+        booksellerid     => $bookseller->{'id'},
+        name             => $bookseller->{'name'},
+    );
     output_html_with_http_headers $input, $cookie, $template->output;
     exit;
 }
@@ -114,19 +120,11 @@ foreach my $i ( 0 .. scalar @$marcresults ) {
 
 $template->param(
     basketno             => $basketno,
-    booksellerid         => $booksellerid,
+    booksellerid     => $bookseller->{'id'},
+    name             => $bookseller->{'name'},
     resultsloop          => \@results,
     total                => $total_hits,
     query                => $query,
-    virtualshelves       => C4::Context->preference("virtualshelves"),
-    LibraryName          => C4::Context->preference("LibraryName"),
-    OpacNav              => C4::Context->preference("OpacNav"),
-    opaccredits          => C4::Context->preference("opaccredits"),
-    AmazonContent        => C4::Context->preference("AmazonContent"),
-    opacsmallimage       => C4::Context->preference("opacsmallimage"),
-    opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
-    opaccolorstylesheet  => C4::Context->preference("opaccolorstylesheet"),
-    "BiblioDefaultView".C4::Context->preference("IntranetBiblioDefaultView") => 1,
     pagination_bar       => pagination_bar( "$ENV{'SCRIPT_NAME'}?q=$query&booksellerid=$booksellerid&", getnbpages( $total_hits, $results_per_page ), $page, 'page' ),
 );
 
