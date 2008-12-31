@@ -79,7 +79,7 @@
     <td><!-- TMPL_VAR NAME="category_description" --> (<!-- TMPL_VAR name="category_type" -->)</td>
     <td><!-- TMPL_VAR NAME="branchcode" --></td>
     <td><!-- TMPL_VAR NAME="dateexpiry" --></td>
-    <td><!-- TMPL_IF EXPR="overdues > 0" --><span class="overdue"><strong><!-- TMPL_VAR NAME="overdues" --></strong></span><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="overdues" --><!-- /TMPL_IF -->/<!-- TMPL_VAR NAME="issues" --></td>
+    <td><!-- TMPL_IF "overdues" --><span class="overdue"><strong><!-- TMPL_VAR NAME="overdues" --></strong></span><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="overdues" --><!-- /TMPL_IF -->/<!-- TMPL_VAR NAME="issues" --></td>
     <td><!-- TMPL_VAR NAME="fines" --></td>
     <td><!-- TMPL_VAR NAME="borrowernotes" --></td>
 	<td><!-- TMPL_IF NAME="category_type" -->
