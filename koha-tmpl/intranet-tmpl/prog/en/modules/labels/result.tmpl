@@ -73,18 +73,17 @@ function add_item3(i_itemnumber){
 			<!-- TMPL_ELSE -->
 			No results found
 			<!-- /TMPL_IF -->
-		</p>
 	</div>
 
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/labels/label-item-search.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->">Search for Items for Batch <!-- TMPL_VAR NAME="batch_id" --></a> &rsaquo; Search results</div>
-<form name="resultform" class="checkboxed"><div style="float: right; margin-top: .5em;"><input type="submit" class="icon addchecked" value="Add checked" onclick="add_item('checked',<!-- TMPL_VAR NAME="batch_id" -->,'<!-- TMPL_VAR NAME="type" -->'); return false" /> <input type="button" class="close" value="Done" /></div><div style="line-height: 2em; margin-left: .7em;"><a id="CheckAll" href="/cgi-bin/koha/labels/label-item-search.pl">Select All</a></span><span class="clearall"><a id="CheckNone" href="/cgi-bin/koha/labels/label-item-search.pl">Clear All</a></div>
+<form name="resultform" class="checkboxed" action=""><div style="float: right; margin-top: .5em;"><input type="submit" class="icon addchecked" value="Add checked" onclick="add_item('checked',<!-- TMPL_VAR NAME="batch_id" -->,'<!-- TMPL_VAR NAME="type" -->'); return false" /> <input type="button" class="close" value="Done" /></div><div style="line-height: 2em; margin-left: .7em;"><a id="CheckAll" href="/cgi-bin/koha/labels/label-item-search.pl">Select All</a><span class="clearall"><a id="CheckNone" href="/cgi-bin/koha/labels/label-item-search.pl">Clear All</a></span></div>
 
 <input type="hidden" name="ccl_query" value="<!-- TMPL_VAR name="ccl_query" -->" />
 
 
 	<!-- TMPL_LOOP name="result" -->
-	<table width="610 pixels" frame="border" border="2" style="float: left; margin: .5em 0;">
+	<table frame="border" border="2" style="float: left; margin: .5em 0;">
 		<!-- TMPL_IF name="highlight" -->
 			<tr class="highlight">
 		<!-- TMPL_ELSE -->
@@ -103,8 +102,10 @@ function add_item3(i_itemnumber){
                                     <th>Barcode</th>
                                     <th></th>
                                 </tr>
+        <!-- TMPL_IF name="item" -->
+                <tr>
         <!-- TMPL_LOOP name="item" -->
-					<!-- TMPL_IF name="i_itemnumber1" --><tr><td align="center"><label for="itm<!-- TMPL_VAR NAME="i_itemnumber1" -->" ><input type="checkbox" name="i_itemnumber" id="itm<!-- TMPL_VAR NAME="i_itemnumber1" -->" value="<!-- TMPL_VAR NAME="i_itemnumber1" -->" /></label></td><!-- /TMPL_IF -->
+					<!-- TMPL_IF name="i_itemnumber1" --><td align="center"><label for="itm<!-- TMPL_VAR NAME="i_itemnumber1" -->" ><input type="checkbox" name="i_itemnumber" id="itm<!-- TMPL_VAR NAME="i_itemnumber1" -->" value="<!-- TMPL_VAR NAME="i_itemnumber1" -->" /></label></td><!-- /TMPL_IF -->
 					<!-- TMPL_IF name="i_itemcallnumber" --><td align="center"><!-- TMPL_VAR name="i_itemcallnumber" --><br /></td><!-- /TMPL_IF -->
 					<!-- TMPL_IF name="i_dateaccessioned" --><td align="center"><!-- TMPL_VAR name="i_dateaccessioned" --><br /></td><!-- /TMPL_IF -->
 					<!-- TMPL_IF name="i_barcode" --><td align="center"><!-- TMPL_VAR name="i_barcode" --></td><!-- /TMPL_IF -->
@@ -114,9 +115,11 @@ function add_item3(i_itemnumber){
 <!-- /NEW -->
         <!-- /TMPL_LOOP --><!-- item -->
                                         </tr>
+        <!-- /TMPL_IF -->
 	 </table>
 	<!-- /TMPL_LOOP -->
 </form>
+</div>
 
 	<div class="results">
 		<!-- TMPL_IF EXPR="displayprev || displaynext" --><p>
@@ -137,7 +140,6 @@ function add_item3(i_itemnumber){
 				<!-- /TMPL_IF -->
 		</p><!-- /TMPL_IF -->
 	</div>
-
 
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

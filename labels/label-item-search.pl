@@ -203,26 +203,28 @@ if ($show_results) {
 		  : $startfrom + $resultsperpage - 1;
 
 		# multi page display
-		my $displaynext = 0;
-		my $displayprev = $startfrom;
+		$displaynext = 0;
+		$displayprev = $startfrom > 1 ? $startfrom : 0;
 
-		$displaynext = 1 if (scalar @results == $resultsperpage);
+		$displaynext = 1 if $to < $total_hits;
 
-		$template->param(
+	} else {
+        $displayprev = 0;
+        $displaynext = 0;
+    }
 
-			total          => $total_hits,
-			from           => $from,
-			to             => $to,
-			startfromnext  => $startfromnext,
-			startfromprev  => $startfromprev,
-			startfrom      => $startfrom,
-			displaynext    => $displaynext,
-			displayprev    => $displayprev,
-			resultsperpage => $resultsperpage,
-			numbers        => \@numbers,
-
-		);
-	}
+	$template->param(
+		total          => $total_hits,
+		from           => $from,
+		to             => $to,
+		startfromnext  => $startfromnext,
+		startfromprev  => $startfromprev,
+		startfrom      => $startfrom,
+		displaynext    => $displaynext,
+		displayprev    => $displayprev,
+		resultsperpage => $resultsperpage,
+		numbers        => \@numbers,
+	);
 
 	$template->param(
 		result    => \@results,
