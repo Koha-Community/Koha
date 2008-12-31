@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-# WARNING: 4-character tab stops here
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -19,6 +18,8 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
+
 use CGI;
 use C4::Auth;
 use HTML::Template::Pro;
@@ -54,7 +55,7 @@ BEGIN {
 my $query           = new CGI;
 
 my $type      = $query->param('type');
-my $op        = $query->param('op');
+my $op        = $query->param('op') || '';
 my $batch_id  = $query->param('batch_id');
 my $ccl_query = $query->param('ccl_query');
 
@@ -97,7 +98,7 @@ if ($op eq "do_search") {
 	if ($marcresults) {
 		$show_results = scalar @$marcresults;
 	} else {
-		warn "ERROR label-item-search: no results from SimpleSearch";
+		$debug and warn "ERROR label-item-search: no results from SimpleSearch";
 
 		# leave $show_results undef
 	}
@@ -270,14 +271,3 @@ $template->param(
     DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
 );
 output_html_with_http_headers $query, $cookie, $template->output;
-
-# Local Variables:
-# tab-width: 4
-# End:
-
-
-
-
-
-
-
