@@ -16,6 +16,7 @@ package C4::Context;
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+use warnings;
 use strict;
 use vars qw($VERSION $AUTOLOAD $context @context_stack);
 
@@ -190,17 +191,14 @@ $context = undef;        # Initially, no context is set
 =cut
 
 sub KOHAVERSION {
-    my $cgidir = C4::Context->intranetdir ."/cgi-bin";
+    my $cgidir = C4::Context->intranetdir;
 
-    # 2 cases here : on CVS install, $cgidir does not need a /cgi-bin
-    # on a standard install, /cgi-bin need to be added.
-    # test one, then the other
-    # FIXME - is this all really necessary?
-    unless (opendir(DIR, "$cgidir/cataloguing/value_builder")) {
-        $cgidir = C4::Context->intranetdir;
-        closedir(DIR);
+    # Apparently the GIT code does not run out of a CGI-BIN subdirectory
+    # but distribution code does?  (Stan, 1jan08)
+    if(-d $cgidir . "/cgi-bin"){
+        my $cgidir .= "/cgi-bin";
     }
-
+    
     do $cgidir."/kohaversion.pl" || die "NO $cgidir/kohaversion.pl";
     return kohaversion();
 }
@@ -649,13 +647,13 @@ sub _new_Zconn {
 sub _new_dbh
 {
 
-### $context
-    ##correct name for db_schme        
+    ## $context
+    ## correct name for db_schme        
     my $db_driver;
     if ($context->config("db_scheme")){
-    $db_driver=db_scheme2dbi($context->config("db_scheme"));
+        $db_driver=db_scheme2dbi($context->config("db_scheme"));
     }else{
-    $db_driver="mysql";
+        $db_driver="mysql";
     }
 
     my $db_name   = $context->config("database");
@@ -931,12 +929,12 @@ sub set_userenv{
         "cardnumber" => $usercnum,
         "firstname"  => $userfirstname,
         "surname"    => $usersurname,
-#possibly a law problem
+        #possibly a law problem
         "branch"     => $userbranch,
         "branchname" => $branchname,
         "flags"      => $userflags,
-        "emailaddress"    => $emailaddress,
-		"branchprinter"    => $branchprinter
+        "emailaddress"     => $emailaddress,
+        "branchprinter"    => $branchprinter
     };
     $context->{userenv}->{$var} = $cell;
     return $cell;
