@@ -113,7 +113,7 @@ Also deals with stocktaking.
 
 =head2 barcodedecode
 
-=head3 $str = &barcodedecode($barcode);
+=head3 $str = &barcodedecode($barcode, [$filter]);
 
 =over 4
 
@@ -124,6 +124,10 @@ to circulation.pl that differs from the barcode stored for the item.
 For proper functioning of this filter, calling the function on the 
 correct barcode string (items.barcode) should return an unaltered barcode.
 
+The optional $filter argument is to allow for testing or explicit 
+behavior that ignores the System Pref.  Valid values are the same as the 
+System Pref options.
+
 =back
 
 =cut
@@ -132,31 +136,27 @@ correct barcode string (items.barcode) should return an unaltered barcode.
 # FIXME -- these plugins should be moved out of Circulation.pm
 #
 sub barcodedecode {
-    my ($barcode) = @_;
-    my $filter = C4::Context->preference('itemBarcodeInputFilter');
-	if($filter eq 'whitespace') {
+    my ($barcode, $filter) = @_;
+    $filter = C4::Context->preference('itemBarcodeInputFilter') unless $filter;
+    $filter or return $barcode;     # ensure filter is defined, else return untouched barcode
+	if ($filter eq 'whitespace') {
 		$barcode =~ s/\s//g;
-		return $barcode;
-	} elsif($filter eq 'cuecat') {
+	} elsif ($filter eq 'cuecat') {
 		chomp($barcode);
 	    my @fields = split( /\./, $barcode );
 	    my @results = map( decode($_), @fields[ 1 .. $#fields ] );
-	    if ( $#results == 2 ) {
-	        return $results[2];
-	    }
-	    else {
-	        return $barcode;
-	    }
-	} elsif($filter eq 'T-prefix') {
-		if ( $barcode =~ /^[Tt]/) {
-			if (substr($barcode,1,1) eq '0') {
-				return $barcode;
-			} else {
-				$barcode = substr($barcode,2) + 0 ;
-			}
+	    ($#results == 2) and return $results[2];
+	} elsif ($filter eq 'T-prefix') {
+		if ($barcode =~ /^[Tt](\d)/) {
+			(defined($1) and $1 eq '0') and return $barcode;
+            $barcode = substr($barcode, 2) + 0;     # FIXME: probably should be substr($barcode, 1)
 		}
-		return sprintf( "T%07d",$barcode);
+        return sprintf("T%07d", $barcode);
+        # FIXME: $barcode could be "T1", causing warning: substr outside of string
+        # Why drop the nonzero digit after the T?
+        # Why pass non-digits (or empty string) to "T%07d"?
 	}
+    return $barcode;    # return barcode, modified or not
 }
 
 =head2 decode
@@ -167,6 +167,9 @@ sub barcodedecode {
 
 =item Decodes a segment of a string emitted by a CueCat barcode scanner and
 returns it.
+
+FIXME: Should be replaced with Barcode::Cuecat from CPAN
+or Javascript based decoding on the client side.
 
 =back
 
@@ -180,7 +183,7 @@ sub decode {
     my $l = ( $#s + 1 ) % 4;
     if ($l) {
         if ( $l == 1 ) {
-            warn "Error!";
+            # warn "Error: Cuecat decode parsing failed!";
             return;
         }
         $l = 4 - $l;
