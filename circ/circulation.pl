@@ -269,6 +269,11 @@ if ($barcode) {
         $inprocess = 1;
     }
   elsif ($issueconfirmed){	# FIXME: Do something? Or is this to *intentionally* do nothing?
+    if (C4::Context->preference("AllowNotForLoanForcing")){
+        AddIssue( $borrower, $barcode, $datedue, $cancelreserve );
+        $template->param(IMPOSSIBLE  => 0);
+        $inprocess = 1;
+    }
   }
   else {
         my $noquestion = 1;

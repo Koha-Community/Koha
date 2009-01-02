@@ -144,13 +144,27 @@ $.tablesorter.addParser({
     <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
     <input type="submit" class="deny" value="No, Don't Check Out (N)" accesskey="n" />
 </form>
-
 </div></div>
 <!-- /TMPL_IF --> <!-- NEEDSCONFIRMATION -->
 
         <!-- TMPL_IF NAME="IMPOSSIBLE" -->
 <div class="yui-g">
 <div id="circ_impossible" class="dialog alert">
+        <!-- TMPL_IF NAME="NOT_FOR_LOAN_CAN_FORCE" -->
+            <form action="/cgi-bin/koha/circ/circulation.pl" method="post">
+                    <h3>Not for loan</h3>
+                    <p>Item not for loan, are you sure you want to loan it?</p>
+                    <input type="hidden" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->" />
+                    <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+                    <input type="hidden" name="issueconfirmed" value="1" />
+                    <input type="submit" class="approve" value="Yes, Check Out (Y)" accesskey="y" />
+            </form>
+            <form method="get" action="/cgi-bin/koha/circ/circulation.pl">
+                <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+                <input type="submit" class="deny" value="No, Don't Check Out (N)" accesskey="n" />
+            </form>
+        <!-- /TMPL_IF -->
+
 <!-- RESULT OF ISSUING REQUEST -->
         <ul>
         <!-- TMPL_IF NAME="STATS" -->
