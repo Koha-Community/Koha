@@ -436,6 +436,7 @@ for (my $i=0;$i<=@servers;$i++) {
 				next;
 			}
 			$_ ->{'clean_isbn'} = $1;
+            $_->{'coins'} = GetCOinSBiblio($_->{'biblionumber'});
 		}
         $total = $total + $results_hashref->{$server}->{"hits"};
         ## If there's just one result, redirect to the detail page
