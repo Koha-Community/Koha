@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 
 use strict;
-# use warnings;  # FIXME
+use warnings;
+
 use CGI;
 use C4::Labels;     # GetActiveLabelTemplate get_label_options GetAssociatedProfile 
 # GetPatronCardItems GetLabelItems GetUnitsValue...
@@ -155,7 +156,7 @@ if ($DEBUG) {
 #warn "$label_height, $label_width\n";
 #warn "$page_height, $page_width\n";
 
-my ($item, $rowcount, $colcount, $x_pos, $y_pos, $rowtemp, $coltemp);
+my ($rowcount, $colcount, $x_pos, $y_pos, $rowtemp, $coltemp);
 
 if ( $start_label and $start_label == 1 ) {
     $rowcount = 1;
@@ -178,7 +179,7 @@ if ( $start_label and $start_label == 1 ) {
 #### main foreach loop #### 
 #
 
-foreach $item (@resultsloop) {
+foreach my $item (@resultsloop) {
     warn "Label parameters: xpos=$x_pos, ypos=$y_pos, lblwid=$label_width, lblhig=$label_height" if $DEBUG;
 
     drawbox($x_pos, $y_pos, $label_width, $label_height) if $guidebox;  # regardless of printingtype
