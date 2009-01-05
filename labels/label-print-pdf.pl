@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
+use warnings;
 use CGI;
 use C4::Labels;
 use C4::Auth;
@@ -147,7 +148,6 @@ if ( $DEBUG && $profile->{'prof_id'} ) {
     warn "No profile associated so no adjustment applied.";
 }
 
-my $item;
 my ( $i, $i2 );    # loop counters
 
 #warn " $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY";
@@ -180,7 +180,7 @@ else {
 #    main foreach loop
 #
 
-foreach $item (@resultsloop) {
+foreach my $item (@resultsloop) {
     warn "Label parameters: xpos=$x_pos, ypos=$y_pos, lblwid=$label_width, lblhig=$label_height" if $DEBUG;
     if ( $printingtype eq 'BAR' ) {
         drawbox( $x_pos, $y_pos, $label_width, $label_height ) if $guidebox;
