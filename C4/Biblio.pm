@@ -819,7 +819,7 @@ for the given frameworkcode
 
 sub GetMarcFromKohaField {
     my ( $kohafield, $frameworkcode ) = @_;
-    return 0, 0 unless $kohafield;
+    return 0, 0 unless $kohafield and defined $frameworkcode;
     my $relations = C4::Context->marcfromkohafield;
     return (
         $relations->{$frameworkcode}->{$kohafield}->[0],
@@ -905,6 +905,9 @@ sub GetAuthorisedValueDesc {
     my $dbh = C4::Context->dbh;
 
     if (!$category) {
+
+        return $value unless defined $tagslib->{$tag}->{$subfield}->{'authorised_value'};
+
 #---- branch
         if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
             return C4::Branch::GetBranchName($value);
@@ -1100,7 +1103,7 @@ sub GetMarcAuthors {
             $value = GetAuthorisedValueDesc( $field->tag(), $authors_subfield->[0], $authors_subfield->[1], '', $tagslib ) if ( $marcflavour eq 'UNIMARC' and ($authors_subfield->[0] =~/4/));
             my @this_link_loop = @link_loop;
             my $separator = C4::Context->preference("authoritysep") unless $count_auth==0;
-            push @subfields_loop, {code => $subfieldcode, value => $value, link_loop => \@this_link_loop, separator => $separator} unless ($authors_subfield->[0] == 9 );
+            push @subfields_loop, {code => $subfieldcode, value => $value, link_loop => \@this_link_loop, separator => $separator} unless ($authors_subfield->[0] eq '9' );
             $count_auth++;
         }
         push @marcauthors, { MARCAUTHOR_SUBFIELDS_LOOP => \@subfields_loop };
@@ -1372,7 +1375,7 @@ sub TransformHtmlToXml {
     my $prevtag = -1;
     my $first   = 1;
     my $j       = -1;
-    for ( my $i = 0 ; $i <= @$tags ; $i++ ) {
+    for ( my $i = 0 ; $i < @$tags ; $i++ ) {
         if (C4::Context->preference('marcflavour') eq 'UNIMARC' and @$tags[$i] eq "100" and @$subfields[$i] eq "a") {
             # if we have a 100 field and it's values are not correct, skip them.
             # if we don't have any valid 100 field, we will create a default one at the end
@@ -1461,6 +1464,7 @@ sub TransformHtmlToXml {
         }
         $prevtag = @$tags[$i];
     }
+    $xml .= "</datafield>\n" if @$tags > 0;
     if (C4::Context->preference('marcflavour') eq 'UNIMARC' and !$unimarc_and_100_exist) {
 #     warn "SETTING 100 for $auth_type";
         use POSIX qw(strftime);
@@ -1506,7 +1510,7 @@ sub TransformHtmlToXml {
 sub TransformHtmlToMarc {
     my $params = shift;
     my $cgi    = shift;
-   
+
     # explicitly turn on the UTF-8 flag for all
     # 'tag_' parameters to avoid incorrect character
     # conversion later on
@@ -1568,7 +1572,7 @@ sub TransformHtmlToMarc {
                 }
     # > 009, deal with subfields
             } else {
-                while($params->[$j] =~ /_code_/){ # browse all it's subfield
+                while(defined $params->[$j] && $params->[$j] =~ /_code_/){ # browse all it's subfield
                     my $inner_param = $params->[$j];
                     if ($newfield){
                         if($cgi->param($params->[$j+1]) ne ''){  # only if there is a value (code => value)
@@ -1618,6 +1622,7 @@ sub TransformMarcToKoha {
 
     my $result;
     $limit_table=$limit_table||0;
+    $frameworkcode = '' unless defined $frameworkcode;
     
     unless (defined $inverted_field_map) {
         $inverted_field_map = _get_inverted_marc_field_map();
@@ -1675,8 +1680,8 @@ sub TransformMarcToKoha {
     # modify copyrightdate to keep only the 1st year found
     if (exists $result->{'copyrightdate'}) {
         my $temp = $result->{'copyrightdate'};
-        $temp =~ m/c(\d\d\d\d)/;    # search cYYYY first
-        if ( $1 > 0 ) {
+        $temp =~ m/c(\d\d\d\d)/;
+        if ( $temp =~ m/c(\d\d\d\d)/ and $1 > 0 ) { # search cYYYY first
             $result->{'copyrightdate'} = $1;
         }
         else {                      # if no cYYYY, get the 1st date.
@@ -1688,8 +1693,7 @@ sub TransformMarcToKoha {
     # modify publicationyear to keep only the 1st year found
     if (exists $result->{'publicationyear'}) {
         my $temp = $result->{'publicationyear'};
-        $temp =~ m/c(\d\d\d\d)/;    # search cYYYY first
-        if ( $1 > 0 ) {
+        if ( $temp =~ m/c(\d\d\d\d)/ and $1 > 0 ) { # search cYYYY first
             $result->{'publicationyear'} = $1;
         }
         else {                      # if no cYYYY, get the 1st date.
@@ -1707,6 +1711,7 @@ sub _get_inverted_marc_field_map {
 
     foreach my $frameworkcode (keys %{ $relations }) {
         foreach my $kohafield (keys %{ $relations->{$frameworkcode} }) {
+            next unless @{ $relations->{$frameworkcode}->{$kohafield} }; # not all columns are mapped to MARC tag & subfield
             my $tag = $relations->{$frameworkcode}->{$kohafield}->[0];
             my $subfield = $relations->{$frameworkcode}->{$kohafield}->[1];
             my ($table, $column) = split /[.]/, $kohafield, 2;
