@@ -1521,7 +1521,11 @@ sub GetMarcItem {
 
     # Tack on 'items.' prefix to column names so that TransformKohaToMarc will work.
     # Also, don't emit a subfield if the underlying field is blank.
-    my $mungeditem = { map {  defined($itemrecord->{$_}) ? ("items.$_" => $itemrecord->{$_}) : ()  } keys %{ $itemrecord } };
+    my $mungeditem = { 
+        map {  
+            defined($itemrecord->{$_}) && $itemrecord->{$_} ne '' ? ("items.$_" => $itemrecord->{$_}) : ()  
+        } keys %{ $itemrecord } 
+    };
     my $itemmarc = TransformKohaToMarc($mungeditem);
 
     my $unlinked_item_subfields = _parse_unlinked_item_subfields_from_xml($mungeditem->{'items.more_subfields_xml'});
