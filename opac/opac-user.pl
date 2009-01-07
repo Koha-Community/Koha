@@ -128,7 +128,7 @@ foreach my $issue ( @issue_list ) {
     my ($status,$renewerror) = CanBookBeRenewed( $borrowernumber, $issue->{'itemnumber'} );
 	($issue->{'renewcount'},$issue->{'renewsallowed'},$issue->{'renewsleft'}) = GetRenewCount($borrowernumber, $issue->{'itemnumber'});
 
-    $issue->{'status'} = $status;
+    $issue->{'status'} = $status || C4::Context->preference("OpacRenewalAllowed");
 
     if ( $issue->{'overdue'} ) {
         push @overdues, $issue;
