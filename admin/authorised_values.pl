@@ -18,7 +18,8 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-# use warnings; #FIXME
+use warnings;
+
 use CGI;
 use C4::Auth;
 use C4::Context;
@@ -43,22 +44,23 @@ sub AuthorizedValuesForCategory ($) {
 
 my $input = new CGI;
 my $id          = $input->param('id');
-my $offset      = $input->param('offset');
+my $offset      = $input->param('offset') || 0;
 my $searchfield = $input->param('searchfield');
+$searchfield = '' unless defined $searchfield;
 $searchfield=~ s/\,//g;
 my $script_name = "/cgi-bin/koha/admin/authorised_values.pl";
 my $dbh = C4::Context->dbh;
 
 my ($template, $borrowernumber, $cookie)= get_template_and_user({
-      template_name => "admin/authorised_values.tmpl",
+    template_name => "admin/authorised_values.tmpl",
     authnotrequired => 0,
-      flagsrequired => {parameters => 1},
+    flagsrequired => {parameters => 1},
     query => $input,
-     type => "intranet",
+    type => "intranet",
     debug => 1,
 });
 my $pagesize = 20;
-my $op = $input->param('op');
+my $op = $input->param('op') || '';
 
 $template->param(  script_name => $script_name,
                  ($op||'else') => 1 );
