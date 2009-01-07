@@ -22,10 +22,11 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 ); 
 my @items          = $query->param('item');
 my $borrowernumber = $query->param('borrowernumber') || $query->param('bornum');
+my $opacrenew = C4::Context->preference("OpacRenewalAllowed");
 
 for my $itemnumber ( @items ) {
     my ($status,$error) = CanBookBeRenewed( $borrowernumber, $itemnumber );
-    if ( $status == 1 ) {
+    if ( $status == 1 && $opacrenew == 1 ) {
         AddRenewal( $borrowernumber, $itemnumber );
     }
 }
