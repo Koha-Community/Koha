@@ -169,7 +169,18 @@ function verify_images() {
             </tr>
             <!-- TMPL_LOOP NAME="itemloop" -->
                 <tr>
-                    <!-- TMPL_IF NAME="item-level_itypes" --><td class="itype"><!-- TMPL_IF NAME="noItemTypeImages" --><!-- TMPL_VAR NAME="description" --><!-- TMPL_ELSE --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --></td><!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="item-level_itypes" -->
+                      <td class="itype">
+                        <!-- TMPL_IF NAME="noItemTypeImages" -->
+                          <!-- TMPL_VAR NAME="description" -->
+                        <!-- TMPL_ELSE -->
+                          <!-- TMPL_IF NAME="imageurl" -->
+                            <img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" />
+                          <!-- TMPL_ELSE -->
+                            <!-- TMPL_VAR NAME="description" -->
+                          <!-- /TMPL_IF -->
+                        <!-- /TMPL_IF --></td>
+                    <!-- /TMPL_IF -->
                     <td class="location"><!-- TMPL_UNLESS NAME="singlebranchmode" --><!-- TMPL_VAR NAME="branchname" --><!-- /TMPL_UNLESS --> <!-- TMPL_VAR NAME="location" --> </td>
                     <!-- TMPL_IF NAME="itemdata_ccode" --><td><!-- TMPL_VAR name="ccode" --></td><!-- /TMPL_IF -->
                     <td class="itemcallnumber"><!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --></td>
@@ -311,11 +322,6 @@ function verify_images() {
                 <!-- TMPL_IF name="pages" --> <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" --> <!-- TMPL_IF NAME="illus" --><!-- TMPL_VAR NAME="illus" --><!-- /TMPL_IF -->
                 <!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" -->
 </td>
-
-    <!-- TMPL_LOOP NAME=items -->
-    <!-- <!-- TMPL_IF NAME="itype" --><img src="/opac-tmpl/prog/itemtypeimg/<!-- TMPL_VAR NAME="itype" -->.gif" title="<!-- TMPL_VAR NAME="itype" -->" /><!-- /TMPL_IF --> -->
-    <!-- barcode:<!-- TMPL_VAR NAME="barcode" --> -->
-    <!-- /TMPL_LOOP -->
 
 <!-- /TMPL_LOOP -->
 </table></div><!-- /TMPL_IF -->

@@ -1184,14 +1184,29 @@ If this is set, it is set to C<One Order>.
 sub GetItemsInfo {
     my ( $biblionumber, $type ) = @_;
     my $dbh   = C4::Context->dbh;
-    my $query = "SELECT items.*,biblio.*,biblioitems.volume,biblioitems.number,biblioitems.itemtype,biblioitems.isbn,biblioitems.issn,biblioitems.publicationyear,biblioitems.publishercode,biblioitems.volumedate,biblioitems.volumedesc,biblioitems.lccn,biblioitems.url,items.notforloan as itemnotforloan
-                 FROM items 
-                 LEFT JOIN biblio ON biblio.biblionumber = items.biblionumber
-                 LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber";
-    $query .=  (C4::Context->preference('item-level_itypes')) ?
-                     " LEFT JOIN itemtypes on items.itype = itemtypes.itemtype "
-                    : " LEFT JOIN itemtypes on biblioitems.itemtype = itemtypes.itemtype ";
-    $query .= "WHERE items.biblionumber = ? ORDER BY items.dateaccessioned desc" ;
+    # note biblioitems.* must be avoided to prevent large marc and marcxml fields from killing performance.
+    my $query = "
+    SELECT items.*,
+           biblio.*,
+           biblioitems.volume,
+           biblioitems.number,
+           biblioitems.itemtype,
+           biblioitems.isbn,
+           biblioitems.issn,
+           biblioitems.publicationyear,
+           biblioitems.publishercode,
+           biblioitems.volumedate,
+           biblioitems.volumedesc,
+           biblioitems.lccn,
+           biblioitems.url,
+           items.notforloan as itemnotforloan,
+           itemtypes.description
+     FROM items
+     LEFT JOIN biblio      ON      biblio.biblionumber     = items.biblionumber
+     LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber
+     LEFT JOIN itemtypes   ON   itemtypes.itemtype         = "
+     . (C4::Context->preference('item-level_itypes') ? 'items.itype' : 'biblioitems.itemtype');
+    $query .= " WHERE items.biblionumber = ? ORDER BY items.dateaccessioned desc" ;
     my $sth = $dbh->prepare($query);
     $sth->execute($biblionumber);
     my $i = 0;
@@ -1309,7 +1324,6 @@ sub GetItemsInfo {
         $results[$i] = $data;
         $i++;
     }
-    $sth->finish;
 	if($serial) {
 		return( sort { ($b->{'publisheddate'} || $b->{'enumchron'}) cmp ($a->{'publisheddate'} || $a->{'enumchron'}) } @results );
 	} else {
