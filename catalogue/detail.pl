@@ -70,8 +70,6 @@ my $subtitle         = C4::Biblio::get_koha_field_from_marc('bibliosubtitle', 's
 # Get Branches, Itemtypes and Locations
 my $branches = GetBranches();
 my $itemtypes = GetItemTypes();
-
-# FIXME: move this to a pm, check waiting status for holds
 my $dbh = C4::Context->dbh;
 
 # change back when ive fixed request.pl
@@ -103,6 +101,8 @@ my $shelflocations = GetKohaAuthorisedValues('items.location', $fw);
 my $collections    = GetKohaAuthorisedValues('items.ccode'   , $fw);
 my (@itemloop, %itemfields);
 my $norequests = 1;
+my $authvalcode_items_itemlost = GetAuthValCode('items.itemlost',$fw);
+my $authvalcode_items_damaged  = GetAuthValCode('items.damaged', $fw);
 foreach my $item (@items) {
 
     # can place holds defaults to yes
@@ -117,9 +117,9 @@ foreach my $item (@items) {
 		$item->{$_} = format_date($item->{$_});
 	}
     # item damaged, lost, withdrawn loops
-    $item->{itemlostloop}= GetAuthorisedValues(GetAuthValCode('items.itemlost',$fw),$item->{itemlost}) if GetAuthValCode('items.itemlost',$fw);
+    $item->{itemlostloop} = GetAuthorisedValues($authvalcode_items_itemlost, $item->{itemlost}) if $authvalcode_items_itemlost;
     if ($item->{damaged}) {
-        $item->{itemdamagedloop}= GetAuthorisedValues(GetAuthValCode('items.damaged',$fw),$item->{damaged}) if GetAuthValCode('items.damaged',$fw);
+        $item->{itemdamagedloop} = GetAuthorisedValues($authvalcode_items_damaged, $item->{damaged}) if $authvalcode_items_damaged;
     }
     #get shelf location and collection code description if they are authorised value.
     my $shelfcode = $item->{'location'};
