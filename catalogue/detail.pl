@@ -112,7 +112,9 @@ foreach my $item (@items) {
     if ( defined $item->{'publictype'} ) {
         $item->{ $item->{'publictype'} } = 1;
     }
-    $item->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtypes->{ $item->{itype} }{imageurl} );
+    $item->{imageurl} = defined $item->{itype} ? getitemtypeimagelocation('intranet', $itemtypes->{ $item->{itype} }{imageurl})
+                                               : '';
+
 	foreach (qw(datedue datelastseen onloan)) {
 		$item->{$_} = format_date($item->{$_});
 	}
