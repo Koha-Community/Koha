@@ -1045,7 +1045,7 @@ sub GetPendingIssues {
     my $today = C4::Dates->new->output('iso');
     foreach (@$data) {
         $_->{date_due} or next;
-        ($_->{date_due} < $today) and $_->{overdue} = 1;
+        ($_->{date_due} lt $today) and $_->{overdue} = 1;
     }
     return $data;
 }
