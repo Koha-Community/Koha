@@ -8,12 +8,20 @@
 
 # TODO: add explainations from the installer ? 
 
-export PERL_MM_USE_DEFAULT=1
-export KOHA_USER='koha'
-export KOHA_GROUP='koha'
+export PERL_MM_USE_DEFAULT=1 # makes the environment variables work
+export KOHA_USER='koha'      # unix account used by zebra  
+export KOHA_GROUP='koha'     # unix group used by zebra
 
 # default root to install config files
-export DESTDIR=$HOME
+export DESTDIR=$HOME         # here would be koha configuration, logs and zebra base 
+
+# The installer tries to guess what's your ip address and your hostname
+# if you plan to use koha with vhosts strategy or run koha on a recent linux
+# guesses won't be appropriate: edit by yourself
+# If you plan to use vhosts, you have to edit the koha-httpd.conf file
+# anyway :(
+export WEBSERVER_HOST=EDITME
+export WEBSERVER_IP=EDITME
 
 # from now, commented export directives are alternatives
 # uncomment one of them to choose it
@@ -41,6 +49,9 @@ export DB_TYPE=mysql
 
 export DB_HOST='localhost'
 export DB_NAME='koha'
+
+# /!\ concider changing password if you don't want 
+# some script kiddies to crack you koha server
 export DB_USER='kohaadmin'
 export DB_PASS='katikoan'
 
@@ -53,6 +64,8 @@ export ZEBRA_MARC_FORMAT=marc21
 #export ZEBRA_LANGUAGE=fr
 export ZEBRA_LANGUAGE=en
 
+# /!\ concider changing password if you don't want 
+# some script kiddies to crack you koha server
 export ZEBRA_USER='kohauser'
 export ZEBRA_PASS='zebrastripes'
 export ZEBRA_SRU_HOST='localhost'
