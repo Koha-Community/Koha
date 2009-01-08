@@ -216,7 +216,8 @@ my $lib2 = &GetSortDetails( "Bsort2", $data->{'sort2'} );
 
 # current issues
 #
-my ( $count, $issue ) = GetPendingIssues($borrowernumber);
+my $issue = GetPendingIssues($borrowernumber);
+my $count = scalar(@$issue);
 my $roaddetails = &GetRoadTypeDetails( $data->{'streettype'} );
 my $today       = POSIX::strftime("%Y-%m-%d", localtime);	# iso format
 my @issuedata;

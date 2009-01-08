@@ -177,9 +177,9 @@ EOF
 
 #'
 sub printslip ($) {
-    my ( $borrowernumber ) = shift;
-    my ( $borrower ) = GetMemberDetails( $borrowernumber);
-	my ($countissues,$issueslist) = GetPendingIssues($borrowernumber); 
+    my $borrowernumber = shift;
+    my $borrower   = GetMemberDetails($borrowernumber);
+	my $issueslist = GetPendingIssues($borrowernumber); 
 	foreach my $it (@$issueslist){
 		$it->{'date_due'}=format_date($it->{'date_due'});
     }		

@@ -994,44 +994,60 @@ sub UpdateGuarantees {
 }
 =head2 GetPendingIssues
 
-  ($count, $issues) = &GetPendingIssues($borrowernumber);
+  my $issues = &GetPendingIssues($borrowernumber);
 
 Looks up what the patron with the given borrowernumber has borrowed.
 
-C<&GetPendingIssues> returns a two-element array. C<$issues> is a
-reference-to-array, where each element is a reference-to-hash; the
-keys are the fields from the C<issues>, C<biblio>, and C<items> tables
-in the Koha database. C<$count> is the number of elements in
-C<$issues>.
+C<&GetPendingIssues> returns a
+reference-to-array where each element is a reference-to-hash; the
+keys are the fields from the C<issues>, C<biblio>, and C<items> tables.
+The keys include C<biblioitems> fields except marc and marcxml.
 
 =cut
 
 #'
 sub GetPendingIssues {
     my ($borrowernumber) = @_;
-    my $dbh              = C4::Context->dbh;
-
-    my $sth              = $dbh->prepare(
-   "SELECT *,issues.timestamp as timestamp FROM issues 
-      LEFT JOIN items ON issues.itemnumber=items.itemnumber
-      LEFT JOIN biblio ON     items.biblionumber=biblio.biblionumber 
-      LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber
+    # must avoid biblioitems.* to prevent large marc and marcxml fields from killing performance
+    # FIXME: namespace collision: each table has "timestamp" fields.  Which one is "timestamp" ?
+    # FIXME: circ/ciculation.pl tries to sort by timestamp!
+    # FIXME: C4::Print::printslip tries to sort by timestamp!
+    # FIXME: namespace collision: other collisions possible.
+    # FIXME: most of this data isn't really being used by callers.
+    my $sth = C4::Context->dbh->prepare(
+   "SELECT issues.*,
+            items.*,
+           biblio.*,
+           biblioitems.volume,
+           biblioitems.number,
+           biblioitems.itemtype,
+           biblioitems.isbn,
+           biblioitems.issn,
+           biblioitems.publicationyear,
+           biblioitems.publishercode,
+           biblioitems.volumedate,
+           biblioitems.volumedesc,
+           biblioitems.lccn,
+           biblioitems.url,
+           issues.timestamp AS timestamp,
+           issues.renewals  AS renewals,
+            items.renewals  AS totalrenewals
+    FROM   issues
+    LEFT JOIN items       ON items.itemnumber       =      issues.itemnumber
+    LEFT JOIN biblio      ON items.biblionumber     =      biblio.biblionumber
+    LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
     WHERE
-      borrowernumber=? 
+      borrowernumber=?
     ORDER BY issues.issuedate"
     );
     $sth->execute($borrowernumber);
     my $data = $sth->fetchall_arrayref({});
-    my $today = POSIX::strftime("%Y%m%d", localtime);
-    foreach( @$data ) {
-        my $datedue = $_->{'date_due'};
-        $datedue =~ s/-//g;
-        if ( $datedue < $today ) {
-            $_->{'overdue'} = 1;
-        }
+    my $today = C4::Dates->new->output('iso');
+    foreach (@$data) {
+        $_->{date_due} or next;
+        ($_->{date_due} < $today) and $_->{overdue} = 1;
     }
-    $sth->finish;
-    return ( scalar(@$data), $data );
+    return $data;
 }
 
 =head2 GetAllIssues
