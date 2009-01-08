@@ -136,7 +136,7 @@ if ($borrower->{cardnumber}) {
 	my $bornum = $borrower->{borrowernumber};
 	my $borrowername = $borrower->{firstname} . " " . $borrower->{surname};
 	my @issues;
-	my ($countissues,$issueslist) = GetPendingIssues($borrower->{'borrowernumber'});
+	my ($issueslist) = GetPendingIssues($borrower->{'borrowernumber'});
 	foreach my $it ( @$issueslist ) {
 		push @issues, $it;
 		$cnt++;

@@ -1,10 +1,8 @@
 #!/usr/bin/perl
 
-
 #script to delete items
 #written 2/5/00
 #by chris@katipo.co.nz
-
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -31,11 +29,8 @@ use C4::Output;
 use C4::Auth;
 use C4::Members;
 
-
 my $input = new CGI;
 
-my $flagsrequired;
-$flagsrequired->{borrowers}=1;
 my ($template, $borrowernumber, $cookie)
                 = get_template_and_user({template_name => "members/deletemem.tmpl",
                                         query => $input,
@@ -47,9 +42,8 @@ my ($template, $borrowernumber, $cookie)
 
 #print $input->header;
 my $member=$input->param('member');
-my %member2;
-$member2{'borrowernumber'}=$member;
-my ($countissues,$issues)=GetPendingIssues($member);
+my $issues = GetPendingIssues($member);     # FIXME: wasteful call when really, we only want the count
+my $countissues = scalar(@$issues);
 
 my ($bor)=GetMemberDetails($member,'');
 my $flags=$bor->{flags};
@@ -74,7 +68,6 @@ my $dbh = C4::Context->dbh;
 my $sth=$dbh->prepare("Select * from borrowers where guarantorid=?");
 $sth->execute($member);
 my $data=$sth->fetchrow_hashref;
-$sth->finish;
 if ($countissues > 0 or $flags->{'CHARGES'}  or $data->{'borrowernumber'}){
     #   print $input->header;
     $template->param(borrowernumber => $member);
@@ -84,7 +77,7 @@ if ($countissues > 0 or $flags->{'CHARGES'}  or $data->{'borrowernumber'}){
     if ($flags->{'CHARGES'} ne '') {
         $template->param(charges => $flags->{'CHARGES'}->{'amount'});
     }
-    if ($data ne '') {
+    if ($data) {
         $template->param(guarantees => 1);
     }
 output_html_with_http_headers $input, $cookie, $template->output;

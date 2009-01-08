@@ -90,7 +90,7 @@ $template->param(   BORROWER_INFO  => \@bordat,
                 );
 
 #get issued items ....
-my ($countissues,$issues) = GetPendingIssues($borrowernumber);
+my ($issues) = GetPendingIssues($borrowernumber);
 my @issue_list = sort { $b->{'date_due'} cmp $a->{'date_due'} } @$issues;
 
 my $count          = 0;

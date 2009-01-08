@@ -422,7 +422,7 @@ my @issued_itemtypes_count_loop;
 
 if ($borrower) {
 # get each issue of the borrower & separate them in todayissues & previous issues
-    my ($countissues,$issueslist) = GetPendingIssues($borrower->{'borrowernumber'});
+    my ($issueslist) = GetPendingIssues($borrower->{'borrowernumber'});
 
     # split in 2 arrays for today & previous
     foreach my $it ( @$issueslist ) {
@@ -482,7 +482,7 @@ FROM issuingrules
   WHERE categorycode=?
 " );
 #my @issued_itemtypes_count;  # huh?
-$issueqty_sth->execute("*");	# FIXME: Why have a WHERE clause at all with a hardcoded "*"?
+$issueqty_sth->execute("*");	# This is a literal asterisk, not a wildcard.
 
 while ( my $data = $issueqty_sth->fetchrow_hashref() ) {
 

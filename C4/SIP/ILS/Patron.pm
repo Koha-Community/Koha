@@ -103,8 +103,7 @@ sub new {
 	# FIXME: populate fine_items recall_items
 #   $ilspatron{hold_items}    = (GetReservesFromBorrowernumber($kp->{borrowernumber},'F'));
 	$ilspatron{unavail_holds} = [(GetReservesFromBorrowernumber($kp->{borrowernumber}))];
-	my ($count,$issues) = GetPendingIssues($kp->{borrowernumber});
-	$ilspatron{items} = $issues;
+	$ilspatron{items} = GetPendingIssues($kp->{borrowernumber});
 	$self = \%ilspatron;
 	$debug and warn Dumper($self);
     syslog("LOG_DEBUG", "new ILS::Patron(%s): found patron '%s'", $patron_id,$self->{id});
