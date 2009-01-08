@@ -60,15 +60,21 @@ also need to override WEBSERVER_IP.
 
 =cut
 
-$myhost = hostname();
-$mydomain = $myhost;
-$mydomain =~ s/^.*?\.//;
-# This is set here to rescue systems with broken DNS
-if ( !gethostbyname( $myhost || 'localhost' ) ) {
-    die 'Could not get the IP address of ' . ( $myhost || 'localhost' ) . ', DNS fault?';
+if ( $myhost = $ENV{WEBSERVER_HOST} || hostname ) {
+    ( $mydomain = $myhost ) =~ s/.*?\.//;
+} else {
+    $myhost   = 'localhost';
+    $mydomain = 'localdomain';
 }
 
-$myip = $ENV{'WEBSERVER_IP'} || inet_ntoa( scalar gethostbyname( $myhost||'localhost' ) );
+unless ( $myip = $ENV{WEBSERVER_IP} ) {
+    my $byname = gethostbyname( $myhost )
+	or die "Could not get the IP address of $myhost, DNS fault? ($!)";
+    $myip = inet_ntoa $byname
+	or die "can't inet_ntoa ($!)";
+}
+
+
 $prefix = $ENV{'INSTALL_BASE'} || "/usr";
 
 # These are our configuration guesses
