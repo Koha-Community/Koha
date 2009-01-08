@@ -734,27 +734,32 @@ sub CanBookBeIssued {
     unless ( $item->{barcode} ) {
         $issuingimpossible{UNKNOWN_BARCODE} = 1;
     }
+
     if (   $item->{'notforloan'}
         && $item->{'notforloan'} > 0 )
     {
-        $issuingimpossible{NOT_FOR_LOAN} = 1;
+        if(!C4::Context->preference("AllowNotForLoanOverride")){
+            $issuingimpossible{NOT_FOR_LOAN} = 1;
+        }else{
+            $needsconfirmation{NOT_FOR_LOAN_FORCING} = 1;
+        }
     }
-	elsif ( !$item->{'notforloan'} ){
-		# we have to check itemtypes.notforloan also
-		if (C4::Context->preference('item-level_itypes')){
-			# this should probably be a subroutine
-			my $sth = $dbh->prepare("SELECT notforloan FROM itemtypes WHERE itemtype = ?");
-			$sth->execute($item->{'itemtype'});
-			my $notforloan=$sth->fetchrow_hashref();
-			$sth->finish();
-			if ($notforloan->{'notforloan'} == 1){
-				$issuingimpossible{NOT_FOR_LOAN} = 1;				
-			}
-		}
-		elsif ($biblioitem->{'notforloan'} == 1){
-			$issuingimpossible{NOT_FOR_LOAN} = 1;
-		}
-	}
+    elsif ( !$item->{'notforloan'} ){
+        # we have to check itemtypes.notforloan also
+        if (C4::Context->preference('item-level_itypes')){
+            # this should probably be a subroutine
+            my $sth = $dbh->prepare("SELECT notforloan FROM itemtypes WHERE itemtype = ?");
+            $sth->execute($item->{'itemtype'});
+            my $notforloan=$sth->fetchrow_hashref();
+            $sth->finish();
+            if ($notforloan->{'notforloan'} == 1){
+                $issuingimpossible{NOT_FOR_LOAN} = 1;
+            }
+        }
+        elsif ($biblioitem->{'notforloan'} == 1){
+            $issuingimpossible{NOT_FOR_LOAN} = 1;
+        }
+    }
     if ( $item->{'wthdrawn'} && $item->{'wthdrawn'} == 1 )
     {
         $issuingimpossible{WTHDRAWN} = 1;
