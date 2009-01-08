@@ -111,11 +111,14 @@
     
     <!-- TMPL_IF NAME="pages" --><span class="results_summary"><span class="label">Physical details:</span> <!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></span><!-- /TMPL_IF -->
     <!-- COinS / OpenURL -->
-    <!-- TMPL_IF NAME="ocoins_format" -->
-    <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3A<!-- TMPL_VAR NAME="ocoins_format" -->&amp;rft.au=<!-- TMPL_VAR NAME="author" -->&amp;rft.btitle=<!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle"-->&amp;rft.date=<!-- TMPL_VAR NAME="publicationyear" -->&amp;rft.pages=<!--TMPL_VAR NAME="pages" -->&amp;rft.isbn=<!-- TMPL_VAR NAME=amazonisbn-->&amp;rft.aucorp=&amp;rft.place=<!-- TMPL_VAR NAME="place"-->&amp;rft.pub=<!-- TMPL_VAR NAME="publishercode" -->&amp;rft.edition=<!--TMPL_VAR NAME="edition" -->&amp;rft.series=<!-- TMPL_VAR NAME="series"-->&amp;rft.genre="></span><!-- /TMPL_IF --> 
-    <!-- TMPL_IF name="normalized_isbn" -->
-    <!-- unAPI <abbr/> tag -->
-    <span class="results_summary"><span class="label">ISBN: </span><abbr class="unapi-id" title="koha:isbn:<!-- TMPL_VAR NAME="normalized_isbn" -->"><!-- TMPL_VAR NAME="normalized_isbn" --></abbr></span><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="ocoins" -->
+    <span class="Z3988" title="<!-- TMPL_VAR NAME="ocoins" -->"></span>
+    <!-- TMPL_ELSE -->
+        <!-- TMPL_IF name="normalized_isbn" -->
+            <!-- unAPI <abbr/> tag -->
+            <span class="results_summary"><span class="label">ISBN: </span><abbr class="unapi-id" title="koha:isbn:<!-- TMPL_VAR NAME="normalized_isbn" -->"><!-- TMPL_VAR NAME="normalized_isbn" --></abbr></span>
+        <!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->
     <!-- TMPL_IF name="issn" -->
     <span class="results_summary"><span class="label">ISSN:</span><!-- TMPL_VAR NAME="issn" --></span>
     <!-- /TMPL_IF -->
@@ -150,7 +153,7 @@
     <!-- TMPL_IF name="copyrightdate" -->
     <span class="results_summary"><span class="label">Year : </span><!-- TMPL_VAR NAME="copyrightdate" --></span>
     <!-- /TMPL_IF -->
-    <!-- TMPL_UNLESS NAME="item-level_itypes" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->">
+    <!-- TMPL_UNLESS NAME="item-level_itypes" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" />
     <span class="results_summary"><span class="label">Item type : </span>
         <!-- TMPL_IF name="description" -->
         <!-- TMPL_VAR NAME="description" -->

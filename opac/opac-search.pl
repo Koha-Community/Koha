@@ -379,6 +379,7 @@ my $total = 0; # the total results for the whole set
 my $facets; # this object stores the faceted results that display on the left-hand of the results page
 my @results_array;
 my $results_hashref;
+my @coins;
 
 if ($tag) {
 	my $taglist = get_tags({term=>$tag, approved=>1});
@@ -439,7 +440,10 @@ for (my $i=0;$i<=@servers;$i++) {
 				$_ ->{'TagLoop'} = get_tags({biblionumber=>$bibnum, approved=>1, 'sort'=>'-weight',
 										limit=>$tag_quantity });
 			}
-		}	
+		}
+		foreach (@newresults) {
+            $_->{coins} = GetCOinSBiblio($_->{'biblionumber'});
+		}
         $total = $total + $results_hashref->{$server}->{"hits"} if $results_hashref->{$server}->{"hits"};
         ## If there's just one result, redirect to the detail page
         if ($total == 1) {         

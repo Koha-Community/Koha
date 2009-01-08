@@ -224,13 +224,8 @@ $template->param(
 );
 
 # COinS format FIXME: for books Only
-my $coins_format;
-my $fmt = substr $record->leader(), 6,2;
-my $fmts;
-$fmts->{'am'} = 'book';
-$coins_format = $fmts->{$fmt};
 $template->param(
-	ocoins_format => $coins_format,
+    ocoins => GetCOinSBiblio($biblionumber),
 );
 
 my $reviews = getreviews( $biblionumber, 1 );

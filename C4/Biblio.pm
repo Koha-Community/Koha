@@ -67,6 +67,7 @@ BEGIN {
 		GetMarcUrls
 		&GetUsedMarcStructure
 		&GetXmlBiblio
+        &GetCOinSBiblio
 
 		&GetAuthorisedValueDesc
 		&GetMarcStructure
@@ -1025,6 +1026,123 @@ sub GetXmlBiblio {
     $sth->execute($biblionumber);
     my ($marcxml) = $sth->fetchrow;
     return $marcxml;
+}
+
+=head2 GetCOinSBiblio
+
+=over 4
+
+my $coins = GetCOinSBiblio($biblionumber);
+
+Returns the COinS(a span) which can be included in a biblio record
+
+=back
+
+=cut
+
+sub GetCOinSBiblio {
+    my ( $biblionumber ) = @_;
+    my $record = GetMarcBiblio($biblionumber);
+
+    # get the coin format
+    my $pos7 = substr $record->leader(), 7,1;
+    my $pos6 = substr $record->leader(), 6,1;
+    my $mtx;
+    my $genre;
+    my ($aulast, $aufirst) = ('','');
+    my $oauthors;
+    my $title;
+    my $pubyear;
+    my $isbn;
+    my $issn;
+    my $publisher;
+
+    if ( C4::Context->preference("marcflavour") eq "UNIMARC" ){
+        my $fmts6;
+        my $fmts7;
+        %$fmts6 = (
+                    'a' => 'book',
+                    'b' => 'manuscript',
+                    'c' => 'book',
+                    'd' => 'manuscript',
+                    'e' => 'map',
+                    'f' => 'map',
+                    'g' => 'film',
+                    'i' => 'audioRecording',
+                    'j' => 'audioRecording',
+                    'k' => 'artwork',
+                    'l' => 'document',
+                    'm' => 'computerProgram',
+                    'r' => 'document',
+
+                );
+        %$fmts7 = (
+                    'a' => 'journalArticle',
+                    's' => 'journal',
+                );
+
+        $genre =  $fmts6->{$pos6} ? $fmts6->{$pos6} : 'book' ;
+
+        if( $genre eq 'book' ){
+            $genre =  $fmts7->{$pos7} if $fmts7->{$pos7};
+        }
+
+        ##### We must transform mtx to a valable mtx and document type ####
+        if( $genre eq 'book' ){
+            $mtx = 'book';
+        }elsif( $genre eq 'journal' ){
+            $mtx = 'journal';
+        }elsif( $genre eq 'journalArticle' ){
+            $mtx = 'journal';
+            $genre = 'article';
+        }else{
+            $mtx = 'dc';
+        }
+
+        $genre = ($mtx eq 'dc') ? "&amp;rft.type=$genre" : "&amp;rft.genre=$genre";
+
+        # Setting datas
+        $aulast     = $record->subfield('700','a');
+        $aufirst    = $record->subfield('700','b');
+        $oauthors   = "&amp;rft.au=$aufirst $aulast";
+        # others authors
+        if($record->field('200')){
+            for my $au ($record->field('200')->subfield('g')){
+                $oauthors .= "&amp;rft.au=$au";
+            }
+        }
+        $title      = ( $mtx eq 'dc' ) ? "&amp;rft.title=".$record->subfield('200','a') :
+                                         "&amp;rft.title=".$record->subfield('200','a')."&amp;rft.btitle=".$record->subfield('200','a');
+        $pubyear    = $record->subfield('210','d');
+        $publisher  = $record->subfield('210','c');
+        $isbn       = $record->subfield('010','a');
+        $issn       = $record->subfield('011','a');
+    }else{
+        # MARC21 need some improve
+        my $fmts;
+        $mtx = 'book';
+        $genre = "&amp;rft.genre=book";
+
+        # Setting datas
+        $oauthors .= "&amp;rft.au=".$record->subfield('100','a');
+        # others authors
+        if($record->field('700')){
+            for my $au ($record->field('700')->subfield('a')){
+                $oauthors .= "&amp;rft.au=$au";
+            }
+        }
+        $title      = "&amp;rft.btitle=".$record->subfield('245','a');
+        $pubyear    = $record->subfield('260','c') or "";
+        $publisher  = $record->subfield('260','b') or "";
+        $isbn       = $record->subfield('020','a') or "";
+        $issn       = $record->subfield('022','a') or "";
+
+    }
+    my $coins_value = "ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3A$mtx$genre$title&amp;rft.isbn=$isbn&amp;rft.issn=$issn&amp;rft.aulast=$aulast&amp;rft.aufirst=$aufirst$oauthors&amp;rft.pub=$publisher&amp;rft.date=$pubyear";
+    $coins_value =~ s/(\ |&[^a])/\+/g;
+    #<!-- TMPL_VAR NAME="ocoins_format" -->&amp;rft.au=<!-- TMPL_VAR NAME="author" -->&amp;rft.btitle=<!-- TMPL_VAR NAME="title" -->&amp;rft.date=<!-- TMPL_VAR NAME="publicationyear" -->&amp;rft.pages=<!-- TMPL_VAR NAME="pages" -->&amp;rft.isbn=<!-- TMPL_VAR NAME=amazonisbn -->&amp;rft.aucorp=&amp;rft.place=<!-- TMPL_VAR NAME="place" -->&amp;rft.pub=<!-- TMPL_VAR NAME="publishercode" -->&amp;rft.edition=<!-- TMPL_VAR NAME="edition" -->&amp;rft.series=<!-- TMPL_VAR NAME="series" -->&amp;rft.genre="
+
+    return $coins_value;
 }
 
 =head2 GetAuthorisedValueDesc

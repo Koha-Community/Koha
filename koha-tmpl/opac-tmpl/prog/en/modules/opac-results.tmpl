@@ -331,6 +331,10 @@ $(document).ready(function(){
                 <!-- /TMPL_IF -->
 
 				<td>
+                <!-- TMPL_IF NAME="coins" -->
+                    <!-- COinS / OpenURL --><span class="Z3988" title="<!-- TMPL_VAR NAME="coins" -->"></span>
+                <!-- /TMPL_IF -->
+
 				<!-- TMPL_IF NAME="XSLTResultsDisplay" -->
                 <!-- TMPL_VAR NAME="XSLTResultsRecord" -->
 				<!-- TMPL_ELSE -->
@@ -351,7 +355,7 @@ $(document).ready(function(){
                         <!-- TMPL_IF name="size" --> <!-- TMPL_VAR name="size" --><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="timestamp" --> <i>(modified on <!-- TMPL_VAR name="timestamp" -->)</i><!-- /TMPL_IF -->
                 </span>
-                <!-- TMPL_IF NAME="copyrightdate" --><span class="results_summary"><span class="label">Date:</span><!-- TMPL_VAR NAME="copyrightdate" --></span><!-- COinS / OpenURL --><span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=<!-- TMPL_VAR NAME="author_nospan" -->&amp;rft.btitle=<!-- TMPL_VAR NAME="title_nospan" ESCAPE="url" -->&amp;rft.date=<!-- TMPL_VAR NAME="publicationyear" -->&amp;rft.tpages=<!-- TMPL_VAR NAME="size" -->&amp;rft.isbn=<!-- TMPL_VAR NAME="normalized_isbn"  ESCAPE="url" -->&amp;rft.aucorp=&amp;rft.place=<!-- TMPL_VAR NAME="place" -->&amp;rft.pub=<!-- TMPL_VAR NAME="publisher" ESCAPE="url" -->&amp;rft.edition=<!-- TMPL_VAR NAME="edition" -->&amp;rft.series=<!-- TMPL_VAR NAME="series" -->&amp;rft.genre="></span><!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="copyrightdate" --><span class="results_summary"><span class="label">Date:</span><!-- TMPL_VAR NAME="copyrightdate" --></span><!-- /TMPL_IF -->
 
 				<span class="results_summary">
                 <span class="label">Availability:</span>
