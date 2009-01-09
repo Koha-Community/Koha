@@ -1126,8 +1126,8 @@ Assumes web resources (not uncommon in MARC21 to omit resource type ind)
 sub GetMarcUrls {
     my ($record, $marcflavour) = @_;
     my @marcurls;
-    my $marcurl;
     for my $field ($record->field('856')) {
+        my $marcurl;
         my $url = $field->subfield('u');
         my @notes;
         for my $note ( $field->subfield('z')) {
@@ -1155,7 +1155,8 @@ sub GetMarcUrls {
             $marcurl->{'part'} = $s3 if($link);
             $marcurl->{'toc'} = 1 if($s3 =~ /^[Tt]able/) ;
         } else {
-            $marcurl->{'linktext'} = $url || C4::Context->preference('URLLinkText') ;
+            $marcurl->{'linktext'} = $field->subfield('z') || C4::Context->preference('URLLinkText') || $url;
+            $marcurl->{'MARCURL'} = $url ;
         }
         push @marcurls, $marcurl;    
     }
