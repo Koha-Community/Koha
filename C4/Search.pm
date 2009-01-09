@@ -499,34 +499,20 @@ sub getRecords {
                     #warn $servers[$i-1]."\n".$record; #.$facet_record->title();
                         if ($facet_record) {
                             for ( my $k = 0 ; $k <= @$facets ; $k++ ) {
-
-                                if ( $facets->[$k] ) {
-                                    my @fields;
-                                    for my $tag ( @{ $facets->[$k]->{'tags'} } )
-                                    {
-                                        push @fields,
-                                          $facet_record->field($tag);
+                                ($facets->[$k]) or next;
+                                my @fields = map {$facet_record->field($_)} @{$facets->[$k]->{'tags'}} ;
+                                for my $field (@fields) {
+                                    my @subfields = $field->subfields();
+                                    for my $subfield (@subfields) {
+                                        my ( $code, $data ) = @$subfield;
+                                        ($code eq $facets->[$k]->{'subfield'}) or next;
+                                        $facets_counter->{ $facets->[$k]->{'link_value'} }->{$data}++;
                                     }
-                                    for my $field (@fields) {
-                                        my @subfields = $field->subfields();
-                                        for my $subfield (@subfields) {
-                                            my ( $code, $data ) = @$subfield;
-                                            if ( $code eq
-                                                $facets->[$k]->{'subfield'} )
-                                            {
-                                                $facets_counter->{ $facets->[$k]
-                                                      ->{'link_value'} }
-                                                  ->{$data}++;
-                                            }
-                                        }
-                                    }
-                                    $facets_info->{ $facets->[$k]
-                                          ->{'link_value'} }->{'label_value'} =
-                                      $facets->[$k]->{'label_value'};
-                                    $facets_info->{ $facets->[$k]
-                                          ->{'link_value'} }->{'expanded'} =
-                                      $facets->[$k]->{'expanded'};
                                 }
+                                $facets_info->{ $facets->[$k]->{'link_value'} }->{'label_value'} =
+                                    $facets->[$k]->{'label_value'};
+                                $facets_info->{ $facets->[$k]->{'link_value'} }->{'expanded'} =
+                                    $facets->[$k]->{'expanded'};
                             }
                         }
                     }
