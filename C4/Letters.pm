@@ -502,8 +502,7 @@ sub parseletter {
     $sth->execute;
     while ( ( my $field ) = $sth->fetchrow_array ) {
         my $replacefield = "<<$table.$field>>";
-        my $replacedby   = $values->{$field};
-
+        my $replacedby   = $values->{$field} || '';
         $letter->{title}   =~ s/$replacefield/$replacedby/g;
         $letter->{content} =~ s/$replacefield/$replacedby/g;
     }
