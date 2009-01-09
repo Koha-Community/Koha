@@ -16,8 +16,8 @@ package C4::Context;
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-use warnings;
 use strict;
+use warnings;
 use vars qw($VERSION $AUTOLOAD $context @context_stack);
 
 BEGIN {
@@ -86,6 +86,7 @@ use ZOOM;
 use XML::Simple;
 use C4::Boolean;
 use C4::Debug;
+use POSIX ();
 
 =head1 NAME
 
@@ -889,7 +890,7 @@ set_userenv is called in Auth.pm
 sub userenv
 {
     my $var = $context->{"activeuser"};
-    return $context->{"userenv"}->{$var} if (defined $context->{"userenv"}->{$var});
+    return $context->{"userenv"}->{$var} if (defined $var and defined $context->{"userenv"}->{$var});
     # insecure=1 management
     if ($context->{"dbh"} && $context->preference('insecure')) {
         my %insecure;
@@ -902,7 +903,7 @@ sub userenv
         $insecure{emailaddress} = 'test@mode.insecure.com';
         return \%insecure;
     } else {
-        return 0;
+        return;
     }
 }
 
@@ -1013,13 +1014,16 @@ sub get_versions {
     my %versions;
     $versions{kohaVersion}  = KOHAVERSION();
     $versions{kohaDbVersion} = C4::Context->preference('version');
-    $versions{osVersion} = `uname -a`;
+    $versions{osVersion} = join(" ", POSIX::uname());
     $versions{perlVersion} = $];
-    $versions{mysqlVersion} = `mysql -V`;
-    $versions{apacheVersion} =  `httpd -v`;
-    $versions{apacheVersion} =  `httpd2 -v`            unless  $versions{apacheVersion} ;
-    $versions{apacheVersion} =  `apache2 -v`           unless  $versions{apacheVersion} ;
-    $versions{apacheVersion} =  `/usr/sbin/apache2 -v` unless  $versions{apacheVersion} ;
+    {
+        no warnings qw(exec); # suppress warnings if unable to find a program in $PATH
+        $versions{mysqlVersion}  = `mysql -V`;
+        $versions{apacheVersion} = `httpd -v`;
+        $versions{apacheVersion} = `httpd2 -v`            unless  $versions{apacheVersion} ;
+        $versions{apacheVersion} = `apache2 -v`           unless  $versions{apacheVersion} ;
+        $versions{apacheVersion} = `/usr/sbin/apache2 -v` unless  $versions{apacheVersion} ;
+    }
     return %versions;
 }
 
