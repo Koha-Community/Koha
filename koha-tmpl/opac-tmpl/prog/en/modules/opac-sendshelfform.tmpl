@@ -1,0 +1,38 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo;  Sending Your Shelf
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body style="padding: 1em;" id="sendbasket">
+<div class="container"><!-- TMPL_IF NAME="email" -->
+
+    <!-- TMPL_IF NAME="SENT" -->
+        <h3>Message Sent</h3>
+        <p>The shelf was sent to: <!-- TMPL_VAR NAME="email" --></p>
+        <p><a class="close" href="#">Close window</a></p>
+    <!-- /TMPL_IF  -->
+    <!-- TMPL_IF NAME="error" -->
+    <p>Problem sending the shelf...</p>
+    <!-- /TMPL_IF -->
+    
+<!-- TMPL_ELSE -->
+
+<form action="<!-- TMPL_VAR NAME="url" -->" method="post">
+
+<fieldset class="rows"> 
+<legend>Sending your shelf</legend>
+<ol>   <li>
+        <label for="email">Email Address:</label>
+        <input type="text" id="email" name="email" size="43" />
+    </li>
+    <li>
+            <label for="comment">Comment:</label>
+            <textarea id="comment" name="comment" rows="4" cols="40"></textarea>
+    </li>
+    <li>
+        <input type="hidden" name="shelfid" value="<!-- TMPL_VAR NAME="shelfid" -->" />
+    </li></ol></fieldset>
+       <fieldset class="action"> <input type="submit" value="Send" /> <a class="cancel close" href="#">Cancel</a> </fieldset>
+</form>
+
+<!-- /TMPL_IF --></div>
+</body>
+</html>
