@@ -18,6 +18,8 @@
 use strict;
 
 use CGI;
+use Encode qw(encode);
+
 use Mail::Sendmail;
 use MIME::QuotedPrint;
 use MIME::Base64;
@@ -129,7 +131,7 @@ if ( $email_add ) {
     #     # Writing mail
     #     $mail{body} =
     $mail{'content-type'} = "multipart/mixed; boundary=\"$boundary\"";
-    my $isofile = encode_base64($iso2709);
+    my $isofile = encode_base64(encode("UTF-8", $iso2709));
     $boundary = '--' . $boundary;
     $mail{body} = <<END_OF_BODY;
 $boundary
