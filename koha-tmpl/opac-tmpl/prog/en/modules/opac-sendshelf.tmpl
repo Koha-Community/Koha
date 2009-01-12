@@ -1,0 +1,54 @@
+<SUBJECT>
+Your Shelf : <!-- TMPL_VAR NAME="shelfname" -->
+<END_SUBJECT>
+
+<HEADER>
+Hi,
+
+Here is your shelf called <!-- TMPL_VAR NAME="shelfname" -->, sent from our Online Catalog.
+
+Please note that the attached file is a MARC biblographic records file
+which can be imported into a Personal Bibliographic Software like EndNote,
+Reference Manager or ProCite.
+<END_HEADER>
+
+<MESSAGE>
+---------------------------------------------
+
+<!-- TMPL_IF NAME="comment" -->
+    <!-- TMPL_VAR NAME="comment" -->
+<!-- /TMPL_IF -->
+
+<!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
+    <!-- TMPL_VAR NAME="title" -->
+    <!-- TMPL_IF name="subtitle" -->
+       <!-- TMPL_VAR NAME="subtitle" -->
+    <!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="MARCAUTHORS" -->
+<!-- TMPL_LOOP NAME="MARCAUTHORS"-->
+    Authors: <!-- TMPL_VAR NAME="value" -->
+<!-- /TMPL_LOOP -->
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="ISBN" -->
+ISBN: <!-- TMPL_VAR NAME="ISBN" -->
+<!-- /TMPL_IF -->
+<!-- TMPL_IF name="publishercode" -->
+Published by: <!-- TMPL_VAR NAME="publishercode" --><!-- /TMPL_IF --><!-- TMPL_IF name="publicationyear" --> in <!-- /TMPL_IF --><!-- TMPL_VAR NAME="publicationyear" --><!-- TMPL_IF name="pages" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="pages" --><!-- TMPL_IF name="size" -->, <!-- /TMPL_IF --><!-- TMPL_VAR name="size" --><!-- TMPL_IF name="collection" -->
+Collection: <!-- TMPL_VAR NAME="seriestitle" --><!-- /TMPL_IF --><!-- TMPL_IF name="subject" -->
+Subject: <!-- TMPL_VAR NAME="subject" --><!-- /TMPL_IF --><!-- TMPL_IF name="copyrightdate" -->
+Copyright year: <!-- TMPL_VAR NAME="copyrightdate" --><!-- /TMPL_IF --><!-- TMPL_IF name="notes" -->
+Notes : <!-- TMPL_VAR NAME="notes" --><!-- /TMPL_IF --><!-- TMPL_IF name="unititle" -->
+Unified title: <!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF --><!-- TMPL_IF name="serial" -->
+Serial: <!-- TMPL_VAR NAME="serial" --><!-- /TMPL_IF --><!-- TMPL_IF name="dewey" -->
+Dewey: <!-- TMPL_VAR name="dewey" --><!-- /TMPL_IF --><!-- TMPL_IF name="classification" -->
+Classification: <!-- TMPL_VAR name="classification" --><!-- /TMPL_IF --><!-- TMPL_IF name="lccn" -->
+LCCN: <!-- TMPL_VAR name="lccn" --><!-- /TMPL_IF --><!-- TMPL_IF name="url" -->
+URL : <!-- TMPL_VAR NAME="url" --><!-- /TMPL_IF -->
+Items : <!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+    <!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR NAME="location" --> <!-- TMPL_IF name="itemcallnumber" -->(<!-- TMPL_VAR NAME="itemcallnumber" -->)<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="barcode" -->
+<!-- /TMPL_LOOP -->
+---------------------------------------------
+<!-- /TMPL_LOOP -->
+<END_MESSAGE>
