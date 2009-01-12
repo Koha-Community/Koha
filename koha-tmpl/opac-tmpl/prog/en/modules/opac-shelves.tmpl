@@ -96,7 +96,7 @@ $.tablesorter.addParser({
 <!-- /TMPL_IF -->
 <input type="hidden" value="1" name="DEL-<!-- TMPL_VAR NAME="shelfnumber" -->"/>
 <input type="submit" class="deleteshelf" value="Delete List" onclick="return confirmDelete(_('Are you sure you want to remove this List?'));"/></form>
-<a href="#" class="send" onClick="open(CGIBIN+'opac-sendshelf.pl?shelfid=<!-- TMPL_VAR NAME="shelfnumber" -->','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100')">Send shelf</a>
+<a href="#" class="send" onClick="open(CGIBIN+'opac-sendshelf.pl?shelfid=<!-- TMPL_VAR NAME="shelfnumber" -->','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100')">Send List</a>
 </div><!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="manageshelf" --><form action="/cgi-bin/koha/opac-shelves.pl" method="post" name="myform" class="checkboxed">
         <input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->" />
@@ -239,7 +239,7 @@ $.tablesorter.addParser({
                     <!-- /TMPL_IF -->
                 </form>
             <!-- /TMPL_IF -->&nbsp;
-            <a href="#" class="send" onClick="open(CGIBIN+'opac-sendshelf.pl?shelfid=<!-- TMPL_VAR NAME="shelf" -->','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100')">Send shelf</a>
+            <a href="#" class="send" onClick="open(CGIBIN+'opac-sendshelf.pl?shelfid=<!-- TMPL_VAR NAME="shelf" -->','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100')">Send List</a>
         </td>
         </tr>
                 <!-- /TMPL_LOOP -->
@@ -287,7 +287,7 @@ $.tablesorter.addParser({
           <!-- /TMPL_IF -->
         </form>
       <!-- /TMPL_IF -->&nbsp;
-      <a href="#" class="send" onClick="open(CGIBIN+'opac-sendshelf.pl?shelfid=<!-- TMPL_VAR NAME="shelf" -->','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100')">Send shelf</a>
+      <a href="#" class="send" onClick="open(CGIBIN+'opac-sendshelf.pl?shelfid=<!-- TMPL_VAR NAME="shelf" -->','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100')">Send List</a>
     </td>
 		</tr>
             <!-- /TMPL_LOOP -->
