@@ -159,7 +159,6 @@ sub AddReserve {
         my $usth = $dbh->prepare($query);
         $usth->execute( $borrowernumber, $nextacctno, $fee,
             "Reserve Charge - $title", $fee );
-        $usth->finish;
     }
 
     #if ($const eq 'a'){
@@ -177,28 +176,20 @@ sub AddReserve {
         $const,          $priority,     $notes,   $checkitem,
         $found,          $waitingdate
     );
-    $sth->finish;
 
     #}
-    if ( ( $const eq "o" ) || ( $const eq "e" ) ) {
-        my $numitems = @$bibitems;
-        my $i        = 0;
-        while ( $i < $numitems ) {
-            my $biblioitem = @$bibitems[$i];
-            my $query      = qq/
-          INSERT INTO reserveconstraints
-              (borrowernumber,biblionumber,reservedate,biblioitemnumber)
-          VALUES
+    ($const eq "o" || $const eq "e") or return;   # FIXME: why not have a useful return value?
+    $query = qq/
+        INSERT INTO reserveconstraints
+            (borrowernumber,biblionumber,reservedate,biblioitemnumber)
+        VALUES
             (?,?,?,?)
-      /;
-            my $sth = $dbh->prepare("");
-            $sth->execute( $borrowernumber, $biblionumber, $resdate,
-                $biblioitem );
-            $sth->finish;
-            $i++;
-        }
+    /;
+    $sth = $dbh->prepare($query);    # keep prepare outside the loop!
+    foreach (@$bibitems) {
+        $sth->execute($borrowernumber, $biblionumber, $resdate, $_);
     }
-    return;
+    return;     # FIXME: why not have a useful return value?
 }
 
 =item GetReservesFromBiblionumber
@@ -236,49 +227,44 @@ sub GetReservesFromBiblionumber {
     my $i = 0;
     while ( my $data = $sth->fetchrow_hashref ) {
 
-        # FIXME - What is this if-statement doing? How do constraints work?
-        if ( $data->{constrainttype} eq 'o' ) {
-            $query = '
-                SELECT biblioitemnumber
-                FROM reserveconstraints
-                WHERE biblionumber   = ?
-                    AND borrowernumber = ?
-                AND reservedate    = ?
-            ';
-            my $csth = $dbh->prepare($query);
-            $csth->execute( $data->{biblionumber}, $data->{borrowernumber},
-                $data->{reservedate}, );
+        # FIXME - What is this doing? How do constraints work?
+        ($data->{constrainttype} eq 'o') or next;
+        $query = '
+            SELECT biblioitemnumber
+             FROM  reserveconstraints
+            WHERE  biblionumber   = ?
+             AND   borrowernumber = ?
+             AND   reservedate    = ?
+        ';
+        my $csth = $dbh->prepare($query);
+        $csth->execute( $data->{biblionumber}, $data->{borrowernumber},
+            $data->{reservedate}, );
 
-            my @bibitemno;
-            while ( my $bibitemnos = $csth->fetchrow_array ) {
-                push( @bibitemno, $bibitemnos );
-            }
-            my $count = @bibitemno;
+        my @bibitemno;
+        while ( my $bibitemnos = $csth->fetchrow_array ) {
+            push( @bibitemno, $bibitemnos );    # FIXME: inefficient: use fetchall_arrayref
+        }
+        my $count = scalar @bibitemno;
 
-            # if we have two or more different specific itemtypes
-            # reserved by same person on same day
-            my $bdata;
-            if ( $count > 1 ) {
-                $bdata = GetBiblioItemData( $bibitemno[$i] );
-                $i++;
-            }
-            else {
-
-                # Look up the book we just found.
-                $bdata = GetBiblioItemData( $bibitemno[0] );
-            }
-            $csth->finish;
-
-            # Add the results of this latest search to the current
-            # results.
-            # FIXME - An 'each' would probably be more efficient.
-            foreach my $key ( keys %$bdata ) {
-                $data->{$key} = $bdata->{$key};
-            }
+        # if we have two or more different specific itemtypes
+        # reserved by same person on same day
+        my $bdata;
+        if ( $count > 1 ) {
+            $bdata = GetBiblioItemData( $bibitemno[$i] );
+            $i++;
+        }
+        else {
+            # Look up the book we just found.
+            $bdata = GetBiblioItemData( $bibitemno[0] );
+        }
+        # Add the results of this latest search to the current
+        # results.
+        # FIXME - An 'each' would probably be more efficient.
+        foreach my $key ( keys %$bdata ) {
+            $data->{$key} = $bdata->{$key};
         }
         push @results, $data;
     }
-    $sth->finish;
     return ( $#results + 1, \@results );
 }
 
@@ -360,8 +346,6 @@ sub GetReserveCount {
     my $sth = $dbh->prepare($query);
     $sth->execute($borrowernumber);
     my $row = $sth->fetchrow_hashref;
-    $sth->finish;
-
     return $row->{counter};
 }
 
@@ -542,7 +526,6 @@ sub GetReservesToBranch {
         $transreserv[$i] = $data;
         $i++;
     }
-    $sth->finish;
     return (@transreserv);
 }
 
@@ -576,7 +559,6 @@ sub GetReservesForBranch {
         $transreserv[$i] = $data;
         $i++;
     }
-    $sth->finish;
     return (@transreserv);
 }
 
@@ -965,7 +947,6 @@ sub ModReserveStatus {
     ";
     my $sth_set = $dbh->prepare($query);
     $sth_set->execute( $newstatus, $itemnumber );
-    $sth_set->finish;
 }
 
 =item ModReserveAffect
@@ -1016,8 +997,6 @@ sub ModReserveAffect {
     }
     $sth = $dbh->prepare($query);
     $sth->execute( $itemnumber, $borrowernumber,$biblionumber);
-    $sth->finish;
-    
     _koha_notify_reserve( $itemnumber, $borrowernumber, $biblionumber ) if ( !$transferToDo );
 
     return;
@@ -1066,7 +1045,6 @@ sub ModReserveMinusPriority {
     ";
     my $sth_upd = $dbh->prepare($query);
     $sth_upd->execute( $itemnumber, $borrowernumber, $biblionumber );
-    $sth_upd->finish;
     # second step update all others reservs
     _FixPriority($biblionumber, $borrowernumber, '0');
 }
@@ -1382,7 +1360,6 @@ sub _Findgroupreserve {
     while ( my $data = $sth->fetchrow_hashref ) {
         push( @results, $data );
     }
-    $sth->finish;
     return @results;
 }
 
