@@ -1083,6 +1083,8 @@ sub GetMarcNotes {
     my $marcnote;
     foreach my $field ( $record->field($scope) ) {
         my $value = $field->as_string();
+        $value =~ s/\n/<br \/>/g ;
+
         if ( $note ne "" ) {
             $marcnote = { marcnote => $note, };
             push @marcnotes, $marcnote;
