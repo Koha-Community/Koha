@@ -157,6 +157,18 @@ if ($op eq "additem") {
 		}
     }
 #-------------------------------------------------------------------------------
+} elsif ($op eq "delallitems") {
+#-------------------------------------------------------------------------------
+    my @biblioitems = &GetBiblioItemByBiblioNumber($biblionumber);
+    foreach my $biblioitem (@biblioitems){
+        my $items = &GetItemsByBiblioitemnumber($biblioitem->{biblioitemnumber});
+
+        foreach my $item (@$items){
+            &DelItem($dbh,$biblionumber,$item->{itemnumber});
+        }
+    }
+    print $input->redirect("/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=$biblionumber");
+#-------------------------------------------------------------------------------
 } elsif ($op eq "saveitem") {
 #-------------------------------------------------------------------------------
     # rebuild
