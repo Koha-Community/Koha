@@ -127,7 +127,7 @@ for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
         }
         else {
             my @subf = $fields[$x_i]->subfields;
-
+            my $previous;
             # loop through each subfield
             for my $i ( 0 .. $#subf ) {
                 $subf[$i][0] = "@" unless $subf[$i][0];
@@ -139,7 +139,10 @@ for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
                   if ( $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }->{hidden} > 0 ); 
                 my %subfield_data;
                 $subfield_data{marc_lib} =
-                  $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }->{lib};
+                                ($tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }->{lib} eq $previous) ?
+                                '--' :
+                                $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }->{lib};
+                $previous = $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }->{lib};
                 $subfield_data{link} =
                   $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }->{link};
                 $subf[$i][1] =~ s/\n/<br\/>/g;
