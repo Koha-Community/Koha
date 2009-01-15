@@ -256,10 +256,13 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
       my $itemnumber ( @{ $itemnumbers_of_biblioitem{$biblioitemnumber} } )
     {
         my $item = $iteminfos_of->{$itemnumber};
-    $item->{itypename} = $itemtypes->{ $item->{itype} }{description};
-    $item->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtypes->{ $item->{itype} }{imageurl} );
-        $item->{homebranchname} =
-          $branches->{ $item->{homebranch} }{branchname};
+        unless (C4::Context->preference('item-level_itypes')) {
+            $item->{itype} = $biblioitem->{itemtype};
+        }
+
+        $item->{itypename} = $itemtypes->{ $item->{itype} }{description};
+        $item->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtypes->{ $item->{itype} }{imageurl} );
+        $item->{homebranchname} = $branches->{ $item->{homebranch} }{branchname};
 
         # if the holdingbranch is different than the homebranch, we show the
         # holdingbranch of the document too
