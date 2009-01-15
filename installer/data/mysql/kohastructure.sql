@@ -684,7 +684,7 @@ DROP TABLE IF EXISTS `default_branch_circ_rules`;
 CREATE TABLE `default_branch_circ_rules` (
   `branchcode` VARCHAR(10) NOT NULL,
   `maxissueqty` int(4) default NULL,
-  `holdallowed` int(1) default NULL,
+  `holdallowed` tinyint(1) default NULL,
   PRIMARY KEY (`branchcode`),
   CONSTRAINT `default_branch_circ_rules_ibfk_1` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`)
     ON DELETE CASCADE ON UPDATE CASCADE
