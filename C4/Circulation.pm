@@ -72,6 +72,7 @@ BEGIN {
 		&GetIssuingCharges
 		&GetIssuingRule
         &GetBranchBorrowerCircRule
+        &GetBranchItemRule
 		&GetBiblioIssues
 		&AnonymiseIssueHistory
 	);
@@ -1223,6 +1224,70 @@ sub GetBranchBorrowerCircRule {
     # built-in default circulation rule
     return {
         maxissueqty => undef,
+    };
+}
+
+=head2 GetBranchItemRule
+
+=over 4
+
+my $branch_item_rule = GetBranchItemRule($branchcode, $itemtype);
+
+=back
+
+Retrieves circulation rule attributes that apply to the given
+branch and item type, regardless of patron category.
+
+The return value is a hashref containing the following key:
+
+holdallowed => Hold policy for this branch and itemtype. Possible values:
+  0: No holds allowed.
+  1: Holds allowed only by patrons that have the same homebranch as the item.
+  2: Holds allowed from any patron.
+
+This searches branchitemrules in the following order:
+
+  * Same branchcode and itemtype
+  * Same branchcode, itemtype '*'
+  * branchcode '*', same itemtype
+  * branchcode and itemtype '*'
+
+Neither C<$branchcode> nor C<$categorycode> should be '*'.
+
+=cut
+
+sub GetBranchItemRule {
+    my ( $branchcode, $itemtype ) = @_;
+    my $dbh = C4::Context->dbh();
+    my $result = {};
+
+    my @attempts = (
+        ['SELECT holdallowed
+            FROM branch_item_rules
+            WHERE branchcode = ?
+              AND itemtype = ?', $branchcode, $itemtype],
+        ['SELECT holdallowed
+            FROM default_branch_circ_rules
+            WHERE branchcode = ?', $branchcode],
+        ['SELECT holdallowed
+            FROM default_branch_item_rules
+            WHERE itemtype = ?', $itemtype],
+        ['SELECT holdallowed
+            FROM default_circ_rules'],
+    );
+
+    foreach my $attempt (@attempts) {
+        my ($query, @bind_params) = @{$attempt};
+
+        # Since branch/category and branch/itemtype use the same per-branch
+        # defaults tables, we have to check that the key we want is set, not
+        # just that a row was returned
+        return $result if ( defined( $result->{'holdallowed'} = $dbh->selectrow_array( $query, {}, @bind_params ) ) );
+    }
+    
+    # built-in default circulation rule
+    return {
+        holdallowed => 2,
     };
 }
 

@@ -126,6 +126,57 @@ $(document).ready(function() {
             </table>
         </form>
     </div>
+    <div class="help">
+        <h4>Defaults for this branch</h4>
+        <p>You can set a default maximum number of checkouts and hold policy that will be used if none is defined below for a particular item type or category.</p>
+    </div>
+    <div>
+        <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
+            <input type="hidden" name="op" value="set-branch-defaults" />
+            <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->"/>
+            <table>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>Total Current Checkouts Allowed</th>
+                    <th>Hold Policy</th>
+                    <th>&nbsp;</th>
+                </tr>
+                <tr>
+                    <td><em>Defaults<!-- TMPL_UNLESS NAME="default_rules" --> (not set)<!-- /TMPL_IF --></em></td>
+                    <td><input name="maxissueqty" size="3" value="<!-- TMPL_VAR NAME="default_maxissueqty" -->"/></td>
+                    <td>
+                        <select name="holdallowed">
+                            <!-- TMPL_IF NAME="default_holdallowed_any" -->
+                            <option value="2" selected="selected">
+                            <!-- TMPL_ELSE -->
+                            <option value="2">
+                            <!-- /TMPL_IF -->
+                                From Any Library
+                            </option>
+                            <!-- TMPL_IF NAME="default_holdallowed_same" -->
+                            <option value="1" selected="selected">
+                            <!-- TMPL_ELSE -->
+                            <option value="1">
+                            <!-- /TMPL_IF -->
+                                From Home Library
+                            </option>
+                            <!-- TMPL_IF NAME="default_holdallowed_none" -->
+                            <option value="0" selected="selected">
+                            <!-- TMPL_ELSE -->
+                            <option value="0">
+                            <!-- /TMPL_IF -->
+                                No Holds Allowed
+                            </option>
+                        </select>
+                    </td>
+                    <td><input type="submit" value="Save" class="submit" /></td>
+                    <td>
+                        <a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=*&amp;branch=<!-- TMPL_VAR NAME="branch" -->">Unset</a>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
     <!-- TMPL_IF NAME="show_branch_cat_rule_form" -->
     <div class="help">
         <p>For this library, you can specify the maximum number of loans that 
@@ -167,7 +218,6 @@ $(document).ready(function() {
                 <tr>
                     <td>
                         <select name="categorycode">
-                            <option value="*">Default</option>
                         <!-- TMPL_LOOP NAME="categoryloop" -->
                             <option value="<!-- TMPL_VAR NAME="categorycode" -->"><!-- TMPL_VAR NAME="description" --></option>
                         <!-- /TMPL_LOOP -->
@@ -180,6 +230,79 @@ $(document).ready(function() {
         </form>
     </div>
     <!-- /TMPL_IF -->
+    <div class="help">
+        <p>
+            For this library, you can edit rules for given itemtypes, regardless
+            of the patron's category.
+        </p>
+        <p>
+            Currently, this means hold policies.
+            The various policies have the following effects:
+        </p>
+        <ul>
+            <li><strong>From Any Library:</strong> Patrons from any library may put this item on hold. <cite>(default if none is defined)</cite></li>
+            <li><strong>From Home Library:</strong> Only patrons from the item's home library may put this book on hold.</li>
+            <li><strong>No Holds Allowed:</strong> No patron may put this book on hold.</li>
+        </ul>
+        <p>
+            Note that if the system preference
+            <code>AllowHoldPolicyOverride</code> is enabled, these policies can
+            be overridden by your circulation staff. Also, these policies are
+            based on the patron's home branch, <em>not</em> the branch that
+            the reserving staff member is from.
+        </p>
+    </div>
+    <div>
+        <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
+            <input type="hidden" name="op" value="add-branch-item" />
+            <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->"/>
+            <table>
+                <tr>
+                    <th>Item Type</th>
+                    <th>Hold Policy</th>
+                    <th>&nbsp;</th>
+                </tr>
+                <!-- TMPL_LOOP NAME="branch_item_rule_loop" -->
+                    <tr>
+                        <td><!-- TMPL_IF NAME="default_humanitemtype" -->
+                                <em>Default</em>
+                            <!-- TMPL_ELSE -->
+                                <!-- TMPL_VAR NAME="humanitemtype" -->
+                            <!-- /TMPL_IF -->
+                        </td>
+                        <td><!-- TMPL_IF NAME="holdallowed_any" -->
+                                From Any Library
+                            <!-- TMPL_ELSIF NAME="holdallowed_same" -->
+                                From Home Library
+                            <!-- TMPL_ELSE -->
+                                No Holds Allowed
+                            <!-- /TMPL_IF -->
+                        </td>
+                        <td>
+                            <a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-item&amp;itemtype=<!-- TMPL_VAR NAME="itemtype" -->&amp;branch=<!-- TMPL_VAR NAME="branch" -->">Delete</a>
+                        </td>
+                    </tr>
+                <!-- /TMPL_LOOP -->
+                <tr>
+                    <td>
+                        <select name="itemtype">
+                        <!-- TMPL_LOOP NAME="itemtypeloop" -->
+                            <option value="<!-- TMPL_VAR NAME="itemtype" -->"><!-- TMPL_VAR NAME="description" --></option>
+                        <!-- /TMPL_LOOP -->
+                        </select>
+                    </td>
+                    <td>
+                        <select name="holdallowed">
+                            <option value="2">From Any Library</option>
+                            <option value="1">From Home Library</option>
+                            <option value="0">No Holds Allowed</option>
+                        </select>
+                    </td>
+                    <td><input type="submit" value="Add" class="submit" /></td>
+                </tr>
+            </table>
+        </form>
+    </div>
 </div>
 
 </div>

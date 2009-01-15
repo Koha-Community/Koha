@@ -87,6 +87,11 @@
     <!-- TMPL_IF NAME="bad_biblionumber" -->
     <div class="dialog alert">ERROR: No biblio record found for biblionumber <!-- TMPL_VAR NAME="bad_biblionumber" -->.</div>
     <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="none_available" -->
+    <div class="dialog alert">
+        <strong>Sorry</strong>, none of these items can be placed on hold.
+    </div>
+    <!-- /TMPL_IF -->
 </div>
 <!-- /TMPL_IF -->
 
@@ -135,7 +140,12 @@
 
 
 <fieldset class="action">            <input type="hidden" name="biblioitem" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" />
+
+            <!-- TMPL_IF NAME="none_available" -->
+            <input type="submit" disabled="disabled" value="Place Hold" />
+            <!-- TMPL_ELSE -->
             <input type="submit" value="Place Hold" />
+            <!-- /TMPL_IF -->
             <input type="hidden" name="all" value="1" />
             <input type="hidden" name="place_reserve" value="1" /></fieldset>
 			<!-- /TMPL_IF -->  
@@ -164,6 +174,7 @@
             <input type="radio" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
             <!-- TMPL_ELSE -->
             <input disabled="disabled" type="radio" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+            <img src="/intranet-tmpl/<!-- TMPL_VAR NAME="theme" -->/img/famfamfam/silk/cross.png" alt="Cannot be put on hold" />
             <!-- /TMPL_IF -->
             </td>
             <!-- TMPL_IF NAME="item-level_itypes" -->
@@ -206,7 +217,11 @@
         <!-- /TMPL_LOOP --> <!-- itemloop -->
         </table>
         <!-- /TMPL_LOOP --> <!-- bibitemloop -->
-        <input type="submit" value="Place Hold" />
+            <!-- TMPL_IF NAME="none_available" -->
+            <input type="submit" disabled="disabled" value="Place Hold" />
+            <!-- TMPL_ELSE -->
+            <input type="submit" value="Place Hold" />
+            <!-- /TMPL_IF -->
         </form><!-- /TMPL_IF -->
     <!-- end of the first form -->
 <!-- /TMPL_IF -->

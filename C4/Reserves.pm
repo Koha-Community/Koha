@@ -1175,6 +1175,7 @@ sub IsAvailableForItemLevelRequest {
                                $item->{wthdrawn} or
                                $notforloan_per_itemtype;
 
+
     if (C4::Context->preference('AllowOnShelfHolds')) {
         return $available_per_item;
     } else {

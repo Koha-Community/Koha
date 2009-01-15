@@ -2,7 +2,16 @@
 <title>Koha &rsaquo; Circulation &rsaquo; Holds &rsaquo; Place a hold on <!-- TMPL_VAR NAME="title" escape="html" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
-// <![CDATA[ 
+    // <![CDATA[
+var patron_homebranch = "<!-- TMPL_VAR NAME="borrower_branchname" ESCAPE="JS" -->";
+var override_items = {<!-- TMPL_LOOP NAME="bibitemloop" --><!-- TMPL_LOOP NAME="itemloop" --><!-- TMPL_IF NAME="override" -->
+    <!-- TMPL_VAR NAME="itemnumber" -->: {
+        homebranch: "<!-- TMPL_VAR NAME="homebranchname" ESCAPE="JS" -->",
+        holdallowed: <!-- TMPL_VAR NAME="holdallowed" -->
+    },
+<!-- /TMPL_IF --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP -->
+};
+
 function check() {
 	var msg = "";
 	var count_reserv = 0;
@@ -50,6 +59,22 @@ if (alreadyreserved > "0"){
 }
 
  $(document).ready(function() {
+    $("input.needsoverride").click(function() { // This must be before the radio button/checkbox switch logic
+        var itemnumber = this.value;
+        var msg;
+
+        switch (override_items[itemnumber].holdallowed) {
+            case 0: msg = _( 'This item normally cannot be put on hold.' ); break;
+            case 1: msg = _( 'This item normally cannot be put on hold except for patrons from ' ) + override_items[itemnumber].homebranch + '.'; break;
+        }
+
+        msg += "\n\n" + _( 'Place hold on this item?' );
+
+        return confirm(msg);
+    });
+    $("input.warning").click(function() {
+        return confirm( _( 'None of these items can normally be put on hold for this patron.' ) + "\n\n" + _( 'Place hold?' ) );
+    });
  	$("#requestany").click(function() {
 		if(this.checked){
 		$("input[@name=checkitem]").each(function() {
@@ -135,6 +160,11 @@ if (alreadyreserved > "0"){
     <!-- TMPL_IF NAME="alreadyreserved" -->
      <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="borrowerfirstname" --> <!-- TMPL_VAR NAME="borrowersurname" --></a> <strong>already has a hold</strong> on this item </li>
     <!-- /TMPL_IF -->
+
+    <!-- TMPL_IF NAME="none_available" -->
+    <li> <strong>No copies are available</strong> to be placed on hold</li>
+    <!-- /TMPL_IF -->
+
 	</ul></div>
 <!-- /TMPL_IF -->	
 
@@ -147,6 +177,7 @@ if (alreadyreserved > "0"){
 <!-- TMPL_IF NAME="diffbranch" -->
     <li> <strong>Pickup library is different</strong> than <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="borrowerfirstname" --> <!-- TMPL_VAR NAME="borrowersurname" --></a>'s home library (<!-- TMPL_VAR NAME="borrower_branchname" --> / <!-- TMPL_VAR NAME="borrower_branchcode" --> )</li>
     <!-- /TMPL_IF -->
+
 </ul></div>
 <!-- /TMPL_IF -->
 
@@ -191,9 +222,15 @@ if (alreadyreserved > "0"){
         <input type="hidden" name="alreadyreserved" value="<!-- TMPL_VAR NAME="alreadyreserved" -->" />
 </ol>
         <fieldset class="action">
-        <!-- TMPL_IF NAME="cardnumber"-->
-        <input type="submit" value="Place Hold" />
-        <!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="cardnumber"-->
+                <!-- TMPL_IF NAME="override_required" -->
+                    <input type="submit" class="warning" value="Place Hold" />
+                <!-- TMPL_ELSIF NAME="none_available" -->
+                    <input type="submit" disabled="disabled" value="Place Hold" />
+                <!-- TMPL_ELSE -->
+                    <input type="submit" value="Place Hold" />
+                <!-- /TMPL_IF -->
+            <!-- /TMPL_IF -->
         </fieldset>
         <!-- TMPL_LOOP name="bibitemloop" -->
 <ol>
@@ -221,8 +258,12 @@ if (alreadyreserved > "0"){
             <td>
             <!-- TMPL_IF NAME="available" -->
                 <input type="radio" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+            <!-- TMPL_ELSIF NAME="override" -->
+                <input type="radio" name="checkitem" class="needsoverride" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+                <img src="/intranet-tmpl/<!-- TMPL_VAR NAME="theme" -->/img/famfamfam/silk/error.png" alt="Requires override of hold policy" />
             <!-- TMPL_ELSE -->
                 <input disabled="disabled" type="radio" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" /> 
+                <img src="/intranet-tmpl/<!-- TMPL_VAR NAME="theme" -->/img/famfamfam/silk/cross.png" alt="Cannot be put on hold" />
             <!-- /TMPL_IF -->
             </td>
             <!-- TMPL_IF NAME="item-level_itypes" -->
@@ -281,9 +322,15 @@ if (alreadyreserved > "0"){
     <!-- /TMPL_LOOP --> <!-- bibitemloop -->
     
     <fieldset class="action">
-    <!-- TMPL_IF NAME="cardnumber"-->
-        <input type="submit" value="Place Hold" />
-    <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="cardnumber"-->
+            <!-- TMPL_IF NAME="override_required" -->
+                <input type="submit" class="warning" value="Place Hold" />
+            <!-- TMPL_ELSIF NAME="none_available" -->
+                <input type="submit" disabled="disabled" value="Place Hold" />
+            <!-- TMPL_ELSE -->
+                <input type="submit" value="Place Hold" />
+            <!-- /TMPL_IF -->
+        <!-- /TMPL_IF -->
     </fieldset>
 	</fieldset>
     </form>

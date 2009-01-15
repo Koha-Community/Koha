@@ -246,18 +246,22 @@ my @bibitemloop;
 
 foreach my $biblioitemnumber (@biblioitemnumbers) {
     my $biblioitem = $biblioiteminfos_of->{$biblioitemnumber};
+    my $num_available;
+    my $num_override;
 
     $biblioitem->{description} =
       $itemtypes->{ $biblioitem->{itemtype} }{description};
 
-    foreach
-      my $itemnumber ( @{ $itemnumbers_of_biblioitem{$biblioitemnumber} } )
-    {
+    foreach my $itemnumber ( @{ $itemnumbers_of_biblioitem{$biblioitemnumber} } )    {
         my $item = $iteminfos_of->{$itemnumber};
-    $item->{itypename} = $itemtypes->{ $item->{itype} }{description};
-    $item->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtypes->{ $item->{itype} }{imageurl} );
-        $item->{homebranchname} =
-          $branches->{ $item->{homebranch} }{branchname};
+
+        if (C4::Context->preference('item-level_itypes')) {
+            $item->{itype} = $biblioitem->{itemtype};
+        }
+
+        $item->{itypename} = $itemtypes->{ $item->{itype} }{description};
+        $item->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtypes->{ $item->{itype} }{imageurl} );
+        $item->{homebranchname} = $branches->{ $item->{homebranch} }{branchname};
 
         # if the holdingbranch is different than the homebranch, we show the
         # holdingbranch of the document too
@@ -266,8 +270,8 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
               $branches->{ $item->{holdingbranch} }{branchname};
         }
         
-#   add information
-    $item->{itemcallnumber} = $item->{itemcallnumber};
+        #   add information
+        $item->{itemcallnumber} = $item->{itemcallnumber};
     
         # if the item is currently on loan, we display its return date and
         # change the background color
@@ -324,29 +328,53 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
         # If there is no loan, return and transfer, we show a checkbox.
         $item->{notforloan} = $item->{notforloan} || 0;
     
-    # if independent branches is on we need to check if the person can reserve
-    # for branches they arent logged in to
-    if ( C4::Context->preference("IndependantBranches") ) { 
-        if (! C4::Context->preference("canreservefromotherbranches")){
-        # cant reserve items so need to check if item homebranch and userenv branch match if not we cant reserve
-        my $userenv = C4::Context->userenv; 
-        if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
-            $item->{cantreserve} = 1 if ( $item->{homebranch} ne $userenv->{branch} );
-        } 
+        # if independent branches is on we need to check if the person can reserve
+        # for branches they arent logged in to
+        if ( C4::Context->preference("IndependantBranches") ) { 
+            if (! C4::Context->preference("canreservefromotherbranches")){
+                # cant reserve items so need to check if item homebranch and userenv branch match if not we cant reserve
+                my $userenv = C4::Context->userenv;
+                if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
+                    $item->{cantreserve} = 1 if ( $item->{homebranch} ne $userenv->{branch} );
+                }
+            }
         }
-    }
 
-    if (IsAvailableForItemLevelRequest($itemnumber) and not $item->{cantreserve}) {
-        $item->{available} = 1;
-    }
+        my $branchitemrule = GetBranchItemRule( $item->{'homebranch'}, $item->{'itype'} );
+        my $policy_holdallowed = 1;
 
-    # FIXME: move this to a pm
-    my $sth2 = $dbh->prepare("SELECT * FROM reserves WHERE borrowernumber=? AND itemnumber=? AND found='W'");
-    $sth2->execute($item->{ReservedForBorrowernumber},$item->{itemnumber});
-    while (my $wait_hashref = $sth2->fetchrow_hashref) {
-        $item->{waitingdate} = format_date($wait_hashref->{waitingdate});
-    }
+        $item->{'holdallowed'} = $branchitemrule->{'holdallowed'};
+
+        if ( $branchitemrule->{'holdallowed'} == 0 ||
+                ( $branchitemrule->{'holdallowed'} == 1 && $borrowerinfo->{'branchcode'} ne $item->{'homebranch'} ) ) {
+            $policy_holdallowed = 0;
+        }
+
+        if (IsAvailableForItemLevelRequest($itemnumber) and not $item->{cantreserve}) {
+            if ( not $policy_holdallowed and C4::Context->preference( 'AllowHoldPolicyOverride' ) ) {
+                $item->{override} = 1;
+                $num_override++;
+            } elsif ( $policy_holdallowed ) {
+                $item->{available} = 1;
+                $num_available++;
+            }
+        }
+        # If none of the conditions hold true, then neither override nor available is set and the item cannot be checked
+
+        # FIXME: move this to a pm
+        my $sth2 = $dbh->prepare("SELECT * FROM reserves WHERE borrowernumber=? AND itemnumber=? AND found='W'");
+        $sth2->execute($item->{ReservedForBorrowernumber},$item->{itemnumber});
+        while (my $wait_hashref = $sth2->fetchrow_hashref) {
+            $item->{waitingdate} = format_date($wait_hashref->{waitingdate});
+        }
         push @{ $biblioitem->{itemloop} }, $item;
+    }
+
+    if ( $num_override == scalar( @{ $biblioitem->{itemloop} } ) ) { # That is, if all items require an override
+        $template->param( override_required => 1 );
+    } elsif ( $num_available == 0 ) {
+        $template->param( none_available => 1 );
+        $template->param( warnings => 1 );
     }
 
     push @bibitemloop, $biblioitem;

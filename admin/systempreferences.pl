@@ -156,6 +156,7 @@ $tabsysprefs{StaticHoldsQueueWeight}         = "Circulation";
 $tabsysprefs{AllowOnShelfHolds}              = "Circulation";
 $tabsysprefs{AllowHoldsOnDamagedItems}       = "Circulation";
 $tabsysprefs{UseBranchTransferLimits}        = "Circulation";
+$tabsysprefs{AllowHoldPolicyOverride}        = "Circulation";
 
 # Staff Client
 $tabsysprefs{TemplateEncoding}        = "StaffClient";
