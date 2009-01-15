@@ -255,7 +255,7 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
     foreach my $itemnumber ( @{ $itemnumbers_of_biblioitem{$biblioitemnumber} } )    {
         my $item = $iteminfos_of->{$itemnumber};
 
-        if (C4::Context->preference('item-level_itypes')) {
+        unless (C4::Context->preference('item-level_itypes')) {
             $item->{itype} = $biblioitem->{itemtype};
         }
 
