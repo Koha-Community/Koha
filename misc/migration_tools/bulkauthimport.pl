@@ -27,7 +27,7 @@ my ($version, $delete, $test_parameter,$char_encoding, $verbose, $format, $commi
 $| = 1;
 GetOptions(
     'file:s'    => \$input_marc_file,
-    'n' => \$number,
+    'n:i' => \$number,
     'h' => \$version,
     'd' => \$delete,
     't' => \$test_parameter,
@@ -144,8 +144,10 @@ RECORD: while ( my $record = $batch->next() ) {
         warn "ADDED authority NB $authid in DB\n" if $verbose;
         $dbh->commit() if (0 == $i % $commitnum);
     }
+
+    last if $i ==  $number;
 }
 $dbh->commit();
 
 my $timeneeded = gettimeofday - $starttime;
-print "$i MARC record done in $timeneeded seconds\n";
+print "\n$i MARC record done in $timeneeded seconds\n";
