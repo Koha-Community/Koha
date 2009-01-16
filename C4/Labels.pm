@@ -1098,6 +1098,7 @@ sub DrawSpineText {
             }
             # loop for each string line
             foreach my $str (@strings) {
+                next if $str eq '';
                 my $hPos = 0;
                 my $stringwidth = prStrWidth($str, $fontname, $fontsize);
                 if ( $$conf_data->{'text_justify'} eq 'R' ) { 
