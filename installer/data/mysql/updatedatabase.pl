@@ -2137,7 +2137,7 @@ if ( C4::Context->preference('Version') < TransformToNum($DBversion) ) {
     my $bad_value = "function prepareEmailPopup(){\r\n  if (!document.getElementById) return false;\r\n  if (!document.getElementById('reserveemail')) return false;\r\n  rsvlink = document.getElementById('reserveemail');\r\n  rsvlink.onclick = function() {\r\n      doReservePopup();\r\n      return false;\r\n	}\r\n}\r\n\r\nfunction doReservePopup(){\r\n}\r\n\r\nfunction prepareReserveList(){\r\n}\r\n\r\naddLoadEvent(prepareEmailPopup);\r\naddLoadEvent(prepareReserveList);";
 
     my $intranetuserjs = C4::Context->preference('intranetuserjs');
-    if ( $intranetuserjs eq $bad_value ) {
+    if ($intranetuserjs  and  $intranetuserjs eq $bad_value) {
         my $sql = <<'END_SQL';
 UPDATE systempreferences
 SET value = ''
