@@ -153,6 +153,7 @@ if ($op eq 'add_form') {
         my $authorised_value =$input->param('authorised_value');
         unless (C4::Context->config('demo') eq 1) {
             $sth->execute(
+                            $tagfield,
                             $liblibrarian,
                             $libopac,
                             $repeatable?1:0,
