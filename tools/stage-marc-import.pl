@@ -183,6 +183,9 @@ if ($completedJobID) {
 
 } else {
     # initial form
+    if (C4::Context->preference("marcflavour") eq "UNIMARC") {
+        $template->param("UNIMARC" => 1);
+    }
     my @matchers = C4::Matcher::GetMatcherList();
     $template->param(available_matchers => \@matchers);
 }

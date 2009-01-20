@@ -97,7 +97,11 @@ function CheckForm(f) {
 	</li>
 	<li>
 		<label for="syntax">Character encoding: </label>
-		<select name="syntax" id="syntax"><option value="MARC21">MARC21</option><option value="UNIMARC">UNIMARC</option></select>
+        <!-- TMPL_IF name="UNIMARC" -->
+            <select name="syntax" id="syntax"><option value="MARC21">MARC21</option><option value="UNIMARC" selected="1">UNIMARC</option></select>
+        <!-- TMPL_ELSE -->
+            <select name="syntax" id="syntax"><option value="MARC21" selected="1">MARC21</option><option value="UNIMARC">UNIMARC</option></select>
+        <!-- /TMPL_IF -->
 		
 	</li>
 </ol></fieldset>
