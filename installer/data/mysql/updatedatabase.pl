@@ -1962,9 +1962,10 @@ END_SQL
 }
 if (C4::Context->preference("Version") =~/3\.00/) {
 	warn "inside 3.00";
-	my $return=do qq($ENV{'PERL5LIB'}/installer/data/mysql/updatedatabase30.pl);
+        my $perllibdir=C4::Context->config('intranetdir');
+	my $return=do qq($perllibdir/installer/data/mysql/updatedatabase30.pl);
 	unless ($return){
-		print STDERR "cannot read file $ENV{'PERL5LIB'}/installer/data/mysql/updatedatabase30.pl : $! \n" if ($!);
+		print STDERR "cannot read file $perllibdir/installer/data/mysql/updatedatabase30.pl : $! \n" if ($!);
 		print STDERR "cannot read file $ENV{'PERL5LIB'}/installer/data/mysql/updatedatabase30.pl : $@ \n" if ($@);
 	}
 }
