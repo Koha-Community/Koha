@@ -94,7 +94,6 @@ my $suggestionid = $input->param('suggestionid');
 my $close        = $input->param('close');
 my $data;
 my $new;
-my $dbh = C4::Context->dbh;
 
 if ( $ordnum eq '' ) {    # create order
     $new = 'yes';
@@ -262,7 +261,7 @@ $template->param(
     nocalc           => $bookseller->{'nocalc'},
     name             => $bookseller->{'name'},
     currency         => $bookseller->{'listprice'},
-    gstrate          => C4::Context->preference("gist"),
+    gstrate          => C4::Context->preference("gist") || 0,
     loop_currencies  => \@loop_currency,
     orderexists      => ( $new eq 'yes' ) ? 0 : 1,
     title            => $data->{'title'},
