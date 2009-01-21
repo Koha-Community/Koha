@@ -225,8 +225,8 @@ if (C4::Context->preference("FRBRizeEditions")==1) {
 if ( C4::Context->preference("AmazonEnabled") == 1 ) {
     my $similar_products_exist;
     my $amazon_details = &get_amazon_details( $isbn, $record, $marcflavour );
-    my $item_attributes = \%{$amazon_details->{Items}->{Item}->{ItemAttributes}};
-    my $customer_reviews = \@{$amazon_details->{Items}->{Item}->{CustomerReviews}->{Review}};
+    my $item_attributes   = \%{$amazon_details->{Items}->{Item}->{ItemAttributes}};
+    my $customer_reviews  = \@{$amazon_details->{Items}->{Item}->{CustomerReviews}->{Review}};
     my @similar_products;
     for my $similar_product (@{$amazon_details->{Items}->{Item}->{SimilarProducts}->{SimilarProduct}}) {
         # do we have any of these isbns in our collection?
@@ -239,10 +239,10 @@ if ( C4::Context->preference("AmazonEnabled") == 1 ) {
     }
     my $editorial_reviews = \@{$amazon_details->{Items}->{Item}->{EditorialReviews}->{EditorialReview}};
     my $average_rating = $amazon_details->{Items}->{Item}->{CustomerReviews}->{AverageRating} || 0;
-    $template->param( AmazonSimilarItems => $similar_products_exist );
-    $template->param( amazon_average_rating => $average_rating * 20);
-    $template->param( AMAZON_CUSTOMER_REVIEWS    => $customer_reviews );
-    $template->param( AMAZON_SIMILAR_PRODUCTS => \@similar_products );
-    $template->param( AMAZON_EDITORIAL_REVIEWS    => $editorial_reviews );
+    $template->param( AmazonSimilarItems       => $similar_products_exist );
+    $template->param( amazon_average_rating    => $average_rating * 20    );
+    $template->param( AMAZON_CUSTOMER_REVIEWS  => $customer_reviews       );
+    $template->param( AMAZON_SIMILAR_PRODUCTS  => \@similar_products      );
+    $template->param( AMAZON_EDITORIAL_REVIEWS => $editorial_reviews      );
 }
 output_html_with_http_headers $query, $cookie, $template->output;
