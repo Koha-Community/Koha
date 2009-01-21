@@ -5,38 +5,41 @@
 //<![CDATA[
 function update(f){
 //collect values
-quantity=f.quantity.value
+quantity=f.quantity.value;
 if (quantity ==0) {
     alert("Quantity must be >0");
 }
-discount=f.discount.value
-listinc=parseInt(f.listinc.value)
-currency=f.currency.value
-applygst=parseInt(f.applygst.value)
-listprice=f.list_price.value
+ discount=f.discount.value;
+ currency=f.currency.value;
+listprice=f.list_price.value;
+  listinc=parseInt(f.listinc.value);
+ applygst=parseInt(f.applygst.value);
 //  rrp=f.rrp.value
 //  ecost=f.ecost.value  //budgetted cost
 //  GST=f.GST.value
 //  total=f.total.value
 //make useful constants out of the above
-exchangerate=f.elements[currency].value      //get exchange rate
+exchangerate=f.elements[currency].value;      //get exchange rate.  same as "discount" above?
 gst_on=(!listinc && applygst);
 //do real stuff
 rrp=listprice*exchangerate;
-ecost=rrp*(100-discount)/100
+ecost=rrp*(100-discount)/100;
 GST=0;
 if (gst_on){
+<!-- TMPL_IF NAME="gstrate"-->
     rrp=rrp*(1+<!-- TMPL_VAR NAME="gstrate" -->);
     GST=ecost*(<!-- TMPL_VAR NAME="gstrate" -->);
+<!-- TMPL_ELSE --> ; // TMPL_VAR NAME=gstrate not set.  leave rrp and GST alone.
+<!-- /TMPL_IF -->
 }
 
-total=(ecost+GST)*quantity
+total=(ecost+GST)*quantity;
 
-f.rrp.value=rrp;
+  f.rrp.value=rrp;
 f.ecost.value=ecost;
 f.total.value=total;
-<!-- TMPL_IF NAME="GST"-->
-f.GST.value=GST;
+<!-- TMPL_IF NAME="GST" -->  // FIXME: TMPL_VAR NAME="GST" never populated
+  f.GST.value=GST;
 <!-- /TMPL_IF -->
 return true;
 }
