@@ -61,10 +61,10 @@ sub get_item_from_barcode {
 
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
-my $error = $input->param('error');
+my $error        = $input->param('error');
 my $biblionumber = $input->param('biblionumber');
-my $itemnumber = $input->param('itemnumber');
-my $op = $input->param('op');
+my $itemnumber   = $input->param('itemnumber');
+my $op           = $input->param('op');
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "cataloguing/additem.tmpl",
@@ -119,11 +119,9 @@ if ($op eq "additem") {
     push @errors,"barcode_not_unique" if($exist_itemnumber);
     # if barcode exists, don't create, but report The problem.
     my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = AddItemFromMarc($record,$biblionumber) unless ($exist_itemnumber);
+    $nextop = "additem";
     if ($exist_itemnumber) {
-        $nextop = "additem";
         $itemrecord = $record;
-    } else {
-        $nextop = "additem";
     }
 #-------------------------------------------------------------------------------
 } elsif ($op eq "edititem") {
@@ -137,6 +135,7 @@ if ($op eq "additem") {
     $error = &DelItemCheck($dbh,$biblionumber,$itemnumber);
     if($error == 1){
         print $input->redirect("additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode");
+		exit;
     }else{
         push @errors,$error;
         $nextop="additem";
@@ -153,17 +152,18 @@ if ($op eq "additem") {
         }
     }
     print $input->redirect("/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=$biblionumber");
+	exit;
 #-------------------------------------------------------------------------------
 } elsif ($op eq "saveitem") {
 #-------------------------------------------------------------------------------
     # rebuild
-    my @tags = $input->param('tag');
+    my @tags      = $input->param('tag');
     my @subfields = $input->param('subfield');
-    my @values = $input->param('field_value');
+    my @values    = $input->param('field_value');
     # build indicator hash.
-    my @ind_tag = $input->param('ind_tag');
+    my @ind_tag   = $input->param('ind_tag');
     my @indicator = $input->param('indicator');
-    #    my $itemnumber = $input->param('itemnumber');
+    # my $itemnumber = $input->param('itemnumber');
     my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag,'ITEM');
     my $itemtosave=MARC::Record::new_from_xml($xml, 'UTF-8');
     # MARC::Record builded => now, record in DB
@@ -192,8 +192,8 @@ my @fields = $temp->fields();
 my %witness; #---- stores the list of subfields used at least once, with the "meaning" of the code
 my @big_array;
 #---- finds where items.itemnumber is stored
-my ($itemtagfield,$itemtagsubfield) = &GetMarcFromKohaField("items.itemnumber",$frameworkcode);
-my ($branchtagfield,$branchtagsubfield) = &GetMarcFromKohaField("items.homebranch",$frameworkcode);
+my (  $itemtagfield,   $itemtagsubfield) = &GetMarcFromKohaField("items.itemnumber", $frameworkcode);
+my ($branchtagfield, $branchtagsubfield) = &GetMarcFromKohaField("items.homebranch", $frameworkcode);
 
 foreach my $field (@fields) {
     next if ($field->tag()<10);
@@ -280,8 +280,8 @@ foreach my $tag (sort keys %{$tagslib}) {
     $subfield_data{subfield}=$subfield;
     $subfield_data{random}=int(rand(1000000)); 
 #        $subfield_data{marc_lib}=$tagslib->{$tag}->{$subfield}->{lib};
-    $subfield_data{marc_lib}="<span id=\"error$i\" title=\"".$tagslib->{$tag}->{$subfield}->{lib}."\">".$tagslib->{$tag}->{$subfield}->{lib}."</span>";
-    $subfield_data{mandatory}=$tagslib->{$tag}->{$subfield}->{mandatory};
+    $subfield_data{marc_lib}  ="<span id=\"error$i\" title=\"".$tagslib->{$tag}->{$subfield}->{lib}."\">".$tagslib->{$tag}->{$subfield}->{lib}."</span>";
+    $subfield_data{mandatory} =$tagslib->{$tag}->{$subfield}->{mandatory};
     $subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
     my ($x,$value);
     ($x,$value) = find_value($tag,$subfield,$itemrecord) if ($itemrecord);
@@ -298,22 +298,22 @@ foreach my $tag (sort keys %{$tagslib}) {
         $value =~ s/DD/$day/g;
     }
     $subfield_data{visibility} = "display:none;" if (($tagslib->{$tag}->{$subfield}->{hidden} > 4) || ($tagslib->{$tag}->{$subfield}->{hidden} < -4));
-    #testing branch value if IndependantBranches.
-    my $test = (C4::Context->preference("IndependantBranches")) &&
-              ($tag eq $branchtagfield) && ($subfield eq $branchtagsubfield) &&
-              (C4::Context->userenv->{flags} != 1) && ($value) && ($value ne C4::Context->userenv->{branch}) ;
-#         print $input->redirect(".pl?biblionumber=$biblionumber") if ($test);
+    # testing branch value if IndependantBranches.
+    # my $test = (C4::Context->preference("IndependantBranches")) &&
+    #          ($tag eq $branchtagfield) && ($subfield eq $branchtagsubfield) &&
+    #          (C4::Context->userenv->{flags} != 1) && ($value) && ($value ne C4::Context->userenv->{branch}) ;
+    # $test and print $input->redirect(".pl?biblionumber=$biblionumber") and exit;
         # search for itemcallnumber if applicable
     if (!$value && $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber' && C4::Context->preference('itemcallnumber')) {
-        my $CNtag = substr(C4::Context->preference('itemcallnumber'),0,3);
-        my $CNsubfield = substr(C4::Context->preference('itemcallnumber'),3,1);
+        my $CNtag       = substr(C4::Context->preference('itemcallnumber'),0,3);
+        my $CNsubfield  = substr(C4::Context->preference('itemcallnumber'),3,1);
         my $CNsubfield2 = substr(C4::Context->preference('itemcallnumber'),4,1);
         my $temp2 = $temp->field($CNtag);
         if ($temp2) {
-                $value = ($temp2->subfield($CNsubfield)).' '.($temp2->subfield($CNsubfield2));
-#remove any trailing space incase one subfield is used
-        $value=~s/^\s+|\s+$//g;
-      }
+            $value = ($temp2->subfield($CNsubfield)).' '.($temp2->subfield($CNsubfield2));
+            #remove any trailing space incase one subfield is used
+            $value=~s/^\s+|\s+$//g;
+        }
     }
     if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {
       my @authorised_values;
@@ -392,7 +392,7 @@ foreach my $tag (sort keys %{$tagslib}) {
               $authorised_lib{$value} = $lib;
           }
       }
-      $subfield_data{marc_value} =CGI::scrolling_list(
+      $subfield_data{marc_value} =CGI::scrolling_list( # FIXME: factor out scrolling_list
           -name     => "field_value",
           -values   => \@authorised_values,
           -default  => $value,
@@ -424,14 +424,8 @@ foreach my $tag (sort keys %{$tagslib}) {
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{'value_builder'} ) {
 
-        # opening plugin. Just check wether we are on a developper computer on a production one
-        # (the cgidir differs)
-        my $cgidir = C4::Context->intranetdir . "/cgi-bin/cataloguing/value_builder";
-        unless ( opendir( DIR, "$cgidir" ) ) {
-            $cgidir = C4::Context->intranetdir . "/cataloguing/value_builder";
-            closedir( DIR );
-        }
-        my $plugin = $cgidir . "/" . $tagslib->{$tag}->{$subfield}->{'value_builder'};
+        # opening plugin
+        my $plugin = C4::Context->intranetdir . "/cataloguing/value_builder" . $tagslib->{$tag}->{$subfield}->{'value_builder'};
         if (do $plugin) {
             my $extended_param = plugin_parameters( $dbh, $temp, $tagslib, $subfield_data{id}, \@loop_data );
             my ( $function_name, $javascript ) = plugin_javascript( $dbh, $temp, $tagslib, $subfield_data{id}, \@loop_data );
