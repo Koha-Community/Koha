@@ -857,76 +857,65 @@ my @weightings = ( 8, 4, 6, 3, 5, 2, 1 );
 
 sub fixup_cardnumber ($) {
     my ($cardnumber) = @_;
-    my $autonumber_members = C4::Context->boolean_preference('autoMemberNum');
-    $autonumber_members = 0 unless defined $autonumber_members;
+    my $autonumber_members = C4::Context->boolean_preference('autoMemberNum') || 0;
 
     # Find out whether member numbers should be generated
     # automatically. Should be either "1" or something else.
     # Defaults to "0", which is interpreted as "no".
 
     #     if ($cardnumber !~ /\S/ && $autonumber_members) {
-    if ($autonumber_members) {
-        my $dbh = C4::Context->dbh;
-        if ( C4::Context->preference('checkdigit') eq 'katipo' ) {
+    ($autonumber_members) or return $cardnumber;
+    my $checkdigit = C4::Context->preference('checkdigit');
+    my $dbh = C4::Context->dbh;
+    if ( $checkdigit and $checkdigit eq 'katipo' ) {
 
-            # if checkdigit is selected, calculate katipo-style cardnumber.
-            # otherwise, just use the max()
-            # purpose: generate checksum'd member numbers.
-            # We'll assume we just got the max value of digits 2-8 of member #'s
-            # from the database and our job is to increment that by one,
-            # determine the 1st and 9th digits and return the full string.
-            my $sth =
-              $dbh->prepare(
-                "select max(substring(borrowers.cardnumber,2,7)) from borrowers"
-              );
-            $sth->execute;
-
-            my $data = $sth->fetchrow_hashref;
-            $cardnumber = $data->{'max(substring(borrowers.cardnumber,2,7))'};
-            $sth->finish;
-            if ( !$cardnumber ) {    # If DB has no values,
-                $cardnumber = 1000000;    # start at 1000000
-            }
-            else {
-                $cardnumber += 1;
-            }
-
-            my $sum = 0;
-            for ( my $i = 0 ; $i < 8 ; $i += 1 ) {
-
-                # read weightings, left to right, 1 char at a time
-                my $temp1 = $weightings[$i];
-
-                # sequence left to right, 1 char at a time
-                my $temp2 = substr( $cardnumber, $i, 1 );
-
-                # mult each char 1-7 by its corresponding weighting
-                $sum += $temp1 * $temp2;
-            }
-
-            my $rem = ( $sum % 11 );
-            $rem = 'X' if $rem == 10;
-
-            $cardnumber = "V$cardnumber$rem";
+        # if checkdigit is selected, calculate katipo-style cardnumber.
+        # otherwise, just use the max()
+        # purpose: generate checksum'd member numbers.
+        # We'll assume we just got the max value of digits 2-8 of member #'s
+        # from the database and our job is to increment that by one,
+        # determine the 1st and 9th digits and return the full string.
+        my $sth = $dbh->prepare(
+            "select max(substring(borrowers.cardnumber,2,7)) as new_num from borrowers"
+        );
+        $sth->execute;
+        my $data = $sth->fetchrow_hashref;
+        $cardnumber = $data->{new_num};
+        if ( !$cardnumber ) {    # If DB has no values,
+            $cardnumber = 1000000;    # start at 1000000
+        } else {
+            $cardnumber += 1;
         }
-        else {
+
+        my $sum = 0;
+        for ( my $i = 0 ; $i < 8 ; $i += 1 ) {
+            # read weightings, left to right, 1 char at a time
+            my $temp1 = $weightings[$i];
+
+            # sequence left to right, 1 char at a time
+            my $temp2 = substr( $cardnumber, $i, 1 );
+
+            # mult each char 1-7 by its corresponding weighting
+            $sum += $temp1 * $temp2;
+        }
+
+        my $rem = ( $sum % 11 );
+        $rem = 'X' if $rem == 10;
+
+        return "V$cardnumber$rem";
+     } else {
 
      # MODIFIED BY JF: mysql4.1 allows casting as an integer, which is probably
      # better. I'll leave the original in in case it needs to be changed for you
-            my $sth =
-              $dbh->prepare(
-                "select max(cast(cardnumber as signed)) from borrowers");
-
-      #my $sth=$dbh->prepare("select max(borrowers.cardnumber) from borrowers");
-
-            $sth->execute;
-
-            my ($result) = $sth->fetchrow;
-            $sth->finish;
-            $cardnumber = $result + 1;
-        }
+     # my $sth=$dbh->prepare("select max(borrowers.cardnumber) from borrowers");
+        my $sth = $dbh->prepare(
+            "select max(cast(cardnumber as signed)) from borrowers"
+        );
+        $sth->execute;
+        my ($result) = $sth->fetchrow;
+        return $result + 1;
     }
-    return $cardnumber;
+    return $cardnumber;     # just here as a fallback/reminder 
 }
 
 =head2 GetGuarantees
