@@ -40,17 +40,22 @@ KOHA.Google = {
             $("."+book.bib_key).each(function() {
                 var a = document.createElement("a");
                 a.href = book.info_url;
-				if(typeof(book.thumbnail_url) != "undefined"){
+				if (typeof(book.thumbnail_url) != "undefined") {
 	            	var img = document.createElement("img");
 	                img.src = book.thumbnail_url;
-		            a.appendChild(img);
+					$(this).append(img);
+                    $(this).append(
+                        '<div style="margin-bottom:5px; margin-top:-5px;font-size:9px">' +
+                        '<a href="' + 
+                        book.info_url + 
+                        '">Source Google</a></div>' 
+                        );
 				} else {
 					var message = document.createElement("span");
 					$(message).attr("class","no-image");
 					$(message).html(NO_GOOGLE_JACKET);
-					a.appendChild(message);
+					$(this).append(message);
 				}
-					$(this).append(a);
             });
         }
     }
