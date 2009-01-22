@@ -2,7 +2,7 @@
 # This code has been modified by Trendsetters (originally from opac-user.pl)
 # This code has been modified by rch
 # We're going to authenticate a self-check user.  we'll add a flag to borrowers 'selfcheck'
-# We're in a controlled environment; we trust the user. so the selfcheck station will accept a patronid and 
+# We're in a controlled environment; we trust the user. so the selfcheck station will accept a patronid and
 # issue items to that borrower.
 #
 use strict;
@@ -18,7 +18,7 @@ use C4::Reserves;
 use C4::Search;
 use C4::Output;
 use C4::Members;
-use HTML::Template::Pro;
+#use HTML::Template::Pro;
 use C4::Dates;
 use C4::Biblio;
 use C4::Items;
@@ -30,7 +30,7 @@ my ($template, $loggedinuser, $cookie)
                              type => "opac",
                              authnotrequired => 0,
                              flagsrequired => { circulate => "circulate_remaining_permissions" },
-                             debug => 1,
+                             debug => 0,
                              });
 my $dbh = C4::Context->dbh;
 
@@ -39,8 +39,8 @@ my ($op, $patronid, $barcode, $confirmed, $timedout) = (
     $query->param("op")         || '',
     $query->param("patronid")   || '',
     $query->param("barcode")    || '',
-    $query->param( "confirmed") || '',
-    $query->param( "timedout")  || '', #not actually using this...
+    $query->param("confirmed")  || '',
+    $query->param("timedout")   || '', #not actually using this...
 );
 
 my %confirmation_strings = ( RENEW_ISSUE => "This item is already checked out to you.  Return it?", );
@@ -65,7 +65,7 @@ if ($op eq "logout") {
      #warn "returnbook: " . $doreturn;
     ($borrower) = GetMemberDetails(undef, $patronid);
   }
-  
+
   if ($op eq "checkout" ) {
 	my $impossible = {};
 	my $needconfirm = {};
@@ -113,7 +113,7 @@ if ($op eq "logout") {
       	    #warn "issuing book?";
             AddIssue($borrower,$barcode);
 	#    ($borrower, $flags) = getpatroninformation(undef,undef, $patronid);
-		
+
        #    $template->param( patronid => $patronid,
 #			validuser => 1,
 #			);
@@ -136,14 +136,20 @@ if ($borrower->{cardnumber}) {
 	my $bornum = $borrower->{borrowernumber};
 	my $borrowername = $borrower->{firstname} . " " . $borrower->{surname};
 	my @issues;
-	my ($issueslist) = GetPendingIssues($borrower->{'borrowernumber'});
-	foreach my $it ( @$issueslist ) {
-		push @issues, $it;
-		$cnt++;
-	}
-   $template->param(  validuser => 1,  
+
+    my ($issueslist) = GetPendingIssues( $borrower->{'borrowernumber'} );
+    foreach my $it (@$issueslist) {
+
+        my ( $renewokay, $renewerror ) =
+                CanBookBeIssued( $borrower, $it->{'barcode'}, '', '' );
+        $it->{'norenew'} = 1 if $renewokay->{'NO_MORE_RENEWALS'} == 1;
+        push @issues, $it;
+        $cnt++;
+    }
+
+   $template->param(  validuser => 1,
    			borrowername => $borrowername,
-			issues_count => $cnt, 
+			issues_count => $cnt,
 			ISSUES => \@issues,,
 			patronid => $patronid ,
 			noitemlinks => 1 ,
@@ -156,7 +162,7 @@ if ($borrower->{cardnumber}) {
       $inputfocus = 'confirm' ;
    } else {
       $inputfocus = 'barcode' ;
-    }
+   }
 
 $template->param( inputfocus => $inputfocus,
 		nofines => 1,

@@ -92,6 +92,7 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	<form id="mainform" action="/cgi-bin/koha/sco/sco-main.pl" name="mainform" method="post">
 	<fieldset class="checkout"><label for="patronid">Please enter your card number:</label> 
 	<input type="text" id="patronid" class="unfocus" size="20" name="patronid" />
+
  	<!-- TMPL_LOOP NAME="INPUTS" --><input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->"><!-- /TMPL_LOOP -->
 	<input type="hidden" name="op" value="login" />
  	<input	type="submit" value="Submit" class="submit" /></fieldset></form>
@@ -116,6 +117,7 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	<table><caption>Issues for <!-- TMPL_VAR NAME='borrowername' --> <span class="count">(<!-- TMPL_VAR NAME="issues_count" --> total)</span></caption>
 	<!-- ISSUES TABLE ROWS -->
 	<tr><th>Title</th><th>Call No.</th><th>Due</th><th>Renew</th><!-- TMPL_UNLESS NAME="nofines" --><th>Fines</th><!-- /TMPL_UNLESS --></tr>
+
 	<!-- TMPL_LOOP NAME="ISSUES" -->
 	<!-- TMPL_UNLESS name="__odd__" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_UNLESS -->
 	<td><!-- TMPL_IF NAME="amazonimages" --> <!-- TMPL_IF NAME="isbn" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.THUMBZZZ.jpg" alt="Book Cover Image" class="thumbnail" /></a><!-- /TMPL_IF --> <!-- /TMPL_IF --><!-- TMPL_UNLESS NAME="noitemlinks" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a><!-- TMPL_ELSE --><strong><!-- TMPL_VAR NAME="title" escape="html" --></strong><!-- /TMPL_UNLESS --><span class="item-details">
@@ -123,10 +125,13 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	<td><!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
 	<!-- TMPL_IF NAME="overdue" --><td class="overdue"><!-- TMPL_VAR NAME="date_due" --></td><!-- TMPL_ELSE --><td><!-- TMPL_VAR NAME="date_due" --></td><!-- /TMPL_IF -->
 	<td>
-	<!-- TMPL_IF NAME="status" -->
+	<!-- TMPL_IF NAME="status" --> 	<!-- FIXME? where does 'status' come from? -->
 	<a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;bornum=<!-- TMPL_VAR NAME="borrowernumber" -->">Renew</a>
-	<!-- TMPL_ELSE -->
-	Not renewable<!-- /TMPL_IF -->
+	<!-- TMPL_ELSIF NAME="norenew" -->
+	Not renewable
+	<!-- TMPL_ELSE  -->
+	Renewable
+    <!-- /TMPL_IF -->
 	</td>
 	<!-- TMPL_UNLESS NAME="nofines" --><td><!-- TMPL_IF NAME="charges" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td><!-- /TMPL_UNLESS --></tr>
 	<!-- /TMPL_LOOP -->

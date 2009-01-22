@@ -794,7 +794,7 @@ sub CanBookBeIssued {
     elsif ($issue->{borrowernumber}) {
 
         # issued to someone else
-        my $currborinfo = GetMemberDetails( $issue->{borrowernumber} );
+        my $currborinfo =    C4::Members::GetMemberDetails( $issue->{borrowernumber} );
 
 #        warn "=>.$currborinfo->{'firstname'} $currborinfo->{'surname'} ($currborinfo->{'cardnumber'})";
         $needsconfirmation{ISSUED_TO_ANOTHER} =
