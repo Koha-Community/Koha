@@ -231,6 +231,7 @@ $sth = $dbh->prepare("SELECT frameworkcode, frameworktext, tagfield, tagsubfield
                       LEFT JOIN biblio_framework USING (frameworkcode)
                       WHERE authtypecode IS NOT NULL
                       AND authtypecode <> ''
+                      AND tab > '-1'
                       AND authtypecode NOT IN (SELECT authtypecode FROM auth_types)
                       ORDER BY frameworkcode, tagfield, tagsubfield");
 $sth->execute;
