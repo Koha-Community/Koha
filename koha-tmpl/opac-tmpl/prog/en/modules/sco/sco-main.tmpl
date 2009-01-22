@@ -125,16 +125,21 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	<td><!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
 	<!-- TMPL_IF NAME="overdue" --><td class="overdue"><!-- TMPL_VAR NAME="date_due" --></td><!-- TMPL_ELSE --><td><!-- TMPL_VAR NAME="date_due" --></td><!-- /TMPL_IF -->
 	<td>
-	<!-- TMPL_IF NAME="status" --> 	<!-- FIXME? where does 'status' come from? -->
-	<a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;bornum=<!-- TMPL_VAR NAME="borrowernumber" -->">Renew</a>
-	<!-- TMPL_ELSIF NAME="norenew" -->
-	Not renewable
+    <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" method="post">
+    <input type="hidden" id="op" name="op" value="checkout" />
+    <input type="hidden" name="patronid" value="<!-- TMPL_VAR NAME="patronid" -->" />
+    <input type="hidden" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->" />
+    <input type="hidden" id="confirmation"  name="confirmed" value=""  />
+	<!-- TMPL_IF NAME="norenew" -->
+        <input type="button" value="Return Item" name="confirm" class="return" onclick="this.form.op.value='returnbook';this.form.submit();"  />
 	<!-- TMPL_ELSE  -->
-	Renewable
+        <input type="button" value="Renew Item" <!-- TMPL_UNLESS NAME="renew" --> name="confirm"<!-- /TMPL_UNLESS --> class="renew" onclick="this.form.confirmed.value='1';this.form.submit();" />
     <!-- /TMPL_IF -->
+    </form>
 	</td>
 	<!-- TMPL_UNLESS NAME="nofines" --><td><!-- TMPL_IF NAME="charges" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td><!-- /TMPL_UNLESS --></tr>
 	<!-- /TMPL_LOOP -->
+
 	</table>
 	<!-- TMPL_ELSE -->
 	<h3>You currently have nothing checked out.</h3>
