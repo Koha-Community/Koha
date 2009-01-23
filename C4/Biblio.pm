@@ -23,8 +23,8 @@ use warnings;
 use MARC::Record;
 use MARC::File::USMARC;
 # Force MARC::File::XML to use LibXML SAX Parser
-$XML::SAX::ParserPackage = "XML::LibXML::SAX";
-require MARC::File::XML;
+#$XML::SAX::ParserPackage = "XML::LibXML::SAX";
+use MARC::File::XML;
 use ZOOM;
 
 use C4::Koha;
