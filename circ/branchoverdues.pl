@@ -17,6 +17,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+# use warnings;  # FIXME
 use C4::Context;
 use CGI;
 use C4::Output;
@@ -50,23 +51,23 @@ use C4::Debug;
  	- 2) item issues is not returned
 	- 3) this item as not been already notify
 
+  FIXME: who is the author?
+  FIXME: No privisions (i.e. "actions") for handling notices are implemented.
+  FIXME: This is linked as "Overdue Fines" but the relationship to fines in GetOverduesForBranch is more complicated than that.
+
 =cut
 
 my $input       = new CGI;
 my $dbh = C4::Context->dbh;
 
-my $theme = $input->param('theme');    # only used if allowthemeoverride is set
-
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
         template_name   => "circ/branchoverdues.tmpl",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
         flagsrequired   => { circulate => "circulate_remaining_permissions" },
         debug           => 1,
-    }
-);
+});
 
 my $default = C4::Context->userenv->{'branch'};
 
@@ -78,22 +79,22 @@ my $overduelevel   = $input->param('overduelevel');
 my $notifyId       = $input->param('notifyId');
 my $location       = $input->param('location');
 
+# FIXME: better check that borrowernumber is defined and valid.
+# FIXME: same for itemnumber and other variables passed in here.
+
 # now create the line in bdd (notifys)
 if ( $input->param('action') eq 'add' ) {
     my $addnotify =
       AddNotifyLine( $borrowernumber, $itemnumber, $overduelevel, $method,
-        $notifyId );
+        $notifyId )    # FIXME: useless variable, no TMPL code for "action" exists.;
 }
 elsif ( $input->param('action') eq 'remove' ) {
     my $notify_date  = $input->param('notify_date');
     my $removenotify =
-      RemoveNotifyLine( $borrowernumber, $itemnumber, $notify_date );
+      RemoveNotifyLine( $borrowernumber, $itemnumber, $notify_date );    # FIXME: useless variable, no TMPL code for "action" exists.
 }
 
 my @overduesloop;
-my @todayoverduesloop;
-my $counter = 0;
-
 my @getoverdues = GetOverduesForBranch( $default, $location );
 use Data::Dumper;
 $debug and warn "HERE : $default / $location" . Dumper(@getoverdues);
@@ -122,17 +123,16 @@ foreach my $num (@getoverdues) {
     $overdueforbranch{'itemnumber'}        = $num->{'itemnumber'};
 
     # now we add on the template, the differents values of notify_level
+    # FIXME: numerical comparison, not string eq.
     if ( $num->{'notify_level'} eq '1' ) {
         $overdueforbranch{'overdue1'}     = 1;
         $overdueforbranch{'overdueLevel'} = 1;
     }
-
-    if ( $num->{'notify_level'} eq '2' ) {
+    elsif ( $num->{'notify_level'} eq '2' ) {
         $overdueforbranch{'overdue2'}     = 1;
         $overdueforbranch{'overdueLevel'} = 2;
     }
-
-    if ( $num->{'notify_level'} eq '3' ) {
+    elsif ( $num->{'notify_level'} eq '3' ) {
         $overdueforbranch{'overdue3'}     = 1;
         $overdueforbranch{'overdueLevel'} = 3;
     }

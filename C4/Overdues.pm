@@ -1178,17 +1178,17 @@ this function is not exported, only used with GetOverduesForBranch
 =cut
 
 sub CheckItemNotify {
-	my ($notify_id,$notify_level,$itemnumber) = @_;
-	my $dbh = C4::Context->dbh;
- 	my $sth = $dbh->prepare("
-	  SELECT COUNT(*) FROM notifys
- WHERE notify_id  = ?
- AND notify_level  = ? 
-  AND  itemnumber  =  ? ");
- $sth->execute($notify_id,$notify_level,$itemnumber);
-	my $notified = $sth->fetchrow;
-$sth->finish;
-return ($notified);
+    my ($notify_id,$notify_level,$itemnumber) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("
+    SELECT COUNT(*)
+     FROM notifys
+    WHERE notify_id    = ?
+     AND  notify_level = ? 
+     AND  itemnumber   = ? ");
+    $sth->execute($notify_id,$notify_level,$itemnumber);
+    my $notified = $sth->fetchrow;
+    return ($notified);
 }
 
 =head2 GetOverduesForBranch
@@ -1197,112 +1197,68 @@ Sql request for display all information for branchoverdues.pl
 2 possibilities : with or without location .
 display is filtered by branch
 
+FIXME: This function should be renamed.
+
 =cut
 
 sub GetOverduesForBranch {
     my ( $branch, $location) = @_;
 	my $itype_link =  (C4::Context->preference('item-level_itypes')) ?  " items.itype " :  " biblioitems.itemtype ";
-    if ( not $location ) {
-        my $dbh = C4::Context->dbh;
-        my $sth = $dbh->prepare("
-            SELECT 
-                borrowers.surname,
-                borrowers.firstname,
-                biblio.title,
-                itemtypes.description,
-                issues.date_due,
-                issues.returndate,
-                branches.branchname,
+    my $dbh = C4::Context->dbh;
+    my $select = "
+    SELECT 
+            borrowers.borrowernumber,
+            borrowers.surname,
+            borrowers.firstname,
+            borrowers.phone,
+            borrowers.email,
+               biblio.title,
+               biblio.biblionumber,
+               issues.date_due,
+               issues.returndate,
+               issues.branchcode,
+             branches.branchname,
                 items.barcode,
-                borrowers.phone,
-                borrowers.email,
                 items.itemcallnumber,
-                borrowers.borrowernumber,
-                items.itemnumber,
-                biblio.biblionumber,
-                issues.branchcode,
-                accountlines.notify_id,
-                accountlines.notify_level,
                 items.location,
-                accountlines.amountoutstanding
-            FROM  accountlines
-            LEFT JOIN issues ON issues.itemnumber = accountlines.itemnumber AND issues.borrowernumber = accountlines.borrowernumber
-            LEFT JOIN borrowers ON borrowers.borrowernumber = accountlines.borrowernumber
-            LEFT JOIN items ON items.itemnumber = issues.itemnumber
-            LEFT JOIN biblio ON biblio.biblionumber = items.biblionumber
-            LEFT JOIN biblioitems ON biblioitems.biblioitemnumber=items.biblioitemnumber
-            LEFT JOIN itemtypes ON itemtypes.itemtype = $itype_link
-            LEFT JOIN branches ON branches.branchcode = issues.branchcode
-            WHERE ( accountlines.amountoutstanding  != '0.000000')
-              AND ( accountlines.accounttype  = 'FU')
-              AND (issues.branchcode = ?)
-              AND (issues.date_due <= NOW())
-            ORDER BY  borrowers.surname
-        ");
-	$sth->execute($branch);
-        my @getoverdues;
-        my $i = 0;
-        while ( my $data = $sth->fetchrow_hashref ) {
-	#check if the document has already been notified
-	my $countnotify = CheckItemNotify($data->{'notify_id'},$data->{'notify_level'},$data->{'itemnumber'});
-	if ($countnotify eq '0'){
+                items.itemnumber,
+            itemtypes.description,
+         accountlines.notify_id,
+         accountlines.notify_level,
+         accountlines.amountoutstanding
+    FROM  accountlines
+    LEFT JOIN issues      ON    issues.itemnumber     = accountlines.itemnumber
+                          AND   issues.borrowernumber = accountlines.borrowernumber
+    LEFT JOIN borrowers   ON borrowers.borrowernumber = accountlines.borrowernumber
+    LEFT JOIN items       ON     items.itemnumber     = issues.itemnumber
+    LEFT JOIN biblio      ON      biblio.biblionumber =  items.biblionumber
+    LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber
+    LEFT JOIN itemtypes   ON itemtypes.itemtype       = $itype_link
+    LEFT JOIN branches    ON  branches.branchcode     = issues.branchcode
+    WHERE (accountlines.amountoutstanding  != '0.000000')
+      AND (accountlines.accounttype         = 'FU'      )
+      AND (issues.branchcode =  ?   )
+      AND (issues.date_due  <= NOW())
+    ";
+    my @getoverdues;
+    my $i = 0;
+    my $sth;
+    if ($location) {
+        $sth = $dbh->prepare("$select AND items.location = ? ORDER BY borrowers.surname, borrowers.firstname");
+        $sth->execute($branch, $location);
+    } else {
+        $sth = $dbh->prepare("$select ORDER BY borrowers.surname, borrowers.firstname");
+        $sth->execute($branch);
+    }
+    while ( my $data = $sth->fetchrow_hashref ) {
+    #check if the document has already been notified
+        my $countnotify = CheckItemNotify($data->{'notify_id'}, $data->{'notify_level'}, $data->{'itemnumber'});
+        if ($countnotify eq '0') {
             $getoverdues[$i] = $data;
             $i++;
-	 }
         }
-        return (@getoverdues);
-	$sth->finish;
     }
-    else {
-        my $dbh = C4::Context->dbh;
-        my $sth = $dbh->prepare( "
-            SELECT  borrowers.surname,
-                    borrowers.firstname,
-                    biblio.title,
-                    itemtypes.description,
-                    issues.date_due,
-                    issues.returndate,
-                    branches.branchname,
-                    items.barcode,
-                    borrowers.phone,
-                    borrowers.email,
-                    items.itemcallnumber,
-                    borrowers.borrowernumber,
-                    items.itemnumber,
-                    biblio.biblionumber,
-                    issues.branchcode,
-                    accountlines.notify_id,
-                    accountlines.notify_level,
-                    items.location,
-                    accountlines.amountoutstanding
-            FROM  accountlines
-            LEFT JOIN issues ON issues.itemnumber = accountlines.itemnumber AND issues.borrowernumber = accountlines.borrowernumber
-            LEFT JOIN borrowers ON borrowers.borrowernumber = accountlines.borrowernumber
-            LEFT JOIN items ON items.itemnumber = issues.itemnumber
-            LEFT JOIN biblio ON biblio.biblionumber = items.biblionumber
-            LEFT JOIN biblioitems ON biblioitems.biblioitemnumber=items.biblioitemnumber
-            LEFT JOIN itemtypes ON itemtypes.itemtype = $itype_link
-            LEFT JOIN branches ON branches.branchcode = issues.branchcode
-           WHERE ( accountlines.amountoutstanding  != '0.000000')
-             AND ( accountlines.accounttype  = 'FU')
-             AND (issues.branchcode = ? AND items.location = ?)
-             AND (issues.date_due <= NOW())
-           ORDER BY  borrowers.surname
-        " );
-        $sth->execute( $branch, $location);
-        my @getoverdues;
-	my $i = 0;
-        while ( my $data = $sth->fetchrow_hashref ) {
-	#check if the document has already been notified
-	  my $countnotify = CheckItemNotify($data->{'notify_id'},$data->{'notify_level'},$data->{'itemnumber'});
-	  if ($countnotify eq '0'){	                
-		$getoverdues[$i] = $data;
-		 $i++;
-	 }
-        }
-        $sth->finish;
-        return (@getoverdues); 
-    }
+    return (@getoverdues);
 }
 
 
