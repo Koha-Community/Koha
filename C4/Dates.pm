@@ -144,11 +144,6 @@ sub init ($;$$) {
     return $self;
 }
 
-sub output ($;$) {
-       my $self = shift;
-       my $newformat = (@_) ? _recognize_format(shift) : _prefformat();
-       return (eval {POSIX::strftime($posix_map{$newformat}, @{$self->{'dmy_arrayref'}})} || undef);
-}
 sub today ($;$) {		# NOTE: sets date value to today (and returns it in the requested or current format)
 	my $class = shift;
 	$class = ref($class) || $class;
