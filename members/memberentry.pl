@@ -171,11 +171,11 @@ if (defined($guarantorid) and ($category_type eq 'C' || $category_type eq 'P') a
   my $guarantordata=GetMember($guarantorid);
   $guarantorinfo=$guarantordata->{'surname'}." , ".$guarantordata->{'firstname'};
   if (!defined($data{'contactname'}) or $data{'contactname'} eq '' or $data{'contactname'} ne $guarantordata->{'surname'}) {
-    $data{'contactfirstname'}= $guarantordata->{'firstname'};
-    $data{'contactname'}     = $guarantordata->{'surname'};
-    $data{'contacttitle'}    = $guarantordata->{'title'};
+    $newdata{'contactfirstname'}= $guarantordata->{'firstname'};
+    $newdata{'contactname'}     = $guarantordata->{'surname'};
+    $newdata{'contacttitle'}    = $guarantordata->{'title'};
 	  foreach (qw(streetnumber address streettype address2 zipcode city phone phonepro mobile fax email emailpro branchcode)) {
-		$data{$_} = $guarantordata->{$_};
+		$newdata{$_} = $guarantordata->{$_};
 	}
   }
 }
