@@ -111,39 +111,27 @@ sub _chron_to_hms {
 }
 
 sub new {
-    shift; # as clone isn't implemented, we don't carre about package name
-    my $self = bless {}, __PACKAGE__;
-    $self->init(@_)
+	my $this = shift;
+	my $class = ref($this) || $this;
+	my $self = {};
+	bless $self, $class;
+	return $self->init(@_);
 }
-
 sub init ($;$$) {
-    my ($self,$string_date,$dformat) = @_; 
-
-    my $from;
-    if ( $dformat ) { 
-        $from = 'argument';
-    } else {
-        $from    = 'system preferences';
-        $dformat = _prefformat;
-    }   
-
-    $self->{'dateformat'} = $dformat;
-    $format_map{$dformat} or croak "Invalid date format '$dformat' from $from";
-
-    $self->{'dmy_arrayref'} = $string_date
-	? $self->dmy_map($string_date)
-	: localtime
-    ;
-
-    $debug and warn
-        q[(during init) @$self->{'dmy_arrayref'}:] 
-        , join(' ',@{$self->{'dmy_arrayref'}})
-        , "\n"
-    ;
-
-    return $self;
+	my $self = shift;
+	my $dformat;
+	$self->{'dateformat'} = $dformat = (scalar(@_) >= 2) ? $_[1] : _prefformat();
+	($format_map{$dformat}) or croak 
+		"Invalid date format '$dformat' from " . ((scalar(@_) >= 2) ? 'argument' : 'system preferences');
+	$self->{'dmy_arrayref'} = [((@_) ? $self->dmy_map(shift) : localtime )] ;
+	$debug and warn "(during init) \@\$self->{'dmy_arrayref'}: " . join(' ',@{$self->{'dmy_arrayref'}}) . "\n";
+	return $self;
 }
-
+sub output ($;$) {
+	my $self = shift;
+	my $newformat = (@_) ? _recognize_format(shift) : _prefformat();
+	return (eval {POSIX::strftime($posix_map{$newformat}, @{$self->{'dmy_arrayref'}})} || undef);
+}
 sub today ($;$) {		# NOTE: sets date value to today (and returns it in the requested or current format)
 	my $class = shift;
 	$class = ref($class) || $class;
