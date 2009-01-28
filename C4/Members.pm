@@ -75,6 +75,8 @@ BEGIN {
 		&GetBorrowersWithIssuesHistoryOlderThan
 
 		&GetExpiryDate
+
+        &IsMemberBlocked
 	);
 
 	#Modify data
@@ -2089,6 +2091,81 @@ sub DebarMember {
     return ModMember( borrowernumber => $borrowernumber,
                       debarred       => 1 );
     
+}
+
+=head2 IsMemberBlocked
+
+=over 4
+
+my $blocked = IsMemberBlocked( $borrowernumber );
+
+return the status, and the number of day or documents, depends his punishment
+
+return :
+-1 if the user have overdue returns
+1 if the user is punished X days
+0 if the user is authorised to loan
+
+=back
+
+=cut
+
+sub IsMemberBlocked {
+    my $borrowernumber = shift;
+    my $dbh            = C4::Context->dbh;
+    # if he have late issues
+    my $sth = $dbh->prepare(
+        "SELECT COUNT(*) as latedocs
+         FROM issues
+         WHERE borrowernumber = ?
+         AND date_due < now()"
+    );
+    $sth->execute($borrowernumber);
+    my $latedocs = $sth->fetchrow_hashref->{'latedocs'};
+    $sth->finish();
+    
+    return (-1, $latedocs) if $latedocs > 0;
+
+    # or if he must wait to loan
+    if(C4::Context->preference("item-level_itypes")){
+        $sth = $dbh->prepare(
+            "SELECT
+            ADDDATE(returndate, finedays * DATEDIFF(returndate,date_due) ) AS blockingdate,
+            DATEDIFF(ADDDATE(returndate, finedays * DATEDIFF(returndate,date_due)),NOW()) AS blockedcount
+            FROM old_issues
+            LEFT JOIN items ON (items.itemnumber=old_issues.itemnumber)
+            LEFT JOIN issuingrules ON (issuingrules.itemtype=items.itype)
+            WHERE finedays IS NOT NULL
+            AND  date_due < returndate
+            AND borrowernumber = ?
+            ORDER BY blockingdate DESC
+            LIMIT 1"
+        );
+    }else{
+        $sth = $dbh->prepare(
+            "SELECT
+            ADDDATE(returndate, finedays * DATEDIFF(returndate,date_due) ) AS blockingdate,
+            DATEDIFF(ADDDATE(returndate, finedays * DATEDIFF(returndate,date_due)),NOW()) AS blockedcount
+            FROM old_issues
+            LEFT JOIN items ON (items.itemnumber=old_issues.itemnumber)
+            LEFT JOIN biblioitems ON (biblioitems.biblioitemnumber=items.biblioitemnumber)
+            LEFT JOIN issuingrules ON (issuingrules.itemtype=biblioitems.itemtype)
+            WHERE finedays IS NOT NULL
+            AND  date_due < returndate
+            AND borrowernumber = ?
+            ORDER BY blockingdate DESC
+            LIMIT 1"
+        );
+    }
+    $sth->execute($borrowernumber);
+    my $row = $sth->fetchrow_hashref;
+    my $blockeddate  = $row->{'blockeddate'};
+    my $blockedcount = $row->{'blockedcount'};
+    $sth->finish();
+
+    return (1, $blockedcount) if $blockedcount > 0;
+
+    return 0
 }
 
 END { }    # module clean-up code here (global destructor)

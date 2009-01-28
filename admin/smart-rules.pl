@@ -77,13 +77,14 @@ elsif ($op eq 'delete-branch-cat') {
 # save the values entered
 elsif ($op eq 'add') {
     my $sth_search = $dbh->prepare("SELECT COUNT(*) AS total FROM issuingrules WHERE branchcode=? AND categorycode=? AND itemtype=?");
-    my $sth_insert = $dbh->prepare("INSERT INTO issuingrules (branchcode, categorycode, itemtype, maxissueqty, issuelength, fine, firstremind, chargeperiod) VALUES(?,?,?,?,?,?,?,?)");
-    my $sth_update=$dbh->prepare("UPDATE issuingrules SET fine=?, firstremind=?, chargeperiod=?, maxissueqty=?, issuelength=? WHERE branchcode=? AND categorycode=? AND itemtype=?");
+    my $sth_insert = $dbh->prepare("INSERT INTO issuingrules (branchcode, categorycode, itemtype, maxissueqty, issuelength, fine, finedays, firstremind, chargeperiod) VALUES(?,?,?,?,?,?,?,?,?)");
+    my $sth_update=$dbh->prepare("UPDATE issuingrules SET fine=?, finedays=?, firstremind=?, chargeperiod=?, maxissueqty=?, issuelength=? WHERE branchcode=? AND categorycode=? AND itemtype=?");
     
     my $br = $branch; # branch
     my $bor  = $input->param('categorycode'); # borrower category
     my $cat  = $input->param('itemtype');     # item type
     my $fine = $input->param('fine');
+    my $finedays     = $input->param('finedays');
     my $firstremind  = $input->param('firstremind');
     my $chargeperiod = $input->param('chargeperiod');
     my $maxissueqty  = $input->param('maxissueqty');
@@ -95,9 +96,9 @@ elsif ($op eq 'add') {
     $sth_search->execute($br,$bor,$cat);
     my $res = $sth_search->fetchrow_hashref();
     if ($res->{total}) {
-        $sth_update->execute($fine, $firstremind, $chargeperiod, $maxissueqty,$issuelength,$br,$bor,$cat);
+        $sth_update->execute($fine, $finedays, $firstremind, $chargeperiod, $maxissueqty,$issuelength,$br,$bor,$cat);
     } else {
-        $sth_insert->execute($br,$bor,$cat,$maxissueqty,$issuelength,$fine,$firstremind,$chargeperiod);
+        $sth_insert->execute($br,$bor,$cat,$maxissueqty,$issuelength,$fine,$finedays,$firstremind,$chargeperiod);
     }
 } 
 elsif ($op eq "add-branch-cat") {

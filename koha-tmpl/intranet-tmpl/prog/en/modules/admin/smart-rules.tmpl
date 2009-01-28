@@ -65,6 +65,7 @@ $(document).ready(function() {
                 <th>Patron Category</th>
                 <th>Item Type</th>
                 <th>Fine Amount</th>
+                <th>Fine Days</th>
                 <th>Fine Grace Period</th>
                 <th>Fine Charging Interval</th>
                 <th>Current Checkouts Allowed</th>
@@ -85,6 +86,11 @@ $(document).ready(function() {
                         <!-- /TMPL_IF -->
                     </td>
                     <td>$<!-- TMPL_VAR NAME="fine" --></td>
+                    <td>
+                        <!-- TMPL_IF NAME="finedays" -->
+                            <!-- TMPL_VAR NAME="finedays" --> day(s)
+                        <!-- /TMPL_IF -->
+                    </td>
                     <td><!-- TMPL_IF NAME="firstremind" --><!-- TMPL_VAR NAME="firstremind" --> day(s)<!-- /TMPL_IF --></td>
                     <td><!-- TMPL_IF NAME="chargeperiod" --><!-- TMPL_VAR NAME="chargeperiod" --> day(s)<!-- /TMPL_IF --></td>
                     <td><!-- TMPL_IF NAME="unlimited_maxissueqty" -->
@@ -117,6 +123,7 @@ $(document).ready(function() {
                         </select>
                     </td>
                     <td>$<input name="fine" size="4" /></td>
+                    <td><input name="finedays" size="2" /> day(s)</td>
                     <td><input name="firstremind" size="2" /> day(s)</td>
                     <td><input name="chargeperiod" size="2" /> day(s)</td>
                     <td><input name="maxissueqty" size="3" /></td>

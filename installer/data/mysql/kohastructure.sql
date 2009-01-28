@@ -1081,6 +1081,7 @@ CREATE TABLE `issuingrules` (
   `rentaldiscount` decimal(28,6) default NULL,
   `reservecharge` decimal(28,6) default NULL,
   `fine` decimal(28,6) default NULL,
+  `finedays` int(11) default NULL,
   `firstremind` int(11) default NULL,
   `chargeperiod` int(11) default NULL,
   `accountsent` int(11) default NULL,
