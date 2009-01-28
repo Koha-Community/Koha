@@ -8,7 +8,7 @@ use C4::Labels;
 use C4::Context;
 use HTML::Template::Pro;
 
-my $dbh =  = C4::Context->dbh;
+my $dbh = C4::Context->dbh;
 my $query = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
