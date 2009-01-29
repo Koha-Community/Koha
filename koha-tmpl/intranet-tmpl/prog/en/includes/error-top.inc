@@ -16,7 +16,7 @@ window.open(targeturl,windowname,"height=480,width=640,scrollbars,resizable")
 
 <script language="JavaScript" type="text/javascript">
 function Help() {
-	newin=window.open("/cgi-bin/koha/help.pl","Koha Help",'width=600,height=600,toolbar=false,scrollbars=yes');
+	newin=window.open("/cgi-bin/koha/help.pl","KohaHelp",'width=600,height=600,toolbar=false,scrollbars=yes');
 }
 </script>
 
