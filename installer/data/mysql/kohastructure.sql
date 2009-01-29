@@ -1222,7 +1222,7 @@ CREATE TABLE `itemtypes` (
 DROP TABLE IF EXISTS `labels`;
 CREATE TABLE `labels` (
   `labelid` int(11) NOT NULL auto_increment,
-  `batch_id` varchar(10) NOT NULL default 1,
+  `batch_id` int(10) NOT NULL default 1,
   `itemnumber` varchar(100) NOT NULL default '',
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   PRIMARY KEY  (`labelid`)

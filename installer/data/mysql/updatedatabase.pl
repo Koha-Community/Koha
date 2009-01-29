@@ -2342,6 +2342,13 @@ if ( C4::Context->preference('Version') < TransformToNum($DBversion) ) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.01.00.024";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE labels MODIFY COLUMN batch_id int(10) NOT NULL default 1;");
+    print "Upgrade to $DBversion done (change labels.batch_id from varchar to int)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
