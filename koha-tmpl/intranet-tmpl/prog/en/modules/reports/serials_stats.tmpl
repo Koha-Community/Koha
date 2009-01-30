@@ -1,0 +1,116 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Reports &rsaquo; serials subscriptions stats</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<style type="text/css">
+	.sql {display: none;}
+</style>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/JavaScript" language="JavaScript">
+	//<![CDATA[
+    	$(document).ready(function() { 
+    		$("#resulttable").tablesorter({
+    				widgets : ['zebra']
+    			});
+    	});
+	//]]>
+</script>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; Items with no checkouts</div>
+
+<div id="doc3" class="yui-t2">
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+	<h1>Serials subscriptions</h1>
+<!-- TMPL_IF NAME="do_it" -->
+	<table id="resulttable">
+		<thead>
+			<tr>
+				<th>Bookseller</th>
+				<th>Title</th>
+				<th>Subscription id</th>
+				<th>Branch</th>
+				<th>Callnumber</th>
+				<th>Subscription Begin</th>
+				<th>Subscription End</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<!-- TMPL_LOOP NAME="datas" -->
+					<td><!-- TMPL_VAR NAME="name" --></td>
+					<td><!-- TMPL_VAR NAME="title" --></td>
+					<td><!-- TMPL_VAR NAME="subscriptionid" --></td>
+					<td><!-- TMPL_VAR NAME="branchcode" --></td>
+					<td><!-- TMPL_VAR NAME="callnumber" --></td>
+					<td><!-- TMPL_VAR NAME="startdate" --></td>
+					<td><!-- TMPL_VAR NAME="enddate" --></td>
+				</tr>
+				<!-- /TMPL_LOOP -->
+			</tr>
+		</tbody>
+	</table>
+
+<!-- TMPL_ELSE -->
+	<form method="post" action="/cgi-bin/koha/reports/serials_stats.pl">
+	
+	<fieldset class="rows">
+		<ol>
+			<li>
+				
+				<label for="bookseller">
+					Vendor:
+			    </label>
+				<select name="bookseller" id="bookseller">
+					<option value="">Any Vendor</option>
+    				<!--TMPL_LOOP Name="booksellers"-->
+        				<option value="<!--TMPL_VAR Name="aqbooksellerid"-->"><!--TMPL_VAR Name="name"--></option>  
+     				<!--/TMPL_LOOP --> 
+			    </select>
+			</li><li>
+		    	<label for="branch">
+					Branch: 
+		    	</label>
+		    	<select name="branchcode"  id="branchcode">
+		    		<option value="">Any Branch</option>
+    				<!--TMPL_LOOP Name="branches"-->
+        				<option value="<!--TMPL_VAR Name="branchcode"-->"><!--TMPL_VAR Name="branchname"--></option>  
+     				<!--/TMPL_LOOP --> 		    	
+		    	</select>
+		    	
+		    </li>
+		    <li>
+		    	<label for="expired">Include expired subscriptions: </label>
+		    	<input type="checkbox" name="expired" />
+		    </li>
+		</ol>	
+	</fieldset>
+	
+
+	<fieldset class="rows">
+	<legend>Output</legend>
+<ol><li><label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> </li>
+<li><label for="outputfile">To a file:</label> 		<input type="radio" name="output" value="file" id="outputfile" /> <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" /> 
+		<label class="inline" for="MIME">Into an application</label><!-- TMPL_VAR NAME="CGIextChoice" -->
+		<!-- TMPL_VAR NAME="CGIsepChoice" --></li></ol>
+	</fieldset>
+
+	<fieldset class="action">
+	<input type="submit" value="Submit" />
+	<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->" />
+	<input type="hidden" name="do_it" value="1" />
+	</fieldset>
+	</form>
+<!-- /TMPL_IF -->
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="reports-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
