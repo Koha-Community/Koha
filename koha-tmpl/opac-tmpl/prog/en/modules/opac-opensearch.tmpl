@@ -32,6 +32,7 @@
 	 <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
      <item>
        <title><!-- TMPL_VAR NAME="title_nospan" ESCAPE="html" --> <!-- TMPL_VAR NAME="subtitle_nospan"  ESCAPE="html" --></title>
+       <isbn><!-- TMPL_VAR NAME="isbn" ESCAPE="html" --></isbn>
        <link><!-- TMPL_IF name="BiblioDefaultViewmarc" --><!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" --><!-- TMPL_ELSE --><!-- TMPL_IF name="BiblioDefaultViewisbd" --><!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" --><!-- /TMPL_IF --><!-- /TMPL_IF --></link>
        <description><![CDATA[
 <!-- TMPL_IF NAME="OPACAmazonEnabled" --><!-- TMPL_IF NAME="OPACAmazonCoverImages" --><!-- TMPL_IF NAME="normalized_isbn" --><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="normalized_isbn" -->.01.TZZZZZZZ.jpg" alt="" /><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
