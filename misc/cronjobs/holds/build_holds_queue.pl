@@ -108,6 +108,7 @@ priority
 branchcode
 reservedate
 reservenotes
+borrowerbranch
 
 The arrayref is sorted in order of increasing priority.
 
@@ -118,8 +119,10 @@ sub GetPendingHoldRequestsForBib {
 
     my $dbh = C4::Context->dbh;
 
-    my $request_query = "SELECT biblionumber, borrowernumber, itemnumber, priority, branchcode, reservedate, reservenotes
+    my $request_query = "SELECT biblionumber, borrowernumber, itemnumber, priority, reserves.branchcode, 
+                                reservedate, reservenotes, borrowers.branchcode AS borrowerbranch
                          FROM reserves
+                         JOIN borrowers USING (borrowernumber)
                          WHERE biblionumber = ?
                          AND found IS NULL
                          AND priority > 0
@@ -190,7 +193,9 @@ sub GetItemsAvailableToFillHoldRequestsForBib {
     $sth->execute(@params);
 
     my $items = $sth->fetchall_arrayref({});
-    return [ grep { my @transfers = GetTransfers($_->{itemnumber}); $#transfers == -1; } @$items ]; 
+    $items = [ grep { my @transfers = GetTransfers($_->{itemnumber}); $#transfers == -1; } @$items ]; 
+    map { my $rule = GetBranchItemRule($_->{homebranch}, $_->{itype}); $_->{holdallowed} = $rule->{holdallowed}; $rule->{holdallowed} != 0 } @$items;
+    return [ grep { $_->{holdallowed} != 0 } @$items ];
 }
 
 =head2 MapItemsToHoldRequests
@@ -268,7 +273,10 @@ sub MapItemsToHoldRequests {
 
         # look for local match first
         my $pickup_branch = $request->{branchcode};
-        if (exists $items_by_branch{$pickup_branch}) {
+        if (exists $items_by_branch{$pickup_branch} and 
+            not ($items_by_branch{$pickup_branch}->[0]->{holdallowed} == 1 and 
+                 $request->{borrowerbranch} ne $items_by_branch{$pickup_branch}->[0]->{homebranch}) 
+           ) {
             my $item = pop @{ $items_by_branch{$pickup_branch} };
             delete $items_by_branch{$pickup_branch} if scalar(@{ $items_by_branch{$pickup_branch} }) == 0;
             $item_map{$item->{itemnumber}} = { 
@@ -289,7 +297,9 @@ sub MapItemsToHoldRequests {
                 @pull_branches = sort keys %items_by_branch;
             }
             foreach my $branch (@pull_branches) {
-                next unless exists $items_by_branch{$branch};
+                next unless exists $items_by_branch{$branch} and
+                            not ($items_by_branch{$branch}->[0]->{holdallowed} == 1 and 
+                                $request->{borrowerbranch} ne $items_by_branch{$branch}->[0]->{homebranch});
                 my $item = pop @{ $items_by_branch{$branch} };
                 delete $items_by_branch{$branch} if scalar(@{ $items_by_branch{$branch} }) == 0;
                 $item_map{$item->{itemnumber}} = { 
