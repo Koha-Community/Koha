@@ -332,7 +332,7 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
         # If there is no loan, return and transfer, we show a checkbox.
         $item->{notforloan} = $item->{notforloan} || 0;
 
-        my $branchitemrule = GetBranchItemRule( $borr->{'branchcode'}, $item->{'itype'} );
+        my $branchitemrule = GetBranchItemRule( $item->{'homebranch'}, $item->{'itype'} );
         my $policy_holdallowed = 1;
 
         if ( $branchitemrule->{'holdallowed'} == 0 ||
