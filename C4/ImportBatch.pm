@@ -869,14 +869,13 @@ sub GetImportBatchStatus {
     my ($batch_id) = @_;
 
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT import_status FROM import_batches WHERE batch_id = ?");
+    my $sth = $dbh->prepare("SELECT import_status FROM import_batches WHERE import_batch_id = ?");
     $sth->execute($batch_id);
     my ($status) = $sth->fetchrow_array();
     $sth->finish();
-    return;
+    return $status;
 
 }
-
 
 =head2 SetImportBatchStatus
 
