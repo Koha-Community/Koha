@@ -185,6 +185,16 @@
                 <option value="se,wrdl" selected="selected">Series Title</option>
 <!-- TMPL_ELSE -->
                 <option value="se,wrdl">Series Title</option><!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="selected" -->
+                <option value="nb" selected="selected">ISBN</option>
+<!-- TMPL_ELSE -->
+                <option value="nb">ISBN</option>
+                <!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="selected" -->
+                <option value="callnum" selected="selected">Call Number</option>
+<!-- TMPL_ELSE -->
+                <option value="callnum">Call Number</option>
+                <!-- /TMPL_IF -->
         </select>
         <input type="text" size="30" name="q" title="Enter search terms" value="" />
         <!-- TMPL_IF NAME="expanded_options" -->
