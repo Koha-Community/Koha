@@ -212,3 +212,4 @@ INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('SMSSendDriver','','','Détermine le pilote utilisé par SMS::Send pour envoyer des SMS.','free');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AllowRenewalLimitOverride', '1', 'Si Activé, permet que les périodes de renouvellement puisse être positionnée manuellement durant la circulation',NULL,'YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('MergeAuthoritiesOnUpdate', '0', 'Si Activé, met à jour toutes les notices bibliographiques afférentes dès la modification d''une autorité',NULL,'YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AllowNotForLoanOverride', '0', 'Si activé, permet au bibliothécaire de choisir de prêter tout de même un exemplaire normalement exclu du prêt',NULL,'YesNo');

@@ -140,6 +140,16 @@ ENDOFSQL3
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.01.005";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+   $dbh->do(<<ENDOFNOTFORLOANOVERRIDE);
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AllowNotForLoanOverride', '0', 'if ON, enables the librarian to choose when they want to check out a notForLoan regular item',NULL,'YesNo')
+ENDOFNOTFORLOANOVERRIDE
+      print "Upgrade to $DBversion done (Adding AllowNotForLoanOverride System preference)\n";
+    }
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
