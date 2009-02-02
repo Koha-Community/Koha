@@ -291,9 +291,13 @@ foreach my $element (sort { lc($shelflist->{$a}->{'shelfname'}) cmp lc($shelflis
 		push (@shelvesloop, $shelflist->{$element});
 	}
 }
+
 my $url = $type eq 'opac' ? "/cgi-bin/koha/opac-shelves.pl" : "/cgi-bin/koha/virtualshelves/shelves.pl";
-$url .= "?display=" . $query->param('display') if $query->param('display');
-$url .= "?viewshelf=" . $query->param('viewshelf') if $query->param('viewshelf');
+my %qhash = ();
+foreach (qw(display viewshelf)) {
+    $qhash{$_} = $query->param($_) if $query->param($_);
+}
+(scalar keys %qhash) and $url .= '?' . join '&', map {"$_=$qhash{$_}"} keys %qhash;
 if ($query->param('viewshelf')) {
 	$template->param( {pagination_bar => pagination_bar($url, (int($totitems/$shelflimit)) + (($totitems % $shelflimit) > 0 ? 1 : 0), $itemoff, "itemoff")} );
 } else {
@@ -311,7 +315,7 @@ if ($template->param('viewshelf') or
 	$template->param(  'edit'   ) ) {
 	$template->param(vseflag => 1);
 }
-if ($template->param( 'shelves' ) or
+if ($template->param( 'shelves' ) or    # note: this part looks duplicative, but is intentional
 	$template->param(  'edit'   ) ) {
 	$template->param( seflag => 1);
 }
