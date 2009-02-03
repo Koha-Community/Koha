@@ -49,7 +49,7 @@ my $order      = $input->param("order");
 my $output     = $input->param("output");
 my $basename   = $input->param("basename");
 my $mime       = $input->param("MIME");
-our $sep       = $input->param("sep");
+our $sep       = $input->param("sep") || '';
 $sep = "\t" if ($sep eq 'tabulation');
 
 my ($template, $borrowernumber, $cookie)
