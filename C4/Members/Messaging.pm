@@ -34,23 +34,20 @@ C4::Members::Messaging - manage patron messaging preferences
 
 =head1 SYNOPSIS
 
-=over 4
+  use C4::Members::Messaging
 
-=back
+=head1 DESCRIPTION
+
+This module lets you modify a patron's messaging preferences.
 
 =head1 FUNCTIONS
 
-
 =head2 GetMessagingPreferences
 
-=over 4
-
-my $preferences = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $borrower->{'borrowernumber'},
-                                                                     message_name   => 'DUE' } );
+  my $preferences = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $borrower->{'borrowernumber'},
+                                                                       message_name   => 'DUE' } );
 
 returns: a hashref of messaging preferences for this borrower for a particlar message_name
-
-=back
 
 =cut
 
@@ -98,20 +95,20 @@ END_SQL
     return $return;
 }
 
-=head2 SetMessagingPreferences
+=head2 SetMessagingPreference
 
-=over 4
+This method defines how a user wants to get a certain message delivered.  The
+list of valid message types can be delivered can be found in the
+C<message_attributes> table, and the list of valid message transports can be
+found in the C<message_transport_types> table.
 
-
-C4::Members::Messaging::SetMessagingPreference( { borrowernumber          => $borrower->{'borrowernumber'}
-                                                  message_attribute_id    => $message_attribute_id,
-                                                  message_transport_types => [ qw( email sms ) ],
-                                                  days_in_advance         => 5
-                                                  wants_digest            => 1 } )
+  C4::Members::Messaging::SetMessagingPreference( { borrowernumber          => $borrower->{'borrowernumber'}
+                                                    message_attribute_id    => $message_attribute_id,
+                                                    message_transport_types => [ qw( email sms ) ],
+                                                    days_in_advance         => 5
+                                                    wants_digest            => 1 } )
 
 returns nothing useful.
-
-=back
 
 =cut
 
@@ -170,13 +167,9 @@ END_SQL
 
 =head2 GetMessagingOptions
 
-=over 4
-
-my $messaging_options = C4::Members::Messaging::SetMessagingPreference()
+  my $messaging_options = C4::Members::Messaging::GetMessagingOptions()
 
 returns a hashref of messaing options available.
-
-=back
 
 =cut
 
@@ -204,6 +197,57 @@ END_SQL
     # warn( Data::Dumper->Dump( [ \@return ], [ 'return' ] ) );
     return \@return;
 }
+
+=head1 TABLES
+
+=head2 message_queue
+
+The actual messages which will be sent via a cron job running
+F<misc/cronjobs/process_message_queue.pl>.
+
+=head2 message_attributes
+
+What kinds of messages can be sent?
+
+=head2 message_transport_types
+
+What transports can messages be sent vith?  (email, sms, etc.)
+
+=head2 message_transports
+
+How are message_attributes and message_transport_types correlated?
+
+=head2 borrower_message_preferences
+
+What messages do the borrowers want to receive?
+
+=head2 borrower_message_transport_preferences
+
+What transport should a message be sent with?
+
+=head1 CONFIG
+
+=head2 Adding a New Kind of Message to the System
+
+=over 4
+
+=item 1.
+
+Add a new template to the `letter` table.
+
+=item 2.
+
+Insert a row into the `message_attributes` table.
+
+=item 3.
+
+Insert rows into `message_transports` for each message_transport_type.
+
+=back
+
+=head1 SEE ALSO
+
+L<C4::Letters>
 
 =head1 AUTHOR
 
