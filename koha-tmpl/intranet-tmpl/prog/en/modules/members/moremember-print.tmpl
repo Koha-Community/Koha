@@ -23,6 +23,8 @@
 		<th>Author</th>
 		<th>Format</th>
 		<th>Date Due</th>
+		<th>Charge</th>
+		<th>Price</th>
 		<th>Status</th>
 	</tr>
 
@@ -36,9 +38,17 @@
 		<td><!-- TMPL_VAR NAME="author" --></td>
 		<td><!-- TMPL_VAR NAME="itemtype" --></td>
 		<td><!-- TMPL_VAR NAME="date_due" --></td>
+		<td><!-- TMPL_VAR NAME="charge" --></td>
+		<td><!-- TMPL_VAR NAME="replacementprice" --></td>
 		<td><!-- TMPL_IF NAME="red" -->Overdue!<!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
 	</tr>
 	<!-- /TMPL_LOOP -->
+	<tr>
+            <td colspan="4" style="text-align: right; font-weight:bold;">Totals:</td>
+            <td><!-- TMPL_VAR NAME="totaldue" --></td>
+            <td><!-- TMPL_VAR NAME="totalprice" --></td>
+            <td colspan="2">&nbsp;</td>
+        </tr>
 	</table>
 	<!-- /TMPL_IF -->
 	
