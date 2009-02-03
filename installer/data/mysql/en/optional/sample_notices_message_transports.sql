@@ -16,4 +16,4 @@ values
 (5, 'email', 0, 'circulation', 'CHECKIN'),
 (5, 'sms',   0, 'circulation', 'CHECKIN'),
 (6, 'email', 0, 'circulation', 'CHECKOUT'),
-(6, 'sms',   0, 'circulation', 'CHECKOUT'),
+(6, 'sms',   0, 'circulation', 'CHECKOUT');
