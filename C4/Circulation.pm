@@ -1032,6 +1032,7 @@ sub AddIssue {
                 type     => 'CHECKOUT',
                 item     => $item,
                 borrower => $borrower,
+                branch   => $branch,
             });
         }
     }
@@ -1531,6 +1532,7 @@ sub AddReturn {
                 type     => 'CHECKIN',
                 item     => $iteminformation,
                 borrower => $borrower,
+                branch   => $branch,
             });
         }
         
@@ -2380,6 +2382,10 @@ Hashref of information about the item being checked in or out.
 
 Hashref of information about the borrower of the item.
 
+=item branch
+
+The branchcode from where the checkout or check-in took place.
+
 =back
 
 B<Example>:
@@ -2388,13 +2394,15 @@ B<Example>:
         type     => 'CHECKOUT',
         item     => $item,
         borrower => $borrower,
+        branch   => $branch,
     });
 
 =cut
 
 sub SendCirculationAlert {
     my ($opts) = @_;
-    my ($type, $item, $borrower) = ($opts->{type}, $opts->{item}, $opts->{borrower});
+    my ($type, $item, $borrower, $branch) =
+        ($opts->{type}, $opts->{item}, $opts->{borrower}, $opts->{branch});
     my %message_name = (
         CHECKIN  => 'Item Check-in',
         CHECKOUT => 'Item Checkout',
@@ -2407,7 +2415,7 @@ sub SendCirculationAlert {
     C4::Letters::parseletter($letter, 'biblio',      $item->{biblionumber});
     C4::Letters::parseletter($letter, 'biblioitems', $item->{biblionumber});
     C4::Letters::parseletter($letter, 'borrowers',   $borrower->{borrowernumber});
-    C4::Letters::parseletter($letter, 'branches',    $item->{homebranch});
+    C4::Letters::parseletter($letter, 'branches',    $branch);
     my @transports = @{ $borrower_preferences->{transports} };
     # warn "no transports" unless @transports;
     for (@transports) {
