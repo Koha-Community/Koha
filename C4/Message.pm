@@ -120,28 +120,54 @@ sub find_last_message {
 }
 
 
-=head3 C4::Message->enqueue($letter, $borrowernumber, $transport)
+=head3 C4::Message->enqueue($letter, $borrower, $transport)
 
 This is a front-end for C<C4::Letters::EnqueueLetter()> that adds metadata to
 the message.
 
 =cut
 
-# C4::Message->enqueue($letter, $borrowernumber, $transport)
+# C4::Message->enqueue($letter, $borrower, $transport)
 sub enqueue {
-    my ($class, $letter, $borrowernumber, $transport) = @_;
-    my $metadata = _make_metadata($letter);
+    my ($class, $letter, $borrower, $transport) = @_;
+    my $metadata   = _metadata($letter);
+    my $to_address = _to_address($borrower, $transport);
     $letter->{metadata} = Dump($metadata);
-    carp 'enqueuing...';
+    #carp "enqueuing... to $to_address";
     C4::Letters::EnqueueLetter({
-      letter                 => $letter,
-      borrowernumber         => $borrowernumber,
-      message_transport_type => $transport,
+        letter                 => $letter,
+        borrowernumber         => $borrower->{borrowernumber},
+        message_transport_type => $transport,
+        to_address             => $to_address,
     });
 }
 
-# _make_metadata($letter) -- return the letter split into head/body/footer
-sub _make_metadata {
+# based on message $transport, pick an appropriate address to send to
+sub _to_address {
+    my ($borrower, $transport) = @_;
+    my $address;
+    if ($transport eq 'email') {
+        $address = $borrower->{email}
+            || $borrower->{emailpro}
+            || $borrower->{B_email};
+    } elsif ($transport eq 'sms') {
+        $address = $borrower->{smsalertnumber}
+            || $borrower->{phone}
+            || $borrower->{phonepro}
+            || $borrower->{B_phone};
+    } else {
+        warn "'$transport' is an unknown message transport.";
+    }
+    if (not defined $address) {
+        warn "An appropriate $transport address "
+            . "for borrower $borrower->{userid} "
+            . "could not be found.";
+    }
+    return $address;
+}
+
+# _metadata($letter) -- return the letter split into head/body/footer
+sub _metadata {
     my ($letter) = @_;
     if ($letter->{content} =~ /----/) {
         my ($header, $body, $footer) = split(/----\r?\n?/, $letter->{content});
@@ -256,7 +282,7 @@ sub append {
     my $item;
     if (ref($letter_or_item)) {
         my $letter   = $letter_or_item;
-        my $metadata = _make_metadata($letter);
+        my $metadata = _metadata($letter);
         $item = $metadata->{body}->[0];
     } else {
         $item = $letter_or_item;

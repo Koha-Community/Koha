@@ -531,8 +531,6 @@ sub EnqueueLetter {
     return unless exists $params->{'borrowernumber'};
     return unless exists $params->{'message_transport_type'};
 
-    warn 'got passed the guard';
-
     # If we have any attachments we should encode then into the body.
     if ( $params->{'attachments'} ) {
         $params->{'letter'} = _add_attachments(
@@ -564,7 +562,6 @@ ENDSQL
         $params->{'from_address'},                # from_address
         $params->{'letter'}->{'content-type'},    # content_type
     );
-    warn $result;
     return $result;
 }
 

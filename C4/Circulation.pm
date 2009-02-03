@@ -2395,7 +2395,6 @@ B<Example>:
 sub SendCirculationAlert {
     my ($opts) = @_;
     my ($type, $item, $borrower) = ($opts->{type}, $opts->{item}, $opts->{borrower});
-    my $dbh = C4::Context->dbh;
     my %message_name = (
         CHECKIN  => 'Item Check-in',
         CHECKOUT => 'Item Checkout',
@@ -2410,11 +2409,13 @@ sub SendCirculationAlert {
     C4::Letters::parseletter($letter, 'borrowers',   $borrower->{borrowernumber});
     C4::Letters::parseletter($letter, 'branches',    $item->{homebranch});
     my @transports = @{ $borrower_preferences->{transports} };
+    # warn "no transports" unless @transports;
     for (@transports) {
+        # warn "transport: $_";
         my $message = C4::Message->find_last_message($borrower, $type, $_);
         if (!$message) {
             #warn "create new message";
-            C4::Message->enqueue($letter, $borrower->{borrowernumber}, $_);
+            C4::Message->enqueue($letter, $borrower, $_);
         } else {
             #warn "append to old message";
             $message->append($letter);
