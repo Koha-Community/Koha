@@ -21,7 +21,6 @@ use warnings;
 use CGI;
 use File::Basename;
 use Encode;
-use URI::Escape 'uri_escape_utf8';
 use JSON;
 #use Data::Dump 'pp';
 
@@ -73,7 +72,7 @@ sub show {
 
     my $br       = GetBranches;
     my $branch   = $input->param('branch') || '*';
-    my @branches = map { utf8($_, 'branchname') } (
+    my @branches = (
         {
             branchcode => '*',
             branchname => 'Default',
@@ -85,10 +84,10 @@ sub show {
     }
     my $branch_name = exists($br->{$branch}) && $br->{$branch}->{branchname};
 
-    my @categories = map { utf8($_, 'description') }  (
+    my @categories = (
         C4::Category->all
     );
-    my @item_types = map { utf8($_, 'description'); br($_, 'description') }  (
+    my @item_types = map { br($_, 'description') }  (
         C4::ItemType->all
     );
     my $grid_checkout = $preferences->grid({ branchcode => $branch, notification => 'CHECKOUT' });
@@ -134,14 +133,14 @@ sub toggle {
     my $response = { success => 1 };
     my @reasons  = $notifications->is_disabled_for($settings);
     if (@reasons == 0) {
-        $response->{class} = '';
+        $response->{classes} = '';
     } else {
         my $default_exists   = grep { $_->{branchcode} eq '*' } @reasons;
         my $non_default_also = grep { $_->{branchcode} ne '*' } @reasons;
         my @classes;
         push @classes, 'default'  if $default_exists;
         push @classes, 'disabled' if $non_default_also;
-        $response->{class} = join(' ', @classes);
+        $response->{classes} = join(' ', @classes);
     }
     print $input->header;
     print encode_json($response);
@@ -195,7 +194,7 @@ Display a branches item circulation alert preferences.
 
 Parameters:
 
-=over 4
+=over 2
 
 =item branch
 
@@ -212,11 +211,12 @@ Toggle a preference via AJAX
 
 Parameters:
 
-=over 4
+=over 2
 
 =item id
 
-"$categorycode-$item_type-$notification"
+The id should be string that can be split on "-" which contains:
+"$categorycode-$item_type-$notification".
 
 =item branch
 

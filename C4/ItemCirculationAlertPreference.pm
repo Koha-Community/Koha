@@ -349,13 +349,20 @@ sub grid {
             my $key = $c->categorycode . "-" . $i->itemtype . "-" . $notification;
             $key =~ s/\*/_/g;
             my @classes;
+            my $text = " ";
             if ($disabled{$key}) {
                 push @classes, 'disabled';
+                $text = "Disabled for $where->{branchcode}";
             }
             if ($default{$key}) {
                 push @classes, 'default';
+                $text = "Disabled for all";
             }
-            push @{$row->{items}}, { class => join(' ', @classes),  id => $key };
+            push @{$row->{items}}, {
+                class => join(' ', @classes),
+                id    => $key,
+                text  => $text,
+            };
         }
     }
     return \@grid;

@@ -17,6 +17,10 @@ table.grid tbody th {
   text-align: right;
 }
 
+table.grid tbody td {
+  font-size: xx-small;
+}
+
 table.grid tbody td.info {
   background: #fff;
 }
@@ -43,6 +47,11 @@ table.grid td.default {
 var $branch = "<!-- TMPL_VAR NAME="branch" -->";
 $(function(){
 
+    var blocked            = _('Blocked!');
+    var saving             = _('Saving...');
+    var disabledForAll     = _('Disabled for all');
+    var disabledForCurrent = _('Disabled for') + ' ' + $branch;
+
     $('#branch_selector input:submit').hide();
     $('#branch').change(function(){
         $('#branch_selector').submit();
@@ -52,17 +61,27 @@ $(function(){
         var id = this.id;
         var td = $(this);
         if (td.hasClass('default') && $branch != '*') {
-            td.html(_('Blocked'));
+            td.html(blocked);
+            window.setTimeout(
+              function(){ td.html(disabledForAll) },
+              3000
+            );
         } else {
-            td.html(_('Saving...'));
+            td.html(saving);
             $.ajax({
                 url      : '/cgi-bin/koha/admin/item_circulation_alerts.pl',
                 type     : 'POST',
                 dataType : 'json',
                 data     : { action: 'toggle', id: id, branch: $branch },
                 success  : function(response){
-                    td.html(' ');
-                    td.attr('class', response.class);
+                    if ($branch == '*' && response.classes.match(/default/)) {
+                        td.html(disabledForAll);
+                    } else if (response.classes.match(/disabled/)) {
+                        td.html(disabledForCurrent);
+                    } else {
+                        td.html(' ');
+                    }
+                    td.attr('class', response.classes);
                 }
             });
         }
@@ -118,7 +137,7 @@ $(function(){
 <tr>
   <th><!-- TMPL_VAR NAME="description" --></th>
   <!-- TMPL_LOOP NAME="items" -->
-  <td class="<!-- TMPL_VAR NAME="class" -->" id="<!-- TMPL_VAR NAME="id" -->">&nbsp;</td>
+  <td class="<!-- TMPL_VAR NAME="class" -->" id="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="text" --></td>
   <!-- /TMPL_LOOP -->
 </tr>
 <!-- /TMPL_LOOP -->
@@ -140,7 +159,7 @@ $(function(){
 <tr>
   <th><!-- TMPL_VAR NAME="description" --></th>
   <!-- TMPL_LOOP NAME="items" -->
-  <td class="<!-- TMPL_VAR NAME="class" -->" id="<!-- TMPL_VAR NAME="id" -->">&nbsp;</td>
+  <td class="<!-- TMPL_VAR NAME="class" -->" id="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="text" --></td>
   <!-- /TMPL_LOOP -->
 </tr>
 <!-- /TMPL_LOOP -->
