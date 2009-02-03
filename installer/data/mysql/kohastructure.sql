@@ -2239,6 +2239,8 @@ CREATE TABLE `message_queue` (
   `borrowernumber` int(11) default NULL,
   `subject` text,
   `content` text,
+  `metadata` text DEFAULT NULL,
+  `letter_code` varchar(64) DEFAULT NULL,
   `message_transport_type` varchar(20) NOT NULL,
   `status` enum('sent','pending','failed','deleted') NOT NULL default 'pending',
   `time_queued` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
@@ -2349,10 +2351,10 @@ CREATE TABLE `item_circulation_alert_preferences` (
   `branchcode` varchar(10) NOT NULL,
   `categorycode` varchar(10) NOT NULL,
   `item_type` varchar(10) NOT NULL,
-  `is_enabled` tinyint(1) NOT NULL default '0',
+  `notification` varchar(16) NOT NULL,
   PRIMARY KEY  (`id`),
-  KEY `branchcode` (`branchcode`,`categorycode`,`item_type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
+  KEY `branchcode` (`branchcode`,`categorycode`,`item_type`, `notification`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

@@ -2130,31 +2130,31 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
             branchcode   varchar(10) NOT NULL,
             categorycode varchar(10) NOT NULL,
             item_type    varchar(10) NOT NULL,
-            is_enabled   tinyint(1)  NOT NULL DEFAULT 0,
+            notification varchar(16) NOT NULL,
             PRIMARY KEY (id),
-            KEY (branchcode, categorycode, item_type)
+            KEY (branchcode, categorycode, item_type, notification)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
     ");
+
+    $dbh->do(q{ ALTER TABLE `message_queue` ADD metadata text DEFAULT NULL           AFTER content;  });
+    $dbh->do(q{ ALTER TABLE `message_queue` ADD letter_code varchar(64) DEFAULT NULL AFTER metadata; });
+
     $dbh->do(q{
         INSERT INTO `letter` (`module`, `code`, `name`, `title`, `content`) VALUES
-        ('circulation','CHECKINDGST','Item Check-in (Digest)','Check-ins','The following items have been checked in:\r\n<<items.content>>');
+        ('circulation','CHECKIN','Item Check-in','Check-ins','The following items have been checked in:\r\n----\r\n<<biblio.title>>\r\n----\r\nThank you.');
     });
     $dbh->do(q{
         INSERT INTO `letter` (`module`, `code`, `name`, `title`, `content`) VALUES
-        ('circulation','CHECKOUTDGST','Item Check-out (Digest)','Checkouts','The following items have been checked out:\r\n<<items.content>>');
+        ('circulation','CHECKOUT','Item Checkout','Checkouts','The following items have been checked out:\r\n----\r\n<<biblio.title>>\r\n----\r\nThank you for visiting <<branches.branchname>>.');
     });
 
     $dbh->do(q{INSERT INTO message_attributes (message_attribute_id, message_name, takes_days) VALUES (5, 'Item Check-in', 0);});
     $dbh->do(q{INSERT INTO message_attributes (message_attribute_id, message_name, takes_days) VALUES (6, 'Item Checkout', 0);});
 
-    $dbh->do(q{INSERT INTO message_transport_types (message_transport_type) VALUES ('feed');});
-
-    $dbh->do(q{INSERT INTO message_transports (message_attribute_id, message_transport_type, is_digest, letter_module, letter_code) VALUES (5, 'email', 1, 'circulation', 'CHECKINDGST');});
-    $dbh->do(q{INSERT INTO message_transports (message_attribute_id, message_transport_type, is_digest, letter_module, letter_code) VALUES (5, 'sms',   1, 'circulation', 'CHECKINDGST');});
-    $dbh->do(q{INSERT INTO message_transports (message_attribute_id, message_transport_type, is_digest, letter_module, letter_code) VALUES (5, 'feed',  1, 'circulation', 'CHECKINDGST');});
-    $dbh->do(q{INSERT INTO message_transports (message_attribute_id, message_transport_type, is_digest, letter_module, letter_code) VALUES (6, 'email', 1, 'circulation', 'CHECKOUTDGST');});
-    $dbh->do(q{INSERT INTO message_transports (message_attribute_id, message_transport_type, is_digest, letter_module, letter_code) VALUES (6, 'sms',   1, 'circulation', 'CHECKOUTDGST');});
-    $dbh->do(q{INSERT INTO message_transports (message_attribute_id, message_transport_type, is_digest, letter_module, letter_code) VALUES (6, 'feed',  1, 'circulation', 'CHECKOUTDGST');});
+    $dbh->do(q{INSERT INTO message_transports (message_attribute_id, message_transport_type, is_digest, letter_module, letter_code) VALUES (5, 'email', 0, 'circulation', 'CHECKIN');});
+    $dbh->do(q{INSERT INTO message_transports (message_attribute_id, message_transport_type, is_digest, letter_module, letter_code) VALUES (5, 'sms',   0, 'circulation', 'CHECKIN');});
+    $dbh->do(q{INSERT INTO message_transports (message_attribute_id, message_transport_type, is_digest, letter_module, letter_code) VALUES (6, 'email', 0, 'circulation', 'CHECKOUT');});
+    $dbh->do(q{INSERT INTO message_transports (message_attribute_id, message_transport_type, is_digest, letter_module, letter_code) VALUES (6, 'sms',   0, 'circulation', 'CHECKOUT');});
 
     print "Upgrade to $DBversion done (data for Email Checkout Slips project)\n";
     SetVersion ($DBversion);
