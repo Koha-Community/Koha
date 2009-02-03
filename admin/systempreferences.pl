@@ -193,7 +193,7 @@ $tabsysprefs{'SMSSendDriver'}              = 'Patrons';
 # I18N/L10N
 $tabsysprefs{dateformat}    = "I18N/L10N";
 $tabsysprefs{opaclanguages} = "I18N/L10N";
-$tabsysprefs{opacthemes}    = "I18N/L10N";
+$tabsysprefs{opaclanguagesdisplay} = "I18N/L10N";
 $tabsysprefs{language}      = "I18N/L10N";
 
 # Searching
@@ -278,7 +278,6 @@ $tabsysprefs{OPACDisplayRequestPriority} = "OPAC";
 $tabsysprefs{SearchMyLibraryFirst} = "OPAC";
 $tabsysprefs{hidelostitems}        = "OPAC";
 $tabsysprefs{opacbookbag}          = "OPAC";
-$tabsysprefs{opaclanguagesdisplay} = "OPAC";
 $tabsysprefs{OpacPasswordChange}   = "OPAC";
 $tabsysprefs{opacreadinghistory}   = "OPAC";
 $tabsysprefs{virtualshelves}       = "OPAC";
