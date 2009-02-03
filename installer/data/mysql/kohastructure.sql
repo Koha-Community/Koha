@@ -2339,6 +2339,21 @@ CREATE TABLE branch_transfer_limits (
     PRIMARY KEY  (limitId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `item_circulation_alert_preferences`
+--
+
+DROP TABLE IF EXISTS `item_circulation_alert_preferences`;
+CREATE TABLE `item_circulation_alert_preferences` (
+  `id` int(11) NOT NULL auto_increment,
+  `branchcode` varchar(10) NOT NULL,
+  `categorycode` varchar(10) NOT NULL,
+  `item_type` varchar(10) NOT NULL,
+  `is_enabled` tinyint(1) NOT NULL default '0',
+  PRIMARY KEY  (`id`),
+  KEY `branchcode` (`branchcode`,`categorycode`,`item_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
