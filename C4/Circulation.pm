@@ -31,6 +31,7 @@ use C4::Dates;
 use C4::Calendar;
 use C4::Accounts;
 use C4::ItemCirculationAlertPreference;
+use C4::Message;
 use Date::Calc qw(
   Today
   Today_and_Now
@@ -1024,10 +1025,11 @@ sub AddIssue {
             branchcode   => $branch,
             categorycode => $borrower->{categorycode},
             item_type    => $item->{itype},
+            notification => 'CHECKOUT',
         );
         if ($circulation_alert->is_enabled_for(\%conditions)) {
             SendCirculationAlert({
-                type     => 'checkout',
+                type     => 'CHECKOUT',
                 item     => $item,
                 borrower => $borrower,
             });
@@ -1522,10 +1524,11 @@ sub AddReturn {
             branchcode   => $branch,
             categorycode => $borrower->{categorycode},
             item_type    => $iteminformation->{itype},
+            notification => 'CHECKIN',
         );
         if ($doreturn && $circulation_alert->is_enabled_for(\%conditions)) {
             SendCirculationAlert({
-                type     => 'check-in',
+                type     => 'CHECKIN',
                 item     => $iteminformation,
                 borrower => $borrower,
             });
@@ -2361,11 +2364,13 @@ sub AnonymiseIssueHistory {
 
 Send out a C<check-in> or C<checkout> alert using the messaging system.
 
+B<Parameters>:
+
 =over 4
 
 =item type
 
-Valid values for this parameter are: C<check-in> or C<checkout>.
+Valid values for this parameter are: C<CHECKIN> and C<CHECKOUT>.
 
 =item item
 
@@ -2380,7 +2385,7 @@ Hashref of information about the borrower of the item.
 B<Example>:
 
     SendCirculationAlert({
-        type     => 'checkout',
+        type     => 'CHECKOUT',
         item     => $item,
         borrower => $borrower,
     });
@@ -2389,7 +2394,34 @@ B<Example>:
 
 sub SendCirculationAlert {
     my ($opts) = @_;
-    # TODO - actually send a message ...somehow.
+    my ($type, $item, $borrower) = ($opts->{type}, $opts->{item}, $opts->{borrower});
+    my $dbh = C4::Context->dbh;
+    my %message_name = (
+        CHECKIN  => 'Item Check-in',
+        CHECKOUT => 'Item Checkout',
+    );
+    my $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences({
+        borrowernumber => $borrower->{borrowernumber},
+        message_name   => $message_name{$type},
+    });
+    my $letter = C4::Letters::getletter('circulation', $type);
+    C4::Letters::parseletter($letter, 'biblio',      $item->{biblionumber});
+    C4::Letters::parseletter($letter, 'biblioitems', $item->{biblionumber});
+    C4::Letters::parseletter($letter, 'borrowers',   $borrower->{borrowernumber});
+    C4::Letters::parseletter($letter, 'branches',    $item->{homebranch});
+    my @transports = @{ $borrower_preferences->{transports} };
+    for (@transports) {
+        my $message = C4::Message->find_last_message($borrower, $type, $_);
+        if (!$message) {
+            #warn "create new message";
+            C4::Message->enqueue($letter, $borrower->{borrowernumber}, $_);
+        } else {
+            #warn "append to old message";
+            $message->append($letter);
+            $message->update;
+        }
+    }
+    $letter;
 }
 
 =head2 updateWrongTransfer

@@ -115,6 +115,7 @@ sub AUTOLOAD {
     }
 }
 
+sub DESTROY { }
 
 
 

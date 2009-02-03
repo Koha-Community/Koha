@@ -125,6 +125,8 @@ sub AUTOLOAD {
     }
 }
 
+sub DESTROY { }
+
 
 
 
