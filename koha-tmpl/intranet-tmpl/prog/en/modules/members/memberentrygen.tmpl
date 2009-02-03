@@ -865,6 +865,53 @@
 			</ol>
 			</fieldset>
 		<!-- /TMPL_UNLESS -->	
+
+                <fieldset class="rows">
+                        <legend>Items Borrowed Notifications</legend>
+                        <ol class="radio">
+                                <!-- TMPL_LOOP NAME="items_borrowed_loop" -->
+                                <li>
+                                        <label class="radio" for="yes_<!-- TMPL_VAR name="name" -->"> <!-- TMPL_VAR name="label" -->: </label>
+                                        <label for="yes_<!-- TMPL_VAR NAME="name" -->">Yes </label>
+                                        <!-- TMPL_IF NAME="yes" -->
+                                        <input type="radio" id="yes_<!-- TMPL_VAR NAME="name" -->" name="<!-- TMPL_VAR NAME="name" -->" value="1" checked="checked" />
+                                        <!-- TMPL_ELSE -->
+                                        <input type="radio" id="yes_<!-- TMPL_VAR NAME="name" -->" name="<!-- TMPL_VAR NAME="name" -->" value="1" />
+                                        <!-- /TMPL_IF -->
+                                        <label for="no_<!-- TMPL_VAR NAME="name" -->">No </label>
+                                        <!-- TMPL_IF NAME="no" -->
+                                        <input type="radio" id="no_<!-- TMPL_VAR NAME="name" -->" name="<!-- TMPL_VAR NAME="name" -->" value="0" checked="checked"/>
+                                        <!-- TMPL_ELSE -->
+                                        <input type="radio" id="no_<!-- TMPL_VAR NAME="name" -->" name="<!-- TMPL_VAR NAME="name" -->" value="0" />
+                                        <!-- /TMPL_IF -->
+                                </li>
+                                <!-- /TMPL_LOOP -->
+                        </ol>
+                </fieldset>
+
+                <fieldset class="rows">
+                        <legend>Items Returned Notifications</legend>
+                        <ol class="radio">
+                                <!-- TMPL_LOOP NAME="items_returned_loop" -->
+                                <li>
+                                        <label class="radio" for="yes_<!-- TMPL_VAR name="name" -->"> <!-- TMPL_VAR name="label" -->: </label>
+                                        <label for="yes_<!-- TMPL_VAR NAME="name" -->">Yes </label>
+                                        <!-- TMPL_IF NAME="yes" -->
+                                        <input type="radio" id="yes_<!-- TMPL_VAR NAME="name" -->" name="<!-- TMPL_VAR NAME="name" -->" value="1" checked="checked" />
+                                        <!-- TMPL_ELSE -->
+                                        <input type="radio" id="yes_<!-- TMPL_VAR NAME="name" -->" name="<!-- TMPL_VAR NAME="name" -->" value="1" />
+                                        <!-- /TMPL_IF -->
+                                        <label for="no_<!-- TMPL_VAR NAME="name" -->">No </label>
+                                        <!-- TMPL_IF NAME="no" -->
+                                        <input type="radio" id="no_<!-- TMPL_VAR NAME="name" -->" name="<!-- TMPL_VAR NAME="name" -->" value="0" checked="checked"/>
+                                        <!-- TMPL_ELSE -->
+                                        <input type="radio" id="no_<!-- TMPL_VAR NAME="name" -->" name="<!-- TMPL_VAR NAME="name" -->" value="0" />
+                                        <!-- /TMPL_IF -->
+                                </li>
+                                <!-- /TMPL_LOOP -->
+                        </ol>
+                </fieldset>
+
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="step_4" --><!-- TMPL_IF NAME="ExtendedPatronAttributes" --><!-- TMPL_UNLESS NAME="no_patron_attribute_types" -->

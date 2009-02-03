@@ -115,6 +115,7 @@ $category_type="A" unless $category_type; # FIXME we should display a error mess
 # if a add or modify is requested => check validity of data.
 %data = %$borrower_data if ($borrower_data);
 
+# initialize %newdata
 my %newdata;	# comes from $input->param()
 if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
     my @names= ($borrower_data && $op ne 'save') ? keys %$borrower_data : $input->param();
@@ -142,6 +143,26 @@ if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
   # check permission to modify login info.
     if (ref($borrower_data) && ($borrower_data->{'category_type'} eq 'S') && ! (C4::Auth::haspermission($dbh,$userenv->{'id'},{'staffaccess'=>1})) )  {
         $NoUpdateLogin = 1;
+    }
+}
+
+# remove keys from %newdata that ModMember() doesn't like
+{
+    my @keys_to_delete =
+        map { ("items_borrowed_$_", "items_returned_$_") } qw(email sms feed);
+    push @keys_to_delete, qw(
+        BorrowerMandatoryField
+        category_type
+        check_member
+        destination
+        nodouble
+        op
+        save
+        select_roadtype
+        updtype
+    );
+    for (@keys_to_delete) {
+        delete($newdata{$_});
     }
 }
 
@@ -290,7 +311,8 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
 			delete $newdata{'password'};
 			delete $newdata{'userid'};
 		}
-		&ModMember(%newdata);    
+		&ModMember(%newdata);
+		save_messaging_preferences($input);
         if (C4::Context->preference('ExtendedPatronAttributes') and $input->param('setting_extended_patron_attributes')) {
             C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $extended_patron_attributes);
         }
@@ -454,6 +476,35 @@ foreach (keys(%flags)) {
 	push @flagdata,\%row;
 }
 
+## Mesaging Preferences
+##____________________________________________________________________________
+sub yes_or_no {
+    my ($transport, $config) = @_;
+    if (grep { $_ eq $transport } @{$config->{transports}}) {
+        return (yes => 1);
+    } else {
+        return (no => 1);
+    }
+}
+my $checkin_prefs  = C4::Members::Messaging::GetMessagingPreferences({
+    borrowernumber => $borrowernumber,
+    message_name   => 'Item Checkout'
+});
+my @items_borrowed_loop = (
+    { name => 'items_borrowed_email', label => 'Email',                yes_or_no('email', $checkin_prefs) },
+    { name => 'items_borrowed_sms',   label => 'Text Message',         yes_or_no('sms',   $checkin_prefs) },
+    { name => 'items_borrowed_feed',  label => 'XML Syndication Feed', yes_or_no('feed',  $checkin_prefs) },
+);
+my $checkout_prefs = C4::Members::Messaging::GetMessagingPreferences({
+    borrowernumber => $borrowernumber,
+    message_name   => 'Item Check-in'
+});
+my @items_returned_loop = (
+    { name => 'items_returned_email', label => 'Email',                yes_or_no('email', $checkout_prefs) },
+    { name => 'items_returned_sms',   label => 'Text Message',         yes_or_no('sms',   $checkout_prefs) },
+    { name => 'items_returned_feed',  label => 'XML Syndication Feed', yes_or_no('feed',  $checkout_prefs) },
+);
+
 #get Branches
 my @branches;
 my @select_branch;
@@ -496,7 +547,7 @@ if (C4::Context->preference("memberofinstitution")){
         $org_labels{$organisation}=$organisations->{$organisation}->{'surname'};
     }
     $member_of_institution=1;
-    
+
     $CGIorganisations = CGI::scrolling_list( -id => 'organisations',
         -name     => 'organisations',
         -labels   => \%org_labels,
@@ -576,6 +627,8 @@ $template->param(
   borrotitlepopup => $borrotitlepopup,
   guarantorinfo   => $guarantorinfo,
   flagloop  => \@flagdata,
+  items_borrowed_loop => \@items_borrowed_loop,
+  items_returned_loop => \@items_returned_loop,
   dateformat      => C4::Dates->new()->visual(),
   C4::Context->preference('dateformat') => 1,
   check_categorytype =>$check_categorytype,#to recover the category type with checkcategorytype function
@@ -672,6 +725,39 @@ sub patron_attributes_form {
     }
     $template->param(patron_attributes => \@attribute_loop);
 
+}
+
+sub save_messaging_preferences {
+    my $input = shift;
+    my %options = map { $_->{message_name} => $_ }
+        @{C4::Members::Messaging::GetMessagingOptions()};
+    my @checkin_transports;
+    my @checkout_transports;
+    for (qw(email sms feed)) {
+        push @checkin_transports,  $_ if ($input->param("items_returned_$_"));
+        push @checkout_transports, $_ if ($input->param("items_borrowed_$_"));
+    }
+    #use Data::Dump 'pp';
+    #warn pp({ checkin => \@checkin_transports, checkout => \@checkout_transports });
+
+    # Check-in Notifications
+    C4::Members::Messaging::SetMessagingPreference({
+        borrowernumber          => $borrowernumber,
+        wants_digest            => 1,
+        message_attribute_id    => $options{'Item Check-in'}{message_attribute_id},
+        message_transport_types => \@checkin_transports,
+    });
+    # Checkout Notifications
+    C4::Members::Messaging::SetMessagingPreference({
+        borrowernumber          => $borrowernumber,
+        wants_digest            => 1,
+        message_attribute_id    => $options{'Item Checkout'}{message_attribute_id},
+        message_transport_types => \@checkout_transports,
+    });
+    return {
+        checkin  => \@checkin_transports,
+        checkout => \@checkout_transports,
+    };
 }
 
 # Local Variables:
