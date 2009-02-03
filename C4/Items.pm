@@ -978,38 +978,50 @@ offset & size can be used to retrieve only a part of the whole listing (defaut b
 sub GetItemsForInventory {
     my ( $minlocation, $maxlocation,$location, $itemtype, $datelastseen, $branch, $offset, $size ) = @_;
     my $dbh = C4::Context->dbh;
+    my ( @bind_params, @where_strings );
 
     my $query = <<'END_SQL';
 SELECT itemnumber, barcode, itemcallnumber, title, author, biblio.biblionumber, datelastseen
 FROM items
   LEFT JOIN biblio ON items.biblionumber = biblio.biblionumber
   LEFT JOIN biblioitems on items.biblionumber = biblioitems.biblionumber
-WHERE itemcallnumber >= ?
-  AND itemcallnumber <= ?
 END_SQL
-    my @bind_params = ( $minlocation, $maxlocation );
+
+    if ($minlocation) {
+        push @where_strings, 'itemcallnumber >= ?';
+        push @bind_params, $minlocation;
+    }
+
+    if ($maxlocation) {
+        push @where_strings, 'itemcallnumber <= ?';
+        push @bind_params, $maxlocation;
+    }
 
     if ($datelastseen) {
         $datelastseen = format_date_in_iso($datelastseen);  
-        $query .= ' AND (datelastseen < ? OR datelastseen IS NULL) ';
+        push @where_strings, '(datelastseen < ? OR datelastseen IS NULL)';
         push @bind_params, $datelastseen;
     }
 
     if ( $location ) {
-        $query.= ' AND items.location = ? ';
+        push @where_strings, 'items.location = ?';
         push @bind_params, $location;
     }
     
     if ( $branch ) {
-        $query.= ' AND items.homebranch = ? ';
+        push @where_strings, 'items.homebranch = ?';
         push @bind_params, $branch;
     }
     
     if ( $itemtype ) {
-        $query.= ' AND biblioitems.itemtype = ? ';
+        push @where_strings, 'biblioitems.itemtype = ?';
         push @bind_params, $itemtype;
     }
 
+    if ( @where_strings ) {
+        $query .= 'WHERE ';
+        $query .= join ' AND ', @where_strings;
+    }
     $query .= ' ORDER BY itemcallnumber, title';
     my $sth = $dbh->prepare($query);
     $sth->execute( @bind_params );

@@ -29,9 +29,9 @@ use C4::Koha;
 use C4::Branch; # GetBranches
 
 my $input = new CGI;
-my $minlocation=$input->param('minlocation') || 'A';
+my $minlocation=$input->param('minlocation') || '';
 my $maxlocation=$input->param('maxlocation');
-$maxlocation=$minlocation.'Z' unless $maxlocation;
+$maxlocation=$minlocation.'Z' unless ( $maxlocation || ! $minlocation );
 my $location=$input->param('location');
 my $itemtype=$input->param('itemtype');
 my $datelastseen = $input->param('datelastseen');
