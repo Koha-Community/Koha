@@ -30,6 +30,7 @@ use C4::Members;
 use C4::Dates;
 use C4::Calendar;
 use C4::Accounts;
+use C4::ItemCirculationAlertPreference;
 use Date::Calc qw(
   Today
   Today_and_Now
@@ -849,17 +850,18 @@ Calculated if empty.
 Defaults to today.  Unlike C<$datedue>, NOT a C4::Dates object, unfortunately.
 
 AddIssue does the following things :
-- step 01: check that there is a borrowernumber & a barcode provided
-- check for RENEWAL (book issued & being issued to the same patron)
-    - renewal YES = Calculate Charge & renew
-    - renewal NO  = 
-        * BOOK ACTUALLY ISSUED ? do a return if book is actually issued (but to someone else)
-        * RESERVE PLACED ?
-            - fill reserve if reserve to this patron
-            - cancel reserve or not, otherwise
-        * TRANSFERT PENDING ?
-            - complete the transfert
-        * ISSUE THE BOOK
+
+  - step 01: check that there is a borrowernumber & a barcode provided
+  - check for RENEWAL (book issued & being issued to the same patron)
+      - renewal YES = Calculate Charge & renew
+      - renewal NO  =
+          * BOOK ACTUALLY ISSUED ? do a return if book is actually issued (but to someone else)
+          * RESERVE PLACED ?
+              - fill reserve if reserve to this patron
+              - cancel reserve or not, otherwise
+          * TRANSFERT PENDING ?
+              - complete the transfert
+          * ISSUE THE BOOK
 
 =back
 
@@ -994,7 +996,7 @@ sub AddIssue {
                   onloan           => $datedue->output('iso'),
                 }, $item->{'biblionumber'}, $item->{'itemnumber'});
         ModDateLastSeen( $item->{'itemnumber'} );
-        
+
         # If it costs to borrow this book, charge it to the patron's account.
         my ( $charge, $itemtype ) = GetIssuingCharges(
             $item->{'itemnumber'},
@@ -1015,8 +1017,23 @@ sub AddIssue {
             ($sipmode ? "SIP-$sipmode" : ''), $item->{'itemnumber'},
             $item->{'itype'}, $borrower->{'borrowernumber'}
         );
+
+        # Send a checkout slip.
+        my $circulation_alert = 'C4::ItemCirculationAlertPreference';
+        my %conditions = (
+            branchcode   => $branch,
+            categorycode => $borrower->{categorycode},
+            item_type    => $item->{itype},
+        );
+        if ($circulation_alert->is_enabled_for(\%conditions)) {
+            SendCirculationAlert({
+                type     => 'checkout',
+                item     => $item,
+                borrower => $borrower,
+            });
+        }
     }
-    
+
     logaction("CIRCULATION", "ISSUE", $borrower->{'borrowernumber'}, $biblio->{'biblionumber'}) 
         if C4::Context->preference("IssueLog");
   }
@@ -1498,6 +1515,21 @@ sub AddReturn {
             $biblio->{'itemtype'},
             $borrower->{'borrowernumber'}
         );
+
+        # Send a check-in slip.
+        my $circulation_alert = 'C4::ItemCirculationAlertPreference';
+        my %conditions = (
+            branchcode   => $branch,
+            categorycode => $borrower->{categorycode},
+            item_type    => $iteminformation->{itype},
+        );
+        if ($doreturn && $circulation_alert->is_enabled_for(\%conditions)) {
+            SendCirculationAlert({
+                type     => 'check-in',
+                item     => $iteminformation,
+                borrower => $borrower,
+            });
+        }
         
         logaction("CIRCULATION", "RETURN", $iteminformation->{borrowernumber}, $iteminformation->{'biblionumber'}) 
             if C4::Context->preference("ReturnLog");
@@ -2251,7 +2283,6 @@ sub GetTransfers {
     return @row;
 }
 
-
 =head2 GetTransfersFromTo
 
 @results = GetTransfersFromTo($frombranch,$tobranch);
@@ -2324,6 +2355,41 @@ sub AnonymiseIssueHistory {
     $query .= " AND borrowernumber = '".$borrowernumber."'" if defined $borrowernumber;
     my $rows_affected = $dbh->do($query);
     return $rows_affected;
+}
+
+=head2 SendCirculationAlert
+
+Send out a C<check-in> or C<checkout> alert using the messaging system.
+
+=over 4
+
+=item type
+
+Valid values for this parameter are: C<check-in> or C<checkout>.
+
+=item item
+
+Hashref of information about the item being checked in or out.
+
+=item borrower
+
+Hashref of information about the borrower of the item.
+
+=back
+
+B<Example>:
+
+    SendCirculationAlert({
+        type     => 'checkout',
+        item     => $item,
+        borrower => $borrower,
+    });
+
+=cut
+
+sub SendCirculationAlert {
+    my ($opts) = @_;
+    # TODO - actually send a message ...somehow.
 }
 
 =head2 updateWrongTransfer
