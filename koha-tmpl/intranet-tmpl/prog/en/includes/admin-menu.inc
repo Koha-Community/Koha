@@ -19,6 +19,7 @@
 	<li><a href="/cgi-bin/koha/admin/patron-attr-types.pl">Patron attribute types</a></li>
 	<li><a href="/cgi-bin/koha/admin/smart-rules.pl">Circulation and fines rules</a></li>
 	<li><a href="/cgi-bin/koha/admin/branch_transfer_limits.pl">Library transfer limits</a></li>
+	<li><a href="/cgi-bin/koha/admin/item_circulation_alerts.pl">Item circulation alerts</a></li>
 </ul>
 
 <h5>Catalog</h5>

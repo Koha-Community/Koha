@@ -1,0 +1,146 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Administration &rsaquo; Item Circulation Alerts</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<style>
+div.circulation-alert h2 {
+  margin-top: 1.5em;
+}
+div.circulation-alert h3 {
+  margin-top: 1em;
+}
+</style>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Item Circulation Alerts </div>
+
+<div id="doc3" class="yui-t1">
+
+<div id="bd">
+
+<div id="yui-main" class="circulation-alert">
+<div class="yui-b">
+<h1>Item Circulation Alerts</h1>
+
+
+<h2>Pick a branch:</h2>
+<form method="GET">
+<select name="branch">
+<!-- TMPL_LOOP NAME="branches" -->
+<!-- TMPL_IF NAME="selected" -->
+<option value="<!-- TMPL_VAR NAME="branchcode" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
+<!-- TMPL_ELSE -->
+<option value="<!-- TMPL_VAR NAME="branchcode" -->"><!-- TMPL_VAR NAME="branchname" --></option>
+<!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+</select>
+<input type="submit" name="submit" value="Pick" />
+</form>
+
+
+<h2>Circulation alerts are disabled for the following conditions:</h2>
+<form method="POST">
+<input type="hidden" name="action" value="create" />
+<input type="hidden" name="branchcode" value="*" />
+<input type="hidden" name="redirect_to" value="<!-- TMPL_VAR NAME="redirect_to" -->" />
+<h3>Default (for all branches)</h3>
+<table>
+<thead>
+<tr>
+<th>Patron Category</th>
+<th>Item Type</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<!-- TMPL_LOOP NAME="default_prefs" -->
+<tr>
+<td><!-- TMPL_VAR NAME="category_description" --></td>
+<td><!-- TMPL_VAR NAME="item_type_description" --></td>
+<td><a href="?action=delete&id=<!-- TMPL_VAR NAME="id" -->&redirect_to=<!-- TMPL_VAR NAME="redirect_to_x" -->">delete</a></td>
+</tr>
+<!-- /TMPL_LOOP -->
+</tbody>
+<tfoot>
+<tr>
+<td>
+<select name="categorycode">
+<!-- TMPL_LOOP NAME="categories" -->
+<option value="<!-- TMPL_VAR NAME="categorycode" -->"><!-- TMPL_VAR NAME="description" --></option>
+<!-- /TMPL_LOOP -->
+</select>
+</td>
+<td>
+<select name="item_type">
+<!-- TMPL_LOOP NAME="item_types" -->
+<option value="<!-- TMPL_VAR NAME="itemtype" -->"><!-- TMPL_VAR NAME="description" --></option>
+<!-- /TMPL_LOOP -->
+</select>
+</td>
+<td>
+<input type="submit" name="submit" value="Disable Alert" />
+</td>
+</tr>
+</tfoot>
+</table>
+</form>
+
+
+<!-- TMPL_IF NAME="branch_name" -->
+<form method="POST">
+<input type="hidden" name="action" value="create" />
+<input type="hidden" name="branchcode" value="<!-- TMPL_VAR NAME="branch" -->" />
+<input type="hidden" name="redirect_to" value="<!-- TMPL_VAR NAME="redirect_to" -->" />
+<h3><!-- TMPL_VAR NAME="branch_name" --></h3>
+<table>
+<thead>
+<tr>
+<th>Patron Category</th>
+<th>Item Type</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<!-- TMPL_LOOP NAME="branch_prefs" -->
+<tr>
+<td><!-- TMPL_VAR NAME="category_description" --></td>
+<td><!-- TMPL_VAR NAME="item_type_description" --></td>
+<td><a href="?action=delete&id=<!-- TMPL_VAR NAME="id" -->&redirect_to=<!-- TMPL_VAR NAME="redirect_to_x" -->">delete</a></td>
+</tr>
+<!-- /TMPL_LOOP -->
+</tbody>
+<tfoot>
+<tr>
+<td>
+<select name="categorycode">
+<!-- TMPL_LOOP NAME="categories" -->
+<option value="<!-- TMPL_VAR NAME="categorycode" -->"><!-- TMPL_VAR NAME="description" --></option>
+<!-- /TMPL_LOOP -->
+</select>
+</td>
+<td>
+<select name="item_type">
+<!-- TMPL_LOOP NAME="item_types" -->
+<option value="<!-- TMPL_VAR NAME="itemtype" -->"><!-- TMPL_VAR NAME="description" --></option>
+<!-- /TMPL_LOOP -->
+</select>
+</td>
+<td>
+<input type="submit" name="submit" value="Disable Alert" />
+</td>
+</tr>
+</tfoot>
+</table>
+</form>
+<!-- /TMPL_IF -->
+
+
+</div>
+</div>
+
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
