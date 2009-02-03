@@ -493,7 +493,6 @@ my $checkin_prefs  = C4::Members::Messaging::GetMessagingPreferences({
 my @items_borrowed_loop = (
     { name => 'items_borrowed_email', label => 'Email',                yes_or_no('email', $checkin_prefs) },
     { name => 'items_borrowed_sms',   label => 'Text Message',         yes_or_no('sms',   $checkin_prefs) },
-    { name => 'items_borrowed_feed',  label => 'XML Syndication Feed', yes_or_no('feed',  $checkin_prefs) },
 );
 my $checkout_prefs = C4::Members::Messaging::GetMessagingPreferences({
     borrowernumber => $borrowernumber,
@@ -502,7 +501,6 @@ my $checkout_prefs = C4::Members::Messaging::GetMessagingPreferences({
 my @items_returned_loop = (
     { name => 'items_returned_email', label => 'Email',                yes_or_no('email', $checkout_prefs) },
     { name => 'items_returned_sms',   label => 'Text Message',         yes_or_no('sms',   $checkout_prefs) },
-    { name => 'items_returned_feed',  label => 'XML Syndication Feed', yes_or_no('feed',  $checkout_prefs) },
 );
 
 #get Branches
@@ -743,14 +741,14 @@ sub save_messaging_preferences {
     # Check-in Notifications
     C4::Members::Messaging::SetMessagingPreference({
         borrowernumber          => $borrowernumber,
-        wants_digest            => 1,
+        wants_digest            => 0,
         message_attribute_id    => $options{'Item Check-in'}{message_attribute_id},
         message_transport_types => \@checkin_transports,
     });
     # Checkout Notifications
     C4::Members::Messaging::SetMessagingPreference({
         borrowernumber          => $borrowernumber,
-        wants_digest            => 1,
+        wants_digest            => 0,
         message_attribute_id    => $options{'Item Checkout'}{message_attribute_id},
         message_transport_types => \@checkout_transports,
     });
