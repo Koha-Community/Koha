@@ -18,6 +18,8 @@ package C4::ItemCirculationAlertPreference;
 use strict;
 use warnings;
 use C4::Context;
+use C4::Category;
+use C4::ItemType;
 use Carp qw(carp croak);
 
 our $AUTOLOAD;
@@ -25,7 +27,7 @@ our $AUTOLOAD;
 # helper function for validating \%opts
 our $valid = sub {
     my $opts = shift;
-    for (qw(branchcode categorycode item_type)) {
+    for (qw(branchcode categorycode item_type notification)) {
         exists($opts->{$_}) || croak("'$_' is a required parameter.");
     }
 };
@@ -46,20 +48,22 @@ Basics:
     # a short-cut to reduce typing the long package name over and over again
     my $preferences = 'C4::ItemCirculationAlertPreference';
 
-Creating Rules:
+Creating a restriction on sending messages:
 
     my $pref = $preferences->create({
         branchcode   => 'CPL',
         categorycode => 'YA',
         item_type    => 'BK',
+        notification => 'CHECKOUT',
     });
 
-Deleting Rules:
+Removing a restriction on sending messages:
 
     $preferences->delete({
         branchcode   => 'CPL',
         categorycode => 'YA',
         item_type    => 'BK',
+        notification => 'CHECKOUT',
     });
 
 =head1 DESCRIPTION
@@ -96,7 +100,28 @@ sub new {
 =head3 C4::ItemCirculationAlertPreference->create(\%opts)
 
 This will find or create an item circulation alert preference.  You must pass
-it a B<branchcode>, B<categorycode>, and B<item_type>.
+it a B<branchcode>, B<categorycode>, B<item_type>, and B<notification>.  Valid
+values for these attributes are as follows:
+
+=over 4
+
+=item branchcode
+
+branches.branchcode
+
+=item categorycode
+
+category.categorycode
+
+=item item_type
+
+itemtypes.itemtype
+
+=item notification
+
+This can be "CHECKIN" or "CHECKOUT"
+
+=back
 
 =cut
 
@@ -109,22 +134,25 @@ sub create {
         FROM  item_circulation_alert_preferences
         WHERE branchcode   = ?
         AND   categorycode = ?
-        AND   item_type    = ?",
+        AND   item_type    = ?
+        AND   notification = ?",
         { Slice => {} },
         $opts->{branchcode},
         $opts->{categorycode},
         $opts->{item_type},
+        $opts->{notification},
     );
     if (@$prefs) {
         return $class->new($prefs->[0]);
     } else {
         my $success = $dbh->do(
             "INSERT INTO item_circulation_alert_preferences
-            (branchcode, categorycode, item_type) VALUES (?, ?, ?)",
+            (branchcode, categorycode, item_type, notification) VALUES (?, ?, ?, ?)",
             {},
             $opts->{branchcode},
             $opts->{categorycode},
             $opts->{item_type},
+            $opts->{notification},
         );
         if ($success) {
             my $self = {
@@ -132,6 +160,7 @@ sub create {
                 branchcode   => $opts->{branchcode},
                 categorycode => $opts->{categorycode},
                 item_type    => $opts->{item_type},
+                notification => $opts->{notification},
             };
             return $class->new($self);
         } else {
@@ -163,15 +192,19 @@ sub delete {
         );
     } else {
         $valid->($opts);
-        $dbh->do(
+        my $sql =
             "DELETE FROM item_circulation_alert_preferences
             WHERE branchcode   = ?
             AND   categorycode = ?
-            AND   item_type    = ?",
+            AND   item_type    = ?
+            AND   notification = ?";
+        $dbh->do(
+            $sql,
             {},
             $opts->{branchcode},
             $opts->{categorycode},
-            $opts->{item_type}
+            $opts->{item_type},
+            $opts->{notification},
         );
     }
 }
@@ -200,48 +233,52 @@ B<Example>:
 
 =cut
 
-sub is_enabled_for {
+sub is_disabled_for {
     my ($class, $opts) = @_;
     $valid->($opts);
     my $dbh = C4::Context->dbh;
 
     # Does a preference exist to block this alert?
     my $query = qq{
-        SELECT id
+        SELECT id, branchcode, categorycode, item_type, notification
           FROM item_circulation_alert_preferences
          WHERE (branchcode   = ? OR branchcode   = '*')
            AND (categorycode = ? OR categorycode = '*')
            AND (item_type    = ? OR item_type    = '*')
+           AND (notification = ? OR notification = '*')
     };
 
     my $preferences = $dbh->selectall_arrayref(
         $query,
-        { },
+        { Slice => {} },
         $opts->{branchcode},
         $opts->{categorycode},
         $opts->{item_type},
+        $opts->{notification},
     );
 
     # If any preferences showed up, we are NOT enabled.
-    if (@$preferences) {
-        return undef;
-    } else {
-        return 1;
-    }
+    return @$preferences;
+}
+
+sub is_enabled_for {
+    my ($class, $opts) = @_;
+    return not $class->is_disabled_for($opts);
 }
 
 
 
 
-=head3 C4::ItemCirculationAlertPreference->find({ branchcode => $bc })
+=head3 C4::ItemCirculationAlertPreference->find({ branchcode => $bc, notification => $type })
 
 This method returns all the item circulation alert preferences for a given
-branch.
+branch and notification.
 
 B<Example>:
 
     my @branch_prefs = C4::ItemCirculationAlertPreference->find({
-        branchcode => 'CPL',
+        branchcode   => 'CPL',
+        notification => 'CHECKIN',
     });
 
 =cut
@@ -250,16 +287,78 @@ sub find {
     my ($class, $where) = @_;
     my $dbh = C4::Context->dbh;
     my $query = qq{
-        SELECT id, branchcode, categorycode, item_type
+        SELECT id, branchcode, categorycode, item_type, notification
           FROM item_circulation_alert_preferences
-         WHERE branchcode = ?
+         WHERE branchcode = ? AND notification = ?
          ORDER BY categorycode, item_type
     };
     return    map { $class->new($_) }    @{$dbh->selectall_arrayref(
         $query,
         { Slice => {} },
-        $where->{branchcode}
+        $where->{branchcode},
+        $where->{notification},
     )};
+}
+
+
+
+
+=head3 C4::ItemCirculationAlertPreference->grid({ branchcode => $c, notification => $type })
+
+Return a 2D arrayref for the grid view in F<admin/item_circulation_alert_preferences.pl>.
+Each row represents a category (like 'Patron' or 'Young Adult') and
+each column represents an itemtype (like 'Book' or 'Music').
+
+Each cell contains...
+
+B<Example>:
+
+    use Data::Dump 'pp';
+    my $grid = C4::ItemCirculationAlertPreference->grid({
+        branchcode   => 'CPL',
+        notification => 'CHECKOUT',
+    });
+    warn pp($grid);
+
+See F<admin/item_circulation_alerts.pl> to see how this method is used.
+
+=cut
+
+sub grid {
+    my ($class, $where) = @_;
+    my @branch_prefs = $class->find($where);
+    my @default_prefs = $class->find({ branchcode => '*', notification => $where->{notification} });
+    my @cc = C4::Category->all;
+    my @it = C4::ItemType->all;
+    my $notification = $where->{notification};
+    my %disabled = map {
+        my $key = $_->categorycode . "-" . $_->item_type . "-" . $notification;
+        $key =~ s/\*/_/g;
+        ($key => 1);
+    } @branch_prefs;
+    my %default = map {
+        my $key = $_->categorycode . "-" . $_->item_type . "-" . $notification;
+        $key =~ s/\*/_/g;
+        ($key => 1);
+    } @default_prefs;
+    my @grid;
+    for my $c (@cc) {
+        my $row = { description => $c->description, items => [] };
+        push @grid, $row;
+        for my $i (@it) {
+            my $key = $c->categorycode . "-" . $i->itemtype . "-" . $notification;
+            $key =~ s/\*/_/g;
+            my @classes;
+            if ($disabled{$key}) {
+                push @classes, 'disabled';
+            }
+            if ($default{$key}) {
+                push @classes, 'default';
+            }
+            push @{$row->{items}}, { class => join(' ', @classes),  id => $key };
+        }
+    }
+    return \@grid;
 }
 
 
@@ -277,6 +376,8 @@ These are read-only accessors for the various attributes of a preference.
 
 =head3 $pref->item_type
 
+=head3 $pref->notification
+
 =cut
 
 sub AUTOLOAD {
@@ -290,12 +391,13 @@ sub AUTOLOAD {
     }
 }
 
+sub DESTROY { }
 
 
 
 =head1 SEE ALSO
 
-L<C4::Circulation>, C<admin/item_circulation_alerts.pl>
+L<C4::Circulation>, F<admin/item_circulation_alerts.pl>
 
 =head1 AUTHOR
 

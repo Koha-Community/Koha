@@ -8,7 +8,68 @@ div.circulation-alert h2 {
 div.circulation-alert h3 {
   margin-top: 1em;
 }
+
+table.grid thead th {
+  vertical-align: bottom;
+}
+
+table.grid tbody th {
+  text-align: right;
+}
+
+table.grid tbody td.info {
+  background: #fff;
+}
+
+table.grid.active tbody td {
+  width: 10%;
+  cursor: pointer;
+}
+
+table.grid tbody td {
+  background: #cfc;
+  color: #111;
+}
+
+table.grid td.disabled {
+  background: #fcc;
+}
+
+table.grid td.default {
+  background: #f88;
+}
 </style>
+<script>
+var $branch = "<!-- TMPL_VAR NAME="branch" -->";
+$(function(){
+
+    $('#branch_selector input:submit').hide();
+    $('#branch').change(function(){
+        $('#branch_selector').submit();
+    });
+
+    $('table.grid.active tbody td').click(function(ev){
+        var id = this.id;
+        var td = $(this);
+        if (td.hasClass('default') && $branch != '*') {
+            td.html(_('Blocked'));
+        } else {
+            td.html(_('Saving...'));
+            $.ajax({
+                url      : '/cgi-bin/koha/admin/item_circulation_alerts.pl',
+                type     : 'POST',
+                dataType : 'json',
+                data     : { action: 'toggle', id: id, branch: $branch },
+                success  : function(response){
+                    td.html(' ');
+                    td.attr('class', response.class);
+                }
+            });
+        }
+    });
+
+});
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -24,9 +85,9 @@ div.circulation-alert h3 {
 <h1>Item Circulation Alerts</h1>
 
 
-<h2>Pick a branch:</h2>
-<form method="GET">
-<select name="branch">
+<h2>Select a library:</h2>
+<form id="branch_selector" method="GET">
+<select id="branch" name="branch">
 <!-- TMPL_LOOP NAME="branches" -->
 <!-- TMPL_IF NAME="selected" -->
 <option value="<!-- TMPL_VAR NAME="branchcode" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
@@ -35,105 +96,78 @@ div.circulation-alert h3 {
 <!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
 </select>
-<input type="submit" name="submit" value="Pick" />
+<input type="submit" name="pick" value="Pick" />
 </form>
 
 
-<h2>Circulation alerts are disabled for the following conditions:</h2>
-<form method="POST">
-<input type="hidden" name="action" value="create" />
-<input type="hidden" name="branchcode" value="*" />
-<input type="hidden" name="redirect_to" value="<!-- TMPL_VAR NAME="redirect_to" -->" />
-<h3>Default (for all branches)</h3>
-<table>
+<h2>Circulation Alerts for <!-- TMPL_VAR NAME="branch_name" --></h2>
+<p>Click on the grid to toggle the settings.</p>
+
+<h3>Checkout</h3>
+<table class="grid active" width="100%">
 <thead>
 <tr>
-<th>Patron Category</th>
-<th>Item Type</th>
-<th>Action</th>
+  <th>&nbsp;</th>
+  <!-- TMPL_LOOP NAME="item_types" -->
+  <th><!-- TMPL_VAR NAME="br_description" --></th>
+  <!-- /TMPL_LOOP -->
 </tr>
 </thead>
 <tbody>
-<!-- TMPL_LOOP NAME="default_prefs" -->
+<!-- TMPL_LOOP NAME="grid_checkout" -->
 <tr>
-<td><!-- TMPL_VAR NAME="category_description" --></td>
-<td><!-- TMPL_VAR NAME="item_type_description" --></td>
-<td><a href="?action=delete&id=<!-- TMPL_VAR NAME="id" -->&redirect_to=<!-- TMPL_VAR NAME="redirect_to_x" -->">delete</a></td>
+  <th><!-- TMPL_VAR NAME="description" --></th>
+  <!-- TMPL_LOOP NAME="items" -->
+  <td class="<!-- TMPL_VAR NAME="class" -->" id="<!-- TMPL_VAR NAME="id" -->">&nbsp;</td>
+  <!-- /TMPL_LOOP -->
 </tr>
 <!-- /TMPL_LOOP -->
 </tbody>
-<tfoot>
-<tr>
-<td>
-<select name="categorycode">
-<!-- TMPL_LOOP NAME="categories" -->
-<option value="<!-- TMPL_VAR NAME="categorycode" -->"><!-- TMPL_VAR NAME="description" --></option>
-<!-- /TMPL_LOOP -->
-</select>
-</td>
-<td>
-<select name="item_type">
-<!-- TMPL_LOOP NAME="item_types" -->
-<option value="<!-- TMPL_VAR NAME="itemtype" -->"><!-- TMPL_VAR NAME="description" --></option>
-<!-- /TMPL_LOOP -->
-</select>
-</td>
-<td>
-<input type="submit" name="submit" value="Disable Alert" />
-</td>
-</tr>
-</tfoot>
 </table>
-</form>
 
-
-<!-- TMPL_IF NAME="branch_name" -->
-<form method="POST">
-<input type="hidden" name="action" value="create" />
-<input type="hidden" name="branchcode" value="<!-- TMPL_VAR NAME="branch" -->" />
-<input type="hidden" name="redirect_to" value="<!-- TMPL_VAR NAME="redirect_to" -->" />
-<h3><!-- TMPL_VAR NAME="branch_name" --></h3>
-<table>
+<h3>Check-in</h3>
+<table class="grid active" width="100%">
 <thead>
 <tr>
-<th>Patron Category</th>
-<th>Item Type</th>
-<th>Action</th>
+  <th>&nbsp;</th>
+  <!-- TMPL_LOOP NAME="item_types" -->
+  <th><!-- TMPL_VAR NAME="br_description" --></th>
+  <!-- /TMPL_LOOP -->
 </tr>
 </thead>
 <tbody>
-<!-- TMPL_LOOP NAME="branch_prefs" -->
+<!-- TMPL_LOOP NAME="grid_checkin" -->
 <tr>
-<td><!-- TMPL_VAR NAME="category_description" --></td>
-<td><!-- TMPL_VAR NAME="item_type_description" --></td>
-<td><a href="?action=delete&id=<!-- TMPL_VAR NAME="id" -->&redirect_to=<!-- TMPL_VAR NAME="redirect_to_x" -->">delete</a></td>
+  <th><!-- TMPL_VAR NAME="description" --></th>
+  <!-- TMPL_LOOP NAME="items" -->
+  <td class="<!-- TMPL_VAR NAME="class" -->" id="<!-- TMPL_VAR NAME="id" -->">&nbsp;</td>
+  <!-- /TMPL_LOOP -->
 </tr>
 <!-- /TMPL_LOOP -->
 </tbody>
-<tfoot>
-<tr>
-<td>
-<select name="categorycode">
-<!-- TMPL_LOOP NAME="categories" -->
-<option value="<!-- TMPL_VAR NAME="categorycode" -->"><!-- TMPL_VAR NAME="description" --></option>
-<!-- /TMPL_LOOP -->
-</select>
-</td>
-<td>
-<select name="item_type">
-<!-- TMPL_LOOP NAME="item_types" -->
-<option value="<!-- TMPL_VAR NAME="itemtype" -->"><!-- TMPL_VAR NAME="description" --></option>
-<!-- /TMPL_LOOP -->
-</select>
-</td>
-<td>
-<input type="submit" name="submit" value="Disable Alert" />
-</td>
-</tr>
-</tfoot>
 </table>
-</form>
-<!-- /TMPL_IF -->
+
+<h3>Legend</h3>
+<table class="grid">
+<thead>
+  <th>Color</th>
+  <th>Meaning</th>
+</thead>
+<tbody>
+  <tr>
+    <td width="100" class="default">&nbsp;</td>
+    <td class="info">These are disabled for ALL libraries.  To change these settings, choose the "Default" library.</td>
+  </tr>
+  <tr>
+    <td class="disabled">&nbsp;</td>
+    <td class="info">These are disabled for the current library.</td>
+  </tr>
+  <tr>
+    <td class="">&nbsp;</td>
+    <td class="info">These are enabled.</td>
+  </tr>
+</tbody>
+</table>
 
 
 </div>

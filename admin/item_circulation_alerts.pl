@@ -22,6 +22,7 @@ use CGI;
 use File::Basename;
 use Encode;
 use URI::Escape 'uri_escape_utf8';
+use JSON;
 #use Data::Dump 'pp';
 
 use C4::Auth;
@@ -35,15 +36,6 @@ use C4::Output;
 # shortcut for long package name
 my $preferences = 'C4::ItemCirculationAlertPreference';
 
-# common redirect code
-sub redirect {
-    my ($input) = @_;
-    my $path = defined($input->param('redirect_to'))
-        ? $input->param('redirect_to')
-        : basename($0);
-    print $input->redirect($path);
-}
-
 # utf8 filter
 sub utf8 {
     my ($data, @keys) = @_;
@@ -53,15 +45,15 @@ sub utf8 {
     $data;
 }
 
-# add long category and itemtype descriptions to preferences
-sub category_and_itemtype {
-    my ($categories, $item_types, @prefs) = @_;
-    my %c = map { $_->{categorycode} => $_->{description} } @$categories;
-    my %i = map { $_->{itemtype}     => $_->{description} } @$item_types;
-    for (@prefs) {
-        $_->{category_description} = $c{$_->{categorycode}} || 'Default';
-        $_->{item_type_description} = $i{$_->{item_type}} || 'Default';
+# prepend "br_" to column name and replace spaces with "<br/>"
+sub br {
+    my ($data, @keys) = @_;
+    for (@keys) {
+        my $br = $data->{$_};
+        $br =~ s{\s+}{<br/>}g;
+        $data->{'br_'.$_} = $br;
     }
+    $data;
 }
 
 # display item circulation alerts
@@ -94,61 +86,72 @@ sub show {
     my $branch_name = exists($br->{$branch}) && $br->{$branch}->{branchname};
 
     my @categories = map { utf8($_, 'description') }  (
-        C4::Category->new({ categorycode => '*', description => 'Default' }),
         C4::Category->all
     );
-    my @item_types = map { utf8($_, 'description') }  (
-        C4::ItemType->new({ itemtype => '*', description => 'Default' }),
+    my @item_types = map { utf8($_, 'description'); br($_, 'description') }  (
         C4::ItemType->all
     );
-    my @default_prefs = $preferences->find({ branchcode => '*' });
-    my @branch_prefs;
-    my $redirect_to = "?branch=$branch";
+    my $grid_checkout = $preferences->grid({ branchcode => $branch, notification => 'CHECKOUT' });
+    my $grid_checkin  = $preferences->grid({ branchcode => $branch, notification => 'CHECKIN' });
 
-    $template->param(redirect_to        => $redirect_to);
-    $template->param(redirect_to_x      => uri_escape_utf8($redirect_to));
     $template->param(branch             => $branch);
-    $template->param(branch_name        => $branch_name);
+    $template->param(branch_name        => $branch_name || 'Default');
     $template->param(branches           => \@branches);
     $template->param(categories         => \@categories);
     $template->param(item_types         => \@item_types);
-    $template->param(default_prefs      => \@default_prefs);
-    if ($branch ne '*') {
-        @branch_prefs = $preferences->find({ branchcode => $branch });
-        $template->param(branch_prefs => \@branch_prefs);
-    }
-    category_and_itemtype(\@categories, \@item_types, (@default_prefs, @branch_prefs));
+    $template->param(grid_checkout      => $grid_checkout);
+    $template->param(grid_checkin       => $grid_checkin);
+
     output_html_with_http_headers $input, $cookie, $template->output;
 }
 
-# create item circulation alert preference and redirect
-sub create {
-    my ($input) = @_;
-    my $branchcode   = $input->param('branchcode');
-    my $categorycode = $input->param('categorycode');
-    my $item_type    = $input->param('item_type');
-    $preferences->create({
-        branchcode   => $branchcode,
-        categorycode => $categorycode,
-        item_type    => $item_type,
-    });
-    redirect($input);
-}
-
-# delete preference and redirect
-sub delete {
+# toggle a preference via ajax
+sub toggle {
     my ($input) = @_;
     my $id = $input->param('id');
-    $preferences->delete({ id => $id });
-    redirect($input);
+    my $branch = $input->param('branch');
+    my ($category, $item_type, $notification) = split('-', $id);
+    $category  =~ s/_/*/;
+    $item_type =~ s/_/*/;
+
+    my $settings = {
+        branchcode   => $branch,
+        categorycode => $category,
+        item_type    => $item_type,
+        notification => $notification,
+    };
+
+    my $restrictions = $preferences;  # all the same thing...
+    my $notifications = $preferences; #
+    if ($notifications->is_enabled_for($settings)) {
+        # toggle by adding a restriction
+        $restrictions->create($settings);
+    } else {
+        # toggle by removing the restriction
+        $restrictions->delete($settings);
+    }
+
+    my $response = { success => 1 };
+    my @reasons  = $notifications->is_disabled_for($settings);
+    if (@reasons == 0) {
+        $response->{class} = '';
+    } else {
+        my $default_exists   = grep { $_->{branchcode} eq '*' } @reasons;
+        my $non_default_also = grep { $_->{branchcode} ne '*' } @reasons;
+        my @classes;
+        push @classes, 'default'  if $default_exists;
+        push @classes, 'disabled' if $non_default_also;
+        $response->{class} = join(' ', @classes);
+    }
+    print $input->header;
+    print encode_json($response);
 }
 
 # dispatch to various actions based on CGI parameter 'action'
 sub dispatch {
     my %handler = (
         show   => \&show,
-        create => \&create,
-        delete => \&delete,
+        toggle => \&toggle,
     );
     my $input  = new CGI;
     my $action = $input->param('action') || 'show';
@@ -203,35 +206,9 @@ branch '*' is used.
 
 
 
+=head3 ?action=toggle
 
-=head3 ?action=create
-
-Create an item circulation alert preference.
-
-Parameters:
-
-=over 4
-
-=item branchcode
-
-Branch code
-
-=item categorycode
-
-Patron category
-
-=item item_type
-
-Item type
-
-=back
-
-
-
-
-=head3 ?action=delete
-
-Delete an item circulation alert preference.
+Toggle a preference via AJAX
 
 Parameters:
 
@@ -239,12 +216,13 @@ Parameters:
 
 =item id
 
-The id of the preference to delete.
+"$categorycode-$item_type-$notification"
+
+=item branch
+
+Branch code to apply this preference to
 
 =back
-
-
-
 
 =cut
 
