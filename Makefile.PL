@@ -528,7 +528,7 @@ WriteMakefile(
               #VERSION     => strftime('2.9.%Y%m%d%H',gmtime),
               VERSION_FROM => 'kohaversion.pl',
               ABSTRACT     => 'Award-winning integrated library system (ILS) and Web OPAC',
-              AUTHOR       => 'Koha Developers <koha-devel@nongnu.org>',
+              AUTHOR       => 'Koha Developers <koha-devel@lists.koha.org>',
               NO_META      => 1,
               PREREQ_PM => {
                             'Algorithm::CheckDigits'          => 0.50,
