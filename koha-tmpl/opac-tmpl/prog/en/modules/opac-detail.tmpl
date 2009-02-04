@@ -266,9 +266,9 @@
             <!-- TMPL_IF NAME="serial" --><td><!-- TMPL_VAR NAME="serialseq" --> </td>
             <td><!-- TMPL_VAR NAME="publisheddate" --> </td><!-- /TMPL_IF -->
             <td><!-- TMPL_IF name="bi_notforloan" -->
-                    Not for loan
+                    Not for loan <!-- TMPL_IF NAME="notforloanvalue" -->(<!-- TMPL_VAR NAME="notforloanvalue" -->)<!-- /TMPL_IF -->
                 <!-- TMPL_ELSIF NAME="itypenotforloan" -->
-                    Not for loan
+                    Not for loan <!-- TMPL_IF NAME="notforloanvalue" -->(<!-- TMPL_VAR NAME="notforloanvalue" -->)<!-- /TMPL_IF -->
                 <!-- TMPL_ELSE -->
                     <!-- TMPL_IF name="datedue" -->
                     Checked out
