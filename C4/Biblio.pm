@@ -2217,7 +2217,7 @@ sub _DelBiblioNoZebra {
     if ($server eq 'biblioserver') {
         %index=GetNoZebraIndexes;
         # get title of the record (to store the 10 first letters with the index)
-        my ($titletag,$titlesubfield) = GetMarcFromKohaField('biblio.title');
+        my ($titletag,$titlesubfield) = GetMarcFromKohaField('biblio.title', ''); # FIXME: should be GetFrameworkCode($biblionumber) ??
         $title = lc($record->subfield($titletag,$titlesubfield));
     } else {
         # for authorities, the "title" is the $a mainentry
@@ -2311,7 +2311,7 @@ sub _AddBiblioNoZebra {
     if ($server eq 'biblioserver') {
         %index=GetNoZebraIndexes;
         # get title of the record (to store the 10 first letters with the index)
-        my ($titletag,$titlesubfield) = GetMarcFromKohaField('biblio.title');
+        my ($titletag,$titlesubfield) = GetMarcFromKohaField('biblio.title', ''); # FIXME: should be GetFrameworkCode($biblionumber) ??
         $title = lc($record->subfield($titletag,$titlesubfield));
     } else {
         # warn "server : $server";
