@@ -355,14 +355,3 @@ L<C4::Circulation>, L<C4::Letters>, L<C4::Members::Messaging>
 John Beppu <john.beppu@liblime.com>
 
 =cut
-
-# Local Variables: ***
-# mode: cperl ***
-# indent-tabs-mode: nil ***
-# cperl-close-paren-offset: -4 ***
-# cperl-continued-statement-offset: 4 ***
-# cperl-indent-level: 4 ***
-# cperl-indent-parens-as-block: t ***
-# cperl-tab-always-indent: nil ***
-# End: ***
-# vim:tabstop=8 softtabstop=4 shiftwidth=4 shiftround expandtab

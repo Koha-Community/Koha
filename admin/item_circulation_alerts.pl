@@ -225,14 +225,3 @@ Branch code to apply this preference to
 =back
 
 =cut
-
-# Local Variables: ***
-# mode: cperl ***
-# indent-tabs-mode: nil ***
-# cperl-close-paren-offset: -4 ***
-# cperl-continued-statement-offset: 4 ***
-# cperl-indent-level: 4 ***
-# cperl-indent-parens-as-block: t ***
-# cperl-tab-always-indent: nil ***
-# End: ***
-# vim:tabstop=8 softtabstop=4 shiftwidth=4 shiftround expandtab
