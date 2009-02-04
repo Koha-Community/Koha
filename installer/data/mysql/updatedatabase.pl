@@ -1324,7 +1324,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion = "3.00.00.072";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("ALTER TABLE labels_conf ADD COLUMN formatstring VARCHAR(64) DEFAULT NULL AFTER printingtype");
+    $dbh->do("ALTER TABLE labels_conf ADD COLUMN formatstring mediumtext DEFAULT NULL AFTER printingtype");
 	print "Upgrade to $DBversion done ( Adding format string to labels generator. )\n";
     SetVersion ($DBversion);
 }
@@ -1500,8 +1500,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (add browser table if not already present)\n";
 	SetVersion ($DBversion);
 }
-
-
 
 $DBversion = "3.00.00.080";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
@@ -2324,6 +2322,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     my $enable_reviews = C4::Context->preference('OPACAmazonEnabled') ? '1' : '0';
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OPACAmazonReviews', '$enable_reviews', 'Display Amazon readers reviews on OPAC','','YesNo');
     ");
+    SetVersion ($DBversion);
+}
+
+$DBversion = '3.01.00.020';
+if ( C4::Context->preference('Version') < TransformToNum($DBversion) ) {
+    $dbh->do("ALTER TABLE `labels_conf` MODIFY COLUMN `formatstring` mediumtext DEFAULT NULL");
+    print "Upgrade to $DBversion done (bug 2945: increase size of labels_conf.formatstring)\n";
     SetVersion ($DBversion);
 }
 

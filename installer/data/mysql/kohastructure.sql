@@ -1249,7 +1249,7 @@ CREATE TABLE `labels_conf` (
   `isbn` int(1) default '0',
   `startlabel` int(2) NOT NULL default '1',
   `printingtype` char(32) default 'BAR',
-  `formatstring` varchar(64) default NULL,
+  `formatstring` mediumtext default NULL,
   `layoutname` char(20) NOT NULL default 'TEST',
   `guidebox` int(1) default '0',
   `active` tinyint(1) default '1',
