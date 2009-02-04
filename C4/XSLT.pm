@@ -134,17 +134,20 @@ sub buildKohaItemsNamespace {
     my @items = C4::Items::GetItemsInfo($biblionumber);
     my $branches = GetBranches();
     my $itemtypes = GetItemTypes();
+
     my $xml;
     for my $item (@items) {
         my $status;
+
         my ( $transfertwhen, $transfertfrom, $transfertto ) = C4::Circulation::GetTransfers($item->{itemnumber});
-        if ( $item->{notforloan} == -1 || $item->{onloan} || $item->{wthdrawn} || $item->{itemlost} || $item->{damaged} ||
+
+        if ( $itemtypes->{ $item->{itype} }->{notforloan} == 1 || $item->{notforloan} || $item->{onloan} || $item->{wthdrawn} || $item->{itemlost} || $item->{damaged} ||
              ($transfertwhen ne '') || $item->{itemnotforloan} ) {
             if ( $item->{notforloan} == -1) {
                 $status = "On order";
             } 
-            if ( $item->{itemnotforloan} ) {
-                $status = "Not for loan";
+            if ( $item->{itemnotforloan} > 0 || $item->{notforloan} > 0 || $itemtypes->{ $item->{itype} }->{notforloan} == 1 ) {
+                $status = "reference";
             }
             if ($item->{onloan}) {
                 $status = "Checked out";
