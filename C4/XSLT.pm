@@ -143,7 +143,7 @@ sub buildKohaItemsNamespace {
 
         if ( $itemtypes->{ $item->{itype} }->{notforloan} == 1 || $item->{notforloan} || $item->{onloan} || $item->{wthdrawn} || $item->{itemlost} || $item->{damaged} ||
              ($transfertwhen ne '') || $item->{itemnotforloan} ) {
-            if ( $item->{notforloan} == -1) {
+            if ( $item->{notforloan} < 0) {
                 $status = "On order";
             } 
             if ( $item->{itemnotforloan} > 0 || $item->{notforloan} > 0 || $itemtypes->{ $item->{itype} }->{notforloan} == 1 ) {
