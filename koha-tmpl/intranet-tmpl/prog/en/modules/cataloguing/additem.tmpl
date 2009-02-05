@@ -133,24 +133,31 @@ function CreateKey(){
     return parseInt(Math.random() * 100000);
 }
 
-	 $(document).ready(function() {
+$(document).ready(function() {
     $("#cataloguing_additem_itemlist  tr").hover(
-      function () {
-        $(this).attr("class","highlight");
-      }, 
-      function () {
-        $(this).attr("class","");
-      }
+        function () {$(this).attr("class","highlight");},
+        function () {$(this).attr("class",""         );}
     );
-	 });
+});
 
+function set_to_today(id, force) {
+    if (! id) { alert("Bad id " + id + " sent to set_to_today()"); return 0; }
+    if ($("#" + id).val() == '' || $("#" + id).val() == '0000-00-00' || force) {
+        $("#" + id).val("<!-- TMPL_VAR NAME="today_iso" -->");
+    }
+}
 //]]>
 </script>
 <link type="text/css" rel="stylesheet" href="<!-- TMPL_VAR NAME="themelang" -->/css/addbiblio.css" />
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Edit <!-- TMPL_VAR name="title" escape="html" --> <!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR name="author" --><!-- /TMPL_IF --> (Record #<!-- TMPL_VAR NAME="biblionumber" -->)</a>  &rsaquo; Items</div>
+<div id="breadcrumbs">
+          <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+ &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>
+ &rsaquo; Edit <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR name="title" escape="html" --> <!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR name="author" --><!-- /TMPL_IF --> (Record #<!-- TMPL_VAR NAME="biblionumber" -->)</a>
+ &rsaquo; <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Items</a>
+</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -196,7 +203,7 @@ function CreateKey(){
     <!-- TMPL_IF name="opisadd" -->
         <h2 id="additema">Add Item</h2>
     <!-- TMPL_ELSE -->
-        <h2>Edit Item</h2>
+        <h2>Edit Item #<!-- TMPL_VAR NAME="itemnumber" --></h2>
     <!-- /TMPL_IF -->	
 	<fieldset class="rows">
 	<ol>
@@ -205,8 +212,8 @@ function CreateKey(){
    
                <label><!-- TMPL_VAR NAME="subfield" --> - <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR NAME="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></label>
                 <!-- TMPL_VAR NAME="marc_value" -->
-                <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->" />
-                <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" />
+                <input type="hidden" name="tag"       value="<!-- TMPL_VAR NAME="tag" -->" />
+                <input type="hidden" name="subfield"  value="<!-- TMPL_VAR NAME="subfield" -->" />
                 <input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->" />
                 <!-- TMPL_IF NAME="repeatable" -->
                     <span class="buttonPlus" onclick="CloneSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->')">+</span>
@@ -214,8 +221,8 @@ function CreateKey(){
    
             </div></li>
         <!-- /tmpl_loop -->
-		</ol>
-		</fieldset>
+    </ol>
+    </fieldset>
     <input type="hidden" name="indicator" value=" " />
     <input type="hidden" name="indicator" value=" " />
     <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->" />

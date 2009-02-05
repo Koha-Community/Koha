@@ -28,8 +28,7 @@ use C4::Context;
 use C4::Koha; # XXX subfield_is_koha_internal_p
 use C4::Branch; # XXX subfield_is_koha_internal_p
 use C4::ClassSource;
-
-use Date::Calc qw(Today);
+use C4::Dates;
 
 use MARC::File::XML;
 
@@ -75,8 +74,10 @@ my ($template, $loggedinuser, $cookie)
                  debug => 1,
                  });
 
-# find itemtype
 my $frameworkcode = &GetFrameworkCode($biblionumber);
+
+my $today_iso = C4::Dates->today('iso');
+$template->param(today_iso => $today_iso);
 
 my $tagslib = &GetMarcStructure(1,$frameworkcode);
 my $record = GetMarcBiblio($biblionumber);
@@ -88,14 +89,14 @@ my @errors; # store errors found while checking data BEFORE saving item.
 if ($op eq "additem") {
 #-------------------------------------------------------------------------------
     # rebuild
-    my @tags = $input->param('tag');
+    my @tags      = $input->param('tag');
     my @subfields = $input->param('subfield');
-    my @values = $input->param('field_value');
+    my @values    = $input->param('field_value');
     # build indicator hash.
-    my @ind_tag = $input->param('ind_tag');
+    my @ind_tag   = $input->param('ind_tag');
     my @indicator = $input->param('indicator');
     my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag, 'ITEM');
-        my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
+    my $record = MARC::Record::new_from_xml($xml, 'UTF-8');
     # if autoBarcode is set to 'incremental', calculate barcode...
 	# NOTE: This code is subject to change in 3.2 with the implemenation of ajax based autobarcode code
 	# NOTE: 'incremental' is the ONLY autoBarcode option available to those not using javascript
@@ -128,7 +129,7 @@ if ($op eq "additem") {
 #-------------------------------------------------------------------------------
 # retrieve item if exist => then, it's a modif
     $itemrecord = C4::Items::GetMarcItem($biblionumber,$itemnumber);
-    $nextop="saveitem";
+    $nextop = "saveitem";
 #-------------------------------------------------------------------------------
 } elsif ($op eq "delitem") {
 #-------------------------------------------------------------------------------
@@ -174,7 +175,7 @@ if ($op eq "additem") {
         push @errors,"barcode_not_unique";
     } else {
         my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = ModItemFromMarc($itemtosave,$biblionumber,$itemnumber);
-    $itemnumber="";
+        $itemnumber="";
     }
     $nextop="additem";
 }
@@ -196,13 +197,14 @@ my ($branchtagfield, $branchtagsubfield) = &GetMarcFromKohaField("items.homebran
 
 foreach my $field (@fields) {
     next if ($field->tag()<10);
-    my @subf=$field->subfields;
+    my @subf = $field->subfields;
+    (defined @subf) or @subf = ();
     my %this_row;
 # loop through each subfield
     for my $i (0..$#subf) {
         next if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab} ne 10 
                 && ($field->tag() ne $itemtagfield 
-                && $subf[$i][0] ne $itemtagsubfield));
+                && $subf[$i][0]   ne $itemtagsubfield));
 
         $witness{$subf[$i][0]} = $tagslib->{$field->tag()}->{$subf[$i][0]}->{lib} if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  eq 10);
 		if ($tagslib->{$field->tag()}->{$subf[$i][0]}->{tab}  eq 10) {
@@ -247,7 +249,7 @@ for (my $i=0;$i<=$#big_array; $i++) {
     $row_data{item_value} = $items_data;
     $row_data{itemnumber} = $big_array[$i]->{itemnumber};
     #reporting this_row values
-    $row_data{'nomod'} = $big_array[$i]{'nomod'};
+    $row_data{'nomod'}    = $big_array[$i]{'nomod'};
     push(@item_value_loop,\%row_data);
 }
 foreach my $subfield_code (sort keys(%witness)) {
@@ -261,37 +263,39 @@ my @loop_data =();
 my $i=0;
 my $authorised_values_sth = $dbh->prepare("SELECT authorised_value,lib FROM authorised_values WHERE category=? ORDER BY lib");
 
+my $onlymine = C4::Context->preference('IndependantBranches') && 
+               C4::Context->userenv                           && 
+               C4::Context->userenv->{flags}!=1               && 
+               C4::Context->userenv->{branch};
+my $branches = GetBranches($onlymine);  # build once ahead of time, instead of multiple times later.
+
 foreach my $tag (sort keys %{$tagslib}) {
-  my $previous_tag = '';
 # loop through each subfield
   foreach my $subfield (sort keys %{$tagslib->{$tag}}) {
     next if subfield_is_koha_internal_p($subfield);
-    next if ($tagslib->{$tag}->{$subfield}->{'tab'}  ne "10");
+    next if ($tagslib->{$tag}->{$subfield}->{'tab'} ne "10");
     my %subfield_data;
  
-    my $index_subfield= int(rand(1000000)); 
-    if($subfield eq '@'){
+    my $index_subfield = int(rand(1000000)); 
+    if ($subfield eq '@'){
         $subfield_data{id} = "tag_".$tag."_subfield_00_".$index_subfield;
     } else {
-         $subfield_data{id} = "tag_".$tag."_subfield_".$subfield."_".$index_subfield;
+        $subfield_data{id} = "tag_".$tag."_subfield_".$subfield."_".$index_subfield;
     }
-    $subfield_data{tag}=$tag;
-    $subfield_data{subfield}=$subfield;
-    $subfield_data{random}=int(rand(1000000)); 
-#        $subfield_data{marc_lib}=$tagslib->{$tag}->{$subfield}->{lib};
-    $subfield_data{marc_lib}  ="<span id=\"error$i\" title=\"".$tagslib->{$tag}->{$subfield}->{lib}."\">".$tagslib->{$tag}->{$subfield}->{lib}."</span>";
-    $subfield_data{mandatory} =$tagslib->{$tag}->{$subfield}->{mandatory};
-    $subfield_data{repeatable}=$tagslib->{$tag}->{$subfield}->{repeatable};
+    $subfield_data{tag}        = $tag;
+    $subfield_data{subfield}   = $subfield;
+    $subfield_data{random}     = int(rand(1000000));    # why do we need 2 different randoms?
+#   $subfield_data{marc_lib}   = $tagslib->{$tag}->{$subfield}->{lib};
+    $subfield_data{marc_lib}   ="<span id=\"error$i\" title=\"".$tagslib->{$tag}->{$subfield}->{lib}."\">".$tagslib->{$tag}->{$subfield}->{lib}."</span>";
+    $subfield_data{mandatory}  = $tagslib->{$tag}->{$subfield}->{mandatory};
+    $subfield_data{repeatable} = $tagslib->{$tag}->{$subfield}->{repeatable};
     my ($x,$value);
     ($x,$value) = find_value($tag,$subfield,$itemrecord) if ($itemrecord);
     $value =~ s/"/&quot;/g;
     unless ($value) {
         $value = $tagslib->{$tag}->{$subfield}->{defaultvalue};
-
         # get today date & replace YYYY, MM, DD if provided in the default value
-        my ( $year, $month, $day ) = Today();
-        $month = sprintf( "%02d", $month );
-        $day   = sprintf( "%02d", $day );
+        my ( $year, $month, $day ) = split ',', $today_iso;
         $value =~ s/YYYY/$year/g;
         $value =~ s/MM/$month/g;
         $value =~ s/DD/$day/g;
@@ -303,69 +307,52 @@ foreach my $tag (sort keys %{$tagslib}) {
     #          (C4::Context->userenv->{flags} != 1) && ($value) && ($value ne C4::Context->userenv->{branch}) ;
     # $test and print $input->redirect(".pl?biblionumber=$biblionumber") and exit;
         # search for itemcallnumber if applicable
-    if (!$value && $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber' && C4::Context->preference('itemcallnumber')) {
-        my $CNtag       = substr(C4::Context->preference('itemcallnumber'),0,3);
-        my $CNsubfield  = substr(C4::Context->preference('itemcallnumber'),3,1);
-        my $CNsubfield2 = substr(C4::Context->preference('itemcallnumber'),4,1);
+    my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
+    if (!$value && $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber' && $pref_itemcallnumber) {
+        my $CNtag       = substr($pref_itemcallnumber, 0, 3);
+        my $CNsubfield  = substr($pref_itemcallnumber, 3, 1);
+        my $CNsubfield2 = substr($pref_itemcallnumber, 4, 1);
         my $temp2 = $temp->field($CNtag);
         if ($temp2) {
             $value = ($temp2->subfield($CNsubfield)).' '.($temp2->subfield($CNsubfield2));
             #remove any trailing space incase one subfield is used
-            $value=~s/^\s+|\s+$//g;
+            $value =~ s/^\s+|\s+$//g;
         }
     }
+
+    my $attributes_no_value = qq(tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="255" );
+    my $attributes          = qq($attributes_no_value value="$value" );
     if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {
       my @authorised_values;
       my %authorised_lib;
-      my $dbh=C4::Context->dbh;   
-  
       # builds list, depending on authorised value...
   
-      #---- branch
-      if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
-          #Use GetBranches($onlymine)
-          my $onlymine=C4::Context->preference('IndependantBranches') && 
-                  C4::Context->userenv && 
-                  C4::Context->userenv->{flags}!=1 && 
-                  C4::Context->userenv->{branch};
-          my $branches = GetBranches($onlymine);
-          my @branchloop;
+      if ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "branches" ) {
           foreach my $thisbranch ( sort keys %$branches ) {
               push @authorised_values, $thisbranch;
               $authorised_lib{$thisbranch} = $branches->{$thisbranch}->{'branchname'};
           }
-          
-          #----- itemtypes
       }
       elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
-          my $sth =
-            $dbh->prepare(
-              "select itemtype,description from itemtypes order by description");
+          push @authorised_values, "" unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
+          my $sth = $dbh->prepare("select itemtype,description from itemtypes order by description");
           $sth->execute;
-          push @authorised_values, ""
-            unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
-            
-          my $itemtype;
-          
+          my $itemtype;     # FIXME: double declaration of $itemtype
           while ( my ( $itemtype, $description ) = $sth->fetchrow_array ) {
               push @authorised_values, $itemtype;
               $authorised_lib{$itemtype} = $description;
           }
           $value = $itemtype unless ($value);
-  
-          #---- class_sources
       }
       elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "cn_source" ) {
-          push @authorised_values, ""
-            unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
+          push @authorised_values, "" unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
             
           my $class_sources = GetClassSources();
-
           my $default_source = C4::Context->preference("DefaultClassificationSource");
           
           foreach my $class_source (sort keys %$class_sources) {
               next unless $class_sources->{$class_source}->{'used'} or
-                          ($value and $class_source eq $value) or
+                          ($value and $class_source eq $value)      or
                           ($class_source eq $default_source);
               push @authorised_values, $class_source;
               $authorised_lib{$class_source} = $class_sources->{$class_source}->{'description'};
@@ -375,12 +362,8 @@ foreach my $tag (sort keys %{$tagslib}) {
           #---- "true" authorised value
       }
       else {
-          $authorised_values_sth->execute(
-              $tagslib->{$tag}->{$subfield}->{authorised_value} );
-  
-          push @authorised_values, ""
-            unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
-  
+          push @authorised_values, "" unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
+          $authorised_values_sth->execute( $tagslib->{$tag}->{$subfield}->{authorised_value} );
           while ( my ( $value, $lib ) = $authorised_values_sth->fetchrow_array ) {
               push @authorised_values, $value;
               $authorised_lib{$value} = $lib;
@@ -401,140 +384,67 @@ foreach my $tag (sort keys %{$tagslib}) {
     # it's a thesaurus / authority field
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{authtypecode} ) {
-        $subfield_data{marc_value} =
-            "<input type=\"text\"
-                    id=\"".$subfield_data{id}."\"
-                    name=\"field_value\"
-                    value=\"$value\"
-                    class=\"input_marceditor\"
-                    tabindex=\"1\"
-                    size=\"67\"
-                    maxlength=\"255\" 
-                    \/>
-                    <a href=\"#\" class=\"buttonDot\"
-                        onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&index=$subfield_data{id}','$subfield_data{id}'); return false;\" title=\"Tag Editor\">...</a>
+        $subfield_data{marc_value} = "<input type=\"text\" $attributes />
+            <a href=\"#\" class=\"buttonDot\"
+                onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&index=$subfield_data{id}','$subfield_data{id}'); return false;\" title=\"Tag Editor\">...</a>
     ";
     # it's a plugin field
     }
-    elsif ( $tagslib->{$tag}->{$subfield}->{'value_builder'} ) {
-
+    elsif ( $tagslib->{$tag}->{$subfield}->{value_builder} ) {
         # opening plugin
-        my $plugin = C4::Context->intranetdir . "/cataloguing/value_builder" . $tagslib->{$tag}->{$subfield}->{'value_builder'};
+        my $plugin = C4::Context->intranetdir . "/cataloguing/value_builder/" . $tagslib->{$tag}->{$subfield}->{'value_builder'};
         if (do $plugin) {
             my $extended_param = plugin_parameters( $dbh, $temp, $tagslib, $subfield_data{id}, \@loop_data );
             my ( $function_name, $javascript ) = plugin_javascript( $dbh, $temp, $tagslib, $subfield_data{id}, \@loop_data );
-        
-            $subfield_data{marc_value} =
-                    "<input tabindex=\"1\"
-                            type=\"text\"
-                            id=\"".$subfield_data{id}."\"
-                            name=\"field_value\"
-                            value=\"$value\"
-                            class=\"input_marceditor\"
-                            onfocus=\"Focus$function_name(".$subfield_data{random}.")\"
-                            size=\"67\"
-                            maxlength=\"255\" 
-                            onblur=\"Blur$function_name(".$subfield_data{random}."); \" \/>
-                            <a href=\"#\" class=\"buttonDot\" onclick=\"Clic$function_name('$subfield_data{id}'); return false;\" title=\"Tag Editor\">...</a>
-                    $javascript";
+            $subfield_data{marc_value} = qq[<input $attributes
+                onfocus="Focus$function_name($subfield_data{random}, '$subfield_data{id}');"
+                 onblur=" Blur$function_name($subfield_data{random}, '$subfield_data{id}');" />
+                <a href="#" class="buttonDot" onclick="Clic$function_name('$subfield_data{id}'); return false;" title="Tag Editor">...</a>
+                $javascript];
         } else {
             warn "Plugin Failed: $plugin";
-            # supply default input form
-            $subfield_data{marc_value} =
-                "<input type=\"text\"
-                        id=\"".$subfield_data{id}."\"
-                        name=\"field_value\"
-                        value=\"$value\"
-                        tabindex=\"1\"
-                        size=\"67\"
-                        maxlength=\"255\" 
-                        class=\"input_marceditor\"
-                \/>
-                ";
+            $subfield_data{marc_value} = "<input $attributes />"; # supply default input form
         }
-        # it's an hidden field
     }
-    elsif ( $tag eq '' ) {
-        $subfield_data{marc_value} =
-            "<input tabindex=\"1\"
-                    type=\"hidden\"
-                    id=\"".$subfield_data{id}."\"
-                    name=\"field_value\"
-                    size=\"67\"
-                    maxlength=\"255\" 
-                    value=\"$value\" \/>
-            ";
+    elsif ( $tag eq '' ) {       # it's an hidden field
+        $subfield_data{marc_value} = qq(<input type="hidden" $attributes />);
     }
-    elsif ( $tagslib->{$tag}->{$subfield}->{'hidden'} ) {
-        $subfield_data{marc_value} =
-            "<input type=\"text\"
-                    id=\"".$subfield_data{id}."\"
-                    name=\"field_value\"
-                    class=\"input_marceditor\"
-                    tabindex=\"1\"
-                    size=\"67\"
-                    maxlength=\"255\" 
-                    value=\"$value\"
-            \/>";
-
+    elsif ( $tagslib->{$tag}->{$subfield}->{'hidden'} ) {   # FIXME: shouldn't input type be "hidden" ?
+        $subfield_data{marc_value} = qq(<input type="text" $attributes />);
+    }
+    elsif ( length($value) > 100
+            or (C4::Context->preference("marcflavour") eq "UNIMARC" and
+                  300 <= $tag && $tag < 400 && $subfield eq 'a' )
+            or (C4::Context->preference("marcflavour") eq "MARC21"  and
+                  500 <= $tag && $tag < 600                     )
+          ) {
+        # oversize field (textarea)
+        $subfield_data{marc_value} = "<textarea $attributes_no_value>$value</textarea>\n";
+    } else {
         # it's a standard field
+         $subfield_data{marc_value} = "<input $attributes />";
     }
-    else {
-        if (
-            length($value) > 100
-            or
-            ( C4::Context->preference("marcflavour") eq "UNIMARC" && $tag >= 300
-                and $tag < 400 && $subfield eq 'a' )
-            or (    $tag >= 500
-                and $tag < 600
-                && C4::Context->preference("marcflavour") eq "MARC21" )
-          )
-        {
-            $subfield_data{marc_value} =
-                "<textarea cols=\"70\"
-                           rows=\"4\"
-                           id=\"".$subfield_data{id}."\"
-                           name=\"field_value\"
-                           class=\"input_marceditor\"
-                           tabindex=\"1\"
-                            size=\"67\"
-                            maxlength=\"255\" 
-                           >$value</textarea>
-                ";
-        }
-        else {
-            $subfield_data{marc_value} =
-                "<input type=\"text\"
-                        id=\"".$subfield_data{id}."\"
-                        name=\"field_value\"
-                        value=\"$value\"
-                        tabindex=\"1\"
-                        size=\"67\"
-                        maxlength=\"255\" 
-                        class=\"input_marceditor\"
-                \/>
-                ";
-        }
-    }
-#        $subfield_data{marc_value}="<input type=\"text\" name=\"field_value\">";
-        push(@loop_data, \%subfield_data);
-        $i++
-    }
+#   $subfield_data{marc_value}="<input type=\"text\" name=\"field_value\">";
+    push (@loop_data, \%subfield_data);
+    $i++
+  }
 }
 
 # what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
 $template->param( title => $record->title() ) if ($record ne "-1");
-$template->param(item_loop => \@item_value_loop,
-                        item_header_loop => \@header_value_loop,
-                        biblionumber => $biblionumber,
-                        title => $oldrecord->{title},
-                        author => $oldrecord->{author},
-                        item => \@loop_data,
-                        itemnumber => $itemnumber,
-                        itemtagfield => $itemtagfield,
-                        itemtagsubfield =>$itemtagsubfield,
-                        op => $nextop,
-                        opisadd => ($nextop eq "saveitem")?0:1);
+$template->param(
+    biblionumber => $biblionumber,
+    title        => $oldrecord->{title},
+    author       => $oldrecord->{author},
+    item_loop        => \@item_value_loop,
+    item_header_loop => \@header_value_loop,
+    item             => \@loop_data,
+    itemnumber       => $itemnumber,
+    itemtagfield     => $itemtagfield,
+    itemtagsubfield  => $itemtagsubfield,
+    op      => $nextop,
+    opisadd => ($nextop eq "saveitem") ? 0 : 1,
+);
 foreach my $error (@errors) {
     $template->param($error => 1);
 }
