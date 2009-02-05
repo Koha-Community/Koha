@@ -106,6 +106,8 @@ sub getAuthorisedValues4MARCSubfields {
     return \@results;
 }
 
+my $stylesheet;
+
 sub XSLTParse4Display {
     my ($biblionumber,$xslfile) = @_;
     # grab the XML, run it through our stylesheet, push it out to the browser
@@ -116,10 +118,12 @@ sub XSLTParse4Display {
     my $parser = XML::LibXML->new();
     # don't die when you find &, >, etc
     $parser->recover_silently(1);
-    my $xslt = XML::LibXSLT->new();
     my $source = $parser->parse_string($xmlrecord);
-    my $style_doc = $parser->parse_file($xslfile);
-    my $stylesheet = $xslt->parse_stylesheet($style_doc);
+    unless ( $stylesheet ) {
+        my $xslt = XML::LibXSLT->new();
+        my $style_doc = $parser->parse_file($xslfile);
+        $stylesheet = $xslt->parse_stylesheet($style_doc);
+    }
     my $results = $stylesheet->transform($source);
     my $newxmlrecord = $stylesheet->output_string($results);
     return $newxmlrecord;
