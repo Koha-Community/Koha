@@ -432,6 +432,7 @@ for (my $i=0;$i<=@servers;$i++) {
 			}
 		}
 		foreach (@newresults) {
+            		$_->{'coins'} = GetCOinSBiblio($_->{'biblionumber'});
 			my $clean = $_->{isbn} or next;
 			unless (
 				$clean =~ /\b(\d{13})\b/ or
@@ -441,7 +442,6 @@ for (my $i=0;$i<=@servers;$i++) {
 				next;
 			}
 			$_ ->{'clean_isbn'} = $1;
-            $_->{'coins'} = GetCOinSBiblio($_->{'biblionumber'});
 		}
         $total = $total + $results_hashref->{$server}->{"hits"};
         ## If there's just one result, redirect to the detail page
