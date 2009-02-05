@@ -19,15 +19,13 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-
-
 =head1
 
-plugin_parameters : other parameters added when the plugin is called by the dopop function
+plugin_parameters : useless here
 
 =cut
 sub plugin_parameters {
-	my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
+	# my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
 	return "";
 }
 
@@ -35,9 +33,9 @@ sub plugin_parameters {
 
 plugin_javascript : the javascript function called when the user enters the subfield.
 contain 3 javascript functions :
-* one called when the field is entered (OnFocus). Named FocusXXX
-* one called when the field is leaved (onBlur). Named BlurXXX
-* one called when the ... link is clicked (<a href="javascript:function">) named ClicXXX
+* one called when the   field  is entered (OnFocus) named FocusXXX
+* one called when the   field  is  left   (onBlur ) named BlurXXX
+* one called when the ... link is clicked (onClick) named ClicXXX
 
 returns :
 * XXX
@@ -46,56 +44,53 @@ the 3 scripts are inserted after the <input> in the html code
 
 =cut
 sub plugin_javascript {
-	my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-	my $function_name= "dateaccessioned".(int(rand(100000))+1);
+	# my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
+	my $function_name = "dateaccessioned".(int(rand(100000))+1);
 
-	# find today's date
-	my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
-                                                               localtime(time);
-	$year +=1900;
-	$mon +=1;
-	$pmon = sprintf("%0*d", "2",$mon);
-
-	$pmday = sprintf("%0*d", "2",$mday);
-	my $date = "$year-$pmon-$pmday";
+    require C4::Dates;
+	my $date = C4::Dates->today('iso');
 
 	# find the tag/subfield mapped to items.dateaccessioned
 	my ($tag,$subfield) =  GetMarcFromKohaField("items.dateaccessioned","");
-	my $res  = "
-<script type=\"text/javascript\">
+	my $res  = <<END_OF_JS;
+<script type="text/javascript">
 //<![CDATA[
+//  
+// from: cataloguing/value_builder/dateaccessioned.pl
+
 function Blur$function_name(index) {
-//need this?
+    //date validation could go here
 }
 
-function Focus$function_name(subfield_managed) {
-	for (i=0 ; i<document.f.field_value.length ; i++) {
-                if (document.f.tag[i].value == '$tag' && document.f.subfield[i].value == '$subfield') {
-						if (document.f.field_value[i].value == '') {
-							document.f.field_value[i].value = '$date';
-						}
-                }
-        }
-return 0;
+function Focus$function_name(subfield_managed, id, force) {
+    //var summary = "";
+    //for (i=0 ; i<document.f.field_value.length ; i++) {
+    //  summary += i + ": " + document.f.tag[i].value + " " + document.f.subfield[i].value + ": " + document.f.field_value[i].value + "\\n"; 
+    //}
+    //alert("Got focus, subfieldmanaged: " + subfield_managed + "\\n" + summary);
+    set_to_today(id); // defined in additem.pl HEAD
+    return 0;
 }
 
-function Clic$function_name(subfield_managed) {
+function Clic$function_name(id) {
+    set_to_today(id, 1); // defined in additem.pl HEAD
+    return 0;
 }
 //]]>
 </script>
-";
-	return ($function_name,$res);
+END_OF_JS
+	return ($function_name, $res);
 }
 
 =head1
 
-plugin : the true value_builded. The screen that is open in the popup window.
+plugin: useless here.
 
 =cut
 
 sub plugin {
-my ($input) = @_;
-return "";
+#    my ($input) = @_;
+    return "";
 }
 
 1;
