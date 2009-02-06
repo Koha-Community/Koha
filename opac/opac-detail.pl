@@ -32,7 +32,7 @@ use C4::Circulation;
 use C4::Tags qw(get_tags);
 use C4::Dates qw/format_date/;
 use C4::XISBN qw(get_xisbns get_biblionumber_from_isbn get_biblio_from_xisbn);
-use C4::Amazon;
+use C4::External::Amazon;
 use C4::Review;
 use C4::Serials;
 use C4::Members;

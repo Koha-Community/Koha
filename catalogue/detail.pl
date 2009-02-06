@@ -33,7 +33,7 @@ use C4::Reserves;
 use C4::Members;
 use C4::Serials;
 use C4::XISBN qw(get_xisbns get_biblionumber_from_isbn get_biblio_from_xisbn);
-use C4::Amazon;
+use C4::External::Amazon;
 
 # use Smart::Comments;
 

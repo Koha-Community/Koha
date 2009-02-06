@@ -1,4 +1,4 @@
-package C4::Amazon;
+package C4::External::Amazon;
 # Copyright (C) 2006 LibLime
 # <jmf at liblime dot com>
 #
@@ -39,7 +39,7 @@ BEGIN {
 
 =head1 NAME
 
-C4::Amazon - Functions for retrieving Amazon.com content in Koha
+C4::External::Amazon - Functions for retrieving Amazon.com content in Koha
 
 =head1 FUNCTIONS
 

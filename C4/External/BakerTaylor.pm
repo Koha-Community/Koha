@@ -130,7 +130,7 @@ Such response will trigger a warning for each request (potentially many).  Point
 
 =head1 SEE ALSO
 
-C4::Amazon
+C4::External::Amazon
 LWP::UserAgent
 
 =head1 AUTHOR

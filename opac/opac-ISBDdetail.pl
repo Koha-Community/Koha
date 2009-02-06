@@ -229,7 +229,7 @@ $template->param(
 ## Amazon.com stuff
 #not used unless preference set
 if ( C4::Context->preference("AmazonContent") == 1 ) {
-    use C4::Amazon;
+    use C4::External::Amazon;
     $dat->{'amazonisbn'} = $dat->{'isbn'};
     $dat->{'amazonisbn'} =~ s|-||g;
 
