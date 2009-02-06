@@ -231,6 +231,14 @@ $tabsysprefs{BakerTaylorEnabled}      = 'EnhancedContent';
 $tabsysprefs{BakerTaylorPassword}     = 'EnhancedContent';
 $tabsysprefs{BakerTaylorUsername}     = 'EnhancedContent';
 
+# Syndetics
+$tabsysprefs{SyndeticsClientCode}     = 'EnhancedContent';
+$tabsysprefs{SyndeticsEnabled}        = 'EnhancedContent';
+$tabsysprefs{SyndeticsCoverImages}    = 'EnhancedContent';
+$tabsysprefs{SyndeticsTOC}            = 'EnhancedContent';
+$tabsysprefs{SyndeticsSummary}        = 'EnhancedContent';
+$tabsysprefs{SyndeticsSimilarItems}   = 'EnhancedContent';
+
 # FRBR
 $tabsysprefs{FRBRizeEditions}     = "EnhancedContent";
 $tabsysprefs{XISBN}               = "EnhancedContent";

@@ -2218,6 +2218,23 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do(q{INSERT INTO message_transports (message_attribute_id, message_transport_type, is_digest, letter_module, letter_code) VALUES (6, 'sms',   0, 'circulation', 'CHECKOUT');});
 
     print "Upgrade to $DBversion done (data for Email Checkout Slips project)\n";
+	 SetVersion ($DBversion);
+	 }
+	 $DBversion = '3.01.00.013';
+	 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsClientCode', '0', 'Client Code for using Syndetics Solutions content','','free')");
+
+	$dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsEnabled', '0', 'Turn on Syndetics Enhanced Content','','YesNo')");
+
+	$dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsCoverImages', '0', 'Display Cover Images from Syndetics','','YesNo')");
+
+	$dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsTOC', '0', 'Display Table of Content information from Syndetics','','YesNo')");
+
+	$dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsSummary', '0', 'Display Summary Information from Syndetics','','YesNo')");
+
+	$dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsSimilarItems', '0', 'Display Similar Items from Syndetics','','YesNo')");
+
+    print "Upgrade to $DBversion done (added Syndetics Enhanced Content system preferences)\n";
     SetVersion ($DBversion);
 }
 
