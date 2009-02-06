@@ -269,6 +269,12 @@ sub get_template_and_user {
             'item-level_itypes'          => C4::Context->preference('item-level_itypes'),
             patronimages                 => C4::Context->preference("patronimages"),
             singleBranchMode             => C4::Context->preference("singleBranchMode"),
+			SyndeticsClientCode			 => C4::Context->preference("SyndeticsClientCode"),
+		    SyndeticsEnabled			 => C4::Context->preference("SyndeticsEnabled"),
+			SyndeticsCoverImages	     => C4::Context->preference("SyndeticsCoverImages"),
+			SyndeticsTOC			     => C4::Context->preference("SyndeticsTOC"),
+			SyndeticsSummary			 => C4::Context->preference("SyndeticsSummary"),
+			SyndeticsSimilarItems		 => C4::Context->preference("SyndeticsSimilarItems"),
                  );
 
     if ( $in->{'type'} eq "intranet" ) {
