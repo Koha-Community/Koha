@@ -155,6 +155,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.01.006";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE `aqbudget` CHANGE `aqbudgetid` `aqbudgetid` INT( 11 ) NOT NULL AUTO_INCREMENT");
+    print "Upgrade to $DBversion done (Change the field)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table

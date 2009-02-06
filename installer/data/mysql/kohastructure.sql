@@ -177,7 +177,7 @@ CREATE TABLE `aqbudget` (
   `startdate` date NOT NULL default 0,
   `enddate` date default NULL,
   `budgetamount` decimal(13,2) default NULL,
-  `aqbudgetid` tinyint(4) NOT NULL auto_increment,
+  `aqbudgetid` int(11) NOT NULL auto_increment,
   `branchcode` varchar(10) default NULL,
   PRIMARY KEY  (`aqbudgetid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
