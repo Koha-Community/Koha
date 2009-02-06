@@ -21,7 +21,7 @@ use XML::Simple;
 #use LWP::Simple;
 use C4::Biblio;
 use C4::Items;
-
+use C4::External::Syndetics qw(get_syndetics_editions);
 use LWP::UserAgent;
 use HTTP::Request::Common;
 
@@ -87,7 +87,7 @@ sub get_biblio_from_xisbn {
 
 sub get_xisbns {
     my ( $isbn ) = @_;
-    my ($response,$thing_response,$xisbn_response,$gapines_response);
+    my ($response,$thing_response,$xisbn_response,$gapines_response,$syndetics_response);
     $isbn =~ /(\d{9,}[X]*)/;
     $isbn = $1;
     # THINGISBN
@@ -95,6 +95,15 @@ sub get_xisbns {
         my $url = "http://www.librarything.com/api/thingISBN/".$isbn;
         $thing_response = _get_url($url,'thingisbn');
     }
+
+	if ( C4::Context->preference("SyndeticsEnabled") && C4::Context->preference("SyndeticsEditions") ) {
+    	my $syndetics_preresponse = &get_syndetics_editions($isbn);
+		my @syndetics_response;
+		for my $response (@$syndetics_preresponse) {
+			push @syndetics_response, {content => $response->{a}};
+		}
+		$syndetics_response = {isbn => \@syndetics_response};
+	}
 
     # XISBN
     if ( C4::Context->preference('XISBN') ) {
@@ -113,7 +122,7 @@ sub get_xisbns {
     #    my $url = "http://www.librarything.com/api/thingISBN/".$isbn;
     #    $gapines_response = _get_url($url,'thingisbn');
     #}
-    $response->{isbn} = [ @{ $xisbn_response->{isbn} or [] }, @{ $thing_response->{isbn} or [] }, @{ $gapines_response->{isbn} or [] } ];
+    $response->{isbn} = [ @{ $xisbn_response->{isbn} or [] },  @{ $syndetics_response->{isbn} or [] }, @{ $thing_response->{isbn} or [] }, @{ $gapines_response->{isbn} or [] } ];
     my @xisbns;
     my $unique_xisbns; # a hashref
 

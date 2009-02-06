@@ -231,6 +231,9 @@
 <!-- TMPL_IF NAME="SYNDETICS_TOC" -->
  <li> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#toc">TOC</a></li>
 <!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="SyndeticsExcerpt" --><!-- TMPL_IF NAME="SYNDETICS_EXCERPT" -->
+ <li> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#excerpt">Excerpt</a></li>
+<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF name="subscriptionsnumber" --><li>
             <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#subscriptions">Subscriptions</a>
     </li><!-- /TMPL_IF -->
@@ -391,6 +394,7 @@
 <!-- /TMPL_IF -->
 </div>
 </div>
+
 <div id="toc">
 <div class="content_set">
 <!-- TMPL_IF NAME="SyndeticsTOC" --><!-- TMPL_IF NAME="SYNDETICS_TOC" -->
@@ -402,6 +406,14 @@
 <!-- /TMPL_LOOP -->
 </ul>
 <!-- /TMPL_IF --><!-- /TMPL_IF -->
+</div>
+</div>
+
+<div id="excerpt">
+<div class="content_set">
+<!-- TMPL_IF NAME="SyndeticsExcerpt" -->
+<!-- TMPL_VAR NAME="SYNDETICS_EXCERPT" -->
+<!-- /TMPL_IF -->
 </div>
 </div>
 <!-- TMPL_IF name="subscriptionsnumber" -->
@@ -501,7 +513,15 @@
 <h2>Other Editions of this Work</h2>
 <table>
 <!-- TMPL_LOOP NAME="XISBNS" -->
-<tr><!-- TMPL_IF NAME="AmazonContent" --><td><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="amazonisbn" -->.01._AA75_PU_PU-5_.jpg" alt="" /></td><!-- /TMPL_IF --><td><!-- TMPL_VAR NAME="description" --></td><td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a><!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR NAME="author" ESCAPE="HTML" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="copyrightdate" --> &copy;<!-- TMPL_VAR NAME="copyrightdate" --><!-- /TMPL_IF --><!-- TMPL_IF name="publishercode" -->
+<tr>
+<td>
+<!-- TMPL_IF NAME="AmazonContent" --><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="amazonisbn" -->.01._AA75_PU_PU-5_.jpg" alt="" /><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="SyndeticsEnabled" --><!-- TMPL_IF NAME="SyndeticsCoverImages" --><!-- TMPL_IF NAME="amazonisbn" --><img src="http://syndetics.com/index.aspx?isbn=<!-- TMPL_VAR NAME="amazonisbn" -->/SC.GIF&client=<!-- TMPL_VAR NAME="SyndeticsClientCode" -->&type=xw10" alt="" class="thumbnail" />
+<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+
+</td>
+<td><!-- TMPL_VAR NAME="description" --></td><td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a><!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR NAME="author" ESCAPE="HTML" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="copyrightdate" --> &copy;<!-- TMPL_VAR NAME="copyrightdate" --><!-- /TMPL_IF --><!-- TMPL_IF name="publishercode" -->
     <p><!-- TMPL_VAR NAME="publishercode" ESCAPE="HTML" --> 
        <!-- TMPL_IF name="place" -->(<!-- TMPL_VAR NAME="place"-->)<!--/TMPL_IF--> <!-- TMPL_IF NAME="publicationyear" -->, <!-- TMPL_VAR NAME="publicationyear" --><!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="pages" --><!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></p><!-- /TMPL_IF -->

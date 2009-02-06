@@ -34,6 +34,8 @@ BEGIN {
     @EXPORT = qw(
         &get_syndetics_summary
         &get_syndetics_toc
+		&get_syndetics_editions
+		&get_syndetics_excerpt
     );
 }
 
@@ -67,7 +69,7 @@ sub get_syndetics_summary {
     my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
 
     my $url = "http://syndetics.com/index.aspx?isbn=$isbn/SUMMARY.XML&client=$syndetics_client_code&type=xw10";
-    warn $url;
+    # warn $url;
     my $content = get($url);
     warn "could not retrieve $url" unless $content;
     my $xmlsimple = XML::Simple->new();
@@ -76,7 +78,8 @@ sub get_syndetics_summary {
         forcearray => [ qw(Fld520) ],
     ) unless !$content;
 	# manipulate response USMARC VarFlds VarDFlds Notes Fld520 a
-	my $summary = \@{$response->{VarFlds}->{VarDFlds}->{Notes}->{Fld520}} if $response;
+	my $summary;
+	$summary = \@{$response->{VarFlds}->{VarDFlds}->{Notes}->{Fld520}} if $response;
     return $summary if $summary;
 }
 
@@ -90,7 +93,7 @@ sub get_syndetics_toc {
     my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
 
     my $url = "http://syndetics.com/index.aspx?isbn=$isbn/TOC.XML&client=$syndetics_client_code&type=xw10";
-    warn $url;
+    #warn $url;
     my $content = get($url);
     warn "could not retrieve $url" unless $content;
     my $xmlsimple = XML::Simple->new();
@@ -99,8 +102,58 @@ sub get_syndetics_toc {
         forcearray => [ qw(Fld970) ],
     ) unless !$content;
     # manipulate response USMARC VarFlds VarDFlds Notes Fld520 a
-    my $toc = \@{$response->{VarFlds}->{VarDFlds}->{SSIFlds}->{Fld970}} if $response;
+    my $toc;
+	$toc = \@{$response->{VarFlds}->{VarDFlds}->{SSIFlds}->{Fld970}} if $response;
     return $toc if $toc;
+}
+
+sub get_syndetics_excerpt {
+    my ( $isbn ) = @_;
+
+    #normalize the ISBN
+    $isbn = _normalize_match_point ($isbn);
+
+    # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
+    my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
+
+    my $url = "http://syndetics.com/index.aspx?isbn=$isbn/DBCHAPTER.XML&client=$syndetics_client_code&type=xw10";
+    #warn $url;
+    my $content = get($url);
+    warn "could not retrieve $url" unless $content;
+    my $xmlsimple = XML::Simple->new();
+    my $response = $xmlsimple->XMLin(
+        $content,
+        forcearray => [ qw(Fld520) ],
+    ) unless !$content;
+    # manipulate response USMARC VarFlds VarDFlds Notes Fld520 a
+    my $excerpt;
+    $excerpt = \@{$response->{VarFlds}->{VarDFlds}->{Notes}->{Fld520}} if $response;
+    return XMLout($excerpt) if $excerpt;
+}
+
+
+sub get_syndetics_editions {
+    my ( $isbn ) = @_;
+
+    #normalize the ISBN
+    $isbn = _normalize_match_point ($isbn);
+
+    # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
+    my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
+
+    my $url = "http://syndetics.com/index.aspx?isbn=$isbn/FICTION.XML&client=$syndetics_client_code&type=xw10";
+    # warn $url;
+    my $content = get($url);
+    warn "could not retrieve $url" unless $content;
+    my $xmlsimple = XML::Simple->new();
+    my $response = $xmlsimple->XMLin(
+        $content,
+        forcearray => [ qw(Fld020) ],
+    ) unless !$content;
+    # manipulate response USMARC VarFlds VarDFlds Notes Fld520 a
+    my $similar_items;
+	$similar_items = \@{$response->{VarFlds}->{VarDFlds}->{NumbCode}->{Fld020}} if $response;
+    return $similar_items if $similar_items;
 }
 
 sub _normalize_match_point {
