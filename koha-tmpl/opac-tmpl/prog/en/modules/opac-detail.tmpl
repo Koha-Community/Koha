@@ -228,6 +228,9 @@
     ( <!-- TMPL_VAR NAME="count" --> )</a>
    </li>
  <li> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#descriptions">Descriptions</a></li>
+<!-- TMPL_IF NAME="SYNDETICS_TOC" -->
+ <li> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#toc">TOC</a></li>
+<!-- /TMPL_IF -->
 <!-- TMPL_IF name="subscriptionsnumber" --><li>
             <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#subscriptions">Subscriptions</a>
     </li><!-- /TMPL_IF -->
@@ -368,6 +371,15 @@
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_IF-->
 
+<!-- TMPL_IF NAME="SyndeticsSummary" -->
+<!-- TMPL_LOOP NAME="SYNDETICS_SUMMARY" -->
+    <!-- TMPL_IF NAME="a" -->
+    <h4>From Syndetics:</h4>
+    <p><!-- TMPL_VAR NAME="a" --></p>
+    <!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+<!-- /TMPL_IF -->
+
 <!-- TMPL_IF name="MARCNOTES" -->
     <!-- TMPL_LOOP NAME="MARCNOTES" -->
     <p><!-- TMPL_VAR NAME="marcnote" --></p>
@@ -379,7 +391,19 @@
 <!-- /TMPL_IF -->
 </div>
 </div>
-
+<div id="toc">
+<div class="content_set">
+<!-- TMPL_IF NAME="SyndeticsTOC" --><!-- TMPL_IF NAME="SYNDETICS_TOC" -->
+<ul>
+<!-- TMPL_LOOP NAME="SYNDETICS_TOC" -->
+    <!-- TMPL_IF NAME="p" -->
+    <li><b><!-- TMPL_VAR NAME="l" --> <!-- TMPL_VAR NAME="t" --></b><!-- TMPL_IF NAME="p" --> (<!-- TMPL_VAR NAME="p" -->)<!-- /TMPL_IF --></li>
+    <!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+</ul>
+<!-- /TMPL_IF --><!-- /TMPL_IF -->
+</div>
+</div>
 <!-- TMPL_IF name="subscriptionsnumber" -->
 <div id="subscriptions">
     <h2>This is a serial subscription</h2>

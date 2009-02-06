@@ -33,6 +33,7 @@ use C4::Tags qw(get_tags);
 use C4::Dates qw/format_date/;
 use C4::XISBN qw(get_xisbns get_biblionumber_from_isbn get_biblio_from_xisbn);
 use C4::External::Amazon;
+use C4::External::Syndetics qw(get_syndetics_summary get_syndetics_toc);
 use C4::Review;
 use C4::Serials;
 use C4::Members;
@@ -289,6 +290,17 @@ if ( C4::Context->preference("OPACAmazonContent") == 1 ) {
     $template->param( AMAZON_SIMILAR_PRODUCTS => \@similar_products );
     $template->param( AMAZON_EDITORIAL_REVIEWS    => $editorial_reviews );
 }
+
+if ( C4::Context->preference("SyndeticsEnabled") && C4::Context->preference("SyndeticsSummary") ) {
+	my $syndetics_summary = &get_syndetics_summary($xisbn);
+	$template->param( SYNDETICS_SUMMARY => $syndetics_summary );
+}
+
+if ( C4::Context->preference("SyndeticsEnabled") && C4::Context->preference("SyndeticsTOC") ) {
+    my $syndetics_toc = &get_syndetics_toc($xisbn);
+    $template->param( SYNDETICS_TOC => $syndetics_toc );
+}
+
 # Shelf Browser Stuff
 if (C4::Context->preference("OPACShelfBrowser")) {
     # pick the first itemnumber unless one was selected by the user
