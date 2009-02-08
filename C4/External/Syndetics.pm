@@ -36,6 +36,7 @@ BEGIN {
         &get_syndetics_toc
 		&get_syndetics_editions
 		&get_syndetics_excerpt
+		&get_syndetics_reviews
     );
 }
 
@@ -69,11 +70,19 @@ sub get_syndetics_summary {
     my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
 
     my $url = "http://syndetics.com/index.aspx?isbn=$isbn/SUMMARY.XML&client=$syndetics_client_code&type=xw10";
-    # warn $url;
-    my $content = get($url);
+	my $ua = LWP::UserAgent->new;
+    $ua->timeout(10);
+    $ua->env_proxy;
+	my $response = $ua->get($url);
+	unless ($response->content_type =~ /xml/) {
+		return;
+    }  
+
+    my $content = $response->content;
+
     warn "could not retrieve $url" unless $content;
     my $xmlsimple = XML::Simple->new();
-    my $response = $xmlsimple->XMLin(
+    $response = $xmlsimple->XMLin(
         $content,
         forcearray => [ qw(Fld520) ],
     ) unless !$content;
@@ -93,11 +102,19 @@ sub get_syndetics_toc {
     my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
 
     my $url = "http://syndetics.com/index.aspx?isbn=$isbn/TOC.XML&client=$syndetics_client_code&type=xw10";
-    #warn $url;
-    my $content = get($url);
+	my $ua = LWP::UserAgent->new;
+    $ua->timeout(10);
+    $ua->env_proxy;
+        
+	my $response = $ua->get($url);
+	unless ($response->content_type =~ /xml/) {
+		return;
+	}  
+
+	my $content = $response->content;
     warn "could not retrieve $url" unless $content;
     my $xmlsimple = XML::Simple->new();
-    my $response = $xmlsimple->XMLin(
+    $response = $xmlsimple->XMLin(
         $content,
         forcearray => [ qw(Fld970) ],
     ) unless !$content;
@@ -117,11 +134,18 @@ sub get_syndetics_excerpt {
     my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
 
     my $url = "http://syndetics.com/index.aspx?isbn=$isbn/DBCHAPTER.XML&client=$syndetics_client_code&type=xw10";
-    #warn $url;
-    my $content = get($url);
+	my $ua = LWP::UserAgent->new;
+    $ua->timeout(10);
+    $ua->env_proxy;
+    my $response = $ua->get($url);
+    unless ($response->content_type =~ /xml/) {
+		return;
+	}  
+        
+	my $content = $response->content;
     warn "could not retrieve $url" unless $content;
     my $xmlsimple = XML::Simple->new();
-    my $response = $xmlsimple->XMLin(
+    $response = $xmlsimple->XMLin(
         $content,
         forcearray => [ qw(Fld520) ],
     ) unless !$content;
@@ -131,6 +155,65 @@ sub get_syndetics_excerpt {
     return XMLout($excerpt) if $excerpt;
 }
 
+sub get_syndetics_reviews {
+    my ( $isbn ) = @_;
+
+    #normalize the ISBN
+    $isbn = _normalize_match_point ($isbn);
+
+    # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
+    my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
+	my @reviews;
+	my $review_sources = [
+	{title => 'Library Journal Review', file => 'LJREVIEW.XML'},
+	{title => 'Publishers Weekly Review', file => 'PWREVIEW.XML'},
+	{title => 'School Library Journal Review', file => 'SLJREVIEW.XML'},
+	{title => 'CHOICE Review', file => 'CHREVIEW.XML'},
+	{title => 'Booklist Review', file => 'BLREVIEW.XML'},
+	{title => 'Horn Book Review', file => 'HBREVIEW.XML'},
+	{title => 'Kirkus Book Review', file => 'KIRKREVIEW.XML'},
+	{title => 'Criticas Review', file => 'CRITICASREVIEW.XML'}
+	];
+
+	for my $source (@$review_sources) {
+    	my $url = "http://syndetics.com/index.aspx?isbn=$isbn/$source->{file}&client=$syndetics_client_code&type=xw10";
+
+		my $ua = LWP::UserAgent->new;
+ 		$ua->timeout(10);
+ 		$ua->env_proxy;
+ 
+		my $response = $ua->get($url);
+		unless ($response->content_type =~ /xml/) {
+			next;
+ 		}
+
+    	my $content = $response->content;
+    	warn "could not retrieve $url" unless $content;
+    	my $xmlsimple = XML::Simple->new();
+		eval {
+		$response = $xmlsimple->XMLin(
+        	$content,
+        	forcearray => [ qw(Fld520) ],
+    	) unless !$content;
+		};
+
+		# This particular review deserializes differently
+		if ($source->{file} =~ /BLREVIEW.XML/) {
+			for my $subfield_a (@{$response->{VarFlds}->{VarDFlds}->{Notes}->{Fld520}}) {
+				my @content;
+				for my $content (@{$subfield_a->{a}->{content}}) {
+					push @content, {content => $content};
+				}
+				push @reviews, {title => $source->{title}, reviews => \@content}; #[ {content => $content} ]};
+			}
+		}
+		else {
+			push @reviews, {title => $source->{title}, reviews => \@{$response->{VarFlds}->{VarDFlds}->{Notes}->{Fld520}}} unless $@;
+		}
+
+	}
+	return \@reviews;
+}
 
 sub get_syndetics_editions {
     my ( $isbn ) = @_;
@@ -142,11 +225,20 @@ sub get_syndetics_editions {
     my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
 
     my $url = "http://syndetics.com/index.aspx?isbn=$isbn/FICTION.XML&client=$syndetics_client_code&type=xw10";
-    # warn $url;
-    my $content = get($url);
+	my $ua = LWP::UserAgent->new;
+    $ua->timeout(10);
+    $ua->env_proxy;
+
+    my $response = $ua->get($url);
+    unless ($response->content_type =~ /xml/) {
+        return;
+    }  
+
+    my $content = $response->content;
+
     warn "could not retrieve $url" unless $content;
     my $xmlsimple = XML::Simple->new();
-    my $response = $xmlsimple->XMLin(
+    $response = $xmlsimple->XMLin(
         $content,
         forcearray => [ qw(Fld020) ],
     ) unless !$content;

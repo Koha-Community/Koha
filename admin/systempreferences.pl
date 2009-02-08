@@ -239,6 +239,7 @@ $tabsysprefs{SyndeticsTOC}            = 'EnhancedContent';
 $tabsysprefs{SyndeticsSummary}        = 'EnhancedContent';
 $tabsysprefs{SyndeticsEditions}       = 'EnhancedContent';
 $tabsysprefs{SyndeticsExcerpt}       = 'EnhancedContent';
+$tabsysprefs{SyndeticsReviews}       = 'EnhancedContent';
 
 # FRBR
 $tabsysprefs{FRBRizeEditions}     = "EnhancedContent";

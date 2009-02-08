@@ -33,7 +33,7 @@ use C4::Tags qw(get_tags);
 use C4::Dates qw/format_date/;
 use C4::XISBN qw(get_xisbns get_biblionumber_from_isbn get_biblio_from_xisbn);
 use C4::External::Amazon;
-use C4::External::Syndetics qw(get_syndetics_summary get_syndetics_toc get_syndetics_excerpt );
+use C4::External::Syndetics qw(get_syndetics_summary get_syndetics_toc get_syndetics_excerpt get_syndetics_reviews );
 use C4::Review;
 use C4::Serials;
 use C4::Members;
@@ -296,6 +296,8 @@ if ( C4::Context->preference("SyndeticsEnabled") && C4::Context->preference("Syn
 	my $syndetics_summary = &get_syndetics_summary($xisbn);
 	$template->param( SYNDETICS_SUMMARY => $syndetics_summary );
 	};
+	warn $@ if $@;
+
 }
 
 if ( C4::Context->preference("SyndeticsEnabled") && C4::Context->preference("SyndeticsTOC") ) {
@@ -303,13 +305,23 @@ if ( C4::Context->preference("SyndeticsEnabled") && C4::Context->preference("Syn
     my $syndetics_toc = &get_syndetics_toc($xisbn);
     $template->param( SYNDETICS_TOC => $syndetics_toc );
 	};
+	warn $@ if $@;
 }
 
-if ( C4::Context->preference("SyndeticsEnabled") && C4::Context->preference("SyndeticsTOC") ) {
+if ( C4::Context->preference("SyndeticsEnabled") && C4::Context->preference("SyndeticsExcerpt") ) {
     eval {
     my $syndetics_excerpt = &get_syndetics_excerpt($xisbn);
     $template->param( SYNDETICS_EXCERPT => $syndetics_excerpt );
     };
+	warn $@ if $@;
+}
+
+if ( C4::Context->preference("SyndeticsEnabled") && C4::Context->preference("SyndeticsReviews") ) {
+    eval {
+    my $syndetics_reviews = &get_syndetics_reviews($xisbn);
+    $template->param( SYNDETICS_REVIEWS => $syndetics_reviews );
+    };
+	warn $@ if $@;
 }
 
 # Shelf Browser Stuff

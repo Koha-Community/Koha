@@ -2236,6 +2236,8 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 	 $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsExcerpt', '0', 'Display Excerpts and first chapters on OPAC from Syndetics','','YesNo')");
 
+	 $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsReviews', '0', 'Display Reviews on OPAC from Syndetics','','YesNo')");
+
     print "Upgrade to $DBversion done (added Syndetics Enhanced Content system preferences)\n";
     SetVersion ($DBversion);
 }

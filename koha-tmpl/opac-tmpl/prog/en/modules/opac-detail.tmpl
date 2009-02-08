@@ -234,6 +234,9 @@
 <!-- TMPL_IF NAME="SyndeticsExcerpt" --><!-- TMPL_IF NAME="SYNDETICS_EXCERPT" -->
  <li> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#excerpt">Excerpt</a></li>
 <!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="SyndeticsReviews" --><!-- TMPL_IF NAME="SYNDETICS_REVIEWS" -->
+ <li> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#reviews">Reviews</a></li>
+<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF name="subscriptionsnumber" --><li>
             <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#subscriptions">Subscriptions</a>
     </li><!-- /TMPL_IF -->
@@ -416,6 +419,26 @@
 <!-- /TMPL_IF -->
 </div>
 </div>
+
+<div id="reviews">
+<div class="content_set">
+<!-- TMPL_IF NAME="SyndeticsReviews" --><!-- TMPL_IF NAME="SYNDETICS_REVIEWS" -->
+<!-- TMPL_LOOP NAME="SYNDETICS_REVIEWS" -->
+    <!-- TMPL_IF NAME="title" -->
+    <h4><!-- TMPL_VAR NAME="title" --></h4>
+	<!-- TMPL_LOOP NAME="reviews" -->
+
+	<!-- TMPL_IF NAME="content" -->
+		<!-- TMPL_VAR NAME="content" -->
+	<!-- /TMPL_IF -->
+
+	<!-- /TMPL_LOOP -->
+    <!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+<!-- /TMPL_IF --><!-- /TMPL_IF -->
+</div>
+</div>
+
 <!-- TMPL_IF name="subscriptionsnumber" -->
 <div id="subscriptions">
     <h2>This is a serial subscription</h2>
