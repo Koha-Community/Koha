@@ -59,6 +59,7 @@ $.tablesorter.addParser({
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo;<!-- TMPL_IF NAME="borrowernumber" --> <a href="/cgi-bin/koha/circ/circulation.pl">Checkouts</a> &rsaquo; <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --><!-- TMPL_ELSE --> <strong>Checkouts</strong><!-- /TMPL_IF --></div>
 
+
 <!-- TMPL_IF NAME="CGIselectborrower" -->
 <div id="doc" class="yui-t7">
    
@@ -69,6 +70,11 @@ $.tablesorter.addParser({
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
+<!-- TMPL_UNLESS NAME="CGIselectborrower" --><!-- TMPL_IF NAME="borrowernumber" --><div class="yui-b">
+<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
+</div>
+<!-- /TMPL_IF -->
+<!-- /TMPL_UNLESS -->
 	<div id="yui-main">
 	<div class="yui-b">
 <!-- /TMPL_IF -->
@@ -414,7 +420,6 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 
 
 </div>
-</div>
 
 <div class="yui-g"><div id="patronlists" class="toptabs">
 
@@ -633,8 +638,5 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 
 </div>
 </div>
-<!-- TMPL_UNLESS NAME="CGIselectborrower" --><!-- TMPL_IF NAME="borrowernumber" --><div class="yui-b">
-<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
-</div><!-- /TMPL_IF --><!-- /TMPL_UNLESS -->
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
