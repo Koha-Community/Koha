@@ -47,13 +47,13 @@ C4::XSLT - Functions for displaying XSLT-generated content
 
 =head1 transformMARCXML4XSLT
 
-=head2 replaces codes with authorized values in a MARCXML record
+=head2 replaces codes with authorized values in a MARC::Record object
 
 =cut
 
 sub transformMARCXML4XSLT {
-    my ($biblionumber) = @_;
-    my $record = GetMarcBiblio($biblionumber);
+    my ($biblionumber, $orig_record) = @_;
+    my $record = $orig_record->clone(); # not updating original record; this may be unnecessarily paranoid
     my $biblio = GetBiblioData($biblionumber);
     my $frameworkcode = GetFrameworkCode($biblionumber);
     my $tagslib = &GetMarcStructure(1,$frameworkcode);
@@ -109,9 +109,9 @@ sub getAuthorisedValues4MARCSubfields {
 my $stylesheet;
 
 sub XSLTParse4Display {
-    my ($biblionumber,$xslfile) = @_;
+    my ($biblionumber, $orig_record, $xslfile) = @_;
     # grab the XML, run it through our stylesheet, push it out to the browser
-    my $record = transformMARCXML4XSLT($biblionumber);
+    my $record = transformMARCXML4XSLT($biblionumber, $orig_record);
     my $itemsxml  = buildKohaItemsNamespace($biblionumber);
     my $xmlrecord = $record->as_xml();
     $xmlrecord =~ s/\<\/record\>/$itemsxml\<\/record\>/;

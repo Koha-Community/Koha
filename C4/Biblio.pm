@@ -3135,6 +3135,7 @@ sub set_service_options {
 
   parameters:
     biblionumber
+    MARC::Record of the bib
 
   returns: a hashref malling the authorised value to the value set for this biblionumber
 
@@ -3151,14 +3152,13 @@ sub set_service_options {
 
 sub get_biblio_authorised_values {
     my $biblionumber = shift;
+    my $record       = shift;
     
     my $forlibrarian = 1; # are we in staff or opac?
     my $frameworkcode = GetFrameworkCode( $biblionumber );
 
     my $authorised_values;
 
-    my $record  = GetMarcBiblio( $biblionumber )
-      or return $authorised_values;
     my $tagslib = GetMarcStructure( $forlibrarian, $frameworkcode )
       or return $authorised_values;
 

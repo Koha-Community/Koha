@@ -1262,7 +1262,7 @@ sub searchResults {
         # add imageurl to itemtype if there is one
         $oldbiblio->{imageurl} = getitemtypeimagelocation( 'opac', $itemtypes{ $oldbiblio->{itemtype} }->{imageurl} );
 
-        $oldbiblio->{'authorised_value_images'}  = C4::Items::get_authorised_value_images( C4::Biblio::get_biblio_authorised_values( $oldbiblio->{'biblionumber'} ) );
+        $oldbiblio->{'authorised_value_images'}  = C4::Items::get_authorised_value_images( C4::Biblio::get_biblio_authorised_values( $oldbiblio->{'biblionumber'}, $marcrecord ) );
         (my $aisbn) = $oldbiblio->{isbn} =~ /([\d-]*[X]*)/;
         $aisbn =~ s/-//g;
         $oldbiblio->{amazonisbn} = $aisbn;
@@ -1492,7 +1492,7 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
 
         # XSLT processing of some stuff
         if (C4::Context->preference("XSLTResultsDisplay") && !$scan) {
-            my $newxmlrecord = XSLTParse4Display($oldbiblio->{biblionumber},C4::Context->config('opachtdocs')."/prog/en/xslt/MARC21slim2OPACResults.xsl");
+            my $newxmlrecord = XSLTParse4Display($oldbiblio->{biblionumber}, $marcrecord, C4::Context->config('opachtdocs')."/prog/en/xslt/MARC21slim2OPACResults.xsl");
             $oldbiblio->{XSLTResultsRecord} = $newxmlrecord;
         }
 
