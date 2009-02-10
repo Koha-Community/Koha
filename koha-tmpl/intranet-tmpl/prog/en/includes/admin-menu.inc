@@ -8,7 +8,7 @@
 	<li><a href="/cgi-bin/koha/admin/branches.pl">Libraries and groups</a></li>
 	<li><a href="/cgi-bin/koha/admin/aqbookfund.pl">Funds and budgets</a></li>
 	<li><a href="/cgi-bin/koha/admin/currency.pl">Currencies and exchange rates</a></li>
-	<li><a href="/cgi-bin/koha/admin/itemtypes.pl">Item types and circulation codes</a></li>
+	<li><a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a></li>
 </ul>
 
 <h5>Patrons and circulation</h5>
