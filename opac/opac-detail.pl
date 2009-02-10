@@ -57,10 +57,11 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 my $biblionumber = $query->param('biblionumber') || $query->param('bib');
+my $record       = GetMarcBiblio($biblionumber);
 $template->param( biblionumber => $biblionumber );
 # XSLT processing of some stuff
 if (C4::Context->preference("XSLTDetailsDisplay") ) {
-    my $newxmlrecord = XSLTParse4Display($biblionumber,C4::Context->config('opachtdocs')."/prog/en/xslt/MARC21slim2OPACDetail.xsl");
+    my $newxmlrecord = XSLTParse4Display($biblionumber, $record, C4::Context->config('opachtdocs')."/prog/en/xslt/MARC21slim2OPACDetail.xsl");
     $template->param('XSLTBloc' => $newxmlrecord);
 }
 
@@ -110,7 +111,7 @@ foreach my $subscription (@subscriptions) {
 
 $dat->{'count'} = scalar(@items);
 
-my $biblio_authorised_value_images = C4::Items::get_authorised_value_images( C4::Biblio::get_biblio_authorised_values( $biblionumber ) );
+my $biblio_authorised_value_images = C4::Items::get_authorised_value_images( C4::Biblio::get_biblio_authorised_values( $biblionumber, $record ) );
 
 my $norequests = 1;
 my $branches = GetBranches();
@@ -159,7 +160,6 @@ for my $itm (@items) {
 ## get notes and subjects from MARC record
 my $dbh              = C4::Context->dbh;
 my $marcflavour      = C4::Context->preference("marcflavour");
-my $record           = GetMarcBiblio($biblionumber);
 my $marcnotesarray   = GetMarcNotes   ($record,$marcflavour);
 my $marcauthorsarray = GetMarcAuthors ($record,$marcflavour);
 my $marcsubjctsarray = GetMarcSubjects($record,$marcflavour);
