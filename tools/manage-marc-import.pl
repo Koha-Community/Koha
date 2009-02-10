@@ -324,16 +324,17 @@ sub import_biblios_list {
         $citation .= $biblio->{'issn'} if $biblio->{'issn'};
         $citation .= ")" if $biblio->{'issn'} or $biblio->{'isbn'};
         my $match = GetImportRecordMatches($biblio->{'import_record_id'}, 1);
-        push @list, {
-            import_record_id => $biblio->{'import_record_id'},
-            citation => $citation,
-            status => $biblio->{'status'},
-            record_sequence => $biblio->{'record_sequence'},
-            overlay_status => $biblio->{'overlay_status'},
-            match_biblionumber => $#$match > -1 ? $match->[0]->{'biblionumber'} : 0,
-            match_citation => $#$match > -1 ? $match->[0]->{'title'} . ' ' . $match->[0]->{'author'} : '',
-            match_score => $#$match > -1 ? $match->[0]->{'score'} : 0,
-        };
+        push @list,
+          { import_record_id         => $biblio->{'import_record_id'},
+            final_match_biblionumber => $biblio->{'matched_biblionumber'},
+            citation                 => $citation,
+            status                   => $biblio->{'status'},
+            record_sequence          => $biblio->{'record_sequence'},
+            overlay_status           => $biblio->{'overlay_status'},
+            match_biblionumber       => $#$match > -1 ? $match->[0]->{'biblionumber'} : 0,
+            match_citation           => $#$match > -1 ? $match->[0]->{'title'} . ' ' . $match->[0]->{'author'} : '',
+            match_score              => $#$match > -1 ? $match->[0]->{'score'} : 0,
+          };
     }
     my $num_biblios = $batch->{'num_biblios'};
     $template->param(biblio_list => \@list); 
