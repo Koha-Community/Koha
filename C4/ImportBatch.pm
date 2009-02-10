@@ -813,7 +813,7 @@ sub GetImportBibliosRange {
 
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare_cached("SELECT title, author, isbn, issn, import_record_id, record_sequence,
-                                           status, overlay_status
+                                           matched_biblionumber, status, overlay_status
                                     FROM   import_records
                                     JOIN   import_biblios USING (import_record_id)
                                     WHERE  import_batch_id = ?

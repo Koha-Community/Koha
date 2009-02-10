@@ -242,6 +242,8 @@ Page
     <th>Citation</th>
     <th>Status</th>
     <th>Match?</th>
+    <th>Bib</th>
+
   </tr>
   <!-- TMPL_LOOP name="biblio_list" -->
   <tr>
@@ -249,6 +251,8 @@ Page
     <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=<!-- TMPL_VAR name='import_record_id' -->" rel="gb_page_center[600,500]"><!-- TMPL_VAR name="citation"--></a></td>
     <td><!-- TMPL_VAR name="status"--></td>
     <td><!-- TMPL_VAR name="overlay_status"--></td>
+    <td align="center"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name='final_match_biblionumber' -->"><!-- TMPL_VAR name="final_match_biblionumber"--></a></td>
++
   </tr>
     <!-- TMPL_IF name="match_biblionumber" -->
     <tr>
