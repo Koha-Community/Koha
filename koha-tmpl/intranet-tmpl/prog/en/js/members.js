@@ -43,13 +43,13 @@ var msg2;
 if (  document.form.check_member.value==1){
 	if (document.form.categorycode.value != "I"){
 		
-		msg1 += ("Warning  !!!! Duplicate patron!!!!");
+		msg1 += _("Warning  !!!! Duplicate patron!!!!");
 		alert(msg1);
 	check_form_borrowers(0);
 	document.form.submit();
 	
 	}else{
-		msg2 += ("Warning !!!! Duplicate organisation!!!!");
+		msg2 += _("Warning !!!! Duplicate organisation!!!!");
 		alert(msg2);
 	check_form_borrowers(0);
 	}
@@ -73,7 +73,7 @@ var myDate2=document.form.dateexpiry.value.split ('/');
 	
 		{ 
 		document.form.dateenrolled.focus();
-		var msg = ("Warning !!! check date expiry  >= date enrolment");
+		var msg = _("Warning !!! check date expiry  >= date enrolment");
 		alert(msg);
 		}
 	}
@@ -129,7 +129,7 @@ function check_form_borrowers(nav){
  	if (statut!=1 && document.form.check_member.value > 0 ) {
 		if (!(document.form_double.answernodouble.checked)){
 			message ="";
-			message_champ+=("Please confirm suspicious duplicate patron !!! ");
+			message_champ+=_("Please confirm suspicious duplicate patron !!! ");
 			statut=1;
 			document.form.nodouble.value=0;
 		} else {
