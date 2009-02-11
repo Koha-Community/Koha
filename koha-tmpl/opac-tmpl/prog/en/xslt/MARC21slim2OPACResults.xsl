@@ -377,19 +377,24 @@
         <xsl:if test="marc:datafield[@tag=245]">
         <xsl:for-each select="marc:datafield[@tag=245]">
             <xsl:variable name="title">
-                <xsl:choose>
-                <xsl:when test="marc:subfield[@code='b']">
-                    <xsl:call-template name="specialSubfieldSelect">
-                        <xsl:with-param name="axis">b</xsl:with-param>
-                        <xsl:with-param name="beforeCodes">afghk</xsl:with-param>
+                     <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">a</xsl:with-param>
                     </xsl:call-template>
-                </xsl:when>
-                <xsl:otherwise>
-                <xsl:call-template name="subfieldSelect">
-                    <xsl:with-param name="codes">abfgk</xsl:with-param>
-                </xsl:call-template>
-                </xsl:otherwise>
-                </xsl:choose>
+                    <xsl:if test="marc:subfield[@code='b']">
+                        <xsl:text> </xsl:text>
+                        <xsl:call-template name="subfieldSelect">
+                            <xsl:with-param name="codes">b</xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:if>
+                    <xsl:if test="marc:subfield[@code='h']">
+                        <xsl:text> </xsl:text>
+                        <xsl:call-template name="subfieldSelect">
+                            <xsl:with-param name="codes">h</xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:if>
+                    <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">fgknps</xsl:with-param>
+                     </xsl:call-template>
             </xsl:variable>
             <xsl:variable name="titleChop">
                 <xsl:call-template name="chopPunctuation">
@@ -399,20 +404,6 @@
                 </xsl:call-template>
             </xsl:variable>
             <xsl:value-of select="$titleChop"/>
-            <xsl:if test="marc:subfield[@code='b']">
-                <xsl:text> : </xsl:text>
-                <xsl:call-template name="chopPunctuation">
-                    <xsl:with-param name="chopString">
-                        <xsl:call-template name="specialSubfieldSelect">
-                            <xsl:with-param name="axis">b</xsl:with-param>
-                            <xsl:with-param name="anyCodes">b</xsl:with-param>
-                            <xsl:with-param name="afterCodes">afghk</xsl:with-param>
-                        </xsl:call-template>
-                    </xsl:with-param>
-                </xsl:call-template>
-            </xsl:if>
-            <xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
-            <xsl:call-template name="part"/>
         </xsl:for-each>
         </xsl:if>
     </a>
@@ -457,6 +448,18 @@
     </xsl:when>
     </xsl:choose>
     </p>
+
+    <xsl:if test="marc:datafield[@tag=250]">
+	<span class="results_summary">
+    <span class="label">Edition: </span>
+            <xsl:for-each select="marc:datafield[@tag=250]">
+                    <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">ab</xsl:with-param>
+                    </xsl:call-template>
+            </xsl:for-each>
+	</span>
+    </xsl:if>
+
     <span class="results_summary">
     <xsl:if test="$typeOf008">
         <span class="label">Type: </span>
@@ -805,6 +808,18 @@
 	</span>
     </xsl:if>
 
+    <xsl:if test="marc:datafield[@tag=246]">
+	<span class="results_summary">
+    <span class="label">Other title: </span>
+            <xsl:for-each select="marc:datafield[@tag=246]">
+                    <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">ab</xsl:with-param>
+                    </xsl:call-template>
+            </xsl:for-each>
+	</span>
+
+    </xsl:if>
+
     <span class="results_summary">
 			   <span class="label">Availability: </span>
 			        <xsl:choose>
@@ -1005,32 +1020,6 @@
         </xsl:if>
     </xsl:template>
 
-    <xsl:template name="part">
-        <xsl:variable name="partNumber">
-            <xsl:call-template name="specialSubfieldSelect">
-                <xsl:with-param name="axis">n</xsl:with-param>
-                <xsl:with-param name="anyCodes">n</xsl:with-param>
-                <xsl:with-param name="afterCodes">fghkdlmor</xsl:with-param>
-            </xsl:call-template>
-        </xsl:variable>
-        <xsl:variable name="partName">
-            <xsl:call-template name="specialSubfieldSelect">
-                <xsl:with-param name="axis">p</xsl:with-param>
-                <xsl:with-param name="anyCodes">p</xsl:with-param>
-                <xsl:with-param name="afterCodes">fghkdlmor</xsl:with-param>
-            </xsl:call-template>
-        </xsl:variable>
-        <xsl:if test="string-length(normalize-space($partNumber))">
-                <xsl:call-template name="chopPunctuation">
-                    <xsl:with-param name="chopString" select="$partNumber"/>
-                </xsl:call-template>
-        </xsl:if>
-        <xsl:if test="string-length(normalize-space($partName))">
-                <xsl:call-template name="chopPunctuation">
-                    <xsl:with-param name="chopString" select="$partName"/>
-                </xsl:call-template>
-        </xsl:if>
-    </xsl:template>
     <xsl:template name="chopBrackets">
         <xsl:param name="chopString"></xsl:param>
         <xsl:variable name="string">
