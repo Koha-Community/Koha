@@ -1,0 +1,3 @@
+INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VALUES (LAST_INSERT_ID( ) + 0,'STACK','0');
+
+INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VALUES (LAST_INSERT_ID( ) + 1,'STACK','1','Особливе зібрання');
