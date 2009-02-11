@@ -1947,9 +1947,9 @@ sub NZorder {
             my $record = GetMarcBiblio($biblionumber);
             my $callnumber;
             my ( $callnumber_tag, $callnumber_subfield ) =
-              GetMarcFromKohaField( $dbh, 'items.itemcallnumber' );
+              GetMarcFromKohaField( 'items.itemcallnumber','' );
             ( $callnumber_tag, $callnumber_subfield ) =
-              GetMarcFromKohaField('biblioitems.callnumber')
+              GetMarcFromKohaField('biblioitems.callnumber','')
               unless $callnumber_tag;
             if ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
                 $callnumber = $record->subfield( '200', 'f' );
@@ -2168,8 +2168,8 @@ sub ModBiblios {
         $tag = $tag . $subfield;
         undef $subfield;
     }
-    my ( $bntag,   $bnsubf )   = GetMarcFromKohaField('biblio.biblionumber');
-    my ( $itemtag, $itemsubf ) = GetMarcFromKohaField('items.itemnumber');
+    my ( $bntag,   $bnsubf )   = GetMarcFromKohaField('biblio.biblionumber','');
+    my ( $itemtag, $itemsubf ) = GetMarcFromKohaField('items.itemnumber','');
     if ($tag eq $itemtag) {
         # do not allow the embedded item tag to be 
         # edited from here
