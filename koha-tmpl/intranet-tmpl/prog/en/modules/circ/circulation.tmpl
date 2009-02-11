@@ -73,14 +73,13 @@ $.tablesorter.addParser({
 <!-- TMPL_IF NAME="borrowernumber" --><div class="yui-b">
 <!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
 </div>
-<!-- /TMPL_UNLESS -->
+<!-- /TMPL_IF -->
 	<div id="yui-main">
 	<div class="yui-b">
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="borrowernumber" -->
 <!-- TMPL_INCLUDE NAME="circ-toolbar.inc" -->
-<!-- /TMPL_IF -->
 
 <!--  INITIAL BLOC : PARAMETERS & BORROWER INFO -->
 <!-- TMPL_IF NAME="dateexpiry" --><div class="dialog message">Patron's account has been renewed until <!-- TMPL_VAR NAME="dateexpiry" --></div><!-- /TMPL_IF -->
@@ -238,6 +237,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 </h4>
 <!-- /TMPL_IF -->
 
+<!-- /TMPL_IF --><!--/borrowernumber-->
 
 <!-- TMPL_IF NAME="CGIselectborrower" -->
 <!-- TMPL_INCLUDE NAME="patron-toolbar.inc" -->
