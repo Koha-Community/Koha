@@ -75,8 +75,8 @@ sub plugin_javascript {
 
 	my $date = "$year";
 
-	my ($tag,$subfield) =  GetMarcFromKohaField("items.barcode");
-	my ($loctag,$locsubfield) =  GetMarcFromKohaField("items.homebranch");
+	my ($tag,$subfield) =  GetMarcFromKohaField("items.barcode","");
+	my ($loctag,$locsubfield) =  GetMarcFromKohaField("items.homebranch","");
 
 	my $nextnum;
 	my $query;
