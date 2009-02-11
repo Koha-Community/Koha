@@ -60,7 +60,7 @@ sub plugin_javascript {
 	my $date = "$year-$pmon-$pmday";
 
 	# find the tag/subfield mapped to items.dateaccessioned
-	my ($tag,$subfield) =  GetMarcFromKohaField("items.dateaccessioned");
+	my ($tag,$subfield) =  GetMarcFromKohaField("items.dateaccessioned","");
 	my $res  = "
 <script type=\"text/javascript\">
 //<![CDATA[
