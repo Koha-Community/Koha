@@ -1180,8 +1180,9 @@ sub GetMemberAccountRecords {
 		$data->{biblionumber} = $biblio->{biblionumber};
         $acctlines[$numlines] = $data;
         $numlines++;
-        $total += $data->{'amountoutstanding'};
+        $total += int(100 * $data->{'amountoutstanding'}); # convert float to integer to avoid round-off errors
     }
+    $total /= 100;
     $sth->finish;
     return ( $total, \@acctlines,$numlines);
 }
@@ -1222,8 +1223,9 @@ sub GetBorNotifyAcctRecord {
     while ( my $data = $sth->fetchrow_hashref ) {
         $acctlines[$numlines] = $data;
         $numlines++;
-        $total += $data->{'amountoutstanding'};
+        $total += int(100 * $data->{'amountoutstanding'});
     }
+    $total /= 100;
     $sth->finish;
     return ( $total, \@acctlines, $numlines );
 }
@@ -1742,7 +1744,7 @@ EOF
     $sth = $dbh->prepare("SELECT enrolmentfee FROM categories WHERE categorycode=?");
     $sth->execute($borrower->{'categorycode'});
     my ($enrolmentfee) = $sth->fetchrow;
-    if ($enrolmentfee) {
+    if ($enrolmentfee && $enrolmentfee > 0) {
         # insert fee in patron debts
         manualinvoice($borrower->{'borrowernumber'}, '', '', 'A', $enrolmentfee);
     }
