@@ -236,7 +236,7 @@ if ($op eq 'serialchangestatus') {
             #New Item
 			
             # if autoBarcode is set to 'incremental', calculate barcode...
-            my ($barcodetagfield,$barcodetagsubfield) = &GetMarcFromKohaField("items.barcode");
+            my ($barcodetagfield,$barcodetagsubfield) = &GetMarcFromKohaField("items.barcode", '');
             if (C4::Context->preference("autoBarcode") eq 'incremental'  ) {
               if (!$record->field($barcodetagfield)->subfield($barcodetagsubfield)) {
                 my $sth_barcode = $dbh->prepare("select max(abs(barcode)) from items");

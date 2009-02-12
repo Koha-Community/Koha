@@ -115,7 +115,7 @@ while (my ($biblionumber) = $sth->fetchrow) {
     }
     next unless $record;
     # get title of the record (to store the 10 first letters with the index)
-    my ($titletag,$titlesubfield) = GetMarcFromKohaField('biblio.title');
+    my ($titletag,$titlesubfield) = GetMarcFromKohaField('biblio.title', '');
     my $title = lc($record->subfield($titletag,$titlesubfield));
 
     # remove blancks comma (that could cause problem when decoding the string for CQL retrieval) and regexp specific values

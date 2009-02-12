@@ -93,7 +93,7 @@ sub MARCfindbreeding {
             if (    C4::Context->preference("z3950NormalizeAuthor")
                 and C4::Context->preference("z3950AuthorAuthFields") )
             {
-                my ( $tag, $subfield ) = GetMarcFromKohaField("biblio.author");
+                my ( $tag, $subfield ) = GetMarcFromKohaField("biblio.author", '');
 
  #                 my $summary = C4::Context->preference("z3950authortemplate");
                 my $auth_fields =
