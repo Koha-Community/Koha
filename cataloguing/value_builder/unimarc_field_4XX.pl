@@ -330,7 +330,7 @@ sub plugin {
         my $startfrom      = $query->param('startfrom');
         my $resultsperpage = $query->param('resultsperpage') || 20;
         my $orderby;
-        my ( $errors, $results, $total_hits ) = SimpleSearch($search, $startfrom, $resultsperpage );
+        my ( $errors, $results, $total_hits ) = SimpleSearch($search, $startfrom * $resultsperpage, $resultsperpage );
         my $total = scalar(@$results);
 
         #        warn " biblio count : ".$total;
@@ -412,11 +412,10 @@ sub plugin {
         my $from = $startfrom * $resultsperpage + 1;
         my $to;
 
-        if ( $total < ( ( $startfrom + 1 ) * $resultsperpage ) ) {
-            $to = $total;
-        }
-        else {
-            $to = ( ( $startfrom + 1 ) * $resultsperpage );
+        if ( $total_hits < $from + $resultsperpage ) {
+            $to = $total_hits;
+        }else{
+            $to = $from + $resultsperpage ;
         }
         my $defaultview =
           'BiblioDefaultView' . C4::Context->preference('BiblioDefaultView');
