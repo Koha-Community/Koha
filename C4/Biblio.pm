@@ -1125,44 +1125,48 @@ Assumes web resources (not uncommon in MARC21 to omit resource type ind)
 =cut
 
 sub GetMarcUrls {
-    my ($record, $marcflavour) = @_;
+    my ( $record, $marcflavour ) = @_;
+
     my @marcurls;
-    for my $field ($record->field('856')) {
+    for my $field ( $record->field('856') ) {
         my $marcurl;
-        my $url = $field->subfield('u');
         my @notes;
-        for my $note ( $field->subfield('z')) {
-            push @notes , {note => $note};
-        }        
-        if($marcflavour eq 'MARC21') {
-            my $s3 = $field->subfield('3');
-            my $link = $field->subfield('y');
-			unless($url =~ /^\w+:/) {
-				if($field->indicator(1) eq '7') {
-					$url = $field->subfield('2') . "://" . $url;
-				} elsif ($field->indicator(1) eq '1') {
-					$url = 'ftp://' . $url;
-				} else {  
-					#  properly, this should be if ind1=4,
-					#  however we will assume http protocol since we're building a link.
-					$url = 'http://' . $url;
-				}
-			}
-			# TODO handle ind 2 (relationship)
-        	$marcurl = {  MARCURL => $url,
-                      notes => \@notes,
-            };
-            $marcurl->{'linktext'} = $link || $s3 || C4::Context->preference('URLLinkText') || $url ;;
-            $marcurl->{'part'} = $s3 if($link);
-            $marcurl->{'toc'} = 1 if($s3 =~ /^[Tt]able/) ;
-        } else {
-            $marcurl->{'linktext'} = $field->subfield('z') || C4::Context->preference('URLLinkText') || $url;
-            $marcurl->{'MARCURL'} = $url ;
+        for my $note ( $field->subfield('z') ) {
+            push @notes, { note => $note };
         }
-        push @marcurls, $marcurl;    
+        my @urls = $field->subfield('u');
+        foreach my $url (@urls) {
+            if ( $marcflavour eq 'MARC21' ) {
+                my $s3   = $field->subfield('3');
+                my $link = $field->subfield('y');
+                unless ( $url =~ /^\w+:/ ) {
+                    if ( $field->indicator(1) eq '7' ) {
+                        $url = $field->subfield('2') . "://" . $url;
+                    } elsif ( $field->indicator(1) eq '1' ) {
+                        $url = 'ftp://' . $url;
+                    } else {
+                        #  properly, this should be if ind1=4,
+                        #  however we will assume http protocol since we're building a link.
+                        $url = 'http://' . $url;
+                    }
+                }
+                # TODO handle ind 2 (relationship)
+                $marcurl = {
+                    MARCURL => $url,
+                    notes   => \@notes,
+                };
+                $marcurl->{'linktext'} = $link || $s3 || C4::Context->preference('URLLinkText') || $url;
+                $marcurl->{'part'} = $s3 if ($link);
+                $marcurl->{'toc'} = 1 if ( $s3 =~ /^[Tt]able/ );
+            } else {
+                $marcurl->{'linktext'} = $field->subfield('z') || C4::Context->preference('URLLinkText') || $url;
+                $marcurl->{'MARCURL'} = $url;
+            }
+            push @marcurls, $marcurl;
+        }
     }
     return \@marcurls;
-}  #end GetMarcUrls
+}
 
 =head2 GetMarcSeries
 
