@@ -349,17 +349,15 @@ sub plugin {
         # multi page display gestion
         my $displaynext = 0;
         my $displayprev = $startfrom;
-        if ( ( $total - ( ( $startfrom + 1 ) * ($resultsperpage) ) ) > 0 ) {
+
+        if( ( $total_hits - ( ( $startfrom + 1 ) * ($resultsperpage) ) ) > 0 ) {
             $displaynext = 1;
         }
         my @arrayresults;
         my @field_data = ($search);
          for (
-             my $i = $startfrom * $resultsperpage ;
-             $i < (( $startfrom * $resultsperpage + $resultsperpage  < scalar(@$results))
-                 ? $startfrom * $resultsperpage + $resultsperpage
-                 : scalar(@$results)
-             ) ;
+             my $i = 0 ;
+             $i < $resultsperpage ;
              $i++
            )
          {
@@ -445,7 +443,7 @@ sub plugin {
             startfromnext  => $startfrom + 1,
             startfromprev  => $startfrom - 1,
             searchdata     => \@field_data,
-            total          => $total,
+            total          => $total_hits,
             from           => $from,
             to             => $to,
             numbers        => \@numbers,
