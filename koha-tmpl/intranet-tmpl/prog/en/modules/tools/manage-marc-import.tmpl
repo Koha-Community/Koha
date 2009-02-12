@@ -78,7 +78,7 @@
     <input type="hidden" name="import_batch_id" value="<!-- TMPL_VAR name="import_batch_id" -->" />
     <input type="hidden" name="current_matcher_id" value="<!-- TMPL_VAR name="current_matcher_id" -->" />
     <ol>
-    <li><label for name="new_matcher_id">New matching rule</label>
+    <li><label for="new_matcher_id">New matching rule</label>
     <select name="new_matcher_id" id="new_matcher_id">
        <option value="">Do not look for matching records</option> 
        <!-- TMPL_LOOP name="available_matchers" -->
@@ -251,13 +251,15 @@ Page
     <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=<!-- TMPL_VAR name='import_record_id' -->" rel="gb_page_center[600,500]"><!-- TMPL_VAR name="citation"--></a></td>
     <td><!-- TMPL_VAR name="status"--></td>
     <td><!-- TMPL_VAR name="overlay_status"--></td>
-    <td align="center"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name='final_match_biblionumber' -->"><!-- TMPL_VAR name="final_match_biblionumber"--></a></td>
-
+    <td><!-- TMPL_IF name="final_match_biblionumber" -->
+        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name='final_match_biblionumber' -->"><!-- TMPL_VAR name="final_match_biblionumber"--></a>
+        <!-- /TMPL_IF -->
+    </td>
   </tr>
     <!-- TMPL_IF name="match_biblionumber" -->
     <tr>
       <td />
-      <td class="highlight" colspan="3">Matches biblio <!-- TMPL_VAR name="match_biblionumber" --> (score = <!-- TMPL_VAR name="match_score" -->): <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="match_biblionumber" -->"><!-- TMPL_VAR name="match_citation" --></a></td>
+      <td class="highlight" colspan="4">Matches biblio <!-- TMPL_VAR name="match_biblionumber" --> (score = <!-- TMPL_VAR name="match_score" -->): <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="match_biblionumber" -->"><!-- TMPL_VAR name="match_citation" --></a></td>
     </tr>
     <!-- /TMPL_IF -->
   <!-- /TMPL_LOOP -->
