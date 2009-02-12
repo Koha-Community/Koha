@@ -19,7 +19,7 @@ package C4::Overdues;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-use Date::Calc qw/Today/;
+use Date::Calc qw/Today Date_to_Days/;
 use Date::Manip qw/UnixDate/;
 use C4::Circulation;
 use C4::Context;
