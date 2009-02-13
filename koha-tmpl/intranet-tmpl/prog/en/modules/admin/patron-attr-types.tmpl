@@ -8,7 +8,7 @@
   <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="delete_attribute_type_form" -->
-  &rsaquo; Confirm deletion of patron attribute type &quot;<!-- TMPL_VAR name="code" -->&quot;
+  &rsaquo; Confirm deletion of patron attribute type &quot;<!-- TMPL_VAR name="code" ESCAPE="HTML" -->&quot;
 <!-- /TMPL_IF -->
 </title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
@@ -57,7 +57,7 @@ function CheckAttributeTypeForm(f) {
   <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="delete_attribute_type_form" -->
-  &rsaquo; Confirm deletion of patron attribute type &quot;<!-- TMPL_VAR name="code" -->&quot;
+  &rsaquo; Confirm deletion of patron attribute type &quot;<!-- TMPL_VAR name="code" ESCAPE="HTML" -->&quot;
 <!-- /TMPL_IF -->
 </div>
 
@@ -92,8 +92,8 @@ this feature on.</div>
       <li>
           <!-- TMPL_IF name="edit_attribute_type" -->
 		  <span class="label">Patron attribute type code: </span>
-            <input type="hidden" name="code" value="<!-- TMPL_VAR name="code" -->" />
-            <!-- TMPL_VAR name="code" -->
+            <input type="hidden" name="code" value="<!-- TMPL_VAR name="code" ESCAPE="HTML" -->" />
+            <!-- TMPL_VAR name="code" ESCAPE="HTML" -->
           <!-- TMPL_ELSE -->
 		  <label for="code">Patron attribute type code: </label>
             <input type="text" id="code" name="code"  size="10" maxlength="10" />
@@ -160,10 +160,10 @@ this feature on.</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_attribute_type_form" -->
-<div class="dialog alert"><h3>Confirm deletion of patron attribute type <span class="ex">'<!-- TMPL_VAR name="code" -->' (<!-- TMPL_VAR name="description" -->)</span>?</h3>
+<div class="dialog alert"><h3>Confirm deletion of patron attribute type <span class="ex">'<!-- TMPL_VAR name="code" ESCAPE="HTML" -->' (<!-- TMPL_VAR name="description" -->)</span>?</h3>
 <form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
   <input type="hidden" name="op" value="<!-- TMPL_VAR name="confirm_op"-->" />
-  <input type="hidden" name="code" value="<!-- TMPL_VAR name="code" -->" />
+  <input type="hidden" name="code" value="<!-- TMPL_VAR name="code" ESCAPE="HTML" -->" />
     <input type="submit" value="Delete patron attribute type" class="approve" /></form>
 	<form action="<!-- TMPL_VAR name="script_name" -->" method="get">
     <input type="submit" value="No, Do Not Delete" class="deny" />
@@ -214,7 +214,7 @@ this feature on.</div>
   </tr>
   <!-- TMPL_LOOP name="available_attribute_types" -->
   <tr>
-    <td><!-- TMPL_VAR name="code" --></td>
+    <td><!-- TMPL_VAR name="code" ESCAPE="HTML" --></td>
     <td><!-- TMPL_VAR name="description" --></td>
     <td>
       <a href="<!-- TMPL_VAR name="script_name" -->?op=edit_attribute_type&amp;code=<!-- TMPL_VAR name="code" escape="HTML" -->">Edit</a>

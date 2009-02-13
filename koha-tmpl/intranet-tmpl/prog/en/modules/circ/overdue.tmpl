@@ -1,6 +1,71 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Circulation &rsaquo; Items Overdue as of <!-- TMPL_VAR NAME="todaysdate" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+    function clone_parent(node) {
+        var parent = node.parentNode;
+		var clone = parent.cloneNode(true);
+        $("a", clone).attr("style", "visibility: visible");
+        $("input", clone).attr("value", "");
+
+		var theid = $("span", clone).attr("id") || "";
+		var parts = theid.match(/^pattrodue-getready-(.*)$/);
+		if (parts && parts.length > 1)
+		{
+			var appendid = "-" + Math.floor(Math.random()*1000+1);
+			$("span", clone).attr("id",theid+appendid);
+
+			theid = $("input", clone).attr("id");
+			$("input", clone).attr("id",theid+appendid);
+
+			theid = $("div[id]", clone).attr("id");
+			$("div[id]", clone).attr("id",theid+appendid);
+
+			var attrcode = $("script", clone).attr("x-code");
+			var newsuffix = parts[1] + appendid;
+			create_auto_completion_responder(newsuffix,attrcode);
+		}
+
+        parent.parentNode.insertBefore(clone, parent.nextSibling);
+    }
+    function delete_parent(node) {
+        var parent = node.parentNode;
+        parent.parentNode.removeChild(parent);
+    }
+	function create_auto_completion_responder(uniqueid,attrcode) {
+		YAHOO.util.Event.onContentReady("pattrodue-getready-"+uniqueid, function() {
+			new function() {
+				// Define a custom formatter function
+				this.fnCustomFormatter = function(oResultItem, sQuery) {
+					var description = oResultItem[0];
+					var authorised_value = oResultItem[1];
+					var aMarkup = [
+						"<div class='pattrodue-result'>",
+						description,
+						" (",
+						authorised_value,
+						")",
+						"</div>"];
+					return (aMarkup.join(""));
+				};
+
+				// Instantiate an XHR DataSource
+				this.oACDS = new YAHOO.widget.DS_XHR("/cgi-bin/koha/circ/ypattrodue-attr-search-authvalue.pl/"+attrcode, ["\n", "\t"]);
+				this.oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
+				this.oACDS.maxCacheEntries = 60;
+				this.oACDS.queryMatchSubset = true;
+
+				// Instantiate an AutoComplete Widget with uniqueid
+				var myInput = document.getElementById('pattrodue-input-'+uniqueid);
+				var myContainer = document.getElementById('pattrodue-container-'+uniqueid);
+				this.oAutoComp = new YAHOO.widget.AutoComplete(myInput,myContainer,this.oACDS);
+				this.oAutoComp.formatResult = this.fnCustomFormatter;
+			}
+		});
+	}
+//]]>
+</script>
 <style type="text/css">
     .sql {display:none;}
 </style>
@@ -12,13 +77,29 @@
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Overdues as of <!-- TMPL_VAR NAME="todaysdate" --></div>
 
 <div id="doc3" class="yui-t2">
-   
+
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
 
-<h2>Items Overdue as of <!-- TMPL_VAR NAME="todaysdate" --></h2>
-<p><a href="overdue.pl?op=csv&amp;branch=<!-- TMPL_VAR name="branchfilter" -->">Download file of all overdues</a> (for <!-- TMPL_IF name="branchfilter" -->branch <!-- TMPL_VAR name="branchfilter" --><!-- TMPL_ELSE -->all branches<!-- /TMPL_IF -->. Other filters are ignored)</p>
+<!-- TMPL_IF name="noreport" -->
+
+<h2>Overdue Report</h2>
+
+<p>Please choose one or more filters to proceed.</p>
+
+<!-- TMPL_ELSE -->
+
+<h2><!-- TMPL_VAR NAME="nnoverdue" --> Item<!-- TMPL_IF NAME="noverdue_is_plural" -->s<!-- /TMPL_IF -->
+	 Overdue as of <!-- TMPL_VAR NAME="todaysdate" --><!-- TMPL_IF NAME="isfiltered" --> (filtered)<!-- /TMPL_IF --></h2>
+
+<p>
+    <!-- TMPL_IF NAME="isfiltered" -->
+      <a href="overdue.pl?op=csv&amp;<!-- TMPL_VAR name="csv_param_string" escape="HTML" -->">Download file of displayed overdues</a> 
+    <!-- TMPL_ELSE -->
+      <a href="overdue.pl?op=csv">Download file of all overdues</a> 
+    <!-- /TMPL_IF -->
+</p>
 <div class="sql"><pre><!-- TMPL_VAR NAME="sql" ESCAPE="HTML" --></pre></div>
 <div class="searchresults">
 <table id="overduest">
@@ -27,6 +108,8 @@
     <th>Patron</th>
     <th>Library</th>
     <th>Title</th>
+    <th>Barcode</th>
+    <th>Call number</th>
 </tr></thead>
 
 <tbody><!-- TMPL_LOOP NAME="overdueloop" -->
@@ -43,10 +126,15 @@
 <!-- TMPL_ELSE -->
 <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" -->  <!-- TMPL_VAR NAME="subtitle" --></a><!-- /TMPL_IF --> <!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
         </td>
-    </tr>
+		<td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnum" -->#item<!-- TMPL_VAR NAME="itemnum" -->"><!-- TMPL_VAR name="barcode" --></a></td>
+		<td><!-- TMPL_VAR name="itemcallnumber" --></td>
+        </tr>
 <!-- /TMPL_LOOP --></tbody>
 </table>
+
 </div>
+<!-- /TMPL_IF -->  <!-- noreport -->
+
 </div>
 </div>
 <div class="yui-b">
@@ -54,46 +142,75 @@
   <fieldset class="brief">
 <h4>Filter On:</h4>
 	<ol>
-    <li><label>Name or cardnumber:</label><input type="text" name="borname" value="<!--TMPL_VAR Name="borname"-->" /></li>
+    <li><label>Name or cardnumber:</label><input type="text" name="borname" value="<!--TMPL_VAR Name="borname" escape="html" -->" /></li>
     <li><label>Patron category:</label><select name="borcat" id="borcat"><option value="">Any</option>
       <!-- TMPL_LOOP name="borcatloop" -->
-        <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="catname" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="catname" --></option><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="value" escape="html" -->" selected="selected"><!-- TMPL_VAR name="catname" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="value" escape="html" -->"><!-- TMPL_VAR name="catname" --></option><!-- /TMPL_IF -->
       <!-- /TMPL_LOOP -->
       </select>
     </li>
     <li><label>Patron flags:</label>
-        <select name="borflags" size="1" id="borflags">
-            <option value=""></option>
-            <option value="gonenoaddress">Address in question</option>
-            <option value="debarred">Debarred</option>
-            <option value="lost">Lost Card</option>
+        <select name="borflag" size="1" id="borflag">
+            <option value="">None</option>
+            <option value="gonenoaddress"<!-- TMPL_IF NAME="borflag_gonenoaddress" --> selected="selected"<!-- /TMPL_IF -->>Address in question</option>
+            <option value="debarred"<!-- TMPL_IF NAME="borflag_debarred" --> selected="selected"<!-- /TMPL_IF -->>Debarred</option>
+            <option value="lost"<!-- TMPL_IF NAME="borflag_lost" --> selected="selected"<!-- /TMPL_IF -->>Lost Card</option>
         </select>
     </li>
+	<!-- TMPL_LOOP name="patron_attr_filter_loop" -->
+		<!-- domid cgivalue ismany isclone ordinal code description repeatable authorised_value_category -->
+		<li>
+			<label><!-- TMPL_VAR name="description" -->:</label>
+			<!-- TMPL_IF NAME="authorised_value_category"-->
+				<script type="text/JavaScript" language="JavaScript" x-code="<!-- TMPL_VAR name="code" escape="html" -->">create_auto_completion_responder(<!-- TMPL_VAR name="domid" -->,"<!-- TMPL_VAR name="code" escape="html" -->");</script>
+				<span id="pattrodue-getready-<!-- TMPL_VAR name="domid" -->">
+						<div class="pattrodue-autocomplete">
+							<input autocomplete="off" id="pattrodue-input-<!-- TMPL_VAR name="domid" -->" name="patron_attr_filter_<!-- TMPL_VAR name="code" escape="html" -->" value="<!-- TMPL_VAR name="cgivalue" escape="html" -->"  class="pattrodue-input" type="text" />
+							<div id="pattrodue-container-<!-- TMPL_VAR name="domid" -->" class="pattrodue-container"></div>
+						</div>
+				</span>
+			<!-- TMPL_ELSE -->
+				<input name="patron_attr_filter_<!-- TMPL_VAR name="code" escape="html" -->" value="<!-- TMPL_VAR name="cgivalue" escape="html" -->"/>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="repeatable"-->
+                <a href="#" onclick="clone_parent(this); return false;">Add</a>
+                <!-- TMPL_IF NAME="isclone" -->
+				    <a href="#" onclick="delete_parent(this); return false;" style="visibility: visible">Delete</a>
+                <!-- TMPL_ELSIF NAME="ismany" -->
+				    <a href="#" onclick="delete_parent(this); return false;" style="visibility: visible">Delete</a>
+                <!-- TMPL_ELSE -->
+				    <a href="#" onclick="delete_parent(this); return false;" style="visibility: hidden">Delete</a>
+                <!-- /TMPL_IF -->
+			<!-- /TMPL_IF -->
+		</li>
+	<!-- /TMPL_LOOP -->
+
     <li><label>Item type:</label><select name="itemtype" id="itemtype"><option value="">Any</option>
       <!-- TMPL_LOOP name="itemtypeloop" --><!-- TMPL_IF NAME="selected" -->
-        <option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="itemtypename" --></option><!-- TMPL_ELSE -->
-        <option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="itemtypename" --></option><!-- /TMPL_IF -->
+        <option value="<!-- TMPL_VAR name="value" escape="html" -->" selected="selected"><!-- TMPL_VAR name="itemtypename" --></option><!-- TMPL_ELSE -->
+        <option value="<!-- TMPL_VAR name="value" escape="html" -->"><!-- TMPL_VAR name="itemtypename" --></option><!-- /TMPL_IF -->
       <!-- /TMPL_LOOP -->
       </select>
     </li>
+
     <li>
     <label>Library of the patron:</label><select name="branch" id="branch">
         <option value="">Any</option>
       <!-- TMPL_LOOP name="branchloop" -->
         <!-- TMPL_IF NAME="selected" -->
-        <option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="branchname" --></option><!-- TMPL_ELSE -->
-        <option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="branchname" --></option><!-- /TMPL_IF -->
+        <option value="<!-- TMPL_VAR name="value" escape="html" -->" selected="selected"><!-- TMPL_VAR name="branchname" --></option><!-- TMPL_ELSE -->
+        <option value="<!-- TMPL_VAR name="value" escape="html" -->"><!-- TMPL_VAR name="branchname" --></option><!-- /TMPL_IF -->
       <!-- /TMPL_LOOP -->
       </select>
     </li>
-   
+
     <li><label for="order">Sort By:</label> <select name="order" id="order">
 <!-- TMPL_LOOP NAME="ORDER_LOOP" -->
     <!-- TMPL_IF NAME="selected" -->
     <option value="<!-- TMPL_VAR NAME="ordervalue" DEFAULT="" -->" selected="selected">
     <!-- TMPL_ELSE -->
     <option value="<!-- TMPL_VAR NAME="ordervalue" DEFAULT="" -->">
-    <!-- /TMPL_IF -->[<!-- TMPL_VAR name="foo" -->]
+    <!-- /TMPL_IF -->
     <!-- TMPL_IF    NAME="order_date_due"      -->Due Date
     <!-- TMPL_ELSIF NAME="order_borrower"      -->Patron
     <!-- TMPL_ELSIF NAME="order_barcode"       -->Barcode
@@ -102,19 +219,30 @@
     <!-- TMPL_ELSIF NAME="order_borrower_desc" -->Patron desc
     <!-- TMPL_ELSIF NAME="order_barcode_desc"  -->Barcode desc
     <!-- TMPL_ELSIF NAME="order_title_desc"    -->Title desc
+    <!-- TMPL_ELSE --><!-- TMPL_VAR NAME="label" -->
+        <!-- TMPL_IF NAME="desc" -->desc<!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
     </option>
 <!-- /TMPL_LOOP -->
+	<!-- TMPL_LOOP name="patron_attr_order_loop" -->
+	    <option value="<!-- TMPL_VAR name="value" escape="html" -->"<!-- TMPL_IF NAME="selected" --> selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR name="label" --></option>
+	<!-- /TMPL_LOOP -->
 </select></li>
+
 <li class="radio"><label for="showall">Show any items currently issued:</label> 
-	<!-- TMPL_IF NAME="showall" --><input type="checkbox" id="showall" name="showall" value="show" checked="checked" /><!-- TMPL_ELSE --><input type="checkbox" id="showall" name="showall" value="show" /><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="showall" -->
+            <input type="checkbox" id="showall" name="showall" value="show" checked="checked" />
+    <!-- TMPL_ELSE -->
+        <input type="checkbox" id="showall" name="showall" value="show" />
+    <!-- /TMPL_IF -->
 </li>
 </ol>
    <fieldset class="action">
-      <input type="submit" value="Apply Filter" class="submit" />
-   </fieldset>   
-   </fieldset>   
+      <input type="submit" name="op" value="Apply Filter" class="submit" />
+   </fieldset>
+   </fieldset>
   </form>
 </div>
 </div>
+
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

@@ -1645,7 +1645,14 @@ label.permissioncode {
 span.permissiondesc {
 	font-weight : normal;
 }
-/* autocomplete additions */
+#mainuserblock {
+	border : 1px solid #E8E8E8;
+	margin-top : .5em;
+	padding : .5em;
+}
+
+
+/* borrower autocomplete */
 #borrowerautocomplete { width: 450px; text-align:left;} /* z-index needed on top instances for ie & sf absolute inside relative issue */
 .autocomplete .yui-ac-highlight ,
 .autocomplete .yui-ac-highlight .sample-result,
@@ -1654,11 +1661,12 @@ span.permissiondesc {
 .autocomplete .sample-query { color:#000; }
 #findborrower { position:static; width:auto; }
 #yborrowercontainer { text-align:left;width:335px; }
-#mainuserblock {
-	border : 1px solid #E8E8E8;
-	margin-top : .5em;
-	padding : .5em;
-}
+
+/* patron attribues autocomplete for overdues report (pattrodue) */
+.pattrodue-autocomplete .pattrodue-result { color: black; }
+.pattrodue-autocomplete .yui-ac-highlight .pattrodue-result { color: white; }
+.pattrodue-input { position:static; width:auto; }
+.pattrodue-container { text-align:left; width:400px; }
 
 .labeledmarc-table {
 	border: 0;
