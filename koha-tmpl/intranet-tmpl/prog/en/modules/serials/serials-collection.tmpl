@@ -30,6 +30,12 @@ function popup(subscriptionid) {
     newin=window.open('subscription-renew.pl?mode=popup&subscriptionid='+subscriptionid,'popup','width=500,height=400,toolbar=false,scrollbars=yes');
 }
 
+function generateNext(subscriptionid) {
+	if(confirm("Do you really want to generate next serial?")){
+		document.location = 'serials-collection.pl?op=gennext&subscriptionid='+subscriptionid;
+	}
+}
+
 $(document).ready(function() {
 	$('#subscription_years > ul').tabs();
 });
@@ -239,7 +245,7 @@ $(document).ready(function() {
             </tr>
       <!-- /TMPL_LOOP -->
         </table>
-      <p><input type="submit" value="Edit serials" /></p>
+      <p><input type="submit" value="Edit serials" />&nbsp;<input type="button" value="Generate Next" onClick="javascript:generateNext(<!-- TMPL_VAR NAME="subscriptionidlist" -->)" /></p>
     </div>
     <!--/TMPL_LOOP -->
   <input type="hidden" name="subscriptionid" value="<!--TMPL_VAR Name="subscriptionidlist"-->" />

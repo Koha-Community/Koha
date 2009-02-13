@@ -1245,8 +1245,14 @@ sub GetNextExpected($) {
     # Each subscription has only one 'expected' issue, with serial.status==1.
     $sth->execute( $subscriptionid, 1 );
     my ( $nextissue ) = $sth->fetchrow_hashref;
+    if(not $nextissue){
+         $sth = $dbh->prepare('SELECT serialid,planneddate FROM serial WHERE subscriptionid  = ? ORDER BY planneddate DESC LIMIT 1');
+         $sth->execute( $subscriptionid );  
+         $nextissue = $sth->fetchrow_hashref;       
+    }
     $nextissue->{planneddate} = C4::Dates->new($nextissue->{planneddate},'iso');
     return $nextissue;
+    
 }
 =head2 ModNextExpected
 
