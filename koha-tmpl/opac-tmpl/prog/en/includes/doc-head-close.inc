@@ -23,7 +23,15 @@
 		var NO_AMAZON_IMAGE = _("No cover image available");
 	//]]>
 </script>
-<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/amazonimages.js"></script><!-- /TMPL_IF -->
+<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/amazonimages.js"></script>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="SyndeticsCoverImages" -->
+<script type="text/javascript" language="javascript">//<![CDATA[
+        var NO_AMAZON_IMAGE = _("No cover image available");
+    //]]>
+</script>
+<script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/amazonimages.js"></script>          <!-- /TMPL_IF -->
+
 <script type="text/javascript" language="javascript"
 <!-- TMPL_IF NAME="opacbookbag" -->src="<!-- TMPL_VAR NAME="themelang" -->/js/basket.js"><!-- TMPL_ELSIF NAME="virtualshelves" -->src="<!-- TMPL_VAR NAME="themelang" -->/js/basket.js"><!-- TMPL_ELSE -->>var readCookie;<!-- /TMPL_IF --></script>
 <!-- TMPL_IF NAME="TagsEnabled" --><script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/tags.js"></script><!-- /TMPL_IF -->
@@ -41,6 +49,9 @@
 	<!-- TMPL_IF NAME="AmazonContent" -->$(window).load(function() {
 		 	verify_images();
 		 });<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="SyndeticsCoverImages" -->$(window).load(function() {
+            verify_images();
+         });<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="opacuserjs" --><!-- TMPL_VAR NAME="opacuserjs" --><!-- /TMPL_IF -->
 	//]]>
 </script><!-- TMPL_IF NAME="GoogleJackets" -->
