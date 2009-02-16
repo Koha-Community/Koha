@@ -33,7 +33,7 @@ use C4::Tags qw(get_tags);
 use C4::Dates qw/format_date/;
 use C4::XISBN qw(get_xisbns get_biblionumber_from_isbn get_biblio_from_xisbn);
 use C4::External::Amazon;
-use C4::External::Syndetics qw(get_syndetics_summary get_syndetics_toc get_syndetics_excerpt get_syndetics_reviews );
+use C4::External::Syndetics qw(get_syndetics_index get_syndetics_summary get_syndetics_toc get_syndetics_excerpt get_syndetics_reviews get_syndetics_anotes );
 use C4::Review;
 use C4::Serials;
 use C4::Members;
@@ -291,7 +291,21 @@ if ( C4::Context->preference("OPACAmazonContent") == 1 ) {
     $template->param( AMAZON_EDITORIAL_REVIEWS    => $editorial_reviews );
 }
 
-if ( C4::Context->preference("SyndeticsEnabled") && C4::Context->preference("SyndeticsSummary") ) {
+my $syndetics_elements;
+if ( C4::Context->preference("SyndeticsEnabled") ) {
+	eval {
+    $syndetics_elements = &get_syndetics_index($xisbn);
+	for my $element (values %$syndetics_elements) {
+		$template->param("Syndetics$element"."Exists" => 1 );
+		#warn "Exists: "."Syndetics$element"."Exists";
+	}
+    };
+    warn $@ if $@;
+}
+
+if ( C4::Context->preference("SyndeticsEnabled")
+        && C4::Context->preference("SyndeticsSummary")
+        && $syndetics_elements->{'SUMMARY'} =~ /SUMMARY/) {
 	eval {
 	my $syndetics_summary = &get_syndetics_summary($xisbn);
 	$template->param( SYNDETICS_SUMMARY => $syndetics_summary );
@@ -300,7 +314,9 @@ if ( C4::Context->preference("SyndeticsEnabled") && C4::Context->preference("Syn
 
 }
 
-if ( C4::Context->preference("SyndeticsEnabled") && C4::Context->preference("SyndeticsTOC") ) {
+if ( C4::Context->preference("SyndeticsEnabled")
+        && C4::Context->preference("SyndeticsTOC")
+        && $syndetics_elements->{'TOC'} =~ /TOC/) {
 	eval {
     my $syndetics_toc = &get_syndetics_toc($xisbn);
     $template->param( SYNDETICS_TOC => $syndetics_toc );
@@ -308,7 +324,9 @@ if ( C4::Context->preference("SyndeticsEnabled") && C4::Context->preference("Syn
 	warn $@ if $@;
 }
 
-if ( C4::Context->preference("SyndeticsEnabled") && C4::Context->preference("SyndeticsExcerpt") ) {
+if ( C4::Context->preference("SyndeticsEnabled")
+    && C4::Context->preference("SyndeticsExcerpt")
+    && $syndetics_elements->{'DBCHAPTER'} =~ /DBCHAPTER/ ) {
     eval {
     my $syndetics_excerpt = &get_syndetics_excerpt($xisbn);
     $template->param( SYNDETICS_EXCERPT => $syndetics_excerpt );
@@ -316,12 +334,23 @@ if ( C4::Context->preference("SyndeticsEnabled") && C4::Context->preference("Syn
 	warn $@ if $@;
 }
 
-if ( C4::Context->preference("SyndeticsEnabled") && C4::Context->preference("SyndeticsReviews") ) {
+if ( C4::Context->preference("SyndeticsEnabled")
+    && C4::Context->preference("SyndeticsReviews")) {
     eval {
-    my $syndetics_reviews = &get_syndetics_reviews($xisbn);
+    my $syndetics_reviews = &get_syndetics_reviews($xisbn,$syndetics_elements);
     $template->param( SYNDETICS_REVIEWS => $syndetics_reviews );
     };
 	warn $@ if $@;
+}
+
+if ( C4::Context->preference("SyndeticsEnabled")
+    && C4::Context->preference("SyndeticsAuthorNotes")
+	&& $syndetics_elements->{'ANOTES'} =~ /ANOTES/ ) {
+    eval {
+    my $syndetics_anotes = &get_syndetics_anotes($xisbn);
+    $template->param( SYNDETICS_ANOTES => $syndetics_anotes );
+    };
+    warn $@ if $@;
 }
 
 # Shelf Browser Stuff

@@ -214,6 +214,17 @@
         </div>
     <!-- /TMPL_IF -->
 
+        <!-- TMPL_IF NAME="SyndeticsEnabled" --><!-- TMPL_IF NAME="SyndeticsSeries" --><!-- TMPL_IF NAME="SyndeticsSERIES1Exists" -->
+        <span class="results_summary">
+        <span class="label">Series Information:</span> <a target="_blank" href="http://syndetics.com/ffseries.aspx?isbn=<!-- TMPL_VAR NAME="amazonisbn" -->&type=series&num=1&client=<!-- TMPL_VAR NAME="SyndeticsClientCode" -->">Click to open in new window</a>
+        </span>
+        <!-- /TMPL_IF --><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="SyndeticsAwards" --><!-- TMPL_IF NAME="SyndeticsAWARDS1Exists" -->
+        <span class="results_summary">
+        <span class="label">Awards:</span> <a target="_blank" href="http://syndetics.com/ffawards.aspx?isbn=<!-- TMPL_VAR NAME="amazonisbn" -->&type=awards&client=<!-- TMPL_VAR NAME="SyndeticsClientCode" -->">Click to open in new window</a>
+        </span>
+        <!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+
     <!-- TMPL_IF NAME="BakerTaylorContentURL" -->
         <span class="results_summary">
         <span class="label">Enhanced Content:</span><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a href="<!-- TMPL_VAR NAME="BakerTaylorContentURL" ESCAPE="HTML" -->" target="_blank">Content Cafe</a><!-- TMPL_ELSE --><a href="<!-- TMPL_VAR NAME="BakerTaylorContentURL" ESCAPE="HTML" -->">Content Cafe</a><!-- /TMPL_IF -->
@@ -231,12 +242,17 @@
 <!-- TMPL_IF NAME="SYNDETICS_TOC" -->
  <li> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#toc">TOC</a></li>
 <!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="SyndeticsEnabled" -->
 <!-- TMPL_IF NAME="SyndeticsExcerpt" --><!-- TMPL_IF NAME="SYNDETICS_EXCERPT" -->
  <li> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#excerpt">Excerpt</a></li>
 <!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="SyndeticsReviews" --><!-- TMPL_IF NAME="SYNDETICS_REVIEWS" -->
  <li> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#reviews">Reviews</a></li>
 <!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="SyndeticsAuthorNotes" --><!-- TMPL_IF NAME="SYNDETICS_ANOTES" -->
+ <li> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#anotes">About the Author</a></li>
+<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
 <!-- TMPL_IF name="subscriptionsnumber" --><li>
             <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#subscriptions">Subscriptions</a>
     </li><!-- /TMPL_IF -->
@@ -376,14 +392,15 @@
     <!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_IF-->
-
-<!-- TMPL_IF NAME="SyndeticsSummary" -->
+<!-- TMPL_IF NAME="SyndeticsEnabled" -->
+<!-- TMPL_IF NAME="SyndeticsSummary" --><!-- TMPL_IF NAME="SyndeticsSUMMARYExists" -->
 <!-- TMPL_LOOP NAME="SYNDETICS_SUMMARY" -->
     <!-- TMPL_IF NAME="a" -->
-    <h4>From Syndetics:</h4>
+    <h4>Enhanced Description:</h4>
     <p><!-- TMPL_VAR NAME="a" --></p>
     <!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
+<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="MARCNOTES" -->
@@ -397,7 +414,7 @@
 <!-- /TMPL_IF -->
 </div>
 </div>
-
+<!-- TMPL_IF NAME="SyndeticsEnabled" -->
 <div id="toc">
 <div class="content_set">
 <!-- TMPL_IF NAME="SyndeticsTOC" --><!-- TMPL_IF NAME="SYNDETICS_TOC" -->
@@ -439,6 +456,19 @@
 </div>
 </div>
 
+<div id="anotes">
+<div class="content_set">
+<!-- TMPL_IF NAME="SyndeticsAuthorNotes" --><!-- TMPL_IF NAME="SYNDETICS_ANOTES" -->
+<!-- TMPL_LOOP NAME="SYNDETICS_ANOTES" -->
+    <!-- TMPL_IF NAME="content" -->
+        <!-- TMPL_VAR NAME="content" -->
+    <!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+<!-- /TMPL_IF --><!-- /TMPL_IF -->
+</div>
+</div>
+
+<!-- /TMPL_IF -->
 <!-- TMPL_IF name="subscriptionsnumber" -->
 <div id="subscriptions">
     <h2>This is a serial subscription</h2>

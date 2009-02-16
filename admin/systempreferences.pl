@@ -238,8 +238,12 @@ $tabsysprefs{SyndeticsCoverImages}    = 'EnhancedContent';
 $tabsysprefs{SyndeticsTOC}            = 'EnhancedContent';
 $tabsysprefs{SyndeticsSummary}        = 'EnhancedContent';
 $tabsysprefs{SyndeticsEditions}       = 'EnhancedContent';
-$tabsysprefs{SyndeticsExcerpt}       = 'EnhancedContent';
-$tabsysprefs{SyndeticsReviews}       = 'EnhancedContent';
+$tabsysprefs{SyndeticsExcerpt}        = 'EnhancedContent';
+$tabsysprefs{SyndeticsReviews}        = 'EnhancedContent';
+$tabsysprefs{SyndeticsAuthorNotes}    = 'EnhancedContent';
+$tabsysprefs{SyndeticsAwards}         = 'EnhancedContent';
+$tabsysprefs{SyndeticsSeries}         = 'EnhancedContent';
+
 
 # FRBR
 $tabsysprefs{FRBRizeEditions}     = "EnhancedContent";

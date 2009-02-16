@@ -277,6 +277,9 @@ sub get_template_and_user {
 			SyndeticsEditions		 => C4::Context->preference("SyndeticsEditions"),
 			SyndeticsExcerpt		     => C4::Context->preference("SyndeticsExcerpt"),
 			SyndeticsReviews			 => C4::Context->preference("SyndeticsReviews"),
+			SyndeticsAuthorNotes		 => C4::Context->preference("SyndeticsAuthorNotes"),
+			SyndeticsAwards				 => C4::Context->preference("SyndeticsAwards"),
+			SyndeticsSeries				 => C4::Context->preference("SyndeticsSeries"),
                  );
 
     if ( $in->{'type'} eq "intranet" ) {
