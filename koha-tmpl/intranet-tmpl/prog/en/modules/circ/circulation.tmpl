@@ -70,74 +70,45 @@ $.tablesorter.addParser({
 <div id="doc3" class="yui-t2">
    
    <div id="bd">
-<!-- TMPL_IF NAME="borrowernumber" --><div class="yui-b">
-<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
-</div>
-<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="borrowernumber" --><div class="yui-b"><!-- TMPL_INCLUDE NAME="circ-menu.inc" --></div><!-- /TMPL_IF -->
 	<div id="yui-main">
 	<div class="yui-b">
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="borrowernumber" -->
 <!-- TMPL_INCLUDE NAME="circ-toolbar.inc" -->
-
 <!--  INITIAL BLOC : PARAMETERS & BORROWER INFO -->
 <!-- TMPL_IF NAME="dateexpiry" --><div class="dialog message">Patron's account has been renewed until <!-- TMPL_VAR NAME="dateexpiry" --></div><!-- /TMPL_IF -->
+
 <!-- TMPL_IF NAME="NEEDSCONFIRMATION" -->
 <div class="yui-g">
-
 <div id="circ_needsconfirmation" class="dialog alert">
 <h3>Please Confirm Checkout</h3>
-
 <ul>
-<!-- TMPL_IF NAME="DEBT" -->
-    <li>The patron has a debt of $<!-- TMPL_VAR name="DEBT" --></li>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="RENEW_ISSUE" -->
-    <li>Item is currently checked out to this patron.  Renew?</li>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="RESERVE_WAITING" -->
-    <li>Item is consigned for <!-- TMPL_VAR NAME="RESERVE_WAITING" --></li>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="RESERVED" -->
-    <li>Item is on reserve for <!-- TMPL_VAR NAME="RESERVED" --></li>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="ISSUED_TO_ANOTHER" -->
-    <li>Item ( <!-- TMPL_VAR NAME="getTitleMessageIteminfo" --> ) checked out to <!-- TMPL_VAR NAME="ISSUED_TO_ANOTHER" -->. Check in and check out?</li>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="TOO_MANY" -->
-    <li>Too many checked out (already checked out / max : <!-- TMPL_VAR name="TOO_MANY" -->)</li>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="OVERDUES" -->
-    <li><!--TMPL_VAR Name="OVERDUES"--> Overdues</li>
-<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="DEBT" --><li>The patron has a debt of $<!-- TMPL_VAR name="DEBT" --></li><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="RENEW_ISSUE" --><li>Item is currently checked out to this patron.  Renew?</li><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="RESERVE_WAITING" --><li>Item is consigned for <!-- TMPL_VAR NAME="RESERVE_WAITING" --></li><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="RESERVED" --><li>Item is on reserve for <!-- TMPL_VAR NAME="RESERVED" --></li><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="ISSUED_TO_ANOTHER" --><li>Item ( <!-- TMPL_VAR NAME="getTitleMessageIteminfo" --> ) checked out to <!-- TMPL_VAR NAME="ISSUED_TO_ANOTHER" -->. Check in and check out?</li><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="TOO_MANY" --><li>Too many checked out (already checked out / max : <!-- TMPL_VAR name="TOO_MANY" -->)</li><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="OVERDUES" --><li><!--TMPL_VAR Name="OVERDUES"--> Overdues</li><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="NOT_FOR_LOAN_CAN_FORCE" --><li>Item not for loan, are you sure you want to check it out ?</p><!-- /TMPL_IF -->
 </ul>
 
 <form method="post" action="/cgi-bin/koha/circ/circulation.pl">
-    
-<!-- TMPL_IF NAME="RESERVED" -->
-    <p>
+<!-- TMPL_IF NAME="RESERVED" -->    <p>
+    <input type="checkbox" id="cancelreserve" name="cancelreserve" value="1" />
+    <label for="cancelreserve">Cancel Reserve</label>
+    </p><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="RESERVE_WAITING" -->    <p>
     <input type="checkbox" id="cancelreserve" name="cancelreserve" value="1" />
     <label for="cancelreserve">Cancel Reserve</label>
     </p>
 <!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="RESERVE_WAITING" -->
-    <p>
-    <input type="checkbox" id="cancelreserve" name="cancelreserve" value="1" />
-    <label for="cancelreserve">Cancel Reserve</label>
-    </p>
-<!-- /TMPL_IF -->
-
+<!-- TMPL_IF NAME="DEBT" --><input type="hidden" name="debt_confirmed" value="1" /><!-- /TMPL_IF -->
     <input type="hidden" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->" />
     <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
     <input type="hidden" name="issueconfirmed" value="1" />
-    <!-- TMPL_IF NAME="DEBT" --><input type="hidden" name="debt_confirmed" value="1" /><!-- /TMPL_IF -->
     <input type="hidden" name="duedatespec" value="<!-- TMPL_VAR NAME="duedatespec" -->" />
     <input type="hidden" name="stickyduedate" value="<!-- TMPL_VAR NAME="stickyduedate" -->" />
     <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
@@ -150,73 +121,23 @@ $.tablesorter.addParser({
 </form>
 </div></div>
 <!-- /TMPL_IF --> <!-- NEEDSCONFIRMATION -->
-
-        <!-- TMPL_IF NAME="IMPOSSIBLE" -->
-<div class="yui-g">
+<!-- TMPL_IF NAME="IMPOSSIBLE" -->
+<div class="yui-g first">
 <div id="circ_impossible" class="dialog alert">
-        <!-- TMPL_IF NAME="NOT_FOR_LOAN_CAN_FORCE" -->
-            <form action="/cgi-bin/koha/circ/circulation.pl" method="post">
-                    <h3>Not for loan</h3>
-                    <p>Item not for loan, are you sure you want to loan it?</p>
-                    <input type="hidden" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->" />
-                    <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
-                    <input type="hidden" name="issueconfirmed" value="1" />
-                    <input type="submit" class="approve" value="Yes, Check Out (Y)" accesskey="y" />
-            </form>
-            <form method="get" action="/cgi-bin/koha/circ/circulation.pl">
-                <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
-                <input type="submit" class="deny" value="No, Don't Check Out (N)" accesskey="n" />
-            </form>
-        <!-- /TMPL_IF -->
-
 <!-- RESULT OF ISSUING REQUEST -->
         <ul>
-        <!-- TMPL_IF NAME="STATS" -->
-            <li>Local Use Recorded</li>
-        <!-- /TMPL_IF -->
-
-        <!-- TMPL_IF NAME="INVALID_DATE" -->
- 		<li>The due date &quot;<!-- TMPL_VAR NAME="INVALID_DATE" -->&quot; is invalid</li>
-        <!-- /TMPL_IF -->  
-        <!-- TMPL_IF NAME="UNKNOWN_BARCODE" -->
-            <li>The barcode was not found</li>
-        <!-- /TMPL_IF -->
-
-        <!-- TMPL_IF NAME="NOT_FOR_LOAN" -->
-            <li>Item not for loan</li>
-        <!-- /TMPL_IF -->
-
-        <!-- TMPL_IF NAME="WTHDRAWN" -->
-            <li>Item has been withdrawn</li>
-        <!-- /TMPL_IF -->
-
-        <!-- TMPL_IF NAME="RESTRICTED" -->
-            <li>Item is restricted</li>
-        <!-- /TMPL_IF -->
-
-        <!-- TMPL_IF NAME="GNA" -->
-            <li>Patron's address is in doubt</li>
-        <!-- /TMPL_IF -->
-
-        <!-- TMPL_IF NAME="CARD_LOST" -->
-            <li>Patron's card is lost</li>
-        <!-- /TMPL_IF -->
-
-        <!-- TMPL_IF NAME="DEBARRED" -->
-            <li>Patron is restricted</li>
-        <!-- /TMPL_IF -->
-
-        <!-- TMPL_IF NAME="NO_MORE_RENEWALS" -->
-            <li>No more renewals possible</li>
-        <!-- /TMPL_IF -->
-
-        <!-- TMPL_IF NAME="EXPIRED" -->
-            <li>Patron's card is expired</li>
-        <!-- /TMPL_IF -->
-
-        <!-- TMPL_IF NAME="NOTSAMEBRANCH" -->
-            <li>This item belongs to <!-- TMPL_VAR NAME="itemhomebranch" --> and cannot be issued from this location.</li>
-        <!-- /TMPL_IF --> 
+        <!-- TMPL_IF NAME="STATS" --><li>Local Use Recorded</li><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="INVALID_DATE" --><li>The due date &quot;<!-- TMPL_VAR NAME="INVALID_DATE" -->&quot; is invalid</li><!-- /TMPL_IF -->  
+        <!-- TMPL_IF NAME="UNKNOWN_BARCODE" --><li>The barcode was not found</li><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="NOT_FOR_LOAN" --><li>Item not for loan</li><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="WTHDRAWN" --><li>Item has been withdrawn</li><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="RESTRICTED" --><li>Item is restricted</li><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="GNA" --><li>Patron's address is in doubt</li><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="CARD_LOST" --><li>Patron's card is lost</li><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="DEBARRED" --><li>Patron is restricted</li><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="NO_MORE_RENEWALS" --><li>No more renewals possible</li><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="EXPIRED" --><li>Patron's card is expired</li><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="NOTSAMEBRANCH" --><li>This item belongs to <!-- TMPL_VAR NAME="itemhomebranch" --> and cannot be issued from this location.</li><!-- /TMPL_IF --> 
         </ul>
 
     <!-- TMPL_IF NAME="memberofinstution" -->
@@ -312,89 +233,58 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 <input type="checkbox" id="stickyduedate" onclick="this.form.barcode.focus();" name="stickyduedate" />
 <!-- /TMPL_IF -->
           <input type="button" class="action" id="cleardate" value="Clear" name="cleardate" onclick="this.checked = false; this.form.duedatespec.value = ''; this.form.stickyduedate.checked = false; this.form.barcode.focus(); return false;" />
-</div>
           <input type="hidden" name="borrowernumber" id="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
           <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
           <input type="hidden" name="printer" value="<!-- TMPL_VAR NAME="printer" -->" />
           <input type="hidden" name="print" value="maybe" />
           <input type="hidden" name="debt_confirmed" value="<!-- TMPL_VAR NAME="debt_confirmed" -->" />
-                <!-- TMPL_IF NAME="CHARGES" -->
-                        <input type="hidden" name="charges" value="yes" />
-                        <input type="hidden" name="oldamount" value="<!-- TMPL_VAR NAME="amountold" -->" />
-                <!-- /TMPL_IF -->
+          <!-- TMPL_IF NAME="CHARGES" --><input type="hidden" name="charges" value="yes" />
+          <input type="hidden" name="oldamount" value="<!-- TMPL_VAR NAME="amountold" -->" />
+          <!-- /TMPL_IF -->
 </fieldset> 
 </form></div><!-- /TMPL_UNLESS --><!-- /unless noissues -->
 
-<!-- TMPL_IF NAME="noissues" --><div><!-- TMPL_ELSE --><div class="yui-u"><!-- /TMPL_IF -->
-	
     <!-- TMPL_IF NAME="flagged" -->
+    <div class="yui-u">
 		<!-- TMPL_IF NAME="noissues" -->
 		 <h4>Checking out to <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</h4>
         <div id="circmessages" class="circmessage warning">
 		<!-- TMPL_ELSE -->
         <div id="circmessages" class="circmessage attention">
 		<!-- /TMPL_IF -->
-		
 		<h3><!-- TMPL_IF NAME="noissues" -->Cannot Check Out!<!-- TMPL_ELSE -->Attention:<!-- /TMPL_IF --></h3>
 		<ul>
-		
 			<!-- TMPL_IF NAME = "warndeparture" -->
 			<li><span class="circ-hlt">Expiration:</span> Patron's card will expire soon.
 			Patron's card expires on <!-- TMPL_VAR NAME="expiry" --> <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->">Edit Details</a>
-			
-			</li>
+            </li>
 			<!-- /TMPL_IF -->
-			
 			<!-- TMPL_IF NAME="returnbeforeexpiry" -->
 			 <li><span class="circ-hlt">Set due date to expiry:</span> You have the ReturnBeforeExpiry system preference enabled this means if the
 			 expiry date is before the date due, the date due will be set to the expiry date
 			 </li>
 			<!-- /TMPL_IF -->
-
 			<!-- TMPL_IF NAME = "expired" -->
 			<li><span class="circ-hlt">Expiration:</span> Patron's card has expired.
 			Patron's card expired on <!-- TMPL_VAR NAME="expiry" --> <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->">Edit Details</a>
-			
 			</li>
 			<!-- /TMPL_IF -->
-
             <!-- TMPL_IF NAME="gna" -->
 			<li class="blocker"><span class="circ-hlt">Address:</span> Patron's address in doubt</li>
 			<!-- /TMPL_IF -->
-			
             <!-- TMPL_IF NAME="lost" -->
 			<li class="blocker"><span class="circ-hlt">Lost: </span>Patron's card is lost</li>
 			<!-- /TMPL_IF -->
-			
             <!-- TMPL_IF NAME="dbarred" --><li class="blocker">
                <span class="circ-hlt"> Restricted:</span> Patron's account is restricted <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&amp;destination=circ&amp;status=0">Lift restriction</a>
 </li><!-- /TMPL_IF -->
-
-        	<!-- TMPL_IF name="odues" --><li><!-- TMPL_IF name="nonreturns" --><span class="circ-hlt">Overdues:</span> Patron has <span class="circ-hlt">ITEMS OVERDUE</span>. See highlighted items <a href="#checkouts">below</a><!-- /TMPL_IF --></li>
+            <!-- TMPL_IF name="odues" --><li><!-- TMPL_IF name="nonreturns" --><span class="circ-hlt">Overdues:</span> Patron has <span class="circ-hlt">ITEMS OVERDUE</span>. See highlighted items <a href="#checkouts">below</a><!-- /TMPL_IF --></li>
             <!-- /TMPL_IF -->
-			
-        	<!-- TMPL_IF NAME="charges" -->
-                <!-- TMPL_IF NAME="charges_is_blocker" -->
-			        <li class="blocker">
-                <!-- TMPL_ELSE -->
-			        <li>
-                <!-- /TMPL_IF -->
-            <span class="circ-hlt">Fines:</span> Patron has  <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->">Outstanding fines<!-- TMPL_IF NAME="chargesamount" --> of $<!-- TMPL_VAR NAME="chargesamount" --><!-- /TMPL_IF --></a>.
-                <!-- TMPL_IF NAME="charges_is_blocker" -->
-                    Checkouts are blocked because fine balance is over the limit.
-                <!-- /TMPL_IF -->
-            Make <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->">Payment</a></li>
-			<!-- /TMPL_IF -->
-
-        	<!-- TMPL_IF NAME="credits" -->
-			<li><span class="circ-hlt">Credits:</span> Patron has a credit</li>
-			<!-- /TMPL_IF -->
-
-			
-
+            <!-- TMPL_IF NAME="charges" --><!-- TMPL_IF NAME="charges_is_blocker" --><li class="blocker"><!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
+            <span class="circ-hlt">Fines:</span> Patron has  <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->">Outstanding fines<!-- TMPL_IF NAME="chargesamount" --> of $<!-- TMPL_VAR NAME="chargesamount" --><!-- /TMPL_IF --></a>.<!-- TMPL_IF NAME="charges_is_blocker" -->Checkouts are blocked because fine balance is over the limit.<!-- /TMPL_IF --> Make <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->">Payment</a></li><!-- /TMPL_IF -->
+        	<!-- TMPL_IF NAME="credits" --><li><span class="circ-hlt">Credits:</span> Patron has a credit</li><!-- /TMPL_IF -->
 			</ul>
         </div>
-
 			<!-- TMPL_IF NAME="WaitingReserveLoop" -->	
 			<div id="holdswaiting" class="circmessage">
 		    <h4>Holds waiting:</h4>
@@ -415,25 +305,15 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
             <p><span class="circ-hlt"><!-- TMPL_VAR name="notesmsg" --></span></p>
 			</div>
     <!-- /If notes --><!-- /TMPL_IF --> 
+    </div>
      <!-- /If flagged --><!-- /TMPL_IF -->
-
-
 </div>
 
 <div class="yui-g"><div id="patronlists" class="toptabs">
 
-<ul>   
-<li>    <!--TMPL_IF NAME="issuecount"-->
-            <a href="/cgi-bin/koha/circ/circulation.pl#checkouts"><!-- TMPL_VAR NAME="issuecount"--> Checkout(s)</a>
-    <!-- TMPL_ELSE -->
-            <a href="/cgi-bin/koha/circ/circulation.pl#checkouts">0 Checkouts</a>
-    <!-- /TMPL_IF --></li>
-<li><!-- TMPL_IF NAME="countreserv"-->
-            <a href="/cgi-bin/koha/circ/circulation.pl#reserves"><!--TMPL_VAR NAME="countreserv"--> Holds(s)</a>
-    <!-- TMPL_ELSE -->
-            <a href="/cgi-bin/koha/circ/circulation.pl#reserves">0 Holds</a>
-    <!-- /TMPL_IF --></li>
- 
+<ul>
+<li><!--TMPL_IF NAME="issuecount"--><a href="/cgi-bin/koha/circ/circulation.pl#checkouts"><!-- TMPL_VAR NAME="issuecount"--> Checkout(s)</a><!-- TMPL_ELSE --><a href="/cgi-bin/koha/circ/circulation.pl#checkouts">0 Checkouts</a><!-- /TMPL_IF --></li>
+<li><!-- TMPL_IF NAME="countreserv"--><a href="/cgi-bin/koha/circ/circulation.pl#reserves"><!--TMPL_VAR NAME="countreserv"--> Holds(s)</a><!-- TMPL_ELSE --><a href="/cgi-bin/koha/circ/circulation.pl#reserves">0 Holds</a><!-- /TMPL_IF --></li>
 </ul>
 
 <!-- SUMMARY : TODAY & PREVIOUS ISSUES -->

@@ -256,10 +256,14 @@ if ($barcode) {
 
   delete $question->{'DEBT'} if ($debt_confirmed);
   foreach my $impossible ( keys %$error ) {
+            if ($impossible eq "NOT_FOR_LOAN_CAN_FORCE"){
+                $$question{$impossible}=$$error{$impossible},
+            } else {
             $template->param(
                 $impossible => $$error{$impossible},
                 IMPOSSIBLE  => 1
             );
+            }
             $noerror = 0;
         }
     
