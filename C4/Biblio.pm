@@ -1273,11 +1273,11 @@ sub GetMarcUrls {
         	$marcurl = {  MARCURL => $url,
                       notes => \@notes,
             };
-            $marcurl->{'linktext'} = $link || $s3 || C4::Context->preference('URLLinkText') || $url ;;
+            $marcurl->{'linktext'} = $link || $s3 || C4::Context->preference('URLLinkText') || $url ;
             $marcurl->{'part'} = $s3 if($link);
             $marcurl->{'toc'} = 1 if($s3 =~ /^[Tt]able/) ;
         } else {
-            $marcurl->{'linktext'} = $field->subfield('z') || C4::Context->preference('URLLinkText') || $url;
+            $marcurl->{'linktext'} = $field->subfield('2') || C4::Context->preference('URLLinkText') || $url;
             $marcurl->{'MARCURL'} = $url ;
         }
         push @marcurls, $marcurl;    
