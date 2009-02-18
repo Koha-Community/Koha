@@ -330,7 +330,7 @@ $(window).load(function() {
                                     <ul>
                                     <!-- TMPL_LOOP NAME="available_items_loop" -->
                                         
-                                        <!-- TMPL_IF NAME="noItemTypeImages" --><li><!-- TMPL_ELSE --><!-- TMPL_IF NAME="item-level_itypes" --><!-- TMPL_IF name="imageurl" --><li style=" list-style: none; list-style-type: none;  background-image: url(<!-- TMPL_VAR name="imageurl" -->); background-repeat: no-repeat; background-position: 0 50%; padding: 3px 0 3px 30px; margin: .4em 0; " title="<!-- TMPL_VAR name="description" -->"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- /TMPL_IF -->
+                                        <!-- TMPL_IF NAME="noItemTypeImages" --><li><!-- TMPL_ELSE --><!-- TMPL_IF NAME="item-level_itypes" --><!-- TMPL_IF name="imageurl" --><li style="list-style: none; list-style-type: none;"><img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR NAME="description" -->"/><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF NAME="branchname" --><!-- TMPL_VAR NAME="branchname" --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF NAME="location" --><!-- TMPL_VAR NAME="location" --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF NAME="itemcallnumber" -->[<a href="/cgi-bin/koha/catalogue/search.pl?q=callnum:<!-- TMPL_VAR NAME="itemcallnumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="itemcallnumber" --></a>]<!-- /TMPL_IF -->
@@ -342,12 +342,12 @@ $(window).load(function() {
                                     <!-- /TMPL_IF -->
 
                                    <!-- TMPL_IF NAME="onloan_items_loop" -->
-                                   <!-- TMPL_IF NAME="onloancount" --><!-- TMPL_VAR NAME="onloancount" --><!-- /TMPL_IF --> on loan:
+                                   <span class="status"><!-- TMPL_IF NAME="onloancount" --><!-- TMPL_VAR NAME="onloancount" --><!-- /TMPL_IF --> on loan:</span>
                                     <ul>
                                     <!-- TMPL_LOOP NAME="onloan_items_loop" -->
                                        <!-- TMPL_IF NAME="noItemTypeImages" --><li><!-- TMPL_ELSE --><!-- TMPL_IF NAME="item-level_itypes" -->
                                         <!-- TMPL_IF name="imageurl" -->
-                                        <li style=" list-style: none; list-style-type: none;  background-image: url(<!-- TMPL_VAR name=imageurl -->); background-repeat: no-repeat; background-position: 0 50%; padding: 3px 0 3px 30px; margin: .4em 0;" title="<!-- TMPL_VAR name="description" -->">
+                                        <li style="list-style: none; list-style-type: none;"><img src="<!-- TMPL_VAR name=imageurl -->" title="<!-- TMPL_VAR name="description" -->"/>
                                         <!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
                                         <!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- /TMPL_IF -->                                        
 
@@ -360,12 +360,12 @@ $(window).load(function() {
                                     <!-- /TMPL_IF -->
 
                                     <!-- TMPL_IF NAME="other_items_loop" -->
-                                    <!-- TMPL_IF NAME="othercount" --><!-- TMPL_VAR NAME="othercount" --><!-- /TMPL_IF --> unavailable:
+                                    <span class="unavailable"><!-- TMPL_IF NAME="othercount" --><!-- TMPL_VAR NAME="othercount" --><!-- /TMPL_IF --> unavailable:</span>
                                     <ul>
                                     <!-- TMPL_LOOP NAME="other_items_loop" -->
                                         <!-- TMPL_IF NAME="noItemTypeImages" --><li><!-- TMPL_ELSE --><!-- TMPL_IF NAME="item-level_itypes" -->
                                         <!-- TMPL_IF name="imageurl" -->
-                                        <li style="list-style: none; list-style-type: none; background-image: url(<!-- TMPL_VAR name="imageurl" -->); background-repeat: no-repeat; background-position: 0 50%; padding: 3px 0 3px 30px; margin: .4em 0;" title="<!-- TMPL_VAR name="description" -->">
+                                        <li style="list-style: none; list-style-type: none;"><img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->"/>
                                         <!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
                                         <!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
