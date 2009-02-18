@@ -525,8 +525,8 @@ my %test_suite_override_dirs = (
  
 WriteMakefile(
               NAME         => 'koha',
-              #VERSION     => strftime('2.9.%Y%m%d%H',gmtime),
-              VERSION_FROM => 'kohaversion.pl',
+              VERSION     => '3.00.01-stable',
+              #VERSION_FROM => 'kohaversion.pl',
               ABSTRACT     => 'Award-winning integrated library system (ILS) and Web OPAC',
               AUTHOR       => 'Koha Developers <koha-devel@lists.koha.org>',
               NO_META      => 1,
