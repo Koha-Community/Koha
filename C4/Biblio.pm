@@ -902,7 +902,8 @@ Returns the COinS(a span) which can be included in a biblio record
 sub GetCOinSBiblio {
     my ( $biblionumber ) = @_;
     my $record = GetMarcBiblio($biblionumber);
-
+    my $coins_value;
+    if (defined $record){
     # get the coin format
     my $pos7 = substr $record->leader(), 7,1;
     my $pos6 = substr $record->leader(), 6,1;
@@ -997,10 +998,10 @@ sub GetCOinSBiblio {
         $issn       = $record->subfield('022','a');
 
     }
-    my $coins_value = "ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3A$mtx$genre$title&rft.isbn=$isbn&rft.issn=$issn&rft.aulast=$aulast&rft.aufirst=$aufirst$oauthors&rft.pub=$publisher&rft.date=$pubyear";
+    $coins_value = "ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3A$mtx$genre$title&rft.isbn=$isbn&rft.issn=$issn&rft.aulast=$aulast&rft.aufirst=$aufirst$oauthors&rft.pub=$publisher&rft.date=$pubyear";
     $coins_value =~ s/\ /\+/g;
     #<!-- TMPL_VAR NAME="ocoins_format" -->&amp;rft.au=<!-- TMPL_VAR NAME="author" -->&amp;rft.btitle=<!-- TMPL_VAR NAME="title" -->&amp;rft.date=<!-- TMPL_VAR NAME="publicationyear" -->&amp;rft.pages=<!-- TMPL_VAR NAME="pages" -->&amp;rft.isbn=<!-- TMPL_VAR NAME=amazonisbn -->&amp;rft.aucorp=&amp;rft.place=<!-- TMPL_VAR NAME="place" -->&amp;rft.pub=<!-- TMPL_VAR NAME="publishercode" -->&amp;rft.edition=<!-- TMPL_VAR NAME="edition" -->&amp;rft.series=<!-- TMPL_VAR NAME="series" -->&amp;rft.genre="
-
+    }
     return $coins_value;
 }
 
