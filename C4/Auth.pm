@@ -302,7 +302,7 @@ sub get_template_and_user {
         $LibraryNameTitle =~ s/<(?:\/?)(?:br|p)\s*(?:\/?)>/ /sgi;
         $LibraryNameTitle =~ s/<(?:[^<>'"]|'(?:[^']*)'|"(?:[^"]*)")*>//sg;
         $template->param(
-            AmazonContent             => "" . C4::Context->preference("AmazonContent"),
+            OPACAmazonContent             => "" . C4::Context->preference("OPACAmazonContent"),
             AnonSuggestions           => "" . C4::Context->preference("AnonSuggestions"),
             AuthorisedValueImages     => C4::Context->preference("AuthorisedValueImages"),
             LibraryName               => "" . C4::Context->preference("LibraryName"),
