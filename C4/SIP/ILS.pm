@@ -86,33 +86,30 @@ sub to_bool {
     my $bool = shift;
     # If it's defined, and matches a true sort of string, or is
     # a non-zero number, then it's true.
-	#
-	# FIXME: this test is faulty
-	# 	We're running under warnings and strict.
-	#	But if we don't match regexp, then we go ahead and numerical compare?
-	# 	That means we'd generate a warning on 'FALSE' or ''.
-    return defined($bool) && (($bool =~ /true|y|yes/i) || $bool != 0);
+    defined($bool) or return;                   # false
+    ($bool =~ /true|y|yes/i) and return 1;      # true
+    return ($bool =~ /^\d+$/ and $bool != 0);   # true for non-zero numbers, false otherwise
 }
 
 sub checkout_ok {
     my $self = shift;
-    return (exists($self->{policy}->{checkout})
-	    && to_bool($self->{policy}->{checkout}));
+    return (exists($self->{institution}->{policy}->{checkout})
+	    && to_bool($self->{institution}->{policy}->{checkout}));
 }
 sub checkin_ok {
     my $self = shift;
-    return (exists($self->{policy}->{checkin})
-	    && to_bool($self->{policy}->{checkin}));
+    return (exists($self->{institution}->{policy}->{checkin})
+	    && to_bool($self->{institution}->{policy}->{checkin}));
 }
 sub status_update_ok {
     my $self = shift;
-    return (exists($self->{policy}->{status_update})
-	    && to_bool($self->{policy}->{status_update}));
+    return (exists($self->{institution}->{policy}->{status_update})
+	    && to_bool($self->{institution}->{policy}->{status_update}));
 }
 sub offline_ok {
     my $self = shift;
-    return (exists($self->{policy}->{offline})
-	    && to_bool($self->{policy}->{offline}));
+    return (exists($self->{institution}->{policy}->{offline})
+	    && to_bool($self->{institution}->{policy}->{offline}));
 }
 
 #
