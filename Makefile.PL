@@ -414,7 +414,7 @@ my %config_defaults = (
   'PATH_TO_ZEBRA' => '',
 );
 
-# set some default configuratio options based on OS
+# set some default configuration options based on OS
 # more conditions need to be added for other OS's
 # this should probably also incorporate usage of Win32::GetOSName() and/or Win32::GetOSVersion()
 # to allow for more granular decisions based on which Win32 platform

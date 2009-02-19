@@ -304,7 +304,7 @@ elsif ( $step && $step == 3 ) {
         # Where <level> is a category of requirement : required, recommended optional
         # level should contain :
         #   SQL File for import With a readable name.
-        #   txt File taht explains what this SQL File is meant for.
+        #   txt File that explains what this SQL File is meant for.
         # Could be VERY useful to have A Big file for a kind of library.
         # But could also be useful to have some Authorised values data set prepared here.
         # Framework Selection is achieved through checking boxes.
