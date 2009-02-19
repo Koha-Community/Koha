@@ -420,7 +420,7 @@ function showCart(){
 }
 
 function hideCart(){
-		 $(".dropShadow").hide();
+		 $("#cartDetails").removeShadow();
 		 $("#cartDetails").fadeOut("fast");
 }
 
