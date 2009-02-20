@@ -95,9 +95,10 @@ sub GetHoldsQueueItems {
 	my $dbh = C4::Context->dbh;
 
     my @bind_params = ();
-	my $query = q/SELECT tmp_holdsqueue.*, biblio.author, items.ccode, items.location, items.enumchron, items.cn_sort
+	my $query = q/SELECT tmp_holdsqueue.*, biblio.author, items.ccode, items.location, items.enumchron, items.cn_sort, biblioitems.publishercode,biblio.copyrightdate,biblioitems.publicationyear,biblioitems.pages,biblioitems.size,biblioitems.publicationyear,biblioitems.isbn
                   FROM tmp_holdsqueue
                   JOIN biblio USING (biblionumber)
+				  LEFT JOIN biblioitems USING (biblionumber)
                   LEFT JOIN items USING (itemnumber)
                 /;
     if ($branchlimit) {

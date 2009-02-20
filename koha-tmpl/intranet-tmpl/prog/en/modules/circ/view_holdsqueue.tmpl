@@ -1,25 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Circulation &rsaquo; Holds Queue</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/JavaScript" language="JavaScript">
-//<![CDATA[
-//$.tablesorter.addParser({
-//    id: 'articles', 
-//    is: function(s) {return false;  }, 
-//    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
-//    type: 'text' 
-//});
-//	 $(document).ready(function() {
-//		$.tablesorter.defaults.widgets = ['zebra']; 
-//		$("#holdst").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
-//		dateFormat: 'uk',<!-- /TMPL_IF -->
-//		sortList: [[1,0]],
-//		headers: { 0: { sorter: 'articles' }}
-//		});
-//	 });
-//]]>
-</script>
+<style type="text/css"> p { margin-top: 0; }</style>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -50,23 +32,26 @@
 	<thead>
 	<tr>
         <th>Title</th>
-        <th>Author</th>
         <th>Collection</th>
-        <th>Shelving Location</th>
         <th>Call Number</th>
         <th>Barcode</th>
-        <th>Enumeration</th>
+		<th>Patron</th>
         <th>Send To</th>
         <th>Date</th>
     </tr>
 	</thead>
      <tbody><!-- TMPL_LOOP NAME="itemsloop"-->
         <tr>
-            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->"><!-- TMPL_VAR NAME="title" escape="html"--></a></td>
-            <td><!-- TMPL_VAR NAME="author" --></td>
+            <td><p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->"><strong><!-- TMPL_VAR NAME="title" escape="html"--></strong></a></p> 
+			<p><strong><!-- TMPL_VAR NAME="author" --></strong>
+			<!-- TMPL_IF name="publishercode" --><!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF -->
+										<!-- TMPL_IF name="publicationyear" -->, <!-- TMPL_VAR name="publicationyear" -->
+										<!-- TMPL_ELSIF name="copyrightdate"-->, <!-- TMPL_VAR name="copyrightdate" --><!-- /TMPL_IF -->
+                                        <!-- TMPL_IF name="pages" -->: <!-- TMPL_VAR name="pages" --> <!-- /TMPL_IF -->
+                                        <!-- TMPL_IF name="size" --><!-- TMPL_VAR name="size" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="isbn" -->ISBN: <!-- TMPL_VAR NAME="isbn" --><!-- /TMPL_IF --></p>
+			</td>
             <td><!-- TMPL_VAR NAME="ccode" --></td>
-            <td><!-- TMPL_VAR NAME="location" --></td>
-            <td><!-- TMPL_VAR NAME="itemcallnumber"--></td>
+            <td><!-- TMPL_VAR NAME="location" --> <!-- TMPL_VAR NAME="itemcallnumber"--> <!-- TMPL_VAR NAME="enumchron" --></td>
             <td>
                 <!-- TMPL_IF NAME="item_level_request" -->
                     <!-- TMPL_VAR NAME="barcode" -->
@@ -74,7 +59,7 @@
                     <em>Any available copy</em>
                 <!-- /TMPL_IF -->
             </td>
-            <td><!-- TMPL_VAR NAME="enumchron" --></td>
+			<td><p><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="cardnumber" -->#reserves"><!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</a></p> <p><!-- TMPL_VAR NAME="phone" --></p></td>
             <td><!-- TMPL_VAR NAME="pickbranch" --></td>
             <td><!-- TMPL_VAR NAME="reservedate" --></td>
         </tr>
