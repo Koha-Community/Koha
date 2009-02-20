@@ -966,7 +966,7 @@ sub GetGuarantees {
   &UpdateGuarantees($parent_borrno);
   
 
-C<&UpdateGuarantees> borrower data for an adulte and updates all the guarantees
+C<&UpdateGuarantees> borrower data for an adult and updates all the guarantees
 with the modified information
 
 =cut
