@@ -62,6 +62,7 @@ $template->param(
 );
 my @component_names =
     qw/
+Algorithm::CheckDigits
 Biblio::EndnoteStyle
 CGI
 CGI::Carp
@@ -73,8 +74,9 @@ Compress::Zlib
 DBD::mysql
 DBI
 Data::Dumper
-Date::Calc
 Data::ICal
+Date::Calc
+Date::ICal
 Date::Manip
 Digest::MD5
 Email::Date
@@ -87,6 +89,7 @@ HTML::Template::Pro
 HTTP::Cookies
 HTTP::Request::Common
 HTML::Scrubber
+JSON
 LWP::Simple
 LWP::UserAgent
 Lingua::Stem
