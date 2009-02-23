@@ -396,7 +396,7 @@ sub create_input {
                     maxlength=\"$max_length\"
                     readonly=\"readonly\"
                     \/><a href=\"#\" class=\"buttonDot\"
-                        onclick=\"openAuth('".$subfield_data{id}."','".$tagslib->{$tag}->{$subfield}->{authtypecode}."'); return false;\" title=\"Tag Editor\">...</a>
+                        onclick=\"openAuth(this.parentNode.getElementsByTagName('input')[1].id,'".$tagslib->{$tag}->{$subfield}->{authtypecode}."'); return false;\" title=\"Tag Editor\">...</a>
             ";
       }
     # it's a plugin field

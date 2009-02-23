@@ -162,10 +162,11 @@ function openAuth(tagsubfieldid,authtype) {
     var elementsubfcode=getSubfieldcode(element.name);
     var mainmainstring=element.value;
     var mainstring="";  
-    var inputs = document.getElementsByTagName("input");
+    var inputs = element.parentNode.parentNode.getElementsByTagName("input");
+
     for (var myindex =0; myindex<inputs.length;myindex++){
         if (inputs[myindex].name && inputs[myindex].name.match(tagsubfield)){
-            var subfieldcode=getSubfieldcode(inputs[myindex].name);  
+            var subfieldcode=getSubfieldcode(inputs[myindex].name);
             if (isNaN(parseInt(subfieldcode)) && inputs[myindex].value != "" && subfieldcode!=elementsubfcode){
                 mainstring=inputs[myindex].value+" "+mainstring;
             }      
@@ -220,6 +221,12 @@ function CloneField(index) {
             
             var inputs   = divs[i].getElementsByTagName('input');
             var id_input = "";
+            
+            for( j = 0 ; j < inputs.length ; j++ ) {
+            	if(inputs[j].getAttribute("id") && inputs[j].getAttribute("id").match(/^tag_/) ){
+            		inputs[j].value = "";
+            	}
+            }
             
             inputs[0].setAttribute('id',inputs[0].getAttribute('id')+new_key);
             inputs[0].setAttribute('name',inputs[0].getAttribute('name')+new_key);
