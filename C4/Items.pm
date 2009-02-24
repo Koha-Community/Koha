@@ -1071,6 +1071,11 @@ END_SQL
         push @where_strings, 'issues.date_due IS NULL';
     }
 
+    if ( $ignoreissued) {
+        $query .= "LEFT JOIN issues ON items.itemnumber = issues.itemnumber ";
+        push @where_strings, 'issues.date_due IS NULL';
+    }
+
     if ( @where_strings ) {
         $query .= 'WHERE ';
         $query .= join ' AND ', @where_strings;
