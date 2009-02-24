@@ -34,6 +34,7 @@ my $maxlocation=$input->param('maxlocation');
 $maxlocation=$minlocation.'Z' unless ( $maxlocation || ! $minlocation );
 my $location=$input->param('location');
 my $itemtype=$input->param('itemtype');
+my $ignoreissued=$input->param('ignoreissued');
 my $datelastseen = $input->param('datelastseen');
 my $offset = $input->param('offset');
 my $markseen = $input->param('markseen');
@@ -105,6 +106,7 @@ $template->param(branchloop => \@branch_loop,
                 minlocation => $minlocation,
                 maxlocation => $maxlocation,
                 location=>$location,
+                ignoreissued=>$ignoreissued,
                 branchcode=>$branchcode,      
                 offset => $offset,
                 pagesize => $pagesize,
@@ -154,7 +156,7 @@ if ($uploadbarcodes && length($uploadbarcodes)>0){
         }
     }
     if ($markseen or $op) {
-        my $res = GetItemsForInventory($minlocation,$maxlocation,$location,$itemtype,$datelastseen,$branchcode,$offset,$pagesize);
+        my $res = GetItemsForInventory($minlocation,$maxlocation,$location,$itemtype,$ignoreissued,$datelastseen,$branchcode,$offset,$pagesize);
         $template->param(loop =>$res,
                         nextoffset => ($offset+$pagesize),
                         prevoffset => ($offset?$offset-$pagesize:0),
