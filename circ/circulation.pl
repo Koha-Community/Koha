@@ -196,6 +196,14 @@ if ($findborrower) {
     my ( $count, $borrowers ) =
       SearchMember($findborrower, 'cardnumber', 'web' );
     my @borrowers = @$borrowers;
+        $template->param(
+                "AddPatronLists_".C4::Context->preference("AddPatronLists")=> "1",
+        );
+        if (C4::Context->preference("AddPatronLists")=~/code/){
+                my $categories=GetBorrowercategoryList;
+                $categories->[0]->{'first'}=1;
+                $template->param(categories=>$categories);
+        }
     if ( $#borrowers == -1 ) {
         $query->param( 'findborrower', '' );
         $message = "'$findborrower'";
