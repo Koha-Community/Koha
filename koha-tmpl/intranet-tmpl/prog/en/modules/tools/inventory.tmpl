@@ -103,6 +103,12 @@ $(document).ready(function(){
             );
             </script>
         </li>
+        <li><label for="ignoreissued">Skip copies on loan: </label>
+            <!-- TMPL_IF NAME="ignoreissued" -->
+            <input type="checkbox" id="ignoreissued" name="ignoreissued" checked="checked" /></li>
+            <!-- TMPL_ELSE -->
+            <input type="checkbox" id="ignoreissued" name="ignoreissued" /></li>
+            <!-- /TMPL_IF -->
         <li><label for="pagesize">Show: </label>
             <input type="text" id="pagesize" name="pagesize" value="<!-- TMPL_VAR NAME="pagesize" -->" maxlength="5" size="5" /> items</li>
           <li><label for="offset">Beginning at offset: </label>

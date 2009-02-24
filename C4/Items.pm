@@ -1024,11 +1024,11 @@ offset & size can be used to retrieve only a part of the whole listing (defaut b
 =cut
 
 sub GetItemsForInventory {
-    my ( $minlocation, $maxlocation,$location, $itemtype, $datelastseen, $branch, $offset, $size ) = @_;
+    my ( $minlocation, $maxlocation,$location, $itemtype, $ignoreissued, $datelastseen, $branch, $offset, $size ) = @_;
     my $dbh = C4::Context->dbh;
 
     my $query = <<'END_SQL';
-SELECT itemnumber, barcode, itemcallnumber, title, author, biblio.biblionumber, datelastseen
+SELECT items.itemnumber, barcode, itemcallnumber, title, author, biblio.biblionumber, datelastseen
 FROM items
   LEFT JOIN biblio ON items.biblionumber = biblio.biblionumber
   LEFT JOIN biblioitems on items.biblionumber = biblioitems.biblionumber
@@ -1057,7 +1057,15 @@ END_SQL
         $query.= ' AND biblioitems.itemtype = ? ';
         push @bind_params, $itemtype;
     }
+    if ( $ignoreissued) {
+        $query .= "LEFT JOIN issues ON items.itemnumber = issues.itemnumber ";
+        push @where_strings, 'issues.date_due IS NULL';
+    }
 
+    if ( @where_strings ) {
+        $query .= 'WHERE ';
+        $query .= join ' AND ', @where_strings;
+    }
     $query .= ' ORDER BY itemcallnumber, title';
     my $sth = $dbh->prepare($query);
     $sth->execute( @bind_params );
