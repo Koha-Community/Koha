@@ -26,6 +26,7 @@ use C4::Search::PazPar2;
 use XML::Simple;
 use C4::Dates qw(format_date);
 use C4::XSLT;
+use C4::Branch;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
 
@@ -1125,7 +1126,17 @@ sub buildQuery {
             $limit .= " and " if $limit || $query;
             $limit      .= "$this_limit";
             $limit_cgi  .= "&limit=$this_limit";
-            $limit_desc .= " $this_limit";
+            if ($this_limit =~ /^branch:(.+)/) {
+                my $branchcode = $1;
+                my $branchname = GetBranchName($branchcode);
+                if (defined $branchname) {
+                    $limit_desc .= " branch:$branchname";
+                } else {
+                    $limit_desc .= " $this_limit";
+                }
+            } else {
+                $limit_desc .= " $this_limit";
+            }
         }
     }
     if ($group_OR_limits) {
