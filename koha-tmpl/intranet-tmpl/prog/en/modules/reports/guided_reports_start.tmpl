@@ -333,7 +333,7 @@ NAME="name" -->"><!-- TMPL_VAR NAME="name"--></label></td><td>
 </p>
 
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
-<input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="sql" -->" />
+<input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="sql" ESCAPE="html" -->" />
 <input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" />
 <p>You will need to save the report before you can execute it</p>
 <fieldset class="action"><input type="hidden" name="phase" value="Save" />  
@@ -343,7 +343,7 @@ NAME="name" -->"><!-- TMPL_VAR NAME="name"--></label></td><td>
 
 <!-- TMPL_IF NAME="save" -->
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
-<input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="sql" -->" />
+<input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="sql" ESCAPE="html" -->" />
 <input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" />
 <fieldset class="rows">
 <legend>Save Your Custom Report</legend>
@@ -373,7 +373,7 @@ NAME="name" -->"><!-- TMPL_VAR NAME="name"--></label></td><td>
 <option value="csv">Comma Separated Text</option>
 <option value="tab">Tab Separated Text</option>
 </select>
-<input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="sql" -->" />
+<input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="sql" ESCAPE="html" -->" />
 <input type="hidden" name="phase" value="Export" />
 <input type="submit" name="submit" value="Download" /></fieldset>
 </form>
@@ -472,7 +472,7 @@ Sub report:<select name="subreport">
 <!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
 </div>
-<input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="sql" -->" />
+<input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="sql" ESCAPE="html" -->" />
 <input type="hidden" name="reportname" value="<!-- TMPL_VAR NAME="reportname" -->" />
 <input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" />
 <input type="hidden" name="notes" value="<!-- TMPL_VAR NAME="notes" -->" />
