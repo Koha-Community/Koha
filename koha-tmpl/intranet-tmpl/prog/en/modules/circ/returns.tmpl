@@ -93,7 +93,9 @@ function Dopop(link) {
 			<!-- TMPL_IF NAME="boraddress2" --><!-- TMPL_VAR NAME="boraddress2" --><br /><!-- /TMPL_IF -->
             <!-- TMPL_VAR Name="borcity" --> <!-- TMPL_VAR NAME="borzip" --></li>
            <!-- TMPL_IF NAME="borphone" --><li> <!-- TMPL_VAR Name="borphone" --></li><!-- /TMPL_IF -->
-		   <!-- TMPL_IF NAME="boremail" --><li><a id="boremail" href="mailto:<!-- TMPL_VAR NAME="boremail" -->"><!-- TMPL_VAR NAME="boremail" --></a></li><!-- /TMPL_IF --></ul>
+		   <!-- TMPL_IF NAME="boremail" --><li><a id="boremail" href="mailto:<!-- TMPL_VAR NAME="boremail" -->"><!-- TMPL_VAR NAME="boremail" --></a></li><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="debarred" --><li class="error">Patron is RESTRICTED</li><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="gonenoaddress" --><li class="error">Patron's address is in doubt</li><!-- /TMPL_IF --></ul>
         </p>
         <form method="post" action="returns.pl" class="confirm">
             <input type="submit" class="approve" value="Confirm" />
@@ -124,6 +126,8 @@ function Dopop(link) {
 						<!-- TMPL_VAR Name="borcity" -->  <!-- TMPL_VAR NAME="borzip" --></li>
                         <!-- TMPL_IF NAME="borphone" --><li><!-- TMPL_VAR Name="borphone" --></li><!-- /TMPL_IF -->
 						<!-- TMPL_IF NAME="boremail" --><li><a id="boremail" href="mailto:<!-- TMPL_VAR NAME="boremail" -->"><!-- TMPL_VAR NAME="boremail" --></a></li><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="debarred" --><li class="error">Patron is RESTRICTED</li><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="gonenoaddress" --><li class="error">Patron's address is in doubt</li><!-- /TMPL_IF -->
                     </ul>
             <!-- TMPL_IF name="transfertodo" -->
                 <h4><strong>Transfer to:</strong> <!-- TMPL_VAR Name="destbranchname" --></h4>
@@ -205,6 +209,8 @@ function Dopop(link) {
 			<!-- TMPL_VAR Name="borcity" --> <!-- TMPL_VAR NAME="borzip" --></li>
             <!-- TMPL_IF NAME="borphone" --><li><!-- TMPL_VAR Name="borphone" --></li><!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="boremail" --><li><a id="boremail" href="mailto:<!-- TMPL_VAR NAME="boremail" -->"><!-- TMPL_VAR NAME="boremail" --></a></li><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="debarred" --><li class="error">Patron is RESTRICTED</li><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="gonenoaddress" --><li class="error">Patron's address is in doubt</li><!-- /TMPL_IF -->
         </ul>
         <!-- TMPL_IF name="transfertodo" -->
             <h4><strong>Transfer to:</strong> <!-- TMPL_VAR Name="destbranchname" --></h4>
