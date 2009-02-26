@@ -409,9 +409,12 @@ function vShelfAdd() {
 }
 
 function showCart(){
-		var position = $("#cartmenulink").offset({border: true,margin:false});
+		var position = $("#cartmenulink").offset();
 		var top = position.top + $("#cartmenulink").outerHeight();
-		var left = position.left - 105;
+		var menuWidth = 200;
+		var buttonWidth = $("#cartmenulink").innerWidth();
+		var buttonOffset = menuWidth - buttonWidth;
+		var left = position.left -  buttonOffset;
 		$("#cartDetails").css("position","absolute").css("top",top);
 		$("#cartDetails").css("position","absolute").css("left",left);
 		$("#cartDetails").fadeIn("fast",function(){
