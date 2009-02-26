@@ -159,12 +159,12 @@
 	            <!-- TMPL_IF NAME="item-level_itypes" -->
                 <th>Item Type</th>
                 <!-- /TMPL_IF -->
-                <th>Barcode</th>
                 <!-- TMPL_UNLESS NAME="singleBranchMode" -->
                 <th>Home Library</th>
                 <th>Last Location</th>
                 <!-- /TMPL_UNLESS -->
                 <th>Call Number</th>
+                <th>Copy Number</th>
                 <th>Information</th>
             </tr>
         <!-- TMPL_LOOP Name="itemloop" -->
@@ -182,12 +182,12 @@
             <img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" />
             </td>
             <!-- /TMPL_IF -->
-            <td><!-- TMPL_VAR NAME="barcode"           --></td>
             <!-- TMPL_UNLESS NAME="singleBranchMode" -->
             <td><!-- TMPL_VAR NAME="homebranchname"    --></td>
             <td><!-- TMPL_VAR NAME="holdingbranchname" --></td>
             <!-- /TMPL_UNLESS -->
             <td><!-- TMPL_VAR NAME="itemcallnumber"    --></td>
+            <td><!-- TMPL_IF NAME="copynumber" --><!-- TMPL_VAR NAME="copynumber" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
             <td>
         <!-- TMPL_IF Name="date_due" -->
             <span class="checkedout">Due <!-- TMPL_VAR NAME="date_due" --></span>

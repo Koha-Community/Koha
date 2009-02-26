@@ -216,10 +216,10 @@ if (alreadyreserved > "0"){
 
         <li> <label for="requestany">Place a hold on the next available copy </label>
                <input type="checkbox" id="requestany" name="request" checked="checked" value="Any" />
+               <input type="hidden" name="biblioitem" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" />
+               <input type="hidden" name="alreadyreserved" value="<!-- TMPL_VAR NAME="alreadyreserved" -->" />
         </li>
 
-        <input type="hidden" name="biblioitem" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" />
-        <input type="hidden" name="alreadyreserved" value="<!-- TMPL_VAR NAME="alreadyreserved" -->" />
 </ol>
         <fieldset class="action">
             <!-- TMPL_IF NAME="cardnumber"-->
@@ -250,7 +250,8 @@ if (alreadyreserved > "0"){
             <th>Barcode</th>
             <th>Home Library</th>
             <th>Last Location</th>
-            <th>Call number</th>
+            <th>Call no.</th>
+            <th>Copy no.</th>
             <th>Information</th>
         </tr>
     <!-- TMPL_LOOP Name="itemloop" -->
@@ -284,6 +285,7 @@ if (alreadyreserved > "0"){
             <td>
             <!-- TMPL_VAR NAME="itemcallnumber" -->
             </td>
+            <td><!-- TMPL_IF NAME="copynumber" --><!-- TMPL_VAR NAME="copynumber" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
             <td>
         	<!-- TMPL_IF Name="onloan" -->
             <span class="checkedout">Due <!-- TMPL_VAR NAME="onloan" --></span>
