@@ -950,7 +950,7 @@ sub split_fcn {
     # Split fiction call numbers based on spaces
     SPLIT_FCN:
     while ($fcn) {
-        if ($fcn =~ m/([A-Za-z0-9]+)(\W?).*?/x) {
+        if ($fcn =~ m/([A-Za-z0-9]+\.?[0-9]?)(\W?).*?/x) {
             push (@fcn_split, $1);
             $fcn = $';
         }
