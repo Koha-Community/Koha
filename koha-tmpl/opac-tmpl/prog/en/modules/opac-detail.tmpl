@@ -21,18 +21,16 @@
     dateFormat: 'uk',<!-- /TMPL_IF -->
             widgets : ['zebra'],
             sortList: [[0,0]]
-        });
-        
-        <!-- TMPL_IF NAME="GoogleJackets" -->KOHA.Google.GetCoverFromIsbn();<!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="TagsEnabled" -->$(".tagbutton").click(KOHA.Tags.add_tag_button);<!-- /TMPL_IF -->
-
+        });<!-- TMPL_IF NAME="GoogleJackets" -->
+        KOHA.Google.GetCoverFromIsbn();<!-- /TMPL_IF --><!-- TMPL_IF NAME="TagsEnabled" -->
+        $(".tagbutton").click(KOHA.Tags.add_tag_button);<!-- /TMPL_IF -->
     }); 
 //]]>
 </script>
 <style type="text/css">
     #addtagl { display: none; }
 </style>
-<!-- TMPL_IF NAME="GoogleJackets" --><script type="text/javascript">                            
+<!-- TMPL_IF NAME="XSLTDetailsDisplay" --><script type="text/javascript">
     var GB_ROOT_DIR = "/intranet-tmpl/prog/en/lib/greybox/";                               
 </script>
 <script type="text/javascript" src="/intranet-tmpl/prog/en/lib/greybox/AJS.js"></script>
