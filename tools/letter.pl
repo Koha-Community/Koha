@@ -78,6 +78,25 @@ sub column_picks ($) {
     return @SQLfieldname;
 }
 
+# letter_exists($module, $code)
+# - return true if a letter with the given $module and $code exists
+sub letter_exists {
+    my ($module, $code) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sql = q{SELECT * FROM letter WHERE module = ? AND code = ?};
+    my $letters = $dbh->selectall_arrayref($sql, { Slice => {} }, $module, $code);
+    return scalar(@$letters);
+}
+
+# $protected_letters = protected_letters()
+# - return a hashref of letter_codes representing letters that should never be deleted
+sub protected_letters {
+    my $dbh = C4::Context->dbh;
+    my $sql = q{SELECT DISTINCT letter_code FROM message_transports};
+    my $codes = $dbh->selectall_arrayref($sql);
+    return { map { $_->[0] => 1 } @$codes };
+}
+
 my $input       = new CGI;
 my $searchfield = $input->param('searchfield');
 $searchfield = '' unless defined($searchfield);
@@ -178,14 +197,28 @@ if ( $op eq 'add_form' ) {
     # called by add_form, used to insert/modify data in DB
 }
 elsif ( $op eq 'add_validate' ) {
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare(
-        "REPLACE letter (module,code,name,title,content) VALUES (?,?,?,?,?)");
-    $sth->execute(
-        $input->param('module'), $input->param('code'),
-        $input->param('name'),   $input->param('title'),
-        $input->param('content')
-    );
+    my $dbh     = C4::Context->dbh;
+    my $module  = $input->param('module');
+    my $code    = $input->param('code');
+    my $name    = $input->param('name');
+    my $title   = $input->param('title');
+    my $content = $input->param('content');
+    if (letter_exists($module, $code)) {
+        # UPDATE
+        $dbh->do(
+            q{UPDATE letter SET module = ?, code = ?, name = ?, title = ?, content = ? WHERE module = ? AND code = ?},
+            undef,
+            $module, $code, $name, $title, $content,
+            $module, $code
+        );
+    } else {
+        # INSERT
+        $dbh->do(
+            q{INSERT INTO letter (module,code,name,title,content) VALUES (?,?,?,?,?)},
+            undef,
+            $module, $code, $name, $title, $content
+        );
+    }
     print $input->redirect("letter.pl");
     exit;
 ################## DELETE_CONFIRM ##################################
@@ -220,11 +253,13 @@ else {    # DEFAULT
     }
     my ($results) = StringSearch($searchfield);
     my @loop_data = ();
+    my $protected_letters = protected_letters();
     foreach my $result (@$results) {
         my %row_data;
-		foreach my $key (qw(module code name)) {
-        	$row_data{$key} = $result->{$key};
-		}
+        foreach my $key (qw(module code name)) {
+            $row_data{$key} = $result->{$key};
+            $row_data{'protected'} = $protected_letters->{$result->{code}};
+        }
         push(@loop_data, \%row_data );
     }
     $template->param( letter => \@loop_data );

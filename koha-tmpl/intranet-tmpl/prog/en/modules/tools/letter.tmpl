@@ -152,7 +152,11 @@ $(document).ready(function() {
 					<a href="/cgi-bin/koha/tools/letter.pl?op=add_form&amp;module=<!-- TMPL_VAR name="module" -->&amp;code=<!-- TMPL_VAR NAME="code" -->">Edit</a>
 				</td>
 				<td>
+					<!-- TMPL_IF NAME="protected" -->
+					-
+					<!-- TMPL_ELSE -->
 					<a href="/cgi-bin/koha/tools/letter.pl?op=delete_confirm&amp;module=<!-- TMPL_VAR name="module"-->&amp;code=<!-- TMPL_VAR NAME="code" -->">Delete</a>
+					<!-- /TMPL_IF -->
 				</td>
 			</tr>
 		<!-- /TMPL_LOOP --></tbody>
