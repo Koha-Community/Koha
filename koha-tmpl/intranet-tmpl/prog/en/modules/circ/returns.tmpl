@@ -125,7 +125,7 @@ function Dopop(link) {
 						<!-- TMPL_IF NAME="boraddress2" --><!-- TMPL_VAR NAME="boraddress2" --><br /><!-- /TMPL_IF -->
 						<!-- TMPL_VAR Name="borcity" -->  <!-- TMPL_VAR NAME="borzip" --></li>
                         <!-- TMPL_IF NAME="borphone" --><li><!-- TMPL_VAR Name="borphone" --></li><!-- /TMPL_IF -->
-						<!-- TMPL_IF NAME="boremail" --><li><a id="boremail" href="mailto:<!-- TMPL_VAR NAME="boremail" -->"><!-- TMPL_VAR NAME="boremail" --></a></li><!-- /TMPL_IF -->
+                        <!-- TMPL_IF NAME="boremail" --><li><!-- TMPL_IF name="transfertodo" --><!-- TMPL_VAR NAME="boremail" --><!-- TMPL_ELSE --><a id="boremail" href="mailto:<!-- TMPL_VAR NAME="boremail" -->"><!-- TMPL_VAR NAME="boremail" --></a><!-- /TMPL_IF --></li><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="debarred" --><li class="error">Patron is RESTRICTED</li><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="gonenoaddress" --><li class="error">Patron's address is in doubt</li><!-- /TMPL_IF -->
                     </ul>
@@ -208,7 +208,7 @@ function Dopop(link) {
 			<!-- TMPL_IF NAME="boraddress2" --><!-- TMPL_VAR NAME="boraddress2" --><br /><!-- /TMPL_IF -->
 			<!-- TMPL_VAR Name="borcity" --> <!-- TMPL_VAR NAME="borzip" --></li>
             <!-- TMPL_IF NAME="borphone" --><li><!-- TMPL_VAR Name="borphone" --></li><!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="boremail" --><li><a id="boremail" href="mailto:<!-- TMPL_VAR NAME="boremail" -->"><!-- TMPL_VAR NAME="boremail" --></a></li><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="boremail" --><li><!-- TMPL_IF name="transfertodo" --><!-- TMPL_VAR NAME="boremail" --><!-- TMPL_ELSE --><a id="boremail" href="mailto:<!-- TMPL_VAR NAME="boremail" -->"><!-- TMPL_VAR NAME="boremail" --></a><!-- /TMPL_IF --></li><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="debarred" --><li class="error">Patron is RESTRICTED</li><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="gonenoaddress" --><li class="error">Patron's address is in doubt</li><!-- /TMPL_IF -->
         </ul>
@@ -225,7 +225,7 @@ function Dopop(link) {
                 <input type="submit" class="approve" value="Confirm hold" />
                 <input type="submit" value="Print Slip and Confirm" class="print" onclick="Dopop('hold-transfer-slip.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;op=slip'); this.form.submit();" />
             <!-- /TMPL_IF -->
-                <input type="submit" class="deny" value="Ignore" onclick="$('.dialog:visible').hide('slow'); return false;" />
+                <input type="submit" class="deny" value="Ignore" onclick="$('.dialog:visible').hide('slow'); $('#barcode').focus(); return false;" />
             <!-- TMPL_LOOP Name="inputloop" -->
 	<input type="hidden" name="ri-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" />
 	<input type="hidden" name="dd-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="duedate" -->" />
