@@ -63,6 +63,8 @@ With 2 URLs, the returned array will look like that:
 
 =cut
 
+use strict;
+use warnings;
 use LWP::UserAgent;
 use HTTP::Request;
 use C4::Biblio;
@@ -88,7 +90,7 @@ sub check_biblio {
     my $host            = $self->{ host_default };
 
     my $record = GetMarcBiblio( $biblionumber ); 
-    return undef unless $record->field('856');
+    return unless $record->field('856');
 
     my @urls = ();
     foreach my $field ( $record->field('856') ) {
@@ -119,8 +121,6 @@ use strict;
 use warnings;
 use diagnostics;
 use Carp;
-
-use YAML::XS;
 
 use Pod::Usage;
 use Getopt::Long;
@@ -196,7 +196,7 @@ if ( $html && !$host_pro ) {
         $host_pro = $host;
     }
     else {
-        print "Error: host_pro parameter or host must be provided in html mode\n";
+        print "Error: host-pro parameter or host must be provided in html mode\n";
         exit;
     }
 }
@@ -215,7 +215,8 @@ check-url.pl - Check URLs from 856$u field.
 
 =item check-url.pl [--verbose|--help] [--host=http://default.tld] 
 
-Scan all URL found in 856$u and display if ressources are available or not.
+Scan all URLs found in 856$u of bib records 
+and display if resources are available or not.
 
 =back
 
@@ -231,7 +232,7 @@ For example, if --host=http://www.mylib.com, then when 856$u contains
 
 =item B<--verbose|-v>
 
-Outputs succeed URL checks with failed ones. 
+Outputs both successful and failed URLs.
 
 =item B<--html>
 
