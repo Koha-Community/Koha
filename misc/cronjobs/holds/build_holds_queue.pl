@@ -161,7 +161,7 @@ sub GetItemsAvailableToFillHoldRequestsForBib {
     my @branches_to_use = @_;
 
     my $dbh = C4::Context->dbh;
-    my $items_query = "SELECT itemnumber, homebranch, holdingbranch
+    my $items_query = "SELECT itemnumber, homebranch, holdingbranch, itemtypes.itemtype AS itype
                        FROM items ";
 
     if (C4::Context->preference('item-level_itypes')) {
