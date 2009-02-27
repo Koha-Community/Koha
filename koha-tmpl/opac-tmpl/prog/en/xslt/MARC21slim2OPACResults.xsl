@@ -486,7 +486,7 @@
 
         <xsl:if test="$typeOf008='CR'">
         <xsl:if test="$controlField008-21 and $controlField008-21 !='|' and $controlField008-21 !=' '">
-        <span class="label">; Type of continuing resource: <xsl:value-of select="$controlField008-21"/></span>
+        <span class="label">; Type of continuing resource: </span>
         </xsl:if>
             <xsl:choose>
                 <xsl:when test="$controlField008-21='d'">
@@ -657,7 +657,7 @@
             </xsl:choose>
         </xsl:if> 
         <xsl:if test="$typeOf008='MU' and $controlField008-30-31 and $controlField008-30-31!='||' and $controlField008-30-31!='  '">
-            <span class="label">; Literary form: <xsl:value-of select="$controlField008-30-31"/> </span> <!-- Literary text for sound recordings -->
+            <span class="label">; Literary form: </span> <!-- Literary text for sound recordings -->
             <xsl:if test="contains($controlField008-30-31,'b')">
                 biography
             </xsl:if>
