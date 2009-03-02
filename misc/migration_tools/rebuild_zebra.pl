@@ -209,7 +209,7 @@ sub index_records {
             if $num_records_exported;
     } else {
         do_indexing($record_type, 'update', "$directory/$record_type", $reset, $noshadow, $record_fmt, $zebraidx_log_opt)
-            if $num_records_exported;
+            if ($num_records_exported or $skip_export);
     }
 }
 
