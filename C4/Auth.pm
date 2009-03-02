@@ -1212,7 +1212,7 @@ sub checkpw {
 
     my ( $dbh, $userid, $password ) = @_;
     if ($ldap) {
-        $debug and print "## checkpw - checking LDAP\n";
+        $debug and print STDERR "## checkpw - checking LDAP\n";
         my ($retval,$retcard) = checkpw_ldap(@_);    # EXTERNAL AUTH
         ($retval) and return ($retval,$retcard);
     }
