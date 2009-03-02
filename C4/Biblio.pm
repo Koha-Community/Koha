@@ -285,25 +285,10 @@ sub ModBiblio {
     foreach my $field ($record->field($itemtag)) {
         $record->delete_field($field);
     }
-    
-    # parse each item, and, for an unknown reason, re-encode each subfield 
-    # if you don't do that, the record will have encoding mixed
-    # and the biblio will be re-encoded.
-    # strange, I (Paul P.) searched more than 1 day to understand what happends
-    # but could only solve the problem this way...
-   my @fields = $oldRecord->field( $itemtag );
-    foreach my $fielditem ( @fields ){
-        my $field;
-        foreach ($fielditem->subfields()) {
-            if ($field) {
-                $field->add_subfields(Encode::encode('utf-8',$_->[0]) => Encode::encode('utf-8',$_->[1]));
-            } else {
-                $field = MARC::Field->new("$itemtag",'','',Encode::encode('utf-8',$_->[0]) => Encode::encode('utf-8',$_->[1]));
-            }
-          }
-        $record->append_fields($field);
-    }
-    
+   
+    # once all the items fields are removed, copy the old ones, in order to keep synchronize
+    $record->append_fields($oldRecord->field( $itemtag ));
+   
     # update biblionumber and biblioitemnumber in MARC
     # FIXME - this is assuming a 1 to 1 relationship between
     # biblios and biblioitems
