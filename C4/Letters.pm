@@ -766,7 +766,10 @@ sub _send_message_by_email {
     );
     if ($message->{'content_type'}) {
         $sendmail_params{'content-type'} = $message->{'content_type'};
+    }else{
+        $sendmail_params{'content-type'} = 'text/plain; charset="UTF-8"';
     }
+    
     my $success = sendmail( %sendmail_params );
 
     if ( $success ) {
