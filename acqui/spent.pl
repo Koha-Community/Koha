@@ -27,14 +27,19 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+#James Winter 3/4/2009: Original query does not select spent rows
+#	correctly due to missing joins between tables
+
 my $query =
-"Select quantity,datereceived,freight,unitprice,listprice,ecost,quantityreceived
-    as qrev,subscription,title,itemtype,aqorders.biblionumber,aqorders.booksellerinvoicenumber,
+"Select distinct quantity,datereceived,freight,unitprice,listprice,ecost,quantityreceived
+    as qrev,subscription,title,itype as itemtype,aqorders.biblionumber,aqorders.booksellerinvoicenumber,
     quantity-quantityreceived as tleft,
     aqorders.ordernumber
-    as ordnum,entrydate,budgetdate,booksellerid,aqbasket.basketno
-    from aqorders,aqorderbreakdown,aqbasket 
-    left join biblioitems on  biblioitems.biblioitemnumber=aqorders.biblioitemnumber 
+    as ordnum,entrydate,budgetdate,aqbasket.booksellerid,aqbasket.basketno
+    from aqorders
+    inner join aqorderbreakdown on aqorderbreakdown.ordernumber = aqorders.ordernumber
+    inner join aqbasket on aqbasket.basketno = aqorders.basketno
+    left join items on  items.biblionumber=aqorders.biblionumber
     where bookfundid=? and
     aqorders.ordernumber=aqorderbreakdown.ordernumber and
     aqorders.basketno=aqbasket.basketno
