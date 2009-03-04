@@ -9,7 +9,7 @@
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
 <div class="container">
-<form name="f" action="/cgi-bin/koha/opac-authorities-home.pl" method="post">
+<form name="f" action="/cgi-bin/koha/opac-authorities-home.pl" method="get">
         <input type="hidden" name="op" value="do_search" />
         <input type="hidden" name="type" value="opac" />
         <input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
@@ -24,40 +24,39 @@
                 <!-- /TMPL_LOOP -->
                 </select></li>           <li>
                 <label for="operatora">Main entry ($a only): </label>
-                <select name="operator" id="operatora">
+                <select name="operatora" id="operatora">
                     <option value="contains">contains</option>
                     <option value="start">starts with</option>
                     <option value="is">is exactly</option>
                 </select>
-                <input type="text" name="value" id="mainentrya_value" value="<!-- TMPL_VAR NAME="value" -->" />
-                <input type="hidden" name="marclist" value="mainmainentry" />
-                <input type="hidden" name="and_or" value="and" />
-                <input type="hidden" name="excluding" value="" />
+                <input type="text" name="valuea" id="mainentrya_value" value="<!-- TMPL_VAR NAME="value" -->" />
+                <input type="hidden" name="marclista" value="mainmainentry" />
+                <input type="hidden" name="and_ora" value="and" />
+                <input type="hidden" name="excludinga" value="" />
             </li>
             <li>
-                <label for="operator">Main entry: </label>
-                <select name="operator" id="operator">
+                <label for="operatorb">Main entry: </label>
+                <select name="operatorb" id="operator">
                     <option value="contains">contains</option>
                     <option value="start">starts with</option>
                     <option value="is">is exactly</option>
                 </select>
-                <input type="text" name="value" id="mainentry_value" value="<!-- TMPL_VAR NAME="value" -->" />
-                <input type="hidden" name="marclist" value="mainentry" />
-                <input type="hidden" name="and_or" value="and" />
-                <input type="hidden" name="excluding" value="" />
+                <input type="text" name="valueb" id="mainentry_value" value="<!-- TMPL_VAR NAME="value" -->" />
+                <input type="hidden" name="marclistb" value="mainentry" />
+                <input type="hidden" name="and_orb" value="and" />
+                <input type="hidden" name="excludingb" value="" />
             </li>
             <li>
                 <label for="anywhere">Anywhere: </label>
-                <select name="operator" id="anywhere">
+                <select name="operatorc" id="anywhere">
                     <option value="contains">contains</option>
                     <option value="start">starts with</option>
                     <option value="is">is exactly</option>
-
                 </select>
-                <input type="text" name="value" id="anywhere_value" value="<!-- TMPL_VAR NAME="value" -->" />
-                <input type="hidden" name="marclist" value="" />
-                <input type="hidden" name="and_or" value="and" />
-                <input type="hidden" name="excluding" value="" />
+                <input type="text" name="valuec" id="anywhere_value" value="<!-- TMPL_VAR NAME="value" -->" />
+                <input type="hidden" name="marclistc" value="" />
+                <input type="hidden" name="and_orc" value="and" />
+                <input type="hidden" name="excludingc" value="" />
             </li>
             <li><label for="orderby">Order by: </label><select name="orderby" id="orderby">
                 <option value="">None</option>
