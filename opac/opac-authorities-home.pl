@@ -55,12 +55,12 @@ foreach my $thisauthtype ( sort { $authtypes->{$a}{'authtypetext'} cmp $authtype
 }
 
 if ( $op eq "do_search" ) {
-    my @marclist = $query->param('marclist');
-    my @and_or = $query->param('and_or');
-    my @excluding = $query->param('excluding');
-    my @operator = $query->param('operator');
+    my @marclist = ($query->param('marclista'),$query->param('marclistb'),$query->param('marclistc'));
+    my @and_or = ($query->param('and_ora'),$query->param('and_orb'),$query->param('and_orc'));
+    my @excluding = ($query->param('excludinga'),$query->param('excludingb'),$query->param('excludingc'),);
+    my @operator = ($query->param('operatora'),$query->param('operatorb'),$query->param('operatorc'));
     my $orderby = $query->param('orderby');
-    my @value = $query->param('value');
+    my @value = ($query->param('valuea'),$query->param('valueb'),$query->param('valuec'),);
 
     $resultsperpage = $query->param('resultsperpage');
     $resultsperpage = 20 if ( !defined $resultsperpage );
@@ -88,14 +88,12 @@ if ( $op eq "do_search" ) {
 
     my @field_data = ();
 
-# we must get parameters once again. Because if there is a mainentry, it has been replaced by something else during the search, thus the links next/previous would not work anymore
-    my @marclist_ini = $query->param('marclist');
-    for ( my $i = 0 ; $i <= $#marclist ; $i++ ) {
-        push @field_data, { term => "marclist",  val => $marclist_ini[$i] };
-        push @field_data, { term => "and_or",    val => $and_or[$i] };
-        push @field_data, { term => "excluding", val => $excluding[$i] };
-        push @field_data, { term => "operator",  val => $operator[$i] };
-        push @field_data, { term => "value",     val => $value[$i] };
+    foreach my $letter (qw/a b c/){
+        push @field_data, { term => "marclist$letter" , val => $query->param("marclist$letter")};
+        push @field_data, { term => "and_or$letter" , val => $query->param("and_or$letter")};
+        push @field_data, { term => "excluding$letter" , val => $query->param("excluding$letter")};
+        push @field_data, { term => "operator$letter" , val => $query->param("operator$letter")};
+        push @field_data, { term => "value$letter" , val => $query->param("value$letter")};
     }
 
     my @numbers = ();
