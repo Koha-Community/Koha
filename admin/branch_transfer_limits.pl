@@ -40,13 +40,25 @@ my ($template, $loggedinuser, $cookie)
 
 my $dbh = C4::Context->dbh;
 
-my @itemtypes;
+# Set the template language for the correct limit type
+my $limit_phrase = 'Collection Code';
+my $limitType = C4::Context->preference("BranchTransferLimitsType");
+if ( $limitType eq 'itemtype' ) {
+	$limit_phrase = 'Item Type';
+}
+
+my @codes;
 my @branchcodes;
 
-my $sth = $dbh->prepare("SELECT itemtype FROM itemtypes");
+my $sth;
+if ( $limitType eq 'ccode' ) {
+	$sth = $dbh->prepare('SELECT authorised_value AS ccode FROM authorised_values WHERE category = "CCODE"');
+} elsif ( $limitType eq 'itemtype' ) {
+	$sth = $dbh->prepare('SELECT itemtype FROM itemtypes');
+}
 $sth->execute();
 while ( my $row = $sth->fetchrow_hashref ) {
-	push( @itemtypes, $row->{'itemtype'} );
+	push( @codes, $row->{ $limitType } );
 }
 
 $sth = $dbh->prepare("SELECT branchcode FROM branches");
@@ -59,12 +71,12 @@ while ( my $row = $sth->fetchrow_hashref ) {
 if ( $input->param('updateLimits') ) {
     DeleteBranchTransferLimits();
 
-	foreach my $itemtype ( @itemtypes ) {
+	foreach my $code ( @codes ) {
 		foreach my $toBranch ( @branchcodes ) {
 			foreach my $fromBranch ( @branchcodes ) {
-				my $isSet = $input->param( $itemtype . "_" . $toBranch . "_" . $fromBranch );
+				my $isSet = $input->param( $code . "_" . $toBranch . "_" . $fromBranch );
 				if ( $isSet ) {
-                                    CreateBranchTransferLimit( $toBranch, $fromBranch, $itemtype );
+                                    CreateBranchTransferLimit( $toBranch, $fromBranch, $code );
 				}
 			}
 		}
@@ -80,23 +92,23 @@ foreach my $branchcode ( @branchcodes ) {
 }
 
 ## Build the default data
-my @itemtypes_loop;
-foreach my $itemtype ( @itemtypes ) {
+my @codes_loop;
+foreach my $code ( @codes ) {
 	my @to_branch_loop;
 	my %row_data;
-	$row_data{ itemtype } = $itemtype;
+	$row_data{ code } = $code;
 	$row_data{ to_branch_loop } = \@to_branch_loop;
 	foreach my $toBranch ( @branchcodes ) {
 		my @from_branch_loop;
 		my %row_data;
-		$row_data{ itemtype } = $itemtype;
+		$row_data{ code } = $code;
 		$row_data{ toBranch } = $toBranch;
 		$row_data{ from_branch_loop } = \@from_branch_loop;
 		
 		foreach my $fromBranch ( @branchcodes ) {
 			my %row_data;
-                        my $isChecked = ! IsBranchTransferAllowed( $toBranch, $fromBranch, $itemtype );
-			$row_data{ itemtype } = $itemtype;
+                        my $isChecked = ! IsBranchTransferAllowed( $toBranch, $fromBranch, $code );
+			$row_data{ code } = $code;
 			$row_data{ toBranch } = $toBranch;
 			$row_data{ fromBranch } = $fromBranch;
                         $row_data{ isChecked } = $isChecked;
@@ -107,13 +119,14 @@ foreach my $itemtype ( @itemtypes ) {
 		push( @to_branch_loop, \%row_data );
 	}
 
-	push( @itemtypes_loop, \%row_data );
+	push( @codes_loop, \%row_data );
 }
 
 
 $template->param(
-		itemtypes_loop => \@itemtypes_loop,
+		codes_loop => \@codes_loop,
 		branchcode_loop => \@branchcode_loop,
+		limit_phrase => $limit_phrase,
 		);
 
 output_html_with_http_headers $input, $cookie, $template->output;

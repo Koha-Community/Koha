@@ -2337,7 +2337,8 @@ CREATE TABLE branch_transfer_limits (
     limitId int(8) NOT NULL auto_increment,
     toBranch varchar(4) NOT NULL,
     fromBranch varchar(4) NOT NULL,
-    itemtype varchar(4) NOT NULL,  
+    itemtype varchar(4) NULL,
+    ccode varchar(10) NULL,  
     PRIMARY KEY  (limitId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

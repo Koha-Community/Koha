@@ -193,6 +193,14 @@ if ($found) {
 
 #####################
 
+# Used for branch transfer limits error messages.
+my $codeTypeDescription = 'Collection Code';
+my $codeType = C4::Context->preference("BranchTransferLimitsType");
+if ( $codeType eq 'itemtype' ) {   
+  $codeTypeDescription = 'Item Type';
+}
+
+
 my @errmsgloop;
 foreach my $code ( keys %$messages ) {
     my %err;
@@ -206,9 +214,10 @@ foreach my $code ( keys %$messages ) {
     warn $messages->{'NotAllowed'};
     warn  $branches->{ $messages->{'NotAllowed'} }->{'branchname'};
         $err{errnotallowed} =  1;
-        my ( $tbr, $itemtype ) = split( /::/,  $messages->{'NotAllowed'} );
+        my ( $tbr, $typecode ) = split( /::/,  $messages->{'NotAllowed'} );
         $err{tbr} = $branches->{ $tbr }->{'branchname'};
-        $err{itemtype} = $itemtype;
+        $err{code} = $typecode;
+        $err{codeType} = $codeTypeDescription; 
     }
     
     if ( $code eq 'IsPermanent' ) {

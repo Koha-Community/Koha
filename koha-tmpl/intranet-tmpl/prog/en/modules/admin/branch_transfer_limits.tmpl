@@ -62,7 +62,7 @@
 </ul></div>
 
 <h1 class="parameters">Library Transfer Limits</h1>
-<div class="help">Check the boxes for the items that should <em>not</em> be transferable.</div>
+<div class="help">Check the boxes for the items that should <strong><em>not</em></strong> be transferable.</div>
 
 	<div class="table">
 		<form name="mainform" method="post" action="branch_transfer_limits.pl">
@@ -77,8 +77,8 @@
 			</thead>
 
 			<tbody>
-				<!-- TMPL_LOOP NAME="itemtypes_loop" -->
-					<tr><th>Limits for Item Type: <!-- TMPL_VAR NAME="itemtype" --></th></tr>
+				<!-- TMPL_LOOP NAME="codes_loop" -->
+					<tr><th>Limits for <!--TMPL_VAR NAME="limit_phrase" -->: <!-- TMPL_VAR NAME="code" --></th></tr>
 	
 					<!-- TMPL_LOOP NAME="to_branch_loop" -->
 						<tr>
@@ -87,11 +87,11 @@
 								<td>
                                     <!-- TMPL_IF NAME="isChecked" -->
 									<input 
-										name="<!-- TMPL_VAR NAME="itemtype" -->_<!-- TMPL_VAR NAME="toBranch" -->_<!-- TMPL_VAR NAME="fromBranch" -->"
+										name="<!-- TMPL_VAR NAME="code" -->_<!-- TMPL_VAR NAME="toBranch" -->_<!-- TMPL_VAR NAME="fromBranch" -->"
 										type="checkbox" value="1" checked="checked" />
                                     <!-- TMPL_ELSE-->
 									<input 
-										name="<!-- TMPL_VAR NAME="itemtype" -->_<!-- TMPL_VAR NAME="toBranch" -->_<!-- TMPL_VAR NAME="fromBranch" -->"
+										name="<!-- TMPL_VAR NAME="code" -->_<!-- TMPL_VAR NAME="toBranch" -->_<!-- TMPL_VAR NAME="fromBranch" -->"
 										type="checkbox" value="1" />
                                     <!-- TMPL_ELSE-->
                                     <!-- /TMPL_IF -->

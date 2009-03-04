@@ -279,13 +279,13 @@ sub transferbook {
 
     # if using Branch Transfer Limits
     if ( C4::Context->preference("UseBranchTransferLimits") == 1 ) {
-        if ( C4::Context->preference("item-level_itypes") ) {
+        if ( C4::Context->preference("item-level_itypes") && C4::Context->preference("BranchTransferLimitsType") eq 'itemtype' ) {
             if ( ! IsBranchTransferAllowed( $tbr, $fbr, $biblio->{'itype'} ) ) {
                 $messages->{'NotAllowed'} = $tbr . "::" . $biblio->{'itype'};
                 $dotransfer = 0;
             }
-        } elsif ( ! IsBranchTransferAllowed( $tbr, $fbr, $biblio->{'itemtype'} ) ) {
-            $messages->{'NotAllowed'} = $tbr . "::" . $biblio->{'itemtype'};
+        } elsif ( ! IsBranchTransferAllowed( $tbr, $fbr, $biblio->{ C4::Context->preference("BranchTransferLimitsType") } ) ) {
+            $messages->{'NotAllowed'} = $tbr . "::" . $biblio->{ C4::Context->preference("BranchTransferLimitsType") };
             $dotransfer = 0;
     	}
     }
@@ -1547,7 +1547,7 @@ sub AddReturn {
 				ModItemTransfer($iteminformation->{'itemnumber'}, C4::Context->userenv->{'branch'}, $iteminformation->{'homebranch'});
 				$messages->{'WasTransfered'} = 1;
 			} elsif ( C4::Context->preference("UseBranchTransferLimits") == 1 
-					&& ! IsTransferAllowed( $branch, $iteminformation->{'homebranch'}, $iteminformation->{'itemtype'} )
+					&& ! IsTransferAllowed( $branch, $iteminformation->{'homebranch'}, $iteminformation->{ C4::Context->preference("BranchTransferLimitsType") } )
 				) {
 				ModItemTransfer($iteminformation->{'itemnumber'}, C4::Context->userenv->{'branch'}, $iteminformation->{'homebranch'});
                                 $messages->{'WasTransfered'} = 1;
@@ -2630,19 +2630,22 @@ return $exist;
 
 =head2 IsBranchTransferAllowed
 
-$allowed = IsBranchTransferAllowed( $toBranch, $fromBranch, $itemtype );
+$allowed = IsBranchTransferAllowed( $toBranch, $fromBranch, $code );
+
+Code is either an itemtype or collection doe depending on the pref BranchTransferLimitsType
 
 =cut
 
 sub IsBranchTransferAllowed {
-	my ( $toBranch, $fromBranch, $itemtype ) = @_;
-    
+	my ( $toBranch, $fromBranch, $code ) = @_;
+
 	if ( $toBranch eq $fromBranch ) { return 1; } ## Short circuit for speed.
         
+	my $limitType = C4::Context->preference("BranchTransferLimitsType");   
 	my $dbh = C4::Context->dbh;
             
-	my $sth = $dbh->prepare('SELECT * FROM branch_transfer_limits WHERE toBranch = ? AND fromBranch = ? AND itemtype = ?');
-	$sth->execute( $toBranch, $fromBranch, $itemtype );
+	my $sth = $dbh->prepare("SELECT * FROM branch_transfer_limits WHERE toBranch = ? AND fromBranch = ? AND $limitType = ?");
+	$sth->execute( $toBranch, $fromBranch, $code );
 	my $limit = $sth->fetchrow_hashref();
                         
 	## If a row is found, then that combination is not allowed, if no matching row is found, then the combination *is allowed*
@@ -2655,17 +2658,21 @@ sub IsBranchTransferAllowed {
 
 =head2 CreateBranchTransferLimit
 
-CreateBranchTransferLimit( $toBranch, $fromBranch, $itemtype );
+CreateBranchTransferLimit( $toBranch, $fromBranch, $code );
+
+$code is either itemtype or collection code depending on what the pref BranchTransferLimitsType is set to.
 
 =cut
 
 sub CreateBranchTransferLimit {
-   my ( $toBranch, $fromBranch, $itemtype ) = @_;
+   my ( $toBranch, $fromBranch, $code ) = @_;
+
+   my $limitType = C4::Context->preference("BranchTransferLimitsType");
    
    my $dbh = C4::Context->dbh;
    
-   my $sth = $dbh->prepare("INSERT INTO branch_transfer_limits ( itemtype, toBranch, fromBranch ) VALUES ( ?, ?, ? )");
-   $sth->execute( $itemtype, $toBranch, $fromBranch );
+   my $sth = $dbh->prepare("INSERT INTO branch_transfer_limits ( $limitType, toBranch, fromBranch ) VALUES ( ?, ?, ? )");
+   $sth->execute( $code, $toBranch, $fromBranch );
 }
 
 =head2 DeleteBranchTransferLimits
