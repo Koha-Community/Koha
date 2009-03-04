@@ -101,7 +101,7 @@ returns ref to array result and count of results returned
 
 sub SearchAuthorities {
     my ($tags, $and_or, $excluding, $operator, $value, $offset,$length,$authtypecode,$sortby) = @_;
-#     warn "CALL : $tags, $and_or, $excluding, $operator, $value, $offset,$length,$authtypecode,$sortby";
+    #use Data::Dumper; map {warn "CALL : ".Data::Dumper::Dumper($_);} @_;
     my $dbh=C4::Context->dbh;
     if (C4::Context->preference('NoZebra')) {
     
@@ -213,7 +213,6 @@ sub SearchAuthorities {
             while ($n>1){$query= "\@or ".$query;$n--;}
         }
         
-        my $dosearch;
         my $and=" \@and " ;
         my $q2="";
         for(my $i = 0 ; $i <= $#{$value} ; $i++)
@@ -238,14 +237,13 @@ sub SearchAuthorities {
                 }
                 $attr =$attr."\"".@$value[$i]."\"";
                 $q2 =($q2 ne "" ?$and.$q2.$attr:$attr);
-                warn $q2;
-            $dosearch=1;
             }#if value
         }
         ##Add how many queries generated
-        if ($query=~/\S+/){    
+        if ($query=~/\S+/ && $q2 ne ""){    
           $query= $and.$query.$q2;
-        } else {
+        } 
+        elsif ($q2 ne "") {
           $query=$q2;
         }
         ## Adding order
@@ -257,7 +255,8 @@ sub SearchAuthorities {
                             '@attr 7=2 @attr 1=Heading 0'
                            :''
                         );            
-        $query=($query?"\@or $orderstring $query":"\@or \@attr 1=_ALLRECORDS \@attr 2=103 '' $orderstring ");
+        my  $allrecords=" \@attr 1=_ALLRECORDS \@attr 2=103 '' ";
+        $query=($q2?"\@or $orderstring $query":"\@or $orderstring ".($query?"\@and $allrecords $query":$allrecords) );
         
         $offset=0 unless $offset;
         my $counter = $offset;
