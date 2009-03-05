@@ -73,13 +73,10 @@ else {
 
 my ( $count, $issues ) = GetAllIssues( $borrowernumber, $order2, $limit );
 
-# add the row parity
-#my $num = 0;
-#foreach my $row (@$issues) {
-#    $row->{'even'} = 1 if $num % 2 == 0;
-#    $row->{'odd'} = 1 if $num % 2 == 1;
-#    $num++;
-#}
+my $borr = GetMemberDetails( $borrowernumber );
+my @bordat;
+$bordat[0] = $borr;
+$template->param( BORROWER_INFO => \@bordat );
 
 my @loop_reading;
 
@@ -90,25 +87,11 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
     }
 	
 	# XISBN Stuff
-	my $xisbn=$issues->[$i]->{'isbn'};
-	$xisbn =~ /(\d*[X]*)/;
-	$line{amazonisbn} = $1;		# FIXME: so it is OK if the ISBN = 'XXXXX' ?
-	my ($clean, $amazonisbn);
-	$amazonisbn = $1;
-	# these might be overkill, but they are better than the regexp above.
-	if (
-		$amazonisbn =~ /\b(\d{13})\b/ or
-		$amazonisbn =~ /\b(\d{10})\b/ or 
-		$amazonisbn =~ /\b(\d{9}X)\b/i
-	) {
-		$clean = $1;
-		$line{clean_isbn} = $1;
-	}
-	
+	my $isbn = GetNormalizedISBN($issues->[$i]->{'isbn'});
+	$line{normalized_isbn} = $isbn;
     $line{biblionumber}   = $issues->[$i]->{'biblionumber'};
     $line{title}          = $issues->[$i]->{'title'};
     $line{author}         = $issues->[$i]->{'author'};
-    $line{isbn}           = $issues->[$i]->{'isbn'};
     $line{itemcallnumber} = $issues->[$i]->{'itemcallnumber'};
     $line{date_due}       = format_date( $issues->[$i]->{'date_due'} );
     $line{returndate}     = format_date( $issues->[$i]->{'returndate'} );
@@ -136,7 +119,7 @@ BEGIN {
 	}
 }
 
-for(qw(AmazonContent GoogleJackets)) {	# BakerTaylorEnabled handled above
+for(qw(AmazonCoverImages GoogleJackets)) {	# BakerTaylorEnabled handled above
 	C4::Context->preference($_) or next;
 	$template->param($_=>1);
 	$template->param(JacketImages=>1);

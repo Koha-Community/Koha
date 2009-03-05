@@ -52,12 +52,10 @@
     <div id="catalogue_detail_biblio">
 
     <div id="bookcover">
-    <!-- TMPL_IF NAME="AmazonContent" --><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="amazonisbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link" target="_blank"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="amazonisbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Cover Image" /></a><!-- TMPL_ELSE --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="amazonisbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="amazonisbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Cover Image" /></a><!-- /TMPL_IF --><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="SyndeticsEnabled" --><!-- TMPL_IF NAME="SyndeticsCoverImages" --><!-- TMPL_IF NAME="amazonisbn" --><img src="http://syndetics.com/index.aspx?isbn=<!-- TMPL_VAR NAME="amazonisbn" -->/MC.GIF&client=<!-- TMPL_VAR NAME="SyndeticsClientCode" -->&type=xw10" alt="" class="thumbnail" /><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
-
-    <!-- TMPL_IF NAME="GoogleJackets" --><div style="block" title="<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" class="<!-- TMPL_VAR NAME="amazonisbn" -->" id="gbs-thumbnail"></div><!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="BakerTaylorEnabled" --><!-- TMPL_IF NAME="clean_isbn" --><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a href="https://<!-- TMPL_VAR NAME="BakerTaylorBookstoreURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="clean_isbn" -->" target="_blank"><img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="clean_isbn" -->" /></a><!-- TMPL_ELSE --><a href="https://<!-- TMPL_VAR NAME="BakerTaylorBookstoreURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="clean_isbn" -->"><img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="clean_isbn" -->" /></a><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="OPACAmazonEnabled" --><!-- TMPL_IF NAME="OPACAmazonCoverImages" --><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="normalized_isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link" target="_blank"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="normalized_isbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Cover Image" /></a><!-- TMPL_ELSE --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="normalized_isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="normalized_isbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="Cover Image" /></a><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="SyndeticsEnabled" --><!-- TMPL_IF NAME="SyndeticsCoverImages" --><img src="http://syndetics.com/index.aspx?isbn=<!-- TMPL_VAR NAME="normalized_isbn" -->/<!-- TMPL_VAR NAME="SyndeticsCoverImageSize" -->.GIF&amp;client=<!-- TMPL_VAR NAME="SyndeticsClientCode" --><!-- TMPL_IF NAME="normalized_upc" -->&amp;upc=<!-- TMPL_VAR NAME="normalized_upc" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="normalized_oclc" -->&amp;oclc=<!-- TMPL_VAR NAME="normalized_oclc" --><!-- /TMPL_IF -->&amp;type=xw10" alt="" class="thumbnail" /><!-- /TMPL_IF --><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="GoogleJackets" --><div style="block" title="<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" class="<!-- TMPL_VAR NAME="normalized_isbn" -->" id="gbs-thumbnail"></div><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="BakerTaylorEnabled" --><!-- TMPL_IF NAME="normalized_isbn" --><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a href="https://<!-- TMPL_VAR NAME="BakerTaylorBookstoreURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="normalized_isbn" -->" target="_blank"><img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="normalized_isbn" -->" /></a><!-- TMPL_ELSE --><a href="https://<!-- TMPL_VAR NAME="BakerTaylorBookstoreURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="normalized_isbn" -->"><img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="normalized_isbn" -->" /></a><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
     </div>
 
     <!-- TMPL_IF NAME="XSLTDetailsDisplay" -->
@@ -114,10 +112,10 @@
     <!-- TMPL_IF NAME="pages" --><span class="results_summary"><span class="label">Physical details:</span> <!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></span><!-- /TMPL_IF -->
     <!-- COinS / OpenURL -->
     <!-- TMPL_IF NAME="ocoins_format" -->
-    <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3A<!-- TMPL_VAR NAME="ocoins_format" -->&amp;rft.au=<!-- TMPL_VAR NAME="author" -->&amp;rft.btitle=<!-- TMPL_VAR NAME="title" -->&amp;rft.date=<!-- TMPL_VAR NAME="publicationyear" -->&amp;rft.pages=<!-- TMPL_VAR NAME="pages" -->&amp;rft.isbn=<!-- TMPL_VAR NAME=amazonisbn -->&amp;rft.aucorp=&amp;rft.place=<!-- TMPL_VAR NAME="place" -->&amp;rft.pub=<!-- TMPL_VAR NAME="publishercode" -->&amp;rft.edition=<!-- TMPL_VAR NAME="edition" -->&amp;rft.series=<!-- TMPL_VAR NAME="series" -->&amp;rft.genre="></span><!-- /TMPL_IF -->
-    <!-- TMPL_IF name="isbn" -->
+    <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3A<!-- TMPL_VAR NAME="ocoins_format" -->&amp;rft.au=<!-- TMPL_VAR NAME="author" -->&amp;rft.btitle=<!-- TMPL_VAR NAME="title" -->&amp;rft.date=<!-- TMPL_VAR NAME="publicationyear" -->&amp;rft.pages=<!-- TMPL_VAR NAME="pages" -->&amp;rft.isbn=<!-- TMPL_VAR NAME=normalized_isbn -->&amp;rft.aucorp=&amp;rft.place=<!-- TMPL_VAR NAME="place" -->&amp;rft.pub=<!-- TMPL_VAR NAME="publishercode" -->&amp;rft.edition=<!-- TMPL_VAR NAME="edition" -->&amp;rft.series=<!-- TMPL_VAR NAME="series" -->&amp;rft.genre="></span><!-- /TMPL_IF -->
+    <!-- TMPL_IF name="normalized_isbn" -->
     <!-- unAPI <abbr/> tag -->
-    <span class="results_summary"><span class="label">ISBN: </span><abbr class="unapi-id" title="koha:isbn:<!-- TMPL_VAR NAME="isbn" -->"><!-- TMPL_VAR NAME="isbn" --></abbr></span><!-- /TMPL_IF -->
+    <span class="results_summary"><span class="label">ISBN: </span><abbr class="unapi-id" title="koha:isbn:<!-- TMPL_VAR NAME="normalized_isbn" -->"><!-- TMPL_VAR NAME="normalized_isbn" --></abbr></span><!-- /TMPL_IF -->
     <!-- TMPL_IF name="issn" -->
     <span class="results_summary"><span class="label">ISSN:</span><!-- TMPL_VAR NAME="issn" --></span>
     <!-- /TMPL_IF -->
@@ -216,12 +214,12 @@
 
         <!-- TMPL_IF NAME="SyndeticsEnabled" --><!-- TMPL_IF NAME="SyndeticsSeries" --><!-- TMPL_IF NAME="SyndeticsSERIES1Exists" -->
         <span class="results_summary">
-        <span class="label">Series Information:</span> <a target="_blank" href="http://syndetics.com/ffseries.aspx?isbn=<!-- TMPL_VAR NAME="amazonisbn" -->&type=series&num=1&client=<!-- TMPL_VAR NAME="SyndeticsClientCode" -->">Click to open in new window</a>
+        <span class="label">Series Information:</span> <a target="_blank" href="http://syndetics.com/ffseries.aspx?isbn=<!-- TMPL_VAR NAME="normalized_isbn" -->&amp;type=series&amp;num=1&amp;client=<!-- TMPL_VAR NAME="SyndeticsClientCode" --><!-- TMPL_IF NAME="normalized_upc" -->&amp;upc=<!-- TMPL_VAR NAME="normalized_upc" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="normalized_oclc" -->&amp;oclc=<!-- TMPL_VAR NAME="normalized_oclc" --><!-- /TMPL_IF -->">Click to open in new window</a>
         </span>
         <!-- /TMPL_IF --><!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="SyndeticsAwards" --><!-- TMPL_IF NAME="SyndeticsAWARDS1Exists" -->
         <span class="results_summary">
-        <span class="label">Awards:</span> <a target="_blank" href="http://syndetics.com/ffawards.aspx?isbn=<!-- TMPL_VAR NAME="amazonisbn" -->&type=awards&client=<!-- TMPL_VAR NAME="SyndeticsClientCode" -->">Click to open in new window</a>
+        <span class="label">Awards:</span> <a target="_blank" href="http://syndetics.com/ffawards.aspx?isbn=<!-- TMPL_VAR NAME="normalized_isbn" -->&amp;type=awards&amp;client=<!-- TMPL_VAR NAME="SyndeticsClientCode" --><!-- TMPL_IF NAME="normalized_upc" -->&amp;upc=<!-- TMPL_VAR NAME="normalized_upc" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="normalized_oclc" -->&amp;oclc=<!-- TMPL_VAR NAME="normalized_oclc" --><!-- /TMPL_IF -->">Click to open in new window</a>
         </span>
         <!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
@@ -260,7 +258,7 @@
 
     <!-- TMPL_IF NAME="OPACFRBRizeEditions" --><!-- TMPL_IF NAME="XISBNS" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#editions">Editions</a></li><!-- /TMPL_IF --><!-- /TMPL_IF -->
     
-    <!-- TMPL_IF NAME="AmazonContent" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#amazonreviews">Amazon Reviews</a></li><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="OPACAmazonEnabled" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#amazonreviews">Amazon Reviews</a></li><!-- /TMPL_IF -->
 
 </ul>
 
@@ -340,12 +338,12 @@
 <!-- TMPL_LOOP NAME="PREVIOUS_SHELF_BROWSE" -->
         <td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser">
 
-    <!-- TMPL_IF NAME="AmazonContent" --><!-- TMPL_IF NAME="isbn" -->
-    <img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn"-->.01._AA75_PU_PU-5_.jpg" alt="" /><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- /TMPL_IF --><!-- /TMPL_IF -->
-	<!-- TMPL_IF NAME="SyndeticsEnabled" --><!-- TMPL_IF NAME="SyndeticsCoverImages" --><!-- TMPL_IF NAME="amazonisbn" --><img border="0" src="http://syndetics.com/index.aspx?isbn=<!-- TMPL_VAR NAME="isbn" -->/SC.GIF&client=<!-- TMPL_VAR NAME="SyndeticsClientCode" -->&type=xw10" alt="" /><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="GoogleJackets" --><!-- TMPL_IF NAME="isbn" --><div style="block" title="<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" class="<!-- TMPL_VAR name="isbn" -->" id="gbs-thumbnail<!--TMPL_VAR NAME="__counter__"-->"></div><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- /TMPL_IF --><!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="BakerTaylorEnabled" --><!-- TMPL_IF NAME="isbn" -->
-    <img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="isbn" -->" /><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- /TMPL_IF --><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="OPACAmazonEnabled" --><!-- TMPL_IF NAME="OPACAmazonCoverImages" --><!-- TMPL_IF NAME="browser_normalized_isbn" -->
+    <img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="browser_normalized_isbn"-->.01._AA75_PU_PU-5_.jpg" alt="" /><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="SyndeticsEnabled" --><!-- TMPL_IF NAME="SyndeticsCoverImages" --><img border="0" src="http://syndetics.com/index.aspx?isbn=<!-- TMPL_VAR NAME="browser_normalized_isbn" -->/SC.GIF&amp;client=<!-- TMPL_VAR NAME="SyndeticsClientCode" --><!-- TMPL_IF NAME="browser_normalized_upc" -->&amp;upc=<!-- TMPL_VAR NAME="browser_normalized_upc" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="browser_normalized_oclc" -->&amp;oclc=<!-- TMPL_VAR NAME="browser_normalized_oclc" --><!-- /TMPL_IF -->&amp;type=xw10" alt="" /><!-- /TMPL_IF --><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="GoogleJackets" --><!-- TMPL_IF NAME="browser_normalized_isbn" --><div style="block" title="<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" class="<!-- TMPL_VAR name="browser_normalized_isbn" -->" id="gbs-thumbnail<!--TMPL_VAR NAME="__counter__"-->"></div><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- /TMPL_IF --><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="BakerTaylorEnabled" --><!-- TMPL_IF NAME="browser_normalized_isbn" -->
+    <img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="browser_normalized_isbn" -->" /><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
 </a></td>
 <!-- /TMPL_LOOP -->
@@ -353,12 +351,12 @@
 <!-- TMPL_LOOP NAME="NEXT_SHELF_BROWSE" -->
        <td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser">
 
-    <!-- TMPL_IF NAME="AmazonContent" --><!-- TMPL_IF NAME="isbn" -->
-    <img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn"-->.01._AA75_PU_PU-5_.jpg" alt="" /><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- /TMPL_IF --><!-- /TMPL_IF -->
-	<!-- TMPL_IF NAME="SyndeticsEnabled" --><!-- TMPL_IF NAME="SyndeticsCoverImages" --><!-- TMPL_IF NAME="amazonisbn" --><img border="0" src="http://syndetics.com/index.aspx?isbn=<!-- TMPL_VAR NAME="isbn" -->/SC.GIF&client=<!-- TMPL_VAR NAME="SyndeticsClientCode" -->&type=xw10" alt="" /><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="GoogleJackets" --><!-- TMPL_IF NAME="isbn" --><div style="block" title="<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" class="<!-- TMPL_VAR name="isbn" -->" id="gbs-thumbnail<!--TMPL_VAR NAME="__counter__"-->"></div><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- /TMPL_IF --><!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="BakerTaylorEnabled" --><!-- TMPL_IF NAME="isbn" -->
-    <img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="isbn" -->" /><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- /TMPL_IF --><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="OPACAmazonEnabled" --><!-- TMPL_IF NAME="OPACAmazonCoverImages" --><!-- TMPL_IF NAME="browser_normalized_isbn" -->
+    <img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="browser_normalized_isbn"-->.01._AA75_PU_PU-5_.jpg" alt="" /><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="SyndeticsEnabled" --><!-- TMPL_IF NAME="SyndeticsCoverImages" --><img border="0" src="http://syndetics.com/index.aspx?isbn=<!-- TMPL_VAR NAME="browser_normalized_isbn" -->/SC.GIF&amp;client=<!-- TMPL_VAR NAME="SyndeticsClientCode" --><!-- TMPL_IF NAME="browser_normalized_upc" -->&amp;upc=<!-- TMPL_VAR NAME="browser_normalized_upc" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="browser_normalized_oclc" -->&amp;oclc=<!-- TMPL_VAR NAME="browser_normalized_oclc" --><!-- /TMPL_IF -->&amp;type=xw10" alt="" /><!-- /TMPL_IF --><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="GoogleJackets" --><!-- TMPL_IF NAME="browser_normalized_isbn" --><div style="block" title="<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" class="<!-- TMPL_VAR name="browser_normalized_isbn" -->" id="gbs-thumbnail<!--TMPL_VAR NAME="__counter__"-->"></div><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- /TMPL_IF --><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="BakerTaylorEnabled" --><!-- TMPL_IF NAME="browser_normalized_isbn" -->
+    <img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="browser_normalized_isbn" -->" /><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
 </a></td>
 <!-- /TMPL_LOOP -->
@@ -384,11 +382,11 @@
 
 <div id="descriptions">
 <div class="content_set">
-<!-- TMPL_IF NAME="AmazonContent" -->
+<!-- TMPL_IF NAME="OPACAmazonEnabled" -->
 <!-- TMPL_LOOP NAME="AMAZON_EDITORIAL_REVIEWS" -->
     <!-- TMPL_IF NAME="Content" -->
     <h4>From <!-- TMPL_VAR NAME="Source" -->:</h4>
-    <p><!-- TMPL_VAR NAME="Content" --></p>
+    <div><!-- TMPL_VAR NAME="Content" --></div>
     <!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_IF-->
@@ -396,7 +394,7 @@
 <!-- TMPL_IF NAME="SyndeticsSummary" --><!-- TMPL_IF NAME="SyndeticsSUMMARYExists" -->
 <!-- TMPL_LOOP NAME="SYNDETICS_SUMMARY" -->
     <!-- TMPL_IF NAME="a" -->
-    <h4>Enhanced Description:</h4>
+    <h4>Enhanced Descriptions from Syndetics:</h4>
     <p><!-- TMPL_VAR NAME="a" --></p>
     <!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
@@ -414,10 +412,13 @@
 <!-- /TMPL_IF -->
 </div>
 </div>
+
 <!-- TMPL_IF NAME="SyndeticsEnabled" -->
+
+<!-- TMPL_IF NAME="SyndeticsTOC" --><!-- TMPL_IF NAME="SYNDETICS_TOC" -->
 <div id="toc">
 <div class="content_set">
-<!-- TMPL_IF NAME="SyndeticsTOC" --><!-- TMPL_IF NAME="SYNDETICS_TOC" -->
+<h3>Table of Contents provided by Syndetics</h3>
 <ul>
 <!-- TMPL_LOOP NAME="SYNDETICS_TOC" -->
     <!-- TMPL_IF NAME="p" -->
@@ -425,21 +426,23 @@
     <!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
 </ul>
+</div>
+</div>
 <!-- /TMPL_IF --><!-- /TMPL_IF -->
-</div>
-</div>
 
+<!-- TMPL_IF NAME="SyndeticsExcerpt" --><!-- TMPL_IF NAME="SYNDETICS_EXCERPT" -->
 <div id="excerpt">
 <div class="content_set">
-<!-- TMPL_IF NAME="SyndeticsExcerpt" -->
+<h3>Excerpt provided by Syndetics</h3>
 <!-- TMPL_VAR NAME="SYNDETICS_EXCERPT" -->
-<!-- /TMPL_IF -->
 </div>
 </div>
+<!-- /TMPL_IF --><!-- /TMPL_IF -->
 
+<!-- TMPL_IF NAME="SyndeticsReviews" --><!-- TMPL_IF NAME="SYNDETICS_REVIEWS" -->
 <div id="reviews">
 <div class="content_set">
-<!-- TMPL_IF NAME="SyndeticsReviews" --><!-- TMPL_IF NAME="SYNDETICS_REVIEWS" -->
+<h3>Reviews provided by Syndetics</h3>
 <!-- TMPL_LOOP NAME="SYNDETICS_REVIEWS" -->
     <!-- TMPL_IF NAME="title" -->
     <h4><!-- TMPL_VAR NAME="title" --></h4>
@@ -452,23 +455,24 @@
 	<!-- /TMPL_LOOP -->
     <!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
+</div>
+</div>
 <!-- /TMPL_IF --><!-- /TMPL_IF -->
-</div>
-</div>
 
+<!-- TMPL_IF NAME="SyndeticsAuthorNotes" --><!-- TMPL_IF NAME="SYNDETICS_ANOTES" -->
 <div id="anotes">
 <div class="content_set">
-<!-- TMPL_IF NAME="SyndeticsAuthorNotes" --><!-- TMPL_IF NAME="SYNDETICS_ANOTES" -->
+<h3>Author Notes provided by Syndetics</h3>
 <!-- TMPL_LOOP NAME="SYNDETICS_ANOTES" -->
     <!-- TMPL_IF NAME="content" -->
         <!-- TMPL_VAR NAME="content" -->
     <!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
+</div>
+</div>
 <!-- /TMPL_IF --><!-- /TMPL_IF -->
-</div>
-</div>
+<!-- /TMPL_IF --> <!-- /SyndeticsEnabled -->
 
-<!-- /TMPL_IF -->
 <!-- TMPL_IF name="subscriptionsnumber" -->
 <div id="subscriptions">
     <h2>This is a serial subscription</h2>
@@ -568,10 +572,9 @@
 <!-- TMPL_LOOP NAME="XISBNS" -->
 <tr>
 <td>
-<!-- TMPL_IF NAME="AmazonContent" --><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="amazonisbn" -->.01._AA75_PU_PU-5_.jpg" alt="" /><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="OPACAmazonEnabled" --><!-- TMPL_IF NAME="OPACAmazonCoverImages" --><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="normalized_isbn" -->.01._AA75_PU_PU-5_.jpg" alt="" /><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="SyndeticsEnabled" --><!-- TMPL_IF NAME="SyndeticsCoverImages" --><!-- TMPL_IF NAME="amazonisbn" --><img src="http://syndetics.com/index.aspx?isbn=<!-- TMPL_VAR NAME="amazonisbn" -->/SC.GIF&client=<!-- TMPL_VAR NAME="SyndeticsClientCode" -->&type=xw10" alt="" class="thumbnail" />
-<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="SyndeticsEnabled" --><!-- TMPL_IF NAME="SyndeticsCoverImages" --><img src="http://syndetics.com/index.aspx?isbn=<!-- TMPL_VAR NAME="normalized_isbn" -->/SC.GIF&amp;client=<!-- TMPL_VAR NAME="SyndeticsClientCode" --><!-- TMPL_IF NAME="normalized_upc" -->&amp;upc=<!-- TMPL_VAR NAME="normalized_upc" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="normalized_oclc" -->&amp;oclc=<!-- TMPL_VAR NAME="normalized_oclc" --><!-- /TMPL_IF -->&amp;type=xw10" alt="" class="thumbnail" /><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
 </td>
 <td><!-- TMPL_VAR NAME="description" --></td><td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a><!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR NAME="author" ESCAPE="HTML" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="copyrightdate" --> &copy;<!-- TMPL_VAR NAME="copyrightdate" --><!-- /TMPL_IF --><!-- TMPL_IF name="publishercode" -->
@@ -588,11 +591,11 @@
 <!-- /TMPL_LOOP -->
 </table>
 </div><!-- /TMPL_IF --><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="AmazonContent" -->
+<!-- TMPL_IF NAME="OPACAmazonEnabled" -->
 <!-- Amazon Reviews -->
 <div id="amazonreviews">
         <!-- TMPL_IF NAME="amazon_average_rating" -->
-            <div class="clearfix"><h3 style="float: left;">Average Rating (from Amazon.com): </h3><span class="starMT" style="float: left;"><span class="starFull" style="float: left; width:<!-- TMPL_VAR EXPR="amazon_average_rating / 2" -->px"></span></span> <!-- TMPL_IF NAME="isbn" --><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&amp;asin=<!-- TMPL_VAR NAME="amazonisbn" -->&amp;store=books" target="_blank">Add your own review</a><!-- TMPL_ELSE --><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&amp;asin=<!-- TMPL_VAR NAME="amazonisbn" -->&amp;store=books">Add your own review</a><!-- /TMPL_IF --><!-- /TMPL_IF --></div>
+            <div class="clearfix"><h3 style="float: left;">Average Rating (from Amazon.com): </h3><span class="starMT" style="float: left;"><span class="starFull" style="float: left; width:<!-- TMPL_VAR EXPR="amazon_average_rating / 2" -->px"></span></span> <!-- TMPL_IF NAME="normalized_isbn" --><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&amp;asin=<!-- TMPL_VAR NAME="normalized_isbn" -->&amp;store=books" target="_blank">Add your own review</a><!-- TMPL_ELSE --><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&amp;asin=<!-- TMPL_VAR NAME="normalized_isbn" -->&amp;store=books">Add your own review</a><!-- /TMPL_IF --><!-- /TMPL_IF --></div>
 
         <!-- TMPL_LOOP NAME="AMAZON_CUSTOMER_REVIEWS" -->
             <div class="content_set">
@@ -604,7 +607,7 @@
         <!-- /TMPL_LOOP -->
         <!-- TMPL_ELSE -->
 
-    <p> Sorry, there are no reviews available for this title. <!-- TMPL_IF NAME="isbn" --><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&amp;asin=<!-- TMPL_VAR NAME="amazonisbn" -->&amp;store=books" target="_blank">Add your own review</a><!-- TMPL_ELSE --><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&amp;asin=<!-- TMPL_VAR NAME="amazonisbn" -->&amp;store=books">Add your own review</a><!-- /TMPL_IF --><!-- /TMPL_IF --></p>
+    <p> Sorry, there are no reviews available for this title. <!-- TMPL_IF NAME="normalized_isbn" --><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&amp;asin=<!-- TMPL_VAR NAME="normalized_isbn" -->&amp;store=books" target="_blank">Add your own review</a><!-- TMPL_ELSE --><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&amp;asin=<!-- TMPL_VAR NAME="normalized_isbn" -->&amp;store=books">Add your own review</a><!-- /TMPL_IF --><!-- /TMPL_IF --></p>
 
         <!-- /TMPL_IF -->
 </div>
@@ -643,13 +646,16 @@
         </a></li><!-- /TMPL_IF -->
 </ul>
 
-<!-- TMPL_IF NAME="AmazonContent" --><!-- TMPL_IF NAME="OPACAmazonSimilarItems" --><!-- TMPL_IF NAME="AMAZON_SIMILAR_PRODUCTS" -->
+<!-- TMPL_IF NAME="OPACAmazonEnabled" --><!-- TMPL_IF NAME="OPACAmazonSimilarItems" --><!-- TMPL_IF NAME="AMAZON_SIMILAR_PRODUCTS" -->
 <div id="similars">
 <h4>Similar Items</h4>
 <ul>
 <!-- TMPL_LOOP NAME="AMAZON_SIMILAR_PRODUCTS" -->
 <!-- TMPL_LOOP NAME="similar_biblionumbers" -->
-<li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><img alt="" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="ASIN"-->.01._SS50_.jpg" /></a> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" ESCAPE="HTML" --></a> </li>
+<li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
+<!-- TMPL_IF NAME="OPACAmazonCoverImages" --><img alt="" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="ASIN"-->.01._SS50_.jpg" /><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="SyndeticsEnabled" --><!-- TMPL_IF NAME="SyndeticsCoverImages" --><img src="http://syndetics.com/index.aspx?isbn=<!-- TMPL_VAR NAME="ASIN"-->/SC.GIF&amp;client=<!-- TMPL_VAR NAME="SyndeticsClientCode" --><!-- TMPL_IF NAME="normalized_upc" -->&amp;upc=<!-- TMPL_VAR NAME="normalized_upc" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="normalized_oclc" -->&amp;oclc=<!-- TMPL_VAR NAME="normalized_oclc" --><!-- /TMPL_IF -->&amp;type=xw10" alt="" /><!-- /TMPL_IF --><!-- /TMPL_IF -->
+<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" ESCAPE="HTML" --></a>
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_LOOP -->
 </ul>

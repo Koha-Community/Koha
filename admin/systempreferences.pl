@@ -217,12 +217,14 @@ $tabsysprefs{QueryRemoveStopwords}    = "Searching";
 $tabsysprefs{AdvancedSearchTypes}     = "Searching";
 
 # EnhancedContent
-$tabsysprefs{AmazonContent}          = "EnhancedContent";
+$tabsysprefs{AmazonEnabled}          = "EnhancedContent";
+$tabsysprefs{OPACAmazonEnabled}      = "EnhancedContent";
+$tabsysprefs{AmazonCoverImages}      = "EnhancedContent";
+$tabsysprefs{OPACAmazonCoverImages}  = "EnhancedContent";
 $tabsysprefs{AWSAccessKeyID}         = "EnhancedContent";
 $tabsysprefs{AmazonLocale}           = "EnhancedContent";
 $tabsysprefs{AmazonAssocTag}         = "EnhancedContent";
 $tabsysprefs{AmazonSimilarItems}     = "EnhancedContent";
-$tabsysprefs{OPACAmazonContent}      = "EnhancedContent";
 $tabsysprefs{OPACAmazonSimilarItems} = "EnhancedContent";
 
 # Baker & Taylor
@@ -243,6 +245,7 @@ $tabsysprefs{SyndeticsReviews}        = 'EnhancedContent';
 $tabsysprefs{SyndeticsAuthorNotes}    = 'EnhancedContent';
 $tabsysprefs{SyndeticsAwards}         = 'EnhancedContent';
 $tabsysprefs{SyndeticsSeries}         = 'EnhancedContent';
+$tabsysprefs{SyndeticsCoverImageSize} = 'EnhancedContent';
 
 
 # FRBR

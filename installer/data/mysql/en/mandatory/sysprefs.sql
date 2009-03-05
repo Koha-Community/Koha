@@ -1,8 +1,8 @@
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('acquisitions','normal','Choose Normal, budget-based acquisitions, or Simple bibliographic-data acquisitions','simple|normal','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('advancedMARCeditor',0,'If ON, the MARC editor won\'t display field/subfield descriptions','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AmazonContent',0,'Turn ON Amazon Content - You MUST set AWSAccessKeyID and AmazonAssocTag if enabled','','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AmazonEnabled',0,'Turn ON Amazon Content - You MUST set AWSAccessKeyID and AmazonAssocTag if enabled','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AmazonSimilarItems',0,'Turn ON Amazon Similar Items feature  - You MUST set AWSAccessKeyID and AmazonAssocTag if enabled','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACAmazonContent',0,'Turn ON Amazon Content in the OPAC - You MUST set AWSAccessKeyID and AmazonAssocTag if enabled','','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACAmazonEnabled',0,'Turn ON Amazon Content in the OPAC - You MUST set AWSAccessKeyID and AmazonAssocTag if enabled','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACAmazonSimilarItems',0,'Turn ON Amazon Similar Items feature  - You MUST set AWSAccessKeyID and AmazonAssocTag if enabled','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AmazonLocale','US','Use to set the Locale of your Amazon.com Web Services','US|CA|DE|FR|JP|UK','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AWSAccessKeyID','','See:  http://aws.amazon.com','','free');
@@ -215,3 +215,17 @@ INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES
 INSERT INTO `systempreferences` ( `variable` , `value` , `options` , `explanation` , `type` ) VALUES ( 'UseBranchTransferLimits', '0', '', 'If ON, Koha will will use the rules defined in branch_transfer_limits to decide if an item transfer should be allowed.', 'YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AllowHoldPolicyOverride', '0', 'Allow staff to override hold policies when placing holds',NULL,'YesNo');
 INSERT INTO `systempreferences` ( `variable` , `value` , `options` , `explanation` , `type` ) VALUES ( 'BranchTransferLimitsType', 'ccode', 'itemtype|ccode', 'When using branch transfer limits, choose whether to limit by itemtype or collection code.', 'Choice');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsClientCode', '0', 'Client Code for using Syndetics Solutions content','','free');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsEnabled', '0', 'Turn on Syndetics Enhanced Content','','YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsCoverImages', '0', 'Display Cover Images from Syndetics','','YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsTOC', '0', 'Display Table of Content information from Syndetics','','YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsSummary', '0', 'Display Summary Information from Syndetics','','YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsEditions', '0', 'Display Editions from Syndetics','','YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsExcerpt', '0', 'Display Excerpts and first chapters on OPAC from Syndetics','','YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsReviews', '0', 'Display Reviews on OPAC from Syndetics','','YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsAuthorNotes', '0', 'Display Notes about the Author on OPAC from Syndetics','','YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsAwards', '0', 'Display Awards on OPAC from Syndetics','','YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsSeries', '0', 'Display Series information on OPAC from Syndetics','','YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('SyndeticsCoverImageSize', 'MC', 'Choose the size of the Syndetics Cover Image to display on the OPAC detail page, MC is Medium, LC is Large','MC|LC','Choice');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OPACAmazonCoverImages', '0', 'Display cover images on OPAC from Amazon Web Services','','YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('AmazonCoverImages', '0', 'Display Cover Images in Staff Client from Amazon Web Services','','YesNo');

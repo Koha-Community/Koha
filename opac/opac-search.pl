@@ -432,17 +432,6 @@ for (my $i=0;$i<=@servers;$i++) {
 										limit=>$tag_quantity });
 			}
 		}
-		foreach (@newresults) {
-			my $clean = $_->{isbn} or next;
-			unless (
-				$clean =~ /\b(\d{13})\b/ or
-				$clean =~ /\b(\d{10})\b/ or 
-				$clean =~ /\b(\d{9}X)\b/i
-			) {
-				next;
-			}
-			$_ ->{'clean_isbn'} = $1;
-		}
         $total = $total + $results_hashref->{$server}->{"hits"};
         ## If there's just one result, redirect to the detail page
         if ($total == 1) {         

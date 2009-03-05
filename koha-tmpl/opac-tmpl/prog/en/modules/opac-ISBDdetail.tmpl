@@ -31,7 +31,7 @@
 	            <a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#opac-isbd-subscriptions">Subscriptions</a>
 	    </li><!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="reviewson" --><li><a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#comments">Comments</a></li><!-- /TMPL_IF -->
-	 	<!-- TMPL_IF NAME="AmazonContent" --><li><a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#opac-isbd-amazonreviews">Amazon Reviews</a></li><!-- /TMPL_IF -->
+	 	<!-- TMPL_IF NAME="OPACAmazonEnabled" --><li><a href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#opac-isbd-amazonreviews">Amazon Reviews</a></li><!-- /TMPL_IF -->
 	</ul>
 
 		<div id="opac-isbd-subscriptions">    <!-- TMPL_IF name="subscriptionsnumber" -->
@@ -108,13 +108,13 @@
 
 	<!-- /TMPL_IF -->
 
-	<!-- TMPL_IF NAME="AmazonContent" -->
+	<!-- TMPL_IF NAME="OPACAmazonEnabled" -->
 	<!-- Amazon Reviews -->
 	<div id="opac-isbd-amazonreviews">
 
 	    <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
-	    <!-- TMPL_IF NAME="isbn" -->
-	        <h4><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&asin=<!-- TMPL_VAR NAME="isbn" -->&amp;store=books">Add your own review</a></h4>
+	    <!-- TMPL_IF NAME="normalized_isbn" -->
+	        <h4><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&asin=<!-- TMPL_VAR NAME="normalized_isbn" -->&amp;store=books">Add your own review</a></h4>
 	    <!-- /TMPL_IF -->
 	    <!-- /TMPL_LOOP --><br/>
 

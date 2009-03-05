@@ -21,6 +21,7 @@ use XML::Simple;
 use LWP::Simple;
 use LWP::UserAgent;
 use HTTP::Request::Common;
+use C4::Koha;
 
 use strict;
 use warnings;
@@ -60,11 +61,10 @@ Get editorial reviews, customer reviews, and similar products using Amazon Web S
 sub get_amazon_details {
     my ( $isbn, $record, $marcflavour ) = @_;
 
-    #normalize the ISBN
-    $isbn = _normalize_match_point ($isbn);
-
-    my $upc = _get_amazon_upc($record,$marcflavour);
-    my $ean = _get_amazon_ean($record,$marcflavour);
+    # Normalize the fields
+    $isbn = GetNormalizedISBN($isbn);
+    my $upc = GetNormalizedUPC($record,$marcflavour);
+    my $ean = GetNormalizedEAN($record,$marcflavour);
 
     # warn "ISBN: $isbn | UPC: $upc | EAN: $ean";
 
@@ -153,64 +153,6 @@ sub check_search_inside {
             undef $available;
         }
         return $available;
-}
-
-sub _get_amazon_upc {
-	my ($record,$marcflavour) = @_;
-	my (@fields,$upc);
-
-	if ($marcflavour eq 'MARC21') {
-		@fields = $record->field('024');
-		foreach my $field (@fields) {
-			my $indicator = $field->indicator(1);
-			my $upc = _normalize_match_point($field->subfield('a'));
-			if ($indicator == 1 and $upc ne '') {
-				return $upc;
-			}
-		}
-	}
-	else { # assume unimarc if not marc21
-		@fields = $record->field('072');
-		foreach my $field (@fields) {
-			my $upc = _normalize_match_point($field->subfield('a'));
-			if ($upc ne '') {
-				return $upc;
-			}
-		}
-	}
-}
-
-sub _get_amazon_ean {
-	my ($record,$marcflavour) = @_;
-	my (@fields,$ean);
-
-	if ($marcflavour eq 'MARC21') {
-		@fields = $record->field('024');
-		foreach my $field (@fields) {
-			my $indicator = $field->indicator(1);
-			my $upc = _normalize_match_point($field->subfield('a'));
-			if ($indicator == 3 and $upc ne '') {
-				return $upc;
-			}
-		}
-	}
-	else { # assume unimarc if not marc21
-		@fields = $record->field('073');
-		foreach my $field (@fields) {
-			my $upc = _normalize_match_point($field->subfield('a'));
-			if ($upc ne '') {
-				return $upc;
-			}
-		}
-	}
-}
-
-sub _normalize_match_point {
-	my $match_point = shift;
-	(my $normalized_match_point) = $match_point =~ /([\d-]*[X]*)/;
-	$normalized_match_point =~ s/-//g;
-
-	return $normalized_match_point;
 }
 
 1;

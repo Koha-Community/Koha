@@ -53,6 +53,10 @@ BEGIN {
 		&GetKohaAuthorisedValues
 		&GetAuthValCode
 		&GetManagedTagSubfields
+		&GetNormalizedUPC
+		&GetNormalizedISBN
+		&GetNormalizedEAN
+		&GetNormalizedOCLCNumber
 
 		$DEBUG
 	);
@@ -1130,6 +1134,131 @@ sub display_marc_indicators {
         $indicators =~ s/ /#/g;
     }
     return $indicators;
+}
+
+sub GetNormalizedUPC {
+ my ($record,$marcflavour) = @_;
+    my (@fields,$upc);
+
+    if ($marcflavour eq 'MARC21') {
+        @fields = $record->field('024');
+        foreach my $field (@fields) {
+            my $indicator = $field->indicator(1);
+            my $upc = _normalize_match_point($field->subfield('a'));
+            if ($indicator == 1 and $upc ne '') {
+                return $upc;
+            }
+        }
+    }
+    else { # assume unimarc if not marc21
+        @fields = $record->field('072');
+        foreach my $field (@fields) {
+            my $upc = _normalize_match_point($field->subfield('a'));
+            if ($upc ne '') {
+                return $upc;
+            }
+        }
+    }
+}
+
+# Normalizes and returns the first valid ISBN found in the record
+sub GetNormalizedISBN {
+    my ($isbn,$record,$marcflavour) = @_;
+    my @fields;
+    if ($isbn) {
+        return _isbn_cleanup($isbn);
+    }
+    return undef unless $record;
+
+    if ($marcflavour eq 'MARC21') {
+        @fields = $record->field('020');
+        foreach my $field (@fields) {
+            $isbn = $field->subfield('a');
+            if ($isbn) {
+                return _isbn_cleanup($isbn);
+            } else {
+                return undef;
+            }
+        }
+    }
+    else { # assume unimarc if not marc21
+        @fields = $record->field('010');
+        foreach my $field (@fields) {
+            my $isbn = $field->subfield('a');
+            if ($isbn) {
+                return _isbn_cleanup($isbn);
+            } else {
+                return undef;
+            }
+        }
+    }
+
+}
+
+sub GetNormalizedEAN {
+    my ($record,$marcflavour) = @_;
+    my (@fields,$ean);
+
+    if ($marcflavour eq 'MARC21') {
+        @fields = $record->field('024');
+        foreach my $field (@fields) {
+            my $indicator = $field->indicator(1);
+            $ean = _normalize_match_point($field->subfield('a'));
+            if ($indicator == 3 and $ean ne '') {
+                return $ean;
+            }
+        }
+    }
+    else { # assume unimarc if not marc21
+        @fields = $record->field('073');
+        foreach my $field (@fields) {
+            $ean = _normalize_match_point($field->subfield('a'));
+            if ($ean ne '') {
+                return $ean;
+            }
+        }
+    }
+}
+sub GetNormalizedOCLCNumber {
+    my ($record,$marcflavour) = @_;
+    my (@fields,$oclc);
+
+    if ($marcflavour eq 'MARC21') {
+        @fields = $record->field('035');
+        foreach my $field (@fields) {
+            $oclc = $field->subfield('a');
+            if ($oclc =~ /OCoLC/) {
+                $oclc =~ s/\(OCoLC\)//;
+                return $oclc;
+            } else {
+                return undef;
+            }
+        }
+    }
+    else { # TODO: add UNIMARC fields
+    }
+}
+
+sub _normalize_match_point {
+    my $match_point = shift;
+    (my $normalized_match_point) = $match_point =~ /([\d-]*[X]*)/;
+    $normalized_match_point =~ s/-//g;
+
+    return $normalized_match_point;
+}
+
+sub _isbn_cleanup ($) {
+    my $normalized_isbn = shift;
+    $normalized_isbn =~/([0-9]{1,})/;
+    $normalized_isbn = $1;
+    if (
+        $normalized_isbn =~ /\b(\d{13})\b/ or
+        $normalized_isbn =~ /\b(\d{10})\b/ or
+        $normalized_isbn =~ /\b(\d{9}X)\b/i
+    ) { 
+        return $1;
+    }
+    return undef;
 }
 
 1;

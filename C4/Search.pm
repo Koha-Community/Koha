@@ -1263,6 +1263,7 @@ sub searchResults {
         $times = $hits;	 # FIXME: if $hits is undefined, why do we want to equal it?
     }
 
+	my $marcflavour = C4::Context->preference("marcflavour");
     # loop through all of the records we've retrieved
     for ( my $i = $offset ; $i <= $times - 1 ; $i++ ) {
         my $marcrecord = MARC::File::USMARC::decode( $marcresults[$i] );
@@ -1274,9 +1275,10 @@ sub searchResults {
         $oldbiblio->{imageurl} = getitemtypeimagelocation( 'opac', $itemtypes{ $oldbiblio->{itemtype} }->{imageurl} );
 
         $oldbiblio->{'authorised_value_images'}  = C4::Items::get_authorised_value_images( C4::Biblio::get_biblio_authorised_values( $oldbiblio->{'biblionumber'}, $marcrecord ) );
-        (my $aisbn) = $oldbiblio->{isbn} =~ /([\d-]*[X]*)/;
-        $aisbn =~ s/-//g;
-        $oldbiblio->{amazonisbn} = $aisbn;
+		$oldbiblio->{normalized_upc} = GetNormalizedUPC($marcrecord,$marcflavour);
+		$oldbiblio->{normalized_ean} = GetNormalizedEAN($marcrecord,$marcflavour);
+		$oldbiblio->{normalized_oclc} = GetNormalizedOCLCNumber($marcrecord,$marcflavour);
+		$oldbiblio->{normalized_isbn} = GetNormalizedISBN(undef,$marcrecord,$marcflavour);
 		$oldbiblio->{description} = $itemtypes{ $oldbiblio->{itemtype} }->{description};
  # Build summary if there is one (the summary is defined in the itemtypes table)
  # FIXME: is this used anywhere, I think it can be commented out? -- JF
@@ -1527,8 +1529,6 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
         $oldbiblio->{damagedcount}         = $itemdamaged_count;
         $oldbiblio->{intransitcount}       = $item_in_transit_count;
         $oldbiblio->{orderedcount}         = $ordered_count;
-        $oldbiblio->{isbn} =~
-          s/-//g;    # deleting - in isbn to enable amazon content
         push( @newresults, $oldbiblio );
     }
     return @newresults;

@@ -31,7 +31,7 @@ use C4::Items;
 use C4::Circulation;
 use C4::Tags qw(get_tags);
 use C4::Dates qw/format_date/;
-use C4::XISBN qw(get_xisbns get_biblionumber_from_isbn get_biblio_from_xisbn);
+use C4::XISBN qw(get_xisbns get_biblionumber_from_isbn);
 use C4::External::Amazon;
 use C4::External::Syndetics qw(get_syndetics_index get_syndetics_summary get_syndetics_toc get_syndetics_excerpt get_syndetics_reviews get_syndetics_anotes );
 use C4::Review;
@@ -188,6 +188,21 @@ foreach ( keys %{$dat} ) {
     $template->param( "$_" => $dat->{$_} . "" );
 }
 
+# some useful variables for enhanced content;
+# in each case, we're grabbing the first value we find in
+# the record and normalizing it
+my $upc = GetNormalizedUPC($record,$marcflavour);
+my $ean = GetNormalizedEAN($record,$marcflavour);
+my $oclc = GetNormalizedOCLCNumber($record,$marcflavour);
+my $isbn = GetNormalizedISBN(undef,$record,$marcflavour);
+
+$template->param(
+	normalized_upc => $upc,
+	normalized_ean => $ean,
+	normalized_oclc => $oclc,
+	normalized_isbn => $isbn,
+);
+
 # COinS format FIXME: for books Only
 my $coins_format;
 my $fmt = substr $record->leader(), 6,2;
@@ -229,44 +244,19 @@ $template->param(
     loggedincommenter   => $loggedincommenter
 );
 
-sub isbn_cleanup ($) {
-	my $isbn=shift;
-    ($isbn) = $isbn =~ /([\d-]*[X]*)/;
-    $isbn =~ s/-//g;
-	if (
-		$isbn =~ /\b(\d{13})\b/ or
-		$isbn =~ /\b(\d{10})\b/ or 
-		$isbn =~ /\b(\d{9}X)\b/i
-	) {
-		return $1;
-	}
-	return undef;
-}
-
 # XISBN Stuff
-my $xisbn=$dat->{'isbn'};
-(my $aisbn) = $xisbn =~ /([\d-]*[X]*)/;
-$aisbn =~ s/-//g;
-$template->param(amazonisbn => $aisbn);		# FIXME: so it is OK if the ISBN = 'XXXXX' ?
-my ($clean,$clean2);
-# these might be overkill, but they are better than the regexp above.
-if ($clean = isbn_cleanup($xisbn)){
-	$template->param(clean_isbn => $clean);
-}
-
 if (C4::Context->preference("OPACFRBRizeEditions")==1) {
     eval {
         $template->param(
-            xisbn => $xisbn,
-            XISBNS => get_xisbns($xisbn)
+            XISBNS => get_xisbns($isbn)
         );
     };
     if ($@) { warn "XISBN Failed $@"; }
 }
 # Amazon.com Stuff
-if ( C4::Context->preference("OPACAmazonContent") == 1 ) {
+if ( C4::Context->preference("OPACAmazonEnabled") && C4::Context->preference("OPACAmazonSimilarItems") ) {
     my $similar_products_exist;
-    my $amazon_details = &get_amazon_details( $xisbn, $record, $marcflavour );
+    my $amazon_details = &get_amazon_details( $isbn, $record, $marcflavour );
     my $item_attributes = \%{$amazon_details->{Items}->{Item}->{ItemAttributes}};
     my $customer_reviews = \@{$amazon_details->{Items}->{Item}->{CustomerReviews}->{Review}};
     for my $one_review (@$customer_reviews) {
@@ -292,9 +282,10 @@ if ( C4::Context->preference("OPACAmazonContent") == 1 ) {
 }
 
 my $syndetics_elements;
+
 if ( C4::Context->preference("SyndeticsEnabled") ) {
 	eval {
-    $syndetics_elements = &get_syndetics_index($xisbn);
+    $syndetics_elements = &get_syndetics_index($isbn,$upc,$oclc);
 	for my $element (values %$syndetics_elements) {
 		$template->param("Syndetics$element"."Exists" => 1 );
 		#warn "Exists: "."Syndetics$element"."Exists";
@@ -307,7 +298,7 @@ if ( C4::Context->preference("SyndeticsEnabled")
         && C4::Context->preference("SyndeticsSummary")
         && $syndetics_elements->{'SUMMARY'} =~ /SUMMARY/) {
 	eval {
-	my $syndetics_summary = &get_syndetics_summary($xisbn);
+	my $syndetics_summary = &get_syndetics_summary($isbn,$upc,$oclc);
 	$template->param( SYNDETICS_SUMMARY => $syndetics_summary );
 	};
 	warn $@ if $@;
@@ -318,7 +309,7 @@ if ( C4::Context->preference("SyndeticsEnabled")
         && C4::Context->preference("SyndeticsTOC")
         && $syndetics_elements->{'TOC'} =~ /TOC/) {
 	eval {
-    my $syndetics_toc = &get_syndetics_toc($xisbn);
+    my $syndetics_toc = &get_syndetics_toc($isbn,$upc,$oclc);
     $template->param( SYNDETICS_TOC => $syndetics_toc );
 	};
 	warn $@ if $@;
@@ -328,7 +319,7 @@ if ( C4::Context->preference("SyndeticsEnabled")
     && C4::Context->preference("SyndeticsExcerpt")
     && $syndetics_elements->{'DBCHAPTER'} =~ /DBCHAPTER/ ) {
     eval {
-    my $syndetics_excerpt = &get_syndetics_excerpt($xisbn);
+    my $syndetics_excerpt = &get_syndetics_excerpt($isbn,$upc,$oclc);
     $template->param( SYNDETICS_EXCERPT => $syndetics_excerpt );
     };
 	warn $@ if $@;
@@ -337,7 +328,7 @@ if ( C4::Context->preference("SyndeticsEnabled")
 if ( C4::Context->preference("SyndeticsEnabled")
     && C4::Context->preference("SyndeticsReviews")) {
     eval {
-    my $syndetics_reviews = &get_syndetics_reviews($xisbn,$syndetics_elements);
+    my $syndetics_reviews = &get_syndetics_reviews($isbn,$upc,$oclc,$syndetics_elements);
     $template->param( SYNDETICS_REVIEWS => $syndetics_reviews );
     };
 	warn $@ if $@;
@@ -347,7 +338,7 @@ if ( C4::Context->preference("SyndeticsEnabled")
     && C4::Context->preference("SyndeticsAuthorNotes")
 	&& $syndetics_elements->{'ANOTES'} =~ /ANOTES/ ) {
     eval {
-    my $syndetics_anotes = &get_syndetics_anotes($xisbn);
+    my $syndetics_anotes = &get_syndetics_anotes($isbn,$upc,$oclc);
     $template->param( SYNDETICS_ANOTES => $syndetics_anotes );
     };
     warn $@ if $@;
@@ -388,12 +379,11 @@ if (C4::Context->preference("OPACShelfBrowser")) {
         my $sth_get_biblio = $dbh->prepare("SELECT biblio.*,biblioitems.isbn AS isbn FROM biblio LEFT JOIN biblioitems ON biblio.biblionumber=biblioitems.biblionumber WHERE biblio.biblionumber=?");
         $sth_get_biblio->execute($this_item->{biblionumber});
         while (my $this_biblio = $sth_get_biblio->fetchrow_hashref()) {
-            $this_item->{'title'} = $this_biblio->{'title'};
-            if ($clean2 = isbn_cleanup($this_biblio->{'isbn'})) {
-                $this_item->{'isbn'} = $clean2;
-            } else { 
-                $this_item->{'isbn'} = $this_biblio->{'isbn'};
-            }
+			$this_item->{'title'} = $this_biblio->{'title'};
+			my $this_record = GetMarcBiblio($this_biblio->{'biblionumber'});
+			$this_item->{'browser_normalized_upc'} = GetNormalizedUPC($this_record,$marcflavour);
+			$this_item->{'browser_normalized_oclc'} = GetNormalizedOCLCNumber($this_record,$marcflavour);
+			$this_item->{'browser_normalized_isbn'} = GetNormalizedISBN(undef,$this_record,$marcflavour);
         }
         unshift @previous_items, $this_item;
     }
@@ -414,11 +404,10 @@ if (C4::Context->preference("OPACShelfBrowser")) {
         $sth_get_biblio->execute($this_item->{biblionumber});
         while (my $this_biblio = $sth_get_biblio->fetchrow_hashref()) {
             $this_item->{'title'} = $this_biblio->{'title'};
-            if ($clean2 = isbn_cleanup($this_biblio->{'isbn'})) {
-                $this_item->{'isbn'} = $clean2;
-            } else { 
-                $this_item->{'isbn'} = $this_biblio->{'isbn'};
-            }
+			my $this_record = GetMarcBiblio($this_biblio->{'biblionumber'});
+            $this_item->{'browser_normalized_upc'} = GetNormalizedUPC($this_record,$marcflavour);
+            $this_item->{'browser_normalized_oclc'} = GetNormalizedOCLCNumber($this_record,$marcflavour);
+            $this_item->{'browser_normalized_isbn'} = GetNormalizedISBN(undef,$this_record,$marcflavour);
         }
         push @next_items, $this_item;
     }
@@ -448,14 +437,14 @@ if (C4::Context->preference("BakerTaylorEnabled")) {
 		BakerTaylorBookstoreURL => C4::Context->preference('BakerTaylorBookstoreURL'),
 	);
 	my ($bt_user, $bt_pass);
-	if ($clean and
+	if ($isbn and
 		$bt_user = C4::Context->preference('BakerTaylorUsername') and
 		$bt_pass = C4::Context->preference('BakerTaylorPassword')    )
 	{
 		$template->param(
 		BakerTaylorContentURL   =>
 		sprintf("http://contentcafe2.btol.com/ContentCafeClient/ContentCafe.aspx?UserID=%s&Password=%s&ItemKey=%s&Options=Y",
-				$bt_user,$bt_pass,$clean)
+				$bt_user,$bt_pass,$isbn)
 		);
 	}
 }

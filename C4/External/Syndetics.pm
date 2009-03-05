@@ -54,7 +54,7 @@ This module provides facilities for retrieving Syndetics.com content in Koha
 
 =over 4
 
-my $syndetics_summary= &get_syndetics_summary( $xisbn );
+my $syndetics_summary= &get_syndetics_summary( $isbn );
 
 =back
 
@@ -63,10 +63,7 @@ Get Summary data from Syndetics
 =cut
 
 sub get_syndetics_index {
-    my ( $isbn ) = @_;
-
-    #normalize the ISBN
-    $isbn = _normalize_match_point ($isbn);
+    my ( $isbn,$upc,$oclc ) = @_;
 
     # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
     my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
@@ -98,10 +95,7 @@ sub get_syndetics_index {
 }
 
 sub get_syndetics_summary {
-    my ( $isbn ) = @_;
-
-    #normalize the ISBN
-    $isbn = _normalize_match_point ($isbn);
+    my ( $isbn,$upc,$oclc ) = @_;
 
     # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
     my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
@@ -130,10 +124,7 @@ sub get_syndetics_summary {
 }
 
 sub get_syndetics_toc {
-    my ( $isbn ) = @_;
-
-    #normalize the ISBN
-    $isbn = _normalize_match_point ($isbn);
+    my ( $isbn,$upc,$oclc ) = @_;
 
     # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
     my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
@@ -162,10 +153,7 @@ sub get_syndetics_toc {
 }
 
 sub get_syndetics_excerpt {
-    my ( $isbn ) = @_;
-
-    #normalize the ISBN
-    $isbn = _normalize_match_point ($isbn);
+    my ( $isbn,$upc,$oclc ) = @_;
 
     # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
     my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
@@ -193,10 +181,7 @@ sub get_syndetics_excerpt {
 }
 
 sub get_syndetics_reviews {
-    my ( $isbn, $syndetics_elements ) = @_;
-
-    #normalize the ISBN
-    $isbn = _normalize_match_point ($isbn);
+    my ( $isbn,$upc,$oclc,$syndetics_elements ) = @_;
 
     # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
     my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
@@ -260,10 +245,7 @@ sub get_syndetics_reviews {
 }
 
 sub get_syndetics_editions {
-    my ( $isbn ) = @_;
-
-    #normalize the ISBN
-    $isbn = _normalize_match_point ($isbn);
+    my ( $isbn,$upc,$oclc ) = @_;
 
     # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
     my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
@@ -293,10 +275,7 @@ sub get_syndetics_editions {
 }
 
 sub get_syndetics_anotes {
-    my ( $isbn ) = @_;
-
-    #normalize the ISBN
-    $isbn = _normalize_match_point ($isbn);
+    my ( $isbn,$upc,$oclc) = @_;
 
     # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
     my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
@@ -334,14 +313,6 @@ sub get_syndetics_anotes {
         }
     }
     return \@anotes;
-}
-
-sub _normalize_match_point {
-    my $match_point = shift;
-    (my $normalized_match_point) = $match_point =~ /([\d-]*[X]*)/;
-    $normalized_match_point =~ s/-//g;
-
-    return $normalized_match_point;
 }
 
 1;

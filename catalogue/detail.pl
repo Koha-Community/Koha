@@ -32,7 +32,7 @@ use C4::Branch;
 use C4::Reserves;
 use C4::Members;
 use C4::Serials;
-use C4::XISBN qw(get_xisbns get_biblionumber_from_isbn get_biblio_from_xisbn);
+use C4::XISBN qw(get_xisbns get_biblionumber_from_isbn);
 use C4::External::Amazon;
 
 # use Smart::Comments;
@@ -54,6 +54,21 @@ my $fw = GetFrameworkCode($biblionumber);
 ## get notes and subjects from MARC record
 my $marcflavour      = C4::Context->preference("marcflavour");
 my $record           = GetMarcBiblio($biblionumber);
+
+# some useful variables for enhanced content;
+# in each case, we're grabbing the first value we find in
+# the record and normalizing it
+my $upc = GetNormalizedUPC($record,$marcflavour);
+my $ean = GetNormalizedEAN($record,$marcflavour);
+my $oclc = GetNormalizedOCLCNumber($record,$marcflavour);
+my $isbn = GetNormalizedISBN(undef,$record,$marcflavour);
+
+$template->param(
+    normalized_upc => $upc,
+    normalized_ean => $ean,
+    normalized_oclc => $oclc,
+    normalized_isbn => $isbn,
+);
 
 unless (defined($record)) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
@@ -195,21 +210,17 @@ $template->param(
 # $debug and $template->param(debug_display => 1);
 
 # XISBN Stuff
-my $xisbn=$dat->{'isbn'};
-$xisbn =~ /(\d*[X]*)/ if ( $xisbn );
-$template->param(amazonisbn => $1);		# FIXME: so it is OK if the ISBN = 'XXXXX' ?
 if (C4::Context->preference("FRBRizeEditions")==1) {
     eval {
         $template->param(
-            xisbn => $xisbn,
-            XISBNS => get_xisbns($xisbn)
+            XISBNS => get_xisbns($isbn)
         );
     };
     if ($@) { warn "XISBN Failed $@"; }
 }
-if ( C4::Context->preference("AmazonContent") == 1 ) {
+if ( C4::Context->preference("AmazonEnabled") == 1 ) {
     my $similar_products_exist;
-    my $amazon_details = &get_amazon_details( $xisbn, $record, $marcflavour );
+    my $amazon_details = &get_amazon_details( $isbn, $record, $marcflavour );
     my $item_attributes = \%{$amazon_details->{Items}->{Item}->{ItemAttributes}};
     my $customer_reviews = \@{$amazon_details->{Items}->{Item}->{CustomerReviews}->{Review}};
     my @similar_products;

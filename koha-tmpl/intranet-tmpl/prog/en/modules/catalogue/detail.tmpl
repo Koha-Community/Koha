@@ -32,7 +32,7 @@ function verify_images() {
      $(document).ready(function() {
         $('#bibliodetails > ul').tabs();
      });
-     <!-- TMPL_IF NAME="AmazonContent" -->$(window).load(function() {
+     <!-- TMPL_IF NAME="AmazonEnabled" -->$(window).load(function() {
         verify_images();
      });<!-- /TMPL_IF -->
 //]]>
@@ -53,7 +53,7 @@ function verify_images() {
     <div class="yui-b">
 
 <!-- TMPL_INCLUDE NAME="cat-toolbar.inc" -->
-    <!-- TMPL_IF NAME="AmazonContent" --><div class="yui-gb"><!-- TMPL_ELSE --><div class="yui-g"><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="AmazonEnabled" --><div class="yui-gb"><!-- TMPL_ELSE --><div class="yui-g"><!-- /TMPL_IF -->
     <div id="catalogue_detail_biblio" class="yui-u first">
         
     <h3><!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_VAR NAME="subtitle" --></h3> 
@@ -98,13 +98,13 @@ function verify_images() {
         </ul>
         </div>
         
-<!-- TMPL_IF NAME="AmazonContent" --><div class="yui-u" id="bookcoverimg">
-        <a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="amazonisbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="amazonisbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="" /></a></div><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="AmazonEnabled" --><!-- TMPL_IF NAME="AmazonCoverImages" --><div class="yui-u" id="bookcoverimg">
+        <a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="normalized_isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="normalized_isbn" -->.01._PIdp-schmooS,TopRight,7,-26_SCMZZZZZZZ_.jpg" alt="" /></a></div><!-- /TMPL_IF --><!-- /TMPL_IF -->
         
         <div class="yui-u" style="margin-top: 1em;">
         <ul>
-        <!-- TMPL_IF name="isbn" -->
-            <li><strong>ISBN:</strong> <!-- TMPL_VAR NAME="isbn" --></li>
+        <!-- TMPL_IF name="normalized_isbn" -->
+            <li><strong>ISBN:</strong> <!-- TMPL_VAR NAME="normalized_isbn" --></li>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF name="issn" -->
             <li><strong>ISSN:</strong><!-- TMPL_VAR NAME="issn" --></li>
@@ -291,7 +291,7 @@ function verify_images() {
     
 <div id="description">
 <div class="content_set">
-<!-- TMPL_IF NAME="AmazonContent" -->
+<!-- TMPL_IF NAME="AmazonEnabled" -->
 <!-- TMPL_LOOP NAME="AMAZON_EDITORIAL_REVIEWS" -->
     <!-- TMPL_IF NAME="Content" -->
     <h4>From <!-- TMPL_VAR NAME="Source" -->:</h4>
@@ -314,7 +314,7 @@ function verify_images() {
 <!-- TMPL_IF NAME="FRBRizeEditions" --><!-- TMPL_IF NAME="XISBNS" -->
 <div id="editions"><h2>Editions</h2>
 <table>
-<!-- TMPL_LOOP NAME="XISBNS" --><tr><!-- TMPL_IF NAME="AmazonContent" --><td><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="isbn" -->.01._AA75_PU_PU-5_.jpg" /></a></td><!-- /TMPL_IF --><td><!-- TMPL_IF NAME="noItemTypeImages" --><!-- TMPL_VAR NAME="description" --><!-- TMPL_ELSE --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->"><!-- /TMPL_IF --></td><td>
+<!-- TMPL_LOOP NAME="XISBNS" --><tr><!-- TMPL_IF NAME="AmazonEnabled" --><td><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="normalized_isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="normalized_isbn" -->.01._AA75_PU_PU-5_.jpg" /></a></td><!-- /TMPL_IF --><td><!-- TMPL_IF NAME="noItemTypeImages" --><!-- TMPL_VAR NAME="description" --><!-- TMPL_ELSE --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->"><!-- /TMPL_IF --></td><td>
 <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a> by <!-- TMPL_VAR NAME="author" --> &copy;<!-- TMPL_VAR NAME="copyrightdate" -->
   <!-- TMPL_IF name="publishercode" -->
 <!-- TMPL_VAR NAME="publishercode" --> <!-- TMPL_IF name="place" -->(<!-- TMPL_VAR NAME="place"-->)<!--/TMPL_IF--> <!-- TMPL_IF NAME="publicationyear" -->, <!-- TMPL_VAR NAME="publicationyear" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="editionstatement" --><!-- TMPL_VAR NAME="editionstatement" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="editionresponsability" --><!-- TMPL_VAR NAME="editionresponsability" --><!-- /TMPL_IF -->
@@ -327,7 +327,7 @@ function verify_images() {
 </table></div><!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="AmazonContent" --><!-- TMPL_IF NAME="AmazonSimilarItems" -->
+<!-- TMPL_IF NAME="AmazonEnabled" --><!-- TMPL_IF NAME="AmazonSimilarItems" -->
 <div id="related">
 <h4>Similar Items</h4>
 <ul>

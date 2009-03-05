@@ -51,8 +51,9 @@ use C4::Biblio;
 use C4::Acquisition;
 use C4::Review;
 use C4::Serials;    # uses getsubscriptionfrom biblionumber
-use C4::Koha;       # use getitemtypeinfo
+use C4::Koha;
 use C4::Members;    # GetMember
+use C4::External::Amazon;
 
 my $query = new CGI;
 
@@ -64,6 +65,21 @@ my $tagslib      = &GetMarcStructure( 1, $itemtype );
 
 my $marcflavour      = C4::Context->preference("marcflavour");
 my $record = GetMarcBiblio($biblionumber);
+
+# some useful variables for enhanced content;
+# in each case, we're grabbing the first value we find in
+# the record and normalizing it
+my $upc = GetNormalizedUPC($record,$marcflavour);
+my $ean = GetNormalizedEAN($record,$marcflavour);
+my $oclc = GetNormalizedOCLCNumber($record,$marcflavour);
+my $isbn = GetNormalizedISBN(undef,$record,$marcflavour);
+
+$template->param(
+    normalized_upc => $upc,
+    normalized_ean => $ean,
+    normalized_oclc => $oclc,
+    normalized_isbn => $isbn,
+);
 
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
@@ -228,14 +244,9 @@ $template->param(
 
 ## Amazon.com stuff
 #not used unless preference set
-if ( C4::Context->preference("AmazonContent") == 1 ) {
-    use C4::External::Amazon;
-    $dat->{'amazonisbn'} = $dat->{'isbn'};
-    $dat->{'amazonisbn'} =~ s|-||g;
+if ( C4::Context->preference("OPACAmazonEnabled") == 1 ) {
 
-    $template->param( amazonisbn => $dat->{amazonisbn} );
-
-    my $amazon_details = &get_amazon_details( $dat->{amazonisbn}, $record, $marcflavour );
+    my $amazon_details = &get_amazon_details( $isbn, $record, $marcflavour );
 
     foreach my $result ( @{ $amazon_details->{Details} } ) {
         $template->param( item_description => $result->{ProductDescription} );

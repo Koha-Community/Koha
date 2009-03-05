@@ -1,7 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo; Library Home for
 <!-- TMPL_LOOP name="BORROWER_INFO" -->
-    <!-- TMPL_VAR name="firstname" --><!-- TMPL_VAR name="surname" -->
+    <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" -->
 <!-- /TMPL_LOOP -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
@@ -200,11 +200,13 @@ $.tablesorter.addParser({
 
 <!-- TMPL_IF NAME="JacketImages" --><td class="jacketcell">
 
-<!-- TMPL_IF NAME="AmazonContent" --><!-- TMPL_IF NAME="amazonisbn" --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="amazonisbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link" title="View at Amazon.com"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="amazonisbn" -->.01.THUMBZZZ.jpg" alt="Cover Image" /></a><!-- TMPL_ELSE --><a href="#"><span class="no-image">No cover image available</span></a><!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="OPACAmazonCoverImages" --><!-- TMPL_IF NAME="normalized_isbn" --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="normalized_isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link" title="View at Amazon.com"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="normalized_isbn" -->.01.THUMBZZZ.jpg" alt="Cover Image" /></a><!-- TMPL_ELSE --><a href="#"><span class="no-image">No cover image available</span></a><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="GoogleJackets" --><!-- TMPL_IF NAME="amazonisbn" --><div style="display:block;" title="Click to view in Google Books" class="<!-- TMPL_VAR NAME="amazonisbn" -->" id="gbs-thumbnail<!--TMPL_VAR NAME="__counter__"-->"></div><!-- TMPL_ELSE --><a href="http://books.google.com/books?q=<!-- TMPL_VAR NAME="title" escape="url" -->"><span class="no-image">No cover image available</span></a><!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="GoogleJackets" --><!-- TMPL_IF NAME="normalized_isbn" --><div style="display:block;" title="Click to view in Google Books" class="<!-- TMPL_VAR NAME="normalized_isbn" -->" id="gbs-thumbnail<!--TMPL_VAR NAME="__counter__"-->"></div><!-- TMPL_ELSE --><a href="http://books.google.com/books?q=<!-- TMPL_VAR NAME="title" escape="url" -->"><span class="no-image">No cover image available</span></a><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="BakerTaylorEnabled" --><!-- TMPL_IF NAME="clean_isbn" --><a href="https://<!-- TMPL_VAR NAME="BakerTaylorBookstoreURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="clean_isbn" -->"><img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="clean_isbn" -->" /></a><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- BakerTaylor needs clean_isbn! --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="BakerTaylorEnabled" --><!-- TMPL_IF NAME="normalized_isbn" --><a href="https://<!-- TMPL_VAR NAME="BakerTaylorBookstoreURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="normalized_isbn" -->"><img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="normalized_isbn" -->" /></a><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- BakerTaylor needs normalized_isbn! --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="SyndeticsCoverImages" --><img src="http://syndetics.com/index.aspx?isbn=<!-- TMPL_VAR NAME="normalized_isbn" -->/SC.GIF&client=<!-- TMPL_VAR NAME="SyndeticsClientCode" --><!-- TMPL_IF NAME="normalized_upc" -->&upc=<!-- TMPL_VAR NAME="normalized_upc" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="normalized_oclc" -->&oclc=<!-- TMPL_VAR NAME="normalized_oclc" --><!-- /TMPL_IF -->&type=xw10" alt="" class="thumbnail"/><!-- /TMPL_IF -->
 
 </td><!-- /TMPL_IF -->
 
@@ -266,12 +268,16 @@ $.tablesorter.addParser({
 <tr>
 <!-- TMPL_IF NAME="JacketImages" --><td class="jacketcell">
 
-<!-- TMPL_IF NAME="AmazonContent" --><!-- TMPL_IF NAME="amazonisbn" --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="amazonisbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link" title="View at Amazon.com"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="amazonisbn" -->.01.THUMBZZZ.jpg" alt="" class="thumbnail" /></a><!-- TMPL_ELSE --><a href="#"><span class="no-image">No cover image available</span></a><!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="OPACAmazonCoverImages" --><!-- TMPL_IF NAME="normalized_isbn" --><a href="http://www.amazon.com/gp/reader/<!-- TMPL_VAR NAME="normalized_isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link" title="View at Amazon.com"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="normalized_isbn" -->.01.THUMBZZZ.jpg" alt="" class="thumbnail" /></a><!-- TMPL_ELSE --><a href="#"><span class="no-image">No cover image available</span></a><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="GoogleJackets" --><!-- TMPL_IF NAME="amazonisbn" --><div style="display:block;" title="Click to view in Google Books" class="<!-- TMPL_VAR NAME="amazonisbn" -->" id="gbs-thumbnail<!--TMPL_VAR NAME="__counter__"-->"></div><!-- TMPL_ELSE --><a href="http://books.google.com/books?q=<!-- TMPL_VAR NAME="title" escape="url" -->"><span class="no-image">No cover image available</span></a><!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="GoogleJackets" --><!-- TMPL_IF NAME="normalized_isbn" --><div style="display:block;" title="Click to view in Google Books" class="<!-- TMPL_VAR NAME="normalized_isbn" -->" id="gbs-thumbnail<!--TMPL_VAR NAME="__counter__"-->"></div><!-- TMPL_ELSE --><a href="http://books.google.com/books?q=<!-- TMPL_VAR NAME="title" escape="url" -->"><span class="no-image">No cover image available</span></a><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="BakerTaylorEnabled" --><!-- TMPL_IF NAME="clean_isbn" --><a href="https://<!-- TMPL_VAR NAME="BakerTaylorBookstoreURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="clean_isbn" -->"><img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="clean_isbn" -->" /></a><!-- TMPL_ELSE --><!-- BakerTaylor needs clean_isbn! --><span class="no-image">No cover image available</span><!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="BakerTaylorEnabled" --><!-- TMPL_IF NAME="normalized_isbn" --><a href="https://<!-- TMPL_VAR NAME="BakerTaylorBookstoreURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="normalized_isbn" -->"><img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="normalized_isbn" -->" /></a><!-- TMPL_ELSE --><!-- BakerTaylor needs normalized_isbn! --><span class="no-image">No cover image available</span><!-- /TMPL_IF --><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="SyndeticsCoverImages" --><img src="http://syndetics.com/index.aspx?isbn=<!-- TMPL_VAR NAME="normalized_isbn" -->/SC.GIF&client=<!-- TMPL_VAR NAME="SyndeticsClientCode" --><!-- TMPL_IF NAME="normalized_upc" -->&upc=<!-- TMPL_VAR NAME="normalized_upc" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="normalized_oclc" -->&oclc=<!-- TMPL_VAR NAME="normalized_oclc" --><!-- /TMPL_IF -->&type=xw10" alt="" class="thumbnail"/><!-- /TMPL_IF -->
+
 </td><!-- /TMPL_IF -->
+
 <td><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a> <span class="item-details"><!-- TMPL_VAR NAME="author" --></span></td>
 
 <!-- TMPL_UNLESS NAME="item-level_itypes" --><td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR name="description" --></td><!-- /TMPL_UNLESS -->

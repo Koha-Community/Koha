@@ -172,7 +172,7 @@ $(document).ready(function(){
             <!-- TMPL_ELSE -->
                 <tr>
             <!-- /TMPL_IF -->
-                    <td><!-- TMPL_IF NAME="AmazonContent" -->
+                    <td><!-- TMPL_IF NAME="OPACAmazonEnabled" -->
                         <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_IF NAME="isbn" --><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.TZZZZZZZ.jpg" alt="" class="thumbnail" /><!-- TMPL_ELSE --><img src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="" class="thumbnail" /><!-- /TMPL_IF -->
                         </a>
                         <!-- TMPL_ELSE -->

@@ -18,7 +18,7 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.hoverIntent.minified.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.dropshadow-min.js"></script>
 <script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/script.js"></script>
-<!-- TMPL_IF NAME="AmazonContent" -->
+<!-- TMPL_IF NAME="OPACAmazonCoverImages" -->
 <script type="text/javascript" language="javascript">//<![CDATA[
 		var NO_AMAZON_IMAGE = _("No cover image available");
 	//]]>
@@ -46,7 +46,7 @@
     var MSG_NO_RECORD_ADDED = _("No item was added to your cart");
     var MSG_CONFIRM_DEL_BASKET = _("Are you sure you want to empty your cart?");
     var MSG_CONFIRM_DEL_RECORDS = _("Are you sure you want to remove the selected items?");<!-- /TMPL_IF -->
-	<!-- TMPL_IF NAME="AmazonContent" -->$(window).load(function() {
+	<!-- TMPL_IF NAME="OPACAmazonCoverImages" -->$(window).load(function() {
 		 	verify_images();
 		 });<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="SyndeticsCoverImages" -->$(window).load(function() {

@@ -21,6 +21,7 @@ use XML::Simple;
 #use LWP::Simple;
 use C4::Biblio;
 use C4::Items;
+use C4::Koha;
 use C4::External::Syndetics qw(get_syndetics_editions);
 use LWP::UserAgent;
 use HTTP::Request::Common;
@@ -34,16 +35,13 @@ BEGIN {
 	@ISA = qw(Exporter);
 	@EXPORT_OK = qw(
 		&get_xisbns
-		&get_biblio_from_xisbn
         &get_biblionumber_from_isbn
 	);
 }
 
 sub get_biblionumber_from_isbn {
     my $isbn = shift;
-     if ($isbn =~ /(\d{9,}[X]*)/) {
-    	$isbn = $1.'%';
-    }
+   	$isbn.='%';
     my @biblionumbers;
     my $dbh=C4::Context->dbh;
     my $query = "SELECT biblionumber FROM biblioitems WHERE isbn LIKE ? LIMIT 10";
@@ -61,9 +59,9 @@ This module provides facilities for retrieving ThingISBN and XISBN content in Ko
 
 =cut
 
-sub get_biblio_from_xisbn {
+sub _get_biblio_from_xisbn {
     my $xisbn = shift;
-    $xisbn .='%' if ($xisbn =~ /(\d{9,}[X]*)/);
+    $xisbn.='%';
     my $dbh = C4::Context->dbh;
     my $query = "SELECT biblionumber FROM biblioitems WHERE isbn LIKE ?";
     my $sth = $dbh->prepare($query);
@@ -72,8 +70,7 @@ sub get_biblio_from_xisbn {
     my $xbiblio;
     if ($xbib_data->{biblionumber}) {
         $xbiblio = GetBiblioData($xbib_data->{biblionumber});
-        $xbiblio->{isbn} =~ /(\d{9,}[X]*)/;
-        $xbiblio->{amazonisbn} = $1;
+        $xbiblio->{normalized_isbn} = GetNormalizedISBN($xbiblio->{isbn});
         $xbiblio->{items} = GetItemsByBiblioitemnumber($xbib_data->{biblionumber});
     }
     return ($xbiblio);
@@ -88,8 +85,6 @@ sub get_biblio_from_xisbn {
 sub get_xisbns {
     my ( $isbn ) = @_;
     my ($response,$thing_response,$xisbn_response,$gapines_response,$syndetics_response);
-    $isbn =~ /(\d{9,}[X]*)/;
-    $isbn = $1;
     # THINGISBN
     if ( C4::Context->preference('ThingISBN') ) {
         my $url = "http://www.librarything.com/api/thingISBN/".$isbn;
@@ -132,8 +127,8 @@ sub get_xisbns {
         next if $isbn eq $response_data;
         next if $unique_xisbns->{ $response_data->{content} };
         $unique_xisbns->{ $response_data->{content} }++;
-        my $xbiblio= get_biblio_from_xisbn($response_data->{content});
-        push @xisbns, $xbiblio if $xbiblio; #response_data->{xbiblio}; #->{biblionumber}; # if $xbiblionumber;
+        my $xbiblio= _get_biblio_from_xisbn($response_data->{content});
+        push @xisbns, $xbiblio if $xbiblio;
     }
     return \@xisbns;
 }
