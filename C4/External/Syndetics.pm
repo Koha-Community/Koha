@@ -68,7 +68,8 @@ sub get_syndetics_index {
     # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
     my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
 
-    my $url = "http://syndetics.com/index.aspx?isbn=$isbn/INDEX.XML&client=$syndetics_client_code&type=xw10";
+    my $url = "http://syndetics.com/index.aspx?isbn=$isbn/INDEX.XML&client=$syndetics_client_code&type=xw10&upc=$upc&oclc=$oclc";
+
     my $ua = LWP::UserAgent->new;
     $ua->timeout(10);
     $ua->env_proxy;
@@ -100,7 +101,7 @@ sub get_syndetics_summary {
     # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
     my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
 
-    my $url = "http://syndetics.com/index.aspx?isbn=$isbn/SUMMARY.XML&client=$syndetics_client_code&type=xw10";
+    my $url = "http://syndetics.com/index.aspx?isbn=$isbn/SUMMARY.XML&client=$syndetics_client_code&type=xw10&upc=$upc&oclc=$oclc";
     my $ua = LWP::UserAgent->new;
     $ua->timeout(10);
     $ua->env_proxy;
@@ -129,7 +130,7 @@ sub get_syndetics_toc {
     # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
     my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
 
-    my $url = "http://syndetics.com/index.aspx?isbn=$isbn/TOC.XML&client=$syndetics_client_code&type=xw10";
+    my $url = "http://syndetics.com/index.aspx?isbn=$isbn/TOC.XML&client=$syndetics_client_code&type=xw10&upc=$upc&oclc=$oclc";
     my $ua = LWP::UserAgent->new;
     $ua->timeout(10);
     $ua->env_proxy;
@@ -158,7 +159,7 @@ sub get_syndetics_excerpt {
     # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
     my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
 
-    my $url = "http://syndetics.com/index.aspx?isbn=$isbn/DBCHAPTER.XML&client=$syndetics_client_code&type=xw10";
+    my $url = "http://syndetics.com/index.aspx?isbn=$isbn/DBCHAPTER.XML&client=$syndetics_client_code&type=xw10&upc=$upc&oclc=$oclc";
     my $ua = LWP::UserAgent->new;
     $ua->timeout(10);
     $ua->env_proxy;
@@ -205,7 +206,7 @@ sub get_syndetics_reviews {
             #warn "Skipping $source->{element} doesn't match $syndetics_elements->{$source->{element}} \n";
             next;
         }
-        my $url = "http://syndetics.com/index.aspx?isbn=$isbn/$source->{file}&client=$syndetics_client_code&type=xw10";
+        my $url = "http://syndetics.com/index.aspx?isbn=$isbn/$source->{file}&client=$syndetics_client_code&type=xw10&upc=$upc&oclc=$oclc";
 
         my $ua = LWP::UserAgent->new;
         $ua->timeout(10);
@@ -250,7 +251,7 @@ sub get_syndetics_editions {
     # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
     my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
 
-    my $url = "http://syndetics.com/index.aspx?isbn=$isbn/FICTION.XML&client=$syndetics_client_code&type=xw10";
+    my $url = "http://syndetics.com/index.aspx?isbn=$isbn/FICTION.XML&client=$syndetics_client_code&type=xw10&upc=$upc&oclc=$oclc";
     my $ua = LWP::UserAgent->new;
     $ua->timeout(10);
     $ua->env_proxy;
@@ -280,7 +281,7 @@ sub get_syndetics_anotes {
     # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
     my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
 
-    my $url = "http://syndetics.com/index.aspx?isbn=$isbn/ANOTES.XML&client=$syndetics_client_code&type=xw10";
+    my $url = "http://syndetics.com/index.aspx?isbn=$isbn/ANOTES.XML&client=$syndetics_client_code&type=xw10&upc=$upc&oclc=$oclc";
     my $ua = LWP::UserAgent->new;
     $ua->timeout(10);
     $ua->env_proxy;
