@@ -73,12 +73,13 @@ my $upc = GetNormalizedUPC($record,$marcflavour);
 my $ean = GetNormalizedEAN($record,$marcflavour);
 my $oclc = GetNormalizedOCLCNumber($record,$marcflavour);
 my $isbn = GetNormalizedISBN(undef,$record,$marcflavour);
-
+my $content_identifier_exists = 1 if ($isbn or $ean or $oclc);
 $template->param(
     normalized_upc => $upc,
     normalized_ean => $ean,
     normalized_oclc => $oclc,
     normalized_isbn => $isbn,
+	content_identifier_exists => $content_identifier_exists,
 );
 
 #coping with subscriptions

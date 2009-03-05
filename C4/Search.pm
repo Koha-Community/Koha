@@ -1279,6 +1279,7 @@ sub searchResults {
 		$oldbiblio->{normalized_ean} = GetNormalizedEAN($marcrecord,$marcflavour);
 		$oldbiblio->{normalized_oclc} = GetNormalizedOCLCNumber($marcrecord,$marcflavour);
 		$oldbiblio->{normalized_isbn} = GetNormalizedISBN(undef,$marcrecord,$marcflavour);
+		$oldbiblio->{content_identifier_exists} = 1 if ($oldbiblio->{normalized_isbn} or $oldbiblio->{normalized_oclc} or $oldbiblio->{normalized_ean});
 		$oldbiblio->{description} = $itemtypes{ $oldbiblio->{itemtype} }->{description};
  # Build summary if there is one (the summary is defined in the itemtypes table)
  # FIXME: is this used anywhere, I think it can be commented out? -- JF
