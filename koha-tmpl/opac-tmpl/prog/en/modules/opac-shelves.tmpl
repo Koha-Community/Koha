@@ -81,7 +81,7 @@ $.tablesorter.addParser({
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_IF --> 
 
-    <div id="toolbar" class="yui-g">
+    <div class="yui-g">
     
     
     <!-- TMPL_IF NAME="viewshelf" -->
@@ -222,7 +222,7 @@ $.tablesorter.addParser({
             <!-- TMPL_IF NAME="viewcategory2" -->Public<!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="viewcategory3" -->Open<!-- /TMPL_IF -->
         </td>
-        <td id="toolbar">
+        <td>
             <!-- TMPL_IF NAME="mine" -->
                 <form action="opac-shelves.pl" method="get">
                     <input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelf" -->" />
@@ -242,7 +242,7 @@ $.tablesorter.addParser({
                     <!-- /TMPL_IF -->
                 </form>
             <!-- /TMPL_IF -->&nbsp;
-            <a href="#" class="send" onClick="open(CGIBIN+'opac-sendshelf.pl?shelfid=<!-- TMPL_VAR NAME="shelf" -->','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100')">Send List</a>
+            <a href="#" class="send" onclick="open(CGIBIN+'opac-sendshelf.pl?shelfid=<!-- TMPL_VAR NAME="shelf" -->','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100')">Send List</a>
         </td>
         </tr>
                 <!-- /TMPL_LOOP -->
@@ -272,7 +272,7 @@ $.tablesorter.addParser({
 	    <!-- TMPL_IF NAME="viewcategory2" -->Public<!-- /TMPL_IF -->
 	    <!-- TMPL_IF NAME="viewcategory3" -->Open<!-- /TMPL_IF -->
 	</td>
-    <td id="toolbar">
+    <td>
             <!-- TMPL_IF NAME="mine" -->
         <form action="opac-shelves.pl" method="get">
           <input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelf" -->" />
@@ -290,7 +290,7 @@ $.tablesorter.addParser({
           <!-- /TMPL_IF -->
         </form>
       <!-- /TMPL_IF -->&nbsp;
-      <a href="#" class="send" onClick="open(CGIBIN+'opac-sendshelf.pl?shelfid=<!-- TMPL_VAR NAME="shelf" -->','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100')">Send List</a>
+      <a href="#" class="send" onclick="open(CGIBIN+'opac-sendshelf.pl?shelfid=<!-- TMPL_VAR NAME="shelf" -->','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100')">Send List</a>
     </td>
 		</tr>
             <!-- /TMPL_LOOP -->
