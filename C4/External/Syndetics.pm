@@ -178,7 +178,7 @@ sub get_syndetics_excerpt {
     # manipulate response USMARC VarFlds VarDFlds Notes Fld520 a
     my $excerpt;
     $excerpt = \@{$response->{VarFlds}->{VarDFlds}->{Notes}->{Fld520}} if $response;
-    return XMLout($excerpt) if $excerpt;
+    return XMLout($excerpt, NoEscape => 1) if $excerpt;
 }
 
 sub get_syndetics_reviews {
