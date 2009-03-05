@@ -130,6 +130,7 @@ $tabsysprefs{IssuingInProcess}               = "Circulation";
 $tabsysprefs{patronimages}                   = "Circulation";
 $tabsysprefs{printcirculationslips}          = "Circulation";
 $tabsysprefs{ReturnBeforeExpiry}             = "Circulation";
+$tabsysprefs{ceilingDueDate}                 = "Circulation";
 $tabsysprefs{SpecifyDueDate}                 = "Circulation";
 $tabsysprefs{AutomaticItemReturn}            = "Circulation";
 $tabsysprefs{ReservesMaxPickUpDelay}         = "Circulation";

@@ -154,6 +154,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('libraryAddress','','L''adresse pour l''impression des reçus, des amendes... si elle est différente de l''adresse physique de la bibliothèque',NULL,'free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('finesMode','test','Choisissez un mode pour le calcul des amendes : Test ou Production.','test|production','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('globalDueDate','','Si défini, autorise une date de retour statique pour tous les prêts','10','free');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ceilingDueDate','','Si présent, les dates de retour des prêts ne pourront être antérieures à cette date. Formatez cette date conformément à la préférence système dateformat.',NULL,'free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('itemBarcodeInputFilter','','If set, allows specification of a item barcode input filter','whitespace|T-prefix|cuecat','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('singleBranchMode',0,'Operate in Single-branch mode, hide branch selection in the OPAC',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('URLLinkText','','Text to display as the link anchor in the OPAC',NULL,'free');
