@@ -12,6 +12,33 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.pack.js"></script>
 <script type="text/javascript">
 //<![CDATA[
+
+function holdMultiple() {
+    var checkedBiblioNums = ""; // Separated by "/"
+    var checkedCount = 0;
+    if(document.bookbag_form.biblionumber.length > 0) {
+        for (var i=0; i < document.bookbag_form.biblionumber.length; i++) {
+            if (document.bookbag_form.biblionumber[i].checked) {
+                checkedBiblioNums += (document.bookbag_form.biblionumber[i].value + "/");
+                checkedCount++;
+            }
+        }
+    }
+
+    if (checkedCount > 0) {
+        holdBiblioNums(checkedBiblioNums);
+    } else {
+        alert(MSG_NO_RECORD_SELECTED);   
+    }
+}
+
+function holdBiblioNums(numList) {
+    // numList: biblio numbers separated by "/"
+    $("#hold_form_biblios").attr("value", numList);
+    $("#hold_form").submit();
+}
+
+
 $(document).ready(function(){
 	var param1 = "<label for=\"addto\">Add to: <\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>"<!-- TMPL_IF name="opacbookbag" -->+"<option value=\"addtocart\">Cart<\/option>"<!-- /TMPL_IF -->+<!-- TMPL_IF NAME="virtualshelves" --><!-- TMPL_IF NAME="loggedinusername" -->"<optgroup label=\"Your Lists:\">"+<!-- TMPL_IF NAME="addbarshelves" --><!-- TMPL_LOOP NAME="addbarshelvesloop" -->"<option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--><\/option>"+<!-- /TMPL_LOOP --><!-- /TMPL_IF -->"<\/optgroup>";
 	param1 += "<optgroup label=\"Public Lists:\">"+<!-- TMPL_IF NAME="addpubshelves" --><!-- TMPL_LOOP NAME="addpubshelvesloop" -->"<option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--><\/option>"+<!-- /TMPL_LOOP --><!-- /TMPL_IF -->"<\/optgroup><option value=\"newlist\">[ New List ]<\/option>"+<!-- TMPL_ELSE -->"<optgroup label=\"Public Lists:\">"+<!-- TMPL_IF NAME="addpubshelves" --><!-- TMPL_LOOP NAME="addpubshelvesloop" -->"<option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--><\/option>"+<!-- /TMPL_LOOP --><!-- /TMPL_IF -->"<\/optgroup>"+<!-- /TMPL_IF --><!-- /TMPL_IF -->"<\/select> <input type=\"submit\" class=\"submit\" value=\"Save\" />";
@@ -54,7 +81,13 @@ $(document).ready(function(){
     $("#CheckNone").click(function(){
         $("#bookbag_form").unCheckCheckboxes();
         return false;
-    }); 
+    });
+    $("#placehold").html("<input class=\"submit\" type=\"submit\" value=\"Place Hold\"/>");
+	$("#placehold").find("input:submit").click(function(){
+        holdMultiple();
+		return false;
+	});
+    $("#holdDetails").hide();
 	<!-- TMPL_IF NAME="TagsEnabled" -->$(".tagbutton").click(KOHA.Tags.add_tag_button);<!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="GoogleJackets" -->KOHA.Google.GetCoverFromIsbn();<!-- /TMPL_IF -->
 });
@@ -66,7 +99,6 @@ $(document).ready(function(){
    <div id="bd">
 
 <!--TMPL_INCLUDE NAME="masthead.inc" -->
-
 
 
 	<div id="yui-main">
@@ -164,15 +196,16 @@ $(document).ready(function(){
         <table>
 		<tr><td colspan="5" class="resultscontrol" style="border : 1px solid #e8e8e8;">
 		<div class="resort"> <select id="sort_by" name="sort_by"> <!--TMPL_INCLUDE NAME="resort_form.inc"--> </select> <input type="submit" class="submit clearfix" id="sortsubmit" value="Go" /></div>
-        <!-- TMPL_IF NAME="opacbookbag" -->
-			<div class="cartlist"><span class="checkall"></span>
-			<span class="clearall"></span>
-			<span class="addto"></span></div>
-        <!-- TMPL_ELSIF NAME="virtualshelves" -->
-			<div class="cartlist"><span class="checkall"></span>
-			<span class="clearall"></span>
-			<span class="addto"></span></div>
-		<!-- /TMPL_IF -->
+		<div class="cartlist">
+            <!-- checkall, clearall are now needed for placehold -->
+            <span class="checkall"></span>
+        	<span class="clearall"></span>
+            <!-- TMPL_IF EXPR="opacbookbag || virtualshelves" -->
+    	    	<span class="addto"></span>
+            <!-- /TMPL_IF -->
+		    <span id="placehold"><!-- input class="submit" type="submit" value="Place Hold"/ --></span>
+            <div id="holdDetails"></div>
+        </div>
 
         </td></tr>
             <!-- Actual Search Results -->
@@ -304,6 +337,10 @@ $(document).ready(function(){
                 </tr>
                 <!-- /TMPL_LOOP -->
             </table>
+    </form>
+    <form id="hold_form" name="hold_form" method="get" action="/cgi-bin/koha/opac-reserve.pl">
+        <!-- The value will be set by holdBiblioNums() in basket.js -->
+        <input id="hold_form_biblios" type="hidden" name="biblionumbers" value=""/>
     </form>
         </div>
     <!-- /TMPL_IF -->

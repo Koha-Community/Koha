@@ -10,6 +10,21 @@ $.tablesorter.addParser({
     type: 'text' 
 });
 
+function holdSelections() {
+    var checkedBoxes = $(":checkbox:checked");
+    if ($(checkedBoxes).size() == 0) {
+        alert(MSG_NO_RECORD_SELECTED);
+    } else {
+        var bibs = "";
+        $(checkedBoxes).each(function(){
+            var name = $(this).attr("name");
+            bib = name.substr(4);
+            bibs += bib + "/";
+        });
+        document.location = "/cgi-bin/koha/opac-reserve.pl?biblionumbers="+bibs;
+    }
+}
+
        $(function() {
             $("span.clearall").html("<a id=\"CheckNone\" href=\"#\">Clear All</a>");
             $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">Select All</a>");
@@ -32,6 +47,10 @@ $.tablesorter.addParser({
                 $(".checkboxed").unCheckCheckboxes();
                 return false;
             });
+       });
+
+       $(document).ready(function(){
+           $(".hold").html("Place Hold");
        });
 //]]>
 </script>
@@ -97,6 +116,7 @@ $.tablesorter.addParser({
 <input type="hidden" value="1" name="DEL-<!-- TMPL_VAR NAME="shelfnumber" -->"/>
 <input type="submit" class="deleteshelf" value="Delete List" onclick="return confirmDelete(_('Are you sure you want to remove this List?'));"/></form>
 <a href="#" class="send" onClick="open(CGIBIN+'opac-sendshelf.pl?shelfid=<!-- TMPL_VAR NAME="shelfnumber" -->','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100')">Send List</a>
+<a href="#" class="hold" onClick="holdSelections();return false;"></a>
 </div><!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="manageshelf" --><form action="/cgi-bin/koha/opac-shelves.pl" method="post" name="myform" class="checkboxed">
         <input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->" />
@@ -341,4 +361,8 @@ $.tablesorter.addParser({
   </div><!-- /TMPL_IF -->
  </div>
 <!-- </div> -->
+
+<!-- DEBUG -->
+<div id="debug"></div>
+
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

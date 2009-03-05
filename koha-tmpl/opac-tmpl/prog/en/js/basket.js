@@ -419,12 +419,12 @@ function showCart(){
 		$("#cartDetails").css("position","absolute").css("left",left);
 		$("#cartDetails").fadeIn("fast",function(){
   			$("#cartDetails").dropShadow({left: 3, top: 3, blur: 0,  color: "#000", opacity: 0.1});
-		});	
+        });
 }
 
 function hideCart(){
-		 $(".dropShadow").hide();
-		 $("#cartDetails").fadeOut("fast");
+    $("#cartDetails").removeShadow();
+    $("#cartDetails").fadeOut("fast");
 }
 
 $("#cartDetails").ready(function(){
@@ -437,3 +437,5 @@ $("#cartDetails").ready(function(){
 	});
 	if(basketcount){ updateBasket(basketcount) }
 });
+
+

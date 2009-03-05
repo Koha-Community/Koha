@@ -1,252 +1,458 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" DEFAULT="Koha Online" --> Catalog &rsaquo;  Reserving <!-- TMPL_VAR NAME="title" escape="html" --> for <!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --><!-- /TMPL_LOOP -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
-// <![CDATA[ 
+// <![CDATA[
+ var MSG_NO_COPY_SELECTED = _("Expecting a specific copy selection.");
+
+ function prefixOf (s, tok) {
+     var index = s.indexOf(tok);
+     return s.substring(0, index);
+ }
+ function suffixOf (s, tok) {
+     var index = s.indexOf(tok);
+     return s.substring(index + 1);
+ }
+
  $(document).ready(function() {
- 	$("#requestany").click(function() {
-		if(this.checked){
-		$("input[@name=checkitem]").each(function() {
-			$(this).attr("checked","");
-		});
-		}
-	});
- 	$("input[@name=checkitem]").click(function() {
-		onechecked = 0;
-		$("input[@name=checkitem]").each(function() {
-			if(this.checked){
-				onechecked = 1;
-			}
-		});
-		if(onechecked == 1){
-			$("#requestany").attr("checked","");
-		} else {
-			$("#requestany").attr("checked","checked");
-		}
-	});
+    var copiesRowId = null;
+    var wasSpecific = false;
+    var lastCopiesRowId = null;
+
+    // Hides all 'specific copy' table rows on load.
+    $(".copiesrow").hide();
+
+    $("#place_on_hdr").show();
+    $(".place_on_type").show();
+
+    // Replace non-JS single-selection with multi-selection capability.
+    $(".reserve_mode").val("multi");
+    $(".confirm_nonjs").remove();
+    $(".confirmjs_hold").each(function(){
+        var bib = $(this).attr("title");
+        var html = "<input type =\"checkbox\" class=\"confirmjs\" checked=\"checked\"";
+        html += "value=\"" + bib + "\"/>";
+        $(this).html(html);
+    });
+    $(".confirmjs_nohold").each(function(){
+        var bib = $(this).attr("title");
+        var html = "<input type =\"checkbox\" class=\"confirmjs\" disabled=\"disabled\"";
+        html += "value=\"" + bib + "\"/>";
+        $(this).html(html);
+    });
+
+    // Make sure a specific item was selected where specified
+    // before moving on to a new item.
+    function changeSelection (newCopiesRowId, isSpecific) {
+        if (copiesRowId && ((copiesRowId != newCopiesRowId) || (wasSpecific != isSpecific))) {
+            var biblioNum = suffixOf(copiesRowId, "_");
+            
+            // If the 'specific copy' radio button was checked
+              if (wasSpecific && (copiesRowId != newCopiesRowId)) {
+                // Find the selected copy
+                var item = $(".checkitem_" + biblioNum + ":checked");
+                if ($(item).size() == 0) {
+                    alert(MSG_NO_COPY_SELECTED);
+                    return false;
+                }
+            }
+        }
+        copiesRowId = newCopiesRowId;
+        wasSpecific = isSpecific;
+        return true;
+    }
+
+    // When 'specific copy' radio button is clicked
+    $(".selectspecific").click(function() {
+
+        // Make sure all other specific copy table rows are hidden
+        biblioNum = suffixOf($(this).attr("id"), "_");
+        newCopiesRowId = "#copiesrow_" + biblioNum;
+
+        if (!changeSelection(newCopiesRowId, true)) {
+            return false;
+        }
+        $(".copiesrow:not(" + newCopiesRowId + ")").hide();
+        
+        // Show the specific copy table for this radio button.
+        $(newCopiesRowId).show();
+    });
+
+
+    // When 'first available' radion button is clicked
+    $(".selectany").click(function() {
+        // Make sure all other specific copy table rows are hidden
+        biblioNum = suffixOf($(this).attr("id"), "_");
+        newCopiesRowId = "#copiesrow_" + biblioNum;
+
+        if (!changeSelection(newCopiesRowId, false)) {
+            return false;
+        }
+
+        // Hide the copies table row
+        $(".copiesrow").hide();
+    });
+
+    // When 'Place Hold' button is clicked
+    $(".placehold").click(function(){
+        var biblionumbers = "";
+        var selections = "";
+
+        if ($(".confirmjs:checked").size() == 0) {
+            alert(MSG_NO_RECORD_SELECTED);
+            return false;
+        }
+
+        // Find the items with the 'Hold' box checked
+        var badBib = null;
+        $(".confirmjs:checked").each(function() {
+            var biblioNum = $(this).val();
+            biblionumbers += biblioNum + "/";
+            selections += biblioNum + "/";
+
+            // If the 'specific copy' radio button is checked
+            if ($("#reqspecific_" + biblioNum + ":checked").size() > 0) {
+                // Find the selected copy
+                var item = $(".checkitem_" + biblioNum + ":checked");
+                if ($(item).size() == 0) {
+                    badBib = biblioNum;
+                    return false;
+                } else {
+                  selections += $(item).val();
+                }
+            }
+            selections += "/";
+
+            // Add the pickup location
+            var branchSel = $("#branch_" + biblioNum);
+            if (branchSel.size() > 0) {
+                selections += $(branchSel).val();
+            }
+            selections += "/";
+            return true;
+        });
+
+        if (badBib) {
+            alert(MSG_NO_COPY_SELECTED);
+            return false;
+        }
+
+        $("#selections").val(selections);
+        $("#biblionumbers").val(biblionumbers);
+
+        return true;
+    });
+
  });
 // ]]>
 </script>
 </head>
+
 <body>
-<div id="doc3" class="yui-t7">
-<!--TMPL_INCLUDE NAME="masthead.inc" -->
-
-   <div id="bd">
-	<div id="yui-g">
-<div id="holds" class="container">
-<!-- TMPL_IF NAME="message" -->
-    <!-- TMPL_IF NAME="GNA" -->
-    <div class="dialog alert">
-        <strong>Sorry</strong>, you cannot place holds because the library doesn't have up-to-date <a href="/cgi-bin/koha/opac-userdetails.pl">contact information</a> on file.
-    </div>
-    <div class="dialog alert">Please contact your librarian, or use the <a href="/cgi-bin/koha/opac-userupdate.pl">online update form</a> to submit current information (<em>Please note:</em> there may be a delay in restoring your account if you submit online)
-    </div>
-    <!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="lost" -->
-    <div class="dialog alert">
-        <strong>Sorry</strong>, you cannot place holds because your library card has been marked as lost or stolen.
-    </div>
-    <div class="dialog alert">
-        If this is an error, please take your card to the circulation desk at your local library and the error will be corrected.
-    </div>
-    <!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="debarred" -->
-    <div class="dialog alert">
-        <strong>Sorry</strong>, you cannot place holds because your account has been frozen.
-    </div>
-    <div class="dialog alert">Usually the reason for freezing an account is old overdues or damage fees.   If <a href="/cgi-bin/koha/opac-user.pl">your account page</a> shows your account to be clear, please consult a librarian.
-    </div>
-    <!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="too_much_oweing" -->
-    <div class="dialog alert">
-        Sorry, you cannot place holds because you owe <!-- TMPL_VAR NAME="too_much_oweing" -->.
-    </div>
-    <!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="too_many_reserves" -->
-        <div class="dialog alert">Sorry, you cannot place more than <!-- TMPL_VAR NAME="too_many_reserves" --> holds.
-        </div>
-        <!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="already_reserved" -->
-    <div class="dialog alert">
-        You already have a hold placed on this item. <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Return to Item Detail Screen</a>
-    </div>
-    <!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="no_items_selected" -->
-    <div class="dialog alert">
-        You must select at least one item.
-    </div>
-    <!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="no_branch_selected" -->
-    <div class="dialog alert">
-        You must select a library for pickup.
-    </div>
-    <!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="no_biblionumber" -->
-    <div class="dialog alert">ERROR: No biblionumber received.</div>
-    <!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="bad_biblionumber" -->
-    <div class="dialog alert">ERROR: No biblio record found for biblionumber <!-- TMPL_VAR NAME="bad_biblionumber" -->.</div>
-    <!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="none_available" -->
-    <div class="dialog alert">
-        <strong>Sorry</strong>, none of these items can be placed on hold.
-    </div>
-    <!-- /TMPL_IF -->
-</div>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="select_item_types" -->
-    <!-- The first time round you select which bibitems you want -->
-    <form action="/cgi-bin/koha/opac-reserve.pl" method="post">
-        <input type="hidden" name="item_types_selected" value="1" />
-        <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
-        <h3>Place a hold on <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a><!-- TMPL_IF NAME="author" -->,  by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --></h3>
-
-<!-- TMPL_IF NAME="OPACItemHolds" --> <!-- TMPL_LOOP name="bibitemloop" --> 
-            <!-- TMPL_UNLESS NAME="item-level_itypes" -->
-            <p><strong>Item type:</strong> <!-- TMPL_VAR NAME="description" --></p>
-            <!-- /TMPL_UNLESS -->
-            <!-- TMPL_IF NAME="publicationyear" --><p><strong>Publication year:</strong> <!-- TMPL_VAR NAME="publicationyear" --></p><!-- /TMPL_IF -->
-<!-- /TMPL_IF --><!-- /TMPL_LOOP -->
-
-		<fieldset class="rows holds">
-			<ol>
-				<li><span class="label">For:</span> <!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)
-            <!-- TMPL_IF NAME="singleBranchMode" -->
-             <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branchcode" -->"/>
+  <div id="doc3" class="yui-t7">
+    <!--TMPL_INCLUDE NAME="masthead.inc" -->
+    <div id="bd">
+	  <div id="yui-g">
+        <div id="holds" class="container">
+      
+          <!-- TMPL_IF NAME="message" -->
+            <!-- TMPL_IF NAME="GNA" -->
+              <div class="dialog alert">
+                <strong>Sorry</strong>, you cannot place holds because the library doesn't have up-to-date <a href="/cgi-bin/koha/opac-userdetails.pl">contact information</a> on file.
+              </div>
+              <div class="dialog alert">Please contact your librarian, or use the <a href="/cgi-bin/koha/opac-userupdate.pl">online update form</a> to submit current information (<em>Please note:</em> there may be a delay in restoring your account if you submit online)
+              </div>
             <!-- /TMPL_IF -->
-            <!-- /TMPL_LOOP --></li>
-            <li><span class="label">Priority:</span><!-- TMPL_VAR Name="rank" DEFAULT="?" --> out of <!-- TMPL_VAR Name="reservecount" DEFAULT="?" -->
-			</li> 
-            <!-- TMPL_UNLESS NAME="singleBranchMode" -->
-            <li><label for="branch">Pick up from:</label> <select name="branch" id="branch">
-                    <!-- TMPL_LOOP NAME="CGIbranch" -->
-                        <!-- TMPL_IF name="selected" -->
-                            <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branch" --></option>
-                        <!-- TMPL_ELSE -->
-                            <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branch" --></option>
+            <!-- TMPL_IF NAME="lost" -->
+              <div class="dialog alert">
+                <strong>Sorry</strong>, you cannot place holds because your library card has been marked as lost or stolen.
+              </div>
+              <div class="dialog alert">If this is an error, please take your card to the circulation desk at your local library and the error will be corrected.
+              </div>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="debarred" -->
+              <div class="dialog alert">
+                <strong>Sorry</strong>, you cannot place holds because your account has been frozen.
+              </div>
+              <div class="dialog alert">Usually the reason for freezing an account is old overdues or damage fees.   If <a href="/cgi-bin/koha/opac-user.pl">your account page</a> shows your account to be clear, please consult a librarian.
+              </div>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="too_much_oweing" -->
+              <div class="dialog alert">
+                Sorry, you cannot place holds because you owe <!-- TMPL_VAR NAME="too_much_oweing" -->.
+              </div>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="too_many_reserves" -->
+              <div class="dialog alert">Sorry, you cannot place more than <!-- TMPL_VAR NAME="too_many_reserves" --> holds.
+              </div>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="bad_biblionumber" -->
+              <div class="dialog alert">ERROR: No biblio record found for biblionumber <!-- TMPL_VAR NAME="bad_biblionumber" -->.</div>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="no_items_selected" -->
+              <div class="dialog alert">
+                You must select at least one item.
+              </div>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="no_branch_selected" -->
+              <div class="dialog alert">
+                You must select a library for pickup.
+              </div>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="no_biblionumber" -->
+              <div class="dialog alert">ERROR: No biblionumber received.</div>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="bad_data" -->
+              <div class="dialog alert">ERROR: Internal error: incomplete hold request.</div>
+            <!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="none_available" -->
+              <div class="dialog alert"><strong>Sorry</strong>, none of these items can be placed on hold.
+              </div>
+            <!-- /TMPL_IF -->
+          <!-- /TMPL_IF --><!-- NAME="message" -->
+
+          <!-- TMPL_UNLESS NAME="message" -->
+            <div class="rows holds">
+              <h3>
+                For:
+                <!-- TMPL_LOOP NAME="USER_INFO" -->
+                  <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)
+                <!-- /TMPL_LOOP -->
+              </h3>
+            </div>
+
+
+
+            <form action="/cgi-bin/koha/opac-reserve.pl" method="post">
+            <input type="hidden" name="place_reserve" value="1"/>
+
+            <!-- These values are set dynamically by js -->
+            <input type="hidden" name="biblionumbers" id="biblionumbers"/>
+            <input type="hidden" name="selecteditems" id="selections"/>
+
+            <!-- TMPL_IF NAME="none_available" -->
+              <input type="submit" disabled="disabled" value="Place Hold" />
+            <!-- TMPL_ELSE -->
+              <input type="submit" value="Place Hold" class="placehold"/>
+            <!-- /TMPL_IF -->
+
+            <div id="bigloop">
+              <table id="bibitemloop">
+                <caption>Confirm Holds</caption>
+                <tr>
+                  <th>Hold</th>
+                  <th>Item</th>
+                  <!-- TMPL_UNLESS NAME="item-level_itypes" -->
+                    <th>Item Type</th>
+                  <!-- /TMPL_UNLESS -->
+                  <th>Priority</th>
+                  <!-- TMPL_IF NAME="OPACItemHolds" -->
+                    <th id="place_on_hdr" style="display:none">Place On:</th>
+                  <!-- /TMPL_IF -->
+                  <!-- TMPL_UNLESS NAME="singleBranchMode" -->
+                    <th>Pickup Location</th>
+                  <!-- /TMPL_UNLESS -->
+                </tr>
+
+                <!-- TMPL_LOOP name="bibitemloop" -->
+                  <tr>
+                    <td>
+                      <input class="reserve_mode" name="reserve_mode" type="hidden" value="single"/>
+                      <input class="single_bib" name="single_bib" type="hidden" value="<!-- TMPL_VAR NAME="biblionumber" -->"/>
+                      <!-- TMPL_IF NAME="holdable" -->
+                        <span class="confirmjs_hold" title="<!-- TMPL_VAR NAME="biblionumber" -->"></span>
+                        <span class="confirm_nonjs">
+                          <input type="radio" class="confirmbox checkitem checkitem_<!-- TMPL_VAR NAME="biblionumber" -->"
+                                 name="checkitem_<!-- TMPL_VAR NAME="biblionumber" -->" checked="checked"
+                                 id="checkitem_<!-- TMPL_VAR NAME="biblionumber" -->"
+                                 value="any" />
+                          <label class="confirm_label" for="checkitem_<!-- TMPL_VAR NAME="biblionumber" -->">Next available copy</label>
+                        </span>
+                      <!-- TMPL_ELSE -->
+                        <span class="confirmjs_nohold" title="<!-- TMPL_VAR NAME="biblionumber" -->"></span>
+                        <span class="confirm_nonjs">
+                          <input type="radio" class="confirmbox checkitem checkitem_<!-- TMPL_VAR NAME="biblionumber" -->"
+                                 name="checkitem_<!-- TMPL_VAR NAME="biblionumber" -->" disabled="disabled"
+                                 id="checkitem_<!-- TMPL_VAR NAME="biblionumber" -->"
+                                 value="any" />
+                        </span>
+                        <!-- TMPL_IF NAME="already_reserved" -->
+                          <div class="bibmessage">You have already requested this title.</div>
                         <!-- /TMPL_IF -->
-                    <!-- /TMPL_LOOP -->
-            </select>
-            </li>
-            <!-- /TMPL_UNLESS -->
-			
-			<!-- TMPL_IF NAME="forloan" -->
-            <!-- TMPL_IF NAME="OPACItemHolds" --><li> <label for="requestany">Place a hold on the next available copy </label>
-            <input type="checkbox" id="requestany" name="request" checked="checked" value="Any" />
-            </li><!-- TMPL_ELSE --><input type="hidden" name="request" value="Any" /><!-- /TMPL_IF -->
-			</ol>
-		</fieldset>
+                        <!-- TMPL_UNLESS NAME="bib_available" -->
+                          <div class="bibmessage">No available items.</div>
+                        <!-- TMPL_ELSE -->
+                          <div class="bibmessage">This title cannot be requested.</div>
+                        <!-- /TMPL_UNLESS -->
+                      <!-- /TMPL_IF -->
+                    </td>
+                    <td>
+                      <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a>
+                      <!-- TMPL_IF NAME="author" -->,  by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
+                    </td>
+                    <!-- TMPL_UNLESS NAME="item-level_itypes" -->
+                      <td>
+                        <img src="<!-- TMPL_VAR NAME="imageurl" -->"
+                             alt="<!-- TMPL_VAR NAME="description" -->"
+                             title="<!-- TMPL_VAR NAME="description" -->" />
+                      </td>
+                    <!-- /TMPL_UNLESS -->
+                    <td><!-- TMPL_VAR name="rank" --> out of <!-- TMPL_VAR NAME="reservecount" --></td>
+                    <!-- TMPL_IF NAME="OPACItemHolds" -->
+                      <td class="place_on_type" style="display:none">
+                        <table>
+                          <tr>
+                            <td>
+                              <!-- TMPL_UNLESS NAME="holdable" -->
+                                <input type="radio" name="reqtype_<!-- TMPL_VAR NAME="biblionumber" -->"
+                                       id="reqany_<!-- TMPL_VAR NAME="biblionumber" -->"
+                                       class="selectany"
+                                       value="Any"
+                                       disabled="disabled"
+                                />
+                              <!-- TMPL_ELSE -->
+                                <input type="radio" name="reqtype_<!-- TMPL_VAR NAME="biblionumber" -->"
+                                       id="reqany_<!-- TMPL_VAR NAME="biblionumber" -->"
+                                       class="selectany"
+                                       value="Any"
+                                       checked="checked"
+                                />
+                              <!-- /TMPL_UNLESS -->
+                              <label for="reqany_<!-- TMPL_VAR NAME="biblionumber" -->">Next available copy</label>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <!-- TMPL_UNLESS NAME="holdable" -->
+                                <input type="radio" name="reqtype_<!-- TMPL_VAR NAME="biblionumber" -->"
+                                       id="reqspecific_<!-- TMPL_VAR NAME="biblionumber" -->"
+                                       class="selectspecific"
+                                       disabled="disabled"
+                                       value="Specific"
+                                />
+                              <!-- TMPL_ELSE -->
+                                <input type="radio" name="reqtype_<!-- TMPL_VAR NAME="biblionumber" -->"
+                                       id="reqspecific_<!-- TMPL_VAR NAME="biblionumber" -->"
+                                       class="selectspecific"
+                                       value="Specific"
+                                />
+                              <!-- /TMPL_UNLESS -->
+                              <label for="reqspecific_<!-- TMPL_VAR NAME="biblionumber"-->">A specific copy</label>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    <!-- /TMPL_IF -->
 
+                    <!-- TMPL_UNLESS NAME="singleBranchMode" -->
+                      <td>
+                        <select name="branch" id="branch_<!-- TMPL_VAR NAME="biblionumber" -->"
+                          <!-- TMPL_UNLESS NAME="holdable" -->disabled="disabled"<!-- /TMPL_UNLESS --> >
+                          <!-- TMPL_LOOP NAME="branchChoicesLoop" -->
+                            <!-- TMPL_IF name="selected" -->
+                              <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branch" --></option>
+                            <!-- TMPL_ELSE -->
+                              <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branch" --></option>
+                            <!-- /TMPL_IF -->
+                          <!-- /TMPL_LOOP -->
+                        </select>
+                      </td>
+                    <!-- /TMPL_UNLESS -->
+                  </tr>
 
-<fieldset class="action">            <input type="hidden" name="biblioitem" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" />
+                  <!-- TMPL_IF NAME="OPACItemHolds" -->
+                  <!-- TMPL_IF NAME="bib_available" -->
+                    <tr class="copiesrow" id="copiesrow_<!-- TMPL_VAR NAME="biblionumber"-->">
+                      <td colspan="1">
+                      </td>
+                      <td colspan="<!-- TMPL_VAR NAME="itemtable_colspan" -->">
+                        <table>
+                          <caption>Select a specific copy:</caption>
+                          <tr>
+                            <th>Copy</th>
+                            <!-- TMPL_IF NAME="item-level_itypes" -->
+                              <th>Item Type</th>
+                            <!-- /TMPL_IF -->
+                            <th>Barcode</th>
+                            <!-- TMPL_UNLESS NAME="singleBranchMode" -->
+                              <th>Home Library</th>
+                              <th>Last Location</th>
+                            <!-- /TMPL_UNLESS -->
+                            <th>Call Number</th>
+                            <th>Information</th>
+                          </tr>
+
+                          <!-- TMPL_LOOP name="itemLoop" -->
+                            <tr class="<!-- TMPL_VAR NAME="backgroundcolor" -->">
+                              <td>
+                                <!-- TMPL_IF NAME="available" -->
+                                  <input type="radio" class="checkitem checkitem_<!-- TMPL_VAR NAME="biblionumber" -->" name="checkitem_<!-- TMPL_VAR NAME="biblionumber" -->"
+                                         value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+                                <!-- TMPL_ELSE -->
+                                  <input disabled="disabled" type="radio" class="checkitem" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+                                  <img src="/intranet-tmpl/<!-- TMPL_VAR NAME="theme" -->/img/famfamfam/silk/cross.png" alt="Cannot be put on hold" />
+                                <!-- /TMPL_IF -->
+                              </td>
+                              <!-- TMPL_IF NAME="item-level_itypes" -->
+                                <td>
+                                  <img src="<!-- TMPL_VAR NAME="imageurl" -->"
+                                       alt="<!-- TMPL_VAR NAME="description" -->"
+                                       title="<!-- TMPL_VAR NAME="description" -->" />
+                                </td>
+                              <!-- /TMPL_IF -->
+                              <td><!-- TMPL_VAR NAME="barcode" --></td>
+                              <!-- TMPL_UNLESS NAME="singleBranchMode" -->
+                                <td><!-- TMPL_VAR NAME="homeBranchName" --></td>
+                                <td><!-- TMPL_VAR NAME="holdingBranchName" --></td>
+                              <!-- /TMPL_UNLESS -->
+                              <td><!-- TMPL_VAR NAME="callNumber" --></td>
+                              <td>
+                                <!-- TMPL_IF NAME="date_due" -->
+                                  <span class="checkedout">Due <!-- TMPL_VAR NAME="date_due" --></span>
+                                <!-- TMPL_ELSIF NAME="transfertwhen" -->
+                                  <span class="intransit">In transit from <!-- TMPL_VAR NAME="transfertfrom" -->,
+                                    to <!-- TMPL_VAR NAME="transfertto" -->, since <!-- TMPL_VAR NAME="transfertwhen" --></span>
+                                <!-- /TMPL_IF -->
+                                <!-- TMPL_IF Name="message" -->
+                                  <span class="lost">Unavailable (lost or missing)</span>
+                                <!-- /TMPL_IF -->
+                                <!-- TMPL_IF Name="notforloan" -->
+                                  <span class="notforloan">Not for loan (<!-- TMPL_VAR NAME="notforloanvalue" -->)</span>
+                                <!-- /TMPL_IF -->
+                                <!-- TMPL_IF NAME="reservedate"-->
+                                  <span class="waiting"><!-- TMPL_IF NAME="waitingdate" -->Waiting<!-- TMPL_ELSE -->On hold<!-- /TMPL_IF --> for patron 
+                                    <!-- TMPL_IF NAME="waitingdate" -->at<!-- TMPL_ELSE -->expected at<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="ExpectedAtLibrary" -->
+                                    since
+                                    <!-- TMPL_IF NAME="waitingdate" --><!-- TMPL_VAR NAME="waitingdate" --><!-- TMPL_ELSE --><!-- TMPL_IF name="reservedate" --><!-- TMPL_VAR NAME="reservedate" --><!-- /TMPL_IF --><!-- /TMPL_IF -->.
+                                  </span>
+                                <!-- TMPL_ELSE -->
+                                  <span class="notonhold">Not on hold</span>
+                                <!-- /TMPL_IF -->&nbsp;
+                              </td>
+                            </tr>
+                          <!-- /TMPL_LOOP -->
+                        </table>
+                      </td>
+                    </tr>
+                  <!-- /TMPL_IF --><!-- bib_available -->
+                  <!-- /TMPL_IF --><!-- OPACItemHolds -->
+                <!-- /TMPL_LOOP -->
+              </table><!-- bibitemloop -->
+            </div><!-- bigloop -->
 
             <!-- TMPL_IF NAME="none_available" -->
             <input type="submit" disabled="disabled" value="Place Hold" />
             <!-- TMPL_ELSE -->
-            <input type="submit" value="Place Hold" />
+            <input type="submit" value="Place Hold" class="placehold" />
             <!-- /TMPL_IF -->
-            <input type="hidden" name="all" value="1" />
-            <input type="hidden" name="place_reserve" value="1" /></fieldset>
-			<!-- /TMPL_IF -->  
-			          
-       <!-- TMPL_IF NAME="OPACItemHolds" --> <!-- TMPL_LOOP name="bibitemloop" -->    
 
-            <table id="requestspecific">
-			<caption>Place a hold on a specific copy</caption>
-            <tr>
-                <th>Hold</th>
-	            <!-- TMPL_IF NAME="item-level_itypes" -->
-                <th>Item Type</th>
-                <!-- /TMPL_IF -->
-                <!-- TMPL_UNLESS NAME="singleBranchMode" -->
-                <th>Home Library</th>
-                <th>Last Location</th>
-                <!-- /TMPL_UNLESS -->
-                <th>Call Number</th>
-                <th>Copy Number</th>
-                <th>Information</th>
-            </tr>
-        <!-- TMPL_LOOP Name="itemloop" -->
-        <tr class="<!-- TMPL_VAR NAME="backgroundcolor" -->">
-            <td>
-            <!-- TMPL_IF NAME="available" -->
-            <input type="radio" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
-            <!-- TMPL_ELSE -->
-            <input disabled="disabled" type="radio" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
-            <img src="/intranet-tmpl/<!-- TMPL_VAR NAME="theme" -->/img/famfamfam/silk/cross.png" alt="Cannot be put on hold" />
-            <!-- /TMPL_IF -->
-            </td>
-            <!-- TMPL_IF NAME="item-level_itypes" -->
-            <td>
-            <img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" />
-            </td>
-            <!-- /TMPL_IF -->
-            <!-- TMPL_UNLESS NAME="singleBranchMode" -->
-            <td><!-- TMPL_VAR NAME="homebranchname"    --></td>
-            <td><!-- TMPL_VAR NAME="holdingbranchname" --></td>
-            <!-- /TMPL_UNLESS -->
-            <td><!-- TMPL_VAR NAME="itemcallnumber"    --></td>
-            <td><!-- TMPL_IF NAME="copynumber" --><!-- TMPL_VAR NAME="copynumber" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
-            <td>
-        <!-- TMPL_IF Name="date_due" -->
-            <span class="checkedout">Due <!-- TMPL_VAR NAME="date_due" --></span>
-        <!-- TMPL_ELSIF Name="transfertwhen" -->
-            <span class="intransit">In transit from <!-- TMPL_VAR NAME="transfertfrom" -->,
-            to <!-- TMPL_VAR NAME="transfertto" -->, since <!-- TMPL_VAR NAME="transfertwhen" --></span>
-        <!-- /TMPL_IF -->
+            </form>
 
-        <!-- TMPL_IF Name="message" -->
-            <span class="lost">Unavailable (lost or missing)</span>
-        <!-- /TMPL_IF -->
+          <!-- /TMPL_UNLESS --><!-- message -->
 
-        <!-- TMPL_IF Name="notforloan" -->
-            <span class="notforloan">Not for loan (<!-- TMPL_VAR NAME="notforloanvalue" -->)</span>
-        <!-- /TMPL_IF -->
+        </div><!-- holds -->
+      </div><!-- yui-g -->
+    </div><!-- bd    -->
+  </div><!-- doc3  -->
 
-            <!-- TMPL_IF NAME="reservedate"-->
-                    <span class="waiting"><!-- TMPL_IF NAME="waitingdate" -->Waiting<!-- TMPL_ELSE -->On hold<!-- /TMPL_IF --> for patron 
-                    <!-- TMPL_IF NAME="waitingdate" -->at<!-- TMPL_ELSE -->expected at<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="ExpectedAtLibrary" -->
-                    since
-                    <!-- TMPL_IF NAME="waitingdate" --><!-- TMPL_VAR NAME="waitingdate" --><!-- TMPL_ELSE --><!-- TMPL_IF name="reservedate" --><!-- TMPL_VAR NAME="reservedate" --><!-- /TMPL_IF --><!-- /TMPL_IF -->.</span>
-            <!-- TMPL_ELSE -->
-                    <span class="notonhold">Not on hold</span>
-            <!-- /TMPL_IF -->&nbsp;
-            </td>
-        </tr>
-        <!-- /TMPL_LOOP --> <!-- itemloop -->
-        </table>
-        <!-- /TMPL_LOOP --> <!-- bibitemloop -->
-            <!-- TMPL_IF NAME="none_available" -->
-            <input type="submit" disabled="disabled" value="Place Hold" />
-            <!-- TMPL_ELSE -->
-            <input type="submit" value="Place Hold" />
-            <!-- /TMPL_IF -->
-        </form><!-- /TMPL_IF -->
-    <!-- end of the first form -->
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="item_types_selected" -->
-<!-- if the bibitems have already been selected -->
-<form action="/cgi-bin/koha/opac-reserve.pl" method="post">
-<input type="hidden" name="place_reserve" value="1" />
-<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><h3>Confirm Reservation</h3>
-<div class="details">
-    <table>
-        <tr><th>Title: </th><td><span class="title"><!-- TMPL_VAR NAME="title" escape="html" --></span></td></tr>
-
-        <!-- TMPL_IF NAME="singleBranchMode" -->
-        <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
-        <!-- TMPL_ELSE -->
-        <tr><th>Pick up From: </th><td><!-- TMPL_VAR NAME="branchname" --><input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" /></td></tr>
-        <!-- /TMPL_IF -->
-</table>
-</div>
-<p><input type="submit" value="Finish and Place Reservation" class="submit" onclick="this.value='Please wait...'; this.disabled=true; this.form.submit();" /></p>
-
-</form>
-
-<!-- /TMPL_IF -->
-</div></div>
-</div>
+<div><!-- The following include seems to have an extra "/div" in it... -->
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc"-->
