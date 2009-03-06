@@ -189,23 +189,31 @@ foreach my $isbdfield ( split /#/, $bloc ) {
           else {
             my @subf = $field->subfields;
             for my $i ( 0 .. $#subf ) {
+            my $valuecode   = $subf[$i][1];
             my $subfieldcode  = $subf[$i][0];
             my $subfieldvalue =
             GetAuthorisedValueDesc( $tag, $subf[$i][0],
               $subf[$i][1], '', $tagslib );
             my $tagsubf = $tag . $subfieldcode;
+
+            $calculated =~ s/                  # replace all {{}} codes by the value code.
+                              \{\{$tagsubf\}\} # catch the {{actualcode}}
+                            /
+                              $valuecode     # replace by the value code
+                           /gx;
+
             $calculated =~
         s/\{(.?.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
         $calculated =~s#/cgi-bin/koha/[^/]+/([^.]*.pl\?.*)$#opac-$1#g;
             }
-        
+
             # field builded, store the result
             if ( $calculated && !$hasputtextbefore )
             {    # put textbefore if not done
             $blocres .= $textbefore;
             $hasputtextbefore = 1;
             }
-        
+
             # remove punctuation at start
             $calculated =~ s/^( |;|:|\.|-)*//g;
             $blocres .= $calculated;
