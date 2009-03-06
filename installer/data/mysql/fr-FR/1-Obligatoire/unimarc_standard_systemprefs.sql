@@ -203,7 +203,7 @@ INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES
 	('TagsShowOnDetail','10','','Nombre de tags à afficher sur la page de détail, 0 désactivant l''affichage.',        'Integer'),
 	('TagsShowOnList',   '6','','Nombre de tags à afficher sur la page de résultat, 0 désactivant l''affichage.','Integer');
 
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('OPACShelfBrowser','1','','Active le parcours des rayonnages sur la page de détail','YesNo');
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('OPACShelfBrowser','1','','Active le parcours des rayonnages sur la page de d�tail','YesNo');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('XSLTDetailsDisplay','0','','Enable XSL stylesheet control over details page display on OPAC WARNING: MARC21 Only','YesNo');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('XSLTResultsDisplay','0','','Permet l''utilisation de Feuilles de style XSLT pour l''affichage des listes de résultat (MARC21)','YesNo');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('AdvancedSearchTypes','itemtypes','itemtypes|ccode','Détermine quel index utiliser lors des recherches par type de document','Choice');
