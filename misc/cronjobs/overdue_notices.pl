@@ -393,6 +393,7 @@ END_SQL
                 while ( my $item_info = $sth2->fetchrow_hashref() ) {
                     my @item_info = map { $_ =~ /^date|date$/ ? format_date( $item_info->{$_} ) : $item_info->{$_} || '' } @item_content_fields;
                     $titles .= join("\t", @item_info) . "\n";
+                    $itemcount++;
                 }
                 $sth2->finish;
     
@@ -584,7 +585,7 @@ sub prepare_letter_for_printing {
     if ( exists $params->{'outputformat'} && $params->{'outputformat'} eq 'csv' ) {
         if ($csv->combine(
                 $params->{'firstname'}, $params->{'lastname'}, $params->{'address1'},  $params->{'address2'}, $params->{'postcode'},
-                $params->{'city'},      $params->{'email'},    $params->{'itemcount'}, $params->{'items.content'}
+                $params->{'city'},      $params->{'email'},    $params->{'itemcount'}, $params->{'titles'}
             )
           ) {
             return $csv->string, "\n";
