@@ -2131,6 +2131,22 @@ sub AddRenewal {
     my $issuedata = $sth->fetchrow_hashref;
     $sth->finish;
 
+    # If the due date wasn't specified, calculate it by adding the
+    # book's loan length to due's date.
+    unless (@_ and $datedue = shift and $datedue->output('iso')) {
+
+        my $borrower = C4::Members::GetMemberDetails( $borrowernumber, 0 ) or return undef;
+        my $loanlength = GetLoanLength(
+            $borrower->{'categorycode'},
+             (C4::Context->preference('item-level_itypes')) ? $biblio->{'itype'} : $biblio->{'itemtype'} ,
+			$item->{homebranch}			# item's homebranch determines loanlength OR do we want the branch specified by the AddRenewal argument?
+        );
+
+        #FIXME -- use circControl?
+        $datedue =  CalcDateDue(C4::Dates->new($issuedata->{date_due}, 'iso'),$loanlength,$branch);	# this branch is the transactional branch.
+        # The question of whether to use item's homebranch calendar is open.
+    }
+
     # Update the issues record to have the new due date, and a new count
     # of how many times it has been renewed.
     my $renews = $issuedata->{'renewals'} + 1;
