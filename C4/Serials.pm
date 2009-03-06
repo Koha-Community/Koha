@@ -1806,7 +1806,7 @@ sub HasSubscriptionExpired {
 	  return 0 unless $res;
       my @res=split (/-/,$res);
       my @endofsubscriptiondate=split(/-/,$expirationdate);
-      return 2 if (not check_date(@res) || not check_date(@endofsubscriptiondate));
+      return 2 if (scalar(@res)!=3 || scalar(@endofsubscriptiondate)!=3||not check_date(@res) || not check_date(@endofsubscriptiondate));
       return 1 if ( (@endofsubscriptiondate && Delta_Days($res[0],$res[1],$res[2],
                   $endofsubscriptiondate[0],$endofsubscriptiondate[1],$endofsubscriptiondate[2]) <= 0)
                   || (!$res));
