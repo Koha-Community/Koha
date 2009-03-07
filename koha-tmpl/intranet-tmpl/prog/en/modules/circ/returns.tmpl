@@ -96,7 +96,11 @@ function Dopop(link) {
 		   <!-- TMPL_IF NAME="boremail" --><li><a id="boremail" href="mailto:<!-- TMPL_VAR NAME="boremail" -->"><!-- TMPL_VAR NAME="boremail" --></a></li><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="debarred" --><li class="error">Patron is RESTRICTED</li><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="gonenoaddress" --><li class="error">Patron's address is in doubt</li><!-- /TMPL_IF --></ul>
-        </p>
+		<!-- TMPL_IF name="transfertodo" -->
+            <h4><strong>Transfer to:</strong> <!-- TMPL_VAR Name="destbranchname" --></h4>
+		<!-- TMPL_ELSE -->
+		<h4><strong>Hold at</strong> <!-- TMPL_VAR Name="destbranchname" --></h4>
+        <!-- /TMPL_IF -->
         <form method="post" action="returns.pl" class="confirm">
             <input type="submit" class="approve" value="Confirm" />
 
@@ -129,9 +133,11 @@ function Dopop(link) {
 <!-- TMPL_IF NAME="debarred" --><li class="error">Patron is RESTRICTED</li><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="gonenoaddress" --><li class="error">Patron's address is in doubt</li><!-- /TMPL_IF -->
                     </ul>
-            <!-- TMPL_IF name="transfertodo" -->
-                <h4><strong>Transfer to:</strong> <!-- TMPL_VAR Name="destbranchname" --></h4>
-            <!-- /TMPL_IF -->
+		<!-- TMPL_IF name="transfertodo" -->
+            <h4><strong>Transfer to:</strong> <!-- TMPL_VAR Name="destbranchname" --></h4>
+		<!-- TMPL_ELSE -->
+		<h4><strong>Hold at</strong> <!-- TMPL_VAR Name="destbranchname" --></h4>
+        <!-- /TMPL_IF -->
 
         <form method="post" action="returns.pl" class="confirm">
             <input type="submit" class="approve" value="Confirm" />
@@ -156,7 +162,7 @@ function Dopop(link) {
     <!-- TMPL_IF Name="needstransfer" -->
 	<!-- transfer -->
 	<div class="dialog message"><h3> This item needs to be transfered to <!-- TMPL_VAR Name="homebranch" --></h3>
-	<center>Transfer Now?<br />
+	Transfer Now?<br />
     <form method="post" action="returns.pl" name="mainform" id="mainform">              
 	<input type="submit" name="dotransfer" value="Yes" class="submit" />
 	<input type="submit" name="notransfer" value="No" class="submit" />
@@ -168,7 +174,7 @@ function Dopop(link) {
 	<input type="hidden" name="bn-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="bornum" -->" /> 
 	<!-- /TMPL_LOOP -->                            
 	<input type="hidden" name="barcode" value="0" />    
-	</form> </center>  </div>
+	</form>   </div>
 	<!-- /TMPL_IF -->
     	
     <!-- TMPL_IF Name="diffbranch" -->
