@@ -4,12 +4,9 @@
 
 function confirm_deletion() {
     var is_confirmed = window.confirm('Are you sure you want to delete this patron? This cannot be undone.');
-    var borrowernumbervalue = $("#borrowernumber").attr("value"); 
     if (is_confirmed) {
-		window.location='/cgi-bin/koha/members/deletemem.pl?member='+borrowernumbervalue+'';
-    } else {
-		return false;
-	}
+            window.location='/cgi-bin/koha/members/deletemem.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->';
+    }
 }
 
 function confirm_updatechild() {
