@@ -340,6 +340,9 @@ if ( $messages->{'ResFound'}) {
             currentbranch  => $branches->{C4::Context->userenv->{'branch'}}->{'branchname'},
             itemnumber       => $reserve->{'itemnumber'},
             barcode     => $barcode,
+            destbranchname =>
+              $branches->{ $reserve->{'branchcode'} }->{'branchname'},
+            destbranch	   => $reserve->{'branchcode'},
         );
 
     }
