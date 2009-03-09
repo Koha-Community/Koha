@@ -1119,11 +1119,11 @@ sub GetCOinSBiblio {
                 $oauthors .= "&rft.au=$au";
             }
         }
-        $title      = "&rft.btitle=".$record->subfield('245','a');
-        $pubyear    = $record->subfield('260','c');
-        $publisher  = $record->subfield('260','b');
-        $isbn       = $record->subfield('020','a');
-        $issn       = $record->subfield('022','a');
+        $title      = "&amp;rft.btitle=".$record->subfield('245','a');
+        $pubyear    = $record->subfield("260","c") || "";
+        $publisher  = $record->subfield('260','b') || "";
+        $isbn       = $record->subfield('020','a') || "";
+        $issn       = $record->subfield('022','a') || "";
 
     }
     $coins_value = "ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3A$mtx$genre$title&rft.isbn=$isbn&rft.issn=$issn&rft.aulast=$aulast&rft.aufirst=$aufirst$oauthors&rft.pub=$publisher&rft.date=$pubyear";
