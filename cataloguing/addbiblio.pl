@@ -382,7 +382,7 @@ sub create_input {
                     maxlength=\"$max_length\"
                     \/>
                     <a href=\"#\" class=\"buttonDot\"
-                        onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&amp;index=$subfield_data{id}','$subfield_data{id}'); return false;\" title=\"Tag Editor\">...</a>
+                        onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&amp;index=$subfield_data{id}','$subfield_data{id}'); return false;\" tabindex=\"1\" title=\"Tag Editor\">...</a>
             ";
       } else {
         $subfield_data{marc_value} =
@@ -396,7 +396,7 @@ sub create_input {
                     maxlength=\"$max_length\"
                     readonly=\"readonly\"
                     \/><a href=\"#\" class=\"buttonDot\"
-                        onclick=\"openAuth(this.parentNode.getElementsByTagName('input')[1].id,'".$tagslib->{$tag}->{$subfield}->{authtypecode}."'); return false;\" title=\"Tag Editor\">...</a>
+                        onclick=\"openAuth(this.parentNode.getElementsByTagName('input')[1].id,'".$tagslib->{$tag}->{$subfield}->{authtypecode}."'); return false;\" tabindex=\"1\" title=\"Tag Editor\">...</a>
             ";
       }
     # it's a plugin field
@@ -426,7 +426,7 @@ sub create_input {
                             size=\"67\"
                             maxlength=\"$max_length\"
                             onblur=\"Blur$function_name($index_tag); \" \/>
-                            <a href=\"#\" class=\"buttonDot\" onclick=\"Clic$function_name('$subfield_data{id}'); return false;\" title=\"Tag Editor\">...</a>
+                            <a href=\"#\" class=\"buttonDot\" onclick=\"Clic$function_name('$subfield_data{id}'); return false;\" tabindex=\"1\" title=\"Tag Editor\">...</a>
                     $javascript";
         } else {
             warn "Plugin Failed: $plugin";
