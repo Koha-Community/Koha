@@ -373,7 +373,7 @@ sub create_input {
     # it's a thesaurus / authority field
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{authtypecode} ) {
-	  	$readonly=(C4::Context->preference("BiblioAddsAuthorities")?qq(readonly="readonly"):"");
+	  	my $readonly=(C4::Context->preference("BiblioAddsAuthorities")?qq(readonly="readonly"):"");
         $subfield_data{marc_value} =
             "<input type=\"text\"
                     id=\"".$subfield_data{id}."\"
