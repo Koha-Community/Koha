@@ -907,24 +907,20 @@ sub deduplicate_batch {
 
 sub split_lccn {
     my ($lccn) = @_;    
-    my ($ll, $wnl, $dec, $cutter, $pubdate) = (0, 0, 0, 0, 0);
     $_ = $lccn;
-    # lccn example 'HE8700.7 .P6T44 1983';
-    my    @splits   = m/
-        (^[a-zA-Z]+)            # HE
-        ([0-9]+\.*[0-9]*)             # 8700.7
+    # lccn examples: 'HE8700.7 .P6T44 1983', 'BS2545.E8 H39 1996';
+    my (@parts) = m/
+        ^([a-zA-Z]+)      # HE          # BS
+        (\d+(?:\.\d)*)    # 8700.7      # 2545
         \s*
-        (\.*[a-zA-Z0-9]*)       # P6T44
+        (\.*\D+\d*)       # .P6         # .E8
         \s*
-        ([0-9]*)                # 1983
-        /x;  
-
-    # strip something occuring spaces too
-    $splits[0] =~ s/\s+$//;
-    $splits[1] =~ s/\s+$//;
-    $splits[2] =~ s/\s+$//;
-
-    return @splits;
+        (.*)              # T44 1983    # H39 1996   # everything else (except any trailing spaces)
+        \s*
+        /x;
+    push @parts, split /\s+/, pop @parts;   # split the last piece into an arbitrary number of pieces at spaces
+    $debug and print STDERR "split_lccn array: ", join(" | ", @parts), "\n";
+    return @parts;
 }
 
 sub split_ddcn {
