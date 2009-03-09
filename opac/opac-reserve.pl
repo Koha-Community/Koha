@@ -314,7 +314,8 @@ $template->param('item-level_itypes' => $itemLevelTypes);
 
 foreach my $biblioNum (@biblionumbers) {
 
-    
+    my $record = GetMarcBiblio($biblioNum);
+    my $subtitle = C4::Biblio::get_koha_field_from_marc('bibliosubtitle', 'subtitle', $record, '');
     # Init the bib item with the choices for branch pickup
     my %biblioLoopIter = ( branchChoicesLoop => $CGIbranchloop );
 
@@ -327,6 +328,7 @@ foreach my $biblioNum (@biblionumbers) {
 
     $biblioLoopIter{biblionumber} = $biblioData->{biblionumber};
     $biblioLoopIter{title} = $biblioData->{title};
+    $biblioLoopIter{subtitle} = $subtitle;
     $biblioLoopIter{author} = $biblioData->{author};
     $biblioLoopIter{rank} = $biblioData->{rank};
     $biblioLoopIter{reservecount} = $biblioData->{reservecount};
@@ -369,7 +371,7 @@ foreach my $biblioNum (@biblionumbers) {
         $itemLoopIter->{barcode} = $itemInfo->{barcode};
         $itemLoopIter->{homeBranchName} = $branches->{$itemInfo->{homebranch}}{branchname};
         $itemLoopIter->{callNumber} = $itemInfo->{itemcallnumber};
-
+        $itemLoopIter->{copynumber} = $itemInfo->{copynumber};
         if ($itemLevelTypes) {
             $itemLoopIter->{description} = $itemInfo->{description};
             $itemLoopIter->{imageurl} = $itemInfo->{imageurl};

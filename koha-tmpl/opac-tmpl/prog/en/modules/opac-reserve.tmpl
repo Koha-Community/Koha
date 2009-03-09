@@ -17,7 +17,13 @@
     var copiesRowId = null;
     var wasSpecific = false;
     var lastCopiesRowId = null;
-
+	$(".checkitem").parent().click(function(e){
+		if(e.target.tagName.toLowerCase() == 'td'){
+           $(this).find("input.checkitem").each( function() {
+               $(this).attr('checked', !$(this).attr('checked'));
+			});
+		}
+	});
     // Hides all 'specific copy' table rows on load.
     $(".copiesrow").hide();
 
@@ -211,16 +217,11 @@
           <!-- /TMPL_IF --><!-- NAME="message" -->
 
           <!-- TMPL_UNLESS NAME="message" -->
-            <div class="rows holds">
-              <h3>
-                For:
+              <h3>Confirm holds for:
                 <!-- TMPL_LOOP NAME="USER_INFO" -->
                   <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)
                 <!-- /TMPL_LOOP -->
               </h3>
-            </div>
-
-
 
             <form action="/cgi-bin/koha/opac-reserve.pl" method="post">
             <input type="hidden" name="place_reserve" value="1"/>
@@ -228,19 +229,11 @@
             <!-- These values are set dynamically by js -->
             <input type="hidden" name="biblionumbers" id="biblionumbers"/>
             <input type="hidden" name="selecteditems" id="selections"/>
-
-            <!-- TMPL_IF NAME="none_available" -->
-              <input type="submit" disabled="disabled" value="Place Hold" />
-            <!-- TMPL_ELSE -->
-              <input type="submit" value="Place Hold" class="placehold"/>
-            <!-- /TMPL_IF -->
-
             <div id="bigloop">
               <table id="bibitemloop">
-                <caption>Confirm Holds</caption>
                 <tr>
-                  <th>Hold</th>
-                  <th>Item</th>
+                  <th colspan="2">Hold</th>
+                  <th>Title</th>
                   <!-- TMPL_UNLESS NAME="item-level_itypes" -->
                     <th>Item Type</th>
                   <!-- /TMPL_UNLESS -->
@@ -255,10 +248,10 @@
 
                 <!-- TMPL_LOOP name="bibitemloop" -->
                   <tr>
-                    <td>
+                      <!-- TMPL_IF NAME="holdable" -->
+					  <td colspan="2">
                       <input class="reserve_mode" name="reserve_mode" type="hidden" value="single"/>
                       <input class="single_bib" name="single_bib" type="hidden" value="<!-- TMPL_VAR NAME="biblionumber" -->"/>
-                      <!-- TMPL_IF NAME="holdable" -->
                         <span class="confirmjs_hold" title="<!-- TMPL_VAR NAME="biblionumber" -->"></span>
                         <span class="confirm_nonjs">
                           <input type="radio" class="confirmbox checkitem checkitem_<!-- TMPL_VAR NAME="biblionumber" -->"
@@ -267,7 +260,11 @@
                                  value="any" />
                           <label class="confirm_label" for="checkitem_<!-- TMPL_VAR NAME="biblionumber" -->">Next available copy</label>
                         </span>
+					</td>
                       <!-- TMPL_ELSE -->
+					  <td>
+                      <input class="reserve_mode" name="reserve_mode" type="hidden" value="single"/>
+                      <input class="single_bib" name="single_bib" type="hidden" value="<!-- TMPL_VAR NAME="biblionumber" -->"/>
                         <span class="confirmjs_nohold" title="<!-- TMPL_VAR NAME="biblionumber" -->"></span>
                         <span class="confirm_nonjs">
                           <input type="radio" class="confirmbox checkitem checkitem_<!-- TMPL_VAR NAME="biblionumber" -->"
@@ -275,6 +272,7 @@
                                  id="checkitem_<!-- TMPL_VAR NAME="biblionumber" -->"
                                  value="any" />
                         </span>
+					</td><td>
                         <!-- TMPL_IF NAME="already_reserved" -->
                           <div class="bibmessage">You have already requested this title.</div>
                         <!-- /TMPL_IF -->
@@ -283,10 +281,10 @@
                         <!-- TMPL_ELSE -->
                           <div class="bibmessage">This title cannot be requested.</div>
                         <!-- /TMPL_UNLESS -->
-                      <!-- /TMPL_IF -->
                     </td>
+                      <!-- /TMPL_IF -->
                     <td>
-                      <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a>
+                      <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --><!-- TMPL_IF NAME="subtitle" --> <!-- TMPL_VAR NAME="subtitle" ESCAPE="html" --><!-- /TMPL_IF --></a>
                       <!-- TMPL_IF NAME="author" -->,  by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
                     </td>
                     <!-- TMPL_UNLESS NAME="item-level_itypes" -->
@@ -389,8 +387,8 @@
                                          value="<!-- TMPL_VAR NAME="itemnumber" -->" />
                                 <!-- TMPL_ELSE -->
                                   <input disabled="disabled" type="radio" class="checkitem" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
-                                  <img src="/intranet-tmpl/<!-- TMPL_VAR NAME="theme" -->/img/famfamfam/silk/cross.png" alt="Cannot be put on hold" />
-                                <!-- /TMPL_IF -->
+                                  <img src="/intranet-tmpl/<!-- TMPL_VAR NAME="theme" -->/img/famfamfam/silk/cross.png" alt="Cannot be put on hold" title="Cannot be put on hold" />
+                                <!-- /TMPL_IF --> <!-- TMPL_IF NAME="copynumber" --><!-- TMPL_VAR NAME="copynumber" --><!-- /TMPL_IF -->
                               </td>
                               <!-- TMPL_IF NAME="item-level_itypes" -->
                                 <td>
