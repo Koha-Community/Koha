@@ -141,7 +141,7 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
         
             $letter = parse_letter( { letter         => $letter,
                                       borrowernumber => $upcoming->{'borrowernumber'},
-                                      branchchode    => $upcoming->{'branchcode'},
+                                      branchcode    => $upcoming->{'branchcode'},
                                       biblionumber   => $biblio->{'biblionumber'} } );
         }
     } else {
@@ -150,7 +150,7 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
         # warn( Data::Dumper->Dump( [ $borrower_preferences ], [ 'borrower_preferences' ] ) );
         next UPCOMINGITEM unless $borrower_preferences && exists $borrower_preferences->{'days_in_advance'};
         next UPCOMINGITEM unless $borrower_preferences->{'days_in_advance'} == $upcoming->{'days_until_due'};
-        
+
         if ( $borrower_preferences->{'wants_digest'} ) {
             # cache this one to process after we've run through all of the items.
             $upcoming_digest->{$upcoming->{'borrowernumber'}}++;
@@ -162,7 +162,7 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
         
             $letter = parse_letter( { letter         => $letter,
                                       borrowernumber => $upcoming->{'borrowernumber'},
-                                      branchchode    => $upcoming->{'branchcode'},
+                                      branchcode    => $upcoming->{'branchcode'},
                                       biblionumber   => $biblio->{'biblionumber'} } );
         }
     }
