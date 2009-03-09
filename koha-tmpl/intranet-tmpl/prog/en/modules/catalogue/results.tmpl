@@ -245,7 +245,7 @@ $(window).load(function() {
                             <!-- TMPL_IF NAME="AmazonContent" -->
                                 <td>
                                     <a class="p1" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                                        <img src="<!-- TMPL_IF NAME="isbn" -->http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.TZZZZZZZ.jpg<!-- TMPL_ELSE -->http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif<!-- /TMPL_IF -->" alt="image" class="thumbnail" />
+                                        <img src="<!-- TMPL_IF NAME="isbn" -->http://images.amazon.com/images/P/<!-- TMPL_VAR name="amazonisbn" -->.01.TZZZZZZZ.jpg<!-- TMPL_ELSE -->http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif<!-- /TMPL_IF -->" alt="image" class="thumbnail" />
                                     </a></td>                           
                             <!-- /TMPL_IF -->
                             <td>
@@ -274,7 +274,7 @@ $(window).load(function() {
                                     <p>
                                     <!-- TMPL_UNLESS NAME="item-level_itypes" -->
                                     <!-- TMPL_UNLESS NAME="noItemTypeImages" --><!-- TMPL_IF name="imageurl" -->
-                                    <img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" style="float: left; margin: .1em;" alt="img" />
+                                    <img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" style="float: left; margin: .1em;" alt="" />
                                     <!-- /TMPL_IF --><!-- /TMPL_UNLESS -->
                                     <!-- /TMPL_UNLESS -->
                                     <!-- TMPL_VAR name="summary" --></p>
@@ -282,7 +282,7 @@ $(window).load(function() {
                                     <p>
                                     <!-- TMPL_UNLESS NAME="item-level_itypes" -->
                                     <!-- TMPL_UNLESS NAME="noItemTypeImages" --><!-- TMPL_IF name="imageurl" -->
-                                    <img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" style="float: left; margin: .1em;" alt="img" />
+                                    <img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" style="float: left; margin: .1em;" alt="" />
                                     <!-- /TMPL_IF --><!-- /TMPL_UNLESS -->
                                     <!-- /TMPL_UNLESS -->
 
@@ -322,31 +322,29 @@ $(window).load(function() {
                                 </td>
 
                                 <td><div class="availability">
-                                    <!-- TMPL_IF NAME="items_count" --><div><!-- TMPL_VAR NAME="items_count" -->
-                                    <!-- TMPL_IF NAME="itemsplural" -->items<!-- TMPL_ELSE -->item<!-- /TMPL_IF --></div>
+                                    <!-- TMPL_IF NAME="items_count" --><strong><!-- TMPL_VAR NAME="items_count" -->
+                                    <!-- TMPL_IF NAME="itemsplural" -->items<!-- TMPL_ELSE -->item<!-- /TMPL_IF --><!-- TMPL_IF NAME="available_items_loop" -->, <!-- TMPL_IF NAME="availablecount" --><!-- TMPL_VAR NAME="availablecount" --> available:<!-- /TMPL_IF --><!-- TMPL_ELSE -->, None available<!-- /TMPL_IF --></strong>
 
                                     <!-- TMPL_IF NAME="available_items_loop" -->
                                     <!-- TMPL_IF NAME="availablecount" --><!-- TMPL_VAR NAME="availablecount" --><!-- /TMPL_IF --> available:
                                     <ul>
                                     <!-- TMPL_LOOP NAME="available_items_loop" -->
                                         
-                                        <!-- TMPL_IF NAME="noItemTypeImages" --><li><!-- TMPL_ELSE --><!-- TMPL_IF NAME="item-level_itypes" --><!-- TMPL_IF name="imageurl" --><li style=" list-style: none; list-style-type: none;  background-image: url(<!-- TMPL_VAR name="imageurl" -->); background-repeat: no-repeat; background-position: 0 50%; padding: 3px 0 3px 30px; margin: .4em 0; " title="<!-- TMPL_VAR name="description" -->"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- /TMPL_IF -->
+                                        <!-- TMPL_IF NAME="noItemTypeImages" --><li><!-- TMPL_ELSE --><!-- TMPL_IF NAME="item-level_itypes" --><!-- TMPL_IF name="imageurl" --><li style="list-style: none; list-style-type: none;"><img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" /><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF NAME="branchname" --><!-- TMPL_VAR NAME="branchname" --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF NAME="location" --><!-- TMPL_VAR NAME="location" --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF NAME="itemcallnumber" -->[<a href="/cgi-bin/koha/catalogue/search.pl?q=callnum:<!-- TMPL_VAR NAME="itemcallnumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="itemcallnumber" --></a>]<!-- /TMPL_IF -->
                                         (<!-- TMPL_VAR NAME="count" -->)</li>
                                     <!-- /TMPL_LOOP --></ul>
-                                    <!-- TMPL_ELSE -->
-                                    <span class="unavailable">No items available</span>
                                     <!-- /TMPL_IF -->
 
                                    <!-- TMPL_IF NAME="onloan_items_loop" -->
-                                   <!-- TMPL_IF NAME="onloancount" --><!-- TMPL_VAR NAME="onloancount" --><!-- /TMPL_IF --> on loan:
+                                   <span class="status"><!-- TMPL_IF NAME="onloancount" --><!-- TMPL_VAR NAME="onloancount" --><!-- /TMPL_IF --> on loan:</span>
                                     <ul>
                                     <!-- TMPL_LOOP NAME="onloan_items_loop" -->
                                        <!-- TMPL_IF NAME="noItemTypeImages" --><li><!-- TMPL_ELSE --><!-- TMPL_IF NAME="item-level_itypes" -->
                                         <!-- TMPL_IF name="imageurl" -->
-                                        <li style=" list-style: none; list-style-type: none;  background-image: url(<!-- TMPL_VAR name=imageurl -->); background-repeat: no-repeat; background-position: 0 50%; padding: 3px 0 3px 30px; margin: .4em 0;" title="<!-- TMPL_VAR name="description" -->">
+                                        <li style="list-style: none; list-style-type: none;"><img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" />
                                         <!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
                                         <!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- /TMPL_IF -->                                        
 
@@ -358,12 +356,12 @@ $(window).load(function() {
                                     <!-- /TMPL_IF -->
 
                                     <!-- TMPL_IF NAME="other_items_loop" -->
-                                    <!-- TMPL_IF NAME="othercount" --><!-- TMPL_VAR NAME="othercount" --><!-- /TMPL_IF --> unavailable:
+                                    <span class="unavailable"><!-- TMPL_IF NAME="othercount" --><!-- TMPL_VAR NAME="othercount" --><!-- /TMPL_IF --> unavailable:</span>
                                     <ul>
                                     <!-- TMPL_LOOP NAME="other_items_loop" -->
                                         <!-- TMPL_IF NAME="noItemTypeImages" --><li><!-- TMPL_ELSE --><!-- TMPL_IF NAME="item-level_itypes" -->
                                         <!-- TMPL_IF name="imageurl" -->
-                                        <li style="list-style: none; list-style-type: none; background-image: url(<!-- TMPL_VAR name="imageurl" -->); background-repeat: no-repeat; background-position: 0 50%; padding: 3px 0 3px 30px; margin: .4em 0;" title="<!-- TMPL_VAR name="description" -->">
+                                        <li style="list-style: none; list-style-type: none;"><img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" />
                                         <!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
                                         <!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
