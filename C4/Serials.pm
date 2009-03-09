@@ -1345,7 +1345,7 @@ $subscriptionid = &NewSubscription($auser,branchcode,$aqbooksellerid,$cost,$aqbu
     $add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
     $add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
     $add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
-    $numberingmethod, $status, $notes, $serialsadditems)
+    $numberingmethod, $status, $notes, $serialsadditems, graceperiod)
 
 Create a new subscription with value given on input args.
 
@@ -1368,7 +1368,8 @@ sub NewSubscription {
         $lastvalue3,    $innerloop3,   $numberingmethod, $status,
         $notes,         $letter,       $firstacquidate,  $irregularity,
         $numberpattern, $callnumber,   $hemisphere,      $manualhistory,
-        $internalnotes, $serialsadditems, $staffdisplaycount, $opacdisplaycount
+        $internalnotes, $serialsadditems, $staffdisplaycount, $opacdisplaycount,
+        $graceperiod
     ) = @_;
     my $dbh = C4::Context->dbh;
 
@@ -1381,8 +1382,9 @@ sub NewSubscription {
             add2,every2,whenmorethan2,setto2,lastvalue2,innerloop2,
             add3,every3,whenmorethan3,setto3,lastvalue3,innerloop3,
             numberingmethod, status, notes, letter,firstacquidate,irregularity,
-            numberpattern, callnumber, hemisphere,manualhistory,internalnotes,serialsadditems,staffdisplaycount,opacdisplaycount)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+            numberpattern, callnumber, hemisphere,manualhistory,internalnotes,serialsadditems,
+            staffdisplaycount,opacdisplaycount,graceperiod)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         |;
     my $sth = $dbh->prepare($query);
     $sth->execute(
@@ -1407,7 +1409,8 @@ sub NewSubscription {
         $numberpattern,                 $callnumber,
         $hemisphere,                    $manualhistory,
         $internalnotes,                 $serialsadditems,
-		$staffdisplaycount,				$opacdisplaycount
+		$staffdisplaycount,				$opacdisplaycount,
+        $graceperiod,
     );
 
     #then create the 1st waited number
@@ -2368,9 +2371,9 @@ sub abouttoexpire {
       $sth->execute($subscriptionid);
       my ($res) = $sth->fetchrow ;
 #        warn "date expiration : ".$expirationdate." date courante ".$res;
-      my @res=split /-/,$res;
+      my @res=split (/-/,$res);
       @res=Date::Calc::Today if ($res[0]*$res[1]==0);
-      my @endofsubscriptiondate=split/-/,$expirationdate;
+      my @endofsubscriptiondate=split(/-/,$expirationdate);
       my $x;
       if ( $per == 1 ) {$x=7;}
       if ( $per == 2 ) {$x=7; }

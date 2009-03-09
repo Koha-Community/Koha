@@ -1898,6 +1898,7 @@ CREATE TABLE `subscription` (
   `serialsadditems` tinyint(1) NOT NULL default '0',
   `staffdisplaycount` VARCHAR(10) NULL,
   `opacdisplaycount` VARCHAR(10) NULL,
+  `graceperiod` int(11) NOT NULL default '0',
   PRIMARY KEY  (`subscriptionid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

@@ -161,22 +161,24 @@ $template->param(  'dateformat_' . C4::Context->preference('dateformat') => 1 ,
                 );
 
 if ($op eq 'addsubscription') {
-    my $auser = $query->param('user');
-    my $branchcode = $query->param('branchcode');
-    my $aqbooksellerid = $query->param('aqbooksellerid');
-    my $cost = $query->param('cost');
-    my $aqbudgetid = $query->param('aqbudgetid'); 
-    my $startdate = $query->param('startdate');
-    my $firstacquidate = $query->param('firstacquidate');    
-    my $periodicity = $query->param('periodicity');
-    my $dow = $query->param('dow');
-    my @irregularity = $query->param('irregularity_select');
-    my $numberlength = 0;
-    my $weeklength = 0;
-    my $monthlength = 0;
-    my $numberpattern = $query->param('numbering_pattern');
-    my $sublength = $query->param('sublength');
-    my $subtype = $query->param('subtype');
+    my $auser           = $query->param('user');
+    my $branchcode      = $query->param('branchcode');
+    my $aqbooksellerid  = $query->param('aqbooksellerid');
+    my $cost            = $query->param('cost');
+    my $aqbudgetid      = $query->param('aqbudgetid'); 
+    my $startdate       = $query->param('startdate');
+    my $firstacquidate  = $query->param('firstacquidate');    
+    my $periodicity     = $query->param('periodicity');
+    my $dow             = $query->param('dow');
+    my @irregularity    = $query->param('irregularity_select');
+    my $numberlength    = 0;
+    my $weeklength      = 0;
+    my $monthlength     = 0;
+    my $numberpattern   = $query->param('numbering_pattern');
+    my $sublength       = $query->param('sublength');
+    my $subtype         = $query->param('subtype');
+    my $graceperiod     = $query->param('graceperiod') || 0;
+
     if ($subtype eq 'months'){
         $monthlength = $sublength;
     } elsif ($subtype eq 'weeks'){
@@ -222,7 +224,7 @@ if ($op eq 'addsubscription') {
 					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
 					$numberingmethod, $status, $notes,$letter,$firstacquidate,join(",",@irregularity),
                     $numberpattern, $callnumber, $hemisphere,($manualhistory?$manualhistory:0),$internalnotes,
-                    $serialsadditems,$staffdisplaycount,$opacdisplaycount
+                    $serialsadditems,$staffdisplaycount,$opacdisplaycount,$graceperiod
 				);
 
     print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");

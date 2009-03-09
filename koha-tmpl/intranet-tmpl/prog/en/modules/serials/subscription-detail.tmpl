@@ -66,6 +66,7 @@ function popup(subscriptionid) {
         <!-- TMPL_ELSE -->
             <li>Serial receipt does not create an item record.</li>
         <!-- /TMPL_IF -->
+        <li><span class="label">Grace period:</span> <!-- TMPL_VAR name="graceperiod" -->&nbsp;</li>
         <!-- TMPL_IF name="callnumber" --><li><span class="label">Call Number:</span> <!-- TMPL_VAR name="callnumber" -->&nbsp;</li><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="staffdisplaycount" --><li><span class="label">Number of issues to display to staff</span>:&nbsp;<!-- TMPL_VAR NAME="staffdisplaycount" -->&nbsp;</li><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="opacdisplaycount" --><li><span class="label">Number of issues to display to the public</span>:&nbsp;<!-- TMPL_VAR NAME="opacdisplaycount" -->&nbsp;</li><!-- /TMPL_IF -->
