@@ -64,33 +64,35 @@ The functions in this module deal with branches.
 =head2 GetBranches
 
   $branches = &GetBranches();
-  returns informations about ALL branches.
-  Create a branch selector with the following code
-  IndependantBranches Insensitive...
+
+  Returns informations about ALL branches, IndependantBranches Insensitive.
   GetBranchInfo() returns the same information without the problems of this function 
-  (namespace collision, mainly).  You should probably use that, and replace GetBranches()
-  with GetBranchInfo() where you see it in the code.
+  (namespace collision, mainly).
+  Create a branch selector with the following code.
   
 =head3 in PERL SCRIPT
 
-my $branches = GetBranches;
-my @branchloop;
-foreach my $thisbranch (keys %$branches) {
-    my $selected = 1 if $thisbranch eq $branch;
-    my %row =(value => $thisbranch,
-                selected => $selected,
-                branchname => $branches->{$thisbranch}->{'branchname'},
-            );
-    push @branchloop, \%row;
-}
+    my $branches = GetBranches;
+    my @branchloop;
+    foreach my $thisbranch (sort keys %$branches) {
+        my $selected = 1 if $thisbranch eq $branch;
+        my %row =(value => $thisbranch,
+                    selected => $selected,
+                    branchname => $branches->{$thisbranch}->{branchname},
+                );
+        push @branchloop, \%row;
+    }
 
 =head3 in TEMPLATE
-            <select name="branch">
-                <option value="">Default</option>
-            <!-- TMPL_LOOP name="branchloop" -->
-                <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
-            <!-- /TMPL_LOOP -->
-            </select>
+
+    <select name="branch">
+        <option value="">Default</option>
+        <!-- TMPL_LOOP name="branchloop" -->
+        <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+        <!-- /TMPL_LOOP -->
+    </select>
+
+=head4 Note that you often will want to just use GetBranchesLoop, for exactly the example above.
 
 =cut
 
