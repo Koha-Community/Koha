@@ -19,6 +19,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+# use warnings;  # FIXME
 use C4::Auth;
 use CGI;
 use C4::Context;
@@ -51,7 +52,7 @@ my $cotedigits  = $input->param("cotedigits");
 my $output      = $input->param("output");
 my $basename    = $input->param("basename");
 my $mime        = $input->param("MIME");
-our $sep     = $input->param("sep");
+our $sep        = $input->param("sep");
 $sep = "\t" if ($sep eq 'tabulation');
 
 my ($template, $borrowernumber, $cookie)
@@ -133,16 +134,16 @@ if ($do_it) {
 # No need to test for data here.  If you don't have itemcallnumbers, you probably know it.
 # FIXME: Hardcoding to 5 chars on itemcallnum. 
 #
-	 my $hascote = 1;
-	 my $highcote = 5;
-	
+    my $hascote = 1;
+    my $highcote = 5;
+
 	$req = $dbh->prepare("select itemtype, description from itemtypes order by description");
 	$req->execute;
 	my $CGIitemtype = $req->fetchall_arrayref({});
 
 	my $authvals = GetKohaAuthorisedValues("items.ccode");
 	my @authvals;
-	foreach (keys %$authvals) {
+	foreach (sort {$authvals->{$a} cmp $authvals->{$b} || $a cmp $b} keys %$authvals) {
 		push @authvals, { code => $_, description => $authvals->{$_} };
 	}
 	
