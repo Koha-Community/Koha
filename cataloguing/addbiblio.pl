@@ -373,7 +373,7 @@ sub create_input {
     # it's a thesaurus / authority field
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{authtypecode} ) {
-     if (C4::Context->preference("BiblioAddsAuthorities")) {
+	  	$readonly=(C4::Context->preference("BiblioAddsAuthorities")?qq(readonly="readonly"):"");
         $subfield_data{marc_value} =
             "<input type=\"text\"
                     id=\"".$subfield_data{id}."\"
@@ -383,28 +383,12 @@ sub create_input {
                     tabindex=\"1\"
                     size=\"67\"
                     maxlength=\"$max_length\"
-                    \/>
-                    <a href=\"#\" class=\"buttonDot\"
-                        onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&amp;index=$subfield_data{id}&amp;mainmainstring=$value','$subfield_data{id}'); return false;\" title=\"Tag Editor\">...</a>
+					$readonly\/><a href=\"#\" class=\"buttonDot\"
+                        onclick=\"openAuth(this.parentNode.getElementsByTagName('input')[1].id,'".$tagslib->{$tag}->{$subfield}->{authtypecode}."'); return false;\" tabindex=\"1\" title=\"Tag Editor\">...</a>
             ";
-      } else {
-        $subfield_data{marc_value} =
-            "<input type=\"text\"
-                    id=\"".$subfield_data{id}."\"
-                    name=\"".$subfield_data{id}."\"
-                    value=\"$value\"
-                    class=\"input_marceditor\"
-                    tabindex=\"1\"
-                    size=\"67\"
-                    maxlength=\"$max_length\"
-                    readonly=\"readonly\"
-                    \/><a href=\"#\" class=\"buttonDot\"
-                        onclick=\"openAuth(this.parentNode.getElementsByTagName('input')[1].id,'".$tagslib->{$tag}->{$subfield}->{authtypecode}."'); return false;\" title=\"Tag Editor\">...</a>
-            ";
-      }
-    # it's a plugin field
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{'value_builder'} ) {
+    # it's a plugin field
 
         # opening plugin. Just check wether we are on a developper computer on a production one
         # (the cgidir differs)
@@ -429,7 +413,7 @@ sub create_input {
                             size=\"67\"
                             maxlength=\"$max_length\"
                             onblur=\"Blur$function_name($index_tag); \" \/>
-                            <a href=\"#\" class=\"buttonDot\" onclick=\"Clic$function_name('$subfield_data{id}'); return false;\" title=\"Tag Editor\">...</a>
+                            <a href=\"#\" class=\"buttonDot\" onclick=\"Clic$function_name('$subfield_data{id}'); return false;\" tabindex=\"1\" title=\"Tag Editor\">...</a>
                     $javascript";
         } else {
             warn "Plugin Failed: $plugin";
