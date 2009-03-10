@@ -243,7 +243,7 @@ build a HTML select with the following code :
 
 sub GetItemTypes {
 
-    # returns a reference to a hash of references to branches...
+    # returns a reference to a hash of references to itemtypes...
     my %itemtypes;
     my $dbh   = C4::Context->dbh;
     my $query = qq|
