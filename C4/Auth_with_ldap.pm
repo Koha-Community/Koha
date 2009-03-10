@@ -109,7 +109,7 @@ sub checkpw_ldap {
 		return 1;
 	}
 	my %borrower = ldap_entry_2_hash($userldapentry,$userid);
-	$debug and print "checkpw_ldap received \%borrower w/ " . keys(%borrower), " keys: ", join(' ', keys %borrower), "\n";
+	$debug and print STDERR "checkpw_ldap received \%borrower w/ " . keys(%borrower), " keys: ", join(' ', keys %borrower), "\n";
 	my ($borrowernumber,$cardnumber,$savedpw);
 	($borrowernumber,$cardnumber,$userid,$savedpw) = exists_local($userid);
 	if ($borrowernumber) {
@@ -132,9 +132,9 @@ sub ldap_entry_2_hash ($$) {
 	my %memberhash;
 	$userldapentry->exists('uid');	# This is bad, but required!  By side-effect, this initializes the attrs hash. 
 	if ($debug) {
-		print "\nkeys(\%\$userldapentry) = " . join(', ', keys %$userldapentry), "\n", $userldapentry->dump();
+		print STDERR "\nkeys(\%\$userldapentry) = " . join(', ', keys %$userldapentry), "\n", $userldapentry->dump();
 		foreach (keys %$userldapentry) {
-			print "\n\nLDAP key: $_\t", sprintf('(%s)', ref $userldapentry->{$_}), "\n";
+			print STDERR "\n\nLDAP key: $_\t", sprintf('(%s)', ref $userldapentry->{$_}), "\n";
 			hashdump("LDAP key: ",$userldapentry->{$_});
 		}
 	}
@@ -142,13 +142,13 @@ sub ldap_entry_2_hash ($$) {
 	my $key;
 	foreach (keys %$x) {
 		$memberhash{$_} = join ' ', @{$x->{$_}};	
-		$debug and print sprintf("building \$memberhash{%s} = ", $_, join(' ', @{$x->{$_}})), "\n";
+		$debug and print STDERR sprintf("building \$memberhash{%s} = ", $_, join(' ', @{$x->{$_}})), "\n";
 	}
-	$debug and print "Finsihed \%memberhash has ", scalar(keys %memberhash), " keys\n",
+	$debug and print STDERR "Finsihed \%memberhash has ", scalar(keys %memberhash), " keys\n",
 					"Referencing \%mapping with ", scalar(keys %mapping), " keys\n";
 	foreach my $key (keys %mapping) {
 		my  $data = $memberhash{$mapping{$key}->{is}}; 
-		$debug and printf "mapping %20s ==> %-20s (%s)\n", $key, $mapping{$key}->{is}, $data;
+		$debug and print STDERR printf "mapping %20s ==> %-20s (%s)\n", $key, $mapping{$key}->{is}, $data;
 		unless (defined $data) { 
 			$data = $mapping{$key}->{content} || '';	# default or failsafe ''
 		}
@@ -168,12 +168,12 @@ sub exists_local($) {
 
 	my $sth = $dbh->prepare("$select WHERE userid=?");	# was cardnumber=?
 	$sth->execute($arg);
-	$debug and printf "Userid '$arg' exists_local? %s\n", $sth->rows;
+	$debug and print STDERR printf "Userid '$arg' exists_local? %s\n", $sth->rows;
 	($sth->rows == 1) and return $sth->fetchrow;
 
 	$sth = $dbh->prepare("$select WHERE cardnumber=?");
 	$sth->execute($arg);
-	$debug and printf "Cardnumber '$arg' exists_local? %s\n", $sth->rows;
+	$debug and print STDERR printf "Cardnumber '$arg' exists_local? %s\n", $sth->rows;
 	($sth->rows == 1) and return $sth->fetchrow;
 	return 0;
 }
@@ -200,7 +200,7 @@ sub update_local($$$$) {
 
 	# MODIFY PASSWORD/LOGIN
 	# search borrowerid
-	$debug and print "changing local password for borrowernumber=$borrowerid to '$digest'\n";
+	$debug and print STDERR "changing local password for borrowernumber=$borrowerid to '$digest'\n";
 	changepassword($userid, $borrowerid, $digest);
 
 	# Confirm changes
