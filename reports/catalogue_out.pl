@@ -176,29 +176,30 @@ sub calculate {
 # preparing calculation
 	my @exe_args = ();
     my $query = "
-        SELECT items.barcode    as barcode,
-               items.homebranch as branch,
+        SELECT items.barcode        as barcode,
+               items.homebranch     as branch,
                items.itemcallnumber as itemcallnumber,
-               biblio.title     as title,
+               biblio.title         as title,
                biblio.biblionumber  as biblionumber,
-               biblio.author    as author";
+               biblio.author        as author";
 	($column) and $query .= ",\n$column as col ";
 	$query .= "
         FROM items
-        LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber
-        LEFT JOIN biblio      ON biblio.biblionumber   = items.biblionumber
-        LEFT JOIN old_issues  ON old_issues.itemnumber = items.itemnumber
-        WHERE old_issues.itemnumber IS NULL
+        LEFT JOIN biblio      USING (biblionumber)
+        LEFT JOIN     issues  USING (itemnumber)
+        LEFT JOIN old_issues  USING (itemnumber)
+          WHERE       issues.itemnumber IS NULL
+           AND    old_issues.itemnumber IS NULL
 	";
 	if ($filters->[0]) {
     	$filters->[0]=~ s/\*/%/g;
 		push @exe_args, $filters->[0]; 
-    	$query .= " AND items.homebranch     LIKE ?";
+    	$query .= " AND items.homebranch LIKE ?";
 	}
 	if ($filters->[1]) {
     	$filters->[1]=~ s/\*/%/g;
 		push @exe_args, $filters->[1]; 
-    	$query .= " AND biblioitems.itemtype LIKE ?";
+    	$query .= " AND items.itype      LIKE ?";
 	}
 	if ($column) {
 		$query .= " AND $column = ? GROUP BY items.itemnumber, $column ";	# placeholder handled below
