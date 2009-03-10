@@ -77,7 +77,6 @@ InstallAuth - Authenticates Koha users for Install process
 @EXPORT = qw(
   &checkauth
   &get_template_and_user
-  &setlanguagecookie
 );
 
 =item get_template_and_user
