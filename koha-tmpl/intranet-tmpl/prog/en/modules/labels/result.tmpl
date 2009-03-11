@@ -103,18 +103,16 @@ function add_item3(i_itemnumber){
                                     <th></th>
                                 </tr>
         <!-- TMPL_IF name="item" -->
-                <tr>
         <!-- TMPL_LOOP name="item" -->
-					<!-- TMPL_IF name="i_itemnumber1" --><td align="center"><label for="itm<!-- TMPL_VAR NAME="i_itemnumber1" -->" ><input type="checkbox" name="i_itemnumber" id="itm<!-- TMPL_VAR NAME="i_itemnumber1" -->" value="<!-- TMPL_VAR NAME="i_itemnumber1" -->" /></label></td><!-- /TMPL_IF -->
+					<!-- TMPL_IF name="i_itemnumber1" --><tr><td align="center"><label for="itm<!-- TMPL_VAR NAME="i_itemnumber1" -->" ><input type="checkbox" name="i_itemnumber" id="itm<!-- TMPL_VAR NAME="i_itemnumber1" -->" value="<!-- TMPL_VAR NAME="i_itemnumber1" -->" /></label></td><!-- /TMPL_IF -->
 					<!-- TMPL_IF name="i_itemcallnumber" --><td align="center"><!-- TMPL_VAR name="i_itemcallnumber" --><br /></td><!-- /TMPL_IF -->
 					<!-- TMPL_IF name="i_dateaccessioned" --><td align="center"><!-- TMPL_VAR name="i_dateaccessioned" --><br /></td><!-- /TMPL_IF -->
 					<!-- TMPL_IF name="i_barcode" --><td align="center"><!-- TMPL_VAR name="i_barcode" --></td><!-- /TMPL_IF -->
 					<!-- TMPL_IF name="i_itemnumber2" --><td align="center">
-					<a onclick="add_item('<!-- TMPL_VAR NAME="i_itemnumber2" -->',<!-- TMPL_VAR NAME="batch_id" -->, '<!-- TMPL_VAR NAME="type" -->'); return false" href="/cgi-bin/koha/barcodes/label-manager.pl?itemnumber=<!-- TMPL_VAR NAME="i_itemnumber2" -->&amp;batch_id=<!-- TMPL_VAR name="batch_id" -->&amp;op=add">Add</a></td>
+					<a onclick="add_item('<!-- TMPL_VAR NAME="i_itemnumber2" -->',<!-- TMPL_VAR NAME="batch_id" -->, '<!-- TMPL_VAR NAME="type" -->'); return false" href="/cgi-bin/koha/barcodes/label-manager.pl?itemnumber=<!-- TMPL_VAR NAME="i_itemnumber2" -->&amp;batch_id=<!-- TMPL_VAR name="batch_id" -->&amp;op=add">Add</a></td></tr>
 		                        <!-- /TMPL_IF -->
 <!-- /NEW -->
         <!-- /TMPL_LOOP --><!-- item -->
-                                        </tr>
         <!-- /TMPL_IF -->
 	 </table>
 	<!-- /TMPL_LOOP -->
