@@ -82,6 +82,18 @@ if ( $op eq "do_search" ) {
     $datefrom = $query->param('datefrom');
     $dateto   = $query->param('dateto');
 
+    ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {
+            template_name   => "labels/result.tmpl",
+            query           => $query,
+            type            => "intranet",
+            authnotrequired => 0,
+            flagsrequired   => { borrowers => 1 },
+            flagsrequired   => { catalogue => 1 },
+            debug           => 1,
+        }
+    );
+
     if ($datefrom) {
         $datefrom = C4::Dates->new($datefrom);
         $ccl_query .= ' and ' if $ccl_textbox;
@@ -176,18 +188,6 @@ if ($show_results) {
     }
     $debug and warn "**********\@results**********\n";
     $debug and warn Dumper(@results);
-
-    ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-        {
-            template_name   => "labels/result.tmpl",
-            query           => $query,
-            type            => "intranet",
-            authnotrequired => 0,
-            flagsrequired   => { borrowers => 1 },
-            flagsrequired   => { catalogue => 1 },
-            debug           => 1,
-        }
-    );
 
     # build page nav stuff.
     my ( @field_data, @numbers );
