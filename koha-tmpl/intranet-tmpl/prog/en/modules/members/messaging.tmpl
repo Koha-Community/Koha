@@ -69,7 +69,7 @@
  <h3>Manage patron messaging settings</h3>
 
   <table>
-    <tr><th></th><th>Days in advance</th><!-- TMPL_IF NAME="SMSSendDriver" --><th>SMS</th><!-- /TMPL_IF --><th>Email</th><th>Digests only?</th><th>RSS</th><th>Do not notify</th></tr>
+    <tr><th></th><th>Days in advance</th><!-- TMPL_IF NAME="SMSSendDriver" --><th>SMS</th><!-- /TMPL_IF --><th>Email</th><th>Digests only?</th><!-- <th>RSS</th> --><th>Do not notify</th></tr>
     <!-- TMPL_LOOP name="messaging_preferences" -->
     <tr>
       <td><!-- TMPL_VAR NAME="message_name" --></td>
@@ -115,7 +115,7 @@
       <td>-</td>
       <!-- /TMPL_IF -->
 
-      <!-- TMPL_IF NAME="transport-rss" -->
+<!--       <!-- TMPL_IF NAME="transport-rss" -->
       <td><input type="checkbox"
                  id="rss<!-- TMPL_VAR NAME="message_attribute_id" -->"
                  name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
@@ -123,7 +123,7 @@
       </td>
       <!-- TMPL_ELSE -->
       <td>-</td>
-      <!-- /TMPL_IF -->
+      <!-- /TMPL_IF --> -->
 
       <td><input type="checkbox" class="none" id="none<!-- TMPL_VAR NAME="message_attribute_id" -->" /></td>
     </tr>

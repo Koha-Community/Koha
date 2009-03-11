@@ -17,21 +17,18 @@
 </script>
 </head>
 <body id="opac-messaging">
-<!-- TMPL_INCLUDE name="masthead.inc" -->
-
 <div id="doc3" class="yui-t1">
    <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b"><div class="yui-g" id="userupdate">
+<!-- TMPL_INCLUDE name="masthead.inc" -->
 
-<div class="container" style="overflow:auto;">
+	<div id="yui-main">
+	<div class="yui-b">
+
 <!-- TMPL_LOOP name="BORROWER_INFO" -->
 <h3><a href="/cgi-bin/koha/opac-user.pl"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->'s account</a> <img src="<!-- TMPL_VAR NAME="themelang" -->../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Your Messaging Settings</h3>
 <!-- /TMPL_LOOP -->
 
 <form action="/cgi-bin/koha/opac-messaging.pl" method="get" name="opacmessaging">
-<div class="yui-u first">
-
 <input type="hidden" name="modify" value="yes" />
 
 <fieldset class="rows">
@@ -39,7 +36,7 @@
   <div class="dialog message"><h3>Settings Updated</h3></div>
   <!-- /TMPL_IF -->
   <table style="margin-right:1em;">
-    <tr><th>&nbsp;</th><th>Days in advance</th><!-- TMPL_IF NAME="SMSSendDriver" --><th>SMS</th><!-- /TMPL_IF --><th>Email</th><th>Digests only?</th><th>RSS</th><th>Do not notify</th></tr>
+    <tr><th>&nbsp;</th><th>Days in advance</th><!-- TMPL_IF NAME="SMSSendDriver" --><th>SMS</th><!-- /TMPL_IF --><th>Email</th><th>Digests only?</th><!-- <th>RSS</th> --><th>Do not notify</th></tr>
     <!-- TMPL_LOOP name="messaging_preferences" -->
     <tr>
       <td><!-- TMPL_VAR NAME="message_name" --></td>
@@ -85,7 +82,7 @@
       <td>-</td>
       <!-- /TMPL_IF -->
 
-      <!-- TMPL_IF NAME="transport-rss" -->
+<!--       <!-- TMPL_IF NAME="transport-rss" -->
       <td><input type="checkbox"
                  id="rss<!-- TMPL_VAR NAME="message_attribute_id" -->"
                  name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
@@ -93,7 +90,7 @@
       </td>
       <!-- TMPL_ELSE -->
       <td>-</td>
-      <!-- /TMPL_IF -->
+      <!-- /TMPL_IF --> -->
 
       <td><input type="checkbox" class="none" id="none<!-- TMPL_VAR NAME="message_attribute_id" -->" /></td>
     </tr>
@@ -103,15 +100,12 @@
 
 </fieldset>
 
-</div>
 
 <fieldset class="action">
   <input type="submit" value="Submit Changes" /> <a class="cancel" href="/cgi-bin/koha/opac-user.pl">Cancel</a>
 </fieldset>
 
 </form>
-</div>
-</div>
 </div>
 </div>
 <div class="yui-b">
