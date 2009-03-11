@@ -228,40 +228,41 @@ sub GetReservesFromBiblionumber {
     while ( my $data = $sth->fetchrow_hashref ) {
 
         # FIXME - What is this doing? How do constraints work?
-        ($data->{constrainttype} eq 'o') or next;
-        $query = '
-            SELECT biblioitemnumber
-             FROM  reserveconstraints
-            WHERE  biblionumber   = ?
-             AND   borrowernumber = ?
-             AND   reservedate    = ?
-        ';
-        my $csth = $dbh->prepare($query);
-        $csth->execute( $data->{biblionumber}, $data->{borrowernumber},
-            $data->{reservedate}, );
-
-        my @bibitemno;
-        while ( my $bibitemnos = $csth->fetchrow_array ) {
-            push( @bibitemno, $bibitemnos );    # FIXME: inefficient: use fetchall_arrayref
-        }
-        my $count = scalar @bibitemno;
-
-        # if we have two or more different specific itemtypes
-        # reserved by same person on same day
-        my $bdata;
-        if ( $count > 1 ) {
-            $bdata = GetBiblioItemData( $bibitemno[$i] );
-            $i++;
-        }
-        else {
-            # Look up the book we just found.
-            $bdata = GetBiblioItemData( $bibitemno[0] );
-        }
-        # Add the results of this latest search to the current
-        # results.
-        # FIXME - An 'each' would probably be more efficient.
-        foreach my $key ( keys %$bdata ) {
-            $data->{$key} = $bdata->{$key};
+        if ($data->{constrainttype} eq 'o') {
+            $query = '
+                SELECT biblioitemnumber
+                FROM  reserveconstraints
+                WHERE  biblionumber   = ?
+                AND   borrowernumber = ?
+                AND   reservedate    = ?
+            ';
+            my $csth = $dbh->prepare($query);
+            $csth->execute( $data->{biblionumber}, $data->{borrowernumber},
+                $data->{reservedate}, );
+    
+            my @bibitemno;
+            while ( my $bibitemnos = $csth->fetchrow_array ) {
+                push( @bibitemno, $bibitemnos );    # FIXME: inefficient: use fetchall_arrayref
+            }
+            my $count = scalar @bibitemno;
+    
+            # if we have two or more different specific itemtypes
+            # reserved by same person on same day
+            my $bdata;
+            if ( $count > 1 ) {
+                $bdata = GetBiblioItemData( $bibitemno[$i] );
+                $i++;
+            }
+            else {
+                # Look up the book we just found.
+                $bdata = GetBiblioItemData( $bibitemno[0] );
+            }
+            # Add the results of this latest search to the current
+            # results.
+            # FIXME - An 'each' would probably be more efficient.
+            foreach my $key ( keys %$bdata ) {
+                $data->{$key} = $bdata->{$key};
+            }
         }
         push @results, $data;
     }
