@@ -1415,7 +1415,7 @@ sub install {
     # installation and uninstallation targets.
 
 # If installation is on Win32, we need to do permissions different from *nix
-    if ( $^O =~ /darwin|linux|cygwin|freebsd/ ) { # this value needs to be verified for each platform and modified accordingly
+    if ( $^O =~ /darwin|linux|cygwin|freebsd|solaris/ ) { # this value needs to be verified for each platform and modified accordingly
 	    foreach my $key (sort keys %$target_directories) {
 		    $install .= qq(
 KOHA_INST_$key = blib/$key
