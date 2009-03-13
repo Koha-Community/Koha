@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -18,24 +17,18 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-
-use C4::Auth;
+use strict;
 use C4::Context;
-use C4::Output;
-use CGI;
-use C4::Search;
-use MARC::Record;
-use C4::Koha;
-
 
 =head1
 
 plugin_parameters : other parameters added when the plugin is called by the dopop function
 
 =cut
+
 sub plugin_parameters {
-my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
-return "";
+    # my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
+    return "";
 }
 
 =head1
@@ -53,32 +46,31 @@ the 3 scripts are inserted after the <input> in the html code
 
 =cut
 sub plugin_javascript {
-my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-my $function_name= $field_number;
+    my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
+    my $function_name= $field_number;
 
-# find today's date
-my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
-$year +=1900;
-$mon +=1;
-if (length($mon)==1) {
-	$mon = "0".$mon;
-}
-if (length($mday)==1) {
-	$mday = "0".$mday;
-}
-if (length($hour)==1) {
+    # find today's date
+    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
+    $year +=1900;
+    $mon +=1;
+    if (length($mon)==1) {
+        $mon = "0".$mon;
+    }
+    if (length($mday)==1) {
+        $mday = "0".$mday;
+    }
+    if (length($hour)==1) {
         $hour = "0".$hour;
-}
-if (length($min)==1) {
+    }
+    if (length($min)==1) {
         $min = "0".$min;
-}
-if (length($sec)==1) {
+    }
+    if (length($sec)==1) {
         $hour = "0".$sec;
-}
+    }
 
-
-my $date = "$year$mon$mday$hour$min$sec".".0";
-my $res  = "
+    my $date = "$year$mon$mday$hour$min$sec".".0";
+    my $res  = "
 <script type=\"text/javascript\">
 //<![CDATA[
 
@@ -96,7 +88,7 @@ function Clic$function_name(subfield_managed) {
 //]]>
 </script>
 ";
-return ($function_name,$res);
+    return ($function_name,$res);
 }
 
 =head1
@@ -106,8 +98,7 @@ plugin : the true value_builded. The screen that is open in the popup window.
 =cut
 
 sub plugin {
-my ($input) = @_;
-return "";
+    return "";
 }
 
 1;
