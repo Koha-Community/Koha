@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -33,14 +32,14 @@ plugin_parameters : other parameters added when the plugin is called by the dopo
 =cut
 
 sub plugin_parameters {
-my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
-return "";
+    my ($dbh, $record, $tagslib, $i, $tabloop) = @_;
+    return "";
 }
 
 sub plugin_javascript {
-my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
-my $function_name= $field_number;
-my $res="
+    my ($dbh, $record, $tagslib, $field_number, $tabloop) = @_;
+    my $function_name = $field_number;
+    my $res           = "
 <script type=\"text/javascript\">
 //<![CDATA[
 
@@ -61,35 +60,37 @@ function Clic$function_name(i) {
 </script>
 ";
 
-return ($function_name,$res);
+    return ($function_name, $res);
 }
+
 sub plugin {
-my ($input) = @_;
-	my $index= $input->param('index');
-	my $result= $input->param('result');
+    my ($input) = @_;
+    my $index   = $input->param('index');
+    my $result  = $input->param('result');
 
+    my $dbh = C4::Context->dbh;
 
-	my $dbh = C4::Context->dbh;
+    my ($template, $loggedinuser, $cookie) = get_template_and_user(
+        {   template_name   => "cataloguing/value_builder/marc21_field_007.tmpl",
+            query           => $input,
+            type            => "intranet",
+            authnotrequired => 0,
+            flagsrequired   => { editcatalogue => 1 },
+            debug           => 1,
+        }
+    );
+    $result = "ta" unless $result;
+    my $f0 = substr($result, 0, 1);
+    my $f1 = substr($result, 1, 4);
 
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "cataloguing/value_builder/marc21_field_007.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {editcatalogue => 1},
-			     debug => 1,
-			     });
-	$result = "ta" unless $result;
-	my $f0 = substr($result,0,1);
-	my $f1 = substr($result,1,4);
-
-	$template->param(				index => $index,
-							f0 => $f0,
-							"f0$f0" => $f0,
-							f1 => $f1,
-                                                        "f1$f1" => $f1,
-					);
-        output_html_with_http_headers $input, $cookie, $template->output;
+    $template->param(
+        index   => $index,
+        f0      => $f0,
+        "f0$f0" => $f0,
+        f1      => $f1,
+        "f1$f1" => $f1,
+    );
+    output_html_with_http_headers $input, $cookie, $template->output;
 }
 
 1;
