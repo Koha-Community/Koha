@@ -23,6 +23,7 @@
 
 use strict;
 use CGI;
+use C4::Debug;
 use C4::Context;
 use C4::Circulation;
 use C4::Output;
@@ -49,7 +50,7 @@ my ( $lastmove, $message ) = lastmove($itm);
 my $lastdate;
 my $count;
 if ( not $lastmove ) {
-    $lastdate = $message;
+#    $lastdate = $message;
     $count = issuessince( $itm, 0 );
 }
 else {
@@ -81,6 +82,8 @@ foreach my $branchcode ( keys %$branches ) {
     push( @branchloop, \%linebranch );
 }
 
+### $lastdate
+
 $template->param(
     biblionumber            => $biblionumber,
     title                   => $data->{'title'},
@@ -89,7 +92,7 @@ $template->param(
     biblioitemnumber        => $bi,
     homebranch              => $homebranch,
     holdingbranch           => $holdingbranch,
-    lastdate                => format_date($lastdate),
+    lastdate                => $lastdate ?  format_date($lastdate) : $message,
     count                   => $count,
     branchloop              => \@branchloop,
 );
