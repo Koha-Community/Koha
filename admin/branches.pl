@@ -231,8 +231,10 @@ sub editbranchform {
 
         # 	printer loop
         foreach my $thisprinter ( keys %$printers ) {
+
             my $selected = 1
-              if $oldprinter eq $printers->{$thisprinter}->{'printqueue'};
+              if $oldprinter and ( $oldprinter eq $printers->{$thisprinter} );
+
             my %row = (
                 value         => $thisprinter,
                 selected      => $selected,
