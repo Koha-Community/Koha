@@ -208,9 +208,9 @@ sub AddBookseller {
 
 #-----------------------------------------------------------------#
 
-=head2 ModSupplier
+=head2 ModBookseller
 
-&ModSupplier($bookseller);
+&ModBookseller($bookseller);
 
 Updates the information for a given bookseller. C<$bookseller> is a
 reference-to-hash whose keys are the fields of the aqbooksellers table
