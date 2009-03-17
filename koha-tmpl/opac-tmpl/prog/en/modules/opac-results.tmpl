@@ -40,8 +40,17 @@ function holdBiblioNums(numList) {
 
 
 $(document).ready(function(){
-	var param1 = "<label for=\"addto\">Add to: <\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>"<!-- TMPL_IF name="opacbookbag" -->+"<option value=\"addtocart\">Cart<\/option>"<!-- /TMPL_IF -->+<!-- TMPL_IF NAME="virtualshelves" --><!-- TMPL_IF NAME="loggedinusername" -->"<optgroup label=\"Your Lists:\">"+<!-- TMPL_IF NAME="addbarshelves" --><!-- TMPL_LOOP NAME="addbarshelvesloop" -->"<option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--><\/option>"+<!-- /TMPL_LOOP --><!-- /TMPL_IF -->"<\/optgroup>";
-	param1 += "<optgroup label=\"Public Lists:\">"+<!-- TMPL_IF NAME="addpubshelves" --><!-- TMPL_LOOP NAME="addpubshelvesloop" -->"<option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--><\/option>"+<!-- /TMPL_LOOP --><!-- /TMPL_IF -->"<\/optgroup><option value=\"newlist\">[ New List ]<\/option>"+<!-- TMPL_ELSE -->"<optgroup label=\"Public Lists:\">"+<!-- TMPL_IF NAME="addpubshelves" --><!-- TMPL_LOOP NAME="addpubshelvesloop" -->"<option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--><\/option>"+<!-- /TMPL_LOOP --><!-- /TMPL_IF -->"<\/optgroup>"+<!-- /TMPL_IF --><!-- /TMPL_IF -->"<\/select> <input type=\"submit\" class=\"submit\" value=\"Save\" />";
+	var param1 = "<label for=\"addto\">Add to: <\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>";
+	<!-- TMPL_IF name="opacbookbag" -->	param1 += "<option value=\"addtocart\">Cart<\/option>";
+	<!-- /TMPL_IF --><!-- TMPL_IF NAME="virtualshelves" --><!-- TMPL_IF NAME="loggedinusername" --><!-- TMPL_IF NAME="addbarshelves" -->
+	param1 += "<optgroup label=\"Your Lists:\">";<!-- TMPL_LOOP NAME="addbarshelvesloop" -->
+	param1 += "<option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--><\/option>";<!-- /TMPL_LOOP -->
+	param1 += "<\/optgroup>";<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="addpubshelves" -->param1 += "<optgroup label=\"Public Lists:\">"<!-- TMPL_LOOP NAME="addpubshelvesloop" -->+"<option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--><\/option>"<!-- /TMPL_LOOP --><!-- /TMPL_IF -->
+	param1 +="<\/optgroup><option value=\"newlist\">[ New List ]<\/option>"
+	<!-- /TMPL_IF -->
+	<!-- /TMPL_IF -->
+	param1 += "<\/select> <input type=\"submit\" class=\"submit\" value=\"Save\" />";
 	$('#sortsubmit').hide();
     $('#sort_by').change(function() {
         $('#bookbag_form').submit();
