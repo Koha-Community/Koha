@@ -115,8 +115,8 @@ foreach my $branch ( keys %$branches ) {
         push @CGIbranchlooparray, \%line;
     }
 }
-@CGIbranchlooparray =
-   sort { $a->{branch} cmp $b->{branch} } @CGIbranchlooparray;
+@CGIbranchlooparray = sort { $a->{branch} cmp $b->{branch} } @CGIbranchlooparray;
+  
 my $CGIbranchloop = \@CGIbranchlooparray;
 $template->param( CGIbranch => $CGIbranchloop );
 
@@ -205,8 +205,8 @@ if ( $query->param('place_reserve') ) {
 
     while (@selectedItems) {
         my $biblioNum = shift(@selectedItems);
-        my $itemNum = shift(@selectedItems);
-        my $branch = shift(@selectedItems); # i.e., branch code, not name
+        my $itemNum   = shift(@selectedItems);
+        my $branch    = shift(@selectedItems); # i.e., branch code, not name
 
         my $singleBranchMode = $template->param('singleBranchMode');
         if ($singleBranchMode) {
@@ -323,7 +323,7 @@ foreach my $biblioNum (@biblionumbers) {
     my $biblioData = $biblioDataHash{$biblioNum};
     if (! $biblioData) {
         $template->param(message=>1, bad_biblionumber=>$biblioNum);
-	&get_out($query, $cookie, $template->output);
+        &get_out($query, $cookie, $template->output);
     }
 
     $biblioLoopIter{biblionumber} = $biblioData->{biblionumber};
@@ -354,12 +354,10 @@ foreach my $biblioNum (@biblionumbers) {
         
         if (!$itemInfo->{'notforloan'} && !($itemInfo->{'itemnotforloan'} > 0)) {
             $biblioLoopIter{forloan} = 1;
-	}
+        }
     }
 
-    $biblioLoopIter{itemTypeDescription} =
-      $itemTypes->{$biblioData->{itemtype}}{description};
-    
+    $biblioLoopIter{itemTypeDescription} = $itemTypes->{$biblioData->{itemtype}}{description};
 
     $biblioLoopIter{itemLoop} = [];
     my $numCopiesAvailable = 0;
@@ -399,10 +397,10 @@ foreach my $biblioNum (@biblionumbers) {
         if ( defined $reservedate ) {
             $itemLoopIter->{backgroundcolor} = 'reserved';
             $itemLoopIter->{reservedate}     = format_date($reservedate);
-            $itemLoopIter->{ReservedForBorrowernumber}     = $reservedfor;
-            $itemLoopIter->{ReservedForSurname}     = $ItemBorrowerReserveInfo->{'surname'};
-            $itemLoopIter->{ReservedForFirstname}     = $ItemBorrowerReserveInfo->{'firstname'};
-            $itemLoopIter->{ExpectedAtLibrary}     = $expectedAt;
+            $itemLoopIter->{ReservedForBorrowernumber} = $reservedfor;
+            $itemLoopIter->{ReservedForSurname}        = $ItemBorrowerReserveInfo->{'surname'};
+            $itemLoopIter->{ReservedForFirstname}      = $ItemBorrowerReserveInfo->{'firstname'};
+            $itemLoopIter->{ExpectedAtLibrary}         = $expectedAt;
         }
 
         $itemLoopIter->{notforloan} = $itemInfo->{notforloan};
@@ -461,7 +459,6 @@ foreach my $biblioNum (@biblionumbers) {
             $itemLoopIter->{waitingdate} = format_date($wait_hashref->{waitingdate});
         }
 	$itemLoopIter->{imageurl} = getitemtypeimagelocation( 'opac', $itemTypes->{ $itemInfo->{itype} }{imageurl} );
-
         
         push @{$biblioLoopIter{itemLoop}}, $itemLoopIter;
     }
@@ -478,11 +475,9 @@ foreach my $biblioNum (@biblionumbers) {
     push @$biblioLoop, \%biblioLoopIter;
 }
 
-
 if ( $numBibsAvailable == 0 ) {
     $template->param( none_available => 1, message => 1 );
 }
-
 
 my $itemTableColspan = 5;
 if (!$template->param('OPACItemHolds')) {
@@ -493,16 +488,7 @@ if ($template->param('singleBranchMode')) {
 }
 $template->param(itemtable_colspan => $itemTableColspan);
 
-
-
 # display infos
 $template->param(bibitemloop => $biblioLoop);
 output_html_with_http_headers $query, $cookie, $template->output;
 
-
-
-
-
-# Local Variables:
-# tab-width: 8
-# End:
