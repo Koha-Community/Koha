@@ -331,8 +331,7 @@ sub getRecords {
     my $facets_info    = ();
     my $facets         = getFacets();
 
-    my @facets_loop
-      ;    # stores the ref to array of hashes for template facets loop
+    my @facets_loop;    # stores the ref to array of hashes for template facets loop
 
     ### LOOP THROUGH THE SERVERS
     for ( my $i = 0 ; $i < @servers ; $i++ ) {
@@ -426,6 +425,9 @@ sub getRecords {
             }
             elsif ( $sort eq "title_za" ) {
                 $sort_by .= "1=4 >i ";
+            }
+            else {
+                warn "Ignoring unrecognized sort '$sort' requested";
             }
         }
         if ($sort_by) {
@@ -625,7 +627,7 @@ sub pazGetRecords {
     my $paz = C4::Search::PazPar2->new(C4::Context->config('pazpar2url'));
     $paz->init();
     $paz->search($simple_query);
-    sleep 1;
+    sleep 1;   # FIXME: WHY?
 
     # do results
     my $results_hashref = {};
