@@ -45,7 +45,8 @@
     var MSG_NO_RECORD_SELECTED = _("No item was selected");
     var MSG_NO_RECORD_ADDED = _("No item was added to your cart");
     var MSG_CONFIRM_DEL_BASKET = _("Are you sure you want to empty your cart?");
-    var MSG_CONFIRM_DEL_RECORDS = _("Are you sure you want to remove the selected items?");<!-- /TMPL_IF -->
+    var MSG_CONFIRM_DEL_RECORDS = _("Are you sure you want to remove the selected items?");
+	$("#cartDetails").ready(function(){ $("#cmspan").html("<a href=\"#\" id=\"cartmenulink\" class=\"\"><i></i><span><i></i><span></span><img src=\"/opac-tmpl/prog/images/cart.gif\" width=\"14\" height=\"14\" alt=\"\" border=\"0\" /> "+_("Cart")+"<span id=\"basketcount\"></span></span></a>"); }); <!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="OPACAmazonCoverImages" -->$(window).load(function() {
 		 	verify_images();
 		 });<!-- /TMPL_IF -->
@@ -54,7 +55,10 @@
          });<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="opacuserjs" --><!-- TMPL_VAR NAME="opacuserjs" --><!-- /TMPL_IF -->
 	//]]>
-</script><!-- TMPL_IF NAME="GoogleJackets" -->
+</script><script type="text/javascript" language="javascript"
+<!-- TMPL_IF NAME="opacbookbag" -->src="<!-- TMPL_VAR NAME="themelang" -->/js/basket.js"><!-- TMPL_ELSIF NAME="virtualshelves" -->src="<!-- TMPL_VAR NAME="themelang" -->/js/basket.js"><!-- TMPL_ELSE -->>var readCookie;<!-- /TMPL_IF --></script>
+<!-- TMPL_IF NAME="TagsEnabled" --><script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/tags.js"></script><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="GoogleJackets" -->
 <script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/google-jackets.js"></script>
 <script type="text/javascript" language="javascript">
 	//<![CDATA[
