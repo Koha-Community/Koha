@@ -7,7 +7,7 @@
 var debug    = "<!-- TMPL_VAR Name="debug" -->";
 var dformat  = "<!-- TMPL_VAR Name="dateformat" -->";
 var sentmsg = 0;
-if (debug > 0) {alert("dateformat: " + dformat + "\ndebug is on (level " + debug + ")");}
+if (debug > 1) {alert("dateformat: " + dformat + "\ndebug is on (level " + debug + ")");}
 
 function Date_from_syspref(dstring) {
 	var dateX = dstring.split(/[-/]/);
