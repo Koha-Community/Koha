@@ -58,10 +58,10 @@ my $patronupdate = $query->param('patronupdate');
 # get borrower information ....
 my ( $borr ) = GetMemberDetails( $borrowernumber );
 
-$borr->{'dateenrolled'} = format_date( $borr->{'dateenrolled'} );
-$borr->{'expiry'}       = format_date( $borr->{'expiry'} );
-$borr->{'dateofbirth'}  = format_date( $borr->{'dateofbirth'} );
-$borr->{'ethnicity'}    = fixEthnicity( $borr->{'ethnicity'} );
+for (qw(dateenrolled dateexpiry dateofbirth)) {
+    ($borr->{$_}) and $borr->{$_} = format_date($borr->{$_});
+}
+$borr->{'ethnicity'} = fixEthnicity( $borr->{'ethnicity'} );
 
 if ( $borr->{'debarred'} || $borr->{'gonenoaddress'} || $borr->{'lost'} ) {
     $borr->{'flagged'} = 1;
