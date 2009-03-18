@@ -145,15 +145,13 @@ if ( $query->param('place_reserve') ) {
     my $checkitem=$query->param('checkitem');
     my $found;
     
-<<<<<<< HEAD:opac/opac-reserve.pl
-    #if we have an item selectionned, and the pickup branch is the same as the holdingbranch of the document, we force the value $rank and $found.
-    if ($checkitem ne ''){
-        $rank = '0' unless C4::Context->preference('ReservesNeedReturns');
-        my $item = $checkitem;
-        $item = GetItem($item);
-        if ( $item->{'holdingbranch'} eq $branch ){
-            $found = 'W' unless C4::Context->preference('ReservesNeedReturns');
-=======
+#    #if we have an item selectionned, and the pickup branch is the same as the holdingbranch of the document, we force the value $rank and $found.
+#    if ($checkitem ne ''){
+#        $rank = '0' unless C4::Context->preference('ReservesNeedReturns');
+#        my $item = $checkitem;
+#        $item = GetItem($item);
+#        if ( $item->{'holdingbranch'} eq $branch ){
+#            $found = 'W' unless C4::Context->preference('ReservesNeedReturns');
     my @selectedItems = split /\//, $selectedItems;
 
     # Make sure there is a biblionum/itemnum/branch triplet for each item.
@@ -172,7 +170,6 @@ if ( $query->param('place_reserve') ) {
         my $singleBranchMode = $template->param('singleBranchMode');
         if ($singleBranchMode) {
             $branch = $borr->{'branchcode'};
->>>>>>> 9f01cc0... whitespace cleanup and remove editor comments:opac/opac-reserve.pl
         }
     }
         
@@ -274,17 +271,12 @@ my @bibitemloop;
 foreach my $biblioitemnumber (@biblioitemnumbers) {
     my $biblioitem = $biblioiteminfos_of->{$biblioitemnumber};
 
-<<<<<<< HEAD:opac/opac-reserve.pl
-    $biblioitem->{description} =
-      $itemtypes->{ $biblioitem->{itemtype} }{description};
-=======
     # Get relevant biblio data.
     my $biblioData = $biblioDataHash{$biblioNum};
     if (! $biblioData) {
         $template->param(message=>1, bad_biblionumber=>$biblioNum);
         &get_out($query, $cookie, $template->output);
     }
->>>>>>> 9f01cc0... whitespace cleanup and remove editor comments:opac/opac-reserve.pl
 
     foreach
       my $itemnumber ( @{ $itemnumbers_of_biblioitem{$biblioitemnumber} } )
@@ -301,14 +293,6 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
               $branches->{ $item->{holdingbranch} }{branchname};
         }
         
-<<<<<<< HEAD:opac/opac-reserve.pl
-# 	add information
-	$item->{itemcallnumber} = $item->{itemcallnumber};
-	
-        # if the item is currently on loan, we display its return date and
-        # change the background color
-        my $issues= GetItemIssue($itemnumber);
-=======
         if (!$itemInfo->{'notforloan'} && !($itemInfo->{'itemnotforloan'} > 0)) {
             $biblioLoopIter{forloan} = 1;
         }
@@ -342,7 +326,6 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
         # If the item is currently on loan, we display its return date and
         # change the background color.
         my $issues= GetItemIssue($itemNum);
->>>>>>> 9f01cc0... whitespace cleanup and remove editor comments:opac/opac-reserve.pl
         if ( $issues->{'date_due'} ) {
             $item->{date_due} = format_date($issues->{'date_due'});
             $item->{backgroundcolor} = 'onloan';
@@ -353,22 +336,12 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
         my $ItemBorrowerReserveInfo = GetMemberDetails( $reservedfor, 0);
 
         if ( defined $reservedate ) {
-<<<<<<< HEAD:opac/opac-reserve.pl
-            $item->{backgroundcolor} = 'reserved';
-            $item->{reservedate}     = format_date($reservedate);
-            $item->{ReservedForBorrowernumber}     = $reservedfor;
-            $item->{ReservedForSurname}     = $ItemBorrowerReserveInfo->{'surname'};
-            $item->{ReservedForFirstname}     = $ItemBorrowerReserveInfo->{'firstname'};
-            $item->{ExpectedAtLibrary}     = $expectedAt;
-            
-=======
             $itemLoopIter->{backgroundcolor} = 'reserved';
             $itemLoopIter->{reservedate}     = format_date($reservedate);
             $itemLoopIter->{ReservedForBorrowernumber} = $reservedfor;
             $itemLoopIter->{ReservedForSurname}        = $ItemBorrowerReserveInfo->{'surname'};
             $itemLoopIter->{ReservedForFirstname}      = $ItemBorrowerReserveInfo->{'firstname'};
             $itemLoopIter->{ExpectedAtLibrary}         = $expectedAt;
->>>>>>> 9f01cc0... whitespace cleanup and remove editor comments:opac/opac-reserve.pl
         }
 
         # Management of the notforloan document
@@ -415,11 +388,7 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
         while (my $wait_hashref = $sth2->fetchrow_hashref) {
             $item->{waitingdate} = format_date($wait_hashref->{waitingdate});
         }
-<<<<<<< HEAD:opac/opac-reserve.pl
-	$item->{imageurl} = getitemtypeimagelocation( 'opac', $itemtypes->{ $item->{itype} }{imageurl} );
-        push @{ $biblioitem->{itemloop} }, $item;
-=======
-	$itemLoopIter->{imageurl} = getitemtypeimagelocation( 'opac', $itemTypes->{ $itemInfo->{itype} }{imageurl} );
+	    $itemLoopIter->{imageurl} = getitemtypeimagelocation( 'opac', $itemTypes->{ $itemInfo->{itype} }{imageurl} );
         
         push @{$biblioLoopIter{itemLoop}}, $itemLoopIter;
     }
@@ -431,14 +400,11 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
     }
     if ($biblioLoopIter{already_reserved}) {
         $biblioLoopIter{holdable} = undef;
->>>>>>> 9f01cc0... whitespace cleanup and remove editor comments:opac/opac-reserve.pl
     }
 
     push @bibitemloop, $biblioitem;
 }
 
-<<<<<<< HEAD:opac/opac-reserve.pl
-=======
 if ( $numBibsAvailable == 0 ) {
     $template->param( none_available => 1, message => 1 );
 }
@@ -452,7 +418,6 @@ if ($template->param('singleBranchMode')) {
 }
 $template->param(itemtable_colspan => $itemTableColspan);
 
->>>>>>> 9f01cc0... whitespace cleanup and remove editor comments:opac/opac-reserve.pl
 # display infos
 $template->param(
 	forloan           => $forloan,
@@ -460,9 +425,3 @@ $template->param(
 );
 output_html_with_http_headers $query, $cookie, $template->output;
 
-<<<<<<< HEAD:opac/opac-reserve.pl
-# Local Variables:
-# tab-width: 8
-# End:
-=======
->>>>>>> 9f01cc0... whitespace cleanup and remove editor comments:opac/opac-reserve.pl
