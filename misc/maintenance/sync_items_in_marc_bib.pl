@@ -29,13 +29,17 @@ if (not $result or $want_help or not $do_update) {
     exit 0;
 }
 
-my $num_bibs_processed = 0;
-my $num_bibs_modified = 0;
+my $num_bibs_processed     = 0;
+my $num_bibs_modified      = 0;
 my $num_marc_items_deleted = 0;
-my $num_marc_items_added = 0;
-my $num_bad_bibs = 0;
+my $num_marc_items_added   = 0;
+my $num_bad_bibs           = 0;
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
+
+our ($itemtag, $itemsubfield) = GetMarcFromKohaField("items.itemnumber", '');
+our ($item_sth) = $dbh->prepare("SELECT itemnumber FROM items WHERE biblionumber = ?");
+
 process_bibs();
 $dbh->commit();
 
@@ -81,18 +85,23 @@ sub process_bib {
     my $bib_modified = 0;
 
     # delete any item tags
-    my ($itemtag, $itemsubfield) = GetMarcFromKohaField("items.itemnumber", '');
     foreach my $field ($bib->field($itemtag)) {
-        $bib->delete_field($field);
+        unless ($bib->delete_field($field)) {
+            warn "Could not delete item in $itemtag for biblionumber $biblionumber";
+            next;
+        }
         $num_marc_items_deleted++;
         $bib_modified = 1;
     }
 
     # add back items from items table
-    my $item_sth = $dbh->prepare("SELECT itemnumber FROM items WHERE biblionumber = ?");
     $item_sth->execute($biblionumber);
     while (my $itemnumber = $item_sth->fetchrow_array) {
         my $marc_item = C4::Items::GetMarcItem($biblionumber, $itemnumber);
+        unless ($marc_item) {
+            warn "FAILED C4::Items::GetMarcItem for biblionumber=$biblionumber, itemnumber=$itemnumber";
+            next;
+        }
         foreach my $item_field ($marc_item->field($itemtag)) {
             $bib->insert_fields_ordered($item_field);
             $num_marc_items_added++;
