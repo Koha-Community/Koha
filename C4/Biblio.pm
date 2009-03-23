@@ -54,6 +54,8 @@ BEGIN {
 		&GetBiblioItemInfosOf
 		&GetBiblioItemByBiblioNumber
 		&GetBiblioFromItemNumber
+		
+		&GetISBDView
 
 		&GetMarcNotes
 		&GetMarcSubjects
@@ -610,6 +612,138 @@ sub GetBiblioFromItemNumber {
     my $data = $sth->fetchrow_hashref;
     $sth->finish;
     return ($data);
+}
+
+=head2 GetISBDView 
+
+=over 4
+
+$isbd = &GetISBDView($biblionumber);
+
+Return the ISBD view which can be included in opac and intranet
+
+=back
+
+=cut
+
+sub GetISBDView {
+    my $biblionumber    = shift;
+    my $record          = GetMarcBiblio($biblionumber);
+    my $itemtype        = &GetFrameworkCode($biblionumber);
+    my ($holdingbrtagf,$holdingbrtagsubf) = &GetMarcFromKohaField("items.holdingbranch",$itemtype);
+    my $tagslib      = &GetMarcStructure( 1, $itemtype );
+    
+    my $ISBD = C4::Context->preference('ISBD');
+    my $bloc = $ISBD;
+    my $res;
+    my $blocres;
+    
+    foreach my $isbdfield ( split (/#/, $bloc) ) {
+
+        #         $isbdfield= /(.?.?.?)/;
+        $isbdfield =~ /(\d\d\d)([^\|])?\|(.*)\|(.*)\|(.*)/;
+        my $fieldvalue    = $1 || 0;
+        my $subfvalue     = $2 || "";
+        my $textbefore    = $3;
+        my $analysestring = $4;
+        my $textafter     = $5;
+    
+        #         warn "==> $1 / $2 / $3 / $4";
+        #         my $fieldvalue=substr($isbdfield,0,3);
+        if ( $fieldvalue > 0 ) {
+            my $hasputtextbefore = 0;
+            my @fieldslist = $record->field($fieldvalue);
+            @fieldslist = sort {$a->subfield($holdingbrtagsubf) cmp $b->subfield($holdingbrtagsubf)} @fieldslist if ($fieldvalue eq $holdingbrtagf);
+    
+            #         warn "ERROR IN ISBD DEFINITION at : $isbdfield" unless $fieldvalue;
+            #             warn "FV : $fieldvalue";
+            if ($subfvalue ne ""){
+              foreach my $field ( @fieldslist ) {
+                foreach my $subfield ($field->subfield($subfvalue)){ 
+                  my $calculated = $analysestring;
+                  my $tag        = $field->tag();
+                  if ( $tag < 10 ) {
+                  }
+                  else {
+                    my $subfieldvalue =
+                    GetAuthorisedValueDesc( $tag, $subfvalue,
+                      $subfield, '', $tagslib );
+                    my $tagsubf = $tag . $subfvalue;
+                    $calculated =~
+                          s/\{(.?.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
+                    $calculated =~s#/cgi-bin/koha/[^/]+/([^.]*.pl\?.*)$#opac-$1#g;
+                
+                    # field builded, store the result
+                    if ( $calculated && !$hasputtextbefore )
+                    {    # put textbefore if not done
+                    $blocres .= $textbefore;
+                    $hasputtextbefore = 1;
+                    }
+                
+                    # remove punctuation at start
+                    $calculated =~ s/^( |;|:|\.|-)*//g;
+                    $blocres .= $calculated;
+                                
+                  }
+                }
+              }
+              $blocres .= $textafter if $hasputtextbefore;
+            } else {    
+            foreach my $field ( @fieldslist ) {
+              my $calculated = $analysestring;
+              my $tag        = $field->tag();
+              if ( $tag < 10 ) {
+              }
+              else {
+                my @subf = $field->subfields;
+                for my $i ( 0 .. $#subf ) {
+                my $valuecode   = $subf[$i][1];
+                my $subfieldcode  = $subf[$i][0];
+                my $subfieldvalue =
+                GetAuthorisedValueDesc( $tag, $subf[$i][0],
+                  $subf[$i][1], '', $tagslib );
+                my $tagsubf = $tag . $subfieldcode;
+    
+                $calculated =~ s/                  # replace all {{}} codes by the value code.
+                                  \{\{$tagsubf\}\} # catch the {{actualcode}}
+                                /
+                                  $valuecode     # replace by the value code
+                               /gx;
+    
+                $calculated =~
+            s/\{(.?.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
+            $calculated =~s#/cgi-bin/koha/[^/]+/([^.]*.pl\?.*)$#opac-$1#g;
+                }
+    
+                # field builded, store the result
+                if ( $calculated && !$hasputtextbefore )
+                {    # put textbefore if not done
+                $blocres .= $textbefore;
+                $hasputtextbefore = 1;
+                }
+    
+                # remove punctuation at start
+                $calculated =~ s/^( |;|:|\.|-)*//g;
+                $blocres .= $calculated;
+              }
+            }
+            $blocres .= $textafter if $hasputtextbefore;
+            }       
+        }
+        else {
+            $blocres .= $isbdfield;
+        }
+    }
+    $res .= $blocres;
+    
+    $res =~ s/\{(.*?)\}//g;
+    $res =~ s/\\n/\n/g;
+    $res =~ s/\n/<br\/>/g;
+    
+    # remove empty ()
+    $res =~ s/\(\)//g;
+   
+    return $res;
 }
 
 =head2 GetBiblio
