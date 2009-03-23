@@ -59,7 +59,7 @@ if ( $op eq "do_search" ) {
     my @and_or    = $query->param('and_or');
     my @excluding = $query->param('excluding');
     my @operator  = $query->param('operator');
-    my @value     = $query->param('value');
+    my @value     = ($query->param('value_mainstr'), $query->param('value_main'), $query->param('value_any'));
     my $orderby   = $query->param('orderby');
 
     $resultsperpage = $query->param('resultsperpage');
@@ -86,8 +86,11 @@ if ( $op eq "do_search" ) {
         push @field_data, { term => "and_or",    val => $and_or[$i] };
         push @field_data, { term => "excluding", val => $excluding[$i] };
         push @field_data, { term => "operator",  val => $operator[$i] };
-        push @field_data, { term => "value",     val => $value[$i] };
     }
+
+    push @field_data, { term => "value_mainstr", val => $query->param('value_mainstr') || "" };
+    push @field_data, { term => "value_main",    val => $query->param('value_main')    || "" };
+    push @field_data, { term => "value_any",     val => $query->param('value_any')     || ""};
 
     my @numbers = ();
 
@@ -141,9 +144,9 @@ if ( $op eq "do_search" ) {
         to             => $to,
         numbers        => \@numbers,
         authtypecode   => $authtypecode,
-        mainmainstring => $value[0],
-        mainstring     => $value[1],
-        anystring      => $value[2],
+        value_mainstr  => $query->param('value_mainstr') || "", 
+        value_main     => $query->param('value_main') || "",
+        value_any      => $query->param('value_any') || "",
     );
 } else {
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -166,6 +169,9 @@ $template->param(
     index         => $index,
     authtypesloop => \@authtypesloop,
     authtypecode  => $authtypecode,
+    value_mainstr  => $query->param('value_mainstr') || "", 
+    value_main     => $query->param('value_main')    || "",
+    value_any      => $query->param('value_any')     || "",
 );
 
 # Print the page

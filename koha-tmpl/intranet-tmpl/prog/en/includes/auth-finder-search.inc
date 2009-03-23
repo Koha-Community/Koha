@@ -1,4 +1,4 @@
-<form name="f" method="post" action="auth_finder.pl">
+<form name="f" method="get" action="auth_finder.pl">
             <input type="hidden" name="op" value="do_search" />
             <input type="hidden" name="type" value="intranet" />
             <input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
@@ -18,7 +18,7 @@
                         <option value="start">starts with</option>
                         <option value="is">is exactly</option>
                     </select>
-                    <input type="text" name="value" value="<!-- TMPL_VAR name="mainmainstring" -->" />
+                    <input type="text" name="value_mainstr" value="<!-- TMPL_VAR ESCAPE="HTML" name="value_mainstr" -->" />
                 </li>
                 <li>
                     <label for="mainentry">Main entry</label>
@@ -30,7 +30,7 @@
                         <option value="start">starts with</option>
                         <option value="is">is exactly</option>
                     </select>
-                    <input type="text" name="value" value="<!-- TMPL_VAR name="mainstring" -->" />
+                    <input type="text" name="value_main" value="<!-- TMPL_VAR ESCAPE="HTML" name="value_main" -->" />
                 </li>
                 <li>
                     <label for="marclist">Anywhere</label>
@@ -42,7 +42,7 @@
                         <option value="start">starts with</option>
                         <option value="is">is exactly</option>
                     </select>
-                    <input type="text" name="value" value="<!-- TMPL_VAR name="anystring" -->" />
+                    <input type="text" name="value_any" value="<!-- TMPL_VAR ESCAPE="HTML" name="value_any" -->" />
                 </li>
 		<li>
 		<label for="orderby">Sort by </label>
