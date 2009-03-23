@@ -172,6 +172,9 @@ $template->param(
     index         => $index,
     authtypesloop => \@authtypesloop,
     authtypecode  => $authtypecode,
+    value_mainstr  => $query->param('value_mainstr') || "", 
+    value_main     => $query->param('value_main')    || "",
+    value_any      => $query->param('value_any')     || "",
 );
 
 # Print the page
