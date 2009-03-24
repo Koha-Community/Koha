@@ -88,38 +88,13 @@ if (($#biblionumbers < 0) && (! $query->param('place_reserve'))) {
 }
 
 # pass the pickup branch along....
-my $branch = $query->param('branch');
+my $branch = $query->param('branch') || C4::Context->userenv->{branch} || '' ;
+($branches->{$branch}) or $branch = "";     # Confirm branch is real
 $template->param( branch => $branch );
 
-# make sure it's a real branch
-if ( !$branch || !$branches->{$branch} ) {
-    $branch = '';
-}
-$template->param( branchname => $branches->{$branch}->{'branchname'} );
-
 # make branch selection options...
-my @branches;
-my @select_branch;
-my %select_branches;
-
-my @CGIbranchlooparray;
-
-foreach my $branch ( keys %$branches ) {
-    if ($branch) {
-        my %line;
-        $line{branch} = $branches->{$branch}->{'branchname'};
-        $line{value}  = $branch;
-        if ($line{value} eq C4::Context->userenv->{'branch'}) {
-            $line{selected} = 1;
-        }
-        push @CGIbranchlooparray, \%line;
-    }
-}
-@CGIbranchlooparray = sort { $a->{branch} cmp $b->{branch} } @CGIbranchlooparray;
-  
-my $CGIbranchloop = \@CGIbranchlooparray;
+my $CGIbranchloop = GetBranchesLoop($branch);
 $template->param( CGIbranch => $CGIbranchloop );
-
 
 #Debug
 #output_html_with_http_headers($query,$cookie,"<html><head></head><body> @biblionumbers </body></html>\n");
