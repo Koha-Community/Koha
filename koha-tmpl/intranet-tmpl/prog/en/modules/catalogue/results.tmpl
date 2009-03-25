@@ -310,6 +310,22 @@ $(window).load(function() {
                                     <span class="unavailable">No items available</span>
                                     <!-- /TMPL_IF -->
 
+									<!-- TMPL_IF NAME="notforloan_items_loop" -->
+										<!-- TMPL_IF name="notforloancount" -->
+											<!-- TMPL_VAR name="notforloancount" --> not for loan:
+										<!-- /TMPL_IF -->
+										<ul>
+										<!-- TMPL_LOOP NAME="notforloan_items_loop" -->
+											<!-- TMPL_IF NAME="noItemTypeImages" --><li><!-- TMPL_ELSE --><!-- TMPL_IF NAME="item-level_itypes" --><!-- TMPL_IF name="imageurl" --><li style="list-style: none; list-style-type: none;"><img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR NAME="description" -->"/><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- /TMPL_IF -->
+	                                        <!-- TMPL_IF NAME="branchname" --><!-- TMPL_VAR NAME="branchname" --><!-- /TMPL_IF -->
+	                                        <!-- TMPL_IF NAME="location" --><!-- TMPL_VAR NAME="location" --><!-- /TMPL_IF -->
+	                                        <!-- TMPL_IF NAME="itemcallnumber" -->[<a href="/cgi-bin/koha/catalogue/search.pl?q=callnum:<!-- TMPL_VAR NAME="itemcallnumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="itemcallnumber" --></a>]<!-- /TMPL_IF -->
+	                                        <!-- TMPL_IF NAME="barcode" -->(<!-- TMPL_VAR NAME="barcode" -->)<!-- /TMPL_IF -->
+	                                        (<!-- TMPL_VAR NAME="count" -->)</li>
+										<!-- /TMPL_LOOP -->
+										</ul>
+									<!-- /TMPL_IF -->
+
                                    <!-- TMPL_IF NAME="onloan_items_loop" -->
                                    <span class="status"><!-- TMPL_IF NAME="onloancount" --><!-- TMPL_VAR NAME="onloancount" --><!-- /TMPL_IF --> on loan:</span>
                                     <ul>

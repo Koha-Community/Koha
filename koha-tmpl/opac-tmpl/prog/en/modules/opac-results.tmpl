@@ -272,6 +272,31 @@ $(document).ready(function(){
                     <!-- TMPL_IF NAME="orderedcount" --> On order (<!-- TMPL_VAR NAME="orderedcount" -->),<!-- /TMPL_IF -->
                     <!-- TMPL_IF NAME="intransitcount" --> In transit (<!-- TMPL_VAR NAME="intransitcount" -->),<!-- /TMPL_IF -->
                     </span>
+                    <!-- TMPL_IF NAME="notforloan_items_loop" --> 
+                            <br />
+                    		<span class="unavailable"><strong>Not for loan :</strong></span>
+                    		<span class="unavailable">
+	                    		<!-- TMPL_LOOP NAME="notforloan_items_loop" -->
+		                    		<!-- TMPL_IF name="OPACItemsResultsDisplay" -->
+										<!-- TMPL_IF NAME="singleBranchMode" -->
+				                        	<!-- TMPL_VAR NAME="location" -->
+		        		            	<!-- TMPL_ELSE -->
+		                		        	<!-- TMPL_VAR NAME="branchname" -->
+				                    	<!-- /TMPL_IF -->
+									    <!-- TMPL_UNLESS NAME="singleBranchMode" -->
+								    		<!-- TMPL_VAR NAME="location" -->
+							    		<!-- /TMPL_UNLESS -->
+		        		                <!-- TMPL_IF NAME="itemcallnumber" -->
+		        		                	[<a href="/cgi-bin/koha/opac-search.pl?q=callnum:<!-- TMPL_VAR NAME="itemcallnumber" ESCAPE="URL" -->">
+		        		                	<!-- TMPL_VAR NAME="itemcallnumber" --></a>]
+	    		                	    <!-- /TMPL_IF -->
+	                                <!-- /TMPL_IF -->
+	                                (<!-- TMPL_VAR NAME="count" -->),
+                        	    <!-- /TMPL_LOOP -->
+                            </span>
+                    			
+            		<!-- /TMPL_IF -->
+
                 </span>
 
 				<!-- /TMPL_IF -->

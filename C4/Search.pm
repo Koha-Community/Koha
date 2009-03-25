@@ -1349,15 +1349,18 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
         # Setting item statuses for display
         my @available_items_loop;
         my @onloan_items_loop;
+        my @notforloan_items_loop;
         my @other_items_loop;
 
         my $available_items;
         my $onloan_items;
+        my $notforloan_items;
         my $other_items;
 
         my $ordered_count         = 0;
         my $available_count       = 0;
         my $onloan_count          = 0;
+        my $notforloan_count      = 0;
         my $longoverdue_count     = 0;
         my $other_count           = 0;
         my $wthdrawn_count        = 0;
@@ -1456,18 +1459,37 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
                     $itemdamaged_count++     if $item->{damaged};
                     $item_in_transit_count++ if $transfertwhen ne '';
                     $item->{status} = $item->{wthdrawn} . "-" . $item->{itemlost} . "-" . $item->{damaged} . "-" . $item->{notforloan};
-                    $other_count++;
 
 					my $key = $prefix . $item->{status};
+					
 					foreach (qw(wthdrawn itemlost damaged branchname itemcallnumber)) {
-                    	$other_items->{$key}->{$_} = $item->{$_};
+					    if($item->{notforloan} == 1){
+					        $notforloan_items->{$key}->{$_} = $item->{$_};
+					    }else{
+                    	   $other_items->{$key}->{$_} = $item->{$_};
+					    }
 					}
-                    $other_items->{$key}->{intransit} = ($transfertwhen ne '') ? 1 : 0;
-					$other_items->{$key}->{notforloan} = GetAuthorisedValueDesc('','',$item->{notforloan},'','',$notforloan_authorised_value) if $notforloan_authorised_value;
-					$other_items->{$key}->{count}++ if $item->{$hbranch};
-					$other_items->{$key}->{location} = $shelflocations->{ $item->{location} };
-					$other_items->{$key}->{imageurl} = getitemtypeimagelocation( 'opac', $itemtypes{ $item->{itype} }->{imageurl} );
-					$other_items->{$key}->{barcode} = $item->{barcode};
+
+					if($item->{notforloan} == 1){
+                        $notforloan_count++;
+
+                        $notforloan_items->{$key}->{intransit} = ($transfertwhen ne '') ? 1 : 0;
+    					$notforloan_items->{$key}->{notforloan} = GetAuthorisedValueDesc('','',$item->{notforloan},'','',$notforloan_authorised_value) if $notforloan_authorised_value;
+    					$notforloan_items->{$key}->{count}++ if $item->{$hbranch};
+    					$notforloan_items->{$key}->{location} = $shelflocations->{ $item->{location} };
+    					$notforloan_items->{$key}->{imageurl} = getitemtypeimagelocation( 'opac', $itemtypes{ $item->{itype} }->{imageurl} );
+    					$notforloan_items->{$key}->{barcode} = $item->{barcode};
+                    }else{
+                        $other_count++;
+					
+                        $other_items->{$key}->{intransit} = ($transfertwhen ne '') ? 1 : 0;
+    					$other_items->{$key}->{notforloan} = GetAuthorisedValueDesc('','',$item->{notforloan},'','',$notforloan_authorised_value) if $notforloan_authorised_value;
+    					$other_items->{$key}->{count}++ if $item->{$hbranch};
+    					$other_items->{$key}->{location} = $shelflocations->{ $item->{location} };
+    					$other_items->{$key}->{imageurl} = getitemtypeimagelocation( 'opac', $itemtypes{ $item->{itype} }->{imageurl} );
+    					$other_items->{$key}->{barcode} = $item->{barcode};
+                    }
+
                 }
                 # item is available
                 else {
@@ -1482,7 +1504,7 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
                 }
             }
         }    # notforloan, item level and biblioitem level
-        my ( $availableitemscount, $onloanitemscount, $otheritemscount );
+        my ( $availableitemscount, $onloanitemscount, $notforloanitemscount,$otheritemscount );
         $maxitems =
           ( C4::Context->preference('maxItemsinSearchResults') )
           ? C4::Context->preference('maxItemsinSearchResults') - 1
@@ -1494,6 +1516,10 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
         for my $key ( sort keys %$other_items ) {
             (++$otheritemscount > $maxitems) and last;
             push @other_items_loop, $other_items->{$key};
+        }
+        for my $key ( sort keys %$notforloan_items ) {
+            (++$notforloanitemscount > $maxitems) and last;
+            push @notforloan_items_loop, $notforloan_items->{$key};
         }
         for my $key ( sort keys %$available_items ) {
             (++$availableitemscount > $maxitems) and last;
@@ -1507,18 +1533,19 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
         }
 
         # last check for norequest : if itemtype is notforloan, it can't be reserved either, whatever the items
-        $can_place_holds = 0
-          if $itemtypes{ $oldbiblio->{itemtype} }->{notforloan};
+        $can_place_holds = 0 if $itemtypes{ $oldbiblio->{itemtype} }->{notforloan};
         $oldbiblio->{norequests} = 1 unless $can_place_holds;
         $oldbiblio->{itemsplural}          = 1 if $items_count > 1;
         $oldbiblio->{items_count}          = $items_count;
         $oldbiblio->{available_items_loop} = \@available_items_loop;
+        $oldbiblio->{notforloan_items_loop}= \@notforloan_items_loop;
         $oldbiblio->{onloan_items_loop}    = \@onloan_items_loop;
         $oldbiblio->{other_items_loop}     = \@other_items_loop;
         $oldbiblio->{availablecount}       = $available_count;
         $oldbiblio->{availableplural}      = 1 if $available_count > 1;
         $oldbiblio->{onloancount}          = $onloan_count;
         $oldbiblio->{onloanplural}         = 1 if $onloan_count > 1;
+        $oldbiblio->{notforloancount}      = $notforloan_count;
         $oldbiblio->{othercount}           = $other_count;
         $oldbiblio->{otherplural}          = 1 if $other_count > 1;
         $oldbiblio->{wthdrawncount}        = $wthdrawn_count;
