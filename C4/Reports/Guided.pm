@@ -333,7 +333,7 @@ sub get_criteria {
 
 =over
 
-($results, $total) = execute_query($sql, $type, $offset, $limit, $format, $id)
+($results, $total, $error) = execute_query($sql, $type, $offset, $limit, $format, $id)
 
 =back
 
@@ -417,7 +417,7 @@ sub execute_query ($$$$;$$) {
         if ($format eq 'tab') {
             $string = join("\t",@$colnames);
         }
-        if ($format eq 'csv') {
+        elsif ($format eq 'csv') {
             $string = join(",",@$colnames);
         }
         my @xmlarray;
@@ -433,18 +433,18 @@ sub execute_query ($$$$;$$) {
             my $row = join( '</td><td>', @data );
             $row = "<tr><td>$row</td></tr>";
             $temphash{'row'} = $row;
-            if ( $format eq 'text' ) {
+            if ($format eq 'text') {
                 $string .= "\n" . $row;
             }
-            if ($format eq 'tab' ){
+            elsif ($format eq 'tab'){
                 $row = join("\t",@data);
                 $string .="\n" . $row;
             }
-            if ($format eq 'csv' ){
+            elsif ($format eq 'csv'){
                 $row = join(",",@data);
                 $string .="\n" . $row;
             }
-            if ($format eq 'url'){
+            elsif ($format eq 'url'){
                 my $temphash;
                 @$temphash{@$colnames}=@data;
                 push @xmlarray,$temphash;
