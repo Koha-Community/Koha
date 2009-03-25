@@ -45,10 +45,11 @@ my $sql = qq(SELECT surname, firstname, cardnumber, address, city, zipcode
              FROM borrowers 
              WHERE surname LIKE ?
              OR firstname LIKE ?
+             OR cardnumber LIKE ?
              ORDER BY surname, firstname);
-            #"OR cardnumber LIKE '" . $query . "%' " . 
 my $sth = $dbh->prepare( $sql );
-$sth->execute("$query%", "$query%");
+$sth->execute("$query%", "$query%", "$query%");
+
 while ( my $rec = $sth->fetchrow_hashref ) {
     print $rec->{surname} . ", " . $rec->{firstname} . "\t" .
           $rec->{cardnumber} . "\t" .
