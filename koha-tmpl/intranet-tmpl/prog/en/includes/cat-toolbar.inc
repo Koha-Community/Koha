@@ -34,6 +34,7 @@ function confirm_deletion() {
 	    $("#duplicatebiblio").parent().remove();
 		$("#deletebiblio").parent().remove();
 		$("#newitem").parent().remove();
+		$("#newsub").parent().remove();
 	    $("#editmenuc").empty();
 		$("#newmenuc").empty();
 		$("#addtoshelfc").empty();
@@ -48,7 +49,8 @@ function confirm_deletion() {
 	function yuiToolbar() {
 		var newmenu = [
 			{text: _("New Record"), url: "/cgi-bin/koha/cataloguing/addbiblio.pl" },
-			{text: _("New Item"), url: "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#additema" }
+			{text: _("New Item"), url: "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#additema" },
+			{text: _("New Subscription"), url: "/cgi-bin/koha/serials/subscription-add.pl?biblionumber_for_new_subscription=<!-- TMPL_VAR NAME="biblionumber" -->"},
 		];
 	
 	    var editmenu = [
@@ -118,6 +120,7 @@ function confirm_deletion() {
 	<!-- TMPL_IF NAME="CAN_user_editcatalogue" -->
 	<li id="newmenuc"><a id="newbiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl">New Record</a></li>
 	<li><a id="newitem" href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">New Item</a></li>
+	<li><a id="newsub" href="/cgi-bin/koha/serials/subscription-add.pl?biblionumber_for_new_subscription=<!-- TMPL_VAR NAME="biblionumber" -->">New Subscription</a></li>
 	<li id="editmenuc"><a id="editbiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;frameworkcode=<!--TMPL_VAR Name="current_framework" -->&amp;op=">Edit Record</a></li>
 	<li><a id="edititems" href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Edit Items</a></li>
 	<li><a id="duplicatebiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;frameworkcode=<!--TMPL_VAR Name="current_framework" -->&amp;op=duplicate">Duplicate Record</a></li>
