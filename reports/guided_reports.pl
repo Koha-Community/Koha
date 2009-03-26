@@ -18,6 +18,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+# use warnings;  # FIXME
 use CGI;
 use C4::Reports::Guided;
 use C4::Auth;
@@ -27,10 +28,11 @@ use C4::Debug;
 
 =head1 NAME
 
-Script to control the guided report creation
+guided_reports.pl
 
 =head1 DESCRIPTION
 
+Script to control the guided report creation
 
 =over2
 
@@ -174,13 +176,11 @@ elsif ( $phase eq 'Choose these criteria' ) {
 	my $query_criteria;
     foreach my $crit (@criteria) {
         my $value = $input->param( $crit . "_value" );
-        if ($value) {
-            if ($value =~ C4::Dates->regexp(C4::Context->preference('dateformat'))) { 
-                my $date = C4::Dates->new($value);
-                $value = $date->output("iso");
-            }
-            $query_criteria .= " AND $crit='$value'";
+        ($value) or next;
+        if ($value =~ C4::Dates->regexp('syspref')) { 
+            $value = C4::Dates->new($value)->output("iso");
         }
+        $query_criteria .= " AND $crit='$value'";
     }
 
     $template->param(
@@ -200,25 +200,8 @@ elsif ( $phase eq 'Choose these criteria' ) {
     # need to do something about the order of the order :)
 	# we also want to use the %columns hash to get the plain english names
     foreach my $col (@columns) {
-        my %total;
-        $total{'name'} = $col;
-        my @selects;
-        my %select1;
-        $select1{'value'} = 'sum';
-        push @selects, \%select1;
-        my %select2;
-        $select2{'value'} = 'min';
-        push @selects, \%select2;
-        my %select3;
-        $select3{'value'} = 'max';
-        push @selects, \%select3;
-        my %select4;
-        $select4{'value'} = 'avg';
-        push @selects, \%select4;
-        my %select5;
-        $select5{'value'} = 'count';
-        push @selects, \%select5;
-
+        my %total = (name => $col);
+        my @selects = map {+{ value => $_ }} (qw(sum min max avg count));
         $total{'select'} = \@selects;
         push @total_by, \%total;
     }
@@ -256,15 +239,8 @@ elsif ( $phase eq 'Choose These Operations' ) {
     # build structue for use by tmpl_loop to choose columns to order by
     # need to do something about the order of the order :)
     foreach my $col (@columns) {
-        my %order;
-        $order{'name'} = $col;
-        my @selects;
-        my %select1;
-        $select1{'value'} = 'asc';
-        push @selects, \%select1;
-        my %select2;
-        $select2{'value'} = 'desc';
-        push @selects, \%select2;
+        my %order = (name => $col);
+        my @selects = map {+{ value => $_ }} (qw(asc desc));
         $order{'select'} = \@selects;
         push @order_by, \%order;
     }
@@ -458,11 +434,9 @@ elsif ($phase eq 'Save Compound'){
 	);
 }
 
-
 $template->param(   'referer' => $referer,
                     'DHTMLcalendar_dateformat' => C4::Dates->DHTMLcalendar(),
                 );
-
 
 if (!$no_html){
 	output_html_with_http_headers $input, $cookie, $template->output;
