@@ -1895,6 +1895,8 @@ CREATE TABLE `subscription` (
   `hemisphere` tinyint(3) default 0,
   `lastbranch` varchar(10),
   `serialsadditems` tinyint(1) NOT NULL default '0',
+  `staffdisplaycount` VARCHAR(10) NULL,
+  `opacdisplaycount` VARCHAR(10) NULL,
   PRIMARY KEY  (`subscriptionid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
