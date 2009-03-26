@@ -2279,6 +2279,22 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.01.00.017";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE `subscription` ADD `staffdisplaycount` VARCHAR(10) NULL;");
+    $dbh->do("ALTER TABLE `subscription` ADD `opacdisplaycount` VARCHAR(10) NULL;");
+    $dbh->do("INSERT INTO `systempreferences` ( `variable` , `value` , `options` , `explanation` , `type` )
+    VALUES (
+    'StaffSerialIssueDisplayCount', '3', '', 'Number of serial issues to display per subscription in the Staff client', 'free'
+    );");
+	$dbh->do("INSERT INTO `systempreferences` ( `variable` , `value` , `options` , `explanation` , `type` )
+    VALUES (
+    'OPACSerialIssueDisplayCount', '3', '', 'Number of serial issues to display per subscription in the OPAC', 'free'
+    );");
+
+    print "Upgrade to $DBversion done ( Updated table for Branch Transfer Limits)\n";
+    SetVersion ($DBversion);
+}
 
 =item DropAllForeignKeys($table)
 

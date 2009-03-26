@@ -1026,6 +1026,17 @@ $('#numberpattern').change( function() {
 				<div class="hint">To notify patrons of new serial issues, you must <a href="/cgi-bin/koha/tools/letter.pl">define a notice</a>.</div>
 				<!-- /TMPL_IF -->
         </li>
+		<li class="radio">
+			<label for="displaycount">Staff and Public Display</label>
+			<p>
+			 <label for="staffdisplaycount">Number of issues to display to staff: </label>
+			 <input type="text" name="staffdisplaycount" id="staffdisplaycount" value="<!-- TMPL_VAR NAME="staffdisplaycount" -->" size="4"/>
+			</p>
+			<p>
+			<label for="opacdisplaycount">Number of issues to display to the public: </label>
+			<input type="text" name="opacdisplaycount" id="opacdisplaycount" value="<!-- TMPL_VAR NAME="opacdisplaycount" -->" size="4"/>
+			</p>
+		</li>
 	</ol>
 
             <div style="float:left;clear:left;margin:1em;"><strong>Note:</strong>

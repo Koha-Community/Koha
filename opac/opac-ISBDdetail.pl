@@ -90,13 +90,17 @@ my @subscriptions       =
 my @subs;
 foreach my $subscription (@subscriptions) {
     my %cell;
+	my $serials_to_display;
     $cell{subscriptionid}    = $subscription->{subscriptionid};
     $cell{subscriptionnotes} = $subscription->{notes};
     $cell{branchcode}        = $subscription->{branchcode};
 
     #get the three latest serials.
+	$serials_to_display = $subscription->{opacdisplaycount};
+	$serials_to_display = C4::Context->preference('OPACSerialIssueDisplayCount') unless $serials_to_display;
+	$cell{opacdisplaycount} = $serials_to_display;
     $cell{latestserials} =
-      GetLatestSerials( $subscription->{subscriptionid}, 3 );
+      GetLatestSerials( $subscription->{subscriptionid}, $serials_to_display );
     push @subs, \%cell;
 }
 

@@ -12,6 +12,7 @@
 <!-- TMPL_IF NAME="OPAC" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a title="Online Public Access Catalog" href="/cgi-bin/koha/admin/systempreferences.pl?tab=OPAC">OPAC</a></li>
 <!-- TMPL_IF NAME="Patrons" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a title="Patrons" href="/cgi-bin/koha/admin/systempreferences.pl?tab=Patrons">Patrons</a></li>
 <!-- TMPL_IF NAME="Searching" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a title="Searching" href="/cgi-bin/koha/admin/systempreferences.pl?tab=Searching">Searching</a></li>
+<!-- TMPL_IF NAME="Serials" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a title="Serials" href="/cgi-bin/koha/admin/systempreferences.pl?tab=Serials">Serials</a></li>
 <!-- TMPL_IF NAME="StaffClient" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a title="Staff Client" href="/cgi-bin/koha/admin/systempreferences.pl?tab=StaffClient">Staff Client</a></li>
 <!-- TMPL_IF NAME="" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/admin/systempreferences.pl">Local Use</a></li>
 </ul>

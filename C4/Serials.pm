@@ -1302,8 +1302,8 @@ sub ModSubscription {
         $whenmorethan3,   $setto3,       $lastvalue3,     $innerloop3,
         $numberingmethod, $status,       $biblionumber,   $callnumber,
         $notes,           $letter,       $hemisphere,     $manualhistory,
-        $internalnotes,   $serialsadditems,
-        $subscriptionid
+        $internalnotes,   $serialsadditems,$subscriptionid,
+        $staffdisplaycount,$opacdisplaycount
     ) = @_;
 #     warn $irregularity;
     my $dbh   = C4::Context->dbh;
@@ -1313,9 +1313,9 @@ sub ModSubscription {
                         add1=?,every1=?,whenmorethan1=?,setto1=?,lastvalue1=?,innerloop1=?,
                         add2=?,every2=?,whenmorethan2=?,setto2=?,lastvalue2=?,innerloop2=?,
                         add3=?,every3=?,whenmorethan3=?,setto3=?,lastvalue3=?,innerloop3=?,
-                        numberingmethod=?, status=?, biblionumber=?, callnumber=?, notes=?, letter=?, hemisphere=?,manualhistory=?,internalnotes=?,serialsadditems=?
+                        numberingmethod=?, status=?, biblionumber=?, callnumber=?, notes=?, letter=?, hemisphere=?,manualhistory=?,internalnotes=?,serialsadditems=?,staffdisplaycount = ?,opacdisplaycount = ?
                     WHERE subscriptionid = ?";
-#     warn "query :".$query;
+     #warn "query :".$query;
     my $sth = $dbh->prepare($query);
     $sth->execute(
         $auser,           $branchcode,   $aqbooksellerid, $cost,
@@ -1329,8 +1329,8 @@ sub ModSubscription {
         $numberingmethod, $status,       $biblionumber,   $callnumber,
         $notes,           $letter,       $hemisphere,     ($manualhistory?$manualhistory:0),
         $internalnotes,   $serialsadditems,
-        $subscriptionid
-    );
+        $staffdisplaycount, $opacdisplaycount, $subscriptionid
+    ); warn "$staffdisplaycount, $opacdisplaycount";
     my $rows=$sth->rows;
     $sth->finish;
     
@@ -1370,7 +1370,7 @@ sub NewSubscription {
         $lastvalue3,    $innerloop3,   $numberingmethod, $status,
         $notes,         $letter,       $firstacquidate,  $irregularity,
         $numberpattern, $callnumber,   $hemisphere,      $manualhistory,
-        $internalnotes, $serialsadditems,
+        $internalnotes, $serialsadditems, $staffdisplaycount, $opacdisplaycount
     ) = @_;
     my $dbh = C4::Context->dbh;
 
@@ -1383,8 +1383,8 @@ sub NewSubscription {
             add2,every2,whenmorethan2,setto2,lastvalue2,innerloop2,
             add3,every3,whenmorethan3,setto3,lastvalue3,innerloop3,
             numberingmethod, status, notes, letter,firstacquidate,irregularity,
-            numberpattern, callnumber, hemisphere,manualhistory,internalnotes,serialsadditems)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+            numberpattern, callnumber, hemisphere,manualhistory,internalnotes,serialsadditems,staffdisplaycount,opacdisplaycount)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         |;
     my $sth = $dbh->prepare($query);
     $sth->execute(
@@ -1409,6 +1409,7 @@ sub NewSubscription {
         $numberpattern,                 $callnumber,
         $hemisphere,                    $manualhistory,
         $internalnotes,                 $serialsadditems,
+		$staffdisplaycount,				$opacdisplaycount
     );
 
     #then create the 1st waited number
@@ -1802,6 +1803,7 @@ sub HasSubscriptionExpired {
       my $sth = $dbh->prepare($query);
       $sth->execute($subscriptionid);
       my ($res) = $sth->fetchrow  ;
+	  return 0 unless $res;
       my @res=split (/-/,$res);
 # warn "date expiration :$expirationdate";
       my @endofsubscriptiondate=split(/-/,$expirationdate);

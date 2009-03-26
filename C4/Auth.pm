@@ -307,6 +307,7 @@ sub get_template_and_user {
             noItemTypeImages            => C4::Context->preference("noItemTypeImages"),
             suggestion                  => C4::Context->preference("suggestion"),
             virtualshelves              => C4::Context->preference("virtualshelves"),
+			StaffSerialIssueDisplayCount => C4::Context->preference("StaffSerialIssueDisplayCount"),
         );
     }
     else {
@@ -359,6 +360,7 @@ sub get_template_and_user {
             reviewson                 => C4::Context->preference("reviewson"),
             suggestion                => "" . C4::Context->preference("suggestion"),
             virtualshelves            => "" . C4::Context->preference("virtualshelves"),
+			OPACSerialIssueDisplayCount => C4::Context->preference("OPACSerialIssueDisplayCount"),
         );
     }
     return ( $template, $borrowernumber, $cookie, $flags);

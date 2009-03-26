@@ -321,6 +321,10 @@ $tabsysprefs{OPACGroupResults}     = "OPAC";
 $tabsysprefs{XSLTDetailsDisplay}   = "OPAC";
 $tabsysprefs{XSLTResultsDisplay}   = "OPAC";
 
+# Serials
+$tabsysprefs{OPACSerialIssueDisplayCount}  = "Serials";
+$tabsysprefs{StaffSerialIssueDisplayCount}  = "Serials";
+
 # LOGFeatures
 $tabsysprefs{CataloguingLog}  = "Logs";
 $tabsysprefs{BorrowersLog}    = "Logs";

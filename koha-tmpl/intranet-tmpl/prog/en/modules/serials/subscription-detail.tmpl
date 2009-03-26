@@ -67,6 +67,8 @@ function popup(subscriptionid) {
             <li>Serial receipt does not create an item record.</li>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF name="callnumber" --><li><span class="label">Call Number:</span> <!-- TMPL_VAR name="callnumber" -->&nbsp;</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="staffdisplaycount" --><li><span class="label">Number of issues to display to staff</span>:&nbsp;<!-- TMPL_VAR NAME="staffdisplaycount" -->&nbsp;</li><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="opacdisplaycount" --><li><span class="label">Number of issues to display to the public</span>:&nbsp;<!-- TMPL_VAR NAME="opacdisplaycount" -->&nbsp;</li><!-- /TMPL_IF -->
         <!-- TMPL_IF name="letter" --><li><span class="label">Patron alert with:</span> <!-- TMPL_VAR name="letter" -->&nbsp;</li><!-- /TMPL_IF -->
         <!-- TMPL_IF name="notes" --><li><span class="label">Notes:</span> <!-- TMPL_VAR name="notes" --></li><!-- /TMPL_IF -->
         <!-- TMPL_IF name="internalnotes" --><li><span class="label">Management Notes:</span> <!-- TMPL_VAR name="internalnotes" --></li><!-- /TMPL_IF -->

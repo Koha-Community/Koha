@@ -98,13 +98,17 @@ my @subs;
 $dat->{'serial'}=1 if $subscriptionsnumber;
 foreach my $subscription (@subscriptions) {
     my %cell;
+	my $serials_to_display;
     $cell{subscriptionid}    = $subscription->{subscriptionid};
     $cell{subscriptionnotes} = $subscription->{notes};
 	$cell{branchcode}        = $subscription->{branchcode};
 	$cell{hasalert}          = $subscription->{hasalert};
     #get the three latest serials.
+	$serials_to_display = $subscription->{staffdisplaycount};
+	$serials_to_display = C4::Context->preference('StaffSerialIssueDisplayCount') unless $serials_to_display;
+	$cell{staffdisplaycount} = $serials_to_display;
     $cell{latestserials} =
-      GetLatestSerials( $subscription->{subscriptionid}, 3 );
+      GetLatestSerials( $subscription->{subscriptionid}, $serials_to_display );
     push @subs, \%cell;
 }
 

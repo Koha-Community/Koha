@@ -371,7 +371,7 @@ function verify_images() {
     <!-- TMPL_LOOP Name="subscriptions" -->
             <!-- TMPL_IF NAME="subscriptionnotes" --><p><!--TMPL_VAR NAME="subscriptionnotes"--> </p><!-- /TMPL_IF -->
             <!--TMPL_IF NAME="latestserials"-->
-            <p> The three latest issues related to this subscription:</p>
+            <p> The <!-- TMPL_VAR NAME="staffdisplaycount" --> latest issues related to this subscription:</p>
             <table>
                 <tr>
                     <th>Issue #</th>
@@ -402,6 +402,7 @@ function verify_images() {
             <!--/TMPL_LOOP -->
             </table>
             <!-- /TMPL_IF -->
+			<a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->">Subscription Details</a>
     <!-- /TMPL_LOOP -->
 </div>
 </div>

@@ -213,6 +213,8 @@ if ($op eq 'addsubscription') {
     # ## BugFIX : hdl doesnot know what innerloops or letter stand for but it seems necessary. So he adds them.
     my $manualhistory = $query->param('manualhist');
     my $serialsadditems = $query->param('serialsadditems');
+	my $staffdisplaycount = $query->param('staffdisplaycount');
+	my $opacdisplaycount = $query->param('opacdisplaycount');
 	my $subscriptionid = NewSubscription($auser,$branchcode,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,
 					$startdate,$periodicity,$dow,$numberlength,$weeklength,$monthlength,
 					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
@@ -220,7 +222,7 @@ if ($op eq 'addsubscription') {
 					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
 					$numberingmethod, $status, $notes,$letter,$firstacquidate,join(",",@irregularity),
                     $numberpattern, $callnumber, $hemisphere,($manualhistory?$manualhistory:0),$internalnotes,
-                    $serialsadditems,
+                    $serialsadditems,$staffdisplaycount,$opacdisplaycount
 				);
 
     print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
@@ -287,6 +289,8 @@ if ($op eq 'addsubscription') {
     my $opacnote = $query->param('opacnote');
     my $librariannote = $query->param('librariannote');
     my $history_only = $query->param('history_only');
+	my $staffdisplaycount = $query->param('staffdisplaycount');
+	my $opacdisplaycount = $query->param('opacdisplaycount');
 	#  If it's  a mod, we need to check the current 'expected' issue, and mod it in the serials table if necessary.
     if ( $nextacquidate ne $nextexpected->{planneddate}->output('iso') ) {
         ModNextExpected($subscriptionid,C4::Dates->new($nextacquidate,'iso'));
@@ -308,7 +312,7 @@ if ($op eq 'addsubscription') {
             $whenmorethan3,   $setto3,       $lastvalue3,     $innerloop3,
             $numberingmethod, $status,       $biblionumber,   $callnumber,
             $notes,           $letter,       $hemisphere,     $manualhistory,$internalnotes,
-            $serialsadditems, $subscriptionid,
+            $serialsadditems, $subscriptionid,$staffdisplaycount,$opacdisplaycount
         );
     }
     print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
