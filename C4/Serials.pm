@@ -1330,7 +1330,7 @@ sub ModSubscription {
         $notes,           $letter,       $hemisphere,     ($manualhistory?$manualhistory:0),
         $internalnotes,   $serialsadditems,
         $staffdisplaycount, $opacdisplaycount, $subscriptionid
-    ); warn "$staffdisplaycount, $opacdisplaycount";
+    );
     my $rows=$sth->rows;
     $sth->finish;
     
