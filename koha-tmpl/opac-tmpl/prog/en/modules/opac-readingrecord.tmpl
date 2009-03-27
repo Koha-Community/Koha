@@ -55,7 +55,7 @@ TMPL_ELSE -->Title<!-- /TMPL_UNLESS --></th>
 
     <!-- TMPL_IF NAME="BakerTaylorEnabled" --><td><!-- TMPL_IF NAME="normalized_isbn" --><a href="https://<!-- TMPL_VAR NAME="BakerTaylorBookstoreURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="normalized_isbn" -->"><img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR NAME="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR NAME="normalized_isbn" -->" /></a><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- /TMPL_IF --></td><!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="SyndeticsCoverImages" --><td><img src="http://www.syndetics.com/index.aspx?isbn=<!-- TMPL_VAR NAME="normalized_isbn" -->/SC.GIF&client=<!-- TMPL_VAR NAME="SyndeticsClientCode" --><!-- TMPL_IF NAME="normalized_upc" -->&upc=<!-- TMPL_VAR NAME="normalized_upc" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="normalized_oclc" -->&oclc=<!-- TMPL_VAR NAME="normalized_oclc" --><!-- /TMPL_IF -->&type=xw10" alt=""/></td><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="SyndeticsCoverImages" --><td><img src="http://www.syndetics.com/index.aspx?isbn=<!-- TMPL_VAR NAME="normalized_isbn" -->/SC.GIF&amp;client=<!-- TMPL_VAR NAME="SyndeticsClientCode" --><!-- TMPL_IF NAME="normalized_upc" -->&amp;upc=<!-- TMPL_VAR NAME="normalized_upc" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="normalized_oclc" -->&amp;oclc=<!-- TMPL_VAR NAME="normalized_oclc" --><!-- /TMPL_IF -->&amp;type=xw10" alt=""/></td><!-- /TMPL_IF -->
 
 <td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
                     <span class="item-details">
