@@ -24,6 +24,7 @@ use C4::Members;
 use C4::Log;
 use C4::SMS;
 use Encode;
+use Carp;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -466,45 +467,64 @@ sub SendAlerts {
 
 =cut
 
+our %handles = ();
+our %columns = ();
+
+sub parseletter_sth {
+    my $table = shift;
+    unless ($table) {
+        carp "ERROR: parseletter_sth() called without argument (table)";
+        return;
+    }
+    # check cache first
+    (defined $handles{$table}) and return $handles{$table};
+    my $query = 
+    ($table eq 'biblio'       ) ? "SELECT * FROM $table WHERE   biblionumber = ?"                      :
+    ($table eq 'biblioitems'  ) ? "SELECT * FROM $table WHERE   biblionumber = ?"                      :
+    ($table eq 'items'        ) ? "SELECT * FROM $table WHERE     itemnumber = ?"                      :
+    ($table eq 'reserves'     ) ? "SELECT * FROM $table WHERE borrowernumber = ? and biblionumber = ?" :
+    ($table eq 'borrowers'    ) ? "SELECT * FROM $table WHERE borrowernumber = ?"                      :
+    ($table eq 'branches'     ) ? "SELECT * FROM $table WHERE     branchcode = ?"                      :
+    ($table eq 'aqbooksellers') ? "SELECT * FROM $table WHERE             id = ?"                      : undef ;
+    unless ($query) {
+        warn "ERROR: No parseletter_sth query for table '$table'";
+        return;     # nothing to get
+    }
+    unless ($handles{$table} = C4::Context->dbh->prepare($query)) {
+        warn "ERROR: Failed to prepare query: '$query'";
+        return;
+    }
+    return $handles{$table};    # now cache is populated for that $table
+}
+
 sub parseletter {
     my ( $letter, $table, $pk, $pk2 ) = @_;
-
-    # 	warn "Parseletter : ($letter,$table,$pk)";
-    my $dbh = C4::Context->dbh;
-    my $sth;
-    if ( $table eq 'biblio' ) {
-        $sth = $dbh->prepare("select * from biblio where biblionumber=?");
-    } elsif ( $table eq 'biblioitems' ) {
-        $sth = $dbh->prepare("select * from biblioitems where biblionumber=?");
-    } elsif ( $table eq 'items' ) {
-        $sth = $dbh->prepare("select * from items where itemnumber=?");
-    } elsif ( $table eq 'reserves' ) {
-        $sth = $dbh->prepare("select * from reserves where borrowernumber = ? and biblionumber=?");
-    } elsif ( $table eq 'borrowers' ) {
-        $sth = $dbh->prepare("select * from borrowers where borrowernumber=?");
-    } elsif ( $table eq 'branches' ) {
-        $sth = $dbh->prepare("select * from branches where branchcode=?");
-    } elsif ( $table eq 'aqbooksellers' ) {
-        $sth = $dbh->prepare("select * from aqbooksellers where id=?");
+    unless ($letter) {
+        carp "ERROR: parseletter() 1st argument 'letter' empty";
+        return;
     }
-
+    # 	warn "Parseletter : ($letter, $table, $pk ...)";
+    my $sth = parseletter_sth($table);
+    unless ($sth) {
+        warn "parseletter_sth('$table') failed to return a valid sth.  No substitution will be done for that table.";
+        return;
+    }
     if ( $pk2 ) {
         $sth->execute($pk, $pk2);
     } else {
         $sth->execute($pk);
     }
 
-    # store the result in an hash
     my $values = $sth->fetchrow_hashref;
 
     # and get all fields from the table
-    $sth = $dbh->prepare("show columns from $table");
-    $sth->execute;
-    while ( ( my $field ) = $sth->fetchrow_array ) {
+    my $columns = C4::Context->dbh->prepare("SHOW COLUMNS FROM $table");
+    $columns->execute;
+    while ( ( my $field ) = $columns->fetchrow_array ) {
         my $replacefield = "<<$table.$field>>";
         my $replacedby   = $values->{$field} || '';
-        $letter->{title}   =~ s/$replacefield/$replacedby/g;
-        $letter->{content} =~ s/$replacefield/$replacedby/g;
+        ($letter->{title}  ) and $letter->{title}   =~ s/$replacefield/$replacedby/g;
+        ($letter->{content}) and $letter->{content} =~ s/$replacefield/$replacedby/g;
     }
 }
 
