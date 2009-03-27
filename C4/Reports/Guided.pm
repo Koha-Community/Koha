@@ -18,11 +18,13 @@ package C4::Reports::Guided;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+# use warnings;  # FIXME: this module needs a lot of repair to run clean under warnings
 use CGI;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use C4::Context;
 use C4::Output;
+use C4::Dates;
 use XML::Simple;
 use XML::Dumper;
 use C4::Debug;
@@ -354,9 +356,14 @@ sub get_criteria {
 =cut
 
 # FIXME: This needs to be generalized to reports in general
+# FIXME: This should NOT have ANY formatting responsibilities.  
+# Instead, is should just be returning a prepared sth.
+# FIXME: $type is a TOTALLY UNUSED "required" argument?
 
 sub execute_query ($$$$;$$) {
     my ( $sql, $type, $offset, $limit, $format, $id ) = @_;
+    $format or $format = '';
+    $debug and print STDERR "execute_query($sql, $type, $offset, $limit, $format, $id)\n";
     my @params;
     my $total = 0;
     my ($useroffset, $userlimit);
@@ -424,16 +431,18 @@ sub execute_query ($$$$;$$) {
         while ( my @data = $sth->fetchrow_array() ) {
             # if the field is a date field, it needs formatting
             foreach my $data (@data) {
+                unless (defined $data) {
+                    $data = ''; # suppress undef, so fields are joinable
+                    next;
+                }
                 next unless $data =~ C4::Dates->regexp("iso");
-                my $date = C4::Dates->new($data, "iso");
-                $data = $date->output();
+                $data = C4::Dates->new($data, "iso")->output();
             }
             # tabular
-            my %temphash;
-            my $row = join( '</td><td>', @data );
-            $row = "<tr><td>$row</td></tr>";
-            $temphash{'row'} = $row;
+			my $row;
             if ( $format eq 'text' ) {
+            	$row = join( '</td><td>', @data );
+            	$row = "<tr><td>$row</td></tr>";
                 $string .= "\n" . $row;
             }
             if ($format eq 'tab' ){
@@ -449,7 +458,7 @@ sub execute_query ($$$$;$$) {
                 @$temphash{@$colnames}=@data;
                 push @xmlarray,$temphash;
             }
-            push @results, \%temphash;
+            push @results, {row=>$row};
         }
         if (defined($sth->errstr)) {
             $error->{'queryerr'} = $sth->errstr;
