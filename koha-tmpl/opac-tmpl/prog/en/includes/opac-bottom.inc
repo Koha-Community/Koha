@@ -43,5 +43,10 @@
         </div>
 <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="Babeltheque" -->
+<script type="text/javascript" src="http://www.babeltheque.com/bw_30.js"></script>
+<!-- /TMPL_IF -->
+
 </body>
 </html>

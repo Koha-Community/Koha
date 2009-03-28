@@ -227,6 +227,9 @@ $tabsysprefs{AmazonAssocTag}         = "EnhancedContent";
 $tabsysprefs{AmazonSimilarItems}     = "EnhancedContent";
 $tabsysprefs{OPACAmazonSimilarItems} = "EnhancedContent";
 
+# Babelthèque
+$tabsysprefs{Babeltheque}            = "EnhancedContent";
+
 # Baker & Taylor
 $tabsysprefs{BakerTaylorBookstoreURL} = 'EnhancedContent';
 $tabsysprefs{BakerTaylorEnabled}      = 'EnhancedContent';

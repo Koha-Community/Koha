@@ -260,6 +260,8 @@
     
     <!-- TMPL_IF NAME="OPACAmazonEnabled" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#amazonreviews">Amazon Reviews</a></li><!-- /TMPL_IF -->
 
+    <!-- TMPL_IF NAME="Babeltheque" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#babeltheque">Babelthèque</a></li><!-- /TMPL_IF -->
+
 </ul>
 
 <div id="holdings">
@@ -560,6 +562,15 @@
     <!-- TMPL_ELSE -->
         <div id="addcomment"><a href="/cgi-bin/koha/opac-user.pl">Log in to your account</a> to post a comment.</div>
     <!-- /TMPL_IF -->
+</div>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="Babeltheque" -->
+<div id="babeltheque">
+  <div id="BW_notes"></div>
+  <div id="BW_critiques"></div>
+  <div id="BW_citations"></div>
+  <div id="BW_etiquettes"></div>
 </div>
 <!-- /TMPL_IF -->
 

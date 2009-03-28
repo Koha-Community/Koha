@@ -343,6 +343,12 @@ if ( C4::Context->preference("SyndeticsEnabled")
     $template->param( SYNDETICS_ANOTES => $syndetics_anotes );
     };
     warn $@ if $@;
+
+# Babelthèque
+if ( C4::Context->preference("Babeltheque") ) {
+    $template->param( 
+        Babeltheque => 1,
+    );
 }
 
 # Shelf Browser Stuff

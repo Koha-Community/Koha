@@ -9,6 +9,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AmazonDevKey', '', 'Voir : aws-portal.amazon.com/gp/aws/developer/registration/index.html', '', '');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AmazonAssocTag', '', 'Voir : associates.amazon.com/gp/flex/associates/apply-login.html', '', '');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AnonSuggestions', '0', 'Attribuée au n° de l''emprunteur anonyme pour activer les suggestions anonymes. 0, pas de suggestions anonymes.', '', 'free');
+VALUES('Babeltheque',0,'Active les contenus Babelthèque - Voir babeltheque.com pour s''abonner','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AuthDisplayHierarchy', '0', 'Affiche la hiérarchie des autorités. A activer uniquement si vous avez un thésaurus hiérarchique. Sera généralement à 0', '', '');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('authoritysep', '--', 'Le séparateur utilisé dans les autorités. Habituellement --', '10', 'free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('autoBarcode', 'OFF', 'Utilisé pour générer automatiquement les codes barre: incremental sera de la forme 1, 2, 3; annual de la forme 2007-0001, 2007-0002, hbyymmincr de la forme HB09010001 où HB=la branche d'appartenance', 'incremental|annual|hbyymmincr|OFF', 'Choice');
