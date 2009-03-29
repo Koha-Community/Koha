@@ -256,9 +256,9 @@ warn "query ".$query  if $DEBUG;
                         push( @breeding_loop, \%row_data );
 		            
                     } else {
-                        push(@breeding_loop,{'toggle'=>($i % 2)?1:0,'server'=>$servername[$k],'title'=>join(': ',$oConnection[$k]->error_x()),'breedingid'=>-1,'biblionumber'=>-1});
+                        push(@breeding_loop,{'server'=>$servername[$k],'title'=>join(': ',$oConnection[$k]->error_x()),'breedingid'=>-1,'biblionumber'=>-1});
                     } # $rec
-                }    # upto 5 results
+                }    # upto 20 results
             }    #$numresults
         }
     }    # if $k !=0

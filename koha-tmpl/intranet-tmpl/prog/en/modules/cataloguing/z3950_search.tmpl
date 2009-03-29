@@ -29,7 +29,8 @@ $.tablesorter.addParser({
     });
 	$("#resultst").tablesorter({
 		sortList: [[1,0]],
-		headers: { 0: {sorter:false}, 1: { sorter: 'articles' },5: { sorter: false },6: { sorter: false }}
+		headers: { 0: {sorter:false}, 1: { sorter: 'articles' },5: { sorter: false },6: { sorter: false } },
+        widgets: ['zebra'],
 	}); 
 });
 //]]>
@@ -96,7 +97,7 @@ $.tablesorter.addParser({
     <tbody><!-- TMPL_LOOP name="breeding_loop" -->
         <!-- TMPL_IF NAME="breedingid" -->
 		
-        <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+        <tr>
             <td><!-- TMPL_VAR name="server" --></td>
             <td><!-- TMPL_VAR NAME="title" escape="html" --></td>
             <td><!-- TMPL_VAR NAME="author" --></td>
