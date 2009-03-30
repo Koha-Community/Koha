@@ -1249,6 +1249,7 @@ sub _normalize_match_point {
 
 sub _isbn_cleanup ($) {
     my $normalized_isbn = shift;
+    $normalized_isbn =~ s/-//g;
     $normalized_isbn =~/([0-9]{1,})/;
     $normalized_isbn = $1;
     if (
