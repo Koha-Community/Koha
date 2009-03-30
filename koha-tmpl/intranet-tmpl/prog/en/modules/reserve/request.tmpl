@@ -142,9 +142,10 @@ if (alreadyreserved > "0"){
                 <input type="submit" value="Search" />
 			</fieldset>
         <!-- TMPL_ELSE -->
-            <!-- TMPL_VAR NAME="CGIselectborrower" -->
-                <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber"-->" />
-                <input type="submit" value="Select" />
+			<fieldset>
+			<!-- TMPL_VAR NAME="CGIselectborrower" -->
+			<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber"-->" /><fieldset class="action"><input type="submit" value="Select" /></fieldset></fieldset>
+
         <!-- /TMPL_UNLESS -->
     </form>
 <!-- TMPL_ELSE -->

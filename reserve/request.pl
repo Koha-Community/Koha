@@ -168,7 +168,7 @@ if ($borrowerslist) {
             '%s, %s ... (%s - %s) ... %s',
             $borrower->{surname},    $borrower->{firstname},
             $borrower->{cardnumber}, $borrower->{categorycode},
-            $borrower->{streetaddress},
+            $borrower->{address},
         );
     }
 
