@@ -27,6 +27,7 @@ use Getopt::Long qw(:config auto_help auto_version);
 use Pod::Usage;
 use Mail::Sendmail;
 use Text::CSV_XS;
+use CGI;
 
 use vars qw($VERSION);
 
@@ -131,15 +132,22 @@ foreach my $report (@ARGV) {
     }
     $verbose and print "SQL: $sql\n\n";
     # my $results = execute_query($sql, undef, 0, 99999, $format, $report); 
-    my ($results) = execute_query($sql, undef, 0, 20, , ); 
+    my ($sth) = execute_query($sql);
     # execute_query(sql, , 0, 20, , )
-    my $count = scalar(@$results);
+    my $count = scalar($sth->rows);
     unless ($count) {
         print "NO OUTPUT: 0 results from execute_query\n";
         next;
     }
     $verbose and print "$count results from execute_query\n";
-    my $message = "<table>\n" . join("\n", map {$_->{row}} @$results) . "\n</table>\n";
+
+    my $cgi = CGI->new();
+    my @rows = ();
+    while (my $line = $sth->fetchrow_arrayref) {
+        foreach (@$line) { defined($_) or $_ = ''; }    # catch undef values, replace w/ ''
+        push @rows, $cgi->TR( join('', $cgi->td($line)) ) . "\n";
+    }
+    my $message = $cgi->table(join "", @rows);
 
     if ($email){
         my %mail = (
@@ -152,4 +160,8 @@ foreach my $report (@ARGV) {
     } else {
         print $message;
     }
+    # my @xmlarray = ... ;
+    # my $url = "/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&id=$id";
+    # my $xml = XML::Dumper->new()->pl2xml( \@xmlarray );
+    # store_results($id,$xml);
 }

@@ -20,6 +20,7 @@ package C4::Reports::Guided;
 use strict;
 # use warnings;  # FIXME: this module needs a lot of repair to run clean under warnings
 use CGI;
+use Carp;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use C4::Context;
@@ -41,6 +42,7 @@ BEGIN {
 		save_report get_saved_reports execute_query get_saved_report create_compound run_compound
 		get_column_type get_distinct_values save_dictionary get_from_dictionary
 		delete_definition delete_report format_results get_sql
+        select_2_select_count_value
 	);
 }
 
@@ -335,7 +337,7 @@ sub get_criteria {
 
 =over
 
-($results, $total, $error) = execute_query($sql, $type, $offset, $limit, $format, $id)
+($results, $total, $error) = execute_query($sql, $offset, $limit)
 
 =back
 
@@ -355,133 +357,77 @@ sub get_criteria {
 
 =cut
 
-# FIXME: This needs to be generalized to reports in general
-# FIXME: This should NOT have ANY formatting responsibilities.  
-# Instead, is should just be returning a prepared sth.
-# FIXME: $type is a TOTALLY UNUSED "required" argument?
+# returns $sql, $offset, $limit
+# $sql returned will be transformed to:
+#  ~ remove any LIMIT clause
+#  ~ repace SELECT clause w/ SELECT count(*)
 
-sub execute_query ($$$$;$$) {
-    my ( $sql, $type, $offset, $limit, $format, $id ) = @_;
-    $format or $format = '';
-    $debug and print STDERR "execute_query($sql, $type, $offset, $limit, $format, $id)\n";
-    my @params;
-    my $total = 0;
-    my ($useroffset, $userlimit);
-    my @errors = ();
-    my $error = {};
-    my $sqlerr = 0;
+sub select_2_select_count_value ($) {
+    my $sql = shift or return;
+    my $countsql = select_2_select_count($sql);
+    $debug and warn "original query: $sql\ncount query: $countsql\n";
+    my $sth1 = C4::Context->dbh->prepare($countsql);
+    $sth1->execute();
+    my $total = $sth1->fetchrow();
+    $debug and warn "total records for this query: $total\n";
+    return $total;
+}
+sub select_2_select_count ($) {
+    # Modify the query passed in to create a count query... (I think this covers all cases -crn)
+    my ($sql) = strip_limit(shift) or return;
+    $sql =~ s/\bSELECT\W+(?:\w+\W+){1,}?FROM\b|\bSELECT\W\*\WFROM\b/SELECT count(*) FROM /ig;
+    return $sql;
+}
+sub strip_limit ($) {
+    my $sql = shift or return;
+    ($sql =~ /\bLIMIT\b/i) or return ($sql, 0, undef);
+    $sql =~ s/\bLIMIT\b\s*\d+(\,\s*\d+)?\s*/ /ig;
+    return ($sql, (defined $1 ? $1 : 0), $2);   # offset can default to 0, LIMIT cannot!
+}
+
+sub execute_query ($;$$$) {
+
+    my ( $sql, $offset, $limit, $no_count ) = @_;
+
+    # check parameters
+    unless ($sql) {
+        carp "execute_query() called without SQL argument";
+        return;
+    }
+    $offset = 0    unless $offset;
+    $limit  = 9999 unless $limit;
+    $debug and print STDERR "execute_query($sql, $offset, $limit)\n";
     if ($sql =~ /;?\W?(UPDATE|DELETE|DROP|INSERT|SHOW|CREATE)\W/i) {
-        $sqlerr = 1;
-        $error->{'sqlerr'} = $1;
-        push @errors, $error;
-    } elsif ($sql !~ /^(SELECT)/i) {
-        $sqlerr = 1;
-        $error->{'queryerr'} = 'Missing SELECT';
-        push @errors, $error;
+        return (undef, {  sqlerr => $1} );
+    } elsif ($sql !~ /^\s*SELECT\b\s*/i) {
+        return (undef, { queryerr => 'Missing SELECT'} );
     }
-    if ($sqlerr == 0) {
-        my $dbh = C4::Context->dbh();
-        unless ($format eq 'text' || $format eq 'tab' || $format eq 'csv' || $format eq 'url'){
-            # Grab offset/limit from user supplied LIMIT and drop the LIMIT so we can control pagination
-            if ($sql =~ /LIMIT/i) {
-                $sql =~ s/LIMIT\W?(\d+)?\,?\W+?(\d+)//ig;
-                $debug and warn "User has supplied LIMIT\n";
-                $useroffset = $1;
-                $userlimit = $2;
-                $debug and warn "User supplied offset = $useroffset, limit = $userlimit\n";
-                $offset += $useroffset if $useroffset;
-                # keep track of where we are if there is a user supplied LIMIT
-                if ( $offset + $limit > $userlimit ) {
-                    $limit = $userlimit - $offset;
-                }
-            }
-            my $countsql = $sql;
-            $sql .= " LIMIT ?, ?";
-            $debug and warn "Passing query with params offset = $offset, limit = $limit\n";
-            @params = ($offset, $limit);
-            # Modify the query passed in to create a count query... (I think this covers all cases -crn)
-            $countsql =~ s/\bSELECT\W+(?:\w+\W+){1,}?FROM\b|\bSELECT\W\*\WFROM\b/SELECT count(*) FROM /ig;
-            $debug and warn "original query: $sql\n";
-            $debug and warn "count query: $countsql\n";
-            my $sth1 = $dbh->prepare($countsql);
-            $sth1->execute();
-            $total = $sth1->fetchrow();
-            $debug and warn "total records for this query: $total\n";
-            $total = $userlimit if defined($userlimit) and $userlimit < $total;     # we will never exceed a user defined LIMIT and...
-            $userlimit = $total if defined($userlimit) and $userlimit > $total;     # we will never exceed the total number of records available to satisfy the query
+
+    my ($useroffset, $userlimit);
+
+    # Grab offset/limit from user supplied LIMIT and drop the LIMIT so we can control pagination
+    ($sql, $useroffset, $userlimit) = strip_limit($sql);
+    $debug and warn sprintf "User has supplied (OFFSET,) LIMIT = %s, %s",
+        $useroffset,
+        (defined($userlimit ) ? $userlimit  : 'UNDEF');
+    $offset += $useroffset;
+    my $total;
+    if (defined($userlimit)) {
+        if ($offset + $limit > $userlimit ) {
+            $limit = $userlimit - $offset;
         }
-        my $sth = $dbh->prepare($sql);
-        $sth->execute(@params);
-        my $colnames=$sth->{'NAME'};
-        my @results;
-        my $row;
-        my %temphash;
-        $row = join ('</th><th>',@$colnames);
-        $row = "<tr><th>$row</th></tr>";
-        $temphash{'row'} = $row;
-        push @results, \%temphash;
-        my $string;
-        if ($format eq 'tab') {
-            $string = join("\t",@$colnames);
-        }
-        elsif ($format eq 'csv') {
-            $string = join(",",@$colnames);
-        }
-        my @xmlarray;
-        while ( my @data = $sth->fetchrow_array() ) {
-            # if the field is a date field, it needs formatting
-            foreach my $data (@data) {
-                unless (defined $data) {
-                    $data = ''; # suppress undef, so fields are joinable
-                    next;
-                }
-                next unless $data =~ C4::Dates->regexp("iso");
-                $data = C4::Dates->new($data, "iso")->output();
-            }
-            # tabular
-            my %temphash;   # FIXME: already declared %temphash in same scope.
-            my $row = join( '</td><td>', @data );
-            $row = "<tr><td>$row</td></tr>";
-            $temphash{'row'} = $row;
-            if ($format eq 'text') {
-                $string .= "\n" . $row;
-            }
-            elsif ($format eq 'tab'){
-                $row = join("\t",@data);
-                $string .="\n" . $row;
-            }
-            elsif ($format eq 'csv'){
-                $row = join(",",@data);
-                $string .="\n" . $row;
-            }
-            elsif ($format eq 'url'){
-                my $temphash;   # FIXME: already declared %temphash in same scope.  TWICE!!
-                @$temphash{@$colnames}=@data;
-                push @xmlarray,$temphash;
-            }
-            push @results, \%temphash;
-        }
-        if (defined($sth->errstr)) {
-            $error->{'queryerr'} = $sth->errstr;
-            push @errors, $error;
-            warn "Database returned: $sth->errstr";
-        }
-        if ( $format eq 'text' || $format eq 'tab' || $format eq 'csv' ) {
-            return $string, $total, \@errors;
-        }
-        elsif ($format eq 'url') {
-            my $url = "/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&id=$id";
-            my $dump = new XML::Dumper;
-            my $xml = $dump->pl2xml( \@xmlarray );
-            store_results($id,$xml);
-            return $url, $total, \@errors;
-        }
-        else {
-            return \@results, $total, \@errors;
-        }
-    } else {
-        return undef, undef, \@errors;
+        $total = $userlimit if $userlimit < $total;     # we will never exceed a user defined LIMIT and...
+        $userlimit = $total if $userlimit > $total;     # we will never exceed the total number of records available to satisfy the query
     }
+    $sql .= " LIMIT ?, ?";
+
+    my $sth = C4::Context->dbh->prepare($sql);
+    $sth->execute($offset, $limit);
+    return ( $sth );
+    # my @xmlarray = ... ;
+    # my $url = "/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&id=$id";
+    # my $xml = XML::Dumper->new()->pl2xml( \@xmlarray );
+    # store_results($id,$xml);
 }
 
 =item save_report($sql,$name,$type,$notes)
@@ -498,8 +444,6 @@ sub save_report {
 "INSERT INTO saved_sql (borrowernumber,date_created,last_modified,savedsql,report_name,type,notes)  VALUES (?,now(),now(),?,?,?,?)";
     my $sth = $dbh->prepare($query);
     $sth->execute( 0, $sql, $name, $type, $notes );
-    $sth->finish();
-
 }
 
 sub store_results {
@@ -512,15 +456,12 @@ sub store_results {
 		my $query2 = "UPDATE saved_reports SET report=?,date_run=now() WHERE report_id=?";
 		my $sth2 = $dbh->prepare($query2);
 	    $sth2->execute($xml,$id);
-		$sth2->finish();
 	}
 	else {
 		my $query2 = "INSERT INTO saved_reports (report_id,report,date_run) VALUES (?,?,now())";
 		my $sth2 = $dbh->prepare($query2);
 		$sth2->execute($id,$xml);
-		$sth2->finish();
 	}
-	$sth->finish();
 }
 
 sub format_results {
@@ -545,7 +486,6 @@ sub format_results {
 	$sth = $dbh->prepare($query);
 	$sth->execute($id);
 	$data = $sth->fetchrow_hashref();
-    $sth->finish();
 	return ($perl,$data->{'report_name'},$data->{'notes'});	
 }	
 
@@ -555,7 +495,6 @@ sub delete_report {
 	my $query = "DELETE FROM saved_sql WHERE id = ?";
 	my $sth = $dbh->prepare($query);
 	$sth->execute($id);
-	$sth->finish();
 }	
 
 sub get_saved_reports {
@@ -565,12 +504,7 @@ sub get_saved_reports {
     ORDER by date_created";
     my $sth   = $dbh->prepare($query);
     $sth->execute();
-    my @reports;
-    while ( my $data = $sth->fetchrow_hashref() ) {
-        push @reports, $data;
-    }
-    $sth->finish();
-    return ( \@reports );
+    return $sth->fetchall_arrayref({});
 }
 
 sub get_saved_report {
@@ -580,7 +514,6 @@ sub get_saved_report {
     my $sth   = $dbh->prepare($query);
     $sth->execute($id);
     my $data = $sth->fetchrow_hashref();
-    $sth->finish();
     return ( $data->{'savedsql'}, $data->{'type'}, $data->{'report_name'}, $data->{'notes'} );
 }
 
@@ -635,7 +568,6 @@ sub get_column_type {
 			return $info->{'TYPE_NAME'};		
 		}
 	}
-	$sth->finish();
 }
 
 =item get_distinct_values($column)
@@ -653,12 +585,7 @@ sub get_distinct_values {
 	  "SELECT distinct($column) as availablevalues FROM $table";
 	my $sth = $dbh->prepare($query);
 	$sth->execute();
-	my @values;
-	while ( my $row = $sth->fetchrow_hashref() ) {
-		push @values, $row;
-	}
-	$sth->finish();
-	return \@values;
+    return $sth->fetchall_arrayref({});
 }	
 
 sub save_dictionary {
@@ -668,7 +595,6 @@ sub save_dictionary {
   VALUES (?,?,?,?,now(),now())";
     my $sth = $dbh->prepare($query);
     $sth->execute($name,$description,$sql,$area) || return 0;
-    $sth->finish();
     return 1;
 }
 
@@ -699,27 +625,24 @@ sub get_from_dictionary {
 		push @loop,$data;
 		
 	}
-	$sth->finish();
 	return (\@loop);
 }
 
 sub delete_definition {
-	my ($id) = @_;
+	my ($id) = @_ or return;
 	my $dbh = C4::Context->dbh();
 	my $query = "DELETE FROM reports_dictionary WHERE id = ?";
 	my $sth = $dbh->prepare($query);
 	$sth->execute($id);
-	$sth->finish();
 }
 
 sub get_sql {
-	my ($id) = @_;
+	my ($id) = @_ or return;
 	my $dbh = C4::Context->dbh();
 	my $query = "SELECT * FROM saved_sql WHERE id = ?";
 	my $sth = $dbh->prepare($query);
 	$sth->execute($id);
 	my $data=$sth->fetchrow_hashref();
-	$sth->finish();	
 	return $data->{'savedsql'};
 }
 
