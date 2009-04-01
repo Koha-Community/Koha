@@ -33,7 +33,7 @@ my $query =
     quantity-quantityreceived as tleft,
     aqorders.ordernumber
     as ordnum,entrydate,budgetdate,booksellerid,aqbasket.basketno
-    from aqorders,aqorderbreakdown,aqbasket 
+    from aqorderbreakdown,aqbasket,aqorders
     left join biblioitems on  biblioitems.biblioitemnumber=aqorders.biblioitemnumber 
     where bookfundid=? and
     aqorders.ordernumber=aqorderbreakdown.ordernumber and
