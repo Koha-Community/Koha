@@ -35,8 +35,26 @@ BEGIN {
     @EXPORT = qw(
         &get_amazon_details
         &check_search_inside
+        &get_amazon_tld
     );
 }
+
+
+sub get_amazon_tld {
+    my %tld = (
+        CA => '.ca',
+        DE => '.de',
+        FR => '.fr',
+        JP => '.jp',
+        UK => '.co.uk',
+        US => '.com',
+    );
+
+    my $locale = C4::Context->preference('AmazonLocale');
+    my $tld = $tld{ $locale } || '.com'; # default top level domain is .com
+    return $tld;
+}
+
 
 =head1 NAME
 
@@ -100,17 +118,7 @@ sub get_amazon_details {
     # Determine which content to grab in the request
 
     # Determine correct locale
-    my $locale_hashref = {
-        CA => '.ca',
-        DE => '.de',
-        FR => '.fr',
-        JP => '.jp',
-        UK => '.co.uk',
-        US => '.com',
-    };
-
-    my $amazon_locale_syspref = C4::Context->preference('AmazonLocale');
-    my $tld = $locale_hashref->{$amazon_locale_syspref} || '.com'; # default top level domain is .com
+    my $tld = get_amazon_tld();
 
     # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
     my $aws_access_key_id = C4::Context->preference('AWSAccessKeyID');

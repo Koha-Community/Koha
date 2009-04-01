@@ -260,6 +260,9 @@ if (C4::Context->preference("OPACFRBRizeEditions")==1) {
     if ($@) { warn "XISBN Failed $@"; }
 }
 # Amazon.com Stuff
+if ( C4::Context->preference("OPACAmazonEnabled") ) {
+    $template->param( AmazonTld => get_amazon_tld() );
+}
 if ( C4::Context->preference("OPACAmazonEnabled") && C4::Context->preference("OPACAmazonSimilarItems") ) {
     my $similar_products_exist;
     my $amazon_details = &get_amazon_details( $isbn, $record, $marcflavour );
