@@ -224,7 +224,7 @@ $.tablesorter.addParser({
                     <!-- TMPL_UNLESS name="patron_flagged" -->
                     <td><!-- TMPL_IF NAME="status" --><a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Renew</a> <span class="renewals">(<!-- TMPL_VAR NAME="renewsleft" --> of <!-- TMPL_VAR NAME="renewsallowed" --> renewals remaining)</span>
                         <!-- TMPL_ELSE -->
-                            Not renewable
+                        Not renewable<!-- TMPL_IF NAME="too_many" --> <span class="renewals">(<!-- TMPL_VAR NAME="renewsleft" --> of <!-- TMPL_VAR NAME="renewsallowed" --> renewals remaining)</span><!-- TMPL_ELSE --><!-- TMPL_IF NAME="on_reserve" --> <span class="renewals">(On hold)</span><!-- /TMPL_IF --><!-- /TMPL_IF --> 
                         <!-- /TMPL_IF --></td>
                     <!-- /TMPL_UNLESS -->
                 <!-- /TMPL_IF -->
