@@ -39,6 +39,45 @@ function holdBiblioNums(numList) {
 }
 
 
+function tagSelected() {
+    var checkedBoxes = $(".searchresults :checkbox:checked");
+    if ($(checkedBoxes).size() == 0) {
+        alert(MSG_NO_RECORD_SELECTED);
+    } else {
+        $("#tagsel_tag").hide();
+        $("#sort_by").hide();
+        $("#tagsel_form").show();
+    }
+}
+
+function tagCanceled() {
+    $("#tagsel_form").hide();
+    $("#tagsel_tag").show();
+    $("#sort_by").show();
+}
+
+function tagAdded() {
+    var checkedBoxes = $(".searchresults :checkbox:checked");
+    if ($(checkedBoxes).size() == 0) {
+        alert(MSG_NO_RECORD_SELECTED);
+        return false;
+    }
+
+    var tag = $("#tagsel_new").val();
+    if (!tag || (tag == "")) {
+        return false;
+    }
+
+    var bibs = [];
+    for (var i = 0; i < $(checkedBoxes).size(); i++) {
+        var box = $(checkedBoxes).get(i);
+        bibs[i] = $(box).val();
+    }
+
+    KOHA.Tags.add_multitags_button(bibs, tag);
+    return false;
+}
+
 $(document).ready(function(){
 	var param1 = "<label for=\"addto\">Add to: <\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>";
 	<!-- TMPL_IF name="opacbookbag" -->	param1 += "<option value=\"addtocart\">Cart<\/option>";
@@ -65,6 +104,9 @@ $(document).ready(function(){
 		cartList();
 		return false;
 	});
+
+    $("#tagsel_span").html("<input id=\"tagsel_tag\" class=\"submit\" type=\"submit\" value=\"Tag\"/>");
+    
 	function cartList(){
 			if($("#addto").find("option:selected").attr("value") == "addtolist"){
 			var shelfnumber = $("#addto").find("option:selected").attr("id").replace("s","");
@@ -97,7 +139,31 @@ $(document).ready(function(){
 		return false;
 	});
     $("#holdDetails").hide();
-	<!-- TMPL_IF NAME="TagsEnabled" -->$(".tagbutton").click(KOHA.Tags.add_tag_button);<!-- /TMPL_IF -->
+
+	<!-- TMPL_IF NAME="TagsEnabled" -->
+        $(".tagbutton").click(KOHA.Tags.add_tag_button);
+	    <!-- TMPL_IF NAME="TagsInputOnList" -->
+	    <!-- TMPL_IF NAME="loggedinusername" -->
+            $("#tagsel_tag").click(function(){
+                tagSelected();
+                return false;
+            });
+            $("#tagsel_cancel").click(function(){
+                tagCanceled();
+                return false;
+            });
+            $("#tagsel_button").click(function(){
+                tagAdded();
+                return false;
+            });
+        <!-- TMPL_ELSE -->
+            $("#tagsel_tag").click(function(){
+                window.location = "/cgi-bin/koha/opac-user.pl";
+                return false;
+            });
+        <!-- /TMPL_IF -->
+        <!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="GoogleJackets" -->KOHA.Google.GetCoverFromIsbn();<!-- /TMPL_IF -->
 });
 //]]>
@@ -214,6 +280,23 @@ $(document).ready(function(){
             <!-- /TMPL_IF -->
 		    <span id="placehold"><!-- input class="submit" type="submit" value="Place Hold"/ --></span>
             <div id="holdDetails"></div>
+
+			<!-- TMPL_IF NAME="TagsEnabled" -->
+            <!-- TMPL_IF NAME="TagsInputOnList" -->
+                <span id="tagsel_span"></span>
+              <!-- TMPL_IF NAME="loggedinusername" -->
+                <span id="tagsel_form" style="display:none">
+                  <label for="tagsel_new">New Tag:</label>
+                  <input name="tagsel_new" id="tagsel_new" maxlength="100" />
+                  <input id="tagsel_button" name="tagsel_button" class="input tagsel_button" title="tagsel_button" type="submit" value="Add" />
+                  <a href="#" id="tagsel_cancel">Cancel</a>
+                </span>
+                <span id="tagsel_status" class="tagsel_tatus" style="display:none;">
+                  Tag status here.
+                </span>
+              <!-- /TMPL_IF -->
+            <!-- /TMPL_IF -->
+            <!-- /TMPL_IF -->
         </div>
 
         </td></tr>

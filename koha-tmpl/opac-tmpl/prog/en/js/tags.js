@@ -63,6 +63,10 @@ KOHA.Tags = {
 		$(tagid).html(newstatus);
 		$(tagid).css({display:"inline"});
 	},
+	append_tag_status : function(tagid, newstatus) {
+		$(tagid).append(newstatus);
+		$(tagid).css({display:"inline"});
+	},
 
 	tag_message: {
 	tagsdisabled : function(arg) {return (_("Sorry, tags are not enabled on this system."));},
@@ -70,7 +74,85 @@ KOHA.Tags = {
 	badparam : function(arg) {return (_("Error! Illegal parameter '" +arg+ "'."));},
 	scrubbed : function(arg) {return (_("Note: your tag contained markup code that was removed. The tag was added as '" +arg+ "'."));},
     failed_add_tag : function(arg) {return (_("Error! The add_tag operation failed on '" +arg+ "'.  Note: you can only tag an item with a given term once.  Check 'My Tags' to see your current tags."));},
-    failed_delete  : function(arg) {return (_("Error! You cannot delete the tag '" +arg+ "'.  Note: you can only delete your own tags."));}
-	}
+    failed_delete  : function(arg) {return (_("Error! You cannot delete the tag '" +arg+ "'.  Note: you can only delete your own tags."));},
+	login : function(arg) {return (_("You must be logged in to add tags."));},
+	},
+
+    // Used to tag multiple items at once.  The main difference
+    // is that status is displayed on a per item basis.
+    add_multitags_button : function(bibarray, tag){
+		var mydata = {CGISESSID: readCookie('CGISESSID')};	// Someday this should be OPACSESSID
+        for (var i = 0; i < bibarray.length; i++) {
+            var mynewtag = "newtag" + bibarray[i];
+            mydata[mynewtag] = tag;
+        }
+		var response;	// AJAX from server will assign value to response.
+		$.post(
+			"/cgi-bin/koha/opac-tags.pl",
+			mydata,
+			function(data){
+				eval(data);
+                $(".tagstatus").empty();
+                var bibErrors = false;
+
+                // Display the status for each tagged bib
+                for (var i = 0; i < bibarray.length; i++) {
+                    var bib = bibarray[i];
+                    var mytagid = "#newtag" + bib;
+                    var status = "";
+
+                    // Number of tags added.
+                    if (response[bib]) {
+                        var added = response[bib]["added"];
+                        if (added > 0) {
+                            status = "Added " + added + (added == 1 ? " tag" : " tags") + ".  ";
+    				        KOHA.Tags.set_tag_status(mytagid + "_status", status);
+                        }
+
+                        // Show a link that opens an error dialog, if necessary.
+                        var errors = response[bib]["errors"];
+                        if (errors.length > 0) {
+                            bibErrors = true;    
+                            var errid = "tagerr_" + bib;
+                            var errstat = "<a id=\"" + errid + "\" class=\"tagerror\" href=\"#\">";
+                            errstat += "Error" + (errors.length > 1 ? "s" : "") + " adding tag.";
+                            errstat += "</a>";
+        				    KOHA.Tags.append_tag_status(mytagid + "_status", errstat);
+                            var errmsg = "";
+                            for (var e = 0; e < errors.length; e++){
+                                if (e) {
+                                    errmsg += "\n\n";
+                                }
+                                errmsg += errors[e];
+                            }
+                            $("#" + errid).click(function(){
+                                alert(errmsg);
+                            });
+                        }
+                    }
+                }
+
+                if (bibErrors || response["global_errors"]) {
+                    var msg = "";
+                    if (bibErrors) {
+                        msg = "Unable to add one or more tags.";
+                    }
+
+                    // Show global errors in a dialog.
+                    if (response["global_errors"]) {
+                        var global_errors = response["global_errors"];
+                        var msg;
+                        for (var e = 0; e < global_errors.length; e++) {
+                            msg += "\n\n";
+                            msg += response.alerts[global_errors[e]];
+                        }
+                    }
+                    alert(msg);
+                }
+			},
+			'script'
+		);
+		return false;
+    }
 };
 

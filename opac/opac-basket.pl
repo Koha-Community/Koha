@@ -48,6 +48,12 @@ my @results;
 
 my $num = 1;
 my $marcflavour = C4::Context->preference('marcflavour');
+if (C4::Context->preference('TagsEnabled')) {
+	$template->param(TagsEnabled => 1);
+	foreach (qw(TagsShowOnList TagsInputOnList)) {
+		C4::Context->preference($_) and $template->param($_ => 1);
+	}
+}
 
 
 foreach my $biblionumber ( @bibs ) {

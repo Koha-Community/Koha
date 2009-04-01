@@ -44,6 +44,10 @@ my %newtags = ();
 my @deltags = ();
 my %counts  = ();
 my @errors  = ();
+my $perBibResults = {};
+
+# Indexes of @errors that do not apply to a particular biblionumber.
+my @globalErrorIndexes = ();
 
 sub ajax_auth_cgi ($) {     # returns CGI object
     my $needed_flags = shift;
@@ -75,6 +79,7 @@ my $openadds = C4::Context->preference('TagsModeration') ? 0 : 1;
 my $query = ($is_ajax) ? &ajax_auth_cgi({}) : CGI->new();
 unless (C4::Context->preference('TagsEnabled')) {
 	push @errors, {+ tagsdisabled=>1 };
+    push @globalErrorIndexes, $#errors;
 } else {
 	foreach ($query->param) {
 		if (/^newtag(.*)/) {
@@ -82,6 +87,7 @@ unless (C4::Context->preference('TagsEnabled')) {
 			unless ($biblionumber =~ /^\d+$/) {
 				$debug and warn "$_ references non numerical biblionumber '$biblionumber'";
 				push @errors, {+'badparam' => $_ };
+                push @globalErrorIndexes, $#errors;
 				next;
 			}
 			$newtags{$biblionumber} = $query->param($_);
@@ -109,6 +115,7 @@ if ($is_ajax) {
 if ($add_op) {
 	unless ($loggedinuser) {
 		push @errors, {+'login' => 1 };
+        push @globalErrorIndexes, $#errors;
 		%newtags=();	# zero out any attempted additions
 		@deltags=();	# zero out any attempted deletions
 	}
@@ -119,6 +126,7 @@ my @newtags_keys = (keys %newtags);
 if (scalar @newtags_keys) {
 	$scrubber = C4::Scrubber->new();
 	foreach my $biblionumber (@newtags_keys) {
+        my $bibResults = {adds=>0, errors=>[]};
 		my @values = split /[;,]/, $newtags{$biblionumber};
 		foreach (@values) {
 			s/^\s*(.+)\s*$/$1/;
@@ -126,8 +134,10 @@ if (scalar @newtags_keys) {
 			unless ($clean_tag eq $_) {
 				if ($clean_tag =~ /\S/) {
 					push @errors, {scrubbed=>$clean_tag};
+					push @{$bibResults->{errors}}, {scrubbed=>$clean_tag};
 				} else {
 					push @errors, {scrubbed_all_bad=>1};
+					push @{$bibResults->{errors}}, {scrubbed_all_bad=>1};
 					next;	# we don't add it if there's nothing left!
 				}
 			}
@@ -136,11 +146,14 @@ if (scalar @newtags_keys) {
 				add_tag($biblionumber,$clean_tag,$loggedinuser)   ;
 			if ($result) {
 				$counts{$biblionumber}++;
+                $bibResults->{adds}++;
 			} else {
 				push @errors, {failed_add_tag=>$clean_tag};
+				push @{$bibResults->{errors}}, {failed_add_tag=>$clean_tag};
 				$debug and warn "add_tag($biblionumber,$clean_tag,$loggedinuser...) returned bad result (" . (defined $result ? $result : 'UNDEF') .")";
 			}
 		}
+        $perBibResults->{$biblionumber} = $bibResults;
 	}
 }
 my $dels = 0;
@@ -156,6 +169,19 @@ if ($is_ajax) {
 	my $sum = 0;
 	foreach (values %counts) {$sum += $_;}
 	my $js_reply = sprintf("response = {\n\tadded: %d,\n\tdeleted: %d,\n\terrors: %d",$sum,$dels,scalar @errors);
+
+    # If no add attempts were made, flag global errors.
+    if (@globalErrorIndexes) {
+        $js_reply .= ",\n\tglobal_errors: [";
+        my $first = 1;
+        foreach (@globalErrorIndexes) {
+            $js_reply .= "," unless $first;
+            $first = 0;
+            $js_reply .= "\n\t\t$_";
+        }
+        $js_reply .= "\n\t]";
+    }
+    
 	my $err_string = '';
 	if (scalar @errors) {
 		$err_string = ",\n\talerts: [";	# open response_function
@@ -168,7 +194,25 @@ if ($is_ajax) {
 		}
 		$err_string .= "\n\t]\n";	# close response_function
 	}
-	output_ajax_with_http_headers($query, "$js_reply\n$err_string};");
+
+    # Add per-biblionumber results for use on results page
+    my $js_perbib = "";
+    for my $bib (keys %$perBibResults) {
+        my $bibResult = $perBibResults->{$bib};
+        my $js_bibres = ",\n\t$bib: {\n\t\tadded: $bibResult->{adds}";
+        $js_bibres .= ",\n\t\terrors: [";
+        my $i = 0;
+        foreach (@{$bibResult->{errors}}) {
+            $js_bibres .= "," if ($i);
+			my $key = (keys %$_)[0];
+			$js_bibres .= "\n\t\t\t KOHA.Tags.tag_message.$key(\"" . $_->{$key} . '")';
+            $i++;
+        }
+        $js_bibres .= "\n\t\t]\n\t}";
+        $js_perbib .= $js_bibres;
+    }
+
+	output_ajax_with_http_headers($query, "$js_reply\n$err_string\n$js_perbib\n};");
 	exit;
 }
 
