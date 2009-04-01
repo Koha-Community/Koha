@@ -234,6 +234,11 @@ $tabsysprefs{BakerTaylorEnabled}      = 'EnhancedContent';
 $tabsysprefs{BakerTaylorPassword}     = 'EnhancedContent';
 $tabsysprefs{BakerTaylorUsername}     = 'EnhancedContent';
 
+# Library Thing for Libraries
+$tabsysprefs{LibraryThingforLibrariesId} = "EnhancedContent"; 
+$tabsysprefs{LibraryThingforLibrariesEnabled} = "EnhancedContent"; 
+$tabsysprefs{LibraryThingForLibrariesTabbedView} = "EnhancedContent";
+
 # Syndetics
 $tabsysprefs{SyndeticsClientCode}     = 'EnhancedContent';
 $tabsysprefs{SyndeticsEnabled}        = 'EnhancedContent';

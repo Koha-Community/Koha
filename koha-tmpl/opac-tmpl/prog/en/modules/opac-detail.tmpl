@@ -113,8 +113,8 @@
     <!-- TMPL_IF NAME="pages" --><span class="results_summary"><span class="label">Physical details:</span> <!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></span><!-- /TMPL_IF -->
     <!-- COinS / OpenURL -->
     <!-- TMPL_IF NAME="ocoins_format" -->
-    <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3A<!-- TMPL_VAR NAME="ocoins_format" -->&amp;rft.au=<!-- TMPL_VAR NAME="author" -->&amp;rft.btitle=<!-- TMPL_VAR NAME="title" -->&amp;rft.date=<!-- TMPL_VAR NAME="publicationyear" -->&amp;rft.pages=<!-- TMPL_VAR NAME="pages" -->&amp;rft.isbn=<!-- TMPL_VAR NAME=normalized_isbn -->&amp;rft.aucorp=&amp;rft.place=<!-- TMPL_VAR NAME="place" -->&amp;rft.pub=<!-- TMPL_VAR NAME="publishercode" -->&amp;rft.edition=<!-- TMPL_VAR NAME="edition" -->&amp;rft.series=<!-- TMPL_VAR NAME="series" -->&amp;rft.genre="></span><!-- /TMPL_IF -->
-    <!-- TMPL_IF name="normalized_isbn" -->
+    <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3A<!-- TMPL_VAR NAME="ocoins_format" -->&amp;rft.au=<!-- TMPL_VAR NAME="author" -->&amp;rft.btitle=<!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle"-->&amp;rft.date=<!-- TMPL_VAR NAME="publicationyear" -->&amp;rft.pages=<!--TMPL_VAR NAME="pages" -->&amp;rft.isbn=<!-- TMPL_VAR NAME=amazonisbn-->&amp;rft.aucorp=&amp;rft.place=<!-- TMPL_VAR NAME="place"-->&amp;rft.pub=<!-- TMPL_VAR NAME="publishercode" -->&amp;rft.edition=<!--TMPL_VAR NAME="edition" -->&amp;rft.series=<!-- TMPL_VAR NAME="series"-->&amp;rft.genre="></span><!-- /TMPL_IF --> 
+    <!-- TMPL_IF name="isbn" -->
     <!-- unAPI <abbr/> tag -->
     <span class="results_summary"><span class="label">ISBN: </span><abbr class="unapi-id" title="koha:isbn:<!-- TMPL_VAR NAME="normalized_isbn" -->"><!-- TMPL_VAR NAME="normalized_isbn" --></abbr></span><!-- /TMPL_IF -->
     <!-- TMPL_IF name="issn" -->
@@ -185,14 +185,27 @@
         <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
 
+
+<!-- TMPL_IF NAME="LibraryThingForLibrariesID"> 
+<!--TMPL_IF NAME = "LibraryThingForLibrariesTabbedView" -->
+<!--TMPL_ELSE -->
+<span class="results_summary"><div id="ltfl_related" class="ltfl"></div></span> 
+<span class="results_summary"><div id="ltfl_similars"class="ltfl"></div></span> 
+<span class="results_summary"><div id="ltfl_tagbrowse"class="ltfl"></div></span> 
+<!--/TMPL_IF-->
+<span class="results_summary"><span class="label">Reviews from LibraryThing.com:</span>	<div class="ltfl_reviews"></div>
+</span>
+<!-- /TMPL_IF --> 
+
+
     <!-- TMPL_IF NAME="TagsShowOnDetail" -->
         <div class="results_summary">
         <!-- TMPL_IF NAME="TagLoop" -->
-        <span class="label">Tags:</span>
+        <span class="label">Tags from this library:</span>
             <ul><!-- TMPL_LOOP NAME="TagLoop" -->
             <li><a href="/cgi-bin/koha/opac-search.pl?tag=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->&amp;q=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="term" ESCAPE="HTML" --></a> <span class="weight">(<!-- TMPL_VAR NAME="weight_total" -->)</span></li>
             <!-- /TMPL_LOOP -->
-            </ul><!-- TMPL_ELSE -->No tags for this title. 
+            </ul><!-- TMPL_ELSE --><span class="label">Tags from this library:</span><div>No tags from this library for this title.</div> 
         <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="TagsInputOnDetail" -->
             <!-- TMPL_IF NAME="loggedinusername" -->
@@ -247,10 +260,17 @@
 <!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="SyndeticsReviews" --><!-- TMPL_IF NAME="SYNDETICS_REVIEWS" -->
  <li> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#reviews">Reviews</a></li>
+<li> <script src="http://www.librarything.com/forlibraries/widget.js?id=99-274208589" type="text/javascript"></script><noscript>This page contains enriched content visible when JavaScript is enabled or by clicking <a href="http://www.librarything.com/forlibraries/noscript.php?id=99-274208589&amp;accessibility=1">here</a>.</noscript></li>
 <!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="SyndeticsAuthorNotes" --><!-- TMPL_IF NAME="SYNDETICS_ANOTES" -->
  <li> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#anotes">About the Author</a></li>
 <!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="LibraryThingForLibrariesID" --> 
+<!-- TMPL_IF NAME="LibraryThingForLibrariesTabbedView" -->
+<li> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#LFTLSimilarItems">Similar Items</a></li>
+<li> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#LTFLTagBrowse">Tag Browser</a></li>
+<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="subscriptionsnumber" --><li>
             <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#subscriptions">Subscriptions</a>
@@ -260,7 +280,6 @@
     <!-- TMPL_IF NAME="OPACFRBRizeEditions" --><!-- TMPL_IF NAME="XISBNS" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#editions">Editions</a></li><!-- /TMPL_IF --><!-- /TMPL_IF -->
     
     <!-- TMPL_IF NAME="OPACAmazonEnabled" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#amazonreviews">Amazon Reviews</a></li><!-- /TMPL_IF -->
-
     <!-- TMPL_IF NAME="Babeltheque" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#babeltheque">Babelthèque</a></li><!-- /TMPL_IF -->
 
 </ul>
@@ -525,6 +544,30 @@
     </div>
     <!-- /TMPL_IF -->
 
+<!-- TMPL_IF NAME="LibraryThingForLibrariesID"--> 
+<!-- TMPL_IF NAME="LibraryThingForLibrariesTabbedView"-->
+	<!-- ltfl content --> 
+		<div id="LFTLSimilarItems">
+			<div class="content_set">
+	<!--		<span class="results_summary">-->
+				<div id="ltfl_related"></div>
+				<div id="ltfl_similars"></div>
+	<!--			</span>-->
+			</div>
+		</div>
+	<!--/TMPL_IF -->
+<!--/TMPL_IF -->
+<!-- TMPL_IF NAME="LibraryThingForLibrariesTabbedView"-->
+	<!-- TMPL_IF NAME="LibraryThingForLibrariesID">
+		<div id="LTFLTagBrowse">
+			<div class="content_set">
+				<span class="results_summary">
+				<div id="ltfl_tagbrowse" class="ltfl"></div>
+				</span>
+			</div>
+		</div>
+	<!--/TMPL_IF -->
+<!--/TMPL_IF -->
 
 <!-- TMPL_IF NAME="reviewson" -->
 <div id="comments">
@@ -621,7 +664,7 @@
         <!-- /TMPL_LOOP -->
         <!-- TMPL_ELSE -->
 
-    <p> Sorry, there are no reviews available for this title. <!-- TMPL_IF NAME="normalized_isbn" --><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&amp;asin=<!-- TMPL_VAR NAME="normalized_isbn" -->&amp;store=books" target="_blank">Add your own review</a><!-- TMPL_ELSE --><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&amp;asin=<!-- TMPL_VAR NAME="normalized_isbn" -->&amp;store=books">Add your own review</a><!-- /TMPL_IF --><!-- /TMPL_IF --></p>
+    <p> Sorry, there are no reviews from this library available for this title. <!-- TMPL_IF NAME="normalized_isbn" --><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&amp;asin=<!-- TMPL_VAR NAME="normalized_isbn" -->&amp;store=books" target="_blank">Add your own review</a><!-- TMPL_ELSE --><a href="http://www.amazon.com/gp/customer-reviews/write-a-review.html/002-2970817-7876066?%5Fencoding=UTF8&amp;asin=<!-- TMPL_VAR NAME="normalized_isbn" -->&amp;store=books">Add your own review</a><!-- /TMPL_IF --><!-- /TMPL_IF --></p>
 
         <!-- /TMPL_IF -->
 </div>
@@ -710,4 +753,7 @@
     </div>
 <!-- /TMPL_IF -->
 </div>
+<!-- TMPL_IF NAME="LibraryThingForLibrariesID" --> 
+<script src="http://ltfl.librarything.com/forlibraries/widget.js?systype=koha&id=<!--TMPL_VAR NAME="LibraryThingForLibrariesID" -->"type="text/javascript"></script><noscript>This page contains enriched content visible when JavaScript is enabled or by clicking <a href="http://www.librarything.com/forlibraries/noscript.php?id=326-4221977395&accessibility=1">here</a>.</noscript> 
+<!-- /TMPL_IF --> 
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

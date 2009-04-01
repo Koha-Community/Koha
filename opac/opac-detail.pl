@@ -357,6 +357,17 @@ if ( C4::Context->preference("SyndeticsEnabled")
     };
     warn $@ if $@;
 }
+# LibraryThingForLibraries 
+if( C4::Context->preference('LibraryThingForLibrariesEnabled') ) 
+{ 
+ $template->param(LibraryThingForLibrariesID =>
+C4::Context->preference('LibraryThingForLibrariesID') ); 
+} 
+if( C4::Context->preference('LibraryThingForLibrariesEnabled') )
+{
+ $template->param(LibraryThingForLibrariesTabbedView =>
+C4::Context->preference('LibraryThingForLibrariesTabbedView') );
+}
 
 # Babelthèque
 if ( C4::Context->preference("Babeltheque") ) {
