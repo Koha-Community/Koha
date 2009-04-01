@@ -88,6 +88,7 @@ Getopt::Long
 Getopt::Std
 HTML::Template::Pro
 HTTP::Cookies
+HTTP::OAI
 HTTP::Request::Common
 HTML::Scrubber
 JSON
@@ -132,6 +133,7 @@ XML::Dumper
 XML::LibXML
 XML::LibXSLT
 XML::SAX::ParserFactory
+XML::SAX::Writer
 XML::Simple
 XML::RSS
 YAML::Syck

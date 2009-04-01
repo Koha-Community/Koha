@@ -557,6 +557,7 @@ WriteMakefile(
                             'HTML::Template::Pro'              => 0.69,
                             'HTML::Scrubber'                   => 0.08,
                             'HTTP::Cookies'                    => 1.39,
+                            'HTTP::OAI'                        => 3.20,
                             'HTTP::Request::Common'            => 1.26,
                             'JSON'                             => 2.07, # Needed by admin/item_circulation_alerts.pl
                             'LWP::Simple'                      => 1.41,
@@ -600,6 +601,7 @@ WriteMakefile(
                             'XML::LibXML'                      => 1.59,
                             'XML::LibXSLT'                     => 1.59,
                             'XML::SAX::ParserFactory'          => 1.01,
+                            'XML::SAX::Writer'                 => 0.44,
                             'XML::Simple'                      => 2.14,
                             'XML::RSS'                         => 1.31,
                             'YAML::Syck'                       => 0.71,
