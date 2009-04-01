@@ -300,6 +300,77 @@ if ( C4::Context->preference("OPACAmazonEnabled") && C4::Context->preference("OP
     $template->param( AMAZON_SIMILAR_PRODUCTS => \@similar_products );
     $template->param( AMAZON_EDITORIAL_REVIEWS    => $editorial_reviews );
 }
+
+my $syndetics_elements;
+
+if ( C4::Context->preference("SyndeticsEnabled") ) {
+	eval {
+    $syndetics_elements = &get_syndetics_index($isbn,$upc,$oclc);
+	for my $element (values %$syndetics_elements) {
+		$template->param("Syndetics$element"."Exists" => 1 );
+		#warn "Exists: "."Syndetics$element"."Exists";
+	}
+    };
+    warn $@ if $@;
+}
+
+if ( C4::Context->preference("SyndeticsEnabled")
+        && C4::Context->preference("SyndeticsSummary")
+        && $syndetics_elements->{'SUMMARY'} =~ /SUMMARY/) {
+	eval {
+	my $syndetics_summary = &get_syndetics_summary($isbn,$upc,$oclc);
+	$template->param( SYNDETICS_SUMMARY => $syndetics_summary );
+	};
+	warn $@ if $@;
+
+}
+
+if ( C4::Context->preference("SyndeticsEnabled")
+        && C4::Context->preference("SyndeticsTOC")
+        && $syndetics_elements->{'TOC'} =~ /TOC/) {
+	eval {
+    my $syndetics_toc = &get_syndetics_toc($isbn,$upc,$oclc);
+    $template->param( SYNDETICS_TOC => $syndetics_toc );
+	};
+	warn $@ if $@;
+}
+
+if ( C4::Context->preference("SyndeticsEnabled")
+    && C4::Context->preference("SyndeticsExcerpt")
+    && $syndetics_elements->{'DBCHAPTER'} =~ /DBCHAPTER/ ) {
+    eval {
+    my $syndetics_excerpt = &get_syndetics_excerpt($isbn,$upc,$oclc);
+    $template->param( SYNDETICS_EXCERPT => $syndetics_excerpt );
+    };
+	warn $@ if $@;
+}
+
+if ( C4::Context->preference("SyndeticsEnabled")
+    && C4::Context->preference("SyndeticsReviews")) {
+    eval {
+    my $syndetics_reviews = &get_syndetics_reviews($isbn,$upc,$oclc,$syndetics_elements);
+    $template->param( SYNDETICS_REVIEWS => $syndetics_reviews );
+    };
+	warn $@ if $@;
+}
+
+if ( C4::Context->preference("SyndeticsEnabled")
+    && C4::Context->preference("SyndeticsAuthorNotes")
+	&& $syndetics_elements->{'ANOTES'} =~ /ANOTES/ ) {
+    eval {
+    my $syndetics_anotes = &get_syndetics_anotes($isbn,$upc,$oclc);
+    $template->param( SYNDETICS_ANOTES => $syndetics_anotes );
+    };
+    warn $@ if $@;
+}
+
+# Babelthèque
+if ( C4::Context->preference("Babeltheque") ) {
+    $template->param( 
+        Babeltheque => 1,
+    );
+}
+
 # Shelf Browser Stuff
 if (C4::Context->preference("OPACShelfBrowser")) {
     # pick the first itemnumber unless one was selected by the user
