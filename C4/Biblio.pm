@@ -1021,6 +1021,8 @@ sub GetMarcSubjects {
         for my $subject_subfield (@subfields ) {
             # don't load unimarc subfields 3,4,5
             next if (($marcflavour eq "UNIMARC") and ($subject_subfield->[0] =~ /3|4|5/ ) );
+            # don't load MARC21 subfields 2 (FIXME: any more subfields??)
+            next if (($marcflavour eq "MARC21")  and ($subject_subfield->[0] =~ /2/ ) );
             my $code = $subject_subfield->[0];
             my $value = $subject_subfield->[1];
             my $linkvalue = $value;
