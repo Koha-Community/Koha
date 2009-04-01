@@ -37,7 +37,8 @@
 <script type="text/javascript" src="/intranet-tmpl/prog/en/lib/greybox/AJS.js"></script>
 <script type="text/javascript" src="/intranet-tmpl/prog/en/lib/greybox/AJS_fx.js"></script>
 <script type="text/javascript" src="/intranet-tmpl/prog/en/lib/greybox/gb_scripts.js"></script>
-<link href="/intranet-tmpl/prog/en/lib/greybox/gb_styles.css" rel="stylesheet" type="text/css" /><!-- /TMPL_IF -->
+<link href="/intranet-tmpl/prog/en/lib/greybox/gb_styles.css" rel="stylesheet" type="text/css" />
+<!-- /TMPL_IF -->
 
 </head>
 <body>
@@ -187,14 +188,13 @@
 
 
 <!-- TMPL_IF NAME="LibraryThingForLibrariesID"> 
-<!--TMPL_IF NAME = "LibraryThingForLibrariesTabbedView" -->
-<!--TMPL_ELSE -->
-<span class="results_summary"><div id="ltfl_related" class="ltfl"></div></span> 
-<span class="results_summary"><div id="ltfl_similars"class="ltfl"></div></span> 
-<span class="results_summary"><div id="ltfl_tagbrowse"class="ltfl"></div></span> 
-<!--/TMPL_IF-->
-<span class="results_summary"><span class="label">Reviews from LibraryThing.com:</span>	<div class="ltfl_reviews"></div>
-</span>
+	<!--TMPL_IF NAME = "LibraryThingForLibrariesTabbedView" -->
+	<!--TMPL_ELSE -->
+		<span class="results_summary"><div id="ltfl_related" class="ltfl"></div></span> 
+		<span class="results_summary"><div id="ltfl_similars"class="ltfl"></div></span> 
+		<span class="results_summary"><div id="ltfl_tagbrowse"class="ltfl"></div></span> 
+	<!--/TMPL_IF-->
+	<span class="results_summary"><span class="label">Reviews from LibraryThing.com:</span>	<div class="ltfl_reviews"></div></span>
 <!-- /TMPL_IF --> 
 
 
@@ -557,8 +557,8 @@
 		</div>
 	<!--/TMPL_IF -->
 <!--/TMPL_IF -->
-<!-- TMPL_IF NAME="LibraryThingForLibrariesTabbedView"-->
-	<!-- TMPL_IF NAME="LibraryThingForLibrariesID">
+<!-- TMPL_IF NAME="LibraryThingForLibrariesID"-->
+	<!-- TMPL_IF NAME="LibraryThingForLibrariesTabbedView">
 		<div id="LTFLTagBrowse">
 			<div class="content_set">
 				<span class="results_summary">
