@@ -223,7 +223,11 @@ sub SearchAuthorities {
             if (@$value[$i]){
             ##If mainentry search $a tag
                 if (@$tags[$i] eq "mainmainentry") {
-                $attr =" \@attr 1=Heading-Main ";
+
+# FIXME: 'Heading-Main' index not yet defined in zebra
+#                $attr =" \@attr 1=Heading-Main "; 
+                $attr =" \@attr 1=Heading ";
+
                 }elsif (@$tags[$i] eq "mainentry") {
                 $attr =" \@attr 1=Heading ";
                 }else{
