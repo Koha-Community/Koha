@@ -26,7 +26,7 @@ use List::Util qw/min/;
 use Date::Calc qw/Delta_YMD Easter_Sunday Today Decode_Date_EU/;
 use Date::Manip qw/ ParseDate UnixDate DateCalc/;
 use C4::Dates qw/format_date format_date_in_iso/;
-use Number::Format qw(format_price);      
+use Number::Format qw(format_price);
 use Text::CSV_XS;
 
 use C4::Acquisition;
@@ -62,6 +62,8 @@ my $cur    = GetCurrency;
 
 $template->param( period_button_only => 1 ) if $count == 0;
 
+
+
 # authcats_loop populates the YUI planning button
 my @auth_cats_loop            = GetBudgetAuthCats();
 my $budget_period_id          = $period->{'budget_period_id'};
@@ -70,6 +72,9 @@ my $budget_period_enddate     = $period->{'budget_period_enddate'};
 my $budget_period_locked      = $period->{'budget_period_locked'};
 my $budget_period_description = $period->{'budget_period_description'};
 my $budget_period_dropbox     = GetBudgetPeriodsDropbox($budget_period_id );
+
+    ## ## @auth_cats_loop
+
 
 $template->param(
     budget_period_id          => $budget_period_id,
@@ -94,9 +99,18 @@ my $basename     = $input->param("basename");
 my $mime         = $input->param("MIME");
 my $del          = $input->param("sep");
 
+my $show_mine       = $input->param('show_mine') ;
+
+my @hide_cols      = $input->param('hide_cols');
+####  @hide_cols
+
+
+
+=c
 my $show_mine    = 1; #SHOW BY DEFAULT
 my $show         = $input->param('show'); # SET TO 1, BY A FORM SUMBIT
 $show_mine       = $input->param('show_mine') if $show == 1;
+=cut
 
 my $cur_format = C4::Context->preference("CurrencyFormat");
 my $num;
@@ -118,7 +132,7 @@ if ( $cur_format eq 'FR' ) {
     );
 }
 
-if ( $budget_period_locked == 1  && not defined  $show_actual ) { 
+if ( $budget_period_locked == 1  && not defined  $show_actual ) {
      $show_actual  = 1;
 }
 
@@ -126,6 +140,12 @@ $authcat = 'Asort1' if  not defined $authcat; # defaults to Asort if no authcat 
 
 my $budget_id = $input->param('budget_id');
 my $op        = $input->param("op");
+
+my $budget_branchcode;
+
+
+#my $budgets_ref = GetBudgetHierarchy( $budget_period_id, $budget_branchcode );
+## ##  $budgets_ref
 
 my $budgets_ref = GetBudgetHierarchy( $budget_period_id, $show_mine?$template->{param_map}->{'USER_INFO'}[0]->{'branchcode'}:'', $show_mine?$template->{param_map}->{'USER_INFO'}[0]->{'borrowernumber'}:'' );
 
@@ -168,22 +188,121 @@ my $CGISort;
 my @authvals;
 my %labels;
 
+
+    my @names = $input->param();
+
+# ------------------------------------------------------------
+if ( $op eq 'save' ) {
+
+
+    ### ---------------------  save
+
+    ####  @names
+
+
+    #get budgets
+    my ( @buds, @auth_values );
+    foreach my $n (@names) {
+        next if $n =~ m/^[^0-9]/;
+        my @moo = split( ',', $n );
+        push @buds, $moo[0];
+        push @auth_values, $moo[1];
+    }
+
+    #uniq buds and auth
+    my %seen;
+    @buds        = grep { !$seen{$_}++ } @buds;
+    @auth_values = grep { !$seen{$_}++ } @auth_values;
+    my @budget_ids;
+    my @budget_lines;
+
+    foreach my $budget (@buds) {
+        my %budget_line;
+        my @cells_line;
+        my %cell_hash;
+
+        foreach my $authvalue (@auth_values) {
+            # get actual stats
+            my $cell_name        = "$budget,$authvalue";
+            my $estimated_amount = $input->param("$cell_name");
+            my %cell_hash = (
+                estimated_amount => $estimated_amount,
+                authvalue        => $authvalue,
+                authcat          => $authcat,
+                budget_id        => $budget,
+                budget_period_id => $budget_period_id,
+            );
+            push( @cells_line, \%cell_hash );
+        }
+
+        %budget_line = (
+            lines => \@cells_line,
+        );
+        push( @budget_lines, \%budget_line );
+    }
+    my $plan = \@budget_lines;
+    ModBudgetPlan( $plan, $budget_period_id, $authcat );
+
+#### iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+HideCols($authcat, @hide_cols);
+
+
+}
+
+
+# ------------------------------------------------------------
+
+
 if ( $authcat =~ m/^Asort/ ) {
 
+#### eeeee
     # ----------- copied from C4::Input::buildCGIsort()
-    my $query = qq{SELECT * FROM authorised_values WHERE category=? order by lib};
+   my $query = qq{ SELECT * FROM authorised_values WHERE category=? order by lib };
     my $sth   = $dbh->prepare($query);
-    $sth->execute($authcat);
+#### $query
+#    $sth->{TraceLevel} = 2;
+    $sth->execute($authcat  );
+
+=c
+    my $query = qq{ 
+
+SELECT * FROM authorised_values
+JOIN aqbudgets_planning  ON
+    (aqbudgets_planning.authvalue = authorised_values.authorised_value )
+WHERE (authcat = ?
+AND category = ?
+AND budget_period_id = ?
+AND display = 1 ) 
+ORDER BY lib   };
+
+
+    my $sth   = $dbh->prepare($query);
+#### $query
+    $sth->{TraceLevel} = 2;
+
+    $sth->execute($authcat, $authcat, $budget_period_id  );
+=cut
+
+
+#### qq
 
     if ( $sth->rows > 0 ) {
         for ( my $i = 0 ; $i < $sth->rows ; $i++ ) {
             my $results = $sth->fetchrow_hashref;
             push @authvals, $results->{authorised_value};
             $labels{ $results->{authorised_value} } = $results->{lib};
+ #          $labels{ $results->{display} } = 1 ;
+
         }
     }
     $sth->finish;
     @authvals = sort { $a <=> $b } @authvals;
+
+
+####  @authvals
+
+
+
 
 }
 elsif ( $authcat eq 'MONTHS' ) {
@@ -210,10 +329,23 @@ elsif ( $authcat eq 'MONTHS' ) {
 }
 
 elsif ( $authcat eq 'ITEMTYPES' ) {
+#### aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
     my $query = qq| SELECT itemtype, description FROM itemtypes |;
+=c
+    my $query = qq| SELECT * FROM aqbudgets_planning
+                    JOIN itemtypes ON (aqbudgets_planning.authvalue = itemtypes.itemtype)
+                    WHERE (authcat = 'itemtypes'
+                            AND budget_period_id = ? )     |;
+=cut
+
+
     my $sth   = $dbh->prepare($query);
-    $sth->execute();
+    $sth->{TraceLevel} = 3;
+
+
+    #$sth->execute( $budget_period_id  );
+    $sth->execute(  );
 
     if ( $sth->rows > 0 ) {
         for ( my $i = 0 ; $i < $sth->rows ; $i++ ) {
@@ -223,6 +355,14 @@ elsif ( $authcat eq 'ITEMTYPES' ) {
         }
     }
     $sth->finish;
+
+
+            ####  @authvals
+
+
+
+
+
 
 } elsif ( $authcat eq 'BRANCHES' ) {
 
@@ -240,17 +380,35 @@ elsif ( $authcat eq 'ITEMTYPES' ) {
     $sth->finish;
 }
 
+####     @authvals
+####     %labels
+
+
+
 my @authvals_row;
+my $i=1;
 foreach my $val (@authvals) {
     my %auth_hash;
     $auth_hash{val} =   $labels{$val};
+    $auth_hash{code} =   $val;
+    $auth_hash{colnum} =   $i++;
+
+    # display lookup
+    $auth_hash{display} = GetCols( $authcat,  $auth_hash{code});
+
     push( @authvals_row, \%auth_hash );
 }
+#### ddddddddddddd
+#### @authvals_row
 
-# ------------------------------------------------------------
-if ( $op eq 'save' ) {
-    ### ---------------------  save
-    my @names = $input->param();
+
+
+
+
+
+
+
+
 
     #get budgets
     my ( @buds, @auth_values );
@@ -261,38 +419,7 @@ if ( $op eq 'save' ) {
         push @auth_values, $2;
     }
 
-    #uniq buds and auth
-    my %seen;
-    @buds        = grep { !$seen{$_}++ } @buds;
-    @auth_values = grep { !$seen{$_}++ } @auth_values;
-    my @budget_ids;
-    my @budget_lines;
 
-    foreach my $budget (@buds) {
-        my %budget_line;
-        my @cells_line;
-        my %cell_hash;
-        foreach my $authvalue (@auth_values) {
-            # get actual stats
-            my $cell_name        = "$budget,$authvalue";
-            my $estimated_amount = $input->param("$cell_name");
-            my %cell_hash = (
-                estimated_amount => $estimated_amount,
-                authvalue        => $authvalue,
-                authcat          => $authcat,
-                budget_id        => $budget,
-                budget_period_id => $budget_period_id,
-            );
-            push( @cells_line, \%cell_hash );
-        }
-        %budget_line = (
-            lines => \@cells_line,
-        );
-        push( @budget_lines, \%budget_line );
-    }
-    my $plan = \@budget_lines;
-    ModBudgetPlan( $plan, $budget_period_id, $authcat );
-}
 # ------------------------------------------------------------
 #         DEFAULT DISPLAY BEGINS
 
@@ -320,6 +447,10 @@ my $CGIsepChoice = CGI::scrolling_list(
 
 my ( @budget_lines, %cell_hash );
 
+
+
+
+
 foreach my $budget (@budgets) {
     my $budget_lock;
 
@@ -342,10 +473,12 @@ foreach my $budget (@budgets) {
             && $budget->{'sort2_authcat'} ne $authcat );
     }
 
-    my %budget_line;
+    my %budget_line; # each row of the  table
     my @cells_line;
     my $actual_spent;
     my $estimated_spent;
+
+    my $i = 0;
     foreach my $authvalue (@authvals) {
 
         # get actual stats
@@ -359,13 +492,21 @@ foreach my $budget (@budgets) {
             budget_lock      => $budget_lock,
         );
 
-        my ( $actual, $estimated ) = GetBudgetsPlanCell( \%cell, $period, $budget );
+        my ( $actual, $estimated, $display ) = GetBudgetsPlanCell( \%cell, $period, $budget );
         $cell{actual_amount}    = sprintf( "%.2f", $actual );
         $cell{estimated_amount} = sprintf( "%.2f", $estimated );
+        $cell{display}          = $authvals_row[$i]{display};
+        $cell{colnum}           = $i;
+
         $actual_spent    += $cell{actual_amount};
         $estimated_spent += $cell{estimated_amount};
+
+
         push( @cells_line, \%cell );
+        $i++;
     }
+
+
 
     #     lines => \@cells_line,
     my $budget_act_remain = $budget->{budget_amount} - $actual_spent;
@@ -379,8 +520,11 @@ foreach my $budget (@budgets) {
         budget_alloc            => $budget->{budget_alloc},
         budget_act_remain       => sprintf( "%.2f", $budget_act_remain ),
         budget_est_remain       => sprintf( "%.2f", $budget_est_remain ),
-        budget_id               => $budget->{budget_id}
+        budget_id               => $budget->{budget_id},
+        budget_lock             => $budget_lock,
     );
+
+
 
     $budget_line{est_negative} = '1' if $budget_est_remain < 0;
     $budget_line{est_positive} = '1' if $budget_est_remain > 0;
@@ -389,6 +533,9 @@ foreach my $budget (@budgets) {
 
     # skip if active set , and spent == 0
     next if ( $show_active == '1' && ( $actual_spent == 0 ) );
+
+
+    ### %budget_lin
 
     push( @budget_lines, \%budget_line );
 }
@@ -399,6 +546,7 @@ if ( $output eq "file" ) {
 }
 
     ## ## @budget_lines
+
 $template->param(
     authvals_row              => \@authvals_row,
     budget_lines              => \@budget_lines,
@@ -409,14 +557,35 @@ $template->param(
     show_active               => $show_active,
     show_actual               => $show_actual,
     show_percent              => $show_percent,
-    show_mine                  => $show_mine,
+    show_mine                 => $show_mine,
     cur                       => $cur->{symbol},
     cur_format                => $cur_format,
     CGIextChoice              => $CGIextChoice,
     CGIsepChoice              => $CGIsepChoice,
+
+    authvals              => \@authvals_row,
+    hide_cols_loop              => \@hide_cols
 );
+#### uuuuuuuuuuu
+
+
 
 output_html_with_http_headers $input, $cookie, $template->output;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 sub _print_to_csv {
     my ( $header, $results ) = @_;

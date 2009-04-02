@@ -153,6 +153,10 @@ sub printorders {
 
 sub printbaskets {
     my ($pdf, $basketgroup, $hbaskets, $bookseller, $GSTrate, $orders) = @_;
+<<<<<<< HEAD:acqui/pdfformat/example.pm
+    $pdf->mediabox($height/mm, $width/mm);
+    my $page = $pdf->page();
+=======
     
     my $cur_format = C4::Context->preference("CurrencyFormat");
     my $num;
@@ -183,16 +187,24 @@ sub printbaskets {
     $text->translate(($width-40)/mm,  ($height-50)/mm);
     $text->text("".$basketgroup->{'id'});
     
+>>>>>>> paul:acqui/pdfformat/example.pm
     my $pdftable = new PDF::Table();
     my $abaskets;
     my $arrbasket;
     # header of the table
+<<<<<<< HEAD:acqui/pdfformat/example.pm
+    my @keys = ('Lot', 'Panier', 'Prix public', 'taux TVA', 'TVA', 'Remise', 'Total TTC');
+=======
     my @keys = ('Lot',  'Panier (N°)', 'Prix public TTC', 'Remise', 'Prix remisé','taux TVA', 'Total HT','TVA', 'Total TTC');
+>>>>>>> paul:acqui/pdfformat/example.pm
     for my $bkey (@keys) {
         push(@$arrbasket, $bkey);
     }
     my $grandtotal=0;
+<<<<<<< HEAD:acqui/pdfformat/example.pm
+=======
     my $grandgst=0;
+>>>>>>> paul:acqui/pdfformat/example.pm
     # calculate each basket total
     push(@$abaskets, $arrbasket);
     for my $basket (@$hbaskets) {
@@ -200,6 +212,25 @@ sub printbaskets {
         my ($total, $gst, $totallist) = (0, 0, 0);
         my $ords = $orders->{$basket->{basketno}};
         my $ordlength = @$ords;
+<<<<<<< HEAD:acqui/pdfformat/example.pm
+        for my $ord (@$ords[1..$ordlength]) {
+        warn "".@$ord[0]."=".@$ord[1]."=".@$ord[2]."=".@$ord[3]."=".@$ord[4]."=".@$ord[5]."=".@$ord[6]."=".@$ord[7]."=";
+            $total = $total + (@$ord[5] * @$ord[6]);
+            $gst   = $gst + ((@$ord[5] * @$ord[6]) * $GSTrate);
+            $totalttc = $totalttc+ @$ord[5] * @$ord[6] * (1 + $GSTrate) * (1 - $bookseller->{discount});
+        }
+        push(@$arrbasket, $basket->{contracname}, $basket->{basketname}, $total, $GSTrate, $gst, $bookseller->{discount}, $total + $gst);
+        push(@$abaskets, $arrbasket);
+    }
+    
+# height is width and width is height in this function, as the pdf is in landscape mode for the Tables.
+    my $text = $page->text(5/mm, 5/mm, ($height -10)/mm, ($width - 5)/mm);
+    $text->font( $pdf->corefont( 'Helvetica'), 8/mm );
+    my $txtstr = "REFERENCES DE COMMANDES DU BON DE COMMANDE N°".$basketgroup->{'id'};
+    my $txtwidth = $text->advancewidth($txtstr);
+    $text->translate(($height-$txtwidth*mm)/2/mm,  ($width-8-5)/mm);
+    $text->text($txtstr);
+=======
         foreach my $ord (@$ords) {
             $total += @$ord[5] * @$ord[7];
             $gst   += (@$ord[5] * @$ord[7]) * $GSTrate/(1+$GSTrate);
@@ -217,6 +248,7 @@ sub printbaskets {
     push @$arrbasket,'','','','Total',$num->format_price($grandtotal),'',$num->format_price($grandtotal-$grandgst), $num->format_price($grandgst),$num->format_price($grandtotal);
     push @$abaskets,$arrbasket;
     # height is width and width is height in this function, as the pdf is in landscape mode for the Tables.
+>>>>>>> paul:acqui/pdfformat/example.pm
 
     $pdftable->table($pdf, $page, $abaskets,
                                     x => 5/mm,
@@ -275,8 +307,20 @@ sub printhead {
 
     # print order info, on the default PDF
     $text->font( $pdf->corefont("Times", -encoding => "utf8"), 8/mm );
-    $text->translate(100/mm,  ($height-5-48)/mm);
-    $text->text($basketgroup->{'id'});
+    my $textstr = "Bon de commande N°  $basketgroup->{'id'}";
+    $txtwidth = $text->advancewidth( $textstr );
+    $text->translate(($width-$txtwidth*mm)/2/mm,  ($height-5-48)/mm);
+    $text->text($textstr);
+
+    $box->rectxy(5/mm, ($height - 60)/mm, ($width-5)/mm, ($height-230)/mm);
+    $box->stroke;
+    $box->restore();
+
+    $text->font( $pdf->corefont( 'Helvetica', -encoding => 'utf8', -encode => 'utf8'), 4/mm );
+    $textstr = $branch->{branchaddress1};
+    $txtwidth = $text->advancewidth( $textstr );
+    $text->translate(7/mm,  ($height - 60 - 6)/mm);
+    $text->text($textstr);
     
     # print the date
     my $today = C4::Dates->today();
@@ -316,12 +360,17 @@ sub printpdf {
     } ); # start with roman numbering
     # fill the 1st page (basketgroup information)
     printhead($pdf, $basketgroup, $bookseller, $branch);
+<<<<<<< HEAD:acqui/pdfformat/example.pm
+    printbaskets($pdf, $basketgroup, $baskets, $bookseller, $GST, $orders);
+    printorders($pdf, $basketgroup, $baskets, $orders);
+=======
     # fill the 2nd page (orders summary)
     printbaskets($pdf, $basketgroup, $baskets, $bookseller, $GST, $orders);
     # fill other pages (orders)
     printorders($pdf, $basketgroup, $baskets, $orders);
     # print something on each page (usually the footer, but you could also put a header
     printfooters($pdf);
+>>>>>>> paul:acqui/pdfformat/example.pm
     return $pdf->stringify;
 }
 

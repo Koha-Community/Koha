@@ -966,3 +966,61 @@ function checkBudgetParent(budgetId, newBudgetParent) {
      }
 }
 
+
+function addColumn(p_sType, p_aArgs, p_oValue)
+{
+    var allRows = document.getElementById('plan').rows;
+    var colnum  = p_oValue[0];
+    var code   = p_oValue[1];
+    var colnum  = new Number(colnum);
+
+    for (var i=0; i<allRows.length; i++) {
+            var allCells  = allRows[i].cells;
+            allCells[colnum+1].style.display="table-cell";
+    }
+
+// make a menuitem object
+    var hids = document.getElementsByName("hide_cols")
+    for (var i=0; i<hids.length; i++) {
+        if (hids[i].value == code) {
+            var x =  hids[i];
+            x.parentNode.removeChild(x)    // sigh...
+            break;
+        }
+    }
+}
+
+
+function delColumn(n, code)
+{
+    var allRows = document.getElementById('plan').rows;
+
+// find index
+    var index;
+    var nn  = new Number(n);
+    var code   = code ;
+    for (var i=0; i<allRows.length; i++) {
+        var allCells  = allRows[i].cells;
+        allCells[nn+1].style.display="none";
+    }
+
+    var r = 0;
+    var hids = document.getElementsByName("hide_cols")
+    for (var i=0; i<hids.length; i++) {
+        if (hids[i].value == code) {
+            r = 1;
+            break;
+        }
+    }
+
+    if (r == 0 ) {
+        // add hide_col to form
+        var el = document.createElement("input");
+        el.setAttribute("type", 'hidden' );
+        el.setAttribute("value", code);
+        el.setAttribute("name", 'hide_cols');
+        document.getElementById("hide_div").appendChild(el);
+    }
+}
+
+

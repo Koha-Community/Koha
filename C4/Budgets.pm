@@ -62,10 +62,59 @@ BEGIN {
         &BudgetHasChildren
         &CheckBudgetParent
         &CheckBudgetParentPerm
+
+        &HideCols
+        &GetCols
 	);
 }
 
 # ----------------------------BUDGETS.PM-----------------------------";
+
+
+sub HideCols {
+    my ( $authcat, @hide_cols ) = @_;
+    my $dbh = C4::Context->dbh;
+
+=c
+    my $sth = $dbh->prepare(
+        qq|
+        UPDATE aqbudgets_planning
+        SET display = 1 where authcat =  ? |
+    );
+    $sth->execute( $authcat );
+=cut
+
+    my $sth1 = $dbh->prepare(
+        qq|
+        UPDATE aqbudgets_planning SET display = 0 
+        WHERE authcat = ? 
+        AND  authvalue = ? |
+    );
+    foreach my $authvalue (@hide_cols) {
+#        $sth1->{TraceLevel} = 3;
+        $sth1->execute(  $authcat, $authvalue );
+    }
+}
+
+sub GetCols {
+    my ( $authcat, $authvalue ) = @_;
+
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare(
+        qq|
+        SELECT count(display) as cnt from aqbudgets_planning
+        WHERE  authcat = ? 
+        AND authvalue = ? and display  = 0   |
+    );
+
+#    $sth->{TraceLevel} = 3;
+    $sth->execute( $authcat, $authvalue );
+    my $res  = $sth->fetchrow_hashref;
+
+    return  $res->{cnt} > 0 ? 0: 1
+
+}
+
 sub CheckBudgetParentPerm {
     my ( $budget, $borrower_id ) = @_;
     my $depth = $budget->{depth};
@@ -192,7 +241,7 @@ sub GetBudgetsPlanCell {
     # get the estimated amount
     my $sth = $dbh->prepare( qq|
 
-        SELECT estimated_amount AS estimated FROM aqbudgets_planning
+        SELECT estimated_amount AS estimated, display FROM aqbudgets_planning
             WHERE budget_period_id = ? AND
                 budget_id = ? AND
                 authvalue = ? AND
@@ -203,7 +252,13 @@ sub GetBudgetsPlanCell {
                     $cell->{'authvalue'},
                     $cell->{'authcat'},
     );
-    my $estimated = $sth->fetchrow_array;
+
+
+    my $res  = $sth->fetchrow_hashref;
+  #  my $display = $res->{'display'};
+    my $estimated = $res->{'estimated'};
+
+
     return $actual, $estimated;
 }
 
