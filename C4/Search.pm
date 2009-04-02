@@ -1311,6 +1311,7 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
         # save an author with no <span> tag, for the <a href=search.pl?q=<!--tmpl_var name="author"-->> link
         $oldbiblio->{'author_nospan'} = $oldbiblio->{'author'};
         $oldbiblio->{'title_nospan'} = $oldbiblio->{'title'};
+        $oldbiblio->{'subtitle_nospan'} = $oldbiblio->{'subtitle'};
         # Add search-term highlighting to the whole record where they match using <span>s
         if (C4::Context->preference("OpacHighlightedWords")){
             my $searchhighlightblob;
