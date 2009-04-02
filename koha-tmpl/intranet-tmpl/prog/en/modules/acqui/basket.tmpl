@@ -65,6 +65,7 @@
             <tr>
                 <th>Order</th>
                 <th>Title</th>
+                <th>ISBN</th>
                 <th><a href="basket.pl?basketno=<!-- TMPL_VAR name="basketno" -->&amp;order=biblioitems.publishercode">Publisher</a></th>
                 <th>RRP</th>
                 <th>Est.</th>
@@ -88,10 +89,10 @@
                            	<p>
                                 <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a></p>
                                 <p><!-- TMPL_VAR NAME="author" -->
-                                <!-- TMPL_IF name="isbn"-->- <!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF -->
                                 <!-- TMPL_IF name="notes" --></p><p><!--TMPL_VAR name="notes" --><!-- /TMPL_IF -->
                             </p>
                         </td>
+                    <td><!-- TMPL_IF name="isbn"--><!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF --></td>
                     <td><!-- TMPL_VAR NAME="publishercode" --></td>
                     <td class="number"><!-- TMPL_VAR NAME="rrp" --></td>
                     <td class="number"><!-- TMPL_VAR NAME="ecost" --></td>
