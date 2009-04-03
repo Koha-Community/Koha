@@ -75,7 +75,7 @@ KOHA.Tags = {
 	scrubbed : function(arg) {return (_("Note: your tag contained markup code that was removed. The tag was added as '" +arg+ "'."));},
     failed_add_tag : function(arg) {return (_("Error! The add_tag operation failed on '" +arg+ "'.  Note: you can only tag an item with a given term once.  Check 'My Tags' to see your current tags."));},
     failed_delete  : function(arg) {return (_("Error! You cannot delete the tag '" +arg+ "'.  Note: you can only delete your own tags."));},
-	login : function(arg) {return (_("You must be logged in to add tags."));},
+	login : function(arg) {return (_("You must be logged in to add tags."));}
 	},
 
     // Used to tag multiple items at once.  The main difference
