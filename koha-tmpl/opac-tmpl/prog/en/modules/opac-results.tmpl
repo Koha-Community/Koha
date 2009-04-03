@@ -384,7 +384,7 @@ $(document).ready(function(){
                 </span>
 
 				<!-- /TMPL_IF -->
-				
+				<!-- TMPL_IF NAME="LibraryThingForLibrariesID" --><div class="ltfl_reviews"></div><!-- /TMPL_IF --> 
 				<!-- TMPL_IF NAME="TagsEnabled" -->
                 <!-- TMPL_IF NAME="TagsShowOnList" -->
                 <!-- TMPL_IF NAME="TagLoop" -->
@@ -459,4 +459,7 @@ $(document).ready(function(){
         <!-- /TMPL_IF -->
 </div>
 
+<!-- TMPL_IF NAME="LibraryThingForLibrariesID" --> 
+<script src="http://ltfl.librarything.com/forlibraries/widget.js?id=<!--TMPL_VAR NAME="LibraryThingForLibrariesID" -->&systype=koha"type="text/javascript"></script> 
+<!-- /TMPL_IF --> 
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

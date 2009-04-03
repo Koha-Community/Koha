@@ -186,7 +186,7 @@
         <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
 
-
+<!-- This puts the LTFL reviews in, and if TabbedView is not set, puts the remaining content above the Tabs instead of in them -->
 <!-- TMPL_IF NAME="LibraryThingForLibrariesID"> 
 	<!--TMPL_IF NAME = "LibraryThingForLibrariesTabbedView" -->
 	<!--TMPL_ELSE -->
@@ -260,7 +260,7 @@
 <!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="SyndeticsReviews" --><!-- TMPL_IF NAME="SYNDETICS_REVIEWS" -->
  <li> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#reviews">Reviews</a></li>
-<li> <script src="http://www.librarything.com/forlibraries/widget.js?id=99-274208589" type="text/javascript"></script><noscript>This page contains enriched content visible when JavaScript is enabled or by clicking <a href="http://www.librarything.com/forlibraries/noscript.php?id=99-274208589&amp;accessibility=1">here</a>.</noscript></li>
+<li> <script src="http://www.librarything.com/forlibraries/widget.js?id=<!-- TMPL_VAR NAME="LibraryThingForLibrariesID" -->" type="text/javascript"></script><noscript>This page contains enriched content visible when JavaScript is enabled or by clicking <a href="http://www.librarything.com/forlibraries/noscript.php?id=99-274208589&amp;accessibility=1">here</a>.</noscript></li>
 <!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="SyndeticsAuthorNotes" --><!-- TMPL_IF NAME="SYNDETICS_ANOTES" -->
  <li> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#anotes">About the Author</a></li>
@@ -546,28 +546,27 @@
 
 <!-- TMPL_IF NAME="LibraryThingForLibrariesID"--> 
 <!-- TMPL_IF NAME="LibraryThingForLibrariesTabbedView"-->
-	<!-- ltfl content --> 
+	<!-- Library Thing for Libraries Content --> 
 		<div id="LFTLSimilarItems">
 			<div class="content_set">
-	<!--		<span class="results_summary">-->
+	<!-- Uncommenting this span makes the font smaller in the tab for LTFL-->
+ 	<!--	<span class="results_summary">-->
 				<div id="ltfl_related"></div>
 				<div id="ltfl_similars"></div>
 	<!--			</span>-->
 			</div>
 		</div>
+		 <div id="LTFLTagBrowse">
+                        <div class="content_set">
+                                <span class="results_summary">
+                                <div id="ltfl_tagbrowse" class="ltfl"></div>
+                                </span>
+                        </div>
+                </div>
 	<!--/TMPL_IF -->
 <!--/TMPL_IF -->
-<!-- TMPL_IF NAME="LibraryThingForLibrariesID"-->
-	<!-- TMPL_IF NAME="LibraryThingForLibrariesTabbedView">
-		<div id="LTFLTagBrowse">
-			<div class="content_set">
-				<span class="results_summary">
-				<div id="ltfl_tagbrowse" class="ltfl"></div>
-				</span>
-			</div>
-		</div>
-	<!--/TMPL_IF -->
-<!--/TMPL_IF -->
+<!-- /Library Thing for Libraries Content -->
+
 
 <!-- TMPL_IF NAME="reviewson" -->
 <div id="comments">
@@ -754,6 +753,6 @@
 <!-- /TMPL_IF -->
 </div>
 <!-- TMPL_IF NAME="LibraryThingForLibrariesID" --> 
-<script src="http://ltfl.librarything.com/forlibraries/widget.js?systype=koha&id=<!--TMPL_VAR NAME="LibraryThingForLibrariesID" -->"type="text/javascript"></script><noscript>This page contains enriched content visible when JavaScript is enabled or by clicking <a href="http://www.librarything.com/forlibraries/noscript.php?id=326-4221977395&accessibility=1">here</a>.</noscript> 
+<script src="http://ltfl.librarything.com/forlibraries/widget.js?systype=koha&id=<!--TMPL_VAR NAME="LibraryThingForLibrariesID" -->"type="text/javascript"></script><noscript>This page contains enriched content visible when JavaScript is enabled or by clicking <a href="http://www.librarything.com/forlibraries/noscript.php?id=<!-- TMPL_VAR NAME="LibraryThingForLibrariesID" -->&accessibility=1">here</a>.</noscript> 
 <!-- /TMPL_IF --> 
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
