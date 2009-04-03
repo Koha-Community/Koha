@@ -982,6 +982,16 @@ sub buildQuery {
                 # Some helpful index variants
                 my $index_plus       = $index . $struct_attr . ":" if $index;
                 my $index_plus_comma = $index . $struct_attr . "," if $index;
+                if ($auto_truncation){
+#					FIXME Auto Truncation is only valid for LTR languages
+#					use C4::Output;
+#					use C4::Languages qw(regex_lang_subtags get_bidi);
+#    				$lang = $query->cookie('KohaOpacLanguage') if (defined $query && $query->cookie('KohaOpacLanguage'));
+#				    my $current_lang = regex_lang_subtags($lang);
+#				    my $bidi;
+#				    $bidi = get_bidi($current_lang->{script}) if $current_lang->{script};
+					$index_plus_comma .= "rtrn:";
+				}
 
                 # Remove Stopwords
                 if ($remove_stopwords) {
