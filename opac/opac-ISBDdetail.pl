@@ -54,9 +54,16 @@ use C4::Serials;    # uses getsubscriptionfrom biblionumber
 use C4::Koha;       # use getitemtypeinfo
 use C4::Members;    # GetMember
 
-my $query = new CGI;
-
-my $dbh = C4::Context->dbh;
+my $query = CGI->new();
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "opac-ISBDdetail.tmpl",
+        query           => $query,
+        type            => "opac",
+        authnotrequired => 1,
+        debug           => 1,
+    }
+);
 
 my $biblionumber = $query->param('biblionumber');
 my $itemtype     = &GetFrameworkCode($biblionumber);
@@ -67,6 +74,7 @@ my $record = GetMarcBiblio($biblionumber);
 
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
+my $dbh = C4::Context->dbh;
 my $dat                 = TransformMarcToKoha( $dbh, $record );
 my @subscriptions       =
   GetSubscriptions( $dat->{title}, $dat->{issn}, $biblionumber );
@@ -83,16 +91,6 @@ foreach my $subscription (@subscriptions) {
     push @subs, \%cell;
 }
 
-# open template
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {
-        template_name   => "opac-ISBDdetail.tmpl",
-        query           => $query,
-        type            => "opac",
-        authnotrequired => 1,
-        debug           => 1,
-    }
-);
 $template->param(
     subscriptions       => \@subs,
     subscriptionsnumber => $subscriptionsnumber,
