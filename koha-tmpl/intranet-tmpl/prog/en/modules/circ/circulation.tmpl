@@ -15,6 +15,7 @@ $.tablesorter.addParser({
     format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); },
     type: 'text'
 });
+<!-- TMPL_UNLESS NAME="borrowernumber" --><!-- TMPL_UNLESS NAME="CGIselectborrower" -->window.onload=function(){ $('#findborrower').focus(); };<!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS -->
 	 $(document).ready(function() {
  		$('#patronlists > ul').tabs();
 		$.tablesorter.defaults.widgets = ['zebra'];
