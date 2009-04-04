@@ -456,14 +456,32 @@ a.send {
 	text-decoration : none;
 	padding-left : 21px;
 }
-a.hold {
+a.hold,#placehold input.submit {
 	background-image: url(../../images/placereserve.gif);
 	background-position : 9px center;
 	background-repeat : no-repeat;
 	text-decoration : none;
 	padding-left : 34px;
 }
-
+#placehold input.submit,#tagsel_span input.submit {
+	border : 0;
+	background-color: transparent;
+	font-size : 100%;
+	font-weight : bold;
+	padding-left : 31px;
+	text-decoration : underline;
+	color : #336699;
+	cursor : pointer;
+}
+#tagsel_span input.submit {
+	background-image: url(../../images/tags.gif);
+	background-position : 9px center;
+	background-repeat : no-repeat;
+	padding-left : 24px;
+}
+#placehold input.submit:hover,#tagsel_span input.submit:hover {
+	color: #990033;
+}
 #toolbar a.empty {
 	background-image: url(../../images/trash.gif);
 }
@@ -792,7 +810,7 @@ a.cancel {
 	margin-top : 5px;
 }
 
-.cartlist input.submit {
+.cartlist input.submit, #tagsel_button {
 	background-color : #d8deb8;
 	background-image : none;
 	border-color : #bebf84;
