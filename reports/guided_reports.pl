@@ -347,26 +347,33 @@ elsif ($phase eq 'Run this report'){
 elsif ($phase eq 'Export'){
     binmode STDOUT, ':utf8';
 
-	# export results to tab separated text
+	# export results to tab separated text or CSV
 	my $sql    = $input->param('sql');  # FIXME: use sql from saved report ID#, not new user-supplied SQL!
     my $format = $input->param('format');
 	my ($sth, $q_errors) = execute_query($sql);
     unless ($q_errors and @$q_errors) {
         print $input->header(       -type => 'application/octet-stream',
-                                    -attachment=>'reportresults.csv'
+                                    -attachment=>"reportresults.$format"
                             );
-        my $csv = Text::CSV->new({binary => 1});
-        $csv or die "Text::CSV->new({binary => 1}) FAILED: " . Text::CSV->error_diag();
-        if ($csv->combine(header_cell_values($sth))) {
-            print $csv->string(), "\n";
+        if ($format eq 'tab') {
+            print join("\t", header_cell_values($sth)), "\n";
+            while (my $row = $sth->fetchrow_arrayref()) {
+                print join("\t", @$row), "\n";
+            }
         } else {
-            push @$q_errors, { combine => 'HEADER ROW: ' . $csv->error_diag() } ;
-        }
-        while (my $row = $sth->fetchrow_arrayref()) {
-            if ($csv->combine(@$row)) {
-                print $csv->string(), "\n"; 
+            my $csv = Text::CSV->new({binary => 1});
+            $csv or die "Text::CSV->new({binary => 1}) FAILED: " . Text::CSV->error_diag();
+            if ($csv->combine(header_cell_values($sth))) {
+                print $csv->string(), "\n";
             } else {
-                push @$q_errors, { combine => $csv->error_diag() } ;
+                push @$q_errors, { combine => 'HEADER ROW: ' . $csv->error_diag() } ;
+            }
+            while (my $row = $sth->fetchrow_arrayref()) {
+                if ($csv->combine(@$row)) {
+                    print $csv->string(), "\n"; 
+                } else {
+                    push @$q_errors, { combine => $csv->error_diag() } ;
+                }
             }
         }
         foreach my $err (@$q_errors, @errors) {
@@ -412,13 +419,13 @@ elsif ($phase eq 'Save Compound'){
 }
 
 # pass $sth, get back an array of names for the column headers
-sub header_cell_values ($) {
+sub header_cell_values {
     my $sth = shift or return ();
     return @{$sth->{NAME}};
 }
 
 # pass $sth, get back a TMPL_LOOP-able set of names for the column headers
-sub header_cell_loop ($) {
+sub header_cell_loop {
     my @headers = map { +{ cell => $_ } } header_cell_values (shift);
     return \@headers;
 }
