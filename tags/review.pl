@@ -46,9 +46,9 @@ sub ajax_auth_cgi ($) {		# returns CGI object
 	$debug and
 	print STDERR "($auth_status, $auth_sessid) = check_cookie_auth($sessid," . Dumper($needed_flags) . ")\n";
 	if ($auth_status ne "ok") {
-		output_ajax_with_http_headers $input,
+		output_with_http_headers $input, undef,
 			"window.alert('Your CGI session cookie ($sessid) is not current.  " . 
-			"Please refresh the page and try again.');\n";
+			"Please refresh the page and try again.');\n", 'js';
 		exit 0;
 	}
 	$debug and print STDERR "AJAX request: " . Dumper($input),
@@ -72,7 +72,7 @@ if (is_ajax()) {
 	if ($tag = $input->param('rej')) {
 		$js_reply = (   blacklist($operator,$tag) ? 'success' : 'failure')  . "_reject('$tag');\n";
 	}
-	output_ajax_with_http_headers $input, $js_reply;
+	output_with_http_headers $input, undef, $js_reply, 'js';
 	exit;
 }
 

@@ -50,7 +50,7 @@ my $perBibResults = {};
 my @globalErrorIndexes = ();
 
 sub ajax_auth_cgi ($) {     # returns CGI object
-    my $needed_flags = shift;
+	my $needed_flags = shift;
 	my %cookies = fetch CGI::Cookie;
 	my $input = CGI->new;
 	my $sessid = $cookies{'CGISESSID'}->value || $input->param('CGISESSID');
@@ -58,9 +58,9 @@ sub ajax_auth_cgi ($) {     # returns CGI object
 	$debug and
 	print STDERR "($auth_status, $auth_sessid) = check_cookie_auth($sessid," . Dumper($needed_flags) . ")\n";
 	if ($auth_status ne "ok") {
-		output_ajax_with_http_headers $input,
+		output_with_http_headers $input, undef,
 		"window.alert('Your CGI session cookie ($sessid) is not current.  " .
-		"Please refresh the page and try again.');\n";
+		"Please refresh the page and try again.');\n", 'js';
 		exit 0;
 	}
 	$debug and print STDERR "AJAX request: " . Dumper($input),
@@ -212,7 +212,7 @@ if ($is_ajax) {
         $js_perbib .= $js_bibres;
     }
 
-	output_ajax_with_http_headers($query, "$js_reply\n$err_string\n$js_perbib\n};");
+	output_with_http_headers($query, undef, "$js_reply\n$err_string\n$js_perbib\n};", 'js');
 	exit;
 }
 

@@ -610,15 +610,6 @@ if ( C4::Context->preference("kohaspsuggest") ) {
 }
 
 # VI. BUILD THE TEMPLATE
-# NOTE: not using application/atom+xml or application/rss+xml beccause of Internet Explorer 6;
-# see bug 2078.
-my $content_type;
-if ($cgi->param('format') && $cgi->param('format') =~ /rss|atom/ ){
-    $content_type = "application/xml";
-}
-else {
-    $content_type = "text/html";
-}
 # Build drop-down list for 'Add To:' menu...
 my $session = get_session($cgi->cookie("CGISESSID"));
 my @addpubshelves;
@@ -639,4 +630,14 @@ if (defined $barshelves) {
 	$template->param( addbarshelvesloop => $barshelves);
 }
 
-output_html_with_http_headers $cgi, $cookie, $template->output, $content_type;
+my $content_type;
+
+if ($cgi->param('format') =~ /rss/) {
+    $content_type = 'rss'
+} elsif ($cgi->param('format') =~ /atom/) {
+    $content_type = 'atom'
+} else {
+    $content_type = 'html'
+}
+
+output_with_http_headers $cgi, $cookie, $template->output, $content_type;
