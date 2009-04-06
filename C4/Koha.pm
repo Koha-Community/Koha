@@ -52,7 +52,6 @@ BEGIN {
 		&GetAuthorisedValueCategories
 		&GetKohaAuthorisedValues
 		&GetAuthValCode
-		&GetManagedTagSubfields
 		&GetNormalizedUPC
 		&GetNormalizedISBN
 		&GetNormalizedEAN
@@ -1067,49 +1066,6 @@ sub GetKohaAuthorisedValues {
   } else {
   	return undef;
   }
-}
-
-=head2 GetManagedTagSubfields
-
-=over 4
-
-$res = GetManagedTagSubfields();
-
-=back
-
-Returns a reference to a big hash of hash, with the Marc structure fro the given frameworkcode
-
-NOTE: This function is used only by the (incomplete) bulk editing feature.  Since
-that feature currently does not deal with items and biblioitems changes 
-correctly, those tags are specifically excluded from the list prepared
-by this function.
-
-For future reference, if a bulk item editing feature is implemented at some point, it
-needs some design thought -- for example, circulation status fields should not 
-be changed willy-nilly.
-
-=cut
-
-sub GetManagedTagSubfields{
-  my $dbh=C4::Context->dbh;
-  my $rq=$dbh->prepare(qq|
-SELECT 
-  DISTINCT CONCAT( marc_subfield_structure.tagfield, tagsubfield ) AS tagsubfield, 
-  marc_subfield_structure.liblibrarian as subfielddesc, 
-  marc_tag_structure.liblibrarian as tagdesc
-FROM marc_subfield_structure
-  LEFT JOIN marc_tag_structure 
-    ON marc_tag_structure.tagfield = marc_subfield_structure.tagfield
-    AND marc_tag_structure.frameworkcode = marc_subfield_structure.frameworkcode
-WHERE marc_subfield_structure.tab>=0
-AND marc_tag_structure.tagfield NOT IN (SELECT tagfield FROM marc_subfield_structure WHERE kohafield like 'items.%')
-AND marc_tag_structure.tagfield NOT IN (SELECT tagfield FROM marc_subfield_structure WHERE kohafield = 'biblioitems.itemtype')
-AND marc_subfield_structure.kohafield <> 'biblio.biblionumber'
-AND marc_subfield_structure.kohafield <>  'biblioitems.biblioitemnumber'
-ORDER BY marc_subfield_structure.tagfield, tagsubfield|);
-  $rq->execute;
-  my $data=$rq->fetchall_arrayref({});
-  return $data;
 }
 
 =head2 display_marc_indicators

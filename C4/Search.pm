@@ -61,7 +61,6 @@ This module provides searching functions for Koha's bibliographic databases
   &getRecords
   &buildQuery
   &NZgetRecords
-  &ModBiblios
 );
 
 # make all your functions, whether exported or not;
@@ -2137,130 +2136,6 @@ sub NZorder {
         $finalresult->{'biblioserver'} = $result_hash;
         return $finalresult;
     }
-}
-
-=head2 ModBiblios
-
-($countchanged,$listunchanged) = ModBiblios($listbiblios, $tagsubfield,$initvalue,$targetvalue,$test);
-
-this function changes all the values $initvalue in subfield $tag$subfield in any record in $listbiblios
-test parameter if set donot perform change to records in database.
-
-=over 2
-
-=item C<input arg:>
-
-    * $listbiblios is an array ref to marcrecords to be changed
-    * $tagsubfield is the reference of the subfield to change.
-    * $initvalue is the value to search the record for
-    * $targetvalue is the value to set the subfield to
-    * $test is to be set only not to perform changes in database.
-
-=item C<Output arg:>
-    * $countchanged counts all the changes performed.
-    * $listunchanged contains the list of all the biblionumbers of records unchanged.
-
-=item C<usage in the script:>
-
-=back
-
-my ($countchanged, $listunchanged) = EditBiblios($results->{RECORD}, $tagsubfield,$initvalue,$targetvalue);;
-#If one wants to display unchanged records, you should get biblios foreach @$listunchanged 
-$template->param(countchanged => $countchanged, loopunchanged=>$listunchanged);
-
-=cut
-
-sub ModBiblios {
-    my ( $listbiblios, $tagsubfield, $initvalue, $targetvalue, $test ) = @_;
-    my $countmatched;
-    my @unmatched;
-    my ( $tag, $subfield ) = ( $1, $2 )
-      if ( $tagsubfield =~ /^(\d{1,3})([a-z0-9A-Z@])?$/ );
-    if ( ( length($tag) < 3 ) && $subfield =~ /0-9/ ) {
-        $tag = $tag . $subfield;
-        undef $subfield;
-    }
-    my ( $bntag,   $bnsubf )   = GetMarcFromKohaField('biblio.biblionumber', '');
-    my ( $itemtag, $itemsubf ) = GetMarcFromKohaField('items.itemnumber', '');
-    if ($tag eq $itemtag) {
-        # do not allow the embedded item tag to be 
-        # edited from here
-        warn "Attempting to edit item tag via C4::Search::ModBiblios -- not allowed";
-        return (0, []);
-    }
-    foreach my $usmarc (@$listbiblios) {
-        my $record;
-        $record = eval { MARC::Record->new_from_usmarc($usmarc) };
-        my $biblionumber;
-        if ($@) {
-
-            # usmarc is not a valid usmarc May be a biblionumber
-            # FIXME - sorry, please let's figure out whether
-            #         this function is to be passed a list of
-            #         record numbers or a list of MARC::Record
-            #         objects.  The former is probably better
-            #         because the MARC records supplied by Zebra
-            #         may be not current.
-            $record       = GetMarcBiblio($usmarc);
-            $biblionumber = $usmarc;
-        }
-        else {
-            if ( $bntag >= 010 ) {
-                $biblionumber = $record->subfield( $bntag, $bnsubf );
-            }
-            else {
-                $biblionumber = $record->field($bntag)->data;
-            }
-        }
-
-        #GetBiblionumber is to be written.
-        #Could be replaced by TransformMarcToKoha (But Would be longer)
-        if ( $record->field($tag) ) {
-            my $modify = 0;
-            foreach my $field ( $record->field($tag) ) {
-                if ($subfield) {
-                    if (
-                        $field->delete_subfield(
-                            'code'  => $subfield,
-                            'match' => qr($initvalue)
-                        )
-                      )
-                    {
-                        $countmatched++;
-                        $modify = 1;
-                        $field->update( $subfield, $targetvalue )
-                          if ($targetvalue);
-                    }
-                }
-                else {
-                    if ( $tag >= 010 ) {
-                        if ( $field->delete_field($field) ) {
-                            $countmatched++;
-                            $modify = 1;
-                        }
-                    }
-                    else {
-                        $field->data = $targetvalue
-                          if ( $field->data =~ qr($initvalue) );
-                    }
-                }
-            }
-
-            #       warn $record->as_formatted;
-            if ($modify) {
-                ModBiblio( $record, $biblionumber,
-                    GetFrameworkCode($biblionumber) )
-                  unless ($test);
-            }
-            else {
-                push @unmatched, $biblionumber;
-            }
-        }
-        else {
-            push @unmatched, $biblionumber;
-        }
-    }
-    return ( $countmatched, \@unmatched );
 }
 
 END { }    # module clean-up code here (global destructor)
