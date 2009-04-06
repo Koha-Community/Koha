@@ -41,7 +41,6 @@ sub methods : Test( 1 ) {
       GetAuthorisedValues
       GetAuthorisedValueCategories
       GetKohaAuthorisedValues
-      GetManagedTagSubfields
       display_marc_indicators
     );
 

@@ -481,37 +481,6 @@ if ($@ || $error) {
     exit;
 }
 
-# FIXME: This belongs in tools/ not in the primary search results page
-my $op=$cgi->param("operation");
-if ($op eq "bulkedit"){
-    my ($countchanged,$listunchanged)=
-    ModBiblios($results_hashref->{'biblioserver'}->{"RECORDS"},
-                      $params->{"tagsubfield"},
-                      $params->{"inputvalue"},
-                      $params->{"targetvalue"},
-                      $params->{"test"}
-                      );
-    $template->param(bulkeditresults=>1,
-                      tagsubfield=>$params->{"tagsubfield"},
-                      inputvalue=>$params->{"inputvalue"},
-                      targetvalue=>$params->{"targetvalue"},
-                      countchanged=>$countchanged,
-                      countunchanged=>scalar(@$listunchanged),
-                      listunchanged=>$listunchanged);
-
-    if (C4::Context->userenv->{'flags'}==1 ||(C4::Context->userenv->{'flags'} & ( 2**9 ) )){
-    #Edit Catalogue Permissions
-        my $editable_subfields = GetManagedTagSubfields();
-        # change '--' to '&mdash;' to avoid escaping issues
-        for (my $i = 0; $i <= $#{$editable_subfields}; $i++) {
-            $editable_subfields->[$i]->{subfielddesc} =~ s/--/&mdash;/g;
-            $editable_subfields->[$i]->{tagdesc} =~ s/--/&mdash;/g;
-        }
-        $template->param(bulkedit => 1);
-        $template->param(tagsubfields=>$editable_subfields);
-    }
-}
-
 # At this point, each server has given us a result set
 # now we build that set for template display
 my @sup_results_array;

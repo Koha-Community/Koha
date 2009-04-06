@@ -194,37 +194,6 @@ $(window).load(function() {
                 <!-- /TMPL_IF -->
                 <!-- FACETS END -->
                 <!-- /TMPL_IF --> <!-- NoZebra -->
-                <!-- BULKEDIT START -->
-                <!--TMPL_IF Name="bulkedit"--> 
-                    <dt id="hbulkedit" onclick="var Elt=document.getElementById('parambulkedit');if (Elt.style.display!='block'){Elt.style.display='block';} else {Elt.style.display='none';}">
-                    Bulk edit
-                    </dt>
-                    <dd id="parambulkedit" style="display:none;">
-                    <form name="bulkedit" action="search.pl">
-                        <input type="hidden" name="q" value="<!-- TMPL_VAR NAME="searchdesc" -->" />
-                        <input type="hidden" name="operation" value="bulkedit" />
-                        Search for Value :<input type="text" name="inputvalue" value="" /><br />
-                        Subfield       <select name="tagsubfield">
-                        <!--TMPL_LOOP Name="tagsubfields"-->
-                            <option value="<!--TMPL_VAR Name="tagsubfield"-->"> <!--TMPL_VAR Name="tagsubfield"-->
-                            <!-- --<TMPL_VAR Name="tagdesc">--<TMPL_VAR Name="subfielddesc">-->
-                            </option>
-                        <!--/TMPL_LOOP -->
-                        </select><br />
-                        Change to : <input type="text" name="targetvalue" value="" /><br />
-                        Test only : <input type="checkbox" name="test" value="1" /><br />
-                        <input type="Submit" name="Edit" value="Edit" />
-                    </form>
-                    </dd>
-                    <!-- TMPL_IF NAME="bulkeditresults" -->
-                    <dd>
-                        tagsubfield : <!-- TMPL_VAR NAME="countchanged" --> Change <!-- TMPL_VAR NAME="countchanged" --> To <!-- TMPL_VAR NAME="countchanged" --><br />
-                        <!-- TMPL_VAR NAME="countchanged" --> biblios changed <br />
-                        <!--TMPL_VAR Name="countunchanged"--> biblios unchanged<br />
-                    </dd>
-                    <!-- /TMPL_IF -->
-                <!--/TMPL_IF--> 
-                <!-- BULKEDIT END -->
                 </dl>
             </div>
             <!-- ######### -->

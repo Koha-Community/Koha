@@ -29,7 +29,6 @@ sub methods : Test( 1 ) {
                       NZoperatorOR
                       NZoperatorNOT
                       NZorder
-                      ModBiblios
                 );
     
     can_ok( $self->testing_class, @methods );    
