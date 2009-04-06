@@ -154,6 +154,10 @@ for my $itm (@items) {
          $itm->{'lostimagelabel'} = $lostimageinfo->{ 'label' };
      }
 
+     if( $itm->{'count_reserves'}){
+          if( $itm->{'count_reserves'} eq "Waiting"){ $itm->{'waiting'} = 1; }
+          if( $itm->{'count_reserves'} eq "Reserved"){ $itm->{'onhold'} = 1; }
+     }
     
      my ( $transfertwhen, $transfertfrom, $transfertto ) = GetTransfers($itm->{itemnumber});
      if ( $transfertwhen ne '' ) {

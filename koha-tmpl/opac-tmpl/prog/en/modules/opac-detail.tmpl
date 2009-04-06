@@ -313,7 +313,7 @@
                                     In transit from <!-- TMPL_VAR NAME="transfertfrom" -->
                                     to <!-- TMPL_VAR NAME="transfertto" --> since <!-- TMPL_VAR NAME="transfertwhen" -->
                                 <!-- TMPL_ELSE -->
-                                    Available
+                                    <!-- TMPL_IF NAME="waiting" -->On hold<!-- TMPL_ELSE --><!-- TMPL_IF NAME="onhold" -->On hold<!-- TMPL_ELSE -->Available<!-- /TMPL_IF --><!-- /TMPL_IF -->
                                 <!-- /TMPL_IF -->
                             <!-- /TMPL_IF -->
                         <!-- /TMPL_IF -->
