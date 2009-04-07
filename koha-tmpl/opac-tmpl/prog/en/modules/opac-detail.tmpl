@@ -24,7 +24,8 @@
         });<!-- TMPL_IF NAME="GoogleJackets" -->
         KOHA.Google.GetCoverFromIsbn();<!-- /TMPL_IF --><!-- TMPL_IF NAME="TagsEnabled" -->
         $(".tagbutton").click(KOHA.Tags.add_tag_button);<!-- /TMPL_IF -->
-    }); 
+		<!-- TMPL_IF NAME="opacbookbag" -->$("#action").append("<li><a class=\"addtocart\" href=\"#\" onclick=\"addRecord('"+$("input[name=bib]").val()+"'); return false;\">Add to Your Cart</a></li>");
+<!-- /TMPL_IF -->});
 //]]>
 </script>
 <style type="text/css">
@@ -650,9 +651,6 @@
         </a></li>
     <!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="opacbookbag" --><li><a class="addtocart" href="#" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
-            Add to Your Cart
-        </a></li><!-- /TMPL_IF -->
 </ul>
 
 <!-- TMPL_IF NAME="OPACAmazonEnabled" --><!-- TMPL_IF NAME="OPACAmazonSimilarItems" --><!-- TMPL_IF NAME="AMAZON_SIMILAR_PRODUCTS" -->
