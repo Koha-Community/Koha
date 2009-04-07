@@ -138,19 +138,19 @@ leader_fix.pl - Repair missing leader position 9 value ("a" for MARC21 - UTF8).
 
 =head1 SYNOPSIS
 
-leader_fix.pl [ -h ] [ -m ] [ -v ] [ -d ] [ -s ] [ -l 7 ] [ -o 4 ] [ -f ]
+leader_fix.pl [ -h | -m ] [ -v ] [ -d ] [ -s ] [ -l N ] [ -o N ] [ -f ]
 
-Help Options:
+ Help Options:
    -h --help -?   Brief help message
    -m --man       Full documentation, same as --help --verbose
       --version   Prints version info
 
-Feeback Options:
+ Feeback Options:
    -d --dump      Dump MARCXML of biblioitems processed, default OFF
    -s --summary   Print initial summary of good and bad biblioitems counted, default ON
    -v --verbose   Increase verbosity of output, default OFF
 
-Run Options:
+ Run Options:
    -f --fix       Save repaired leaders to biblioitems.marcxml, 
    -l --limit     Number of biblioitems to display or fix
    -o --offset    Number of biblioitems to skip (not displayed or fixed)
