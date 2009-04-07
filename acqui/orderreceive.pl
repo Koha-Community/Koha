@@ -57,6 +57,7 @@ The biblionumber of this order.
 =cut
 
 use strict;
+# use warnings;  # FIXME
 use CGI;
 use C4::Context;
 use C4::Koha;   # GetKohaAuthorisedValues GetItemTypes
@@ -75,7 +76,7 @@ my $dbh        = C4::Context->dbh;
 my $search       = $input->param('receive');
 my $invoice      = $input->param('invoice');
 my $freight      = $input->param('freight');
-my $biblionumber       = $input->param('biblionumber');
+my $biblionumber = $input->param('biblionumber');
 my $datereceived = C4::Dates->new($input->param('datereceived'),'iso') || C4::Dates->new();
 my $catview      = $input->param('catview');
 my $gst          = $input->param('gst');
@@ -98,67 +99,50 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
-$template->param($count);
 
 if ( $count == 1 ) {
 
     my (@itemtypesloop,@locationloop,@ccodeloop);
     my $itemtypes = GetItemTypes;
     foreach my $thisitemtype (sort keys %$itemtypes) {
-		my %row = (
-                    value => $thisitemtype,
-                    description => $itemtypes->{$thisitemtype}->{'description'},
-					selected => ($thisitemtype eq $results[0]->{itemtype}),  # ifdef itemtype @ bibliolevel, use it as default for item level. 
-                  );
-        push @itemtypesloop, \%row;
+        push @itemtypesloop, {
+                  value => $thisitemtype,
+            description => $itemtypes->{$thisitemtype}->{'description'},
+               selected => ($thisitemtype eq $results[0]->{itemtype}),  # ifdef itemtype @ bibliolevel, use it as default for item level. 
+        };
     }
-
     my $locs = GetKohaAuthorisedValues( 'items.location' );
     foreach my $thisloc (sort keys %$locs) {
-		my $row = {
-                    value => $thisloc,
-                    description => $locs->{$thisloc},
-                  };
-        push @locationloop, $row;
+	    push @locationloop, {
+                  value => $thisloc,
+            description => $locs->{$thisloc},
+        };
     }
-    my $ccodes= GetKohaAuthorisedValues( 'items.ccode' );
+    my $ccodes = GetKohaAuthorisedValues( 'items.ccode' );
 	foreach my $thisccode (sort keys %$ccodes) {
-        push @ccodeloop,  {
-                    value => $thisccode,
-                    description => $ccodes->{$thisccode},
-                  };
+        push @ccodeloop, {
+                  value => $thisccode,
+            description => $ccodes->{$thisccode},
+        };
     }
-    $template->param(itemtypeloop => \@itemtypesloop ,
-					locationloop => \@locationloop,
-					ccodeloop => \@ccodeloop,
-					itype => C4::Context->preference('item-level_itypes'),
-					);
+    $template->param(
+        itemtypeloop => \@itemtypesloop,
+        locationloop => \@locationloop,
+           ccodeloop => \@ccodeloop,
+          branchloop => GetBranchesLoop($order->{branchcode}),
+               itype => C4::Context->preference('item-level_itypes'),
+    );
     
-	my $onlymine=C4::Context->preference('IndependantBranches') && 
-                C4::Context->userenv && 
-                C4::Context->userenv->{flags} !=1  && 
-                C4::Context->userenv->{branch};
-    my $branches = GetBranches($onlymine);
-    my @branchloop;
-    foreach my $thisbranch ( sort keys %$branches ) {
-        my %row = (
-            value      => $thisbranch,
-            description => $branches->{$thisbranch}->{'branchname'},
-        );
-	    $row{'selected'} = 1 if( $thisbranch eq $order->{branchcode}) ;
-        push @branchloop, \%row;
-    }
-
     my $barcode;
     # See whether barcodes should be automatically allocated.
 	# FIXME : only incremental is implemented here, and it creates a race condition.
-	#
+	# FIXME : Same problems as other autoBarcode: breaks if any unexpected data is encountered (like alphanumerical barcode)
+    # FIXME : Fails when >1 items are added (via js).  
     if ( C4::Context->preference('autoBarcode') eq 'incremental' ) {
         my $sth = $dbh->prepare("Select max(barcode) from items");
         $sth->execute;
         my $data = $sth->fetchrow_hashref;
         $barcode = $results[0]->{'barcode'} + 1;
-        $sth->finish;
     }
 
     if ( $results[0]->{'quantityreceived'} == 0 ) {
@@ -169,17 +153,12 @@ if ( $count == 1 ) {
     }
 #    $results[0]->{'copyrightdate'} = format_date( $results[0]->{'copyrightdate'} );  # this usu fails.
     $template->param(
-        branchloop            => \@branchloop,
         count                 => 1,
         biblionumber          => $results[0]->{'biblionumber'},
         ordernumber           => $results[0]->{'ordernumber'},
         biblioitemnumber      => $results[0]->{'biblioitemnumber'},
         supplierid            => $results[0]->{'booksellerid'},
-        freight               => $freight,
-        gst                   => $gst,
         catview               => ( $catview ne 'yes' ? 1 : 0 ),
-        name                  => $bookseller->{'name'},
-        date                  => format_date($date),
         title                 => $results[0]->{'title'},
         author                => $results[0]->{'author'},
         copyrightdate         => $results[0]->{'copyrightdate'},
@@ -194,33 +173,30 @@ if ( $count == 1 ) {
         rrp                   => $results[0]->{'rrp'},
         ecost                 => $results[0]->{'ecost'},
         unitprice             => $results[0]->{'unitprice'},
-        invoice               => $invoice,
-        datereceived          => $datereceived->output(),
-        datereceived_iso          => $datereceived->output('iso'),
     );
 }
 else {
     my @loop;
     for ( my $i = 0 ; $i < $count ; $i++ ) {
         my %line = %{ $results[$i] };
-
-        $line{invoice}      = $invoice;
-        $line{datereceived} = $datereceived->output();
-        $line{freight}      = $freight;
-        $line{gst}          = $gst;
         $line{title}        = $results[$i]->{'title'};
         $line{author}       = $results[$i]->{'author'};
-        $line{supplierid}   = $supplierid;
         push @loop, \%line;
     }
     $template->param(
-        loop                    => \@loop,
-        date                    => format_date($date),
-        datereceived            => $datereceived->output(),
-        name                    => $bookseller->{'name'},
-        supplierid              => $supplierid,
-        invoice                 => $invoice,
+        loop         => \@loop,
+        supplierid   => $supplierid,
     );
-
 }
+
+$template->param(
+    date             => format_date($date),
+    datereceived     => $datereceived->output(),
+    datereceived_iso => $datereceived->output('iso'),
+    invoice          => $invoice,
+    name             => $bookseller->{'name'},
+    freight          => $freight,
+    gst              => $gst,
+);
+
 output_html_with_http_headers $input, $cookie, $template->output;
