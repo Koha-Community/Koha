@@ -36,21 +36,24 @@ BEGIN {
     # test carefully before changing this
     use FindBin;
     eval { require "$FindBin::Bin/../kohalib.pl" };
-    $VERSION = 0.21;
+    $VERSION = 0.22;
 }
 
 =head1 NAME
 
-runreport.pl - Run a pre-existing saved report.
+runreport.pl - Run pre-existing saved reports
 
 =head1 SYNOPSIS
 
-runreport.pl [ -v ] 
+runreport.pl [ -h | -m ] [ -v ] reportID [ reportID ... ]
 
  Options:
-   -h --help             brief help message
-   -m --man              full documentation, same as --help --verbose
-   -v --verbose          verbose output
+   -h --help       brief help message
+   -m --man        full documentation, same as --help --verbose
+   -v --verbose    verbose output
+
+ Arguments:
+   reportID        report ID Number from saved_sql.id, multiple ID's may be specified
 
 =head1 OPTIONS
 
@@ -72,14 +75,28 @@ Verbose. Without this flag set, only fatal errors are reported.
 
 =head1 DESCRIPTION
 
-This script is designed to run an existing Saved Report.
+This script is designed to run existing Saved Reports.
 
 =head1 USAGE EXAMPLES
 
-B<runreport.pl> 16
+B<runreport.pl 16>
 
 In the most basic form, runs the report specified by ID number from 
 saved_sql.id, in this case #16, outputting the results to STDOUT.  
+
+B<runreport.pl 16 17>
+
+Same as above, but also runs report #17. 
+
+=head1 TO DO
+
+=over 8
+
+ ~ Complete testing for Sendmail related options: --email, --to, and --from.
+ ~ Allow Saved Results option.
+ ~ Possible --format option for CSV or tab-delimited output.
+
+=back
 
 =head1 SEE ALSO
 
@@ -93,9 +110,10 @@ Reports - Guided Reports
 my $help    = 0;
 my $man     = 0;
 my $verbose = 0;
+my $email   = 0;
 my $format  = "";
-my $to      = C4::Context->preference('KohaAdminEmailAddress');
-my $from    = C4::Context->preference('KohaAdminEmailAddress');
+my $to      = "";
+my $from    = "";
 my $subject = 'Koha Saved Report';
 
 GetOptions(
@@ -105,6 +123,7 @@ GetOptions(
     'format'     => \$format,
     'to'         => \$to,
     'from'       => \$from,
+    'email'      => \$email,
 ) or pod2usage(2);
 pod2usage( -verbose => 2 ) if ($man);
 pod2usage( -verbose => 2 ) if ($help and $verbose);
@@ -116,13 +135,18 @@ unless ($format) {
     # $format = 'text';
 }
 
+if ($to or $from or $email) {
+    $email = 1;
+    $from or $from = C4::Context->preference('KohaAdminEmailAddress');
+    $to   or $to   = C4::Context->preference('KohaAdminEmailAddress');
+}
+
 unless (scalar(@ARGV)) {
-    print STDERR "ERROR: No reports specified\n";
+    print STDERR "ERROR: No reportID(s) specified\n";
     pod2usage(1);
 }
-print scalar(@ARGV), " argument(s) after options: " . join(" ", @ARGV) . "\n";
+($verbose) and print scalar(@ARGV), " argument(s) after options: " . join(" ", @ARGV) . "\n";
 
-my $email;
 
 foreach my $report (@ARGV) {
     my ($sql, $type) = get_saved_report($report);
