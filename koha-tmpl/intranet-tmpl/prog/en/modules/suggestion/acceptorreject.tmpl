@@ -135,11 +135,9 @@
             <th>Suggestion</th>
             <th>Suggested by</th>
             <th>Date</th>
+            <th>Reason</th>
     <!--TMPL_IF EXPR="suggestiontype ne 'pending'"-->
-            <th>Reason</th>
             <th>Reason Update</th>
-    <!--TMPL_ELSE-->
-            <th>Reason</th>
     <!--/TMPL_IF -->         
             <th>Accept</th>
             <th>Reject</th>
@@ -167,7 +165,6 @@
                 <td>
                 <!--TMPL_VAR Name="reason"-->
       <input type="hidden" name="initial-reason<!-- TMPL_VAR name="suggestionid" -->" value="<!--TMPL_VAR Name="reason" ESCAPE="HTML"-->"  />
-      
                 </td>
     <!--/TMPL_IF -->
                 <td>
@@ -187,9 +184,9 @@
 			
                 </td>
                 <td>
+    <!-- These EXPR are NOT doing what the author thinks they are -->
     <!--TMPL_IF EXPR="suggestiontype eq 'accepted'"-->
                         <input id="a<!--TMPL_VAR name="suggestionid" -->" name="<!--TMPL_VAR name="suggestionid" -->" type="radio" value="ACCEPTED" readonly="readonly" checked="checked"  />
-    
     <!--TMPL_ELSE-->  
                         <input id="a<!--TMPL_VAR name="suggestionid" -->" name="<!--TMPL_VAR name="suggestionid" -->" type="radio" value="ACCEPTED" />
     <!--/TMPL_IF-->            
@@ -197,7 +194,6 @@
             <td>
     <!--TMPL_IF EXPR="suggestiontype eq 'rejected'"-->
                         <input id="r<!--TMPL_VAR name="suggestionid" -->" name="<!--TMPL_VAR name="suggestionid" -->" type="radio" value="REJECTED" readonly="readonly" checked="checked" />
-    
     <!--TMPL_ELSE-->  
                         <input id="r<!--TMPL_VAR name="suggestionid" -->"  name="<!--TMPL_VAR name="suggestionid" -->" type="radio" value="REJECTED" />
     <!--/TMPL_IF-->            
