@@ -141,10 +141,10 @@ if ( $op eq "aorr_confirm" ) {
     if (scalar(@deletelist)>0){  
         my $params = "&delete_field=".join ("&delete_field=",@deletelist);
         print $input->redirect("/cgi-bin/koha/suggestion/acceptorreject.pl?op=delete_confirm$params");
+        exit;
     }  
 }
-
-if ( $op eq "delete_confirm" ) {
+elsif ( $op eq "delete_confirm" ) {
     my @delete_field = $input->param("delete_field");
     foreach my $delete_field (@delete_field) {
         &DelSuggestion( $loggedinuser, $delete_field,"intranet" );
@@ -153,28 +153,36 @@ if ( $op eq "delete_confirm" ) {
 }
 
 my $reasonsloop = GetAuthorisedValues("SUGGEST");
-my $pending_suggestions = &SearchSuggestion( "", "", "", "", 'ASKED', "",$branchcode );
-map{$_->{'reasonsloop'}=$reasonsloop;$_->{'date'}=format_date($_->{'date'})} @$pending_suggestions;
-my $accepted_suggestions = &GetSuggestionByStatus('ACCEPTED',$branchcode);
-map{$_->{'reasonsloop'}=$reasonsloop;$_->{'date'}=format_date($_->{'date'})} @$accepted_suggestions;
-my $rejected_suggestions = &GetSuggestionByStatus('REJECTED',$branchcode);
-map{$_->{'reasonsloop'}=$reasonsloop;$_->{'date'}=format_date($_->{'date'})} @$rejected_suggestions;
+my $pending_suggestions = &SearchSuggestion("", "", "", "", 'ASKED', "", $branchcode);
+map { $_->{'reasonsloop'} = $reasonsloop; $_->{'date'} = format_date($_->{'date'}) } @$pending_suggestions;
+my $accepted_suggestions = &GetSuggestionByStatus('ACCEPTED', $branchcode);
+map { $_->{'reasonsloop'} = $reasonsloop; $_->{'date'} = format_date($_->{'date'}) } @$accepted_suggestions;
+my $rejected_suggestions = &GetSuggestionByStatus('REJECTED', $branchcode);
+map { $_->{'reasonsloop'} = $reasonsloop; $_->{'date'} = format_date($_->{'date'}) } @$rejected_suggestions;
+
+# FIXME: BAD use of map in VOID context.
 
 my @allsuggestions;
-push @allsuggestions,{"suggestiontype"=>"accepted",
-                    'suggestions_loop'=>$accepted_suggestions,    
-                    'reasonsloop' => $reasonsloop};
-push @allsuggestions,{"suggestiontype"=>"pending",
-                     'suggestions_loop'=>$pending_suggestions,
-                    'reasonsloop' => $reasonsloop};
-push @allsuggestions,{"suggestiontype"=>"rejected",
-                     'suggestions_loop'=>$rejected_suggestions,
-                    'reasonsloop' => $reasonsloop};
+push @allsuggestions,
+  { "suggestiontype"   => "accepted",
+    'suggestions_loop' => $accepted_suggestions,
+    'reasonsloop'      => $reasonsloop
+  };
+push @allsuggestions,
+  { "suggestiontype"   => "pending",
+    'suggestions_loop' => $pending_suggestions,
+    'reasonsloop'      => $reasonsloop
+  };
+push @allsuggestions,
+  { "suggestiontype"   => "rejected",
+    'suggestions_loop' => $rejected_suggestions,
+    'reasonsloop'      => $reasonsloop
+  };
 
 $template->param(
-    suggestions       => \@allsuggestions,
-    "op_$op"                => 1,
-    dateformat    => C4::Context->preference("dateformat"),
+    suggestions => \@allsuggestions,
+    "op_$op"    => 1,
+    dateformat  => C4::Context->preference("dateformat"),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
