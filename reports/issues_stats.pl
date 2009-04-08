@@ -426,12 +426,12 @@ sub calculate {
     my $strcalc = "SELECT $linefield, $colfield, ";
         $strcalc .= ($process == 1) ? " COUNT(*) "                                 :
 					($process == 2) ? "(COUNT(DISTINCT borrowers.borrowernumber))" :
-        			($process == 3) ? "(COUNT(DISTINCT issues.itemnumber))"        : '';
+        			($process == 3) ? "(COUNT(DISTINCT statistics.itemnumber))"        : '';
 	if ($process == 4) {
 		my $rqbookcount = $dbh->prepare("SELECT count(*) FROM items");
 		$rqbookcount->execute;
 		my ($bookcount) = $rqbookcount->fetchrow;
-		$strcalc .= "100*(COUNT(DISTINCT issues.itemnumber))/ $bookcount " ;
+		$strcalc .= "100*(COUNT(DISTINCT statistics.itemnumber))/ $bookcount " ;
 	}
 	$strcalc .= "
         FROM statistics
