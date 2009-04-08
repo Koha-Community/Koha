@@ -2292,7 +2292,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     'OPACSerialIssueDisplayCount', '3', '', 'Number of serial issues to display per subscription in the OPAC', 'Integer'
     );");
 
-    print "Upgrade to $DBversion done ( Updated table for Branch Transfer Limits)\n";
+    print "Upgrade to $DBversion done ( Updated table for Serials Display)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.01.00.018";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE deletedborrowers ADD `smsalertnumber` varchar(50) default NULL");
+    print "Upgrade to $DBversion done (added deletedborrowers.smsalertnumber, missed in 3.00.00.091)\n";
     SetVersion ($DBversion);
 }
 
