@@ -426,6 +426,9 @@ sub getRecords {
             elsif ( $sort eq "title_za" ) {
                 $sort_by .= "1=4 >i ";
             }
+            else {
+                warn "Ignoring unrecognized sort '$sort' requested" if $sort_by;
+            }
         }
         if ($sort_by) {
             if ( $results[$i]->sort( "yaz", $sort_by ) < 0 ) {
