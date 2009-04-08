@@ -238,7 +238,7 @@ if ( C4::Context->preference("AmazonEnabled") == 1 ) {
         }
     }
     my $editorial_reviews = \@{$amazon_details->{Items}->{Item}->{EditorialReviews}->{EditorialReview}};
-    my $average_rating = $amazon_details->{Items}->{Item}->{CustomerReviews}->{AverageRating};
+    my $average_rating = $amazon_details->{Items}->{Item}->{CustomerReviews}->{AverageRating} || 0;
     $template->param( AmazonSimilarItems => $similar_products_exist );
     $template->param( amazon_average_rating => $average_rating * 20);
     $template->param( AMAZON_CUSTOMER_REVIEWS    => $customer_reviews );

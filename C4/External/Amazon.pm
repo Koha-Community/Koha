@@ -87,7 +87,7 @@ sub get_amazon_details {
     # warn "ISBN: $isbn | UPC: $upc | EAN: $ean";
 
     my ( $id_type, $item_id);
-    if (length($isbn) eq 13) { # if the isbn is 13-digit, search Amazon using EAN
+    if (defined($isbn) && length($isbn) == 13) { # if the isbn is 13-digit, search Amazon using EAN
 	$id_type = 'EAN';
 	$item_id = $isbn;
     }
