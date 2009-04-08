@@ -106,15 +106,15 @@ fieldset.rows .itemblock fieldset.action { padding:.5em; }
     <fieldset class="rows">
     <legend>Accounting details</legend>
        <ol>
-       <li><label for="datereceived">Date received: </label><span class="label"> <!-- TMPL_VAR NAME="datereceived" --> </span></li>
-       <li><label for="quantity">Quantity ordered: </label><span class="label"> <!-- TMPL_VAR NAME="quantity" --> </span></li>
+       <li><span class="label">Date received: </span> <!-- TMPL_VAR NAME="datereceived" --></li>
+       <li><span class="label">Quantity ordered: </span> <!-- TMPL_VAR NAME="quantity" --></li>
         <li><label for="quantityrec">Quantity received: </label>
             <!-- TMPL_IF NAME="quantityreceived" -->
-                <input id="quantityrec" READONLY type="text" size="20" name="quantityrec" value="<!-- TMPL_VAR NAME="quantityreceivedplus1" -->" />
-                <input id="origquantityrec" READONLY type="hidden" name="origquantityrec" value="<!-- TMPL_VAR NAME="quantityreceived" -->" />
+                <input id="quantityrec" readonly="readonly" type="text" size="20" name="quantityrec" value="<!-- TMPL_VAR NAME="quantityreceivedplus1" -->" />
+                <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="<!-- TMPL_VAR NAME="quantityreceived" -->" />
             <!-- TMPL_ELSE -->
-                <input id="quantityrec" READONLY type="text" size="20" name="quantityrec" value="1" />
-                <input id="origquantityrec" READONLY type="hidden" name="origquantityrec" value="0" />
+                <input id="quantityrec" readonly="readonly" type="text" size="20" name="quantityrec" value="1" />
+                <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="0" />
             <!-- /TMPL_IF -->
 		<!-- 	<input type="text" size="20" name="quantityrec" id="quantityrec" value="<!-- TMPL_VAR NAME="quantityreceived" -->" /> --></li>
         <li><label for="rrp">Replacement cost: </label><input type="text" size="20" name="rrp" id="rrp" value="<!-- TMPL_VAR NAME="rrp" -->" /></li>
