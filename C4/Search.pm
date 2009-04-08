@@ -427,7 +427,7 @@ sub getRecords {
                 $sort_by .= "1=4 >i ";
             }
             else {
-                warn "Ignoring unrecognized sort '$sort' requested";
+                warn "Ignoring unrecognized sort '$sort' requested" if $sort_by;
             }
         }
         if ($sort_by) {
