@@ -109,11 +109,11 @@ foreach my $item (@items){
     }
     $item->{'homebranchname'} = GetBranchName($item->{'homebranch'});
     $item->{'holdingbranchname'} = GetBranchName($item->{'holdingbranch'});
-    if ($item->{'onloan'} eq ''){
-        $item->{'issue'}= 0;
-    } else {
-        $item->{'onloan'} = format_date($item->{'onloan'});
+    if ($item->{'datedue'}) {
+        $item->{'datedue'} = format_date($item->{'datedue'});
         $item->{'issue'}= 1;
+    } else {
+        $item->{'issue'}= 0;
     }
 }
 $template->param(count => $data->{'count'},
