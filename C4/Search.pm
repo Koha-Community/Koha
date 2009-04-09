@@ -902,13 +902,13 @@ sub buildQuery {
 # for handling ccl, cql, pqf queries in diagnostic mode, skip the rest of the steps
 # DIAGNOSTIC ONLY!!
     if ( $query =~ /^ccl=/ ) {
-        return ( undef, $', $', $', $', '', '', '', '', 'ccl' );
+        return ( undef, $', $', "q=ccl=$'", $', '', '', '', '', 'ccl' );
     }
     if ( $query =~ /^cql=/ ) {
-        return ( undef, $', $', $', $', '', '', '', '', 'cql' );
+        return ( undef, $', $', "q=cql=$'", $', '', '', '', '', 'cql' );
     }
     if ( $query =~ /^pqf=/ ) {
-        return ( undef, $', $', $', $', '', '', '', '', 'pqf' );
+        return ( undef, $', $', "q=pqf=$'", $', '', '', '', '', 'pqf' );
     }
 
     # pass nested queries directly
