@@ -25,7 +25,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
     # set the version for version checking
-    $VERSION = 3.00;
+    $VERSION = 3.01;
     require Exporter;
     @ISA    = qw(Exporter);
     @EXPORT = qw(
@@ -228,7 +228,7 @@ any actual character conversion.
 
 sub SetMarcUnicodeFlag {
     my $marc_record = shift;
-    my $marc_flavour = shift;
+    my $marc_flavour = shift; # || C4::Context->preference("marcflavour");
 
     $marc_record->encoding('UTF-8');
     if ($marc_flavour eq 'MARC21') {
@@ -241,6 +241,8 @@ sub SetMarcUnicodeFlag {
             substr($sfa, 26, 4) = '5050';
             $field->update('a' => $sfa);
         }
+    } else {
+        warn "Unrecognized marcflavour: $marc_flavour";
     }
 }
 

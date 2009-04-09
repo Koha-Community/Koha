@@ -165,17 +165,12 @@ my $purchaseorder = $input->param('purchaseordernumber');
 my $invoice       = $input->param('invoice');
 my $publishercode = $input->param('publishercode');
 my $suggestionid  = $input->param('suggestionid');
-my $user          = $input->remote_user;
-
-#warn "CREATEBIBITEM =  $input->param('createbibitem')";
-#warn Dumper $input->param('createbibitem');
-my $createbibitem = $input->param('createbibitem');
+my $biblionumber  = $input->param('biblionumber');
 
 # create, modify or delete biblio
 # create if $quantity>=0 and $existing='no'
 # modify if $quantity>=0 and $existing='yes'
 # delete if $quantity has been set to 0 by the librarian
-my $biblionumber  = $input->param('biblionumber');
 my $bibitemnum;
 if ( $quantity ne '0' ) {
     #check to see if biblio exists
