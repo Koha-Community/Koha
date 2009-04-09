@@ -24,6 +24,7 @@ use MARC::Record;
 use MARC::File::USMARC;
 use MARC::File::XML;
 use ZOOM;
+use POSIX qw(strftime);
 
 use C4::Koha;
 use C4::Dates qw/format_date/;
@@ -1445,18 +1446,15 @@ sub GetPublisherNameFromIsbn($){
 =cut
 
 sub TransformKohaToMarc {
-
     my ( $hash ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth =
-    $dbh->prepare(
+    my $sth = C4::Context->dbh->prepare(
         "SELECT tagfield,tagsubfield FROM marc_subfield_structure WHERE frameworkcode=? AND kohafield=?"
     );
     my $record = MARC::Record->new();
+    SetMarcUnicodeFlag($record, C4::Context->preference("marcflavour"));
     foreach (keys %{$hash}) {
-        &TransformKohaToMarcOneField( $sth, $record, $_,
-            $hash->{$_}, '' );
-        }
+        &TransformKohaToMarcOneField( $sth, $record, $_, $hash->{$_}, '' );
+    }
     return $record;
 }
 
@@ -1618,7 +1616,6 @@ sub TransformHtmlToXml {
     $xml .= "</datafield>\n" if @$tags > 0;
     if (C4::Context->preference('marcflavour') eq 'UNIMARC' and !$unimarc_and_100_exist) {
 #     warn "SETTING 100 for $auth_type";
-        use POSIX qw(strftime);
         my $string = strftime( "%Y%m%d", localtime(time) );
         # set 50 to position 26 is biblios, 13 if authorities
         my $pos=26;

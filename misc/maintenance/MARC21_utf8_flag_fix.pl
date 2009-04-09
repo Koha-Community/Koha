@@ -72,7 +72,8 @@ if ($debug) {
     $verbose++;
 }
 
-my $marcflavour = C4::Context->preference('marcflavour');
+my $marcflavour = C4::Context->preference('marcflavour') or die "No marcflavour (MARC21 or UNIMARC) set in syspref";
+($marcflavour eq 'MARC21') or die "marcflavour must be MARC21, not $marcflavour";
 
 my $all = C4::Context->dbh->prepare("SELECT COUNT(*) FROM biblioitems");
 $all->execute;
@@ -100,8 +101,6 @@ $limit or $limit = $bad_recs->rows();   # limit becomes max if unspecified
 $limit += $offset if $offset;           # increase limit for offset
 my $i = 0;
 
-$marcflavour or die "No marcflavour (MARC21 or UNIMARC) set in syspref";
-
 MARC::File::XML->default_record_format($marcflavour) or die "FAILED MARC::File::XML->default_record_format($marcflavour)";
 
 while ( my $row = $bad_recs->fetchrow_hashref() ) {
@@ -120,7 +119,7 @@ while ( my $row = $bad_recs->fetchrow_hashref() ) {
         next;
     }
     if ($fix) {
-        $record->encoding('UTF-8');
+        SetMarcUnicodeFlag($record, $marcflavour);
         if (ModBiblioMarc($record, $row->{biblionumber})) {
             printf "# %4d of %4d: biblionumber %s : <leader>%s</leader>\n", $i, $badcount, $row->{biblionumber}, $record->leader();
         } else {
@@ -134,13 +133,13 @@ __END__
 
 =head1 NAME
 
-leader_fix.pl - Repair missing leader position 9 value ("a" for MARC21 - UTF8).
+MARC21_utf8_flag_fix.pl - Repair missing leader position 9 value ("a" for MARC21 - UTF8).
 
 =head1 SYNOPSIS
 
-leader_fix.pl [ -h | -m ] [ -v ] [ -d ] [ -s ] [ -l N ] [ -o N ] [ -f ]
+MARC21_utf8_flag_fix.pl [ -h | -m ] [ -v ] [ -d ] [ -s ] [ -l N ] [ -o N ] [ -f ]
 
- Help Options:
+ Help Optionsc
    -h --help -?   Brief help message
    -m --man       Full documentation, same as --help --verbose
       --version   Prints version info
@@ -188,25 +187,27 @@ presents a problem when records have been inserted with the leader/09 showing
 blank for MARC8 encoding.  This script is used to determine the extent of the 
 problem and to fix the affected leaders.
 
-Run leader_fix.pl the first time with no options, and assuming you agree that the leaders
+As the name suggests, this script is only useful for MARC21 and will die for marcflavour UNIMARC.
+
+Run MARC21_utf8_flag_fix.pl the first time with no options, and assuming you agree that the leaders
 presented need fixing, run it again with B<--fix>.  
 
 =head1 USAGE EXAMPLES
 
-B<leader_fix.pl>
+B<MARC21_utf8_flag_fix.pl>
 
 In the most basic form, displays summary of biblioitems examined
 and the leader from any found without /09 = a.
 
-B<leader_fix.pl --fix>
+B<MARC21_utf8_flag_fix.pl --fix>
 
 Fixes the same biblioitems, displaying summary and each leader before/after change.
 
-B<leader_fix.pl --limit=3 --offset=15 --nosummary --dump>
+B<MARC21_utf8_flag_fix.pl --limit=3 --offset=15 --nosummary --dump>
 
 Dumps MARCXML from the 16th, 17th and 18th bad records found.
 
-B<leader_fix.pl -l 3 -o 15 -s 0 -d>
+B<MARC21_utf8_flag_fix.pl -l 3 -o 15 -s 0 -d>
 
 Same thing as previous example in terse form.
 
