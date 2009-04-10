@@ -43,14 +43,14 @@ overdue_notices.pl - prepare messages to be sent to patrons for overdue items
 
 =head1 SYNOPSIS
 
-overdue_notices.pl [ -n ] [ -library <branchcode> ] [ -max <number of days> ] [ -csv [ <filename> ] ] [ -itemscontent <field list> ]
+overdue_notices.pl [ -n ] [ -library <branchcode> ] [ -library <branchcode>...] [ -max <number of days> ] [ -csv [ <filename> ] ] [ -itemscontent <field list> ]
 
  Options:
    -help                          brief help message
    -man                           full documentation
    -n                             No email will be sent
    -max          <days>           maximum days overdue to deal with
-   -library      <branchname>     only deal with overdues from this library
+   -library      <branchname>     only deal with overdues from this library (repeatable : several libraries can be given)
    -csv          <filename>       populate CSV file
    -itemscontent <list of fields> item information in templates
 
@@ -87,7 +87,8 @@ any CSV files. Defaults to 90 to match F<longoverdues.pl>.
 =item B<-library>
 
 select overdues for one specific library. Use the value in the
-branches.branchcode table.
+branches.branchcode table. This option can be repeated in order 
+to select overdues for a group of libraries.
 
 =item B<-csv>
 
@@ -228,7 +229,7 @@ my $man     = 0;
 my $verbose = 0;
 my $nomail  = 0;
 my $MAX     = 90;
-my $mybranch;
+my @branchcodes; # Branch(es) passed as parameter
 my $csvfilename;
 my $triggered = 0;
 my $listall = 0;
@@ -240,7 +241,7 @@ GetOptions(
     'v'              => \$verbose,
     'n'              => \$nomail,
     'max=s'          => \$MAX,
-    'library=s'      => \$mybranch,
+    'library=s'      => \@branchcodes,
     'csv:s'          => \$csvfilename,    # this optional argument gets '' if not supplied.
     'itemscontent=s' => \$itemscontent,
     'list-all'      => \$listall,
@@ -253,24 +254,38 @@ if ( defined $csvfilename && $csvfilename =~ /^-/ ) {
     warn qq(using "$csvfilename" as filename, that seems odd);
 }
 
-my @branches    = C4::Overdues::GetBranchcodesWithOverdueRules();
-my $branchcount = scalar(@branches);
+my @overduebranches    = C4::Overdues::GetBranchcodesWithOverdueRules();	# Branches with overdue rules
+my @branches;									# Branches passed as parameter with overdue rules
+my $branchcount = scalar(@overduebranches);
+
+my $overduebranch_word = scalar @overduebranches > 1 ? 'branches' : 'branch';
+my $branchcodes_word = scalar @branchcodes > 1 ? 'branches' : 'branch';
+
 if ($branchcount) {
-    my $branch_word = scalar @branches > 1 ? 'branches' : 'branch';
-    $verbose and warn "Found $branchcount $branch_word with first message enabled: " . join( ', ', map { "'$_'" } @branches ), "\n";
+    $verbose and warn "Found $branchcount $overduebranch_word with first message enabled: " . join( ', ', map { "'$_'" } @overduebranches ), "\n";
 } else {
     die 'No branches with active overduerules';
 }
 
-if ($mybranch) {
-    $verbose and warn "Branch $mybranch selected\n";
-    if ( scalar grep { $mybranch eq $_ } @branches ) {
-        @branches = ($mybranch);
+if (@branchcodes) {
+    $verbose and warn "$branchcodes_word @branchcodes passed on parameter\n";
+    
+    # Getting libraries which have overdue rules
+    my %seen = map { $_ => 1 } @branchcodes;
+    @branches = grep { $seen{$_} } @overduebranches;
+    
+    
+    if (@branches) {
+
+    	my $branch_word = scalar @branches > 1 ? 'branches' : 'branch';
+	$verbose and warn "$branch_word @branches have overdue rules\n";
+
     } else {
-        $verbose and warn "No active overduerules for branch '$mybranch'\n";
+    
+        $verbose and warn "No active overduerules for $branchcodes_word  '@branchcodes'\n";
         ( scalar grep { '' eq $_ } @branches )
           or die "No active overduerules for DEFAULT either!";
-        $verbose and warn "Falling back on default rules for $mybranch\n";
+        $verbose and warn "Falling back on default rules for @branchcodes\n";
         @branches = ('');
     }
 }
