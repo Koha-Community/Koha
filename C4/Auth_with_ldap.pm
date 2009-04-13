@@ -307,6 +307,7 @@ Example XML stanza for LDAP configuration in KOHA_CONF.
 
  <config>
   ...
+  <useldapserver>1</useldapserver>
   <!-- LDAP SERVER (optional) -->
   <ldapserver id="ldapserver">
     <hostname>localhost</hostname>
