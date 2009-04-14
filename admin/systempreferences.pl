@@ -70,7 +70,6 @@ my %tabsysprefs;
 $tabsysprefs{acquisitions}              = "Acquisitions";
 $tabsysprefs{gist}                      = "Acquisitions";
 $tabsysprefs{emailPurchaseSuggestions}  = "Acquisitions";
-$tabsysprefs{RenewSerialAddsSuggestion} = "Acquisitions";
 
 # Admin
 $tabsysprefs{singleBranchMode}      = "Admin";
@@ -282,13 +281,10 @@ $tabsysprefs{opacsmallimage}             = "OPAC";
 $tabsysprefs{opacstylesheet}             = "OPAC";
 $tabsysprefs{opacthemes}                 = "OPAC";
 $tabsysprefs{opacuserjs}                 = "OPAC";
-$tabsysprefs{SubscriptionHistory}        = "OPAC";
 $tabsysprefs{opacheader}                 = "OPAC";
 $tabsysprefs{noOPACUserLogin}            = "OPAC";
 $tabsysprefs{hideBiblioNumber}           = "OPAC";
-$tabsysprefs{OPACDisplayExtendedSubInfo} = "OPAC";
 $tabsysprefs{OpacMainUserBlock}          = "OPAC";
-$tabsysprefs{OPACSubscriptionDisplay}    = "OPAC";
 $tabsysprefs{OPACURLOpenInNewWindow}     = "OPAC";
 $tabsysprefs{OPACUserCSS}                = "OPAC";
 $tabsysprefs{OPACHighlightedWords}       = "OPAC";
@@ -323,7 +319,11 @@ $tabsysprefs{XSLTResultsDisplay}   = "OPAC";
 
 # Serials
 $tabsysprefs{OPACSerialIssueDisplayCount}  = "Serials";
-$tabsysprefs{StaffSerialIssueDisplayCount}  = "Serials";
+$tabsysprefs{StaffSerialIssueDisplayCount} = "Serials";
+$tabsysprefs{OPACDisplayExtendedSubInfo}   = "Serials";
+$tabsysprefs{OPACSubscriptionDisplay}      = "Serials";
+$tabsysprefs{RenewSerialAddsSuggestion}    = "Serials";
+$tabsysprefs{SubscriptionHistory}          = "Serials";
 
 # LOGFeatures
 $tabsysprefs{CataloguingLog}  = "Logs";
