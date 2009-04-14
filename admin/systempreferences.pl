@@ -181,7 +181,6 @@ $tabsysprefs{BorrowersTitles}              = "Patrons";
 $tabsysprefs{patronimages}                 = "Patrons";
 $tabsysprefs{MinPasswordLength}            = "Patrons";
 $tabsysprefs{uppercasesurnames}            = "Patrons";
-$tabsysprefs{NoReturnSetLost}              = "Patrons";
 $tabsysprefs{MaxFine}                      = "Patrons";
 $tabsysprefs{NotifyBorrowerDeparture}      = "Patrons";
 $tabsysprefs{AddPatronLists}               = "Patrons";
