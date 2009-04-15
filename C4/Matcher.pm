@@ -788,7 +788,7 @@ sub _get_match_keys {
                 $key = _normalize($key);
                 if ($component->{'length'}){
                    if (length($key) > $component->{'length'}){
-                     $key = _normalize(substr($key,$component->{'offset'},$component{'length'}));
+                     $key = _normalize(substr($key,$component->{'offset'},$component->{'length'}));
                    }
                 }
             }
