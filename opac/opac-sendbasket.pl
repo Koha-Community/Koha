@@ -118,7 +118,7 @@ if ( $email_add ) {
         $email_file = $1;
     }
 
-    if ( $template_res =~ /<MESSAGE>\n(.*)\n<END_MESSAGE>/s ) { $body = $1; }
+    if ( $template_res =~ /<MESSAGE>\n(.*)\n<END_MESSAGE>/s ) { $body = encode_qp($1); }
 
     my $boundary = "====" . time() . "====";
 
