@@ -188,6 +188,8 @@ $(document).ready(function(){
                       <a href="#" id="tagsel_cancel" onclick="tagCanceled(); return false;" style="display:inline">Cancel</a>
                     </span>
                   </div>
+				<!-- TMPL_ELSE -->
+				<div style="margin-left:1em;"><a href="#" class="send tag_hides" onclick="open(CGIBIN+'opac-sendshelf.pl?shelfid=<!-- TMPL_VAR NAME="shelfnumber" -->','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100')">Send List</a> | <span><a href="/cgi-bin/koha/opac-user.pl">Log in</a> to place holds or add tags</span></div>
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="manageshelf" -->
                   <form action="/cgi-bin/koha/opac-shelves.pl" method="post" name="myform" class="checkboxed">
