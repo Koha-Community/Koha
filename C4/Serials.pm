@@ -1106,9 +1106,9 @@ sub ModSubscriptionHistory {
                     WHERE subscriptionid=?
                 ";
     my $sth = $dbh->prepare($query);
-    $recievedlist =~ s/^,//g;
-    $missinglist  =~ s/^,//g;
-    $opacnote     =~ s/^,//g;
+    $recievedlist =~ s/^; //;
+    $missinglist  =~ s/^; //;
+    $opacnote     =~ s/^; //;
     $sth->execute(
         $histstartdate, $enddate,       $recievedlist, $missinglist,
         $opacnote,      $librariannote, $subscriptionid
@@ -1164,21 +1164,22 @@ sub ModSerialStatus {
             my ( $missinglist, $recievedlist ) = $sth->fetchrow;
             if ( $status eq 2 ) {
 
-#             warn "receivedlist : $recievedlist serialseq :$serialseq, ".index("$recievedlist","$serialseq");
-                $recievedlist .= ",$serialseq"
+                $recievedlist .= "; $serialseq"
                   unless ( index( "$recievedlist", "$serialseq" ) >= 0 );
             }
 
 #         warn "missinglist : $missinglist serialseq :$serialseq, ".index("$missinglist","$serialseq");
-            $missinglist .= ",$serialseq"
+            $missinglist .= "; $serialseq"
               if ( $status eq 4
                 and not index( "$missinglist", "$serialseq" ) >= 0 );
-            $missinglist .= ",not issued $serialseq"
+            $missinglist .= "; not issued $serialseq"
               if ( $status eq 5
                 and index( "$missinglist", "$serialseq" ) >= 0 );
             $query =
 "UPDATE subscriptionhistory SET recievedlist=?, missinglist=? WHERE  subscriptionid=?";
             $sth = $dbh->prepare($query);
+            $recievedlist =~ s/^; //;
+            $missinglist  =~ s/^; //;
             $sth->execute( $recievedlist, $missinglist, $subscriptionid );
         }
     }
@@ -1558,10 +1559,10 @@ sub NewIssue {
       ### TODO Add a feature that improves recognition and description.
       ### As such count (serialseq) i.e. : N18,2(N19),N20
       ### Would use substr and index But be careful to previous presence of ()
-        $recievedlist .= ",$serialseq" unless (index($recievedlist,$serialseq)>0);
+        $recievedlist .= "; $serialseq" unless (index($recievedlist,$serialseq)>0);
     }
     if ( $status eq 4 ) {
-        $missinglist .= ",$serialseq" unless (index($missinglist,$serialseq)>0);
+        $missinglist .= "; $serialseq" unless (index($missinglist,$serialseq)>0);
     }
     $query = qq|
         UPDATE subscriptionhistory
@@ -1569,6 +1570,8 @@ sub NewIssue {
         WHERE  subscriptionid=?
     |;
     $sth = $dbh->prepare($query);
+    $recievedlist =~ s/^; //;
+    $missinglist  =~ s/^; //;
     $sth->execute( $recievedlist, $missinglist, $subscriptionid );
     return $serialid;
 }
