@@ -342,7 +342,7 @@ sub branchinfotable {
         $branchinfo = GetBranchInfo($branchcode);
     }
     else {
-        $branchinfo = GetBranchInfo(undef,'properties');
+        $branchinfo = GetBranchInfo();
     }
     my $toggle;
     my $i = 0;
