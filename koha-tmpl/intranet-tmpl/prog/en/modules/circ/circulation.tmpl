@@ -92,8 +92,9 @@ $.tablesorter.addParser({
 <!-- TMPL_IF NAME="RESERVED" --><li>Item is on reserve for <!-- TMPL_VAR NAME="RESERVED" --></li><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="ISSUED_TO_ANOTHER" --><li>Item ( <!-- TMPL_VAR NAME="getTitleMessageIteminfo" --> ) checked out to <!-- TMPL_VAR NAME="ISSUED_TO_ANOTHER" -->. Check in and check out?</li><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="TOO_MANY" --><li>Too many checked out (already checked out / max : <!-- TMPL_VAR name="TOO_MANY" -->)</li><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="OVERDUES" --><li><!--TMPL_VAR Name="OVERDUES"--> Overdues</li><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="NOT_FOR_LOAN_CAN_FORCE" --><li>Item not for loan, are you sure you want to check it out ?</p><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="USERBLOCKEDREMAINING" --><li><!--TMPL_VAR Name="USERBLOCKEDREMAINING"--> Overdues</li><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="NOT_FOR_LOAN_CAN_FORCING" --><li>Item not for loan, are you sure you want to check it out ?</p><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="PATRON_CANT" --><li>This patron can't issue this item (issuing rules)</li><!-- /TMPL_IF -->
 </ul>
 
 <form method="post" action="/cgi-bin/koha/circ/circulation.pl">
