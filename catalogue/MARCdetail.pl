@@ -247,6 +247,7 @@ my @fields = $record->fields();
 my %witness
   ; #---- stores the list of subfields used at least once, with the "meaning" of the code
 my @big_array;
+my $norequests = 1;
 foreach my $field (@fields) {
     next if ( $field->tag() < 10 );
     my @subf = $field->subfields;
@@ -260,11 +261,13 @@ foreach my $field (@fields) {
         $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{lib};
         $this_row{ $subf[$i][0] } = GetAuthorisedValueDesc( $field->tag(),
                         $subf[$i][0], $subf[$i][1], '', $tagslib) || $subf[$i][1];
+        $norequests = 0 if $subf[$i][1] ==0 and $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{kohafield} eq 'items.notforloan';
     }
     if (%this_row) {
         push( @big_array, \%this_row );
     }
 }
+
 my ($holdingbrtagf,$holdingbrtagsubf) = &GetMarcFromKohaField("items.holdingbranch",$frameworkcode);
 @big_array = sort {$a->{$holdingbrtagsubf} cmp $b->{$holdingbrtagsubf}} @big_array;
 
@@ -306,6 +309,7 @@ if ($subscriptionscount) {
 }
 
 $template->param (
+    norequests              => $norequests, 
     item_loop               => \@item_value_loop,
     item_header_loop        => \@header_value_loop,
     biblionumber            => $biblionumber,
