@@ -106,9 +106,6 @@ sub GetSuppliersWithLateIssues {
     while ( my ( $id, $name ) = $sth->fetchrow ) {
         $supplierlist{$id} = $name;
     }
-    if ( C4::Context->preference("RoutingSerials") ) {
-        $supplierlist{''} = "All Suppliers";
-    }
     return %supplierlist;
 }
 
