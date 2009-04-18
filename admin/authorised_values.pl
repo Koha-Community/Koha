@@ -90,7 +90,8 @@ if ($op eq 'add_form') {
                          authorised_value => $data->{'authorised_value'},
                          lib              => $data->{'lib'},
                          id               => $data->{'id'},
-                         imagesets        => C4::Koha::getImageSets( checked => $data->{'imageurl'} )
+                         imagesets        => C4::Koha::getImageSets( checked => $data->{'imageurl'} ),
+                         offset           => $offset,
                      );
                           
 ################## ADD_VALIDATE ##################################
@@ -123,7 +124,7 @@ if ($op eq 'add_form') {
             my $lib = $input->param('lib');
             undef $lib if ($lib eq ""); # to insert NULL instead of a blank string
             $sth->execute($new_category, $new_authorised_value, $lib, $imageurl, $id);          
-            print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=".$new_category."\"></html>";
+            print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=".$new_category."&offset=$offset\"></html>";
             exit;
         }
     }
@@ -139,7 +140,7 @@ if ($op eq 'add_form') {
     	    my $lib = $input->param('lib');
     	    undef $lib if ($lib eq ""); # to insert NULL instead of a blank string
     	    $sth->execute($id, $new_category, $new_authorised_value, $lib, $imageurl );
-    	    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=".$input->param('category')."\"></html>";
+    	    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=".$input->param('category')."&offset=$offset\"></html>";
     	    exit;
         }
     }
@@ -170,7 +171,7 @@ if ($op eq 'add_form') {
 	my $id = $input->param('id');
 	my $sth=$dbh->prepare("delete from authorised_values where id=?");
 	$sth->execute($id);
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=$searchfield\"></html>";
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=authorised_values.pl?searchfield=$searchfield&offset=$offset\"></html>";
 	exit;
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
@@ -218,8 +219,8 @@ sub default_form {
 		$row_data{authorised_value} = $results->[$i]{'authorised_value'};
 		$row_data{lib}              = $results->[$i]{'lib'};
 		$row_data{imageurl}         = getitemtypeimagelocation( 'intranet', $results->[$i]{'imageurl'} );
-		$row_data{edit}             = "$script_name?op=add_form&amp;id=".$results->[$i]{'id'};
-		$row_data{delete}           = "$script_name?op=delete_confirm&amp;searchfield=$searchfield&amp;id=".$results->[$i]{'id'};
+		$row_data{edit}             = "$script_name?op=add_form&amp;id=".$results->[$i]{'id'}."&offset=$offset";
+		$row_data{delete}           = "$script_name?op=delete_confirm&amp;searchfield=$searchfield&amp;id=".$results->[$i]{'id'}."&offset=$offset";
 		push(@loop_data, \%row_data);
 	}
 
