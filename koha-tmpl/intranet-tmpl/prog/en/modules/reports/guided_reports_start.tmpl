@@ -112,8 +112,8 @@ canned reports and writing custom SQL reports.</p>
 </td>
 <td><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&amp;phase=Show%20SQL">Show SQL</a> 
 &nbsp; <a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&amp;phase=Edit%20SQL">Edit SQL</a></td>
-<td><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&amp;phase=Run%20this%20report">Run this Report</a></td>
-<td><a href="/cgi-bin/koha/tools/scheduler.pl?id=<!-- TMPL_VAR NAME="id" -->">Schedule this Report</a></td>
+<td><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&amp;phase=Run%20this%20report">Run</a></td>
+<td><a href="/cgi-bin/koha/tools/scheduler.pl?id=<!-- TMPL_VAR NAME="id" -->">Schedule</a></td>
 <td><a class="confirmdelete" title="Delete this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&amp;phase=Delete%20Saved">Delete</a></td></tr>
 <!-- /TMPL_LOOP -->
 </table>
@@ -461,7 +461,10 @@ Sub report:<select name="subreport">
 <input type="hidden" name="id" value="<!-- TMPL_VAR NAME="id" -->">
 <fieldset class="rows">
 <legend>Edit SQL</legend>
-<textarea id="sql" name="sql"><!-- TMPL_VAR NAME="sql" --></textarea>
+<ol>
+<li><label for="reportname">Report Name:</label><input type="text" id="reportname" name="reportname" value="<!-- TMPL_VAR NAME="reportname" -->" ></li>
+<li><textarea id="sql" name="sql"><!-- TMPL_VAR NAME="sql" --></textarea></li>
+</ol>
 </fieldset>
 
 <fieldset class="action">

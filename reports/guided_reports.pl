@@ -91,18 +91,20 @@ elsif ( $phase eq 'Show SQL'){
 
 elsif ( $phase eq 'Edit SQL'){
 	
-	my $id = $input->param('reports');
-	my $sql = get_sql($id);
-	$template->param(
-		'sql'     => $sql,
-	        'id'      => $id,
-		'editsql' => 1,
+    my $id = $input->param('reports');
+    my ($sql,$type,$reportname,$notes) = get_saved_report($id);
+    $template->param(
+	    'sql'        => $sql,
+	    'reportname' => $reportname,
+            'id'         => $id,
+	    'editsql'    => 1,
     );
 }
 
 elsif ( $phase eq 'Update SQL'){
-    my $id = $input->param('id');
-    my $sql = $input->param('sql');
+    my $id         = $input->param('id');
+    my $sql        = $input->param('sql');
+    my $reportname = $input->param('reportname');
     my @errors;
     if ($sql =~ /;?\W?(UPDATE|DELETE|DROP|INSERT|SHOW|CREATE)\W/i) {
         push @errors, {sqlerr => $1};
@@ -117,7 +119,7 @@ elsif ( $phase eq 'Update SQL'){
         );
     }
     else {
-        update_sql( $id, $sql );
+        update_sql( $id, $sql, $reportname );
         $template->param(
             'save_successful'       => 1,
         );
