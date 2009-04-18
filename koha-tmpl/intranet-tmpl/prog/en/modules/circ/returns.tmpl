@@ -362,7 +362,7 @@ function Dopop(link) {
             <td><!-- TMPL_VAR Name="itemtype" --> <!-- TMPL_VAR Name="ccode" --></td>
 			 <td><!-- TMPL_IF Name="duedate" -->
                 <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->">
-                    <!-- TMPL_VAR Name="borsurname" -->, <!-- TMPL_VAR Name="borfirstname" -->
+                    <!-- TMPL_VAR Name="borsurname" -->, <!-- TMPL_VAR Name="borfirstname" --> (<!-- TMPL_VAR name="borcategorycode" -->)
                 </a>
             <!-- TMPL_ELSE -->Not checked out<!-- /TMPL_IF --></td>
             <td><!-- TMPL_IF name="bornote" --><span class="circ-hlt"><!-- TMPL_VAR name="bornote" --><br /></span><!-- /TMPL_IF -->
