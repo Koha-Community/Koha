@@ -7,7 +7,7 @@
     <!-- TMPL_IF NAME="SENT" -->
         <h3>Message Sent</h3>
         <p>The list was sent to: <!-- TMPL_VAR NAME="email" --></p>
-        <p><a class="close" href="#">Close window</a></p>
+        <p><a class="close focus" href="#">Close window</a></p>
     <!-- /TMPL_IF  -->
     <!-- TMPL_IF NAME="error" -->
     <p>Problem sending the list...</p>
@@ -21,7 +21,7 @@
 <legend>Sending your list</legend>
 <ol>   <li>
         <label for="email">Email Address:</label>
-        <input type="text" id="email" name="email" size="43" />
+        <input type="text" id="email" name="email" size="43" class="focus" />
     </li>
     <li>
             <label for="comment">Comment:</label>

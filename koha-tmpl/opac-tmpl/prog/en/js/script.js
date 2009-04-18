@@ -11,6 +11,7 @@ $(document).ready(function(){
 	$(".close").click(function(){
 		window.close();
 	});
+	$(".focus").focus();
 	// clear the basket when user logs out
 	$("#logout").click(function(){
 		var nameCookie = "bib_list";
