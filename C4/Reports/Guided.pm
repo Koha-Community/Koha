@@ -39,7 +39,7 @@ BEGIN {
 	@ISA = qw(Exporter);
 	@EXPORT = qw(
 		get_report_types get_report_areas get_columns build_query get_criteria
-		save_report get_saved_reports execute_query get_saved_report create_compound run_compound
+	    save_report get_saved_reports execute_query get_saved_report create_compound run_compound
 		get_column_type get_distinct_values save_dictionary get_from_dictionary
 		delete_definition delete_report format_results get_sql
         select_2_select_count_value update_sql
@@ -449,11 +449,12 @@ sub save_report {
 sub update_sql {
     my $id = shift || croak "No Id given";
     my $sql = shift;
+    my $reportname = shift;
     my $dbh = C4::Context->dbh();
     $sql =~ s/(\s*\;\s*)$//; # removes trailing whitespace and /;/
-    my $query = "UPDATE saved_sql SET savedsql = ?, last_modified = now() WHERE id = ? ";
+    my $query = "UPDATE saved_sql SET savedsql = ?, last_modified = now(), report_name = ? WHERE id = ? ";
     my $sth = $dbh->prepare($query);
-    $sth->execute( $sql, $id );
+    $sth->execute( $sql, $reportname, $id );
     $sth->finish();
 }
 
