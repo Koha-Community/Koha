@@ -738,7 +738,12 @@ sub CanBookBeIssued {
     # JB34 CHECKS IF BORROWERS DONT HAVE ISSUE TOO MANY BOOKS
     #
 	my $toomany = TooMany( $borrower, $item->{biblionumber}, $item );
-    $needsconfirmation{TOO_MANY} = $toomany if $toomany;
+    # if TooMany return / 0, then the user has no permission to check out this book
+    if ($toomany =~ /\/ 0/) {
+        $needsconfirmation{PATRON_CANT} = 1;
+    } else {
+        $needsconfirmation{TOO_MANY} = $toomany if $toomany;
+    }
 
     #
     # ITEM CHECKING
