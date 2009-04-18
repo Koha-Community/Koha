@@ -281,7 +281,6 @@ $tabsysprefs{opacstylesheet}             = "OPAC";
 $tabsysprefs{opacthemes}                 = "OPAC";
 $tabsysprefs{opacuserjs}                 = "OPAC";
 $tabsysprefs{opacheader}                 = "OPAC";
-$tabsysprefs{noOPACUserLogin}            = "OPAC";
 $tabsysprefs{hideBiblioNumber}           = "OPAC";
 $tabsysprefs{OpacMainUserBlock}          = "OPAC";
 $tabsysprefs{OPACURLOpenInNewWindow}     = "OPAC";
