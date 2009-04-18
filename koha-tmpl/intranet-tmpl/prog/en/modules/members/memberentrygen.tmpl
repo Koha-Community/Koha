@@ -276,45 +276,66 @@
     <fieldset class="rows">
         <legend>Guarantor Information</legend>
         <ol>
-        <!-- TMPL_IF NAME="guarantorid" -->
-        <li id="contact-details">
-        <!-- TMPL_ELSE -->
-        <li id="contact-details" style="display: none">
-        <!-- /TMPL_IF -->
-            <span class="label">Patron #:</span> <!-- TMPL_IF NAME="guarantorid" --> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="guarantorid" -->" target="blank"><!-- TMPL_VAR NAME="guarantorid" --></a><!-- /TMPL_IF -->
-        </li>
-        <li>
-            <label for="contactname">Surname: </label>
-            <!-- TMPL_IF NAME="guarantorid" -->
-            <span><!-- TMPL_VAR NAME="contactname" --></span>
-            <input name="contactname" id="contactname" type="hidden" size="20" value="<!-- TMPL_VAR NAME="contactname" -->" />
-            <!-- TMPL_ELSE -->
-            <input name="contactname" id="contactname" type="text" size="20" value="<!-- TMPL_VAR NAME="contactname" -->" />
-            <!-- /TMPL_IF -->
-        </li>
-        <li>
-            <label for="contactfirstname">First name: </label>
-            <!-- TMPL_IF NAME="guarantorid" -->
-            <span><!-- TMPL_VAR NAME="contactfirstname" --></span>
-            <input name="contactfirstname" id="contactfirstname" type="hidden" size="20" value="<!-- TMPL_VAR NAME="contactfirstname" -->" />
-            <!-- TMPL_ELSE -->
-            <input name="contactfirstname" id="contactfirstname" type="text" size="20" value="<!-- TMPL_VAR NAME="contactfirstname" -->" />
-            <!-- /TMPL_IF -->
-        </li>
-        <!-- TMPL_IF name="relshiploop" -->
-        <li>
-            <label for="relationship">Relationship: </label>
-            <select name="relationship" id="relationship" >
-                <!-- TMPL_LOOP name="relshiploop" -->
-                <!-- TMPL_IF name="selected" -->
-                <option value="<!-- TMPL_VAR name="relationship" -->" selected="selected" ><!-- TMPL_VAR name="relationship" --></option>
-                <!-- TMPL_ELSE -->
-                <option value="<!-- TMPL_VAR name="relationship" -->"><!-- TMPL_VAR name="relationship" --></option>
-                <!-- /TMPL_IF -->
-                <!-- /TMPL_LOOP -->
-            </select>
-        </li>
-        <!-- /TMPL_IF -->
+<!--TMPL_IF Name="P"-->
+	        <!-- TMPL_IF NAME="guarantorid" -->
+	        <li id="contact-details">
+	        <!-- TMPL_ELSE -->
+	        <li id="contact-details" style="display: none">
+	        <!-- /TMPL_IF -->
+	            <span class="label">Organization #:</span> <!-- TMPL_IF NAME="guarantorid" --> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="guarantorid" -->" target="blank"><!-- TMPL_VAR NAME="guarantorid" --></a><!-- /TMPL_IF -->
+	        </li>
+	        <li>
+	            <label for="contactname">Organization name: </label>
+	            <!-- TMPL_IF NAME="guarantorid" -->
+	            <span><!-- TMPL_VAR NAME="contactname" --></span>
+	            <input name="contactname" id="contactname" type="hidden" size="20" value="<!-- TMPL_VAR NAME="contactname" -->" />
+	            <!-- TMPL_ELSE -->
+	            <input name="contactname" id="contactname" type="text" size="20" value="<!-- TMPL_VAR NAME="contactname" -->" />
+	            <!-- /TMPL_IF -->
+	        </li>
+<!-- TMPL_ELSE -->
+ <!-- TMPL_IF NAME="C" -->
+ <!-- TMPL_IF NAME="guarantorid" -->
+ <li id="contact-details">
+ <!-- TMPL_ELSE -->
+ <li id="contact-details" style="display: none">
+ <!-- /TMPL_IF -->
+     <span class="label">Patron #:</span> <!-- TMPL_IF NAME="guarantorid" --> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="guarantorid" -->" target="blank"><!-- TMPL_VAR NAME="guarantorid" --></a><!-- /TMPL_IF -->
+ </li>
+ <li>
+     <label for="contactname">Surname: </label>
+     <!-- TMPL_IF NAME="guarantorid" -->
+     <span><!-- TMPL_VAR NAME="contactname" --></span>
+     <input name="contactname" id="contactname" type="hidden" size="20" value="<!-- TMPL_VAR NAME="contactname" -->" />
+     <!-- TMPL_ELSE -->
+     <input name="contactname" id="contactname" type="text" size="20" value="<!-- TMPL_VAR NAME="contactname" -->" />
+     <!-- /TMPL_IF -->
+ </li>
+ <li>
+     <label for="contactfirstname">First name: </label>
+     <!-- TMPL_IF NAME="guarantorid" -->
+     <span><!-- TMPL_VAR NAME="contactfirstname" --></span>
+     <input name="contactfirstname" id="contactfirstname" type="hidden" size="20" value="<!-- TMPL_VAR NAME="contactfirstname" -->" />
+     <!-- TMPL_ELSE -->
+     <input name="contactfirstname" id="contactfirstname" type="text" size="20" value="<!-- TMPL_VAR NAME="contactfirstname" -->" />
+     <!-- /TMPL_IF -->
+ </li>
+ <!-- TMPL_IF name="relshiploop" -->
+ <li>
+     <label for="relationship">Relationship: </label>
+     <select name="relationship" id="relationship" >
+         <!-- TMPL_LOOP name="relshiploop" -->
+         <!-- TMPL_IF name="selected" -->
+         <option value="<!-- TMPL_VAR name="relationship" -->" selected="selected" ><!-- TMPL_VAR name="relationship" --></option>
+         <!-- TMPL_ELSE -->
+         <option value="<!-- TMPL_VAR name="relationship" -->"><!-- TMPL_VAR name="relationship" --></option>
+         <!-- /TMPL_IF -->
+         <!-- /TMPL_LOOP -->
+     </select>
+ </li>
+ <!-- /TMPL_IF -->
+ <!-- /TMPL_IF -->
+<!--/TMPL_IF -->
         <li>
             <span class="label">&nbsp;</span>
             <!-- TMPL_IF NAME="guarantorid" -->
