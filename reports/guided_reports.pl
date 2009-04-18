@@ -54,7 +54,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
     my @errors = ();
 my $phase = $input->param('phase');
-
 if ( !$phase ) {
     $template->param( 'start' => 1 );
     # show welcome page
@@ -88,6 +87,42 @@ elsif ( $phase eq 'Show SQL'){
 		'sql' => $sql,
 		'showsql' => 1,
     );
+}
+
+elsif ( $phase eq 'Edit SQL'){
+	
+	my $id = $input->param('reports');
+	my $sql = get_sql($id);
+	$template->param(
+		'sql'     => $sql,
+	        'id'      => $id,
+		'editsql' => 1,
+    );
+}
+
+elsif ( $phase eq 'Update SQL'){
+    my $id = $input->param('id');
+    my $sql = $input->param('sql');
+    my @errors;
+    if ($sql =~ /;?\W?(UPDATE|DELETE|DROP|INSERT|SHOW|CREATE)\W/i) {
+        push @errors, {sqlerr => $1};
+    }
+    elsif ($sql !~ /^(SELECT)/i) {
+        push @errors, {queryerr => 1};
+    }
+    if (@errors) {
+        $template->param(
+            'errors'    => \@errors,
+            'sql'       => $sql,
+        );
+    }
+    else {
+        update_sql( $id, $sql );
+        $template->param(
+            'save_successful'       => 1,
+        );
+    }
+    
 }
 
 elsif ($phase eq 'retrieve results') {

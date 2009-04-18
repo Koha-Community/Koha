@@ -110,7 +110,8 @@ canned reports and writing custom SQL reports.</p>
 <td><!-- TMPL_VAR NAME="notes" --></td>
 <td><!-- TMPL_IF NAME="date_run" --><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&id=<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="date_run" --></a><!-- /TMPL_IF -->
 </td>
-<td><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&amp;phase=Show%20SQL">Show SQL</a></td>
+<td><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&amp;phase=Show%20SQL">Show SQL</a> 
+&nbsp; <a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&amp;phase=Edit%20SQL">Edit SQL</a></td>
 <td><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&amp;phase=Run%20this%20report">Run this Report</a></td>
 <td><a href="/cgi-bin/koha/tools/scheduler.pl?id=<!-- TMPL_VAR NAME="id" -->">Schedule this Report</a></td>
 <td><a class="confirmdelete" title="Delete this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&amp;phase=Delete%20Saved">Delete</a></td></tr>
@@ -452,6 +453,22 @@ Sub report:<select name="subreport">
 
 <!-- TMPL_IF NAME="showsql" -->
 <textarea id="sql"><!-- TMPL_VAR NAME="sql" --></textarea>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="editsql" -->
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+<input type="hidden" name="phase" value="Update SQL" />
+<input type="hidden" name="id" value="<!-- TMPL_VAR NAME="id" -->">
+<fieldset class="rows">
+<legend>Edit SQL</legend>
+<textarea id="sql" name="sql"><!-- TMPL_VAR NAME="sql" --></textarea>
+</fieldset>
+
+<fieldset class="action">
+<input type="submit" name="submit" value="Update SQL" /></fieldset>
+</form>
+
+
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="save_successful" -->
