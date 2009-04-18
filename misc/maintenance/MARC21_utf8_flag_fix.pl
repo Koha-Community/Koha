@@ -139,7 +139,7 @@ MARC21_utf8_flag_fix.pl - Repair missing leader position 9 value ("a" for MARC21
 
 MARC21_utf8_flag_fix.pl [ -h | -m ] [ -v ] [ -d ] [ -s ] [ -l N ] [ -o N ] [ -f ]
 
- Help Optionsc
+ Help Options:
    -h --help -?   Brief help message
    -m --man       Full documentation, same as --help --verbose
       --version   Prints version info
