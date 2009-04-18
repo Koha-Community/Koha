@@ -139,12 +139,12 @@ MARC21_utf8_flag_fix.pl - Repair missing leader position 9 value ("a" for MARC21
 
 MARC21_utf8_flag_fix.pl [ -h | -m ] [ -v ] [ -d ] [ -s ] [ -l N ] [ -o N ] [ -f ]
 
- Help Optionsc
+ Help Options:
    -h --help -?   Brief help message
    -m --man       Full documentation, same as --help --verbose
       --version   Prints version info
 
- Feeback Options:
+ Feedback Options:
    -d --dump      Dump MARCXML of biblioitems processed, default OFF
    -s --summary   Print initial summary of good and bad biblioitems counted, default ON
    -v --verbose   Increase verbosity of output, default OFF
@@ -165,7 +165,7 @@ With --fix, the script fixes the same records.
 
 =item B<--limit=N>
 
-Like a LIMIT statement in SQL, this contrains the number of records targeted by the script to an integer N.  
+Like a LIMIT statement in SQL, this constrains the number of records targeted by the script to an integer N.  
 The default is to target all records with bad leaders.
 
 =item B<--offset=N>
