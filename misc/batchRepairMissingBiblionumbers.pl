@@ -3,6 +3,7 @@
 #  Written by TG on 01/10/2005
 #  Revised by Joshua Ferraro on 03/31/2006
 use strict;
+use warnings;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
@@ -14,43 +15,24 @@ BEGIN {
 
 use C4::Context;
 use C4::Biblio;
-use MARC::Record;
-use MARC::File::USMARC;
 
 
 my $dbh = C4::Context->dbh;
+my %kohafields;
 
-my $sth=$dbh->prepare("select m.biblionumber,b.biblioitemnumber from marc_biblio m left join biblioitems b on b.biblionumber=m.biblionumber ");
-    $sth->execute();
+my $sth=$dbh->prepare("SELECT biblio.biblionumber, biblioitemnumber, frameworkcode FROM biblio JOIN biblioitems USING (biblionumber)");
+$sth->execute();
 
-while (my ($biblionumber,$biblioitemnumber)=$sth->fetchrow ){
- my $record = GetMarcBiblio($biblionumber);
-    
-        MARCmodbiblionumber($biblionumber,$biblioitemnumber,$record);
-    
+while (my ($biblionumber,$biblioitemnumber,$frameworkcode)=$sth->fetchrow ){
+    my $record = GetMarcBiblio($biblionumber);
+    C4::Biblio::_koha_marc_update_bib_ids($record, $frameworkcode, $biblionumber, $biblioitemnumber);
+    my $biblionumber = eval {ModBiblioMarc( $record, $biblionumber, $frameworkcode )};
+    if($@){
+        print "Problem with biblionumber : $biblionumber\n";
+        exit -1;
+    }else{
+        print "biblionumber : $biblionumber\r\r";
+    }
 }
 
-sub MARCmodbiblionumber{
-my ($biblionumber,$biblioitemnumber,$record)=@_;
-
-my ($tagfield,$biblionumtagsubfield) = &GetMarcFromKohaField("biblio.biblionumber","");
-my ($tagfield2,$biblioitemtagsubfield) = &GetMarcFromKohaField("biblio.biblioitemnumber","");
-    
-my $update=0;
-      my @tags = $record->field($tagfield);
-
-if (!@tags){
-         
-my $newrec = MARC::Field->new( $tagfield,'','', $biblionumtagsubfield => $biblionumber,$biblioitemtagsubfield=>$biblioitemnumber);
-    $record->append_fields($newrec);
- $update=1;
-    }
-
- 
-if ($update){    
-&ModBiblioMarc($record,'',$biblionumber);
-    print "$biblionumber \n";
-    }
-
-}
 END;
