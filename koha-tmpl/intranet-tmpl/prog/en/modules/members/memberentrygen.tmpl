@@ -398,19 +398,7 @@
 	</ol>
     </fieldset>
   <fieldset class="rows" id="memberentry_contact">
-    <legend>Contact</legend><ol>       
-<!--TMPL_IF Name="C"-->
-      <h2>Patron</h2>
-      <li> 
-        <!-- TMPL_IF NAME="mandatoryB_email" -->
-          <label for="B_email" class="required">
-        <!--TMPL_ELSE-->
-          <label for="B_email">
-        <!-- /TMPL_IF-->
-        Email (home): </label>
-        <input type="text" id="B_email" name="B_email" size="45" value="<!-- TMPL_VAR NAME="B_email" -->" />
-		<!-- TMPL_IF NAME="mandatoryB_email" --><span class="required">Required</span><!-- /TMPL_IF --> </li>
-<!--/TMPL_IF-->
+    <legend>Contact</legend><ol>
       <li>
       <!-- TMPL_IF NAME="mandatoryphone" --> 
       <label for="phone" class="required">
