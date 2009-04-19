@@ -1,7 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration &rsaquo; Patron Categories &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="categorycode" -->Modify category '<!-- TMPL_VAR NAME="categorycode" -->'<!-- TMPL_ELSE -->New category<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<title>Koha &rsaquo; Administration &rsaquo; Patron Categories &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="categorycode" -->Modify category '<!-- TMPL_VAR NAME="categorycode" escape="html" -->'<!-- TMPL_ELSE -->New category<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="add_validate" -->Data recorded<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="delete_confirm" --><!-- TMPL_IF NAME="totalgtzero" -->Cannot Delete: Category <!-- TMPL_VAR NAME="categorycode" --> in Use<!-- TMPL_ELSE -->Confirm Deletion of Category '<!-- TMPL_VAR NAME="categorycode" -->'<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirm" --><!-- TMPL_IF NAME="totalgtzero" -->Cannot Delete: Category <!-- TMPL_VAR NAME="categorycode" escape="html" --> in Use<!-- TMPL_ELSE -->Confirm Deletion of Category '<!-- TMPL_VAR NAME="categorycode" escape="html" -->'<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirmed" -->Category Deleted<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
@@ -74,9 +74,9 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="patrons-admin-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --> <a href="/cgi-bin/koha/admin/categorie.pl">Patron Categories</a> &rsaquo; <!-- TMPL_IF NAME="categorycode" -->Modify category '<!-- TMPL_VAR NAME="categorycode" -->'<!-- TMPL_ELSE -->New category<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --> <a href="/cgi-bin/koha/admin/categorie.pl">Patron Categories</a> &rsaquo; <!-- TMPL_IF NAME="categorycode" -->Modify category '<!-- TMPL_VAR NAME="categorycode" escape="html" -->'<!-- TMPL_ELSE -->New category<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="add_validate" --> <a href="/cgi-bin/koha/admin/categorie.pl">Patron Categories</a> &rsaquo; Data recorded<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="delete_confirm" --> <a href="/cgi-bin/koha/admin/categorie.pl">Patron Categories</a> &rsaquo; <!-- TMPL_IF NAME="totalgtzero" -->Cannot Delete: Category <!-- TMPL_VAR NAME="categorycode" --> in Use<!-- TMPL_ELSE -->Confirm Deletion of Category '<!-- TMPL_VAR NAME="categorycode" -->'<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="delete_confirm" --> <a href="/cgi-bin/koha/admin/categorie.pl">Patron Categories</a> &rsaquo; <!-- TMPL_IF NAME="totalgtzero" -->Cannot Delete: Category <!-- TMPL_VAR NAME="categorycode" escape="html" --> in Use<!-- TMPL_ELSE -->Confirm Deletion of Category '<!-- TMPL_VAR NAME="categorycode" escape="html" -->'<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirmed" --> <a href="/cgi-bin/koha/admin/categorie.pl">Patron Categories</a> &rsaquo; Category Deleted<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="else" -->Patron Categories<!-- /TMPL_IF --></div>
 
@@ -95,18 +95,18 @@
 	<input type="hidden" name="op" value="add_validate" />
 	<input type="hidden" name="checked" value="0" />
 <!-- TMPL_IF NAME="categorycode" -->
-		<h1>Modify category <!-- TMPL_VAR NAME="categorycode" --></h1>
+		<h1>Modify category <!-- TMPL_VAR NAME="categorycode" escape="html" --></h1>
 	<!-- TMPL_ELSE -->
 		<h1>New category</h1>
 	<!-- /TMPL_IF -->
 	<fieldset class="rows">
 	<ol><!-- TMPL_IF NAME="categorycode" -->
-	<li><span class="label">Category code</span><!-- TMPL_VAR NAME="categorycode" -->
-				<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" -->" /><input type="hidden" name="is_a_modif" value="1" /></li>
+	<li><span class="label">Category code</span><!-- TMPL_VAR NAME="categorycode" escape="html" -->
+				<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" escape="html" -->" /><input type="hidden" name="is_a_modif" value="1" /></li>
 	<!-- TMPL_ELSE -->
 	<li><label for="categorycode">Category code: </label> &nbsp; <input type="text" name="categorycode" id="categorycode" size="10" maxlength="10" onblur="toUC(this)" /></li>
 	<!-- /TMPL_IF -->
-	<li><label for="description">Description: </label> &nbsp; <input type="text" name="description" id="description" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="description" -->" /></li>
+	<li><label for="description">Description: </label> &nbsp; <input type="text" name="description" id="description" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="description" escape="html" -->" /></li>
 	<li><label for="enrolmentperiod">Enrollment period: </label> &nbsp; <input type="text" name="enrolmentperiod" id="enrolmentperiod" size="3" maxlength="3" value="<!-- TMPL_VAR NAME="enrolmentperiod" -->" /> months</li>
 	<li><label for="dateofbirthrequired">Age required: </label> &nbsp; <input type="text" name="dateofbirthrequired" id="dateofbirthrequired" value="<!-- TMPL_VAR NAME="dateofbirthrequired" -->" size="3" maxlength="3" /> years</li>
 	<li><label for="upperagelimit">Upperage limit: </label> &nbsp; <input type="text" name="upperagelimit" id="upperagelimit" size="3" maxlength="3" value="<!-- TMPL_VAR NAME="upperagelimit" -->" /> years</li>
@@ -151,13 +151,13 @@
     	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 	<fieldset><legend>    	
 	<!-- TMPL_IF NAME="totalgtzero" -->
-	Category <!-- TMPL_VAR NAME="categorycode" --> is in use.  Deletion not possible!<!-- TMPL_ELSE -->
-Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" --><!-- /TMPL_IF --></legend>
+	Category <!-- TMPL_VAR NAME="categorycode" escape="html" --> is in use.  Deletion not possible!<!-- TMPL_ELSE -->
+Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" escape="html" --><!-- /TMPL_IF --></legend>
 
 <!-- TMPL_IF NAME="totalgtzero" --><div class="dialog alert"><strong>This category is used <!-- TMPL_VAR NAME="total" --> times</strong>. Deletion not possible</div><!-- /TMPL_IF -->
 	<table>
-	<tr><th scope="row">Category code: </th><td><!-- TMPL_VAR NAME="categorycode" --></td></tr>
-	<tr><th scope="row">Description: </th><td><!-- TMPL_VAR NAME="description" --></td></tr>
+	<tr><th scope="row">Category code: </th><td><!-- TMPL_VAR NAME="categorycode" escape="html" --></td></tr>
+	<tr><th scope="row">Description: </th><td><!-- TMPL_VAR NAME="description" escape="html" --></td></tr>
 	<tr><th scope="row">Enrollment period: </th><td><!-- TMPL_VAR NAME="enrolmentperiod" --> months</td></tr>
 	<tr><th scope="row">Age required: </th><td><!-- TMPL_VAR NAME="dateofbirthrequired" --> years</td></tr>
 	<tr><th scope="row">Upperage limit: </th><td><!-- TMPL_VAR NAME="upperagelimit" --> years</td></tr>
@@ -169,7 +169,7 @@ Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" --><!-- /TMPL_IF 
 <input type="submit" value="OK" /></form>
 		<!-- TMPL_ELSE -->
 			<input type="hidden" name="op" value="delete_confirmed" />
-			<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" -->" /> <input type="submit" value="Delete this Category" /> <a class="cancel" href="/cgi-bin/koha/admin/categorie.pl">Cancel</a> 
+			<input type="hidden" name="categorycode" value="<!-- TMPL_VAR NAME="categorycode" escape="html" -->" /> <input type="submit" value="Delete this Category" /> <a class="cancel" href="/cgi-bin/koha/admin/categorie.pl">Cancel</a> 
 		<!-- /TMPL_IF --></fieldset></fieldset></form>
 <!-- /TMPL_IF -->
 
@@ -225,9 +225,9 @@ Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" --><!-- /TMPL_IF 
 		</tr>
 		<!-- TMPL_LOOP NAME="loop" -->
 		<!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
-                        <td><!-- TMPL_VAR NAME="categorycode" --></td>
+                        <td><!-- TMPL_VAR NAME="categorycode" escape="html" --></td>
                         <td>
-                            <a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->"><!-- TMPL_VAR NAME="description" --></a>
+                            <a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" escape="html" -->"><!-- TMPL_VAR NAME="description" escape="html" --></a>
                         </td>
                         <td>
                             <!-- TMPL_IF NAME="type_A" -->Adult<!-- /TMPL_IF -->
