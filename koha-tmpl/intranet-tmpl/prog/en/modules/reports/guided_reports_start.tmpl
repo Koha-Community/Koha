@@ -458,12 +458,12 @@ Sub report:<select name="subreport">
 <!-- TMPL_IF NAME="editsql" -->
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
 <input type="hidden" name="phase" value="Update SQL" />
-<input type="hidden" name="id" value="<!-- TMPL_VAR NAME="id" -->">
+<input type="hidden" name="id" value="<!-- TMPL_VAR NAME="id" -->"/>
 <fieldset class="rows">
 <legend>Edit SQL</legend>
 <ol>
-<li><label for="reportname">Report Name:</label><input type="text" id="reportname" name="reportname" value="<!-- TMPL_VAR NAME="reportname" -->" ></li>
-<li><textarea id="sql" name="sql"><!-- TMPL_VAR NAME="sql" --></textarea></li>
+<li><label for="reportname">Report Name:</label><input type="text" id="reportname" name="reportname" value="<!-- TMPL_VAR NAME="reportname" -->" /></li>
+<li><textarea id="sql" name="sql" rows="10" cols="60"><!-- TMPL_VAR NAME="sql" --></textarea></li>
 </ol>
 </fieldset>
 
