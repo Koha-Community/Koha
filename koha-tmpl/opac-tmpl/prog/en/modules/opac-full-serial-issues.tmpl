@@ -49,11 +49,11 @@
                 </td>
                 <td>    <!-- TMPL_VAR name="notes" -->
                 </td>
-                <td>    <!-- TMPL_VAR Name="planneddate" -->
+                <td>   <!-- TMPL_IF Name="status2" --> <!-- TMPL_VAR Name="planneddate" --> <!-- /TMPL_IF -->
                 </td>
                 <td>    <!-- TMPL_VAR Name="serialseq" -->
                 </td>
-                <td>    <!-- TMPL_IF Name="status1" -->Waited<!-- /TMPL_IF -->
+                <td>    <!-- TMPL_IF Name="status1" -->Waiting<!-- /TMPL_IF -->
                     <!-- TMPL_IF Name="status2" -->Arrived<!-- /TMPL_IF -->
                     <!-- TMPL_IF Name="status3" -->Late<!-- /TMPL_IF -->
                     <!-- TMPL_IF Name="status4" -->Missing<!-- /TMPL_IF -->
