@@ -538,7 +538,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
             $ri{duedate} = format_date($duedate);
             my ($borrower) =
               GetMemberDetails( $riborrowernumber{$_}, 0 );
-            $ri{return_overdue} = 1 if ($duedate < $today->output('iso'));
+            $ri{return_overdue} = 1 if ($duedate lt $today->output('iso'));
             $ri{borrowernumber} = $borrower->{'borrowernumber'};
             $ri{borcnum}        = $borrower->{'cardnumber'};
             $ri{borfirstname}   = $borrower->{'firstname'};
