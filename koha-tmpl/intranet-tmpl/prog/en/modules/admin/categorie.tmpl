@@ -227,7 +227,7 @@ Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" escape="html" -->
 		<!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
                         <td><!-- TMPL_VAR NAME="categorycode" escape="html" --></td>
                         <td>
-                            <a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" escape="html" -->"><!-- TMPL_VAR NAME="description" escape="html" --></a>
+                            <a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" escape="url" -->"><!-- TMPL_VAR NAME="description" escape="html" --></a>
                         </td>
                         <td>
                             <!-- TMPL_IF NAME="type_A" -->Adult<!-- /TMPL_IF -->
@@ -243,8 +243,8 @@ Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" escape="html" -->
                         <td><!-- TMPL_VAR NAME="enrolmentfee" --></td>
                         <td><!-- TMPL_IF NAME="overduenoticerequired" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
                         <td><!-- TMPL_VAR NAME="reservefee" --></td>
-                        <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->">Edit</a></td>
-						<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->">Delete</a></td>
+                        <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" escape="url" -->">Edit</a></td>
+						<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" escape="url" -->">Delete</a></td>
 		</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
