@@ -1,6 +1,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Circulation &rsaquo; Check In <!-- TMPL_VAR Name="title" escape="html" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<style type="text/css">
+    background-color: red;
+</style>
 <script type="text/javascript">
 //<![CDATA[
 function Dopop(link) {
@@ -354,13 +357,20 @@ function Dopop(link) {
         
         <!-- TMPL_LOOP Name="riloop" -->
             <tr>
-            <td><!-- TMPL_IF Name="duedate" --><!-- TMPL_VAR NAME="duedate" --><!-- TMPL_ELSE -->Not checked out<!-- /TMPL_IF --></td>
+            <td><!-- TMPL_IF Name="duedate" -->
+                    <!-- TMPL_IF Name="return_overdue" -->
+                        <span class="overdue"><!-- TMPL_VAR NAME="duedate" --> (overdue)</span>
+                    <!-- TMPL_ELSE --><!-- TMPL_VAR NAME="duedate" -->
+                    <!-- /TMPL_IF -->
+                <!-- TMPL_ELSE -->Not checked out
+                <!-- /TMPL_IF -->
+            </td>
             <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR Name="itembiblionumber" -->">
                     <!-- TMPL_VAR Name="itemtitle" escape="html" --></a></td>
 			<td><!-- TMPL_VAR Name="itemauthor" --></td>
             <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#item<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_VAR Name="barcode" --></a></td>
             <td><!-- TMPL_VAR Name="itemtype" --> <!-- TMPL_VAR Name="ccode" --></td>
-			 <td><!-- TMPL_IF Name="duedate" -->
+			<td><!-- TMPL_IF Name="duedate" -->
                 <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->">
                     <!-- TMPL_VAR Name="borsurname" -->, <!-- TMPL_VAR Name="borfirstname" --> (<!-- TMPL_VAR name="borcategorycode" -->)
                 </a>

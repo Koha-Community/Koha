@@ -26,6 +26,8 @@ script to execute returns of books
 =cut
 
 use strict;
+# use warnings; # FIXME
+
 use CGI;
 use C4::Context;
 use C4::Auth qw/:DEFAULT get_session/;
@@ -174,7 +176,9 @@ my $exemptfine = $query->param('exemptfine');
 my $dropboxmode= $query->param('dropboxmode');
 my $calendar = C4::Calendar->new(  branchcode => C4::Context->userenv->{'branch'} );
 	#dropbox: get last open day (today - 1)
-my $dropboxdate = $calendar->addDate(C4::Dates->new(), -1 );
+my $today       = C4::Dates->new();
+my $today_iso   = $today->output('iso');
+my $dropboxdate = $calendar->addDate($today, -1 );
 my $dotransfer = $query->param('dotransfer');
 if ($dotransfer){
 	# An item has been returned to a branch other than the homebranch, and the librarian has choosen to initiate a transfer
@@ -205,6 +209,7 @@ if ($barcode) {
         ccode            => $biblio->{'ccode'},
         itembiblionumber => $biblio->{'biblionumber'},    
     );
+
     if ($returned) {
         $returneditems{0}    = $barcode;
         $riborrowernumber{0} = $borrower->{'borrowernumber'};
@@ -213,8 +218,9 @@ if ($barcode) {
         $input{counter}        = 0;
         $input{first}          = 1;
         $input{barcode}        = $barcode;
-        $input{duedate}        = $riduedate{0};
-        $input{borrowernumber} = $riborrowernumber{0};
+        $input{borrowernumber} = $borrower->{'borrowernumber'};
+        $input{duedate}        = $issueinformation->{'date_due'};
+        $input{return_overdue} = 1 if ($issueinformation->{'date_due'} lt $today->output('iso'));
         push( @inputloop, \%input );
 
         # check if the branch is the same as homebranch
@@ -234,12 +240,12 @@ if ($barcode) {
         $riduedate{0}     = 0;
         if ( $messages->{'wthdrawn'} ) {
             $input{withdrawn}      = 1;
-            $input{borrowernumber} = "Item Cancelled";
+            $input{borrowernumber} = 'Item Cancelled';
             $riborrowernumber{0}   = 'Item Cancelled';
         }
         else {
-            $input{borrowernumber} = "&nbsp;";
-            $riborrowernumber{0} = '&nbsp;';
+            $input{borrowernumber} = '&nbsp;';
+            $riborrowernumber{0}   = '&nbsp;';
         }
         push( @inputloop, \%input );
     }
@@ -288,21 +294,21 @@ if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
     my ($borr) = GetMemberDetails( $reserve->{'borrowernumber'}, 0 );
     my $name =
       $borr->{'surname'} . " " . $borr->{'title'} . " " . $borr->{'firstname'};
-        $template->param(
+    $template->param(
             wname           => $name,
             wborfirstname   => $borr->{'firstname'},
             wborsurname     => $borr->{'surname'},
             wbortitle       => $borr->{'title'},
             wborphone       => $borr->{'phone'},
             wboremail       => $borr->{'email'},
-            wboraddress  => $borr->{'address'},
-            wboraddress2 => $borr->{'address2'},
+            wboraddress     => $borr->{'address'},
+            wboraddress2    => $borr->{'address2'},
             wborcity        => $borr->{'city'},
             wborzip         => $borr->{'zipcode'},
             wborrowernumber => $reserve->{'borrowernumber'},
             wborcnum        => $borr->{'cardnumber'},
-            wtransfertFrom    => C4::Context->userenv->{'branch'},
-        );
+            wtransfertFrom  => C4::Context->userenv->{'branch'},
+    );
 }
 
 
@@ -329,8 +335,8 @@ if ( $messages->{'ResFound'}) {
             bortitle       => $borr->{'title'},
             borphone       => $borr->{'phone'},
             boremail       => $borr->{'email'},
-            boraddress  => $borr->{'address'},
-            boraddress2  => $borr->{'address2'},
+            boraddress     => $borr->{'address'},
+            boraddress2    => $borr->{'address2'},
             borcity        => $borr->{'city'},
             borzip         => $borr->{'zipcode'},
             borrowernumber => $reserve->{'borrowernumber'},
@@ -338,8 +344,8 @@ if ( $messages->{'ResFound'}) {
             debarred       => $borr->{'debarred'},
             gonenoaddress  => $borr->{'gonenoaddress'},
             currentbranch  => $branches->{C4::Context->userenv->{'branch'}}->{'branchname'},
-            itemnumber       => $reserve->{'itemnumber'},
-            barcode     => $barcode,
+            itemnumber     => $reserve->{'itemnumber'},
+            barcode        => $barcode,
             destbranchname =>
               $branches->{ $reserve->{'branchcode'} }->{'branchname'},
             destbranch	   => $reserve->{'branchcode'},
@@ -347,9 +353,6 @@ if ( $messages->{'ResFound'}) {
 
     }
     if ( $reserve->{'ResFound'} eq "Reserved" ) {
-       # my @da         = localtime( time() );
-       # my $todaysdate = sprintf( "%0.2d/%0.2d/%0.4d", ( $datearr[3] + 1 ),( $datearr[4] + 1 ),( $datearr[5] + 1900 ) );
-		# FIXME - use Dates obj , locale. AND, why [4]+1 ??
         if ( C4::Context->userenv->{'branch'} eq $reserve->{'branchcode'} ) {
             $template->param( intransit => 0 );
         }
@@ -374,8 +377,8 @@ if ( $messages->{'ResFound'}) {
             borrowernumber   => $reserve->{'borrowernumber'},
             borcnum          => $borr->{'cardnumber'},
             borphone         => $borr->{'phone'},
-            boraddress    => $borr->{'address'},
-            boraddress2    => $borr->{'address2'},
+            boraddress       => $borr->{'address'},
+            boraddress2      => $borr->{'address2'},
             borsub           => $borr->{'suburb'},
             borcity          => $borr->{'city'},
             borzip           => $borr->{'zipcode'},
@@ -487,16 +490,14 @@ if ($borrower) {
             foreach my $item ( sort { $a->{'date_due'} cmp $b->{'date_due'} }
                 @$items )
             {
-                my $biblio =
-                  GetBiblioFromItemNumber( $item->{'itemnumber'});
+                my $biblio = GetBiblioFromItemNumber( $item->{'itemnumber'});
                 my %overdueitem;
                 $overdueitem{duedate}   = format_date( $item->{'date_due'} );
                 $overdueitem{biblionum} = $biblio->{'biblionumber'};
                 $overdueitem{barcode}   = $biblio->{'barcode'};
                 $overdueitem{title}     = $biblio->{'title'};
                 $overdueitem{brname}    =
-                  $branches->{ $biblio->{'holdingbranch'} }
-                  ->{'branchname'};
+                  $branches->{ $biblio->{'holdingbranch'}} ->{'branchname'};
                 push( @itemloop, \%overdueitem );
             }
             $flaginfo{itemloop} = \@itemloop;
@@ -524,7 +525,7 @@ my $count = 0;
 my @riloop;
 foreach ( sort { $a <=> $b } keys %returneditems ) {
     my %ri;
-    if ( $count < 8 ) {
+    if ( $count++ < 8 ) {
         my $barcode = $returneditems{$_};
         my $duedate = $riduedate{$_};
         my $overduetext;
@@ -534,16 +535,10 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
             $ri{year}  = $tempdate[0];
             $ri{month} = $tempdate[1];
             $ri{day}   = $tempdate[2];
-            my $duedatenz  = "$tempdate[2]/$tempdate[1]/$tempdate[0]";
-            my @datearr    = localtime( time() );
-            my $todaysdate =
-                $datearr[5] . '-'
-              . sprintf( "%0.2d", ( $datearr[4] + 1 ) ) . '-'
-              . sprintf( "%0.2d", $datearr[3] );
-		  # FIXME - todaysdate isn't used, and what date _is_ it ?
             $ri{duedate} = format_date($duedate);
             my ($borrower) =
               GetMemberDetails( $riborrowernumber{$_}, 0 );
+            $ri{return_overdue} = 1 if ($duedate < $today->output('iso'));
             $ri{borrowernumber} = $borrower->{'borrowernumber'};
             $ri{borcnum}        = $borrower->{'cardnumber'};
             $ri{borfirstname}   = $borrower->{'firstname'};
@@ -566,13 +561,12 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
         $ri{itemtype}         = $biblio->{'itemtype'};
         $ri{itemnote}         = $biblio->{'itemnotes'};
         $ri{ccode}            = $biblio->{'ccode'};
-	$ri{itemnumber}       = $biblio->{'itemnumber'};
+        $ri{itemnumber}       = $biblio->{'itemnumber'};
         $ri{barcode}          = $barcode;
     }
     else {
         last;
     }
-    $count++;
     push( @riloop, \%ri );
 }
 $template->param( riloop => \@riloop );
@@ -584,7 +578,7 @@ $template->param(
     printer                 => $printer,
     errmsgloop              => \@errmsgloop,
     exemptfine              => $exemptfine,
-    dropboxmode              => $dropboxmode,
+    dropboxmode             => $dropboxmode,
     dropboxdate				=> $dropboxdate->output(),
 	overduecharges          => $overduecharges,
 );
