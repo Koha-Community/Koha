@@ -30,6 +30,7 @@
 	<th>Call No.</th>
 	<th>Barcode</th>
 	<th>Number of Renewals</th>
+	<th>Date Due</th>
 	<th>
 		<a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;order=returndate DESC&amp;limit=<!-- TMPL_VAR name="limit" -->">Return Date</a>
 	</th>
@@ -58,7 +59,7 @@
 
             <td>
         <!-- TMPL_VAR NAME="renewals" --></td>
-
+			<td><!-- TMPL_IF NAME="date_due" --><!-- TMPL_VAR NAME="date_due" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
             <td>
         <!-- TMPL_IF NAME="returndate" -->
             <!-- TMPL_VAR name="returndate" -->
