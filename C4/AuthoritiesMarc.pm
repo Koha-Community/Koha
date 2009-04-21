@@ -519,16 +519,11 @@ sub AddAuthority {
 # pass the MARC::Record to this function, and it will create the records in the authority table
   my ($record,$authid,$authtypecode) = @_;
   my $dbh=C4::Context->dbh;
-	my $leader='     nz  a22     o  4500';#Leader for incomplete MARC21 record
+	my $leader='    nz   a22     o  4500';#Leader for incomplete MARC21 record
 
 # if authid empty => true add, find a new authid number
-    my $format;
-    if (uc(C4::Context->preference('marcflavour')) eq 'UNIMARC') {
-        $format= 'UNIMARCAUTH';
-    }
-    else {
-        $format= 'MARC21';
-    }
+  my $format= 'UNIMARCAUTH' if (uc(C4::Context->preference('marcflavour')) eq 'UNIMARC');
+  $format= 'MARC21' if (uc(C4::Context->preference('marcflavour')) ne 'UNIMARC');
 
 	if ($format eq "MARC21") {
 		if (!$record->leader) {
