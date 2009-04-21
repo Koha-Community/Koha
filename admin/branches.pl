@@ -101,8 +101,7 @@ elsif ( $op eq 'add_validate' ) {
         if ($error) {
             # copy input parameters back to form
             # FIXME - doing this doesn't preserve any branch group selections, but good enough for now
-            $template->param(%$params);     # FIXME: Allows user to set ANY TMPL_VAR to ANY value!!
-            $template->param(branch_name => $params->{branchname});
+            editbranchform($branchcode,$template);
             $template->param( 'heading-branches-add-branch-p' => 1, 'add' => 1, "ERROR$error" => 1 );
         } else {
             $template->param( else => 1);
