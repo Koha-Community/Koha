@@ -522,11 +522,43 @@ sub AddAuthority {
 # pass the MARC::Record to this function, and it will create the records in the authority table
   my ($record,$authid,$authtypecode) = @_;
   my $dbh=C4::Context->dbh;
-  my $leader='         a              ';##Fixme correct leader as this one just adds utf8 to MARC21
+	my $leader='    nz   a22     o  4500';#Leader for incomplete MARC21 record
 
 # if authid empty => true add, find a new authid number
   my $format= 'UNIMARCAUTH' if (uc(C4::Context->preference('marcflavour')) eq 'UNIMARC');
   $format= 'MARC21' if (uc(C4::Context->preference('marcflavour')) ne 'UNIMARC');
+
+	if ($format eq "MARC21") {
+		if (!$record->leader) {
+			$record->leader($leader);
+		}
+		if (!$record->field('003')) {
+			$record->insert_fields_ordered(
+				MARC::Field->new('003',C4::Context->preference('MARCOrgCode'))
+			);
+		}
+		my $time=POSIX::strftime("%Y%m%d%H%M%S",localtime);
+		if (!$record->field('005')) {
+			$record->insert_fields_ordered(
+				MARC::Field->new('005',$time.".0")
+			);
+		}
+		my $date=POSIX::strftime("%y%m%d",localtime);
+		if (!$record->field('008')) {
+			$record->insert_fields_ordered(
+				MARC::Field->new('008',$date."|||a||||||           | |||     d")
+			);
+		}
+		if (!$record->field('040')) {
+		 $record->insert_fields_ordered(
+        MARC::Field->new('040','','',
+				'a' => C4::Context->preference('MARCOrgCode'),
+				'c' => C4::Context->preference('MARCOrgCode')
+				) 
+			);
+    }
+	}
+
   if (($format eq "UNIMARCAUTH") && (!$record->subfield('100','a'))){
         $record->leader("     nx  j22             ");
         my $date=POSIX::strftime("%Y%m%d",localtime);    

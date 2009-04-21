@@ -793,6 +793,15 @@ AND (authtypecode IS NOT NULL AND authtypecode<>\"\")|);
             SetMarcUnicodeFlag($marcrecordauth, 'MARC21');
          }
 
+				if (C4::Context->preference('marcflavour') eq 'MARC21') {
+					$marcrecordauth->insert_fields_ordered(MARC::Field->new('667','','','a'=>"Machine generated authority record."));
+					my $cite = $record->author() . ", " .  $record->title_proper() . ", " . $record->publication_date() . " "; 
+					$cite =~ s/^[\s\,]*//;
+					$cite =~ s/[\s\,]*$//;
+					$cite = "Work cat.: (" . C4::Context->preference('MARCOrgCode') . ")". $record->subfield('999','c') . ": " . $cite;
+					$marcrecordauth->insert_fields_ordered(MARC::Field->new('670','','','a'=>$cite));
+				}
+
 #          warn "AUTH RECORD ADDED : ".$marcrecordauth->as_formatted;
 
          my $authid=AddAuthority($marcrecordauth,'',$data->{authtypecode});
