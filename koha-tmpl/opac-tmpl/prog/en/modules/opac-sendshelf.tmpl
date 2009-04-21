@@ -5,7 +5,7 @@ Your List : <!-- TMPL_VAR NAME="shelfname" -->
 <HEADER>
 Hi,
 
-Here is your list called <!-- TMPL_VAR NAME="shelfname" -->, sent from our Online Catalog.
+Here is your list called <!-- TMPL_VAR NAME="shelfname" -->, sent from our online catalog.
 
 Please note that the attached file is a MARC biblographic records file
 which can be imported into a Personal Bibliographic Software like EndNote,
@@ -32,6 +32,8 @@ Dewey: <!-- TMPL_VAR name="dewey" --><!-- /TMPL_IF --><!-- TMPL_IF name="classif
 Classification: <!-- TMPL_VAR name="classification" --><!-- /TMPL_IF --><!-- TMPL_IF name="lccn" -->
 LCCN: <!-- TMPL_VAR name="lccn" --><!-- /TMPL_IF --><!-- TMPL_IF name="url" -->
 URL : <!-- TMPL_VAR NAME="url" --><!-- /TMPL_IF -->
+In the online catalog:
+<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" escape="url" -->
 Items : <!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
     <!-- TMPL_VAR NAME="branchname" --> <!-- TMPL_VAR NAME="location" --> <!-- TMPL_IF name="itemcallnumber" -->(<!-- TMPL_VAR NAME="itemcallnumber" -->)<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="barcode" --><!-- /TMPL_LOOP -->
 
