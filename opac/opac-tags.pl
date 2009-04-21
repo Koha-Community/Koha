@@ -219,7 +219,7 @@ if ($is_ajax) {
 my $results = [];
 my $my_tags = [];
 
-if ($loggedinuser and not $query->param('hidemytags')) {
+if ($loggedinuser) {
 	$my_tags = get_tag_rows({borrowernumber=>$loggedinuser});
 	foreach (@$my_tags) {
 		my $biblio = GetBiblioData($_->{biblionumber});
@@ -244,12 +244,14 @@ if ($add_op) {
 		deleted_count => $dels,
 	);
 } else {
-	my ($arg,$limit);
+	my ($arg,$limit,$mine);
 	my $hardmax = 100;	# you might disagree what this value should be, but there definitely should be a max
 	$limit = $query->param('limit') || $hardmax;
+    $mine =  $query->param('mine') || 0; # set if the patron want to see only his own tags.
 	($limit =~ /^\d+$/ and $limit <= $hardmax) or $limit = $hardmax;
 	$template->param(limit => $limit);
 	my $arghash = {approved=>1, limit=>$limit, 'sort'=>'-weight_total'};
+    $arghash->{'borrowernumber'} = $loggedinuser if $mine;
 	# ($openadds) or $arghash->{approved} = 1;
 	if ($arg = $query->param('tag')) {
 		$arghash->{term} = $arg;
@@ -259,7 +261,7 @@ if ($add_op) {
 	$results = get_approval_rows($arghash);
 
 	my $count = scalar @$results;
-	$template->param(TAGLOOP_COUNT => $count);
+	$template->param(TAGLOOP_COUNT => $count, mine => $mine);
 	# Here we make a halfhearted attempt to separate the tags into "strata" based on weight_total
 	# FIXME: code4lib probably has a better algorithm, iirc
 	# FIXME: when we get a better algorithm, move to C4
@@ -286,9 +288,9 @@ if ($add_op) {
 		$previous = $current;
 	}
 }
-$query->param('hidemytags') and $template->param(hidemytags => 1);
 (scalar @errors  ) and $template->param(ERRORS  => \@errors);
-(scalar @$results) and $template->param(TAGLOOP => $results);
+my @orderedresult = sort { $a->{'term'} cmp $b->{'term'} } @$results;
+(scalar @$results) and $template->param(TAGLOOP => \@orderedresult );
 (scalar @$my_tags) and $template->param(MY_TAGS => $my_tags);
 
 output_html_with_http_headers $query, $cookie, $template->output;

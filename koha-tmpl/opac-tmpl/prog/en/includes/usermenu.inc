@@ -9,7 +9,7 @@
   <!-- TMPL_IF NAME="userupdateview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-userupdate.pl">my personal details</a></li>
     <!-- /TMPL_IF -->
   <!-- TMPL_IF NAME="TagsEnabled" -->
-    <!-- TMPL_IF NAME="tagsview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-tags.pl">my tags</a></li>
+    <!-- TMPL_IF NAME="tagsview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-tags.pl?mine=1">my tags</a></li>
   <!-- /TMPL_IF -->
   <!-- TMPL_IF NAME="OpacPasswordChange" -->
     <!-- TMPL_IF NAME="passwdview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-passwd.pl">change my password</a></li>
