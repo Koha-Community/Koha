@@ -93,7 +93,7 @@ sub SearchSuggestion  {
         U1.surname   AS surnamesuggestedby,
         U1.firstname AS firstnamesuggestedby,
         U1.borrowernumber AS borrnumsuggestedby,
-        U1.branchcode AS branchcode,
+        U1.branchcode AS branchcodesuggestedby,
         U2.surname   AS surnamemanagedby,
         U2.firstname AS firstnamemanagedby,
         U2.borrowernumber AS borrnummanagedby
