@@ -66,6 +66,7 @@ if (C4::Context->preference("XSLTDetailsDisplay") ) {
     $template->param('XSLTBloc' => $newxmlrecord);
 }
 
+$template->param('OPACShowCheckoutName' => C4::Context->preference("OPACShowCheckoutName") ); 
 # change back when ive fixed request.pl
 my @all_items = &GetItemsInfo( $biblionumber, 'opac' );
 my @items;

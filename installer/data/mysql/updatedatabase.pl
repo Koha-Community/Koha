@@ -2302,6 +2302,12 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (added deletedborrowers.smsalertnumber, missed in 3.00.00.091)\n";
     SetVersion ($DBversion);
 }
+$DBversion = "3.01.00.019";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+        $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACShowCheckoutName','0','Displays in the OPAC the name of patron who has checked out the material. WARNING: Most sites should leave this off. It is intended for corporate or special sites which need to track who has the item.','','YesNo')");
+    print "Upgrade to $DBversion done (adding ReservesNeedReturns systempref, in circulation)\n";
+    SetVersion ($DBversion);
+}
 
 =item DropAllForeignKeys($table)
 

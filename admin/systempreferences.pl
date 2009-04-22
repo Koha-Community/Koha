@@ -314,6 +314,7 @@ $tabsysprefs{OPACItemHolds}        = "OPAC";
 $tabsysprefs{OPACGroupResults}     = "OPAC";
 $tabsysprefs{XSLTDetailsDisplay}   = "OPAC";
 $tabsysprefs{XSLTResultsDisplay}   = "OPAC";
+$tabsysprefs{OPACShowCheckoutName}   = "OPAC";
 
 # Serials
 $tabsysprefs{OPACSerialIssueDisplayCount}  = "Serials";

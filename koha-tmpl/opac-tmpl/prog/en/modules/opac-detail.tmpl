@@ -297,7 +297,11 @@
                     Not for loan <!-- TMPL_IF NAME="notforloanvalue" -->(<!-- TMPL_VAR NAME="notforloanvalue" -->)<!-- /TMPL_IF -->
                 <!-- TMPL_ELSE -->
                     <!-- TMPL_IF name="datedue" -->
+                         <!-- TMPL_IF name="OPACShowCheckoutName" -->
+			Checked out to ID# <!-- TMPL_VAR NAME="borrowernumber" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->
+                    <!-- TMPL_ELSE -->
                     Checked out
+			<!-- /TMPL_IF -->
                     <!-- TMPL_ELSE -->
                         <!-- TMPL_IF name="itemnotforloan" -->
                             <!-- TMPL_VAR NAME="notforloanvalue" -->
