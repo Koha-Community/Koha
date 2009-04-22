@@ -174,7 +174,7 @@ canned reports and writing custom SQL reports.</p>
 <h3>Step 3 of 6: Select Columns for Display</h3>
 <p>Note: Be careful selecting when selecting columns. If your choice is too broad it could result in a very large report that will either not complete, or slow your system down.</p>
 
-<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+<form id="column_submit" action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
 	<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->" />
 	<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" />
 	<fieldset>
@@ -205,7 +205,7 @@ canned reports and writing custom SQL reports.</p>
 </div>
 
 <div class="yui-u">
-<select id="selectedColumns" name="columns" multiple="multiple" size="25" style="min-width:200px;height:300px;"></select>
+<select id="selectedColumns" name="columns" multiple="multiple" size="25" style="width:200px; height:300px;"></select>
 </div>
 </div>
 </fieldset>
@@ -513,30 +513,20 @@ Sub report:<select name="subreport">
 </div>
 <script type="text/javascript">
 //<![CDATA[
-function setObjects() {
-	selectedColumnsObj=document.getElementById('selectedColumns');
-	availableColumnsObj=document.getElementById('availableColumns');
-}
-setObjects();
-
 function addColumn() {
-	for (i=0;i<availableColumnsObj.length;i++) {
-		if (availableColumnsObj.options[i].selected==true) {
-			var newColumnObj=document.createElement("OPTION");
-			newColumnObj.value=availableColumnsObj.options[i].value;
-			newColumnObj.text=availableColumnsObj.options[i].text;
-			selectedColumnsObj.appendChild(newColumnObj);
-			newColumnObj.selected=true;
-		}
-	}
+    $("#availableColumns option:selected").clone().appendTo("#selectedColumns").attr("selected", "selected");
 }
-
 function delColumn() {
-	for (i=0;i<=selectedColumnsObj.options.length;i++) {
-		if (selectedColumnsObj.options.selectedIndex>=0)
-		selectedColumnsObj.remove(selectedColumnsObj.options.selectedIndex)
-	}
+    $("#selectedColumns option:selected").remove();
 }
+$("#column_submit").submit(function() {
+    if ($("#selectedColumns option").size() < 1) {
+        alert(_("No columns selected!"));
+        return false;
+    }
+    $("#selectedColumns option").attr("selected", "selected");  // Select everything still in #selectedColumns
+    return true;
+});
 //]]>
 </script>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
