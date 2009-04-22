@@ -35,27 +35,25 @@
  */
 function AreMandatoriesNotOk(){
     var mandatories = new Array();
-    var tab = new Array();
+    var   tab = new Array();
     var label = new Array();
-    var flag=0;
     <!-- TMPL_LOOP NAME='BIG_LOOP' --><!-- TMPL_LOOP NAME='innerloop' --><!-- TMPL_LOOP NAME='subfield_loop'--><!-- TMPL_IF NAME='mandatory'-->mandatories.push("<!-- TMPL_VAR NAME='id' -->");
                         tab.push("<!-- TMPL_VAR NAME='number' -->");
                         label.push("<!-- TMPL_VAR NAME='marc_lib' ESCAPE=JS-->");<!-- /TMPL_IF --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP -->
-    var StrAlert = _("Can't save this record because the following field aren't filled :\n\n");
+    var StrAlert = "";
     for(var i=0,len=mandatories.length; i<len ; i++){
-        //alert (  mandatories[i]);
-        if( ! document.getElementById(mandatories[i]).value){
-            flag = 1;
-            document.getElementById(mandatories[i]).setAttribute('class','subfield_not_filled');
-            document.getElementById(mandatories[i]).focus();
+        var id_string = mandatories[i];
+        alert (id_string);
+        if( ! $("#" + id_string).val() ){
+            $("#" + id_string).attr('class','subfield_not_filled').focus();
             StrAlert += "\t* "+label[i]+_(" in tab ")+tab[i]+"\n";
         }
     }
-    if(flag){
-      return StrAlert;
-  } else {
-    return flag;
-  }
+    if(StrAlert){
+        return _("Can't save this record because the following field aren't filled :\n\n") + StrAlert;
+    } else {
+        return flag;
+    }
 }
 
 /**
@@ -72,8 +70,6 @@ function Check(){
         return false;
     }
 }
-
-
 
 
 function AddField(field,cntrepeatfield) {
