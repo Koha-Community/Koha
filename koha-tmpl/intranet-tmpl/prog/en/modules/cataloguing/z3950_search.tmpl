@@ -6,11 +6,11 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
-    function Import(GetThisOne,biblionumber) {
-        opener.document.location="../cataloguing/addbiblio.pl?biblionumber="+biblionumber+"&z3950=1&frameworkcode=<!-- TMPL_VAR name="frameworkcode" -->&breedingid="+GetThisOne;
-        window.close();
-        return false;
-    }
+function Import(GetThisOne,biblionumber) {
+    opener.document.location="../cataloguing/addbiblio.pl?biblionumber="+biblionumber+"&z3950=1&frameworkcode=<!-- TMPL_VAR name="frameworkcode" -->&breedingid="+GetThisOne;
+    window.close();
+    return false;
+}
 $.tablesorter.addParser({
     id: 'articles', 
     is: function(s) {return false;  }, 
@@ -18,7 +18,7 @@ $.tablesorter.addParser({
     type: 'text' 
 });
 
-	$(document).ready(function(){
+$(document).ready(function(){
     $("#CheckAll").click(function(){
         $(".checkboxed").checkCheckboxes();
         return false;
@@ -27,11 +27,11 @@ $.tablesorter.addParser({
         $(".checkboxed").unCheckCheckboxes();
         return false;
     });
-	$("#resultst").tablesorter({
-		sortList: [[1,0]],
-		headers: { 0: {sorter:false}, 1: { sorter: 'articles' },5: { sorter: false },6: { sorter: false } },
-        widgets: ['zebra'],
-	}); 
+    $("#resultst").tablesorter({
+        sortList: [[1,0]],
+        headers: { 0: {sorter:false}, 1: { sorter: 'articles' },5: { sorter: false },6: { sorter: false } },
+        widgets: ['zebra']
+    }); 
 });
 //]]>
 </script>
