@@ -3,6 +3,12 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 
+<style type="text/css">
+.yui-u li p label.widelabel {
+    width: 300px;  /* not enough for IE7 apparently */
+    /* height: 2.4em; background-color: pink; */
+}
+</style>
 <script type="text/javascript">
 //<![CDATA[
 
@@ -103,6 +109,7 @@ IrregularPattern.prototype.update = function() {
 		var summary_str = '';
 		this.numskipped = 0;
         if(document.f.irregularity_select) {
+            //$("#irregularity_select option:selected").each(...); //jquery can combine both conditionals and the for loop
             for( var i in document.f.irregularity_select.options ) {
                 if( document.f.irregularity_select.options[i].selected ) {
                     this.skipped[cnt] = document.f.irregularity_select.options[i].value ;
@@ -136,8 +143,8 @@ function reset_pattern() {
     document.getElementById("irregularity").innerHTML = '';
 	init_pattern();
 	reset_num_pattern();
-
 }
+
 // common pre defined number patterns
 function reset_num_pattern() {
 var patternchoice = document.getElementById("numberpattern").value;
@@ -395,7 +402,6 @@ function set_num_pattern_from_template_vars() {
 }
 
 // a pre check with more options to see if 'number' and '1/day' are chosen
-<!-- 
 function moreoptions_daily_check(x) {
     var periodicity = document.f.periodicity.value;
     var errortext='';
@@ -414,8 +420,6 @@ function moreoptions_daily_check(x) {
         moreoptions(x);
     }
 }
--->
-
 
 // to dispaly the more options section
 function moreoptions(x,y,z){
@@ -512,8 +516,7 @@ var textbox = '';
         textbox += "<td>" + irregular_issues.firstissue.getFullYear() + "<\/td><\/tr>\n";
         textbox +="<tr><th scope=\"row\">"+text[6]+"<\/th>";
         textbox +="<td><input type='text' name='whenmorethan2temp' id='whenmorethan2temp' size='4' onkeyup='moreoptionsupdate(this,1)'><\/td>\n";
-                textbox +="<\/tr><\/table>\n";
-
+        textbox +="<\/tr><\/table>\n";
     }
     document.getElementById("more_options").innerHTML = textbox;
 }
@@ -912,7 +915,8 @@ function Check(f) {
 }
 
 $(document).ready(function() {
-init_pattern();
+    init_pattern();
+   //  $(".widelabel").attr("width", "300px");  // labels stay skinny in IE7 anyway.
 <!-- TMPL_IF name="mod" -->
     set_num_pattern_from_template_vars();
     <!-- TMPL_IF name="hemisphere" -->
@@ -923,8 +927,8 @@ init_pattern();
 <!-- TMPL_IF name="irregularity" -->
     irregularity_check();
 <!-- /TMPL_IF -->
-$('#numberpattern').change( function() { 
-    reset_num_pattern(); 
+    $('#numberpattern').change( function() { 
+        reset_num_pattern(); 
     });
 });
 //]]>
@@ -975,11 +979,11 @@ $('#numberpattern').change( function() {
         </li>
         <li class="radio">
             <!-- TMPL_IF name="serialsadditems" -->
-                <p><input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1" checked="checked" /><label for="serialsadditems-yes">create an item record when receiving this serial</label></p>
-                <p><input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" /><label for="serialsadditems-no">do not create an item record when receiving this serial </label></p>
+                <p><input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1" checked="checked" /><label class="widelabel" for="serialsadditems-yes">create an item record when receiving this serial</label></p>
+                <p><input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" /><label class="widelabel" for="serialsadditems-no">do not create an item record when receiving this serial </label></p>
             <!-- TMPL_ELSE -->
-                <p><input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1"/><label for="serialsadditems-yes">create an item record when receiving this serial</label></p>
-                <p><input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" checked="checked" /><label for="serialsadditems-no">do not create an item record when receiving this serial</label></p>
+                <p><input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1"/><label class="widelabel" for="serialsadditems-yes">create an item record when receiving this serial</label></p>
+                <p><input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" checked="checked" /><label class="widelabel" for="serialsadditems-no">do not create an item record when receiving this serial</label></p>
             <!-- /TMPL_IF -->
         </li>
         <li>
@@ -1029,11 +1033,11 @@ $('#numberpattern').change( function() {
 		<li class="radio">
 			<label for="displaycount">Staff and Public Display</label>
 			<p>
-			 <label for="staffdisplaycount">Number of issues to display to staff: </label>
+			 <label class="widelabel" for="staffdisplaycount">Number of issues to display to staff: </label>
 			 <input type="text" name="staffdisplaycount" id="staffdisplaycount" value="<!-- TMPL_VAR NAME="staffdisplaycount" -->" size="4"/>
 			</p>
 			<p>
-			<label for="opacdisplaycount">Number of issues to display to the public: </label>
+			<label class="widelabel" for="opacdisplaycount">Number of issues to display to the public: </label>
 			<input type="text" name="opacdisplaycount" id="opacdisplaycount" value="<!-- TMPL_VAR NAME="opacdisplaycount" -->" size="4"/>
 			</p>
 		</li>
