@@ -10,22 +10,45 @@
 <div id="custom-doc" class="yui-t7">
    <div id="bd">
 
-
-<h3>Add 
+<!-- TMPL_UNLESS NAME="biblioloop" -->
+  <h3>Add 
     <i><!-- TMPL_VAR NAME="title" escape="html" --></i>
     <!-- TMPL_IF NAME="author" -->
         by <!-- TMPL_VAR NAME="author" -->
     <!-- /TMPL_IF --> to a list
-</h3>
+  </h3>
+<!-- TMPL_ELSE -->
+  <h3>Add to a list:</h3>
+  <h4>
+    <ul>
+      <!-- TMPL_LOOP NAME="biblioloop" -->
+        <li>
+          <i><!-- TMPL_VAR NAME="title" escape="html" --></i>
+             <!-- TMPL_IF NAME="author" -->
+               by <!-- TMPL_VAR NAME="author" -->
+             <!-- /TMPL_IF -->
+        </li>
+      <!-- /TMPL_LOOP -->    
+    </ul>
+  </h4>
+<!-- /TMPL_UNLESS -->
 
 <!-- TMPL_IF NAME="CGIvirtualshelves" --><form name="f1" method="post" action="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl">
-    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+    <!-- TMPL_UNLESS NAME="biblionumbers" -->
+      <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+    <!-- TMPL_ELSE -->
+      <input type="hidden" name="biblionumbers" value="<!-- TMPL_VAR NAME="biblionumbers" -->" />
+    <!-- /TMPL_UNLESS -->
     <fieldset class="rows">
     <legend>Select an existing list</legend>
     <ol>
         <li><label>Choose list</label><!-- TMPL_VAR NAME="CGIvirtualshelves" --></li>
     </ol>
-    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+    <!-- TMPL_UNLESS NAME="biblionumbers" -->
+      <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+    <!-- TMPL_ELSE -->
+      <input type="hidden" name="biblionumbers" value="<!-- TMPL_VAR NAME="biblionumbers" -->" />
+    <!-- /TMPL_UNLESS -->
     <fieldset class="action"><input type="submit" value="Save" class="submit" /></fieldset>
 	</fieldset>
 </form>
@@ -37,7 +60,11 @@
             <label for="newvirtualshelf">
                 List name:
             </label>
-			<input type="hidden" name="biblionumber" id="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+            <!-- TMPL_UNLESS NAME="biblionumbers" -->
+			  <input type="hidden" name="biblionumber" id="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+            <!-- TMPL_ELSE -->
+			  <input type="hidden" name="biblionumbers" id="biblionumbers" value="<!-- TMPL_VAR NAME="biblionumbers" -->" />
+            <!-- /TMPL_UNLESS -->
             <input type="text" name="newvirtualshelf" id="newvirtualshelf" size="40" />
         </li>
         <li>

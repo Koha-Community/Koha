@@ -67,7 +67,13 @@ use CGI::Carp qw/fatalsToBrowser/;
 use warnings;
 
 my $query           = new CGI;
+
+# If set, then single item case.
 my $biblionumber    = $query->param('biblionumber');
+
+# If set, then multiple item case.
+my $biblionumbers   = $query->param('biblionumbers');
+
 my $shelfnumber     = $query->param('shelfnumber');
 my $newvirtualshelf = $query->param('newvirtualshelf');
 my $category        = $query->param('category');
@@ -83,50 +89,79 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my @biblionumbers;
+if ($biblionumbers) {
+    @biblionumbers = split '/', $biblionumbers;
+} else {
+    @biblionumbers = ($biblionumber);
+}
+
 $shelfnumber = AddShelf( $newvirtualshelf, $loggedinuser, $category, $sortfield )
   if $newvirtualshelf;
 if ( $shelfnumber || ( $shelfnumber == -1 ) ) {    # the shelf already exist.
-    AddToShelfFromBiblio( $biblionumber, $shelfnumber );
+    foreach my $biblionumber (@biblionumbers) {
+        AddToShelfFromBiblio( $biblionumber, $shelfnumber );
+    }
     print
 "Content-Type: text/html\n\n<html><body onload=\"window.close()\"></body></html>";
     exit;
 }
 else {    # this shelf doesn't already exist.
-    my ( $bibliocount, @biblios ) = GetBiblio($biblionumber);
-
-	my $limit = 10;
-	my ($shelflist) = GetRecentShelves(1, $limit, $loggedinuser);
+    my $limit = 10;
+    my ($shelflist) = GetRecentShelves(1, $limit, $loggedinuser);
     my @shelvesloop;
     my %shelvesloop;
     for my $shelf ( @{ $shelflist->[0] } ) {
         push( @shelvesloop, $shelf->{shelfnumber} );
-		$shelvesloop{$shelf->{shelfnumber}} = $shelf->{shelfname};
-	}
-	# then open shelves...
-	my ($shelflist) = GetRecentShelves(3, $limit, undef);
+        $shelvesloop{$shelf->{shelfnumber}} = $shelf->{shelfname};
+    }
+    # then open shelves...
+    my ($shelflist) = GetRecentShelves(3, $limit, undef);
     for my $shelf ( @{ $shelflist->[0] } ) {
         push( @shelvesloop, $shelf->{shelfnumber} );
-		$shelvesloop{$shelf->{shelfnumber}} = $shelf->{shelfname};
-	}
-	if(@shelvesloop gt 0){
-    my $CGIvirtualshelves = CGI::scrolling_list(
-        -name     => 'shelfnumber',
-        -values   => \@shelvesloop,
-        -labels   => \%shelvesloop,
-        -size     => 1,
-        -tabindex => '',
-        -multiple => 0
-    );
-    $template->param(
-	        CGIvirtualshelves => $CGIvirtualshelves,
-    );
-	}
-
-    $template->param(
-        biblionumber      => $biblionumber,
-        title             => $biblios[0]->{'title'},
-        author            => $biblios[0]->{'author'},
-    );
-
+        $shelvesloop{$shelf->{shelfnumber}} = $shelf->{shelfname};
+    }
+    if(@shelvesloop gt 0){
+        my $CGIvirtualshelves = CGI::scrolling_list
+          (
+           -name     => 'shelfnumber',
+           -values   => \@shelvesloop,
+           -labels   => \%shelvesloop,
+           -size     => 1,
+           -tabindex => '',
+           -multiple => 0
+          );
+        $template->param
+          (
+           CGIvirtualshelves => $CGIvirtualshelves,
+          );
+    }
+    
+    unless ($biblionumbers) {
+        my ( $bibliocount, @biblios ) = GetBiblio($biblionumber);
+    
+        $template->param
+          (
+           biblionumber      => $biblionumber,
+           title             => $biblios[0]->{'title'},
+           author            => $biblios[0]->{'author'},
+          );
+    } else {
+        my @biblioloop = ();
+        foreach my $biblionumber (@biblionumbers) {
+            my ( $bibliocount, @biblios ) = GetBiblio($biblionumber);
+            my %biblioiter = (
+                              title=>$biblios[0]->{'title'},
+                              author=>$biblios[0]->{'author'}
+                             );
+            push @biblioloop, \%biblioiter;
+        }
+        $template->param
+          (
+           biblioloop => \@biblioloop,
+           biblionumbers => $biblionumbers
+          );
+    }
+    
     output_html_with_http_headers $query, $cookie, $template->output;
 }

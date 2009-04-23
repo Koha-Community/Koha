@@ -46,6 +46,8 @@ my @biblionumber=$query->param('biblionumber');
 my @borrower=$query->param('borrowernumber');
 my @branch=$query->param('pickup');
 my @itemnumber=$query->param('itemnumber');
+my $multi_hold = $query->param('multi_hold');
+my $biblionumbers = $query->param('biblionumbers');
 my $count=@rank;
 
 my $CancelBiblioNumber=$query->param('CancelBiblioNumber');
@@ -71,5 +73,11 @@ my $from=$query->param('from');
 if ($from eq 'borrower'){
   print $query->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrower[0]");
  } else {
-   print $query->redirect("/cgi-bin/koha/reserve/request.pl?biblionumber=$biblionumber[0]");
+     my $url = "/cgi-bin/koha/reserve/request.pl?";
+     if ($multi_hold) {
+         $url .= "multi_hold=1&biblionumbers=$biblionumbers";
+     } else {
+         $url .= "biblionumber=$biblionumber[0]";
+     }
+     print $query->redirect($url);
 }

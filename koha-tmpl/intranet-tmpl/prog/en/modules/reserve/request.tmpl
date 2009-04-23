@@ -1,5 +1,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Circulation &rsaquo; Holds &rsaquo; Place a hold on <!-- TMPL_VAR NAME="title" escape="html" --></title>
+<!-- TMPL_UNLESS NAME="multi_hold" -->
+    <title>Koha &rsaquo; Circulation &rsaquo; Holds &rsaquo; Place a hold on <!-- TMPL_VAR NAME="title" escape="html" --></title>
+<!-- TMPL_ELSE -->
+    <title>Koha &rsaquo; Circulation &rsaquo; Holds &rsaquo; Confirm Holds</title>
+<!-- /TMPL_UNLESS -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
     // <![CDATA[
@@ -11,51 +15,78 @@ var override_items = {<!-- TMPL_LOOP NAME="bibitemloop" --><!-- TMPL_LOOP NAME="
     },
 <!-- /TMPL_IF --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP -->
 };
+var MSG_NO_ITEMS_AVAILABLE = _("A hold cannot be requested on any of these items.");
 
 function check() {
 	var msg = "";
 	var count_reserv = 0;
 	var alreadyreserved = 0;
 
-// check if we have checkitem form
-if (document.form.checkitem){
-	for (i=0;i<document.form.checkitem.length;i++){
-		if (document.form.checkitem[i].checked == true) {
+    // check if we have checkitem form
+    if (document.form.checkitem){
+        for (i=0;i<document.form.checkitem.length;i++){
+            if (document.form.checkitem[i].checked == true) {
 				count_reserv++ ;
 			}
-	}
-	// for only one item, check the checkitem without consider the loop checkitem
-	if (i==0){
-		if (document.form.checkitem.checked == true) {
-			count_reserv++;
-		}
-	}
-}
+        }
+        // for only one item, check the checkitem without consider the loop checkitem
+        if (i==0){
+		    if (document.form.checkitem.checked == true) {
+			    count_reserv++;
+		    }
+	    }
+    }
 
-if (document.form.request.checked == true){
+    if (document.form.request.checked == true){
 		count_reserv++ ;
-}
+    }
 
-if (document.form.alreadyreserved.value == "1"){
+    if (document.form.alreadyreserved && document.form.alreadyreserved.value == "1"){
 		 alreadyreserved++ ;
-}
+    }
 
-if (count_reserv == "0"){
+    if (count_reserv == "0"){
 		msg += (_("- Please select an item to place a hold\n"));
-}
-if (count_reserv >= "2"){
+    }
+    if (count_reserv >= "2"){
 		msg += (_("- You may only place a hold on one item at a time\n"));
-}
+    }
 
-if (alreadyreserved > "0"){
+    if (alreadyreserved > "0"){
 		msg += (_("- This patron had already placed a hold on this item\n Please cancel the previous hold first \n"));
-}
+    }
 
 	if (msg == "") return(true);
 	else	{
 		alert(msg);
 		return(false);
 	}
+}
+
+function checkMultiHold() {
+    var spans = $(".multi_hold_item");
+    if ($(spans).size() == 0) {
+        alert(MSG_NO_ITEMS_AVAILABLE);
+        return false;
+    }
+    
+    var biblionumbers = "";
+    $(spans).each(function() {
+        var bibnum = $(this).attr("title");
+        biblionumbers += bibnum + "/";    
+    });
+
+    var badSpans = $(".not_holdable");
+    var badBibs = "";
+    $(badSpans).each(function() {
+        var bibnum = $(this).attr("title");
+        badBibs += bibnum + "/";    
+    });
+
+    $("#multi_hold_bibs").val(biblionumbers);
+    $("#bad_bibs").val(badBibs);
+    
+    return true;
 }
 
  $(document).ready(function() {
@@ -104,7 +135,11 @@ if (alreadyreserved > "0"){
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="circ-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a> &rsaquo; Place a hold on <!-- TMPL_VAR NAME="title" escape="html" --></div>
+<!-- TMPL_UNLESS NAME="multi_hold" -->
+    <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a> &rsaquo; Place a hold on <!-- TMPL_VAR NAME="title" escape="html" --></div>
+<!-- TMPL_ELSE -->
+    <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a> &rsaquo; Confirm Holds</div>
+<!-- /TMPL_UNLESS -->
 
  <div id="doc3" class="yui-t2">
 
@@ -116,7 +151,7 @@ if (alreadyreserved > "0"){
 <strong>Cannot reserve:</strong> this record has no items attached.                            
 </div>
 <!-- TMPL_ELSE -->
-<!-- TMPL_IF NAME="messagetransfert" -->
+  <!-- TMPL_IF NAME="messagetransfert" -->
 		<div class="dialog message">
 				<h2>Hold found for (<!-- TMPL_VAR NAME="nextreservtitle" -->), please transfer</h2>
 			<p>Hold placed by : <strong> <!-- TMPL_VAR NAME="nextreservsurname" --> <!-- TMPL_VAR NAME="nextreservfirstname" --></strong> at : <strong> <!-- TMPL_VAR NAME="branchname" --> </strong>, Please transfer this item.
@@ -125,10 +160,15 @@ if (alreadyreserved > "0"){
 				<input type="submit" class="button" />
 			</form>
 		</div>
-	<!-- /TMPL_IF -->
-<h1>Place a hold on <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a></h1>
+  <!-- /TMPL_IF -->
+    
+  <!-- TMPL_UNLESS NAME="multi_hold" -->
+    <h1>Place a hold on <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a></h1>
+  <!-- TMPL_ELSE -->
+    <h1>Confirm Holds</h1>
+  <!-- /TMPL_UNLESS -->
 
-<!-- TMPL_UNLESS NAME="cardnumber"-->
+  <!-- TMPL_UNLESS NAME="cardnumber"-->
     <!-- TMPL_IF NAME="messageborrower" -->                                    
       <div class="dialog alert"><h3>Patron Not Found</h3><p>No patron with this name, Please, try another</p> </div>    
     <!-- /TMPL_IF -->
@@ -147,26 +187,34 @@ if (alreadyreserved > "0"){
 			<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber"-->" /><fieldset class="action"><input type="submit" value="Select" /></fieldset></fieldset>
 
         <!-- /TMPL_UNLESS -->
+        <!-- TMPL_IF NAME="multi_hold" -->
+            <input type="hidden" name="multi_hold" value="<!-- TMPL_VAR NAME="multi_hold" -->"/>
+            <input type="hidden" name="biblionumbers" value="<!-- TMPL_VAR NAME="biblionumbers" -->"/>
+        <!-- /TMPL_IF -->
     </form>
-<!-- TMPL_ELSE -->
+  <!-- TMPL_ELSE -->
 
 <!-- TMPL_IF NAME="warnings" -->
     <div class="dialog alert">
-	<h3>Cannot Place Hold</h3>
-	<ul>
-<!-- TMPL_IF NAME="maxreserves" -->
-      <li><strong>Too Many Holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="borrowerfirstname" --> <!-- TMPL_VAR NAME="borrowersurname" --> </a> has too many holds.</li>
-    <!-- /TMPL_IF -->
 
-    <!-- TMPL_IF NAME="alreadyreserved" -->
-     <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="borrowerfirstname" --> <!-- TMPL_VAR NAME="borrowersurname" --></a> <strong>already has a hold</strong> on this item </li>
-    <!-- /TMPL_IF -->
+    <!-- TMPL_UNLESS NAME="multi_hold" -->
+      <h3>Cannot Place Hold</h3>
+  	  <ul>
+        <!-- TMPL_IF NAME="maxreserves" -->
+          <li><strong>Too Many Holds: </strong> <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="borrowerfirstname" --> <!-- TMPL_VAR NAME="borrowersurname" --> </a> has too many holds.</li>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="alreadyreserved" -->
+          <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="borrowerfirstname" --> <!-- TMPL_VAR NAME="borrowersurname" --></a> <strong>already has a hold</strong> on this item </li>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="none_available" -->
+          <li> <strong>No copies are available</strong> to be placed on hold</li>
+        <!-- /TMPL_IF -->
+	  </ul>
+    <!-- TMPL_ELSE -->
+      <h3>Cannot Place Hold on Some Items</h3>
+    <!-- /TMPL_UNLESS -->
 
-    <!-- TMPL_IF NAME="none_available" -->
-    <li> <strong>No copies are available</strong> to be placed on hold</li>
-    <!-- /TMPL_IF -->
-
-	</ul></div>
+    </div>
 <!-- /TMPL_IF -->	
 
 <!-- TMPL_IF NAME="messages" -->
@@ -188,13 +236,30 @@ if (alreadyreserved > "0"){
   
   <fieldset class="rows left">
     <legend>Hold details</legend>
-        <form action="placerequest.pl" method="post" onsubmit="return check();" name="form">
+        <!-- TMPL_UNLESS NAME="multi_hold" -->
+            <form action="placerequest.pl" method="post" onsubmit="return check();" name="form">
+        <!-- TMPL_ELSE -->
+            <form action="placerequest.pl" method="post" onsubmit="return checkMultiHold();" name="form">
+        <!-- /TMPL_UNLESS -->
     
         <input type="hidden" size="10" name="member" value="<!--  TMPL_VAR NAME="cardnumber" -->" />
-        <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
         <input type="hidden" name="type" value="str8" />
-        <input type="hidden" name="title" value="<!-- TMPL_VAR NAME="title" -->" />
-        <input type="hidden" name="rank-request" value="<!-- TMPL_VAR NAME="fixedRank" -->" />
+
+        <!-- TMPL_IF NAME="multi_hold" -->
+            <input type="hidden" name="multi_hold" value="<!-- TMPL_VAR NAME="multi_hold" -->"/>
+            <input type="hidden" name="biblionumbers" id="multi_hold_bibs" value="<!-- TMPL_VAR NAME="biblionumbers" -->"/>
+            <input type="hidden" name="bad_bibs" id="bad_bibs" value=""/>
+            <input type="hidden" name="request" value="any"/>
+            <!-- TMPL_LOOP NAME="biblioloop" -->
+              <input type="hidden" name="title_<!-- TMPL_VAR NAME="biblionumber">" value="<!-- TMPL_VAR NAME="title">"/>
+              <input type="hidden" name="rank_<!-- TMPL_VAR NAME="biblionumber">" value="<!-- TMPL_VAR NAME="rank">"/>
+            <!-- /TMPL_LOOP -->
+        <!-- TMPL_ELSE -->
+            <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+            <input type="hidden" name="title" value="<!-- TMPL_VAR NAME="title" -->" />
+            <input type="hidden" name="rank-request" value="<!-- TMPL_VAR NAME="fixedRank" -->" />
+        <!-- /TMPL_IF -->
+
        <ol> <li><span class="label">Patron:</span>
             <!-- TMPL_IF NAME="cardnumber"-->
                 <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="borrowerfirstname" --> <!-- TMPL_VAR NAME="borrowersurname" --> (<!--  TMPL_VAR NAME="cardnumber" -->)</a>
@@ -202,10 +267,12 @@ if (alreadyreserved > "0"){
                 Not defined yet
             <!-- /TMPL_IF -->
         </li>
-        <li>
-        <span class="label">Priority:</span>
-            <strong><!-- TMPL_VAR Name="fixedRank" --></strong>
-        </li>
+        <!-- TMPL_UNLESS NAME="multi_hold" -->
+          <li>
+          <span class="label">Priority:</span>
+              <strong><!-- TMPL_VAR Name="fixedRank" --></strong>
+          </li>
+        <!-- /TMPL_UNLESS -->
         <li>
             <label for="holdnotes">Notes:</label>
             <textarea id="holdnotes" name="notes" cols="30" rows="1"></textarea>
@@ -215,13 +282,16 @@ if (alreadyreserved > "0"){
             <!-- TMPL_VAR NAME="CGIbranch" -->
         </li>
 
-        <li> <label for="requestany">Place a hold on the next available copy </label>
+        <!-- TMPL_UNLESS NAME="multi_hold" -->
+          <li> <label for="requestany">Place a hold on the next available copy </label>
                <input type="checkbox" id="requestany" name="request" checked="checked" value="Any" />
                <input type="hidden" name="biblioitem" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" />
                <input type="hidden" name="alreadyreserved" value="<!-- TMPL_VAR NAME="alreadyreserved" -->" />
-        </li>
+          </li>
+        <!-- /TMPL_UNLESS -->
 
 </ol>
+   <!-- TMPL_UNLESS NAME="multi_hold" -->
         <fieldset class="action">
             <!-- TMPL_IF NAME="cardnumber"-->
                 <!-- TMPL_IF NAME="override_required" -->
@@ -234,12 +304,13 @@ if (alreadyreserved > "0"){
             <!-- /TMPL_IF -->
         </fieldset>
         <!-- TMPL_LOOP name="bibitemloop" -->
-<ol>
-	<!-- TMPL_UNLESS NAME="item-level_itypes" -->
-        <li><span class="label">Item type:</span> <!-- TMPL_VAR NAME="description" --></li>
-	<!-- /TMPL_UNLESS -->
-        <!-- TMPL_IF NAME="publicationyear" --><li><span class="label">Publication year:</span> <!-- TMPL_VAR NAME="publicationyear" --></li><!-- /TMPL_IF -->
-</ol>
+          <ol>
+            <!-- TMPL_UNLESS NAME="item-level_itypes" -->
+              <li><span class="label">Item type:</span> <!-- TMPL_VAR NAME="description" --></li>
+            <!-- /TMPL_UNLESS -->
+
+            <!-- TMPL_IF NAME="publicationyear" --><li><span class="label">Publication year:</span> <!-- TMPL_VAR NAME="publicationyear" --></li><!-- /TMPL_IF -->
+          </ol>
          
         <table id="requestspecific">
         <caption>Place a hold on a specific copy</caption>
@@ -322,7 +393,75 @@ if (alreadyreserved > "0"){
         </tr>
     <!-- /TMPL_LOOP --> <!-- itemloop -->
         </table>
+        
     <!-- /TMPL_LOOP --> <!-- bibitemloop -->
+
+  <!-- TMPL_ELSE --><!-- UNLESS multi_hold -->
+
+    <table id="requesttitles">
+      <tr>
+        <th>Title</th>
+        <!-- TMPL_UNLESS NAME="item-level_itypes" -->
+          <th>Item Type</th>
+        <!-- /TMPL_UNLESS -->
+        <th>Priority</th>
+        <th>Information</th>
+      </tr>
+      <!-- TMPL_LOOP NAME="biblioloop" -->
+        <!-- TMPL_IF NAME="warn" -->
+          <tr class="onissue">
+        <!-- TMPL_ELSE -->
+          <tr>
+        <!-- /TMPL_IF -->
+          <td>
+            <ul>
+              <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></li>
+              <!-- TMPL_IF NAME="publicationyear" -->
+                <li><span class="label">Publication year:</span> <!-- TMPL_VAR NAME="publicationyear" --></li>
+              <!-- /TMPL_IF -->
+            </ul>
+            <!-- TMPL_UNLESS NAME="warn" -->
+              <span class="multi_hold_item" title="<!-- TMPL_VAR NAME="biblionumber" -->"></span>
+            <!-- TMPL_ELSE -->
+              <span class="not_holdable" title="<!-- TMPL_VAR NAME="biblionumber" -->"></span>
+            <!-- /TMPL_UNLESS -->
+          </td>
+          <!-- TMPL_UNLESS NAME="item-level_itypes" -->
+            <td>
+              <img src="<!-- TMPL_VAR name="imageurl" -->" alt="<!-- TMPL_VAR NAME="itypename" -->" title="<!-- TMPL_VAR NAME="itypename" -->" />
+            </td>
+          <!-- /TMPL_UNLESS -->
+          <td><!-- TMPL_VAR NAME="rank" --></td>
+          <td>
+            <!-- TMPL_IF NAME="alreadyres" -->
+              <ul>
+            <!-- TMPL_ELSE -->
+              <!-- TMPL_IF NAME="none_avail" -->
+                <ul>
+              <!-- /TMPL_IF -->
+            <!-- /TMPL_IF -->
+
+          <!-- TMPL_IF NAME="alreadyres" -->
+              <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="borrowerfirstname" --> <!-- TMPL_VAR NAME="borrowersurname" --></a> <strong>already has a hold</strong> on this item </li>
+          <!-- /TMPL_IF -->
+          <!-- TMPL_IF NAME="none_avail" -->
+              <li> <strong>No copies are available</strong> to be placed on hold</li>
+          <!-- /TMPL_IF -->
+
+            <!-- TMPL_IF NAME="alreadyres" -->
+              </ul>
+            <!-- TMPL_ELSE -->
+              <!-- TMPL_IF NAME="none_avail" -->
+                </ul>
+              <!-- /TMPL_IF -->
+            <!-- /TMPL_IF -->
+
+          </td>
+        </tr>
+      <!-- /TMPL_LOOP -->
+    </table>
+
+  <!-- /TMPL_UNLESS --><!-- /multi_hold -->
     
     <fieldset class="action">
         <!-- TMPL_IF NAME="cardnumber"-->
@@ -335,16 +474,28 @@ if (alreadyreserved > "0"){
             <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
     </fieldset>
-	</fieldset>
     </form>
+	</fieldset>
 <!-- /TMPL_UNLESS -->
 
 <!-- TMPL_UNLESS NAME="cardnumber" -->
 <!-- TMPL_IF name="reserveloop" -->
 <form name="T<!-- TMPL_VAR NAME="time" -->" action="modrequest.pl" method="post">
+  <!-- TMPL_IF NAME="multi_hold" -->
+    <input type = "hidden" name="multi_hold" value="1"/>
+    <input type = "hidden" name="biblionumbers" value="<!-- TMPL_VAR NAME="biblionumbers" -->"/>
+  <!-- /TMPL_IF -->
+
 <fieldset class="rows left">
 <legend>Existing holds</legend>
+
+<!-- TMPL_LOOP NAME="biblioloop" -->
+
+    <!-- TMPL_IF NAME="reserveloop" -->
     <table>
+      <!-- TMPL_IF NAME="multi_hold" -->
+          <caption><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></caption>
+      <!-- /TMPL_IF -->
       <tr>
         <th>Priority</th>
         <th>Patron</th>
@@ -435,7 +586,12 @@ if (alreadyreserved > "0"){
       </tr>
   <!-- /TMPL_LOOP --> <!-- existing reserveloop -->
      </table>
-<fieldset class="action"><input type="submit" name="submit" value="Update hold(s)" /></fieldset>
+  <!-- /TMPL_IF --><!-- /reserveloop -->
+<!-- /TMPL_LOOP --><!-- /biblioloop -->
+
+<fieldset class="action">
+  <input type="submit" name="submit" value="Update hold(s)" />
+</fieldset>
 </fieldset>
 </form>
 <!-- /TMPL_IF -->
@@ -445,7 +601,9 @@ if (alreadyreserved > "0"){
 </div>
 
 <div class="yui-b">
-<!-- TMPL_INCLUDE NAME="biblio-view-menu.inc" -->
+<!-- TMPL_UNLESS NAME="multi_hold" -->
+  <!-- TMPL_INCLUDE NAME="biblio-view-menu.inc" -->
+<!-- /TMPL_UNLESS -->
 
 </div>
 </div>

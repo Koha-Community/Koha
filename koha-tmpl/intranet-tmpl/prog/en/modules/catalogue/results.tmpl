@@ -1,8 +1,11 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Catalog &rsaquo; <!-- TMPL_IF NAME="searchdesc" -->Results of Search <!-- TMPL_IF NAME="query_desc" -->for '<!-- TMPL_VAR NAME="query_desc" -->'<!-- /TMPL_IF --><!-- TMPL_IF NAME="limit_desc" -->&nbsp;with limit(s):&nbsp;'<!-- TMPL_VAR NAME="limit_desc" -->'<!-- /TMPL_IF --><!-- TMPL_ELSE -->You did not specify any search criteria<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- TMPL_IF NAME="AmazonEnabled" --><script type="text/javascript">
+<script type="text/javascript">
 //<![CDATA[
+var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
+var MSG_NON_RESERVES_SELECTED = _("One or more selected items cannot be reserved.");
+<!-- TMPL_IF NAME="AmazonEnabled" -->
 // http://www.oreillynet.com/pub/a/javascript/2003/10/21/amazonhacks.html
 function verify_images() {
     $("img").each(function(i){
@@ -14,7 +17,7 @@ function verify_images() {
             } else if ((this.complete != null) && (!this.complete)) {
                 this.src = 'http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
             }
-        }
+           }
         });
         }
 $(document).ready(function() {
@@ -26,8 +29,58 @@ $(document).ready(function() {
 $(window).load(function() {
         verify_images();
      });
-     //]]>
-     </script><!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+$(document).ready(function() {
+    $("#selection_ops").show();
+    $(".selection").show();
+});
+function selectAll () {
+    $(".selection").attr("checked", "checked");
+}
+function clearAll () {
+    $(".selection").removeAttr("checked");
+}
+function placeHold () {
+    var checkedItems = $(".selection:checked");
+    if ($(checkedItems).size() == 0) {
+        alert(MSG_NO_ITEM_SELECTED);
+        return false;
+    }
+    var bibs = "";
+    var badBibs = false;
+    $(checkedItems).each(function() {
+        var bib = $(this).val();
+        if ($("#reserve_" + bib).size() == 0) {
+            alert(MSG_NON_RESERVES_SELECTED);
+            badBibs = true;
+            return false;
+        }
+        bibs += bib + "/";
+    });
+    if (badBibs) {
+        return false;
+    }
+    $("#hold_form_biblios").val(bibs);
+    $("#hold_form").submit();
+    return false;
+}
+function addToList () {
+    var checkedItems = $(".selection:checked");
+    if ($(checkedItems).size() == 0) {
+        alert(MSG_NO_ITEM_SELECTED);
+        return false;
+    }
+    var bibs = "";
+    $(checkedItems).each(function() {
+        bibs += $(this).val() + "/";
+    });
+
+    var url = "/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumbers=" + bibs;
+	window.open(url, 'Add_to_virtualshelf', 'width=500, height=400, toolbar=false, scrollbars=yes');
+    return false;
+}
+//]]>
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -79,6 +132,15 @@ $(window).load(function() {
             <h3>
                 <!-- TMPL_VAR NAME="total" --> result(s) found <!-- TMPL_IF NAME="query_desc" -->for <span style="font-weight: bold;">'<!-- TMPL_VAR NAME="query_desc" -->'</span><!-- /TMPL_IF --><!-- TMPL_IF NAME="limit_desc" -->&nbsp;with limit(s): <span style="font-weight: bold;">'<!-- TMPL_VAR NAME="limit_desc" -->'</span><!-- /TMPL_IF --><!-- TMPL_IF NAME="LibraryName" --> in <!-- TMPL_VAR NAME="LibraryName" --> Catalog<!-- /TMPL_IF -->.<br />&nbsp;
             </h3>
+            <div id="selection_ops" style="display:none">
+                <a href="#" onclick="selectAll(); return false;">Select All</a>
+                |
+                <a href="#" onclick="clearAll(); return false;">Clear All</a>
+                <!-- TMPL_IF NAME="CAN_user_reserveforothers" -->
+                  <input type="button" onclick="placeHold(); return false;" value="Place Hold"/>
+                <!-- /TMPL_IF -->
+                <input type="button" onclick="addToList(); return false;" value="Add to List"/>
+            </div>
         </div>
     <!-- TMPL_IF NAME="stopwords_removed" --><div><p class="tip">Ignored the following common words: "<!-- TMPL_VAR NAME="stopwords_removed" -->"<p></div><!-- /TMPL_IF -->
     <!-- TMPL_ELSE -->
@@ -205,7 +267,7 @@ $(window).load(function() {
                 <table>
                     <tr>
                         <!-- TMPL_IF NAME="AmazonEnabled" --><th>&nbsp;</th><!-- /TMPL_IF -->
-                        <th>Results</th>
+                        <th colspan="2">Results</th>
                         <th>Location</th>
                     </tr>
                         <!-- Actual Search Results -->
@@ -218,6 +280,9 @@ $(window).load(function() {
                                         <img src="<!-- TMPL_IF NAME="normalized_isbn" -->http://images.amazon.com/images/P/<!-- TMPL_VAR name="normalized_isbn" -->.01.TZZZZZZZ.jpg<!-- TMPL_ELSE -->http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif<!-- /TMPL_IF -->" alt="image" class="thumbnail" /> <!-- /TMPL_IF -->
                                     </a></td>                           
                             <!-- /TMPL_IF -->
+                            <td>
+                                <input type="checkbox" class="selection" value="<!-- TMPL_VAR NAME="biblionumber" -->" style="display:none" />
+                            </td>
                             <td>
                                 <p><!-- TMPL_VAR NAME="result_number" -->.
                                     <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
@@ -287,7 +352,7 @@ $(window).load(function() {
                                   <!-- TMPL_IF NAME="norequests" -->
                                         No holds allowed
                                     <!-- TMPL_ELSE -->
-                                        <a class="reserve" href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Holds</a>
+                                        <a class="reserve" id="reserve_<!-- TMPL_VAR NAME="biblionumber" -->" href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Holds</a>
                                     <!-- /TMPL_IF -->
                                 </td>
 
@@ -376,6 +441,18 @@ $(window).load(function() {
 </div>
 </div>
 <!-- /TMPL_IF -->
+
+<form id="hold_form" method="get" action="/cgi-bin/koha/reserve/request.pl">
+    <!-- Value will be set here by placeHold() -->
+    <input id="hold_form_biblios" type="hidden" name="biblionumbers" value="" />
+    <input type="hidden" name="multi_hold" value="1"/>
+</form>
+
+<form id="list_form" method="get" action="/cgi-bin/koha/reserve/request.pl">
+    <!-- Value will be set here by addToList() -->
+    <input id="list_form_biblios" type="hidden" name="biblionumbers" value="" />
+    <input type="hidden" name="multi_listadd" value="1"/>
+</form>
 
 </div>
 </div>
