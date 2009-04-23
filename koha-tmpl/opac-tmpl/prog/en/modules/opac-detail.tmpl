@@ -115,7 +115,7 @@
     <!-- COinS / OpenURL -->
     <!-- TMPL_IF NAME="ocoins_format" -->
     <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3A<!-- TMPL_VAR NAME="ocoins_format" -->&amp;rft.au=<!-- TMPL_VAR NAME="author" -->&amp;rft.btitle=<!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle"-->&amp;rft.date=<!-- TMPL_VAR NAME="publicationyear" -->&amp;rft.pages=<!--TMPL_VAR NAME="pages" -->&amp;rft.isbn=<!-- TMPL_VAR NAME=amazonisbn-->&amp;rft.aucorp=&amp;rft.place=<!-- TMPL_VAR NAME="place"-->&amp;rft.pub=<!-- TMPL_VAR NAME="publishercode" -->&amp;rft.edition=<!--TMPL_VAR NAME="edition" -->&amp;rft.series=<!-- TMPL_VAR NAME="series"-->&amp;rft.genre="></span><!-- /TMPL_IF --> 
-    <!-- TMPL_IF name="isbn" -->
+    <!-- TMPL_IF name="normalized_isbn" -->
     <!-- unAPI <abbr/> tag -->
     <span class="results_summary"><span class="label">ISBN: </span><abbr class="unapi-id" title="koha:isbn:<!-- TMPL_VAR NAME="normalized_isbn" -->"><!-- TMPL_VAR NAME="normalized_isbn" --></abbr></span><!-- /TMPL_IF -->
     <!-- TMPL_IF name="issn" -->
@@ -188,13 +188,15 @@
 
 <!-- This puts the LTFL reviews in, and if TabbedView is not set, puts the remaining content above the Tabs instead of in them -->
 <!-- TMPL_IF NAME="LibraryThingForLibrariesID"> 
-	<!--TMPL_IF NAME = "LibraryThingForLibrariesTabbedView" -->
-	<!--TMPL_ELSE -->
-		<span class="results_summary"><div id="ltfl_related" class="ltfl"></div></span> 
-		<span class="results_summary"><div id="ltfl_similars"class="ltfl"></div></span> 
-		<span class="results_summary"><div id="ltfl_tagbrowse"class="ltfl"></div></span> 
-	<!--/TMPL_IF-->
-	<span class="results_summary"><span class="label">Reviews from LibraryThing.com:</span>	<div class="ltfl_reviews"></div></span>
+	<!-- TMPL_UNLESS NAME = "LibraryThingForLibrariesTabbedView" -->
+		<span class="results_summary"><span id="ltfl_related" class="ltfl"></span></span> 
+		<span class="results_summary"><span id="ltfl_similars" class="ltfl"></span></span> 
+		<span class="results_summary"><span id="ltfl_tagbrowse" class="ltfl"></span></span> 
+	<!-- /TMPL_UNLESS -->
+	<span class="results_summary">
+        <span class="label">Reviews from LibraryThing.com:</span>	
+        <span style="display: block;" class="ltfl_reviews"></span>
+    </span>
 <!-- /TMPL_IF --> 
 
 
@@ -549,7 +551,8 @@
 	<!-- Library Thing for Libraries Content --> 
 		<div id="LFTLSimilarItems">
 			<div class="content_set">
-	<!-- Uncommenting this span makes the font smaller in the tab for LTFL-->
+	<!-- Uncommenting this span makes the font smaller in the tab for LTFL -->
+    <!-- but breaks XHTML validation -->
  	<!--	<span class="results_summary">-->
 				<div id="ltfl_related"></div>
 				<div id="ltfl_similars"></div>
@@ -558,9 +561,9 @@
 		</div>
 		 <div id="LTFLTagBrowse">
                         <div class="content_set">
-                                <span class="results_summary">
+                                <!-- <span class="results_summary"> -->
                                 <div id="ltfl_tagbrowse" class="ltfl"></div>
-                                </span>
+                                <!-- </span> -->
                         </div>
                 </div>
 	<!--/TMPL_IF -->
@@ -753,6 +756,6 @@
 <!-- /TMPL_IF -->
 </div>
 <!-- TMPL_IF NAME="LibraryThingForLibrariesID" --> 
-<script src="http://ltfl.librarything.com/forlibraries/widget.js?systype=koha&id=<!--TMPL_VAR NAME="LibraryThingForLibrariesID" -->"type="text/javascript"></script><noscript>This page contains enriched content visible when JavaScript is enabled or by clicking <a href="http://www.librarything.com/forlibraries/noscript.php?id=<!-- TMPL_VAR NAME="LibraryThingForLibrariesID" -->&accessibility=1">here</a>.</noscript> 
+<script src="http://ltfl.librarything.com/forlibraries/widget.js?systype=koha&amp;id=<!--TMPL_VAR NAME="LibraryThingForLibrariesID" -->" type="text/javascript"></script><noscript>This page contains enriched content visible when JavaScript is enabled or by clicking <a href="http://www.librarything.com/forlibraries/noscript.php?id=<!-- TMPL_VAR NAME="LibraryThingForLibrariesID" -->&amp;accessibility=1">here</a>.</noscript> 
 <!-- /TMPL_IF --> 
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
