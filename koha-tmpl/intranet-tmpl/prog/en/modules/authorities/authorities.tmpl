@@ -38,12 +38,13 @@ function AreMandatoriesNotOk(){
     var   tab = new Array();
     var label = new Array();
     <!-- TMPL_LOOP NAME='BIG_LOOP' --><!-- TMPL_LOOP NAME='innerloop' --><!-- TMPL_LOOP NAME='subfield_loop'--><!-- TMPL_IF NAME='mandatory'-->mandatories.push("<!-- TMPL_VAR NAME='id' -->");
-                        tab.push("<!-- TMPL_VAR NAME='number' -->");
-                        label.push("<!-- TMPL_VAR NAME='marc_lib' ESCAPE=JS-->");<!-- /TMPL_IF --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP -->
+        tab.push("<!-- TMPL_VAR NAME='number' -->");
+        label.push("<!-- TMPL_VAR NAME='marc_lib' ESCAPE=JS-->");
+    <!-- /TMPL_IF --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP -->
     var StrAlert = "";
     for(var i=0,len=mandatories.length; i<len ; i++){
         var id_string = mandatories[i];
-        alert (id_string);
+        // alert (id_string);
         if( ! $("#" + id_string).val() ){
             $("#" + id_string).attr('class','subfield_not_filled').focus();
             StrAlert += "\t* "+label[i]+_(" in tab ")+tab[i]+"\n";
@@ -51,9 +52,8 @@ function AreMandatoriesNotOk(){
     }
     if(StrAlert){
         return _("Can't save this record because the following field aren't filled :\n\n") + StrAlert;
-    } else {
-        return flag;
     }
+    return false;
 }
 
 /**
