@@ -24,7 +24,7 @@ use CGI;
 use C4::Context;
 
 
-sub StringSearch {
+sub string_search {
     my ( $searchstring, $frameworkcode ) = @_;
     my $dbh = C4::Context->dbh;
     $searchstring =~ s/\'/\\\'/g;
@@ -47,6 +47,14 @@ sub StringSearch {
     $sth->finish;
     $dbh->disconnect;
     return ( $cnt, \@results );
+}
+
+sub marc_subfield_structure_exists {
+    my ($tagfield, $tagsubfield, $frameworkcode) = @_;
+    my $dbh  = C4::Context->dbh;
+    my $sql  = "select tagfield from marc_subfield_structure where tagfield = ? and tagsubfield = ? and frameworkcode = ?";
+    my $rows = $dbh->selectall_arrayref($sql, {}, $tagfield, $tagsubfield, $frameworkcode);
+    return @$rows > 0;
 }
 
 my $input         = new CGI;
@@ -382,10 +390,18 @@ if ( $op eq 'add_form' ) {
 elsif ( $op eq 'add_validate' ) {
     my $dbh = C4::Context->dbh;
     $template->param( tagfield => "$input->param('tagfield')" );
-    my $sth = $dbh->prepare(
-"replace marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,authtypecode,value_builder,hidden,isurl,frameworkcode, link,defaultvalue)
-                                    values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-    );
+#     my $sth = $dbh->prepare(
+# "replace marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,authtypecode,value_builder,hidden,isurl,frameworkcode, link,defaultvalue)
+#                                     values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+#     );
+    my $sth_insert = $dbh->prepare(qq{
+        insert into marc_subfield_structure (tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,authtypecode,value_builder,hidden,isurl,frameworkcode, link,defaultvalue)
+        values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+    });
+    my $sth_update = $dbh->prepare(qq{
+        update marc_subfield_structure set tagfield=?, tagsubfield=?, liblibrarian=?, libopac=?, repeatable=?, mandatory=?, kohafield=?, tab=?, seealso=?, authorised_value=?, authtypecode=?, value_builder=?, hidden=?, isurl=?, frameworkcode=?,  link=?, defaultvalue=?
+        where tagfield=? and tagsubfield=? and frameworkcode=?
+    });
     my @tagsubfield       = $input->param('tagsubfield');
     my @liblibrarian      = $input->param('liblibrarian');
     my @libopac           = $input->param('libopac');
@@ -421,29 +437,57 @@ elsif ( $op eq 'add_validate' ) {
         
         if ($liblibrarian) {
             unless ( C4::Context->config('demo') eq 1 ) {
-                $sth->execute(
-                    $tagfield,
-                    $tagsubfield,
-                    $liblibrarian,
-                    $libopac,
-                    $repeatable,
-                    $mandatory,
-                    $kohafield,
-                    $tab,
-                    $seealso,
-                    $authorised_value,
-                    $authtypecode,
-                    $value_builder,
-                    $hidden,
-                    $isurl,
-                    $frameworkcode,
-                    $link,
-                    $defaultvalue,
-                );
+                if (marc_subfield_structure_exists($tagfield, $tagsubfield, $frameworkcode)) {
+                    $sth_update->execute(
+                        $tagfield,
+                        $tagsubfield,
+                        $liblibrarian,
+                        $libopac,
+                        $repeatable,
+                        $mandatory,
+                        $kohafield,
+                        $tab,
+                        $seealso,
+                        $authorised_value,
+                        $authtypecode,
+                        $value_builder,
+                        $hidden,
+                        $isurl,
+                        $frameworkcode,
+                        $link,
+                        $defaultvalue,
+                        (
+                            $tagfield,
+                            $tagsubfield,
+                            $frameworkcode,
+                        ),
+                    );
+                } else {
+                    $sth_insert->execute(
+                        $tagfield,
+                        $tagsubfield,
+                        $liblibrarian,
+                        $libopac,
+                        $repeatable,
+                        $mandatory,
+                        $kohafield,
+                        $tab,
+                        $seealso,
+                        $authorised_value,
+                        $authtypecode,
+                        $value_builder,
+                        $hidden,
+                        $isurl,
+                        $frameworkcode,
+                        $link,
+                        $defaultvalue,
+                    );
+                }
             }
         }
     }
-    $sth->finish;
+    $sth_insert->finish;
+    $sth_update->finish;
     print
 "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=marc_subfields_structure.pl?tagfield=$tagfield&frameworkcode=$frameworkcode\"></html>";
     exit;
@@ -494,7 +538,7 @@ elsif ( $op eq 'delete_confirmed' ) {
 ################## DEFAULT ##################################
 }
 else {    # DEFAULT
-    my ( $count, $results ) = StringSearch( $tagfield, $frameworkcode );
+    my ( $count, $results ) = string_search( $tagfield, $frameworkcode );
     my $toggle    = 1;
     my @loop_data = ();
     for (

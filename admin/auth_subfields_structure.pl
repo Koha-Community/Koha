@@ -24,7 +24,7 @@ use CGI;
 use C4::Context;
 
 
-sub StringSearch  {
+sub string_search  {
 	my ($searchstring,$authtypecode)=@_;
 	my $dbh = C4::Context->dbh;
 	$searchstring=~ s/\'/\\\'/g;
@@ -42,6 +42,14 @@ sub StringSearch  {
 	}
 	$sth->finish;
 	return ($cnt,\@results);
+}
+
+sub auth_subfield_structure_exists {
+	my ($authtypecode, $tagfield, $tagsubfield) = @_;
+	my $dbh  = C4::Context->dbh;
+	my $sql  = "select tagfield from auth_subfield_structure where authtypecode = ? and tagfield = ? and tagsubfield = ?";
+	my $rows = $dbh->selectall_arrayref($sql, {}, $authtypecode, $tagfield, $tagsubfield);
+	return @$rows > 0;
 }
 
 my $input = new CGI;
@@ -384,8 +392,12 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'add_validate') {
 	my $dbh = C4::Context->dbh;
 	$template->param(tagfield => "$input->param('tagfield')");
-	my $sth=$dbh->prepare("replace auth_subfield_structure (authtypecode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,frameworkcode,value_builder,hidden,isurl)
+#	my $sth=$dbh->prepare("replace auth_subfield_structure (authtypecode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,frameworkcode,value_builder,hidden,isurl)
+#									values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+	my $sth_insert = $dbh->prepare("insert into auth_subfield_structure (authtypecode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,frameworkcode,value_builder,hidden,isurl)
 									values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+	my $sth_update = $dbh->prepare("update auth_subfield_structure set authtypecode=?, tagfield=?, tagsubfield=?, liblibrarian=?, libopac=?, repeatable=?, mandatory=?, kohafield=?, tab=?, seealso=?, authorised_value=?, frameworkcode=?, value_builder=?, hidden=?, isurl=?
+									where authtypecode=? and tagfield=? and tagsubfield=?");
 	my @tagsubfield	= $input->param('tagsubfield');
 	my @liblibrarian	= $input->param('liblibrarian');
 	my @libopac		= $input->param('libopac');
@@ -418,26 +430,53 @@ if ($op eq 'add_form') {
 		my $isurl = $input->param("isurl$i")?1:0;
 		if ($liblibrarian) {
 			unless (C4::Context->config('demo') eq 1) {
-				$sth->execute($authtypecode,
-                              $tagfield,
-                              $tagsubfield,
-                              $liblibrarian,
-                              $libopac,
-                              $repeatable,
-                              $mandatory,
-                              $kohafield,
-                              $tab,
-                              $seealso,
-                              $authorised_value,
-                              $frameworkcode,
-                              $value_builder,
-                              $hidden,
-                              $isurl,
-					      );
+				if (auth_subfield_structure_exists($authtypecode, $tagfield, $tagsubfield)) {
+					$sth_update->execute(
+						$authtypecode,
+						$tagfield,
+						$tagsubfield,
+						$liblibrarian,
+						$libopac,
+						$repeatable,
+						$mandatory,
+						$kohafield,
+						$tab,
+						$seealso,
+						$authorised_value,
+						$frameworkcode,
+						$value_builder,
+						$hidden,
+						$isurl,
+						(
+							$authtypecode,
+							$tagfield,
+							$tagsubfield
+						),
+					);
+				} else {
+					$sth_insert->execute(
+						$authtypecode,
+						$tagfield,
+						$tagsubfield,
+						$liblibrarian,
+						$libopac,
+						$repeatable,
+						$mandatory,
+						$kohafield,
+						$tab,
+						$seealso,
+						$authorised_value,
+						$frameworkcode,
+						$value_builder,
+						$hidden,
+						$isurl,
+					);
+				}
 			}
 		}
 	}
-	$sth->finish;
+	$sth_insert->finish;
+	$sth_update->finish;
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=auth_subfields_structure.pl?tagfield=$tagfield&authtypecode=$authtypecode\"></html>";
 	exit;
 
@@ -473,7 +512,7 @@ if ($op eq 'add_form') {
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
-	my ($count,$results)=StringSearch($tagfield,$authtypecode);
+	my ($count,$results)=string_search($tagfield,$authtypecode);
 	my $toggle=1;
 	my @loop_data = ();
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
