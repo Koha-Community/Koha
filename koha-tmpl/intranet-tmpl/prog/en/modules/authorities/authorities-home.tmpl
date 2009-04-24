@@ -16,6 +16,9 @@ function searchauthority() {
     Y = document.forms[0].value.value;
     window.location="/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&authtypecode="+X+"&value="+Y+"&marclist=&and_or=and&excluding=&operator=contains";
 }
+function confirm_deletion() {   // not really implemented, but required by phantom delAuthButton code in authorities-toolbar.inc
+    return true;
+}
 //]]>
 </script>
 </head>
