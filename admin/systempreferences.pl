@@ -141,6 +141,7 @@ $tabsysprefs{CircAutocompl}                  = "Circulation";
 $tabsysprefs{AllowRenewalLimitOverride}      = "Circulation";
 $tabsysprefs{canreservefromotherbranches}    = "Circulation";
 $tabsysprefs{finesMode}                      = "Circulation";
+$tabsysprefs{numReturnedItemsToShow}         = "Circulation";
 $tabsysprefs{emailLibrarianWhenHoldIsPlaced} = "Circulation";
 $tabsysprefs{globalDueDate}                  = "Circulation";
 $tabsysprefs{holdCancelLength}               = "Circulation";

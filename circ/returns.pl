@@ -521,11 +521,12 @@ if ($borrower) {
 }
 
 #set up so only the last 8 returned items display (make for faster loading pages)
+my $returned_counter = ( C4::Context->preference('numReturnedItemsToShow') ) ? C4::Context->preference('numReturnedItemsToShow') : 8;
 my $count = 0;
 my @riloop;
 foreach ( sort { $a <=> $b } keys %returneditems ) {
     my %ri;
-    if ( $count++ < 8 ) {
+    if ( $count++ < $returned_counter ) {
         my $barcode = $returneditems{$_};
         my $duedate = $riduedate{$_};
         my $overduetext;
