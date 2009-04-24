@@ -1,399 +1,471 @@
 #!/usr/bin/perl
 
 use strict;
+use warnings;
+use diagnostics;
+
+use CGI qw/:standard -oldstyle_urls/;
+use vars qw( $GZIP );
+use C4::Context;
+
+
+BEGIN {
+    eval { require PerlIO::gzip };
+    $GZIP = $@ ? 0 : 1;
+}
+
+unless ( C4::Context->preference('OAI-PMH') ) {
+    print
+        header(
+            -type       => 'text/plain; charset=utf-8',
+            -charset    => 'utf-8',
+            -status     => '404 OAI-PMH service is disabled',
+        ),
+        "OAI-PMH service is disabled";
+    exit;
+}
+
+my @encodings = http('HTTP_ACCEPT_ENCODING');
+if ( $GZIP && grep { defined($_) && $_ eq 'gzip' } @encodings ) {
+    print header(
+        -type               => 'text/xml; charset=utf-8',
+        -charset            => 'utf-8',
+        -Content-Encoding   => 'gzip',
+    );
+    binmode( STDOUT, ":gzip" );
+}
+else {
+    print header(
+        -type       => 'text/xml; charset=utf-8',
+        -charset    => 'utf-8',
+    );
+}
+
+binmode( STDOUT, ":utf8" );
+my $repository = C4::OAI::Repository->new();
+
+# __END__ Main Prog
+
+
+#
+# Extends HTTP::OAI::ResumptionToken
+# A token is identified by:
+# - metadataPrefix
+# - from
+# - until
+# - offset
+# 
+package C4::OAI::ResumptionToken;
+
+use strict;
+use warnings;
+use diagnostics;
+use HTTP::OAI;
+
+use base ("HTTP::OAI::ResumptionToken");
+
+
+sub new {
+    my ($class, %args) = @_;
+
+    my $self = $class->SUPER::new(%args);
+
+    my ($metadata_prefix, $offset, $from, $until);
+    if ( $args{ resumptionToken } ) {
+        ($metadata_prefix, $offset, $from, $until)
+            = split( ':', $args{resumptionToken} );
+    }
+    else {
+        $metadata_prefix = $args{ metadataPrefix };
+        $from = $args{ from } || '1970-01-01';
+        $until = $args{ until };
+        unless ( $until) {
+            my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday) = gmtime( time );
+            $until = sprintf( "%.4d-%.2d-%.2d", $year+1900, $mon+1,$mday );
+        }
+        $offset = $args{ offset } || 0;
+    }
+
+    $self->{ metadata_prefix } = $metadata_prefix;
+    $self->{ offset          } = $offset;
+    $self->{ from            } = $from;
+    $self->{ until           } = $until;
+
+    $self->resumptionToken(
+        join( ':', $metadata_prefix, $offset, $from, $until ) );
+    $self->cursor( $offset );
+
+    return $self;
+}
+
+# __END__ C4::OAI::ResumptionToken
+
+
+
+package C4::OAI::Identify;
+
+use strict;
+use warnings;
+use diagnostics;
+use HTTP::OAI;
+use C4::Context;
+
+use base ("HTTP::OAI::Identify");
+
+sub new {
+    my ($class, $repository) = @_;
+
+    my ($baseURL) = $repository->self_url() =~ /(.*)\?.*/;
+    my $self = $class->SUPER::new(
+        baseURL             => $baseURL,
+        repositoryName      => C4::Context->preference("LibraryName"),
+        adminEmail          => C4::Context->preference("KohaAdminEmailAddress"),
+        MaxCount            => C4::Context->preference("OAI-PMH:MaxCount"),
+        granularity         => 'YYYY-MM-DD',
+        earliestDatestamp   => '0001-01-01',
+    );
+    $self->description( "Koha OAI Repository" );
+    $self->compression( 'gzip' );
+
+    return $self;
+}
+
+# __END__ C4::OAI::Identify
+
+
+
+package C4::OAI::ListMetadataFormats;
+
+use strict;
+use warnings;
+use diagnostics;
+use HTTP::OAI;
+
+use base ("HTTP::OAI::ListMetadataFormats");
+
+sub new {
+    my ($class, $repository) = @_;
+
+    my $self = $class->SUPER::new();
+
+    $self->metadataFormat( HTTP::OAI::MetadataFormat->new(
+        metadataPrefix    => 'oai_dc',
+        schema            => 'http://www.openarchives.org/OAI/2.0/oai_dc.xsd',
+        metadataNamespace => 'http://www.openarchives.org/OAI/2.0/oai_dc/'
+    ) );
+    $self->metadataFormat( HTTP::OAI::MetadataFormat->new(
+        metadataPrefix    => 'marcxml',
+        schema            => 'http://www.loc.gov/MARC21/slim http://www.loc.gov/ standards/marcxml/schema/MARC21slim.xsd',
+        metadataNamespace => 'http://www.loc.gov/MARC21/slim http://www.loc.gov/ standards/marcxml/schema/MARC21slim'
+    ) );
+
+    return $self;
+}
+
+# __END__ C4::OAI::ListMetadataFormats
+
+
+
+package C4::OAI::Record;
+
+use strict;
+use warnings;
+use diagnostics;
+use HTTP::OAI;
+use HTTP::OAI::Metadata::OAI_DC;
+
+use base ("HTTP::OAI::Record");
+
+sub new {
+    my ($class, $repository, $marcxml, $timestamp, %args) = @_;
+
+    my $self = $class->SUPER::new(%args);
+
+    $timestamp =~ s/ /T/, $timestamp .= 'Z';
+    $self->header( new HTTP::OAI::Header(
+        identifier  => $args{identifier},
+        datestamp   => $timestamp,
+    ) );
+
+    my $parser = XML::LibXML->new();
+    my $record_dom = $parser->parse_string( $marcxml );
+    if ( $args{metadataPrefix} ne 'marcxml' ) {
+        $record_dom = $repository->oai_dc_stylesheet()->transform( $record_dom );
+    }
+    $self->metadata( HTTP::OAI::Metadata->new( dom => $record_dom ) );
+
+    return $self;
+}
+
+# __END__ C4::OAI::Record
+
+
+
+package C4::OAI::GetRecord;
+
+use strict;
+use warnings;
+use diagnostics;
+use HTTP::OAI;
+
+use base ("HTTP::OAI::GetRecord");
+
+
+sub new {
+    my ($class, $repository, %args) = @_;
+
+    my $self = HTTP::OAI::GetRecord->new(%args);
+
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("
+        SELECT marcxml, timestamp
+        FROM   biblioitems
+        WHERE  biblionumber=? " );
+    my $prefix = $repository->{koha_identifier} . ':';
+    my ($biblionumber) = $args{identifier} =~ /^$prefix(.*)/;
+    $sth->execute( $biblionumber );
+    my ($marcxml, $timestamp);
+    unless ( ($marcxml, $timestamp) = $sth->fetchrow ) {
+        return HTTP::OAI::Response->new(
+            requestURL  => $repository->self_url(),
+            errors      => [ new HTTP::OAI::Error(
+                code    => 'idDoesNotExist',
+                message => "There is no biblio record with this identifier",
+                ) ] ,
+        );
+    }
+
+    #$self->header( HTTP::OAI::Header->new( identifier  => $args{identifier} ) );
+    $self->record( C4::OAI::Record->new(
+        $repository, $marcxml, $timestamp, %args ) );
+
+    return $self;
+}
+
+# __END__ C4::OAI::GetRecord
+
+
+
+package C4::OAI::ListIdentifiers;
+
+use strict;
+use warnings;
+use diagnostics;
+use HTTP::OAI;
+
+use base ("HTTP::OAI::ListIdentifiers");
+
+
+sub new {
+    my ($class, $repository, %args) = @_;
+
+    my $self = HTTP::OAI::ListIdentifiers->new(%args);
+
+    my $token = new C4::OAI::ResumptionToken( %args );
+    my $dbh = C4::Context->dbh;
+    my $sql = "SELECT biblionumber, timestamp
+               FROM   biblioitems
+               WHERE  timestamp >= ? AND timestamp <= ?
+               LIMIT  " . $repository->{koha_max_count} . "
+               OFFSET " . $token->{offset};
+    my $sth = $dbh->prepare( $sql );
+   	$sth->execute( $token->{from}, $token->{until} );
+
+    my $pos = $token->{offset};
+ 	while ( my ($biblionumber, $timestamp) = $sth->fetchrow ) {
+ 	    $timestamp =~ s/ /T/, $timestamp .= 'Z';
+        $self->identifier( new HTTP::OAI::Header(
+            identifier => $repository->{ koha_identifier} . ':' . $biblionumber,
+            datestamp  => $timestamp,
+        ) );
+        $pos++;
+ 	}
+ 	$self->resumptionToken( new C4::OAI::ResumptionToken(
+        metadataPrefix  => $token->{metadata_prefix},
+        from            => $token->{from},
+        until           => $token->{until},
+        offset          => $pos ) );
+
+    return $self;
+}
+
+# __END__ C4::OAI::ListIdentifiers
+
+
+
+package C4::OAI::ListRecords;
+
+use strict;
+use warnings;
+use diagnostics;
+use HTTP::OAI;
+
+use base ("HTTP::OAI::ListRecords");
+
+
+sub new {
+    my ($class, $repository, %args) = @_;
+
+    my $self = HTTP::OAI::ListRecords->new(%args);
+
+    my $token = new C4::OAI::ResumptionToken( %args );
+    my $dbh = C4::Context->dbh;
+    my $sql = "SELECT biblionumber, marcxml, timestamp
+               FROM   biblioitems
+               WHERE  timestamp >= ? AND timestamp <= ?
+               LIMIT  " . $repository->{koha_max_count} . "
+               OFFSET " . $token->{offset};
+    my $sth = $dbh->prepare( $sql );
+   	$sth->execute( $token->{from}, $token->{until} );
+
+    my $pos = $token->{offset};
+ 	while ( my ($biblionumber, $marcxml, $timestamp) = $sth->fetchrow ) {
+        $self->record( C4::OAI::Record->new(
+            $repository, $marcxml, $timestamp,
+            identifier      => $repository->{ koha_identifier } . ':' . $biblionumber,
+            metadataPrefix  => $token->{metadata_prefix}
+        ) );
+        $pos++;
+ 	}
+ 	$self->resumptionToken( new C4::OAI::ResumptionToken(
+        metadataPrefix  => $token->{metadata_prefix},
+        from            => $token->{from},
+        until           => $token->{until},
+        offset          => $pos ) );
+
+    return $self;
+}
+
+# __END__ C4::OAI::ListRecords
+
+
+
+package C4::OAI::Repository;
+
+use base ("HTTP::OAI::Repository");
+
+use strict;
+use warnings;
+use diagnostics;
+
+use HTTP::OAI;
+use HTTP::OAI::Repository qw/:validate/;
+
+use XML::SAX::Writer;
+use XML::LibXML;
+use XML::LibXSLT;
+use CGI qw/:standard -oldstyle_urls/;
 
 use C4::Context;
 use C4::Biblio;
 
-=head1 OAI-PMH for koha
 
-This file is an implementation of the OAI-PMH protocol for koha. Its purpose
-is to share metadata in Dublin core format with harvester like PKP-Harverster.
-Presently, all the bibliographic records managed by the runing koha instance
-are publicly shared (as the opac is).
+=head1 NAME
 
-=head1 Package MARC::Record::KOHADC
+C4::OAI::Repository - Handles OAI-PMH requests for a Koha database.
 
-This package is a sub-class of the MARC::File::USMARC. It add methods and functions
-to map the content of a marc record (of any flavor) to Dublin core.
-As soon as it is possible, mapping between marc fields and there semantic
-are got from ::GetMarcFromKohaField fonction from C4::Biblio (see also the "Koha
-to MARC mapping" preferences).
+=head1 SYNOPSIS
+
+  use C4::OAI::Repository;
+
+  my $repository = C4::OAI::Repository->new();
+
+=head1 DESCRIPTION
+
+This object extend HTTP::OAI::Repository object.
 
 =cut
 
-package MARC::Record::KOHADC;
-use vars ('@ISA');
-@ISA = qw(MARC::Record);
 
-use MARC::File::USMARC;
 
-sub new { # Get a MAR::Record as parameter and bless it as MARC::Record::KOHADC
-	shift;
-	my $marc = shift;
-	bless $marc  if( ref( $marc ) );
-}
+sub new {
+    my ($class, %args) = @_;
+    my $self = $class->SUPER::new(%args);
 
-sub subfield {
-    my $self = shift;
-    my ($t,$sf) = @_;
+    $self->{ koha_identifier      } = C4::Context->preference("OAI-PMH:archiveID");
+    $self->{ koha_max_count       } = C4::Context->preference("OAI-PMH:MaxCount");
+    $self->{ koha_metadata_format } = ['oai_dc', 'marcxml'];
 
-    return $self->SUPER::subfield( @_ ) unless wantarray;
+    # Check for grammatical errors in the request
+    my @errs = validate_request( CGI::Vars() );
 
-    my @field = $self->field($t);
-    my @list = ();
-    my $f;
-
-    foreach $f ( @field ) {
-		push( @list, $f->subfield( $sf ) );
+    # Is metadataPrefix supported by the respository?
+    my $mdp = param('metadataPrefix') || '';
+    if ( $mdp && !grep { $_ eq $mdp } @{$self->{ koha_metadata_format }} ) {
+        push @errs, new HTTP::OAI::Error(
+            code    => 'cannotDisseminateFormat',
+            message => "Dissemination as '$mdp' is not supported",
+        );
     }
-    return @list;
-}
 
-sub getfields {
-my $marc = shift;
-my @result = ();
-
-        foreach my $kohafield ( @_ ) {
-                my ( $field, $subfield ) = ::GetMarcFromKohaField( $kohafield, '' );
-                next unless defined $field; # $kohafield not defined in framework
-                push( @result, $field < 10 ? $marc->field( $field )->as_string() : $marc->subfield( $field, $subfield ) );
+    my $response;
+    if ( @errs ) {
+        $response = HTTP::OAI::Response->new(
+            requestURL  => self_url(),
+            errors      => \@errs,
+        );
+    }
+    else {
+        my %attr = CGI::Vars();
+        my $verb = delete( $attr{verb} );
+        if ( grep { $_ eq $verb } qw( ListSets ) ) {
+            $response = HTTP::OAI::Response->new(
+                requestURL  => $self->self_url(),
+                errors      => [ new HTTP::OAI::Error(
+                    code    => 'noSetHierarchy',
+                    message => "Koha repository doesn't have sets",
+                    ) ] ,
+            );
         }
-#        @result>1 ? \@result : $result[0];
-	\@result;
-}  
+        elsif ( $verb eq 'Identify' ) {
+            $response = C4::OAI::Identify->new( $self );
+        }
+        elsif ( $verb eq 'ListMetadataFormats' ) {
+            $response = C4::OAI::ListMetadataFormats->new( $self );
+        }
+        elsif ( $verb eq 'GetRecord' ) {
+            $response = C4::OAI::GetRecord->new( $self, %attr );
+        }
+        elsif ( $verb eq 'ListRecords' ) {
+            $response = C4::OAI::ListRecords->new( $self, %attr );
+        }
+        elsif ( $verb eq 'ListIdentifiers' ) {
+            $response = C4::OAI::ListIdentifiers->new( $self, %attr );
+        }
+    }
 
-sub XMLescape {
-my ($t) = shift;
+    $response->set_handler( XML::SAX::Writer->new( Output => *STDOUT ) );
+    $response->generate;
 
-	foreach (@$t ) {
-        	s/\&/\&amp;/g; s/</&lt;/g;
-	}
-	$t;
-} 
-
-sub Status {
-  my $self = shift;
-	undef;
+    bless $self, $class;
+    return $self;
 }
 
-sub Title {
-  my $self = shift;
-	&XMLescape( $self->getfields('biblio.title') );
-}
 
-sub Creator {
-  my $self = shift;
-	&XMLescape( $self->getfields('biblio.author') );
-}
-
-sub Subject {
-  my $self = shift;
-	&XMLescape( $self->getfields('bibliosubject.subject') );
-}
-
-sub DateStamp {
-  my $self = shift;
-	my ($d,$h) = split( ' ', $self->{'biblio.timestamp'} );
-	$d . "T" . $h . "Z";
-}
-
-sub Date {
-  my $self = shift;
-    my ($str) = @{$self->getfields('biblioitems.publicationyear')};
-    my ($y,$m,$d) = (substr($str,0,4), substr($str,4,2), substr($str,6,2));
-
-    $y=1970 unless($y>0); $m=1 unless($m>0); $d=1 unless($d>0);
-
-    sprintf( "%.4d-%.2d-%.2d", $y,$m,$d);
-}
-
-sub Description {
-  my $self = shift;
-	undef;
-}
-
-sub Identifier {
-  my $self = shift;
-  my $id = $self->getfields('biblio.biblionumber')->[0];
-
-# get url of this script and assume that OAI server is in the same place as opac-detail script
-# and build a direct link to the record.
-  my $uri = $ENV{'SCRIPT_URI'};
-  $uri= "http://" . $ENV{'HTTP_HOST'} . $ENV{'REQUEST_URI'} unless( $uri ); # SCRIPT_URI doesn't exist on all httpd server
-  $uri =~ s#[^/]+$##;	
-	[
-		C4::Context->preference("OAI-PMH:archiveID") .":" .$id, 
-		"${uri}opac-detail.pl?bib=$id",
-		@{$self->getfields('biblioitems.isbn', 'biblioitems.issn')}
-	];
-}
-
-sub Language {
-  my $self = shift;
-	undef;
-}
-
-sub Type {
-  my $self = shift;
-	&XMLescape( $self->getfields('biblioitems.itemtype') );
-}
-
-sub Publisher {
-  my $self = shift;
-	&XMLescape( $self->getfields('biblioitems.publishercode') );
-}
-
-sub Set {
-my $set = &OAI::KOHA::Set();
-	[ map( $_=$_->[0], @$set) ];
-}
-
-=head1 The OAI::KOHA package
-
-This package is a subclass of the OAI::DC data provider. It overides needed methods
-and provide the links between the OAI-PMH request and the koha application.
-The data used in answers are from the koha table I<bibio>.
-
-=cut
-
-package OAI::KOHA;
-
-use C4::OAI::DC;
-use vars ('@ISA');
-@ISA = ("C4::OAI::DC");
-
-=head2 Set
-
-return the Set list to the I<verb=ListSets> query. Data are from the 'OAI-PMH:Set' preference.
-
-=cut
-
-sub Set {
-#   [
-#	['BRISE','Experimental unimarc set for BRISE network'],
-#	['BRISE:EMSE','EMSE set in BRISE network']
-#   ];
 #
-# A blinder correctement
-	[ map( $_ = [ split(",", $_)], split( "\n",C4::Context->preference("OAI-PMH:Set") ) ) ];
+# XSLT stylesheet used to transform MARCXML record into OAI Dublin Core.
+# The object is constructed the fist time this method is called.
+#
+# Styleeet file is located in /koha-tmpl/intranet-tmpl/prog/en/xslt/ directory.
+# Its name is constructed with 'marcflavour' syspref:
+#   - MARC21slim2OAIDC.xsl
+#   - UNIMARCslim2OADIC.xsl
+#
+sub oai_dc_stylesheet {
+    my $self = shift;
+
+    unless ( $self->{ oai_dc_stylesheet } ) {
+        my $xslt_file = C4::Context->config('intranetdir') .
+                        "/koha-tmpl/intranet-tmpl/prog/en/xslt/" .
+                        C4::Context->preference('marcflavour') .
+                        "slim2OAIDC.xsl";
+        my $parser = XML::LibXML->new();
+        my $xslt = XML::LibXSLT->new();
+        my $style_doc = $parser->parse_file( $xslt_file );
+        my $stylesheet = $xslt->parse_stylesheet( $style_doc );
+        $self->{ oai_dc_stylesheet } = $stylesheet;
+    }
+
+    return $self->{ oai_dc_stylesheet };
 }
 
-=head2 new
-
-The new method is the constructor for this class. It doesn't have any parameters and 
-get required data from koha preferences. Koha I<LibraryName> is used to identify the
-OAI-PMH repository, I<OAI-PMH:MaxCount> is used to set the maximun number of records
-returned at the same time in answers to I<verb=ListRecords> or I<verb=ListIdentifiers>
-queries.
-
-The method return a blessed reference.
-
-=cut
-
-# constructor
-sub new
-{
-   my $classname = shift;
-   my $self = $classname->SUPER::new ();
-
-   # set configuration
-   $self->{'repositoryName'} = C4::Context->preference("LibraryName");
-   $self->{'MaxCount'} = C4::Context->preference("OAI-PMH:MaxCount");
-   $self->{'adminEmail'} = C4::Context->preference("KohaAdminEmailAddress");
-
-   bless $self, $classname;
-   return $self;
-}
-
-=head2 dispose
-
-The dispose method is used as a destructor. It call just the SUPER::dispose method.
-
-=cut
-
-# destructor
-sub dispose
-{
-   my ($self) = @_;
-   $self->SUPER::dispose ();
-}
-
-# now date
-sub now {
-my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday) = gmtime( time );
-
-        sprintf( "%.4d-%.2d-%.2d", $year+1900, $mon+1,$mday );
-}
-
-# build the resumptionTocken fom ($metadataPrefix,$offset,$from,$until)
-
-=head2 buildResumptionToken and parseResumptionToken
-
-Theses two functions are used to manage resumption tokens. The choosed syntax is simple as
-possible, a token is only the metadata prefix, the offset in the full answer, the from and 
-the until date (in the yyyy-mm-dd format) joined by ':' caracter.
-
-I<buildResumptionToken> get the four elements as parameters and return the ':' separated 
-string.
-
-I<parseResumptionToken> is used to set the default values to the from and until date, the 
-metadata prefix using the resumption tocken if necessary. This function have four parameters
-(from,until,metadata prefix and resumption tocken) which can be undefined and return every
-time this list of values correctly set. The missing values are set with defaults: offset=0,
-from= 1970-01-01 and until is set to current date.
-
-=cut
-
-sub buildResumptionToken {
-        join( ':', @_ );
-}
-
-# parse the resumptionTocken
-sub parseResumptionToken {
-my ($from, $until, $metadataPrefix, $resumptionToken) = @_;
-my $offset = 0;
-
-        if( $resumptionToken ) {
-                ($metadataPrefix,$offset,$from,$until) = split( ':', $resumptionToken );
-        }
-
-        $from  = "1970-01-01" unless( $from );
-        $until = &now unless( $until );
-        ($metadataPrefix, $offset, $from, $until );
-}
-
-=head2 Archive_ListSets
-
-return the full list Set to the I<verb=ListSets> query. Data are from the 'OAI-PMH:Set' preference.
-
-=cut
-
-# get full list of sets from the archive
-sub Archive_ListSets
-{
-	&Set();
-}
-                              
-=head2 Archive_GetRecord
-
-This method select the record specified as its first parameter from the koha I<biblio>
-table and return a reference to a MARC::Record::KOHADC object. 
-
-=cut
-
-# get a single record from the archive
-sub Archive_GetRecord
-{
-   my ($self, $identifier, $metadataFormat) = @_;
-   my $dbh = C4::Context->dbh;
-   my $sth = $dbh->prepare("SELECT biblionumber,timestamp FROM biblio WHERE biblionumber=?");
-   my $prefixID = C4::Context->preference("OAI-PMH:archiveID"); $prefixID=qr{$prefixID:};
-
-   $identifier =~ s/^$prefixID//;
-
-   $sth->execute( $identifier );
-
-   if( my $r = $sth->fetchrow_hashref() ) {
-   	my $marc = new MARC::Record::KOHADC( ::GetMarcBiblio( $identifier ) );
-	if( $marc ) {
-		$marc->{'biblio.timestamp'} = $r->{'timestamp'};
-   		return $marc ;
-	}
-	else {
-		warn("Archive_GetRecord : no MARC record for " . C4::Context->preference("OAI-PMH:archiveID") . ":" . $identifier);
-	}
-   }
-
-   $self->AddError ('idDoesNotExist', 'The value of the identifier argument is unknown or illegal in this repository');
-   undef;
-}
-
-=head2 Archive_ListRecords
-
-This method return a list of 'MaxCount' references to MARC::Record::KOHADC object build from the 
-koha I<biblio> table according to its parameters : set, from and until date, metadata prefix 
-and resumption token.
-
-=cut
-
-# list metadata records from the archive
-sub Archive_ListRecords
-{
-   my ($self, $set, $from, $until, $metadataPrefix, $resumptionToken) = @_;
-
-   my @allrows = ();
-   my $marc;
-   my $offset;
-   my $tokenInfo;
-   my $dbh = C4::Context->dbh;
-   my $sth = $dbh->prepare("SELECT biblionumber,timestamp FROM biblio WHERE DATE(timestamp) >= ? and DATE(timestamp) <= ? LIMIT ? OFFSET ?");
-   my $count;
-
-        ($metadataPrefix, $offset, $from, $until ) = &parseResumptionToken($from, $until, $metadataPrefix, $resumptionToken);
-
-#warn( "Archive_ListRecords : $set, $from, $until, $metadataPrefix, $resumptionToken\n");
-   	$sth->execute( $from,$until,$self->{'MaxCount'}?$self->{'MaxCount'}:100000, $offset );
-
-	while( my $r = $sth->fetchrow_hashref() ) { 
-		my $marc = new MARC::Record::KOHADC( ::GetMarcBiblio( $r->{'biblionumber'} ) );
-		unless( $marc ) { # somme time there is problems within koha, and we can't get valid marc record
-			warn("Archive_ListRecords : no MARC record for " . C4::Context->preference("OAI-PMH:archiveID") .":" . $r->{'biblionumber'} );
-			next;
-		}
-		$marc->{'biblio.timestamp'} = $r->{'timestamp'};
-		push( @allrows, $marc );
-	} 
-
-	$sth = $dbh->prepare("SELECT count(*) FROM biblioitems WHERE DATE(timestamp) >= ? and DATE(timestamp) <= ?"); 
-	$sth->execute($from, $until);
-	( $count ) = $sth->fetchrow_array();
-
-	unless( @allrows ) {
-      		$self->AddError ('noRecordsMatch', 'The combination of the values of arguments results in an empty set');
-   	}
-
-	if( $offset + $self->{'MaxCount'} < $count ) { # Not at the end
-		$offset = $offset + $self->{'MaxCount'};
-		$resumptionToken = &buildResumptionToken($metadataPrefix,$offset,$from,$until);
-		$tokenInfo = { 'completeListSize' => $count, 'cursor' => $offset };
-	}
-	else {
-		$resumptionToken = '';
-		$tokenInfo = {};
-	}
-	( \@allrows, $resumptionToken, $metadataPrefix, $tokenInfo );
-}
-
-package main;
-
-=head1 Main package
-
-The I<main> function is the starting point of the service. The first step is
-to verify if the service is enable using the 'OAI-PMH' preference value
-(See Koha systeme preferences).
-
-If the service is enable, it create a new instance of the OAI::KOHA data
-provider (see before) and run the service.
-
-=cut
-
-sub disable {
-	print "Status:404 OAI-PMH service is disabled\n";
-	print "Content-type: text/plain\n\n";
-
-	print "OAI-PMH service is disable.\n";
-}
-
-sub main
-{
-   return &disable() unless( C4::Context->preference('OAI-PMH') );
-
-   my $OAI = new OAI::KOHA();
-   $OAI->Run;
-   $OAI->dispose;
-}
-
-main;
-
-1;
