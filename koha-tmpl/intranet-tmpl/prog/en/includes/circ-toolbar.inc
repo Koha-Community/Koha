@@ -3,30 +3,29 @@
 	//<![CDATA[
 
 function confirm_deletion() {
-    var is_confirmed = window.confirm('Are you sure you want to delete this patron? This cannot be undone.');
+    var is_confirmed = window.confirm(_('Are you sure you want to delete this patron? This cannot be undone.'));
     if (is_confirmed) {
-            window.location='/cgi-bin/koha/members/deletemem.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->';
+        window.location='/cgi-bin/koha/members/deletemem.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->';
     }
 }
 
 function confirm_updatechild() {
-    var is_confirmed = window.confirm('Are you sure you want to update this child to an Adult category?  This cannot be undone.');
-   
+    var is_confirmed = window.confirm(_('Are you sure you want to update this child to an Adult category?  This cannot be undone.'));
     if (is_confirmed) {
-            window.location='/cgi-bin/koha/members/update-child.pl?op=update&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&catcode=<!-- TMPL_VAR NAME="catcode" -->&catcode_multi=<!-- TMPL_VAR NAME="CATCODE_MULTI" -->';
+        window.location='/cgi-bin/koha/members/update-child.pl?op=update&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&catcode=<!-- TMPL_VAR NAME="catcode" -->&catcode_multi=<!-- TMPL_VAR NAME="CATCODE_MULTI" -->';
     }
 }
 
 function confirm_reregistration() {
-    var is_confirmed = window.confirm('Are you sure you want to renew this patron\'s registration?');
-    var borrowernumbervalue1 = $("#borrowernumber").attr("value");
+    var is_confirmed = window.confirm(_('Are you sure you want to renew this patron\'s registration?'));
+    // var borrowernumbervalue1 = $("#borrowernumber").attr("value");
     if (is_confirmed) {
 	window.location = '/cgi-bin/koha/members/setstatus.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&amp;destination=circ&amp;reregistration=y';
     }
 }
 
 function update_child() {
-    var borrowernumbervalue= $("#borrowernumber").attr("value"); 
+    // var borrowernumbervalue= $("#borrowernumber").attr("value"); 
 <!-- TMPL_IF NAME="CATCODE_MULTI" -->
  window.open('/cgi-bin/koha/members/update-child.pl?op=multi&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->','UpdateChild','width=400,height=300,toolbar=no,scrollbars=no,resizable=yes');
 <!-- TMPL_ELSE -->
