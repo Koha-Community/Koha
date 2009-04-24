@@ -674,7 +674,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 	
         <!-- TMPL_LOOP NAME="subfield_loop" -->
             <!--  One line on the marc editor -->
-            <div class="subfield_line" style="<!-- TMPL_VAR NAME='visibility' -->; float: left; clear: left;" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
+            <div class="subfield_line" style="<!-- TMPL_VAR NAME='visibility' -->; float: left; clear: left; width: 100%;" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
             
                 <!--TMPL_UNLESS NAME="advancedMARCEditor" -->
                     <label for="tag_<!-- TMPL_VAR NAME='tag'-->_subfield_<!--  TMPL_VAR NAME='subfield'-->_<!-- TMPL_VAR NAME='index'-->_<!-- TMPL_VAR NAME='index_subfield'-->" <!-- TMPL_IF NAME="fixedfield" --> style="display:none;" <!-- /TMPL_IF --> class="labelsubfield">
