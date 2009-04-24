@@ -2325,7 +2325,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.01.00.020';
+$DBversion = '3.01.00.022';
 if ( C4::Context->preference('Version') < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE `labels_conf` MODIFY COLUMN `formatstring` mediumtext DEFAULT NULL");
     print "Upgrade to $DBversion done (bug 2945: increase size of labels_conf.formatstring)\n";
