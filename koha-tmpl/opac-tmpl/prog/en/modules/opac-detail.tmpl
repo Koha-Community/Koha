@@ -281,7 +281,7 @@
 
     <!-- TMPL_IF NAME="OPACFRBRizeEditions" --><!-- TMPL_IF NAME="XISBNS" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#editions">Editions</a></li><!-- /TMPL_IF --><!-- /TMPL_IF -->
     
-    <!-- TMPL_IF NAME="OPACAmazonEnabled" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#amazonreviews">Amazon Reviews</a></li><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="OPACAmazonEnabled" --><!-- TMPL_IF NAME="OPACAmazonReviews" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#amazonreviews">Amazon Reviews</a></li><!-- /TMPL_IF --><!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="Babeltheque" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#babeltheque">Babelthèque</a></li><!-- /TMPL_IF -->
 
 </ul>
@@ -409,12 +409,14 @@
 <div id="descriptions">
 <div class="content_set">
 <!-- TMPL_IF NAME="OPACAmazonEnabled" -->
+<!-- TMPL_IF NAME="OPACAmazonReviews" -->
 <!-- TMPL_LOOP NAME="AMAZON_EDITORIAL_REVIEWS" -->
     <!-- TMPL_IF NAME="Content" -->
     <h4>From <!-- TMPL_VAR NAME="Source" -->:</h4>
     <div><!-- TMPL_VAR NAME="Content" --></div>
     <!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
+<!-- /TMPL_IF-->
 <!-- /TMPL_IF-->
 <!-- TMPL_IF NAME="SyndeticsEnabled" -->
 <!-- TMPL_IF NAME="SyndeticsSummary" --><!-- TMPL_IF NAME="SyndeticsSUMMARYExists" -->
@@ -651,6 +653,7 @@
 </table>
 </div><!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="OPACAmazonEnabled" -->
+<!-- TMPL_IF NAME="OPACAmazonReviews" -->
 <!-- Amazon Reviews -->
 <div id="amazonreviews">
         <!-- TMPL_IF NAME="amazon_average_rating" -->
@@ -671,6 +674,7 @@
         <!-- /TMPL_IF -->
 </div>
 <!-- /Amazon Reviews -->
+<!-- /TMPL_IF-->
 <!-- /TMPL_IF-->
 
 </div>

@@ -267,6 +267,7 @@ if (C4::Context->preference("OPACFRBRizeEditions")==1) {
 # Amazon.com Stuff
 if ( C4::Context->preference("OPACAmazonEnabled") ) {
     $template->param( AmazonTld => get_amazon_tld() );
+    $template->param( OPACAmazonReviews => C4::Context->preference("OPACAmazonReviews") );
 }
 if ( C4::Context->preference("OPACAmazonEnabled") && C4::Context->preference("OPACAmazonSimilarItems") ) {
     my $similar_products_exist;
