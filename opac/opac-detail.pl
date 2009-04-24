@@ -146,6 +146,10 @@ for my $itm (@items) {
     if ( defined $itm->{'location'} ) {
         $itm->{'location_description'} = $shelflocations->{ $itm->{'location'} };
     }
+    if (exists $itm->{itype} && defined($itm->{itype}) && exists $itemtypes->{ $itm->{itype} }) {
+        $itm->{'imageurl'}    = getitemtypeimagelocation( 'opac', $itemtypes->{ $itm->{itype} }->{'imageurl'} );
+        $itm->{'description'} = $itemtypes->{ $itm->{itype} }->{'description'};
+    }
     foreach (qw(ccode enumchron copynumber itemnotes)) {
         $itemfields{$_} = 1 if ($itm->{$_});
     }
