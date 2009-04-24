@@ -2321,7 +2321,8 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion = "3.01.00.021";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OPACAmazonReviews', '0', 'Display Amazon readers reviews on OPAC','','YesNo');
+    my $enable_reviews = C4::Context->preference('OPACAmazonEnabled') ? '1' : '0';
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OPACAmazonReviews', '$enable_reviews', 'Display Amazon readers reviews on OPAC','','YesNo');
     ");
     SetVersion ($DBversion);
 }

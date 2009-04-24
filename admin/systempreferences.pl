@@ -224,6 +224,7 @@ $tabsysprefs{AmazonLocale}           = "EnhancedContent";
 $tabsysprefs{AmazonAssocTag}         = "EnhancedContent";
 $tabsysprefs{AmazonSimilarItems}     = "EnhancedContent";
 $tabsysprefs{OPACAmazonSimilarItems} = "EnhancedContent";
+$tabsysprefs{OPACAmazonReviews}      = "EnhancedContent";
 
 # Babelthèque
 $tabsysprefs{Babeltheque}            = "EnhancedContent";
