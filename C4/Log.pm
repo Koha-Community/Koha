@@ -182,7 +182,7 @@ sub displaylog {
 
 =item GetLogs
 
-$logs = GetLogs($datefrom,$dateto,$user,$module,$action,$object,$info);
+$logs = GetLogs($datefrom,$dateto,$user,\@modules,$action,$object,$info);
 
 Return: 
 C<$logs> is a ref to a hash which containts all columns from action_logs
@@ -193,7 +193,7 @@ sub GetLogs {
     my $datefrom = shift;
     my $dateto   = shift;
     my $user     = shift;
-    my $module   = shift;
+    my $modules   = shift;
     my $action   = shift;
     my $object   = shift;
     my $info     = shift;
@@ -207,16 +207,38 @@ sub GetLogs {
         FROM   action_logs
         WHERE 1
     ";
-    $query .= " AND DATE_FORMAT(timestamp, '%Y-%m-%d') >= \"".$iso_datefrom."\" " if $iso_datefrom;
+
+    my @parameters;
+    $query .= " AND DATE_FORMAT(timestamp, '%Y-%m-%d') >= \"".$iso_datefrom."\" " if $iso_datefrom;   #fix me - mysql specific
     $query .= " AND DATE_FORMAT(timestamp, '%Y-%m-%d') <= \"".$iso_dateto."\" " if $iso_dateto;
-    $query .= " AND user LIKE \"%".$user."%\" "     if $user;
-    $query .= " AND module LIKE \"%".$module."%\" " if $module;
-    $query .= " AND action LIKE \"%".$action."%\" " if $action;
-    $query .= " AND object LIKE \"%".$object."%\" " if $object;
-    $query .= " AND info LIKE \"%".$info."%\" "     if $info;
+    if($user) {
+    	$query .= " AND user LIKE ? ";
+    	push(@parameters,"%".$user."%");
+    }
+    if(scalar @$modules > 1 or @$modules[0] ne "") {
+	    $query .= " AND (1 = 2";  #always false but used to build the query
+	    foreach my $module (@$modules) {
+	    	next if $module eq "";
+	   	$query .= " or module = ?";
+		push(@parameters,$module);
+	    }
+	    $query .= ")";
+    }
+    if($action) {
+    	$query .= " AND action LIKE ? ";
+	push(@parameters,"%".$action."%");
+    }
+    if($object) {
+    	$query .= " AND object LIKE ? ";
+	push(@parameters,"%".$object."%");
+    }
+    if($info) {
+    	$query .= " AND info LIKE ? ";
+	push(@parameters,"%".$info."%");
+    }
    
     my $sth = $dbh->prepare($query);
-    $sth->execute;
+    $sth->execute(@parameters);
     
     my @logs;
     while( my $row = $sth->fetchrow_hashref ) {

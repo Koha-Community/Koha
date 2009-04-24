@@ -1,5 +1,12 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Tools &rsaquo; <!-- TMPL_IF NAME="do_it" -->Logs &rsaquo; Results<!-- TMPL_ELSE -->Logs<!-- /TMPL_IF --></title>
+<title>
+	Koha &rsaquo; Tools &rsaquo;
+	<!-- TMPL_IF NAME="do_it" -->
+		Logs &rsaquo; Results
+	<!-- TMPL_ELSE -->
+		Logs
+	<!-- /TMPL_IF -->
+</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 </head>
@@ -7,210 +14,218 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <!-- TMPL_IF NAME="do_it" --><a href="/cgi-bin/koha/tools/viewlog.pl">Logs</a> &rsaquo; Results<!-- TMPL_ELSE -->Logs<!-- /TMPL_IF --></div>
+<div id="breadcrumbs">
+	<a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
+	<!-- TMPL_IF NAME="do_it" -->
+		<a href="/cgi-bin/koha/tools/viewlog.pl">Logs</a> &rsaquo; Results
+	<!-- TMPL_ELSE -->
+		Logs
+	<!-- /TMPL_IF -->
+</div>
 
 <div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
-
-<h1>Browse system logs</h1>
-
-<form method="post" action="/cgi-bin/koha/tools/viewlog.pl">
-
-	    <!-- TMPL_IF NAME="do_it" --><input type="hidden" name="do_it" value="<!--TMPL_VAR NAME="do_it" -->" /><!-- /TMPL_IF -->
-<!--	These are selects below.
-		<input type="hidden" name="module" value="<!--TMPL_VAR NAME="module" -->" />
-	    <input type="hidden" name="action" value="<!--TMPL_VAR NAME="action" -->" />
-	    <input type="hidden" name="object" value="<!--TMPL_VAR NAME="object" -->" />
--->	    <input type="hidden" name="src" value="<!--TMPL_VAR NAME="src" -->" />
-<fieldset class="rows">
-<ol>
-	    <li>
-	       <label for="user">Librarian:</label> <input type="text" name="user" id="user" value="<!-- TMPL_VAR NAME="user"-->" />
-	    </li>
-	    <li>
-		<label for="module">Module:</label>
-	        <select name="module" id="module">
-			    <option value="" selected="selected">All</option>
-			    <option value ="CATALOGUING">Catalog</option>
-				<option value ="MEMBERS">Members</option>
-				<option value ="ACQUISITION">Acquisitions</option>
-				<option value ="SERIAL">Serial</option>
-				<option value="CIRCULATION">Circulation</option>
-				<option value="LETTER">Letter</option>
-				<option value="FINES">Fines</option>
-				<option value="SYSTEMPREFERENCE">System Prefs</option>
-			</select>
-	    </li>
-	    <li>
-		<label for="action">Action:</label>
-	        <select name="action" id="action">
-    			<option value ="">All</option>
-				<option value ="add">Add</option>
-				<option value ="del">Delete</option>
-				<option value ="mod">Modify</option>
-				<option value="issue">Issue</option>
-				<option value="return">Return</option>
-			</select>
-	    </li>
-	    <li>
-		<label for="object">Object</label>
-	        <input type="text" id="object" name="object" value="<!-- TMPL_VAR NAME="object"-->" />
-	    </li>
-	    <li>
-		<label for="info">Info:</label>
-	        <input type="text" name="info" value="<!-- TMPL_VAR NAME="info"-->" />
-	    </li>
-        <li>
-        <label for="from"> Display from</label> <input type="text" size="10" id="from" name="from" value="<!-- TMPL_VAR NAME="datefrom"-->" />
-		<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" alt="Show Calendar" id="openCalendarFrom" style="cursor: pointer;" />
-		<label for="to">to</label> <input size="10" id="to" name="to" type="text" value="<!-- TMPL_VAR NAME="dateto"-->" />
-		<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="openCalendarTo" alt="Show Calendar" style="cursor: pointer;" border="0" />
-			<script type="text/javascript">
-//<![CDATA[
-				// function submit_check (from_id,to_id) {
-				//	var dateFrom = Date_from_syspref(document.getElementById(from_id).value);
-				//	var dateTo   = Date_from_syspref(document.getElementById(  to_id).value);
-				//	var today = new Date();
-				// 	if (dateFrom < dateTo) { 
-				//		alert("The starting date cannot be after the ending date.");
-				//		document.getElementById(to_id).select();
-				//		return false;
-				//	}
-				// 	if (dateFrom > today) { 
-				//		alert("The starting date cannot be in the future.");
-			    //		document.getElementById(from_id).select();
-				//		return false;
-				//	}
-				// }
-
-				// return true if the date is blocked.
-				function disable_from(date) {var limit = get_Calendar_limit(date,'to'  ); return (limit && limit < date);}
-				function disable_to  (date) {var limit = get_Calendar_limit(date,'from'); return (limit && limit > date);}
-
-				Calendar.setup({
-					inputField : "from",
-					ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
-					button : "openCalendarFrom",
-					disableFunc : disable_from,
-					dateStatusFunc : disable_from
-				});
-				Calendar.setup({
-					inputField : "to",
-					ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
-					button : "openCalendarTo",
-					disableFunc : disable_to,
-					dateStatusFunc : disable_to
-				});
-//]]>
-		    </script>
-		</li>
-		</ol>
-		</fieldset>
-	<fieldset class="rows">
-		<legend>Output</legend>
-		<ol>
-        <li><label for="screen" >To screen in the browser:</label> <input id="screen" type="radio" checked="checked" name="output" value="screen" />
-        </li>
-		<li><label for="file">To a file:</label>
-		<input id="file" type="radio" name="output" value="file" />
-		 <label class="inline" for="basename">Named:</label>
-		<input type="text" name="basename" id="basename" value="Export" />
-		<label for="MIME" class="inline">Into an application:</label>
-		<!-- TMPL_VAR NAME="CGIextChoice" -->
-		<!-- TMPL_VAR NAME="CGIsepChoice" -->
-	    <input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->" />
-	    </li>
-		</ol>
-</fieldset>
-<fieldset class="action"><input type="submit" value="Submit" />
-            <input type="hidden" name="do_it" value="1" /></fieldset>
-    
-    <!-- TMPL_IF NAME="do_it" -->
-        <!-- TMPL_IF NAME="total" -->
-            <h4><!-- TMPL_VAR NAME="total" --> lines found.</h4>
-        <!-- TMPL_ELSE -->
-            <div class="dialog alert">No log found
-			<!-- TMPL_IF EXPR="module eq 'CATALOGUING'" -->for <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="object" -->">Bibliographic Record <!-- TMPL_VAR NAME="object" --></a><!-- /TMPL_IF --><!-- TMPL_IF EXPR="module eq 'MEMBERS'" -->for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="object" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</a><!-- /TMPL_IF -->
-			.</div>
-        <!-- /TMPL_IF -->
-    <!-- /TMPL_IF -->    
-	
-    <!-- TMPL_IF NAME="do_it" -->
-        <!-- TMPL_IF NAME="total" -->
-    <table>
-    <tr>
-        <th>Date</th>
-        <th>Librarian</th>
-    	<th>Module</th>
-    	<th>Action</th>
-		<th>Object</th>
-		<th>Info</th>
-	</tr>
-	
-	    <!-- TMPL_LOOP NAME="looprow" -->
-					<tr>
-						<td><!-- TMPL_VAR NAME="timestamp" --></td>
-						<td>
-						    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="user" -->" title="display detail for this librarian.">
-						        <!-- TMPL_VAR NAME="user" -->
-						    </a>
-						</td>
-						<td><!-- TMPL_VAR NAME="module" --></td>
-						<td><!-- TMPL_VAR NAME="action" --></td>
-						<td>
-						    <!-- TMPL_IF NAME="MEMBERS"-->
-						        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="object" -->" title="Display member details.">
-						            member <!-- TMPL_VAR NAME="object" -->
-						        </a>
-						    <!-- TMPL_ELSE -->
-						    <!-- TMPL_IF NAME="CIRCULATION" -->
-						        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="object" -->" title="Display member details.">
-						            <!-- TMPL_IF NAME="object"-->member <!-- TMPL_VAR NAME="object" --><!-- /TMPL_IF -->
-						        </a>
-						    <!-- TMPL_ELSE -->
-						    <!-- TMPL_IF NAME="CATALOGUING" -->
-						        <!-- TMPL_IF EXPR="info eq 'item'" -->
-							<a href="/cgi-bin/koha/catalogue/moredetail.pl?item=<!-- TMPL_VAR NAME="object" -->&biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->#item<!-- TMPL_VAR NAME="object" -->">Item <!-- TMPL_VAR NAME="object" --></a>
-							<!-- TMPL_ELSE -->
-						        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="object" -->" title="Display detail for this biblio">biblio <!-- TMPL_VAR NAME="object" --></a>
-							<!-- /TMPL_IF -->
-						    <!-- TMPL_ELSE-->
-						    <!-- TMPL_IF NAME="SERIAL"-->
-						        <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR NAME="object" -->">
-						            <!-- TMPL_VAR NAME="object" -->
-						        </a>
-						    <!-- TMPL_ELSE -->
-    						    <!-- TMPL_VAR NAME="object" -->
-    						<!-- /TMPL_IF -->
-    						<!-- /TMPL_IF -->
-    						<!-- /TMPL_IF -->
-    						<!-- /TMPL_IF -->
-						</td>
-						<td>
-						    <!-- TMPL_IF NAME="CIRCULATION" -->
-						         <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="info" -->" title="Display detail for this biblio">biblio <!-- TMPL_VAR NAME="info" escape="html" --></a>
-    						<!-- TMPL_ELSE -->
-    						    <!-- TMPL_VAR NAME="info" escape="html"-->
-    						<!-- /TMPL_IF -->
-						</td>
-					</tr>
-		<!-- /TMPL_LOOP -->
-    </table>
-<!-- /TMPL_IF -->
-<!-- /TMPL_IF -->
-	</form>
-</div>
-</div>
-<div class="yui-b noprint">
-<!-- TMPL_IF NAME="menu" -->
-    <!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
-<!-- TMPL_ELSE -->
-	
-    <!-- TMPL_IF EXPR="module eq 'CATALOGUING'" --><!-- TMPL_INCLUDE NAME="biblio-view-menu.inc" --><!-- TMPL_ELSE --><!-- TMPL_INCLUDE NAME="tools-menu.inc" --><!-- /TMPL_IF -->
-<!-- /TMPL_IF -->
-</div>
+	<div id="bd">
+		<div id="yui-main">
+			<div class="yui-b">
+				<h1>Browse system logs</h1>
+				<form method="post" action="/cgi-bin/koha/tools/viewlog.pl">
+					<!-- TMPL_IF NAME="do_it" -->
+						<input type="hidden" name="do_it" value="<!--TMPL_VAR NAME="do_it" -->" />
+					<!-- /TMPL_IF -->
+					<input type="hidden" name="src" value="<!--TMPL_VAR NAME="src" -->" />
+					<fieldset class="rows">
+						<ol>
+							<li>
+								<label for="user">Librarian:</label>
+								<input type="text" name="user" id="user" value="<!-- TMPL_VAR NAME="user"-->" />
+							</li>
+							<li>
+								<label for="module">Module:</label>
+								<select name="modules" id="modules" multiple="multiple">
+									<option value="" selected="selected">All</option>
+									<option value ="CATALOGUING">Catalog</option>
+									<option value ="MEMBERS">Members</option>
+									<option value ="ACQUISITION">Acquisitions</option>
+									<option value ="SERIAL">Serial</option>
+									<option value="CIRCULATION">Circulation</option>
+									<option value="LETTER">Letter</option>
+									<option value="FINES">Fines</option>
+									<option value="SYSTEMPREFERENCE">System Prefs</option>
+								</select>
+							</li>
+							<li>
+								<label for="action">Action:</label>
+								<select name="action" id="action">
+									<option value ="">All</option>
+									<option value ="add">Add</option>
+									<option value ="del">Delete</option>
+									<option value ="mod">Modify</option>
+									<option value="issue">Issue</option>
+									<option value="return">Return</option>
+								</select>
+							</li>
+							<li>
+								<label for="object">Object</label>
+								<input type="text" id="object" name="object" value="<!-- TMPL_VAR NAME="object"-->" />
+							</li>
+							<li>
+								<label for="info">Info:</label>
+								<input type="text" name="info" value="<!-- TMPL_VAR NAME="info"-->" />
+							</li>
+							<li>
+								<label for="from"> Display from</label> <input type="text" size="10" id="from" name="from" value="<!-- TMPL_VAR NAME="datefrom"-->" />
+								<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" alt="Show Calendar" id="openCalendarFrom" style="cursor: pointer;" />
+								<label for="to">to</label> <input size="10" id="to" name="to" type="text" value="<!-- TMPL_VAR NAME="dateto"-->" />
+								<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="openCalendarTo" alt="Show Calendar" style="cursor: pointer;" border="0" />
+									<script type="text/javascript">
+									//<![CDATA[
+									// function submit_check (from_id,to_id) {
+									//	var dateFrom = Date_from_syspref(document.getElementById(from_id).value);
+									//	var dateTo   = Date_from_syspref(document.getElementById(  to_id).value);
+									//	var today = new Date();
+									// 	if (dateFrom < dateTo) { 
+									//		alert("The starting date cannot be after the ending date.");
+									//		document.getElementById(to_id).select();
+									//		return false;
+									//	}
+									// 	if (dateFrom > today) { 
+									//		alert("The starting date cannot be in the future.");
+									//		document.getElementById(from_id).select();
+									//		return false;
+									//	}
+									// }
+									
+									// return true if the date is blocked.
+									function disable_from(date) {var limit = get_Calendar_limit(date,'to'  ); return (limit && limit < date);}
+									function disable_to  (date) {var limit = get_Calendar_limit(date,'from'); return (limit && limit > date);}
+									
+									Calendar.setup({
+									inputField : "from",
+									ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+									button : "openCalendarFrom",
+									disableFunc : disable_from,
+									dateStatusFunc : disable_from
+									});
+									Calendar.setup({
+									inputField : "to",
+									ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+									button : "openCalendarTo",
+									disableFunc : disable_to,
+									dateStatusFunc : disable_to
+									});
+									//]]>
+									</script>
+							</li>
+						</ol>
+					</fieldset>
+					<fieldset class="rows">
+						<legend>Output</legend>
+						<ol>
+							<li>
+								<label for="screen" >To screen in the browser:</label> <input id="screen" type="radio" checked="checked" name="output" value="screen" />
+							</li>
+							<li>
+								<label for="file">To a file:</label>
+								<input id="file" type="radio" name="output" value="file" />
+								<label class="inline" for="basename">Named:</label>
+								<input type="text" name="basename" id="basename" value="Export" />
+								<!--
+									<label for="MIME" class="inline">Into an application:</label>
+									<!-- TMPL_VAR NAME="CGIextChoice" -->
+									<!-- TMPL_VAR NAME="CGIsepChoice" -->
+								-->
+								<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->" />
+							</li>
+						</ol>
+					</fieldset>
+					<fieldset class="action">
+						<input type="submit" value="Submit" />
+						<input type="hidden" name="do_it" value="1" />
+					</fieldset>
+					<!-- TMPL_IF NAME="do_it" -->
+						<!-- TMPL_IF NAME="total" -->
+							<h4><!-- TMPL_VAR NAME="total" --> lines found.</h4>
+							<table>
+								<tr>
+									<th>Date</th>
+									<th>Librarian</th>
+									<th>Module</th>
+									<th>Action</th>
+									<th>Object</th>
+									<th>Info</th>
+								</tr>
+								<!-- TMPL_LOOP NAME="looprow" -->
+									<tr>
+										<td><!-- TMPL_VAR NAME="timestamp" --></td>
+										<td>
+											<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="user" -->" title="display detail for this librarian."> <!-- TMPL_VAR NAME="user" --> </a>
+										</td>
+										<td><!-- TMPL_VAR NAME="module" --></td>
+										<td><!-- TMPL_VAR NAME="action" --></td>
+										<td>
+											<!-- TMPL_IF EXPR="module eq 'MEMBERS'"-->
+												<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="object" -->" title="Display member details."> member <!-- TMPL_VAR NAME="object" --> </a>
+											<!-- TMPL_ELSE -->
+												<!-- TMPL_IF EXPR="module eq 'CIRCULATION'" -->
+													<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="object" -->" title="Display member details.">
+														<!-- TMPL_IF NAME="object" -->
+															member <!-- TMPL_VAR NAME="object" -->
+														<!-- /TMPL_IF -->
+													</a>
+												<!-- TMPL_ELSE -->
+													<!-- TMPL_IF EXPR="module eq 'CATALOGUING'" -->
+														<!-- TMPL_IF EXPR="info eq 'item'" -->
+															<a href="/cgi-bin/koha/catalogue/moredetail.pl?item=<!-- TMPL_VAR NAME="object" -->&biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->#item<!-- TMPL_VAR NAME="object" -->">Item <!-- TMPL_VAR NAME="object" --></a>
+														<!-- TMPL_ELSE -->
+															<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="object" -->" title="Display detail for this biblio">biblio <!-- TMPL_VAR NAME="object" --></a>
+														<!-- /TMPL_IF -->
+													<!-- TMPL_ELSE-->
+														<!-- TMPL_IF EXPR="module eq 'SERIAL'" -->
+															<a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR NAME="object" -->"> <!-- TMPL_VAR NAME="object" --> </a>
+														<!-- TMPL_ELSE -->
+															<!-- TMPL_VAR NAME="object" -->
+														<!-- /TMPL_IF -->
+													<!-- /TMPL_IF -->
+												<!-- /TMPL_IF -->
+											<!-- /TMPL_IF -->
+										</td>
+										<td>
+											<!-- TMPL_IF NAME="CIRCULATION" -->
+												<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="info" -->" title="Display detail for this biblio">biblio <!-- TMPL_VAR NAME="info" escape="html" --></a>
+											<!-- TMPL_ELSE -->
+												<!-- TMPL_VAR NAME="info" escape="html"-->
+											<!-- /TMPL_IF -->
+										</td>
+									</tr>
+								<!-- /TMPL_LOOP -->
+							</table>
+						<!-- TMPL_ELSE -->
+							<div class="dialog alert">
+								No log found
+								<!-- TMPL_IF NAME="CATALOGUING" -->
+									for <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="object" -->">Bibliographic Record <!-- TMPL_VAR NAME="object" --></a>
+								<!-- /TMPL_IF -->
+								<!-- TMPL_IF NAME="MEMBERS" -->
+									for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="object" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</a>
+								<!-- /TMPL_IF -->
+								.
+							</div>
+						<!-- /TMPL_IF -->
+					<!-- /TMPL_IF -->
+				</form>
+			</div>
+		</div>
+		<div class="yui-b noprint">
+			<!-- TMPL_IF NAME="menu" -->
+				<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
+			<!-- TMPL_ELSE -->
+				<!-- TMPL_IF NAME="CATALOGUING" -->
+					<!-- TMPL_INCLUDE NAME="biblio-view-menu.inc" -->
+				<!-- TMPL_ELSE -->
+					<!-- TMPL_INCLUDE NAME="tools-menu.inc" -->
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_IF -->
+		</div>
+	</div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

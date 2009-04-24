@@ -43,7 +43,7 @@ my $input    = new CGI;
 
 $debug or $debug = $cgi_debug;
 my $do_it    = $input->param('do_it');
-my $module   = $input->param("module");
+my @modules   = $input->param("modules");
 my $user     = $input->param("user");
 my $action   = $input->param("action");
 my $object   = $input->param("object");
@@ -52,7 +52,7 @@ my $datefrom = $input->param("from");
 my $dateto   = $input->param("to");
 my $basename = $input->param("basename");
 my $mime     = $input->param("MIME");
-my $del      = $input->param("sep");
+#my $del      = $input->param("sep");
 my $output   = $input->param("output") || "screen";
 my $src      = $input->param("src");    # this param allows us to be told where we were called from -fbcit
 
@@ -99,10 +99,32 @@ $template->param(
 	              dateformat => C4::Dates->new()->format(),
 				       debug => $debug,
 );
-
+#
+#### This code was never really used - maybe some day some will fix it ###
+#my @mime = ( C4::Context->preference("MIME") );
+#my $CGIextChoice = CGI::scrolling_list(
+#        -name     => 'MIME',
+#        -id       => 'MIME',
+#        -values   => \@mime,
+#        -size     => 1,
+#        -multiple => 0
+#);
+#my @dels         = ( C4::Context->preference("delimiter") );
+#my $CGIsepChoice = CGI::scrolling_list(
+#        -name     => 'sep',
+#        -id       => 'sep',
+#        -values   => \@dels,
+#        -size     => 1,
+#        -multiple => 0
+#);
+#$template->param(
+#        CGIextChoice => $CGIextChoice,
+#        CGIsepChoice => $CGIsepChoice,
+#);
+#
 if ($do_it) {
 
-    my $results = GetLogs($datefrom,$dateto,$user,$module,$action,$object,$info);
+    my $results = GetLogs($datefrom,$dateto,$user,\@modules,$action,$object,$info);
     my $total = scalar @$results;
     foreach my $result (@$results){
 	if ($result->{'info'} eq 'item'){
@@ -118,59 +140,47 @@ if ($do_it) {
         $template->param (
 			logview => 1,
             total    => $total,
-            $module  => 1,
             looprow  => $results,
             do_it    => 1,
             datefrom => $datefrom,
             dateto   => $dateto,
             user     => $user,
-            module   => $module,
             object   => $object,
             action   => $action,
             info     => $info,
             src      => $src,
         );
+	    #module   => 'fix this', #this seems unused in actual code
+	foreach my $module (@modules) {
+		$template->param($module  => 1);
+	}
+
         output_html_with_http_headers $input, $cookie, $template->output;
     } else {
         # Printing to a csv file
         print $input->header(
-            -type       => 'application/vnd.sun.xml.calc',
+            -type       => 'text/csv',
             -attachment => "$basename.csv",
             -filename   => "$basename.csv"
         );
         my $sep = C4::Context->preference("delimiter");
         foreach my $line (@$results) {
-            ($module eq "catalogue") or next;
-			foreach (qw(timestamp firstname surname action info title author)) {
-				print $line->{$_} . $sep;
-			}	
-		}
+            #next unless $modules[0] eq "catalogue";
+		foreach (qw(timestamp firstname surname action info title author)) {
+			print $line->{$_} . $sep;
+		}	
+	}
     }
 	exit;
 } else {
-    my @values;
-    my %labels;
-    my %select;
-    my @mime = ( C4::Context->preference("MIME") );
-    my $CGIextChoice = CGI::scrolling_list(
-        -name     => 'MIME',
-        -id       => 'MIME',
-        -values   => \@mime,
-        -size     => 1,
-        -multiple => 0
-    );
-    my @dels         = ( C4::Context->preference("delimiter") );
-    my $CGIsepChoice = CGI::scrolling_list(
-        -name     => 'sep',
-        -id       => 'sep',
-        -values   => \@dels,
-        -size     => 1,
-        -multiple => 0
-    );
-    $template->param(
-        total        => 0,
-        CGIextChoice => $CGIextChoice,
-        CGIsepChoice => $CGIsepChoice,
-    );
-    output_html_with_http_headers $input, $cookie, $template->output;
+    #my @values;
+    #my %labels;
+    #my %select;
+	#initialize some paramaters that might not be used in the template - it seems to evaluate EXPR even if a false TMPL_IF
+	$template->param(
+        	total => 0,
+		module => "",
+		info => ""
+	);
+	output_html_with_http_headers $input, $cookie, $template->output;
 }
