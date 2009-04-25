@@ -1310,6 +1310,7 @@ sub AddReturn {
             my $curr_iteminfo = GetItem($iteminformation->{'itemnumber'});
             $iteminformation->{'homebranch'} = $curr_iteminfo->{'homebranch'};
             $iteminformation->{'holdingbranch'} = $curr_iteminfo->{'holdingbranch'};
+            $iteminformation->{'itemlost'} = $curr_iteminfo->{'itemlost'};
             $doreturn = 0;
         }
     
