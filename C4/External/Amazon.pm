@@ -33,9 +33,8 @@ BEGIN {
     $VERSION = 0.03;
     @ISA = qw(Exporter);
     @EXPORT = qw(
-        &get_amazon_details
-        &check_search_inside
-        &get_amazon_tld
+        get_amazon_details
+        get_amazon_tld
     );
 }
 
@@ -60,24 +59,57 @@ sub get_amazon_tld {
 
 C4::External::Amazon - Functions for retrieving Amazon.com content in Koha
 
-=head1 FUNCTIONS
+=head2 FUNCTIONS
 
 This module provides facilities for retrieving Amazon.com content in Koha
 
-=head2 get_amazon_details
+=over
 
-=over 4
-
-my $amazon_details = &get_amazon_details( $xisbn, $record, $marcflavour );
-
-=back
+=item get_amazon_detail( $isbn, $record, $marcflavour, $services )
 
 Get editorial reviews, customer reviews, and similar products using Amazon Web Services.
 
+Parameters:
+
+=over
+
+=item $isbn
+
+Biblio record isbn
+
+=item $record
+
+Biblio MARC record
+
+=item $marcflavour
+
+MARC flavor, MARC21 or UNIMARC
+
+=item $services
+
+Requested Amazon services: A ref to an array. For example,
+[ 'Similarities', 'EditorialReviews', 'Reviews' ].
+No other service will be accepted. Services must be spelled exactly.
+If no sercice is requested, AWS isn't called.
+
+=back
+
+=item get_amazon_tld()
+
+Get Amazon Top Level Domain depending on Amazon local preference: AmazonLocal.
+For example, if AmazonLocal is 'UK', returns '.co.uk'.
+
+=back
+
 =cut
 
+
 sub get_amazon_details {
-    my ( $isbn, $record, $marcflavour ) = @_;
+    my ( $isbn, $record, $marcflavour, $aws_ref ) = @_;
+
+    return unless defined $aws_ref;
+    my @aws = @$aws_ref;
+    return if $#aws == -1;
 
     # Normalize the fields
     $isbn = GetNormalizedISBN($isbn);
@@ -107,7 +139,9 @@ sub get_amazon_details {
 	return undef;
     }
 
-    my $format = substr $record->leader(), 6, 1; # grab the item format to determine Amazon search index
+    # grab the item format to determine Amazon search index
+    # FIXME: This is MARC21 specific
+    my $format = substr $record->leader(), 6, 1; 
     my $formats;
     $formats->{'a'} = 'Books';
     $formats->{'g'} = 'Video';
@@ -125,12 +159,12 @@ sub get_amazon_details {
 
     #grab the associates tag: mine is 'kadabox-20'
     my $af_tag=C4::Context->preference('AmazonAssocTag');
-    my $response_group = "Similarities,EditorialReview,Reviews,ItemAttributes,Images";
+    my $response_group = join( ',',  @aws );
     my $url = "http://ecs.amazonaws$tld/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=$aws_access_key_id&Operation=ItemLookup&AssociateTag=$af_tag&Version=2007-01-15&ItemId=$item_id&IdType=$id_type&ResponseGroup=$response_group";
     if ($id_type ne 'ASIN') {
 	$url .= "&SearchIndex=$search_index";
     }
-    # warn $url;
+    #warn $url;
     my $content = get($url);
     warn "could not retrieve $url" unless $content;
     my $xmlsimple = XML::Simple->new();

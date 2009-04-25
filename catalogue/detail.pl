@@ -224,8 +224,8 @@ if (C4::Context->preference("FRBRizeEditions")==1) {
 }
 if ( C4::Context->preference("AmazonEnabled") == 1 ) {
     my $similar_products_exist;
-    my $amazon_details = &get_amazon_details( $isbn, $record, $marcflavour );
-    my $item_attributes   = \%{$amazon_details->{Items}->{Item}->{ItemAttributes}};
+    my @aws = qw( Similarities EditorialReview Reviews );
+    my $amazon_details = &get_amazon_details( $isbn, $record, $marcflavour, \@aws );
     my $customer_reviews  = \@{$amazon_details->{Items}->{Item}->{CustomerReviews}->{Review}};
     my @similar_products;
     for my $similar_product (@{$amazon_details->{Items}->{Item}->{SimilarProducts}->{SimilarProduct}}) {
