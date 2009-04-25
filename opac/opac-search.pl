@@ -2,7 +2,7 @@
 # Script to perform searching
 # Mostly copied from search.pl, see POD there
 use strict;            # always use
-
+use warnings;
 ## STEP 1. Load things that are used in both search page and
 # results page and decide which template to load, operations 
 # to perform, etc.
@@ -37,7 +37,7 @@ my $template_type;
 my @params = $cgi->param("limit");
 
 my $build_grouped_results = C4::Context->preference('OPACGroupResults');
-if  ($cgi->param("format") =~ /(rss|atom|opensearchdescription)/) {
+if ($cgi->param("format") && $cgi->param("format") =~ /(rss|atom|opensearchdescription)/) {
 	$template_name = 'opac-opensearch.tmpl';
 }
 elsif ($build_grouped_results) {
@@ -59,16 +59,16 @@ else {
     }
 );
 
-if ($cgi->param("format") eq 'rss2') {
+if ($cgi->param("format") && $cgi->param("format") eq 'rss2') {
 	$template->param("rss2" => 1);
 }
-elsif ($cgi->param("format") eq 'atom') {
+elsif ($cgi->param("format") && $cgi->param("format") eq 'atom') {
 	$template->param("atom" => 1);
     # FIXME - the timestamp is a hack - the biblio update timestamp should be used for each
     # entry, but not sure if that's worth an extra database query for each bib
     $template->param(timestamp => strftime("%Y-%m-%dT%H:%M:%S-00:00", gmtime));
 }
-elsif ($cgi->param("format") eq 'opensearchdescription') {
+elsif ($cgi->param("format") && $cgi->param("format") eq 'opensearchdescription') {
 	$template->param("opensearchdescription" => 1);
 }
 if (C4::Context->preference("marcflavour") eq "UNIMARC" ) {
@@ -190,7 +190,7 @@ if ( $template_type eq 'advsearch' ) {
     # shouldn't appear on the first one, scan indexes should, adding a new
     # box should only appear on the last, etc.
     my @search_boxes_array;
-    my $search_boxes_count = C4::Context->preference("OPACAdvSearchInputCount") | 3; # FIXME: should be a syspref
+    my $search_boxes_count = C4::Context->preference("OPACAdvSearchInputCount") || 3; # FIXME: should be a syspref
     for (my $i=1;$i<=$search_boxes_count;$i++) {
         # if it's the first one, don't display boolean option, but show scan indexes
         if ($i==1) {
@@ -225,7 +225,7 @@ if ( $template_type eq 'advsearch' ) {
 		$template->param( expanded_options => C4::Context->preference("expandedSearchOption") );
 	}
 	# but let the user override it
-   	if ( ($cgi->param('expanded_options') == 0) || ($cgi->param('expanded_options') == 1 ) ) {
+   	if ( $cgi->param("expanded_options") && (($cgi->param('expanded_options') == 0) || ($cgi->param('expanded_options') == 1 )) ) {
     	$template->param( expanded_options => $cgi->param('expanded_options'));
 	}
 
@@ -435,7 +435,7 @@ for (my $i=0;$i<=@servers;$i++) {
         $total = $total + $results_hashref->{$server}->{"hits"};
         ## If there's just one result, redirect to the detail page
         if ($total == 1) {         
-            my $biblionumber=@newresults[0]->{biblionumber};
+            my $biblionumber=$newresults[0]->{biblionumber};
             if (C4::Context->preference('BiblioDefaultView') eq 'isbd') {
                 print $cgi->redirect("/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=$biblionumber");
             } elsif  (C4::Context->preference('BiblioDefaultView') eq 'marc') {
@@ -608,7 +608,7 @@ foreach my $shelf (@$pubshelves) {
 	push (@addpubshelves, $shelf);
 }
 
-if (defined @addpubshelves) {
+if (@addpubshelves) {
 	$template->param( addpubshelves     => scalar (@addpubshelves));
 	$template->param( addpubshelvesloop => \@addpubshelves);
 }
