@@ -186,21 +186,27 @@ if (($op eq 'insert') and !$nodouble){
 }
 
   #recover all data from guarantor address phone ,fax... 
-if (defined($guarantorid) and ($category_type eq 'C' || $category_type eq 'P') and $guarantorid ne '' ){
-  my $guarantordata=GetMember($guarantorid);
-  $guarantorinfo=$guarantordata->{'surname'}." , ".$guarantordata->{'firstname'};
-  if (!defined($data{'contactname'}) or $data{'contactname'} eq '' or $data{'contactname'} ne $guarantordata->{'surname'}) {
-    $newdata{'contactfirstname'}= $guarantordata->{'firstname'};
-    $newdata{'contactname'}     = $guarantordata->{'surname'};
-    $newdata{'contacttitle'}    = $guarantordata->{'title'};
-	  foreach (qw(streetnumber address streettype address2 zipcode city phone phonepro mobile fax email emailpro branchcode)) {
-		$newdata{$_} = $guarantordata->{$_};
-	}
-  }
+if ( defined($guarantorid) and
+     ( $category_type eq 'C' || $category_type eq 'P' ) and
+     $guarantorid ne ''  and
+     $guarantorid ne '0' ) {
+    if (my $guarantordata=GetMember($guarantorid)) {
+        $guarantorinfo=$guarantordata->{'surname'}." , ".$guarantordata->{'firstname'};
+        if ( !defined($data{'contactname'}) or $data{'contactname'} eq '' or
+             $data{'contactname'} ne $guarantordata->{'surname'} ) {
+            $newdata{'contactfirstname'}= $guarantordata->{'firstname'};
+            $newdata{'contactname'}     = $guarantordata->{'surname'};
+            $newdata{'contacttitle'}    = $guarantordata->{'title'};
+	        foreach (qw(streetnumber address streettype address2
+                        zipcode city phone phonepro mobile fax email emailpro branchcode)) {
+		        $newdata{$_} = $guarantordata->{$_};
+	        }
+        }
+    }
 }
 
 ###############test to take the right zipcode and city name ##############
-if (!defined($guarantorid) or $guarantorid eq '') {
+if (!defined($guarantorid) or $guarantorid eq '' or $guarantorid eq '0') {
     # set only if parameter was passed from the form
     $newdata{'city'}    = $input->param('city')    if defined($input->param('city'));
     $newdata{'zipcode'} = $input->param('zipcode') if defined($input->param('zipcode'));
