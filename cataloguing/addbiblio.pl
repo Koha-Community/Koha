@@ -382,7 +382,7 @@ sub create_input {
                     maxlength=\"$max_length\"
                     \/>
                     <a href=\"#\" class=\"buttonDot\"
-                        onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&amp;index=$subfield_data{id}','$subfield_data{id}'); return false;\" tabindex=\"1\" title=\"Tag Editor\">...</a>
+                        onclick=\"openAuth(this.parentNode.getElementsByTagName('input')[1].id,'".$tagslib->{$tag}->{$subfield}->{authtypecode}."'); return false;\" tabindex=\"1\" title=\"Tag Editor\">...</a>
             ";
       } else {
         $subfield_data{marc_value} =
