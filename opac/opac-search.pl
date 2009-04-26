@@ -33,7 +33,7 @@ my ($template,$borrowernumber,$cookie);
 
 # decide which template to use
 my $template_name;
-my $template_type;
+my $template_type = 'basic';
 my @params = $cgi->param("limit");
 
 my $build_grouped_results = C4::Context->preference('OPACGroupResults');
@@ -251,7 +251,7 @@ my $default_sort_by = C4::Context->preference('OPACdefaultSortField')."_".C4::Co
     if (C4::Context->preference('OPACdefaultSortField') && C4::Context->preference('OPACdefaultSortOrder'));
 
 @sort_by = split("\0",$params->{'sort_by'}) if $params->{'sort_by'};
-$sort_by[0] = $default_sort_by unless $sort_by[0];
+$sort_by[0] = $default_sort_by if !$sort_by[0] && defined($default_sort_by);
 foreach my $sort (@sort_by) {
     $template->param($sort => 1);
 }
@@ -273,7 +273,7 @@ my @operators;
 
 # indexes are query qualifiers, like 'title', 'author', etc. They
 # can be single or multiple parameters separated by comma: kw,right-Truncation 
-my @indexes = split("\0",$params->{'idx'});
+my @indexes = exists($params->{'idx'}) ? split("\0",$params->{'idx'}) : ();
 
 # if a simple index (only one)  display the index used in the top search box
 if ($indexes[0] && !$indexes[1]) {
@@ -351,7 +351,7 @@ my @query_inputs = _input_cgi_parse($query_cgi);
 $template->param ( QUERY_INPUTS => \@query_inputs );
 
 ## parse the limit_cgi string and put it into a form suitable for <input>s
-my @limit_inputs = _input_cgi_parse($limit_cgi);
+my @limit_inputs = $limit_cgi ? _input_cgi_parse($limit_cgi) : ();
 
 # add OPAC 'hidelostitems'
 if (C4::Context->preference('hidelostitems') == 1) {
@@ -367,7 +367,7 @@ if (C4::Context->preference('OpacSuppression')) {
 $template->param ( LIMIT_INPUTS => \@limit_inputs );
 
 ## II. DO THE SEARCH AND GET THE RESULTS
-my $total; # the total results for the whole set
+my $total = 0; # the total results for the whole set
 my $facets; # this object stores the faceted results that display on the left-hand of the results page
 my @results_array;
 my $results_hashref;
@@ -448,7 +448,7 @@ for (my $i=0;$i<=@servers;$i++) {
         if ($hits) {
             $template->param(total => $hits);
             my $limit_cgi_not_availablity = $limit_cgi;
-            $limit_cgi_not_availablity =~ s/&limit=available//g;
+            $limit_cgi_not_availablity =~ s/&limit=available//g if defined $limit_cgi_not_availablity;
             $template->param(limit_cgi_not_availablity => $limit_cgi_not_availablity);
             $template->param(limit_cgi => $limit_cgi);
             $template->param(query_cgi => $query_cgi);
@@ -595,7 +595,7 @@ if ( C4::Context->preference("kohaspsuggest") ) {
 # VI. BUILD THE TEMPLATE
 # NOTE: not using application/atom+xml or application/rss+xml beccause of Internet Explorer 6;
 # see bug 2078.
-my $content_type = $cgi->param('format') =~ /rss|atom/ ? "application/xml" :
+my $content_type = ($cgi->param('format') && $cgi->param('format') =~ /rss|atom/) ? "application/xml" :
                    "text/html";
 
 # Build drop-down list for 'Add To:' menu...
