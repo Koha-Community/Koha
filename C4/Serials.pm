@@ -1778,12 +1778,14 @@ sub ItemizeSerials {
 
 =over 4
 
-1 or 0 = HasSubscriptionExpired($subscriptionid)
+$has_expired = HasSubscriptionExpired($subscriptionid)
 
 the subscription has expired when the next issue to arrive is out of subscription limit.
 
 return :
-1 if true, 0 if false.
+0 if the subscription has not expired
+1 if the subscription has expired
+2 if has subscription does not have a valid expiration date set
 
 =back
 
