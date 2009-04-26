@@ -1195,10 +1195,8 @@ sub merge {
     my $authtypecodeto = GetAuthTypeCode($mergeto);
 #     warn "mergefrom : $authtypecodefrom $mergefrom mergeto : $authtypecodeto $mergeto ";
     # return if authority does not exist
-    my @X = $MARCfrom->fields();
-    return "error MARCFROM not a marcrecord ".Data::Dumper::Dumper($MARCfrom) if $#X == -1;
-    my @X = $MARCto->fields();
-    return "error MARCTO not a marcrecord".Data::Dumper::Dumper($MARCto) if $#X == -1;
+    return "error MARCFROM not a marcrecord ".Data::Dumper::Dumper($MARCfrom) if scalar($MARCfrom->fields()) == 0;
+    return "error MARCTO not a marcrecord".Data::Dumper::Dumper($MARCto) if scalar($MARCto->fields()) == 0;
     # search the tag to report
     my $sth = $dbh->prepare("select auth_tag_to_report from auth_types where authtypecode=?");
     $sth->execute($authtypecodefrom);
