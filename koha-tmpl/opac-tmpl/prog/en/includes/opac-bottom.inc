@@ -7,6 +7,7 @@
 </div>
 <!-- TMPL_IF NAME="opaclanguagesdisplay" -->
 <!-- TMPL_IF NAME="languages_loop" -->
+    <!-- TMPL_UNLESS NAME="one_language_enabled" -->
         <div id="changelanguage" class="ft"><strong>Languages: </strong>
         <!-- TMPL_LOOP NAME="languages_loop" -->
             <!-- TMPL_IF NAME="group_enabled" -->
@@ -28,7 +29,6 @@
 			</div>
 
             <!-- TMPL_ELSE -->
-            <!-- TMPL_UNLESS NAME="one_language_enabled" -->
 	    	<!-- TMPL_IF NAME="group_enabled" -->
                 <!-- TMPL_IF NAME="current" -->
                     <!-- TMPL_IF NAME="native_description" --><!-- TMPL_VAR NAME="native_description" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="rfc4646_subtag" --><!-- /TMPL_IF -->
@@ -37,10 +37,10 @@
                 <!-- /TMPL_IF -->
 		<!-- /TMPL_IF -->
             <!-- /TMPL_IF -->
-            <!-- /TMPL_UNLESS -->
             <!-- /TMPL_IF --><!-- TMPL_UNLESS NAME="__last__" --> | <!-- /TMPL_UNLESS -->
         <!-- /TMPL_LOOP -->
         </div>
+    <!-- /TMPL_UNLESS -->
 <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 

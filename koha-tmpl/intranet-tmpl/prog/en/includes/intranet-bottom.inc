@@ -1,6 +1,7 @@
         </div>
 
 <!-- TMPL_IF NAME="languages_loop" -->
+    <!-- TMPL_UNLESS NAME="one_language_enabled" -->
         <div id="changelanguage" class="ft">
         <ul id="i18nMenu" class="footermenu">
         <!-- TMPL_LOOP NAME="languages_loop" -->
@@ -21,7 +22,6 @@
             </ul></div></div></li>
 
             <!-- TMPL_ELSE -->
-            <!-- TMPL_UNLESS NAME="one_language_enabled" -->
 	    	<!-- TMPL_IF NAME="group_enabled" -->
                 <!-- TMPL_IF NAME="current" -->
                     <li><!-- TMPL_IF NAME="native_description" --><!-- TMPL_VAR NAME="native_description" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="rfc4646_subtag" --><!-- /TMPL_IF --></li>
@@ -30,11 +30,11 @@
                 <!-- /TMPL_IF -->
 		<!-- /TMPL_IF -->
             <!-- /TMPL_IF -->
-            <!-- /TMPL_UNLESS -->
             <!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
         </ul>
         </div>
+    <!-- /TMPL_UNLESS -->
 <!-- /TMPL_IF -->
     </body>
 </html>
