@@ -115,55 +115,31 @@ sub get_amazon_details {
     $isbn = GetNormalizedISBN($isbn);
     my $upc = GetNormalizedUPC($record,$marcflavour);
     my $ean = GetNormalizedEAN($record,$marcflavour);
-
     # warn "ISBN: $isbn | UPC: $upc | EAN: $ean";
 
-    my ( $id_type, $item_id);
-    if (defined($isbn) && length($isbn) == 13) { # if the isbn is 13-digit, search Amazon using EAN
-	$id_type = 'EAN';
-	$item_id = $isbn;
-    }
-    elsif ($isbn) {
-	$id_type = 'ASIN';
-	$item_id = $isbn;
-    }
-    elsif ($upc) {
-	$id_type = 'UPC';
-	$item_id = $upc;
-    }
-    elsif ($ean) {
-	$id_type = 'EAN';
-	$item_id = $upc;
-    }
-    else { # if no ISBN, UPC, or EAN exists, do not even attempt to query Amazon
-	return undef;
-    }
+    # Choose the appropriate and available item identifier
+    my ( $id_type, $item_id ) =
+        defined($isbn) && length($isbn) == 13 ? ( 'EAN',  $isbn ) :
+        $isbn                                 ? ( 'ASIN', $isbn ) :
+        $upc                                  ? ( 'UPC',  $upc  ) :
+        $ean                                  ? ( 'EAN',  $upc  ) : ( undef, undef );
+    return unless defined($id_type);
 
     # grab the item format to determine Amazon search index
-    # FIXME: This is MARC21 specific
-    my $format = substr $record->leader(), 6, 1; 
-    my $formats;
-    $formats->{'a'} = 'Books';
-    $formats->{'g'} = 'Video';
-    $formats->{'j'} = 'Music';
+    my %hformat = ( a => 'Books', g => 'Video', j => 'Music' );
+    my $search_index = $hformat{ substr($record->leader(),6,1) } || 'Books';
 
-    my $search_index = $formats->{$format};
-
-    # Determine which content to grab in the request
-
-    # Determine correct locale
-    my $tld = get_amazon_tld();
-
-    # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
-    my $aws_access_key_id = C4::Context->preference('AWSAccessKeyID');
-
-    #grab the associates tag: mine is 'kadabox-20'
-    my $af_tag=C4::Context->preference('AmazonAssocTag');
-    my $response_group = join( ',',  @aws );
-    my $url = "http://ecs.amazonaws$tld/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=$aws_access_key_id&Operation=ItemLookup&AssociateTag=$af_tag&Version=2007-01-15&ItemId=$item_id&IdType=$id_type&ResponseGroup=$response_group";
-    if ($id_type ne 'ASIN') {
-	$url .= "&SearchIndex=$search_index";
-    }
+    my $url =
+        "http://ecs.amazonaws" . get_amazon_tld() .
+        "/onca/xml?Service=AWSECommerceService" .
+        "&AWSAccessKeyId=" . C4::Context->preference('AWSAccessKeyID') .
+        "&Operation=ItemLookup" .
+        "&AssociateTag=" . C4::Context->preference('AmazonAssocTag') .
+        "&Version=2009-02-01" .
+        "&ItemId=$item_id" .
+        "&IdType=$id_type" .
+        "&ResponseGroup=" . join( ',',  @aws );
+	$url .= "&SearchIndex=$search_index" if $id_type ne 'ASIN';
     #warn $url;
     my $content = get($url);
     warn "could not retrieve $url" unless $content;
