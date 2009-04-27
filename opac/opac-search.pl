@@ -407,7 +407,7 @@ if ($@ || $error) {
 my @sup_results_array;
 for (my $i=0;$i<=@servers;$i++) {
     my $server = $servers[$i];
-    if ($server =~/biblioserver/) { # this is the local bibliographic server
+    if ($server && $server =~/biblioserver/) { # this is the local bibliographic server
         $hits = $results_hashref->{$server}->{"hits"};
         my $page = $cgi->param('page') || 0;
         my @newresults;
@@ -431,8 +431,8 @@ for (my $i=0;$i<=@servers;$i++) {
 				$_ ->{'TagLoop'} = get_tags({biblionumber=>$bibnum, approved=>1, 'sort'=>'-weight',
 										limit=>$tag_quantity });
 			}
-		}
-        $total = $total + $results_hashref->{$server}->{"hits"};
+		}	
+        $total = $total + $results_hashref->{$server}->{"hits"} if $results_hashref->{$server}->{"hits"};
         ## If there's just one result, redirect to the detail page
         if ($total == 1) {         
             my $biblionumber=$newresults[0]->{biblionumber};
@@ -513,7 +513,7 @@ for (my $i=0;$i<=@servers;$i++) {
         }
     } # end of the if local
     # asynchronously search the authority server
-    elsif ($server =~/authorityserver/) { # this is the local authority server
+    elsif ($server && $server =~/authorityserver/) { # this is the local authority server
         my @inner_sup_results_array;
         for my $sup_record ( @{$results_hashref->{$server}->{"RECORDS"}} ) {
             my $marc_record_object = MARC::Record->new_from_usmarc($sup_record);
