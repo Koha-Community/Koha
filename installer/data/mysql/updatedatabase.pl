@@ -2319,8 +2319,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 $DBversion = "3.01.00.021";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     my $enable_reviews = C4::Context->preference('OPACAmazonEnabled') ? '1' : '0';
-    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OPACAmazonReviews', '$enable_reviews', 'Display Amazon readers reviews on OPAC','','YesNo');
-    ");
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OPACAmazonReviews', '$enable_reviews', 'Display Amazon readers reviews on OPAC','','YesNo')");
     SetVersion ($DBversion);
 }
 
@@ -2371,6 +2370,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.01.00.028';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    my $enable_reviews = C4::Context->preference('AmazonEnabled') ? '1' : '0';
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('AmazonReviews', '$enable_reviews', 'Display Amazon reviews on staff interface','','YesNo')");
+    print "Upgrade to $DBversion done (added AmazonReviews)\n";
+    SetVersion ($DBversion);
+}
 
 =item DropAllForeignKeys($table)
 

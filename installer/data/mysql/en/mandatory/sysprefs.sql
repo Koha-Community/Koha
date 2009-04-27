@@ -1,6 +1,7 @@
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('acquisitions','normal','Choose Normal, budget-based acquisitions, or Simple bibliographic-data acquisitions','simple|normal','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('advancedMARCeditor',0,'If ON, the MARC editor won\'t display field/subfield descriptions','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AmazonEnabled',0,'Turn ON Amazon Content - You MUST set AWSAccessKeyID and AmazonAssocTag if enabled','','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AmazonReviews',0,'Display Amazon review on staff interface - You MUST set AWSAccessKeyID and AmazonAssocTag if enabled','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AmazonSimilarItems',0,'Turn ON Amazon Similar Items feature  - You MUST set AWSAccessKeyID and AmazonAssocTag if enabled','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACAmazonEnabled',0,'Turn ON Amazon Content in the OPAC - You MUST set AWSAccessKeyID and AmazonAssocTag if enabled','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACAmazonSimilarItems',0,'Turn ON Amazon Similar Items feature  - You MUST set AWSAccessKeyID and AmazonAssocTag if enabled','','YesNo');
