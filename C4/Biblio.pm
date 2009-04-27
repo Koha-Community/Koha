@@ -379,11 +379,9 @@ sub DelBiblio {
     return $error if $error;
 
     # We delete attached subscriptions
-    if(C4::Serials::CountSubscriptionFromBiblionumber($biblionumber) != 0){
-        my $subscriptions = &C4::Serials::GetFullSubscriptionsFromBiblionumber($biblionumber);
-        foreach my $subscription (@$subscriptions){
-            &C4::Serials::DelSubscription($subscription->{subscriptionid});
-        }
+    my $subscriptions = &C4::Serials::GetFullSubscriptionsFromBiblionumber($biblionumber);
+    foreach my $subscription (@$subscriptions){
+        &C4::Serials::DelSubscription($subscription->{subscriptionid});
     }
     
     # Delete in Zebra. Be careful NOT to move this line after _koha_delete_biblio
