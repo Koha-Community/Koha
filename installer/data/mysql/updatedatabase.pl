@@ -2378,6 +2378,17 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.01.00.029';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(q( UPDATE language_rfc4646_to_iso639
+                SET iso639_2_code = 'spa'
+                WHERE rfc4646_subtag = 'es'
+                AND   iso639_2_code = 'rus' )
+            );
+    print "Upgrade to $DBversion done (fixed bug 2599: using Spanish search limit retrieves Russian results)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
