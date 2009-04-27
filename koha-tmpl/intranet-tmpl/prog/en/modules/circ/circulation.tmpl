@@ -110,6 +110,10 @@ $.tablesorter.addParser({
 <!-- TMPL_IF NAME="TOO_MANY" -->
     <li>Too many checked out (already checked out / max : <!-- TMPL_VAR name="TOO_MANY" -->)</li>
 <!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="NOT_FOR_LOAN_FORCING" -->
+    <li>Item is normally not for loan.  Check out anyway?</li>
+<!-- /TMPL_IF -->
 </ul>
 
 <form method="post" action="/cgi-bin/koha/circ/circulation.pl">

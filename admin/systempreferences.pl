@@ -159,6 +159,7 @@ $tabsysprefs{AllowHoldsOnDamagedItems}       = "Circulation";
 $tabsysprefs{UseBranchTransferLimits}        = "Circulation";
 $tabsysprefs{AllowHoldPolicyOverride}        = "Circulation";
 $tabsysprefs{BranchTransferLimitsType}       = "Circulation";
+$tabsysprefs{AllowNotForLoanOverride}        = "Circulation";
 
 # Staff Client
 $tabsysprefs{TemplateEncoding}        = "StaffClient";
