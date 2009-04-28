@@ -25,7 +25,7 @@
 	<tr>
 		<th>Order</th>
 		<th>Order receive</th>
-		<th>Company</th>
+		<th>Vendor</th>
 		<th>&nbsp;</th>
 	</tr>
 	
@@ -36,7 +36,7 @@
 		<tr>
 	<!-- /TMPL_UNLESS -->
 			<td>	<!-- TMPL_IF name="active" -->
-					<a href="basket.pl?supplierid=<!-- TMPL_VAR name="supplierid" -->">Add order</a>
+					<a href="basketheader.pl?booksellerid=<!-- TMPL_VAR name="supplierid" -->&op=add_form">Add basket</a>
 				<!-- TMPL_ELSE -->
 					Inactive
 				<!-- /TMPL_IF -->
@@ -58,12 +58,17 @@
 							<th>&nbsp;</th>
 						</tr>
 						<!-- TMPL_LOOP NAME="loop_basket" -->
+						<!--TMPL_IF Name="uncertainprices"-->
+							<tr class="problem">
+						<!--TMPL_ELSE-->
 						<!-- TMPL_UNLESS NAME="__odd__" -->
 							<tr class="highlight">
 						<!-- TMPL_ELSE -->
 							<tr>
 						<!-- /TMPL_UNLESS -->
+						<!--/TMPL_IF-->
 								<td><!-- TMPL_VAR NAME="basketno" --></td>
+								<td><!-- TMPL_VAR NAME="basketname" --></td>
 								<td><TMPL_VAR NAME="total"></td>
 								<td>						<!-- TMPL_VAR name="firstname" -->
 										<!-- TMPL_VAR name="surname" -->

@@ -1,9 +1,9 @@
 #!/usr/bin/perl
 
 #script to show suppliers and orders
-#written by chris@katipo.co.nz 23/2/2000
 
 # Copyright 2000-2002 Katipo Communications
+# Copyright 2008-2009 BibLibre SARL
 #
 # This file is part of Koha.
 #
@@ -62,6 +62,7 @@ use CGI;
 use C4::Acquisition;
 use C4::Dates qw/format_date/;
 use C4::Bookseller;
+use C4::Members qw/GetMember/;
 
 my $query = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -70,7 +71,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { acquisition => 1 },
+        flagsrequired   => { acquisition => 'vendors_manage' },
         debug           => 1,
     }
 );
@@ -95,12 +96,17 @@ if ($count == 1){
 if ($query->param('op') eq 'close') {
 	my $basket = $query->param('basketno');
 	$basket =~ /^\d+$/ and CloseBasket($basket);
+} elsif ($query->param('op') eq 'reopen') {
+    my $basket;
+    $basket->{basketno} = $query->param('basketno');
+    $basket->{closedate} = undef;
+    ModBasket($basket);
 }
 
 #build result page
 my @loop_suppliers;
 for ( my $i = 0 ; $i < $count ; $i++ ) {
-    my $orders  = GetPendingOrders( $suppliers[$i]->{'id'}, "grouped" );
+    my $orders  = GetBasketsByBookseller( $suppliers[$i]->{'id'}, {groupby => "aqbasket.basketno", orderby => "aqbasket.basketname"} );
     my $ordcount = scalar @$orders;
     my %line;
 
@@ -108,16 +114,22 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
     $line{name}       = $suppliers[$i]->{'name'};
     $line{active}     = $suppliers[$i]->{'active'};
     my @loop_basket;
+    my $uid = GetMember($loggedinuser)->{userid};
     for ( my $i2 = 0 ; $i2 < $ordcount ; $i2++ ) {
-        my %inner_line;
-        $inner_line{basketno}     = $orders->[$i2]{'basketno'};
-        $inner_line{total}        = $orders->[$i2]{'count(*)'};
-        $inner_line{authorisedby} = $orders->[$i2]{'authorisedby'};
-        $inner_line{surname}      = $orders->[$i2]{'firstname'};
-        $inner_line{firstname}    = $orders->[$i2]{'surname'};
-        $inner_line{creationdate} = format_date( $orders->[$i2]{'creationdate'} );
-        $inner_line{closedate}    = format_date( $orders->[$i2]{'closedate'}    );
-        push @loop_basket, \%inner_line;
+        if ( $orders->[$i2]{'authorisedby'} eq $loggedinuser || haspermission(C4::Context->dbh, $uid, { flagsrequired   => { 'acquisition' => '*' } } ) ) {
+            my %inner_line;
+            $inner_line{basketno}     = $orders->[$i2]{'basketno'};
+            $inner_line{basketname}     = $orders->[$i2]{'basketname'};
+            $inner_line{total}        = scalar GetOrders($orders->[$i2]{'basketno'});
+            $inner_line{authorisedby} = $orders->[$i2]{'authorisedby'};
+            my $authby = GetMember( $orders->[$i2]{'authorisedby'});
+            $inner_line{surname}      = $authby->{'firstname'};
+            $inner_line{firstname}    = $authby->{'surname'};
+            $inner_line{creationdate} = format_date( $orders->[$i2]{'creationdate'} );
+            $inner_line{closedate}    = format_date( $orders->[$i2]{'closedate'}    );
+            $inner_line{uncertainprice} = $orders->[$i2]{'uncertainprice'};
+            push @loop_basket, \%inner_line;
+        }
     }
     $line{loop_basket} = \@loop_basket;
     push @loop_suppliers, \%line;
