@@ -2,9 +2,9 @@
 
 
 #script to show display basket of orders
-#written by chris@katipo.co.nz 24/2/2000
 
 # Copyright 2000-2002 Katipo Communications
+# Copyright 2008-2009 BibLibre SARL
 #
 # This file is part of Koha.
 #
@@ -47,60 +47,63 @@ use C4::Biblio;
 use C4::Output;
 use CGI;
 
-
 use C4::Bookseller;
-use C4::Bookfund;
+use C4::Budgets;
 
-my $query=new CGI;
-my $id=$query->param('supplierid');
+my $query       = new CGI;
+my $id          = $query->param('supplierid');
 my @booksellers = GetBookSellerFromId($id) if $id;
-my $count = scalar @booksellers;
-my $op=$query->param('op') || "display";
-
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "acqui/supplier.tmpl",
-			     query => $query,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {acquisition => 1},
-			     debug => 1,
-                });
-
+my $count       = scalar @booksellers;
+my $op          = $query->param('op') || "display";
+my ($template, $loggedinuser, $cookie) = get_template_and_user(
+	{   template_name   => "acqui/supplier.tmpl",
+		query           => $query,
+		type            => "intranet",
+		authnotrequired => 0,
+		flagsrequired   => { acquisition => 'vendors_manage' },
+		debug           => 1,
+	}
+);
+my $GST = $booksellers[0]->{'gstrate'} || C4::Context->preference("gist");
+$GST *= 100;
 #build array for currencies
-if ($op eq "display"){
-    $template->param(id => $id,
-                    name => $booksellers[0]->{'name'},
-                    postal =>$booksellers[0]->{'postal'},
-                    address1 => $booksellers[0]->{'address1'},
-                    address2 => $booksellers[0]->{'address2'},
-                    address3 => $booksellers[0]->{'address3'},
-                    address4 => $booksellers[0]->{'address4'},
-                    phone =>$booksellers[0]->{'phone'},
-                    fax => $booksellers[0]->{'fax'},
-                    url => $booksellers[0]->{'url'},
-                    contact => $booksellers[0]->{'contact'},
-                    contpos => $booksellers[0]->{'contpos'},
-                    contphone => $booksellers[0]->{'contphone'},
-                    contaltphone => $booksellers[0]->{'contaltphone'},
-                    contfax => $booksellers[0]->{'contfax'},
-                    contemail => $booksellers[0]->{'contemail'},
-                    contnotes => $booksellers[0]->{'contnotes'},
-                    notes => $booksellers[0]->{'notes'},
-                    active => $booksellers[0]->{'active'},
-                    specialty => $booksellers[0]->{'specialty'},
-                    gstreg => $booksellers[0]->{'gstreg'},
-                    listincgst => $booksellers[0]->{'listincgst'},
-                    invoiceincgst => $booksellers[0]->{'invoiceincgst'},
-                    discount => $booksellers[0]->{'discount'},
-                    invoiceprice=>$booksellers[0]->{'invoiceprice'},
-                    listprice=>$booksellers[0]->{'listprice'},
-                    GST => C4::Context->preference("gist"),
-                    basketcount =>$booksellers[0]->{'basketcount'},
-                    );
-} elsif ($op eq 'delete') {
-    &DelBookseller($id);
-    print $query->redirect("/cgi-bin/koha/acqui/acqui-home.pl");
-    exit;
+if ($op eq "display") {
+	$template->param(
+		id            => $id,
+		name          => $booksellers[0]->{'name'},
+		postal        => $booksellers[0]->{'postal'},
+		address1      => $booksellers[0]->{'address1'},
+		address2      => $booksellers[0]->{'address2'},
+		address3      => $booksellers[0]->{'address3'},
+		address4      => $booksellers[0]->{'address4'},
+		phone         => $booksellers[0]->{'phone'},
+		fax           => $booksellers[0]->{'fax'},
+		url           => $booksellers[0]->{'url'},
+		contact       => $booksellers[0]->{'contact'},
+		contpos       => $booksellers[0]->{'contpos'},
+		contphone     => $booksellers[0]->{'contphone'},
+		contaltphone  => $booksellers[0]->{'contaltphone'},
+		contfax       => $booksellers[0]->{'contfax'},
+		contemail     => $booksellers[0]->{'contemail'},
+		contnotes     => $booksellers[0]->{'contnotes'},
+		notes         => $booksellers[0]->{'notes'},
+		active        => $booksellers[0]->{'active'},
+		specialty     => $booksellers[0]->{'specialty'},
+		gstreg        => $booksellers[0]->{'gstreg'},
+		listincgst    => $booksellers[0]->{'listincgst'},
+		invoiceincgst => $booksellers[0]->{'invoiceincgst'},
+		gstrate                 => $booksellers[0]->{'gstrate'},
+		discount      => $booksellers[0]->{'discount'},
+		invoiceprice  => $booksellers[0]->{'invoiceprice'},
+		listprice     => $booksellers[0]->{'listprice'},
+		GST           => $GST,
+		basketcount   => $booksellers[0]->{'basketcount'},
+	);
+}
+elsif ($op eq 'delete') {
+  &DelBookseller($id);
+  print $query->redirect("/cgi-bin/koha/acqui/acqui-home.pl");
+  exit;
 } else {
     my @currencies = GetCurrencies();
     my $count = scalar @currencies;
@@ -119,34 +122,38 @@ if ($op eq "display"){
             push @loop_invoicecurrency, { currency => "<option value=\"$currencies[$i]->{'currency'}\">$currencies[$i]->{'currency'}</option>"};
         }
     }
-    $template->param(id => $id,
-                    name => $booksellers[0]->{'name'},
-                    postal =>$booksellers[0]->{'postal'},
-                    address1 => $booksellers[0]->{'address1'},
-                    address2 => $booksellers[0]->{'address2'},
-                    address3 => $booksellers[0]->{'address3'},
-                    address4 => $booksellers[0]->{'address4'},
-                    phone =>$booksellers[0]->{'phone'},
-                    fax => $booksellers[0]->{'fax'},
-                    url => $booksellers[0]->{'url'},
-                    contact => $booksellers[0]->{'contact'},
-                    contpos => $booksellers[0]->{'contpos'},
-                    contphone => $booksellers[0]->{'contphone'},
-                    contaltphone => $booksellers[0]->{'contaltphone'},
-                    contfax => $booksellers[0]->{'contfax'},
-                    contemail => $booksellers[0]->{'contemail'},
-                    contnotes => $booksellers[0]->{'contnotes'},
-                    notes => $booksellers[0]->{'notes'},
-                    active => $booksellers[0]->{'active'},
-                    specialty => $booksellers[0]->{'specialty'},
-                    gstreg => $booksellers[0]->{'gstreg'},
-                    listincgst => $booksellers[0]->{'listincgst'},
-                    invoiceincgst => $booksellers[0]->{'invoiceincgst'},
-                    discount => $booksellers[0]->{'discount'},
-                    loop_pricescurrency => \@loop_pricescurrency,
-                    loop_invoicecurrency => \@loop_invoicecurrency,
-                    GST => C4::Context->preference("gist"),
-                    enter=>1,
-                    );
+    my $GST = $booksellers[0]->{'gstrate'} || C4::Context->preference("gist");
+    $GST *= 100;
+	$template->param(
+		id                   => $id,
+		name                 => $booksellers[0]->{'name'},
+		postal               => $booksellers[0]->{'postal'},
+		address1             => $booksellers[0]->{'address1'},
+		address2             => $booksellers[0]->{'address2'},
+		address3             => $booksellers[0]->{'address3'},
+		address4             => $booksellers[0]->{'address4'},
+		phone                => $booksellers[0]->{'phone'},
+		fax                  => $booksellers[0]->{'fax'},
+		url                  => $booksellers[0]->{'url'},
+		contact              => $booksellers[0]->{'contact'},
+		contpos              => $booksellers[0]->{'contpos'},
+		contphone            => $booksellers[0]->{'contphone'},
+		contaltphone         => $booksellers[0]->{'contaltphone'},
+		contfax              => $booksellers[0]->{'contfax'},
+		contemail            => $booksellers[0]->{'contemail'},
+		contnotes            => $booksellers[0]->{'contnotes'},
+		notes                => $booksellers[0]->{'notes'},
+		active               => $booksellers[0]->{'active'},
+		specialty            => $booksellers[0]->{'specialty'},
+		gstreg               => $booksellers[0]->{'gstreg'},
+		listincgst           => $booksellers[0]->{'listincgst'},
+		invoiceincgst        => $booksellers[0]->{'invoiceincgst'},
+		gstrate                 => $booksellers[0]->{'gstrate'},
+		discount             => $booksellers[0]->{'discount'},
+		loop_pricescurrency  => \@loop_pricescurrency,
+		loop_invoicecurrency => \@loop_invoicecurrency,
+		GST                  => $GST,
+		enter                => 1,
+	);
 }
 output_html_with_http_headers $query, $cookie, $template->output;

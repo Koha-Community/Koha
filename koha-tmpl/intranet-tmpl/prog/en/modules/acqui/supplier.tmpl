@@ -132,6 +132,7 @@ if (f.company.value == "") {
 				<!-- /TMPL_IF --></li><!-- /TMPL_IF -->
             <li><label for="discount">Discount</label>
                 <input type="text" size="3" id="discount" name="discount" value="<!-- TMPL_VAR NAME="discount" -->" /> %</li>
+            <li><label for="gstrate">GST rate</label><input type="text" name="gstrate" id="gstrate" size="5" value="<!-- TMPL_VAR name="GST" -->"/>%</li>
             <li><label for="notes">Notes</label>
                 <textarea cols="40" rows="4" id="notes" name="notes" ><!-- TMPL_VAR NAME="notes" --></textarea></li></ol>			
 			<!-- TMPL_UNLESS NAME="GST" -->
@@ -199,10 +200,11 @@ if (f.company.value == "") {
                     <!-- TMPL_IF name= "invoiceincgst" -->Yes<!--TMPL_ELSE-->No<!-- /TMPL_IF --></p><!-- /TMPL_IF -->
             <p><strong>Discount: </strong>
                 <!-- TMPL_VAR NAME="discount" --> %</p>
+            <p><strong>GST rate: </strong>
+                <!-- TMPL_VAR name="GST" -->%</p>
             <!-- TMPL_IF NAME="notes" --><p><strong>Notes: </strong>
                 <!-- TMPL_VAR NAME="notes" --></p><!-- /TMPL_IF -->
         </div>
-
 <!--/TMPL_IF-->
 
 </div>
