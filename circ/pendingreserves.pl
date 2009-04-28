@@ -143,11 +143,12 @@ my $strsth =
 	LEFT JOIN items ON items.biblionumber=reserves.biblionumber 
 	LEFT JOIN biblio ON reserves.biblionumber=biblio.biblionumber
 	LEFT JOIN branchtransfers ON items.itemnumber=branchtransfers.itemnumber
+	LEFT JOIN issues ON items.itemnumber=issues.itemnumber
  WHERE
 reserves.found IS NULL
  $sqldatewhere
 AND items.itemnumber NOT IN (SELECT itemnumber FROM branchtransfers where datearrived IS NULL)
-AND items.itemnumber NOT IN (SELECT itemnumber FROM issues)
+AND issues.itemnumber IS NULL
 AND reserves.priority <> 0 
 AND notforloan = 0 AND damaged = 0 AND itemlost = 0 AND wthdrawn = 0
 ";
