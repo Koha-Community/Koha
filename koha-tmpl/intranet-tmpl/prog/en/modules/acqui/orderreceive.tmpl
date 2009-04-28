@@ -1,13 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Acquisitions &rsaquo; Receipt summary for : <!-- TMPL_VAR NAME="name" --> <!-- TMPL_IF NAME="invoice" -->invoice, <!-- TMPL_VAR NAME="invoice" --><!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<script type="text/javascript" src="<!-- TMPL_VAR NAME='themelang' -->/js/additem.js">
-</script>
-<style type="text/css">
-a.cloneItemBlock { cursor: pointer; color: grey; font-size: 180%; padding:.5em;text-decoration:none;}
-a.deleteItemBlock { display:none; cursor: pointer; color: grey; font-size: 180%;padding:.5em;text-decoration:none; }
-fieldset.rows .itemblock fieldset.action { padding:.5em; }
-</style>
+<script type="text/javascript" src="<!-- TMPL_VAR NAME='themelang' -->/js/additem.js"> </script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -41,80 +35,85 @@ fieldset.rows .itemblock fieldset.action { padding:.5em; }
         <!-- TMPL_VAR NAME="seriestitle" --></li>
     </ol>
 	</fieldset>
-	<fieldset class="rows">
-	<legend>Item details:  (add to catalog)</legend>
-  <div id="outeritemblock">
-	<div class="itemblock">
-	<ol>
-	<li> <label for="volinf1">Volume/Copy (for serials): </label>
-        <input type="text" size="20" name="volinf" id="volinf1" /></li>
-    <li> <label for="barcode1">Item barcode: </label>
-        <input type="text" size="20" name="barcode" id="barcode1" value="<!-- TMPL_VAR NAME="barcode" -->" /></li>
-    <li> <label for="homebranch1">Home library: </label>
-            <select name="homebranch" id="homebranch1">            <!-- TMPL_LOOP name="branchloop" -->
-                <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
-                <!-- TMPL_ELSE -->
-                <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
-                <!-- /TMPL_IF -->
-            <!-- /TMPL_LOOP -->
-            </select></li>
-    <!-- TMPL_IF NAME="locationloop" -->
-		<li> <label for="location1">Shelf location: </label>
-            <select name="location" id="location1"><!-- TMPL_LOOP name="locationloop" -->
-                <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option>
-                <!-- TMPL_ELSE -->
-                <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="description" --></option>
-                <!-- /TMPL_IF -->
-            <!-- /TMPL_LOOP -->
-            </select></li>
-   <!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="itype" -->
-    <li> <label for="itemtype1">Item type: </label>
-            <select name="itemtype" id="itemtype1"><!-- TMPL_LOOP name="itemtypeloop" -->
-                <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option>
-                <!-- TMPL_ELSE -->
-                <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="description" --></option>
-                <!-- /TMPL_IF -->
-            <!-- /TMPL_LOOP -->
-            </select></li>
-   <!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="ccodeloop" -->
-    <li> <label for="ccode1">Collection: </label>
-            <select name="ccode" id="ccode1">            <!-- TMPL_LOOP name="ccodeloop" -->
-                <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option>
-                <!-- TMPL_ELSE -->
-                <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="description" --></option>
-                <!-- /TMPL_IF -->
-            <!-- /TMPL_LOOP -->
-            </select></li>
-   <!-- /TMPL_IF -->
-   </ol>
-<fieldset class="action"><a href="#" class="cloneItemBlock">[+]</a>
- <a href="#" class="deleteItemBlock">[-]</a></fieldset>
-    </div>
-	</div>
-	<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+    <!-- TMPL_IF name="items" -->
+    <fieldset class="rows">
+        <legend>Item</legend>
+
+        <!-- TMPL_LOOP NAME="items" -->
+        <div id="outeritemblock">
+        <div id="itemblock">
+            <ol><!-- TMPL_LOOP NAME="iteminformation" --><li>
+                <div class="subfield_line" style="<!-- TMPL_VAR NAME='hidden' -->;" id="subfield<!-- TMPL_VAR NAME='serialid' --><!-- TMPL_VAR NAME='countitems' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
+                                
+                    <label><!-- TMPL_VAR NAME="subfield" --> - <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR NAME="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></label>
+                    <!-- TMPL_VAR NAME="marc_value" -->
+                    <input type="hidden" name="itemid" value="1" />
+                    <input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->" />
+                    <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->" />
+                    <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" />
+                    <input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->" />
+                    <!-- TMPL_IF NAME="ITEM_SUBFIELDS_ARE_NOT_REPEATABLE" -->
+                        <span class="buttonPlus" onclick="CloneSubfield('subfield<!-- TMPL_VAR NAME='serialid' --><!-- TMPL_VAR NAME='countitems' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->')">+</span>
+                    <!-- /TMPL_IF -->
+            
+                </div></li>
+            <!-- /TMPL_LOOP-->
+            </ol>
+            <a style="cursor: pointer; color: grey; font-size: 180%;" onclick="cloneItemBlock('itemblock<!-- TMPL_VAR name="itemBlockIndex" -->')">+</a>
+            <a style="display:none; cursor: pointer; color: grey; font-size: 180%;" onclick="deleteItemBlock('itemblock<!-- TMPL_VAR name="itemBlockIndex" -->')">-</a>
+        </div><!-- /iteminformation -->
+        </div>
+        
+        <input type="hidden" name="moditem" value="" /> 
+        <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="itemtagfield" -->" />
+        <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="itemtagsubfield" -->" />
+        <input type="hidden" name="serial" value="<!-- TMPL_VAR NAME="serialid" -->" />
+        <input type="hidden" name="bibnum" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+        <input type="hidden" name="itemid" value="1" />
+        <input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+        <!--/TMPL_LOOP--> <!-- /items -->
+    </fieldset>
+    <!-- /TMPL_IF --> <!-- items -->
+    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
     <input type="hidden" name="ordnum" value="<!-- TMPL_VAR NAME="ordernumber" -->" />
     <input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" />
     <input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->" />
     <input type="hidden" name="datereceived" value="<!-- TMPL_VAR NAME="datereceived_iso" -->" />
     <input type="hidden" name="freight" value="<!-- TMPL_VAR NAME="freight" -->" />
     <input type="hidden" name="gst" value="<!-- TMPL_VAR NAME="gst" -->" />
-    </fieldset>
 	</div>
 	<div class="yui-u">
     <fieldset class="rows">
     <legend>Accounting details</legend>
        <ol>
-       <li><span class="label">Date received: </span> <!-- TMPL_VAR NAME="datereceived" --></li>
-       <li><span class="label">Quantity ordered: </span> <!-- TMPL_VAR NAME="quantity" --></li>
+       <li><label for="datereceived">Date received: </label><span class="label"> <!-- TMPL_VAR NAME="datereceived" --> </span></li>
+       <li><label for="quantity">Quantity to receive: </label><span class="label">
+           <!-- TMPL_IF name="edit" -->
+               <input type="text" name="quantity" value="<!-- TMPL_VAR NAME="quantity" -->" />
+           <!-- TMPL_ELSE -->
+               <input type="text" READONLY name="quantity" value="<!-- TMPL_VAR NAME="quantity" -->" />
+           <!-- /TMPL_IF -->
+           </span></li>
         <li><label for="quantityrec">Quantity received: </label>
             <!-- TMPL_IF NAME="quantityreceived" -->
-                <input id="quantityrec" readonly="readonly" type="text" size="20" name="quantityrec" value="<!-- TMPL_VAR NAME="quantityreceivedplus1" -->" />
-                <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="<!-- TMPL_VAR NAME="quantityreceived" -->" />
+                <!-- TMPL_IF name="edit" -->
+                    <input id="quantityrec" type="text" size="20" name="quantityrec" value="<!-- TMPL_VAR NAME="quantityreceived" -->" />
+                    <input id="origquantityrec" READONLY type="hidden" name="origquantityrec" value="<!-- TMPL_VAR NAME="quantityreceived" -->" />
+                <!-- TMPL_ELSE -->
+                <!-- TMPL_IF name="items" -->
+                    <input id="quantityrec" READONLY type="text" size="20" name="quantityrec" value="<!-- TMPL_VAR NAME="quantityreceivedplus1" -->" />
+                <!-- TMPL_ELSE -->
+                    <input id="quantityrec" type="text" size="20" name="quantityrec" value="<!-- TMPL_VAR NAME="quantityreceivedplus1" -->" />
+                <!-- /TMPL_IF -->
+                <input id="origquantityrec" READONLY type="hidden" name="origquantityrec" value="<!-- TMPL_VAR NAME="quantityreceived" -->" />
+                <!-- /TMPL_IF -->
             <!-- TMPL_ELSE -->
-                <input id="quantityrec" readonly="readonly" type="text" size="20" name="quantityrec" value="1" />
-                <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="0" />
+                <!-- TMPL_IF name="items" -->
+                    <input id="quantityrec" READONLY type="text" size="20" name="quantityrec" value="1" />
+                <!-- TMPL_ELSE -->
+                    <input id="quantityrec" type="text" size="20" name="quantityrec" value="1" />
+                <!-- /TMPL_IF -->
+                <input id="origquantityrec" READONLY type="hidden" name="origquantityrec" value="0" />
             <!-- /TMPL_IF -->
 		<!-- 	<input type="text" size="20" name="quantityrec" id="quantityrec" value="<!-- TMPL_VAR NAME="quantityreceived" -->" /> --></li>
         <li><label for="rrp">Replacement cost: </label><input type="text" size="20" name="rrp" id="rrp" value="<!-- TMPL_VAR NAME="rrp" -->" /></li>
@@ -125,15 +124,14 @@ fieldset.rows .itemblock fieldset.action { padding:.5em; }
         <!-- TMPL_ELSE -->
             <input type="text" size="20" name="cost" id="cost" value="<!-- TMPL_VAR name="ecost" -->" />
         <!-- /TMPL_IF --></li></ol>
+        <label for="note">Notes: </label><textarea name="note" width="40" rows="8" ><!--TMPL_VAR name="notes" --></textarea>
         <input type="hidden" name="invoice" value="<!-- TMPL_VAR NAME="invoice" -->" />
     </fieldset>
 
 </div>
-</div><div class="yui-g"><fieldset class="action"><!-- TMPL_IF name="catview" -->
+</div><div class="yui-g"><fieldset class="action">
         <input type="button"  value="Save" onclick="javascript:if(check_additem()) { this.form.submit(); } else { alert( _('Duplicate barcodes detected.  Please correct the errors and resubmit.') ); return false };" /> <a class="cancel" href="/cgi-bin/koha/acqui/parcel.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->">Cancel</a>
-    <!-- TMPL_ELSE -->
-        <a href="/cgi-bin/koha/acqui/neworderempty.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&amp;id=<!-- TMPL_VAR NAME="booksellerid" -->">Edit</a>
-    <!-- /TMPL_IF --></fieldset></div>    </form>
+</fieldset></div>    </form>
 <!-- TMPL_ELSE -->
 <div id="acqui_acquire_orderlist">
     <table>
