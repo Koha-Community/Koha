@@ -1,9 +1,10 @@
 #!/usr/bin/perl
 
-#script to receive orders
-#written by chris@katipo.co.nz 24/2/2000
+#script to recieve orders
+
 
 # Copyright 2000-2002 Katipo Communications
+# Copyright 2008-2009 BibLibre SARL
 #
 # This file is part of Koha.
 #
@@ -61,44 +62,40 @@ use C4::Dates qw/format_date format_date_in_iso/;
 
 use strict;
 
-my $input      = new CGI;
-my $supplierid = $input->param('supplierid');
-my $bookseller = GetBookSellerFromId($supplierid);
+my $input=new CGI;
+my $supplierid=$input->param('supplierid');
+my $bookseller=GetBookSellerFromId($supplierid);
 
-my $invoice = $input->param('invoice') || '';
-my $freight = $input->param('freight');
-my $gst     = $input->param('gst');
-my $datereceived =
-  ($input->param('op') eq 'new')
-  ? C4::Dates->new($input->param('datereceived'))
-  : C4::Dates->new($input->param('datereceived'), 'iso');
+my $invoice=$input->param('invoice') || '';
+my $freight=$input->param('freight');
+my $gst= $input->param('gst') || $bookseller->{gstrate} || C4::Context->preference("gist") || 0;
+my $datereceived =  ($input->param('op') eq 'new') ? C4::Dates->new($input->param('datereceived')) 
+					:  C4::Dates->new($input->param('datereceived'), 'iso')   ;
 $datereceived = C4::Dates->new() unless $datereceived;
 my $code            = $input->param('code');
 my @rcv_err         = $input->param('error');
 my @rcv_err_barcode = $input->param('error_bc');
 
-my ($template, $loggedinuser, $cookie) = get_template_and_user(
-    {   template_name   => "acqui/parcel.tmpl",
-        query           => $input,
-        type            => "intranet",
-        authnotrequired => 0,
-        flagsrequired   => { acquisition => 1 },
-        debug           => 1,
-    }
-);
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "acqui/parcel.tmpl",
+                 query => $input,
+				 type => "intranet",
+                 authnotrequired => 0,
+                 flagsrequired => {acquisition => 'order_receive'},
+                 debug => 1,
+});
 
-# If receiving error, report the error (coming from finishreceive.pl).
-if (scalar(@rcv_err)) {
-    my $cnt = 0;
-    my $error_loop;
-    for my $err (@rcv_err) {
-        push @$error_loop, { "error_$err" => 1, barcode => $rcv_err_barcode[$cnt] };
-        $cnt++;
-    }
-    $template->param(
-        receive_error => 1,
-        error_loop    => $error_loop,
-    );
+# If receiving error, report the error (coming from finishrecieve.pl(sic)).
+if( scalar(@rcv_err) ) {
+	my $cnt=0;
+	my $error_loop;
+	for my $err (@rcv_err) {
+		push @$error_loop, { "error_$err" => 1 , barcode => $rcv_err_barcode[$cnt] };
+		$cnt++;
+	}
+	$template->param( receive_error => 1 ,
+						error_loop => $error_loop,
+					);
 }
 
 my $cfstr         = "%.2f";                                                           # currency format string -- could get this from currency table.
@@ -146,20 +143,28 @@ my $ordergrandtotal;
 my @loop_orders = ();
 for (my $i = 0 ; $i < $countpendings ; $i++) {
     my %line;
-    %line = %{ $pendingorders->[$i] };
-    $line{quantity}         += 0;
-    $line{quantityreceived} += 0;
-    $line{unitprice}        += 0;
-    $totalPunitprice        += $line{unitprice};
-    $totalPquantity         += $line{quantity};
-    $totalPqtyrcvd          += $line{quantityreceived};
-    $totalPecost            += $line{ecost};
-    $line{ecost}      = sprintf("%.2f", $line{ecost});
-    $line{ordertotal} = sprintf("%.2f", $line{ecost} * $line{quantity});
-    $line{unitprice}  = sprintf("%.2f", $line{unitprice});
-    $line{invoice}    = $invoice;
-    $line{gst}        = $gst;
-    $line{total}      = $total;
+    if ($toggle==0){
+        $line{color}='#EEEEEE';
+        $toggle=1;
+    } else {
+            $line{color}='white';
+            $toggle=0;
+    }
+    %line = %{$pendingorders->[$i]};
+	$line{quantity}+=0;
+	$line{quantrem} = $line{quantity} - $line{quantityreceived};
+	$line{quantityreceived}+=0;
+	$line{unitprice}+=0;
+    $totalPunitprice += $line{unitprice};
+    $totalPquantity +=$line{quantity};
+    $totalPqtyrcvd +=$line{quantityreceived};
+    $totalPecost += $line{ecost};
+    $line{ecost} = sprintf("%.2f",$line{ecost});
+    $line{ordertotal} = sprintf("%.2f",$line{ecost}*$line{quantity});
+    $line{unitprice} = sprintf("%.2f",$line{unitprice});
+    $line{invoice} = $invoice;
+    $line{gst} = $gst;
+    $line{total} = $total;
     $line{supplierid} = $supplierid;
     $ordergrandtotal += $line{ecost} * $line{quantity};
     push @loop_orders, \%line;

@@ -47,10 +47,10 @@
     <form action="/cgi-bin/koha/acqui/parcel.pl" method="get" name="orderform">
     <table>
         <tr>
-            <th>Quantity</th>
+            <th>Quantity/Edit order</th>
             <th>Basket/Order</th>
             <th>Summary</th>
-            <th>View Record</th>
+            <th>View Record/Edit shipment</th>
             <th>Est cost</th>
             <th>Actual cost</th>
             <th>TOTAL</th>
@@ -61,14 +61,14 @@
         <!-- TMPL_ELSE -->
             <tr>
         <!-- /TMPL_UNLESS -->
-                <td><!-- TMPL_VAR NAME="quantityreceived" --></td>
+                <td><a href="neworderempty.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&booksellerid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="quantityreceived" --></a></td>
                 <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->"><!-- TMPL_VAR NAME="basketno" --></a>&nbsp; / &nbsp;<!-- TMPL_VAR NAME="ordernumber" --></td>
                 <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a>
                 <!-- TMPL_IF NAME="isbn" --><br />ISBN: <!-- TMPL_VAR NAME="isbn" --><!--/TMPL_IF-->
                 <!-- TMPL_IF NAME="author" --><br />author :<!-- TMPL_VAR NAME="author" --><!--/TMPL_IF-->
                 <!-- TMPL_IF NAME="publishercode" --><br />Publisher :<!-- TMPL_VAR NAME="publishercode" --><!--/TMPL_IF-->
                 </td>
-                <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=<!-- TMPL_VAR NAME="biblionumber" -->" title="MARC" rel="gb_page_center[600,500]">View MARC</a></td>
+                <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=<!-- TMPL_VAR NAME="biblionumber" -->" title="MARC" rel="gb_page_center[600,500]">View MARC</a>/<a href="orderreceive.pl?op=edit&ordernumber=<!-- TMPL_VAR name="ordernumber" -->&biblionumber=<!-- TMPL_VAR name="biblionumber" -->&supplierid=<!-- TMPL_VAR name="supplierid" -->&invoice=<!-- TMPL_VAR NAME="invoice" -->&datereceived=<!-- TMPL_VAR name="datereceived" -->" >Edit shipment</a></td>
                 <td><!-- TMPL_VAR NAME="ecost" --></td>
                 <td><!-- TMPL_VAR NAME="unitprice" --></td>
                 <td><!-- TMPL_VAR NAME="total" --></td>
@@ -145,7 +145,7 @@
                 <td> <!-- TMPL_VAR NAME="quantity" --></td>
                 <td><!-- TMPL_VAR NAME="ecost" --></td>
                 <td><!-- TMPL_VAR NAME="ordertotal" --></td>
-				<td><a href="orderreceive.pl?receive=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;datereceived=<!-- TMPL_VAR NAME="invoicedatereceived" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->">Receive order</a></td>
+				<td><a href="orderreceive.pl?ordernumber=<!-- TMPL_VAR NAME="ordernumber" -->&amp;datereceived=<!-- TMPL_VAR NAME="invoicedatereceived" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->">Receive order</a></td>
             </tr>
         <!-- /TMPL_LOOP -->
             <tr><td colspan="2">&nbsp;</td>
