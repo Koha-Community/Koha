@@ -23,7 +23,6 @@ use warnings;
 use CGI;
 use C4::Auth;
 use C4::Output;
-use C4::Bookfund;
 
 my $query = new CGI;
 
@@ -45,7 +44,7 @@ my $sthtemp =
     "Select flags, branchcode from borrowers where borrowernumber = ?");
 $sthtemp->execute($loggedinuser);
 my ( $flags, $homebranch ) = $sthtemp->fetchrow;
-my @results = GetBookFunds($homebranch);
+my @results = GetBookFunds(1, $homebranch);
 my $count   = scalar(@results);
 
 my $classlist   = '';
