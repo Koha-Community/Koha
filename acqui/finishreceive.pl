@@ -21,7 +21,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-# use warnings; # FIXME
+use warnings;
 use CGI;
 use C4::Auth;
 use C4::Output;
@@ -30,73 +30,88 @@ use C4::Acquisition;
 use C4::Biblio;
 use C4::Items;
 use C4::Search;
+use List::MoreUtils qw/any/;
 
-my $input = new CGI;
-my $flagsrequired = { acquisition => 1 };
+my $input=new CGI;
+my $flagsrequired = {acquisition => 'order_receive'};
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired, 'intranet');
-my $user             = $input->remote_user;     # FIXME: surely outmoded now
-my $biblionumber     = $input->param('biblionumber');
-my $biblioitemnumber = $input->param('biblioitemnumber');
-my $ordnum           = $input->param('ordnum');
-my $origquantityrec  = $input->param('origquantityrec');
-my $quantityrec      = $input->param('quantityrec');
-my $quantity         = $input->param('quantity');
-my $cost             = $input->param('cost');
-my $invoiceno        = $input->param('invoice');
-my $datereceived     = $input->param('datereceived');
-my $replacement      = $input->param('rrp');
-my $gst              = $input->param('gst');
-my $freight          = $input->param('freight');
-my $supplierid       = $input->param('supplierid');
-my @branch           = $input->param('homebranch');
-my @barcode          = $input->param('barcode');
-my @ccode            = $input->param('ccode');
-my @itemtype         = $input->param('itemtype');
-my @location         = $input->param('location');
-my @enumchron        = $input->param('volinf');
-my $cnt              = 0;
+my $user=$input->remote_user;
+my $biblionumber = $input->param('biblionumber');
+my $biblioitemnumber=$input->param('biblioitemnumber');
+my $ordnum=$input->param('ordnum');
+my $origquantityrec=$input->param('origquantityrec');
+my $quantityrec=$input->param('quantityrec');
+my $quantity=$input->param('quantity');
+my $unitprice=$input->param('cost');
+my $invoiceno=$input->param('invoice');
+my $datereceived=$input->param('datereceived');
+my $replacement=$input->param('rrp');
+my $gst=$input->param('gst');
+my $freight=$input->param('freight');
+my $supplierid = $input->param('supplierid');
+my $cnt=0;
 my $error_url_str;
+my $ecost = $input->param('ecost');
+my $note = $input->param("note");
 
-if ($quantityrec > $origquantityrec) {
-    foreach my $bc (@barcode) {
-        if ($bc) {
-            my $item_hash = {
-                "items.replacementprice" => $replacement,
-                "items.price"            => $cost,
-                "items.booksellerid"     => $supplierid,
-                "items.homebranch"       => $branch[$cnt],
-                "items.holdingbranch"    => $branch[$cnt],
-                "items.barcode"          => $barcode[$cnt],
-                "items.ccode"            => $ccode[$cnt],
-                "items.itype"            => $itemtype[$cnt],
-                "items.location"         => $location[$cnt],
-                "items.enumchron"        => $enumchron[$cnt],    # FIXME : No integration here with serials module.
-                "items.loan"             => 0,
-            };
-            $item_hash->{'items.cn_source'} = C4::Context->preference('DefaultClassificationSource') if (C4::Context->preference('DefaultClassificationSource'));
+my %tplorder = ( 'quantity'                  =>     $input->param('quantity') || '',
+                             'quantityreceived'   =>     $input->param('quantityrec') || '',
+                             'notes'                      =>      $input->param("note") || '',
+                             'rrp'                          =>      $input->param('rrp') || '',
+                             'ecost'                      =>      $input->param('ecost') || '',
+                             'unitprice'                =>      $input->param('cost') || '',
+                     );
+my $order = GetOrder($ordnum);
+if ( any { $order->{$_} ne $tplorder{$_} } qw(quantity quantityreceived notes rrp ecost unitprice) ) {
+    $order->{quantity} = $tplorder{quantity} if $tplorder{quantity};
+    $order->{quantityreceived} = $tplorder{quantityreceived} if $tplorder{quantityreceived};
+    $order->{notes} = $tplorder{notes} if $tplorder{notes};
+    $order->{rrp} = $tplorder{rrp} if $tplorder{rrp};
+    $order->{ecost} = $tplorder{ecost} if $tplorder{ecost};
+    $order->{unitprice} = $tplorder{unitprice} if $tplorder{unitprice};
+    ModOrder($order);
+}
 
-            # FIXME : cn_sort is populated by Items::_set_derived_columns_for_add , which is never called with AddItemFromMarc .  Bug 2403
-            my $itemRecord = TransformKohaToMarc($item_hash);
-            $cnt++;
-            $item_hash = TransformMarcToKoha(undef, $itemRecord, '', 'items');
-
-            # FIXME: possible race condition.  duplicate barcode check should happen in AddItem, but for now we have to do it here.
-            my %err = CheckItemPreSave($item_hash);
-            if (%err) {
-                for my $err_cnd (keys %err) {
-                    $error_url_str .= "&error=" . $err_cnd . "&error_param=" . $err{$err_cnd};
-                }
-                $quantityrec--;
-            } else {
-                AddItemFromMarc($itemRecord, $biblionumber);
+#need old recievedate if we update the order, parcel.pl only shows the right parcel this way FIXME
+if ($quantityrec > $origquantityrec ) {
+    # now, add items if applicable
+    if (C4::Context->preference('AcqCreateItem') eq 'receiving') {
+        my @tags         = $input->param('tag');
+        my @subfields    = $input->param('subfield');
+        my @field_values = $input->param('field_value');
+        my @serials      = $input->param('serial');
+        my @itemid       = $input->param('itemid');
+        my @ind_tag      = $input->param('ind_tag');
+        my @indicator    = $input->param('indicator');
+        #Rebuilding ALL the data for items into a hash
+        # parting them on $itemid.
+        my %itemhash;
+        my $countdistinct;
+        my $range=scalar(@itemid);
+        for (my $i=0; $i<$range; $i++){
+            unless ($itemhash{$itemid[$i]}){
+            $countdistinct++;
             }
+            push @{$itemhash{$itemid[$i]}->{'tags'}},$tags[$i];
+            push @{$itemhash{$itemid[$i]}->{'subfields'}},$subfields[$i];
+            push @{$itemhash{$itemid[$i]}->{'field_values'}},$field_values[$i];
+            push @{$itemhash{$itemid[$i]}->{'ind_tag'}},$ind_tag[$i];
+            push @{$itemhash{$itemid[$i]}->{'indicator'}},$indicator[$i];
+        }
+        foreach my $item (keys %itemhash){
+            my $xml = TransformHtmlToXml( $itemhash{$item}->{'tags'},
+                                    $itemhash{$item}->{'subfields'},
+                                    $itemhash{$item}->{'field_values'},
+                                    $itemhash{$item}->{'ind_tag'},
+                                    $itemhash{$item}->{'indicator'});
+            my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
+            my ($biblionumber,$bibitemnum,$itemnumber) = AddItemFromMarc($record,$biblionumber);
         }
     }
-
+    
     # save the quantity received.
-    if ($quantityrec > 0) {
-        $datereceived = ModReceiveOrder($biblionumber, $ordnum, $quantityrec, $user, $cost, $invoiceno, $freight, $replacement, undef, $datereceived);
-    }
+	if( $quantityrec > 0 ) {
+    	$datereceived = ModReceiveOrder($biblionumber,$ordnum, $quantityrec ,$user,$unitprice,$invoiceno,$freight,$replacement,undef,$datereceived);
+	}
 }
-print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoice=$invoiceno&supplierid=$supplierid&freight=$freight&gst=$gst&datereceived=$datereceived$error_url_str");
-
+    print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoice=$invoiceno&supplierid=$supplierid&freight=$freight&gst=$gst&datereceived=$datereceived$error_url_str");
