@@ -10,7 +10,7 @@
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> <!-- TMPL_IF NAME="do_it" -->&rsaquo; <a href="/cgi-bin/koha/reports/acquisitions_stats.pl">Acquisitions Statistics</a> &rsaquo; Results<!-- TMPL_ELSE --> &rsaquo; Acquisitions Statistics <!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
-   
+
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
@@ -24,7 +24,7 @@
 					<p><!-- TMPL_VAR NAME="crit"-->: <!--  TMPL_VAR NAME="filter" --></p>
 			<!-- /TMPL_LOOP -->
 		<!-- /TMPL_IF-->
-		
+
 		<table>
 			<tr >
 				<th><!-- TMPL_VAR name="line" --> / <!-- TMPL_VAR name="column" --></th>
@@ -97,7 +97,7 @@
 											return false;
 										}
 									}
-					
+
 									Calendar.setup(
 										{
 											inputField : "from",
@@ -128,7 +128,7 @@
 										return false;
 									}
 								}
-		
+
 								Calendar.setup(
 									{
 										inputField : "to",
@@ -142,7 +142,7 @@
 							</script>
 				</td>
 			</tr>
-			<tr class="hilighted"> 
+			<tr class="hilighted">
 				<td>&nbsp;</td>
 				<td colspan="2">group by <select name="PlacedOnDisplay">
 					<option value="">None</option>
@@ -150,7 +150,7 @@
 					<option value ="2">Month</option>
 					<option value ="3">Year</option>
 					</select>
-					
+
 				</td>
 				<td>&nbsp;</td>
 			</tr>
@@ -177,7 +177,7 @@
 											return false;
 										}
 									}
-					
+
 									Calendar.setup(
 										{
 											inputField : "fromRO",
@@ -208,7 +208,7 @@
 										return false;
 									}
 								}
-		
+
 								Calendar.setup(
 									{
 										inputField : "toRO",
@@ -222,7 +222,7 @@
 								</script>
 				</td>
 			</tr>
-			<tr> 
+			<tr>
 				<td>&nbsp;</td>
 				<td colspan="2">group by <select name="ReceivedOnDisplay">
 					<option value="">None</option>
@@ -230,7 +230,7 @@
 					<option value ="2">Month</option>
 					<option value ="3">Year</option>
 					</select>
-					
+
 				</td>
 				<td>&nbsp;</td>
 			</tr>
@@ -246,14 +246,16 @@
 				<td><input type="radio" name="Column" value="biblioitems.itemtype" /></td>
 				<td><!-- TMPL_VAR NAME="CGIItemType" --></td>
 			</tr>
+
 			<tr>
 				<td>Budget</td>
-				<td><input type="radio" name="Line" value="aqorderbreakdown.bookfundid" /></td>
-				<td><input type="radio" name="Column" value="aqorderbreakdown.bookfundid" /></td>
+				<td><input type="radio" name="Line" value="aqbudgets.budget_code" /></td>
+				<td><input type="radio" name="Column" value="aqbudgets.budget_code" /></td>
 				<td><!-- TMPL_VAR NAME="CGIBudget" --></td>
 			</tr>
+
 			<!-- TMPL_IF Name="hassort1" -->
-				<tr class="hilighted"> 
+				<tr class="hilighted">
 					<td>Sort1</td>
 					<td><input type="radio" name="Line" value="aqorders.sort1" /></td>
 					<td><input type="radio" name="Column" value="aqorders.sort1" /></td>
@@ -261,7 +263,7 @@
 				</tr>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF Name="hassort2" -->
-				<!-- TMPL_IF Name="HglghtSort2"--><tr class="hilighted"> <!-- TMPL_ELSE --><tr><!--/TMPL_IF --> 
+				<!-- TMPL_IF Name="HglghtSort2"--><tr class="hilighted"> <!-- TMPL_ELSE --><tr><!--/TMPL_IF -->
 					<td>Sort2</td>
 					<td><input type="radio" name="Line" value="aqorders.sort2" /></td>
 					<td><input type="radio" name="Column" value="aqorders.sort2" /></td>
@@ -271,15 +273,15 @@
 		</tbody>
 	</table><br />
 	</fieldset>
-	
+
 <fieldset class="rows">		<legend> Cell value </legend>
 			<ol><li><label for="cellvalue1">Count items</label><input type="radio" name="Cellvalue" id="cellvalue1" value="1" checked="checked" /> </li>
 			<li><label for="cellvalue2">Amount</label><input type="radio" name="Cellvalue" id="cellvalue2" value="2" /> </li></ol></fieldset>
-	
+
 	<fieldset class="rows">
 	<legend>Output</legend>
 <ol><li><label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> </li>
-<li><label for="outputfile">To a file:</label> 		<input type="radio" name="output" value="file" id="outputfile" /> <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" /> <label class="inline" for="MIME">Into an application  
+<li><label for="outputfile">To a file:</label> 		<input type="radio" name="output" value="file" id="outputfile" /> <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" /> <label class="inline" for="MIME">Into an application
 		</label><!-- TMPL_VAR NAME="CGIextChoice" -->
 		<!-- TMPL_VAR NAME="CGIsepChoice" --></li></ol>
 	</fieldset>
