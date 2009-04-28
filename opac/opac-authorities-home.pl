@@ -19,6 +19,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
 
 use CGI;
 use C4::Auth;
@@ -30,8 +31,8 @@ use C4::AuthoritiesMarc;
 use C4::Koha;    # XXX subfield_is_koha_internal_p
 
 my $query        = new CGI;
-my $op           = $query->param('op');
-my $authtypecode = $query->param('authtypecode');
+my $op           = $query->param('op') || '';
+my $authtypecode = $query->param('authtypecode') || '';
 my $dbh          = C4::Context->dbh;
 
 my $startfrom = $query->param('startfrom');
@@ -89,11 +90,11 @@ if ( $op eq "do_search" ) {
     my @field_data = ();
 
     foreach my $letter (qw/a b c/){
-        push @field_data, { term => "marclist$letter" , val => $query->param("marclist$letter")};
-        push @field_data, { term => "and_or$letter" , val => $query->param("and_or$letter")};
-        push @field_data, { term => "excluding$letter" , val => $query->param("excluding$letter")};
-        push @field_data, { term => "operator$letter" , val => $query->param("operator$letter")};
-        push @field_data, { term => "value$letter" , val => $query->param("value$letter")};
+        push @field_data, { term => "marclist$letter" , val => $query->param("marclist$letter") || ''};
+        push @field_data, { term => "and_or$letter" , val => $query->param("and_or$letter") || ''};
+        push @field_data, { term => "excluding$letter" , val => $query->param("excluding$letter") || ''};
+        push @field_data, { term => "operator$letter" , val => $query->param("operator$letter") || ''};
+        push @field_data, { term => "value$letter" , val => $query->param("value$letter") || ''};
     }
 
     my @numbers = ();
