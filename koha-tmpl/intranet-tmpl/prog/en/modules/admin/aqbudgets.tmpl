@@ -1,0 +1,360 @@
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="calendar.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR NAME='themelang' -->/js/acq.js"></script>
+
+<!-- TMPL_IF name="add_form" -->
+<script type="text/javascript">
+//<![CDATA[
+	//
+        var actTotal ="";
+
+	function ownerRemove(f) {
+        document.getElementById('budget_owner_name').innerHTML = '';
+    }
+
+	function Check(f) {
+		var ok=1;
+		var _alertString="";
+		var alertString2;
+
+        // var actTotal ="";
+
+	    if (!(isNotNull(f.budget_code,1))) {
+			_alertString += _("- Budget code missing\n");
+		}
+
+	    if (!(isNotNull(f.budget_name,1))) {
+			_alertString += _("- Budget name missing\n");
+		}
+
+		if( ! (isNum(f.budget_amount,0))     && ! (isNum(f.budget_amount_sublevel,0)  ) )  {
+			_alertString += _("- Budget base-level and sub-level amount missing or invalid\n");
+		}
+
+        var budgetId;
+        if   (typeof(f.budget_id ) != "undefined")  {
+            budgetId = f.budget_id.value
+        }
+
+        var newBudgetParent;
+
+//  hack to test if selected parent_id in scrolling-list...
+//  if value == 'undef' its got a selected_parent :/
+        var chkAdd   =  f.budget_parent_id.value ;
+        if  (     typeof(chkAdd ) != "undefined") {
+            newBudgetParent  =  f.budget_parent_id.value
+        } else {
+            newBudgetParent  =  f.budget_parent_id.item(0).value
+        }
+
+        if   (budgetId  > 0)  {  ; //its a mod ...
+            // if parent eq curent-budget, fail...
+            if ( newBudgetParent  ==  budgetId     ) {
+    			    _alertString += _("- Budget parent is current budget\n");
+            }
+
+            else if (newBudgetParent) {
+                var result = checkBudgetParent(  budgetId , newBudgetParent   );
+                if (result) {
+    			    _alertString += result;
+                }
+            }
+        }
+
+         // else do lookup
+        var budgetTotal = Math.abs(f.budget_amount.value)  + Math.abs(f.budget_amount_sublevel.value);
+        var result =   budgetExceedsParent  (budgetTotal, budgetId, newBudgetParent, f.budget_period_id.value)
+        if (result) {
+            _alertString += result;
+        }
+
+		if (_alertString.length==0) {
+			document.Aform.submit();
+		} else {
+			alertString2 = _("Form not submitted because of the following problem(s)\n");
+			alertString2 += "------------------------------------------------------------------------------------\n\n";
+			alertString2 += _alertString;
+			alert(alertString2);
+		}
+	}
+//]]>
+</script>
+<!-- /TMPL_IF -->
+
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="budgets-admin-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; 
+    <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="else" -->Budgets<!-- /TMPL_IF --><!-- TMPL_IF name="add_form" -->
+    <a href="/cgi-bin/koha/admin/aqbudgets.pl">Budgets</a> &rsaquo; <!-- TMPL_IF NAME="budget_id" -->Modify<!-- TMPL_ELSE -->Add<!-- /TMPL_IF --> Budget<!-- /TMPL_IF -->  <!-- TMPL_IF name="delete_confirm" -->
+    <a href="/cgi-bin/koha/admin/aqbudgets.pl">Budgets</a> &rsaquo; Delete Budget?<!-- /TMPL_IF --></div>
+
+<div id="doc3" class="yui-t2">
+<div id="bd">
+<div id="yui-main">
+<div class="yui-b">
+
+<!-- TMPL_INCLUDE NAME="budgets-admin.inc" -->
+<!-- TMPL_IF name="else" -->
+
+<h1>Budgets for '<!-- TMPL_VAR name="budget_period_description" -->'</h1>
+<input type="hidden" name"budget_period_id" value="<!-- TMPL_VAR name=    'budget_period_id' -->" />
+<form action="/cgi-bin/koha/admin/aqbudgets.pl" method="post">
+    <fieldset>
+    <legend>Budget options</legend>
+    <li><label for="budget_period_dropbox">Select Budget Period:</label>
+        <!-- TMPL_VAR name="budget_period_dropbox" -->
+        <input type="hidden" value="<!-- TMPL_VAR name='budget_period_id' -->" />
+    </li>
+    <li>
+        <label for="budget_branchcode_dropbox">Limit to Branch:</label>
+        <select name="budget_branchcode"  >
+            <option value=""></option>
+            <!-- TMPL_LOOP name="branchloop" -->
+            <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+            <!-- /TMPL_LOOP -->
+        </select>
+    
+        <input type="hidden" value="<!-- TMPL_VAR name='budget_period_id' -->" />
+    <li>
+        <!-- TMPL_IF NAME="show_mine" -->
+            <input type="checkbox" id="show_mine"  name="show_mine" value="1" checked="checked" />
+        <!-- TMPL_ELSE -->  
+            <input type="checkbox" id="show_mine"  name="show_mine" value="1"  />
+        <!-- /TMPL_IF -->  
+        <label for="show_mine">Show my budgets only</label>
+    </li>
+    <input type="hidden" name="show" value="1"  -->
+    <input type="submit" value="Select" />
+</fieldset>
+</form>
+
+<table>
+    <tr>
+    <th>Budget hierarchy</th>
+    <th>Budget name</th>
+    <th>Total<br>allocated</th>
+    <th>Base-level<br>allocated</th>
+    <th>Sub-level<br>allocated (unallocated)</th>
+    <th>Base-level<br>spent</th>
+    <th>Base-level<br>remaining</th>
+    <!--
+    <th>Sub-level<br>spent</th>
+    <th>Encum%</th>
+    <th>Expend%</th>
+    -->
+    <th>Owner</th>
+    <th>Branch</th>
+    <th>Note</th>
+    <th colspan="3">Actions</th>
+    </tr>
+
+<!-- TMPL_LOOP name="budget" -->
+    <!-- TMPL_IF NAME="toggle" -->
+    <tr class="highlight">
+    <!-- TMPL_ELSE -->
+    <tr>
+    <!-- /TMPL_IF -->
+
+    <td><!-- TMPL_VAR NAME="budget_code_indent" --></td>
+    <td><!-- TMPL_VAR NAME="budget_name" --></td>
+    <td align='right'><!-- TMPL_VAR NAME="budget_amount_total" --></td>
+    <td align='right'><!-- TMPL_VAR NAME="budget_amount" --> </td>
+    <!-- TMPL_IF NAME="budget_amount_sublevel" -->
+        <td align='center'><!-- TMPL_VAR NAME="budget_amount_sublevel" -->
+    <!-- TMPL_IF NAME="budget_unalloc_sublevel" -->
+        (<span  STYLE="color: green;" > <!-- TMPL_VAR NAME="budget_unalloc_sublevel" --></span>)
+    <!-- /TMPL_IF -->
+    </td>
+    <!-- TMPL_ELSE -->
+        <td align='center'>--</td>
+    <!-- /TMPL_IF -->
+
+    <td align='right'><!-- TMPL_VAR NAME="budget_spent" --> </td>
+    <td align='right'
+    <!-- TMPL_IF NAME="remaining_pos" --> STYLE="color: green;" <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="remaining_neg" --> STYLE="color: red;" <!-- /TMPL_IF -->   >
+    <!-- TMPL_VAR NAME="budget_remaining" --> </td>
+
+    <!--
+    <td><!-- TMPL_VAR NAME="budget_encumb" --></td>
+    <td><!-- TMPL_VAR NAME="budget_expend" --></td>
+    -->
+    <td>    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="budget_owner_id" -->"><!-- TMPL_VAR NAME="budget_owner_name" --></a></td>
+
+    <td><!-- TMPL_VAR NAME="budget_branchcode" --></td>
+    <td><!-- TMPL_VAR NAME="budget_notes" --></td>
+    <!-- TMPL_IF NAME='budget_lock'-->
+        <td> <span STYLE="color: gray;" > Edit Delete </span> </td>
+    <!-- TMPL_ELSE -->
+        <td><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=<!-- TMPL_VAR NAME="budget_id" -->&amp;budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->" >Edit</a>
+        <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=delete_confirm&amp;budget_id=<!-- TMPL_VAR NAME="budget_id" -->">Delete       </a></td>
+    <!-- /TMPL_IF -->
+    </tr>
+<!-- /TMPL_LOOP -->
+
+    <tfoot>
+    <tr>
+    <th colspan='2' style='text-align: left;' nowrap>Period allocated <!-- TMPL_VAR NAME='budget_period_total'-->  </th>
+    <th nowrap style='text-align: right;' > <!-- TMPL_VAR NAME='period_alloc_total'--></th>
+    <th nowrap  style='text-align: right;'> <!-- TMPL_VAR NAME='base_alloc_total'--></th>
+    <th nowrap  style='text-align: center;'> <!-- TMPL_VAR NAME='sub_alloc_total'--></th>
+    <th style='text-align: right;' ><!-- TMPL_VAR NAME='base_spent_total'--></th>
+    <th style='text-align: right;' ><!-- TMPL_VAR NAME='base_remaining_total'--></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+    </tr>
+    </tfoot>
+</table>
+
+<span><b>Currency = <!-- TMPL_VAR NAME="cur" --> <!-- TMPL_VAR NAME="cur_format" --></b></span><br>
+<div class="paginationBar"><!-- TMPL_VAR NAME="pagination_bar" --></div>
+<!-- /TMPL_IF --> <!-- else -->
+
+<!-- ********************************************************************************************** -->
+<!-- create add/mod entry form -->
+<!-- TMPL_IF name="add_form" -->
+
+<form action="/cgi-bin/koha/admin/aqbudgets.pl" name="Aform" method="post">
+    <fieldset class="rows">
+    <legend><!-- TMPL_IF NAME="budget_id" -->Modify<!-- TMPL_ELSE -->Add<!-- /TMPL_IF --> Budget
+    <!-- TMPL_IF NAME="budget_period_description" -->
+        <!-- TMPL_VAR NAME="budget_name" --> for period <!-- TMPL_VAR NAME="budget_period_description" -->
+    <!-- /TMPL_IF -->
+    </legend>
+
+    <input type="hidden" name="op" value="add_validate" />
+    <input type="hidden" name="checked" value="0" />
+    <ol>
+    <li>
+    <label for="parents">Budget Parent: </label>
+    <!-- TMPL_VAR NAME="budget_parent_dropbox" -->
+
+    <!-- TMPL_IF NAME="budget_id" -->
+        <input type="hidden" name="budget_parent_id" value="<!-- TMPL_VAR NAME="budget_parent_id" -->" />
+    <!-- /TMPL_IF -->
+    </li>
+
+    <li>
+    <label style="color: red;"  for="budget_code">Budget Code: </label>
+    <input type="text" name="budget_code" id="budget_code" value="<!-- TMPL_VAR NAME="budget_code" -->" size="30" />
+    </li>
+
+    <li>
+    <label style="color: red;" for="budget_name">Budget Name: </label>
+    <input type="text" name="budget_name" id="budget_name" value="<!-- TMPL_VAR NAME="budget_name" -->" size="60" />
+    </li>
+
+    <div class='hint'>base-level and sub-level amount fields cannot both be empty</div>
+    <li>
+    <label style='white-space: nowrap;' for="budget_amount">Base-level amount: </label>
+    <input type="text" name="budget_amount" id="budget_amount" value="<!-- TMPL_VAR NAME="budget_amount" -->" size="8" />
+    </li>
+
+    <li>
+    <label for="budget_amount_sublevel">Sub-level amount: </label>
+    <input type="text" name="budget_amount_sublevel" id="budget_amount_sublevel" value="<!-- TMPL_VAR NAME="budget_amount_sublevel" -->" size="8" />
+    </li>
+
+    <li>
+    <label for="">Encumberance: </label>
+    <input type="text" name="budget_encumb" id="budget_encumb" value="<!-- TMPL_VAR NAME="budget_encumb" -->" size="8" />
+    </li>
+
+    <li>
+    <label for="">Expenditure: </label>
+    <input type="text" name="budget_expend" id="budget_expend" value="<!-- TMPL_VAR NAME="budget_expend" -->" size="8" />
+    </li>
+
+    <input type="hidden" name="budget_owner_id" id="budget_owner_id" value='<!-- TMPL_VAR NAME="budget_owner_id" -->' />
+    <li>
+    <label for="parents">Owner: </label>
+    <span  id="budget_owner_name">
+    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="budget_owner_id" -->"><!-- TMPL_VAR NAME="budget_owner_name" --></a>
+    </span>
+
+    <!-- FIXME: hardcoded button positions :/ -->
+    <input style="position:absolute; left:600px;" type="button" id="patron_search" value="Edit owner" onclick="ownerPopup(); return false;" />
+    <input style="position:absolute; left:680px;"  type="button" id="patron_search" value="Remove owner" onclick="ownerRemove(this.form); return false;" />
+    </li>
+    </td>
+    </tr>
+    </table>
+
+    <li>
+    <label for="branch">Library: </label>
+    <select name="budget_branchcode">
+    <option value=""></option>
+    <!-- TMPL_LOOP name="branchloop_select" -->
+        <option value="<!-- TMPL_VAR name="value" -->"
+        <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF --> >
+        <!-- TMPL_VAR name="branchname" --></option>
+    <!-- /TMPL_LOOP -->
+    </select>
+    </li>
+
+    <li>
+    <label for="branch">Restrict access to: </label>
+    <!-- TMPL_VAR name="budget_perm_dropbox" -->
+    </li>
+
+    <li>
+    <label for="">Notes: </label>
+    <textarea name="budget_notes" id="budget_notes"  cols="80" rows="6" ><!-- TMPL_VAR NAME='budget_notes' --></textarea>
+    </li>
+
+    <li>
+    <label  style='white-space: nowrap;' for="parents">Planning Category1: </label>
+    <!-- TMPL_VAR NAME="sort1_authcat_dropbox" -->
+    </li>
+    <li>
+    <label  style='white-space: nowrap;' for="parents">Planning Category2: </label>
+    <!-- TMPL_VAR NAME="sort2_authcat_dropbox" -->
+    </li>
+    </ol>
+
+    <!-- TMPL_IF NAME="budget_id" -->
+        <input type="hidden" name="budget_id" value="<!-- TMPL_VAR NAME='budget_id' -->" />
+    <!-- /TMPL_IF -->
+    </fieldset>
+
+    <fieldset class="action">
+        <input type="button" value="Submit" onclick="Check(this.form)" /> <a class="cancel" href="/cgi-bin/koha/admin/aqbudgets.pl">Cancel</a>
+        <input type="hidden" name="budget_period_id" value="<!-- TMPL_VAR name='budget_period_id' -->" />
+    </fieldset>
+</form>
+
+<!-- /TMPL_IF --> <!-- add_form -->
+
+<!-- TMPL_IF name="delete_confirm" -->
+<div class="dialog alert"> <h3>Delete Budget <!-- TMPL_VAR NAME="budget_name" -->?</h3>
+<table>
+    <<tr>
+    <th scope="row">Budget Amount:</td>
+    <td><!-- TMPL_VAR NAME="budget_amount" --></td>
+    </tr>
+</table>
+
+<form action="<!-- TMPL_VAR NAME="action" -->" method="post">
+    <input type="hidden" name="op" value="delete_confirmed" />
+    <input type="hidden" name="budget_id" value="<!-- TMPL_VAR NAME="budget_id" -->" />
+    <input type="submit" value="Delete this budget" class="approve" />
+</form>
+
+<form action="<!-- TMPL_VAR NAME="action" -->" method="get">
+    <input type="submit" class="deny" value="No, Do Not Delete" />
+</form>
+</div>
+<!-- /TMPL_IF -->
+
+</div>
+</div>
+<div class="yui-b">
+    <!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
