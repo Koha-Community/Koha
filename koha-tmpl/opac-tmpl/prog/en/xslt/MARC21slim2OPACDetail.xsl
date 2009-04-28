@@ -37,7 +37,7 @@
                 <xsl:when test="$leader6='a'">
                     <xsl:choose>
                         <xsl:when test="$leader7='a' or $leader7='c' or $leader7='d' or $leader7='m'">Book</xsl:when>
-                        <xsl:when test="$leader7='b' or $leader7='i' or $leader7='s'">Serial</xsl:when>
+                        <xsl:when test="$leader7='b' or $leader7='i' or $leader7='s'">Continuing Resource</xsl:when>
                     </xsl:choose>
                 </xsl:when>
                 <xsl:when test="$leader6='t'">Book</xsl:when>
@@ -45,7 +45,7 @@
                 <xsl:when test="$leader6='m'">Computer File</xsl:when>
                 <xsl:when test="$leader6='e' or $leader6='f'">Map</xsl:when>
                 <xsl:when test="$leader6='g' or $leader6='k' or $leader6='o' or $leader6='r'">Visual Material</xsl:when>
-                <xsl:when test="$leader6='c' or $leader6='d' or $leader6='i' or $leader6='j'">Music</xsl:when>
+                <xsl:when test="$leader6='c' or $leader6='d' or $leader6='i' or $leader6='j'">Sound</xsl:when>
             </xsl:choose>
         </xsl:variable>
 

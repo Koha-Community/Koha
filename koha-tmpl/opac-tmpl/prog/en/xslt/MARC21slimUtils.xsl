@@ -62,6 +62,7 @@
 			<xsl:when test="not($chopString)"/>
 			<xsl:otherwise><xsl:value-of select="$chopString"/></xsl:otherwise>
 		</xsl:choose>
+<xsl:text> </xsl:text>
 	</xsl:template>
 </xsl:stylesheet><!-- Stylus Studio meta-information - (c)1998-2002 eXcelon Corp.
 <metaInformation>

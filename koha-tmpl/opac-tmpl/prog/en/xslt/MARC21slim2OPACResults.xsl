@@ -160,7 +160,7 @@
                 <img src="/opac-tmpl/prog/famfamfam/silk/cd.png" alt="optical disc" title="optical disc"/>
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='c'][substring(text(),2,1)='r']">
-                <img src="/opac-tmpl/prog/famfamfam/silk/drive_remote.png" alt="remote" title="remote"/>
+                <img src="/opac-tmpl/prog/famfamfam/silk/drive_web.png" alt="remote" title="remote"/>
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='c'][substring(text(),2,1)='a']">
                 tape cartridge
@@ -173,16 +173,16 @@
             </xsl:if>
 
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='d'][substring(text(),2,1)='a']">
-                <img src="/opac-tmpl/prog/famfamfam/silk/globe.png" alt="celestial globe" title="celestial globe"/>
+                <img src="/opac-tmpl/prog/famfamfam/silk/world.png" alt="celestial globe" title="celestial globe"/>
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='d'][substring(text(),2,1)='e']">
-                <img src="/opac-tmpl/prog/famfamfam/silk/globe.png" alt="earth moon globe" title="earth moon globe"/>
+                <img src="/opac-tmpl/prog/famfamfam/silk/world.png" alt="earth moon globe" title="earth moon globe"/>
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='d'][substring(text(),2,1)='b']">
-                <img src="/opac-tmpl/prog/famfamfam/silk/globe.png" alt="planetary or lunar globe" title="planetary or lunar globe"/>
+                <img src="/opac-tmpl/prog/famfamfam/silk/world.png" alt="planetary or lunar globe" title="planetary or lunar globe"/>
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='d'][substring(text(),2,1)='c']">
-                <img src="/opac-tmpl/prog/famfamfam/silk/globe.png" alt="terrestrial globe" title="terrestrial globe"/>
+                <img src="/opac-tmpl/prog/famfamfam/silk/world.png" alt="terrestrial globe" title="terrestrial globe"/>
             </xsl:if>
 
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='o'][substring(text(),2,1)='o']">
@@ -251,7 +251,7 @@
                 collage
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='k'][substring(text(),2,1)='d']">
-                 <img src="/opac-tmpl/prog/famfamfam/silk/pencile.png" alt="drawing" title="drawing"/>
+                 <img src="/opac-tmpl/prog/famfamfam/silk/pencil.png" alt="drawing" title="drawing"/>
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='k'][substring(text(),2,1)='o']">
                 <img src="/opac-tmpl/prog/famfamfam/silk/note.png" alt="flash card" title="flash card"/>
