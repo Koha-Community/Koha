@@ -5,6 +5,7 @@
 
 
 # Copyright 2000-2002 Katipo Communications
+# Copyright 2008-2009 BibLibre SARL
 #
 # This file is part of Koha.
 #
@@ -38,12 +39,13 @@ supplier, id, company, company_postal, physical, company_phone,
 physical, company_phone, company_fax, website, company_contact_name,
 company_contact_position, contact_phone, contact_phone_2, contact_fax,
 company_email, contact_notes, notes, status, publishers_imprints,
-list_currency, gst, list_gst, invoice_gst, discount.
+list_currency, gst, list_gst, invoice_gst, discount, gstrate.
 
 =back
 
 =cut
-
+use C4::Context;
+use C4::Auth;
 use C4::Bookseller;
 use C4::Biblio;
 use C4::Output;
@@ -51,6 +53,16 @@ use CGI;
 use strict;
 
 my $input=new CGI;
+my ($template, $loggedinuser, $cookie) = get_template_and_user(
+	{   template_name   => "",
+		query           => $input,
+		type            => "intranet",
+		authnotrequired => 0,
+		flagsrequired   => { acquisition => 'vendors_manage' },
+		debug           => 1,
+	}
+);
+
 #print $input->header();
 my $supplier=$input->param('supplier');
 #print startpage;
@@ -84,7 +96,10 @@ $data{'invoiceprice'}=$input->param('invoice_currency');
 $data{'gstreg'}=$input->param('gst');
 $data{'listincgst'}=$input->param('list_gst');
 $data{'invoiceincgst'}=$input->param('invoice_gst');
+#have to transform this into fraction so it's easier to use
+$data{'gstrate'}=$input->param('gstrate')/100;
 $data{'discount'}=$input->param('discount');
+$data{'active'}=$input->param('status');
 if($data{'name'}) {
 	if ($data{'id'}){
 	    ModBookseller(\%data);
