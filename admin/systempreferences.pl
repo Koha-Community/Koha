@@ -67,9 +67,13 @@ use C4::Output;
 my %tabsysprefs;
 
 # Acquisitions
-$tabsysprefs{acquisitions}              = "Acquisitions";
-$tabsysprefs{gist}                      = "Acquisitions";
-$tabsysprefs{emailPurchaseSuggestions}  = "Acquisitions";
+    $tabsysprefs{acquisitions}="Acquisitions";
+    $tabsysprefs{gist}="Acquisitions";
+    $tabsysprefs{emailPurchaseSuggestions}="Acquisitions";
+    $tabsysprefs{RenewSerialAddsSuggestion}="Acquisitions";
+    $tabsysprefs{AcqCreateItem}="Acquisitions";
+    $tabsysprefs{pdfformat}="Acquisitions";
+    $tabsysprefs{CurrencyFormat}="Acquisitions";
 
 # Admin
 $tabsysprefs{singleBranchMode}      = "Admin";

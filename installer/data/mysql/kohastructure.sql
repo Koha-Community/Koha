@@ -88,33 +88,44 @@ CREATE TABLE `alert` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Table structure for table `aqbasketgroups`
+--
+
+DROP TABLE IF EXISTS `aqbasketgroups`;
+CREATE TABLE `aqbasketgroups` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(50) default NULL,
+  `closed` tinyint(1) default NULL,
+  `booksellerid` int(11) NOT NULL,
+  PRIMARY KEY  (`id`),
+  KEY `booksellerid` (`booksellerid`),
+  CONSTRAINT `aqbasketgroups_ibfk_1` FOREIGN KEY (`booksellerid`) REFERENCES `aqbooksellers` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
 -- Table structure for table `aqbasket`
 --
 
 DROP TABLE IF EXISTS `aqbasket`;
 CREATE TABLE `aqbasket` (
   `basketno` int(11) NOT NULL auto_increment,
+  `basketname` varchar(50) default NULL,
+  `note` mediumtext,
+  `booksellernote` mediumtext,
+  `contractnumber` int(11),
   `creationdate` date default NULL,
   `closedate` date default NULL,
   `booksellerid` int(11) NOT NULL default 1,
   `authorisedby` varchar(10) default NULL,
   `booksellerinvoicenumber` mediumtext,
+  `basketgroupid` int(11),
   PRIMARY KEY  (`basketno`),
   KEY `booksellerid` (`booksellerid`),
-  CONSTRAINT `aqbasket_ibfk_1` FOREIGN KEY (`booksellerid`) REFERENCES `aqbooksellers` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Table structure for table `aqbookfund`
---
-
-DROP TABLE IF EXISTS `aqbookfund`;
-CREATE TABLE `aqbookfund` (
-  `bookfundid` varchar(10) NOT NULL default '',
-  `bookfundname` mediumtext,
-  `bookfundgroup` varchar(5) default NULL,
-  `branchcode` varchar(10) NOT NULL default '',
-  PRIMARY KEY  (`bookfundid`,`branchcode`)
+  KEY `basketgroupid` (`basketgroupid`),
+  KEY `contractnumber` (`contractnumber`),
+  CONSTRAINT `aqbasket_ibfk_1` FOREIGN KEY (`booksellerid`) REFERENCES `aqbooksellers` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `aqbasket_ibfk_2` FOREIGN KEY (`contractnumber`) REFERENCES `aqcontract` (`contractnumber`),
+  CONSTRAINT `aqbasket_ibfk_3` FOREIGN KEY (`basketgroupid`) REFERENCES `aqbasketgroups` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -156,6 +167,7 @@ CREATE TABLE `aqbooksellers` (
   `gstreg` tinyint(4) default NULL,
   `listincgst` tinyint(4) default NULL,
   `invoiceincgst` tinyint(4) default NULL,
+  `gstrate` decimal(6,4) default NULL,
   `discount` float(6,4) default NULL,
   `fax` varchar(50) default NULL,
   `nocalc` int(11) default NULL,
@@ -168,36 +180,81 @@ CREATE TABLE `aqbooksellers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Table structure for table `aqbudget`
+-- Table structure for table `aqbudgets`
 --
 
-DROP TABLE IF EXISTS `aqbudget`;
-CREATE TABLE `aqbudget` (
-  `bookfundid` varchar(10) NOT NULL default '',
-  `startdate` date NOT NULL default 0,
-  `enddate` date default NULL,
-  `budgetamount` decimal(13,2) default NULL,
-  `aqbudgetid` tinyint(4) NOT NULL auto_increment,
-  `branchcode` varchar(10) default NULL,
-  PRIMARY KEY  (`aqbudgetid`)
+CREATE TABLE `aqbudgets` (
+  `budget_id` int(11) NOT NULL auto_increment,
+  `budget_parent_id` int(11) default NULL,
+  `budget_code` varchar(30) default NULL,
+  `budget_name` varchar(80) default NULL,
+  `budget_branchcode` varchar(10) default NULL,
+  `budget_amount` decimal(28,6) NULL default '0.00',
+  `budget_amount_sublevel` decimal(28,6) NULL default '0.00',
+  `budget_encumb` decimal(28,6) NULL default '0.00', 
+  `budget_expend` decimal(28,6) NULL default '0.00', 
+  `budget_notes` mediumtext,
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `budget_period_id` int(11) default NULL,
+  `sort1_authcat` varchar(80) default NULL,
+  `sort2_authcat` varchar(80) default NULL,
+  `budget_owner_id` int(11) default NULL,
+  `budget_permission` int(1) default '0',
+  PRIMARY KEY  (`budget_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+--
+-- Table structure for table `aqbudgetperiods`
+--
+
+
+DROP TABLE IF EXISTS `aqbudgetperiods`;
+CREATE TABLE `aqbudgetperiods` (
+  `budget_period_id` int(11) NOT NULL auto_increment,
+  `budget_period_startdate` date NOT NULL,
+  `budget_period_enddate` date NOT NULL,
+  `budget_period_active` tinyint(1) default '0',
+  `budget_period_description` mediumtext,
+  `budget_period_total` decimal(28,6),
+  `budget_period_locked` tinyint(1) default NULL,
+  `sort1_authcat` varchar(10) default NULL,
+  `sort2_authcat` varchar(10) default NULL,
+  PRIMARY KEY  (`budget_period_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Table structure for table `aqorderbreakdown`
+-- Table structure for table `aqbudgets_planning`
 --
 
-DROP TABLE IF EXISTS `aqorderbreakdown`;
-CREATE TABLE `aqorderbreakdown` (
-  `ordernumber` int(11) default NULL,
-  `linenumber` int(11) default NULL,
-  `branchcode` varchar(10) default NULL,
-  `bookfundid` varchar(10) NOT NULL default '',
-  `allocation` smallint(6) default NULL,
-  KEY `ordernumber` (`ordernumber`),
-  KEY `bookfundid` (`bookfundid`),
-  CONSTRAINT `aqorderbreakdown_ibfk_1` FOREIGN KEY (`ordernumber`) REFERENCES `aqorders` (`ordernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `aqorderbreakdown_ibfk_2` FOREIGN KEY (`bookfundid`) REFERENCES `aqbookfund` (`bookfundid`) ON DELETE CASCADE ON UPDATE CASCADE
+DROP TABLE IF EXISTS `aqbudgets_planning`;
+CREATE TABLE `aqbudgets_planning` (
+  `plan_id` int(11) NOT NULL auto_increment,
+  `budget_id` int(11) NOT NULL,
+  `budget_period_id` int(11) NOT NULL,
+  `estimated_amount` decimal(28,6) default NULL,
+  `authcat` varchar(30) NOT NULL,
+  `authvalue` varchar(30) NOT NULL,
+  PRIMARY KEY  (`plan_id`),
+  CONSTRAINT `aqbudgets_planning_ifbk_1` FOREIGN KEY (`budget_id`) REFERENCES `aqbudgets` (`budget_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table 'aqcontract'
+--
+
+DROP TABLE IF EXISTS `aqcontract`;
+CREATE TABLE `aqcontract` (
+  `contractnumber` int(11) NOT NULL auto_increment,
+  `contractstartdate` date default NULL,
+  `contractenddate` date default NULL,
+  `contractname` varchar(50) default NULL,
+  `contractdescription` mediumtext,
+  `booksellerid` int(11) not NULL,
+  PRIMARY KEY  (`contractnumber`),
+  CONSTRAINT `booksellerid_fk1` FOREIGN KEY (`booksellerid`) 
+       REFERENCES `aqbooksellers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Table structure for table `aqorderdelivery`
@@ -220,7 +277,6 @@ DROP TABLE IF EXISTS `aqorders`;
 CREATE TABLE `aqorders` (
   `ordernumber` int(11) NOT NULL auto_increment,
   `biblionumber` int(11) default NULL,
-  `title` mediumtext,
   `entrydate` date default NULL,
   `quantity` smallint(6) default NULL,
   `currency` varchar(3) default NULL,
@@ -244,14 +300,32 @@ CREATE TABLE `aqorders` (
   `rrp` decimal(13,2) default NULL,
   `ecost` decimal(13,2) default NULL,
   `gst` decimal(13,2) default NULL,
+  `budget_id` int(11) NOT NULL,
+  `budgetgroup_id` int(11) NOT NULL,
   `budgetdate` date default NULL,
   `sort1` varchar(80) default NULL,
   `sort2` varchar(80) default NULL,
+  `sort1_authcat` varchar(10) default NULL,
+  `sort2_authcat` varchar(10) default NULL,
+  `uncertainprice` tinyint(1),
   PRIMARY KEY  (`ordernumber`),
   KEY `basketno` (`basketno`),
   KEY `biblionumber` (`biblionumber`),
   CONSTRAINT `aqorders_ibfk_1` FOREIGN KEY (`basketno`) REFERENCES `aqbasket` (`basketno`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `aqorders_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE SET NULL
+  CONSTRAINT `aqorders_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `aqorders_items`
+--
+
+DROP TABLE IF EXISTS `aqorders_items`;
+CREATE TABLE `aqorders_items` (
+  `ordernumber` int(11) NOT NULL,
+  `itemnumber` int(11) NOT NULL,
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`itemnumber`),
+  KEY `ordernumber` (`ordernumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -775,6 +849,7 @@ CREATE TABLE `currency` (
   `symbol` varchar(5) default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `rate` float(7,5) default NULL,
+  `active` tinyint(1) default NULL,
   PRIMARY KEY  (`currency`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
