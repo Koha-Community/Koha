@@ -106,6 +106,7 @@ my $publishercode   = $input->param('publishercode');
 my $op              = $input->param('op');
 my $suggestionid    = $input->param('suggestionid');
 my $duplicateNumber = $input->param('duplicateNumber');
+my $uncertainprice = $input->param('uncertainprice');
 
 $op = 'else' unless $op;
 
@@ -116,7 +117,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         type            => "intranet",
         query           => $input,
         authnotrequired => 1,
-        flagsrequired   => { acquisition => 1 },
+        flagsrequired   => { acquisition => 'order_manage' },
     }
 );
 
