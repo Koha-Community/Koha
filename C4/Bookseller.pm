@@ -71,7 +71,7 @@ sub GetBookSeller($) {
     my $dbh = C4::Context->dbh;
     my $query = "SELECT * FROM aqbooksellers WHERE name LIKE ?";
     my $sth =$dbh->prepare($query);
-    $sth->execute( "$searchstring%" );
+    $sth->execute( "%$searchstring%" );
     my @results;
     # count how many baskets this bookseller has.
     # if it has none, the bookseller can be deleted
@@ -218,8 +218,8 @@ in the Koha database. It must contain entries for all of the fields.
 The entry to modify is determined by C<$bookseller-E<gt>{id}>.
 
 The easiest way to get all of the necessary fields is to look up a
-book seller with C<&booksellers>, modify what's necessary, then call
-C<&ModSupplier> with the result.
+book seller with C<&GetBookseller>, modify what's necessary, then call
+C<&ModBookseller> with the result.
 
 =cut
 
@@ -232,8 +232,8 @@ sub ModBookseller {
             postal=?,phone=?,fax=?,url=?,contact=?,contpos=?,
             contphone=?,contfax=?,contaltphone=?,contemail=?,
             contnotes=?,active=?,listprice=?, invoiceprice=?,
-            gstreg=?, listincgst=?,invoiceincgst=?,
-            specialty=?,discount=?,invoicedisc=?,nocalc=?, notes=?
+            gstreg=?,listincgst=?,invoiceincgst=?,
+            specialty=?,discount=?,invoicedisc=?,nocalc=?,notes=?,gstrate=?
         WHERE id=?
     ";
     my $sth    = $dbh->prepare($query);
@@ -251,7 +251,8 @@ sub ModBookseller {
         $data->{'listincgst'},   $data->{'invoiceincgst'},
         $data->{'specialty'},    $data->{'discount'},
         $data->{'invoicedisc'},  $data->{'nocalc'},
-        $data->{'notes'},        $data->{'id'}
+        $data->{'notes'},        $data->{'gstrate'},
+        $data->{'id'}
     );
     $sth->finish;
 }
