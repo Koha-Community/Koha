@@ -28,6 +28,23 @@ use C4::SQLHelper qw(:all);
 use C4::Debug;
 use C4::Letters;
 use List::MoreUtils qw(any);
+use base 'Exporter';  # parent would be better there
+our $VERSION = 3.01;
+our @EXPORT  = qw<
+    &ConnectSuggestionAndBiblio
+    &CountSuggestion
+    &DelSuggestion
+    &GetSuggestion
+    &GetSuggestionByStatus
+    &GetSuggestionFromBiblionumber
+    &ModStatus
+    &ModSuggestion
+    &NewSuggestion
+    &SearchSuggestion
+>;
+use C4::Dates qw(format_date_in_iso);
+>>>>>>> Suggestions.pm, probably useless & not working (check with hdl):C4/Suggestions.pm
+>>>>>>> Suggestions.pm, probably useless & not working (check with hdl):C4/Suggestions.pm
 use vars qw($VERSION @ISA @EXPORT);
 
 BEGIN {
@@ -50,7 +67,7 @@ BEGIN {
 
 =head1 NAME
 
-C4::Suggestions - Some useful functions for dealings with suggestions.
+C4::Suggestions - Some useful functions for dealings with aqorders.
 
 =head1 SYNOPSIS
 
@@ -58,7 +75,7 @@ use C4::Suggestions;
 
 =head1 DESCRIPTION
 
-The functions in this module deal with the suggestions in OPAC and in librarian interface
+The functions in this module deal with the aqorders in OPAC and in librarian interface
 
 A suggestion is done in the OPAC. It has the status "ASKED"
 
@@ -68,7 +85,7 @@ When the book is ordered, the suggestion status becomes "ORDERED"
 
 When a book is ordered and arrived in the library, the status becomes "AVAILABLE"
 
-All suggestions of a borrower can be seen by the borrower itself.
+All aqorders of a borrower can be seen by the borrower itself.
 Suggestions done by other borrowers can be seen when not "AVAILABLE"
 
 =head1 FUNCTIONS
@@ -80,7 +97,7 @@ Suggestions done by other borrowers can be seen when not "AVAILABLE"
 searches for a suggestion
 
 return :
-C<\@array> : the suggestions found. Array of hash.
+C<\@array> : the aqorders found. Array of hash.
 Note the status is stored twice :
 * in the status field
 * as parameter ( for example ASKED => 1, or REJECTED => 1) . This is for template & translation purposes.
@@ -153,9 +170,9 @@ sub SearchSuggestion  {
 
 =head2 GetSuggestion
 
-\%sth = &GetSuggestion($suggestionid)
+\%sth = &GetSuggestion($ordernumber)
 
-this function get the detail of the suggestion $suggestionid (input arg)
+this function get the detail of the suggestion $ordernumber (input arg)
 
 return :
     the result of the SQL query as a hash : $sth->fetchrow_hashref.
@@ -163,7 +180,7 @@ return :
 =cut
 
 sub GetSuggestion {
-    my ($suggestionid) = @_;
+    my ($ordernumber) = @_;
     my $dbh = C4::Context->dbh;
     my $query = "
         SELECT *
@@ -171,13 +188,13 @@ sub GetSuggestion {
         WHERE  suggestionid=?
     ";
     my $sth = $dbh->prepare($query);
-    $sth->execute($suggestionid);
+    $sth->execute($ordernumber);
     return($sth->fetchrow_hashref);
 }
 
 =head2 GetSuggestionFromBiblionumber
 
-$suggestionid = &GetSuggestionFromBiblionumber($dbh,$biblionumber)
+$ordernumber = &GetSuggestionFromBiblionumber($dbh,$biblionumber)
 
 Get a suggestion from it's biblionumber.
 
@@ -195,13 +212,13 @@ sub GetSuggestionFromBiblionumber {
     |;
     my $sth = $dbh->prepare($query);
     $sth->execute($biblionumber);
-    my ($suggestionid) = $sth->fetchrow;
-    return $suggestionid;
+    my ($ordernumber) = $sth->fetchrow;
+    return $ordernumber;
 }
 
 =head2 GetSuggestionByStatus
 
-$suggestions = &GetSuggestionByStatus($status,[$branchcode])
+$aqorders = &GetSuggestionByStatus($status,[$branchcode])
 
 Get a suggestion from it's status
 
@@ -258,7 +275,7 @@ sub GetSuggestionByStatus {
 
 &CountSuggestion($status)
 
-Count the number of suggestions with the status given on input argument.
+Count the number of aqorders with the status given on input argument.
 the arg status can be :
 
 =over 2
@@ -366,14 +383,14 @@ sub ModSuggestion {
 
 =head2 ConnectSuggestionAndBiblio
 
-&ConnectSuggestionAndBiblio($suggestionid,$biblionumber)
+&ConnectSuggestionAndBiblio($ordernumber,$biblionumber)
 
 connect a suggestion to an existing biblio
 
 =cut
 
 sub ConnectSuggestionAndBiblio {
-    my ($suggestionid,$biblionumber) = @_;
+    my ($ordernumber,$biblionumber) = @_;
     my $dbh=C4::Context->dbh;
     my $query = "
         UPDATE suggestions
@@ -386,14 +403,14 @@ sub ConnectSuggestionAndBiblio {
 
 =head2 DelSuggestion
 
-&DelSuggestion($borrowernumber,$suggestionid)
+&DelSuggestion($borrowernumber,$ordernumber)
 
 Delete a suggestion. A borrower can delete a suggestion only if he is its owner.
 
 =cut
 
 sub DelSuggestion {
-    my ($borrowernumber,$suggestionid,$type) = @_;
+    my ($borrowernumber,$ordernumber,$type) = @_;
     my $dbh = C4::Context->dbh;
     # check that the suggestion comes from the suggestor
     my $query = "
@@ -402,7 +419,7 @@ sub DelSuggestion {
         WHERE  suggestionid=?
     ";
     my $sth = $dbh->prepare($query);
-    $sth->execute($suggestionid);
+    $sth->execute($ordernumber);
     my ($suggestedby) = $sth->fetchrow;
     if ($type eq "intranet" || $suggestedby eq $borrowernumber ) {
         my $queryDelete = "
