@@ -1,0 +1,261 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Basket grouping for Vendor <!-- TMPL_VAR name="booksellername" --></title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.6.0/build/fonts/fonts-min.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/animation/animation-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/dragdrop/dragdrop-min.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR NAME='themelang' -->/js/acq.js"></script>
+
+<script type="text/javascript">
+//<![CDATA[
+function Check(ff) {
+    ff.submit();
+}
+var basketgroups = 1;
+YAHOO.util.Event.onDOMReady(DDApp.init, DDApp, true);
+//]]>
+</script>
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+
+div.workarea { padding:10px; float:left; width: 45%;}
+div.workarea_alt { padding: 5px; float:left; width: 95%;}
+div.closed { background-color="pink"; padding:10px; float:left; width: 45%;}
+
+ul.closed {
+    position: relative;
+    background: grey;
+    padding-bottom:10;
+    border: 1px solid gray;
+    list-style: none;
+    margin:0;
+    padding: 5px;
+}
+
+ul.draglist {
+    position: relative;
+    background: #f7f7f7;
+    padding-bottom:10;
+    border: 1px solid gray;
+    list-style: none;
+    margin:0;
+    padding: 5px;
+}
+
+ul.draglist li {
+    margin: 1px;
+    cursor: move;
+    list-style: none;
+}
+
+ul.draglist_alt {
+    position: relative;
+    border: 1px solid gray;
+    list-style: none;
+    margin: 0;
+    background: #f7f7f7;
+    padding: 5px;
+    cursor: move;
+}
+
+ul.draglist_alt li {
+    margin: 1px;
+    list-style: none;
+}
+
+li.grouped {
+    background-color: #D1E6EC;
+    border:1px solid #7EA6B2;
+    list-style: none;
+}
+
+li.ungrouped {
+    background-color: #D8D4E2;
+    border:1px solid #6B4C86;
+}
+
+fieldset.various li {
+    list-style: none;
+    clear: none;
+}
+
+</style>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;<a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR NAME="booksellername" --></a> &rsaquo; Basket grouping for vendor: <!-- TMPL_VAR NAME="booksellername" --></div>
+
+<div id="doc" class="yui-t7">
+    <div id="bd">
+        <div id="yui-main">
+
+           	<div id="toolbar">
+<script type="text/javascript">
+	//<![CDATA[
+
+	// prepare DOM for YUI Toolbar
+
+	 $(document).ready(function() {
+	    $("#toolbar").empty();
+	    yuiToolbar();
+	 });
+
+	// YUI Toolbar Functions
+
+	function yuiToolbar() {
+	    new YAHOO.widget.Button("newrecord");
+		var booksellermenu = [
+			{ text: _("Bookseller"), url: "/cgi-bin/koha/acqui/supplier.pl?booksellerid=<!-- TMPL_VAR name="booksellerid" -->" },
+			{ text: _("Edit bookseller"), url: "/cgi-bin/koha/acqui/booksellers.pl?booksellerid=<!-- TMPL_VAR name="booksellerid" -->"},
+		]
+		var ordersbutton = [
+		         { text: _("Manage orders"), url: "/cgi-bin/koha/acqui/booksellers.pl?supplier=<!-- TMPL_VAR name="booksellerid" -->" },
+		         { text: _("Edit uncertain prices"), url: "/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=<!-- TMPL_VAR name="booksellerid" -->&owner=1" },
+		]
+
+	    new YAHOO.widget.Button({
+	        type: "menu",
+	        label: _("Bookseller"),
+	        name: "booksellerbutton",
+	        menu: booksellermenu,
+	        container: "toolbar"
+	    });
+	    
+	    new YAHOO.widget.Button({
+	        type: "menu",
+	        label: _("Orders"),
+	        name: "ordersbutton",
+	        menu: ordersbutton,
+	        container: "toolbar"
+	    });
+	}
+	//]]>
+	</script>
+	</div>
+           	
+            </div>
+            <div class="yui-b"> 
+        <h1>Basket grouping for Vendor <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR name="booksellername" --></a></h1>
+            <div class="yui-gc"> 
+	   <div class="yui-u">
+            <fieldset id="various" class='various' >
+                <ul >
+                <li>
+                <label for="newbasketgroupname">New Basketgroup:</label>
+                <input type="text" name="newbasketgroupname" id="newbasketgroupname" onkeypress="newGroup(event, document.getElementById('newbasketgroupname').value);" checked/>
+                <span class="yui-button yui-link-button">
+                    <span class=" first-child"><a href="javascript: newGroup('button', document.getElementById('newbasketgroupname').value);">Ok</a></span>
+                </span>
+                </li>
+                <li>
+                <label for="filter baskets (regexp)">Filter Basketgroups (regexps allowed):</label>
+                <input type="text" name="filter baskets (regexp)" id="filter baskets (regexp)" onkeypress="filterGroups(event, document.getElementById('filter baskets (regexp)').value);" />
+                <span class="yui-button yui-link-button">
+                    <span class=" first-child"><a href="javascript: filterGroups('button', document.getElementById('filter baskets (regexp)').value);">Ok</a></span>
+                </span>
+                </li>
+                <li>
+                <label for="showclosed">Show closed basketgroups</label>
+                <input type="checkbox" name="showclosed" id="showclosed" value="1" onChange="showhideclosegroups(document.getElementById('showclosed').checked);" unchecked />
+                </li>
+                <li>
+                <label for="Move all ungrouped baskets to:">Move all ungrouped baskets to</label>
+                <input type="text" name="Move all ungrouped baskets to:" id="Move all ungrouped baskets to:" onkeypress="moveallungroupedto(event, document.getElementById('Move all ungrouped baskets to:').value);" />
+                <span class="yui-button yui-link-button">
+                    <span class=" first-child"><a href="javascript: moveallungroupedto('button', document.getElementById('Move all ungrouped baskets to:').value);">Ok</a></span>
+                </span>
+                </li>
+                </ul>
+            </fieldset>
+        </div>
+        <div class="yui-u first">
+        <form action="<!-- TMPL_VAR name="scriptname" -->" method="post" name="basketgroups" id="basketgroups">
+            <div id="groups">
+            <div class="workarea_alt" >
+            <h3>Ungrouped Baskets</h3>
+            <ul id="ungrouped" class="draglist_alt">
+            <!-- TMPL_IF NAME="baskets" -->
+                <!-- TMPL_LOOP NAME="baskets" -->
+                    <li class="ungrouped" id="<!-- TMPL_VAR NAME="basketno" -->" >
+                        <a href="basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->">
+                        <!-- TMPL_IF NAME="basketname" -->
+                            <!-- TMPL_VAR NAME="basketname" -->
+                        <!-- TMPL_ELSE -->
+                            No name, basketnumber: <!-- TMPL_VAR NAME="basketno" -->
+                        <!-- /TMPL_IF -->
+                        </a>, <br />
+                        Total: <!-- TMPL_VAR name="total" -->
+                        <input type="hidden" id="<!-- TMPL_VAR NAME="basketno" -->-group" name="<!-- TMPL_VAR NAME="basketno" -->-group" value="0" />
+                        <input type="hidden" id="basket-<!-- TMPL_VAR NAME="basketno" -->-changed" name="basket-<!-- TMPL_VAR NAME="basketno" -->-changed" value="0" />
+                    </li>
+                    <!-- /TMPL_LOOP -->
+                <!-- /TMPL_IF>
+                </ul>
+            </div>
+
+            <!-- TMPL_IF NAME="basketgroups" -->
+                <!-- TMPL_LOOP NAME="basketgroups" -->
+                    <!-- TMPL_IF NAME="closed" -->
+                        <div class="closed" style="display: none">
+                        <h3 ><!-- TMPL_VAR NAME="name" --></h3>
+                        <p > [ 
+                                <a href="javascript:parent.location='basketgroup.pl?op=printbgroup&bgroupid=<!-- TMPL_VAR NAME="id" -->';">print</a>/
+                                <a href="javascript:unclosegroup('<!-- TMPL_VAR name="id" -->');">Unclose group</a>
+                        ]</p>
+                        <ul id="bg-<!-- TMPL_VAR NAME="id" -->" class="closed">
+                    <!-- TMPL_ELSE -->
+                        <div class="workarea">
+                        <h3 ><!-- TMPL_VAR NAME="name" --></h3>
+                        <p > [ 
+                            <a href="javascript:renameinit(<!-- TMPL_VAR NAME="id" -->);">rename</a> / 
+                            <a href="javascript:closebasketgroup('<!-- TMPL_VAR NAME="id" -->');">close</a>
+                        ]</p>
+                        <ul id="bg-<!-- TMPL_VAR NAME="id" -->" class="draglist">
+
+                    <!-- /TMPL_IF -->
+                        <!-- TMPL_LOOP NAME="baskets" -->
+                            <li class="grouped" id="<!-- TMPL_VAR NAME="basketno" -->">
+                                <a href="basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->">
+                                <!-- TMPL_IF NAME="basketname" -->
+                                    <!-- TMPL_VAR NAME="basketname" -->
+                                <!-- TMPL_ELSE -->
+                                    No name, basketnumber: <!-- TMPL_VAR NAME="basketno" -->
+                                <!-- /TMPL_IF -->
+                                </a>, <br />
+                                Total: <!-- TMPL_VAR name="total" -->
+                                <input type="hidden" id="<!-- TMPL_VAR NAME="basketno" -->-group"name="<!-- TMPL_VAR NAME="basketno" -->-group" value="<!-- TMPL_VAR NAME="id" -->" />
+                                <input type="hidden" id="basket-<!-- TMPL_VAR NAME="basketno" -->-changed" name="basket-<!-- TMPL_VAR NAME="basketno" -->-changed" value="0" />
+                            </li>
+                        <!-- /TMPL_LOOP -->
+                        </ul>
+                        <input type="hidden" name="basketgroup-<!-- TMPL_VAR NAME="id" -->-name" id="basketgroup-<!-- TMPL_VAR NAME="id" -->-name" value='<!-- TMPL_VAR NAME="name" -->' />
+                        <input type="hidden" id="basketgroup-<!-- TMPL_VAR NAME="id" -->-closed" name="basketgroup-<!-- TMPL_VAR NAME="id" -->-closed" value="<!-- TMPL_VAR NAME="closed" -->" />
+                        <input type="hidden" id="basketgroup-<!-- TMPL_VAR NAME="id" -->-changed" name="basketgroup-<!-- TMPL_VAR NAME="id" -->-changed" value="0" />
+                    </div>
+                <!-- /TMPL_LOOP -->
+            <!-- /TMPL_IF -->
+            </div>
+            <fieldset class="action">
+                <input type="hidden" name="booksellerid" value="<!-- TMPL_VAR name="booksellerid" -->" />
+                <input type="hidden" name="op" value="validate" />
+                <input type="button" value="Save" onclick="Check(this.form);" />
+            </fieldset>
+            </form>
+            </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
