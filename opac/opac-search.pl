@@ -115,10 +115,15 @@ if (C4::Context->preference('TagsEnabled')) {
 #}
 
 # load the branches
+my $mybranch = ( C4::Context->preference( 'SearchMyLibraryFirst' ) && C4::Context->userenv ) ? C4::Context->userenv->{branch} : '';
 my $branches = GetBranches();
 # FIXME: next line duplicates GetBranchesLoop(0,0);
 my @branch_loop = map {
-                    {value => $_, branchname => $branches->{$_}->{branchname}}
+                    {
+                        value => $_,
+                        branchname => $branches->{$_}->{branchname},
+                        selected => ( $mybranch eq $_ ) ? 1 : 0
+                    }
                 } sort {
                     $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname}
                 } keys %$branches;
