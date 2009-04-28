@@ -1,0 +1,207 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>
+Budget planning
+</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="calendar.inc" -->
+
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="budgets-admin-search.inc" -->
+
+<script type="text/javascript" src="<!-- TMPL_VAR NAME='themelang' -->/js/acq.js"></script>
+<script type="text/javascript">
+// ######################################################################
+// Javascript
+// ######################################################################
+    function Check(f) {
+            var ok=1;
+            var _alertString="";
+            var alertString2;
+            var arr = document.getElementsByName('est_total')
+
+            for ( var i=0, len=arr.length; i<len; ++i ){
+                    var tot = arr[i].innerHTML;
+
+                    if (tot == 'NaN') {
+                        _alertString += "\n- " + _("One or more cell values is non-numeric");
+                    }
+            }
+
+            if (_alertString.length==0) {
+                    document.Aform.submit();
+            } else {
+                    alertString2  = _("Form not submitted because of the following problem(s)");
+                    alertString2 += "\n------------------------------------------------------------------------------------\n";
+                    alertString2 += _alertString;
+                    alert(alertString2);
+            }
+    }
+</script>
+
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
+    <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
+    <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->">Budgets</a> &rsaquo;
+    <a href="/cgi-bin/koha/admin/aqplan.pl?budget_period_id=   <!-- TMPL_VAR NAME="budget_period_id" -->">Planning</a> &rsaquo;
+</div>
+
+<div id="doc3" class="yui-t2">
+<div id="bd">
+<div id="yui-main">
+<div class="yui-b">
+
+<!-- TMPL_INCLUDE NAME="budgets-admin.inc" -->    
+
+<h1>Planning for <!-- TMPL_VAR NAME="budget_period_description" --> by <!-- TMPL_VAR NAME="authcat" --></h1>
+<br>
+
+<form method="post" action="/cgi-bin/koha/admin/aqplan.pl">
+    <fieldset>
+    <legend>Planning options</legend>
+     <li><label for="budget_period_dropbox">Select budget period:</label>
+     <!-- TMPL_VAR name="budget_period_dropbox" -->
+    </li>
+
+    <li><label for="authcat_dropbox"  > Select planning type:</label>
+    <!-- TMPL_VAR NAME="authcat_dropbox" -->
+    </li>
+
+    <li>
+    <!-- TMPL_IF NAME="show_mine" -->
+        <input type="checkbox" id="show_mine"  name="show_mine" value="1" checked="checked" />
+    <!-- TMPL_ELSE -->  
+        <input type="checkbox" id="show_mine"  name="show_mine" value="1"  />
+    <!-- /TMPL_IF -->  
+    <label for="show_mine">Show my budgets only</label>
+    </li>
+    <input type="hidden" name="show" value="1"  -->
+
+    <li>
+    <!-- TMPL_IF NAME="show_active" -->
+        <input type="checkbox" id="show_active" name="show_active" value="1" checked="checked" />
+    <!-- TMPL_ELSE -->  
+        <input type="checkbox" id="show_active" name="show_active" value="1" />
+        <!-- /TMPL_IF --> 
+    <label for="show_active">Show active budgets only</label>
+    </li>
+
+    <!-- TMPL_UNLESS  name="budget_period_locked" -->
+        <li>
+        <label for="show_actual">Show actual/estimated values:</label>
+        <!-- TMPL_IF NAME="show_actual" -->
+            <input type="checkbox" name="show_actual" value="1"   checked="checked" />
+        <!-- TMPL_ELSE -->  
+            <input type="checkbox" name="show_actual" value="1"  />
+        <!-- /TMPL_IF -->
+        </li>
+    <!-- /TMPL_UNLESS -->
+
+    <li>
+    <input type="hidden" name="budget_period_id" value="<!-- TMPL_VAR NAME="budget_period_id" -->" />
+     <input style="position:relative; left:180px"   type="submit" value="Select" />
+    </li>
+    <br>
+    </fieldset>
+</form>
+
+<form method="post" name="Aform"  ction="/cgi-bin/koha/admin/aqplan.pl">
+    <input type="hidden" name="budget_period_id" value="<!-- TMPL_VAR NAME="budget_period_id" -->" />
+
+    <table>
+    <tr>
+    <th>Budget name</th>
+    <th>Budget total</th>
+    <!-- TMPL_LOOP NAME="authvals_row" -->
+        <th><!-- TMPL_VAR NAME="val" --></th>
+    <!-- /TMPL_LOOP -->
+    <th >Budget remaining</th>
+
+    <!-- TMPL_UNLESS Name="budget_period_locked" -->
+        <th></th>
+    <!-- /TMPL_UNLESS -->
+    </tr>
+
+    <!-- TMPL_LOOP NAME="budget_lines" -->
+        <tr>
+        <td align='left'><!-- TMPL_VAR NAME="budget_name_indent"--></td>
+        <td align='center'><span id='budget_tot_formatted" -->'><!-- TMPL_VAR NAME="budget_amount_formatted"--></span></td>
+
+        <!-- NEXT DIV ELEMENT IS USED BY JS FOR CALC-ING AUTO-FILL AND ESTIMATED AMOUNTS -->
+        <div style="display:none;" id='budget_tot_<!-- TMPL_VAR NAME="budget_id" -->'><!-- TMPL_VAR NAME="budget_amount"--></div>
+        <!-- TMPL_LOOP NAME="lines"	-->
+
+            <td align='center'>
+            <span>
+            <!-- TMPL_IF Name="show_actual" -->
+                <!-- TMPL_VAR NAME="actual_amount" --> /
+            <!--/TMPL_IF -->
+            <!-- TMPL_IF Name="budget_period_locked" -->
+                <!-- TMPL_VAR NAME="estimated_amount" -->
+            <!--TMPL_ELSIF  Name="budget_lock" -->
+                <!-- TMPL_VAR NAME="estimated_amount" -->
+            <!--TMPL_ELSE -->
+            <input type="text" style="text-align: right;" size='6' name='<!-- TMPL_VAR NAME="cell_name"-->'  value="<!-- TMPL_VAR NAME="estimated_amount" -->"  id='<!-- TMPL_VAR NAME="budget_id"-->' class='<!-- TMPL_VAR NAME="budget_id"-->' onchange="calcTotalRow(this);" >
+            <!--/TMPL_IF -->
+
+            </span>
+            </td>
+        <!-- /TMPL_LOOP -->
+
+        <td align="center">
+
+        <!-- TMPL_IF Name="show_actual" -->
+            <span
+            <!-- TMPL_IF NAME="act_negative" --> style="color: red;" <!--/TMPL_IF -->
+                <!-- TMPL_IF NAME="act_positive" --> style="color: green;" <!--/TMPL_IF --> >
+                <!-- TMPL_VAR NAME="budget_act_remain"-->
+            </span> /
+        <!-- /TMPL_IF -->
+        <span
+        <!-- TMPL_IF NAME="est_negative" --> style="color: red;" <!--/TMPL_IF -->
+        <!-- TMPL_IF NAME="est_positive" --> style="color: green;" <!--/TMPL_IF -->
+        name="est_total" id='budget_est_<!-- TMPL_VAR NAME="budget_id"-->'><!-- TMPL_VAR NAME="budget_est_remain"-->
+        </span></td>
+        <!-- TMPL_UNLESS Name="budget_period_locked" -->
+            <td><input type="button"  onclick="autoFillRow('<!-- TMPL_VAR NAME="budget_id"-->')" value="Auto-fill row"/> </td>
+        <!-- /TMPL_UNLESS  -->
+        </tr>
+    <!-- /TMPL_LOOP -->
+    </table>
+    <!-- TMPL_IF NAME="show_actual" -->
+        <span><b>Cells contain 'Actual / Estimated' values.</b></span><br>
+    <!-- TMPL_ELSE -->
+        <span><b>Cells contain estimated values only.</b></span><br>
+    <!-- /TMPL_IF -->
+    <span><b>Currency = <!-- TMPL_VAR NAME="cur" --> <!-- TMPL_VAR NAME="cur_format" --></b></span><br>
+    <!-- TMPL_IF name="budget_period_locked" -->
+        <!-- <input STYLE="background: gray;"   type="submit" value="Save" disabled='disabled'/> -->
+    <!-- TMPL_ELSE -->
+        <input type="button"  onclick="Check(this.form)" value="Save"/>
+        <input type="hidden" name="op" value="save"/>
+    <!-- /TMPL_IF -->
+        <input type="hidden" name="authcat" value="<!-- TMPL_VAR NAME="authcat"-->"/>
+</form>
+
+<form method="post" action="/cgi-bin/koha/admin/aqplan.pl">
+<fieldset class="rows">
+    <ol>
+    <li><label for="outputfile">Output to a file named: </label><input type="text" name="basename" id="basename" value="Export" />
+    <label class="inline" for="MIME">Into an application
+    </label><!-- TMPL_VAR NAME="CGIextChoice" -->
+    <!-- TMPL_VAR NAME="CGIsepChoice" --> &nbsp;&nbsp;&nbsp;
+    <input type="submit" value="Output"/>
+    <input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->" />
+    <input type="hidden" name="output" value="file" />
+    </li></ol>
+    </fieldset>
+</form>
+
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
