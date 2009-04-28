@@ -9,7 +9,7 @@
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; </div>
 
 <div id="doc3" class="yui-t2">
-   
+
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
@@ -24,7 +24,7 @@
         <legend>Start, receive, or modify any order</legend>
     <!-- TMPL_IF name="nobudget" -->
 		<!-- TMPL_IF NAME="CAN_user_parameters" -->
-        <span class="problem">You must <a href="/cgi-bin/koha/admin/aqbookfund.pl">define a budget</a> in Administration</span>
+        <span class="problem">You must <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">define a budget</a> in Administration</span>
 		<!-- TMPL_ELSE -->
 		<span class="problem">Your administrator must define a budget in Administration</span>
 		<!-- /TMPL_IF -->
@@ -39,7 +39,7 @@
             <input type="submit" value="Search" />
             </p>
         </form>
-		
+
     <!-- /TMPL_IF -->
     </fieldset>
 </div>
@@ -51,51 +51,97 @@
         <!-- TMPL_ELSE -->
             <p>No suggestions waiting</p>
         <!-- /TMPL_IF -->
+    <br>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Book fund group</th>
+                <th>number of <br>waiting sugg.</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+        <!-- TMPL_LOOP name="bookfundgroup_loop" -->
+            <tr>
+                <td><!-- TMPL_VAR name="bookfundgroupname" --></td>
+                <td><!-- TMPL_VAR name="nowsuggestions" --></td>
+                <td><a href="/cgi-bin/koha/suggestion/acceptorrejectpd.pl?bookfundgroupnumber=<!-- TMPL_VAR name="bookfundgroupnumber" -->">manage</a></td>
+            </tr>
+        <!-- /TMPL_LOOP -->
+        </tbody>
+    </table>
+
     </fieldset>
 </div>
 </div>
 
 <div class="yui-u">
-    <!-- TMPL_IF name="nobudget" -->
-    <!-- TMPL_ELSE -->
-    <h2>Funds and Budgets</h2>
-    <a href="/cgi-bin/koha/admin/aqbookfund.pl" title="[ Manage funds ]">[ Manage ]</a>
+
+        <!-- TMPL_IF name="loop_budget" -->
+
+            <h3>All available budgets<!-- TMPL_IF NAME="branchname" --> for <!-- TMPL_VAR NAME="branchname" --> branch<!-- /TMPL_IF  --></h3>
+
+    <!-- <a href="/cgi-bin/koha/admin/aqbookfund.pl" title="[ Manage funds ]">[ Manage ]</a>
+    <a href="/cgi-bin/koha/admin/budgetperiods.pl">manage budgets</a><br><br>  -->
+
+
+
     <div id="BudgetsAndFunds">
     <table id="accounts">
         <thead>
         <tr>
-            <th>Budgets</th>
-            <th>Total</th>
+            <th>Budget</th>
+            <th>Owner</th>
+            <th>Branch</th>
+            <th>Amount</th>
             <th>Spent</th>
-            <th>Comtd</th>
             <th>Avail</th>
         </tr>
         </thead>
         <tbody>
+
+
         <!-- TMPL_LOOP name="loop_budget" -->
-            <tr>
-                <td><!-- TMPL_VAR name="bookfundname" --></td>
-                <td><a href="/cgi-bin/koha/admin/aqbudget.pl?op=add_form&amp;aqbudgetid=<!--TMPL_VAR NAME="aqbudgetid"-->"><!-- TMPL_VAR name="budgetamount" --></a></td>
-                <td><a href="/cgi-bin/koha/acqui/spent.pl?bookfund=<!--TMPL_VAR NAME="bookfundid"-->&amp;start=<!--TMPL_VAR NAME="sdate"-->&amp;end=<!-- TMPL_VAR NAME="edate"-->"><!-- TMPL_VAR name="spent" --></a></td>
-                <td><a href="/cgi-bin/koha/acqui/bookfund.pl?bookfund=<!--TMPL_VAR NAME="bookfundid"-->&amp;start=<!--TMPL_VAR NAME="sdate"-->&amp;end=<!-- TMPL_VAR NAME="edate"-->"><!-- TMPL_VAR name="comtd" --></a></td>
-                <td><!-- TMPL_VAR name="avail" --></td>
+
+   <!--TMPL_IF name="toggle"-->
+      <tr class="highlight">
+      <!--TMPL_ELSE-->
+      <tr>
+      <!--/TMPL_IF-->
+
+                <td align="center"><!-- TMPL_VAR name="budget_code" --></td>
+                <td align="center"><!-- TMPL_VAR name="budget_owner" --></td>
+                <td align="center"><!-- TMPL_VAR name="budget_branchname" --></td>
+                <td><p  align="right" ><!-- TMPL_VAR name="budget_amount" --></p> </td>
+                <td><p  align="right" ><!-- TMPL_VAR name="budget_spent" --></p> </td>
+                <td><p  align="right" ><!-- TMPL_VAR name="budget_avail" --></p> </td>
+
             </tr>
         <!-- /TMPL_LOOP -->
         </tbody>
+
         <tfoot>
         <tr>
             <th>Total</th>
-            <th><!-- TMPL_VAR name="total" --></th>
-            <th><!-- TMPL_VAR name="totspent" --></th>
-            <th><!-- TMPL_VAR name="totcomtd" --></th>
-            <th><!-- TMPL_VAR name="totavail" --></th>
+                <td>
+                <td>
+            <th><p  align="right" ><!-- TMPL_VAR name="total" --></p> </th>
+            <th><p  align="right" ><!-- TMPL_VAR name="totspent" --></p> </th>
+            <th><p  align="right" ><!-- TMPL_VAR name="totavail" --></p> </th>
         </tr>
         </tfoot>
     </table>
     </div>
+
+
     <p>Use your reload button [ctrl + r] to get the most recent figures.
     Committed figures are approximate only, as exchange rates will affect the amount actually paid.</p>
     <!-- /TMPL_IF -->
+
+
+
     <div id="acqui_acqui_home_currency">
     <!-- TMPL_IF NAME="loop_currency" -->
         <h2>Exchange rates</h2>
@@ -103,18 +149,23 @@
         <table>
             <tr>
                 <th>Currency</th>
+                <th>Symbol</th>
                 <th>Rate</th>
                 <th>&nbsp;</th>
             </tr>
             <!-- TMPL_LOOP name="loop_currency" -->
                 <tr>
-                    <td>
-                        <label for="<!-- TMPL_VAR name="currency" -->"><!-- TMPL_VAR name="currency" --></label>
-                    </td>
+                    <td align='center'><!-- TMPL_VAR name="currency" --></td>
+                    <td align='center'><!-- TMPL_VAR name="currency_symbol" --></td>
                     <td>
                             <input type="hidden" name="type" value="change" />
-                            <input type="text" size="10" id="<!-- TMPL_VAR name="currency" -->" name="<!-- TMPL_VAR name="currency" -->" value="<!-- TMPL_VAR name="rate" -->" />
+                            <input type="text" size="10" value="<!-- TMPL_VAR name="rate" -->" />
                     </td>
+
+
+
+
+
                     <td><input type="submit" value="Save" /></td>
                 </tr>
             <!-- /TMPL_LOOP -->
@@ -127,7 +178,7 @@
     <!-- /TMPL_IF -->
     </div>
 </div>
-    
+
 </div>
 
 <div id="acqui_acqui_home_hints">
