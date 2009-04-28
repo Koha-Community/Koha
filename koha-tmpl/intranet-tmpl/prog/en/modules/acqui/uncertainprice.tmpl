@@ -1,0 +1,118 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Orders with uncertain prices for Vendor <!-- TMPL_VAR name="booksellername" --></title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR NAME='themelang' -->/js/acq.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+function check(form) {
+    form.submit();
+}
+//]]>
+</script>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;<a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR NAME="booksellername" --></a> &rsaquo; Uncertain prices for vendor: <!-- TMPL_VAR NAME="booksellername" --></div>
+
+<div id="doc" class="yui-t7">
+   <div id="bd">
+        <div id="yui-main">
+        <!-- TMPL_IF name="validate" -->
+            <META HTTP-EQUIV=Refresh CONTENT="0; URL=<!-- TMPL_VAR name="scriptname" -->?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->">
+        <!-- TMPL_ELSE -->
+        <h1>Orders with uncertain prices for vendor <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!--TMPL_VAR name="booksellername" --></a> <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->&op=enter">(edit)</a></h1>
+        <!-- TMPL_IF name="owner" -->
+            <a href="/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->">View everyone orders</a>
+        <!-- TMPL_ELSE -->
+            <a href="/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&owner=1">View only my orders</a>
+        <!-- /TMPL_IF -->
+        <h2>Contact information</h2>
+        <p><strong>Postal address: </strong>
+            <!-- TMPL_VAR name="booksellerpostal" --></p>
+        <!-- TMPL_IF name="bookselleraddress1" -->
+        <p><strong>Address 1: </strong>
+            <!-- TMPL_VAR name="bookselleraddress1" --></p>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF name="bookselleraddress2" -->
+        <p><strong>Address 2: </strong>
+            <!-- TMPL_VAR name="bookselleraddress2" --></p>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF name="bookselleraddress3" -->
+        <p><strong>Address 3: </strong>
+            <!-- TMPL_VAR name="bookselleraddress3" --></p>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF name="bookselleraddress4" -->
+        <p><strong>Address 4: </strong>
+            <!-- TMPL_VAR name="bookselleraddress4" --></p>
+        <!-- /TMPL_IF -->
+        <p><strong>Telephone: </strong>
+            <!--TMPL_VAR name="booksellerphone" --></p>
+        <p><strong>Fax: </strong>
+            <!--TMPL_VAR name="booksellerfax" --></p>
+        <p><strong>Web: </strong>
+            <a href="<!--TMPL_VAR name="booksellerurl" -->"><!--TMPL_VAR name="booksellerurl" --></a></p>
+        <p><dl>
+            <dt><strong>Contact: </strong></dt>
+            <dd><strong>Name: </strong><!--TMPL_VAR name="booksellercontact" --></dd>
+            <dd><strong>Position: </strong><!--TMPL_VAR name="booksellercontpos" --></dd>
+            <dd><strong>Telephone: </strong><!--TMPL_VAR name="booksellercontphone" --></dd>
+            <!-- TMPL_IF name="booksellercontaltphone" -->
+                <dd><strong>Alternate phone: </strong><!--TMPL_VAR name="booksellercontaltphone" --></dd>
+            <!-- /TMPL_IF -->
+            <dd><strong>e-mail: </strong><!--TMPL_VAR name="booksellercontemail" --></dd>
+            <!-- TMPL_IF name="booksellercontnotes" -->
+            <dd><strong>notes: </strong><!--TMPL_VAR name="booksellercontnotes" --></dd>
+            <!-- /TMPL_IF -->
+        </dl></p>
+        <!-- TMPL_IF name="booksellernotes" -->
+        <p><strong>Notes: </strong>
+            <!--TMPL_VAR name="booksellernotes" --></p>
+        <!-- /TMPL_IF -->
+        <h2>Orders with uncertain prices</h2>
+        <form action="<!-- TMPL_VAR name="scriptname" -->" method="post" name="uncertainprices">
+        <input type="hidden" name="booksellerid" value="<!-- TMPL_VAR name="booksellerid" -->" />
+        <input type="hidden" name="op" value="validate" />
+        <table>
+	    <tr>
+	        <th>order information</th>
+	        <th>basket name</th>
+	        <th>uncertain price</th>
+	        <th>price</th>
+	        <th>quantity</th>
+	    </tr>
+	    <!-- TMPL_LOOP name="uncertainpriceorders" -->
+	    <tr>
+	    <td>
+	        <!-- TMPL_VAR name="bibtitle" --> / <!-- TMPL_VAR name="bibauthor" --> <br /> <!-- TMPL_VAR name="bibpublishercode" -->, <!-- TMPL_VAR name="bibpublicationyear" --><br /><!-- TMPL_VAR name="bibisbn" --><br />
+	        <a href="neworderempty.pl?ordnum=<!-- TMPL_VAR name="ordernumber" -->&booksellerid=<!-- TMPL_VAR name="booksellerid" -->&basketno=<!-- TMPL_VAR name="basketno" -->">
+	            edit
+	        </a>
+	    </td>
+	    <td>
+	        <!-- TMPL_VAR name="basketname" -->
+	    </td>
+	    <td>
+	        <input type="checkbox" name="uncertainprice<!-- TMPL_VAR name="ordernumber" -->" value="1" checked>
+	    </td>
+	    <td>
+	        <input type="text" size="10" name="price<!-- TMPL_VAR name="ordernumber"-->" value="<!-- TMPL_VAR name="listprice" -->"
+	                                        onChange="uncheckbox(this.form, <!-- TMPL_VAR name="ordernumber" -->);" />
+	    </td>
+	    <td>
+	        
+	        <input type="text" size="10" name="qty<!-- TMPL_VAR name="ordernumber"-->" value="<!-- TMPL_VAR name="quantity" -->"
+	                                        onChange="uncheckbox(this.form, <!-- TMPL_VAR name="ordernumber" -->);" />
+	    </td>
+	    </tr>
+	    <!-- /TMPL_LOOP -->
+	</table>
+	<input type="button" value="Save" onclick="check(this.form)" />
+	</form>
+	<!-- /TMPL_IF -->
+</div>
+</div>
+</div>
+</body>
+</html>
