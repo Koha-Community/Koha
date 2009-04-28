@@ -1,10 +1,9 @@
 #!/usr/bin/perl
 
-#written by chris@katipo.co.nz
-#9/10/2000
 #script to display and update currency rates
 
 # Copyright 2000-2002 Katipo Communications
+# Copyright 2008-2009 BibLibre SARL
 #
 # This file is part of Koha.
 #
@@ -24,7 +23,9 @@
 use strict;
 use warnings;
 use CGI;
-use C4::Bookfund qw(ModCurrencies);
+use C4::Acquisition;
+use C4::Biblio;
+use C4::Budgets;
 
 # FIXME: CHECK AUTH
 # FIXME: This should be part of another script, not a throwaway standalone.
