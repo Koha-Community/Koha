@@ -69,6 +69,9 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
     debug => 1,
 });
 
+$searchfield=~ s/\,//g;
+
+
 $template->param(searchfield => $searchfield,
 		 script_name => $script_name);
 
@@ -88,6 +91,7 @@ if ($op eq 'add_form') {
 	foreach (keys %$data) {
 		$template->param($_ => $data->{$_});
 	}
+
 	my $date = $template->param('timestamp');
 	($date) and $template->param('timestamp' => format_date($date));
 													# END $OP eq ADD_FORM
@@ -95,15 +99,37 @@ if ($op eq 'add_form') {
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	$template->param(add_validate => 1);
-	my $check = $dbh->prepare("select * from currency where currency = ?");
+	my $dbh = C4::Context->dbh;
+	my $check = $dbh->prepare("select count(*) as count from currency where currency = ?");
+
+	$dbh->do("UPDATE currency SET active = 0") if (    $input->param('active')  == 1);
+
 	$check->execute($input->param('currency'));
-	if ( $check->fetchrow ) {
-		my $sth = $dbh->prepare("UPDATE currency SET rate = ?, symbol = ?, timestamp = ? WHERE currency = ?");
-		$sth->execute($input->param('rate'),$input->param('symbol'),C4::Dates->new->output('iso'),$input->param('currency'));
-	} else {
-		my $sth = $dbh->prepare("INSERT INTO currency (currency, rate, symbol) VALUES (?,?,?)");
-		$sth->execute($input->param('currency'),$input->param('rate'),$input->param('symbol'));
-	}	 
+	my $count =   $check->fetchrow ;
+	if ( $count > 0  )
+	{
+		my $sth = $dbh->prepare(qq|
+                UPDATE currency
+                    SET rate = ?,
+                      symbol = ?,
+                      active = ?
+              WHERE currency = ?  |  );
+
+		$sth->execute(  $input->param('rate'),
+                        $input->param('symbol'),
+                        $input->param('active'),
+                        $input->param('currency'),  );
+	}
+	else
+	{
+		my $sth = $dbh->prepare(qq|
+                    INSERT INTO currency (currency, rate, symbol, active) VALUES (?,?,?,?)   |);
+
+		$sth->execute(  $input->param('currency'),
+                        $input->param('rate'),
+                        $input->param('symbol'),
+                        $input->param('active'),       );
+	}
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB

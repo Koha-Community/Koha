@@ -42,11 +42,9 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="currencies-admin-search.inc" -->
 
-<div id="breadcrumbs">
-         <a href="/cgi-bin/koha/mainpage.pl">Home</a>
-&rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
-&rsaquo; <a href="<!-- TMPL_VAR NAME="script_name" -->">Currencies &amp; Exchange Rates</a>
-&rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modify Currency '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->New Currency<!-- /TMPL_IF --><!-- /TMPL_IF -->
+
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  <a href="/cgi-bin/koha/admin/currency.pl">Currencies &amp; Exchange Rates</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modify Currency '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->New Currency<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="add_validate" -->Data Recorded<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion of Currency '<span class="ex"><!-- TMPL_VAR NAME="searchfield" --></span>'<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirmed" -->Currency Deleted<!-- /TMPL_IF -->
@@ -94,11 +92,18 @@
 			<label for="symbol">Symbol: </label>
 			<input type="text" name="symbol" id="symbol" size="5" maxlength="5" value="<!-- TMPL_VAR NAME="symbol" -->" />
 		</li>
+
         <li>
 			<label for="currency">Last Updated: </label><!-- TMPL_VAR NAME="timestamp" -->
 		</li>
-    </ol>
-    </fieldset>
+        <li>
+			<label for="currency">Active: </label>
+            <input type="checkbox" id="active" name="active" value="1"
+            <!-- TMPL_IF NAME="active" --> checked <!-- /TMPL_IF -->   />
+		</li>
+
+		</ol>
+        </fieldset>
 		
     <fieldset class="action">
         <input type="submit" value="Submit" onclick="Check(this.form)" /> <a class="cancel" href="<!-- TMPL_VAR NAME="script_name" -->">Cancel</a>
@@ -168,7 +173,8 @@
 			<th>Rate</th>
 			<th>Symbol</th>
 			<th>Last Updated</th>
-			<th colspan="2">&nbsp;</th>
+			<th>Active</th>
+			<th colspan="2">Actions&nbsp;</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="loop" -->
 		<!-- TMPL_UNLESS NAME="__odd__" -->
@@ -180,11 +186,20 @@
 			<td><!-- TMPL_VAR NAME="rate" --></td>
 			<td><!-- TMPL_VAR NAME="symbol" ESCAPE="HTML" --></td>
 			<td><!-- TMPL_VAR NAME="timestamp" --></td>
+
+			<td><!-- TMPL_IF NAME="active" -->
+                <font COLOR="#00FF00">✓</font>
+                <!-- /TMPL_IF -->
+            </td>
+
 			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="currency" -->">Edit</a></td>
             <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="currency" -->">Delete</a></td>
 		</tr>
 		<!-- /TMPL_LOOP -->
 	</table>
+<br>
+<p><b>Hint:</b> Your 'active' currency should have it's exchange rate set to '1.00000'</p>
+
 	
 	<!-- TMPL_IF NAME="offsetgtzero" -->
 		<a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->">&lt;&lt; Previous</a>
