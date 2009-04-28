@@ -15,5 +15,18 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'import_patrons', 'Import patron data'),
    (13, 'delete_anonymize_patrons', 'Delete old borrowers and anonymize circulation history (deletes borrower reading history)'),
    (13, 'batch_upload_patron_images', 'Upload patron images in batch or one at a time'),
-   (13, 'schedule_tasks', 'Schedule tasks to run')
+   (13, 'schedule_tasks', 'Schedule tasks to run'),
+   (13, 'batchmod', 'Perform batch modification of items'),
+   (13, 'batchdel', 'Perform batch deletion of items')
+   (11, 'vendors_manage', 'Manage vendors'),
+   (11, 'contracts_manage', 'Manage contracts'),
+   (11, 'period_manage', 'Manage periods'),
+   (11, 'budget_manage', 'Manage budgets'),
+   (11, 'budget_modify', 'Modify budget (can''t create lines, but can modify existing ones)'),
+   (11, 'planning_manage', 'Manage budget plannings'),
+   (11, 'order_manage', 'Manage orders & basket'),
+   (11, 'group_manage', 'Manage orders & basketgroups'),
+   (11, 'order_receive', 'Manage orders & basket')
+   (11, 'budget_add_del', 'Add and delete budgets (but cant modify budgets)')
 ;
+>>>>>>> granular perms for acquisitions:installer/data/mysql/en/mandatory/userpermissions.sql
