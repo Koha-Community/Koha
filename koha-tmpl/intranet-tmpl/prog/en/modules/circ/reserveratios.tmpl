@@ -9,7 +9,7 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
 <!-- End of additions -->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/JavaScript" language="JavaScript">
+<script type="text/javascript" language="JavaScript">
 //<![CDATA[
 $.tablesorter.addParser({
     id: 'articles', 
@@ -19,19 +19,30 @@ $.tablesorter.addParser({
 });
 	 $(document).ready(function() {
 	 	$("th a").hide();
+	 	$(".ratiolimit").click(function () {
+            $("#ratio").val($(this).html());
+        });
+	 	$(".ratiolimit").hover(
+            function () { $(this).toggleClass("ulined") },
+            function () { $(this).toggleClass("ulined") }
+        );
 		$.tablesorter.defaults.widgets = ['zebra']; 
-		$("#holdst").tablesorter({
+		$("#holdst:has(tbody tr)").tablesorter({    // only add sort if the table has a body and rows
 			sortList: [[0,0]],
 			headers: { 1: { sorter: 'articles' }}
 		}); 
 	 });
 //]]>
 </script>
+<style type="text/css">
+    .sql { display: none; }
+    .ulined { text-decoration: underline; }
+    .ratiolimit { color: blue; cursor: pointer; }
+</style>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="circ-search.inc" -->
-
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Hold Ratios</div>
 
@@ -43,7 +54,9 @@ $.tablesorter.addParser({
 <h1>Hold Ratios to Calculate Items Needed</h1>
    <h3>Calculated on <!-- TMPL_VAR NAME="todaysdate" -->. From <!-- TMPL_VAR NAME="from" -->
 	to <!-- TMPL_VAR NAME="to" --></h3>
-<p>These items have a large number of holds.</p>
+<p>These items have a hold ratio &ge; <!-- TMPL_VAR NAME="ratio" -->.</p>
+<div class="sql"><!-- TMPL_VAR NAME="sql" DEFAULT="" --></div>
+
 <!-- TMPL_IF NAME="reserveloop" -->
     <table id="holdst">
 <thead>    <tr>
@@ -53,6 +66,7 @@ $.tablesorter.addParser({
         <th>Items
         <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=<!-- TMPL_VAR NAME="ratio" -->&amp;order=itemcount&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
+        <th>Hold Ratio</th>
         <th>Title
         <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=<!-- TMPL_VAR NAME="ratio" -->&amp;order=biblio&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
@@ -73,42 +87,29 @@ $.tablesorter.addParser({
     </tr></thead>
     
     <tbody><!-- TMPL_LOOP NAME="reserveloop" -->
-        <!-- TMPL_IF name="ratio_ge_one" -->
         <tr>
-            	 <td>
-            	 	  <p><!-- TMPL_VAR NAME="reservecount" --></p>
-            	 </td>
-            	 <td>
-            	 	  <p><!-- TMPL_VAR NAME="itemcount" --></p>
-            	 </td>
-                <td>
-                    <p>
-                    <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
-                    <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                        <!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_VAR NAME="subtitle" -->
-                    </a>
-                    <!-- TMPL_ELSE -->
-                        <!-- TMPL_IF name="BiblioDefaultViewisbd" -->
-                        <a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                            <!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_VAR NAME="subtitle" -->
-                        </a>
-                        <!-- TMPL_ELSE -->
-                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                                <!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_VAR NAME="subtitle" -->
-                            </a>
-                        <!-- /TMPL_IF -->
-                    <!-- /TMPL_IF -->
-                    </p>
-                    <p><!-- TMPL_VAR NAME="notes" --></p>
-                </td>
-
-            	<td><p><!-- TMPL_VAR NAME="listbranch" --></p></td>
-            	<td><p><!-- TMPL_VAR NAME="location" --></p></td>
-            	<td><p><!-- TMPL_VAR NAME="itype" --></p></td>
-            	<td><p><!-- TMPL_VAR NAME="listcall" --></p></td>
-				<td><p><b><!-- TMPL_VAR NAME="ratiocalc" --> to order</b></p></td>
+           	<td><p><!-- TMPL_VAR NAME="reservecount" --></p></td>
+           	<td><p><!-- TMPL_VAR NAME="itemcount" --></p></td>
+           	<td><p class="ratiolimit"><!-- TMPL_VAR NAME="thisratio" --></p></td>
+            <td><p>
+                   <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
+                   <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+                   <!-- TMPL_ELSIF name="BiblioDefaultViewisbd" -->
+                   <a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+                   <!-- TMPL_ELSE -->
+                   <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+                   <!-- /TMPL_IF -->
+                      <!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_VAR NAME="subtitle" -->
+                   </a>
+                </p>
+                <p><!-- TMPL_VAR NAME="notes" --></p>
+            </td>
+            <td><p><!-- TMPL_VAR NAME="listbranch" --></p></td>
+            <td><p><!-- TMPL_VAR NAME="location" --></p></td>
+            <td><p><!-- TMPL_VAR NAME="itype" --></p></td>
+            <td><p><!-- TMPL_VAR NAME="listcall" --></p></td>
+            <td><!-- TMPL_IF NAME="thisratio_atleast1" --><p><b><!-- TMPL_VAR NAME="ratiocalc" --> to order</b></p><!-- /TMPL_IF --></td>
         </tr>
-        <!-- /TMPL_IF -->
     <!-- /TMPL_LOOP --></tbody>
     </table>
     <!-- TMPL_ELSE -->
