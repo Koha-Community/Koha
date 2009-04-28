@@ -1,0 +1,141 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Acquisitions &rsaquo; Z39.50 Search Results</title>
+<!-- TMPL_INCLUDE NAME="greybox.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.pack.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+$.tablesorter.addParser({
+    id: 'articles', 
+    is: function(s) {return false;  }, 
+    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
+    type: 'text' 
+});
+
+	$(document).ready(function(){
+    $("#CheckAll").click(function(){
+        $(".checkboxed").checkCheckboxes();
+        return false;
+    });
+    $("#CheckNone").click(function(){
+        $(".checkboxed").unCheckCheckboxes();
+        return false;
+    });
+	$("#resultst").tablesorter({
+		sortList: [[1,0]],
+		headers: { 0: {sorter:false}, 1: { sorter: 'articles' },5: { sorter: false },6: { sorter: false }}
+	}); 
+});
+//]]>
+</script>
+   <style type="text/css">
+   #custom-doc { width:54.92em;*width:53.55em;min-width:720px; margin:auto; text-align:left; }
+   </style>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; order from z3950 search</div>
+<div id="custom-doc" class="yui-t7">
+      <div id="bd">
+	  <!-- TMPL_IF name="opsearch" -->
+<h2>Z39.50 Search Points</h2>
+    <form method="post" action="z3950_search.pl" name="f" class="checkboxed">
+    <input type="hidden" name="op" id="op" value="do_search" />
+	<div class="yui-g">
+    <div class="yui-u first">
+	    <fieldset class="rows"> 
+		 <ol><li><label for="title">Title: </label> <input type="text" id="title"  name="title" value="<!-- TMPL_VAR NAME="title" -->" /></li>
+		 <li><label for="isbn">ISBN/ISSN: </label> <input type="text" id="isbn" name="isbn" value="<!-- TMPL_VAR NAME="isbn" -->" /></li>
+		 <li><label for="lccall">LC Call Number: </label> <input type="text" id="lccall" name="lccall" value="" /></li></ol>
+		</fieldset>
+	    </div>
+    <div class="yui-u">
+	<fieldset class="rows">		 <ol><li><label for="author">Author: </label> <input type="text" id="author" name="author" value="<!-- TMPL_VAR NAME="author" -->" /><!--  <label for="Keyword">Keyword</label> <input type="text" name="keyword" value="" /> --></li>
+		 <li> <label for="subject">Subject Heading: </label> <input type="text" id="subject" name="subject" value="" /></li>
+		 <li><label for="dewey">Dewey: </label> <input type="text" id="dewey" name="dewey" value="" /></li></ol></fieldset>
+	     <fieldset class="rows" >
+                 <ol>
+                     <li>
+                         <label for="frameworkcode" >Select used MARC framework:</label>
+                         <select id="frameworkcode" name="frameworkcode" >
+                             <option value="">Default</option>
+                         <!-- TMPL_LOOP name="frameworkcodeloop" -->
+                             <!-- TMPL_IF name="active" -->
+                                 <option value="<!-- TMPL_VAR name="value" -->" selected="selected" ><!-- TMPL_VAR name="frameworktext"--></option>
+                             <!-- TMPL_ELSE -->
+                                 <option value="<!-- TMPL_VAR name="value" -->" ><!-- TMPL_VAR name="frameworktext"--></option>
+                             <!-- /TMPL_IF -->
+                         <!-- /TMPL_LOOP -->
+                         </select>
+                     </li>
+                 </ol>
+             </fieldset>
+    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+    <input type="hidden" name="basketno" value="<!-- TMPL_VAR name="basketno" -->" />
+    <input type="hidden" name="booksellerid" value="<!-- TMPL_VAR name="booksellerid" -->" />
+	    </div>
+</div>
+<div class="yui-g">
+<h2>Search targets <span style="display: inline; font-size: 70%; padding-left: 1em;"><span class="checkall"><a id="CheckAll" href="#">Select All</a></span><span class="clearall"><a id="CheckNone" href="#">Clear All</a></span></span></h2>
+
+    <!-- TMPL_LOOP name="serverloop" -->
+        <p> 
+            <!-- TMPL_IF name="checked" -->
+                <input type="checkbox" name="id" id="z3950_<!-- TMPL_VAR NAME="id" -->" value="<!-- TMPL_VAR NAME="id" -->" checked="checked" />
+            <!-- TMPL_ELSE -->
+                <input type="checkbox" name="id" id="z3950_<!-- TMPL_VAR NAME="id" -->" value="<!-- TMPL_VAR NAME="id" -->" />
+            <!-- /TMPL_IF -->
+            <label for="z3950_<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name" --> [<!-- TMPL_VAR NAME="host" -->]</label>  
+
+        </p>
+    <!-- /TMPL_LOOP -->
+    <fieldset class="action"><input type="submit"  class="submit" value="Search" onclick="cursor :'wait'"/> <a class="cancel close" href="#">Cancel</a></fieldset>
+    </form>
+
+
+<!-- TMPL_ELSE -->
+    <h2>Results</h2>
+    <!-- TMPL_IF name="breeding_loop" -->
+    <table id="resultst">
+<thead>    <tr>
+        <th>Server</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>ISBN</th>
+        <th>LCCN</th>
+        <th colspan="2">Preview</th>
+		<th>&nbsp;</th>
+    </tr></thead>
+    <tbody><!-- TMPL_LOOP name="breeding_loop" -->
+        <!-- TMPL_IF NAME="breedingid" -->
+		
+        <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+            <td><!-- TMPL_VAR name="server" --></td>
+            <td><!-- TMPL_VAR NAME="title" --></td>
+            <td><!-- TMPL_VAR NAME="author" --></td>
+            <td><!-- TMPL_VAR NAME="isbn" --></td>
+            <td><!-- TMPL_VAR NAME="lccn" --></td>
+            <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=<!-- TMPL_VAR NAME="breedingid" -->" title="MARC" rel="gb_page_center[600,500]">MARC</a></td><td><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&importid=<!-- TMPL_VAR NAME="breedingid" -->" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
+			<td><a href="/cgi-bin/koha/acqui/neworderempty.pl?frameworkcode=<!-- TMPL_VAR name="frameworkcode" -->&breedingid=<!-- TMPL_VAR NAME="breedingid" -->&booksellerid=<!-- TMPL_VAR name="booksellerid" -->&basketno=<!-- TMPL_VAR name="basketno" -->">Order</a></td> 
+
+        </tr>
+        <!-- /TMPL_IF -->
+    <!-- /TMPL_LOOP --></tbody>
+</table>
+    <!-- TMPL_ELSE -->
+        <p>Nothing found. <a href="javascript: history.back()">Try another search</a>.</p>
+    <!-- /TMPL_IF -->
+
+
+<!-- /TMPL_IF -->
+
+	</div>
+</div>
+<!-- TMPL_IF name="numberpending" --><h3 align="center">Still <!-- TMPL_VAR NAME="numberpending" --> servers to search</h3><!-- /TMPL_IF -->
+
+</body>
+</html>
+
