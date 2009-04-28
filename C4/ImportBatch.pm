@@ -137,7 +137,7 @@ sub GetImportRecordMarc {
     $sth->execute($import_record_id);
     my ($marc, $encoding) = $sth->fetchrow();
     $sth->finish();
-    return $marc;
+    return $marc, $encoding;
 
 }
 
@@ -771,18 +771,21 @@ sub GetImportBatchRangeDesc {
     my ($offset, $results_per_group) = @_;
 
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare_cached("SELECT * FROM import_batches
+    my $query = "SELECT * FROM import_batches
                                     WHERE batch_type = 'batch'
-                                    ORDER BY import_batch_id DESC
-                                    LIMIT ? OFFSET ?");
-    $sth->bind_param(1, $results_per_group);
-    $sth->bind_param(2, $offset);
-
-    my $results = [];
-    $sth->execute();
-    while (my $row = $sth->fetchrow_hashref) {
-        push @$results, $row;
+                                    ORDER BY import_batch_id DESC";
+    my @params;
+    if ($offset){
+        if ($results_per_group){
+            $query .= " LIMIT ?";
+            push(@params, $results_per_group);
+        }
+        $query .= " OFFSET ?";
+        push(@params, $offset);
     }
+    my $sth = $dbh->prepare_cached($query);
+    $sth->execute(@params);
+    my $results = $sth->fetchall_arrayref({});
     $sth->finish();
     return $results;
 }
@@ -840,20 +843,25 @@ sub GetImportBibliosRange {
     my ($batch_id, $offset, $results_per_group) = @_;
 
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare_cached("SELECT title, author, isbn, issn, import_record_id, record_sequence,
-                                           matched_biblionumber, status, overlay_status
+    my $query = "SELECT title, author, isbn, issn, import_record_id, record_sequence,
+                                           status, overlay_status
                                     FROM   import_records
                                     JOIN   import_biblios USING (import_record_id)
                                     WHERE  import_batch_id = ?
-                                    ORDER BY import_record_id LIMIT ? OFFSET ?");
-    $sth->bind_param(1, $batch_id);
-    $sth->bind_param(2, $results_per_group);
-    $sth->bind_param(3, $offset);
-    my $results = [];
-    $sth->execute();
-    while (my $row = $sth->fetchrow_hashref) {
-        push @$results, $row;
+                                    ORDER BY import_record_id";
+    my @params;
+    push(@params, $batch_id);
+    if($offset){
+        if($results_per_group){
+            $query .= " LIMIT ?";
+            push(@params, $results_per_group);
+        }
+        $query .= " OFFSET ?";
+        push(@params, $offset);
     }
+    my $sth = $dbh->prepare_cached($query);
+    $sth->execute(@params);
+    my $results = $sth->fetchall_arrayref({});
     $sth->finish();
     return $results;
 
