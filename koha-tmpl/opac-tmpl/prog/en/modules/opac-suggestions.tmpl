@@ -126,7 +126,9 @@ $.tablesorter.addParser({
         <tbody><!-- TMPL_LOOP NAME="suggestions_loop" -->
             <!-- TMPL_IF name="even" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="loggedinusername" --><td>
-                    <input type="checkbox" name="delete_field" value="<!--TMPL_VAR name="ordernumber" -->" />
+    <!-- TMPL_IF NAME="showcheckbox" -->
+                    <input type="checkbox" name="delete_field" value="<!--TMPL_VAR name="suggestionid" -->" />
+    <!-- /TMPL_IF -->
                 </td><!-- /TMPL_IF -->
                 <td>
                     <p><strong><!-- TMPL_VAR NAME="title" escape="html" --></strong></p>

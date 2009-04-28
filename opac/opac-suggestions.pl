@@ -108,9 +108,14 @@ $template->param(
 	itemtypeloop=> $supportlist,
     suggestions_loop => $suggestions_loop,
     showall    => $allsuggestions,
+    title            => $title,
+    author           => $author,
+    publishercode    => $publishercode,
+    status           => $status,
     "op_$op"         => 1,
 	  suggestionsview => 1
 );
+
 
 output_html_with_http_headers $input, $cookie, $template->output;
 

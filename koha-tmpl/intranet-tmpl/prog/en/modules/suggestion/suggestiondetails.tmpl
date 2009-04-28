@@ -1,0 +1,580 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+
+
+<title>
+
+    Koha &rsaquo; Acquisitions &rsaquo; Suggestion management &rsaquo; Suggestion details
+
+</title>
+
+
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+
+<script type="text/javascript">
+// ################################################################################# 
+// Javascript
+// #################################################################################
+
+    function isNotNull(f,noalert) {
+            if (f.value.length ==0) {
+                    return false;
+            }
+            return true;
+    }
+
+
+    function toUC(f) {
+            var x=f.value.toUpperCase();
+            f.value=x;
+            return true;
+    }
+
+
+    function isNum(v,maybenull) {
+    var n = new Number(v.value);
+    if (isNaN(n)) {
+            return false;
+            }
+    if (maybenull==0 && v.value=='') {
+            return false;
+    }
+    return true;
+    }
+
+
+    function isDate(f) {
+            var t = Date.parse(f.value);
+            if (isNaN(t)) {
+                    return false;
+            }
+    }
+
+
+    function Check(f) {
+            var ok=1;
+            var _alertString="";
+            var alertString2;
+
+            if (!(isNotNull(window.document.Aform.budgetperiodstartdate,1))) {
+                    _alertString += "\n- " + _("budget period start date missing");
+            }
+
+            if (!(isNotNull(window.document.Aform.budgetperiodenddate,1))) {
+                    _alertString += "\n- " + _("budget period end date missing");
+            }
+
+            if (!(isNotNull(window.document.Aform.budgetperiodref,1))) {
+                    _alertString += "\n- " + _("reference period indicator missing");
+            }
+
+            if (!(isNotNull(window.document.Aform.budgetperioddescription,1))) {
+                    _alertString += "\n- " + _("Description missing");
+            }
+
+            if (_alertString.length==0) {
+                    document.Aform.submit();
+            } else {
+                    alertString2  = _("Form not submitted because of the following problem(s)");
+                    alertString2 += "\n------------------------------------------------------------------------------------\n";
+                    alertString2 += _alertString;
+                    alert(alertString2);
+            }
+    }
+
+</script>
+
+</head>
+<!-- ################################################################################# -->
+<!-- ################################################################################# -->
+<!-- BODY -->
+<!-- ################################################################################# -->
+<!-- ################################################################################# -->
+
+<body>
+
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->  
+
+
+<!-- ################################################################################# -->
+<!-- BREADCRUMBS -->
+<!-- ################################################################################# -->
+
+
+<div id="breadcrumbs">
+
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
+    <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;
+    <a href="/cgi-bin/koha/suggestion/acceptorreject.pl">Suggestions Management (GPD)</a> &rsaquo;
+    suggestion details
+
+</div>
+
+
+<!--<div id="doc3" class="yui-t2">
+<div id="bd">
+<div id="yui-main">
+<div class="yui-b">-->
+<!-- TMPL_INCLUDE NAME="acquisitions-toolbar.inc" -->
+
+
+
+
+<!-- ###################################################################### -->
+<!-- ###################################################################### -->
+<!-- display the suggestion details -->
+<!-- ###################################################################### -->
+<!-- ###################################################################### -->
+
+    <div class="paginationBar"><!-- TMPL_VAR NAME="pagination_bar" --></div>
+
+    <h1>Suggestion details (General Purchase Department)</h1>
+    <br/><br/>
+
+
+
+<!-- TMPL_IF NAME="step2ormore" -->
+
+<!-- ###################################################################### -->
+<!-- The user cannot edit the fields -->
+<!-- ###################################################################### -->
+<!-- ###################################################################### -->
+
+    <ol>
+        <li>
+            <h2>Document</h2>
+        </li>
+        <li>
+            <label for="title">Title :</label>&nbsp;<!-- TMPL_VAR name="title" -->
+        </li>
+        <li>
+            <label for="author">Author:</label>&nbsp;<!-- TMPL_VAR name="author" -->
+        </li>
+        <li>
+            <label for="copyrightdate">Copyright date:</label>&nbsp;<!-- TMPL_VAR name="copyrightdate" -->
+        </li>
+        <li>
+            <label for="isbn">ISBN : </label>&nbsp;<!-- TMPL_VAR name="isbn" -->
+        </li>
+        <li>
+            <label for="rrp">unit price : </label>&nbsp;<!-- TMPL_VAR name="rrp" -->
+        </li>
+        <li>
+            <label for="publishercode">Publisher:</label>&nbsp;<!-- TMPL_VAR name="publishercode" -->
+        </li>
+        <li>
+            <label for="seriestitle">Series:</label>&nbsp;<!-- TMPL_VAR name="seriestitle" -->
+        </li>
+        <li>
+            <label for="note">Notes:</label>&nbsp;<!-- TMPL_VAR name="note" -->
+        </li>
+
+        <li>
+            <label for="itemtype">Item type :</label>&nbsp;<!-- TMPL_VAR NAME="itemtypedescription" -->
+        </li>
+
+        <li>
+            <h2>Branch, book fund group, book fund, audience</h2>
+        </li>
+
+<!-- ############################################################# -->
+<!-- 'Branch, book fund group, book fund, audience'        -->
+<!-- ############################################################# -->
+
+        <li>
+            <label for="branch_loop">Branch :</label>&nbsp;<!-- TMPL_VAR NAME="branchname" -->
+        </li>
+
+        <li>
+            <label for="bookfundgroup_loop">book fund group :</label>&nbsp;<!-- TMPL_VAR NAME="bookfundgroupname"-->
+        </li>
+
+        <li>
+            <label for="bookfund_loop">book fund :</label>&nbsp;<!-- TMPL_VAR NAME="bookfundname"-->
+        </li>
+
+        <li>
+            <label for="audience_loop">audience :</label>&nbsp;<!-- TMPL_VAR NAME="audiencename"-->
+        </li>
+
+        <li>
+            <h2>Suggestion management</h2>
+        </li>
+
+<!-- ############################################################# -->
+<!-- suggestion management        -->
+<!-- ############################################################# -->
+
+        <li>
+
+            <table>
+                <tr>
+                    <th>Action</th>
+                    <th>Author</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Reason</th>
+                </tr>
+
+                <tr>
+                    <td>suggestion made by</td>
+                    <td>
+                        <!-- TMPL_VAR name="surnamesuggestedby" -->
+                        <!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF -->
+                        <!-- TMPL_VAR name="firstnamesuggestedby" -->
+                    </td>
+                    <td><!-- TMPL_VAR name="suggestioncreatedon" --></td>
+                    <td> - - - - - </td>
+                    <td> - - - - - </td>
+                </tr>
+
+
+                <tr>
+                    <td>suggestion managed by (GPD)</td>
+                    <td>
+                        <!-- TMPL_VAR name="surnamemanagedingpdby" -->
+                        <!-- TMPL_IF name="firstnamemanagedingpdby" -->,<!-- /TMPL_IF -->
+                        <!-- TMPL_VAR name="firstnamemanagedingpdby" -->
+                    </td>
+                    <td><!-- TMPL_VAR name="suggestionmanagedingpdon" --></td>
+
+                    <td>
+                        <!-- TMPL_IF name="rejected2" -->
+                            REJECTED
+                        <!-- TMPL_ELSE -->
+                            ACCEPTED
+                        <!-- /TMPL_IF -->
+                    </td>
+
+                    <td>
+                        <!-- TMPL_IF name="rejected2" -->
+                                <!-- TMPL_VAR NAME="reason" -->
+                        <!-- TMPL_ELSE -->
+                                 - - - - - 
+                        <!-- /TMPL_IF -->
+                    </td>
+
+                </tr>
+
+                <!-- "suggestion managed by (PD) " -->
+                <!-- ################################################### -->
+
+                <tr>
+                    <td>suggestion managed by (PD)</td>
+
+                    <!-- TMPL_IF name="rejected2" -->
+                    <td> - - - - - </td>
+                    <td> - - - - - </td>
+                    <td> - - - - - </td>
+                    <td> - - - - - </td>
+
+                    <!-- TMPL_ELSE -->
+
+                        <!-- TMPL_IF name="accepted2" -->
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+    
+                        <!-- TMPL_ELSE -->
+                        <td>
+                            <!-- TMPL_VAR name="surnamemanagedinpdby" -->
+                            <!-- TMPL_IF name="firstnamemanagedinpdby" -->,<!-- /TMPL_IF -->
+                            <!-- TMPL_VAR name="firstnamemanagedinpdby" -->
+                        </td>
+                        <td><!-- TMPL_VAR name="suggestionmanagedinpdon" --></td>
+                        <td><!-- TMPL_VAR NAME="status" --></td>
+                        <td><!-- TMPL_VAR NAME="reason" --></td>
+    
+                        <!-- /TMPL_IF -->
+
+                    <!-- /TMPL_IF -->
+                </tr>
+        </li>
+
+    </ol>
+
+
+
+<!-- TMPL_ELSE -->
+
+<!-- ###################################################################### -->
+<!-- ## the user can edit the fields (step=1) -->
+<!-- ###################################################################### -->
+<!-- ###################################################################### -->
+
+
+<!-- ###################################################################### -->
+<!-- description of the item -->
+<!-- ###################################################################### -->
+
+
+    <form action="/cgi-bin/koha/suggestion/suggestiondetails.pl" method="post">
+
+        <input type="hidden" name="ordernumber" value=<!-- TMPL_VAR name="ordernumber" --> />
+
+        <fieldset class="rows">
+            <ol>
+                <li>
+                    <h2>Document</h2>
+                </li>
+                <li>
+                    <label for="title">Title: *</label>
+                    <input type="text" id="title" name="title" size="50" maxlentgh="80" value="<!-- TMPL_VAR name="title" -->"/>
+                </li>
+                <li>
+                    <label for="author">Author: *</label>
+                    <input type="text" id="author" name="author" size="50" maxlength="80" value="<!-- TMPL_VAR name="author" -->" />
+                </li>
+                <li>
+                    <label for="copyrightdate">Copyright date: </label>
+                    <input type="text" id="copyrightdate" name="copyrightdate" size="4" maxlength="4" value="<!-- TMPL_VAR name="copyrightdate" -->"/>
+                </li>
+                <li>
+                    <label for="isbn">ISBN: *</label>
+                    <input type="text" id="isbn" name="isbn" size="13" maxlength="13" value="<!-- TMPL_VAR name="isbn" -->"/>
+                </li>
+                <li>
+                    <label for="rrp">unit price: </label>
+                    <input type="text" id="rrp" name="rrp" size="15" maxlength="15" value="<!-- TMPL_VAR name="rrp" -->"/>
+                </li>
+                <li>
+                    <label for="publishercode">Publisher: *</label>
+                    <input type="text" id="publishercode" name="publishercode" size="50" maxlength="80" value="<!-- TMPL_VAR name="publishercode" -->"/>
+                </li>
+                <li>
+                    <label for="seriestitle">Series:</label>
+                    <input type="text" id="seriestitle" name="seriestitle" size="50" maxlength="50" value="<!-- TMPL_VAR name="seriestitle" -->"/>
+                </li>
+                <li>
+                    <label for="note">Notes:</label>
+                    <textarea name="note" id="note" rows="5" cols="40" value="<!-- TMPL_VAR name="note" -->"><!-- TMPL_VAR name="note" --></textarea>
+                </li>
+
+                <li>
+                    <label for="itemtype">Item type: *</label>
+                    <select id="itemtype" name="itemtype">
+
+                        <!-- TMPL_LOOP NAME="itemtypeloop" -->
+
+                            <!-- TMPL_IF NAME="selected" -->
+
+                                <option value="<!-- TMPL_VAR NAME="itemtype" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option>
+
+                            <!-- TMPL_ELSE -->
+
+                                <option value="<!-- TMPL_VAR NAME="itemtype" -->"><!-- TMPL_VAR NAME="description" --></option>
+
+                            <!-- /TMPL_IF -->
+
+                        <!-- /TMPL_LOOP -->
+                    </select>
+                </li>
+
+
+                <li>
+                    <h2>Branch, book fund group, book fund, audience</h2>
+                </li>
+
+<!-- ############################################################# -->
+<!-- 'Branch, book fund group, book fund, audience'        -->
+<!-- ############################################################# -->
+
+                <li>
+                    <label for="branch_loop">Branch: *</label>
+                    <select id="branch_loop" name="branch_loop">
+                        <!-- TMPL_LOOP NAME="branch_loop" -->
+                            <!-- TMPL_IF NAME="selected" -->
+                                <option value="<!-- TMPL_VAR NAME="branchcode" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
+                            <!-- TMPL_ELSE -->
+                                <option value="<!-- TMPL_VAR NAME="branchcode" -->"><!-- TMPL_VAR NAME="branchname" --></option>
+                            <!-- /TMPL_IF -->
+                        <!-- /TMPL_LOOP -->
+                    </select>
+                </li>
+
+                <li>
+                    <label for="bookfundgroup_loop">book fund group: *</label>
+                    <select name="bookfundgroup_loop">
+                        <option value="">choose a book fund group</option>
+
+                        <!-- TMPL_LOOP NAME="bookfundgroup_loop" -->
+
+                            <!-- TMPL_IF NAME="selected" -->
+                                <option value="<!-- TMPL_VAR name="bookfundgroupnumber" -->" selected="selected"><!-- TMPL_VAR NAME="bookfundgroupname"--></option>
+
+                            <!-- TMPL_ELSE -->
+                                <option value="<!-- TMPL_VAR name="bookfundgroupnumber" -->" ><!-- TMPL_VAR NAME="bookfundgroupname"--></option>
+
+                            <!-- /TMPL_IF -->
+
+                        <!-- /TMPL_LOOP -->
+                    </select>
+                </li>
+
+                <li>
+                    <label for="bookfund_loop">book fund :</label>
+                    <select name="bookfund_loop">
+
+                        <!-- TMPL_IF NAME="chooseabookfund" -->
+                        <option value"">choose a book fund</option>
+                        <!-- TMPL_ELSE -->
+                        <option value"">please 1st specify a book fund group</option>
+                        <!-- /TMPL_IF -->
+
+                        <!-- TMPL_LOOP NAME="bookfund_loop" -->
+
+                            <!-- TMPL_IF NAME="selected" -->
+                                <option value="<!-- TMPL_VAR name="bookfundnumber" -->" selected="selected"><!-- TMPL_VAR NAME="bookfundname"--></option>
+
+                            <!-- TMPL_ELSE -->
+                                <option value="<!-- TMPL_VAR name="bookfundnumber" -->" ><!-- TMPL_VAR NAME="bookfundname"--></option>
+
+                            <!-- /TMPL_IF -->
+                        <!-- /TMPL_LOOP -->
+                    </select>
+                </li>
+
+                <li>
+                    <label for="audience_loop">audience :</label>
+                    <select name="audience_loop">
+
+                        <!-- TMPL_IF NAME="chooseanaudience" -->
+                            <option value"">choose an audience</option>
+                        <!-- TMPL_ELSE -->
+                            <option value"">please 1st specify a book fund group</option>
+                        <!-- /TMPL_IF -->
+
+                        <!-- TMPL_LOOP NAME="audience_loop" -->
+
+                            <!-- TMPL_IF NAME="selected" -->
+                                <option value="<!-- TMPL_VAR name="audiencenumber" -->" selected="selected"><!-- TMPL_VAR NAME="audiencename"--></option>
+
+                            <!-- TMPL_ELSE -->
+                                <option value="<!-- TMPL_VAR name="audiencenumber" -->" ><!-- TMPL_VAR NAME="audiencename"--></option>
+
+                            <!-- /TMPL_IF -->
+                        <!-- /TMPL_LOOP -->
+                    </select>
+
+                </li>
+
+
+                <li>
+                    <h2>Suggestion management</h2>
+                </li>
+
+<!-- ############################################################# -->
+<!-- suggestion management         -->
+<!-- ############################################################# -->
+
+                <li>
+
+                    <table>
+                        <tr>
+                            <th>Action</th>
+                            <th>Author</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Reason</th>
+                        </tr>
+
+                        <tr>
+                            <td>suggestion made by</td>
+                            <td>
+                                <!-- TMPL_VAR name="surnamesuggestedby" -->
+                                <!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF -->
+                                <!-- TMPL_VAR name="firstnamesuggestedby" -->
+                            </td>
+                            <td><!-- TMPL_VAR name="suggestioncreatedon" --></td>
+                            <td> - - - - - </td>
+                            <td> - - - - - </td>
+                        </tr>
+
+
+                        <tr>
+                            <td>suggestion managed by (GPD)</td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <select name="aorr">
+                                    <option value=""> -- Choose Action -- </option>
+                                    <option value="REJECTED" <!-- TMPL_IF name="rejected1" -->selected="selected"<!-- /TMPL_IF -->>Reject</option>
+                                    <option value="ACCEPTED" <!-- TMPL_IF name="accepted1" -->selected="selected"<!-- /TMPL_IF -->>Accept</option>
+                                </select>
+                            </td>
+
+                            <td>
+
+                                <span id="span-select-reason<!-- TMPL_VAR NAME="ordernumber" -->" class="content_visible">
+
+
+                                    <!-- TMPL_IF NAME="reasons_loop" -->
+                                        <select name="reason" onchange="displayOther('<!-- TMPL_VAR NAME="ordernumber" -->');">
+                                            <option value=""> -- Choose a reason -- </option>
+
+                                            <!-- TMPL_LOOP NAME="reasons_loop" -->
+
+                                                <option value="<!-- TMPL_VAR NAME="lib" -->" <!-- TMPL_IF name="selected" -->selected="selected"<!-- /TMPL_IF -->><!-- TMPL_VAR NAME="lib" --></option>
+
+                                            <!-- /TMPL_LOOP -->
+
+                                            <option value="other" <!-- TMPL_IF name="selected" -->selected="selected"<!-- /TMPL_IF -->>Others...</option>
+
+                                        </select>
+
+                                    <!-- TMPL_ELSE -->
+                                        <span class="problem">No reasons defined in <a href="/cgi-bin/koha/admin/authorised_values.pl">authorised values</a></span>
+                                    <!-- /TMPL_IF -->
+
+                                    </span>
+
+                                    <span id="span-other-reason<!-- TMPL_VAR NAME="ordernumber" -->" class="content_hidden">
+
+                                        <input type="text" name="other-reason<!-- TMPL_VAR name="ordernumber" -->" value="please note your reason here..." onclick="if(this.value === 'please note your reason here...'){this.value=''}" />
+
+                                        <small><a href="#" onclick="displayOther('<!-- TMPL_VAR NAME="ordernumber" -->'); return false;">back to list</a></small>
+
+                                    </span>
+
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td>suggestion managed by (PD)</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                </li>
+
+            </ol>
+
+        </fieldset>
+
+        <fieldset class="action">
+            <input type="hidden" name="op" value="add_confirm" />
+            <input type="submit" value="Submit Your Suggestion" />
+            <a class="action" href="/cgi-bin/koha/suggestion/acceptorreject.pl">Cancel</a>
+        </fieldset>
+
+    </form>
+
+<!-- /TMPL_IF -->
+
+    <br><br>
+    <a href="/cgi-bin/koha/suggestion/acceptorreject.pl">Suggestions Management</a>
+
+
+<!--</div>
+</div>-->
+<div class="yui-b">
+<!--<!-- TMPL_INCLUDE NAME="admin-menu.inc" -->-->
+<!--</div>
+</div>-->
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+</div>

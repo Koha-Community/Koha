@@ -1,0 +1,442 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+
+<title>Koha &rsaquo; Suggestions Management</title>
+
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+
+<script type="text/JavaScript">
+
+// #################################################################################
+// Javascript
+// #################################################################################
+
+ // <![CDATA[
+	
+	/**
+	 *  displayOther.
+	 *  This function display the select or an textaera to write a reason.
+	 */
+	function displayOther(id) {
+		var spanselect = document.getElementById("span-select-reason"+id);
+		var spanother = document.getElementById("span-other-reason"+id);
+        var select = spanselect.firstChild.nextSibling;	
+        
+		if(select.value != "other"){
+			return;
+		}
+		if(spanother.getAttribute('class')=='content_visible'){
+			spanother.removeAttribute('class');
+			spanselect.removeAttribute('class');
+			spanother.setAttribute('class','content_hidden');
+			spanselect.setAttribute('class','content_visible');
+		}
+		else{
+			spanother.removeAttribute('class');
+			spanselect.removeAttribute('class');
+			spanselect.setAttribute('class','content_hidden');
+			spanother.setAttribute('class','content_visible');			
+		}
+	}
+// ]]>
+
+</script>
+</head>
+
+
+<body>
+
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<!-- ################################################################################# -->
+<!-- BREADCRUMBS -->
+<!-- ################################################################################# -->
+
+
+<div id="breadcrumbs">
+
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; 
+    <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; 
+    <a href="/cgi-bin/koha/suggestion/acceptorrejectpd.pl?bookfundgroupnumber=<!-- TMPL_VAR name="bookfundgroupnumber"-->">Suggestions Management (PD) </a>
+
+    <!-- TMPL_IF NAME="op_accepted"-->&rsaquo; Accepted<!-- /TMPL_IF -->
+
+    <!-- TMPL_IF NAME="op_rejected"-->&rsaquo; Rejected<!-- /TMPL_IF -->
+
+
+</div>
+
+<!-- ################################################################################# -->
+<!-- ################################################################################# -->
+<!-- unique screen -->
+<!-- ################################################################################# -->
+<!-- ################################################################################# -->
+
+<div id="doc" class="yui-t7">
+
+<div id="bd">
+<div id="yui-main">
+<div class="yui-b">
+
+
+<h1>Suggestions (Purchase Department - <!-- TMPL_VAR name="bookfundgroupname"-->)</h1>
+
+<!-- ################################################################################# -->
+<!-- 'accepted', 'pending', rejected' titles -->
+<!-- ################################################################################# -->
+<!-- ################################################################################# -->
+
+<!-- TMPL_IF NAME="suggestions_loop" -->
+    <div class="toptabs">
+    <ul class="tabs-nav">
+
+        <!-- TMPL_IF NAME="op_accepted"-->
+        <li class="tabs-selected">
+
+        <!-- TMPL_ELSE -->
+        <li>
+
+        <!-- /TMPL_IF -->
+
+            <a href="/cgi-bin/koha/suggestion/acceptorrejectpd.pl?op=accepted&bookfundgroupnumber=<!-- TMPL_VAR name="bookfundgroupnumber"-->">Accepted</a>
+        </li>
+
+
+        <!-- TMPL_IF NAME="op_else" -->
+        <li class="tabs-selected">
+
+        <!-- TMPL_ELSE -->
+        <li>
+
+        <!-- /TMPL_IF -->
+
+            <a href="/cgi-bin/koha/suggestion/acceptorrejectpd.pl?op=aorr_confirm&bookfundgroupnumber=<!-- TMPL_VAR name="bookfundgroupnumber"-->">Pending</a>
+        </li>
+
+
+        <!-- TMPL_IF NAME="op_rejected"-->
+        <li class="tabs-selected">
+        <!-- TMPL_ELSE -->
+        <li>
+        <!-- /TMPL_IF -->
+
+            <a href="/cgi-bin/koha/suggestion/acceptorrejectpd.pl?op=rejected&bookfundgroupnumber=<!-- TMPL_VAR name="bookfundgroupnumber"-->">Rejected</a>
+        </li>
+
+    </ul>
+
+<!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF name="op_else" -->
+
+<!-- ################################################################################# -->
+<!-- list of pending suggestions -->
+<!-- ################################################################################# -->
+<!-- ################################################################################# -->
+
+<div class="tabs-container">
+
+
+    <!-- TMPL_IF NAME="suggestions_loop" -->
+
+    <!-- The list of pending suggestions is not empty
+    ################################################################################## -->
+
+        <form name="f" method="post" action="/cgi-bin/koha/suggestion/acceptorrejectpd.pl?bookfundgroupnumber=<!-- TMPL_VAR name="bookfundgroupnumber"-->">
+
+            <input type="hidden" name="op" value="aorr_confirm" />
+            <input type="hidden" name="bookfundgroupnumber" value="<!-- TMPL_VAR name="bookfundgroupnumber"-->" />
+
+            <table>
+                <tr>
+                    <th>Status</th>
+                    <th>Reason</th>
+                    <th>Book fund</th>
+                    <th>Suggestion</th>
+                    <th>Suggested by<br/>on</th>
+                    <th></th>
+                </tr>
+
+                <!-- TMPL_LOOP NAME="suggestions_loop" -->
+
+                    <input type="hidden" name="step<!-- TMPL_VAR NAME="ordernumber" -->" value="<!-- TMPL_VAR NAME="step" -->" />
+
+                    <!-- TMPL_IF name="even" -->
+                    <tr class="highlight">
+
+                    <!-- TMPL_ELSE -->
+                    <tr>
+                    <!-- /TMPL_IF -->
+
+
+<!-- set a status -->
+<!-- ################################################################################# -->
+
+                        <td>
+                            <select name="aorr">
+                                <option value=""> -- Choose Action -- </option>
+                                <option value="R<!--TMPL_VAR name="ordernumber" -->">Reject</option>
+                                <option value="A<!--TMPL_VAR name="ordernumber" -->">Accept</option>
+                            </select>
+                        </td>
+
+
+<!-- reasons loop-->
+<!-- ################################################################################# -->
+
+                        <td>
+                            <span id="span-select-reason<!-- TMPL_VAR NAME="ordernumber" -->" class="content_visible">
+
+                            <!-- TMPL_IF NAME="reasonsloop" -->
+                                <select name="reason<!-- TMPL_VAR name="ordernumber" -->" onchange="displayOther('<!-- TMPL_VAR NAME="ordernumber" -->');">
+                                    <option value=""> -- Choose a reason -- </option>
+
+                                    <!-- TMPL_LOOP NAME="reasonsloop" -->
+                                    <option value="<!-- TMPL_VAR NAME="lib" -->"><!-- TMPL_VAR NAME="lib" --></option>
+                                    <!-- /TMPL_LOOP -->
+
+                                    <option value="other">Others...</option>
+
+                                </select>
+
+                            <!-- TMPL_ELSE -->
+                                <span class="problem">No reasons defined in <a href="/cgi-bin/koha/admin/authorised_values.pl">authorised values</a></span>
+                            <!-- /TMPL_IF -->
+
+                            </span>
+
+                            <span id="span-other-reason<!-- TMPL_VAR NAME="ordernumber" -->" class="content_hidden">
+
+                                <input type="text" name="other-reason<!-- TMPL_VAR name="ordernumber" -->" value="please note your reason here..." onclick="if(this.value === 'please note your reason here...'){this.value=''}" />
+
+                                <small><a href="#" onclick="displayOther('<!-- TMPL_VAR NAME="ordernumber" -->'); return false;">back to list</a></small>
+
+                            </span>
+
+                        </td>
+
+
+<!-- choose the Book fund group related to the document -->
+<!-- ################################################################################# -->
+
+                        <td>
+                            <select name="bookfunds_loop<!-- TMPL_VAR NAME="ordernumber" -->">
+                                <option value="">choose a book fund</option>
+
+                                <!-- TMPL_LOOP NAME="bookfunds_loop" -->
+
+                                    <!-- TMPL_IF NAME="selected" -->
+                                        <option value="<!-- TMPL_VAR name="bookfundnumber" -->" selected="selected"><!-- TMPL_VAR NAME="bookfundname"--></option>
+
+                                    <!-- TMPL_ELSE -->
+                                        <option value="<!-- TMPL_VAR name="bookfundnumber" -->"><!-- TMPL_VAR NAME="bookfundname"--></option>
+
+                                    <!-- /TMPL_IF -->
+                                <!-- /TMPL_LOOP -->
+                            </select>
+
+                        </td>
+
+<!-- description ot the document -->
+<!-- ################################################################################# -->
+
+                        <td>
+                            <!-- TMPL_VAR NAME="title" --><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --><br />
+
+                            <!-- TMPL_IF name="copyrightdate" -->&copy; <!-- TMPL_VAR name="copyrightdate" --> <!-- /TMPL_IF -->
+
+                            <!-- TMPL_IF name="volumedesc" -->; Volume:<i><!-- TMPL_VAR name="volumedesc" --></i> <!-- /TMPL_IF -->
+
+                            <!-- TMPL_IF name="isbn" -->; ISBN :<i><!-- TMPL_VAR name="isbn" --></i><br /> <!-- /TMPL_IF -->
+
+                            <!-- TMPL_IF name="publishercode" -->; Published by <!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF -->
+
+                            <!-- TMPL_IF name="publicationyear" --> in <i><!-- TMPL_VAR name="publicationyear" --></i> <!-- /TMPL_IF -->
+
+                            <!-- TMPL_IF name="place" --> in <i><!-- TMPL_VAR name="place" --></i><!-- /TMPL_IF --><br />
+
+                            <!-- TMPL_IF name="rrp" --><!-- TMPL_VAR name="rrp" --><!-- /TMPL_IF --><br />
+
+                            <!-- TMPL_IF name="note" --><!-- TMPL VAR NAME="note" --><!-- /TMPL_IF -->
+                        </td>
+
+
+<!-- name of the person who 1st wrote the suggestion -->
+<!-- ################################################################################# -->
+
+                        <td>
+                            <!-- TMPL_VAR name="surnamesuggestedby" -->
+                            <!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF -->
+                            <!-- TMPL_VAR name="firstnamesuggestedby" --><br/>
+                            <!-- TMPL_VAR name="suggestioncreatedon" -->
+                        </td>
+
+<!-- link to get more details about the suggestion -->
+<!-- ################################################################################# -->
+                        <td>
+                            <a href="/cgi-bin/koha/suggestion/suggestiondetailspd.pl?ordernumber=<!-- TMPL_VAR name="ordernumber" -->">details</a>
+                        </td>
+
+                    </tr>
+
+                <!-- /TMPL_LOOP -->  <!-- ## fin de la boucle associée aux suggestions -->
+
+            </table>
+
+            <fieldset class="action"><input type="submit" value="Change Status" /></fieldset>
+
+        </form>
+
+    <!-- TMPL_ELSE -->
+
+    <!-- The list of pending suggestions is empty -->
+    <!-- ################################################################################# -->
+    <!-- ################################################################################# -->
+
+        <b>No pending suggestions</b>
+        <br><br>
+
+        <a href="/cgi-bin/koha/suggestion/acceptorrejectpd.pl?op=accepted&bookfundgroupnumber=<!-- TMPL_VAR name="bookfundgroupnumber"-->">See accepted suggestions</a>
+        <br><br>
+
+        <a href="/cgi-bin/koha/suggestion/acceptorrejectpd.pl?op=rejected&bookfundgroupnumber=<!-- TMPL_VAR name="bookfundgroupnumber"-->">See rejected suggestions</a>
+
+    <!-- /TMPL_IF -->
+
+<!-- /TMPL_IF -->
+
+
+
+<!-- TMPL_IF NAME="done" -->
+
+<!-- ################################################################################# -->
+<!-- List of managed suggestions -->
+<!-- ################################################################################# -->
+<!-- ################################################################################# -->
+
+    <!-- TMPL_IF NAME="suggestions_loop" -->
+
+    <!-- The list of managed suggestions is not empty -->
+    <!-- ################################################################################# -->
+    <!-- ################################################################################# -->
+
+        <table>
+
+            <tr>
+                <th>Managed by (GPD)<br/>on</th>
+                <th>Managed by (PD)<br/>on</th>
+                <th><!-- TMPL_IF NAME="op_rejected"-->Reason
+                <!-- /TMPL_IF --><br/>Book fund</th>
+                <th>Suggestion</th>
+                <th>Suggested by<br/>on</th>
+                <th></th>
+            </tr>
+
+            <!-- TMPL_LOOP NAME="suggestions_loop" -->
+                <tr>
+
+                    <td>
+                        <!-- TMPL_VAR name="surnamemanagedingpdby" -->
+                        <!-- TMPL_IF name="firstnamemanagedingpdby" -->,<!-- /TMPL_IF -->
+                        <!-- TMPL_VAR name="firstnamemanagedingpdby" --><br/>
+                        <!-- TMPL_VAR name="suggestionmanagedingpdon" -->
+                    </td>
+
+                    <td>
+                        <!-- TMPL_VAR name="surnamemanagedinpdby" -->
+                        <!-- TMPL_IF name="firstnamemanagedinpdby" -->,<!-- /TMPL_IF -->
+                        <!-- TMPL_VAR name="firstnamemanagedinpdby" --><br/>
+                        <!-- TMPL_VAR name="suggestionmanagedinpdon" -->
+                    </td>
+
+                    <td>
+                        <!-- TMPL_VAR NAME="reason" --><br/>
+                        <!-- TMPL_VAR NAME="bookfundname" -->
+                    </td>
+
+                    <td>
+                        <!-- TMPL_VAR NAME="title" -->
+                            <!-- TMPL_IF NAME="author" -->
+                                , by <!-- TMPL_VAR NAME="author" -->
+                            <!-- /TMPL_IF -->
+                            <br />
+
+                            <!-- TMPL_IF name="copyrightdate" -->
+                                &copy; <!-- TMPL_VAR name="copyrightdate" -->
+                            <!-- /TMPL_IF -->
+
+                            <!-- TMPL_IF name="volumedesc" -->
+                                ; Volume:<i><!-- TMPL_VAR name="volumedesc" --></i>
+                            <!-- /TMPL_IF -->
+
+                            <!-- TMPL_IF name="isbn" -->
+                                ; ISBN :<i><!-- TMPL_VAR name="isbn" --></i><br />
+                            <!-- /TMPL_IF -->
+
+                            <!-- TMPL_IF name="publishercode" -->
+                                Published by <!-- TMPL_VAR name="publishercode" -->
+                            <!-- /TMPL_IF -->
+
+                            <!-- TMPL_IF name="publicationyear" -->
+                                in <i><!-- TMPL_VAR name="publicationyear" --></i>
+                            <!-- /TMPL_IF -->
+
+                            <!-- TMPL_IF name="place" -->
+                                in <i><!-- TMPL_VAR name="place" --></i>
+                            <!-- /TMPL_IF -->
+                            <br />
+
+                            <!-- TMPL_IF name="rrp" -->unit price : <!-- TMPL_VAR name="rrp" --><!-- /TMPL_IF --><br />
+
+                            <!-- TMPL_IF name="note" -->
+                                <!-- TMPL VAR NAME="note" -->
+                            <!-- /TMPL_IF -->
+                    </td>
+
+                    <td>
+                        <!-- TMPL_VAR name="surnamesuggestedby" -->
+                        <!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF -->
+                        <!-- TMPL_VAR name="firstnamesuggestedby" --><br/>
+                        <!-- TMPL_VAR name="suggestioncreatedon" -->
+                    </td>
+
+                    <td>
+                        <a href="/cgi-bin/koha/suggestion/suggestiondetailspd.pl?ordernumber=<!-- TMPL_VAR name="ordernumber" -->">details</a>
+                    </td>
+
+                </tr>
+            <!-- /TMPL_LOOP -->
+
+        </table>
+
+
+    <!-- TMPL_ELSE -->
+
+    <!-- The list of managed suggestions is empty -->
+    <!-- ################################################################################# -->
+    <!-- ################################################################################# -->
+
+        <h4>No suggestions have been 
+
+        <!-- TMPL_IF NAME="op_accepted"-->
+            accepted.
+        <!-- TMPL_ELSE -->
+            rejected.
+        <!-- /TMPL_IF -->
+
+        </h4>
+
+    <!-- /TMPL_IF -->
+
+<!-- /TMPL_IF -->
+
+
+</div>
+</div>
+
+</div>
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

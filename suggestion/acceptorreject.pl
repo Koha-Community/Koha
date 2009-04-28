@@ -186,3 +186,24 @@ $template->param(
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
+my @allsuggestions;
+foreach my $status ('ASKED','CHECKED','REJECTED','ACCEPTED'){
+    my $suggestions = &GetSuggestionByStatus( $status, $branchcode );
+    map{
+        $_->{$status}=1 unless ($status eq 'ASKED' ||$status eq 'PENDING');
+        $_->{'reasonsloop'}=$reasonsloop;
+        $_->{'suggestioncreatedon'}=format_date($_->{'suggestioncreatedon'})
+        } @$suggestions;
+    
+    push @allsuggestions,{"suggestiontype"=>($status eq 'ASKED'?"pending":lc $status),
+                        'suggestions_loop'=>$suggestions,
+                        'reasonsloop' => $reasonsloop};
+}
+>>>>>>> suggestions changes (probably useless):suggestion/acceptorreject.pl
+$template->param(
+    suggestions => \@allsuggestions,
+    "op_$op"    => 1,
+    dateformat  => C4::Context->preference("dateformat"),
+);
+
+output_html_with_http_headers $input, $cookie, $template->output;
