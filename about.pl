@@ -111,9 +111,12 @@ Mail::Sendmail
 Net::LDAP
 Net::LDAP::Filter
 Net::Z3950::ZOOM
+Number::Format
 PDF::API2
 PDF::API2::Page
 PDF::API2::Util
+PDF::API2::Simple
+PDF::Table
 PDF::Reuse
 PDF::Reuse::Barcode
 POE

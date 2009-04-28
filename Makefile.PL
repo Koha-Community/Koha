@@ -585,9 +585,12 @@ WriteMakefile(
                             'Net::LDAP'                        => 0.33, # optional
                             'Net::LDAP::Filter'                => 0.14, # optional
                             'Net::Z3950::ZOOM'                 => 1.16,
+                            'Number::Format'                   => 1.52,
                             'PDF::API2'                        => 2.000,
                             'PDF::API2::Page'                  => 2.000,
                             'PDF::API2::Util'                  => 2.000,
+                            'PDF::API2::Simple'                => 1.000,
+                            'PDF::Table'                       => 0.9.3,
                             'PDF::Reuse'                       => 0.33,
                             'PDF::Reuse::Barcode'              => 0.05,
                             'POE'                              => 0.9999,
