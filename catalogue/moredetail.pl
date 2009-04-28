@@ -51,8 +51,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
 
 my $biblionumber=$query->param('biblionumber');
 my $title=$query->param('title');
-my $itemnumber=$query->param('itemnumber');
-my $bi=$query->param('bi');
+# my $bi=$query->param('bi');
 # $bi = $biblionumber unless $bi;
 my $data=GetBiblioData($biblionumber);
 my $dewey = $data->{'dewey'};
@@ -77,8 +76,6 @@ my @items= GetItemsInfo($biblionumber);
 my $count=@items;
 $data->{'count'}=$count;
 
-my $ordernum = GetOrderNumber($biblionumber);
-my $order = GetOrder($ordernum);
 my $ccodes= GetKohaAuthorisedValues('items.ccode',$fw);
 my $itemtypes = GetItemTypes;
 
@@ -88,15 +85,19 @@ $results[0]=$data;
 foreach my $item (@items){
     $item->{itemlostloop}= GetAuthorisedValues(GetAuthValCode('items.itemlost',$fw),$item->{itemlost}) if GetAuthValCode('items.itemlost',$fw);
     $item->{itemdamagedloop}= GetAuthorisedValues(GetAuthValCode('items.damaged',$fw),$item->{damaged}) if GetAuthValCode('items.damaged',$fw);
-    $item->{'collection'} = $ccodes->{$item->{ccode}};
-    $item->{'itype'} = $itemtypes->{$item->{'itype'}}->{'description'}; 
-    $item->{'replacementprice'}=sprintf("%.2f", $item->{'replacementprice'});
-    $item->{'datelastborrowed'}= format_date($item->{'datelastborrowed'});
-    $item->{'dateaccessioned'} = format_date($item->{'dateaccessioned'});
-    $item->{'datelastseen'} = format_date($item->{'datelastseen'});
-    $item->{'ordernumber'} = $ordernum;
+    $item->{'collection'}              = $ccodes->{ $item->{ccode} };
+    $item->{'itype'}                   = $itemtypes->{ $item->{'itype'} }->{'description'};
+    $item->{'replacementprice'}        = sprintf( "%.2f", $item->{'replacementprice'} );
+    $item->{'datelastborrowed'}        = format_date( $item->{'datelastborrowed'} );
+    $item->{'dateaccessioned'}         = format_date( $item->{'dateaccessioned'} );
+    $item->{'datelastseen'}            = format_date( $item->{'datelastseen'} );
+    $item->{'copyvol'}                 = $item->{'copynumber'};
+
+    my $order = GetOrderFromItemnumber( $item->{'itemnumber'} );
+    $item->{'ordernumber'}             = $order->{'ordernumber'};
+    $item->{'basketno'}                = $order->{'basketno'};
     $item->{'booksellerinvoicenumber'} = $order->{'booksellerinvoicenumber'};
-    $item->{'copyvol'} = $item->{'copynumber'};
+
     if ($item->{notforloantext} or $item->{itemlost} or $item->{damaged} or $item->{wthdrawn}) {
         $item->{status_advisory} = 1;
     }
