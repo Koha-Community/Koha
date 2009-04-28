@@ -1,3 +1,43 @@
+function deleteItemBlock(index) {
+    var aDiv = document.getElementById(index);
+    aDiv.parentNode.removeChild(aDiv);
+    var quantityrec = document.getElementById('quantityrec');
+    quantityrec.setAttribute('value',parseFloat(quantityrec.getAttribute('value'))-1);
+}
+function cloneItemBlock(index) {    
+    var original = document.getElementById(index); //original <div>
+    var clone = original.cloneNode(true);
+    var random = Math.floor(Math.random()*100000); // get a random itemid.
+    // set the attribute for the new 'div' subfields
+    clone.setAttribute('id',index + random);//set another id.
+    var NumTabIndex;
+    NumTabIndex = parseInt(original.getAttribute('tabindex'));
+    if(isNaN(NumTabIndex)) NumTabIndex = 0;
+    clone.setAttribute('tabindex',NumTabIndex+1);
+    var CloneButtonPlus;
+    var CloneButtonMinus;
+  //  try{
+        CloneButtonPlus = clone.getElementsByTagName('a')[0];
+        CloneButtonPlus.setAttribute('onclick',"cloneItemBlock('" + index + random + "')");
+    CloneButtonMinus = clone.getElementsByTagName('a')[1];
+    CloneButtonMinus.setAttribute('onclick',"deleteItemBlock('" + index + random + "')");
+    CloneButtonMinus.setAttribute('style',"display:inline");
+    // change itemids of the clone
+    var elems = clone.getElementsByTagName('input');
+    for( i = 0 ; elems[i] ; i++ )
+    {
+        if(elems[i].name.match(/^itemid/)) {
+            elems[i].value = random;
+        }
+    }    
+   // }
+    //catch(e){        // do nothig if ButtonPlus & CloneButtonPlus don't exist.
+    //}
+    // insert this line on the page    
+    original.parentNode.insertBefore(clone,original.nextSibling);
+    var quantityrec = document.getElementById('quantityrec');
+    quantityrec.setAttribute('value',parseFloat(quantityrec.getAttribute('value'))+1);
+}
 function check_additem() {
 	var	barcodes = document.getElementsByName('barcode');
 	var success = true;
