@@ -39,7 +39,7 @@ BEGIN {
     $VERSION = 3.02;        # set version for version checking
     $debug = $ENV{DEBUG} || 0 ;
     @ISA   = qw(Exporter);
-    @EXPORT    = qw(&checkauth &get_template_and_user);
+    @EXPORT    = qw(&checkauth &get_template_and_user &haspermission &get_user_subpermissions);
     @EXPORT_OK = qw(&check_api_auth &get_session &check_cookie_auth &checkpw &get_all_subpermissions &get_user_subpermissions);
     %EXPORT_TAGS = (EditPermissions => [qw(get_all_subpermissions get_user_subpermissions)]);
     $ldap = C4::Context->config('useldapserver') || 0;
@@ -61,7 +61,7 @@ C4::Auth - Authenticates Koha users
 
   my $query = new CGI;
 
-  my ($template, $borrowernumber, $cookie) 
+  my ($template, $borrowernumber, $cookie)
     = get_template_and_user(
         {
             template_name   => "opac-main.tmpl",
@@ -144,30 +144,30 @@ sub get_template_and_user {
         $template->param( loggedinusername => $user );
         $template->param( sessionID        => $sessionID );
 
-        my ($total, $pubshelves, $barshelves) = C4::Context->get_shelves_userenv();
-        if (defined($pubshelves)) {
-            $template->param(   pubshelves      => scalar (@$pubshelves),
-                                pubshelvesloop  => $pubshelves,
-                            );
-            $template->param(   pubtotal        => $total->{'pubtotal'}, ) if ($total->{'pubtotal'} > scalar (@$pubshelves));
-        }
-        if (defined($barshelves)) {
-            $template->param(   barshelves      => scalar (@$barshelves),
-                                barshelvesloop  => $barshelves,
-                            );
-            $template->param(   bartotal        => $total->{'bartotal'}, ) if ($total->{'bartotal'} > scalar (@$barshelves));
-        }
+		my ($total, $pubshelves, $barshelves) = C4::Context->get_shelves_userenv();
+		if (defined($pubshelves)) {
+        	$template->param( 	pubshelves     	=> scalar (@$pubshelves),
+        						pubshelvesloop 	=> $pubshelves,
+							);
+			$template->param(	pubtotal		=> $total->{'pubtotal'}, ) if ($total->{'pubtotal'} > scalar (@$pubshelves));
+		}
+		if (defined($barshelves)) {
+        	$template->param(	barshelves     	=> scalar (@$barshelves),
+        						barshelvesloop 	=> $barshelves,
+							);
+			$template->param(	bartotal		=> $total->{'bartotal'}, ) if ($total->{'bartotal'} > scalar (@$barshelves));
+		}
 
         $borrowernumber = getborrowernumber($user);
         my ( $borr ) = GetMemberDetails( $borrowernumber );
         my @bordat;
         $bordat[0] = $borr;
         $template->param( "USER_INFO" => \@bordat );
-        
+
         my $all_perms = get_all_subpermissions();
 
         my @flagroots = qw(circulate catalogue parameters borrowers permissions reserveforothers borrow
-                            editcatalogue updatecharges management tools editauthorities serials reports);
+                            editcatalogue updatecharges management tools editauthorities serials reports acquisition);
         # We are going to use the $flags returned by checkauth
         # to create the template's parameters that will indicate
         # which menus the user can access.
@@ -183,7 +183,7 @@ sub get_template_and_user {
             $template->param( CAN_user_updatecharges     => 1 );
             $template->param( CAN_user_acquisition      => 1 );
             $template->param( CAN_user_management       => 1 );
-            $template->param( CAN_user_tools            => 1 ); 
+            $template->param( CAN_user_tools            => 1 );
             $template->param( CAN_user_editauthorities  => 1 );
             $template->param( CAN_user_serials          => 1 );
             $template->param( CAN_user_reports          => 1 );
@@ -280,7 +280,7 @@ sub get_template_and_user {
 			}
 		}
     }
-    else {  # if this is an anonymous session, setup to display public lists...
+	else {	# if this is an anonymous session, setup to display public lists...
 
         # load the template variables for stylesheets and JavaScript
         $template->param( css_libs => $in->{'css_libs'} );
@@ -327,28 +327,14 @@ sub get_template_and_user {
             LoginSurname                 => C4::Context->userenv?C4::Context->userenv->{"surname"}:"Inconnu",
             TagsEnabled                  => C4::Context->preference("TagsEnabled"),
             hide_marc                    => C4::Context->preference("hide_marc"),
-            dateformat                   => C4::Context->preference("dateformat"),
             'item-level_itypes'          => C4::Context->preference('item-level_itypes'),
             patronimages                 => C4::Context->preference("patronimages"),
             singleBranchMode             => C4::Context->preference("singleBranchMode"),
-            SyndeticsClientCode          => C4::Context->preference("SyndeticsClientCode"),
-            SyndeticsEnabled             => C4::Context->preference("SyndeticsEnabled"),
-            SyndeticsCoverImages         => C4::Context->preference("SyndeticsCoverImages"),
-            SyndeticsTOC                 => C4::Context->preference("SyndeticsTOC"),
-            SyndeticsSummary             => C4::Context->preference("SyndeticsSummary"),
-            SyndeticsEditions            => C4::Context->preference("SyndeticsEditions"),
-            SyndeticsExcerpt             => C4::Context->preference("SyndeticsExcerpt"),
-            SyndeticsReviews             => C4::Context->preference("SyndeticsReviews"),
-            SyndeticsAuthorNotes         => C4::Context->preference("SyndeticsAuthorNotes"),
-            SyndeticsAwards              => C4::Context->preference("SyndeticsAwards"),
-            SyndeticsSeries              => C4::Context->preference("SyndeticsSeries"),
-			SyndeticsCoverImageSize		 => C4::Context->preference("SyndeticsCoverImageSize"),
                  );
 
     if ( $in->{'type'} eq "intranet" ) {
         $template->param(
-            AmazonEnabled               => C4::Context->preference("AmazonEnabled"),
-            AmazonCoverImages           => C4::Context->preference("AmazonCoverImages"),
+            AmazonContent               => C4::Context->preference("AmazonContent"),
             AmazonSimilarItems          => C4::Context->preference("AmazonSimilarItems"),
             AutoLocation                => C4::Context->preference("AutoLocation"),
             "BiblioDefaultView".C4::Context->preference("IntranetBiblioDefaultView") => 1,
@@ -390,13 +376,12 @@ sub get_template_and_user {
             $opac_name = C4::Branch::GetBranchName($mylibraryfirst);
         }
         $template->param(
+            AmazonContent             => "" . C4::Context->preference("AmazonContent"),
             AnonSuggestions           => "" . C4::Context->preference("AnonSuggestions"),
             AuthorisedValueImages     => C4::Context->preference("AuthorisedValueImages"),
             LibraryName               => "" . C4::Context->preference("LibraryName"),
             LibraryNameTitle          => "" . $LibraryNameTitle,
             LoginBranchname           => C4::Context->userenv?C4::Context->userenv->{"branchname"}:"",
-            OPACAmazonEnabled         => C4::Context->preference("OPACAmazonEnabled"),
-            OPACAmazonCoverImages     => C4::Context->preference("OPACAmazonCoverImages"),
             OPACAmazonSimilarItems    => "" . C4::Context->preference("OPACAmazonSimilarItems"),
             OPACFRBRizeEditions       => C4::Context->preference("OPACFRBRizeEditions"),
             OPACItemHolds             => C4::Context->preference("OPACItemHolds"),
@@ -443,6 +428,7 @@ sub get_template_and_user {
 			OPACSerialIssueDisplayCount => C4::Context->preference("OPACSerialIssueDisplayCount"),
         );
     }
+	$template->param(listloop=>[{shelfname=>"Freelist", shelfnumber=>110}]);
     return ( $template, $borrowernumber, $cookie, $flags);
 }
 
@@ -452,8 +438,8 @@ sub get_template_and_user {
 
 Verifies that the user is authorized to run this script.  If
 the user is authorized, a (userid, cookie, session-id, flags)
-quadruple is returned.  If the user is not authorized due to
-insufficent privileges (see $flagsrequired below), it
+quadruple is returned.  If the user is not authorized but does
+not have the required privilege (see $flagsrequired below), it
 displays an error page and exits.  Otherwise, it displays the
 login page and exits.
 
@@ -514,7 +500,7 @@ user has authenticated, C<&checkauth> restarts the original script
 
 The login page is provided using a HTML::Template, which is set in the
 systempreferences table or at the top of this file. The variable C<$type>
-selects which template to use, either the opac or the intranet 
+selects which template to use, either the opac or the intranet
 authentification template.
 
 C<&checkauth> returns a user ID, a cookie, and a session ID. The
@@ -529,16 +515,16 @@ sub _version_check ($$) {
     my $version;
     # If Version syspref is unavailable, it means Koha is beeing installed,
     # and so we must redirect to OPAC maintenance page or to the WebInstaller
-    # also, if OpacMaintenance is ON, OPAC should redirect to maintenance
-    if (C4::Context->preference('OpacMaintenance') && $type eq 'opac') {
-        warn "OPAC Install required, redirecting to maintenance";
-        print $query->redirect("/cgi-bin/koha/maintenance.pl");
-    }
+	# also, if OpacMaintenance is ON, OPAC should redirect to maintenance
+	if (C4::Context->preference('OpacMaintenance') && $type eq 'opac') {
+		warn "OPAC Install required, redirecting to maintenance";
+		print $query->redirect("/cgi-bin/koha/maintenance.pl");
+	}
     unless ($version = C4::Context->preference('Version')) {    # assignment, not comparison
       if ($type ne 'opac') {
         warn "Install required, redirecting to Installer";
         print $query->redirect("/cgi-bin/koha/installer/install.pl");
-      } 
+      }
       else {
         warn "OPAC Install required, redirecting to maintenance";
         print $query->redirect("/cgi-bin/koha/maintenance.pl");
@@ -562,7 +548,7 @@ sub _version_check ($$) {
         } else {
             warn sprintf("OPAC: " . $warning, 'maintenance');
             print $query->redirect("/cgi-bin/koha/maintenance.pl");
-        }       
+        }
         exit;
     }
 }
@@ -576,7 +562,7 @@ sub _session_log {
 
 sub checkauth {
     my $query = shift;
-    $debug and warn "Checking Auth";
+	$debug and warn "Checking Auth";
     # $authnotrequired will be set for scripts which will run without authentication
     my $authnotrequired = shift;
     my $flagsrequired   = shift;
@@ -607,7 +593,7 @@ sub checkauth {
         );
         $loggedin = 1;
     }
-    elsif ( $sessionID = $query->cookie("CGISESSID")) {     # assignment, not comparison 
+    elsif ( $sessionID = $query->cookie("CGISESSID")) {     # assignment, not comparison
         my $session = get_session($sessionID);
         C4::Context->_new_userenv($sessionID);
         my ($ip, $lasttime, $sessiontype);
@@ -626,7 +612,7 @@ sub checkauth {
             $ip       = $session->param('ip');
             $lasttime = $session->param('lasttime');
             $userid   = $session->param('id');
-            $sessiontype = $session->param('sessiontype');
+			$sessiontype = $session->param('sessiontype');
         }
    
         if ( ($query->param('koha_login_context')) && ($query->param('userid') ne $session->param('id')) ) {
@@ -636,12 +622,12 @@ sub checkauth {
             $session->flush;      
             $session->delete();
             C4::Context->_unset_userenv($sessionID);
-            $sessionID = undef;
-            $userid = undef;
-        }
+			$sessionID = undef;
+			$userid = undef;
+		}
         elsif ($logout) {
             # voluntary logout the user
-            $session->flush;      
+            $session->flush;
             $session->delete();
             C4::Context->_unset_userenv($sessionID);
             _session_log(sprintf "%20s from %16s logged out at %30s (manually).\n", $userid,$ip,(strftime "%c",localtime));
@@ -683,9 +669,9 @@ sub checkauth {
     }
     unless ($userid || $sessionID) {
         #we initiate a session prior to checking for a username to allow for anonymous sessions...
-        my $session = get_session("") or die "Auth ERROR: Cannot get_session()";
+		my $session = get_session("") or die "Auth ERROR: Cannot get_session()";
         my $sessionID = $session->id;
-        C4::Context->_new_userenv($sessionID);
+       	C4::Context->_new_userenv($sessionID);
         $cookie = $query->cookie(CGISESSID => $sessionID);
         if ( $userid    = $query->param('userid') ) {
             my $password = $query->param('password');
@@ -738,115 +724,115 @@ sub checkauth {
 # launch a sequence to check if we have a ip for the branch, i
 # if we have one we replace the branchcode of the userenv by the branch bound in the ip.
 
-                    my $ip       = $ENV{'REMOTE_ADDR'};
-                    # if they specify at login, use that
-                    if ($query->param('branch')) {
-                        $branchcode  = $query->param('branch');
-                        $branchname = GetBranchName($branchcode);
-                    }
-                    my $branches = GetBranches();
-                    if (C4::Context->boolean_preference('IndependantBranches') && C4::Context->boolean_preference('Autolocation')){
-                        # we have to check they are coming from the right ip range
-                        my $domain = $branches->{$branchcode}->{'branchip'};
-                        if ($ip !~ /^$domain/){
-                            $loggedin=0;
-                            $info{'wrongip'} = 1;
-                        }
-                    }
+					my $ip       = $ENV{'REMOTE_ADDR'};
+					# if they specify at login, use that
+					if ($query->param('branch')) {
+						$branchcode  = $query->param('branch');
+						$branchname = GetBranchName($branchcode);
+					}
+					my $branches = GetBranches();
+					if (C4::Context->boolean_preference('IndependantBranches') && C4::Context->boolean_preference('Autolocation')){
+						# we have to check they are coming from the right ip range
+						my $domain = $branches->{$branchcode}->{'branchip'};
+						if ($ip !~ /^$domain/){
+							$loggedin=0;
+							$info{'wrongip'} = 1;
+						}
+					}
 
-                    my @branchesloop;
-                    foreach my $br ( keys %$branches ) {
-                        #     now we work with the treatment of ip
-                        my $domain = $branches->{$br}->{'branchip'};
-                        if ( $domain && $ip =~ /^$domain/ ) {
-                            $branchcode = $branches->{$br}->{'branchcode'};
+					my @branchesloop;
+					foreach my $br ( keys %$branches ) {
+						#     now we work with the treatment of ip
+						my $domain = $branches->{$br}->{'branchip'};
+						if ( $domain && $ip =~ /^$domain/ ) {
+							$branchcode = $branches->{$br}->{'branchcode'};
 
-                            # new op dev : add the branchprinter and branchname in the cookie
-                            $branchprinter = $branches->{$br}->{'branchprinter'};
-                            $branchname    = $branches->{$br}->{'branchname'};
-                        }
-                    }
-                    $session->param('number',$borrowernumber);
-                    $session->param('id',$userid);
-                    $session->param('cardnumber',$cardnumber);
-                    $session->param('firstname',$firstname);
-                    $session->param('surname',$surname);
-                    $session->param('branch',$branchcode);
-                    $session->param('branchname',$branchname);
-                    $session->param('flags',$userflags);
-                    $session->param('emailaddress',$emailaddress);
-                    $session->param('ip',$session->remote_addr());
-                    $session->param('lasttime',time());
-                    $debug and printf STDERR "AUTH_4: (%s)\t%s %s - %s\n", map {$session->param($_)} qw(cardnumber firstname surname branch) ;
-                }
-                elsif ( $return == 2 ) {
-                    #We suppose the user is the superlibrarian
-                    $borrowernumber = 0;
-                    $session->param('number',0);
-                    $session->param('id',C4::Context->config('user'));
-                    $session->param('cardnumber',C4::Context->config('user'));
-                    $session->param('firstname',C4::Context->config('user'));
-                    $session->param('surname',C4::Context->config('user'));
-                    $session->param('branch','NO_LIBRARY_SET');
-                    $session->param('branchname','NO_LIBRARY_SET');
-                    $session->param('flags',1);
-                    $session->param('emailaddress', C4::Context->preference('KohaAdminEmailAddress'));
-                    $session->param('ip',$session->remote_addr());
-                    $session->param('lasttime',time());
-                }
-                C4::Context::set_userenv(
-                    $session->param('number'),       $session->param('id'),
-                    $session->param('cardnumber'),   $session->param('firstname'),
-                    $session->param('surname'),      $session->param('branch'),
-                    $session->param('branchname'),   $session->param('flags'),
-                    $session->param('emailaddress'), $session->param('branchprinter')
-                );
+							# new op dev : add the branchprinter and branchname in the cookie
+							$branchprinter = $branches->{$br}->{'branchprinter'};
+							$branchname    = $branches->{$br}->{'branchname'};
+						}
+					}
+					$session->param('number',$borrowernumber);
+					$session->param('id',$userid);
+					$session->param('cardnumber',$cardnumber);
+					$session->param('firstname',$firstname);
+					$session->param('surname',$surname);
+					$session->param('branch',$branchcode);
+					$session->param('branchname',$branchname);
+					$session->param('flags',$userflags);
+					$session->param('emailaddress',$emailaddress);
+					$session->param('ip',$session->remote_addr());
+					$session->param('lasttime',time());
+					$debug and printf STDERR "AUTH_4: (%s)\t%s %s - %s\n", map {$session->param($_)} qw(cardnumber firstname surname branch) ;
+				}
+				elsif ( $return == 2 ) {
+					#We suppose the user is the superlibrarian
+					$borrowernumber = 0;
+					$session->param('number',0);
+					$session->param('id',C4::Context->config('user'));
+					$session->param('cardnumber',C4::Context->config('user'));
+					$session->param('firstname',C4::Context->config('user'));
+					$session->param('surname',C4::Context->config('user'));
+					$session->param('branch','NO_LIBRARY_SET');
+					$session->param('branchname','NO_LIBRARY_SET');
+					$session->param('flags',1);
+					$session->param('emailaddress', C4::Context->preference('KohaAdminEmailAddress'));
+					$session->param('ip',$session->remote_addr());
+					$session->param('lasttime',time());
+				}
+				C4::Context::set_userenv(
+					$session->param('number'),       $session->param('id'),
+					$session->param('cardnumber'),   $session->param('firstname'),
+					$session->param('surname'),      $session->param('branch'),
+					$session->param('branchname'),   $session->param('flags'),
+					$session->param('emailaddress'), $session->param('branchprinter')
+				);
 
-                # Grab borrower's shelves and public shelves and add them to the session
-                # $row_count determines how many records are returned from the db query
-                # and the number of lists to be displayed of each type in the 'Lists' button drop down
-                my $row_count = 10; # FIXME:This probably should be a syspref
-                my ($total, $totshelves, $barshelves, $pubshelves);
-                ($barshelves, $totshelves) = C4::VirtualShelves::GetRecentShelves(1, $row_count, $borrowernumber);
-                $total->{'bartotal'} = $totshelves;
-                ($pubshelves, $totshelves) = C4::VirtualShelves::GetRecentShelves(2, $row_count, undef);
-                $total->{'pubtotal'} = $totshelves;
-                $session->param('barshelves', $barshelves->[0]);
-                $session->param('pubshelves', $pubshelves->[0]);
-                $session->param('totshelves', $total);
-                
-                C4::Context::set_shelves_userenv('bar',$barshelves->[0]);
-                C4::Context::set_shelves_userenv('pub',$pubshelves->[0]);
-                C4::Context::set_shelves_userenv('tot',$total);
-            }
-            else {
-                if ($userid) {
-                    $info{'invalid_username_or_password'} = 1;
-                    C4::Context->_unset_userenv($sessionID);
-                }
-            }
-        }   # END if ( $userid    = $query->param('userid') )
-        elsif ($type eq "opac") {   
+				# Grab borrower's shelves and public shelves and add them to the session
+				# $row_count determines how many records are returned from the db query
+				# and the number of lists to be displayed of each type in the 'Lists' button drop down
+				my $row_count = 10; # FIXME:This probably should be a syspref
+				my ($total, $totshelves, $barshelves, $pubshelves);
+				($barshelves, $totshelves) = C4::VirtualShelves::GetRecentShelves(1, $row_count, $borrowernumber);
+				$total->{'bartotal'} = $totshelves;
+				($pubshelves, $totshelves) = C4::VirtualShelves::GetRecentShelves(2, $row_count, undef);
+				$total->{'pubtotal'} = $totshelves;
+				$session->param('barshelves', $barshelves->[0]);
+				$session->param('pubshelves', $pubshelves->[0]);
+				$session->param('totshelves', $total);
+
+				C4::Context::set_shelves_userenv('bar',$barshelves->[0]);
+				C4::Context::set_shelves_userenv('pub',$pubshelves->[0]);
+				C4::Context::set_shelves_userenv('tot',$total);
+			}
+        	else {
+            	if ($userid) {
+                	$info{'invalid_username_or_password'} = 1;
+                	C4::Context->_unset_userenv($sessionID);
+            	}
+			}
+        }	# END if ( $userid    = $query->param('userid') )
+		elsif ($type eq "opac") {
             # if we are here this is an anonymous session; add public lists to it and a few other items...
             # anonymous sessions are created only for the OPAC
-            $debug and warn "Initiating an anonymous session...";
+			$debug and warn "Initiating an anonymous session...";
 
-            # Grab the public shelves and add to the session...
-            my $row_count = 20; # FIXME:This probably should be a syspref
-            my ($total, $totshelves, $pubshelves);
-            ($pubshelves, $totshelves) = C4::VirtualShelves::GetRecentShelves(2, $row_count, undef);
-            $total->{'pubtotal'} = $totshelves;
-            $session->param('pubshelves', $pubshelves->[0]);
-            $session->param('totshelves', $total);
-            C4::Context::set_shelves_userenv('pub',$pubshelves->[0]);
-            C4::Context::set_shelves_userenv('tot',$total);
-            
-            # setting a couple of other session vars...
-            $session->param('ip',$session->remote_addr());
-            $session->param('lasttime',time());
-            $session->param('sessiontype','anon');
-        }
-    }   # END unless ($userid)
+			# Grab the public shelves and add to the session...
+			my $row_count = 20; # FIXME:This probably should be a syspref
+			my ($total, $totshelves, $pubshelves);
+			($pubshelves, $totshelves) = C4::VirtualShelves::GetRecentShelves(2, $row_count, undef);
+			$total->{'pubtotal'} = $totshelves;
+			$session->param('pubshelves', $pubshelves->[0]);
+			$session->param('totshelves', $total);
+			C4::Context::set_shelves_userenv('pub',$pubshelves->[0]);
+			C4::Context::set_shelves_userenv('tot',$total);
+
+			# setting a couple of other session vars...
+			$session->param('ip',$session->remote_addr());
+			$session->param('lasttime',time());
+			$session->param('sessiontype','anon');
+		}
+    }	# END unless ($userid)
     my $insecure = C4::Context->boolean_preference('insecure');
 
     # finished authentification, now respond
@@ -864,7 +850,7 @@ sub checkauth {
 # AUTH rejected, show the login/password template, after checking the DB.
 #
 #
-    
+
     # get the inputs from the incoming query
     my @inputs = ();
     foreach my $name ( param $query) {
@@ -876,7 +862,7 @@ sub checkauth {
     my $branches = GetBranches();
     my @branch_loop;
     for my $branch_hash (sort keys %$branches) {
-        push @branch_loop, {branchcode => "$branch_hash", branchname => $branches->{$branch_hash}->{'branchname'}, };
+		push @branch_loop, {branchcode => "$branch_hash", branchname => $branches->{$branch_hash}->{'branchname'}, };
     }
 
     my $template_name = ( $type eq 'opac' ) ? 'opac-auth.tmpl' : 'auth.tmpl';
@@ -906,16 +892,16 @@ sub checkauth {
         TagsEnabled                  => C4::Context->preference("TagsEnabled"),
         OPACUserCSS           => C4::Context->preference("OPACUserCSS"),
         intranetcolorstylesheet =>
-                                C4::Context->preference("intranetcolorstylesheet"),
+								C4::Context->preference("intranetcolorstylesheet"),
         intranetstylesheet => C4::Context->preference("intranetstylesheet"),
         IntranetNav        => C4::Context->preference("IntranetNav"),
         intranetuserjs     => C4::Context->preference("intranetuserjs"),
         TemplateEncoding   => C4::Context->preference("TemplateEncoding"),
         IndependantBranches=> C4::Context->preference("IndependantBranches"),
         AutoLocation       => C4::Context->preference("AutoLocation"),
-        wrongip            => $info{'wrongip'}
+		wrongip            => $info{'wrongip'}
     );
-    
+
     $template->param( loginprompt => 1 ) unless $info{'nopermission'};
 
     my $self_url = $query->url( -absolute => 1 );
@@ -1053,8 +1039,8 @@ sub check_api_auth {
         }
     } else {
         # new login
-        my $userid = $query->param('userid');   
-        my $password = $query->param('password');   
+        my $userid = $query->param('userid');
+        my $password = $query->param('password');
         unless ($userid and $password) {
             # caller did something wrong, fail the authenticateion
             return ("failed", undef, undef);
@@ -1147,7 +1133,7 @@ sub check_api_auth {
                 $session->param('emailaddress', C4::Context->preference('KohaAdminEmailAddress'));
                 $session->param('ip',$session->remote_addr());
                 $session->param('lasttime',time());
-            } 
+            }
             C4::Context::set_userenv(
                 $session->param('number'),       $session->param('id'),
                 $session->param('cardnumber'),   $session->param('firstname'),
@@ -1159,7 +1145,7 @@ sub check_api_auth {
         } else {
             return ("failed", undef, undef);
         }
-    } 
+    }
 }
 
 =item check_cookie_auth
@@ -1277,7 +1263,7 @@ sub check_cookie_auth {
   my $session = get_session($sessionID);
 
 Given a session ID, retrieve the CGI::Session object used to store
-the session's state.  The session object can be used to store 
+the session's state.  The session object can be used to store
 data that needs to be accessed by different scripts during a
 user's session.
 
@@ -1308,7 +1294,7 @@ sub checkpw {
 
     my ( $dbh, $userid, $password ) = @_;
     if ($ldap) {
-        $debug and print STDERR "## checkpw - checking LDAP\n";
+        $debug and print "## checkpw - checking LDAP\n";
         my ($retval,$retcard) = checkpw_ldap(@_);    # EXTERNAL AUTH
         ($retval) and return ($retval,$retcard);
     }
@@ -1406,7 +1392,7 @@ sub getuserflags {
     return $userflags;
 }
 
-=item get_user_subpermissions 
+=item get_user_subpermissions
 
 =over 4
 
@@ -1415,10 +1401,10 @@ my $user_perm_hashref = get_user_subpermissions($userid);
 =back
 
 Given the userid (note, not the borrowernumber) of a staff user,
-return a hashref of hashrefs of the specific subpermissions 
+return a hashref of hashrefs of the specific subpermissions
 accorded to the user.  An example return is
 
-{ 
+{
     tools => {
         export_catalog => 1,
         import_patrons => 1,
@@ -1484,7 +1470,7 @@ sub get_all_subpermissions {
     return $all_perms;
 }
 
-=item haspermission 
+=item haspermission
 
   $flags = ($userid, $flagsrequired);
 
@@ -1516,10 +1502,10 @@ sub haspermission {
                 return 0 unless ( $flags->{$module} == 1 or ref($flags->{$module}) );
             } else {
                 return 0 unless ( $flags->{$module} == 1 or
-                                    ( ref($flags->{$module}) and 
-                                      exists $flags->{$module}->{$subperm} and 
-                                      $flags->{$module}->{$subperm} == 1 
-                                    ) 
+                                    ( ref($flags->{$module}) and
+                                      exists $flags->{$module}->{$subperm} and
+                                      $flags->{$module}->{$subperm} == 1
+                                    )
                                 );
             }
         } else {
