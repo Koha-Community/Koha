@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 
+# Copyright 2008 - 2009 BibLibre SARL
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the
@@ -24,7 +25,7 @@ acqui-home.pl
 =head1 DESCRIPTION
 
 this script is the main page for acqui/
-It presents the budget's dashboard, another table about differents currency with 
+It presents the budget's dashboard, another table about differents currency with
 their rates and the pending suggestions.
 
 =head1 CGI PARAMETERS
@@ -40,15 +41,17 @@ thus, it can be REJECTED, ACCEPTED, ORDERED, ASKED, AVAIBLE
 =cut
 
 use strict;
+use Number::Format;
+
 use CGI;
 use C4::Auth;
 use C4::Output;
-
 use C4::Suggestions;
-
 use C4::Acquisition;
-use C4::Bookfund;
+use C4::Budgets;
 use C4::Members;
+use C4::Branch;
+use C4::Debug;
 
 my $query = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -57,7 +60,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { acquisition => 1 },
+        flagsrequired   => { acquisition => "*" },
         debug           => 1,
     }
 );
@@ -68,7 +71,10 @@ my ( $flags, $homebranch )= ($borrower->{'flags'},$borrower->{'branchcode'});
 
 my @results = GetBookFunds($homebranch);
 my $count = scalar @results;
+my $branchname = GetBranchName($homebranch);
 
+#my $count = scalar @results;
+my $count;
 my $classlist   = '';
 my $total       = 0;
 my $totspent    = 0;
@@ -76,55 +82,186 @@ my $totcomtd    = 0;
 my $totavail    = 0;
 my @loop_budget = ();
 
-for (my $i=0; $i<$count; $i++){
-	my ($spent,$comtd)=GetBookFundBreakdown($results[$i]->{'bookfundid'},$results[$i]->{'startdate'},$results[$i]->{'enddate'});
-	my $avail=$results[$i]->{'budgetamount'}-($spent+$comtd);
-	my %line;
-	$line{bookfundname} = $results[$i]->{'bookfundname'};
-	$line{budgetamount} = $results[$i]->{'budgetamount'};
-	$line{aqbudgetid} = $results[$i]->{'aqbudgetid'};
-	$line{bookfundid} = $results[$i]->{'bookfundid'};
-	$line{sdate} = $results[$i]->{'startdate'};
-	$line{edate} = $results[$i]->{'enddate'};
-	$line{spent} = sprintf  ("%.2f", $spent);
-	$line{comtd} = sprintf  ("%.2f",$comtd);
-	$line{avail}  = sprintf  ("%.2f",$avail);
-	push @loop_budget, \%line;
-	$total+=$results[$i]->{'budgetamount'};
-	$totspent+=$spent;
-	$totcomtd+=$comtd;
-	$totavail+=$avail;
-}
-
+# ---------------------------------------------------
 # currencies
+my $cur;
 my @rates = GetCurrencies();
 $count = scalar @rates;
 
+my $active_currency = GetCurrency;
+my $num = new Number::Format(-int_curr_symbol => '',
+                             -decimal_digits => "2" );
 my @loop_currency = ();
 for ( my $i = 0 ; $i < $count ; $i++ ) {
     my %line;
-    $line{currency} = $rates[$i]->{'currency'};
-    $line{rate}     = $rates[$i]->{'rate'};
+    $line{currency}        = $rates[$i]->{'currency'} ;
+    $line{currency_symbol} = $rates[$i]->{'symbol'};
+    $line{rate}            = sprintf ( '%.2f',  $rates[$i]->{'rate'} );
     push @loop_currency, \%line;
 }
 
 # suggestions
 my $status           = $query->param('status') || "ASKED";
 my $suggestion       = CountSuggestion($status);
-my $suggestions_loop = &SearchSuggestion( {status=> $status} );
+my $suggestions_loop = &SearchSuggestion( {STATUS=> $status} );
+# ---------------------------------------------------
+# number format
+my $cur_format = C4::Context->preference("CurrencyFormat");
+my $num;
+
+if ( $cur_format eq 'FR' ) {
+    $num = new Number::Format(
+        'decimal_fill'      => '2',
+        'decimal_point'     => ',',
+        'int_curr_symbol'   => '',
+        'mon_thousands_sep' => ' ',
+        'thousands_sep'     => ' ',
+        'mon_decimal_point' => ','
+    );
+} else {  # US by default..
+    $num = new Number::Format(
+        'int_curr_symbol'   => '',
+        'mon_thousands_sep' => ',',
+        'mon_decimal_point' => '.'
+    );
+}
+
+my $period            = GetBudgetPeriod;
+my $budget_period_id  = $period->{budget_period_id};
+my $budget_branchcode = $period->{budget_branchcode};
+my $moo               = GetBudgetHierarchy( $budget_period_id, $homebranch, $template->{param_map}->{'USER_INFO'}[0]->{'borrowernumber'} );
+my @results           = @$moo;
+my $period_total      = 0;
+my $toggle            = 0;
+my @loop;
+my ( $total, $totspent, $totcomtd, $totavail );
+
+foreach my $result (@results) {
+    # only get top-level budgets for display
+    #         warn  $result->{'budget_branchcode'};
+
+    $period_total += $result->{'budget_amount'};
+
+    my $a = $result->{'budget_code_indent'};
+    $a =~ s/\ /\&nbsp\;/g;
+    $result->{'budget_code_indent'} = $a;
+
+    my $r = GetBranchName( $result->{'budget_owner_id'} );
+    $result->{'budget_branchname'} = GetBranchName( $result->{'budget_branchcode'} );
+
+    my $member      = GetMember( $result->{'budget_owner_id'} );
+    my $member_full = $member->{'firstname'} . ' ' . $member->{'surname'};
+
+    $result->{'budget_owner'} = $member_full;
+    $result->{'budget_avail'} = $result->{'budget_amount'} - $result->{'budget_spent'};
+    $result->{'budget_spent'} = GetBudgetSpent( $result->{'budget_id'} );
+
+    $total    += $result->{'budget_amount'};
+    $totspent += $result->{'budget_spent'};
+    $totavail += $result->{'budget_avail'};
+
+    $result->{'budget_amount'} = $num->format_price( $result->{'budget_amount'} );
+    $result->{'budget_spent'}  = $num->format_price( $result->{'budget_spent'} );
+    $result->{'budget_avail'}  = $num->format_price( $result->{'budget_avail'} );
+
+    #        my $spent_percent = ( $result->{'budget_spent'} / $result->{'budget_amount'} ) * 100;
+    #        $result->{'budget_spent_percent'} = sprintf( "%00d", $spent_percent );
+
+    my $borrower = &GetMember( $result->{budget_owner_id} );
+    $result->{budget_owner_name} = $borrower->{'firstname'} . ' ' . $borrower->{'surname'};
+
+    push( @loop_budget, { %{$result}, toggle => $toggle++ % 2, } );
+}
+
+
+# ---------------------------------------------------
+
+=c FIXME
+
+
+### $cur
+
+## suggestions
+
+my $dbh = C4::Context->dbh;
+
+
+## liste des domaines
+
+my $sth=$dbh->prepare("
+SELECT bookfundgroupnumber,bookfundgroupname
+FROM `aq2bookfundgroups`
+ORDER BY Bookfundgroupname
+");
+$sth->execute;
+
+my @bookfundgroup_loop;  ## liste des domaines
+
+while (my $row=$sth->fetchrow_hashref) {
+        push @bookfundgroup_loop,$row;
+}
+$sth->finish;
+
+
+## liste des BFG ayant des suggestions à traiter
+
+
+## nowsuggestions = Number Of Waiting Suggestions
+
+my $dbh = C4::Context->dbh;
+
+my $sth=$dbh->prepare("
+SELECT bookfundgroupnumber, count(*) AS nowsuggestions
+FROM `aq2orders`
+WHERE step=2
+AND STATUS='ASKED'
+GROUP BY bookfundgroupnumber
+");
+$sth->execute;
+
+my @nowsuggestionsneq0_loop;  ## liste des BFG ayant des suggestions à traiter
+
+while (my $row=$sth->fetchrow_hashref) {
+        push @nowsuggestionsneq0_loop,$row;
+}
+$sth->finish;
+
+
+## liste des BFG avec l'effectif des suggestions à traiter (effectif éventuellement nul)
+
+my @nowsuggestions_loop;
+
+foreach my $data1 (@bookfundgroup_loop) {
+    $data1->{'nowsuggestions'}=0;
+    foreach my $data2 (@nowsuggestionsneq0_loop) {
+        if ($data1->{'bookfundgroupnumber'}==$data2->{'bookfundgroupnumber'}) {
+            $data1->{'nowsuggestions'}=$data2->{'nowsuggestions'};
+        }
+    }
+}
+
+=cut
+
 
 $template->param(
-    classlist        => $classlist,
-    type             => 'intranet',
-    loop_budget      => \@loop_budget,
-    loop_currency    => \@loop_currency,
-    total            => sprintf( "%.2f", $total ),
-    suggestion       => $suggestion,
-    suggestions_loop => $suggestions_loop,
-    totspent         => sprintf( "%.2f", $totspent ),
-    totcomtd         => sprintf( "%.2f", $totcomtd ),
-    totavail         => sprintf( "%.2f", $totavail ),
-    nobudget         => $#results == -1 ? 1 : 0
+    classlist     => $classlist,
+    type          => 'intranet',
+    loop_budget   => \@loop_budget,
+    loop_currency => \@loop_currency,
+    active_symbol => $active_currency->{'symbol'},
+    branchname    => $branchname,
+    budget        => $period->{budget_name},
+    total         => $num->format_price(  $total ),
+    totspent      => $num->format_price($totspent ),
+    totcomtd      => $num->format_price( $totcomtd ),
+    totavail      => $num->format_price( $totavail ),
+
+    #      nowsuggestions_loop           => \@nowsuggestions_loop,
+    #      bookfundgroup_loop            => \@bookfundgroup_loop,
+    #      numberofwaitingsuggestionsgpd => $numberofwaitingsuggestionsgpd,
+    #      numberofwaitingsuggestionspd  => $numberofwaitingsuggestionspd,
+    #      suggestions_loop              => $suggestions_loop,
+
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
