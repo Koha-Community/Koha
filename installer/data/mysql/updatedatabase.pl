@@ -2457,7 +2457,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE `borrowers` ADD `privacy` INTEGER NOT NULL DEFAULT 1;");
     print "Upgrade to $DBversion done (add new syspref and column in borrowers)\n";
 
-$DBversion = '3.01.00.020';
+$DBversion = '3.01.00.036';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do(<<'END_SQL');
 CREATE TABLE IF NOT EXISTS `aqcontract` (
@@ -2476,7 +2476,7 @@ END_SQL
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.01.00.021';
+$DBversion = '3.01.00.037';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE `aqbasket` ADD COLUMN `basketname` varchar(50) default NULL AFTER `basketno`");
     $dbh->do("ALTER TABLE `aqbasket` ADD COLUMN `note` mediumtext AFTER `basketname`");
@@ -2487,7 +2487,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.01.00.022';
+$DBversion = '3.01.00.038';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE `aqorders` ADD COLUMN `uncertainprice` tinyint(1)");
 
@@ -2495,7 +2495,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.01.00.023';
+$DBversion = '3.01.00.039';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("CREATE TABLE IF NOT EXISTS `aqbasketgroups` (
                          `id` int(11) NOT NULL auto_increment,
@@ -2513,7 +2513,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.01.00.024';
+$DBversion = '3.01.00.040';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("DROP TABLE IF EXISTS `aqbudgetperiods` ");
     $dbh->do(qq|
@@ -2586,7 +2586,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.01.00.025';
+$DBversion = '3.01.00.041';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 # removes 'aqbudgets' NOT NULL
@@ -2602,7 +2602,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.01.00.026';
+$DBversion = '3.01.00.042';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 # removes 'aqbudgets' NOT NULL
@@ -2615,7 +2615,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 }
 
 
-$DBversion = '3.01.00.027';
+$DBversion = '3.01.00.043';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 # removes 'aqbudgets' NOT NULL
@@ -2626,7 +2626,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.01.00.028';
+$DBversion = '3.01.00.044';
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE aqbudgetperiods ADD COLUMN budget_period_total decimal(28,6)");
     print "Upgrade to $DBversion done (adds 'budget_period_total' column to aqbudgetperiods table)\n";
@@ -2634,7 +2634,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 }
 
 
-$DBversion = '3.01.00.029';
+$DBversion = '3.01.00.045';
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE currency ADD COLUMN active  tinyint(1)");
 
@@ -2642,7 +2642,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = '3.01.00.030';
+$DBversion = '3.01.00.046';
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES
             (11, 'vendors_manage', 'Manage vendors'),
@@ -2660,7 +2660,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = '3.01.00.031';
+$DBversion = '3.01.00.047';
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE aqbudgets CHANGE COLUMN budget_owner_id budget_owner_id int(11)");
 
@@ -2669,7 +2669,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 }
 
 
-$DBversion = '3.01.00.032';
+$DBversion = '3.01.00.048';
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do(qq|  INSERT INTO permissions (module_bit, code, description) VALUES
             (11, 'budget_add_del', "Add and delete budgets (but can't modify budgets) )") |);
@@ -2678,14 +2678,14 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = '3.01.00.033';
+$DBversion = '3.01.00.049';
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE aqbooksellers ADD COLUMN `gstrate` decimal(5,2) default NULL");
     print "Upgrade to $DBversion done (added per-supplier gstrate setting)\n";
     SetVersion($DBversion);
 }
 
-$DBversion = "3.01.00.034";
+$DBversion = "3.01.00.050";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     if (C4::Context->preference("opaclanguages") eq "fr") {
         $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AcqCreateItem','ordering','Définit quand l'exemplaire est créé : à la commande, à la livraison, au catalogage','ordering|receiving|cataloguing','Choice')");
@@ -2696,7 +2696,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.035";
+$DBversion = "3.01.00.051";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do(qq| 
  CREATE TABLE `aqorders_items` (
@@ -2713,7 +2713,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.036";
+$DBversion = "3.01.00.052";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     my $query = "SELECT * FROM `aqbooksellers`";
     my $sth = $dbh->prepare($query);
@@ -2731,7 +2731,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.037";
+$DBversion = "3.01.00.053";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do(  qq# INSERT INTO `systempreferences` VALUES ('CurrencyFormat','US','US|FR','Determines the display format of currencies. eg: ''36000'' is displayed as ''360 000,00''  in ''FR'' or 360,000.00''  in ''US''.','Choice')  #);
 
@@ -2739,7 +2739,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.038";
+$DBversion = "3.01.00.054";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER table aqorders drop column title");
 
@@ -2747,7 +2747,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.039";
+$DBversion = "3.01.00.055";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE `aqorders` CHANGE `budget_id` `budget_id` INT( 11 ) NOT NULL");
     print "Upgrade to $DBversion done update budget_id size that should not be a tinyint\n";
