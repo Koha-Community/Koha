@@ -138,13 +138,17 @@
             </ol></div>
             <div class="listgroup"><h4>History</h4>
             <ol class="bibliodetails">
+
                 <li><span class="label">
-                <!-- TMPL_IF NAME="CAN_user_editcatalogue" --><a href="/cgi-bin/koha/acqui/orderreceive.pl?recieve=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;invoice=<!-- TMPL_VAR NAME="booksellerinvoicenumber" -->&amp;catview=yes">Accession Date:</a><!-- TMPL_ELSE -->Accession Date:<!-- /TMPL_IF --></span> <!-- TMPL_VAR NAME="dateaccessioned" --></li>
+                <!-- TMPL_IF NAME="CAN_user_editcatalogue" -->
+                    Accession Date:</span> <a href="/cgi-bin/koha/acqui/basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->"><!-- TMPL_VAR NAME="dateaccessioned" --></a>
+                <!-- TMPL_ELSE -->
+                    <!-- TMPL_VAR NAME="dateaccessioned" -->
+                <!-- /TMPL_IF --> </li>
 
                 <li><span class="label">Total Renewals:</span> <!-- TMPL_VAR NAME="renewals" -->&nbsp;</li>
 
                 <li><span class="label">Total Checkouts:</span><!-- TMPL_IF NAME="issues" --><!-- TMPL_VAR NAME="issues" --><!-- TMPL_ELSE -->0<!-- /TMPL_IF -->  (<a href="/cgi-bin/koha/circ/bookcount.pl?&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;itm=<!-- TMPL_VAR NAME="itemnumber" -->">View item's checkout history</a>)</li>
-
 
                 <li><span class="label">Last seen:</span> <!-- TMPL_VAR NAME="datelastseen" -->&nbsp;</li>
                 <li><span class="label">Last borrowed:</span> <!-- TMPL_VAR NAME="datelastborrowed" -->&nbsp;</li>
