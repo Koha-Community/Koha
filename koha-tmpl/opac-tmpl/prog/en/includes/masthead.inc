@@ -18,7 +18,7 @@
 <div id="fluid-offset">
 <!-- TMPL_UNLESS NAME="advsearch" --><form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform">
 	<label for="masthead_search" class="left"> Search <!-- TMPL_IF name="mylibraryfirst" --> <!-- TMPL_IF name="loggedinusername" -->(in <!-- TMPL_VAR name="LoginBranchcode" --> only)<!-- /TMPL_IF --><!-- /TMPL_IF --></label>
-	<select name="idx" id="masthead_search" class="left" style="max-width:9em;width:9em;">
+	<select name="idx" id="masthead_search" class="left" style="max-width:10em;width:10em;">
 	<!-- TMPL_IF NAME="ms_kw" -->
         <option selected="selected" value="">Library Catalog</option>
 		<!-- TMPL_ELSE -->
