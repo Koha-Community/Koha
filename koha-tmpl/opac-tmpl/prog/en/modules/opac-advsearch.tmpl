@@ -206,6 +206,15 @@
 
     </fieldset></div>
 	</div>
+<div id="pubrange" class="container">
+<fieldset>
+<!-- PUB RANGE OPTION -->
+<legend>Publication Date Range:</legend>
+<option value="limit-yr">For example:  1999-2001.  You could also use "-1987" for everything published before 1987 or "2008-" for everything published after 2008.</option>
+<input type="text" size="30" name="limit-yr" title="Enter search terms" value="" />
+</fieldset>
+<!-- /PUB RANGE OPTION -->
+</div>
 	<div class="yui-g">
 <!-- /BOOLEAN SEARCH OPTIONS -->
     <div id="advsearch-itemtype" class="container">
@@ -223,30 +232,7 @@
 	</fieldset>
     </div>
 <!-- TMPL_IF NAME="expanded_options" -->
-    <!-- BASIC LIMITS -->
     <!--TMPL_IF Name="usmarc"-->
-        <fieldset>
-            <legend>Limit type to: match any of the following</legend>
-            <table class="itemtypes">
-                <tr>
-                    <td><input type="checkbox" id="mc-bks" name="limit" value="mc:t" /><label for="mc-bks" title="Books, Pamphlets, Technical reports, Manuscripts, Legal papers, Theses and dissertations"><img border="0" src="/intranet-tmpl/prog/en/images/AF.gif" alt="Books" />Books</label></td>
-                    <td><input type="checkbox" id="mc-vis" name="limit" value="mc:v" /><label for="mc-vis" title="Motion pictures, Videorecordings, Filmstrips, Slides, Transparencies, Photos, Cards, Charts, Drawings"><img border="0" src="/intranet-tmpl/prog/en/images/AV Aids.gif" alt="Visual Materials" />Visual Materials</label></td>
-                    <td><input type="checkbox" id="mc-sr" name="limit" value="mc-rtype:i" /><label for="mc-sr" title="Spoken, Books on CD and Cassette"><img border="0" src="/intranet-tmpl/prog/en/images/AF.gif" alt="Books on Tape" />Books on Tape</label></td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" id="mc-cf" name="limit" value="mc:c" /><label for="mc-cf" title="Computer files, Data, Software"><img border="0" src="/intranet-tmpl/prog/en/images/CD-ROM software.gif" alt="Computer Files" />Computer Files</label></td>
-                    <td><input type="checkbox" id="mc-lh" name="limit" value="mc-collection:LH" /><label for="mc-lh" title="Local History Materials"><img border="0" src="/intranet-tmpl/prog/en/images/Local history.gif" alt="Local History Materials" />Local History Materials</label></td>
-                    <td><input type="checkbox" id="mc-map" name="limit" value="mc:a" /><label for="mc-map" title="Maps, Globes"><img border="0" src="/intranet-tmpl/prog/en/images/PF.gif " alt="Maps" />Maps</label></td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox" id="mc-mus" name="limit" value="mc-rtype:j" /><label for="mc-mus" title="Music"><img border="0" src="/intranet-tmpl/prog/en/images/CDM.gif" alt="Music" />Music</label></td>
-                    <td><input type="checkbox" id="mc-kit" name="limit" value="mc-rtype:o" /><label for="mc-kit" title="Kits"><img border="0" src="/intranet-tmpl/prog/en/images/KIT.gif" alt="Kits" />Kits</label></td>
-                    <td><input type="checkbox" id="mc-ref" name="limit" value="mc-collection:REF" /><label for="mc-ref" title="Reference"><img border="0" src="/intranet-tmpl/prog/en/images/REF.gif" alt="Reference" />Reference</label></td></tr>
-                
-                </table>
-        </fieldset>
-        <!-- /BASIC LIMITS -->
-
         <!-- SUBTYPE LIMITS -->
             <div id="subtypes" class="container"><fieldset>
             <legend>Subtype limits</legend><select name="limit" class="subtype">
@@ -282,7 +268,7 @@
                 </select>
             
             <select name="limit" class="subtype">
-                <option value="">Additional Content Types</option>
+                <option value="">Additional Content Types for Books/Printed Materials</option>
                     <option value="ctype:a">Abstracts/summaries</option>
                     <option value="ctype:b">Bibliographies</option>
                     <option value="ctype:c">Catalogs</option>

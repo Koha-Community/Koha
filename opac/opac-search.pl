@@ -74,6 +74,9 @@ elsif ($cgi->param("format") && $cgi->param("format") eq 'opensearchdescription'
 if (C4::Context->preference("marcflavour") eq "UNIMARC" ) {
     $template->param('UNIMARC' => 1);
 }
+if (C4::Context->preference("marcflavour") eq "MARC21" ) {
+    $template->param('usmarc' => 1);
+}
 
 if (C4::Context->preference('BakerTaylorEnabled')) {
 	$template->param(
@@ -226,7 +229,7 @@ if ( $template_type eq 'advsearch' ) {
                       search_boxes_loop => \@search_boxes_array);
 
 # use the global setting by default
-	if ( C4::Context->preference("expandedSearchOption") == 1) {
+	if ( C4::Context->preference("expandedSearchOption") ) {
 		$template->param( expanded_options => C4::Context->preference("expandedSearchOption") );
 	}
 	# but let the user override it
