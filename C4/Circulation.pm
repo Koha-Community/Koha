@@ -672,7 +672,19 @@ sub CanBookBeIssued {
     #
     # DUE DATE is OK ? -- should already have checked.
     #
-    #$issuingimpossible{INVALID_DATE} = 1 unless ($duedate);
+    unless ( $duedate ) {
+        my $issuedate = strftime( "%Y-%m-%d", localtime );
+        my $branch = (C4::Context->preference('CircControl') eq 'PickupLibrary') ? C4::Context->userenv->{'branch'} :
+                     (C4::Context->preference('CircControl') eq 'PatronLibrary') ? $borrower->{'branchcode'}        :
+                     $item->{'homebranch'};     # fallback to item's homebranch
+        my $itype = ( C4::Context->preference('item-level_itypes') ) ? $item->{'itype'} : $biblioitem->{'itemtype'};
+        my $loanlength = GetLoanLength( $borrower->{'categorycode'}, $itype, $branch );
+        $duedate = CalcDateDue( C4::Dates->new( $issuedate, 'iso' ), $loanlength, $branch, $borrower );
+
+        # Offline circ calls AddIssue directly, doesn't run through here
+        #  So issuingimpossible should be ok.
+    }
+    $issuingimpossible{INVALID_DATE} = $duedate->output('syspref') unless ( $duedate && $duedate->output('iso') ge C4::Dates->today('iso') );
 
     #
     # BORROWER STATUS
@@ -979,19 +991,8 @@ sub AddIssue {
         unless ($datedue) {
             my $itype = ( C4::Context->preference('item-level_itypes') ) ? $biblio->{'itype'} : $biblio->{'itemtype'};
             my $loanlength = GetLoanLength( $borrower->{'categorycode'}, $itype, $branch );
-            $datedue = CalcDateDue( C4::Dates->new( $issuedate, 'iso' ), $loanlength, $branch );
+            $datedue = CalcDateDue( C4::Dates->new( $issuedate, 'iso' ), $loanlength, $branch, $borrower );
 
-            # if ReturnBeforeExpiry ON the datedue can't be after borrower expirydate
-            if ( C4::Context->preference('ReturnBeforeExpiry') && $datedue->output('iso') gt $borrower->{dateexpiry} ) {
-                $datedue = C4::Dates->new( $borrower->{dateexpiry}, 'iso' );
-            }
-
-	    # if ceilingDueDate ON the datedue can't be after the ceiling date
-	    if ( C4::Context->preference('ceilingDueDate')
-		 && ( C4::Context->preference('ceilingDueDate') =~ C4::Dates->regexp('syspref') )
-		 && $datedue->output gt C4::Context->preference('ceilingDueDate') ) {
-		$datedue = C4::Dates->new( C4::Context->preference('ceilingDueDate') );
-	    }
         }
         $sth->execute(
             $borrower->{'borrowernumber'},      # borrowernumber
@@ -2105,7 +2106,7 @@ sub AddRenewal {
 			$item->{homebranch}			# item's homebranch determines loanlength OR do we want the branch specified by the AddRenewal argument?
         );
 		#FIXME -- use circControl?
-		$datedue =  CalcDateDue(C4::Dates->new(),$loanlength,$branch);	# this branch is the transactional branch.
+		$datedue =  CalcDateDue(C4::Dates->new(),$loanlength,$branch,$borrower);	# this branch is the transactional branch.
 								# The question of whether to use item's homebranch calendar is open.
     }
 
@@ -2496,17 +2497,32 @@ C<$loanlength>  = loan length prior to adjustment
 =cut
 
 sub CalcDateDue { 
-	my ($startdate,$loanlength,$branch) = @_;
+	my ($startdate,$loanlength,$branch,$borrower) = @_;
+	my $datedue;
+
 	if(C4::Context->preference('useDaysMode') eq 'Days') {  # ignoring calendar
-		my $datedue = time + ($loanlength) * 86400;
+		my $timedue = time + ($loanlength) * 86400;
 	#FIXME - assumes now even though we take a startdate 
-		my @datearr  = localtime($datedue);
-		return C4::Dates->new( sprintf("%04d-%02d-%02d", 1900 + $datearr[5], $datearr[4] + 1, $datearr[3]), 'iso');
+		my @datearr  = localtime($timedue);
+		$datedue = C4::Dates->new( sprintf("%04d-%02d-%02d", 1900 + $datearr[5], $datearr[4] + 1, $datearr[3]), 'iso');
 	} else {
 		my $calendar = C4::Calendar->new(  branchcode => $branch );
-		my $datedue = $calendar->addDate($startdate, $loanlength);
-		return $datedue;
+		$datedue = $calendar->addDate($startdate, $loanlength);
 	}
+
+	# if ReturnBeforeExpiry ON the datedue can't be after borrower expirydate
+	if ( C4::Context->preference('ReturnBeforeExpiry') && $datedue->output('iso') gt $borrower->{dateexpiry} ) {
+	    $datedue = C4::Dates->new( $borrower->{dateexpiry}, 'iso' );
+	}
+
+	# if ceilingDueDate ON the datedue can't be after the ceiling date
+	if ( C4::Context->preference('ceilingDueDate')
+	     && ( C4::Context->preference('ceilingDueDate') =~ C4::Dates->regexp('syspref') )
+	     && $datedue->output gt C4::Context->preference('ceilingDueDate') ) {
+	    $datedue = C4::Dates->new( C4::Context->preference('ceilingDueDate') );
+	}
+
+	return $datedue;
 }
 
 =head2 CheckValidDatedue
