@@ -782,6 +782,10 @@ AND (authtypecode IS NOT NULL AND authtypecode<>\"\")|);
          my $authtypedata=GetAuthType($data->{authtypecode});
          next unless $authtypedata;
          my $marcrecordauth=MARC::Record->new();
+		if (C4::Context->preference('marcflavour') eq 'MARC21') {
+			$marcrecordauth->leader('     nz  a22     o  4500');
+			SetMarcUnicodeFlag($marcrecordauth, 'MARC21');
+			}
          my $authfield=MARC::Field->new($authtypedata->{auth_tag_to_report},'','',"a"=>"".$field->subfield('a'));
          map { $authfield->add_subfields($_->[0]=>$_->[1]) if ($_->[0]=~/[A-z]/ && $_->[0] ne "a" )}  $field->subfields();
          $marcrecordauth->insert_fields_ordered($authfield);
@@ -792,14 +796,8 @@ AND (authtypecode IS NOT NULL AND authtypecode<>\"\")|);
          # FIXME: AddAuthority() instead should simply explicitly require that the MARC::Record
          # use UTF-8, but as of 2008-08-05, did not want to introduce that kind
          # of change to a core API just before the 3.0 release.
-         # 
-         # This isn't needed if we set the UTF flag in the leader below
-		#if (C4::Context->preference('marcflavour') eq 'MARC21') {
-        #    SetMarcUnicodeFlag($marcrecordauth, 'MARC21');
-        # }
 
 				if (C4::Context->preference('marcflavour') eq 'MARC21') {
-					$marcrecordauth->leader('     nz  a22     o  4500');
 					$marcrecordauth->insert_fields_ordered(MARC::Field->new('667','','','a'=>"Machine generated authority record."));
 					my $cite = $record->author() . ", " .  $record->title_proper() . ", " . $record->publication_date() . " "; 
 					$cite =~ s/^[\s\,]*//;
