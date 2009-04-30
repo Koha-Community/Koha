@@ -35,12 +35,22 @@
  */
 function AreMandatoriesNotOk(){
     var mandatories = new Array();
+    var mandatoriesfields = new Array();
     var   tab = new Array();
     var label = new Array();
-    <!-- TMPL_LOOP NAME='BIG_LOOP' --><!-- TMPL_LOOP NAME='innerloop' --><!-- TMPL_LOOP NAME='subfield_loop'--><!-- TMPL_IF NAME='mandatory'-->mandatories.push("<!-- TMPL_VAR NAME='id' -->");
-        tab.push("<!-- TMPL_VAR NAME='number' -->");
-        label.push("<!-- TMPL_VAR NAME='marc_lib' ESCAPE=JS-->");
-    <!-- /TMPL_IF --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP --><!-- /TMPL_LOOP -->
+    <!-- TMPL_LOOP NAME='BIG_LOOP' -->
+    	<!-- TMPL_LOOP NAME='innerloop' -->
+			<!-- TMPL_IF NAME="mandatory" -->
+        		mandatoriesfields.push(new Array("<!-- TMPL_VAR NAME="tag" -->","<!-- TMPL_VAR NAME="index" -->"));
+            <!-- /TMPL_IF -->
+    		<!-- TMPL_LOOP NAME='subfield_loop'-->
+    			<!-- TMPL_IF NAME='mandatory'-->mandatories.push("<!-- TMPL_VAR NAME='id' -->");
+        		tab.push("<!-- TMPL_VAR NAME='number' -->");
+        		label.push("<!-- TMPL_VAR NAME='marc_lib' ESCAPE=JS-->");
+    			<!-- /TMPL_IF -->
+			<!-- /TMPL_LOOP -->
+		<!-- /TMPL_LOOP -->
+	<!-- /TMPL_LOOP -->
     var StrAlert = "";
     for(var i=0,len=mandatories.length; i<len ; i++){
         var id_string = mandatories[i];
@@ -50,6 +60,39 @@ function AreMandatoriesNotOk(){
             StrAlert += "\t* "+label[i]+_(" in tab ")+tab[i]+"\n";
         }
     }
+    
+    /* Check for mandatories field(not subfields) */
+    for(var i=0,len=mandatoriesfields.length; i<len; i++){
+    	isempty  = true;
+    	arr      = mandatoriesfields[i];
+    	divid    = "tag_" + arr[0] + "_" + arr[1];
+    	varegexp = new RegExp("^tag_" + arr[0] + "_code_");
+
+    	elem = document.getElementById(divid);
+    	eleminputs = elem.getElementsByTagName('input');
+    	
+    	for(var j=0,len2=eleminputs.length; j<len2; j++){
+
+    		if(eleminputs[j].name.match(varegexp) && eleminputs[j].value){
+				/* tag_801_subfield_c_841304_545657 */
+				inputregexp = new RegExp("^tag_" + arr[0] + "_subfield_" + eleminputs[j].value + "_" + arr[1]);
+				
+				for( var k=0; k<len2; k++){
+					if(eleminputs[k].id.match(inputregexp) && eleminputs[k].value){
+						isempty = false
+					}
+				}
+    		}
+    	}
+    	
+    	if(isempty){
+    		flag = 1;
+    		StrAlert += "\t* Field " + arr[0] + " is mandatory, at least one of its subfields must be filled\n";
+    	}
+    	
+    }
+    
+    
     if(StrAlert){
         return _("Can't save this record because the following field aren't filled :\n\n") + StrAlert;
     }
