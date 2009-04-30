@@ -231,7 +231,16 @@ sub get_syndetics_reviews {
         for my $subfield_a (@{$response->{VarFlds}->{VarDFlds}->{Notes}->{Fld520}}) {
             my @content;
             # this is absurd, but sometimes this data serializes differently
-            if(ref($subfield_a->{a}->{content}) eq 'ARRAY') {
+            if (exists $subfield_a->{content}) {
+                if (ref($subfield_a->{content} eq 'ARRAY')) {
+                    for my $content (@{$subfield_a->{content}}) {
+                        push @content, {content => $content};
+                    }
+                } else {
+                    push @content, {content => $subfield_a->{content}};
+                }
+            }
+            elsif(ref($subfield_a->{a}->{content}) eq 'ARRAY') {
                 for my $content (@{$subfield_a->{a}->{content}}) {
                     push @content, {content => $content};
                 }
