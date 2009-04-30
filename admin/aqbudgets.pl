@@ -200,9 +200,9 @@ if ($op eq 'add_form') {
     }
     push @values, '';
     # if no buget_id is passed then its an add
-    my $budget_dropbox;
+    my $budget_parent_dropbox;
     my $budget_parent_id = $budget->{'budget_parent_id'} if $budget;
-    $budget_dropbox = CGI::scrolling_list(
+    $budget_parent_dropbox = CGI::scrolling_list(
         -name    => 'budget_parent_id',
         -values  => \@values,
         -default => $budget_parent_id ? $budget_parent_id : undef,
@@ -210,7 +210,6 @@ if ($op eq 'add_form') {
         -style   => "min-width:100px;",
         -labels  => \%labels,
     );
-    my $budget_parent_dropbox =~ s/\~/&nbsp;/g;  #
 
     my $branches = GetBranches;
     my @branchloop_select;
