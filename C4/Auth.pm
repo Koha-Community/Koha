@@ -1,7 +1,3 @@
-
-# -*- tab-width: 8 -*-
-# NOTE: This file uses 8-character tabs; do not change the tab size!
-
 package C4::Auth;
 
 # Copyright 2000-2002 Katipo Communications
@@ -552,38 +548,38 @@ sub checkauth {
             $sessionID = undef;
             $userid    = undef;
         }
-		elsif ( $lasttime < time() - $timeout ) {
-			# timed logout
-			$info{'timed_out'} = 1;
-			$session->delete();
-			C4::Context->_unset_userenv($sessionID);
-			_session_log(sprintf "%20s from %16s logged out at %30s (inactivity).\n", $userid,$ip,localtime);
-			$userid    = undef;
-			$sessionID = undef;
-		}
-		elsif ( $ip ne $ENV{'REMOTE_ADDR'} ) {
-			# Different ip than originally logged in from
-			$info{'oldip'}        = $ip;
-			$info{'newip'}        = $ENV{'REMOTE_ADDR'};
-			$info{'different_ip'} = 1;
-			$session->delete();
-			C4::Context->_unset_userenv($sessionID);
-			_session_log(sprintf "%20s from %16s logged out at %30s (ip changed to %16s).\n", $userid,$ip,localtime, $info{'newip'});
-			$sessionID = undef;
-			$userid    = undef;
-		}
-		else {
-			$cookie = $query->cookie( CGISESSID => $session->id );
-			$session->param('lasttime',time());
-			unless ( $sessiontype eq 'anon' ) {	#if this is an anonymous session, we want to update the session, but not behave as if they are logged in...
-				$flags = haspermission( $dbh, $userid, $flagsrequired );
-				if ($flags) {
-					$loggedin = 1;
-				} else {
-					$info{'nopermission'} = 1;
-				}
-			}
-		}
+        elsif ( $lasttime < time() - $timeout ) {
+            # timed logout
+            $info{'timed_out'} = 1;
+            $session->delete();
+            C4::Context->_unset_userenv($sessionID);
+            _session_log(sprintf "%20s from %16s logged out at %30s (inactivity).\n", $userid,$ip,localtime);
+            $userid    = undef;
+            $sessionID = undef;
+        }
+        elsif ( $ip ne $ENV{'REMOTE_ADDR'} ) {
+            # Different ip than originally logged in from
+            $info{'oldip'}        = $ip;
+            $info{'newip'}        = $ENV{'REMOTE_ADDR'};
+            $info{'different_ip'} = 1;
+            $session->delete();
+            C4::Context->_unset_userenv($sessionID);
+            _session_log(sprintf "%20s from %16s logged out at %30s (ip changed to %16s).\n", $userid,$ip,localtime, $info{'newip'});
+            $sessionID = undef;
+            $userid    = undef;
+        }
+        else {
+            $cookie = $query->cookie( CGISESSID => $session->id );
+            $session->param('lasttime',time());
+            unless ( $sessiontype eq 'anon' ) { #if this is an anonymous session, we want to update the session, but not behave as if they are logged in...
+                $flags = haspermission($userid, $flagsrequired);
+                if ($flags) {
+                    $loggedin = 1;
+                } else {
+                    $info{'nopermission'} = 1;
+                }
+            }
+        }
     }
     unless ($userid || $sessionID) {
         #we initiate a session prior to checking for a username to allow for anonymous sessions...
@@ -591,54 +587,53 @@ sub checkauth {
         my $sessionID = $session->id;
        	C4::Context->_new_userenv($sessionID);
         $cookie = $query->cookie(CGISESSID => $sessionID);
-		if ( $userid    = $query->param('userid') ) {
-        	my $password = $query->param('password');
-        	my ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password );
-        	if ($return) {
-            	_session_log(sprintf "%20s from %16s logged in  at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},localtime);
-            	if ( $flags = haspermission( $dbh, $userid, $flagsrequired ) ) {
-					$loggedin = 1;
-            	}
-           		else {
-                	$info{'nopermission'} = 1;
-                	C4::Context->_unset_userenv($sessionID);
-            	}
+        if ( $userid    = $query->param('userid') ) {
+            my $password = $query->param('password');
+            my ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password );
+            if ($return) {
+                _session_log(sprintf "%20s from %16s logged in  at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},localtime);
+                if ( $flags = haspermission($userid, $flagsrequired) ) {
+                    $loggedin = 1;
+                }
+                else {
+                    $info{'nopermission'} = 1;
+                    C4::Context->_unset_userenv($sessionID);
+                }
 
-				my ($borrowernumber, $firstname, $surname, $userflags,
-					$branchcode, $branchname, $branchprinter, $emailaddress);
+                my ($borrowernumber, $firstname, $surname, $userflags,
+                    $branchcode, $branchname, $branchprinter, $emailaddress);
 
-            	if ( $return == 1 ) {
-                	my $select = "
-                	SELECT borrowernumber, firstname, surname, flags, borrowers.branchcode, 
-                    	    branches.branchname    as branchname, 
-                        	branches.branchprinter as branchprinter, 
-                        	email 
-                	FROM borrowers 
-                	LEFT JOIN branches on borrowers.branchcode=branches.branchcode
-                	";
-                	my $sth = $dbh->prepare("$select where userid=?");
-                	$sth->execute($userid);
-					unless ($sth->rows) {
-                		$debug and print STDERR "AUTH_1: no rows for userid='$userid'\n";
-						$sth = $dbh->prepare("$select where cardnumber=?");
-                   		$sth->execute($cardnumber);
-						unless ($sth->rows) {
-                			$debug and print STDERR "AUTH_2a: no rows for cardnumber='$cardnumber'\n";
-                    		$sth->execute($userid);
-							unless ($sth->rows) {
-                				$debug and print STDERR "AUTH_2b: no rows for userid='$userid' AS cardnumber\n";
-							}
-						}
-					}
-                	if ($sth->rows) {
-                    	($borrowernumber, $firstname, $surname, $userflags,
-                    		$branchcode, $branchname, $branchprinter, $emailaddress) = $sth->fetchrow;
-						$debug and print STDERR "AUTH_3 results: " .
-							"$cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress\n";
-					} else {
-						print STDERR "AUTH_3: no results for userid='$userid', cardnumber='$cardnumber'.\n";
-					}
-
+                if ( $return == 1 ) {
+                    my $select = "
+                    SELECT borrowernumber, firstname, surname, flags, borrowers.branchcode, 
+                            branches.branchname    as branchname, 
+                            branches.branchprinter as branchprinter, 
+                            email 
+                    FROM borrowers 
+                    LEFT JOIN branches on borrowers.branchcode=branches.branchcode
+                    ";
+                    my $sth = $dbh->prepare("$select where userid=?");
+                    $sth->execute($userid);
+                    unless ($sth->rows) {
+                        $debug and print STDERR "AUTH_1: no rows for userid='$userid'\n";
+                        $sth = $dbh->prepare("$select where cardnumber=?");
+                        $sth->execute($cardnumber);
+                        unless ($sth->rows) {
+                            $debug and print STDERR "AUTH_2a: no rows for cardnumber='$cardnumber'\n";
+                            $sth->execute($userid);
+                            unless ($sth->rows) {
+                                $debug and print STDERR "AUTH_2b: no rows for userid='$userid' AS cardnumber\n";
+                            }
+                        }
+                    }
+                    if ($sth->rows) {
+                        ($borrowernumber, $firstname, $surname, $userflags,
+                            $branchcode, $branchname, $branchprinter, $emailaddress) = $sth->fetchrow;
+                        $debug and print STDERR "AUTH_3 results: " .
+                            "$cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress\n";
+                    } else {
+                        print STDERR "AUTH_3: no results for userid='$userid', cardnumber='$cardnumber'.\n";
+                    }
 # launch a sequence to check if we have a ip for the branch, i
 # if we have one we replace the branchcode of the userenv by the branch bound in the ip.
 
@@ -941,7 +936,7 @@ sub check_api_auth {
             } else {
                 my $cookie = $query->cookie( CGISESSID => $session->id );
                 $session->param('lasttime',time());
-                my $flags = haspermission( $dbh, $userid, $flagsrequired );
+                my $flags = haspermission($userid, $flagsrequired);
                 if ($flags) {
                     return ("ok", $cookie, $sessionID);
                 } else {
@@ -964,7 +959,7 @@ sub check_api_auth {
             return ("failed", undef, undef);
         }
         my ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password );
-        if ($return and haspermission( $dbh, $userid, $flagsrequired)) {
+        if ($return and haspermission($userid, $flagsrequired)) {
             my $session = get_session("");
             return ("failed", undef, undef) unless $session;
 
@@ -1159,7 +1154,7 @@ sub check_cookie_auth {
             return ("expired", undef);
         } else {
             $session->param('lasttime',time());
-            my $flags = haspermission( $dbh, $userid, $flagsrequired );
+            my $flags = haspermission($userid, $flagsrequired);
             if ($flags) {
                 return ("ok", $sessionID);
             } else {
@@ -1272,10 +1267,12 @@ sub checkpw {
 
 =item getuserflags
 
- $authflags = getuserflags($flags,$dbh);
+    my $authflags = getuserflags($flags, $userid, [$dbh]);
+
 Translates integer flags into permissions strings hash.
 
 C<$flags> is the integer userflags value ( borrowers.userflags )
+C<$userid> is the members.userid, used for building subpermissions
 C<$authflags> is a hashref of permissions
 
 =cut
@@ -1283,7 +1280,7 @@ C<$authflags> is a hashref of permissions
 sub getuserflags {
     my $flags   = shift;
     my $userid  = shift;
-    my $dbh     = shift;
+    my $dbh     = @_ ? shift : C4::Context->dbh;
     my $userflags;
     $flags = 0 unless $flags;
     my $sth = $dbh->prepare("SELECT bit, flag, defaulton FROM userflags");
@@ -1388,9 +1385,9 @@ sub get_all_subpermissions {
 
 =item haspermission 
 
-  $flags = ($dbh,$member,$flagsrequired);
+  $flags = ($userid, $flagsrequired);
 
-C<$member> may be either userid or overloaded with $borrower hashref from GetMemberDetails.
+C<$userid> the userid of the member
 C<$flags> is a hashref of required flags like C<$borrower-&lt;{authflags}> 
 
 Returns member's flags or 0 if a permission is not met.
@@ -1398,22 +1395,15 @@ Returns member's flags or 0 if a permission is not met.
 =cut
 
 sub haspermission {
-    my ( $dbh, $userid, $flagsrequired ) = @_;
-    my ($flags,$intflags);
-    $dbh=C4::Context->dbh unless($dbh);
-    if(ref($userid)) {
-        $intflags = $userid->{'flags'};  
-    } else {
-        my $sth = $dbh->prepare("SELECT flags FROM borrowers WHERE userid=?");
-        $sth->execute($userid);
-        my ($intflags) = $sth->fetchrow;
-        $flags = getuserflags( $intflags, $userid, $dbh );
-    }
+    my ($userid, $flagsrequired) = @_;
+    my $sth = C4::Context->dbh->prepare("SELECT flags FROM borrowers WHERE userid=?");
+    $sth->execute($userid);
+    my $flags = getuserflags( $sth->fetchrow(), $userid );
     if ( $userid eq C4::Context->config('user') ) {
         # Super User Account from /etc/koha.conf
         $flags->{'superlibrarian'} = 1;
     }
-    if ( $userid eq 'demo' && C4::Context->config('demo') ) {
+    elsif ( $userid eq 'demo' && C4::Context->config('demo') ) {
         # Demo user that can do "anything" (demo=1 in /etc/koha.conf)
         $flags->{'superlibrarian'} = 1;
     }

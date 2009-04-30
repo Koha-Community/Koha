@@ -22,6 +22,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+# use warnings; # FIXME
 
 use CGI;
 use C4::Context;
@@ -49,7 +50,7 @@ my ($bor)=GetMemberDetails($member,'');
 my $flags=$bor->{flags};
 my $userenv = C4::Context->userenv;
 if ($bor->{category_type} eq "S") {
-    unless(C4::Auth::haspermission(undef,$userenv->{'id'},{'staffaccess'=>1})) {
+    unless(C4::Auth::haspermission($userenv->{'id'},{'staffaccess'=>1})) {
         print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE_STAFF");
         exit 1;
     }
