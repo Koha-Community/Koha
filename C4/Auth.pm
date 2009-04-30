@@ -43,7 +43,7 @@ BEGIN {
     @EXPORT_OK = qw(&check_api_auth &get_session &check_cookie_auth &checkpw &get_all_subpermissions &get_user_subpermissions);
     %EXPORT_TAGS = (EditPermissions => [qw(get_all_subpermissions get_user_subpermissions)]);
     $ldap = C4::Context->config('useldapserver') || 0;
-    $cas = C4::Context->config('usecasserver') || 0;
+    $cas = C4::Context->preference('casAuthentication');
     if ($ldap) {
         require C4::Auth_with_ldap;             # no import
         import  C4::Auth_with_ldap qw(checkpw_ldap);

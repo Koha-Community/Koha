@@ -37,7 +37,7 @@ BEGIN {
 
 
 my $context = C4::Context->new() 	or die 'C4::Context->new failed';
-my $casserver = C4::Context->config("usecasserver") or die 'No "usecasserver" in KOHA_CONF: ' . $ENV{KOHA_CONF};
+my $casserver = C4::Context->preference('casServerUrl');
 
 sub logout_cas {
     my ($query) = @_;
