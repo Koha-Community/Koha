@@ -67,6 +67,10 @@
 
 <!--TMPL_IF NAME="virtualshelves" --><a href="/cgi-bin/koha/opac-shelves.pl" id="listsmenulink" class=""><i></i><span><i></i><span></span>Lists </span></a><!-- /TMPL_IF -->
     </form>
+<!-- TMPL_ELSE -->
+<div style="width:80%;*margin-bottom:-30px;">
+<!--TMPL_IF NAME="virtualshelves" --><a href="/cgi-bin/koha/opac-shelves.pl" id="listsmenulink" class=""><i></i><span><i></i><span></span>Lists </span></a><!-- /TMPL_IF --><!-- TMPL_IF NAME="opacbookbag" --><span id="cmspan"></span><!-- /TMPL_IF -->
+</div>
 <!-- /TMPL_UNLESS -->
 
 <div id="moresearches">
