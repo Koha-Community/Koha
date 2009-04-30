@@ -1561,7 +1561,7 @@ sub AddReturn {
 				ModItemTransfer($iteminformation->{'itemnumber'}, C4::Context->userenv->{'branch'}, $iteminformation->{'homebranch'});
 				$messages->{'WasTransfered'} = 1;
 			} elsif ( C4::Context->preference("UseBranchTransferLimits") == 1 
-					&& ! IsTransferAllowed( $branch, $iteminformation->{'homebranch'}, $iteminformation->{ C4::Context->preference("BranchTransferLimitsType") } )
+					&& ! IsBranchTransferAllowed( $branch, $iteminformation->{'homebranch'}, $iteminformation->{ C4::Context->preference("BranchTransferLimitsType") } )
 				) {
 				ModItemTransfer($iteminformation->{'itemnumber'}, C4::Context->userenv->{'branch'}, $iteminformation->{'homebranch'});
                                 $messages->{'WasTransfered'} = 1;
