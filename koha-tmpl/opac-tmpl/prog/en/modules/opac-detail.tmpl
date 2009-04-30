@@ -233,6 +233,11 @@
         <span class="label">Series Information:</span> <a target="_blank" href="http://www.syndetics.com/ffseries.aspx?isbn=<!-- TMPL_VAR NAME="normalized_isbn" -->&amp;type=series&amp;num=1&amp;client=<!-- TMPL_VAR NAME="SyndeticsClientCode" --><!-- TMPL_IF NAME="normalized_upc" -->&amp;upc=<!-- TMPL_VAR NAME="normalized_upc" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="normalized_oclc" -->&amp;oclc=<!-- TMPL_VAR NAME="normalized_oclc" --><!-- /TMPL_IF -->">Click to open in new window</a>
         </span>
         <!-- /TMPL_IF --><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="SyndeticsFICTIONExists" -->
+        <span class="results_summary">
+        <span class="label">Fiction Notes:</span> <a target="_blank" href="http://www.syndetics.com/index.aspx?isbn=<!-- TMPL_VAR NAME="normalized_isbn" -->/fiction.html&amp;client=<!-- TMPL_VAR NAME="SyndeticsClientCode" --><!-- TMPL_IF NAME="normalized_upc" -->&amp;upc=<!-- TMPL_VAR NAME="normalized_upc" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="normalized_oclc" -->&amp;oclc=<!-- TMPL_VAR NAME="normalized_oclc" --><!-- /TMPL_IF -->&amp;type=xw10">Click to open in new window</a>
+        </span>
+        <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="SyndeticsAwards" --><!-- TMPL_IF NAME="SyndeticsAWARDS1Exists" -->
         <span class="results_summary">
         <span class="label">Awards:</span> <a target="_blank" href="http://www.syndetics.com/ffawards.aspx?isbn=<!-- TMPL_VAR NAME="normalized_isbn" -->&amp;type=awards&amp;client=<!-- TMPL_VAR NAME="SyndeticsClientCode" --><!-- TMPL_IF NAME="normalized_upc" -->&amp;upc=<!-- TMPL_VAR NAME="normalized_upc" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="normalized_oclc" -->&amp;oclc=<!-- TMPL_VAR NAME="normalized_oclc" --><!-- /TMPL_IF -->">Click to open in new window</a>
