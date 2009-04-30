@@ -420,7 +420,9 @@ if (C4::Context->preference("OPACShelfBrowser")) {
     ## List of Previous Items
     # order by cn_sort, which should include everything we need for ordering purposes (though not
     # for limits, those need to be handled separately
-    my $sth_shelfbrowse_previous = $dbh->prepare("
+    my $sth_shelfbrowse_previous;
+    if (defined $starting_location->{code}) {
+      $sth_shelfbrowse_previous = $dbh->prepare("
         SELECT *
         FROM items
         WHERE
@@ -428,7 +430,18 @@ if (C4::Context->preference("OPACShelfBrowser")) {
             homebranch = ? AND location = ?
         ORDER BY cn_sort DESC, itemnumber LIMIT 3
         ");
-    $sth_shelfbrowse_previous->execute($starting_cn_sort, $starting_itemnumber, $starting_cn_sort, $starting_homebranch->{code}, $starting_location->{code});
+      $sth_shelfbrowse_previous->execute($starting_cn_sort, $starting_itemnumber, $starting_cn_sort, $starting_homebranch->{code}, $starting_location->{code});
+    } else {
+      $sth_shelfbrowse_previous = $dbh->prepare("
+        SELECT *
+        FROM items
+        WHERE
+            ((cn_sort = ? AND itemnumber < ?) OR cn_sort < ?) AND
+            homebranch = ?
+        ORDER BY cn_sort DESC, itemnumber LIMIT 3
+        ");
+      $sth_shelfbrowse_previous->execute($starting_cn_sort, $starting_itemnumber, $starting_cn_sort, $starting_homebranch->{code});
+    }
     my @previous_items;
     while (my $this_item = $sth_shelfbrowse_previous->fetchrow_hashref()) {
         my $sth_get_biblio = $dbh->prepare("SELECT biblio.*,biblioitems.isbn AS isbn FROM biblio LEFT JOIN biblioitems ON biblio.biblionumber=biblioitems.biblionumber WHERE biblio.biblionumber=?");
@@ -444,7 +457,9 @@ if (C4::Context->preference("OPACShelfBrowser")) {
     }
     
     ## List of Next Items; this also intentionally catches the current item
-    my $sth_shelfbrowse_next = $dbh->prepare("
+    my $sth_shelfbrowse_next;
+    if (defined $starting_location->{code}) {
+      $sth_shelfbrowse_next = $dbh->prepare("
         SELECT *
         FROM items
         WHERE
@@ -452,7 +467,18 @@ if (C4::Context->preference("OPACShelfBrowser")) {
             homebranch = ? AND location = ?
         ORDER BY cn_sort, itemnumber LIMIT 3
         ");
-    $sth_shelfbrowse_next->execute($starting_cn_sort, $starting_itemnumber, $starting_cn_sort, $starting_homebranch->{code}, $starting_location->{code});
+      $sth_shelfbrowse_next->execute($starting_cn_sort, $starting_itemnumber, $starting_cn_sort, $starting_homebranch->{code}, $starting_location->{code});
+    } else {
+      $sth_shelfbrowse_next = $dbh->prepare("
+        SELECT *
+        FROM items
+        WHERE
+            ((cn_sort = ? AND itemnumber >= ?) OR cn_sort > ?) AND
+            homebranch = ?
+        ORDER BY cn_sort, itemnumber LIMIT 3
+        ");
+      $sth_shelfbrowse_next->execute($starting_cn_sort, $starting_itemnumber, $starting_cn_sort, $starting_homebranch->{code});
+    }
     my @next_items;
     while (my $this_item = $sth_shelfbrowse_next->fetchrow_hashref()) {
         my $sth_get_biblio = $dbh->prepare("SELECT biblio.*,biblioitems.isbn AS isbn FROM biblio LEFT JOIN biblioitems ON biblio.biblionumber=biblioitems.biblionumber WHERE biblio.biblionumber=?");
