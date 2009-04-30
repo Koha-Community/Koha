@@ -26,7 +26,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (11, 'planning_manage', 'Manage budget plannings'),
    (11, 'order_manage', 'Manage orders & basket'),
    (11, 'group_manage', 'Manage orders & basketgroups'),
-   (11, 'order_receive', 'Manage orders & basket')
+   (11, 'order_receive', 'Manage orders & basket'),
    (11, 'budget_add_del', 'Add and delete budgets (but cant modify budgets)')
 ;
 >>>>>>> granular perms for acquisitions:installer/data/mysql/en/mandatory/userpermissions.sql
