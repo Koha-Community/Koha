@@ -32,20 +32,18 @@ use ZOOM;
 
 my $input        = new CGI;
 my $dbh          = C4::Context->dbh;
-my $error        = $input->param('error');
-my $biblionumber = $input->param('biblionumber');
-$biblionumber = 0 unless $biblionumber;
+my $error         = $input->param('error');
+my $biblionumber  = $input->param('biblionumber') || 0;
 my $frameworkcode = $input->param('frameworkcode');
 my $title         = $input->param('title');
 my $author        = $input->param('author');
 my $isbn          = $input->param('isbn');
 my $issn          = $input->param('issn');
 my $lccn          = $input->param('lccn');
-my $subject= $input->param('subject');
-my $dewey = $input->param('dewey');
-my $random        = $input->param('random');
+my $subject       = $input->param('subject');
+my $dewey         = $input->param('dewey');
+my $random        = $input->param('random') || rand(1000000000); # this var is not useful anymore just kept for rel2_2 compatibility
 my $op            = $input->param('op');
-my $noconnection;
 my $numberpending;
 my $attr = '';
 my $term;
@@ -57,7 +55,6 @@ my $marcdata;
 my @encoding;
 my @results;
 my $count;
-my $toggle;
 my $record;
 my $oldbiblio;
 my $errmsg;
@@ -68,21 +65,14 @@ my @breeding_loop = ();
 
 my $DEBUG = 0;    # if set to 1, many debug message are send on syslog.
 
-unless ($random)
-{    # this var is not useful anymore just kept to keep rel2_2 compatibility
-    $random = rand(1000000000);
-}
-
-my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
         template_name   => "cataloguing/z3950_search.tmpl",
         query           => $input,
         type            => "intranet",
         authnotrequired => 1,
         flagsrequired   => { catalogue => 1 },
         debug           => 1,
-    }
-);
+});
 
 $template->param( frameworkcode => $frameworkcode, );
 
@@ -149,15 +139,13 @@ warn "query ".$query  if $DEBUG;
         $sth->execute($servid);
         while ( $server = $sth->fetchrow_hashref ) {
             warn "serverinfo ".join(':',%$server) if $DEBUG;
-            my $noconnection = 0;
             my $option1      = new ZOOM::Options();
-            $option1->option( 'async' => 1 );
-            $option1->option( 'elementSetName', 'F' );
-            $option1->option( 'databaseName',   $server->{db} );
-            $option1->option( 'user', $server->{userid} ) if $server->{userid};
-            $option1->option( 'password', $server->{password} )
-              if $server->{password};
-            $option1->option( 'preferredRecordSyntax', $server->{syntax} );
+            $option1->option('async' => 1);
+            $option1->option('elementSetName', 'F');
+            $option1->option('databaseName', $server->{db});
+            $option1->option('user',         $server->{userid}  ) if $server->{userid};
+            $option1->option('password',     $server->{password}) if $server->{password};
+            $option1->option('preferredRecordSyntax', $server->{syntax});
             $oConnection[$s] = create ZOOM::Connection($option1)
               || $DEBUG
               && warn( "" . $oConnection[$s]->errmsg() );
@@ -203,21 +191,14 @@ warn "query ".$query  if $DEBUG;
             if ($error =~ m/^(10000|10007)$/ ) {
                 push(@errconn, {'server' => $serverhost[$k]});
             }
-            warn "$k $serverhost[$k] error $query: $errmsg ($error) $addinfo\n"
-              if $DEBUG;
-
+            $DEBUG and warn "$k $serverhost[$k] error $query: $errmsg ($error) $addinfo\n";
         }
         else {
             my $numresults = $oResult[$k]->size();
             my $i;
             my $result = '';
             if ( $numresults > 0 ) {
-                for (
-                    $i = 0 ;
-                    $i < ( ( $numresults < 20 ) ? ($numresults) : (20) ) ;
-                    $i++
-                  )
-                {
+                for ($i = 0; $i < (($numresults < 20) ? $numresults : 20); $i++) {
                     my $rec = $oResult[$k]->record($i);
                     if ($rec) {
                         my $marcrecord;
@@ -239,13 +220,7 @@ warn "query ".$query  if $DEBUG;
                           )
                           = ImportBreeding( $marcdata, 2, $serverhost[$k], $encoding[$k], $random, 'z3950' );
                         my %row_data;
-                        if ( $i % 2 ) {
-                            $toggle = 1;
-                        }
-                        else {
-                            $toggle = 0;
-                        }
-                        $row_data{toggle}       = $toggle;
+                        $row_data{toggle}       = ($i % 2) ? 1 : 0;
                         $row_data{server}       = $servername[$k];
                         $row_data{isbn}         = $oldbiblio->{isbn};
                         $row_data{lccn}         = $oldbiblio->{lccn};
@@ -256,9 +231,9 @@ warn "query ".$query  if $DEBUG;
                         push( @breeding_loop, \%row_data );
 		            
                     } else {
-                        push(@breeding_loop,{'server'=>$servername[$k],'title'=>join(': ',$oConnection[$k]->error_x()),'breedingid'=>-1,'biblionumber'=>-1});
+                        push(@breeding_loop,{'toggle'=>($i % 2)?1:0,'server'=>$servername[$k],'title'=>join(': ',$oConnection[$k]->error_x()),'breedingid'=>-1,'biblionumber'=>-1});
                     } # $rec
-                }    # upto 20 results
+                }
             }    #$numresults
         }
     }    # if $k !=0
