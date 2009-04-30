@@ -90,7 +90,7 @@ sub get_syndetics_index {
     ) unless !$content;
 
     my $syndetics_elements;
-    for my $available_type ('SUMMARY','TOC','FICTION','AWARDS1','SERIES1','SPSUMMARY','SPREVIEW','AVSUMMARY','DBCHAPTER','LJREVIEW','PWREVIEW','SLJREVIEW','CHREVIEW','BLREVIEW','HBREVIEW','KIREVIEW','CRITICASREVIEW','ANOTES') {
+    for my $available_type ('SUMMARY','TOC','FICTION','AWARDS1','SERIES1','SPSUMMARY','SPREVIEW', 'AVPROFILE', 'AVSUMMARY','DBCHAPTER','LJREVIEW','PWREVIEW','SLJREVIEW','CHREVIEW','BLREVIEW','HBREVIEW','KIREVIEW','CRITICASREVIEW','ANOTES') {
         if (exists $response->{$available_type} && $response->{$available_type} =~ /$available_type/) {
             $syndetics_elements->{$available_type} = $available_type;
             #warn "RESPONSE: $available_type : $response->{$available_type}";
@@ -100,12 +100,13 @@ sub get_syndetics_index {
 }
 
 sub get_syndetics_summary {
-    my ( $isbn,$upc,$oclc ) = @_;
+    my ( $isbn, $upc, $oclc, $syndetics_elements ) = @_;
 
     # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
     my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
 
-    my $url = "http://www.syndetics.com/index.aspx?isbn=$isbn/SUMMARY.XML&client=$syndetics_client_code&type=xw10&upc=$upc&oclc=$oclc";
+    my $summary_type = exists($syndetics_elements->{'AVSUMMARY'}) ? 'AVSUMMARY' : 'SUMMARY';
+    my $url = "http://www.syndetics.com/index.aspx?isbn=$isbn/$summary_type.XML&client=$syndetics_client_code&type=xw10&upc=$upc&oclc=$oclc";
     my $ua = LWP::UserAgent->new;
     $ua->timeout(10);
     $ua->env_proxy;
@@ -117,14 +118,14 @@ sub get_syndetics_summary {
     my $content = $response->content;
 
     warn "could not retrieve $url" unless $content;
-    my $xmlsimple = XML::Simple->new();
-    $response = $xmlsimple->XMLin(
-        $content,
-        forcearray => [ qw(Fld520) ],
-    ) unless !$content;
-    # manipulate response USMARC VarFlds VarDFlds Notes Fld520 a
     my $summary;
-    $summary = \@{$response->{VarFlds}->{VarDFlds}->{Notes}->{Fld520}} if $response;
+    eval { 
+        my $doc = $parser->parse_string($content);
+        $summary = $doc->findvalue('//Fld520');
+    };
+    if ($@) {
+        warn "Error parsing response from $url";
+    }
     return $summary if $summary;
 }
 

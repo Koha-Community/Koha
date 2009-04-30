@@ -333,9 +333,10 @@ if ( C4::Context->preference("SyndeticsEnabled") ) {
 
 if ( C4::Context->preference("SyndeticsEnabled")
         && C4::Context->preference("SyndeticsSummary")
-        && $syndetics_elements->{'SUMMARY'} =~ /SUMMARY/) {
+        && (    $syndetics_elements->{'SUMMARY'}   =~ /SUMMARY/
+             || $syndetics_elements->{'AVSUMMARY'} =~ /AVSUMMARY/ ) ) {
 	eval {
-	my $syndetics_summary = &get_syndetics_summary($isbn,$upc,$oclc);
+	my $syndetics_summary = &get_syndetics_summary($isbn,$upc,$oclc, $syndetics_elements);
 	$template->param( SYNDETICS_SUMMARY => $syndetics_summary );
 	};
 	warn $@ if $@;
