@@ -443,7 +443,6 @@ sub accept_language {
     if ($clientPreferences) {
         # There should be no whitespace anways, but a cleanliness/sanity check
         $clientPreferences =~ s/\s//g;
-
         # Prepare the list of client-acceptable languages
         foreach my $tag (split(/,/, $clientPreferences)) {
             my ($language, $quality) = split(/\;/, $tag);
@@ -464,10 +463,11 @@ sub accept_language {
     my %supportedLanguages = ();
     my %secondaryLanguages = ();
     foreach my $language (@$supportedLanguages) {
-        # warn "Language supported: " . $language->{language_code};
-        $supportedLanguages{lc($language->{language_code})} = $language->{language_code};
-        if ($language->{language_code} =~ /^([^-]+)-?/) {
-            $secondaryLanguages{lc($1)} = $language->{language_code};
+        # warn "Language supported: " . $language->{language};
+        my $subtag = $language->{rfc4646_subtag};
+        $supportedLanguages{lc($subtag)} = $subtag;
+        if ( $subtag =~ /^([^-]+)-?/ ) {
+            $secondaryLanguages{lc($1)} = $subtag;
         }
     }
 
