@@ -76,8 +76,10 @@ function tagAdded() {
 		);
 	        return false;
 	    });
+<!-- TMPL_IF NAME="RequestOnOpac" -->
         $(".holdsep").text("| ");
         $(".hold").text("Place Hold");
+<!-- /TMPL_IF -->
   
         <!-- TMPL_IF NAME="TagsEnabled" -->
         <!-- TMPL_IF NAME="TagsInputOnList" -->

@@ -96,8 +96,9 @@ $(function() {
 });
 
 $(document).ready(function(){
+<!-- TMPL_IF NAME="RequestOnOpac" -->
     $(".hold").html("Place Hold");
-
+<!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="TagsEnabled" -->
     $("#tagsel_tag").text("Tag");
     $("#tagsel_button").click(function(){
@@ -177,7 +178,9 @@ $(document).ready(function(){
                          <input type="submit" class="deleteshelf" value="Delete List" onclick="return confirmDelete(_('Are you sure you want to remove this List?'));"/>
                       </form>
                       <a href="#" class="send tag_hides" onclick="open(CGIBIN+'opac-sendshelf.pl?shelfid=<!-- TMPL_VAR NAME="shelfnumber" -->','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100')">Send List</a>
+<!-- TMPL_IF NAME="RequestOnOpac" -->
                       <a href="#" class="hold tag_hides" onclick="holdSelections();return false;"></a>
+<!-- /TMPL_IF -->
                     <!-- /div -->
                     <a id="tagsel_tag" href="#" onclick="tagSelected(); return false;"></a>                 
                     <span id="tagsel_form" style="display:none">

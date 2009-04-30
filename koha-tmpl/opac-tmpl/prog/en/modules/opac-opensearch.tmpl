@@ -44,7 +44,10 @@
                         <!-- TMPL_IF name="pages" -->. <!-- TMPL_VAR name="pages"  ESCAPE="html" --><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="notes" -->, <!-- TMPL_VAR name="notes"  ESCAPE="html" --><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="size" --> <!-- TMPL_VAR name="size"  ESCAPE="html" -->. <!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="isbn" --> <!-- TMPL_VAR name="isbn"  ESCAPE="html" --><!-- /TMPL_IF --> </p><p><a href="<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold on <i><!-- TMPL_VAR NAME="title_nospan" --></i></a></p>
+                        <!-- TMPL_IF name="isbn" --> <!-- TMPL_VAR name="isbn"  ESCAPE="html" --><!-- /TMPL_IF --> </p><p>
+<!-- TMPL_IF NAME="RequestOnOpac" -->
+<a href="<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold on <i><!-- TMPL_VAR NAME="title_nospan" --></i></a></p>
+<!-- /TMPL_IF -->
 						]]></description>
        <guid><!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" --></guid>
      </item>
