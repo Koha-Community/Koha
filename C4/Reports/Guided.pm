@@ -24,6 +24,7 @@ use Carp;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use C4::Context;
+use C4::Dates qw/format_date/;
 use C4::Output;
 use C4::Dates;
 use XML::Simple;
@@ -437,13 +438,13 @@ Given some sql and a name this will saved it so that it can resued
 =cut
 
 sub save_report {
-    my ( $sql, $name, $type, $notes ) = @_;
+    my ( $borrowernumber, $sql, $name, $type, $notes ) = @_;
     my $dbh = C4::Context->dbh();
     $sql =~ s/(\s*\;\s*)$//; # removes trailing whitespace and /;/
     my $query =
 "INSERT INTO saved_sql (borrowernumber,date_created,last_modified,savedsql,report_name,type,notes)  VALUES (?,now(),now(),?,?,?,?)";
     my $sth = $dbh->prepare($query);
-    $sth->execute( 0, $sql, $name, $type, $notes );
+    $sth->execute( $borrowernumber, $sql, $name, $type, $notes );
 }
 
 sub update_sql {
@@ -516,7 +517,12 @@ sub get_saved_reports {
     ORDER by date_created";
     my $sth   = $dbh->prepare($query);
     $sth->execute();
-    return $sth->fetchall_arrayref({});
+    
+    my $result = $sth->fetchall_arrayref({});
+    foreach (@$result){
+        $_->{date_created} = format_date($_->{date_created}); 
+    }
+    return $result;
 }
 
 sub get_saved_report {

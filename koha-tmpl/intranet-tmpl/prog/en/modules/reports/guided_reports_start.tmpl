@@ -103,11 +103,13 @@ canned reports and writing custom SQL reports.</p>
 <p>Choose the report to run from the list</p>
 <form action="/cgi-bin/koha/reports/guided_reports.pl">
 <table>
-<tr><th>Report Name</th><th>Type</th><th>Notes</th><th>Saved Results</th><th>Saved SQL</th><th colspan="3">&nbsp;</th></tr>
+<tr><th>Report Name</th><th>Type</th><th>Notes</th><th>Author</th><th>Creation Date</th><th>Saved Results</th><th>Saved SQL</th><th colspan="3">&nbsp;</th></tr>
 <!-- TMPL_LOOP NAME="savedreports" -->
 <tr><td><!-- TMPL_VAR NAME="report_name" --></td>
 <td><!-- TMPL_VAR NAME="type" --></td>
 <td><!-- TMPL_VAR NAME="notes" --></td>
+<td><!-- TMPL_VAR NAME="borrowernumber" --></td>
+<td><!-- TMPL_VAR NAME="date_created" --></td>
 <td><!-- TMPL_IF NAME="date_run" --><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&id=<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="date_run" --></a><!-- /TMPL_IF -->
 </td>
 <td><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&amp;phase=Show%20SQL">Show SQL</a> 
