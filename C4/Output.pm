@@ -139,13 +139,10 @@ sub themelanguage {
     # Set some defaults for language and theme
     # First, check the user's preferences
     my $lang;
-	my $http_env = $ENV{HTTP_ACCEPT_LANGUAGE};
-	$http_env =~ m/(\w+-*\w*),/;
-	my $language_preference = $1;
-    my $http_accept_language = regex_lang_subtags($language_preference)->{language};
-    if ($http_accept_language) {
-        $lang = accept_language($http_accept_language,getTranslatedLanguages($interface,'prog'));
-    } 
+    my $http_accept_language = $ENV{ HTTP_ACCEPT_LANGUAGE };
+    $lang = accept_language( $http_accept_language, 
+              getTranslatedLanguages($interface,'prog') )
+      if $http_accept_language;
     # But, if there's a cookie set, obey it
     $lang = $query->cookie('KohaOpacLanguage') if $query->cookie('KohaOpacLanguage');
     # Fall back to English
