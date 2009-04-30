@@ -1,7 +1,3 @@
-
-# -*- tab-width: 8 -*-
-# NOTE: This file uses 8-character tabs; do not change the tab size!
-
 package C4::Auth;
 
 # Copyright 2000-2002 Katipo Communications
@@ -592,7 +588,7 @@ sub checkauth {
             $cookie = $query->cookie( CGISESSID => $session->id );
             $session->param('lasttime',time());
             unless ( $sessiontype eq 'anon' ) { #if this is an anonymous session, we want to update the session, but not behave as if they are logged in...
-                $flags = haspermission( $dbh, $userid, $flagsrequired );
+                $flags = haspermission($userid, $flagsrequired);
                 if ($flags) {
                     $loggedin = 1;
                 } else {
@@ -612,7 +608,7 @@ sub checkauth {
             my ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password );
             if ($return) {
                 _session_log(sprintf "%20s from %16s logged in  at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},localtime);
-                if ( $flags = haspermission( $dbh, $userid, $flagsrequired ) ) {
+                if ( $flags = haspermission($userid, $flagsrequired) ) {
                     $loggedin = 1;
                 }
                 else {
@@ -957,7 +953,7 @@ sub check_api_auth {
             } else {
                 my $cookie = $query->cookie( CGISESSID => $session->id );
                 $session->param('lasttime',time());
-                my $flags = haspermission( $dbh, $userid, $flagsrequired );
+                my $flags = haspermission($userid, $flagsrequired);
                 if ($flags) {
                     return ("ok", $cookie, $sessionID);
                 } else {
@@ -980,7 +976,7 @@ sub check_api_auth {
             return ("failed", undef, undef);
         }
         my ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password );
-        if ($return and haspermission( $dbh, $userid, $flagsrequired)) {
+        if ($return and haspermission($userid, $flagsrequired)) {
             my $session = get_session("");
             return ("failed", undef, undef) unless $session;
 
@@ -1175,7 +1171,7 @@ sub check_cookie_auth {
             return ("expired", undef);
         } else {
             $session->param('lasttime',time());
-            my $flags = haspermission( $dbh, $userid, $flagsrequired );
+            my $flags = haspermission($userid, $flagsrequired);
             if ($flags) {
                 return ("ok", $sessionID);
             } else {
@@ -1288,10 +1284,12 @@ sub checkpw {
 
 =item getuserflags
 
- $authflags = getuserflags($flags,$dbh);
+    my $authflags = getuserflags($flags, $userid, [$dbh]);
+
 Translates integer flags into permissions strings hash.
 
 C<$flags> is the integer userflags value ( borrowers.userflags )
+C<$userid> is the members.userid, used for building subpermissions
 C<$authflags> is a hashref of permissions
 
 =cut
@@ -1299,7 +1297,7 @@ C<$authflags> is a hashref of permissions
 sub getuserflags {
     my $flags   = shift;
     my $userid  = shift;
-    my $dbh     = shift;
+    my $dbh     = @_ ? shift : C4::Context->dbh;
     my $userflags;
     $flags = 0 unless $flags;
     my $sth = $dbh->prepare("SELECT bit, flag, defaulton FROM userflags");
@@ -1404,9 +1402,9 @@ sub get_all_subpermissions {
 
 =item haspermission 
 
-  $flags = ($dbh,$member,$flagsrequired);
+  $flags = ($userid, $flagsrequired);
 
-C<$member> may be either userid or overloaded with $borrower hashref from GetMemberDetails.
+C<$userid> the userid of the member
 C<$flags> is a hashref of required flags like C<$borrower-&lt;{authflags}> 
 
 Returns member's flags or 0 if a permission is not met.
@@ -1414,22 +1412,15 @@ Returns member's flags or 0 if a permission is not met.
 =cut
 
 sub haspermission {
-    my ( $dbh, $userid, $flagsrequired ) = @_;
-    my ($flags,$intflags);
-    $dbh=C4::Context->dbh unless($dbh);
-    if(ref($userid)) {
-        $intflags = $userid->{'flags'};  
-    } else {
-        my $sth = $dbh->prepare("SELECT flags FROM borrowers WHERE userid=?");
-        $sth->execute($userid);
-        my ($intflags) = $sth->fetchrow;
-        $flags = getuserflags( $intflags, $userid, $dbh );
-    }
+    my ($userid, $flagsrequired) = @_;
+    my $sth = C4::Context->dbh->prepare("SELECT flags FROM borrowers WHERE userid=?");
+    $sth->execute($userid);
+    my $flags = getuserflags( $sth->fetchrow(), $userid );
     if ( $userid eq C4::Context->config('user') ) {
         # Super User Account from /etc/koha.conf
         $flags->{'superlibrarian'} = 1;
     }
-    if ( $userid eq 'demo' && C4::Context->config('demo') ) {
+    elsif ( $userid eq 'demo' && C4::Context->config('demo') ) {
         # Demo user that can do "anything" (demo=1 in /etc/koha.conf)
         $flags->{'superlibrarian'} = 1;
     }

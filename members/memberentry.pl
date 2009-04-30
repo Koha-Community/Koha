@@ -141,7 +141,7 @@ if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
         }
     }
   # check permission to modify login info.
-    if (ref($borrower_data) && ($borrower_data->{'category_type'} eq 'S') && ! (C4::Auth::haspermission($dbh,$userenv->{'id'},{'staffaccess'=>1})) )  {
+    if (ref($borrower_data) && ($borrower_data->{'category_type'} eq 'S') && ! (C4::Auth::haspermission($userenv->{'id'},{'staffaccess'=>1})) )  {
         $NoUpdateLogin = 1;
     }
 }
