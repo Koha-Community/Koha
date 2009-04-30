@@ -1206,10 +1206,11 @@ sub _normalize_match_point {
 sub _isbn_cleanup ($) {
     my $normalized_isbn = shift;
     $normalized_isbn =~ s/-//g;
-    $normalized_isbn =~/([0-9]{1,})/;
+    $normalized_isbn =~/([0-9x]{1,})/i;
     $normalized_isbn = $1;
     if (
         $normalized_isbn =~ /\b(\d{13})\b/ or
+        $normalized_isbn =~ /\b(\d{12})\b/i or
         $normalized_isbn =~ /\b(\d{10})\b/ or
         $normalized_isbn =~ /\b(\d{9}X)\b/i
     ) { 
