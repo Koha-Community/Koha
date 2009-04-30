@@ -76,8 +76,6 @@
             <!-- TMPL_VAR NAME="itemtype" -->
         <!-- /TMPL_IF -->
         ] <!-- /TMPL_UNLESS -->
-        <!-- TMPL_IF name="volume" --> <!-- TMPL_VAR NAME="volume" --><!-- /TMPL_IF -->
-        <!-- TMPL_IF name="volumedesc" -->, <!-- TMPL_VAR NAME="volumedesc" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="number" --> <!-- TMPL_VAR NAME="number" --> <!-- /TMPL_IF -->
         <!-- TMPL_IF name="unititle" -->, <!-- TMPL_VAR NAME="unititle" --><!-- /TMPL_IF -->
     </span>
 
@@ -95,8 +93,8 @@
     <span class="results_summary"><span class="label">Series:</span>
             <!-- TMPL_LOOP NAME="MARCSERIES" -->
             <!-- TMPL_LOOP NAME="MARCSERIES_SUBFIELDS_LOOP" -->
-            <a href="/cgi-bin/koha/opac-search.pl?q=se:<!-- TMPL_VAR NAME="value"-->"><!-- TMPL_VAR NAME="value" --></a>
-            <!-- /TMPL_LOOP -->
+            <!-- TMPL_IF NAME="value" --><a href="/cgi-bin/koha/opac-search.pl?q=se:<!-- TMPL_VAR NAME="value" ESCAPE="url"-->"><!-- TMPL_VAR NAME="value" --></a><!-- /TMPL_IF --><!-- TMPL_IF NAME="volumenum" -->. <!-- TMPL_VAR NAME="volumenum" --><!-- /TMPL_IF -->
+            <!-- /TMPL_LOOP --> <!-- TMPL_UNLESS NAME="__last__" -->|<!-- /TMPL_UNLESS -->
             <!-- /TMPL_LOOP -->
     </span>
     <!-- /TMPL_IF -->
