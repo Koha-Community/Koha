@@ -18,6 +18,7 @@ package C4::External::Syndetics;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use XML::Simple;
+use XML::LibXML;
 use LWP::Simple;
 use LWP::UserAgent;
 use HTTP::Request::Common;
@@ -41,6 +42,9 @@ BEGIN {
         &get_syndetics_anotes
     );
 }
+
+# package-level variable
+my $parser = XML::LibXML->new();
 
 =head1 NAME
 
@@ -219,36 +223,21 @@ sub get_syndetics_reviews {
 
         my $content = $response->content;
         warn "could not retrieve $url" unless $content;
-        my $xmlsimple = XML::Simple->new();
-        eval {
-        $response = $xmlsimple->XMLin(
-            $content,
-            ForceContent => 1,
-            forcearray => [ qw(Fld520) ]
-        ) unless !$content;
+       
+        eval { 
+            my $doc = $parser->parse_string($content);
+
+            # note that using findvalue strips any HTML elements embedded
+            # in that review.  That helps us handle slight differences
+            # in the output provided by Syndetics 'old' and 'new' versions
+            # of their service and cleans any questionable HTML that
+            # may be present in the reviews, but does mean that any
+            # <B> and <I> tags used to format the review are also gone.
+            my $result = $doc->findvalue('//Fld520');
+            push @reviews, {title => $source->{title}, reviews => [ { content => $result } ]} if $result;
         };
-            
-        for my $subfield_a (@{$response->{VarFlds}->{VarDFlds}->{Notes}->{Fld520}}) {
-            my @content;
-            # this is absurd, but sometimes this data serializes differently
-            if (exists $subfield_a->{content}) {
-                if (ref($subfield_a->{content} eq 'ARRAY')) {
-                    for my $content (@{$subfield_a->{content}}) {
-                        push @content, {content => $content};
-                    }
-                } else {
-                    push @content, {content => $subfield_a->{content}};
-                }
-            }
-            elsif(ref($subfield_a->{a}->{content}) eq 'ARRAY') {
-                for my $content (@{$subfield_a->{a}->{content}}) {
-                    push @content, {content => $content};
-                }
-            }
-            else {
-                push @content, {content => $subfield_a->{a}->{content}};
-            }
-            push @reviews, {title => $source->{title}, reviews => \@content};
+        if ($@) {
+            warn "Error parsing response from $url";
         }
     }
     return \@reviews;
