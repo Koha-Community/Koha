@@ -18,7 +18,7 @@
 
 
 use strict;
-
+use warnings;
 use C4::Auth;
 use C4::Output;  # contains gettemplate
 use C4::Biblio;  # GetMarcBiblio GetXmlBiblio
@@ -128,7 +128,7 @@ if ($op eq "export") {
     
     while (my ($biblionumber) = $sth->fetchrow) {
         my $record = GetMarcBiblio($biblionumber);
-
+        next if not defined $record;
         if ( $dont_export_items || $strip_nonlocal_items || $limit_ind_branch) {
             my ( $homebranchfield, $homebranchsubfield ) =
                 GetMarcFromKohaField( 'items.homebranch', '' );
@@ -145,6 +145,8 @@ if ($op eq "export") {
                 /^(\d*)(\w)?$/;
                 my $field = $1;
                 my $subfield = $2;
+                # skip if this record doesn't have this field
+                next if not defined $record->field($field);
                 if( $subfield ) {
                     $record->field($field)->delete_subfields($subfield);
                 }
