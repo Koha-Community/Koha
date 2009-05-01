@@ -109,10 +109,12 @@ function check_form_borrowers(nav){
 				var ref_champ=eval("document.form."+champ_verif[i]);
 				//check if it's a select
 				if (ref_champ.type=='select-one'){
-					if (ref_champ.options[0].selected ){
+					// check to see if first option is selected and is blank
+					if (ref_champ.options[0].selected &&
+					    ref_champ.options[0].text == ''){
 						// action if field is empty
 						message_champ+=champ_verif[i]+"\n";
-						//test to konw if you must show a message with error
+						//test to know if you must show a message with error
 						statut=1;
 					}
 				} else {
@@ -125,7 +127,7 @@ function check_form_borrowers(nav){
 			}
 		}
 	}
-	//patrons form to test if you chcked no to the quetsion of double 
+	//patrons form to test if you checked no to the question of double
  	if (statut!=1 && document.form.check_member.value > 0 ) {
 		if (!(document.form_double.answernodouble.checked)){
 			message ="";
