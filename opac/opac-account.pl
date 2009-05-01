@@ -25,6 +25,7 @@ use C4::Circulation;
 use C4::Auth;
 use C4::Output;
 use C4::Dates qw/format_date/;
+use warnings;
 
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -58,11 +59,6 @@ for ( my $i = 0 ; $i < $numaccts ; $i++ ) {
       sprintf( "%.2f", $accts->[$i]{'amountoutstanding'} );
     if ( $accts->[$i]{'amountoutstanding'} >= 0 ) {
         $accts->[$i]{'amountoutstandingcredit'} = 1;
-    }
-    if (   $accts->[$i]{'accounttype'} ne 'F'
-        && $accts->[$i]{'accounttype'} ne 'FU' )
-    {
-        $accts->[$i]{'print_title'};	# FIXME: Useless use of hash element in void context
     }
 }
 
