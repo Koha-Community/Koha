@@ -12,14 +12,19 @@
    
    <div id="bd">
 	<div id="yui-main" class="sysprefs">
-	<div class="yui-g"><h1>System Preferences</h1></div>
+	<div class="yui-g"><h1>Koha Administration</h1></div>
 	<div class="yui-g">
 
 <div class="yui-u first">
-<dl>
-	<dt><a href="/cgi-bin/koha/admin/systempreferences.pl">Global system preferences</a></dt>
-	<dd>Manage global system preferences like MARC flavor, date format, administrator email, and templates.</dd>
-</dl>
+<form action="/cgi-bin/koha/admin/systempreferences.pl" method="post">
+<fieldset>
+<h4><a href="/cgi-bin/koha/admin/systempreferences.pl">Global system preferences</a></h4>
+	<p>Manage global system preferences like MARC flavor, date format, administrator email, and templates.</p>
+		<input type="hidden" value="all" name="tab" />
+        <input type="text" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
+        <input type="submit" name="ok" class="submit" value="Search" />
+</fieldset>
+</form>
 
 
 <div class="hint"><h4>Hint:</h4><p>Configure these parameters in the order they appear.</p></div>
