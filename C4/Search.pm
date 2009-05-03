@@ -224,7 +224,7 @@ sub SimpleSearch {
         my $search_result =
           (      $result->{hits}
               && $result->{hits} > 0 ? $result->{'RECORDS'} : [] );
-        return ( undef, $search_result, scalar($search_result) );
+        return ( undef, $search_result, scalar($result->{hits}) );
     }
     else {
         # FIXME hardcoded value. See catalog/search.pl & opac-search.pl too.
