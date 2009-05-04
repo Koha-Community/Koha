@@ -44,23 +44,27 @@ sub AuthorizedValuesForCategory ($) {
 
 my $input = new CGI;
 my $id          = $input->param('id');
+my $op          = $input->param('op')     || '';
 my $offset      = $input->param('offset') || 0;
 my $searchfield = $input->param('searchfield');
 $searchfield = '' unless defined $searchfield;
-$searchfield=~ s/\,//g;
+$searchfield =~ s/\,//g;
 my $script_name = "/cgi-bin/koha/admin/authorised_values.pl";
 my $dbh = C4::Context->dbh;
+
+# my $subpermission = C4::Context->preference('GranularPermissions') ? 
+#     { editcatalogue => ... } :
+#     {    parameters => 1   } ;
 
 my ($template, $borrowernumber, $cookie)= get_template_and_user({
     template_name => "admin/authorised_values.tmpl",
     authnotrequired => 0,
-    flagsrequired => {parameters => 1},
+    flagsrequired => {parameters => 1},     # soon $subpermission
     query => $input,
     type => "intranet",
     debug => 1,
 });
 my $pagesize = 20;
-my $op = $input->param('op') || '';
 
 $template->param(  script_name => $script_name,
                  ($op||'else') => 1 );
@@ -233,14 +237,12 @@ sub default_form {
 		$template->param(isprevpage => $offset,
 						prevpage=> $prevpage,
 						searchfield => $searchfield,
-						script_name => $script_name,
 		 );
 	}
 	if ($offset+$pagesize<$count) {
 		my $nextpage =$offset+$pagesize;
 		$template->param(nextpage =>$nextpage,
 						searchfield => $searchfield,
-						script_name => $script_name,
 		);
 	}
 }
