@@ -238,7 +238,13 @@ sub SetMarcUnicodeFlag {
     } elsif ($marc_flavour eq "UNIMARC") {
         if (my $field = $marc_record->field('100')) {
             my $sfa = $field->subfield('a');
-            substr($sfa, 26, 4) = '5050';
+            
+            my $subflength = 36;
+            # fix the length of the field
+            $sfa = substr $sfa, 0, $subflength if (length($sfa) > $subflength);
+            $sfa = sprintf( "%-*s", 35, $sfa ) if (length($sfa) < $subflength);
+            
+            substr($sfa, 26, 4) = '50  ';
             $field->update('a' => $sfa);
         }
     } else {
