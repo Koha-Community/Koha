@@ -108,7 +108,7 @@ canned reports and writing custom SQL reports.</p>
 <tr><td><!-- TMPL_VAR NAME="report_name" --></td>
 <td><!-- TMPL_VAR NAME="type" --></td>
 <td><!-- TMPL_VAR NAME="notes" --></td>
-<td><!-- TMPL_VAR NAME="borrowernumber" --></td>
+<td><!-- TMPL_VAR NAME="borrowersurname" --><!-- TMPL_IF NAME="borrowerfirstname" -->, <!-- TMPL_VAR NAME="borrowerfirstname" --><!-- /TMPL_IF --> (<!-- TMPL_VAR NAME="borrowernumber" -->)</td>
 <td><!-- TMPL_VAR NAME="date_created" --></td>
 <td><!-- TMPL_IF NAME="date_run" --><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&id=<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="date_run" --></a><!-- /TMPL_IF -->
 </td>
