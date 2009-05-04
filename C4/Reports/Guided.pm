@@ -521,6 +521,10 @@ sub get_saved_reports {
     my $result = $sth->fetchall_arrayref({});
     foreach (@$result){
         $_->{date_created} = format_date($_->{date_created}); 
+        
+        my $member = C4::Members::GetMember($_->{borrowernumber});
+        $_->{borrowerfirstname} = $member->{firstname};
+        $_->{borrowersurname}   = $member->{surname};
     }
     return $result;
 }
