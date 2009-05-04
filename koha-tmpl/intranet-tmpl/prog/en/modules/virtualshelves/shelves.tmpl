@@ -142,12 +142,12 @@ function placeHold () {
                 <th>&nbsp;</th>
             </tr>
 		<!-- TMPL_LOOP NAME="itemsloop" -->
-			<!-- TMPL_IF NAME="toggle" -->
+			<!-- TMPL_UNLESS NAME="__odd__" -->
 			<tr class="highlight">
 			<!-- TMPL_ELSE -->
 			<tr>
-			<!-- /TMPL_IF -->
-			<!--TMPL_IF NAME="manageshelf" -->
+			<!-- /TMPL_UNLESS -->
+			<!-- TMPL_IF NAME="manageshelf" -->
 			<td>
 				<!-- TMPL_IF NAME="confirm" -->
 				<input type="hidden"   name="CONFIRM-<!-- TMPL_VAR NAME="confirm" -->" />
@@ -163,12 +163,10 @@ function placeHold () {
 			<td>
 			<!-- TMPL_IF name="BiblioDefaultViewmarc" -->
 				<a class="title" href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-			<!-- TMPL_ELSE -->
-				<!-- TMPL_IF name="BiblioDefaultViewisbd" -->
+            <!-- TMPL_ELSIF NAME="BiblioDefaultViewisbd" -->
 				<a class="title" href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-				<!-- TMPL_ELSE -->
+            <!-- TMPL_ELSE -->
 				<a class="title" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-				<!-- /TMPL_IF -->
 			<!-- /TMPL_IF -->
 			<!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_VAR NAME="subtitle" --></a>
 			</td>
