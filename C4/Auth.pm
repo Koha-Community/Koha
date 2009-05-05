@@ -33,7 +33,7 @@ use C4::VirtualShelves;
 use POSIX qw/strftime/;
 
 # use utf8;
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug $ldap $cas);
+use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug $ldap $cas $caslogout);
 
 BEGIN {
     $VERSION = 3.02;        # set version for version checking
@@ -44,6 +44,7 @@ BEGIN {
     %EXPORT_TAGS = (EditPermissions => [qw(get_all_subpermissions get_user_subpermissions)]);
     $ldap = C4::Context->config('useldapserver') || 0;
     $cas = C4::Context->preference('casAuthentication');
+    $caslogout = C4::Context->preference('casLogout');
     if ($ldap) {
         require C4::Auth_with_ldap;             # no import
         import  C4::Auth_with_ldap qw(checkpw_ldap);
@@ -640,9 +641,7 @@ sub checkauth {
             $sessionID = undef;
             $userid    = undef;
 
-	    if ($cas) {
-		warn "Here we cas logout the user";
-		# Add a syspref here
+	    if ($cas and $caslogout) {
 		logout_cas($query);
 	    }
         }
