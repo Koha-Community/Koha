@@ -78,7 +78,7 @@
             <!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
         </select>
-        <input type="hidden" name="marclist" value="" />
+        <input type="hidden" name="marclist" value="all" />
         <input type="hidden" name="and_or" value="and" />
         <input type="hidden" name="excluding" value="" />
         <select name="operator">
