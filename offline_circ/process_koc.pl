@@ -237,6 +237,7 @@ sub arguments_for_command {
 sub kocIssueItem {
   my $circ = shift;
 
+  $circ->{ 'barcode' } = barcodedecode($circ->{'barcode'}) if( $circ->{'barcode'} && C4::Context->preference('itemBarcodeInputFilter'));
   my $branchcode = C4::Context->userenv->{branch};
   my $borrower = GetMember( $circ->{ 'cardnumber' }, 'cardnumber' );
   my $item = GetBiblioFromItemNumber( undef, $circ->{ 'barcode' } );
@@ -321,6 +322,7 @@ sub kocIssueItem {
 
 sub kocReturnItem {
   my ( $circ ) = @_;
+  $circ->{'barcode'} = barcodedecode($circ->{'barcode'}) if( $circ->{'barcode'} && C4::Context->preference('itemBarcodeInputFilter'));
   my $item = GetBiblioFromItemNumber( undef, $circ->{ 'barcode' } );
   #warn( Data::Dumper->Dump( [ $circ, $item ], [ qw( circ item ) ] ) );
   my $borrowernumber = _get_borrowernumber_from_barcode( $circ->{'barcode'} );
