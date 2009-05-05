@@ -129,7 +129,7 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
 
     push @feedback, {feedback=>1, name=>'headerrow', value=>join(', ', @csvcolumns)};
     my $today_iso = C4::Dates->new()->output('iso');
-    my @criticals = qw(cardnumber surname categorycode);    # there probably should be others
+    my @criticals = qw(surname branchcode categorycode);    # there probably should be others
     my @bad_dates;  # I've had a few.
     my $date_re = C4::Dates->new->regexp('syspref');
     my  $iso_re = C4::Dates->new->regexp('iso');
@@ -206,7 +206,7 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
 	$borrower{dateexpiry} = GetExpiryDate($borrower{categorycode},$borrower{dateenrolled}) unless $borrower{dateexpiry}; 
         my $borrowernumber;
         my $member;
-        if ($matchpoint eq 'cardnumber') {
+        if ( ($matchpoint eq 'cardnumber') && ($borrower{'cardnumber'}) ) {
             $member = GetMember( $borrower{'cardnumber'}, 'cardnumber' );
             if ($member) {
                 $borrowernumber = $member->{'borrowernumber'};
