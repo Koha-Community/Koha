@@ -541,7 +541,7 @@ WriteMakefile(
                             'Class::Factory::Util'             => 1.6,
                             'Class::Accessor'                  => 0.30,
                             'DBD::mysql'                       => 4.004,
-                            'DBD::SQLite'                      => 1.13, # optional, used for offline circulation
+                            'DBD::SQLite2'                     => 0.33, # optional, used for offline circulation
                             'DBI'                              => 1.53,
                             'Data::Dumper'                     => 2.121,
                             'Data::ICal'                       => 0.13,

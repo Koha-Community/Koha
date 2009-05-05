@@ -111,7 +111,7 @@ verify_dbd_sqlite();
 
 ## Create DB Connections
 my $dbh_mysql = C4::Context->dbh;
-my $dbh_sqlite = DBI->connect( "dbi:SQLite:dbname=$filename", "", "" );
+my $dbh_sqlite = DBI->connect( "dbi:SQLite2:dbname=$filename", "", "" );
 $dbh_sqlite->{AutoCommit} = 0;
 
 create_borrowers_table();
@@ -131,12 +131,12 @@ make sure we have a new enough version of it.
 
 sub verify_dbd_sqlite {
 
-    eval { require DBD::SQLite; };
+    eval { require DBD::SQLite2; };
     if ( $EVAL_ERROR ) {
         my $msg = <<'END_MESSAGE';
-DBD::SQLite is required to generate offline circultion database files, but not found.
-Please install the DBD::SQLite perl module. It is availalbe from
-http://search.cpan.org/dist/DBD-SQLite/ or through the CPAN module.
+DBD::SQLite2 is required to generate offline circultion database files, but not found.
+Please install the DBD::SQLite2 perl module. It is availalbe from
+http://search.cpan.org/dist/DBD-SQLite2/ or through the CPAN module.
 END_MESSAGE
         die $msg;
     }
