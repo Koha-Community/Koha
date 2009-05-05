@@ -526,8 +526,13 @@ sub AddAuthority {
 	my $leader='     nz  a22     o  4500';#Leader for incomplete MARC21 record
 
 # if authid empty => true add, find a new authid number
-  my $format= 'UNIMARCAUTH' if (uc(C4::Context->preference('marcflavour')) eq 'UNIMARC');
-  $format= 'MARC21' if (uc(C4::Context->preference('marcflavour')) ne 'UNIMARC');
+    my $format;
+    if (uc(C4::Context->preference('marcflavour')) eq 'UNIMARC') {
+        $format= 'UNIMARCAUTH';
+    }
+    else {
+        $format= 'MARC21';
+    }
 
 	if ($format eq "MARC21") {
 		if (!$record->leader) {
@@ -681,23 +686,22 @@ returns xml form of record $authid
 sub GetAuthorityXML {
   # Returns MARC::XML of the authority passed in parameter.
   my ( $authid ) = @_;
-  my $format= 'UNIMARCAUTH' if (uc(C4::Context->preference('marcflavour')) eq 'UNIMARC');
-  $format= 'MARC21' if (uc(C4::Context->preference('marcflavour')) ne 'UNIMARC');
-  if ($format eq "MARC21") {
-    # for MARC21, call GetAuthority instead of
-    # getting the XML directly since we may
-    # need to fix up the location of the authority
-    # code -- note that this is reasonably safe
-    # because GetAuthorityXML is used only by the 
-    # indexing processes like zebraqueue_start.pl
-    my $record = GetAuthority($authid);
-    return $record->as_xml_record($format);
-  } else {
-    my $dbh=C4::Context->dbh;
-    my $sth = $dbh->prepare("select marcxml from auth_header where authid=? "  );
-    $sth->execute($authid);
-    my ($marcxml)=$sth->fetchrow;
-    return $marcxml;
+  if (uc(C4::Context->preference('marcflavour')) eq 'UNIMARC') {
+      my $dbh=C4::Context->dbh;
+      my $sth = $dbh->prepare("select marcxml from auth_header where authid=? "  );
+      $sth->execute($authid);
+      my ($marcxml)=$sth->fetchrow;
+      return $marcxml;
+  }
+  else { 
+      # for MARC21, call GetAuthority instead of
+      # getting the XML directly since we may
+      # need to fix up the location of the authority
+      # code -- note that this is reasonably safe
+      # because GetAuthorityXML is used only by the 
+      # indexing processes like zebraqueue_start.pl
+      my $record = GetAuthority($authid);
+      return $record->as_xml_record('MARC21');
   }
 }
 
@@ -942,8 +946,10 @@ sub BuildSummary{
         $notes.= '<span class="note">'.$field->subfield('a')."</span>\n";
       }
       foreach my $field ($record->field('4..')) {
-        my $thesaurus = "thes. : ".$thesaurus{"$field->subfield('2')"}." : " if ($field->subfield('2'));
-        $see.= '<span class="UF">'.$thesaurus.$field->subfield('a')."</span> -- \n";
+        if ($field->subfield('2')) {
+            my $thesaurus = "thes. : ".$thesaurus{"$field->subfield('2')"}." : ";
+            $see.= '<span class="UF">'.$thesaurus.$field->subfield('a')."</span> -- \n";
+        }
       }
       # see :
       foreach my $field ($record->field('5..')) {
@@ -1220,9 +1226,10 @@ sub merge {
         while (my $biblionumbers=$rq->fetchrow){
             my @biblionumbers=split /;/,$biblionumbers;
             foreach (@biblionumbers) {
-                my $biblionumber=$1 if ($_=~/(\d+),.*/);
-                my $marc=GetMarcBiblio($biblionumber);        
-                push @reccache,$marc;        
+                if ($_=~/(\d+),.*/) {
+                    my $marc=GetMarcBiblio($1);
+                    push @reccache,$marc;
+                }
             }
         }
     } else {
@@ -1232,14 +1239,17 @@ sub merge {
         my $query;
         $query= "an=".$mergefrom;
         my $oResult = $oConnection->search(new ZOOM::Query::CCL2RPN( $query, $oConnection ));
-        my $count=$oResult->size() if  ($oResult);
+        my $count = 0;
+        if  ($oResult) {
+            $count=$oResult->size();
+        }
         my $z=0;
         while ( $z<$count ) {
             my $rec;
             $rec=$oResult->record($z);
             my $marcdata = $rec->raw();
             push @reccache, $marcdata;
-        $z++;
+            $z++;
         }
         $oConnection->destroy();    
     }
