@@ -53,12 +53,20 @@ YAHOO.util.Event.onContentReady("header_search", function() {
                 <input id="ysearchsubmit" type="submit" class="submit" value="Submit" />
                 <input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
                 <input name="printer" value="" type="hidden" />
+            <!-- TMPL_IF NAME="stickyduedate" -->
+                <input type="hidden" name="duedatespec" value="<!-- TMPL_VAR NAME="duedatespec" -->" />
+                <input type="hidden" name="stickyduedate" value="<!-- TMPL_VAR NAME="stickyduedate" -->" />
+            <!-- /TMPL_IF -->
             </div>
         </div>
 	<!-- TMPL_ELSE -->
             <input id="findborrower" name="findborrower" size="40" class="focus" type="text" />
             <input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
             <input name="printer" value="" type="hidden" />
+            <!-- TMPL_IF NAME="stickyduedate" -->
+            <input type="hidden" name="duedatespec" value="<!-- TMPL_VAR NAME="duedatespec" -->" />
+            <input type="hidden" name="stickyduedate" value="<!-- TMPL_VAR NAME="stickyduedate" -->" />
+            <!-- /TMPL_IF -->
             <input value="Submit" class="submit" type="submit" />
 	<!-- /TMPL_IF -->
     </form>
