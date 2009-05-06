@@ -144,6 +144,8 @@ $.tablesorter.addParser({
 
 <form method="get" action="/cgi-bin/koha/circ/circulation.pl">
     <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+    <input type="hidden" name="duedatespec" value="<!-- TMPL_VAR NAME="duedatespec" -->" />
+    <input type="hidden" name="stickyduedate" value="<!-- TMPL_VAR NAME="stickyduedate" -->" />
     <input type="submit" class="deny" value="No, Don't Check Out (N)" accesskey="n" />
 </form>
 
@@ -232,6 +234,8 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 
     <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
     <input type="hidden" name="printer" value="<!-- TMPL_VAR NAME="printer" -->" />
+    <input type="hidden" name="duedatespec" value="<!-- TMPL_VAR NAME="duedatespec" -->" />
+    <input type="hidden" name="stickyduedate" value="<!-- TMPL_VAR NAME="stickyduedate" -->" />
 
 <ol>    <li>
     <label for="borrowernumber">Select a patron: </label>
