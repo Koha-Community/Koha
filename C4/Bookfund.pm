@@ -272,7 +272,7 @@ sub GetBookFundBreakdown {
 
     while ( my $data = $sth->fetchrow_hashref ) {
         my $left = $data->{'tleft'};
-        if ( (!$left && (!$data->{'datereceived'}||$data->{'datereceived'} eq '0000-00-00') ) || $left eq '' ) {
+        if ( !$left || $left eq '' ) {
             $left = $data->{'quantity'};
         }
         if ( $left && $left > 0 ) {
