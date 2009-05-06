@@ -4,6 +4,7 @@
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 
 <style type="text/css">
+fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
 .yui-u li p label.widelabel {
     width: 300px;  /* not enough for IE7 apparently */
     /* height: 2.4em; background-color: pink; */
@@ -916,7 +917,6 @@ function Check(f) {
 
 $(document).ready(function() {
     init_pattern();
-   //  $(".widelabel").attr("width", "300px");  // labels stay skinny in IE7 anyway.
 <!-- TMPL_IF name="mod" -->
     set_num_pattern_from_template_vars();
     <!-- TMPL_IF name="hemisphere" -->
@@ -961,9 +961,7 @@ $(document).ready(function() {
 	<legend>Subscription details</legend>
 	<ol>
         <li><span class="label">Subscription #</span> <!--TMPL_VAR name="subscriptionid"--></li>
-        <li>
-            <span class="label">Librarian: </span>            <!-- TMPL_VAR name="loggedinusername" -->
-        </li>
+        <li><span class="label">Librarian: </span> <!-- TMPL_VAR name="loggedinusername" --></li>
         <li>
             <label for="aqbooksellerid">Vendor: </label>
             <input type="text" name="aqbooksellerid" id="aqbooksellerid" value="<!-- TMPL_VAR name="aqbooksellerid" -->" size="8" /> (<input type="text" name="aqbooksellername" value="<!-- TMPL_VAR name="aqbooksellername" -->" disabled="disabled" readonly="readonly" />) <div class="inputnote"><a href="#" onclick="FindAcqui(f)">Search for a vendor</a></div>
@@ -1031,7 +1029,7 @@ $(document).ready(function() {
 				<!-- /TMPL_IF -->
         </li>
 		<li class="radio">
-			<label for="displaycount">Staff and Public Display</label>
+			<label for="staffdisplaycount">Staff and Public Display</label>
 			<p>
 			 <label class="widelabel" for="staffdisplaycount">Number of issues to display to staff: </label>
 			 <input type="text" name="staffdisplaycount" id="staffdisplaycount" value="<!-- TMPL_VAR NAME="staffdisplaycount" -->" size="4"/>
@@ -1060,7 +1058,7 @@ $(document).ready(function() {
 	<legend>Serials planning</legend>
     <ol>
         <li>
-           <label for="firstacquidate"> First issue publication date:</label>
+           <label for="acqui_date"> First issue publication date:</label>
                 <!-- TMPL_UNLESS NAME="mod" --><img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="acqui_button" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" /><!-- /TMPL_UNLESS -->
                 <input type="text" name="firstacquidate" value="<!-- TMPL_VAR name="firstacquidate" -->"  size="13" maxlength="10" id="acqui_date" <!-- TMPL_IF NAME="mod" -->disabled="true"<!-- /TMPL_IF --> style="border-width: 0px;"  />
         </li>
@@ -1245,7 +1243,7 @@ $(document).ready(function() {
                 <li id="irregularity"></li>
    	           <li id="displayexample"></li>
         <li>
-           <label for="startdate" class="required"> Subscription start date:</label>
+           <label for="beginning_date" class="required"> Subscription start date:</label>
             
                 <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="button1" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />
                 <input type="text" name="startdate" value="<!-- TMPL_VAR name="startdate" -->" size="13" maxlength="10" id="beginning_date" style="border-width: 0px;" />
@@ -1257,8 +1255,6 @@ $(document).ready(function() {
                         button       : "button1",
                         align        : "Tl"
                     });
-                </script>
-                <script type="text/javascript">
                     Calendar.setup({
                         inputField   : "beginning_date",
                         ifFormat     : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
