@@ -419,6 +419,7 @@ CREATE TABLE `biblioitems` (
   KEY `bibinoidx` (`biblioitemnumber`),
   KEY `bibnoidx` (`biblionumber`),
   KEY `isbn` (`isbn`),
+  KEY `issn` (`issn`),
   KEY `publishercode` (`publishercode`),
   CONSTRAINT `biblioitems_ibfk_1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -521,8 +522,8 @@ DROP TABLE IF EXISTS `borrower_attributes`;
 CREATE TABLE `borrower_attributes` (
   `borrowernumber` int(11) NOT NULL,
   `code` varchar(10) NOT NULL,
-  `attribute` varchar(30) default NULL,
-  `password` varchar(30) default NULL,
+  `attribute` varchar(64) default NULL,
+  `password` varchar(64) default NULL,
   KEY `borrowernumber` (`borrowernumber`),
   KEY `code_attribute` (`code`, `attribute`),
   CONSTRAINT `borrower_attributes_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`)
@@ -835,6 +836,7 @@ CREATE TABLE `deletedborrowers` (
   `phonepro` text,
   `B_streetnumber` varchar(10) default NULL,
   `B_streettype` varchar(50) default NULL,
+  `smsalertnumber` varchar(50) default NULL,
   `B_address` varchar(100) default NULL,
   `B_city` mediumtext,
   `B_zipcode` varchar(25) default NULL,
@@ -2063,7 +2065,7 @@ CREATE TABLE `z3950servers` (
 DROP TABLE IF EXISTS `zebraqueue`;
 CREATE TABLE `zebraqueue` (
   `id` int(11) NOT NULL auto_increment,
-  `biblio_auth_number` int(11) NOT NULL default '0',
+  `biblio_auth_number` bigint(20) unsigned NOT NULL default '0',
   `operation` char(20) NOT NULL default '',
   `server` char(20) NOT NULL default '',
   `done` int(11) NOT NULL default '0',
