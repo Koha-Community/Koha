@@ -94,16 +94,27 @@ sub transformMARCXML4XSLT {
 
 =cut
 
+# Cache for tagfield-tagsubfield to decode per framework.
+# Should be preferably be placed in Koha-core...
+my %authval_per_framework;
+
 sub getAuthorisedValues4MARCSubfields {
     my ($frameworkcode) = @_;
-    my @results;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT DISTINCT tagfield,tagsubfield FROM marc_subfield_structure WHERE authorised_value IS NOT NULL AND authorised_value!='' AND frameworkcode=?");
-    $sth->execute($frameworkcode);
-    while (my $result = $sth->fetchrow_hashref()) {
-        push @results, $result;
+    unless ( $authval_per_framework{ $frameworkcode } ) {
+        my @results;
+        my $dbh = C4::Context->dbh;
+        my $sth = $dbh->prepare("SELECT DISTINCT tagfield, tagsubfield
+                                 FROM marc_subfield_structure
+                                 WHERE authorised_value IS NOT NULL
+                                   AND authorised_value!=''
+                                   AND frameworkcode=?");
+        $sth->execute( $frameworkcode );
+        while ( my $result = $sth->fetchrow_hashref() ) {
+            push ( @results, $result );
+        }
+        $authval_per_framework{ $frameworkcode } = \@results;
     }
-    return \@results;
+    return $authval_per_framework{ $frameworkcode };
 }
 
 my $stylesheet;
