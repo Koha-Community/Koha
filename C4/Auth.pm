@@ -1342,6 +1342,7 @@ sub checkpw {
         my ($retval,$retcard,$retuserid) = checkpw_cas($dbh, $ticket, $query);    # EXTERNAL AUTH
 	warn "retval : $retval $retcard";
         ($retval) and return ($retval,$retcard,$retuserid);
+	return 0;
     }
 
     # INTERNAL AUTH
