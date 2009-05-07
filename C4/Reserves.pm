@@ -375,7 +375,7 @@ sub GetOtherReserves {
             );
 
             #launch the subroutine dotransfer
-            C4::Circulation::ModItemTransfer(
+            C4::Items::ModItemTransfer(
                 $itemnumber,
                 $iteminfo->{'holdingbranch'},
                 $checkreserves->{'branchcode'}
