@@ -363,7 +363,7 @@ sub GetOtherReserves {
     my $messages;
     my $nextreservinfo;
     my ( $restype, $checkreserves ) = CheckReserves($itemnumber);
-    if ($checkreserves and $restype ne "Waiting" ) {
+    if ($checkreserves) {
         my $iteminfo = GetItem($itemnumber);
         if ( $iteminfo->{'holdingbranch'} ne $checkreserves->{'branchcode'} ) {
             $messages->{'transfert'} = $checkreserves->{'branchcode'};
