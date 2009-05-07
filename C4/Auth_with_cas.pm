@@ -31,6 +31,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug);
 BEGIN {
 	require Exporter;
 	$VERSION = 3.03;	# set the version for version checking
+	$debug = $ENV{DEBUG};
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(checkpw_cas login_cas logout_cas login_cas_url);
 }
@@ -50,7 +51,6 @@ sub logout_cas {
 sub login_cas {
     my ($query) = @_;
     my $cas = Authen::CAS::Client->new($casserver);
-    warn $cas->login_url(%ENV->{'SCRIPT_URI'});
     print $query->redirect($cas->login_url(%ENV->{'SCRIPT_URI'})); 
 }
 
@@ -63,14 +63,14 @@ sub login_cas_url {
 # Checks for password correctness
 # In our case : is there a ticket, is it valid and does it match one of our users ?
 sub checkpw_cas {
-    warn "checkpw_cas";
+    $debug and warn "checkpw_cas";
     my ($dbh, $ticket, $query) = @_;
     my $retnumber;
     my $cas = Authen::CAS::Client->new($casserver);
 
     # If we got a ticket
     if ($ticket) {
-	warn "Got ticket : $ticket";
+	$debug and warn "Got ticket : $ticket";
 	
 	# We try to validate it
 	my $val = $cas->service_validate(%ENV->{'SCRIPT_URI'}, $ticket);
@@ -79,7 +79,7 @@ sub checkpw_cas {
 	if( $val->is_success() ) {
 
 	    my $userid = $val->user();
-	    warn "User authenticated as: $userid";
+	    $debug and warn "User CAS authenticated as: $userid";
 
 	    # Does it match one of our users ?
     	    my $sth = $dbh->prepare("select cardnumber from borrowers where userid=?");
@@ -94,8 +94,12 @@ sub checkpw_cas {
 	    	$retnumber = $sth->fetchrow;
 		return (1, $retnumber, $userid);
 	    }
+	    
+	    # If we reach this point, then the user is a valid CAS user, but not a Koha user
+	    $debug and warn "User $userid is not a valid Koha user";
+
     	} else {
-    	    warn "Invalid session ticket : $ticket";
+    	    $debug and warn "Invalid session ticket : $ticket";
     	    return 0;
 	}
     }
@@ -114,8 +118,6 @@ C4::Auth - Authenticates Koha users
   use C4::Auth_with_cas;
 
 =cut
-
-=head1 KOHA_CONF <usecasserver>http://mycasserver/loginurl</usecasserver>
 
 =head1 SEE ALSO
 
