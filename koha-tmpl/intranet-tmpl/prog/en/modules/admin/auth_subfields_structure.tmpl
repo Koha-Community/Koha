@@ -73,8 +73,13 @@ function displayMoreConstraint(numlayer){
         <!-- TMPL_LOOP NAME="loop" -->
         <div id="sub<!-- TMPL_VAR NAME="tagsubfield" -->field">
 			<fieldset class="rows"><ol>
-                
-                <li><input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR name="tagsubfield" -->" /><label for="repeatable<!-- TMPL_VAR NAME="row" -->">Repeatable: </label><!-- TMPL_VAR NAME="repeatable" -->&nbsp;</li>
+
+                    <!-- TMPL_IF NAME="new_subfield" -->
+                <li><label for="tagsubfieldinput<!-- TMPL_VAR NAME="row" -->">Subfield code: </label><!-- TMPL_VAR NAME="tagsubfieldinput" -->&nbsp;</li> 
+                    <!-- TMPL_ELSE -->
+                <input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR name="tagsubfield" -->" />
+                    <!-- /TMPL_IF --> 
+                <li><label for="repeatable<!-- TMPL_VAR NAME="row" -->">Repeatable: </label><!-- TMPL_VAR NAME="repeatable" -->&nbsp;</li>
                 <li><label for="mandatory<!-- TMPL_VAR NAME="row" -->">Mandatory: </label><!-- TMPL_VAR NAME="mandatory" -->&nbsp;</li>
                 <li><label for="liblibrarian<!-- TMPL_VAR NAME="row" -->">Text for librarian: </label><input id="liblibrarian<!-- TMPL_VAR NAME="row" -->" type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" -->" size="40" maxlength="80" /></li>
                 <li><label for="libopac<!-- TMPL_VAR NAME="row" -->">Text for OPAC: </label><input type="text" id="libopac<!-- TMPL_VAR NAME="row" -->" name="libopac" value="<!-- TMPL_VAR NAME="libopac" -->" size="40" maxlength="80" /></li>

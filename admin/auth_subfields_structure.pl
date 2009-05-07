@@ -322,7 +322,10 @@ if ($op eq 'add_form') {
 					-size=>1,
 					-multiple=>0,
 					);
-		$row_data{tagsubfieldinput} = "<input type=\"text\" name=\"tagsubfield\" value=\"".$data->{'tagsubfield'}."\" size=\"1\" id=\"tagsubfield\" maxlength=\"1\" />";
+		$row_data{tagsubfieldinput} = 
+			"<label><input type=\"text\" name=\"tagsubfield\" value=\""
+			. $data->{'tagsubfield'}
+			. "\" size=\"1\" id=\"tagsubfield\" maxlength=\"1\" /></label>";
 		$row_data{tagsubfield} = $data->{'tagsubfield'};
 		$row_data{liblibrarian} = "";
 		$row_data{libopac} = "";
