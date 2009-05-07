@@ -84,7 +84,7 @@ sub localNEWmodbiblio {
     my ($dbh,$record,$biblionumber,$frameworkcode) =@_;
     $frameworkcode="" unless $frameworkcode;
     my $oldbiblio = TransformMarcToKoha($dbh,$record,$frameworkcode);
-    C4::Biblio::_koha_modify_biblio( $dbh, $oldbiblio );
+    C4::Biblio::_koha_modify_biblio( $dbh, $oldbiblio, $frameworkcode );
     C4::Biblio::_koha_modify_biblioitem_nonmarc( $dbh, $oldbiblio );
     return 1;
 }
