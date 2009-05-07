@@ -54,7 +54,7 @@
             <td><!-- TMPL_VAR NAME="price" --></td>
             <td><!-- TMPL_VAR NAME="replacementprice" --></td>
             <td><!-- TMPL_VAR NAME="homebranch" --></td>
-            <td><!-- TMPL_VAR NAME="itype" --></td>
+            <td><!-- TMPL_IF NAME="itype_level" --><!-- TMPL_VAR NAME="itype" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="itemtype" --><!-- /TMPL_IF --></td>
             <td><!-- TMPL_VAR NAME="holdingbranch"--></td>
             <td><!-- TMPL_VAR NAME="location"--></td>
         </tr>
