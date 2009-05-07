@@ -933,23 +933,24 @@ sub GetLostItems {
 
     my $query   = "
         SELECT *
-        FROM   items, biblio, authorised_values
+        FROM   items
+            LEFT JOIN biblio ON (items.biblionumber = biblio.biblionumber)
+            LEFT JOIN biblioitems ON (items.biblionumber = biblioitems.biblionumber)
+            LEFT JOIN authorised_values ON (items.itemlost = authorised_values.authorised_value)
         WHERE
-        		items.biblionumber = biblio.biblionumber
-        		AND items.itemlost = authorised_values.authorised_value
-        		AND authorised_values.category = 'LOST'
+        	authorised_values.category = 'LOST'
           	AND itemlost IS NOT NULL
          	AND itemlost <> 0
-          
     ";
     my @query_parameters;
     foreach my $key (keys %$where) {
         $query .= " AND $key LIKE ?";
         push @query_parameters, "%$where->{$key}%";
     }
-    if ( defined $orderby ) {
-        $query .= ' ORDER BY ?';
-        push @query_parameters, $orderby;
+    my @ordervalues = qw/title author homebranch itype barcode price replacementprice lib datelastseen location/;
+    
+    if ( defined $orderby && grep($orderby, @ordervalues)) {
+        $query .= ' ORDER BY '.$orderby;
     }
 
     my $sth = $dbh->prepare($query);

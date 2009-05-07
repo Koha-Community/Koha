@@ -56,14 +56,17 @@ if ( $get_items ) {
     my %where;
     $where{'homebranch'}       = $branchfilter    if defined $branchfilter;
     $where{'barcode'}          = $barcodefilter   if defined $barcodefilter;
-    $where{'itype'}            = $itemtypesfilter if defined $itemtypesfilter;
     $where{'authorised_value'} = $loststatusfilter if defined $loststatusfilter;
+    
+    my $itype = C4::Context->preference('item-level_itypes') ? "itype" : "itemtype";
+    $where{$itype}            = $itemtypesfilter if defined $itemtypesfilter;
 
     my $items = GetLostItems( \%where, $orderbyfilter ); 
     $template->param(
-                     total     => scalar @$items,
-                     itemsloop => $items,
-                     get_items => $get_items
+                     total       => scalar @$items,
+                     itemsloop   => $items,
+                     get_items   => $get_items,
+                     itype_level => C4::Context->preference('item-level_itypes'),
                  );
 }
 
