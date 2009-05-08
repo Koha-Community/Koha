@@ -102,6 +102,11 @@
 			<!-- TMPL_ELSE -->
 				<option value="o">o - Kit</option>
 			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6p" -->
+				<option value="p" SELECTED>p - Mixed materials</option>
+			<!-- TMPL_ELSE -->
+				<option value="p">p - Mixed materials</option>
+			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6r" -->
 				<option value="r" SELECTED>r - Three-dimensional artifact or naturally occurring object</option>
 			<!-- TMPL_ELSE -->
@@ -159,7 +164,7 @@
 	</tr>
 	
 	<tr>
-		<td>8- Hierarchic level</td>
+		<td>8- Type of control</td>
 		<td>
 			<select name="f8" size="1">
 				<!-- TMPL_IF name="f8 " -->
@@ -248,7 +253,7 @@
 				<!-- TMPL_IF name="f17z" -->
 					<option value="z" SELECTED>z- Not applicable</option>
 				<!-- TMPL_ELSE -->
-					<option value="z">z- Not applicableFull level</option>
+					<option value="z">z- Not applicable</option>
 				<!-- /TMPL_IF -->
 			</select>
 		</td>
@@ -283,18 +288,28 @@
 	</tr>
 	
 	<tr>
-		<td>19 - Linked record requirement</td>
+		<td>19 - Multipart resource record level</td>
 		<td>
 			<select name="f19" size="1">
 				<!-- TMPL_IF name="f19 " -->
-					<option value=" " SELECTED>Related record not required</option>
+					<option value=" " SELECTED>Not specified or not applicable </option>
 				<!-- TMPL_ELSE -->
-					<option value=" ">Related record not required</option>
+					<option value=" ">Not specified or not applicable</option>
 				<!-- /TMPL_IF -->
-				<!-- TMPL_IF name="f18r" -->
-					<option value="r" SELECTED>r- Related record required</option>
+				<!-- TMPL_IF name="f19a" -->
+					<option value="a" SELECTED>a- Set</option>
 				<!-- TMPL_ELSE -->
-					<option value="r">r- Related record required</option>
+					<option value="a">a- Set</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f19b" -->
+					<option value="b" SELECTED>b- Part with independent title</option>
+				<!-- TMPL_ELSE -->
+					<option value="b">b- Part with independent title</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f19c" -->
+					<option value="c" SELECTED>c- Part with dependent title</option>
+				<!-- TMPL_ELSE -->
+					<option value="c">c- Part with dependent title</option>
 				<!-- /TMPL_IF -->
 			</select>
 		</td>
