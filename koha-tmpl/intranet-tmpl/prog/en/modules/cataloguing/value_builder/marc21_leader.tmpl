@@ -183,20 +183,7 @@
 
 	<tr>
 		<td>9- Character coding scheme</td>
-		<td>
-			<select name="f9" size="1">
-				<!-- TMPL_IF name="f9 " -->
-					<option value=" " selected="selected">MARC-8</option>
-				<!-- TMPL_ELSE -->
-					<option value=" ">MARC-8</option>
-				<!-- /TMPL_IF -->
-				<!-- TMPL_IF name="f9a" -->
-					<option value="a" selected="selected">a- UCS/Unicode</option>
-				<!-- TMPL_ELSE -->
-					<option value="a">a- UCS/Unicode</option>
-				<!-- /TMPL_IF -->
-			</select>
-		</td>
+		<td>a - UCS/Unicode (auto-filled)</td>
 	</tr>
 	<tr>
 		<td>10-16 indicator/subfields/size</td>
@@ -335,7 +322,7 @@ function report() {
 			document.f_pop.f6.value+
 			document.f_pop.f7.value+
 			document.f_pop.f8.value+
-			document.f_pop.f9.value+ 
+			'a'+ // MARC21 UNICODE flag - must be 'a' for Koha
 			'22     '+
 			document.f_pop.f17.value+
 			document.f_pop.f18.value+
