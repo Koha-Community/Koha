@@ -936,7 +936,7 @@ sub split_ddcn {
     # ddcn examples: 'R220.3 H2793Z H32 c.2', 'BIO JP2 R5c.1'
 
     my (@parts) = m/
-        ^([a-zA-Z]+(?:$possible_decimal)?) # R220.3            # BIO   # first example will require extra splitting
+        ^([a-zA-Z-]+(?:$possible_decimal)?) # R220.3            # BIO   # first example will require extra splitting
         \s*
         (.+)                               # H2793Z H32 c.2   # R5c.1   # everything else (except bracketing spaces)
         \s*
