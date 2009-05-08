@@ -123,6 +123,7 @@ sub new {
         MaxCount            => C4::Context->preference("OAI-PMH:MaxCount"),
         granularity         => 'YYYY-MM-DD',
         earliestDatestamp   => '0001-01-01',
+        deletedRecord       => 'no',
     );
     $self->description( "Koha OAI Repository" );
     $self->compression( 'gzip' );
