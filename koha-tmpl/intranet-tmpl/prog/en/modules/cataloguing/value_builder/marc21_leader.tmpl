@@ -183,7 +183,20 @@
 
 	<tr>
 		<td>9- Character coding scheme</td>
-		<td>a - UCS/Unicode (auto-filled)</td>
+		<td>
+			<select name="f9" size="1">
+				<!-- TMPL_IF name="f9 " -->
+					<option value=" " selected="selected">MARC-8</option>
+				<!-- TMPL_ELSE -->
+					<option value=" ">MARC-8</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f9a" -->
+					<option value="a" selected="selected">a- UCS/Unicode</option>
+				<!-- TMPL_ELSE -->
+					<option value="a">a- UCS/Unicode</option>
+				<!-- /TMPL_IF -->
+			</select>
+		</td>
 	</tr>
 	<tr>
 		<td>10-16 indicator/subfields/size</td>
@@ -280,16 +293,11 @@
 		<td>
 			<select name="f19" size="1">
 				<!-- TMPL_IF name="f19 " -->
-<<<<<<< HEAD:koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tmpl
 					<option value=" " selected="selected">Not specified or not applicable </option>
-=======
-					<option value=" " SELECTED>Not specified or not applicable </option>
->>>>>>> 2de58fc... bug 3209: add 'p' (mixed materials) to MARC21 Leader/06 dropdown:koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tmpl
 				<!-- TMPL_ELSE -->
 					<option value=" ">Not specified or not applicable</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="f19a" -->
-<<<<<<< HEAD:koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tmpl
 					<option value="a" selected="selected">a- Set</option>
 				<!-- TMPL_ELSE -->
 					<option value="a">a- Set</option>
@@ -302,20 +310,6 @@
 				<!-- TMPL_IF name="f19c" -->
 					<option value="c" selected="selected">c- Part with dependent title</option>
 				<!-- TMPL_ELSE -->
-=======
-					<option value="a" SELECTED>a- Set</option>
-				<!-- TMPL_ELSE -->
-					<option value="a">a- Set</option>
-				<!-- /TMPL_IF -->
-				<!-- TMPL_IF name="f19b" -->
-					<option value="b" SELECTED>b- Part with independent title</option>
-				<!-- TMPL_ELSE -->
-					<option value="b">b- Part with independent title</option>
-				<!-- /TMPL_IF -->
-				<!-- TMPL_IF name="f19c" -->
-					<option value="c" SELECTED>c- Part with dependent title</option>
-				<!-- TMPL_ELSE -->
->>>>>>> 2de58fc... bug 3209: add 'p' (mixed materials) to MARC21 Leader/06 dropdown:koha-tmpl/intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_leader.tmpl
 					<option value="c">c- Part with dependent title</option>
 				<!-- /TMPL_IF -->
 			</select>
