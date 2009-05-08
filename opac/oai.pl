@@ -125,7 +125,13 @@ sub new {
         earliestDatestamp   => '0001-01-01',
         deletedRecord       => 'no',
     );
-    $self->description( "Koha OAI Repository" );
+
+    # FIXME - alas, the description element is not so simple; to validate
+    # against the OAI-PMH schema, it cannot contain just a string,
+    # but one or more elements that validate against another XML schema.
+    # For now, simply omitting it.
+    # $self->description( "Koha OAI Repository" );
+
     $self->compression( 'gzip' );
 
     return $self;
