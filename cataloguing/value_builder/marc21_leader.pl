@@ -86,7 +86,6 @@ my ($template, $loggedinuser, $cookie)
 	my $f6 = substr($result,6,1);
 	my $f7 = substr($result,7,1);
 	my $f8 = substr($result,8,1);
-	my $f9 = substr($result,9,1);
 	my $f17 = substr($result,17,1);
 	my $f18 = substr($result,18,1);
 	my $f19 = substr($result,19,1);
@@ -96,7 +95,6 @@ my ($template, $loggedinuser, $cookie)
 							"f6$f6" => 1,
 							"f7$f7" => 1,
 							"f8$f8" => 1,
-							"f9$f9" => 1,
 							"f17$f17" => 1,
 							"f18$f18" => 1,
 							"f19$f19" => 1,
