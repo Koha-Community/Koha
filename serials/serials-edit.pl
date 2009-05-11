@@ -86,7 +86,7 @@ my @notes = $query->param('notes');
 my @subscriptionids = $query->param('subscriptionid');
 my $op = $query->param('op');
 if (scalar(@subscriptionids)==1 && index($subscriptionids[0],",")>0){
-  @subscriptionids =split /,/,$subscriptionids[0];
+  @subscriptionids =split (/,/,$subscriptionids[0]);
 }
 my @errors;
 my @errseq;
@@ -236,7 +236,7 @@ if ($op eq 'serialchangestatus') {
             #New Item
 			
             # if autoBarcode is set to 'incremental', calculate barcode...
-            my ($barcodetagfield,$barcodetagsubfield) = &GetMarcFromKohaField("items.barcode", '');
+            my ($barcodetagfield,$barcodetagsubfield) = &GetMarcFromKohaField("items.barcode", GetFrameworkCode($serialdatalist[0]->{'biblionumber'}));
             if (C4::Context->preference("autoBarcode") eq 'incremental'  ) {
               if (!$record->field($barcodetagfield)->subfield($barcodetagsubfield)) {
                 my $sth_barcode = $dbh->prepare("select max(abs(barcode)) from items");
