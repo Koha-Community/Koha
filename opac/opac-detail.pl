@@ -63,8 +63,8 @@ my $record       = GetMarcBiblio($biblionumber);
 $template->param( biblionumber => $biblionumber );
 # XSLT processing of some stuff
 if (C4::Context->preference("XSLTDetailsDisplay") ) {
-    my $newxmlrecord = XSLTParse4Display($biblionumber, $record, C4::Context->config('opachtdocs')."/prog/en/xslt/MARC21slim2OPACDetail.xsl");
-    $template->param('XSLTBloc' => $newxmlrecord);
+    $template->param(
+        'XSLTBloc' => XSLTParse4Display($biblionumber, $record, 'Detail') );
 }
 
 $template->param('OPACShowCheckoutName' => C4::Context->preference("OPACShowCheckoutName") ); 

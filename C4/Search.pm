@@ -1504,8 +1504,8 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
 
         # XSLT processing of some stuff
         if (C4::Context->preference("XSLTResultsDisplay") && !$scan) {
-            my $newxmlrecord = XSLTParse4Display($oldbiblio->{biblionumber}, $marcrecord, C4::Context->config('opachtdocs')."/prog/en/xslt/MARC21slim2OPACResults.xsl");
-            $oldbiblio->{XSLTResultsRecord} = $newxmlrecord;
+            $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display(
+                $oldbiblio->{biblionumber}, $marcrecord, 'Results' );
         }
 
         # last check for norequest : if itemtype is notforloan, it can't be reserved either, whatever the items
