@@ -111,7 +111,10 @@ $.tablesorter.addParser({
     <li>Too many checked out (already checked out / max : <!-- TMPL_VAR name="TOO_MANY" -->)</li>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="PATRON_CANT" --><li>This patron can't issue this item (issuing rules)</li><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="PATRON_CANT" -->
+    <li>This patron can't check out this item per library circulation policy</i>
+<!-- /TMPL_IF -->
+
 <!-- TMPL_IF NAME="NOT_FOR_LOAN_FORCING" -->
     <li>Item is normally not for loan.  Check out anyway?</li>
 <!-- /TMPL_IF -->
