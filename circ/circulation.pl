@@ -115,14 +115,24 @@ my $barcode        = $query->param('barcode') || '';
 $barcode =~  s/^\s*|\s*$//g; # remove leading/trailing whitespace
 
 $barcode = barcodedecode($barcode) if( $barcode && C4::Context->preference('itemBarcodeInputFilter'));
-my $stickyduedate  = $query->param('stickyduedate');
-my $duedatespec    = $query->param('duedatespec');
+my $stickyduedate  = $query->param('stickyduedate') || $session->param( 'stickyduedate' );
+my $duedatespec    = $query->param('duedatespec') || $session->param( 'stickyduedate' );
 my $issueconfirmed = $query->param('issueconfirmed');
 my $cancelreserve  = $query->param('cancelreserve');
 my $organisation   = $query->param('organisations');
 my $print          = $query->param('print');
 my $newexpiry      = $query->param('dateexpiry');
 my $debt_confirmed = $query->param('debt_confirmed') || 0; # Don't show the debt error dialog twice
+
+# Check if stickyduedate is turned off
+if ( $barcode ) {
+    # was stickyduedate loaded from session?
+    if ( $stickyduedate && ! $query->param("stickyduedate") ) {
+        $session->clear( 'stickyduedate' );
+        $stickyduedate  = $query->param('stickyduedate');
+        $duedatespec    = $query->param('duedatespec');
+    }
+}
 
 #set up cookie.....
 # my $branchcookie;
@@ -694,6 +704,10 @@ $template->param(
     circview => 1,
 );
 
+# save stickyduedate to session
+if ($stickyduedate) {
+    $session->param( 'stickyduedate', $duedatespec );
+}
 
 #if ($branchcookie) {
 #$cookie=[$cookie, $branchcookie, $printercookie];
