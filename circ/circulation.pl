@@ -49,14 +49,15 @@ use Date::Calc qw(
 #
 my $query = new CGI;
 
+my $sessionID = $query->cookie("CGISESSID") ;
+my $session = get_session($sessionID);
+
 # new op dev the branch and the printer are now defined by the userenv
 # but first we have to check if someone has tried to change them
 
 my $branch = $query->param('branch');
 if ($branch){
     # update our session so the userenv is updated
-    my $sessionID = $query->cookie("CGISESSID") ;
-    my $session = get_session($sessionID);
     $session->param('branch',$branch);
     my $branchname = GetBranchName($branch);
     $session->param('branchname',$branchname);
@@ -65,14 +66,10 @@ if ($branch){
 my $printer = $query->param('printer');
 if ($printer){
     # update our session so the userenv is updated
-  my $sessionID = $query->cookie("CGISESSID") ;
-  my $session = get_session($sessionID);
   $session->param('branchprinter',$printer);
 
 }
 if (!C4::Context->userenv && !$branch){
-  my $sessionID = $query->cookie("CGISESSID") ;
-  my $session = get_session($sessionID);
   if ($session->param('branch') eq 'NO_LIBRARY_SET'){
     # no branch set we can't issue
     print $query->redirect("/cgi-bin/koha/circ/selectbranchprinter.pl");
