@@ -845,12 +845,6 @@ sub CanBookBeIssued {
 "$res->{'reservedate'} : $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'})";
         }
     }
-    if ( C4::Context->preference("LibraryName") eq "Horowhenua Library Trust" ) {
-        if ( $borrower->{'categorycode'} eq 'W' ) {
-            my %emptyhash;
-            return ( \%emptyhash, \%needsconfirmation );
-        }
-	}
 	return ( \%issuingimpossible, \%needsconfirmation );
 }
 
