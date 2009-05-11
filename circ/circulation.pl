@@ -112,7 +112,7 @@ if (C4::Context->preference("AutoLocation") ne 1) { # FIXME: string comparison t
 }
 
 my $barcode        = $query->param('barcode') || '';
-$barcode =~  s/^[ \t]+|[ \t]+$//g; # remove leading/trailing whitespace
+$barcode =~  s/^\s*|\s*$//g; # remove leading/trailing whitespace
 
 $barcode = barcodedecode($barcode) if( $barcode && C4::Context->preference('itemBarcodeInputFilter'));
 my $stickyduedate  = $query->param('stickyduedate');
