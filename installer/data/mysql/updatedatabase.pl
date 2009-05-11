@@ -2396,6 +2396,16 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.01.00.031";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE branch_transfer_limits
+              MODIFY toBranch   varchar(10) NOT NULL,
+              MODIFY fromBranch varchar(10) NOT NULL,
+              MODIFY itemtype   varchar(10) NULL");
+    print "Upgrade to $DBversion done (fix column widths in branch_transfer_limits)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
