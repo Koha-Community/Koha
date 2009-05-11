@@ -53,7 +53,8 @@ C4::XSLT - Functions for displaying XSLT-generated content
 =cut
 
 sub transformMARCXML4XSLT {
-    my ($biblionumber, $record) = @_;
+    my ($biblionumber, $orig_record) = @_;
+    my $record = $orig_record->clone(); # not updating original record; this may be unnecessarily paranoid
     my $frameworkcode = GetFrameworkCode($biblionumber);
     my $tagslib = &GetMarcStructure(1,$frameworkcode);
     my @fields;
