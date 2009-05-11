@@ -2406,6 +2406,15 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.01.00.032";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(<<ENDOFRENEWAL);
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('RenewalPeriodBase', 'now', 'Set whether the renewal date should be counted from the date_due or from the moment the Patron asks for renewal ','date_due|now','Choice');
+ENDOFRENEWAL
+    print "Upgrade to $DBversion done (Change the field)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
