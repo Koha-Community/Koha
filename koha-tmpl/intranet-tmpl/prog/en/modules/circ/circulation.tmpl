@@ -94,7 +94,7 @@ $.tablesorter.addParser({
 <!-- TMPL_IF NAME="TOO_MANY" --><li>Too many checked out (already checked out / max : <!-- TMPL_VAR name="TOO_MANY" -->)</li><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="USERBLOCKEDREMAINING" --><li><!--TMPL_VAR Name="USERBLOCKEDREMAINING"--> Overdues</li><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="NOT_FOR_LOAN_CAN_FORCING" --><li>Item not for loan, are you sure you want to check it out ?</p><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="PATRON_CANT" --><li>This patron can't issue this item (issuing rules)</li><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="PATRON_CANT" --><li>This patron can't check out this item per library circulation policy</li><!-- /TMPL_IF -->
 </ul>
 
 <form method="post" action="/cgi-bin/koha/circ/circulation.pl">
