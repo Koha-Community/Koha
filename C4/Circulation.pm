@@ -648,6 +648,12 @@ sub CanBookBeIssued {
 	$item->{'itemtype'}=$item->{'itype'}; 
     my $dbh             = C4::Context->dbh;
 
+    # MANDATORY CHECKS - unless item exists, nothing else matters
+    unless ( $item->{barcode} ) {
+        $issuingimpossible{UNKNOWN_BARCODE} = 1;
+    }
+	return ( \%issuingimpossible, \%needsconfirmation ) if %issuingimpossible;
+
     #
     # DUE DATE is OK ? -- should already have checked.
     #
