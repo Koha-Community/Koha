@@ -54,7 +54,6 @@ C4::XSLT - Functions for displaying XSLT-generated content
 sub transformMARCXML4XSLT {
     my ($biblionumber, $orig_record) = @_;
     my $record = $orig_record->clone(); # not updating original record; this may be unnecessarily paranoid
-    my $biblio = GetBiblioData($biblionumber);
     my $frameworkcode = GetFrameworkCode($biblionumber);
     my $tagslib = &GetMarcStructure(1,$frameworkcode);
     my @fields;
@@ -80,7 +79,7 @@ sub transformMARCXML4XSLT {
                 $authvalue->{tagfield},
                 $field->indicator(1),
                 $field->indicator(2),
-                $authvalue->{tagsubfield} => @newSubfields
+                @newSubfields
             );
             $field->replace_with($newField);
         }
@@ -120,7 +119,7 @@ sub getAuthorisedValues4MARCSubfields {
 my $stylesheet;
 
 sub XSLTParse4Display {
-    my ($biblionumber, $orig_record, $xslfile) = @_;
+    my ( $biblionumber, $orig_record, $xsl_suffix ) = @_;
     # grab the XML, run it through our stylesheet, push it out to the browser
     my $record = transformMARCXML4XSLT($biblionumber, $orig_record);
     my $itemsxml  = buildKohaItemsNamespace($biblionumber);
@@ -132,6 +131,10 @@ sub XSLTParse4Display {
     my $source = $parser->parse_string($xmlrecord);
     unless ( $stylesheet ) {
         my $xslt = XML::LibXSLT->new();
+        my $xslfile = C4::Context->config('opachtdocs') . 
+                      "/prog/en/xslt/" .
+                      C4::Context->preference('marcflavour') .
+                      "slim2OPAC$xsl_suffix.xsl";
         my $style_doc = $parser->parse_file($xslfile);
         $stylesheet = $xslt->parse_stylesheet($style_doc);
     }
