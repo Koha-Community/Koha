@@ -48,7 +48,9 @@ KOHA.Google = {
                         '<div style="margin-bottom:5px; margin-top:-5px;font-size:9px">' +
                         '<a href="' + 
                         book.info_url + 
-                        '">Source Google</a></div>' 
+                        '"><img src="' +
+                        'http://books.google.com/intl/en/googlebooks/images/gbs_preview_sticker1.gif' +
+                        '"></a></div>' 
                         );
 				} else {
 					var message = document.createElement("span");
