@@ -2,6 +2,7 @@
 <title>Koha &rsaquo; Tools &rsaquo; Calendar</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR NAME="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script language="JavaScript" type="text/javascript">
 //<![CDATA[
 	// Captura el evento onmousemove para cualquier navegador
@@ -18,6 +19,8 @@
 	var mouseYMax = 0;
 	var mouseX = 0;
 	var mouseY = 0;
+	var weekdays = new Array("Sundays", "Mondays", "Tuesdays",
+	    		"Wednesdays", "Thursdays", "Fridays", "Saturdays");
 
 	function captureMousePosition(e) {
 	    if (document.layers) {
@@ -104,6 +107,19 @@
 	$(document).ready(function() {
 		$("#branch").change(function(){
 			changeBranch();
+		});
+		$("#holidayexceptions").tablesorter({
+		  sortList: [[0,0]]
+		});
+		$("#holidayweeklyrepeatable").tablesorter({
+		  sortList: [[0,0]]
+		});
+		$("#holidaysyearlyrepeatable").tablesorter({
+		  sortList: [[0,0]]
+		});
+		$("#holidaysunique").tablesorter({
+		  dateFormat: "uk",
+		  sortList: [[0,0]]
 		});
 	});
 //]]>
@@ -334,9 +350,107 @@ h1 select { width: 20em; }
 		}
 	);
 </script>
+
+<div id="holiday-list">
+<p>
+<!-- Exceptions First -->
+<!--   this will probably always have the least amount of data -->
+<!-- TMPL_IF NAME="EXCEPTION_HOLIDAYS_LOOP" -->
+<h3>Exceptions</h3>
+  <table id="holidayexceptions">
+<thead><tr>
+  <th class="exception">Year/Month/Day</th>
+  <th class="exception">Title</th>
+  <th class="exception">Description</th>
+</tr>
+</thead>
+<tbody>
+  <!-- TMPL_LOOP NAME="EXCEPTION_HOLIDAYS_LOOP" -->
+  <tr>
+  <td><!-- TMPL_VAR NAME="KEY" --></td>
+  <td><!-- TMPL_VAR NAME="TITLE" --></td>
+  <td><!-- TMPL_VAR NAME="DESCRIPTION" --></td> 
+  </tr>
+  <!-- /TMPL_LOOP --> 
+</tbody>
+</table>
+<!-- /TMPL_IF -->
+
+<!--TMPL_IF NAME="WEEK_DAYS_LOOP" -->
+<h3>Weekly - Repeatable Holidays</h3>
+<table id="holidayweeklyrepeatable">
+<thead>
+<tr>
+  <th class="repeatableday">Day of Week</th>
+  <th class="repeatableday">Title</th>
+  <th class="repeatableday">Description</th>
+</tr>
+</thead>
+<tbody>
+  <!-- TMPL_LOOP NAME="WEEK_DAYS_LOOP" -->
+  <tr>
+  <td>
+<script type="text/javascript">
+  document.write(weekdays[ <!-- TMPL_VAR NAME="KEY" -->]);
+</script>
+  </td> 
+  <td><!-- TMPL_VAR NAME="TITLE" --></td> 
+  <td><!-- TMPL_VAR NAME="DESCRIPTION" --></td> 
+  </tr>
+  <!-- /TMPL_LOOP --> 
+</tbody>
+</table>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="DAY_MONTH_HOLIDAYS_LOOP" -->
+<h3>Yearly - Repeatable Holidays</h3>
+<table id="holidaysyearlyrepeatable">
+<thead>
+<tr>
+  <th class="repeatableday">Month/Day</th>
+  <th class="repeatableday">Title</th>
+  <th class="repeatableday">Description</th>
+</tr>
+</thead>
+<tbody>
+  <!-- TMPL_LOOP NAME="DAY_MONTH_HOLIDAYS_LOOP" -->
+  <tr>
+  <td><!-- TMPL_VAR NAME="KEY" --></td>
+  <td><!-- TMPL_VAR NAME="TITLE" --></td> 
+  <td><!-- TMPL_VAR NAME="DESCRIPTION" --></td> 
+  </tr>
+  <!-- /TMPL_LOOP --> 
+</tbody>
+</table>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="HOLIDAYS_LOOP" -->
+<h3>Unique Holidays</h3>
+<table id="holidaysunique">
+<thead>
+<tr>
+  <th class="holiday">Year/Month/Day</th>
+  <th class="holiday">Title</th>
+  <th class="holiday">Description</th>
+</tr>
+</thead>
+<tbody>
+    <!-- TMPL_LOOP NAME="HOLIDAYS_LOOP" -->
+<tr>
+  <td><!-- TMPL_VAR NAME="KEY" --></td>
+  <td><!-- TMPL_VAR NAME="TITLE" --></td>
+  <td><!-- TMPL_VAR NAME="DESCRIPTION" --></td>
+</tr>
+  <!-- /TMPL_LOOP --> 
+</tbody>
+</table>
+<!-- /TMPL_IF -->
+</p>
 </div>
 </div>
 </div>
+</div>
+
 <div class="yui-b noprint">
 <!-- TMPL_INCLUDE NAME="tools-menu.inc" -->
 </div>
