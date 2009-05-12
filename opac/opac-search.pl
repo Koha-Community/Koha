@@ -455,7 +455,10 @@ for (my $i=0;$i<=@servers;$i++) {
 			}
 			$_ ->{'clean_isbn'} = $1;
 		}
-        $total = $total + $results_hashref->{$server}->{"hits"};
+      
+	if ($results_hashref->{$server}->{"hits"}){
+	    $total = $total + $results_hashref->{$server}->{"hits"};
+	}
         ## If there's just one result, redirect to the detail page
         if ($total == 1) {         
             my $biblionumber=$newresults[0]->{biblionumber};
