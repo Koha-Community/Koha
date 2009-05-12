@@ -17,6 +17,7 @@
 
 
 use strict;
+use warnings;
 use CGI;
 use C4::Koha;
 use C4::Biblio;
@@ -72,14 +73,16 @@ foreach my $biblionumber ( @bibs ) {
     my $collections =  GetKohaAuthorisedValues('items.ccode',$dat->{'frameworkcode'} );
 
 	for my $itm (@items) {
+	    if ($itm->{'location'}){
 	    $itm->{'location_description'} = $shelflocations->{$itm->{'location'} };
+		}
 	}
 	# COinS format FIXME: for books Only
         my $coins_format;
         my $fmt = substr $record->leader(), 6,2;
         my $fmts;
         $fmts->{'am'} = 'book';
-        $dat->{ocoins_format} => $fmts->{$fmt};
+        $dat->{ocoins_format} = $fmts->{$fmt};
 
     if ( $num % 2 == 1 ) {
         $dat->{'even'} = 1;
