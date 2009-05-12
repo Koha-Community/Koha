@@ -27,7 +27,7 @@ use C4::Koha;    # GetItemTypes
 use C4::Branch;  # GetBranches
 
 my $query = new CGI;
-my $op=$query->param("op");
+my $op=$query->param("op") || '';
 my $filename=$query->param("filename");
 my $dbh=C4::Context->dbh;
 my $marcflavour = C4::Context->preference("marcflavour");
@@ -50,7 +50,7 @@ my ($template, $loggedinuser, $cookie)
               C4::Context->userenv->{flags} !=1  &&
               C4::Context->userenv->{branch}?1:0);
 	my $branches = GetBranches($limit_ind_branch);    
-    my $branch                = $query->param("branch");
+    my $branch                = $query->param("branch") || '';
 	if ( C4::Context->preference("IndependantBranches") ) {
     	$branch = C4::Context->userenv->{'branch'};
 	}
@@ -127,7 +127,11 @@ if ($op eq "export") {
     $sth->execute(@sql_params);
     
     while (my ($biblionumber) = $sth->fetchrow) {
-        my $record = GetMarcBiblio($biblionumber);
+        my $record = eval{ GetMarcBiblio($biblionumber); };
+        # FIXME: decide how to handle records GetMarcBiblio can't parse or retrieve
+        if ($@) {
+            next;
+        }
         next if not defined $record;
         if ( $dont_export_items || $strip_nonlocal_items || $limit_ind_branch) {
             my ( $homebranchfield, $homebranchsubfield ) =
