@@ -109,17 +109,16 @@
 			changeBranch();
 		});
 		$("#holidayexceptions").tablesorter({
-		  sortList: [[0,0]]
+		  sortList: [[0,0]], widgets: ['zebra']
 		});
 		$("#holidayweeklyrepeatable").tablesorter({
-		  sortList: [[0,0]]
+		  sortList: [[0,0]], widgets: ['zebra']
 		});
 		$("#holidaysyearlyrepeatable").tablesorter({
-		  sortList: [[0,0]]
+		  sortList: [[0,0]], widgets: ['zebra']
 		});
 		$("#holidaysunique").tablesorter({
-		  dateFormat: "uk",
-		  sortList: [[0,0]]
+		  sortList: [[0,0]], widgets: ['zebra']
 		});
 	});
 //]]>
@@ -352,7 +351,6 @@ h1 select { width: 20em; }
 </script>
 
 <div id="holiday-list">
-<p>
 <!-- Exceptions First -->
 <!--   this will probably always have the least amount of data -->
 <!-- TMPL_IF NAME="EXCEPTION_HOLIDAYS_LOOP" -->
@@ -445,7 +443,6 @@ h1 select { width: 20em; }
 </tbody>
 </table>
 <!-- /TMPL_IF -->
-</p>
 </div>
 </div>
 </div>
