@@ -446,7 +446,7 @@ for (my $i=0;$i<=@servers;$i++) {
 		foreach (@newresults) {
 		    $_->{coins} = GetCOinSBiblio($_->{'biblionumber'});
 		}
-      }
+      
 	if ($results_hashref->{$server}->{"hits"}){
 	    $total = $total + $results_hashref->{$server}->{"hits"};
 	}
