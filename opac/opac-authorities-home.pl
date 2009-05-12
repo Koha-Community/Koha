@@ -83,6 +83,7 @@ if ( $op eq "do_search" ) {
     # multi page display gestion
     my $displaynext = 0;
     my $displayprev = $startfrom;
+    $total ||= 0;
     if ( ( $total - ( ( $startfrom + 1 ) * ($resultsperpage) ) ) > 0 ) {
         $displaynext = 1;
     }

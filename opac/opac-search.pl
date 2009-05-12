@@ -3,6 +3,7 @@
 # Mostly copied from search.pl, see POD there
 use strict;            # always use
 use warnings;
+
 ## STEP 1. Load things that are used in both search page and
 # results page and decide which template to load, operations 
 # to perform, etc.
@@ -180,7 +181,7 @@ if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {
 # $template->param(itypeloop=>\@itype_loop,);
 
 # The following should only be loaded if we're bringing up the advanced search template
-if ( $template_type eq 'advsearch' ) {
+if ( $template_type && $template_type eq 'advsearch' ) {
 
     # load the servers (used for searching -- to do federated searching, etc.)
     my $primary_servers_loop;# = displayPrimaryServers();
@@ -281,7 +282,8 @@ my @operators;
 
 # indexes are query qualifiers, like 'title', 'author', etc. They
 # can be single or multiple parameters separated by comma: kw,right-Truncation 
-my @indexes = exists($params->{'idx'}) ? split("\0",$params->{'idx'}) : ();
+my @indexes;
+@indexes = split("\0",$params->{'idx'}) if $params->{'idx'};
 
 # if a simple index (only one)  display the index used in the top search box
 if ($indexes[0] && !$indexes[1]) {
@@ -442,9 +444,12 @@ for (my $i=0;$i<=@servers;$i++) {
 			}
 		}
 		foreach (@newresults) {
-            $_->{coins} = GetCOinSBiblio($_->{'biblionumber'});
+		    $_->{coins} = GetCOinSBiblio($_->{'biblionumber'});
 		}
-        $total = $total + $results_hashref->{$server}->{"hits"} if $results_hashref->{$server}->{"hits"};
+      }
+	if ($results_hashref->{$server}->{"hits"}){
+	    $total = $total + $results_hashref->{$server}->{"hits"};
+	}
         ## If there's just one result, redirect to the detail page
         if ($total == 1) {         
             my $biblionumber=$newresults[0]->{biblionumber};
@@ -607,9 +612,13 @@ if ( C4::Context->preference("kohaspsuggest") ) {
 # VI. BUILD THE TEMPLATE
 # NOTE: not using application/atom+xml or application/rss+xml beccause of Internet Explorer 6;
 # see bug 2078.
-my $content_type = ($cgi->param('format') && $cgi->param('format') =~ /rss|atom/) ? "application/xml" :
-                   "text/html";
-
+my $content_type;
+if ($cgi->param('format') && $cgi->param('format') =~ /rss|atom/ ){
+    $content_type = "application/xml";
+}
+else {
+    $content_type = "text/html";
+}
 # Build drop-down list for 'Add To:' menu...
 my $session = get_session($cgi->cookie("CGISESSID"));
 my @addpubshelves;
