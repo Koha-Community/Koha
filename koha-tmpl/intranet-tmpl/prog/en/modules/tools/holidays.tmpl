@@ -105,6 +105,18 @@
 		$("#branch").change(function(){
 			changeBranch();
 		});
+		$("#holidayexceptions").tablesorter({
+		  sortList: [[0,0]], widgets: ['zebra']
+		});
+		$("#holidayweeklyrepeatable").tablesorter({
+		  sortList: [[0,0]], widgets: ['zebra']
+		});
+		$("#holidaysyearlyrepeatable").tablesorter({
+		  sortList: [[0,0]], widgets: ['zebra']
+		});
+		$("#holidaysunique").tablesorter({
+		  sortList: [[0,0]], widgets: ['zebra']
+		});
 	});
 //]]>
 </script>
@@ -334,6 +346,101 @@ h1 select { width: 20em; }
 		}
 	);
 </script>
+
+<div id="holiday-list">
+<!-- Exceptions First -->
+<!--   this will probably always have the least amount of data -->
+<!-- TMPL_IF NAME="EXCEPTION_HOLIDAYS_LOOP" -->
+<h3>Exceptions</h3>
+  <table id="holidayexceptions">
+<thead><tr>
+  <th class="exception">Year/Month/Day</th>
+  <th class="exception">Title</th>
+  <th class="exception">Description</th>
+</tr>
+</thead>
+<tbody>
+  <!-- TMPL_LOOP NAME="EXCEPTION_HOLIDAYS_LOOP" -->
+  <tr>
+  <td><!-- TMPL_VAR NAME="KEY" --></td>
+  <td><!-- TMPL_VAR NAME="TITLE" --></td>
+  <td><!-- TMPL_VAR NAME="DESCRIPTION" --></td> 
+  </tr>
+  <!-- /TMPL_LOOP --> 
+</tbody>
+</table>
+<!-- /TMPL_IF -->
+
+<!--TMPL_IF NAME="WEEK_DAYS_LOOP" -->
+<h3>Weekly - Repeatable Holidays</h3>
+<table id="holidayweeklyrepeatable">
+<thead>
+<tr>
+  <th class="repeatableday">Day of Week</th>
+  <th class="repeatableday">Title</th>
+  <th class="repeatableday">Description</th>
+</tr>
+</thead>
+<tbody>
+  <!-- TMPL_LOOP NAME="WEEK_DAYS_LOOP" -->
+  <tr>
+  <td>
+<script type="text/javascript">
+  document.write(weekdays[ <!-- TMPL_VAR NAME="KEY" -->]);
+</script>
+  </td> 
+  <td><!-- TMPL_VAR NAME="TITLE" --></td> 
+  <td><!-- TMPL_VAR NAME="DESCRIPTION" --></td> 
+  </tr>
+  <!-- /TMPL_LOOP --> 
+</tbody>
+</table>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="DAY_MONTH_HOLIDAYS_LOOP" -->
+<h3>Yearly - Repeatable Holidays</h3>
+<table id="holidaysyearlyrepeatable">
+<thead>
+<tr>
+  <th class="repeatableday">Month/Day</th>
+  <th class="repeatableday">Title</th>
+  <th class="repeatableday">Description</th>
+</tr>
+</thead>
+<tbody>
+  <!-- TMPL_LOOP NAME="DAY_MONTH_HOLIDAYS_LOOP" -->
+  <tr>
+  <td><!-- TMPL_VAR NAME="KEY" --></td>
+  <td><!-- TMPL_VAR NAME="TITLE" --></td> 
+  <td><!-- TMPL_VAR NAME="DESCRIPTION" --></td> 
+  </tr>
+  <!-- /TMPL_LOOP --> 
+</tbody>
+</table>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="HOLIDAYS_LOOP" -->
+<h3>Unique Holidays</h3>
+<table id="holidaysunique">
+<thead>
+<tr>
+  <th class="holiday">Year/Month/Day</th>
+  <th class="holiday">Title</th>
+  <th class="holiday">Description</th>
+</tr>
+</thead>
+<tbody>
+    <!-- TMPL_LOOP NAME="HOLIDAYS_LOOP" -->
+<tr>
+  <td><!-- TMPL_VAR NAME="KEY" --></td>
+  <td><!-- TMPL_VAR NAME="TITLE" --></td>
+  <td><!-- TMPL_VAR NAME="DESCRIPTION" --></td>
+</tr>
+  <!-- /TMPL_LOOP --> 
+</tbody>
+</table>
+<!-- /TMPL_IF -->
+</div>
 </div>
 </div>
 </div>
