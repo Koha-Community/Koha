@@ -1052,6 +1052,7 @@ sub GetCOinSBiblio {
     my ($aulast, $aufirst) = ('','');
     my $oauthors;
     my $title;
+    my $subtitle;
     my $pubyear;
     my $isbn;
     my $issn;
@@ -1132,10 +1133,12 @@ sub GetCOinSBiblio {
             }
         }
         $title      = "&amp;rft.btitle=".$record->subfield('245','a');
-        $pubyear    = $record->subfield("260","c") || "";
-        $publisher  = $record->subfield('260','b') || "";
-        $isbn       = $record->subfield('020','a') || "";
-        $issn       = $record->subfield('022','a') || "";
+        $subtitle   = $record->subfield('245', 'b') || '';
+        $title .= $subtitle;
+        $pubyear    = $record->subfield('260', 'c') || '';
+        $publisher  = $record->subfield('260', 'b') || '';
+        $isbn       = $record->subfield('020', 'a') || '';
+        $issn       = $record->subfield('022', 'a') || '';
 
     }
     my $coins_value = "ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3A$mtx$genre$title&amp;rft.isbn=$isbn&amp;rft.issn=$issn&amp;rft.aulast=$aulast&amp;rft.aufirst=$aufirst$oauthors&amp;rft.pub=$publisher&amp;rft.date=$pubyear";
