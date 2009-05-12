@@ -355,6 +355,11 @@ $(document).ready(function(){
                         <!-- TMPL_IF name="size" --> <!-- TMPL_VAR name="size" --><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="timestamp" --> <i>(modified on <!-- TMPL_VAR name="timestamp" -->)</i><!-- /TMPL_IF -->
                 </span>
+                <!-- TMPL_IF NAME="summary" -->
+                <span class="result_summary">
+                	<!-- TMPL_VAR name="summary" -->
+                </span>
+                <!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="copyrightdate" --><span class="results_summary"><span class="label">Date:</span><!-- TMPL_VAR NAME="copyrightdate" --></span><!-- /TMPL_IF -->
 
 				<span class="results_summary">
