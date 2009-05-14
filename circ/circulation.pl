@@ -66,9 +66,9 @@ if ($branch){
 my $printer = $query->param('printer');
 if ($printer){
     # update our session so the userenv is updated
-  $session->param('branchprinter',$printer);
-
+    $session->param('branchprinter',$printer);
 }
+
 if (!C4::Context->userenv && !$branch){
   if ($session->param('branch') eq 'NO_LIBRARY_SET'){
     # no branch set we can't issue
@@ -91,8 +91,8 @@ my $branches = GetBranches();
 my $printers = GetPrinters();
 
 my @failedrenews = $query->param('failedrenew');
-my @renew_failed;
-for (@failedrenews) { $renew_failed[$_] = 1; } 
+my %renew_failed;
+for (@failedrenews) { $renew_failed{$_} = 1; } 
 
 my $findborrower = $query->param('findborrower');
 $findborrower =~ s|,| |g;
@@ -112,8 +112,8 @@ my $barcode        = $query->param('barcode') || '';
 $barcode =~  s/^\s*|\s*$//g; # remove leading/trailing whitespace
 
 $barcode = barcodedecode($barcode) if( $barcode && C4::Context->preference('itemBarcodeInputFilter'));
-my $stickyduedate  = $query->param('stickyduedate') || $session->param( 'stickyduedate' );
-my $duedatespec    = $query->param('duedatespec') || $session->param( 'stickyduedate' );
+my $stickyduedate  = $query->param('stickyduedate') || $session->param('stickyduedate');
+my $duedatespec    = $query->param('duedatespec')   || $session->param('stickyduedate');
 my $issueconfirmed = $query->param('issueconfirmed');
 my $cancelreserve  = $query->param('cancelreserve');
 my $organisation   = $query->param('organisations');
@@ -201,17 +201,18 @@ if ( $print eq 'yes' && $borrowernumber ne '' ) {
 my $borrowerslist;
 my $message;
 if ($findborrower) {
-    my ( $count, $borrowers ) =
-      SearchMember($findborrower, 'cardnumber', 'web' );
+    my ($count, $borrowers) = SearchMember($findborrower, 'cardnumber', 'web');
     my @borrowers = @$borrowers;
+    if (C4::Context->preference("AddPatronLists")) {
         $template->param(
-                "AddPatronLists_".C4::Context->preference("AddPatronLists")=> "1",
+            "AddPatronLists_".C4::Context->preference("AddPatronLists")=> "1",
         );
         if (C4::Context->preference("AddPatronLists")=~/code/){
-                my $categories=GetBorrowercategoryList;
-                $categories->[0]->{'first'}=1;
-                $template->param(categories=>$categories);
+            my $categories = GetBorrowercategoryList;
+            $categories->[0]->{'first'} = 1;
+            $template->param(categories=>$categories);
         }
+    }
     if ( $#borrowers == -1 ) {
         $query->param( 'findborrower', '' );
         $message = "'$findborrower'";
@@ -234,39 +235,37 @@ if ($borrowernumber) {
     my ( $od, $issue, $fines ) = GetMemberIssuesAndFines( $borrowernumber );
 
     # Warningdate is the date that the warning starts appearing
-    my ( $today_year,   $today_month,   $today_day )   = Today();
-    my ( $warning_year, $warning_month, $warning_day ) = split /-/,
-      $borrower->{'dateexpiry'};
-    my ( $enrol_year, $enrol_month, $enrol_day ) = split /-/,
-      $borrower->{'dateenrolled'};
+    my (  $today_year,   $today_month,   $today_day) = Today();
+    my ($warning_year, $warning_month, $warning_day) = split /-/, $borrower->{'dateexpiry'};
+    my (  $enrol_year,   $enrol_month,   $enrol_day) = split /-/, $borrower->{'dateenrolled'};
     # Renew day is calculated by adding the enrolment period to today
-    my ( $renew_year, $renew_month, $renew_day ) =
+    my (  $renew_year,   $renew_month,   $renew_day) =
       Add_Delta_YM( $enrol_year, $enrol_month, $enrol_day,
         0 , $borrower->{'enrolmentperiod'}) if ($enrol_year*$enrol_month*$enrol_day>0);
     # if the expiry date is before today ie they have expired
     if ( $warning_year*$warning_month*$warning_day==0 
-      || Date_to_Days( $today_year, $today_month, $today_day ) 
-         > Date_to_Days( $warning_year, $warning_month, $warning_day ) )
+        || Date_to_Days($today_year,     $today_month, $today_day  ) 
+         > Date_to_Days($warning_year, $warning_month, $warning_day) )
     {
         #borrowercard expired, no issues
         $template->param(
-      flagged => "1",
-            noissues       => "1",
-            expired => format_date($borrower->{dateexpiry}),
-            renewaldate   => format_date("$renew_year-$renew_month-$renew_day")
+            flagged  => "1",
+            noissues => "1",
+            expired     => format_date($borrower->{dateexpiry}),
+            renewaldate => format_date("$renew_year-$renew_month-$renew_day")
         );
     }
     # check for NotifyBorrowerDeparture
-  elsif ( C4::Context->preference('NotifyBorrowerDeparture') &&
-    Date_to_Days(Add_Delta_Days($warning_year,$warning_month,$warning_day,- C4::Context->preference('NotifyBorrowerDeparture'))) <
-    Date_to_Days( $today_year, $today_month, $today_day ) ) 
-  {
-    # borrower card soon to expire warn librarian
-    $template->param("warndeparture" => format_date($borrower->{dateexpiry}),
-      flagged       => "1",);
-    if ( C4::Context->preference('ReturnBeforeExpiry')){
-      $template->param("returnbeforeexpiry" => 1);
-    }
+    elsif ( C4::Context->preference('NotifyBorrowerDeparture') &&
+            Date_to_Days(Add_Delta_Days($warning_year,$warning_month,$warning_day,- C4::Context->preference('NotifyBorrowerDeparture'))) <
+            Date_to_Days( $today_year, $today_month, $today_day ) ) 
+    {
+        # borrower card soon to expire warn librarian
+        $template->param("warndeparture" => format_date($borrower->{dateexpiry}),
+        flagged       => "1",);
+        if (C4::Context->preference('ReturnBeforeExpiry')){
+            $template->param("returnbeforeexpiry" => 1);
+        }
   }
     $template->param(
         overduecount => $od,
@@ -389,7 +388,7 @@ if ($borrowernumber) {
         {
             $getreserv{nottransfered}   = 1;
             $getreserv{nottransferedby} =
-              GetBranchName( $getiteminfo->{'holdingbranch'} );
+            GetBranchName( $getiteminfo->{'holdingbranch'} );
         }
 
 #         if we don't have a reserv on item, we put the biblio infos and the waiting position
@@ -401,7 +400,7 @@ if ($borrowernumber) {
             $getreserv{nottransfered}   = 0;
             $getreserv{itemtype}        = $getbibtype->{'description'};
             $getreserv{author}          = $getbibinfo->{'author'};
-          $getreserv{biblionumber}    = $num_res->{'biblionumber'};
+            $getreserv{biblionumber}    = $num_res->{'biblionumber'};
         }
         $getreserv{waitingposition} = $num_res->{'priority'};
         push( @reservloop, \%getreserv );
@@ -461,7 +460,7 @@ if ($borrower) {
         $it->{'dd'} = format_date($it->{'date_due'});
         $it->{'od'} = ( $it->{'date_due'} lt $todaysdate ) ? 1 : 0 ;
         ($it->{'author'} eq '') and $it->{'author'} = ' ';
-        $it->{'renew_failed'} = $renew_failed[$it->{'itemnumber'}];
+        $it->{'renew_failed'} = $renew_failed{$it->{'itemnumber'}};
         # ADDED BY JF: NEW ITEMTYPE COUNT DISPLAY
         $issued_itemtypes_count->{ $it->{'itemtype'} }++;
 
@@ -497,7 +496,6 @@ FROM issuingrules
   LEFT JOIN itemtypes ON (itemtypes.itemtype=issuingrules.itemtype)
   WHERE categorycode=?
 " );
-#my @issued_itemtypes_count;  # huh?
 $issueqty_sth->execute("*");	# This is a literal asterisk, not a wildcard.
 
 while ( my $data = $issueqty_sth->fetchrow_hashref() ) {
