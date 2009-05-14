@@ -21,16 +21,17 @@
 <!-- TMPL_IF NAME="start_dictionary" -->
 <p>Use the dictionary to define custom criteria for reporting.</p>
 
-<!-- TMPL_IF NAME="definitions" -->
+
 <h2>Current Terms</h2>
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
+<input type="hidden" name="phase" value="View Dictionary" />
 Filter by area <select name="areas">
-<option value="All">All</option>
+<option value="">All</option>
 <!-- TMPL_LOOP NAME="areas" -->     
 <option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name"--></option>                  
 <!-- /TMPL_LOOP -->                
 </select> 
-<input name="phase" value="Go" type="submit" />
+<input name="submit" value="Go" type="submit" />
 </form>
 <br />
 <table border="1" cellspacing="0" cellpadding="5">
@@ -41,6 +42,7 @@ Filter by area <select name="areas">
 <th>Definition</th>
 <th>&nbsp;</th>
 </tr>
+<!-- TMPL_IF NAME="definitions" -->
 <!-- TMPL_LOOP NAME="definitions" -->
 <tr valign="top">
 <td><!-- TMPL_VAR NAME="name" --></td>
@@ -54,7 +56,8 @@ Filter by area <select name="areas">
 </form></td>
 </tr>
 <!-- /TMPL_LOOP -->
-</table><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+<!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+</table>
 <!-- /TMPL_IF -->
 
 
