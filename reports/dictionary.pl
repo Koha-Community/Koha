@@ -18,6 +18,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 use CGI::Carp qw(fatalsToBrowser warningsToBrowser);
 use strict;
+use warnings;
 use C4::Auth;
 use CGI;
 use C4::Output;
@@ -38,7 +39,8 @@ Script to control the guided report creation
 my $input = new CGI;
 my $referer = $input->referer();
 
-my $phase = $input->param('phase');
+my $phase = $input->param('phase') || 'View Dictionary';
+my $area = $input->param('areas') || '';
 my $no_html = 0; # this will be set if we dont want to print out an html::template
 my 	( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -54,7 +56,7 @@ my 	( $template, $borrowernumber, $cookie ) = get_template_and_user(
 if ($phase eq 'View Dictionary'){
 	# view the dictionary we use to set up abstract variables such as all borrowers over fifty who live in a certain town
 	my $areas = get_report_areas();
-	my $definitions = get_from_dictionary();
+	my $definitions = get_from_dictionary($area);
 	$template->param( 'areas' => $areas ,
 		'start_dictionary' => 1,
 		'definitions' => $definitions,
