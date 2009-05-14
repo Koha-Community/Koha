@@ -125,6 +125,12 @@ foreach my $subscription (@subscriptions) {
 
 $dat->{'count'} = scalar(@items);
 
+# If there are no items or the syspref says so, we show serial collection as default tab
+if ($dat->{'count'} == 0 || C4::Context->preference('opacSerialDefaultTab') eq 'serialcollection') {
+	$dat->{'defaultserialcollection'} = 1;
+	
+}
+
 my $biblio_authorised_value_images = C4::Items::get_authorised_value_images( C4::Biblio::get_biblio_authorised_values( $biblionumber, $record ) );
 
 my $norequests = 1;
@@ -283,6 +289,28 @@ if (C4::Context->preference("OPACFRBRizeEditions")==1) {
     };
     if ($@) { warn "XISBN Failed $@"; }
 }
+
+# Serial Collection
+my @sc_fields = $record->field(955);
+my @serialcollections = ();
+
+foreach my $sc_field (@sc_fields) {
+    my %row_data;
+
+    $row_data{text}    = $sc_field->subfield('r');
+    $row_data{branch}  = $sc_field->subfield('9');
+
+    if ($row_data{text} && $row_data{branch}) { 
+	push (@serialcollections, \%row_data);
+    }
+}
+
+if (scalar(@serialcollections) > 0) {
+    $template->param(
+	serialcollection  => 1,
+	serialcollections => \@serialcollections);
+}
+
 # Amazon.com Stuff
 if ( C4::Context->preference("OPACAmazonEnabled") ) {
     $template->param( AmazonTld => get_amazon_tld() );
