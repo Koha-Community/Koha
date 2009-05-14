@@ -125,7 +125,7 @@ sub return_error {
     exit;
 }
 
-=head return_multi
+=head2 return_multi
 
 =over 4
 
@@ -228,7 +228,7 @@ sub require_params {
     return @values;
 }
 
-=head dispatch
+=head2 dispatch
 
 =over 4
 
