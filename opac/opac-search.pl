@@ -632,9 +632,9 @@ if (defined $barshelves) {
 
 my $content_type;
 
-if ($cgi->param('format') =~ /rss/) {
+if ($cgi->param('format') && $cgi->param('format') =~ /rss/) {
     $content_type = 'rss'
-} elsif ($cgi->param('format') =~ /atom/) {
+} elsif ($cgi->param('format') && $cgi->param('format') =~ /atom/) {
     $content_type = 'atom'
 } else {
     $content_type = 'html'
