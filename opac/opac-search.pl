@@ -644,4 +644,14 @@ if (defined $barshelves) {
 	$template->param( addbarshelvesloop => $barshelves);
 }
 
-output_html_with_http_headers $cgi, $cookie, $template->output, $content_type;
+my $content_type;
+
+if ($cgi->param('format') && $cgi->param('format') =~ /rss/) {
+    $content_type = 'rss'
+} elsif ($cgi->param('format') && $cgi->param('format') =~ /atom/) {
+    $content_type = 'atom'
+} else {
+    $content_type = 'html'
+}
+
+output_with_http_headers $cgi, $cookie, $template->output, $content_type;
