@@ -23,6 +23,7 @@ use C4::Items;
 use C4::Koha;
 use C4::Biblio;
 use C4::Circulation;
+use Encode;
 use XML::LibXML;
 use XML::LibXSLT;
 
@@ -52,8 +53,7 @@ C4::XSLT - Functions for displaying XSLT-generated content
 =cut
 
 sub transformMARCXML4XSLT {
-    my ($biblionumber, $orig_record) = @_;
-    my $record = $orig_record->clone(); # not updating original record; this may be unnecessarily paranoid
+    my ($biblionumber, $record) = @_;
     my $frameworkcode = GetFrameworkCode($biblionumber);
     my $tagslib = &GetMarcStructure(1,$frameworkcode);
     my @fields;
@@ -62,26 +62,24 @@ sub transformMARCXML4XSLT {
         @fields = $record->fields();
     };
     if ($@) { warn "PROBLEM WITH RECORD"; next; }
-    my $list_of_authvalues = getAuthorisedValues4MARCSubfields($frameworkcode);
-    for my $authvalue (@$list_of_authvalues) {
-        for my $field ( $record->field($authvalue->{tagfield}) ) {
-            my @newSubfields = ();
-            for my $subfield ( $field->subfields() ) {
-                my ($code,$data) = @$subfield;
-                unless ($code eq $authvalue->{tagsubfield}) {
-                    push ( @newSubfields, $code, $data );
-                } else {
-                    my $newvalue = GetAuthorisedValueDesc( $authvalue->{tagfield}, $code, $data, '', $tagslib );
-                    push ( @newSubfields, $code, $newvalue );
-                }
+    my $av = getAuthorisedValues4MARCSubfields($frameworkcode);
+    foreach my $tag ( keys %$av ) {
+        foreach my $field ( $record->field( $tag ) ) {
+            if ( $av->{ $tag } ) {
+                my @new_subfields = ();
+                for my $subfield ( $field->subfields() ) {
+                    my ( $letter, $value ) = @$subfield;
+                    $value = GetAuthorisedValueDesc( $tag, $letter, $value, '', $tagslib )
+                        if $av->{ $tag }->{ $letter };
+                    push( @new_subfields, $letter, $value );
+                } 
+                $field ->replace_with( MARC::Field->new(
+                    $tag,
+                    $field->indicator(1),
+                    $field->indicator(2),
+                    @new_subfields
+                ) );
             }
-            my $newField = MARC::Field->new(
-                $authvalue->{tagfield},
-                $field->indicator(1),
-                $field->indicator(2),
-                @newSubfields
-            );
-            $field->replace_with($newField);
         }
     }
     return $record;
@@ -89,7 +87,7 @@ sub transformMARCXML4XSLT {
 
 =head1 getAuthorisedValues4MARCSubfields
 
-=head2 returns an array of hash refs for authorised value tag/subfield combos for a given framework
+=head2 returns an ref of hash of ref of hash for tag -> letter controled bu authorised values
 
 =cut
 
@@ -100,7 +98,6 @@ my %authval_per_framework;
 sub getAuthorisedValues4MARCSubfields {
     my ($frameworkcode) = @_;
     unless ( $authval_per_framework{ $frameworkcode } ) {
-        my @results;
         my $dbh = C4::Context->dbh;
         my $sth = $dbh->prepare("SELECT DISTINCT tagfield, tagsubfield
                                  FROM marc_subfield_structure
@@ -108,10 +105,11 @@ sub getAuthorisedValues4MARCSubfields {
                                    AND authorised_value!=''
                                    AND frameworkcode=?");
         $sth->execute( $frameworkcode );
-        while ( my $result = $sth->fetchrow_hashref() ) {
-            push ( @results, $result );
+        my $av = { };
+        while ( my ( $tag, $letter ) = $sth->fetchrow() ) {
+            $av->{ $tag }->{ $letter } = 1;
         }
-        $authval_per_framework{ $frameworkcode } = \@results;
+        $authval_per_framework{ $frameworkcode } = $av;
     }
     return $authval_per_framework{ $frameworkcode };
 }
@@ -122,6 +120,7 @@ sub XSLTParse4Display {
     my ( $biblionumber, $orig_record, $xsl_suffix ) = @_;
     # grab the XML, run it through our stylesheet, push it out to the browser
     my $record = transformMARCXML4XSLT($biblionumber, $orig_record);
+    #return $record->as_formatted();
     my $itemsxml  = buildKohaItemsNamespace($biblionumber);
     my $xmlrecord = $record->as_xml();
     $xmlrecord =~ s/\<\/record\>/$itemsxml\<\/record\>/;
@@ -181,12 +180,14 @@ sub buildKohaItemsNamespace {
         } else {
             $status = "available";
         }
-        $xml.="<item><homebranch>".$branches->{$item->{homebranch}}->{'branchname'}."</homebranch>".
+        my $homebranch = $branches->{$item->{homebranch}}->{'branchname'};
+        $xml.= "<item><homebranch>$homebranch</homebranch>".
 		"<status>$status</status>".
 		"<itemcallnumber>".$item->{'itemcallnumber'}."</itemcallnumber></item>";
 
     }
-    return "<items xmlns='http://www.koha.org/items'>".$xml."</items>";
+    $xml = "<items xmlns=\"http://www.koha.org/items\">".$xml."</items>";
+    return $xml;
 }
 
 
