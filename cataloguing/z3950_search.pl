@@ -42,6 +42,9 @@ my $issn          = $input->param('issn');
 my $lccn          = $input->param('lccn');
 my $subject       = $input->param('subject');
 my $dewey         = $input->param('dewey');
+my $controlnumber	= $input->param('controlnumber');
+my $stdid			= $input->param('stdid');
+my $srchany			= $input->param('srchany');
 my $random        = $input->param('random') || rand(1000000000); # this var is not useful anymore just kept for rel2_2 compatibility
 my $op            = $input->param('op');
 my $numberpending;
@@ -86,6 +89,9 @@ if ( $op ne "do_search" ) {
         lccn         => $lccn,
         title        => $title,
         author       => $author,
+        controlnumber=> $controlnumber,
+        stdid			=> $stdid,
+        srchany		=> $srchany,
         serverloop   => $serverloop,
         opsearch     => "search",
         biblionumber => $biblionumber,
@@ -127,6 +133,18 @@ else {
     }
 	if ($lccn) {	
         $query .= " \@attr 1=9 $lccn ";
+        $nterms++;
+    }
+    if ($controlnumber) {
+        $query .= " \@attr 1=12 \"$controlnumber\" ";
+        $nterms++;
+    }
+    if ($stdid) {
+        $query .= " \@attr 1=1007 \"$stdid\" ";
+        $nterms++;
+    }
+    if ($srchany) {
+        $query .= " \@attr 1=1016 \"$srchany\" ";
         $nterms++;
     }
 for my $i (1..$nterms-1) {
