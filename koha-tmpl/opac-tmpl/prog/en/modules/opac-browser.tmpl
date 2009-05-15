@@ -10,35 +10,36 @@
 	<div class="yui-b"><div class="yui-g">
 <div class="container">
     <h1>Browse our catalogue</h1>
-        <!-- TMPL_IF name="HIERARCHY_LOOP" -->
+        <!-- TMPL_IF name="have_hierarchy" -->
         <ul>
         <li>
             <!-- TMPL_VAR name="description" --> <a href="opac-browser.pl">Top level</a>
         </li>
-        <ul>
+        <li style="list-style-type: none;"><ul>
         <!-- TMPL_LOOP name="HIERARCHY_LOOP" -->
                 <li>
-                    <a href="opac-browser.pl?level=<!-- TMPL_VAR name="level"-->&filter=<!-- TMPL_VAR name="classification"-->"><!-- TMPL_VAR name="description" --></a>
+                    <a href="opac-browser.pl?level=<!-- TMPL_VAR name="level"-->&amp;filter=<!-- TMPL_VAR name="classification" ESCAPE="uri" -->"><!-- TMPL_VAR name="description" ESCAPE="html" --></a>
                 </li>
-            <ul>
+            <li  style="list-style-type: none;"><ul>
         <!-- /TMPL_LOOP -->
-        <table><tr>
+        <li style="list-style-type: none;"><table><tr>
         <!-- TMPL_LOOP name="LEVEL_LOOP" -->
                 <td width="33%">
                 <p>
                 <!-- TMPL_IF name="endnode" -->
-                    <a href="opac-search.pl?q=Dewey-classification:<!-- TMPL_VAR name="classification" -->"><!-- TMPL_VAR name="description" --></a>
+                    <a href="opac-search.pl?q=Dewey-classification:<!-- TMPL_VAR name="classification" ESCAPE="uri" -->"><!-- TMPL_VAR name="description" ESCAPE="html" --></a>
                 <!-- TMPL_ELSE -->
-                    <a href="opac-browser.pl?level=<!-- TMPL_VAR name="level"-->&filter=<!-- TMPL_VAR name="classification"-->"><!-- TMPL_VAR name="description" --></a>
+                    <a href="opac-browser.pl?level=<!-- TMPL_VAR name="level"-->&amp;filter=<!-- TMPL_VAR name="classification" ESCAPE="uri" -->"><!-- TMPL_VAR name="description" ESCAPE="html" --></a>
                 <!-- /TMPL_IF --></p>
                 <p style="font-size:0.75em"><i>(<!-- TMPL_VAR name="number"--> biblios)</i></p>
                 </td>
                 <!-- TMPL_IF name="count3" --></tr><tr><!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
+        </tr></table></li>
         <!-- TMPL_LOOP name="HIERARCHY_LOOP" -->
-            </ul>
+            </ul></li>
         <!-- /TMPL_LOOP -->
-        </ul>
+        </ul></li></ul>
         <!-- TMPL_ELSE -->
             <div class="warning">The browser table is empty. this feature is not fully set-up. See the <a href="http://wiki.koha.org/doku.php?id=opacbrowser">Koha Wiki</a> for more information on what it does and how to configure it.</div>
         <!-- /TMPL_IF -->
