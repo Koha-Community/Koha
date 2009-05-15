@@ -69,21 +69,9 @@ Get Summary data from Syndetics
 sub get_syndetics_index {
     my ( $isbn,$upc,$oclc ) = @_;
 
-    # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
-    my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
-
-    my $url = "http://www.syndetics.com/index.aspx?isbn=$isbn/INDEX.XML&client=$syndetics_client_code&type=xw10&upc=$upc&oclc=$oclc";
-
-    my $ua = LWP::UserAgent->new;
-    $ua->timeout(10);
-    $ua->env_proxy;
-    my $response = $ua->get($url);
-    unless ($response->content_type =~ /xml/) {
-        return;
-    }
+    my $response = _fetch_syndetics_content('INDEX.XML', $isbn, $upc, $oclc);
 
     my $content = $response->content;
-    warn "could not retrieve $url" unless $content;
     my $xmlsimple = XML::Simple->new();
     $response = $xmlsimple->XMLin(
         $content,
@@ -102,29 +90,21 @@ sub get_syndetics_index {
 sub get_syndetics_summary {
     my ( $isbn, $upc, $oclc, $syndetics_elements ) = @_;
 
-    # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
-    my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
-
-    my $summary_type = exists($syndetics_elements->{'AVSUMMARY'}) ? 'AVSUMMARY' : 'SUMMARY';
-    my $url = "http://www.syndetics.com/index.aspx?isbn=$isbn/$summary_type.XML&client=$syndetics_client_code&type=xw10&upc=$upc&oclc=$oclc";
-    my $ua = LWP::UserAgent->new;
-    $ua->timeout(10);
-    $ua->env_proxy;
-    my $response = $ua->get($url);
+    my $summary_type = exists($syndetics_elements->{'AVSUMMARY'}) ? 'AVSUMMARY.XML' : 'SUMMARY.XML';
+    my $response = _fetch_syndetics_content($summary_type, $isbn, $upc, $oclc);
     unless ($response->content_type =~ /xml/) {
         return;
     }  
 
     my $content = $response->content;
 
-    warn "could not retrieve $url" unless $content;
     my $summary;
     eval { 
         my $doc = $parser->parse_string($content);
         $summary = $doc->findvalue('//Fld520');
     };
     if ($@) {
-        warn "Error parsing response from $url";
+        warn "Error parsing Syndetics $summary_type";
     }
     return $summary if $summary;
 }
@@ -132,21 +112,12 @@ sub get_syndetics_summary {
 sub get_syndetics_toc {
     my ( $isbn,$upc,$oclc ) = @_;
 
-    # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
-    my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
-
-    my $url = "http://www.syndetics.com/index.aspx?isbn=$isbn/TOC.XML&client=$syndetics_client_code&type=xw10&upc=$upc&oclc=$oclc";
-    my $ua = LWP::UserAgent->new;
-    $ua->timeout(10);
-    $ua->env_proxy;
-        
-    my $response = $ua->get($url);
+    my $response = _fetch_syndetics_content('TOC.XML', $isbn, $upc, $oclc);
     unless ($response->content_type =~ /xml/) {
         return;
     }  
 
     my $content = $response->content;
-    warn "could not retrieve $url" unless $content;
     my $xmlsimple = XML::Simple->new();
     $response = $xmlsimple->XMLin(
         $content,
@@ -161,20 +132,12 @@ sub get_syndetics_toc {
 sub get_syndetics_excerpt {
     my ( $isbn,$upc,$oclc ) = @_;
 
-    # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
-    my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
-
-    my $url = "http://www.syndetics.com/index.aspx?isbn=$isbn/DBCHAPTER.XML&client=$syndetics_client_code&type=xw10&upc=$upc&oclc=$oclc";
-    my $ua = LWP::UserAgent->new;
-    $ua->timeout(10);
-    $ua->env_proxy;
-    my $response = $ua->get($url);
+    my $response = _fetch_syndetics_content('DBCHAPTER.XML', $isbn, $upc, $oclc);
     unless ($response->content_type =~ /xml/) {
         return;
     }  
         
     my $content = $response->content;
-    warn "could not retrieve $url" unless $content;
     my $xmlsimple = XML::Simple->new();
     $response = $xmlsimple->XMLin(
         $content,
@@ -189,8 +152,6 @@ sub get_syndetics_excerpt {
 sub get_syndetics_reviews {
     my ( $isbn,$upc,$oclc,$syndetics_elements ) = @_;
 
-    # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
-    my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
     my @reviews;
     my $review_sources = [
     {title => 'Library Journal Review', file => 'LJREVIEW.XML', element => 'LJREVIEW'},
@@ -211,19 +172,12 @@ sub get_syndetics_reviews {
             #warn "Skipping $source->{element} doesn't match $syndetics_elements->{$source->{element}} \n";
             next;
         }
-        my $url = "http://www.syndetics.com/index.aspx?isbn=$isbn/$source->{file}&client=$syndetics_client_code&type=xw10&upc=$upc&oclc=$oclc";
-
-        my $ua = LWP::UserAgent->new;
-        $ua->timeout(10);
-        $ua->env_proxy;
- 
-        my $response = $ua->get($url);
+        my $response = _fetch_syndetics_content($source->{file}, $isbn, $upc, $oclc);
         unless ($response->content_type =~ /xml/) {
             next;
         }
 
         my $content = $response->content;
-        warn "could not retrieve $url" unless $content;
        
         eval { 
             my $doc = $parser->parse_string($content);
@@ -238,7 +192,7 @@ sub get_syndetics_reviews {
             push @reviews, {title => $source->{title}, reviews => [ { content => $result } ]} if $result;
         };
         if ($@) {
-            warn "Error parsing response from $url";
+            warn "Error parsing Syndetics $source->{title} review";
         }
     }
     return \@reviews;
@@ -247,22 +201,13 @@ sub get_syndetics_reviews {
 sub get_syndetics_editions {
     my ( $isbn,$upc,$oclc ) = @_;
 
-    # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
-    my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
-
-    my $url = "http://www.syndetics.com/index.aspx?isbn=$isbn/FICTION.XML&client=$syndetics_client_code&type=xw10&upc=$upc&oclc=$oclc";
-    my $ua = LWP::UserAgent->new;
-    $ua->timeout(10);
-    $ua->env_proxy;
-
-    my $response = $ua->get($url);
+    my $response = _fetch_syndetics_content('FICTION.XML', $isbn, $upc, $oclc);
     unless ($response->content_type =~ /xml/) {
         return;
     }  
 
     my $content = $response->content;
 
-    warn "could not retrieve $url" unless $content;
     my $xmlsimple = XML::Simple->new();
     $response = $xmlsimple->XMLin(
         $content,
@@ -277,22 +222,13 @@ sub get_syndetics_editions {
 sub get_syndetics_anotes {
     my ( $isbn,$upc,$oclc) = @_;
 
-    # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
-    my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
-
-    my $url = "http://www.syndetics.com/index.aspx?isbn=$isbn/ANOTES.XML&client=$syndetics_client_code&type=xw10&upc=$upc&oclc=$oclc";
-    my $ua = LWP::UserAgent->new;
-    $ua->timeout(10);
-    $ua->env_proxy;
-
-    my $response = $ua->get($url);
+    my $response = _fetch_syndetics_content('ANOTES.XML', $isbn, $upc, $oclc);
     unless ($response->content_type =~ /xml/) {
         return;
     }
 
     my $content = $response->content;
 
-    warn "could not retrieve $url" unless $content;
     my $xmlsimple = XML::Simple->new();
     $response = $xmlsimple->XMLin(
         $content,
@@ -315,6 +251,25 @@ sub get_syndetics_anotes {
     return \@anotes;
 }
 
+sub _fetch_syndetics_content {
+    my ( $element, $isbn, $upc, $oclc ) = @_;
+
+    $isbn = '' unless defined $isbn;
+    $upc  = '' unless defined $upc;
+    $oclc = '' unless defined $oclc;
+
+    my $syndetics_client_code = C4::Context->preference('SyndeticsClientCode');
+
+    my $url = "http://www.syndetics.com/index.aspx?isbn=$isbn/$element&client=$syndetics_client_code&type=xw10&upc=$upc&oclc=$oclc";
+    my $ua = LWP::UserAgent->new;
+    $ua->timeout(10);
+    $ua->env_proxy;
+    my $response = $ua->get($url);
+
+    warn "could not retrieve $url" unless $response->content;
+    return $response;
+
+}
 1;
 __END__
 

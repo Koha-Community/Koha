@@ -328,8 +328,7 @@ if ( C4::Context->preference("SyndeticsEnabled") ) {
 
 if ( C4::Context->preference("SyndeticsEnabled")
         && C4::Context->preference("SyndeticsSummary")
-        && (    $syndetics_elements->{'SUMMARY'}   =~ /SUMMARY/
-             || $syndetics_elements->{'AVSUMMARY'} =~ /AVSUMMARY/ ) ) {
+        && ( exists($syndetics_elements->{'SUMMARY'}) || exists($syndetics_elements->{'AVSUMMARY'}) ) ) {
 	eval {
 	my $syndetics_summary = &get_syndetics_summary($isbn,$upc,$oclc, $syndetics_elements);
 	$template->param( SYNDETICS_SUMMARY => $syndetics_summary );
@@ -340,7 +339,7 @@ if ( C4::Context->preference("SyndeticsEnabled")
 
 if ( C4::Context->preference("SyndeticsEnabled")
         && C4::Context->preference("SyndeticsTOC")
-        && $syndetics_elements->{'TOC'} =~ /TOC/) {
+        && exists($syndetics_elements->{'TOC'}) ) {
 	eval {
     my $syndetics_toc = &get_syndetics_toc($isbn,$upc,$oclc);
     $template->param( SYNDETICS_TOC => $syndetics_toc );
@@ -350,7 +349,7 @@ if ( C4::Context->preference("SyndeticsEnabled")
 
 if ( C4::Context->preference("SyndeticsEnabled")
     && C4::Context->preference("SyndeticsExcerpt")
-    && $syndetics_elements->{'DBCHAPTER'} =~ /DBCHAPTER/ ) {
+    && exists($syndetics_elements->{'DBCHAPTER'}) ) {
     eval {
     my $syndetics_excerpt = &get_syndetics_excerpt($isbn,$upc,$oclc);
     $template->param( SYNDETICS_EXCERPT => $syndetics_excerpt );
@@ -369,7 +368,7 @@ if ( C4::Context->preference("SyndeticsEnabled")
 
 if ( C4::Context->preference("SyndeticsEnabled")
     && C4::Context->preference("SyndeticsAuthorNotes")
-	&& $syndetics_elements->{'ANOTES'} =~ /ANOTES/ ) {
+	&& exists($syndetics_elements->{'ANOTES'}) ) {
     eval {
     my $syndetics_anotes = &get_syndetics_anotes($isbn,$upc,$oclc);
     $template->param( SYNDETICS_ANOTES => $syndetics_anotes );
