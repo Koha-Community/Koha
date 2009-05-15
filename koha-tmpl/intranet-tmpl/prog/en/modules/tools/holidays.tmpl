@@ -357,7 +357,7 @@ h1 select { width: 20em; }
 <h3>Exceptions</h3>
   <table id="holidayexceptions">
 <thead><tr>
-  <th class="exception">Year/Month/Day</th>
+  <th class="exception">Date</th>
   <th class="exception">Title</th>
   <th class="exception">Description</th>
 </tr>
@@ -365,7 +365,7 @@ h1 select { width: 20em; }
 <tbody>
   <!-- TMPL_LOOP NAME="EXCEPTION_HOLIDAYS_LOOP" -->
   <tr>
-  <td><!-- TMPL_VAR NAME="KEY" --></td>
+  <td><!-- TMPL_VAR NAME="DATE" --></td>
   <td><!-- TMPL_VAR NAME="TITLE" --></td>
   <td><!-- TMPL_VAR NAME="DESCRIPTION" --></td> 
   </tr>
@@ -405,7 +405,11 @@ h1 select { width: 20em; }
 <table id="holidaysyearlyrepeatable">
 <thead>
 <tr>
+  <!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
+  <th class="repeatableday">Day/Month</th>
+  <!-- TMPL_ELSE -->
   <th class="repeatableday">Month/Day</th>
+  <!-- /TMPL_IF -->
   <th class="repeatableday">Title</th>
   <th class="repeatableday">Description</th>
 </tr>
@@ -413,7 +417,7 @@ h1 select { width: 20em; }
 <tbody>
   <!-- TMPL_LOOP NAME="DAY_MONTH_HOLIDAYS_LOOP" -->
   <tr>
-  <td><!-- TMPL_VAR NAME="KEY" --></td>
+  <td><!-- TMPL_VAR NAME="DATE" --></td>
   <td><!-- TMPL_VAR NAME="TITLE" --></td> 
   <td><!-- TMPL_VAR NAME="DESCRIPTION" --></td> 
   </tr>
@@ -427,7 +431,7 @@ h1 select { width: 20em; }
 <table id="holidaysunique">
 <thead>
 <tr>
-  <th class="holiday">Year/Month/Day</th>
+  <th class="holiday">Date</th>
   <th class="holiday">Title</th>
   <th class="holiday">Description</th>
 </tr>
@@ -435,7 +439,7 @@ h1 select { width: 20em; }
 <tbody>
     <!-- TMPL_LOOP NAME="HOLIDAYS_LOOP" -->
 <tr>
-  <td><!-- TMPL_VAR NAME="KEY" --></td>
+  <td><!-- TMPL_VAR NAME="DATE" --></td>
   <td><!-- TMPL_VAR NAME="TITLE" --></td>
   <td><!-- TMPL_VAR NAME="DESCRIPTION" --></td>
 </tr>

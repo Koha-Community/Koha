@@ -104,7 +104,9 @@ sub _init {
     while (my $row = $repeatable->fetchrow_hashref) {
         my $key = $row->{month} . "/" . $row->{day};
         $day_month_holidays{$key}{title}       = $row->{title};
-        $day_month_holidays{$key}{description} = $row->{description}
+        $day_month_holidays{$key}{description} = $row->{description};
+        $day_month_holidays{$key}{day} = sprintf("%02d", $row->{day});
+        $day_month_holidays{$key}{month} = sprintf("%02d", $row->{month});
     }
     $self->{'day_month_holidays'} = \%day_month_holidays;
 
@@ -117,6 +119,8 @@ sub _init {
     while (my ($day, $month, $year, $title, $description) = $special->fetchrow) {
         $exception_holidays{"$year/$month/$day"}{title} = $title;
         $exception_holidays{"$year/$month/$day"}{description} = $description;
+        $exception_holidays{"$year/$month/$day"}{date} = 
+		sprintf("%04d-%02d-%02d", $year, $month, $day);
     }
     $self->{'exception_holidays'} = \%exception_holidays;
 
@@ -125,6 +129,8 @@ sub _init {
     while (my ($day, $month, $year, $title, $description) = $special->fetchrow) {
         $single_holidays{"$year/$month/$day"}{title} = $title;
         $single_holidays{"$year/$month/$day"}{description} = $description;
+        $single_holidays{"$year/$month/$day"}{date} = 
+		sprintf("%04d-%02d-%02d", $year, $month, $day);
     }
     $self->{'single_holidays'} = \%single_holidays;
     return $self;
