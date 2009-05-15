@@ -62,6 +62,7 @@ $(document).ready(function(){
  		 <li> <label for="subject">Subject Heading: </label> <input type="text" id="subject" name="subject" value="" /></li>
   		 <li><label for="dewey">Dewey: </label> <input type="text" id="dewey" name="dewey" value="" /></li>
 		 <li><label for="stdid">Standard ID: </label> <input type="text" id="stdid" name="stdid" value="" /></li></ol>
+    </fieldset>
     <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
     <input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
 	    </div>
@@ -80,6 +81,7 @@ $(document).ready(function(){
 
         </p>
     <!-- /TMPL_LOOP -->
+        </div>
     <fieldset class="action"><input type="submit"  class="submit" value="Search" onclick="cursor :'wait'"/> <a class="cancel close" href="#">Cancel</a></fieldset>
     </form>
 
@@ -106,7 +108,7 @@ $(document).ready(function(){
             <td><!-- TMPL_VAR NAME="author" --></td>
             <td><!-- TMPL_VAR NAME="isbn" --></td>
             <td><!-- TMPL_VAR NAME="lccn" --></td>
-            <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=<!-- TMPL_VAR NAME="breedingid" -->" title="MARC" rel="gb_page_center[600,500]">MARC</a></td><td><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&importid=<!-- TMPL_VAR NAME="breedingid" -->" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
+            <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=<!-- TMPL_VAR NAME="breedingid" -->" title="MARC" rel="gb_page_center[600,500]">MARC</a></td><td><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=<!-- TMPL_VAR NAME="breedingid" -->" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
 			<td><a href="javascript:Import(<!-- TMPL_VAR NAME="breedingid" -->,<!-- TMPL_VAR NAME="biblionumber" -->)">Import</a></td> 
         </tr>
         <!-- /TMPL_IF -->
