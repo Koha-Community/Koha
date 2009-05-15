@@ -76,8 +76,18 @@ foreach my $weekday (keys %$week_days_holidays) {
 my $day_month_holidays = $calendar->get_day_month_holidays();
 my @day_month_holidays;
 foreach my $monthDay (keys %$day_month_holidays) {
+    # Determine date format on month and day.
+    my $day_monthdate;
+    if (C4::Context->preference("dateformat") eq "metric") {
+      $day_monthdate = "$day_month_holidays->{$monthDay}{day}/$day_month_holidays->{$monthDay}{month}";
+    } elsif (C4::Context->preference("dateformat") eq "us") {
+      $day_monthdate = "$day_month_holidays->{$monthDay}{month}/$day_month_holidays->{$monthDay}{day}";
+    } else {
+      $day_monthdate = "$day_month_holidays->{$monthDay}{month}-$day_month_holidays->{$monthDay}{day}";
+    }
     my %day_month;
     %day_month = (KEY => $monthDay,
+                  DATE => $day_monthdate,
                   TITLE => $day_month_holidays->{$monthDay}{title},
                   DESCRIPTION => $day_month_holidays->{$monthDay}{description});
     push @day_month_holidays, \%day_month;
@@ -86,8 +96,10 @@ foreach my $monthDay (keys %$day_month_holidays) {
 my $exception_holidays = $calendar->get_exception_holidays();
 my @exception_holidays;
 foreach my $yearMonthDay (keys %$exception_holidays) {
+    my $exceptiondate = C4::Dates->new($exception_holidays->{$yearMonthDay}{date}, "iso");
     my %exception_holiday;
     %exception_holiday = (KEY => $yearMonthDay,
+                          DATE => $exceptiondate->output("syspref"),
                           TITLE => $exception_holidays->{$yearMonthDay}{title},
                           DESCRIPTION => $exception_holidays->{$yearMonthDay}{description});
     push @exception_holidays, \%exception_holiday;
@@ -96,8 +108,10 @@ foreach my $yearMonthDay (keys %$exception_holidays) {
 my $single_holidays = $calendar->get_single_holidays();
 my @holidays;
 foreach my $yearMonthDay (keys %$single_holidays) {
+    my $holidaydate = C4::Dates->new($single_holidays->{$yearMonthDay}{date}, "iso");
     my %holiday;
     %holiday = (KEY => $yearMonthDay,
+                DATE => $holidaydate->output("syspref"),
                 TITLE => $single_holidays->{$yearMonthDay}{title},
                 DESCRIPTION => $single_holidays->{$yearMonthDay}{description});
     push @holidays, \%holiday;
