@@ -162,34 +162,37 @@ if ($op eq 'add_form') {
 					);
 		$row_data{ohidden} = CGI::scrolling_list(-name=>'ohidden',
 					-id=>"ohidden$i",
-					-values=>['0','1','2'],
-					-labels => {'0'=>'Show','1'=>'Show Collapsed',
-									'2' =>'Hide',
-									},
-					-default=>substr($data->{'hidden'},0,1),
+					#-values=>['0','1','2'],
+					#-labels => {'0'=>'Show','1'=>'Show Collapsed',
+					#				'2' =>'Hide',
+					#				},
+					-values=>['0','-5'],
+					-labels => {'0'=>'Show All','-5'=>'Hide All',},
+					-default=>$data->{'hidden'},
+					#-default=>"-5",
 					-size=>1,
 					-multiple=>0,
 					);
-		$row_data{ihidden} = CGI::scrolling_list(-name=>'ihidden',
-					-id=>"ihidden$i",
-					-values=>['0','1','2'],
-					-labels => {'0'=>'Show','1'=>'Show Collapsed',
-									'2' =>'Hide',
-									},
-					-default=>substr($data->{'hidden'},1,1),
-					-size=>1,
-					-multiple=>0,
-					);
-		$row_data{ehidden} = CGI::scrolling_list(-name=>'ehidden',
-					-id=>"ehidden$i",
-					-values=>['0','1','2'],
-					-labels => {'0'=>'Show','1'=>'Show Collapsed',
-									'2' =>'Hide',
-									},
-					-default=>substr($data->{'hidden'}."  ",2,1),
-					-size=>1,
-					-multiple=>0,
-					);
+		#$row_data{ihidden} = CGI::scrolling_list(-name=>'ihidden',
+		#			-id=>"ihidden$i",
+		#			-values=>['0','1','2'],
+		#			-labels => {'0'=>'Show','1'=>'Show Collapsed',
+		#							'2' =>'Hide',
+		#							},
+		#			-default=>substr($data->{'hidden'},1,1),
+		#			-size=>1,
+		#			-multiple=>0,
+		#			);
+		#$row_data{ehidden} = CGI::scrolling_list(-name=>'ehidden',
+		#			-id=>"ehidden$i",
+		#			-values=>['0','1','2'],
+		#			-labels => {'0'=>'Show','1'=>'Show Collapsed',
+		#							'2' =>'Hide',
+		#							},
+		#			-default=>substr($data->{'hidden'}."  ",2,1),
+		#			-size=>1,
+		#			-multiple=>0,
+		#			);
 		$row_data{tagsubfieldinput} = "<input type=\"hidden\" name=\"tagsubfield\" value=\"".$data->{'tagsubfield'}."\" id=\"tagsubfield\" />";
 		$row_data{tagsubfield} = $data->{'tagsubfield'};
 		$row_data{liblibrarian} = CGI::escapeHTML($data->{'liblibrarian'});
@@ -275,39 +278,44 @@ if ($op eq 'add_form') {
 					);
 		$row_data{ohidden} = CGI::scrolling_list(-name=>'ohidden',
 					-id=>"ohidden$i",
-					-values=>['0','1','2'],
-					-labels => {'0'=>'Show','1'=>'Show Collapsed',
-									'2' =>'Hide',
-									},
-					-default=>"0",
+					#-values=>['0','1','2'],
+					#-labels => {'0'=>'Show','1'=>'Show Collapsed',
+					#				'2' =>'Hide',
+					#				},
+					-values=>['0','-5'],
+					-labels => {'0'=>'Show All','-5'=>'Hide All',},
+					#-default=>"0",
+					-default=>$data->{'hidden'},
+					#-default=>"-5",
 					-size=>1,
 					-multiple=>0,
 					);
 
-		$row_data{ihidden} = CGI::scrolling_list(-name=>'ihidden',
-					-id=>"ihidden$i",
-					-values=>['0','1','2'],
-					-labels => {'0'=>'Show','1'=>'Show Collapsed',
-									'2' =>'Hide',
-									},
-					-default=>"0",
-					-size=>1,
-					-multiple=>0,
-					);
-		$row_data{ehidden} = CGI::scrolling_list(-name=>'ehidden',
-					-id=>"ehidden$i",
-					-values=>['0','1','2'],
-					-labels => {'0'=>'Show','1'=>'Show Collapsed',
-									'2' =>'Hide',
-									},
-					-default=>"0",
-					-size=>1,
-					-multiple=>0,
-					);
-		$row_data{tagsubfieldinput} = 
-			"<label><input type=\"text\" name=\"tagsubfield\" value=\""
-			. $data->{'tagsubfield'}
-			. "\" size=\"1\" id=\"tagsubfield\" maxlength=\"1\" /></label>";
+		#$row_data{ihidden} = CGI::scrolling_list(-name=>'ihidden',
+		#			-id=>"ihidden$i",
+		#			-values=>['0','1','2'],
+		#			-labels => {'0'=>'Show','1'=>'Show Collapsed',
+		#							'2' =>'Hide',
+		#							},
+		#			-default=>"0",
+		#			-size=>1,
+		#			-multiple=>0,
+		#			);
+		#$row_data{ehidden} = CGI::scrolling_list(-name=>'ehidden',
+		#			-id=>"ehidden$i",
+		#			-values=>['0','1','2'],
+		#			-labels => {'0'=>'Show','1'=>'Show Collapsed',
+		#							'2' =>'Hide',
+		#							},
+		#			-default=>"0",
+		#			-size=>1,
+		#			-multiple=>0,
+		#			);
+		$row_data{tagsubfieldinput} = "<input type=\"text\" name=\"tagsubfield\" value=\"".$data->{'tagsubfield'}."\" size=\"1\" id=\"tagsubfield\" maxlength=\"1\" />";
+                $row_data{tagsubfieldinput} = 
+                        "<label><input type=\"text\" name=\"tagsubfield\" value=\""
+                        . $data->{'tagsubfield'}
+                        . "\" size=\"1\" id=\"tagsubfield\" maxlength=\"1\" /></label>";
 		$row_data{tagsubfield} = $data->{'tagsubfield'};
 		$row_data{liblibrarian} = "";
 		$row_data{libopac} = "";
@@ -389,8 +397,8 @@ if ($op eq 'add_form') {
 	my @seealso		= $input->param('seealso');
 	my @hidden;
 	my @ohidden		= $input->param('ohidden');
-	my @ihidden		= $input->param('ihidden');
-	my @ehidden		= $input->param('ehidden');
+	#my @ihidden		= $input->param('ihidden');
+	#my @ehidden		= $input->param('ehidden');
 	my @authorised_values	= $input->param('authorised_value');
 	my $authtypecode	= $input->param('authtypecode');
 	my @frameworkcodes	= $input->param('frameworkcode');
@@ -409,7 +417,8 @@ if ($op eq 'add_form') {
 		my $authorised_value		=$authorised_values[$i];
 		my $frameworkcode		=$frameworkcodes[$i];
 		my $value_builder=$value_builder[$i];
-		my $hidden = $ohidden[$i].$ihidden[$i].$ehidden[$i]; #collate from 3 hiddens;
+		#my $hidden = $ohidden[$i].$ihidden[$i].$ehidden[$i]; #collate from 3 hiddens;
+		my $hidden = $ohidden[$i]; #collate from 3 hiddens;
 		my $isurl = $input->param("isurl$i")?1:0;
 		if ($liblibrarian) {
 			unless (C4::Context->config('demo') eq 1) {
