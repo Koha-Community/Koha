@@ -20,6 +20,10 @@ my $year = $input->param('newYear');
 my $title = $input->param('newTitle');
 my $description = $input->param('newDescription');
 
+my $calendardate = sprintf("%04d-%02d-%02d", $year, $month, $day);
+my $isodate = C4::Dates->new($calendardate, 'iso');
+$calendardate = $isodate->output('syspref');
+
 $title || ($title = '');
 if ($description) {
 	$description =~ s/\r/\\r/g;
@@ -51,4 +55,4 @@ if ($input->param('newOperation') eq 'weekday') {
 						             description => $description);
 
 }
-print $input->redirect("/cgi-bin/koha/tools/holidays.pl?branch=$branchcode");
+print $input->redirect("/cgi-bin/koha/tools/holidays.pl?branch=$branchcode&calendardate=$calendardate");

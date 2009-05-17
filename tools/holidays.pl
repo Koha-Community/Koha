@@ -38,6 +38,21 @@ my ($template, $loggedinuser, $cookie)
                              debug => 1,
                            });
 
+# keydate - date passed to calendar.js.  calendar.js does not process dashes within a date.
+my $keydate;
+# calendardate - date passed in url for human readability (syspref)
+my $calendardate;
+my $today = C4::Dates->new();
+my $calendarinput = C4::Dates->new($input->param('calendardate')) || $today;
+# if the url has an invalid date default to 'now.'
+unless($calendardate = $calendarinput->output('syspref')) {
+  $calendardate = $today->output('syspref');
+}
+unless($keydate = $calendarinput->output('iso')) {
+  $keydate = $today->output('iso');
+}
+$keydate =~ s/-/\//g;
+
 my $branch= $input->param('branch') || C4::Context->userenv->{'branch'};
 # Set all the branches.
 my $onlymine=(C4::Context->preference('IndependantBranches') &&
@@ -122,6 +137,8 @@ $template->param(WEEK_DAYS_LOOP => \@week_days,
 				HOLIDAYS_LOOP => \@holidays,
 				EXCEPTION_HOLIDAYS_LOOP => \@exception_holidays,
 				DAY_MONTH_HOLIDAYS_LOOP => \@day_month_holidays,
+				calendardate => $calendardate,
+				keydate => $keydate,
 				branch => $branch
 	);
 

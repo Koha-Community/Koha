@@ -85,7 +85,7 @@
 
 	function changeBranch () {
 		var branch = $("#branch option:selected").val();
-		location.href='/cgi-bin/koha/tools/holidays.pl?branch=' + branch;
+		location.href='/cgi-bin/koha/tools/holidays.pl?branch=' + branch + '&calendardate=' + "<!-- TMPL_VAR NAME='calendardate' -->";
 	}
 
 	function additionalInformation (anExplanation) {
@@ -345,6 +345,7 @@ h1 select { width: 20em; }
 		{
 			flat : "calendar-container",
 			flatCallback : dateChanged,
+			date: "<!-- TMPL_VAR NAME='keydate' -->",
 			dateStatusFunc : dateStatusHandler
 		}
 	);

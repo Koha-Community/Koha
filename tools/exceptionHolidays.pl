@@ -20,6 +20,10 @@ my $year = $input->param('showYear');
 my $title = $input->param('showTitle');
 my $description = $input->param('showDescription');
 
+my $calendardate = sprintf("%04d-%02d-%02d", $year, $month, $day);
+my $isodate = C4::Dates->new($calendardate, 'iso');
+$calendardate = $isodate->output('syspref');
+
 my $calendar = C4::Calendar->new(branchcode => $branchcode);
 
 $title || ($title = '');
@@ -42,4 +46,4 @@ if ($input->param('showOperation') eq 'exception') {
   	                          month => $month,
 				              year => $year);
 }
-print $input->redirect("/cgi-bin/koha/tools/holidays.pl?branch=$branchcode");
+print $input->redirect("/cgi-bin/koha/tools/holidays.pl?branch=$branchcode&calendardate=$calendardate");
