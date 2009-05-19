@@ -73,8 +73,10 @@ my $branches = GetBranches();
 my $printers = GetPrinters();
 
 #my $branch  = C4::Context->userenv?C4::Context->userenv->{'branch'}:"";
-my $printer = C4::Context->userenv?C4::Context->userenv->{'branchprinter'}:"";
+my $printer = C4::Context->userenv ? C4::Context->userenv->{'branchprinter'} : "";
 my $overduecharges = (C4::Context->preference('finesMode') && C4::Context->preference('finesMode') ne 'off');
+
+my $userenv_branch = C4::Context->userenv->{'branch'} || '';
 #
 # Some code to handle the error if there is no branch or printer setting.....
 #
@@ -131,7 +133,7 @@ if ( $query->param('resbarcode') ) {
     
 #     addin in ModReserveAffect the possibility to check if the document is expected in this library or not,
 # if not we send a value in reserve waiting for not implementting waiting status
-    if (C4::Context->userenv->{'branch'} ne $diffBranchReturned) {
+    if ($userenv_branch ne $diffBranchReturned) {
         $diffBranchSend = $diffBranchReturned;
     }
     else {
@@ -141,20 +143,18 @@ if ( $query->param('resbarcode') ) {
 #   check if we have other reservs for this document, if we have a return send the message of transfer
     my ( $messages, $nextreservinfo ) = GetOtherReserves($item);
 
-    my $branchname = GetBranchName( $messages->{'transfert'} );
     my ($borr) = GetMemberDetails( $nextreservinfo, 0 );
     my $borcnum = $borr->{'cardnumber'};
-    my $name    =
-      $borr->{'surname'} . ", " . $borr->{'title'} . " " . $borr->{'firstname'};
+    my $name    = $borr->{'surname'} . ", " . $borr->{'title'} . " " . $borr->{'firstname'};
+     
     my $slip = $query->param('resslip');
-
 
     if ( $messages->{'transfert'} ) {
         $template->param(
             itemtitle      => $iteminfo->{'title'},
 			itembiblionumber => $iteminfo->{'biblionumber'},
             iteminfo       => $iteminfo->{'author'},
-            tobranchname   => $branchname,
+            tobranchname   => GetBranchName($messages->{'transfert'}),
             name           => $name,
             borrowernumber => $borrowernumber,
             borcnum        => $borcnum,
@@ -169,22 +169,20 @@ my $borrower;
 my $returned = 0;
 my $messages;
 my $issueinformation;
-my $barcode = $query->param('barcode');
-# strip whitespace
-# $barcode =~ s/\s*//g; - use barcodedecode for this; whitespace is not invalid.
-my $exemptfine = $query->param('exemptfine');
-my $dropboxmode= $query->param('dropboxmode');
-my $calendar = C4::Calendar->new(  branchcode => C4::Context->userenv->{'branch'} );
+my $barcode     = $query->param('barcode');
+my $exemptfine  = $query->param('exemptfine');
+my $dropboxmode = $query->param('dropboxmode');
+my $dotransfer  = $query->param('dotransfer');
+my $calendar    = C4::Calendar->new( branchcode => $userenv_branch );
 	#dropbox: get last open day (today - 1)
 my $today       = C4::Dates->new();
 my $today_iso   = $today->output('iso');
-my $dropboxdate = $calendar->addDate($today, -1 );
-my $dotransfer = $query->param('dotransfer');
+my $dropboxdate = $calendar->addDate($today, -1);
 if ($dotransfer){
 	# An item has been returned to a branch other than the homebranch, and the librarian has choosen to initiate a transfer
-	my $transferitem=$query->param('transferitem');
-	my $tobranch=$query->param('tobranch');
-	ModItemTransfer($transferitem, C4::Context->userenv->{'branch'}, $tobranch); 
+	my $transferitem = $query->param('transferitem');
+	my $tobranch     = $query->param('tobranch');
+	ModItemTransfer($transferitem, $userenv_branch, $tobranch); 
 }
 
 # actually return book and prepare item table.....
@@ -194,7 +192,7 @@ if ($barcode) {
 # save the return
 #
     ( $returned, $messages, $issueinformation, $borrower ) =
-      AddReturn( $barcode, C4::Context->userenv->{'branch'}, $exemptfine, $dropboxmode);
+      AddReturn( $barcode, $userenv_branch, $exemptfine, $dropboxmode);
     # get biblio description
     my $biblio = GetBiblioFromItemNumber($issueinformation->{'itemnumber'});
     # fix up item type for display
@@ -225,7 +223,7 @@ if ($barcode) {
 
         # check if the branch is the same as homebranch
         # if not, we want to put a message
-        if ( $biblio->{'homebranch'} ne C4::Context->userenv->{'branch'} ) {
+        if ( $biblio->{'homebranch'} ne $userenv_branch ) {
             $template->param( homebranch => $biblio->{'homebranch'} );
         }
     }
@@ -289,11 +287,10 @@ if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
         WrongTransferItem => $messages->{'WrongTransferItem'},
     );
 
-    my $reserve        = $messages->{'ResFound'};
+    my $reserve    = $messages->{'ResFound'};
     my $branchname = $branches->{ $reserve->{'branchcode'} }->{'branchname'};
     my ($borr) = GetMemberDetails( $reserve->{'borrowernumber'}, 0 );
-    my $name =
-      $borr->{'surname'} . " " . $borr->{'title'} . " " . $borr->{'firstname'};
+    my $name = $borr->{'surname'} . ", " . $borr->{'title'} . " " . $borr->{'firstname'};
     $template->param(
             wname           => $name,
             wborfirstname   => $borr->{'firstname'},
@@ -307,7 +304,7 @@ if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
             wborzip         => $borr->{'zipcode'},
             wborrowernumber => $reserve->{'borrowernumber'},
             wborcnum        => $borr->{'cardnumber'},
-            wtransfertFrom  => C4::Context->userenv->{'branch'},
+            wtransfertFrom  => $userenv_branch,
     );
 }
 
@@ -316,20 +313,30 @@ if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
 # reserve found and item arrived at the expected branch
 #
 if ( $messages->{'ResFound'}) {
-    my $reserve        = $messages->{'ResFound'};
+    my $reserve    = $messages->{'ResFound'};
     my $branchname = $branches->{ $reserve->{'branchcode'} }->{'branchname'};
     my ($borr) = GetMemberDetails( $reserve->{'borrowernumber'}, 0 );
-    if ( $reserve->{'ResFound'} eq "Waiting" ) {
-        if ( C4::Context->userenv->{'branch'} eq $reserve->{'branchcode'} ) {
-            $template->param( waiting => 1 );
-        }
-        else {
-            $template->param( waiting => 0 );
+
+    if ( $reserve->{'ResFound'} eq "Waiting" or $reserve->{'ResFound'} eq "Reserved" ) {
+        if ( $reserve->{'ResFound'} eq "Waiting" ) {
+            $template->param(
+                waiting      => ($userenv_branch eq $reserve->{'branchcode'} ? 1 : 0 ),
+            );
+        } elsif ( $reserve->{'ResFound'} eq "Reserved" ) {
+            $template->param(
+                intransit    => ($userenv_branch eq $reserve->{'branchcode'} ? 0 : 1 ),
+                transfertodo => ($userenv_branch eq $reserve->{'branchcode'} ? 0 : 1 ),
+                resbarcode   => $barcode,
+                reserved     => 1,
+            );
         }
 
+        # same params for Waiting or Reserved
         $template->param(
             found          => 1,
-            name           => $borr->{'surname'} . " " . $borr->{'title'} . " " . $borr->{'firstname'},
+            currentbranch  => $branches->{$userenv_branch}->{'branchname'},
+            destbranchname => $branches->{ $reserve->{'branchcode'} }->{'branchname'},
+            name           => $borr->{'surname'} . ", " . $borr->{'title'} . " " . $borr->{'firstname'},
             borfirstname   => $borr->{'firstname'},
             borsurname     => $borr->{'surname'},
             bortitle       => $borr->{'title'},
@@ -339,55 +346,15 @@ if ( $messages->{'ResFound'}) {
             boraddress2    => $borr->{'address2'},
             borcity        => $borr->{'city'},
             borzip         => $borr->{'zipcode'},
-            borrowernumber => $reserve->{'borrowernumber'},
             borcnum        => $borr->{'cardnumber'},
             debarred       => $borr->{'debarred'},
             gonenoaddress  => $borr->{'gonenoaddress'},
-            currentbranch  => $branches->{C4::Context->userenv->{'branch'}}->{'branchname'},
-            itemnumber     => $reserve->{'itemnumber'},
             barcode        => $barcode,
-            destbranchname =>
-              $branches->{ $reserve->{'branchcode'} }->{'branchname'},
             destbranch	   => $reserve->{'branchcode'},
+            borrowernumber => $reserve->{'borrowernumber'},
+            itemnumber     => $reserve->{'itemnumber'},
         );
-
-    }
-    if ( $reserve->{'ResFound'} eq "Reserved" ) {
-        if ( C4::Context->userenv->{'branch'} eq $reserve->{'branchcode'} ) {
-            $template->param( intransit => 0 );
-        }
-        else {
-            $template->param( intransit => 1 );
-        }
-
-        $template->param(
-            found          => 1,
-            currentbranch  => $branches->{C4::Context->userenv->{'branch'}}->{'branchname'},
-            destbranchname =>
-              $branches->{ $reserve->{'branchcode'} }->{'branchname'},
-            destbranch	   => $reserve->{'branchcode'},
-            transfertodo => ( C4::Context->userenv->{'branch'} eq $reserve->{'branchcode'} ? 0 : 1 ),
-            reserved => 1,
-            resbarcode       => $barcode,
-          #  today            => $todaysdate,
-            itemnumber       => $reserve->{'itemnumber'},
-            borsurname       => $borr->{'surname'},
-            bortitle         => $borr->{'title'},
-            borfirstname     => $borr->{'firstname'},
-            borrowernumber   => $reserve->{'borrowernumber'},
-            borcnum          => $borr->{'cardnumber'},
-            borphone         => $borr->{'phone'},
-            boraddress       => $borr->{'address'},
-            boraddress2      => $borr->{'address2'},
-            borsub           => $borr->{'suburb'},
-            borcity          => $borr->{'city'},
-            borzip           => $borr->{'zipcode'},
-            boremail         => $borr->{'email'},
-            debarred         => $borr->{'debarred'},
-            gonenoaddress    => $borr->{'gonenoaddress'},
-            barcode          => $barcode
-        );
-    }
+    } # else { ; }  # error?
 }
 
 # Error Messages
@@ -422,7 +389,7 @@ foreach my $code ( keys %$messages ) {
         $exit_required_p = 1;
     }
     elsif ( ( $code eq 'IsPermanent' ) && ( not $messages->{'ResFound'} ) ) {
-        if ( $messages->{'IsPermanent'} ne C4::Context->userenv->{'branch'} ) {
+        if ( $messages->{'IsPermanent'} ne $userenv_branch ) {
             $err{ispermanent} = 1;
             $err{msg}         =
               $branches->{ $messages->{'IsPermanent'} }->{'branchname'};
@@ -434,10 +401,10 @@ foreach my $code ( keys %$messages ) {
     elsif ( $code eq 'WrongTransferItem' ) {
         ;    # FIXME... anything to do here?
     }
-	elsif ( $code eq 'NeedsTransfer' ) {
-	}
-	elsif ( $code eq 'Wrongbranch' ) {
-	}
+    elsif ( $code eq 'NeedsTransfer' ) {
+    }
+    elsif ( $code eq 'Wrongbranch' ) {
+    }
 		
     else {
         die "Unknown error code $code";    # XXX
@@ -471,15 +438,12 @@ if ($borrower) {
             my @waitingitemloop;
             my $items = $flags->{$flag}->{'itemlist'};
             foreach my $item (@$items) {
-                my $biblio =
-                  GetBiblioFromItemNumber( $item->{'itemnumber'});
+                my $biblio = GetBiblioFromItemNumber( $item->{'itemnumber'});
                 my %waitingitem;
                 $waitingitem{biblionum} = $biblio->{'biblionumber'};
                 $waitingitem{barcode}   = $biblio->{'barcode'};
                 $waitingitem{title}     = $biblio->{'title'};
-                $waitingitem{brname}    =
-                  $branches->{ $biblio->{'holdingbranch'} }
-                  ->{'branchname'};
+                $waitingitem{brname}    = $branches->{ $biblio->{'holdingbranch'} }->{'branchname'};
                 push( @waitingitemloop, \%waitingitem );
             }
             $flaginfo{itemloop} = \@waitingitemloop;
@@ -496,8 +460,7 @@ if ($borrower) {
                 $overdueitem{biblionum} = $biblio->{'biblionumber'};
                 $overdueitem{barcode}   = $biblio->{'barcode'};
                 $overdueitem{title}     = $biblio->{'title'};
-                $overdueitem{brname}    =
-                  $branches->{ $biblio->{'holdingbranch'}} ->{'branchname'};
+                $overdueitem{brname}    = $branches->{ $biblio->{'holdingbranch'}} ->{'branchname'};
                 push( @itemloop, \%overdueitem );
             }
             $flaginfo{itemloop} = \@itemloop;
@@ -537,8 +500,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
             $ri{month} = $tempdate[1];
             $ri{day}   = $tempdate[2];
             $ri{duedate} = format_date($duedate);
-            my ($borrower) =
-              GetMemberDetails( $riborrowernumber{$_}, 0 );
+            my ($borrower) = GetMemberDetails( $riborrowernumber{$_}, 0 );
             $ri{return_overdue} = 1 if ($duedate lt $today->output('iso'));
             $ri{borrowernumber} = $borrower->{'borrowernumber'};
             $ri{borcnum}        = $borrower->{'cardnumber'};
@@ -546,7 +508,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
             $ri{borsurname}     = $borrower->{'surname'};
             $ri{bortitle}       = $borrower->{'title'};
             $ri{bornote}        = $borrower->{'borrowernotes'};
-            $ri{borcategorycode}   = $borrower->{'categorycode'};
+            $ri{borcategorycode}= $borrower->{'categorycode'};
         }
         else {
             $ri{borrowernumber} = $riborrowernumber{$_};
@@ -573,15 +535,15 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
 $template->param( riloop => \@riloop );
 
 $template->param(
-    genbrname               => $branches->{C4::Context->userenv->{'branch'}}->{'branchname'},
-    genprname               => $printers->{$printer}->{'printername'},
-    branchname              => $branches->{C4::Context->userenv->{'branch'}}->{'branchname'},
-    printer                 => $printer,
-    errmsgloop              => \@errmsgloop,
-    exemptfine              => $exemptfine,
-    dropboxmode             => $dropboxmode,
-    dropboxdate				=> $dropboxdate->output(),
-	overduecharges          => $overduecharges,
+    genbrname      => $branches->{$userenv_branch}->{'branchname'},
+    genprname      => $printers->{$printer}->{'printername'},
+    branchname     => $branches->{$userenv_branch}->{'branchname'},
+    printer        => $printer,
+    errmsgloop     => \@errmsgloop,
+    exemptfine     => $exemptfine,
+    dropboxmode    => $dropboxmode,
+    dropboxdate	   => $dropboxdate->output(),
+    overduecharges => $overduecharges,
 );
 
 # actually print the page!
