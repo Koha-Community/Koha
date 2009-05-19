@@ -720,6 +720,12 @@ sub SearchOrder {
           )
           . ") or biblioitems.isbn=? OR (aqorders.ordernumber=? AND aqorders.biblionumber=?)) ";
     }
+    
+    if( $biblionumber and $biblionumber ne "" ){
+        $query .= "AND aqorders.biblionumber = ? ";
+        push (@searchterms, $biblionumber);
+    }
+    
     $query .= " GROUP BY aqorders.ordernumber";
     ### $query
     my $sth = $dbh->prepare($query);
