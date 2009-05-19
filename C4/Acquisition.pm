@@ -685,7 +685,17 @@ sub SearchOrder {
     push( @searchterms, $search, $search, $biblionumber );
     my $query;
   ### FIXME  THIS CAN raise a problem if more THAN ONE biblioitem is linked to one biblio  
-    if ($id) {  
+    if($id and $search){
+        @searchterms = ($id, $search);
+        $query =
+          "SELECT *,biblio.title
+             FROM aqorders
+             LEFT JOIN biblio ON aqorders.biblionumber=biblio.biblionumber
+             LEFT JOIN biblioitems ON biblioitems.biblionumber=biblio.biblionumber
+             LEFT JOIN aqbasket ON aqorders.basketno = aqbasket.basketno
+             WHERE aqbasket.booksellerid = ? AND aqorders.ordernumber = ?
+          "
+    }elsif ($id) {  
         $query =
           "SELECT *,biblio.title 
            FROM aqorders 
@@ -722,7 +732,7 @@ sub SearchOrder {
     }
     
     if( $biblionumber and $biblionumber ne "" ){
-        $query .= "AND aqorders.biblionumber = ? ";
+        $query .= "AND biblio.biblionumber = ? ";
         push (@searchterms, $biblionumber);
     }
     
