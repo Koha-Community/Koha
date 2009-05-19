@@ -12,7 +12,7 @@ sub testing_class { 'C4::Search' };
 
 sub methods : Test( 1 ) {
     my $self = shift;
-    my @methods = qw( findseealso
+    my @methods = qw(
                       FindDuplicate
                       SimpleSearch
                       getRecords

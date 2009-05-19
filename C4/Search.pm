@@ -54,7 +54,6 @@ This module provides searching functions for Koha's bibliographic databases
 
 @ISA    = qw(Exporter);
 @EXPORT = qw(
-  &findseealso
   &FindDuplicate
   &SimpleSearch
   &searchResults
@@ -64,32 +63,6 @@ This module provides searching functions for Koha's bibliographic databases
 );
 
 # make all your functions, whether exported or not;
-
-=head2 findseealso($dbh,$fields);
-
-C<$dbh> is a link to the DB handler.
-
-use C4::Context;
-my $dbh =C4::Context->dbh;
-
-C<$fields> is a reference to the fields array
-
-This function modifies the @$fields array and adds related fields to search on.
-
-FIXME: this function is probably deprecated in Koha 3
-
-=cut
-
-sub findseealso {
-    my ( $dbh, $fields ) = @_;
-    my $tagslib = GetMarcStructure(1);
-    for ( my $i = 0 ; $i <= $#{$fields} ; $i++ ) {
-        my ($tag)      = substr( @$fields[$i], 1, 3 );
-        my ($subfield) = substr( @$fields[$i], 4, 1 );
-        @$fields[$i] .= ',' . $tagslib->{$tag}->{$subfield}->{seealso}
-          if ( $tagslib->{$tag}->{$subfield}->{seealso} );
-    }
-}
 
 =head2 FindDuplicate
 
