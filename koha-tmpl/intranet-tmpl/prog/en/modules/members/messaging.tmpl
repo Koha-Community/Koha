@@ -42,15 +42,17 @@
    </div>
 <!-- TMPL_ELSE -->
 
-<!-- TMPL_IF NAME="message_queue" -->
 <table>
   <caption>Message Queue</caption>
   <tr><th>Type</th><th>Subject</th><th>Status</th><th>Time Prepared</th></tr>
-<!-- TMPL_LOOP name="message_queue" -->
-  <tr><td><!-- TMPL_VAR NAME="message_transport_type" --></td><td><!-- TMPL_VAR NAME="subject" --></td><td><!-- TMPL_VAR NAME="status" --></td><td><!-- TMPL_VAR NAME="time_queued" --></td></tr>
-<!-- /TMPL_LOOP -->
-</table>
+<!-- TMPL_IF NAME="message_queue" -->
+  <!-- TMPL_LOOP name="message_queue" -->
+    <tr><td><!-- TMPL_VAR NAME="message_transport_type" --></td><td><!-- TMPL_VAR NAME="subject" --></td><td><!-- TMPL_VAR NAME="status" --></td><td><!-- TMPL_VAR NAME="time_queued" --></td></tr>
+  <!-- /TMPL_LOOP -->
+<!-- TMPL_ELSE -->
+  <tr><td colspan="4">There is no record of any messages that have been sent to this patron.</td></tr>
 <!-- /TMPL_IF -->
+</table>
 
 </div>
 
