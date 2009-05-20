@@ -1,6 +1,12 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Circulation &rsaquo; Circulation Statistics for <!-- TMPL_VAR Name="title" escape="html" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript">
+$(document).ready(function(){
+    $(".striped tr:even").addClass("highlight");
+    $("tr.mybranch td").css("background-color", "#CFE7FF");
+});
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -15,27 +21,41 @@
 	<div class="yui-b">
 
 <h2>
-<!-- TMPL_VAR Name="title" escape="html" --> <!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR Name="author" --><!-- /TMPL_IF --></h2>
-<h3>Barcode <!-- TMPL_VAR Name="barcode" --></h3>
+<!-- TMPL_VAR NAME="title" ESCAPE="html" --> <!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR NAME="author" ESCAPE="html" --><!-- /TMPL_IF --></h2>
+<h3>Barcode <!-- TMPL_VAR NAME="barcode" --></h3>
 <table>
-		<tr><th>Home Library</th><th>Current Library</th><th>Date arrived at current library </th><th>Number of issues since since last transfer</th></tr>
+		<tr><th>Home Library</th><th>Current Library</th><th>Date arrived<br />at current library </th><th>Number of issues<br />since last transfer</th></tr>
 		
-		<tr><td> <!-- TMPL_VAR Name="homebranch" --> </td><td> <!-- TMPL_VAR Name="holdingbranch" --></td><td> <!-- TMPL_VAR Name="lastdate" --> </td><td> <!-- TMPL_VAR Name="count" --> </td></tr>
+		<tr><td><!-- TMPL_VAR NAME="homebranch" --></td>
+            <td><!-- TMPL_VAR NAME="holdingbranch" --></td>
+            <td><!-- TMPL_VAR NAME="lastdate" --></td>
+            <td><!-- TMPL_VAR NAME="count" --></td>
+        </tr>
 </table>
-<table>
-			<tr>
-				<th>Library</th>
-				<th>No. of times checked out</th>
-				<th>Last Seen</th>
-			</tr>
-			<!-- TMPL_LOOP Name="branchloop" -->
-				<tr>
-					<td><!-- TMPL_VAR Name="branchname" --> </td>
-					<td><!-- TMPL_VAR Name="issues" --> </td>
-					<td><!-- TMPL_VAR Name="seen" --> </td>
-				</tr>
-			<!-- /TMPL_LOOP -->
-		</table>
+<table class="striped">
+    <tr>
+        <th>Library</th>
+        <th>No. of times checked out</th>
+        <th>Last Seen</th>
+    </tr>
+    <!-- TMPL_LOOP NAME="branchloop" -->
+    <!-- TMPL_IF NAME="selected" -->
+        <tr class="mybranch">
+    <!-- TMPL_ELSE -->
+        <tr>
+    <!-- /TMPL_IF -->
+            <td><!-- TMPL_VAR NAME="branchname" --></td>
+            <td><!-- TMPL_VAR NAME="issues" --></td>
+            <td><!-- TMPL_IF NAME="seen" -->
+                    <span style="display:none;"><!-- TMPL_VAR NAME="seen" --><!-- TMPL_VAR NAME="seentime" --></span>
+                    <!-- invisible span for eventual use by tablesorter -->
+                    <!-- TMPL_VAR NAME="seentime" DEFAULT="??:??" --> <!-- TMPL_VAR NAME="seen" --> 
+                <!-- TMPL_ELSE -->Never
+                <!-- /TMPL_IF -->
+            </td>
+        </tr>
+    <!-- /TMPL_LOOP -->
+</table>
 
 </div>
 </div>

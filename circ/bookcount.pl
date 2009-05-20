@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 #written 7/3/2002 by Finlay
 #script to display reports
 
@@ -22,6 +21,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+# use warnings;
 use CGI;
 use C4::Debug;
 use C4::Context;
@@ -42,7 +42,7 @@ my $branches     = GetBranches;
 my $idata = itemdatanum($itm);
 my $data  = GetBiblioItemData($bi);
 
-my $homebranch    = $branches->{ $idata->{'homebranch'} }->{'branchname'};
+my $homebranch    = $branches->{ $idata->{'homebranch'}    }->{'branchname'};
 my $holdingbranch = $branches->{ $idata->{'holdingbranch'} }->{'branchname'};
 
 my ( $lastmove, $message ) = lastmove($itm);
@@ -52,8 +52,7 @@ my $count;
 if ( not $lastmove ) {
 #    $lastdate = $message;
     $count = issuessince( $itm, 0 );
-}
-else {
+} else {
     $lastdate = $lastmove->{'datearrived'};
     $count = issuessince( $itm, $lastdate );
 }
@@ -71,15 +70,13 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my @branchloop;
-
-foreach my $branchcode ( keys %$branches ) {
-    my %linebranch;
-    $linebranch{issues} = issuesat( $itm, $branchcode );
-    my $date = lastseenat( $itm, $branchcode );
-    $linebranch{seen}       = slashdate($date);
-    $linebranch{branchname} = $branches->{$branchcode}->{'branchname'};
-    push( @branchloop, \%linebranch );
+my $branchloop = GetBranchesLoop(C4::Context->userenv->{branch});
+foreach (@$branchloop) {
+    my $date = lastseenat( $itm, $_->{value} );
+    my ($datechunk, $timechunk) =  slashdate($date);
+    $_->{issues}     = issuesat($itm, $_->{value});
+    $_->{seen}       = $datechunk;
+    $_->{seentime}   = $timechunk;
 }
 
 ### $lastdate
@@ -94,40 +91,34 @@ $template->param(
     holdingbranch           => $holdingbranch,
     lastdate                => $lastdate ?  format_date($lastdate) : $message,
     count                   => $count,
-    branchloop              => \@branchloop,
+    branchloop              => $branchloop,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
-
+exit;
 
 sub itemdatanum {
     my ($itemnumber) = @_;
-    my $dbh          = C4::Context->dbh;
-    my $sth          = $dbh->prepare("select * from items where itemnumber=?");
+    my $sth = C4::Context->dbh->prepare("SELECT * FROM items WHERE itemnumber=?");
     $sth->execute($itemnumber);
-    my $data = $sth->fetchrow_hashref;
-    $sth->finish;
-    return ($data);
+    return $sth->fetchrow_hashref;
 }
 
 sub lastmove {
     my ($itemnumber) = @_;
-    my $dbh          = C4::Context->dbh;
-    my $sth          =
-      $dbh->prepare(
-"select max(branchtransfers.datearrived) from branchtransfers where branchtransfers.itemnumber=?"
-      );
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare(
+"SELECT max(branchtransfers.datearrived) FROM branchtransfers WHERE branchtransfers.itemnumber=?"
+    );
     $sth->execute($itemnumber);
     my ($date) = $sth->fetchrow_array;
     return ( 0, "Item has no branch transfers record" ) if not $date;
-    $sth =
-      $dbh->prepare(
-"Select * from branchtransfers where branchtransfers.itemnumber=? and branchtransfers.datearrived=?"
-      );
+    $sth = $dbh->prepare(
+"SELECT * FROM branchtransfers WHERE branchtransfers.itemnumber=? and branchtransfers.datearrived=?"
+    );
     $sth->execute( $itemnumber, $date );
     my ($data) = $sth->fetchrow_hashref;
     return ( 0, "Item has no branch transfers record" ) if not $data;
-    $sth->finish;
     return ( $data, "" );
 }
 
@@ -141,76 +132,53 @@ sub issuessince {
                         SELECT COUNT(*) AS count FROM old_issues WHERE itemnumber = ? and timestamp > ?
                      ) tmp");
     $sth->execute( $itemnumber, $date, $itemnumber, $date );
-    my $count = $sth->fetchrow_arrayref->[0];
-    $sth->finish;
-    return ( $count );
+    return $sth->fetchrow_arrayref->[0];
 }
 
 sub issuesat {
     my ( $itemnumber, $brcd ) = @_;
     my $dbh = C4::Context->dbh;
-    my $sth =
-      $dbh->prepare("SELECT SUM(count) FROM (
-                        SELECT COUNT(*) AS count FROM issues WHERE itemnumber = ? and branchcode = ?
-                        UNION ALL
-                        SELECT COUNT(*) AS count FROM old_issues WHERE itemnumber = ? and branchcode = ?
-                     ) tmp");
+    my $sth = $dbh->prepare(
+    "SELECT SUM(count) FROM (
+        SELECT COUNT(*) AS count FROM     issues WHERE itemnumber = ? AND branchcode = ?
+        UNION ALL
+        SELECT COUNT(*) AS count FROM old_issues WHERE itemnumber = ? AND branchcode = ?
+     ) tmp"
+    );
     $sth->execute( $itemnumber, $brcd, $itemnumber, $brcd );
-    my ($count) = $sth->fetchrow_array;
-    $sth->finish;
-    return ($count);
+    return $sth->fetchrow_array;
 }
 
 sub lastseenat {
     my ( $itm, $brc ) = @_;
     my $dbh = C4::Context->dbh;
-    my $sth =
-      $dbh->prepare("SELECT MAX(tstamp) FROM (
-                        SELECT MAX(timestamp) AS tstamp FROM issues WHERE itemnumber = ? and branchcode = ?
-                        UNION ALL
-                        SELECT MAX(timestamp) AS tstamp FROM old_issues WHERE itemnumber = ? and branchcode = ?
-                     ) tmp");
+    my $sth = $dbh->prepare(
+    "SELECT MAX(tstamp) FROM (
+        SELECT MAX(timestamp) AS tstamp FROM     issues WHERE itemnumber = ? AND branchcode = ?
+        UNION ALL
+        SELECT MAX(timestamp) AS tstamp FROM old_issues WHERE itemnumber = ? AND branchcode = ?
+     ) tmp"
+    );
     $sth->execute( $itm, $brc, $itm, $brc );
     my ($date1) = $sth->fetchrow_array;
-    $sth->finish;
-    $sth =
-      $dbh->prepare(
-"Select max(datearrived) from branchtransfers where itemnumber=? and tobranch = ?"
-      );
+    $sth = $dbh->prepare(
+"SELECT max(datearrived) FROM branchtransfers WHERE itemnumber=? AND tobranch = ?"
+    );
     $sth->execute( $itm, $brc );
     my ($date2) = $sth->fetchrow_array;
-    $sth->finish;
 
-    #FIXME: MJR thinks unsafe
-    $date1 =~ s/-//g;
-    $date1 =~ s/://g;
-    $date1 =~ s/ //g;
-    $date2 =~ s/-//g;
-    $date2 =~ s/://g;
-    $date2 =~ s/ //g;
-    my $date;
-    if ( $date1 < $date2 ) {
-        $date = $date2;
-    }
-    else {
-        $date = $date1;
-    }
+    my $date = ( $date1 lt $date2 ) ? $date2 : $date1 ;
     return ($date);
 }
 
 #####################################################
-# write date....
+# return date and time from timestamp
 sub slashdate {
     my ($date) = @_;
-    if ( not $date ) {
-        return "never";
-    }
-    my ( $yr, $mo, $da, $hr, $mi ) = (
-        substr( $date, 0,  4 ),
-        substr( $date, 4,  2 ),
-        substr( $date, 6,  2 ),
-        substr( $date, 8,  2 ),
-        substr( $date, 10, 2 )
+    $date or return;
+    # warn "slashdate($date)...";
+    return (
+        format_date($date),
+        substr($date,11,5)
     );
-    return "$hr:$mi  " . format_date("$yr-$mo-$da");
 }
