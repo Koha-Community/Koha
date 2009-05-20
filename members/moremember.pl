@@ -47,6 +47,7 @@ use C4::Letters;
 use C4::Biblio;
 use C4::Reserves;
 use C4::Branch; # GetBranchName
+use C4::Form::MessagingPreferences;
 
 #use Smart::Comments;
 #use Data::Dumper;
@@ -348,6 +349,13 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
     if (scalar(@types) == 0) {
         $template->param(no_patron_attribute_types => 1);
     }
+}
+
+if (C4::Context->preference('EnhancedMessagingPreferences')) {
+    C4::Form::MessagingPreferences::set_form_values({ borrowernumber => $borrowernumber }, $template);
+    $template->param(messaging_form_inactive => 1);
+    $template->param(SMSSendDriver => C4::Context->preference("SMSSendDriver"));
+    $template->param(SMSnumber     => defined $data->{'smsalertnumber'} ? $data->{'smsalertnumber'} : $data->{'mobile'});
 }
 
 $template->param(

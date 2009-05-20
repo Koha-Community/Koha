@@ -33,7 +33,6 @@ use C4::Letters;
 use C4::Biblio;
 use C4::Reserves;
 use C4::Branch; # GetBranchName
-use C4::Form::MessagingPreferences;
 
 use Data::Dumper;
 
@@ -65,18 +64,6 @@ $template->param( $borrower );
 
 my $borrower = GetMemberDetails( $borrowernumber );
 
-if ( defined $query->param('modify') && $query->param('modify') eq 'yes' ) {
-
-    # If they've modified the SMS number, record it.
-    if ( ( defined $query->param('SMSnumber') ) && ( $query->param('SMSnumber') ne $borrower->{'mobile'} ) ) {
-        ModMember( borrowernumber => $borrowernumber,
-                   smsalertnumber => $query->param('SMSnumber') );
-        $borrower = GetMemberDetails( $borrowernumber );
-    }
-    C4::Form::MessagingPreferences::handle_form_action($query, { borrowernumber => $borrowernumber }, $template);
-} 
-
-C4::Form::MessagingPreferences::set_form_values({ borrowernumber => $borrowernumber }, $template);
 
     if ( $borrower->{'category_type'} eq 'C') {
         my  ( $catcodes, $labels ) =  GetborCatFromCatType( 'A', 'WHERE category_type = ?' );
@@ -100,7 +87,6 @@ $template->param( messagingview               => 1,
                   dateformat                  => C4::Context->preference("dateformat"),
                   categoryname                => $borrower->{'description'},
                   $borrower->{'categorycode'} => 1,
-                  SMSSendDriver                =>  C4::Context->preference("SMSSendDriver")
 );
 
 #$messaging_preferences->{'SMSnumber'}{'value'} = defined $borrower->{'smsalertnumber'}
@@ -109,6 +95,6 @@ $template->param( messagingview               => 1,
 $template->param( BORROWER_INFO         => [ $borrower ],
                   messagingview         => 1,
 				  is_child        => ($borrower->{'category_type'} eq 'C'),
-                  SMSnumber             => defined $borrower->{'smsalertnumber'} ? $borrower->{'smsalertnumber'} : $borrower->{'mobile'} );
+                );
 
 output_html_with_http_headers $query, $cookie, $template->output;

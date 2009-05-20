@@ -126,6 +126,7 @@ sub set_form_values {
         # make a hashref of the days, selecting one.
         if ( $option->{'takes_days'} ) {
             my $days_in_advance = $pref->{'days_in_advance'} ? $pref->{'days_in_advance'} : 0;
+            $option->{days_in_advance} = $days_in_advance;
             @{$option->{'select_days'}} = map {; {
                 day        => $_,
                 selected   => $_ == $days_in_advance ? 'selected="selected"' :'' } 

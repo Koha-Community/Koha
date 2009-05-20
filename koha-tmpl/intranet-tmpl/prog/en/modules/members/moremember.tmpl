@@ -279,6 +279,19 @@ if (nodename =="barcodes[]"){
 <div class="action"><a href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=4">Edit</a></div>
 <!-- /TMPL_UNLESS -->
 <!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="EnhancedMessagingPreferences" -->
+<div id="patron-messaging-prefs" style="padding-top: 1em;">
+<h3>Patron messaging preferences</h3>
+<!-- TMPL_INCLUDE NAME="messaging-preference-form.inc" -->
+ <!-- TMPL_IF NAME="SMSSendDriver" -->
+      <div class="rows"> <ol><li><span class="label">SMS number:</span><!-- TMPL_VAR NAME="SMSnumber"  -->
+     </li></ol></div>
+ <!-- /TMPL_IF -->
+</div>
+<div class="action"><a href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=5">Edit</a></div>
+<!-- /TMPL_IF -->
+
 </div>
  <div class="yui-u"> 
  <div id="patron-library-details">
@@ -443,7 +456,7 @@ if (nodename =="barcodes[]"){
             </td>
       <!-- /TMPL_IF -->
         </tr>
-        <!-- /tmpl_loop --></tbody>
+        <!-- /tmpl_loop -->
         <tr>
             <td colspan="4" style="text-align: right; font-weight:bold;">Totals:</td>
 			<td><!-- TMPL_VAR NAME="totaldue" --></td>
@@ -467,6 +480,7 @@ if (nodename =="barcodes[]"){
                 </p>
             </td>
         </tr>
+        </tbody>
         </table>
         <fieldset class="action">
         <!-- TMPL_IF NAME="CAN_user_circulate_override_renewals" -->

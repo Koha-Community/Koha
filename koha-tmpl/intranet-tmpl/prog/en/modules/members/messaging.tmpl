@@ -42,23 +42,6 @@
    </div>
 <!-- TMPL_ELSE -->
 
-<form method="get" name="messaging" action="/cgi-bin/koha/members/messaging.pl">
-  <!-- TMPL_IF NAME= "settings_updated" -->
-    <div class="dialog message"><h4>Settings Updated</h4>
-      The patron settings have been updated</div>
-  <!-- /TMPL_IF -->
-
- <h3>Manage patron messaging settings</h3>
-
-<!-- TMPL_INCLUDE NAME="messaging-preference-form.inc" -->
-
-<!-- TMPL_IF NAME="transport-sms" --><p><label for="SMSnumber">SMS number:</label> <input type="text" id="SMSnumber" name="SMSnumber" value="<!-- TMPL_VAR NAME="SMSnumber"  -->" /></p><!-- /TMPL_IF -->
-<fieldset class="action">
-  <input type="submit" value="Submit Changes" /> <a class="cancel" href="/cgi-bin/koha/opac-user.pl">Cancel</a>
-</fieldset>
-
-</form>
-
 <!-- TMPL_IF NAME="message_queue" -->
 <table>
   <caption>Message Queue</caption>
