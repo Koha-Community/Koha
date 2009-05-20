@@ -2415,6 +2415,21 @@ ENDOFRENEWAL
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.01.00.033";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(q/
+        ALTER TABLE borrower_message_preferences
+        MODIFY borrowernumber int(11) default NULL,
+        ADD    categorycode varchar(10) default NULL AFTER borrowernumber,
+        ADD KEY `categorycode` (`categorycode`),
+        ADD CONSTRAINT `borrower_message_preferences_ibfk_3` 
+                       FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`) 
+                       ON DELETE CASCADE ON UPDATE CASCADE
+    /);
+    print "Upgrade to $DBversion done (DB changes to allow patron category defaults for messaging preferences)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table

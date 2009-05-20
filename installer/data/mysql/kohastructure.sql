@@ -2306,15 +2306,18 @@ CREATE TABLE `message_transports` (
 DROP TABLE IF EXISTS `borrower_message_preferences`;
 CREATE TABLE `borrower_message_preferences` (
   `borrower_message_preference_id` int(11) NOT NULL auto_increment,
-  `borrowernumber` int(11) NOT NULL default '0',
+  `borrowernumber` int(11) default NULL,
+  `categorycode` varchar(10) default NULL,
   `message_attribute_id` int(11) default '0',
   `days_in_advance` int(11) default '0',
   `wants_digest` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`borrower_message_preference_id`),
   KEY `borrowernumber` (`borrowernumber`),
+  KEY `categorycode` (`categorycode`),
   KEY `message_attribute_id` (`message_attribute_id`),
   CONSTRAINT `borrower_message_preferences_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `borrower_message_preferences_ibfk_2` FOREIGN KEY (`message_attribute_id`) REFERENCES `message_attributes` (`message_attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `borrower_message_preferences_ibfk_2` FOREIGN KEY (`message_attribute_id`) REFERENCES `message_attributes` (`message_attribute_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `borrower_message_preferences_ibfk_3` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
