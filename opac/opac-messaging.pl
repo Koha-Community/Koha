@@ -31,6 +31,7 @@ use C4::Dates qw/format_date/;
 use C4::Members;
 use C4::Members::Messaging;
 use C4::Branch;
+use C4::Form::MessagingPreferences;
 
 my $query = CGI->new();
 
@@ -57,66 +58,14 @@ if ( defined $query->param('modify') && $query->param('modify') eq 'yes' ) {
         $borrower = GetMemberDetails( $borrowernumber );
     }
 
-    # TODO: If a "NONE" box and another are checked somehow (javascript failed), we should pay attention to the "NONE" box
-    
-    # warn( Data::Dumper->Dump( [ $messaging_options ], [ 'messaging_options' ] ) );
-    OPTION: foreach my $option ( @$messaging_options ) {
-        # warn( Data::Dumper->Dump( [ $option ], [ 'option' ] ) );
-        my $updater = { borrowernumber          => $borrower->{'borrowernumber'},
-                        message_attribute_id    => $option->{'message_attribute_id'} };
-        
-        # find the desired transports
-        @{$updater->{'message_transport_types'}} = $query->param( $option->{'message_attribute_id'} );
-        next OPTION unless $updater->{'message_transport_types'};
-
-        if ( $option->{'has_digest'} ) {
-            if ( List::Util::first { $_ == $option->{'message_attribute_id'} } $query->param( 'digest' ) ) {
-                $updater->{'wants_digest'} = 1;
-            }
-        }
-
-        if ( $option->{'takes_days'} ) {
-            if ( defined $query->param( $option->{'message_attribute_id'} . '-DAYS' ) ) {
-                $updater->{'days_in_advance'} = $query->param( $option->{'message_attribute_id'} . '-DAYS' );
-            }
-        }
-
-        # warn( 'calling SetMessaginPreferencse with ' . Data::Dumper->Dump( [ $updater ], [ 'updater' ] ) );
-        C4::Members::Messaging::SetMessagingPreference( $updater );
-    }
-
-    # show the success message
-    $template->param( settings_updated => 1 );
-} 
-
-$messaging_options = C4::Members::Messaging::GetMessagingOptions();
-# walk through the options and update them with these borrower_preferences
-PREF: foreach my $option ( @$messaging_options ) {
-    my $pref = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber     => $borrower->{'borrowernumber'},
-                                                                  message_name       => $option->{'message_name'} } );
-    # warn( Data::Dumper->Dump( [ $pref ], [ 'pref' ] ) );
-    # make a hashref of the days, selecting one.
-    if ( $option->{'takes_days'} ) {
-        foreach my $day ( 0..30 ) { # FIXME: 30 is a magic number.
-            my $dayrow = { day      => $day,
-                           selected => '' };
-            if ( defined $pref->{'days_in_advance'} && $pref->{'days_in_advance'} == $day ) {
-                $dayrow->{'selected'} = 'SELECTED';
-            }
-            push @{$option->{'select_days'}}, $dayrow
-        }
-    }
-    foreach my $transport ( @{$pref->{'transports'}} ) {
-        $option->{'transport-'.$transport} = 'checked="checked"';
-    }
-
-    $option->{'digest'} = $pref->{'wants_digest'} ? 'checked="checked"' : '';
+    C4::Form::MessagingPreferences::handle_form_action($query, { borrowernumber => $borrowernumber }, $template);
 }
+
+C4::Form::MessagingPreferences::set_form_values({ borrowernumber     => $borrower->{'borrowernumber'} }, $template);
 
 # warn( Data::Dumper->Dump( [ $messaging_options ], [ 'messaging_options' ] ) );
 $template->param( BORROWER_INFO         => [ $borrower ],
                   messagingview         => 1,
-                  messaging_preferences => $messaging_options,
                   SMSnumber => defined $borrower->{'smsalertnumber'} ? $borrower->{'smsalertnumber'} : $borrower->{'mobile'},
                   SMSSendDriver                =>  C4::Context->preference("SMSSendDriver") );
 
