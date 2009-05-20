@@ -133,6 +133,12 @@
 	</li></ol>
 </fieldset>
 
+    <!-- TMPL_IF NAME="EnhancedMessagingPreferences" -->
+      <fieldset>
+        <h4>Default messaging preferences for this patron category</h4>
+        <!-- TMPL_INCLUDE NAME="messaging-preference-form.inc" -->
+      </fieldset>
+    <!-- /TMPL_IF -->
 	<fieldset class="action"><input type="button" value="Save" onclick="Check(this.form);" /> </fieldset>
 	</form>
 
@@ -221,6 +227,9 @@ Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" escape="html" -->
 			<th scope="col">Enrollment fee</th>
 			<th scope="col">Overdue</th>
  			<th scope="col">Hold fee</th>
+            <!-- TMPL_IF NAME="EnhancedMessagingPreferences" -->
+            <th scope="col">Messaging</th>
+            <!-- /TMPL_IF -->
 			<th scope="col" colspan="2">&nbsp; </th>
 		</tr>
 		<!-- TMPL_LOOP NAME="loop" -->
@@ -243,6 +252,21 @@ Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" escape="html" -->
                         <td><!-- TMPL_VAR NAME="enrolmentfee" --></td>
                         <td><!-- TMPL_IF NAME="overduenoticerequired" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
                         <td><!-- TMPL_VAR NAME="reservefee" --></td>
+                        <!-- TMPL_IF NAME="EnhancedMessagingPreferences" -->
+                        <td>
+                            <!-- TMPL_IF NAME="messaging_prefs" -->
+                                <!-- TMPL_LOOP NAME="messaging_prefs" -->
+                                    <!-- TMPL_VAR NAME="message_name" --> :
+                                    <!-- TMPL_LOOP NAME="transports" -->
+                                        <!-- TMPL_VAR NAME="transport" -->
+                                    <!-- /TMPL_LOOP -->
+                                <!-- /TMPL_LOOP -->
+                                <br />
+                            <!-- TMPL_ELSE -->
+                                none
+                            <!-- /TMPL_IF -->
+                        </td>
+                        <!-- /TMPL_IF -->
                         <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" escape="url" -->">Edit</a></td>
 						<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" escape="url" -->">Delete</a></td>
 		</tr>
