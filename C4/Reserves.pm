@@ -973,6 +973,12 @@ sub ModReserveAffect {
     my $sth = $dbh->prepare("SELECT biblionumber FROM items WHERE itemnumber=?");
     $sth->execute($itemnumber);
     my ($biblionumber) = $sth->fetchrow;
+
+    # get request - need to find out if item is already
+    # waiting in order to not send duplicate hold filled notifications
+    my $request = GetReserveInfo($borrowernumber, $biblionumber);
+    my $already_on_shelf = ($request && $request->{found} eq 'W') ? 1 : 0;
+
     # If we affect a reserve that has to be transfered, don't set to Waiting
     my $query;
     if ($transferToDo) {
@@ -998,7 +1004,7 @@ sub ModReserveAffect {
     }
     $sth = $dbh->prepare($query);
     $sth->execute( $itemnumber, $borrowernumber,$biblionumber);
-    _koha_notify_reserve( $itemnumber, $borrowernumber, $biblionumber ) if ( !$transferToDo );
+    _koha_notify_reserve( $itemnumber, $borrowernumber, $biblionumber ) if ( !$transferToDo && !$already_on_shelf );
 
     return;
 }
