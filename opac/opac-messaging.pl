@@ -107,10 +107,10 @@ PREF: foreach my $option ( @$messaging_options ) {
         }
     }
     foreach my $transport ( @{$pref->{'transports'}} ) {
-        $option->{'transport-'.$transport} = 'CHECKED';
+        $option->{'transport-'.$transport} = 'checked="checked"';
     }
 
-    $option->{'digest'} = $pref->{'wants_digest'} ? 'CHECKED' : '';
+    $option->{'digest'} = $pref->{'wants_digest'} ? 'checked="checked"' : '';
 }
 
 # warn( Data::Dumper->Dump( [ $messaging_options ], [ 'messaging_options' ] ) );

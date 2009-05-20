@@ -119,9 +119,9 @@ PREF: foreach my $option ( @$messaging_options ) {
                                                selected   => $_ == $pref->{'days_in_advance'} ? 'SELECTED' :'' } } ( 0..30 ); # FIXME: 30 is a magic number.
     }
     foreach my $transport ( @{$pref->{'transports'}} ) {
-        $option->{'transport-'.$transport} = 'CHECKED';
+        $option->{'transport-'.$transport} = 'checked="checked"';
     }
-    $option->{'digest'} = 'CHECKED' if $pref->{'wants_digest'};
+    $option->{'digest'} = 'checked="checked"' if $pref->{'wants_digest'};
 }
 
     if ( $borrower->{'category_type'} eq 'C') {
