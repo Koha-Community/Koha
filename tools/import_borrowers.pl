@@ -44,6 +44,7 @@ use C4::Branch qw(GetBranchName);
 use C4::Members;
 use C4::Members::Attributes;
 use C4::Members::AttributeTypes;
+use C4::Members::Messaging;
 
 use Text::CSV;
 # Text::CSV::Unicode, even in binary mode, fails to parse lines with these diacriticals:
@@ -55,6 +56,7 @@ use CGI;
 
 my (@errors, @feedback);
 my $extended = C4::Context->preference('ExtendedPatronAttributes');
+my $set_messaging_prefs = C4::Context->preference('EnhancedMessagingPreferences');
 my @columnkeys = C4::Members->columns;
 if ($extended) {
     push @columnkeys, 'patron_attributes';
@@ -263,6 +265,10 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
             if ($borrowernumber = AddMember(%borrower)) {
                 if ($extended) {
                     C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $patron_attributes);
+                }
+                if ($set_messaging_prefs) {
+                    C4::Members::Messaging::SetMessagingPreferencesFromDefaults({ borrowernumber => $borrowernumber,
+                                                                                  categorycode => $borrower{categorycode} });
                 }
                 $imported++;
                 $template->param('lastimported'=>$borrower{'surname'}.' / '.$borrowernumber);

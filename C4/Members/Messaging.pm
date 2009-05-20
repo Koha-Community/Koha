@@ -191,7 +191,7 @@ END_SQL
 
   my $messaging_options = C4::Members::Messaging::GetMessagingOptions()
 
-returns a hashref of messaing options available.
+returns a hashref of messaging options available.
 
 =cut
 
@@ -218,6 +218,40 @@ END_SQL
     my @return = values %$choices;
     # warn( Data::Dumper->Dump( [ \@return ], [ 'return' ] ) );
     return \@return;
+}
+
+=head2 SetMessagingPreferencesFromDefaults
+
+  C4::Members::Messaging::SetMessagingPreferenceFromDefaults( { borrowernumber => $borrower->{'borrowernumber'}
+                                                                categorycode   => 'CPL' } );
+
+Given a borrowernumber and a patron category code (from the C<borrowernumber> and C<categorycode> keys
+in the parameter hashref), replace all of the patron's current messaging preferences with
+whatever defaults are defined for the patron category.
+
+=cut
+
+sub SetMessagingPreferencesFromDefaults {
+    my $params = shift;
+
+    foreach my $required ( qw( borrowernumber categorycode ) ) {
+        unless ( exists $params->{ $required } ) {
+            die "SetMessagingPreferencesFromDefaults called without required parameter: $required";
+        }
+    }
+
+    my $messaging_options = GetMessagingOptions();
+    OPTION: foreach my $option ( @$messaging_options ) {
+        my $default_pref = GetMessagingPreferences( { categorycode => $params->{categorycode},
+                                                      message_name => $option->{'message_name'} } );
+        # FIXME - except for setting the borrowernumber, it really ought to be possible
+        # to have the output of GetMessagingPreferences be able to be the input
+        # to SetMessagingPreference
+        $default_pref->{message_attribute_id}    = $option->{'message_attribute_id'};
+        $default_pref->{message_transport_types} = $default_pref->{transports};
+        $default_pref->{borrowernumber}          = $params->{borrowernumber};
+        SetMessagingPreference( $default_pref );
+    }
 }
 
 =head1 TABLES
