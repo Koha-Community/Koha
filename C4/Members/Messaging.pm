@@ -47,18 +47,20 @@ This module lets you modify a patron's messaging preferences.
   my $preferences = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $borrower->{'borrowernumber'},
                                                                        message_name   => 'DUE' } );
 
-returns: a hashref of messaging preferences for this borrower for a particlar message_name
+  my $preferences = C4::Members::Messaging::GetMessagingPreferences( { categorycode => 'LIBRARY',
+                                                                       message_name   => 'DUE' } );
+
+returns: a hashref of messaging preferences for a borrower or patron category for a particlar message_name
+
+Requires either a borrowernumber or a categorycode key, but not both.
 
 =cut
 
 sub GetMessagingPreferences {
     my $params = shift;
 
-    foreach my $required ( qw( borrowernumber message_name ) ) {
-        if ( ! exists $params->{ $required } ) {
-            return;
-        }
-    }
+    return unless exists $params->{message_name};
+    return unless exists $params->{borrowernumber} xor exists $params->{categorycode}; # yes, xor
 
     my $sql = <<'END_SQL';
 SELECT borrower_message_preferences.*,
@@ -73,11 +75,17 @@ SELECT borrower_message_preferences.*,
   LEFT JOIN message_transports
     ON message_transports.message_attribute_id = message_attributes.message_attribute_id
     AND message_transports.message_transport_type = borrower_message_transport_preferences.message_transport_type
-  WHERE borrower_message_preferences.borrowernumber = ?
-   AND message_attributes.message_name = ?
+  WHERE message_attributes.message_name = ?
 END_SQL
 
-    my @bind_params = ( $params->{'borrowernumber'}, $params->{'message_name'} );
+    my @bind_params = ( $params->{'message_name'} );
+    if ( exists $params->{'borrowernumber'} ) {
+        $sql .= " AND borrower_message_preferences.borrowernumber = ? ";
+        push @bind_params, $params->{borrowernumber};
+    } else {
+        $sql .= " AND borrower_message_preferences.categorycode = ? ";
+        push @bind_params, $params->{categorycode};
+    }
 
     my $sth = C4::Context->dbh->prepare($sql);
     $sth->execute(@bind_params);
@@ -97,8 +105,8 @@ END_SQL
 
 =head2 SetMessagingPreference
 
-This method defines how a user wants to get a certain message delivered.  The
-list of valid message types can be delivered can be found in the
+This method defines how a user (or a default for a patron category) wants to get a certain 
+message delivered.  The list of valid message types can be delivered can be found in the
 C<message_attributes> table, and the list of valid message transports can be
 found in the C<message_transport_types> table.
 
@@ -115,7 +123,11 @@ returns nothing useful.
 sub SetMessagingPreference {
     my $params = shift;
 
-    foreach my $required ( qw( borrowernumber message_attribute_id message_transport_types ) ) {
+    unless (exists $params->{borrowernumber} xor exists $params->{categorycode}) { # yes, xor
+        warn "SetMessagingPreference called without exactly one of borrowernumber or categorycode";
+        return;
+    }
+    foreach my $required ( qw( message_attribute_id message_transport_types ) ) {
         if ( ! exists $params->{ $required } ) {
             warn "SetMessagingPreference called without required parameter: $required";
             return;
@@ -128,26 +140,36 @@ sub SetMessagingPreference {
     
     my $delete_sql = <<'END_SQL';
 DELETE FROM borrower_message_preferences
-  WHERE borrowernumber = ?
-    AND message_attribute_id = ?
+  WHERE message_attribute_id = ?
 END_SQL
+    my @bind_params = ( $params->{'message_attribute_id'} );
+    if ( exists $params->{'borrowernumber'} ) {
+        $delete_sql .= " AND borrowernumber = ? ";
+        push @bind_params, $params->{borrowernumber};
+    } else {
+        $delete_sql .= " AND categorycode = ? ";
+        push @bind_params, $params->{categorycode};
+    }
     my $sth = $dbh->prepare( $delete_sql );
-    my $deleted = $sth->execute( $params->{'borrowernumber'}, $params->{'message_attribute_id'} );
+    my $deleted = $sth->execute( @bind_params );
 
     if ( $params->{'message_transport_types'} ) {
         my $insert_bmp = <<'END_SQL';
 INSERT INTO borrower_message_preferences
-(borrower_message_preference_id, borrowernumber, message_attribute_id, days_in_advance, wants_digest)
+(borrower_message_preference_id, borrowernumber, categorycode, message_attribute_id, days_in_advance, wants_digest)
 VALUES
-(NULL, ?, ?, ?, ?)
+(NULL, ?, ?, ?, ?, ?)
 END_SQL
         
         $sth = C4::Context->dbh()->prepare($insert_bmp);
+        # set up so that we can easily construct the insert SQL
+        $params->{'borrowernumber'}  = undef unless exists ( $params->{'borrowernumber'} );
+        $params->{'categorycode'}    = undef unless exists ( $params->{'categorycode'} );
         my $success = $sth->execute( $params->{'borrowernumber'},
+                                     $params->{'categorycode'},
                                      $params->{'message_attribute_id'},
                                      $params->{'days_in_advance'},
                                      $params->{'wants_digest'} );
-        
         # my $borrower_message_preference_id = $dbh->last_insert_id();
         my $borrower_message_preference_id = $dbh->{'mysql_insertid'};
         
