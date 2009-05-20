@@ -25,7 +25,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
 	# set the version for version checking
-	$VERSION = 3.01;
+	$VERSION = 3.02;
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
 		&GetBranchCategory
@@ -45,6 +45,7 @@ BEGIN {
 		&DelBranch
 		&DelBranchCategory
 	);
+	@EXPORT_OK = qw( &onlymine );
 }
 
 =head1 NAME
@@ -111,13 +112,14 @@ sub GetBranches {
         $query.=" ORDER BY branchname";
     $sth = $dbh->prepare($query);
     $sth->execute( @bind_parameters );
+
+    my $nsth = $dbh->prepare(
+        "SELECT categorycode FROM branchrelations WHERE branchcode = ?"
+    );  # prepare once, outside while loop
+
     while ( my $branch = $sth->fetchrow_hashref ) {
-        my $nsth =
-          $dbh->prepare(
-            "SELECT categorycode FROM branchrelations WHERE branchcode = ?");
         $nsth->execute( $branch->{'branchcode'} );
         while ( my ($cat) = $nsth->fetchrow_array ) {
-
             # FIXME - This seems wrong. It ought to be
             # $branch->{categorycodes}{$cat} = 1;
             # otherwise, there's a namespace collision if there's a
@@ -135,9 +137,17 @@ sub GetBranches {
     return ( \%branches );
 }
 
+sub onlymine {
+    return 
+    C4::Context->preference('IndependantBranches') &&
+    C4::Context->userenv                           &&
+    C4::Context->userenv->{flags}!=1               &&
+    C4::Context->userenv->{branch}                 ;
+}
+
 sub GetBranchesLoop (;$$) {  # since this is what most pages want anyway
     my $branch   = @_ ? shift : '';     # optional first argument is branchcode of "my branch", if preselection is wanted.
-    my $onlymine = @_ ? shift : C4::Context->preference("IndependantBranches");
+    my $onlymine = @_ ? shift : onlymine();
     my $branches = GetBranches($onlymine);
     my @loop;
     foreach (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
