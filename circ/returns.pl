@@ -41,7 +41,7 @@ use C4::Reserves;
 use C4::Biblio;
 use C4::Items;
 use C4::Members;
-use C4::Branch; # GetBranchName
+use C4::Branch; # GetBranches GetBranchName
 use C4::Koha;   # FIXME : is it still useful ?
 
 my $query = new CGI;
@@ -125,30 +125,18 @@ if ( $query->param('resbarcode') ) {
     my $borrowernumber = $query->param('borrowernumber');
     my $resbarcode     = $query->param('resbarcode');
     my $diffBranchReturned = $query->param('diffBranch');
-    # set to waiting....
     my $iteminfo   = GetBiblioFromItemNumber($item);
     # fix up item type for display
     $iteminfo->{'itemtype'} = C4::Context->preference('item-level_itypes') ? $iteminfo->{'itype'} : $iteminfo->{'itemtype'};
-    my $diffBranchSend;
-    
-#     addin in ModReserveAffect the possibility to check if the document is expected in this library or not,
-# if not we send a value in reserve waiting for not implementting waiting status
-    if ($userenv_branch ne $diffBranchReturned) {
-        $diffBranchSend = $diffBranchReturned;
-    }
-    else {
-        $diffBranchSend = undef;
-    }
-    ModReserveAffect( $item, $borrowernumber,$diffBranchSend);
-#   check if we have other reservs for this document, if we have a return send the message of transfer
+    my $diffBranchSend = ($userenv_branch ne $diffBranchReturned) ? $diffBranchReturned : undef;
+# diffBranchSend tells ModReserveAffect whether document is expected in this library or not,
+# i.e., whether to apply waiting status
+    ModReserveAffect( $item, $borrowernumber, $diffBranchSend);
+#   check if we have other reserves for this document, if we have a return send the message of transfer
     my ( $messages, $nextreservinfo ) = GetOtherReserves($item);
 
     my ($borr) = GetMemberDetails( $nextreservinfo, 0 );
-    my $borcnum = $borr->{'cardnumber'};
-    my $name    = $borr->{'surname'} . ", " . $borr->{'title'} . " " . $borr->{'firstname'};
-     
-    my $slip = $query->param('resslip');
-
+    my $name   = $borr->{'surname'} . ", " . $borr->{'title'} . " " . $borr->{'firstname'};
     if ( $messages->{'transfert'} ) {
         $template->param(
             itemtitle      => $iteminfo->{'title'},
@@ -157,10 +145,10 @@ if ( $query->param('resbarcode') ) {
             tobranchname   => GetBranchName($messages->{'transfert'}),
             name           => $name,
             borrowernumber => $borrowernumber,
-            borcnum        => $borcnum,
+            borcnum        => $borr->{'cardnumber'},
             borfirstname   => $borr->{'firstname'},
             borsurname     => $borr->{'surname'},
-            diffbranch     => 1
+            diffbranch     => 1,
         );
     }
 }
@@ -187,7 +175,7 @@ if ($dotransfer){
 
 # actually return book and prepare item table.....
 if ($barcode) {
-    $barcode = barcodedecode($barcode)  if(C4::Context->preference('itemBarcodeInputFilter'));
+    $barcode = barcodedecode($barcode) if C4::Context->preference('itemBarcodeInputFilter');
 #
 # save the return
 #
@@ -208,14 +196,16 @@ if ($barcode) {
         itembiblionumber => $biblio->{'biblionumber'},    
     );
 
+    my %input = (
+        counter => 0,
+        first   => 1,
+        barcode => $barcode,
+    );
+
     if ($returned) {
         $returneditems{0}    = $barcode;
         $riborrowernumber{0} = $borrower->{'borrowernumber'};
         $riduedate{0}        = $issueinformation->{'date_due'};
-        my %input;
-        $input{counter}        = 0;
-        $input{first}          = 1;
-        $input{barcode}        = $barcode;
         $input{borrowernumber} = $borrower->{'borrowernumber'};
         $input{duedate}        = $issueinformation->{'date_due'};
         $input{return_overdue} = 1 if ($issueinformation->{'date_due'} lt $today->output('iso'));
@@ -228,17 +218,12 @@ if ($barcode) {
         }
     }
     elsif ( !$messages->{'BadBarcode'} ) {
-        my %input;
-        $input{counter} = 0;
-        $input{first}   = 1;
-        $input{barcode} = $barcode;
-        $input{duedate} = 0;
-
+        $input{duedate}   = 0;
         $returneditems{0} = $barcode;
         $riduedate{0}     = 0;
         if ( $messages->{'wthdrawn'} ) {
             $input{withdrawn}      = 1;
-            $input{borrowernumber} = 'Item Cancelled';
+            $input{borrowernumber} = 'Item Cancelled';  # FIXME: should be in display layer ?
             $riborrowernumber{0}   = 'Item Cancelled';
         }
         else {
@@ -439,12 +424,12 @@ if ($borrower) {
             my $items = $flags->{$flag}->{'itemlist'};
             foreach my $item (@$items) {
                 my $biblio = GetBiblioFromItemNumber( $item->{'itemnumber'});
-                my %waitingitem;
-                $waitingitem{biblionum} = $biblio->{'biblionumber'};
-                $waitingitem{barcode}   = $biblio->{'barcode'};
-                $waitingitem{title}     = $biblio->{'title'};
-                $waitingitem{brname}    = $branches->{ $biblio->{'holdingbranch'} }->{'branchname'};
-                push( @waitingitemloop, \%waitingitem );
+                push @waitingitemloop, {
+                    biblionum => $biblio->{'biblionumber'},
+                    barcode   => $biblio->{'barcode'},
+                    title     => $biblio->{'title'},
+                    brname    => $branches->{ $biblio->{'holdingbranch'} }->{'branchname'},
+                };
             }
             $flaginfo{itemloop} = \@waitingitemloop;
         }
@@ -455,13 +440,13 @@ if ($borrower) {
                 @$items )
             {
                 my $biblio = GetBiblioFromItemNumber( $item->{'itemnumber'});
-                my %overdueitem;
-                $overdueitem{duedate}   = format_date( $item->{'date_due'} );
-                $overdueitem{biblionum} = $biblio->{'biblionumber'};
-                $overdueitem{barcode}   = $biblio->{'barcode'};
-                $overdueitem{title}     = $biblio->{'title'};
-                $overdueitem{brname}    = $branches->{ $biblio->{'holdingbranch'}} ->{'branchname'};
-                push( @itemloop, \%overdueitem );
+                push @itemloop, {
+                    duedate   => format_date($item->{'date_due'}),
+                    biblionum => $biblio->{'biblionumber'},
+                    barcode   => $biblio->{'barcode'},
+                    title     => $biblio->{'title'},
+                    brname    => $branches->{ $biblio->{'holdingbranch'} }->{'branchname'},
+                };
             }
             $flaginfo{itemloop} = \@itemloop;
             $flaginfo{overdue}  = 1;
@@ -532,9 +517,9 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
     }
     push( @riloop, \%ri );
 }
-$template->param( riloop => \@riloop );
 
 $template->param(
+    riloop         => \@riloop,
     genbrname      => $branches->{$userenv_branch}->{'branchname'},
     genprname      => $printers->{$printer}->{'printername'},
     branchname     => $branches->{$userenv_branch}->{'branchname'},
