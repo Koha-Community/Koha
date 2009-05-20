@@ -905,8 +905,6 @@ sub deduplicate_batch {
 	return $killed, undef;
 }
 
-our $possible_decimal = qr/\d+(?:\.\d+)?/;
-
 sub split_lccn {
     my ($lccn) = @_;    
     $_ = $lccn;
@@ -929,6 +927,8 @@ sub split_lccn {
     return @parts;
 }
 
+our $possible_decimal = qr/\d{3,}(?:\.\d+)?/; # at least three digits for a DDCN
+
 sub split_ddcn {
     my ($ddcn) = @_;
     $_ = $ddcn;
@@ -937,7 +937,7 @@ sub split_ddcn {
 
     my (@parts) = m/
         ^([a-zA-Z-]+(?:$possible_decimal)?) # R220.3            # BIO   # first example will require extra splitting
-        \s*
+        \s+
         (.+)                               # H2793Z H32 c.2   # R5c.1   # everything else (except bracketing spaces)
         \s*
         /x;
