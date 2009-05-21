@@ -1,4 +1,4 @@
-INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VALUES (LAST_INSERT_ID( ) + 0,'LOST','0');
+INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VALUES (LAST_INSERT_ID( ) + 0,'LOST','0', '');
 
 INSERT INTO `authorised_values` (`id`, `category`, `authorised_value`, `lib`) VALUES (LAST_INSERT_ID( ) + 1,'LOST','2','Длительная просрочка (утрачено)');
 
