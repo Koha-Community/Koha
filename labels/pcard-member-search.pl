@@ -156,6 +156,7 @@ $template->param(
 $template->param( 
         searching       => "1",
         member          => $member,
+        category_type   => $category,
         numresults      => $count,
         resultsloop     => \@resultsdata,
         batch_id        => $batch_id,
