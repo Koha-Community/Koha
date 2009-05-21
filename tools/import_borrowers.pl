@@ -143,6 +143,12 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
             push @missing_criticals, {badparse=>1, line=>$., lineraw=>$borrowerline};
         } elsif (@columns == @columnkeys) {
             @borrower{@columnkeys} = @columns;
+            # MJR: try to fill blanks gracefully by using default values
+            foreach my $key (@criticals) {
+                if ($borrower{$key} !~ /\S/) {
+                    $borrower{$key} = $defaults{$key};
+                }
+            } 
         } else {
             # MJR: try to recover gracefully by using default values
             foreach my $key (@columnkeys) {
