@@ -323,9 +323,11 @@ Example XML stanza for LDAP configuration in KOHA_CONF.
     <hostname>localhost</hostname>
     <base>dc=metavore,dc=com</base>
     <user>cn=Manager,dc=metavore,dc=com</user>             <!-- DN, if not anonymous -->
-    <pass>metavore</pass>      <!-- password, if not anonymous -->
-    <replicate>1</replicate>   <!-- add new users from LDAP to Koha database -->
-    <update>1</update>         <!-- update existing users in Koha database -->
+    <pass>metavore</pass>          <!-- password, if not anonymous -->
+    <replicate>1</replicate>       <!-- add new users from LDAP to Koha database -->
+    <update>1</update>             <!-- update existing users in Koha database -->
+    <auth_by_bind>0</auth_by_bind> <!-- set to 1 to authenticate by binding instead of
+                                        password comparison, e.g., to use Active Directory -->
     <mapping>                  <!-- match koha SQL field names to your LDAP record field names -->
       <firstname    is="givenname"      ></firstname>
       <surname      is="sn"             ></surname>
