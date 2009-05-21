@@ -100,7 +100,7 @@ $tabsysprefs{dontmerge}             = "Authorities";
 $tabsysprefs{BiblioAddsAuthorities} = "Authorities";
 
 # Cataloguing
-$tabsysprefs{advancedMARCEditor}          = "Cataloguing";
+$tabsysprefs{advancedMARCeditor}          = "Cataloguing";
 $tabsysprefs{autoBarcode}                 = "Cataloguing";
 $tabsysprefs{hide_marc}                   = "Cataloguing";
 $tabsysprefs{IntranetBiblioDefaultView}   = "Cataloguing";
