@@ -731,7 +731,7 @@ sub SearchOrder {
           . ") or biblioitems.isbn=? OR (aqorders.ordernumber=? AND aqorders.biblionumber=?)) ";
     }
     
-    if( $biblionumber and $biblionumber ne "" ){
+    if ( $biblionumber ) {
         $query .= "AND biblio.biblionumber = ? ";
         push (@searchterms, $biblionumber);
     }
