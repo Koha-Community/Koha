@@ -1345,7 +1345,8 @@ $subscriptionid = &NewSubscription($auser,branchcode,$aqbooksellerid,$cost,$aqbu
     $add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
     $add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
     $add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
-    $numberingmethod, $status, $notes, $serialsadditems, graceperiod)
+    $numberingmethod, $status, $notes, $serialsadditems,
+    $staffdisplaycount, $opacdisplaycount, $graceperiod);
 
 Create a new subscription with value given on input args.
 
