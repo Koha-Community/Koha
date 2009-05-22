@@ -373,37 +373,29 @@ sub output_with_http_headers($$$$;$) {
 
     my %content_type_map = (
         'html' => 'text/html',
-        'js' => 'text/javascript',
+        'js'   => 'text/javascript',
         'json' => 'application/json',
-        'xml' => 'text/xml',
+        'xml'  => 'text/xml',
         # NOTE: not using application/atom+xml or application/rss+xml because of
         # Internet Explorer 6; see bug 2078.
-        'rss' => 'text/xml',
+        'rss'  => 'text/xml',
         'atom' => 'text/xml'
     );
 
     die "Unknown content type '$content_type'" if ( !defined( $content_type_map{$content_type} ) );
-
-    if ($cookie) {
-        print $query->header(
-            -type    => $content_type_map{$content_type},
-            -status => $status,
-            -charset => 'UTF-8',
-            -cookie  => $cookie,
-            -Pragma => 'no-cache',
-            -'Cache-Control' => 'no-cache',
-        );
-    } else {
-        print $query->header(
-            -type    => $content_type_map{$content_type},
-            -status  => $status,
-            -charset => 'UTF-8',
-            -Pragma => 'no-cache',
-            -'Cache-Control' => 'no-cache',
-        );
+    my $options = {
+        type    => $content_type_map{$content_type},
+        status  => $status,
+        charset => 'UTF-8',
+        Pragma          => 'no-cache',
+        'Cache-Control' => 'no-cache',
+    };
+    $options->{cookie} = $cookie if $cookie;
+    if ($content_type eq 'html') {  # guaranteed to be one of the content_type_map keys, else we'd have died
+        $options->{'Content-Style-Type' } = 'text/css';
+        $options->{'Content-Script-Type'} = 'text/javascript';
     }
-
-    print $data;
+    print $query->header($options), $data;
 }
 
 sub output_html_with_http_headers ($$$) {
