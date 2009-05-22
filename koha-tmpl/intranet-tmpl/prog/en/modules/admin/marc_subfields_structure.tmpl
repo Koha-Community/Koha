@@ -89,7 +89,7 @@
     <!-- TMPL_LOOP NAME="loop" --> 
         <div id="sub<!-- TMPL_VAR NAME="urisubfieldcode" -->field">
         
-               <fieldset class="rows"><legend>Basic constraints</legend>
+               <fieldset class="rows"><legend><!-- TMPL_IF EXPR="new_subfield eq 1" -->Add new subfield<!-- TMPL_ELSE -->Basic constraints<!-- /TMPL_IF --></legend>
                 	<ol>
                 		<!-- TMPL_IF EXPR="subfieldcode eq 0 || subfieldcode" --> 
                 		<li><span class="label">Subfield code:</span> <!-- TMPL_VAR NAME="subfieldcode" --> <input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR NAME="subfieldcode" -->" /></li>
