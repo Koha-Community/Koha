@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -19,6 +18,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
 use C4::Context;
 use C4::Output;
 use CGI;
@@ -28,12 +28,10 @@ use C4::Debug;
 use Date::Calc qw/Today Add_Delta_YM/;
 
 my $input = new CGI;
-my $order = $input->param('order');
-my $startdate=$input->param('from');
-my $enddate=$input->param('to');
-my $max_bill=$input->param('ratio');
-
-my $theme = $input->param('theme');    # only used if allowthemeoverride is set
+my $order     = $input->param('order') || '';
+my $startdate = $input->param('from')  || '';
+my $enddate   = $input->param('to')    || '';
+my $max_bill  = $input->param('ratio') || C4::Context->preference('noissuescharge') || 20.00;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -46,47 +44,23 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $duedate;
-my $borrowernumber;
-my $itemnum;
-my $data1;
-my $data2;
-my $data3;
-my $name;
-my $phone;
-my $email;
-my $biblionumber;
-my $title;
-my $author;
-
 my ( $year, $month, $day ) = Today();
 my $todaysdate   = sprintf("%-04.4d-%-02.2d-%02.2d", $year, $month, $day);
 # Find yesterday for the default shelf pull start and end dates
 #    A default of the prior years's holds is a reasonable way to pull holds 
 my $datelastyear = sprintf("%-04.4d-%-02.2d-%02.2d", Add_Delta_YM($year, $month, $day, -1, 0));
 
-#		Predefine the start and end dates if they are not already defined
 $startdate =~ s/^\s+//;
 $startdate =~ s/\s+$//;
-$enddate =~ s/^\s+//;
-$enddate =~ s/\s+$//;
-#		Check if null, should string match, if so set start and end date to yesterday
-if (!defined($startdate) or $startdate eq "") {
-	$startdate = format_date($datelastyear);
-}
-if (!defined($enddate) or $enddate eq "") {
-	$enddate = format_date($todaysdate);
-}
-if (!defined($max_bill) or $max_bill eq "") {
-	$max_bill = C4::Context->preference('noissuescharge');
-	if ($max_bill <= 0) {
-		$max_bill = 20.00;
-	}
-}
+$enddate   =~ s/^\s+//;
+$enddate   =~ s/\s+$//;
+# Predefine the start and end dates if they are not already defined
+$startdate = format_date($datelastyear) unless $startdate;
+$enddate   = format_date($todaysdate  ) unless   $enddate;
 
-my $dbh    = C4::Context->dbh;
+my $dbh = C4::Context->dbh;
 my ($sqlorderby, $sqldatewhere, $presqldatewhere) = ("","","");
-$debug and warn format_date_in_iso($startdate) . "\n" . format_date_in_iso($enddate);
+$debug and warn "start: " . format_date_in_iso($startdate) . "\nend: " . format_date_in_iso($enddate);
 my @query_params = ();
 # the dates below is to check for compliance of the current date range
 if ($enddate) {
@@ -118,22 +92,22 @@ if ($order eq "patron") {
 }
 my $strsth =
 	"SELECT 
-		GROUP_CONCAT(accountlines.accounttype ORDER BY accountlines.date DESC SEPARATOR '<br/>') as l_accounttype,
-		GROUP_CONCAT(description ORDER BY accountlines.date DESC SEPARATOR '<br/>') as l_description,
+		GROUP_CONCAT(accountlines.accounttype   ORDER BY accountlines.date DESC SEPARATOR '<br/>') as l_accounttype,
+		GROUP_CONCAT(description                ORDER BY accountlines.date DESC SEPARATOR '<br/>') as l_description,
 		GROUP_CONCAT(round(amountoutstanding,2) ORDER BY accountlines.date DESC SEPARATOR '<br/>') as l_amountoutstanding, 
-		GROUP_CONCAT(accountlines.date ORDER BY accountlines.date DESC SEPARATOR '<br/>') as l_date, 
-		GROUP_CONCAT(accountlines.itemnumber ORDER BY accountlines.date DESC SEPARATOR '<br/>') as l_itemnumber, 
-		count(*) as cnt, 
-		max(accountlines.date) as maxdate,
+		GROUP_CONCAT(accountlines.date          ORDER BY accountlines.date DESC SEPARATOR '<br/>') as l_date,
+		GROUP_CONCAT(accountlines.itemnumber    ORDER BY accountlines.date DESC SEPARATOR '<br/>') as l_itemnumber,
+		count(*)                        as cnt,
+		max(accountlines.date)          as maxdate,
 		round(sum(amountoutstanding),2) as sum_amount, 
-		borrowers.borrowernumber as borrowernumber, 
-		borrowers.surname as surname, 
-		borrowers.firstname as firstname, 
-		borrowers.email as email,
-		borrowers.phone as phone,
+		borrowers.borrowernumber        as borrowernumber,
+		borrowers.surname               as surname,
+		borrowers.firstname             as firstname,
+		borrowers.email                 as email,
+		borrowers.phone                 as phone,
 		accountlines.itemnumber,
 		description, 
-		accountlines.date as accountdate
+		accountlines.date               as accountdate
 		FROM 
 			borrowers, accountlines
 		WHERE 
@@ -151,7 +125,6 @@ my $strsth =
 				GROUP BY accountlines.borrowernumber HAVING sum(amountoutstanding) >= ? ) 
 ";
 
-
 if (C4::Context->preference('IndependantBranches')){
 	$strsth .= " AND borrowers.branchcode=? ";
     push @query_params, C4::Context->userenv->{'branch'};
@@ -163,38 +136,29 @@ my $sth = $dbh->prepare($strsth);
 $sth->execute(@query_params);
 
 my @billingdata;
-my $previous;
-my $this;
 while ( my $data = $sth->fetchrow_hashref ) {   
-    my @itemlist;
-    push(
-        @billingdata,
-        {
-				l_accountype			=>		$data->{l_accounttype},
-				l_description			=>		$data->{l_description},
-				l_amountoutstanding	=>		$data->{l_amountoutstanding}, 
-				l_date					=>		$data->{l_date}, 
-				l_itemnumber			=>		$data->{l_itemnumber}, 
-				l_accounttype			=>		$data->{l_accounttype}, 
-				l_title					=>		$data->{l_title},
-				cnt						=>		$data->{cnt},
-				maxdate					=>		$data->{maxdate},
-				sum_amount				=>		$data->{sum_amount}, 
-				borrowernumber			=>		$data->{borrowernumber}, 
-				surname					=>		$data->{surname}, 
-				firstname				=>		$data->{firstname},
-				phone						=>		$data->{phone},
-				email						=>		$data->{email},
-				patronname				=>		$data->{surname} . ", " . $data->{firstname} ,
-				description				=>		$data->{description}, 
-				amountoutstanding		=>		$data->{amountoutstanding},
-				accountdata				=>		$data->{accountdata}
-        }
-    );
+    push @billingdata, {
+        l_accountype        => $data->{l_accounttype},
+        l_description       => $data->{l_description},
+        l_amountoutstanding => $data->{l_amountoutstanding},
+        l_date              => $data->{l_date},
+        l_itemnumber        => $data->{l_itemnumber},
+        l_accounttype       => $data->{l_accounttype},
+        l_title             => $data->{l_title},
+        cnt                 => $data->{cnt},
+        maxdate             => $data->{maxdate},
+        sum_amount          => $data->{sum_amount},
+        borrowernumber      => $data->{borrowernumber},
+        surname             => $data->{surname},
+        firstname           => $data->{firstname},
+        phone               => $data->{phone},
+        email               => $data->{email},
+        patronname          => $data->{surname} . ", " . $data->{firstname},
+        description         => $data->{description},
+        amountoutstanding   => $data->{amountoutstanding},
+        accountdata         => $data->{accountdata}
+    };
 }
-
-
-$sth->finish;
 
 $template->param(
     todaysdate      => format_date($todaysdate),
@@ -202,8 +166,7 @@ $template->param(
     to              => $enddate,
     ratio           => $max_bill,
     billingloop     => \@billingdata,
-    "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
-    DHTMLcalendar_dateformat =>  C4::Dates->DHTMLcalendar(),
+    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
