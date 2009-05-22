@@ -19,9 +19,13 @@ package C4::Stats;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+#use warnings; # FIXME
 require Exporter;
 use C4::Context;
+use C4::Debug;
 use vars qw($VERSION @ISA @EXPORT);
+
+our $debug;
 
 BEGIN {
 	# set the version for version checking
@@ -77,15 +81,16 @@ sub UpdateStats {
       = @_;
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare(
-        "INSERT INTO statistics (datetime,branch,type,value,
-                                        other,itemnumber,itemtype,borrowernumber,proccode) VALUES (now(),?,?,?,?,?,?,?,?)"
+        "INSERT INTO statistics
+        (datetime, branch, type, value,
+         other, itemnumber, itemtype, borrowernumber, proccode)
+         VALUES (now(),?,?,?,?,?,?,?,?)"
     );
     $sth->execute(
         $branch,    $type,    $amount,
         $other,     $itemnum, $itemtype, $borrowernumber,
 		$accountno
     );
-    $sth->finish;
 }
 
 # Otherwise, it'd need a POD.
@@ -97,26 +102,20 @@ sub TotalPaid {
   LEFT JOIN borrowers ON statistics.borrowernumber= borrowers.borrowernumber
   WHERE (statistics.type='payment' OR statistics.type='writeoff') ";
     if ( $time eq 'today' ) {
-        $query = $query . " AND datetime = now()";
-    }
-    else {
-        $query .= " AND datetime > '$time'";
+        $query .= " AND datetime = now()";
+    } else {
+        $query .= " AND datetime > '$time'";    # FIXME: use placeholders
     }
     if ( $time2 ne '' ) {
-        $query .= " AND datetime < '$time2'";
+        $query .= " AND datetime < '$time2'";   # FIXME: use placeholders
     }
     if ($spreadsheet) {
         $query .= " ORDER BY branch, type";
     }
+    $debug and warn "TotalPaid query: $query";
     my $sth = $dbh->prepare($query);
-warn $query;
     $sth->execute();
-    my @results;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push @results, $data;
-    }
-    $sth->finish;
-    return (@results);
+    return @{$sth->fetchall_arrayref({})};
 }
 
 1;
