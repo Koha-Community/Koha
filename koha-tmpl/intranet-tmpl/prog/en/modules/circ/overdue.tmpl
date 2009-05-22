@@ -1,6 +1,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Circulation &rsaquo; Items Overdue as of <!-- TMPL_VAR NAME="todaysdate" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<style type="text/css">
+    .sql {display:none;}
+</style>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -16,6 +19,7 @@
 
 <h2>Items Overdue as of <!-- TMPL_VAR NAME="todaysdate" --></h2>
 <p><a href="overdue.pl?op=csv&amp;branch=<!-- TMPL_VAR name="branchfilter" -->">Download file of all overdues</a> (for <!-- TMPL_IF name="branchfilter" -->branch <!-- TMPL_VAR name="branchfilter" --><!-- TMPL_ELSE -->all branches<!-- /TMPL_IF -->. Other filters are ignored)</p>
+<div class="sql"><pre><!-- TMPL_VAR NAME="sql" ESCAPE="HTML" --></pre></div>
 <div class="searchresults">
 <table id="overduest">
 <thead><tr>
@@ -28,12 +32,9 @@
 <tbody><!-- TMPL_LOOP NAME="overdueloop" -->
     <tr>
         <td><!-- TMPL_VAR NAME="duedate" --></td>
-        <!-- TMPL_IF NAME="email" -->
-        <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber"-->"><!-- TMPL_VAR NAME="name" --></a> <a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" -->">[email]</a> (<!-- TMPL_VAR NAME="phone" -->)</td>
-        <!-- TMPL_ELSE -->
-        <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber"-->"><!-- TMPL_VAR NAME="name" --></a> (<!--TMPL_IF NAME="phone" --><!-- TMPL_VAR NAME="phone" --><!-- TMPL_ELSE -->
-    <!--TMPL_IF NAME="mobile" --><!-- TMPL_VAR NAME="mobile" --><!-- TMPL_ELSE --><!--TMPL_IF NAME="phonepro" -->       <!-- TMPL_VAR NAME="phonepro" --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->)</td>
-        <!-- /TMPL_IF -->
+        <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber"-->"><!-- TMPL_VAR NAME="name" --></a>
+        <!-- TMPL_IF NAME="email" -->[<a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" -->">email</a>]<!-- /TMPL_IF -->
+        (<!--TMPL_IF NAME="phone" --><!-- TMPL_VAR NAME="phone" --><!-- TMPL_ELSIF NAME="mobile" --><!-- TMPL_VAR NAME="mobile" --><!-- TMPL_ELSIF NAME="phonepro" --><!-- TMPL_VAR NAME="phonepro" --><!-- /TMPL_IF -->)</td>
         <td><!-- TMPL_VAR name="branchcode" --></td>
         <td><!-- TMPL_IF name="BiblioDefaultViewmarc" -->
 <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a>
@@ -62,7 +63,7 @@
     </li>
     <li><label>Patron flags:</label>
         <select name="borflags" size="1" id="borflags">
-            <option value=" "> </option>
+            <option value=""></option>
             <option value="gonenoaddress">Address in question</option>
             <option value="debarred">Debarred</option>
             <option value="lost">Lost Card</option>
@@ -87,16 +88,23 @@
     </li>
    
     <li><label for="order">Sort By:</label> <select name="order" id="order">
-<!-- TMPL_IF NAME="order" -->
-<option value="">Due Date</option>
-<!-- TMPL_ELSE --><option value="" selected="selected">Due Date</option><!-- /TMPL_IF -->
-<option value="borrower">Patron</option>
-<option value="title">Title</option>
-<option value="barcode">Barcode</option>
-<option value="date_due desc">Due Date desc</option>
-<option value="borrower desc">Patron desc</option>
-<option value="title desc">Title desc</option>
-<option value="barcode desc">Barcode</option>
+<!-- TMPL_LOOP NAME="ORDER_LOOP" -->
+    <!-- TMPL_IF NAME="selected" -->
+    <option value="<!-- TMPL_VAR NAME="ordervalue" DEFAULT="" -->" selected="selected">
+    <!-- TMPL_ELSE -->
+    <option value="<!-- TMPL_VAR NAME="ordervalue" DEFAULT="" -->">
+    <!-- /TMPL_IF -->[<!-- TMPL_VAR name="foo" -->]
+    <!-- TMPL_IF    NAME="order_date_due"      -->Due Date
+    <!-- TMPL_ELSIF NAME="order_borrower"      -->Patron
+    <!-- TMPL_ELSIF NAME="order_barcode"       -->Barcode
+    <!-- TMPL_ELSIF NAME="order_title"         -->Title
+    <!-- TMPL_ELSIF NAME="order_date_due_desc" -->Due Date desc
+    <!-- TMPL_ELSIF NAME="order_borrower_desc" -->Patron desc
+    <!-- TMPL_ELSIF NAME="order_barcode_desc"  -->Barcode desc
+    <!-- TMPL_ELSIF NAME="order_title_desc"    -->Title desc
+    <!-- /TMPL_IF -->
+    </option>
+<!-- /TMPL_LOOP -->
 </select></li>
 <li class="radio"><label for="showall">Show any items currently issued:</label> 
 	<!-- TMPL_IF NAME="showall" --><input type="checkbox" id="showall" name="showall" value="show" checked="checked" /><!-- TMPL_ELSE --><input type="checkbox" id="showall" name="showall" value="show" /><!-- /TMPL_IF -->
