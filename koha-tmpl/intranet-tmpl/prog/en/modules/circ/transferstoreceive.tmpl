@@ -2,7 +2,7 @@
 <title>Koha &rsaquo; Circulation &rsaquo; Transfers to your library</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/JavaScript" language="JavaScript">
+<script type="text/javascript" language="JavaScript">
 //<![CDATA[
 $.tablesorter.addParser({
     id: 'articles', 
@@ -10,16 +10,16 @@ $.tablesorter.addParser({
     format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
     type: 'text' 
 });
-	 $(document).ready(function() {
-            <!-- TMPL_LOOP NAME="branchesloop" -->
-		$.tablesorter.defaults.widgets = ['zebra']; 
-		$("#transferst<!-- TMPL_VAR NAME="branchcode" -->").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
-		dateFormat: 'uk',<!-- /TMPL_IF -->
-			sortList: [[1,0]],
-			headers: { 1: { sorter: 'articles' },4:{sorter:false}}
-		}); 
-		<!-- /TMPL_LOOP -->
-	 });
+$(document).ready(function() {
+    <!-- TMPL_LOOP NAME="branchesloop" -->
+    $.tablesorter.defaults.widgets = ['zebra']; 
+    $("#transferst<!-- TMPL_VAR NAME="branchcode" -->").tablesorter({<!-- TMPL_IF ="dateformat_metric" -->
+        dateFormat: 'uk',<!-- /TMPL_IF -->
+        sortList: [[1,0]],
+        headers: { 1: { sorter: 'articles' },4:{sorter:false}}
+    }); 
+    <!-- /TMPL_LOOP -->
+});
 //]]>
 </script>
 </head>
@@ -35,63 +35,61 @@ $.tablesorter.addParser({
 	<div id="yui-main">
 	<div class="yui-g">
 
-
 	<h1>Transfers made to your library on : <!-- TMPL_VAR NAME="show_date" --></h1>
 	<!-- TMPL_IF name="branchesloop" -->
-            <p>Your library is the destination for the following transfer(s)</p>
-            <div id="resultlist">
-            <!-- TMPL_LOOP NAME="branchesloop" -->
-                <!-- TMPL_IF NAME="branchcode" -->
-                <table style="width: 100%" id="transferst<!-- TMPL_VAR NAME="branchcode" -->">
-				<caption>Coming from <!-- TMPL_VAR NAME="branchname" --></caption>
-                <thead><tr>
-                    <th>Date of transfer</th>
-                    <th>Title</th>
-                    <th>Reserved by </th>
-                    <th>Location</th>
-                </tr></thead>
-                <tbody><!-- TMPL_LOOP NAME="reserv" -->
-				<!-- TMPL_IF NAME="messcompa" -->
-                    <tr class="problem">
-					<!-- TMPL_ELSE -->
-					<tr>
-					<!-- /TMPL_IF -->
-                        <td><p><!-- TMPL_VAR NAME="datetransfer" --></p> <!-- TMPL_IF NAME="messcompa" --> check this transfer<!-- /TMPL_IF --></td>
-                        <td><!-- TMPL_IF name="BiblioDefaultViewmarc" -->
+        <p>Your library is the destination for the following transfer(s)</p>
+        <div id="resultlist">
+        <!-- TMPL_LOOP NAME="branchesloop" -->
+            <!-- TMPL_IF NAME="branchcode" -->
+            <table style="width: 100%" id="transferst<!-- TMPL_VAR NAME="branchcode" -->">
+            <caption>Coming from <!-- TMPL_VAR NAME="branchname" --></caption>
+            <thead><tr>
+                <th>Date of transfer</th>
+                <th>Title</th>
+                <th>Reserved by </th>
+                <th>Location</th>
+            </tr></thead>
+            <tbody><!-- TMPL_LOOP NAME="reserv" -->
+                <!-- TMPL_IF NAME="messcompa" -->
+                <tr class="problem">
+                <!-- TMPL_ELSE -->
+                <tr>
+                <!-- /TMPL_IF -->
+                    <td><p><!-- TMPL_VAR NAME="datetransfer" --></p> <!-- TMPL_IF NAME="messcompa" -->check this transfer<!-- /TMPL_IF --></td>
+                    <td><span style="display:none;"><!-- TMPL_VAR NAME="title" escape="html" --></span><!-- invisible title for tablesorter -->
+                        <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
 <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a>
 <!-- TMPL_ELSIF NAME="BiblioDefaultViewisbd" -->
 <a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a>
 <!-- TMPL_ELSE -->
 <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" -->  <!-- TMPL_VAR NAME="subtitle" --></a><!-- /TMPL_IF -->
-                                &nbsp; (<b><!-- TMPL_VAR NAME="itemtype" --> </b>)
-                                <br />Barcode : <!-- TMPL_VAR NAME="barcode" -->
-                        </td>
-                        <td><!-- TMPL_IF NAME="borrowername" -->
-                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernum"-->">
-                                    <!-- TMPL_VAR NAME="borrowername" --> &nbsp; <!-- TMPL_VAR NAME="borrowerfirstname" -->
+                            &nbsp; (<b><!-- TMPL_VAR NAME="itemtype" --></b>)
+                            <br />Barcode: <!-- TMPL_VAR NAME="barcode" -->
+                    </td>
+                    <td><!-- TMPL_IF NAME="borrowername" -->
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernum"-->">
+                            <!-- TMPL_VAR NAME="borrowername" --> &nbsp; <!-- TMPL_VAR NAME="borrowerfirstname" -->
+                        </a>
+                        <br /><!-- TMPL_VAR NAME="borrowerphone" --><br />
+                            <!-- TMPL_IF NAME="borrowermail" -->
+                                <a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Reservation: <!-- TMPL_VAR NAME="title" -->">
+                                    <!-- TMPL_VAR NAME="borrowermail" -->
                                 </a>
-                                <br /><!-- TMPL_VAR NAME="borrowerphone" --><br />
-                                <!-- TMPL_IF NAME="borrowermail" -->
-                                    <a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Reservation: <!-- TMPL_VAR NAME="title" -->">
-                                        <!-- TMPL_VAR NAME="borrowermail" -->
-                                    </a>
-                                <!--/TMPL_IF-->
+                            <!--/TMPL_IF-->
                         <!-- TMPL_ELSE -->
-                            <p>
-                            None
-                            </p>
-                        <!-- /TMPL_IF -->
-                        </td>
-                        <td><!-- TMPL_VAR NAME="homebranch" --> <!-- TMPL_VAR NAME="itemcallnumber" --></td>
-                    </tr>
-                <!-- /TMPL_LOOP -->	</tbody>
-                </table>
-                <!-- /TMPL_IF -->
-            <!-- /TMPL_LOOP -->
-            </div>
-        <!-- TMPL_ELSE -->
-            <p>No transfers to receive</p>
-        <!-- /TMPL_IF -->
+                        <p>None</p>
+                    <!-- /TMPL_IF -->
+                    </td>
+                    <td><!-- TMPL_VAR NAME="homebranch" --> <!-- TMPL_VAR NAME="itemcallnumber" --></td>
+                </tr>
+            <!-- /TMPL_LOOP --></tbody>
+            </table>
+            <!-- /TMPL_IF -->
+        <!-- /TMPL_LOOP -->
+        </div>
+    <!-- TMPL_ELSE -->
+        <p>No transfers to receive</p>
+    <!-- /TMPL_IF -->
 
 </div>
 </div>

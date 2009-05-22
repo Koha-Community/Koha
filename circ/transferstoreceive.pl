@@ -19,10 +19,11 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
 use CGI;
 use C4::Context;
 use C4::Output;
-use C4::Branch;
+use C4::Branch;     # GetBranches
 use C4::Auth;
 use C4::Dates qw/format_date/;
 use C4::Biblio;
@@ -38,8 +39,6 @@ use C4::Koha;
 use C4::Reserves;
 
 my $input = new CGI;
-
-my $theme = $input->param('theme');    # only used if allowthemeoverride is set
 my $itemnumber = $input->param('itemnumber');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -79,9 +78,8 @@ foreach my $br ( keys %$branches ) {
                 C4::Context->preference('TransfersMaxDaysWarning'));
             my $calcDate = Date_to_Days( $sent_year, $sent_month, $sent_day );
             my $today    = Date_to_Days(&Today);
-            my $warning  = ( $today > $calcDate );
 
-            if ( $warning > 0 ) {
+            if ($today > $calcDate) {
                 $getransf{'messcompa'} = 1;
             }
             my $gettitle     = GetBiblioFromItemNumber( $num->{'itemnumber'} );
@@ -93,19 +91,15 @@ foreach my $br ( keys %$branches ) {
             	$getransf{$_} = $gettitle->{$_};
 			}
 
-            # 				we check if we have a reserv for this transfer
+            # we check if we have a reserv for this transfer
             my @checkreserv = GetReservesFromItemnumber($num->{'itemnumber'} );
             if ( $checkreserv[0] ) {
-                my $getborrower =
-                  GetMemberDetails( $checkreserv[1] );
-                $getransf{'borrowernum'}  = $getborrower->{'borrowernumber'};
-                $getransf{'borrowername'} = $getborrower->{'surname'};
+                my $getborrower = GetMemberDetails( $checkreserv[1] );
+                $getransf{'borrowernum'}       = $getborrower->{'borrowernumber'};
+                $getransf{'borrowername'}      = $getborrower->{'surname'};
                 $getransf{'borrowerfirstname'} = $getborrower->{'firstname'};
-                if ( $getborrower->{'emailaddress'} ) {
-                    $getransf{'borrowermail'} = $getborrower->{'emailaddress'};
-                }
-                $getransf{'borrowerphone'} = $getborrower->{'phone'};
-
+                $getransf{'borrowermail'}      = $getborrower->{'emailaddress'} if $getborrower->{'emailaddress'};
+                $getransf{'borrowerphone'}     = $getborrower->{'phone'};
             }
             push( @transferloop, \%getransf );
         }
@@ -119,7 +113,7 @@ foreach my $br ( keys %$branches ) {
 $template->param(
     branchesloop => \@branchesloop,
     show_date    => format_date(C4::Dates->today('iso')),
-	dateformat    => C4::Context->preference("dateformat"),
+	'dateformat_' . (C4::Context->preference("dateformat") || '') => 1,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
