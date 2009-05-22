@@ -1,77 +1,207 @@
 #!/usr/bin/perl
-use CGI;
+
+# Copyright 2008-2009 LibLime
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+
 use strict;
 use warnings;
+
+=head1 NAME
+
+unapi - implement unAPI for the OPAC
+
+=head1 SYNOPSIS
+
+Retrieve http://library.example.org/cgi-bin/koha/unapi?id=koha:biblionumber:123&format=oai_dc
+
+=head1 DESCRIPTION
+
+Implements unAPI <http://unapi.info>, a small HTTP API for retrieving structured
+content from a web application.  The primary application of unAPI in Koha is to
+allow tools such as Zotero to identify and grab bibliographic record metadata in
+an XML format such as OAI DC, RSS2, MARCXML, or MODS.
+
+=cut
+
+use CGI;
 use C4::Context;
-use XML::Simple;
-use LWP::Simple;
+use C4::Biblio;
+use XML::LibXML;
+use XML::LibXSLT;
 
-use LWP::UserAgent;
-use HTTP::Request::Common;
-
-my $cgi = new CGI;
+my $cgi = CGI->new();
 binmode(STDOUT, "utf8"); #output as utf8
-my $baseurl = C4::Context->preference('OPACBaseURL');
-warn "Warning: OPACBaseURL not set in system preferences" unless $baseurl;
 
-my $id = $cgi->param('id');
+=head1 VARIABLES
+
+=head2 $format_to_stylesheet_map
+
+This hashref of hashrefs maps from a MARC flavour and unAPI format
+to the stylesheet that should be used to transform the bib MARCXML
+to the desired output format.  As new MARC XSLT stylesheets are added,
+(particularly for UNIMARC), this map should be updated.  Of course,
+if/when we add support for emitting a format that is not genreated
+by a stylesheet, the structure of this variable will have to be changed.
+At present, this doubles as the list of output formats supported by
+this unAPI implementation.
+
+=cut
+
+my $format_to_stylesheet_map = {
+    'MARC21' => {
+        'marcxml'      => 'identity.xsl',
+        'marcxml-full' => 'identity.xsl',
+        'mods'         => 'MARC21slim2MODS.xsl',
+        'mods-full'    => 'MARC21slim2MODS.xsl',
+        'mods3'        => 'MARC21slim2MODS3-1.xsl',
+        'mods3-full'   => 'MARC21slim2MODS3-1.xsl',
+        'oai_dc'       => 'MARC21slim2OAIDC.xsl',
+        'rdfdc',       => 'MARC21slim2RDFDC.xsl',
+        'rss2'         => 'MARC21slim2RSS2.xsl',
+        'rss2-full'    => 'MARC21slim2RSS2.xsl',
+        'srw_dc'       => 'MARC21slim2SRWDC.xsl',
+    },
+    'UNIMARC' => {
+        'marcxml'      => 'identity.xsl',
+        'marcxml-full' => 'identity.xsl',
+        'oai_dc'       => 'UNIMARCslim2OAIDC.xsl',
+    },
+};
+
+=head2 $format_info
+
+This hashref maps from unAPI output formats to the <format> elements
+used to describe them in an unAPI format request.
+
+=cut
+
+my $format_info = {
+    'marcxml' => q(<format name="marcxml" type="application/xml" namespace_uri="http://www.loc.gov/MARC21/slim" docs="http://www.loc.gov/marcxml/" schema_location="http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd"/>),
+    'marcxml-full' => q(<format name="marcxml-full" type="application/xml" namespace_uri="http://www.loc.gov/MARC21/slim" docs="http://www.loc.gov/marcxml/" schema_location="http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd"/>),
+    'mods' => q(<format name="mods" type="application/xml" namespace_uri="http://www.loc.gov/mods/" docs="http://www.loc.gov/mods/" schema_location="http://www.loc.gov/standards/mods/mods.xsd"/>),
+    'mods-full' => q(<format name="mods-full" type="application/xml" namespace_uri="http://www.loc.gov/mods/" docs="http://www.loc.gov/mods/" schema_location="http://www.loc.gov/standards/mods/mods.xsd"/>),
+    'mods3' => q(<format name="mods3" type="application/xml" namespace_uri="http://www.loc.gov/mods/v3" docs="http://www.loc.gov/mods/" schema_location="http://www.loc.gov/standards/mods/v3/mods-3-1.xsd"/>),
+    'mods3-full' => q(<format name="mods3-full" type="application/xml" namespace_uri="http://www.loc.gov/mods/v3" docs="http://www.loc.gov/mods/" schema_location="http://www.loc.gov/standards/mods/v3/mods-3-1.xsd"/>),
+    'oai_dc' => q(<format name="oai_dc" type="application/xml" namespace_uri="http://www.openarchives.org/OAI/2.0/oai_dc/" schema_location="http://www.openarchives.org/OAI/2.0/oai_dc.xsd"/>),
+    'rdfdc' => q(<format name="rdfdc" type="application/xml" namespace_uri="http://purl.org/dc/elements/1.1/" schema_location="http://purl.org/dc/elements/1.1/"/>),
+    'rss2' => q(<format name="rss2" type="application/xml"/>),
+    'rss2-full' => q(<format name="rss2-full" type="application/xml"/>),
+    'srw_dc' => q(<format name="srw_dc" type="application/xml" namespace_uri="info:srw/schema/1/dc-schema" schema_location="http://www.loc.gov/z3950/agency/zing/srw/dc-schema.xsd"/>),
+};
+
+my $id     = $cgi->param('id');
 my $format = $cgi->param('format');
-if ($id && $format) {
 
-    # koha:isbn:0152018484
-    if ($id =~ /isbn/) {
-        $id =~ s/koha:isbn://;
+if (not defined $format) {
+    emit_formats($id);
+} elsif ($id) {
 
-        # two ways to do this, one via the SRU Zebra server (fast)
-        # FIXME - getting the SRU URL this way is purely guesswork
-        $baseurl =~ s/:\d+$//; # parse off OPAC port
-        my $url = "$baseurl:9998/biblios?version=1.1&operation=searchRetrieve&query=$id&startRecord=1&maximumRecords=20&recordSchema=$format";
-        my $content= get($url);
+    # koha:biblionumber:0152018484
+    if ($id =~ /koha:biblionumber:(\d+)/) {
+        my $biblionumber = $1;
 
-        # the other via XSL parsing (not as fast)
-        unless ($content) {
-            
+        my $content;
         eval {
-            my $conn = C4::Context->Zconn('biblioserver');
-            $conn->option(preferredRecordSyntax => $format);
-            my $rs = $conn->search_pqf('@attr 1=7 '.$id);
-            my $n = $rs->size();
-            $content = $rs->record(0)->raw();
+            my $marcxml = GetXmlBiblio($biblionumber);
+            unless (defined $marcxml) {
+                # no bib, so 404
+                print $cgi->header( -status => '404 record not found');
+                exit 0;
+            }
+
+            my $transformer = get_transformer($format);
+            unless (defined $transformer) {
+                print $cgi->header( -status => '406 invalid format requested' );
+                exit 0;
+            }
+            my $parser = XML::LibXML->new();
+            my $record_dom = $parser->parse_string( $marcxml );
+            $record_dom = $transformer->transform( $record_dom );
+            $content = $record_dom->toString();
         };
         if ($@) {
-            print "Error ", $@->code(), ": ", $@->message(), "\n";
+            print $cgi->header( -status => '500 internal error ' . $@->code() . ": " . $@->message() );
+            exit 0;
         }
 
-        }
         print $cgi->header( -type =>'application/xml' );
         print $content;
+    } else {
+        # ID is obviously wrong, so 404
+        print $cgi->header( -status => '404 record not found');
+        exit 0;
     }
+} else {
+    # supplied a format but no id - caller is doing it wrong
+    print $cgi->header( -status => '400 bad request - if you specify format, must specify id');
+    exit 0;
 }
 
-else {
+exit 0;
 
-print $cgi->header( -type =>'application/xml' );
+sub emit_formats {
+    my $id = shift;
 
-print "<?xml version='1.0' encoding='utf-8'  ?>
-<formats>
-<!-- <format name=\"opac\" type=\"text/html\"/> -->
-<!-- <format name=\"html\" type=\"text/html\"/> -->
-<!-- <format name=\"htmlholdings\" type=\"text/html\"/> -->
-<!-- <format name=\"html-full\" type=\"text/html\"/> -->
-<!-- <format name=\"htmlholdings-full\" type=\"text/html\"/> -->
-<!-- <format name=\"atom\" type=\"application/xml\" namespace_uri=\"http://www.w3.org/2005/Atom\" docs=\"http://www.ietf.org/rfc/rfc4287.txt\"/> -->
-<!-- <format name=\"atom-full\" type=\"application/xml\" namespace_uri=\"http://www.w3.org/2005/Atom\" docs=\"http://www.ietf.org/rfc/rfc4287.txt\"/> -->
-<format name=\"marcxml\" type=\"application/xml\" namespace_uri=\"http://www.loc.gov/MARC21/slim\" docs=\"http://www.loc.gov/marcxml/\" schema_location=\"http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd\"/>
-<format name=\"marcxml-full\" type=\"application/xml\" namespace_uri=\"http://www.loc.gov/MARC21/slim\" docs=\"http://www.loc.gov/marcxml/\" schema_location=\"http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd\"/>
-<format name=\"mods\" type=\"application/xml\" namespace_uri=\"http://www.loc.gov/mods/\" docs=\"http://www.loc.gov/mods/\" schema_location=\"http://www.loc.gov/standards/mods/mods.xsd\"/>
-<format name=\"mods-full\" type=\"application/xml\" namespace_uri=\"http://www.loc.gov/mods/\" docs=\"http://www.loc.gov/mods/\" schema_location=\"http://www.loc.gov/standards/mods/mods.xsd\"/>
-<format name=\"mods3\" type=\"application/xml\" namespace_uri=\"http://www.loc.gov/mods/v3\" docs=\"http://www.loc.gov/mods/\" schema_location=\"http://www.loc.gov/standards/mods/v3/mods-3-1.xsd\"/>
-<format name=\"mods3-full\" type=\"application/xml\" namespace_uri=\"http://www.loc.gov/mods/v3\" docs=\"http://www.loc.gov/mods/\" schema_location=\"http://www.loc.gov/standards/mods/v3/mods-3-1.xsd\"/>
-<format name=\"oai_dc\" type=\"application/xml\" namespace_uri=\"http://www.openarchives.org/OAI/2.0/oai_dc/\" schema_location=\"http://www.openarchives.org/OAI/2.0/oai_dc.xsd\"/>
-<format name=\"rdfdc\" type=\"application/xml\" namespace_uri=\"http://purl.org/dc/elements/1.1/\" schema_location=\"http://purl.org/dc/elements/1.1/\"/>
-<format name=\"rss2\" type=\"application/xml\"/>
-<format name=\"rss2-full\" type=\"application/xml\"/>
-<format name=\"srw_dc\" type=\"application/xml\" namespace_uri=\"info:srw/schema/1/dc-schema\" schema_location=\"http://www.loc.gov/z3950/agency/zing/srw/dc-schema.xsd\"/>
-</formats>
-";
+    if (defined $id) {
+        print $cgi->header( -type =>'application/xml', -status => '300 multiple choices' );
+    } else {
+        print $cgi->header( -type =>'application/xml' );
+    }
+
+    print "<?xml version='1.0' encoding='utf-8'  ?>\n";
+    if (defined $id) {
+        print qq(<formats id="$id">\n);
+    } else {
+        print "<formats>\n";
+    }
+
+    my $marcflavour = uc(C4::Context->preference('marcflavour'));
+    foreach my $format (sort keys %{ $format_to_stylesheet_map->{$marcflavour} }) {
+        print $format_info->{$format}, "\n";
+    }
+    print "</formats>\n";
+    return;
 }
+
+
+sub get_transformer {
+    my $format = lc shift;
+
+    my $marcflavour = uc(C4::Context->preference('marcflavour'));
+    return unless $format_to_stylesheet_map->{$marcflavour}->{$format};
+
+    my $xslt_file = C4::Context->config('intranetdir') .
+                    "/koha-tmpl/intranet-tmpl/prog/en/xslt/" .
+                    $format_to_stylesheet_map->{$marcflavour}->{$format};
+
+    my $parser = XML::LibXML->new();
+    my $xslt = XML::LibXSLT->new();
+    my $style_doc = $parser->parse_file( $xslt_file );
+    my $stylesheet = $xslt->parse_stylesheet( $style_doc );
+
+    return $stylesheet;
+}
+
+=head1 AUTHOR
+
+Koha Development team <info@koha.org>
+
+Originally written by Joshua Ferraro <jmf@liblime.com>
+
+Improved by Galen Charlton <galen.charlton@liblime.com>
+
+=cut

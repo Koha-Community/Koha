@@ -74,4 +74,4 @@
 	});
 	//]]>
 </script><!-- /TMPL_IF -->
-<link rel="unapi-server" type="application/xml" title="unAPI" href="/cgi-bin/koha/unapi" />
+<link rel="unapi-server" type="application/xml" title="unAPI" href="<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/unapi" />

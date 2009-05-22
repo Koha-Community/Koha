@@ -110,14 +110,14 @@
     <!-- /TMPL_IF -->
     
     <!-- TMPL_IF NAME="pages" --><span class="results_summary"><span class="label">Physical details:</span> <!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></span><!-- /TMPL_IF -->
-    <!-- COinS / OpenURL -->
+    <abbr class="unapi-id" title="koha:biblionumber:<!-- TMPL_VAR NAME="biblionumber" -->"><!-- unAPI --></abbr>
     <!-- TMPL_IF NAME="ocoins" -->
+    <!-- COinS / OpenURL -->
     <span class="Z3988" title="<!-- TMPL_VAR NAME="ocoins" -->"></span>
-    <!-- TMPL_ELSE -->
-        <!-- TMPL_IF name="normalized_isbn" -->
-            <!-- unAPI <abbr/> tag -->
-            <span class="results_summary"><span class="label">ISBN: </span><abbr class="unapi-id" title="koha:isbn:<!-- TMPL_VAR NAME="normalized_isbn" -->"><!-- TMPL_VAR NAME="normalized_isbn" --></abbr></span>
-        <!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->
+
+    <!-- TMPL_IF name="normalized_isbn" -->
+        <span class="results_summary"><span class="label">ISBN: </span><!-- TMPL_VAR NAME="normalized_isbn" --></span>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF name="issn" -->
     <span class="results_summary"><span class="label">ISSN:</span><!-- TMPL_VAR NAME="issn" --></span>
