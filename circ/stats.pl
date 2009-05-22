@@ -22,21 +22,19 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+# use warnings;
 use CGI;
 use C4::Context;
 use C4::Output;
 use C4::Auth;
 use Date::Manip;
 use C4::Stats;
+use C4::Debug;
 
 use vars qw($debug);
 
-BEGIN {
-	$debug = $ENV{DEBUG} || 0;
-}
-
 my $input = new CGI;
-my $time  = $input->param('time');
+my $time  = $input->param('time') || '';
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -51,33 +49,33 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $date;
 my $date2;
-if ( $time eq '' ) {
-    $template->param(notime => '1');
-    output_html_with_http_headers $input, $cookie, $template->output;
-    exit;
-}
 if ( $time eq 'yesterday' ) {
     $date  = ParseDate('yesterday');
     $date2 = ParseDate('today');
 }
-if ( $time eq 'today' ) {
+elsif ( $time eq 'today' ) {
     $date  = ParseDate('today');
     $date2 = ParseDate('tomorrow');
 }
-if ( $time eq 'daybefore' ) {
+elsif ( $time eq 'daybefore' ) {
     $date  = ParseDate('2 days ago');
     $date2 = ParseDate('yesterday');
 }
-if ( $time eq 'month' ) {
+elsif ( $time eq 'month' ) {
     $date  = ParseDate('1 month ago');
     $date2 = ParseDate('today');
-    $debug and warn "d : $date // d2 : $date2";
 }
-if ( $time =~ /\// ) {
+elsif ( $time =~ /\// ) {
     $date  = ParseDate($time);
     $date2 = ParseDateDelta('+ 1 day');
     $date2 = DateCalc( $date, $date2 );
+} else {
+    $template->param(notime => '1');    # TODO: add error feedback if time sent, but unrecognized
+    output_html_with_http_headers $input, $cookie, $template->output;
+    exit;
 }
+
+$debug and warn "d : $date // d2 : $date2";
 $date  = UnixDate( $date,  '%Y-%m-%d' );
 $date2 = UnixDate( $date2, '%Y-%m-%d' );
 $debug and warn "d : $date // d2 : $date2";
@@ -95,7 +93,7 @@ while ( $i < $count ) {
     my $time     = $payments[$i]{'datetime'};
     my $payments = $payments[$i]{'value'};
     my $charge   = 0;
-    my @temp     = split( / /, $payments[$i]{'datetime'} );
+    my @temp     = split(/ /, $payments[$i]{'datetime'});
     my $date     = $temp[0];
     my @charges  =
       getcharges( $payments[$i]{'borrowernumber'}, $payments[$i]{'timestamp'} );
@@ -106,6 +104,7 @@ while ( $i < $count ) {
     my $temptotalren = 0;
     my $temptotalw   = 0;
 
+    # FIXME: way too much logic to live only here in a report script
     for ( my $i2 = 0 ; $i2 < $count ; $i2++ ) {
         $charge += $charges[$i2]->{'amount'};
         %row = (
@@ -162,6 +161,7 @@ while ( $i < $count ) {
             $total += $payments[$i]{'amount'};
         }
 
+        #FIXME: display layer HTML
         %row = (
             name => "<b>"
               . $payments[$i]{'firstname'}
