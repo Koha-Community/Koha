@@ -2320,6 +2320,7 @@ $DBversion = "3.01.00.021";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     my $enable_reviews = C4::Context->preference('OPACAmazonEnabled') ? '1' : '0';
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OPACAmazonReviews', '$enable_reviews', 'Display Amazon readers reviews on OPAC','','YesNo')");
+    print "Upgrade to $DBversion done (adding OPACAmazonReviews syspref)\n";
     SetVersion ($DBversion);
 }
 
@@ -2433,7 +2434,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 $DBversion = "3.01.00.034";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE `subscription` ADD COLUMN `graceperiod` INT(11) NOT NULL default '0';");
-    print "Upgrade to $DBversion done (Adding a field in issuingrules table)\n";
+    print "Upgrade to $DBversion done (Adding graceperiod column to subscription table)\n";
     SetVersion ($DBversion);
 }
 
