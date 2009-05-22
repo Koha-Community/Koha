@@ -9,9 +9,7 @@
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Transfers</div>
 
 <div id="doc" class="yui-t7">
-   
    <div id="bd">
-
 
 <!-- TMPL_IF Name="found" -->
    <div class="yui-g"> <h3>Reserve Found</h3>
@@ -88,7 +86,7 @@
     </table></div>
 
 <!-- TMPL_ELSE -->
-	<div class="yui-ge">
+<div class="yui-ge">
    <div class="yui-u first">     
     <form method="post" name="mainform" id="mainform" action="/cgi-bin/koha/circ/branchtransfers.pl">
         <fieldset class="brief">
@@ -96,19 +94,17 @@
             <ol>
 			<li>
                 <label for="tobranchcd">Destination library: </label>
-                
                     <select name="tobranchcd" id="tobranchcd">
                         <!-- TMPL_LOOP Name="branchoptionloop" -->
 						<!-- TMPL_IF NAME="selected" -->
-                            <option value="<!-- TMPL_VAR Name="code" -->" selected="selected">
+                            <option value="<!-- TMPL_VAR Name="value" -->" selected="selected">
 						<!-- TMPL_ELSE -->
-                            <option value="<!-- TMPL_VAR Name="code" -->">
+                            <option value="<!-- TMPL_VAR Name="value" -->">
 						<!-- /TMPL_IF -->
-                                <!-- TMPL_VAR Name="name" -->
+                                <!-- TMPL_VAR Name="branchname" -->
                             </option>
                         <!-- /TMPL_LOOP -->
                     </select>
-                
             </li>
             <li>
                 <label for="barcode">Enter barcode: </label>
@@ -124,7 +120,6 @@
         <!-- /TMPL_LOOP -->
     </form></div>
  
-	 
 	 <div class="yui-u"><h4>Messages</h4>
 		<ul>
                 <!-- TMPL_IF Name="reqmessage" -->
@@ -140,10 +135,10 @@
                         <li>No Item with barcode: <!-- TMPL_VAR Name="msg" --></li>
                     <!-- /TMPL_IF -->
                     <!-- TMPL_IF Name="errispermanent" -->
-                            <li>Please return item to home library: <!-- TMPL_VAR Name="msg" --></li>
+                        <li>Please return item to home library: <!-- TMPL_VAR Name="msg" --></li>
                     <!-- /TMPL_IF -->
                     <!-- TMPL_IF Name="errnotallowed" -->
-                            <li>You cannot transfer items of <!--TMPL_VAR Name="codeType" --> <b><!-- TMPL_VAR Name="code" --></b> to <b><!-- TMPL_VAR Name="tbr" --></b></li>
+                        <li>You cannot transfer items of <!--TMPL_VAR Name="codeType" --> <b><!-- TMPL_VAR Name="code" --></b> to <b><!-- TMPL_VAR Name="tbr" --></b></li>
                     <!-- /TMPL_IF -->
                     <!-- TMPL_IF Name="errdesteqholding" -->
                         <li>Item is already at destination library.</li>
@@ -154,8 +149,9 @@
 (<!--TMPL_VAR NAME="cardnumber" -->)</a> and has been returned.</li>
                     <!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
-			</ul></div><!-- /yui-u -->
-			</div><!-- /yui-ge -->
+        </ul>
+    </div><!-- /yui-u -->
+</div><!-- /yui-ge -->
 	 
     <!-- TMPL_IF Name="trsfitemloop" -->
         <div class="yui-g">

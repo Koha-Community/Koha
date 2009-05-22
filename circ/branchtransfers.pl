@@ -22,6 +22,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
 use CGI;
 use C4::Circulation;
 use C4::Output;
@@ -40,20 +41,17 @@ my $query = new CGI;
 
 if (!C4::Context->userenv){
 	my $sessionID = $query->cookie("CGISESSID");
-	my $session = get_session($sessionID);
-	if ($session->param('branch') eq 'NO_LIBRARY_SET'){
+	my $session = get_session($sessionID) if $sessionID;
+	if (!$session or $session->param('branch') eq 'NO_LIBRARY_SET'){
 		# no branch set we can't transfer
 		print $query->redirect("/cgi-bin/koha/circ/selectbranchprinter.pl");
 		exit;
 	}
-}   
-
+}
 
 #######################################################################################
 # Make the page .....
-my ( $template, $cookie );
-my $user;
-( $template, $user, $cookie ) = get_template_and_user(
+my ($template, $user, $cookie) = get_template_and_user(
     {
         template_name   => "circ/branchtransfers.tmpl",
         query           => $query,
@@ -64,7 +62,6 @@ my $user;
 );
 
 my $branches = GetBranches;
-my $branch  = GetBranch( $query,  $branches );
 
 my $messages;
 my $found;
@@ -74,43 +71,31 @@ my $reqmessage;
 my $cancelled;
 my $setwaiting;
 
-my $request        = $query->param('request');
-my $borrowernumber = $query->param('borrowernumber');
-my $tobranchcd     = $query->param('tobranchcd');
+my $request        = $query->param('request')        || '';
+my $borrowernumber = $query->param('borrowernumber') ||  0;
+my $tobranchcd     = $query->param('tobranchcd')     || '';
 
+my $ignoreRs = 0;
 ############
 # Deal with the requests....
 if ( $request eq "KillWaiting" ) {
     my $item = $query->param('itemnumber');
-
     CancelReserve( 0, $item, $borrowernumber );
     $cancelled   = 1;
     $reqmessage  = 1;
 }
-
-my $ignoreRs = 0;
-if ( $request eq "SetWaiting" ) {
+elsif ( $request eq "SetWaiting" ) {
     my $item = $query->param('itemnumber');
     ModReserveAffect( $item, $borrowernumber );
     $ignoreRs    = 1;
     $setwaiting  = 1;
     $reqmessage  = 1;
 }
-if ( $request eq 'KillReserved' ) {
+elsif ( $request eq 'KillReserved' ) {
     my $biblio = $query->param('biblionumber');
     CancelReserve( $biblio, 0, $borrowernumber );
     $cancelled   = 1;
     $reqmessage  = 1;
-}
-
-# set up the branchselect options....
-my @branchoptionloop;
-foreach my $br ( keys %$branches ) {
-    my %branch;
-    $branch{selected} = ( $br eq $tobranchcd );
-    $branch{code}     = $br;
-    $branch{name}     = $branches->{$br}->{'branchname'};
-    push( @branchoptionloop, \%branch );
 }
 
 # collect the stack of books already transfered so they can printed...
@@ -119,7 +104,7 @@ my %transfereditems;
 my $transfered;
 my $barcode = $query->param('barcode');
 # strip whitespace
-$barcode =~ s/\s*//g;
+defined $barcode and $barcode =~ s/\s*//g;  # FIXME: barcodeInputFilter
 # warn "barcode : $barcode";
 if ($barcode) {
 
@@ -185,7 +170,7 @@ if ($found) {
     if ( $res->{'ResFound'} eq "Waiting" ) {
         $waiting = 1;
     }
-    if ( $res->{'ResFound'} eq "Reserved" ) {
+    elsif ( $res->{'ResFound'} eq "Reserved" ) {
         $reserved  = 1;
         $biblionumber = $res->{'biblionumber'};
     }
@@ -197,44 +182,39 @@ if ($found) {
 my $codeTypeDescription = 'Collection Code';
 my $codeType = C4::Context->preference("BranchTransferLimitsType");
 if ( $codeType eq 'itemtype' ) {   
-  $codeTypeDescription = 'Item Type';
+    $codeTypeDescription = 'Item Type';
 }
-
 
 my @errmsgloop;
 foreach my $code ( keys %$messages ) {
     my %err;
-
     if ( $code eq 'BadBarcode' ) {
         $err{msg}        = $messages->{'BadBarcode'};
         $err{errbadcode} = 1;
     }
-
-    if ( $code eq "NotAllowed" ) {
-    warn $messages->{'NotAllowed'};
-    warn  $branches->{ $messages->{'NotAllowed'} }->{'branchname'};
+    elsif ( $code eq "NotAllowed" ) {
+        warn "NotAllowed: $messages->{'NotAllowed'} to  " . $branches->{ $messages->{'NotAllowed'} }->{'branchname'};
+        # Do we really want a error log message here? --atz
         $err{errnotallowed} =  1;
         my ( $tbr, $typecode ) = split( /::/,  $messages->{'NotAllowed'} );
-        $err{tbr} = $branches->{ $tbr }->{'branchname'};
-        $err{code} = $typecode;
+        $err{tbr}      = $branches->{ $tbr }->{'branchname'};
+        $err{code}     = $typecode;
         $err{codeType} = $codeTypeDescription; 
     }
-    
-    if ( $code eq 'IsPermanent' ) {
+    elsif ( $code eq 'IsPermanent' ) {
         $err{errispermanent} = 1;
         $err{msg} = $branches->{ $messages->{'IsPermanent'} }->{'branchname'};
     }
-    $err{errdesteqholding} = ( $code eq 'DestinationEqualsHolding' );
-
-    if ( $code eq 'WasReturned' ) {
+    elsif ( $code eq 'WasReturned' ) {
         $err{errwasreturned} = 1;
-		$err{borrowernumber}=$messages->{'WasReturned'};
+		$err{borrowernumber} = $messages->{'WasReturned'};
 		my $borrower = GetMember($messages->{'WasReturned'},'borrowernumber');
-		$err{title}=$borrower->{'title'};
-		$err{firstname}=$borrower->{'firstname'};
-		$err{surname}=$borrower->{'surname'};
-		$err{cardnumber} =$borrower->{'cardnumber'};
+		$err{title}      = $borrower->{'title'};
+		$err{firstname}  = $borrower->{'firstname'};
+		$err{surname}    = $borrower->{'surname'};
+		$err{cardnumber} = $borrower->{'cardnumber'};
     }
+    $err{errdesteqholding} = ( $code eq 'DestinationEqualsHolding' );
     push( @errmsgloop, \%err );
 }
 
@@ -253,19 +233,9 @@ $template->param(
     cancelled               => $cancelled,
     setwaiting              => $setwaiting,
     trsfitemloop            => \@trsfitemloop,
-    branchoptionloop        => \@branchoptionloop,
+    branchoptionloop        => GetBranchesLoop($tobranchcd),
     errmsgloop              => \@errmsgloop,
     CircAutocompl           => C4::Context->preference("CircAutocompl")
 );
 output_html_with_http_headers $query, $cookie, $template->output;
 
-sub name {
-    my ($borinfo) = @_;
-    return $borinfo->{'surname'} . " "
-      . $borinfo->{'title'} . " "
-      . $borinfo->{'firstname'};
-}
-
-# Local Variables:
-# tab-width: 4
-# End:
