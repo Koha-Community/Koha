@@ -81,6 +81,15 @@ function add_item3(borrowernumber){
     <a href="/cgi-bin/koha/labels/pcard-member-search.pl?member=z&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->">Z</a>
 </div>
 
+<form method="get" action="/cgi-bin/koha/labels/pcard-member-search.pl"><p>
+<input type="hidden" name="batch_id" value="<!-- TMPL_VAR NAME="batch_id" -->" />
+<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" />
+<label for="member">Name</label>
+<input name="member" />
+<label for="category">Category code</label>
+<input name="category" />
+<input type="submit" value="Search" /></p>
+</form>
 
 <!-- TMPL_IF NAME="resultsloop" -->
 <div id="searchheader"> <h3>Results <!-- TMPL_VAR Name ="from" --> to <!-- TMPL_VAR Name ="to" --> of <!-- TMPL_VAR Name ="numresults" --> found for '<span class="ex"><!-- TMPL_VAR NAME="member" --></span>'</h3></div>

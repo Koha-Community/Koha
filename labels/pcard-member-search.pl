@@ -39,6 +39,7 @@ $debug and warn "[In pcard-member-search] Batch Id: $batch_id, and Type: $batch_
 my $quicksearch = $input->param('quicksearch');
 my $startfrom = $input->param('startfrom')||1;
 my $resultsperpage = $input->param('resultsperpage')||C4::Context->preference("PatronsPerPage")||20;
+my $category = $input->param('category');
 
 my ($template, $loggedinuser, $cookie);
 if($quicksearch){
@@ -75,7 +76,7 @@ $orderby = "surname,firstname" unless $orderby;
 $member =~ s/,//g;   #remove any commas from search string
 $member =~ s/\*/%/g;
 
-unless ($member) {
+unless ($member||$category) {
     $template->param( batch_id => $batch_id, type => $batch_type,);
     output_html_with_http_headers $input, $cookie, $template->output;
     exit;
@@ -89,7 +90,7 @@ if(length($member) == 1)
 }
 else
 {
-    ($count,$results)=SearchMember($member,$orderby,"advanced");
+    ($count,$results)=SearchMember($member,$orderby,"advanced",$category);
 }
 
 
@@ -133,6 +134,7 @@ my $base_url =
     '&amp;',
     map { $_->{term} . '=' . $_->{val} } (
         { term => 'member',         val => $member         },
+        { term => 'category',         val => $category         },
         { term => 'orderby',        val => $orderby        },
         { term => 'resultsperpage', val => $resultsperpage },
         { term => 'type',           val => $batch_type     },
