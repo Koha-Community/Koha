@@ -65,8 +65,42 @@ $(document).ready(function(){
     $("#CheckNone").click(function(){
         $("#bookbag_form").unCheckCheckboxes();
         return false;
-    }); 
-	<!-- TMPL_IF NAME="TagsEnabled" -->$(".tagbutton").click(KOHA.Tags.add_tag_button);<!-- /TMPL_IF -->
+    });
+<!-- TMPL_IF NAME="RequestOnOpac" -->
+  <!-- TMPL_IF NAME="opacuserlogin" -->
+    $("#placehold").html("<input class=\"submit\" type=\"submit\" value=\"Place Hold\"/>");
+	$("#placehold").find("input:submit").click(function(){
+        holdMultiple();
+		return false;
+	});
+  <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+    $("#holdDetails").hide();
+
+	<!-- TMPL_IF NAME="TagsEnabled" -->
+        $(".tagbutton").click(KOHA.Tags.add_tag_button);
+	    <!-- TMPL_IF NAME="TagsInputOnList" -->
+	    <!-- TMPL_IF NAME="loggedinusername" -->
+            $("#tagsel_tag").click(function(){
+                tagSelected();
+                return false;
+            });
+            $("#tagsel_cancel").click(function(){
+                tagCanceled();
+                return false;
+            });
+            $("#tagsel_button").click(function(){
+                tagAdded();
+                return false;
+            });
+        <!-- TMPL_ELSE -->
+            $("#tagsel_tag").click(function(){
+                window.location = "/cgi-bin/koha/opac-user.pl";
+                return false;
+            });
+        <!-- /TMPL_IF -->
+        <!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="GoogleJackets" -->KOHA.Google.GetCoverFromIsbn();<!-- /TMPL_IF -->
 });
 //]]>
