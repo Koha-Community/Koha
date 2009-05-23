@@ -11,6 +11,8 @@ KOHA.Google = {
     /**
      * Search all:
      *    <div title="biblionumber" id="isbn" class="gbs-thumbnail"></div>
+     * or
+     *    <div title="biblionumber" id="isbn" class="gbs-thumbnail-preview"></div>
      * and run a search with all collected isbns to Google Book Search.
      * The result is asynchronously returned by Google and catched by
      * gbsCallBack().
@@ -32,7 +34,8 @@ KOHA.Google = {
     },
 
     /**
-     * Add cover pages and links to Google detail in <div
+     * Add cover pages <div
+     * and link to preview if div id is gbs-thumbnail-preview
      */
     gbsCallBack: function(booksInfo) {
         for (id in booksInfo) {
@@ -44,14 +47,17 @@ KOHA.Google = {
 	            	var img = document.createElement("img");
 	                img.src = book.thumbnail_url;
 					$(this).append(img);
-                    $(this).append(
-                        '<div style="margin-bottom:5px; margin-top:-5px;font-size:9px">' +
-                        '<a href="' + 
-                        book.info_url + 
-                        '"><img src="' +
-                        'http://books.google.com/intl/en/googlebooks/images/gbs_preview_sticker1.gif' +
-                        '"></a></div>' 
-                        );
+                    var re = /^gbs-thumbnail-preview/;
+                    if ( re.exec($(this).attr("id")) ) {
+                        $(this).append(
+                            '<div style="margin-bottom:5px; margin-top:-5px;font-size:9px">' +
+                            '<a href="' + 
+                            book.info_url + 
+                            '"><img src="' +
+                            'http://books.google.com/intl/en/googlebooks/images/gbs_preview_sticker1.gif' +
+                            '"></a></div>' 
+                            );
+                    }
 				} else {
 					var message = document.createElement("span");
 					$(message).attr("class","no-image");
