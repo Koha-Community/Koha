@@ -43,7 +43,7 @@
     <!-- TMPL_IF name="overduesloop" -->
         <table style="width:100%;">
         <tr>	
-            <th>Date_due</th>
+            <th>Date due</th>
             <th>Title</th>
             <th>Patron</th>
             <th>Location</th>
@@ -75,10 +75,10 @@
                     <td align="center">
                     <b>
                         <!-- TMPL_IF NAME="overdue1" -->
-                            first overdue
+                            First overdue
                         <!-- /TMPL_IF -->
                         <!-- TMPL_IF NAME="overdue2" -->
-                            second overdue
+                            Second overdue
                         <!-- /TMPL_IF -->
                         <!-- TMPL_IF NAME="overdue3" -->
                             Third overdue
@@ -90,11 +90,11 @@
                         <!-- TMPL_IF NAME="borroweremail" -->
                             <a href="branchoverdues.pl?action=add&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&amp;method=mail&amp;location=<!-- TMPL_VAR NAME="location" -->&amp;overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->&amp;notifyId=<!-- TMPL_VAR NAME="notify_id" -->">Mail</a>
                         <!-- TMPL_ELSE -->
-                            mail
+                            Mail
                         <!-- /TMPL_IF -->
                             &nbsp;|&nbsp;
                             <a href="branchoverdues.pl?action=add&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&amp;method=phone&amp;location=<!-- TMPL_VAR NAME="location" -->&amp;overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->&amp;notifyId=<!-- TMPL_VAR NAME="notify_id" -->
-                            ">phone</a>
+                            ">Phone</a>
                             &nbsp;|&nbsp;
                             <a href="branchoverdues.pl?action=add&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->&amp;method=letter&amp;location=<!-- TMPL_VAR NAME="location" -->&amp;overduelevel=<!-- TMPL_VAR NAME="overdueLevel" -->
                             &amp;notifyId=<!-- TMPL_VAR NAME="notify_id" -->">Notice</a>
@@ -121,7 +121,7 @@
             <table style="width:100%;">
 			<caption>Today's notifications</caption>
             <tr>
-                <th>Date_due</th>
+                <th>Date due</th>
                 <th>Title</th>
                 <th>Borrower</th>
                 <th>Location</th>
@@ -154,13 +154,13 @@
                         <td align="center">
                             <b>
                                 <!-- TMPL_IF NAME="overdue1" -->
-                                    first overdue
+                                    First overdue
                                 <!-- /TMPL_IF -->
                                 <!-- TMPL_IF NAME="overdue2" -->
-                                    second overdue
+                                    Second overdue
                                 <!-- /TMPL_IF -->
                                 <!-- TMPL_IF NAME="overdue3" -->
-                                    considered lost
+                                    Considered lost
                                 <!-- /TMPL_IF -->
                             </b>
                         </td>
