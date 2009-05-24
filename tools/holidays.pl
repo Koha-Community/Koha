@@ -72,7 +72,8 @@ for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{b
             );
     push @branchloop, \%row;
 }
-
+# branches calculated - put branch codes in a single string so they can be passed in a form
+my $branchcodes = join("|", keys %$branches);
 
 # Get all the holidays
 
@@ -139,6 +140,7 @@ $template->param(WEEK_DAYS_LOOP => \@week_days,
 				DAY_MONTH_HOLIDAYS_LOOP => \@day_month_holidays,
 				calendardate => $calendardate,
 				keydate => $keydate,
+				branchcodes => $branchcodes,
 				branch => $branch
 	);
 

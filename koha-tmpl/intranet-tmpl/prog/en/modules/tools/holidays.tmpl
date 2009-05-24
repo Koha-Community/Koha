@@ -233,6 +233,7 @@ h1 select { width: 20em; }
 	<!-- ***************************** Panel to deal with new holidays **********************  -->
 	<div class="panel" id="newHoliday">
 	 	<form action="/cgi-bin/koha/tools/newHolidays.pl" method="post">
+				<input type="hidden" name="branchCodes" id="branchCodes" value="<!-- TMPL_VAR NAME="branchcodes" -->" /> 
 			<h2>Add new holiday</h2>
 			<p>
 				<label for="newBranchName">Library</label>
@@ -264,6 +265,10 @@ h1 select { width: 20em; }
 				<label for="newOperationYear">Holiday repeated yearly on the same date</label>.
 				<a href="#" onclick=" additionalInformation('This will take this day and month as a reference to make it holiday. Through this option, you can repeat this rule for every year. For example, selecting August 1st will make August 1st a holiday every year.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/../img/more.gif" border="0" alt="More information" /></a>
 				<p>
+				<input type="checkbox" name="allBranches" id="allBranches" />
+				<label for="allBranches">Copy to all locations</label>.
+				<a href="#" onclick=" additionalInformation('If checked, this holiday will be copied to all locations. If the holiday already exists for a location, no change is made.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/../img/more.gif" border="0" alt="More information" /></a>
+				</p><p>
 					<input type="submit" name="submit" value="Save" />
 					<input type="button" name="cancel2" value="Cancel" onclick=" hidePanel('newHoliday');hidePanel('information')" />
 				</p>
