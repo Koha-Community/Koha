@@ -11,12 +11,13 @@
 # translation of prog_opac_fr_4.po to
 # Penbwrdd yn Gymraeg.
 # Copyright (C) 2003, 2006, 2007, 2008 Free Software Foundation, Inc.
+# Copyright (C) 2008, 2009 BibLibre, SARL
 msgid ""
 msgstr ""
 "Project-Id-Version: nicomo-fr-FR-i-opac-t-prog-v-3000000\n"
 "POT-Creation-Date: 2009-05-13 17:42+0200\n"
-"PO-Revision-Date: 2009-01-23 18:41+0100\n"
-"Last-Translator: Henri-Damien LAURENT <henridamien.laurent@biblibre.com>\n"
+"PO-Revision-Date: 2009-05-15 11:29+0100\n"
+"Last-Translator: nicomo <nicolas.morin@biblibre.com>\n"
 "Language-Team: Français\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -83,9 +84,9 @@ msgstr "Compte adhérent de %s %s"
 #. %1$s: TMPL_VAR name=LibraryName
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/help.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:1
-#, fuzzy, c-format
+#, c-format
 msgid "%s &rsaquo; Self Checkout"
-msgstr "%s Prêt auto-contrôlé"
+msgstr "%s &rsaquo; Prêt auto-contrôlé"
 
 #. %1$s: TMPL_VAR name=bibliotitle
 #. %2$s: TMPL_VAR name=biblionumber
@@ -248,16 +249,16 @@ msgstr "%s."
 #. %1$s: TMPL_VAR name=OPACBaseURL
 #. %2$s: TMPL_VAR name=biblionumber
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-opensearch.tmpl:36
-#, fuzzy, c-format
+#, c-format
 msgid "%s/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=%s"
-msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
+msgstr "%s/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=%s"
 
 #. %1$s: TMPL_VAR name=OPACBaseURL
 #. %2$s: TMPL_VAR name=biblionumber
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-opensearch.tmpl:36
-#, fuzzy, c-format
+#, c-format
 msgid "%s/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=%s"
-msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
+msgstr "%s/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=%s"
 
 #. %1$s: TMPL_VAR name=OPACBaseURL
 #. %2$s: TMPL_VAR name=biblionumber
@@ -466,9 +467,8 @@ msgid "(Checked out)"
 msgstr "(En prêt)"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:225
-#, fuzzy
 msgid "(On hold)"
-msgstr "Réservé"
+msgstr "(réservé)"
 
 #. %1$s: TMPL_VAR name=subscriptionsnumber
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:384
@@ -505,7 +505,7 @@ msgstr "(Publié le %s)"
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:135
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-facets.inc:7
 msgid "(related searches:"
-msgstr "(Recherches apparentées :"
+msgstr "(Recherches apparentées&nbsp;:"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=unititle
@@ -525,7 +525,7 @@ msgstr ", ISSN %s"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:310
 msgid ", Shelving Location:"
-msgstr ", Localisation :"
+msgstr ", Localisation&nbsp;:"
 
 #. %1$s: TMPL_VAR name=author
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:98
@@ -535,26 +535,16 @@ msgstr ", par %s"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:40
 #, c-format
-msgid ""
-", you cannot place holds because the library doesn't have up-to-date "
-"<a1>contact information</a> on file."
-msgstr ""
-", vous ne pouvez pas faire de réservation, parce que vos <a1>coordonnées</a> "
-"ne sont pas à jour."
+msgid ", you cannot place holds because the library doesn't have up-to-date <a1>contact information</a> on file."
+msgstr ", vous ne pouvez pas faire de réservation, parce que vos <a1>coordonnées</a> ne sont pas à jour."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:55
 msgid ", you cannot place holds because your account has been frozen."
-msgstr ""
-", vous ne pouvez pas faire de réservation parce que votre compte a été "
-"bloqué."
+msgstr ", vous ne pouvez pas faire de réservation parce que votre compte a été bloqué."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:47
-msgid ""
-", you cannot place holds because your library card has been marked as lost "
-"or stolen."
-msgstr ""
-", vous ne pouvez pas faire de réservation parce que votre carte de "
-"bibliothèque a été signalée comme perdue ou volée."
+msgid ", you cannot place holds because your library card has been marked as lost or stolen."
+msgstr ", vous ne pouvez pas faire de réservation parce que votre carte de bibliothèque a été signalée comme perdue ou volée."
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=publicationyear
@@ -718,12 +708,10 @@ msgstr "<a1>%s</a>,"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:76
 #, c-format
 msgid "<a1>Click here</a> for more information on subscription(s) history"
-msgstr ""
-"<a1>Cliquer ici</a> pour plus d'information sur l'historique de(s) "
-"l'abonnement(s)"
+msgstr "<a1>Cliquer ici</a> pour plus d'information sur l'historique de(s) l'abonnement(s)"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:73
-#, fuzzy, c-format
+#, c-format
 msgid "<a1>HELP</a> with the self checkout system"
 msgstr "<a1>AIDE</a> sur le prêt auto-contôlé"
 
@@ -758,19 +746,19 @@ msgstr "<a1>Sélectionner tout</a> <a2>Effacer tout</a>"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:201
 #, c-format
 msgid "<b>Selected items :</b> <a1>Remove</a>"
-msgstr "<b>Documents sélectionnés :</b> <a1> Retirer </a>"
+msgstr "<b>Documents sélectionnés&nbsp;:</b> <a1> Retirer </a>"
 
 #. %1$s: TMPL_VAR name=shelfname
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:14
 #, c-format
 msgid "<em>%s</em>:"
-msgstr "<em>%s</em> :"
+msgstr "<em>%s</em>&nbsp;:"
 
 #. %1$s: TMPL_VAR name=impossible
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:28
 #, c-format
 msgid "<em>Error type:</em> %s"
-msgstr "<em>Type d'erreur :</em> %s"
+msgstr "<em>Type d'erreur&nbsp;:</em> %s"
 
 #. %1$s: TMPL_VAR name=already
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:51
@@ -799,17 +787,8 @@ msgstr "Accès refusé"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:96
 #, c-format
-msgid ""
-"According to our records, we don't have up-to-date <a1>contact information</"
-"a> on file. Please contact your librarian, or use the <a2>online update "
-"form</a> to submit current information (<em>Please note:</em> there may be a "
-"delay in restoring your account if you submit online)"
-msgstr ""
-"D'après nos fichiers <a1>vos coordonnées</a> ne sont plus à jour. Merci de "
-"nous contacter ou d'utiliser <a2>la mise à jour en ligne</a> pour nous "
-"transmettre vos nouvelles coordonnées (<em>Attention :</em> si vous utilisez "
-"la mise à jour en ligne, il y a un délai pour la réactivation de votre "
-"compte)"
+msgid "According to our records, we don't have up-to-date <a1>contact information</a> on file. Please contact your librarian, or use the <a2>online update form</a> to submit current information (<em>Please note:</em> there may be a delay in restoring your account if you submit online)"
+msgstr "D'après nos fichiers <a1>vos coordonnées</a> ne sont plus à jour. Merci de nous contacter ou d'utiliser <a2>la mise à jour en ligne</a> pour nous transmettre vos nouvelles coordonnées (<em>Attention :</em> si vous utilisez la mise à jour en ligne, il y a un délai pour la réactivation de votre compte)"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:283
 msgid "Account Frozen"
@@ -818,21 +797,21 @@ msgstr "Compte bloqué"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:109
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:36
 msgid "Acquired in the last:"
-msgstr "acquis durant les derniers :"
+msgstr "acquis durant les derniers&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/resort_form.inc:25
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/resort_form.inc:26
 msgid "Acquisition Date: Newest to Oldest"
-msgstr "Date d'acquisition : décroissante"
+msgstr "Date d'acquisition&nbsp;: décroissante"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/resort_form.inc:27
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/resort_form.inc:28
 msgid "Acquisition Date: Oldest to Newest"
-msgstr "Date d'acquisition : croissante"
+msgstr "Date d'acquisition&nbsp;: croissante"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:337
 msgid "Actions:"
-msgstr "Actions :"
+msgstr "Actions&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:200
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:203
@@ -867,7 +846,7 @@ msgstr "Ajouter à mon panier"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:46
 msgid "Add to a New List:"
-msgstr "Ajouter à une nouvelle liste :"
+msgstr "Ajouter à une nouvelle liste&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:60
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:204
@@ -876,13 +855,12 @@ msgstr "Ajouter à ma liste"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:28
 msgid "Add to list:"
-msgstr "Ajouter à ma liste :"
+msgstr "Ajouter à ma liste&nbsp;:"
 
 #. SCRIPT
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:77
-#, fuzzy
 msgid "Add to: "
-msgstr "Ajouter à"
+msgstr "Ajouter à :"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:496
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:508
@@ -891,13 +869,12 @@ msgid "Add your own review"
 msgstr "Ajoutez votre propre commentaire"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:271
-#, fuzzy
 msgid "Additional Content Types for Books/Printed Materials"
-msgstr "Autres types de contenus"
+msgstr "Autres types de contenus pour les documents imprimés"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:29
 msgid "Address:"
-msgstr "Adresse :"
+msgstr "Adresse&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:243
 msgid "Adult"
@@ -939,7 +916,7 @@ msgstr "Coordonnées d'un autre contact"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:59
 msgid "Alternate Contact:"
-msgstr "Autre contact :"
+msgstr "Autre contact&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:238
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:34
@@ -1023,7 +1000,7 @@ msgstr "Les autres"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authorities-home.tmpl:50
 msgid "Anywhere:"
-msgstr "Partout :"
+msgstr "Partout&nbsp;:"
 
 #. SCRIPT
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:57
@@ -1052,7 +1029,7 @@ msgstr "A la bibliothèque %s"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:42
 #, c-format
 msgid "At library: %s %s"
-msgstr "A la bibliothèque : %s %s"
+msgstr "A la bibliothèque&nbsp;: %s %s"
 
 #. %1$s: TMPL_VAR name=title
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:42
@@ -1100,14 +1077,13 @@ msgstr "Auteur (Z-A)"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:21
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:21
-#, fuzzy
 msgid "Author(s):"
-msgstr "Auteurs :"
+msgstr "Auteur(s)&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:64
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions2.tmpl:64
 msgid "Author:"
-msgstr "Auteur :"
+msgstr "Auteur&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-dictionary.tmpl:41
 msgid "Authorities"
@@ -1143,7 +1119,7 @@ msgstr "Auteurs"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:82
 msgid "Authors:"
-msgstr "Auteurs :"
+msgstr "Auteurs&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-facets.inc:6
 msgid "Availability"
@@ -1186,7 +1162,7 @@ msgstr "Code-barres"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:43
 msgid "Below is a list of the three latest issues :"
-msgstr "Ci-dessous les 3 derniers numéros parus :"
+msgstr "Ci-dessous les 3 derniers numéros parus&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:145
 msgid "Biannual"
@@ -1245,7 +1221,7 @@ msgstr "Feuilleter notre catalogue"
 
 #. %1$s: TMPL_VAR name=starting_homebranch
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:310
-#, fuzzy, c-format
+#, c-format
 msgid "Browsing %s Shelves"
 msgstr "Parcourir la bibliothèque %s"
 
@@ -1313,11 +1289,11 @@ msgstr "Annuler"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:17
 msgid "Card Number:"
-msgstr "N° de carte :"
+msgstr "N° de carte&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:68
 msgid "Card number:"
-msgstr "N° de carte :"
+msgstr "N° de carte&nbsp;:"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -1383,7 +1359,7 @@ msgstr "Catalogue &rsaquo; Identification désactivée"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:1
 msgid "Catalog &rsaquo; Details for:"
-msgstr "Catalogue &rsaquo; Détails pour :"
+msgstr "Catalogue &rsaquo; Détails pour&nbsp;:"
 
 #. %1$s: TMPL_VAR name=title
 #. %2$s: TMPL_VAR name=subtitle
@@ -1434,9 +1410,8 @@ msgid "Catalog &rsaquo; Sending Your Cart"
 msgstr "Catalogue &rsaquo; Envoi de mon panier"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelfform.tmpl:1
-#, fuzzy
 msgid "Catalog &rsaquo; Sending Your List"
-msgstr "Catalogue &rsaquo; Envoi de mon panier"
+msgstr "Catalogue &rsaquo; Envoi liste"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-alert-subscribe.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:1
@@ -1470,7 +1445,7 @@ msgstr "Catalogues"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:178
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:322
 msgid "Category:"
-msgstr "Catégorie :"
+msgstr "Catégorie&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:12
 msgid "Change your Password"
@@ -1478,7 +1453,7 @@ msgstr "Modifier mon mot de passe"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:103
 msgid "Check out or return an item:"
-msgstr "Emprunter ou rendre un document :"
+msgstr "Emprunter ou rendre un document&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:106
 msgid "Checked Out"
@@ -1517,7 +1492,7 @@ msgstr "Prêts"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:32
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:53
 msgid "City, State:"
-msgstr "Commune :"
+msgstr "Commune&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:159
 msgid "Classification"
@@ -1590,7 +1565,7 @@ msgstr "Collection"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:125
 msgid "Collection:"
-msgstr "Collection :"
+msgstr "Collection&nbsp;:"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=seriestitle
@@ -1598,7 +1573,7 @@ msgstr "Collection :"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:25
 #, c-format
 msgid "Collection: %s"
-msgstr "Collection : %s"
+msgstr "Collection&nbsp;: %s"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=title
@@ -1613,7 +1588,7 @@ msgstr "Commentaire de %s %s %s"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:27
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelfform.tmpl:27
 msgid "Comment:"
-msgstr "Commentaire :"
+msgstr "Commentaire&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:234
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:33
@@ -1683,20 +1658,19 @@ msgstr "Exemplaires"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:204
 msgid "Copies available at:"
-msgstr "Exemplaires disponibles à :"
+msgstr "Exemplaires disponibles à&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:253
 msgid "Copies available:"
-msgstr "Exemplaires disponibles :"
+msgstr "Exemplaires disponibles&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:251
 msgid "Copy"
 msgstr "Copie"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:157
-#, fuzzy
 msgid "Copy Number"
-msgstr "Cote"
+msgstr "Exemplaire numéro"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:124
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:111
@@ -1706,7 +1680,7 @@ msgstr "Copyright"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:65
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions2.tmpl:65
 msgid "Copyright date:"
-msgstr "Date de copyright :"
+msgstr "Date de copyright&nbsp;:"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=copyrightdate
@@ -1714,11 +1688,11 @@ msgstr "Date de copyright :"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:27
 #, c-format
 msgid "Copyright year: %s"
-msgstr "Année de copyright : %s"
+msgstr "Année de copyright&nbsp;: %s"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:20
 msgid "Copyright:"
-msgstr "Copyright :"
+msgstr "Copyright&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:176
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:320
@@ -1748,7 +1722,7 @@ msgstr "Crédits"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:33
 msgid "Current Password:"
-msgstr "Mot de passe actuel :"
+msgstr "Mot de passe actuel&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:265
 msgid "DVD video / Videodisc"
@@ -1785,7 +1759,7 @@ msgstr "Date de retour"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:59
 msgid "Date of Birth:"
-msgstr "Date de naissance :"
+msgstr "Date de naissance&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:37
 msgid "Date received"
@@ -1793,7 +1767,7 @@ msgstr "Date de réception"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:248
 msgid "Date:"
-msgstr "Date :"
+msgstr "Date&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-tags.tmpl:92
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-tags.tmpl:101
@@ -1828,7 +1802,7 @@ msgstr "Notes"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:50
 msgid "Detailed notes:"
-msgstr "Notes détaillées :"
+msgstr "Notes détaillées&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:102
 msgid "Details"
@@ -1857,7 +1831,7 @@ msgstr "Recherche dictionnaire"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:69
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:91
 msgid "Did you mean:"
-msgstr "Vouliez-vous dire :"
+msgstr "Vouliez-vous dire&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-messaging.tmpl:27
 msgid "Digests only?"
@@ -1872,16 +1846,12 @@ msgid "Discographies"
 msgstr "Discographies"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-alert-subscribe.tmpl:14
-msgid ""
-"Do you want to receive an email when a new issue for this subscription "
-"arrives?"
-msgstr ""
-"Voulez vous recevoir un e-mail à chaque fois qu'un nouveau fascicule sera "
-"reçu pour cet abonnement ?"
+msgid "Do you want to receive an email when a new issue for this subscription arrives?"
+msgstr "Voulez vous recevoir un e-mail à chaque fois qu'un nouveau fascicule sera reçu pour cet abonnement ?"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:52
 msgid "DoB:"
-msgstr "Né le :"
+msgstr "Né le&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-auth.tmpl:55
 msgid "Don't have a library card?"
@@ -1919,61 +1889,59 @@ msgstr "Date de retour"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:74
 #, c-format
 msgid "ERROR: Database error. Delete (list number %s) failed."
-msgstr ""
-"ERREUR : erreur de la base de données. Echec de la suppression (liste n° %s)"
+msgstr "ERREUR : erreur de la base de données. Echec de la suppression (liste n° %s)"
 
 #. %1$s: TMPL_VAR name=unrecognized
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:77
 #, c-format
 msgid "ERROR: List number %s unrecognized."
-msgstr "ERREUR : Etagère N° %s inconnue"
+msgstr "ERREUR&nbsp;: Etagère N° %s inconnue"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:53
 msgid "ERROR: No barcode given."
-msgstr "ERREUR : Pas de code-barres attribué"
+msgstr "ERREUR&nbsp;: Pas de code-barres attribué"
 
 #. %1$s: TMPL_VAR name=bad_biblionumber
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:88
 #, c-format
 msgid "ERROR: No biblio record found for biblionumber %s."
-msgstr "ERREUR : Il n'y a pas de notice ayant le biblionumber %s"
+msgstr "ERREUR&nbsp;: Il n'y a pas de notice ayant le biblionumber %s"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:85
 msgid "ERROR: No biblionumber received."
-msgstr "ERREUR : pas de biblionumber transmis."
+msgstr "ERREUR&nbsp;: pas de biblionumber transmis."
 
 #. %1$s: TMPL_VAR name=failgetitem
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:65
 #, c-format
 msgid "ERROR: No item found with barcode %s."
-msgstr "ERREUR : Il n'y a pas de document avec le code-barres %s"
+msgstr "ERREUR&nbsp;: Il n'y a pas de document avec le code-barres %s"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:54
 msgid "ERROR: No shelfnumber given."
-msgstr "ERREUR : Pas de n° d'étagère attribué."
+msgstr "ERREUR&nbsp;: Pas de n° d'étagère attribué."
 
 #. %1$s: TMPL_VAR name=failed_delete
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-tags.tmpl:66
 #, c-format
 msgid "ERROR: You cannot delete the tag %s."
-msgstr "ERREUR : Vous ne pouvez pas supprimer le tag %s."
+msgstr "ERREUR&nbsp;: Vous ne pouvez pas supprimer le tag %s."
 
 #. %1$s: TMPL_VAR name=nopermission
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:62
 #, c-format
 msgid "ERROR: You do not have adequate permission for that action on list %s."
-msgstr ""
-"ERREUR : Vous n'avez pas les droits de faire cette action sur la liste %s."
+msgstr "ERREUR : Vous n'avez pas les droits de faire cette action sur la liste %s."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-tags.tmpl:65
 msgid "ERROR: You must log in to complete that action."
-msgstr "ERREUR : vous devez vous identifier pour faire cela."
+msgstr "ERREUR&nbsp;: vous devez vous identifier pour faire cela."
 
 #. %1$s: TMPL_VAR name=badparam
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-tags.tmpl:64
 #, c-format
 msgid "ERROR: illegal parameter %s"
-msgstr "ERREUR : paramètre illégal %s"
+msgstr "ERREUR&nbsp;: paramètre illégal %s"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:240
 msgid "Easy"
@@ -1995,7 +1963,7 @@ msgstr "Edition"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:101
 msgid "Edition statement:"
-msgstr "Information d'édition :"
+msgstr "Information d'édition&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:236
 msgid "Editions"
@@ -2010,7 +1978,7 @@ msgstr "Courriel:"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:40
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:32
 msgid "Email:"
-msgstr "E-mail :"
+msgstr "E-mail&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:50
 msgid "Empty and Close"
@@ -2023,7 +1991,7 @@ msgstr "Encyclopédies"
 #
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:219
 msgid "Enhanced Content:"
-msgstr "Contenu enrichi :"
+msgstr "Contenu enrichi&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:2
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:57
@@ -2040,14 +2008,11 @@ msgstr "Saisissez les termes de recherche"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:105
 msgid "Enter the item barcode:"
-msgstr "Entrer le code-barres du document :"
+msgstr "Entrer le code-barres du document&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/help.tmpl:22
-msgid ""
-"Enter your User ID, and click the submit button (or press the enter key)."
-msgstr ""
-"Entrez votre identifiant adhérent, et cliquer sur le bouton \"Soumettre"
-"\" (ou appuyez sur la touche <Entrée>)"
+msgid "Enter your User ID, and click the submit button (or press the enter key)."
+msgstr "Entrez votre identifiant adhérent, et cliquer sur le bouton \"Soumettre\" (ou appuyez sur la touche <Entrée>)"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:13
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/404.tmpl:13
@@ -2064,31 +2029,26 @@ msgstr "Erreur lors du prêt du document"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-review.tmpl:62
 msgid "Error! You cannot add an empty comment. Please add content or cancel."
-msgstr ""
-"Erreur ! vous ne pouvez pas saisir un commentaire vide. Merci de saisir "
-"quelque chose ou annuler votre saisie de commentaire."
+msgstr "Erreur ! vous ne pouvez pas saisir un commentaire vide. Merci de saisir quelque chose ou annuler votre saisie de commentaire."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-review.tmpl:61
-msgid ""
-"Error! Your comment was entirely illegal markup code. It has NOT been added."
-msgstr ""
-"Erreur ! Votre commentaire comportait uniquement des éléments interdits. Il "
-"n'a pas été ajouté."
+msgid "Error! Your comment was entirely illegal markup code. It has NOT been added."
+msgstr "Erreur ! Votre commentaire comportait uniquement des éléments interdits. Il n'a pas été ajouté."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:81
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:103
 msgid "Error:"
-msgstr "Erreur :"
+msgstr "Erreur&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:72
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:46
 msgid "Expires:"
-msgstr "Expire :"
+msgstr "Expire&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:36
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:30
 msgid "Fax:"
-msgstr "Fax :"
+msgstr "Fax&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:61
 msgid "Female"
@@ -2133,36 +2093,34 @@ msgstr "Finaliser et localiser la réservation"
 #
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:21
 msgid "First Name:"
-msgstr "Prénom :"
+msgstr "Prénom&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:299
 msgid "Fix Itemtype"
 msgstr "Choisir le type de document"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:213
-msgid ""
-"For example: 1999-2001. You could also use \"-1987\" for everything "
-"published before 1987 or \"2008-\" for everything published after 2008."
-msgstr ""
+msgid "For example: 1999-2001. You could also use \"-1987\" for everything published before 1987 or \"2008-\" for everything published after 2008."
+msgstr "Par exemple : 1999-2001. Vous pouvez aussi utiliser \"-1987\" pour tout ce qui est publié avant 1987 ou \"2008-\" pour tout ce qui est publié après 2008."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:109
 msgid "For:"
-msgstr "Pour :"
+msgstr "Pour&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:18
 msgid "Format:"
-msgstr "Support :"
+msgstr "Support&nbsp;:"
 
 #. %1$s: TMPL_VAR name=Source
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:363
 #, c-format
 msgid "From %s:"
-msgstr "De %s :"
+msgstr "De %s&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:89
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:16
 msgid "From:"
-msgstr "De :"
+msgstr "De&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authoritiessearchresultlist.tmpl:47
 msgid "Full Heading"
@@ -2179,7 +2137,7 @@ msgstr "Allez"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:67
 msgid "Guarantor:"
-msgstr "Garant :"
+msgstr "Garant&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:277
 msgid "Handbooks"
@@ -2201,28 +2159,14 @@ msgid "Hello, %s %s"
 msgstr "Bonjour %s %s"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:6
-#, fuzzy
-msgid ""
-"Hi, Here is your cart, sent from our online catalog. Please note that the "
-"attached file is a MARC biblographic records file which can be imported into "
-"a Personal Bibliographic Software like EndNote, Reference Manager or ProCite."
-msgstr ""
-"Bonjour,Voici votre panier, fabriqué à partir du catalogue. Notez que le "
-"fichier attaché est un fichier MARC, qui peut être importé dans un logiciel "
-"de gestion de bibliographie tel qu'EndNote, Reference Manager ou ProCite."
+msgid "Hi, Here is your cart, sent from our online catalog. Please note that the attached file is a MARC biblographic records file which can be imported into a Personal Bibliographic Software like EndNote, Reference Manager or ProCite."
+msgstr "Bonjour,Voici votre panier, envoyé à partir du catalogue. Notez que le fichier attaché est un fichier MARC, qui peut être importé dans un logiciel de gestion de bibliographie tel qu'EndNote, Reference Manager ou ProCite."
 
 #. %1$s: TMPL_VAR name=shelfname
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:6
-#, fuzzy, c-format
-msgid ""
-"Hi, Here is your list called %s, sent from our online catalog. Please note "
-"that the attached file is a MARC biblographic records file which can be "
-"imported into a Personal Bibliographic Software like EndNote, Reference "
-"Manager or ProCite."
-msgstr ""
-"Bonjour,Voici votre panier, fabriqué à partir du catalogue. Notez que le "
-"fichier attaché est un fichier MARC, qui peut être importé dans un logiciel "
-"de gestion de bibliographie tel qu'EndNote, Reference Manager ou ProCite."
+#, c-format
+msgid "Hi, Here is your list called %s, sent from our online catalog. Please note that the attached file is a MARC biblographic records file which can be imported into a Personal Bibliographic Software like EndNote, Reference Manager or ProCite."
+msgstr "Bonjour, Voici votre liste %s, envoyée à partir du catalogue. Notez que le fichier attaché est un fichier MARC, qui peut être importé dans un logiciel de gestion de bibliographie tel qu'EndNote, Reference Manager ou ProCite."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:51
 msgid "Hide Window"
@@ -2258,7 +2202,7 @@ msgstr "Site d'origine"
 #
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:34
 msgid "Home Phone:"
-msgstr "Téléphone domicile :"
+msgstr "Téléphone domicile&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:23
 msgid "ISBD"
@@ -2283,7 +2227,7 @@ msgstr "ISBN"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:118
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:23
 msgid "ISBN:"
-msgstr "ISBN :"
+msgstr "ISBN&nbsp;:"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=ISBN
@@ -2291,7 +2235,7 @@ msgstr "ISBN :"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:23
 #, c-format
 msgid "ISBN: %s"
-msgstr "ISBN : %s"
+msgstr "ISBN&nbsp;: %s"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:113
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:135
@@ -2300,45 +2244,27 @@ msgstr "ISSN"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:122
 msgid "ISSN:"
-msgstr "ISSN :"
+msgstr "ISSN&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:51
 msgid "Identity Details"
 msgstr "Etat civil"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:50
-msgid ""
-"If this is an error, please take your card to the circulation desk at your "
-"local library and the error will be corrected."
-msgstr ""
-"Si c'est une erreur, prière d'apporter votre carte à la banque de prêt de "
-"votre bibliothèque et l'erreur sera corrigée."
+msgid "If this is an error, please take your card to the circulation desk at your local library and the error will be corrected."
+msgstr "Si c'est une erreur, prière d'apporter votre carte à la banque de prêt de votre bibliothèque et l'erreur sera corrigée."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/help.tmpl:17
-msgid ""
-"If this is your first time using the self checkout system, or if the system "
-"is not behaving as expected, you may want to refer to this guide to get "
-"yourself started."
-msgstr ""
-"Si vous utilisez le prêt en auto-contôle pour la première fois, ou bien si "
-"le système semble ne pas se comporter comme prévu, n'hésitez pas à consulter "
-"le guide d'utilisation pour vous dépanner."
+msgid "If this is your first time using the self checkout system, or if the system is not behaving as expected, you may want to refer to this guide to get yourself started."
+msgstr "Si vous utilisez le prêt en auto-contôle pour la première fois, ou bien si le système semble ne pas se comporter comme prévu, n'hésitez pas à consulter le guide d'utilisation pour vous dépanner."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-auth.tmpl:55
-msgid ""
-"If you don't have a library card, stop by your local library to sign up."
-msgstr ""
-"Si vous n'êtes pas inscrit, passez à la bibliothèque la plus proche pour le "
-"faire."
+msgid "If you don't have a library card, stop by your local library to sign up."
+msgstr "Si vous n'êtes pas inscrit, passez à la bibliothèque la plus proche pour le faire."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-auth.tmpl:54
-msgid ""
-"If you don't have a password yet, stop by the circulation desk the next time "
-"you're in the library. We'll happily set one up for you."
-msgstr ""
-"Si vous n'avez pas encore de mot de passe, passez par la banque de prêt la "
-"prochaine fois que vous viendrez à la bibliothèque. Nous serons ravis de "
-"vous en attribuer un."
+msgid "If you don't have a password yet, stop by the circulation desk the next time you're in the library. We'll happily set one up for you."
+msgstr "Si vous n'avez pas encore de mot de passe, passez par la banque de prêt la prochaine fois que vous viendrez à la bibliothèque. Nous serons ravis de vous en attribuer un."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:60
 msgid "Illustration"
@@ -2349,10 +2275,9 @@ msgstr "Illustration"
 #. %2$s: TMPL_VAR name=biblionumber
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:35
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:35
-#, fuzzy, c-format
-msgid ""
-"In the online catalog: %s/cgi-bin/koha/opac-detail.pl?biblionumber=%s Items :"
-msgstr "%s/cgi-bin/koha/opac-detail.pl?biblionumber=%s"
+#, c-format
+msgid "In the online catalog: %s/cgi-bin/koha/opac-detail.pl?biblionumber=%s Items :"
+msgstr "Dans le catalogue : %s/cgi-bin/koha/opac-detail.pl?biblionumber=%s Exemplaires :"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=intransitcount
@@ -2388,7 +2313,7 @@ msgstr "En transit de %s vers %s, le %s"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:99
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:121
 msgid "Indexed in:"
-msgstr "Répertorié dans :"
+msgstr "Répertorié dans&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:279
 msgid "Indexes"
@@ -2443,7 +2368,6 @@ msgid "Item Type"
 msgstr "Type de document"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:26
-#, fuzzy
 msgid "Item cannot be checked out."
 msgstr "Le document ne peut pas être prété."
 
@@ -2474,11 +2398,11 @@ msgstr "Type de document"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:156
 msgid "Item type :"
-msgstr "Type de document :"
+msgstr "Type de document&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:102
 msgid "Item type:"
-msgstr "Type de document :"
+msgstr "Type de document&nbsp;:"
 
 #. %1$s: TMPL_VAR name=wbrname
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:333
@@ -2507,11 +2431,11 @@ msgstr "Type de document"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:71
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:44
 msgid "Joined:"
-msgstr "Inscription :"
+msgstr "Inscription&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:48
 msgid "Joining Branch:"
-msgstr "Site d'inscription :"
+msgstr "Site d'inscription&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:241
 msgid "Juvenile"
@@ -2524,7 +2448,7 @@ msgstr "Tous les mots"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-dictionary.tmpl:8
 msgid "Keyword(s):"
-msgstr "Mot(s)-clé :"
+msgstr "Mot(s)-clé&nbsp;:"
 
 #. LINK
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:10
@@ -2595,7 +2519,7 @@ msgstr "LCCN"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:26
 msgid "LCCN:"
-msgstr "LCCN :"
+msgstr "LCCN&nbsp;:"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=lccn
@@ -2603,7 +2527,7 @@ msgstr "LCCN :"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:33
 #, c-format
 msgid "LCCN: %s"
-msgstr "LCCN : %s"
+msgstr "LCCN&nbsp;: %s"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:119
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:121
@@ -2612,7 +2536,7 @@ msgstr "Langue"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-bottom.inc:11
 msgid "Languages:"
-msgstr "Langues :"
+msgstr "Langues&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:259
 msgid "Large print"
@@ -2625,7 +2549,7 @@ msgstr "Dernière Localisation"
 #
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:22
 msgid "Last Name:"
-msgstr "Nom de famille :"
+msgstr "Nom de famille&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:68
 msgid "Last Seen"
@@ -2668,7 +2592,7 @@ msgstr "Tous les mots"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:66
 msgid "Library Use:"
-msgstr "Note de la bibliothèque :"
+msgstr "Note de la bibliothèque&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-facets.inc:6
 #, c-format
@@ -2676,14 +2600,13 @@ msgid "Limit to <a1>currently available items.</a>"
 msgstr "Seulement les <a1>documents actuellement en rayon</a>"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:222
-#, fuzzy
 msgid "Limit to any of the following:"
-msgstr "Limiter le type à :"
+msgstr "Limiter à&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:99
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:26
 msgid "Limit to:"
-msgstr "Limiter à :"
+msgstr "Limiter à&nbsp;:"
 
 #. %1$s: TMPL_VAR name=delete_ok
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:71
@@ -2702,7 +2625,7 @@ msgstr "Liste des noms"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:171
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:309
 msgid "List Name:"
-msgstr "Liste des noms :"
+msgstr "Liste des noms&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:89
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:165
@@ -2718,7 +2641,7 @@ msgstr "Localisation"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:310
 msgid "Location and availability:"
-msgstr "Localisation et disponibilité :"
+msgstr "Localisation et disponibilité&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:184
 msgid "Location(s)"
@@ -2748,7 +2671,7 @@ msgstr "Connectez-vous"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:101
 msgid "Log in to Your Account:"
-msgstr "Me connecter à mon compte :"
+msgstr "Me connecter à mon compte&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:211
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:328
@@ -2801,7 +2724,7 @@ msgstr "MODS (XML)"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:22
 msgid "Mailing Address:"
-msgstr "Adresse électronique :"
+msgstr "Adresse électronique&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authorities-home.tmpl:26
 msgid "Main entry ($a only):"
@@ -2809,7 +2732,7 @@ msgstr "Entrée principale (seulement $a)"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authorities-home.tmpl:38
 msgid "Main entry:"
-msgstr "Entrée principale :"
+msgstr "Entrée principale&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:247
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:363
@@ -2836,7 +2759,7 @@ msgstr "Traité par"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:335
 msgid "Match:"
-msgstr "Votre requête :"
+msgstr "Votre requête&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:93
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions2.tmpl:93
@@ -2845,7 +2768,7 @@ msgstr "Moi"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:40
 msgid "Membership Category:"
-msgstr "Catégorie d'adhérent :"
+msgstr "Catégorie d'adhérent&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:37
 msgid "Membership Details"
@@ -2853,7 +2776,7 @@ msgstr "Renseignements sur l'adhérent"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:38
 msgid "Membership Number:"
-msgstr "N° de lecteur :"
+msgstr "N° de lecteur&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:8
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelfform.tmpl:8
@@ -2873,7 +2796,7 @@ msgstr "Manquant"
 #
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:35
 msgid "Mobile Phone:"
-msgstr "Téléphone portable :"
+msgstr "Téléphone portable&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:307
 msgid "Modify"
@@ -2929,7 +2852,7 @@ msgstr "Nom"
 #
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:15
 msgid "Name:"
-msgstr "Nom :"
+msgstr "Nom&nbsp;:"
 
 #. A
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authoritiesdetail.tmpl:51
@@ -2942,7 +2865,7 @@ msgstr "Ajouter une liste"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:34
 msgid "New Password:"
-msgstr "Nouveau mot de passe :"
+msgstr "Nouveau mot de passe&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:105
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:153
@@ -2953,12 +2876,12 @@ msgstr "Nouvelle suggestion d'achat"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:321
 msgid "New tag:"
-msgstr "Nouveau tag :"
+msgstr "Nouveau tag&nbsp;:"
 
 #
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:202
 msgid "New:"
-msgstr "Nouveau :"
+msgstr "Nouveau&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:126
 msgid "Newspaper"
@@ -3053,12 +2976,8 @@ msgstr "Pas d'image disponible"
 #
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:60
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions2.tmpl:60
-msgid ""
-"No fields are mandatory. Enter whatever information you have. The \"Notes\" "
-"field can be used to provide any additional information."
-msgstr ""
-"Pas de champ obligatoire. Saisissez les informations que vous avez. Le champ "
-"\"Note\" peut être utilisé pour ajouter ce que vous voulez."
+msgid "No fields are mandatory. Enter whatever information you have. The \"Notes\" field can be used to provide any additional information."
+msgstr "Pas de champ obligatoire. Saisissez les informations que vous avez. Le champ \"Note\" peut être utilisé pour ajouter ce que vous voulez."
 
 #. SCRIPT
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:57
@@ -3073,7 +2992,7 @@ msgstr "Aucun document sélectionné"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:215
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:270
 msgid "No items available:"
-msgstr "Pas d'exemplaire disponible :"
+msgstr "Pas d'exemplaire disponible&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:113
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:40
@@ -3107,9 +3026,8 @@ msgid "No results found in the catalog."
 msgstr "Pas de réponses dans le catalogue."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authoritiessearchresultlist.tmpl:34
-#, fuzzy
 msgid "No results found."
-msgstr "Pas de réponses"
+msgstr "Pas de réponses."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-dictionary.tmpl:64
 msgid "No results in Authorities"
@@ -3182,9 +3100,8 @@ msgid "Not for loan (%s)"
 msgstr "Exclu du prêt (%s)"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:282
-#, fuzzy
 msgid "Not for loan :"
-msgstr "Exclu du prêt"
+msgstr "Exclu du prêt :"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:202
 msgid "Not on hold"
@@ -3204,46 +3121,32 @@ msgid "Note"
 msgstr "Note"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-tags_subject.tmpl:27
-msgid ""
-"Note: This feature only available to French catalogs where ISBD subjects "
-"have been populated, and an index built by separate script."
-msgstr ""
-"Note : cette fonction est utilisée disponible uniquement pour les français, "
-"à partir d'un catalogue indexé en dewey, avec un index construit par un "
-"script spécifique."
+msgid "Note: This feature only available to French catalogs where ISBD subjects have been populated, and an index built by separate script."
+msgstr "Note : cette fonction est utilisée disponible uniquement pour les français, à partir d'un catalogue indexé en dewey, avec un index construit par un script spécifique."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-review.tmpl:74
 msgid "Note: Your comment must be approved by a librarian."
-msgstr "Remarque : Votre commentaire sera modéré par un(e) bibliothécaire."
+msgstr "Remarque&nbsp;: Votre commentaire sera modéré par un(e) bibliothécaire."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-review.tmpl:65
 msgid "Note: this window will close automatically in 5 seconds"
-msgstr "Note : cette fenêtre va se fermer automatiquement dans 5 secondes"
+msgstr "Note&nbsp;: cette fenêtre va se fermer automatiquement dans 5 secondes"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-tags.tmpl:67
 msgid "Note: you can only delete your own tags."
-msgstr "Note : vous ne pouvez supprimer que vos propres tags."
+msgstr "Note&nbsp;: vous ne pouvez supprimer que vos propres tags."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-review.tmpl:57
-msgid ""
-"Note: your comment contained illegal markup code. It has been saved with the "
-"markup removed, as below. You can edit the comment further, or cancel to "
-"retain the comment as is."
-msgstr ""
-"Note : Votre commentaire contenait du texte interdit. Il a été enregistré, "
-"avec les mots en question effacés, comme montré ci-dessous. Vous pouvez "
-"modifier votre commentaire, ou annuler pour conserver le commentaire tel "
-"qu'il est."
+msgid "Note: your comment contained illegal markup code. It has been saved with the markup removed, as below. You can edit the comment further, or cancel to retain the comment as is."
+msgstr "Note : Votre commentaire contenait du texte interdit. Il a été enregistré, avec les mots en question effacés, comme montré ci-dessous. Vous pouvez modifier votre commentaire, ou annuler pour conserver le commentaire tel qu'il est."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-tags.tmpl:68
 msgid "Note: your tag contained markup code that was removed."
-msgstr "Note : votre tag contenait du texte qui a été supprimé"
+msgstr "Note&nbsp;: votre tag contenait du texte qui a été supprimé"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-tags.tmpl:70
 msgid "Note: your tag was entirely markup code. It was NOT added."
-msgstr ""
-"Note : votre tag contenait uniquement du texte interdit. Il n'a PAS été "
-"ajouté."
+msgstr "Note : votre tag contenait uniquement du texte interdit. Il n'a PAS été ajouté."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:110
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:256
@@ -3259,7 +3162,7 @@ msgstr "Notes"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:28
 #, c-format
 msgid "Notes : %s"
-msgstr "Notes : %s"
+msgstr "Notes&nbsp;: %s"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:125
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:126
@@ -3271,7 +3174,7 @@ msgstr "Notes/commentaires"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions2.tmpl:67
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:65
 msgid "Notes:"
-msgstr "Notes :"
+msgstr "Notes&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:39
 msgid "Number"
@@ -3309,7 +3212,6 @@ msgid "Online Stores (Bookfinder.com)"
 msgstr "Boutiques en ligne (bookfinder.com)"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:324
-#, fuzzy
 msgid "Only items currently available for loan or reference"
 msgstr "Seulement les documents actuellement en rayon"
 
@@ -3320,7 +3222,7 @@ msgstr "Ouverte"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authorities-home.tmpl:61
 msgid "Order by:"
-msgstr "Classer par :"
+msgstr "Classer par&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:140
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions2.tmpl:140
@@ -3362,13 +3264,11 @@ msgstr "Mot de passe ou PIN"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:104
 msgid "Password:"
-msgstr "Mot de passe :"
+msgstr "Mot de passe&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:18
 msgid "Passwords do not match. Please re-type your new password."
-msgstr ""
-"Les mots de passe ne correspondent pas.Prière de confirmer votre nouveau mot "
-"de passe."
+msgstr "Les mots de passe ne correspondent pas.Prière de confirmer votre nouveau mot de passe."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:280
 msgid "Patent document"
@@ -3377,11 +3277,11 @@ msgstr "Brevet"
 #
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:70
 msgid "Patron Category:"
-msgstr "Catégorie d'adhérent :"
+msgstr "Catégorie d'adhérent&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:69
 msgid "Patron Number:"
-msgstr "N° de carte :"
+msgstr "N° de carte&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:56
 msgid "Pending"
@@ -3401,11 +3301,11 @@ msgstr "Adresse permanente"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:24
 msgid "Permanent Address:"
-msgstr "Adresse permanente :"
+msgstr "Adresse permanente&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:49
 msgid "Permanent or Alternate Address:"
-msgstr "Adresse permanente :"
+msgstr "Adresse permanente&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:12
 msgid "Personal Details"
@@ -3417,19 +3317,19 @@ msgstr "Téléphone (travail):"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:26
 msgid "Phone (Home):"
-msgstr "Téléphone (domicile) :"
+msgstr "Téléphone (domicile)&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:61
 msgid "Phone:"
-msgstr "Téléphone :"
+msgstr "Téléphone&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:32
 msgid "Physical Details:"
-msgstr "Caractéristiques physiques :"
+msgstr "Caractéristiques physiques&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:111
 msgid "Physical details:"
-msgstr "Caractéristiques physiques :"
+msgstr "Caractéristiques physiques&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:154
 msgid "Pick Up Library"
@@ -3441,11 +3341,11 @@ msgstr "Lieu de retrait"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:226
 msgid "Pick up From:"
-msgstr "A retirer à  :"
+msgstr "A retirer à &nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:117
 msgid "Pick up from:"
-msgstr "A retirer à :"
+msgstr "A retirer à&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:167
 msgid "Picture"
@@ -3491,60 +3391,37 @@ msgid "Please Click Here to Exit"
 msgstr "Merci de cliquer ici pour sortir"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-alert-subscribe.tmpl:28
-msgid ""
-"Please confirm that you do not want to receive email when a new issue "
-"arrives for this subscription"
-msgstr ""
-"Merci de confirmer que vous ne voulez plus recevoir d'e-mail lorsqu'un "
-"nouveau bulletin arrive pour cet abonnement."
+msgid "Please confirm that you do not want to receive email when a new issue arrives for this subscription"
+msgstr "Merci de confirmer que vous ne voulez plus recevoir d'e-mail lorsqu'un nouveau bulletin arrive pour cet abonnement."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:40
-#, fuzzy
 msgid "Please confirm the checkout:"
-msgstr "Merci de confirmer le prêt :"
+msgstr "Merci de confirmer le prêt&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:42
 #, c-format
-msgid ""
-"Please contact your librarian, or use the <a1>online update form</a> to "
-"submit current information (<em>Please note:</em> there may be a delay in "
-"restoring your account if you submit online)"
-msgstr ""
-"Prière de contacter votre bibliothécaire ou d'utiliser <a1>la mise à jour en "
-"ligne</a> pour nous transmettre les informations à jour(<em>Veuillez  noter</"
-"em> qu'il peut y avoir un délai pour la mise à jour de votre compte si vous "
-"le faites en ligne)"
+msgid "Please contact your librarian, or use the <a1>online update form</a> to submit current information (<em>Please note:</em> there may be a delay in restoring your account if you submit online)"
+msgstr "Prière de contacter votre bibliothécaire ou d'utiliser <a1>la mise à jour en ligne</a> pour nous transmettre les informations à jour(<em>Veuillez  noter</em> qu'il peut y avoir un délai pour la mise à jour de votre compte si vous le faites en ligne)"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:93
-#, fuzzy
 msgid "Please enter your card number:"
-msgstr "Merci de saisir votre numéro de carte :"
+msgstr "Merci de saisir votre numéro de carte&nbsp;:"
 
 #
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:59
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions2.tmpl:59
-msgid ""
-"Please fill out this form to make a purchase suggestion. You will receive an "
-"email when the library processes your purchase suggestion"
-msgstr ""
-"Remplissez ce formulaire pour suggérer une nouvelle acquisition à la "
-"bibliothèque. Vous serez prévenu par messagerie électronique lorsque la "
-"bibliothèque traitera votre suggestion."
+msgid "Please fill out this form to make a purchase suggestion. You will receive an email when the library processes your purchase suggestion"
+msgstr "Remplissez ce formulaire pour suggérer une nouvelle acquisition à la bibliothèque. Vous serez prévenu par messagerie électronique lorsque la bibliothèque traitera votre suggestion."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:87
-msgid ""
-"Please make any necessary changes to your record. Submitting the form will "
-"notify a library staff member, who will make the changes permanent."
-msgstr ""
-"Prière de signaler ici les changements importants dans vos coordonnées. "
-"Proposer le formulaire avertira un membre de l'équipe de la bibliothèque, "
-"qui validera ces changements."
+msgid "Please make any necessary changes to your record. Submitting the form will notify a library staff member, who will make the changes permanent."
+msgstr "Prière de signaler ici les changements importants dans vos coordonnées. Proposer le formulaire avertira un membre de l'équipe de la bibliothèque, qui validera ces changements."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:93
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:96
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:99
 msgid "Please note:"
-msgstr "Merci de noter :"
+msgstr "Merci de noter&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-tags.tmpl:71
 msgid "Please try again with plain text."
@@ -3588,7 +3465,7 @@ msgstr "Imprimer"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:114
 msgid "Priority:"
-msgstr "Priorité :"
+msgstr "Priorité&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:55
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:180
@@ -3603,9 +3480,8 @@ msgid "Problem sending the cart..."
 msgstr "Problème lors de l'envoi de votre panier..."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelfform.tmpl:13
-#, fuzzy
 msgid "Problem sending the list..."
-msgstr "Problème lors de l'envoi de votre panier..."
+msgstr "Problème lors de l'envoi de la liste..."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:286
 msgid "Programmed texts"
@@ -3630,14 +3506,12 @@ msgstr "Listes publiques"
 
 #. SCRIPT
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:77
-#, fuzzy
 msgid "Public Lists:"
-msgstr "Listes publiques"
+msgstr "Listes publiques :"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:212
-#, fuzzy
 msgid "Publication Date Range:"
-msgstr "Année d'édition"
+msgstr "Dates de publication :"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:104
 msgid "Publication year:"
@@ -3646,16 +3520,16 @@ msgstr "Année d'édition"
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/resort_form.inc:21
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/resort_form.inc:22
 msgid "Publication/Copyright Date: Newest to Oldest"
-msgstr "Date de publication/copyright : décroissant"
+msgstr "Date de publication/copyright&nbsp;: décroissant"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/resort_form.inc:23
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/resort_form.inc:24
 msgid "Publication/Copyright Date: Oldest to Newest"
-msgstr "Date de publication/copyright : croissant"
+msgstr "Date de publication/copyright&nbsp;: croissant"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:235
 msgid "Publication:"
-msgstr "Publication :"
+msgstr "Publication&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:254
 msgid "Published"
@@ -3663,7 +3537,7 @@ msgstr "Publié"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:104
 msgid "Published by :"
-msgstr "Publié par :"
+msgstr "Publié par&nbsp;:"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=publishercode
@@ -3671,7 +3545,7 @@ msgstr "Publié par :"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:24
 #, c-format
 msgid "Published by: %s"
-msgstr "Publié par : %s"
+msgstr "Publié par&nbsp;: %s"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:109
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:131
@@ -3690,7 +3564,7 @@ msgstr "Lieu de publication"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:66
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions2.tmpl:66
 msgid "Publisher:"
-msgstr "Editeur :"
+msgstr "Editeur&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:3
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:75
@@ -3715,11 +3589,11 @@ msgstr "Classement (de Amazon.com):"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:35
 msgid "Re-Type New Password:"
-msgstr "Confirmer votre nouveau mot de passe :"
+msgstr "Confirmer votre nouveau mot de passe&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:46
 msgid "Record No.:"
-msgstr "Notice N° :"
+msgstr "Notice N°&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:64
 msgid "Record not found"
@@ -3748,7 +3622,7 @@ msgstr "Liens connexes:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:63
 msgid "Relationship:"
-msgstr "Lien :"
+msgstr "Lien&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/resort_form.inc:1
 msgid "Relevance"
@@ -3846,9 +3720,8 @@ msgid "Return to Your Record"
 msgstr "Retour à mes informations"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/help.tmpl:32
-#, fuzzy
 msgid "Return to the Self-Checkout"
-msgstr "Retourner au système de prêt auto-contrôlé."
+msgstr "Retourner au système de prêt auto-contrôlé"
 
 #
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:285
@@ -3873,7 +3746,7 @@ msgstr "Enregistrer"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:571
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:174
 msgid "Save Record:"
-msgstr "Enregistrer notice :"
+msgstr "Enregistrer notice&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:340
 msgid "Save to Lists"
@@ -3891,28 +3764,21 @@ msgstr "Enregistrer dans vos listes"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:116
 #, c-format
 msgid "Scan Index for: %S"
-msgstr "Parcourir l'index pour : %S"
+msgstr "Parcourir l'index pour&nbsp;: %S"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:89
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:111
 msgid "Scan Index:"
-msgstr "Parcourir l'index :"
+msgstr "Parcourir l'index&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:74
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:104
 msgid "Scan a new item or enter its barcode:"
-msgstr "Scannez un nouveau document, ou saissez son code-barres :"
+msgstr "Scannez un nouveau document, ou saissez son code-barres&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/help.tmpl:25
-msgid ""
-"Scan each item and wait for the page to reload before scanning the next "
-"item. The checked-out item should appear in your issues list. The Submit "
-"button only needs to be clicked if you enter the barcode manually."
-msgstr ""
-"Scannez les documents et attendez que la page se rafraichisse pour scanner "
-"le document suivant. Le document emprunté doit apparaître dans la liste des "
-"prêts. Le bouton \"Soumettre\" doit être utilisé seulement si vous saisissez "
-"les code-barres manuellement."
+msgid "Scan each item and wait for the page to reload before scanning the next item. The checked-out item should appear in your issues list. The Submit button only needs to be clicked if you enter the barcode manually."
+msgstr "Scannez les documents et attendez que la page se rafraichisse pour scanner le document suivant. Le document emprunté doit apparaître dans la liste des prêts. Le bouton \"Soumettre\" doit être utilisé seulement si vous saisissez les code-barres manuellement."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:111
 msgid "Scan next item, or"
@@ -3928,13 +3794,13 @@ msgstr "Rechercher"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:561
 msgid "Search for this title in:"
-msgstr "Chercher ce titre dans :"
+msgstr "Chercher ce titre dans&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:48
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:82
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions2.tmpl:82
 msgid "Search for:"
-msgstr "Rechercher :"
+msgstr "Rechercher&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-opensearch.tmpl:22
 msgid "Search results"
@@ -3948,7 +3814,7 @@ msgstr "Rechercher %s"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authorities-home.tmpl:19
 msgid "Search: :"
-msgstr "Rechercher :"
+msgstr "Rechercher&nbsp;:"
 
 #. IMG
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:59
@@ -4023,18 +3889,16 @@ msgstr "Envoyer"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:99
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:245
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:293
-#, fuzzy
 msgid "Send List"
-msgstr "Ajouter une liste"
+msgstr "Envoyer liste"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:21
 msgid "Sending your cart"
 msgstr "Envoi de mon panier"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelfform.tmpl:21
-#, fuzzy
 msgid "Sending your list"
-msgstr "Envoi de mon panier"
+msgstr "Envoi de votre liste"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:147
 msgid "Serial"
@@ -4054,7 +3918,7 @@ msgstr "Périodique"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:30
 #, c-format
 msgid "Serial: %s"
-msgstr "Périodique : %s"
+msgstr "Périodique&nbsp;: %s"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:119
 msgid "Serials"
@@ -4077,7 +3941,7 @@ msgstr "Titre de collections"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:92
 msgid "Series:"
-msgstr "Collections :"
+msgstr "Collections&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:62
 msgid "Session Lost"
@@ -4094,7 +3958,7 @@ msgstr "Paramètres mis à jour"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:60
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:54
 msgid "Sex:"
-msgstr "Sexe :"
+msgstr "Sexe&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-tags_subject.tmpl:17
 msgid "Show"
@@ -4147,12 +4011,8 @@ msgid "Sorry"
 msgstr "Désolé"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:58
-msgid ""
-"Sorry, This Self-Checkout Station has lost authentication. Please contact "
-"the administrator to resolve this problem."
-msgstr ""
-"Désolé, le poste de prêt en auto-contrôle a perdu l'authentification. "
-"Contactez l'administrateur pour résoudre le problème."
+msgid "Sorry, This Self-Checkout Station has lost authentication. Please contact the administrator to resolve this problem."
+msgstr "Désolé, le poste de prêt en auto-contrôle a perdu l'authentification. Contactez l'administrateur pour résoudre le problème."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:26
 msgid "Sorry, This item cannot be checked out at this station."
@@ -4168,10 +4028,8 @@ msgid "Sorry, tags are not enabled on this system."
 msgstr "Désolé, les tags ne sont pas disponibles sur ce système."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-auth.tmpl:24
-msgid ""
-"Sorry, the system doesn't think you have permission to access this page."
-msgstr ""
-"Désolé, Koha pense que vous n'avez pas les droits pour accéder à cette page."
+msgid "Sorry, the system doesn't think you have permission to access this page."
+msgstr "Désolé, Koha pense que vous n'avez pas les droits pour accéder à cette page."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:508
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:137
@@ -4182,8 +4040,7 @@ msgstr "Désolé, il n'y a pas de commentaire disponible pour ce titre."
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:62
 #, c-format
 msgid "Sorry, you cannot place holds because you owe %s."
-msgstr ""
-"Désolé, vous ne pouvez pas faire de réservations parce que vous devez %s"
+msgstr "Désolé, vous ne pouvez pas faire de réservations parce que vous devez %s"
 
 #. %1$s: TMPL_VAR name=too_many_reserves
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:66
@@ -4192,7 +4049,6 @@ msgid "Sorry, you cannot place more than %s holds."
 msgstr "Désolé, vous ne pouvez faire plus de %s réservations."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:61
-#, fuzzy
 msgid "Sorry, your session has timed out, please log in again."
 msgstr "Désolé, votre session a expiré. Merci de vous reconnecter."
 
@@ -4206,12 +4062,12 @@ msgstr "Trié par"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:331
 msgid "Sort by:"
-msgstr "Tri par :"
+msgstr "Tri par&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:172
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:316
 msgid "Sort this list by:"
-msgstr "Trier cette liste par :"
+msgstr "Trier cette liste par&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:141
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:143
@@ -4239,15 +4095,15 @@ msgstr "Situation"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/help.tmpl:21
 msgid "Step One: Enter your user id"
-msgstr "Etape 1 : saisissez votre identifiant utilisateur"
+msgstr "Etape 1&nbsp;: saisissez votre identifiant utilisateur"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/help.tmpl:29
 msgid "Step Three: Click the 'Click here if done' link when done."
-msgstr "Etape 3 : cliquez sur \"cliquer ici\" lorsque vous avez terminé."
+msgstr "Etape 3&nbsp;: cliquez sur \"cliquer ici\" lorsque vous avez terminé."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/help.tmpl:24
 msgid "Step Two: Scan the barcode for each item, one at a time"
-msgstr "Etape 2 : scannez le code-barres pour chaque document, un à la fois"
+msgstr "Etape 2&nbsp;: scannez le code-barres pour chaque document, un à la fois"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:106
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:128
@@ -4279,7 +4135,7 @@ msgstr "Sujet(s)"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:149
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:41
 msgid "Subject(s):"
-msgstr "Sujet(s) :"
+msgstr "Sujet(s)&nbsp;:"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=subject
@@ -4287,7 +4143,7 @@ msgstr "Sujet(s) :"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:26
 #, c-format
 msgid "Subject: %s"
-msgstr "Sujet : %s"
+msgstr "Sujet&nbsp;: %s"
 
 #. INPUT type=submit
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:119
@@ -4305,7 +4161,7 @@ msgstr "Valider"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:88
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:36
 msgid "Submit Changes"
-msgstr "Proposer les modifications à la bibliothèque"
+msgstr "Valider"
 
 #. INPUT type=submit
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:69
@@ -4359,7 +4215,7 @@ msgstr "Suggéré par"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:88
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions2.tmpl:88
 msgid "Suggested by:"
-msgstr "Suggéré par :"
+msgstr "Suggéré par&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:141
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions2.tmpl:141
@@ -4379,12 +4235,8 @@ msgstr "Enquêtes"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/maintenance.tmpl:11
 #, c-format
-msgid ""
-"System Maintenance ... we'll be back soon! If you have any questions, please "
-"contact the <a1>Site Administrator</a>"
-msgstr ""
-"Système en maintenance ... Nous serons de retour bientôt ! Si vous avez des "
-"questions, merci de contacter l'<a1>administrateur du site</a>"
+msgid "System Maintenance ... we'll be back soon! If you have any questions, please contact the <a1>Site Administrator</a>"
+msgstr "Système en maintenance ... Nous serons de retour bientôt ! Si vous avez des questions, merci de contacter l'<a1>administrateur du site</a>"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:76
 msgid "Tag Cloud"
@@ -4398,7 +4250,7 @@ msgstr "Statut du tag."
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:192
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:313
 msgid "Tags:"
-msgstr "Tags :"
+msgstr "Tags&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:290
 msgid "Technical reports"
@@ -4431,20 +4283,14 @@ msgstr "Le nuage n'est pas activé"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-browser.tmpl:43
 #, c-format
-msgid ""
-"The browser table is empty. this feature is not fully set-up. See the "
-"<a1>Koha Wiki</a> for more information on what it does and how to configure "
-"it."
-msgstr ""
-"La table du feuilletage est vite. Cette fonctionnalité n'est pas "
-"correctement installée. Allez sur le <a1>wiki</a> pour avoir plus "
-"d'information sur sa mise en place."
+msgid "The browser table is empty. this feature is not fully set-up. See the <a1>Koha Wiki</a> for more information on what it does and how to configure it."
+msgstr "La table du feuilletage est vite. Cette fonctionnalité n'est pas correctement installée. Allez sur le <a1>wiki</a> pour avoir plus d'information sur sa mise en place."
 
 #. %1$s: TMPL_VAR name=email_add
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:9
 #, c-format
 msgid "The cart was sent to: %s"
-msgstr "Le panier a été envoyé à : %s"
+msgstr "Le panier a été envoyé à&nbsp;: %s"
 
 #. %1$s: TMPL_VAR name=startdate
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:20
@@ -4466,9 +4312,9 @@ msgstr "La liste <i>%s</i> n'est pas vide."
 
 #. %1$s: TMPL_VAR name=email
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelfform.tmpl:9
-#, fuzzy, c-format
+#, c-format
 msgid "The list was sent to: %s"
-msgstr "Le panier a été envoyé à : %s"
+msgstr "Liste envoyée à&nbsp;: %s"
 
 #. %1$s: TMPl_VAR name=histenddate
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:83
@@ -4484,7 +4330,7 @@ msgstr "Le tag a été ajouté comme &quot;%s&quot;"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:389
 msgid "The three latest issues for this subscription:"
-msgstr "Les trois derniers numéros de cet abonnement :"
+msgstr "Les trois derniers numéros de cet abonnement&nbsp;:"
 
 #. %1$s: TMPL_VAR name=patronid
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:82
@@ -4504,16 +4350,12 @@ msgstr "Il n'y a pas de suggestions d'achat en attente."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:32
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:33
-msgid ""
-"There is a problem with your account. Please ask for help at the circulation "
-"desk."
-msgstr ""
-"Il y a un problème avec votre compte. Merci de demander de l'aide à la "
-"banque de prêt."
+msgid "There is a problem with your account. Please ask for help at the circulation desk."
+msgstr "Il y a un problème avec votre compte. Merci de demander de l'aide à la banque de prêt."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-tags.tmpl:62
 msgid "There was a problem with this operation:"
-msgstr "Il y a eu un problème avec cette opération :"
+msgstr "Il y a eu un problème avec cette opération&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:15
 msgid "There was a problem with your submission"
@@ -4524,46 +4366,29 @@ msgid "Theses"
 msgstr "Mémoires"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-tags_subject.tmpl:14
-msgid ""
-"This &quot;cloud&quot; shows the most used topics in our catalog. Click on "
-"any subject below to see the items in our collection."
-msgstr ""
-"Cet &quot;nuage&quot; montre les sujets les plus utilisés dans notre "
-"catalogue. Cliquez sur l'un d'entre eux pour voir les documents qui y sont "
-"attachés."
+msgid "This &quot;cloud&quot; shows the most used topics in our catalog. Click on any subject below to see the items in our collection."
+msgstr "Cet &quot;nuage&quot; montre les sujets les plus utilisés dans notre catalogue. Cliquez sur l'un d'entre eux pour voir les documents qui y sont attachés."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:144
 #, c-format
-msgid ""
-"This List is empty. You can add to your lists from the results of any "
-"<a1>search</a>!"
-msgstr ""
-"Cette liste est vide. Vous pouvez ajouter des éléments à partir des "
-"résultats de n'importe quelle <a1>recherche</a>!"
+msgid "This List is empty. You can add to your lists from the results of any <a1>search</a>!"
+msgstr "Cette liste est vide. Vous pouvez ajouter des éléments à partir des résultats de n'importe quelle <a1>recherche</a>!"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:15
 msgid "This error means that the Koha is pointed an invalid link."
 msgstr "Cette erreur signifie que Koha a pointé vers une adresse invalide."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/404.tmpl:15
-msgid ""
-"This error means that the link was broken and that the page doesn't exist."
-msgstr ""
-"Cette erreur signifie que le lien est cassé et que la page n'existe pas."
+msgid "This error means that the link was broken and that the page doesn't exist."
+msgstr "Cette erreur signifie que le lien est cassé et que la page n'existe pas."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/401.tmpl:15
-msgid ""
-"This error means that the you are trying to access a link that you're not "
-"authorized to see."
-msgstr ""
-"Cette erreur signifie que vous tentez d'accéder à une page à laquelle vous "
-"n'avez pas droit."
+msgid "This error means that the you are trying to access a link that you're not authorized to see."
+msgstr "Cette erreur signifie que vous tentez d'accéder à une page à laquelle vous n'avez pas droit."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:15
-msgid ""
-"This error means that you are forbidden for some reason to see this page."
-msgstr ""
-"Cette erreur signifie que vous n'avez pas le droit de visualiser cette page."
+msgid "This error means that you are forbidden for some reason to see this page."
+msgstr "Cette erreur signifie que vous n'avez pas le droit de visualiser cette page."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:383
 msgid "This is a serial subscription"
@@ -4571,8 +4396,7 @@ msgstr "Il s'agit d'un abonnement"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:64
 msgid "This is not an open list. Items cannot be added to it."
-msgstr ""
-"Ce n'est pas une liste ouverte, vous ne pouvez pas y ajouter de documents."
+msgstr "Ce n'est pas une liste ouverte, vous ne pouvez pas y ajouter de documents."
 
 #. SCRIPT
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:57
@@ -4580,9 +4404,8 @@ msgid "This item has been added to your cart"
 msgstr "Ce document a été ajouté à mon panier"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:41
-#, fuzzy
 msgid "This item is already checked out to you. Return it?"
-msgstr "Ce document est déjà dans mon panier"
+msgstr "Ce document est déjà en prêt sur votre compte. Le rendre?"
 
 #. SCRIPT
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:57
@@ -4650,13 +4473,13 @@ msgstr "Expression titre"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:63
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions2.tmpl:63
 msgid "Title:"
-msgstr "Titre :"
+msgstr "Titre&nbsp;:"
 
 #. %1$s: TMPL_VAR name=title
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:27
-#, fuzzy, c-format
+#, c-format
 msgid "Title: <em>%s</em>"
-msgstr "<em>%s</em> :"
+msgstr "Titre :<em>%s</em>"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-facets.inc:13
 msgid "Titles"
@@ -4670,9 +4493,7 @@ msgstr "Titres"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:16
 #, c-format
 msgid "To report this error, you can <a1>email the Koha Administrator</a>."
-msgstr ""
-"Pour signaler cette erreur, vous pouvez envoyer un <a1>e-mail à "
-"l'administrateur</a>"
+msgstr "Pour signaler cette erreur, vous pouvez envoyer un <a1>e-mail à l'administrateur</a>"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:137
 msgid "Today's Issues"
@@ -4721,7 +4542,7 @@ msgstr "Type/Support"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:34
 #, c-format
 msgid "URL : %s"
-msgstr "URL : %s"
+msgstr "URL&nbsp;: %s"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:172
 msgid "URL(s)"
@@ -4745,7 +4566,7 @@ msgstr "Titre uniforme"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:29
 #, c-format
 msgid "Unified title: %s"
-msgstr "Titre uniforme : %s"
+msgstr "Titre uniforme&nbsp;: %s"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:133
 msgid "Uniform titles:"
@@ -4767,8 +4588,7 @@ msgstr "Se désabonner"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:58
 msgid "Use the \"Confirm\" button below to confirm deletion."
-msgstr ""
-"Utilisez le bouton \"Confirmer\" ci-dessous pour confirmer la suppression"
+msgstr "Utilisez le bouton \"Confirmer\" ci-dessous pour confirmer la suppression"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-auth.tmpl:65
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:18
@@ -4788,18 +4608,12 @@ msgstr "Utilisé dans"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authoritiesdetail.tmpl:64
 #, c-format
 msgid "Used in <a1>%s records</a>"
-msgstr ""
+msgstr "Utilisé dans <a1>%s notices</a>"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:57
 #, c-format
-msgid ""
-"Usually the reason for freezing an account is old overdues or damage fees. "
-"If <a1>your account page</a> shows your account to be clear, please consult "
-"a librarian."
-msgstr ""
-"En général, la suspension d'un compte est due à des retards anciens ou à des "
-"frais de détérioration. Si <a1>votre page personnelle</a> montre que votre "
-"compte est à jour, merci de contacter un bibliothécaire."
+msgid "Usually the reason for freezing an account is old overdues or damage fees. If <a1>your account page</a> shows your account to be clear, please consult a librarian."
+msgstr "En général, la suspension d'un compte est due à des retards anciens ou à des frais de détérioration. Si <a1>votre page personnelle</a> montre que votre compte est à jour, merci de contacter un bibliothécaire."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:264
 msgid "VHS tape / Videocassette"
@@ -4854,7 +4668,7 @@ msgstr "En attente"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:41
 msgid "Warning:"
-msgstr "Alerte :"
+msgstr "Alerte&nbsp;:"
 
 #. %1$s: TMPL_VAR name=subscriptionsnumber
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:39
@@ -4894,7 +4708,7 @@ msgstr "Téléphone bureau"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:153
 msgid "Year :"
-msgstr "Année :"
+msgstr "Année&nbsp;:"
 
 #. INPUT type=submit
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-alert-subscribe.tmpl:20
@@ -4909,20 +4723,12 @@ msgstr "Oui"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:71
 #, c-format
-msgid ""
-"You already have a hold placed on this item. <a1>Return to Item Detail "
-"Screen</a>"
-msgstr ""
-"Vous avez déjà une réservation en cours pour ce document. <a1>Retour à "
-"l'écran de détail du document</a>"
+msgid "You already have a hold placed on this item. <a1>Return to Item Detail Screen</a>"
+msgstr "Vous avez déjà une réservation en cours pour ce document. <a1>Retour à l'écran de détail du document</a>"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:62
-#, fuzzy
-msgid ""
-"You are accessing Self-Checkout from a different IP address! please log in "
-"again."
-msgstr ""
-"Vous accédez à Koha depuis une autre adresse IP. Merci de vous reconnecter."
+msgid "You are accessing Self-Checkout from a different IP address! please log in again."
+msgstr "Vous accédez au prêt auto-contrôlé depuis une autre adresse IP. Merci de vous reconnecter."
 
 #. %1$s: TMPL_VAR name=borrowername
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:78
@@ -4932,9 +4738,7 @@ msgstr "Connecté en tant que %s."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-auth.tmpl:34
 msgid "You are logging from a different IP address. Please log in again."
-msgstr ""
-"Vous êtes déjà connecté à Koha depuis une autre adresse IP. Merci de vous "
-"reconnecter."
+msgstr "Vous êtes déjà connecté à Koha depuis une autre adresse IP. Merci de vous reconnecter."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:39
 msgid "You can't change your password."
@@ -4947,7 +4751,7 @@ msgstr "Vous n'avez pas de prêt en cours."
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:121
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:131
 msgid "You currently owe fines and charges amounting to:"
-msgstr "Vous devez actuellement des amendes et des frais s'élevant à : :"
+msgstr "Vous devez actuellement des amendes et des frais s'élevant à&nbsp;:&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:6
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:6
@@ -4956,13 +4760,8 @@ msgid "You did not specify any search criteria."
 msgstr "Vous n'avez précisé aucun critère de recherche."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-auth.tmpl:39
-msgid ""
-"You entered an incorrect username or password. Please try again! And "
-"remember, usernames and passwords are case sensitive."
-msgstr ""
-"Vous avez saisi un nom d'utilisateur ou mot de passe invalide, merci de "
-"réessayer. Et n'oubliez pas que les noms d'utilisateur et les mots de passe "
-"sont sensibles à la casse."
+msgid "You entered an incorrect username or password. Please try again! And remember, usernames and passwords are case sensitive."
+msgstr "Vous avez saisi un nom d'utilisateur ou mot de passe invalide, merci de réessayer. Et n'oubliez pas que les noms d'utilisateur et les mots de passe sont sensibles à la casse."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:140
 msgid "You have a credit of:"
@@ -4982,12 +4781,8 @@ msgstr "Vous n'avez aucun prêt en cours"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:107
 #, c-format
-msgid ""
-"You have subscribed to email notification on new issues <a1> Cancel email "
-"notification </a>"
-msgstr ""
-"Vous êtes abonné à la notification par e-mail à chaque fascicule. "
-"<a1>Annuler cet abonnement</a>"
+msgid "You have subscribed to email notification on new issues <a1> Cancel email notification </a>"
+msgstr "Vous êtes abonné à la notification par e-mail à chaque fascicule. <a1>Annuler cet abonnement</a>"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:81
 msgid "You must select a library for pickup."
@@ -5013,9 +4808,9 @@ msgstr "Votre commentaire"
 
 #. %1$s: TMPL_VAR name=shelfname
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:2
-#, fuzzy, c-format
+#, c-format
 msgid "Your List : %s"
-msgstr "Mes listes"
+msgstr "Mes listes : %s"
 
 #. For the first occurrence,
 #. SCRIPT
@@ -5028,9 +4823,8 @@ msgstr "Mes listes"
 
 #. SCRIPT
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:77
-#, fuzzy
 msgid "Your Lists:"
-msgstr "Mes listes"
+msgstr "Mes listes :"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-messaging.tmpl:14
 msgid "Your Messaging Settings"
@@ -5042,15 +4836,8 @@ msgstr "Coordonnées personnelles"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:93
 #, c-format
-msgid ""
-"Your account has been frozen. Usually the reason for freezing an account is "
-"old overdues or damage fees.If <a1>your account page</a> shows your account "
-"to be clear, please consult a librarian."
-msgstr ""
-"Votre compte a été suspendu. Habituellement, la suspension est due à des "
-"anciens retards  ou à des pénalités pour détérioration. Si <a1>votre page "
-"personnelle</a> montre que votre compte est à jour, contactez un "
-"bibliothécaire."
+msgid "Your account has been frozen. Usually the reason for freezing an account is old overdues or damage fees.If <a1>your account page</a> shows your account to be clear, please consult a librarian."
+msgstr "Votre compte a été suspendu. Habituellement, la suspension est due à des anciens retards  ou à des pénalités pour détérioration. Si <a1>votre page personnelle</a> montre que votre compte est à jour, contactez un bibliothécaire."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-auth.tmpl:48
 msgid "Your card number"
@@ -5066,30 +4853,16 @@ msgid "Your cart is empty."
 msgstr "Votre panier est vide."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:81
-msgid ""
-"Your corrections have been submitted to the library, and a staff member will "
-"update your record as soon as possible."
-msgstr ""
-"Vos corrections ont été soumises à la bibliothèque et un membre du personnel "
-"mettra votre compte à jour dès que possible."
+msgid "Your corrections have been submitted to the library, and a staff member will update your record as soon as possible."
+msgstr "Vos corrections ont été soumises à la bibliothèque et un membre du personnel mettra votre compte à jour dès que possible."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:24
-msgid ""
-"Your current password was entered incorrectly. If this problem persists, "
-"please ask a librarian to re-set your password for you."
-msgstr ""
-"Votre mot de passe actuel a été mal saisi. Si le problème persiste, "
-"contactez un bibliothécaire, qui modifiera votre mot de passe à votre place."
+msgid "Your current password was entered incorrectly. If this problem persists, please ask a librarian to re-set your password for you."
+msgstr "Votre mot de passe actuel a été mal saisi. Si le problème persiste, contactez un bibliothécaire, qui modifiera votre mot de passe à votre place."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:99
-msgid ""
-"Your library card has been marked as lost or stolen. If this is an error, "
-"please take your card to the circulation desk at your local library and the "
-"error will be corrected."
-msgstr ""
-"Votre carte de bibliothèque a été signalée comme perdue ou volée. Si c'est "
-"une erreur, prière d'apporter votre carte à la banque de prêt de votre "
-"bibliothèque et l'erreur sera corrigée."
+msgid "Your library card has been marked as lost or stolen. If this is an error, please take your card to the circulation desk at your local library and the error will be corrected."
+msgstr "Votre carte de bibliothèque a été signalée comme perdue ou volée. Si c'est une erreur, prière d'apporter votre carte à la banque de prêt de votre bibliothèque et l'erreur sera corrigée."
 
 #. %1$s: TMPL_VAR name=minpasslen
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:21
@@ -5109,13 +4882,11 @@ msgstr "Votre mot de passe doit avoir au moins %s caractères."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:87
 msgid "Your session has timed out due to inactivity. Please sign in."
-msgstr ""
-"Votre session a expiré pour cause d'inactivité. Merci de vous reconnecter."
+msgstr "Votre session a expiré pour cause d'inactivité. Merci de vous reconnecter."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:64
-#, fuzzy
 msgid "Your userid was not found in the database. Please try again."
-msgstr "Vote identifiant n'a pas été trouvé dans la base. Merci de rééssayer."
+msgstr "Votre identifiant n'a pas été trouvé dans la base. Merci de rééssayer."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:54
 msgid "Zip Code"
@@ -5123,17 +4894,16 @@ msgstr "Code postal"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:33
 msgid "Zip Code:"
-msgstr "Code postal :"
+msgstr "Code postal&nbsp;:"
 
 #. SCRIPT
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:77
-#, fuzzy
 msgid "[ New List ]"
-msgstr "Ajouter une liste"
+msgstr "[ Nouvelle liste ]"
 
 #. %1$s: TMPL_VAR name=itemcallnumber
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:295
-#, fuzzy, c-format
+#, c-format
 msgid "[<a1> %s</a>]"
 msgstr "[<a1>%s</a>]"
 
@@ -5160,7 +4930,7 @@ msgstr "[Nouvelle Recherche]"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:14
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:16
 msgid "a list:"
-msgstr "une liste :"
+msgstr "une liste&nbsp;:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:88
 msgid "abstract"
@@ -5291,24 +5061,8 @@ msgstr "copyright"
 #. SPAN
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:75
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:229
-msgid ""
-"ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;"
-"rft.au=<!-- TMPL_VAR NAME=\"author\" -->&amp;rft.btitle=<!-- TMPL_VAR NAME="
-"\"title\" ESCAPE=\"url\" -->&amp;rft.date=<!-- TMPL_VAR NAME="
-"\"publicationyear\" -->&amp;rft.tpages=<!-- TMPL_VAR NAME=\"size\" -->&amp;"
-"rft.isbn=<!-- TMPL_VAR NAME=\"isbn\" ESCAPE=\"url\" -->&amp;rft.aucorp=&amp;"
-"rft.place=<!-- TMPL_VAR NAME=\"place\" -->&amp;rft.pub=<!-- TMPL_VAR NAME="
-"\"publisher\" ESCAPE=\"url\" -->&amp;rft.edition=<!-- TMPL_VAR NAME=\"edition"
-"\" -->&amp;rft.series=<!-- TMPL_VAR NAME=\"series\" -->&amp;rft.genre="
-msgstr ""
-"ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;"
-"rft.au=<!-- TMPL_VAR NAME=\"author\" -->&amp;rft.btitle=<!-- TMPL_VAR NAME="
-"\"title\" ESCAPE=\"url\" -->&amp;rft.date=<!-- TMPL_VAR NAME="
-"\"publicationyear\" -->&amp;rft.tpages=<!-- TMPL_VAR NAME=\"size\" -->&amp;"
-"rft.isbn=<!-- TMPL_VAR NAME=\"isbn\" ESCAPE=\"url\" -->&amp;rft.aucorp=&amp;"
-"rft.place=<!-- TMPL_VAR NAME=\"place\" -->&amp;rft.pub=<!-- TMPL_VAR NAME="
-"\"publisher\" ESCAPE=\"url\" -->&amp;rft.edition=<!-- TMPL_VAR NAME=\"edition"
-"\" -->&amp;rft.series=<!-- TMPL_VAR NAME=\"series\" -->&amp;rft.genre="
+msgid "ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=<!-- TMPL_VAR NAME=\"author\" -->&amp;rft.btitle=<!-- TMPL_VAR NAME=\"title\" ESCAPE=\"url\" -->&amp;rft.date=<!-- TMPL_VAR NAME=\"publicationyear\" -->&amp;rft.tpages=<!-- TMPL_VAR NAME=\"size\" -->&amp;rft.isbn=<!-- TMPL_VAR NAME=\"isbn\" ESCAPE=\"url\" -->&amp;rft.aucorp=&amp;rft.place=<!-- TMPL_VAR NAME=\"place\" -->&amp;rft.pub=<!-- TMPL_VAR NAME=\"publisher\" ESCAPE=\"url\" -->&amp;rft.edition=<!-- TMPL_VAR NAME=\"edition\" -->&amp;rft.series=<!-- TMPL_VAR NAME=\"series\" -->&amp;rft.genre="
+msgstr "ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=<!-- TMPL_VAR NAME=\"author\" -->&amp;rft.btitle=<!-- TMPL_VAR NAME=\"title\" ESCAPE=\"url\" -->&amp;rft.date=<!-- TMPL_VAR NAME=\"publicationyear\" -->&amp;rft.tpages=<!-- TMPL_VAR NAME=\"size\" -->&amp;rft.isbn=<!-- TMPL_VAR NAME=\"isbn\" ESCAPE=\"url\" -->&amp;rft.aucorp=&amp;rft.place=<!-- TMPL_VAR NAME=\"place\" -->&amp;rft.pub=<!-- TMPL_VAR NAME=\"publisher\" ESCAPE=\"url\" -->&amp;rft.edition=<!-- TMPL_VAR NAME=\"edition\" -->&amp;rft.series=<!-- TMPL_VAR NAME=\"series\" -->&amp;rft.genre="
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:22
 msgid "day"
@@ -5427,7 +5181,7 @@ msgstr "illustrations"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:24
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:24
 msgid "in"
-msgstr "En :"
+msgstr "En&nbsp;:"
 
 #. %1$s: TMPL_VAR name=LibraryName
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:139
@@ -5881,9 +5635,9 @@ msgstr "semaine"
 #. %1$s: TMPL_VAR name=limit_desc
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-opensearch.tmpl:19
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-opensearch.tmpl:22
-#, fuzzy, c-format
+#, c-format
 msgid "with limit(s): '%s'"
-msgstr "&nsbp;limité à&nbsp;'%s'"
+msgstr "limité à&nbsp;: '%s'"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:191
 msgid "wood"
@@ -5904,41 +5658,30 @@ msgstr "$<!-- TMPL_VAR NAME=\"code\" --> <!-- TMPL_VAR NAME=\"value\" -->"
 #, fuzzy
 #~ msgid "%s Results:"
 #~ msgstr "%s fascicules"
-
 #~ msgid "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=atom"
 #~ msgstr "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=atom"
-
 #~ msgid "%s;"
 #~ msgstr "%s;"
-
 #~ msgid "&nbsp;No results found."
 #~ msgstr "&nbsp;Pas de réponses"
-
 #~ msgid "<a1>Normal View</a> <a2>MARC View</a>"
 #~ msgstr "<a1>Vue normale</a> <a2>Vue MARC</a>"
-
 #~ msgid "<em>Title:</em> %s"
-#~ msgstr "<em>Titre :</em> %s"
-
+#~ msgstr "<em>Titre&nbsp;:</em> %s"
 #~ msgid "Authors: %s"
-#~ msgstr "Auteurs : %s"
-
+#~ msgstr "Auteurs&nbsp;: %s"
 #~ msgid "Books"
 #~ msgstr "Livres"
-
 #~ msgid "Books on Tape"
 #~ msgstr "Livres cassette"
-
 #~ msgid ""
 #~ "Books, Pamphlets, Technical reports, Manuscripts, Legal papers, Theses "
 #~ "and dissertations"
 #~ msgstr ""
 #~ "Livres, pamphlets, rapports techniques, manuscrits, textes de lois, "
 #~ "mémoires et thèses"
-
 #~ msgid "Computer Files"
 #~ msgstr "Fichiers informatiques"
-
 #~ msgid "Computer files, Data, Software"
 #~ msgstr "Fichiers informatiques, données, logiciel"
 
@@ -5954,55 +5697,42 @@ msgstr "$<!-- TMPL_VAR NAME=\"code\" --> <!-- TMPL_VAR NAME=\"value\" -->"
 #, fuzzy
 #~ msgid "Item Types:"
 #~ msgstr "Type de document"
-
 #~ msgid "Items :"
-#~ msgstr "Documents :"
-
+#~ msgstr "Documents&nbsp;:"
 #~ msgid "Kits"
 #~ msgstr "Kits"
-
 #~ msgid "Limit type to: match any of the following"
-#~ msgstr "Limiter le type à : sélectionner ci-dessous"
-
+#~ msgstr "Limiter le type à&nbsp;: sélectionner ci-dessous"
 #~ msgid "Local History Materials"
 #~ msgstr "Documents d'histoire locale"
-
 #~ msgid "Maps"
 #~ msgstr "Cartes"
-
 #~ msgid "Maps, Globes"
 #~ msgstr "Cartes, Globes"
-
 #~ msgid ""
 #~ "Motion pictures, Videorecordings, Filmstrips, Slides, Transparencies, "
 #~ "Photos, Cards, Charts, Drawings"
 #~ msgstr ""
 #~ "Films, Enregistrements vidéos, Film fixe, Diapositives, Transparents, "
 #~ "Photos, Cartes, Graphiques, Dessins"
-
 #~ msgid "Music"
 #~ msgstr "Musique"
-
 #~ msgid "Reference"
 #~ msgstr "Référence"
-
 #~ msgid "Spoken, Books on CD and Cassette"
 #~ msgstr "Discours, livres sur CD et cassette"
 
 #, fuzzy
 #~ msgid "Suggested by"
 #~ msgstr "Suggéré par :"
-
 #~ msgid "To see any of your own saved tags, first log in."
 #~ msgstr "Pour voir vos tags, merci de vous identifier."
 
 #, fuzzy
 #~ msgid "User Tags"
 #~ msgstr "Mes tags"
-
 #~ msgid "Visual Materials"
 #~ msgstr "Documents visuels"
-
 #~ msgid "Waited"
 #~ msgstr "Attendu"
 
@@ -6027,7 +5757,6 @@ msgstr "$<!-- TMPL_VAR NAME=\"code\" --> <!-- TMPL_VAR NAME=\"value\" -->"
 #~ "TMPL_VAR NAME=\"publishercode\" -->&amp;rft.edition=<!-- TMPL_VAR NAME="
 #~ "\"edition\" -->&amp;rft.series=<!-- TMPL_VAR NAME=\"series\" -->&amp;rft."
 #~ "genre="
-
 #~ msgid ""
 #~ "ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%"
 #~ "3Abook&amp;rft.au=<!-- TMPL_VAR NAME=\"author_nospan\" -->&amp;rft."
@@ -6048,30 +5777,22 @@ msgstr "$<!-- TMPL_VAR NAME=\"code\" --> <!-- TMPL_VAR NAME=\"value\" -->"
 #~ "\"place\" -->&amp;rft.pub=<!-- TMPL_VAR NAME=\"publisher\" ESCAPE=\"url\" "
 #~ "-->&amp;rft.edition=<!-- TMPL_VAR NAME=\"edition\" -->&amp;rft."
 #~ "series=<!-- TMPL_VAR NAME=\"series\" -->&amp;rft.genre="
-
 #~ msgid "mc-collection:LH"
 #~ msgstr "mc-collection:LH"
-
 #~ msgid "mc-collection:REF"
 #~ msgstr "mc-collection:REF"
-
 #~ msgid "mc-rtype:i"
 #~ msgstr "mc-rtype:i"
-
 #~ msgid "mc-rtype:j"
 #~ msgstr "mc-rtype:j"
-
 #~ msgid "mc-rtype:o"
 #~ msgstr "mc-rtype:o"
-
 #~ msgid "mc:a"
 #~ msgstr "mc:a"
-
 #~ msgid "mc:c"
 #~ msgstr "mc:c"
-
 #~ msgid "mc:t"
 #~ msgstr "mc:t"
-
 #~ msgid "mc:v"
 #~ msgstr "mc:v"
+
