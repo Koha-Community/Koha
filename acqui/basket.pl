@@ -239,6 +239,10 @@ if ( $op eq 'delete_confirm' ) {
                 $line{$key} .= '??';
             }
         }
+        my $volume = $results[$i]->{'volume'};
+        my $seriestitle = $results[$i]->{'seriestitle'};
+        $line{'title'} .= " / $seriestitle" if $seriestitle;
+        $line{'title'} .= " / $volume" if $volume;
         push @books_loop, \%line;
     }
 
