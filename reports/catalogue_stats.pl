@@ -54,6 +54,12 @@ my $basename    = $input->param("basename");
 my $mime        = $input->param("MIME");
 our $sep        = $input->param("sep");
 $sep = "\t" if ($sep eq 'tabulation');
+my $item_itype;
+if(C4::Context->preference('item-level_itypes')) {
+	$item_itype = "items\.itype"
+} else {
+	$item_itype = "itemtype";
+}
 
 my ($template, $borrowernumber, $cookie)
 	= get_template_and_user({template_name => $fullreportname,
@@ -176,6 +182,7 @@ if ($do_it) {
 					authvals     => \@authvals,
 					CGIextChoice => \@mime,
 					CGIsepChoice => GetDelimiterChoices,
+					item_itype => $item_itype
 					);
 
 }
@@ -250,7 +257,11 @@ if($barcodefilter){
  	$linefilter[1] = @$filters[3] if ($line =~ /lccn/ )  ;
  	$linefilter[0] = @$filters[4] if ($line =~ /items\.itemcallnumber/ )  ;
  	$linefilter[1] = @$filters[5] if ($line =~ /items\.itemcallnumber/ )  ;
- 	$linefilter[0] = @$filters[6] if ($line =~ /itemtype/ )  ;
+	if (C4::Context->preference('item-level_itypes')) {
+ 		$linefilter[0] = @$filters[6] if ($line =~ /items\.itype/ )  ;
+	} else {
+ 		$linefilter[0] = @$filters[6] if ($line =~ /itemtype/ )  ;
+	}
  	$linefilter[0] = @$filters[7] if ($line =~ /publishercode/ ) ;
  	$linefilter[0] = @$filters[8] if ($line =~ /publicationyear/ ) ;
  	$linefilter[1] = @$filters[9] if ($line =~ /publicationyear/ ) ;
@@ -265,7 +276,11 @@ if($barcodefilter){
  	$colfilter[1] = @$filters[3] if ($column =~ /lccn/ )  ;
  	$colfilter[0] = @$filters[4] if ($column =~ /items\.itemcallnumber/ )  ;
  	$colfilter[1] = @$filters[5] if ($column =~ /items\.itemcallnumber/ )  ;
- 	$colfilter[0] = @$filters[6] if ($column =~ /itemtype/ )  ;
+	if (C4::Context->preference('item-level_itypes')) {
+ 		$colfilter[0] = @$filters[6] if ($column =~ /items\.itype/ )  ;
+	} else {
+ 		$colfilter[0] = @$filters[6] if ($column =~ /itemtype/ )  ;
+	}
  	$colfilter[0] = @$filters[7] if ($column =~ /publishercode/ ) ;
  	$colfilter[0] = @$filters[8] if ($column =~ /publicationyear/ ) ;
  	$colfilter[1] = @$filters[9] if ($column =~ /publicationyear/ ) ;
@@ -410,7 +425,7 @@ if($barcodefilter){
 	if (@$filters[6]){
 		@$filters[6]=~ s/\*/%/g;
 		$strcalc .= " AND " . 
-			(C4::Context::preference('Item-level_itypes') ? 'items.itype' : 'biblioitems.itemtype')
+			(C4::Context->preference('item-level_itypes') ? 'items.itype' : 'biblioitems.itemtype')
 			. " LIKE '" . @$filters[6] ."'";
 	}
 	

@@ -125,9 +125,9 @@
 			<!-- /TMPL_IF -->
 			 <tr>
 				<td>Item Type</td>
-				<td><input type="radio" name="Line" value="itemtype" /></td>
-				<td><input type="radio" name="Column" value="itemtype" /></td>
-				<td><select name="Filter" id="itemtype">
+				<td><input type="radio" name="Line" value="<!-- TMPL_VAR NAME="item_itype" -->" /></td>
+				<td><input type="radio" name="Column" value="<!-- TMPL_VAR NAME="item_itype" -->" /></td>
+				<td><select name="Filter" id="<!-- TMPL_VAR NAME="item_itype" -->">
 					<option value=""> </option>
 					<!-- TMPL_LOOP NAME="CGIItemType" -->
 					<!-- TMPL_IF NAME="selected" -->
