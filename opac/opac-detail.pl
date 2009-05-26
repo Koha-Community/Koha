@@ -285,7 +285,7 @@ if ( C4::Context->preference("OPACAmazonEnabled") ) {
     my $amazon_details = &get_amazon_details( $isbn, $record, $marcflavour, \@services );
     my $similar_products_exist;
     if ( $amazon_reviews ) {
-        my $item = $amazon_details->{Items}->{Item};
+        my $item = $amazon_details->{Items}->{Item}->[0];
         my $customer_reviews = \@{ $item->{CustomerReviews}->{Review} };
         for my $one_review ( @$customer_reviews ) {
             $one_review->{Date} = format_date($one_review->{Date});
@@ -297,7 +297,7 @@ if ( C4::Context->preference("OPACAmazonEnabled") ) {
         $template->param( AMAZON_EDITORIAL_REVIEWS => $editorial_reviews );
     }
     if ( $amazon_similars ) {
-        my $item = $amazon_details->{Items}->{Item};
+        my $item = $amazon_details->{Items}->{Item}->[0];
         my @similar_products;
         for my $similar_product (@{ $item->{SimilarProducts}->{SimilarProduct} }) {
             # do we have any of these isbns in our collection?

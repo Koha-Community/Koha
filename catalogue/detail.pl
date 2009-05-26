@@ -239,7 +239,7 @@ if ( C4::Context->preference("AmazonEnabled") == 1 ) {
     if ( $amazon_similars ) {
         my $similar_products_exist;
         my @similar_products;
-        for my $similar_product (@{$amazon_details->{Items}->{Item}->{SimilarProducts}->{SimilarProduct}}) {
+        for my $similar_product (@{$amazon_details->{Items}->{Item}->[0]->{SimilarProducts}->{SimilarProduct}}) {
             # do we have any of these isbns in our collection?
             my $similar_biblionumbers = get_biblionumber_from_isbn($similar_product->{ASIN});
             # verify that there is at least one similar item
@@ -252,10 +252,10 @@ if ( C4::Context->preference("AmazonEnabled") == 1 ) {
         $template->param( AMAZON_SIMILAR_PRODUCTS  => \@similar_products      );
     }
     if ( $amazon_reviews ) {
-        my $item = $amazon_details->{Items}->{Item};
+        my $item = $amazon_details->{Items}->{Item}->[0];
         my $editorial_reviews = \@{ $item->{EditorialReviews}->{EditorialReview} };
-        #my $customer_reviews  = \@{$amazon_details->{Items}->{Item}->{CustomerReviews}->{Review}};
-        #my $average_rating = $amazon_details->{Items}->{Item}->{CustomerReviews}->{AverageRating} || 0;
+        #my $customer_reviews  = \@{$amazon_details->{Items}->{Item}->[0]->{CustomerReviews}->{Review}};
+        #my $average_rating = $amazon_details->{Items}->{Item}->[0]->{CustomerReviews}->{AverageRating} || 0;
         #$template->param( amazon_average_rating    => $average_rating * 20    );
         #$template->param( AMAZON_CUSTOMER_REVIEWS  => $customer_reviews       );
         $template->param( AMAZON_EDITORIAL_REVIEWS => $editorial_reviews      );

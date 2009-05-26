@@ -146,7 +146,7 @@ sub get_amazon_details {
     my $xmlsimple = XML::Simple->new();
     my $response = $xmlsimple->XMLin(
         $content,
-        forcearray => [ qw(SimilarProduct EditorialReview Review) ],
+        forcearray => [ qw(SimilarProduct EditorialReview Review Item) ],
     ) unless !$content;
     return $response;
 }
