@@ -2456,6 +2456,8 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
         # borrower reading record privacy : 0 : forever, 1 : laws, 2 : don't keep at all
     $dbh->do("ALTER TABLE `borrowers` ADD `privacy` INTEGER NOT NULL DEFAULT 1;");
     print "Upgrade to $DBversion done (add new syspref and column in borrowers)\n";
+    SetVersion ($DBversion);
+}
 
 $DBversion = '3.01.00.036';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {

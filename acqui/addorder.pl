@@ -173,6 +173,7 @@ my $purchaseorder = $input->param('purchaseordernumber');
 my $invoice       = $input->param('invoice');
 my $publishercode = $input->param('publishercode');
 my $suggestionid  = $input->param('suggestionid');
+my $biblionumber  = $input->param('biblionumber');
 my $user          = $input->remote_user;
 my $uncertainprice = $input->param('uncertainprice');
 
@@ -288,7 +289,8 @@ if ( $quantity ne '0' ) {
                                     $itemhash{$item}->{'subfields'},
                                     $itemhash{$item}->{'field_values'},
                                     $itemhash{$item}->{'ind_tag'},
-                                    $itemhash{$item}->{'indicator'});
+                                    $itemhash{$item}->{'indicator'},
+                                    'ITEM');
             my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
             my ($biblionumber,$bibitemnum,$itemnumber) = AddItemFromMarc($record,$biblionumber);
             NewOrderItem($itemnumber, $ordnum);
