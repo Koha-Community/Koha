@@ -52,29 +52,28 @@ my $query = new CGI;
 my $sessionID = $query->cookie("CGISESSID") ;
 my $session = get_session($sessionID);
 
-# new op dev the branch and the printer are now defined by the userenv
+# branch and printer are now defined by the userenv
 # but first we have to check if someone has tried to change them
 
 my $branch = $query->param('branch');
 if ($branch){
     # update our session so the userenv is updated
-    $session->param('branch',$branch);
-    my $branchname = GetBranchName($branch);
-    $session->param('branchname',$branchname);
+    $session->param('branch', $branch);
+    $session->param('branchname', GetBranchName($branch));
 }
 
 my $printer = $query->param('printer');
 if ($printer){
     # update our session so the userenv is updated
-    $session->param('branchprinter',$printer);
+    $session->param('branchprinter', $printer);
 }
 
 if (!C4::Context->userenv && !$branch){
-  if ($session->param('branch') eq 'NO_LIBRARY_SET'){
-    # no branch set we can't issue
-    print $query->redirect("/cgi-bin/koha/circ/selectbranchprinter.pl");
-    exit;
-  }
+    if ($session->param('branch') eq 'NO_LIBRARY_SET'){
+        # no branch set we can't issue
+        print $query->redirect("/cgi-bin/koha/circ/selectbranchprinter.pl");
+        exit;
+    }
 }
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
@@ -88,11 +87,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user (
 );
 
 my $branches = GetBranches();
-my $printers = GetPrinters();
 
-my @failedrenews = $query->param('failedrenew');
+my @failedrenews = $query->param('failedrenew');    # expected to be itemnumbers 
 my %renew_failed;
-for (@failedrenews) { $renew_failed{$_} = 1; } 
+for (@failedrenews) { $renew_failed{$_} = 1; }
 
 my $findborrower = $query->param('findborrower');
 $findborrower =~ s|,| |g;
@@ -103,7 +101,7 @@ $branch  = C4::Context->userenv->{'branch'};
 $printer = C4::Context->userenv->{'branchprinter'};
 
 
-# If Autolocated is not activated, we show the Circulation Parameters to chage settings of librarian
+# If AutoLocation is not activated, we show the Circulation Parameters to chage settings of librarian
 if (C4::Context->preference("AutoLocation") ne 1) { # FIXME: string comparison to number
     $template->param(ManualLocation => 1);
 }
@@ -170,7 +168,7 @@ if($duedatespec_allow){
         }
     }
 } else {
-    $datedue = $globalduedate if($globalduedate);
+    $datedue = $globalduedate if ($globalduedate);
 }
 
 my $todaysdate = C4::Dates->new->output('iso');
@@ -229,7 +227,6 @@ if ($findborrower) {
 
 # get the borrower information.....
 my $borrower;
-my @lines;
 if ($borrowernumber) {
     $borrower = GetMemberDetails( $borrowernumber, 0 );
     my ( $od, $issue, $fines ) = GetMemberIssuesAndFines( $borrowernumber );
@@ -266,7 +263,7 @@ if ($borrowernumber) {
         if (C4::Context->preference('ReturnBeforeExpiry')){
             $template->param("returnbeforeexpiry" => 1);
         }
-  }
+    }
     $template->param(
         overduecount => $od,
         issuecount   => $issue,
@@ -361,7 +358,7 @@ if ($borrowernumber) {
         $getreserv{barcodereserv}  = $getiteminfo->{'barcode'};
         $getreserv{itemcallnumber} = $getiteminfo->{'itemcallnumber'};
         $getreserv{biblionumber}   = $getiteminfo->{'biblionumber'};
-        $getreserv{waitingat}    = GetBranchName( $num_res->{'branchcode'} );
+        $getreserv{waitingat}      = GetBranchName( $num_res->{'branchcode'} );
         #         check if we have a waiting status for reservations
         if ( $num_res->{'found'} eq 'W' ) {
             $getreserv{color}   = 'reserved';
@@ -373,7 +370,7 @@ if ($borrowernumber) {
         $getWaitingReserveInfo{author}       = $getiteminfo->{'author'};
         $getWaitingReserveInfo{reservedate}  = format_date( $num_res->{'reservedate'} );
         $getWaitingReserveInfo{waitingat}    = GetBranchName( $num_res->{'branchcode'} );
-      if($num_res->{'branchcode'} eq $branch){ $getWaitingReserveInfo{waitinghere} = 1; }
+        $getWaitingReserveInfo{waitinghere}  = 1 if $num_res->{'branchcode'} eq $branch;
         }
         #         check transfers with the itemnumber foud in th reservation loop
         if ($transfertwhen) {
@@ -381,14 +378,9 @@ if ($borrowernumber) {
             $getreserv{transfered} = 1;
             $getreserv{datesent}   = format_date($transfertwhen);
             $getreserv{frombranch} = GetBranchName($transfertfrom);
-        }
-
-        if ( ( $getiteminfo->{'holdingbranch'} ne $num_res->{'branchcode'} )
-            and not $transfertwhen )
-        {
+        } elsif ($getiteminfo->{'holdingbranch'} ne $num_res->{'branchcode'}) {
             $getreserv{nottransfered}   = 1;
-            $getreserv{nottransferedby} =
-            GetBranchName( $getiteminfo->{'holdingbranch'} );
+            $getreserv{nottransferedby} = GetBranchName( $getiteminfo->{'holdingbranch'} );
         }
 
 #         if we don't have a reserv on item, we put the biblio infos and the waiting position
@@ -426,13 +418,8 @@ my $todaysissues = '';
 my $previssues   = '';
 my @todaysissues;
 my @previousissues;
-my $allowborrow;
 ## ADDED BY JF: new itemtype issuingrules counter stuff
-my $issued_itemtypes_loop;
 my $issued_itemtypes_count;
-my $issued_itemtypes_allowed_count;    # hashref with total allowed by itemtype
-my $issued_itemtypes_remaining;        # hashref with remaining
-my $issued_itemtypes_flags;            #hashref that stores flags
 my @issued_itemtypes_count_loop;
 
 if ($borrower) {
@@ -516,7 +503,6 @@ while ( my $data = $issueqty_sth->fetchrow_hashref() ) {
         push @issued_itemtypes_count_loop, $data;
     }
 }
-$issued_itemtypes_loop = \@issued_itemtypes_count_loop;
 
 #### / JF
 
@@ -548,9 +534,7 @@ if ($borrowerslist) {
 
 #title
 my $flags = $borrower->{'flags'};
-my $flag;
-
-foreach $flag ( sort keys %$flags ) {
+foreach my $flag ( sort keys %$flags ) {
     $template->param( flagged=> 1);
     $flags->{$flag}->{'message'} =~ s#\n#<br />#g;
     if ( $flags->{$flag}->{'noissues'} ) {
@@ -561,13 +545,13 @@ foreach $flag ( sort keys %$flags ) {
         if ( $flag eq 'GNA' ) {
             $template->param( gna => 'true' );
         }
-        if ( $flag eq 'LOST' ) {
+        elsif ( $flag eq 'LOST' ) {
             $template->param( lost => 'true' );
         }
-        if ( $flag eq 'DBARRED' ) {
+        elsif ( $flag eq 'DBARRED' ) {
             $template->param( dbarred => 'true' );
         }
-        if ( $flag eq 'CHARGES' ) {
+        elsif ( $flag eq 'CHARGES' ) {
             $template->param(
                 charges    => 'true',
                 chargesmsg => $flags->{'CHARGES'}->{'message'},
@@ -575,7 +559,7 @@ foreach $flag ( sort keys %$flags ) {
                 charges_is_blocker => 1
             );
         }
-        if ( $flag eq 'CREDITS' ) {
+        elsif ( $flag eq 'CREDITS' ) {
             $template->param(
                 credits    => 'true',
                 creditsmsg => $flags->{'CREDITS'}->{'message'}
@@ -591,13 +575,13 @@ foreach $flag ( sort keys %$flags ) {
                 chargesamount => $flags->{'CHARGES'}->{'amount'},
             );
         }
-        if ( $flag eq 'CREDITS' ) {
+        elsif ( $flag eq 'CREDITS' ) {
             $template->param(
                 credits    => 'true',
                 creditsmsg => $flags->{'CREDITS'}->{'message'}
             );
         }
-        if ( $flag eq 'ODUES' ) {
+        elsif ( $flag eq 'ODUES' ) {
             $template->param(
                 odues    => 'true',
                 flagged  => 1,
@@ -614,11 +598,11 @@ foreach $flag ( sort keys %$flags ) {
 #                     push @itemswaiting, $iteminformation;
 #                 }
 #             }
-            if ( $query->param('module') ne 'returns' ) {
+            if ( ! $query->param('module') or $query->param('module') ne 'returns' ) {
                 $template->param( nonreturns => 'true' );
             }
         }
-        if ( $flag eq 'NOTES' ) {
+        elsif ( $flag eq 'NOTES' ) {
             $template->param(
                 notes    => 'true',
                 flagged  => 1,
@@ -629,7 +613,7 @@ foreach $flag ( sort keys %$flags ) {
 }
 
 my $amountold = $borrower->{flags}->{'CHARGES'}->{'message'} || 0;
-my @temp = split( /\$/, $amountold );
+$amountold =~ s/^.*\$//;    # remove upto the $, if any
 
 if ( $borrower->{'category_type'} eq 'C') {
     my  ( $catcodes, $labels ) =  GetborCatFromCatType( 'A', 'WHERE category_type = ?' );
@@ -646,8 +630,7 @@ if ( C4::Context->preference("memberofinstitution") ) {
     my %org_labels;
     foreach my $organisation ( keys %$organisations ) {
         push @orgs, $organisation;
-        $org_labels{$organisation} =
-          $organisations->{$organisation}->{'surname'};
+        $org_labels{$organisation} = $organisations->{$organisation}->{'surname'};
     }
     $member_of_institution = 1;
     $CGIorganisations      = CGI::popup_menu(
@@ -658,10 +641,8 @@ if ( C4::Context->preference("memberofinstitution") ) {
     );
 }
 
-$amountold = $temp[1];
-
 $template->param(
-    issued_itemtypes_count_loop => $issued_itemtypes_loop,
+    issued_itemtypes_count_loop => \@issued_itemtypes_count_loop,
     findborrower                => $findborrower,
     borrower                    => $borrower,
     borrowernumber              => $borrowernumber,
