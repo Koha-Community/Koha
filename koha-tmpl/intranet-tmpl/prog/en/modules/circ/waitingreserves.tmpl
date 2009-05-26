@@ -2,7 +2,7 @@
 <title>Koha &rsaquo; Circulation &rsaquo; Holds awaiting pickup</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/JavaScript" language="JavaScript">
+<script type="text/javascript" language="JavaScript">
 //<![CDATA[
 $.tablesorter.addParser({
     id: 'articles', 
@@ -26,7 +26,10 @@ $.tablesorter.addParser({
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="circ-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Holds awaiting pickup</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
+&rsaquo; <a href="/cgi-bin/koha/circ/waitingreserves.pl">Holds awaiting pickup</a>
+</div>
 
 <div id="doc" class="yui-t7">
    
@@ -34,80 +37,84 @@ $.tablesorter.addParser({
 	<div id="yui-main">
 	<div class="yui-g">
 
-        <h2>Holds awaiting pickup for your library on : <!-- TMPL_VAR NAME="show_date" --></h2>
+        <h2>Holds awaiting pickup for your library on: <!-- TMPL_VAR NAME="show_date" --></h2>
         <!-- TMPL_IF NAME="messagetransfert" -->
-                <div>
-                                <h2>Hold find for (<!-- TMPL_VAR NAME="nextreservtitle" -->) must transfered</h2>
-                        <p>This hold placed by : <b> <!-- TMPL_VAR NAME="nextreservsurname" --> <!-- TMPL_VAR NAME="nextreservfirstname" --></b> at the library : <b> <!-- TMPL_VAR NAME="branchname" --> </b>, Please transfer this hold.
-                        </p>
-                        <form name="cancelReservewithtransfert" action="waitingreserves.pl" method="post">
-                                <input type="submit" class="button" />
-                        </form>
-                </div>
+            <div>
+                <h2>Hold find for (<!-- TMPL_VAR NAME="nextreservtitle" -->) must transfered</h2>
+                <p>This hold placed by : <b> <!-- TMPL_VAR NAME="nextreservsurname" --> <!-- TMPL_VAR NAME="nextreservfirstname" --></b> at the library : <b> <!-- TMPL_VAR NAME="branchname" --> </b>, Please transfer this hold.
+                </p>
+                <form name="cancelReservewithtransfert" action="waitingreserves.pl" method="post">
+                    <input type="submit" class="button" />
+                </form>
+            </div>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="waiting" -->
-                <div id="bloc25">
-                                <h2>This hold is waiting</h2>
-                        <p>This hold (<!-- TMPL_VAR NAME="nextreservtitle" -->) was placed by <b> : <!-- TMPL_VAR NAME="nextreservsurname" --> <!-- TMPL_VAR NAME="nextreservfirstname" --></b>,
-                        Please retain this hold.
-                        </p>
-                        <form name="cancelReservewithwaiting" action="waitingreserves.pl" method="post">
-                                <input type="submit" />
-                        </form>
-                </div>
+            <div id="bloc25">
+                <h2>This hold is waiting</h2>
+                <p>This hold (<!-- TMPL_VAR NAME="nextreservtitle" -->) was placed by <b> : <!-- TMPL_VAR NAME="nextreservsurname" --> <!-- TMPL_VAR NAME="nextreservfirstname" --></b>,
+                Please retain this hold.
+                </p>
+                <form name="cancelReservewithwaiting" action="waitingreserves.pl" method="post">
+                    <input type="submit" />
+                </form>
+            </div>
         <!-- /TMPL_IF -->
         <!-- TMPL_UNLESS NAME="message" -->
         <div id="resultlist">
             <!-- TMPL_IF NAME="reserveloop" -->
-                <table id="holdst">
-               <thead> <tr>
-                        <th>Available since</th>
-                        <th>Title</th>
-                        <th>Patron</th>
-                        <th>Location</th>
-                        <th>Action</th>
-                </tr></thead>
-                        <tbody><!-- TMPL_LOOP NAME="reserveloop" -->
-                        <!-- TMPL_IF NAME="messcompa" --><tr class="problem"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
-                                        <td><p><!-- TMPL_VAR NAME="waitingdate" --></p> <!-- TMPL_IF NAME="messcompa" --> Hold Over <!-- /TMPL_IF --></td>
-                                        <td>
-
-
-<!-- TMPL_IF name="BiblioDefaultViewmarc" -->
-<a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a>
-<!-- TMPL_ELSIF NAME="BiblioDefaultViewisbd" -->
-<a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a>
-<!-- TMPL_ELSE -->
-<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" -->  <!-- TMPL_VAR NAME="subtitle" --></a><!-- /TMPL_IF --> &nbsp; (<b><!-- TMPL_VAR NAME="itemtype" --></b>)
-                                                        <br />Barcode : <!-- TMPL_VAR NAME="barcode" -->
-                                        </td>
-                                        <td>
-                                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernum"-->"><!-- TMPL_VAR NAME="borrowername" -->, <!-- TMPL_VAR NAME="borrowerfirstname" --></a><br /><!-- TMPL_VAR NAME="borrowerphone" --><br />
-                                        <!-- TMPL_IF NAME="borrowermail" --><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Reservation: <!-- TMPL_VAR NAME="title" -->">
-                <!-- TMPL_VAR NAME="borrowermail" --></a><!--/TMPL_IF-->
-                                        </td>
-                                        <td><!-- TMPL_VAR NAME="homebranch" --> <!-- TMPL_VAR NAME="itemcallnumber" --></td>
-                                        <td>
-                                                <form name="cancelReserve" action="waitingreserves.pl" method="post">
-                                                        <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernum" -->" />
-                                                        <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
-                                                        <input type="hidden" name="fbr" value="<!-- TMPL_VAR NAME="holdingbranch" -->" />
-                                                        <input type="hidden" name="tbr" value="<!-- TMPL_VAR NAME="homebranch" -->" />
-                                                        <!-- TMPL_IF NAME="dotransfer" -->
-                                                        <input type="submit" value="Cancel hold and return to : <!-- TMPL_VAR NAME="homebranch" -->" /> 
-                                                        <!-- TMPL_ELSE -->
-                                                        <input type="submit" value="Cancel hold" />
-                                                <!-- /TMPL_IF -->
-                                                </form>
-                                        </td>
-                                </tr>
-                        <!-- /TMPL_LOOP --></tbody>
-                </table>
-                <!-- TMPL_ELSE -->
-                    <div class="dialog message">No holds found.</div>
-                <!-- /TMPL_IF -->
+               <table id="holdst">
+               <thead><tr>
+                    <th>Available since</th>
+                    <th>Title</th>
+                    <th>Patron</th>
+                    <th>Location</th>
+                    <th>Action</th>
+               </tr></thead>
+               <tbody><!-- TMPL_LOOP NAME="reserveloop" -->
+                <!-- TMPL_IF NAME="messcompa" --><tr class="problem"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+                    <td><p><!-- TMPL_VAR NAME="waitingdate" --></p>
+                        <!-- TMPL_IF NAME="messcompa" -->Hold Over<!-- /TMPL_IF -->
+                    </td>
+                    <td>
+    <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
+    <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+    <!-- TMPL_ELSIF NAME="BiblioDefaultViewisbd" -->
+    <a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+    <!-- TMPL_ELSE -->
+    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+    <!-- /TMPL_IF -->
+    <!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_VAR NAME="subtitle" ESCAPE="html" -->
+    </a>
+        &nbsp; (<b><!-- TMPL_VAR NAME="itemtype" --></b>)
+                        <br />Barcode: <!-- TMPL_VAR NAME="barcode" -->
+                    </td>
+                    <td>
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernum"-->"><!-- TMPL_VAR NAME="borrowername" -->, <!-- TMPL_VAR NAME="borrowerfirstname" --></a><br /><!-- TMPL_VAR NAME="borrowerphone" --><br />
+                        <!-- TMPL_IF NAME="borrowermail" --><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Reservation: <!-- TMPL_VAR NAME="title" -->">
+        <!-- TMPL_VAR NAME="borrowermail" --></a><!--/TMPL_IF-->
+                    </td>
+                    <td><!-- TMPL_VAR NAME="homebranch" --> <!-- TMPL_VAR NAME="itemcallnumber" --></td>
+                    <td>
+                        <form name="cancelReserve" action="waitingreserves.pl" method="post">
+                            <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernum" -->" />
+                            <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+                            <input type="hidden" name="fbr" value="<!-- TMPL_VAR NAME="holdingbranch" -->" />
+                            <input type="hidden" name="tbr" value="<!-- TMPL_VAR NAME="homebranch" -->" />
+                            <!-- TMPL_IF NAME="dotransfer" -->
+                            <input type="submit" value="Cancel hold and return to : <!-- TMPL_VAR NAME="homebranch" -->" /> 
+                            <!-- TMPL_ELSE -->
+                            <input type="submit" value="Cancel hold" />
+                            <!-- /TMPL_IF -->
+                       </form>
+                    </td>
+                </tr>
+                <!-- /TMPL_LOOP --></tbody>
+        </table>
+        <!-- TMPL_ELSE -->
+            <div class="dialog message">No holds found.</div>
+        <!-- /TMPL_IF -->
         </div>
-        <!-- /TMPL_UNLESS -->
+    <!-- /TMPL_UNLESS -->
 
 </div>
 </div>
