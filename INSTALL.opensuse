@@ -8,7 +8,7 @@ Feedback/bug reports: Koha Developer's List:
 
 http://lists.koha.org/mailman/listinfo/koha-devel
 
-This document last modified: 15 July 2008
+This document last modified: 02 December 2008
 
 
 ===== Installation Instructions =====
@@ -487,10 +487,10 @@ Install some packages that are needed to install Koha:
 ==== Download Koha ====
 
 |--------------------
-# wget http://download.koha.org/koha-3.00.00-stableRC1.tar.gz
+# wget http://download.koha.org/koha-3.00.00.tar.gz
 |--------------------
 
-[FIXME: Check what will be the exact URL of the .tar.gz file for Koha 3.0 Final] 
+[FIXME: Check what will be the exact URL of the .tar.gz file for Koha 3]
 
 
 ==== Extract Koha ====
@@ -829,6 +829,7 @@ XML::LibXML::SAX::Parser=HASH(0x8356e0c)
 
 
 
+
 ==== Run Koha's perl installer ====
 |--------------------
 myhost:/usr/lib/perl5/vendor_perl/5.10.0/XML/SAX # cd /root/koha-3.00.00
@@ -1064,45 +1065,49 @@ DB_USER=my_koha DOC_DIR=/usr/local/info perl Makefile.PL
 If installing on a Win32 platform, be sure to use:
 'dmake -x MAXLINELENGTH=300000'
 
+Checking if your kit is complete...
+Looks good
 Warning: prerequisite Algorithm::CheckDigits 0.5 not found.
 Warning: prerequisite Biblio::EndnoteStyle 0.05 not found.
-[Tue Jul  8 00:41:15 2008] Makefile.PL: Warning: prerequisite CGI::Session 4.10 not found.
-[Tue Jul  8 00:41:15 2008] Makefile.PL: Warning: prerequisite Class::Accessor 0.3 not found.
-[Tue Jul  8 00:41:15 2008] Makefile.PL: Warning: prerequisite Class::Factory::Util 1.6 not found.
-[Tue Jul  8 00:41:15 2008] Makefile.PL: Warning: prerequisite DBD::mysql 4.004 not found.
-[Tue Jul  8 00:41:15 2008] Makefile.PL: Warning: prerequisite Data::ICal 0.13 not found.
-[Tue Jul  8 00:41:15 2008] Makefile.PL: Warning: prerequisite Date::Calc 5.4 not found.
-[Tue Jul  8 00:41:15 2008] Makefile.PL: Warning: prerequisite Date::ICal 1.72 not found.
-[Tue Jul  8 00:41:15 2008] Makefile.PL: Warning: prerequisite Date::Manip 5.44 not found.
-[Tue Jul  8 00:41:15 2008] Makefile.PL: Warning: prerequisite GD::Barcode::UPCE 1.1 not found.
-[Tue Jul  8 00:41:15 2008] Makefile.PL: Warning: prerequisite HTML::Scrubber 0.08 not found.
-[Tue Jul  8 00:41:15 2008] Makefile.PL: Warning: prerequisite HTML::Template::Pro 0.69 not found.
-[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite Image::Magick 6.2 not found.
-[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite Lingua::Stem 0.82 not found.
-[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite List::MoreUtils 0.21 not found.
-[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite MARC::Charset 0.98 not found.
-[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite MARC::Crosswalk::DublinCore 0.02 not found.
-[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite MARC::File::XML 0.88 not found.
-[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite MARC::Record 2 not found.
-[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite Mail::Sendmail 0.79 not found.
-[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite Net::LDAP 0.33 not found.
-[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite Net::LDAP::Filter 0.14 not found.
-[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite Net::Z3950::ZOOM 1.16 not found.
-[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite PDF::API2 2 not found.
-[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite PDF::API2::Page 2 not found.
-[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite PDF::API2::Util 2 not found.
-[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite PDF::Reuse 0.33 not found.
-[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite PDF::Reuse::Barcode 0.05 not found.
-[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite POE 0.9999 not found.
-[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite SMS::Send 0.05 not found.
-[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite Schedule::At 1.06 not found.
-[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite Text::CSV 0.01 not found.
-[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite Text::CSV_XS 0.32 not found.
-[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite Text::Iconv 1.7 not found.
-[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite XML::Dumper 0.81 not found.
-[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite XML::LibXSLT 1.59 not found.
-[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite XML::RSS 1.31 not found.
-[Tue Jul  8 00:41:16 2008] Makefile.PL: Warning: prerequisite YAML::Syck 0.71 not found.
+[Tue Oct 14 23:40:25 2008] Makefile.PL: Warning: prerequisite CGI::Session 4.10 not found.
+[Tue Oct 14 23:40:25 2008] Makefile.PL: Warning: prerequisite Class::Accessor 0.3 not found.
+[Tue Oct 14 23:40:25 2008] Makefile.PL: Warning: prerequisite Class::Factory::Util 1.6 not found.
+[Tue Oct 14 23:40:25 2008] Makefile.PL: Warning: prerequisite DBD::mysql 4.004 not found.
+[Tue Oct 14 23:40:25 2008] Makefile.PL: Warning: prerequisite Data::ICal 0.13 not found.
+[Tue Oct 14 23:40:25 2008] Makefile.PL: Warning: prerequisite Date::Calc 5.4 not found.
+[Tue Oct 14 23:40:25 2008] Makefile.PL: Warning: prerequisite Date::ICal 1.72 not found.
+[Tue Oct 14 23:40:25 2008] Makefile.PL: Warning: prerequisite Date::Manip 5.44 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite Email::Date 1.103 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite GD 2.39 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite GD::Barcode::UPCE 1.1 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite HTML::Scrubber 0.08 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite HTML::Template::Pro 0.69 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite Lingua::Stem 0.82 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite List::MoreUtils 0.21 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite MARC::Charset 0.98 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite MARC::Crosswalk::DublinCore 0.02 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite MARC::File::XML 0.88 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite MARC::Record 2 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite MIME::Lite 3 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite Mail::Sendmail 0.79 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite Net::LDAP 0.33 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite Net::LDAP::Filter 0.14 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite Net::Z3950::ZOOM 1.16 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite PDF::API2 2 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite PDF::API2::Page 2 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite PDF::API2::Util 2 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite PDF::Reuse 0.33 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite PDF::Reuse::Barcode 0.05 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite POE 0.9999 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite SMS::Send 0.05 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite Schedule::At 1.06 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite Text::CSV 0.01 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite Text::CSV_XS 0.32 not found.
+[Tue Oct 14 23:40:26 2008] Makefile.PL: Warning: prerequisite Text::Iconv 1.7 not found.
+[Tue Oct 14 23:40:27 2008] Makefile.PL: Warning: prerequisite XML::Dumper 0.81 not found.
+[Tue Oct 14 23:40:27 2008] Makefile.PL: Warning: prerequisite XML::LibXSLT 1.59 not found.
+[Tue Oct 14 23:40:27 2008] Makefile.PL: Warning: prerequisite XML::RSS 1.31 not found.
+[Tue Oct 14 23:40:27 2008] Makefile.PL: Warning: prerequisite YAML::Syck 0.71 not found.
 Writing Makefile for koha
 
 
@@ -1580,12 +1585,68 @@ cpan[2]> install Biblio::EndnoteStyle
 
 
 
+
 === Install the "CGI::Session::Serialize::yaml" Perl Module ===
 
 [Install CGI::Session::Serialize::yaml "instead" of CGI::Session to avoid problems related to JSON::Syck when installing CGI::Session. Don't worry: by installing CGI::Session::Serialize::yaml you are also installing CGI::Session]:
 |--------------------
 cpan[3]> install CGI::Session::Serialize::yaml
 
+[...]
+CGI-Session-Serialize-yaml-4.24/README
+CGI-Session-Serialize-yaml-4.24/Build.PL
+CGI-Session-Serialize-yaml-4.24/Makefile.PL
+CPAN: File::Temp loaded ok (v0.18)
+CPAN: Module::Build loaded ok (v0.280801)
+Warning (usually harmless): 'YAML' not installed, will not store persistent state
+
+  CPAN.pm: Going to build R/RS/RSAVAGE/CGI-Session-Serialize-yaml-4.24.tgz
+
+Checking whether your kit is complete...
+Looks good
+
+Checking prerequisites...
+ - ERROR: Test::Pod is not installed
+ - ERROR: CGI::Session is not installed
+ - ERROR: CGI::Session::ErrorHandler is not installed
+
+ERRORS/WARNINGS FOUND IN PREREQUISITES.  You may wish to install the versions
+of the modules indicated above before proceeding with this installation
+
+Creating new 'Build' script for 'CGI-Session-Serialize-yaml' version '4.24'
+Could not read '/root/.cpan/build/CGI-Session-Serialize-yaml-4.24-YmsZPx/META.yml'. Falling back to other methods to determine prerequisites
+----   Unsatisfied dependencies detected during  ----
+---- RSAVAGE/CGI-Session-Serialize-yaml-4.24.tgz ----
+    CGI::Session [requires]
+    CGI::Session::ErrorHandler [requires]
+    Test::Pod [build_requires]
+Shall I follow them and prepend them to the queue
+of modules we are processing right now? [yes]
+
+[...]
+
+Checking prerequisites...
+ - ERROR: Test::Pod is not installed
+
+ERRORS/WARNINGS FOUND IN PREREQUISITES.  You may wish to install the versions
+of the modules indicated above before proceeding with this installation
+
+Creating new 'Build' script for 'CGI-Session' version '4.38'
+Could not read '/root/.cpan/build/CGI-Session-4.38-RYliaM/META.yml'. Falling back to other methods to determine prerequisites
+---- Unsatisfied dependencies detected during ----
+----     MARKSTOS/CGI-Session-4.38.tar.gz     ----
+    Test::Pod [build_requires]
+Shall I follow them and prepend them to the queue
+of modules we are processing right now? [yes]
+
+[...]
+All tests successful, 1 test skipped.
+Files=11, Tests=19,  2 wallclock secs ( 0.83 cusr +  1.08 csys =  1.91 CPU)
+  PETDANCE/Test-Pod-1.26.tar.gz
+  /usr/bin/make test -- OK
+Warning (usually harmless): 'YAML' not installed, will not store persistent state
+Running make install
+P/PE/PETDANCE/Test-Pod-1.26.tar.gz is just needed temporarily during building or testing. Do you want to install it permanently? (Y/n) [yes]
 
 cpan[4]> quit
 Lockfile removed.
@@ -1723,6 +1784,7 @@ Lockfile removed.
 |--------------------
 
 
+
 === Install some "Date" Perl Modules ===
 |--------------------
 myhost:~/koha-3.00.00 # yast -i perl-Date-Calc
@@ -1753,6 +1815,140 @@ Lockfile removed.
 myhost:~/koha-3.00.00 # yast -i perl-DateManip
 |--------------------
 
+
+=== Install the "Email::Date" Perl Module ===
+|--------------------
+myhost:~/koha-3.00.00 # cpan
+
+cpan shell -- CPAN exploration and modules installation (v1.9205)
+ReadLine support enabled
+
+cpan[1]> install Email::Date
+
+
+Warning: prerequisite Email::Abstract 2.10 not found.
+Warning: prerequisite Email::Date::Format 1.000 not found.
+Writing Makefile for Email::Date
+Could not read '/root/.cpan/build/Email-Date-1.103-LsgMdE/META.yml'. Falling back to other methods to determine prerequisites
+---- Unsatisfied dependencies detected during ----
+----       RJBS/Email-Date-1.103.tar.gz       ----
+    Email::Abstract [requires]
+    Email::Date::Format [requires]
+Shall I follow them and prepend them to the queue
+of modules we are processing right now? [yes]
+
+Warning: prerequisite Email::Simple 1.91 not found.
+Writing Makefile for Email::Abstract
+Could not read '/root/.cpan/build/Email-Abstract-2.134-zLB1QI/META.yml'. Falling back to other methods to determine prerequisites
+---- Unsatisfied dependencies detected during ----
+----     RJBS/Email-Abstract-2.134.tar.gz     ----
+    Email::Simple [requires]
+Shall I follow them and prepend them to the queue
+of modules we are processing right now? [yes]
+
+cpan[2]> quit
+Lockfile removed.
+|--------------------
+
+=== Install the "GD" Perl Module ===
+|--------------------
+myhost:~/koha-3.00.00 # cpan
+
+cpan shell -- CPAN exploration and modules installation (v1.9205)
+ReadLine support enabled
+
+cpan[1]> install GD
+
+[many lines scroll by...] 
+
+**UNRECOVERABLE ERROR**
+Could not find gdlib-config in the search path. Please install libgd 2.0.28 or higher.
+If you want to try to compile anyway, please rerun this script with the option --ignore_missing_gd.
+Warning: No success on command[/usr/bin/perl Makefile.PL]
+Warning (usually harmless): 'YAML' not installed, will not store persistent state
+  LDS/GD-2.41.tar.gz
+  /usr/bin/perl Makefile.PL -- NOT OK
+Running make test
+  Make had some problems, won't test
+Running make install
+  Make had some problems, won't install
+Could not read '/root/.cpan/build/GD-2.41-4ZLPXP/META.yml'. Falling back to other methods to determine prerequisites
+Failed during this command:
+ LDS/GD-2.41.tar.gz                           : writemakefile NO '/usr/bin/perl Makefile.PL' returned status 512
+
+cpan[2]> quit
+Lockfile removed.
+|--------------------
+
+OK. It seems that we need to install the GD software packages. Let's do that:
+
+|--------------------
+myhost:~/koha-3.00.00 # yast -i gd
+
+myhost:~/koha-3.00.00 # yast -i gd-devel
+|--------------------
+
+And now let's try again to install the "GD" Perl Module
+|--------------------
+myhost:~/koha-3.00.00 # cpan
+
+cpan shell -- CPAN exploration and modules installation (v1.9205)
+ReadLine support enabled
+
+cpan[1]> install GD
+
+[many lines scroll by...]
+
+/usr/lib/gcc/i586-suse-linux/4.3/../../../../i586-suse-linux/bin/ld: cannot find -lXpm
+collect2: ld returned 1 exit status
+make: *** [blib/arch/auto/GD/GD.so] Error 1
+  LDS/GD-2.41.tar.gz
+  /usr/bin/make -- NOT OK
+Warning (usually harmless): 'YAML' not installed, will not store persistent state
+Running make test
+  Can't test without successful make
+Running make install
+  Make had returned bad status, install seems impossible
+Failed during this command:
+ LDS/GD-2.41.tar.gz                           : make NO
+
+cpan[2]> quit
+Lockfile removed.
+|--------------------
+
+OK. We got another error, mentioning "-lXpm". Apparently, this is related to libXpm (the "X.Org Xpm Library"). Let's install the "xorg-x11-libXpm-devel" software package:
+
+|--------------------
+myhost:~/koha-3.00.00 # yast -i xorg-x11-libXpm-devel
+|--------------------
+
+[This will also install 9 other xorg-x11-....-devel software packages: xorg-x11-proto-devel, xorg-x11-xtrans-devel, xorg-x11-libXdmcp-devel ...]
+
+If you'd try now to install again the "GD" perl module, you'd get another error, now concerning "ljpeg" (and in other attempt to "lfontconfig"... and yet in another to "lpng12"). So, let's first install the "libjpeg-devel", "fontconfig-devel" and "libpng-devel" software packages:
+
+|--------------------
+myhost:~/koha-3.00.00 # yast -i libjpeg-devel
+
+myhost:~/koha-3.00.00 # yast -i fontconfig-devel
+
+myhost:~/koha-3.00.00 # yast -i libpng-devel
+|--------------------
+
+[Installing fontconfig-devel will also install some other dependencies: zlib-devel, libexpat-devel and freetype2-devel]
+
+And now, finally, we can install the "GD" Perl Module:
+|--------------------
+myhost:~/koha-3.00.00 # cpan
+
+cpan shell -- CPAN exploration and modules installation (v1.9205)
+ReadLine support enabled
+
+cpan[1]> install GD
+
+cpan[2]> quit
+Lockfile removed.
+|--------------------
+
 === Install the "GD::Barcode::UPCE" Perl Module ===
 |--------------------
 myhost:~/Koha # cpan
@@ -1774,12 +1970,7 @@ Lockfile removed.
 |--------------------
 
 
-=== Install ImageMagick ===
-|--------------------
-myhost:~/koha-3.00.00 # yast -i perl-PerlMagick
-|--------------------
 
-[This will install 3 other dependencies: libMagickCore1, libMagickWand1 and ImageMagick]
 
 
 === Install the "Lingua::Stem" Perl Module ===
@@ -1840,6 +2031,8 @@ myhost:~ # yast -i perl-List-MoreUtils
 |--------------------
 (If the above command does not work, you probably did not set up the "Official openSUSE 11.0 OSS Repository". See the "Configure Software Repositories" section earlier in this document that explains how you set up it inside yast).
 
+
+
 === Install some "MARC" Perl Modules ===
 |--------------------
 myhost:~ # cpan
@@ -1848,6 +2041,7 @@ cpan shell -- CPAN exploration and modules installation (v1.9205)
 ReadLine support enabled
 
 cpan[1]> install MARC::Charset
+MARC::Charset is up to date (1.0).
 
 cpan[2]> install MARC::Crosswalk::DublinCore
 
@@ -1882,11 +2076,18 @@ cpan[3]> quit
 Lockfile removed.
 |--------------------
 
+
+=== Install the "MIME::Lite" Perl Module === 
+|--------------------
+myhost:~/Koha-3.00.00 # yast -i perl-MIME-Lite
+|--------------------
+
 === Install the "Mail::Sendmail" Perl Module ===
 |--------------------
 myhost:~ # yast -i perl-Mail-Sendmail
 |--------------------
 (If the above command does not work, you probably did not set up the "Official openSUSE 11.0 OSS Repository". See the "Configure Software Repositories" section earlier in this document that explains how you set up it inside yast).
+
 
 === Install some "Net" Perl Modules ===
 |--------------------
@@ -2032,7 +2233,8 @@ Failed during this command:
  MIRK/Net-Z3950-ZOOM-1.21.tar.gz              : writemakefile NO '/usr/bin/perl Makefile.PL' returned status 512
 |--------------------
 
-  * Installing libyaz, libyaz-devel and yaz for Net::Z3950::ZOOM
+== Installing libyaz, libyaz-devel and yaz for Net::Z3950::ZOOM ==
+
 OK... So we ran through a problem with a missing "yaz-config" while installing Net::Z3950::ZOOM. To solve this, let's first install the libyaz package:
 
   * Install the libyaz package:
@@ -2059,7 +2261,8 @@ zlib-devel, tcpd-devel, tack, libgpg-error-devel, ncurses-devel, libopenssl-deve
 
 (//15-Jul-2008: Thanks to Bob Ewart for catching this missing step of installing yaz//)
 
-Let's now install the Net::Z3950::ZOOM Module
+
+Let's now install the Net::Z3950::ZOOM Perl Module:
 
 |--------------------
 myhost:~ # cpan
@@ -2071,6 +2274,7 @@ cpan[1]> install Net::Z3950::ZOOM
 cpan[2]> quit
 Lockfile removed.
 |--------------------
+
 
 
 
@@ -2115,11 +2319,113 @@ Writing Makefile for PDF::Reuse::Barcode
 Shall I follow them and prepend them to the queue
 of modules we are processing right now? [yes]
 
+[...]
+
+Barcode-Code128-2.01/lib/Barcode/
+Barcode-Code128-2.01/lib/Barcode/Code128.pm
+Barcode-Code128-2.01/META.yml
+Warning (usually harmless): 'YAML' not installed, will not store persistent state
+
+  CPAN.pm: Going to build W/WR/WRW/Barcode-Code128-2.01.tar.gz
+
+Checking if your kit is complete...
+Looks good
+Writing Makefile for Barcode::Code128
+Could not read '/root/.cpan/build/Barcode-Code128-2.01-1g3s6u/META.yml'. Falling back to other methods to determine prerequisites
+cp lib/Barcode/Code128.pm blib/lib/Barcode/Code128.pm
+Manifying blib/man3/Barcode::Code128.3pm
+  WRW/Barcode-Code128-2.01.tar.gz
+  /usr/bin/make -- OK
+Warning (usually harmless): 'YAML' not installed, will not store persistent state
+Running make test
+PERL_DL_NONLAZY=1 /usr/bin/perl "-MExtUtils::Command::MM" "-e" "test_harness(0, 'blib/lib', 'blib/arch')" t/*.t
+t/barcode....ok
+t/gif........ok 1/0skipped
+        all skipped: no reason given
+t/png........FAILED test 2
+        Failed 1/2 tests, 50.00% okay
+Failed Test Stat Wstat Total Fail  List of Failed
+-------------------------------------------------------------------------------
+t/png.t                    2    1  2
+1 test skipped.
+Failed 1/3 test scripts. 0/4 subtests failed.
+Files=3, Tests=4,  1 wallclock secs ( 0.17 cusr +  0.27 csys =  0.44 CPU)
+Failed 1/3 test programs. 0/4 subtests failed.
+make: *** [test_dynamic] Error 255
+  WRW/Barcode-Code128-2.01.tar.gz
+  /usr/bin/make test -- NOT OK
+//hint// to see the cpan-testers results for installing this module, try:
+  reports WRW/Barcode-Code128-2.01.tar.gz
+Warning (usually harmless): 'YAML' not installed, will not store persistent state
+Running make install
+  make test had returned bad status, won't install without force
+Running make for L/LA/LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz
+  Has already been unwrapped into directory /root/.cpan/build/PDF-Reuse-Barcode-0.05-xyOb8t
+
+  CPAN.pm: Going to build L/LA/LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz
+
+Warning: Prerequisite 'Barcode::Code128 => 0' for 'L/LA/LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz' failed when processing 'W/WR/WRW/Barcode-Code128-2.01.tar.gz' with 'make_test => NO'. Continuing, but chances to succeed are limited.
+cp Barcode.pm blib/lib/PDF/Reuse/Barcode.pm
+Manifying blib/man3/PDF::Reuse::Barcode.3pm
+  LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz
+  /usr/bin/make -- OK
+Warning (usually harmless): 'YAML' not installed, will not store persistent state
+Running make test
+PERL_DL_NONLAZY=1 /usr/bin/perl "-Iblib/lib" "-Iblib/arch" test.pl
+1..15
+# Running under perl version 5.010000 for linux
+# Current time local: Mon Dec  1 23:33:14 2008
+# Current time GMT:   Mon Dec  1 23:33:14 2008
+# Using Test.pm version 1.25
+ok 1
+ok 2
+ok 3
+ok 4
+ok 5
+ok 6
+ok 7
+ok 8
+ok 9
+ok 10
+ok 11
+ok 12
+ok 13
+Can't find Barcode::Code128 - can't produce those barcodes
+not ok 14
+# Failed test 14 in test.pl at line 18
+#  test.pl line 18 is: ok(find('Barcode::Code128'));
+ok 15
+  LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz
+Tests succeeded but one dependency not OK (Barcode::Code128)
+Warning (usually harmless): 'YAML' not installed, will not store persistent state
+  LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz
+  [dependencies] -- NA
+Running make install
+  make test had returned bad status, won't install without force
+Failed during this command:
+ WRW/Barcode-Code128-2.01.tar.gz              : make_test NO
+ LARSLUND/PDF-Reuse-Barcode-0.05.tar.gz       : make_test NO one dependency not OK (Barcode::Code128)
+
 |--------------------
 
 
+**01-Dec-2008**: Oh well... So, it seems that the installation of PDF::Reuse::Barcode failed due to a Perl Module dependency - "Barcode::Code128" - that, in turn, fails to install when doing some PNG related tests. According to Galen Charlton (from LibLime) - http://lists.katipo.co.nz/public/koha/2007-December/012843.html - "There seem to be various problems with Barcode::Code128 on various platforms, particularly with its test suite. The barcode generation functionality is used in only a couple places in Koha, so for quick-and-dirty testing, doing a force install of that module should be OK."
 
+On a related note, this "Barcode::Code128" installation bug is being tracked at:
 
+#28369: test result negative maybe due to library skew 
+ http://rt.cpan.org/Public/Bug/Display.html?id=28369
+
+OK. So, let's do then a "force install" of the Barcode::Code128 Perl Module in the same CPAN prompt:
+
+|--------------------
+cpan[5]> force install "Barcode::Code128"
+|--------------------
+
+And still in the same CPAN prompt, let's now try again to install "PDF::Reuse::Barcode":
+|--------------------
+cpan[6]> install PDF::Reuse::Barcode
+|--------------------
 
 === Install the "POE" Perl Module ===
 In the same CPAN prompt, type the following command:
@@ -2207,6 +2513,8 @@ cpan[5]> quit
 Lockfile removed.
 |--------------------
 
+
+
 === Install some "XML" Perl Modules ===
 |--------------------
 myhost:~ # yast -i perl-XML-Dumper
@@ -2247,6 +2555,7 @@ Could not read '/root/.cpan/build/DateTime-0.4302-YXqzkk/META.yml'. Falling back
     DateTime::Locale [requires]
     DateTime::TimeZone [requires]
     Params::Validate [requires]
+    Time::y2038 [requires]
 Shall I follow them and prepend them to the queue
 of modules we are processing right now? [yes]
 
@@ -2284,6 +2593,9 @@ prerequisites
 Shall I follow them and prepend them to the queue
 of modules we are processing right now? [yes]
 
+[...]
+
+B/BD/BDFOY/Test-Manifest-1.22.tar.gz is just needed temporarily during building or testing. Do you want to install it permanently? (Y/n) [yes]
 
 cpan[2]> quit
 Lockfile removed.
@@ -2310,6 +2622,7 @@ Password changed.
 |--------------------
 
 
+
 ==== Run make test ====
 |--------------------
 myhost:~/Koha # make test
@@ -2324,14 +2637,6 @@ cp koha-tmpl/opac-tmpl/prog/famfamfam/mini/note.gif blib/OPAC_TMPL_DIR/prog/famf
 
 |--------------------
 t/Amazon....................ok
-t/Barcodes..................ok 1/126Use of uninitialized value $db_driver in concatenation (.) or string at /root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 629.
-Can't connect to data source 'dbname=__DB_NAME__;host=__DB_HOST__;port=__DB_PORT__' because I can't work out what driver to use (it doesn't seem to contain a 'dbi:driver:' prefix and the DBI_DRIVER env var is not set) at /root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 629
-# Looks like you planned 126 tests but only ran 1.
-# Looks like your test died just after 1.
-t/Barcodes..................dubious
-        Test returned status 255 (wstat 65280, 0xff00)
-DIED. FAILED tests 2-126
-        Failed 125/126 tests, 0.79% okay
 t/Barcodes_PrinterConfig....ok
 t/Bookfund..................ok
 t/Bookseller................ok
@@ -2339,14 +2644,6 @@ t/Boolean...................ok
 t/Branch....................ok
 t/Calendar..................ok
 t/Charset...................ok
-t/Date......................ok 1/4Use of uninitialized value $db_driver in concatenation (.) or string at /root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 629.
-Can't connect to data source 'dbname=__DB_NAME__;host=__DB_HOST__;port=__DB_PORT__' because I can't work out what driver to use (it doesn't seem to contain a 'dbi:driver:' prefix and the DBI_DRIVER env var is not set) at /root/Koha/blib/PERL_MODULE_DIR/C4/Context.pm line 629
-# Looks like you planned 4 tests but only ran 1.
-# Looks like your test died just after 1.
-t/Date......................dubious
-        Test returned status 255 (wstat 65280, 0xff00)
-DIED. FAILED tests 2-4
-        Failed 3/4 tests, 25.00% okay
 t/Debug.....................# BEFORE use:     $debug is not defined
 # BEFORE use: $cgi_debug is not defined
 t/Debug.....................ok 1/3#  AFTER use:     $debug is 0
@@ -2365,28 +2662,14 @@ t/Scrubber..................ok 1/10# Note: scrubber test output will have whites
 # done.
 t/Scrubber..................ok
 t/Stats.....................ok
-Failed Test  Stat Wstat Total Fail  List of Failed
--------------------------------------------------------------------------------
-t/Barcodes.t  255 65280   126  250  2-126
-t/Date.t      255 65280     4    6  2-4
-Failed 2/21 test scripts. 128/177 subtests failed.
-Files=21, Tests=177, 10 wallclock secs ( 4.76 cusr +  4.54 csys =  9.30 CPU)
-Failed 2/21 test programs. 128/177 subtests failed.
-make: *** [test_dynamic] Error 255
+All tests successful.
+Files=19, Tests=47, 21 wallclock secs ( 4.82 cusr +  5.55 csys = 10.37 CPU)
 |--------------------
-
-
-
-
-
-
-
-
 
 
 === Run "make install" ===
 
-Even with these "Can't connect to data source" errors, we will run make install:
+Now, we will run make install:
 
 |--------------------
 myhost:~/Koha # make install
@@ -2469,13 +2752,14 @@ Invalid command 'RewriteEngine', perhaps misspelled or defined by a module not i
 |--------------------
 
 
+
 == Enable the mod_rewrite Apache module ==
 
 OK... It seems that we need to enable the mod_rewrite Apache module:
 |--------------------
 myhost:/etc/sysconfig # a2enmod rewrite
 |--------------------
-[If the above command seems NOT to work, for some reason, do this - edit /etc/sysconfig/apache2 and add rewrite at the end of the APACHE_MODULES line, right before the right quote]
+[If the above command seems NOT to work, for some reason, do this - edit /etc/sysconfig/apache2 and add the word "rewrite" (without the quotes) at the end of the APACHE_MODULES line, right before the right quote]
 |--------------------
 myhost:/etc/sysconfig # service apache2 restart
 Syntax OK
@@ -2607,3 +2891,4 @@ http://192.168.0.2:8080/cgi-bin/koha/installer/install.pl
 
 
 You may now login with your koha administrator username and password and reply to the several questions you will be asked.
+
