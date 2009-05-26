@@ -277,20 +277,31 @@ if ( C4::Context->preference("OPACAmazonEnabled") ) {
 }
 if ( C4::Context->preference("OPACAmazonEnabled") && C4::Context->preference("OPACAmazonSimilarItems") ) {
     my $similar_products_exist;
-    my $amazon_details = &get_amazon_details( $xisbn, $record, $marcflavour );
-    my $item_attributes = \%{$amazon_details->{Items}->{Item}->{ItemAttributes}};
-    my $customer_reviews = \@{$amazon_details->{Items}->{Item}->{CustomerReviews}->{Review}};
-    for my $one_review (@$customer_reviews) {
-        $one_review->{Date} = format_date($one_review->{Date});
+    my $amazon_reviews  = C4::Context->preference("AmazonReviews");
+    my $amazon_similars = C4::Context->preference("AmazonSimilarItems");
+    if ( $amazon_reviews ) {
+        my $item = $amazon_details->{Items}->{Item}->[0];
+        my $customer_reviews = \@{ $item->{CustomerReviews}->{Review} };
+        for my $one_review ( @$customer_reviews ) {
+            $one_review->{Date} = format_date($one_review->{Date});
+        }
+        my $editorial_reviews = \@{ $item->{EditorialReviews}->{EditorialReview} };
+        my $average_rating = $item->{CustomerReviews}->{AverageRating} || 0;
+        $template->param( amazon_average_rating    => $average_rating * 20);
+        $template->param( AMAZON_CUSTOMER_REVIEWS  => $customer_reviews );
+        $template->param( AMAZON_EDITORIAL_REVIEWS => $editorial_reviews );
     }
-    my @similar_products;
-    for my $similar_product (@{$amazon_details->{Items}->{Item}->{SimilarProducts}->{SimilarProduct}}) {
-        # do we have any of these isbns in our collection?
-        my $similar_biblionumbers = get_biblionumber_from_isbn($similar_product->{ASIN});
-        # verify that there is at least one similar item
-        if (scalar(@$similar_biblionumbers)){
-            $similar_products_exist++ if ($similar_biblionumbers && $similar_biblionumbers->[0]);
-            push @similar_products, +{ similar_biblionumbers => $similar_biblionumbers, title => $similar_product->{Title}, ASIN => $similar_product->{ASIN}  };
+    if ( $amazon_similars ) {
+        my $item = $amazon_details->{Items}->{Item}->[0];
+        my @similar_products;
+        for my $similar_product (@{ $item->{SimilarProducts}->{SimilarProduct} }) {
+            # do we have any of these isbns in our collection?
+            my $similar_biblionumbers = get_biblionumber_from_isbn($similar_product->{ASIN});
+            # verify that there is at least one similar item
+            if (scalar(@$similar_biblionumbers)){
+                $similar_products_exist++ if ($similar_biblionumbers && $similar_biblionumbers->[0]);
+                push @similar_products, +{ similar_biblionumbers => $similar_biblionumbers, title => $similar_product->{Title}, ASIN => $similar_product->{ASIN}  };
+            }
         }
     }
     my $editorial_reviews = \@{$amazon_details->{Items}->{Item}->{EditorialReviews}->{EditorialReview}};
