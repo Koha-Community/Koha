@@ -953,7 +953,7 @@ sub split_ddcn {
 
     push @parts, split /\s+/, pop @parts;   # split the last piece into an arbitrary number of pieces at spaces
 
-    if ($parts[-1] =~ /^(.*\d+)(\D.*)$/) {
+    if ($parts[-1] !~ /^.*\d-\d.*$/ && $parts[-1] =~ /^(.*\d+)(\D.*)$/) {
          pop @parts;            # pull off the mathching last element, like example 2
         push @parts, $1, $2;    # replace it with the two pieces
     }

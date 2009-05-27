@@ -5,7 +5,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 72;
+use Test::More tests => 82;
 
 BEGIN {
     use_ok('C4::Labels');
@@ -19,6 +19,7 @@ my $ddcns = {
     'R220.3 H2793Z H32 c.2' => [qw(R 220.3 H2793Z H32 c.2)],
     'CD-ROM 787.87 EAS'     => [qw(CD-ROM 787.87 EAS)],
     'MP3-CD F PARKER'       => [qw(MP3-CD F PARKER)],
+    '252.051 T147 v.1-2'    => [qw(252.051 T147 v.1-2)],
 };
 
 foreach my $ddcn (sort keys %$ddcns) {
