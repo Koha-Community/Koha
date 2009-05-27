@@ -140,7 +140,7 @@ use strict;            # always use
 ## load Koha modules
 use C4::Context;
 use C4::Output;
-use C4::Auth;
+use C4::Auth qw(:DEFAULT get_session);
 use C4::Search;
 use C4::Languages qw(getAllLanguages);
 use C4::Koha;
@@ -316,6 +316,8 @@ if ( $template_type eq 'advsearch' ) {
     if ( ($cgi->param('expanded_options') == 0) || ($cgi->param('expanded_options') == 1 ) ) {
         $template->param( expanded_options => $cgi->param('expanded_options'));
     }
+
+    $template->param(virtualshelves => C4::Context->preference("virtualshelves"));
 
     output_html_with_http_headers $cgi, $cookie, $template->output;
     exit;
@@ -636,4 +638,27 @@ if ($query_desc || $limit_desc) {
 }
 
 # VI. BUILD THE TEMPLATE
+
+# Build drop-down list for 'Add To:' menu...
+my $session = get_session($cgi->cookie("CGISESSID"));
+my @addpubshelves;
+my $pubshelves = $session->param('pubshelves');
+my $barshelves = $session->param('barshelves');
+foreach my $shelf (@$pubshelves) {
+        next if ( ($shelf->{'owner'} != ($borrowernumber ? $borrowernumber : -1)) && ($shelf->{'category'} < 3) );
+        push (@addpubshelves, $shelf);
+}
+
+if (@addpubshelves) {
+        $template->param( addpubshelves     => scalar (@addpubshelves));
+        $template->param( addpubshelvesloop => \@addpubshelves);
+}
+
+if (defined $barshelves) {
+        $template->param( addbarshelves     => scalar (@$barshelves));
+        $template->param( addbarshelvesloop => $barshelves);
+}
+
+
+
 output_html_with_http_headers $cgi, $cookie, $template->output;

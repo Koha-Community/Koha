@@ -28,11 +28,64 @@ $(window).load(function() {
 
 var q_array = new Array();  // will hold search terms, if present
 
+$(window).load(function() {
+        verify_images();
+     });
+<!-- /TMPL_IF -->
+function Dopop(link) {                      
+        newin=window.open(link,'popup','width=500,height=400,toolbar=false,scrollbars=yes,resizeable=yes');
+}   
 $(document).ready(function() {
-    $('#sortbyform').find("input:submit").hide();
-    $('#sort_by').change(function() {
+$('#sortbyform').find("input:submit").hide();
+$('#sort_by').change(function() {
         $('#sortbyform').submit();
     });
+
+
+$(".addtocart").show();
+        var param1 = "<label for=\"addto\">Add to: <\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>";
+
+        <!-- TMPL_IF NAME="virtualshelves" --><!-- TMPL_IF NAME="addbarshelves" -->
+        param1 += "<optgroup label=\"Your Lists:\">";<!-- TMPL_LOOP NAME="addbarshelvesloop" -->
+        param1 += "<option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--><\/option>";<!-- /TMPL_LOOP -->
+        param1 += "<\/optgroup>";<!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="addpubshelves" -->param1 += "<optgroup label=\"Public Lists:\">"<!-- TMPL_LOOP NAME="addpubshelvesloop" -->+"<option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--><\/option>"<!-- /TMPL_LOOP -->
+        param1 +="<\/optgroup><option value=\"newlist\">[ New List ]<\/option>"
+<!-- /TMPL_IF -->
+        <!-- /TMPL_IF -->
+        param1 += "<\/select> <input type=\"submit\" class=\"submit\" value=\"Save\" />";
+ $('#sortsubmit').hide();
+    $('#sort_by').change(function() {
+        $('#bookbag_form').submit();
+    });
+        $("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_("Clear All")+"<\/a>");
+        $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_("Select All")+"<\/a>");
+        $("span.addto").html(param1);
+        $("#addto").change(function(){
+                cartList();
+        });
+        $(".addto").find("input:submit").click(function(){
+                cartList();
+                return false;
+	});
+
+ $("#tagsel_span").html("<input id=\"tagsel_tag\" class=\"submit\" type=\"submit\" value=\"Tag\"/>");
+    
+        function cartList(){
+                        if($("#addto").find("option:selected").attr("value") == "addtolist"){
+                        var shelfnumber = $("#addto").find("option:selected").attr("id").replace("s","");
+                        if (vShelfAdd()) {
+			    Dopop('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?shelfnumber='+shelfnumber+'&confirm=1&' + vShelfAdd());
+                        }
+                        return false;                   
+                } else if($("#addto").find("option:selected").attr("value") == "newlist"){
+                        if (vShelfAdd()) {
+			    Dopop('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?newshelf=1&confirm=1&' + vShelfAdd());
+                        }
+                        return false;   
+                }
+        }
+
     $("#selection_ops").show();
     $(".selection").show();
     <!-- TMPL_IF NAME="query_desc" -->
@@ -124,12 +177,16 @@ function GetZ3950Terms(){
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
+<<<<<<< HEAD:koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tmpl
 <div id="breadcrumbs">
          <a href="/cgi-bin/koha/mainpage.pl">Home</a>
 &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
 &rsaquo; Search <!-- TMPL_IF NAME="query_desc" -->for '<!-- TMPL_VAR NAME="query_desc" ESCAPE="html"-->'<!-- /TMPL_IF --><!-- TMPL_IF NAME="limit_desc" -->&nbsp;with limit(s):&nbsp;'<!-- TMPL_VAR NAME="limit_desc" -->'<!-- /TMPL_IF -->
 </div>
 
+=======
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Search <!-- TMPL_IF NAME="query_desc" -->for '<!-- TMPL_VAR NAME="query_desc" -->'<!-- /TMPL_IF --><!-- TMPL_IF NAME="limit_desc" -->&nbsp;with limit(s):&nbsp;'<!-- TMPL_VAR NAME="limit_desc" -->'<!-- /TMPL_IF --></div>
+>>>>>>> cefbb72... Ticket 1110 : Balance carts and lists:koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tmpl
 <div id="doc3" class="yui-t1">
    <div id="bd">
     <div id="yui-main">
@@ -174,18 +231,26 @@ function GetZ3950Terms(){
             <h3>
                 <!-- TMPL_VAR NAME="total" --> result(s) found <!-- TMPL_IF NAME="query_desc" -->for <span style="font-weight: bold;">'<!-- TMPL_VAR NAME="query_desc" ESCAPE="HTML"-->'</span><!-- /TMPL_IF --><!-- TMPL_IF NAME="limit_desc" -->&nbsp;with limit(s): <span style="font-weight: bold;">'<!-- TMPL_VAR NAME="limit_desc" -->'</span><!-- /TMPL_IF --><!-- TMPL_IF NAME="LibraryName" --> in <!-- TMPL_VAR NAME="LibraryName" --> Catalog<!-- /TMPL_IF -->.<br />&nbsp;
             </h3>
-            <div id="selection_ops" style="display:none">
+            <div id="selection_ops" class="cartlist" style="display:none">
                 <a href="#" onclick="selectAll(); return false;">Select All</a>
                 |
                 <a href="#" onclick="clearAll(); return false;">Clear All</a>
+<<<<<<< HEAD:koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tmpl
                 |
                 <a href="#" class="highlight_toggle" id="highlight_toggle_off">Unhighlight</a>
                 <a href="#" class="highlight_toggle" id="highlight_toggle_on">Highlight</a>
+=======
+		<span class="addto"></span>
+
+>>>>>>> cefbb72... Ticket 1110 : Balance carts and lists:koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tmpl
                 <!-- TMPL_IF NAME="CAN_user_reserveforothers" -->
-                  <input type="button" onclick="placeHold(); return false;" value="Place Hold"/>
+                | <a href="/cgi-bin/koha/catalogue/search.pl" onclick="placeHold(); return false;">Place Hold</a>
                 <!-- /TMPL_IF -->
+<<<<<<< HEAD:koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tmpl
                 <input type="button" onclick="addToList(); return false;" value="Add to List"/>
 				<!-- TMPL_IF NAME="CAN_user_editcatalogue" --><input type="button" onclick="PopupZ3950(); return false;" value="z39.50 Search"/><!-- /TMPL_IF -->
+=======
+>>>>>>> cefbb72... Ticket 1110 : Balance carts and lists:koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tmpl
             </div>
         </div>
     <!-- TMPL_IF NAME="stopwords_removed" --><div><p class="tip">Ignored the following common words: "<!-- TMPL_VAR NAME="stopwords_removed" -->"<p></div><!-- /TMPL_IF -->
@@ -309,7 +374,16 @@ function GetZ3950Terms(){
             <!-- ######### -->
 
             <div id="searchresults">
-                    
+                <form action="/cgi-bin/koha/catalogue/search.pl" method="get" name="bookbag_form" id="bookbag_form">
+                <!-- TMPL_IF NAME="searchdesc" -->
+                <!-- TMPL_LOOP NAME="QUERY_INPUTS"-->
+                <input type="hidden" name="<!-- TMPL_VAR NAME="input_name" -->" value="<!-- TMPL_VAR NAME="input_value" -->"/>
+                <!-- /TMPL_LOOP -->
+                <!-- TMPL_LOOP NAME="LIMIT_INPUTS"-->
+                <input type="hidden" name="<!-- TMPL_VAR NAME="input_name" -->" value="<!-- TMPL_VAR NAME="input_value" -->"/>
+                <!-- /TMPL_LOOP -->
+                <!-- /TMPL_IF -->
+    
                     <!-- TABLE RESULTS START -->
 
                 <table>
@@ -329,7 +403,7 @@ function GetZ3950Terms(){
                                     </a></td>                           
                             <!-- /TMPL_IF -->
                             <td>
-                                <input type="checkbox" class="selection" value="<!-- TMPL_VAR NAME="biblionumber" -->" style="display:none" />
+                                <input type="checkbox" class="selection" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" style="display:none" />
                             </td>
                             <td>
                                 <p><!-- TMPL_VAR NAME="result_number" -->.
@@ -467,6 +541,7 @@ function GetZ3950Terms(){
                             </tr>
                         <!-- /TMPL_LOOP -->
                 </table>
+		</form>
                 </div>
         <!-- /TMPL_IF -->
         <!-- TMPL_INCLUDE NAME="page-numbers.inc" -->

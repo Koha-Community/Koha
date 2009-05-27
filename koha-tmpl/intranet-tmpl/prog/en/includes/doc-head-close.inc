@@ -29,6 +29,8 @@
 <!-- TMPL_IF NAME="js_page" -->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/js/pages/<!-- TMPL_VAR NAME="js_page" -->"></script>
 <!-- /TMPL_IF -->
+<script type="text/javascript" language="javascript"
+<!-- TMPL_IF NAME="opacbookbag" -->src="<!-- TMPL_VAR NAME="themelang" -->/js/basket.js"><!-- TMPL_ELSIF NAME="virtualshelves" -->src="<!-- TMPL_VAR NAME="themelang" -->/js/basket.js"><!-- TMPL_ELSE -->>var readCookie;<!-- /TMPL_IF --></script>
 
 <!-- TMPL_IF NAME="js_widgets" -->
 <!-- TMPL_LOOP NAME="js_widgets" -->

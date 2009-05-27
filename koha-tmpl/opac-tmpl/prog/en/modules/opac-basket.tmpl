@@ -8,9 +8,20 @@
     @import url(<!-- TMPL_VAR NAME="themelang" -->/css/print.css);
 </style>
     <!-- TMPL_ELSE --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-	<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+	<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.pack.js"></script>
+	<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 	<script type="text/javascript">
 	//<![CDATA[
+
+$(document).ready(function() 
+    { 
+        $("#itemst").tablesorter({
+                        headers: { 0: { sorter: false }}
+                }); 
+    } 
+); 
+    
+
 var MSG_NO_TAG_SPECIFIED = _("No tag was specified.");
 
 function tagSelected() {
@@ -89,7 +100,6 @@ function tagAdded() {
               tagAdded();
               return false;
           });
-          $("#tablehead").attr("colspan", $("#tablehead").attr("colspan") + 1);
         <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
 	});
@@ -296,9 +306,12 @@ function tagAdded() {
             </form>
 
 <!-- TMPL_ELSE -->
+<!-- TMPL_UNLESS NAME="print_basket" -->
+<p style="border-top : 1px solid #E8E8E8;">
 	<form action="/cgi-bin/koha/opac-basket.pl" method="get" name="bookbag_form" id="bookbag_form">
-    <table>
-				<!-- TMPL_UNLESS NAME="print_basket" --><tr><td id="tablehead" colspan="3" style="padding-bottom: 7px;"><a id="CheckAll" href="#">Select All</a> <a id="CheckNone" href="#">Clear All</a> | <b>Selected items :</b>
+    <a id="CheckAll" href="#">Select All</a> 
+    <a id="CheckNone" href="#">Clear All</a>
+    | <b>Selected items :</b>
 <span id="tag_hides">                
 <a href="#" onclick="delSelRecords(); return false;">Remove</a>
 <!-- TMPL_IF NAME="loggedinusername" -->
@@ -313,7 +326,16 @@ function tagAdded() {
        <input id="tagsel_button" name="tagsel_button" class="input tagsel_button" title="tagsel_button" type="submit" value="Add"  style="display:inline"/>
        <a href="#" id="tagsel_cancel" onclick="tagCanceled(); return false;" style="display:inline">Cancel</a>
      </span>
-</td></tr><!-- /TMPL_UNLESS -->
+<!-- /TMPL_UNLESS -->
+</p>
+    <table id="itemst">
+	<thead><tr>
+	    <th>&nbsp;</th>
+	    <th>Title</th>
+	    <th>Item Type</th>
+	    <th>Location</th>
+        </tr></thead>
+
         <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
             <!-- TMPL_IF NAME="even" -->
                 <tr class="highlight">
