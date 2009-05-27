@@ -30,6 +30,7 @@ use C4::Items;
 use C4::Branch;
 use C4::Debug;
 # use Data::Dumper;
+use C4::Search;		# enabled_staff_search_views
 
 use vars qw($debug $cgi_debug);
 
@@ -98,6 +99,7 @@ $template->param(
 	DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
 	              dateformat => C4::Dates->new()->format(),
 				       debug => $debug,
+	C4::Search::enabled_staff_search_views,
 );
 #
 #### This code was never really used - maybe some day some will fix it ###

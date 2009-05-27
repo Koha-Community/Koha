@@ -30,6 +30,7 @@ use C4::Auth;
 use C4::Serials;
 use C4::Dates qw/format_date/;
 use C4::Circulation;  # to use itemissues
+use C4::Search;		# enabled_staff_search_views
 
 my $query=new CGI;
 
@@ -119,6 +120,7 @@ foreach my $item (@items){
 $template->param(count => $data->{'count'},
 	subscriptionsnumber => $subscriptionsnumber,
     subscriptiontitle   => $data->{title},
+	C4::Search::enabled_staff_search_views,
 );
 $template->param(BIBITEM_DATA => \@results);
 $template->param(ITEM_DATA => \@items);
@@ -128,6 +130,7 @@ $template->param(biblionumber => $biblionumber);
 $template->param(biblioitemnumber => $bi);
 $template->param(itemnumber => $itemnumber);
 $template->param(ONLY_ONE => 1) if ( $itemnumber && $count != @items );
+$template->param(z3950_search_params => C4::Search::z3950_search_args(GetBiblioData($biblionumber)));
 
 output_html_with_http_headers $query, $cookie, $template->output;
 

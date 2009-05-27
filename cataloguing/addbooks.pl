@@ -113,6 +113,8 @@ for ( my $i = 0 ; $i <= $#resultsbr ; $i++ ) {
     $row_data{toggle} = $toggle;
     $row_data{id}     = $resultsbr[$i]->{'id'};
     $row_data{isbn}   = $resultsbr[$i]->{'isbn'};
+    $row_data{copyrightdate}   = $resultsbr[$i]->{'copyrightdate'};
+    $row_data{editionstatement}   = $resultsbr[$i]->{'editionstatement'};
     $row_data{file}   = $resultsbr[$i]->{'file'};
     $row_data{title}  = $resultsbr[$i]->{'title'};
     $row_data{author} = $resultsbr[$i]->{'author'};
@@ -123,6 +125,7 @@ $template->param(
     frameworkcodeloop => \@frameworkcodeloop,
     breeding_count    => $countbr,
     breeding_loop     => \@breeding_loop,
+    z3950_search_params => C4::Search::z3950_search_args($query),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

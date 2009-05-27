@@ -34,6 +34,7 @@ use C4::Members;
 use C4::Serials;
 use C4::XISBN qw(get_xisbns get_biblionumber_from_isbn get_biblio_from_xisbn);
 use C4::External::Amazon;
+use C4::Search;		# enabled_staff_search_views
 
 # use Smart::Comments;
 
@@ -177,12 +178,17 @@ $template->param(
 	itemdata_uri        => $itemfields{uri},
 	itemdata_copynumber => $itemfields{copynumber},
 	volinfo				=> $itemfields{enumchron} || $dat->{'serial'} ,
+	z3950_search_params	=> C4::Search::z3950_search_args($dat),
+	C4::Search::enabled_staff_search_views,
 );
 
 my @results = ( $dat, );
 foreach ( keys %{$dat} ) {
     $template->param( "$_" => defined $dat->{$_} ? $dat->{$_} : '' );
 }
+
+# does not work: my %views_enabled = map { $_ => 1 } $template->query(loop => 'EnableViews');
+# method query not found?!?!
 
 $template->param(
     itemloop        => \@itemloop,
