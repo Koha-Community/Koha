@@ -40,7 +40,7 @@ my ($subscriptionid,$auser,$branchcode,$librarian,$cost,$aqbooksellerid, $aqbook
 	$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
 	$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
 	$numberingmethod, $status, $biblionumber, 
-	$bibliotitle, $callnumber, $notes, $hemisphere, $letter, $manualhistory,$serialsadditems);
+	$bibliotitle, $callnumber, $notes, $hemisphere, $letter, $manualhistory,$serialsadditems, $location);
 
 	my @budgets;
 my ($template, $loggedinuser, $cookie)
@@ -217,6 +217,7 @@ if ($op eq 'addsubscription') {
     my $serialsadditems = $query->param('serialsadditems');
 	my $staffdisplaycount = $query->param('staffdisplaycount');
 	my $opacdisplaycount = $query->param('opacdisplaycount');
+    my $location = $query->param('location');
 	my $subscriptionid = NewSubscription($auser,$branchcode,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,
 					$startdate,$periodicity,$dow,$numberlength,$weeklength,$monthlength,
 					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
@@ -224,7 +225,7 @@ if ($op eq 'addsubscription') {
 					$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
 					$numberingmethod, $status, $notes,$letter,$firstacquidate,join(",",@irregularity),
                     $numberpattern, $callnumber, $hemisphere,($manualhistory?$manualhistory:0),$internalnotes,
-                    $serialsadditems,$staffdisplaycount,$opacdisplaycount,$graceperiod
+                    $serialsadditems,$staffdisplaycount,$opacdisplaycount,$graceperiod,$location
 				);
 
     print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
@@ -293,6 +294,7 @@ if ($op eq 'addsubscription') {
     my $history_only = $query->param('history_only');
 	my $staffdisplaycount = $query->param('staffdisplaycount');
 	my $opacdisplaycount = $query->param('opacdisplaycount');
+    my $location = $query->param('location');
 	#  If it's  a mod, we need to check the current 'expected' issue, and mod it in the serials table if necessary.
     if ( $nextacquidate ne $nextexpected->{planneddate}->output('iso') ) {
         ModNextExpected($subscriptionid,C4::Dates->new($nextacquidate,'iso'));
@@ -314,7 +316,7 @@ if ($op eq 'addsubscription') {
             $whenmorethan3,   $setto3,       $lastvalue3,     $innerloop3,
             $numberingmethod, $status,       $biblionumber,   $callnumber,
             $notes,           $letter,       $hemisphere,     $manualhistory,$internalnotes,
-            $serialsadditems, $subscriptionid,$staffdisplaycount,$opacdisplaycount
+            $serialsadditems, $subscriptionid,$staffdisplaycount,$opacdisplaycount,$location
         );
     }
     print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");

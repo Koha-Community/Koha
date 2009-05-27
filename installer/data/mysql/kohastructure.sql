@@ -1892,6 +1892,7 @@ CREATE TABLE `subscription` (
   `distributedto` text,
   `internalnotes` longtext,
   `callnumber` text,
+  `location` varchar(80) NULL default '',
   `branchcode` varchar(10) NOT NULL default '',
   `hemisphere` tinyint(3) default 0,
   `lastbranch` varchar(10),

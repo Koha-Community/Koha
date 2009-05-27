@@ -2437,6 +2437,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (Adding graceperiod column to subscription table)\n";
     SetVersion ($DBversion);
 }
+$DBversion = '3.01.00.015';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(q{ ALTER TABLE `subscription` ADD location varchar(80) NULL DEFAULT '' AFTER callnumber; });
+   print "Upgrade to $DBversion done (Adding location to subscription table)\n";
+    SetVersion ($DBversion);
+}
+
 
 =item DropAllForeignKeys($table)
 

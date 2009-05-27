@@ -1301,7 +1301,7 @@ sub ModSubscription {
         $numberingmethod, $status,       $biblionumber,   $callnumber,
         $notes,           $letter,       $hemisphere,     $manualhistory,
         $internalnotes,   $serialsadditems,$subscriptionid,
-        $staffdisplaycount,$opacdisplaycount
+        $staffdisplaycount,$opacdisplaycount, $location
     ) = @_;
 #     warn $irregularity;
     my $dbh   = C4::Context->dbh;
@@ -1311,7 +1311,7 @@ sub ModSubscription {
                         add1=?,every1=?,whenmorethan1=?,setto1=?,lastvalue1=?,innerloop1=?,
                         add2=?,every2=?,whenmorethan2=?,setto2=?,lastvalue2=?,innerloop2=?,
                         add3=?,every3=?,whenmorethan3=?,setto3=?,lastvalue3=?,innerloop3=?,
-                        numberingmethod=?, status=?, biblionumber=?, callnumber=?, notes=?, letter=?, hemisphere=?,manualhistory=?,internalnotes=?,serialsadditems=?,staffdisplaycount = ?,opacdisplaycount = ?
+                        numberingmethod=?, status=?, biblionumber=?, callnumber=?, notes=?, letter=?, hemisphere=?,manualhistory=?,internalnotes=?,serialsadditems=?,staffdisplaycount = ?,opacdisplaycount = ?, location = ?
                     WHERE subscriptionid = ?";
      #warn "query :".$query;
     my $sth = $dbh->prepare($query);
@@ -1327,7 +1327,8 @@ sub ModSubscription {
         $numberingmethod, $status,       $biblionumber,   $callnumber,
         $notes,           $letter,       $hemisphere,     ($manualhistory?$manualhistory:0),
         $internalnotes,   $serialsadditems,
-        $staffdisplaycount, $opacdisplaycount, $subscriptionid
+        $staffdisplaycount, $opacdisplaycount, $location,
+        $subscriptionid
     );
     my $rows=$sth->rows;
     $sth->finish;
@@ -1346,7 +1347,7 @@ $subscriptionid = &NewSubscription($auser,branchcode,$aqbooksellerid,$cost,$aqbu
     $add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
     $add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
     $numberingmethod, $status, $notes, $serialsadditems,
-    $staffdisplaycount, $opacdisplaycount, $graceperiod);
+    $staffdisplaycount, $opacdisplaycount, $graceperiod, $location);
 
 Create a new subscription with value given on input args.
 
@@ -1370,7 +1371,7 @@ sub NewSubscription {
         $notes,         $letter,       $firstacquidate,  $irregularity,
         $numberpattern, $callnumber,   $hemisphere,      $manualhistory,
         $internalnotes, $serialsadditems, $staffdisplaycount, $opacdisplaycount,
-        $graceperiod
+        $graceperiod, $location
     ) = @_;
     my $dbh = C4::Context->dbh;
 
@@ -1384,8 +1385,8 @@ sub NewSubscription {
             add3,every3,whenmorethan3,setto3,lastvalue3,innerloop3,
             numberingmethod, status, notes, letter,firstacquidate,irregularity,
             numberpattern, callnumber, hemisphere,manualhistory,internalnotes,serialsadditems,
-            staffdisplaycount,opacdisplaycount,graceperiod)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+            staffdisplaycount,opacdisplaycount,graceperiod,location)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         |;
     my $sth = $dbh->prepare($query);
     $sth->execute(
@@ -1411,7 +1412,7 @@ sub NewSubscription {
         $hemisphere,                    $manualhistory,
         $internalnotes,                 $serialsadditems,
 		$staffdisplaycount,				$opacdisplaycount,
-        $graceperiod,
+        $graceperiod,                   $location,
     );
 
     #then create the 1st waited number
