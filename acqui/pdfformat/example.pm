@@ -310,7 +310,7 @@ sub printfooters {
 sub printpdf {
     my ($basketgroup, $bookseller, $baskets, $branch, $orders, $GST) = @_;
     # open the default PDF that will be used for base (1st page already filled)
-    my $pdf = PDF::API2->open('/home/paul/koha.dev/new_acq/acqui/pdfformat/example.pdf');
+    my $pdf = PDF::API2->open('pdfformat/example.pdf');
     $pdf->pageLabel( 0, {
         -style => 'roman',
     } ); # start with roman numbering
