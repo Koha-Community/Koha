@@ -41,7 +41,8 @@ my $query = new CGI;
 
 if (!C4::Context->userenv){
 	my $sessionID = $query->cookie("CGISESSID");
-	my $session = get_session($sessionID) if $sessionID;
+    my $session;
+	$session = get_session($sessionID) if $sessionID;
 	if (!$session or $session->param('branch') eq 'NO_LIBRARY_SET'){
 		# no branch set we can't transfer
 		print $query->redirect("/cgi-bin/koha/circ/selectbranchprinter.pl");
