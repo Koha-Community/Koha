@@ -40,6 +40,51 @@
 <li><label for="emailaddress">Email:</label> <input id="emailaddress" type="text" value="<!-- TMPL_VAR name="email" -->"  name="emailaddress" /></li>
 </ol>
 </fieldset>
+
+<fieldset class="brief">
+<legend>Items Borrowed Notifications</legend>
+<ol>
+<li>
+  <label for="items_borrowed_email">Email:</label>
+  <!-- TMPL_IF items_borrowed_email -->
+  <input type="checkbox" id="items_borrowed_email" name="items_borrowed_email" value="1" checked="checked" />
+  <!-- TMPL_ELSE -->
+  <input type="checkbox" id="items_borrowed_email" name="items_borrowed_email" value="1" />
+  <!-- /TMPL_IF -->
+</li>
+<li>
+  <label for="items_borrowed_sms">Text Message:</label>
+  <!-- TMPL_IF items_borrowed_sms -->
+  <input type="checkbox" id="items_borrowed_sms" name="items_borrowed_sms" value="1" checked="checked" />
+  <!-- TMPL_ELSE -->
+  <input type="checkbox" id="items_borrowed_sms" name="items_borrowed_sms" value="1" />
+  <!-- /TMPL_IF -->
+</li>
+</ol>
+</fieldset>
+
+<fieldset class="brief">
+<legend>Items Returned Notifications</legend>
+<ol>
+<li>
+  <label for="items_returned_email">Email:</label>
+  <!-- TMPL_IF items_returned_email -->
+  <input type="checkbox" id="items_returned_email" name="items_returned_email" value="1" checked="checked" />
+  <!-- TMPL_ELSE -->
+  <input type="checkbox" id="items_returned_email" name="items_returned_email" value="1" />
+  <!-- /TMPL_IF -->
+</li>
+<li>
+  <label for="items_returned_sms">Text Message:</label>
+  <!-- TMPL_IF items_returned_sms -->
+  <input type="checkbox" id="items_returned_sms" name="items_returned_sms" value="1" checked="checked" />
+  <!-- TMPL_ELSE -->
+  <input type="checkbox" id="items_returned_sms" name="items_returned_sms" value="1" />
+  <!-- /TMPL_IF -->
+</li>
+</ol>
+</fieldset>
+
 </div>
 <div class="yui-u">
 <fieldset class="brief">
