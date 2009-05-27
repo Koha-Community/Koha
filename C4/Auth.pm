@@ -308,9 +308,20 @@ sub get_template_and_user {
     }
     else {
         warn "template type should be OPAC, here it is=[" . $in->{'type'} . "]" unless ( $in->{'type'} eq 'opac' );
+        #TODO : replace LibraryName syspref with 'system name', and remove this html processing
         my $LibraryNameTitle = C4::Context->preference("LibraryName");
         $LibraryNameTitle =~ s/<(?:\/?)(?:br|p)\s*(?:\/?)>/ /sgi;
         $LibraryNameTitle =~ s/<(?:[^<>'"]|'(?:[^']*)'|"(?:[^"]*)")*>//sg;
+        # variables passed from CGI: opac_css_override and opac_search_limits.
+        my $opac_search_limit = $ENV{'OPAC_SEARCH_LIMIT'};
+        my $opac_limit_override = $ENV{'OPAC_LIMIT_OVERRIDE'};
+        my $mylibraryfirst = C4::Context->preference("SearchMyLibraryFirst");
+        my $opac_name;
+        if($opac_limit_override && ($opac_search_limit =~ /branch:(\w+)/) ){
+             $opac_name = C4::Branch::GetBranchName($1)   # opac_search_limit is a branch, so we use it.
+        } elsif($mylibraryfirst){
+            $opac_name = C4::Branch::GetBranchName($mylibraryfirst);
+        }
         $template->param(
             AnonSuggestions           => "" . C4::Context->preference("AnonSuggestions"),
             AuthorisedValueImages     => C4::Context->preference("AuthorisedValueImages"),
@@ -327,9 +338,12 @@ sub get_template_and_user {
             OPACUserCSS               => "". C4::Context->preference("OPACUserCSS"),
             OPACViewOthersSuggestions => "" . C4::Context->preference("OPACViewOthersSuggestions"),
             OpacAuthorities           => C4::Context->preference("OpacAuthorities"),
-            OPACBaseURL               => ($in->{'query'}->https() ? "https://" : "http://") .
-                   $ENV{'SERVER_NAME'} .
+            OPACBaseURL               => ($in->{'query'}->https() ? "https://" : "http://") . $ENV{'SERVER_NAME'} .
                    ($ENV{'SERVER_PORT'} eq ($in->{'query'}->https() ? "443" : "80") ? '' : ":$ENV{'SERVER_PORT'}"),
+            opac_name             => $opac_name,
+            opac_css_override           => $ENV{'OPAC_CSS_OVERRIDE'},
+            opac_search_limit         => $opac_search_limit,
+            opac_limit_override       => $opac_limit_override,
             OpacBrowser               => C4::Context->preference("OpacBrowser"),
             OpacCloud                 => C4::Context->preference("OpacCloud"),
             OpacMainUserBlock         => "" . C4::Context->preference("OpacMainUserBlock"),
@@ -342,7 +356,7 @@ sub get_template_and_user {
             XSLTDetailsDisplay        => C4::Context->preference("XSLTDetailsDisplay"),
             XSLTResultsDisplay        => C4::Context->preference("XSLTResultsDisplay"),
             hidelostitems             => C4::Context->preference("hidelostitems"),
-            mylibraryfirst            => C4::Context->preference("SearchMyLibraryFirst"),
+            mylibraryfirst            => (C4::Context->preference("SearchMyLibraryFirst")) ? C4::Context->userenv->{'branch'} : '',
             opacbookbag               => "" . C4::Context->preference("opacbookbag"),
             opaccolorstylesheet       => "". C4::Context->preference("opaccolorstylesheet"),
             opaccredits               => "" . C4::Context->preference("opaccredits"),
