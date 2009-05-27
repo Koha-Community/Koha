@@ -16,6 +16,8 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
+
 use CGI;
 use Date::Calc qw(Today Day_of_Year Week_of_Year Add_Delta_Days);
 use C4::Koha;
@@ -32,7 +34,7 @@ use C4::Letters;
 #use Smart::Comments;
 
 my $query = new CGI;
-my $op = $query->param('op');
+my $op = $query->param('op') || '';
 my $dbh = C4::Context->dbh;
 my ($subscriptionid,$auser,$branchcode,$librarian,$cost,$aqbooksellerid, $aqbooksellername,$aqbudgetid, $bookfundid, $startdate, $periodicity,
 	$firstacquidate, $dow, $irregularity, $numberpattern, $numberlength, $weeklength, $monthlength, $sublength,
@@ -60,19 +62,6 @@ my @subscription_types = (
         ); 
 my @sub_type_data;
 
-my $letters = GetLetters('serial');
-my @letterloop;
-foreach my $thisletter (keys %$letters) {
-    my $selected = 1 if $thisletter eq $letter;
-    my %row =(value => $thisletter,
-                selected => $selected,
-                lettername => $letters->{$thisletter},
-            );
-    push @letterloop, \%row;
-}
-$template->param(letterloop => \@letterloop);
-
-my $subscriptionid;
 my $subs;
 my $firstissuedate;
 my $nextexpected;
@@ -88,6 +77,7 @@ if ($op eq 'mod' || $op eq 'dup' || $op eq 'modsubscription') {
     } 
     $firstissuedate = $subs->{firstacquidate};  # in iso format.
     for (qw(startdate firstacquidate histstartdate enddate histenddate)) {
+        next unless defined $subs->{$_};
 	# TODO : Handle date formats properly.
          if ($subs->{$_} eq '0000-00-00') {
             $subs->{$_} = ''
@@ -96,6 +86,7 @@ if ($op eq 'mod' || $op eq 'dup' || $op eq 'modsubscription') {
         }
 	  }
     $subs->{'letter'}='' unless($subs->{'letter'});
+    letter_loop($subs->{'letter'}, $template);
     $irregularity   = $subs->{'irregularity'};
     $numberpattern  = $subs->{'numberpattern'};
     $nextexpected = GetNextExpected($subscriptionid);
@@ -124,13 +115,13 @@ if ($op eq 'mod' || $op eq 'dup' || $op eq 'modsubscription') {
         }
     
         $template->param($subs);
+        $template->param("dow".$subs->{'dow'} => 1) if defined $subs->{'dow'};
         $template->param(
                     $op => 1,
                     subtype => \@sub_type_data,
                     sublength =>$sublength,
                     history => ($op eq 'mod' && $subs->{manualhistory} == 1 ),
                     "periodicity".$subs->{'periodicity'} => 1,
-                    "dow".$subs->{'dow'} => 1,
                     "numberpattern".$subs->{'numberpattern'} => 1,
                     firstacquiyear => substr($firstissuedate,0,4),
                     );
@@ -144,8 +135,9 @@ my $onlymine=C4::Context->preference('IndependantBranches') &&
 my $branches = GetBranches($onlymine);
 my @branchloop;
 for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
-    my $selected = 1 if ($thisbranch eq C4::Context->userenv->{'branch'});
-    my $selected = 1 if (defined($subs) && $thisbranch eq $subs->{'branchcode'});
+    my $selected = 0;
+    $selected = 1 if ($thisbranch eq C4::Context->userenv->{'branch'});
+    $selected = 1 if (defined($subs) && $thisbranch eq $subs->{'branchcode'});
     my %row =(value => $thisbranch,
                 selected => $selected,
                 branchname => $branches->{$thisbranch}->{'branchname'},
@@ -294,6 +286,7 @@ if ($op eq 'addsubscription') {
     my $history_only = $query->param('history_only');
 	my $staffdisplaycount = $query->param('staffdisplaycount');
 	my $opacdisplaycount = $query->param('opacdisplaycount');
+    my $graceperiod     = $query->param('graceperiod') || 0;
     my $location = $query->param('location');
 	#  If it's  a mod, we need to check the current 'expected' issue, and mod it in the serials table if necessary.
     if ( $nextacquidate ne $nextexpected->{planneddate}->output('iso') ) {
@@ -316,7 +309,7 @@ if ($op eq 'addsubscription') {
             $whenmorethan3,   $setto3,       $lastvalue3,     $innerloop3,
             $numberingmethod, $status,       $biblionumber,   $callnumber,
             $notes,           $letter,       $hemisphere,     $manualhistory,$internalnotes,
-            $serialsadditems, $subscriptionid,$staffdisplaycount,$opacdisplaycount,$location
+            $serialsadditems, $subscriptionid,$staffdisplaycount,$opacdisplaycount,$graceperiod,$location
         );
     }
     print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
@@ -325,7 +318,7 @@ if ($op eq 'addsubscription') {
         while (@subscription_types) {
            my $sub_type = shift @subscription_types;
            my %row = ( 'name' => $sub_type );
-           if ( $sub_on eq $sub_type ) {
+           if ( defined $sub_on and $sub_on eq $sub_type ) {
 	     $row{'selected'} = ' selected';
            } else {
 	     $row{'selected'} = '';
@@ -345,3 +338,19 @@ if ($op eq 'addsubscription') {
     }
 	output_html_with_http_headers $query, $cookie, $template->output;
 }
+
+sub letter_loop {
+    my ($selected_letter, $template) = @_;
+    my $letters = GetLetters('serial');
+    my @letterloop;
+    foreach my $thisletter (keys %$letters) {
+        my $selected = $thisletter eq $selected_letter ? 1 : 0;
+        push @letterloop, {
+            value => $thisletter,
+            selected => $selected,
+            lettername => $letters->{$thisletter},
+        };
+    }
+    $template->param(letterloop => \@letterloop) if @letterloop;
+}
+

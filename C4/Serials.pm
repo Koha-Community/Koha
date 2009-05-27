@@ -1301,7 +1301,7 @@ sub ModSubscription {
         $numberingmethod, $status,       $biblionumber,   $callnumber,
         $notes,           $letter,       $hemisphere,     $manualhistory,
         $internalnotes,   $serialsadditems,$subscriptionid,
-        $staffdisplaycount,$opacdisplaycount, $location
+        $staffdisplaycount,$opacdisplaycount, $graceperiod, $location
     ) = @_;
 #     warn $irregularity;
     my $dbh   = C4::Context->dbh;
@@ -1311,7 +1311,7 @@ sub ModSubscription {
                         add1=?,every1=?,whenmorethan1=?,setto1=?,lastvalue1=?,innerloop1=?,
                         add2=?,every2=?,whenmorethan2=?,setto2=?,lastvalue2=?,innerloop2=?,
                         add3=?,every3=?,whenmorethan3=?,setto3=?,lastvalue3=?,innerloop3=?,
-                        numberingmethod=?, status=?, biblionumber=?, callnumber=?, notes=?, letter=?, hemisphere=?,manualhistory=?,internalnotes=?,serialsadditems=?,staffdisplaycount = ?,opacdisplaycount = ?, location = ?
+                        numberingmethod=?, status=?, biblionumber=?, callnumber=?, notes=?, letter=?, hemisphere=?,manualhistory=?,internalnotes=?,serialsadditems=?,staffdisplaycount = ?,opacdisplaycount = ?, graceperiod = ?, location = ?
                     WHERE subscriptionid = ?";
      #warn "query :".$query;
     my $sth = $dbh->prepare($query);
@@ -1327,7 +1327,7 @@ sub ModSubscription {
         $numberingmethod, $status,       $biblionumber,   $callnumber,
         $notes,           $letter,       $hemisphere,     ($manualhistory?$manualhistory:0),
         $internalnotes,   $serialsadditems,
-        $staffdisplaycount, $opacdisplaycount, $location,
+        $staffdisplaycount, $opacdisplaycount, $graceperiod, $location,
         $subscriptionid
     );
     my $rows=$sth->rows;

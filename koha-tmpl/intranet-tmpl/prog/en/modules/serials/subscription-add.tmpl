@@ -1067,9 +1067,9 @@ $(document).ready(function() {
         <li>
            <label for="acqui_date"> First issue publication date:</label>
                 <!-- TMPL_UNLESS NAME="mod" --><img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="acqui_button" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" /><!-- /TMPL_UNLESS -->
-                <input type="text" name="firstacquidate" value="<!-- TMPL_VAR name="firstacquidate" -->"  size="13" maxlength="10" id="acqui_date" <!-- TMPL_IF NAME="mod" -->disabled="true"<!-- /TMPL_IF --> style="border-width: 0px;"  />
+                <input type="text" name="firstacquidate" value="<!-- TMPL_VAR name="firstacquidate" -->"  size="13" maxlength="10" id="acqui_date" <!-- TMPL_IF NAME="mod" -->disabled="disabled"<!-- /TMPL_IF --> style="border-width: 0px;"  />
         </li>
-           <!-- TMPL_IF NAME="mod" --><li><label for="nextacquidate"> Next issue publication date:</label>
+           <!-- TMPL_IF NAME="mod" --><li><label for="next_acqui_date"> Next issue publication date:</label>
                 <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="next_acqui_button" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />
                 <input type="text" name="nextacquidate" value="<!-- TMPL_VAR name="nextacquidate" -->" size="13" maxlength="10" id="next_acqui_date" style="border-width: 0px;"  />
                 </li><!-- /TMPL_IF -->
