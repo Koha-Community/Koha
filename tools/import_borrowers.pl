@@ -42,7 +42,7 @@ use C4::Dates qw(format_date_in_iso);
 use C4::Context;
 use C4::Branch qw(GetBranchName);
 use C4::Members;
-use C4::Members::Attributes;
+use C4::Members::Attributes qw(:all);
 use C4::Members::AttributeTypes;
 use C4::Members::Messaging;
 
@@ -64,7 +64,7 @@ if ($extended) {
 my $columnkeystpl = [ map { {'key' => $_} }  grep {$_ ne 'borrowernumber' && $_ ne 'cardnumber'} @columnkeys ];  # ref. to array of hashrefs.
 
 my $input = CGI->new();
-my $csv   = Text::CSV->new({binary => 1});  # binary needed for non-ASCII Unicode
+our $csv  = Text::CSV->new({binary => 1});  # binary needed for non-ASCII Unicode
 # push @feedback, {feedback=>1, name=>'backend', value=>$csv->backend, backend=>$csv->backend};
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
@@ -125,6 +125,7 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
         $csvkeycol{$keycol} = $col++;
     }
     #warn($borrowerline);
+    my $ext_preserve = $input->param('ext_preserve') || 0;
     if ($extended) {
         $matchpoint_attr_type = C4::Members::AttributeTypes->fetch($matchpoint);
     }
@@ -189,14 +190,10 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
             # The first 25 errors are enough.  Keeping track of 30,000+ would destroy performance.
             next LINE;
         }
-        my @attrs;
         if ($extended) {
             my $attr_str = $borrower{patron_attributes};
-            delete $borrower{patron_attributes};
-            my $ok = $csv->parse($attr_str);
-            my @list = $csv->fields();
-            # FIXME error handling
-            $patron_attributes = [ map { map { my @arr = split /:/, $_, 2; { code => $arr[0], value => $arr[1] } } $_ } @list ];
+            delete $borrower{patron_attributes};    # not really a field in borrowers, so we don't want to pass it to ModMember.
+            $patron_attributes = extended_attributes_code_value_arrayref($attr_str); 
         }
 	# Popular spreadsheet applications make it difficult to force date outputs to be zero-padded, but we require it.
         foreach (qw(dateofbirth dateenrolled dateexpiry)) {
@@ -239,20 +236,24 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
                 next LINE;
             }
             $borrower{'borrowernumber'} = $borrowernumber;
-	    for my $col ( keys %borrower) {
-            # use values from extant patron unless our csv file includes this column or we provided a default.
-            # FIXME : You cannot update a field with a  perl-evaluated false value using the defaults.
-            unless(exists($csvkeycol{$col}) || $defaults{$col}) {
-                $borrower{$col} = $member->{$col} if($member->{$col}) ;
+            for my $col (keys %borrower) {
+                # use values from extant patron unless our csv file includes this column or we provided a default.
+                # FIXME : You cannot update a field with a  perl-evaluated false value using the defaults.
+                unless(exists($csvkeycol{$col}) || $defaults{$col}) {
+                    $borrower{$col} = $member->{$col} if($member->{$col}) ;
+                }
             }
-        }
             unless (ModMember(%borrower)) {
                 $invalid++;
                 $template->param('lastinvalid'=>$borrower{'surname'}.' / '.$borrowernumber);
                 next LINE;
             }
             if ($extended) {
-                C4::Members::Attributes::SetBorrowerAttributes($borrower{'borrowernumber'}, $patron_attributes);
+                if ($ext_preserve) {
+                    my $old_attributes = GetBorrowerAttributes($borrowernumber);
+                    $patron_attributes = extended_attributes_merge($old_attributes, $patron_attributes);  #TODO: expose repeatable options in template
+                }
+                SetBorrowerAttributes($borrower{'borrowernumber'}, $patron_attributes);
             }
             $overwritten++;
             $template->param('lastoverwritten'=>$borrower{'surname'}.' / '.$borrowernumber);
@@ -264,7 +265,7 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
             }
             if ($borrowernumber = AddMember(%borrower)) {
                 if ($extended) {
-                    C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $patron_attributes);
+                    SetBorrowerAttributes($borrowernumber, $patron_attributes);
                 }
                 if ($set_messaging_prefs) {
                     C4::Members::Messaging::SetMessagingPreferencesFromDefaults({ borrowernumber => $borrowernumber,
@@ -273,7 +274,7 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
                 $imported++;
                 $template->param('lastimported'=>$borrower{'surname'}.' / '.$borrowernumber);
             } else {
-                $invalid++;		# was just "$invalid", I assume incrementing was the point --atz
+                $invalid++;
                 $template->param('lastinvalid'=>$borrower{'surname'}.' / AddMember');
             }
         }
