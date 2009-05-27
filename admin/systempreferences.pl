@@ -121,6 +121,9 @@ $tabsysprefs{DefaultClassificationSource} = "Cataloguing";
 $tabsysprefs{RoutingSerials}              = "Cataloguing";
 $tabsysprefs{'item-level_itypes'}         = "Cataloguing";
 $tabsysprefs{OpacSuppression}             = "Cataloguing";
+$tabsysprefs{viewMARC}                    = "Cataloguing";
+$tabsysprefs{viewLabeledMARC}             = "Cataloguing";
+$tabsysprefs{viewISBD}                    = "Cataloguing";
 
 # Circulation
 $tabsysprefs{maxoutstanding}                 = "Circulation";
