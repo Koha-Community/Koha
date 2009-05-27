@@ -2726,7 +2726,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE `aqbooksellers` ADD COLUMN `gstrate` decimal(6,4) default NULL");
     for my $bookseller (@$booksellers) {
         my $sth = $dbh->prepare("UPDATE aqbooksellers SET gstrate=? WHERE id=?");
-        $sth->execute($bookseller->{gstrate} / 100, $bookseller->{id});
+        $sth->execute($bookseller->{gstrate}?$bookseller->{gstrate}:0 / 100, $bookseller->{id});
         $sth->finish;
     }
     print "Upgrade to $DBversion done (modify gstrate to be consistent with syspref)\n";
