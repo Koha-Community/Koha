@@ -114,12 +114,27 @@
     <!-- /TMPL_LOOP -->
 </ol></fieldset>
 	<fieldset class="rows">
-	<legend>If matching record is already in the borrowers table:</legend><ol><li class="radio">
-		 
-		<input type="radio" id="overwrite_cardnumberno" name="overwrite_cardnumber" value="0" checked="checked" /><label for="overwrite_cardnumberno">Ignore this one, keep the existing one</label></li>
-<li class="radio">
-			<input type="radio" id="overwrite_cardnumberyes" name="overwrite_cardnumber" value="1" /><label for="overwrite_cardnumberyes">Overwrite the existing one with this</label>
-	</li></ol></fieldset>
+	<legend>If matching record is already in the borrowers table:</legend>
+    <ol><li class="radio">
+        <input type="radio" id="overwrite_cardnumberno" name="overwrite_cardnumber" value="0" checked="checked" /><label for="overwrite_cardnumberno">Ignore this one, keep the existing one</label>
+        </li>
+        <li class="radio">
+		<input type="radio" id="overwrite_cardnumberyes" name="overwrite_cardnumber" value="1" /><label for="overwrite_cardnumberyes">Overwrite the existing one with this</label>
+        </li>
+    </ol>
+    </fieldset>
+    <!-- TMPL_IF NAME="ExtendedPatronAttributes" -->
+	<fieldset class="rows">
+	<legend>Extended Attributes</legend>
+    <ol><li class="radio">
+        <input type="radio" id="ext_preserve_0" name="ext_preserve" value="0" checked="checked" /><label for="ext_preserve_0">Replace all Extended Attributes</label>
+        </li>
+        <li class="radio">
+        <input type="radio" id="ext_preserve_1" name="ext_preserve" value="1" /><label for="ext_preserve_1">Replace only included Extended Attributes</label>
+        </li>
+    </ol>
+    </fieldset>
+    <!-- /TMPL_IF -->
 	<fieldset class="action"><input type="submit" value="Import" /></fieldset>
 </form>
 <!-- /TMPL_IF -->

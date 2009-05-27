@@ -60,28 +60,34 @@ $attr_type = C4::Members::AttributeTypes->delete($code);
 
 =over 4
 
-my @attribute_types = C4::Members::AttributeTypes::GetAttributeTypes();
+my @attribute_types = C4::Members::AttributeTypes::GetAttributeTypes($all_fields);
 
 =back
 
 Returns an array of hashrefs of each attribute type defined
 in the database.  The array is sorted by code.  Each hashref contains
-the following fields:
+at least the following fields:
 
 code
 description
 
+If $all_fields is true, then each hashref also contains the other fields from borrower_attribute_types.
+
 =cut
 
 sub GetAttributeTypes {
+    my $all = @_ ? shift : 0;
+    my $select = $all ? '*' : 'code, description';
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare('SELECT code, description FROM borrower_attribute_types ORDER by code');
+    my $sth = $dbh->prepare("SELECT $select FROM borrower_attribute_types ORDER by code");
     $sth->execute();
-    my @results = ();
-    while (my $row = $sth->fetchrow_hashref) {
-        push @results, $row;
-    }
-    return @results;
+    my $results = $sth->fetchall_arrayref({});
+    return @$results;
+}
+
+sub GetAttributeTypes_hashref {
+    my %hash = map {$_->{code} => $_} GetAttributeTypes(@_);
+    return \%hash;
 }
 
 =head1 METHODS 

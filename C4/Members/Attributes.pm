@@ -18,25 +18,34 @@ package C4::Members::Attributes;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
+
+use Text::CSV;      # Don't be tempted to use Text::CSV::Unicode -- even in binary mode it fails.
 use C4::Context;
 use C4::Members::AttributeTypes;
 
-use vars qw($VERSION);
+use vars qw($VERSION @ISA @EXPORT_OK @EXPORT %EXPORT_TAGS);
+our ($csv, $AttributeTypes);
 
 BEGIN {
     # set the version for version checking
-    $VERSION = 3.00;
+    $VERSION = 3.01;
+    @ISA = qw(Exporter);
+    @EXPORT_OK = qw(GetBorrowerAttributes CheckUniqueness SetBorrowerAttributes
+                    extended_attributes_code_value_arrayref extended_attributes_merge);
+    %EXPORT_TAGS = ( all => \@EXPORT_OK );
 }
 
 =head1 NAME
 
-C4::Members::Attribute - manage extend patron attributes
+C4::Members::Attributes - manage extend patron attributes
 
 =head1 SYNOPSIS
 
 =over 4
 
-my $attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
+    use C4::Members::Attributes;
+    my $attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
 
 =back
 
@@ -96,7 +105,7 @@ sub GetBorrowerAttributes {
 
 =over 4
 
-my $ok = CheckUniqueness($code, $value[, $borrowernumber]);
+    my $ok = CheckUniqueness($code, $value[, $borrowernumber]);
 
 =back
 
@@ -137,7 +146,6 @@ sub CheckUniqueness {
         $sth->execute($code, $value);
     }
     my ($count) = $sth->fetchrow_array;
-    $sth->finish();
     return ($count == 0);
 }
 
@@ -145,7 +153,7 @@ sub CheckUniqueness {
 
 =over 4
 
-SetBorrowerAttributes($borrowernumber, [ { code => 'CODE', value => 'value', password => 'password' }, ... ] );
+    SetBorrowerAttributes($borrowernumber, [ { code => 'CODE', value => 'value', password => 'password' }, ... ] );
 
 =back
 
@@ -168,6 +176,91 @@ sub SetBorrowerAttributes {
         $attr->{password} = undef unless exists $attr->{password};
         $sth->execute($borrowernumber, $attr->{code}, $attr->{value}, $attr->{password});
     }
+}
+
+=head2 extended_attributes_code_value_arrayref 
+
+=over 4
+
+    my $patron_attributes = "homeroom:1150605,grade:01,extradata:foobar";
+    my $aref = extended_attributes_code_value_arrayref($patron_attributes);
+
+=back
+
+Takes a comma-delimited CSV-style string argument and returns the kind of data structure that SetBorrowerAttributes wants, 
+namely a reference to array of hashrefs like:
+ [ { code => 'CODE', value => 'value' }, { code => 'CODE2', value => 'othervalue' } ... ]
+
+Caches Text::CSV parser object for efficiency.
+
+=cut
+
+sub extended_attributes_code_value_arrayref {
+    my $string = shift or return;
+    $csv or $csv = Text::CSV->new({binary => 1});  # binary needed for non-ASCII Unicode
+    my $ok   = $csv->parse($string);  # parse field again to get subfields!
+    my @list = $csv->fields();
+    # TODO: error handling (check $ok)
+    return [
+        sort {&_sort_by_code($a,$b)}
+        map { map { my @arr = split /:/, $_, 2; { code => $arr[0], value => $arr[1] } } $_ }
+        @list
+    ];
+    # nested map because of split
+}
+
+=head2 extended_attributes_merge
+
+=over 4
+
+    my $old_attributes = extended_attributes_code_value_arrayref("homeroom:224,grade:04,deanslist:2007,deanslist:2008,somedata:xxx");
+    my $new_attributes = extended_attributes_code_value_arrayref("homeroom:115,grade:05,deanslist:2009,extradata:foobar");
+    my $merged = extended_attributes_merge($patron_attributes, $new_attributes, 1);
+
+    # assuming deanslist is a repeatable code, value same as:
+    # $merged = extended_attributes_code_value_arrayref("homeroom:115,grade:05,deanslist:2007,deanslist:2008,deanslist:2009,extradata:foobar,somedata:xxx");
+
+=back
+
+Takes three arguments.  The first two are references to array of hashrefs, each like:
+ [ { code => 'CODE', value => 'value' }, { code => 'CODE2', value => 'othervalue' } ... ]
+
+The third option specifies whether repeatable codes are clobbered or collected.  True for non-clobber.
+
+Returns one reference to (merged) array of hashref.
+
+Caches results of C4::Members::AttributeTypes::GetAttributeTypes_hashref(1) for efficiency.
+
+=cut
+
+sub extended_attributes_merge {
+    my $old = shift or return;
+    my $new = shift or return $old;
+    my $keep = @_ ? shift : 0;
+    $AttributeTypes or $AttributeTypes = C4::Members::AttributeTypes::GetAttributeTypes_hashref(1);
+    my @merged = @$old;
+    foreach my $att (@$new) {
+        unless ($att->{code}) {
+            warn "Cannot merge element: no 'code' defined";
+            next;
+        }
+        unless ($AttributeTypes->{$att->{code}}) {
+            warn "Cannot merge element: unrecognized code = '$att->{code}'";
+            next;
+        }
+        unless ($AttributeTypes->{$att->{code}}->{repeatable} and $keep) {
+            @merged = grep {$att->{code} ne $_->{code}} @merged;    # filter out any existing attributes of the same code
+        }
+        push @merged, $att;
+    }
+    return [( sort {&_sort_by_code($a,$b)} @merged )];
+}
+
+sub _sort_by_code {
+    my ($x, $y) = @_;
+    defined ($x->{code}) or return -1;
+    defined ($y->{code}) or return 1;
+    return $x->{code} cmp $y->{code} || $x->{value} cmp $y->{value};
 }
 
 =head1 AUTHOR
