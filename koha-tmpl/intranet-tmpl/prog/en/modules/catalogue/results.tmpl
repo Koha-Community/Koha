@@ -23,17 +23,15 @@ function verify_images() {
 <!-- /TMPL_IF -->
 
 $(document).ready(function() {
-<!-- TMPL_IF NAME="AmazonContent" -->
     $('#sortbyform').find("input:submit").hide();
     $('#sort_by').change(function() {
         $('#sortbyform').submit();
     });
-<!-- /TMPL_IF -->
 	$("#z3950searchc").empty();
 	yuiZ3950button();
 });
 
-<!-- TMPL_IF NAME="AmazonContent" -->
+<!-- TMPL_IF NAME="AmazonEnabled" -->
 $(window).load(function() {
         verify_images();
      });
