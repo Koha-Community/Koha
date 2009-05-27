@@ -17,7 +17,7 @@
 <div id="fluid">
 <div id="fluid-offset">
 <!-- TMPL_UNLESS NAME="advsearch" --><form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform">
-	<label for="masthead_search" class="left"> Search <!-- TMPL_IF name="mylibraryfirst" --> <!-- TMPL_IF name="loggedinusername" -->(in <!-- TMPL_VAR name="LoginBranchcode" --> only)<!-- /TMPL_IF --><!-- /TMPL_IF --></label>
+    <label for="masthead_search" class="left"> Search <!-- TMPL_IF name="mylibraryfirst" --> (in <!-- TMPL_VAR name="mylibraryfirst" --> only)<!-- /TMPL_IF --><!-- /TMPL_IF --></label>
 	<select name="idx" id="masthead_search" class="left" style="max-width:10em;width:10em;">
 	<!-- TMPL_IF NAME="ms_kw" -->
         <option selected="selected" value="">Library Catalog</option>
@@ -59,10 +59,15 @@
 <!-- TMPL_ELSE -->
         <input type="text" name="q" class="left" style="width: 35%; font-size: 111%;" />
 <!-- /TMPL_IF -->
-        <!-- TMPL_IF name="mylibraryfirst" --><!-- TMPL_IF name="loggedinusername" -->
-            <input name="limit" value="<!-- TMPL_VAR name="LoginBranchcode" -->" type="hidden" />
-        <!-- /TMPL_IF --><!-- /TMPL_IF -->
-        <input type="submit" value="Go" id="searchsubmit" class="left" />
+   <!-- TMPL_UNLESS NAME="opac_limit_override" -->
+       <!-- TMPL_IF name="mylibraryfirst" --> 
+            <input name="limit" value="branch:<!-- TMPL_VAR name="mylibraryfirst" -->" type="hidden" />
+       <!-- /TMPL_IF -->
+    <!-- /TMPL_UNLESS -->
+    <!-- TMPL_IF NAME="opac_search_limit" -->
+        <input name="limit" value="<!-- TMPL_VAR name="opac_search_limit" -->" type="hidden" />
+    <!-- /TMPL_IF -->
+    <input type="submit" value="Go" id="searchsubmit" class="left" />
 <!-- TMPL_IF NAME="opacbookbag" --><span id="cmspan"></span><!-- /TMPL_IF -->
 
 <!--TMPL_IF NAME="virtualshelves" --><a href="/cgi-bin/koha/opac-shelves.pl" id="listsmenulink" class=""><i></i><span><i></i><span></span>Lists </span></a><!-- /TMPL_IF -->
