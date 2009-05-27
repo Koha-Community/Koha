@@ -1,0 +1,59 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+
+	<title>Koha &rsaquo; Catalog &rsaquo; Labeled MARC Details for <!-- TMPL_VAR NAME="bibliotitle" --></title>
+
+	<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+	<script type="text/javascript">
+	//<![CDATA[
+		function Changefwk(FwkList)
+		{
+			var fwk = FwkList.options[FwkList.selectedIndex].value;
+			window.location = "labeledMARCdetail.pl?biblionumber=<!--TMPL_VAR Name="biblionumber"-->&frameworkcode="+fwk;
+		}
+	//]]>
+	</script>
+</head>
+
+<body>
+	<!-- TMPL_INCLUDE NAME="header.inc" -->
+	<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+	<div id="breadcrumbs">
+		<a href="/cgi-bin/koha/mainpage.pl">Home</a>
+		&rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
+		&rsaquo; MARC Details for <i><!-- TMPL_VAR NAME="bibliotitle" --></i>
+	</div>
+
+	<div id="doc3" class="yui-t2">
+		<div id="bd">
+			<div id="yui-main">
+				<div class="yui-b">
+
+					<!-- TMPL_INCLUDE NAME="cat-toolbar.inc" -->
+
+					<!-- TMPL_UNLESS name="popup" -->
+						<h1>Labeled MARC biblio : <!-- TMPL_VAR NAME="biblionumber" -->  ( <!-- TMPL_VAR NAME="bibliotitle" --> )</h1>
+					<!-- /TMPL_UNLESS -->
+					<p><b>With Framework :<!--TMPL_VAR Name="framework" --></b></p>
+					<!-- div id="bibliotabs" class="toptabs numbered" -->
+					<div>
+						<table class="labeledmarc-table">
+							<!-- TMPL_LOOP NAME="marc_data" -->
+								<tr>
+									<td class="labeledmarc-label"><!-- TMPL_VAR NAME="label" --></td>
+									<td class="labeledmarc-value"><!-- TMPL_VAR NAME="value" --></td>
+								</tr>
+							<!-- /TMPL_LOOP -->
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="yui-b">
+
+				<!-- TMPL_INCLUDE NAME="biblio-view-menu.inc" -->
+
+			</div>
+		</div>
+	</div>
+	<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
