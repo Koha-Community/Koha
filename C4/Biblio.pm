@@ -1037,14 +1037,14 @@ sub GetCOinSBiblio {
     my $pos6 = substr $record->leader(), 6,1;
     my $mtx;
     my $genre;
-    my ($aulast, $aufirst);
-    my $oauthors;
-    my $title;
-    my $subtitle;
-    my $pubyear;
-    my $isbn;
-    my $issn;
-    my $publisher;
+    my ($aulast, $aufirst) = ('','');
+    my $oauthors  = '';
+    my $title     = '';
+    my $subtitle  = '';
+    my $pubyear   = '';
+    my $isbn      = '';
+    my $issn      = '';
+    my $publisher = '';
 
     if ( C4::Context->preference("marcflavour") eq "UNIMARC" ){
         my $fmts6;
@@ -1113,7 +1113,9 @@ sub GetCOinSBiblio {
         $genre = "&rft.genre=book";
 
         # Setting datas
-        $oauthors .= "&rft.au=".$record->subfield('100','a');
+        if ($record->field('100')) {
+            $oauthors .= "&amp;rft.au=".$record->subfield('100','a');
+        }
         # others authors
         if($record->field('700')){
             for my $au ($record->field('700')->subfield('a')){
