@@ -242,9 +242,11 @@ C4::Service->dispatch(
 dispatch takes several array-refs, each one describing a 'route', to use the
 Rails terminology.
 
-$path_regex should be a string in regex-form, describing which paths this route
-handles. Each route is tested in order, from the top down, so put more specific
-handlers first. Also, the regex is tested on the entire path.
+$path_regex should be a string in regex-form, describing which methods and
+paths this route handles. Each route is tested in order, from the top down, so
+put more specific handlers first. Also, the regex is tested on the request
+method, plus the path. For instance, you might use the route [ 'POST /', ... ]
+to handle POST requests to your service.
 
 Each named parameter in @required_params is tested for to make sure the route
 matches, but does not raise an error if one is missing; it simply tests the next
@@ -253,7 +255,7 @@ C<C4::Service->require_params> inside your handler.
 
 \&handler is called with each matched group in $path_regex in its arguments. For
 example, if your service is accessed at the path /blah/123, and you call
-C<dispatch> with the route [ '/blah/(\\d+)', ... ], your handler will be called
+C<dispatch> with the route [ 'GET /blah/(\\d+)', ... ], your handler will be called
 with the argument '123'.
 
 =cut
