@@ -62,6 +62,8 @@
 			<!-- TMPL_IF NAME="isbn" --> - <!-- TMPL_VAR NAME="isbn" --> <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="publicationyear" --> - <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="publishercode" -->- <!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="copyrightdate" --> - <!-- TMPL_VAR name="copyrightdate" --><!-- /TMPL_IF -->
+                        <!-- TMPL_IF NAME="edition" -->Edition: <!-- TMPL_VAR NAME="edition" --><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="place" --> ; <!-- TMPL_VAR name="place" --><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="pages" --> - <!-- TMPL_VAR name="pages" --><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="size" --> ; <!-- TMPL_VAR name="size" --><!-- /TMPL_IF -->
@@ -125,6 +127,8 @@
             <tr>
                 <th>Title</th>
                 <th>ISBN</th>
+                <th>Date</th>
+                <th>Edition</th>
                 <th>coming from</th>
                 <th>preview</th>
                 <th>&nbsp;</th>
@@ -134,6 +138,8 @@
                 <td><!-- TMPL_VAR NAME="title" escape="html" -->
                 <!-- TMPL_VAR NAME="author" --></td>
                 <td><!-- TMPL_VAR NAME="isbn" --></td>
+                <td><!-- TMPL_VAR NAME="copyrightdate" --></td>
+                <td><!-- TMPL_VAR NAME="edition" --></td>
                 <td><!-- TMPL_VAR NAME="file" --></td>
                 <td> <a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=<!-- TMPL_VAR NAME="id" -->" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=<!-- TMPL_VAR NAME="id" -->" title="MARC" rel="gb_page_center[600,500]">Card</a>
 				</td>

@@ -20,12 +20,20 @@ function verify_images() {
            }
         });
         }
+<!-- /TMPL_IF -->
+
 $(document).ready(function() {
+<!-- TMPL_IF NAME="AmazonContent" -->
     $('#sortbyform').find("input:submit").hide();
     $('#sort_by').change(function() {
         $('#sortbyform').submit();
     });
+<!-- /TMPL_IF -->
+	$("#z3950searchc").empty();
+	yuiZ3950button();
 });
+
+<!-- TMPL_IF NAME="AmazonContent" -->
 $(window).load(function() {
         verify_images();
      });
@@ -79,6 +87,32 @@ function addToList () {
 	window.open(url, 'Add_to_virtualshelf', 'width=500, height=400, toolbar=false, scrollbars=yes');
     return false;
 }
+
+/* this function open a popup to search on z3950 server.  */
+function PopupZ3950() {
+    var strQuery = GetZ3950Terms();
+    if(strQuery){
+        window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"+strQuery,"z3950search",'width=740,height=450,location=yes,toolbar=no,scrollbars=yes,resize=yes');
+    }
+}
+/* provide Z3950 search points */
+function GetZ3950Terms(){
+	var strQuery="&frameworkcode=";
+	<!-- TMPL_LOOP NAME='z3950_search_params' -->
+		strQuery += "&" + "<!-- TMPL_VAR NAME="name" -->" + "=" + "<!-- TMPL_VAR NAME="encvalue" -->";
+	<!-- /TMPL_LOOP -->
+	return strQuery;
+}
+/* prepare DOM for Z39.50 Search Button */
+function yuiZ3950button() {
+	new YAHOO.widget.Button({
+			id: "z3950search",
+			type: "button",
+			label: _("z39.50 Search"),
+			container: "z3950searchc",
+			onclick: {fn:function(){PopupZ3950()}}
+	});
+}
 //]]>
 </script>
 </head>
@@ -112,6 +146,9 @@ function addToList () {
 
     <!-- TMPL_IF NAME="total" -->
         <div id="searchheader">
+			<form method="post" name="fz3950" class="fz3950">
+					<span id="z3950searchc"><input type="button" id="z3950search" value="z39.50 Search" onclick="PopupZ3950(); return false;" /></span>
+			</form>
             <form action="/cgi-bin/koha/catalogue/search.pl" method="get" id="sortbyform">
                 <!-- TMPL_IF NAME="searchdesc" -->
                     <!-- TMPL_LOOP NAME="QUERY_INPUTS"-->
@@ -144,6 +181,10 @@ function addToList () {
         </div>
     <!-- TMPL_IF NAME="stopwords_removed" --><div><p class="tip">Ignored the following common words: "<!-- TMPL_VAR NAME="stopwords_removed" -->"<p></div><!-- /TMPL_IF -->
     <!-- TMPL_ELSE -->
+        <div id="searchheader">
+			<form method="post" name="fz3950" class="fz3950bigrpad">
+				<span id="z3950searchc"><input type="button" id="z3950search" value="z39.50 Search" onclick="PopupZ3950(); return false;" /></span>
+			</form>
         <!-- TMPL_IF NAME="searchdesc" -->
             <h3>No results found</h3>
             <p>
@@ -155,6 +196,7 @@ function addToList () {
             You did not specify any search criteria.
             </p>
         <!-- /TMPL_IF -->
+		</div>
     <!-- /TMPL_IF -->
     
     <!-- TMPL_IF NAME="query_error" -->
@@ -290,6 +332,10 @@ function addToList () {
                                             <b><!-- TMPL_IF NAME="title" --><!-- TMPL_VAR NAME="title" --><!-- TMPL_ELSE -->No title<!-- /TMPL_IF --></b>
                                         </a> <!-- TMPL_VAR NAME="subtitle" -->
 <!-- TMPL_IF name="volume" -->,<!-- TMPL_VAR name="volume" --><!-- /TMPL_IF --> <!-- TMPL_IF name="volumeddesc" -->, <!-- TMPL_VAR name="volumeddesc" --><!-- /TMPL_IF -->
+                                    <!-- TMPL_ELSIF NAME="BiblioDefaultViewlabeled_marc" -->
+                                            <a class="title" href="/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+                                                <!-- TMPL_VAR NAME="title" --> 
+                                            </a> <!-- TMPL_VAR NAME="subtitle" --><!-- TMPL_IF name="volume" -->,<!-- TMPL_VAR name="volume" --><!-- /TMPL_IF --> <!-- TMPL_IF name="volumeddesc" -->, <!-- TMPL_VAR name="volumeddesc" --><!-- /TMPL_IF -->
                                     <!-- TMPL_ELSIF NAME="BiblioDefaultViewisbd" -->
                                             <a class="title" href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
                                                 <!-- TMPL_IF NAME="title" --><!-- TMPL_VAR NAME="title" --><!-- TMPL_ELSE -->No title<!-- /TMPL_IF -->
@@ -328,6 +374,7 @@ function addToList () {
                                         <!-- /TMPL_IF -->
                                         
                                         <!-- TMPL_IF name="publishercode" --><!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF -->
+										<!-- TMPL_IF NAME="edition" -->Edition: <!-- TMPL_VAR NAME="edition" --><!-- /TMPL_IF -->
                                         Description: 
                                         <!-- TMPL_IF name="place" --> ; <!-- TMPL_VAR name="place" --><!-- /TMPL_IF -->
 										<!-- TMPL_IF name="publicationyear" -->, <!-- TMPL_VAR name="publicationyear" -->

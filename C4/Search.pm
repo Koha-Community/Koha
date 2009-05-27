@@ -19,7 +19,7 @@ use strict;
 # use warnings; # FIXME
 require Exporter;
 use C4::Context;
-use C4::Biblio;    # GetMarcFromKohaField
+use C4::Biblio;    # GetMarcFromKohaField, GetBiblioData
 use C4::Koha;      # getFacets
 use Lingua::Stem;
 use C4::Search::PazPar2;
@@ -27,6 +27,7 @@ use XML::Simple;
 use C4::Dates qw(format_date);
 use C4::XSLT;
 use C4::Branch;
+use URI::Escape;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
 
@@ -1250,6 +1251,9 @@ sub searchResults {
 		$oldbiblio->{normalized_oclc} = GetNormalizedOCLCNumber($marcrecord,$marcflavour);
 		$oldbiblio->{normalized_isbn} = GetNormalizedISBN(undef,$marcrecord,$marcflavour);
 		$oldbiblio->{content_identifier_exists} = 1 if ($oldbiblio->{normalized_isbn} or $oldbiblio->{normalized_oclc} or $oldbiblio->{normalized_ean} or $oldbiblio->{normalized_upc});
+
+		# edition information, if any
+        $oldbiblio->{edition} = $oldbiblio->{editionstatement};
 		$oldbiblio->{description} = $itemtypes{ $oldbiblio->{itemtype} }->{description};
  # Build summary if there is one (the summary is defined in the itemtypes table)
  # FIXME: is this used anywhere, I think it can be commented out? -- JF
@@ -2108,6 +2112,96 @@ sub NZorder {
         return $finalresult;
     }
 }
+
+=head2 enabled_staff_search_views
+
+%hash = enabled_staff_search_views()
+
+This function returns a hash that contains three flags obtained from the system
+preferences, used to determine whether a particular staff search results view
+is enabled.
+
+=over 2
+
+=item C<Output arg:>
+
+    * $hash{can_view_MARC} is true only if the MARC view is enabled
+    * $hash{can_view_ISBD} is true only if the ISBD view is enabled
+    * $hash{can_view_labeledMARC} is true only if the Labeled MARC view is enabled
+
+=item C<usage in the script:>
+
+=back
+
+$template->param ( C4::Search::enabled_staff_search_views );
+
+=cut
+
+sub enabled_staff_search_views
+{
+	return (
+		can_view_MARC			=> C4::Context->preference('viewMARC'),			# 1 if the staff search allows the MARC view
+		can_view_ISBD			=> C4::Context->preference('viewISBD'),			# 1 if the staff search allows the ISBD view
+		can_view_labeledMARC	=> C4::Context->preference('viewLabeledMARC'),	# 1 if the staff search allows the Labeled MARC view
+	);
+}
+
+
+=head2 z3950_search_args
+
+$arrayref = z3950_search_args($matchpoints)
+
+This function returns an array reference that contains the search parameters to be
+passed to the Z39.50 search script (z3950_search.pl). The array elements
+are hash refs whose keys are name, value and encvalue, and whose values are the
+name of a search parameter, the value of that search parameter and the URL encoded
+value of that parameter.
+
+The search parameter names are lccn, isbn, issn, title, author, dewey and subject.
+
+The search parameter values are obtained from the bibliographic record whose
+data is in a hash reference in $matchpoints, as returned by Biblio::GetBiblioData().
+
+If $matchpoints is a scalar, it is assumed to be an unnamed query descriptor, e.g.
+a general purpose search argument. In this case, the returned array contains only
+entry: the key is 'title' and the value and encvalue are derived from $matchpoints.
+
+If a search parameter value is undefined or empty, it is not included in the returned
+array.
+
+The returned array reference may be passed directly to the template parameters.
+
+=over 2
+
+=item C<Output arg:>
+
+    * $array containing hash refs as described above
+
+=item C<usage in the script:>
+
+=back
+
+$data = Biblio::GetBiblioData($bibno);
+$template->param ( MYLOOP => C4::Search::z3950_search_args($data) )
+
+*OR*
+
+$template->param ( MYLOOP => C4::Search::z3950_search_args($searchscalar) )
+
+=cut
+
+sub z3950_search_args {
+    my $bibrec = shift;
+    $bibrec = { title => $bibrec } if !ref $bibrec;
+    my $array = [];
+    for my $field (qw/ lccn isbn issn title author dewey subject /)
+    {
+        my $encvalue = URI::Escape::uri_escape_utf8($bibrec->{$field});
+        push @$array, { name=>$field, value=>$bibrec->{$field}, encvalue=>$encvalue } if defined $bibrec->{$field};
+    }
+    return $array;
+}
+
 
 END { }    # module clean-up code here (global destructor)
 

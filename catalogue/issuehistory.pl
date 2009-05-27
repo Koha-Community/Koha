@@ -25,6 +25,7 @@ use C4::Output;
 use C4::Circulation;    # GetBiblioIssues
 use C4::Biblio;    # GetBiblio GetBiblioFromItemNumber
 use C4::Dates qw/format_date/;
+use C4::Search;		# enabled_staff_search_views
 
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -70,6 +71,7 @@ $template->param(
     total        => scalar @$issues,
     issues       => $issues,
 	issuehistoryview => 1,
+	C4::Search::enabled_staff_search_views,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

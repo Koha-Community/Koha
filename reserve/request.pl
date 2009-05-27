@@ -40,6 +40,7 @@ use C4::Koha;
 use C4::Circulation;
 use C4::Dates qw/format_date/;
 use C4::Members;
+use C4::Search;		# enabled_staff_search_views
 
 my $dbh = C4::Context->dbh;
 my $sth;
@@ -526,6 +527,7 @@ foreach my $biblionumber (@biblionumbers) {
                      holdsview => 1,
                      borrower_branchname => $branches->{$borrowerinfo->{'branchcode'}}->{'branchname'},
                      borrower_branchcode => $borrowerinfo->{'branchcode'},
+                     C4::Search::enabled_staff_search_views,
                     );
 
     $biblioloopiter{biblionumber} = $biblionumber;

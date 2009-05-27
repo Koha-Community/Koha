@@ -244,6 +244,8 @@ warn "query ".$query  if $DEBUG;
                         $row_data{lccn}         = $oldbiblio->{lccn};
                         $row_data{title}        = $oldbiblio->{title};
                         $row_data{author}       = $oldbiblio->{author};
+                        $row_data{date}         = $oldbiblio->{copyrightdate};
+                        $row_data{edition}      = $oldbiblio->{editionstatement};
                         $row_data{breedingid}   = $breedingid;
                         $row_data{biblionumber} = $biblionumber;
                         push( @breeding_loop, \%row_data );

@@ -45,7 +45,7 @@ use C4::Biblio;
 use C4::Items;
 use C4::Branch;     # GetBranchDetail
 use C4::Serials;    # CountSubscriptionFromBiblionumber
-
+use C4::Search;		# enabled_staff_search_views
 
 #---- Internal function
 
@@ -88,6 +88,8 @@ $template->param (
     ISBD                => $res,
     biblionumber        => $biblionumber,
 	isbdview => 1,
+	z3950_search_params	=> C4::Search::z3950_search_args(GetBiblioData($biblionumber)),
+	C4::Search::enabled_staff_search_views,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

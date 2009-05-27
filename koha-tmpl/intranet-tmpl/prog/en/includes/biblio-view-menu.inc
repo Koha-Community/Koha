@@ -2,10 +2,22 @@
 <ul>
     <!-- TMPL_IF NAME="detailview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
     <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_IF NAME="object" --><!-- TMPL_VAR NAME="object" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="biblionumber" --><!-- /TMPL_IF -->">Normal</a></li>
+
+<!-- TMPL_IF NAME="can_view_MARC" -->
 <!-- TMPL_IF NAME="marcview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
 <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_IF NAME="object" --><!-- TMPL_VAR NAME="object" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="biblionumber" --><!-- /TMPL_IF -->">MARC</a></li>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="can_view_labeledMARC" -->
+    <!-- TMPL_IF NAME="labeledmarcview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
+	<a href="/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=<!-- TMPL_IF NAME="object" --><!-- TMPL_VAR NAME="object" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="biblionumber" --><!-- /TMPL_IF -->">Labeled MARC</a></li>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="can_view_ISBD" -->
     <!-- TMPL_IF NAME="isbdview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
     <a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_IF NAME="object" --><!-- TMPL_VAR NAME="object" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="biblionumber" --><!-- /TMPL_IF -->">ISBD</a></li>
+<!-- /TMPL_IF -->
+
     <!-- TMPL_IF NAME="moredetailview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
     <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_IF NAME="object" --><!-- TMPL_VAR NAME="object" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="biblionumber" --><!-- /TMPL_IF -->">Items</a></li>
     <!-- TMPL_IF NAME="CAN_user_reserveforothers" -->

@@ -403,6 +403,25 @@ if ($params->{'limit-yr'}) {
     #FIXME: Should return a error to the user, incorect date format specified
 }
 
+# convert indexes and operands to corresponding parameter names for the z3950 search
+# $ %z3950p will be a hash ref if the indexes are present (advacned search), otherwise undef
+my $z3950par;
+my $indexes2z3950 = {
+	kw=>'title', au=>'author', 'au,phr'=>'author', nb=>'isbn', ns=>'issn',
+	'lcn,phr'=>'dewey', su=>'subject', 'su,phr'=>'subject', 
+	ti=>'title', 'ti,phr'=>'title', se=>'title'
+};
+for (my $ii = 0; $ii < @operands; ++$ii)
+{
+	my $name = $indexes2z3950->{$indexes[$ii]};
+	if (defined $name && defined $operands[$ii])
+	{
+		$z3950par ||= {};
+		$z3950par->{$name} = $operands[$ii] if !exists $z3950par->{$name};
+	}
+}
+
+
 # Params that can only have one value
 my $scan = $params->{'scan'};
 my $count = C4::Context->preference('numSearchResults') || 20;
@@ -494,10 +513,14 @@ for (my $i=0;$i<@servers;$i++) {
         ## If there's just one result, redirect to the detail page
         if ($total == 1) {         
             my $biblionumber=@newresults[0]->{biblionumber};
-            if (C4::Context->preference('IntranetBiblioDefaultView') eq 'isbd') {
+			my $defaultview = C4::Context->preference('IntranetBiblioDefaultView');
+			my $views = { C4::Search::enabled_staff_search_views }; 
+            if ($defaultview eq 'isbd' && $views->{can_view_ISBD}) {
                 print $cgi->redirect("/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=$biblionumber");
-            } elsif  (C4::Context->preference('IntranetBiblioDefaultView') eq 'marc') {
+            } elsif  ($defaultview eq 'marc' && $views->{can_view_MARC}) {
                 print $cgi->redirect("/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=$biblionumber");
+            } elsif  ($defaultview eq 'labeled_marc' && $views->{can_view_labeledMARC}) {
+                print $cgi->redirect("/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=$biblionumber");
             } else {
                 print $cgi->redirect("/cgi-bin/koha/catalogue/detail.pl?biblionumber=$biblionumber");
             } 
@@ -515,6 +538,7 @@ for (my $i=0;$i<@servers;$i++) {
             $template->param(query_cgi => $query_cgi);
             $template->param(query_desc => $query_desc);
             $template->param(limit_desc => $limit_desc);
+			$template->param (z3950_search_params => C4::Search::z3950_search_args($query_desc));
             if ($query_desc || $limit_desc) {
                 $template->param(searchdesc => 1);
             }
@@ -580,6 +604,7 @@ for (my $i=0;$i<@servers;$i++) {
         # no hits
         else {
             $template->param(searchdesc => 1,query_desc => $query_desc,limit_desc => $limit_desc);
+			$template->param (z3950_search_params => C4::Search::z3950_search_args($z3950par || $query_desc));
         }
 
 

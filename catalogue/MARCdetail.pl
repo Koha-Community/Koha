@@ -55,6 +55,7 @@ use C4::Biblio;
 use C4::Items;
 use C4::Acquisition;
 use C4::Serials;    #uses getsubscriptionsfrombiblionumber GetSubscriptionsFromBiblionumber
+use C4::Search;		# enabled_staff_search_views
 
 
 my $query        = new CGI;
@@ -316,6 +317,8 @@ $template->param (
     popup                   => $popup,
     hide_marc               => C4::Context->preference('hide_marc'),
 	marcview => 1,
+	z3950_search_params		=> C4::Search::z3950_search_args($biblio),
+	C4::Search::enabled_staff_search_views,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

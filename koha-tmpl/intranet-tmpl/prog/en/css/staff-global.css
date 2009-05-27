@@ -844,6 +844,11 @@ fieldset.rows .inputnote {
 	background-position : center left;
 	background-repeat : no-repeat;
 }
+#z3950searcht table {
+	/* doesn't have desired effect in catalogue/results.tmpl - I'll leave this here for now but there do seem to be casscading CSS errors in this and other CSS fiels - RICKW 20081118 */
+	padding: 20px;
+	border: none;
+}
 #printbiblio button, #printbiblio a, #printmenuc .first-child {
 	padding-left : 34px;
 	background-image: url("../../img/toolbar-print.gif");
@@ -1324,6 +1329,18 @@ overflow :  hidden;
 	float : right;
 }
 
+#searchheader form.fz3950 {
+	float : right;
+	font-size : 125%;
+	padding : 0 0 0 5em;
+}
+
+#searchheader form.fz3950bigrpad {
+	float : right;
+	font-size : 125%;
+	padding : 5px 25em 0 0;
+}
+
 #search-facets ul {
 	margin : 0;
 	padding : .3em;
@@ -1642,3 +1659,22 @@ span.permissiondesc {
 	margin-top : .5em;
 	padding : .5em;
 }
+
+.labeledmarc-table {
+	border: 0;
+}
+
+.labeledmarc-label {
+	border: 0;
+	padding: 5;
+	font-size: 11pt;
+	color: darkblue;
+}
+
+.labeledmarc-value {
+	border: 0;
+	padding: 5;
+	font-size: 10pt;
+	color: black;
+}
+
