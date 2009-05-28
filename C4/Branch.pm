@@ -177,9 +177,9 @@ sub GetBranchName {
 
 =head2 ModBranch
 
-&ModBranch($newvalue);
+$error = &ModBranch($newvalue);
 
-This function modify an existing branches.
+This function modify an existing branch
 
 C<$newvalue> is a ref to an array wich is containt all the column from branches table.
 
@@ -205,6 +205,7 @@ sub ModBranch {
             $data->{'branchfax'},        $data->{'branchemail'},
             $data->{'branchip'},         $data->{'branchprinter'},
         );
+        return 1 if $dbh->err;
     } else {
         my $query  = "
             UPDATE branches
