@@ -106,7 +106,7 @@ my $suggestions;
 my $branchcode;
 my $userenv = C4::Context->userenv;
 if ($userenv) {
-    unless ($userenv->{flags} == 1){
+    unless ($userenv->{flags} % 2 == 1){
         $branchcode=$userenv->{branch};
     }
 }

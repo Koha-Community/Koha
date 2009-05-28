@@ -2233,7 +2233,7 @@ sub PrepareItemrecordDisplay {
                         "branches" )
                     {
                         if ( ( C4::Context->preference("IndependantBranches") )
-                            && ( C4::Context->userenv->{flags} != 1 ) )
+                            && ( C4::Context->userenv->{flags} % 2 != 1 ) )
                         {
                             my $sth =
                               $dbh->prepare(

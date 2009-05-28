@@ -118,7 +118,7 @@ sub SearchSuggestion  {
     if (C4::Context->preference("IndependantBranches") || $branchcode) {
         my $userenv = C4::Context->userenv;
         if ($userenv) {
-            unless ($userenv->{flags} == 1){
+            unless ($userenv->{flags} % 2 == 1){
                 push @sql_params,$userenv->{branch};
                 $query .= " and (U1.branchcode = ? or U1.branchcode ='')";
             }
@@ -237,7 +237,7 @@ sub GetSuggestionByStatus {
     if (C4::Context->preference("IndependantBranches") || $branchcode) {
         my $userenv = C4::Context->userenv;
         if ($userenv) {
-            unless ($userenv->{flags} == 1){
+            unless ($userenv->{flags} % 2 == 1){
                 push @sql_params,$userenv->{branch};
                 $query .= " and (U1.branchcode = ? or U1.branchcode ='')";
             }
@@ -287,7 +287,7 @@ sub CountSuggestion {
     my $sth;
     if (C4::Context->preference("IndependantBranches")){
         my $userenv = C4::Context->userenv;
-        if ($userenv->{flags} == 1){
+        if ($userenv->{flags} % 2 == 1){
             my $query = qq |
                 SELECT count(*)
                 FROM   suggestions

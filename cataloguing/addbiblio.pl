@@ -168,7 +168,7 @@ sub build_authorized_values_list ($$$$$$$) {
         #Use GetBranches($onlymine)
         my $onlymine=C4::Context->preference('IndependantBranches') && 
                 C4::Context->userenv && 
-                C4::Context->userenv->{flags}!=1 && 
+                C4::Context->userenv->{flags} % 2 == 0 && 
                 C4::Context->userenv->{branch};
         my $branches = GetBranches($onlymine);
         my @branchloop;

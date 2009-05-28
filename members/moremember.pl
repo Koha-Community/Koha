@@ -190,7 +190,7 @@ else {
 #Independant branches management
 my $unvalidlibrarian =
   (      ( C4::Context->preference("IndependantBranches") )
-      && ( C4::Context->userenv->{flags} != 1 )
+      && ( C4::Context->userenv->{flags} % 2 != 1 )
       && ( $data->{'branchcode'} ne C4::Context->userenv->{branch} ) );
 
 my %bor;
@@ -200,10 +200,10 @@ $bor{'borrowernumber'} = $borrowernumber;
 my $samebranch;
 if ( C4::Context->preference("IndependantBranches") ) {
     my $userenv = C4::Context->userenv;
-    unless ( $userenv->{flags} == 1 ) {
+    unless ( $userenv->{flags} % 2 == 1 ) {
         $samebranch = ( $data->{'branchcode'} eq $userenv->{branch} );
     }
-    $samebranch = 1 if ( $userenv->{flags} == 1 );
+    $samebranch = 1 if ( $userenv->{flags} % 2 == 1 );
 }
 my $branchdetail = GetBranchDetail( $data->{'branchcode'});
 $data->{'branchname'} = $branchdetail->{branchname};

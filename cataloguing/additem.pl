@@ -256,7 +256,7 @@ my $authorised_values_sth = $dbh->prepare("SELECT authorised_value,lib FROM auth
 
 my $onlymine = C4::Context->preference('IndependantBranches') && 
                C4::Context->userenv                           && 
-               C4::Context->userenv->{flags}!=1               && 
+               C4::Context->userenv->{flags} % 2 == 0         && 
                C4::Context->userenv->{branch};
 my $branches = GetBranches($onlymine);  # build once ahead of time, instead of multiple times later.
 
@@ -293,11 +293,6 @@ foreach my $tag (sort keys %{$tagslib}) {
     }
     $subfield_data{visibility} = "display:none;" if (($tagslib->{$tag}->{$subfield}->{hidden} > 4) || ($tagslib->{$tag}->{$subfield}->{hidden} < -4));
     # testing branch value if IndependantBranches.
-    # my $test = (C4::Context->preference("IndependantBranches")) &&
-    #          ($tag eq $branchtagfield) && ($subfield eq $branchtagsubfield) &&
-    #          (C4::Context->userenv->{flags} != 1) && ($value) && ($value ne C4::Context->userenv->{branch}) ;
-    # $test and print $input->redirect(".pl?biblionumber=$biblionumber") and exit;
-        # search for itemcallnumber if applicable
     my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
     if (!$value && $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber' && $pref_itemcallnumber) {
         my $CNtag       = substr($pref_itemcallnumber, 0, 3);

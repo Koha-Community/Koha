@@ -549,7 +549,7 @@ sub GetSubscriptionsFromBiblionumber {
         $subs->{ "status" . $subs->{'status'} } = 1;
         $subs->{'cannotedit'}=(C4::Context->preference('IndependantBranches') && 
                 C4::Context->userenv && 
-                C4::Context->userenv->{flags} !=1  && 
+                C4::Context->userenv->{flags} % 2 !=1  && 
                 C4::Context->userenv->{branch} && $subs->{branchcode} &&
                 (C4::Context->userenv->{branch} ne $subs->{branchcode}));
         if ( $subs->{enddate} eq '0000-00-00' ) {
@@ -704,7 +704,7 @@ sub GetSubscriptions {
         $line->{toggle} = 1 if $odd == 1;
         $line->{'cannotedit'}=(C4::Context->preference('IndependantBranches') && 
                 C4::Context->userenv && 
-                C4::Context->userenv->{flags} !=1  && 
+                C4::Context->userenv->{flags} % 2 !=1  && 
                 C4::Context->userenv->{branch} && $line->{branchcode} &&
                 (C4::Context->userenv->{branch} ne $line->{branchcode}));
         push @results, $line;

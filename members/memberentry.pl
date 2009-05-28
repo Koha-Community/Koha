@@ -246,7 +246,7 @@ if ($op eq 'save' || $op eq 'insert'){
     }
   }
   if (C4::Context->preference("IndependantBranches")) {
-    if ($userenv && $userenv->{flags} != 1){
+    if ($userenv && $userenv->{flags} % 2 != 1){
       $debug and print STDERR "  $newdata{'branchcode'} : ".$userenv->{flags}.":".$userenv->{branch};
       unless (!$newdata{'branchcode'} || $userenv->{branch} eq $newdata{'branchcode'}){
         push @errors, "ERROR_branch";
@@ -364,7 +364,7 @@ if ($nok or !$nodouble){
 } 
 if (C4::Context->preference("IndependantBranches")) {
     my $userenv = C4::Context->userenv;
-    if ($userenv->{flags} != 1 && $data{branchcode}){
+    if ($userenv->{flags} % 2 != 1 && $data{branchcode}){
         unless ($userenv->{branch} eq $data{'branchcode'}){
             print $input->redirect("/cgi-bin/koha/members/members-home.pl");
             exit;
@@ -508,7 +508,7 @@ my %select_branches;
 
 my $onlymine=(C4::Context->preference('IndependantBranches') && 
               C4::Context->userenv && 
-              C4::Context->userenv->{flags} !=1  && 
+              C4::Context->userenv->{flags} % 2 !=1  && 
               C4::Context->userenv->{branch}?1:0);
               
 my $branches=GetBranches($onlymine);

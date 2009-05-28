@@ -57,7 +57,7 @@ my $branch= $input->param('branch') || C4::Context->userenv->{'branch'};
 # Set all the branches.
 my $onlymine=(C4::Context->preference('IndependantBranches') &&
               C4::Context->userenv &&
-              C4::Context->userenv->{flags} !=1  &&
+              C4::Context->userenv->{flags} % 2 !=1  &&
               C4::Context->userenv->{branch}?1:0);
 if ( $onlymine ) { 
     $branch = C4::Context->userenv->{'branch'};

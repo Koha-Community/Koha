@@ -1254,7 +1254,7 @@ sub GetItemsInfo {
             $datedue                = $idata->{'date_due'};
         if (C4::Context->preference("IndependantBranches")){
         my $userenv = C4::Context->userenv;
-        if ( ($userenv) && ( $userenv->{flags} != 1 ) ) { 
+        if ( ($userenv) && ( $userenv->{flags} % 2 != 1 ) ) { 
             $data->{'NOTSAMEBRANCH'} = 1 if ($idata->{'bcode'} ne $userenv->{branch});
         }
         }

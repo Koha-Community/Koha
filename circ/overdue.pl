@@ -88,7 +88,7 @@ while (my ($itemtype, $description) =$req->fetchrow) {
 }
 my $onlymine=C4::Context->preference('IndependantBranches') && 
              C4::Context->userenv && 
-             C4::Context->userenv->{flags}!=1 && 
+             C4::Context->userenv->{flags} % 2 !=1 && 
              C4::Context->userenv->{branch};
 
 $branchfilter = C4::Context->userenv->{'branch'} if ($onlymine && !$branchfilter);

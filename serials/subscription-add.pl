@@ -130,7 +130,7 @@ if ($op eq 'mod' || $op eq 'dup' || $op eq 'modsubscription') {
 
 my $onlymine=C4::Context->preference('IndependantBranches') && 
              C4::Context->userenv && 
-             C4::Context->userenv->{flags}!=1 && 
+             C4::Context->userenv->{flags} % 2 !=1 && 
              C4::Context->userenv->{branch};
 my $branches = GetBranches($onlymine);
 my @branchloop;

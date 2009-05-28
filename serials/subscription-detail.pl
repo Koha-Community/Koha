@@ -72,12 +72,6 @@ $subs->{histstartdate}  = format_date($subs->{histstartdate});
 $subs->{enddate}        = format_date($subs->{enddate});
 $subs->{histenddate}    = format_date($subs->{histenddate});
 $subs->{abouttoexpire}  = abouttoexpire($subs->{subscriptionid});
-# Done in Serials.pm
-# $subs->{'donotedit'}=(C4::Context->preference('IndependantBranches') && 
-#         C4::Context->userenv && 
-#         C4::Context->userenv->{flags} !=1  && 
-#         C4::Context->userenv->{branch} && $subs->{branchcode} &&
-#         (C4::Context->userenv->{branch} ne $subs->{branchcode}));
 
 $template->param($subs);
 $template->param(biblionumber_for_new_subscription => $subs->{bibnum});
@@ -90,7 +84,7 @@ $template->param(
     hemisphere => $hemisphere,
     cannotedit =>(C4::Context->preference('IndependantBranches') && 
                 C4::Context->userenv && 
-                C4::Context->userenv->{flags} !=1  && 
+                C4::Context->userenv->{flags} % 2 !=1  && 
                 C4::Context->userenv->{branch} && $subs->{branchcode} &&
                 (C4::Context->userenv->{branch} ne $subs->{branchcode})),
     "periodicity".($subs->{periodicity}?$subs->{periodicity}:'0') => 1,
