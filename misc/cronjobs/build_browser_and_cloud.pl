@@ -92,7 +92,7 @@ while ((my ($biblionumber)= $sth->fetchrow)) {
 	    next;
     }
     # deal with BROWSER part
-    if ($browser_tag) { 
+    if ($browser_tag && $Koharecord) { 
         foreach my $browsed_field ($Koharecord->subfield($browser_tag,$browser_subfield)) {
             $browsed_field =~ s/\.//g;
             my $upto = length($browsed_field)<=$max_digits?length($browsed_field):$max_digits;
@@ -103,7 +103,7 @@ while ((my ($biblionumber)= $sth->fetchrow)) {
         }
     }
     #deal with CLOUD part
-    if ($cloud_tag) {
+    if ($cloud_tag && $Koharecord) {
         foreach ($Koharecord->field($cloud_tag)) {
             my $line;
             foreach ($_->subfields()) {
