@@ -59,6 +59,7 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="add" -->
+    <!-- TMPL_IF name="ERROR1" --><div class="dialog message">Code already exist &mdash; Please enter a unique code</div><!-- /TMPL_IF -->
   <h3><!-- TMPL_IF name="heading-branches-add-branch-p" -->New library<!-- TMPL_ELSE -->Modify library<!-- /TMPL_IF --></h3>
     <form action="<!-- TMPL_VAR name="action" -->" name="Aform" method="post">
 	<fieldset class="rows">
@@ -69,7 +70,7 @@
             <input type="hidden" name="add" value="0" />
         <!-- /TMPL_IF -->
         <ol><li>
-            <!-- TMPL_IF name="branchcode" -->
+            <!-- TMPL_IF name="heading-branches-add-p" -->
 			<span class="label">Library code</span>
                 <input type="hidden" name="branchcode" value="<!-- TMPL_VAR name="branchcode" escape="HTML" -->" />
                 <!-- TMPL_VAR name="branchcode" -->

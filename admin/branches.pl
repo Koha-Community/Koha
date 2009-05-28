@@ -114,9 +114,15 @@ elsif ( $op eq 'add_validate' ) {
         default("MESSAGE1",$template);
     }
     else {
-        ModBranch($params);
-        $template->param( else => 1 );
-        default("MESSAGE2",$template);
+        my $error = ModBranch($params);
+        # if error saving, stay on edit and rise error
+        if ($error) {
+            editbranchform($branchcode,$template);
+            $template->param( 'heading-branches-add-branch-p' => 1, 'add' => 1, "ERROR$error" => 1 );
+        } else {
+            $template->param( else => 1);
+            default("MESSAGE2",$template);
+        }
     }
 }
 elsif ( $op eq 'delete' ) {
