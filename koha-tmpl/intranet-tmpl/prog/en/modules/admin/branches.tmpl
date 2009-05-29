@@ -70,13 +70,13 @@
             <input type="hidden" name="add" value="0" />
         <!-- /TMPL_IF -->
         <ol><li>
-            <!-- TMPL_IF name="heading-branches-add-p" -->
+            <!-- TMPL_IF name="heading-branches-add-branch-p" -->
+            <label for="branchcode">Library code</label>
+                <input type="text" name="branchcode" id="branchcode" size="10" maxlength="10" value="<!-- TMPL_VAR name="branchcode" escape="HTML" -->" />
+            <!-- TMPL_ELSE -->
 			<span class="label">Library code</span>
                 <input type="hidden" name="branchcode" value="<!-- TMPL_VAR name="branchcode" escape="HTML" -->" />
                 <!-- TMPL_VAR name="branchcode" -->
-            <!-- TMPL_ELSE -->
-            <label for="branchcode">Library code</label>
-                <input type="text" name="branchcode" id="branchcode" size="10" maxlength="10" value="<!-- TMPL_VAR name="branchcode" escape="HTML" -->" />
             <!-- /TMPL_IF -->
         </li>
         <li>

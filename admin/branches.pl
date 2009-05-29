@@ -117,7 +117,10 @@ elsif ( $op eq 'add_validate' ) {
         my $error = ModBranch($params);
         # if error saving, stay on edit and rise error
         if ($error) {
-            editbranchform($branchcode,$template);
+            # copy input parameters back to form
+            # FIXME - doing this doesn't preserve any branch group selections, but good enough for now
+            $template->param(%$params);
+            $template->param(branch_name => $params->{branchname});
             $template->param( 'heading-branches-add-branch-p' => 1, 'add' => 1, "ERROR$error" => 1 );
         } else {
             $template->param( else => 1);
