@@ -18,101 +18,67 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-use CGI qw/:standard/;
+use warnings;
+use CGI;
 
 use C4::Context;
-use C4::Circulation;
 use C4::Output;
 use C4::Auth;
-use C4::Print;
+use C4::Print;  # GetPrinters
 use C4::Koha;
-use C4::Branch; # GetBranches
+use C4::Branch; # GetBranches GetBranchesLoop
 
-# this is a reorganisation of circulationold.pl
-# dividing it up into three scripts......
-# this will be the first one that chooses branch and printer settings....
+# this will be the script that chooses branch and printer settings....
 
-#general design stuff...
+my $query = CGI->new();
+my ( $template, $borrowernumber, $cookie ) = get_template_and_user({
+    template_name   => "circ/selectbranchprinter.tmpl",
+    query           => $query,
+    type            => "intranet",
+    debug           => 1,
+    authnotrequired => 0,
+    flagsrequired   => { circulate => "circulate_remaining_permissions" },
+});
 
-# try to get the branch and printer settings from the http....
-my $query    = new CGI;
+# try to get the branch and printer settings from http, fallback to userenv
 my $branches = GetBranches();
 my $printers = GetPrinters();
-my $branch   = $query->param('branch');
-my $printer  = $query->param('printer');
+my $branch   = $query->param('branch' ) || C4::Context->userenv->{'branch'}; 
+my $printer  = $query->param('printer') || C4::Context->userenv->{'branchprinter'};
 
-# set header with cookie....
-
-my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
-    {
-        template_name   => "circ/selectbranchprinter.tmpl",
-        query           => $query,
-        type            => "intranet",
-        authnotrequired => 0,
-        flagsrequired   => { circulate => "circulate_remaining_permissions" },
-    }
-);
-
-
-($branch)  || ( $branch  = C4::Context->userenv->{'branch'} );
-($printer) || ( $printer = C4::Context->userenv->{'branchprinter'} );
-( $branches->{$branch} )  || ( $branch  = ( keys %$branches )[0] );
-( $printers->{$printer} ) || ( $printer = ( keys %$printers )[0] );
-
-# if you force a selection....
-my $oldbranch  = $branch;
-my $oldprinter = $printer;
-
-# set up select options....
-my $branchcount  = 0;
-my $printercount = 0;
-my @branchloop;
-for my $br (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
-    next unless $br =~ /\S/; # next unless $br is not blank.
-
-    $branchcount++;
-    my %branch;
-    $branch{selected} = ( $br eq $oldbranch );
-    $branch{name}     = $branches->{$br}->{'branchname'};
-    $branch{value}    = $br;
-    push( @branchloop, \%branch );
+unless ($branches->{$branch}) {
+    $branch = (keys %$branches)[0];  # if branch didn't really exist, then replace it w/ one that does
 }
+
+my @printkeys = sort keys %$printers;
+if (scalar(@printkeys) == 1 or not $printers->{$printer}) {
+    $printer = $printkeys[0];
+}
+
 my @printerloop;
-foreach ( keys %$printers ) {
-    (next) unless ($_); # next unless if this printer is blank.
-    $printercount++;
-    my %printer;
-    $printer{selected} = ( $_ eq $oldprinter );
-    $printer{name}     = $printers->{$_}->{'printername'};
-    $printer{value}    = $_;
-    push( @printerloop, \%printer );
+foreach ( @printkeys ) {
+    next unless ($_); # skip printer if blank.
+    push @printerloop, {
+        selected => ( $_ eq $printer ),
+        name     => $printers->{$_}->{'printername'},
+        value    => $_,
+    };
 }
 
-# if there is only one....
-my $printername;
-my $branchname;
-
-my $oneprinter = ( $printercount == 1 );
-my $onebranch  = ( $branchcount == 1 );
-if ( $printercount == 1 ) {
-    my ($tmpprinter) = keys %$printers;
-    $printername = $printers->{$tmpprinter}->{printername};
+my @recycle_loop;
+foreach ($query->param()) {
+    /^branch(printer)?$/ and next;  # disclude branch and branchprinter
+    push @recycle_loop, {
+        param => $_,
+        value => $query->param($_),
+    };
 }
-if ( $branchcount == 1 ) {
-    my ($tmpbranch) = keys %$branches;
-    $branchname = $branches->{$tmpbranch}->{branchname};
-}
-
-################################################################################
-# Start writing page....
 
 $template->param(
-    oneprinter              => $oneprinter,
-    onebranch               => $onebranch,
-    printername             => $printername,
-    branchname              => $branchname,
-    printerloop             => \@printerloop,
-    branchloop              => \@branchloop,
+    referer     => $ENV{HTTP_REFERER},
+    printerloop => \@printerloop,
+    branchloop  => GetBranchesLoop($branch),
+    recycle_loop=> \@recycle_loop,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

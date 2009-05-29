@@ -1,55 +1,72 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Circulation &rsaquo; Set Library</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<style type="text/css">
+    .noshow {display: none;}
+</style>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="circ-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Set Library</div>
+<div id="breadcrumbs">
+         <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
+&rsaquo; <a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set Library</a>
+</div>
 
 <div id="doc" class="yui-t7">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
-
-
+  <div id="bd">
+    <div id="yui-main">
+      <div class="yui-b">
+<!-- NOTE this posts back to circulation to enact changes.  Should stay here. -->
 <form method="post" action="/cgi-bin/koha/circ/circulation.pl">
-<!-- TMPL_VAR NAME="branch" -->
-
+<!-- TMPL_IF NAME="singleBranchMode" -->
+    <br />Single Branch mode is ON.
+<!-- TMPL_ELSE -->
 <fieldset class="rows">
 	<legend>Set Library</legend>
 	<ol><li><label for="branch">Choose library:</label>
-<!--branchselection-->
 	<select name="branch" id="branch">
 	<!-- TMPL_LOOP Name="branchloop" -->
-		<!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="name" --></option>
-				<!-- TMPL_ELSE -->
-				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="name" --></option>
-				<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="selected" -->
+        <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
+        <!-- TMPL_ELSE -->
+        <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
+        <!-- /TMPL_IF -->
 	<!-- /TMPL_LOOP -->
 	</select></li>
-
+<!-- /TMPL_IF -->
 
 <!-- TMPL_IF Name="printerloop" -->
     <li><label for="printer">Choose a network printer:</label>
     <input type="hidden" name="setcookies" value="1" />
-    <!--printerselection-->
     <select name="printer" id="printer">
         <!-- TMPL_LOOP Name="printerloop" -->
-            <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="name" --></option>
-				<!-- TMPL_ELSE -->
+            <!-- TMPL_IF NAME="selected" -->
+                <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="name" --></option>
+            <!-- TMPL_ELSE -->
 				<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="name" --></option>
-				<!-- /TMPL_IF -->
+            <!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
         </select></li>
 <!-- /TMPL_IF --></ol>
-</fieldset>    <fieldset class="action"><input type="submit" value="Submit" name="changesettings" /></fieldset>
+</fieldset>
+<fieldset class="action"><input type="submit" value="Submit" name="changesettings" /></fieldset>
+<div class="noshow">
+    <!-- TMPL_LOOP Name="recycle_loop" -->
+    <input name="<!-- TMPL_VAR NAME="param" -->" value="<!-- TMPL_VAR NAME="value" ESCAPE='HTML' -->" />
+    <!-- /TMPL_LOOP -->
+    <input type="hidden" name="oldreferer" value="<!-- TMPL_VAR NAME='referer' ESCAPE='HTML' DEFAULT='/cgi-bin/koha/circ/circulation.pl' -->" />
+    <div>referer is:
+        <a href="<!-- TMPL_VAR NAME='referer' ESCAPE='HTML' DEFAULT='/cgi-bin/koha/circ/circulation.pl' -->">
+                 <!-- TMPL_VAR NAME='referer' ESCAPE='HTML' DEFAULT='/cgi-bin/koha/circ/circulation.pl' -->
+        </a>
+    </div>
+</div>
 </form>
 
-
-</div>
-</div>
-</div>
+      </div>
+    </div>
+  </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
