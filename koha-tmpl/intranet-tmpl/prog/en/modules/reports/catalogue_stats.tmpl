@@ -62,6 +62,10 @@
 <!-- TMPL_ELSE -->
 
 	<form method="post" action="/cgi-bin/koha/reports/catalogue_stats.pl">
+	<input type="hidden" name="Filter" /> <input type="hidden" name="Filter" />
+	<!-- TMPL_UNLESS Name="haslccn" -->
+	<input type="hidden" name="Filter" /> <input type="hidden" name="Filter" />
+	<!-- /TMPL_UNLESS -->
 	<fieldset class="rows">
 	<legend>Catalog statistics</legend>
 	<table>
@@ -74,7 +78,6 @@
 			</tr>
 		</thead>
 		<tbody>
-				<input type="hidden" name="Filter" /> <input type="hidden" name="Filter" />
 			<!-- TMPL_IF Name="haslccn" -->
 					<tr>
 					<td>LoC Classification</td>
@@ -96,8 +99,6 @@
 					</td>
 					<td>&nbsp;</td>
 				</tr>
-				<!-- TMPL_ELSE -->
-				<input type="hidden" name="Filter" /> <input type="hidden" name="Filter" />
 			<!-- /TMPL_IF  -->
 			<!-- TMPL_IF Name="hascote" -->
 			  <tr>
