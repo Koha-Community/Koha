@@ -139,6 +139,7 @@
 	  </div>
 </div>
 <!-- /TMPL_IF -->
+<div id="listsDetails"></div>
 </div>
 </div>
 <div id="breadcrumbs" class="yui-g"><!-- TMPL_IF NAME="searchdesc" --><p><!-- TMPL_IF name="total" --><strong>&ldquo;<!-- TMPL_VAR NAME="query_desc" ESCAPE="HTML"--><!-- TMPL_VAR NAME="limit_desc" ESCAPE="HTML"-->&rdquo; </strong>returned <!-- TMPL_VAR NAME="total" ESCAPE="HTML"--> results. <!-- TMPL_IF NAME="related" --> (related searches: <!-- TMPL_LOOP NAME="related" --><!-- TMPL_VAR NAME="related_search" --><!-- /TMPL_LOOP -->). <!-- /TMPL_IF -->
