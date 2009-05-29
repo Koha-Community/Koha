@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo; Tools &rsaquo; Labels</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<script>
+<script type="text/javascript">
 $(document).ready(function() {
     $("input[@name='layoutchoice']").change( function() { layout_method() } );
     layout_method();
@@ -65,7 +65,11 @@ function layout_method() {
 <legend>
 Bibliographic Data to Print
 </legend>
-<input type="radio" name="layoutchoice" value="layout_tx" <!-- TMPL_UNLESS NAME="layout_string" -->checked="checked"<!-- /TMPL_UNLESS -->" >Choose Order Of Text Fields to Print</input>
+<!-- TMPL_IF NAME="layout_string" -->
+<input type="radio" name="layoutchoice" value="layout_tx" />Choose Order Of Text Fields to Print
+<!-- TMPL_ELSE -->
+<input type="radio" name="layoutchoice" value="layout_tx" checked="checked" />Choose Order Of Text Fields to Print
+<!-- /TMPL_IF -->
 <br />
 <fieldset id="layout_tx">
 <table summary="fields to print">
@@ -153,7 +157,7 @@ Bibliographic Data to Print
    <label for="tx_itemtype">Itemtype</label>
         </td>
         <td>
-        <select name="tx_barcode">
+        <select id="tx_barcode" name="tx_barcode">
                  <!-- TMPL_LOOP Name="tx_barcode" -->
 		<!-- TMPL_IF Name="selected" -->		 
                 <option value="<!-- TMPL_VAR Name="num" -->" selected="selected">
@@ -193,7 +197,11 @@ Bibliographic Data to Print
 <br />
 </fieldset>
 <br />
-<input type="radio" name="layoutchoice" value="layout_string" <!-- TMPL_IF NAME="formatstring" -->checked="checked"<!-- /TMPL_IF -->"> List Fields </input>
+<!-- TMPL_IF NAME="formatstring" -->
+<input type="radio" name="layoutchoice" value="layout_string" checked="checked"/> List Fields
+<!-- TMPL_ELSE -->
+<input type="radio" name="layoutchoice" value="layout_string" /> List Fields
+<!-- /TMPL_IF -->
 <fieldset id="layout_string" class="brief">
 <label for="layoutname">Data Fields</label>
   
@@ -225,7 +233,7 @@ Bibliographic Data to Print
 <!-- /TMPL_IF --></li>
 
 <li><label for="text_justify">Text Justification</label>
-<select name="text_justify">
+<select id="text_justify" name="text_justify">
 <!-- TMPL_IF NAME="justify_L" --><option value='L' selected="selected">Left</option>
 <!-- TMPL_ELSE --><option value='L'>Left</option>
 <!-- /TMPL_IF -->
