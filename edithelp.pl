@@ -34,6 +34,8 @@ my $type    = $input->param('type');
 my $referer = $input->param('referer');
 my $oldreferer = $referer;
 my $help    = $input->param('help');
+# strip any DOS-newlines that TinyMCE may have sneaked in
+$help =~ s/\r//g;
 my $error;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
