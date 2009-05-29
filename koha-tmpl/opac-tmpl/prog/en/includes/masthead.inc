@@ -136,6 +136,7 @@
 	  </div>
 </div><!-- /listmenu /virtualshelves -->
 <!-- /TMPL_IF -->
+<div id="listsDetails"></div>
 </div>
 </div>
 <div id="breadcrumbs" class="yui-g">
