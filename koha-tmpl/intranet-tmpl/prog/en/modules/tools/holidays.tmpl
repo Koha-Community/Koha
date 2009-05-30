@@ -48,7 +48,7 @@
 	}
 
 	// This function shows the "Show Holiday" panel //
-	function showHoliday (exceptionPosibility, dayName, day, month, year, weekDay, title, description) {
+	function showHoliday (exceptionPosibility, dayName, day, month, year, weekDay, title, description, isException) {
 		$("#newHoliday").slideUp("fast");
 		$("#showHoliday").slideDown("fast");
 		document.getElementById('showDayname').value = dayName;
@@ -59,6 +59,12 @@
 		document.getElementById('showDescription').value = description;
 		document.getElementsByName('showWeekday')[0].value = weekDay;
 		document.getElementById('showTitle').value = title;
+
+		if (isException == 1) {
+			document.getElementById('showOperationDelLabel').innerHTML = 'Delete this exception.';
+		} else {
+			document.getElementById('showOperationDelLabel').innerHTML = 'Delete this program.';
+		}
 		
 		if (exceptionPosibility == 1) {
 			document.getElementById('exceptionPosibility').style.display = 'inline';
@@ -213,16 +219,18 @@ h1 select { width: 20em; }
 				<label for="showMonth">Month</label> <input type="text" size="2" id="showMonth" name="showMonth" readonly="readonly" />
 				<label for="showYear">Year</label> <input type="text" size="4" id="showYear" name="showYear" readonly="readonly" />		
 			</div>
+		    <!-- showTitle is necessary for exception radio button to work properly --> 
+		    <input type="hidden" id="showTitle" name="showTitle" value="">
 		    <p><label for="showDescription">Description:</label>
 				<br />
 				<textarea rows="2" cols="40" id="showDescription" name="showDescription"></textarea>	
 			</p>
 			<div id="exceptionPosibility" style="position:static">
 				<input type="radio" name="showOperation" id="showOperationExc" value="exception" /> <label for="showOperationExc">Generate an exception to this holiday.</label>
-				<a href="#" onclick=" additionalInformation('You can make an exception for this holiday rule. This means that you will be able to say for a repeatable holiday, that there is one of those days that is going to be an exception.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/../img/more.gif" border="0" alt="More information" /></a>
+				<a href="#" onclick=" additionalInformation('You can make an exception for this holiday rule. This means that you will be able to say for a repeatable holiday, that there is one of those days that is going to be an exception.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/../img/more.gif" border="0" alt="More information" /></a><br />
 			</div>
-			<input type="radio" name="showOperation" id="showOperationDel" value="delete" checked="checked" /> <label for="showOperationDel">Delete this holiday</label>.
-			<a href="#" onclick=" additionalInformation('This will delete this holiday rule. In case it is a repeatable holiday, this option checks for posible exceptions. In case those exists, this option take care of set this exceptions to regular holidays.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/../img/more.gif" border="0" alt="More information" /></a>
+			<input type="radio" name="showOperation" id="showOperationDel" value="delete" checked="checked" /> <label for="showOperationDel" id="showOperationDelLabel">Delete this holiday</label>
+			<a href="#" onclick=" additionalInformation('This will delete this holiday rule. If it is a repeatable holiday, this option checks for posible exceptions. If an exception exists, this option will remove the exception and set the date to a regular holiday.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/../img/more.gif" border="0" alt="More information" /></a>
 			<p>
 				<input type="submit" name="submit" value="Save" />
 				<input type="button" name="cancel2" value="Cancel" onclick=" hidePanel('showHoliday');hidePanel('information')" />
@@ -334,13 +342,13 @@ h1 select { width: 20em; }
 		var dateString = year + '/' + month + '/' + day;
 		if (calendar.dateClicked) {
 			if (holidays[dateString] != null) {
-				showHoliday(0, dayName, day, month, year, weekDay, holidays[dateString].title, 	holidays[dateString].description);
+				showHoliday(0, dayName, day, month, year, weekDay, holidays[dateString].title, 	holidays[dateString].description, 0);
 			} else if (exception_holidays[dateString] != null) {
-				showHoliday(0, dayName, day, month, year, weekDay, exception_holidays[dateString].title, exception_holidays[dateString].description);
+				showHoliday(0, dayName, day, month, year, weekDay, exception_holidays[dateString].title, exception_holidays[dateString].description, 1);
 			} else if (week_days[weekDay] != null) {
-				showHoliday(1, dayName, day, month, year, weekDay, week_days[weekDay].title, 	week_days[weekDay].description);
+				showHoliday(1, dayName, day, month, year, weekDay, week_days[weekDay].title, 	week_days[weekDay].description, 0);
 			} else if (day_month_holidays[dayMonth] != null) {
-				showHoliday(1, dayName, day, month, year, weekDay, day_month_holidays[dayMonth].title, day_month_holidays[dayMonth].description);
+				showHoliday(1, dayName, day, month, year, weekDay, day_month_holidays[dayMonth].title, day_month_holidays[dayMonth].description, 0);
 			} else {
 				newHoliday(dayName, day, month, year, weekDay);
 			}
