@@ -30,7 +30,7 @@
         <!-- TMPL_IF NAME="OpacPasswordChange" -->
         <form action="/cgi-bin/koha/opac-passwd.pl" name="mainform" id="mainform" method="post"><fieldset class="brief">
 			<!-- TMPL_UNLESS NAME= "ShortPass" --><div class="hint">Your password must be at least <!-- TMPL_VAR NAME="minpasslen" --> characters long.</div><!-- /TMPL_UNLESS -->
-          <ol>  <li><label for="password">Current Password:</label> <input type="password" id="Oldkey" size="25"  name="Oldkey" /></li>
+          <ol>  <li><label for="Oldkey">Current Password:</label> <input type="password" id="Oldkey" size="25"  name="Oldkey" /></li>
             <li><label for="Newkey">New Password:</label> <input type="password" id="Newkey"  size="25"  name="Newkey" /></li>
             <li><label for="Confirm">Re-Type New Password:</label> <input type="password"  id="Confirm" size="25" name="Confirm" /></li></ol></fieldset>
             <fieldset class="action"><input type="submit" value="Submit Changes" class="submit" /> <a href="/cgi-bin/koha/opac-user.pl" class="cancel">Cancel</a></fieldset>
