@@ -80,7 +80,7 @@ function AreMandatoriesNotOk(){
     <!-- TMPL_LOOP NAME='BIG_LOOP' -->
     	<!-- TMPL_LOOP NAME='innerloop' -->
 	        <!-- TMPL_IF NAME="mandatory" -->
-    	    	mandatoriesfields.push(new Array("<!-- TMPL_VAR NAME="tag" -->","<!-- TMPL_VAR NAME="index" -->"));
+    	    	mandatoriesfields.push(new Array("<!-- TMPL_VAR NAME="tag" -->","<!-- TMPL_VAR NAME="index" --><!-- TMPL_VAR NAME="random" -->","<!-- TMPL_VAR NAME="index" -->"));
         	<!-- /TMPL_IF -->
     		<!-- TMPL_LOOP NAME='subfield_loop'-->
     			<!-- TMPL_IF NAME='mandatory'-->mandatories.push("<!-- TMPL_VAR NAME='id' -->");
@@ -124,7 +124,7 @@ function AreMandatoriesNotOk(){
     	divid    = "tag_" + arr[0] + "_" + arr[1];
     	varegexp = new RegExp("^tag_" + arr[0] + "_code_");
     	
-		if(parseInt(arr[0]) > 10){
+		if(parseInt(arr[0]) >= 10){
 	    	elem = document.getElementById(divid);
 	    	eleminputs = elem.getElementsByTagName('input');
 	    	
@@ -132,7 +132,7 @@ function AreMandatoriesNotOk(){
 	
 	    		if(eleminputs[j].name.match(varegexp) && eleminputs[j].value){
 					/* tag_801_subfield_c_841304_545657 */
-					inputregexp = new RegExp("^tag_" + arr[0] + "_subfield_" + eleminputs[j].value + "_" + arr[1]);
+					inputregexp = new RegExp("^tag_" + arr[0] + "_subfield_" + eleminputs[j].value + "_" + arr[2]);
 					
 					for( var k=0; k<len2; k++){
 						if(eleminputs[k].id.match(inputregexp) && eleminputs[k].value){
