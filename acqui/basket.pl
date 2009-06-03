@@ -171,7 +171,7 @@ if ( $op eq 'delete_confirm' ) {
 #if the basket is closed,and the user has the permission to edit basketgroups, display a list of basketgroups
     my $basketgroups;
     my $member = GetMember($loggedinuser, "borrowernumber");
-    if ($basket->{closedate} && haspermission(C4::Context->dbh, $member->{userid}, { flagsrequired   => { acquisition => 'group_manage'} })) {
+    if ($basket->{closedate} && haspermission({ flagsrequired   => { acquisition => 'group_manage'} })) {
         $basketgroups = GetBasketgroups($basket->{booksellerid});
         for (my $i=0; $i < scalar(@$basketgroups); $i++) {
             if (@$basketgroups[$i]->{closed}) {
