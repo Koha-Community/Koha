@@ -877,18 +877,15 @@ sub _new_stopwords
 
   C4::Context->userenv;
 
-Builds a hash for user environment variables.
+Retrieves a hash for user environment variables.
 
 This hash shall be cached for future use: if you call
 C<C4::Context-E<gt>userenv> twice, you will get the same hash without real DB access
 
-set_userenv is called in Auth.pm
-
 =cut
 
 #'
-sub userenv
-{
+sub userenv {
     my $var = $context->{"activeuser"};
     return $context->{"userenv"}->{$var} if (defined $var and defined $context->{"userenv"}->{$var});
     # insecure=1 management
@@ -911,17 +908,14 @@ sub userenv
 
   C4::Context->set_userenv($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $userflags, $emailaddress);
 
-Informs a hash for user environment variables.
-
-This hash shall be cached for future use: if you call
-C<C4::Context-E<gt>userenv> twice, you will get the same hash without real DB access
+Establish a hash of user environment variables.
 
 set_userenv is called in Auth.pm
 
 =cut
 
 #'
-sub set_userenv{
+sub set_userenv {
     my ($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $branchname, $userflags, $emailaddress, $branchprinter)= @_;
     my $var=$context->{"activeuser"};
     my $cell = {
