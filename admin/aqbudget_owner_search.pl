@@ -73,7 +73,7 @@ if ( $member ) {
 
     foreach my $res (@$results) {
 
-        my $perms = haspermission( $dbh, $res->{'userid'} );
+        my $perms = haspermission( $res->{'userid'} );
         my $subperms =  get_user_subpermissions  ($res->{'userid'} );
 
 
