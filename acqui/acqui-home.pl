@@ -129,7 +129,7 @@ if ( $cur_format eq 'FR' ) {
 my $period            = GetBudgetPeriod;
 my $budget_period_id  = $period->{budget_period_id};
 my $budget_branchcode = $period->{budget_branchcode};
-my $moo               = GetBudgetHierarchy( $budget_period_id, $homebranch, $template->{param_map}->{'USER_INFO'}[0]->{'borrowernumber'} );
+my $moo               = GetBudgetHierarchy('',$homebranch, $template->{param_map}->{'USER_INFO'}[0]->{'borrowernumber'} );
 my @results           = @$moo;
 my $period_total      = 0;
 my $toggle            = 0;

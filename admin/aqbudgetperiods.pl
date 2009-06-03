@@ -155,6 +155,7 @@ elsif ( $op eq 'add_validate' ) {
                     , budget_period_description = ?
                     , budget_period_total       = ?
                     , budget_period_locked      = ?
+                    , budget_period_active      = ?
                 WHERE budget_period_id          = ?
             ';
 
@@ -165,11 +166,9 @@ elsif ( $op eq 'add_validate' ) {
             $input->param('budget_period_description') ? $input->param('budget_period_description')                     : undef,
             $input->param('budget_period_total')       ? $input->param('budget_period_total')                           : undef,
             $input->param('budget_period_locked')      ? $input->param('budget_period_locked')                          : undef,
+            $input->param('budget_period_active')      ? $input->param('budget_period_active')                          : undef,
             $input->param('budget_period_id'),
         );
-
-        # IF PASSED ACTIVE - THEN SET IT IN DB TOO.
-        set_active($budget_period_id) if ( $budget_period_active == 1 );
 
     } else {    # ELSE ITS AN ADD
         my $query = "
@@ -179,8 +178,9 @@ elsif ( $op eq 'add_validate' ) {
                     , budget_period_enddate
                     , budget_period_total
                     , budget_period_description
-                    , budget_period_locked )
-                VALUES  (?,?,?,?,?,? );
+                    , budget_period_locked
+                    , budget_period_active)
+                VALUES  (?,?,?,?,?,?,? );
             ";
         my $sth = $dbh->prepare($query);
         $sth->execute(
@@ -190,9 +190,9 @@ elsif ( $op eq 'add_validate' ) {
             $input->param('budget_period_total')       ? $input->param('budget_period_total')                           : undef,
             $input->param('budget_period_description') ? $input->param('budget_period_description')                     : undef,
             $input->param('budget_period_locked')      ? $input->param('budget_period_locked')                          : undef,
+            $input->param('budget_period_active')      ? $input->param('budget_period_active')                          : undef,
         );
         $budget_period_id = $dbh->last_insert_id( undef, undef, 'aqbudgetperiods', undef );
-        set_active($budget_period_id) if ( $budget_period_active == 1 );
     }
 
     print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=aqbudgetperiods.pl\"></html>";    #YUCK
@@ -267,15 +267,3 @@ else {
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;
-
-sub set_active {
-				my $sth = $dbh->do(
-					"UPDATE aqbudgetperiods
-                     SET budget_period_active = 0 "
-				);
-				my $sth = $dbh->do(
-					"UPDATE aqbudgetperiods
-                     SET budget_period_active = 1
-                     WHERE budget_period_id  =  $budget_period_id"
-				);
-}

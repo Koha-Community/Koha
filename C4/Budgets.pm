@@ -492,8 +492,13 @@ sub GetBudgetHierarchy {
 	my $query = qq|
                     SELECT *
                     FROM aqbudgets
-                    WHERE budget_period_id = ? |;
-	push @bind_params, $budget_period_id;
+                    JOIN aqbudgetperiods USING (budget_period_id)
+                    WHERE budget_period_active=1 |;
+    # show only period X if requested
+    if ($budget_period_id) {
+        $query .= "AND aqbudgets.budget_period_id = ?";
+        push @bind_params, $budget_period_id;
+    }
 	# show only budgets owned by me, my branch or everyone
     if ($owner) {
         if ($branchcode) {
@@ -501,7 +506,7 @@ sub GetBudgetHierarchy {
             push @bind_params, $owner;
             push @bind_params, $branchcode;
         } else {
-            $query .= ' AND budget_owner_id = ?';
+            $query .= ' AND budget_owner_id = ? OR budget_owner_id IS NULL';
             push @bind_params, $owner;
         }
     } else {
@@ -510,7 +515,6 @@ sub GetBudgetHierarchy {
             push @bind_params, $branchcode;
         }
     }
-    warn "Q : $query";
 	my $sth = $dbh->prepare($query);
 	$sth->execute(@bind_params);
 	my $results = $sth->fetchall_arrayref({});

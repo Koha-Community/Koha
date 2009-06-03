@@ -233,7 +233,7 @@ my $budget =  GetBudget($budget_id);
 # build budget list
 my %labels;
 my @values;
-my $budgets = GetBudgetHierarchy('1','',$borrower->{'borrowernumber'});
+my $budgets = GetBudgetHierarchy('','',$borrower->{'borrowernumber'});
 foreach my $r (@$budgets) {
     $labels{"$r->{budget_id}"} = $r->{budget_name};
     next if  sprintf ("%00d",  $r->{budget_amount})  ==   0;
