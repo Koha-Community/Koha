@@ -80,7 +80,7 @@ elsif ( $op eq "checkout" ) {
     if (scalar keys %$impossible) {
 
         #  warn "impossible: numkeys: " . scalar (keys(%$impossible));
-        warn join " ", keys %$impossible;
+        #warn join " ", keys %$impossible;
         my $issue_error = (keys %$impossible)[0];
 
         # FIXME  we assume only one error.
@@ -147,7 +147,7 @@ if ($borrower->{cardnumber}) {
     my ($issueslist) = GetPendingIssues( $borrower->{'borrowernumber'} );
     foreach my $it (@$issueslist) {
         my ($renewokay, $renewerror) = CanBookBeIssued($borrower, $it->{'barcode'},'','');
-        $it->{'norenew'} = 1 if $renewokay->{'NO_MORE_RENEWALS'} == 1;
+        $it->{'norenew'} = 1 if $renewokay->{'NO_MORE_RENEWALS'};
         push @issues, $it;
     }
 
