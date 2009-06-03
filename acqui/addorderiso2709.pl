@@ -266,7 +266,7 @@ sub import_biblios_list {
 # Itemtype is mandatory for adding a biblioitem, we just add a default, the user needs to modify this aftewards
     my $itemtypehash = GetItemTypes();
     my @itemtypes;
-    for my $key (keys %$itemtypehash) {
+    for my $key (sort { $itemtypehash->{$a}->{description} cmp $itemtypehash->{$b}->{description} } keys %$itemtypehash) {
         push(@itemtypes, $itemtypehash->{$key});
     }
     foreach my $biblio (@$biblios) {
