@@ -61,17 +61,17 @@ $(document).ready(function() {
 <input type="button" name="returnbook" value="Return this item" class="return" onclick="this.form.op.value='returnbook';this.form.submit();"  />
 <!-- /TMPL_IF -->
 <input type="submit" name= "confirm" value="Return to Account Summary" class="back focus" />
-</div>
+</form>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="confirm" --><!-- We need to confirm the issue.. -->
 <div class="dialog alert"><h3>Please confirm the checkout:</h3>
 <p><!-- TMPL_IF NAME="confirm_renew_issue" -->This item is already checked out to you.  Return it?<!-- /TMPL_IF --></p>
 
 <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" method="post">
-<input type="hidden" id="op" name="op" value="checkout" />
+<input type="hidden" name="op" value="checkout" />
 <input type="hidden" name="patronid" value="<!-- TMPL_VAR NAME="patronid" -->" />
 <input type="hidden" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->" />
-<input type="hidden" id="confirmation"  name="confirmed" value="" />
+<input type="hidden" name="confirmed" value="" />
 <!-- TMPL_IF NAME="renew" -->
 <input type="button" value="Return Item" name="confirm" class="return" onclick="this.form.op.value='returnbook';this.form.submit();"  />
 <!-- /TMPL_IF -->
@@ -118,7 +118,7 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="validuser" -->
 	<div id="newcheckout" class="sco_entry">
-	<form id="mainform" name="scan_form" method="post" action="/cgi-bin/koha/sco/sco-main.pl" onsubmit="return checkout_confirm('<!-- TMPL_VAR NAME='patronid' -->');">
+	<form id="scan_form" name="scan_form" method="post" action="/cgi-bin/koha/sco/sco-main.pl" onsubmit="return checkout_confirm('<!-- TMPL_VAR NAME='patronid' -->');">
 	<fieldset><legend> Check out or return an item: </legend>
 	<label for="barcode">Scan a new item or enter its barcode:</label>
 	<input id="barcode" name="barcode" size="20" class="focus" />
@@ -127,7 +127,7 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	<input type="hidden" name="valid_session" value="1" />
 	<input type="submit" value="Submit" class="submit" /></fieldset>
 	</form>
-	<p class="alert"><form method="post" action="/cgi-bin/koha/sco/sco-main.pl?op=logout" >Scan next item, or <input type="submit" value="Click here if done." class="finish" /></form></p>
+	<div><form method="post" action="/cgi-bin/koha/sco/sco-main.pl?op=logout" >Scan next item, or <input type="submit" value="Click here if done." class="finish" /></form></div>
 	</div> <!-- sco_entry --> <!-- newcheckout -->
 
 	<div id="borrowerdetails">
@@ -144,11 +144,11 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	<td><!-- TMPL_VAR NAME="itemcallnumber" DEFAULT="&nbsp;" --></td>
 	<!-- TMPL_IF NAME="overdue" --><td class="overdue"><!-- TMPL_VAR NAME="date_due" --></td><!-- TMPL_ELSE --><td><!-- TMPL_VAR NAME="date_due" --></td><!-- /TMPL_IF -->
 	<td>
-    <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" method="post">
-    <input type="hidden" id="op" name="op" value="checkout" />
+    <form action="/cgi-bin/koha/sco/sco-main.pl" method="post">
+    <input type="hidden" name="op" value="checkout" />
     <input type="hidden" name="patronid" value="<!-- TMPL_VAR NAME="patronid" -->" />
     <input type="hidden" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->" />
-    <input type="hidden" id="confirmation"  name="confirmed" value=""  />
+    <input type="hidden" name="confirmed" value=""  />
         <!-- TMPL_IF NAME="norenew" -->
         <input type="button" value="Return Item" name="confirm" class="return" onclick="this.form.op.value='returnbook';this.form.submit();"  />
         <!-- TMPL_ELSE  -->
@@ -163,7 +163,7 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	<!-- TMPL_ELSE -->
 	<h3>You currently have nothing checked out.</h3>
 	<!-- /TMPL_IF -->
-	</div> <!-- borrowerdetails -->
+
 	<!-- TMPL_ELSE --><!-- not validuser -->
 	<div class="sco_entry" >
 	<form id="mainform" action="/cgi-bin/koha/sco/sco-main.pl" name="mainform" method="post">
