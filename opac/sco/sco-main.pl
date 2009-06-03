@@ -1,38 +1,43 @@
 #!/usr/bin/perl
+#
 # This code has been modified by Trendsetters (originally from opac-user.pl)
 # This code has been modified by rch
 # We're going to authenticate a self-check user.  we'll add a flag to borrowers 'selfcheck'
-# We're in a controlled environment; we trust the user. so the selfcheck station will accept a patronid and
-# issue items to that borrower.
 #
+# We're in a controlled environment; we trust the user.
+# So the selfcheck station will accept a patronid and issue items to that borrower.
+# FIXME: NOT really a controlled environment...  We're on the internet!
+#
+# The checkout permission comes form the CGI cookie/session of a staff user.
+# The patron is not really logging in here in the same way as they do on the
+# rest of the OPAC.  So don't confuse loggedinuser with the patron user.
+#
+# FIXME: inputfocus not really used in TMPL
+
 use strict;
 use warnings;
 
 use CGI;
 
-#use C4::Authsco;
 use C4::Auth;
 use C4::Koha;
 use C4::Circulation;
 use C4::Reserves;
-use C4::Search;
 use C4::Output;
 use C4::Members;
-#use HTML::Template::Pro;
 use C4::Dates;
 use C4::Biblio;
 use C4::Items;
 
 my $query = new CGI;
-my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "sco/sco-main.tmpl",
-                             query => $query,
-                             type => "opac",
-                             authnotrequired => 0,
-                             flagsrequired => { circulate => "circulate_remaining_permissions" },
-                             debug => 0,
-                             });
-my $dbh = C4::Context->dbh;
+my ($template, $loggedinuser, $cookie) = get_template_and_user({
+    template_name   => "sco/sco-main.tmpl",
+    authnotrequired => 0,
+      flagsrequired => { circulate => "circulate_remaining_permissions" },
+    query => $query,
+    type  => "opac",
+    debug => 1,
+});
 
 my $issuerid = $loggedinuser;
 my ($op, $patronid, $barcode, $confirmed, $timedout) = (
@@ -45,43 +50,38 @@ my ($op, $patronid, $barcode, $confirmed, $timedout) = (
 
 my %confirmation_strings = ( RENEW_ISSUE => "This item is already checked out to you.  Return it?", );
 my $issuenoconfirm = 1; #don't need to confirm on issue.
-my $cnt = 0;
 #warn "issuerid: " . $issuerid;
-my ($issuer) = GetMemberDetails($issuerid);
-my $item = GetItem(undef,$barcode);
-my $borrower;
-($borrower) = GetMemberDetails(undef,$patronid);
+my $issuer   = GetMemberDetails($issuerid);
+my $item     = GetItem(undef,$barcode);
+my $borrower = GetMemberDetails(undef,$patronid);
 
 my $branch = $issuer->{branchcode};
 my $confirm_required = 0;
 my $return_only = 0;
-#warn "issuer cardnum: " . $issuer->{cardnumber};
-#warn "cardnumber= ".$borrower->{cardnumber};
+#warn "issuer cardnumber: " .   $issuer->{cardnumber};
+#warn "patron cardnumber: " . $borrower->{cardnumber};
 if ($op eq "logout") {
-        $query->param( patronid => undef );
+    $query->param( patronid => undef );
 }
-
-
-if ( $op eq "returnbook" ) {
+elsif ( $op eq "returnbook" ) {
     my ($doreturn) = AddReturn( $barcode, $branch );
-
     #warn "returnbook: " . $doreturn;
-    ($borrower) = GetMemberDetails( undef, $patronid );
+    $borrower = GetMemberDetails( undef, $patronid );   # update borrower
 }
-
-if ( $op eq "checkout" ) {
+elsif ( $op eq "checkout" ) {
     my $impossible  = {};
     my $needconfirm = {};
     if ( !$confirmed ) {
         ( $impossible, $needconfirm ) = CanBookBeIssued( $borrower, $barcode );
     }
-    $confirm_required = scalar( keys(%$needconfirm) );
+    $confirm_required = scalar keys %$needconfirm;
 
     #warn "confirm_required: " . $confirm_required ;
-    if ( scalar( keys(%$impossible) ) ) {
+    if (scalar keys %$impossible) {
 
         #  warn "impossible: numkeys: " . scalar (keys(%$impossible));
-        my ($issue_error) = keys %$impossible;
+        warn join " ", keys %$impossible;
+        my $issue_error = (keys %$impossible)[0];
 
         # FIXME  we assume only one error.
         $template->param(
@@ -89,7 +89,6 @@ if ( $op eq "checkout" ) {
             title      => $item->{title},
             hide_main  => 1,
         );
-
         #warn "issue_error: " . $issue_error ;
         if ( $issue_error eq "NO_MORE_RENEWALS" ) {
             $return_only = 1;
@@ -100,11 +99,9 @@ if ( $op eq "checkout" ) {
         }
     } elsif ( $needconfirm->{RENEW_ISSUE} ) {
         if ($confirmed) {
-
             #warn "renewing";
             AddRenewal( $borrower, $item->{itemnumber} );
         } else {
-
             #warn "renew confirmation";
             $template->param(
                 renew               => 1,
@@ -115,26 +112,22 @@ if ( $op eq "checkout" ) {
             );
         }
     } elsif ( $confirm_required && !$confirmed ) {
-
         #warn "failed confirmation";
-        my ($confirmation) = keys %$needconfirm;
         $template->param(
-            impossible => $confirmation,
+            impossible => (keys %$needconfirm)[0],
             hide_main  => 1,
         );
     } else {
         if ( $confirmed || $issuenoconfirm ) {    # we'll want to call getpatroninfo again to get updated issues.
-                                                  #warn "issuing book?";
+            # warn "issuing book?";
             AddIssue( $borrower, $barcode );
-
-            #    ($borrower, $flags) = getpatroninformation(undef,undef, $patronid);
-
-            #    $template->param( patronid => $patronid,
-            #			validuser => 1,
-            #			);
+            # ($borrower, $flags) = getpatroninformation(undef,undef, $patronid);
+            # $template->param(
+            #   patronid => $patronid,
+            #   validuser => 1,
+            # );
         } else {
             $confirm_required = 1;
-
             #warn "issue confirmation";
             $template->param(
                 confirm    => "Issuing title: " . $item->{title},
@@ -144,51 +137,39 @@ if ( $op eq "checkout" ) {
             );
         }
     }
-}    # op=checkout
+} # $op
 
 if ($borrower->{cardnumber}) {
-
-#   warn "here's the issuer's  branchcode: ".$issuer->{branchcode};
-#   warn "here's the user's  branchcode: ".$borrower->{branchcode};
-	my $bornum = $borrower->{borrowernumber};
-	my $borrowername = $borrower->{firstname} . " " . $borrower->{surname};
-	my @issues;
-
+#   warn "issuer's  branchcode: " .   $issuer->{branchcode};
+#   warn   "user's  branchcode: " . $borrower->{branchcode};
+    my $borrowername = sprintf "%s %s", ($borrower->{firstname} || ''), ($borrower->{surname} || '');
+    my @issues;
     my ($issueslist) = GetPendingIssues( $borrower->{'borrowernumber'} );
     foreach my $it (@$issueslist) {
-
-        my ( $renewokay, $renewerror ) =
-                CanBookBeIssued( $borrower, $it->{'barcode'}, '', '' );
+        my ($renewokay, $renewerror) = CanBookBeIssued($borrower, $it->{'barcode'},'','');
         $it->{'norenew'} = 1 if $renewokay->{'NO_MORE_RENEWALS'} == 1;
         push @issues, $it;
-        $cnt++;
     }
 
-   $template->param(  validuser => 1,
-   			borrowername => $borrowername,
-			issues_count => $cnt,
-			ISSUES => \@issues,,
-			patronid => $patronid ,
-			noitemlinks => 1 ,
-		);
-   $cnt = 0;
-   my $inputfocus;
-   if ($return_only ==1) {
-      $inputfocus = 'returnbook' ;
-   }elsif ($confirm_required == 1) {
-      $inputfocus = 'confirm' ;
-   } else {
-      $inputfocus = 'barcode' ;
-   }
-
-$template->param( inputfocus => $inputfocus,
+    $template->param(
+        validuser => 1,
+        borrowername => $borrowername,
+        issues_count => scalar(@issues),
+        ISSUES => \@issues,
+        patronid => $patronid,
+        noitemlinks => 1 ,
+    );
+    my $inputfocus = ($return_only      == 1) ? 'returnbook' :
+                     ($confirm_required == 1) ? 'confirm'    : 'barcode' ;
+    $template->param(
+        inputfocus => $inputfocus,
 		nofines => 1,
-		);
-
+    );
 } else {
-
- $template->param( patronid => $patronid,  nouser => $patronid,
- 			inputfocus => 'patronid', );
+    $template->param(
+        patronid   => $patronid,
+        nouser     => $patronid,
+    );
 }
 
 output_html_with_http_headers $query, $cookie, $template->output;
