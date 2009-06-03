@@ -117,6 +117,8 @@ function Dopop(link) {
                 <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR Name="borrowernumber" -->" />
                 <input type="hidden" name="resbarcode" value="<!-- TMPL_VAR Name="barcode" -->" />
                 <input type="hidden" name="diffBranch" value="<!-- TMPL_VAR Name="destbranch" -->" />
+                <input type="hidden" name="exemptfine" value="<!-- TMPL_VAR Name="exemptfine" -->" />
+                <input type="hidden" name="dropboxmode" value="<!-- TMPL_VAR Name="dropboxmode" -->" />
                 </form>
 	</div>
     <!-- /TMPL_IF -->
@@ -151,6 +153,8 @@ function Dopop(link) {
                 <input type="hidden" name="bn-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="borrowernumber" -->" />
             <!-- /TMPL_LOOP -->
             <input type="hidden" name="diffBranch" value="<!-- TMPL_VAR Name="destbranch" -->" />
+            <input type="hidden" name="exemptfine" value="<!-- TMPL_VAR Name="exemptfine" -->" />
+            <input type="hidden" name="dropboxmode" value="<!-- TMPL_VAR Name="dropboxmode" -->" />
             <input type="hidden" name="barcode" value="0" />
         </form>
 		</div>
@@ -169,8 +173,10 @@ function Dopop(link) {
     <form method="post" action="returns.pl" name="mainform" id="mainform">              
 	<input type="submit" name="dotransfer" value="Yes" class="submit" />
 	<input type="submit" name="notransfer" value="No" class="submit" />
-	<input type="hidden" name="tobranch" value="<!-- TMPL_VAR NAME="homebranch" -->">
-	<input type="hidden" name="transferitem" value="<!-- TMPL_VAR NAME="itemnumber" -->">
+	<input type="hidden" name="tobranch" value="<!-- TMPL_VAR NAME="homebranch" -->" />
+	<input type="hidden" name="transferitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+        <input type="hidden" name="exemptfine" value="<!-- TMPL_VAR Name="exemptfine" -->" />
+        <input type="hidden" name="dropboxmode" value="<!-- TMPL_VAR Name="dropboxmode" -->" />
 	<!--TMPL_LOOP Name="inputloop" -->     
 	<input type="hidden" name="ri-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="barcode" -->" /> 
 	<input type="hidden" name="dd-<!-- TMPL_VAR Name="counter" -->" value="<!-- TMPL_VAR Name="duedate" -->" /> 
@@ -243,10 +249,11 @@ function Dopop(link) {
             <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR Name="borrowernumber" -->" />
             <input type="hidden" name="resbarcode" value="<!-- TMPL_VAR Name="barcode" -->" />
             <input type="hidden" name="diffBranch" value="<!-- TMPL_VAR Name="destbranch" -->" />
+            <input type="hidden" name="exemptfine" value="<!-- TMPL_VAR Name="exemptfine" -->" />
+            <input type="hidden" name="dropboxmode" value="<!-- TMPL_VAR Name="dropboxmode" -->" />
         </form>
 	</div>
     <!-- /TMPL_IF -->
-	</div>
 <!-- TMPL_ELSE -->
 
 <!-- TMPL_IF NAME="errmsgloop" -->
@@ -318,7 +325,6 @@ function Dopop(link) {
                     </li>
                     <!-- /TMPL_IF --> <!-- overduecharges -->
                     <li>
-                        <!-- (fixme) -->
                         <!-- TMPL_IF NAME="dropboxmode" -->
                         <input type="checkbox" id="dropboxcheck" name="dropboxmode" value="dropboxmode" checked="checked" />
                         <!-- TMPL_ELSE -->
