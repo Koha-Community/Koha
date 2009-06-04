@@ -55,9 +55,9 @@
         <option value="callnum">Call Number</option>
 		<!-- /TMPL_IF --></select>
 <!-- TMPL_IF NAME="ms_value" -->
-        <input type="text" name="q" value="<!-- TMPL_VAR ESCAPE="HTML" NAME="ms_value" -->" class="left" style="width: 35%; font-size: 111%;" />
+        <input type="text" id = "transl1" name="q" value="<!-- TMPL_VAR ESCAPE="HTML" NAME="ms_value" -->" class="left" style="width: 35%; font-size: 100%;"/><div id="translControl"></div>
 <!-- TMPL_ELSE -->
-        <input type="text" name="q" class="left" style="width: 35%; font-size: 111%;" />
+        <input type="text" id = "transl1" name="q" class="left" style="width: 35%; font-size: 100%;"/><div id="translControl"></div>
 <!-- /TMPL_IF -->
    <!-- TMPL_UNLESS NAME="opac_limit_override" -->
        <!-- TMPL_IF name="mylibraryfirst" --> 

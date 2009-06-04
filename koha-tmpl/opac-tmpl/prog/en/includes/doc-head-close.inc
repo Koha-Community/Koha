@@ -80,3 +80,8 @@
 	//]]>
 </script><!-- /TMPL_IF -->
 <link rel="unapi-server" type="application/xml" title="unAPI" href="<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/unapi" />
+<!-- TMPL_IF NAME="GoogleIndicTransliteration" -->
+        <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+        <script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/googleindictransliteration.js"></script>
+<!-- /TMPL_IF -->
+

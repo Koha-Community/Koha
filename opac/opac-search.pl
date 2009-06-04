@@ -640,4 +640,9 @@ if ($cgi->param('format') && $cgi->param('format') =~ /rss/) {
     $content_type = 'html'
 }
 
+# If GoogleIndicTransliteration system preference is On Set paramter to load Google's javascript in OPAC search screens 
+if (C4::Context->preference('GoogleIndicTransliteration')) {
+        $template->param('GoogleIndicTransliteration' => 1);
+}
+
 output_with_http_headers $cgi, $cookie, $template->output, $content_type;
