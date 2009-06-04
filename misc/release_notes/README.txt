@@ -31,7 +31,8 @@ Sign, MD5 the release, upload:
  $ gpg --clearsign koha-3.00.00-alpha.tar.gz.MD5
  $ cat koha-3.00.00-alpha.tar.gz.MD5.asc
  $ gpg --detach-sign koha-3.00.00-alpha.tar.gz
- $ scp * download.koha.org
+ $ sftp user@download.koha.org
+ 	mput *
 
 Tag the Release:
 From a clone of the RM repo, run:
