@@ -328,11 +328,11 @@ sub GetNewsToDisplay {
      SELECT *,timestamp AS newdate
      FROM   opac_news
      WHERE   (
-        expirationdate > CURRENT_DATE()
+        expirationdate >= CURRENT_DATE()
         OR    expirationdate IS NULL
         OR    expirationdate = '00-00-0000'
       )
-      AND   `timestamp` < CURRENT_DATE()
+      AND   `timestamp` <= CURRENT_DATE()
       AND   lang = ?
       ORDER BY number
     ";				# expirationdate field is NOT in ISO format?
