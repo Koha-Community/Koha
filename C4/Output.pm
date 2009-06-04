@@ -100,13 +100,10 @@ sub gettemplate {
           . "/$theme/$lang";
     $template->param(
         themelang => $themelang,
-        yuipath => (C4::Context->preference("yuipath") eq "local"?"$themelang/lib/yui":C4::Context->preference("yuipath")),
+        yuipath   => (C4::Context->preference("yuipath") eq "local"?"$themelang/lib/yui":C4::Context->preference("yuipath")),
         interface => ( $interface ne 'intranet' ? '/opac-tmpl' : '/intranet-tmpl' ),
-        theme => $theme,
-        opacstylesheet      => $opacstylesheet,
-        opaccolorstylesheet => C4::Context->preference('opaccolorstylesheet'),
-        opacsmallimage      => C4::Context->preference('opacsmallimage'),
-        lang                => $lang
+        theme     => $theme,
+        lang      => $lang
     );
 
     # Bidirectionality
