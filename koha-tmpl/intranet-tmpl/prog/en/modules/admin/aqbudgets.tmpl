@@ -232,9 +232,11 @@
     <ol>
     <li>
     <label for="parents">Budget Parent: </label>
-    <!-- TMPL_VAR NAME="budget_parent_dropbox" -->
+    <!-- TMPL_VAR NAME="budget_dropbox" -->
 
+    <!-- TMPL_IF name="budget_id" -->
     <input type="hidden" name="budget_parent_id" value="<!-- TMPL_VAR NAME="budget_parent_id" -->" />
+    <!-- /TMPL_IF -->
     </li>
 
     <li>
@@ -307,11 +309,37 @@
 
     <li>
     <label  style='white-space: nowrap;' for="parents">Planning Category1: </label>
-    <!-- TMPL_VAR NAME="sort1_authcat_dropbox" -->
+        <select name="sort1_authcat" id="authorised_value_category1">
+            <option value=""></option>
+            <!-- TMPL_LOOP name="authorised_value_categories1" -->
+                <!-- TMPL_IF name="selected" -->
+                    <option value="<!-- TMPL_VAR name="category" -->" selected="selected">
+                        <!-- TMPL_VAR name="category" -->
+                    </option>
+                <!-- TMPL_ELSE -->
+                    <option value="<!-- TMPL_VAR name="category" -->">
+                        <!-- TMPL_VAR name="category" -->
+                    </option>
+                <!-- /TMPL_IF -->
+            <!-- /TMPL_LOOP -->
+        </select>
     </li>
     <li>
     <label  style='white-space: nowrap;' for="parents">Planning Category2: </label>
-    <!-- TMPL_VAR NAME="sort2_authcat_dropbox" -->
+        <select name="sort2_authcat" id="authorised_value_category2">
+            <option value=""></option>
+            <!-- TMPL_LOOP name="authorised_value_categories2" -->
+                <!-- TMPL_IF name="selected" -->
+                    <option value="<!-- TMPL_VAR name="category" -->" selected="selected">
+                        <!-- TMPL_VAR name="category" -->
+                    </option>
+                <!-- TMPL_ELSE -->
+                    <option value="<!-- TMPL_VAR name="category" -->">
+                        <!-- TMPL_VAR name="category" -->
+                    </option>
+                <!-- /TMPL_IF -->
+            <!-- /TMPL_LOOP -->
+        </select>
     </li>
     </ol>
 

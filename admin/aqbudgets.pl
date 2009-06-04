@@ -29,7 +29,7 @@ use C4::Branch; # GetBranches
 use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Auth;
 use C4::Acquisition;
-use C4::Budgets;   #  1ST ADD
+use C4::Budgets;   #
 use C4::Members;  # calls GetSortDetails()
 use C4::Context;
 use C4::Output;
@@ -41,13 +41,13 @@ my $input = new CGI;
 my $dbh     = C4::Context->dbh;
 
 my ($template, $borrowernumber, $cookie, $staffflags ) = get_template_and_user(
-	{   template_name   => "admin/aqbudgets.tmpl",
-		query           => $input,
-		type            => "intranet",
-		authnotrequired => 0,
-		flagsrequired   => { acquisition => 'budget_manage' },
-		debug           => 0,
-	}
+    {   template_name   => "admin/aqbudgets.tmpl",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { acquisition => 'budget_manage' },
+        debug           => 0,
+    }
 );
 
 my $op = $input->param('op');
@@ -57,27 +57,14 @@ my $show_mine    = 1; #SHOW BY DEFAULT
 my $show         = $input->param('show'); # SET TO 1, BY A FORM SUMBIT
 $show_mine       = $input->param('show_mine') if $show == 1;
 
-
 # IF USER DOESNT HAVE PERM FOR AN 'ADD', THEN REDIRECT TO THE DEFAULT VIEW...
 if  (  not defined $template->{param_map}->{'CAN_user_acquisition_budget_add_del'}  &&  $op ==  'add_form'  )   {
     $op = '';
 }
 
-my  $count  = GetPeriodsCount();
-$template->param( period_button_only => 1 ) if $count == 0 ;
 my $cur  =  GetCurrency;
 my $cur_format = C4::Context->preference("CurrencyFormat");
 my $num;
-
-=c
-# TODO: at some stage this currency handling should be done properly
-with locales and POSIX.pm - and a proper 'locales' lookup and syspref
-
-    setlocale( LC_MONETARY , "french");
-    my $num = new Number::Format();
-    my $formatted_number =  $num->format_price('123456789.123'):
-
-=cut
 
 if ( $cur_format eq 'FR' ) {
     $num = new Number::Format(
@@ -95,27 +82,6 @@ if ( $cur_format eq 'FR' ) {
         'mon_decimal_point' => '.'
     );
 }
-
-# ' ------- get periods stuff ------------------'
-# IF PERIODID IS DEFINED,  GET THE PERIOD - ELSE JUST GET THE ACTIVE PERIOD BY DEFAULT
-my $budget_period_id  = $input->param('budget_period_id');
-my $period = GetBudgetPeriod($budget_period_id);
-
-# authcats_loop populates the YUI planning button
-my @auth_cats_loop  = GetBudgetAuthCats();
-
-my $budget_period_id          = $period->{'budget_period_id'};
-my $budget_period_locked      = $period->{'budget_period_locked'};
-my $budget_period_description = $period->{'budget_period_description'};
-my $budget_period_total       = $period->{'budget_period_total'};
-
-$template->param(
-    budget_period_id          => $budget_period_id,
-    budget_period_locked      => $budget_period_locked,
-    budget_period_description => $budget_period_description,
-    auth_cats_loop            => \@auth_cats_loop,
-);
-# ------- get periods stuff ------------------
 
 my $script_name               = "/cgi-bin/koha/admin/aqbudgets.pl";
 my $budget_id                 = $input->param('budget_id');
@@ -137,9 +103,23 @@ my $budget_period_dropbox     = $input->param('budget_period_dropbox');
 my $filter_budgetname         = $input->param('filter_budgetname');
 my $filter_budgetbranch       = $input->param('filter_budgetbranch');
 
-my $pagesize = 20; # del
+# ' ------- get periods stuff ------------------'
+# IF PERIODID IS DEFINED,  GET THE PERIOD - ELSE JUST GET THE ACTIVE PERIOD BY DEFAULT
+my $budget_period_id  = $input->param('budget_period_id');
+my $period = GetBudgetPeriod($budget_period_id);
+my $budget_period_id          = $period->{'budget_period_id'};
+my $budget_period_locked      = $period->{'budget_period_locked'};
+my $budget_period_description = $period->{'budget_period_description'};
+my $budget_period_total       = $period->{'budget_period_total'};
 
-# USED FOR PERMISSION COMPARSION LATER
+$template->param(
+    budget_period_id          => $budget_period_id,
+    budget_period_locked      => $budget_period_locked,
+    budget_period_description => $budget_period_description,
+);
+# ------- get periods stuff ------------------
+
+# USED FOR PERMISSION COMPARISON LATER
 my $borrower_id         = $template->{param_map}->{'USER_INFO'}[0]->{'borrowernumber'};
 my $user                = GetMemberDetails($borrower_id);
 my $user_branchcode     = $user->{'branchcode'};
@@ -151,34 +131,27 @@ $template->param(
     $op || else => 1,
 );
 
-my $sthtemp = $dbh->prepare("Select flags, branchcode from borrowers where borrowernumber = ?");
-$sthtemp->execute($borrowernumber);
-my ( $flags, $homebranch ) = $sthtemp->fetchrow;
 
+# retrieve branches
 my ( $budget, $period, $query, $sth );
 
 my $branches = GetBranches;
 my @branchloop2;
 foreach my $thisbranch (keys %$branches) {
-	my %row = (
-		value      => $thisbranch,
-		branchname => $branches->{$thisbranch}->{'branchname'},
-	);
-	$row{selected} = 1 if $thisbranch eq $filter_budgetbranch;
-	push @branchloop2, \%row;
+    my %row = (
+        value      => $thisbranch,
+        branchname => $branches->{$thisbranch}->{'branchname'},
+    );
+    $row{selected} = 1 if $thisbranch eq $filter_budgetbranch;
+    push @branchloop2, \%row;
 }
-
-#$template->param(
-#	budget_id             => $budget->{'budget_id'}
-#);
 
 # Used to create form to add or  modify a record
 if ($op eq 'add_form') {
 #### ------------------- ADD_FORM -------------------------
 
-#---- if primkey exists, it's a modify action, so read values to modify...
-#  pass the period_id to build the dropbox - because we only want to show  budgets from this period
-
+    # if no buget_id is passed then its an add
+    #  pass the period_id to build the dropbox - because we only want to show  budgets from this period
     my $dropbox_disabled;
     if ( defined $budget_id ) {    ### MOD
         $budget           = GetBudget($budget_id);
@@ -187,9 +160,7 @@ if ($op eq 'add_form') {
         $budget->{budget_owner_name} = $borrower->{'firstname'} . ' ' . $borrower->{'surname'};
     }
 
-    my $sort1_authcat_dropbox = GetAuthcatDropbox( 'sort1_authcat',  $budget->{'sort1_authcat'} );
-    my $sort2_authcat_dropbox = GetAuthcatDropbox( 'sort2_authcat',  $budget->{'sort2_authcat'} );
-    
+    # build budget hierarchy
     my %labels;
     my @values;
     my $hier = GetBudgetHierarchy($budget_period_id);
@@ -211,6 +182,7 @@ if ($op eq 'add_form') {
         -labels  => \%labels,
     );
 
+    # build branches select
     my $branches = GetBranches;
     my @branchloop_select;
     foreach my $thisbranch ( keys %$branches ) {
@@ -221,54 +193,68 @@ if ($op eq 'add_form') {
         $row{selected} = 1 if $thisbranch eq $budget->{'budget_branchcode'};
         push @branchloop_select, \%row;
     }
+    
+    # populates the YUI planning button
+    my $categories = GetAuthorisedValueCategories();
+    my @auth_cats_loop1 = ();
+    foreach my $category (@$categories) {
+        my $entry = { category => $category,
+                        selected => $budget->{sort1_authcat} eq $category ?1:0,
+                    };
+        push @auth_cats_loop1, $entry;
+    }
+    my @auth_cats_loop2 = ();
+    foreach my $category (@$categories) {
+        my $entry = { category => $category,
+                        selected => $budget->{sort2_authcat} eq $category ?1:0,
+                    };
+        push @auth_cats_loop2, $entry;
+    }
+    $template->param(authorised_value_categories1 => \@auth_cats_loop1);
+    $template->param(authorised_value_categories2 => \@auth_cats_loop2);
 
-#	$period                    = GetBudgetPeriod($budget->{'budget_period_id'});
-#	$budget_period_description = $period->{'budget_period_description'};
+    my $budget_perm_dropbox =
+    GetBudgetPermDropbox($budget->{'budget_permission'});
 
-	my $budget_perm_dropbox =
-	  GetBudgetPermDropbox($budget->{'budget_permission'});
-
-	# if no buget_id is passed then its an add
-	$template->param(
-          add_form                  => 1,
-          dateformat                => C4::Dates->new()->visual(),
-          budget_id                 => $budget->{'budget_id'},
-          budget_parent_id          => $budget->{'budget_parent_id'},
-          budget_parent_dropbox     => $budget_parent_dropbox,
-          sort1_authcat_dropbox     => $sort1_authcat_dropbox,
-          sort2_authcat_dropbox     => $sort2_authcat_dropbox,
-          budget_perm_dropbox       => $budget_perm_dropbox,
-          budget_code               => $budget->{'budget_code'},
-          budget_code_indent        => $budget->{'budget_code_indent'},
-          budget_name               => $budget->{'budget_name'},
-          budget_branchcode         => $budget->{'budget_branchcode'},
-          budget_amount             => sprintf("%.2f", $budget->{'budget_amount'}),
-          budget_amount_sublevel    => sprintf("%.2f", $budget->{'budget_amount_sublevel'}),
-          budget_encumb             => $budget->{'budget_encumb'},
-          budget_expend             => $budget->{'budget_expend'},
-          budget_notes              => $budget->{'budget_notes'},
-          budget_description        => $budget->{'budget_description'},
-          budget_owner_id           => $budget->{'budget_owner_id'},
-          budget_owner_name         => $budget->{'budget_owner_name'},
-          budget_permission         => $budget->{'budget_permission'},
-          budget_period_id          => $budget_period_id,
-          budget_period_description => $budget_period_description,
-          branchloop_select         => \@branchloop_select,
-	);
-													# END $OP eq ADD_FORM
-#---------------------- DEFAULT DISPLAPY BELOW ---------------------
+    # if no buget_id is passed then its an add
+    $template->param(
+        add_form                  => 1,
+        dateformat                => C4::Dates->new()->visual(),
+        budget_id                 => $budget->{'budget_id'},
+        budget_parent_id          => $budget->{'budget_parent_id'},
+        budget_dropbox     => $budget_dropbox,
+        budget_perm_dropbox       => $budget_perm_dropbox,
+        budget_code               => $budget->{'budget_code'},
+        budget_code_indent        => $budget->{'budget_code_indent'},
+        budget_name               => $budget->{'budget_name'},
+        budget_branchcode         => $budget->{'budget_branchcode'},
+        budget_amount             => sprintf("%.2f", $budget->{'budget_amount'}),
+        budget_amount_sublevel    => sprintf("%.2f", $budget->{'budget_amount_sublevel'}),
+        budget_encumb             => $budget->{'budget_encumb'},
+        budget_expend             => $budget->{'budget_expend'},
+        budget_notes              => $budget->{'budget_notes'},
+        budget_description        => $budget->{'budget_description'},
+        budget_owner_id           => $budget->{'budget_owner_id'},
+        budget_owner_name         => $budget->{'budget_owner_name'},
+        budget_permission         => $budget->{'budget_permission'},
+        budget_period_id          => $budget_period_id,
+        budget_period_description => $budget_period_description,
+        branchloop_select         => \@branchloop_select,
+    );
+                                                    # END $OP eq ADD_FORM
+#---------------------- DEFAULT DISPLAY BELOW ---------------------
 
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
 
     my $budget = GetBudget($budget_id);
-	$template->param(
-		budget_id     => $budget->{'budget_id'},
-		budget_code   => $budget->{'budget_code'},
-		budget_name   => $budget->{'budget_name'},
-		budget_amount => $num->format_price(  $budget->{'budget_amount'} ),
-	);
-													# END $OP eq DELETE_CONFIRM
+    $template->param(
+        budget_id     => $budget->{'budget_id'},
+        budget_code   => $budget->{'budget_code'},
+        budget_name   => $budget->{'budget_name'},
+        budget_amount => $num->format_price(  $budget->{'budget_amount'} ),
+    );
+                                                    # END $OP eq DELETE_CONFIRM
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 }  else {
     if ( $op eq 'delete_confirmed' ) {
@@ -301,12 +287,12 @@ if ($op eq 'add_form') {
     }
     my $branches = GetBranches();
     my $budget_period_dropbox = GetBudgetPeriodsDropbox($budget_period_id );
-	$template->param(
-		budget_period_dropbox     => $budget_period_dropbox,
-		budget_id                 => $budget_id,
-		budget_period_startdate   => $period->{'budget_period_startdate'},
-		budget_period_enddate     => $period->{'budget_period_enddate'},
-	);
+    $template->param(
+        budget_period_dropbox     => $budget_period_dropbox,
+        budget_id                 => $budget_id,
+        budget_period_startdate   => $period->{'budget_period_startdate'},
+        budget_period_enddate     => $period->{'budget_period_enddate'},
+    );
     my $moo = GetBudgetHierarchy($budget_period_id, $template->{param_map}->{'USER_INFO'}[0]->{'branchcode'}, $show_mine?$borrower_id:'');
     my @budgets = @$moo; #FIXME
 
@@ -318,7 +304,7 @@ if ($op eq 'add_form') {
     foreach my $budget (@budgets) {
 
         # PERMISSIONS
-         unless($staffflags->{'superlibrarian'}   == 1 ) {
+        unless($staffflags->{'superlibrarian'}   == 1 ) {
             #IF NO PERMS, THEN DISABLE EDIT/DELETE
             unless ( $template->{param_map}->{'CAN_user_acquisition_budget_modify'} ) {
                 $budget->{'budget_lock'} = 1;
@@ -401,9 +387,6 @@ if ($op eq 'add_form') {
         branchloop             => \@branchloop2,
         cur                    => $cur->{symbol},
         cur_format             => $cur_format,
-        #		pagination_bar => pagination_bar(
-        #			$script_name, getnbpages(scalar @results, $pagesize),
-        #			$page,        'page' ),
     );
 
 } #---- END $OP eq DEFAULT
