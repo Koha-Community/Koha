@@ -146,6 +146,8 @@ foreach my $thisbranch (keys %$branches) {
     push @branchloop2, \%row;
 }
 
+$template->param(auth_cats_loop => GetBudgetAuthCats($budget_period_id) );
+
 # Used to create form to add or  modify a record
 if ($op eq 'add_form') {
 #### ------------------- ADD_FORM -------------------------
@@ -215,7 +217,7 @@ if ($op eq 'add_form') {
 
     my $budget_perm_dropbox =
     GetBudgetPermDropbox($budget->{'budget_permission'});
-
+    
     # if no buget_id is passed then its an add
     $template->param(
         add_form                  => 1,

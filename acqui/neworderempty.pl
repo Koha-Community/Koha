@@ -262,7 +262,7 @@ if ($budget) {    # its a mod ..
         $CGIsort1 = GetAuthvalueDropbox( 'sort1', $budget->{'sort1_authcat'}, $data->{'sort1'} );
     }
 } else {
-    $CGIsort1 = GetAuthvalueDropbox( 'sort1', 'Asort1', '' );
+    $CGIsort1 = GetAuthvalueDropbox( 'sort1', @$budgets[0]->{'sort1_authcat'}, '' );
 }
 
 # if CGIsort is successfully fetched, the use it
@@ -279,7 +279,7 @@ if ($budget) {
         $CGIsort2 = GetAuthvalueDropbox( 'sort2', $budget->{'sort2_authcat'}, $data->{'sort2'} );
     }
 } else {
-    $CGIsort2 = GetAuthvalueDropbox( 'sort2', 'Asort2', '' );
+    $CGIsort2 = GetAuthvalueDropbox( 'sort2', @$budgets[0]->{sort2_authcat}, '' );
 }
 if ($CGIsort2) {
     $template->param( CGIsort2 => $CGIsort2 );
@@ -289,25 +289,25 @@ if ($CGIsort2) {
 
 
 
-#do a biblioitems lookup on bib
-my @bibitems = GetBiblioItemByBiblioNumber($biblionumber);
-my $bibitemscount = scalar @bibitems;
-
-if ( $bibitemscount > 0 ) {
-    # warn "NEWBIBLIO: bibitems for $biblio exists\n";
-    my @bibitemloop;
-    for ( my $i = 0 ; $i < $bibitemscount ; $i++ ) {
-        my %line;
-        $line{biblioitemnumber} = $bibitems[$i]->{'biblioitemnumber'};
-        $line{isbn}             = $bibitems[$i]->{'isbn'};
-        $line{itemtype}         = $bibitems[$i]->{'itemtype'};
-        $line{volumeddesc}      = $bibitems[$i]->{'volumeddesc'};
-        push( @bibitemloop, \%line );
-
-        $template->param( bibitemloop => \@bibitemloop );
-    }
-    $template->param( bibitemexists => "1" );
-}
+# #do a biblioitems lookup on bib
+# my @bibitems = GetBiblioItemByBiblioNumber($biblionumber);
+# my $bibitemscount = scalar @bibitems;
+# 
+# if ( $bibitemscount > 0 ) {
+#     # warn "NEWBIBLIO: bibitems for $biblio exists\n";
+#     my @bibitemloop;
+#     for ( my $i = 0 ; $i < $bibitemscount ; $i++ ) {
+#         my %line;
+#         $line{biblioitemnumber} = $bibitems[$i]->{'biblioitemnumber'};
+#         $line{isbn}             = $bibitems[$i]->{'isbn'};
+#         $line{itemtype}         = $bibitems[$i]->{'itemtype'};
+#         $line{volumeddesc}      = $bibitems[$i]->{'volumeddesc'};
+#         push( @bibitemloop, \%line );
+# 
+#         $template->param( bibitemloop => \@bibitemloop );
+#     }
+#     $template->param( bibitemexists => "1" );
+# }
 
 if (C4::Context->preference('AcqCreateItem') eq 'ordering' && !$ordnum) {
     # prepare empty item form

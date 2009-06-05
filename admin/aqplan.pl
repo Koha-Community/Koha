@@ -65,7 +65,7 @@ $template->param( period_button_only => 1 ) if $count == 0;
 
 
 # authcats_loop populates the YUI planning button
-my @auth_cats_loop            = GetBudgetAuthCats();
+my $auth_cats_loop            = GetBudgetAuthCats($budget_period_id);
 my $budget_period_id          = $period->{'budget_period_id'};
 my $budget_period_startdate   = $period->{'budget_period_startdate'};
 my $budget_period_enddate     = $period->{'budget_period_enddate'};
@@ -73,15 +73,13 @@ my $budget_period_locked      = $period->{'budget_period_locked'};
 my $budget_period_description = $period->{'budget_period_description'};
 my $budget_period_dropbox     = GetBudgetPeriodsDropbox($budget_period_id );
 
-    ## ## @auth_cats_loop
-
 
 $template->param(
     budget_period_id          => $budget_period_id,
     budget_period_locked      => $budget_period_locked,
     budget_period_description => $budget_period_description,
     budget_period_dropbox     => $budget_period_dropbox,
-    auth_cats_loop            => \@auth_cats_loop,
+    auth_cats_loop            => $auth_cats_loop,
 );
 
 # ------- get periods stuff ------------------

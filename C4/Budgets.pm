@@ -365,25 +365,22 @@ sub GetAuthcatDropbox  {
 
 # -------------------------------------------------------------------
 sub GetBudgetAuthCats  {
-	my @auth_cats;
-	my $value;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare(
-		"SELECT distinct(category)
-            FROM authorised_values where category like 'Asort%'
-            ORDER BY category"
-	);
-	$sth->execute();
-    while ( my $value = $sth->fetchrow_array ) {
-        push @auth_cats, $value;
+    my ($budget_period_id) = shift;
+    # now, populate the auth_cats_loop used in the budget planning button
+    # we must retrieve all auth values used by at least one budget
+    my $dbh = C4::Context->dbh;
+    my $sth=$dbh->prepare("SELECT sort1_authcat,sort2_authcat FROM aqbudgets WHERE budget_period_id=?");
+    $sth->execute($budget_period_id);
+    my %authcats;
+    while (my ($sort1_authcat,$sort2_authcat) = $sth->fetchrow) {
+        $authcats{$sort1_authcat}=1;
+        $authcats{$sort2_authcat}=1;
     }
-    my @loop_data = ();    # initialize an array to hold your loop
-    while (@auth_cats) {
-        my %row_data;      # get a fresh hash for the row data
-        $row_data{authcat} = shift @auth_cats;
-        push( @loop_data, \%row_data );
+    my @auth_cats_loop;
+    foreach (sort keys %authcats) {
+        push @auth_cats_loop,{ authcat => $_ };
     }
-    return @loop_data;
+    return \@auth_cats_loop;
 }
 
 # -------------------------------------------------------------------
@@ -545,7 +542,7 @@ sub GetBudgetHierarchy {
 	my @bind_params;
 	my $dbh   = C4::Context->dbh;
 	my $query = qq|
-                    SELECT *
+                    SELECT aqbudgets.*
                     FROM aqbudgets
                     JOIN aqbudgetperiods USING (budget_period_id)
                     WHERE budget_period_active=1 |;
@@ -654,45 +651,19 @@ sub GetBudgetHierarchy {
 
         $r->{'budget_spent'}       = GetBudgetSpent( $r->{'budget_id'} );
 
-#        $budget->{'budget_alloc'}       = sprintf( "%.2f", $budget->{'budget_alloc'} - $budget->{'budget_amount  alloc'} );
-#        $budget->{'budget_alloc'} = sprintf( "%.2f", $budget->{'budget_alloc'} );
-
         $r->{'budget_amount_total'} =  $r->{'budget_amount'} + $r->{'budget_amount_sublevel'}  ;
-#	    $r->{budget_alloc} = $r->{'budget_amount'} - $r->{'budget_amount_sublevel'}  ;
-
-	  #  $r->{'budget_amount_sublevel'}  ;
 
         # foreach sub-levels
         my $unalloc_count ;
 
 		foreach my $sub (@subs_arr) {
 			my $sub_budget = GetBudget($sub);
-			# $r->{budget_spent_sublevel} += $bud->{'budget_amount'} ;
 
 			$r->{budget_spent_sublevel} +=    GetBudgetSpent( $sub_budget->{'budget_id'} );
 			$unalloc_count +=   $sub_budget->{'budget_amount'} + $sub_budget->{'budget_amount_sublevel'};
 		}
 
 	    $r->{budget_unalloc_sublevel} =  $r->{'budget_amount_sublevel'}   -   $unalloc_count;
-
-        #		  (($r->{'budget_amount'} - $r->{'budget_alloc'}) /  $r->{'budget_amount'}) * 100;
-
-=c
-#        my $percent =     $r->{'budget_amount'}  ? (  $r->{'budget_alloc'} / $r->{'budget_amount'} ) * 100 :  0;
- #       my $spent_percent = ( $r->{'budget_spent'} / $r->{'budget_amount'} ) * 100 if $r->{'budget_amount'};
-
-        #		  (($r->{'budget_amount'} - $r->{'budget_alloc'}) /  $r->{'budget_amount'}) * 100;
-#        my $percent = ( $r->{'budget_alloc'} / $r->{'budget_amount'} ) * 100 if $r->{'budget_amount'};
-#        my $spent_percent = ( $r->{'budget_spent'} / $r->{'budget_amount'} ) * 100 if $r->{'budget_amount'};
-		if ($percent == 0) {
-			$r->{budget_alloc_none} = 1;
-		} elsif ($percent == 100) {
-			$r->{budget_alloc_full} = 1
-
-		} else {
-			$r->{budget_alloc_percent} =    sprintf("%00d", $percent);
-		}
-=cut
 
         if ( scalar  @subs_arr == 0  && $r->{budget_amount_sublevel} > 0 ) {
             $r->{warn_no_subs} = 1;
