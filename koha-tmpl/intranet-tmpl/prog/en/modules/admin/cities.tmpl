@@ -3,50 +3,16 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 //<![CDATA[
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		function isNotNull(f,noalert) {
-			if (f.value.length == 0) {
-		return false;
-			}
-		return true;
-		}
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		function toUC(f) {
-			var x=f.value.toUpperCase();
-			f.value=x;
-			return true;
-		}
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		function isNum(v,maybenull) {
-		var n = new Number(v.value);
-		if (isNaN(n)) {
-			return false;
-			}
-		if (maybenull == 0 && v.value =='') {
-			return false;
-		}
-		return true;
-		}
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		function isDate(f) {
-			var t = Date.parse(f.value);
-			if (isNaN(t)) {
-				return false;
-			}
-		}
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		function Check(f) {
-			var ok=1;
-			var _alertString="";
-			var alertString2;
-			if (f.city_zipcode.value.length == 0 && f.city_name.value.length == 0 ) {
-				_alertString += "\n- " + _("City name & zipcode missing");
-				alert(_alertString);	
-			}
-			else{
-			document.Aform.submit();
-			}
-		}
+    function Check(f) {
+        if (f.city_zipcode.value.length == 0 && f.city_name.value.length == 0 ) {
+            alert("City name & zipcode missing");
+        } else{
+            document.Aform.submit();
+        }
+    }
+    $(document).ready(function() {
+        new YAHOO.widget.Button("newcity");
+    });
 //]]>
 </script>
 </head>
@@ -54,7 +20,16 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cities-admin-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><a href="/cgi-bin/koha/admin/cities.pl">Cities</a> &rsaquo; <!-- TMPL_IF NAME="cityid" --> Modify City<!-- TMPL_ELSE --> New City<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="delete_confirm" --><a href="/cgi-bin/koha/admin/cities.pl">Cities</a> &rsaquo; Confirm Deletion of City<!-- TMPL_ELSE --> Cities<!-- /TMPL_IF --><!-- /TMPL_IF --></div>
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+    &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+    &rsaquo; <a href="/cgi-bin/koha/admin/cities.pl">Cities</a>
+    <!-- TMPL_IF NAME="add_form" -->
+    &rsaquo; <!-- TMPL_IF NAME="cityid" -->Modify<!-- TMPL_ELSE -->New<!-- /TMPL_IF --> City
+    <!-- TMPL_ELSIF NAME="delete_confirm" -->
+    &rsaquo; Confirm Deletion of City
+    <!-- /TMPL_IF -->
+</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -80,7 +55,7 @@
 	<!-- /TMPL_IF -->
 	<li>
 	<label for="city_name">City name: </label>
-	<input  type="text" name="city_name" id="city_name" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="city_name" ESCAPE="HTML" -->" />
+	<input type="text" name="city_name" id="city_name" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="city_name" ESCAPE="HTML" -->" />
 	</li>
 	<li>				
 	<label for="city_zipcode">City zipcode: </label>
@@ -94,67 +69,45 @@
 
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirm" -->
-		<!-- TMPL_IF NAME="totalgtzero" -->
-<div class="dialog message">
-		<h3>Cannot Delete City "<!-- TMPL_VAR NAME="city_name" -->"</h3>
-		<p>This record is used <!-- TMPL_VAR NAME="total" --> times. Impossible to delete it</p>
-		<!-- TMPL_ELSE -->
-<div class="dialog alert">
-<h3>Delete City "<!-- TMPL_VAR NAME="city_name" -->?"</h3>
-<!-- /TMPL_IF -->
-	<table>
-		<tr>
-			<th>City id
-			</th>
-			<td>
-				<!-- TMPL_VAR NAME="cityid" -->
-			</td>
-		</tr>
-		        
-		<tr>
-			<th>City name</th>
-			<td><!-- TMPL_VAR NAME="city_name" --></td>
-		</tr>
-		<tr>
-			<th>City zipcode</th>
-			<td><!-- TMPL_VAR NAME="city_zipcode" --></td>
-		</tr>
-</table>
-		<!-- TMPL_IF NAME="totalgtzero" -->
-				<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-				<input type="submit" class="approv" value="OK" />
-				</form>
-		<!-- TMPL_ELSE -->
-<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-			<input type="hidden" name="op" value="delete_confirmed" />
-			<input type="hidden" name="cityid" value="<!-- TMPL_VAR NAME="cityid" -->" /><input type="submit" class="approve" value="Yes, Delete" /></form> <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-			<input type="submit" class="deny" value="No, do not Delete" /></form>
-		<!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="total" -->
+    <div class="dialog message">
+    <h3>Cannot Delete City "<!-- TMPL_VAR NAME="city_name" -->"</h3>
+    <p>This record is used <!-- TMPL_VAR NAME="total" --> times. Impossible to delete it</p>
+    <!-- TMPL_ELSE -->
+    <div class="dialog alert">
+    <h3>Delete City "<!-- TMPL_VAR NAME="city_name" -->?"</h3>
+    <!-- /TMPL_IF -->
+    <table>
+        <tr><th>City id</th>
+            <td><!-- TMPL_VAR NAME="cityid" --></td>
+        </tr>
+        <tr><th>City name</th>
+            <td><!-- TMPL_VAR NAME="city_name" --></td>
+        </tr>
+        <tr><th>City zipcode</th>
+            <td><!-- TMPL_VAR NAME="city_zipcode" --></td>
+        </tr>
+    </table>
+    <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+    <!-- TMPL_IF NAME="total" -->
+        <input type="submit" class="approv" value="OK" />
+    <!-- TMPL_ELSE -->
+        <input type="hidden" name="op" value="delete_confirmed" />
+        <input type="hidden" name="cityid" value="<!-- TMPL_VAR NAME="cityid" -->" />
+        <input type="submit" class="approve" value="Yes, Delete" />
+    </form>
+    <form action="<!-- TMPL_VAR NAME="script_name" -->" method="get">
+        <input type="submit" class="deny" value="No, do not Delete" />
+    <!-- /TMPL_IF -->
+    </form>
 </div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="else" -->
 
 <div id="toolbar">
-	<script type="text/javascript">
-	//<![CDATA[
-
-	// prepare DOM for YUI Toolbar
-
-	 $(document).ready(function() {
-	    yuiToolbar();
-	 });
-
-	// YUI Toolbar Functions
-
-	function yuiToolbar() {
-	    new YAHOO.widget.Button("newcity");
-	}
-
-	//]]>
-	</script>
 	<ul class="toolbar">
-	<li><a id="newcity" href="/cgi-bin/koha/admin/cities.pl?op=add_form">New City</a></li>
+	<li><a id="newcity" href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form">New City</a></li>
 </ul></div>
 
 	<h2>Cities</h2>
@@ -169,14 +122,13 @@
 			<th>City zipcode</th>
 			<th>&nbsp;</th>
 			<th>&nbsp;</th>
-			
 		</tr>
 		<!-- TMPL_LOOP NAME="loop" -->
-		<!-- TMPL_IF NAME="toggle" -->
-		<tr class="hilighted">
+		<!-- TMPL_UNLESS NAME="__odd__" -->
+		<tr class="highlight">
 		<!-- TMPL_ELSE -->
 		<tr>
-		<!-- /TMPL_IF -->
+		<!-- /TMPL_UNLESS -->
 			<td><!-- TMPL_VAR NAME="cityid" --></td>
 			<td><!-- TMPL_VAR NAME="city_name" --></td>
 			<td><!-- TMPL_VAR NAME="city_zipcode" --></td>
