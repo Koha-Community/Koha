@@ -211,7 +211,7 @@ YAHOO.util.Event.onAvailable("popmenu", function () {
                 <td align="right">
 
                 <!--TMPL_IF  Name="budget_lock" -->
-                    <!-- TMPL_VAR NAME="estimated_amount" -->uu&nbsp;
+                    <!-- TMPL_VAR NAME="estimated_amount" -->&nbsp;
                     <input type="hidden" style="text-align: right;"  name='<!-- TMPL_VAR NAME="cell_name"-->' value="<!-- TMPL_VAR NAME="estimated_amount" -->"   >
                 <!--TMPL_ELSE -->
                     <input type="text" style="text-align: right;  width:90%; " size='6' name='<!-- TMPL_VAR NAME="cell_name"-->'  value="<!-- TMPL_VAR NAME="estimated_amount" -->"  id='<!-- TMPL_VAR NAME="budget_id"-->' class='<!-- TMPL_VAR NAME="budget_id"-->' onchange="calcTotalRow(this);" >
@@ -246,7 +246,7 @@ YAHOO.util.Event.onAvailable("popmenu", function () {
              <!-- TMPL_UNLESS Name="budget_lock" -->
                     <input type="button"  onclick="autoFillRow('<!-- TMPL_VAR NAME="budget_id"-->')" value="Auto-fill row"/>
             <!-- TMPL_ELSE  -->
-             <div style="color:red;">LOCKED</div>
+             <div style="color:red;">not owned</div>
             <!-- /TMPL_UNLESS  -->
         </td>
         </tr>

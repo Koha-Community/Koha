@@ -47,7 +47,6 @@ BEGIN {
 
 	    &GetBudgetPeriodsDropbox
         &GetBudgetSortDropbox
-	    &GetAuthcatDropbox
         &GetAuthvalueDropbox
         &GetBudgetPermDropbox
 
@@ -330,37 +329,6 @@ sub GetBudgetPermDropbox {
 		-size    => 1,
 	);
 	return $radio;
-}
-
-# -------------------------------------------------------------------
-sub GetAuthcatDropbox  {
-	my ($name, $default ) = @_;
-	my @authorised_values;
-	my $value;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare(qq|
-		SELECT distinct(category)
-            FROM authorised_values WHERE category LIKE 'Asort%'
-            ORDER BY lib |
-	);
-	$sth->execute();
-
-	push @authorised_values, '';
-	while (my $value = $sth->fetchrow_array) {
-		push @authorised_values, $value;
-	}
-
-    my $budget_authcat_dropbox = CGI::scrolling_list(
-        -name     => $name,
-        -values   => \@authorised_values,
-        -override => 1,
-        -size     => 1,
-        -default  => $default,
-        -multiple => 0,
-        -tabindex => 1,
-        -id       => $name,
-    );
-	return $budget_authcat_dropbox;
 }
 
 # -------------------------------------------------------------------
