@@ -1267,9 +1267,10 @@ sub GetItemsInfo {
 		if ( $datedue eq '' ) {
             my ( $restype, $reserves ) =
               C4::Reserves::CheckReserves( $data->{'itemnumber'} );
-            if ($restype) {
-                $count_reserves = $restype;
-            }
+# Previous conditional check with if ($restype) is not needed because a true
+# result for one item will result in subsequent items defaulting to this true
+# value.
+            $count_reserves = $restype;
         }
         $isth->finish;
         $ssth->finish;
