@@ -116,7 +116,6 @@ foreach ($query->param()) {
     $_ eq "branch"     and next;  # disclude branch
     $_ eq "printer"    and next;  # disclude printer
     $_ eq "oldreferer" and next;  # disclude oldreferer
-    warn "recycling $_";
     push @recycle_loop, {
         param => $_,
         value => $query->param($_),
