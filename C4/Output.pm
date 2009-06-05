@@ -80,7 +80,6 @@ sub gettemplate {
     }
     my $path = C4::Context->preference('intranet_includes') || 'includes';
     my ( $theme, $lang ) = themelanguage( $htdocs, $tmplbase, $interface, $query );
-    my $opacstylesheet = C4::Context->preference('opacstylesheet');
 
     # if the template doesn't exist, load the English one as a last resort
     my $filename = "$htdocs/$theme/$lang/modules/$tmplbase";
