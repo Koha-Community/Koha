@@ -123,14 +123,13 @@ if ($op eq ""){
             my $branch = C4::Branch->GetBranchDetail($patron->{branchcode});
             my ($invoice);
             my %orderinfo = ("biblionumber", $biblionumber,
-                                           "basketno", $cgiparams->{'basketno'},
-                                           "quantity", $cgiparams->{'quantityrec-' . $biblio->{'import_record_id'}},
-#                                           "budgetdate", $budget,
-                                           "branchcode", $branch,
-                                           "booksellerinvoicenumber", $invoice,
-                                           "budget_id", $budget_id,
-                                           "uncertainprice", 1,
-                                           );
+                            "basketno", $cgiparams->{'basketno'},
+                            "quantity", $cgiparams->{'quantityrec-' . $biblio->{'import_record_id'}},
+                            "branchcode", $branch,
+                            "booksellerinvoicenumber", $invoice,
+                            "budget_id", $budget_id,
+                            "uncertainprice", 1,
+                            );
             # get the price if there is one.
             # filter by storing only the 1st number
             # we suppose the currency is correct, as we have no possibilities to get it.
@@ -168,6 +167,8 @@ if ($op eq ""){
               }
               $orderinfo{'rrp'} = $orderinfo{'listprice'};
             }
+            # remove uncertainprice flag if we have found a price in the MARC record
+            $orderinfo{uncertainprice} = 0 if $orderinfo{listprice};
             my $basketno;
             ( $basketno, $ordnum ) = NewOrder(\%orderinfo);
 
