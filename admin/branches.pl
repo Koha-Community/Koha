@@ -32,12 +32,6 @@ FIXME: looped html (e.g., list of checkboxes) need to be properly
         of these should be converted into exported booleans / counters etc
         so that the error messages can be localized; need to notify translators
 
- NOTE:  heading() should now be called like this:
-        1. Use heading() as before
-        2. $template->param('heading-LISPISHIZED-HEADING-p' => 1);
-        3. $template->param('use-heading-flags-p' => 1);
-        This ensures that both converted and unconverted templates work
-
  Finlay working on this file from 26-03-2002
  Reorganising this branches admin page.....
  
@@ -54,7 +48,6 @@ use C4::Branch;
 
 # Fixed variables
 my $script_name = "/cgi-bin/koha/admin/branches.pl";
-my $pagesize    = 20;
 
 ################################################################################
 # Main loop....
@@ -62,11 +55,7 @@ my $input        = new CGI;
 my $branchcode   = $input->param('branchcode');
 my $branchname   = $input->param('branchname');
 my $categorycode = $input->param('categorycode');
-my $op           = $input->param('op');
-
-if(!defined($op)){
-  $op = '';
-}
+my $op           = $input->param('op') || '';
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -78,19 +67,12 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
-if ($op) {
-    $template->param(
-        script_name => $script_name,
-        $op         => 1
-    );    # we show only the TMPL_VAR names $op
-}
-else {
-    $template->param(
-        script_name => $script_name,
-        else        => 1
-    );    # we show only the TMPL_VAR names $op
-}
-$template->param( action => $script_name );
+$template->param(
+     script_name => $script_name,
+     action      => $script_name,
+);
+$template->param( ($op || 'else') => 1 );
+
 if ( $op eq 'add' ) {
 
     # If the user has pressed the "add new branch" button.
@@ -114,12 +96,12 @@ elsif ( $op eq 'add_validate' ) {
         default("MESSAGE1",$template);
     }
     else {
-        my $error = ModBranch($params);
+        my $error = ModBranch($params); # FIXME: causes warnings to log on duplicate branchcode
         # if error saving, stay on edit and rise error
         if ($error) {
             # copy input parameters back to form
             # FIXME - doing this doesn't preserve any branch group selections, but good enough for now
-            $template->param(%$params);
+            $template->param(%$params);     # FIXME: Allows user to set ANY TMPL_VAR to ANY value!!
             $template->param(branch_name => $params->{branchname});
             $template->param( 'heading-branches-add-branch-p' => 1, 'add' => 1, "ERROR$error" => 1 );
         } else {
@@ -136,21 +118,13 @@ elsif ( $op eq 'delete' ) {
     my $sth = $dbh->prepare("select count(*) from items where holdingbranch=? or homebranch=?");
     $sth->execute( $branchcode, $branchcode );
     my ($total) = $sth->fetchrow_array;
-    $sth->finish;
-    
-    my $message;
-
     if ($total) {
-        $message = "MESSAGE7";
-    }
-   
-    if ($message) {
         $template->param( else => 1 );
-        default($message,$template);
+        default("MESSAGE7", $template);
     }
     else {
-        $template->param( branchname     => $branchname );
         $template->param( delete_confirm => 1 );
+        $template->param( branchname     => $branchname );
         $template->param( branchcode     => $branchcode );
     }
 }
@@ -169,15 +143,14 @@ elsif ( $op eq 'editcategory' ) {
 }
 elsif ( $op eq 'addcategory_validate' ) {
 
+    $template->param( else => 1 );
     # confirm settings change...
     my $params = $input->Vars;
     unless ( $params->{'categorycode'} && $params->{'categoryname'} ) {
-        $template->param( else => 1 );
         default("MESSAGE4",$template);
     }
     else {
         ModBranchCategoryInfo($params);
-        $template->param( else => 1 );
         default("MESSAGE5",$template);
     }
 }
@@ -203,7 +176,6 @@ elsif ( $op eq 'categorydelete_confirmed' ) {
 
 }
 else {
-
     # if no operation has been set...
     default("",$template);
 }
@@ -213,10 +185,12 @@ else {
 # html output functions....
 
 sub default {
-    my ($message,$innertemplate) = @_;
-    $innertemplate->param( 'heading-branches-p' => 1 );
-    $innertemplate->param( "$message"           => 1 );
-    $innertemplate->param( action               => $script_name );
+    my $message       = shift || '';
+    my $innertemplate = shift or return;
+    $innertemplate->param($message => 1) if $message;
+    $innertemplate->param(
+        'heading-branches-p' => 1,
+    );
     branchinfotable("",$innertemplate);
 }
 
@@ -225,35 +199,16 @@ sub editbranchform {
     # initiate the scrolling-list to select the printers
     my $printers = GetPrinters();
     my @printerloop;
-    my $printercount = 0;
-    my $oldprinter;
-    my $CGIprinter;
-    
     my $data;
+    my $oldprinter = "";
 
     if ($branchcode) {
         $data = GetBranchInfo($branchcode);
         $data = $data->[0];
 
         # get the old printer of the branch
-        $oldprinter = $data->{'branchprinter'};
-
-        # 	printer loop
-        foreach my $thisprinter ( keys %$printers ) {
-
-            my $selected = 1
-              if $oldprinter and ( $oldprinter eq $printers->{$thisprinter} );
-
-            my %row = (
-                value         => $thisprinter,
-                selected      => $selected,
-                branchprinter => $printers->{$thisprinter}->{'printqueue'},
-            );
-            push @printerloop, \%row;
-        }
-
+        $oldprinter = $data->{'branchprinter'} || '';
         $innertemplate->param( 
-             printerloop    => \@printerloop,
              branchcode     => $data->{'branchcode'},
              branch_name    => $data->{'branchname'},
              branchaddress1 => $data->{'branchaddress1'},
@@ -265,28 +220,23 @@ sub editbranchform {
              branchip       => $data->{'branchip'} 
         );
     }
-    else {    #case of an add branch select printer
-        foreach my $thisprinter ( keys %$printers ) {
-            my %row = (
-                value         => $thisprinter,
-                branchprinter => $printers->{$thisprinter}->{'printqueue'},
-            );
-            push @printerloop, \%row;
-        }
-        $innertemplate->param( printerloop => \@printerloop );
+
+    foreach my $thisprinter ( keys %$printers ) {
+        push @printerloop, {
+            value         => $thisprinter,
+            selected      => ( $oldprinter eq $printers->{$thisprinter} ),
+            branchprinter => $printers->{$thisprinter}->{'printqueue'},
+        };
     }
 
-    # make the checkboxs.....
+    $innertemplate->param( printerloop => \@printerloop );
+    # make the checkboxes.....
     #
     # We export a "categoryloop" array to the template, each element of which
     # contains separate 'categoryname', 'categorycode', 'codedescription', and
-    # 'checked' fields. The $checked field is either '' or 'checked'
-    # (see bug 130)
-    #
-    my $catinfo = GetBranchCategory();
-    my $catcheckbox;
+    # 'checked' fields. The $checked field is either '' or 'checked="checked"'
 
-    #    print DEBUG "catinfo=".cvs($catinfo)."\n";
+    my $catinfo = GetBranchCategory();
     my @categoryloop = ();
     foreach my $cat (@$catinfo) {
         my $checked = "";
@@ -294,51 +244,42 @@ sub editbranchform {
         if ( grep { /^$tmp$/ } @{ $data->{'categories'} } ) {
             $checked = "checked=\"checked\"";
         }
-        push @categoryloop,
-          {
+        push @categoryloop, {
             categoryname    => $cat->{'categoryname'},
             categorycode    => $cat->{'categorycode'},
             categorytype    => $cat->{'categorytype'},
             codedescription => $cat->{'codedescription'},
             checked         => $checked,
-          };
+        };
     }
     $innertemplate->param( categoryloop => \@categoryloop );
 
-    # {{{ Leave this here until bug 130 is completely resolved in the templates
     for my $obsolete ( 'categoryname', 'categorycode', 'codedescription' ) {
         $innertemplate->param(
             $obsolete => 'Your template is out of date (bug 130)' );
     }
-
-    # }}}
 }
 
 sub editcatform {
 
     # prepares the edit form...
     my ($categorycode,$innertemplate) = @_;
-    warn "cat : $categorycode";
-    my $data;
+    # warn "cat : $categorycode";
 	my @cats;
-    $innertemplate->param( categorytype => \@cats);
+    my $data;
 	if ($categorycode) {
-        $data = GetBranchCategory($categorycode);
+        my $data = GetBranchCategory($categorycode);
         $data = $data->[0];
-        $innertemplate->param(	categorycode    => $data->{'categorycode'} ,
-        				categoryname    => $data->{'categoryname'},
-        				codedescription => $data->{'codedescription'} ,
-						);
+        $innertemplate->param(
+            categorycode    => $data->{'categorycode'},
+            categoryname    => $data->{'categoryname'},
+            codedescription => $data->{'codedescription'},
+		);
     }
 	for my $ctype (GetCategoryTypes()) {
-		push @cats , { type => $ctype , selected => ($data->{'categorytype'} eq $ctype) };
+		push @cats , { type => $ctype , selected => ($data->{'categorytype'} and $data->{'categorytype'} eq $ctype) };
 	}
-}
-
-sub deleteconfirm {
-
-    # message to print if the
-    my ($branchcode) = @_;
+    $innertemplate->param(categorytype => \@cats);
 }
 
 sub branchinfotable {
@@ -346,25 +287,14 @@ sub branchinfotable {
 # makes the html for a table of branch info from reference to an array of hashs.
 
     my ($branchcode,$innertemplate) = @_;
-    my $branchinfo;
-    if ($branchcode) {
-        $branchinfo = GetBranchInfo($branchcode);
-    }
-    else {
-        $branchinfo = GetBranchInfo();
-    }
-    my $toggle;
-    my $i = 0;
+    my $branchinfo = $branchcode ? GetBranchInfo($branchcode) : GetBranchInfo();
     my @loop_data = ();
     foreach my $branch (@$branchinfo) {
-        ( $i % 2 ) ? ( $toggle = 1 ) : ( $toggle = 0 );
-
         #
         # We export the following fields to the template. These are not
         # pre-composed as a single "address" field because the template
         # might (and should) escape what is exported here. (See bug 180)
         #
-        # - color
         # - branch_name     (Note: not "branchname")
         # - branch_code     (Note: not "branchcode")
         # - address         (containing a static error message)
@@ -379,7 +309,6 @@ sub branchinfotable {
         # - category_list   (loop containing "categoryname")
         # - no-categories-p (1 if no categories set, 0 otherwise)
         # - value
-        # - action
         #
         my %row = ();
 
@@ -393,16 +322,9 @@ sub branchinfotable {
           )
         {
             $row{$field} = $branch->{$field};
-            if ( $branch->{$field} ) {
-                $address_empty_p = 0;
-            }
+            $address_empty_p = 0 if ( $branch->{$field} );
         }
         $row{'address-empty-p'} = $address_empty_p;
-
-        # {{{ Leave this here until bug 180 is completely resolved in templates
-        $row{'address'} = 'Your template is out of date (see bug 180)';
-
-        # }}}
 
         # Handle categories
         my $no_categories_p = 1;
@@ -413,57 +335,33 @@ sub branchinfotable {
             $no_categories_p = 0;
         }
 
-        # {{{ Leave this here until bug 180 is completely resolved in templates
-        $row{'categories'} = 'Your template is out of date (see bug 180)';
-
-        # }}}
         $row{'category_list'}   = \@categories;
         $row{'no-categories-p'} = $no_categories_p;
-
-        # Handle all other fields
         $row{'branch_name'} = $branch->{'branchname'};
         $row{'branch_code'} = $branch->{'branchcode'};
-        $row{'toggle'}      = $toggle;
         $row{'value'}       = $branch->{'branchcode'};
-        $row{'action'}      = '/cgi-bin/koha/admin/branches.pl';
 
-        push @loop_data, {%row};
-        $i++;
+        push @loop_data, \%row;
     }
     my @branchcategories = ();
 	for my $ctype ( GetCategoryTypes() ) {
     	my $catinfo = GetBranchCategories(undef,$ctype);
     	my @categories;
 		foreach my $cat (@$catinfo) {
-	       	push @categories,
-        	  {
-        	    categoryname    => $cat->{'categoryname'},
-        	    categorycode    => $cat->{'categorycode'},
-        	    codedescription => $cat->{'codedescription'},
-        	    categorytype => $cat->{'categorytype'},
-        	  };
+            push @categories, {
+                categoryname    => $cat->{'categoryname'},
+                categorycode    => $cat->{'categorycode'},
+                codedescription => $cat->{'codedescription'},
+                categorytype    => $cat->{'categorytype'},
+            };
     	}
-	push @branchcategories, { categorytype => $ctype , $ctype => 1 , catloop => \@categories};
+        push @branchcategories, { categorytype => $ctype , $ctype => 1 , catloop => \@categories};
 	}
     $innertemplate->param(
         branches         => \@loop_data,
         branchcategories => \@branchcategories
     );
 
-}
-
-# FIXME logic seems wrong   ##  sub is not used.
-sub branchcategoriestable {
-    my $innertemplate = shift;
-    #Needs to be implemented...
-
-    my $categoryinfo = GetBranchCategory();
-    my $color;
-    foreach my $cat (@$categoryinfo) {
-        $innertemplate->param( categoryname    => $cat->{'categoryname'} );
-        $innertemplate->param( categorycode    => $cat->{'categorycode'} );
-        $innertemplate->param( codedescription => $cat->{'codedescription'} );
-    }
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -1,6 +1,15 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration &rsaquo; <!-- TMPL_IF NAME="editcategory" --><!-- TMPL_IF NAME="categorycode" -->Libraries and Groups &rsaquo; Edit Group <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->Libraries and Groups &rsaquo; New Group<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_category" -->Libraries and Groups &rsaquo; Confirm Deletion of Group <!-- TMPL_VAR name="categorycode" --><!-- /TMPL_IF --><!-- TMPL_IF name="add" -->
-    <!-- TMPL_IF name="heading-branches-add-branch-p" -->New library<!-- TMPL_ELSE -->Libraries and Groups &rsaquo; Modify library <!-- TMPL_VAR name="branchcode" --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirm" -->Libraries and Groups &rsaquo; Confirm deletion of library '<!-- TMPL_VAR NAME="branchcode" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->Libraries and Groups<!-- /TMPL_IF --></title>
+<title>Koha &rsaquo; Administration &rsaquo; Libraries and Groups
+<!-- TMPL_IF NAME="editcategory" -->
+    &rsaquo;<!-- TMPL_IF NAME="categorycode" -->Edit Group <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->New Group<!-- /TMPL_IF -->
+<!-- TMPL_ELSIF NAME="delete_category" -->
+    &rsaquo; Confirm Deletion of Group <!-- TMPL_VAR name="categorycode" -->
+<!-- TMPL_ELSIF name="add" -->
+    &rsaquo;<!-- TMPL_IF name="heading-branches-add-branch-p" -->New library<!-- TMPL_ELSE -->Modify library <!-- TMPL_VAR name="branchcode" --><!-- /TMPL_IF -->
+<!-- TMPL_ELSIF name="delete_confirm" -->
+    &rsaquo; Confirm deletion of library '<!-- TMPL_VAR NAME="branchcode" -->'
+<!-- /TMPL_IF -->
+</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 </head>
@@ -8,18 +17,19 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  
-
-<!-- TMPL_IF NAME="editcategory" --><a href="/cgi-bin/koha/admin/branches.pl">Libraries and Groups</a> &rsaquo; <!-- TMPL_IF NAME="categorycode" -->Edit Group <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->New Group<!-- /TMPL_IF --><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="delete_category" --><a href="/cgi-bin/koha/admin/branches.pl">Libraries and Groups</a> &rsaquo; Confirm Deletion of Group <!-- TMPL_VAR name="categorycode" --><!-- /TMPL_IF -->
-
-<!-- TMPL_IF name="add" --><a href="/cgi-bin/koha/admin/branches.pl">Libraries and Groups</a> &rsaquo; 
-<!-- TMPL_IF name="heading-branches-add-branch-p" -->New library<!-- TMPL_ELSE -->Modify library <!-- TMPL_VAR name="branchcode" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
-
-<!-- TMPL_IF name="delete_confirm" --><a href="/cgi-bin/koha/admin/branches.pl">Libraries and Groups</a> &rsaquo; Confirm deletion of library '<!-- TMPL_VAR NAME="branchcode" -->'<!-- /TMPL_IF -->
-
-<!-- TMPL_IF name="else" -->Libraries and Groups<!-- /TMPL_IF -->
-
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/branches.pl">Libraries and Groups</a>
+<!-- TMPL_IF NAME="editcategory" -->
+&rsaquo; <!-- TMPL_IF NAME="categorycode" -->Edit Group <!-- TMPL_VAR NAME="categorycode" --><!-- TMPL_ELSE -->New Group<!-- /TMPL_IF -->
+<!-- TMPL_ELSIF NAME="delete_category" -->
+&rsaquo; Confirm Deletion of Group <!-- TMPL_VAR name="categorycode" -->
+<!-- TMPL_ELSIF name="add" -->
+&rsaquo; <!-- TMPL_IF name="heading-branches-add-branch-p" -->New library<!-- TMPL_ELSE -->Modify library <!-- TMPL_VAR name="branchcode" --><!-- /TMPL_IF -->
+<!-- TMPL_ELSIF name="delete_confirm" -->
+&rsaquo; Confirm deletion of library '<!-- TMPL_VAR NAME="branchcode" -->'
+<!-- /TMPL_IF -->
 </div>
 
 <div id="doc3" class="yui-t2">
@@ -59,7 +69,7 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="add" -->
-    <!-- TMPL_IF name="ERROR1" --><div class="dialog message">Code already exist &mdash; Please enter a unique code</div><!-- /TMPL_IF -->
+    <!-- TMPL_IF name="ERROR1" --><div class="dialog message">Code already exists &mdash; Please enter a unique code</div><!-- /TMPL_IF -->
   <h3><!-- TMPL_IF name="heading-branches-add-branch-p" -->New library<!-- TMPL_ELSE -->Modify library<!-- /TMPL_IF --></h3>
     <form action="<!-- TMPL_VAR name="action" -->" name="Aform" method="post">
 	<fieldset class="rows">
@@ -128,7 +138,7 @@
         <input type="hidden" name="branchcode" value="<!-- TMPL_VAR name="branchcode" escape="HTML" -->" />
         <input type="hidden" name="branchname" value="<!-- TMPL_VAR NAME="branchname" escape="HTML" -->">
         <fieldset class="action"><input type="submit" value="Delete Library" /> <a class="cancel" href="/cgi-bin/koha/admin/branches.pl">Cancel</a></fieldset>
-</fieldset>    </form>
+</fieldset></form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="else" -->
@@ -146,7 +156,7 @@
 
 <!-- TMPL_IF NAME="branches" -->
     <table id="branchest">
-<thead>        <tr>
+<thead><tr>
 			<th>Name</th>
             <th>Code</th>
             <th>Address</th>
@@ -156,7 +166,7 @@
             <th colspan="2">&nbsp;</th>
         </tr></thead><tbody>
         <!-- TMPL_LOOP name="branches" -->
-	<!-- TMPL_IF NAME="toggle" -->
+	<!-- TMPL_IF NAME="__odd__" -->
         <tr>
 	<!-- TMPL_ELSE -->
 		<tr class="highlight">
@@ -182,12 +192,11 @@
                     <!-- /TMPL_IF -->
                 </td>
                 <td>
-                    <!-- TMPL_IF name="no-categories-p" -->
-                    <!-- TMPL_ELSE -->
+                    <!-- TMPL_UNLESS name="no-categories-p" -->
                         <!-- TMPL_LOOP name="category_list" -->
                             <!-- TMPL_VAR name="categoryname" --><br />
                         <!-- /TMPL_LOOP -->
-                    <!-- /TMPL_IF -->
+                    <!-- /TMPL_UNLESS -->
                 </td>
                 <td>
                     <!-- TMPL_VAR NAME="branchip" -->
@@ -208,8 +217,7 @@
 	<div class="dialog message">There are no libraries defined. <a href="/cgi-bin/koha/admin/branches.pl?op=add">Start defining libraries</a>.</div>
 	<!-- /TMPL_IF -->
     
-    <!-- TMPL_IF NAME="branchcategories" -->
-   
+   <!-- TMPL_IF   NAME="branchcategories" -->
    <!-- TMPL_LOOP NAME="branchcategories" -->
     <h3>Group(s):  <!-- TMPL_IF NAME="properties" -->Properties<!-- TMPL_ELSE --><!-- TMPL_IF NAME="searchdomain" -->Search Domain<!-- /TMPL_IF --><!-- /TMPL_IF --></h3>
 	<table>
@@ -230,14 +238,11 @@
         <td><a href="<!-- TMPL_VAR name="action" -->?op=delete_category&amp;categorycode=<!-- TMPL_VAR name="categorycode" escape="url" -->">Delete</a>
         </td>
         </tr>
-    <!-- /TMPL_LOOP --><!-- TMPL_ELSE --><tr><td colspan="5">No <!-- TMPL_IF NAME="properties" -->Properties<!-- TMPL_ELSE --><!-- TMPL_IF NAME="searchdomain" -->Search Domain<!-- /TMPL_IF --><!-- /TMPL_IF --> Defined</td></tr><!-- /TMPL_IF -->
+    <!-- /TMPL_LOOP --><!-- TMPL_ELSE --><tr><td colspan="5">No <!-- TMPL_IF NAME="properties" -->Properties<!-- TMPL_ELSIF NAME="searchdomain" -->Search Domain<!-- /TMPL_IF --> Defined</td></tr><!-- /TMPL_IF -->
     </table>
     <!-- /TMPL_LOOP -->
-
     <!-- TMPL_ELSE -->
-        <p>
-            No Groups defined.
-        </p>
+        <p>No Groups defined.</p>
     <!-- /TMPL_IF --> <!-- NAME="branchcategories" -->
 <!-- /TMPL_IF -->
 
@@ -258,7 +263,7 @@
                     <input type="hidden" name="categorycode" id="categorycode" value="<!-- TMPL_VAR name="categorycode" escape="HTML" -->" />
                     <!-- TMPL_VAR name="categorycode" -->
                 <!-- TMPL_ELSE -->
-            <label for="categorycode">Category code:</label>
+                <label for="categorycode">Category code:</label>
                     <input type="text" name="categorycode" id="categorycode" size="11" maxlength="10" value="<!-- TMPL_VAR name="categorycode" escape="HTML" -->" />
                 <!-- /TMPL_IF -->
             </li>
@@ -274,8 +279,12 @@
 		<label for="categorytype">Category Type: </label>
             <select id="categorytype" name="categorytype">
             <!-- TMPL_LOOP NAME="categorytype" -->
-                <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="type" -->" selected="selected"><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="type" -->"><!-- /TMPL_IF --><!-- TMPL_VAR NAME="type" --></option>
-                <!-- /TMPL_LOOP -->
+                <!-- TMPL_IF NAME="selected" -->
+                    <option value="<!-- TMPL_VAR NAME="type" -->" selected="selected">
+                <!-- TMPL_ELSE -->
+                    <option value="<!-- TMPL_VAR NAME="type" -->">
+                <!-- /TMPL_IF --> <!-- TMPL_VAR NAME="type" --></option>
+            <!-- /TMPL_LOOP -->
             </select>
 		</li>
 		</ol>
@@ -285,7 +294,8 @@
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_category" -->
- <!-- TMPL_UNLESS name="MESSAGE8" -->
+    <!-- TMPL_UNLESS name="MESSAGE8" -->
+    <div class="dialog message"> 
     Confirm delete:
     <form action="<!-- TMPL_VAR name="action" -->" method="post">
         <input type="hidden" name="op" value="categorydelete_confirmed" />
@@ -295,7 +305,8 @@
     <form action="<!-- TMPL_VAR name="action" -->" method="post"><input type="hidden" name="op" value="">
         <input type="submit" value="NO" />
     </form>
-<!-- /TMPL_UNLESS -->
+    </div>
+    <!-- /TMPL_UNLESS -->
 <!-- /TMPL_IF -->
 
 </div>
