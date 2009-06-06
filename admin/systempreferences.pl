@@ -121,9 +121,6 @@ $tabsysprefs{DefaultClassificationSource} = "Cataloguing";
 $tabsysprefs{RoutingSerials}              = "Cataloguing";
 $tabsysprefs{'item-level_itypes'}         = "Cataloguing";
 $tabsysprefs{OpacSuppression}             = "Cataloguing";
-$tabsysprefs{viewMARC}                    = "Cataloguing";
-$tabsysprefs{viewLabeledMARC}             = "Cataloguing";
-$tabsysprefs{viewISBD}                    = "Cataloguing";
 
 # Circulation
 $tabsysprefs{maxoutstanding}                 = "Circulation";
@@ -175,6 +172,9 @@ $tabsysprefs{intranetcolorstylesheet} = "StaffClient";
 $tabsysprefs{intranetuserjs}          = "StaffClient";
 $tabsysprefs{yuipath}                 = "StaffClient";
 $tabsysprefs{IntranetmainUserblock}   = "StaffClient";
+$tabsysprefs{viewMARC}                = "StaffClient";
+$tabsysprefs{viewLabeledMARC}         = "StaffClient";
+$tabsysprefs{viewISBD}                = "StaffClient";
 
 # Patrons
 $tabsysprefs{autoMemberNum}                = "Patrons";
