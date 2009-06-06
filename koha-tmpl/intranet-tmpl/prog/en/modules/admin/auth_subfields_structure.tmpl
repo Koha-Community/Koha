@@ -66,7 +66,7 @@ function displayMoreConstraint(numlayer){
                         <li><a href="/cgi-bin/koha/admin/auth_subfields_structure.pl#sub<!-- TMPL_VAR NAME="tagsubfield" -->field" title="<!-- TMPL_VAR NAME="liblibrarian" -->">
                             <!-- TMPL_VAR NAME="tagsubfield" -->
                     </a></li>
-                    <!-- /TMPL_IF --></li>
+                    <!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
             </ul>
 
@@ -75,10 +75,12 @@ function displayMoreConstraint(numlayer){
 			<fieldset class="rows"><ol>
 
                     <!-- TMPL_IF NAME="new_subfield" -->
-                <li><label for="tagsubfieldinput<!-- TMPL_VAR NAME="row" -->">Subfield code: </label><!-- TMPL_VAR NAME="tagsubfieldinput" -->&nbsp;</li> 
+                <li><label for="tagsubfieldinput<!-- TMPL_VAR NAME="row" -->">Subfield code: </label><!-- TMPL_VAR NAME="tagsubfieldinput" -->&nbsp;</li>
                     <!-- TMPL_ELSE -->
+                <li>
                 <input type="hidden" name="tagsubfield" value="<!-- TMPL_VAR name="tagsubfield" -->" />
-                    <!-- /TMPL_IF --> 
+                 </li>
+                    <!-- /TMPL_IF -->
                 <li><label for="repeatable<!-- TMPL_VAR NAME="row" -->">Repeatable: </label><!-- TMPL_VAR NAME="repeatable" -->&nbsp;</li>
                 <li><label for="mandatory<!-- TMPL_VAR NAME="row" -->">Mandatory: </label><!-- TMPL_VAR NAME="mandatory" -->&nbsp;</li>
                 <li><label for="liblibrarian<!-- TMPL_VAR NAME="row" -->">Text for librarian: </label><input id="liblibrarian<!-- TMPL_VAR NAME="row" -->" type="text" name="liblibrarian" value="<!-- TMPL_VAR NAME="liblibrarian" -->" size="40" maxlength="80" /></li>
