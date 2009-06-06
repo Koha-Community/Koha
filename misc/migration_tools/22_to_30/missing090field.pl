@@ -26,7 +26,7 @@ $sth->execute();
 my $i=1;
 while (my ($biblionumber,$biblioitemnumber)=$sth->fetchrow ){
  my $record = GetMarcBiblio($biblionumber);
-    print ".";	
+    print ".";
     print "\r$i" unless $i %100;
     MARCmodbiblionumber($biblionumber,$biblioitemnumber,$record);
 }
@@ -38,36 +38,40 @@ sub MARCmodbiblionumber{
     my ($tagfield2,$biblioitemtagsubfield) = &GetMarcFromKohaField("biblio.biblioitemnumber","");
         
     my $update=0;
-    my $tag = $record->field($tagfield);
-#     warn "ICI : ".$record->as_formatted if $record->subfield('090','a') eq '11546';
+    if (defined $record) {
+        my $tag = $record->field($tagfield);
+        #warn "ICI : ".$record->as_formatted if $record->subfield('090','a') eq '11546';
     
-# check that we have biblionumber at the right place, otherwise, update or create the field.
-    if ($tagfield <10) {
-        unless ($tag && $tag->data() == $biblionumber) {
-            if ($tag) {
-                $tag->update($biblionumber);
-            } else {
-                my $newrec = MARC::Field->new( $tagfield, $biblionumber);
-                $record->insert_fields_ordered($newrec);
+        # check that we have biblionumber at the right place, otherwise, update or create the field.
+        if ($tagfield <10) {
+            unless ($tag && $tag->data() == $biblionumber) {
+                if ($tag) {
+                    $tag->update($biblionumber);
+                } else {
+                    my $newrec = MARC::Field->new( $tagfield, $biblionumber);
+                    $record->insert_fields_ordered($newrec);
+                }
+                $update=1;
             }
-            $update=1;
+        } else {
+            unless ($tag && $tag->subfield($biblionumtagsubfield) == $biblionumber) {
+                if($tag) {
+                    $tag->update($tagfield => $biblionumber);
+                } else {
+                    my $newrec = MARC::Field->new( $tagfield,'','', $biblionumtagsubfield => $biblionumber,$biblioitemtagsubfield=>$biblioitemnumber);
+                    $record->insert_fields_ordered($newrec);
+                }
+                $update=1;
+            }
         }
     } else {
-        unless ($tag && $tag->subfield($biblionumtagsubfield) == $biblionumber) {
-            if($tag) {
-                $tag->update($tagfield => $biblionumber);
-            } else {
-                my $newrec = MARC::Field->new( $tagfield,'','', $biblionumtagsubfield => $biblionumber,$biblioitemtagsubfield=>$biblioitemnumber);
-                $record->insert_fields_ordered($newrec);
-            }
-            $update=1;
-        }
+        warn "problem with :".$biblionumber." , record undefined";
     }
-    
-    
-    if ($update){	
+
+
+    if ($update){
         &ModBiblioMarc($record,$biblionumber,'');
-        print "\n modified : $biblionumber \n";	
+        print "\n modified : $biblionumber \n";
     }
     
 }
