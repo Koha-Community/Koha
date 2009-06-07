@@ -18,6 +18,8 @@ package C4::Breeding;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
+
 use C4::Biblio;
 use C4::Koha;
 use C4::Charset;
@@ -109,9 +111,7 @@ sub ImportBreeding {
             # if isbn found and biblio does not exist, add it. If isbn found and biblio exists, 
             # overwrite or ignore depending on user choice
             # drop every "special" char : spaces, - ...
-            $oldbiblio->{isbn} =~ s/\(.*$//;
-            $oldbiblio->{isbn} =~ tr/ -_//;
-            $oldbiblio->{isbn} = uc $oldbiblio->{isbn}; 
+            $oldbiblio->{isbn} = C4::Koha::_isbn_cleanup($oldbiblio->{isbn}); # FIXME C4::Koha::_isbn_cleanup should be public
             # search if biblio exists
             my $biblioitemnumber;
             if ($oldbiblio->{isbn}) {
