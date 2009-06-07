@@ -26,6 +26,7 @@ package C4::Output;
 # templates.
 
 use strict;
+use warnings;
 
 use C4::Context;
 use C4::Languages qw(getTranslatedLanguages get_bidi regex_lang_subtags language_get_description accept_language );

@@ -17,6 +17,9 @@ package C4::XSLT;
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
+use strict;
+use warnings;
+
 use C4::Context;
 use C4::Branch;
 use C4::Items;
@@ -26,8 +29,6 @@ use C4::Circulation;
 use Encode;
 use XML::LibXML;
 use XML::LibXSLT;
-
-use strict;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -147,15 +148,14 @@ sub buildKohaItemsNamespace {
     my @items = C4::Items::GetItemsInfo($biblionumber);
     my $branches = GetBranches();
     my $itemtypes = GetItemTypes();
-
-    my $xml;
+    my $xml = '';
     for my $item (@items) {
         my $status;
 
         my ( $transfertwhen, $transfertfrom, $transfertto ) = C4::Circulation::GetTransfers($item->{itemnumber});
 
-        if ( $itemtypes->{ $item->{itype} }->{notforloan} == 1 || $item->{notforloan} || $item->{onloan} || $item->{wthdrawn} || $item->{itemlost} || $item->{damaged} ||
-             ($transfertwhen ne '') || $item->{itemnotforloan} ) {
+        if ( $itemtypes->{ $item->{itype} }->{notforloan} || $item->{notforloan} || $item->{onloan} || $item->{wthdrawn} || $item->{itemlost} || $item->{damaged} ||
+             (defined $transfertwhen && $transfertwhen ne '') || $item->{itemnotforloan} ) {
             if ( $item->{notforloan} < 0) {
                 $status = "On order";
             } 
@@ -174,7 +174,7 @@ sub buildKohaItemsNamespace {
             if ($item->{damaged}) {
                 $status = "Damaged"; 
             }
-            if ($transfertwhen ne '') {
+            if (defined $transfertwhen && $transfertwhen ne '') {
                 $status = 'In transit';
             }
         } else {
@@ -183,7 +183,9 @@ sub buildKohaItemsNamespace {
         my $homebranch = $branches->{$item->{homebranch}}->{'branchname'};
         $xml.= "<item><homebranch>$homebranch</homebranch>".
 		"<status>$status</status>".
-		"<itemcallnumber>".$item->{'itemcallnumber'}."</itemcallnumber></item>";
+		(defined $item->{'itemcallnumber'} ? "<itemcallnumber>".$item->{'itemcallnumber'}."</itemcallnumber>" 
+                                           : "<itemcallnumber />")
+        . "</item>";
 
     }
     $xml = "<items xmlns=\"http://www.koha.org/items\">".$xml."</items>";

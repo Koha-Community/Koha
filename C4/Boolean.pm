@@ -22,6 +22,8 @@ package C4::Boolean;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
+
 use POSIX;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
