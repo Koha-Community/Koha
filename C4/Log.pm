@@ -21,6 +21,8 @@ package C4::Log;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
+
 use C4::Context;
 use C4::Dates qw(format_date);
 
