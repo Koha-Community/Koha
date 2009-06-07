@@ -18,7 +18,7 @@ package C4::ClassSortRoutine::Dewey;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-require Exporter;
+use warnings;
 
 use vars qw($VERSION);
 
@@ -58,6 +58,8 @@ Generates sorting key using the following rules:
 sub get_class_sort_key {
     my ($cn_class, $cn_item) = @_;
 
+    $cn_class = '' unless defined $cn_class;
+    $cn_item  = '' unless defined $cn_item;
     my $init = uc "$cn_class $cn_item";
     $init =~ s/^\s+//;
     $init =~ s/\s+$//;

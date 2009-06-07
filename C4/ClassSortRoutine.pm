@@ -18,6 +18,8 @@ package C4::ClassSortRoutine;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
+
 require Exporter;
 use Class::Factory::Util;
 use C4::Context;
