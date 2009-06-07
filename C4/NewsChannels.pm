@@ -30,208 +30,21 @@ BEGIN {
 	@ISA = qw(Exporter);
 	@EXPORT = qw(
 		&GetNewsToDisplay
-		&news_channels &get_new_channel &del_channels &add_channel &update_channel
-		&news_channels_categories &get_new_channel_category &del_channels_categories
-		&add_channel_category &update_channel_category &news_channels_by_category
 		&add_opac_new &upd_opac_new &del_opac_new &get_opac_new &get_opac_news
 	);
 }
 
 =head1 NAME
 
-C4::NewsChannels - Functions to manage the news channels and its categories
+C4::NewsChannels - Functions to manage OPAC and intranet news
 
 =head1 DESCRIPTION
 
-This module provides the functions needed to admin the news channels and its categories
+This module provides the functions needed to mange OPAC and intranet news.
 
 =head1 FUNCTIONS
 
-=head2 news_channels
-
-  ($count, @channels) = &news_channels($channel_name, $id_category, $unclassified);
-
-Looks up news channels by name or category.
-
-C<$channel_name> is the channel name to search.
-
-C<$id_category> is the channel category code to search.
-
-C<$$unclassified> if it is set and $channel_name and $id_category search for the news channels without a category
-
-if none of the params are set C<&news_channels> returns all the news channels.
-
-C<&news_channels> returns two values: an integer giving the number of
-news channels found and a reference to an array
-of references to hash, which has the news_channels and news_channels_categories fields.
-
 =cut
-
-sub news_channels {
-    my ($channel_name, $id_category, $unclassified) = @_;
-    my $dbh = C4::Context->dbh;
-    my @channels;
-    my $query = "SELECT * FROM news_channels LEFT JOIN news_channels_categories ON news_channels.id_category = news_channels_categories.id_category";
-    if ( ($channel_name ne '') && ($id_category ne '') ) {
-        $query.= " WHERE channel_name like '" . $channel_name . "%' AND news_channels.id_category = " . $id_category;
-    } elsif ($channel_name ne '')  {
-        $query.= " WHERE channel_name like '" . $channel_name . "%'";
-    } elsif ($id_category ne '') {
-        $query.= " WHERE news_channels.id_category = " . $id_category;
-    } elsif ($unclassified) {
-        $query.= " WHERE news_channels.id_category IS NULL ";
-    }
-    my $sth = $dbh->prepare($query);
-    $sth->execute();
-    while (my $row = $sth->fetchrow_hashref) {
-        push @channels, $row;
-    }
-    $sth->finish;
-    return (scalar(@channels), @channels);
-}
-
-=head2 news_channels_by_category
-
-  ($count, @results) = &news_channels_by_category();
-
-Looks up news channels grouped by category.
-
-C<&news_channels_by_category> returns two values: an integer giving the number of
-categories found and a reference to an array
-of references to hash, which the following keys: 
-
-=over 4
-
-=item C<channels_count>
-
-The number of news channels in that category
-
-=item C<channels>
-
-A reference to an array of references to hash which keys are the new_channels fields. 
-
-Additionally the last index of results has a reference to all the news channels which don't have a category 
-
-=back
-
-=cut
-
-sub news_channels_by_category {
-    
-    my ($categories_count, @results) = &news_channels_categories();
-    foreach my $row (@results) {
-
-        my ($channels_count, @channels) = &news_channels('', $row->{'id_category'});
-        $row->{'channels_count'} = $channels_count;
-        $row->{'channels'} = \@channels;
-    }
-
-    my ($channels_count, @channels) = &news_channels('', '', 1);
-    my %row;
-    $row{'id_category'} = -1;
-    $row{'unclassified'} = 1;
-    $row{'channels_count'} = $channels_count;
-    $row{'channels'} = \@channels;
-    push @results, \%row;
-
-    return (scalar(@results), @results);
-}
-
-sub get_new_channel {
-    my ($id) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT * FROM news_channels WHERE id = ?");
-    $sth->execute($id);
-    my $channel = $sth->fetchrow_hashref;
-    $sth->finish;
-    return $channel;
-}
-
-sub del_channels {
-    my ($ids) = @_;
-    if ($ids ne '') {
-        my $dbh = C4::Context->dbh;
-        my $sth = $dbh->prepare("DELETE FROM news_channels WHERE id IN ($ids) ");
-        $sth->execute();
-        $sth->finish;
-        return $ids;
-    }
-    return 0;
-}
-
-sub add_channel {
-    my ($name, $url, $id_category, $notes) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("INSERT INTO news_channels (channel_name, url, id_category, notes) VALUES (?,?,?,?)");
-    $sth->execute($name, $url, $id_category, $notes);
-    $sth->finish;
-    return 1;
-}
-
-sub update_channel {
-    my ($id, $name, $url, $id_category, $notes) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("UPDATE news_channels SET channel_name = ?,  url = ?, id_category = ?, notes = ? WHERE id = ?");
-    $sth->execute($name, $url, $id_category, $notes, $id);
-    $sth->finish;
-    return 1;
-}
-
-sub news_channels_categories {
-    my $dbh = C4::Context->dbh;
-    my @categories;
-    my $query = "SELECT * FROM news_channels_categories";
-    my $sth = $dbh->prepare($query);
-    $sth->execute();
-    while (my $row = $sth->fetchrow_hashref) {
-        push @categories, $row;
-    }
-    $sth->finish;
-    return (scalar(@categories), @categories);
-
-}
-
-sub get_new_channel_category {
-    my ($id) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT * FROM news_channels_categories WHERE id_category = ?");
-    $sth->execute($id);
-    my $category = $sth->fetchrow_hashref;
-    $sth->finish;
-    return $category;
-}
-
-sub del_channels_categories {
-    my ($ids) = @_;
-    if ($ids ne '') {
-        my $dbh = C4::Context->dbh;
-        my $sth = $dbh->prepare("UPDATE news_channels SET id_category = NULL WHERE id_category IN ($ids) ");
-        $sth->execute();
-        $sth = $dbh->prepare("DELETE FROM news_channels_categories WHERE id_category IN ($ids) ");
-        $sth->execute();
-        $sth->finish;
-        return $ids;
-    }
-    return 0;
-}
-
-sub add_channel_category {
-    my ($name) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("INSERT INTO news_channels_categories (category_name) VALUES (?)");
-    $sth->execute($name);
-    $sth->finish;
-    return 1;
-}
-
-sub update_channel_category {
-    my ($id, $name) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("UPDATE news_channels_categories SET category_name = ? WHERE id_category = ?");
-    $sth->execute($name, $id);
-    $sth->finish;
-    return 1;
-}
 
 sub add_opac_new {
     my ($title, $new, $lang, $expirationdate, $timestamp, $number) = @_;

@@ -12,17 +12,7 @@ sub testing_class { 'C4::NewsChannels' };
 
 sub methods : Test( 1 ) {
     my $self = shift;
-    my @methods = qw( news_channels 
-                      news_channels_by_category 
-                      get_new_channel 
-                      del_channels 
-                      add_channel 
-                      update_channel 
-                      news_channels_categories 
-                      get_new_channel_category 
-                      del_channels_categories 
-                      add_channel_category 
-                      update_channel_category 
+    my @methods = qw(
                       add_opac_new 
                       upd_opac_new 
                       del_opac_new 
