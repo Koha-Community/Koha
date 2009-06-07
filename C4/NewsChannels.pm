@@ -18,6 +18,7 @@ package C4::NewsChannels;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
 
 use C4::Context;
 use C4::Dates qw(format_date);
@@ -279,7 +280,7 @@ sub get_opac_new {
     my $sth = $dbh->prepare("SELECT * FROM opac_news WHERE idnew = ?");
     $sth->execute($idnew);
     my $data = $sth->fetchrow_hashref;
-    $data->{$data->{'lang'}} = 1;
+    $data->{$data->{'lang'}} = 1 if defined $data->{lang};
     $data->{expirationdate} = format_date($data->{expirationdate});
     $data->{timestamp}      = format_date($data->{timestamp});
     $sth->finish;
