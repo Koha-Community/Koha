@@ -18,6 +18,8 @@ package C4::Matcher;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
+
 use C4::Context;
 use MARC::Record;
 use C4::Search;
@@ -820,7 +822,7 @@ sub _parse_match_component {
 # FIXME - default normalizer
 sub _normalize {
     my $value = uc shift;
-    $value =~ s/.;:,\]\[\)\(\/'"//g;
+    $value =~ s/[.;:,\]\[\)\(\/'"]//g;
     $value =~ s/^\s+//;
     #$value =~ s/^\s+$//;
     $value =~ s/\s+$//;
