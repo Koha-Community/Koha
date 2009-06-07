@@ -19,6 +19,8 @@ package C4::Input; #assumes C4/Input
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
+
 require Exporter;
 use C4::Context;
 use CGI;
@@ -49,7 +51,7 @@ number or ISBN is valid.
 
 @ISA = qw(Exporter);
 @EXPORT = qw(
-	&checkdigit &checkvalidisbn
+	&checkdigit
 	&buildCGIsort
 );
 
@@ -106,32 +108,6 @@ sub checkdigit ($;$) {
 	}
 	return 0;
 } # sub checkdigit
-
-=item checkvalidisbn		# Obsolete Function!
-
-  $valid = &checkvalidisbn($isbn);
-
-Returns a true value iff C<$isbn> is a valid ISBN: it must be ten
-digits long (counting "X" as a digit), and must have a valid check
-digit at the end.
-
-sub checkvalidisbn ($) {	# Obsolete Function!
-	my ($q) = shift or return undef;
-	$q=~s/[^Xx\d]//g;
-	 /(\d{9})(X|\d)/i or
-	/(\d{12})(X|\d)/i or return 0; 
-	my $checksum = $2;
-	my $isbn     = $1;
-	my $c = 0;
-	my $max = length $isbn;
-	for (my $i=0; $i<$max; $i++) {
-		my $digit=substr($q,$i,1);
-		$c+=$digit*(10-$i);
-	}
-	$c %= 11;
-	($c==10) and $c = 'X';
-	return ($c eq $checksum) ? 1 : 0;
-}
 
 =item buildCGISort
 
