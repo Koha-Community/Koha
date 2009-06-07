@@ -1235,7 +1235,7 @@ sub GetItemsInfo {
     $sth->execute($biblionumber);
     my $i = 0;
     my @results;
-    my ( $date_due, $count_reserves, $serial );
+    my $serial;
 
     my $isth    = $dbh->prepare(
         "SELECT issues.*,borrowers.cardnumber,borrowers.surname,borrowers.firstname,borrowers.branchcode as bcode
@@ -1245,6 +1245,7 @@ sub GetItemsInfo {
 	my $ssth = $dbh->prepare("SELECT serialseq,publisheddate from serialitems left join serial on serialitems.serialid=serial.serialid where serialitems.itemnumber=? "); 
 	while ( my $data = $sth->fetchrow_hashref ) {
         my $datedue = '';
+        my $count_reserves;
         $isth->execute( $data->{'itemnumber'} );
         if ( my $idata = $isth->fetchrow_hashref ) {
             $data->{borrowernumber} = $idata->{borrowernumber};
