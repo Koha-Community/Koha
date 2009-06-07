@@ -34,7 +34,6 @@ BEGIN {
 		&news_channels_categories &get_new_channel_category &del_channels_categories
 		&add_channel_category &update_channel_category &news_channels_by_category
 		&add_opac_new &upd_opac_new &del_opac_new &get_opac_new &get_opac_news
-		&add_opac_electronic &upd_opac_electronic &del_opac_electronic &get_opac_electronic &get_opac_electronics
 	);
 }
 
@@ -345,75 +344,6 @@ sub GetNewsToDisplay {
         push @results, $row;
     }
     return \@results;
-}
-
-### get electronic databases
-
-sub add_opac_electronic {
-    my ($title, $edata, $lang,$image,$href,$section) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("INSERT INTO opac_electronic (title, edata, lang,image,href,section) VALUES (?,?,?,?,?,?)");
-    $sth->execute($title, $edata, $lang,$image,$href,$section);
-    $sth->finish;
-    return 1;
-}
-
-sub upd_opac_electronic {
-    my ($idelectronic, $title, $edata, $lang, $image, $href,$section) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("UPDATE opac_electronic SET title = ?, edata = ?, lang = ? , image=?, href=? ,section=? WHERE idelectronic = ?");
-    $sth->execute($title, $edata, $lang, $image,$href ,$section, $idelectronic);
-    $sth->finish;
-    return 1;
-}
-
-sub del_opac_electronic {
-    my ($ids) = @_;
-    if ($ids) {
-        my $dbh = C4::Context->dbh;
-        my $sth = $dbh->prepare("DELETE FROM opac_electronic WHERE idelectronic IN ($ids)");
-        $sth->execute();
-        $sth->finish;
-        return 1;
-    } else {
-        return 0;
-    }
-}
-
-sub get_opac_electronic {
-    my ($idelectronic) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT * FROM opac_electronic WHERE idelectronic = ?");
-    $sth->execute($idelectronic);
-    my $data = $sth->fetchrow_hashref;
-    $data->{$data->{'lang'}} = 1;
-    $data->{$data->{'section'}} = 1;
-    $sth->finish;
-    return $data;
-}
-
-sub get_opac_electronics {
-    my ($section, $lang) = @_;
-    my $dbh = C4::Context->dbh;
-    my $query = "SELECT *, DATE_FORMAT(timestamp, '%d/%m/%Y') AS newdate FROM opac_electronic";
-    if ($lang) {
-        $query.= " WHERE lang = '" .$lang ."' ";
-    }
-    if ($section) {
-        $query.= " and section= '" . $section."' ";
-    }
-    $query.= " ORDER BY title ";
-    
-    my $sth = $dbh->prepare($query);
-    $sth->execute();
-    my @opac_electronic;
-    my $count = 0;
-    while (my $row = $sth->fetchrow_hashref) {
-            push @opac_electronic, $row;
-        $count++;
-    }
-
-    return ($count,\@opac_electronic);
 }
 
 1;

@@ -29,11 +29,6 @@ sub methods : Test( 1 ) {
                       get_opac_new 
                       get_opac_news 
                       GetNewsToDisplay 
-                      add_opac_electronic 
-                      upd_opac_electronic 
-                      del_opac_electronic 
-                      get_opac_electronic 
-                      get_opac_electronics 
                 );
     
     can_ok( $self->testing_class, @methods );    
