@@ -28,7 +28,6 @@ sub methods : Test( 1 ) {
                       GetSerials
                       GetSerials2
                       GetLatestSerials
-                      GetDistributedTo
                       GetNextSeq
                       GetSeq
                       GetExpirationDate
@@ -41,7 +40,6 @@ sub methods : Test( 1 ) {
                       NewIssue
                       ItemizeSerials
                       HasSubscriptionExpired
-                      SetDistributedto
                       DelSubscription
                       DelIssue
                       GetLateOrMissingIssues
