@@ -240,10 +240,8 @@ else {    # DEFAULT
     # if we are on the last page, the number of the last word to display
     # must not exceed the length of the results array
     my $last = min( $first + $pagesize - 1, scalar @{$results} - 1, );
-    my $toggle = 0;
     my @loop;
     foreach my $itemtype ( @{$results}[ $first .. $last ] ) {
-        $itemtype->{toggle} = ($toggle++ % 2) ? 0 : 1 ;
         $itemtype->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtype->{imageurl} );
         $itemtype->{rentalcharge} = sprintf( '%.2f', $itemtype->{rentalcharge} );
         push( @loop, $itemtype );
