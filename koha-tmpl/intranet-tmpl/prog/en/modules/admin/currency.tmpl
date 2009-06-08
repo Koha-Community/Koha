@@ -204,12 +204,12 @@
 			<th colspan="2">&nbsp;</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="loop" -->
-		<!-- TMPL_IF NAME="toggle" -->
-		<tr class="highlight"><td class="highlight">
+		<!-- TMPL_UNLESS NAME="__odd__" -->
+		<tr class="highlight">
 		<!-- TMPL_ELSE -->
-		<tr><td>
-		<!-- /TMPL_IF -->
-			    <!-- TMPL_VAR NAME="currency" --></td>
+		<tr>
+		<!-- /TMPL_UNLESS -->
+			<td><!-- TMPL_VAR NAME="currency" --></td>
 			<td><!-- TMPL_VAR NAME="rate" --></td>
 			<td><!-- TMPL_VAR NAME="symbol" --></td>
 			<td><!-- TMPL_VAR NAME="timestamp" --></td>
