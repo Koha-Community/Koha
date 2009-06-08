@@ -165,7 +165,6 @@ if ($op eq 'add_form') {
 
 	my ($count,$results)=StringSearch($searchfield,'web');
 	my @loop;
-	my $toggle = 0;
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
 		my %row = (
 			currency => $results->[$i]{'currency'},
@@ -173,7 +172,6 @@ if ($op eq 'add_form') {
 			  symbol => $results->[$i]{'symbol'},
 		   timestamp => format_date($results->[$i]{'timestamp'}),
 		);
-		($i % 2) and $row{toggle} = 1;
 		push @loop, \%row;
 	}
 	$template->param(loop => \@loop);
