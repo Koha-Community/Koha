@@ -43,6 +43,11 @@ sub blank_row {
     for my $rp (@rule_params) {
         for my $n (1 .. 3) {
             my $key   = "${rp}${n}-$category_code";
+            
+            if (utf8::is_utf8($key)) {
+              utf8::encode($key);
+            }
+            
             my $value = $input->param($key);
             if ($value) {
                 return 0;
