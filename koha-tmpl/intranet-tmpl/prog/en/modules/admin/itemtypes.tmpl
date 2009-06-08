@@ -290,10 +290,10 @@ Item Types Administration
     <th>Actions</th>
   </tr>
   <!-- TMPL_LOOP name="loop" -->
-    <!-- TMPL_IF NAME="toggle" -->
-  <tr>
-    <!-- TMPL_ELSE -->
+    <!-- TMPL_UNLESS name="__odd__" -->
   <tr class="highlight">
+    <!-- TMPL_ELSE -->
+  <tr>
     <!-- /TMPL_IF -->
    <!-- TMPL_UNLESS NAME="noItemTypeImages" --> <td><img src="<!-- TMPL_VAR name="imageurl" -->" alt="" /></td><!-- /TMPL_UNLESS -->
     <td>
