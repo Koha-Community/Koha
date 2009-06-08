@@ -121,10 +121,10 @@ RECORD: while ( my $record = $batch->next() ) {
         $authtypecode="CORPO_NAME" if ($record->field('110'));
         $authtypecode="MEETI_NAME" if ($record->field('111'));
         $authtypecode="UNIF_TITLE" if ($record->field('130'));
-        $authtypecode="CHRON_TERM" if ($record->field('148'));
-        $authtypecode="TOPIC_TERM" if ($record->field('150'));
-        $authtypecode="GEOGR_NAME" if ($record->field('151'));
-        $authtypecode="GENRE/FORM" if ($record->field('155'));
+        $authtypecode="CHRON_TERM" if ($record->field('148') or $record->field('182'));
+        $authtypecode="TOPIC_TERM" if ($record->field('150') or $record->field('180'));
+        $authtypecode="GEOGR_NAME" if ($record->field('151') or $record->field('181'));
+        $authtypecode="GENRE/FORM" if ($record->field('155') or $record->field('185'));
         next unless $authtypecode; # skip invalid records FIXME: far too simplistic
     }
     else {
