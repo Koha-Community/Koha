@@ -402,14 +402,12 @@ SELECT aqbudgetid,
         scalar @results - 1,
     );
 
-    my $toggle = 0;
     my @loop;
     foreach my $result (@results[$first .. $last]) {
         push(
             @loop,
             {
                 %{$result},
-                toggle => $toggle++%2,
                 bookfundname => $bookfundname_of{ $result->{'bookfundid'} },
                 branchname => $branches->{ $result->{branchcode} }->{branchname},
                 startdate => format_date($result->{startdate}),
