@@ -80,11 +80,11 @@ $(document).ready(function() {
                         <th scope="col">Delay</th><th scope="col">Letter</th><th scope="col">Debar</th><th scope="col">Delay</th><th scope="col">Letter</th><th scope="col">Debar</th><th scope="col">Delay</th><th scope="col">Letter</th><th scope="col">Debar</th>
                     </tr>
                     <!-- TMPL_LOOP NAME="table" -->
-                     <!-- TMPL_IF NAME="toggle" -->
+                     <!-- TMPL_UNLESS NAME="__odd__" -->
                                 <tr class="highlight">
                             <!-- TMPL_ELSE -->
                                 <tr>
-                            <!-- /TMPL_IF -->
+                            <!-- /TMPL_UNLESS -->
                             <th scope="row"><!-- TMPL_VAR NAME="line" --></th>
 <td>
                                 <input name="delay1-<!-- TMPL_VAR NAME="overduename" -->" size="5" value="<!-- TMPL_VAR NAME="delay1" -->" />

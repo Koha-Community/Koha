@@ -182,17 +182,10 @@ my $letters = GetLetters("circulation");
 my $countletters = scalar $letters;
 
 my @line_loop;
-my $toggle = 1;
 
 for my $data (@categories) {
-    if ( $toggle eq 1 ) {
-        $toggle = 0;
-    } else {
-        $toggle = 1;
-    }
     my %row = (
         overduename => $data->{'categorycode'},
-        toggle      => $toggle,
         line        => $data->{'description'}
     );
     if (%temphash and not $input_saved){
