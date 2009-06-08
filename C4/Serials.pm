@@ -51,7 +51,6 @@ BEGIN {
     
     &UpdateClaimdateIssues
     &GetSuppliersWithLateIssues             &getsupplierbyserialid
-    &GetDistributedTo   &SetDistributedTo
     &getroutinglist     &delroutingmember   &addroutingmember
     &reorder_members
     &check_routing &updateClaim &removeMissingIssue
@@ -853,27 +852,6 @@ sub GetLatestSerials {
     #     $sth->execute($subscriptionid);
     #     my ($totalissues) = $sth->fetchrow;
     return \@serials;
-}
-
-=head2 GetDistributedTo
-
-=over 4
-
-$distributedto=GetDistributedTo($subscriptionid)
-This function select the old previous value of distributedto in the database.
-
-=back
-
-=cut
-
-sub GetDistributedTo {
-    my $dbh = C4::Context->dbh;
-    my $distributedto;
-    my $subscriptionid = @_;
-    my $query = "SELECT distributedto FROM subscription WHERE subscriptionid=?";
-    my $sth   = $dbh->prepare($query);
-    $sth->execute($subscriptionid);
-    return ($distributedto) = $sth->fetchrow;
 }
 
 =head2 GetNextSeq
@@ -1828,29 +1806,6 @@ sub HasSubscriptionExpired {
       }
     }
     return 0;	# Notice that you'll never get here.
-}
-
-=head2 SetDistributedto
-
-=over 4
-
-SetDistributedto($distributedto,$subscriptionid);
-This function update the value of distributedto for a subscription given on input arg.
-
-=back
-
-=cut
-
-sub SetDistributedto {
-    my ( $distributedto, $subscriptionid ) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = qq|
-        UPDATE subscription
-        SET    distributedto=?
-        WHERE  subscriptionid=?
-    |;
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $distributedto, $subscriptionid );
 }
 
 =head2 DelSubscription
