@@ -140,15 +140,8 @@ else {    # DEFAULT
     my $sth2 = $dbh->prepare("SHOW COLUMNS from $tablename");
     $sth2->execute;
 
-    my $toggle    = 1;
     my @loop_data = ();
     while ( ( my $field ) = $sth2->fetchrow_array ) {
-        if ( $toggle eq 1 ) {
-            $toggle = 0;
-        }
-        else {
-            $toggle = 1;
-        }
         my %row_data;    # get a fresh hash for the row data
         $row_data{tagfield} = $fields{ $tablename . "." . $field }->{tagfield};
         $row_data{tagsubfield} =
@@ -158,7 +151,6 @@ else {    # DEFAULT
         $row_data{kohafield} = $field;
         $row_data{edit}      =
 "$script_name?op=add_form&amp;tablename=$tablename&amp;kohafield=$field";
-        $row_data{toggle} = $toggle;
         push( @loop_data, \%row_data );
     }
     $template->param(

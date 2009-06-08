@@ -155,7 +155,11 @@
     <th>&nbsp;</th>
 </tr>
 <!-- TMPL_LOOP name="loop" -->
-<!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
+<!-- TMPL_UNLESS name="__odd__" -->
+<tr class="highlight">
+<!-- TMPL_ELSE -->
+<tr>
+<!-- /TMPL_IF -->
     <td><a href="<!-- TMPL_VAR name="edit" -->"><!-- TMPL_VAR name="kohafield" --></a></td>
     <td><!-- TMPL_VAR name="tagfield" --></td>
     <td><!-- TMPL_VAR name="tagsubfield" --></td>
