@@ -198,7 +198,11 @@ the subfield is not entered through a free field, but though a list of authorize
 	<th>Delete</th>
 	</tr>
 <!-- TMPL_LOOP name="loop" -->
+<!-- TMPL_UNLESS name="__odd__" -->
+<tr class="highlight">
+<!-- TMPL_ELSE -->
 <tr>
+<!-- /TMPL_UNLESS -->
 	<td><!-- TMPL_VAR name="category" --></td>
 	<td><!-- TMPL_VAR name="authorised_value" --></td>
 	<td><!-- TMPL_VAR name="lib" --></td>
