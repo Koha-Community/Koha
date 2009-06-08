@@ -515,7 +515,8 @@
     <h2>This is a serial subscription</h2>
     <p> (There are <!-- TMPL_VAR NAME="subscriptionsnumber" --> subscriptions associated with this title).</p>
     <!-- TMPL_LOOP Name="subscriptions" -->
-    <!-- TMPL_IF name="branchcode" --><h3>At branch: <!-- TMPL_VAR NAME="branchcode" --></h3><!-- /TMPL_IF -->
+    <!-- TMPL_IF name="branchname" --><h3>At library: <!-- TMPL_VAR NAME="branchname" --></h3><!-- TMPL_ELSE -->
+    <!-- TMPL_IF name="branchcode" --><h3>At branch: <!-- TMPL_VAR NAME="branchcode" --></h3><!-- /TMPL_IF --><!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="subscriptionnotes" --><p><!--TMPL_VAR NAME="subscriptionnotes"--> </p><!-- /TMPL_IF -->
     <!--TMPL_IF NAME="latestserials"-->
     <p> The <!-- TMPL_VAR NAME="opacdisplaycount" --> latest issues for this subscription:</p>

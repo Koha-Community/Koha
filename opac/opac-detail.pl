@@ -107,6 +107,7 @@ foreach my $subscription (@subscriptions) {
     $cell{subscriptionid}    = $subscription->{subscriptionid};
     $cell{subscriptionnotes} = $subscription->{notes};
     $cell{branchcode}        = $subscription->{branchcode};
+    $cell{branchname}        = GetBranchName($subscription->{branchcode});
     $cell{hasalert}          = $subscription->{hasalert};
     #get the three latest serials.
     $serials_to_display = $subscription->{opacdisplaycount};
