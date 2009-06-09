@@ -831,7 +831,7 @@ sub GetLatestSerials {
                         FROM     serial
                         WHERE    subscriptionid = ?
                         AND      (status =2 or status=4)
-                        ORDER BY planneddate DESC LIMIT 0,$limit
+                        ORDER BY publisheddate DESC LIMIT 0,$limit
                 ";
     my $sth = $dbh->prepare($strsth);
     $sth->execute($subscriptionid);
