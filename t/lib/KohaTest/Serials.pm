@@ -53,9 +53,6 @@ sub methods : Test( 1 ) {
                       getroutinglist
                       countissuesfrom
                       abouttoexpire
-                      old_newsubscription
-                      old_modsubscription
-                      old_getserials
                       in_array
                       GetNextDate
                       itemdata
