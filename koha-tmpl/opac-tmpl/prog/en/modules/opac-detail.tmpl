@@ -24,7 +24,7 @@
         });<!-- TMPL_IF NAME="GoogleJackets" -->
         KOHA.Google.GetCoverFromIsbn();<!-- /TMPL_IF --><!-- TMPL_IF NAME="TagsEnabled" -->
         $(".tagbutton").click(KOHA.Tags.add_tag_button);<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="opacbookbag" -->$("#action").append("<li><a class=\"addtocart\" href=\"#\" onclick=\"addRecord('"+$("input[name=bib]").val()+"'); return false;\">Add to Your Cart</a></li>");
+		<!-- TMPL_IF NAME="opacbookbag" -->$("#action").append("<li><a class=\"addtocart\" href=\"#\" onclick=\"addRecord('"+$("input[name=bib]").val()+"'); return false;\">"+_("Add to Your Cart")+"</a></li>");
 <!-- /TMPL_IF -->});
 //]]>
 </script>
