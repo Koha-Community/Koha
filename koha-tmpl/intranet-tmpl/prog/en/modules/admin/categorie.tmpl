@@ -233,7 +233,11 @@ Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" escape="html" -->
 			<th scope="col" colspan="2">&nbsp; </th>
 		</tr>
 		<!-- TMPL_LOOP NAME="loop" -->
-		<!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+		<!-- TMPL_UNLESS NAME="__odd__" -->
+			<tr class="highlight">
+		<!-- TMPL_ELSE -->
+			<tr>
+		<!-- /TMPL_UNLESS -->
                         <td><!-- TMPL_VAR NAME="categorycode" escape="html" --></td>
                         <td>
                             <a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" escape="url" -->"><!-- TMPL_VAR NAME="description" escape="html" --></a>
