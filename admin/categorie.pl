@@ -174,7 +174,6 @@ if ($op eq 'add_form') {
 	$template->param(else => 1);
 	my @loop;
 	my ($count,$results)=StringSearch($searchfield,'web');
-	my $toggle = 0;
 	for (my $i=0; $i < $count; $i++){
 		my %row = (categorycode => $results->[$i]{'categorycode'},
 				description => $results->[$i]{'description'},
@@ -188,15 +187,12 @@ if ($op eq 'add_form') {
 				category_type => $results->[$i]{'category_type'},
 				"type_".$results->[$i]{'category_type'} => 1,
 				toggle => $toggle );
-		push @loop, \%row;
-		if ( $toggle eq 0 )
-		{
-			$toggle = 1;
-		}
-		else
-		{
-			$toggle = 0;
-		}
+	    if (C4::Context->preference('EnhancedMessagingPreferences')) {
+		my $brief_prefs = _get_brief_messaging_prefs($results->[$i]{'categorycode'});
+		$row{messaging_prefs} = $brief_prefs if @$brief_prefs;
+	    }
+	    
+	    push @loop, \%row;
 	}
 	$template->param(loop => \@loop);
 	# check that I (institution) and C (child) exists. otherwise => warning to the user
