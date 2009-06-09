@@ -144,7 +144,11 @@ $(document).ready(function() {
 			<th>&nbsp;</th>
 		</tr></thead>
 		<tbody><!-- TMPL_LOOP NAME="letter" -->
-		<!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+		<!-- TMPL_UNLESS NAME="__odd__" -->
+			<tr class="highlight">
+		<!-- TMPL_ELSE -->
+			<tr>
+		<!-- /TMPL_UNLESS -->
 				<td><!-- TMPL_VAR NAME="module" --></td>
 				<td><!-- TMPL_VAR NAME="code" --></td>
 				<td><!-- TMPL_VAR NAME="name" --></td>
