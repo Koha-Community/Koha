@@ -143,18 +143,11 @@ my $ordergrandtotal;
 my @loop_orders = ();
 for (my $i = 0 ; $i < $countpendings ; $i++) {
     my %line;
-    if ($toggle==0){
-        $line{color}='#EEEEEE';
-        $toggle=1;
-    } else {
-            $line{color}='white';
-            $toggle=0;
-    }
     %line = %{$pendingorders->[$i]};
-	$line{quantity}+=0;
-	$line{quantrem} = $line{quantity} - $line{quantityreceived};
-	$line{quantityreceived}+=0;
-	$line{unitprice}+=0;
+    $line{quantity}+=0;
+    $line{quantrem} = $line{quantity} - $line{quantityreceived};
+    $line{quantityreceived}+=0;
+    $line{unitprice}+=0;
     $totalPunitprice += $line{unitprice};
     $totalPquantity +=$line{quantity};
     $totalPqtyrcvd +=$line{quantityreceived};
