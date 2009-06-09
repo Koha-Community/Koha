@@ -14,16 +14,17 @@
 //<![CDATA[
 $(document).ready(function(){
 	$(".addtocart").show();
-	var param1 = "<label for=\"addto\">Add to: <\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>";
-	<!-- TMPL_IF name="opacbookbag" -->	param1 += "<option value=\"addtocart\">Cart<\/option>";
+	var param1 = "<label for=\"addto\">"+_("Add to: ")+"<\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>";
+	<!-- TMPL_IF name="opacbookbag" -->	param1 += "<option value=\"addtocart\">"+_("Cart")+"<\/option>";
 	<!-- /TMPL_IF --><!-- TMPL_IF NAME="virtualshelves" --><!-- TMPL_IF NAME="loggedinusername" --><!-- TMPL_IF NAME="addbarshelves" -->
 	param1 += "<optgroup label=\""+_("Your Lists:")+"\">";<!-- TMPL_LOOP NAME="addbarshelvesloop" -->
 	param1 += "<option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--><\/option>";<!-- /TMPL_LOOP -->
 	param1 += "<\/optgroup>";<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="addpubshelves" -->param1 += "<optgroup label=\""+_("Public Lists:")+"\">"<!-- TMPL_LOOP NAME="addpubshelvesloop" -->+"<option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--><\/option>"<!-- /TMPL_LOOP --><!-- /TMPL_IF -->
-	param1 +="<\/optgroup><option value=\"newlist\">"+_("[ New List ]")+"<\/option>"
-	<!-- /TMPL_IF --> <!-- /TMPL_IF -->
-	param1 += "<\/select> <input type=\"submit\" class=\"submit\" value=\"Save\" />";
+	param1 +="<\/optgroup><option value=\"newlist\">[ "+_("New List")+" ]<\/option>"
+	<!-- /TMPL_IF -->
+	<!-- /TMPL_IF -->
+	param1 += "<\/select> <input type=\"submit\" class=\"submit\" value=\""+_("Save")+"\" />";
 	$('#sortsubmit').hide();
     $('#sort_by').change(function() {
         $('#bookbag_form').submit();
@@ -32,7 +33,7 @@ $(document).ready(function(){
 	var selectallstring="<a id=\"CheckAll\" href=\"#\">"+_("Select All")+"<\/a>";
 	$("span.clearall").html(clearallstring);
 	$("span.checkall").html(selectallstring);
-	$("span.addto").html(param1);
+$("span.addto").html(param1);
 	$("#addto").change(function(){
 		cartList();
 	});
@@ -68,7 +69,7 @@ $(document).ready(function(){
     });
 <!-- TMPL_IF NAME="RequestOnOpac" -->
   <!-- TMPL_IF NAME="opacuserlogin" -->
-    $("#placehold").html("<input class=\"submit\" type=\"submit\" value=\"Place Hold\"/>");
+    $("#placehold").html("<input class=\"submit\" type=\"submit\" value=\""+_("Place Hold")+"\"/>");
 	$("#placehold").find("input:submit").click(function(){
         holdMultiple();
 		return false;
