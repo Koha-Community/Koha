@@ -108,11 +108,11 @@
   </tr>
 
     <!-- TMPL_LOOP name="bookfund" -->
-      <!-- TMPL_IF NAME="toggle" -->
+      <!-- TMPL_UNLESS NAME="__odd__" -->
   <tr class="highlight">
       <!-- TMPL_ELSE -->
   <tr>
-      <!-- /TMPL_IF -->
+      <!-- /TMPL_UNLESS -->
     <td>
       <!-- TMPL_VAR name="bookfundid" -->
     </td>

@@ -268,13 +268,11 @@ else { # DEFAULT
         scalar(@results) - 1,
     );
 
-    my $toggle = 0;
     foreach my $result (@results[$first .. $last]) {
         push(
             @loop,
             {
                 %{$result},
-                toggle => $toggle++%2,
                 branchname =>
                     $branches->{ $result->{branchcode} }->{branchname},
                 has_budgets => defined $nb_budgets_of{ $result->{bookfundid} },
