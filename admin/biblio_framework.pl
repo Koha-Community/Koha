@@ -22,37 +22,26 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
 use CGI;
 use C4::Context;
 use C4::Auth;
 use C4::Output;
 
-
 sub StringSearch  {
-	my ($searchstring,$type)=@_;
 	my $dbh = C4::Context->dbh;
-	$searchstring=~ s/\'/\\\'/g;
-	my @data=split(' ',$searchstring);
-	my $count=@data;
 	my $sth=$dbh->prepare("Select * from biblio_framework where (frameworkcode like ?) order by frameworktext");
-	$sth->execute("$data[0]%");
-	my @results;
-	while (my $data=$sth->fetchrow_hashref){
-	push(@results,$data);
-	}
-	#  $sth->execute;
-	$sth->finish;
-	return (scalar(@results),\@results);
+	$sth->execute((shift || '') . '%');
+    return $sth->fetchall_arrayref({});
 }
 
 my $input = new CGI;
-my $searchfield=$input->param('frameworkcode');
-my $offset=$input->param('offset');
-my $script_name="/cgi-bin/koha/admin/biblio_framework.pl";
-my $frameworkcode=$input->param('frameworkcode');
-my $pagesize=20;
-my $op = $input->param('op');
-$searchfield=~ s/\,//g;
+my $script_name   = "/cgi-bin/koha/admin/biblio_framework.pl";
+my $frameworkcode = $input->param('frameworkcode') || '';
+my $offset        = $input->param('offset') || 0;
+my $op            = $input->param('op') || '';
+my $pagesize      = 20;
+
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => "admin/biblio_framework.tmpl",
 			     query => $input,
@@ -62,17 +51,10 @@ my ($template, $borrowernumber, $cookie)
 			     debug => 1,
 			     });
 
-if ($op) {
-$template->param(script_name => $script_name,
-						$op              => 1); # we show only the TMPL_VAR names $op
-} else {
-$template->param(script_name => $script_name,
-						else              => 1); # we show only the TMPL_VAR names $op
-}
+$template->param( script_name  => $script_name);
+$template->param(($op||'else') => 1);
 
-
-
-
+my $dbh = C4::Context->dbh;
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
 if ($op eq 'add_form') {
@@ -80,91 +62,70 @@ if ($op eq 'add_form') {
 	#---- if primkey exists, it's a modify action, so read values to modify...
 	my $data;
 	if ($frameworkcode) {
-		my $dbh = C4::Context->dbh;
 		my $sth=$dbh->prepare("select * from biblio_framework where frameworkcode=?");
 		$sth->execute($frameworkcode);
 		$data=$sth->fetchrow_hashref;
-		$sth->finish;
 	}
-	$template->param(frameworkcode => $frameworkcode,
-							frameworktext => $data->{'frameworktext'},
-							);
-;
+	$template->param(
+        frameworkcode => $frameworkcode,
+        frameworktext => $data->{'frameworktext'},
+    );
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
-	my $dbh = C4::Context->dbh;
     if ($input->param('modif')) {
         my $sth=$dbh->prepare("UPDATE biblio_framework SET frameworktext=? WHERE frameworkcode=?");
         $sth->execute($input->param('frameworktext'),$input->param('frameworkcode'));
-        $sth->finish;
     } else {
         my $sth=$dbh->prepare("INSERT into biblio_framework (frameworkcode,frameworktext) values (?,?)");
         $sth->execute($input->param('frameworkcode'),$input->param('frameworktext'));
-        $sth->finish;
     }
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=biblio_framework.pl\"></html>";
+	print $input->redirect($script_name);   # FIXME: unnecessary redirect
 	exit;
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
-	#start the page and read in includes
-	my $dbh = C4::Context->dbh;
-
 	# Check both categoryitem and biblioitems, see Bug 199
-	my $total = 0;
-	for my $table ('marc_tag_structure') {
-	   my $sth=$dbh->prepare("select count(*) as total from $table where frameworkcode=?");
-	   $sth->execute($frameworkcode);
-	   $total += $sth->fetchrow_hashref->{total};
-	   $sth->finish;
-	}
+    my $sth = $dbh->prepare("select count(*) as total from marc_tag_structure where frameworkcode=?");
+    $sth->execute($frameworkcode);
+    my $total = $sth->fetchrow_hashref->{total};
 
-	my $sth=$dbh->prepare("select * from biblio_framework where frameworkcode=?");
+	$sth = $dbh->prepare("select * from biblio_framework where frameworkcode=?");
 	$sth->execute($frameworkcode);
-	my $data=$sth->fetchrow_hashref;
-	$sth->finish;
+	my $data = $sth->fetchrow_hashref;
 
-	$template->param(frameworkcode => $frameworkcode,
-							frameworktext => $data->{'frameworktext'},
-							total => $total);
+	$template->param(
+        frameworkcode => $frameworkcode,
+        frameworktext => $data->{'frameworktext'},
+        total => $total
+    );
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
-	#start the page and read in includes
-	my $dbh = C4::Context->dbh;
-#	my $frameworkcode=uc($input->param('frameworkcode'));
-#   
-	if($frameworkcode) { 
+    if ($frameworkcode) { 
 		my $sth=$dbh->prepare("delete from marc_tag_structure where frameworkcode=?");
 		$sth->execute($frameworkcode);
 		$sth=$dbh->prepare("delete from marc_subfield_structure where frameworkcode=?");
 		$sth->execute($frameworkcode);
 		$sth=$dbh->prepare("delete from biblio_framework where frameworkcode=?");
 		$sth->execute($frameworkcode);
-		$sth->finish;
 	}
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=biblio_framework.pl\"></html>";
+	print $input->redirect($script_name);   # FIXME: unnecessary redirect
 	exit;
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
-	my ($count,$results)=StringSearch($searchfield,'web');
-	my $toggle="white";
+	my $results = StringSearch($frameworkcode);
+    my $count = scalar(@$results);
 	my @loop_data;
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-		my %row_data;
-		if ($toggle eq 'white'){
-			$row_data{toggle}="#ffffcc";
-		} else {
-			$row_data{toggle}="white";
-		}
-		$row_data{frameworkcode} = $results->[$i]{'frameworkcode'};
-		$row_data{frameworktext} = $results->[$i]{'frameworktext'};
-		push(@loop_data, \%row_data);
+		push @loop_data, {
+            frameworkcode => $results->[$i]{'frameworkcode'},
+            frameworktext => $results->[$i]{'frameworktext'},
+        };
 	}
 	$template->param(loop => \@loop_data);
 	if ($offset>0) {
@@ -176,8 +137,6 @@ if ($op eq 'add_form') {
 		$template->param(next => "$script_name?offset=".$nextpage);
 	}
 } #---- END $OP eq DEFAULT
+
 output_html_with_http_headers $input, $cookie, $template->output;
 
-# Local Variables:
-# tab-width: 4
-# End:

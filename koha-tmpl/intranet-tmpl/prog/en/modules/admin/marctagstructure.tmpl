@@ -7,90 +7,55 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 //<![CDATA[
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    function isNotNull(f,noalert) {
-        if (f.value.length ==0) {
-			return false;
-        }
-        return true;
+function Check(f) {
+    var _alertString="";
+    var alertString2;
+    if (f.tagfield.value.length==0) {
+        _alertString += "\n- " + _("tag number missing");
     }
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    function toUC(f) {
-        var x=f.value.toUpperCase();
-        f.value=x;
-        return true;
+    if (_alertString.length==0) {
+        document.Aform.submit();
+    } else {
+        alertString2  = _("Form not submitted because of the following problem(s)");
+        alertString2 += "\n------------------------------------------------------------------------------------\n";
+        alertString2 += _alertString;
+        alert(alertString2);
     }
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    function isNum(v,maybenull) {
-    var n = new Number(v.value);
-    if (isNaN(n)) {
-        return false;
-        }
-    if (maybenull==0 && v.value=='') {
-        return false;
-    }
-    return true;
-    }
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    function isDate(f) {
-        var t = Date.parse(f.value);
-        if (isNaN(t)) {
-            return false;
-        }
-    }
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    function Check(f) {
-        var ok=1;
-        var _alertString="";
-        var alertString2;
-        if (f.tagfield.value.length==0) {
-            _alertString += "\n- " + _("tag number missing");
-        }
-        if (_alertString.length==0) {
-            document.Aform.submit();
-        } else {
-            alertString2  = _("Form not submitted because of the following problem(s)");
-            alertString2 += "\n------------------------------------------------------------------------------------\n";
-            alertString2 += _alertString;
-            alert(alertString2);
-        }
-    }
-    //]]>
+}
+
+$(document).ready(function() {
+    new YAHOO.widget.Button("addtag");
+});
+//]]>
 </script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" --> <a href="/cgi-bin/koha/admin/marctagstructure.pl">MARC Frameworks</a> &rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">MARC Framework for <!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)</a> &rsaquo; <!-- TMPL_VAR name="action" --> <!-- TMPL_VAR NAME="searchfield" --><!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirm" --> <a href="/cgi-bin/koha/admin/marctagstructure.pl">MARC Frameworks</a> &rsaquo; Confirm Deletion of Tag '<!-- TMPL_VAR name="searchfield" -->'<!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_confirmed" --> <a href="/cgi-bin/koha/admin/marctagstructure.pl">MARC Frameworks</a> &rsaquo; Data Deleted<!-- /TMPL_IF -->
-<!-- TMPL_IF name="else" --><a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC Frameworks</a> &rsaquo; MARC Framework for <!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)<!-- /TMPL_IF --></div>
+<div id="breadcrumbs">
+         <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC Frameworks</a>
+<!-- TMPL_IF name="add_form" -->
+&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->"><!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)</a>
+&rsaquo; <!-- TMPL_VAR name="action" --> <!-- TMPL_VAR NAME="searchfield" -->
+<!-- TMPL_ELSIF name="else" -->
+&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->"><!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)</a>
+<!-- TMPL_ELSIF name="delete_confirm" -->
+&rsaquo; Confirm Deletion of Tag '<!-- TMPL_VAR name="searchfield" -->'
+<!-- TMPL_ELSIF name="delete_confirmed" -->
+&rsaquo; Data Deleted
+<!-- /TMPL_IF -->
+</div>
 
 <div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
+  <div id="bd">
+    <div id="yui-main">
+      <div class="yui-b">
 
-<!-- TMPL_IF NAME="else" --><div id="toolbar">
-	<script type="text/javascript">
-	//<![CDATA[
-
-	// prepare DOM for YUI Toolbar
-
-	 $(document).ready(function() {
-	    yuiToolbar();
-	 });
-
-	// YUI Toolbar Functions
-
-	function yuiToolbar() {
-	    new YAHOO.widget.Button("addtag");
-	}
-
-	//]]>
-	</script>
+<!-- TMPL_IF NAME="else" -->
+<div id="toolbar">
 	<ul class="toolbar">
 	<li><a id="addtag" href="/cgi-bin/koha/admin/marctagstructure.pl?op=add_form&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">New Tag</a></li>
 </ul></div><!-- /TMPL_IF -->
@@ -111,10 +76,10 @@
     <li><label for="mandatory">Mandatory: </label><!-- TMPL_VAR NAME="mandatory" --></li>
     <li><label for="authorised_value">Authorized value: </label><!-- TMPL_VAR NAME="authorised_value" --> (if you select a value here, the indicators will be limited to the authorized value list)</li>
 </ol></fieldset> 
-	<fieldset class="action">
-            <input type="submit" value="Save Changes" onclick="Check(this.form)" />
-            <a class="cancel" href="<!-- TMPL_VAR NAME="script_name" -->?frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">Cancel</a>
-	</fieldset>
+    <fieldset class="action">
+        <input type="submit" value="Save Changes" onclick="Check(this.form)" />
+        <a class="cancel" href="<!-- TMPL_VAR NAME="script_name" -->?frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">Cancel</a>
+    </fieldset>
     </form>
 <!-- /TMPL_IF -->
 
@@ -129,7 +94,7 @@
 	<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" /><input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
 	<input type="submit" class="approve" value="Yes, Delete this Tag" /></form>
 	
-	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" value="No, Do Not Delete" class="deny" /></form></div>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="get"><input type="submit" value="No, Do Not Delete" class="deny" /></form></div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirmed" -->
@@ -177,10 +142,11 @@
         <input type="submit" value="Search" />
     </p>
     <p>
+        <label for="select_display">Display only used Tags/Subfields</label>
         <!-- TMPL_IF Name="select_display"-->
-            <label for="select_display">Display only used Tags/Subfields</label> <input type="checkbox" name="select_display" id="select_display" value="True" checked="checked"  onchange="this.form.submit();" />
+            <input type="checkbox" name="select_display" id="select_display" value="True" checked="checked"  onchange="this.form.submit();" />
         <!-- TMPL_ELSE -->
-            <label for="select_display">Display only used Tags/Subfields</label> <input type="checkbox" name="select_display" id="select_display" value="True" onchange="this.form.submit();" />
+            <input type="checkbox" name="select_display" id="select_display" value="True" onchange="this.form.submit();" />
         <!--/TMPL_IF -->
     </p>
 </form>
@@ -200,7 +166,7 @@
 
     <!-- TMPL_IF NAME="select_display" -->
         <!-- TMPL_LOOP NAME="loop" -->
-            <!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="__odd__" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
             <td><!-- TMPL_VAR NAME="tagfield" --></td>
             <td><!-- TMPL_VAR NAME="liblibrarian" --></td>
             <td><!-- TMPL_IF NAME="repeatable" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
@@ -210,10 +176,8 @@
             <td><a href="<!-- TMPL_VAR NAME="edit" -->">Edit</a></td>
             <td><a href="<!-- TMPL_VAR NAME="delete" -->">Delete</a></td>
         </tr>
-      <!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
-            <td>
-                &nbsp;
-            </td>
+      <!-- TMPL_IF NAME="__odd__" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
+            <td>&nbsp;</td>
             <td colspan="7">
                 <!-- TMPL_LOOP NAME="subfields" -->
                     <p>	Tab:<!-- TMPL_VAR NAME="tab" --> | $<!-- TMPL_VAR NAME="tagsubfield" -->
@@ -225,7 +189,7 @@
         <!-- /TMPL_LOOP -->
     <!-- TMPL_ELSE -->
     <!-- TMPL_LOOP NAME="loop" -->
-    <!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="__odd__" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
         <td><!-- TMPL_VAR NAME="tagfield" --></td>
         <td><!-- TMPL_VAR NAME="liblibrarian" --></td>
         <td><!-- TMPL_IF NAME="repeatable" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
@@ -238,19 +202,20 @@
     <!-- /TMPL_LOOP -->
     <!--/TMPL_IF -->
     </table>
-    <!-- TMPL_IF NAME="isprevpage" -->
-            <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" --><!--TMPL_IF Name="select_display"-->&amp;select_display=True<!--/TMPL_IF -->">&lt;&lt; Previous</a>
-        <!-- /TMPL_IF -->
 
-        <!-- TMPL_IF NAME="nextpage" -->
-            <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" --><!--TMPL_IF Name="select_display"-->&amp;select_display=True<!--/TMPL_IF -->">Next &gt;&gt;</a>
-        <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="isprevpage" -->
+    <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" --><!--TMPL_IF Name="select_display"-->&amp;select_display=True<!--/TMPL_IF -->">&lt;&lt; Previous</a>
+    <!-- /TMPL_IF -->
+
+    <!-- TMPL_IF NAME="nextpage" -->
+    <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" --><!--TMPL_IF Name="select_display"-->&amp;select_display=True<!--/TMPL_IF -->">Next &gt;&gt;</a>
+    <!-- /TMPL_IF -->
 
 <!-- /TMPL_IF -->
 
 
-</div>
-</div>
+    </div>
+  </div>
 <div class="yui-b">
 <!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
 </div>

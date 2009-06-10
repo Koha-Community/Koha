@@ -29,22 +29,19 @@ use C4::Context;
 
 # retrieve parameters
 my $input = new CGI;
-my $frameworkcode = $input->param('frameworkcode'); # set to select framework
-$frameworkcode="" unless $frameworkcode;
-my $existingframeworkcode = $input->param('existingframeworkcode'); # set when we have to create a new framework (in frameworkcode) by copying an old one (in existingframeworkcode)
-$existingframeworkcode = "" unless $existingframeworkcode;
+my $frameworkcode         = $input->param('frameworkcode')         || ''; # set to select framework
+my $existingframeworkcode = $input->param('existingframeworkcode') || '';
+my $searchfield           = $input->param('searchfield') || 0;
+# set when we have to create a new framework (in frameworkcode) by copying an old one (in existingframeworkcode)
 my $frameworkinfo = getframeworkinfo($frameworkcode);
-my $searchfield=$input->param('searchfield');
-$searchfield=0 unless $searchfield;
 $searchfield=~ s/\,//g;
-my $last_searchfield=$input->param('searchfield');
 
-my $offset=$input->param('offset') || 0;
-my $op = $input->param('op') || '';
+my $offset    = $input->param('offset') || 0;
+my $op        = $input->param('op')     || '';
 my $dspchoice = $input->param('select_display');
-my $pagesize=20;
+my $pagesize = 20;
 
-my $script_name="/cgi-bin/koha/admin/marctagstructure.pl";
+my $script_name = "/cgi-bin/koha/admin/marctagstructure.pl";
 
 my $dbh = C4::Context->dbh;
 
@@ -62,39 +59,34 @@ my ($template, $loggedinuser, $cookie)
 my $frameworks = getframeworks();
 my @frameworkloop;
 foreach my $thisframeworkcode (keys %$frameworks) {
-	my $selected = 1 if $thisframeworkcode eq $frameworkcode;
-	my %row =(value => $thisframeworkcode,
-				selected => $selected,
-				frameworktext => $frameworks->{$thisframeworkcode}->{'frameworktext'},
-			);
-	push @frameworkloop, \%row;
+	push @frameworkloop, {
+        value => $thisframeworkcode,
+        selected => ($thisframeworkcode eq $frameworkcode) ? 1 : 0,
+        frameworktext => $frameworks->{$thisframeworkcode}->{'frameworktext'},
+    };
 }
 
 # check that framework is defined in marc_tag_structure
 my $sth=$dbh->prepare("select count(*) from marc_tag_structure where frameworkcode=?");
 $sth->execute($frameworkcode);
 my ($frameworkexist) = $sth->fetchrow;
-if ($frameworkexist) {
-} else {
+unless ($frameworkexist) {
 	# if frameworkcode does not exists, then OP must be changed to "create framework" if we are not on the way to create it
 	# (op = itemtyp_create_confirm)
 	if ($op eq "framework_create_confirm") {
 		duplicate_framework($frameworkcode, $existingframeworkcode);
-		$op=""; # unset $op to go back to framework list
+		$op = ""; # unset $op to go back to framework list
 	} else {
 		$op = "framework_create";
 	}
 }
-$template->param(frameworkloop => \@frameworkloop,
-				frameworkcode => $frameworkcode,
-				frameworktext => $frameworkinfo->{frameworktext});
-if ($op) {
-$template->param(script_name => $script_name,
-						$op              => 1); # we show only the TMPL_VAR names $op
-} else {
-$template->param(script_name => $script_name,
-						else              => 1); # we show only the TMPL_VAR names $op
-}
+$template->param(
+    frameworkloop => \@frameworkloop,
+    frameworkcode => $frameworkcode,
+    frameworktext => $frameworkinfo->{frameworktext},
+    script_name   => $script_name,
+    ($op||'else') => 1,
+);
 
 
 ################## ADD_FORM ##################################
@@ -106,7 +98,6 @@ if ($op eq 'add_form') {
 		$sth=$dbh->prepare("select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from marc_tag_structure where tagfield=? and frameworkcode=?");
 		$sth->execute($searchfield,$frameworkcode);
 		$data=$sth->fetchrow_hashref;
-		$sth->finish;
 	}
 	my $sth = $dbh->prepare("select distinct category from authorised_values");
 	$sth->execute;
@@ -123,8 +114,8 @@ if ($op eq 'add_form') {
 			-default => $data->{'authorised_value'},
 			);
 
-  $template->param(searchfield => $searchfield) if ($searchfield);
 	if ($searchfield) {
+        $template->param(searchfield => $searchfield);
 		$template->param(action => "Modify tag");
 		$template->param('heading-modify-tag-p' => 1);
 	} else {
@@ -146,43 +137,43 @@ if ($op eq 'add_form') {
 						-id => 'mandatory'),
 			authorised_value => $authorised_value,
 			frameworkcode => $frameworkcode,
-			);
+    );  # FIXME: move checkboxes to presentation layer
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
-	my $tagfield       =$input->param('tagfield');
-	my $liblibrarian  = $input->param('liblibrarian');
-	my $libopac       =$input->param('libopac');
-	my $repeatable =$input->param('repeatable');
-	my $mandatory =$input->param('mandatory');
-	my $authorised_value =$input->param('authorised_value');
-    if ($input->param('modif')) {
-        $sth=$dbh->prepare("UPDATE marc_tag_structure SET liblibrarian=? ,libopac=? ,repeatable=? ,mandatory=? ,authorised_value=? WHERE frameworkcode=? AND tagfield=?");
-         unless (C4::Context->config('demo') eq 1) {
+	my $tagfield         = $input->param('tagfield');
+	my $liblibrarian     = $input->param('liblibrarian');
+	my $libopac          = $input->param('libopac');
+	my $repeatable       = $input->param('repeatable') ? 1 : 0;
+	my $mandatory        = $input->param('mandatory')  ? 1 : 0;
+	my $authorised_value = $input->param('authorised_value');
+    unless (C4::Context->config('demo') eq 1) {
+        if ($input->param('modif')) {
+            $sth = $dbh->prepare(
+            "UPDATE marc_tag_structure SET liblibrarian=? ,libopac=? ,repeatable=? ,mandatory=? ,authorised_value=? WHERE frameworkcode=? AND tagfield=?"
+            );
             $sth->execute(  $liblibrarian,
                             $libopac,
-                            $repeatable?1:0,
-                            $mandatory?1:0,
+                            $repeatable,
+                            $mandatory,
                             $authorised_value,
                             $frameworkcode,
                             $tagfield
-                                );
-        }
-        $sth->finish;
-	} else {
-        $sth=$dbh->prepare("INSERT INTO marc_tag_structure (tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value,frameworkcode) values (?,?,?,?,?,?,?)");
-        unless (C4::Context->config('demo') eq 1) {
+            );
+        } else {
+            $sth = $dbh->prepare(
+            "INSERT INTO marc_tag_structure (tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value,frameworkcode) values (?,?,?,?,?,?,?)"
+            );
             $sth->execute($tagfield,
-                                $liblibrarian,
-                                $libopac,
-                                $repeatable?1:0,
-                                $mandatory?1:0,
-                                $authorised_value,
-                                $frameworkcode
-                                );
+                          $liblibrarian,
+                          $libopac,
+                          $repeatable,
+                          $mandatory,
+                          $authorised_value,
+                          $frameworkcode
+            );
         }
-        $sth->finish;
 	}
     print $input->redirect("/cgi-bin/koha/admin/marctagstructure.pl?searchfield=$tagfield&frameworkcode=$frameworkcode");
 	exit;
@@ -191,24 +182,27 @@ if ($op eq 'add_form') {
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
 	$sth=$dbh->prepare("select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from marc_tag_structure where tagfield=? and frameworkcode=?");
-	$sth->execute($searchfield,$frameworkcode);
-	my $data=$sth->fetchrow_hashref;
-	$sth->finish;
-	$template->param(liblibrarian => $data->{'liblibrarian'},
-							searchfield => $searchfield,
-							frameworkcode => $frameworkcode,
-							);
+    $sth->execute($searchfield, $frameworkcode);
+    my $data = $sth->fetchrow_hashref;
+	$template->param(
+         liblibrarian => $data->{'liblibrarian'},
+          searchfield => $searchfield,
+        frameworkcode => $frameworkcode,
+    );
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
 	unless (C4::Context->config('demo') eq 1) {
-		$dbh->do("delete from marc_tag_structure where tagfield='$searchfield' and frameworkcode='$frameworkcode'");
-		$dbh->do("delete from marc_subfield_structure where tagfield='$searchfield' and frameworkcode='$frameworkcode'");
+        my $sth1 = $dbh->prepare("DELETE FROM marc_tag_structure      WHERE tagfield=? AND frameworkcode=?");
+        my $sth2 = $dbh->prepare("DELETE FROM marc_subfield_structure WHERE tagfield=? AND frameworkcode=?");
+        $sth1->execute($searchfield, $frameworkcode);
+        $sth2->execute($searchfield, $frameworkcode);
 	}
-	$template->param(searchfield => $searchfield,
-							frameworkcode => $frameworkcode,
-							);
+	$template->param(
+          searchfield => $searchfield,
+        frameworkcode => $frameworkcode,
+    );
 													# END $OP eq DELETE_CONFIRMED
 ################## ITEMTYPE_CREATE ##################################
 # called automatically if an unexisting  frameworkis selected
@@ -218,10 +212,10 @@ if ($op eq 'add_form') {
 	my @existingframeworkloop;
 	while (my ($tot,$thisframeworkcode,$frameworktext) = $sth->fetchrow) {
 		if ($tot>0) {
-			my %line = ( value => $thisframeworkcode,
-						frameworktext => $frameworktext,
-					);
-			push @existingframeworkloop,\%line;
+			push @existingframeworkloop, {
+                value => $thisframeworkcode,
+                frameworktext => $frameworktext,
+            };
 		}
 	}
 	$template->param(existingframeworkloop => \@existingframeworkloop,
@@ -231,9 +225,9 @@ if ($op eq 'add_form') {
 ################## DEFAULT ##################################
 } else { # DEFAULT
 	# here, $op can be unset or set to "framework_create_confirm".
-	if  ($searchfield ne '') {
-		 $template->param(searchfield => $searchfield);
-	}
+    if ($searchfield ne '') {
+        $template->param(searchfield => $searchfield);
+    }
 	my $cnt=0;
 	if ($dspchoice) {
 		#here, user only wants used tags/subfields displayed
@@ -256,94 +250,73 @@ if ($op eq 'add_form') {
 			push(@results,$data);
 			$cnt++;
 		}
-		$sth->finish;
 		
-		my $toggle=0;
 		my @loop_data = ();
 		my $j=1;
 		my $i=$offset;
 		while ($i < ($offset+$pagesize<$cnt?$offset+$pagesize:$cnt)) {
-			if ($toggle eq 0){
-				$toggle=1;
-			} else {
-				$toggle=0;
-			}
 			my %row_data;  # get a fresh hash for the row data
-			$row_data{tagfield} = $results[$i]->{'mts_tagfield'};
-			$row_data{liblibrarian} = $results[$i]->{'mts_liblibrarian'};
-			$row_data{repeatable} = $results[$i]->{'mts_repeatable'};
-			$row_data{mandatory} = $results[$i]->{'mts_mandatory'};
+			$row_data{tagfield}         = $results[$i]->{'mts_tagfield'};
+			$row_data{liblibrarian}     = $results[$i]->{'mts_liblibrarian'};
+			$row_data{repeatable}       = $results[$i]->{'mts_repeatable'};
+			$row_data{mandatory}        = $results[$i]->{'mts_mandatory'};
 			$row_data{authorised_value} = $results[$i]->{'mts_authorised_value'};
-			$row_data{subfield_link} ="marc_subfields_structure.pl?op=add_form&amp;tagfield=".$results[$i]->{'mts_tagfield'}."&amp;frameworkcode=".$frameworkcode;
-			$row_data{edit} = "$script_name?op=add_form&amp;searchfield=".$results[$i]->{'mts_tagfield'}."&amp;frameworkcode=".$frameworkcode;
-			$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results[$i]->{'mts_tagfield'}."&amp;frameworkcode=".$frameworkcode;
-			$row_data{toggle} = $toggle;
+			$row_data{subfield_link} = "marc_subfields_structure.pl?op=add_form&amp;tagfield=".$results[$i]->{'mts_tagfield'}."&amp;frameworkcode=".$frameworkcode;
+			$row_data{edit}          = "$script_name?op=add_form&amp;searchfield="            .$results[$i]->{'mts_tagfield'}."&amp;frameworkcode=".$frameworkcode;
+			$row_data{delete}        = "$script_name?op=delete_confirm&amp;searchfield="      .$results[$i]->{'mts_tagfield'}."&amp;frameworkcode=".$frameworkcode;
 			$j=$i;
 			my @internal_loop = ();
 			while (($results[$i]->{'tagfield'}==$results[$j]->{'tagfield'}) and ($j< ($offset+$pagesize<$cnt?$offset+$pagesize:$cnt))) {
 				my %subfield_data;
-				$subfield_data{tagsubfield} = $results[$j]->{'tagsubfield'};
-				$subfield_data{liblibrarian} = $results[$j]->{'liblibrarian'};
-				$subfield_data{kohafield} = $results[$j]->{'kohafield'};
-				$subfield_data{repeatable} = $results[$j]->{'repeatable'};
-				$subfield_data{mandatory} = $results[$j]->{'mandatory'};
-				$subfield_data{tab} = $results[$j]->{'tab'};
-				$subfield_data{seealso} = $results[$j]->{'seealso'};
+				$subfield_data{tagsubfield}      = $results[$j]->{'tagsubfield'};
+				$subfield_data{liblibrarian}     = $results[$j]->{'liblibrarian'};
+				$subfield_data{kohafield}        = $results[$j]->{'kohafield'};
+				$subfield_data{repeatable}       = $results[$j]->{'repeatable'};
+				$subfield_data{mandatory}        = $results[$j]->{'mandatory'};
+				$subfield_data{tab}              = $results[$j]->{'tab'};
+				$subfield_data{seealso}          = $results[$j]->{'seealso'};
 				$subfield_data{authorised_value} = $results[$j]->{'authorised_value'};
-				$subfield_data{authtypecode}= $results[$j]->{'authtypecode'};
-				$subfield_data{value_builder}= $results[$j]->{'value_builder'};
-				$subfield_data{toggle}	= $toggle;
+				$subfield_data{authtypecode}     = $results[$j]->{'authtypecode'};
+				$subfield_data{value_builder}    = $results[$j]->{'value_builder'};
 # 				warn "tagfield :  ".$results[$j]->{'tagfield'}." tagsubfield :".$results[$j]->{'tagsubfield'};
 				push @internal_loop,\%subfield_data;
 				$j++;
 			}
 			$row_data{'subfields'}=\@internal_loop;
 			push(@loop_data, \%row_data);
-#			undef @internal_loop;
 			$i=$j;
 		}
 		$template->param(select_display => "True",
 						loop => \@loop_data);
-		#  $sth->execute;
-		$sth->finish;
 	} else {
 		#here, normal old style : display every tags
 		my ($count,$results)=StringSearch($searchfield,$frameworkcode);
 		$cnt = $count;
-		my $toggle=0;
 		my @loop_data = ();
 		for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-			if ($toggle eq 0){
-				$toggle=1;
-			} else {
-				$toggle=0;
-			}
 			my %row_data;  # get a fresh hash for the row data
-			$row_data{tagfield} = $results->[$i]{'tagfield'};
-			$row_data{liblibrarian} = $results->[$i]{'liblibrarian'};
-			$row_data{repeatable} = $results->[$i]{'repeatable'};
-			$row_data{mandatory} = $results->[$i]{'mandatory'};
+			$row_data{tagfield}         = $results->[$i]{'tagfield'};
+			$row_data{liblibrarian}     = $results->[$i]{'liblibrarian'};
+			$row_data{repeatable}       = $results->[$i]{'repeatable'};
+			$row_data{mandatory}        = $results->[$i]{'mandatory'};
 			$row_data{authorised_value} = $results->[$i]{'authorised_value'};
-			$row_data{subfield_link} ="marc_subfields_structure.pl?tagfield=".$results->[$i]{'tagfield'}."&amp;frameworkcode=".$frameworkcode;
-			$row_data{edit} = "$script_name?op=add_form&amp;searchfield=".$results->[$i]{'tagfield'}."&amp;frameworkcode=".$frameworkcode;
-			$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results->[$i]{'tagfield'}."&amp;frameworkcode=".$frameworkcode;
-			$row_data{toggle} = $toggle;
+			$row_data{subfield_link}    = "marc_subfields_structure.pl?tagfield="          .$results->[$i]{'tagfield'}."&amp;frameworkcode=".$frameworkcode;
+			$row_data{edit}             = "$script_name?op=add_form&amp;searchfield="      .$results->[$i]{'tagfield'}."&amp;frameworkcode=".$frameworkcode;
+			$row_data{delete}           = "$script_name?op=delete_confirm&amp;searchfield=".$results->[$i]{'tagfield'}."&amp;frameworkcode=".$frameworkcode;
 			push(@loop_data, \%row_data);
 		}
 		$template->param(loop => \@loop_data);
 	}
 	if ($offset>0) {
-		my $prevpage = $offset-$pagesize;
 		$template->param(isprevpage => $offset,
-						prevpage=> $prevpage,
+						prevpage=> $offset-$pagesize,
 						searchfield => $searchfield,
 						script_name => $script_name,
 						frameworkcode => $frameworkcode,
 		);
 	}
 	if ($offset+$pagesize<$cnt) {
-		my $nextpage =$offset+$pagesize;
-		$template->param(nextpage =>$nextpage,
+		$template->param(nextpage =>$offset+$pagesize,
 						searchfield => $searchfield,
 						script_name => $script_name,
 						frameworkcode => $frameworkcode,
@@ -351,29 +324,22 @@ if ($op eq 'add_form') {
 	}
 } #---- END $OP eq DEFAULT
 
-$template->param(loggeninuser => $loggedinuser,
-		);
 output_html_with_http_headers $input, $cookie, $template->output;
-
 
 #
 # the sub used for searches
 #
 sub StringSearch  {
 	my ($searchstring,$frameworkcode)=@_;
-	my $dbh = C4::Context->dbh;
-	$searchstring=~ s/\'/\\\'/g;
-	my @data=split(' ',$searchstring);
-	my $count=@data;
-	my $sth=$dbh->prepare("Select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from marc_tag_structure where (tagfield >= ? and frameworkcode=?) order by tagfield");
-	$sth->execute($data[0], $frameworkcode);
-	my @results;
-	while (my $data=$sth->fetchrow_hashref){
-	push(@results,$data);
-	}
-	#  $sth->execute;
-	$sth->finish;
-	return (scalar(@results),\@results);
+	my $sth = C4::Context->dbh->prepare("
+    SELECT tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value
+     FROM  marc_tag_structure
+     WHERE (tagfield >= ? and frameworkcode=?)
+    ORDER BY tagfield
+    ");
+	$sth->execute($searchstring, $frameworkcode);
+	my $results = $sth->fetchall_arrayref({});
+	return (scalar(@$results), $results);
 }
 
 #

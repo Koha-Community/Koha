@@ -1,38 +1,24 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration &rsaquo; <!-- TMPL_IF NAME="add_form" --> MARC Frameworks &rsaquo; <!-- TMPL_IF NAME="frameworkcode" -->Modify framework text<!-- TMPL_ELSE -->Add framework<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirm" --> MARC Frameworks &rsaquo; Delete Framework for <!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)?<!-- /TMPL_IF --><!-- TMPL_IF NAME="else" -->MARC Frameworks<!-- /TMPL_IF --></title>
+<title>Koha &rsaquo; Administration &rsaquo; MARC Frameworks
+<!-- TMPL_IF NAME="add_form" -->
+&rsaquo; <!-- TMPL_IF NAME="frameworkcode" -->Modify framework text<!-- TMPL_ELSE -->Add framework<!-- /TMPL_IF -->
+<!-- TMPL_ELSIF NAME="delete_confirm" -->
+&rsaquo; Delete Framework for <!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)?
+<!-- /TMPL_IF -->
+</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 //<![CDATA[
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 function isNotNull(f,noalert) {
     if (f.value.length ==0) {
         return false;
     }
     return true;
 }
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function toUC(f) {
-    var x=f.value.toUpperCase();
-    f.value=x;
+    f.value = f.value.toUpperCase();
     return true;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function isNum(v,maybenull) {
-var n = new Number(v.value);
-if (isNaN(n)) {
-    return false;
-    }
-if (maybenull==0 && v.value=='') {
-    return false;
-}
-return true;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function isDate(f) {
-    var t = Date.parse(f.value);
-    if (isNaN(t)) {
-        return false;
-    }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function Check(f) {
@@ -42,7 +28,7 @@ function Check(f) {
     if (f.frameworkcode.value.length==0) {
         _alertString += "\n- " + _("Framework code missing");
     }
-    if (!(isNotNull(window.document.Aform.frameworktext,1))) {
+    if (!(isNotNull(window.document.Aform.frameworktext))) {
         _alertString += "\n- " + _("Description missing");
     }
     if (_alertString.length==0) {
@@ -54,6 +40,10 @@ function Check(f) {
         alert(alertString2);
     }
 }
+
+$(document).ready(function() {
+    new YAHOO.widget.Button("newframework");
+});
 //]]>
 </script>
 </head>
@@ -61,32 +51,23 @@ function Check(f) {
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC Frameworks</a> &rsaquo; <!-- TMPL_IF NAME="frameworkcode" -->Modify framework text<!-- TMPL_ELSE -->Add framework<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirm" --><a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC Frameworks</a> &rsaquo; Delete Framework for <!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)?<!-- /TMPL_IF --><!-- TMPL_IF NAME="else" -->MARC Frameworks<!-- /TMPL_IF --></div>
+<div id="breadcrumbs">
+        <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC Frameworks</a>
+<!-- TMPL_IF NAME="add_form" -->
+&rsaquo; <!-- TMPL_IF NAME="frameworkcode" -->Modify framework text<!-- TMPL_ELSE -->Add framework<!-- /TMPL_IF -->
+<!-- TMPL_ELSIF NAME="delete_confirm" -->
+&rsaquo; Delete Framework for <!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)?
+<!-- /TMPL_IF -->
+</div>
 
 <div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
+  <div id="bd">
+    <div id="yui-main">
+      <div class="yui-b">
 	
 <!-- TMPL_IF NAME="else" --><div id="toolbar">
-	<script type="text/javascript">
-	//<![CDATA[
-
-	// prepare DOM for YUI Toolbar
-
-	 $(document).ready(function() {
-	    yuiToolbar();
-	 });
-
-	// YUI Toolbar Functions
-
-	function yuiToolbar() {
-	    new YAHOO.widget.Button("newframework");
-	}
-
-	//]]>
-	</script>
 	<ul class="toolbar">
 	<li><a id="newframework" href="/cgi-bin/koha/admin/biblio_framework.pl?op=add_form">New Framework</a></li>
 </ul></div><!-- /TMPL_IF -->
@@ -95,12 +76,14 @@ function Check(f) {
     <h1><!-- TMPL_IF NAME="frameworkcode" -->Modify framework text<!-- TMPL_ELSE -->Add framework<!-- /TMPL_IF --></h1>
     <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
         <input type="hidden" name="op" value="add_validate" />
-<fieldset class="rows">	<ol>
+    <fieldset class="rows">
+    <ol>
 	<!-- TMPL_IF NAME="frameworkcode" -->
-            <li><span class="label">Framework Code</span><input type="hidden" id="frameworkcode" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" /><!-- TMPL_VAR NAME="frameworkcode" --></li>
+        <li><span class="label">Framework Code</span><input type="hidden" id="frameworkcode" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" /><!-- TMPL_VAR NAME="frameworkcode" -->
             <input type="hidden" name="modif" value="1" />
+        </li>
 	<!-- TMPL_ELSE -->
-            <li><label for="frameworkcode">Framework Code</label><input type="text" id="frameworkcode" name="frameworkcode" size="4" maxlength="4" onblur="toUC(this)" /></li>
+        <li><label for="frameworkcode">Framework Code</label><input type="text" id="frameworkcode" name="frameworkcode" size="4" maxlength="4" onblur="toUC(this)" /></li>
 	<!-- /TMPL_IF -->
         <li><label for="description">Description</label>
         <input type="text" name="frameworktext" id="description" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="frameworktext" ESCAPE="HTML" -->" /></li></ol></fieldset>
@@ -108,14 +91,16 @@ function Check(f) {
     </form>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="delete_confirm" --><div class="dialog alert">
-<h3>Delete framework for <!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)?</h3>
+<!-- TMPL_IF NAME="delete_confirm" -->
+<div class="dialog alert">
+    <h3>Delete framework for <!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)?</h3>
     <!-- TMPL_IF NAME="total" -->
-       <p> <strong>This framework is used <!-- TMPL_VAR NAME="total" --> times</strong>.</p>
+       <p><strong>This framework is used <!-- TMPL_VAR NAME="total" --> times</strong>.</p>
     <!-- /TMPL_IF -->
-        <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" /><input type="submit" class="approve" value="Yes, Delete this Framework!" />
-        </form>
-        <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" class="deny" value="No, Do not Delete!" /></form></div>
+    <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" /><input type="submit" class="approve" value="Yes, Delete this Framework!" />
+    </form>
+    <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="get"><input type="submit" class="deny" value="No, Do not Delete!" /></form>
+</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="else" -->
@@ -136,9 +121,11 @@ function Check(f) {
         <td>&nbsp;</td>
         <td>&nbsp;</td>
     </tr>
-    
+    <!-- note highlight assignment appears backwards because we already have a normal row for Default -->
     <!-- TMPL_LOOP NAME="loop" -->
-        <tr>
+    <!-- TMPL_IF NAME="__odd__" --><tr class="highlight">
+    <!-- TMPL_ELSE --><tr>
+    <!-- /TMPL_IF -->
             <td><!-- TMPL_VAR name="frameworkcode" --></td>
             <td><!-- TMPL_VAR name="frameworktext" --></td>
             <td><a href="marctagstructure.pl?frameworkcode=<!-- TMPL_VAR name="frameworkcode" -->" >MARC structure</a></td>
@@ -147,13 +134,14 @@ function Check(f) {
         </tr>
     <!-- /TMPL_LOOP -->
 </table>
-    <!-- TMPL_IF NAME="previous" --><a href="<!-- TMPL_VAR NAME="previous" -->">&lt;&lt; Previous</a><!-- /TMPL_IF --> <!-- TMPL_IF NAME="next" --><a href="<!-- TMPL_VAR NAME="next" -->">Next &gt;&gt;</a><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="previous" --><a href="<!-- TMPL_VAR NAME="previous" -->">&lt;&lt; Previous</a><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="next" --><a href="<!-- TMPL_VAR NAME="next" -->">Next &gt;&gt;</a><!-- /TMPL_IF -->
 
 <!-- /TMPL_IF -->
-</div>
-</div>
+    </div>
+  </div>
 <div class="yui-b">
 <!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
-</div>
+  </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
