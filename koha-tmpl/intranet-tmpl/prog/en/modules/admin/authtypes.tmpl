@@ -1,5 +1,11 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="authtypecode" --> Authority Types &rsaquo; Modify authority type<!-- TMPL_ELSE --> Authority Types &rsaquo; New authority type<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="delete_confirm" -->Authority Types &rsaquo; Confirm Deletion of Authority Type<!-- TMPL_ELSE -->Authority Types<!-- /TMPL_IF --><!-- /TMPL_IF --></title>
+<title>Koha &rsaquo; Administration &rsaquo; Authority Types
+<!-- TMPL_IF NAME="add_form" -->
+&rsaquo; <!-- TMPL_IF NAME="authtypecode" -->Modify authority type<!-- TMPL_ELSE -->New authority type<!-- /TMPL_IF -->
+<!-- TMPL_ELSIF NAME="delete_confirm" -->
+&rsaquo; Confirm Deletion of Authority Type
+<!-- /TMPL_IF -->
+</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 //<![CDATA[
@@ -17,26 +23,7 @@ function toUC(f) {
 	return true;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function isNum(v,maybenull) {
-var n = new Number(v.value);
-if (isNaN(n)) {
-	return false;
-	}
-if (maybenull==0 && v.value=='') {
-	return false;
-}
-return true;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-function isDate(f) {
-	var t = Date.parse(f.value);
-	if (isNaN(t)) {
-		return false;
-	}
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 function Check(f) {
-	var ok=1;
 	var _alertString="";
 	var alertString2;
 	if (f.authtypecode.value.length==0) {
@@ -54,6 +41,10 @@ function Check(f) {
 		alert(alertString2);
 	}
 }
+
+$(document).ready(function() {
+    new YAHOO.widget.Button("authtype");
+});
 //]]>
 </script>
 </head>
@@ -61,42 +52,60 @@ function Check(f) {
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="authtypecode" --> <a href="/cgi-bin/koha/admin/authtypes.pl">Authority Types</a> &rsaquo; Modify authority type<!-- TMPL_ELSE --> <a href="/cgi-bin/koha/admin/authtypes.pl">Authority Types</a> &rsaquo; New authority type<!-- /TMPL_IF --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="delete_confirm" --><a href="/cgi-bin/koha/admin/authtypes.pl">Authority Types</a> &rsaquo; Confirm Deletion of Authority Type<!-- TMPL_ELSE -->Authority Types<!-- /TMPL_IF --><!-- /TMPL_IF --></div>
+<div id="breadcrumbs">
+         <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+&rsaquo; <a href="<!-- TMPL_IF NAME="script_name" -->">Authority Types</a>
+<!-- TMPL_IF NAME="add_form" -->
+&rsaquo; <!-- TMPL_IF NAME="authtypecode" -->Modify<!-- TMPL_ELSE -->New<!-- /TMPL_IF --> Authority Type
+<!-- TMPL_ELSIF NAME="delete_confirm" -->
+&rsaquo; Confirm Deletion of Authority Type
+<!-- /TMPL_IF -->
+</div>
 
 <div id="doc3" class="yui-t2">
-   
-   <div id="bd">
+  <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b">
+	  <div class="yui-b">
 
 <!-- TMPL_IF NAME="add_form" -->
 
-	<form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
-		<fieldset class="rows">
-		<!-- TMPL_IF NAME="authtypecode" -->
-		<legend>Modify authority type</legend>
+    <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
+    <fieldset class="rows">
+    <legend>
+    <!-- TMPL_IF NAME="authtypecode" -->
+        Modify authority type
 	<!-- TMPL_ELSE -->
-		<legend>New authority type</legend>
+        New authority type
 	<!-- /TMPL_IF -->
-	<ol>
-			<!-- TMPL_IF NAME="authtypecode" -->
-				<li><span class="label">Authority type</span><input type="hidden" name="op" value="add_validate" />
-		<input type="hidden" name="checked" value="0" /><input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" /><!-- TMPL_VAR NAME="authtypecode" --></li>
-			<!-- TMPL_ELSE -->
-				<li><label for="authtypecode">Authority type: </label><input id="authtypecode" type="text" name="authtypecode" size="10" maxlength="10" onblur="toUC(this)" /></li>
-			<!-- /TMPL_IF -->
+    </legend>
+    <ol>
+        <li>
+    <!-- TMPL_IF NAME="authtypecode" -->
+            <span class="label">Authority type</span>
+            <input type="hidden" name="op" value="add_validate" />
+            <input type="hidden" name="checked" value="0" />
+            <input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" /><!-- TMPL_VAR NAME="authtypecode" -->
+    <!-- TMPL_ELSE -->
+            <label for="authtypecode">Authority type: </label>
+            <input id="authtypecode" type="text" name="authtypecode" size="10" maxlength="10" onblur="toUC(this)" />
+    <!-- /TMPL_IF -->
+        </li>
 		<li><label for="authtypetext">Description: </label><input type="text" id="authtypetext" name="authtypetext" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="authtypetext" ESCAPE="HTML" -->" /></li>
 		<li><label for="summary">Summary: </label><textarea id="summary" name="summary" cols="55" rows="7"><!-- TMPL_VAR NAME="summary" --></textarea></li>
 		<li>
 		<p class="tip">Note: for 'Authority field to copy', enter the authority field that should be copied from the authority record to the bibliographic record. E.g., in MARC21, field 100 in the authority record should be copied to field 100 in the bibliographic record</p>
 		<label for="auth_tag_to_report">Authority field to copy: </label><input type="text" id="auth_tag_to_report" name="auth_tag_to_report" size="5" maxlength="3" value="<!-- TMPL_VAR NAME="auth_tag_to_report">" />
 		<input type="hidden" name="op" value="add_validate" />
-		<!-- TMPL_IF NAME="authtypecode" -->
-		<input type="hidden" name="modif" value="1" />
-	<!-- /TMPL_IF -->
-	</li></ol>
+        <!-- TMPL_IF NAME="authtypecode" -->
+        <input type="hidden" name="modif" value="1" />
+        <!-- /TMPL_IF -->
+        </li>
+    </ol>
 	</fieldset>
-	<fieldset class="action"><input type="submit" value="Submit" onclick="Check(this.form); return false;" /><a class="cancel" href="/cgi-bin/koha/admin/authtypes.pl">Cancel</a></fieldset>
+	<fieldset class="action"><input type="submit" value="Submit" onclick="Check(this.form); return false;" />
+        <a class="cancel" href="<!-- TMPL_VAR NAME="script_name" -->">Cancel</a>
+    </fieldset>
 	</form>
 <!-- /TMPL_IF -->
 
@@ -116,19 +125,8 @@ function Check(f) {
 <!-- TMPL_IF NAME="else" -->
 
 <div id="toolbar">
-	<script type="text/javascript">
-	//<![CDATA[
-	// prepare DOM for YUI Toolbar
-	 $(document).ready(function() {
-	    yuiToolbar();
-	 });
-	// YUI Toolbar Functions
-	function yuiToolbar() {
-	    new YAHOO.widget.Button("authtype");
-	} //]]>
-	</script>
 	<ul class="toolbar">
-	<li><a id="authtype" href="/cgi-bin/koha/admin/authtypes.pl?op=add_form">New Authority Type</a></li>
+	<li><a id="authtype" href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form">New Authority Type</a></li>
 </ul></div>
 
 <h1>Authority Types</h1>
@@ -145,7 +143,11 @@ function Check(f) {
 	</tr>
 	
 	<!-- TMPL_LOOP NAME="loop" -->
+        <!-- TMPL_IF NAME="__odd__" -->
 		<tr>
+        <!-- TMPL_ELSE -->
+        <tr class="highlight">
+        <!-- /TMPL_IF -->
 			<td><!-- TMPL_VAR NAME="authtypecode" --></td>
 			<td><!-- TMPL_VAR NAME="authtypetext" --></td>
 			<td><!-- TMPL_VAR NAME="summary" --></td>

@@ -6,76 +6,52 @@
 <!-- TMPL_IF NAME="delete_confirmed" -->Currency Deleted<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="else" -->Currencies<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<style type="text/css">
-	.highlight { background-color: #ffffcc;}
-</style>
-<!-- TMPL_IF NAME="add_form" -->
 <script type="text/javascript">
 //<![CDATA[
-        //
-        function isNotNull(f,noalert) {
-                if (f.value.length ==0) {
-   return false;
-                }
-                return true;
-        }
-        //
-        function toUC(f) {
-                var x=f.value.toUpperCase();
-                f.value=x;
-                return true;
-        }
-        //
-        function isNum(v,maybenull) {
-        var n = new Number(v.value);
-        if (isNaN(n)) {
-                return false;
-                }
-        if (maybenull=="0" && v.value=="") {
-                return false;
-        }
+    function toUC(f) {
+        var x=f.value.toUpperCase();
+        f.value=x;
         return true;
+    }
+    function Check(f) {
+        var _alertString="";
+        var alertString2;
+        if (f.currency.value.length==0) {
+            _alertString += "- Currency name missing\\n";
         }
-        //
-        function isDate(f) {
-                var t = Date.parse(f.value);
-                if (isNaN(t)) {
-                        return false;
-                }
+        if (f.rate.value.length==0) {
+            _alertString += "- Rate missing\\n";
         }
-        //
-        function Check(f) {
-                var ok=1;
-                var _alertString="";
-                var alertString2;
-                if (f.currency.value.length==0) {
-                        _alertString += "- Currency name missing\\n";
-                }
-                if (f.rate.value.length==0) {
-                        _alertString += "- Rate missing\\n";
-                }
-                if (_alertString.length==0) {
-                        document.Aform.submit();
-                } else {
-                        alertString2 = "Form not submitted because of the following problem(s)\\n";
-                        alertString2 += "------------------------------------------------------------------------------------\\n\\n";
-                        alertString2 += _alertString;
-                        alert(alertString2);
-                }
+        if (_alertString.length==0) {
+            document.Aform.submit();
+        } else {
+            alertString2 = "Form not submitted because of the following problem(s)\\n";
+            alertString2 += "------------------------------------------------------------------------------------\\n\\n";
+            alertString2 += _alertString;
+            alert(alertString2);
         }
-        //]]>
+    }
+
+    $(document).ready(function() {
+        new YAHOO.widget.Button("newcurrency");
+    });
+//]]>
 </script>
-		<!-- /TMPL_IF -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="currencies-admin-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  <a href="/cgi-bin/koha/admin/currency.pl">Currencies &amp; Exchange Rates</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modify Currency '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->New Currency<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<div id="breadcrumbs">
+         <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+&rsaquo; <a href="<!-- TMPL_VAR NAME="script_name" -->">Currencies &amp; Exchange Rates</a>
+&rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modify Currency '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->New Currency<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="add_validate" -->Data Recorded<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion of Currency '<span class="ex"><!-- TMPL_VAR NAME="searchfield" --></span>'<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirmed" -->Currency Deleted<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="else" -->Currencies<!-- /TMPL_IF --></div>
+<!-- TMPL_IF NAME="else" -->Currencies<!-- /TMPL_IF -->
+</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -85,27 +61,15 @@
 	
 <!-- TMPL_IF NAME="else" -->
 <div id="toolbar">
-	<script type="text/javascript">
-	//<![CDATA[
-	// prepare DOM for YUI Toolbar
-	 $(document).ready(function() {
-	    yuiToolbar();
-	 });
-	// YUI Toolbar Functions
-	function yuiToolbar() {
-	    new YAHOO.widget.Button("newcurrency");
-	}	//]]>
-	</script>
 	<ul class="toolbar">
-	<li><a id="newcurrency" href="/cgi-bin/koha/admin/currency.pl?op=add_form">New Currency</a></li>
+	<li><a id="newcurrency" href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form">New Currency</a></li>
 </ul></div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="add_form" -->
 
 <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
-<input type="hidden" name="op" value="add_validate" />
-
+    <input type="hidden" name="op" value="add_validate" />
 	<fieldset class="rows">
 	<legend><!-- TMPL_IF NAME="searchfield" -->
 		Modify currency
@@ -133,59 +97,62 @@
         <li>
 			<label for="currency">Last Updated: </label><!-- TMPL_VAR NAME="timestamp" -->
 		</li>
-		</ol>
-        </fieldset>
+    </ol>
+    </fieldset>
 		
-		<fieldset class="action"><input type="submit" value="Submit" onclick="Check(this.form)" /> <a class="cancel" href="/cgi-bin/koha/admin/currency.pl">Cancel</a> </fieldset>
-        </form>
+    <fieldset class="action">
+        <input type="submit" value="Submit" onclick="Check(this.form)" /> <a class="cancel" href="<!-- TMPL_VAR NAME="script_name" -->">Cancel</a>
+    </fieldset>
+    </form>
 
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="add_validate" -->
 <div class="dialog message">
-<h3>Data Recorded</h3>
-<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post"><input type="submit" class="approve"  value="OK" />
-        </form>
+    <h3>Data Recorded</h3>
+    <form action="<!-- TMPL_VAR NAME="script_name" -->" method="get">
+        <input type="submit" class="approve"  value="OK" />
+    </form>
 </div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirm" -->
-		<!-- TMPL_IF NAME="totalgtzero" -->
-<div class="dialog message">		<h3>Cannot Delete Currencey <span class="ex">'<!-- TMPL_VAR NAME="searchfield" -->'</span></h3>
-						<p>This currency is used <!-- TMPL_VAR NAME="total" --> times. Deletion not possible</span>
-				<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-					<input type="submit" value="OK" class="approve" />
-				</form></div>
-		<!-- TMPL_ELSE -->
-<div class="dialog alert">		<h3>Confirm Deletion of Currency <span class="ex">'<!-- TMPL_VAR NAME="searchfield" -->'</span></h3>
-<table>
-		<tr>
-			<th>Currency</th>
-			<td><!-- TMPL_VAR NAME="searchfield" --></td>
-		</tr>
-       	<tr>
-			<th>Rate</th>
-			<td><!-- TMPL_VAR NAME="rate" --></td>
-		</tr>
-		</table>
-
-
-     	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-			<input type="hidden" name="op" value="delete_confirmed" />
-			<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
-				<input type="submit" class="approve" value="Delete this Currency" />
-				</form>
-				<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-					<input type="submit" class="deny" value="No, Do Not Delete" />
-				</form></div>
-		<!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="totalgtzero" -->
+    <div class="dialog message">
+        <h3>Cannot Delete Currencey <span class="ex">'<!-- TMPL_VAR NAME="searchfield" -->'</span></h3>
+        <p>This currency is used <!-- TMPL_VAR NAME="total" --> times. Deletion not possible</p>
+        <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+            <input type="submit" value="OK" class="approve" />
+        </form>
+    </div>
+    <!-- TMPL_ELSE -->
+    <div class="dialog alert">
+        <h3>Confirm Deletion of Currency <span class="ex">'<!-- TMPL_VAR NAME="searchfield" -->'</span></h3>
+        <table>
+            <tr><th>Currency</th>
+                <td><!-- TMPL_VAR NAME="searchfield" --></td>
+            </tr>
+            <tr><th>Rate</th>
+                <td><!-- TMPL_VAR NAME="rate" --></td>
+            </tr>
+        </table>
+        <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+            <input type="hidden" name="op" value="delete_confirmed" />
+            <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
+            <input type="submit" class="approve" value="Delete this Currency" />
+        </form>
+        <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+            <input type="submit" class="deny" value="No, Do Not Delete" />
+        </form>
+    </div>
+    <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirmed" -->
 <div class="dialog message"><h3>Currency Deleted</h3>
 <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-		<input type="submit" class="approve" value="OK" />
-	</form></div>
+    <input type="submit" class="approve" value="OK" />
+</form></div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="else" -->
@@ -211,7 +178,7 @@
 		<!-- /TMPL_UNLESS -->
 			<td><!-- TMPL_VAR NAME="currency" --></td>
 			<td><!-- TMPL_VAR NAME="rate" --></td>
-			<td><!-- TMPL_VAR NAME="symbol" --></td>
+			<td><!-- TMPL_VAR NAME="symbol" ESCAPE="HTML" --></td>
 			<td><!-- TMPL_VAR NAME="timestamp" --></td>
 			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="currency" -->">Edit</a></td>
             <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="currency" -->">Delete</a></td>
