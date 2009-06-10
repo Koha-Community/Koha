@@ -149,7 +149,11 @@
                     <th> </th>
             </tr>
             <!-- TMPL_LOOP NAME="loop" -->
-               <!-- TMPL_IF NAME="toggle" --> <tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
+               <!-- TMPL_UNLESS NAME="__odd__" -->
+                    <tr class="highlight">
+               <!-- TMPL_ELSE -->
+                    <tr>
+               <!-- /TMPL_IF -->
                     <td><!-- TMPL_VAR NAME="word" --></td>
                     <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="word" -->">Delete</a></td>
                 </tr>

@@ -136,12 +136,9 @@ if ($op eq 'add_form') {
 	my $env;
 	my ($count,$results)=StringSearch($env,$searchfield,'web');
 	my @loop;
-	my $toggle = 0;
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-		my %row = (word => $results->[$i]{'word'},
-			   toggle => $toggle);
+		my %row = (word => $results->[$i]{'word'});
 		push @loop, \%row;
-		$toggle = ($toggle eq 0) ? 1 : 0 ;
 	}
 	$template->param(loop => \@loop);
 
