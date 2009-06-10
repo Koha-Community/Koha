@@ -295,7 +295,12 @@
                 <thead><tr><th>Target</th><th>Hostname/Port</th><th>Database</th><th>Userid</th><th>Password</th><th>Checked</th><th>Rank</th>       			<th>Syntax</th><th>Encoding</th><th colspan="2">&nbsp;</th>
                 </tr></thead>
                 <tbody><!-- TMPL_LOOP NAME="loop" -->
-               <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF --><td><a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="name" ESCAPE="url" -->"><!-- TMPL_VAR NAME="name" --></a></td><td><!-- TMPL_VAR NAME="host" -->:<!-- TMPL_VAR NAME="port" --></td><td><!-- TMPL_VAR NAME="db" --></td><td><!-- TMPL_VAR NAME="userid" --></td><td><!-- TMPL_VAR NAME="password" --></td><td><!-- TMPL_VAR NAME="checked" --></td><td><!-- TMPL_VAR NAME="rank" --></td>			<td><!-- TMPL_VAR NAME="syntax" --></td><td><!-- TMPL_VAR NAME="encoding" --></td><td><a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="name" ESCAPE="url" -->">Edit</a></td><td><a href="<!-- TMPL_VAR name="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="name" ESCAPE="url" -->">Delete</a></td>                </tr>
+                <!-- TMPL_UNLESS NAME="__odd__" -->
+                    <tr class="highlight">
+                <!-- TMPL_ELSE -->
+                    <tr>
+                <!-- /TMPL_UNLESS -->
+<td><a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="name" ESCAPE="url" -->"><!-- TMPL_VAR NAME="name" --></a></td><td><!-- TMPL_VAR NAME="host" -->:<!-- TMPL_VAR NAME="port" --></td><td><!-- TMPL_VAR NAME="db" --></td><td><!-- TMPL_VAR NAME="userid" --></td><td><!-- TMPL_VAR NAME="password" --></td><td><!-- TMPL_VAR NAME="checked" --></td><td><!-- TMPL_VAR NAME="rank" --></td>			<td><!-- TMPL_VAR NAME="syntax" --></td><td><!-- TMPL_VAR NAME="encoding" --></td><td><a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="name" ESCAPE="url" -->">Edit</a></td><td><a href="<!-- TMPL_VAR name="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="name" ESCAPE="url" -->">Delete</a></td>                </tr>
                 <!-- /TMPL_LOOP --></tbody>
 	</table>
 

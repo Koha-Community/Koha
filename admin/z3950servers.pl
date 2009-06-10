@@ -160,7 +160,6 @@ if ($op eq 'add_form') {
 	$template->param(else => 1);
 	my ($count,$results)=StringSearch($searchfield,'web');
 	my @loop;
-	my $toggle = 0;
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
 			
 		my $urlsearchfield=$results->[$i]{name};
@@ -174,18 +173,8 @@ if ($op eq 'add_form') {
 			checked => $results->[$i]{'checked'},
 			rank => $results->[$i]{'rank'},
 			syntax => $results->[$i]{'syntax'},
-      encoding => $results->[$i]{'encoding'},
-			toggle => $toggle);
+      encoding => $results->[$i]{'encoding'});
 		push @loop, \%row;
-
-                if ( $toggle eq 0 )
-                {
-                        $toggle = 1;
-                }
-                else
-                {
-                        $toggle = 0;
-                }
 
 	}
 	$template->param(loop => \@loop);
