@@ -1,26 +1,18 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Administration &rsaquo; Classification Sources
 <!-- TMPL_IF name="class_source_form" -->
-  <!-- TMPL_IF name="edit_class_source" -->
-    &rsaquo; Modify classification source
-  <!-- TMPL_ELSE -->
-    &rsaquo; Add classification source
-  <!-- /TMPL_IF -->
+&rsaquo; 
+    <!-- TMPL_IF name="edit_class_source" -->Modify classification source<!-- TMPL_ELSE -->Add classification source<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="sort_rule_form" -->
-  <!-- TMPL_IF name="edit_sort_rule" -->
-    &rsaquo; Modify filing rule
-  <!-- TMPL_ELSE -->
-    &rsaquo; Add filing rule
-  <!-- /TMPL_IF -->
+&rsaquo;
+    <!-- TMPL_IF name="edit_sort_rule" -->Modify filing rule<!-- TMPL_ELSE -->Add filing rule<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="delete_class_source_form" -->
   &rsaquo; Confirm deletion of classification source <!-- TMPL_VAR name="class_source" -->
-<!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_sort_rule_form" -->
+<!-- TMPL_ELSIF name="delete_sort_rule_form" -->
   &rsaquo; Confirm deletion of filing rule <!-- TMPL_VAR name="sort_rule" -->
-<!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_sort_rule_impossible" -->
+<!-- TMPL_ELSIF name="delete_sort_rule_impossible" -->
   &rsaquo; Cannot delete filing rule <!-- TMPL_VAR name="sort_rule" -->
 <!-- /TMPL_IF -->
 </title>
@@ -30,7 +22,6 @@
 //<![CDATA[
 
 function CheckSourceForm(f) {
-    var ok=1;
     var _alertString="";
     var alertString2;
     if (f.class_source.value.length==0) {
@@ -53,7 +44,6 @@ function CheckSourceForm(f) {
 }
 
 function CheckRuleForm(f) {
-    var ok=1;
     var _alertString="";
     var alertString2;
     if (f.sort_rule.value.length==0) {
@@ -75,6 +65,11 @@ function CheckRuleForm(f) {
     }
 }
 
+$(document).ready(function() {
+    new YAHOO.widget.Button("newsource");
+    new YAHOO.widget.Button("newrule");
+});
+
 //]]>
 </script>
 </head>
@@ -82,37 +77,29 @@ function CheckRuleForm(f) {
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="display_lists" -->Classification Sources<!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/classsources.pl">Classification Sources</a><!-- /TMPL_IF -->
+<div id="breadcrumbs">
+         <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/classsources.pl">Classification Sources</a>
 <!-- TMPL_IF name="class_source_form" -->
-  <!-- TMPL_IF name="edit_class_source" -->
-    &rsaquo; Modify classification source
-  <!-- TMPL_ELSE -->
-    &rsaquo; Add classification source
-  <!-- /TMPL_IF -->
+&rsaquo; <!-- TMPL_IF name="edit_class_source" -->Modify classification source<!-- TMPL_ELSE -->Add classification source<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="sort_rule_form" -->
-  <!-- TMPL_IF name="edit_sort_rule" -->
-    &rsaquo; Modify filing rule
-  <!-- TMPL_ELSE -->
-    &rsaquo; Add filing rule
-  <!-- /TMPL_IF -->
+&rsaquo; <!-- TMPL_IF name="edit_sort_rule" -->Modify filing rule<!-- TMPL_ELSE -->Add filing rule<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_class_source_form" -->
-  &rsaquo; Confirm deletion of classification source <span class="ex">'<!-- TMPL_VAR name="class_source" -->'</span>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_sort_rule_form" -->
-  &rsaquo; Confirm deletion of filing rule <span class="ex">'<!-- TMPL_VAR name="sort_rule" -->'</span>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF name="delete_sort_rule_impossible" -->
-  &rsaquo; Cannot delete filing rule <span class="ex">'<!-- TMPL_VAR name="sort_rule" -->'</span>
+<!-- TMPL_IF    name="delete_class_source_form" -->
+&rsaquo; Confirm deletion of classification source <span class="ex">'<!-- TMPL_VAR name="class_source" -->'</span>
+<!-- TMPL_ELSIF name="delete_sort_rule_form" -->
+&rsaquo; Confirm deletion of filing rule <span class="ex">'<!-- TMPL_VAR name="sort_rule" -->'</span>
+<!-- TMPL_ELSIF name="delete_sort_rule_impossible" -->
+&rsaquo; Cannot delete filing rule <span class="ex">'<!-- TMPL_VAR name="sort_rule" -->'</span>
 <!-- /TMPL_IF -->
 </div>
 
 <div id="doc3" class="yui-t2">
-
-   <div id="bd">
+  <div id="bd">
     <div id="yui-main">
-    <div class="yui-b">
+      <div class="yui-b">
 
 <!-- TMPL_IF name="class_source_form" -->
   <!-- TMPL_IF name="edit_class_source" -->
@@ -156,13 +143,7 @@ function CheckRuleForm(f) {
     </ol>
   </fieldset>
   <fieldset class="action">
-    <!-- TMPL_IF name="edit_class_source" -->
-    <input type="button" value="Save"
-           onclick="CheckSourceForm(this.form)" />
-    <!-- TMPL_ELSE -->
-    <input type="button" value="Save"
-           onclick="CheckSourceForm(this.form)" />
-    <!-- /TMPL_IF-->
+    <input type="button" value="Save" onclick="CheckSourceForm(this.form)" />
     <a class="cancel" href="/cgi-bin/koha/admin/classsources.pl">Cancel</a>
   </fieldset>
 </form>
@@ -205,64 +186,53 @@ function CheckRuleForm(f) {
        </li>
     </ol>
   </fieldset>
-  <fieldset class="action">
-  <!-- TMPL_IF name="edit_sort_rule" -->
-        <input type="button" value="Save"
-           onclick="CheckRuleForm(this.form)" />
-    <!-- TMPL_ELSE -->
-        <input type="button" value="Save"
-           onclick="CheckRuleForm(this.form)" />    <!-- /TMPL_IF-->
-    	<a class="cancel" href="/cgi-bin/koha/admin/classsources.pl">Cancel</a>
-  </fieldset>
+    <fieldset class="action">
+        <input type="button" value="Save" onclick="CheckRuleForm(this.form)" />
+        <a class="cancel" href="/cgi-bin/koha/admin/classsources.pl">Cancel</a>
+    </fieldset>
 </form>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_class_source_form" -->
 <div class="dialog alert"><h3>Confirm deletion of classification source <span class="ex">'<!-- TMPL_VAR name="class_source" -->'</span>?</h3>
-<form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
-  <input type="hidden" name="op" value="<!-- TMPL_VAR name="confirm_op"-->" />
-  <input type="hidden" name="class_source" value="<!-- TMPL_VAR name="class_source" -->" />
-  <input type="submit" value="Delete classification source" class="approve" /></form>
-  <form action="<!-- TMPL_VAR name="script_name" -->" method="get"><input type="submit" value="No, Do Not Delete" class="deny" />
-</form>
+    <form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
+      <input type="hidden" name="op" value="<!-- TMPL_VAR name="confirm_op"-->" />
+      <input type="hidden" name="class_source" value="<!-- TMPL_VAR name="class_source" -->" />
+      <input type="submit" value="Delete classification source" class="approve" />
+    </form>
+    <form action="<!-- TMPL_VAR name="script_name" -->" method="get">
+        <input type="submit" value="No, Do Not Delete" class="deny" />
+    </form>
 </div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_sort_rule_form" -->
 <div class="dialog alert"><h3>Confirm deletion of filing rule <span class="ex">'<!-- TMPL_VAR name="sort_rule" -->'</span>?</h3>
-<form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
-  <input type="hidden" name="op" value="<!-- TMPL_VAR name="confirm_op"-->" />
-  <input type="hidden" name="sort_rule" value="<!-- TMPL_VAR name="sort_rule" -->" />
-    <input type="submit" value="Delete filing rule" class="approve" />
-</form>
-<form action="<!-- TMPL_VAR name="script_name" -->" method="get">    <input type="submit" value="No, Do Not Delete" class="deny" /></form></div>
+    <form action="<!-- TMPL_VAR name="script_name" -->" name="Aform" method="post">
+        <input type="hidden" name="op" value="<!-- TMPL_VAR name="confirm_op"-->" />
+        <input type="hidden" name="sort_rule" value="<!-- TMPL_VAR name="sort_rule" -->" />
+        <input type="submit" value="Delete filing rule" class="approve" />
+    </form>
+    <form action="<!-- TMPL_VAR name="script_name" -->" method="get">
+        <input type="submit" value="No, Do Not Delete" class="deny" />
+    </form>
+</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="delete_sort_rule_impossible" -->
 <div class="dialog message"><h3>Cannot delete filing rule <span class="ex">'<!-- TMPL_VAR name="sort_rule" -->'</span></h3>
-<p>The filing rule <!-- TMPL_VAR name="sort_rule" --> is used by at least one classification source.  Please
-remove it from all classification source definitions before trying again.
-</p>
-<form action="<!-- TMPL_VAR name="script_name" -->" method="get">
-    <input type="button" value="OK" class="approve" /></form>
+    <p>The filing rule <!-- TMPL_VAR name="sort_rule" --> is used by at least one classification source.  Please
+    remove it from all classification source definitions before trying again.
+    </p>
+    <form action="<!-- TMPL_VAR name="script_name" -->" method="get">
+        <input type="button" value="OK" class="approve" />
+    </form>
 </div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="display_lists" -->
 
 <div id="toolbar">
-	<script type="text/javascript">
-	//<![CDATA[
-	// prepare DOM for YUI Toolbar
-	 $(document).ready(function() {
-	    yuiToolbar();
-	 });
-	// YUI Toolbar Functions
-	function yuiToolbar() {
-	    new YAHOO.widget.Button("newsource");
-	    new YAHOO.widget.Button("newrule");
-	}	//]]>
-	</script>
 	<ul class="toolbar">
 	<li><a id="newsource" href="<!-- TMPL_VAR name="script_name" -->?op=add_source">New Classification Source</a></li>
 	<li><a id="newrule" href="<!-- TMPL_VAR name="script_name" -->?op=add_sort_rule">New Filing Rules</a></li>
@@ -287,7 +257,11 @@ remove it from all classification source definitions before trying again.
     <th>Actions</th>
   </tr>
   <!-- TMPL_LOOP name="class_sources" -->
+  <!-- TMPL_IF name="__odd__" -->
   <tr>
+  <!-- TMPL_ELSE -->
+  <tr class="highlight">
+  <!-- /TMPL_IF -->
     <td><!-- TMPL_VAR name="code" --></td>
     <td><!-- TMPL_VAR name="description" --></td>
     <td><!-- TMPL_IF name="used" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
@@ -321,7 +295,11 @@ remove it from all classification source definitions before trying again.
     <th>Actions</th>
   </tr>
   <!-- TMPL_LOOP name="class_sort_rules" -->
+  <!-- TMPL_IF name="__odd__" -->
   <tr>
+  <!-- TMPL_ELSE -->
+  <tr class="highlight">
+  <!-- /TMPL_IF -->
     <td><!-- TMPL_VAR name="rule" --></td>
     <td><!-- TMPL_VAR name="description" --></td>
     <td><!-- TMPL_VAR name="sort_routine" --></td>
@@ -336,10 +314,10 @@ remove it from all classification source definitions before trying again.
 
 <!-- /TMPL_IF -->
 
-</div>
-</div>
+      </div>
+    </div>
 <div class="yui-b">
 <!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
-</div>
+  </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

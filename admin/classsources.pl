@@ -19,6 +19,7 @@
 #
 
 use strict;
+# use warnings; FIXME
 use CGI;
 use C4::Auth;
 use C4::Context;
@@ -30,9 +31,9 @@ use C4::ClassSortRoutine;
 my $script_name = "/cgi-bin/koha/admin/classsources.pl";
 
 my $input = new CGI;
-my $op = $input->param('op');
+my $op          = $input->param('op') || '';
 my $source_code = $input->param('class_source');
-my $rule_code = $input->param('sort_rule');
+my $rule_code   = $input->param('sort_rule');
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "admin/classsources.tmpl",
@@ -43,11 +44,8 @@ my ($template, $loggedinuser, $cookie)
                  debug => 1,
                  });
 
-if ($op) {
-    $template->param(script_name => $script_name, $op => 1);
-} else {
-    $template->param(script_name => $script_name);
-}
+$template->param(script_name => $script_name);
+$template->param($op => 1) if $op;
 
 my $display_lists = 0;
 if ($op eq "add_source") {
@@ -151,7 +149,7 @@ sub delete_class_source_form {
     my ($template) = @_;
     $template->param(
         delete_class_source_form => 1,
-        confirm_op => "delete_source_confirmed",
+        confirm_op   => "delete_source_confirmed",
         class_source => $source_code,
     );
 }
@@ -170,12 +168,11 @@ sub get_sort_rule_codes {
     my @sort_rules = ();
     foreach my $sort_rule (sort keys %$sort_rules) {
         my $sort_rule = $sort_rules->{$sort_rule};
-        push @sort_rules,
-          {
+        push @sort_rules, {
             rule        => $sort_rule->{'class_sort_rule'},
             description => $sort_rule->{'description'},
-            selected => $sort_rule->{'class_sort_rule'} eq $current_rule ? 1 : 0
-          }
+            selected    => $sort_rule->{'class_sort_rule'} eq $current_rule ? 1 : 0
+        };
     }
     $template->param(rules_dropdown => \@sort_rules);
  
@@ -204,7 +201,7 @@ sub delete_sort_rule_form {
         $template->param(
             delete_sort_rule_form => 1,
             confirm_op => "delete_sort_rule_confirmed",
-            sort_rule => $rule_code,
+            sort_rule  => $rule_code,
         );
     } else {
         $template->param(
@@ -227,9 +224,9 @@ sub edit_class_sort_rule_form {
     $template->param(
         sort_rule_form => 1,
         edit_sort_rule => 1,
-        confirm_op => "edit_sort_rule_confirmed",
-        sort_rule => $rule_code,
-        description => $rule->{'description'},
+        confirm_op   => "edit_sort_rule_confirmed",
+        sort_rule    => $rule_code,
+        description  => $rule->{'description'},
         sort_routine => $rule->{'sort_routine'}
     );
 
@@ -244,11 +241,10 @@ sub get_class_sort_routines {
     my @sort_form = ();
 
     foreach my $sort_routine (sort @sort_routines) {    
-        push @sort_form,
-          {
+        push @sort_form, {
             routine  => $sort_routine,
             selected => $sort_routine eq $current_routine ? 1 : 0
-          }
+        };
     }
     $template->param(routines_dropdown => \@sort_form);
 
@@ -267,13 +263,12 @@ sub class_source_list {
     my @sources = ();
     foreach my $cn_source (sort keys %$sources) {
         my $source = $sources->{$cn_source};
-        push @sources,
-          { 
+        push @sources, {
             code        => $source->{'cn_source'},
             description => $source->{'description'},
-            used => $source->{'used'},
+            used        => $source->{'used'},
             sortrule    => $source->{'class_sort_rule'}
-          } 
+        };
     }
     $template->param(class_sources => \@sources);
 }
@@ -286,12 +281,11 @@ sub class_sort_rule_list {
     my @sort_rules = ();
     foreach my $sort_rule (sort keys %$sort_rules) {
         my $sort_rule = $sort_rules->{$sort_rule};
-        push @sort_rules, 
-          {  
+        push @sort_rules, {
             rule        => $sort_rule->{'class_sort_rule'},
             description => $sort_rule->{'description'},
             sort_routine    => $sort_rule->{'sort_routine'}
-          } 
+        }; 
     }
     $template->param(class_sort_rules => \@sort_rules);
 }
