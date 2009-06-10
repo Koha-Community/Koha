@@ -38,6 +38,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+# use warnings; # FIXME
 use CGI;
 use C4::Context;
 use C4::Auth;
@@ -45,47 +46,33 @@ use C4::Dates qw(format_date);
 use C4::Output;
 
 sub StringSearch  {
-	my ($searchstring,$type)=@_;
-	my $dbh = C4::Context->dbh;
-	$searchstring=~ s/\'/\\\'/g;
-	my @data=split(' ',$searchstring);
-	my $count=@data;
-	my $query="Select * from currency where (currency like \"$data[0]%\") order by currency";
-	my $sth=$dbh->prepare($query);
-	$sth->execute;
-	my @results;
-	my $cnt=0;
-	while (my $data=$sth->fetchrow_hashref){
-	push(@results,$data);
-		$cnt++;
-	}
-	#  $sth->execute;
-	$sth->finish;
-	return ($cnt,\@results);
+	my $query = "SELECT * FROM currency WHERE (currency LIKE ?) ORDER BY currency";
+    warn "$query :: @_[0]";
+	my $sth = C4::Context->dbh->prepare($query);
+	$sth->execute((shift || '') . '%');
+	return $sth->fetchall_arrayref({});
 }
 
 my $input = new CGI;
-my $searchfield=$input->param('searchfield');
-#my $branchcode=$input->param('branchcode');
-my $offset=$input->param('offset');
-my $script_name="/cgi-bin/koha/admin/currency.pl";
+my $searchfield = $input->param('searchfield') || $input->param('description') || '';
+my $offset      = $input->param('offset') || 0;
+my $op          = $input->param('op')     || '';
+my $script_name = "/cgi-bin/koha/admin/currency.pl";
+my $pagesize = 20;
 
-my $pagesize=20;
-my $op = $input->param('op');
-$searchfield=~ s/\,//g;
-
-my ($template, $loggedinuser, $cookie) 
-    = get_template_and_user({template_name => "admin/currency.tmpl",
-                             query => $input,
-                             type => "intranet",
-			     flagsrequired => {parameters => 1},
-			     authnotrequired => 0,
-                             debug => 1,
-                             });
+my ($template, $loggedinuser, $cookie) = get_template_and_user({
+    template_name => "admin/currency.tmpl",
+    query => $input,
+     type => "intranet",
+      flagsrequired => {parameters => 1},
+    authnotrequired => 0,
+    debug => 1,
+});
 
 $template->param(searchfield => $searchfield,
 		 script_name => $script_name);
 
+my $dbh = C4::Context->dbh;
 
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
@@ -94,11 +81,9 @@ if ($op eq 'add_form') {
 	#---- if primkey exists, it's a modify action, so read values to modify...
 	my $data;
 	if ($searchfield) {
-		my $dbh = C4::Context->dbh;
 		my $sth=$dbh->prepare("select * from currency where currency=?");
 		$sth->execute($searchfield);
 		$data=$sth->fetchrow_hashref;
-		$sth->finish;
 	}
 	foreach (keys %$data) {
 		$template->param($_ => $data->{$_});
@@ -110,38 +95,26 @@ if ($op eq 'add_form') {
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
 	$template->param(add_validate => 1);
-	my $dbh = C4::Context->dbh;
-
 	my $check = $dbh->prepare("select * from currency where currency = ?");
 	$check->execute($input->param('currency'));
-	if ( $check->fetchrow )
-	{
+	if ( $check->fetchrow ) {
 		my $sth = $dbh->prepare("UPDATE currency SET rate = ?, symbol = ?, timestamp = ? WHERE currency = ?");
 		$sth->execute($input->param('rate'),$input->param('symbol'),C4::Dates->new->output('iso'),$input->param('currency'));
-		$sth->finish;
-	}
-	else
-	{
+	} else {
 		my $sth = $dbh->prepare("INSERT INTO currency (currency, rate, symbol) VALUES (?,?,?)");
 		$sth->execute($input->param('currency'),$input->param('rate'),$input->param('symbol'));
-		$sth->finish;
 	}	 
-
-	$check->finish;
 													# END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
 	$template->param(delete_confirm => 1);
-	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("select count(*) as total from aqbooksellers where currency=?");
 	$sth->execute($searchfield);
 	my $total = $sth->fetchrow_hashref;
-	$sth->finish;
 	my $sth2=$dbh->prepare("select currency,rate from currency where currency=?");
 	$sth2->execute($searchfield);
 	my $data=$sth2->fetchrow_hashref;
-	$sth2->finish;
 
 	if ($total->{'total'} >0) {
 		$template->param(totalgtzero => 1);
@@ -154,25 +127,23 @@ if ($op eq 'add_form') {
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
 	$template->param(delete_confirmed => 1);
-	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("delete from currency where currency=?");
 	$sth->execute($searchfield);
-	$sth->finish;
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
 	$template->param(else => 1);
 
-	my ($count,$results)=StringSearch($searchfield,'web');
+	my $results = StringSearch($searchfield);
+    my $count = scalar(@$results);
 	my @loop;
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-		my %row = (
+        push @loop, {
 			currency => $results->[$i]{'currency'},
 			    rate => $results->[$i]{'rate'},
 			  symbol => $results->[$i]{'symbol'},
 		   timestamp => format_date($results->[$i]{'timestamp'}),
-		);
-		push @loop, \%row;
+		};
 	}
 	$template->param(loop => \@loop);
 
@@ -181,7 +152,7 @@ if ($op eq 'add_form') {
 				 prevpage => $offset-$pagesize);
 	}
 
-	if ($offset+$pagesize<$count) {
+	if ($offset+$pagesize < scalar @$results) {
 		$template->param(ltcount => 1,
 				 nextpage => $offset+$pagesize);
 	}
