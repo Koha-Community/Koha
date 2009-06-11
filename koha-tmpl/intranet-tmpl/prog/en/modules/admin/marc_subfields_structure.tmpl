@@ -135,7 +135,7 @@
 
 <h3>Confirm Deletion of Subfield <!-- TMPL_VAR NAME="tagsubfield" -->?</h3>
     <p>Subfield: <!-- TMPL_VAR NAME="tagsubfield" --></p>
-    <p>Description<!-- TMPL_VAR NAME="liblibrarian" --></p>
+    <p>Description: <!-- TMPL_VAR NAME="liblibrarian" --></p>
 
             <form action="<!-- TMPL_VAR NAME="delete_link" -->" method="post"><input type="hidden" name="op" value="delete_confirmed" />
                 <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
@@ -177,7 +177,11 @@
     <th>Delete</th>
 </tr>
 <!-- TMPL_LOOP NAME="loop" -->
-<!-- TMPL_IF NAME="toggle" --><tr class="highlighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+<!-- TMPL_UNLESS NAME="__odd__" -->
+<tr class="highlight">
+<!-- TMPL_ELSE -->
+<tr>
+<!-- /TMPL_UNLESS -->
     <td><!-- TMPL_VAR NAME="tagsubfield" --></td>
     <td>
         <!-- TMPL_IF NAME="subfield_ignored" -->
