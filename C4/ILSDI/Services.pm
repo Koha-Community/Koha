@@ -28,6 +28,7 @@ use C4::Context;
 use C4::AuthoritiesMarc;
 use C4::ILSDI::Utility;
 use XML::Simple;
+use HTML::Entities;
 use CGI;
 
 =head1 NAME
@@ -209,6 +210,8 @@ sub GetRecords {
 		$biblioitem->{'items'}->{'item'} = $items;
 		$biblioitem->{'reserves'}->{'reserve'} = @reserves[1];
 		$biblioitem->{'issues'}->{'issue'} = $issues;
+
+		map { $biblioitem->{$_} = encode_entities($biblioitem->{$_},'&') } grep(!/marcxml/, keys %$biblioitem);
 	
 		push @records, $biblioitem;
 	}
