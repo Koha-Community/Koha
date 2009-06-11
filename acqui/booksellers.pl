@@ -98,19 +98,12 @@ if ($query->param('op') eq 'close') {
 }
 
 #build result page
-my $toggle = 0;
 my @loop_suppliers;
 for ( my $i = 0 ; $i < $count ; $i++ ) {
     my $orders  = GetPendingOrders( $suppliers[$i]->{'id'}, "grouped" );
     my $ordcount = scalar @$orders;
     my %line;
-    if ( $toggle == 0 ) {
-        $line{even} = 1;
-        $toggle = 1;
-    } else {
-        $line{even} = 0;
-        $toggle = 0;
-    }
+
     $line{supplierid} = $suppliers[$i]->{'id'};
     $line{name}       = $suppliers[$i]->{'name'};
     $line{active}     = $suppliers[$i]->{'active'};

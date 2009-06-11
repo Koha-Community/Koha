@@ -30,7 +30,11 @@
 	</tr>
 	
 	<!-- TMPL_LOOP name="loop_suppliers" -->
+	<!-- TMPL_UNLESS name="__odd__" -->
+		<tr class="highlight">
+	<!-- TMPL_ELSE -->
 		<tr>
+	<!-- /TMPL_UNLESS -->
 			<td>	<!-- TMPL_IF name="active" -->
 					<a href="basket.pl?supplierid=<!-- TMPL_VAR name="supplierid" -->">Add order</a>
 				<!-- TMPL_ELSE -->
@@ -54,7 +58,11 @@
 							<th>&nbsp;</th>
 						</tr>
 						<!-- TMPL_LOOP NAME="loop_basket" -->
+						<!-- TMPL_UNLESS NAME="__odd__" -->
+							<tr class="highlight">
+						<!-- TMPL_ELSE -->
 							<tr>
+						<!-- /TMPL_UNLESS -->
 								<td><!-- TMPL_VAR NAME="basketno" --></td>
 								<td><TMPL_VAR NAME="total"></td>
 								<td>						<!-- TMPL_VAR name="firstname" -->
