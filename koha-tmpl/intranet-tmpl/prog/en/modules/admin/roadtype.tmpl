@@ -141,11 +141,11 @@
 			<th colspan="2">&nbsp;</th>
 		</tr>
 		<!-- TMPL_LOOP NAME="loop" -->
-		<!-- TMPL_IF NAME="toggle" -->
-		<tr class="hilighted">
+		<!-- TMPL_UNLESS NAME="__odd__" -->
+		<tr class="highlight">
 		<!-- TMPL_ELSE -->
 		<tr>
-		<!-- /TMPL_IF -->
+		<!-- /TMPL_UNLESS -->
 			<td><!-- TMPL_VAR NAME="road_type" --></td>
 			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;roadtypeid=<!-- TMPL_VAR NAME="roadtypeid" -->">Edit</a></td>
 			<td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;roadtypeid=<!-- TMPL_VAR NAME="roadtypeid" -->">Delete</a></td>
