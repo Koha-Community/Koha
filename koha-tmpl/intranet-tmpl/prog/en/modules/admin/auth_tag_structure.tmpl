@@ -212,7 +212,11 @@ return false;
         <th>Delete</th>
 	</tr>
     <!-- TMPL_LOOP NAME="loop" -->
-		<!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+	<!-- TMPL_UNLESS NAME="__odd__" -->
+	<tr class="highlight">
+	<!-- TMPL_ELSE -->
+	<tr>
+	<!-- /TMPL_UNLESS -->
         <td><b><!-- TMPL_VAR NAME="tagfield" --></b></td>
         <td><!-- TMPL_VAR NAME="liblibrarian" --></td>
         <td><!-- TMPL_IF NAME="repeatable" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>

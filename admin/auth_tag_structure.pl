@@ -219,14 +219,8 @@ if ($op eq 'add_form') {
 		 $template->param(searchfield => $searchfield);
 	}
 	my ($count,$results)=StringSearch($searchfield,$authtypecode);
-	my $toggle=1;
 	my @loop_data = ();
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-	  	if ($toggle eq 1){
-			$toggle=0;
-	  	} else {
-			$toggle=1;
-	  	}
 		my %row_data;  # get a fresh hash for the row data
         $row_data{tagfield}         = $results->[$i]{'tagfield'};
         $row_data{liblibrarian}     = $results->[$i]{'liblibrarian'};
@@ -236,7 +230,6 @@ if ($op eq 'add_form') {
         $row_data{subfield_link}    = "auth_subfields_structure.pl?tagfield=" . $results->[$i]{'tagfield'} . "&amp;authtypecode=" . $authtypecode;
         $row_data{edit}             = "$script_name?op=add_form&amp;searchfield=" . $results->[$i]{'tagfield'} . "&amp;authtypecode=" . $authtypecode;
         $row_data{delete}           = "$script_name?op=delete_confirm&amp;searchfield=" . $results->[$i]{'tagfield'} . "&amp;authtypecode=" . $authtypecode;
-        $row_data{toggle}           = $toggle;
 		push(@loop_data, \%row_data);
 	}
 	$template->param(loop => \@loop_data,

@@ -134,16 +134,10 @@ if ($op eq 'add_form') {
 	my $sth=$dbh->prepare("select * from auth_subfield_structure where tagfield=? and authtypecode=?"); # and tagsubfield='$tagsubfield'");
 	$sth->execute($tagfield,$authtypecode);
 	my @loop_data = ();
-	my $toggle=1;
 	my $i=0;
 	while ($data =$sth->fetchrow_hashref) {
 
 		my %row_data;  # get a fresh hash for the row data
-		if ($toggle eq 1){
-			$toggle=0;
-	  	} else {
-			$toggle=1;
-	  	}
 		$row_data{tab} = CGI::scrolling_list(-name=>'tab',
 					-id=>"tab$i",
                                         -values =>
@@ -250,7 +244,6 @@ if ($op eq 'add_form') {
 			-value => 1,
 			-label => '');
 		$row_data{row} = $i;
-		$row_data{toggle} = $toggle;
 		push(@loop_data, \%row_data);
 		$i++;
 	}
@@ -365,7 +358,6 @@ if ($op eq 'add_form') {
 		 			-tabindex=>'',
 					-multiple=>0,
 					);
-		$row_data{toggle} = $toggle;
 		$row_data{row} = $i;
 		push(@loop_data, \%row_data);
 	}
@@ -498,14 +490,8 @@ if ($op eq 'add_form') {
 ################## DEFAULT ##################################
 } else { # DEFAULT
 	my ($count,$results)=string_search($tagfield,$authtypecode);
-	my $toggle=1;
 	my @loop_data = ();
 	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-	  	if ($toggle eq 1){
-			$toggle=0;
-	  	} else {
-			$toggle=1;
-	  	}
 		my %row_data;  # get a fresh hash for the row data
 		$row_data{tagfield} = $results->[$i]{'tagfield'};
 		$row_data{tagsubfield} = $results->[$i]{'tagsubfield'};
@@ -521,7 +507,6 @@ if ($op eq 'add_form') {
 		$row_data{hidden}	= $results->[$i]{'hidden'} if($results->[$i]{'hidden'} gt "000") ;
 		$row_data{isurl}	= $results->[$i]{'isurl'};
 		$row_data{delete} = "$script_name?op=delete_confirm&amp;tagfield=$tagfield&amp;tagsubfield=".$results->[$i]{'tagsubfield'}."&amp;authtypecode=$authtypecode";
-		$row_data{toggle} = $toggle;
 		if ($row_data{tab} eq -1) {
 			$row_data{subfield_ignored} = 1;
 		}

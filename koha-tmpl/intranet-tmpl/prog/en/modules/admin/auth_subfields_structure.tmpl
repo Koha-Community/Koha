@@ -158,7 +158,11 @@ function displayMoreConstraint(numlayer){
         <th>Delete</th>
     </tr>
     <!-- TMPL_LOOP NAME="loop" -->
-    <!-- TMPL_IF NAME="toggle" --><tr class="highlighted"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+    <!-- TMPL_UNLESS NAME="__odd__" -->
+    <tr class="highlight">
+    <!-- TMPL_ELSE -->
+    <tr>
+    <!-- /TMPL_IF -->
         <td><!-- TMPL_VAR NAME="tagsubfield" --></td>
         <td>
             <!-- TMPL_IF NAME="subfield_ignored" -->
@@ -202,7 +206,7 @@ function displayMoreConstraint(numlayer){
 	</form>
 
     <!-- TMPL_IF NAME="previous" -->
-    <input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1leftarrow.png" title="previous" alt="previous" border="0" >
+    <input type="image" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/1leftarrow.png" title="previous" alt="previous" border="0" />
     </a>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="next" -->
