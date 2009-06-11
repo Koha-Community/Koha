@@ -71,7 +71,11 @@ $(document).ready(function() {
                 <th>Loan Period</th><th>&nbsp;</th>
             </tr>
             <!-- TMPL_LOOP NAME="rules" -->
+                <!-- TMPL_UNLESS NAME="__odd__" -->
+                <tr class="highlight">
+                <!-- TMPL_ELSE -->
                 <tr>
+                <!-- /TMPL_UNLESS -->
                     <td><!-- TMPL_IF NAME="default_humancategorycode" -->
                             <em>Default</em>
                         <!-- TMPL_ELSE -->
@@ -197,7 +201,11 @@ $(document).ready(function() {
                     <th>&nbsp;</th>
                 </tr>
                 <!-- TMPL_LOOP NAME="branch_cat_rule_loop" -->
+                    <!-- TMPL_UNLESS NAME="__odd__" -->
+                    <tr class="highlight">
+                    <!-- TMPL_ELSE -->
                     <tr>
+                    <!-- /TMPL_UNLESS -->
                         <td><!-- TMPL_IF NAME="default_humancategorycode" -->
                                 <em>Default</em>
                             <!-- TMPL_ELSE -->
@@ -263,7 +271,11 @@ $(document).ready(function() {
                     <th>&nbsp;</th>
                 </tr>
                 <!-- TMPL_LOOP NAME="branch_item_rule_loop" -->
+                    <!-- TMPL_UNLESS NAME="__odd__" -->
+                    <tr class="highlight">
+                    <!-- TMPL_ELSE -->
                     <tr>
+                    <!-- /TMPL_UNLESS -->
                         <td><!-- TMPL_IF NAME="default_humanitemtype" -->
                                 <em>Default</em>
                             <!-- TMPL_ELSE -->

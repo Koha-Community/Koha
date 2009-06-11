@@ -349,7 +349,6 @@ $sth->finish;
 $sth=$dbh->prepare("SELECT description,itemtype FROM itemtypes ORDER BY description");
 $sth->execute;
 # $i=0;
-my $toggle= 1;
 my @row_loop;
 my @itemtypes;
 while (my $row=$sth->fetchrow_hashref){
