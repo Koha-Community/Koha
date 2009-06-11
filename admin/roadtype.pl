@@ -141,20 +141,10 @@ if ($op eq 'add_form') {
 	$template->param(else => 1);
 	my @loop;
 	my ($count,$results)=StringSearch($searchfield,'web');
-	my $toggle = 0;
 	for (my $i=0; $i < $count; $i++){
 		my %row = (roadtypeid => $results->[$i]{'roadtypeid'},
-				road_type => $results->[$i]{'road_type'},
-				toggle => $toggle );	
+				road_type => $results->[$i]{'road_type'});
 		push @loop, \%row;
-		if ( $toggle eq 0 )
-		{
-			$toggle = 1;
-		}
-		else
-		{
-			$toggle = 0;
-		}
 	}
 	$template->param(loop => \@loop);
 
