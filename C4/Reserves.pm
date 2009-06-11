@@ -1714,6 +1714,9 @@ sub _koha_notify_reserve {
     if ( $reserve->{'itemnumber'} ) {
         C4::Letters::parseletter( $letter, 'items', $reserve->{'itemnumber'} );
     }
+    my $today = C4::Dates->new()->output();
+    $letter->{'title'} =~ s/<<today>>/$today/g;
+    $letter->{'content'} =~ s/<<today>>/$today/g;
     $letter->{'content'} =~ s/<<[a-z0-9_]+\.[a-z0-9]+>>//g; #remove any stragglers
 
     if ( -1 !=  firstidx { $_ eq 'email' } @{$messagingprefs->{transports}} ) {
