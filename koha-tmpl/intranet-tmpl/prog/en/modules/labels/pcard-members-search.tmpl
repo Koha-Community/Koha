@@ -85,9 +85,9 @@ function add_item3(borrowernumber){
 <input type="hidden" name="batch_id" value="<!-- TMPL_VAR NAME="batch_id" -->" />
 <input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" />
 <label for="member">Name</label>
-<input name="member" />
+<input id="member" name="member" />
 <label for="category">Category code</label>
-<input name="category" />
+<input id="category" name="category" />
 <input type="submit" value="Search" /></p>
 </form>
 
@@ -100,7 +100,7 @@ function add_item3(borrowernumber){
 
     <table style="float: left; margin: .5em 0;">
     <tr>
-    <th><label for="patron<!-- TMPL_VAR NAME="borrowernumber" -->" style="font-weight:bold;">Select</label></th>
+    <th><label style="font-weight:bold;">Select</label></th>
     <th><a href="pcard-member-search.pl?member=<!--TMPL_VAR Name="member" -->&amp;category=<!--TMPL_VAR Name="category_type" -->&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->&amp;orderby=cardnumber">Card</a></th>
     <th><a href="pcard-member-search.pl?member=<!--TMPL_VAR Name="member" -->&amp;category=<!--TMPL_VAR Name="category_type" -->&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->&amp;orderby=surname">Name</a></th>
     <th><a href="pcard-member-search.pl?member=<!--TMPL_VAR Name="member" -->&amp;category=<!--TMPL_VAR Name="category_type" -->&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=<!-- TMPL_VAR NAME="type" -->&amp;orderby=borrowers.categorycode">Category</a></th>
@@ -110,7 +110,11 @@ function add_item3(borrowernumber){
     <th></th>
     </tr>
     <!-- TMPL_LOOP NAME="resultsloop" -->
+    <!-- TMPL_UNLESS NAME="__odd__" -->
+    <tr class="highlight">
+    <!-- TMPL_ELSE -->
     <tr>
+    <!-- /TMPL_UNLESS -->
     <td> <input type="checkbox" name="borrowernumber" id="patron<!-- TMPL_VAR NAME="borrowernumber" -->" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />	</td>
     <td><!-- TMPL_VAR NAME="cardnumber" --></td>
     <td style="white-space: nowrap;"><a href="/cgi-bin/koha/members/morepcard-member-search.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --></a> <br /> <!-- TMPL_VAR NAME="address" --><!-- TMPL_IF NAME="address2" --><br /><!-- TMPL_VAR NAME="address2" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="city" --><br /><!-- TMPL_VAR NAME=city --><!-- /TMPL_IF --></td>
