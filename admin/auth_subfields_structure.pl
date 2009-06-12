@@ -29,19 +29,10 @@ sub string_search  {
 	my $dbh = C4::Context->dbh;
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
-	my $count=@data;
 	my $sth=$dbh->prepare("Select * from auth_subfield_structure where (tagfield like ? and authtypecode=?) order by tagfield");
 	$sth->execute("$searchstring%",$authtypecode);
-	my @results;
-	my $cnt=0;
-	my $u=1;
-	while (my $data=$sth->fetchrow_hashref){
-		push(@results,$data);
-		$cnt ++;
-		$u++;
-	}
-	$sth->finish;
-	return ($cnt,\@results);
+	my $results = $sth->fetchall_arrayref({});
+	return (scalar(@$results), $results);
 }
 
 sub auth_subfield_structure_exists {
@@ -52,25 +43,25 @@ sub auth_subfield_structure_exists {
 	return @$rows > 0;
 }
 
-my $input = new CGI;
-my $tagfield=$input->param('tagfield');
-my $tagsubfield=$input->param('tagsubfield');
-my $authtypecode=$input->param('authtypecode');
-my $pkfield="tagfield";
-my $offset=$input->param('offset');
-my $script_name="/cgi-bin/koha/admin/auth_subfields_structure.pl";
+my $input        = new CGI;
+my $tagfield     = $input->param('tagfield');
+my $tagsubfield  = $input->param('tagsubfield');
+my $authtypecode = $input->param('authtypecode');
+my $offset       = $input->param('offset');
+my $op           = $input->param('op') || '';
+my $script_name  = "/cgi-bin/koha/admin/auth_subfields_structure.pl";
 
-my ($template, $borrowernumber, $cookie)
-    = get_template_and_user({template_name => "admin/auth_subfields_structure.tmpl",
-			     query => $input,
-			     type => "intranet",
-			     authnotrequired => 0,
-			     flagsrequired => {parameters => 1},
-			     debug => 1,
-			     });
-my $pagesize=30;
-my $op = $input->param('op');
-$tagfield=~ s/\,//g;
+my ($template, $borrowernumber, $cookie) = get_template_and_user(
+    {   template_name   => "admin/auth_subfields_structure.tmpl",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { parameters => 1 },
+        debug           => 1,
+    }
+);
+my $pagesize = 30;
+$tagfield =~ s/\,//g;
 
 if ($op) {
 $template->param(script_name => $script_name,
@@ -84,11 +75,11 @@ $template->param(script_name => $script_name,
 						else              => 1); # we show only the TMPL_VAR names $op
 }
 
+my $dbh = C4::Context->dbh;
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
 if ($op eq 'add_form') {
 	my $data;
-	my $dbh = C4::Context->dbh;
 	my $more_subfields = $input->param("more_subfields")+1;
 	# builds kohafield tables
 	my @kohafields;
@@ -100,7 +91,6 @@ if ($op eq 'add_form') {
 	}
 	
 	# build authorised value list
-	$sth2->finish;
 	$sth2 = $dbh->prepare("select distinct category from authorised_values");
 	$sth2->execute;
 	my @authorised_values;
@@ -112,7 +102,6 @@ if ($op eq 'add_form') {
 	push (@authorised_values,"itemtypes");
     
     # build thesaurus categories list
-    $sth2->finish;
     $sth2 = $dbh->prepare("select authtypecode from auth_types");
     $sth2->execute;
     my @authtypes;
@@ -393,7 +382,6 @@ if ($op eq 'add_form') {
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
-	my $dbh = C4::Context->dbh;
 	$template->param(tagfield => "$input->param('tagfield')");
 #	my $sth=$dbh->prepare("replace auth_subfield_structure (authtypecode,tagfield,tagsubfield,liblibrarian,libopac,repeatable,mandatory,kohafield,tab,seealso,authorised_value,frameworkcode,value_builder,hidden,isurl)
 #									values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
@@ -478,8 +466,6 @@ if ($op eq 'add_form') {
 			}
 		}
 	}
-	$sth_insert->finish;
-	$sth_update->finish;
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=auth_subfields_structure.pl?tagfield=$tagfield&authtypecode=$authtypecode\"></html>";
 	exit;
 
@@ -487,11 +473,9 @@ if ($op eq 'add_form') {
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
-	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("select * from auth_subfield_structure where tagfield=? and tagsubfield=? and authtypecode=?");
 	$sth->execute($tagfield,$tagsubfield,$authtypecode);
 	my $data=$sth->fetchrow_hashref;
-	$sth->finish;
 	$template->param(liblibrarian => $data->{'liblibrarian'},
 							tagsubfield => $data->{'tagsubfield'},
 							delete_link => $script_name,
@@ -503,11 +487,9 @@ if ($op eq 'add_form') {
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
-	my $dbh = C4::Context->dbh;
 	unless (C4::Context->config('demo') eq 1) {
 		my $sth=$dbh->prepare("delete from auth_subfield_structure where tagfield=? and tagsubfield=? and authtypecode=?");
 		$sth->execute($tagfield,$tagsubfield,$authtypecode);
-		$sth->finish;
 	}
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=auth_subfields_structure.pl?tagfield=$tagfield&authtypecode=$authtypecode\"></html>";
 	exit;

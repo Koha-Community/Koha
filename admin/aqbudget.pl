@@ -38,6 +38,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+# use warnings; FIXME
 use CGI;
 use C4::Branch; # GetBranches
 use List::Util qw/min/;
@@ -53,8 +54,8 @@ my $script_name="/cgi-bin/koha/admin/aqbudget.pl";
 my $bookfundid   = $input->param('bookfundid');
 my $aqbudgetid   = $input->param('aqbudgetid');
 my $branchcodeid = $input->param('branchcode');
+my $op           = $input->param('op') || '';
 my $pagesize = 20;
-my $op = $input->param('op');
 
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user(
@@ -83,8 +84,6 @@ my ($flags, $homebranch)=$sthtemp->fetchrow;
 # called by default. Used to create form to add or  modify a record
 if ($op eq 'add_form') {
     my ($query, $dataaqbudget, $dataaqbookfund, $sth);
-    my $dbh = C4::Context->dbh;
-
     #---- if primkey exists, it's a modify action, so read values to modify...
     if ($aqbudgetid) {
         $query = '
@@ -104,7 +103,6 @@ SELECT aqbudgetid,
         $sth=$dbh->prepare($query);
         $sth->execute($aqbudgetid);
         $dataaqbudget=$sth->fetchrow_hashref;
-        $sth->finish;
     }
 
     $query = '
@@ -121,7 +119,6 @@ SELECT aqbookfund.branchcode,
         $branchcodeid
     );
     $dataaqbookfund=$sth->fetchrow_hashref;
-    $sth->finish;
 
     if (defined $aqbudgetid) {
         $template->param(
@@ -160,10 +157,8 @@ SELECT branchcode,
             $branch->{selected} =
                 $dataaqbudget->{branchcode} eq $row->{branchcode} ? 1 : 0;
         }
-
         push @branches, $branch;
     }
-    $sth->finish;
 
     $template->param(
         dateformat => C4::Dates->new()->visual(),
@@ -205,7 +200,6 @@ UPDATE aqbudget
             $input->param('branch') || '',
             $aqbudgetid,
         );
-        $sth->finish;
     }
     else {
         $query = '
@@ -223,36 +217,31 @@ INSERT
             $input->param('budgetamount'),
             $input->param('branch') || '',
         );
-        $sth->finish;
     }
 
-    $input->redirect("aqbudget.pl");
-
+    print $input->redirect("aqbudget.pl");  # FIXME: unnecessary redirect
+    exit;
 # END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
-	my $dbh = C4::Context->dbh;
 	my $sth=$dbh->prepare("select aqbudgetid,bookfundid,startdate,enddate,budgetamount,branchcode from aqbudget where aqbudgetid=?");
 	$sth->execute($aqbudgetid);
 	my $data=$sth->fetchrow_hashref;
-	$sth->finish;
 	$template->param(bookfundid => $bookfundid);
 	$template->param(aqbudgetid => $data->{'aqbudgetid'});
-	$template->param(startdate => format_date($data->{'startdate'}));
-	$template->param(enddate => format_date($data->{'enddate'}));
+	$template->param(startdate  => format_date($data->{'startdate'}));
+	$template->param(enddate    => format_date($data->{'enddate'}));
 	$template->param(budgetamount => $data->{'budgetamount'});
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
-	my $dbh = C4::Context->dbh;
 	my $aqbudgetid=uc($input->param('aqbudgetid'));
 	my $sth=$dbh->prepare("delete from aqbudget where aqbudgetid=?");
 	$sth->execute($aqbudgetid);
-	$sth->finish;
-	 print $input->redirect("aqbookfund.pl");
-	 return;
+	print $input->redirect("aqbookfund.pl");
+	exit;
 													# END $OP eq DELETE_CONFIRMED
 ################## DEFAULT ##################################
 } else { # DEFAULT
@@ -270,7 +259,6 @@ SELECT bookfundid, bookfundname
     while (my $row = $sth->fetchrow_hashref) {
         $bookfundname_of{ $row->{bookfundid} } = $row->{bookfundname};
     }
-    $sth->finish;
 
     # filters
     my $branches = GetBranches();
@@ -285,7 +273,6 @@ SELECT bookfundid, bookfundname
             and $input->param('filter_branchcode') eq $branchcode) {
             $row->{selected} = 1;
         }
-
         push @branchloop, $row;
     }
 
@@ -301,10 +288,8 @@ SELECT bookfundid
             and $input->param('filter_bookfundid') eq $row->{bookfundid}) {
             $row->{selected} = 1;
         }
-
         push @bookfundids_loop, $row;
     }
-    $sth->finish;
 
     $template->param(
         filter_bookfundids => \@bookfundids_loop,
@@ -341,7 +326,7 @@ SELECT aqbudgetid,
        budgetamount,
        branchcode
   FROM aqbudget
-  WHERE 1 = 1';			# What's the point?
+  WHERE 1 = 1';
 
     my @bindings;
 
@@ -389,7 +374,6 @@ SELECT aqbudgetid,
     while (my $row = $sth->fetchrow_hashref){
         push @results, $row;
     }
-    $sth->finish;
 
     # filter budgets depending on the pagination
     my $page = $input->param('page') || 1;
@@ -404,16 +388,13 @@ SELECT aqbudgetid,
 
     my @loop;
     foreach my $result (@results[$first .. $last]) {
-        push(
-            @loop,
-            {
-                %{$result},
-                bookfundname => $bookfundname_of{ $result->{'bookfundid'} },
-                branchname => $branches->{ $result->{branchcode} }->{branchname},
-                startdate => format_date($result->{startdate}),
-                enddate => format_date($result->{enddate}),
-            }
-        );
+        push @loop, {
+            %{$result},
+            bookfundname => $bookfundname_of{ $result->{'bookfundid'} },
+              branchname => $branches->{ $result->{branchcode} }->{branchname},
+               startdate => format_date($result->{startdate}),
+                 enddate => format_date($result->{enddate}),
+        };
     }
 
     $template->param(

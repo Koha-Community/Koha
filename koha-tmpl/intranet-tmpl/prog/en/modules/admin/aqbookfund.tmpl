@@ -1,43 +1,15 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Administration &rsaquo; Funds and Budgets</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- TMPL_IF name="add_form" -->
 <script type="text/javascript">
 //<![CDATA[
-
-	function isNotNull(f,noalert) {
-		if (f.value.length ==0) {
-   return false;
-		}
-		return true;
-	}
-
+<!-- TMPL_IF name="add_form" -->
 	function toUC(f) {
-		var x=f.value.toUpperCase();
-		f.value=x;
+		f.value=f.value.toUpperCase();
 		return true;
-	}
-
-	function isNum(v,maybenull) {
-	var n = new Number(v.value);
-	if (isNaN(n)) {
-		return false;
-		}
-	if (maybenull==0 && v.value=="") {
-		return false;
-	}
-	return true;
-	}
-
-	function isDate(f) {
-		var t = Date.parse(f.value);
-		if (isNaN(t)) {
-			return false;
-		}
 	}
 
 	function Check(f) {
-		var ok=1;
 		var _alertString="";
 		var alertString2;
 		if (f.bookfundid.value.length==0) {
@@ -55,47 +27,34 @@
 			alert(alertString2);
 		}
 	}
-	//]]>
-</script>
 <!-- /TMPL_IF -->
+	 $(document).ready(function() {
+	    new YAHOO.widget.Button("newfund");
+	 });
+//]]>
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="bookfund-admin-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="else" -->Funds and Budgets  <!-- /TMPL_IF --> <!-- TMPL_IF name="add_form" --><a href="/cgi-bin/koha/admin/aqbookfund.pl">Funds and Budgets</a> &rsaquo; Add fund<!-- /TMPL_IF --></div>
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/aqbookfund.pl">Funds and Budgets</a>
+<!-- TMPL_IF name="add_form" -->&rsaquo; Add fund<!-- /TMPL_IF -->
+</div>
 
 <div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
+  <div id="bd">
+    <div id="yui-main">
+      <div class="yui-b">
 	
 <!-- TMPL_IF name="else" -->
 <div id="toolbar">
-	<script type="text/javascript">
-	//<![CDATA[
-
-	// prepare DOM for YUI Toolbar
-
-	 $(document).ready(function() {
-	    yuiToolbar();
-	 });
-
-	// YUI Toolbar Functions
-
-	function yuiToolbar() {
-	    new YAHOO.widget.Button("newfund");
-	}
-
-	//]]>
-	</script>
 	<ul class="toolbar">
 	<li><a id="newfund" href="/cgi-bin/koha/admin/aqbookfund.pl?op=add_form">New Fund</a></li>
 </ul></div>
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF name="else" -->
 <h1>Funds and budgets administration</h1>
   <!-- TMPL_IF NAME="bookfund" -->
 <form action="aqbudget.pl" method="post">
@@ -113,28 +72,18 @@
       <!-- TMPL_ELSE -->
   <tr>
       <!-- /TMPL_UNLESS -->
+    <td><!-- TMPL_VAR name="bookfundid" --></td>
+    <td><!-- TMPL_VAR name="bookfundname" --></td>
+    <td><!-- TMPL_VAR name="branchname" DEFAULT="" --></td>
     <td>
-      <!-- TMPL_VAR name="bookfundid" -->
-    </td>
-    <td>
-      <!-- TMPL_VAR name="bookfundname" -->
-    </td>
-    <td>
-      <!-- TMPL_IF NAME="branchname" -->
-      <!-- TMPL_VAR name="branchname" -->
-      <!-- TMPL_ELSE -->
-      <!-- /TMPL_IF -->
-    </td>
-    <td>
-      <a href="<!-- TMPL_VAR name="scriptname" -->?op=add_form&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" -->&amp;branchcode=<!-- TMPL_VAR name="branchcode" -->">Edit</a></td><td>
-      <a href="<!-- TMPL_VAR name="scriptname" -->?op=delete_confirm&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" -->&amp;branchcode=<!-- TMPL_VAR name="branchcode" -->">Delete</a></td><td>
+      <a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" -->&amp;branchcode=<!-- TMPL_VAR name="branchcode" -->">Edit</a></td><td>
+      <a href="<!-- TMPL_VAR name="script_name" -->?op=delete_confirm&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" -->&amp;branchcode=<!-- TMPL_VAR name="branchcode" -->">Delete</a></td><td>
       <a href="aqbudget.pl?op=add_form&amp;bookfundid=<!-- TMPL_VAR name="bookfundid" -->&amp;branchcode=<!-- TMPL_VAR name="branchcode" -->">Add budget</a>
       <!-- TMPL_IF NAME="has_budgets" -->
       <a href="aqbudget.pl?filter_bookfundid=<!-- TMPL_VAR name="bookfundid" -->">Show budgets</a>
       <!-- /TMPL_IF -->
     </td>
   </tr>
-
     <!-- /TMPL_LOOP --> <!-- bookfund -->
 </table>
 </form>
@@ -150,44 +99,37 @@
 
 <!-- TMPL_IF name="add_form" -->
 <form action="<!-- TMPL_VAR name="action" -->" name="Aform" method="post">
-
+  <input type="hidden" name="checked" value="0" />
 
 <!-- TMPL_IF name="header-is-modify-p" -->
   <input type="hidden" name="op" value="mod_validate" />
   <input type="hidden" name="current_branch" value="<!-- TMPL_VAR name="current_branch" -->"/>
-  <!-- /TMPL_IF -->
-
-<!-- TMPL_IF name="header-is-add-p" -->
+<!-- TMPL_ELSIF name="header-is-add-p" -->
   <input type="hidden" name="op" value="add_validate" />
-  <!-- /TMPL_IF -->
-
-
-  <input type="hidden" name="checked" value="0" />
+<!-- /TMPL_IF -->
 
   <fieldset class="rows">
-    <legend><!-- TMPL_VAR name="header" --></legend>
+    <legend><!-- TMPL_IF name="header-is-modify-p" -->Modify book fund<!-- TMPL_ELSIF name="header-is-add-p" -->Add book fund<!-- /TMPL_IF -->
+    </legend>
     
-  <ol><!-- TMPL_IF name="add_or_modify" -->
-    <li>
-      	<span class="label">Fund: </span>
+  <ol>
+  <!-- TMPL_IF name="add_or_modify" -->
+    <li><span class="label">Fund: </span>
         <input type="hidden" name="bookfundid" id="bookfundid" value="<!-- TMPL_VAR name="bookfundid" -->" />
         <!-- TMPL_VAR name="bookfundid" -->
     </li>
   <!-- TMPL_ELSE -->
-    <li>
-      <label for="bookfundid">Fund: </label>
-      <input type="text" name="bookfundid" id="bookfundid" size="5" maxlength="5" onblur="toUC(this)" />
+    <li><label for="bookfundid">Fund: </label>
+        <input type="text" name="bookfundid" id="bookfundid" size="5" maxlength="5" onblur="toUC(this)" />
     </li>
   <!-- /TMPL_IF --> <!-- add_or_modify -->
     
-    <li>
-      <label for="bookfundname">Name: </label>
-	  <input type="text" name="bookfundname" id="bookfundname" size="40" maxlength="80" value="<!-- TMPL_VAR name="bookfundname" escape="HTML" -->" />
-      </li>
+    <li><label for="bookfundname">Name: </label>
+	    <input type="text" name="bookfundname" id="bookfundname" size="40" maxlength="80" value="<!-- TMPL_VAR name="bookfundname" escape="HTML" -->" />
+    </li>
 
-    <li>
-      <label for="branchcode">Library: </label>
-      <select name="branchcode" id="branchcode">
+    <li><label for="branchcode">Library: </label>
+        <select name="branchcode" id="branchcode">
           <option value="">----</option>
   <!-- TMPL_LOOP NAME="branches" -->
     <!-- TMPL_IF NAME="selected" -->
@@ -197,38 +139,29 @@
     <!-- /TMPL_IF -->
   <!-- /TMPL_LOOP -->
   	</select>
-    </li></ol>
+    </li>
+  </ol>
     
   </fieldset>
 
   <fieldset class="action">
-    <input type="button" value="Submit" onclick="Check(this.form); return false;" /> <a class="cancel" href="/cgi-bin/koha/admin/aqbookfund.pl">Cancel</a>
+    <input type="button" value="Submit" onclick="Check(this.form); return false;" />
+    <a class="cancel" href="/cgi-bin/koha/admin/aqbookfund.pl">Cancel</a>
   </fieldset>
 </form>
 <!-- /TMPL_IF --> <!-- add_form -->
 
-
 <!-- TMPL_IF name="add_validate" -->
 <h3>Fund added</h3>
-
 <p>
   <a href="<!-- TMPL_VAR name="action" -->">Return to fund list</a>
 </p>
-<!-- /TMPL_IF -->
-
-
-<!-- TMPL_IF name="mod_validate" -->
+<!-- TMPL_ELSIF name="mod_validate" -->
 <h3>Fund modified</h3>
-
 <p>
   <a href="<!-- TMPL_VAR name="action" -->">Return to fund list</a>
 </p>
-<!-- /TMPL_IF -->
-
-
-
-<!-- TMPL_IF name="delete_confirm" -->
-
+<!-- TMPL_ELSIF name="delete_confirm" -->
 <div class="dialog alert">
 <h3>Confirm Deletion of Fund <em><!-- TMPL_VAR name="bookfundid" --></em></h3>
 <form action="<!-- TMPL_VAR name="action" -->" method="post">
@@ -236,31 +169,27 @@
   <input type="hidden" name="bookfundid" value="<!-- TMPL_VAR name="bookfundid" -->" />
   <input type="hidden" name="branchcode" value="<!-- TMPL_VAR name="branchcode" -->" />
 	<table>
-		  <tr>
+  <tr>
     <th scope="row">Fund: </th><td>
     <!-- TMPL_VAR name="bookfundid" --></td></tr>
-  
   <tr>
     <th scope="row">Library: </th><td>
     <!-- TMPL_VAR name="branchcode" --></td></tr>
-  
   <tr>
     <th scope="row">Name: </th><td>
     <!-- TMPL_VAR name="bookfundname" --></td></tr>
-  
   <tr>
     <th scope="row">Group: </th><td>
     <!-- TMPL_VAR name="bookfundgroup" --></td></tr>
   	</table>
-   <input type="submit" class="approve" value="Yes, Delete this Fund" /></form>
-   <form action="/cgi-bin/koha/admin/aqbookfund.pl" method="get"><input type="submit" class="deny" value="No, Do not Delete" /></form>
-   </div>
+  <input type="submit" class="approve" value="Yes, Delete this Fund" />
+</form>
+<form action="/cgi-bin/koha/admin/aqbookfund.pl" method="get"><input type="submit" class="deny" value="No, Do not Delete" /></form>
+</div>
 
-<!-- /TMPL_IF --> <!-- delete_confirm -->
-
-<!-- TMPL_IF name="delete_confirmed" -->
+<!-- TMPL_ELSIF name="delete_confirmed" -->
 <div class="dialog message"><h3>Data Deleted</h3>
-<form action="<!-- TMPL_VAR name="action" -->" method="post">
+<form action="<!-- TMPL_VAR name="action" -->" method="get">
   <input type="submit" class="approve" value="OK" />
 </form></div>
 <!-- /TMPL_IF --> <!-- delete_confirmed -->
