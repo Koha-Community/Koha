@@ -629,7 +629,7 @@ sub HoldTitle {
 			return $out;
 		}
 	} else { # if user provide no branch, use his own
-		$branch = C4::Context->userenv->{'branch'};
+		$branch = $borrower->{'branchcode'};
 	}
 
 	# Add the reserve
@@ -718,7 +718,7 @@ sub HoldItem {
 			return $out;
 		}
 	} else { # if user provide no branch, use his own
-		$branch = C4::Context->userenv->{'branch'};
+		$branch = $borrower->{'branchcode'};
 	}
 	
 	my $rank;
