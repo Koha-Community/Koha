@@ -84,7 +84,7 @@ if (!$op or $op eq 'authtype_create_confirm') {
 }
 $template->param(script_name  => $script_name);
 $template->param(authtypeloop => \@authtypesloop);
-if ($op ne 'authtype_create_confirm') {
+if ($op && $op ne 'authtype_create_confirm') {
     $template->param($op  => 1);
 } else {
     $template->param(else => 1);
