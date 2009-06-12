@@ -25,6 +25,18 @@ use C4::Reserves;
 use C4::Context;
 use Digest::MD5 qw(md5_base64);
 
+use vars qw($VERSION @ISA @EXPORT);
+
+BEGIN {
+	# set the version for version checking
+	$VERSION = 3.00;
+	require Exporter;
+	@ISA    = qw(Exporter);
+	@EXPORT = qw(
+		&BorrowerExists &CanBookBeReserved &Availability
+	);
+}
+
 =head1 NAME
 
 C4::ILS-DI::Utility - ILS-DI Utilities
