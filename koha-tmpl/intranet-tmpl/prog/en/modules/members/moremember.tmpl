@@ -14,33 +14,34 @@ $.tablesorter.addParser({
 });
 $(document).ready(function() {
 	$('#finesholdsissues > ul').tabs();
-	$("#issuest").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
+	$("#issuest").tablesorter({<!-- TMPL_IF NAME="dateformat_metric" -->
 		dateFormat: 'uk',<!-- /TMPL_IF -->
 		sortList: [[1,0]],
 		headers: { 1: { sorter: 'articles' },4:{sorter:false},5: { sorter: false },6:{sorter:false},7:{sorter:false}}
 	}); 
-	$("#holdst").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
+	$("#holdst").tablesorter({<!-- TMPL_IF NAME="dateformat_metric" -->
 		dateFormat: 'uk',<!-- /TMPL_IF -->
 		sortList: [[0,0]],
 		headers: { 1: { sorter: 'articles' },6: { sorter: false }}
 	}); 
-	$('#manage-patron-image').find("input[@value*=Delete]").click(function(){
+    <!-- TMPL_IF NAME="picture" -->
+    // new YAHOO.widget.Button("delpicture");   // FIXME: formatting mismatch between YUI and normal button
+	$('#delpicture').click(function(){
 		 return confirm('Are you sure you want to delete this patron image? This cannot be undone.');
-	});<!-- TMPL_IF NAME="picture" -->
+	});
 	$('#manage-patron-image').find("input[@value*=Upload]").click(function(){
-		if($("#uploadfile").val() == ""){
-			alert("Please choose a file to upload");
-			return false;
-			} else {
-		 return confirm('Are you sure you want to replace the current patron image? This cannot be undone.');
-		 }
+        if($("#uploadfile").val() == ""){
+            alert("Please choose a file to upload");
+            return false;
+        }
+        return confirm('Are you sure you want to replace the current patron image? This cannot be undone.');
 	});<!-- /TMPL_IF -->
-	$("#renew_all").click(function(){ $(".checkboxed").checkCheckboxes(":input[@name*=items]"); $(".checkboxed").unCheckCheckboxes(":input[@name*=barcodes]"); });
-	$("#return_all").click(function(){ $(".checkboxed").checkCheckboxes(":input[@name*=barcodes]"); $(".checkboxed").unCheckCheckboxes(":input[@name*=items]"); });
-	$("#CheckAllitems").click(function(){ $(".checkboxed").checkCheckboxes(":input[@name*=items]"); $(".checkboxed").unCheckCheckboxes(":input[@name*=barcodes]"); return false; });
-    $("#CheckNoitems").click(function(){ $(".checkboxed").unCheckCheckboxes(":input[@name*=items]"); return false; });
+	$("#renew_all"      ).click(function(){ $(".checkboxed").checkCheckboxes(":input[@name*=items]"   ); $(".checkboxed").unCheckCheckboxes(":input[@name*=barcodes]"); });
+	$("#return_all"     ).click(function(){ $(".checkboxed").checkCheckboxes(":input[@name*=barcodes]"); $(".checkboxed").unCheckCheckboxes(":input[@name*=items]"   ); });
+	$("#CheckAllitems"  ).click(function(){ $(".checkboxed").checkCheckboxes(":input[@name*=items]"   ); $(".checkboxed").unCheckCheckboxes(":input[@name*=barcodes]"); return false; });
+    $("#CheckNoitems"   ).click(function(){ $(".checkboxed").unCheckCheckboxes(":input[@name*=items]"); return false; });
 	$("#CheckAllreturns").click(function(){ $(".checkboxed").checkCheckboxes(":input[@name*=barcodes]"); $(".checkboxed").unCheckCheckboxes(":input[@name*=items]"); return false; });
-    $("#CheckNoreturns").click(function(){ $(".checkboxed").unCheckCheckboxes(":input[@name*=barcodes]"); return false; });
+    $("#CheckNoreturns" ).click(function(){ $(".checkboxed").unCheckCheckboxes(":input[@name*=barcodes]"); return false; });
 
     <!-- TMPL_IF NAME="CAN_user_circulate_override_renewals" -->
     <!-- TMPL_IF NAME="AllowRenewalLimitOverride" -->
@@ -58,9 +59,9 @@ $(document).ready(function() {
            $(this).find("input:checkbox").each( function() {
                $(this).attr('checked', !$(this).attr('checked'));
 			   if($(this).attr('checked')){
-			   	$(this).parent().siblings().find("input:checkbox").each(function(){
-	               if($(this).attr('checked')){ $(this).attr('checked',''); }
-	           });
+                    $(this).parent().siblings().find("input:checkbox").each(function(){
+                       if($(this).attr('checked')){ $(this).attr('checked',''); }
+                   });
 			   }
            });
 		}
@@ -98,7 +99,11 @@ if (nodename =="barcodes[]"){
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="patron-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; <!-- TMPL_IF NAME="unknowuser" -->Patron does not exist<!-- TMPL_ELSE -->Patron Details for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)<!-- /TMPL_IF --> </div>
+<div id="breadcrumbs">
+         <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
+&rsaquo; <!-- TMPL_IF NAME="unknowuser" -->Patron does not exist<!-- TMPL_ELSE -->Patron Details for <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)<!-- /TMPL_IF -->
+</div>
 
 <div id="doc3" class="yui-t1">
    
@@ -108,38 +113,33 @@ if (nodename =="barcodes[]"){
 <!-- TMPL_INCLUDE NAME="members-toolbar.inc" -->
 <!-- TMPL_IF NAME="error" -->
 <div class="dialog alert">
-<!-- TMPL_IF NAME="AUTH_UPDATE_FAILED" -->
-<h3>Userid / Password update failed</h3>
-<strong>Insufficient privileges.</strong>
-<p>Other fields updated.</p>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="CANT_DELETE_STAFF" -->
-<h3>Unable to delete staff user</h3>
-<p>Insufficient privileges.</p>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="CANT_DELETE_OTHERLIBRARY" -->
-<h3>Unable to delete patrons from other libraries with current settings</h3>
-<p>Insufficient privileges.</p>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="CANT_DELETE" -->
-<h3>Unable to delete patron:</h3>
-<p>Insufficient privileges.</p>
-<!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="AUTH_UPDATE_FAILED" -->
+        <h3>Userid / Password update failed</h3>
+        <strong>Insufficient privileges.</strong>
+        <p>Other fields updated.</p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="CANT_DELETE_STAFF" -->
+        <h3>Unable to delete staff user</h3>
+        <p>Insufficient privileges.</p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="CANT_DELETE_OTHERLIBRARY" -->
+        <h3>Unable to delete patrons from other libraries with current settings</h3>
+        <p>Insufficient privileges.</p>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="CANT_DELETE" -->
+        <h3>Unable to delete patron</h3>
+        <p>Insufficient privileges.</p>
+    <!-- /TMPL_IF -->
 </div>
 <!-- /TMPL_IF -->
 <div class="yui-g">
-<!-- TMPL_IF NAME="unknowuser" -->
-   <div class="dialog message">
-   	 This patron does not exist.
-   </div>
-<!-- TMPL_ELSE -->
-<!-- TMPL_IF NAME="reregistration" --><div class="dialog message">Patron's account has been renewed until <!-- TMPL_VAR NAME="dateexpiry" --></div><!-- /TMPL_IF -->
-<form action="" name="form">
-<input type="hidden" name="reregistration" value="<!-- TMPL_VAR NAME="reregistration"-->" /> 
-<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
-</form>
 
-<!-- TMPL_IF NAME="flagged" -->
+<!-- TMPL_IF NAME="unknowuser" -->
+   <div class="dialog message">This patron does not exist.</div>
+<!-- TMPL_ELSE -->
+    <!-- TMPL_IF NAME="reregistration" --><div class="dialog message">Patron's account has been renewed until <!-- TMPL_VAR NAME="dateexpiry" --></div><!-- /TMPL_IF -->
+
+    <!-- TMPL_IF NAME="flagged" -->
     <ul>
         <!-- TMPL_IF NAME="debarred" -->
             <li>Patron is restricted
@@ -153,8 +153,7 @@ if (nodename =="barcodes[]"){
         <!-- TMPL_IF NAME="gonenoaddress" --><li>Patron's address is in doubt.</li><!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="lost" --><li>Patron's card has been reported lost.</li><!-- /TMPL_IF -->
     </ul>
-
-<!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->
 
 <h3><!-- TMPL_UNLESS NAME="I" -->
    <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- /TMPL_UNLESS --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</h3>
@@ -174,24 +173,23 @@ if (nodename =="barcodes[]"){
 		    
 	<div class="rows">
 		<ol>
-		<!-- TMPL_UNLESS NAME="I"-->
-			<!-- TMPL_IF NAME="phone" --><li><span class="label">Home: </span><!-- TMPL_VAR NAME="phone" --></li><!-- /TMPL_IF -->
-		    <!-- TMPL_IF NAME="mobile" --><li><span class="label">Mobile:  </span><!-- TMPL_VAR NAME="mobile" --></li><!-- /TMPL_IF -->
-		    <!-- TMPL_IF NAME="phonepro" --><li><span class="label">Work: </span><!-- TMPL_VAR NAME="phonepro" --></li><!-- /TMPL_IF -->
-		<!-- /TMPL_UNLESS -->
-		<!-- TMPL_IF NAME="I" -->
-			<!-- TMPL_IF NAME="phonepro" --><li><span class="label">Organization phone: </span><!-- TMPL_VAR NAME="phonepro" --></li><!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="emailpro" --><li><span class="label">Organization email: </span><!-- TMPL_VAR NAME="emailpro" --></li><!-- /TMPL_IF -->
-    <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="I" -->
+            <!-- TMPL_IF NAME="phonepro" --><li><span class="label">Organization phone: </span><!-- TMPL_VAR NAME="phonepro" --></li><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="emailpro" --><li><span class="label">Organization email: </span><!-- TMPL_VAR NAME="emailpro" --></li><!-- /TMPL_IF -->
+        <!-- TMPL_ELSE -->
+            <!-- TMPL_IF NAME="phone"    --><li><span class="label">Home: </span><!-- TMPL_VAR NAME="phone" --></li><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="mobile"   --><li><span class="label">Mobile: </span><!-- TMPL_VAR NAME="mobile" --></li><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="phonepro" --><li><span class="label">Work: </span><!-- TMPL_VAR NAME="phonepro" --></li><!-- /TMPL_IF -->
+        <!-- /TMPL_IF -->
 
     <!-- TMPL_IF NAME="P"-->
-   <!-- TMPL_IF NAME="phone" --><li><span class="label">Professional phone: </span><!-- TMPL_VAR NAME="phone" --></li><!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="mobile" --><li><span class="label">Professionnal mobile: </span><!-- TMPL_VAR NAME="mobile" --></li><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="phone"  --><li><span class="label">Professional phone: </span><!-- TMPL_VAR NAME="phone" --></li><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="mobile" --><li><span class="label">Professional mobile: </span><!-- TMPL_VAR NAME="mobile" --></li><!-- /TMPL_IF -->
     <!-- /TMPL_IF -->   	
 	<!-- TMPL_IF NAME="fax" --><li><span class="label">Fax: </span><!-- TMPL_VAR NAME="fax" --></li><!-- /TMPL_IF -->
-  <!-- TMPL_UNLESS NAME="I"-->
-	<!--TMPL_IF Name="email"--><li><span class="label">Email (home):</span><a href="mailto:<!-- TMPL_VAR NAME="email" -->"><!-- TMPL_VAR NAME="email" --></a></li><!-- /TMPL_IF -->
-	<!--TMPL_IF Name="emailpro"--><li><span class="label">Email (work): </span><a href="mailto:<!-- TMPL_VAR NAME="emailpro" -->"><!-- TMPL_VAR NAME="emailpro" --></a></li><!--/TMPL_IF-->
+    <!-- TMPL_UNLESS NAME="I"-->
+        <!-- TMPL_IF Name="email"    --><li><span class="label">Email (home):</span><a href="mailto:<!-- TMPL_VAR NAME="email" -->"><!-- TMPL_VAR NAME="email" --></a></li><!-- /TMPL_IF -->
+        <!-- TMPL_IF Name="emailpro" --><li><span class="label">Email (work): </span><a href="mailto:<!-- TMPL_VAR NAME="emailpro" -->"><!-- TMPL_VAR NAME="emailpro" --></a></li><!--/TMPL_IF-->
     <!-- /TMPL_UNLESS -->
     <li><span class="label">Initials: </span><!-- TMPL_VAR NAME="initials" --></li>
     <li><span class="label">Date of birth:</span><!-- TMPL_VAR NAME="dateofbirth" --></li>
@@ -200,23 +198,23 @@ if (nodename =="barcodes[]"){
     <li><span class="label">Ethnicity:</span><!-- TMPL_VAR NAME="ethnicity" --></li>
     <li><span class="label">Ethnicity notes: </span><!-- TMPL_VAR NAME="ethnotes" --></li>
     <!-- /TMPL_IF -->
-   <!-- TMPL_IF NAME="isguarantee" -->
-            <!-- TMPL_IF NAME="guaranteeloop" -->
-                <li><span class="label">Guarantees:</span><ul><!-- TMPL_LOOP NAME="guaranteeloop" --><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="name" -->  </a></li><!-- /tmpl_loop --></ul></li>
-            <!-- /TMPL_IF -->
-        <!-- TMPL_ELSE -->
-            <!-- TMPL_IF name="guarantorborrowernumber" -->
-                <li><span class="label">Guarantor:</span><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->"><!-- TMPL_VAR NAME="guarantorsurname" -->, <!-- TMPL_VAR NAME="guarantorfirstname" --></a></li>
-            <!-- /TMPL_IF -->
-     <!-- /TMPL_IF  -->
+    <!-- TMPL_IF NAME="isguarantee" -->
+        <!-- TMPL_IF NAME="guaranteeloop" -->
+            <li><span class="label">Guarantees:</span><ul><!-- TMPL_LOOP NAME="guaranteeloop" --><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="name" -->  </a></li><!-- /tmpl_loop --></ul></li>
+        <!-- /TMPL_IF -->
+    <!-- TMPL_ELSE -->
+        <!-- TMPL_IF name="guarantorborrowernumber" -->
+            <li><span class="label">Guarantor:</span><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->"><!-- TMPL_VAR NAME="guarantorsurname" -->, <!-- TMPL_VAR NAME="guarantorfirstname" --></a></li>
+        <!-- /TMPL_IF -->
+    <!-- /TMPL_IF  -->
 </ol>
 </div>
-          <div class="action">  <!-- TMPL_IF name="guarantorborrowernumber" -->
-			<a href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=1&amp;guarantorid=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->">Edit</a>
-			<!-- TMPL_ELSE -->
-            <a href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=1">Edit</a>
-			<!-- /TMPL_IF --></div>
-
+      <div class="action">
+        <!-- TMPL_IF name="guarantorborrowernumber" -->
+        <a href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=1&amp;guarantorid=<!-- TMPL_VAR NAME="guarantorborrowernumber" -->">Edit</a>
+        <!-- TMPL_ELSE -->
+        <a href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=1">Edit</a>
+        <!-- /TMPL_IF --></div>
 
 </div>
 
@@ -224,32 +222,34 @@ if (nodename =="barcodes[]"){
 
 <div id="manage-patron-image">
 <!-- TMPL_IF NAME="patronimages" -->
-	<!-- TMPL_IF NAME="CAN_user_tools" -->
-	        <form method="post" action="/cgi-bin/koha/tools/picture-upload.pl" enctype="multipart/form-data">
-                <!-- TMPL_IF NAME="picture" -->
-                    <fieldset class="brief"><legend>Manage Patron Image</legend>
-                        <div class="hint">To update the image for <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="surname" -->, enter the name of the new image file to upload and click 'Upload.' <br />Click the 'Delete' button to remove the current image. <br /> Only PNG, GIF, JPEG, XPM formats are supported.</div>
-                <!-- /TMPL_IF -->
-                <!-- TMPL_UNLESS NAME="picture" -->
-                    <fieldset class="brief"><legend>Upload Patron Image</legend>
-                        <div class="hint"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> does not currently have an image available. To import an image for <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="surname" -->, enter the name of an image file to upload. <br /> Only PNG, JPEG, XPM formats are supported.</div>
-                <!-- /TMPL_UNLESS -->
-		    <input type="hidden" id="image" name="filetype" value="image" />
-		    <input type="hidden" id="cardnumber" name="cardnumber" value="<!-- TMPL_VAR NAME="cardnumber" -->" />
-		    <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
-	             <ol>
-                        <li>
-                           <label for="uploadfile">Select the file to upload: </label><input type="file" id="uploadfile" name="uploadfile" />
-                         </li>
-    	             </ol>
-                    <fieldset class="action">
-                        <input type="submit" value="Upload" class="submit" />
-                        <input name="op" type="hidden" value="Upload" />
-                        <!-- TMPL_IF NAME="picture" --><a href="/cgi-bin/koha/tools/picture-upload.pl?op=Delete&amp;cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" class="delete">Delete</a><!-- /TMPL_IF -->
-                    </fieldset>
+    <!-- TMPL_IF NAME="CAN_user_tools_batch_upload_patron_images" -->
+        <form method="post" action="/cgi-bin/koha/tools/picture-upload.pl" enctype="multipart/form-data">
+            <fieldset class="brief">
+            <!-- TMPL_IF NAME="picture" -->
+                <legend>Manage Patron Image</legend>
+                <div class="hint">To update the image for <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="surname" -->, select a new image file and click 'Upload.' <br />Click the 'Delete' button to remove the current image.
+            <!-- TMPL_ELSE -->
+                <legend>Upload Patron Image</legend>
+                <div class="hint"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> does not currently have an image available. To import an image for <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="surname" -->, enter the name of an image file to upload.
+            <!-- /TMPL_IF -->
+                    <br />Only PNG, GIF, JPEG, XPM formats are supported.
+                </div>
+                <input type="hidden" id="image" name="filetype" value="image" />
+                <input type="hidden" id="cardnumber" name="cardnumber" value="<!-- TMPL_VAR NAME="cardnumber" -->" />
+                <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+                <ol>
+                    <li>
+                       <label for="uploadfile">Select the file to upload: </label><input type="file" id="uploadfile" name="uploadfile" />
+                    </li>
+                </ol>
+                <fieldset class="action">
+                    <input type="submit" value="Upload" class="submit" />
+                    <input name="op" type="hidden" value="Upload" />
+                    <!-- TMPL_IF NAME="picture" --><a id="delpicture" href="/cgi-bin/koha/tools/picture-upload.pl?op=Delete&amp;cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" class="delete">Delete</a><!-- /TMPL_IF -->
                 </fieldset>
-                </form>
-        <!-- /TMPL_IF -->
+            </fieldset>
+        </form>
+    <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 </div>
 
@@ -306,37 +306,37 @@ if (nodename =="barcodes[]"){
     <li><span class="label">Expiration date: </span>
     <!-- TMPL_IF NAME="reregistration" -->
             <strong class="reregistrinfo"><!-- TMPL_VAR NAME="dateexpiry" --></span>
-    <!--TMPL_ELSE-->
+    <!-- TMPL_ELSE -->
             <!-- TMPL_VAR NAME="dateexpiry" -->
     <!-- /TMPL_IF -->
     </li>
     
     <li><span class="label">Registration branch: </span><!-- TMPL_VAR NAME="branchname" --></li>
 
-    <!-- TMPL_IF NAME="sort1" --><li><span class="label">Sort field 1: </span><!-- TMPL_VAR NAME="lib1" --></li><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="sort1" --><li><span class="label">Sort field 1:</span><!-- TMPL_VAR NAME="lib1" --></li><!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="sort2" --><li><span class="label">Sort field 2:</span><!-- TMPL_VAR NAME="lib2" --></li><!-- /TMPL_IF -->
     <li><span class="label">OPAC login: </span><!-- TMPL_VAR name="userid" --></li>
+    <li><span class="label">OPAC password: </span>
     <!-- TMPL_IF NAME="password" -->
-  <li><span class="label">OPAC password: </span>*******</li>
-   <!--TMPL_ELSE -->
-  <li><span class="label">OPAC password: </span><span class="problem"><a href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Undefined</a></span></li> 
-   <!--/TMPL_IF --> 
-  <!-- TMPL_IF NAME="borrowernotes" --><li><span class="label">Circulation note: </span><!-- TMPL_VAR name="borrowernotes" --></li><!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="opacnote" --><li><span class="label">OPAC note:</span><!-- TMPL_VAR NAME="opacnote" --></li><!-- /TMPL_IF -->
+        *******
+    <!-- TMPL_ELSE -->
+        <span class="problem"><a href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Undefined</a></span>
+    <!-- /TMPL_IF --> 
+    </li>
+    <!-- TMPL_IF NAME="borrowernotes" --><li><span class="label">Circulation note: </span><!-- TMPL_VAR name="borrowernotes" --></li><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="opacnote"      --><li><span class="label">OPAC note:</span><!-- TMPL_VAR NAME="opacnote" --></li><!-- /TMPL_IF -->
 	</ol>
 	</div>
  </div>
-            <div class="action"><a href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=3">Edit</a></div>
+    <div class="action"><a href="memberentry.pl?op=modify&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;step=3">Edit</a></div>
  
  <div id="patron-alternate-address" style="padding-top: 1em;">
     <h3>Alternate Address</h3>
-    <!-- TMPL_UNLESS NAME="I"-->
-      <!-- TMPL_UNLESS NAME="C"-->
+    <!-- TMPL_UNLESS NAME="I"--><!-- TMPL_UNLESS NAME="C"-->
   <p><!-- TMPL_VAR NAME="B_address" --><br />
       <!-- TMPL_VAR NAME="B_city" --><br />
       <!-- TMPL_VAR NAME="B_zipcode" --></p>
-  <!-- /TMPL_UNLESS -->
-    <!-- /TMPL_UNLESS -->
+    <!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS -->
      <!-- TMPL_IF NAME="C" -->
    <div class="rows"> <ol><li><span class="label">Surname: </span><!-- TMPL_VAR NAME="contactname" --></li>
     <li><span class="label">First name: </span><!-- TMPL_VAR NAME="contactfirstname" --></li>    
@@ -370,7 +370,7 @@ if (nodename =="barcodes[]"){
 	
 <div id="finesandcharges">
     <h2>Fines and Charges</h2>
-    <!-- TMPL_IF EXPR="totaldue ne '0.00'" -->
+    <!-- TMPL_IF NAME="totaldue_raw" -->
         <p>Total due: <!-- TMPL_VAR NAME="totaldue" --></p>
     <!-- TMPL_ELSE -->
         <p>No outstanding charges</p>
@@ -379,13 +379,14 @@ if (nodename =="barcodes[]"){
 
 <div id="checkedout">
     <h2>Checked Out</h2>
-    <!-- TMPL_IF NAME="issueloop" --><form action="/cgi-bin/koha/reserve/renewscript.pl" method="post" class="checkboxed">
-        <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+    <!-- TMPL_IF NAME="issueloop" -->
+    <form action="/cgi-bin/koha/reserve/renewscript.pl" method="post" class="checkboxed">
+    <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
 	<input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
     <table id="issuest">
-<thead>
+    <thead>
 		<tr>
-			<th scope="col">Item Type</th>
+            <th scope="col">Item Type</th>
             <th scope="col">Title</th>
             <th scope="col">Checked out on</th> 
             <th scope="col">Date due</th>
@@ -395,15 +396,13 @@ if (nodename =="barcodes[]"){
             <th scope="col">Return <p class="column-tool"><a href="#" id="CheckAllreturns">select all</a> | <a href="#" id="CheckNoreturns">none</a></p></th>
         </tr></thead>
     
-       <tbody> <!-- TMPL_LOOP name="issueloop" -->
+       <tbody>
+       <!-- TMPL_LOOP name="issueloop" -->
+
           <!-- TMPL_IF name="overdue" -->
-        <tr class="problem">
+          <tr class="problem">
           <!-- TMPL_ELSE -->
-            <!-- TMPL_IF name="toggle" -->
-        <tr class="highlight">
-            <!-- TMPL_ELSE -->
-        <tr>
-            <!-- /TMPL_IF -->
+          <tr>
           <!-- /TMPL_IF -->
 		  <td><!-- TMPL_UNLESS NAME="noItemTypeImages" --> <!-- TMPL_IF NAME="itemtype_image" -->
                 <img src="<!-- TMPL_VAR NAME="itemtype_image" -->" alt="" />
@@ -429,9 +428,9 @@ if (nodename =="barcodes[]"){
                     </span>
                     <span class="renewals-disabled">
                 <!-- /TMPL_IF -->
-			      <!-- TMPL_IF NAME="norenew_reason_on_reserve" -->
-              <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">On Hold</a>
-				    <!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="norenew_reason_on_reserve" -->
+                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">On Hold</a>
+                <!-- /TMPL_IF -->
 				    <!-- TMPL_IF NAME="norenew_reason_too_many" -->
 				        Not Renewable
 				    <!-- /TMPL_IF -->
@@ -450,13 +449,13 @@ if (nodename =="barcodes[]"){
       <!-- /TMPL_IF -->
       <!-- TMPL_IF NAME="return_failed" -->
             <td class="problem">Return Failed</td>
-       <!--TMPL_ELSE-->   
+      <!--TMPL_ELSE-->
             <td><input type="checkbox" name="barcodes[]"  value="<!-- TMPL_VAR NAME="barcode" -->" onclick="uncheck_sibling(this);" />
-            <input type="checkbox" name="all_barcodes[]" value="<!-- TMPL_VAR NAME="barcode" -->" checked="checked" style="display: none;" />
+                <input type="checkbox" name="all_barcodes[]" value="<!-- TMPL_VAR NAME="barcode" -->" checked="checked" style="display: none;" />
             </td>
       <!-- /TMPL_IF -->
         </tr>
-        <!-- /tmpl_loop -->
+  <!-- /tmpl_loop -->
         <tr>
             <td colspan="4" style="text-align: right; font-weight:bold;">Totals:</td>
 			<td><!-- TMPL_VAR NAME="totaldue" --></td>
@@ -513,46 +512,44 @@ if (nodename =="barcodes[]"){
 		</tr></thead>
 		<tbody><!-- TMPL_LOOP NAME="reservloop" -->
 		<tr class="<!-- TMPL_VAR NAME="color" -->">
-					<td>
-						<!-- TMPL_VAR NAME="reservedate" -->
-					</td>
-					<td>
-						<a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
-                        
-					</td>
-					<td><!-- TMPL_VAR NAME="itemtype" --></td>
-					<td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
-					<td><!-- TMPL_IF name="waiting" -->
-                        <em>Item is <strong>waiting</strong></em>
-                        <!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="transfered" -->
-                        <em>Item <strong>in transit</strong> from
-                        <!-- TMPL_VAR NAME="frombranch" --> since <!-- TMPL_VAR NAME="datesent" --> </em>
-                        <!-- /TMPL_IF -->
+            <td><!-- TMPL_VAR NAME="reservedate" --></td>
+            <td>
+                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
+            </td>
+            <td><!-- TMPL_VAR NAME="itemtype" --></td>
+            <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
+            <td><!-- TMPL_IF name="waiting" -->
+                <em>Item is <strong>waiting</strong></em>
+                <!-- /TMPL_IF -->
+                <!-- TMPL_IF name="transfered" -->
+                <em>Item <strong>in transit</strong> from
+                <!-- TMPL_VAR NAME="frombranch" --> since <!-- TMPL_VAR NAME="datesent" --> </em>
+                <!-- /TMPL_IF -->
 
-                        <!-- TMPL_IF name="nottransfered" -->
-                        <em>Item hasn't been transfered yet from <!-- TMPL_VAR NAME="nottransferedby" --></em>
-                        <!-- /TMPL_IF -->
-						<!-- TMPL_IF name="barcodereserv" -->
-						<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="barcodereserv" --></a>
-						<!-- /TMPL_IF -->
-					</td>
-					<td><!-- TMPL_IF NAME="waitingposition" --><strong><!-- TMPL_VAR NAME="waitingposition" --></strong><!-- /TMPL_IF --></td>
-					<td><select name="rank-request">
-			<option value="n">No</option>
-			<option value="del">Yes</option>
-			</select>
-		<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" />
-		<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR name="borrowernumber" -->" /></td>
-			</tr>
+                <!-- TMPL_IF name="nottransfered" -->
+                <em>Item hasn't been transfered yet from <!-- TMPL_VAR NAME="nottransferedby" --></em>
+                <!-- /TMPL_IF -->
+                <!-- TMPL_IF name="barcodereserv" -->
+                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="barcodereserv" --></a>
+                <!-- /TMPL_IF -->
+            </td>
+            <td><!-- TMPL_IF NAME="waitingposition" --><strong><!-- TMPL_VAR NAME="waitingposition" --></strong><!-- /TMPL_IF --></td>
+            <td><select name="rank-request">
+                    <option value="n">No</option>
+                    <option value="del">Yes</option>
+                </select>
+                <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" />
+                <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR name="borrowernumber" -->" />
+            </td>
+        </tr>
 		<!-- /TMPL_LOOP --></tbody>
-	</table>
-			<fieldset class="action"><input type="submit" class="cancel" name="submit" value="Cancel Marked Requests" /></fieldset>
-	</form>
-	<!-- TMPL_ELSE -->
-	<p>Patron has nothing on hold.</p>
-	<!-- /TMPL_IF -->
-	</div>
+    </table>
+        <fieldset class="action"><input type="submit" class="cancel" name="submit" value="Cancel Marked Requests" /></fieldset>
+    </form>
+    <!-- TMPL_ELSE -->
+    <p>Patron has nothing on hold.</p>
+    <!-- /TMPL_IF -->
+    </div>
 </div>
 <!-- /TMPL_IF --> <!-- unknowuser -->
 

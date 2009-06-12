@@ -187,12 +187,6 @@ else {
 	}
 }
 
-#Independant branches management
-my $unvalidlibrarian =
-  (      ( C4::Context->preference("IndependantBranches") )
-      && ( C4::Context->userenv->{flags} % 2 != 1 )
-      && ( $data->{'branchcode'} ne C4::Context->userenv->{branch} ) );
-
 my %bor;
 $bor{'borrowernumber'} = $borrowernumber;
 
@@ -212,8 +206,8 @@ $data->{'branchname'} = $branchdetail->{branchname};
 my ( $total, $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
 my $lib1 = &GetSortDetails( "Bsort1", $data->{'sort1'} );
 my $lib2 = &GetSortDetails( "Bsort2", $data->{'sort2'} );
-( $template->param( lib1 => $lib1 ) ) if ($lib1);
-( $template->param( lib2 => $lib2 ) ) if ($lib2);
+$template->param( lib1 => $lib1 ) if ($lib1);
+$template->param( lib2 => $lib2 ) if ($lib2);
 
 # current issues
 #
@@ -224,19 +218,17 @@ my $today       = POSIX::strftime("%Y-%m-%d", localtime);	# iso format
 my @issuedata;
 my $overdues_exist = 0;
 my $totalprice = 0;
-my $toggle     = 0;
 for ( my $i = 0 ; $i < $count ; $i++ ) {
     my $datedue = $issue->[$i]{'date_due'};
-    $issue->[$i]{'date_due'} = C4::Dates->new($issue->[$i]{'date_due'},'iso')->output('syspref');
+    $issue->[$i]{'date_due'}  = C4::Dates->new($issue->[$i]{'date_due'}, 'iso')->output('syspref');
     $issue->[$i]{'issuedate'} = C4::Dates->new($issue->[$i]{'issuedate'},'iso')->output('syspref');
     my %row = %{ $issue->[$i] };
     $totalprice += $issue->[$i]{'replacementprice'};
     $row{'replacementprice'} = $issue->[$i]{'replacementprice'};
     if ( $datedue lt $today ) {
         $overdues_exist = 1;
-        $row{'red'} = 1;    #print "<font color=red>";
+        $row{'red'} = 1;
 	}
-    $row{toggle} = $toggle++ % 2;
 
     #find the charge for an item
     my ( $charge, $itemtype ) =
@@ -252,7 +244,7 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
 	$row{'norenew'} = !$renewokay;
 	$row{'can_confirm'} = ( !$renewokay && $renewerror ne 'on_reserve' );
 	$row{"norenew_reason_$renewerror"} = 1 if $renewerror;
-	$row{'renew_failed'} = $renew_failed{ $issue->[$i]{'itemnumber'} };
+	$row{'renew_failed'}  = $renew_failed{ $issue->[$i]{'itemnumber'} };
 	$row{'return_failed'} = $return_failed{$issue->[$i]{'barcode'}};   
     push( @issuedata, \%row );
 }
@@ -273,13 +265,13 @@ if ($borrowernumber) {
         my ( $transfertwhen, $transfertfrom, $transfertto ) =
             GetTransfers( $num_res->{'itemnumber'} );
 
-		foreach (qw(waiting transfered nottransfered)) {
-				$getreserv{$_} = 0;
-		}
+        foreach (qw(waiting transfered nottransfered)) {
+            $getreserv{$_} = 0;
+        }
         $getreserv{reservedate}  = C4::Dates->new($num_res->{'reservedate'},'iso')->output('syspref');
-		foreach (qw(biblionumber title author itemcallnumber )) {
-				$getreserv{$_} = $getiteminfo->{$_};
-		}
+        foreach (qw(biblionumber title author itemcallnumber )) {
+            $getreserv{$_} = $getiteminfo->{$_};
+        }
         $getreserv{barcodereserv}  = $getiteminfo->{'barcode'};
         $getreserv{itemtype}  = $itemtypeinfo->{'description'};
 
@@ -361,23 +353,24 @@ if (C4::Context->preference('EnhancedMessagingPreferences')) {
 $template->param(
     detailview => 1,
     AllowRenewalLimitOverride => C4::Context->preference("AllowRenewalLimitOverride"),
-    DHTMLcalendar_dateformat=>C4::Dates->DHTMLcalendar(),
-    roaddetails      => $roaddetails,
-    borrowernumber   => $borrowernumber,
-    categoryname	=> $data->{'description'},
-    reregistration   => $reregistration,
-    branch	     => $branch,	
-    totalprice       => sprintf( "%.2f", $totalprice ),
-    totaldue         => sprintf( "%.2f", $total ),
-    issueloop        => \@issuedata,
-    overdues_exist   => $overdues_exist,
-    unvalidlibrarian => $unvalidlibrarian,
-   	error	         => $error,
-	$error			=> 1,
-    StaffMember		=> ($category_type eq 'S'),
-	is_child        => ($category_type eq 'C'),
-	# 		 reserveloop     => \@reservedata,
-	dateformat    => C4::Context->preference("dateformat"),
+    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
+    roaddetails     => $roaddetails,
+    borrowernumber  => $borrowernumber,
+    categoryname    => $data->{'description'},
+    reregistration  => $reregistration,
+    branch          => $branch,
+    totalprice      => sprintf("%.2f", $totalprice),
+    totaldue        => sprintf("%.2f", $total),
+    totaldue_raw    => $total,
+    issueloop       => \@issuedata,
+    overdues_exist  => $overdues_exist,
+    error           => $error,
+    $error          => 1,
+    StaffMember     => ($category_type eq 'S'),
+    is_child        => ($category_type eq 'C'),
+#   reserveloop     => \@reservedata,
+    dateformat      => C4::Context->preference("dateformat"),
+    "dateformat_" . (C4::Context->preference("dateformat") || '') => 1,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
