@@ -1,65 +1,50 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; System Administration &rsaquo; <!-- TMPL_IF NAME="else" -->Stop words<!-- /TMPL_IF --><!-- TMPL_IF NAME="add_form" --> Stop words &rsaquo; <!-- TMPL_IF NAME="searchfield" -->Modify stop word<!-- TMPL_ELSE -->New stop word<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="add_validate" --> Stop words &rsaquo; Data recorded<!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirm" --> Stop words &rsaquo; Delete stop word '<!-- TMPL_VAR NAME="searchfield" -->' ?<!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirmed" --> Stop words &rsaquo; Data deleted<!-- /TMPL_IF --></title>
+<title>Koha &rsaquo; System Administration &rsaquo; Stop words
+<!-- TMPL_IF NAME="add_form"            -->&rsaquo; <!-- TMPL_IF NAME="searchfield" -->Modify<!-- TMPL_ELSE -->New<!-- /TMPL_IF --> stop word
+<!-- TMPL_ELSIF NAME="add_validate"     -->&rsaquo; Data recorded
+<!-- TMPL_ELSIF NAME="delete_confirm"   -->&rsaquo; Delete stop word '<!-- TMPL_VAR NAME="searchfield" -->' ?
+<!-- TMPL_ELSIF NAME="delete_confirmed" -->&rsaquo; Data deleted
+<!-- /TMPL_IF -->
+</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- TMPL_IF NAME="add_form" -->
-        <script language="javascript" type="text/javascript">
-		//<![CDATA[
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            function isNotNull(f,noalert) {
-                if (f.value.length ==0) {
-                    return false;
-                }
-                return true;
-            }
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            function toUC(f) {
-                var x=f.value.toUpperCase();
-                f.value=x;
-                return true;
-            }
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            function isNum(v,maybenull) {
-            var n = new Number(v.value);
-            if (isNaN(n)) {
-                return false;
-            }
-            if (maybenull==0 && v.value=='') {
-                return false;
-            }
-            return true;
-            }
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            function isDate(f) {
-                var t = Date.parse(f.value);
-                if (isNaN(t)) {
-                    return false;
-                }
-            }
-            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            function Check(f) {
-                var ok=1;
-                var _alertString="";
-                var alertString2;
-                if (f.word.value.length==0) {
-                    _alertString += "\n- " + _("word missing");
-                }
-                if (_alertString.length==0) {
-                    document.Aform.submit();
-                } else {
-                    alertString2  = _("Form not submitted because of the following problem(s)");
-                    alertString2 += "\n------------------------------------------------------------------------------------\n";
-                    alertString2 += _alertString;
-                    alert(alertString2);
-                }
-            }  //]]>
-        </script>
-	<!-- /TMPL_IF -->
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        new YAHOO.widget.Button("newstopword");
+    });
+    function toUC(f) {
+        var x=f.value.toUpperCase();
+        f.value=x;
+        return true;
+    }
+    function Check(f) {
+        if (f.word.value.length==0) {
+            alert("Form not submitted: word missing");
+        } else {
+            document.Aform.submit();
+        }
+    }
+//]]>
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="stopwords-admin-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF NAME="else" -->Stop Words<!-- /TMPL_IF --><!-- TMPL_IF NAME="add_form" --><a href="/cgi-bin/koha/admin/stopwords.pl">Stop Words</a> &rsaquo; <!-- TMPL_IF NAME="searchfield" -->Modify Stop Word<!-- TMPL_ELSE -->New Stop Word<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- TMPL_IF NAME="add_validate" --> <a href="/cgi-bin/koha/admin/stopwords.pl">Stop Words</a> &rsaquo; Data recorded<!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirm" --> <a href="/cgi-bin/koha/admin/stopwords.pl">Stop Words</a> &rsaquo; Delete Stop Word '<!-- TMPL_VAR NAME="searchfield" -->' ?<!-- /TMPL_IF --><!-- TMPL_IF NAME="delete_confirmed" --> <a href="/cgi-bin/koha/admin/stopwords.pl">Stop Words</a> &rsaquo; Data deleted<!-- /TMPL_IF --></div>
+<div id="breadcrumbs">
+<a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/stopwords.pl">Stop Words</a>
+<!-- TMPL_IF NAME="add_form" -->
+    &rsaquo; <!-- TMPL_IF NAME="searchfield" -->Modify<!-- TMPL_ELSE -->New<!-- /TMPL_IF --> Stop Word
+<!-- TMPL_ELSIF NAME="add_validate" -->
+    &rsaquo; Data recorded
+<!-- TMPL_ELSIF NAME="delete_confirm" -->
+    &rsaquo; Delete Stop Word '<!-- TMPL_VAR NAME="searchfield" -->' ?
+<!-- TMPL_ELSIF NAME="delete_confirmed" -->
+    &rsaquo; Data deleted
+<!-- /TMPL_IF -->
+</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -68,7 +53,6 @@
 	<div class="yui-b">
 
 <!-- TMPL_IF NAME="add_form" -->
-        
         <!-- TMPL_IF NAME="searchfield" -->
             <h1>Modify word</h1>
         <!-- TMPL_ELSE -->
@@ -76,19 +60,21 @@
         <!-- /TMPL_IF -->
         <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
             <input type="hidden" name="op" value="add_validate" />
-         <fieldset class="rows">  <ol> <!-- TMPL_IF NAME="searchfield" -->
-                <li>
-                    <span class="label">Word</span>
-                        <input type="hidden" name="word" value="<!-- TMPL_VAR NAME="searchfield" -->" /><!-- TMPL_VAR NAME="searchfield" -->
-                </li>
+            <fieldset class="rows">
+            <ol><li>
+            <!-- TMPL_IF NAME="searchfield" -->
+                <span class="label">Word</span>
+                    <input type="hidden" name="word" value="<!-- TMPL_VAR NAME="searchfield" -->" /><!-- TMPL_VAR NAME="searchfield" -->
             <!-- TMPL_ELSE -->
-                <li>
-                    <label for="word">Word</label>
-                    <input type="text" name="word" id="word" size="50" maxlength="250" onblur="toUC(this)" />
+                <label for="word">Word</label>
+                <input type="text" name="word" id="word" size="50" maxlength="250" onblur="toUC(this)" />
+            <!-- /TMPL_IF -->
                 </li>
-            <!-- /TMPL_IF --></ol></fieldset>
+            </ol>
+            </fieldset>
             <fieldset class="action">
-                <input type="button" value="Save" onclick="Check(this.form)" /> <a class="cancel" href="/cgi-bin/koha/admin/stopwords.pl">Cancel</a>
+                <input type="button" value="Save" onclick="Check(this.form)" />
+                <a class="cancel" href="/cgi-bin/koha/admin/stopwords.pl">Cancel</a>
             </fieldset>
         </form>
 <!-- /TMPL_IF -->
@@ -104,10 +90,13 @@
     <div class="dialog alert">
 	<h3>Delete Stop Word <span class="ex">'<!-- TMPL_VAR NAME="searchfield" -->'</span></h3>
 	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-       <input type="hidden" name="op" value="delete_confirmed" />
+        <input type="hidden" name="op" value="delete_confirmed" />
         <input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
-       <input type="submit" value="Yes, Delete" class="approve" /></form>
-	   <form action="<!-- TMPL_VAR NAME="script_name" -->" method="get"><input type="submit" class="deny" value="No, Do Not Delete" /> </form></div>
+        <input type="submit" value="Yes, Delete" class="approve" />
+    </form>
+    <form action="<!-- TMPL_VAR NAME="script_name" -->" method="get">
+        <input type="submit" class="deny" value="No, Do Not Delete" />
+    </form></div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirmed" -->
@@ -120,17 +109,6 @@
 <!-- TMPL_IF NAME="else" -->
 
 <div id="toolbar">
-	<script type="text/javascript">
-	//<![CDATA[
-	// prepare DOM for YUI Toolbar
-	 $(document).ready(function() {
-	    yuiToolbar();
-	 });
-	// YUI Toolbar Functions
-	function yuiToolbar() {
-	    new YAHOO.widget.Button("newstopword");
-	}	//]]>
-	</script>
 	<ul class="toolbar">
 	<li><a id="newstopword" href="/cgi-bin/koha/admin/stopwords.pl?op=add_form">New Stop Word</a></li>
 </ul></div>
@@ -138,33 +116,32 @@
     <h1>Stop Words</h1>
     <p class="message">NOTE : if you change something in this table, ask your administrator to run misc/rebuildnonmarc.pl script.</p>
 
-
     <!-- TMPL_IF NAME="searchfield" -->
-                    You searched for <b><!-- TMPL_VAR NAME="searchfield" --></b>
+        <p>You searched for <b><!-- TMPL_VAR NAME="searchfield" --></b></p>
     <!-- /TMPL_IF -->
 
     <table>
-            <tr>
-                    <th>Word</th>
-                    <th> </th>
-            </tr>
-            <!-- TMPL_LOOP NAME="loop" -->
-               <!-- TMPL_UNLESS NAME="__odd__" -->
-                    <tr class="highlight">
-               <!-- TMPL_ELSE -->
-                    <tr>
-               <!-- /TMPL_IF -->
-                    <td><!-- TMPL_VAR NAME="word" --></td>
-                    <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="word" -->">Delete</a></td>
-                </tr>
-            <!-- /TMPL_LOOP -->
+        <tr><th>Word</th>
+            <th></th>
+        </tr>
+        <!-- TMPL_LOOP NAME="loop" -->
+           <!-- TMPL_IF NAME="__odd__" --><tr>
+           <!-- TMPL_ELSE --><tr class="highlight">
+           <!-- /TMPL_IF -->
+            <td><!-- TMPL_VAR NAME="word" --></td>
+            <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="word" -->">Delete</a></td>
+        </tr>
+        <!-- /TMPL_LOOP -->
     </table>
-           <div class="pages"> <!-- TMPL_IF NAME="offsetgtzero" -->
-                <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->">&lt;&lt; Previous</a>
-            <!-- /TMPL_IF -->
-            <!-- TMPL_IF NAME="ltcount" -->
-                <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->">Next &gt;&gt;</a>
-            <!-- /TMPL_iF --></div>
+
+    <div class="pages">
+        <!-- TMPL_IF NAME="offsetgtzero" -->
+            <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->">&lt;&lt; Previous</a>
+        <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="ltcount" -->
+            <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->">Next &gt;&gt;</a>
+        <!-- /TMPL_iF -->
+    </div>
 <!-- /TMPL_IF -->
 
 </div>
