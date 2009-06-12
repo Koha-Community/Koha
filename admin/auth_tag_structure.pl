@@ -29,20 +29,17 @@ use C4::Context;
 
 # retrieve parameters
 my $input = new CGI;
-my $authtypecode = $input->param('authtypecode'); # set to select framework
-$authtypecode="" unless $authtypecode;
-my $existingauthtypecode = $input->param('existingauthtypecode'); # set when we have to create a new framework (in authtype) by copying an old one (in existingauthtype)
-$existingauthtypecode = "" unless $existingauthtypecode;
+my $authtypecode         = $input->param('authtypecode')         || '';    # set to select framework
+my $existingauthtypecode = $input->param('existingauthtypecode') || '';    # set when we have to create a new framework (in authtype) by copying an old one (in existingauthtype)
+
 # my $authtypeinfo = getauthtypeinfo($authtype);
-my $searchfield=$input->param('searchfield');
-$searchfield=0 unless $searchfield;
-$searchfield=~ s/\,//g;
+my $searchfield = $input->param('searchfield') || 0;
+my $offset      = $input->param('offset') || 0;
+my $op          = $input->param('op')     || '';
+$searchfield =~ s/\,//g;
 
-my $offset=$input->param('offset');
-my $op = $input->param('op');
-my $pagesize=20;
-
-my $script_name="/cgi-bin/koha/admin/auth_tag_structure.pl";
+my $pagesize    = 20;
+my $script_name = "/cgi-bin/koha/admin/auth_tag_structure.pl";
 
 my $dbh = C4::Context->dbh;
 
@@ -71,7 +68,6 @@ foreach my $thisauthtype (keys %$authtypes) {
 my $sth;
 # check that authtype framework is defined in auth_tag_structure if we are on a default action
 if (!$op or $op eq 'authtype_create_confirm') {
-#warn "IN";
 	$sth=$dbh->prepare("select count(*) from auth_tag_structure where authtypecode=?");
 	$sth->execute($authtypecode);
 	my ($authtypeexist) = $sth->fetchrow;
@@ -86,13 +82,12 @@ if (!$op or $op eq 'authtype_create_confirm') {
 		}
 	}
 }
+$template->param(script_name  => $script_name);
 $template->param(authtypeloop => \@authtypesloop);
-if ($op && $op ne 'authtype_create_confirm') {
-$template->param(script_name => $script_name,
-						$op              => 1); # we show only the TMPL_VAR names $op
+if ($op ne 'authtype_create_confirm') {
+    $template->param($op  => 1);
 } else {
-$template->param(script_name => $script_name,
-						else              => 1); # we show only the TMPL_VAR names $op
+    $template->param(else => 1);
 }
  
 ################## ADD_FORM ##################################
@@ -104,7 +99,6 @@ if ($op eq 'add_form') {
 		$sth=$dbh->prepare("select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from auth_tag_structure where tagfield=? and authtypecode=?");
 		$sth->execute($searchfield,$authtypecode);
 		$data=$sth->fetchrow_hashref;
-		$sth->finish;
 	}
 	my $sth = $dbh->prepare("select distinct category from authorised_values");
 	$sth->execute;
@@ -143,46 +137,37 @@ if ($op eq 'add_form') {
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
-    if ($input->param('modif')) {
-        $sth=$dbh->prepare("UPDATE auth_tag_structure SET tagfield=?, liblibrarian=?, libopac=?, repeatable=?, mandatory=?, authorised_value=? WHERE authtypecode=? AND tagfield=?");
-        my $tagfield       =$input->param('tagfield');
-        my $liblibrarian  = $input->param('liblibrarian');
-        my $libopac       =$input->param('libopac');
-        my $repeatable =$input->param('repeatable');
-        my $mandatory =$input->param('mandatory');
-        my $authorised_value =$input->param('authorised_value');
-        unless (C4::Context->config('demo') eq 1) {
+    my $tagfield         = $input->param('tagfield');
+    my $liblibrarian     = $input->param('liblibrarian');
+    my $libopac          = $input->param('libopac');
+    my $repeatable       = $input->param('repeatable') ? 1 : 0;
+    my $mandatory        = $input->param('mandatory')  ? 1 : 0;
+    my $authorised_value = $input->param('authorised_value');
+    unless (C4::Context->config('demo') eq 1) {
+        if ($input->param('modif')) {
+            $sth=$dbh->prepare("UPDATE auth_tag_structure SET tagfield=?, liblibrarian=?, libopac=?, repeatable=?, mandatory=?, authorised_value=? WHERE authtypecode=? AND tagfield=?");
             $sth->execute(
-                            $tagfield,
-                            $liblibrarian,
-                            $libopac,
-                            $repeatable?1:0,
-                            $mandatory?1:0,
-                            $authorised_value,
-                            $authtypecode,
-                            $tagfield,
-                            );
+                $tagfield,
+                $liblibrarian,
+                $libopac,
+                $repeatable,
+                $mandatory,
+                $authorised_value,
+                $authtypecode,
+                $tagfield,
+            );
+        } else {
+            $sth=$dbh->prepare("INSERT INTO auth_tag_structure (tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value,authtypecode) VALUES (?,?,?,?,?,?,?)");
+            $sth->execute(
+                $tagfield,
+                $liblibrarian,
+                $libopac,
+                $repeatable,
+                $mandatory,
+                $authorised_value,
+                $authtypecode
+           );
         }
-        $sth->finish;
-    } else {
-        $sth=$dbh->prepare("INSERT INTO auth_tag_structure (tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value,authtypecode) VALUES (?,?,?,?,?,?,?)");
-        my $tagfield       =$input->param('tagfield');
-        my $liblibrarian  = $input->param('liblibrarian');
-        my $libopac       =$input->param('libopac');
-        my $repeatable =$input->param('repeatable');
-        my $mandatory =$input->param('mandatory');
-        my $authorised_value =$input->param('authorised_value');
-        unless (C4::Context->config('demo') eq 1) {
-            $sth->execute($tagfield,
-                            $liblibrarian,
-                            $libopac,
-                            $repeatable?1:0,
-                            $mandatory?1:0,
-                            $authorised_value,
-                            $authtypecode
-                            );
-        }
-        $sth->finish;
     }
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=auth_tag_structure.pl?searchfield=".$input->param('tagfield')."&authtypecode=$authtypecode\">";
 	exit;
@@ -193,7 +178,6 @@ if ($op eq 'add_form') {
 	$sth=$dbh->prepare("select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from auth_tag_structure where tagfield=?");
 	$sth->execute($searchfield);
 	my $data=$sth->fetchrow_hashref;
-	$sth->finish;
 	$template->param(liblibrarian => $data->{'liblibrarian'},
 							searchfield => $searchfield,
 							authtypecode => $authtypecode,
@@ -205,6 +189,7 @@ if ($op eq 'add_form') {
 	unless (C4::Context->config('demo') eq 1) {
 		$dbh->do("delete from auth_tag_structure where tagfield='$searchfield' and authtypecode='$authtypecode'");
 		$dbh->do("delete from auth_subfield_structure where tagfield='$searchfield' and authtypecode='$authtypecode'");
+        # FIXME: Secuity vulnerability -- use placeholders, prepare and execute!
 	}
     print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=auth_tag_structure.pl?searchfield=".$input->param('tagfield')."&authtypecode=$authtypecode\">";
     exit;
@@ -243,15 +228,15 @@ if ($op eq 'add_form') {
 			$toggle=1;
 	  	}
 		my %row_data;  # get a fresh hash for the row data
-		$row_data{tagfield} = $results->[$i]{'tagfield'};
-		$row_data{liblibrarian} = $results->[$i]{'liblibrarian'};
-		$row_data{repeatable} = $results->[$i]{'repeatable'};
-		$row_data{mandatory} = $results->[$i]{'mandatory'};
-		$row_data{authorised_value} = $results->[$i]{'authorised_value'};
-		$row_data{subfield_link} ="auth_subfields_structure.pl?tagfield=".$results->[$i]{'tagfield'}."&amp;authtypecode=".$authtypecode;
-		$row_data{edit} = "$script_name?op=add_form&amp;searchfield=".$results->[$i]{'tagfield'}."&amp;authtypecode=".$authtypecode;
-		$row_data{delete} = "$script_name?op=delete_confirm&amp;searchfield=".$results->[$i]{'tagfield'}."&amp;authtypecode=".$authtypecode;
-		$row_data{toggle} = $toggle;
+        $row_data{tagfield}         = $results->[$i]{'tagfield'};
+        $row_data{liblibrarian}     = $results->[$i]{'liblibrarian'};
+        $row_data{repeatable}       = $results->[$i]{'repeatable'};
+        $row_data{mandatory}        = $results->[$i]{'mandatory'};
+        $row_data{authorised_value} = $results->[$i]{'authorised_value'};
+        $row_data{subfield_link}    = "auth_subfields_structure.pl?tagfield=" . $results->[$i]{'tagfield'} . "&amp;authtypecode=" . $authtypecode;
+        $row_data{edit}             = "$script_name?op=add_form&amp;searchfield=" . $results->[$i]{'tagfield'} . "&amp;authtypecode=" . $authtypecode;
+        $row_data{delete}           = "$script_name?op=delete_confirm&amp;searchfield=" . $results->[$i]{'tagfield'} . "&amp;authtypecode=" . $authtypecode;
+        $row_data{toggle}           = $toggle;
 		push(@loop_data, \%row_data);
 	}
 	$template->param(loop => \@loop_data,
@@ -262,23 +247,17 @@ if ($op eq 'add_form') {
 		$template->param(isprevpage => $offset,
 						prevpage=> $prevpage,
 						searchfield => $searchfield,
-						script_name => $script_name,
 		 );
 	}
 	if ($offset+$pagesize<$count) {
 		my $nextpage =$offset+$pagesize;
 		$template->param(nextpage =>$nextpage,
 						searchfield => $searchfield,
-						script_name => $script_name,
 		);
 	}
 } #---- END $OP eq DEFAULT
 
-$template->param(loggeninuser => $loggedinuser,
-		);
-
 output_html_with_http_headers $input, $cookie, $template->output;
-
 
 #
 # the sub used for searches
@@ -288,15 +267,12 @@ sub StringSearch  {
 	my $dbh = C4::Context->dbh;
 	$searchstring=~ s/\'/\\\'/g;
 	my @data=split(' ',$searchstring);
-	my $count=@data;
 	my $sth=$dbh->prepare("Select tagfield,liblibrarian,libopac,repeatable,mandatory,authorised_value from auth_tag_structure where (tagfield >= ? and authtypecode=?) order by tagfield");
 	$sth->execute($data[0], $authtypecode);
 	my @results;
 	while (my $data=$sth->fetchrow_hashref){
-	push(@results,$data);
+        push(@results,$data);
 	}
-	#  $sth->execute;
-	$sth->finish;
 	return (scalar(@results),\@results);
 }
 
