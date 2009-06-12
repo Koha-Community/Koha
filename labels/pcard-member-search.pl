@@ -95,14 +95,12 @@ else
 
 
 my @resultsdata;
-my $toggle = 0;
 my $to=($count>($startfrom*$resultsperpage)?$startfrom*$resultsperpage:$count);
 for (my $i=($startfrom-1)*$resultsperpage; $i < $to; $i++){
   #find out stats
   my ($od,$issue,$fines)=GetMemberIssuesAndFines($results->[$i]{'borrowernumber'});
 
   my %row = (
-    toggle => $toggle,
     count => $i+1,
     borrowernumber => $results->[$i]{'borrowernumber'},
     cardnumber => $results->[$i]{'cardnumber'},
@@ -125,7 +123,6 @@ for (my $i=($startfrom-1)*$resultsperpage; $i < $to; $i++){
     sort2 => $results->[$i]{'sort2'},
     dateexpiry => C4::Dates->new($results->[$i]{'dateexpiry'},'iso')->output('syspref'),
     );
-  if ( $toggle ) { $toggle = 0; } else {$toggle = 1; }
   push(@resultsdata, \%row);
 }
 my $base_url =
