@@ -113,7 +113,8 @@ foreach my $branch ( keys %$branches ) {
         push @CGIbranchlooparray, \%line;
     }
 }
-@CGIbranchlooparray = sort { $a->{branch} cmp $b->{branch} } @CGIbranchlooparray;
+@CGIbranchlooparray =
+  sort { $a->{branch} cmp $b->{branch} } @CGIbranchlooparray;
 my $CGIbranchloop = \@CGIbranchlooparray;
 $template->param( CGIbranch => $CGIbranchloop );
 
@@ -145,31 +146,13 @@ if ( $query->param('place_reserve') ) {
     my $checkitem=$query->param('checkitem');
     my $found;
     
-#    #if we have an item selectionned, and the pickup branch is the same as the holdingbranch of the document, we force the value $rank and $found.
-#    if ($checkitem ne ''){
-#        $rank = '0' unless C4::Context->preference('ReservesNeedReturns');
-#        my $item = $checkitem;
-#        $item = GetItem($item);
-#        if ( $item->{'holdingbranch'} eq $branch ){
-#            $found = 'W' unless C4::Context->preference('ReservesNeedReturns');
-    my @selectedItems = split /\//, $selectedItems;
-
-    # Make sure there is a biblionum/itemnum/branch triplet for each item.
-    # The itemnum can be 'any', meaning next available.
-    my $selectionCount = @selectedItems;
-    if (($selectionCount == 0) || (($selectionCount % 3) != 0)) {
-        $template->param(message=>1, bad_data=>1);
-        &get_out($query, $cookie, $template->output);
-    }
-
-    while (@selectedItems) {
-        my $biblioNum = shift(@selectedItems);
-        my $itemNum   = shift(@selectedItems);
-        my $branch    = shift(@selectedItems); # i.e., branch code, not name
-
-        my $singleBranchMode = $template->param('singleBranchMode');
-        if ($singleBranchMode) {
-            $branch = $borr->{'branchcode'};
+    #if we have an item selectionned, and the pickup branch is the same as the holdingbranch of the document, we force the value $rank and $found.
+    if ($checkitem ne ''){
+        $rank = '0' unless C4::Context->preference('ReservesNeedReturns');
+        my $item = $checkitem;
+        $item = GetItem($item);
+        if ( $item->{'holdingbranch'} eq $branch ){
+            $found = 'W' unless C4::Context->preference('ReservesNeedReturns');
         }
     }
         
@@ -271,12 +254,8 @@ my @bibitemloop;
 foreach my $biblioitemnumber (@biblioitemnumbers) {
     my $biblioitem = $biblioiteminfos_of->{$biblioitemnumber};
 
-    # Get relevant biblio data.
-    my $biblioData = $biblioDataHash{$biblioNum};
-    if (! $biblioData) {
-        $template->param(message=>1, bad_biblionumber=>$biblioNum);
-        &get_out($query, $cookie, $template->output);
-    }
+    $biblioitem->{description} =
+      $itemtypes->{ $biblioitem->{itemtype} }{description};
 
     foreach
       my $itemnumber ( @{ $itemnumbers_of_biblioitem{$biblioitemnumber} } )
@@ -293,39 +272,12 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
               $branches->{ $item->{holdingbranch} }{branchname};
         }
         
-        if (!$itemInfo->{'notforloan'} && !($itemInfo->{'itemnotforloan'} > 0)) {
-            $biblioLoopIter{forloan} = 1;
-        }
-    }
-
-    $biblioLoopIter{itemTypeDescription} = $itemTypes->{$biblioData->{itemtype}}{description};
-
-    $biblioLoopIter{itemLoop} = [];
-    my $numCopiesAvailable = 0;
-    foreach my $itemInfo (@{$biblioData->{itemInfos}}) {
-        my $itemNum = $itemInfo->{itemnumber};
-        my $itemLoopIter = {};
-
-        $itemLoopIter->{itemnumber} = $itemNum;
-        $itemLoopIter->{barcode} = $itemInfo->{barcode};
-        $itemLoopIter->{homeBranchName} = $branches->{$itemInfo->{homebranch}}{branchname};
-        $itemLoopIter->{callNumber} = $itemInfo->{itemcallnumber};
-        $itemLoopIter->{copynumber} = $itemInfo->{copynumber};
-        if ($itemLevelTypes) {
-            $itemLoopIter->{description} = $itemInfo->{description};
-            $itemLoopIter->{imageurl} = $itemInfo->{imageurl};
-        }
-
-        # If the holdingbranch is different than the homebranch, we show the
-        # holdingbranch of the document too.
-        if ( $itemInfo->{homebranch} ne $itemInfo->{holdingbranch} ) {
-            $itemLoopIter->{holdingBranchName} =
-              $branches->{ $itemInfo->{holdingbranch} }{branchname};
-        }
-
-        # If the item is currently on loan, we display its return date and
-        # change the background color.
-        my $issues= GetItemIssue($itemNum);
+# 	add information
+	$item->{itemcallnumber} = $item->{itemcallnumber};
+	
+        # if the item is currently on loan, we display its return date and
+        # change the background color
+        my $issues= GetItemIssue($itemnumber);
         if ( $issues->{'date_due'} ) {
             $item->{date_due} = format_date($issues->{'date_due'});
             $item->{backgroundcolor} = 'onloan';
@@ -336,12 +288,13 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
         my $ItemBorrowerReserveInfo = GetMemberDetails( $reservedfor, 0);
 
         if ( defined $reservedate ) {
-            $itemLoopIter->{backgroundcolor} = 'reserved';
-            $itemLoopIter->{reservedate}     = format_date($reservedate);
-            $itemLoopIter->{ReservedForBorrowernumber} = $reservedfor;
-            $itemLoopIter->{ReservedForSurname}        = $ItemBorrowerReserveInfo->{'surname'};
-            $itemLoopIter->{ReservedForFirstname}      = $ItemBorrowerReserveInfo->{'firstname'};
-            $itemLoopIter->{ExpectedAtLibrary}         = $expectedAt;
+            $item->{backgroundcolor} = 'reserved';
+            $item->{reservedate}     = format_date($reservedate);
+            $item->{ReservedForBorrowernumber}     = $reservedfor;
+            $item->{ReservedForSurname}     = $ItemBorrowerReserveInfo->{'surname'};
+            $item->{ReservedForFirstname}     = $ItemBorrowerReserveInfo->{'firstname'};
+            $item->{ExpectedAtLibrary}     = $expectedAt;
+            
         }
 
         # Management of the notforloan document
@@ -388,35 +341,12 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
         while (my $wait_hashref = $sth2->fetchrow_hashref) {
             $item->{waitingdate} = format_date($wait_hashref->{waitingdate});
         }
-	    $itemLoopIter->{imageurl} = getitemtypeimagelocation( 'opac', $itemTypes->{ $itemInfo->{itype} }{imageurl} );
-        
-        push @{$biblioLoopIter{itemLoop}}, $itemLoopIter;
-    }
-
-    if ($numCopiesAvailable > 0) {
-        $numBibsAvailable++;
-        $biblioLoopIter{bib_available} = 1;
-        $biblioLoopIter{holdable} = 1;
-    }
-    if ($biblioLoopIter{already_reserved}) {
-        $biblioLoopIter{holdable} = undef;
+	$item->{imageurl} = getitemtypeimagelocation( 'opac', $itemtypes->{ $item->{itype} }{imageurl} );
+        push @{ $biblioitem->{itemloop} }, $item;
     }
 
     push @bibitemloop, $biblioitem;
 }
-
-if ( $numBibsAvailable == 0 ) {
-    $template->param( none_available => 1, message => 1 );
-}
-
-my $itemTableColspan = 5;
-if (!$template->param('OPACItemHolds')) {
-    $itemTableColspan--;
-}
-if ($template->param('singleBranchMode')) {
-    $itemTableColspan--;
-}
-$template->param(itemtable_colspan => $itemTableColspan);
 
 # display infos
 $template->param(
@@ -425,3 +355,6 @@ $template->param(
 );
 output_html_with_http_headers $query, $cookie, $template->output;
 
+# Local Variables:
+# tab-width: 8
+# End:
