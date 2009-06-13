@@ -461,7 +461,7 @@
     </xsl:if>
 
     <span class="results_summary">
-    <xsl:if test="$typeOf008">
+    <xsl:if test="$typeOf008!=''">
         <span class="label">Type: </span>
             <xsl:choose>
                 <xsl:when test="$leader6='a'">
