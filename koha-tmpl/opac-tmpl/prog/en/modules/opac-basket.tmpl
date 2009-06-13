@@ -122,8 +122,8 @@ function tagAdded() {
 	<li><a class="empty" href="opac-basket.pl" onclick="delBasket(); return false;">Empty and Close</a></li>
 	<li><a class="hide" href="opac-basket.pl" onclick="quit(); return false;">Hide Window</a></li>
 </ul>
-        <!-- /TMPL_UNLESS -->
 </div>
+        <!-- /TMPL_UNLESS -->
 
 <!-- TMPL_IF NAME="verbose" -->
 	<!-- TMPL_UNLESS NAME="print_basket" --><p style="padding: 7px 0; border-top : 1px solid #E8E8E8;"><a id="CheckAll" href="#">Select All</a> <a id="CheckNone" href="#">Clear All</a> | <b>Selected items :</b>
@@ -202,7 +202,8 @@ function tagAdded() {
             <td><!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
                    <p> <!-- TMPL_LOOP NAME="MARCSUBJECT_SUBFIELDS_LOOP" -->
                         <!-- TMPL_VAR NAME="separator" --><!-- TMPL_VAR NAME="value" --><!-- /TMPL_LOOP -->
-                <!-- /TMPL_LOOP --></p></td>
+                   </p>
+                <!-- /TMPL_LOOP --></td>
         </tr>
         <!-- /TMPL_IF -->
     
