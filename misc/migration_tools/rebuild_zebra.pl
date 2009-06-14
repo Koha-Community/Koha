@@ -17,6 +17,7 @@ use C4::AuthoritiesMarc;
 $|=1; # flushes output
 
 my $directory;
+my $nosanitize;
 my $skip_export;
 my $keep_export;
 my $reset;
@@ -36,6 +37,7 @@ my $result = GetOptions(
     'reset'         => \$reset,
     's'             => \$skip_export,
     'k'             => \$keep_export,
+    'nosanitize'    => \$nosanitize,
     'b'             => \$biblios,
     'noxml'         => \$noxml,
     'w'             => \$noshadow,
@@ -62,6 +64,12 @@ if (not $biblios and not $authorities) {
 
 if ($authorities and $as_xml) {
     my $msg = "Cannot specify both -a and -x\n";
+    $msg   .= "Please do '$0 --help' to see usage.\n";
+    die $msg;
+}
+
+if ( !$as_xml and $nosanitize ) {
+    my $msg = "Cannot specify both -no_xml and -nosanitize\n";
     $msg   .= "Please do '$0 --help' to see usage.\n";
     die $msg;
 }
@@ -119,13 +127,13 @@ if ($do_munge) {
 }
 
 if ($authorities) {
-    index_records('authority', $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt);
+    index_records('authority', $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $nosanitize, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt);
 } else {
     print "skipping authorities\n" if ( $verbose_logging );
 }
 
 if ($biblios) {
-    index_records('biblio', $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt);
+    index_records('biblio', $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $nosanitize, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt);
 } else {
     print "skipping biblios\n" if ( $verbose_logging );
 }
@@ -158,7 +166,7 @@ if ($keep_export) {
 }
 
 sub index_records {
-    my ($record_type, $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt) = @_;
+    my ($record_type, $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $nosanitize, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt) = @_;
 
     my $num_records_exported = 0;
     my $num_records_deleted = 0;
@@ -186,7 +194,7 @@ sub index_records {
             mark_zebraqueue_batch_done($entries);
         } else {
             my $sth = select_all_records($record_type);
-            $num_records_exported = export_marc_records_from_sth($record_type, $sth, "$directory/$record_type", $as_xml, $noxml);
+            $num_records_exported = export_marc_records_from_sth($record_type, $sth, "$directory/$record_type", $as_xml, $noxml, $nosanitize);
             unless ($do_not_clear_zebraqueue) {
                 mark_all_zebraqueue_done($record_type);
             }
@@ -270,7 +278,7 @@ sub select_all_biblios {
 }
 
 sub export_marc_records_from_sth {
-    my ($record_type, $sth, $directory, $as_xml, $noxml) = @_;
+    my ($record_type, $sth, $directory, $as_xml, $noxml, $nosanitize) = @_;
 
     my $num_exported = 0;
     open (OUT, ">:utf8 ", "$directory/exported_records") or die $!;
@@ -278,6 +286,16 @@ sub export_marc_records_from_sth {
     while (my ($record_number) = $sth->fetchrow_array) {
         print "." if ( $verbose_logging );
         print "\r$i" unless ($i++ %100 or !$verbose_logging);
+        if ( $nosanitize ) {
+            my $marcxml = $record_type eq 'biblio'
+                          ? GetXmlBiblio( $record_number )
+                          : GetAuthorityXML( $record_number );
+            if ( $marcxml ) {
+                print OUT $marcxml if $marcxml;
+                $num_exported++;
+            }
+            next;
+        }
         my ($marc) = get_corrected_marc_record($record_type, $record_number, $noxml);
         if (defined $marc) {
             # FIXME - when more than one record is exported and $as_xml is true,
@@ -548,6 +566,11 @@ Parameters:
     -x                      export and index as xml instead of is02709 (biblios only).
                             use this if you might have records > 99,999 chars,
 							
+    -nosanitize             export biblio/authority records directly from DB marcxml
+                            field without sanitizing records. It speed up
+                            dump process but could fail if DB contains badly
+                            encoded records. Works only with -x,
+
     -w                      skip shadow indexing for this batch
 
     -y                      do NOT clear zebraqueue after indexing; normally,
