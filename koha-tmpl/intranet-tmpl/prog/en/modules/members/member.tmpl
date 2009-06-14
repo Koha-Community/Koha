@@ -68,11 +68,11 @@
     <!-- TMPL_IF name="overdue" -->
     <tr class="problem">
     <!-- TMPL_ELSE -->
-    <!-- TMPL_IF name="toggle" -->
+    <!-- TMPL_UNLESS name="__odd__" -->
     <tr class="highlight">
     <!-- TMPL_ELSE -->
     <tr>
-    <!-- /TMPL_IF -->
+    <!-- /TMPL_UNLESS -->
     <!-- /TMPL_IF -->
     <td><!-- TMPL_VAR NAME="cardnumber" --></td>
     <td style="white-space: nowrap;"><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --></a> <br /> <!-- TMPL_VAR NAME="address" --><!-- TMPL_IF NAME="address2" --><br /><!-- TMPL_VAR NAME="address2" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="city" --><br /><!-- TMPL_VAR NAME=city --><!-- /TMPL_IF --><!-- TMPL_IF NAME="zipcode" -->  <!-- TMPL_VAR NAME="zipcode" --><!-- /TMPL_IF --></td>
