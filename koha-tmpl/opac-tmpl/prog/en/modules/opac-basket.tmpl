@@ -151,10 +151,12 @@ function tagAdded() {
         <!-- TMPL_IF NAME="print_basket" -->
             <!-- TMPL_VAR NAME="title" -->
                 <!-- TMPL_IF name="subtitle" --> <!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF -->
+                <!-- TMPL_IF name="author" --> <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
         <!-- TMPL_ELSE -->
                 <input type="checkbox" value="<!-- TMPL_VAR NAME="biblionumber" -->" name="bib<!-- TMPL_VAR NAME="biblionumber" -->" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" onclick="selRecord(value,checked)" />
                 <!-- TMPL_VAR NAME="title" escape="html" -->
                 <!-- TMPL_IF name="subtitle" --> <!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF -->
+                <!-- TMPL_IF name="author" --> <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
     </h3>
 	    <!-- COinS / OpenURL -->
@@ -167,12 +169,23 @@ function tagAdded() {
         </tr>
         <!-- /TMPL_IF -->
         
-        <!-- TMPL_IF name="MARCAUTHORS" -->
+        <!-- TMPL_IF EXPR="MARCAUTHORS || author" -->
         <tr>
-            <th scope="row">Authors</th>
-            <td><!-- TMPL_LOOP NAME="MARCAUTHORS" -->
-                    <!-- TMPL_VAR NAME="value" -->
-            <!-- /TMPL_LOOP --></td>
+            <th scope="row">Author(s)</th>
+            <td>
+                   <!-- TMPL_IF NAME="author" -->
+                       <p><!-- TMPL_VAR NAME="author" --></p>
+                   <!-- /TMPL_IF -->
+                   <!-- TMPL_IF NAME="MARCAUTHORS" -->
+                       <!-- TMPL_LOOP NAME="MARCAUTHORS" -->
+                       <p> <!-- TMPL_LOOP NAME="MARCAUTHOR_SUBFIELDS_LOOP" -->
+                              <!-- TMPL_VAR NAME="separator" -->
+                                  <!-- TMPL_VAR NAME="value" -->
+                           <!-- /TMPL_LOOP -->
+                       </p>
+                       <!-- /TMPL_LOOP -->
+                   <!-- /TMPL_IF -->
+	    </td>
         </tr>
         <!-- /TMPL_IF -->
         
