@@ -451,11 +451,12 @@ sub update_sql {
     my $id = shift || croak "No Id given";
     my $sql = shift;
     my $reportname = shift;
+    my $notes = shift;
     my $dbh = C4::Context->dbh();
     $sql =~ s/(\s*\;\s*)$//; # removes trailing whitespace and /;/
-    my $query = "UPDATE saved_sql SET savedsql = ?, last_modified = now(), report_name = ? WHERE id = ? ";
+    my $query = "UPDATE saved_sql SET savedsql = ?, last_modified = now(), report_name = ?, notes = ? WHERE id = ? ";
     my $sth = $dbh->prepare($query);
-    $sth->execute( $sql, $reportname, $id );
+    $sth->execute( $sql, $reportname, $notes, $id );
     $sth->finish();
 }
 
