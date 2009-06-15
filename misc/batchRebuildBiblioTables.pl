@@ -1,7 +1,10 @@
 #!/usr/bin/perl
-# small script that rebuilds the non-MARC DB
+# Small script that rebuilds the non-MARC DB
+# Formerly named rebuildnonmarc.pl
 
 use strict;
+# use warnings; FIXME someday
+
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
@@ -16,8 +19,8 @@ use C4::Biblio;
 use Time::HiRes qw(gettimeofday);
 
 use Getopt::Long;
-my ( $input_marc_file, $number) = ('',0);
-my ($version, $confirm,$test_parameter);
+my ( $input_marc_file, $number) = ('', 0);
+my ($version, $confirm, $test_parameter);
 GetOptions(
     'c' => \$confirm,
     'h' => \$version,
@@ -28,15 +31,17 @@ if ($version || (!$confirm)) {
     print <<EOF
 This script rebuilds the non-MARC DB from the MARC values.
 You can/must use it when you change your mapping.
-For example : you decide to map biblio.title to 200$a (it was previously mapped to 610$a) : run this script or you will have strange
-results in OPAC !
-syntax :
-\t./rebuildnonmarc.pl -h (or without arguments => shows this screen)
-\t./rebuildnonmarc.pl -c (c like confirm => rebuild non marc DB (may be long)
+
+Example: you decide to map biblio.title to 200\$a (it was previously mapped to 610\$a).
+Run this script or you will have strange results in OPAC !
+
+Syntax:
+\t./batchRebuildBiblioTables.pl -h (or without arguments => shows this screen)
+\t./batchRebuildBiblioTables.pl -c (c like confirm => rebuild non marc DB (may be long)
 \t-t => test only, change nothing in DB
 EOF
 ;
-die;
+    exit;
 }
 
 my $dbh = C4::Context->dbh;
