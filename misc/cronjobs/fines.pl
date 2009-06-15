@@ -44,10 +44,36 @@ use C4::Overdues;
 use C4::Calendar qw();  # don't need any exports from Calendar
 use C4::Biblio;
 use C4::Debug;  # supplying $debug and $cgi_debug
+use Getopt::Long;
+
+my $help = 0;
+my $verbose = 0;
+my $output_dir;
+
+GetOptions( 'h|help'    => \$help,
+            'v|verbose' => \$verbose,
+            'o|out:s'   => \$output_dir,
+       );
+my $usage = << 'ENDUSAGE';
+
+This script calculates and charges overdue fines
+to patron accounts.  If the Koha System Preference
+'finesMode' is set to 'production', the fines are charged
+to the patron accounts.  If set to 'test', the fines are
+calculated but not applied.
+
+This script has the following parameters :
+    -h --help: this message
+    -o --out:  ouput directory for logs (defaults to env or /tmp if !exist)
+    -v --verbose
+
+ENDUSAGE
+
+die $usage if $help;
 
 use vars qw(@borrower_fields @item_fields @other_fields);
 use vars qw($fldir $libname $control $mode $delim $dbname $today $today_iso $today_days);
-use vars qw($filename $summary);
+use vars qw($filename);
 
 CHECK {
     @borrower_fields = qw(cardnumber categorycode surname firstname email phone address citystate);
@@ -59,14 +85,6 @@ CHECK {
     $dbname  = C4::Context->config('database');
     $delim   = "\t"; # ?  C4::Context->preference('delimiter') || "\t";
 
-    $today = C4::Dates->new();
-    $today_iso = $today->output('iso');
-    $today_days = Date_to_Days(split(/-/,$today_iso));
-    $fldir = $ENV{TMPDIR} || "/tmp"; # TODO: use GetOpt
-    $filename = $dbname;
-    $filename =~ s/\W//;
-    $filename = $fldir . '/'. $filename . '_' .  $today_iso . ".log";
-    $summary = 1;  # TODO: use GetOpt
 }
 
 INIT {
@@ -77,13 +95,25 @@ INIT {
         "Delimiter: '$delim'\n";
 }
 
-open (FILE, ">$filename") or die "Cannot write file $filename: $!";
-print FILE join $delim, (@borrower_fields, @item_fields, @other_fields);
-print FILE "\n";
-
 my $data = Getoverdues();
 my $overdueItemsCounted = 0;
 my %calendars = ();
+$today = C4::Dates->new();
+$today_iso = $today->output('iso');
+$today_days = Date_to_Days(split(/-/,$today_iso));
+if($output_dir){
+    $fldir = $output_dir if( -d $output_dir );
+} else {
+    $fldir = $ENV{TMPDIR} || "/tmp";
+    warn "Could not write to $output_dir ... does not exist!";
+}
+$filename = $dbname;
+$filename =~ s/\W//;
+$filename = $fldir . '/'. $filename . '_' .  $today_iso . ".log";
+print "writing to $filename\n";
+open (FILE, ">$filename") or die "Cannot write file $filename: $!";
+print FILE join $delim, (@borrower_fields, @item_fields, @other_fields);
+print FILE "\n";
 
 for (my $i=0; $i<scalar(@$data); $i++) {
     my $datedue = C4::Dates->new($data->[$i]->{'date_due'},'iso');
@@ -125,7 +155,7 @@ for (my $i=0; $i<scalar(@$data); $i++) {
 }
 
 my $numOverdueItems = scalar(@$data);
-if ($summary) {
+if ($verbose) {
    print <<EOM;
 Fines assessment -- $today_iso -- Saved to $filename
 Number of Overdue Items:
