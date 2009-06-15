@@ -27,6 +27,7 @@ use C4::Items;
 use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Koha;
 use C4::Branch; # GetBranches
+use C4::Circulation;
 
 my $input = new CGI;
 my $minlocation=$input->param('minlocation') || '';
