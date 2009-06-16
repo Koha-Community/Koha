@@ -14,5 +14,5 @@ while (1) {
 	chomp($in);
 	last unless $in;
 	my $patron = ILS::Patron->new($in);
-	print Dumper($patron);
+	print "Patron ($in):\n", Dumper($patron);
 }
