@@ -15,7 +15,7 @@ while (1) {
 	last unless $in;
 	print "GetMember : \n",  Dumper(GetMember($in, 'cardnumber'));
 	my ($member) = GetMemberDetails(undef, $in);
-	my $flags = $member->{flags};
+	my $flags = $member->{authflags};
 	print "GetMemberDetails (member) : \n", Dumper($member);
 	print "GetMemberDetails ( flags) : \n", Dumper($flags);
 	print "=" x 10, "\n";
