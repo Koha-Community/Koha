@@ -238,6 +238,7 @@ foreach ( @$reviews ) {
     $_->{surname}   = $borrowerData->{'surname'};
     $_->{firstname} = $borrowerData->{'firstname'};
     $_->{userid}    = $borrowerData->{'userid'};
+    $_->{cardnumber}    = $borrowerData->{'cardnumber'};
     $_->{datereviewed} = format_date($_->{datereviewed});
     if ($borrowerData->{'borrowernumber'} eq $borrowernumber) {
 		$_->{your_comment} = 1;
