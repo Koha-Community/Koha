@@ -62,6 +62,11 @@ foreach my $biblionumber ( @bibs ) {
     my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);
     my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
     my @items            = &GetItemsInfo( $biblionumber, 'opac' );
+
+    my $hasauthors = 0;
+    if($dat->{'author'} || @$marcauthorsarray) {
+      $hasauthors = 1;
+    }
 	
     my $shelflocations =GetKohaAuthorisedValues('items.location',$dat->{'frameworkcode'});
     my $collections =  GetKohaAuthorisedValues('items.ccode',$dat->{'frameworkcode'} );
@@ -90,6 +95,7 @@ foreach my $biblionumber ( @bibs ) {
     $dat->{MARCAUTHORS}    = $marcauthorsarray;
     $dat->{MARCSERIES}  = $marcseriesarray;
     $dat->{MARCURLS}    = $marcurlsarray;
+    $dat->{HASAUTHORS}  = $hasauthors;
 
     if ( C4::Context->preference("BiblioDefaultView") eq "normal" ) {
         $dat->{dest} = "opac-detail.pl";
