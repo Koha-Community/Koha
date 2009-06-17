@@ -771,12 +771,20 @@ sub CanBookBeIssued {
             $sth->execute($item->{'itemtype'});
             my $notforloan=$sth->fetchrow_hashref();
             $sth->finish();
-            if ($notforloan->{'notforloan'} == 1){
-                $issuingimpossible{NOT_FOR_LOAN} = 1;
+            if ($notforloan->{'notforloan'}) {
+                if (!C4::Context->preference("AllowNotForLoanOverride")) {
+                    $issuingimpossible{NOT_FOR_LOAN} = 1;
+                } else {
+                    $needsconfirmation{NOT_FOR_LOAN_FORCING} = 1;
+                }
             }
         }
         elsif ($biblioitem->{'notforloan'} == 1){
-            $issuingimpossible{NOT_FOR_LOAN} = 1;
+            if (!C4::Context->preference("AllowNotForLoanOverride")) {
+                $issuingimpossible{NOT_FOR_LOAN} = 1;
+            } else {
+                $needsconfirmation{NOT_FOR_LOAN_FORCING} = 1;
+            }
         }
     }
     if ( $item->{'wthdrawn'} && $item->{'wthdrawn'} == 1 )
