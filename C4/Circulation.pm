@@ -1736,7 +1736,6 @@ sub FixAccountForLostAndReturned {
 			WHERE (borrowernumber = ?)
 			AND (itemnumber = ?) AND (accountno = ?) ");
 		$usth->execute($data->{'borrowernumber'},$itm,$acctno);
-		$usth->finish;
 	#check if any credit is left if so writeoff other accounts
 		my $nextaccntno = getnextacctno($data->{'borrowernumber'});
 		if ($amountleft < 0){
@@ -1768,9 +1767,8 @@ sub FixAccountForLostAndReturned {
 				VALUES
 				(?,?,?,?)");
 			$usth->execute($data->{'borrowernumber'},$accdata->{'accountno'},$nextaccntno,$newamtos);
-			$usth->finish;
 		}
-		$msth->finish;
+		$msth->finish;  # $msth might actually have data left
 		}
 		if ($amountleft > 0){
 			$amountleft*=-1;
@@ -1780,12 +1778,10 @@ sub FixAccountForLostAndReturned {
 			(borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding)
 			VALUES (?,?,now(),?,?,'CR',?)");
 		$usth->execute($data->{'borrowernumber'},$nextaccntno,0-$amount,$desc,$amountleft);
-		$usth->finish;
 		$usth = $dbh->prepare("INSERT INTO accountoffsets
 			(borrowernumber, accountno, offsetaccount,  offsetamount)
 			VALUES (?,?,?,?)");
 		$usth->execute($borrower->{'borrowernumber'},$data->{'accountno'},$nextaccntno,$offset);
-		$usth->finish;
         ModItem({ paidfor => '' }, undef, $itm);
 	}
 	$sth->finish;
@@ -1796,46 +1792,28 @@ sub FixAccountForLostAndReturned {
 
 $issues = &GetItemIssue($itemnumber);
 
-Returns patrons currently having a book. nothing if item is not issued atm
+Returns patron currently having a book, or undef if not checked out.
 
 C<$itemnumber> is the itemnumber
 
-Returns an array of hashes
-
-FIXME: Though the above says that this function returns nothing if the
-item is not issued, this actually returns a hasref that looks like
-this:
-    {
-      itemnumber => 1,
-      overdue    => 1
-    }
-
+C<$issues> is an array of hashes.
 
 =cut
 
 sub GetItemIssue {
-    my ( $itemnumber) = @_;
+    my ($itemnumber) = @_;
     return unless $itemnumber;
-    my $dbh = C4::Context->dbh;
-    my @GetItemIssues;
-    
-    # get today date
-    my $today = POSIX::strftime("%Y%m%d", localtime);
-
-    my $sth = $dbh->prepare(
-        "SELECT * FROM issues 
+    my $sth = C4::Context->dbh->prepare(
+        "SELECT *
+        FROM issues 
         LEFT JOIN items ON issues.itemnumber=items.itemnumber
-    WHERE
-    issues.itemnumber=?");
+        WHERE issues.itemnumber=?");
     $sth->execute($itemnumber);
     my $data = $sth->fetchrow_hashref;
-    my $datedue = $data->{'date_due'};
-    $datedue =~ s/-//g;
-    if ( $datedue < $today ) {
-        $data->{'overdue'} = 1;
-    }
-    $data->{'itemnumber'} = $itemnumber; # fill itemnumber, in case item is not on issue
-    $sth->finish;
+    return unless $data;
+    $data->{'overdue'} = ($data->{'date_due'} lt C4::Dates->today('iso')) ? 1 : 0;
+    $data->{'itemnumber'} = $itemnumber; # fill itemnumber, in case item is not on issue.
+    # FIXME: that would mean issues.itemnumber IS NULL and we didn't really match it.
     return ($data);
 }
 
@@ -1868,23 +1846,20 @@ $issues = &GetItemIssues($itemnumber, $history);
 Returns patrons that have issued a book
 
 C<$itemnumber> is the itemnumber
-C<$history> is 0 if you want actuel "issuer" (if it exist) and 1 if you want issues history
+C<$history> is false if you just want the current "issuer" (if any)
+and true if you want issues history from old_issues also.
 
-Returns an array of hashes
+Returns reference to an array of hashes
 
 =cut
 
 sub GetItemIssues {
-    my ( $itemnumber,$history ) = @_;
-    my $dbh = C4::Context->dbh;
-    my @GetItemIssues;
+    my ( $itemnumber, $history ) = @_;
     
-    # get today date
-    my $today = POSIX::strftime("%Y%m%d", localtime);
-
+    my $today = C4::Dates->today('iso');  # get today date
     my $sql = "SELECT * FROM issues 
               JOIN borrowers USING (borrowernumber)
-              JOIN items USING (itemnumber)
+              JOIN items     USING (itemnumber)
               WHERE issues.itemnumber = ? ";
     if ($history) {
         $sql .= "UNION ALL
@@ -1894,23 +1869,17 @@ sub GetItemIssues {
                  WHERE old_issues.itemnumber = ? ";
     }
     $sql .= "ORDER BY date_due DESC";
-    my $sth = $dbh->prepare($sql);
+    my $sth = C4::Context->dbh->prepare($sql);
     if ($history) {
         $sth->execute($itemnumber, $itemnumber);
     } else {
         $sth->execute($itemnumber);
     }
-    while ( my $data = $sth->fetchrow_hashref ) {
-        my $datedue = $data->{'date_due'};
-        $datedue =~ s/-//g;
-        if ( $datedue < $today ) {
-            $data->{'overdue'} = 1;
-        }
-        my $itemnumber = $data->{'itemnumber'};
-        push @GetItemIssues, $data;
+    my $results = $sth->fetchall_arrayref({});
+    foreach (@$results) {
+        $_->{'overdue'} = ($_->{'date_due'} lt $today) ? 1 : 0;
     }
-    $sth->finish;
-    return ( \@GetItemIssues );
+    return $results;
 }
 
 =head2 GetBiblioIssues
