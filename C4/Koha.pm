@@ -22,6 +22,7 @@ use strict;
 use C4::Context;
 use C4::Output;
 use URI::Split qw(uri_split);
+use Memoize;
 
 use vars qw($VERSION @ISA @EXPORT $DEBUG);
 
@@ -61,6 +62,9 @@ BEGIN {
 	);
 	$DEBUG = 0;
 }
+
+# expensive functions
+memoize('GetAuthorisedValues');
 
 =head1 NAME
 
