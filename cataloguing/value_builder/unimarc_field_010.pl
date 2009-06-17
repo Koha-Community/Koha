@@ -88,26 +88,51 @@ sub plugin {
 
 
     my $dbh = C4::Context->dbh;
-    my $seg1;
-
-    if (length ($isbn)<13){
-        if ( substr( $isbn, 0, 1 ) <= 7 ) {
-            $seg1 = substr( $isbn, 0, 1 );
-        }elsif ( substr( $isbn, 0, 2 ) <= 94 ) {
-            $seg1 = substr( $isbn, 0, 2 );
-        }elsif ( substr( $isbn, 0, 3 ) <= 995 ) {
-            $seg1 = substr( $isbn, 0, 3 );
-        }elsif ( substr( $isbn, 0, 4 ) <= 9989 ) {
-            $seg1 = substr( $isbn, 0, 4 );
-        }else {
-            $seg1 = substr( $isbn, 0, 5 );
-        }
+    my $len = 0;
+    my $sth = $dbh->prepare('SELECT publishercode FROM biblioitems WHERE isbn LIKE ? LIMIT 1');
+    
+    if (length ($isbn) == 13){
+        $isbn = substr(3, length($isbn));
     }
 
-    $seg1 .= "%";
-    my $sth = $dbh->prepare('SELECT publishercode FROM biblioitems WHERE isbn LIKE ? LIMIT 1');
-    $sth->execute($seg1);
+    if(length($isbn) <=10){
+        $len = 5;
+        $len = 1 if ( substr( $isbn, 0, 1 ) <= 7 );
+        $len = 2 if ( substr( $isbn, 0, 2 ) <= 94 );
+        $len = 3 if ( substr( $isbn, 0, 3 ) <= 995 );
+        $len = 4 if ( substr( $isbn, 0, 4 ) <= 9989 );
 
+        my $x = substr( $isbn, $len );
+        my $seg2;
+ 
+        if ( substr( $x, 0, 2 ) <= 19 ) {    
+            $seg2 = substr( $x, 0, 2 );
+        }
+        elsif ( substr( $x, 0, 3 ) <= 699 ) {
+            $seg2 = substr( $x, 0, 3 );
+        }
+        elsif ( substr( $x, 0, 4 ) <= 8399 ) {
+            $seg2 = substr( $x, 0, 4 );
+        }
+        elsif ( substr( $x, 0, 5 ) <= 89999 ) {
+            $seg2 = substr( $x, 0, 5 );
+        }
+        elsif ( substr( $x, 0, 6 ) <= 9499999 ) {
+            $seg2 = substr( $x, 0, 6 );
+        }
+        else {
+            $seg2 = substr( $x, 0, 7 );
+        }
+
+        while($len--){
+            $seg2 = "_".$seg2;
+        }
+    
+        $seg2 .= "%";
+        warn $seg2;
+        $sth->execute($seg2);
+    }
+    
     if( (my $publishercode) = $sth->fetchrow )
     {
         $template->param(return => $publishercode);
