@@ -89,7 +89,7 @@ sub plugin {
 
     my $dbh = C4::Context->dbh;
     my $len = 0;
-    my $sth = $dbh->prepare('SELECT publishercode FROM biblioitems WHERE isbn LIKE ? LIMIT 1');
+    my $sth = $dbh->prepare('SELECT publishercode FROM biblioitems WHERE isbn LIKE ? OR isbn LIKE ? LIMIT 1');
     
     if (length ($isbn) == 13){
         $isbn = substr(3, length($isbn));
@@ -103,8 +103,9 @@ sub plugin {
         $len = 4 if ( substr( $isbn, 0, 4 ) <= 9989 );
 
         my $x = substr( $isbn, $len );
-        my $seg2;
- 
+        my $seg2 = "";
+        my $seg3 = "";
+        
         if ( substr( $x, 0, 2 ) <= 19 ) {    
             $seg2 = substr( $x, 0, 2 );
         }
@@ -129,8 +130,8 @@ sub plugin {
         }
     
         $seg2 .= "%";
-        warn $seg2;
-        $sth->execute($seg2);
+        $seg3 = "978" . $seg2; #support of ISBN13
+        $sth->execute($seg2, $seg3);
     }
     
     if( (my $publishercode) = $sth->fetchrow )
