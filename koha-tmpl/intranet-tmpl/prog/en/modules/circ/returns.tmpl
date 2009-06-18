@@ -160,14 +160,13 @@ function Dopop(link) {
 		</div>
     <!-- /TMPL_IF -->
 
-    <!-- case of a return of item, but with no reservation after, if the item must be returned to its homebranch -->
     <!-- TMPL_IF Name="transfer" -->
-	<!-- transfer -->
+    <!-- transfer: item with no reservation, must be returned to its homebranch -->
 	<div class="dialog message">
-	  <h3>Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" escape="html" --></a> to <!-- TMPL_VAR Name="homebranch" --></h3></div><!-- /TMPL_IF -->
+	  <h3>Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" DEFAULT="item" --></a> to <!-- TMPL_VAR NAME="homebranch" DEFAULT="homebranch" --></h3></div><!-- /TMPL_IF -->
     
     <!-- TMPL_IF Name="needstransfer" -->
-	<!-- transfer -->
+	<!-- needstransfer -->
 	<div class="dialog message"><h3> This item needs to be transfered to <!-- TMPL_VAR Name="homebranch" --></h3>
 	Transfer Now?<br />
     <form method="post" action="returns.pl" name="mainform" id="mainform">              
