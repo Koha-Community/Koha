@@ -379,21 +379,18 @@ sub GetBranch ($$) {
 
 =head2 GetBranchDetail
 
-  $branchname = &GetBranchDetail($branchcode);
+    $branch = &GetBranchDetail($branchcode);
 
-Given the branch code, the function returns the corresponding
-branch name for a comprehensive information display
+Given the branch code, the function returns a
+hashref for the corresponding row in the branches table.
 
 =cut
 
 sub GetBranchDetail {
-    my ($branchcode) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT * FROM branches WHERE branchcode = ?");
+    my ($branchcode) = shift or return;
+    my $sth = C4::Context->dbh->prepare("SELECT * FROM branches WHERE branchcode = ?");
     $sth->execute($branchcode);
-    my $branchname = $sth->fetchrow_hashref();
-    $sth->finish();
-    return $branchname;
+    return $sth->fetchrow_hashref();
 }
 
 =head2 get_branchinfos_of
