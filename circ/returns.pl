@@ -96,7 +96,7 @@ foreach ( $query->param ) {
     my $borrowernumber = $query->param("bn-$counter");
     $counter++;
 
-    # decode barcode
+    # decode barcode    ## Didn't we already decode them before passing them back last time??
     $barcode = barcodedecode($barcode) if(C4::Context->preference('itemBarcodeInputFilter'));
 
     ######################
@@ -157,6 +157,7 @@ my $borrower;
 my $returned = 0;
 my $messages;
 my $issueinformation;
+my $itemnumber;
 my $barcode     = $query->param('barcode');
 my $exemptfine  = $query->param('exemptfine');
 my $dropboxmode = $query->param('dropboxmode');
@@ -167,7 +168,7 @@ my $today       = C4::Dates->new();
 my $today_iso   = $today->output('iso');
 my $dropboxdate = $calendar->addDate($today, -1);
 if ($dotransfer){
-	# An item has been returned to a branch other than the homebranch, and the librarian has choosen to initiate a transfer
+	# An item has been returned to a branch other than the homebranch, and the librarian has chosen to initiate a transfer
 	my $transferitem = $query->param('transferitem');
 	my $tobranch     = $query->param('tobranch');
 	ModItemTransfer($transferitem, $userenv_branch, $tobranch); 
@@ -176,13 +177,13 @@ if ($dotransfer){
 # actually return book and prepare item table.....
 if ($barcode) {
     $barcode = barcodedecode($barcode) if C4::Context->preference('itemBarcodeInputFilter');
-#
-# save the return
-#
+    $itemnumber = GetItemnumberFromBarcode($barcode);
+
     ( $returned, $messages, $issueinformation, $borrower ) =
-      AddReturn( $barcode, $userenv_branch, $exemptfine, $dropboxmode);
+      AddReturn( $barcode, $userenv_branch, $exemptfine, $dropboxmode);     # do the return
+
     # get biblio description
-    my $biblio = GetBiblioFromItemNumber($issueinformation->{'itemnumber'});
+    my $biblio = GetBiblioFromItemNumber($itemnumber);
     # fix up item type for display
     $biblio->{'itemtype'} = C4::Context->preference('item-level_itypes') ? $biblio->{'itype'} : $biblio->{'itemtype'};
 
@@ -203,19 +204,14 @@ if ($barcode) {
     );
 
     if ($returned) {
-        $returneditems{0}    = $barcode;
-        $riborrowernumber{0} = $borrower->{'borrowernumber'};
-        $riduedate{0}        = $issueinformation->{'date_due'};
+        my $duedate = $issueinformation->{'date_due'};
+        $returneditems{0}      = $barcode;
+        $riborrowernumber{0}   = $borrower->{'borrowernumber'};
+        $riduedate{0}          = $duedate;
         $input{borrowernumber} = $borrower->{'borrowernumber'};
-        $input{duedate}        = $issueinformation->{'date_due'};
-        $input{return_overdue} = 1 if ($issueinformation->{'date_due'} lt $today->output('iso'));
+        $input{duedate}        = $duedate;
+        $input{return_overdue} = 1 if ($duedate and $duedate lt $today->output('iso'));
         push( @inputloop, \%input );
-
-        # check if the branch is the same as homebranch
-        # if not, we want to put a message
-        if ( $biblio->{'homebranch'} ne $userenv_branch ) {
-            $template->param( homebranch => $biblio->{'homebranch'} );
-        }
     }
     elsif ( !$messages->{'BadBarcode'} ) {
         $input{duedate}   = 0;
@@ -227,7 +223,7 @@ if ($barcode) {
             $riborrowernumber{0}   = 'Item Cancelled';
         }
         else {
-            $input{borrowernumber} = '&nbsp;';
+            $input{borrowernumber} = '&nbsp;';  # This seems clearly bogus.
             $riborrowernumber{0}   = '&nbsp;';
         }
         push( @inputloop, \%input );
@@ -253,7 +249,7 @@ if ( $messages->{'NeedsTransfer'} ){
 	$template->param(
 		found          => 1,
 		needstransfer  => 1,
-		itemnumber => $issueinformation->{'itemnumber'}
+		itemnumber     => $itemnumber,
 	);
 }
 
@@ -263,7 +259,7 @@ if ( $messages->{'Wrongbranch'} ){
 	);
 }
 
-# adding a case of wrong transfert, if the document wasn't transfered in the good library (according to branchtransfer (tobranch) BDD)
+# case of wrong transfert, if the document wasn't transfered to the right library (according to branchtransfer (tobranch) BDD)
 
 if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
 	$template->param(
@@ -292,7 +288,6 @@ if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
             wtransfertFrom  => $userenv_branch,
     );
 }
-
 
 #
 # reserve found and item arrived at the expected branch
@@ -345,8 +340,6 @@ if ( $messages->{'ResFound'}) {
 # Error Messages
 my @errmsgloop;
 foreach my $code ( keys %$messages ) {
-
-    #    warn $code;
     my %err;
     my $exit_required_p = 0;
     if ( $code eq 'BadBarcode' ) {
@@ -392,7 +385,8 @@ foreach my $code ( keys %$messages ) {
     }
 		
     else {
-        die "Unknown error code $code";    # XXX
+        die "Unknown error code $code";    # note we need all the (empty) elsif's above, or we die.
+        # This forces the issue of staying in sync w/ Circulation.pm
     }
     if (%err) {
         push( @errmsgloop, \%err );
