@@ -866,7 +866,6 @@ sub _new_stopwords
     my $sth = $dbh->prepare("select word from stopwords");
     $sth->execute;
     while (my $stopword = $sth->fetchrow_array) {
-        my $retval = {};
         $stopwordlist->{$stopword} = uc($stopword);
     }
     $stopwordlist->{A} = "A" unless $stopwordlist;
@@ -957,7 +956,7 @@ sub get_shelves_userenv () {
 
 =item _new_userenv
 
-  C4::Context->_new_userenv($session);
+  C4::Context->_new_userenv($session);  # FIXME: This calling style is wrong for what looks like an _internal function
 
 Builds a hash for user environment variables.
 
@@ -971,7 +970,7 @@ _new_userenv is called in Auth.pm
 #'
 sub _new_userenv
 {
-    shift;
+    shift;  # Useless except it compensates for bad calling style
     my ($sessionID)= @_;
      $context->{"activeuser"}=$sessionID;
 }
