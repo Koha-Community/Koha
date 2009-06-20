@@ -1,5 +1,5 @@
 <acsconfig xmlns="http://openncip.org/acs-config/1.0/">
-<!-- FIXME: above address gets nothing? -->
+<!-- above address gets nothing, it's just a namespace -->
   <error-detect enabled="true" />
 
 <!-- Set Net::Server::PreFork runtime parameters -->
@@ -36,37 +36,39 @@
              delimiter="|" error-detect="enabled" institution="LPL" />
   </accounts>
 
-<!-- Institution tags will hold stuff used to interface to -->
-<!-- the rest of the ILS: authentication parameters, etc.  I -->
-<!-- don't know what yet, so it'll just be blank.  But there -->
-<!-- needs to be one institution stanza for each institution -->
-<!-- named in the accounts above. -->
+<!--
+Institution tags are for enabled branches.  There needs to be one
+institution stanza for each institution named in the accounts above.
+The implementation attribute is actually used to find the code to run,
+in our case "ILS".
+-->
+
 <institutions>
     <institution id="MAIN" implementation="ILS" parms="">
-          <policy checkin="true" renewal="true"
+          <policy checkin="true" renewal="true" checkout="true"
 	  	  status_update="false" offline="false"
 		  timeout="100"
 	  	  retries="5" />
     </institution>
     <institution id="CPL" implementation="ILS" parms="">
-          <policy checkin="true" renewal="true"
+          <policy checkin="true" renewal="true" checkout="true"
 	  	  status_update="false" offline="false"
 		  timeout="25"
 	  	  retries="5" />
     </institution>
     <institution id="kohalibrary" implementation="ILS" parms="">
-          <policy checkin="true" renewal="false"
+          <policy checkin="true" renewal="false" checkout="true"
 	  	  status_update="false" offline="false"
 		  timeout="100"
 	  	  retries="5" />
     </institution>
     <institution id="kohalibrary2" implementation="ILS" parms="">
-          <policy checkin="true" renewal="false"
+          <policy checkin="true" renewal="false" checkout="true"
 		  timeout="100"
 	  	  retries="3" />
     </institution>
     <institution id="LPL" implementation="ILS">
-          <policy checkin="true" renewal="false"
+          <policy checkin="true" renewal="false" checkout="true"
 		  timeout="100"
 	  	  retries="5" />
     </institution>
