@@ -386,7 +386,11 @@ $(document).ready(function(){
                   <!-- TMPL_ELSE -->
                     <div id="publicshelves" class="tab-container" style="display:none;">
                   <!-- /TMPL_IF -->
+                  <!-- TMPL_IF NAME="loggedinusername" -->
                   <a class="newshelf" href="/cgi-bin/koha/opac-shelves.pl?shelves=1">New List</a>
+                  <!-- TMPL_ELSE -->
+                  <div><a href="/cgi-bin/koha/opac-user.pl">Log in</a> to create new Lists.</div>
+                  <!-- /TMPL_IF -->
                   <!-- TMPL_IF NAME="shelvesloop" -->
                     <!-- TMPL_VAR name='pagination_bar'-->
                       <table>
