@@ -287,44 +287,49 @@ C<$itemnumber> is the book's item number.
 =cut
 
 sub GetSpecialHolidays {
-my ($date_dues,$itemnumber) = @_;
-# calcul the today date
-my $today = join "-", &Today();
+    my ( $date_dues, $itemnumber ) = @_;
 
-# return the holdingbranch
-my $iteminfo=GetIssuesIteminfo($itemnumber);
-# use sql request to find all date between date_due and today
-my $dbh = C4::Context->dbh;
-my $query=qq|SELECT DATE_FORMAT(concat(year,'-',month,'-',day),'%Y-%m-%d')as date 
+    # calcul the today date
+    my $today = join "-", &Today();
+
+    # return the holdingbranch
+    my $iteminfo = GetIssuesIteminfo($itemnumber);
+
+    # use sql request to find all date between date_due and today
+    my $dbh = C4::Context->dbh;
+    my $query =
+      qq|SELECT DATE_FORMAT(concat(year,'-',month,'-',day),'%Y-%m-%d') as date
 FROM `special_holidays`
 WHERE DATE_FORMAT(concat(year,'-',month,'-',day),'%Y-%m-%d') >= ?
 AND   DATE_FORMAT(concat(year,'-',month,'-',day),'%Y-%m-%d') <= ?
 AND branchcode=?
 |;
-my @result=GetWdayFromItemnumber($itemnumber);
-my @result_date;
-my $wday;
-my $dateinsec;
-my $sth = $dbh->prepare($query);
-$sth->execute($date_dues,$today,$iteminfo->{'branchcode'});
+    my @result = GetWdayFromItemnumber($itemnumber);
+    my @result_date;
+    my $wday;
+    my $dateinsec;
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $date_dues, $today, $iteminfo->{'branchcode'} )
+      ;    # FIXME: just use NOW() in SQL instead of passing in $today
 
-while ( my $special_date=$sth->fetchrow_hashref){
-    push (@result_date,$special_date);
-}
+    while ( my $special_date = $sth->fetchrow_hashref ) {
+        push( @result_date, $special_date );
+    }
 
-my $specialdaycount=scalar(@result_date);
+    my $specialdaycount = scalar(@result_date);
 
-    for (my $i=0;$i<scalar(@result_date);$i++){
-        $dateinsec=UnixDate($result_date[$i]->{'date'},"%o");
-        (undef,undef,undef,undef,undef,undef,$wday,undef,undef) =localtime($dateinsec);
-        for (my $j=0;$j<scalar(@result);$j++){
-            if ($wday == ($result[$j]->{'weekday'})){
-            $specialdaycount --;
+    for ( my $i = 0 ; $i < scalar(@result_date) ; $i++ ) {
+        $dateinsec = UnixDate( $result_date[$i]->{'date'}, "%o" );
+        ( undef, undef, undef, undef, undef, undef, $wday, undef, undef ) =
+          localtime($dateinsec);
+        for ( my $j = 0 ; $j < scalar(@result) ; $j++ ) {
+            if ( $wday == ( $result[$j]->{'weekday'} ) ) {
+                $specialdaycount--;
             }
         }
     }
 
-return $specialdaycount;
+    return $specialdaycount;
 }
 
 =head2 GetRepeatableHolidays
@@ -341,27 +346,27 @@ C<$difference> numbers of between day date of the day and date due
 
 =cut
 
-sub GetRepeatableHolidays{
-my ($date_dues,$itemnumber,$difference) = @_;
-my $dateinsec=UnixDate($date_dues,"%o");
-my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =localtime($dateinsec);
-my @result=GetWdayFromItemnumber($itemnumber);
-my @dayclosedcount;
-my $j;
+sub GetRepeatableHolidays {
+    my ( $date_dues, $itemnumber, $difference ) = @_;
+    my $dateinsec = UnixDate( $date_dues, "%o" );
+    my ( $sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst ) =
+      localtime($dateinsec);
+    my @result = GetWdayFromItemnumber($itemnumber);
+    my @dayclosedcount;
+    my $j;
 
-for (my $i=0;$i<scalar(@result);$i++){
-    my $k=$wday;
+    for ( my $i = 0 ; $i < scalar(@result) ; $i++ ) {
+        my $k = $wday;
 
-        for ( $j=0;$j<$difference;$j++){
-            if ($result[$i]->{'weekday'} == $k)
-                    {
-                    push ( @dayclosedcount ,$k);
+        for ( $j = 0 ; $j < $difference ; $j++ ) {
+            if ( $result[$i]->{'weekday'} == $k ) {
+                push( @dayclosedcount, $k );
             }
-        $k++;
-        ($k=0) if($k eq 7);
+            $k++;
+            ( $k = 0 ) if ( $k eq 7 );
         }
     }
-return scalar(@dayclosedcount);
+    return scalar(@dayclosedcount);
 }
 
 
@@ -375,23 +380,21 @@ C<$itemnumber> is  item number.
 
 =cut
 
-sub GetWdayFromItemnumber{
-my($itemnumber)=@_;
-my $iteminfo=GetIssuesIteminfo($itemnumber);
-my @result;
-my $dbh = C4::Context->dbh;
-my $query = qq|SELECT weekday  
+sub GetWdayFromItemnumber {
+    my ($itemnumber) = @_;
+    my $iteminfo = GetIssuesIteminfo($itemnumber);
+    my @result;
+    my $query = qq|SELECT weekday
     FROM repeatable_holidays
     WHERE branchcode=?
 |;
-my $sth = $dbh->prepare($query);
-    #  print $query;
+    my $sth = C4::Context->dbh->prepare($query);
 
-$sth->execute($iteminfo->{'branchcode'});
-while ( my $weekday=$sth->fetchrow_hashref){
-    push (@result,$weekday);
+    $sth->execute( $iteminfo->{'branchcode'} );
+    while ( my $weekday = $sth->fetchrow_hashref ) {
+        push( @result, $weekday );
     }
-return @result;
+    return @result;
 }
 
 
@@ -405,17 +408,17 @@ C<$itemnumber> is  item number.
 
 =cut
 
-sub GetIssuesIteminfo{
-my($itemnumber)=@_;
-my $dbh = C4::Context->dbh;
-my $query = qq|SELECT *  
+sub GetIssuesIteminfo {
+    my ($itemnumber) = @_;
+    my $dbh          = C4::Context->dbh;
+    my $query        = qq|SELECT *
     FROM issues
     WHERE itemnumber=?
-|;
-my $sth = $dbh->prepare($query);
-$sth->execute($itemnumber);
-my ($issuesinfo)=$sth->fetchrow_hashref;
-return $issuesinfo;
+    |;
+    my $sth = $dbh->prepare($query);
+    $sth->execute($itemnumber);
+    my ($issuesinfo) = $sth->fetchrow_hashref;
+    return $issuesinfo;
 }
 
 
@@ -473,7 +476,7 @@ sub UpdateFine {
 	#	"Pay" is Payment
 	#   "REF" is Cash Refund
     my $sth = $dbh->prepare(
-        "SELECT * FROM accountlines 
+        "SELECT * FROM accountlines
 		WHERE itemnumber=?
 		AND   borrowernumber=?
 		AND   accounttype IN ('FU','O','F','M')
@@ -564,14 +567,12 @@ sub BorType {
     my ($borrowernumber) = @_;
     my $dbh              = C4::Context->dbh;
     my $sth              = $dbh->prepare(
-        "SELECT * from borrowers 
+        "SELECT * from borrowers
       LEFT JOIN categories ON borrowers.categorycode=categories.categorycode 
       WHERE borrowernumber=?"
     );
     $sth->execute($borrowernumber);
-    my $data = $sth->fetchrow_hashref;
-    $sth->finish;
-    return ($data);
+    return $sth->fetchrow_hashref;
 }
 
 =head2 ReplacementCost
@@ -590,9 +591,8 @@ sub ReplacementCost {
       $dbh->prepare("Select replacementprice from items where itemnumber=?");
     $sth->execute($itemnum);
 
-    # FIXME - Use fetchrow_array or something.
+    # FIXME - Use fetchrow_array or a slice.
     my $data = $sth->fetchrow_hashref;
-    $sth->finish;
     return ( $data->{'replacementprice'} );
 }
 
@@ -612,7 +612,7 @@ C<$borrowernumber> is the borrowernumber
 sub GetFine {
     my ( $itemnum, $borrowernumber ) = @_;
     my $dbh   = C4::Context->dbh();
-    my $query = "SELECT sum(amountoutstanding) FROM accountlines 
+    my $query = "SELECT sum(amountoutstanding) FROM accountlines
     where accounttype like 'F%'  
   AND amountoutstanding > 0 AND itemnumber = ? AND borrowernumber=?";
     my $sth = $dbh->prepare($query);
@@ -644,7 +644,7 @@ sub GetIssuingRules {
 	warn "GetIssuingRules is deprecated: use GetIssuingRule from C4::Circulation instead.";
    my ($itemtype,$categorycode)=@_;
    my $dbh   = C4::Context->dbh();    
-   my $query=qq|SELECT * 
+   my $query=qq|SELECT *
         FROM issuingrules
         WHERE issuingrules.itemtype=?
             AND issuingrules.categorycode=?
@@ -659,7 +659,7 @@ sub GetIssuingRules {
 sub ReplacementCost2 {
     my ( $itemnum, $borrowernumber ) = @_;
     my $dbh   = C4::Context->dbh();
-    my $query = "SELECT amountoutstanding 
+    my $query = "SELECT amountoutstanding
          FROM accountlines
              WHERE accounttype like 'L'
          AND amountoutstanding > 0
@@ -684,36 +684,32 @@ C<$reference> contains the beggining of file number
 
 =cut
 
-
-
 sub GetNextIdNotify {
-my ($reference)=@_;
-my $query=qq|SELECT max(notify_id) 
+    my ($reference) = @_;
+    my $query = qq|SELECT max(notify_id)
          FROM accountlines
          WHERE notify_id  like \"$reference%\"
          |;
-# AND borrowernumber=?|;   
-my $dbh = C4::Context->dbh;
-my $sth=$dbh->prepare($query);
-$sth->execute();
-my $result=$sth->fetchrow;
-$sth->finish;
-my $count;
-    if ($result eq '')
-    {
-    ($result=$reference."01")  ;
-    }else
-    {
-    $count=substr($result,6)+1;
-     
-    if($count<10){
-     ($count = "0".$count);
-     }
-     $result=$reference.$count;
-     }
-return $result;
-}
 
+    # AND borrowernumber=?|;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare($query);
+    $sth->execute();
+    my $result = $sth->fetchrow;
+    my $count;
+    if ( $result eq '' ) {
+        ( $result = $reference . "01" );
+    }
+    else {
+        $count = substr( $result, 6 ) + 1;
+
+        if ( $count < 10 ) {
+            ( $count = "0" . $count );
+        }
+        $result = $reference . $count;
+    }
+    return $result;
+}
 
 =head2 NumberNotifyId
 
@@ -733,15 +729,12 @@ sub NumberNotifyId{
             FROM accountlines
             WHERE borrowernumber=?|;
     my @notify;
-    my $sth=$dbh->prepare($query);
-        $sth->execute($borrowernumber);
-          while ( my ($numberofnotify)=$sth->fetchrow){
-    push (@notify,$numberofnotify);
+    my $sth = $dbh->prepare($query);
+    $sth->execute($borrowernumber);
+    while ( my ($numberofnotify) = $sth->fetchrow ) {
+        push( @notify, $numberofnotify );
     }
-    $sth->finish;
-
     return (@notify);
-
 }
 
 =head2 AmountNotify
@@ -786,21 +779,20 @@ C<$notify_id> contains the file number for the borrower number nad item number
 
 =cut
 
- sub GetNotifyId {
- my ($borrowernumber,$itemnumber)=@_;
- my $query=qq|SELECT notify_id 
+sub GetNotifyId {
+    my ( $borrowernumber, $itemnumber ) = @_;
+    my $query = qq|SELECT notify_id
            FROM accountlines
            WHERE borrowernumber=?
           AND itemnumber=?
            AND (accounttype='FU' or accounttype='O')|;
- my $dbh = C4::Context->dbh;
- my $sth=$dbh->prepare($query);
- $sth->execute($borrowernumber,$itemnumber);
- my ($notify_id)=$sth->fetchrow;
- $sth->finish;
- return ($notify_id);
-
- }
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $borrowernumber, $itemnumber );
+    my ($notify_id) = $sth->fetchrow;
+    $sth->finish;
+    return ($notify_id);
+}
 
 =head2 CreateItemAccountLine
 
@@ -831,23 +823,29 @@ C<$notify_id> contains the file number
 
 C<$level> contains the file level
 
-
 =cut
 
- sub CreateItemAccountLine {
-  my ($borrowernumber,$itemnumber,$date,$amount,$description,$accounttype,$amountoutstanding,$timestamp,$notify_id,$level)=@_;
-  my $dbh = C4::Context->dbh;
-  my $nextaccntno = C4::Accounts::getnextacctno($borrowernumber);
-   my $query= "INSERT into accountlines  
+sub CreateItemAccountLine {
+    my (
+        $borrowernumber, $itemnumber,  $date,              $amount,
+        $description,    $accounttype, $amountoutstanding, $timestamp,
+        $notify_id,      $level
+    ) = @_;
+    my $dbh         = C4::Context->dbh;
+    my $nextaccntno = C4::Accounts::getnextacctno($borrowernumber);
+    my $query       = "INSERT into accountlines
          (borrowernumber,accountno,itemnumber,date,amount,description,accounttype,amountoutstanding,timestamp,notify_id,notify_level)
           VALUES
              (?,?,?,?,?,?,?,?,?,?,?)";
-  
-  
-  my $sth=$dbh->prepare($query);
-  $sth->execute($borrowernumber,$nextaccntno,$itemnumber,$date,$amount,$description,$accounttype,$amountoutstanding,$timestamp,$notify_id,$level);
-  $sth->finish;
- }
+
+    my $sth = $dbh->prepare($query);
+    $sth->execute(
+        $borrowernumber, $nextaccntno,       $itemnumber,
+        $date,           $amount,            $description,
+        $accounttype,    $amountoutstanding, $timestamp,
+        $notify_id,      $level
+    );
+}
 
 =head2 UpdateAccountLines
 
@@ -869,37 +867,28 @@ C<$borrowernumber> contains the borrowernumber
 =cut
 
 sub UpdateAccountLines {
-my ($notify_id,$notify_level,$borrowernumber,$itemnumber)=@_;
-my $query;
-if ($notify_id eq '')
-{
-
-    $query=qq|UPDATE accountlines
+    my ( $notify_id, $notify_level, $borrowernumber, $itemnumber ) = @_;
+    my $query;
+    if ( $notify_id eq '' ) {
+        $query = qq|UPDATE accountlines
     SET  notify_level=?
     WHERE borrowernumber=? AND itemnumber=?
     AND (accounttype='FU' or accounttype='O')|;
-}else
-{
-    $query=qq|UPDATE accountlines
+    } else {
+        $query = qq|UPDATE accountlines
      SET notify_id=?, notify_level=?
-           WHERE borrowernumber=?
+   WHERE borrowernumber=?
     AND itemnumber=?
-        AND (accounttype='FU' or accounttype='O')|;
-}
- my $dbh = C4::Context->dbh;
- my $sth=$dbh->prepare($query);
+    AND (accounttype='FU' or accounttype='O')|;
+    }
 
-if ($notify_id eq '')
-{
-    $sth->execute($notify_level,$borrowernumber,$itemnumber);
-}else
-{
-    $sth->execute($notify_id,$notify_level,$borrowernumber,$itemnumber);
+    my $sth = C4::Context->dbh->prepare($query);
+    if ( $notify_id eq '' ) {
+        $sth->execute( $notify_level, $borrowernumber, $itemnumber );
+    } else {
+        $sth->execute( $notify_id, $notify_level, $borrowernumber, $itemnumber );
+    }
 }
- $sth->finish;
-
-}
-
 
 =head2 GetItems
 
@@ -914,17 +903,20 @@ C<$itemnumber> contains the borrower categorycode
 
 =cut
 
+# FIXME: This is a bad function to have here.
+# Shouldn't it be in C4::Items?
+# Shouldn't it be called GetItem since you only get 1 row?
+# Shouldn't it be called GetItem since you give it only 1 itemnumber?
+
 sub GetItems {
-    my($itemnumber) = @_;
-    my $query=qq|SELECT *
+    my $itemnumber = shift or return;
+    my $query = qq|SELECT *
              FROM items
               WHERE itemnumber=?|;
-        my $dbh = C4::Context->dbh;
-        my $sth=$dbh->prepare($query);
-        $sth->execute($itemnumber);
-        my ($items)=$sth->fetchrow_hashref;
-        $sth->finish;
-    return($items);
+    my $sth = C4::Context->dbh->prepare($query);
+    $sth->execute($itemnumber);
+    my ($items) = $sth->fetchrow_hashref;
+    return ($items);
 }
 
 =head2 GetOverdueDelays
@@ -940,16 +932,14 @@ C<$categorycode> contains the borrower categorycode
 =cut
 
 sub GetOverdueDelays {
-    my($category) = @_;
-    my $dbh = C4::Context->dbh;
-        my $query=qq|SELECT delay1,delay2,delay3
+    my ($category) = @_;
+    my $query      = qq|SELECT delay1,delay2,delay3
                 FROM overduerules
                 WHERE categorycode=?|;
-    my $sth=$dbh->prepare($query);
-        $sth->execute($category);
-        my (@delays)=$sth->fetchrow_array;
-        $sth->finish;
-        return(@delays);
+    my $sth = C4::Context->dbh->prepare($query);
+    $sth->execute($category);
+    my (@delays) = $sth->fetchrow_array;
+    return (@delays);
 }
 
 =head2 GetBranchcodesWithOverdueRules
@@ -969,7 +959,6 @@ sub GetBranchcodesWithOverdueRules {
     my $rqoverduebranches = $dbh->prepare("SELECT DISTINCT branchcode FROM overduerules WHERE delay1 IS NOT NULL AND branchcode <> ''");
     $rqoverduebranches->execute;
     my @branches = map { shift @$_ } @{ $rqoverduebranches->fetchall_arrayref };
-    $rqoverduebranches->finish;
     return @branches;
 }
 
@@ -994,18 +983,17 @@ C<$notify_level> contains the accountline level
 =cut
 
 sub CheckAccountLineLevelInfo {
-    my($borrowernumber,$itemnumber,$level) = @_;
-    my $dbh = C4::Context->dbh;
-        my $query=    qq|SELECT count(*)
+    my ( $borrowernumber, $itemnumber, $level ) = @_;
+    my $dbh   = C4::Context->dbh;
+    my $query = qq|SELECT count(*)
             FROM accountlines
             WHERE borrowernumber =?
             AND itemnumber = ?
             AND notify_level=?|;
-    my $sth=$dbh->prepare($query);
-        $sth->execute($borrowernumber,$itemnumber,$level);
-        my ($exist)=$sth->fetchrow;
-        $sth->finish;
-        return($exist);
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $borrowernumber, $itemnumber, $level );
+    my ($exist) = $sth->fetchrow;
+    return ($exist);
 }
 
 =head2 GetOverduerules
@@ -1022,17 +1010,16 @@ C<$notify_level> contains the notify level
 
 =cut
 
-sub GetOverduerules{
-    my($category,$notify_level) = @_;
-    my $dbh = C4::Context->dbh;
-        my $query=qq|SELECT debarred$notify_level
-             FROM overduerules
-             WHERE categorycode=?|;
-    my $sth=$dbh->prepare($query);
-        $sth->execute($category);
-        my ($overduerules)=$sth->fetchrow;
-        $sth->finish;
-        return($overduerules);
+sub GetOverduerules {
+    my ( $category, $notify_level ) = @_;
+    my $dbh   = C4::Context->dbh;
+    my $query = qq|SELECT debarred$notify_level
+                     FROM overduerules
+                    WHERE categorycode=?|;
+    my $sth = $dbh->prepare($query);
+    $sth->execute($category);
+    my ($overduerules) = $sth->fetchrow;
+    return ($overduerules);
 }
 
 
@@ -1048,23 +1035,19 @@ C<$borrowernumber> contains the borrower number
 
 =cut
 
-
-sub CheckBorrowerDebarred{
-    my($borrowernumber) = @_;
-    my $dbh = C4::Context->dbh;
-        my $query=qq|SELECT debarred
-              FROM borrowers
-             WHERE borrowernumber=?
-            |;
-    my $sth=$dbh->prepare($query);
-        $sth->execute($borrowernumber);
-        my ($debarredstatus)=$sth->fetchrow;
-        $sth->finish;
-        if ($debarredstatus eq '1'){
-    return(1);}
-    else{
-    return(0);
-    }
+# FIXME: Shouldn't this be in C4::Members?
+sub CheckBorrowerDebarred {
+    my ($borrowernumber) = @_;
+    my $dbh   = C4::Context->dbh;
+    my $query = qq|
+        SELECT debarred
+        FROM borrowers
+        WHERE borrowernumber=?
+    |;
+    my $sth = $dbh->prepare($query);
+    $sth->execute($borrowernumber);
+    my ($debarredstatus) = $sth->fetchrow;
+    return ( $debarredstatus eq '1' ? 1 : 0 );
 }
 
 =head2 UpdateBorrowerDebarred
@@ -1106,23 +1089,15 @@ C<$date_due> contains the date of item return
 =cut
 
 sub CheckExistantNotifyid {
-     my($borrowernumber,$date_due) = @_;
-     my $dbh = C4::Context->dbh;
-         my $query =  qq|SELECT notify_id FROM accountlines 
+    my ( $borrowernumber, $date_due ) = @_;
+    my $dbh   = C4::Context->dbh;
+    my $query = qq|SELECT notify_id FROM accountlines
              LEFT JOIN issues ON issues.itemnumber= accountlines.itemnumber
              WHERE accountlines.borrowernumber =?
               AND date_due = ?|;
-    my $sth=$dbh->prepare($query);
-         $sth->execute($borrowernumber,$date_due);
-         my ($exist)=$sth->fetchrow;
-         $sth->finish;
-         if ($exist eq '')
-    {
-    return(0);
-    }else
-        {
-    return($exist);
-    }
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $borrowernumber, $date_due );
+    return $sth->fetchrow || 0;
 }
 
 =head2 CheckAccountLineItemInfo
@@ -1145,19 +1120,18 @@ C<$notify_id> contains the file number
 =cut
 
 sub CheckAccountLineItemInfo {
-     my($borrowernumber,$itemnumber,$accounttype,$notify_id) = @_;
-     my $dbh = C4::Context->dbh;
-         my $query =  qq|SELECT count(*) FROM accountlines
+    my ( $borrowernumber, $itemnumber, $accounttype, $notify_id ) = @_;
+    my $dbh   = C4::Context->dbh;
+    my $query = qq|SELECT count(*) FROM accountlines
              WHERE borrowernumber =?
              AND itemnumber = ?
               AND accounttype= ?
             AND notify_id = ?|;
-    my $sth=$dbh->prepare($query);
-         $sth->execute($borrowernumber,$itemnumber,$accounttype,$notify_id);
-         my ($exist)=$sth->fetchrow;
-         $sth->finish;
-         return($exist);
- }
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $borrowernumber, $itemnumber, $accounttype, $notify_id );
+    my ($exist) = $sth->fetchrow;
+    return ($exist);
+}
 
 =head2 CheckItemNotify
 
@@ -1195,7 +1169,7 @@ sub GetOverduesForBranch {
 	my $itype_link =  (C4::Context->preference('item-level_itypes')) ?  " items.itype " :  " biblioitems.itemtype ";
     my $dbh = C4::Context->dbh;
     my $select = "
-    SELECT 
+    SELECT
             borrowers.borrowernumber,
             borrowers.surname,
             borrowers.firstname,
@@ -1261,25 +1235,22 @@ Creat a line into notify, if the method is phone, the notification_send_date is 
 
 sub AddNotifyLine {
     my ( $borrowernumber, $itemnumber, $overduelevel, $method, $notifyId ) = @_;
+    my $dbh = C4::Context->dbh;
     if ( $method eq "phone" ) {
-        my $dbh = C4::Context->dbh;
         my $sth = $dbh->prepare(
             "INSERT INTO notifys (borrowernumber,itemnumber,notify_date,notify_send_date,notify_level,method,notify_id)
         VALUES (?,?,now(),now(),?,?,?)"
         );
         $sth->execute( $borrowernumber, $itemnumber, $overduelevel, $method,
             $notifyId );
-        $sth->finish;
     }
     else {
-        my $dbh = C4::Context->dbh;
         my $sth = $dbh->prepare(
             "INSERT INTO notifys (borrowernumber,itemnumber,notify_date,notify_level,method,notify_id)
         VALUES (?,?,now(),?,?,?)"
         );
         $sth->execute( $borrowernumber, $itemnumber, $overduelevel, $method,
             $notifyId );
-        $sth->finish;
     }
     return 1;
 }
@@ -1303,7 +1274,6 @@ sub RemoveNotifyLine {
             AND notify_date=?"
     );
     $sth->execute( $borrowernumber, $itemnumber, $notify_date );
-    $sth->finish;
     return 1;
 }
 
