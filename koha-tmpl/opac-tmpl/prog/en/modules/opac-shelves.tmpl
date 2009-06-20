@@ -210,11 +210,11 @@ $(document).ready(function(){
                   </tr></thead>
                   <tbody>
                   <!-- TMPL_LOOP NAME="itemsloop" -->
-                    <!-- TMPL_IF NAME="toggle" -->
+                    <!-- TMPL_UNLESS NAME="__odd__" -->
                       <tr class="highlight">
                     <!-- TMPL_ELSE -->
                       <tr>
-                    <!-- /TMPL_IF -->
+                    <!-- /TMPL_UNLESS -->
                     <!-- TMPL_IF NAME="manageshelf" -->
                         <td><input type="checkbox" name="REM-<!-- TMPL_VAR NAME="biblionumber" -->"
                                    value="<!-- TMPL_VAR NAME="biblionumber">" /></td>
@@ -333,11 +333,11 @@ $(document).ready(function(){
                           <th>&nbsp;</th>
                         </tr>
                         <!-- TMPL_LOOP NAME="shelveslooppriv" -->
-                          <!-- TMPL_IF NAME="toggle" -->
+                          <!-- TMPL_UNLESS NAME="__odd__" -->
                             <tr class="highlight">
                           <!--TMPL_ELSE-->
                             <tr>
-                          <!-- /TMPL_IF -->
+                          <!-- /TMPL_UNLESS -->
                               <td><a href="opac-shelves.pl?display=privateshelves&amp;viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"  --></a></td>
                               <td><!-- TMPL_VAR NAME="count" --> item(s)</td>
                               <td><!-- TMPL_VAR NAME="sortfield" --></td>
@@ -386,23 +386,25 @@ $(document).ready(function(){
                   <!-- TMPL_ELSE -->
                     <div id="publicshelves" class="tab-container" style="display:none;">
                   <!-- /TMPL_IF -->
-                  
+                  <a class="newshelf" href="/cgi-bin/koha/opac-shelves.pl?shelves=1">New List</a>
                   <!-- TMPL_IF NAME="shelvesloop" -->
                     <!-- TMPL_VAR name='pagination_bar'-->
                       <table>
                         <tr>
                           <th>List Name</th>
                           <th>Contents</th>
+                          <th>Sort by</th>
                           <th>Type</th><th>&nbsp;</th>
                         </tr>
                     <!-- TMPL_LOOP NAME="shelvesloop" -->
-                      <!-- TMPL_IF NAME="toggle" -->
+                      <!-- TMPL_UNLESS NAME="__odd__" -->
                         <tr class="highlight">
                       <!--TMPL_ELSE-->
                         <tr>
-                      <!-- /TMPL_IF -->
+                      <!-- /TMPL_UNLESS -->
                           <td><a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"  --></a></td>
                           <td><!-- TMPL_VAR NAME="count" --> item(s)</td>
+                          <td><!-- TMPL_VAR NAME="sortfield" --></td>
                           <td>
                             <!-- TMPL_IF NAME="viewcategory1" -->Private<!-- /TMPL_IF -->
                             <!-- TMPL_IF NAME="viewcategory2" -->Public<!-- /TMPL_IF -->

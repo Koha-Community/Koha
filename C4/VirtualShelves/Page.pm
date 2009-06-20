@@ -183,9 +183,6 @@ SWITCH: {
 			push @paramsloop, {display => 'privateshelves'} if $category == 1;
 			$showadd = 1;
 			my $i = 0;
-			foreach (grep {$i++ % 2} @$items) {     # every other item
-				$_->{toggle} = 1;
-			}
 			my $manageshelf = ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' );
 			$template->param(
 				shelfname   => $shelflist->{$shelfnumber}->{'shelfname'} || $privshelflist->{$shelfnumber}->{'shelfname'},
@@ -286,10 +283,8 @@ foreach my $element (sort { lc($shelflist->{$a}->{'shelfname'}) cmp lc($shelflis
 	$shelflist->{$element}->{ownername} = defined($member) ? $member->{firstname} . " " . $member->{surname} : '';
 	$numberCanManage++ if $canmanage;	# possibly outmoded
 	if ($shelflist->{$element}->{'category'} eq '1') {
-		(scalar(@shelveslooppriv) % 2) and $shelflist->{$element}->{toggle} = 1;
 		push (@shelveslooppriv, $shelflist->{$element});
 	} else {
-		(scalar(@shelvesloop)     % 2) and $shelflist->{$element}->{toggle} = 1;
 		push (@shelvesloop, $shelflist->{$element});
 	}
 }
