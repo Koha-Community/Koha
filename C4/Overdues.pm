@@ -155,37 +155,26 @@ LEFT JOIN biblioitems USING (biblioitemnumber)
 
 =head2 checkoverdues
 
-( $count, $overdueitems )=checkoverdues( $borrowernumber, $dbh );
+($count, $overdueitems) = checkoverdues($borrowernumber);
 
-Not exported
+Returns a count and a list of overdueitems for a given borrowernumber
 
 =cut
 
 sub checkoverdues {
-
-# From Main.pm, modified to return a list of overdueitems, in addition to a count
-#checks whether a borrower has overdue items
-    my ( $borrowernumber, $dbh ) = @_;
-    my @datearr = localtime;
-    my $today   =
-      ( $datearr[5] + 1900 ) . "-" . ( $datearr[4] + 1 ) . "-" . $datearr[3];
-    my @overdueitems;
-    my $count = 0;
-    my $sth   = $dbh->prepare(
+    my $borrowernumber = shift or return;
+    my $sth = C4::Context->dbh->prepare(
         "SELECT * FROM issues
-         LEFT JOIN items ON issues.itemnumber      = items.itemnumber
-         LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber
+         LEFT JOIN items       ON issues.itemnumber      = items.itemnumber
+         LEFT JOIN biblio      ON items.biblionumber     = biblio.biblionumber
          LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
             WHERE issues.borrowernumber  = ?
-                AND issues.date_due < ?"
+            AND   issues.date_due < NOW()"
     );
-    $sth->execute( $borrowernumber, $today );
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push( @overdueitems, $data );
-        $count++;
-    }
-    $sth->finish;
-    return ( $count, \@overdueitems );
+    # FIXME: SELECT * across 4 tables?  do we really need the marc AND marcxml blobs??
+    $sth->execute($borrowernumber);
+    my $results = $sth->fetchall_arrayref({});
+    return ( scalar(@$results), $results);  # returning the count and the results is silly
 }
 
 =head2 CalcFine
