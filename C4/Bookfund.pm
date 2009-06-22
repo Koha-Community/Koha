@@ -223,25 +223,30 @@ sub GetBookFundBreakdown {
     # do a query for spent totals.
     my $query = "
         SELECT quantity,datereceived,freight,unitprice,listprice,ecost,
-               quantityreceived,subscription
+               quantityreceived,subscription, closedate
         FROM   aqorders
+        LEFT JOIN aqbasket USING (basketno)
         LEFT JOIN aqorderbreakdown ON aqorders.ordernumber=aqorderbreakdown.ordernumber
         LEFT JOIN aqbookfund ON (aqorderbreakdown.bookfundid=aqbookfund.bookfundid and aqorderbreakdown.branchcode=aqbookfund.branchcode)
         LEFT JOIN aqbudget ON (aqbudget.bookfundid=aqbookfund.bookfundid and aqbudget.branchcode=aqbookfund.branchcode)
         WHERE  aqorderbreakdown.bookfundid=?
             AND (datecancellationprinted IS NULL OR datecancellationprinted='0000-00-00')
             AND ((budgetdate >= ? and budgetdate < ?) OR (startdate>=? and enddate<=?))
+            AND (closedate >= ? AND closedate <= ?)
     ";
     my $sth = $dbh->prepare($query);
-    $sth->execute( $id, $start, $end, $start, $end );
+    $sth->execute( $id, $start, $end, $start, $end, $start, $end );
 
     my ($spent) = 0;
     while ( my $data = $sth->fetchrow_hashref ) {
-        if ( $data->{'subscription'} == 1 ) {
-            $spent += $data->{'quantity'} * $data->{'unitprice'};
-        }
-        else {
-            $spent += ( $data->{'unitprice'} ) * ($data->{'quantityreceived'}?$data->{'quantityreceived'}:0);
+        if($data->{datereceived}){
+            if ( $data->{'subscription'} == 1 ) {
+                $spent += $data->{'quantity'} * $data->{'unitprice'};
+            }
+            else {
+                $spent += ( $data->{'unitprice'} ) * ($data->{'quantityreceived'}?$data->{'quantityreceived'}:0);
+    
+            }
 
         }
     }
@@ -254,32 +259,36 @@ sub GetBookFundBreakdown {
                 listprice,ecost,quantityreceived AS qrev,
                 subscription,title,itemtype,aqorders.biblionumber,
                 aqorders.booksellerinvoicenumber,
-                quantity-quantityreceived AS tleft,
+                quantity-quantityreceived AS tleft,quantityreceived,
                 aqorders.ordernumber AS ordnum,entrydate,budgetdate
         FROM    aqorders
+        LEFT JOIN aqbasket USING (basketno)
         LEFT JOIN biblioitems ON biblioitems.biblioitemnumber=aqorders.biblioitemnumber
         LEFT JOIN aqorderbreakdown ON aqorders.ordernumber=aqorderbreakdown.ordernumber
         WHERE   bookfundid=?
             AND (budgetdate >= ? AND budgetdate < ?)
             AND (datecancellationprinted IS NULL OR datecancellationprinted='0000-00-00')
+            AND (closedate >= ? AND closedate <= ?)
     ";
 
     $sth = $dbh->prepare($query);
 #      warn "$start $end";     
-    $sth->execute( $id, $start, $end );
+    $sth->execute( $id, $start, $end , $start, $end);
 
     my $comtd=0;
 
     while ( my $data = $sth->fetchrow_hashref ) {
-        my $left = $data->{'tleft'};
-        if ( !$left || $left eq '' ) {
-            $left = $data->{'quantity'};
-        }
-        if ( $left && $left > 0 ) {
-            my $subtotal = $left * $data->{'ecost'};
-            $data->{subtotal} = $subtotal;
-            $data->{'left'} = $left;
-            $comtd += $subtotal;
+        if(not $data->{datereceived}){
+            my $left = $data->{'tleft'};
+            if ( !$left || $left eq '' ) {
+                $left = $data->{'quantity'};
+            }
+            if ( $left && $left > 0 ) {
+                my $subtotal = $left * $data->{'ecost'};
+                $data->{subtotal} = $subtotal;
+                $data->{'left'} = $left;
+                $comtd += $subtotal;
+            }
         }
 #         use Data::Dumper; warn Dumper($data);    
     }
