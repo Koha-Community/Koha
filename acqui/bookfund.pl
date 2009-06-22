@@ -71,9 +71,10 @@ SELECT quantity,
     AND budgetdate < ?
     AND (datecancellationprinted IS NULL
          OR datecancellationprinted = \'0000-00-00\')
+    AND (closedate >= ? and closedate < ?)
 ';
 my $sth = $dbh->prepare($query);
-$sth->execute( $bookfund, $start, $end );
+$sth->execute( $bookfund, $start, $end, $start, $end);
 my @commited_loop;
 
 my $total = 0;

@@ -196,7 +196,7 @@ Results are ordered from most to least recent.
 =cut
 
 sub GetPendingOrders {
-    my ($supplierid,$grouped) = @_;
+    my ($supplierid,$grouped, $closed) = @_;
     my $dbh = C4::Context->dbh;
     my $strsth = "
         SELECT    ".($grouped?"count(*),":"")."aqbasket.basketno,
@@ -210,6 +210,9 @@ sub GetPendingOrders {
             AND datecancellationprinted IS NULL
             AND (to_days(now())-to_days(closedate) < 180 OR closedate IS NULL)
     ";
+    if($closed){
+        $strsth .= " AND closedate IS NOT NULL ";
+    }
     ## FIXME  Why 180 days ???
     my @query_params = ( $supplierid );
     if ( C4::Context->preference("IndependantBranches") ) {
