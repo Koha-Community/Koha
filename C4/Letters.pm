@@ -607,7 +607,7 @@ sub SendQueuedMessages (;$) {
         if ( lc( $message->{'message_transport_type'} ) eq 'email' ) {
             _send_message_by_email( $message );
         }
-        if ( lc( $message->{'message_transport_type'} ) eq 'sms' ) {
+        elsif ( lc( $message->{'message_transport_type'} ) eq 'sms' ) {
             _send_message_by_sms( $message );
         }
     }
@@ -761,24 +761,35 @@ ENDSQL
 }
 
 sub _send_message_by_email ($) {
-    my $message = shift or return undef;
+    my $message = shift or return;
 
-    my $member = C4::Members::GetMember( $message->{'borrowernumber'} );
-    return unless $message->{'to_address'} or $member->{'email'};
+    my $to_address = $message->{to_address};
+    unless ($to_address) {
+        my $member = C4::Members::GetMember( $message->{'borrowernumber'} );
+        unless ($member) {
+            warn "FAIL: No 'to_address' and INVALID borrowernumber ($message->{borrowernumber})";
+            _set_message_status( { message_id => $message->{'message_id'},
+                                   status     => 'failed' } );
+            return;
+        }
+        unless ($to_address = $member->{email}) {   # assigment, not comparison
+            # warn "FAIL: No 'to_address' and no email for " . ($member->{surname} ||'') . ", borrowernumber ($message->{borrowernumber})";
+            # warning too verbose for this more common case?
+            _set_message_status( { message_id => $message->{'message_id'},
+                                   status     => 'failed' } );
+            return;
+        }
+    }
 
 	my $content = encode('utf8', $message->{'content'});
     my %sendmail_params = (
-        To   => $message->{'to_address'}   || $member->{'email'},
+        To   => $to_address,
         From => $message->{'from_address'} || C4::Context->preference('KohaAdminEmailAddress'),
         Subject => $message->{'subject'},
-		charset => 'utf8',
+        charset => 'utf8',
         Message => $content,
+        'content-type' => $message->{'content_type'} || 'text/plain; charset="UTF-8"',
     );
-    if ($message->{'content_type'}) {
-        $sendmail_params{'content-type'} = $message->{'content_type'};
-    }else{
-        $sendmail_params{'content-type'} = 'text/plain; charset="UTF-8"';
-    }
     
     my $success = sendmail( %sendmail_params );
 
