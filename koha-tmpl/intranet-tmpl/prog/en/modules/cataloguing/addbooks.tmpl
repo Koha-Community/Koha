@@ -134,7 +134,11 @@
                 <th>&nbsp;</th>
             </tr>
             <!-- TMPL_LOOP NAME="breeding_loop" -->
-            <!-- TMPL_IF NAME="toggle" --><tr><!-- TMPL_ELSE --><tr class="hilighted"><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="__odd__" -->
+               <tr>
+            <!--  TMPL_ELSE -->
+               <tr class="hilighted">
+            <!-- /TMPL_IF -->
                 <td><!-- TMPL_VAR NAME="title" escape="html" -->
                 <!-- TMPL_VAR NAME="author" --></td>
                 <td><!-- TMPL_VAR NAME="isbn" --></td>
