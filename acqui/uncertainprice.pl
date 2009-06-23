@@ -67,12 +67,13 @@ my ($template, $loggedinuser, $cookie)
                 });
 
 my $booksellerid = $input->param('booksellerid');
+my $basketno     = $input->param('basketno');
 my $op = $input->param('op');
 my $owner = $input->param('owner') || 0 ; # flag to see only "my" orders, or everyone orders
 my $bookseller = &GetBookSellerFromId($booksellerid);
 
 #show all orders that have uncertain price for the bookseller
-my $pendingorders = &GetPendingOrders($booksellerid,0,$owner);
+my $pendingorders = &GetPendingOrders($booksellerid,0,$owner,$basketno);
 my @orders;
 
 foreach my $order (@{$pendingorders}) {
@@ -83,6 +84,8 @@ foreach my $order (@{$pendingorders}) {
         $order->{'bibpublicationyear'} = $bibdata->{'publicationyear'};
         $order->{'bibtitle'} = $bibdata->{'title'};
         $order->{'bibauthor'} = $bibdata->{'author'};
+        $order->{'surname'} = $order->{'surname'};
+        $order->{'firstname'} = $order->{'firstname'};
         my $order_as_from_db=GetOrder($order->{ordernumber});
         $order->{'quantity'} = $order_as_from_db->{'quantity'};
         $order->{'listprice'} = $order_as_from_db->{'listprice'};

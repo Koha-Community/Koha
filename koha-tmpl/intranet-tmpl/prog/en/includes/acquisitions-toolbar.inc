@@ -19,7 +19,11 @@
 	        { text: _("Baskets"), url: "/cgi-bin/koha/acqui/booksellers.pl?supplierid=<!--TMPL_VAR Name="id"-->"},
 	        { text: _("Basket grouping"), url: "/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=<!-- TMPL_VAR NAME="id" -->"},
 	        { text: _("Receive shipments"), url: "/cgi-bin/koha/acqui/parcels.pl?supplierid=<!--TMPL_VAR Name="id"-->" },
-	        { text: _("Uncertain prices"), url: "/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=<!-- TMPL_VAR NAME="id" -->&owner=1"}
+            <!-- TMPL_IF name="basketno" -->
+                { text: _("Uncertain prices"), url: "/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=<!-- TMPL_VAR NAME="id" -->&basketno=<!--TMPL_VAR name="basketno" -->&owner=1"}
+            <!-- TMPL_ELSE -->
+                { text: _("Uncertain prices"), url: "/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=<!-- TMPL_VAR NAME="id" -->&owner=1"}
+            <!-- /TMPL_IF -->
 	    ]
 	    <!-- TMPL_IF NAME="id" -->new YAHOO.widget.Button("newbasket");
 	    new YAHOO.widget.Button("editsupplier");

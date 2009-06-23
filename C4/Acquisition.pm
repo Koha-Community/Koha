@@ -651,7 +651,7 @@ Results are ordered from most to least recent.
 =cut
 
 sub GetPendingOrders {
-    my ($supplierid,$grouped,$owner) = @_;
+    my ($supplierid,$grouped,$owner,$basketno) = @_;
     my $dbh = C4::Context->dbh;
     my $strsth = "
         SELECT    ".($grouped?"count(*),":"")."aqbasket.basketno,
@@ -679,6 +679,10 @@ sub GetPendingOrders {
     if ($owner) {
         $strsth .= " AND aqbasket.authorisedby=? ";
         push @query_params, $userenv->{'number'};
+    }
+    if ($basketno) {
+        $strsth .= " AND aqbasket.basketno=? ";
+        push @query_params, $basketno;
     }
     $strsth .= " group by aqbasket.basketno" if $grouped;
     $strsth .= " order by aqbasket.basketno";
