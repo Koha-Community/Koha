@@ -276,7 +276,7 @@ if (! $op ) {
                     push(@ba_order, undef);
                 }
                 if ($ord->{itemtype}){
-                    push(@ba_order, $itemtypes->{$bib->{itemtype}}->{description});
+                    push(@ba_order, $itemtypes->{$bib->{itemtype}}->{description}) if $bib->{itemtype};
                 } else {
                     push(@ba_order, undef);
                 }
@@ -286,7 +286,7 @@ if (! $op ) {
                     push(@ba_order, $ord->{$key});                                                  #Order lines
                 }
                 push(@ba_order, $bookseller->{discount});
-                push(@ba_order, $bookseller->{gstrate}*100 || C4::Context->preference("gist"));
+                push(@ba_order, $bookseller->{gstrate}*100 || C4::Context->preference("gist") || 0);
                 push(@ba_orders, \@ba_order);
             }
         }
