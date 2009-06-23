@@ -25,6 +25,7 @@
 =cut
 
 use strict;
+use warnings;
 use CGI;
 use C4::Auth;
 use C4::Biblio;
@@ -56,13 +57,13 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 # get framework list
 my $frameworks = getframeworks;
 my @frameworkcodeloop;
-foreach my $thisframeworkcode ( keys %$frameworks ) {
-    my %row = (
+foreach my $thisframeworkcode ( keys %{$frameworks} ) {
+    push @frameworkcodeloop, {
         value         => $thisframeworkcode,
         frameworktext => $frameworks->{$thisframeworkcode}->{'frameworktext'},
-    );
-    push @frameworkcodeloop, \%row;
+    };
 }
+
 
 # Searching the catalog.
 if ($query) {
@@ -76,7 +77,7 @@ if ($query) {
         output_html_with_http_headers $input, $cookie, $template->output;
         exit;
     }
-    
+
     # format output
     my $total = scalar @$marcresults;
     my @newresults = searchResults( $query, $total, $results_per_page, $page-1, 0, @$marcresults );
@@ -89,43 +90,45 @@ if ($query) {
 }
 
 # fill with books in breeding farm
-my $toggle = 0;
-my ( $title, $isbn );
 
+my $countbr = 0;
+my @resultsbr;
+if ($query) {
 # fill isbn or title, depending on what has been entered
 #u must do check on isbn because u can find number in beginning of title
 #check is on isbn legnth 13 for new isbn and 10 for old isbn
-my $querylength = length($query);
-if ( $query =~ /\d/ and ( $querylength eq 13 or $querylength eq 10 ) ) {
-    $isbn = $query;
+    my ( $title, $isbn );
+    if ($query=~/\d/) {
+        my $querylength = length $query;
+        if ( $querylength == 13 || $querylength == 10 ) {
+            $isbn = $query;
+        }
+    }
+    if (!$isbn) {
+        $title = $query;
+    }
+    ( $countbr, @resultsbr ) = BreedingSearch( $title, $isbn );
 }
-$title = $query unless $isbn;
-my ( $countbr, @resultsbr ) = BreedingSearch( $title, $isbn ) if $query;
-my @breeding_loop = ();
-for ( my $i = 0 ; $i <= $#resultsbr ; $i++ ) {
-    my %row_data;
-    if ( $i % 2 ) {
-        $toggle = 0;
-    }
-    else {
-        $toggle = 1;
-    }
-    $row_data{toggle} = $toggle;
-    $row_data{id}     = $resultsbr[$i]->{'id'};
-    $row_data{isbn}   = $resultsbr[$i]->{'isbn'};
-    $row_data{copyrightdate}   = $resultsbr[$i]->{'copyrightdate'};
-    $row_data{editionstatement}   = $resultsbr[$i]->{'editionstatement'};
-    $row_data{file}   = $resultsbr[$i]->{'file'};
-    $row_data{title}  = $resultsbr[$i]->{'title'};
-    $row_data{author} = $resultsbr[$i]->{'author'};
-    push( @breeding_loop, \%row_data );
+my $breeding_loop = [];
+my $id = 0;
+for my $resultsbr (@resultsbr) {
+    push @{$breeding_loop}, {
+        id               => $id++,
+        isbn             => $resultsbr->{isbn},
+        copyrightdate    => $resultsbr->{copyrightdate},
+        editionstatement => $resultsbr->{editionstatement},
+        file             => $resultsbr->{file},
+        title            => $resultsbr->{title},
+        author           => $resultsbr->{author},
+    };
 }
 
 $template->param(
     frameworkcodeloop => \@frameworkcodeloop,
     breeding_count    => $countbr,
-    breeding_loop     => \@breeding_loop,
+    breeding_loop     => $breeding_loop,
     z3950_search_params => C4::Search::z3950_search_args($query),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
+
