@@ -73,7 +73,10 @@ if ($op eq "do_search" && $query) {
 
     # add the itemtype limit if applicable
     my $itemtypelimit = $input->param('itemtypelimit');
-    $query .= " AND itype=$itemtypelimit" if $itemtypelimit;
+    if ( $itemtypelimit ) {
+        my $index = C4::Context->preference("item-level_itypes") ? 'itype' : 'itemtype';
+        $query .= " AND $index=$itemtypelimit";
+    }
     
     $resultsperpage= $input->param('resultsperpage');
     $resultsperpage = 19 if(!defined $resultsperpage);
