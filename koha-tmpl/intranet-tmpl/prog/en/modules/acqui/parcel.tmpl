@@ -3,6 +3,21 @@
             Receipt Summary for <!-- TMPL_VAR NAME="name" --> <!--TMPL_IF Name="invoice"-->Invoice <!-- TMPL_VAR NAME="invoice" --><!--/TMPL_IF --> on <!-- TMPL_VAR NAME="formatteddatereceived" --><!-- TMPL_ELSE -->Receive Orders from <!-- TMPL_VAR NAME="name" --><!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="greybox.inc" -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<script language="javascript">
+	function cancelorder(biblionumber, ordernumber, title){
+		supplierid = '<!-- TMPL_VAR NAME="supplierid" -->';
+		datereceived = '<!-- TMPL_VAR NAME="invoicedatereceived" -->';
+
+		if(confirm(_("Are you sure to cancel the order : " + title))){
+			window.location = '/cgi-bin/koha/acqui/parcel.pl?op=delete&supplierid=' + supplierid 
+														+ '&datereceived=' + datereceived 
+														+ '&biblionumber=' + biblionumber
+														+ '&ordernumber=' + ordernumber;
+			console.log(" " + datereceived + " " +supplierid);
+		}
+	}
+</script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -137,7 +152,10 @@
                 <td> <!-- TMPL_VAR NAME="quantity" --></td>
                 <td><!-- TMPL_VAR NAME="ecost" --></td>
                 <td><!-- TMPL_VAR NAME="ordertotal" --></td>
-				<td><a href="orderreceive.pl?receive=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;datereceived=<!-- TMPL_VAR NAME="invoicedatereceived" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->">Receive order</a></td>
+				<td>
+					<a href="orderreceive.pl?receive=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;datereceived=<!-- TMPL_VAR NAME="invoicedatereceived" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->">Receive order</a>&nbsp;
+					<a href="#" onclick="cancelorder(<!-- TMPL_VAR NAME="biblionumber" -->, <!-- TMPL_VAR NAME="ordernumber" -->, '<!-- TMPL_VAR ESCAPE="JS" NAME="title" -->'); return false;">Cancel order</a>
+				</td>
             </tr>
         <!-- /TMPL_LOOP -->
             <tr><td colspan="2">&nbsp;</td>

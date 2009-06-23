@@ -87,6 +87,15 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
     }
 );
 
+if($input->param('op') eq "delete" ){
+    if($input->param('biblionumber') and $input->param('ordernumber')){
+       DelOrder($input->param('biblionumber'), $input->param('ordernumber')); 
+       print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?supplierid=$supplierid&datereceived=" . $datereceived->output('iso'));
+       exit;
+    }
+}
+
+
 # If receiving error, report the error (coming from finishreceive.pl).
 if (scalar(@rcv_err)) {
     my $cnt = 0;
