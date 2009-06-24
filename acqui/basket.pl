@@ -239,10 +239,14 @@ if ( $op eq 'delete_confirm' ) {
                 $line{$key} .= '??';
             }
         }
-        my $volume = $results[$i]->{'volume'};
-        my $seriestitle = $results[$i]->{'seriestitle'};
-        $line{'title'} .= " / $seriestitle" if $seriestitle;
-        $line{'title'} .= " / $volume" if $volume;
+	if ($line{'title'}){
+	    my $volume = $results[$i]->{'volume'};
+	    my $seriestitle = $results[$i]->{'seriestitle'};
+	    $line{'title'} .= " / $seriestitle" if $seriestitle;
+	    $line{'title'} .= " / $volume" if $volume;
+	} else {
+	    $line{'title'} = "Deleted bibliographic notice, can't find title.";
+	}
         push @books_loop, \%line;
     }
 

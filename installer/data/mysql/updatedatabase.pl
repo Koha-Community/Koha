@@ -2993,6 +2993,15 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.99.023";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE `aqorders` drop foreign key `aqorders_ibfk_2`");
+    $dbh->do("ALTER TABLE `aqorders` drop key `biblionumber`");
+    $dbh->do("ALTER TABLE `aqorders` ADD foreign key (biblionumber) REFERENCES biblio(`biblionumber`) ON DELETE SET NULL ON UPDATE CASCADE;"); 
+    print "Upgrade to $DBversion done adding display column to aqbudgets_planning\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
