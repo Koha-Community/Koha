@@ -77,10 +77,22 @@ $(function() {
     $("#listcontents").tablesorter({
         widgets : ['zebra'],
         <!-- TMPL_IF NAME="manageshelf" -->
+          <!-- TMPL_IF NAME="authorsort" -->
+          sortList: [[2,0]],
+          <!-- TMPL_ELSIF NAME="copyrightsort" -->
+          sortList: [[3,1]],
+          <!-- TMPL_ELSE -->
           sortList: [[1,0]],
+          <!-- /TMPL_IF -->
           headers: { 0: { sorter: false },1:{sorter: 'articles'}
         <!-- TMPL_ELSE -->
+          <!-- TMPL_IF NAME="authorsort" -->
+          sortList: [[1,0]],
+          <!-- TMPL_ELSIF NAME="copyrightsort" -->
+          sortList: [[2,1]],
+          <!-- TMPL_ELSE -->
           sortList: [[0,0]],
+          <!-- /TMPL_IF -->
           headers: { 0:{sorter:'articles'}
         <!-- /TMPL_IF -->
         }
@@ -338,7 +350,7 @@ $(document).ready(function(){
                           <!--TMPL_ELSE-->
                             <tr>
                           <!-- /TMPL_UNLESS -->
-                              <td><a href="opac-shelves.pl?display=privateshelves&amp;viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"  --></a></td>
+                              <td><a href="opac-shelves.pl?display=privateshelves&amp;viewshelf=<!-- TMPL_VAR NAME="shelf" -->&amp;sortfield=<!-- TMPL_VAR NAME="sortfield" -->"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"  --></a></td>
                               <td><!-- TMPL_VAR NAME="count" --> item(s)</td>
                               <td><!-- TMPL_VAR NAME="sortfield" --></td>
                               <td>
@@ -406,7 +418,7 @@ $(document).ready(function(){
                       <!--TMPL_ELSE-->
                         <tr>
                       <!-- /TMPL_UNLESS -->
-                          <td><a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"  --></a></td>
+                          <td><a href="opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->&amp;sortfield=<!-- TMPL_VAR NAME="sortfield" -->"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"  --></a></td>
                           <td><!-- TMPL_VAR NAME="count" --> item(s)</td>
                           <td><!-- TMPL_VAR NAME="sortfield" --></td>
                           <td>

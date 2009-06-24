@@ -103,7 +103,7 @@
 		<!-- TMPL_IF NAME="pubshelves" -->
 			<ul class="first-of-type">
 			<!-- TMPL_LOOP NAME="pubshelvesloop" -->
-			<li class="yuimenuitem"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelfnumber" -->"><!-- TMPL_VAR NAME="shelfname"  ESCAPE="html" --></a></li>
+			<li class="yuimenuitem"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelfnumber" -->&amp;sortfield=<!-- TMPL_VAR NAME="sortfield" -->"><!-- TMPL_VAR NAME="shelfname"  ESCAPE="html" --></a></li>
 			<!-- /TMPL_LOOP -->
 			</ul>   
 		<!-- TMPL_ELSE -->
@@ -120,7 +120,7 @@
 		<!-- TMPL_IF NAME="barshelves" -->
 			<ul class="first-of-type">
 			<!-- TMPL_LOOP NAME="barshelvesloop" -->
-			<li class="yuimenuitem"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelfnumber" -->"><!-- TMPL_VAR NAME="shelfname"  ESCAPE="html" --></a></li>
+			<li class="yuimenuitem"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelfnumber" -->&amp;sortfield=<!-- TMPL_VAR NAME="sortfield" -->"><!-- TMPL_VAR NAME="shelfname"  ESCAPE="html" --></a></li>
 			<!-- /TMPL_LOOP -->
 			</ul>   
 		<!-- TMPL_ELSE -->

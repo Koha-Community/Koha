@@ -170,6 +170,15 @@ SWITCH: {
         #check that the user can view the shelf
 		if ( ShelfPossibleAction( $loggedinuser, $shelfnumber, 'view' ) ) {
 			my $items;
+			my $authorsort;
+			my $copyrightsort;
+	                my $sortfield = ($query->param('sortfield') ? $query->param('sortfield') : 'title');
+			if ($sortfield eq 'author') {
+				$authorsort = 'author';
+			}
+			if ($sortfield eq 'copyrightdate'){
+				$copyrightsort = 'copyrightdate';
+			}
 			($items, $totitems) = GetShelfContents($shelfnumber, $shelflimit, $shelfoffset);
 			for my $this_item (@$items) {
 				# the virtualshelfcontents table does not store these columns nor are they retrieved from the items
@@ -188,6 +197,8 @@ SWITCH: {
 				shelfname   => $shelflist->{$shelfnumber}->{'shelfname'} || $privshelflist->{$shelfnumber}->{'shelfname'},
 				shelfnumber => $shelfnumber,
 				viewshelf   => $shelfnumber,
+				authorsort   => $authorsort,
+				copyrightsort => $copyrightsort,
 				manageshelf => $manageshelf,
 				itemsloop => $items,
 			);
@@ -291,7 +302,7 @@ foreach my $element (sort { lc($shelflist->{$a}->{'shelfname'}) cmp lc($shelflis
 
 my $url = $type eq 'opac' ? "/cgi-bin/koha/opac-shelves.pl" : "/cgi-bin/koha/virtualshelves/shelves.pl";
 my %qhash = ();
-foreach (qw(display viewshelf)) {
+foreach (qw(display viewshelf sortfield)) {
     $qhash{$_} = $query->param($_) if $query->param($_);
 }
 (scalar keys %qhash) and $url .= '?' . join '&', map {"$_=$qhash{$_}"} keys %qhash;
