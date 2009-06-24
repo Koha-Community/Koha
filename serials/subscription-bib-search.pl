@@ -79,9 +79,9 @@ if ($op eq "do_search" && $query) {
     }
     
     $resultsperpage= $input->param('resultsperpage');
-    $resultsperpage = 19 if(!defined $resultsperpage);
+    $resultsperpage = 20 if(!defined $resultsperpage);
 
-    my ($error, $marcrecords, $total_hits) = SimpleSearch($query, $startfrom, $resultsperpage);
+    my ($error, $marcrecords, $total_hits) = SimpleSearch($query, $startfrom*$resultsperpage, $resultsperpage);
     my $total = scalar @$marcrecords;
 
     if (defined $error) {
@@ -122,14 +122,14 @@ if ($op eq "do_search" && $query) {
     # multi page display gestion
     my $displaynext=0;
     my $displayprev=$startfrom;
-    if(($total - (($startfrom+1)*($resultsperpage))) > 0 ){
+    if(($total_hits - (($startfrom+1)*($resultsperpage))) > 0 ){
         $displaynext = 1;
     }
 
 
     my @numbers = ();
 
-    if ($total>$resultsperpage)
+    if ($total_hits>$resultsperpage)
     {
         for (my $i=1; $i<$total/$resultsperpage+1; $i++)
         {
@@ -144,11 +144,12 @@ if ($op eq "do_search" && $query) {
             }
         }
     }
-
-    my $from = $startfrom*$resultsperpage+1;
+    
+    my $from = 0;
+    $from = $startfrom*$resultsperpage+1 if($total_hits > 0);
     my $to;
 
-    if($total < (($startfrom+1)*$resultsperpage))
+    if($total_hits < (($startfrom+1)*$resultsperpage))
     {
         $to = $total;
     } else {
@@ -163,7 +164,7 @@ if ($op eq "do_search" && $query) {
                             resultsperpage => $resultsperpage,
                             startfromnext => $startfrom+1,
                             startfromprev => $startfrom-1,
-                            total=>$total,
+                            total=>$total_hits,
                             from=>$from,
                             to=>$to,
                             numbers=>\@numbers,
