@@ -202,7 +202,9 @@ if ( C4::Context->preference("IndependantBranches") ) {
     unless ( $userenv->{flags} == 1 ) {
         $samebranch = ( $data->{'branchcode'} eq $userenv->{branch} );
     }
-    $samebranch = 1 if ( $userenv->{flags} == 1 );
+    $samebranch = 1 if ( $userenv->{flags} % 2 == 1 );
+}else{
+    $samebranch = 1;
 }
 my $branchdetail = GetBranchDetail( $data->{'branchcode'});
 $data->{'branchname'} = $branchdetail->{branchname};
@@ -353,6 +355,7 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
 $template->param(
     detailview => 1,
     AllowRenewalLimitOverride => C4::Context->preference("AllowRenewalLimitOverride"),
+<<<<<<< HEAD:members/moremember.pl
     DHTMLcalendar_dateformat=>C4::Dates->DHTMLcalendar(),
     roaddetails      => $roaddetails,
     borrowernumber   => $borrowernumber,
@@ -370,6 +373,27 @@ $template->param(
 	is_child        => ($category_type eq 'C'),
 	# 		 reserveloop     => \@reservedata,
 	dateformat    => C4::Context->preference("dateformat"),
+=======
+    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
+    roaddetails     => $roaddetails,
+    borrowernumber  => $borrowernumber,
+    categoryname    => $data->{'description'},
+    reregistration  => $reregistration,
+    branch          => $branch,
+    totalprice      => sprintf("%.2f", $totalprice),
+    totaldue        => sprintf("%.2f", $total),
+    totaldue_raw    => $total,
+    issueloop       => \@issuedata,
+    overdues_exist  => $overdues_exist,
+    error           => $error,
+    $error          => 1,
+    StaffMember     => ($category_type eq 'S'),
+    is_child        => ($category_type eq 'C'),
+#   reserveloop     => \@reservedata,
+    dateformat      => C4::Context->preference("dateformat"),
+    "dateformat_" . (C4::Context->preference("dateformat") || '') => 1,
+    samebranch     => $samebranch,
+>>>>>>> 1be2c41... (bug #3284) fix borrower deletion in independantbranches mode:members/moremember.pl
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
