@@ -9,6 +9,7 @@ $(document).ready(function() {
         $('#branch').change(function() {
                 $('#selectlibrary').submit();
         });
+	    $('#rulestabs > ul').tabs();
 });
 //]]>
 </script>
@@ -67,18 +68,18 @@ $(document).ready(function() {
             <form method="post" action="/cgi-bin/koha/tools/overduerules.pl">
                 <input type="hidden" name="op" value="save" />
                 <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
-                <table>
-                    <caption>Rules for overdue actions: <!--TMPL_IF Name="branch"--><!-- TMPL_VAR NAME="branch" --><!--TMPL_ELSE--> default library <!--/TMPL_IF-->
-                    <!--TMPL_IF Name="datasaved"-->
-                        <br /><div class="dialog message">INPUT SAVED</div>
-                    <!--/TMPL_IF -->
-                    </caption>
-                    <tr>
-                        <th rowspan="2">&nbsp;</th><th colspan="3" scope="col">First</th><th colspan="3" scope="col">Second</th><th colspan="3" scope="col">Third</th>
-                    </tr>
-                    <tr>
-                        <th scope="col">Delay</th><th scope="col">Letter</th><th scope="col">Debar</th><th scope="col">Delay</th><th scope="col">Letter</th><th scope="col">Debar</th><th scope="col">Delay</th><th scope="col">Letter</th><th scope="col">Debar</th>
-                    </tr>
+				<h3>Rules for overdue actions: <!--TMPL_IF Name="branch"--><!-- TMPL_VAR NAME="branch" --><!--TMPL_ELSE--> default library <!--/TMPL_IF--></h3>
+                    <!--TMPL_IF Name="datasaved"--><div class="dialog message">INPUT SAVED</div> <!--/TMPL_IF -->
+
+  <div id="rulestabs" class="toptabs">
+	<ul class="ui-tabs-nav">
+      <li><a href="#first">First</a></li>
+      <li><a href="#second">Second</a></li>
+      <li><a href="#third">Third</a></li>
+	</ul>
+
+<div id="first"><table>
+					<tr><th>&nbsp;</th><th scope="col">Delay</th><th scope="col">First Letter</th><th scope="col">Debar</th></tr>
                     <!-- TMPL_LOOP NAME="table" -->
                      <!-- TMPL_UNLESS NAME="__odd__" -->
                                 <tr class="highlight">
@@ -112,6 +113,20 @@ $(document).ready(function() {
                                     <input type="checkbox" name="debarred1-<!-- TMPL_VAR NAME="overduename" -->" value="1" />
                                 <!-- /TMPL_IF -->
                             </td>
+							</tr>
+							<!-- /TMPL_LOOP -->
+							</table>
+</div>
+
+<div id="second"><table>
+					<tr><th>&nbsp;</th><th scope="col">Delay</th><th scope="col">Second Letter</th><th scope="col">Debar</th></tr>
+                    <!-- TMPL_LOOP NAME="table" -->
+                     <!-- TMPL_UNLESS NAME="__odd__" -->
+                                <tr class="highlight">
+                            <!-- TMPL_ELSE -->
+                                <tr>
+                            <!-- /TMPL_UNLESS -->
+                            <th scope="row"><!-- TMPL_VAR NAME="line" --></th>
 <td>
                                 <input name="delay2-<!-- TMPL_VAR NAME="overduename" -->" size="5" value="<!-- TMPL_VAR NAME="delay2" -->" />
                             </td>
@@ -138,6 +153,20 @@ $(document).ready(function() {
                                     <input type="checkbox" name="debarred2-<!-- TMPL_VAR NAME="overduename" -->" value="1" />
                                 <!-- /TMPL_IF -->
                             </td>
+							</tr>
+							<!-- /TMPL_LOOP -->
+							</table>
+</div>
+
+<div id="third"><table>
+					<tr><th>&nbsp;</th><th scope="col">Delay</th><th scope="col">Third Letter</th><th scope="col">Debar</th></tr>
+                    <!-- TMPL_LOOP NAME="table" -->
+                     <!-- TMPL_UNLESS NAME="__odd__" -->
+                                <tr class="highlight">
+                            <!-- TMPL_ELSE -->
+                                <tr>
+                            <!-- /TMPL_UNLESS -->
+                            <th scope="row"><!-- TMPL_VAR NAME="line" --></th>
 <td>
                                 <input name="delay3-<!-- TMPL_VAR NAME="overduename" -->" size="5" value="<!-- TMPL_VAR NAME="delay3" -->" />
                             </td>
@@ -167,6 +196,9 @@ $(document).ready(function() {
                         </tr>
                     <!-- /TMPL_LOOP -->
                 </table>
+</div>
+</div>
+
                 <fieldset class="action"><input type="submit" value="Save Changes" /></fieldset>
             </form>
             <!-- TMPL_ELSE -->
