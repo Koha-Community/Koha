@@ -80,7 +80,7 @@ if ($shelfnumber && ($shelfnumber != -1)) {
 	AddBibliosToShelf($shelfnumber,@biblionumber);
 	RefreshShelvesSummary($query->cookie("CGISESSID"),$loggedinuser,($loggedinuser == -1 ? 20 : 10));
 	print $query->header;
-	print "<html><meta http-equiv=\"refresh\" content=\"0;url=opac-shelves.pl?display=privateshelves\" /><body onload=\"window.opener.location.reload(true);self.close();\"></body></html>";
+	print "<html><meta http-equiv=\"refresh\" content=\"0;url=opac-shelves.pl?display=privateshelves\" /><body onload=\"self.close();\"></body></html>";
 	exit;
 }
 else {
