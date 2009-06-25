@@ -24,7 +24,7 @@
         });<!-- TMPL_IF NAME="GoogleJackets" -->
         KOHA.Google.GetCoverFromIsbn();<!-- /TMPL_IF --><!-- TMPL_IF NAME="TagsEnabled" -->
         $(".tagbutton").click(KOHA.Tags.add_tag_button);<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="opacbookbag" -->$("#action").append("<li><a class=\"addtocart\" href=\"#\" onclick=\"addRecord('"+$("input[name=bib]").val()+"'); return false;\">"+_("Add to Your Cart")+"</a></li>");
+		<!-- TMPL_IF NAME="opacbookbag" -->$("#action").append("<li><a class=\"addtocart\" href=\"#\" onclick=\"addRecord('"+$("input[name=bib]").val()+"'); return false;\">"+_("Add to Your Cart")+"<\/a><\/li>");
 <!-- /TMPL_IF -->});
 //]]>
 </script>
@@ -64,7 +64,7 @@
         <!-- TMPL_VAR NAME="XSLTBloc" -->
     <!-- TMPL_ELSE -->
     <h1><!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_IF NAME="subtitle" --> <span class="subtitle"><!-- TMPL_VAR NAME="subtitle" --></span><!-- /TMPL_IF --></h1>
-    <!-- TMPL_IF NAME="author" --><h5 class="author">by <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="author" -->"><!-- TMPL_VAR NAME="author" ESCAPE="HTML" --></a></h5><!-- /TMPL_IF --> 
+    <!-- TMPL_IF NAME="author" --><h5 class="author">by <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" ESCAPE="HTML" --></a></h5><!-- /TMPL_IF --> 
     <div id="views"><span class="view"><span id="Normalview">Normal View</span></span> <span class="view"><a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">MARC View</a></span> <!-- TMPL_IF NAME="ISBD" --><span class="view"><a id="ISBDview" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">ISBD View</a></span><!-- /TMPL_IF -->
     </div>
 
@@ -82,7 +82,7 @@
     <!-- TMPL_IF name="MARCAUTHORS" -->
     <span class="results_summary"><span class="label">Authors:</span>
                 <!-- TMPL_LOOP NAME="MARCAUTHORS" -->
-                <!-- TMPL_LOOP NAME="MARCAUTHOR_SUBFIELDS_LOOP" --><!-- TMPL_VAR NAME="separator" --><a title="‡<!-- TMPL_VAR NAME=code --> <!-- TMPL_VAR NAME=value -->" href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_LOOP NAME=link_loop --><!-- TMPL_VAR NAME=operator --><!-- TMPL_VAR NAME='limit' -->:<!-- TMPL_VAR NAME=link --><!-- /TMPL_LOOP -->"><!-- TMPL_VAR NAME="value" --></a><!-- /TMPL_LOOP --> 
+                <!-- TMPL_LOOP NAME="MARCAUTHOR_SUBFIELDS_LOOP" --><!-- TMPL_VAR NAME="separator" --><a title="&#8225;<!-- TMPL_VAR NAME=code --> <!-- TMPL_VAR NAME=value -->" href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_LOOP NAME=link_loop --><!-- TMPL_VAR NAME=operator ESCAPE="URL" --><!-- TMPL_VAR NAME='limit' ESCAPE="URL" -->:<!-- TMPL_VAR NAME=link ESCAPE="URL" --><!-- /TMPL_LOOP -->"><!-- TMPL_VAR NAME="value" --></a><!-- /TMPL_LOOP --> 
         <!-- TMPL_UNLESS NAME="__last__" -->|
 <!-- /TMPL_UNLESS -->
                 <!-- /TMPL_LOOP -->
@@ -103,7 +103,7 @@
     <!-- /TMPL_IF -->
     <!-- TMPL_IF name="publishercode" -->
     <span class="results_summary"><span class="label">Published by :</span>
-        <a href="/cgi-bin/koha/opac-search.pl?q=pb:<!-- TMPL_VAR NAME="publishercode" ESCAPE="HTML" --> ">
+        <a href="/cgi-bin/koha/opac-search.pl?q=pb:<!-- TMPL_VAR NAME="publishercode" ESCAPE="URL" --> ">
             <!-- TMPL_VAR NAME="publishercode" ESCAPE="HTML" --> 
         </a> <!-- TMPL_IF name="place" -->(<!-- TMPL_VAR NAME="place"-->)<!--/TMPL_IF--> <!-- TMPL_IF NAME="publicationyear" -->, <!-- TMPL_VAR NAME="publicationyear" --><!-- /TMPL_IF -->
     </span>
@@ -143,11 +143,11 @@
             <span class="results_summary"><span class="label">Subject(s):</span> 
                 <!-- TMPL_LOOP NAME="MARCSUBJCTS" -->
                     <!-- TMPL_LOOP NAME="MARCSUBJECT_SUBFIELDS_LOOP" -->
-                        <!-- TMPL_VAR NAME="separator" --><a title="$<!-- TMPL_VAR NAME="code" --> <!-- TMPL_VAR NAME="value" -->" href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_LOOP NAME="link_loop" --><!-- TMPL_VAR NAME="operator" --><!-- TMPL_VAR NAME="limit" -->:<!-- TMPL_VAR NAME="link" --> <!-- /TMPL_LOOP -->"><!-- TMPL_VAR NAME="value" --></a><!-- /TMPL_LOOP -->
+                        <!-- TMPL_VAR NAME="separator" --><a title="$<!-- TMPL_VAR NAME="code" --> <!-- TMPL_VAR NAME="value" -->" href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_LOOP NAME="link_loop" --><!-- TMPL_VAR NAME="operator" ESCAPE="URL" --><!-- TMPL_VAR NAME="limit" ESCAPE="URL" -->:<!-- TMPL_VAR NAME="link" ESCAPE="URL" --><!-- /TMPL_LOOP -->"><!-- TMPL_VAR NAME="value" --></a><!-- /TMPL_LOOP -->
         <!-- TMPL_IF NAME="__LAST__" --><!-- TMPL_ELSE -->|<!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP --></span>
     <!-- TMPL_ELSE -->
-    <!-- TMPL_IF name="subjects" --><span class="results_summary"><span class="label">Subject(s):</span> <!-- TMPL_LOOP name="subjects" --><a href="/cgi-bin/koha/opac-search.pl?q=su:<!-- TMPL_VAR NAME="subject" escape="HTML"-->"><!-- TMPL_VAR NAME="subject" --></a> | <!-- /TMPL_LOOP --></span><!-- /TMPL_IF -->
+    <!-- TMPL_IF name="subjects" --><span class="results_summary"><span class="label">Subject(s):</span> <!-- TMPL_LOOP name="subjects" --><a href="/cgi-bin/koha/opac-search.pl?q=su:<!-- TMPL_VAR NAME="subject" escape="URL" -->"><!-- TMPL_VAR NAME="subject" --></a> | <!-- /TMPL_LOOP --></span><!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
 
     <!-- TMPL_IF name="copyrightdate" -->
@@ -723,9 +723,8 @@
 <ul>
 <!-- TMPL_LOOP NAME="AMAZON_SIMILAR_PRODUCTS" -->
 <!-- TMPL_LOOP NAME="similar_biblionumbers" -->
-<li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
-<!-- TMPL_IF NAME="OPACAmazonCoverImages" --><img alt="" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="ASIN"-->.01._SS50_.jpg" /><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="SyndeticsEnabled" --><!-- TMPL_IF NAME="SyndeticsCoverImages" --><img src="http://www.syndetics.com/index.aspx?isbn=<!-- TMPL_VAR NAME="ASIN"-->/SC.GIF&amp;client=<!-- TMPL_VAR NAME="SyndeticsClientCode" --><!-- TMPL_IF NAME="normalized_upc" -->&amp;upc=<!-- TMPL_VAR NAME="normalized_upc" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="normalized_oclc" -->&amp;oclc=<!-- TMPL_VAR NAME="normalized_oclc" --><!-- /TMPL_IF -->&amp;type=xw10" alt="" /><!-- /TMPL_IF --><!-- /TMPL_IF -->
+<li><!-- TMPL_IF NAME="OPACAmazonCoverImages" --><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><img alt="" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="ASIN"-->.01._SS50_.jpg" /><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="SyndeticsEnabled" --><!-- TMPL_IF NAME="SyndeticsCoverImages" --><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><img src="http://www.syndetics.com/index.aspx?isbn=<!-- TMPL_VAR NAME="ASIN"-->/SC.GIF&amp;client=<!-- TMPL_VAR NAME="SyndeticsClientCode" --><!-- TMPL_IF NAME="normalized_upc" -->&amp;upc=<!-- TMPL_VAR NAME="normalized_upc" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="normalized_oclc" -->&amp;oclc=<!-- TMPL_VAR NAME="normalized_oclc" --><!-- /TMPL_IF -->&amp;type=xw10" alt="" /></a><!-- /TMPL_IF --><!-- /TMPL_IF -->
 <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" ESCAPE="HTML" --></a>
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_LOOP -->
@@ -738,7 +737,7 @@
 <ul>
 <li><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a href="http://worldcat.org/search?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->" target="_blank">Other Libraries (WorldCat)</a><!-- TMPL_ELSE --><a href="http://worldcat.org/search?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->">Other Libraries (WorldCat)</a><!-- /TMPL_IF --></li>
 <li><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a href="http://www.scholar.google.com/scholar?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->" target="_blank">Other Databases (Google Scholar)</a><!-- TMPL_ELSE --><a href="http://www.scholar.google.com/scholar?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->">Other Databases (Google Scholar)</a><!-- /TMPL_IF --></li>
-<li><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a href="http://www.bookfinder.com/search/?author=<!-- TMPL_VAR NAME="author" -->&amp;title=<!-- TMPL_VAR NAME="title" -->&amp;st=xl&amp;ac=qr" target="_blank">Online Stores (Bookfinder.com)</a><!-- TMPL_ELSE --><a href="http://www.bookfinder.com/search/?author=<!-- TMPL_VAR NAME="author" -->&amp;title=<!-- TMPL_VAR NAME="title" -->&amp;st=xl&amp;ac=qr">Online Stores (Bookfinder.com)</a><!-- /TMPL_IF --></li>
+<li><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a href="http://www.bookfinder.com/search/?author=<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->&amp;title=<!-- TMPL_VAR NAME="title" ESCAPE="URL" -->&amp;st=xl&amp;ac=qr" target="_blank">Online Stores (Bookfinder.com)</a><!-- TMPL_ELSE --><a href="http://www.bookfinder.com/search/?author=<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->&amp;title=<!-- TMPL_VAR NAME="title" ESCAPE="URL" -->&amp;st=xl&amp;ac=qr">Online Stores (Bookfinder.com)</a><!-- /TMPL_IF --></li>
 </ul>
 </div>
 
