@@ -105,7 +105,9 @@ if($output_dir){
     $fldir = $output_dir if( -d $output_dir );
 } else {
     $fldir = $ENV{TMPDIR} || "/tmp";
-    warn "Could not write to $output_dir ... does not exist!";
+}
+if (!-d $fldir) {
+    warn "Could not write to $fldir ... does not exist!";
 }
 $filename = $dbname;
 $filename =~ s/\W//;
