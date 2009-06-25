@@ -57,14 +57,15 @@ if ($bor->{category_type} eq "S") {
 }
 
 if (C4::Context->preference("IndependantBranches")) {
-    unless ($userenv->{flags} % 2 == 1){
-        unless ($userenv->{'branch'} eq $bor->{'branchcode'}){
-#           warn "user ".$userenv->{'branch'} ."borrower :". $bor->{'branchcode'};
+    my $userenv = C4::Context->userenv;
+    if ($userenv->{flags} != 1 && $bor->{'branchcode'}){
+        unless ($userenv->{branch} eq $bor->{'branchcode'}){
             print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE_OTHERLIBRARY");
-            exit 1;
+            exit;
         }
     }
 }
+
 my $dbh = C4::Context->dbh;
 my $sth=$dbh->prepare("Select * from borrowers where guarantorid=?");
 $sth->execute($member);

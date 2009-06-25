@@ -198,6 +198,8 @@ if ( C4::Context->preference("IndependantBranches") ) {
         $samebranch = ( $data->{'branchcode'} eq $userenv->{branch} );
     }
     $samebranch = 1 if ( $userenv->{flags} % 2 == 1 );
+}else{
+    $samebranch = 1;
 }
 my $branchdetail = GetBranchDetail( $data->{'branchcode'});
 $data->{'branchname'} = $branchdetail->{branchname};
@@ -371,6 +373,7 @@ $template->param(
 #   reserveloop     => \@reservedata,
     dateformat      => C4::Context->preference("dateformat"),
     "dateformat_" . (C4::Context->preference("dateformat") || '') => 1,
+    samebranch     => $samebranch,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
