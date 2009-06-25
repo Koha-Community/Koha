@@ -39,6 +39,7 @@
         <th>Itemtype</th>
         <th>Holdingbranch</th>
         <th>Location</th>
+        <th>Notes</th>
     </tr>
      <!-- TMPL_LOOP NAME="itemsloop"-->
         <tr>
@@ -57,6 +58,7 @@
             <td><!-- TMPL_IF NAME="itype_level" --><!-- TMPL_VAR NAME="itype" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="itemtype" --><!-- /TMPL_IF --></td>
             <td><!-- TMPL_VAR NAME="holdingbranch"--></td>
             <td><!-- TMPL_VAR NAME="location"--></td>
+            <td><!-- TMPL_VAR NAME="itemnotes"--></td>
         </tr>
     <!-- /TMPL_LOOP -->
     </table>
