@@ -151,7 +151,7 @@ for my $itm (@items) {
         $itm->{'imageurl'}    = getitemtypeimagelocation( 'opac', $itemtypes->{ $itm->{itype} }->{'imageurl'} );
         $itm->{'description'} = $itemtypes->{ $itm->{itype} }->{'description'};
     }
-    foreach (qw(ccode enumchron copynumber itemnotes)) {
+    foreach (qw(ccode enumchron copynumber itemnotes uri)) {
         $itemfields{$_} = 1 if ($itm->{$_});
     }
 
@@ -198,6 +198,7 @@ my $subtitle         = C4::Biblio::get_koha_field_from_marc('bibliosubtitle', 's
                      RequestOnOpac           => C4::Context->preference("RequestOnOpac"),
                      itemdata_ccode          => $itemfields{ccode},
                      itemdata_enumchron      => $itemfields{enumchron},
+                     itemdata_uri            => $itemfields{uri},
                      itemdata_copynumber     => $itemfields{copynumber},
                      itemdata_itemnotes          => $itemfields{itemnotes},
                      authorised_value_images => $biblio_authorised_value_images,

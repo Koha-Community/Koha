@@ -170,6 +170,7 @@ function verify_images() {
                 <th>Last seen</th>
                 <th>Barcode</th>
                 <!-- TMPL_IF NAME="volinfo" --><th>Publication Details</th><!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="itemdata_uri" --><th>URL</th><!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="itemdata_copynumber" --><th>Copy No.</th><!-- /TMPL_IF -->
             </tr>
             <!-- TMPL_LOOP NAME="itemloop" -->
@@ -271,6 +272,9 @@ function verify_images() {
 					<!-- /TMPL_IF -->
 					<!-- TMPL_VAR NAME="serialseq" --><!-- TMPL_IF NAME="publisheddate" --> (<!-- TMPL_VAR NAME="publisheddate" -->)<!-- /TMPL_IF -->
 				</td><!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="itemdata_uri" -->
+					<td class="uri"><a href="<!-- TMPL_VAR NAME="uri" -->"><!-- TMPL_VAR NAME="uri" --></a></td>
+				<!-- /TMPL_IF -->
 				<!-- TMPL_IF NAME="itemdata_copynumber" -->
 					<td class="copynumber"><!-- TMPL_VAR NAME="copynumber" --></td>
 				<!-- /TMPL_IF -->
