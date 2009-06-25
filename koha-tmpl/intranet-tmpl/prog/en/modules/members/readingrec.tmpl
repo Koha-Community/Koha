@@ -16,10 +16,10 @@
 <!-- TMPL_INCLUDE NAME="circ-toolbar.inc" -->
 <h1>Reading Record</h1>
 <form action="/cgi-bin/koha/members/readingrec.pl" method="get"><input type="hidden" name="borrowernumber" id="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" /></form>
-<table>
-<tr><td colspan="4"><!-- TMPL_IF NAME="showfulllink" -->Showing All Items |
+<p><!-- TMPL_IF NAME="showfulllink" -->Showing All Items |
 	<a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;limit=full">Show Last 50 Items Only</a> <!-- TMPL_ELSE -->	Showing Last 50 Items | 
-	<a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;limit=full">Show All Items</a><!-- /TMPL_IF --></td></tr>
+	<a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;limit=full">Show All Items</a><!-- /TMPL_IF --></p>
+<table>
 <tr>
 	<th>
 		<a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;order=title&amp;amp;limit=<!-- TMPL_VAR name="limit" -->">Title</a>
