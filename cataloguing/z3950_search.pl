@@ -238,7 +238,6 @@ warn "query ".$query  if $DEBUG;
                           )
                           = ImportBreeding( $marcdata, 2, $serverhost[$k], $encoding[$k], $random, 'z3950' );
                         my %row_data;
-                        $row_data{toggle}       = ($i % 2) ? 1 : 0;
                         $row_data{server}       = $servername[$k];
                         $row_data{isbn}         = $oldbiblio->{isbn};
                         $row_data{lccn}         = $oldbiblio->{lccn};
@@ -251,7 +250,7 @@ warn "query ".$query  if $DEBUG;
                         push( @breeding_loop, \%row_data );
 		            
                     } else {
-                        push(@breeding_loop,{'toggle'=>($i % 2)?1:0,'server'=>$servername[$k],'title'=>join(': ',$oConnection[$k]->error_x()),'breedingid'=>-1,'biblionumber'=>-1});
+                        push(@breeding_loop,{'server'=>$servername[$k],'title'=>join(': ',$oConnection[$k]->error_x()),'breedingid'=>-1,'biblionumber'=>-1});
                     } # $rec
                 }
             }    #$numresults

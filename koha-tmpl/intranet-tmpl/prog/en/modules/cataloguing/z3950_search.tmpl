@@ -104,7 +104,11 @@ $(document).ready(function(){
     <tbody><!-- TMPL_LOOP name="breeding_loop" -->
         <!-- TMPL_IF NAME="breedingid" -->
 		
+	<!-- TMPL_UNLESS NAME="__odd__" -->
+	<tr class="highlight">
+	<!-- TMPL_ELSE -->
         <tr>
+	<!-- /TMPL_UNLESS -->
             <td><!-- TMPL_VAR name="server" --></td>
             <td><!-- TMPL_VAR NAME="title" escape="html" --></td>
             <td><!-- TMPL_VAR NAME="author" --></td>
