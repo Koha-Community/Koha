@@ -58,7 +58,7 @@ if ($bor->{category_type} eq "S") {
 
 if (C4::Context->preference("IndependantBranches")) {
     my $userenv = C4::Context->userenv;
-    if ($userenv->{flags} != 1 && $bor->{'branchcode'}){
+    if (($userenv->{flags} % 2 != 1) && $bor->{'branchcode'}){
         unless ($userenv->{branch} eq $bor->{'branchcode'}){
             print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE_OTHERLIBRARY");
             exit;
