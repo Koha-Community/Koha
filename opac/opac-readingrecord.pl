@@ -82,9 +82,6 @@ my @loop_reading;
 
 for ( my $i = 0 ; $i < $count ; $i++ ) {
     my %line;
-    if ( $i % 2 ) {
-        $line{'toggle'} = 1;
-    }
 	
 	# XISBN Stuff
 	my $isbn = GetNormalizedISBN($issues->[$i]->{'isbn'});
