@@ -80,9 +80,16 @@ if ( $email_add ) {
 
         my @items = &GetItemsInfo( $biblionumber, 'opac' );
 
+        my $hasauthors = 0;
+        if($dat->{'author'} || @$marcauthorsarray) {
+          $hasauthors = 1;
+        }
+	
+
         $dat->{MARCNOTES}      = $marcnotesarray;
         $dat->{MARCSUBJCTS}    = $marcsubjctsarray;
         $dat->{MARCAUTHORS}    = $marcauthorsarray;
+        $dat->{HASAUTHORS}     = $hasauthors;
         $dat->{'biblionumber'} = $biblionumber;
         $dat->{ITEM_RESULTS}   = \@items;
 
