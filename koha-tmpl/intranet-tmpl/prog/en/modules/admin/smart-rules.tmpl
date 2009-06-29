@@ -88,7 +88,7 @@ $(document).ready(function() {
                             <!-- TMPL_VAR NAME="humanitemtype" -->
                         <!-- /TMPL_IF -->
                     </td>
-                    <td>$<!-- TMPL_VAR NAME="fine" --></td>
+                    <td><!-- TMPL_VAR NAME="fine" --></td>
                     <td><!-- TMPL_IF NAME="firstremind" --><!-- TMPL_VAR NAME="firstremind" --> day(s)<!-- /TMPL_IF --></td>
                     <td><!-- TMPL_IF NAME="chargeperiod" --><!-- TMPL_VAR NAME="chargeperiod" --> day(s)<!-- /TMPL_IF --></td>
                     <td><!-- TMPL_IF NAME="unlimited_maxissueqty" -->
@@ -120,7 +120,7 @@ $(document).ready(function() {
                         <!-- /TMPL_LOOP -->
                         </select>
                     </td>
-                    <td>$<input name="fine" size="4" /></td>
+                    <td><input name="fine" size="4" /></td>
                     <td><input name="firstremind" size="2" /> day(s)</td>
                     <td><input name="chargeperiod" size="2" /> day(s)</td>
                     <td><input name="maxissueqty" size="3" /></td>
