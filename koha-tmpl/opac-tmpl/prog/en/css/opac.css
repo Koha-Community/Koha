@@ -429,6 +429,21 @@ a .term {
 	background-image:url(../../images/print.gif);
 }
 
+#action a#furthersearches {
+	background : transparent url(../../images/menu-arrow.gif) no-repeat right center;
+	border : 1px solid #F3F3F3;
+	margin-left : 5px;
+	padding : 2px 26px 2px 10px;
+	text-decoration : none;
+}
+
+#action a#furthersearches:hover {
+	border-top : 1px solid #FFF;
+	border-left : 1px solid #FFF;
+	border-right : 1px solid #979797;
+	border-bottom : 1px solid #979797;
+}
+
 #toolbar a.brief {
 	background-image: url(../../images/brief.gif);
 }
@@ -1385,7 +1400,7 @@ div#menu li.active a:hover {
 	padding: 2px 2px 1px 2px;
 }
 
-#export,#further,#similars, .detailtagcell {
+#export,#further,.detailtagcell {
 	margin-top : .5em;
 	background-color : #F3F3F3;
 	border : 1px solid #E8E8E8;
@@ -1413,28 +1428,6 @@ div#menu li.active a:hover {
 
 #further ul li {
 	list-style-image : url("../../images/further-bullet.gif");
-}
-
-#similars {
-	background-color : #FFF;
-    text-align : center;
-    font-size : 95%;
-    padding : 0 3px 3px 3px;
-}
-
-#similars ul {
-	margin : 0;
-	padding : 0;
-}
-
-#similars li {
-	list-style : none;
-	margin : 0;
-	padding : 0;
-}
-
-#similars li a {
-	display : block;
 }
 
 #amazonreviews h4 {
@@ -1793,9 +1786,37 @@ table#items th {
 #action {
 	margin-top: 0;
 }
+#similars h4 {
+	text-align : left;
+}
+#similars table,
+#similars td {
+	border : 0;
+	margin : 0;
+}
+#similars td {
+	width : 13em;
+}
+#similars a {
+	display : block;
+	font-weight : normal;
+}
+#furtherm a,
+#furtherm a:link,
+#furtherm a:visited {
+	color : #006699;
+}
+#furtherm h4 {
+	font-size : 106%;
+	margin : .1em .5em;
+}
+#furtherm .bd {
+	background-color : #F3F3F3;
+	border:1px solid #DDD;
+}
 .results_summary img {
 	margin : 0 5px;
-}
+ }
 span.no-image {
 	background-color : #FFF;
 	border: 1px solid #979797;
