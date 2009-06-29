@@ -50,16 +50,16 @@ $(document).ready(function() {
             <!--TMPL_IF Name="ERROR"-->
             <div class="dialog alert">
                 <h3>Data error</h3>
-                <p>The following fields have a forbidden value. Correct them and press OK again :</p>
+                <p>The following errors were found. Please correct them and submit again:</p>
                 <ul>
                 <!-- TMPL_IF NAME="ERRORDELAY" -->
-                    <li>Delay <!--TMPL_VAR Name="ERRORDELAY"--> for <!--TMPL_VAR Name="BORERR"--> borrower category has some unexpected characters. There should be only numerical characters. </li>
+                    <li>Delay <!--TMPL_VAR Name="ERRORDELAY"--> for <!--TMPL_VAR Name="BORERR"--> patron category has some unexpected characters. There should be only numerical characters. </li>
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="ERRORUSELESSDELAY" -->
-                    <li>No letter or debar action specified for delay <!--TMPL_VAR Name="ERRORUSELESSDELAY"--> for <!--TMPL_VAR Name="BORERR"--> borrower category.  If a delay is supplied, either a letter, debar action, or both should be specified.</li>
+                    <li>No letter or debar action specified for delay <!--TMPL_VAR Name="ERRORUSELESSDELAY"--> for <!--TMPL_VAR Name="BORERR"--> patron category.  If a delay is supplied, either a letter, debar action, or both should be specified.</li>
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="ERRORORDER" -->
-                    <li>Delay1 should be less than Delay2 which should be less than Delay3 for <!--TMPL_VAR Name="BORERR"--> borrower category </li>
+                    <li>The first notice's delay should be less than the second, which should be less than the third for the <strong><!--TMPL_VAR Name="BORERR"--></strong> patron category </li>
                 <!-- /TMPL_IF -->
                 </ul>
             </div>
