@@ -52,12 +52,17 @@ BEGIN {
 
 	# to get something
 	push @EXPORT, qw(
+	    &Get
 		&GetBiblio
 		&GetBiblioData
 		&GetBiblioItemData
 		&GetBiblioItemInfosOf
 		&GetBiblioItemByBiblioNumber
 		&GetBiblioFromItemNumber
+		
+		GetFieldMapping
+		SetFieldMapping
+		DeleteFieldMapping
 		
 		&GetISBDView
 
@@ -464,6 +469,115 @@ sub LinkBibHeadingsToAuthorities {
 
     }
     return $num_headings_changed;
+}
+
+=head2 Get
+
+=over 4
+
+my $values = Get($field, $record, $frameworkcode);
+
+=back
+
+Get MARC fields from a keyword defined in fieldmapping table.
+
+=cut
+
+sub Get {
+    my ($field, $record, $frameworkcode) = @_;
+    my $dbh = C4::Context->dbh;
+    
+    my $sth = $dbh->prepare('SELECT fieldcode, subfieldcode FROM fieldmapping WHERE frameworkcode = ? AND field = ?');
+    $sth->execute($frameworkcode, $field);
+    
+    my @result = ();
+    
+    while(my $row = $sth->fetchrow_hashref){
+        foreach my $field ($record->field($row->{fieldcode})){
+            if( ($row->{subfieldcode} ne "" && $field->subfield($row->{subfieldcode}))){
+                foreach my $subfield ($field->subfield($row->{subfieldcode})){
+                    push @result, { 'subfield' => $subfield };
+                }
+                
+            }elsif($row->{subfieldcode} eq "") {
+                push @result, {'subfield' => $field->as_string()};
+            }
+        }
+    }
+    
+    return @result;
+}
+
+=head2 SetFieldMapping
+
+=over 4
+
+SetFieldMapping($framework, $field, $fieldcode, $subfieldcode);
+
+=back
+
+Set a Field to MARC mapping value, if it already exists we don't add a new one.
+
+=cut
+
+sub SetFieldMapping {
+    my ($framework, $field, $fieldcode, $subfieldcode) = @_;
+    my $dbh = C4::Context->dbh;
+    
+    my $sth = $dbh->prepare('SELECT * FROM fieldmapping WHERE fieldcode = ? AND subfieldcode = ? AND frameworkcode = ? AND field = ?');
+    $sth->execute($fieldcode, $subfieldcode, $framework, $field);
+    if(not $sth->fetchrow_hashref){
+        my @args;
+        $sth = $dbh->prepare('INSERT INTO fieldmapping (fieldcode, subfieldcode, frameworkcode, field) VALUES(?,?,?,?)');
+        
+        $sth->execute($fieldcode, $subfieldcode, $framework, $field);
+    }
+}
+
+=head2 DeleteFieldMapping
+
+=over 4
+
+DeleteFieldMapping($id);
+
+=back
+
+Delete a field mapping from an $id.
+
+=cut
+
+sub DeleteFieldMapping{
+    my ($id) = @_;
+    my $dbh = C4::Context->dbh;
+    
+    my $sth = $dbh->prepare('DELETE FROM fieldmapping WHERE id = ?');
+    $sth->execute($id);
+}
+
+=head2 GetFieldMapping
+
+=over 4
+
+GetFieldMapping($frameworkcode);
+
+=back
+
+Get all field mappings for a specified frameworkcode
+
+=cut
+
+sub GetFieldMapping {
+    my ($framework) = @_;
+    my $dbh = C4::Context->dbh;
+    
+    my $sth = $dbh->prepare('SELECT * FROM fieldmapping where frameworkcode = ?');
+    $sth->execute($framework);
+    
+    my @return;
+    while(my $row = $sth->fetchrow_hashref){
+        push @return, $row;
+    }
+    return \@return;
 }
 
 =head2 GetBiblioData
