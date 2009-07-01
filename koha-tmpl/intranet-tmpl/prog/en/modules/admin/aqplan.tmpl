@@ -170,10 +170,15 @@ YAHOO.util.Event.onAvailable("popmenu", function () {
     <th>Budget total</th>
 
     <!-- TMPL_LOOP NAME="authvals_row" -->
-         <th id="<!-- TMPL_VAR NAME="code" -->"   style="text-align: center;   
-    <!-- TMPL_UNLESS NAME="display" --> display:none;  <!-- /TMPL_UNLESS -->
+         <!-- TMPL_IF NAME="display" -->
+            <th id="<!-- TMPL_VAR NAME="code" -->"   style="text-align: center;
+                        class="<!-- TMPL_VAR NAME='colnum' -->" >
+        <!-- TMPL_ELSE -->
+            <th id="<!-- TMPL_VAR NAME="code" -->"   style="text-align: center;
+                            display:none;
+                        class="<!-- TMPL_VAR NAME='colnum' -->" >
+        <!-- /TMPL_IF -->
 
-    class="<!-- TMPL_VAR NAME="colnum" -->" >
     <!-- TMPL_VAR NAME="val" -->&nbsp;<span class="buttonPlus" onclick="delColumn('<!-- TMPL_VAR NAME="colnum" -->', '<!-- TMPL_VAR NAME="code" -->')"  > - &nbsp;</span></th>
 
     <!-- /TMPL_LOOP -->
