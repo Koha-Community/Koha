@@ -547,52 +547,6 @@ if ($query_desc || $limit_desc) {
     $template->param(searchdesc => 1);
 }
 
-## Now let's find out if we have any supplemental data to show the user
-#  and in the meantime, save the current query for statistical purposes, etc.
-my $koha_spsuggest; # a flag to tell if we've got suggestions coming from Koha
-my @koha_spsuggest; # place we store the suggestions to be returned to the template as LOOP
-my $phrases = $query_desc;
-my $ipaddress;
-
-if ( C4::Context->preference("kohaspsuggest") ) {
-        my ($suggest_host, $suggest_dbname, $suggest_user, $suggest_pwd) = split(':', C4::Context->preference("kohaspsuggest"));
-        eval {
-            my $koha_spsuggest_dbh;
-            # FIXME: this needs to be moved to Context.pm
-            eval {
-                $koha_spsuggest_dbh=DBI->connect("DBI:mysql:$suggest_dbname:$suggest_host","$suggest_user","$suggest_pwd");
-            };
-            if ($@) { 
-                warn "can't connect to spsuggest db";
-            }
-            else {
-                my $koha_spsuggest_insert = "INSERT INTO phrase_log(phr_phrase,phr_resultcount,phr_ip) VALUES(?,?,?)";
-                my $koha_spsuggest_query = "SELECT display FROM distincts WHERE strcmp(soundex(suggestion), soundex(?)) = 0 order by soundex(suggestion) limit 0,5";
-                my $koha_spsuggest_sth = $koha_spsuggest_dbh->prepare($koha_spsuggest_query);
-                $koha_spsuggest_sth->execute($phrases);
-                while (my $spsuggestion = $koha_spsuggest_sth->fetchrow_array) {
-                    $spsuggestion =~ s/(:|\/)//g;
-                    my %line;
-                    $line{spsuggestion} = $spsuggestion;
-                    push @koha_spsuggest,\%line;
-                    $koha_spsuggest = 1;
-                }
-
-                # Now save the current query
-                $koha_spsuggest_sth=$koha_spsuggest_dbh->prepare($koha_spsuggest_insert);
-                #$koha_spsuggest_sth->execute($phrases,$results_per_page,$ipaddress);
-                $koha_spsuggest_sth->finish;
-
-                $template->param( koha_spsuggest => $koha_spsuggest ) unless $hits;
-                $template->param( SPELL_SUGGEST => \@koha_spsuggest,
-                );
-            }
-    };
-    if ($@) {
-            warn "Kohaspsuggest failure:".$@;
-    }
-}
-
 # VI. BUILD THE TEMPLATE
 # Build drop-down list for 'Add To:' menu...
 my $session = get_session($cgi->cookie("CGISESSID"));

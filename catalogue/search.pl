@@ -2,8 +2,6 @@
 # Script to perform searching
 # For documentation try 'perldoc /path/to/search'
 #
-# $Header$
-#
 # Copyright 2006 LibLime
 #
 # This file is part of Koha
@@ -275,15 +273,12 @@ if ( $template_type eq 'advsearch' ) {
     # shouldn't appear on the first one, scan indexes should, adding a new
     # box should only appear on the last, etc.
     my @search_boxes_array;
-    my $search_boxes_count = C4::Context->preference("OPACAdvSearchInputCount") | 3; # FIXME: should be a syspref
+    my $search_boxes_count = C4::Context->preference("OPACAdvSearchInputCount") || 3; # FIXME: using OPAC sysprefs?
+    # FIXME: all this junk can be done in TMPL using __first__ and __last__
     for (my $i=1;$i<=$search_boxes_count;$i++) {
         # if it's the first one, don't display boolean option, but show scan indexes
         if ($i==1) {
-            push @search_boxes_array,
-                {
-                scan_index => 1,
-                };
-        
+            push @search_boxes_array, {scan_index => 1};
         }
         # if it's the last one, show the 'add field' box
         elsif ($i==$search_boxes_count) {
@@ -484,7 +479,7 @@ my $results_hashref;
 if (C4::Context->preference('NoZebra')) {
     $query=~s/yr(:|=)\s*([\d]{1,4})-([\d]{1,4})/(yr>=$2 and yr<=$3)/g;
     $simple_query=~s/yr\s*(:|=)([\d]{1,4})-([\d]{1,4})/(yr>=$2 and yr<=$3)/g;
-    warn $query; 
+    # warn $query; 
     eval {
         ($error, $results_hashref, $facets) = NZgetRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
     };
@@ -495,7 +490,6 @@ if (C4::Context->preference('NoZebra')) {
 }
 if ($@ || $error) {
     $template->param(query_error => $error.$@);
-
     output_html_with_http_headers $cgi, $cookie, $template->output;
     exit;
 }
@@ -512,7 +506,7 @@ for (my $i=0;$i<@servers;$i++) {
         $total = $total + $results_hashref->{$server}->{"hits"};
         ## If there's just one result, redirect to the detail page
         if ($total == 1) {         
-            my $biblionumber=@newresults[0]->{biblionumber};
+            my $biblionumber = $newresults[0]->{biblionumber};
 			my $defaultview = C4::Context->preference('IntranetBiblioDefaultView');
 			my $views = { C4::Search::enabled_staff_search_views }; 
             if ($defaultview eq 'isbd' && $views->{can_view_ISBD}) {
@@ -526,7 +520,6 @@ for (my $i=0;$i<@servers;$i++) {
             } 
             exit;
         }
-
 
 
         if ($hits) {
@@ -577,8 +570,6 @@ for (my $i=0;$i<@servers;$i++) {
                         
             }
 
-
-
             # now, show twenty pages, with the current one smack in the middle
             else {
                 for (my $i=$current_page_number; $i<=($current_page_number + 20 );$i++) {
@@ -589,7 +580,6 @@ for (my $i=0;$i<@servers;$i++) {
                         push @page_numbers, { offset => $this_offset, pg => $this_page_number, highlight => $highlight, sort_by => join " ",@sort_by };
                     }
                 }
-                        
             }
             # FIXME: no previous_page_offset when pages < 2
             $template->param(   PAGE_NUMBERS => \@page_numbers,
@@ -598,18 +588,11 @@ for (my $i=0;$i<@servers;$i++) {
         }
 
 
-
-
-
         # no hits
         else {
             $template->param(searchdesc => 1,query_desc => $query_desc,limit_desc => $limit_desc);
 			$template->param (z3950_search_params => C4::Search::z3950_search_args($z3950par || $query_desc));
         }
-
-
-
-
 
     } # end of the if local
 
@@ -624,8 +607,7 @@ for (my $i=0;$i<@servers;$i++) {
                 'link' => "&amp;idx=an&amp;q=".$marc_record_object->field('001')->as_string(),
             };
         }
-        my $servername = $server;
-        push @sup_results_array, {  servername => $servername, 
+        push @sup_results_array, {  servername => $server, 
                                     inner_sup_results_loop => \@inner_sup_results_array} if @inner_sup_results_array;
     }
     # FIXME: can add support for other targets as needed here
@@ -645,52 +627,6 @@ $template->param(
 
 if ($query_desc || $limit_desc) {
     $template->param(searchdesc => 1);
-}
-
-## Now let's find out if we have any supplemental data to show the user
-#  and in the meantime, save the current query for statistical purposes, etc.
-my $koha_spsuggest; # a flag to tell if we've got suggestions coming from Koha
-my @koha_spsuggest; # place we store the suggestions to be returned to the template as LOOP
-my $phrases = $query_desc;
-my $ipaddress;
-
-if ( C4::Context->preference("kohaspsuggest") ) {
-        my ($suggest_host, $suggest_dbname, $suggest_user, $suggest_pwd) = split(':', C4::Context->preference("kohaspsuggest"));
-        eval {
-            my $koha_spsuggest_dbh;
-            # FIXME: this needs to be moved to Context.pm
-            eval {
-                $koha_spsuggest_dbh=DBI->connect("DBI:mysql:$suggest_dbname:$suggest_host","$suggest_user","$suggest_pwd");
-            };
-            if ($@) { 
-                warn "can't connect to spsuggest db";
-            }
-            else {
-                my $koha_spsuggest_insert = "INSERT INTO phrase_log(phr_phrase,phr_resultcount,phr_ip) VALUES(?,?,?)";
-                my $koha_spsuggest_query = "SELECT display FROM distincts WHERE strcmp(soundex(suggestion), soundex(?)) = 0 order by soundex(suggestion) limit 0,5";
-                my $koha_spsuggest_sth = $koha_spsuggest_dbh->prepare($koha_spsuggest_query);
-                $koha_spsuggest_sth->execute($phrases);
-                while (my $spsuggestion = $koha_spsuggest_sth->fetchrow_array) {
-                    $spsuggestion =~ s/(:|\/)//g;
-                    my %line;
-                    $line{spsuggestion} = $spsuggestion;
-                    push @koha_spsuggest,\%line;
-                    $koha_spsuggest = 1;
-                }
-
-                # Now save the current query
-                $koha_spsuggest_sth=$koha_spsuggest_dbh->prepare($koha_spsuggest_insert);
-                #$koha_spsuggest_sth->execute($phrases,$results_per_page,$ipaddress);
-                $koha_spsuggest_sth->finish;
-
-                $template->param( koha_spsuggest => $koha_spsuggest ) unless $hits;
-                $template->param( SPELL_SUGGEST => \@koha_spsuggest,
-                );
-            }
-    };
-    if ($@) {
-            warn "Kohaspsuggest failure:".$@;
-    }
 }
 
 # VI. BUILD THE TEMPLATE
