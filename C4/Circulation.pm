@@ -2081,7 +2081,8 @@ has the item.
 
 C<$itemnumber> is the number of the item to renew.
 
-C<$branch> is the library branch.  Defaults to the homebranch of the ITEM.
+C<$branch> is the library where the renewal took place (if any).
+           The library that controls the circ policies for the renewal is retrieved from the issues record.
 
 C<$datedue> can be a C4::Dates object used to set the due date.
 
@@ -2094,17 +2095,13 @@ from the book's item type.
 =cut
 
 sub AddRenewal {
-	my $borrowernumber = shift or return undef;
-	my     $itemnumber = shift or return undef;
+    my $borrowernumber  = shift or return undef;
+    my $itemnumber      = shift or return undef;
+    my $branch          = shift;
+    my $datedue         = shift;
+    my $lastreneweddate = shift || C4::Dates->new()->output('iso');
     my $item   = GetItem($itemnumber) or return undef;
     my $biblio = GetBiblioFromItemNumber($itemnumber) or return undef;
-    my $branch  = (@_) ? shift : $item->{homebranch};	# opac-renew doesn't send branch
-    my $datedue = shift;
-    my $lastreneweddate = shift;
-    # $lastreneweddate defaults to today.
-    unless (defined $lastreneweddate) {
-        $lastreneweddate = strftime( "%Y-%m-%d", localtime );
-    }
 
     my $dbh = C4::Context->dbh;
     # Find the issues record for this book
@@ -2116,25 +2113,25 @@ sub AddRenewal {
     $sth->execute( $borrowernumber, $itemnumber );
     my $issuedata = $sth->fetchrow_hashref;
     $sth->finish;
-
+    if($datedue && ! $datedue->output('iso')){
+        warn "Invalid date passed to AddRenewal.";
+        return undef;
+    }
     # If the due date wasn't specified, calculate it by adding the
     # book's loan length to today's date or the current due date
     # based on the value of the RenewalPeriodBase syspref.
-    unless ($datedue && $datedue->output('iso')) {
+    unless ($datedue) {
 
         my $borrower = C4::Members::GetMemberDetails( $borrowernumber, 0 ) or return undef;
         my $loanlength = GetLoanLength(
-            $borrower->{'categorycode'},
-             (C4::Context->preference('item-level_itypes')) ? $biblio->{'itype'} : $biblio->{'itemtype'} ,
-			$item->{homebranch}     # item's homebranch determines loanlength OR do we want the branch specified by the AddRenewal argument?
-        );
+                    $borrower->{'categorycode'},
+                    (C4::Context->preference('item-level_itypes')) ? $biblio->{'itype'} : $biblio->{'itemtype'} ,
+			        $issuedata->{'branchcode'}  );   # that's the circ control branch.
 
         $datedue = (C4::Context->preference('RenewalPeriodBase') eq 'date_due') ?
                                         C4::Dates->new($issuedata->{date_due}, 'iso') :
                                         C4::Dates->new();
-        #FIXME -- use circControl?
-        $datedue =  CalcDateDue($datedue,$loanlength,$branch,$borrower);    # this branch is the transactional branch.
-        # The question of whether to use item's homebranch calendar is open.
+        $datedue =  CalcDateDue($datedue,$loanlength,$issuedata->{'branchcode'},$borrower);
     }
 
     # Update the issues record to have the new due date, and a new count
