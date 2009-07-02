@@ -45,7 +45,7 @@ BEGIN {
 		&GetPendingOrders &GetOrder &GetOrders
 		&GetOrderNumber &GetLateOrders &NewOrder &DelOrder
 		&SearchOrder &GetHistory &GetRecentAcqui
-		&ModOrder &ModReceiveOrder &ModOrderBiblioitemNumber
+		&ModOrder &ModOrderItem &ModReceiveOrder &ModOrderBiblioitemNumber
 
         &NewOrderItem
 
@@ -969,6 +969,45 @@ sub ModOrder {
 }
 
 #------------------------------------------------------------#
+
+=head3 ModOrderItem
+
+=over 4
+
+&ModOrderItem(\%hashref);
+
+=over 2
+
+Modifies the itemnumber in the aqorders_items table. The input hash needs three entities:
+  - itemnumber: the old itemnumber
+  - ordernumber: the order this item is attached to
+  - newitemnumber: the new itemnumber we want to attach the line to
+
+=back
+
+=back
+
+=cut
+
+sub ModOrderItem {
+    my $orderiteminfo = shift;
+    if (! $orderiteminfo->{'ordernumber'} || ! $orderiteminfo->{'itemnumber'} || ! $orderiteminfo->{'newitemnumber'}){
+        die "Ordernumber, itemnumber and newitemnumber is required";
+    }
+
+    my $dbh = C4::Context->dbh;
+
+    my $query = "UPDATE aqorders_items set itemnumber=? where itemnumber=? and ordernumber=?";
+    my @params = ($orderiteminfo->{'newitemnumber'}, $orderiteminfo->{'itemnumber'}, $orderiteminfo->{'ordernumber'});
+    warn $query;
+    warn Data::Dumper::Dumper(@params);
+    my $sth = $dbh->prepare($query);
+    $sth->execute(@params);
+    return 0;
+}
+
+#------------------------------------------------------------#
+
 
 =head3 ModOrderBibliotemNumber
 

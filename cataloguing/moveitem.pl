@@ -29,6 +29,7 @@ use C4::Context;
 use C4::Koha;
 use C4::Branch;
 use C4::ClassSource;
+use C4::Acquisition qw/GetOrderFromItemnumber ModOrder GetOrder ModOrderItem/;
 
 use Date::Calc qw(Today);
 
@@ -63,38 +64,55 @@ if ($barcode && $biblionumber) {
     my $itemnumber = GetItemnumberFromBarcode($barcode);
 
     if ($itemnumber) {
-    
     	# And then, we get the item
-	my $item = GetItem($itemnumber);
+		my $item = GetItem($itemnumber);
 
-	if ($item) {
+		if ($item) {
 
-	    my $results = GetBiblioFromItemNumber($itemnumber, $barcode);
-            my $frombiblionumber = $results->{'biblionumber'};
-	   
-	    my $moveresult = MoveItemFromBiblio($itemnumber, $frombiblionumber, $biblionumber); 
-	    if ($moveresult) { 
-	             $template->param(success => 1);
-	    } else {
-		$template->param(error => 1,
-				 errornonewitem => 1); 
-	    }
+			# We delete the item from the old record (we can't delete afterwards, because of constraint on barcode duplicity)
+			my $results = GetBiblioFromItemNumber($itemnumber, $barcode);
+			my $frombiblionumber = $results->{'biblionumber'};
 
+			my $order = GetOrderFromItemnumber($itemnumber);
+			if ($order){
+				$order->{'biblionumber'} = $biblionumber;
+				ModOrder($order);
+			}
+				
+			if ($frombiblionumber) {
+				DelItem(C4::Context->dbh, $frombiblionumber, $itemnumber);
+			}
 
-	} else {
-	    $template->param(error => 1,
-	                     errornoitem => 1);
-	}
+			# We add the item to the requested record
+			my ($biblionumber, $biblioitemnumber, $newitemnumber) = AddItem($item, $biblionumber);
+
+			if ($order){
+				my $orderitem = {
+					ordernumber => $order->{'ordernumber'},
+					itemnumber => $itemnumber,
+					newitemnumber => $newitemnumber,
+				};
+				ModOrderItem($orderitem);
+			}
+				
+			if ($newitemnumber) { 
+				$template->param(success => 1);
+			} else {
+				$template->param(error => 1,
+								 errornonewitem => 1); 
+			}
+		} else {
+			$template->param(error => 1,
+					 errornoitem => 1);
+		}
     } else {
-	    $template->param(error => 1,
-			     errornoitemnumber => 1);
-
+	$template->param(error => 1,
+			 errornoitemnumber => 1);
     }
     $template->param(
 			barcode => $barcode,  
 			itemnumber => $itemnumber,
 		    );
-
 } else {
     $template->param(missingparameter => 1);
     if (!$barcode)      { $template->param(missingbarcode      => 1); }
