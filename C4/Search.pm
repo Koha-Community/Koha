@@ -1691,6 +1691,7 @@ sub NZanalyse {
         $left = 'subject'          if $left =~ '^su$';
         $left = 'koha-Auth-Number' if $left =~ '^an$';
         $left = 'keyword'          if $left =~ '^kw$';
+        $left = 'itemtype'         if $left =~ '^mc$'; # Fix for Bug 2599 - Search limits not working for NoZebra 
         warn "handling leaf... left:$left operator:$operator right:$right" if $DEBUG;
         if ( $operator && $left ne 'keyword' ) {
 
