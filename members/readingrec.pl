@@ -64,9 +64,6 @@ my @loop_reading;
 
 for (my $i=0;$i<$count;$i++){
  	my %line;
-	if($i%2){
-		$line{'toggle'} = 1;
-	}
 	$line{biblionumber}=$issues->[$i]->{'biblionumber'};
 	$line{title}=$issues->[$i]->{'title'};
 	$line{author}=$issues->[$i]->{'author'};

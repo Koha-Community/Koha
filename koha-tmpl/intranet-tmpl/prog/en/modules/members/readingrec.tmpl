@@ -36,11 +36,11 @@
 	</th>
 </tr>
 <!-- TMPL_LOOP name="loop_reading" -->
-<!-- TMPL_IF NAME="toggle" -->
+<!-- TMPL_UNLESS NAME="__odd__" -->
     <!-- TMPL_IF NAME="returndate" --><tr class="highlight"><!-- TMPL_ELSE --><tr class="highlight onissue"><!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
     <!-- TMPL_IF NAME="returndate" --><tr><!-- TMPL_ELSE --><tr class="onissue"><!-- /TMPL_IF -->
-<!-- /TMPL_IF -->
+<!-- /TMPL_UNLESS -->
 
             <td>
             <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
