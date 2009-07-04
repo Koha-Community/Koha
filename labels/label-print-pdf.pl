@@ -112,6 +112,7 @@ print $cgi->header( -type => 'application/pdf', -attachment => 'barcode.pdf' );
 prInitVars();
 $| = 1;
 prFile();   # No args means to STDOUT
+prCompress(1);  # turn on zip compression which dramatically reduces file size
 prMbox( $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY );
 
 # drawbox( $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY );  #do page border
