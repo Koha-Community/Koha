@@ -106,6 +106,17 @@ my $lowerLeftY  = 0;
 my $upperRightX = $page_width;
 my $upperRightY = $page_height;
 
+warn "Active profile: " . ($profile->{prof_id} || "None") if $DEBUG;
+
+#### PRINT PRELIMINARY DATA ####
+print $cgi->header( -type => 'application/pdf', -attachment => 'barcode.pdf' ); 
+    # Don't print header until very last possible moment
+    # That way if error or die occurs, fatals_to_browser will still work.
+    # After we print this header, there is no way back to HTML.  All we can do is deliver PDF.
+prInitVars();
+$| = 1;
+prFile();   # No args means to STDOUT
+prCompress(1);  # turn on zip compression which dramatically reduces file size
 prMbox( $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY );
 
 my $codetype; # = 'Code39';

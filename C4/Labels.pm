@@ -1202,6 +1202,7 @@ sub DrawBarcode {
                 ySize         => ( .02 * $height ),
                 xSize         => $xsize_ratio,
                 hide_asterisk => 1,
+                mode          => 'graphic',  # the only other option here is Type3...
             );
         };
         if ($@) {
@@ -1227,6 +1228,7 @@ sub DrawBarcode {
                 ySize         => ( .02 * $height ),
                 xSize         => $xsize_ratio,
                 hide_asterisk => 1,
+                mode          => 'graphic',  # the only other option here is Type3...
             );
         };
 
@@ -1252,7 +1254,8 @@ sub DrawBarcode {
                 ySize         => ( .02 * $height ),
                 xSize         => $xsize_ratio,
                 hide_asterisk => 1,
-				text         => 0, 
+		text          => 0, 
+                mode          => 'graphic',  # the only other option here is Type3...
             );
         };
 
@@ -1370,6 +1373,7 @@ sub build_circ_barcode {
                 xSize => .85,
 
                 ySize => 1.3,
+                mode            => 'graphic',  # the only other option here is Type3...
             );
         };
         if ($@) {
