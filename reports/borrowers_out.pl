@@ -208,7 +208,6 @@ sub calculate {
     
     my $i=0;
 #	my @totalcol;
-    my $hilighted=-1;
     
     #Initialization of cell values.....
     my @table;
@@ -294,9 +293,7 @@ sub calculate {
         }
         push @looprow,{ 'rowtitle' => $i ,
                         'loopcell' => \@loopcell,
-                        'hilighted' => ($hilighted >0),
                     };
-        $hilighted = -$hilighted;
     }
     
             

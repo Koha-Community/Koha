@@ -33,12 +33,14 @@
                 <!-- /TMPL_LOOP -->
             </tr>
                 <!-- TMPL_LOOP NAME="looprow" -->
-                    <tr>
-                        <!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
-                        <!-- TMPL_VAR NAME="rowtitle" --></td>
+		<!-- TMPL_UNLESS NAME="__odd__" -->
+                    <tr class="highlight">
+		<!-- TMPL_ELSE -->
+		    <tr>
+		<!-- /TMPL_UNLESS -->
+                        <td><!-- TMPL_VAR NAME="rowtitle" --></td>
                         <!-- TMPL_LOOP NAME="loopcell" -->
-                            <!-- TMPL_IF NAME="hilighted" --><td class="hilighted"><!-- TMPL_ELSE --><td ><!-- /TMPL_IF -->
-                                <!-- TMPL_IF NAME="value" --><!-- TMPL_VAR NAME="value" --><!-- /TMPL_IF -->
+                        <td><!-- TMPL_IF NAME="value" --><!-- TMPL_VAR NAME="value" --><!-- /TMPL_IF -->
                             </td>
                         <!-- /TMPL_LOOP -->
                     </tr>
