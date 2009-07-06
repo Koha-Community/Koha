@@ -81,7 +81,7 @@ if ( $updateemailaddress eq '' ) {
     exit;
 }
 
-if ( $query->{'modify'} ) {
+if ( $query->param('modify') ) {
 
     # get all the fields:
     my $message = <<"EOF";
