@@ -298,7 +298,6 @@ if ( defined $csvfilename ) {
 }
 
 foreach my $branchcode (@branches) {
-
     my $branch_details = C4::Branch::GetBranchDetail($branchcode);
     my $admin_email_address = $branch_details->{'branchemail'} || C4::Context->preference('KohaAdminEmailAddress');
     my @output_chunks;    # may be sent to mail or stdout or csv file.
@@ -307,19 +306,25 @@ foreach my $branchcode (@branches) {
 
     my $sth2 = $dbh->prepare( <<'END_SQL' );
 SELECT biblio.*, items.*, issues.*, TO_DAYS(NOW())-TO_DAYS(date_due) AS days_overdue
-  FROM issues,items,biblio
-  WHERE items.itemnumber=issues.itemnumber
-    AND biblio.biblionumber   = items.biblionumber
-    AND issues.borrowernumber = ?
+  FROM issues
+  LEFT JOIN items USING(itemnumber)
+  LEFT JOIN biblio USING(biblionumber)
+  WHERE issues.borrowernumber = ?
     AND TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN ? and ?
 END_SQL
 
     my $rqoverduerules = $dbh->prepare("SELECT * FROM overduerules WHERE delay1 IS NOT NULL AND branchcode = ? ");
     $rqoverduerules->execute($branchcode);
+    
+    # We get default rules is there is no rule for this branch
+    if($rqoverduerules->rows == 0){
+        $rqoverduerules = $dbh->prepare("SELECT * FROM overduerules WHERE delay1 IS NOT NULL AND branchcode = '' ");
+        $rqoverduerules->execute();
+    }
+
     # my $outfile = 'overdues_' . ( $mybranch || $branchcode || 'default' );
     while ( my $overdue_rules = $rqoverduerules->fetchrow_hashref ) {
       PERIOD: foreach my $i ( 1 .. 3 ) {
-
             $verbose and warn "branch '$branchcode', pass $i\n";
             my $mindays = $overdue_rules->{"delay$i"};    # the notice will be sent after mindays days (grace period)
             my $maxdays = (
@@ -341,9 +346,10 @@ END_SQL
 
             my $borrower_sql = <<'END_SQL';
 SELECT COUNT(*), issues.borrowernumber, firstname, surname, address, address2, city, zipcode, email, MIN(date_due) as longest_issue
-FROM   issues,borrowers,categories
-WHERE  issues.borrowernumber=borrowers.borrowernumber
-AND    borrowers.categorycode=categories.categorycode
+FROM   issues
+LEFT JOIN borrowers USING (borrowernumber)
+LEFT JOIN categories ON (borrowers.categorycode=categories.categorycode)
+WHERE 1 
 END_SQL
             my @borrower_parameters;
             if ($branchcode) {
