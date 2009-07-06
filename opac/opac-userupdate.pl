@@ -73,8 +73,7 @@ if ( $updateemailaddress eq '' ) {
     );
 
     $template->param(
-        errormessage => 'KohaAdminEmailAddress system preference
-    is not set.  Please visit the library to update your user record'
+        noadminemail => 1,
     );
 
     output_html_with_http_headers $query, $cookie, $template->output;

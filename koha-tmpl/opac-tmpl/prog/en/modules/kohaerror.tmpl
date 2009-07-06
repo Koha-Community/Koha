@@ -2,11 +2,25 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
-<!--TMPL_INCLUDE NAME="masthead.inc" -->
-<!--TMPL_INCLUDE NAME="navigation.inc" -->
+<div id="doc3" class="yui-t7">
+   <div id="bd">
+<!-- TMPL_INCLUDE name="masthead.inc" -->
 
+<div id="yui-g">
+<div class="container">
+<div id="kohaerror">
+<div class="dialog message">
+<h3>An Error has Occurred</h3>
+<!-- TMPL_IF NAME="noadminemail" -->
+<p>An error occurred when sending your message to the administrator. Please visit the library to update your personal details. </p>
+<p><a href="/cgi-bin/koha/opac-user.pl">Return to your summary.</a></p>
+<!-- TMPL_ELSE -->
+<p><!-- TMPL_VAR NAME="errormessage" --></p>
+<!-- /TMPL_IF -->
+</div>
+</div>
+</div>
+</div>
+</div>
 
-<div id="main">
-<h3>An Error has Occurred</h3><!-- TMPL_VAR NAME="errormessage" --></div>
-</body>
-</html>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
