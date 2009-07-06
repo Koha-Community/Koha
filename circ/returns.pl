@@ -333,6 +333,7 @@ if ( $messages->{'ResFound'}) {
             destbranch	   => $reserve->{'branchcode'},
             borrowernumber => $reserve->{'borrowernumber'},
             itemnumber     => $reserve->{'itemnumber'},
+            reservenotes   => $reserve->{'reservenotes'},
         );
     } # else { ; }  # error?
 }
