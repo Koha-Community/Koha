@@ -78,16 +78,13 @@ sub plugin_javascript {
             var isbn_found   = 0;
             var editor_found = 0;
             
-            var re1 = /'tag_010_subfield_a_.*'/;
-            var re2 = /'tag_210_subfield_c_.*'/;
-            
             var inputs = document.getElementsByTagName('input');
             
             for(var i=0 , len=inputs.length ; i \< len ; i++ ){
-                if(inputs[i].id.match(re1)){
+                if(inputs[i].id.match(/^tag_010_subfield_a_.*/)){
                     isbn_found = inputs[i].value;
                 }
-                if(inputs[i].id.match(re2)){
+                if(inputs[i].id.match(/^tag_210_subfield_c_.*/)){
                     editor_found = inputs[i].value;
                 }
                 if(editor_found && isbn_found){
