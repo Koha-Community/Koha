@@ -36,7 +36,7 @@ use C4::Charset;
 require C4::Heading;
 require C4::Serials;
 
-use vars qw($VERSION @ISA @EXPORT);
+use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
 BEGIN {
 	$VERSION = 1.00;
@@ -46,13 +46,16 @@ BEGIN {
 
 	# to add biblios
 # EXPORTED FUNCTIONS.
+    push @EXPORT_OK, qw(
+        &GetRecordValue
+    );
+
 	push @EXPORT, qw( 
 		&AddBiblio
 	);
 
 	# to get something
 	push @EXPORT, qw(
-	    &Get
 		&GetBiblio
 		&GetBiblioData
 		&GetBiblioItemData
@@ -60,9 +63,9 @@ BEGIN {
 		&GetBiblioItemByBiblioNumber
 		&GetBiblioFromItemNumber
 		
-		GetFieldMapping
-		SetFieldMapping
-		DeleteFieldMapping
+		&GetFieldMapping
+		&SetFieldMapping
+		&DeleteFieldMapping
 		
 		&GetISBDView
 
@@ -471,11 +474,11 @@ sub LinkBibHeadingsToAuthorities {
     return $num_headings_changed;
 }
 
-=head2 Get
+=head2 GetRecordValue
 
 =over 4
 
-my $values = Get($field, $record, $frameworkcode);
+my $values = GetRecordValue($field, $record, $frameworkcode);
 
 =back
 
@@ -483,7 +486,7 @@ Get MARC fields from a keyword defined in fieldmapping table.
 
 =cut
 
-sub Get {
+sub GetRecordValue {
     my ($field, $record, $frameworkcode) = @_;
     my $dbh = C4::Context->dbh;
     
