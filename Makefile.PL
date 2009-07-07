@@ -549,6 +549,7 @@ WriteMakefile(
                             'Date::ICal'                       => 1.72,
                             'Date::Manip'                      => 5.44,
                             'Digest::MD5'                      => 2.36,
+                            'Digest::SHA'                      => 5.43,
                             'Email::Date'                      => 1.103,
                             'File::Temp'                       => 0.16,
                             'GD'                               => 2.39,    #optional
@@ -599,6 +600,7 @@ WriteMakefile(
                             'Time::HiRes'                      => 1.86,
                             'Time::localtime'                  => 1.02,
                             'Unicode::Normalize'               => 0.32,
+                            'URI::Escape'                      => 1.36,
                             'XML::Dumper'                      => 0.81,
                             'XML::LibXML'                      => 1.59,
                             'XML::LibXSLT'                     => 1.59,

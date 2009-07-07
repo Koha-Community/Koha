@@ -22,6 +22,9 @@ use LWP::Simple;
 use LWP::UserAgent;
 use HTTP::Request::Common;
 use C4::Koha;
+use URI::Escape;
+use POSIX;
+use Digest::SHA qw(hmac_sha256_base64);
 
 use strict;
 use warnings;
@@ -129,18 +132,25 @@ sub get_amazon_details {
     my %hformat = ( a => 'Books', g => 'Video', j => 'Music' );
     my $search_index = $hformat{ substr($record->leader(),6,1) } || 'Books';
 
-    my $url =
-        "http://ecs.amazonaws" . get_amazon_tld() .
-        "/onca/xml?Service=AWSECommerceService" .
-        "&AWSAccessKeyId=" . C4::Context->preference('AWSAccessKeyID') .
-        "&Operation=ItemLookup" .
-        "&AssociateTag=" . C4::Context->preference('AmazonAssocTag') .
-        "&Version=2009-02-01" .
-        "&ItemId=$item_id" .
-        "&IdType=$id_type" .
-        "&ResponseGroup=" . join( ',',  @aws );
-	$url .= "&SearchIndex=$search_index" if $id_type ne 'ASIN';
-    #warn $url;
+	my $parameters={Service=>"AWSECommerceService" ,
+        "AWSAccessKeyId"=> C4::Context->preference('AWSAccessKeyID') ,
+        "Operation"=>"ItemLookup", 
+        "AssociateTag"=>  C4::Context->preference('AmazonAssocTag') ,
+        "Version"=>"2009-06-01",
+        "ItemId"=>$item_id,
+        "IdType"=>$id_type,
+        "ResponseGroup"=>  join( ',',  @aws ),
+        "Timestamp"=>strftime("%Y-%m-%dT%H:%M:%SZ", gmtime)
+		};
+	$$parameters{"SearchIndex"} = $search_index if $id_type ne 'ASIN';
+	my @params;
+	while (my ($key,$value)=each %$parameters){
+		push @params, qq{$key=}.uri_escape($value, "^A-Za-z0-9\-_.~" );
+	}
+
+    my $url =qq{http://webservices.amazon}.  get_amazon_tld(). 
+        "/onca/xml?".join("&",sort @params).qq{&Signature=}.uri_escape(SignRequest(@params),"^A-Za-z0-9\-_.~" );
+
     my $content = get($url);
     warn "could not retrieve $url" unless $content;
     my $xmlsimple = XML::Simple->new();
@@ -149,6 +159,17 @@ sub get_amazon_details {
         forcearray => [ qw(SimilarProduct EditorialReview Review Item) ],
     ) unless !$content;
     return $response;
+}
+
+sub SignRequest{
+	my @params=@_;
+    my $tld=get_amazon_tld(); 
+    my $string = qq{ 
+GET 
+webservices.amazon$tld 
+/onca/xml 
+}.join("&",sort @params);
+ 	return hmac_sha256_base64($string,C4::Context->preference('AWSPrivateKey'));
 }
 
 sub check_search_inside {
