@@ -21,6 +21,10 @@ use XML::Simple;
 use LWP::Simple;
 use LWP::UserAgent;
 use HTTP::Request::Common;
+use C4::Koha;
+use URI::Escape;
+use POSIX;
+use Digest::SHA qw(hmac_sha256_base64);
 
 use strict;
 use warnings;
@@ -86,51 +90,37 @@ sub get_amazon_details {
 
     # warn "ISBN: $isbn | UPC: $upc | EAN: $ean";
 
-    my ( $id_type, $item_id);
-    if (defined($isbn) && length($isbn) == 13) { # if the isbn is 13-digit, search Amazon using EAN
-	$id_type = 'EAN';
-	$item_id = $isbn;
-    }
-    elsif ($isbn) {
-	$id_type = 'ASIN';
-	$item_id = $isbn;
-    }
-    elsif ($upc) {
-	$id_type = 'UPC';
-	$item_id = $upc;
-    }
-    elsif ($ean) {
-	$id_type = 'EAN';
-	$item_id = $upc;
-    }
-    else { # if no ISBN, UPC, or EAN exists, do not even attempt to query Amazon
-	return undef;
-    }
+    # Choose the appropriate and available item identifier
+    my ( $id_type, $item_id ) =
+        defined($isbn) && length($isbn) == 13 ? ( 'EAN',  $isbn ) :
+        $isbn                                 ? ( 'ASIN', $isbn ) :
+        $upc                                  ? ( 'UPC',  $upc  ) :
+        $ean                                  ? ( 'EAN',  $upc  ) : ( undef, undef );
+    return unless defined($id_type);
 
-    my $format = substr $record->leader(), 6, 1; # grab the item format to determine Amazon search index
-    my $formats;
-    $formats->{'a'} = 'Books';
-    $formats->{'g'} = 'Video';
-    $formats->{'j'} = 'Music';
+    # grab the item format to determine Amazon search index
+    my %hformat = ( a => 'Books', g => 'Video', j => 'Music' );
+    my $search_index = $hformat{ substr($record->leader(),6,1) } || 'Books';
 
-    my $search_index = $formats->{$format};
+	my $parameters={Service=>"AWSECommerceService" ,
+        "AWSAccessKeyId"=> C4::Context->preference('AWSAccessKeyID') ,
+        "Operation"=>"ItemLookup", 
+        "AssociateTag"=>  C4::Context->preference('AmazonAssocTag') ,
+        "Version"=>"2009-06-01",
+        "ItemId"=>$item_id,
+        "IdType"=>$id_type,
+        "ResponseGroup"=>  join( ',',  @aws ),
+        "Timestamp"=>strftime("%Y-%m-%dT%H:%M:%SZ", gmtime)
+		};
+	$$parameters{"SearchIndex"} = $search_index if $id_type ne 'ASIN';
+	my @params;
+	while (my ($key,$value)=each %$parameters){
+		push @params, qq{$key=}.uri_escape($value, "^A-Za-z0-9\-_.~" );
+	}
 
-    # Determine which content to grab in the request
+    my $url =qq{http://webservices.amazon}.  get_amazon_tld(). 
+        "/onca/xml?".join("&",sort @params).qq{&Signature=}.uri_escape(SignRequest(@params),"^A-Za-z0-9\-_.~" );
 
-    # Determine correct locale
-    my $tld = get_amazon_tld();
-
-    # grab the AWSAccessKeyId: mine is '0V5RRRRJZ3HR2RQFNHR2'
-    my $aws_access_key_id = C4::Context->preference('AWSAccessKeyID');
-
-    #grab the associates tag: mine is 'kadabox-20'
-    my $af_tag=C4::Context->preference('AmazonAssocTag');
-    my $response_group = "Similarities,EditorialReview,Reviews,ItemAttributes,Images";
-    my $url = "http://ecs.amazonaws$tld/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=$aws_access_key_id&Operation=ItemLookup&AssociateTag=$af_tag&Version=2007-01-15&ItemId=$item_id&IdType=$id_type&ResponseGroup=$response_group";
-    if ($id_type ne 'ASIN') {
-	$url .= "&SearchIndex=$search_index";
-    }
-    # warn $url;
     my $content = get($url);
     warn "could not retrieve $url" unless $content;
     my $xmlsimple = XML::Simple->new();
@@ -139,6 +129,17 @@ sub get_amazon_details {
         forcearray => [ qw(SimilarProduct EditorialReview Review Item) ],
     ) unless !$content;
     return $response;
+}
+
+sub SignRequest{
+	my @params=@_;
+    my $tld=get_amazon_tld(); 
+    my $string = qq{ 
+GET 
+webservices.amazon$tld 
+/onca/xml 
+}.join("&",sort @params);
+ 	return hmac_sha256_base64($string,C4::Context->preference('AWSPrivateKey'));
 }
 
 sub check_search_inside {
