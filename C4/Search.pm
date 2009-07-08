@@ -1376,7 +1376,7 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
 # For each grouping of items (onloan, available, unavailable), we build a key to store relevant info about that item
             if ( $item->{onloan} ) {
                 $onloan_count++;
-				my $key = $prefix . $item->{due_date};
+				my $key = $prefix . $item->{onloan} . $item->{barcode};
 				$onloan_items->{$key}->{due_date} = format_date($item->{onloan});
 				$onloan_items->{$key}->{count}++ if $item->{$hbranch};
 				$onloan_items->{$key}->{branchname} = $item->{branchname};
