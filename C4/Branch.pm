@@ -141,7 +141,7 @@ sub onlymine {
     return 
     C4::Context->preference('IndependantBranches') &&
     C4::Context->userenv                           &&
-    C4::Context->userenv->{flags}!=1               &&
+    C4::Context->userenv->{flags} %2 != 1          &&
     C4::Context->userenv->{branch}                 ;
 }
 

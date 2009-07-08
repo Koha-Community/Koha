@@ -198,8 +198,7 @@ my ($branchtagfield, $branchtagsubfield) = &GetMarcFromKohaField("items.homebran
 
 foreach my $field (@fields) {
     next if ($field->tag()<10);
-    my @subf = $field->subfields;
-    (defined @subf) or @subf = ();
+    my @subf = $field->subfields || ();
     my %this_row;
 # loop through each subfield
     for my $i (0..$#subf) {
@@ -287,7 +286,7 @@ foreach my $tag (sort keys %{$tagslib}) {
     unless ($value) {
         $value = $tagslib->{$tag}->{$subfield}->{defaultvalue};
         # get today date & replace YYYY, MM, DD if provided in the default value
-        my ( $year, $month, $day ) = split ',', $today_iso;
+        my ( $year, $month, $day ) = split ',', $today_iso;     # FIXME: iso dates don't have commas!
         $value =~ s/YYYY/$year/g;
         $value =~ s/MM/$month/g;
         $value =~ s/DD/$day/g;
@@ -320,27 +319,25 @@ foreach my $tag (sort keys %{$tagslib}) {
       # builds list, depending on authorised value...
   
       if ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "branches" ) {
-          foreach my $thisbranch ( sort keys %$branches ) {
-              push @authorised_values, $thisbranch;
-              $authorised_lib{$thisbranch} = $branches->{$thisbranch}->{'branchname'};
+          foreach my $thisbranch (@$branches) {
+              push @authorised_values, $thisbranch->{value};
+              $authorised_lib{$thisbranch->{value}} = $thisbranch->{branchname};
+              $value = $thisbranch->{value} if $thisbranch->{selected};
           }
       }
       elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
           push @authorised_values, "" unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
           my $sth = $dbh->prepare("select itemtype,description from itemtypes order by description");
           $sth->execute;
-          my $itemtype;     # FIXME: double declaration of $itemtype
           while ( my ( $itemtype, $description ) = $sth->fetchrow_array ) {
               push @authorised_values, $itemtype;
               $authorised_lib{$itemtype} = $description;
           }
 
           unless ( $value ) {
-              my $default_itemtype;
               my $itype_sth = $dbh->prepare("SELECT itemtype FROM biblioitems WHERE biblionumber = ?");
               $itype_sth->execute( $biblionumber );
-              ( $default_itemtype ) = $itype_sth->fetchrow_array;
-              $value = $default_itemtype;
+              ( $value ) = $itype_sth->fetchrow_array;
           }
   
           #---- class_sources
@@ -370,7 +367,7 @@ foreach my $tag (sort keys %{$tagslib}) {
               $authorised_lib{$value} = $lib;
           }
       }
-      $subfield_data{marc_value} =CGI::scrolling_list( # FIXME: factor out scrolling_list
+      $subfield_data{marc_value} =CGI::scrolling_list(      # FIXME: factor out scrolling_list
           -name     => "field_value",
           -values   => \@authorised_values,
           -default  => $value,
