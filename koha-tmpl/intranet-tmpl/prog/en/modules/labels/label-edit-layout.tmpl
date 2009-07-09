@@ -2,11 +2,11 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
 $(document).ready(function() {
-    $("input[@name='layoutchoice']").change( function() { layout_method() } );
+    $("input[name=layoutchoice]").change( function() { layout_method() } );
     layout_method();
 });
 function layout_method() {
-    if( $("input[@name='layoutchoice']:checked").val() == 'layout_string' ) {
+    if( $("input[name=layoutchoice]:checked").val() == 'layout_string' ) {
         $('#layout_tx').hide();
         $('#layout_string').show();
     } else {
