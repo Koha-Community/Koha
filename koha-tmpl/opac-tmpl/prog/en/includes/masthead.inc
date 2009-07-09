@@ -114,8 +114,8 @@
             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl?display=publicshelves">View all <!--TMPL_VAR NAME="pubtotal" --> public lists</a></li>
 			</ul>
 		<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="opacuserlogin" -->
-<!-- TMPL_IF NAME="loggedinusername" -->
+  <!-- TMPL_IF NAME="opacuserlogin" -->
+    <!-- TMPL_IF NAME="loggedinusername" -->
 <h4>Your Lists</h4>
 		<!-- TMPL_IF NAME="barshelves" -->
 			<ul class="first-of-type">
@@ -134,23 +134,26 @@
 		<ul class="second-of-type">
         <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl">Manage Lists</a></li>
         </ul>
-		<!-- TMPL_ELSE --><ul class="first-of-type"><li><a href="/cgi-bin/koha/opac-user.pl">Log in to Create Your Own Lists</a></li></ul><!-- /TMPL_IF -->
-<!-- /TMPL_IF -->
+    <!-- TMPL_ELSE --><ul class="first-of-type"><li><a href="/cgi-bin/koha/opac-user.pl">Log in to Create Your Own Lists</a></li></ul>
+    <!-- /TMPL_IF -->
+  <!-- /TMPL_IF -->
 	  </div>
-</div>
+</div><!-- /listmenu /virtualshelves -->
 <!-- /TMPL_IF -->
 <div id="listsDetails"></div>
 </div>
 </div>
-<div id="breadcrumbs" class="yui-g"><!-- TMPL_IF NAME="searchdesc" --><p><!-- TMPL_IF name="total" --><strong>&ldquo;<!-- TMPL_VAR NAME="query_desc" ESCAPE="HTML"--><!-- TMPL_VAR NAME="limit_desc" ESCAPE="HTML"-->&rdquo; </strong>returned <!-- TMPL_VAR NAME="total" ESCAPE="HTML"--> results. <!-- TMPL_IF NAME="related" --> (related searches: <!-- TMPL_LOOP NAME="related" --><!-- TMPL_VAR NAME="related_search" --><!-- /TMPL_LOOP -->). <!-- /TMPL_IF -->
-<a href="<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?<!-- TMPL_VAR name="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi"  ESCAPE="HTML" -->&amp;format=rss2"><img src="/opac-tmpl/prog/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" /></a><!-- TMPL_ELSE --><!-- TMPL_IF NAME="searchdesc" -->
-<strong>No Result found !</strong>
+<div id="breadcrumbs" class="yui-g">
+<!-- TMPL_IF NAME="searchdesc" --><p><!-- TMPL_IF name="total" --><strong>&ldquo;<!-- TMPL_VAR NAME="query_desc" ESCAPE="HTML"--> <!-- TMPL_VAR NAME="limit_desc" ESCAPE="HTML"-->&rdquo; </strong>returned <!-- TMPL_VAR NAME="total" ESCAPE="HTML"--> results. <!-- TMPL_IF NAME="related" --> (related searches: <!-- TMPL_LOOP NAME="related" --><!-- TMPL_VAR NAME="related_search" --><!-- /TMPL_LOOP -->). <!-- /TMPL_IF -->
+<a href="<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?<!-- TMPL_VAR name="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi"  ESCAPE="HTML" -->&amp;format=rss2"><img src="/opac-tmpl/prog/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" /></a>
+<!-- TMPL_ELSE -->
+<strong>No Result found!</strong>
 <p>
-    No results match your search for <span style="font-weight: bold;">&ldquo;<!-- TMPL_VAR NAME="query_desc" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_desc" ESCAPE="HTML"-->&rdquo;</span> in <!-- TMPL_VAR NAME="LibraryName" --> Catalog. <a href="<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?<!-- TMPL_VAR name="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi"  ESCAPE="HTML" -->&amp;format=rss2"><img src="/opac-tmpl/prog/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" /></a>
-</p>
-<!-- TMPL_ELSE --><strong> No result found !</strong>
-<p>
+    <!-- TMPL_IF NAME="searchdesc" -->
+    No results match your search for <span style="font-weight: bold;">&ldquo;<!-- TMPL_VAR NAME="query_desc" ESCAPE="HTML" --> <!-- TMPL_VAR NAME="limit_desc" ESCAPE="HTML"-->&rdquo;</span> in <!-- TMPL_VAR NAME="LibraryName" --> Catalog. <a href="<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?<!-- TMPL_VAR name="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi" ESCAPE="HTML" -->&amp;format=rss2"><img src="/opac-tmpl/prog/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" /></a>
+    <!-- TMPL_ELSE -->
     You did not specify any search criteria.
+    <!-- /TMPL_IF -->
 </p>
-</div><!-- /TMPL_IF -->
+</div>
 <!-- /TMPL_IF --></p><!-- /TMPL_IF --></div>
