@@ -92,16 +92,6 @@ if ($count == 1){
 		id => $suppliers[0]->{'id'}
 	);
 }
-# check if we have to "close" a basket before building page
-if ($query->param('op') eq 'close') {
-	my $basket = $query->param('basketno');
-	$basket =~ /^\d+$/ and CloseBasket($basket);
-} elsif ($query->param('op') eq 'reopen') {
-    my $basket;
-    $basket->{basketno} = $query->param('basketno');
-    $basket->{closedate} = undef;
-    ModBasket($basket);
-}
 
 #build result page
 my @loop_suppliers;

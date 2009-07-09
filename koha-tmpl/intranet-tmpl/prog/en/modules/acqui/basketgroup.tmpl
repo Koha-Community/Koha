@@ -207,24 +207,33 @@ fieldset.various li {
 
             <!-- TMPL_IF NAME="basketgroups" -->
                 <!-- TMPL_LOOP NAME="basketgroups" -->
-                    <!-- TMPL_IF NAME="closed" -->
-                        <div class="closed" style="display: none">
+                    <!-- TMPL_UNLESS name="displayclosedbgs" -->
+                        <!-- TMPL_IF NAME="closed" -->
+                            <div class="closed" style="display: none">
+                            <h3 ><!-- TMPL_VAR NAME="name" --></h3>
+                            <p > [ 
+                                    <a href="javascript:parent.location='basketgroup.pl?op=printbgroup&bgroupid=<!-- TMPL_VAR NAME="id" -->';">print</a>/
+                                    <a href="javascript:unclosegroup('<!-- TMPL_VAR name="id" -->');">Unclose group</a>
+                            ]</p>
+                            <ul id="bg-<!-- TMPL_VAR NAME="id" -->" class="closed">
+                        <!-- TMPL_ELSE -->
+                            <div class="workarea">
+                            <h3 ><!-- TMPL_VAR NAME="name" --></h3>
+                            <p > [ 
+                                <a href="javascript:renameinit(<!-- TMPL_VAR NAME="id" -->);">rename</a> / 
+                                <a href="javascript:closebasketgroup('<!-- TMPL_VAR NAME="id" -->');">close</a>
+                            ]</p>
+                            <ul id="bg-<!-- TMPL_VAR NAME="id" -->" class="draglist">
+                        <!-- /TMPL_IF -->
+                    <!-- TMPL_ELSE -->
+                        <div class="closed">
                         <h3 ><!-- TMPL_VAR NAME="name" --></h3>
                         <p > [ 
                                 <a href="javascript:parent.location='basketgroup.pl?op=printbgroup&bgroupid=<!-- TMPL_VAR NAME="id" -->';">print</a>/
                                 <a href="javascript:unclosegroup('<!-- TMPL_VAR name="id" -->');">Unclose group</a>
                         ]</p>
                         <ul id="bg-<!-- TMPL_VAR NAME="id" -->" class="closed">
-                    <!-- TMPL_ELSE -->
-                        <div class="workarea">
-                        <h3 ><!-- TMPL_VAR NAME="name" --></h3>
-                        <p > [ 
-                            <a href="javascript:renameinit(<!-- TMPL_VAR NAME="id" -->);">rename</a> / 
-                            <a href="javascript:closebasketgroup('<!-- TMPL_VAR NAME="id" -->');">close</a>
-                        ]</p>
-                        <ul id="bg-<!-- TMPL_VAR NAME="id" -->" class="draglist">
-
-                    <!-- /TMPL_IF -->
+                    <!-- /TMPL_UNLESS -->
                         <!-- TMPL_LOOP NAME="baskets" -->
                             <li class="grouped" id="<!-- TMPL_VAR NAME="basketno" -->">
                                 <a href="basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->">

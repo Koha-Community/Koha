@@ -153,6 +153,41 @@ if ( $op eq 'delete_confirm' ) {
         address4             => $bookseller->{'address4'},
         count               =>     $count,
       );
+} elsif ($op eq 'attachbasket' && $template->{'param_map'}->{'CAN_user_acquisition_group_manage'} == 1) {
+    my $basketgroups = GetBasketgroups($basket->{booksellerid});
+    for (my $i=0; $i < scalar(@$basketgroups); $i++) {
+        if (@$basketgroups[$i]->{closed}) {
+            splice(@$basketgroups, $i, 1);
+            $i--;
+        } elsif ($basket->{basketgroupid} == @$basketgroups[$i]->{id}){
+            @$basketgroups[$i]->{default} = 1;
+        }
+    }
+    $template->param(
+        basketgroups    => $basketgroups,
+        booksellerid    => $booksellerid,
+        basketno        => $basket->{'basketno'},
+        basketname      => $basket->{'basketname'},
+        name            => $bookseller->{'name'},
+        selectbasketg    => "1"
+    );
+    # check if we have to "close" a basket before building page
+} elsif ($op eq 'close') {
+    my $basket = $query->param('basketno');
+    $basket =~ /^\d+$/ and CloseBasket($basket);
+    if ($template->{'param_map'}->{'CAN_user_acquisition_group_manage'} == 1){
+        print $query->redirect('/cgi-bin/koha/acqui/basket.pl?basketno='.$basket.'&op=attachbasket');
+        exit;
+    } else {
+        print $query->redirect('/cgi-bin/koha/acqui/booksellers.pl?supplierid='.$booksellerid);
+        exit;
+    }
+} elsif ($query->param('op') eq 'reopen') {
+    my $basket;
+    $basket->{basketno} = $query->param('basketno');
+    $basket->{closedate} = undef;
+    ModBasket($basket);
+    print $query->redirect('/cgi-bin/koha/acqui/basket.pl?basketno='.$basket->{'basketno'})
 } else {
     # get librarian branch...
     if ( C4::Context->preference("IndependantBranches") ) {

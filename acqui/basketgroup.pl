@@ -298,6 +298,38 @@ if (! $op ) {
     my $pdf = printpdf($basketgroup, $bookseller, $baskets, $branch, \%orders, $bookseller->{gstrate} || C4::Context->preference("gist")) || die "pdf generation failed";
     print $pdf;
     exit;
+} elsif ( $op eq 'attachbasket') {
+    # TODO: create basketgroup and attach basket to it?
+    my $basketgroup = {};
+    $basketgroup->{'name'} = $input->param('basketgroupname');
+    $basketgroup->{'booksellerid'} = $input->param('booksellerid');
+    my $basketgroupid;
+    my $basketno = $input->param('basketno');
+    warn "basketgroupname", $basketgroup->{'name'};
+    if ($basketgroup->{'name'}) {
+        $basketgroupid = NewBasketgroup($basketgroup);
+    } else {
+        $basketgroupid = $input->param('basketgroupid');
+    }
+    if ($input->param('closebasketgroup')){
+        #we override $basketgroup on purpose here
+        my $basketgroup= {};
+        $basketgroup->{'closed'} = 1;
+        $basketgroup->{'id'} = $basketgroupid;
+        ModBasketgroup($basketgroup)
+    }
+    my $basket = {};
+    $basket->{'basketno'} = $basketno;
+    $basket->{'basketgroupid'} = $basketgroupid;
+    ModBasket($basket);
+    $basketgroup = GetBasketgroup($basketgroupid);
+    my $baskets = GetBasketsByBasketgroup($basketgroupid);
+    my $bookseller = &GetBookSellerFromId($booksellerid);
+    my @basketgroups;
+    push(@basketgroups, $basketgroup);
+    $template->param(displayclosedbgs => 1,
+                     booksellerid => $booksellerid);
+    displaybasketgroups(\@basketgroups, $bookseller, $baskets);
 }
 #prolly won't use all these, maybe just use print, the rest can be done inside validate
 output_html_with_http_headers $input, $cookie, $template->output;
