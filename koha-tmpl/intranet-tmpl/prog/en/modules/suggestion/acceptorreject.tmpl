@@ -56,7 +56,7 @@
 		$("div[id*=other-reason]").hide();
 		$("input[name*=other-reason]").focus(function(){ $(this).val(""); });
 		$("select[name*=reason]").change(function(){
-			if($(this).children("[@selected]").val() == "other"){
+			if($(this).children("[selected]").val() == "other"){
 			displayOther($(this).attr("name").replace(/reason/,""),"other-reason","select-reason");
 			}
 		});
