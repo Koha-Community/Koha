@@ -74,7 +74,26 @@
 		</div>
 	<!-- /TMPL_LOOP -->
 	<!-- /TMPL_IF -->
-
+	<h1>All Tags</h1>
+	
+		<form method="get" action="opac-tags.pl">
+		<fieldset>Show up to <input name="limit" style="text-align: right;" maxlength="4" size="4" value="<!-- TMPL_VAR NAME="limit" DEFAULT="100" -->" />
+			tags from other users.
+			<input type="hidden" name="hidemytags" value="1" />
+			<input type="submit" value="OK" /> <!-- TMPL_UNLESS NAME="MY_TAGS" --><a href="/cgi-bin/koha/opac-user.pl">Log in</a> to see your own saved tags.<!-- /TMPL_UNLESS --></fieldset>
+		</form>
+	
+	<!-- TMPL_IF NAME="TAGLOOP" -->
+	<div id="tagcloud">
+	<!-- TMPL_LOOP NAME="TAGLOOP" -->
+	<span class="tag" id="tag<!-- TMPL_VAR NAME="__counter__" -->" title="<!-- TMPL_VAR NAME="cloudweight" -->">
+		<a href="/cgi-bin/koha/opac-search.pl?tag=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->&amp;q=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->">
+		<!-- TMPL_VAR NAME="term" ESCAPE="HTML" --></a>
+			<span class="tagweight"><!-- TMPL_VAR NAME="weight_total" --></span>
+	</span>
+	<!-- /TMPL_LOOP -->
+	</div>
+	<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="add_op" -->
 	  <!-- TMPL_IF NAME="added_count" -->
 		<div class="dialog message"><!-- TMPL_VAR NAME="added_count" --> <!-- TMPL_IF EXPR="added_count ==1" --> tag<!-- TMPL_ELSE -->tags<!-- /TMPL_IF --> successfully added.</div>
@@ -106,26 +125,7 @@
 	<!-- /TMPL_IF -->
 	<!-- /TMPL_UNLESS -->
 
-	<h1>All Tags</h1>
-	
-		<form method="get" action="opac-tags.pl">
-		<fieldset>Show up to <input name="limit" style="text-align: right;" maxlength="4" size="4" value="<!-- TMPL_VAR NAME="limit" DEFAULT="100" -->" />
-			tags from other users.
-			<input type="hidden" name="hidemytags" value="1" />
-			<input type="submit" value="OK" /> <!-- TMPL_UNLESS NAME="MY_TAGS" --><a href="/cgi-bin/koha/opac-user.pl">Log in</a> to see your own saved tags.<!-- /TMPL_UNLESS --></fieldset>
-		</form>
-	
-	<!-- TMPL_IF NAME="TAGLOOP" -->
-	<div id="tagcloud">
-	<!-- TMPL_LOOP NAME="TAGLOOP" -->
-	<span class="tag" id="tag<!-- TMPL_VAR NAME="__counter__" -->" title="<!-- TMPL_VAR NAME="cloudweight" -->">
-		<a href="/cgi-bin/koha/opac-search.pl?tag=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->&amp;q=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->">
-		<!-- TMPL_VAR NAME="term" ESCAPE="HTML" --></a>
-			<span class="tagweight"><!-- TMPL_VAR NAME="weight_total" --></span>
-	</span>
-	<!-- /TMPL_LOOP -->
-	</div>
-	<!-- /TMPL_IF -->
+
 </div>
 </div>
 </div>
