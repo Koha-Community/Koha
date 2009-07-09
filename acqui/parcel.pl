@@ -76,6 +76,11 @@ my $code            = $input->param('code');
 my @rcv_err         = $input->param('error');
 my @rcv_err_barcode = $input->param('error_bc');
 
+my $startfrom=$input->param('startfrom');
+my $resultsperpage = $input->param('resultsperpage');
+$resultsperpage = 20 unless ($resultsperpage);
+$startfrom=0 unless ($startfrom);
+
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/parcel.tmpl",
                  query => $input,
@@ -160,9 +165,42 @@ for (my $i = 0 ; $i < $countpendings ; $i++) {
     $line{total} = $total;
     $line{supplierid} = $supplierid;
     $ordergrandtotal += $line{ecost} * $line{quantity};
-    push @loop_orders, \%line;
+    push @loop_orders, \%line if ($i >= $startfrom and $i < $startfrom + $resultsperpage);
 }
 $freight = $totalfreight unless $freight;
+
+my $count = $countpendings;
+
+if ($count>$resultsperpage){
+    my $displaynext=0;
+    my $displayprev=$startfrom;
+    if(($count - ($startfrom+$resultsperpage)) > 0 ) {
+        $displaynext = 1;
+    }
+
+    my @numbers = ();
+    for (my $i=1; $i<$count/$resultsperpage+1; $i++) {
+            my $highlight=0;
+            ($startfrom/$resultsperpage==($i-1)) && ($highlight=1);
+            push @numbers, { number => $i,
+                highlight => $highlight ,
+                startfrom => ($i-1)*$resultsperpage};
+    }
+
+    my $from = $startfrom*$resultsperpage+1;
+    my $to;
+    if($count < (($startfrom+1)*$resultsperpage)){
+        $to = $count;
+    } else {
+        $to = (($startfrom+1)*$resultsperpage);
+    }
+    $template->param(numbers=>\@numbers,
+                     displaynext=>$displaynext,
+                     displayprev=>$displayprev,
+                     nextstartfrom=>(($startfrom+$resultsperpage<$count)?$startfrom+$resultsperpage:$count),
+                     prevstartfrom=>(($startfrom-$resultsperpage>0)?$startfrom-$resultsperpage:0)
+                    );
+}
 
 #$totalfreight=$freight;
 $tototal = $tototal + $freight;
@@ -192,5 +230,6 @@ $template->param(
     totalPquantity        => $totalPquantity,
     totalPqtyrcvd         => $totalPqtyrcvd,
     totalPecost           => sprintf("%.2f", $totalPecost),
+    resultsperpage        => $resultsperpage,
 );
 output_html_with_http_headers $input, $cookie, $template->output;

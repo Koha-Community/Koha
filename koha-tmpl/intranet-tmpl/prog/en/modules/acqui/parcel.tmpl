@@ -118,6 +118,22 @@
         <input type="hidden" name="invoice" value="<!-- TMPL_VAR NAME="invoice" -->" />
         <p><label for="receive">Search ISBN or Title:</label> <input type="text" size="25" id="receive" name="receive" /></p>
     </form>
+    <div id="resultnumber">
+	<!-- Row of numbers corresponding to search result pages -->
+	<!-- TMPL_IF NAME="displayprev" -->
+		<a href="parcel.pl?type=intra&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;startfrom=<!-- TMPL_VAR NAME="prevstartfrom" --><!--TMPL_IF Name="datereceived"-->&amp;datereceived=<!--TMPL_VAR Name="datereceived"--><!--/TMPL_IF--><!--TMPL_IF Name="invoice"-->&amp;invoice=<!--TMPL_VAR Name="invoice"--><!--/TMPL_IF--><!--TMPL_IF Name="resultsperpage"-->&amp;resultsperpage=<!--TMPL_VAR Name="resultsperpage"--><!--/TMPL_IF-->#resultnumber">&lt;&lt; Previous</a>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_LOOP NAME="numbers" -->
+		<!-- TMPL_IF NAME="highlight" -->
+		<span class="current"><!-- TMPL_VAR NAME="number" --></span>
+		<!-- TMPL_ELSE -->
+		<a href="parcel.pl?type=intra&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;startfrom=<!-- TMPL_VAR NAME="startfrom" --><!--TMPL_IF Name="datereceived"-->&amp;datereceived=<!--TMPL_VAR Name="datereceived"--><!--/TMPL_IF--><!--TMPL_IF Name="invoice"-->&amp;invoice=<!--TMPL_VAR Name="invoice"--><!--/TMPL_IF--><!--TMPL_IF Name="resultsperpage"-->&amp;resultsperpage=<!--TMPL_VAR Name="resultsperpage"--><!--/TMPL_IF-->#resultnumber"><!-- TMPL_VAR NAME="number" --></a>
+		<!-- /TMPL_IF -->
+	<!-- /TMPL_LOOP -->
+	<!-- TMPL_IF NAME="displaynext" -->
+		<a href="parcel.pl?type=intra&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;startfrom=<!-- TMPL_VAR NAME="nextstartfrom" --><!--TMPL_IF Name="datereceived"-->&amp;datereceived=<!--TMPL_VAR Name="datereceived"--><!--/TMPL_IF--><!--TMPL_IF Name="invoice"-->&amp;invoice=<!--TMPL_VAR Name="invoice"--><!--/TMPL_IF--><!--TMPL_IF Name="resultsperpage"-->&amp;resultsperpage=<!--TMPL_VAR Name="resultsperpage"--><!--/TMPL_IF-->#resultnumber">Next &gt;&gt;</a>
+	<!-- /TMPL_IF -->
+	</div>
     <table> <caption>or select a pending orders</caption>
         <tr>
             <th>BASKET</th>
