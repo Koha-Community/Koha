@@ -65,27 +65,6 @@ the supplier this script have to display the basket.
 my $query        = new CGI;
 my $basketno     = $query->param('basketno');
 my $booksellerid = $query->param('supplierid');
-my $sort         = $query->param('order') || "aqorders.ordernumber";
-
-my @sort_loop;
-if (defined $sort) {
-	foreach (split /\,/, $sort) {
-		my %sorthash = (
-			string => $_,
-		);
-		# other possibly valid tables for later: aqbookfund biblio biblioitems
-		if (
-			(/^\s*(biblioitems)\.(\w+)\s*$/      and $2 eq 'publishercode') or
-			(/^\s*(aqorders)\.(\w+)\s*$/ and $2 eq 'ordernumber' )
-		) {
-			$sorthash{table} = $1;
-			$sorthash{field} = $2;
-		} else {
-			$sorthash{error} = 1;
-		}
-		push @sort_loop, \%sorthash;
-	}
-}
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -231,7 +210,7 @@ if ( $op eq 'delete_confirm' ) {
       "loggedinuser: $loggedinuser; creationdate: %s; authorisedby: %s",
       $basket->{creationdate}, $basket->{authorisedby};
 
-    my @results = GetOrders( $basketno, $sort );
+    my @results = GetOrders( $basketno );
     my $count = scalar @results;
 
     my $sub_total;      # total of line totals
@@ -325,7 +304,6 @@ if ( $op eq 'delete_confirm' ) {
         address4             => $bookseller->{'address4'},
         entrydate            => format_date( $results[0]->{'entrydate'} ),
         books_loop           => \@books_loop,
-        sort_loop            => \@sort_loop,
         count                => $count,
         gist                 => $gist ? sprintf( "%.2f", $gist ) : 0,
         gist_rate       => sprintf( "%.2f", $prefgist * 100 ) . '%',

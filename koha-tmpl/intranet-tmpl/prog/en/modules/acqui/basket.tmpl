@@ -1,7 +1,20 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Acquisitions &rsaquo; <!-- TMPL_UNLESS name="basketno" -->New <!-- /TMPL_UNLESS -->Basket <!-- TMPL_IF NAME="basketno" -->(<!-- TMPL_VAR NAME="basketno" -->)<!-- /TMPL_IF --> for <!-- TMPL_VAR NAME="name" --></title>
+<title>Koha &rsaquo; Acquisitions &rsaquo; <!-- TMPL_UNLESS name="basketno" -->New <!-- /TMPL_UNLESS --><!-- TMPL_IF NAME="delete_confirm" -->Delete <!-- /TMPL_IF -->Basket <!-- TMPL_VAR NAME="basketname" --> (<!-- TMPL_VAR NAME="basketno" -->) for <!-- TMPL_VAR NAME="name" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_UNLESS name="closedate" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/JavaScript">
+//<![CDATA[
+    $(document).ready(function() {
+        $("#orders").tablesorter({
+            headers: {
+                9: { sorter: false },
+                10: { sorter: false }
+            }
+        });
+    });
+//]]>
+</script>
 <script type="text/javascript">
 //<![CDATA[
             function confirm_close() {
@@ -35,7 +48,7 @@
 <!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
 
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR NAME="name" --></a> &rsaquo; <!-- TMPL_UNLESS name="basketno" -->New <!-- /TMPL_UNLESS -->Basket <!-- TMPL_IF NAME="basketno" -->(<!-- TMPL_VAR NAME="basketno" -->)<!-- /TMPL_IF --> for <!-- TMPL_VAR NAME="name" --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR NAME="name" --></a> &rsaquo; <!-- TMPL_UNLESS name="basketno" -->New <!-- /TMPL_UNLESS --><!-- TMPL_IF NAME="delete_confirm" -->Delete <!-- /TMPL_IF -->Basket <!-- TMPL_VAR NAME="basketname" --> (<!-- TMPL_VAR NAME="basketno" -->) for <!-- TMPL_VAR NAME="name" --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -108,7 +121,7 @@
             <h3>Basket deleted</h3>
             <META HTTP-EQUIV=Refresh CONTENT="0; URL=booksellers.pl">
         <!-- TMPL_ELSE -->
-        <h1><!-- TMPL_UNLESS name="basketno" -->New <!-- /TMPL_UNLESS --><!-- TMPL_IF NAME="delete_confirm" -->Delete<!-- /TMPL_IF -->Basket <!-- TMPL_VAR NAME="basketno" --> for <a href="supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR NAME="name" --></a></h1>
+        <h1><!-- TMPL_UNLESS name="basketno" -->New <!-- /TMPL_UNLESS --><!-- TMPL_IF NAME="delete_confirm" -->Delete <!-- /TMPL_IF -->Basket <!-- TMPL_VAR NAME="basketname" --> (<!-- TMPL_VAR NAME="basketno" -->) for <a href="supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR NAME="name" --></a></h1>
         <!-- TMPL_IF NAME="delete_confirm" -->
             <h2>
             <span class="yui-button yui-link-button">
@@ -125,18 +138,16 @@
         <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="basketno" --><div id="acqui_basket_summary">
             <h2>Basket Details</h2>
-            <p>Basket number:  <!-- TMPL_VAR NAME="basketno" --></p>
-            <p>Basket name: <!--TMPL_VAR NAME="basketname" --></p>
-            <p>Internal note: <!-- TMPL_VAR NAME="basketnote" --></p>
-            <p>Bookseller note: <!-- TMPL_VAR NAME="basketbooksellernote" --></p>
+			<!-- TMPL_IF NAME="basketnote" --><p>Internal note: <!-- TMPL_VAR NAME="basketnote" --></p><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="basketbooksellernote" --><p>Bookseller note: <!-- TMPL_VAR NAME="basketbooksellernote" --></p><!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="basketcontractno" -->
             <p>Contract number: <!-- TMPL_VAR NAME="basketcontractno" --></p>
             <p>Contract name: <a href="../admin/aqcontract.pl?op=add_form&contractnumber=<!-- TMPL_VAR NAME="basketcontractno" -->"><!-- TMPL_VAR NAME="basketcontractname" --></a></p>
             <!-- /TMPL_IF -->
-            <p>Managed by:  <!-- TMPL_VAR NAME="authorisedbyname" --></p>
-            <p>Open on:  <!-- TMPL_VAR NAME="creationdate" --></p>
-            <p>For vendor ID: <!-- TMPL_VAR NAME="booksellerid" --></p>
-            <p>Invoice number: <!-- TMPL_VAR NAME="booksellerinvoicenumber" --></p>
+			<!-- TMPL_IF NAME="authorisedbyname" --><p>Managed by:  <!-- TMPL_VAR NAME="authorisedbyname" --></p><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="creationdate" --><p>Open on:  <!-- TMPL_VAR NAME="creationdate" --></p><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="booksellerid" --><p>For vendor ID: <!-- TMPL_VAR NAME="booksellerid" --></p><!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="booksellerinvoicenumber" --><p>Invoice number: <!-- TMPL_VAR NAME="booksellerinvoicenumber" --></p><!-- /TMPL_IF -->
             <!-- TMPL_IF name="closedate" -->
             <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="post">
             <p>Closed On:  <!-- TMPL_VAR name="closedate" --></p>
@@ -164,35 +175,28 @@
         <!-- TMPL_UNLESS name="delete_confirm" -->
         <div id="acqui_basket_content">
         <h2>Order Details</h2>
-        <!-- TMPL_IF NAME="sort_loop" -->
-            <!-- TMPL_LOOP NAME="sort_loop" -->
-                <!-- TMPL_IF name="error" -->
-                <div class="dialog alert">ERROR: Illegal sort requested by &quot;<!-- TMPL_VAR NAME="string" -->&quot;.
-                    <br />Please use valid sort criteria. <a href="/cgi-bin/koha/acqui/basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->">Return to default results.</a></div>
-                <!-- TMPL_ELSE -->
-                <div class="dialog message">Sorted by &quot;<!-- TMPL_VAR NAME="string" -->&quot;.</div>
-                <!-- /TMPL_IF -->
-            <!-- /TMPL_LOOP -->
-        <!-- /TMPL_IF -->
         <!-- TMPL_IF name="books_loop" -->
-            <table>
-                <tr>
-                    <th>Order</th>
-                    <th>Title</th>
-                    <th>ISBN</th>
-                    <th><a href="basket.pl?basketno=<!-- TMPL_VAR name="basketno" -->&amp;order=biblioitems.publishercode">Publisher</a></th>
-                    <th>RRP</th>
-                    <th>Est.</th>
-                    <th>Qty.</th>
-                    <th>Total</th>
-                    <th>Budget</th>
-                    <!-- TMPL_IF name="active" -->
-                        <!-- TMPL_UNLESS name="closedate" -->
-                            <th>Modify</th>
-                            <th>Delete</th>
-                        <!-- /TMPL_UNLESS -->
-                    <!-- /TMPL_IF -->
-                </tr>
+            <table id="orders">
+            	<thead>
+		            <tr>
+		                <th>Order</th>
+		                <th>Title</th>
+		                <th>ISBN</th>
+		                <th>Publisher</th>
+		                <th>RRP</th>
+		                <th>Est.</th>
+		                <th>Qty.</th>
+		                <th>Total</th>
+		                <th>Budget</th>
+		                <!-- TMPL_IF name="active" -->
+		                    <!-- TMPL_UNLESS name="closedate" -->
+		                        <th>Modify</th>
+		                        <th>Delete</th>
+		                    <!-- /TMPL_UNLESS -->
+		                <!-- /TMPL_IF -->
+		            </tr>
+                </thead>
+                <tbody>
                 <!-- TMPL_LOOP NAME="books_loop" -->
                     <!-- TMPL_IF NAME="order_received" --><tr class="disabled"><!-- TMPL_ELSE --><!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF --><!-- /TMPL_IF -->
                         <td><!-- TMPL_VAR NAME="ordernumber" -->
@@ -223,6 +227,7 @@
                         <!-- /TMPL_IF -->
                     </tr>
                 <!-- /TMPL_LOOP -->
+                </tbody>
                 <tr>
                     <td colspan="4" rowspan="3">
                         <input type="hidden" name="number" value="<!-- TMPL_VAR NAME="count" -->" />
