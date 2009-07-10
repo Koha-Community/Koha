@@ -340,8 +340,6 @@ elsif ( $phase eq 'Save Report' ) {
 }
 
 elsif ($phase eq 'Run this report'){
-    binmode STDOUT, ':utf8';
-
     # execute a saved report
     my $limit  = 20;    # page size. # TODO: move to DB or syspref?
     my $offset = 0;
