@@ -1359,29 +1359,21 @@ sub AddReturn {
     # case of a return of document (deal with issues and holdingbranch)
     
         if ($doreturn) {
-			my $circControlBranch;
+			my $circControlBranch = GetCirculationBranch($iteminformation,$borrower);
 			if($dropbox) {
 				# don't allow dropbox mode to create an invalid entry in issues (issuedate > returndate) FIXME: actually checks eq, not gt
 				undef($dropbox) if ( $iteminformation->{'issuedate'} eq C4::Dates->today('iso') );
-				if (C4::Context->preference('CircControl') eq 'ItemHomeBranch' ) {
-					$circControlBranch = $iteminformation->{homebranch};
-				} elsif ( C4::Context->preference('CircControl') eq 'PatronLibrary') {
-					$circControlBranch = $borrower->{branchcode};
-				} else { # CircControl must be PickupLibrary.
-					$circControlBranch = $iteminformation->{holdingbranch};
-					# FIXME - is this right ? are we sure that the holdingbranch is still the pickup branch?
-				}
 			}
             MarkIssueReturned($borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'},$circControlBranch);
             $messages->{'WasReturned'} = 1;    # FIXME is the "= 1" right?  
             # continue to deal with returns cases, but not only if we have an issue
-
-            # the holdingbranch is updated if the document is returned in an other location .
-            if ( $iteminformation->{'holdingbranch'} ne C4::Context->userenv->{'branch'} ) {
-                           UpdateHoldingbranch(C4::Context->userenv->{'branch'},$iteminformation->{'itemnumber'});
-                           #           reload iteminformation holdingbranch with the userenv value
-                           $iteminformation->{'holdingbranch'} = C4::Context->userenv->{'branch'};
-            }
+            
+            
+            # We update the holdingbranch from circControlBranch variable
+            UpdateHoldingbranch($circControlBranch,$iteminformation->{'itemnumber'});
+            $iteminformation->{'holdingbranch'} = $circControlBranch;
+        
+            
             ModDateLastSeen( $iteminformation->{'itemnumber'} );
             ModItem({ onloan => undef }, $biblio->{'biblionumber'}, $iteminformation->{'itemnumber'});
 
@@ -1452,9 +1444,9 @@ sub AddReturn {
         #adding message if holdingbranch is non equal a userenv branch to return the document to homebranch
         #we check, if we don't have reserv or transfert for this document, if not, return it to homebranch .
         
-        if ($doreturn and ($branch ne $iteminformation->{'homebranch'}) and not $messages->{'WrongTransfer'} and ($validTransfert ne 1) and ($reserveDone ne 1) ){
+        if ($doreturn and ($branch ne $iteminformation->{$hbr}) and not $messages->{'WrongTransfer'} and ($validTransfert ne 1) and ($reserveDone ne 1) ){
 			if (C4::Context->preference("AutomaticItemReturn") == 1) {
-				ModItemTransfer($iteminformation->{'itemnumber'}, C4::Context->userenv->{'branch'}, $iteminformation->{'homebranch'});
+				ModItemTransfer($iteminformation->{'itemnumber'}, C4::Context->userenv->{'branch'}, $iteminformation->{$hbr});
 				$messages->{'WasTransfered'} = 1;
 			}
 			else {
@@ -1668,6 +1660,34 @@ sub FixAccountForLostAndReturned {
 	}
 	$sth->finish;
 	return;
+}
+
+=head2 GetCirculationBranch
+
+	&GetCirculationBranch($iteminfos,$borrower);
+
+Return the branchcode that must be used for an item circulation
+
+C<$iteminfos> is a hashref to iteminfo. Only {itemnumber} is used.
+
+C<$borrower> is a hashref to borrower. Only {borrowernumber is used.
+
+Internal function, called by AddReturn
+
+=cut
+
+sub GetCirculationBranch {
+    my ($iteminfos, $borrower) = @_;
+    my $circcontrol = C4::Context->preference('CircControl');
+    
+    if($circcontrol eq 'ItemHomeLibrary'){
+        return $iteminfos->{C4::Context->preference("HomeOrHoldingBranch")};
+    }elsif($circcontrol eq 'PatronLibrary'){
+        return $borrower->{branchcode};
+    }elsif($circcontrol eq 'PickupLibrary'){
+        return C4::Context->userenv->{'branch'};
+    }
+    
 }
 
 =head2 GetItemIssue
