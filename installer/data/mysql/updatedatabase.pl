@@ -2480,6 +2480,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.01.00.038';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type)VALUES('SpineLabelFormat', '<itemcallnumber><copynumber>', '', 'This preference defines the format for the quick spine label printer. Just list the fields you would like to see in the order you would like to see them, surrounded by <>, for example <itemcallnumber>.', 'Textarea')");
+    SetVersion ($DBversion);
+    print "Upgrade to $DBversion done (added SpineLabelFormat syspref)\n";
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
