@@ -212,15 +212,14 @@ if ( $op eq 'delete_confirm' ) {
 
     my @results = GetOrders( $basketno );
     my $count = scalar @results;
-
-    my $sub_total;      # total of line totals
-    my $grand_total;    # $subttotal + $gist
-
-    # my $line_total_est; # total of each line
-    my $sub_total_est;      # total of line totals
-    my $sub_total_rrp;      # total of line totals
-    my $grand_total_est;    # $subttotal + $gist
-
+    
+	my $gist = $bookseller->{gstrate} || C4::Context->preference("gist") || 0;
+	my $discount = $bookseller->{'discount'} / 100;
+    my $total_rrp;      # RRP Total, its value will be assigned to $total_rrp_gsti or $total_rrp_gste depending of $bookseller->{'listincgst'}
+	my $total_rrp_gsti; # RRP Total, GST included
+	my $total_rrp_gste; # RRP Total, GST excluded
+	my $gist_rrp;
+	
     my $qty_total;
     my @books_loop;
 
@@ -231,10 +230,9 @@ if ( $op eq 'delete_confirm' ) {
         my $budget = GetBudget(  $results[$i]->{'budget_id'} );
         $rrp = ConvertCurrency( $results[$i]->{'currency'}, $rrp );
 
-        $sub_total_rrp += $qty * $results[$i]->{'rrp'};
+        $total_rrp += $qty * $results[$i]->{'rrp'};
         my $line_total = $qty * $results[$i]->{'ecost'};
 		# FIXME: what about the "actual cost" field?
-        $sub_total += $line_total;
         $qty_total += $qty;
         my %line = %{ $results[$i] };
 		($i%2) and $line{toggle} = 1;
@@ -264,25 +262,20 @@ if ( $op eq 'delete_confirm' ) {
         push @books_loop, \%line;
     }
 
-
-
-
-    my $prefgist = $bookseller->{gstrate} || C4::Context->preference("gist") || 0;
-    my $gist     = $sub_total     * $prefgist;
-    my $gist_rrp = $sub_total_rrp * $prefgist;
-    $grand_total     = $sub_total_est = $sub_total;
-    $grand_total_est = $sub_total_est;		# FIXME: Too many things that are ALL the SAME
-	my $temp;
-    if ($temp = $bookseller->{'listincgst'}) {
-		$template->param(listincgst => $temp);
-		$gist = 0;
-	} else {
-        $grand_total += $gist;
-        $grand_total_est += $sub_total_est * $prefgist;		# same thing as += gist
-    }
-    if ($temp = $bookseller->{'discount'}) {
-		$template->param(discount => sprintf( "%.2f", $temp ));
+	if ($bookseller->{'listincgst'}) {                        # if prices already includes GST
+		$total_rrp_gsti = $total_rrp;                         # we know $total_rrp_gsti
+		$total_rrp_gste = $total_rrp_gsti / ($gist + 1);      # and can reverse compute other values
+		$gist_rrp       = $total_rrp_gsti - $total_rrp_gste;  #
+	} else {                                                  # if prices does not include GST
+		$total_rrp_gste = $total_rrp;                         # then we use the common way to compute other values
+		$gist_rrp = $total_rrp_gste * $gist;                  #
+		$total_rrp_gsti = $total_rrp_gste + $gist_rrp;        #
 	}
+	# These vars are estimated totals and GST, taking in account the booksellet discount
+	my $total_est_gsti = $total_rrp_gsti - ($total_rrp_gsti * $discount);
+	my $gist_est       = $gist_rrp       - ($gist_rrp * $discount);
+	my $total_est_gste = $total_rrp_gste - ($total_rrp_gste * $discount);
+
     my $contract = &GetContract($basket->{contractnumber});
     $template->param(
         basketno             => $basketno,
@@ -305,21 +298,18 @@ if ( $op eq 'delete_confirm' ) {
         entrydate            => format_date( $results[0]->{'entrydate'} ),
         books_loop           => \@books_loop,
         count                => $count,
-        gist                 => $gist ? sprintf( "%.2f", $gist ) : 0,
-        gist_rate       => sprintf( "%.2f", $prefgist * 100 ) . '%',
-        gist_est        => sprintf( "%.2f", $sub_total_est * $prefgist ),
-        gist_rrp        => sprintf( "%.2f", $gist_rrp ),
-        sub_total       => sprintf( "%.2f", $sub_total ),
-        grand_total     => sprintf( "%.2f", $grand_total ),
-        sub_total_est   => sprintf( "%.2f", $sub_total_est ),
-        grand_total_est => sprintf( "%.2f", $grand_total_est ),
-        sub_total_rrp   => sprintf( "%.2f", $sub_total_rrp ),
-        grand_total_rrp => sprintf( "%.2f", $sub_total_rrp + $gist_rrp ),
-        currency        => $bookseller->{'listprice'},
-        qty_total       => $qty_total,
-        GST             => $prefgist,
-        basketgroups  =>  $basketgroups,
-        grouped    => $basket->{basketgroupid},
+        gist_rate            => sprintf( "%.2f", $gist * 100 ) . '%',
+        total_rrp_gste       => sprintf( "%.2f", $total_rrp_gste ),
+        total_est_gste       => sprintf( "%.2f", $total_est_gste ),
+        gist_est             => sprintf( "%.2f", $gist_est ),
+        gist_rrp             => sprintf( "%.2f", $gist_rrp ),        
+        total_rrp_gsti       => sprintf( "%.2f", $total_rrp_gsti ),
+        total_est_gsti       => sprintf( "%.2f", $total_est_gsti ),
+        currency             => $bookseller->{'listprice'},
+        qty_total            => $qty_total,
+        GST                  => $gist,
+        basketgroups         => $basketgroups,
+        grouped              => $basket->{basketgroupid},
     );
 }
 output_html_with_http_headers $query, $cookie, $template->output;
