@@ -24,12 +24,12 @@
                 if (subfield){subfield.value="" ;}
             <!--TMPL_ELSE-->      
                 if(code.value=='9'){
-                        subfield.value = "<!-- TMPL_VAR NAME="authid" -->";
+                        subfield.value = "<!-- TMPL_VAR ESCAPE="JS" NAME="authid" -->";
                 }
             <!-- TMPL_LOOP NAME="0XX" -->
                 <!-- TMPL_LOOP NAME="subfield" -->
-                    if (code.value == "<!-- TMPL_VAR NAME="marc_subfield" -->"){
-                        subfield.value = "<!-- TMPL_VAR NAME="marc_value" -->";
+                    if (code.value == "<!-- TMPL_VAR ESCAPE="JS" NAME="marc_subfield" -->"){
+                        subfield.value = "<!-- TMPL_VAR ESCAPE="JS" NAME="marc_value" -->";
                     }
                 <!-- /TMPL_LOOP -->
             <!-- /TMPL_LOOP -->
