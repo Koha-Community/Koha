@@ -1,7 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Search Results</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<script language="Javascript">
+<script type="text/javascript" language="javascript">
 //<![CDATA[
 function GetIt(bibno,title)
 {
@@ -55,14 +55,14 @@ function GetIt(bibno,title)
 <h2>No results found for <b><!-- TMPL_VAR NAME="query" --></b></h2>
 <!-- /TMPL_IF-->
 <!-- TMPL_IF NAME="displayprev" -->
-<a href="/cgi-bin/koha/serials/subscription-bib-search.pl?op=do_search&type=intranet&startfrom=<!-- TMPL_VAR ESCAPE="URL" NAME="startfromprev" -->&q=<!-- TMPL_VAR ESCAPE="URL" NAME="query" -->">&lt;&lt;</a>
+<a href="/cgi-bin/koha/serials/subscription-bib-search.pl?op=do_search&amp;type=intranet&amp;startfrom=<!-- TMPL_VAR ESCAPE="URL" NAME="startfromprev" -->&amp;q=<!-- TMPL_VAR ESCAPE="URL" NAME="query" -->">&lt;&lt;</a>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="displaynext" -->
-<a href="/cgi-bin/koha/serials/subscription-bib-search.pl?op=do_search&type=intranet&startfrom=<!-- TMPL_VAR ESCAPE="URL" NAME="startfromnext" -->&q=<!-- TMPL_VAR ESCAPE="URL" NAME="query" -->">&gt;&gt;</a>
+<a href="/cgi-bin/koha/serials/subscription-bib-search.pl?op=do_search&amp;type=intranet&amp;startfrom=<!-- TMPL_VAR ESCAPE="URL" NAME="startfromnext" -->&amp;q=<!-- TMPL_VAR ESCAPE="URL" NAME="query" -->">&gt;&gt;</a>
 <!-- /TMPL_IF -->
 <br/>
 <a href="subscription-bib-search.pl">Search for another Biblio</a>
-<a class="button" href="#" onclick="window.close()">  Close</a></p>
+<a class="button" href="#" onclick="window.close()">  Close</a>
 </div>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
