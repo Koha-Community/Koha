@@ -467,7 +467,7 @@ sub getRecords {
                         $results_hash->{'RECORDS'}[$j] = $record;
 
             # Fill the facets while we're looping, but only for the biblioserver
-                        $facet_record = MARC::Record->new_from_usmarc($record)
+                        $facet_record = MARC::Record->new_from_xml($record)
                           if $servers[ $i - 1 ] =~ /biblioserver/;
 
                     #warn $servers[$i-1]."\n".$record; #.$facet_record->title();
@@ -1237,7 +1237,8 @@ sub searchResults {
 	my $marcflavour = C4::Context->preference("marcflavour");
     # loop through all of the records we've retrieved
     for ( my $i = $offset ; $i <= $times - 1 ; $i++ ) {
-        my $marcrecord = MARC::File::USMARC::decode( $marcresults[$i] );
+        my $marcrecord = 
+          MARC::Record::new_from_xml( $marcresults[$i], "utf8", $marcflavour ); 
         my $oldbiblio = TransformMarcToKoha( $dbh, $marcrecord, '' );
         $oldbiblio->{subtitle} = C4::Biblio::get_koha_field_from_marc('bibliosubtitle', 'subtitle', $marcrecord, '');
         $oldbiblio->{result_number} = $i + 1;
