@@ -197,7 +197,7 @@ my ($branchtagfield, $branchtagsubfield) = &GetMarcFromKohaField("items.homebran
 
 foreach my $field (@fields) {
     next if ($field->tag()<10);
-    my @subf = $field->subfields || ();
+    my @subf = $field->subfields or (); # don't use ||, as that forces $field->subfelds to be interpreted in scalar context
     my %this_row;
 # loop through each subfield
     for my $i (0..$#subf) {
