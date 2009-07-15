@@ -162,7 +162,8 @@ my ($input) = @_;
         my @excluding = $query->param('excluding');
         my @operator = $query->param('operator');
         my @value = $query->param('value');
-    
+        my $orderby   = $query->param('orderby');
+        
         $resultsperpage= $query->param('resultsperpage');
         $resultsperpage = 19 if(!defined $resultsperpage);
     
@@ -171,8 +172,8 @@ my ($input) = @_;
     
         my ($results,$total) = SearchAuthorities( \@tags,\@and_or,
                                             \@excluding, \@operator, \@value,
-                                            $startfrom*$resultsperpage, $resultsperpage,$authtypecode);# $orderby);
-    
+                                            $startfrom*$resultsperpage, $resultsperpage,$authtypecode, $orderby);
+                                            
         ($template, $loggedinuser, $cookie)
             = get_template_and_user({template_name => "cataloguing/value_builder/unimarc_field_210c.tmpl",
                     query => $query,
@@ -211,7 +212,7 @@ my ($input) = @_;
         } else {
             $to = (($startfrom+1)*$resultsperpage);
         }
-        my $link="../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_210c.pl&amp;authtypecode=EDITORS&and_or=and&operator=contains&".join("&",map {"value=".$_} @value)."&op=do_search&type=intranet&index=$index";
+        my $link="../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_210c.pl&amp;authtypecode=EDITORS&and_or=$and_or&amp;marclist=$marclist&amp;operator=$operator&amp;orderby=$orderby&amp;excluding=$excluding&amp;".join("&amp;",map {"value=".$_} @value)."&amp;op=do_search&amp;type=intranet&amp;index=$index";
         warn "$link ,".getnbpages($total, $resultsperpage);
         $template->param(result => $results) if $results;
         $template->param('index' => $query->param('index'));
