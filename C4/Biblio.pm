@@ -938,6 +938,7 @@ sub GetUsedMarcStructure($){
         FROM   marc_subfield_structure
         WHERE   tab > -1 
             AND frameworkcode = ?
+        ORDER BY tagfield, tagsubfield
     /;
     my @results;
     my $sth = $dbh->prepare($query);
