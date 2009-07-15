@@ -21,6 +21,20 @@
                     <input type="hidden" name="index" value="<!--TMPL_VAR Name="index"-->">
                     <input type="hidden" name="authtypecode" value="EDITORS">
                     <input type="hidden" name="q" value="<!-- TMPL_VAR NAME="index" -->">
+                    <input type="hidden" name="marclist" value="all" />
+                    <input type="hidden" name="and_or" value="and" />
+                    <input type="hidden" name="excluding" value="" />
+					<select name="orderby">
+            			<option value="">None</option>
+            			<option value="HeadingAsc" selected="selected">Heading A-Z</option>
+            			<option value="HeadingDsc">Heading Z-A</option>
+        			</select>
+					<select name="operator">
+			            <option value="contains">contains</option>
+			            <option value="start">starts with</option>
+			            <option value="is">is exactly</option>
+		        	</select>
+
                 </p>
                 <p>
                 <input type="submit" value="Start search" class="button authority">
@@ -53,7 +67,7 @@
                         <td><!-- TMPL_VAR NAME="summary" --></td>
                         <td><!-- TMPL_VAR NAME="used" --> times</td>
                         <td>
-                            <a href="javascript:report('<!-- TMPL_VAR NAME="index" -->','<!-- TMPL_VAR name="summary" ESCAPE=JS -->')"><img alt="choose" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/arrow.gif" width="32" hspace="0" vspace="0" border="0"></a>
+                            <a href="javascript:report('<!-- TMPL_VAR name="summary" ESCAPE=JS -->')"><img alt="choose" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/arrow.gif" width="32" hspace="0" vspace="0" border="0"></a>
                         </td>
                     </tr>
                 <!-- /TMPL_LOOP -->
@@ -70,14 +84,14 @@
 
 <script language="JavaScript" type="text/javascript">
 
-function report(index,summary)
+function report(summary)
 {    
-    var regexp= /(\d* -+ *)(.*)/;
+    var regexp= /--\s*(.*)/;
     var result=summary.match(regexp);
     var doc   = opener.document; 
-    var field = doc.getElementById(index);
+    var field = doc.getElementById('<!-- TMPL_VAR NAME="index" -->');
 
-    field.value = result[2];
+    field.value = result[1];
     self.close();
 }
 </script>
