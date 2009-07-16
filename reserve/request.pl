@@ -447,7 +447,7 @@ foreach my $biblionumber (@biblionumbers) {
                 );
         }
         my @branchloop;
-        foreach my $br ( keys %$branches ) {
+        foreach my $br ( sort {$branches->{$a}->{'branchname'} cmp $branches->{$b}->{'branchname'}} keys %$branches ) {
             my %abranch;
             $abranch{'selected'}   = ( $br eq $res->{'branchcode'} );
             $abranch{'branch'}     = $br;
