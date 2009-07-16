@@ -287,12 +287,38 @@ if ($barcode) {
   delete $question->{'DEBT'} if ($debt_confirmed);
   foreach my $impossible ( keys %$error ) {
             if ($impossible eq "NOT_FOR_LOAN_CAN_FORCE"){
-                $$question{$impossible}=$$error{$impossible},
+                $$question{$impossible}=$$error{$impossible};
             } else {
             $template->param(
                 $impossible => $$error{$impossible},
                 IMPOSSIBLE  => 1
             );
+            $blocker = 1;
+        }
+	}
+    if( !$blocker ){
+        my $confirm_required = 0;
+    	unless($issueconfirmed){
+            #  Get the item title for more information
+            my $getmessageiteminfo  = GetBiblioFromItemNumber(undef,$barcode);
+		    $template->param( itemhomebranch => $getmessageiteminfo->{'homebranch'} );
+
+		    # pass needsconfirmation to template if issuing is possible and user hasn't yet confirmed.
+       	    foreach my $needsconfirmation ( keys %$question ) {
+       	        $template->param(
+       	            $needsconfirmation => $$question{$needsconfirmation},
+       	            getTitleMessageIteminfo => $getmessageiteminfo->{'title'},
+       	            NEEDSCONFIRMATION  => 1
+       	        );
+       	        $confirm_required = 1;
+       	    }
+		}
+        unless($confirm_required) {
+            AddIssue( $borrower, $barcode, $datedue, $cancelreserve );
+			$inprocess = 1;
+            if($globalduedate && ! $stickyduedate && $duedatespec_allow ){
+                $duedatespec = $globalduedate->output();
+                $stickyduedate = 1;
             }
             $noerror = 0;
         }
