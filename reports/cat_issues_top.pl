@@ -129,26 +129,13 @@ if ($do_it) {
                 -multiple => 0 );
     
     my $CGIsepChoice=GetDelimiterChoices;
-    #branch
-    my $branches = GetBranches;
-    my @branchloop;
-    foreach my $thisbranch (keys %$branches) {
-# 			my $selected = 1 if $thisbranch eq $branch;
-            my %row =(value => $thisbranch,
-# 									selected => $selected,
-                                    branchname => $branches->{$thisbranch}->{'branchname'},
-                            );
-            push @branchloop, \%row;
-    }
 
     #doctype
     my $itemtypes = GetItemTypes;
     my @itemtypeloop;
-    foreach my $thisitemtype (keys %$itemtypes) {
-# 			my $selected = 1 if $thisbranch eq $branch;
+    foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'}} keys %$itemtypes) {
             my %row =(value => $thisitemtype,
-# 									selected => $selected,
-                                    description => $itemtypes->{$thisitemtype}->{'description'},
+                      description => $itemtypes->{$thisitemtype}->{'description'},
                             );
             push @itemtypeloop, \%row;
     }
@@ -156,11 +143,9 @@ if ($do_it) {
     #borcat
     my ($codes,$labels) = GetborCatFromCatType(undef,undef);
     my @borcatloop;
-    foreach my $thisborcat (sort keys %$labels) {
-# 			my $selected = 1 if $thisbranch eq $branch;
+    foreach my $thisborcat (sort {$labels->{$a} cmp $labels->{$b}} keys %$labels) {
             my %row =(value => $thisborcat,
-# 									selected => $selected,
-                                    description => $labels->{$thisborcat},
+                      description => $labels->{$thisborcat},
                             );
             push @borcatloop, \%row;
     }
@@ -170,7 +155,7 @@ if ($do_it) {
     $template->param(
                     CGIextChoice => $CGIextChoice,
                     CGIsepChoice => $CGIsepChoice,
-                    branchloop =>\@branchloop,
+                    branchloop => GetBranchesLoop(C4::Context->userenv->{'branch'}),
                     itemtypeloop =>\@itemtypeloop,
                     borcatloop =>\@borcatloop,
                     );
