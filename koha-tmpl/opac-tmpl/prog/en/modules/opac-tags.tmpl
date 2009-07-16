@@ -79,8 +79,17 @@
 		<form method="get" action="opac-tags.pl">
 		<fieldset>Show up to <input name="limit" style="text-align: right;" maxlength="4" size="4" value="<!-- TMPL_VAR NAME="limit" DEFAULT="100" -->" />
 			tags from other users.
+                        <!-- TMPL_IF NAME="hidemytags" -->
 			<input type="hidden" name="hidemytags" value="1" />
-			<input type="submit" value="OK" /> <!-- TMPL_UNLESS NAME="MY_TAGS" --><a href="/cgi-bin/koha/opac-user.pl">Log in</a> to see your own saved tags.<!-- /TMPL_UNLESS --></fieldset>
+                        <!-- /TMPL_IF -->
+			<input type="submit" value="OK" />
+                        <!-- TMPL_UNLESS NAME="loggedinusername" -->
+                          <a href="/cgi-bin/koha/opac-user.pl">Log in</a> to see your own saved tags.
+                        <!-- TMPL_ELSE -->
+                          <!-- TMPL_IF NAME="hidemytags" --><a class="hidemytags" href="/cgi-bin/koha/opac-tags.pl?limit=<!-- TMPL_VAR NAME="limit" DEFAULT="100" -->">Show my tags</a>
+                          <!-- TMPL_ELSE --><a class="hidemytags" href="/cgi-bin/koha/opac-tags.pl?limit=<!-- TMPL_VAR NAME="limit" DEFAULT="100" -->&amp;hidemytags=1">Hide my tags</a>
+                          <!-- /TMPL_IF -->
+                        <!-- /TMPL_UNLESS --></fieldset>
 		</form>
 	
 	<!-- TMPL_IF NAME="TAGLOOP" -->
