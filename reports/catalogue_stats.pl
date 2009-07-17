@@ -156,7 +156,7 @@ if ($do_it) {
 
 	my $branches=GetBranches();
 	my @branchloop;
-	foreach (keys %$branches) {
+	foreach (sort {$branches->{$a}->{'branchname'} cmp $branches->{$b}->{'branchname'}} keys %$branches) {
 		my $thisbranch = ''; # FIXME: populate $thisbranch to preselect one
 		my %row = (branchcode => $_,
 			selected => ($thisbranch eq $_ ? 1 : 0),
