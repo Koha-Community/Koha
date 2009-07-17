@@ -53,7 +53,7 @@ Language: French (French)
 Choice of keyboard: French (Latin9) recognized by default.
 Removal of existing Linux partitions
 Host Name: NomMachine.NomDomaine.fr
-Time zone: Europe / Paris. Click on the map or select from the
+Time zone: Europe/Paris. Click on the map or select from the
 list and check system clock to UTC.
 Informing the root password, which is the administrator account.
 
@@ -73,7 +73,7 @@ Enter root, then the password root.
 With Fedora, GNOME is the default environment.
 
 To use KDE default (as we at Lyon 2 have done), close the session,
-having recovered the KDE packages on Add / Remove software. For the
+having recovered the KDE packages on Add/Remove software. For the
 french interface,  go through the package manager and seek, then
 install kde-french.
 
@@ -117,8 +117,8 @@ File menu è save changes
 Close the services manager.
 
 If one or both services are absent, it is necessary to install Apache
-and / or MySQL. To do so, go in the Package Manager, choose and 
-select Apache server and / or MySQL. In the case of MySQL, we must
+and/or MySQL. To do so, go in the Package Manager, choose and 
+select Apache server and/or MySQL. In the case of MySQL, we must
 not forget MySQL-devel (available in packages optional). Finally,
 start the installation.
 
@@ -152,7 +152,7 @@ Libicu-devel
 To add software Linux Fedora, you have two tools
 
 A graphical tool
-Menu K è è System Add / Remove software
+Menu K è è System Add/Remove software
 
 Click on the Search tab
 Enter the name of the software in the zone entry and click the
@@ -249,7 +249,7 @@ LANG = en_GB.UTF-8
 1.4.2 The web server Apache 2 is it configured to use UNICODE?
 
 To verify, using a text editor, open the httpd.conf file located
-in / etc / httpd / conf and look if it contains the directive:
+in /etc/httpd/conf and look if it contains the directive:
 
 AddDefaultCharset UTF-8
 
@@ -262,23 +262,23 @@ Text of query:
 
 show where variable_name variables like 'char%';
 
-************************************************** ****************
+******************************************************************
 Screenshot
 mysql> show where variable_name variables like 'char%';
-+--------------------------+---------------------- ------+
-| Variable_name | Value |
-+--------------------------+---------------------- ------+
-| Character_set_client | latin1 |
++--------------------------+----------------------------+
+| Variable_name            | Value |
++--------------------------+----------------------------+
+| Character_set_client     | latin1 |
 | Character_set_connection | latin1 |
-| Character_set_database | latin1 |
+| Character_set_database   | latin1 |
 | Character_set_filesystem | Binary |
-| Character_set_results | latin1 |
-| Character_set_server | latin1 |
-| Character_set_system | utf8 |
-| Character_sets_dir | / usr / share / mysql / charsets / |
-+--------------------------+---------------------- ------+
+| Character_set_results    | latin1 |
+| Character_set_server     | latin1 |
+| Character_set_system     | utf8   |
+| Character_sets_dir       | /usr/share/mysql/charsets/ |
++--------------------------+----------------------------+
 8 rows in set (0.00 sec)
-************************************************** ****************
+******************************************************************
 
 Some variables are not properly configured (latin1), so we have to
 change the configuration file server MySQL.
@@ -302,33 +302,33 @@ show where variable_name variables like 'char%';
 The variables contain well utf8 /
 Quit MySQL by the command quit
 
-************************************************** ****************
+******************************************************************
 Screenshot
   MySQL
-Welcome to the MySQL monitor. Commands end with; or \ g.
+Welcome to the MySQL monitor. Commands end with; or \g.
 Your MySQL connection id is 2
 Server version: 5.0.45 Source distribution
 
-Type 'help,' or '\ h' for help. Type '\ c' to clear the buffer.
+Type 'help,' or '\h' for help. Type '\c' to clear the buffer.
 
 mysql> show where variable_name variables like 'char%';
-+--------------------------+---------------------- ------+
-| Variable_name | Value |
-+--------------------------+---------------------- ------+
-| Character_set_client | utf8 |
-| Character_set_connection | utf8 |
-| Character_set_database | utf8 |
++--------------------------+----------------------------+
+| Variable_name            | Value |
++--------------------------+----------------------------+
+| Character_set_client     | utf8   |
+| Character_set_connection | utf8   |
+| Character_set_database   | utf8   |
 | Character_set_filesystem | Binary |
-| Character_set_results | utf8 |
-| Character_set_server | utf8 |
-| Character_set_system | utf8 |
-| Character_sets_dir | / usr / share / mysql / charsets / |
-+--------------------------+---------------------- ------+
+| Character_set_results    | utf8   |
+| Character_set_server     | utf8   |
+| Character_set_system     | utf8   |
+| Character_sets_dir       | /usr/share/mysql/charsets/ |
++--------------------------+----------------------------+
 8 rows in set (0.00 sec)
 
 MySQL> quit
 Bye
-************************************************** ****************
+******************************************************************
 
 Some information for the use of MySQL here: HYPERLINK "http://doc.ubuntu-fr.org/mysql" http://doc.ubuntu-fr.org/mysql
 
@@ -352,8 +352,8 @@ Website for downloads: HYPERLINK "http://www.indexdata.dk/software/" http://www.
 2.1 Installation of the software YAZ
 
 Creating a file needed for the installation of Yaz
-Create files redhat in the directory / usr / src
-SOURCES Create a folder in the directory / usr / src / redhat
+Create files redhat in the directory /usr/src
+SOURCES Create a folder in the directory /usr/src/redhat
 NB: redhat lowercase and uppercase SOURCES.
 
 Installing Yaz by the command:
@@ -387,9 +387,9 @@ Download koha here: HYPERLINK "http://download.koha.org/koha-3.00.00-beta2.tar.g
 
 3.1 Decompression of the archive koha 3.0
 
-Save the file in the directory / usr / share.
-Opening a window Terminal, and placing himself in the directory / usr / share by the command:
-cd / usr / share
+Save the file in the directory /usr/share.
+Opening a window Terminal, and placing himself in the directory /usr/share by the command:
+cd /usr/share
 verify the presence of compressed file koha by the command:
 ls-l * Koha
 Unzip the file with the command tar:
@@ -465,9 +465,9 @@ cpan
 then force install NomDuModule
 then quit
 
-************************************************** ****************
+******************************************************************
 Screenshot:
-/ usr/lib/perl5/5.8.8/CPAN/Config.pm initialized.
+/usr/lib/perl5/5.8.8/CPAN/Config.pm initialized.
 
 
 CPAN is the world-wide archive of perl resources. It consists of about
@@ -492,7 +492,7 @@ This may be a site-wide directory or a personal directory.
 
 First of all, I'd like to create this directory. Where?
 
-CPAN build and cache directory? [/ root / .cpan]
+CPAN build and cache directory? [/ root/.cpan]
 
 
 If you want, I can keep the source files after a build in the cpan
@@ -519,7 +519,7 @@ To considerably speed up the initial CPAN shell startup, it is
 Storable possible to use to create a cache of metadata. If Storable
 is not available, the normal index mechanism will be used.
 
-Cache metadata (yes / no)? [yes]
+Cache metadata (yes/no)? [yes]
 
 
 The next option deals with the charset your terminal supports. In
@@ -531,7 +531,7 @@ supports ISO-8859-1 (also known as LATIN1) then you say yes, and if it
 neither supports nor, your answer does not matter, you will not be
 able to read the names of some authors anyway. If you answer no, names
 will be output in UTF-8.
-Your terminal expects iso-8859-1 (yes / no) [yes]
+Your terminal expects iso-8859-1 (yes/no) [yes]
 
 If you have one of the readline packages (Term: ReadLine: Perl,
 Term: ReadLine: Gnu, possibly others) installed, the interactive CPAN
@@ -539,14 +539,14 @@ Shell will have history support. The next two questions deal with the
 filename of the history file and with its size. If you do not want to
 set this variable, please hit SPACE RETURN to the following question.
 
-File to save your history? [/ root / .cpan / histfile]
+File to save your history? [/root/.cpan/histfile]
 Number of lines to save? [100]
 
 
 The CPAN module can detect when a module that which you are trying to
 build depends on prerequisites. If this happens, it can build the
-prerequisites for you automatically ( 'follow'), ask you for
-confirmation ( 'ask'), or just ignore them ( 'ignore'). Please set your
+prerequisites for you automatically ('follow'), ask you for
+confirmation ('ask'), or just ignore them ('ignore'). Please set your
 policy to one of the three values.
 
 Policy on building prerequisites (follow, ask or ignore)? [ask]
@@ -559,17 +559,17 @@ disable the use of a download program, you can type a space followed
 by ENTER.
 
 
-Where is your gzip program? [/ bin / gzip]
-Where is your tar program? [/ bin / tar]
-Where is your unzip program? [/ usr / bin / unzip]
-Where is your make program? [/ usr / bin / make]
-Where is your links program? [/ usr / bin / links]
-Where is your wget program? [/ usr / bin / wget]
-Where is your ncftpget program? [/ usr / bin / ncftpget]
-Where is your ftp program? [/ usr / bin / ftp]
-Where is your gpg program? [/ usr / bin / gpg]
-What is your favorite pager program? [/ usr / bin / less]
-What is your favorite shell? [/ bin / bash]
+Where is your gzip program?          [/bin/gzip]
+Where is your tar program?           [/bin/tar]
+Where is your unzip program?         [/usr/bin/unzip]
+Where is your make program?          [/usr/bin/make]
+Where is your links program?         [/usr/bin/links]
+Where is your wget program?          [/usr/bin/wget]
+Where is your ncftpget program?      [/usr/bin/ncftpget]
+Where is your ftp program?           [/usr/bin/ftp]
+Where is your gpg program?           [/usr/bin/gpg]
+What is your favorite pager program? [/usr/bin/less]
+What is your favorite shell?         [/bin/bash]
 
 
 Every Makefile.PL is run by perl in a separate process. Likewise we
@@ -582,7 +582,7 @@ If you do not understand this question, just press ENTER.
 Parameters for the 'perl Makefile.PL' command?
 Typical frequently used settings:
 
-     PREFIX = ~ / perl non-root users (please see manual for more hints)
+     PREFIX = ~/perl non-root users (please see manual for more hints)
 
 
 Every Makefile.PL is run by perl in a separate process. Likewise we
@@ -595,7 +595,7 @@ If you do not understand this question, just press ENTER.
 Parameters for the 'perl Makefile.PL' command?
 Typical frequently used settings:
 
-     PREFIX = ~ / perl non-root users (please see manual for more hints)
+     PREFIX = ~/perl non-root users (please see manual for more hints)
 
 Your choice: []
 Parameters for the 'make' command?
@@ -631,7 +631,7 @@ the $ CPAN:: Config takes precedence.
 Your ftp_proxy?
 Your http_proxy?
 Your no_proxy?
-You have no / root / .cpan / sources / MIRRORED.BY
+You have no/root/.cpan/sources/MIRRORED.BY
    I'm trying to fetch one
 CPAN: LWP:: UserAgent loaded ok
 Fetching with LWP:
@@ -712,7 +712,7 @@ New set of picks:
    ftp://mir1.ovh.net/ftp.cpan.org
 
 
-commit: wrote / usr/lib/perl5/5.8.8/CPAN/Config.pm
+commit: wrote /usr/lib/perl5/5.8.8/CPAN/Config.pm
 Terminal does not support AddHistory.
 
 cpan shell - CPAN exploration and modules installation (v1.7602)
@@ -733,44 +733,43 @@ Install Command: cpan NomDuModule to install and validate the default
 choice for each question.
 
 List of modules required to koha need to install:
-MARC: Record
-Class:: Accessor
-XML:: SAX
-MARC: Charset
-MARC:: File:: XML
-Net: Z3950: ZOOM
-HTML:: Template:: Pro
-MARC: Crosswalk: DublinCore
-PDF:: Reuse
-PDF:: Reuse: Barcode
-Data: ICal
-GD: Barcode: UPCE
-XML:: RSS
-Algorithm: CheckDigits: M43_001
-Biblio: EndnoteStyle
-Schedule:: At
-Barcode: Code128
-XML:: LibXML: SAX
-MARC: Charset:: Constants
-CGI:: Session
-Class:: Factory: Util
-Date: ICal
-Date:: Manip
-Lingua:: Stem
-List: MoreUtils
-PDF: API2
-PDF: API2::
-PDF: API2: Util
-Text: CSV
-Text: CSV_XS
-XML:: Dumper
-XML: LibXSLT
-XML:: Simple
-YAML: Syck
-Unix:: Syslog
+Class::Accessor
+XML::SAX
+XML::RSS
+XML::LibXML::SAX
+MARC::Record
+MARC::Charset
+MARC::Charset::Constants
+MARC::File::XML
+MARC::Crosswalk::DublinCore
+Net::Z3950::ZOOM
+Net::LDAP::Filter
+HTML::Template::Pro
+Data::ICal
+GD::Barcode::UPCE
+Algorithm::CheckDigits::M43_001
+Biblio::EndnoteStyle
+Schedule::At
+Barcode::Code128
+CGI::Session
+Class::Factory::Util
+Date::ICal
+Date::Manip
+Lingua::Stem
+List::MoreUtils
+PDF::Reuse
+PDF::Reuse::Barcode
+PDF::API2
+PDF::API2::Util
+Text::CSV
+Text::CSV_XS
+XML::Dumper
+XML::LibXSLT
+XML::Simple
+YAML::Syck
+Unix::Syslog
 POE
-Date: Calc
-Net:: LDAP: Filter
+Date::Calc
 
 
 3.6.2 Installation of modules - Cases difficult
@@ -787,7 +786,7 @@ force install Net:: LDAP ======= force install ok
 
 3.6.3 Installing module access MySQL DBMS
 
-Installation of the connector DBD:: mysql for perl
+Installation of the connector DBD::mysql for perl
 
 We will have to rebuild this module because koha requires the latest version.
 
@@ -818,21 +817,21 @@ quit
 3.7 Test SAX Parser
 
 In a Terminal window, go to the installation directory koha.
-CD / usr/share/koha-3.00.00-alpha/misc
+CD /usr/share/koha-3.00.00-alpha/misc
 launch the script sax_parser_print.pl
-. / sax_parser_print.pl
-which returns: XML:: LibXML: SAX = HASH (0x895a3fc)
+./sax_parser_print.pl
+which returns: XML::LibXML::SAX = HASH (0x895a3fc)
 
-The file / usr/lib/perl5/site_perl/5.8.8/XML/SAX/ParserDetails.ini should be amended to
+The file /usr/lib/perl5/site_perl/5.8.8/XML/SAX/ParserDetails.ini should be amended to
 contain the final (save the other lines to comment or delete):
-[XML:: LibXML: SAX:: Parser]
+[XML::LibXML::SAX::Parser]
 Http://xml.org/sax/features/namespaces = 1
 
 
 3.8 Installation of Koha
 
 Opening a window Terminal and placed in the directory koha
-CD / usr/share/koha-3.00.00-alpha
+CD /usr/share/koha-3.00.00-alpha
 launch the script Makefile.PL
 perl Makefile.PL
 
@@ -872,7 +871,7 @@ one instance of Koha, you may want to modify the last
 component of the directory path, which will be used
 as the package name in the FHS layout.
 
-Base installation directory [/ usr / share / koha]
+Base installation directory [/usr/share/koha]
 
 Since you are using the 'standard' install
 mode, you should run 'make install' as root.
@@ -1059,8 +1058,8 @@ Taper la commande make install
 As indicated at the end of the installation (see screen shot), we must add two environment variables:
 
 Entering the two lines below a window in Terminal:
-export KOHA_CONF = / etc / koha / koha-conf.xml
-export PERL5LIB = / usr / share / koha / lib
+export KOHA_CONF=/etc/koha/koha-conf.xml
+export PERL5LIB=/usr/share/koha/lib
 
 Seizures of this event, both variables are recorded on a temporary basis. If these variables are definitely enr
 egistrées we must add these two lines in the file. bash_profile or. bashrc users root and koha.
@@ -1068,7 +1067,7 @@ egistrées we must add these two lines in the file. bash_profile or. bashrc user
 
 4.2 Creation of the database
 The base is not created. It is a bug, we must launch a script to recreate it. In a Terminal window, type:
-mysql - user = kohaadmin - password = kohakoha koha </ usr/share/koha-3.00.00-alpha/installer/data/mysql/kohastructure.sql;
+mysql -user=kohaadmin -password=kohakoha koha </usr/share/koha-3.00.00-alpha/installer/data/mysql/kohastructure.sql;
 
 Explanation:
 mysql è launches client mysql
@@ -1076,20 +1075,20 @@ mysql è launches client mysql
 -- password = kohakoha è password for this user
 koha è the name of the database
 <È means setting the result of a script (here, the base koha)
-/ usr/share/koha-3.00.00-alpha/installer/data/mysql/kohastructure.sql è address sql script to execute
+/usr/share/koha-3.00.00-alpha/installer/data/mysql/kohastructure.sql è address sql script to execute
 Do not forget the sign at the end of the investigation.
 
 To check if the base is well rebuilt: mysql-u-p kohaadmin
 Enter password: kohakoha
 
 
-************************************************** ****************
+******************************************************************
 Screenshot
-Welcome to the MySQL monitor. Commands end with; or \ g.
+Welcome to the MySQL monitor. Commands end with; or \g.
 Your MySQL connection id is 51
 Server version: 5.0.45 Source distribution
 
-Type 'help,' or '\ h' for help. Type '\ c' to clear the buffer.
+Type 'help,' or '\h' for help. Type '\c' to clear the buffer.
 
 MySQL> use Koha;
 Reading table information for completion of table and column names
@@ -1195,34 +1194,34 @@ MySQL> show tables;
 94 rows in set (0.00 sec)
 
 mysql> quit
-************************************************** ****************
+******************************************************************
 
 4.3 Changing the configuration of the Apache server
 
-Create a link koha in the directory / etc / httpd / conf.d / pointing to the configuration file of koha for apache.
-Open / etc / koha / koha-httpd.conf and paste the contents of this file at the end of / etc / httpd / conf / httpd.conf
+Create a link koha in the directory /etc/httpd/conf.d/ pointing to the configuration file of koha for apache.
+Open /etc/koha/koha-httpd.conf and paste the contents of this file at the end of /etc/httpd/conf/httpd.conf
 
-Editing httpd.conf located in the directory / etc / httpd / conf, so the Apache web server is reachable on port 8
+Editing httpd.conf located in the directory /etc/httpd/conf, so the Apache web server is reachable on port 8
 0 (standard) and also on port 8080.
 Find string Listen 80 and add a new line below with the string Listen 8080
 Restarting the service httpd. On a Terminal window, type service httpd restart.
 
 Lancer Zebra Server
-zebrasrv east / usr / bin
+zebrasrv east /usr/bin
 with the name zebrasrv-2.0
-go to the directory / usr / bin
-cd / usr / bin
+go to the directory /usr/bin
+cd /usr/bin
 koha become user by typing the command su:
 su Koha
 zebra start the server by the command:
-./zebrasrv-2.0-f / etc / koha / koha-conf.xml
+./zebrasrv-2.0-f /etc/koha/koha-conf.xml
 
 Starting the daemon Zebraqueue
-zebraqueue_daemon.pl is in / usr / share / koha / bin
-go in / usr / share / koha / bin
-cd / usr / share / koha / bin
+zebraqueue_daemon.pl is in /usr/share/koha/bin
+go in /usr/share/koha/bin
+cd /usr/share/koha/bin
 and launch the script zebraqueue_daemon.pl
-. / zebraqueue_daemon.pl
+. /zebraqueue_daemon.pl
 
 
 4.4 loading data for tests
@@ -1241,7 +1240,7 @@ Other ports and click Add button.
 When the 3 ports are added, click Apply, then click the button.
 
 Using the Web installer
-We must move the fr located in / usr / share / koha / intranet / cgi-bin / data / mysql en-US (installer points to the directory
+We must move the fr located in /usr/share/koha/intranet/cgi-bin/data/mysql en-US (installer points to the directory
 en-ing and not en).
 
 Connect to Koha: HYPERLINK "http://localhost:8080/" http://localhost:8080 and use the Web installer french (en-US).
@@ -1259,7 +1258,7 @@ Connect to PhPMyadmin: HYPERLINK "http://localhost/phpmyadmin" http://localhost/
 Connect to interface professional Koha: HYPERLINK "http://localhost:8080/" http://localhost:8080
 Connect to online catalogue Koha: HYPERLINK "http://localhost:80/" http://localhost:80
 
-Zebra is in / etc / koha
-The files perl Koha professional can be found in / usr / share / koha / intranet / cgi-bin (then a large repertoire by fonctionnal
+Zebra is in /etc/koha
+The files perl Koha professional can be found in /usr/share/koha/intranet/cgi-bin (then a large repertoire by fonctionnal
 ities of SIGB)
-The files perl Koha public are in / usr / share / koha / koha / cgi-bin
+The files perl Koha public are in /usr/share/koha/koha/cgi-bin
