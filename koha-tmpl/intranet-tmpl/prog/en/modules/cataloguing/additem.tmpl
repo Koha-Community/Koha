@@ -23,6 +23,7 @@ function active(numlayer)
     }
 }
 function Check(f) {
+
     var total_errors=0;
 //	alert(f.field_value.length);
     for (i=0 ; i<f.field_value.length ; i++) {
@@ -43,6 +44,13 @@ function Check(f) {
         alertString2 += "\n- "+ total_errors+_(" mandatory fields empty (see bold subfields)");
         alert(alertString2);
         return false;
+    }
+}
+function CheckMultipleAdd(f) {
+
+    if (!f || isNaN(f) || !parseInt(f) == f || f <= 0) { 
+	alert(_("Please enter a number of items to create.")); 
+	return false;	
     }
 }
 function Dopop(link,i) {
@@ -169,6 +177,7 @@ function set_to_today(id, force) {
 <h1>Items for <!-- TMPL_VAR name="title" escape="html" --> <!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR name="author" --><!-- /TMPL_IF --> (Record #<!-- TMPL_VAR NAME="biblionumber" -->)</h1>
 
 <!-- TMPL_IF NAME="barcode_not_unique" --><div class="dialog alert"><strong>Error saving item</strong>: Barcode must be unique.</div><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="no_next_barcode" --><div class="dialog alert"><strong>Error saving items</strong>: Unable to automatically determine values for barcodes. No item has been inserted.</div><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="book_on_loan" --><div class="dialog alert"><strong>Cannot Delete</strong>: item is checked out.</div><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="book_reserved" --><div class="dialogalert"><strong>Cannot Delete</strong>: item has a waiting hold.</div><!-- /TMPL_IF -->
 
@@ -230,7 +239,20 @@ function set_to_today(id, force) {
     <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
 
 <fieldset class="action">    <!-- TMPL_IF name="opisadd" -->
-    <input type="submit" value="Add item" onclick="return Check(this.form)" />
+    <input type="submit" name="phony_submit" value="phony_submit" id="phony_submit" style="display:none;" onclick="return false;" />
+    <!-- Note : We use here a false submit button because we have several submit buttons and we don't want the user to believe he validated the adding of multiple copies 
+		when pressing the enter key, while in fact it is the first submit button that is validated, in our case the "add (single) item" button. 
+		It is a bit tricky, but necessary in the sake of UI correctness. 
+    -->
+
+    <input type="submit" name="add_submit" value="Add item" onclick="return Check(this.form)" />
+    <input type="submit" name="add_duplicate_submit" value="Add &amp; Duplicate" onclick="return Check(this.form)" />
+    <input type="submit" name="add_multiple_copies" value="Add Multiple Copies" onclick="javascript:this.nextSibling.style.visibility='visible';document.f.number_of_copies.focus(); return false;" /><span id="add_multiple_copies_span" style="visibility:hidden">
+	<label for="number_of_copies">Number of copies to add : </label>
+	<input type="text" id="number_of_copies" name="number_of_copies" value="" size="2" />
+	<input type="submit" id="add_multiple_copies_submit" name="add_multiple_copies_submit" value="Add" onclick="javascript:return Check(this.form) &amp;&amp; CheckMultipleAdd(this.form.number_of_copies.value);" />
+    </span>
+
     <!-- TMPL_ELSE -->
     <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="itemtagfield" -->" />
     <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="itemtagsubfield" -->" />

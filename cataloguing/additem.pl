@@ -97,6 +97,13 @@ if ($op eq "additem") {
     my @indicator = $input->param('indicator');
     my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag, 'ITEM');
     my $record = MARC::Record::new_from_xml($xml, 'UTF-8');
+
+    # type of add
+    my $add_submit                 = $input->param('add_submit');
+    my $add_duplicate_submit       = $input->param('add_duplicate_submit');
+    my $add_multiple_copies_submit = $input->param('add_multiple_copies_submit');
+    my $number_of_copies           = $input->param('number_of_copies');
+
     # if autoBarcode is set to 'incremental', calculate barcode...
 	# NOTE: This code is subject to change in 3.2 with the implemenation of ajax based autobarcode code
 	# NOTE: 'incremental' is the ONLY autoBarcode option available to those not using javascript
@@ -114,16 +121,98 @@ if ($op eq "additem") {
             $record->insert_fields_ordered($fieldItem);
         }
     }
-# check for item barcode # being unique
+
     my $addedolditem = TransformMarcToKoha($dbh,$record);
-    my $exist_itemnumber = get_item_from_barcode($addedolditem->{'barcode'});
-    push @errors,"barcode_not_unique" if($exist_itemnumber);
-    # if barcode exists, don't create, but report The problem.
-    my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = AddItemFromMarc($record,$biblionumber) unless ($exist_itemnumber);
-    $nextop = "additem";
-    if ($exist_itemnumber) {
+
+    # If we have to add or add & duplicate, we add the item
+    if ($add_submit || $add_duplicate_submit) {
+	# check for item barcode # being unique
+	my $exist_itemnumber = get_item_from_barcode($addedolditem->{'barcode'});
+	push @errors,"barcode_not_unique" if($exist_itemnumber);
+	# if barcode exists, don't create, but report The problem.
+	my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = AddItemFromMarc($record,$biblionumber) unless ($exist_itemnumber);
+	$nextop = "additem";
+	if ($exist_itemnumber) {
+	    $itemrecord = $record;
+	}
+    }
+
+    # If we have to add & duplicate
+    if ($add_duplicate_submit) {
+
+        # We try to get the next barcode
+        use C4::Barcodes;
+        my $barcodeobj = C4::Barcodes->new;
+        my $barcodevalue = $barcodeobj->next_value($addedolditem->{'barcode'}) if $barcodeobj;
+        my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.barcode",$frameworkcode);
+        if ($record->field($tagfield)->subfield($tagsubfield)) {
+            # If we got the next codebar value, we put it in the record
+            if ($barcodevalue) {
+                $record->field($tagfield)->update($tagsubfield => $barcodevalue);
+            # If not, we delete the recently inserted barcode from the record (so the user can input a barcode himself)
+            } else {
+                $record->field($tagfield)->update($tagsubfield => '');
+            }
+        }
         $itemrecord = $record;
     }
+
+    # If we have to add multiple copies
+    if ($add_multiple_copies_submit) {
+
+        use C4::Barcodes;
+        my $barcodeobj = C4::Barcodes->new;
+        my $oldbarcode = $addedolditem->{'barcode'};
+        my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.barcode",$frameworkcode);
+
+	# If there is a barcode and we can't find him new values, we can't add multiple copies
+        my $testbarcode = $barcodeobj->next_value($oldbarcode) if $barcodeobj;
+	if ($oldbarcode && !$testbarcode) {
+
+	    push @errors, "no_next_barcode";
+	    $itemrecord = $record;
+
+	} else {
+	# We add each item
+
+	    # For the first iteration
+	    my $barcodevalue = $oldbarcode;
+	    my $exist_itemnumber;
+
+
+	    for (my $i = 0; $i < $number_of_copies;) {
+
+		# If there is a barcode
+		if ($barcodevalue) {
+
+		    # Getting a new barcode (if it is not the first iteration or the barcode we tried already exists)
+		    $barcodevalue = $barcodeobj->next_value($oldbarcode) if ($i > 0 || $exist_itemnumber);
+
+		    # Putting it into the record
+		    if ($barcodevalue) {
+			$record->field($tagfield)->update($tagsubfield => $barcodevalue);
+		    }
+
+		    # Checking if the barcode already exists
+		    $exist_itemnumber = get_item_from_barcode($barcodevalue);
+		}
+
+		# Adding the item
+		my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = AddItemFromMarc($record,$biblionumber) unless ($exist_itemnumber);
+
+		# We count the item only if it was really added
+		# That way, all items are added, even if there was some already existing barcodes
+		# FIXME : Please note that there is a risk of infinite loop here if we never find a suitable barcode
+		$i++ unless ($exist_itemnumber);
+
+		# Preparing the next iteration
+		$oldbarcode = $barcodevalue;
+	    }
+	    undef($itemrecord);
+	}
+    }
+
+
 #-------------------------------------------------------------------------------
 } elsif ($op eq "edititem") {
 #-------------------------------------------------------------------------------
