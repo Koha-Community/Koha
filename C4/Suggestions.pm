@@ -43,8 +43,6 @@ our @EXPORT  = qw<
     &SearchSuggestion
 >;
 use C4::Dates qw(format_date_in_iso);
->>>>>>> Suggestions.pm, probably useless & not working (check with hdl):C4/Suggestions.pm
->>>>>>> Suggestions.pm, probably useless & not working (check with hdl):C4/Suggestions.pm
 use vars qw($VERSION @ISA @EXPORT);
 
 BEGIN {
@@ -62,6 +60,15 @@ BEGIN {
 		&ModSuggestion
 		&ConnectSuggestionAndBiblio
 		&GetSuggestionFromBiblionumber
+    &ConnectSuggestionAndBiblio
+    &CountSuggestion
+    &DelSuggestion
+    &GetSuggestion
+    &GetSuggestionByStatus
+    &GetSuggestionFromBiblionumber
+    &ModStatus
+    &ModSuggestion
+    &NewSuggestion
 	);
 }
 

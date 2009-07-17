@@ -46,6 +46,42 @@ use C4::Auth;
 use C4::Context;
 use C4::Output;
 
+sub StringSearch {
+    my ($searchstring) = @_;
+    my $dbh = C4::Context->dbh;
+    $searchstring =~ s/\'/\\\'/g;
+    my @data = split( ' ', $searchstring );
+    $data[0] = '' unless @data;
+    my $sth = $dbh->prepare("SELECT * FROM letter WHERE (code LIKE ?) ORDER BY module, code");
+    $sth->execute("$data[0]%");     # slightly bogus, only searching on first string.
+    return $sth->fetchall_arrayref({});
+}
+
+# FIXME untranslateable
+our %column_map = (
+    aqbooksellers => 'BOOKSELLERS',
+    aqorders => 'ORDERS',
+    serial => 'SERIALS',
+    reserves => 'HOLDS',
+    suggestions => 'SUGGESTIONS',
+);
+
+sub column_picks ($) {
+    # returns @array of values
+    my $table = shift or return ();
+    my $sth = C4::Context->dbh->prepare("SHOW COLUMNS FROM $table");
+    $sth->execute;
+    my @SQLfieldname = ();
+    push @SQLfieldname, {'value' => "", 'text' => '---' . uc($column_map{$table} || $table) . '---'};
+    while (my ($field) = $sth->fetchrow_array) {
+        push @SQLfieldname, {
+            value => $table . ".$field",
+             text => $table . ".$field"
+        };
+    }
+    return @SQLfieldname;
+}
+
 # letter_exists($module, $code)
 # - return true if a letter with the given $module and $code exists
 sub letter_exists {
@@ -145,19 +181,23 @@ sub add_form {
         $template->param( adding => 1 );
     }
 
-    # build field list
-    my $field_selection = [
-    {
-        value => 'LibrarianFirstname',
-        text  => 'LibrarianFirstname',
-    },
-    {
-        value => 'LibrarianSurname',
-        text  => 'LibrarianSurname',
-    },
-    {
-        value => 'LibrarianEmailaddress',
-        text  => 'LibrarianEmailaddress',
+    # add acquisition specific tables
+    if ( $module eq "suggestions" ) {
+        push @SQLfieldname, column_picks('borrowers'),
+                            column_picks('suggestions'),
+                            column_picks('aqbooksellers'),
+                            column_picks('biblio'),
+                            column_picks('items');
+	}
+    elsif ( $module eq "reserves" ) {
+        push @SQLfieldname, column_picks('borrowers'),
+                            column_picks('reserves'),
+                            column_picks('biblio'),
+                            column_picks('items');
+    }
+    elsif ( index( $module, "acquisition" ) > 0 ) {	# FIXME: imprecise comparison
+        push @SQLfieldname, column_picks('aqbooksellers'), column_picks('aqorders');
+        # add issues specific tables
     }
     ];
     push @{$field_selection}, add_fields('branches');
