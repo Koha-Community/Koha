@@ -300,8 +300,8 @@ virtual hosts for full instructions.
 
 Note: it's recommended that you daemonize the Zebra process and add it to your
 startup profile. For a non-production test/development installation, running 
-Zebra from the command line can be useful. Pick from the two available options
-below, or roll your own :-)
+Zebra from the command line can be useful.  Otherwise you will want zebrasrv
+running when Apache/Koha is.
 
 Note: it's also recommended that you create a Koha system user, which you will
 have specified during the install process. Alternatively, Zebra can be
@@ -318,7 +318,7 @@ Option 1: run the Zebra processes from the command line:
     on the Zebra index; in development mode, you may wish to use your system
     user.
 
-    Zebraqueue Daemon:
+    Zebraqueue Daemon (not recommended -- use rebuild_zebra in crontab instead):
     $ sudo -u ${KOHA_USER} misc/bin/zebraqueue_daemon.pl
 
     Note: if you are running in this mode, you may wish to defer starting the
@@ -337,7 +337,7 @@ Koha's command-line scripts are installed, e.g., /usr/share/koha/bin.
     
     $ sudo ${SCRIPT_DIR}/koha-zebra-ctl.sh start
 
-    Zebraqueue Daemon:
+    Zebraqueue Daemon (not recommended -- use rebuild_zebra in crontab instead):
     $ sudo ln -s ${SCRIPT_DIR}/koha-zebraqueue-ctl.sh  /etc/init.d/koha-zebraqueue-daemon
     $ sudo update-rc.d koha-zebraqueue-daemon defaults 
     ( Note: see man chkconfig(8) on other distros )
@@ -360,6 +360,25 @@ Koha's command-line scripts are installed, e.g., /usr/share/koha/bin.
     $ export KOHA_CONF=/usr/share/koha/etc/koha-conf.xml
       (note: use the correct path to your koha-conf.xml)
 
+7.0 Schedule crontab jobs
+    Do you want Koha to:
+        send mail?
+        automatically index added records?
+        generate overdue or advance notices?
+        mark items lost after they are long overdue?
+        assess fines?
+
+    All these and other regularly scheduled background tasks are handled by crontab.
+    You need to examine the example crontab file, edit a copy to your liking, and schedule it.
+
+    $ crontab -l           # just check if you have any other jobs already scheduled
+    $ cp ./misc/cronjobs/crontab.example my_crontab
+    $ vi my_crontab        # select jobs or adjust times.
+    $                      # If you had already scheduled lines, add them at the bottom.
+    $ crontab my_crontab   # This overwrites your scheduled jobs with the new ones.
+
+    If you want to check to confirm, you can run crontab -l again.  
+
 7.1 Import:
     Bibliographic data in MARC21 format
     $ misc/migration-tools/bulkmarcimport.pl -file /path/to/marc.iso2709
@@ -376,7 +395,8 @@ Koha's command-line scripts are installed, e.g., /usr/share/koha/bin.
 
 7.3 Schedule regular index updates
     run rebuild_zebra.pl -b -a -z as a regular cron job, check misc/cronjobs/crontab.example
-	for usage examples
+	for usage examples.  Do not schedule rebuild_zebra AND run zebraqueue.  Pick one or the other.
+    See 7.0 above.
     
 7.4 To enable public Z39.50/SRU servers, you'll need to edit your koha-conf.xml and
     change the <listen> options to listen on a TCP port; then restart the zebra daemon.
