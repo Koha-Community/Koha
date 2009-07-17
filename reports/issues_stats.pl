@@ -133,13 +133,13 @@ my %select;
 
 # create itemtype arrayref for <select>.
 my @itemtypeloop;
-for my $itype ( keys(%$itemtypes)) {
+for my $itype ( sort {$itemtypes->{$a}->{description} cmp $itemtypes->{$b}->{description}} keys(%$itemtypes)) {
 	push @itemtypeloop, { code => $itype , description => $itemtypes->{$itype}->{description} } ;
 }
 
 my $branches=GetBranches();
 my @branchloop;
-foreach (keys %$branches) {
+foreach (sort {$branches->{$a}->{'branchname'} cmp $branches->{$b}->{'branchname'}} keys %$branches) {
 	my $thisbranch = ''; # FIXME 
 	my %row = (
 		branchcode => $_,
@@ -157,7 +157,7 @@ foreach (sort keys %$locations) {
 }
     
 my @ccodes;
-foreach (keys %$ccodes) {
+foreach (sort {$ccodes->{$a} cmp $ccodes->{$b}} keys %$ccodes) {
 	push @ccodes, { code => $_, description => $ccodes->{$_} };
 }
 
