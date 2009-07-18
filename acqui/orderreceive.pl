@@ -104,7 +104,7 @@ if ( $count == 1 ) {
 
     my (@itemtypesloop,@locationloop,@ccodeloop);
     my $itemtypes = GetItemTypes;
-    foreach my $thisitemtype (sort keys %$itemtypes) {
+    foreach my $thisitemtype (sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'}} keys %$itemtypes) {
         push @itemtypesloop, {
                   value => $thisitemtype,
             description => $itemtypes->{$thisitemtype}->{'description'},
@@ -112,14 +112,14 @@ if ( $count == 1 ) {
         };
     }
     my $locs = GetKohaAuthorisedValues( 'items.location' );
-    foreach my $thisloc (sort keys %$locs) {
+    foreach my $thisloc (sort {$locs->{$a} cmp $locs->{$b}} keys %$locs) {
 	    push @locationloop, {
                   value => $thisloc,
             description => $locs->{$thisloc},
         };
     }
     my $ccodes = GetKohaAuthorisedValues( 'items.ccode' );
-	foreach my $thisccode (sort keys %$ccodes) {
+	foreach my $thisccode (sort {$ccodes->{$a} cmp $ccodes->{$b}} keys %$ccodes) {
         push @ccodeloop, {
                   value => $thisccode,
             description => $ccodes->{$thisccode},
