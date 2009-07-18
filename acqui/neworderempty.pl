@@ -145,7 +145,7 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
 my $itemtypes = GetItemTypes;
 
 my @itemtypesloop;
-foreach my $thisitemtype (sort keys %$itemtypes) {
+foreach my $thisitemtype (sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'}} keys %$itemtypes) {
     push @itemtypesloop, { itemtype => $itemtypes->{$thisitemtype}->{'itemtype'} , desc =>  $itemtypes->{$thisitemtype}->{'description'} } ;
 }
 
@@ -156,7 +156,7 @@ my $onlymine=C4::Context->preference('IndependantBranches') &&
              C4::Context->userenv->{branch};
 my $branches = GetBranches($onlymine);
 my @branchloop;
-foreach my $thisbranch ( sort keys %$branches ) {
+foreach my $thisbranch ( sort {$branches->{$a}->{'branchname'} cmp $branches->{$b}->{'branchname'}} keys %$branches ) {
      my %row = (
         value      => $thisbranch,
         branchname => $branches->{$thisbranch}->{'branchname'},
