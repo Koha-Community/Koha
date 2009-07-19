@@ -145,7 +145,7 @@ if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {
 	}
 } else {
     my $advsearchtypes = GetAuthorisedValues($advanced_search_types);
-	for my $thisitemtype (@$advsearchtypes) {
+	for my $thisitemtype (sort {$a->{'lib'} cmp $b->{'lib'}} @$advsearchtypes) {
 		my %row =(
 				number=>$cnt++,
 				ccl => $advanced_search_types,
