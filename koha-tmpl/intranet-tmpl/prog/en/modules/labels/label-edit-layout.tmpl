@@ -1,264 +1,173 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo; Tools &rsaquo; Labels</title>
-<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<script type="text/javascript">
-$(document).ready(function() {
-    $("input[name=layoutchoice]").change( function() { layout_method() } );
-    layout_method();
-});
-function layout_method() {
-    if( $("input[name=layoutchoice]:checked").val() == 'layout_string' ) {
-        $('#layout_tx').hide();
-        $('#layout_string').show();
-    } else {
-        $('#layout_tx').show();
-        $('#layout_string').hide();
-    }
-
-}
-</script>
+    <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+    <title>Koha &rsaquo; Tools &rsaquo; Labels</title>
+    <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+    <script type="text/JavaScript" language="JavaScript">
+        //<![CDATA[
+            $(document).ready(function() {
+                $("input[@name='layout_choice']").change( function() { layout_method() } );
+                layout_method();
+            });
+            function layout_method() {
+                if( $("input[@name='layout_choice']:checked").val() == 'layout_string' ) {
+                    $('#layout_table').hide();
+                    $('#layout_string').show();
+                } else {
+                    $('#layout_table').show();
+                    $('#layout_string').hide();
+                }
+            }
+        //]]>
+    </script>
 </head>
 <body>
-<!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
-
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/labels/label-home.pl">Labels</a> &rsaquo; <!-- TMPL_IF NAME="layout_id" -->Edit<!-- TMPL_ELSE -->Create<!-- /TMPL_IF --> Label Layout</div>
-
-<div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
-	<!-- TMPL_INCLUDE NAME="tools-labels-toolbar.inc" -->
-<form name="input" action="/cgi-bin/koha/labels/label-manager.pl" method="get">
-<fieldset class="rows">
-<legend><!-- TMPL_IF NAME="layout_id" -->Edit<!-- TMPL_ELSE -->Create<!-- /TMPL_IF --> Label Layout</legend>
-<ol>
-<li><label for="layoutname">Layout Name</label>
-<input type="text" name="layoutname" id="layoutname" size="20" value="<!-- TMPL_VAR NAME="layoutname" -->" /></li>
-
-<li><label for="barcodetype">Choose Barcode Type (encoding)</label>
-<select name="barcodetype" id="barcodetype">
-    <!-- TMPL_LOOP NAME="barcode_types" -->
-	<!-- TMPL_IF NAME="active" -->
-        <option value="<!-- TMPL_VAR NAME="code" -->" selected="selected"><!-- TMPL_VAR NAME="desc" --></option>
-	<!-- TMPL_ELSE -->
-        <option value="<!-- TMPL_VAR NAME="code" -->"><!-- TMPL_VAR NAME="desc" --></option>
-	<!-- /TMPL_IF -->
-    <!-- /TMPL_LOOP -->
-</select></li>
-
-
-<li><label for="printingtype">Choose Layout Type</label>
-<select name="printingtype" id="printingtype">
-    <!-- TMPL_LOOP NAME="printingtypes" -->
-<!-- TMPL_IF NAME="active" -->
-	<option value="<!-- TMPL_VAR NAME="code" -->" selected="selected"><!-- TMPL_VAR NAME="desc" --></option>
-	<!-- TMPL_ELSE -->
-        <option value="<!-- TMPL_VAR NAME="code" -->"><!-- TMPL_VAR NAME="desc" --></option>
-<!-- /TMPL_IF -->
-    <!-- /TMPL_LOOP -->
-</select></li>
-
-
-<li> 
-<fieldset class="rows">
-<legend>
-Bibliographic Data to Print
-</legend>
-<!-- TMPL_IF NAME="layout_string" -->
-<input type="radio" name="layoutchoice" value="layout_tx" />Choose Order Of Text Fields to Print
-<!-- TMPL_ELSE -->
-<input type="radio" name="layoutchoice" value="layout_tx" checked="checked" />Choose Order Of Text Fields to Print
-<!-- /TMPL_IF -->
-<br />
-<fieldset id="layout_tx">
-<table summary="fields to print">
-<tr>
-        <td>
- <select name="tx_title" id="tx_title">
-            <!-- TMPL_LOOP Name="tx_title" -->
-			<!-- TMPL_IF Name="selected" -->
-                <option value="<!-- TMPL_VAR Name="num" -->" selected="selected">
-                    <!-- TMPL_VAR Name="num" -->
-                </option>
-			<!-- TMPL_ELSE -->
-                <option value="<!-- TMPL_VAR Name="num" -->">
-                    <!-- TMPL_VAR Name="num" -->
-                </option>
-		<!-- /TMPL_IF -->
-            <!-- /TMPL_LOOP -->
-            </select>
-        <label for="tx_title">Title</label>
-        </td>
-        <td>
-        <select name="tx_author" id="tx_author">
-             <!-- TMPL_LOOP Name="tx_author" -->
-		<!-- TMPL_IF Name="selected" -->	 
-                <option value="<!-- TMPL_VAR Name="num" -->" selected="selected">
-                    <!-- TMPL_VAR Name="num" -->
-                </option>
-		<!-- TMPL_ELSE -->		
-                <option value="<!-- TMPL_VAR Name="num" -->">
-                    <!-- TMPL_VAR Name="num" -->
-                </option>
-		<!-- /TMPL_IF -->		
-            <!-- /TMPL_LOOP -->
-            </select>
-       <label for="tx_author">Author</label>
-        </td>
-        <td>
-        <select name="tx_isbn" id="tx_isbn">
-              <!-- TMPL_LOOP Name="tx_isbn" -->
-		<!-- TMPL_IF Name="selected" -->	  
-                <option value="<!-- TMPL_VAR Name="num" -->" selected="selected">
-                    <!-- TMPL_VAR Name="num" -->
-                </option>
-		<!-- TMPL_ELSE -->		
-                <option value="<!-- TMPL_VAR Name="num" -->">
-                    <!-- TMPL_VAR Name="num" -->
-                </option>
-		<!-- /TMPL_IF -->		
-            <!-- /TMPL_LOOP -->
-            </select>
-      <label for="tx_isbn">ISBN</label>
-        </td>
-</tr>
-<tr>
-        <td>
-        <select name="tx_issn" id="tx_issn">
-               <!-- TMPL_LOOP Name="tx_issn" -->
-		<!-- TMPL_IF Name="selected" -->	   
-                <option value="<!-- TMPL_VAR Name="num" -->" selected="selected">
-                    <!-- TMPL_VAR Name="num" -->
-                </option>
-		<!-- TMPL_ELSE -->		
-                <option value="<!-- TMPL_VAR Name="num" -->">
-                    <!-- TMPL_VAR Name="num" -->
-                </option>
-		<!-- /TMPL_IF -->		
-            <!-- /TMPL_LOOP -->
-            </select>
-     <label for="tx_issn">ISSN</label>
-	 </td>
-        <td>
-        <select name="tx_itemtype" id="tx_itemtype">
-                 <!-- TMPL_LOOP Name="tx_itemtype" -->
-		<!-- TMPL_IF Name="selected" -->		 
-                <option value="<!-- TMPL_VAR Name="num" -->" selected="selected">
-                    <!-- TMPL_VAR Name="num" -->
-                </option>
-			<!-- TMPL_ELSE -->	
-                <option value="<!-- TMPL_VAR Name="num" -->">
-                    <!-- TMPL_VAR Name="num" -->
-                </option>
-		<!-- /TMPL_IF -->		
-            <!-- /TMPL_LOOP -->
-            </select>
-   <label for="tx_itemtype">Itemtype</label>
-        </td>
-        <td>
-        <select id="tx_barcode" name="tx_barcode">
-                 <!-- TMPL_LOOP Name="tx_barcode" -->
-		<!-- TMPL_IF Name="selected" -->		 
-                <option value="<!-- TMPL_VAR Name="num" -->" selected="selected">
-                    <!-- TMPL_VAR Name="num" -->
-                </option>
-			<!-- TMPL_ELSE -->	 
-                <option value="<!-- TMPL_VAR Name="num" -->">
-                    <!-- TMPL_VAR Name="num" -->
-                </option>
-			<!-- /TMPL_IF -->	
-            <!-- /TMPL_LOOP -->
-      </select>
-        <label for="tx_barcode">Barcode (as text)</label>
-        </td>
-</tr> 
- <tr>
-            <td>
-        <select name="tx_itemcallnumber" id="tx_itemcallnumber">
-                 <!-- TMPL_LOOP Name="tx_itemcallnumber" -->
-			<!-- TMPL_IF Name="selected" -->	  
-                <option value="<!-- TMPL_VAR Name="num" -->" selected="selected">
-                    <!-- TMPL_VAR Name="num" -->
-                </option>
-			<!-- TMPL_ELSE -->	 
-                <option value="<!-- TMPL_VAR Name="num" -->">
-                    <!-- TMPL_VAR Name="num" -->
-                </option>
-			<!-- /TMPL_IF -->	
-            <!-- /TMPL_LOOP -->
-      </select>
-        <label for="tx_itemcallnumber">Call Number</label>
-        </td>
-		<td>&nbsp;</td>
-		<td>&nbsp;</td>
-  </tr>
-</table>
-<br />
-</fieldset>
-<br />
-<!-- TMPL_IF NAME="formatstring" -->
-<input type="radio" name="layoutchoice" value="layout_string" checked="checked"/> List Fields
-<!-- TMPL_ELSE -->
-<input type="radio" name="layoutchoice" value="layout_string" /> List Fields
-<!-- /TMPL_IF -->
-<fieldset id="layout_string" class="brief">
-<label for="layoutname">Data Fields</label>
-  
-<input type="text" name="formatstring" id="formatstring" size="80" value="<!-- TMPL_VAR ESCAPE='HTML' NAME="formatstring" -->" />
-
-   <div class="help">
-   <p>Enter a comma separated list of fields to print.  You may include any <em>Koha field</em> or MARC subfield.</p>
-   <p>See online help for advanced options</p>
-   <p>ex: barcode, itemcallnumber, title, "050a 050b", 300a </p>
-	</div>
-</fieldset>
-</fieldset>   
-</li>
-<li><label for="startlabel">Start printing from Label number: </label><input type="text" name="startlabel"  id="startlabel" size="1"  value="<!-- TMPL_IF NAME="startlabel" --><!-- TMPL_VAR NAME="startlabel" --><!-- TMPL_ELSE -->1<!-- /TMPL_IF -->" /></li>
-
-
-<li><label for="guidebox">Draw Guide Boxes</label>
-<!-- TMPL_IF NAME="guidebox"-->
-<input type="checkbox" name="guidebox" id="guidebox" value="1"  checked="checked" />
-<!-- TMPL_ELSE -->
-<input type="checkbox" name="guidebox" id="guidebox" value="1" />
-<!-- /TMPL_IF --></li>
-
-<li><label for="callnum_split">Split Call Numbers</label>
-<!-- TMPL_IF NAME="callnum_split"-->
-<input type="checkbox" name="callnum_split" id="callnum_split" value="1"  checked="checked" />
-<!-- TMPL_ELSE -->
-<input type="checkbox" name="callnum_split" id="callnum_split" value="1" />
-<!-- /TMPL_IF --></li>
-
-<li><label for="text_justify">Text Justification</label>
-<select id="text_justify" name="text_justify">
-<!-- TMPL_IF NAME="justify_L" --><option value='L' selected="selected">Left</option>
-<!-- TMPL_ELSE --><option value='L'>Left</option>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="justify_C" --><option value='C' selected="selected">Center</option>
-<!-- TMPL_ELSE --><option value='C'>Center</option>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="justify_R" --><option value='R' selected="selected">Right</option>
-<!-- TMPL_ELSE --><option value='R'>Right</option>
-<!-- /TMPL_IF -->
-</select>
-</li>
-
-</ol>
-</fieldset>
-<fieldset class="action">
-        <input type="submit" value="Submit" /> <a class="cancel" href="/cgi-bin/koha/labels/label-home.pl">Cancel</a>
-        <input type="hidden" name="op" value="<!-- TMPL_IF NAME="layout_id" -->save<!-- TMPL_ELSE -->add<!-- /TMPL_IF -->_layout" />
-        <input type="hidden" name="layout_id" value="<!-- TMPL_VAR NAME="layout_id" -->" />
-</fieldset>
-</form>
-
-</div>
-</div>
-<div class="yui-b">
-<!-- TMPL_INCLUDE NAME="labels-menu.inc" -->
-</div>
-</div>
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+    <!-- TMPL_INCLUDE NAME="header.inc" -->
+    <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+    <div id="breadcrumbs">
+        <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
+        <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
+        <a href="/cgi-bin/koha/labels/label-home.pl">Labels</a> &rsaquo;
+        <!-- TMPL_IF NAME="layout_id" -->Edit<!-- TMPL_ELSE -->Create<!-- /TMPL_IF --> Label Layout
+    </div>
+    <div id="doc3" class="yui-t2">
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+                    <!-- TMPL_INCLUDE NAME="tools-labels-toolbar.inc" -->
+                    <form name="input" action="/cgi-bin/koha/labels/label-edit-layout.pl" method="get">
+                        <fieldset class="rows">
+                            <legend><!-- TMPL_IF NAME="layout_id" -->Edit<!-- TMPL_ELSE -->Create<!-- /TMPL_IF --> Label Layout</legend>
+                            <ol>
+                                <li>
+                                    <label for="layout_name">Layout Name</label>
+                                    <input type="text" name="layout_name" id="layout_name" size="20" value="<!-- TMPL_VAR NAME="layout_name" -->" />
+                                </li>
+                                <li>
+                                    <label for="barcode_type">Choose Barcode Type (encoding)</label>
+                                    <select name="barcode_type" id="barcode_type">
+                                    <!-- TMPL_LOOP NAME="barcode_types" -->
+                                    <!-- TMPL_IF NAME="selected" -->
+                                    <option value="<!-- TMPL_VAR NAME="type" -->" selected="selected"><!-- TMPL_VAR NAME="name" --></option>
+                                    <!-- TMPL_ELSE -->
+                                    <option value="<!-- TMPL_VAR NAME="type" -->"><!-- TMPL_VAR NAME="name" --></option>
+                                    <!-- /TMPL_IF -->
+                                    <!-- /TMPL_LOOP -->
+                                    </select>
+                                </li>
+                                <li>
+                                    <label for="printing_type">Choose Layout Type</label>
+                                    <select name="printing_type" id="printing_type">
+                                    <!-- TMPL_LOOP NAME="label_types" -->
+                                    <!-- TMPL_IF NAME="selected" -->
+                                    <option value="<!-- TMPL_VAR NAME="type" -->" selected="selected"><!-- TMPL_VAR NAME="name" --></option>
+                                    <!-- TMPL_ELSE -->
+                                    <option value="<!-- TMPL_VAR NAME="type" -->"><!-- TMPL_VAR NAME="name" --></option>
+                                    <!-- /TMPL_IF -->
+                                    <!-- /TMPL_LOOP -->
+                                    </select>
+                                </li>
+                                <li> 
+                                    <fieldset class="rows">
+                                        <legend>Bibliographic Data to Print</legend>
+                                        <input type="radio" name="layout_choice" value="layout_table" <!-- TMPL_UNLESS NAME="layout_string" -->checked="checked"<!-- /TMPL_UNLESS -->" >Choose Order Of Text Fields to Print</input>
+                                        <br />
+                                            <fieldset id="layout_table">
+                                                <table summary="fields to print">
+                                                    <!-- TMPL_LOOP NAME="field_table" -->
+                                                    <tr>
+                                                        <!-- TMPL_LOOP NAME="text_fields" -->
+                                                        <!-- TMPL_IF NAME="field_empty" -->
+                                                        <td>
+                                                            &nbsp;
+                                                        </td>
+                                                        <!-- TMPL_ELSE -->
+                                                        <td>
+                                                            <select name="<!-- TMPL_VAR NAME="field_name" -->" id="<!-- TMPL_VAR NAME="field_name" -->">
+                                                                <!-- TMPL_LOOP NAME="order" -->
+                                                                <!-- TMPL_IF Name="selected" -->
+                                                                <option value="<!-- TMPL_VAR Name="num" -->" selected="selected"><!-- TMPL_VAR Name="num" --></option>
+                                                                <!-- TMPL_ELSE -->
+                                                                <option value="<!-- TMPL_VAR Name="num" -->"><!-- TMPL_VAR Name="num" --></option>
+                                                                <!-- /TMPL_IF -->
+                                                                <!-- /TMPL_LOOP -->
+                                                            </select>
+                                                            <label for="<!-- TMPL_VAR NAME="field_name" -->"><!-- TMPL_VAR NAME="field_label" --></label>
+                                                        </td>
+                                                        <!-- /TMPL_IF -->
+                                                        <!-- /TMPL_LOOP -->
+                                                    </tr>
+                                                    <!-- /TMPL_LOOP -->
+                                                </table>
+                                                <br />
+                                            </fieldset>
+                                            <br />
+                                            <input type="radio" name="layout_choice" value="layout_string" <!-- TMPL_IF NAME="layout_string" -->checked="checked"<!-- /TMPL_IF -->"> List Fields </input>
+                                            <fieldset id="layout_string" class="brief">
+                                                <label for="format_string">Data Fields</label>
+                                                <input type="text" name="format_string" id="format_string" size="80" value="<!-- TMPL_VAR ESCAPE='HTML' NAME="format_string" -->" />
+                                                <div class="help">
+                                                    <p>Enter a comma separated list of fields to print.  You may include any <em>Koha field</em> or MARC subfield.</p>
+                                                    <p>See online help for advanced options</p>
+                                                    <p>ex: barcode, itemcallnumber, title, "050a 050b", 300a </p>
+                                                </div>
+                                            </fieldset>
+                                    </fieldset>   
+                                </li>
+                                <li>
+                                    <label for="guidebox">Draw Guide Boxes</label>
+                                    <!-- TMPL_IF NAME="guidebox"-->
+                                    <input type="checkbox" name="guidebox" id="guidebox" value="1"  checked="checked" />
+                                    <!-- TMPL_ELSE -->
+                                    <input type="checkbox" name="guidebox" id="guidebox" value="1" />
+                                    <!-- /TMPL_IF -->
+                                </li>
+                                <li>
+                                    <label for="callnum_split">Split Call Numbers</label>
+                                    <!-- TMPL_IF NAME="callnum_split"-->
+                                    <input type="checkbox" name="callnum_split" id="callnum_split" value="1"  checked="checked" />
+                                    <!-- TMPL_ELSE -->
+                                    <input type="checkbox" name="callnum_split" id="callnum_split" value="1" />
+                                    <!-- /TMPL_IF -->
+                                </li>
+                                <li>
+                                    <label for="text_justify">Text Justification</label>
+                                    <select name="text_justify" id="text_justify">
+                                        <!-- TMPL_LOOP Name="text_justification_types" -->
+                                        <!-- TMPL_IF Name="selected" -->
+                                        <option value="<!-- TMPL_VAR Name="type" -->" selected="selected"><!-- TMPL_VAR Name="name" --></option>
+                                        <!-- TMPL_ELSE -->
+                                        <option value="<!-- TMPL_VAR Name="type" -->"><!-- TMPL_VAR Name="name" --></option>
+                                        <!-- /TMPL_IF -->
+                                        <!-- /TMPL_LOOP -->
+                                    </select>
+                                </li>
+                                <li>
+                                    <label for="font">Font</label>
+                                    <select name="font" id="font">
+                                        <!-- TMPL_LOOP Name="font_types" -->
+                                        <!-- TMPL_IF Name="selected" -->
+                                        <option value="<!-- TMPL_VAR Name="type" -->" selected="selected"><!-- TMPL_VAR Name="name" --></option>
+                                        <!-- TMPL_ELSE -->
+                                        <option value="<!-- TMPL_VAR Name="type" -->"><!-- TMPL_VAR Name="name" --></option>
+                                        <!-- /TMPL_IF -->
+                                        <!-- /TMPL_LOOP -->
+                                    </select>
+                                </li>
+                                <li>
+                                    <label for="font_size">Font Size</label>
+                                    <input type="text" name="font_size" id="font_size" size="2" value="<!-- TMPL_VAR ESCAPE='HTML' NAME="font_size" -->" />
+                                </li>
+                            </ol>
+                        </fieldset>
+                        <fieldset class="action">
+                            <input type="submit" value="Submit" /><a class="cancel" href="/cgi-bin/koha/labels/label-layout.pl">Cancel</a>
+                            <input type="hidden" name="op" value="save" />
+                            <input type="hidden" name="layout_id" value="<!-- TMPL_VAR NAME="layout_id" -->" />
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+            <div class="yui-b">
+                <!-- TMPL_INCLUDE NAME="labels-menu.inc" -->
+            </div>
+        </div>
+        <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

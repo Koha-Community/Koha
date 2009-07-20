@@ -21,6 +21,7 @@ use strict;
 use warnings;
 
 use Sys::Syslog qw(syslog);
+use DBI qw(neat);
 
 use C4::Context;
 use C4::Debug;
@@ -43,32 +44,30 @@ BEGIN {
 #    }
 
 sub _check_params {
-    my $given_params = {};
     my $exit_code = 0;
     my @valtmpl_id_params = (
         'barcode_type',
-        'start_label',  #remove...pass in as a cgi->param
         'printing_type',
         'layout_name',
         'guidebox',
-        'font_type',
-        'ccode',        #remove...depricated...
+        'font',
+        'font_size',
         'callnum_split',
         'text_justify',
         'format_string',
     );
     if (scalar(@_) >1) {
-        $given_params = {@_};
-        foreach my $key (keys %{$given_params}) {
+        my %given_params = @_;
+        foreach my $key (keys %given_params) {
             if (!(grep m/$key/, @valtmpl_id_params)) {
-                syslog("LOG_ERR", "C4::Labels::Template : Unrecognized parameter type of \"%s\".", $key);
+                syslog("LOG_ERR", "C4::Labels::Layout : (Multiple parameters) Unrecognized parameter type of \"%s\".", $key);
                 $exit_code = 1;
             }
         }
     }
     else {
         if (!(grep m/$_/, @valtmpl_id_params)) {
-            syslog("LOG_ERR", "C4::Labels::Template : Unrecognized parameter type of \"%s\".", $_);
+            syslog("LOG_ERR", "C4::Labels::Layout : (Single parameter) Unrecognized parameter type of \"%s\".", $_);
             $exit_code = 1;
         }
     }
@@ -101,16 +100,15 @@ sub new {
     }
     my $type = ref($invocant) || $invocant;
     my $self = {
-        barcode_type    =>      '',
-        start_label     =>      1,
-        printing_type   =>      '',
-        layout_name     =>      '',
+        barcode_type    =>      'CODE39',
+        printing_type   =>      'BAR',
+        layout_name     =>      'DEFAULT',
         guidebox        =>      0,
-        font_type       =>      '',
-        ccode           =>      '',
+        font            =>      'TR',
+        font_size       =>      3,
         callnum_split   =>      0,
-        text_justify    =>      '',
-        format_string   =>      '',
+        text_justify    =>      'L',
+        format_string   =>      'title, author, isbn, issn, itemtype, barcode, callnumber',
         @_,
     };
     bless ($self, $type);
@@ -169,17 +167,14 @@ sub delete {
         $call_type = 'C4::Labels::Layout::delete';
         $query_param = $opts{'layout_id'};
     }
-    warn Dumper(\%opts);
     if ($query_param eq '') {   # If there is no layout id then we cannot delete it
         syslog("LOG_ERR", "%s : Cannot delete layout as the layout id is invalid or non-existant.", $call_type);
         return 1;
     }
     my $query = "DELETE FROM labels_layouts WHERE layout_id = ?";  
     my $sth = C4::Context->dbh->prepare($query);
-    warn "$query : ?= $query_param\n";
     $sth->execute($query_param);
     if ($sth->err) {
-        warn "DB error: $sth->errstr\n";
         syslog("LOG_ERR", "%s : Database returned the following error: %s", $call_type, $sth->errstr);
         return 1;
     }
@@ -203,18 +198,18 @@ sub save {
         my @params;
         my $query = "UPDATE labels_layouts SET ";
         foreach my $key (keys %{$self}) {
-            next if $key eq 'id';
+            next if $key eq 'layout_id';
             push (@params, $self->{$key});
             $query .= "$key=?, ";
         }
         $query = substr($query, 0, (length($query)-2));
-        push (@params, $self->{'id'});
         $query .= " WHERE layout_id=?;";
-        warn "DEBUG: Updating: $query\n" if $debug;
+        push (@params, $self->{'layout_id'});
         my $sth = C4::Context->dbh->prepare($query);
+        #local $sth->{TraceLevel} = "3";        # enable DBI trace and set level; outputs to STDERR
         $sth->execute(@params);
         if ($sth->err) {
-            syslog("LOG_ERR", "Database returned the following error: %s", $sth->errstr);
+            syslog("LOG_ERR", "C4::Labels::Layout : Database returned the following error: %s", $sth->errstr);
             return -1;
         }
         return $self->{'layout_id'};
@@ -233,11 +228,10 @@ sub save {
         }
         $query = substr($query, 0, (length($query)-1));
         $query .= ");";
-        warn "DEBUG: Saving: $query\n" if $debug;
         my $sth = C4::Context->dbh->prepare($query);
         $sth->execute(@params);
         if ($sth->err) {
-            syslog("LOG_ERR", "Database returned the following error: %s", $sth->errstr);
+            syslog("LOG_ERR", "C4::Labels::Layout : Database returned the following error: %s", $sth->errstr);
             return -1;
         }
         my $sth1 = C4::Context->dbh->prepare("SELECT MAX(layout_id) FROM labels_layouts;");
@@ -259,14 +253,14 @@ sub save {
 sub get_attr {
     my $self = shift;
     if (_check_params(@_) eq 1) {
-        return 1;
+        return -1;
     }
     my ($attr) = @_;
     if (exists($self->{$attr})) {
         return $self->{$attr};
     }
     else {
-        return 1;
+        return -1;
     }
     return;
 }
@@ -285,8 +279,10 @@ sub set_attr {
     if (_check_params(@_) eq 1) {
         return 1;
     }
-    my ($attr, $value) = @_;
-    $self->{$attr} = $value;
+    my %attrs = @_;
+    foreach my $attrib (keys(%attrs)) {
+        $self->{$attrib} = $attrs{$attrib};
+    };
     return 0;
 }
 1;

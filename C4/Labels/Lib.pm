@@ -101,7 +101,7 @@ my $unit_values = [
 
     examples:
 
-        my $templates = C4::Labels::Lib::get_all_templates();
+        my $templates = get_all_templates();
 
 =cut
 
@@ -127,7 +127,7 @@ sub get_all_templates {
 
     examples:
 
-        my $layouts = C4::Labels::Lib::get_all_layouts();
+        my $layouts = get_all_layouts();
 
 =cut
 
