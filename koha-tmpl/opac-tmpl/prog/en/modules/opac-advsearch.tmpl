@@ -10,197 +10,95 @@
 <form action="/cgi-bin/koha/opac-search.pl" method="get">
 	<div class="yui-g">
 <!-- TMPL_IF NAME="if_expanded_options_actually_worked" -->
-       <div id="databases" class="container"> <!-- TMPL_IF NAME="outer_servers_loop" -->
-            <!-- DATABASES -->
-            
+        <div id="databases" class="container"> <!-- TMPL_IF NAME="outer_servers_loop" -->
+        <!-- DATABASES -->
             <fieldset>
-                    <legend>Select local databases:</legend>
-                        <!-- TMPL_LOOP NAME="outer_servers_loop" -->
-                            <!-- TMPL_LOOP NAME="inner_servers_loop" -->
+                <legend>Select local databases:</legend>
+                <!-- TMPL_LOOP NAME="outer_servers_loop" -->
+                    <!-- TMPL_LOOP NAME="inner_servers_loop" -->
 
-<!-- TMPL_IF NAME="checked" --><input type="checkbox" id="<!-- TMPL_VAR NAME="id" -->" name="<!-- TMPL_VAR NAME="name" -->" checked="<!-- TMPL_VAR NAME="checked" -->" value="<!-- TMPL_VAR NAME="value" -->" /><!-- TMPL_ELSE --><input type="checkbox" id="<!-- TMPL_VAR NAME="id" -->" name="<!-- TMPL_VAR NAME="name" -->"  value="<!-- TMPL_VAR NAME="value" -->" /><!-- /TMPL_IF -->
-<label for="<!-- TMPL_VAR NAME="id" -->"><img width="16" height="16" alt="<!-- TMPL_VAR NAME="id" -->" src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="icon" -->" /> <!-- TMPL_VAR NAME="label" --></label>
-                            <!-- /TMPL_LOOP -->
-                            <!-- /TMPL_LOOP -->
+<!-- TMPL_IF NAME="checked" --><input type="checkbox" id="<!-- TMPL_VAR NAME="id" -->" name="<!-- TMPL_VAR NAME="name" -->" checked="<!-- TMPL_VAR NAME="checked" -->" value="<!-- TMPL_VAR NAME="value" -->" /><!-- TMPL_ELSE -->
+                               <input type="checkbox" id="<!-- TMPL_VAR NAME="id" -->" name="<!-- TMPL_VAR NAME="name" -->"  value="<!-- TMPL_VAR NAME="value" -->" /><!-- /TMPL_IF -->
+                        <label for="<!-- TMPL_VAR NAME="id" -->"><img width="16" height="16" alt="<!-- TMPL_VAR NAME="id" -->" src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="icon" -->" /> <!-- TMPL_VAR NAME="label" --></label>
+                    <!-- /TMPL_LOOP -->
+                <!-- /TMPL_LOOP -->
             </fieldset>
-            <!-- /DATABASES -->
+        <!-- /DATABASES -->
         <!-- /TMPL_IF -->
-    
+
         <!-- TMPL_IF NAME="outer_sup_servers_loop" -->
             <!-- REMOTE DATABASES -->
             <fieldset>
                 <legend>Select remote databases:</legend>
-                    <!-- TMPL_LOOP NAME="outer_sup_servers_loop" -->
-                            <!-- TMPL_LOOP NAME="inner_sup_servers_loop" -->
+                <!-- TMPL_LOOP NAME="outer_sup_servers_loop" -->
+                    <!-- TMPL_LOOP NAME="inner_sup_servers_loop" -->
 
 <!-- TMPL_IF NAME="checked" --><input type="checkbox" id="<!-- TMPL_VAR NAME="id" -->" name="<!-- TMPL_VAR NAME="name" -->" checked="<!-- TMPL_VAR NAME="checked" -->" value="<!-- TMPL_VAR NAME="value" -->" /><input type="checkbox" id="<!-- TMPL_VAR NAME="id" -->" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->" />
 <!-- /TMPL_IF -->
 <label for="<!-- TMPL_VAR NAME="id" -->"><img alt="<!-- TMPL_VAR NAME="id" -->" src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="icon" -->" /><!-- TMPL_VAR NAME="label" --></label>
-                            <!-- /TMPL_LOOP -->
-                            <!-- /TMPL_LOOP -->
-                </fieldset>
+                    <!-- /TMPL_LOOP -->
+                <!-- /TMPL_LOOP -->
+            </fieldset>
             <!-- /REMOTE DATABASES -->
         <!-- /TMPL_IF --></div>
     <!-- /TMPL_IF -->
 
     <!-- BOOLEAN SEARCH OPTIONS -->
     <div id="booleansearch" class="container"><fieldset>
-    <legend>Search for:</legend>
+        <legend>Search for:</legend>
     <!-- TMPL_LOOP NAME="search_boxes_loop" -->
         <p>
         <!-- TMPL_IF NAME="expanded_options" -->
-             <!-- TMPL_IF NAME="boolean" -->
-                  <select name="op">
-                       <option value="and" selected="selected">and</option>
-                       <option value="or">or</option>
-                       <option value="not">not</option>
-                   </select>
-               <!-- /TMPL_IF -->
-            <!-- TMPL_IF NAME="search_boxes_label" -->
-                <!-- p tag was here -->
-            <!-- TMPL_ELSE -->
-                 <!-- p tag was here -->
+            <!-- TMPL_IF NAME="boolean" -->
+            <select name="op">
+                <option value="and" selected="selected">and</option>
+                <option value="or">or</option>
+                <option value="not">not</option>
+            </select>
             <!-- /TMPL_IF -->
-        <!-- TMPL_ELSE -->
-             <!-- p tag was here -->
         <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="expanded_options" --><!-- TMPL_VAR NAME="left_content" --><!-- /TMPL_IF --> 
         <select name="idx">
-		<!-- TMPL_IF NAME="selected" -->
-            <option value="kw" selected="selected">Keyword</option>
-			<!-- TMPL_ELSE -->
             <option value="kw">Keyword</option>
-			<!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="selected" -->
-            <option value="au,wrdl" selected="selected">Author</option>
-			<!-- TMPL_ELSE -->
             <option value="au,wrdl">Author</option>
-			<!-- /TMPL_IF -->
 			
 <!-- TMPL_IF NAME="expanded_options" -->
-			
-			<!-- TMPL_IF NAME="selected" -->
-                <option value="au,phr" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; Author Phrase</option>
-<!-- TMPL_ELSE -->
-                <option value="au,phr">&nbsp;&nbsp;&nbsp;&nbsp; Author Phrase</option>
+            <option value="au,phr">&nbsp;&nbsp;&nbsp;&nbsp; Author Phrase</option>
+            <option value="cpn,wrdl">&nbsp;&nbsp;&nbsp;&nbsp; Corporate Name</option>
+            <option value="cfn,wrdl">&nbsp;&nbsp;&nbsp;&nbsp; Conference Name</option>
+            <option value="cfn,phr">&nbsp;&nbsp;&nbsp;&nbsp; Conference Name Phrase</option>
+            <option value="pn,wrdl">&nbsp;&nbsp;&nbsp;&nbsp; Personal Name</option>
+            <option value="pn,phr">&nbsp;&nbsp;&nbsp;&nbsp; Personal Name Phrase</option>
 <!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" -->
-                <option value="cpn,wrdl" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; Corporate Name</option>
-<!-- TMPL_ELSE -->
-                <option value="cpn,wrdl">&nbsp;&nbsp;&nbsp;&nbsp; Corporate Name</option>
+            <option value="ln">Language</option>
+<!-- TMPL_IF NAME="expanded_options" -->
+            <option value="nt">Notes/Comments</option>
 <!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" -->
-                <option value="cfn,wrdl" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; Conference Name</option>
-<!-- TMPL_ELSE -->
-                <option value="cfn,wrdl">&nbsp;&nbsp;&nbsp;&nbsp; Conference Name</option>
+            <option value="pb,wrdl">Publisher</option>
+            <option value="pl,wrdl">Publisher Location</option>
+<!-- TMPL_IF NAME="expanded_options" -->
+            <option value="sn">Standard Number</option>
+            <option value="nb">&nbsp;&nbsp;&nbsp;&nbsp; ISBN</option>
+            <option value="ns">&nbsp;&nbsp;&nbsp;&nbsp; ISSN</option>
+            <option value="lcn,phr">&nbsp;&nbsp;&nbsp;&nbsp; Call Number</option>
 <!-- /TMPL_IF -->
-				
-				<!-- TMPL_IF NAME="selected" -->
-                    <option value="cpn,phr" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; Corporate Name Phrase</option>
-<!-- TMPL_ELSE -->
-                    <option value="cfn,phr">&nbsp;&nbsp;&nbsp;&nbsp; Conference Name Phrase</option><!-- /TMPL_IF -->
-				
-				<!-- TMPL_IF NAME="selected" -->
-                    <option value="pn,wrdl" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; Personal Name</option>
-<!-- TMPL_ELSE -->	
-                    <option value="pn,wrdl">&nbsp;&nbsp;&nbsp;&nbsp; Personal Name</option><!-- /TMPL_IF -->
-				
- <!-- TMPL_IF NAME="selected" -->				
-                    <option value="pn,phr" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; Personal Name Phrase</option>		
-<!-- TMPL_ELSE -->		
-                    <option value="pn,phr">&nbsp;&nbsp;&nbsp;&nbsp; Personal Name Phrase</option>
+            <option value="su,wrdl">Subject</option>
+<!-- TMPL_IF NAME="expanded_options" -->
+            <option value="su,phr">&nbsp;&nbsp;&nbsp;&nbsp; Subject Phrase</option>
 <!-- /TMPL_IF -->
-
- <!-- /TMPL_IF -->
- 
- <!-- TMPL_IF NAME="selected" -->
-            <option value="ln" selected="selected">Language</option>
-			<!-- TMPL_ELSE -->
-            <option value="ln">Language</option><!-- /TMPL_IF -->
-
-
-                <!-- TMPL_IF NAME="expanded_options" -->
-                <!-- TMPL_IF NAME="selected" --><option value="nt" selected="selected">Notes/Comments</option><!-- TMPL_ELSE -->
-                <option value="nt">Notes/Comments</option><!-- /TMPL_IF -->
+            <option value="ti">Title</option>
+<!-- TMPL_IF NAME="expanded_options" -->
+            <option value="ti,phr">&nbsp;&nbsp;&nbsp;&nbsp; Title Phrase</option>
+            <option value="se,wrdl">Series Title</option>
+            <option value="nb">ISBN</option>
+            <option value="callnum">Call Number</option>
 <!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="selected" -->
-            <option value="pb,wrdl" selected="selected">Publisher</option>
-			<!-- TMPL_ELSE -->
-            <option value="pb,wrdl">Publisher</option><!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="selected" -->
-                <option value="pl,wrdl" selected="selected">Publisher Location</option>
-<!-- TMPL_ELSE -->
-                <option value="pl,wrdl">Publisher Location</option><!-- /TMPL_IF -->
-                
-
-
-                <!-- TMPL_IF NAME="expanded_options" --><!-- TMPL_IF NAME="selected" -->
-                <option value="sn" selected="selected">Standard Number</option>
-				<!-- TMPL_ELSE -->
-                <option value="sn">Standard Number</option><!-- /TMPL_IF -->
-				
-				<!-- TMPL_IF NAME="selected" -->
-                    <option value="nb" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; ISBN</option>
-					<!-- TMPL_ELSE -->
-                    <option value="nb">&nbsp;&nbsp;&nbsp;&nbsp; ISBN</option><!-- /TMPL_IF -->
-				
-				<!-- TMPL_IF NAME="selected" -->
-                    <option value="ns" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; ISSN</option>
-					<!-- TMPL_ELSE -->
-                    <option value="ns">&nbsp;&nbsp;&nbsp;&nbsp; ISSN</option><!-- /TMPL_IF -->
-				
-				<!-- TMPL_IF NAME="selected" -->
-                    <option value="lcn,phr" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; Call Number</option>
-					<!-- TMPL_ELSE -->
-                    <option value="lcn,phr">&nbsp;&nbsp;&nbsp;&nbsp; Call Number</option><!-- /TMPL_IF -->
-
-
-                <!-- /TMPL_IF -->
-				<!-- TMPL_IF NAME="selected" -->
-            <option value="su,wrdl" selected="selected">Subject</option>
-			<!-- TMPL_ELSE -->
-            <option value="su,wrdl">Subject</option><!-- /TMPL_IF -->
-
-
-                <!-- TMPL_IF NAME="expanded_options" -->
-				<!-- TMPL_IF NAME="selected" -->
-                <option value="su,phr" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; Subject Phrase</option>
-<!-- TMPL_ELSE -->
-                <option value="su,phr">&nbsp;&nbsp;&nbsp;&nbsp; Subject Phrase</option><!-- /TMPL_IF -->
-                <!-- /TMPL_IF -->
-				<!-- TMPL_IF NAME="selected" -->
-            <option value="ti" selected="selected">Title</option>
-			<!-- TMPL_ELSE -->
-            <option value="ti">Title</option><!-- /TMPL_IF -->
-                <!-- TMPL_IF NAME="expanded_options" -->
-				<!-- TMPL_IF NAME="selected" -->
-                <option value="ti,phr" selected="selected">&nbsp;&nbsp;&nbsp;&nbsp; Title Phrase</option>
-<!-- TMPL_ELSE -->
-                <option value="ti,phr">&nbsp;&nbsp;&nbsp;&nbsp; Title Phrase</option><!-- /TMPL_IF -->
-                <!-- /TMPL_IF -->
-				<!-- TMPL_IF NAME="selected" -->
-                <option value="se,wrdl" selected="selected">Series Title</option>
-<!-- TMPL_ELSE -->
-                <option value="se,wrdl">Series Title</option><!-- /TMPL_IF -->
-                <!-- TMPL_IF NAME="selected" -->
-                <option value="nb" selected="selected">ISBN</option>
-<!-- TMPL_ELSE -->
-                <option value="nb">ISBN</option>
-                <!-- /TMPL_IF -->
-                <!-- TMPL_IF NAME="selected" -->
-                <option value="callnum" selected="selected">Call Number</option>
-<!-- TMPL_ELSE -->
-                <option value="callnum">Call Number</option>
-                <!-- /TMPL_IF -->
         </select>
         <input type="text" size="30" name="q" title="Enter search terms" value="" />
-        <!-- TMPL_IF NAME="expanded_options" -->
-          <!--   <!-- TMPL_IF NAME="scan_index" --><input type="checkbox" name="scan" id="scan" value="1" /> Scan Indexes<!-- /TMPL_IF --> -->
-            <!-- TMPL_IF NAME="add_field" --><a href="JavaScript:add_field();" id="ButtonPlus" title="Add another field">[+]</a><!-- /TMPL_IF -->
-        <!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="expanded_options" -->
+        <!--   <!-- TMPL_IF NAME="scan_index" --><input type="checkbox" name="scan" id="scan" value="1" /> Scan Indexes<!-- /TMPL_IF --> -->
+        <!-- TMPL_IF NAME="add_field" --><a href="JavaScript:add_field();" id="ButtonPlus" title="Add another field">[+]</a><!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
         </p>
     <!-- /TMPL_LOOP -->
 
@@ -320,7 +218,6 @@
         <!-- /TMPL_LOOP -->
         </select>
         
-        
         <div style="margin-top:.4em"><label for="available-items"><input type="checkbox" id="available-items" name="limit" value="available" /> Only items currently available for loan or reference</label></div>
     </fieldset></div>
 	<!-- /TMPL_UNLESS -->
@@ -349,20 +246,16 @@
 <!-- /SEARCH BUTTONS --></div></div>
 </form>
 
-<script type="text/JavaScript" language="JavaScript">
-	/**
-	 *  Function add_field();
-         *  This function allows to display a new field to search.
-         */
+<script type="text/javascript" language="javascript">
+    /* This function allows to display a new field to search.
+     */
 	function add_field() {
 		var ButtonPlus = document.getElementById('ButtonPlus');
 		var line       = ButtonPlus.parentNode;
-		var dad        = line.parentNode;
-		dad.appendChild(line.cloneNode(true));
+		line.parentNode.appendChild(line.cloneNode(true));
 		line.removeChild(ButtonPlus);
-        }
+    }
 </script>
-
 
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
