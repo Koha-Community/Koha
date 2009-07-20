@@ -2147,6 +2147,7 @@ sub z3950_search_args {
         push @$array, { name=>$field, value=>$bibrec->{$field}, encvalue=>$encvalue } if defined $bibrec->{$field};
     }
     return $array;
+}
 
 =head2 BiblioAddAuthorities
 
