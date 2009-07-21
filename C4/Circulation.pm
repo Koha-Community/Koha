@@ -1380,10 +1380,6 @@ sub AddReturn {
             if ($iteminformation->{borrowernumber}){
               ($borrower) = C4::Members::GetMemberDetails( $iteminformation->{borrowernumber}, 0 );
             }
-        }       
-        # fix up the accounts.....
-        if ( $iteminformation->{'itemlost'} ) {
-            $messages->{'WasLost'} = 1;
         }
     
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -1413,6 +1409,7 @@ sub AddReturn {
         # fix up the accounts.....
         if ($iteminformation->{'itemlost'}) {
                 FixAccountForLostAndReturned($iteminformation, $borrower);
+                ModItem({ itemlost => '0' }, $biblio->{'biblionumber'}, $iteminformation->{'itemnumber'});
                 $messages->{'WasLost'} = 1;
         }
         # fix up the overdues in accounts...
