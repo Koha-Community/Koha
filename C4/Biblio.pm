@@ -2184,10 +2184,14 @@ sub PrepareItemrecordDisplay {
                   $tagslib->{$tag}->{$subfield}->{repeatable};
                 $subfield_data{hidden} = "display:none"
                   if $tagslib->{$tag}->{$subfield}->{hidden};
-                my ( $x, $value );
-                ( $x, $value ) = _find_value( $tag, $subfield, $itemrecord )
-                  if ($itemrecord);
-                $value =~ s/"/&quot;/g;
+                  my ( $x, $value );
+                  if ($itemrecord) {
+                      ( $x, $value ) = _find_value( $tag, $subfield, $itemrecord );
+                  }
+                  if (!defined $value) {
+                      $value = q||;
+                  }
+                  $value =~ s/"/&quot;/g;
 
                 # search for itemcallnumber if applicable
                 if ( $tagslib->{$tag}->{$subfield}->{kohafield} eq
