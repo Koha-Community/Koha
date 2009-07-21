@@ -1068,27 +1068,31 @@ sub GetAuthValCode {
 
 $authvalues = GetAuthorisedValues([$category], [$selected]);
 
-This function returns all authorised values from the'authosied_value' table in a reference to array of hashrefs.
+This function returns all authorised values from the'authorised_value' table in a reference to array of hashrefs.
 
 C<$category> returns authorised values for just one category (optional).
+
+C<$opac> If set to a true value, displays OPAC descriptions rather than normal ones when they exist.
 
 =cut
 
 sub GetAuthorisedValues {
-    my ($category,$selected) = @_;
+    my ($category,$selected,$opac) = @_;
 	my @results;
     my $dbh      = C4::Context->dbh;
     my $query    = "SELECT * FROM authorised_values";
     $query .= " WHERE category = '" . $category . "'" if $category;
-    $query .= " ORDER BY category, lib";
-
+    $query .= " ORDER BY category, lib, lib_opac";
     my $sth = $dbh->prepare($query);
     $sth->execute;
 	while (my $data=$sth->fetchrow_hashref) {
-		if ($selected eq $data->{'authorised_value'} ) {
-			$data->{'selected'} = 1;
-		}
-        push @results, $data;
+	    if ($selected eq $data->{'authorised_value'} ) {
+		    $data->{'selected'} = 1;
+	    }
+	    if ($opac && $data->{'lib_opac'}) {
+		$data->{'lib'} = $data->{'lib_opac'};
+	    }
+	    push @results, $data;
 	}
     #my $data = $sth->fetchall_arrayref({});
     return \@results; #$data;
@@ -1117,6 +1121,7 @@ sub GetAuthorisedValueCategories {
 =head2 GetKohaAuthorisedValues
 	
 	Takes $kohafield, $fwcode as parameters.
+	If $opac parameter is set to a true value, displays OPAC descriptions rather than normal ones when they exist.
 	Returns hashref of Code => description
 	Returns undef 
 	  if no authorised value category is defined for the kohafield.
@@ -1124,16 +1129,16 @@ sub GetAuthorisedValueCategories {
 =cut
 
 sub GetKohaAuthorisedValues {
-  my ($kohafield,$fwcode,$codedvalue) = @_;
+  my ($kohafield,$fwcode,$opac) = @_;
   $fwcode='' unless $fwcode;
   my %values;
   my $dbh = C4::Context->dbh;
   my $avcode = GetAuthValCode($kohafield,$fwcode);
   if ($avcode) {  
-	my $sth = $dbh->prepare("select authorised_value, lib from authorised_values where category=? ");
+	my $sth = $dbh->prepare("select authorised_value, lib, lib_opac from authorised_values where category=? ");
    	$sth->execute($avcode);
-	while ( my ($val, $lib) = $sth->fetchrow_array ) { 
-   		$values{$val}= $lib;
+	while ( my ($val, $lib, $lib_opac) = $sth->fetchrow_array ) { 
+		$values{$val} = ($opac && $lib_opac) ? $lib_opac : $lib;
    	}
    	return \%values;
   } else {

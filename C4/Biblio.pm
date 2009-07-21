@@ -1272,19 +1272,22 @@ sub GetCOinSBiblio {
 =over 4
 
 my $subfieldvalue =get_authorised_value_desc(
-    $tag, $subf[$i][0],$subf[$i][1], '', $taglib, $category);
+    $tag, $subf[$i][0],$subf[$i][1], '', $taglib, $category, $opac);
 Retrieve the complete description for a given authorised value.
 
 Now takes $category and $value pair too.
 my $auth_value_desc =GetAuthorisedValueDesc(
     '','', 'DVD' ,'','','CCODE');
 
+If the optional $opac parameter is set to a true value, displays OPAC descriptions rather than normal ones when they exist.
+
+
 =back
 
 =cut
 
 sub GetAuthorisedValueDesc {
-    my ( $tag, $subfield, $value, $framework, $tagslib, $category ) = @_;
+    my ( $tag, $subfield, $value, $framework, $tagslib, $category, $opac ) = @_;
     my $dbh = C4::Context->dbh;
 
     if (!$category) {
@@ -1308,11 +1311,11 @@ sub GetAuthorisedValueDesc {
     if ( $category ne "" ) {
         my $sth =
             $dbh->prepare(
-                    "SELECT lib FROM authorised_values WHERE category = ? AND authorised_value = ?"
+                    "SELECT lib, lib_opac FROM authorised_values WHERE category = ? AND authorised_value = ?"
                     );
         $sth->execute( $category, $value );
         my $data = $sth->fetchrow_hashref;
-        return $data->{'lib'};
+        return ($opac && $data->{'lib_opac'}) ? $data->{'lib_opac'} : $data->{'lib'};
     }
     else {
         return $value;    # if nothing is found return the original value
