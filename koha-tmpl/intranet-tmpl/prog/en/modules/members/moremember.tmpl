@@ -27,21 +27,21 @@ $(document).ready(function() {
     <!-- TMPL_IF NAME="picture" -->
     // new YAHOO.widget.Button("delpicture");   // FIXME: formatting mismatch between YUI and normal button
 	$('#delpicture').click(function(){
-		 return confirm('Are you sure you want to delete this patron image? This cannot be undone.');
+		 return confirm(_('Are you sure you want to delete this patron image? This cannot be undone.'));
 	});
-	$('#manage-patron-image').find("input[@value*=Upload]").click(function(){
+	$('#manage-patron-image').find("input[value*=Upload]").click(function(){
         if($("#uploadfile").val() == ""){
-            alert("Please choose a file to upload");
+            alert(_("Please choose a file to upload"));
             return false;
         }
-        return confirm('Are you sure you want to replace the current patron image? This cannot be undone.');
+        return confirm(_('Are you sure you want to replace the current patron image? This cannot be undone.'));
 	});<!-- /TMPL_IF -->
-	$("#renew_all"      ).click(function(){ $(".checkboxed").checkCheckboxes(":input[@name*=items]"   ); $(".checkboxed").unCheckCheckboxes(":input[@name*=barcodes]"); });
-	$("#return_all"     ).click(function(){ $(".checkboxed").checkCheckboxes(":input[@name*=barcodes]"); $(".checkboxed").unCheckCheckboxes(":input[@name*=items]"   ); });
-	$("#CheckAllitems"  ).click(function(){ $(".checkboxed").checkCheckboxes(":input[@name*=items]"   ); $(".checkboxed").unCheckCheckboxes(":input[@name*=barcodes]"); return false; });
-    $("#CheckNoitems"   ).click(function(){ $(".checkboxed").unCheckCheckboxes(":input[@name*=items]"); return false; });
-	$("#CheckAllreturns").click(function(){ $(".checkboxed").checkCheckboxes(":input[@name*=barcodes]"); $(".checkboxed").unCheckCheckboxes(":input[@name*=items]"); return false; });
-    $("#CheckNoreturns" ).click(function(){ $(".checkboxed").unCheckCheckboxes(":input[@name*=barcodes]"); return false; });
+	$("#renew_all"      ).click(function(){ $(".checkboxed").checkCheckboxes(":input[name*=items]"   ); $(".checkboxed").unCheckCheckboxes(":input[name*=barcodes]"); });
+	$("#return_all"     ).click(function(){ $(".checkboxed").checkCheckboxes(":input[name*=barcodes]"); $(".checkboxed").unCheckCheckboxes(":input[name*=items]"   ); });
+	$("#CheckAllitems"  ).click(function(){ $(".checkboxed").checkCheckboxes(":input[name*=items]"   ); $(".checkboxed").unCheckCheckboxes(":input[name*=barcodes]"); return false; });
+    $("#CheckNoitems"   ).click(function(){ $(".checkboxed").unCheckCheckboxes(":input[name*=items]"); return false; });
+	$("#CheckAllreturns").click(function(){ $(".checkboxed").checkCheckboxes(":input[name*=barcodes]"); $(".checkboxed").unCheckCheckboxes(":input[name*=items]"); return false; });
+    $("#CheckNoreturns" ).click(function(){ $(".checkboxed").unCheckCheckboxes(":input[name*=barcodes]"); return false; });
 
     <!-- TMPL_IF NAME="CAN_user_circulate_override_renewals" -->
     <!-- TMPL_IF NAME="AllowRenewalLimitOverride" -->
