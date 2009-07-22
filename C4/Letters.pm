@@ -400,18 +400,26 @@ sub SendAlerts {
 
         # ... then send mail
         if (   $databookseller->{bookselleremail}
-            || $databookseller->{contemail} )
-        {
+            || $databookseller->{contemail} ) {
+            my $mail_to = $databookseller->{bookselleremail};
+            if ($databookseller->{contemail}) {
+                if (!$mail_to) {
+                    $mail_to = $databookseller->{contemail};
+                } else {
+                    $mail_to .= q|,|;
+                    $mail_to .= $databookseller->{contemail};
+                }
+            }
+            my $mail_subj = $innerletter->{title};
+            my $mail_msg  = $innerletter->{content};
+            $mail_msg  ||= q{};
+            $mail_subj ||= q{};
+
             my %mail = (
-                To => $databookseller->{bookselleremail}
-                  . (
-                    $databookseller->{contemail}
-                    ? "," . $databookseller->{contemail}
-                    : ""
-                  ),
+                To => $mail_to,
                 From    => $userenv->{emailaddress},
-                Subject => "" . $innerletter->{title},
-                Message => "" . $innerletter->{content},
+                Subject => $mail_subj,
+                Message => $mail_msg,
                 'Content-Type' => 'text/plain; charset="utf8"',
             );
             sendmail(%mail);
