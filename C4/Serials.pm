@@ -320,15 +320,14 @@ Update Claimdate for issues in @$serialids list with date $date
 
 sub UpdateClaimdateIssues {
     my ( $serialids, $date ) = @_;
+    if (!$date) {
+        $date = strftime('%Y-%m-%d',localtime);
+    }
     my $dbh   = C4::Context->dbh;
-    $date = strftime("%Y-%m-%d",localtime) unless ($date);
-    my $query = "
-        UPDATE serial SET claimdate=$date,status=7
-        WHERE  serialid in ".join (",",@$serialids);
-    ;
-    my $rq = $dbh->prepare($query);
-    $rq->execute;
-    return $rq->rows;
+    my $ids_str = join ',', @{$serialids};
+    my $query = 'UPDATE serial SET claimdate=? ,status=7 WHERE  serialid IN ( '
+     . $ids_str . ' )';
+    return $dbh->do($query,undef, $date);
 }
 
 =head2 GetSubscription
