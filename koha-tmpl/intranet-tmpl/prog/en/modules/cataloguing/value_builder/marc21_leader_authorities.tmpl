@@ -1,8 +1,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Cataloging &rsaquo; Leader builder</title>
+<title>Koha &rsaquo; Authorities &rsaquo; Leader builder</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body style="padding:1em;">
+<h3>000 - Leader</h3>
 <form name="f_pop" onsubmit="report()">
 <input type="hidden" name="plugin_name" value="marc21_leader_authorities.pl" />
 <table>
@@ -11,7 +12,7 @@
 		<td>(auto-filled)</td>
 	</tr>
 	<tr>
-		<td>5- Record status</td>
+		<td><label for="f5">5- Record status</label></td>
 		<td>
 			<select name="f5" id="f5" size="1">
 			<!-- TMPL_IF name="f5a" -->
@@ -54,7 +55,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td>6- Type of record</td>
+		<td><label for="f6">6- Type of record</label></td>
 		<td>
             <input name="f6" value="z" type="hidden" />
             z- Authority data
@@ -66,7 +67,7 @@
 	</tr>
 
 	<tr>
-		<td>9- Encoding</td>
+		<td><label for="f9">9- Encoding</label></td>
 		<td>
 			<select name="f9" id="f9" size="1">
 				<!-- TMPL_IF name="f9 " -->
@@ -86,7 +87,7 @@
 		<td>10-16 indicator/subfields/size</td>
 		<td>(auto-filled)</td>
 	<tr>
-		<td>17- Encoding level</td>
+		<td><label for="f17">17- Encoding level</label></td>
 		<td>
 			<select name="f17" id="f17" size="1">
 				<!-- TMPL_IF name="f17n" -->

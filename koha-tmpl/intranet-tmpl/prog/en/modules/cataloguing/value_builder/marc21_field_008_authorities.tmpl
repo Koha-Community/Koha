@@ -1,8 +1,9 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Cataloging &rsaquo; Leader builder</title>
+<title>Koha &rsaquo; Authorities &rsaquo; 008 builder</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body style="padding:1em;">
+<h3> 008 Fixed-length data elements</h3>
 <form name="f_pop" onsubmit="report()">
 <input type="hidden" name="plugin_name" value="marc21_field_008_authorities.pl" />
 <table>
@@ -12,7 +13,7 @@
         <input name="f1" value="<!-- TMPL_VAR name="f1" -->" type="hidden" />
 	</tr>
 	<tr>
-		<td>06- Direct or indirect geographic subdivision</td>
+		<td><label for="f6">06- Direct or indirect geographic subdivision</label></td>
 		<td>
 			<select name="f6" id="f6" size="1">
             <!-- TMPL_IF name="f6 " -->
@@ -45,7 +46,7 @@
 	</tr>
 
     <tr>
-        <td>07- Romanization scheme</td>
+        <td><label for="f7">07- Romanization scheme</label></td>
         <td>
             <select name="f7" id="f7" size="1">
             <!-- TMPL_IF name="f7a" -->
@@ -97,7 +98,7 @@
         </td>
     </tr>
     <tr>
-        <td>08- Language of catalog</td>
+        <td><label for="f8">08- Language of catalog</label></td>
         <td>
             <select name="f8" id="f8" size="1">
             <!-- TMPL_IF name="f8 " -->
@@ -129,7 +130,7 @@
         </td>
     </tr>
     <tr>
-        <td>09- Kind of record</td>
+        <td><label for="f9">09- Kind of record</label></td>
         <td>
             <select name="f9" id="f9" size="1">
             <!-- TMPL_IF name="f9a" -->
@@ -171,7 +172,7 @@
         </td>
     </tr>
     <tr>
-        <td>10- Descriptive cataloging rules</td>
+        <td><label for="f10">10- Descriptive cataloging rules</label></td>
         <td>
             <select name="f10" id="f10" size="1">
             <!-- TMPL_IF name="f10a" -->
@@ -213,7 +214,7 @@
         </td>
     </tr>
     <tr>
-        <td>11- Subject heading system/thesaurus</td>
+        <td><label for="f11">11- Subject heading system/thesaurus</label></td>
         <td>
             <select name="f11" id="f11" size="1">
             <!-- TMPL_IF name="f11a" -->
@@ -275,7 +276,7 @@
         </td>
     </tr>
     <tr>
-        <td>12- Type of series</td>
+        <td><label for="f12">12- Type of series</label></td>
         <td>
             <select name="f12" id="f12" size="1">
             <!-- TMPL_IF name="f12a" -->
@@ -312,7 +313,7 @@
         </td>
     </tr>
     <tr>
-        <td>13- Numbered or unnumbered series</td>
+        <td><label for="f13">13- Numbered or unnumbered series</label></td>
         <td>
             <select name="f13" id="f13" size="1">
             <!-- TMPL_IF name="f13a" -->
@@ -344,7 +345,7 @@
         </td>
     </tr>
     <tr>
-        <td>14- Heading use--main or added entry</td>
+        <td><label for="f14">14- Heading use--main or added entry</label></td>
         <td>
             <select name="f14" id="f14" size="1">
             <!-- TMPL_IF name="f14a" -->
@@ -366,7 +367,7 @@
         </td>
     </tr>
     <tr>
-        <td>15- Heading use--subject added entry</td>
+        <td><label for="f15">15- Heading use--subject added entry</label></td>
         <td>
             <select name="f15" id="f15" size="1">
             <!-- TMPL_IF name="f15a" -->
@@ -388,7 +389,7 @@
         </td>
     </tr>
     <tr>
-        <td>16- Heading use--series added entry</td>
+        <td><label for="f16">16- Heading use--series added entry</label></td>
         <td>
             <select name="f16" id="f16" size="1">
             <!-- TMPL_IF name="f16a" -->
@@ -410,7 +411,7 @@
         </td>
     </tr>
     <tr>
-        <td>17- Type of subject subdivision</td>
+        <td><label for="f17">17- Type of subject subdivision</label></td>
         <td>
             <select name="f17" id="f17" size="1">
             <!-- TMPL_IF name="f17a" -->
@@ -458,7 +459,7 @@
     </tr>
 
     <tr>
-        <td>28- Type of government agency</td>
+        <td><label for="f28">28- Type of government agency</label></td>
         <td>
             <select name="f28" id="f28" size="1">
             <!-- TMPL_IF name="f28 " -->
@@ -525,7 +526,7 @@
         </td>
     </tr>
     <tr>
-        <td>29- Reference evaluation</td>
+        <td><label for="f29">29- Reference evaluation</label></td>
         <td>
             <select name="f29" id="f29" size="1">
             <!-- TMPL_IF name="f29a" -->
@@ -558,7 +559,7 @@
     </tr>
 
     <tr>
-        <td>31- Record update in process</td>
+        <td><label for="f31">31- Record update in process</label></td>
         <td>
             <select name="f31" id="f31" size="1">
             <!-- TMPL_IF name="f31a" -->
@@ -580,7 +581,7 @@
         </td>
     </tr>
     <tr>
-        <td>32- Undifferentiated personal name</td>
+        <td><label for="f32">32- Undifferentiated personal name</label></td>
         <td>
             <select name="f32" id="f32" size="1">
             <!-- TMPL_IF name="f32a" -->
@@ -607,7 +608,7 @@
         </td>
     </tr>
     <tr>
-        <td>33- Level of establishment</td>
+        <td><label for="f33">33- Level of establishment</label></td>
         <td>
             <select name="f33" id="f33" size="1">
             <!-- TMPL_IF name="f33a" -->
@@ -650,7 +651,7 @@
     </tr>
 
     <tr>
-        <td>38- Modified record</td>
+        <td><label for="f38">38- Modified record</label></td>
         <td>
             <select name="f38" id="f38" size="1">
             <!-- TMPL_IF name="f38 " -->
@@ -677,7 +678,7 @@
         </td>
     </tr>
     <tr>
-        <td>39- Cataloging source</td>
+        <td><label for="f39">39- Cataloging source</label></td>
         <td>
             <select name="f39" id="f39" size="1">
             <!-- TMPL_IF name="f39 " -->
