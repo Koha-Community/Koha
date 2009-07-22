@@ -153,18 +153,6 @@ if ($do_it) {
 		push @authvals, { code => $_, description => $authvals->{$_} };
 	}
 	
-
-	my $branches=GetBranches();
-	my @branchloop;
-	foreach (sort {$branches->{$a}->{'branchname'} cmp $branches->{$b}->{'branchname'}} keys %$branches) {
-		my $thisbranch = ''; # FIXME: populate $thisbranch to preselect one
-		my %row = (branchcode => $_,
-			selected => ($thisbranch eq $_ ? 1 : 0),
-			branchname => $branches->{$_}->{'branchname'},
-		);
-		push @branchloop, \%row;
-	}
-
 	my $locations = GetKohaAuthorisedValues("items.location");
 	my @locations;
 	foreach (sort keys %$locations) {
@@ -177,7 +165,7 @@ if ($do_it) {
 					haslccn   => $haslccn,
 					hascote   => $hascote,
 					CGIItemType => $CGIitemtype,
-					CGIBranch    => \@branchloop,
+					CGIBranch    => GetBranchesLoop(C4::Context->userenv->{'branch'}),
 					locationloop => \@locations,
 					authvals     => \@authvals,
 					CGIextChoice => \@mime,
