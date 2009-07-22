@@ -1,19 +1,20 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Cataloging &rsaquo; Leader builder</title>
+<title>Koha &rsaquo; Cataloging &rsaquo; 000 - Leader builder</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
-<body>
-<form name="f_pop" onsubmit="javascript:report()" action="#">
+<body style="padding:1em;">
+<form name="f_pop" onsubmit="report()">
 <input type="hidden" name="plugin_name" value="marc21_leader.pl" />
+<h3>000 - Leader</h3>
 <table>
 	<tr>
-		<td>1-4 Record size</td>
+		<td><span class="label">1-4 Record size</span></td>
 		<td>(auto-filled)</td>
 	</tr>
 	<tr>
-		<td>5- Record status</td>
+		<td><label for="f5">5- Record status</label></td>
 		<td>
-			<select name="f5" size="1">
+			<select name="f5" id="f5" size="1">
 			<!-- TMPL_IF name="f5a" -->
 				<option value=" " selected="selected">a- Increase in encoding level</option>
 			<!-- TMPL_ELSE -->
@@ -44,9 +45,9 @@
 		</td>
 	</tr>
 	<tr>
-		<td>6- Type of record</td>
+		<td><label for="f6">6- Type of record</label></td>
 		<td>
-			<select name="f6" size="1">
+			<select name="f6" id="f6" size="1">
 			<!-- TMPL_IF name="f6a" -->
 				<option value="a" selected="selected">a- Language material</option>
 			<!-- TMPL_ELSE -->
@@ -121,9 +122,9 @@
 		</td>
 	</tr>
 	<tr>
-		<td>7- Bibliographic level</td>
+		<td><label for="f7">7- Bibliographic level</label></td>
 		<td>
-			<select name="f7" size="1">
+			<select name="f7" id="f7" size="1">
 				<!-- TMPL_IF name="f7a" -->
 					<option value="a" selected="selected">a- Monographic component part</option>
 				<!-- TMPL_ELSE -->
@@ -164,9 +165,9 @@
 	</tr>
 	
 	<tr>
-		<td>8- Type of control</td>
+		<td><label for="f8">8- Type of control</label></td>
 		<td>
-			<select name="f8" size="1">
+			<select name="f8" id="f8" size="1">
 				<!-- TMPL_IF name="f8 " -->
 					<option value=" " selected="selected">No specific type</option>
 				<!-- TMPL_ELSE -->
@@ -190,9 +191,9 @@
 		<td>(auto-filled)</td>
     </tr>
     <tr>
-		<td>17- Encoding level</td>
+		<td><label for="f17">17- Encoding level</label></td>
 		<td>
-			<select name="f17" size="1">
+			<select name="f17" id="f17" size="1">
 				<!-- TMPL_IF name="f17 " -->
 					<option value=" " selected="selected">full level</option>
 				<!-- TMPL_ELSE -->
@@ -248,9 +249,9 @@
 	</tr>
 
 	<tr>
-		<td>18 - Descriptive cataloging form</td>
+		<td><label for="f18">18 - Descriptive cataloging form</label></td>
 		<td>
-			<select name="f18" size="1">
+			<select name="f18" id="f18" size="1">
 				<!-- TMPL_IF name="f18 " -->
 					<option value=" " selected="selected">Non-ISBD</option>
 				<!-- TMPL_ELSE -->
@@ -276,9 +277,9 @@
 	</tr>
 	
 	<tr>
-		<td>19 - Multipart resource record level</td>
+		<td><label for="f19">19 - Multipart resource record level</label></td>
 		<td>
-			<select name="f19" size="1">
+			<select name="f19" id="f19" size="1">
 				<!-- TMPL_IF name="f19 " -->
 					<option value=" " selected="selected">Not specified or not applicable </option>
 				<!-- TMPL_ELSE -->
@@ -307,8 +308,8 @@
 		<td>(auto-filled)</td>
 	</tr>
 
-	<tr><td colspan="2"><input type="submit" value="OK" /></td></tr>
 </table>
+<fieldset class="action"><input type="submit" value="OK" /> <a href="#" class="cancel close">Cancel</a></fieldset>
 </form>
 <script type="text/javascript">
 //<![CDATA[
@@ -331,6 +332,6 @@ function report() {
 		self.close();
 		return false;
 	}
-//]]>
+	//]]>
 </script>
 <!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->

@@ -1,10 +1,10 @@
-<html>
-<head>
-<title>Leader builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Cataloging &rsaquo; Leader builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
-<body>
-<form name="f_pop" onSubmit="javascript:report()">
-<input type="hidden" name="plugin_name" value="marc21_field_008_authorities.pl">
+<body style="padding:1em;">
+<form name="f_pop" onsubmit="report()">
+<input type="hidden" name="plugin_name" value="marc21_field_008_authorities.pl" />
 <table>
 	<tr>
 		<td>00-05- Date entered on file</td>
@@ -14,29 +14,29 @@
 	<tr>
 		<td>06- Direct or indirect geographic subdivision</td>
 		<td>
-			<select name="f6" size="1">
+			<select name="f6" id="f6" size="1">
             <!-- TMPL_IF name="f6 " -->
-                <option value=" " SELECTED>#- Not subdivided geographically</option>
+                <option value=" " selected="selected">#- Not subdivided geographically</option>
             <!-- TMPL_ELSE -->
                 <option value=" ">#- Not subdivided geographically</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f6d" -->
-                <option value="d" SELECTED>d- Subdivided geographically&mdash;direct</option>
+                <option value="d" selected="selected">d- Subdivided geographically&mdash;direct</option>
             <!-- TMPL_ELSE -->
                 <option value="d">d- Subdivided geographically&mdash;direct</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f6i" -->
-                <option value="i" SELECTED>i- Subdivided geographically&mdash;indirect</option>
+                <option value="i" selected="selected">i- Subdivided geographically&mdash;indirect</option>
             <!-- TMPL_ELSE -->
                 <option value="i">i- Subdivided geographically&mdash;indirect</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f6n" -->
-                <option value="n" SELECTED>n- Not applicable</option>
+                <option value="n" selected="selected">n- Not applicable</option>
             <!-- TMPL_ELSE -->
                 <option value="n">n- Not applicable</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f6|" -->
-                <option value="|" SELECTED>|- No attempt to code</option>
+                <option value="|" selected="selected">|- No attempt to code</option>
             <!-- TMPL_ELSE -->
                 <option value="|">|- No attempt to code</option>
             <!-- /TMPL_IF -->
@@ -47,49 +47,49 @@
     <tr>
         <td>07- Romanization scheme</td>
         <td>
-            <select name="f7" size="1">
+            <select name="f7" id="f7" size="1">
             <!-- TMPL_IF name="f7a" -->
-                <option value="a" SELECTED>a- International standard</option>
+                <option value="a" selected="selected">a- International standard</option>
             <!-- TMPL_ELSE -->
                 <option value="a">a- International standard</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f7b" -->
-                <option value="b" SELECTED>b- National standard</option>
+                <option value="b" selected="selected">b- National standard</option>
             <!-- TMPL_ELSE -->
                 <option value="b">b- National standard</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f7c" -->
-                <option value="c" SELECTED>c- National library association standard</option>
+                <option value="c" selected="selected">c- National library association standard</option>
             <!-- TMPL_ELSE -->
                 <option value="c">c- National library association standard</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f7d" -->
-                <option value="d" SELECTED>d- National library or bibliographic agency standard</option>
+                <option value="d" selected="selected">d- National library or bibliographic agency standard</option>
             <!-- TMPL_ELSE -->
                 <option value="d">d- National library or bibliographic agency standard</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f7e" -->
-                <option value="e" SELECTED>e- Local standard</option>
+                <option value="e" selected="selected">e- Local standard</option>
             <!-- TMPL_ELSE -->
                 <option value="e">e- Local standard</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f7f" -->
-                <option value="f" SELECTED>f- Standard of unknown origin</option>
+                <option value="f" selected="selected">f- Standard of unknown origin</option>
             <!-- TMPL_ELSE -->
                 <option value="f">f- Standard of unknown origin</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f7g" -->
-                <option value="g" SELECTED>g- Conventional romanization or conventional form of name in language of cataloging agency</option>
+                <option value="g" selected="selected">g- Conventional romanization or conventional form of name in language of cataloging agency</option>
             <!-- TMPL_ELSE -->
                 <option value="g">g- Conventional romanization or conventional form of name in language of cataloging agency</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f7n" -->
-                <option value="n" SELECTED>n- Not applicable</option>
+                <option value="n" selected="selected">n- Not applicable</option>
             <!-- TMPL_ELSE -->
                 <option value="n">n- Not applicable</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f7|" -->
-                <option value="|" SELECTED>|- No attempt to code</option>
+                <option value="|" selected="selected">|- No attempt to code</option>
             <!-- TMPL_ELSE -->
                 <option value="|">|- No attempt to code</option>
             <!-- /TMPL_IF -->
@@ -99,29 +99,29 @@
     <tr>
         <td>08- Language of catalog</td>
         <td>
-            <select name="f8" size="1">
+            <select name="f8" id="f8" size="1">
             <!-- TMPL_IF name="f8 " -->
-                <option value=" " SELECTED>#- No information provided</option>
+                <option value=" " selected="selected">#- No information provided</option>
             <!-- TMPL_ELSE -->
                 <option value=" ">#- No information provided</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f8b" -->
-                <option value="b" SELECTED>b- English and French</option>
+                <option value="b" selected="selected">b- English and French</option>
             <!-- TMPL_ELSE -->
                 <option value="b">b- English and French</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f8e" -->
-                <option value="e" SELECTED>e- English only</option>
+                <option value="e" selected="selected">e- English only</option>
             <!-- TMPL_ELSE -->
                 <option value="e">e- English only</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f8f" -->
-                <option value="f" SELECTED>f- French only</option>
+                <option value="f" selected="selected">f- French only</option>
             <!-- TMPL_ELSE -->
                 <option value="f">f- French only</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f8|" -->
-                <option value="|" SELECTED>|- No attempt to code</option>
+                <option value="|" selected="selected">|- No attempt to code</option>
             <!-- TMPL_ELSE -->
                 <option value="|">|- No attempt to code</option>
             <!-- /TMPL_IF -->
@@ -131,39 +131,39 @@
     <tr>
         <td>09- Kind of record</td>
         <td>
-            <select name="f9" size="1">
+            <select name="f9" id="f9" size="1">
             <!-- TMPL_IF name="f9a" -->
-                <option value="a" SELECTED>a- Established heading</option>
+                <option value="a" selected="selected">a- Established heading</option>
             <!-- TMPL_ELSE -->
                 <option value="a">a- Established heading</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f9b" -->
-                <option value="b" SELECTED>b- Untraced reference</option>
+                <option value="b" selected="selected">b- Untraced reference</option>
             <!-- TMPL_ELSE -->
                 <option value="b">b- Untraced reference</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f9c" -->
-                <option value="c" SELECTED>c- Traced reference</option>
+                <option value="c" selected="selected">c- Traced reference</option>
             <!-- TMPL_ELSE -->
                 <option value="c">c- Traced reference</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f9d" -->
-                <option value="d" SELECTED>d- Subdivision</option>
+                <option value="d" selected="selected">d- Subdivision</option>
             <!-- TMPL_ELSE -->
                 <option value="d">d- Subdivision</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f9e" -->
-                <option value="e" SELECTED>e- Node label</option>
+                <option value="e" selected="selected">e- Node label</option>
             <!-- TMPL_ELSE -->
                 <option value="e">e- Node label</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f9f" -->
-                <option value="f" SELECTED>f- Established heading and subdivision</option>
+                <option value="f" selected="selected">f- Established heading and subdivision</option>
             <!-- TMPL_ELSE -->
                 <option value="f">f- Established heading and subdivision</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f9g" -->
-                <option value="g" SELECTED>g- Reference and subdivision</option>
+                <option value="g" selected="selected">g- Reference and subdivision</option>
             <!-- TMPL_ELSE -->
                 <option value="g">g- Reference and subdivision</option>
             <!-- /TMPL_IF -->
@@ -173,39 +173,39 @@
     <tr>
         <td>10- Descriptive cataloging rules</td>
         <td>
-            <select name="f10" size="1">
+            <select name="f10" id="f10" size="1">
             <!-- TMPL_IF name="f10a" -->
-                <option value="a" SELECTED>a- Earlier rules</option>
+                <option value="a" selected="selected">a- Earlier rules</option>
             <!-- TMPL_ELSE -->
                 <option value="a">a- Earlier rules</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f10b" -->
-                <option value="b" SELECTED>b- AACR 1</option>
+                <option value="b" selected="selected">b- AACR 1</option>
             <!-- TMPL_ELSE -->
                 <option value="b">b- AACR 1</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f10c" -->
-                <option value="c" SELECTED>c- AACR 2</option>
+                <option value="c" selected="selected">c- AACR 2</option>
             <!-- TMPL_ELSE -->
                 <option value="c">c- AACR 2</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f10d" -->
-                <option value="d" SELECTED>d- AACR 2 compatible heading</option>
+                <option value="d" selected="selected">d- AACR 2 compatible heading</option>
             <!-- TMPL_ELSE -->
                 <option value="d">d- AACR 2 compatible heading</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f10n" -->
-                <option value="n" SELECTED>n- Not applicable</option>
+                <option value="n" selected="selected">n- Not applicable</option>
             <!-- TMPL_ELSE -->
                 <option value="n">n- Not applicable</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f10z" -->
-                <option value="z" SELECTED>z- Other</option>
+                <option value="z" selected="selected">z- Other</option>
             <!-- TMPL_ELSE -->
                 <option value="z">z- Other</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f10|" -->
-                <option value="|" SELECTED>|- No attempt to code</option>
+                <option value="|" selected="selected">|- No attempt to code</option>
             <!-- TMPL_ELSE -->
                 <option value="|">|- No attempt to code</option>
             <!-- /TMPL_IF -->
@@ -215,59 +215,59 @@
     <tr>
         <td>11- Subject heading system/thesaurus</td>
         <td>
-            <select name="f11" size="1">
+            <select name="f11" id="f11" size="1">
             <!-- TMPL_IF name="f11a" -->
-                <option value="a" SELECTED>a- Library of Congress Subject Headings</option>
+                <option value="a" selected="selected">a- Library of Congress Subject Headings</option>
             <!-- TMPL_ELSE -->
                 <option value="a">a- Library of Congress Subject Headings</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f11b" -->
-                <option value="b" SELECTED>b- LC subject headings for children's literature</option>
+                <option value="b" selected="selected">b- LC subject headings for children's literature</option>
             <!-- TMPL_ELSE -->
                 <option value="b">b- LC subject headings for children's literature</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f11c" -->
-                <option value="c" SELECTED>c- Medical Subject Headings</option>
+                <option value="c" selected="selected">c- Medical Subject Headings</option>
             <!-- TMPL_ELSE -->
                 <option value="c">c- Medical Subject Headings</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f11d" -->
-                <option value="d" SELECTED>d- National Agricultural Library subject authority file</option>
+                <option value="d" selected="selected">d- National Agricultural Library subject authority file</option>
             <!-- TMPL_ELSE -->
                 <option value="d">d- National Agricultural Library subject authority file</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f11k" -->
-                <option value="k" SELECTED>k- Canadian Subject Headings</option>
+                <option value="k" selected="selected">k- Canadian Subject Headings</option>
             <!-- TMPL_ELSE -->
                 <option value="k">k- Canadian Subject Headings</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f11n" -->
-                <option value="n" SELECTED>n- Not applicable</option>
+                <option value="n" selected="selected">n- Not applicable</option>
             <!-- TMPL_ELSE -->
                 <option value="n">n- Not applicable</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f11r" -->
-                <option value="r" SELECTED>r- Art and Architecture Thesaurus</option>
+                <option value="r" selected="selected">r- Art and Architecture Thesaurus</option>
             <!-- TMPL_ELSE -->
                 <option value="r">r- Art and Architecture Thesaurus</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f11s" -->
-                <option value="s" SELECTED>s- Sears List of Subject Headings</option>
+                <option value="s" selected="selected">s- Sears List of Subject Headings</option>
             <!-- TMPL_ELSE -->
                 <option value="s">s- Sears List of Subject Headings</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f11v" -->
-                <option value="v" SELECTED>v- Repertoire de vedettes-matiere</option>
+                <option value="v" selected="selected">v- Repertoire de vedettes-matiere</option>
             <!-- TMPL_ELSE -->
                 <option value="v">v- Repertoire de vedettes-matiere</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f11z" -->
-                <option value="z" SELECTED>z- Other</option>
+                <option value="z" selected="selected">z- Other</option>
             <!-- TMPL_ELSE -->
                 <option value="z">z- Other</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f11|" -->
-                <option value="|" SELECTED>|- No attempt to code</option>
+                <option value="|" selected="selected">|- No attempt to code</option>
             <!-- TMPL_ELSE -->
                 <option value="|">|- No attempt to code</option>
             <!-- /TMPL_IF -->
@@ -277,34 +277,34 @@
     <tr>
         <td>12- Type of series</td>
         <td>
-            <select name="f12" size="1">
+            <select name="f12" id="f12" size="1">
             <!-- TMPL_IF name="f12a" -->
-                <option value="a" SELECTED>a- Monographic series</option>
+                <option value="a" selected="selected">a- Monographic series</option>
             <!-- TMPL_ELSE -->
                 <option value="a">a- Monographic series</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f12b" -->
-                <option value="b" SELECTED>b- Multipart item</option>
+                <option value="b" selected="selected">b- Multipart item</option>
             <!-- TMPL_ELSE -->
                 <option value="b">b- Multipart item</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f12c" -->
-                <option value="c" SELECTED>c- Series-like phrase</option>
+                <option value="c" selected="selected">c- Series-like phrase</option>
             <!-- TMPL_ELSE -->
                 <option value="c">c- Series-like phrase</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f12n" -->
-                <option value="n" SELECTED>n- Not applicable</option>
+                <option value="n" selected="selected">n- Not applicable</option>
             <!-- TMPL_ELSE -->
                 <option value="n">n- Not applicable</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f12z" -->
-                <option value="z" SELECTED>z- Other</option>
+                <option value="z" selected="selected">z- Other</option>
             <!-- TMPL_ELSE -->
                 <option value="z">z- Other</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f12|" -->
-                <option value="|" SELECTED>|- No attempt to code</option>
+                <option value="|" selected="selected">|- No attempt to code</option>
             <!-- TMPL_ELSE -->
                 <option value="|">|- No attempt to code</option>
             <!-- /TMPL_IF -->
@@ -314,29 +314,29 @@
     <tr>
         <td>13- Numbered or unnumbered series</td>
         <td>
-            <select name="f13" size="1">
+            <select name="f13" id="f13" size="1">
             <!-- TMPL_IF name="f13a" -->
-                <option value="a" SELECTED>a- Numbered</option>
+                <option value="a" selected="selected">a- Numbered</option>
             <!-- TMPL_ELSE -->
                 <option value="a">a- Numbered</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f13b" -->
-                <option value="b" SELECTED>b- Unnumbered</option>
+                <option value="b" selected="selected">b- Unnumbered</option>
             <!-- TMPL_ELSE -->
                 <option value="b">b- Unnumbered</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f13c" -->
-                <option value="c" SELECTED>c- Numbering varies</option>
+                <option value="c" selected="selected">c- Numbering varies</option>
             <!-- TMPL_ELSE -->
                 <option value="c">c- Numbering varies</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f13n" -->
-                <option value="n" SELECTED>n- Not applicable</option>
+                <option value="n" selected="selected">n- Not applicable</option>
             <!-- TMPL_ELSE -->
                 <option value="n">n- Not applicable</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f13|" -->
-                <option value="|" SELECTED>|- No attempt to code</option>
+                <option value="|" selected="selected">|- No attempt to code</option>
             <!-- TMPL_ELSE -->
                 <option value="|">|- No attempt to code</option>
             <!-- /TMPL_IF -->
@@ -346,19 +346,19 @@
     <tr>
         <td>14- Heading use--main or added entry</td>
         <td>
-            <select name="f14" size="1">
+            <select name="f14" id="f14" size="1">
             <!-- TMPL_IF name="f14a" -->
-                <option value="a" SELECTED>a- Appropriate</option>
+                <option value="a" selected="selected">a- Appropriate</option>
             <!-- TMPL_ELSE -->
                 <option value="a">a- Appropriate</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f14b" -->
-                <option value="b" SELECTED>b- Not appropriate</option>
+                <option value="b" selected="selected">b- Not appropriate</option>
             <!-- TMPL_ELSE -->
                 <option value="b">b- Not appropriate</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f14|" -->
-                <option value="|" SELECTED>|- No attempt to code</option>
+                <option value="|" selected="selected">|- No attempt to code</option>
             <!-- TMPL_ELSE -->
                 <option value="|">|- No attempt to code</option>
             <!-- /TMPL_IF -->
@@ -368,19 +368,19 @@
     <tr>
         <td>15- Heading use--subject added entry</td>
         <td>
-            <select name="f15" size="1">
+            <select name="f15" id="f15" size="1">
             <!-- TMPL_IF name="f15a" -->
-                <option value="a" SELECTED>a- Appropriate</option>
+                <option value="a" selected="selected">a- Appropriate</option>
             <!-- TMPL_ELSE -->
                 <option value="a">a- Appropriate</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f15b" -->
-                <option value="b" SELECTED>b- Not appropriate</option>
+                <option value="b" selected="selected">b- Not appropriate</option>
             <!-- TMPL_ELSE -->
                 <option value="b">b- Not appropriate</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f15|" -->
-                <option value="|" SELECTED>|- No attempt to code</option>
+                <option value="|" selected="selected">|- No attempt to code</option>
             <!-- TMPL_ELSE -->
                 <option value="|">|- No attempt to code</option>
             <!-- /TMPL_IF -->
@@ -390,19 +390,19 @@
     <tr>
         <td>16- Heading use--series added entry</td>
         <td>
-            <select name="f16" size="1">
+            <select name="f16" id="f16" size="1">
             <!-- TMPL_IF name="f16a" -->
-                <option value="a" SELECTED>a- Appropriate</option>
+                <option value="a" selected="selected">a- Appropriate</option>
             <!-- TMPL_ELSE -->
                 <option value="a">a- Appropriate</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f16b" -->
-                <option value="b" SELECTED>b- Not appropriate</option>
+                <option value="b" selected="selected">b- Not appropriate</option>
             <!-- TMPL_ELSE -->
                 <option value="b">b- Not appropriate</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f16|" -->
-                <option value="|" SELECTED>|- No attempt to code</option>
+                <option value="|" selected="selected">|- No attempt to code</option>
             <!-- TMPL_ELSE -->
                 <option value="|">|- No attempt to code</option>
             <!-- /TMPL_IF -->
@@ -412,39 +412,39 @@
     <tr>
         <td>17- Type of subject subdivision</td>
         <td>
-            <select name="f17" size="1">
+            <select name="f17" id="f17" size="1">
             <!-- TMPL_IF name="f17a" -->
-                <option value="a" SELECTED>a- Topical</option>
+                <option value="a" selected="selected">a- Topical</option>
             <!-- TMPL_ELSE -->
                 <option value="a">a- Topical</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f17b" -->
-                <option value="b" SELECTED>b- Form</option>
+                <option value="b" selected="selected">b- Form</option>
             <!-- TMPL_ELSE -->
                 <option value="b">b- Form</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f17c" -->
-                <option value="c" SELECTED>c- Chronological</option>
+                <option value="c" selected="selected">c- Chronological</option>
             <!-- TMPL_ELSE -->
                 <option value="c">c- Chronological</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f17d" -->
-                <option value="d" SELECTED>d- Geographic</option>
+                <option value="d" selected="selected">d- Geographic</option>
             <!-- TMPL_ELSE -->
                 <option value="d">d- Geographic</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f17e" -->
-                <option value="e" SELECTED>e- Language</option>
+                <option value="e" selected="selected">e- Language</option>
             <!-- TMPL_ELSE -->
                 <option value="e">e- Language</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f17n" -->
-                <option value="n" SELECTED>n- Not applicable</option>
+                <option value="n" selected="selected">n- Not applicable</option>
             <!-- TMPL_ELSE -->
                 <option value="n">n- Not applicable</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f17|" -->
-                <option value="|" SELECTED>|- No attempt to code</option>
+                <option value="|" selected="selected">|- No attempt to code</option>
             <!-- TMPL_ELSE -->
                 <option value="|">|- No attempt to code</option>
             <!-- /TMPL_IF -->
@@ -460,64 +460,64 @@
     <tr>
         <td>28- Type of government agency</td>
         <td>
-            <select name="f28" size="1">
+            <select name="f28" id="f28" size="1">
             <!-- TMPL_IF name="f28 " -->
-                <option value=" " SELECTED>#- Not a government agency</option>
+                <option value=" " selected="selected">#- Not a government agency</option>
             <!-- TMPL_ELSE -->
                 <option value=" ">#- Not a government agency</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f28a" -->
-                <option value="a" SELECTED>a- Autonomous or semi-autonomous component</option>
+                <option value="a" selected="selected">a- Autonomous or semi-autonomous component</option>
             <!-- TMPL_ELSE -->
                 <option value="a">a- Autonomous or semi-autonomous component</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f28c" -->
-                <option value="c" SELECTED>c- Multilocal</option>
+                <option value="c" selected="selected">c- Multilocal</option>
             <!-- TMPL_ELSE -->
                 <option value="c">c- Multilocal</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f28f" -->
-                <option value="f" SELECTED>f- Federal/national</option>
+                <option value="f" selected="selected">f- Federal/national</option>
             <!-- TMPL_ELSE -->
                 <option value="f">f- Federal/national</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f28i" -->
-                <option value="i" SELECTED>i- International intergovernmental</option>
+                <option value="i" selected="selected">i- International intergovernmental</option>
             <!-- TMPL_ELSE -->
                 <option value="i">i- International intergovernmental</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f28l" -->
-                <option value="l" SELECTED>l- Local</option>
+                <option value="l" selected="selected">l- Local</option>
             <!-- TMPL_ELSE -->
                 <option value="l">l- Local</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f28m" -->
-                <option value="m" SELECTED>m- Multistate</option>
+                <option value="m" selected="selected">m- Multistate</option>
             <!-- TMPL_ELSE -->
                 <option value="m">m- Multistate</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f28o" -->
-                <option value="o" SELECTED>o- Government agency&mdash;type undetermined</option>
+                <option value="o" selected="selected">o- Government agency&mdash;type undetermined</option>
             <!-- TMPL_ELSE -->
                 <option value="o">o- Government agency&mdash;type undetermined</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f28s" -->
-                <option value="s" SELECTED>s- State, provincial, territorial, dependent, etc.</option>
+                <option value="s" selected="selected">s- State, provincial, territorial, dependent, etc.</option>
             <!-- TMPL_ELSE -->
                 <option value="s">s- State, provincial, territorial, dependent, etc.</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f28u" -->
-                <option value="u" SELECTED>u- Unknown if heading is government agency</option>
+                <option value="u" selected="selected">u- Unknown if heading is government agency</option>
             <!-- TMPL_ELSE -->
                 <option value="u">u- Unknown if heading is government agency</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f28z" -->
-                <option value="z" SELECTED>z- Other</option>
+                <option value="z" selected="selected">z- Other</option>
             <!-- TMPL_ELSE -->
                 <option value="z">z- Other</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f28|" -->
-                <option value="|" SELECTED>|- No attempt to code</option>
+                <option value="|" selected="selected">|- No attempt to code</option>
             <!-- TMPL_ELSE -->
                 <option value="|">|- No attempt to code</option>
             <!-- /TMPL_IF -->
@@ -527,24 +527,24 @@
     <tr>
         <td>29- Reference evaluation</td>
         <td>
-            <select name="f29" size="1">
+            <select name="f29" id="f29" size="1">
             <!-- TMPL_IF name="f29a" -->
-                <option value="a" SELECTED>a- Tracings are consistent with the heading</option>
+                <option value="a" selected="selected">a- Tracings are consistent with the heading</option>
             <!-- TMPL_ELSE -->
                 <option value="a">a- Tracings are consistent with the heading</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f29b" -->
-                <option value="b" SELECTED>b- Tracings are not necessarily consistent with the heading</option>
+                <option value="b" selected="selected">b- Tracings are not necessarily consistent with the heading</option>
             <!-- TMPL_ELSE -->
                 <option value="b">b- Tracings are not necessarily consistent with the heading</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f29n" -->
-                <option value="n" SELECTED>n- Not applicable</option>
+                <option value="n" selected="selected">n- Not applicable</option>
             <!-- TMPL_ELSE -->
                 <option value="n">n- Not applicable</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f29|" -->
-                <option value="|" SELECTED>|- No attempt to code</option>
+                <option value="|" selected="selected">|- No attempt to code</option>
             <!-- TMPL_ELSE -->
                 <option value="|">|- No attempt to code</option>
             <!-- /TMPL_IF -->
@@ -560,19 +560,19 @@
     <tr>
         <td>31- Record update in process</td>
         <td>
-            <select name="f31" size="1">
+            <select name="f31" id="f31" size="1">
             <!-- TMPL_IF name="f31a" -->
-                <option value="a" SELECTED>a- Record can be used</option>
+                <option value="a" selected="selected">a- Record can be used</option>
             <!-- TMPL_ELSE -->
                 <option value="a">a- Record can be used</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f31b" -->
-                <option value="b" SELECTED>b- Record is being updated</option>
+                <option value="b" selected="selected">b- Record is being updated</option>
             <!-- TMPL_ELSE -->
                 <option value="b">b- Record is being updated</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f31|" -->
-                <option value="|" SELECTED>|- No attempt to code</option>
+                <option value="|" selected="selected">|- No attempt to code</option>
             <!-- TMPL_ELSE -->
                 <option value="|">|- No attempt to code</option>
             <!-- /TMPL_IF -->
@@ -582,24 +582,24 @@
     <tr>
         <td>32- Undifferentiated personal name</td>
         <td>
-            <select name="f32" size="1">
+            <select name="f32" id="f32" size="1">
             <!-- TMPL_IF name="f32a" -->
-                <option value="a" SELECTED>a- Differentiated personal name</option>
+                <option value="a" selected="selected">a- Differentiated personal name</option>
             <!-- TMPL_ELSE -->
                 <option value="a">a- Differentiated personal name</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f32b" -->
-                <option value="b" SELECTED>b- Undifferentiated personal name</option>
+                <option value="b" selected="selected">b- Undifferentiated personal name</option>
             <!-- TMPL_ELSE -->
                 <option value="b">b- Undifferentiated personal name</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f32n" -->
-                <option value="n" SELECTED>n- Not applicable</option>
+                <option value="n" selected="selected">n- Not applicable</option>
             <!-- TMPL_ELSE -->
                 <option value="n">n- Not applicable</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f32|" -->
-                <option value="|" SELECTED>|- No attempt to code</option>
+                <option value="|" selected="selected">|- No attempt to code</option>
             <!-- TMPL_ELSE -->
                 <option value="|">|- No attempt to code</option>
             <!-- /TMPL_IF -->
@@ -609,34 +609,34 @@
     <tr>
         <td>33- Level of establishment</td>
         <td>
-            <select name="f33" size="1">
+            <select name="f33" id="f33" size="1">
             <!-- TMPL_IF name="f33a" -->
-                <option value="a" SELECTED>a- Fully established</option>
+                <option value="a" selected="selected">a- Fully established</option>
             <!-- TMPL_ELSE -->
                 <option value="a">a- Fully established</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f33b" -->
-                <option value="b" SELECTED>b- Memorandum</option>
+                <option value="b" selected="selected">b- Memorandum</option>
             <!-- TMPL_ELSE -->
                 <option value="b">b- Memorandum</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f33c" -->
-                <option value="c" SELECTED>c- Provisional</option>
+                <option value="c" selected="selected">c- Provisional</option>
             <!-- TMPL_ELSE -->
                 <option value="c">c- Provisional</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f33d" -->
-                <option value="d" SELECTED>d- Preliminary</option>
+                <option value="d" selected="selected">d- Preliminary</option>
             <!-- TMPL_ELSE -->
                 <option value="d">d- Preliminary</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f33n" -->
-                <option value="n" SELECTED>n- Not applicable</option>
+                <option value="n" selected="selected">n- Not applicable</option>
             <!-- TMPL_ELSE -->
                 <option value="n">n- Not applicable</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f33|" -->
-                <option value="|" SELECTED>|- No attempt to code</option>
+                <option value="|" selected="selected">|- No attempt to code</option>
             <!-- TMPL_ELSE -->
                 <option value="|">|- No attempt to code</option>
             <!-- /TMPL_IF -->
@@ -652,24 +652,24 @@
     <tr>
         <td>38- Modified record</td>
         <td>
-            <select name="f38" size="1">
+            <select name="f38" id="f38" size="1">
             <!-- TMPL_IF name="f38 " -->
-                <option value=" " SELECTED>#- Not modified</option>
+                <option value=" " selected="selected">#- Not modified</option>
             <!-- TMPL_ELSE -->
                 <option value=" ">#- Not modified</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f38s" -->
-                <option value="s" SELECTED>s- Shortened</option>
+                <option value="s" selected="selected">s- Shortened</option>
             <!-- TMPL_ELSE -->
                 <option value="s">s- Shortened</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f38x" -->
-                <option value="x" SELECTED>x- Missing characters</option>
+                <option value="x" selected="selected">x- Missing characters</option>
             <!-- TMPL_ELSE -->
                 <option value="x">x- Missing characters</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f38|" -->
-                <option value="|" SELECTED>|- No attempt to code</option>
+                <option value="|" selected="selected">|- No attempt to code</option>
             <!-- TMPL_ELSE -->
                 <option value="|">|- No attempt to code</option>
             <!-- /TMPL_IF -->
@@ -679,39 +679,39 @@
     <tr>
         <td>39- Cataloging source</td>
         <td>
-            <select name="f39" size="1">
+            <select name="f39" id="f39" size="1">
             <!-- TMPL_IF name="f39 " -->
-                <option value=" " SELECTED>#- National bibliographic agency</option>
+                <option value=" " selected="selected">#- National bibliographic agency</option>
             <!-- TMPL_ELSE -->
                 <option value=" ">#- National bibliographic agency</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f39c" -->
-                <option value="c" SELECTED>c- Cooperative cataloging program</option>
+                <option value="c" selected="selected">c- Cooperative cataloging program</option>
             <!-- TMPL_ELSE -->
                 <option value="c">c- Cooperative cataloging program</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f39d" -->
-                <option value="d" SELECTED>d- Other</option>
+                <option value="d" selected="selected">d- Other</option>
             <!-- TMPL_ELSE -->
                 <option value="d">d- Other</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f39u" -->
-                <option value="u" SELECTED>u- Unknown</option>
+                <option value="u" selected="selected">u- Unknown</option>
             <!-- TMPL_ELSE -->
                 <option value="u">u- Unknown</option>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF name="f39|" -->
-                <option value="|" SELECTED>|- No attempt to code</option>
+                <option value="|" selected="selected">|- No attempt to code</option>
             <!-- TMPL_ELSE -->
                 <option value="|">|- No attempt to code</option>
             <!-- /TMPL_IF -->
             </select>
         </td>
     </tr>
-	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
 </table>
+<fieldset class="action"><input type="submit" value="OK" /> <a href="#" class="cancel close">Cancel</a></fieldset>
 </form>
-<script>
+<script type="text/javascript">//<![CDATA[
 function report() {
             var doc   = opener.document; 
             var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
@@ -743,6 +743,7 @@ function report() {
 		self.close();
 		return false;
 	}
+	//]]>
 </script>
-</body>
-</html>
+
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->

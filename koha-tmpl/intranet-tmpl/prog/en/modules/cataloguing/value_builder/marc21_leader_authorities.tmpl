@@ -1,10 +1,10 @@
-<html>
-<head>
-<title>Leader builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Cataloging &rsaquo; Leader builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
-<body>
-<form name="f_pop" onSubmit="javascript:report()">
-<input type="hidden" name="plugin_name" value="marc21_leader_authorities.pl">
+<body style="padding:1em;">
+<form name="f_pop" onsubmit="report()">
+<input type="hidden" name="plugin_name" value="marc21_leader_authorities.pl" />
 <table>
 	<tr>
 		<td>1-4 Record size</td>
@@ -13,40 +13,40 @@
 	<tr>
 		<td>5- Record status</td>
 		<td>
-			<select name="f5" size="1">
+			<select name="f5" id="f5" size="1">
 			<!-- TMPL_IF name="f5a" -->
-				<option value="a" SELECTED>a- Increase in encoding level</option>
+				<option value="a" selected="selected">a- Increase in encoding level</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">a- Increase in encoding level</option>
 			<!-- /TMPL_IF -->
 
 			<!-- TMPL_IF name="f5c" -->
-				<option value="c" SELECTED>c- Corrected or revised</option>
+				<option value="c" selected="selected">c- Corrected or revised</option>
 			<!-- TMPL_ELSE -->
 				<option value="c">c- Corrected or revised</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5d" -->
-				<option value="d" SELECTED>d- Deleted</option>
+				<option value="d" selected="selected">d- Deleted</option>
 			<!-- TMPL_ELSE -->
 				<option value="d">d- Deleted</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5n" -->
-				<option value="n" SELECTED>n- New</option>
+				<option value="n" selected="selected">n- New</option>
 			<!-- TMPL_ELSE -->
 				<option value="n">n- New</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5o" -->
-				<option value="o" SELECTED>o- Obsolete</option>
+				<option value="o" selected="selected">o- Obsolete</option>
 			<!-- TMPL_ELSE -->
 				<option value="o">o- Obsolete</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5s" -->
-				<option value="s" SELECTED>s- Deleted; heading split into two or more headings</option>
+				<option value="s" selected="selected">s- Deleted; heading split into two or more headings</option>
 			<!-- TMPL_ELSE -->
 				<option value="s">s- Deleted; heading split into two or more headings</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5x" -->
-				<option value="x" SELECTED>x- Deleted; heading replaced by another heading</option>
+				<option value="x" selected="selected">x- Deleted; heading replaced by another heading</option>
 			<!-- TMPL_ELSE -->
 				<option value="x">x- Deleted; heading replaced by another heading</option>
 			<!-- /TMPL_IF -->
@@ -68,14 +68,14 @@
 	<tr>
 		<td>9- Encoding</td>
 		<td>
-			<select name="f9" size="1">
+			<select name="f9" id="f9" size="1">
 				<!-- TMPL_IF name="f9 " -->
-					<option value=" " SELECTED>MARC-8</option>
+					<option value=" " selected="selected">MARC-8</option>
 				<!-- TMPL_ELSE -->
 					<option value=" ">MARC-8</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="f9a" -->
-					<option value="a" SELECTED>a- UCS/Unicode</option>
+					<option value="a" selected="selected">a- UCS/Unicode</option>
 				<!-- TMPL_ELSE -->
 					<option value="a">a- UCS/Unicode</option>
 				<!-- /TMPL_IF -->
@@ -88,14 +88,14 @@
 	<tr>
 		<td>17- Encoding level</td>
 		<td>
-			<select name="f17" size="1">
+			<select name="f17" id="f17" size="1">
 				<!-- TMPL_IF name="f17n" -->
-					<option value="n" SELECTED>n- Complete authority record</option>
+					<option value="n" selected="selected">n- Complete authority record</option>
 				<!-- TMPL_ELSE -->
 					<option value="n">n- Complete authority record</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="f17o" -->
-					<option value="o" SELECTED>o- Incomplete authority record</option>
+					<option value="o" selected="selected">o- Incomplete authority record</option>
 				<!-- TMPL_ELSE -->
 					<option value="o">o- Incomplete authority record</option>
 				<!-- /TMPL_IF -->
@@ -113,10 +113,10 @@
 		<td>(auto-filled)</td>
 	<tr>
 
-	<tr><td colspan=2><input type="submit" value="OK"></td></tr>
 </table>
+<fieldset class="action"><input type="submit" value="OK" /> <a href="#" class="cancel close">Cancel</a></fieldset>
 </form>
-<script>
+<script type="text/javascript">//<![CDATA[
 function report() {
             var doc   = opener.document; 
             var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
@@ -134,6 +134,7 @@ function report() {
 		self.close();
 		return false;
 	}
+	//]]>
 </script>
-</body>
-</html>
+
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->
