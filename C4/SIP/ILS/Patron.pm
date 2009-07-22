@@ -10,22 +10,24 @@ package ILS::Patron;
 use strict;
 use warnings;
 use Exporter;
+use Carp;
 
 use Sys::Syslog qw(syslog);
 use Data::Dumper;
 
 use C4::Debug;
 use C4::Context;
-use C4::Dates;
+# use C4::Dates;
 use C4::Koha;
 use C4::Members;
 use C4::Reserves;
+use C4::Branch qw(GetBranchName);
 use Digest::MD5 qw(md5_base64);
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
 BEGIN {
-	$VERSION = 2.02;
+	$VERSION = 2.03;
 	@ISA = qw(Exporter);
 	@EXPORT_OK = qw(invalid_patron);
 }
@@ -44,63 +46,67 @@ sub new {
 	}
 	$kp = GetMemberDetails(undef,$patron_id);
 	$debug and warn "new Patron (GetMemberDetails): " . Dumper($kp);
-	my $pw = $kp->{password};    ## FIXME - md5hash -- deal with . 
-	my $dob= $kp->{dateofbirth};
-	my $fines_out = GetMemberAccountRecords($kp->{borrowernumber});
-	my $flags = $kp->{flags}; # or warn "Warning: No flags from patron object for '$patron_id'"; 
-	my $debarred = $kp->{debarred}; ### 1 if ($kp->{flags}->{DBARRED}->{noissues});
-	$debug and warn sprintf("Debarred = %s : ",($debarred||'undef')) . Dumper(%{$kp->{flags}});
+	my $pw        = $kp->{password};  ### FIXME - md5hash -- deal with . 
+	my $flags     = $kp->{flags};     # or warn "Warning: No flags from patron object for '$patron_id'"; 
+	my $debarred  = $kp->{debarred};  # 1 if ($kp->{flags}->{DBARRED}->{noissues});
+	$debug and warn sprintf("Debarred = %s : ", ($debarred||'undef')) . Dumper(%{$kp->{flags}});
 	my %ilspatron;
 	my $adr     = $kp->{streetnumber} || '';
 	my $address = $kp->{address}      || ''; 
+    my $dob     = $kp->{dateofbirth};
+    $dob and $dob =~ s/-//g;    # YYYYMMDD
 	$adr .= ($adr && $address) ? " $address" : $address;
-	{
+    my $fines_amount = $flags->{CHARGES}->{amount};
+    $fines_amount = ($fines_amount and $fines_amount > 0) ? $fines_amount : 0;
+    {
 	no warnings;	# any of these $kp->{fields} being concat'd could be undef
-	$dob =~ s/\-//g;
-	%ilspatron = (
-	  getmemberdetails_object => $kp,
-		name => $kp->{firstname} . " " . $kp->{surname},
-		  id => $kp->{cardnumber},			# to SIP, the id is the BARCODE, not userid
-		  password => $pw,
-		     ptype => $kp->{categorycode}, # 'A'dult.  Whatever.
-		 birthdate => $kp->{dateofbirth}, ##$dob,
-		branchcode => $kp->{branchcode},
-	borrowernumber => $kp->{borrowernumber},
-		   address => $adr,
-		home_phone => $kp->{phone},
-		email_addr => $kp->{email},
-		 charge_ok => (!$debarred), ##  (C4::Context->preference('FinesMode') eq 'charge') || 0,
-		  renew_ok => (!$debarred),
-		 recall_ok => (!$debarred),
-		   hold_ok => (!$debarred),
-	 	 card_lost => ($kp->{lost} || $kp->{gonenoaddress} || $flags->{LOST}) ,
-		claims_returned => 0,
-		fines => $fines_out,
-		 fees => 0,			# currently not distinct from fines
-		recall_overdue => 0,
-		  items_billed => 0,
-		screen_msg => 'Greetings from Koha. ' . $kp->{opacnote},
-		print_line => '',
-		        items => [],
-		   hold_items => $flags->{WAITING}{itemlist},
-		overdue_items => $flags->{ODUES}{itemlist},
-		   fine_items => [],
-		 recall_items => [],
-		unavail_holds => [],
-		inet => 1,
-	);
-	}
+    %ilspatron = (
+        getmemberdetails_object => $kp,
+        name => $kp->{firstname} . " " . $kp->{surname},
+        id   => $kp->{cardnumber},    # to SIP, the id is the BARCODE, not userid
+        password        => $pw,
+        ptype           => $kp->{categorycode},     # 'A'dult.  Whatever.
+        birthdate       => $dob,
+        birthdate_iso   => $kp->{dateofbirth},
+        branchcode      => $kp->{branchcode},
+        library_name    => "",                      # only populated if needed, cached here
+        borrowernumber  => $kp->{borrowernumber},
+        address         => $adr,
+        home_phone      => $kp->{phone},
+        email_addr      => $kp->{email},
+        charge_ok       => ( !$debarred ),
+        renew_ok        => ( !$debarred ),
+        recall_ok       => ( !$debarred ),
+        hold_ok         => ( !$debarred ),
+        card_lost       => ( $kp->{lost} || $kp->{gonenoaddress} || $flags->{LOST} ),
+        claims_returned => 0,
+        fines           => $fines_amount, # GetMemberAccountRecords($kp->{borrowernumber})
+        fees            => 0,             # currently not distinct from fines
+        recall_overdue  => 0,
+        items_billed    => 0,
+        screen_msg      => 'Greetings from Koha. ' . $kp->{opacnote},
+        print_line      => '',
+        items           => [],
+        hold_items      => $flags->{WAITING}{itemlist},
+        overdue_items   => $flags->{ODUES}{itemlist},
+        fine_items      => [],
+        recall_items    => [],
+        unavail_holds   => [],
+        inet            => ( !$debarred ),
+    );
+    }
+    print STDERR "patron fines: $ilspatron{fines} ... amountoutstanding: $kp->{amountoutstanding} ... CHARGES->amount: $flags->{CHARGES}->{amount}\n";
 	for (qw(CHARGES CREDITS GNA LOST DBARRED NOTES)) {
 		($flags->{$_}) or next;
 		$ilspatron{screen_msg} .= ($flags->{$_}->{message} || '') ;
-		if ($flags->{$_}->{noissues}){
-			foreach my $toggle (qw(charge_ok renew_ok recall_ok hold_ok)) {
-				$ilspatron{$toggle} = 0;
+		if ($flags->{$_}->{noissues}) {
+			foreach my $toggle (qw(charge_ok renew_ok recall_ok hold_ok inet)) {
+				$ilspatron{$toggle} = 0;    # if we get noissues, disable everything
 			}
 		}
 	}
 
-	# FIXME: populate fine_items recall_items
+    # FIXME: populate fine_items recall_items
 #   $ilspatron{hold_items}    = (GetReservesFromBorrowernumber($kp->{borrowernumber},'F'));
 	$ilspatron{unavail_holds} = [(GetReservesFromBorrowernumber($kp->{borrowernumber}))];
 	$ilspatron{items} = GetPendingIssues($kp->{borrowernumber});
@@ -111,62 +117,67 @@ sub new {
     return $self;
 }
 
-sub id {
-    my $self = shift;
-    return $self->{id};
+
+# 0 means read-only
+# 1 means read/write
+
+my %fields = (
+    id                      => 0,
+    name                    => 0,
+    address                 => 0,
+    email_addr              => 0,
+    home_phone              => 0,
+    birthdate               => 0,
+    birthdate_iso           => 0,
+    ptype                   => 0,
+    charge_ok               => 0,   # for patron_status[0] (inverted)
+    renew_ok                => 0,   # for patron_status[1] (inverted)
+    recall_ok               => 0,   # for patron_status[2] (inverted)
+    hold_ok                 => 0,   # for patron_status[3] (inverted)
+    card_lost               => 0,   # for patron_status[4]
+    recall_overdue          => 0,
+    currency                => 1,
+#   fee_limit               => 0,
+    screen_msg              => 1,
+    print_line              => 1,
+    too_many_charged        => 0,   # for patron_status[5]
+    too_many_overdue        => 0,   # for patron_status[6]
+    too_many_renewal        => 0,   # for patron_status[7]
+    too_many_claim_return   => 0,   # for patron_status[8]
+    too_many_lost           => 0,   # for patron_status[9]
+#   excessive_fines         => 0,   # for patron_status[10]
+#   excessive_fees          => 0,   # for patron_status[11]
+    recall_overdue          => 0,   # for patron_status[12]
+    too_many_billed         => 0,   # for patron_status[13]
+    inet                    => 0,   # EnvisionWare extension
+    getmemberdetails_object => 0,
+);
+
+our $AUTOLOAD;
+
+sub DESTROY {
+    # be cool.  needed for AUTOLOAD(?)
 }
-sub name {
+
+sub AUTOLOAD {
     my $self = shift;
-    return $self->{name};
+    my $class = ref($self) or croak "$self is not an object";
+    my $name = $AUTOLOAD;
+
+    $name =~ s/.*://;
+
+    unless (exists $fields{$name}) {
+		croak "Cannot access '$name' field of class '$class'";
+    }
+
+	if (@_) {
+        $fields{$name} or croak "Field '$name' of class '$class' is READ ONLY.";
+		return $self->{$name} = shift;
+	} else {
+		return $self->{$name};
+	}
 }
-sub address {
-    my $self = shift;
-    return $self->{address};
-}
-sub email_addr {
-    my $self = shift;
-    return $self->{email_addr};
-}
-sub home_phone {
-    my $self = shift;
-    return $self->{home_phone};
-}
-sub sip_birthdate {
-    my $self = shift;
-    return $self->{birthdate};
-}
-sub ptype {
-    my $self = shift;
-    return $self->{ptype};
-}
-sub language {
-    my $self = shift;
-    return $self->{language} || '000'; # Unspecified
-}
-sub charge_ok {
-    my $self = shift;
-    return $self->{charge_ok};
-}
-sub renew_ok {
-    my $self = shift;
-    return $self->{renew_ok};
-}
-sub recall_ok {
-    my $self = shift;
-    return $self->{recall_ok};
-}
-sub hold_ok {
-    my $self = shift;
-    return $self->{hold_ok};
-}
-sub card_lost {
-    my $self = shift;
-    return $self->{card_lost};
-}
-sub recall_overdue {
-    my $self = shift;
-    return $self->{recall_overdue};
-}
+
 sub check_password {
     my ($self, $pwd) = @_;
 	my $md5pwd = $self->{password};
@@ -175,57 +186,21 @@ sub check_password {
 	(defined $md5pwd) or return($pwd eq '');	# if the record has a NULL password, accept '' as match
 	return (md5_base64($pwd) eq $md5pwd);
 }
-sub currency {
-    my $self = shift;
-    return $self->{currency};
-}
+
+# A few special cases, not in AUTOLOADed %fields
 sub fee_amount {
     my $self = shift;
-    return $self->{fee_amount} || undef;
+    return $self->{fines} || undef;
 }
-sub screen_msg {
+
+sub fines_amount {
     my $self = shift;
-    return $self->{screen_msg};
+    return $self->fee_amount;
 }
-sub print_line {
+
+sub language {
     my $self = shift;
-    return $self->{print_line};
-}
-sub too_many_charged {
-    my $self = shift;
-    return $self->{too_many_charged};
-}
-sub too_many_overdue {
-    my $self = shift;
-    return $self->{too_many_overdue};
-}
-sub too_many_renewal {
-    my $self = shift;
-    return $self->{too_many_renewal};
-}
-sub too_many_claim_return {
-    my $self = shift;
-    return $self->{too_many_claim_return};
-}
-sub too_many_lost {
-    my $self = shift;
-    return $self->{too_many_lost};
-}
-sub excessive_fines {
-    my $self = shift;
-    return $self->{excessive_fines};
-}
-sub excessive_fees {
-    my $self = shift;
-    return $self->{excessive_fees};
-}
-sub too_many_billed {
-    my $self = shift;
-    return $self->{too_many_billed};
-}
-sub getmemberdetails_object {
-    my $self = shift;
-    return $self->{getmemberdetails_object};
+    return $self->{language} || '000'; # Unspecified
 }
 
 #
@@ -236,7 +211,7 @@ sub hold_items {
 	$self->{hold_items} or return [];
     $start = 1 unless defined($start);
     $end = scalar @{$self->{hold_items}} unless defined($end);
-    return [@{$self->{hold_items}}[$start-1 .. $end-1]];
+    return [@{$self->{hold_items}}[$start-1 .. $end-1]];    # SIP "start item" and "end item" values are 1-indexed, not 0 like perl arrays
 }
 
 #
@@ -304,22 +279,23 @@ sub unavail_holds {
 
 sub block {
     my ($self, $card_retained, $blocked_card_msg) = @_;
-    foreach my $field ('charge_ok', 'renew_ok', 'recall_ok', 'hold_ok') {
+    foreach my $field ('charge_ok', 'renew_ok', 'recall_ok', 'hold_ok', 'inet') {
 		$self->{$field} = 0;
     }
-    $self->{screen_msg} = $blocked_card_msg || "Card Blocked.  Please contact library staff";
+    $self->{screen_msg} = "Feature not implemented";  # $blocked_card_msg || "Card Blocked.  Please contact library staff";
+    # TODO: not really affecting patron record
     return $self;
 }
 
 sub enable {
     my $self = shift;
-    foreach my $field ('charge_ok', 'renew_ok', 'recall_ok', 'hold_ok') {
+    foreach my $field ('charge_ok', 'renew_ok', 'recall_ok', 'hold_ok', 'inet') {
 		$self->{$field} = 1;
     }
     syslog("LOG_DEBUG", "Patron(%s)->enable: charge: %s, renew:%s, recall:%s, hold:%s",
 	   $self->{id}, $self->{charge_ok}, $self->{renew_ok},
 	   $self->{recall_ok}, $self->{hold_ok});
-    $self->{screen_msg} = "All privileges restored.";   # FIXME: not really affecting patron record
+    $self->{screen_msg} = "This feature not implemented."; # "All privileges restored.";   # TODO: not really affecting patron record
     return $self;
 }
 
@@ -328,6 +304,27 @@ sub inet_privileges {
     return $self->{inet} ? 'Y' : 'N';
 }
 
+sub fee_limit {
+    # my $self = shift;
+    return C4::Context->preference("noissuescharge") || 5;
+}
+
+sub excessive_fees {
+    my $self = shift or return;
+    return ($self->fee_amount and $self->fee_amount > $self->fee_limit);
+}
+sub excessive_fines {
+    my $self = shift or return;
+    return $self->excessive_fees;   # same thing for Koha
+}
+    
+sub library_name {
+    my $self = shift;
+    unless ($self->{library_name}) {
+        $self->{library_name} = GetBranchName($self->{branchcode});
+    }
+    return $self->{library_name};
+}
 #
 # Messages
 #

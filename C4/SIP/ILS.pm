@@ -21,25 +21,25 @@ use ILS::Transaction::RenewAll;
 my $debug = 0;
 
 my %supports = (
-		'magnetic media'	=> 1,
-		'security inhibit'	=> 0,
-		'offline operation'	=> 0,
-		"patron status request" => 1,
-		"checkout"		=> 1,
-		"checkin"		=> 1,
-		"block patron"		=> 1,
-		"acs status"		=> 1,
-		"login"			=> 1,
-		"patron information"	=> 1,
-		"end patron session"	=> 1,
-		"fee paid"		=> 0,
-		"item information"	=> 1,
-		"item status update"	=> 0,
-		"patron enable"		=> 1,
-		"hold"			=> 1,
-		"renew"			=> 1,
-		"renew all"		=> 1,
-	       );
+    'magnetic media'        => 1,
+    'security inhibit'      => 0,
+    'offline operation'     => 0,
+    "patron status request" => 1,
+    "checkout"              => 1,
+    "checkin"               => 1,
+    "block patron"          => 1,
+    "acs status"            => 1,
+    "login"                 => 1,
+    "patron information"    => 1,
+    "end patron session"    => 1,
+    "fee paid"              => 0,
+    "item information"      => 1,
+    "item status update"    => 0,
+    "patron enable"         => 1,
+    "hold"                  => 1,
+    "renew"                 => 1,
+    "renew all"             => 1,
+);
 
 sub new {
     my ($class, $institution) = @_;
@@ -65,6 +65,11 @@ sub find_item {
 }
 
 sub institution {
+    my $self = shift;
+    return $self->{institution}->{id};  # consider making this return the whole institution
+}
+
+sub institution_id {
     my $self = shift;
     return $self->{institution}->{id};
 }
@@ -174,8 +179,8 @@ sub checkin {
     $circ = new ILS::Transaction::Checkin;
     # BEGIN TRANSACTION
     $circ->item($item = new ILS::Item $item_id);
-    
-    $circ->do_checkin();    
+
+    $circ->do_checkin($current_loc, $return_date);
 	# It's ok to check it in if it exists, and if it was checked out
 	$circ->ok($item && $item->{patron});
 
