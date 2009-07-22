@@ -1264,12 +1264,11 @@ sub _FixPriority {
 
   @results = &_Findgroupreserve($biblioitemnumber, $biblionumber, $itemnumber);
 
-****** FIXME ******
-I don't know what this does, because I don't understand how reserve
-constraints work. I think the idea is that you reserve a particular
-biblio, and the constraint allows you to restrict it to a given
-biblioitem (e.g., if you want to borrow the audio book edition of "The
-Prophet", rather than the first available publication).
+Looks for an item-specific match first, then for a title-level match, returning the
+first match found.  If neither, then we look for a 3rd kind of match based on
+reserve constraints.
+
+TODO: add more explanation about reserve constraints
 
 C<&_Findgroupreserve> returns :
 C<@results> is an array of references-to-hash whose keys are mostly
@@ -1282,19 +1281,20 @@ sub _Findgroupreserve {
     my ( $bibitem, $biblio, $itemnumber ) = @_;
     my $dbh   = C4::Context->dbh;
 
+    # TODO: consolidate at least the SELECT portion of the first 2 queries to a common $select var.
     # check for exact targetted match
     my $item_level_target_query = qq/
-        SELECT reserves.biblionumber AS biblionumber,
-               reserves.borrowernumber AS borrowernumber,
-               reserves.reservedate AS reservedate,
-               reserves.branchcode AS branchcode,
-               reserves.cancellationdate AS cancellationdate,
-               reserves.found AS found,
-               reserves.reservenotes AS reservenotes,
-               reserves.priority AS priority,
-               reserves.timestamp AS timestamp,
+        SELECT reserves.biblionumber        AS biblionumber,
+               reserves.borrowernumber      AS borrowernumber,
+               reserves.reservedate         AS reservedate,
+               reserves.branchcode          AS branchcode,
+               reserves.cancellationdate    AS cancellationdate,
+               reserves.found               AS found,
+               reserves.reservenotes        AS reservenotes,
+               reserves.priority            AS priority,
+               reserves.timestamp           AS timestamp,
                biblioitems.biblioitemnumber AS biblioitemnumber,
-               reserves.itemnumber AS itemnumber
+               reserves.itemnumber          AS itemnumber
         FROM reserves
         JOIN biblioitems USING (biblionumber)
         JOIN hold_fill_targets USING (biblionumber, borrowernumber, itemnumber)
@@ -1313,17 +1313,17 @@ sub _Findgroupreserve {
     
     # check for title-level targetted match
     my $title_level_target_query = qq/
-        SELECT reserves.biblionumber AS biblionumber,
-               reserves.borrowernumber AS borrowernumber,
-               reserves.reservedate AS reservedate,
-               reserves.branchcode AS branchcode,
-               reserves.cancellationdate AS cancellationdate,
-               reserves.found AS found,
-               reserves.reservenotes AS reservenotes,
-               reserves.priority AS priority,
-               reserves.timestamp AS timestamp,
+        SELECT reserves.biblionumber        AS biblionumber,
+               reserves.borrowernumber      AS borrowernumber,
+               reserves.reservedate         AS reservedate,
+               reserves.branchcode          AS branchcode,
+               reserves.cancellationdate    AS cancellationdate,
+               reserves.found               AS found,
+               reserves.reservenotes        AS reservenotes,
+               reserves.priority            AS priority,
+               reserves.timestamp           AS timestamp,
                biblioitems.biblioitemnumber AS biblioitemnumber,
-               reserves.itemnumber AS itemnumber
+               reserves.itemnumber          AS itemnumber
         FROM reserves
         JOIN biblioitems USING (biblionumber)
         JOIN hold_fill_targets USING (biblionumber, borrowernumber)
@@ -1341,23 +1341,23 @@ sub _Findgroupreserve {
     return @results if @results;
 
     my $query = qq/
-        SELECT reserves.biblionumber AS biblionumber,
-               reserves.borrowernumber AS borrowernumber,
-               reserves.reservedate AS reservedate,
-               reserves.branchcode AS branchcode,
-               reserves.cancellationdate AS cancellationdate,
-               reserves.found AS found,
-               reserves.reservenotes AS reservenotes,
-               reserves.priority AS priority,
-               reserves.timestamp AS timestamp,
+        SELECT reserves.biblionumber               AS biblionumber,
+               reserves.borrowernumber             AS borrowernumber,
+               reserves.reservedate                AS reservedate,
+               reserves.branchcode                 AS branchcode,
+               reserves.cancellationdate           AS cancellationdate,
+               reserves.found                      AS found,
+               reserves.reservenotes               AS reservenotes,
+               reserves.priority                   AS priority,
+               reserves.timestamp                  AS timestamp,
                reserveconstraints.biblioitemnumber AS biblioitemnumber,
-               reserves.itemnumber AS itemnumber
+               reserves.itemnumber                 AS itemnumber
         FROM reserves
           LEFT JOIN reserveconstraints ON reserves.biblionumber = reserveconstraints.biblionumber
         WHERE reserves.biblionumber = ?
           AND ( ( reserveconstraints.biblioitemnumber = ?
           AND reserves.borrowernumber = reserveconstraints.borrowernumber
-          AND reserves.reservedate    =reserveconstraints.reservedate )
+          AND reserves.reservedate    = reserveconstraints.reservedate )
           OR  reserves.constrainttype='a' )
           AND (reserves.itemnumber IS NULL OR reserves.itemnumber = ?)
     /;
