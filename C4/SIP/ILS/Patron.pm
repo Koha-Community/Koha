@@ -95,7 +95,7 @@ sub new {
         inet            => ( !$debarred ),
     );
     }
-    print STDERR "patron fines: $ilspatron{fines} ... amountoutstanding: $kp->{amountoutstanding} ... CHARGES->amount: $flags->{CHARGES}->{amount}\n";
+    $debug and warn "patron fines: $ilspatron{fines} ... amountoutstanding: $kp->{amountoutstanding} ... CHARGES->amount: $flags->{CHARGES}->{amount}";
 	for (qw(CHARGES CREDITS GNA LOST DBARRED NOTES)) {
 		($flags->{$_}) or next;
 		$ilspatron{screen_msg} .= ($flags->{$_}->{message} || '') ;
