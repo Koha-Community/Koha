@@ -1129,9 +1129,9 @@ sub GetMemberAccountRecords {
 	        $data->{title} = $biblio->{title};
         $acctlines[$numlines] = $data;
         $numlines++;
-        $total += int(100 * $data->{'amountoutstanding'}); # convert float to integer to avoid round-off errors
+        $total += int(1000 * $data->{'amountoutstanding'}); # convert float to integer to avoid round-off errors
     }
-    $total /= 100;
+    $total /= 1000;
     $sth->finish;
     return ( $total, \@acctlines,$numlines);
 }
