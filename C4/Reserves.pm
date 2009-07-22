@@ -1,6 +1,3 @@
-# -*- tab-width: 8 -*-
-# NOTE: This file uses standard 8-character tabs
-
 package C4::Reserves;
 
 # Copyright 2000-2002 Katipo Communications
@@ -24,6 +21,7 @@ package C4::Reserves;
 
 
 use strict;
+# use warnings;  # FIXME: someday
 use C4::Context;
 use C4::Biblio;
 use C4::Items;
@@ -39,8 +37,6 @@ use C4::Branch qw( GetBranchDetail );
 use List::MoreUtils qw( firstidx );
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-
-my $library_name = C4::Context->preference("LibraryName");
 
 =head1 NAME
 
@@ -194,16 +190,15 @@ sub AddReserve {
 
 =item GetReservesFromBiblionumber
 
-@borrowerreserv=&GetReserves($biblionumber,$itemnumber,$borrowernumber);
+($count, $title_reserves) = &GetReserves($biblionumber);
 
-this function get the list of reservation for an C<$biblionumber>, C<$itemnumber> or C<$borrowernumber>
-given on input arg. 
-Only 1 argument has to be passed.
+This function gets the list of reservations for one C<$biblionumber>, returning a count
+of the reserves and an arrayref pointing to the reserves for C<$biblionumber>.
 
 =cut
 
 sub GetReservesFromBiblionumber {
-    my ( $biblionumber, $itemnumber, $borrowernumber ) = @_;
+    my ($biblionumber) = shift or return (0, []);
     my $dbh   = C4::Context->dbh;
 
     # Find the desired items in the reserves
@@ -237,9 +232,7 @@ sub GetReservesFromBiblionumber {
                 AND   reservedate    = ?
             ';
             my $csth = $dbh->prepare($query);
-            $csth->execute( $data->{biblionumber}, $data->{borrowernumber},
-                $data->{reservedate}, );
-    
+            $csth->execute($data->{biblionumber}, $data->{borrowernumber}, $data->{reservedate});
             my @bibitemno;
             while ( my $bibitemnos = $csth->fetchrow_array ) {
                 push( @bibitemno, $bibitemnos );    # FIXME: inefficient: use fetchall_arrayref
@@ -250,8 +243,8 @@ sub GetReservesFromBiblionumber {
             # reserved by same person on same day
             my $bdata;
             if ( $count > 1 ) {
-                $bdata = GetBiblioItemData( $bibitemno[$i] );
-                $i++;
+                $bdata = GetBiblioItemData( $bibitemno[$i] );   # FIXME: This doesn't make sense.
+                $i++; #  $i can increase each pass, but the next @bibitemno might be smaller?
             }
             else {
                 # Look up the book we just found.
