@@ -69,7 +69,7 @@ our $user_fullname= 'Edna Acosta';
 our $user_homeaddr= '7896 Library Rd\.';
 our $user_email   = 'patron\@liblime\.com';
 our $user_phone   = '\(212\) 555-1212';
-our $user_birthday= '1980-04-24';
+our $user_birthday= '19800424';   # YYYYMMDD, ANSI X3.30
 our $user_ptype   = 'PT';
 our $user_inet    = 'Y';
 
@@ -80,7 +80,7 @@ our $user2_fullname= 'Jamie White';
 our $user2_homeaddr= '937 Library Rd\.';
 our $user2_email   = 'patron\@liblime\.com';
 our $user2_phone   = '\(212\) 555-1212';
-our $user2_birthday= '1950-04-22';
+our $user2_birthday= '19500422';    # YYYYMMDD, ANSI X3.30
 our $user2_ptype   = 'T';
 our $user2_inet    = 'Y';
 

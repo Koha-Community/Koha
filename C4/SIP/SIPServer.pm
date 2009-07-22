@@ -21,7 +21,7 @@ use constant LOG_SIP => "local6"; # Local alias for the logging facility
 use vars qw(@ISA $VERSION);
 
 BEGIN {
-	$VERSION = 1.01;
+	$VERSION = 1.02;
 	@ISA = qw(Net::Server::PreFork);
 }
 
@@ -55,8 +55,20 @@ foreach my $svc (keys %{$config->{listeners}}) {
 #
 # Logging
 #
-push @parms, "log_file=Sys::Syslog", "syslog_ident=acs-server",
-  "syslog_facility=" . LOG_SIP;
+# Log lines look like this:
+# Jun 16 21:21:31 server08 steve_sip[19305]: ILS::Transaction::Checkout performing checkout...
+# [  TIMESTAMP  ] [ HOST ] [ IDENT ]  PID  : Message...
+#
+# The IDENT is determined by $ENV{KOHA_SIP_LOG_IDENT}, if present.
+# Otherwise it is "_sip" appended to $USER, if present, or "acs-server" as a fallback.
+#  
+
+my $syslog_ident = $ENV{KOHA_SIP_LOG_IDENT} || ($ENV{USER} ? $ENV{USER} . "_sip" : 'acs-server');
+
+push @parms,
+    "log_file=Sys::Syslog",
+    "syslog_ident=$syslog_ident",
+    "syslog_facility=" . LOG_SIP;
 
 #
 # Server Management: set parameters for the Net::Server::PreFork
@@ -70,6 +82,7 @@ if (defined($config->{'server-params'})) {
     }
 }
 
+print scalar(localtime),  " -- startup -- procid:$$\n";
 print "Params for Net::Server::PreFork : \n" . Dumper(\@parms);
 
 #
@@ -211,13 +224,6 @@ sub telnet_transport {
 		$uid = get_clean_string ($uid);
 		$pwd = get_clean_string ($pwd);
 		syslog("LOG_DEBUG", "telnet_transport 2: uid length %s, pwd length %s", length($uid), length($pwd));
-		# $uid =~ s/^\s+//;			# 
-		# $pwd =~ s/^\s+//;			# 
-	    # $uid =~ s/[\r\n]+$//gms;	# 
-	    # $pwd =~ s/[\r\n]+$//gms;	# 
-	    # $uid =~ s/[[:cntrl:]]//g;	# 
-	    # $pwd =~ s/[[:cntrl:]]//g;	# 
-		# syslog("LOG_DEBUG", "telnet_transport 3: uid length %s, pwd length %s", length($uid), length($pwd));
 
 	    if (exists ($config->{accounts}->{$uid})
 		&& ($pwd eq $config->{accounts}->{$uid}->password())) {
