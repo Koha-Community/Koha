@@ -21,6 +21,7 @@ use CGI;
 
 use C4::Auth;
 use C4::Koha;
+use C4::Dates qw/format_date/;
 use C4::Circulation;
 use C4::Reserves;
 use C4::Output;
@@ -146,6 +147,7 @@ if ($borrower->{cardnumber}) {
     my @issues;
     my ($issueslist) = GetPendingIssues( $borrower->{'borrowernumber'} );
     foreach my $it (@$issueslist) {
+        $it->{date_due_display} = format_date($it->{date_due});
         my ($renewokay, $renewerror) = CanBookBeIssued($borrower, $it->{'barcode'},'','');
         $it->{'norenew'} = 1 if $renewokay->{'NO_MORE_RENEWALS'};
         push @issues, $it;
@@ -164,6 +166,7 @@ if ($borrower->{cardnumber}) {
     $template->param(
         inputfocus => $inputfocus,
 		nofines => 1,
+        "dateformat_" . C4::Context->preference('dateformat') => 1,
     );
     if (C4::Context->preference('ShowPatronImageInWebBasedSelfCheck')) {
         my ($image, $dberror) = GetPatronImage($borrower->{cardnumber});
