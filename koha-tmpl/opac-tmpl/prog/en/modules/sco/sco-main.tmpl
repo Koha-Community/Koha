@@ -72,7 +72,40 @@ $(document).ready(function() {
 <!-- TMPL_IF NAME="impossible" --><!-- We tried to issue, but failed. -->
 <div class="dialog alert"><h3>Item cannot be checked out.</h3><p>Sorry, This item cannot be checked out at this station.  </p>
 <!-- TMPL_IF NAME="title" --><p>Title: <em><!-- TMPL_VAR NAME="title" escape="html" --></em> </p><!-- /TMPL_IF -->
-<p><em>Error type:</em> <!-- TMPL_VAR NAME="impossible" --></p>
+<p>
+   <!-- TMPL_IF NAME="circ_error_UNKNOWN_BARCODE" -->
+    <em>MESSAGE 1:</em> The system does not recognize this barcode.
+   <!-- TMPL_ELSIF NAME="circ_error_TOO_MANY" -->
+    <em>MESSAGE 2:</em> You have borrowed too many items and can't check out any more.
+   <!-- TMPL_ELSIF NAME="circ_error_ISSUED_TO_ANOTHER" -->
+    <em>MESSAGE 3:</em> This item is checked out to someone else.
+   <!-- TMPL_ELSIF NAME="circ_error_NO_MORE_RENEWALS" -->
+    <em>MESSAGE 4:</em> You cannot renew this item again.
+   <!-- TMPL_ELSIF NAME="circ_error_NOT_FOR_LOAN" -->
+    <em>MESSAGE 5:</em> This item is not for loan.
+   <!-- TMPL_ELSIF NAME="circ_error_DEBT" -->
+    <em>MESSAGE 6:</em> You owe the library <!-- TMPL_VAR NAME="amount" --> and cannot borrow.
+   <!-- TMPL_ELSIF NAME="circ_error_WTHDRAWN" -->
+    <em>MESSAGE 7:</em> This item has been withdrawn from the collection.
+   <!-- TMPL_ELSIF NAME="circ_error_RESTRICTED" -->
+    <em>MESSAGE 8:</em>
+   <!-- TMPL_ELSIF NAME="circ_error_RESERVED" -->
+    <em>MESSAGE 9:</em> This item is reserved for another patron.
+   <!-- TMPL_ELSIF NAME="circ_error_NOTSAMEBRANCH" -->
+    <em>MESSAGE 10:</em>
+   <!-- TMPL_ELSIF NAME="circ_error_EXPIRED" -->
+    <em>MESSAGE 11:</em> Your account has expired.
+   <!-- TMPL_ELSIF NAME="circ_error_DEBARRED" -->
+    <em>MESSAGE 12:</em> Your account has been suspended.
+   <!-- TMPL_ELSIF NAME="circ_error_CARD_LOST" -->
+    <em>MESSAGE 13:</em> This card has been declared lost.
+   <!-- TMPL_ELSIF NAME="circ_error_GNA" -->
+    <em>MESSAGE 14:</em>
+   <!-- TMPL_ELSIF NAME="circ_error_INVALID_DATE" -->
+    <em>MESSAGE 15:</em>
+   <!-- /TMPL_IF -->
+   Please see a member of the library staff.
+</p>
 <form action="/cgi-bin/koha/sco/sco-main.pl" name="errorForm" method="post">
 <input type="hidden" name="op" value="login" />
 <input type="hidden" name="patronid" value="<!-- TMPL_VAR NAME="patronid" -->" />

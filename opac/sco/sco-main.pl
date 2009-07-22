@@ -86,10 +86,14 @@ elsif ( $op eq "checkout" ) {
 
         # FIXME  we assume only one error.
         $template->param(
-            impossible => $issue_error,
-            title      => $item->{title},
-            hide_main  => 1,
+            impossible                => $issue_error,
+            "circ_error_$issue_error" => 1,
+            title                     => $item->{title},
+            hide_main                 => 1,
         );
+        if ($issue_error eq 'DEBT') {
+            $template->param(amount => $impossible->{DEBT});
+        }
         #warn "issue_error: " . $issue_error ;
         if ( $issue_error eq "NO_MORE_RENEWALS" ) {
             $return_only = 1;
@@ -114,9 +118,11 @@ elsif ( $op eq "checkout" ) {
         }
     } elsif ( $confirm_required && !$confirmed ) {
         #warn "failed confirmation";
+        my $issue_error = (keys %$needconfirm)[0];
         $template->param(
-            impossible => (keys %$needconfirm)[0],
-            hide_main  => 1,
+            impossible                => (keys %$needconfirm)[0],
+            "circ_error_$issue_error" => 1,
+            hide_main                 => 1,
         );
     } else {
         if ( $confirmed || $issuenoconfirm ) {    # we'll want to call getpatroninfo again to get updated issues.
