@@ -104,6 +104,9 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	<!-- TMPL_IF NAME="patronid" -->
 	<!-- TMPL_IF NAME="validuser" -->
 	<h3 class="warning">You are logged in as <!-- TMPL_VAR NAME="borrowername" -->.</h3>
+    <!-- TMPL_IF NAME="display_patron_image" -->
+        <img src="/cgi-bin/koha/sco/sco-patron-image.pl?cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->" alt="" />
+    <!-- /TMPL_IF -->
 	<!-- /TMPL_IF -->
 	</div>
 	<!-- TMPL_IF NAME="nouser" -->
