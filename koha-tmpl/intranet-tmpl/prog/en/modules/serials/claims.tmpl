@@ -55,7 +55,6 @@
    <!-- TMPL_IF NAME="missingissues" -->	
     <form action="claims.pl" method="post">
         <input type="hidden" name="order" value="<!--TMPL_VAR Name="order"-->" />
-        <input type="hidden" name="op" value="" />
             <h3>Missing Issues</h3>
             <table id="claimst">
                 <thead><tr>
@@ -74,7 +73,7 @@
                     <tr>
                         <!--TMPL_IF NAME="letter" -->
                             <td>
-                    <input type="checkbox" name="serialid" value="<!-- TMPL_VAR NAME="serialid"-->" onclick="document.claims.op='send_alert';" />
+                    <input type="checkbox" name="serialid" value="<!-- TMPL_VAR NAME="serialid"-->" />
                             </td>
                         <!--/TMPL_IF-->
                         <td>

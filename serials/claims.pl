@@ -66,13 +66,13 @@ if($supplierid){
 my $preview=0;
 if($op eq 'preview'){
     $preview = 1;
-}
-
-if ($op eq "send_alert"){
-  my @serialnums=$input->param("serialid");
-  SendAlerts('claimissues',\@serialnums,$input->param("letter_code"));
-  my $cntupdate=UpdateClaimdateIssues(\@serialnums);
-  ### $cntupdate SHOULD be equal to scalar(@$serialnums)
+} else {
+    my @serialnums=$input->param('serialid');
+    if (@serialnums) { # i.e. they have been flagged to generate claims
+        SendAlerts('claimissues',\@serialnums,$input->param("letter_code"));
+        my $cntupdate=UpdateClaimdateIssues(\@serialnums);
+        ### $cntupdate SHOULD be equal to scalar(@$serialnums)  TODO so what do we do about it??
+    }
 }
 
 $template->param('letters'=>\@letters,'letter'=>$letter);
