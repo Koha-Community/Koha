@@ -1422,11 +1422,12 @@ sub AddReturn {
         $messages->{'BadBarcode'} = $barcode;
         $doreturn = 0;
     } else {
-        if ( not $iteminformation ) {
+        if ( not %$iteminformation ) {
             $messages->{'NotIssued'} = $barcode;
             # even though item is not on loan, it may still
             # be transferred; therefore, get current branch information
-            my $curr_iteminfo = GetItem($iteminformation->{'itemnumber'});
+            my $curr_iteminfo = GetItem($itemnumber);
+            $iteminformation->{'itemnumber'}    = $curr_iteminfo->{'itemnumber'};
             $iteminformation->{'homebranch'}    = $curr_iteminfo->{'homebranch'};
             $iteminformation->{'holdingbranch'} = $curr_iteminfo->{'holdingbranch'};
             $iteminformation->{'itemlost'}      = $curr_iteminfo->{'itemlost'};
