@@ -79,6 +79,8 @@ sub new {
                                   $self->{'user'}, $self->{'password'});
     $self->{'language'} = undef;
     $self->{'marcflavour'} = undef;
+	$self->{'dbh'}->do('set NAMES "utf8"');
+    $self->{'dbh'}->{'mysql_enable_utf8'}=1; 
 
     bless $self, $class;
     return $self;
@@ -557,7 +559,7 @@ sub load_sql {
             . ( $self->{user}     ? " -u $self->{user} "     : "" )
             . ( $self->{password} ? " -p'$self->{password}'"   : "" )
             . " $self->{dbname} ";
-        $error = qx($strcmd <$filename 2>&1 1>/dev/null);
+        $error = qx($strcmd --default-character-set=utf8 <$filename 2>&1 1>/dev/null);
     } elsif ( $self->{dbms} eq 'Pg' ) {
         $strcmd = "psql "
             . ( $self->{hostname} ? " -h $self->{hostname} " : "" )
