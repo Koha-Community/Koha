@@ -81,66 +81,37 @@ Serials updated :
         </tr>
         
         <!-- TMPL_LOOP name="subscriptions" -->
+        <!-- TMPL_UNLESS name="__odd__" -->
+            <tr class="highlight">
+        <!-- TMPL_ELSE -->
             <tr>
-                <!-- TMPL_IF name="toggle" -->
-                    <td class="hilighted">
-                <!-- TMPL_ELSE -->
-                    <td>
-                <!-- /TMPL_IF -->
+        <!-- /TMPL_UNLESS -->
+                <td>
                 <!-- TMPL_IF name="issn" --><!-- TMPL_VAR name="issn" -->
                 <!-- /TMPL_IF -->
                 </td>
-                <!-- TMPL_IF name="toggle" -->
-                    <td class="hilighted">
-                <!-- TMPL_ELSE -->
-                    <td>
-                <!-- /TMPL_IF -->
-                
-                    <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button" title="subscription detail"><!-- TMPL_IF name="title" --><!-- TMPL_VAR name="title" escape="html" --><!-- TMPL_ELSE -->
+                <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" class="button" title="subscription detail"><!-- TMPL_IF name="title" --><!-- TMPL_VAR name="title" escape="html" --><!-- TMPL_ELSE -->
                     ---
                 <!-- /TMPL_IF --></a>
-                
                 </td>
-                <!-- TMPL_IF name="toggle" -->
-                    <td class="hilighted">
-                <!-- TMPL_ELSE -->
-                    <td>
-                <!-- /TMPL_IF -->
-                <!-- TMPL_IF name="notes" -->(<!-- TMPL_VAR name="notes" -->)<!-- /TMPL_IF -->
+                <td><!-- TMPL_IF name="notes" -->(<!-- TMPL_VAR name="notes" -->)<!-- /TMPL_IF -->
                 </td>
-                <!-- TMPL_IF name="toggle" -->
-                    <td class="hilighted">
-                <!-- TMPL_ELSE -->
-                    <td>
-                <!-- /TMPL_IF -->
+                <td>
                 <!-- TMPL_IF name="branchcode" --><!-- TMPL_VAR name="branchcode" --><!-- /TMPL_IF -->
                 <!-- TMPL_IF name="callnumber" -->(<!-- TMPL_VAR name="callnumber" -->)<!-- /TMPL_IF -->
                 </td>
-                  <!-- TMPL_IF name="toggle" -->
-                        <td class="hilighted">
-                    <!-- TMPL_ELSE -->
-                        <td>
-                    <!-- /TMPL_IF -->
-						<a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Issue History</a>
-					</td>
+                <td><a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Issue History</a>
+                </td>
                 <!-- TMPL_IF NAME="routing" -->
-                    <!-- TMPL_IF name="toggle" -->
-                        <td class="hilighted">
-                    <!-- TMPL_ELSE -->
-                        <td>
-                    <!-- /TMPL_IF -->
+                <td>
                 <!-- TMPL_IF NAME="cannotedit" -->
                   &nbsp;        
                 <!-- TMPL_ELSE -->
                         <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" --><!-- TMPL_UNLESS NAME="routingedit" -->&amp;op=new<!-- /TMPL_UNLESS -->">Routing List</a>
                 <!-- /TMPL_IF -->
-                    </td>
+                </td>
                 <!-- /TMPL_IF -->
-                <!-- TMPL_IF name="toggle" -->
-                    <td class="hilighted">
-                <!-- TMPL_ELSE -->
-                    <td>
-                <!-- /TMPL_IF -->
+                <td>
                 <!-- TMPL_IF NAME="cannotedit" -->
                   &nbsp;        
                 <!-- TMPL_ELSE -->
