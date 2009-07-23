@@ -505,7 +505,7 @@ function checkMultiHold() {
         <th>Details</th>
       </tr>
   <!-- TMPL_LOOP Name="reserveloop" -->
-      <tr>
+  <!-- TMPL_UNLESS Name="__odd__" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_UNLESS -->
         <td>
           <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
           <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
@@ -539,9 +539,9 @@ function checkMultiHold() {
           <select name="pickup">
       <!-- TMPL_LOOP Name="branchloop" -->
         <!-- TMPL_IF Name="selected" -->
-            <option value="<!-- TMPL_VAR NAME="branch" -->" selected="selected">
+            <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected">
         <!-- TMPL_ELSE -->
-            <option value="<!-- TMPL_VAR NAME="branch" -->">
+            <option value="<!-- TMPL_VAR NAME="value" -->">
         <!-- /TMPL_IF -->
               <!-- TMPL_VAR NAME="branchname" -->
             </option>

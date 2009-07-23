@@ -446,14 +446,6 @@ foreach my $biblionumber (@biblionumbers) {
                  }
                 );
         }
-        my @branchloop;
-        foreach my $br ( sort {$branches->{$a}->{'branchname'} cmp $branches->{$b}->{'branchname'}} keys %$branches ) {
-            my %abranch;
-            $abranch{'selected'}   = ( $br eq $res->{'branchcode'} );
-            $abranch{'branch'}     = $br;
-            $abranch{'branchname'} = $branches->{$br}->{'branchname'};
-            push( @branchloop, \%abranch );
-        }
         
         if ( ( $res->{'found'} eq 'W' ) ) {
             my $item = $res->{'itemnumber'};
@@ -497,7 +489,7 @@ foreach my $biblionumber (@biblionumbers) {
         $reserve{'ccode'}           = $res->{'ccode'};
         $reserve{'barcode'}         = $res->{'barcode'};
         $reserve{'priority'}    = $res->{'priority'};
-        $reserve{'branchloop'} = \@branchloop;
+        $reserve{'branchloop'} = GetBranchesLoop($res->{'branchcode'});
         $reserve{'optionloop'} = \@optionloop;
         
         push( @reserveloop, \%reserve );
