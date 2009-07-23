@@ -734,7 +734,7 @@ sub GetSerials {
     $count=5 unless ($count);
     my @serials;
     my $query =
-      "SELECT serialid,serialseq, status, publisheddate, planneddate,notes, routingnotes
+      "SELECT serialid,serialseq, status, publisheddate, planneddate,notes, routingnotes, claimdate
                         FROM   serial
                         WHERE  subscriptionid = ? AND status NOT IN (2,4,5) 
                         ORDER BY IF(publisheddate<>'0000-00-00',publisheddate,planneddate) DESC";
@@ -745,6 +745,7 @@ sub GetSerials {
           1;    # fills a "statusX" value, used for template status select list
         $line->{"publisheddate"} = format_date( $line->{"publisheddate"} );
         $line->{"planneddate"}   = format_date( $line->{"planneddate"} );
+        $line->{claimdate}       = format_date( $line->{claimdate} );
         push @serials, $line;
     }
     # OK, now add the last 5 issues arrives/missing
