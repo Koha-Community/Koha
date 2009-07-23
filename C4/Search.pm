@@ -632,19 +632,16 @@ sub _remove_stopwords {
 #       we use IsAlpha unicode definition, to deal correctly with diacritics.
 #       otherwise, a French word like "leçon" woudl be split into "le" "çon", "le"
 #       is a stopword, we'd get "çon" and wouldn't find anything...
-        foreach ( keys %{ C4::Context->stopwords } ) {
-            next if ( $_ =~ /(and|or|not)/ );    # don't remove operators
-            if ( $operand =~
-                /(\P{IsAlpha}$_\P{IsAlpha}|^$_\P{IsAlpha}|\P{IsAlpha}$_$|^$_$)/ )
-            {
-                $operand =~ s/\P{IsAlpha}$_\P{IsAlpha}/ /gi;
-                $operand =~ s/^$_\P{IsAlpha}/ /gi;
-                $operand =~ s/\P{IsAlpha}$_$/ /gi;
-				$operand =~ s/$1//gi;
-                push @stopwords_removed, $_;
-            }
-        }
-    }
+		foreach ( keys %{ C4::Context->stopwords } ) {
+			next if ( $_ =~ /(and|or|not)/ );    # don't remove operators
+			if ( my ($matched) = ($operand =~
+				/(\P{IsAlnum}\Q$_\E\P{IsAlnum}|^\Q$_\E\P{IsAlnum}|\P{IsAlnum}\Q$_\E$|^\Q$_\E$)/gi) )
+			{
+				$operand =~ s/\Q$matched\E/ /gi;
+				push @stopwords_removed, $_;
+			}
+		}
+	}
     return ( $operand, \@stopwords_removed );
 }
 
