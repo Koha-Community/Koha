@@ -106,7 +106,7 @@ my @results;
 my $data;
 for(my $i=0;$i<$routing;$i++){
     $data=GetMember($routinglist[$i]->{'borrowernumber'},'borrowernumber');
-    $data->{'location'}=$data->{'streetaddress'};
+    $data->{'location'}=$data->{'branchcode'};
     $data->{'name'}="$data->{'firstname'} $data->{'surname'}";
     $data->{'routingid'}=$routinglist[$i]->{'routingid'};
     $data->{'subscriptionid'}=$subscriptionid;
