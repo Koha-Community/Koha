@@ -2703,7 +2703,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     my $sth=$dbh->prepare("SELECT value FROM systempreferences WHERE variable='AnonSuggestions'");
     $sth->execute;
     my ($value) = $sth->fetchrow();
-    $dbh->do("UPDATE systempreferences SET value=$value WHERE variable='AnonymousPatron'");
+    $dbh->do("UPDATE systempreferences SET value='$value' WHERE variable='AnonymousPatron'");
     # set AnonymousSuggestion do YesNo
     # 1st, set the value (1/True if it had a borrowernumber)
     $dbh->do("UPDATE systempreferences SET value=1 WHERE variable='AnonSuggestions' AND value>0");
