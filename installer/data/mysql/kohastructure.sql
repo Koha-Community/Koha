@@ -569,12 +569,17 @@ CREATE TABLE `branches` (
   `branchaddress1` mediumtext,
   `branchaddress2` mediumtext,
   `branchaddress3` mediumtext,
+  `branchzip` varchar(25) default NULL,  
+  `branchcity` mediumtext,
+  `branchcountry` text,
   `branchphone` mediumtext,
   `branchfax` mediumtext,
   `branchemail` mediumtext,
+  `branchurl` mediumtext,
   `issuing` tinyint(4) default NULL,
   `branchip` varchar(15) default NULL,
   `branchprinter` varchar(100) default NULL,
+  `branchnotes` mediumtext,
   UNIQUE KEY `branchcode` (`branchcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

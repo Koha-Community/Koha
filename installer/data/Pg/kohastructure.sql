@@ -540,12 +540,17 @@ branchname text NOT NULL,
 branchaddress1 text,
 branchaddress2 text,
 branchaddress3 text,
+branchzip varchar(25) default NULL,  
+branchcity mediumtext,
+branchcountry text,
 branchphone text,
 branchfax text,
 branchemail text,
+branchurl mediumtext,
 issuing int default NULL,
 branchip varchar(15) default NULL,
-branchprinter varchar(100) default NULL
+branchprinter varchar(100) default NULL,
+branchnotes mediumtext
 );
 
 -- 
