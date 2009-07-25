@@ -259,3 +259,4 @@ INSERT INTO `systempreferences` ( `variable` , `value` , `options` , `explanatio
 INSERT INTO `systempreferences` ( `variable` , `value` , `options` , `explanation` , `type` ) VALUES ('DisplayClearScreenButton', '0', '', 'Cette option ajoute un bouton à la page de circulation pour effacer l\'écran', 'YesNo');
 INSERT INTO systempreferences (variable,value,options,explanation,type)VALUES('HidePatronName', '0', '', 'Active l''affichage du numéro des adhérents à la place de leur nom dans les pages de réservation et du catalogue.', 'YesNo');
 INSERT INTO systempreferences (variable,value,options,explanation,type)VALUES('DisplayOPACiconsXSLT', '1', '', 'Si activé, affiche le format, le type de public et les icônes de type en XSLT (MARC21)).', 'YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AllowAllMessageDeletion','0','Allow any Library to delete any message','','YesNo');

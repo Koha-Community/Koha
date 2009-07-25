@@ -75,11 +75,23 @@ $.tablesorter.addParser({
     <div id="yui-main">
     <div class="yui-b"><div class="yui-g">
 	<div id="userdetails" class="container">
+
+	<!-- TMPL_IF NAME="bor_messages" -->
+	       <div class="dialog message">
+	               <h3>Messages For You</h3>
+	               <ul>
+	                       <!--TMPL_LOOP NAME="bor_messages_loop" -->
+	                               <li>On <!--TMPL_VAR NAME="message_date_formatted"--> <!--TMPL_VAR NAME="branchname"--> wrote <i>"<!--TMPL_VAR NAME="message"-->"</i></li>
+	                        <!-- /TMPL_LOOP -->
+	               </ul>
+	       </div>
+	<!-- /TMPL_IF -->
     <!-- TMPL_LOOP NAME="BORROWER_INFO" -->
         <h2>Hello, <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> <span class="hint">(<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Click here</a> if you're not <!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->)</span></h2>
         
 		<!-- TMPL_IF NAME="patronupdate" --><div class="dialog message"><h3>Thank you!</h3><p>Your corrections have been submitted to the library, and a staff member will update your record as soon as possible.</p></div><!-- /TMPL_IF -->
 		
+
         <!-- TMPL_IF NAME="opacnote"-->
 		<div class="dialog message">
             <h3>Message from the library</h3>

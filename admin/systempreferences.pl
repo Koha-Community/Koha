@@ -170,6 +170,7 @@ $tabsysprefs{InProcessingToShelvingCart}     = "Circulation";
 $tabsysprefs{NewItemsDefaultLocation}        = "Circulation";
 $tabsysprefs{ReturnToShelvingCart}           = "Circulation";
 $tabsysprefs{DisplayClearScreenButton}       = "Circulation";
+$tabsysprefs{AllowAllMessageDeletion}        = "Circulation";
 
 # Staff Client
 $tabsysprefs{TemplateEncoding}        = "StaffClient";

@@ -266,7 +266,12 @@ if (C4::Context->preference("OPACAmazonCoverImages") or
         $template->param(JacketImages=>1);
 }
 
+if ( GetMessagesCount( $borrowernumber, 'B' ) ) {
+	$template->param( bor_messages => 1 );
+}
+
 $template->param(
+    bor_messages_loop	=> GetMessages( $borrowernumber, 'B', 'NONE' ),
     waiting_count      => $wcount,
     textmessaging      => $borr->{textmessaging},
     patronupdate => $patronupdate,

@@ -128,6 +128,20 @@ function refocus(calendar) {
 };
 //]]>
 </script>
+
+<script>
+function showhide(id){
+  if (document.getElementById){
+    obj = document.getElementById(id);
+    if (obj.style.display == "none"){
+      obj.style.display = "";
+    } else {
+      obj.style.display = "none";
+    }
+  }
+}
+</script>
+
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 </head>
 <body>
@@ -136,6 +150,7 @@ function refocus(calendar) {
 <!-- TMPL_INCLUDE NAME="circ-search.inc" -->
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo;<!-- TMPL_IF NAME="borrowernumber" --> <a href="/cgi-bin/koha/circ/circulation.pl">Checkouts</a> &rsaquo; <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --><!-- TMPL_ELSE --> <strong>Checkouts</strong><!-- /TMPL_IF --></div>
+
 
 <!-- TMPL_IF NAME="CGIselectborrower" -->
 <div id="doc" class="yui-t7">
@@ -156,6 +171,41 @@ function refocus(calendar) {
 <!-- /TMPL_IF -->
 
 <!--  INITIAL BLOC : PARAMETERS & BORROWER INFO -->
+<div style="display: none;" id="add_message">
+<form method="post" action="/cgi-bin/koha/circ/add_message.pl" id="message_form" name="message_f">
+<fieldset id="borrower_messages">
+    <legend>Leave A Message</legend>
+    <p>
+            <label for="message_type">Add A Message For</label>
+          <select name="message_type" id="message_type">
+            <option value="L">Other Librarians</option>
+            <option value="B"><!-- TMPL_VAR name="firstname" --></option>
+        </select>
+    </p>
+    <!-- TMPL_IF NAME="canned_bor_notes_loop" -->
+        <p>
+                <label for="canned_notes">Canned Notes: </label>
+                <select name="type" id="type" onchange="this.form.borrower_message.value=this.options[this.selectedIndex].value;">
+                    <option value=''>Select Note</option>
+                    <!-- TMPL_LOOP NAME="canned_bor_notes_loop" -->
+                    <option value="<!-- TMPL_VAR NAME="lib" -->"><!--TMPL_VAR NAME="authorised_value" --></option>
+                    <!-- /TMPL_LOOP -->
+                </select>
+        </p>
+    <!-- /TMPL_IF -->
+    <p>
+        <textarea rows="3" cols="60" name="borrower_message" id="borrower_message" ></textarea>
+    </p>
+    <p>
+        <input type="submit" value="Save Message" />
+    </p>
+
+        <input type="hidden" name="borrowernumber" id="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+        <input type="hidden" name="branchcode" value="<!-- TMPL_VAR NAME="branch" -->" />
+</fieldset>
+</form>
+</div>
+
 <!-- TMPL_IF NAME="dateexpiry" --><div class="dialog message">Patron's account has been renewed until <!-- TMPL_VAR NAME="dateexpiry" --></div><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="NEEDSCONFIRMATION" -->
 <div class="yui-g">
@@ -336,7 +386,12 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 <!-- TMPL_IF NAME="flagged" -->
 <div class="yui-u first">
 <!-- TMPL_ELSE -->
-<div><!-- /TMPL_IF --><form method="post" action="/cgi-bin/koha/circ/circulation.pl" name="mainform">
+<div>
+
+<!-- /TMPL_IF -->
+
+
+<form method="post" action="/cgi-bin/koha/circ/circulation.pl" name="mainform">
 <fieldset id="circ_circulation_issue">
     <!-- TMPL_IF NAME="DisplayClearScreenButton" -->
 	    <input type=button value="Clear Screen" onClick="window.location = '/cgi-bin/koha/circ/circulation.pl'">
@@ -474,7 +529,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 			<div id="holdswaiting" class="circmessage">
 		    <h4>Holds waiting:</h4>
 			        <!-- TMPL_LOOP NAME="WaitingReserveLoop" -->
-			            <ul> 
+			            <ul>
 			                <li> <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a> (<!-- TMPL_VAR NAME="itemtype"-->), <!-- TMPL_IF NAME="author" -->by <!-- TMPL_VAR NAME="author"--><!-- /TMPL_IF --> Hold placed on <!-- TMPL_VAR NAME="reservedate"-->.
 			            <!-- TMPL_IF NAME="waitingat" -->
 			                <br /><!-- TMPL_IF NAME="waitinghere" --><strong class="waitinghere"><!-- TMPL_ELSE --><strong><!-- /TMPL_IF -->Waiting at <!-- TMPL_VAR NAME="waitingat" --></strong>
@@ -489,9 +544,37 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 			<h4>Notes:</h4>
             <p><span class="circ-hlt"><!-- TMPL_VAR name="notesmsg" --></span></p>
 			</div>
+
+
     <!-- /If notes --><!-- /TMPL_IF -->
      <!-- /If flagged --><!-- /TMPL_IF -->
 
+	<div id="messages" class="circmessage">
+		<h4>Messages:</h4>
+		<ul>
+			<!--TMPL_LOOP NAME="lib_messages_loop" -->
+				<li>
+					<span class="circ-hlt">
+						<!--TMPL_VAR NAME="message_date_formatted"-->
+						<!--TMPL_VAR NAME="branchcode"-->
+						<i>"<!--TMPL_VAR NAME="message"-->"</i>
+					</span>
+					<!-- TMPL_IF NAME="can_delete" -->
+						<a href='/cgi-bin/koha/circ/del_message.pl?message_id=<!--TMPL_VAR NAME="message_id" -->&borrowernumber=<!--TMPL_VAR NAME="borrowernumber" -->'>[Delete]</a>
+					<!-- TMPL_ELSE -->
+						<!-- TMPL_IF NAME="all_messages_del" -->
+							<a href='/cgi-bin/koha/circ/del_message.pl?message_id=<!--TMPL_VAR NAME="message_id" -->&borrowernumber=<!--TMPL_VAR NAME="borrowernumber" -->'>[Delete]</a>
+						<!-- /TMPL_IF -->
+					<!-- /TMPL_IF -->
+				</li>
+			<!-- /TMPL_LOOP -->
+			<!--TMPL_LOOP NAME="bor_messages_loop" -->
+				<li><span class=""><!--TMPL_VAR NAME="message_date_formatted"--> <!--TMPL_VAR NAME="branchcode"--> <i>"<!--TMPL_VAR NAME="message"-->"</i></span> <!-- TMPL_IF NAME="can_delete" --><a href='/cgi-bin/koha/circ/del_message.pl?message_id=<!--TMPL_VAR NAME="message_id" -->&borrowernumber=<!--TMPL_VAR NAME="borrowernumber" -->'>[Delete]</a><!-- /TMPL_IF --></li>
+			<!-- /TMPL_LOOP -->
+
+			<a href="#" onclick="showhide('add_message'); return(false);">Add A New Message</a>
+		</ul>
+	</div>
 
 </div>
 </div>
@@ -620,7 +703,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 		<!-- /TMPL_IF -->
     </tr>
     <!-- /TMPL_LOOP --> <!-- /loop todayissues -->
-    <!-- /if todayissues --><!-- /TMPL_IF --> 
+    <!-- /if todayissues --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="previssues" -->
 <!-- TMPL_IF NAME="todayissues" --><tr><th colspan="10"><a name="previous" id="previous"></a>Previous checkouts</th></tr><!-- TMPL_ELSE -->
 <tr><th class="{sorter: false}" colspan="10"><a name="previous" id="previous"></a>Previous checkouts</th></tr></thead>
