@@ -38,8 +38,8 @@ sub _check_params {
     my $exit_code = 0;
     my @valid_template_params = (
         'layout_id',
-        'tmpl_id',
-        'prof_id',
+        'template_id',
+        'profile_id',
     );
     if (scalar(@_) >1) {
         $given_params = {@_};
@@ -67,12 +67,12 @@ C4::Labels::Batch - A class for creating and manipulating batch objects in Koha
 
 =head1 METHODS
 
-=head2 C4::Labels::Batch->new(layout_id => layout_id, tmpl_id => template_id, prof_id => prof_id)
+=head2 C4::Labels::Batch->new(layout_id => layout_id, template_id => template_id, profile_id => profile_id)
 
     Invoking the I<new> method constructs a new batch object with no items.
 
     example:
-        my $batch = C4::Labels::Batch->new(layout_id => layout_id, tmpl_id => template_id, prof_id => prof_id);
+        my $batch = C4::Labels::Batch->new(layout_id => layout_id, template_id => template_id, profile_id => profile_id);
             # Creates and returns a new batch object
 
     B<NOTE:> This batch is I<not> written to the database untill $batch->save() is invoked. You have been warned!
@@ -85,8 +85,8 @@ sub new {
     my $self = {
         batch_id        => 0,
         layout_id       => $params{layout_id},
-        tmpl_id         => $params{tmpl_id},
-        prof_id      => $params{prof_id},
+        template_id         => $params{template_id},
+        profile_id      => $params{profile_id},
         items           => [],
         batch_stat      => 0,   # False if any data has changed and the db has not been updated
     };
@@ -158,10 +158,10 @@ sub save {
     my $self = shift;
     if ($self->{batch_id} > 0) {
         foreach my $item_number (@$self->{items}) {
-            my $query = "UPDATE labels_batches SET item_number=?, layout_id=?, tmpl_id=?, prof_id=? WHERE batch_id=?;";
+            my $query = "UPDATE labels_batches SET item_number=?, layout_id=?, template_id=?, profile_id=? WHERE batch_id=?;";
             warn "DEBUG: Updating: $query\n" if $debug;
             my $sth->C4::Context->dbh->prepare($query);
-            $sth->execute($item_number, $self->{layout_id}, $self->{tmpl_id}, $self->{prof_id}, $self->{batch_id});
+            $sth->execute($item_number, $self->{layout_id}, $self->{template_id}, $self->{profile_id}, $self->{batch_id});
             if ($sth->err) {
                 syslog("LOG_ERR", "Database returned the following error: %s", $sth->errstr);
                 return -1;
@@ -170,10 +170,10 @@ sub save {
     }
     else {
         foreach my $item_number (@$self->{items}) {
-            my $query = "INSERT INTO labels_batches (item_number, layout_id, tmpl_id, prof_id) VALUES (?,?,?,?);";
+            my $query = "INSERT INTO labels_batches (item_number, layout_id, template_id, profile_id) VALUES (?,?,?,?);";
             warn "DEBUG: Inserting: $query\n" if $debug;
             my $sth->C4::Context->dbh->prepare($query);
-            $sth->execute($item_number, $self->{layout_id}, $self->{tmpl_id}, $self->{prof_id});
+            $sth->execute($item_number, $self->{layout_id}, $self->{template_id}, $self->{profile_id});
             if ($sth->err) {
                 syslog("LOG_ERR", "Database returned the following error: %s", $sth->errstr);
                 return -1;
@@ -201,7 +201,7 @@ sub save {
         my $template = C4::Labels::Template->retrieve(template_id => 1, convert => 1); # Retrieves template record 1, converts the units to points,
             and returns an object containing the record
 
-        my $template = C4::Labels::Template->retrieve(template_id => 1, prof_id => prof_id); # Retrieves template record 1, converts the units
+        my $template = C4::Labels::Template->retrieve(template_id => 1, profile_id => profile_id); # Retrieves template record 1, converts the units
             to points, applies the given profile id, and returns an object containing the record
 
 =cut
@@ -223,8 +223,8 @@ sub retrieve {
     while (my $record = $sth->fetchrow_hashref) {
         $self->{batch_id} = $record->{batch_id};        # FIXME: seems a bit wasteful to re-initialize these every trip: is there a better way?
         $self->{layout_id} = $record->{layout_id};
-        $self->{tmpl_id} = $record->{tmpl_id};
-        $self->{prof_id} = $record->{prof_id};
+        $self->{template_id} = $record->{template_id};
+        $self->{profile_id} = $record->{profile_id};
         push (@{$self->{items}}, $record->{item_number});
     }
     $self->{batch_stat} = 1;
