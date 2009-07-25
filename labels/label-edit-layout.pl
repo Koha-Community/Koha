@@ -48,7 +48,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 
 my $op = $cgi->param('op') || $ARGV[0] || '';
-my $layout_id = $cgi->param('layout_id') || $ARGV[1] || '';
+my $layout_id = $cgi->param('layout_id') || $cgi->param('element_id') || $ARGV[1] || '';
 my $layout = '';
 
 sub _set_selected {
@@ -89,7 +89,7 @@ sub _select_format_string {     # generate field table based on format_string
         $col_index++;
         $field_index++;
         if ((($col_index > 0) && !($col_index % $cols)) || ($field_index == $field_count)) {    # wrap to new row
-            if ($field_index == $field_count) { # in this case fill out row with empty fields
+            if (($field_index == $field_count) && ($row_index > 0)) { # in this case fill out row with empty fields
                 while ($col_index < $cols) {
                     $$fields[$col_index] = {field_empty => 1, field_name => '', field_label => '', order => [{num => '', selected => 0}]};
                     $col_index++;
@@ -145,7 +145,7 @@ elsif  ($op eq 'save') {
         $layout = C4::Labels::Layout->new(@params);
         $layout->save();
     }
-    print $cgi->redirect("label-layout.pl");
+    print $cgi->redirect("label-manage.pl?label_element=layout");
     exit;
 }
 else {  # if we get here, this is a new layout

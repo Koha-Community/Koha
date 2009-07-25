@@ -96,7 +96,7 @@ C4::Labels::Layout -A class for creating and manipulating layout objects in Koha
 sub new {
     my $invocant = shift;
     if (_check_params(@_) eq 1) {
-        return 1;
+        return -1;
     }
     my $type = ref($invocant) || $invocant;
     my $self = {
@@ -134,7 +134,7 @@ sub retrieve {
     $sth->execute($opts{'layout_id'});
     if ($sth->err) {
         syslog("LOG_ERR", "Database returned the following error: %s", $sth->errstr);
-        return 1;
+        return -1;
     }
     my $self = $sth->fetchrow_hashref;
     bless ($self, $type);
@@ -169,14 +169,14 @@ sub delete {
     }
     if ($query_param eq '') {   # If there is no layout id then we cannot delete it
         syslog("LOG_ERR", "%s : Cannot delete layout as the layout id is invalid or non-existant.", $call_type);
-        return 1;
+        return -1;
     }
     my $query = "DELETE FROM labels_layouts WHERE layout_id = ?";  
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute($query_param);
     if ($sth->err) {
         syslog("LOG_ERR", "%s : Database returned the following error: %s", $call_type, $sth->errstr);
-        return 1;
+        return -1;
     }
     return 0;
 }
@@ -277,7 +277,7 @@ sub get_attr {
 sub set_attr {
     my $self = shift;
     if (_check_params(@_) eq 1) {
-        return 1;
+        return -1;
     }
     my %attrs = @_;
     foreach my $attrib (keys(%attrs)) {

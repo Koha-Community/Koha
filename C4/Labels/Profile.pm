@@ -24,17 +24,11 @@ use Data::Dumper;
 
 use C4::Context;
 use C4::Debug;
+use C4::Labels::Lib 1.000000 qw(get_unit_values);
 
 BEGIN {
     use version; our $VERSION = qv('1.0.0_1');
 }
-
-my $unit_values = {
-    POINT       => 1,
-    INCH        => 72,
-    MM          => 2.83464567,
-    CM          => 28.3464567,
-};
 
 sub _check_params {
     my $given_params = {};
@@ -47,7 +41,7 @@ sub _check_params {
         'offset_vert',
         'creep_horz',
         'creep_vert',
-        'unit',
+        'units',
     );
     if (scalar(@_) >1) {
         $given_params = {@_};
@@ -69,10 +63,11 @@ sub _check_params {
 
 sub _conv_points {
     my $self = shift;
-    $self->{offset_horz}        = $self->{offset_horz} * $unit_values->{$self->{unit}};
-    $self->{offset_vert}        = $self->{offset_vert} * $unit_values->{$self->{unit}};
-    $self->{creep_horz}         = $self->{creep_horz} * $unit_values->{$self->{unit}};
-    $self->{creep_vert}         = $self->{creep_vert} * $unit_values->{$self->{unit}};
+    my @unit_value = grep {$_->{'type'} eq $self->{units}} get_unit_values();
+    $self->{offset_horz}        = $self->{offset_horz} * $unit_value[0]->{'value'};
+    $self->{offset_vert}        = $self->{offset_vert} * $unit_value[0]->{'value'};
+    $self->{creep_horz}         = $self->{creep_horz} * $unit_value[0]->{'value'};
+    $self->{creep_vert}         = $self->{creep_vert} * $unit_value[0]->{'value'};
     return $self;
 }
 
@@ -109,7 +104,7 @@ sub new {
         offset_vert     => 0,
         creep_horz      => 0,
         creep_vert      => 0,
-        unit            => 'POINT',
+        units           => 'POINT',
         @_,
     };
     bless ($self, $type);
@@ -135,7 +130,7 @@ sub retrieve {
     my $invocant = shift;
     my %opts = @_;
     my $type = ref($invocant) || $invocant;
-    my $query = "SELECT * FROM printers_profile WHERE prof_id = ?";  
+    my $query = "SELECT * FROM printers_profile WHERE profile_id = ?";  
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute($opts{profile_id});
     if ($sth->err) {
@@ -148,34 +143,34 @@ sub retrieve {
     return $self;
 }
 
-=head2 C4::Labels::Profile->delete(prof_id => profile_id) |  $profile->delete()
+=head2 C4::Labels::Profile->delete(profile_id => profile_id) |  $profile->delete()
 
     Invoking the delete method attempts to delete the profile from the database. The method returns 0 upon success
     and 1 upon failure. Errors are logged to the syslog.
 
     examples:
         my $exitstat = $profile->delete(); # to delete the record behind the $profile object
-        my $exitstat = C4::Labels::Profile->delete(prof_id => 1); # to delete profile record 1
+        my $exitstat = C4::Labels::Profile->delete(profile_id => 1); # to delete profile record 1
 
 =cut
 
 sub delete {
     my $self = shift;
-    if (!$self->{'prof_id'}) {   # If there is no profile prof_id then we cannot delete it
+    if (!$self->{'profile_id'}) {   # If there is no profile profile_id then we cannot delete it
         syslog("LOG_ERR", "Cannot delete profile as it has not been saved.");
         return 1;
     }
-    my $query = "DELETE FROM printers_profile WHERE prof_id = ?";  
+    my $query = "DELETE FROM printers_profile WHERE profile_id = ?";  
     my $sth = C4::Context->dbh->prepare($query);
-    $sth->execute($self->{'prof_id'});
+    $sth->execute($self->{'profile_id'});
     return 0;
 }
 
 =head2 $profile->save()
 
     Invoking the I<save> method attempts to insert the profile into the database if the profile is new and
-    update the existing profile record if the profile exists. The method returns the new record prof_id upon
-    success and -1 upon failure (This avoids conflicting with a record prof_id of 1). Errors are logged to the syslog.
+    update the existing profile record if the profile exists. The method returns the new record profile_id upon
+    success and -1 upon failure (This avoids conflicting with a record profile_id of 1). Errors are logged to the syslog.
 
     example:
         my $exitstat = $profile->save(); # to save the record behind the $profile object
@@ -184,17 +179,17 @@ sub delete {
 
 sub save {
     my $self = shift;
-    if ($self->{'prof_id'}) {        # if we have an prof_id, the record exists and needs UPDATE
+    if ($self->{'profile_id'}) {        # if we have an profile_id, the record exists and needs UPDATE
         my @params;
         my $query = "UPDATE printers_profile SET ";
         foreach my $key (keys %{$self}) {
-            next if $key eq 'prof_id';
+            next if $key eq 'profile_id';
             push (@params, $self->{$key});
             $query .= "$key=?, ";
         }
         $query = substr($query, 0, (length($query)-2));
-        push (@params, $self->{'prof_id'});
-        $query .= " WHERE prof_id=?;";
+        push (@params, $self->{'profile_id'});
+        $query .= " WHERE profile_id=?;";
         warn "DEBUG: Updating: $query\n" if $debug;
         my $sth = C4::Context->dbh->prepare($query);
         $sth->execute(@params);
@@ -202,7 +197,7 @@ sub save {
             syslog("LOG_ERR", "C4::Labels::Profile : Database returned the following error: %s", $sth->errstr);
             return -1;
         }
-        return $self->{'prof_id'};
+        return $self->{'profile_id'};
     }
     else {                      # otherwise create a new record
         my @params;
@@ -225,7 +220,7 @@ sub save {
             syslog("LOG_ERR", "C4::Labels::Profile : Database returned the following error: %s", $sth->errstr);
             return -1;
         }
-        my $sth1 = C4::Context->dbh->prepare("SELECT MAX(prof_id) FROM printers_profile;");
+        my $sth1 = C4::Context->dbh->prepare("SELECT MAX(profile_id) FROM printers_profile;");
         $sth1->execute();
         my $tmpl_id = $sth1->fetchrow_array;
         return $tmpl_id;
