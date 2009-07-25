@@ -41,13 +41,30 @@ $(document).ready(function(){
 	<fieldset class="rows">
 	<legend>Manual Invoice</legend>
 	<ol>
-	<li><label for="type">Type: </label><select name="type" id="type">
-<option value="L">Lost Item</option>
-<option value="F">Fine</option>
-<option value="A">Account Management Fee</option>
-<option value="N">New Card</option>
-<option value="M">Sundry</option>
-</select></li>
+      <li>
+<script type="text/javascript">
+var type_fees = new Array();
+type_fees['L'] = '';
+type_fees['F'] = '';
+type_fees['A'] = '';
+type_fees['N'] = '';
+type_fees['M'] = '';
+<!-- TMPL_LOOP NAME="invoice_types_loop" -->
+type_fees['<!-- TMPL_VAR NAME="authorised_value" -->'] = "<!-- TMPL_VAR NAME="lib" -->";
+<!-- /TMPL_LOOP -->
+</script>
+        <label for="type">Type: </label>
+        <select name="type" id="type" onchange="this.form.desc.value=this.options[this.selectedIndex].value; this.form.amount.value=type_fees[this.options[this.selectedIndex].value];">
+          <option value="L">Lost Item</option>
+          <option value="F">Fine</option>
+          <option value="A">Account Management Fee</option>
+          <option value="N">New Card</option>
+          <option value="M">Sundry</option>
+          <!-- TMPL_LOOP NAME="invoice_types_loop" -->
+            <option value="<!-- TMPL_VAR NAME="authorised_value" -->"><!--TMPL_VAR NAME="authorised_value" --></option>
+          <!-- /TMPL_LOOP -->
+        </select>
+      </li>
 	<li><label for="barcode">Barcode: </label><input type="text" name="barcode" id="barcode" /></li>
 	<li><label for="desc">Description: </label><input type="text" name="desc" id="desc" size="50" /></li>
 	<li><label for="amount">Amount: </label><input type="text" name="amount" id="amount" /> Example: 5.00</li>
