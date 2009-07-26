@@ -98,6 +98,9 @@ $.tablesorter.addParser({
             <!-- TMPL_IF NAME="lost" -->
                 <li><strong>Please note: </strong> Your library card has been marked as lost or stolen. If this is an error, please take your card to the circulation desk at your local library and the error will be corrected.</li>
             <!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="renewal_blocked_fines" -->
+                <li><strong>Please note: </strong> Since you have <a href="/cgi-bin/koha/opac-account.pl">more than <!-- TMPL_VAR NAME="renewal_blocked_fines" --></a> in fines, you cannot renew your books online. Please pay your fines if you wish to renew your books.</li>
+            <!-- /TMPL_IF -->
         </ul></div>
         <!-- /TMPL_IF -->
         
