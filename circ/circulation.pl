@@ -106,6 +106,10 @@ if (C4::Context->preference("AutoLocation") ne 1) { # FIXME: string comparison t
     $template->param(ManualLocation => 1);
 }
 
+if (C4::Context->preference("DisplayClearScreenButton")) {
+    $template->param(DisplayClearScreenButton => 1);
+}
+
 my $barcode        = $query->param('barcode') || '';
 $barcode =~  s/^\s*|\s*$//g; # remove leading/trailing whitespace
 

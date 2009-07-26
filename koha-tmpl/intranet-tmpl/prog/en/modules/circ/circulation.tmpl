@@ -261,6 +261,10 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 <!-- TMPL_ELSE -->
 <div><!-- /TMPL_IF --><form method="post" action="/cgi-bin/koha/circ/circulation.pl" name="mainform">
 <fieldset id="circ_circulation_issue">
+    <!-- TMPL_IF NAME="DisplayClearScreenButton" -->
+	    <input type=button value="Clear Screen" onClick="window.location = '/cgi-bin/koha/circ/circulation.pl'">
+    <!-- /TMPL_IF -->
+
     <label for="barcode">Checking out to <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->) </label>
 	<div class="hint">Enter item barcode:</div>
 

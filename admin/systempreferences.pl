@@ -169,6 +169,7 @@ $tabsysprefs{OPACFineNoRenewals}             = "Circulation";
 $tabsysprefs{InProcessingToShelvingCart}     = "Circulation";
 $tabsysprefs{NewItemsDefaultLocation}        = "Circulation";
 $tabsysprefs{ReturnToShelvingCart}           = "Circulation";
+$tabsysprefs{DisplayClearScreenButton}       = "Circulation";
 
 # Staff Client
 $tabsysprefs{TemplateEncoding}        = "StaffClient";
