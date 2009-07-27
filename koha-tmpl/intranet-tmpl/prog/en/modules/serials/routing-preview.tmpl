@@ -43,7 +43,7 @@ window.open(myurl,'PrintSlip','width=500,height=500,toolbar=no,scrollbars=yes');
     <td><!-- TMPL_VAR NAME="routingnotes" --></td></tr>
 </table>
 <p>
-<input type="submit" name="ok" class="button" value="OK, Preview Routing Slip" onclick="print_slip(<!-- TMPL_VAR NAME="subscriptionid" -->,'<!-- TMPL_VAR NAME="issue" -->'); return false" />
+<input type="submit" name="ok" class="button" value="OK, Preview Routing Slip" onclick="print_slip(<!-- TMPL_VAR NAME="subscriptionid" -->,'<!-- TMPL_VAR NAME="issue_escaped" -->'); return false" />
 <input type="submit" name="edit" class="button" value="Edit" />
 <input type="submit" name="delete" class="button" value="Delete" /></p>
 </form>
