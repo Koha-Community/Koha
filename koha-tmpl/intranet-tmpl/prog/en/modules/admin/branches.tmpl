@@ -109,9 +109,13 @@
         <li><label for="branchaddress1">Address Line 1</label><input type="text" name="branchaddress1" id="branchaddress1" value="<!-- TMPL_VAR name="branchaddress1" escape="HTML" -->" /></li>
         <li><label for="branchaddress2">Address Line 2</label><input type="text" name="branchaddress2" id="branchaddress2" value="<!-- TMPL_VAR name="branchaddress2" escape="HTML" -->" /></li>
         <li><label for="branchaddress3">Address Line 3</label><input type="text" name="branchaddress3" id="branchaddress3" value="<!-- TMPL_VAR name="branchaddress3" escape="HTML" -->" /></li>
+        <li><label for="branchzip">Zip/Postal Code</label><input type="text" name="branchzip" id="branchzip" value="<!-- TMPL_VAR name="branchzip" escape="HTML" -->" /></li>
+        <li><label for="branchcity">City</label><input type="text" name="branchcity" id="branchcity" value="<!-- TMPL_VAR name="branchcity" escape="HTML" -->" /></li>
+        <li><label for="branchcountry">Country</label><input type="text" name="branchcountry" id="branchcountry" value="<!-- TMPL_VAR name="branchcountry" escape="HTML" -->" /></li>
         <li><label for="branchphone">Phone</label><input type="text" name="branchphone" id="branchphone" value="<!-- TMPL_VAR name="branchphone" escape="HTML" -->" /></li>
         <li><label for="branchfax">Fax</label><input type="text" name="branchfax" id="branchfax" value="<!-- TMPL_VAR name="branchfax" escape="HTML" -->" /></li>
         <li><label for="branchemail">Email</label><input type="text" name="branchemail" id="branchemail" value="<!-- TMPL_VAR name="branchemail" escape="HTML" -->" /></li>
+        <li><label for="branchurl">URL</label><input type="text" name="branchurl" id="branchurl" value="<!-- TMPL_VAR name="branchurl" escape="HTML" -->" /></li>
         <li><label for="branchip">IP</label><input type="text" name="branchip" id="branchip" value="<!-- TMPL_VAR name="branchip" escape="HTML" -->" /> <span class="hint">Can be entered as a single IP, or a subnet such as 192.168.1.*</span></li>
 		<!--
         <li><label for="branchprinter">Library Printer</label>
@@ -126,6 +130,7 @@
                 <!-- /TMPL_LOOP -->
             </select></li>
 			-->
+        <li><label for="branchnotes">Notes</label><input type="text" name="branchnotes" id="branchnotes" value="<!-- TMPL_VAR name="branchnotes" escape="HTML" -->" /></li>
         </ol>
         </fieldset>
         <fieldset class="action"><input type="submit" value="Submit" /> <a class="cancel" href="/cgi-bin/koha/admin/branches.pl">Cancel</a></fieldset>
@@ -183,12 +188,22 @@
                             <br /><!-- TMPL_VAR name="branchaddress2" escape="HTML" --><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="branchaddress3" -->
                             <br /><!-- TMPL_VAR name="branchaddress3" escape="HTML" --><!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="branchzip" -->
+                            <br /><!-- TMPL_VAR name="branchzip" escape="HTML" --><!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="branchcity" -->
+                            <br /><!-- TMPL_VAR name="branchcity" escape="HTML" --><!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="branchcountry" -->
+                            <br /><!-- TMPL_VAR name="branchcountry" escape="HTML" --><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="branchphone" -->
                             <br />Ph: <!-- TMPL_VAR name="branchphone" escape="HTML" --><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="branchfax" -->
                             <br />Fax: <!-- TMPL_VAR name="branchfax" escape="HTML" --><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="branchemail" -->
                             <br />Email: <!-- TMPL_VAR name="branchemail" escape="HTML" --><!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="branchurl" -->
+                            <br />URL: <!-- TMPL_VAR name="branchurl" escape="HTML" --><!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="branchnotes" -->
+                            <br />Notes: <!-- TMPL_VAR name="branchnotesl" escape="HTML" --><!-- /TMPL_IF -->
                     <!-- /TMPL_IF -->
                 </td>
                 <td>

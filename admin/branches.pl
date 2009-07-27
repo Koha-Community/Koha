@@ -214,10 +214,15 @@ sub editbranchform {
              branchaddress1 => $data->{'branchaddress1'},
              branchaddress2 => $data->{'branchaddress2'},
              branchaddress3 => $data->{'branchaddress3'},
+             branchzip      => $data->{'branchzip'},
+             branchcity     => $data->{'branchcity'},
+             branchcountry  => $data->{'branchcountry'},
              branchphone    => $data->{'branchphone'},
              branchfax      => $data->{'branchfax'},
              branchemail    => $data->{'branchemail'},
-             branchip       => $data->{'branchip'} 
+             branchurl      => $data->{'branchurl'},
+             branchip       => $data->{'branchip'},
+             branchnotes    => $data->{'branchnotes'}, 
         );
     }
 
@@ -301,9 +306,13 @@ sub branchinfotable {
         # - branchaddress1 \
         # - branchaddress2  |
         # - branchaddress3  | comprising the old "address" field
+        # - branchzip       |
+        # - branchcity      |
+        # - branchcountry   |
         # - branchphone     |
         # - branchfax       |
         # - branchemail    /
+        # - branchurl      /
         # - address-empty-p (1 if no address information, 0 otherwise)
         # - categories      (containing a static error message)
         # - category_list   (loop containing "categoryname")
@@ -316,9 +325,11 @@ sub branchinfotable {
         my $address_empty_p = 1;
         for my $field (
             'branchaddress1', 'branchaddress2',
-            'branchaddress3', 'branchphone',
-            'branchfax',      'branchemail',
-            'branchip',       'branchprinter'
+            'branchaddress3', 'branchzip',
+            'branchcity', 'branchcountry',
+            'branchphone', 'branchfax',
+            'branchemail', 'branchurl',
+            'branchip',       'branchprinter', 'branchnotes'
           )
         {
             $row{$field} = $branch->{$field};
