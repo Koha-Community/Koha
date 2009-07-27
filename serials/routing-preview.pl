@@ -17,6 +17,7 @@ use C4::Members;
 use C4::Biblio;
 use C4::Items;
 use C4::Serials;
+use URI::Escape;
 
 my $query = new CGI;
 my $subscriptionid = $query->param('subscriptionid');
@@ -113,6 +114,7 @@ $routingnotes =~ s/\n/\<br \/\>/g;
 $template->param(
     title => $subs->{'bibliotitle'},
     issue => $issue,
+    issue_escaped => URI::Escape::uri_escape($issue),
     subscriptionid => $subscriptionid,
     memberloop => \@results,    
     routingnotes => $routingnotes,

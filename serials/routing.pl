@@ -38,6 +38,8 @@ use C4::Context;
 use C4::Members;
 use C4::Serials;
 
+use URI::Escape;
+
 my $query = new CGI;
 my $subscriptionid = $query->param('subscriptionid');
 my $serialseq = $query->param('serialseq');
@@ -58,7 +60,8 @@ if($op eq 'add'){
 if($op eq 'save'){
     my $sth = $dbh->prepare("UPDATE serial SET routingnotes = ? WHERE subscriptionid = ?");
     $sth->execute($notes,$subscriptionid);
-    print $query->redirect("routing-preview.pl?subscriptionid=$subscriptionid&issue=$date_selected");
+    my $urldate = URI::Escape::uri_escape($date_selected);
+    print $query->redirect("routing-preview.pl?subscriptionid=$subscriptionid&issue=$urldate");
 }
     
 my ($routing, @routinglist) = getroutinglist($subscriptionid);
