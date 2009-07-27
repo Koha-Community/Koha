@@ -239,7 +239,7 @@ $.tablesorter.addParser({
 			<!-- TMPL_LOOP NAME="ISSUES" -->
 			<input type="hidden" name="item" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
 			<!-- /TMPL_LOOP -->
-			<input type="submit" value="Renew All" />
+			<!-- TMPL_UNLESS name="patron_flagged" --><input type="submit" value="Renew All" /><!-- /TMPL_UNLESS -->
 		</form>
 		<!-- /TMPL_IF -->
     <!-- TMPL_ELSE -->
