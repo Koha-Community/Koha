@@ -198,12 +198,20 @@ if ($op eq "additem") {
 		}
 
 		# Adding the item
-		my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = AddItemFromMarc($record,$biblionumber) unless ($exist_itemnumber);
+        if (!$exist_itemnumber) {
+            my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = AddItemFromMarc($record,$biblionumber);
 
-		# We count the item only if it was really added
-		# That way, all items are added, even if there was some already existing barcodes
-		# FIXME : Please note that there is a risk of infinite loop here if we never find a suitable barcode
-		$i++ unless ($exist_itemnumber);
+            # We count the item only if it was really added
+            # That way, all items are added, even if there was some already existing barcodes
+            # FIXME : Please note that there is a risk of infinite loop here if we never find a suitable barcode
+            $i++;
+            if ( C4::Context->preference('NewItemsDefaultLocation') ) {
+                my $item = GetItem( $oldbibitemnum );
+                $item->{'permanent_location'} = $item->{'location'};
+                $item->{'location'} = C4::Context->preference('NewItemsDefaultLocation');
+                ModItem( $item, $oldbiblionumber, $oldbibitemnum );
+            }
+        }
 
 		# Preparing the next iteration
 		$oldbarcode = $barcodevalue;

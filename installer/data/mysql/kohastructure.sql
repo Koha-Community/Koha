@@ -1183,6 +1183,7 @@ CREATE TABLE `items` (
   `paidfor` mediumtext,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `location` varchar(80) default NULL,
+  `permanent_location` varchar(80) default NULL,
   `onloan` date default NULL,
   `cn_source` varchar(10) default NULL,
   `cn_sort` varchar(30) default NULL,

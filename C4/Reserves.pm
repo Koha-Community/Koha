@@ -937,6 +937,10 @@ sub ModReserveStatus {
     ";
     my $sth_set = $dbh->prepare($query);
     $sth_set->execute( $newstatus, $itemnumber );
+
+    if ( C4::Context->preference("ReturnToShelvingCart") && $newstatus ) {
+      CartToShelf( $itemnumber );
+    }
 }
 
 =item ModReserveAffect
@@ -994,6 +998,10 @@ sub ModReserveAffect {
     $sth = $dbh->prepare($query);
     $sth->execute( $itemnumber, $borrowernumber,$biblionumber);
     _koha_notify_reserve( $itemnumber, $borrowernumber, $biblionumber ) if ( !$transferToDo && !$already_on_shelf );
+
+    if ( C4::Context->preference("ReturnToShelvingCart") ) {
+      CartToShelf( $itemnumber );
+    }
 
     return;
 }

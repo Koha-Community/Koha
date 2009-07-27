@@ -19,6 +19,7 @@ package C4::Items;
 
 use strict;
 
+use Carp;
 use C4::Context;
 use C4::Koha;
 use C4::Biblio;
@@ -62,6 +63,8 @@ BEGIN {
         GetItemsInfo
         get_itemnumbers_of
         GetItemnumberFromBarcode
+
+        CartToShelf
     );
 }
 
@@ -152,6 +155,30 @@ sub GetItem {
 	}
     return $data;
 }    # sub GetItem
+
+sub CartToShelf {
+    my ( $itemnumber, $barcode ) = @_;
+
+    my ( $field, $value );
+
+    if ( $itemnumber ) {
+        $field = 'itemnumber';
+        $value = $itemnumber;
+    } elsif ( $barcode ) {
+        $field = 'barcode';
+        $value = $barcode;
+    } else {
+        $barcode    ||= 'UNDEFINED';
+        $itemnumber ||= 'UNDEFINED';
+        croak "FAILED CartToShelf( $itemnumber, $barcode )";
+    }
+
+    my $sql = "UPDATE items SET items.location = items.permanent_location WHERE $field = ?";
+
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare( $sql );
+    $sth->execute( $value );
+}
 
 =head2 AddItemFromMarc
 
