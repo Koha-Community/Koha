@@ -6,7 +6,7 @@
             function DeleteConfirm() {
                 var element_id = selected_layout();
                 if (element_id>-1) {
-                    var msg = "Are you sure you want to delete template " + element_id + "?"
+                    var msg = "Are you sure you want to delete <!-- TMPL_VAR NAME="label_element" --> " + element_id + "?"
                     var answer = confirm(msg);
                     if (answer) {
                         window.location = "/cgi-bin/koha/labels/label-manage.pl?op=delete&amp;label_element=<!-- TMPL_VAR NAME="label_element" -->&amp;element_id=" + element_id;

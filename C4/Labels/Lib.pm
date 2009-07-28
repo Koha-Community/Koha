@@ -106,13 +106,15 @@ my $unit_values = [
 =cut
 
 sub get_all_templates {
+    my %params = @_;
     my @templates = ();
-    my $query = "SELECT * FROM labels_templates;";
+    my $query = "SELECT " . ($params{'field_list'} ? $params{'field_list'} : '*') . " FROM labels_templates";
+    $query .= ($params{'filter'} ? " WHERE $params{'filter'};" : ';');
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute();
     if ($sth->err) {
         syslog("LOG_ERR", "C4::Labels::Lib::get_all_templates : Database returned the following error: %s", $sth->errstr);
-        return 1;
+        return -1;
     }
     ADD_TEMPLATES:
     while (my $template = $sth->fetchrow_hashref) {
@@ -138,7 +140,7 @@ sub get_all_layouts {
     $sth->execute();
     if ($sth->err) {
         syslog("LOG_ERR", "C4::Labels::Lib::get_all_layouts : Database returned the following error: %s", $sth->errstr);
-        return 1;
+        return -1;
     }
     ADD_LAYOUTS:
     while (my $layout = $sth->fetchrow_hashref) {
@@ -171,7 +173,7 @@ sub get_all_profiles {
     $sth->execute();
     if ($sth->err) {
         syslog("LOG_ERR", "C4::Labels::Lib::get_all_profiles : Database returned the following error: %s", $sth->errstr);
-        return 1;
+        return -1;
     }
     ADD_LAYOUTS:
     while (my $profile = $sth->fetchrow_hashref) {

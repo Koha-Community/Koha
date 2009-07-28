@@ -35,7 +35,7 @@ sub _check_params {
     my $exit_code = 0;
     my @valid_profile_params = (
         'printer_name',
-        'tmpl_id',
+        'template_id',
         'paper_bin',
         'offset_horz',
         'offset_vert',
@@ -93,13 +93,13 @@ C4::Labels::Profile - A class for creating and manipulating profile objects in K
 sub new {
     my $invocant = shift;
     if (_check_params(@_) eq 1) {
-        return 1;
+        return -1;
     }
     my $type = ref($invocant) || $invocant;
     my $self = {
-        printer_name    => '',
-        tmpl_id         => '',
-        paper_bin       => '',
+        printer_name    => 'Default Printer',
+        template_id     => '',
+        paper_bin       => 'Tray 1',
         offset_horz     => 0,
         offset_vert     => 0,
         creep_horz      => 0,
@@ -135,7 +135,7 @@ sub retrieve {
     $sth->execute($opts{profile_id});
     if ($sth->err) {
         syslog("LOG_ERR", "Database returned the following error: %s", $sth->errstr);
-        return 1;
+        return -1;
     }
     my $self = $sth->fetchrow_hashref;
     $self = _conv_points($self) if ($opts{convert} && $opts{convert} == 1);
@@ -143,26 +143,40 @@ sub retrieve {
     return $self;
 }
 
-=head2 C4::Labels::Profile->delete(profile_id => profile_id) |  $profile->delete()
+=head2 C4::Labels::Profile::delete(profile_id => profile_id) | $profile->delete()
 
     Invoking the delete method attempts to delete the profile from the database. The method returns 0 upon success
     and 1 upon failure. Errors are logged to the syslog.
 
     examples:
         my $exitstat = $profile->delete(); # to delete the record behind the $profile object
-        my $exitstat = C4::Labels::Profile->delete(profile_id => 1); # to delete profile record 1
+        my $exitstat = C4::Labels::Profile::delete(profile_id => 1); # to delete profile record 1
 
 =cut
 
 sub delete {
-    my $self = shift;
-    if (!$self->{'profile_id'}) {   # If there is no profile profile_id then we cannot delete it
-        syslog("LOG_ERR", "Cannot delete profile as it has not been saved.");
-        return 1;
+    my $self = {};
+    my %opts = ();
+    my $call_type = '';
+    my $query_param = '';
+    if (ref($_[0])) {
+        $self = shift;  # check to see if this is a method call
+        $call_type = 'C4::Labels::Profile->delete';
+        $query_param = $self->{'profile_id'};
+    }
+    else {
+        %opts = @_;
+        $call_type = 'C4::Labels::Profile::delete';
+        $query_param = $opts{'profile_id'};
+    }
+    if ($query_param eq '') {   # If there is no profile id then we cannot delete it
+        syslog("LOG_ERR", "%s : Cannot delete layout as the profile id is invalid or non-existant.", $call_type);
+        return -1;
     }
     my $query = "DELETE FROM printers_profile WHERE profile_id = ?";  
     my $sth = C4::Context->dbh->prepare($query);
-    $sth->execute($self->{'profile_id'});
+#    $sth->{'TraceLevel'} = 3;
+    $sth->execute($query_param);
     return 0;
 }
 
@@ -190,11 +204,11 @@ sub save {
         $query = substr($query, 0, (length($query)-2));
         push (@params, $self->{'profile_id'});
         $query .= " WHERE profile_id=?;";
-        warn "DEBUG: Updating: $query\n" if $debug;
         my $sth = C4::Context->dbh->prepare($query);
+#        $sth->{'TraceLevel'} = 3;
         $sth->execute(@params);
         if ($sth->err) {
-            syslog("LOG_ERR", "C4::Labels::Profile : Database returned the following error: %s", $sth->errstr);
+            syslog("LOG_ERR", "C4::Labels::Profile : Database returned the following error on attempted UPDATE: %s", $sth->errstr);
             return -1;
         }
         return $self->{'profile_id'};
@@ -213,11 +227,10 @@ sub save {
         }
         $query = substr($query, 0, (length($query)-1));
         $query .= ");";
-        warn "DEBUG: Saving: $query\n" if $debug;
         my $sth = C4::Context->dbh->prepare($query);
         $sth->execute(@params);
         if ($sth->err) {
-            syslog("LOG_ERR", "C4::Labels::Profile : Database returned the following error: %s", $sth->errstr);
+            syslog("LOG_ERR", "C4::Labels::Profile : Database returned the following error on attempted INSERT: %s", $sth->errstr);
             return -1;
         }
         my $sth1 = C4::Context->dbh->prepare("SELECT MAX(profile_id) FROM printers_profile;");
@@ -239,7 +252,7 @@ sub save {
 sub get_attr {
     my $self = shift;
     if (_check_params(@_) eq 1) {
-        return 1;
+        return -1;
     }
     my ($attr) = @_;
     if (exists($self->{$attr})) {
@@ -247,7 +260,7 @@ sub get_attr {
     }
     else {
         syslog("LOG_ERR", "C4::Labels::Profile : %s is currently undefined.", $attr);
-        return 1;
+        return -1;
     }
 }
 
@@ -263,10 +276,12 @@ sub get_attr {
 sub set_attr {
     my $self = shift;
     if (_check_params(@_) eq 1) {
-        return 1;
+        return -1;
     }
-    my ($attr, $value) = @_;
-    $self->{$attr} = $value;
+    my %attrs = @_;
+    foreach my $attrib (keys(%attrs)) {
+        $self->{$attrib} = $attrs{$attrib};
+    };
     return 0;
 }
 

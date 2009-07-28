@@ -1,74 +1,98 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo; Tools &rsaquo; Labels</title>
-<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+    <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->i
+    <title>Koha &rsaquo; Tools &rsaquo; Labels</title>
+    <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
-<!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
-
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a>&rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/labels/label-home.pl">Labels</a> &rsaquo; <a href="/cgi-bin/koha/labels/label-profiles.pl">Printer Profiles</a> &rsaquo; Edit Printer Profile</div>
-
-<div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
-<form name="input" action="/cgi-bin/koha/labels/label-edit-profile.pl" method="get">
-
-<div class="yui-g">
-<h3>Edit Printer Profile</h3>
-<div class="yui-g first">
-<fieldset class="rows"><legend>Profile Settings</legend>
-
-<ol>
-<li>
-    <label>Printer Name:</label> <!-- TMPL_VAR NAME="printername" -->
-</li>
-<li>
-    <label>Paper Bin:</label> <!-- TMPL_VAR NAME="paper_bin" -->
-</li>
-<li>
-    <label>Template Name:</label> <!-- TMPL_VAR NAME="tmpl_code" -->
-</li>
-<li>
-    <label><h4>Offset:</h4></label>
-</li>
-<li>
-    <label for="offset_horz">Horizontal: </label><input type="text"  size="4" name="offset_horz" id="offset_horz" value="<!-- TMPL_VAR NAME="offset_horz" -->" />
-</li>
-<li>
-    <label for="offset_vert">Vertical: </label><input type="text" size="4" name="offset_vert" id="offset_vert" value="<!-- TMPL_VAR NAME="offset_vert" -->" />
-</li>
-<li>
-    <label><h4>Creep:</h4></label>
-</li>
-<li>
-    <label for="creep_horz">Horizontal: </label><input type="text"  size="4" name="creep_horz" id="creep_horz" value="<!-- TMPL_VAR NAME="creep_horz" -->" />
-</li>
-<li>
-    <label for="creep_vert">Vertical: </label><input type="text" size="4" name="creep_vert" id="creep_vert" value="<!-- TMPL_VAR NAME="creep_vert" -->" />
-</li>
-<li><label for="unit">Units: </label><select id="unit" name="unit">
-    <!-- TMPL_LOOP NAME="units" -->
-        <!-- TMPL_IF NAME="selected" -->
-            <option value="<!-- TMPL_VAR NAME="unit" -->" selected="selected">
-        <!-- TMPL_ELSE -->
-            <option value="<!-- TMPL_VAR NAME="unit" -->">
-        <!-- /TMPL_IF --><!-- TMPL_VAR NAME="desc" --></option>
-    <!-- /TMPL_LOOP -->
-</select>
-</li>
-<input type="hidden" name="prof_id" value="<!-- TMPL_VAR NAME="prof_id" -->" />
-</ol>
-</fieldset>
-<fieldset class="action">
-        <input type="submit" name ="op" value="Save" /> <input type="submit" name="op" value="Cancel" />
-</fieldset></div>
-</div>
-</div></form>
-
-</div>
-<div class="yui-b">
-<!-- TMPL_INCLUDE NAME="labels-menu.inc" -->
-</div>
-</div>
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+    <!-- TMPL_INCLUDE NAME="header.inc" -->
+    <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+    <div id="breadcrumbs">
+        <a href="/cgi-bin/koha/mainpage.pl">Home</a>&rsaquo;
+        <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>&rsaquo;
+        <a href="/cgi-bin/koha/labels/label-home.pl">Labels</a>&rsaquo;
+        <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=profile">Printer Profiles</a>&rsaquo;
+        Edit Printer Profile
+    </div>
+    <div id="doc3" class="yui-t2">
+        <div id="bd">
+	    <div id="yui-main">
+	        <div class="yui-b">
+                    <form name="input" action="/cgi-bin/koha/labels/label-edit-profile.pl" method="get">
+                        <div class="yui-g">
+                            <h3>Edit Printer Profile</h3>
+                                <div class="yui-g first">
+                                    <fieldset class="rows"><legend>Profile Settings</legend>
+                                        <ol>
+                                            <li>
+                                                <label for="printer_name">Printer Name:</label>
+                                                <!-- TMPL_IF NAME="profile_id" -->
+                                                 <!-- TMPL_VAR NAME="printer_name" -->
+                                                <!-- TMPL_ELSE -->
+                                                <input type="text"  size="20" name="printer_name" id="printer_name" />
+                                                <!-- /TMPL_IF -->
+                                            </li>
+                                            <li>
+                                                <label for="paper_bin">Paper Bin:</label>
+                                                <!-- TMPL_IF NAME="profile_id" -->
+                                                <!-- TMPL_VAR NAME="paper_bin" -->
+                                                <!-- TMPL_ELSE -->
+                                                <input type="text"  size="20" name="paper_bin" id="paper_bin" />
+                                                <!-- /TMPL_IF -->
+                                            </li>
+                                            <li>
+                                                <label for="template_name">Template Name:</label>
+                                                <!-- TMPL_IF NAME="label_template" -->
+                                                 <!-- TMPL_VAR NAME="label_template" -->
+                                                <!-- TMPL_ELSE -->
+                                                 Profile Unassigned
+                                                <!-- /TMPL_IF -->
+                                            </li>
+                                            </li>
+                                            <li>
+                                                <label><h4>Offset:</h4></label>
+                                            </li>
+                                            <li>
+                                                <label for="offset_horz">Horizontal: </label><input type="text"  size="4" name="offset_horz" id="offset_horz" value="<!-- TMPL_VAR NAME="offset_horz" -->" />
+                                            </li>
+                                            <li>
+                                                <label for="offset_vert">Vertical: </label><input type="text" size="4" name="offset_vert" id="offset_vert" value="<!-- TMPL_VAR NAME="offset_vert" -->" />
+                                            </li>
+                                            <li>
+                                                <label><h4>Creep:</h4></label>
+                                            </li>
+                                            <li>
+                                                <label for="creep_horz">Horizontal: </label><input type="text"  size="4" name="creep_horz" id="creep_horz" value="<!-- TMPL_VAR NAME="creep_horz" -->" />
+                                            </li>
+                                            <li>
+                                                <label for="creep_vert">Vertical: </label><input type="text" size="4" name="creep_vert" id="creep_vert" value="<!-- TMPL_VAR NAME="creep_vert" -->" />
+                                            </li>
+                                            <li>
+                                                <label for="units">Units: </label>
+                                                <select id="units" name="units">
+                                                    <!-- TMPL_LOOP NAME="units" -->
+                                                    <!-- TMPL_IF NAME="selected" -->
+                                                    <option value="<!-- TMPL_VAR NAME="type" -->" selected="selected">
+                                                    <!-- TMPL_ELSE -->
+                                                    <option value="<!-- TMPL_VAR NAME="type" -->">
+                                                    <!-- /TMPL_IF -->
+                                                    <!-- TMPL_VAR NAME="desc" -->
+                                                    </option>
+                                                    <!-- /TMPL_LOOP -->
+                                                </select>
+                                            </li>
+                                        </ol>
+                                    </fieldset>
+                                    <fieldset class="action">
+                                        <input type="submit" value="Submit" /><a class="cancel" href="/cgi-bin/koha/labels/label-manage.pl?label_element=profile">Cancel</a>
+                                        <input type="hidden" name="op" value="save" />
+                                        <input type="hidden" name="profile_id" value="<!-- TMPL_VAR NAME="profile_id" -->" />
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="yui-b">
+                    <!-- TMPL_INCLUDE NAME="labels-menu.inc" -->
+                </div>
+            </div>
+            <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
