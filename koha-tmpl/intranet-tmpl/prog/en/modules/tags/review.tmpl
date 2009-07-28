@@ -146,82 +146,9 @@ td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
   <div id="yui-main">
    <div class="yui-b">
    
+<div class="yui-ge">
+<div class="yui-u first">
 <h1>Tags</h1>
-
-<form method="post" action="/cgi-bin/koha/tags/review.pl">
-<fieldset>
-  <legend>Filters</legend>
-	<table>
-    <tr>
-		<th>Term</th>
-		<th>Status</th>
-		<th>Reviewer</th>
-		<th>Date</th>
-	</tr>
-	<tr>
-	    <td><input type="text" name="tag" value="<!-- TMPL_VAR NAME="filter_tag" -->" />
-	    </td>
-	    <td><select name="approved">
-			<option <!-- TMPL_IF NAME="filter_approved_all"     -->selected="selected" <!-- /TMPL_IF -->value="all">all</option>
-			<option <!-- TMPL_IF NAME="filter_approved_ok"      -->selected="selected" <!-- /TMPL_IF -->value="1">approved</option>
-			<option <!-- TMPL_IF NAME="filter_approved_pending" -->selected="selected" <!-- /TMPL_IF -->value="0">pending</option>
-			<option <!-- TMPL_IF NAME="filter_approved_rej"     -->selected="selected" <!-- /TMPL_IF -->value="-1">rejected</option>
-			</select>
-	    </td>
-	    <td><input type="text" name="approver" value="<!-- TMPL_VAR NAME="filter_approver" -->" />
-	    </td>
-	    <td>
-			<label for="from" class="setlabel">from </label>
-			<input type="text" size="10" id="from" name="from" value="<!-- TMPL_VAR NAME="filter_date_approved_from" -->" />
-			<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" alt="Show Calendar" style="cursor: pointer;" id="openCalendarFrom" />
-			<br />
-			<label for="to" class="setlabel">&nbsp;&nbsp;to </label>
-			<input type="text" size="10" id="to"   name="to"   value="<!-- TMPL_VAR NAME="filter_date_approved_to" -->" />
-			<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" alt="Show Calendar" style="cursor: pointer;" id="openCalendarTo" />
-	    </td>
-	</tr>
-  </table>
- <fieldset class="action"><input type="submit" value="Apply Filter(s)" /></fieldset>
-</fieldset>
-</form>
-<script type="text/javascript">
-//<![CDATA[
-// function submit_check (from_id,to_id) {
-//	var dateFrom = Date_from_syspref(document.getElementById(from_id).value);
-//	var dateTo   = Date_from_syspref(document.getElementById(  to_id).value);
-//	var today = new Date();
-// 	if (dateFrom < dateTo) { 
-//		alert("The starting date cannot be after the ending date.");
-//		document.getElementById(to_id).select();
-//		return false;
-//	}
-// 	if (dateFrom > today) { 
-//		alert("The starting date cannot be in the future.");
-//		document.getElementById(from_id).select();
-//		return false;
-//	}
-// }
-
-// return true if the date is blocked.
-function disable_from(date) {var limit = get_Calendar_limit(date,'to'  ); return (limit && limit < date);}
-function disable_to  (date) {var limit = get_Calendar_limit(date,'from'); return (limit && limit > date);}
-
-Calendar.setup({
-	inputField : "from",
-	  ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
-		button : "openCalendarFrom",
-	   disableFunc : disable_from,
-	dateStatusFunc : disable_from
-});
-Calendar.setup({
-	inputField : "to",
-	  ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
-		button : "openCalendarTo",
-	   disableFunc : disable_to,
-	dateStatusFunc : disable_to
-});
-//]]>
-</script>
 <form method="post" action="/cgi-bin/koha/tags/review.pl" class="checkboxed">
   <h4>Displaying 
 	<!-- TMPL_IF NAME="filter_approved_all"     -->ALL<!-- /TMPL_IF -->
@@ -325,11 +252,9 @@ Calendar.setup({
    <input type="submit" value="Reject"  id="reject_button"  name="op" />
   </fieldset><!-- /TMPL_IF -->
   </form>
-  </div>
- </div>
- <div class="yui-b">
-
-  <fieldset class="brief">
+</div>
+<div class="yui-u">
+ <fieldset class="brief">
   <h4>Terms Summary</h4>
   <ul>
   	<li><a href="/cgi-bin/koha/tags/review.pl?approved=1">Approved</a>:
@@ -366,6 +291,80 @@ Calendar.setup({
    </div>
    </form>
   </fieldset>
+</div>
+</div>
+
+
+  </div>
+ </div>
+ <div class="yui-b">
+<form method="post" action="/cgi-bin/koha/tags/review.pl">
+<fieldset class="brief">
+  <h4>Filters</h4>
+	<ol>
+	    <li><label for="tag">Term</label> <input type="text" name="tag" id="tag" value="<!-- TMPL_VAR NAME="filter_tag" -->" />
+	    </li>
+	    <li><label for="approved">Status</label> <select name="approved" id="approved">
+			<option <!-- TMPL_IF NAME="filter_approved_all"     -->selected="selected" <!-- /TMPL_IF -->value="all">all</option>
+			<option <!-- TMPL_IF NAME="filter_approved_ok"      -->selected="selected" <!-- /TMPL_IF -->value="1">approved</option>
+			<option <!-- TMPL_IF NAME="filter_approved_pending" -->selected="selected" <!-- /TMPL_IF -->value="0">pending</option>
+			<option <!-- TMPL_IF NAME="filter_approved_rej"     -->selected="selected" <!-- /TMPL_IF -->value="-1">rejected</option>
+			</select>
+	    </li>
+	    <li><label for="approver">Reviewer</label> <input type="text" name="approver" id="approver" value="<!-- TMPL_VAR NAME="filter_approver" -->" />
+	    </li>
+	    <li>
+			<label for="from">Date: from </label>
+			<input type="text" size="10" id="from" name="from" value="<!-- TMPL_VAR NAME="filter_date_approved_from" -->" />
+			<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" alt="Show Calendar" style="cursor: pointer;" id="openCalendarFrom" />
+			<br />
+			<label for="to">...to </label>
+			<input type="text" size="10" id="to"   name="to"   value="<!-- TMPL_VAR NAME="filter_date_approved_to" -->" />
+			<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" alt="Show Calendar" style="cursor: pointer;" id="openCalendarTo" />
+	    </li>
+  </ol>
+ <fieldset class="action"><input type="submit" value="Apply Filter(s)" /></fieldset>
+</fieldset>
+</form>
+<script type="text/javascript">
+//<![CDATA[
+// function submit_check (from_id,to_id) {
+//	var dateFrom = Date_from_syspref(document.getElementById(from_id).value);
+//	var dateTo   = Date_from_syspref(document.getElementById(  to_id).value);
+//	var today = new Date();
+// 	if (dateFrom < dateTo) {
+//		alert("The starting date cannot be after the ending date.");
+//		document.getElementById(to_id).select();
+//		return false;
+//	}
+// 	if (dateFrom > today) {
+//		alert("The starting date cannot be in the future.");
+//		document.getElementById(from_id).select();
+//		return false;
+//	}
+// }
+
+// return true if the date is blocked.
+function disable_from(date) {var limit = get_Calendar_limit(date,'to'  ); return (limit && limit < date);}
+function disable_to  (date) {var limit = get_Calendar_limit(date,'from'); return (limit && limit > date);}
+
+Calendar.setup({
+	inputField : "from",
+	  ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+		button : "openCalendarFrom",
+	   disableFunc : disable_from,
+	dateStatusFunc : disable_from
+});
+Calendar.setup({
+	inputField : "to",
+	  ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+		button : "openCalendarTo",
+	   disableFunc : disable_to,
+	dateStatusFunc : disable_to
+});
+//]]>
+</script>
+
  </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
