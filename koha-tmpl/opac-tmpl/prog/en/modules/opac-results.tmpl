@@ -10,8 +10,89 @@
 
 
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.highlight-3.js"></script>
 <script type="text/javascript">
 //<![CDATA[
+
+function holdMultiple() {
+    var checkedBiblioNums = ""; // Separated by "/"
+    var checkedCount = 0;
+    if(document.bookbag_form.biblionumber.length > 0) {
+        for (var i=0; i < document.bookbag_form.biblionumber.length; i++) {
+            if (document.bookbag_form.biblionumber[i].checked) {
+                checkedBiblioNums += (document.bookbag_form.biblionumber[i].value + "/");
+                checkedCount++;
+            }
+        }
+    }
+
+    if (checkedCount > 0) {
+        holdBiblioNums(checkedBiblioNums);
+    } else {
+        alert(MSG_NO_RECORD_SELECTED);   
+    }
+}
+
+function holdBiblioNums(numList) {
+    // numList: biblio numbers separated by "/"
+    $("#hold_form_biblios").attr("value", numList);
+    $("#hold_form").submit();
+}
+
+
+function tagSelected() {
+    var checkedBoxes = $(".searchresults :checkbox:checked");
+    if ($(checkedBoxes).size() == 0) {
+        alert(MSG_NO_RECORD_SELECTED);
+    } else {
+        $("#tagsel_tag").hide();
+        $("#sort_by").hide();
+        $("#tagsel_form").show();
+    }
+}
+
+function tagCanceled() {
+    $("#tagsel_form").hide();
+    $("#tagsel_tag").show();
+    $("#sort_by").show();
+}
+
+function tagAdded() {
+    var checkedBoxes = $(".searchresults :checkbox:checked");
+    if ($(checkedBoxes).size() == 0) {
+        alert(MSG_NO_RECORD_SELECTED);
+        return false;
+    }
+
+    var tag = $("#tagsel_new").val();
+    if (!tag || (tag == "")) {
+        return false;
+    }
+
+    var bibs = [];
+    for (var i = 0; i < $(checkedBoxes).size(); i++) {
+        var box = $(checkedBoxes).get(i);
+        bibs[i] = $(box).val();
+    }
+
+    KOHA.Tags.add_multitags_button(bibs, tag);
+    return false;
+}
+
+var q_array = new Array();  // holds search terms if available
+
+function highlightOff() {
+    $("td").removeHighlight();
+    $(".highlight_toggle").toggle();
+}
+function highlightOn() {
+    var x;
+    for (x in q_array) {
+        $("td").highlight(q_array[x]);
+    }
+    $(".highlight_toggle").toggle();
+}
+
 $(document).ready(function(){
 	$(".addtocart").show();
 	var param1 = "<label for=\"addto\">"+_("Add to: ")+"<\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>";
@@ -77,6 +158,14 @@ $("span.addto").html(param1);
   <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
     $("#holdDetails").hide();
+
+    <!-- TMPL_IF NAME="query_desc" -->
+        var query_desc = "<!-- TMPL_VAR NAME="query_desc" ESCAPE="JS"-->";
+        q_array = query_desc.split(" ");
+        highlightOn();
+        $("#highlight_toggle_on" ).hide().click(function() {highlightOn() ;});
+        $("#highlight_toggle_off").show().click(function() {highlightOff();});
+    <!-- /TMPL_IF -->
 
 	<!-- TMPL_IF NAME="TagsEnabled" -->
         $(".tagbutton").click(KOHA.Tags.add_tag_button);
@@ -184,7 +273,7 @@ $("span.addto").html(param1);
 			<tr>
 			<!-- /TMPL_IF -->
                 <td>
-                    <a href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="scan_use" escape="url" -->&quot;<!-- TMPL_VAR NAME="title_nospan"  ESCAPE="URL" -->&quot;"><!-- TMPL_IF NAME="title" --><!-- TMPL_VAR NAME="title" --><!-- TMPL_ELSE -->No title<!-- /TMPL_IF --></a>
+                    <a href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="scan_use" escape="url" -->&quot;<!-- TMPL_VAR NAME="title"  ESCAPE="URL" -->&quot;"><!-- TMPL_IF NAME="title" --><!-- TMPL_VAR NAME="title" --><!-- TMPL_ELSE -->No title<!-- /TMPL_IF --></a>
                 </td>
                 <td>
                     <!-- TMPL_VAR NAME="author" -->
@@ -210,15 +299,35 @@ $("span.addto").html(param1);
         <table>
 		<tr><td colspan="5" class="resultscontrol" style="border : 1px solid #e8e8e8;">
 		<div class="resort"> <select id="sort_by" name="sort_by"> <!--TMPL_INCLUDE NAME="resort_form.inc"--> </select> <input type="submit" class="submit clearfix" id="sortsubmit" value="Go" /></div>
-        <!-- TMPL_IF NAME="opacbookbag" -->
-			<div class="cartlist"><span class="checkall"></span>
-			<span class="clearall"></span>
-			<span class="addto"></span></div>
-        <!-- TMPL_ELSIF NAME="virtualshelves" -->
-			<div class="cartlist"><span class="checkall"></span>
-			<span class="clearall"></span>
-			<span class="addto"></span></div>
-		<!-- /TMPL_IF -->
+		<div class="cartlist">
+            <!-- checkall, clearall are now needed for placehold -->
+            <span class="checkall"></span>
+        	<span class="clearall"></span>
+            <a href="#" class="highlight_toggle" id="highlight_toggle_off">Unhighlight</a>
+            <a href="#" class="highlight_toggle" id="highlight_toggle_on">Highlight</a>
+            <!-- TMPL_IF EXPR="opacbookbag || virtualshelves" -->
+    	    	<span class="addto"></span>
+            <!-- /TMPL_IF -->
+		    <span id="placehold"><!-- input class="submit" type="submit" value="Place Hold"/ --></span>
+            <div id="holdDetails"></div>
+
+			<!-- TMPL_IF NAME="TagsEnabled" -->
+            <!-- TMPL_IF NAME="TagsInputOnList" -->
+                <span id="tagsel_span"></span>
+              <!-- TMPL_IF NAME="loggedinusername" -->
+                <span id="tagsel_form" style="display:none">
+                  <label for="tagsel_new">New Tag:</label>
+                  <input name="tagsel_new" id="tagsel_new" maxlength="100" />
+                  <input id="tagsel_button" name="tagsel_button" class="input tagsel_button" title="tagsel_button" type="submit" value="Add" />
+                  <a href="#" id="tagsel_cancel">Cancel</a>
+                </span>
+                <span id="tagsel_status" class="tagsel_tatus" style="display:none;">
+                  Tag status here.
+                </span>
+              <!-- /TMPL_IF -->
+            <!-- /TMPL_IF -->
+            <!-- /TMPL_IF -->
+        </div>
 
         </td></tr>
             <!-- Actual Search Results -->
@@ -260,7 +369,7 @@ $("span.addto").html(param1);
                                 <!-- TMPL_ELSE --><a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" title="View details for this title"><!-- TMPL_IF NAME="title" --><!-- TMPL_VAR NAME="title" --><!-- TMPL_ELSE -->No title<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="subtitle"  --></a>
                                 <!-- /TMPL_IF -->
                                 <!-- /TMPL_IF -->
-                                <!-- TMPL_IF NAME="author" -->by <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="author_nospan" ESCAPE="URL" -->" title="Search for works by this author"><!-- TMPL_VAR NAME="author" --></a>
+                                <!-- TMPL_IF NAME="author" -->by <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->" title="Search for works by this author"><!-- TMPL_VAR NAME="author" --></a>
                                 <!-- TMPL_ELSE -->&nbsp;
                                 <!-- /TMPL_IF -->
 				<span class="results_summary"><span class="label">Publication:</span>

@@ -11,6 +11,9 @@ href="/cgi-bin/koha/opac-rss.pl?<!-- TMPL_VAR name="query_cgi"--><!-- TMPL_VAR N
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
+
+var q_array = new Array();  // will hold the search terms, if possible
+
 $(document).ready(function(){
 	$('#sortsubmit').hide();
     $('#sort_by').change(function() {
@@ -52,7 +55,26 @@ $(document).ready(function(){
         $("#bookbag_form").unCheckCheckboxes();
         return false;
     }); 
+    <!-- TMPL_IF NAME="query_desc" -->
+    var query_desc = "<!-- TMPL_VAR NAME="query_desc" ESCAPE="JS"-->";
+    q_array = query_desc.split(" ");
+    highlightOn();
+    $("#highlight_toggle_on" ).hide().click(function() {highlightOn() ;});
+    $("#highlight_toggle_off").show().click(function() {highlightOff();});
+    <!-- /TMPL_IF -->
 });
+
+function highlightOff() {
+    $("td").removeHighlight();
+    $(".highlight_toggle").toggle();
+}
+function highlightOn() {
+    var x;
+    for (x in q_array) {
+        $("td").highlight(q_array[x]);
+    }
+    $(".highlight_toggle").toggle();
+}
 //]]>
 </script>
 </head>
@@ -159,6 +181,8 @@ $(document).ready(function(){
 		<div class="resort"> <select id="sort_by" name="sort_by"> <!--TMPL_INCLUDE Name="resort_form.inc"--> </select> <input type="submit" class="submit clearfix" id="sortsubmit" value="Go" /></div>
         <!-- TMPL_IF EXPR="opacbookbag || virtualshelves" --><div class="cartlist"><span class="checkall"></span>
 		<span class="clearall"></span>
+        <a href="#" class="highlight_toggle" id="highlight_toggle_off">Unhighlight</a>
+        <a href="#" class="highlight_toggle" id="highlight_toggle_on">Highlight</a>
 		<span class="addto"></span></div>
 		<!-- /TMPL_IF -->
 
@@ -188,7 +212,7 @@ $(document).ready(function(){
                       <!-- TMPL_IF name="BiblioDefaultViewisbd" --><a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" title="View details for this title"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" --></a>
                       <!-- TMPL_ELSE --><a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" title="View details for this title"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" --></a>
                       <!-- /TMPL_IF --><!-- /TMPL_IF -->
-                      <!-- TMPL_IF NAME="author" -->by <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="author_nospan" ESCAPE="URL" -->" title="Search for works by this author"><!-- TMPL_VAR NAME="author" --></a>
+                      <!-- TMPL_IF NAME="author" -->by <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->" title="Search for works by this author"><!-- TMPL_VAR NAME="author" --></a>
                       <!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
 				<p> <!-- TMPL_IF name="publicationyear" --> - <!-- TMPL_VAR name="publicationyear" --><!-- /TMPL_IF -->
 						<!-- TMPL_IF name="publishercode" -->- <!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF -->
