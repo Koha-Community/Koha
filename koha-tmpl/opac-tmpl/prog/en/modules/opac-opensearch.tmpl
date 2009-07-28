@@ -31,14 +31,14 @@
      <opensearch:Query role="request" searchTerms="<!-- TMPL_VAR NAME="query_desc" ESCAPE="html" --> <!-- TMPL_VAR NAME="limit_desc" ESCAPE="html" -->" startPage="<!-- TMPL_VAR NAME="page" -->" />
 	 <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
      <item>
-       <title><!-- TMPL_VAR NAME="title_nospan" ESCAPE="html" --> <!-- TMPL_VAR NAME="subtitle_nospan"  ESCAPE="html" --></title>
+       <title><!-- TMPL_VAR NAME="title" ESCAPE="html" --> <!-- TMPL_VAR NAME="subtitle"  ESCAPE="html" --></title>
        <isbn><!-- TMPL_VAR NAME="isbn" ESCAPE="html" --></isbn>
        <link><!-- TMPL_IF name="BiblioDefaultViewmarc" --><!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" --><!-- TMPL_ELSE --><!-- TMPL_IF name="BiblioDefaultViewisbd" --><!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" --><!-- /TMPL_IF --><!-- /TMPL_IF --></link>
        <description><![CDATA[
 <!-- TMPL_IF NAME="OPACAmazonEnabled" --><!-- TMPL_IF NAME="OPACAmazonCoverImages" --><!-- TMPL_IF NAME="normalized_isbn" --><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="normalized_isbn" -->.01.TZZZZZZZ.jpg" alt="" /><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="SyndeticsEnabled" --><!-- TMPL_IF NAME="SyndeticsCoverImages" --><!-- TMPL_IF NAME="content_identifier_exists" --><img src="http://www.syndetics.com/index.aspx?isbn=<!-- TMPL_VAR NAME="normalized_isbn" -->/SC.GIF&amp;client=<!-- TMPL_VAR NAME="SyndeticsClientCode" -->&amp;type=xw10<!-- TMPL_IF NAME="normalized_upc" -->&amp;upc=<!-- TMPL_VAR NAME="normalized_upc" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="normalized_oclc" -->&amp;oclc=<!-- TMPL_VAR NAME="normalized_oclc" --><!-- /TMPL_IF -->" alt="" /><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="BakerTaylorEnabled" --><!-- TMPL_IF NAME="normalized_isbn" --><a href="https://<!-- TMPL_VAR name="BakerTaylorBookstoreURL" ESCAPE="HTML" --><!-- TMPL_VAR name="normalized_isbn" -->"><img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR name="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR name="normalized_isbn" -->" /></a><!-- /TMPL_IF --><!-- /TMPL_IF -->
-	   <p><!-- TMPL_IF NAME="author" -->By <!-- TMPL_VAR NAME="author_nospan"  ESCAPE="html" -->. <!-- /TMPL_IF -->
+	   <p><!-- TMPL_IF NAME="author" -->By <!-- TMPL_VAR NAME="author"  ESCAPE="html" -->. <!-- /TMPL_IF -->
 	   <!-- TMPL_IF name="place" --><!-- TMPL_VAR name="place"  ESCAPE="html" --> <!-- /TMPL_IF --><!-- TMPL_IF name="publishercode" --><!-- TMPL_VAR name="publishercode"  ESCAPE="html" --><!-- /TMPL_IF --><!-- TMPL_IF name="publicationyear" --> <!-- TMPL_VAR name="publicationyear"  ESCAPE="html" -->
                     <!-- TMPL_ELSE --><!-- TMPL_IF name="copyrightdate" --> <!-- TMPL_VAR name="copyrightdate"  ESCAPE="html" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="pages" -->. <!-- TMPL_VAR name="pages"  ESCAPE="html" --><!-- /TMPL_IF -->
@@ -46,7 +46,7 @@
                         <!-- TMPL_IF name="size" --> <!-- TMPL_VAR name="size"  ESCAPE="html" -->. <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="isbn" --> <!-- TMPL_VAR name="isbn"  ESCAPE="html" --><!-- /TMPL_IF --> </p><p>
 <!-- TMPL_IF NAME="RequestOnOpac" -->
-<a href="<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold on <i><!-- TMPL_VAR NAME="title_nospan" --></i></a></p>
+<a href="<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold on <i><!-- TMPL_VAR NAME="title" --></i></a></p>
 <!-- /TMPL_IF -->
 						]]></description>
        <guid><!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" --></guid>

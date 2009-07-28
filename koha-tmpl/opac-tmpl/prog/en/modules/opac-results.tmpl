@@ -10,6 +10,7 @@
 
 
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.highlight-3.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 
@@ -78,6 +79,20 @@ function tagAdded() {
     return false;
 }
 
+var q_array = new Array();  // holds search terms if available
+
+function highlightOff() {
+    $("td").removeHighlight();
+    $(".highlight_toggle").toggle();
+}
+function highlightOn() {
+    var x;
+    for (x in q_array) {
+        $("td").highlight(q_array[x]);
+    }
+    $(".highlight_toggle").toggle();
+}
+
 $(document).ready(function(){
 	$(".addtocart").show();
 	var param1 = "<label for=\"addto\">"+_("Add to: ")+"<\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>";
@@ -144,6 +159,14 @@ $(document).ready(function(){
   <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
     $("#holdDetails").hide();
+
+    <!-- TMPL_IF NAME="query_desc" -->
+        var query_desc = "<!-- TMPL_VAR NAME="query_desc" ESCAPE="JS"-->";
+        q_array = query_desc.split(" ");
+        highlightOn();
+        $("#highlight_toggle_on" ).hide().click(function() {highlightOn() ;});
+        $("#highlight_toggle_off").show().click(function() {highlightOff();});
+    <!-- /TMPL_IF -->
 
 	<!-- TMPL_IF NAME="TagsEnabled" -->
         $(".tagbutton").click(KOHA.Tags.add_tag_button);
@@ -250,7 +273,7 @@ $(document).ready(function(){
 			<tr>
 			<!-- /TMPL_IF -->
                 <td>
-                    <a href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="scan_use" escape="url" -->&quot;<!-- TMPL_VAR NAME="title_nospan"  ESCAPE="URL" -->&quot;"><!-- TMPL_IF NAME="title" --><!-- TMPL_VAR NAME="title" --><!-- TMPL_ELSE -->No title<!-- /TMPL_IF --></a>
+                    <a href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="scan_use" escape="url" -->&quot;<!-- TMPL_VAR NAME="title"  ESCAPE="URL" -->&quot;"><!-- TMPL_IF NAME="title" --><!-- TMPL_VAR NAME="title" --><!-- TMPL_ELSE -->No title<!-- /TMPL_IF --></a>
                 </td>
                 <td>
                     <!-- TMPL_VAR NAME="author" -->
@@ -280,6 +303,8 @@ $(document).ready(function(){
             <!-- checkall, clearall are now needed for placehold -->
             <span class="checkall"></span>
         	<span class="clearall"></span>
+            <a href="#" class="highlight_toggle" id="highlight_toggle_off">Unhighlight</a>
+            <a href="#" class="highlight_toggle" id="highlight_toggle_on">Highlight</a>
             <!-- TMPL_IF EXPR="opacbookbag || virtualshelves" -->
     	    	<span class="addto"></span>
             <!-- /TMPL_IF -->
@@ -346,7 +371,7 @@ $(document).ready(function(){
                                 <!-- TMPL_ELSE --><a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" title="View details for this title"><!-- TMPL_IF NAME="title" --><!-- TMPL_VAR NAME="title" --><!-- TMPL_ELSE -->No title<!-- /TMPL_IF --> <!-- TMPL_VAR NAME="subtitle"  --></a>
                                 <!-- /TMPL_IF -->
                                 <!-- /TMPL_IF -->
-                                <!-- TMPL_IF NAME="author" -->by <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="author_nospan" ESCAPE="URL" -->" title="Search for works by this author"><!-- TMPL_VAR NAME="author" --></a>
+                                <!-- TMPL_IF NAME="author" -->by <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->" title="Search for works by this author"><!-- TMPL_VAR NAME="author" --></a>
                                 <!-- TMPL_ELSE -->&nbsp;
                                 <!-- /TMPL_IF -->
 				<span class="results_summary"><span class="label">Publication:</span>

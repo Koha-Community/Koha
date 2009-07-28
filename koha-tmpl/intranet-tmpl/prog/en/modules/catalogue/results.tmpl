@@ -1,6 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Catalog &rsaquo; <!-- TMPL_IF NAME="searchdesc" -->Results of Search <!-- TMPL_IF NAME="query_desc" -->for '<!-- TMPL_VAR NAME="query_desc" -->'<!-- /TMPL_IF --><!-- TMPL_IF NAME="limit_desc" -->&nbsp;with limit(s):&nbsp;'<!-- TMPL_VAR NAME="limit_desc" -->'<!-- /TMPL_IF --><!-- TMPL_ELSE -->You did not specify any search criteria<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="/intranet-tmpl/prog/en/lib/jquery/plugins/jquery.highlight-3.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
@@ -9,7 +10,7 @@ var MSG_NON_RESERVES_SELECTED = _("One or more selected items cannot be reserved
 // http://www.oreillynet.com/pub/a/javascript/2003/10/21/amazonhacks.html
 function verify_images() {
     $("img").each(function(i){
-           if ((this.src.indexOf('images.amazon.com') >= 0) || (this.src.indexOf('g-images.amazon.com') >=0)) {
+        if ((this.src.indexOf('images.amazon.com') >= 0) || (this.src.indexOf('g-images.amazon.com') >=0)) {
             w = this.width;
             h = this.height;
             if ((w == 1) || (h == 1)) {
@@ -17,10 +18,15 @@ function verify_images() {
             } else if ((this.complete != null) && (!this.complete)) {
                 this.src = 'http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
             }
-           }
-        });
         }
+    });
+}
+$(window).load(function() {
+    verify_images();
+});
 <!-- /TMPL_IF -->
+
+var q_array = new Array();  // will hold search terms, if present
 
 $(document).ready(function() {
     $('#sortbyform').find("input:submit").hide();
@@ -29,17 +35,29 @@ $(document).ready(function() {
     });
 	$("#z3950searchc").empty();
 	yuiZ3950button();
-});
-
-<!-- TMPL_IF NAME="AmazonEnabled" -->
-$(window).load(function() {
-        verify_images();
-     });
-<!-- /TMPL_IF -->
-$(document).ready(function() {
     $("#selection_ops").show();
     $(".selection").show();
+    <!-- TMPL_IF NAME="query_desc" -->
+        var query_desc = "<!-- TMPL_VAR NAME="query_desc" ESCAPE="JS"-->";
+        q_array = query_desc.split(" ");
+        highlightOn();
+        $("#highlight_toggle_on" ).hide().click(function() {highlightOn() ;});
+        $("#highlight_toggle_off").show().click(function() {highlightOff();});
+    <!-- /TMPL_IF -->
 });
+
+function highlightOff() {
+    $("p").removeHighlight();
+    $(".highlight_toggle").toggle();
+}
+function highlightOn() {
+    var x;
+    for (x in q_array) {
+        $("p").highlight(q_array[x]);
+    }
+    $(".highlight_toggle").toggle();
+}
+
 function selectAll () {
     $(".selection").attr("checked", "checked");
 }
@@ -118,7 +136,11 @@ function yuiZ3950button() {
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Search <!-- TMPL_IF NAME="query_desc" -->for '<!-- TMPL_VAR NAME="query_desc" ESCAPE="html"-->'<!-- /TMPL_IF --><!-- TMPL_IF NAME="limit_desc" -->&nbsp;with limit(s):&nbsp;'<!-- TMPL_VAR NAME="limit_desc" -->'<!-- /TMPL_IF --></div>
+<div id="breadcrumbs">
+         <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
+&rsaquo; Search <!-- TMPL_IF NAME="query_desc" -->for '<!-- TMPL_VAR NAME="query_desc" ESCAPE="html"-->'<!-- /TMPL_IF --><!-- TMPL_IF NAME="limit_desc" -->&nbsp;with limit(s):&nbsp;'<!-- TMPL_VAR NAME="limit_desc" -->'<!-- /TMPL_IF -->
+</div>
 
 <div id="doc3" class="yui-t1">
    <div id="bd">
@@ -171,6 +193,9 @@ function yuiZ3950button() {
                 <a href="#" onclick="selectAll(); return false;">Select All</a>
                 |
                 <a href="#" onclick="clearAll(); return false;">Clear All</a>
+                |
+                <a href="#" class="highlight_toggle" id="highlight_toggle_off">Unhighlight</a>
+                <a href="#" class="highlight_toggle" id="highlight_toggle_on">Highlight</a>
                 <!-- TMPL_IF NAME="CAN_user_reserveforothers" -->
                   <input type="button" onclick="placeHold(); return false;" value="Place Hold"/>
                 <!-- /TMPL_IF -->
@@ -183,16 +208,13 @@ function yuiZ3950button() {
 			<form method="post" name="fz3950" class="fz3950bigrpad">
 				<span id="z3950searchc"><input type="button" id="z3950search" value="z39.50 Search" onclick="PopupZ3950(); return false;" /></span>
 			</form>
-        <!-- TMPL_IF NAME="searchdesc" -->
             <h3>No results found</h3>
+        <!-- TMPL_IF NAME="searchdesc" -->
             <p>
                 No results match your search <!-- TMPL_IF NAME="query_desc" -->for <span style="font-weight: bold;">'<!-- TMPL_VAR NAME="query_desc" ESCAPE="HTML"-->'</span><!-- /TMPL_IF --><!-- TMPL_IF NAME="limit_desc" -->&nbsp;with limit(s): <span style="font-weight: bold;">'<!-- TMPL_VAR NAME="limit_desc" -->'</span><!-- /TMPL_IF --><!-- TMPL_IF NAME="LibraryName" --> in <!-- TMPL_VAR NAME="LibraryName" --> Catalog<!-- /TMPL_IF -->.
             </p>
         <!-- TMPL_ELSE -->
-            <h3>No results found</h3>
-            <p>
-            You did not specify any search criteria.
-            </p>
+            <p>You did not specify any search criteria.</p>
         <!-- /TMPL_IF -->
 		</div>
     <!-- /TMPL_IF -->
@@ -249,7 +271,7 @@ function yuiZ3950button() {
                 <!-- TMPL_LOOP NAME="SEARCH_RESULTS" -->
                     <!-- TMPL_IF NAME="__odd__" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
                         <td>
-                            <a href="/cgi-bin/koha/catalogue/search.pl?idx=<!-- TMPL_VAR name="scan_index_to_use" -->&amp;q=<!-- TMPL_VAR NAME="scan_use" escape="url" -->&quot;<!-- TMPL_VAR NAME="title_nospan" -->&quot;"><!-- TMPL_VAR NAME="title" --></a>
+                            <a href="/cgi-bin/koha/catalogue/search.pl?idx=<!-- TMPL_VAR name="scan_index_to_use" -->&amp;q=<!-- TMPL_VAR NAME="scan_use" escape="url" -->&quot;<!-- TMPL_VAR NAME="title" -->&quot;"><!-- TMPL_VAR NAME="title" --></a>
                         </td>
                         <td>
                             <!-- TMPL_VAR NAME="author" -->
@@ -346,7 +368,7 @@ function yuiZ3950button() {
                                 </p>
                                 <!-- TMPL_IF name="summary" -->
                                         <!-- TMPL_IF NAME="author" -->
-                                            <a href="/cgi-bin/koha/catalogue/search.pl?q=au:<!-- TMPL_VAR NAME="author_nospan" ESCAPE="URL" -->" title="Search for this Author"><!-- TMPL_VAR NAME="author" --></a>
+                                            <a href="/cgi-bin/koha/catalogue/search.pl?q=au:<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->" title="Search for this Author"><!-- TMPL_VAR NAME="author" --></a>
                                         <!-- TMPL_ELSE -->
                                             &nbsp;
                                         <!-- /TMPL_IF -->
@@ -366,7 +388,7 @@ function yuiZ3950button() {
                                     <!-- /TMPL_UNLESS -->
 
                                         <!-- TMPL_IF NAME="author" -->
-                                            <a href="/cgi-bin/koha/catalogue/search.pl?q=au:<!-- TMPL_VAR NAME="author_nospan" ESCAPE="URL" -->" title="Search for this Author"><!-- TMPL_VAR NAME="author" --></a>
+                                            <a href="/cgi-bin/koha/catalogue/search.pl?q=au:<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->" title="Search for this Author"><!-- TMPL_VAR NAME="author" --></a>
                                         <!-- TMPL_ELSE -->
                                             &nbsp;
                                         <!-- /TMPL_IF -->

@@ -175,7 +175,6 @@ for my $i (0..$hits) {
     my $biblio = TransformMarcToKoha(C4::Context->dbh,$marcrecord,'');
 
     #build the hash for the template.
-    $resultsloop{highlight}       = ($i % 2)?(1):(0);
     $resultsloop{title}           = $biblio->{'title'};
     $resultsloop{subtitle}        = $biblio->{'subtitle'};
     $resultsloop{biblionumber}    = $biblio->{'biblionumber'};
@@ -1130,23 +1129,13 @@ Format results in a form suitable for passing to the template
 sub searchResults {
     my ( $searchdesc, $hits, $results_per_page, $offset, $scan, @marcresults ) = @_;
     my $dbh = C4::Context->dbh;
-    my $even = 1;
     my @newresults;
-
-    # add search-term highlighting via <span>s on the search terms
-    my $span_terms_hashref;
-    for my $span_term ( split( / /, $searchdesc ) ) {
-        $span_term =~ s/(.*=|\)|\(|\+|\.|\*)//g;
-        $span_terms_hashref->{$span_term}++;
-    }
 
     #Build branchnames hash
     #find branchname
     #get branch information.....
     my %branches;
-    my $bsth =
-      $dbh->prepare("SELECT branchcode,branchname FROM branches")
-      ;    # FIXME : use C4::Koha::GetBranches
+    my $bsth =$dbh->prepare("SELECT branchcode,branchname FROM branches"); # FIXME : use C4::Branch::GetBranches
     $bsth->execute();
     while ( my $bdata = $bsth->fetchrow_hashref ) {
         $branches{ $bdata->{'branchcode'} } = $bdata->{'branchname'};
@@ -1247,48 +1236,6 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
             $summary =~ s/\n/<br\/>/g;
             $oldbiblio->{summary} = $summary;
         }
-
-        # save an author with no <span> tag, for the <a href=search.pl?q=<!--tmpl_var name="author"-->> link
-        $oldbiblio->{'author_nospan'} = $oldbiblio->{'author'};
-        $oldbiblio->{'title_nospan'} = $oldbiblio->{'title'};
-        $oldbiblio->{'subtitle_nospan'} = $oldbiblio->{'subtitle'};
-        # Add search-term highlighting to the whole record where they match using <span>s
-        if (C4::Context->preference("OpacHighlightedWords")){
-            my $searchhighlightblob;
-            for my $highlight_field ( $marcrecord->fields ) {
-    
-    # FIXME: need to skip title, subtitle, author, etc., as they are handled below
-                next if $highlight_field->tag() =~ /(^00)/;    # skip fixed fields
-                for my $subfield ($highlight_field->subfields()) {
-                    my $match;
-                    next if $subfield->[0] eq '9';
-                    my $field = $subfield->[1];
-                    for my $term ( keys %$span_terms_hashref ) {
-                        if ( ( $field =~ /$term/i ) && (( length($term) > 3 ) || ($field =~ / $term /i)) ) {
-                            $field =~ s/$term/<span class=\"term\">$&<\/span>/gi;
-                        $match++;
-                        }
-                    }
-                    $searchhighlightblob .= $field . " ... " if $match;
-                }
-    
-            }
-            $searchhighlightblob = ' ... '.$searchhighlightblob if $searchhighlightblob;
-            $oldbiblio->{'searchhighlightblob'} = $searchhighlightblob;
-        }
-
-        # Add search-term highlighting to the title, subtitle, etc. fields
-        for my $term ( keys %$span_terms_hashref ) {
-            my $old_term = $term;
-            if ( length($term) > 3 ) {
-                $term =~ s/(.*=|\)|\(|\+|\.|\?|\[|\]|\\|\*)//g;
-				foreach(qw(title subtitle author publishercode place pages notes size)) {
-                	$oldbiblio->{$_} =~ s/$term/<span class=\"term\">$&<\/span>/gi;
-				}
-            }
-        }
-
-        ($i % 2) and $oldbiblio->{'toggle'} = 1;
 
         # Pull out the items fields
         my @fields = $marcrecord->field($itemtag);
