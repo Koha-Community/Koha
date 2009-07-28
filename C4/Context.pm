@@ -588,7 +588,7 @@ sub _new_Zconn {
     my $tried=0; # first attempt
     my $Zconn; # connection object
     $server = "biblioserver" unless $server;
-    $syntax = "xml" unless $syntax;
+    $syntax = "usmarc" unless $syntax;
 
     my $host = $context->{'listen'}->{$server}->{'content'};
     my $servername = $context->{"config"}->{$server};
