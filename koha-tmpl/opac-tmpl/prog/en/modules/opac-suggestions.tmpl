@@ -101,8 +101,8 @@ $.tablesorter.addParser({
             </form><!-- /TMPL_IF -->
         <form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
             <input type="hidden" name="op" value="delete_confirm" />
-			<div><span class="checkall"><a href="#" id="CheckAll">Select All</a></span>
-		<span class="clearall"><a href="#" id="CheckNone">Clear All</a></span> | <!-- TMPL_IF NAME="loggedinusername" --><a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a><!-- TMPL_ELSE --><!-- TMPL_IF NAME="AnonSuggestions" --><a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a><!-- /TMPL_IF --><!-- /TMPL_IF -->
+			<div><!-- TMPL_IF NAME="loggedinusername" --><span class="checkall"><a href="#" id="CheckAll">Select All</a></span>
+		<span class="clearall"><a href="#" id="CheckNone">Clear All</a></span> | <a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a><!-- TMPL_ELSE --><!-- TMPL_IF NAME="AnonSuggestions" --><a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a><!-- /TMPL_IF --><!-- /TMPL_IF -->
 </div>
 			<table id="suggestt" class="checkboxed">
 			<thead><tr>
@@ -116,7 +116,9 @@ $.tablesorter.addParser({
         <tbody><!-- TMPL_LOOP NAME="suggestions_loop" -->
             <!-- TMPL_IF name="even" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="loggedinusername" --><td>
+    <!-- TMPL_IF NAME="showcheckbox" -->
                     <input type="checkbox" name="delete_field" value="<!--TMPL_VAR name="suggestionid" -->" />
+    <!-- /TMPL_IF -->
                 </td><!-- /TMPL_IF -->
                 <td>
                     <p><strong><!-- TMPL_VAR NAME="title" escape="html" --></strong></p>
