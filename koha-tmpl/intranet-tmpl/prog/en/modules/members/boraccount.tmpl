@@ -32,6 +32,7 @@
     <th>Description of charges</th>
     <th>Amount</th>
     <th>Outstanding</th>
+    <th>&nbsp;</th>
   </tr>
 
 	<!-- FIXME: Shouldn't hardcode dollar signs, since Euro or Pound might be needed -->
@@ -42,13 +43,20 @@
       <td><!-- TMPL_VAR NAME="description" -->&nbsp;<!-- TMPL_IF NAME="itemnumber" --><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">View item</a>&nbsp;<!-- /TMPL_IF --><!-- TMPL_IF NAME="printtitle" --> <!-- TMPL_VAR NAME="title" escape="html" --><!-- /TMPL_IF --></td>
       <!-- TMPL_IF NAME="amountcredit" --><td class="credit"><!-- TMPL_ELSE --><td class="debit"><!-- /TMPL_IF --><!-- TMPL_VAR NAME="amount" --></td>
       <!-- TMPL_IF NAME="amountoutstandingcredit" --><td class="credit"><!-- TMPL_ELSE --><td class="debit"><!-- /TMPL_IF --><!-- TMPL_VAR NAME="amountoutstanding" --></td>
+      <td>
+	<!-- TMPL_IF NAME="payment" -->
+		<a href="boraccount.pl?action=reverse&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&accountno=<!-- TMPL_VAR NAME="accountno" -->">Reverse</a>
+	<!-- TMPL_ELSE -->
+		&nbsp;
+	<!-- /TMPL_IF -->
+      </td>
     </tr>
 
   <!-- /TMPL_LOOP -->
 <tfoot>
   <tr>
     <td colspan="3">Total due</td>
-    <!-- TMPL_IF NAME="totalcredit" --><td class="credit"><!-- TMPL_ELSE --><td class="debit"><!-- /TMPL_IF --><!-- TMPL_VAR NAME="total" --></td>
+    <!-- TMPL_IF NAME="totalcredit" --><td colspan="2" class="credit"><!-- TMPL_ELSE --><td colspan="2" class="debit"><!-- /TMPL_IF --><!-- TMPL_VAR NAME="total" --></td>
   </tr>
   </tfoot>
 </table>

@@ -36,6 +36,7 @@ BEGIN {
 		&recordpayment &makepayment &manualinvoice
 		&getnextacctno &reconcileaccount &getcharges &getcredits
 		&getrefunds &chargelostitem
+		&ReversePayment
 	); # removed &fixaccounts
 }
 
@@ -642,6 +643,25 @@ sub getrefunds {
 	}
     return (@results);
 }
+
+sub ReversePayment {
+  my ( $borrowernumber, $accountno ) = @_;
+  my $dbh = C4::Context->dbh;
+  
+  my $sth = $dbh->prepare('SELECT amountoutstanding FROM accountlines WHERE borrowernumber = ? AND accountno = ?');
+  $sth->execute( $borrowernumber, $accountno );
+  my $row = $sth->fetchrow_hashref();
+  my $amount_outstanding = $row->{'amountoutstanding'};
+  
+  if ( $amount_outstanding <= 0 ) {
+    $sth = $dbh->prepare('UPDATE accountlines SET amountoutstanding = amount * -1, description = CONCAT( description, " Reversed -" ) WHERE borrowernumber = ? AND accountno = ?');
+    $sth->execute( $borrowernumber, $accountno );
+  } else {
+    $sth = $dbh->prepare('UPDATE accountlines SET amountoutstanding = 0, description = CONCAT( description, " Reversed -" ) WHERE borrowernumber = ? AND accountno = ?');
+    $sth->execute( $borrowernumber, $accountno );
+  }
+}
+
 END { }    # module clean-up code here (global destructor)
 
 1;
