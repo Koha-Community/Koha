@@ -147,7 +147,7 @@
         <tbody><!-- TMPL_LOOP NAME="suggestions_loop" -->
             <!-- TMPL_IF name="even" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
                 <td>
-    <!-- TMPL_VAR NAME="title" escape="html" --><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --><br />
+    <!-- TMPL_IF NAME="title" --><a href="/cgi-bin/koha/catalogue/search.pl?q=<!-- TMPL_VAR NAME="title" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a><!-- /TMPL_IF --><!-- TMPL_IF NAME="author" -->, by <a href="/cgi-bin/koha/catalogue/search.pl?q=au:<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" --></a><!-- /TMPL_IF --><br />
                     <!-- TMPL_IF name="copyrightdate" -->&copy; <!-- TMPL_VAR name="copyrightdate" --> <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="volumedesc" -->; Volume:<i><!-- TMPL_VAR name="volumedesc" --></i> <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="isbn" -->; ISBN :<i><!-- TMPL_VAR name="isbn" --></i> <!-- /TMPL_IF --><!-- TMPL_IF name="publishercode" -->; Published by <!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF --><!-- TMPL_IF name="publicationyear" --> in <i><!-- TMPL_VAR name="publicationyear" --></i> <!-- /TMPL_IF --><!-- TMPL_IF name="place" --> in <i><!-- TMPL_VAR name="place" --></i> <!-- /TMPL_IF --><br /></td>
@@ -155,8 +155,9 @@
                 <td>
                     <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrnumsuggestedby" -->"><!-- TMPL_VAR name="surnamesuggestedby" -->
                     <!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF -->
-                    <!-- TMPL_VAR name="firstnamesuggestedby" --></a>
-                    (<!-- TMPL_VAR name="branchcodesuggestedby" -->)
+                    <!-- TMPL_VAR name="firstnamesuggestedby" --></a><br />
+                    Branch: <!-- TMPL_VAR name="branchcodesuggestedby" --><br />
+                    Category: <!-- TMPL_VAR name="categorycodesuggestedby" -->
                 </td>
                 <td>
                     <!-- TMPL_VAR name="date" -->
