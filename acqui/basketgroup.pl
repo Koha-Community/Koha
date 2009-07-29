@@ -288,6 +288,18 @@ if (! $op ) {
                 push(@ba_order, $bookseller->{discount});
                 push(@ba_order, $bookseller->{gstrate}*100 || C4::Context->preference("gist") || 0);
                 push(@ba_orders, \@ba_order);
+                # Editor Number
+                my $en;
+                if (C4::Context->preference("marcflavour") eq 'UNIMARC') {
+                    $en = MARC::Record::new_from_xml($ord->{marcxml},'UTF-8')->subfield('345',"b");
+                } elsif (C4::Context->preference("marcflavour") eq 'MARC21') {
+                    $en = MARC::Record::new_from_xml($ord->{marcxml},'UTF-8')->subfield('037',"a");
+                }
+                if($en){
+                    push(@ba_order, $en);
+                } else {
+                    push(@ba_order, undef);
+                }
             }
         }
         %orders->{$basket->{basketno}}=\@ba_orders;
