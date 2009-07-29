@@ -736,11 +736,17 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 
 <!-- TMPL_UNLESS NAME="norequests" -->
     <!-- TMPL_UNLESS name="bi_notforloan" -->
-        <!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="RequestOnOpac" -->
-            <li><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
-            Place Hold
-            </a></li>
-        <!-- /TMPL_IF --><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="opacuserlogin" -->
+		<!-- TMPL_IF NAME="RequestOnOpac" -->
+			<!-- TMPL_IF NAME="AllowOnShelfHolds" -->
+	            		<li><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a></li>
+			<!-- TMPL_ELSE -->
+				<!-- TMPL_IF NAME="ItemsIssued" -->
+		            		<li><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a></li>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_IF -->
+        	<!-- /TMPL_IF -->
+	<!-- /TMPL_IF -->
     <!-- /TMPL_UNLESS -->
 <!-- /TMPL_UNLESS -->
         <li><a class="print" href="/cgi-bin/koha/opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">

@@ -74,6 +74,9 @@ $template->param(
     bibliotitle => $biblio->{title},
 );
 
+$template->param( 'AllowOnShelfHolds' => C4::Context->preference('AllowOnShelfHolds') );
+$template->param( 'ItemsIssued' => CountItemsIssued( $biblionumber ) );
+
 # adding the $RequestOnOpac param
 my $RequestOnOpac;
 if (C4::Context->preference("RequestOnOpac")) {

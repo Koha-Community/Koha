@@ -67,7 +67,7 @@ BEGIN {
 		GetMarcUrls
 		&GetUsedMarcStructure
 		&GetXmlBiblio
-        &GetCOinSBiblio
+		&GetCOinSBiblio
 
 		&GetAuthorisedValueDesc
 		&GetMarcStructure
@@ -75,6 +75,8 @@ BEGIN {
 		&GetFrameworkCode
 		&GetPublisherNameFromIsbn
 		&TransformKohaToMarc
+		
+		&CountItemsIssued
 	);
 
 	# To modify something
@@ -2023,6 +2025,15 @@ more.
 =back
 
 =cut
+
+sub CountItemsIssued {
+  my ( $biblionumber )  = @_;
+  my $dbh = C4::Context->dbh;
+  my $sth = $dbh->prepare('SELECT COUNT(*) as issuedCount FROM items, issues WHERE items.itemnumber = issues.itemnumber AND items.biblionumber = ?');
+  $sth->execute( $biblionumber );
+  my $row = $sth->fetchrow_hashref();
+  return $row->{'issuedCount'};
+}
 
 sub _disambiguate {
     my ($table, $column) = @_;

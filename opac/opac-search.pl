@@ -73,6 +73,7 @@ if (C4::Context->preference("marcflavour") eq "UNIMARC" ) {
 elsif (C4::Context->preference("marcflavour") eq "MARC21" ) {
     $template->param('usmarc' => 1);
 }
+$template->param( 'AllowOnShelfHolds' => C4::Context->preference('AllowOnShelfHolds') );
 
 if (C4::Context->preference('BakerTaylorEnabled')) {
 	$template->param(
@@ -423,6 +424,7 @@ for (my $i=0;$i<=@servers;$i++) {
 			$tag_quantity = C4::Context->preference('TagsShowOnList')) {
 			foreach (@newresults) {
 				my $bibnum = $_->{biblionumber} or next;
+				$_->{itemsissued} = CountItemsIssued( $bibnum );
 				$_ ->{'TagLoop'} = get_tags({biblionumber=>$bibnum, approved=>1, 'sort'=>'-weight',
 										limit=>$tag_quantity });
 			}

@@ -224,7 +224,21 @@ $(document).ready(function(){
 					</span>
 				</p>
 
-				<p><!-- TMPL_IF name="RequestOnOpac" --><!-- TMPL_UNLESS NAME="norequests" --><!-- TMPL_IF NAME="opacuserlogin" --><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a><!-- /TMPL_IF --><!-- /TMPL_UNLESS --> <!-- /TMPL_IF -->
+				<p>
+                                <!-- TMPL_IF name="RequestOnOpac" -->
+					<!-- TMPL_UNLESS NAME="norequests" -->
+						<!-- TMPL_IF NAME="opacuserlogin" -->
+							<!-- TMPL_IF NAME="AllowOnShelfHolds" -->
+								<a class="hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a><!-- add back when available 0 holds in queue-->
+							<!-- TMPL_ELSE -->
+								<!-- TMPL_IF NAME="itemsissued" -->
+									<a class="hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a><!-- add back when available 0 holds in queue-->
+								<!-- /TMPL_IF -->
+							<!-- /TMPL_IF -->
+						<!-- /TMPL_IF -->
+					<!-- /TMPL_UNLESS -->
+				<!-- /TMPL_IF -->
+
 				<!--TMPL_IF EXPR="opacbookbag || virtualshelves" --><input type="checkbox" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" title="Click to add to cart" /> <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"><!-- /TMPL_IF --><img src="<!-- TMPL_VAR NAME="themelang" -->/images/<!-- TMPL_VAR NAME="itemtype" -->.gif" alt="<!-- TMPL_VAR NAME="ccode" -->" title="<!-- TMPL_VAR NAME="ccode" -->" /><!--TMPL_IF EXPR="opacbookbag || virtualshelves" --></label><!-- /TMPL_IF --> <!-- TMPL_IF name="classification" -->
                                     <a href="/cgi-bin/koha/opac-search.pl?q=callnum:<!-- TMPL_VAR NAME="classification" ESCAPE="URL" -->">
                                         <!-- TMPL_VAR NAME="classification" -->

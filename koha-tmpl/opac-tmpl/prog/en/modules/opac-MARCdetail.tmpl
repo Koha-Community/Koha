@@ -19,7 +19,19 @@
 <div class="container"><div class="yui-g">
 <div id="toolbar">
 <ul>
-	<!-- TMPL_UNLESS NAME="norequests" --><!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="RequestOnOpac" --><li><a class="link reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a></li><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_UNLESS -->
+	<!-- TMPL_UNLESS NAME="norequests" -->
+		<!-- TMPL_IF NAME="opacuserlogin" -->
+			<!-- TMPL_IF NAME="RequestOnOpac" -->
+				<!-- TMPL_IF NAME="AllowOnShelfHolds" -->
+					<li><a class="link reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a></li>
+				<!-- TMPL_ELSE -->
+					<!-- TMPL_IF NAME="ItemsIssued" -->
+						<li><a class="link reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a></li>
+					<!-- /TMPL_IF -->
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_IF -->
+		<!-- /TMPL_IF -->
+	<!-- /TMPL_UNLESS -->
 	<li><a class="link print" href="/cgi-bin/koha/opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">Print</a></li>
 	<!-- TMPL_IF name="virtualshelves" --><!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="loggedinusername" --><li><a class="link addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">Save to Your Lists</a></li><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="opacbookbag" --><li><a class="link addtocart" href="#" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">Add to Your Cart</a></li><!-- /TMPL_IF -->

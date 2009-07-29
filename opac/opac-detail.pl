@@ -59,6 +59,10 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 my $biblionumber = $query->param('biblionumber') || $query->param('bib');
+
+$template->param( 'AllowOnShelfHolds' => C4::Context->preference('AllowOnShelfHolds') );
+$template->param( 'ItemsIssued' => CountItemsIssued( $biblionumber ) );
+
 my $record       = GetMarcBiblio($biblionumber);
 $template->param( biblionumber => $biblionumber );
 # XSLT processing of some stuff
