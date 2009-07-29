@@ -93,7 +93,8 @@ sub SearchSuggestion  {
         U1.surname   AS surnamesuggestedby,
         U1.firstname AS firstnamesuggestedby,
         U1.borrowernumber AS borrnumsuggestedby,
-        U1.branchcode AS branchcodesuggestedby,
+        U1.categorycode AS categorycodesuggestedby,
+        U2.branchcode AS branchcodemanagedby,
         U2.surname   AS surnamemanagedby,
         U2.firstname AS firstnamemanagedby,
         U2.borrowernumber AS borrnummanagedby
@@ -226,7 +227,8 @@ sub GetSuggestionByStatus {
                         U1.surname   AS surnamesuggestedby,
                         U1.firstname AS firstnamesuggestedby,
             U1.branchcode AS branchcodesuggestedby,
-						U1.borrowernumber AS borrnumsuggestedby,
+			U1.borrowernumber AS borrnumsuggestedby,
+			U1.categorycode AS categorycodesuggestedby,
                         U2.surname   AS surnamemanagedby,
                         U2.firstname AS firstnamemanagedby,
 						U2.borrowernumber AS borrnummanagedby
