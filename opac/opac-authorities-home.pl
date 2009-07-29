@@ -61,7 +61,7 @@ if ( $op eq "do_search" ) {
     my @excluding = ($query->param('excludinga'),$query->param('excludingb'),$query->param('excludingc'),);
     my @operator = ($query->param('operatora'),$query->param('operatorb'),$query->param('operatorc'));
     my $orderby = $query->param('orderby');
-    my @value = ($query->param('valuea'),$query->param('valueb'),$query->param('valuec'),);
+    my @value = ($query->param('valuea') || "",$query->param('valueb') || "",$query->param('valuec') || "",);
 
     $resultsperpage = $query->param('resultsperpage');
     $resultsperpage = 20 if ( !defined $resultsperpage );
