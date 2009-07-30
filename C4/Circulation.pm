@@ -1524,8 +1524,10 @@ sub AddReturn {
     }
 
     # fix up the overdues in accounts...
-    my $fix = _FixOverduesOnReturn($borrowernumber, $item->{itemnumber}, $exemptfine, $dropbox);
-    defined($fix) or warn "_FixOverduesOnReturn($borrowernumber, $item->{itemnumber}...) failed!";  # zero is OK, check defined
+    if ($borrowernumber) {
+        my $fix = _FixOverduesOnReturn($borrowernumber, $item->{itemnumber}, $exemptfine, $dropbox);
+        defined($fix) or warn "_FixOverduesOnReturn($borrowernumber, $item->{itemnumber}...) failed!";  # zero is OK, check defined
+    }
 
     # find reserves.....
     # if we don't have a reserve with the status W, we launch the Checkreserves routine
@@ -1581,7 +1583,7 @@ sub AddReturn {
             $messages->{'NeedsTransfer'} = 1;   # TODO: instead of 1, specify branchcode that the transfer SHOULD go to, $item->{homebranch}
         }
     }
-    return ( $doreturn, $messages, $item, $borrower );
+    return ( $doreturn, $messages, $issue, $borrower );
 }
 
 =head2 MarkIssueReturned
