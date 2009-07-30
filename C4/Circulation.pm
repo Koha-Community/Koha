@@ -1718,7 +1718,7 @@ FIXME: Give a positive return value on success.  It might be the $borrowernumber
 
 =cut
 
-sub FixAccountForLostAndReturned {
+sub _FixAccountForLostAndReturned {
     my $itemnumber     = shift or return;
     my $borrowernumber = @_ ? shift : undef;
     my $item_id        = @_ ? shift : $itemnumber;  # Send the barcode if you want that logged in the description
