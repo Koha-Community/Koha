@@ -24,8 +24,8 @@ sub methods : Test( 1 ) {
                       GetBranchBorrowerCircRule
                       AddReturn 
                       MarkIssueReturned 
-                      FixOverduesOnReturn 
-                      FixAccountForLostAndReturned 
+                      _FixOverduesOnReturn
+                      _FixAccountForLostAndReturned
                       GetItemIssue 
                       GetItemIssues 
                       GetBiblioIssues 
