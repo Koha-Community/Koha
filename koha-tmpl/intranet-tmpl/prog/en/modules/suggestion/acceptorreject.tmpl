@@ -153,11 +153,10 @@
                         <!-- TMPL_IF name="isbn" -->; ISBN :<i><!-- TMPL_VAR name="isbn" --></i> <!-- /TMPL_IF --><!-- TMPL_IF name="publishercode" -->; Published by <!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF --><!-- TMPL_IF name="publicationyear" --> in <i><!-- TMPL_VAR name="publicationyear" --></i> <!-- /TMPL_IF --><!-- TMPL_IF name="place" --> in <i><!-- TMPL_VAR name="place" --></i> <!-- /TMPL_IF --><br /></td>
 			<td><!-- TMPL_VAR NAME="note" --></td>
                 <td>
-                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrnumsuggestedby" -->"><!-- TMPL_VAR name="surnamesuggestedby" -->
-                    <!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF -->
+                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrnumsuggestedby" -->"><!-- TMPL_VAR name="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->,<!-- /TMPL_IF -->
                     <!-- TMPL_VAR name="firstnamesuggestedby" --></a><br />
-                    Branch: <!-- TMPL_VAR name="branchcodesuggestedby" --><br />
-                    Category: <!-- TMPL_VAR name="categorycodesuggestedby" -->
+                    <!-- TMPL_VAR name="categorydescriptionsuggestedby" --> (<!-- TMPL_VAR name="categorycodesuggestedby" -->)<br />
+                    <!-- TMPL_VAR name="branchnamesuggestedby" --> (<!-- TMPL_VAR name="branchcodesuggestedby" -->)
                 </td>
                 <td>
                     <!-- TMPL_VAR name="date" -->

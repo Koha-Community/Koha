@@ -90,17 +90,23 @@ sub SearchSuggestion  {
     my $query = "
     SELECT suggestions.*,
         U1.branchcode   AS branchcodesuggestedby,
+        B1.branchname AS branchnamesuggestedby,
         U1.surname   AS surnamesuggestedby,
         U1.firstname AS firstnamesuggestedby,
         U1.borrowernumber AS borrnumsuggestedby,
         U1.categorycode AS categorycodesuggestedby,
+        C1.description AS categorydescriptionsuggestedby,
         U2.branchcode AS branchcodemanagedby,
+        B2.branchname AS branchnamemanagedby,
         U2.surname   AS surnamemanagedby,
         U2.firstname AS firstnamemanagedby,
         U2.borrowernumber AS borrnummanagedby
     FROM suggestions
     LEFT JOIN borrowers AS U1 ON suggestedby=U1.borrowernumber
     LEFT JOIN borrowers AS U2 ON managedby=U2.borrowernumber
+    LEFT JOIN categories AS C1 ON C1.categorycode = U1.categorycode
+    LEFT JOIN branches AS B1 ON B1.branchcode = U1.branchcode
+    LEFT JOIN branches AS B2 ON B2.branchcode = U2.branchcode
     WHERE 1=1 ";
 
     my @sql_params;
@@ -226,15 +232,19 @@ sub GetSuggestionByStatus {
     my $query = qq(SELECT suggestions.*,
                         U1.surname   AS surnamesuggestedby,
                         U1.firstname AS firstnamesuggestedby,
-            U1.branchcode AS branchcodesuggestedby,
+                        U1.branchcode AS branchcodesuggestedby,
+                        B1.branchname AS branchnamesuggestedby,
 			U1.borrowernumber AS borrnumsuggestedby,
 			U1.categorycode AS categorycodesuggestedby,
+                        C1.description AS categorydescriptionsuggestedby,
                         U2.surname   AS surnamemanagedby,
                         U2.firstname AS firstnamemanagedby,
-						U2.borrowernumber AS borrnummanagedby
+                        U2.borrowernumber AS borrnummanagedby
                         FROM suggestions
                         LEFT JOIN borrowers AS U1 ON suggestedby=U1.borrowernumber
                         LEFT JOIN borrowers AS U2 ON managedby=U2.borrowernumber
+                        LEFT JOIN categories AS C1 ON C1.categorycode=U1.categorycode
+                        LEFT JOIN branches AS B1 on B1.branchcode = U1.branchcode
                         WHERE status = ?);
     if (C4::Context->preference("IndependantBranches") || $branchcode) {
         my $userenv = C4::Context->userenv;

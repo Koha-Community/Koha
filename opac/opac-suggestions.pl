@@ -97,7 +97,6 @@ if ( $op eq "delete_confirm" ) {
 my $suggestions_loop =
   &SearchSuggestion( $borrowernumber, $author, $title, $publishercode, $status,
     $suggestedbyme );
-map{ $_->{'branchcodesuggestedby'}=GetBranchInfo($_->{'branchcodesuggestedby'})->[0]->{'branchname'}} @$suggestions_loop;  
 
 foreach my $suggestion(@$suggestions_loop) {
     if($suggestion->{'suggestedby'} == $borrowernumber) {
