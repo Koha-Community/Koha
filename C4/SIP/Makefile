@@ -11,11 +11,11 @@ PODFLAGS = --htmlroot=. --podroot=.
 	pod2html $(PODFLAGS) --outfile=$@ --infile=$<
 
 all:
-	@echo Nothing to make.  The command '"make run"' will run the server.
+	@echo Nothing to make.  Use make test.
 
 # just run the server from the command line
-run: 
-	perl SIPServer.pm SIPconfig.xml
+# run:
+# 	perl SIPServer.pm SIPconfig.xml
 
 test:
 	cd t; $(MAKE) test

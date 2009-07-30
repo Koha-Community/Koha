@@ -18,7 +18,7 @@ my $checkout_template = {
 
 my $checkin_template = {
 	id => "Renew: cleanup: check in item ($item_barcode)",
-	msg => "09N20060102    08423620060113    084235APUnder the bed|AO$instid|AB$item_barcode|AC$password|",
+	msg => "09N20060102    08423620060113    084235AP$item_owner|AO$instid|AB$item_barcode|AC$password|",
 	pat => qr/^101YNN$datepat/,
 	fields => [],
 };
@@ -71,6 +71,8 @@ my @tests = (
 	$renew_test_template,
 );
 
+SIPtest::run_sip_tests(@tests); exit;   # debug hack
+
 my $test;
 
 # Renew: item checked out, identify by title
@@ -91,6 +93,9 @@ my $test;
 #}
 #
 #push @tests, $hold_template, $test, $cancel_hold_template;
+#
+#
+# Tests for impossible renewals.
 #
 # Renew: item not checked out.  Basically the same, except
 # for the leader test.

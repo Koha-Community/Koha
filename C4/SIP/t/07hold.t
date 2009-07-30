@@ -182,6 +182,7 @@ push @tests, $test, $hold_count_test_template0;				# 15
 #     - valid item, not allowed to hold item
 #     - multiple holds on item: correct queue position management
 #     - setting and verifying hold expiry dates (requires ILS support)
+#     - 3M checkin extensions for hold/ILL routing
 
 SIPtest::run_sip_tests(@tests);
 

@@ -98,7 +98,9 @@ sub new {
     $debug and warn "patron fines: $ilspatron{fines} ... amountoutstanding: $kp->{amountoutstanding} ... CHARGES->amount: $flags->{CHARGES}->{amount}";
 	for (qw(CHARGES CREDITS GNA LOST DBARRED NOTES)) {
 		($flags->{$_}) or next;
-		$ilspatron{screen_msg} .= ($flags->{$_}->{message} || '') ;
+        if ($_ ne 'NOTES' and $flags->{$_}->{message}) {
+            $ilspatron{screen_msg} .= " -- " . $flags->{$_}->{message};  # show all but internal NOTES
+        }
 		if ($flags->{$_}->{noissues}) {
 			foreach my $toggle (qw(charge_ok renew_ok recall_ok hold_ok inet)) {
 				$ilspatron{$toggle} = 0;    # if we get noissues, disable everything
@@ -204,17 +206,6 @@ sub language {
 }
 
 #
-# List of outstanding holds placed
-#
-sub hold_items {
-    my ($self, $start, $end) = @_;
-	$self->{hold_items} or return [];
-    $start = 1 unless defined($start);
-    $end = scalar @{$self->{hold_items}} unless defined($end);
-    return [@{$self->{hold_items}}[$start-1 .. $end-1]];    # SIP "start item" and "end item" values are 1-indexed, not 0 like perl arrays
-}
-
-#
 # remove the hold on item item_id from my hold queue.
 # return true if I was holding the item, false otherwise.
 # 
@@ -235,46 +226,48 @@ sub drop_hold {
     return $result;
 }
 
+# Accessor method for array_ref values, designed to get the "start" and "end" values
+# from the SIP request.  Note those incoming values are 1-indexed, not 0-indexed.
+#
+sub x_items {
+    my $self      = shift or return;
+    my $array_var = shift or return;
+    my ($start, $end) = @_;
+	$self->{$array_var} or return [];
+    $start = 1 unless defined($start);
+    $end   = scalar @{$self->{$array_var}} unless defined($end);
+    # syslog("LOG_DEBUG", "$array_var: start = %d, end = %d; items(%s)", $start, $end, join(', ', @{$self->{items}}));
+
+    return [@{$self->{$array_var}}[$start-1 .. $end-1]];
+}
+
+#
+# List of outstanding holds placed
+#
+sub hold_items {
+    my $self = shift or return;
+    return $self->x_items('hold_items', @_);
+}
+
 sub overdue_items {
-    my ($self, $start, $end) = @_;
-	$self->{overdue_items} or return [];
-    $start = 1 if !defined($start);
-    $end = scalar @{$self->{overdue_items}} if !defined($end);
-    return [@{$self->{overdue_items}}[$start-1 .. $end-1]];
+    my $self = shift or return;
+    return $self->x_items('overdue_items', @_);
 }
-
 sub charged_items {
-    my ($self, $start, $end) = shift;
-	$self->{items} or return [];
-    $start = 1 if !defined($start);
-    $end = scalar @{$self->{items}} if !defined($end);
-    syslog("LOG_DEBUG", "charged_items: start = %d, end = %d; items(%s)",
-			$start, $end, join(', ', @{$self->{items}}));
-	return [@{$self->{items}}[$start-1 .. $end-1]];
+    my $self = shift or return;
+    return $self->x_items('items', @_);
 }
-
 sub fine_items {
-    my ($self, $start, $end) = @_;
-	$self->{fine_items} or return [];
-    $start = 1 if !defined($start);
-    $end = scalar @{$self->{fine_items}} if !defined($end);
-    return [@{$self->{fine_items}}[$start-1 .. $end-1]];
+    my $self = shift or return;
+    return $self->x_items('fine_items', @_);
 }
-
 sub recall_items {
-    my ($self, $start, $end) = @_;
-	$self->{recall_items} or return [];
-    $start = 1 if !defined($start);
-    $end = scalar @{$self->{recall_items}} if !defined($end);
-    return [@{$self->{recall_items}}[$start-1 .. $end-1]];
+    my $self = shift or return;
+    return $self->x_items('recall_items', @_);
 }
-
 sub unavail_holds {
-    my ($self, $start, $end) = @_;
-	$self->{unavail_holds} or return [];
-    $start = 1 if !defined($start);
-    $end = scalar @{$self->{unavail_holds}} if !defined($end);
-    return [@{$self->{unavail_holds}}[$start-1 .. $end-1]];
+    my $self = shift or return;
+    return $self->x_items('unavail_holds', @_);
 }
 
 sub block {
@@ -282,7 +275,7 @@ sub block {
     foreach my $field ('charge_ok', 'renew_ok', 'recall_ok', 'hold_ok', 'inet') {
 		$self->{$field} = 0;
     }
-    $self->{screen_msg} = "Feature not implemented";  # $blocked_card_msg || "Card Blocked.  Please contact library staff";
+    $self->{screen_msg} = "Block feature not implemented";  # $blocked_card_msg || "Card Blocked.  Please contact library staff";
     # TODO: not really affecting patron record
     return $self;
 }
@@ -295,7 +288,7 @@ sub enable {
     syslog("LOG_DEBUG", "Patron(%s)->enable: charge: %s, renew:%s, recall:%s, hold:%s",
 	   $self->{id}, $self->{charge_ok}, $self->{renew_ok},
 	   $self->{recall_ok}, $self->{hold_ok});
-    $self->{screen_msg} = "This feature not implemented."; # "All privileges restored.";   # TODO: not really affecting patron record
+    $self->{screen_msg} = "Enable feature not implemented."; # "All privileges restored.";   # TODO: not really affecting patron record
     return $self;
 }
 
@@ -315,7 +308,7 @@ sub excessive_fees {
 }
 sub excessive_fines {
     my $self = shift or return;
-    return $self->excessive_fees;   # same thing for Koha
+    return $self->excessive_fees;   # excessive_fines is the same thing as excessive_fees for Koha
 }
     
 sub library_name {

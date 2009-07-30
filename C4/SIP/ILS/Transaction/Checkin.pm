@@ -13,6 +13,7 @@ use ILS;
 use ILS::Transaction;
 
 use C4::Circulation;
+use C4::Debug;
 
 our @ISA = qw(ILS::Transaction);
 
@@ -45,28 +46,46 @@ sub do_checkin {
     my $self = shift;
     my $branch = @_ ? shift : 'SIP2' ;
     my $barcode = $self->{item}->id;
+    $debug and warn "do_checkin() calling AddReturn($barcode, $branch)";
     my ($return, $messages, $iteminformation, $borrower) = AddReturn($barcode, $branch);
     $self->alert(!$return);
+    # ignoring messages: NotIssued, IsPermanent, WasLost, WasTransfered
+
+    # biblionumber, biblioitemnumber, itemnumber
+    # borrowernumber, reservedate, branchcode
+    # cancellationdate, found, reservenotes, priority, timestamp
+
     if ($messages->{BadBarcode}) {
         $self->alert_type('99');
     }
-    # ignoring: NotIssued, IsPermanent
     if ($messages->{wthdrawn}) {
         $self->alert_type('99');
     }
-    if ($messages->{ResFound}) {
-        if ($self->hold($messages->{ResFound}->{ResFound})) {
-            $self->alert_type('99');
-        }
+    if ($messages->{Wrongbranch}) {
+        $self->destination_loc($messages->{Wrongbranch}->{Rightbranch});
+        $self->alert_type('04');            # send to other branch
     }
-    $self->alert(1) if defined $self->alert_type;  # alert_type could be "00"
+    if ($messages->{WrongTransfer}) {
+        $self->destination_loc($messages->{WrongTransfer});
+        $self->alert_type('04');            # send to other branch
+    }
+    if ($messages->{NeedsTransfer}) {
+        $self->destination_loc($iteminformation->{homebranch});
+        $self->alert_type('04');            # send to other branch
+    }
+    if ($messages->{ResFound}) {
+        $self->hold($messages->{ResFound});
+        $debug and warn "Item returned at $branch reserved at $messages->{ResFound}->{branchcode}";
+        $self->alert_type(($branch eq $messages->{ResFound}->{branchcode}) ? '01' : '02');
+    }
+    $self->alert(1) if defined $self->alert_type;  # alert_type could be "00", hypothetically
     $self->ok($return);
 }
 
 sub resensitize {
 	my $self = shift;
 	unless ($self->{item}) {
-		warn "no item found in object to resensitize";
+		warn "resensitize(): no item found in object to resensitize";
 		return;
 	}
 	return !$self->{item}->magnetic_media;
@@ -75,7 +94,7 @@ sub resensitize {
 sub patron_id {
 	my $self = shift;
 	unless ($self->{patron}) {
-		warn "no patron found in object";
+		warn "patron_id(): no patron found in object";
 		return;
 	}
 	return $self->{patron}->id;

@@ -10,8 +10,9 @@ use CGI;
 use Sip::Constants qw(:all);
 use SIPtest qw(
 		:basic
-		$user_barcode $item_barcode $item_title
+		$user_barcode
 		:diacritic
+        :item1
 	);
 
 my $patron_enable_template = {
@@ -31,7 +32,7 @@ my $patron_disable_template = {
 
 my $checkin_template = {
 	id => 'Checkout: cleanup: check in item',
-	msg => "09N20050102    08423620060113    084235APUnder the bed|AO$instid|AB$item_barcode|ACterminal password|",
+	msg => "09N20050102    08423620060113    084235AP$item_owner|AO$instid|AB$item_barcode|ACterminal password|",
 	pat => qr/^101YNN$datepat/o,
 	fields => [],
 };

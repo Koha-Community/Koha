@@ -138,16 +138,19 @@ my %fields = (
 
 sub next_hold {
     my $self = shift or return;
-    foreach (@$self->{hold_shelf}) {    # If this item was taken from the hold shelf, then that reserve still governs
+    # use Data::Dumper; warn "next_hold() hold_shelf: " . Dumper($self->{hold_shelf}); warn "next_hold() pending_queue: " . $self->{pending_queue};
+    foreach (@{$self->hold_shelf}) {    # If this item was taken from the hold shelf, then that reserve still governs
         next unless ($_->{itemnumber} and $_->{itemnumber} == $self->{itemnumber});
         return $_;
     }
-    if (scalar @$self->{pending_queue}) {    # Otherwise, if there is at least one hold, the first (best priority) gets it
+    if (scalar @{$self->{pending_queue}}) {    # Otherwise, if there is at least one hold, the first (best priority) gets it
         return  $self->{pending_queue}->[0];
     }
     return;
 }
 
+# hold_patron_id is NOT the barcode.  It's the borrowernumber.
+# That's because the reserving patron may not have a barcode, or may be from an different system entirely (ILL)!
 sub hold_patron_id {
     my $self = shift or return;
     my $hold = $self->next_hold() or return;
@@ -162,11 +165,11 @@ sub hold_patron_name {
         syslog("LOG_ERR", "While checking hold, GetMember failed for borrowernumber '$borrowernumber'");
         return;
     }
-    my $email = $holder{email} || '';
-    my $phone = $holder{phone} || '';
+    my $email = $holder->{email} || '';
+    my $phone = $holder->{phone} || '';
     my $extra = ($email and $phone) ? " ($email, $phone)" :  # both populated, employ comma
                 ($email or  $phone) ? " ($email$phone)"   :  # only 1 populated, we don't care which: no comma
-                "" ;                                         # niether populated, empty string
+                "" ;                                         # neither populated, empty string
     my $name = $holder->{firstname} ? $holder->{firstname} . ' ' : '';
     $name .= $holder->{surname} . $extra;
     # $self->{hold_patron_name} = $name;      # TODO: consider caching
@@ -175,7 +178,7 @@ sub hold_patron_name {
 sub destination_loc {
     my $self = shift or return;
     my $hold = $self->next_hold();
-    return ($hold ? $hold->{branchcode}
+    return ($hold ? $hold->{branchcode} : '');
 }
 
 our $AUTOLOAD;

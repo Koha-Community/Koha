@@ -82,8 +82,8 @@ sub supports {
 sub check_inst_id {
     my ($self, $id, $whence) = @_;
     if ($id ne $self->{institution}->{id}) {
-	syslog("LOG_WARNING", "%s: received institution '%s', expected '%s'",
-	       $whence, $id, $self->{institution}->{id});
+        syslog("LOG_WARNING", "%s: received institution '%s', expected '%s'", $whence, $id, $self->{institution}->{id});
+        # Just an FYI check, we don't expect the user to change location from that in SIPconfig.xml
     }
 }
 
@@ -396,8 +396,12 @@ sub renew {
 		my $j = 0;
 		my $count = scalar @{$patron->{items}};
 		foreach my $i (@{$patron->{items}}) {
-			syslog("LOG_DEBUG", "checking item %s of %s: $item_id vs. %s", ++$j, $count, $i);
-			if ($i eq $item_id) {
+            unless (defined $i->{barcode}) {    # FIXME: using data instead of objects may violate the abstraction layer
+                syslog("LOG_ERR", "No barcode for item %s of %s: $item_id", $j+1, $count);
+                next;
+            }
+            syslog("LOG_DEBUG", "checking item %s of %s: $item_id vs. %s", ++$j, $count, $i->{barcode});
+            if ($i->{barcode} eq $item_id) {
 				# We have it checked out
 				$item = new ILS::Item $item_id;
 				last;
@@ -408,26 +412,19 @@ sub renew {
     $trans->item($item);
 
     if (!defined($item)) {
-	# It's not checked out to $patron_id
-		$trans->screen_msg("Item not checked out to " . $patron->name);
+		$trans->screen_msg("Item not checked out to " . $patron->name);     # not checked out to $patron_id
+        $trans->ok(0);
     } elsif (!$item->available($patron_id)) {
 		$trans->screen_msg("Item unavailable due to outstanding holds");
+        $trans->ok(0);
     } else {
 		$trans->renewal_ok(1);
 		$trans->desensitize(0);	# It's already checked out
 		$trans->do_renew();
-		syslog("LOG_DEBUG", "done renew (%s): %s renews %s", $trans->renewal_ok(1),$patron_id,$item_id);
+		syslog("LOG_DEBUG", "done renew (ok:%s): %s renews %s", $trans->renewal_ok, $patron_id, $item_id);
 
-#		if ($no_block eq 'Y') {
-#			$item->{due_date} = $nb_due_date;
-#		} else {
-#			$item->{due_date} = time + (14*24*60*60); # two weeks
-#		}
-#		if ($item_props) {
-#			$item->{sip_item_properties} = $item_props;
-#		}
-#		$trans->ok(1);
-#		return $trans;
+#		$item->{due_date} = $nb_due_date if $no_block eq 'Y';
+#		$item->{sip_item_properties} = $item_props if $item_props;
     }
 
     return $trans;
@@ -442,11 +439,9 @@ sub renew_all {
 
     $trans->patron($patron = new ILS::Patron $patron_id);
     if (defined $patron) {
-	syslog("LOG_DEBUG", "ILS::renew_all: patron '%s': renew_ok: %s",
-	       $patron->name, $patron->renew_ok);
+        syslog("LOG_DEBUG", "ILS::renew_all: patron '%s': renew_ok: %s", $patron->name, $patron->renew_ok);
     } else {
-	syslog("LOG_DEBUG", "ILS::renew_all: Invalid patron id: '%s'",
-	       $patron_id);
+        syslog("LOG_DEBUG", "ILS::renew_all: Invalid patron id: '%s'", $patron_id);
     }
 
     if (!defined($patron)) {
