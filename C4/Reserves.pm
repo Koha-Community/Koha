@@ -559,6 +559,7 @@ sub GetReservesForBranch {
 =item CheckReserves
 
   ($status, $reserve) = &CheckReserves($itemnumber);
+  ($status, $reserve) = &CheckReserves(undef, $barcode);
 
 Find a book in the reserves.
 
@@ -586,65 +587,50 @@ sub CheckReserves {
     my ( $item, $barcode ) = @_;
     my $dbh = C4::Context->dbh;
     my $sth;
+    my $select = "
+    SELECT items.biblionumber,
+           items.biblioitemnumber,
+           itemtypes.notforloan,
+           items.notforloan AS itemnotforloan,
+           items.itemnumber
+    FROM   items
+    LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
+    LEFT JOIN itemtypes   ON biblioitems.itemtype   = itemtypes.itemtype
+    ";
+
     if ($item) {
-        my $qitem = $dbh->quote($item);
-        # Look up the item by itemnumber
-        my $query = "
-            SELECT items.biblionumber, items.biblioitemnumber, itemtypes.notforloan, items.notforloan AS itemnotforloan
-            FROM   items
-            LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
-            LEFT JOIN itemtypes ON biblioitems.itemtype = itemtypes.itemtype
-            WHERE  itemnumber=$qitem
-        ";
-        $sth = $dbh->prepare($query);
+        $sth = $dbh->prepare("$select WHERE itemnumber = ?");
+        $sth->execute($item);
     }
     else {
-        my $qbc = $dbh->quote($barcode);
-        # Look up the item by barcode
-        my $query = "
-            SELECT items.biblionumber, items.biblioitemnumber, itemtypes.notforloan, items.notforloan AS itemnotforloan
-            FROM   items
-            LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
-            LEFT JOIN itemtypes ON biblioitems.itemtype = itemtypes.itemtype
-            WHERE  items.biblioitemnumber = biblioitems.biblioitemnumber
-              AND biblioitems.itemtype = itemtypes.itemtype
-              AND barcode=$qbc
-        ";
-        $sth = $dbh->prepare($query);
-
-        # FIXME - This function uses $item later on. Ought to set it here.
+        $sth = $dbh->prepare("$select WHERE    barcode = ?");
+        $sth->execute($barcode);
     }
-    $sth->execute;
-    my ( $biblio, $bibitem, $notforloan_per_itemtype, $notforloan_per_item ) = $sth->fetchrow_array;
-    $sth->finish;
+    # note: we get the itemnumber because we might have started w/ just the barcode.  Now we know for sure we have it.
+    my ( $biblio, $bibitem, $notforloan_per_itemtype, $notforloan_per_item, $itemnumber ) = $sth->fetchrow_array;
+
+    return ( 0, 0 ) unless $itemnumber; # bail if we got nothing.
+
     # if item is not for loan it cannot be reserved either.....
-    #    execption to notforloan is where items.notforloan < 0 :  This indicates the item is holdable. 
+    #    execpt where items.notforloan < 0 :  This indicates the item is holdable. 
     return ( 0, 0 ) if  ( $notforloan_per_item > 0 ) or $notforloan_per_itemtype;
 
-    # get the reserves...
     # Find this item in the reserves
-    my @reserves = _Findgroupreserve( $bibitem, $biblio, $item );
-    my $count    = scalar @reserves;
+    my @reserves = _Findgroupreserve( $bibitem, $biblio, $itemnumber );
 
     # $priority and $highest are used to find the most important item
     # in the list returned by &_Findgroupreserve. (The lower $priority,
     # the more important the item.)
     # $highest is the most important item we've seen so far.
-    my $priority = 10000000;
     my $highest;
-    if ($count) {
+    if (scalar @reserves) {
+        my $priority = 10000000;
         foreach my $res (@reserves) {
-            # FIXME - $item might be undefined or empty: the caller
-            # might be searching by barcode.
-            if ( $res->{'itemnumber'} == $item && $res->{'priority'} == 0) {
-                # Found it
-                return ( "Waiting", $res );
-            }
-            else {
-                # See if this item is more important than what we've got
-                # so far.
-                if ( $res->{'priority'} != 0 && $res->{'priority'} < $priority )
-                {
+            if ( $res->{'itemnumber'} == $itemnumber && $res->{'priority'} == 0) {
+                return ( "Waiting", $res ); # Found it
+            } else {
+                # See if this item is more important than what we've got so far
+                if ( $res->{'priority'} && $res->{'priority'} < $priority ) {
                     $priority = $res->{'priority'};
                     $highest  = $res;
                 }
@@ -652,10 +638,9 @@ sub CheckReserves {
         }
     }
 
-    # If we get this far, then no exact match was found. Print the
-    # most important item on the list. I think this tells us who's
-    # next in line to get this book.
-    if ($highest) {    # FIXME - $highest might be undefined
+    # If we get this far, then no exact match was found.
+    # We return the most important (i.e. next) reservation.
+    if ($highest) {
         $highest->{'itemnumber'} = $item;
         return ( "Reserved", $highest );
     }

@@ -7,7 +7,7 @@ package ILS::Transaction::Checkin;
 use warnings;
 use strict;
 
-use POSIX qw(strftime);
+# use POSIX qw(strftime);
 
 use ILS;
 use ILS::Transaction;
@@ -31,7 +31,7 @@ my %fields = (
 
 sub new {
     my $class = shift;
-    my $self = $class->SUPER::new();
+    my $self = $class->SUPER::new();                # start with an ILS::Transaction object
 
     foreach (keys %fields) {
         $self->{_permitted}->{$_} = $fields{$_};    # overlaying _permitted
@@ -59,7 +59,7 @@ sub do_checkin {
             $self->alert_type('99');
         }
     }
-    defined $self->alert_type and $self->alert(1);  # alert_type could be "00"
+    $self->alert(1) if defined $self->alert_type;  # alert_type could be "00"
     $self->ok($return);
 }
 
@@ -69,7 +69,7 @@ sub resensitize {
 		warn "no item found in object to resensitize";
 		return;
 	}
-	return !$self->{item}->magnetic;
+	return !$self->{item}->magnetic_media;
 }
 
 sub patron_id {
@@ -78,7 +78,7 @@ sub patron_id {
 		warn "no patron found in object";
 		return;
 	}
-	return !$self->{patron}->id;
+	return $self->{patron}->id;
 }
 
 1;

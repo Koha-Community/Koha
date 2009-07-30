@@ -11,30 +11,30 @@ ILS::Item - Portable Item status object class for SIP
 	my $item = new ILS::Item $item_id;
 
 	# Basic object access methods
-	$item_id = $item->id;
-	$title = $item->title_id;
-	$media_type = $item->sip_media_type;
-	$bool = $item->magnetic;
-	$locn = $item->permanent_location;
-	$locn = $item->current_location;
-	$props = $item->sip_item_props;
-	$owner = $item->owner;
-	$str = $item->sip_circulation_status;
-	$bool = $item->available;
-	@hold_queue = $item->hold_queue;
-	$pos = $item->hold_queue_position($patron_id);
-	$due = $item->due_date;
-	$pickup = $item->hold_pickup_date;
-	$recall = $item->recall_date;
-	$fee = $item->fee;
-	$currency = $item->fee_currency;
-	$type = $item->sip_fee_type;
-	$mark = $item->sip_security_marker;
-	$msg = $item->screen_msg;
-	$msg = $item->print_line;
+    $item_id    = $item->id;
+    $title      = $item->title_id;
+    $media_type = $item->sip_media_type;
+    $bool       = $item->magnetic_media;
+    $locn       = $item->permanent_location;
+    $locn       = $item->current_location;
+    $props      = $item->sip_item_props;
+    $owner      = $item->owner;
+    $str        = $item->sip_circulation_status;
+    $bool       = $item->available;
+    @hold_queue = $item->hold_queue;
+    $pos        = $item->hold_queue_position($patron_id);
+    $due        = $item->due_date;
+    $pickup     = $item->hold_pickup_date;
+    $recall     = $item->recall_date;
+    $fee        = $item->fee;
+    $currency   = $item->fee_currency;
+    $type       = $item->sip_fee_type;
+    $mark       = $item->sip_security_marker;
+    $msg        = $item->screen_msg;
+    $msg        = $item->print_line;
 
-	# Operations on items
-	$status = $item->status_update($item_props);
+    # Operations on items
+    $status = $item->status_update($item_props);
 
 =head1 DESCRIPTION
 
@@ -93,9 +93,9 @@ behavior at all; it merely passes it through to the self-service
 terminal.  In particular, it does not set indicators related to
 whether an item is magnetic, or whether it should be
 desensitized, based on this return type.  The
-C<$item-E<gt>magnetic> method will be used for that purpose.
+C<$item-E<gt>magnetic_media> method will be used for that purpose.
 
-=item C<magnetic>
+=item C<magnetic_media>
 
 Is the item some form of magnetic media (eg, a video or a book
 with an accompanying floppy)?  This method will not be called

@@ -1,8 +1,7 @@
 #
 # ILS::Item.pm
 # 
-# A Class for hiding the ILS's concept of the item from the OpenSIP
-# system
+# A Class for hiding the ILS's concept of the item from OpenSIP
 #
 
 package ILS::Item;
@@ -11,6 +10,7 @@ use strict;
 use warnings;
 
 use Sys::Syslog qw(syslog);
+use Carp;
 
 use ILS::Transaction;
 
@@ -25,7 +25,7 @@ use C4::Reserves;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
 BEGIN {
-	$VERSION = 2.10;
+	$VERSION = 2.11;
 	require Exporter;
 	@ISA = qw(Exporter);
 	@EXPORT_OK = qw();
@@ -82,22 +82,27 @@ sub new {
 	my $type = ref($class) || $class;
 	my $self;
     my $itemnumber = GetItemnumberFromBarcode($item_id);
-	my $item = GetBiblioFromItemNumber($itemnumber);
+	my $item = GetBiblioFromItemNumber($itemnumber);    # actually biblio.*, biblioitems.* AND items.*  (overkill)
 	if (! $item) {
 		syslog("LOG_DEBUG", "new ILS::Item('%s'): not found", $item_id);
 		warn "new ILS::Item($item_id) : No item '$item_id'.";
 		return undef;
 	}
-    $item->{itemnumber} = $itemnumber;
-    $item->{'id'} = $item->{'barcode'};
+    $item->{  'itemnumber'   } = $itemnumber;
+    $item->{      'id'       } = $item->{barcode};     # to SIP, the barcode IS the id.
+    $item->{permanent_location}= $item->{homebranch};
+    $item->{'collection_code'} = $item->{ccode};
+    $item->{  'call_number'  } = $item->{itemcallnumber};
+    # $item->{'destination_loc'}  =  ?
+
 	# check if its on issue and if so get the borrower
 	my $issue = GetItemIssue($item->{'itemnumber'});
 	my $borrower = GetMember($issue->{'borrowernumber'},'borrowernumber');
 	$item->{patron} = $borrower->{'cardnumber'};
-	my @reserves = (@{ GetReservesFromBiblionumber($item->{biblionumber}) });
-	$item->{hold_queue} = [ sort priority_sort @reserves ];
+    my ($whatever, $arrayref) = GetReservesFromBiblionumber($item->{biblionumber});
+	$item->{hold_queue} = [ sort priority_sort @$arrayref ];
 	$item->{hold_shelf}    = [( grep {   defined $_->{found}  and $_->{found} eq 'W' } @{$item->{hold_queue}} )];
-	$item->{pending_queue} = [( grep {(! defined $_->{found}) or ($_->{found} ne 'W')} @{$item->{hold_queue}} )];
+	$item->{pending_queue} = [( grep {(! defined $_->{found}) or  $_->{found} ne 'W' } @{$item->{hold_queue}} )];
 	$self = $item;
 	bless $self, $type;
 
@@ -107,17 +112,93 @@ sub new {
     return $self;
 }
 
-sub magnetic {
-    my $self = shift;
-    return $self->{magnetic_media};
+# 0 means read-only
+# 1 means read/write
+
+my %fields = (
+    id                  => 0,
+    sip_media_type      => 0,
+    sip_item_properties => 0,
+    magnetic_media      => 0,
+    permanent_location  => 0,
+    current_location    => 0,
+    print_line          => 1,
+    screen_msg          => 1,
+    itemnumber          => 0,
+    biblionumber        => 0,
+    barcode             => 0,
+    onloan              => 0,
+    collection_code     => 0,
+    call_number         => 0,
+    enumchron           => 0,
+    location            => 0,
+    author              => 0,
+    title               => 0,
+);
+
+sub next_hold {
+    my $self = shift or return;
+    foreach (@$self->{hold_shelf}) {    # If this item was taken from the hold shelf, then that reserve still governs
+        next unless ($_->{itemnumber} and $_->{itemnumber} == $self->{itemnumber});
+        return $_;
+    }
+    if (scalar @$self->{pending_queue}) {    # Otherwise, if there is at least one hold, the first (best priority) gets it
+        return  $self->{pending_queue}->[0];
+    }
+    return;
 }
-sub sip_media_type {
-    my $self = shift;
-    return $self->{sip_media_type};
+
+sub hold_patron_id {
+    my $self = shift or return;
+    my $hold = $self->next_hold() or return;
+    return $hold->{borrowernumber};
 }
-sub sip_item_properties {
+sub hold_patron_name {
+    my $self = shift or return;
+    # return $self->{hold_patron_name} if $self->{hold_patron_name};    TODO: consider caching
+    my $borrowernumber = (@_ ? shift: $self->hold_patron_id()) or return;
+    my $holder = GetMember($borrowernumber, 'borrowernumber');
+    unless ($holder) {
+        syslog("LOG_ERR", "While checking hold, GetMember failed for borrowernumber '$borrowernumber'");
+        return;
+    }
+    my $email = $holder{email} || '';
+    my $phone = $holder{phone} || '';
+    my $extra = ($email and $phone) ? " ($email, $phone)" :  # both populated, employ comma
+                ($email or  $phone) ? " ($email$phone)"   :  # only 1 populated, we don't care which: no comma
+                "" ;                                         # niether populated, empty string
+    my $name = $holder->{firstname} ? $holder->{firstname} . ' ' : '';
+    $name .= $holder->{surname} . $extra;
+    # $self->{hold_patron_name} = $name;      # TODO: consider caching
+    return $name;
+}
+sub destination_loc {
+    my $self = shift or return;
+    my $hold = $self->next_hold();
+    return ($hold ? $hold->{branchcode}
+}
+
+our $AUTOLOAD;
+
+sub DESTROY { } # keeps AUTOLOAD from catching inherent DESTROY calls
+
+sub AUTOLOAD {
     my $self = shift;
-    return $self->{sip_item_properties};
+    my $class = ref($self) or croak "$self is not an object";
+    my $name = $AUTOLOAD;
+
+    $name =~ s/.*://;
+
+    unless (exists $fields{$name}) {
+		croak "Cannot access '$name' field of class '$class'";
+    }
+
+	if (@_) {
+        $fields{$name} or croak "Field '$name' of class '$class' is READ ONLY.";
+		return $self->{$name} = shift;
+	} else {
+		return $self->{$name};
+	}
 }
 
 sub status_update {     # FIXME: this looks unimplemented
@@ -128,21 +209,9 @@ sub status_update {     # FIXME: this looks unimplemented
     return $status;
 }
     
-sub id {
-    my $self = shift;
-    return $self->{id};
-}
 sub title_id {
     my $self = shift;
     return $self->{title};
-}
-sub permanent_location {
-    my $self = shift;
-    return $self->{permanent_location} || '';
-}
-sub current_location {
-    my $self = shift;
-    return $self->{current_location} || '';
 }
 
 sub sip_circulation_status {
@@ -173,7 +242,7 @@ sub fee_currency {
 }
 sub owner {
     my $self = shift;
-    return 'CPL';	# FIXME: UWOLS was hardcoded 
+    return $self->{homebranch};
 }
 sub hold_queue {
     my $self = shift;
@@ -216,14 +285,6 @@ sub recall_date {
 sub hold_pickup_date {
     my $self = shift;
     return $self->{hold_pickup_date} || 0;
-}
-sub screen_msg {
-    my $self = shift;
-    return $self->{screen_msg} || '';
-}
-sub print_line {
-	my $self = shift;
-	return $self->{print_line} || '';
 }
 
 # This is a partial check of "availability".  It is not supposed to check everything here.

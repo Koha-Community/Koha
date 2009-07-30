@@ -531,7 +531,7 @@ sub handle_checkout {
 	$resp = CHECKOUT_RESP . '1';
 	$resp .= sipbool($status->renew_ok);
 	if ($ils->supports('magnetic media')) {
-	    $resp .= sipbool($item->magnetic);
+	    $resp .= sipbool($item->magnetic_media);
 	} else {
 	    $resp .= 'U';
 	}
@@ -634,10 +634,9 @@ sub handle_checkin {
     $resp .= $status->ok ? '1' : '0';
     $resp .= $status->resensitize ? 'Y' : 'N';
     if ($item && $ils->supports('magnetic media')) {
-		$resp .= sipbool($item->magnetic);
+		$resp .= sipbool($item->magnetic_media);
     } else {
-	# The item barcode was invalid or the system doesn't support
-	# the 'magnetic media' indicator
+        # item barcode is invalid or system doesn't support 'magnetic media' indicator
 		$resp .= 'U';
     }
     $resp .= $status->alert ? 'Y' : 'N';
@@ -656,17 +655,17 @@ sub handle_checkin {
             $resp .= add_field(FID_PATRON_ID, $patron->id);
         }
         if ($item) {
-            $resp .= maybe_add(FID_MEDIA_TYPE,        $item->sip_media_type     );
-            $resp .= maybe_add(FID_ITEM_PROPS,        $item->sip_item_properties);
-            # $resp .= maybe_add(FID_COLLECTION_CODE, $item->collection_code    );
-            # $resp .= maybe_add(FID_CALL_NUMBER,     $item->call_number        );
-            # $resp .= maybe_add(FID_DESTINATION,     $item->destination_loc    );
-            # $resp .= maybe_add(FID_ALERT_TYPE,      $item->alert_type         );
-            # $resp .= maybe_add(FID_PATRON_ID,       $item->hold_patron_id     );
-            # $resp .= maybe_add(FID_PATRON_NAME,     $item->hold_patron_name   );
+            $resp .= maybe_add(FID_MEDIA_TYPE,           $item->sip_media_type     );
+            $resp .= maybe_add(FID_ITEM_PROPS,           $item->sip_item_properties);
+            $resp .= maybe_add(FID_COLLECTION_CODE,      $item->collection_code    );
+            $resp .= maybe_add(FID_CALL_NUMBER,          $item->call_number        );
+            $resp .= maybe_add(FID_DESTINATION_LOCATION, $item->destination_loc    );
+            $resp .= maybe_add(FID_HOLD_PATRON_ID,       $item->hold_patron_id     );
+            $resp .= maybe_add(FID_HOLD_PATRON_NAME,     $item->hold_patron_name   );
         }
     }
 
+    $resp .= maybe_add(FID_ALERT_TYPE, $status->alert_type) if $status->alert;
     $resp .= maybe_add(FID_SCREEN_MSG, $status->screen_msg);
     $resp .= maybe_add(FID_PRINT_LINE, $status->print_line);
 
@@ -1328,7 +1327,7 @@ sub handle_renew {
 	$resp .= '1';
 	$resp .= $status->renewal_ok ? 'Y' : 'N';
 	if ($ils->supports('magnetic media')) {
-	    $resp .= sipbool($item->magnetic);
+	    $resp .= sipbool($item->magnetic_media);
 	} else {
 	    $resp .= 'U';
 	}
