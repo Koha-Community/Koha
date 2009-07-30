@@ -68,6 +68,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $biblionumber = $query->param('biblionumber');
 
+$template->param( 'AllowOnShelfHolds' => C4::Context->preference('AllowOnShelfHolds') );
+$template->param( 'ItemsIssued' => CountItemsIssued( $biblionumber ) );
+
 my $marcflavour      = C4::Context->preference("marcflavour");
 my $record = GetMarcBiblio($biblionumber);
 
