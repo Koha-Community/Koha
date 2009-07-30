@@ -460,7 +460,8 @@ sub html_table {
             elsif ($db_column =~ m/^_((.*)_(.*$))/) {   # this a special case
                 my $table_name = get_table_names($2);
                 my $record_set = _SELECT($1, @$table_name[0], $2 . "_id = " . $db_row->{$2 . "_id"});
-                $db_row->{$db_column} = $$record_set[0]{$1};
+                $$fields[$col_index] = {select_field => 0, field_name => ($db_column . "_tbl"), field_value => $$record_set[0]{$1}};
+                $col_index++;
                 next POPULATE_ROW;
             }
             elsif ($db_column eq 'select' ) {
