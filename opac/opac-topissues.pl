@@ -56,27 +56,46 @@ my $branch = $input->param('branch');
 my $itemtype = $input->param('itemtype');
 my $timeLimit = $input->param('timeLimit') || 3;
 my $whereclause;
-$whereclause .= 'items.homebranch='.$dbh->quote($branch)." AND " if ($branch);
-$whereclause .= 'biblioitems.itemtype='.$dbh->quote($itemtype)." AND " if $itemtype;
-$whereclause .= ' TO_DAYS(NOW()) - TO_DAYS(biblio.datecreated) <= '.($timeLimit*30).' AND ' if $timeLimit < 999;
+$whereclause .= ' AND items.homebranch='.$dbh->quote($branch) if ($branch);
+$whereclause .= ' AND TO_DAYS(NOW()) - TO_DAYS(biblio.datecreated) <= '.($timeLimit*30) if $timeLimit < 999;
 $whereclause =~ s/ AND $//;
-$whereclause = " WHERE ".$whereclause if $whereclause;
-
-my $query = "SELECT datecreated, biblio.biblionumber, title, 
-                author, sum( items.issues ) AS tot, biblioitems.itemtype,
-                biblioitems.publishercode,biblioitems.publicationyear,
-                itemtypes.description
-                FROM biblio
-                LEFT JOIN items USING (biblionumber)
-                LEFT JOIN biblioitems USING (biblionumber)
-                LEFT JOIN itemtypes ON itemtypes.itemtype = biblioitems.itemtype
-                $whereclause
-                GROUP BY biblio.biblionumber
-                HAVING tot >0
-                ORDER BY tot DESC
-                LIMIT $limit
-                ";
-
+my $query;
+if(C4::Context->preference('AdvancedSearchTypes') eq 'ccode'){
+    $whereclause .= ' AND authorised_values.authorised_value='.$dbh->quote($itemtype) if $itemtype;
+    $query = "SELECT datecreated, biblio.biblionumber, title, 
+                    author, sum( items.issues ) AS tot, biblioitems.itemtype,
+                    biblioitems.publishercode,biblioitems.publicationyear,
+                    authorised_values.lib as description
+                    FROM biblio
+                    LEFT JOIN items USING (biblionumber)
+                    LEFT JOIN biblioitems USING (biblionumber)
+                    LEFT JOIN authorised_values ON items.ccode = authorised_values.authorised_value
+                    WHERE 1
+                    $whereclause
+                    AND authorised_values.category = 'ccode' 
+                    GROUP BY biblio.biblionumber
+                    HAVING tot >0
+                    ORDER BY tot DESC
+                    LIMIT $limit
+                    ";
+}else{
+    $whereclause .= ' AND biblioitems.itemtype='.$dbh->quote($itemtype) if $itemtype;
+    $query = "SELECT datecreated, biblio.biblionumber, title, 
+                    author, sum( items.issues ) AS tot, biblioitems.itemtype,
+                    biblioitems.publishercode,biblioitems.publicationyear,
+                    itemtypes.description
+                    FROM biblio
+                    LEFT JOIN items USING (biblionumber)
+                    LEFT JOIN biblioitems USING (biblionumber)
+                    LEFT JOIN itemtypes ON itemtypes.itemtype = biblioitems.itemtype
+                    WHERE 1
+                    $whereclause
+                    GROUP BY biblio.biblionumber
+                    HAVING tot >0
+                    ORDER BY tot DESC
+                    LIMIT $limit
+                    ";
+}
 my $sth = $dbh->prepare($query);
 $sth->execute();
 my @results;
