@@ -57,7 +57,7 @@ my $limit = $input->param('limit') || 10;
 my $branch = $input->param('branch') || '';
 my $itemtype = $input->param('itemtype') || '';
 my $timeLimit = $input->param('timeLimit') || 3;
-my $whereclause;
+my $whereclause='';
 $whereclause .= ' AND items.homebranch='.$dbh->quote($branch) if ($branch);
 $whereclause .= ' AND TO_DAYS(NOW()) - TO_DAYS(biblio.datecreated) <= '.($timeLimit*30) if $timeLimit < 999;
 $whereclause =~ s/ AND $//;
