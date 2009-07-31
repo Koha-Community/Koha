@@ -43,6 +43,11 @@ This plug-in deals with unimarc field 700-4 (
 
 =cut
 
+sub plugin_parameters {
+my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
+return "";
+}
+
 sub plugin_javascript {
 my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
 my $function_name= $field_number;
