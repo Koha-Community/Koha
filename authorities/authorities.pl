@@ -202,7 +202,10 @@ sub create_input {
         }
         my $plugin = $cgidir . "/" . $tagslib->{$tag}->{$subfield}->{'value_builder'};
         do $plugin || die "Plugin Failed: ".$plugin;
-        my $extended_param = plugin_parameters( $dbh, $rec, $tagslib, $subfield_data{id}, $tabloop );
+        my $extended_param;
+        eval{
+            $extended_param = plugin_parameters( $dbh, $rec, $tagslib, $subfield_data{id}, $tabloop );
+        };
         my ( $function_name, $javascript ) = plugin_javascript( $dbh, $rec, $tagslib, $subfield_data{id}, $tabloop );
 #         my ( $function_name, $javascript,$extended_param );
         
