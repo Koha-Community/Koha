@@ -75,3 +75,5 @@ KOHA_CRON_PATH = /home/liblime/kohaclone/misc/cronjobs
 # Obviously, one needs logrotate(8) to do this
 # 20 1 * * *  /usr/sbin/logrotate -s /home/liblime/kohaclone/var/run/zebradb/logstatus /home/liblime/kohaclone/etc/logrotate.conf
 
+# clean up databases nightly.  Be sure not to run this with --sessions during a time when the system is in use!
+16 1 * * * $KOHA_CRON_PATH/cleanup_database.pl --sessions --zebraqueue 10
