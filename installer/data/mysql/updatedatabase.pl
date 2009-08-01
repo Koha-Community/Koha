@@ -2467,13 +2467,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (added FilterBeforeOverdueReport syspref and new index on authorised_values)\n";
 }
 
-=item
-
-    Deal with branches
-
-=cut
-
-my $DBversion = "3.01.00.038";
+$DBversion = "3.01.00.038";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     # update branches table
     # 
@@ -2482,7 +2476,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE branches ADD `branchcountry` text AFTER `branchcity`");
     $dbh->do("ALTER TABLE branches ADD `branchurl` mediumtext AFTER `branchemail`");
     $dbh->do("ALTER TABLE branches ADD `branchnotes` mediumtext AFTER `branchprinter`");
-    print "Upgrade to $DBversion done (branches)\n";
+    print "Upgrade to $DBversion done (add ZIP, city, country, URL, and notes column to branches)\n";
     SetVersion ($DBversion);
 }
 
