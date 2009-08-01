@@ -1,7 +1,6 @@
 #!/usr/bin/perl
 
 #script to administer Authorities without biblio
-# This software is placed under the gnu General Public License, v2 (http://www.gnu.org/licenses/gpl.html)
 
 # Copyright 2009 BibLibre
 # written 2009-05-04 by paul dot poulain at biblibre.com
@@ -22,11 +21,11 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
 
 use C4::Context;
 use C4::AuthoritiesMarc;
 use Getopt::Long;
-use warnings;
 
 my ($test,@authtypes);
 my $want_help = 0;
