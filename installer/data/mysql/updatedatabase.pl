@@ -2535,6 +2535,22 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (added a preference to hide the patrons name in the staff catalog)";
 }
 
+=item
+
+    Deal with borrowers
+
+=cut
+
+$DBversion = "3.01.00.039";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    # update borrowers table
+    # 
+    $dbh->do("ALTER TABLE borrowers ADD `country` text AFTER zipcode");
+    $dbh->do("ALTER TABLE borrowers ADD `B_country` text AFTER B_zipcode");
+    print "Upgrade to $DBversion done (branches)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
