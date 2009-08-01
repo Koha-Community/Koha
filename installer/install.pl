@@ -1,5 +1,7 @@
-#!/usr/bin/perl -w # please develop with -w
+#!/usr/bin/perl
 
+use strict;
+use warnings;
 use diagnostics;
 
 # use Install;
@@ -9,9 +11,8 @@ use C4::Output;
 use C4::Languages qw(getAllLanguages getTranslatedLanguages);
 use C4::Installer;
 
-use strict;    # please develop with the strict pragma
-
 use CGI;
+use IPC::Cmd;
 
 my $query = new CGI;
 my $step  = $query->param('step');
@@ -391,16 +392,18 @@ elsif ( $step && $step == 3 ) {
         # Not 1st install, the only sub-step : update database
         #
         #Do updatedatabase And report
-        my $execstring =
-          C4::Context->config("intranetdir") . "/installer/data/$info{dbms}/updatedatabase.pl";
-        undef $/;
-        my $string = qx($execstring 2>&1 1>/dev/null);				# added '1>/dev/null' to return only stderr in $string. Needs testing here. -fbcit
-        if ($string) {
-            $string =~ s/\n|\r/<br \/>/g;
-            $string =~
-                s/(DBD::mysql.*? failed: .*? line [0-9]*.|=================.*?====================)/<font color=red>$1<\/font>/g;
-            $template->param( "updatereport" => $string );
+        my $cmd = C4::Context->config("intranetdir") . "/installer/data/$info{dbms}/updatedatabase.pl";
+        my ($success, $error_code, $full_buf, $stdout_buf, $stderr_buf) = IPC::Cmd::run(command => $cmd, verbose => 0);
+
+        if (@$stdout_buf) {
+            $template->param(update_report => [ map { { line => $_ } } split(/\n/, join('', @$stdout_buf)) ] );
+            $template->param(has_update_succeeds => 1);
         }
+        if (@$stderr_buf) {
+            $template->param(update_errors => [ map { { line => $_ } } split(/\n/, join('', @$stderr_buf)) ] );
+            $template->param(has_update_errors => 1);
+        }
+
         $template->param( $op => 1 );
     }
     else {

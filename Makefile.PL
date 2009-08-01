@@ -560,6 +560,7 @@ WriteMakefile(
                             'HTTP::Cookies'                    => 1.39,
                             'HTTP::OAI'                        => 3.20,
                             'HTTP::Request::Common'            => 1.26,
+                            'IPC::Cmd'                         => 0.46,
                             'JSON'                             => 2.07, # Needed by admin/item_circulation_alerts.pl
                             'LWP::Simple'                      => 1.41,
                             'LWP::UserAgent'                   => 2.033,
