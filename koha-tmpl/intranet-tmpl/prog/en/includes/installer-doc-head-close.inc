@@ -65,6 +65,11 @@ td input { font-size: 1.5em; }
         font-style: italic;
 }
 
+.update_error {
+        color: red;
+        font-weight: bold;
+}
+
 </style>
 </head>
 <body>

@@ -90,6 +90,7 @@ HTTP::Cookies
 HTTP::OAI
 HTTP::Request::Common
 HTML::Scrubber
+IPC::Cmd
 JSON
 LWP::Simple
 LWP::UserAgent

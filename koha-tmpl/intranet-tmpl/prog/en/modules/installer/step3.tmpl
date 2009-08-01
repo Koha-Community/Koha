@@ -271,14 +271,25 @@
 
 <!--TMPL_IF Name="updatestructure"-->
   <div><h2 align="center">Updating database structure</h2>
-  <!--TMPL_IF Name="updatereport"-->
-    <p>Update report :</p>
-    <p>
-    <!--TMPL_VAR Name="updatereport"-->
-    </p>
-  <!--TMPL_ELSE-->
+  <!-- TMPL_IF NAME="has_update_succeeds" -->
+  <p>Update report :</p>
+    <ul>
+      <!-- TMPL_LOOP NAME="update_report" -->
+          <li><!-- TMPL_VAR NAME="line" ESCAPE="html" --></li>
+      <!-- /TMPL_LOOP --> 
+    </ul>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME="has_update_errors" -->
+  <p>Update errors :</p>
+    <ul>
+      <!-- TMPL_LOOP NAME="update_errors" -->
+          <li class="update_error"><!-- TMPL_VAR NAME="line" ESCAPE="html" --></li>
+      <!-- /TMPL_LOOP --> 
+    </ul>
+  <!-- /TMPL_IF -->
+ <!-- TMPL_UNLESS NAME="has_update_errors" -->
     <p>Everything went OK, update done.</p>
-  <!--/TMPL_IF-->
+  <!-- /TMPL_UNLESS -->
 <a href="install.pl?step=3&amp;op=finished" class="button">Continue to log in to Koha</a>
   </div>
 <!--/TMPL_IF-->
