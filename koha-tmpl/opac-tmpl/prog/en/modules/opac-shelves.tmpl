@@ -338,6 +338,7 @@ $(function() {
         
                   <!-- TMPL_IF NAME="loggedinusername" -->
                     <a class="newshelf" href="/cgi-bin/koha/opac-shelves.pl?shelves=1">New List</a>
+                  <!-- TMPL_IF NAME="showprivateshelves" -->
                     <!-- TMPL_IF NAME="shelveslooppriv" -->
                       <!-- TMPL_VAR name='pagination_bar'-->
                       <table>
@@ -386,10 +387,11 @@ $(function() {
                             </td>
                           </tr>
                         <!-- /TMPL_LOOP -->
-                    <!-- TMPL_ELSE -->
-                          <tr><td colspan="4">No Private Lists.</td></tr>
-                    <!-- /TMPL_IF --><!-- /shelveslooppriv -->
                       </table>
+                    <!-- TMPL_ELSE -->
+                         No Private Lists.
+                    <!-- /TMPL_IF --><!-- /shelveslooppriv -->
+                  <!-- /TMPL_IF --><! -- /showprivateshelves -->
                   <!-- TMPL_ELSE --><!-- /loggedinusername -->
                       <div><a href="/cgi-bin/koha/opac-user.pl">Log in</a> to create new Lists.</div>
                   <!-- /TMPL_IF --><!-- /loggedinusername -->
