@@ -23,6 +23,7 @@
     <!-- TMPL_IF NAME="city" -->
             <!-- TMPL_VAR NAME="city" -->
 	    <!-- TMPL_VAR NAME="zipcode" -->
+	    <!-- TMPL_IF NAME="country" -->, <!-- TMPL_VAR NAME="country" --><!-- /TMPL_IF -->
     <!-- TMPL_ELSE -->
         <span class="empty">No city stored.</span>
     <!-- /TMPL_IF --></li>

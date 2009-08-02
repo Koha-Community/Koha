@@ -139,7 +139,7 @@ my $catcode;
 if ( $category_type eq 'C') {
 	if ($data->{'guarantorid'} ne '0' ) {
     	my $data2 = GetMember( $data->{'guarantorid'} ,'borrowernumber');
-    	foreach (qw(address city B_address B_city phone mobile zipcode)) {
+    	foreach (qw(address city B_address B_city phone mobile zipcode country B_country)) {
     	    $data->{$_} = $data2->{$_};
     	}
    }

@@ -109,6 +109,7 @@ for (my $i=($startfrom-1)*$resultsperpage; $i < $to; $i++){
 	address2 => $results->[$i]{'address2'},
     city => $results->[$i]{'city'},
 	zipcode => $results->[$i]{'zipcode'},
+	country => $results->[$i]{'country'},
     branchcode => $results->[$i]{'branchcode'},
     overdues => $od,
     issues => $issue,

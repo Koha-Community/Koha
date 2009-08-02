@@ -177,6 +177,7 @@ $template->param(
 		address2 => $bor->{'address2'},
 		city => $bor->{'city'},
 		zipcode => $bor->{'zipcode'},
+		country => $bor->{'country'},
 		phone => $bor->{'phone'},
 		email => $bor->{'email'},
 		branchcode => $bor->{'branchcode'},

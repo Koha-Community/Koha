@@ -41,7 +41,7 @@ if ($auth_status ne "ok") {
 }
 
 my $dbh = C4::Context->dbh;
-my $sql = qq(SELECT surname, firstname, cardnumber, address, city, zipcode 
+my $sql = qq(SELECT surname, firstname, cardnumber, address, city, zipcode, country 
              FROM borrowers 
              WHERE surname LIKE ?
              OR firstname LIKE ?
@@ -55,6 +55,7 @@ while ( my $rec = $sth->fetchrow_hashref ) {
           $rec->{cardnumber} . "\t" .
           $rec->{address} . "\t" .
           $rec->{city} . "\t" .
-          $rec->{zip} .
+          $rec->{zip} . "\t" .
+          $rec->{country} .
           "\n";
 }

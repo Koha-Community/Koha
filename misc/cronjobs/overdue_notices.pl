@@ -290,7 +290,7 @@ if ( defined $csvfilename ) {
     } else {
         open $csv_fh, ">", $csvfilename or die "unable to open $csvfilename: $!";
     }
-    if ( $csv->combine(qw(name surname address1 address2 zipcode city email itemcount itemsinfo)) ) {
+    if ( $csv->combine(qw(name surname address1 address2 zipcode city country email itemcount itemsinfo)) ) {
         print $csv_fh $csv->string, "\n";
     } else {
         $verbose and warn 'combine failed on argument: ' . $csv->error_input;
@@ -340,7 +340,7 @@ END_SQL
             # <date> <itemcount> <firstname> <lastname> <address1> <address2> <address3> <city> <postcode>
 
             my $borrower_sql = <<'END_SQL';
-SELECT COUNT(*), issues.borrowernumber, firstname, surname, address, address2, city, zipcode, email, MIN(date_due) as longest_issue
+SELECT COUNT(*), issues.borrowernumber, firstname, surname, address, address2, city, zipcode, country, email, MIN(date_due) as longest_issue
 FROM   issues,borrowers,categories
 WHERE  issues.borrowernumber=borrowers.borrowernumber
 AND    borrowers.categorycode=categories.categorycode

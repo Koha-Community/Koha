@@ -83,6 +83,7 @@ if ($member ne ''){
 		address => $results->[$i]{'address'},
 		city => $results->[$i]{'city'},
 		zipcode => $results->[$i]{'zipcode'},
+		country => $results->[$i]{'country'},
 		branchcode => $results->[$i]{'branchcode'},
 		guarantorinfo =>$guarantorinfo,
 		#op

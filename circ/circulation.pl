@@ -667,6 +667,7 @@ $template->param(
     borrowernotes     => $borrower->{'borrowernotes'},
     city              => $borrower->{'city'},
     zipcode	          => $borrower->{'zipcode'},
+    country	          => $borrower->{'country'},
     phone             => $borrower->{'phone'} || $borrower->{'mobile'},
     cardnumber        => $borrower->{'cardnumber'},
     amountold         => $amountold,

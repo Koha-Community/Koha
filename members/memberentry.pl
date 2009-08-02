@@ -210,18 +210,19 @@ if ( defined($guarantorid) and
             $newdata{'contactname'}     = $guarantordata->{'surname'};
             $newdata{'contacttitle'}    = $guarantordata->{'title'};
 	        foreach (qw(streetnumber address streettype address2
-                        zipcode city phone phonepro mobile fax email emailpro branchcode)) {
+                        zipcode country city phone phonepro mobile fax email emailpro branchcode)) {
 		        $newdata{$_} = $guarantordata->{$_};
 	        }
         }
     }
 }
 
-###############test to take the right zipcode and city name ##############
+###############test to take the right zipcode, country and city name ##############
 if (!defined($guarantorid) or $guarantorid eq '' or $guarantorid eq '0') {
     # set only if parameter was passed from the form
     $newdata{'city'}    = $input->param('city')    if defined($input->param('city'));
     $newdata{'zipcode'} = $input->param('zipcode') if defined($input->param('zipcode'));
+    $newdata{'country'} = $input->param('counry') if defined($input->param('country'));
 }
 
 #builds default userid

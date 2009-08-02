@@ -81,6 +81,7 @@ if ($add){
 		    address2 => $data->{'address2'},
 		    city => $data->{'city'},
 		    zipcode => $data->{'zipcode'},
+		    country => $data->{'country'},
 		    phone => $data->{'phone'},
 		    email => $data->{'email'},
 		    branchcode => $data->{'branchcode'},
