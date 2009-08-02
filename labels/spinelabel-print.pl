@@ -41,6 +41,7 @@ my $data;
 while ( my ($key, $value ) = each(%$item) ) {
   $data->{$key} .= "<span class='field' id='$key'>";
 
+  $value = '' unless defined $value;
   my @characters = split(//, $value );
   my $charnum = 1;
   my $wordnum = 1;
