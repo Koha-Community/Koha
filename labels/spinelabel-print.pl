@@ -5,7 +5,6 @@ use strict;
 use CGI;
 use C4::Auth;
 use C4::Output;
-use HTML::Template::Pro;
 
 my $scheme = C4::Context->preference('SpineLabelFormat');
 my $query = new CGI;
