@@ -655,12 +655,13 @@ sub GetPendingOrders {
     my $dbh = C4::Context->dbh;
     my $strsth = "
         SELECT    ".($grouped?"count(*),":"")."aqbasket.basketno,
-                    surname,firstname,aqorders.*,biblio.*,
+                    surname,firstname,aqorders.*,biblio.*,biblioitems.isbn,
                     aqbasket.closedate, aqbasket.creationdate, aqbasket.basketname
         FROM      aqorders
         LEFT JOIN aqbasket ON aqbasket.basketno=aqorders.basketno
         LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber
         LEFT JOIN biblio ON biblio.biblionumber=aqorders.biblionumber
+        LEFT JOIN biblioitems ON biblioitems.biblionumber=biblio.biblionumber
         WHERE booksellerid=?
             AND (quantity > quantityreceived OR quantityreceived is NULL)
             AND datecancellationprinted IS NULL

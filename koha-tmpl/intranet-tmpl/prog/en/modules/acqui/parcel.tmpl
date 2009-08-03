@@ -1,8 +1,114 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Acquisitions &rsaquo; <!-- TMPL_IF name="date" -->
             Receipt Summary for <!-- TMPL_VAR NAME="name" --> <!--TMPL_IF Name="invoice"-->Invoice <!-- TMPL_VAR NAME="invoice" --><!--/TMPL_IF --> on <!-- TMPL_VAR NAME="formatteddatereceived" --><!-- TMPL_ELSE -->Receive Orders from <!-- TMPL_VAR NAME="name" --><!-- /TMPL_IF --></title>
-<!-- TMPL_INCLUDE NAME="greybox.inc" -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="greybox.inc" -->
+<script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+
+    var rowsToCollapse = 5;
+
+    $(document).ready(function(){
+
+	rowCountPending  = $("table#pendingt tbody.filterclass tr").length;
+	rowCountReceived = $("table#receivedt tbody.filterclass tr").length;
+	if (rowCountPending  > rowsToCollapse) { pendingCollapse(); }
+	if (rowCountReceived > rowsToCollapse) { receivedCollapse(); }
+    });
+
+     // Case-insensitive version of jquery's contains function
+     jQuery.extend(jQuery.expr[':'], { 
+	    icontains : "jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase())>=0" 
+     });
+
+     // Contains exactly function
+     jQuery.extend(jQuery.expr[':'], {
+          containsExactly: "$(a).text() == m[3]"
+     });
+
+
+    // Collapse pending items table
+    function pendingCollapse() {
+	$("#pendingcollapserow").remove();
+	$("table#pendingt tbody.filterclass tr:gt(" + rowsToCollapse + ")").hide();
+	$("#basketfilter").focus();
+	$("<tr><td id=\"pendingcollapserow\" colspan=\"7\">Only the first " + rowsToCollapse + " items are displayed. <a href=\"javascript:pendingExpand();\">Click here to show all " + rowCountPending + " items<\/a>.<\/td><\/tr>").appendTo("table#pendingt");
+
+    }
+
+    // Expend pending items table
+    function pendingExpand() {
+	$("#pendingcollapserow").remove();
+	$("table#pendingt tr").show();
+	$("<tr><td id=\"pendingcollapserow\" colspan=\"7\">All " + rowCountPending + " items are displayed. <a href=\"javascript:pendingCollapse();\">Click here to show only the first " + rowsToCollapse + " items<\/a>.<\/td><\/tr>").appendTo("table#pendingt");
+    }
+
+    // Collapse already received items table
+    function receivedCollapse() {
+	$("#receivedcollapserow").remove();
+	$("table#receivedt tbody.filterclass tr:gt(" + rowsToCollapse + ")").hide();
+	$("<tr><td id=\"receivedcollapserow\" colspan=\"7\">Only the first " + rowsToCollapse + " items are displayed. <a href=\"javascript:receivedExpand();\">Click here to show all " + rowCountReceived + " items<\/a>.<\/td><\/tr>").appendTo("table#receivedt");
+
+    }
+
+    // Expand already received items table
+    function receivedExpand() {
+	$("#receivedcollapserow").remove();
+	$("table#receivedt tr").show();
+	$("<tr><td id=\"receivedcollapserow\" colspan=\"7\">All " + rowCountReceived + " items are displayed. <a href=\"javascript:receivedCollapse();\">Click here to show only the first " + rowsToCollapse + " items<\/a>.<\/td><\/tr>").appendTo("table#receivedt");
+    }
+
+    // Launch filtering
+    function filter() {
+
+    	var summaryStatus = jQuery.trim($("#summaryfilter").val());
+	var basketStatus  = $("#basketfilter").val();
+	var orderStatus   = $("#orderfilter").val();
+
+	if (summaryStatus == '' && basketStatus == '' && orderStatus == '') { clearFilters(); return false; }
+
+	var filtered = "table#pendingt tbody.filterclass tr";
+	var foundCount = 0;
+
+	// We hide everything
+	$("#nothingfoundrow").remove();
+	$(filtered).hide();
+
+	// Then show what matches the filters
+	if (summaryStatus != '') {
+	    // Case-insensitive search for a substring
+	    $(filtered + " td.summaryfilterclass:icontains(" + summaryStatus + ")").parent().show();
+	    foundCount += $(filtered + " td.summaryfilterclass:icontains(" + summaryStatus + ")").length;
+	}
+
+	if (basketStatus != '') {
+	    // Exact search
+	    $(filtered + " td.basketfilterclass:containsExactly(" + basketStatus + ")").parent().show();
+	    foundCount += $(filtered + " td.basketfilterclass:containsExactly(" + basketStatus + ")").length;
+	}
+
+	if (orderStatus != '') {
+	    // Exact search
+	    $(filtered + " td.orderfilterclass:containsExactly(" + orderStatus + ")").parent().show();
+	    foundCount += $(filtered + " td.orderfilterclass:containsExactly(" + orderStatus + ")").length;
+	}
+
+	// If nothing has been found, we tell the user so
+	if (foundCount == 0) {
+	    $("<tr><td id=\"nothingfoundrow\" colspan=\"8\">No items match your criteria.<\/tr>").appendTo("table#pendingt");
+	}
+    }
+    
+    // Clear already applied filters
+    function clearFilters() {
+	$("#nothingfoundrow").remove();
+        $("table#pendingt tbody.filterclass tr").show();
+	pendingExpand();
+    }
+
+//]]>
+</script>
+
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -42,83 +148,87 @@
     <p>On: <!-- TMPL_VAR NAME="formatteddatereceived" --></p>
 	<!-- TODO: Add date picker, change rcv date. -->
 </div>
-<div id="acqui_receive_receivelist">
+<div id="acqui_receive_search">
     <h2>Items in shipment</h2>
-    <form action="/cgi-bin/koha/acqui/parcel.pl" method="get" name="orderform">
-    <table>
+        <form action="/cgi-bin/koha/acqui/parcel.pl" id="filterform" onsubmit="filter(); return false;">
+        <fieldset class="rows">
+
+            <legend>Filters :</legend>
+	 
+	    <ol>
+
+		<li>	
+		    <label for="summaryfilter">ISBN, author or title :</label>
+		    <input type="text" name="summaryfilter" id="summaryfilter" />
+		</li>
+
+		<li>	
+		    <label for="basketfilter">Basket :</label>
+		    <input type="text" name="basketfilter" id="basketfilter" /><br />
+		</li>
+
+		<li>	
+		    <label for="orderfilter">Order :</label>
+		    <input type="text" name="orderfilter" id="orderfilter" /><br />
+		</li>
+
+		<li>	
+		    <input type="submit" value="OK" />
+		    <input type="reset" value="Clear Filters" onclick="clearFilters();" />
+		</li>
+		
+	    </ol>
+
+        </fieldset>
+    </form>
+
+ <table id="pendingt"> <caption>Pending Orders</caption>
+    <thead>
         <tr>
-            <th>Quantity/Edit order</th>
-            <th>Basket/Order</th>
+            <th>Basket</th>
+            <th>Order</th>
             <th>Summary</th>
-            <th>View Record/Edit shipment</th>
-            <th>Est cost</th>
-            <th>Actual cost</th>
-            <th>TOTAL</th>
+    	    <th>View Record</th>
+            <th>Still on order</th>
+            <th>Unit cost</th>
+            <th>Order cost</th>
+            <th>Receive</th>
         </tr>
-        <!-- TMPL_LOOP NAME="loop_received" -->
+    </thead>
+    <tbody class="filterclass">
+        <!-- TMPL_LOOP NAME="loop_orders" -->
 	<!-- TMPL_UNLESS NAME="__odd__" -->
             <tr class="highlight">
         <!-- TMPL_ELSE -->
             <tr>
         <!-- /TMPL_UNLESS -->
-                <td><a href="neworderempty.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&booksellerid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="quantityreceived" --></a></td>
-                <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->"><!-- TMPL_VAR NAME="basketno" --></a>&nbsp; / &nbsp;<!-- TMPL_VAR NAME="ordernumber" --></td>
-                <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a>
-                <!-- TMPL_IF NAME="isbn" --><br />ISBN: <!-- TMPL_VAR NAME="isbn" --><!--/TMPL_IF-->
-                <!-- TMPL_IF NAME="author" --><br />author :<!-- TMPL_VAR NAME="author" --><!--/TMPL_IF-->
+                <td class="basketfilterclass"><a href="/cgi-bin/koha/acqui/basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->"><!-- TMPL_VAR NAME="basketno" --></a></td>
+                <td class="orderfilterclass"><a href="neworderempty.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&booksellerid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="ordernumber" --></a></td>
+                <td class="summaryfilterclass">
+                  <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html"--></a>
+                <!-- TMPL_IF NAME="author" --> / <!-- TMPL_VAR NAME="author" --><!--/TMPL_IF-->
+                <!-- TMPL_IF NAME="isbn" --> &ndash; <!-- TMPL_VAR NAME="isbn" --><!--/TMPL_IF-->
                 <!-- TMPL_IF NAME="publishercode" --><br />Publisher :<!-- TMPL_VAR NAME="publishercode" --><!--/TMPL_IF-->
                 </td>
-                <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=<!-- TMPL_VAR NAME="biblionumber" -->" title="MARC" rel="gb_page_center[600,500]">View MARC</a>/<a href="orderreceive.pl?op=edit&ordernumber=<!-- TMPL_VAR name="ordernumber" -->&biblionumber=<!-- TMPL_VAR name="biblionumber" -->&supplierid=<!-- TMPL_VAR name="supplierid" -->&invoice=<!-- TMPL_VAR NAME="invoice" -->&datereceived=<!-- TMPL_VAR name="datereceived" -->" >Edit shipment</a></td>
+                <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=<!-- TMPL_VAR NAME="biblionumber" -->" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=<!-- TMPL_VAR NAME="biblionumber" -->" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
+                <td><!-- TMPL_VAR NAME="quantrem" --> / <!-- TMPL_VAR NAME="quantity" --></td>
                 <td><!-- TMPL_VAR NAME="ecost" --></td>
-                <td><!-- TMPL_VAR NAME="unitprice" --></td>
-                <td><!-- TMPL_VAR NAME="total" --></td>
+                <td><!-- TMPL_VAR NAME="ordertotal" --></td>
+				<td><a href="orderreceive.pl?ordernumber=<!-- TMPL_VAR NAME="ordernumber" -->&amp;datereceived=<!-- TMPL_VAR NAME="invoicedatereceived" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->">Receive</a></td>
             </tr>
         <!-- /TMPL_LOOP -->
-        <tr>
-            <td colspan="3">&nbsp;</td>
-            <th>SUBTOTAL</th>
-            <td>&nbsp;</td>
-            <th><!-- TMPL_VAR NAME="totalprice" --></th>
-            <th><!-- TMPL_VAR NAME="tototal" --></th>
-        </tr>
-          <!-- TMPL_IF NAME="totalfreight" -->
-		<tr>
-            <td colspan="5">
-            </td>
-            </p>
-			<th colspan="1">Shipping</th>
-            <td><!-- TMPL_VAR NAME="totalfreight" --></td>
-        </tr> <!-- /TMPL_IF -->
-          <!-- TMPL_IF NAME="gst" -->
-		<tr>
-            <td colspan="5">
-            <p class="message">
-			<b>HELP</b>
-                <p>The total at the bottom of the page should be within a few cents of the total for the invoice.</p>
-            </td>
-            </p>
-			<td colspan="2"><b>GST</b></td>
-            <td><!-- TMPL_VAR NAME="gst" --></td>
-        </tr> <!-- /TMPL_IF -->
-        <tr>
-        <td colspan="3">&nbsp;</td>
-            <th>TOTAL</th>
-            <td colspan="2">&nbsp;</td>
-            <th><!-- TMPL_VAR NAME="grandtot" --></th>
-        </tr>
-    </table>
-    </form>
-</div>
-<div id="acqui_receive_search">
-    <h2>Search orders to add to this shipment</h2>
-    <form action="/cgi-bin/koha/acqui/orderreceive.pl">
-        <input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->" />
-        <input type="hidden" name="gst" value="<!-- TMPL_VAR NAME="gst" -->" />
-        <input type="hidden" name="freight" value="<!-- TMPL_VAR NAME="freight" -->" />
-        <input type="hidden" name="invoice" value="<!-- TMPL_VAR NAME="invoice" -->" />
-        <p><label for="receive">Search ISBN or Title:</label> <input type="text" size="25" id="receive" name="receive" /></p>
-    </form>
-    <div id="resultnumber">
+    </tbody>
+    <tbody>
+            <tr><td colspan="3">&nbsp;</td>
+                <th>TOTAL</th>
+                <th> <!-- TMPL_VAR NAME="totalPquantity" --> </th>
+				<td>&nbsp;</td>
+                <th><!-- TMPL_VAR NAME="ordergrandtotal" --></th>
+				<td>&nbsp;</td>
+            </tr>
+    </tbody>
+     </table>
+   <div id="resultnumber">
 	<!-- Row of numbers corresponding to search result pages -->
 	<!-- TMPL_IF NAME="displayprev" -->
 		<a href="parcel.pl?type=intra&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;startfrom=<!-- TMPL_VAR NAME="prevstartfrom" --><!--TMPL_IF Name="datereceived"-->&amp;datereceived=<!--TMPL_VAR Name="datereceived"--><!--/TMPL_IF--><!--TMPL_IF Name="invoice"-->&amp;invoice=<!--TMPL_VAR Name="invoice"--><!--/TMPL_IF--><!--TMPL_IF Name="resultsperpage"-->&amp;resultsperpage=<!--TMPL_VAR Name="resultsperpage"--><!--/TMPL_IF-->#resultnumber">&lt;&lt; Previous</a>
@@ -134,45 +244,82 @@
 		<a href="parcel.pl?type=intra&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;startfrom=<!-- TMPL_VAR NAME="nextstartfrom" --><!--TMPL_IF Name="datereceived"-->&amp;datereceived=<!--TMPL_VAR Name="datereceived"--><!--/TMPL_IF--><!--TMPL_IF Name="invoice"-->&amp;invoice=<!--TMPL_VAR Name="invoice"--><!--/TMPL_IF--><!--TMPL_IF Name="resultsperpage"-->&amp;resultsperpage=<!--TMPL_VAR Name="resultsperpage"--><!--/TMPL_IF-->#resultnumber">Next &gt;&gt;</a>
 	<!-- /TMPL_IF -->
 	</div>
-    <table> <caption>or select a pending orders</caption>
-        <tr>
-            <th>BASKET</th>
-            <th>Summary</th>
-			<th>View Record</th>
-            <th>Still on order</th>
-            <th>Unit cost</th>
-            <th>Order cost</th>
-            <th>&nbsp;</th>
-        </tr>
-        <!-- TMPL_LOOP NAME="loop_orders" -->
+</div>
+<div id="acqui_receive_receivelist">
+    <h2>Already Received</h2>
+
+   <form action="/cgi-bin/koha/acqui/parcel.pl" method="get" name="orderform">
+    <table id="receivedt">
+        <thead>
+	    <tr>
+		<th>Basket</th>
+		<th>Order</th>
+		<th>Summary</th>
+		<th>View Record</th>
+		<th>Est cost</th>
+		<th>Actual cost</th>
+		<th>TOTAL</th>
+	    </tr>
+	</thead>
+	<tbody class="filterclass">
+	    <!-- TMPL_LOOP NAME="loop_received" -->
         <!-- TMPL_UNLESS NAME="__odd__" -->
             <tr class="highlight">
         <!-- TMPL_ELSE -->
             <tr>
         <!-- /TMPL_UNLESS -->
                 <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->"><!-- TMPL_VAR NAME="basketno" --></a></td>
-                <td>
-                  <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a>
-                <!-- TMPL_IF NAME="isbn" --><br />ISBN: <!-- TMPL_VAR NAME="isbn" --><!--/TMPL_IF-->
-                <!-- TMPL_IF NAME="author" --><br />author :<!-- TMPL_VAR NAME="author" --><!--/TMPL_IF-->
+                <td><a href="neworderempty.pl?ordnum=<!-- TMPL_VAR NAME="ordernumber" -->&booksellerid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="ordernumber" --></a></td>
+                <td><a href="/cgi-bin/koha/catalogue/detail.pl?amp;biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
+                <!-- TMPL_IF NAME="author" --> / <!-- TMPL_VAR NAME="author" --><!--/TMPL_IF-->
+                <!-- TMPL_IF NAME="isbn" --> - <!-- TMPL_VAR NAME="isbn" --><!--/TMPL_IF-->
                 <!-- TMPL_IF NAME="publishercode" --><br />Publisher :<!-- TMPL_VAR NAME="publishercode" --><!--/TMPL_IF-->
                 </td>
                 <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=<!-- TMPL_VAR NAME="biblionumber" -->" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=<!-- TMPL_VAR NAME="biblionumber" -->" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
-                <td> <!-- TMPL_VAR NAME="quantity" --></td>
                 <td><!-- TMPL_VAR NAME="ecost" --></td>
-                <td><!-- TMPL_VAR NAME="ordertotal" --></td>
-				<td><a href="orderreceive.pl?ordernumber=<!-- TMPL_VAR NAME="ordernumber" -->&amp;datereceived=<!-- TMPL_VAR NAME="invoicedatereceived" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->">Receive order</a></td>
+                <td><!-- TMPL_VAR NAME="unitprice" --></td>
+                <td><!-- TMPL_VAR NAME="total" --></td>
             </tr>
-        <!-- /TMPL_LOOP -->
-            <tr><td colspan="2">&nbsp;</td>
-                <th>TOTAL</th>
-                <th> <!-- TMPL_VAR NAME="totalPquantity" --> </th>
-				<td>&nbsp;</td>
-                <th><!-- TMPL_VAR NAME="ordergrandtotal" --></th>
-				<td>&nbsp;</td>
-            </tr>
-     </table>
+	    <!-- /TMPL_LOOP -->
+	</tbody>
+	<tbody>
+	    <tr>
+		<td colspan="3">&nbsp;</td>
+		<th>SUBTOTAL</th>
+		<td>&nbsp;</td>
+		<th><!-- TMPL_VAR NAME="totalprice" --></th>
+		<th><!-- TMPL_VAR NAME="tototal" --></th>
+	    </tr>
+	      <!-- TMPL_IF NAME="totalfreight" -->
+		    <tr>
+		<td colspan="5">
+		</td>
+		</p>
+			    <th colspan="1">Shipping</th>
+		<td><!-- TMPL_VAR NAME="totalfreight" --></td>
+	    </tr> <!-- /TMPL_IF -->
+	      <!-- TMPL_IF NAME="gst" -->
+		    <tr>
+		<td colspan="5">
+		<p class="message">
+			    <b>HELP</b><br />
+		    The total at the bottom of the page should be within a few cents of the total for the invoice.
+		</p>
+		</td>
+			    <td><b>GST</b></td>
+		<td><!-- TMPL_VAR NAME="gst" --></td>
+	    </tr> <!-- /TMPL_IF -->
+	    <tr>
+	    <td colspan="3">&nbsp;</td>
+		<th>TOTAL</th>
+		<td colspan="2">&nbsp;</td>
+		<th><!-- TMPL_VAR NAME="grandtot" --></th>
+	    </tr>
+    </tbody>
+    </table>
+    </form>
 </div>
+
 </div>
 </div>
 <div class="yui-b">
