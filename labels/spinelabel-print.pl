@@ -48,6 +48,11 @@ $sth = $dbh->prepare($sql);
 $sth->execute($barcode);
 $item = $sth->fetchrow_hashref;
 
+if ( $item->{'itemnumber'} eq '' ) {
+  $template->param( 'Barcode' => $barcode );
+  $template->param( 'BarcodeNotFound' => 1 );
+}
+
 my $body;
 
 my $data;

@@ -2,13 +2,26 @@
 	<head>
 		<title>Koha &rsaquo; Tools &rsaquo; Spine Labels</title>
 		<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/css/spinelabel.css" />
+
+ 		<style type="text/css">
+			@media print {
+				.noprint { display: none; }
+			}
+		</style>
 	</head>
-	<body <!-- TMPL_IF NAME="autoprint">onLoad="window.print()"<!-- /TMPL_IF> >
-		<span id="spinelabel" class="label">
-			<!-- TMPL_VAR NAME="content" -->
-		</span>
-		<span id="print_button">
-			<form><input type="button" value="Print This Label" onClick="window.print()" /></form>
-		</span>
-	</body>
+	<!-- TMPL_IF NAME="BarcodeNotFound" -->
+		<body>
+			<p>The barcode <!-- TMPL_VAR NAME="Barcode" --> was not found.</p>
+			<p><a href="spinelabel-home.pl">Return To Spine Label Printer</a></p>
+		</body>
+	<!-- TMPL_ELSE -->
+		<body <!-- TMPL_IF NAME="autoprint">onLoad="window.print()"<!-- /TMPL_IF> >
+			<span id="spinelabel" class="label">
+				<!-- TMPL_VAR NAME="content" -->
+			</span>
+			<span id="print_button" class="noprint">
+				<form><input type="button" value="Print This Label" onClick="window.print()" /></form>
+			</span>
+		</body>
+	<!-- /TMPL_IF -->
 </html>
