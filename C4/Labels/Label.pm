@@ -66,7 +66,7 @@ sub _get_label_item {
     my $data = $sth->fetchrow_hashref;
     # Replaced item's itemtype with the more user-friendly description...
     my $sth1 = $dbh->prepare("SELECT itemtype,description FROM itemtypes WHERE itemtype = ?");
-    $sth1->execute($data->{itemtype});
+    $sth1->execute($data->{'itemtype'});
     if ($sth1->err) {
         syslog("LOG_ERR", "C4::Labels::Label::_get_label_item : Database returned the following error: %s", $sth1->errstr);
     }
@@ -178,9 +178,9 @@ sub _get_barcode_data {
     my $match_kohatable = join(
         '|',
         (
-            @{ $kohatables->{biblio} },
-            @{ $kohatables->{biblioitems} },
-            @{ $kohatables->{items} }
+            @{ $kohatables->{'biblio'} },
+            @{ $kohatables->{'biblioitems'} },
+            @{ $kohatables->{'items'} }
         )
     );
     FIELD_LIST:
@@ -258,24 +258,25 @@ sub _desc_koha_tables {
 sub new {
     my ($invocant, %params) = @_;
     my $type = ref($invocant) || $invocant;
-    my $layout = C4::Labels::Layout->retrieve(layout_id => $params{'layout_id'});
     my $self = {
-        batch_id        => $params{'batch_id'},
-        layout_id       => $params{'layout_id'},
-        item_number     => $params{'item_number'},
-        height          => $params{'height'},
-        width           => $params{'width'},
-        top_text_margin => $params{'top_text_margin'},
-        left_text_margin => $params{'left_text_margin'},
-        font            => $params{'font'},
-        font_size       => $params{'font_size'},
-        justify         => $params{'justify'},
-        text_wrap_cols  => $params{'text_wrap_cols'},
-        layout          => $layout,
-        guidebox        => '',
-        barcode         => 0,
+        batch_id                => $params{'batch_id'},
+        item_number             => $params{'item_number'},
+        height                  => $params{'height'},
+        width                   => $params{'width'},
+        top_text_margin         => $params{'top_text_margin'},
+        left_text_margin        => $params{'left_text_margin'},
+        barcode_type            => $params{'barcode_type'},
+        printing_type           => $params{'printing_type'},
+        guidebox                => $params{'guidebox'},
+        font                    => $params{'font'},
+        font_size               => $params{'font_size'},
+        callnum_split           => $params{'callnum_split'},
+        justify                 => $params{'justify'},
+        format_string           => $params{'format_string'},
+        text_wrap_cols          => $params{'text_wrap_cols'},
+        barcode                 => 0,
     };
-    if ($layout->get_attr('guidebox')) {
+    if ($self->{'guidebox'}) {
         $self->{'guidebox'} = _guide_box($self->{'llx'}, $self->{'lly'}, $self->{'width'}, $self->{'height'});
     }
     bless ($self, $type);
@@ -284,7 +285,31 @@ sub new {
 
 sub get_label_type {
     my $self = shift;
-    return $self->{'layout'}->get_attr('printing_type');
+    return $self->{'printing_type'};
+}
+
+=head2 $label->get_attr("attr")
+
+    Invoking the I<get_attr> method will return the value of the requested attribute or 1 on errors.
+
+    example:
+        my $value = $label->get_attr("attr");
+
+=cut
+
+sub get_attr {
+    my $self = shift;
+#    if (_check_params(@_) eq 1) {
+#        return -1;
+#    }
+    my ($attr) = @_;
+    if (exists($self->{$attr})) {
+        return $self->{$attr};
+    }
+    else {
+        return -1;
+    }
+    return;
 }
 
 =head2 $label->draw_label_text()
@@ -308,9 +333,9 @@ sub draw_label_text {
     my $text_llx = 0;
     my $text_lly = $params{'lly'};
     my $font = $self->{'font'};
-    my $item = _get_label_item($self->{item_number});
-    my $label_fields = _get_text_fields($self->{layout}->get_attr('format_string'));
-    my $record = GetMarcBiblio($item->{biblionumber});
+    my $item = _get_label_item($self->{'item_number'});
+    my $label_fields = _get_text_fields($self->{'format_string'});
+    my $record = GetMarcBiblio($item->{'biblionumber'});
     # FIXME - returns all items, so you can't get data from an embedded holdings field.
     # TODO - add a GetMarcBiblio1item(bibnum,itemnum) or a GetMarcItem(itemnum).
     my $cn_source = ($item->{'cn_source'} ? $item->{'cn_source'} : C4::Context->preference('DefaultClassificationSource'));
@@ -328,7 +353,7 @@ sub draw_label_text {
         $field_data =~ s/\r//g;
         my @label_lines;
         my @callnumber_list = ('itemcallnumber', '050a', '050b', '082a', '952o'); # Fields which hold call number data  FIXME: ( 060? 090? 092? 099? )
-        if ((grep {$field->{'code'} =~ m/$_/} @callnumber_list) and ($self->{layout}->get_attr('printing_type') eq 'BIB') and ($self->{layout}->get_attr('callnum_split'))) { # If the field contains the call number, we do some sp
+        if ((grep {$field->{'code'} =~ m/$_/} @callnumber_list) and ($self->{'printing_type'} eq 'BIB') and ($self->{'callnum_split'})) { # If the field contains the call number, we do some sp
             if ($cn_source eq 'lcc') {
                 @label_lines = _split_lccn($field_data);
                 @label_lines = _split_fcn($field_data) if !@label_lines;    # If it was not a true lccn, try it as a fiction call number
@@ -366,11 +391,13 @@ sub draw_label_text {
             my $string_width = C4::Labels::PDF->StrWidth($line, $font, $self->{'font_size'});
             if ($self->{'justify'} eq 'R') { 
                 $text_llx = $params{'llx'} + $self->{'width'} - ($self->{'left_text_margin'} + $string_width);
-            } elsif($self->{'justify'} eq 'C') {
+            } 
+            elsif($self->{'justify'} eq 'C') {
                  # some code to try and center each line on the label based on font size and string point width...
                  my $whitespace = ($self->{'width'} - ($string_width + (2 * $self->{'left_text_margin'})));
                  $text_llx = (($whitespace  / 2) + $params{'llx'} + $self->{'left_text_margin'});
-            } else {
+            } 
+            else {
                 $text_llx = ($params{'llx'} + $self->{'left_text_margin'});
             }
             push @label_text,   {
@@ -408,7 +435,7 @@ sub barcode {
     my $self = shift;
     my %params = @_;
     $params{'barcode'} = _get_label_item($self->{'item_number'}, 1) if !$params{'barcode'};
-    $params{'barcode_type'} = $self->{'layout'}->get_attr('barcode_type') if !$params{'barcode_type'};
+    $params{'barcode_type'} = $self->{'barcode_type'} if !$params{'barcode_type'};
     my $x_scale_factor = 1;
     my $num_of_bars = length($params{'barcode'});
     my $tot_bar_length = 0;

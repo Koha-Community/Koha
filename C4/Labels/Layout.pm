@@ -285,6 +285,33 @@ sub set_attr {
     };
     return 0;
 }
+
+=head2 $layout->get_text_wrap_cols()
+
+    Invoking the I<get_text_wrap_cols> method will return the number of columns that can be printed on the
+    label before wrapping to the next line.
+
+    examples:
+        my $text_wrap_cols = $layout->get_text_wrap_cols();
+
+=cut
+
+sub get_text_wrap_cols {
+    my $self = shift;
+    my %params = @_;
+    my $string = '';
+    my $strwidth = 0;
+    my $col_count = 0;
+    my $textlimit = $params{'label_width'} - ( 3 * $params{'left_text_margin'});
+
+    while ($strwidth < $textlimit) {
+        $string .= '0';
+        $col_count++;
+        $strwidth = C4::Labels::PDF->StrWidth( $string, $self->{'font'}, $self->{'font_size'} );
+    }
+    return $col_count;
+}
+
 1;
 __END__
 

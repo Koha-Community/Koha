@@ -216,7 +216,7 @@ sub retrieve {
     while (my $record = $sth->fetchrow_hashref) {
         $self->{'branch_code'} = $record->{'branch_code'};
         push (@{$self->{'items'}}, {item_number => $record->{'item_number'}, label_id => $record->{'label_id'}});
-        $record_flag = 1;
+        $record_flag = 1;       # true if one or more rows were retrieved
     }
     return -2 if $record_flag == 0;     # a hackish sort of way of indicating no such record exists
     if ($sth->err) {

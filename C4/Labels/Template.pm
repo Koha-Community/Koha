@@ -74,17 +74,17 @@ sub _check_params {
 
 sub _conv_points {
     my $self = shift;
-    my @unit_value = grep {$_->{'type'} eq $self->{units}} get_unit_values();
-    $self->{page_width}         = $self->{page_width} * $unit_value[0]->{'value'};
-    $self->{page_height}        = $self->{page_height} * $unit_value[0]->{'value'};
-    $self->{label_width}        = $self->{label_width} * $unit_value[0]->{'value'};
-    $self->{label_height}       = $self->{label_height} * $unit_value[0]->{'value'};
-    $self->{top_text_margin}    = $self->{top_text_margin} * $unit_value[0]->{'value'};
-    $self->{left_text_margin}   = $self->{left_text_margin} * $unit_value[0]->{'value'};
-    $self->{top_margin}         = $self->{top_margin} * $unit_value[0]->{'value'};
-    $self->{left_margin}        = $self->{left_margin} * $unit_value[0]->{'value'};
-    $self->{col_gap}            = $self->{col_gap} * $unit_value[0]->{'value'};
-    $self->{row_gap}            = $self->{row_gap} * $unit_value[0]->{'value'};
+    my @unit_value = grep {$_->{'type'} eq $self->{'units'}} @{get_unit_values()};
+    $self->{'page_width'}         = $self->{'page_width'} * $unit_value[0]->{'value'};
+    $self->{'page_height'}        = $self->{'page_height'} * $unit_value[0]->{'value'};
+    $self->{'label_width'}        = $self->{'label_width'} * $unit_value[0]->{'value'};
+    $self->{'label_height'}       = $self->{'label_height'} * $unit_value[0]->{'value'};
+    $self->{'top_text_margin'}    = $self->{'top_text_margin'} * $unit_value[0]->{'value'};
+    $self->{'left_text_margin'}   = $self->{'left_text_margin'} * $unit_value[0]->{'value'};
+    $self->{'top_margin'}         = $self->{'top_margin'} * $unit_value[0]->{'value'};
+    $self->{'left_margin'}        = $self->{'left_margin'} * $unit_value[0]->{'value'};
+    $self->{'col_gap'}            = $self->{'col_gap'} * $unit_value[0]->{'value'};
+    $self->{'row_gap'}            = $self->{'row_gap'} * $unit_value[0]->{'value'};
     return $self;
 }
 
@@ -92,10 +92,10 @@ sub _apply_profile {
     my $self = shift;
     my $profile_id = shift;
     my $profile = C4::Labels::Profile->retrieve(profile_id => $profile_id, convert => 1);
-    $self->{top_margin} = $self->{top_margin} + $profile->get_attr('offset_vert');      # controls vertical offset
-    $self->{left_margin} = $self->{left_margin} + $profile->get_attr('offset_horz');    # controls horizontal offset
-    $self->{label_height} = $self->{label_height} + $profile->get_attr('creep_vert');   # controls vertical creep
-    $self->{label_width} = $self->{label_width} + $profile->get_attr('creep_horz');     # controls horizontal creep
+    $self->{'top_margin'} = $self->{'top_margin'} + $profile->get_attr('offset_vert');      # controls vertical offset
+    $self->{'left_margin'} = $self->{'left_margin'} + $profile->get_attr('offset_horz');    # controls horizontal offset
+    $self->{'label_height'} = $self->{'label_height'} + $profile->get_attr('creep_vert');   # controls vertical creep
+    $self->{'label_width'} = $self->{'label_width'} + $profile->get_attr('creep_horz');     # controls horizontal creep
     return $self;
 }
 
@@ -180,7 +180,7 @@ sub retrieve {
     my $self = $sth->fetchrow_hashref;
     $self = _conv_points($self) if (($opts{convert} && $opts{convert} == 1) || $opts{profile_id});
     $self = _apply_profile($self, $opts{profile_id}) if $opts{profile_id};
-    $self->{tmpl_stat} = 1;
+    $self->{'tmpl_stat'} = 1;
     bless ($self, $type);
     return $self;
 }
@@ -218,7 +218,7 @@ sub delete {
     my $query = "DELETE FROM labels_templates WHERE template_id = ?";  
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute($query_param);
-    $self->{tmpl_stat} = 0;
+    $self->{'tmpl_stat'} = 0;
     return 0;
 }
 
@@ -246,14 +246,13 @@ sub save {
         $query = substr($query, 0, (length($query)-2));
         push (@params, $self->{'template_id'});
         $query .= " WHERE template_id=?;";
-        warn "DEBUG: Updating: $query\n" if $debug;
         my $sth = C4::Context->dbh->prepare($query);
         $sth->execute(@params);
         if ($sth->err) {
             syslog("LOG_ERR", "Database returned the following error: %s", $sth->errstr);
             return -1;
         }
-        $self->{tmpl_stat} = 1;
+        $self->{'tmpl_stat'} = 1;
         return $self->{'template_id'};
     }
     else {                      # otherwise create a new record
@@ -271,7 +270,6 @@ sub save {
         }
         $query = substr($query, 0, (length($query)-1));
         $query .= ");";
-        warn "DEBUG: Saving: $query\n" if $debug;
         my $sth = C4::Context->dbh->prepare($query);
         $sth->execute(@params);
         if ($sth->err) {
@@ -281,8 +279,8 @@ sub save {
         my $sth1 = C4::Context->dbh->prepare("SELECT MAX(template_id) FROM labels_templates;");
         $sth1->execute();
         my $template_id = $sth1->fetchrow_array;
-        $self->{template_id} = $template_id;
-        $self->{tmpl_stat} = 1;
+        $self->{'template_id'} = $template_id;
+        $self->{'tmpl_stat'} = 1;
         return $template_id;
     }
 }
@@ -330,31 +328,6 @@ sub set_attr {
     };
 }
 
-=head2 $template->get_text_wrap_cols()
-
-    Invoking the I<get_text_wrap_cols> method will return the number of columns that can be printed on the
-    label before wrapping to the next line.
-
-    examples:
-        my $text_wrap_cols = $template->get_text_wrap_cols();
-
-=cut
-
-sub get_text_wrap_cols {
-    my $self = shift;
-    my $string = '';
-    my $strwidth = 0;
-    my $col_count = 0;
-    my $textlimit = $self->{label_width} - ( 3 * $self->{left_text_margin});
-
-    while ($strwidth < $textlimit) {
-        $string .= '0';
-        $col_count++;
-        $strwidth = C4::Labels::PDF->StrWidth( $string, $self->{font}, $self->{font_size} );
-    }
-    return $col_count;
-}
-
 =head2 $template->get_label_position($start_label)
 
     Invoking the I<get_label_position> method will return the row, column coordinates on the starting page
@@ -371,15 +344,15 @@ sub get_label_position {
     if ($start_label eq 1) {
         $row_count = 1;
         $col_count = 1;
-        $llx = $self->{left_margin};
-        $lly = ($self->{page_height} - $self->{top_margin} - $self->{label_height});
+        $llx = $self->{'left_margin'};
+        $lly = ($self->{'page_height'} - $self->{'top_margin'} - $self->{'label_height'});
         return ($row_count, $col_count, $llx, $lly);
     }
     else {
-        $row_count = ceil($start_label / $self->{cols});
-        $col_count = ($start_label - (($row_count - 1) * $self->{cols}));
-        $llx = $self->{left_margin} + ($self->{label_width} * ($col_count - 1)) + ($self->{col_gap} * ($col_count - 1));
-        $lly = $self->{page_height} - $self->{top_margin} - ($self->{label_height} * $row_count) - ($self->{row_gap} * ($row_count - 1));
+        $row_count = ceil($start_label / $self->{'cols'});
+        $col_count = ($start_label - (($row_count - 1) * $self->{'cols'}));
+        $llx = $self->{'left_margin'} + ($self->{'label_width'} * ($col_count - 1)) + ($self->{'col_gap'} * ($col_count - 1));
+        $lly = $self->{'page_height'} - $self->{'top_margin'} - ($self->{'label_height'} * $row_count) - ($self->{'row_gap'} * ($row_count - 1));
         return ($row_count, $col_count, $llx, $lly);
     }
 }

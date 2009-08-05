@@ -63,7 +63,7 @@ sub _check_params {
 
 sub _conv_points {
     my $self = shift;
-    my @unit_value = grep {$_->{'type'} eq $self->{units}} get_unit_values();
+    my @unit_value = grep {$_->{'type'} eq $self->{units}} @{get_unit_values()};
     $self->{offset_horz}        = $self->{offset_horz} * $unit_value[0]->{'value'};
     $self->{offset_vert}        = $self->{offset_vert} * $unit_value[0]->{'value'};
     $self->{creep_horz}         = $self->{creep_horz} * $unit_value[0]->{'value'};

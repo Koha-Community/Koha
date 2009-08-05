@@ -1,260 +1,176 @@
 #!/usr/bin/perl
 
+# Copyright 2006 Katipo Communications.
+# Some parts Copyright 2009 Foundations Bible College.
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+
 use strict;
 use warnings;
 
 use CGI;
-use C4::Labels;     # GetActiveLabelTemplate get_label_options GetAssociatedProfile 
-# GetPatronCardItems GetLabelItems GetUnitsValue...
+use HTML::Template::Pro;
+use POSIX qw(ceil);
+use Data::Dumper;
+use Sys::Syslog qw(syslog);
+
+use C4::Labels;
 use C4::Auth;
 use C4::Output;
 use C4::Context;
 use C4::Members;
 use C4::Branch;
-use HTML::Template::Pro;
-use PDF::Reuse;
-use PDF::Reuse::Barcode;
-use POSIX;  # ceil
-use Data::Dumper;
+use C4::Debug;
+use C4::Labels::Batch 1.000000;
+use C4::Labels::Template 1.000000;
+use C4::Labels::Layout 1.000000;
+use C4::Labels::PDF 1.000000;
+use C4::Labels::Label 1.000000;
 
-my $DEBUG = 0;
-my $DEBUG_LPT = 0;
+my $cgi = new CGI;
 
-my $cgi         = new CGI;
+my $htdocs_path = C4::Context->config('intrahtdocs');
+my $batch_id    = $cgi->param('batch_id') || $ARGV[0];
+my $template_id = $cgi->param('template_id') || $ARGV[1];
+my $layout_id   = $cgi->param('layout_id') || $ARGV[2];
+my $start_label = $cgi->param('start_label') || $ARGV[3];
 
-#### Tons of Initialization ####
-# get the printing settings
-my $template    = GetActiveLabelTemplate();
-my $conf_data   = get_label_options() or die "get_label_options failed";
-my $profile     = GetAssociatedProfile($template->{'tmpl_id'});
+print $cgi->header( -type => 'application/pdf', -attachment => "koha_batch_$batch_id.pdf" );
 
-my $batch_id =   $cgi->param('batch_id');
-my @resultsloop;
+my $pdf = C4::Labels::PDF->new(InitVars => 0);
+my $batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);
+my $template = C4::Labels::Template->retrieve(template_id => $template_id, profile_id => 1);
+my $layout = C4::Labels::Layout->retrieve(layout_id => $layout_id);
 
-my $batch_type   = $conf_data->{'type'};
-my $barcodetype  = $conf_data->{'barcodetype'};
-my $printingtype = $conf_data->{'printingtype'} or die "No printingtype in conf_data";
-my $guidebox     = $conf_data->{'guidebox'};
-my $start_label  = $conf_data->{'startlabel'};
-if ($cgi->param('startlabel')) {
-    $start_label = $cgi->param('startlabel');       # A bit of a hack to allow setting the starting label from the address bar... -fbcit
+sub _calc_next_label_pos {
+    my ($row_count, $col_count, $llx, $lly) = @_;
+    if ($col_count lt $template->get_attr('cols')) {
+        $llx = ($llx + $template->get_attr('label_width') + $template->get_attr('col_gap'));
+        $col_count++;
+    }
+    else {
+        $llx = $template->get_attr('left_margin');
+        if ($row_count eq $template->get_attr('rows')) {
+            $pdf->Page();
+            $lly = ($template->get_attr('page_height') - $template->get_attr('top_margin') - $template->get_attr('label_height'));
+            $row_count = 1;
+        }
+        else {
+            $lly = ($lly - $template->get_attr('row_gap') - $template->get_attr('label_height'));
+            $row_count++;
+        }
+        $col_count = 1;
+    }
+    return ($row_count, $col_count, $llx, $lly);
 }
-warn "Starting on label #$start_label" if $DEBUG;
-my $units        = $template->{'units'};
 
-if ($printingtype eq 'PATCRD') {
-    @resultsloop = GetPatronCardItems($batch_id);
-} else {
-    @resultsloop = GetLabelItems($batch_id);
+sub _print_text {
+    my $label_text = shift;
+    foreach my $text_line (@$label_text) {
+        my $pdf_font = $pdf->Font($text_line->{'font'});
+        my $line = "BT /$pdf_font $text_line->{'font_size'} Tf $text_line->{'text_llx'} $text_line->{'text_lly'} Td ($text_line->{'line'}) Tj ET";
+        $pdf->Add($line);
+    }
 }
 
-#warn "UNITS $units";
-#warn "fontsize = $fontsize";
-#warn Dumper $template;
-
-my $unitvalue      = GetUnitsValue($units);
-my $prof_unitvalue = GetUnitsValue($profile->{'unit'});
-
-warn "Template units: $units which converts to $unitvalue PostScript Points" if $DEBUG;
-warn "Profile units: $profile->{'unit'} which converts to $prof_unitvalue PostScript Points" if $DEBUG;
-
-my $tmpl_code = $template->{'tmpl_code'};
-my $tmpl_desc = $template->{'tmpl_desc'};
-
-my $page_height  = ( $template->{'page_height'}  * $unitvalue );
-my $page_width   = ( $template->{'page_width'}   * $unitvalue );
-my $label_height = ( $template->{'label_height'} * $unitvalue );
-my $label_width  = ( $template->{'label_width'}  * $unitvalue );
-my $spine_width  = ( $template->{'label_width'}  * $unitvalue );
-my $circ_width   = ( $template->{'label_width'}  * $unitvalue );
-my $top_margin   = ( $template->{'topmargin'}    * $unitvalue );
-my $left_margin  = ( $template->{'leftmargin'}   * $unitvalue );
-my $colspace     = ( $template->{'colgap'}       * $unitvalue );
-my $rowspace     = ( $template->{'rowgap'}       * $unitvalue );
-
-warn "Converted dimensions are:" if $DEBUG;
-warn "pghth=$page_height, pgwth=$page_width, lblhth=$label_height, lblwth=$label_width, spinwth=$spine_width, circwth=$circ_width, tpmar=$top_margin, lmar=$left_margin, colsp=$colspace, rowsp=$rowspace" if $DEBUG;
-
-my $label_cols = $template->{'cols'};
-my $label_rows = $template->{'rows'};
-
-my $margin           = $top_margin;
-my $left_text_margin = 3;       # FIXME: This value should not be hardcoded
-my $str;
-
-# Some peritent notes from PDF::Reuse regarding prFont()...
-# If a font wasn't found, Helvetica will be set.
-# These names are always recognized: Times-Roman, Times-Bold, Times-Italic, Times-BoldItalic, Courier, Courier-Bold,
-#   Courier-Oblique, Courier-BoldOblique, Helvetica, Helvetica-Bold, Helvetica-Oblique, Helvetica-BoldOblique
-# They can be abbreviated: TR, TB, TI, TBI, C, CB, CO, CBO, H, HB, HO, HBO
-
-my $fontsize    = $template->{'fontsize'};
-my $fontname    = $template->{'font'};
-
-my $text_wrap_cols = GetTextWrapCols( $fontname, $fontsize, $label_width, $left_text_margin );
-
-#warn $label_cols, $label_rows;
+$| = 1;
 
 # set the paper size
 my $lowerLeftX  = 0;
 my $lowerLeftY  = 0;
-my $upperRightX = $page_width;
-my $upperRightY = $page_height;
-my $codetype; # = 'Code39';
+my $upperRightX = $template->get_attr('page_width');
+my $upperRightY = $template->get_attr('page_height');
 
-warn "Active profile: " . ($profile->{prof_id} || "None") if $DEBUG;
+$pdf->Compress(1);
+$pdf->Mbox($lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY);
 
-#### PRINT PRELIMINARY DATA ####
-print $cgi->header( -type => 'application/pdf', -attachment => 'barcode.pdf' ); 
-    # Don't print header until very last possible moment
-    # That way if error or die occurs, fatals_to_browser will still work.
-    # After we print this header, there is no way back to HTML.  All we can do is deliver PDF.
-prInitVars();
-$| = 1;
-prFile();   # No args means to STDOUT
-prCompress(1);  # turn on zip compression which dramatically reduces file size
-prMbox( $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY );
-
-# drawbox( $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY );  #do page border
-# draw margin box for alignment page
-drawbox($left_margin, $top_margin, $page_width-(2*$left_margin), $page_height-(2*$top_margin)) if $DEBUG_LPT;
-
-
-#### TWEAKS and DEBUGGING ###
-# Adjustments for image position and creep -fbcit
-# NOTE: *All* of these factor in to image position and creep. Keep this in mind when makeing adjustments.
-# Suggested proceedure: Adjust margins until both top and left margins are correct. Then adjust the label
-# height and width to correct label creep across and down page. Units are PostScript Points (72 per inch).
-
-sub debug_drop {
-    my $title = @_ || "";
-    warn "-------------------------$title-----------------------------\n"
-     . "  top margin = $top_margin points\n" 
-     . " left margin = $left_margin points\n"
-     . "label height = $label_height points\n"
-     . "label width  = $label_width points\n";
-}
-
-debug_drop('INITIAL VALUES') if ($DEBUG);
-
-if ( $profile->{'prof_id'} ) {
-    $top_margin   += ($profile->{'offset_vert'} * $prof_unitvalue);    # controls vertical offset
-    $label_height += ($profile->{'creep_vert'}  * $prof_unitvalue);    # controls vertical creep
-    $left_margin  += ($profile->{'offset_horz'} * $prof_unitvalue);    # controls horizontal offset
-    $label_width  += ($profile->{'creep_horz'}  * $prof_unitvalue);    # controls horizontal creep
-}
-
-if ($DEBUG) {
-    if ($profile->{'prof_id'}) {
-        debug_drop('ADJUSTED VALUES');
-    } else {
-        warn "No profile associated so no adjustment applied.";
+my ($row_count, $col_count, $llx, $lly) = $template->get_label_position($start_label);
+LABEL_ITEMS:
+foreach my $item (@{$batch->get_attr('items')}) {
+    my ($barcode_llx, $barcode_lly, $barcode_width, $barcode_y_scale_factor) = 0,0,0,0;
+    my $label = C4::Labels::Label->new(
+                                    batch_id            => $batch_id,
+                                    item_number         => $item->{'item_number'},
+                                    width               => $template->get_attr('label_width'),
+                                    height              => $template->get_attr('label_height'),
+                                    top_text_margin     => $template->get_attr('top_text_margin'),
+                                    left_text_margin    => $template->get_attr('left_text_margin'),
+                                    barcode_type        => $layout->get_attr('barcode_type'),
+                                    printing_type       => $layout->get_attr('printing_type'),
+                                    guidebox            => $layout->get_attr('guidebox'),
+                                    font                => $layout->get_attr('font'),
+                                    font_size           => $layout->get_attr('font_size'),
+                                    callnum_split       => $layout->get_attr('callnum_split'),
+                                    justify             => $layout->get_attr('text_justify'),
+                                    format_string       => $layout->get_attr('format_string'),
+                                    text_wrap_cols      => $layout->get_text_wrap_cols(label_width => $template->get_attr('label_width'), left_text_margin => $template->get_attr('left_text_margin')),
+                                      );
+    my $label_type = $label->get_label_type;
+    if ($label_type eq 'BIB') {
+        my $line_spacer = ($label->get_attr('font_size') * 1);    # number of pixels between text rows (This is actually leading: baseline to baseline minus font size. Recommended starting point is 20% of font size.).
+        my $text_lly = ($lly + ($template->get_attr('label_height') - $template->get_attr('top_text_margin')));
+        my $label_text = $label->draw_label_text(
+                                        llx             => $llx,
+                                        lly             => $text_lly,
+                                        line_spacer     => $line_spacer,
+                                        );
+        _print_text($label_text);
+        ($row_count, $col_count, $llx, $lly) = _calc_next_label_pos($row_count, $col_count, $llx, $lly);
+        next LABEL_ITEMS;
     }
-}
-
-#warn " $lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY";
-#warn "$label_rows, $label_cols\n";
-#warn "$label_height, $label_width\n";
-#warn "$page_height, $page_width\n";
-
-my ($rowcount, $colcount, $x_pos, $y_pos, $rowtemp, $coltemp);
-
-if ( $start_label and $start_label == 1 ) {
-    $rowcount = 1;
-    $colcount = 1;
-    $x_pos    = $left_margin;
-    $y_pos    = ( $page_height - $top_margin - $label_height );
-} else {
-    $rowcount = ceil( $start_label / $label_cols );
-    $colcount = ( $start_label - ( ( $rowcount - 1 ) * $label_cols ) );
-    $x_pos = $left_margin + ( $label_width * ( $colcount - 1 ) ) +
-      ( $colspace * ( $colcount - 1 ) );
-    $y_pos = $page_height - $top_margin - ( $label_height * $rowcount ) -
-      ( $rowspace * ( $rowcount - 1 ) );
-    $DEBUG and warn "Start label: $start_label. Beginning in row $rowcount, column $colcount\n"
-        . "(X,Y) positions = ($x_pos,$y_pos)\n"
-        . "Rowspace = $rowspace, Label height = $label_height";
-}
-
-#
-#### main foreach loop #### 
-#
-
-foreach my $item (@resultsloop) {
-    warn "Label parameters: xpos=$x_pos, ypos=$y_pos, lblwid=$label_width, lblhig=$label_height" if $DEBUG;
-
-    drawbox($x_pos, $y_pos, $label_width, $label_height) if $guidebox;  # regardless of printingtype
-
-    if ( $printingtype eq 'BAR' ) {
-        DrawBarcode( $x_pos, $y_pos, $label_height, $label_width, $item->{'barcode'}, $barcodetype );
-    }
-    elsif ( $printingtype eq 'BARBIB' ) {
-        # reposoitioning barcode up the top of label
-        my $barcode_height = ($label_height / 1.5 );    ## scaling voodoo
-        my $text_height    = $label_height / 2;
-        my $barcode_y      = $y_pos + ( $label_height / 2.5  );   ## scaling voodoo
-
-        DrawBarcode( $x_pos, $barcode_y, $barcode_height, $label_width, $item->{'barcode'}, $barcodetype );
-        DrawSpineText( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize,
-            $left_text_margin, $text_wrap_cols, \$item, \$conf_data, $printingtype );
-    }    # correct
-    elsif ( $printingtype eq 'BIBBAR' ) {
-        my $barcode_height = $label_height / 2;
-        DrawBarcode( $x_pos, $y_pos, $barcode_height, $label_width, $item->{'barcode'}, $barcodetype );
-        DrawSpineText( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize,
-            $left_text_margin, $text_wrap_cols, \$item, \$conf_data, $printingtype );
-    }
-    elsif ( $printingtype eq 'ALT' ) {
-        DrawBarcode( $x_pos, $y_pos, $label_height, $label_width, $item->{'barcode'}, $barcodetype );
-        CalcNextLabelPos();
-        drawbox( $x_pos, $y_pos, $label_width, $label_height ) if $guidebox;
-        DrawSpineText( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize,
-            $left_text_margin, $text_wrap_cols, \$item, \$conf_data, $printingtype );
-    }
-    elsif ( $printingtype eq 'BIB' ) {
-        DrawSpineText( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize,
-            $left_text_margin, $text_wrap_cols, \$item, \$conf_data, $printingtype );
-    }
-    elsif ( $printingtype eq 'PATCRD' ) {
-        my $patron_data = $item;
-        #FIXME: This needs to be paramatized and passed in from the user...
-        #Each element of this hash is a separate line on the patron card. Keys are the text to print and the associated data is the point size.
-        my $text = {        
-            $patron_data->{'description'}  => $fontsize,
-            $patron_data->{'branchname'}   => ($fontsize + 3),
-        };
-        $DEBUG and warn "Generating patron card for cardnumber $patron_data->{'cardnumber'}";
-        my $barcode_height = $label_height / 2.75; #FIXME: Scaling barcode height; this needs to be a user parameter.
-        DrawBarcode( $x_pos, $y_pos, $barcode_height, $label_width, $patron_data->{'cardnumber'}, $barcodetype );
-        DrawPatronCardText( $x_pos, $y_pos, $label_height, $label_width, $fontname, $fontsize,
-            $left_text_margin, $text_wrap_cols, $text, $printingtype );
+    elsif ($label_type eq 'BARBIB') {
+        $barcode_llx = $llx + $template->get_attr('left_text_margin');                             # this places the bottom left of the barcode the left text margin distance to right of the the left edge of the label ($llx)
+        $barcode_lly = ($lly + $template->get_attr('label_height')) - $template->get_attr('top_text_margin');        # this places the bottom left of the barcode the top text margin distance below the top of the label ($lly)
+        $barcode_width = 0.8 * $template->get_attr('label_width');                                 # this scales the barcode width to 80% of the label width
+        $barcode_y_scale_factor = 0.01 * $template->get_attr('label_height');                      # this scales the barcode height to 10% of the label height
+        my $line_spacer = ($label->get_attr('font_size') * 1);    # number of pixels between text rows (This is actually leading: baseline to baseline minus font size. Recommended starting point is 20% of font size.).
+        my $text_lly = ($lly + ($template->get_attr('label_height') - $template->get_attr('top_text_margin')));
+        my $label_text = $label->draw_label_text(
+                                        llx             => $llx,
+                                        lly             => $text_lly,
+                                        line_spacer     => $line_spacer,
+                                        );
+        _print_text($label_text);
     }
     else {
-        die "CANNOT PRINT: Unknown printingtype '$printingtype'";
-    }
-
-    CalcNextLabelPos();     # regardless of printingtype
-}    # end for item loop
-prEnd();
-
-sub CalcNextLabelPos {
-    if ($colcount < $label_cols) {
-        # warn "new col";
-        $x_pos = ( $x_pos + $label_width + $colspace );
-        $colcount++;
-    } else {
-        $x_pos = $left_margin;
-        if ($rowcount == $label_rows) {
-            # warn "new page";
-            prPage();
-            $y_pos    = ( $page_height - $top_margin - $label_height );
-            $rowcount = 1;
-        } else {
-            # warn "new row";
-            $y_pos = ( $y_pos - $rowspace - $label_height );
-            $rowcount++;
+        $barcode_llx = $llx + $template->get_attr('left_text_margin');             # this places the bottom left of the barcode the left text margin distance to right of the the left edge of the label ($llx)
+        $barcode_lly = $lly + $template->get_attr('top_text_margin');              # this places the bottom left of the barcode the top text margin distance above the bottom of the label ($lly)
+        $barcode_width = 0.8 * $template->get_attr('label_width');                 # this scales the barcode width to 80% of the label width
+        $barcode_y_scale_factor = 0.01 * $template->get_attr('label_height');      # this scales the barcode height to 10% of the label height
+        if ($label_type eq 'BIBBAR' || $label_type eq 'ALT') {
+            my $line_spacer = ($label->get_attr('font_size') * 1);    # number of pixels between text rows (This is actually leading: baseline to baseline minus font size. Recommended starting point is 20% of font size.).
+            my $text_lly = ($lly + ($template->get_attr('label_height') - $template->get_attr('top_text_margin')));
+            my $label_text = $label->draw_label_text(
+                                            llx             => $llx,
+                                            lly             => $text_lly,
+                                            line_spacer     => $line_spacer,
+                                            );
+            _print_text($label_text);
         }
-        $colcount = 1;
+        if ($label_type eq 'ALT') {
+        ($row_count, $col_count, $llx, $lly) = _calc_next_label_pos($row_count, $col_count, $llx, $lly);
+        }
     }
+    $label->barcode(
+                llx                 => $barcode_llx,
+                lly                 => $barcode_lly,
+                width               => $barcode_width,
+                y_scale_factor      => $barcode_y_scale_factor,
+    );
+    ($row_count, $col_count, $llx, $lly) = _calc_next_label_pos($row_count, $col_count, $llx, $lly);
 }
 
+$pdf->End();
