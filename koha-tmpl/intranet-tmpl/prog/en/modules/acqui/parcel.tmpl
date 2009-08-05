@@ -142,6 +142,18 @@
             Receive orders from <!-- TMPL_VAR NAME="name" -->
         <!-- /TMPL_IF -->
     </h1>
+
+    <!-- TMPL_IF NAME="success_delorder" -->
+    <div class="dialog message">The order has been successfully canceled.</div>
+    <!-- TMPL_ELSE -->
+	<!-- TMPL_IF NAME="error_delitem" -->
+	    <div class="dialog alert">The order has been canceled, although one or more items could not have been deleted.</div>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="error_delbiblio" -->
+	    <div class="dialog alert">The order has been canceled, although the record has not been deleted.</div>
+	<!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->
+
 <div id="acqui_receive_summary">
     <p>Invoice number: <!-- TMPL_VAR NAME="invoice" --></p>
     <p>Received by: <!-- TMPL_VAR NAME="loggedinusername" --></p>
@@ -192,7 +204,7 @@
             <th>Still on order</th>
             <th>Unit cost</th>
             <th>Order cost</th>
-            <th>Receive</th>
+            <th>Order</th>
         </tr>
     </thead>
     <tbody class="filterclass">
@@ -214,7 +226,10 @@
                 <td><!-- TMPL_VAR NAME="quantrem" --> / <!-- TMPL_VAR NAME="quantity" --></td>
                 <td><!-- TMPL_VAR NAME="ecost" --></td>
                 <td><!-- TMPL_VAR NAME="ordertotal" --></td>
-				<td><a href="orderreceive.pl?ordernumber=<!-- TMPL_VAR NAME="ordernumber" -->&amp;datereceived=<!-- TMPL_VAR NAME="invoicedatereceived" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->">Receive</a></td>
+				<td>
+				    <a href="orderreceive.pl?ordernumber=<!-- TMPL_VAR NAME="ordernumber" -->&amp;datereceived=<!-- TMPL_VAR NAME="invoicedatereceived" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->">Receive</a> / 
+				    <a href="parcel.pl?type=intra&amp;ordernumber=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;action=cancelorder&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;datereceived=<!-- TMPL_VAR NAME="invoicedatereceived" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->" onclick="return confirm(_('Are you sure you want to cancel this order?'));">Cancel</a>
+				</td>
             </tr>
         <!-- /TMPL_LOOP -->
     </tbody>

@@ -53,6 +53,7 @@ BEGIN {
 		&GetContracts &GetContract
 
         &GetOrderFromItemnumber
+        &GetItemnumbersFromOrder
 	);
 }
 
@@ -80,6 +81,22 @@ sub GetOrderFromItemnumber {
 
 }
 
+# Returns the itemnumber(s) associated with the ordernumber given in parameter 
+sub GetItemnumbersFromOrder {
+    my ($ordernumber) = @_;
+    my $dbh          = C4::Context->dbh;
+    my $query        = "SELECT itemnumber FROM aqorders_items WHERE ordernumber=?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($ordernumber);
+    my @tab;
+
+    while (my $order = $sth->fetchrow_hashref) {
+	push @tab, $order->{'itemnumber'}; 
+    }
+
+    return @tab;
+
+}
 
 
 

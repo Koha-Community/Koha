@@ -54,8 +54,10 @@ To filter the results list on this given date.
 
 use C4::Auth;
 use C4::Acquisition;
+use C4::Budgets;
 use C4::Bookseller;
 use C4::Biblio;
+use C4::Items;
 use CGI;
 use C4::Output;
 use C4::Dates qw/format_date format_date_in_iso/;
@@ -89,6 +91,46 @@ my ($template, $loggedinuser, $cookie)
                  flagsrequired => {acquisition => 'order_receive'},
                  debug => 1,
 });
+
+my $action = $input->param('action');
+my $ordernumber = $input->param('ordernumber');
+my $biblionumber = $input->param('biblionumber');
+
+# If canceling an order
+if ($action eq "cancelorder") {
+
+    my $error_delitem;
+    my $error_delbiblio;
+
+    # We delete the order
+    DelOrder($biblionumber, $ordernumber);
+
+    # We delete all the items related to this order
+    my @itemnumbers = GetItemnumbersFromOrder($ordernumber);
+    foreach (@itemnumbers) {
+	my $delcheck = DelItemCheck(C4::Context->dbh, $biblionumber, $_);
+	# (should always success, as no issue should exist on item on order)
+	if ($delcheck != 1) { $error_delitem = 1; }
+    }
+
+    # We get the number of remaining items
+    my $itemcount = GetItemsCount($biblionumber);
+    
+    # If there are no items left,
+    if ($itemcount eq 0) {
+	# We delete the record
+	$error_delbiblio = DelBiblio($biblionumber);	
+    }
+
+    if ($error_delitem || $error_delbiblio) {
+	warn $error_delitem;
+	warn $error_delbiblio;
+	if ($error_delitem)   { $template->param(error_delitem => 1); }
+	if ($error_delbiblio) { $template->param(error_delbiblio => 1); }
+    } else {
+	$template->param(success_delorder => 1);
+    }
+}
 
 # If receiving error, report the error (coming from finishrecieve.pl(sic)).
 if( scalar(@rcv_err) ) {
