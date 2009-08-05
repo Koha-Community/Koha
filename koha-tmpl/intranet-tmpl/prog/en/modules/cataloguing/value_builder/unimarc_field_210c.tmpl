@@ -1,26 +1,31 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<div id="mainbloc">
+<head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>UNIMARC_Field 125b builder</title>
+</head>
+<body>
+
+<div id="mainbloc">
     <h1 class="authority">Authority search results</h1>
-    <div id="bloc25">
+    <div>
         <form name="f" method="post" action="plugin_launcher.pl">
-            <input type="hidden" name="plugin_name" value="unimarc_field_210c.pl">
-            <input type="hidden" name="op" value="do_search">
-            <input type="hidden" name="type" value="intranet">
-            <input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->">
-            <div id="bloc25">
+            <input type="hidden" name="plugin_name" value="unimarc_field_210c.pl" />
+            <input type="hidden" name="op" value="do_search" />
+            <input type="hidden" name="type" value="intranet" />
+            <input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
+            <div>
                 <h2 class="authority">Search on</h2>
                 <p>
                     <label class="label100">Authority type</label>
                     EDITORS
                 </p>
                 <p>
-                    <label class="label100">Search value</label><input type="text" name="value" value="<!-- TMPL_VAR name="resultstring" -->">
-                    <input type="hidden" name="index" value="<!--TMPL_VAR Name="index"-->">
-                    <input type="hidden" name="authtypecode" value="EDITORS">
-                    <input type="hidden" name="q" value="<!-- TMPL_VAR NAME="index" -->">
+                    <label class="label100">Search value</label><input type="text" name="value" value="<!-- TMPL_VAR name="resultstring" -->" />
+                    <input type="hidden" name="index" value="<!--TMPL_VAR Name="index"-->" />
+                    <input type="hidden" name="authtypecode" value="EDITORS" />
+                    <input type="hidden" name="q" value="<!-- TMPL_VAR NAME="index" -->" />
                     <input type="hidden" name="marclist" value="all" />
                     <input type="hidden" name="and_or" value="and" />
                     <input type="hidden" name="excluding" value="" />
@@ -37,21 +42,21 @@
 
                 </p>
                 <p>
-                <input type="submit" value="Start search" class="button authority">
+                <input type="submit" value="Start search" class="button authority" />
                 </p>
             </div>
         </form>
     </div>
-    <div id="bloc25">
-        <div id="resultnumber">
+    <div>
+        <div>
             <div class="paginationBar">
               <!--TMPL_VAR Name="pagination_bar"-->      
             </div>
             <p>
                 <!-- TMPL_IF name="total" -->
-                    &nbsp;<b>Results <!-- TMPL_VAR NAME="from" --> to <!-- TMPL_VAR NAME="to" --> of <!-- TMPL_VAR NAME="total" --></b><br><br>
+                    &nbsp;<b>Results <!-- TMPL_VAR NAME="from" --> to <!-- TMPL_VAR NAME="to" --> of <!-- TMPL_VAR NAME="total" --></b><br /><br />
                 <!-- TMPL_ELSE -->
-                    &nbsp; No results found<br>
+                    &nbsp; No results found<br />
                 <!-- /TMPL_IF -->
             </p>
         </div>
@@ -74,7 +79,7 @@
             </table>
     
         </div>
-        <div id="resultnumber">
+        <div>
             <div class="paginationBar">
               <!--TMPL_VAR Name="pagination_bar"-->      
             </div>

@@ -63,51 +63,12 @@ my $function_name= $field_number;
 #---- 200$a for isbn
 #---- 200$b for editor
 #---- 200$c (repeated) for collections
- my $sth 
-= $dbh->prepare("select auth_subfield_table.authid,subfieldvalue from auth_subfield_table 
-                        left join auth_header on auth_subfield_table.authid=auth_header.authid
-                        where authtypecode='EDITORS' and tag='200' and subfieldcode='a'");
- my $sth2
- = $dbh->prepare("select subfieldvalue from auth_subfield_table where tag='200' and subfieldcode='b' and authid=?");
-$sth->execute;
-my @editors;
-my $authoritysep = C4::Context->preference("authoritysep");
-while (my ($authid,$isbn) = $sth->fetchrow) {
-    $sth2->execute($authid);
-    my ($editor) = $sth2->fetchrow;
-    push(@editors,"$isbn $authoritysep $editor");
-}
+
+
 my $res  = "
 <script type=\"text/javascript\">
 function Focus$function_name(index) {
-var isbn_array = [ ";
-foreach my $editor (@editors) {
-    my @arr = split (/ $authoritysep /,$editor);
-    $res .='["'.$arr[0].'","'.$arr[1].'","'.$arr[2].'"],';
-}
-chop $res;
-$res .= "
-];
-    // search isbn subfield. it''s 010a
-    var isbn_found;
-    var nb_fields = document.f.field_value.length;
-    for (i=0 ; i< nb_fields; i++) {
-        if (document.f.tag[i].value == '010' && document.f.subfield[i].value == 'a') {
-            isbn_found=document.f.field_value[i].value;
-            break;
-        }
-    }
-    try{
-        isbn_found.getAttribute('value'); // throw an exception if doesn't (if no 010a)
-    }
-    catch(e){
-        return;
-    }
-    for (i=0;i<=isbn_array.length;i++) {
-        if (isbn_found.substr(0,isbn_array[i][0].length) == isbn_array[i][0]) {
-            document.f.field_value[index].value =isbn_array[i][1];
-        }
-    }
+
 }
 
 function Blur$function_name(subfield_managed) {
