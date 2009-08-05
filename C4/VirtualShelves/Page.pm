@@ -171,13 +171,13 @@ SWITCH: {
 		if ( ShelfPossibleAction( $loggedinuser, $shelfnumber, 'view' ) ) {
 			my $items;
 			my $authorsort;
-			my $copyrightsort;
+			my $yearsort;
 	                my $sortfield = ($query->param('sortfield') ? $query->param('sortfield') : 'title');
 			if ($sortfield eq 'author') {
 				$authorsort = 'author';
 			}
-			if ($sortfield eq 'copyrightdate'){
-				$copyrightsort = 'copyrightdate';
+			if ($sortfield eq 'year'){
+				$yearsort = 'year';
 			}
 			($items, $totitems) = GetShelfContents($shelfnumber, $shelflimit, $shelfoffset);
 			for my $this_item (@$items) {
@@ -198,7 +198,7 @@ SWITCH: {
 				shelfnumber => $shelfnumber,
 				viewshelf   => $shelfnumber,
 				authorsort   => $authorsort,
-				copyrightsort => $copyrightsort,
+				yearsort => $yearsort,
 				manageshelf => $manageshelf,
 				itemsloop => $items,
 			);

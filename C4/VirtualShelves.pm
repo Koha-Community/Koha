@@ -266,8 +266,8 @@ sub GetShelfContents ($;$$$) {
 		($sortfield) = $sth2->fetchrow_array;
 	}
     my $query =
-       " SELECT vc.biblionumber, vc.shelfnumber, vc.dateadded,
-	   			biblio.*, biblioitems.itemtype, itemtypes.*
+       " SELECT vc.biblionumber, vc.shelfnumber, vc.dateadded, itemtypes.*,
+	   			biblio.*, biblioitems.itemtype, biblioitems.publicationyear
          FROM   virtualshelfcontents vc
 		 LEFT JOIN biblio      ON      vc.biblionumber =      biblio.biblionumber
 		 LEFT JOIN biblioitems ON  biblio.biblionumber = biblioitems.biblionumber

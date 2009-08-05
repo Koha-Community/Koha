@@ -85,7 +85,7 @@ $(function() {
         <!-- TMPL_IF NAME="manageshelf" -->
           <!-- TMPL_IF NAME="authorsort" -->
           sortList: [[2,0]],
-          <!-- TMPL_ELSIF NAME="copyrightsort" -->
+          <!-- TMPL_ELSIF NAME="yearsort" -->
           sortList: [[3,1]],
           <!-- TMPL_ELSE -->
           sortList: [[1,0]],
@@ -94,7 +94,7 @@ $(function() {
         <!-- TMPL_ELSE -->
           <!-- TMPL_IF NAME="authorsort" -->
           sortList: [[1,0]],
-          <!-- TMPL_ELSIF NAME="copyrightsort" -->
+          <!-- TMPL_ELSIF NAME="yearsort" -->
           sortList: [[2,1]],
           <!-- TMPL_ELSE -->
           sortList: [[0,0]],
@@ -222,7 +222,7 @@ $(function() {
                     <!-- TMPL_UNLESS NAME="item-level_itypes" --><th>Item Type</th><!-- /TMPL_UNLESS -->
                     <th>Title</th>
                     <th>Author</th>
-                    <th>Copyright</th>
+                    <th>Year</th>
                   </tr></thead>
                   <tbody>
                   <!-- TMPL_LOOP NAME="itemsloop" -->
@@ -256,7 +256,13 @@ $(function() {
                           <div id="newtag<!-- TMPL_VAR NAME="biblionumber">_status" class="tagstatus results_summary" style="display:none">Tag status here.</div>
                         </td>
                         <td><!-- TMPL_VAR NAME="author" --></td>
-                        <td><!-- TMPL_VAR NAME="copyrightdate" --></td>
+                        <td>
+			            	<!-- TMPL_IF NAME="publicationyear" -->
+			            		<!-- TMPL_VAR NAME="publicationyear" -->
+			            	<!-- TMPL_ELSE -->
+			            		<!-- TMPL_VAR NAME="copyrightdate" -->
+			            	<!-- /TMPL_IF -->
+                        </td>
                       </tr>
                   <!-- /TMPL_LOOP --><!-- /itemsloop -->
                     </tbody>
@@ -296,7 +302,7 @@ $(function() {
                         <select name="sortfield" id="sortfield">
                           <!-- TMPL_IF NAME="sort_title" --><option value="title" selected="selected">Title</option><!-- TMPL_ELSE --><option value="title">Title</option><!-- /TMPL_IF -->
                           <!-- TMPL_IF NAME="sort_author" --><option value="author" selected="selected">Author</option><!-- TMPL_ELSE --><option value="author">Author</option><!-- /TMPL_IF -->
-                          <!-- TMPL_IF NAME="sort_copyrightdate" --><option value="copyrightdate" selected="selected">Copyrightdate</option><!-- TMPL_ELSE --><option value="copyrightdate">Copyrightdate</option><!-- /TMPL_IF -->
+                          <!-- TMPL_IF NAME="sort_year" --><option value="year" selected="selected">Year</option><!-- TMPL_ELSE --><option value="year">Year</option><!-- /TMPL_IF -->
                         </select>
                       </li>
                       <li>
@@ -486,7 +492,7 @@ $(function() {
                         <select name="sortfield" id="sortfield">
                           <!-- TMPL_IF NAME="sort_title" --><option value="title" selected="selected">Title</option><!-- TMPL_ELSE --><option value="title">Title</option><!-- /TMPL_IF -->
                           <!-- TMPL_IF NAME="sort_author" --><option value="author" selected="selected">Author</option><!-- TMPL_ELSE --><option value="author">Author</option><!-- /TMPL_IF -->
-                          <!-- TMPL_IF NAME="sort_copyrightdate" --><option value="copyrightdate" selected="selected">Copyrightdate</option><!-- TMPL_ELSE --><option value="copyrightdate">Copyrightdate</option><!-- /TMPL_IF -->
+                          <!-- TMPL_IF NAME="sort_year" --><option value="year" selected="selected">Year</option><!-- TMPL_ELSE --><option value="year">Year</option><!-- /TMPL_IF -->
                         </select>
                       </li>
                       <li>
