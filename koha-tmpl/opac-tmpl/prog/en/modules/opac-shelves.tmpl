@@ -108,7 +108,7 @@ $.tablesorter.addParser({
             <!-- TMPL_UNLESS NAME="item-level_itypes" --><th>Item Type</th><!-- /TMPL_UNLESS -->
             <th>Title</th>
             <th>Author</th>
-            <th>Copyright</th>
+            <th>Year</th>
         </tr></thead>
             <tbody><!-- TMPL_LOOP NAME="itemsloop" -->
                 <!-- TMPL_IF NAME="toggle" -->
@@ -136,7 +136,13 @@ $.tablesorter.addParser({
               <!-- COinS / OpenURL --><span class="Z3988" title="<!-- TMPL_VAR NAME="coins" -->"></span>
             </td>
             <td><!-- TMPL_VAR NAME="author" --></td>
-            <td><!-- TMPL_VAR NAME="copyrightdate" --></td>
+            <td>
+            	<!-- TMPL_IF NAME="publicationyear" -->
+            		<!-- TMPL_VAR NAME="publicationyear" -->
+            	<!-- TMPL_ELSE -->
+            		<!-- TMPL_VAR NAME="copyrightdate" -->
+            	<!-- /TMPL_IF -->
+            </td>
         </tr>
                 <!-- /TMPL_LOOP --></tbody><!-- /itemsloop -->
     </table>
@@ -173,7 +179,7 @@ $.tablesorter.addParser({
             <select name="sortfield">
             <!-- TMPL_IF NAME="sort_title" --><option value="title" selected="selected">Title</option><!-- TMPL_ELSE --><option value="title">Title</option><!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="sort_author" --><option value="author" selected="selected">Author</option><!-- TMPL_ELSE --><option value="author">Author</option><!-- /TMPL_IF -->
-            <!-- TMPL_IF NAME="sort_copyrightdate" --><option value="copyrightdate" selected="selected">Copyrightdate</option><!-- TMPL_ELSE --><option value="copyrightdate">Copyrightdate</option><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="sort_year" --><option value="year" selected="selected">Year</option><!-- TMPL_ELSE --><option value="year">Year</option><!-- /TMPL_IF -->
             </select></li>
             <li><label for="category">Category: </label>
                 <select name="category" id="category">
@@ -317,7 +323,7 @@ $.tablesorter.addParser({
                 <select name="sortfield">
                 <!-- TMPL_IF NAME="sort_title" --><option value="title" selected="selected">Title</option><!-- TMPL_ELSE --><option value="title">Title</option><!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="sort_author" --><option value="author" selected="selected">Author</option><!-- TMPL_ELSE --><option value="author">Author</option><!-- /TMPL_IF -->
-                <!-- TMPL_IF NAME="sort_copyrightdate" --><option value="copyrightdate" selected="selected">Copyrightdate</option><!-- TMPL_ELSE --><option value="copyrightdate">Copyrightdate</option><!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="sort_year" --><option value="year" selected="selected">Year</option><!-- TMPL_ELSE --><option value="year">Year</option><!-- /TMPL_IF -->
                 </select></li>
                 <li><label for="category">Category:</label>
                 <select name="category" id="category">
