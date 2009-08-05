@@ -46,7 +46,7 @@ use C4::Auth;
 use CGI;
 use C4::Context;
 
-use C4::Search;
+use C4::AuthoritiesMarc;
 use C4::Output;
 
 =head1
@@ -81,9 +81,6 @@ sub plugin_javascript {
             var inputs = document.getElementsByTagName('input');
             
             for(var i=0 , len=inputs.length ; i \< len ; i++ ){
-                if(inputs[i].id.match(/^tag_010_subfield_a_.*/)){
-                    isbn_found = inputs[i].value;
-                }
                 if(inputs[i].id.match(/^tag_210_subfield_c_.*/)){
                     editor_found = inputs[i].value;
                 }
@@ -93,7 +90,7 @@ sub plugin_javascript {
             }
                     
             defaultvalue = document.getElementById(\"$field_number\").value;
-            window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_225a.pl&index=\"+index+\"&result=\"+defaultvalue+\"&isbn_found=\"+isbn_found+\"&editor_found=\"+editor_found,\"unimarc 225a\",'width=500,height=200,toolbar=false,scrollbars=no');
+            window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_225a.pl&index=\"+index+\"&result=\"+defaultvalue+\"&editor_found=\"+editor_found,\"unimarc225a\",'width=500,height=200,toolbar=false,scrollbars=no');
     
         }
     </script>
@@ -107,9 +104,8 @@ sub plugin {
     my $index        = $input->param('index');
     my $result       = $input->param('result');
     my $editor_found = $input->param('editor_found');
-    my $isbn_found   = $input->param('isbn_found');
-    my $dbh          = C4::Context->dbh;
     my $authoritysep = C4::Context->preference("authoritysep");
+    
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
             template_name =>
@@ -125,62 +121,23 @@ sub plugin {
 # builds collection list : search isbn and editor, in parent, then load collections from bibliothesaurus table
 # if there is an isbn, complete search
     my @collections;
-    if ($isbn_found) {
-        my $sth = $dbh->prepare(
-            "SELECT auth_subfield_table.authid,subfieldvalue
-            FROM   auth_subfield_table
-            LEFT JOIN auth_header ON auth_subfield_table.authid = auth_header.authid 
-	    WHERE authtypecode='EDITORS' 
-               AND tag='200'
-               AND subfieldcode='a'
-               AND subfieldvalue=?"
-        );
-        my $sth2 =
-          $dbh->prepare(
-            "SELECT subfieldvalue
-             FROM auth_subfield_table 
-             WHERE tag='200'
-             AND subfieldcode='c'
-             AND authid=?
-             ORDER BY subfieldvalue"
-          );
-        my @splited = split //, $isbn_found;
-        my $isbn_rebuild = '';
-        foreach my $x (@splited) {
-            $isbn_rebuild .= $x;
-            $sth->execute($isbn_rebuild);
-            my ($authid) = $sth->fetchrow;
-            $sth2->execute($authid);
-            while ( my ($line) = $sth2->fetchrow ) {
-                push @collections, $line;
-            }
+    
+    my @value     = ($editor_found,"","");
+    my @tags      = ("mainentry","","");
+    my @and_or    = ('and','','');
+    my @operator  = ('is','','');
+    my @excluding = ('','','');
+    
+    
+    my ($results,$total) = SearchAuthorities( \@tags,\@and_or,
+                                            \@excluding, \@operator, \@value,
+                                            0, 20,"EDITORS", "HeadingAsc");
+    foreach my $editor (@$results){
+        my $authority = GetAuthority($editor->{authid});
+        foreach my $col ($authority->subfield('200','c')){
+            push @collections, $col;
         }
-    }
-    else {
-        my $sth = $dbh->prepare(
-            "SELECT auth_subfield_table.authid,subfieldvalue
-             FROM auth_subfield_table
-             LEFT JOIN auth_header ON auth_subfield_table.authid = auth_header.authid 
-	     WHERE authtypecode='EDITORS'
-               AND tag='200'
-               AND subfieldcode='b'
-               AND subfieldvalue=?"
-        );
-        my $sth2 =
-          $dbh->prepare(
-            "SELECT subfieldvalue
-             FROM auth_subfield_table
-             WHERE tag='200'
-                AND subfieldcode='c'
-                AND authid=?
-             ORDER BY subfieldvalue"
-          );
-        $sth->execute($editor_found);
-        my ($authid) = $sth->fetchrow;
-        $sth2->execute($authid);
-        while ( my ($line) = $sth2->fetchrow ) {
-            push @collections, $line;
-        }
+            
     }
 
     #	my @collections = ["test"];
