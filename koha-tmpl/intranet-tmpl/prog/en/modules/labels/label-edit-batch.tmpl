@@ -3,21 +3,35 @@
     <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
     <script type="text/JavaScript" language="JavaScript">
         //<![CDATA[
-            function RemoveConfirm() {
-                var label_id = selected_layout();
-                if (label_id>-1) {
-                    var msg = "Are you sure you want to the selected item from this batch?"
-                    var answer = confirm(msg);
-                    if (answer) {
-                        window.location = "/cgi-bin/koha/labels/label-edit-batch.pl?op=remove&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;label_id=" + label_id;
+            function Remove() {
+                items= new Array;
+                if(document.items.action.length > 0) {
+                    for (var i=0; i < document.items.action.length; i++) {
+                        if (document.items.action[i].checked) {
+                            items.push("label_id=" +  document.items.action[i].value);
+                        }
                     }
-                    else {
-                        return; // abort delete
+                    if (items.length < 1) {
+                        alert("Please select at least one item to delete.");
+                        return;     // no item selected
                     }
+                    getstr = items.join("&");
+                }
+                else if (document.items.action.checked) {
+                    getstr = "label_id="+document.items.action.value;
                 }
                 else {
-                    return;     // no layout selected
-                };
+                    alert("Please select at least one item to delete.");
+                    return;     // no item selected
+                }
+                var msg = "Are you sure you want to the selected item(s) from this batch?"
+                var answer = confirm(msg);
+                if (answer) {
+                    window.location = "/cgi-bin/koha/labels/label-edit-batch.pl?op=remove&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;" + getstr;
+                }
+                else {
+                    return; // abort delete
+                }
             };
             function Add() {
                 window.location = "/cgi-bin/koha/labels/label-edit-batch.pl?op=add&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->";
@@ -39,16 +53,16 @@
                 };
             };
            function selected_layout() {
-                if (document.layouts.action.length) {
-                for (i=0;i<document.layouts.action.length;i++){
-                    if (document.layouts.action[i].checked==true){
-                        return(document.layouts.action[i].value);
+                if (document.items.action.length) {
+                for (i=0;i<document.items.action.length;i++){
+                    if (document.items.action[i].checked==true){
+                        return(document.items.action[i].value);
                     }
                 };
                 }
                 else {
-                    if (document.layouts.action.checked){
-                        return(document.layouts.action.value);
+                    if (document.items.action.checked){
+                        return(document.items.action.value);
                     }
                     //var x=document.getElementsByName("action");
                     //if (x[0].checked) {
@@ -56,7 +70,7 @@
                     //    return(x[0].value);
                     //};
                 };
-                alert("Please select an item.");
+                alert("Please select at least one item.");
                 return (-1);
             };
         //]]>
@@ -79,7 +93,7 @@
                     <div class="yui-gc">
                         <div class="yui-u first" id="manage-label-batches">
                             <div class="hint">Current Branch: <!-- TMPL_VAR NAME="LoginBranchname" --></div>
-                            <form name="layouts">
+                            <form name="items">
                             <h2>Items in batch number <!-- TMPL_VAR NAME="batch_id" --></h2>
                             <table>
                                 <!-- TMPL_LOOP NAME="table_loop" -->
@@ -93,7 +107,7 @@
                                 <tr>
                                 <!-- TMPL_LOOP NAME="text_fields" -->
                                 <!-- TMPL_IF NAME="select_field" -->
-                                    <td align="center"><input type="radio" name="action" value="<!-- TMPL_VAR NAME="field_value" -->"></td>
+                                    <td align="center"><input type="checkbox" name="action" value="<!-- TMPL_VAR NAME="field_value" -->"></td>
                                 <!-- TMPL_ELSE -->
                                     <td><!-- TMPL_VAR NAME="field_value" --></td>
                                 <!-- /TMPL_IF -->
@@ -104,9 +118,9 @@
                             </table>
                             </form>
                             <div style="margin: 10px 10px 10px 0px;">
-                                <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="add" onclick="Add()" value="Add Item"></span></span>
-                                <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="remove" onclick="RemoveConfirm()" value="Remove Item"></span></span>
-                                <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="print_item" onclick="Print(item)" value="Print Item"></span></span>
+                                <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="add" onclick="Add()" value="Add Item(s)"></span></span>
+                                <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="remove" onclick="Remove()" value="Remove Item(s)"></span></span>
+                                <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="print_item" onclick="Print(item)" value="Print Item(s)"></span></span>
                                 <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="print_batch" onclick="Print(batch)" value="Print Batch"></span></span>
                             </div>
                         </div>

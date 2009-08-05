@@ -59,15 +59,20 @@ my $display_columns = [ {_label_number  => {label => 'Label Number', link_field 
                         {select         => {label => 'Select', value => '_label_id'}},
                       ];
 my $op = $cgi->param('op') || undef;
-my $label_id = $cgi->param('label_id') || undef;
+my @label_ids = $cgi->param('label_id') if $cgi->param('label_id');
 my $batch_id = $cgi->param('element_id') || $cgi->param('batch_id') || undef;
 my @item_numbers = $cgi->param('item_number') if $cgi->param('item_number');
 my $branch_code = get_branch_code_from_name($template->param('LoginBranchname'));
 
 if ($op eq 'remove') {
     $batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);
+    foreach my $label_id (@label_ids) {
     $err = $batch->remove_item($label_id);
-    $errstr = "item $label_id was not removed." if $err;
+    }
+    $errstr = "item(s) not removed from batch $batch_id." if $err;
+#    Something like this would be nice to avoid problems with the browser's 'refresh' button, but it needs an error handling mechanism...
+#    print $cgi->redirect("label-edit-batch.pl?op=edit&batch_id=$batch_id");
+#    exit;
 }
 elsif ($op eq 'delete') {
     $err = C4::Labels::Batch::delete(batch_id => $batch_id, branch_code => $branch_code);

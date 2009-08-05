@@ -4,7 +4,7 @@
     <script type="text/JavaScript" language="JavaScript">
         //<![CDATA[
             function DeleteConfirm() {
-                var element_id = selected_layout();
+                var element_id = selected_layout("delete");
                 if (element_id>-1) {
                     var msg = "Are you sure you want to delete <!-- TMPL_VAR NAME="label_element" --> " + element_id + "?"
                     var answer = confirm(msg);
@@ -20,7 +20,7 @@
                 };
             };
             function Edit() {
-                var element_id = selected_layout();
+                var element_id = selected_layout("edit");
                 if (element_id>-1) {
                     window.location = "/cgi-bin/koha/labels/label-edit-<!-- TMPL_VAR NAME="label_element" -->.pl?op=edit&amp;element_id=" + element_id;
                 }
@@ -29,7 +29,7 @@
                 };
             };
             function Print() {
-                var element_id = selected_layout();
+                var element_id = selected_layout("print");
                 if (element_id>-1) {
                     window.location = "/cgi-bin/koha/labels/label-edit-<!-- TMPL_VAR NAME="label_element" -->.pl?op=edit&amp;element_id=" + element_id;
                 }
@@ -37,13 +37,21 @@
                     return;     // no layout selected
                 };
             };
-            function selected_layout() {
+            function selected_layout(op) {
+                var selected = new Array;
                 if (document.layouts.action.length) {
-                for (i=0;i<document.layouts.action.length;i++){
-                    if (document.layouts.action[i].checked==true){
-                        return(document.layouts.action[i].value);
+                    for (i=0;i<document.layouts.action.length;i++){
+                        if (document.layouts.action[i].checked){
+                            selected.push(i);
+                        }
+                    };
+                    if (selected.length == 1) {
+                        return(document.layouts.action[selected[0]].value);
                     }
-                };
+                    else {
+                        alert("Please select only one <!-- TMPL_VAR NAME="label_element" --> to " + op + ".");
+                        return (-1);
+                    }
                 }
                 else {
                     if (document.layouts.action.checked){
@@ -92,7 +100,7 @@
                                 <tr>
                                 <!-- TMPL_LOOP NAME="text_fields" -->
                                 <!-- TMPL_IF NAME="select_field" -->
-                                    <td align="center"><input type="radio" name="action" value="<!-- TMPL_VAR NAME="field_value" -->"></td>
+                                    <td align="center"><input type="checkbox" name="action" value="<!-- TMPL_VAR NAME="field_value" -->"></td>
                                 <!-- TMPL_ELSE -->
                                     <td><!-- TMPL_VAR NAME="field_value" --></td>
                                 <!-- /TMPL_IF -->

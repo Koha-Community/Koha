@@ -1,7 +1,7 @@
     <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
     <title>Koha &rsaquo; Barcodes and Labels &rsaquo; Search Results</title>
     <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-    <style type="text/css">#custom-doc { width:46.23em;*width:45.04em;min-width:610px; margin:auto;margin-top: .4em; text-align:left; }</style>
+    <style type="text/css">#custom-doc { width:46.23em;*width:45.04em;min-width:700px; margin:auto;margin-top: .4em; text-align:left; }</style>
     <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.pack.js"></script>
     <script type="text/javascript">
         //<![CDATA[
@@ -35,9 +35,10 @@
                 }
                 var myurl = "label-edit-batch.pl?op=add&batch_id="+batch_id+
                 "&"+getstr;
-                 window.opener.location.href = myurl;
+                window.opener.location.href = myurl;
+                //top.location.href=myurl;
             }
-            ]]>
+            //]]>
     </script>
 </head>
 <body>
@@ -69,16 +70,17 @@
                 Search results
             </div>
             <form name="resultform" class="checkboxed" action="">
-                    <div style="float: right; margin-top: .5em; margin-left: .7em; margin-bottom: .7em">
-                        <input type="submit" class="icon addchecked" value="Add checked" onclick="add_item('checked',<!-- TMPL_VAR NAME="batch_id" -->,'<!-- TMPL_VAR NAME="type" -->'); return false" />
-                        <input type="button" class="close" value="Done" />
-                    </div>
-                <div style="line-height: 2em; margin-left: .7em;">
-                    <a id="CheckAll" href="/cgi-bin/koha/labels/label-item-search.pl">Select All</a>
-                    <span class="clearall">
-                        <a id="CheckNone" href="/cgi-bin/koha/labels/label-item-search.pl">Clear All</a>
-                    </span>
+                <div style="float: right; margin-top: .5em; margin-left: .7em; margin-bottom: .7em">
+                    <input type="submit" class="icon addchecked" value="Add checked" onclick="add_item('checked',<!-- TMPL_VAR NAME="batch_id" -->,'<!-- TMPL_VAR NAME="type" -->'); return false" />
+                    <input type="button" class="close" value="Done" />
                 </div>
+                <div style="float: left; margin-top: .5em; margin-right: .7em; margin-bottom: .7em">
+                    <input id="CheckAll" type="submit" class="icon checkall" value="Check All" onclick="return false" />
+                    <!--<a id="CheckAll" href="/cgi-bin/koha/labels/label-item-search.pl">Select All</a>-->
+                    <input id="CheckNone" type="submit" class="icon checknone" value="Clear All" onclick="return false" />
+                    <!--<a id="CheckNone" href="/cgi-bin/koha/labels/label-item-search.pl">Clear All</a>-->
+                </div>
+                <div style="padding-top: 0.7em;">
                 <input type="hidden" name="ccl_query" value="<!-- TMPL_VAR name="ccl_query" -->" />
 	        <!-- TMPL_LOOP name="result_set" -->
 	        <table id="label-search-results" frame="border" border="2">
@@ -114,6 +116,7 @@
                     <!-- /TMPL_LOOP -->
 	        </table>
 	        <!-- /TMPL_LOOP -->
+                </div>
             </form>
         </div>
 	<div class="results">
