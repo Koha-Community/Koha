@@ -138,8 +138,8 @@ sub plugin {
             push @collections, $col;
         }
             
-    }
-
+    } 
+    @collections = sort @collections;
     #	my @collections = ["test"];
     my $collection = CGI::scrolling_list(
         -name     => 'f1',
