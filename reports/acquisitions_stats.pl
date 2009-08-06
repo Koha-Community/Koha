@@ -478,17 +478,17 @@ sub calculate {
         $colfield .= "Year($column)";
 
     }
-    elsif ( ( $column =~ /deliverydate/ ) and ( $rodsp == 1 ) ) {
+    elsif ( ( $column =~ /received/ ) and ( $rodsp == 1 ) ) {
 
         #Display by day
         $colfield .= "dayname($column)";
     }
-    elsif ( ( $column =~ /deliverydate/ ) and ( $rodsp == 2 ) ) {
+    elsif ( ( $column =~ /received/ ) and ( $rodsp == 2 ) ) {
 
         #Display by Month
         $colfield .= "monthname($column)";
     }
-    elsif ( ( $column =~ /deliverydate/ ) and ( $rodsp == 3 ) ) {
+    elsif ( ( $column =~ /received/ ) and ( $rodsp == 3 ) ) {
 
         #Display by Year
         $colfield .= "Year($column)";
