@@ -1,0 +1,72 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Import BDP</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
+
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Import BDP</div>
+
+<div id="doc3" class="yui-t2">
+	<div id="bd">
+    	<div id="yui-main">
+    		<div class="yui-b">
+    			<div class="yui-g">
+		    		<div class="yui-u first">
+		    			<h2>Import BDP</h2>
+		    			<p>
+		    				Pour importer les notices de la BDP, chargez un fichier, puis choisissez le site auquel seront rattachés les exemplaires:
+		    			</p>
+		    			<form method="post" action="" enctype="multipart/form-data">
+		    				<input type="hidden" name="import" value="1" />
+		    				<fieldset class="rows" id="import_bdp_entry">
+		    					<ol>
+			    					<li><input type="file" name="bdpfile" /></li>
+				    				<li>
+				    					<select name="branchcode">
+					    					<!-- TMPL_LOOP NAME="branches" -->
+					    						<option value="<!-- TMPL_VAR NAME="branchcode" -->"><!-- TMPL_VAR NAME="branchname" --></option>
+					    					<!-- /TMPL_LOOP -->
+					    				</select>
+				    				</li>
+				    				<li><input type="checkbox" name="test">Mode test</input></li>
+				    			</ol>
+		    				</fieldset>
+		    				<fieldset class="action">
+						        <input type="submit" name="import" value="Import" />
+						    </fieldset>
+		    			</form>
+		    		</div>
+		    		<div class="yui-u">
+		    		<h2>Retour BDP</h2>
+		    		<p>
+	    				Pour effectuer un retour BDP, chargez un fichier ci-dessous:
+	    			</p>
+					<form method="post" action="" enctype="multipart/form-data">
+						<input type="hidden" name="retour" value="1" />
+	    				<fieldset class="rows" id="retour_bdp_entry">
+	    					<ol>
+		    					<li><input type="file" name="retourbdpfile" /></li>
+			    				<li><input type="checkbox" name="test">Mode test</input></li>
+			    			</ol>
+	    				</fieldset>
+	    				<fieldset class="action">
+					        <input type="submit" name="retour" value="Retour" />
+					    </fieldset>
+	    			</form>
+		    		</div>
+	    		</div>
+	    		<!-- TMPL_IF NAME="uploaded" -->
+	    			<h2><!-- TMPL_VAR NAME="filename" --></h2>
+	    			<p>
+	    				<!-- TMPL_VAR NAME="log" -->
+	    			</p>
+    			<!-- /TMPL_IF -->
+	    	</div>
+    	</div>
+    </div>
+</div>
+
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
