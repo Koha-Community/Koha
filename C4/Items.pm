@@ -1474,7 +1474,7 @@ sub get_item_authorised_values {
   authorised values for a biblio.
 
   parameters: listref of authorised values, such as comes from
-    get_item_ahtorised_values or
+    get_item_authorised_values or
     from C4::Biblio::get_biblio_authorised_values
 
   returns: listref of hashrefs for each image. Each hashref looks like
