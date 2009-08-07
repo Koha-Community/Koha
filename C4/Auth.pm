@@ -357,7 +357,7 @@ sub get_template_and_user {
             XSLTDetailsDisplay        => C4::Context->preference("XSLTDetailsDisplay"),
             XSLTResultsDisplay        => C4::Context->preference("XSLTResultsDisplay"),
             hidelostitems             => C4::Context->preference("hidelostitems"),
-            mylibraryfirst            => (C4::Context->preference("SearchMyLibraryFirst")) ? C4::Context->userenv->{'branch'} : '',
+            mylibraryfirst            => (C4::Context->preference("SearchMyLibraryFirst") && C4::Context->userenv) ? C4::Context->userenv->{'branch'} : '',
             opaclayoutstylesheet      => "" . C4::Context->preference("opaclayoutstylesheet"),
             opaccolorstylesheet       => "" . C4::Context->preference("opaccolorstylesheet"),
             opacstylesheet            => "" . C4::Context->preference("opacstylesheet"),
