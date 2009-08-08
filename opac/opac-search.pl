@@ -383,6 +383,7 @@ my @results_array;
 my $results_hashref;
 
 if ($tag) {
+	$query_cgi = "tag=" .$tag . "&" . $query_cgi;
 	my $taglist = get_tags({term=>$tag, approved=>1});
 	$results_hashref->{biblioserver}->{hits} = scalar (@$taglist);
 	my @biblist  = (map {GetBiblioData($_->{biblionumber})} @$taglist);
