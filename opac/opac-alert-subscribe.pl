@@ -19,6 +19,8 @@
 
 
 use strict;
+use warnings;
+
 use CGI;
 use C4::Auth;
 use C4::Dates;
@@ -30,13 +32,13 @@ use C4::Serials;
 
 
 my $query = new CGI;
-my $op    = $query->param('op');
+my $op    = $query->param('op') || '';
 my $dbh   = C4::Context->dbh;
 
 my $sth;
 my ( $template, $loggedinuser, $cookie );
 my $externalid   = $query->param('externalid');
-my $alerttype    = $query->param('alerttype');
+my $alerttype    = $query->param('alerttype') || '';
 my $biblionumber = $query->param('biblionumber');
 
 ( $template, $loggedinuser, $cookie ) = get_template_and_user(
