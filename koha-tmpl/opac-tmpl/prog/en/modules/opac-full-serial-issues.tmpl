@@ -41,11 +41,15 @@
                 <th>Status
                 </th>
             </tr>
-            <!-- TMPL_LOOP Name="serials" -->
+        <!-- TMPL_LOOP Name="serials" -->
+            <!-- TMPL_UNLESS Name="__odd__" -->
+            <tr class="highlight">
+            <!-- TMPL_ELSE --> 
             <tr>
+            <!-- /TMPL_UNLESS -->
                 <td>    <!-- TMPL_VAR Name="publisheddate" -->
                 </td>
-                <td>    <!-- TMPL_VAR name="branchcode" -->
+                <td>    <!-- TMPL_VAR name="branchname" -->
                 </td>
                 <td>    <!-- TMPL_VAR name="notes" -->
                 </td>

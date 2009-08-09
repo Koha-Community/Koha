@@ -588,6 +588,7 @@ sub GetFullSubscriptionsFromBiblionumber {
             aqbudget.bookfundid,aqbooksellers.name as aqbooksellername,
             biblio.title as bibliotitle,
             subscription.branchcode AS branchcode,
+            branches.branchname AS branchname,
             subscription.subscriptionid AS subscriptionid|;
      if (C4::Context->preference('IndependantBranches') && 
         C4::Context->userenv && 
@@ -602,6 +603,7 @@ sub GetFullSubscriptionsFromBiblionumber {
           (serial.subscriptionid=subscription.subscriptionid)
   LEFT JOIN aqbudget ON subscription.aqbudgetid=aqbudget.aqbudgetid 
   LEFT JOIN aqbooksellers on subscription.aqbooksellerid=aqbooksellers.id 
+  LEFT JOIN branches ON branches.branchcode=subscription.branchcode
   LEFT JOIN biblio on biblio.biblionumber=subscription.biblionumber 
   WHERE     subscription.biblionumber = ? 
   ORDER BY year DESC,
