@@ -25,6 +25,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
 
 # standard or CPAN modules used
 use CGI;
@@ -41,7 +42,7 @@ use XML::LibXML;
 my $input       = new CGI;
 my $biblionumber = $input->param('id');
 my $importid	= $input->param('importid');
-my $view		= $input->param('viewas');
+my $view		= $input->param('viewas') || 'marc';
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
         template_name   => "opac-showmarc.tmpl",
