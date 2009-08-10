@@ -23,16 +23,12 @@ use warnings;
 use vars qw($debug);
 
 use Sys::Syslog qw(syslog);
-use Switch qw(Perl6);
 use CGI;
 use HTML::Template::Pro;
-use Data::Dumper;
 
-use C4::Auth;
-use C4::Output;
-use C4::Context;
+use C4::Auth qw(get_template_and_user);
+use C4::Output qw(output_html_with_http_headers);
 use autouse 'C4::Branch' => qw(get_branch_code_from_name);
-use C4::Debug;
 use C4::Labels::Lib 1.000000 qw(get_all_templates get_all_layouts get_all_profiles get_batch_summary html_table);
 use C4::Labels::Layout 1.000000;
 use C4::Labels::Template 1.000000;
@@ -78,31 +74,24 @@ my $display_columns = { layout =>   [  #db column       => display column
                                     ],
 };
 
-my $label_element = $cgi->param('label_element') || $ARGV[0];
-my $op = $cgi->param('op') || $ARGV[1] || '';
-my $element_id = $cgi->param('element_id') || $ARGV[2] || '';
+my $label_element = $cgi->param('label_element');
+my $op = $cgi->param('op');
+my $element_id = $cgi->param('element_id');
 my $branch_code = ($label_element eq 'batch' ? get_branch_code_from_name($template->param('LoginBranchname')) : '');
 
 if ($op eq 'delete') {
-    given ($label_element) {
-        when 'layout'   {$error = C4::Labels::Layout::delete(layout_id => $element_id); last;}
-        when 'template' {$error = C4::Labels::Template::delete(template_id => $element_id); last;}
-        when 'profile'  {$error = C4::Labels::Profile::delete(profile_id => $element_id); last;}
-        when 'batch'    {$error = C4::Labels::Batch::delete(batch_id => $element_id, branch_code => $branch_code); last;}
-        default         {}      # FIXME: Some error trapping code 
-    }
-#    FIXME: this does not allow us to process any errors
-#    print $cgi->redirect("label-manage.pl?label_element=$label_element");
-#    exit;
+    if          ($label_element eq 'layout')    {$error = C4::Labels::Layout::delete(layout_id => $element_id);}
+    elsif       ($label_element eq 'template')  {$error = C4::Labels::Template::delete(template_id => $element_id);}
+    elsif       ($label_element eq 'profile')   {$error = C4::Labels::Profile::delete(profile_id => $element_id);}
+    elsif       ($label_element eq 'batch')     {$error = C4::Labels::Batch::delete(batch_id => $element_id, branch_code => $branch_code);}
+    else                                        {}      # FIXME: Some error trapping code 
 }
 
-given ($label_element) {
-    when 'layout'       {$db_rows = get_all_layouts();}
-    when 'template'     {$db_rows = get_all_templates();}
-    when 'profile'      {$db_rows = get_all_profiles();}
-    when 'batch'        {$db_rows = get_batch_summary(filter => "branch_code=\'$branch_code\'");}
-    default             {}      # FIXME: Some error trapping code
-}
+if      ($label_element eq 'layout')    {$db_rows = get_all_layouts();}
+elsif   ($label_element eq 'template')  {$db_rows = get_all_templates();}
+elsif   ($label_element eq 'profile')   {$db_rows = get_all_profiles();}
+elsif   ($label_element eq 'batch')     {$db_rows = get_batch_summary(filter => "branch_code=\'$branch_code\'");}
+else                                    {}      # FIXME: Some error trapping code
 
 my $table = html_table($display_columns->{$label_element}, $db_rows);
 

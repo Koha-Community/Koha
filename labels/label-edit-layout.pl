@@ -20,17 +20,15 @@
 
 use strict;
 use warnings;
+
 use Sys::Syslog qw(syslog);
 use CGI;
 use HTML::Template::Pro;
-use Data::Dumper;
 use POSIX;
 use Text::CSV_XS;
 
-use C4::Auth;
-use C4::Output;
-use C4::Context;
-use C4::Debug;
+use C4::Auth qw(get_template_and_user);
+use C4::Output qw(output_html_with_http_headers);
 use C4::Labels::Lib 1.000000 qw(get_barcode_types get_label_types get_font_types get_text_justification_types);
 use C4::Labels::Layout 1.000000;
 
@@ -45,7 +43,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
-
 
 my $op = $cgi->param('op') || $ARGV[0] || '';
 my $layout_id = $cgi->param('layout_id') || $cgi->param('element_id') || $ARGV[1] || '';

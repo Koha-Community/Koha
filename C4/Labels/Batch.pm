@@ -65,15 +65,21 @@ C4::Labels::Batch - A class for creating and manipulating batch objects in Koha
 
 =head1 METHODS
 
-=head2 C4::Labels::Batch->new(layout_id => layout_id, template_id => template_id, profile_id => profile_id)
+=head2 C4::Labels::Batch->new()
 
-    Invoking the I<new> method constructs a new batch object with no items.
+    Invoking the I<new> method constructs a new batch object with no items. It is possible to pre-populate the batch with items and a branch code by passing them
+    as in the second example below.
+
+    B<NOTE:> The items list must be an arrayref pointing to an array of hashes containing a key/data pair after this fashion: {item_number => item_number}. The order of
+    the array elements determines the order of the items in the batch.
 
     example:
-        my $batch = C4::Labels::Batch->new(layout_id => layout_id, template_id => template_id, profile_id => profile_id);
-            # Creates and returns a new batch object
+        C<my $batch = C4::Labels::Batch->new(); # Creates and returns a new batch object>
 
-    B<NOTE:> This batch is I<not> written to the database untill $batch->save() is invoked. You have been warned!
+        C<my $batch = C4::Labels::Batch->new(items => $arrayref, branch_code => branch_code) #    Creates and returns a new batch object containing the items passed in
+                                                                                                with the branch code passed in.>
+
+    B<NOTE:> This batch is I<not> written to the database until C<$batch->save()> is invoked. You have been warned!
 
 =cut
 

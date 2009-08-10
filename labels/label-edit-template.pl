@@ -20,15 +20,13 @@
 
 use strict;
 use warnings;
+
 use Sys::Syslog qw(syslog);
 use CGI;
 use HTML::Template::Pro;
-use Data::Dumper;
 
-use C4::Auth;
-use C4::Output;
-use C4::Context;
-use C4::Debug;
+use C4::Auth qw(get_template_and_user);
+use C4::Output qw(output_html_with_http_headers);
 use C4::Labels::Lib 1.000000 qw(get_all_profiles get_unit_values);
 use C4::Labels::Template 1.000000;
 
@@ -44,10 +42,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $op = $cgi->param('op') || $ARGV[0] || '';
-my $template_id = $cgi->param('template_id') || $cgi->param('element_id') || $ARGV[1] || '';
-my $label_template = '';
-my $profile_list = '';
+my $op = $cgi->param('op');
+my $template_id = $cgi->param('template_id') || $cgi->param('element_id');
+my $label_template = undef;
+my $profile_list = undef;
+
 my $units = get_unit_values();
 
 if ($op eq 'edit') {

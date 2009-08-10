@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-
+#
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -19,24 +19,21 @@
 
 use strict;
 use warnings;
+use vars qw($debug $cgi_debug);
 
 use CGI;
 use HTML::Template::Pro;
 use List::Util qw( max min );
 use POSIX;
-use Data::Dumper;
 
-use C4::Auth;
+use C4::Auth qw(get_template_and_user);
+use C4::Output qw(output_html_with_http_headers);
 use C4::Context;
-use C4::Search;
-use C4::Auth;
-use C4::Output;
-use C4::Biblio;
-use C4::Items;
-use C4::Acquisition;
-use C4::Search;
 use C4::Dates;
-use C4::Koha;    # XXX subfield_is_koha_internal_p
+use C4::Search qw(SimpleSearch);
+use C4::Biblio qw(TransformMarcToKoha);
+use C4::Items qw(GetItemInfosOf get_itemnumbers_of);
+use C4::Koha qw(GetItemTypes);    # XXX subfield_is_koha_internal_p
 use C4::Labels::Lib qw(html_table);
 use C4::Debug;
 
@@ -48,29 +45,20 @@ BEGIN {
     }
 }
 
-# Creates a scrolling list with the associated default value.
-# Using more than one scrolling list in a CGI assigns the same default value to all the
-# scrolling lists on the page !?!? That's why this function was written.
-
 my $query = new CGI;
 
 my $type      = $query->param('type');
-my $op        = $query->param('op') || '';
+my $op        = $query->param('op');
 my $batch_id  = $query->param('batch_id');
-my $ccl_query = $query->param('ccl_query') || '';
-
-my $dbh = C4::Context->dbh;
-
+my $ccl_query = $query->param('ccl_query');
 my $startfrom = $query->param('startfrom') || 1;
-my ( $template, $loggedinuser, $cookie );
+my ($template, $loggedinuser, $cookie) = (undef, undef, undef);
 my (
     $total_hits,  $orderby, $results,  $total,  $error,
     $marcresults, $idx,     $datefrom, $dateto, $ccl_textbox
 );
-
 my $resultsperpage = C4::Context->preference('numSearchResults') || '20';
 my $show_results = 0;
-
 my $display_columns = [ {_add                   => {label => "Add Item", link_field => 1}},
                         {_item_call_number      => {label => "Call Number", link_field => 0}},
                         {_date_accessioned      => {label => "Accession Date", link_field => 0}},
@@ -79,7 +67,6 @@ my $display_columns = [ {_add                   => {label => "Add Item", link_fi
                       ];
 
 if ( $op eq "do_search" ) {
-    my @params = $query->param();
     $idx         = $query->param('idx');
     $ccl_textbox = $query->param('ccl_textbox');
     if ( $ccl_textbox && $idx ) {

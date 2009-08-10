@@ -23,17 +23,12 @@ use warnings;
 use vars qw($debug);
 
 use Sys::Syslog qw(syslog);
-use Switch qw(Perl6);
 use CGI;
 use HTML::Template::Pro;
-use Data::Dumper;
-use JSON;
 
-use C4::Auth;
-use C4::Output;
-use C4::Context;
+use C4::Auth qw(get_template_and_user);
+use C4::Output qw(output_html_with_http_headers);
 use C4::Branch qw(get_branch_code_from_name);
-use C4::Debug;
 use C4::Labels::Lib 1.000000 qw(get_label_summary html_table);
 use C4::Labels::Batch 1.000000;
 
@@ -48,6 +43,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
+
 my $err = 0;
 my $errstr = undef;
 my $duplicate_count = undef;
@@ -61,9 +57,10 @@ my $display_columns = [ {_label_number  => {label => 'Label Number', link_field 
                         {select         => {label => 'Select', value => '_label_id'}},
                       ];
 my $op = $cgi->param('op') || undef;
-my @label_ids = $cgi->param('label_id') if $cgi->param('label_id');
 my $batch_id = $cgi->param('element_id') || $cgi->param('batch_id') || undef;
+my @label_ids = $cgi->param('label_id') if $cgi->param('label_id');
 my @item_numbers = $cgi->param('item_number') if $cgi->param('item_number');
+
 my $branch_code = get_branch_code_from_name($template->param('LoginBranchname'));
 
 if ($op eq 'remove') {
