@@ -171,7 +171,7 @@ for my $branch_hash (sort keys %$branches ) {
         selected => $selected
       };
 }
-$template->param( branchloop => \@branch_loop, "mylibraryfirst"=>C4::Context->preference("SearchMyLibraryFirst"));
+$template->param( branchloop => \@branch_loop );
 
 # now the reserved items....
 my @reserves  = GetReservesFromBorrowernumber( $borrowernumber );
