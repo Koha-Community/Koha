@@ -26,6 +26,22 @@
         $(".tagbutton").click(KOHA.Tags.add_tag_button);<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="opacbookbag" -->$("#action").append("<li><a class=\"addtocart\" href=\"#\" onclick=\"addRecord('"+$("input[name=bib]").val()+"'); return false;\">"+_("Add to Your Cart")+"<\/a><\/li>");
 <!-- /TMPL_IF -->});
+
+YAHOO.util.Event.onContentReady("furtherm", function () {
+    $("#furtherm").css("display","block").css("visibility","hidden");
+	$("#furthersearches").parent().show();
+	var furthersearchesMenu = new YAHOO.widget.Menu("furtherm");
+		furthersearchesMenu.render();
+		furthersearchesMenu.cfg.setProperty("context", ["furthersearches", "tr", "br"]);
+		furthersearchesMenu.subscribe("beforeShow",positionfurthersearchesMenu);
+		furthersearchesMenu.subscribe("show", furthersearchesMenu.focus);
+        function positionfurthersearchesMenu() {
+                    furthersearchesMenu.align("tr", "br");
+		}
+		YAHOO.util.Event.addListener("furthersearches", "click", furthersearchesMenu.show, null, furthersearchesMenu);
+		YAHOO.widget.Overlay.windowResizeEvent.subscribe(positionfurthersearchesMenu);
+ });
+	
 //]]>
 </script>
 <style type="text/css">
@@ -558,13 +574,7 @@
 <ul>
 <!-- TMPL_LOOP NAME="AMAZON_SIMILAR_PRODUCTS" -->
 <!-- TMPL_LOOP NAME="similar_biblionumbers" -->
-<<<<<<< HEAD:koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl
 <li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><img alt="" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="ASIN"-->.01._SS50_.jpg" /></a> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" ESCAPE="HTML" --></a> </li>
-=======
-<li><!-- TMPL_IF NAME="OPACAmazonCoverImages" --><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><img alt="" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="ASIN"-->.01._SS50_.jpg" /><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="SyndeticsEnabled" --><!-- TMPL_IF NAME="SyndeticsCoverImages" --><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><img src="http://www.syndetics.com/index.aspx?isbn=<!-- TMPL_VAR NAME="ASIN"-->/SC.GIF&amp;client=<!-- TMPL_VAR NAME="SyndeticsClientCode" --><!-- TMPL_IF NAME="normalized_upc" -->&amp;upc=<!-- TMPL_VAR NAME="normalized_upc" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="normalized_oclc" -->&amp;oclc=<!-- TMPL_VAR NAME="normalized_oclc" --><!-- /TMPL_IF -->&amp;type=xw10" alt="" /></a><!-- /TMPL_IF --><!-- /TMPL_IF -->
-<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" ESCAPE="HTML" --></a>
->>>>>>> adde6f9... Correcting validation errors.:koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_LOOP -->
 </ul>
@@ -572,6 +582,12 @@
 <!-- /TMPL_IF --><!-- /TMPL_IF -->
 
 <div id="further">
+
+		<li style="display:none;"><a href="#" id="furthersearches">More searches</a></li>
+</ul>
+
+<div id="furtherm" class="yuimenu">
+<div class="bd">
 <h4>Search for this title in:</h4>
 <ul>
 <li><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a href="http://worldcat.org/search?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->" target="_blank">Other Libraries (WorldCat)</a><!-- TMPL_ELSE --><a href="http://worldcat.org/search?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->">Other Libraries (WorldCat)</a><!-- /TMPL_IF --></li>
