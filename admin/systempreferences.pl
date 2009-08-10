@@ -164,6 +164,7 @@ $tabsysprefs{BranchTransferLimitsType}       = "Circulation";
 $tabsysprefs{AllowNotForLoanOverride}        = "Circulation";
 $tabsysprefs{RenewalPeriodBase}              = "Circulation";
 $tabsysprefs{FilterBeforeOverdueReport}      = "Circulation";
+$tabsysprefs{AllowHoldDateInFuture}          = "Circulation";
 
 # Staff Client
 $tabsysprefs{TemplateEncoding}        = "StaffClient";
@@ -307,6 +308,7 @@ $tabsysprefs{OPACViewOthersSuggestions}  = "OPAC";
 $tabsysprefs{URLLinkText}                = "OPAC";
 $tabsysprefs{OPACShelfBrowser}           = "OPAC";
 $tabsysprefs{OPACDisplayRequestPriority} = "OPAC";
+$tabsysprefs{OPACAllowHoldDateInFuture}  = "OPAC";
 
 # OPAC
 $tabsysprefs{SearchMyLibraryFirst} = "OPAC";
