@@ -31,12 +31,45 @@
             function Print() {
                 var element_id = selected_layout("print");
                 if (element_id>-1) {
-                    window.location = "/cgi-bin/koha/labels/label-edit-<!-- TMPL_VAR NAME="label_element" -->.pl?op=edit&amp;element_id=" + element_id;
+                    window.location = "/cgi-bin/koha/labels/label-print.pl?batch_id=" + element_id;
                 }
                 else {
                     return;     // no layout selected
                 };
             };
+
+
+           function Xport() {
+                batches= new Array;
+                if(document.layouts.action.length > 0) {
+                    for (var i=0; i < document.layouts.action.length; i++) {
+                        if (document.layouts.action[i].checked) {
+                            batches.push("batch_id=" +  document.layouts.action[i].value);
+                        }
+                    }
+                    if (batches.length < 1) {
+                        alert("Please select at least one batch to export.");
+                        return;     // no batch selected
+                    }
+                    getstr = batches.join("&");
+                }
+                else if (document.layouts.action.checked) {
+                    getstr = "batch_id="+document.layouts.action.value;
+                }
+                else {
+                    alert("Please select at least one batch to export.");
+                    return;     // no batch selected
+                }
+                var msg = "Are you sure you want to export the selected batch(s)?"
+                var answer = confirm(msg);
+                if (answer) {
+                    window.location = "/cgi-bin/koha/labels/label-print.pl?" + getstr;
+                }
+                else {
+                    return; // abort export
+                }
+            };
+
             function selected_layout(op) {
                 var selected = new Array;
                 if (document.layouts.action.length) {
@@ -112,13 +145,13 @@
                             <div style="margin: 10px 10px 10px 0px;">
                                 <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="edit" onclick="Edit()" value="Edit"></span></span>
                                 <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="delete" onclick="DeleteConfirm()" value="Delete"></span></span>
-                                <!-- TMPL_IF NAME="print" --><span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="print" onclick="Print()" value="Print"></span></span><!-- /TMPL_IF -->
+                                <!-- TMPL_IF NAME="print" --><span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="print" onclick="Xport()" value="Export"></span></span><!-- /TMPL_IF -->
                             </div>
                             </form>
                         </div>
                         <!-- TMPL_IF NAME="error" -->
                         <div class="yui-u">
-                            <div class="dialog alert">
+                            <div class="alert">
                                 <strong>WARNING: An error was encountered and <!-- TMPL_VAR NAME="label_element" --> <!-- TMPL_VAR NAME="element_id" --> was not deleted. Please have your system administrator check the syslog for details.</strong>
                             </div>
                         </div>

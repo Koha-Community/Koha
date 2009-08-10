@@ -1,181 +1,98 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>Print Preview</title>
-<style type="text/css" media="screen">
-/* need to set print margins for sheet */
-body {
-        margin:48px; /* 1/2" at 96dpi */
-/*      margin:36px */  /* 1/2" at 72dpi */
-}
-/*
-8 1/2" x 11" sheet size
-
-spine data
-        1 1/4"H x 1"W
-                at 96dpi -> 120px H x 96px W
-                at 72dpi -> 90px H x 72px W
-space between cells - 1/2"
-        at 96dpi -> 48px
-        at 72dpi -> 36px
-circ data
-        1 1/4"H x 2 7/8"W
-                at 96dpi -> 120px H x 276px W
-                at 72dpi -> 90px H x 207px W
-*/
-table.print-preview {
-        border-collapse:collapse;
-        border-spacing:0;
-        empty-cells: show;
-}
-.print-preview td {
-        font-family:arial,helvetica,sans-serif;
-        font-size:10px;
-        padding:0 4px 0 4px
-}
-/* 96dpi */
-.spine-label-8511 {
-        border:dashed 1px #999999;
-        width: 88px;
-        height: 112px;
-        text-align: center
-}
-.space-8511 {
-        width:40px
-}
-.circ-label-8511 {
-        border:dashed 1px #999999;
-        width:268px;
-        text-align: center
-}
-/* 72dpi
-.spine-label-8511 {
-        border:dashed 1px #999999;
-        width: 64px;
-        height: 82px;
-        text-align: center
-}
-.space-8511 {
-        width:28px
-}
-.circ-label-8511 {
-        border:dashed 1px #999999;
-        width:199px;
-        text-align: center
-}
-*/
-</style>
-<style type="text/css" media="print">
-/* need to set print margins for sheet */
-body {
-        margin:48px; /* 1/2" at 96dpi */
-        /*      margin:36px */  /* 1/2" at 72dpi */
-}
-.noprint {
-        display:none
-}
-table.print-preview {
-        border-collapse:collapse;
-        border-spacing:0;
-}
-/* need to set printer font size */
-.print-preview td {
-        font-family:arial,helvetica,sans-serif;
-        font-size:10px;
-        padding:0 4px 0 4px
-}
-/* 96dpi */
-.spine-label-8511 {
-        border:dashed 1px #999999;
-        width: 88px;
-        height: 112px;
-}
-.space-8511 {
-        width:40px;
-}
-.circ-label-8511 {
-        border:dashed 1px #999999;
-        width:268px;
-        height:112px;
-}
-/* 72dpi
-.spine-label-8511 {
-        border:none;
-        width: 64px;
-        height: 82px;
-        text-align: center
-}
-.space-8511 {
-        width:28px
-}
-.circ-label-8511 {
-        border:none;
-        width:199px;
-        text-align: left
-}
-*/
-</style>
+    <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+    <title>Koha &rsaquo; Tools &rsaquo; Labels &rsaquo; Label Printing/Exporting</title>
+    <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+    <style type="text/css">#custom-doc {width:47.23em; *width:46.04em; min-width:610px; margin:auto; margin-top:0.4em;}</style>
+</head>
 <body>
-
-<div class="noprint">
-        <h3 class="bull">Print Preview<br />
-        Barcodetype:<!-- TMPL_VAR NAME="barcodetype_opt" --><br />
-        Papertype:<!-- TMPL_VAR NAME="papertype_opt" --><br />
-        Field Options: <!-- TMPL_IF NAME="author_opt" -->Author <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="itemtype_opt" -->Itemtype <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="title_opt" -->Title <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="isbn_opt" -->ISBN <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="dewey_opt" -->Dewey <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="class_opt" -->Class<!-- /TMPL_IF -->
-	<!-- TMPL_IF NAME="subclass_opt" -->Subclass<!-- /TMPL_IF -->
-	<!-- TMPL_IF NAME="itemcallnumber_opt" -->Itemcallnumber<!-- /TMPL_IF -->
-
-</h3>
-</div>
-
-
-<table summary="print preview" class="print-preview">
-
-<!-- TMPL_LOOP NAME="resultsloop" -->
-<tr>
-        <td class="spine-label-8511">
-      <!-- TMPL_IF NAME="itemtype_opt" --><!-- TMPL_VAR NAME="itemtype" --><br /><!-- /TMPL_IF -->
-      <!-- TMPL_IF NAME="papertype_opt" --><!-- TMPL_VAR NAME="papertype" --><br /><!-- /TMPL_IF -->
-      <!-- TMPL_IF NAME="author_opt" --><!-- TMPL_VAR NAME="author" --><br /><!-- /TMPL_IF -->
-      <!-- TMPL_IF NAME="title_opt" --><!-- TMPL_VAR NAME="title" --><br /><!-- /TMPL_IF -->
-      <!-- TMPL_IF NAME="isbn_opt" --><!-- TMPL_VAR NAME="isbn" --><br /><!-- /TMPL_IF -->
-      <!-- TMPL_IF NAME="dewey_opt" --><!-- TMPL_VAR NAME="dewey" --><br /><!-- /TMPL_IF -->
-      <!-- TMPL_IF NAME="class_opt" --><!-- TMPL_VAR NAME="class" --><!-- /TMPL_IF -->
-      <!-- TMPL_IF NAME="subclass_opt" --><!-- TMPL_VAR NAME="subclass" --><!-- /TMPL_IF -->
-      <!-- TMPL_IF NAME="itemcallnumber_opt" --><!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF -->
-        </td>
-        <td class="space-8511">&nbsp;</td>
-        <td class="circ-label-8511">
-                <img src="/intranet-tmpl/barcodes/<!-- TMPL_VAR NAME="barcodetype_opt" -->-<!-- TMPL_VAR NAME="barcode" -->.png">
- <!-- TMPL_IF NAME="barcodeerror" -->
-                <div class="noprint">'<!-- TMPL_VAR NAME="barcode" -->'<br />
-        not '<!-- TMPL_VAR NAME="barcodetype_opt" -->' format.</div>
-        <!-- /TMPL_IF -->
-        </td>
-        <td class="space-8511">&nbsp;</td>
-        <td class="circ-label-8511">
-                <img src="/intranet-tmpl/barcodes/<!-- TMPL_VAR NAME="barcodetype_opt" -->-<!-- TMPL_VAR NAME="barcode" -->.png">
-        <!-- TMPL_IF NAME="barcodeerror" -->
-                <div class="noprint">'<!-- TMPL_VAR NAME="barcode" -->'<br />
-        not '<!-- TMPL_VAR NAME="barcodetype_opt" -->' format.</div>
-        <!-- /TMPL_IF -->
-        </td>
-</tr>
-<!-- /TMPL_LOOP -->
-</table>
-
-<div class="noprint"><br />
-       <a href="/cgi-bin/koha/barcodes/label-manager.pl"
-class="button">Back</a> &nbsp;
-       <a href="/cgi-bin/koha/barcodes/label-print-pdf.pl" class="button">Print</a> &nbsp;
-</div>
-
-
-</body>
-</html>
+    <div id="custom-doc" class="yui-t2">
+        <div id="bd">
+            <!-- TMPL_IF NAME="batches" -->
+            <form name="exporting" method="post" action="/cgi-bin/koha/labels/label-manage.pl">
+                <input type="hidden" name="label_element" value="batch" />
+                <div align="center">
+                    <div class="message">
+                        <h2>Click on the following link(s) to download the exported batch(es).</h2>
+                    </div>
+                </div>
+                <fieldset class="rows">
+                    <table class="borderless">
+                        <!-- TMPL_LOOP NAME="batches" -->
+                        <tr>
+                            <td class="borderless">
+                                <a href="/cgi-bin/koha/labels/<!-- TMPL_VAR NAME="create_script" -->?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;template_id=<!-- TMPL_VAR NAME="template_id" -->&amp;layout_id=<!-- TMPL_VAR NAME="layout_id" -->&amp;start_label=<!-- TMPL_VAR NAME="start_label" -->">label_batch_<!-- TMPL_VAR NAME="batch_id" -->.pdf</a>
+                            </td>
+                        </tr>
+                        <!-- /TMPL_LOOP -->
+                    </table>
+                </fieldset>
+                <fieldset class="action">
+                    <input type="submit" value="Done" class="submit" />
+                </fieldset>
+            </form>
+            <!-- TMPL_ELSE -->
+            <div align="center">
+                <div class="message">
+                    <h2><!-- TMPL_VAR NAME="multi_batch_count" --> batch(es) to export.</h2>
+                </div>
+            </div>
+            <form name="exporting" method="post" action="/cgi-bin/koha/labels/label-print.pl">
+                <input type="hidden" name="op" value="export" />
+                <!-- TMPL_LOOP NAME="batch_ids" -->
+                    <input type="hidden" name="batch_id" value="<!-- TMPL_VAR NAME="batch_id" -->" />
+                <!-- /TMPL_LOOP -->
+                <fieldset class="rows">
+                    <table class="borderless">
+                        <tr>
+                            <td class="borderless">
+                                <label for="template">Select a template to be applied: </label>
+                            </td>
+                            <td class="borderless">
+                                <select name="template_id">
+                                    <!-- TMPL_LOOP NAME="templates" -->
+                                    <option value="<!-- TMPL_VAR NAME="template_id" -->"><!-- TMPL_VAR NAME="template_code"  --></option>
+                                    <!-- /TMPL_LOOP -->
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="borderless">
+                                <label for="layout">Select a layout to be applied: </label>
+                            </td>
+                            <td class="borderless">
+                                <select name="layout_id">
+                                    <!-- TMPL_LOOP NAME="layouts" -->
+                                    <option value="<!-- TMPL_VAR NAME="layout_id" -->"><!-- TMPL_VAR NAME="layout_name"  --></option>
+                                    <!-- /TMPL_LOOP -->
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="borderless">
+                                <label for="start_label">Enter starting label number: </label>
+                            </td>
+                            <td class="borderless">
+                                <input type="text" size="5" id="start_label" name="start_label" class="focus" title="Starting label number" value="1"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="borderless">
+                                <label for="output_type">Select output format: </label>
+                            </td>
+                            <td class="borderless">
+                                <select name="output_format">
+                                    <!-- TMPL_LOOP NAME="label_output_formats" -->
+                                    <option value="<!-- TMPL_VAR NAME="type" -->"><!-- TMPL_VAR NAME="desc"  --></option>
+                                    <!-- /TMPL_LOOP -->
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+                <fieldset class="action">
+                    <input type="submit" value="Export" class="submit" />
+                    <a class="cancel close" href="#">Cancel</a>
+                </fieldset>
+            </form>
+            <!-- /TMPL_IF -->
+        </div>
+    <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

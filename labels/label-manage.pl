@@ -77,6 +77,7 @@ my $display_columns = { layout =>   [  #db column       => display column
 my $label_element = $cgi->param('label_element');
 my $op = $cgi->param('op');
 my $element_id = $cgi->param('element_id');
+
 my $branch_code = ($label_element eq 'batch' ? get_branch_code_from_name($template->param('LoginBranchname')) : '');
 
 if ($op eq 'delete') {

@@ -40,6 +40,8 @@ sub new {
     _InitVars() if ($opts{InitVars} == 0);
     _InitVars($opts{InitVars}) if ($opts{InitVars} > 0);
     delete($opts{InitVars});
+    prDocDir($opts{'DocDir'}) if $opts{'DocDir'};
+    delete($opts{'DocDir'});
     prFile(%opts);
     bless ($self, $type);
     return $self;
@@ -72,12 +74,6 @@ sub Doc {
     my $self = shift;
     my %params = @_;
     prDoc(%params);
-}
-
-sub DocDir {
-    my $self = shift;
-    my $directoryName = shift;
-    prDocDir($directoryName);
 }
 
 sub DocForm {

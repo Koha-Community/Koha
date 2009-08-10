@@ -48,7 +48,7 @@ my $template_id = $cgi->param('template_id') || $ARGV[1];
 my $layout_id   = $cgi->param('layout_id') || $ARGV[2];
 my $start_label = $cgi->param('start_label') || $ARGV[3];
 
-print $cgi->header( -type => 'application/pdf', -attachment => "koha_batch_$batch_id.pdf" );
+print $cgi->header( -type => 'application/pdf', -attachment => "label_batch_$batch_id.pdf" );
 
 my $pdf = C4::Labels::PDF->new(InitVars => 0);
 my $batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);

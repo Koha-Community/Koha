@@ -37,6 +37,7 @@ BEGIN {
                         get_label_types
                         get_font_types
                         get_text_justification_types
+                        get_label_output_formats
                         get_column_names
                         get_table_names
                         get_unit_values
@@ -125,6 +126,11 @@ my $unit_values = [
     {type       => 'CM',         desc    => 'SI Centimeters',     value   => 28.3464567,        selected => 0},
 ];
 
+my $label_output_formats = [
+    {type       => 'pdf',       desc    => 'PDF File'},
+    {type       => 'csv',       desc    => 'CSV File'},
+];
+
 =head2 C4::Labels::Lib::get_all_templates()
 
     This function returns a reference to a hash containing all templates upon success and 1 upon failure. Errors are logged to the syslog.
@@ -164,8 +170,11 @@ sub get_all_templates {
 =cut
 
 sub get_all_layouts {
+    my %params = @_;
     my @layouts = ();
-    my $query = "SELECT * FROM labels_layouts;";
+    #my $query = "SELECT * FROM labels_layouts;";
+    my $query = "SELECT " . ($params{'field_list'} ? $params{'field_list'} : '*') . " FROM labels_layouts";
+    $query .= ($params{'filter'} ? " WHERE $params{'filter'};" : ';');
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute();
     if ($sth->err) {
@@ -367,6 +376,20 @@ sub get_text_justification_types {
 
 sub get_unit_values {
     return $unit_values;
+}
+
+=head2 C4::Labels::Lib::get_label_output_formats()
+
+    This function returns a reference to an array of hashes containing all label output formats along with their description.
+
+    examples:
+
+        my $label_output_formats = get_label_output_formats();
+
+=cut
+
+sub get_label_output_formats {
+    return $label_output_formats;
 }
 
 =head2 C4::Labels::Lib::get_column_names($table_name)

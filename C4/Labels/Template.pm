@@ -90,8 +90,7 @@ sub _conv_points {
 
 sub _apply_profile {
     my $self = shift;
-    my $profile_id = shift;
-    my $profile = C4::Labels::Profile->retrieve(profile_id => $profile_id, convert => 1);
+    my $profile = C4::Labels::Profile->retrieve(profile_id => $self->{'profile_id'}, convert => 1);
     $self->{'top_margin'} = $self->{'top_margin'} + $profile->get_attr('offset_vert');      # controls vertical offset
     $self->{'left_margin'} = $self->{'left_margin'} + $profile->get_attr('offset_horz');    # controls horizontal offset
     $self->{'label_height'} = $self->{'label_height'} + $profile->get_attr('creep_vert');   # controls vertical creep
@@ -179,7 +178,7 @@ sub retrieve {
     }
     my $self = $sth->fetchrow_hashref;
     $self = _conv_points($self) if (($opts{convert} && $opts{convert} == 1) || $opts{profile_id});
-    $self = _apply_profile($self, $opts{profile_id}) if $opts{profile_id};
+    $self = _apply_profile($self) if $opts{profile_id};
     $self->{'tmpl_stat'} = 1;
     bless ($self, $type);
     return $self;
