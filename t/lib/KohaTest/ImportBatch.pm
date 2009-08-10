@@ -27,6 +27,7 @@ sub routines : Test( 1 ) {
                         BatchCommitItems
                         BatchRevertBibRecords
                         BatchRevertItems
+                        CleanBatch
                         GetAllImportBatches
                         GetImportBatchRangeDesc
                         GetItemNumbersFromImportBatch

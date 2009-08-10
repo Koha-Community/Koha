@@ -43,6 +43,10 @@
 </div>
 <!-- /TMPL_IF -->
 
+<!-- TMPL_IF name="did_clean" -->
+  <div class="dialog message">Cleaned import batch #<!-- TMPL_VAR name="import_batch_id" --></div>
+<!-- /TMPL_IF -->
+
 <!-- TMPL_UNLESS name="batch_list" -->
    <!-- TMPL_UNLESS name="batch_info" -->
      <span class="problem">No records have been staged.</span>
@@ -196,6 +200,7 @@ Page
     <th>Staged</th>
     <th># Bibs</th>
     <th># Items</th>
+    <th>Action</th>
   </tr>
   <!-- TMPL_LOOP name="batch_list" -->
   <tr>
@@ -206,6 +211,14 @@ Page
     <td><!-- TMPL_VAR name="upload_timestamp" --></td>
     <td><!-- TMPL_VAR name="num_biblios" --></td>
     <td><!-- TMPL_VAR name="num_items" --><!-- TMPL_IF NAME="num_items" --> <a href="<!-- TMPL_VAR name="script_name" -->?import_batch_id=<!-- TMPL_VAR name="import_batch_id" -->&amp;op=create_labels">(Create Label Batch)</a><!-- /TMPL_IF --></td>
+    <td><!-- TMPL_IF name="can_clean" -->
+          <form method="POST" action="<!-- TMPL_VAR name="script_name" -->" name="clean_batch_<!-- TMPL_VAR name='import_batch_id'-->" id="clean_batch_<!-- TMPL_VAR name='import_batch_id'-->" >
+            <input type="hidden" name="import_batch_id" value="<!-- TMPL_VAR name="import_batch_id" -->" />
+            <input type="hidden" name="op" value="clean-batch" />
+            <input type="submit" class="button" value="Clean" onclick="return confirm(_('Clear all reservoir records staged in this batch?  This cannot be undone.'));" />
+          </form>
+        <!-- /TMPL_IF -->
+    </td>
   </tr>
   <!-- /TMPL_LOOP -->
 </table>

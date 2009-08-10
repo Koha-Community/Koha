@@ -45,6 +45,7 @@ BEGIN {
     BatchFindBibDuplicates
     BatchCommitBibRecords
     BatchRevertBibRecords
+    CleanBatch
 
     GetAllImportBatches
     GetImportBatchRangeDesc
@@ -698,6 +699,29 @@ sub BatchRevertItems {
     }
     $sth->finish();
     return $num_items_deleted;
+}
+
+=head2 CleanBatch
+
+=over 4
+
+CleanBatch($batch_id)
+
+=back
+
+Deletes all staged records from the import batch
+and sets the status of the batch to 'cleaned'.  Note
+that deleting a stage record does *not* affect
+any record that has been committed to the database.
+
+=cut
+
+sub CleanBatch {
+    my $batch_id = shift;
+    return unless defined $batch_id;
+
+    C4::Context->dbh->do('DELETE FROM import_records WHERE import_batch_id = ?', {}, $batch_id);
+    SetImportBatchStatus($batch_id, 'cleaned');
 }
 
 =head2 GetAllImportBatches

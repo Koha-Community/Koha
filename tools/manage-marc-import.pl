@@ -95,7 +95,12 @@ if ($op eq "") {
     }
     import_biblios_list($template, $import_batch_id, $offset, $results_per_page);
 } elsif ($op eq "clean-batch") {
-    ;
+    CleanBatch($import_batch_id);
+    import_batches_list($template, $offset, $results_per_page);
+    $template->param( 
+        did_clean       => 1,
+        import_batch_id => $import_batch_id,
+    );
 } elsif ($op eq "redo-matching") {
     my $new_matcher_id = $input->param('new_matcher_id');
     my $current_matcher_id = $input->param('current_matcher_id');
@@ -179,7 +184,8 @@ sub import_batches_list {
             upload_timestamp => $batch->{'upload_timestamp'},
             import_status => $batch->{'import_status'},
             file_name => $batch->{'file_name'},
-            comments => $batch->{'comments'}
+            comments => $batch->{'comments'},
+            can_clean => ($batch->{'import_status'} ne 'cleaned') ? 1 : 0,
         };
     }
     $template->param(batch_list => \@list); 
@@ -373,6 +379,9 @@ sub batch_info {
     $template->param(upload_timestamp => $batch->{'upload_timestamp'});
     $template->param(num_biblios => $batch->{'num_biblios'});
     $template->param(num_items => $batch->{'num_biblios'});
+    if ($batch->{'import_status'} ne 'cleaned') {
+        $template->param(can_clean => 1);
+    }
     if ($batch->{'num_biblios'} > 0) {
         if ($batch->{'import_status'} eq 'staged' or $batch->{'import_status'} eq 'reverted') {
             $template->param(can_commit => 1);
