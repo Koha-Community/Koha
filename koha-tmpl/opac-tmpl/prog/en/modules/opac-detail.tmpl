@@ -29,7 +29,7 @@
 
 YAHOO.util.Event.onContentReady("furtherm", function () {
     $("#furtherm").css("display","block").css("visibility","hidden");
-
+	$("#furthersearches").parent().show();
 	var furthersearchesMenu = new YAHOO.widget.Menu("furtherm");
 		furthersearchesMenu.render();
 		furthersearchesMenu.cfg.setProperty("context", ["furthersearches", "tr", "br"]);
@@ -759,10 +759,10 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         </a></li>
     <!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
-		<li><a href="#" id="furthersearches">More searches</a></li>
+		<li style="display:none;"><a href="#" id="furthersearches">More searches</a></li>
 </ul>
 
-<div id="furtherm" class="yuimenu" style="display: none">
+<div id="furtherm" class="yuimenu">
 <div class="bd">
 <h4>Search for this title in:</h4>
 <ul class="first-of-type">
