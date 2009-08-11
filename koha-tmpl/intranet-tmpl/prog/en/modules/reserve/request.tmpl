@@ -291,9 +291,10 @@ function checkMultiHold() {
 		//<![CDATA[
 		function validate1(date) {
 			var today = new Date();
-			if ( date < today ) {
-				return false;
-			} else if ( date.getDate() == today.getDate() && date.getMonth() == today.getMonth() && date.getFullYear() == today.getFullYear() ) {
+			if ( (date > today) ||
+                    ( date.getDate() == today.getDate() &&
+                      date.getMonth() == today.getMonth() &&
+                      date.getFullYear() == today.getFullYear() ) ) {
 				return false;
 			} else {
 				return true;

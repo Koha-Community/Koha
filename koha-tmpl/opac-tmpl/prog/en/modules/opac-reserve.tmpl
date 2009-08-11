@@ -316,12 +316,15 @@
 			document.getElementById("reserve_date_<!-- TMPL_VAR NAME="biblionumber" -->").parentNode.appendChild( cal_img );
 
 			function validate<!-- TMPL_VAR NAME="biblionumber" -->(date) {
-			   var today = new Date();
-			   if ( date < today ) {
-			      return true;
-			   } else {
-			      return false;
-			   }
+			    var today = new Date();
+                if ( (date > today) ||
+                        ( date.getDate() == today.getDate() &&
+                          date.getMonth() == today.getMonth() &&
+                          date.getFullYear() == today.getFullYear() ) ) {
+                    return false;
+                } else {
+                    return true;
+                }
 			};
 			Calendar.setup(
 			{
