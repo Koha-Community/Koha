@@ -1624,6 +1624,7 @@ $auth_type contains :
 sub TransformHtmlToXml {
     my ( $tags, $subfields, $values, $indicator, $ind_tag, $auth_type ) = @_;
     my $xml = MARC::File::XML::header('UTF-8');
+    $xml .= "<record>\n";
     $auth_type = C4::Context->preference('marcflavour') unless $auth_type;
     MARC::File::XML->default_record_format($auth_type);
     # in UNIMARC, field 100 contains the encoding
@@ -1670,10 +1671,8 @@ sub TransformHtmlToXml {
                         warn "Indicator in @$tags[$i] is empty";
                         $ind2 = " ";
                     }
-                    $xml .=
-"<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
-                    $xml .=
-"<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
+                    $xml .= "<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
+                    $xml .= "<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
                     $first = 0;
                 }
                 else {
@@ -1691,17 +1690,16 @@ sub TransformHtmlToXml {
                         # rest of the fixed fields
                     }
                     elsif ( @$tags[$i] < 10 ) {
-                        $xml .=
-"<controlfield tag=\"@$tags[$i]\">@$values[$i]</controlfield>\n";
+                        $xml .= "<controlfield tag=\"@$tags[$i]\">@$values[$i]</controlfield>\n";
                         $first = 1;
                     }
                     else {
                         my $ind1 = substr( @$indicator[$j], 0, 1 );
                         my $ind2 = substr( @$indicator[$j], 1, 1 );
-                        $xml .=
-"<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
-                        $xml .=
-"<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
+                        $ind1 = " " if !defined($ind2) or $ind2 eq "";
+                        $ind2 = " " if !defined($ind2) or $ind2 eq "";
+                        $xml .= "<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
+                        $xml .= "<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
                         $first = 0;
                     }
                 }
@@ -1714,12 +1712,12 @@ sub TransformHtmlToXml {
                 if ($first) {
                     my $ind1 = substr( @$indicator[$j], 0, 1 );
                     my $ind2 = substr( @$indicator[$j], 1, 1 );
-                    $xml .=
-"<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
+                    $ind1 = " " if !defined($ind2) or $ind2 eq "";
+                    $ind2 = " " if !defined($ind2) or $ind2 eq "";
+                    $xml .= "<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
                     $first = 0;
                 }
-                $xml .=
-"<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
+                $xml .= "<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
             }
         }
         $prevtag = @$tags[$i];
@@ -1737,6 +1735,7 @@ sub TransformHtmlToXml {
         $xml .= "<subfield code=\"a\">$string</subfield>\n";
         $xml .= "</datafield>\n";
     }
+    $xml .= "</record>\n";
     $xml .= MARC::File::XML::footer();
     return $xml;
 }
