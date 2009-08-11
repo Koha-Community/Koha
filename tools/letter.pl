@@ -21,20 +21,23 @@
 
  ALGO :
  this script use an $op to know what to do.
- if $op is empty or none of the above values,
-	- the default screen is build (with all records, or filtered datas).
-	- the   user can clic on add, modify or delete record.
+ if $op is empty or none of the values listed below,
+	- the default screen is built (with all or filtered (if search string is set) records).
+	- the   user can click on add, modify or delete record.
+    - filtering is done on the code field
  if $op=add_form
-	- if primkey exists, this is a modification,so we read the $primkey record
+	- if primary key (module + code) exists, this is a modification,so we read the required record
 	- builds the add/modify form
  if $op=add_validate
-	- the user has just send datas, so we create/modify the record
+	- the user has just send data, so we create/modify the record
  if $op=delete_form
-	- we show the record having primkey=$primkey and ask for deletion validation form
+	- we show the record selected and ask for confirmation
  if $op=delete_confirm
-	- we delete the record having primkey=$primkey
+	- we delete the designated record
 
 =cut
+# TODO This script drives the CRUD operations on the letter table
+# The DB interaction should be handled by calls to C4/Letters.pm
 
 use strict;
 use warnings;
@@ -43,89 +46,48 @@ use C4::Auth;
 use C4::Context;
 use C4::Output;
 
-sub StringSearch {
-    my ($searchstring) = @_;
-    my $dbh = C4::Context->dbh;
-    $searchstring =~ s/\'/\\\'/g;
-    my @data = split( ' ', $searchstring );
-    $data[0] = '' unless @data;
-    my $sth = $dbh->prepare("SELECT * FROM letter WHERE (code LIKE ?) ORDER BY module, code");
-    $sth->execute("$data[0]%");     # slightly bogus, only searching on first string.
-    return $sth->fetchall_arrayref({});
-}
-
-# FIXME untranslateable
-our %column_map = (
-    aqbooksellers => 'BOOKSELLERS',
-    aqorders => 'ORDERS',
-    serial => 'SERIALS',
-    reserves => 'HOLDS',
-);
-
-sub column_picks ($) {
-    # returns @array of values
-    my $table = shift or return ();
-    my $sth = C4::Context->dbh->prepare("SHOW COLUMNS FROM $table");
-    $sth->execute;
-    my @SQLfieldname = ();
-    push @SQLfieldname, {'value' => "", 'text' => '---' . uc($column_map{$table} || $table) . '---'};
-    while (my ($field) = $sth->fetchrow_array) {
-        push @SQLfieldname, {
-            value => $table . ".$field",
-             text => $table . ".$field"
-        };
-    }
-    return @SQLfieldname;
-}
-
 # letter_exists($module, $code)
 # - return true if a letter with the given $module and $code exists
 sub letter_exists {
     my ($module, $code) = @_;
     my $dbh = C4::Context->dbh;
-    my $sql = q{SELECT * FROM letter WHERE module = ? AND code = ?};
-    my $letters = $dbh->selectall_arrayref($sql, { Slice => {} }, $module, $code);
-    return scalar(@$letters);
+    my $letters = $dbh->selectall_arrayref(q{SELECT name FROM letter WHERE module = ? AND code = ?}, undef, $module, $code);
+    return @{$letters};
 }
 
 # $protected_letters = protected_letters()
 # - return a hashref of letter_codes representing letters that should never be deleted
 sub protected_letters {
     my $dbh = C4::Context->dbh;
-    my $sql = q{SELECT DISTINCT letter_code FROM message_transports};
-    my $codes = $dbh->selectall_arrayref($sql);
-    return { map { $_->[0] => 1 } @$codes };
+    my $codes = $dbh->selectall_arrayref(q{SELECT DISTINCT letter_code FROM message_transports});
+    return { map { $_->[0] => 1 } @{$codes} };
 }
 
 my $input       = new CGI;
 my $searchfield = $input->param('searchfield');
-$searchfield = '' unless defined($searchfield);
-# my $offset      = $input->param('offset'); # pagination not implemented
-my $script_name = "/cgi-bin/koha/tools/letter.pl";
+my $script_name = '/cgi-bin/koha/tools/letter.pl';
 my $code        = $input->param('code');
 my $module      = $input->param('module');
-$module = '' unless defined($module);
 my $content     = $input->param('content');
 my $op          = $input->param('op');
-$op = '' unless defined($op);
-$searchfield =~ s/\,//g;
 my $dbh = C4::Context->dbh;
+if (!defined $module ) {
+    $module = q{};
+}
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
-        template_name   => "tools/letter.tmpl",
+        template_name   => 'tools/letter.tmpl',
         query           => $input,
-        type            => "intranet",
+        type            => 'intranet',
         authnotrequired => 0,
         flagsrequired   => { tools => 'edit_notices' },
         debug           => 1,
     }
 );
 
-if ($op) {
-	$template->param($op  => 1);
-} else {
-	$template->param(else => 1);
+if (!defined $op) {
+    $op = q{}; # silence errors from eq
 }
 # we show only the TMPL_VAR names $op
 
@@ -133,70 +95,107 @@ $template->param(
 	script_name => $script_name,
 	action => $script_name
 );
-################## ADD_FORM ##################################
-# called by default. Used to create form to add or  modify a record
-if ( $op eq 'add_form' ) {
 
-    #---- if primkey exists, it's a modify action, so read values to modify...
+if ($op eq 'add_form') {
+    add_form($module, $code);
+}
+elsif ( $op eq 'add_validate' ) {
+    add_validate();
+    $op = q{}; # next operation is to return to default screen
+}
+elsif ( $op eq 'delete_confirm' ) {
+    delete_confirm($module, $code);
+}
+elsif ( $op eq 'delete_confirmed' ) {
+    delete_confirmed($module, $code);
+    $op = q{}; # next operation is to return to default screen
+}
+else {
+    default_display($searchfield);
+}
+
+# Do this last as delete_confirmed resets
+if ($op) {
+    $template->param($op  => 1);
+} else {
+    $template->param(no_op_set => 1);
+}
+
+output_html_with_http_headers $input, $cookie, $template->output;
+
+sub add_form {
+    my ($module, $code ) = @_;
+
     my $letter;
+    # if code has been passed we can identify letter and its an update action
     if ($code) {
-        my $sth = $dbh->prepare("SELECT * FROM letter WHERE module=? AND code=?");
-        $sth->execute( $module, $code );
-        $letter = $sth->fetchrow_hashref;
-    }
-
-    # build field list
-    my @SQLfieldname;
-    foreach (qw(LibrarianFirstname LibrarianSurname LibrarianEmailaddress)) {
-        push @SQLfieldname, {value => $_, text => $_};
-    }
-    push @SQLfieldname, column_picks('branches');
-
-    # add acquisition specific tables
-    if ( $module eq "reserves" ) {
-        push @SQLfieldname, column_picks('borrowers'),
-                            column_picks('reserves'),
-                            column_picks('biblio'),
-                            column_picks('items');
-    }
-    elsif ( index( $module, "acquisition" ) > 0 ) {	# FIXME: imprecise comparison
-        push @SQLfieldname, column_picks('aqbooksellers'), column_picks('aqorders');
-        # add issues specific tables
-    }
-    elsif ( index( $module, "issues" ) > 0 ) {	# FIXME: imprecise comparison
-        push @SQLfieldname, column_picks('aqbooksellers'),
-            column_picks('serial'),
-            column_picks('subscription'),
-            {value => "", text => '---BIBLIO---'};
-		foreach(qw(title author serial)) {
-        	push @SQLfieldname, {value => "biblio.$_", text => ucfirst($_) };
-		}
-    }
-    else {
-        push @SQLfieldname, column_picks('biblio'),
-            column_picks('biblioitems'),
-            {value => "",              text => '---ITEMS---'  },
-            {value => "items.content", text => 'items.content'},
-            column_picks('borrowers');
-    }
-    if ($code) {
+        $letter = $dbh->selectrow_hashref(q{SELECT module, code, name, title, content FROM letter WHERE module=? AND code=?},
+            undef, $module, $code);
         $template->param( modify => 1 );
         $template->param( code   => $letter->{code} );
     }
-    else {
+    else { # initialize the new fields
+        $letter = {
+            module  => $module,
+            code    => q{},
+            name    => q{},
+            title   => q{},
+            content => q{},
+        };
         $template->param( adding => 1 );
     }
+
+    # build field list
+    my $field_selection = [
+    {
+        value => 'LibrarianFirstname',
+        text  => 'LibrarianFirstname',
+    },
+    {
+        value => 'LibrarianSurname',
+        text  => 'LibrarianSurname',
+    },
+    {
+        value => 'LibrarianEmailaddress',
+        text  => 'LibrarianEmailaddress',
+    }
+    ];
+    push @{$field_selection}, add_fields('branches');
+    if ($module eq 'reserves') {
+        push @{$field_selection}, add_fields('borrowers', 'reserves', 'biblio', 'items');
+    }
+    elsif ($module eq 'claimacquisition') {
+        push @{$field_selection}, add_fields('aqbooksellers', 'aqorders');
+    }
+    elsif ($module eq 'claimissues') {
+        push @{$field_selection}, add_fields('aqbooksellers', 'serial', 'subscription');
+        push @{$field_selection},
+        {
+            value => q{},
+            text => '---BIBLIO---'
+        };
+        foreach(qw(title author serial)) {
+            push @{$field_selection}, {value => "biblio.$_", text => ucfirst $_ };
+        }
+    }
+    else {
+        push @{$field_selection}, add_fields('biblio','biblioitems'),
+            {value => q{},             text => '---ITEMS---'  },
+            {value => 'items.content', text => 'items.content'},
+            add_fields('borrowers');
+    }
+
     $template->param(
         name    => $letter->{name},
         title   => $letter->{title},
-        content => ( $content ? $content : $letter->{content} ),
-        ( $module ? $module : $letter->{module} ) => 1,
-        SQLfieldname => \@SQLfieldname,
+        content => $letter->{content},
+        $module => 1,
+        SQLfieldname => $field_selection,
     );
-################## ADD_VALIDATE ##################################
-    # called by add_form, used to insert/modify data in DB
+    return;
 }
-elsif ( $op eq 'add_validate' ) {
+
+sub add_validate {
     my $dbh     = C4::Context->dbh;
     my $module  = $input->param('module');
     my $code    = $input->param('code');
@@ -204,7 +203,6 @@ elsif ( $op eq 'add_validate' ) {
     my $title   = $input->param('title');
     my $content = $input->param('content');
     if (letter_exists($module, $code)) {
-        # UPDATE
         $dbh->do(
             q{UPDATE letter SET module = ?, code = ?, name = ?, title = ?, content = ? WHERE module = ? AND code = ?},
             undef,
@@ -212,58 +210,118 @@ elsif ( $op eq 'add_validate' ) {
             $module, $code
         );
     } else {
-        # INSERT
         $dbh->do(
             q{INSERT INTO letter (module,code,name,title,content) VALUES (?,?,?,?,?)},
             undef,
             $module, $code, $name, $title, $content
         );
     }
-    print $input->redirect("letter.pl");
-    exit;
-################## DELETE_CONFIRM ##################################
-    # called by default form, used to confirm deletion of data in DB
+    # set up default display
+    default_display();
+    return;
 }
-elsif ( $op eq 'delete_confirm' ) {
+
+sub delete_confirm {
+    my ($module, $code) = @_;
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT * FROM letter WHERE code=?");
-    $sth->execute($code);
-    my $data = $sth->fetchrow_hashref;
+    my $letter = $dbh->selectrow_hashref(q|SELECT  name FROM letter WHERE module = ? AND code = ?|,
+        { Slice => {} },
+        $module, $code);
     $template->param( code => $code );
-	foreach (qw(module name content)) {
-    	$template->param( $_ => $data->{$_} );
-	}
-################## DELETE_CONFIRMED ##################################
-  # called by delete_confirm, used to effectively confirm deletion of data in DB
+    $template->param( module => $module);
+    $template->param( name => $letter->{name});
+    return;
 }
-elsif ( $op eq 'delete_confirmed' ) {
+
+sub delete_confirmed {
+    my ($module, $code) = @_;
     my $dbh    = C4::Context->dbh;
-    my $code   = uc( $input->param('code') );
-    my $module = $input->param('module');
-    my $sth    = $dbh->prepare("DELETE FROM letter WHERE module=? AND code=?");
-    $sth->execute( $module, $code );
-    print $input->redirect("/cgi-bin/koha/tools/letter.pl");
-    exit;
-################## DEFAULT ##################################
+    $dbh->do('DELETE FROM letter WHERE module=? AND code=?',{},$module,$code);
+    # setup default display for screen
+    default_display();
+    return;
 }
-else {    # DEFAULT
-    if ( $searchfield ne '' ) {
+
+sub retrieve_letters {
+    my $searchstring = shift;
+    my $dbh = C4::Context->dbh;
+    if ($searchstring) {
+        if ($searchstring=~m/(\S+)/) {
+            $searchstring = $1 . q{%};
+            return $dbh->selectall_arrayref('SELECT module, code, name FROM letter WHERE code LIKE ? ORDER BY module, code',
+                { Slice => {} }, $searchstring);
+        }
+    }
+    else {
+        return $dbh->selectall_arrayref('SELECT module, code, name FROM letter ORDER BY module, code', { Slice => {} });
+    }
+    return;
+}
+
+sub default_display {
+    my $searchfield = shift;
+    my $results;
+    if ( $searchfield  ) {
         $template->param( search      => 1 );
         $template->param( searchfield => $searchfield );
+        $results = retrieve_letters($searchfield);
+    } else {
+        $results = retrieve_letters();
     }
-    my ($results) = StringSearch($searchfield);
-    my @loop_data = ();
+    my $loop_data = [];
     my $protected_letters = protected_letters();
-    foreach my $result (@$results) {
-        my %row_data;
-        foreach my $key (qw(module code name)) {
-            $row_data{$key} = $result->{$key};
-            $row_data{'protected'} = $protected_letters->{$result->{code}};
-        }
-        push(@loop_data, \%row_data );
+    foreach my $row (@{$results}) {
+        $row->{protected} = $protected_letters->{ $row->{code}};
+        push @{$loop_data}, $row;
+
     }
-    $template->param( letter => \@loop_data );
-}    #---- END $OP eq DEFAULT
+    $template->param( letter => $loop_data );
+    return;
+}
 
-output_html_with_http_headers $input, $cookie, $template->output;
+sub add_fields {
+    my @tables = @_;
+    my @fields = ();
 
+    for my $table (@tables) {
+        push @fields, get_columns_for($table);
+
+    }
+    return @fields;
+}
+
+sub get_columns_for {
+    my $table = shift;
+# FIXME untranslateable
+    my %column_map = (
+        aqbooksellers => '---BOOKSELLERS---',
+        aqorders      => '---ORDERS---',
+        serial        => '---SERIALS---',
+        reserves      => '---HOLDS---',
+    );
+    my @fields = ();
+    if (exists $column_map{$table} ) {
+        push @fields, {
+            value => q{},
+            text  => $column_map{$table} ,
+        };
+    }
+    else {
+        my $tlabel = '---' . uc $table;
+        $tlabel.= '---';
+        push @fields, {
+            value => q{},
+            text  => $tlabel,
+        };
+    }
+    my $sql = "SHOW COLUMNS FROM $table";# TODO not db agnostic
+    my $table_prefix = $table . q|.|;
+    my $rows = C4::Context->dbh->selectall_arrayref($sql, { Slice => {} });
+    for my $row (@{$rows}) {
+        push @fields, {
+            value => $table_prefix . $row->{Field},
+            text  => $table_prefix . $row->{Field},
+        }
+    }
+    return @fields;
+}
