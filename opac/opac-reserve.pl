@@ -130,7 +130,7 @@ foreach my $biblioNumber (@biblionumbers) {
     }
 
     # Compute the priority rank.
-    my ( $rank, $reserves ) = GetReservesFromBiblionumber($biblioNumber);
+    my ( $rank, $reserves ) = GetReservesFromBiblionumber($biblioNumber,1);
     $biblioData->{reservecount} = $rank;
     foreach my $res (@$reserves) {
         my $found = $res->{'found'};
@@ -191,6 +191,15 @@ if ( $query->param('place_reserve') ) {
         my $biblioData = $biblioDataHash{$biblioNum};
         my $found;
         
+	# Check for user supplied reserve date
+	my $startdate;
+	if (
+	    C4::Context->preference( 'AllowHoldDateInFuture' ) &&
+	    C4::Context->preference( 'OPACAllowHoldDateInFuture' )
+	    ) {
+	    $startdate = $query->param("reserve_date_$biblioNum");
+	}
+
         # If a specific item was selected and the pickup branch is the same as the
         # holdingbranch, force the value $rank and $found.
         my $rank = $biblioData->{rank};
@@ -207,7 +216,7 @@ if ( $query->param('place_reserve') ) {
         }
         
         # Here we actually do the reserveration. Stage 3.
-        AddReserve($branch, $borrowernumber, $biblioNum, 'a', [$biblioNum], $rank, $notes,
+        AddReserve($branch, $borrowernumber, $biblioNum, 'a', [$biblioNum], $rank, $startdate, $notes,
                    $biblioData->{'title'}, $itemNum, $found);
     }
 
@@ -465,5 +474,17 @@ $template->param(itemtable_colspan => $itemTableColspan);
 
 # display infos
 $template->param(bibitemloop => $biblioLoop);
+
+# can set reserve date in future
+if (
+    C4::Context->preference( 'AllowHoldDateInFuture' ) &&
+    C4::Context->preference( 'OPACAllowHoldDateInFuture' )
+    ) {
+    $template->param(
+	reserve_in_future         => 1,
+	DHTMLcalendar_dateformat  => C4::Dates->DHTMLcalendar(),
+	);
+}
+
 output_html_with_http_headers $query, $cookie, $template->output;
 

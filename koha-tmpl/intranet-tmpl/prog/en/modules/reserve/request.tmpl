@@ -5,6 +5,7 @@
     <title>Koha &rsaquo; Circulation &rsaquo; Holds &rsaquo; Confirm Holds</title>
 <!-- /TMPL_UNLESS -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="calendar.inc" -->
 <script type="text/javascript">
     // <![CDATA[
 var patron_homebranch = "<!-- TMPL_VAR NAME="borrower_branchname" ESCAPE="JS" -->";
@@ -281,6 +282,36 @@ function checkMultiHold() {
             <label for="pickup">Pickup at:</label>
             <!-- TMPL_VAR NAME="CGIbranch" -->
         </li>
+	<!-- TMPL_IF NAME="reserve_in_future" -->
+	<li>
+	    <label for="reserve_date">Reserve starts on date:</label>
+	    <input name="reserve_date" id="reserve_date" size="10" readonly="readonly">
+	    <img src="<!-- TMPL_VAR NAME="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="CalendarReserveDate" style="cursor: pointer;" />
+	    <script language="JavaScript" type="text/javascript">
+		//<![CDATA[
+		function validate1(date) {
+			var today = new Date();
+			if ( date < today ) {
+				return false;
+			} else if ( date.getDate() == today.getDate() && date.getMonth() == today.getMonth() && date.getFullYear() == today.getFullYear() ) {
+				return false;
+			} else {
+				return true;
+			}
+		};
+		Calendar.setup(
+			{
+				inputField : "reserve_date",
+				ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+				button : "CalendarReserveDate",
+				disableFunc : validate1,
+				dateStatusFunc : validate1,
+			}
+		);
+		//]]>
+	    </script>
+	</li>
+	<!-- /TMPL_IF -->
 
         <!-- TMPL_UNLESS NAME="multi_hold" -->
           <li> <label for="requestany">Place a hold on the next available copy </label>

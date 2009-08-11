@@ -71,7 +71,7 @@ if($ok){
 	if($routinglist[$i]->{'borrowernumber'} == $data->{'borrowernumber'}){
 	    ModReserve($routinglist[$i]->{'ranking'},$biblio,$routinglist[$i]->{'borrowernumber'},$branch);
         } else {
-        AddReserve($branch,$routinglist[$i]->{'borrowernumber'},$biblio,$const,\@bibitems,$routinglist[$i]->{'ranking'},$notes,$title);
+        AddReserve($branch,$routinglist[$i]->{'borrowernumber'},$biblio,$const,\@bibitems,$routinglist[$i]->{'ranking'},'',$notes,$title);
 	}
     }
     

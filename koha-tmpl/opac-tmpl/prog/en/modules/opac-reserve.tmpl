@@ -1,5 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" DEFAULT="Koha Online" --> Catalog &rsaquo;  Reserving <!-- TMPL_VAR NAME="title" escape="html" --> for <!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --><!-- /TMPL_LOOP -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="calendar.inc" -->
 <script type="text/javascript">
 // <![CDATA[
  var MSG_NO_COPY_SELECTED = _("Expecting a specific copy selection.");
@@ -238,6 +239,9 @@
                     <th>Item Type</th>
                   <!-- /TMPL_UNLESS -->
                   <th>Priority</th>
+		  <!-- TMPL_IF NAME="reserve_in_future" -->
+		  <th>Reserve Starts on Date</th>
+		  <!-- /TMPL_IF -->
                   <!-- TMPL_IF NAME="OPACItemHolds" -->
                     <th id="place_on_hdr" style="display:none">Place On:</th>
                   <!-- /TMPL_IF -->
@@ -295,6 +299,43 @@
                       </td>
                     <!-- /TMPL_UNLESS -->
                     <td><!-- TMPL_VAR name="rank" --> out of <!-- TMPL_VAR NAME="reservecount" --></td>
+		    <!-- TMPL_IF NAME="reserve_in_future" -->
+		    <td>
+			<input name="reserve_date_<!-- TMPL_VAR NAME="biblionumber" -->" id="reserve_date_<!-- TMPL_VAR NAME="biblionumber" -->" size="10">
+			<!-- <img src="<!-- TMPL_VAR NAME="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="CalendarReserveDate<!-- TMPL_VAR NAME="biblionumber" -->" style="cursor: pointer;" /> -->
+			<script language="JavaScript" type="text/javascript">
+			//<![CDATA[
+			$("#reserve_date_<!-- TMPL_VAR NAME="biblionumber" -->").attr( 'readonly', 'readonly' );
+
+			var cal_img = document.createElement('img');
+			cal_img.src = "<!-- TMPL_VAR NAME="themelang" -->/lib/calendar/cal.gif";
+			cal_img.alt = "Show Calendar";
+			cal_img.border = "0";
+			cal_img.id = "CalendarReserveDate<!-- TMPL_VAR NAME="biblionumber" -->";
+			cal_img.style.cursor = "pointer";
+			document.getElementById("reserve_date_<!-- TMPL_VAR NAME="biblionumber" -->").parentNode.appendChild( cal_img );
+
+			function validate<!-- TMPL_VAR NAME="biblionumber" -->(date) {
+			   var today = new Date();
+			   if ( date < today ) {
+			      return true;
+			   } else {
+			      return false;
+			   }
+			};
+			Calendar.setup(
+			{
+				inputField : "reserve_date_<!-- TMPL_VAR NAME="biblionumber" -->",
+				ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+				button : "CalendarReserveDate<!-- TMPL_VAR NAME="biblionumber" -->",
+				disableFunc : validate<!-- TMPL_VAR NAME="biblionumber" -->,
+				dateStatusFunc : validate<!-- TMPL_VAR NAME="biblionumber" -->,
+			}
+			);
+			//]]>
+			</script>
+		    </td>
+		    <!-- /TMPL_IF -->
                     <!-- TMPL_IF NAME="OPACItemHolds" -->
                       <td class="place_on_type" style="display:none">
                         <table>

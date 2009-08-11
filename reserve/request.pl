@@ -219,7 +219,7 @@ foreach my $biblionumber (@biblionumbers) {
     my $dat          = GetBiblioData($biblionumber);
 
     # get existing reserves .....
-    my ( $count, $reserves ) = GetReservesFromBiblionumber($biblionumber);
+    my ( $count, $reserves ) = GetReservesFromBiblionumber($biblionumber,1);
     my $totalcount = $count;
     my $alreadyreserved;
 
@@ -434,7 +434,7 @@ foreach my $biblionumber (@biblionumbers) {
 
     # existingreserves building
     my @reserveloop;
-    ( $count, $reserves ) = GetReservesFromBiblionumber($biblionumber);
+    ( $count, $reserves ) = GetReservesFromBiblionumber($biblionumber,1);
     foreach my $res ( sort { 
             my $a_found = $a->{found} || '';
             my $b_found = $a->{found} || '';
@@ -549,6 +549,13 @@ $template->param( biblionumbers => $biblionumbers );
 
 if ($multihold) {
     $template->param( multi_hold => 1 );
+}
+
+if ( C4::Context->preference( 'AllowHoldDateInFuture' ) ) {
+    $template->param(
+	reserve_in_future         => 1,
+	DHTMLcalendar_dateformat  => C4::Dates->DHTMLcalendar(),
+	);
 }
     
 # printout the page
