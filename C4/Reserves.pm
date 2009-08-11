@@ -610,11 +610,11 @@ sub CheckReserves {
     ";
 
     if ($item) {
-        $sth = $dbh->prepare("$select WHERE reservedate <= CURRENT_DATE() AND itemnumber = ?");
+        $sth = $dbh->prepare("$select WHERE itemnumber = ?");
         $sth->execute($item);
     }
     else {
-        $sth = $dbh->prepare("$select WHERE reservedate <= CURRENT_DATE() AND barcode = ?");
+        $sth = $dbh->prepare("$select WHERE barcode = ?");
         $sth->execute($barcode);
     }
     # note: we get the itemnumber because we might have started w/ just the barcode.  Now we know for sure we have it.
@@ -1351,7 +1351,7 @@ sub _Findgroupreserve {
           AND reserves.reservedate    = reserveconstraints.reservedate )
           OR  reserves.constrainttype='a' )
           AND (reserves.itemnumber IS NULL OR reserves.itemnumber = ?)
-          AND reservedate <= CURRENT_DATE()
+          AND reserves.reservedate <= CURRENT_DATE()
     /;
     $sth = $dbh->prepare($query);
     $sth->execute( $biblio, $bibitem, $itemnumber );
