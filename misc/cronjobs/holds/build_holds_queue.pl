@@ -83,7 +83,8 @@ sub GetBibsWithPendingHoldRequests {
     my $bib_query = "SELECT DISTINCT biblionumber
                      FROM reserves
                      WHERE found IS NULL
-                     AND priority > 0";
+                     AND priority > 0
+                     AND reservedate <= CURRENT_DATE()";
     my $sth = $dbh->prepare($bib_query);
 
     $sth->execute();
@@ -129,6 +130,7 @@ sub GetPendingHoldRequestsForBib {
                          WHERE biblionumber = ?
                          AND found IS NULL
                          AND priority > 0
+                         AND reservedate <= CURRENT_DATE()
                          ORDER BY priority";
     my $sth = $dbh->prepare($request_query);
     $sth->execute($biblionumber);
