@@ -76,9 +76,9 @@ print "Merging\n" unless $noconfirm;
 if ($batch) {
   my @authlist;
   my $cgidir = C4::Context->intranetdir ."/cgi-bin";
-  unless (opendir(DIR, "$cgidir/localfile/modified_authorities")) {
+  unless (opendir(DIR, "$cgidir/tmp/modified_authorities")) {
     $cgidir = C4::Context->intranetdir;
-    opendir(DIR, "$cgidir/localfile/modified_authorities") || die "can't opendir $cgidir/localfile/modified_authorities: $!";
+    opendir(DIR, "$cgidir/tmp/modified_authorities") || die "can't opendir $cgidir/tmp/modified_authorities: $!";
   } 
   while (my $authid = readdir(DIR)) {
     if ($authid =~ /\.authid$/) {
@@ -87,7 +87,7 @@ if ($batch) {
       my $MARCauth = GetAuthority($authid) ;
       next unless ($MARCauth);
       merge($authid,$MARCauth,$authid,$MARCauth) if ($MARCauth);
-      unlink $cgidir.'/localfile/modified_authorities/'.$authid.'.authid';
+      unlink $cgidir.'/tmp/modified_authorities/'.$authid.'.authid';
     }
   }
   closedir DIR;
