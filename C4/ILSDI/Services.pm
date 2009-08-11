@@ -91,59 +91,55 @@ C4::ILS-DI::Services - ILS-DI Services
 =cut
 
 sub GetAvailability {
-	my ( $cgi ) = @_;
-	
-	my $out = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>\n";
-	$out .= "<dlf:collection\n";
-	$out .= "  xmlns:dlf=\"http://diglib.org/ilsdi/1.1\"\n";
-	$out .= "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
-	$out .= "  xsi:schemaLocation=\"http://diglib.org/ilsdi/1.1\n";
-	$out .= "    http://diglib.org/architectures/ilsdi/schemas/1.1/dlfexpanded.xsd\">\n";
+    my ($cgi) = @_;
 
-	foreach my $id (split(/ /, $cgi->param('id')))
-	{
-		if ($cgi->param('id_type') eq "item")
-		{
-			my ($biblionumber, $status, $msg, $location) = Availability($id);
+    my $out = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>\n";
+    $out .= "<dlf:collection\n";
+    $out .= "  xmlns:dlf=\"http://diglib.org/ilsdi/1.1\"\n";
+    $out .= "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
+    $out .= "  xsi:schemaLocation=\"http://diglib.org/ilsdi/1.1\n";
+    $out .= "    http://diglib.org/architectures/ilsdi/schemas/1.1/dlfexpanded.xsd\">\n";
 
-			$out .= "  <dlf:record>\n";
-			$out .= "    <dlf:bibliographic id=\"" . ($biblionumber || $id) . "\" />\n";
-			$out .= "    <dlf:items>\n";
-			$out .= "      <dlf:item id=\"" . $id . "\">\n";
-			$out .= "        <dlf:simpleavailability>\n";
-			$out .= "          <dlf:identifier>" . $id . "</dlf:identifier>\n";
-			$out .= "          <dlf:availabilitystatus>" . $status . "</dlf:availabilitystatus>\n";
-			if ($msg)      { $out .= "          <dlf:availabilitymsg>" . $msg . "</dlf:availabilitymsg>\n"; }
-			if ($location) { $out .= "          <dlf:location>" . $location . "</dlf:location>\n"; }
-			$out .= "        </dlf:simpleavailability>\n";
-			$out .= "      </dlf:item>\n";
-			$out .= "    </dlf:items>\n";
-			$out .= "  </dlf:record>\n";
-		}
-		else
-		{
-			my $status;
-			my $msg;
-			my $biblioitem = (GetBiblioItemByBiblioNumber($id, undef))[0];
-			if ($biblioitem) {
-			
-			} else {
-				$status = "unknown";
-				$msg = "Error: could not retrieve availability for this ID";
-			}
-			$out .= "  <dlf:record>\n";
-			$out .= "    <dlf:bibliographic id=\"" . $id . "\" />\n";
-			$out .= "    <dlf:simpleavailability>\n";
-			$out .= "      <dlf:identifier>" . $id . "</dlf:identifier>\n";
-			$out .= "      <dlf:availabilitystatus>" . $status . "</dlf:availabilitystatus>\n";
-			$out .= "      <dlf:availabilitymsg>" . $msg . "</dlf:availabilitymsg>\n";
-			$out .= "    </dlf:simpleavailability>\n";
-			$out .= "  </dlf:record>\n";
-		}
-	}
-	$out .= "</dlf:collection>\n";
-	
-	return $out;
+    foreach my $id ( split( / /, $cgi->param('id') ) ) {
+        if ( $cgi->param('id_type') eq "item" ) {
+            my ( $biblionumber, $status, $msg, $location ) = Availability($id);
+
+            $out .= "  <dlf:record>\n";
+            $out .= "    <dlf:bibliographic id=\"" . ( $biblionumber || $id ) . "\" />\n";
+            $out .= "    <dlf:items>\n";
+            $out .= "      <dlf:item id=\"" . $id . "\">\n";
+            $out .= "        <dlf:simpleavailability>\n";
+            $out .= "          <dlf:identifier>" . $id . "</dlf:identifier>\n";
+            $out .= "          <dlf:availabilitystatus>" . $status . "</dlf:availabilitystatus>\n";
+            if ($msg)      { $out .= "          <dlf:availabilitymsg>" . $msg . "</dlf:availabilitymsg>\n"; }
+            if ($location) { $out .= "          <dlf:location>" . $location . "</dlf:location>\n"; }
+            $out .= "        </dlf:simpleavailability>\n";
+            $out .= "      </dlf:item>\n";
+            $out .= "    </dlf:items>\n";
+            $out .= "  </dlf:record>\n";
+        } else {
+            my $status;
+            my $msg;
+            my $biblioitem = ( GetBiblioItemByBiblioNumber( $id, undef ) )[0];
+            if ($biblioitem) {
+
+            } else {
+                $status = "unknown";
+                $msg    = "Error: could not retrieve availability for this ID";
+            }
+            $out .= "  <dlf:record>\n";
+            $out .= "    <dlf:bibliographic id=\"" . $id . "\" />\n";
+            $out .= "    <dlf:simpleavailability>\n";
+            $out .= "      <dlf:identifier>" . $id . "</dlf:identifier>\n";
+            $out .= "      <dlf:availabilitystatus>" . $status . "</dlf:availabilitystatus>\n";
+            $out .= "      <dlf:availabilitymsg>" . $msg . "</dlf:availabilitymsg>\n";
+            $out .= "    </dlf:simpleavailability>\n";
+            $out .= "  </dlf:record>\n";
+        }
+    }
+    $out .= "</dlf:collection>\n";
+
+    return $out;
 }
 
 =head2 GetRecords
@@ -170,55 +166,58 @@ sub GetAvailability {
 =cut
 
 sub GetRecords {
-	my ( $cgi ) = @_;
+    my ($cgi) = @_;
 
-	# Check if the schema is supported. For now, GetRecords only supports MARCXML
-	if ( $cgi->param('schema') and $cgi->param('schema') ne "MARCXML") { 
+    # Check if the schema is supported. For now, GetRecords only supports MARCXML
+    if ( $cgi->param('schema') and $cgi->param('schema') ne "MARCXML" ) {
         return { message => 'UnsupportedSchema' };
-	}
+    }
 
-	my @records;
-	# Loop over biblionumbers
-	foreach my $biblionumber (split(/ /, $cgi->param('id')))
-	{
-		# Get the biblioitem from the biblionumber
-		my $biblioitem = (GetBiblioItemByBiblioNumber($biblionumber, undef))[0];
-		if ( not $biblioitem->{'biblionumber'} ) { 
-			$biblioitem = "RecordNotFound";
-		}
+    my @records;
 
-		# We don't want MARC to be displayed
-		delete $biblioitem->{'marc'};
-		# nor the XML declaration of MARCXML
-		$biblioitem->{'marcxml'} =~ s/<\?xml version="1.0" encoding="UTF-8"\?>//go;
+    # Loop over biblionumbers
+    foreach my $biblionumber ( split( / /, $cgi->param('id') ) ) {
 
-		# Get most of the needed data
-		my $biblioitemnumber = $biblioitem->{'biblioitemnumber'};
-		my @reserves = GetReservesFromBiblionumber($biblionumber, undef, undef);
-		my $issues = GetBiblioIssues($biblionumber);
-		my $items = GetItemsByBiblioitemnumber($biblioitemnumber);
+        # Get the biblioitem from the biblionumber
+        my $biblioitem = ( GetBiblioItemByBiblioNumber( $biblionumber, undef ) )[0];
+        if ( not $biblioitem->{'biblionumber'} ) {
+            $biblioitem = "RecordNotFound";
+        }
 
-		# We loop over the items to clean them
-		foreach my $item (@$items)
-		{
-			# This hides additionnal XML subfields, we don't need these info
-			delete $item->{'more_subfields_xml'};
-			# Display branch names instead of branch codes
-			$item->{'homebranchname'} = GetBranchName($item->{'homebranch'});
-			$item->{'holdingbranchname'} = GetBranchName($item->{'holdingbranch'});
-		}
+        # We don't want MARC to be displayed
+        delete $biblioitem->{'marc'};
 
-		# Hashref building...
-		$biblioitem->{'items'}->{'item'} = $items;
-		$biblioitem->{'reserves'}->{'reserve'} = $reserves[1];
-		$biblioitem->{'issues'}->{'issue'} = $issues;
+        # nor the XML declaration of MARCXML
+        $biblioitem->{'marcxml'} =~ s/<\?xml version="1.0" encoding="UTF-8"\?>//go;
 
-		map { $biblioitem->{$_} = encode_entities($biblioitem->{$_},'&') } grep(!/marcxml/, keys %$biblioitem);
-	
-		push @records, $biblioitem;
-	}
+        # Get most of the needed data
+        my $biblioitemnumber = $biblioitem->{'biblioitemnumber'};
+        my @reserves         = GetReservesFromBiblionumber( $biblionumber, undef, undef );
+        my $issues           = GetBiblioIssues($biblionumber);
+        my $items            = GetItemsByBiblioitemnumber($biblioitemnumber);
 
-	return { record => \@records };
+        # We loop over the items to clean them
+        foreach my $item (@$items) {
+
+            # This hides additionnal XML subfields, we don't need these info
+            delete $item->{'more_subfields_xml'};
+
+            # Display branch names instead of branch codes
+            $item->{'homebranchname'}    = GetBranchName( $item->{'homebranch'} );
+            $item->{'holdingbranchname'} = GetBranchName( $item->{'holdingbranch'} );
+        }
+
+        # Hashref building...
+        $biblioitem->{'items'}->{'item'}       = $items;
+        $biblioitem->{'reserves'}->{'reserve'} = $reserves[1];
+        $biblioitem->{'issues'}->{'issue'}     = $issues;
+
+        map { $biblioitem->{$_} = encode_entities( $biblioitem->{$_}, '&' ) } grep( !/marcxml/, keys %$biblioitem );
+
+        push @records, $biblioitem;
+    }
+
+    return { record => \@records };
 }
 
 =head2 GetAuthorityRecords
@@ -238,24 +237,25 @@ sub GetRecords {
 =cut
 
 sub GetAuthorityRecords {
-	my ( $cgi ) = @_;
+    my ($cgi) = @_;
 
-	# If the user asks for an unsupported schema, return an error code
-	if ( $cgi->param('schema') and $cgi->param('schema') ne "MARCXML") { 
+    # If the user asks for an unsupported schema, return an error code
+    if ( $cgi->param('schema') and $cgi->param('schema') ne "MARCXML" ) {
         return { message => 'UnsupportedSchema' };
-	}
+    }
 
-	my $records;
-	# Let's loop over the authority IDs
-	foreach my $authid (split(/ /, $cgi->param('id')))
-	{
-		# Get the record as XML string, or error code
-		my $record= GetAuthorityXML($authid) || "<record>RecordNotFound</record>";
-		$record =~ s/<\?xml version="1.0" encoding="UTF-8"\?>//go;
-		$records .= $record;
-	}
-	
-	return $records;
+    my $records;
+
+    # Let's loop over the authority IDs
+    foreach my $authid ( split( / /, $cgi->param('id') ) ) {
+
+        # Get the record as XML string, or error code
+        my $record = GetAuthorityXML($authid) || "<record>RecordNotFound</record>";
+        $record =~ s/<\?xml version="1.0" encoding="UTF-8"\?>//go;
+        $records .= $record;
+    }
+
+    return $records;
 }
 
 =head2 LookupPatron
@@ -276,19 +276,19 @@ sub GetAuthorityRecords {
 =cut
 
 sub LookupPatron {
-	my ( $cgi ) = @_;
-	
-	# Get the borrower...
-	my $borrower = GetMember($cgi->param('id'), $cgi->param('id_type'));
-	if ( not $borrower->{'borrowernumber'} ) {
-        return { message => 'PatronNotFound' };
-	}
+    my ($cgi) = @_;
 
-	# Build the hashref
-	my $patron->{'id'} = $borrower->{'borrowernumber'};
-	
-	# ...and return his ID
-	return $patron;
+    # Get the borrower...
+    my $borrower = GetMember( $cgi->param('id'), $cgi->param('id_type') );
+    if ( not $borrower->{'borrowernumber'} ) {
+        return { message => 'PatronNotFound' };
+    }
+
+    # Build the hashref
+    my $patron->{'id'} = $borrower->{'borrowernumber'};
+
+    # ...and return his ID
+    return $patron;
 }
 
 =head2 AuthenticatePatron
@@ -306,21 +306,21 @@ sub LookupPatron {
 =cut
 
 sub AuthenticatePatron {
-	my ( $cgi ) = @_;
-	
-	# Check if borrower exists, using a C4::ILSDI::Utility function...
-	if ( not (BorrowerExists($cgi->param('username'), $cgi->param('password')))) {
-        return { message => 'PatronNotFound' };
-	}
-	
-	# Get the borrower
-	my $borrower = GetMember($cgi->param('username'), "userid");
-	
-	# Build the hashref
-	my $patron->{'id'} = $borrower->{'borrowernumber'};
+    my ($cgi) = @_;
 
-	# ... and return his ID
-	return $patron;
+    # Check if borrower exists, using a C4::ILSDI::Utility function...
+    if ( not( BorrowerExists( $cgi->param('username'), $cgi->param('password') ) ) ) {
+        return { message => 'PatronNotFound' };
+    }
+
+    # Get the borrower
+    my $borrower = GetMember( $cgi->param('username'), "userid" );
+
+    # Build the hashref
+    my $patron->{'id'} = $borrower->{'borrowernumber'};
+
+    # ... and return his ID
+    return $patron;
 }
 
 =head2 GetPatronInfo
@@ -345,73 +345,79 @@ sub AuthenticatePatron {
 =cut
 
 sub GetPatronInfo {
-	my ( $cgi ) = @_;
+    my ($cgi) = @_;
 
-	# Get Member details
-	my $borrowernumber = $cgi->param('patron_id');
-	my $borrower = GetMemberDetails($borrowernumber, undef);
-	if ( not $borrower->{'borrowernumber'}) {
+    # Get Member details
+    my $borrowernumber = $cgi->param('patron_id');
+    my $borrower = GetMemberDetails( $borrowernumber, undef );
+    if ( not $borrower->{'borrowernumber'} ) {
         return { message => 'PatronNotFound' };
-	}
+    }
 
-	# Cleaning the borrower hashref
-	$borrower->{'charges'} = $borrower->{'flags'}->{'CHARGES'}->{'amount'};
-	$borrower->{'branchname'} = GetBranchName($borrower->{'branchcode'});
-	delete $borrower->{'flags'};
-	delete $borrower->{'userid'};
-	delete $borrower->{'password'};
+    # Cleaning the borrower hashref
+    $borrower->{'charges'}    = $borrower->{'flags'}->{'CHARGES'}->{'amount'};
+    $borrower->{'branchname'} = GetBranchName( $borrower->{'branchcode'} );
+    delete $borrower->{'flags'};
+    delete $borrower->{'userid'};
+    delete $borrower->{'password'};
 
-	# Contact fields management
-	if ($cgi->param('show_contact') eq "0") {	
-		# Define contact fields		
-		my @contactfields = ('email', 'emailpro', 'fax', 'mobile', 
-		'phone', 'phonepro', 'streetnumber', 'zipcode', 'city', 
-		'streettype', 'B_address', 'B_city', 'B_email', 'B_phone', 
-		'B_zipcode', 'address', 'address2', 'altcontactaddress1', 
-		'altcontactaddress2', 'altcontactaddress3', 'altcontactfirstname', 
-		'altcontactphone', 'altcontactsurname', 'altcontactzipcode');
-		# and delete them
-		foreach my $field (@contactfields) {
-			delete $borrower->{$field};
-		}
-	}
+    # Contact fields management
+    if ( $cgi->param('show_contact') eq "0" ) {
 
-	# Fines management
-	if ($cgi->param('show_fines') eq "1") {
-		my @charges;
-		for(my $i = 1; my @charge = getcharges($borrowernumber, undef, $i); $i++) {
-			push(@charges, @charge);
-		}
-		$borrower->{'fines'}->{'fine'} = \@charges;
-	}
+        # Define contact fields
+        my @contactfields = (
+            'email',              'emailpro',           'fax',                 'mobile',          'phone',             'phonepro',
+            'streetnumber',       'zipcode',            'city',                'streettype',      'B_address',         'B_city',
+            'B_email',            'B_phone',            'B_zipcode',           'address',         'address2',          'altcontactaddress1',
+            'altcontactaddress2', 'altcontactaddress3', 'altcontactfirstname', 'altcontactphone', 'altcontactsurname', 'altcontactzipcode'
+        );
 
-	# Reserves management
-	if ($cgi->param('show_holds') eq "1") {
-		# Get borrower's reserves
-		my @reserves = GetReservesFromBorrowernumber($borrowernumber, undef);
-		foreach my $reserve (@reserves) {
-			# Get additional informations
-			my $item = GetBiblioFromItemNumber($reserve->{'itemnumber'}, undef);
-			my $branchname = GetBranchName($reserve->{'branchcode'});
-			# Remove unwanted fields
-			delete $item->{'marc'};
-			delete $item->{'marcxml'};
-			delete $item->{'more_subfields_xml'};
-			# Add additional fields
-			$reserve->{'item'} = $item;
-			$reserve->{'branchname'} = $branchname;
-			$reserve->{'title'} = (GetBiblio($reserve->{'biblionumber'}))[1]->{'title'};
-		}
-		$borrower->{'holds'}->{'hold'} = \@reserves;
-	}
+        # and delete them
+        foreach my $field (@contactfields) {
+            delete $borrower->{$field};
+        }
+    }
 
-	# Issues management
-	if ($cgi->param('show_loans') eq "1") {
-		my $issues = GetPendingIssues($borrowernumber);
-		$borrower->{'loans'}->{'loan'} = $issues;
-	}
-	
-	return $borrower;
+    # Fines management
+    if ( $cgi->param('show_fines') eq "1" ) {
+        my @charges;
+        for ( my $i = 1 ; my @charge = getcharges( $borrowernumber, undef, $i ) ; $i++ ) {
+            push( @charges, @charge );
+        }
+        $borrower->{'fines'}->{'fine'} = \@charges;
+    }
+
+    # Reserves management
+    if ( $cgi->param('show_holds') eq "1" ) {
+
+        # Get borrower's reserves
+        my @reserves = GetReservesFromBorrowernumber( $borrowernumber, undef );
+        foreach my $reserve (@reserves) {
+
+            # Get additional informations
+            my $item = GetBiblioFromItemNumber( $reserve->{'itemnumber'}, undef );
+            my $branchname = GetBranchName( $reserve->{'branchcode'} );
+
+            # Remove unwanted fields
+            delete $item->{'marc'};
+            delete $item->{'marcxml'};
+            delete $item->{'more_subfields_xml'};
+
+            # Add additional fields
+            $reserve->{'item'}       = $item;
+            $reserve->{'branchname'} = $branchname;
+            $reserve->{'title'}      = ( GetBiblio( $reserve->{'biblionumber'} ) )[1]->{'title'};
+        }
+        $borrower->{'holds'}->{'hold'} = \@reserves;
+    }
+
+    # Issues management
+    if ( $cgi->param('show_loans') eq "1" ) {
+        my $issues = GetPendingIssues($borrowernumber);
+        $borrower->{'loans'}->{'loan'} = $issues;
+    }
+
+    return $borrower;
 }
 
 =head2 GetPatronStatus
@@ -426,22 +432,22 @@ sub GetPatronInfo {
 =cut
 
 sub GetPatronStatus {
-	my ( $cgi ) = @_;
-	
-	# Get Member details
-	my $borrowernumber = $cgi->param('patron_id');
-	my $borrower = GetMemberDetails($borrowernumber, undef);
-	if ( not $borrower->{'borrowernumber'} ) {
-        return { message => 'PatronNotFound' };
-	}
+    my ($cgi) = @_;
 
-	# Hashref building
+    # Get Member details
+    my $borrowernumber = $cgi->param('patron_id');
+    my $borrower = GetMemberDetails( $borrowernumber, undef );
+    if ( not $borrower->{'borrowernumber'} ) {
+        return { message => 'PatronNotFound' };
+    }
+
+    # Hashref building
     my $patron;
-	$patron->{'type'}   = $borrower->{'categorycode'};
-	$patron->{'status'} = 0; #TODO
-	$patron->{'expiry'} = $borrower->{'dateexpiry'};
-	
-	return $patron;
+    $patron->{'type'}   = $borrower->{'categorycode'};
+    $patron->{'status'} = 0;                             #TODO
+    $patron->{'expiry'} = $borrower->{'dateexpiry'};
+
+    return $patron;
 }
 
 =head2 GetServices
@@ -458,63 +464,64 @@ sub GetPatronStatus {
 =cut
 
 sub GetServices {
-	my ( $cgi ) = @_;
+    my ($cgi) = @_;
 
-	# Get the member, or return an error code if not found
-	my $borrowernumber = $cgi->param('patron_id');
-	my $borrower = GetMemberDetails($borrowernumber, undef);
-	if ( not $borrower->{'borrowernumber'} ) {
+    # Get the member, or return an error code if not found
+    my $borrowernumber = $cgi->param('patron_id');
+    my $borrower = GetMemberDetails( $borrowernumber, undef );
+    if ( not $borrower->{'borrowernumber'} ) {
         return { message => 'PatronNotFound' };
-	}
+    }
 
-	# Get the item, or return an error code if not found
-	my $itemnumber = $cgi->param('item_id');
-	my $item = GetItem($itemnumber, undef, undef);
-	if ( not $item->{'itemnumber'} ) {
+    # Get the item, or return an error code if not found
+    my $itemnumber = $cgi->param('item_id');
+    my $item = GetItem( $itemnumber, undef, undef );
+    if ( not $item->{'itemnumber'} ) {
         return { message => 'RecordNotFound' };
-	}
-	
-	my @availablefor;
-	
-	# Reserve level management
-	my $biblionumber = $item->{'biblionumber'};
-	my $canbookbereserved = CanBookBeReserved($borrower, $biblionumber);
-	if ( $canbookbereserved ) {
-		push @availablefor, 'title level hold';
-		my $canitembereserved = IsAvailableForItemLevelRequest($itemnumber);
-		if ( $canitembereserved ) {
-			push @availablefor, 'item level hold';
-		}
-	}
-	
-	# Reserve cancellation management
-	my @reserves = GetReservesFromBorrowernumber($borrowernumber, undef);
-	my @reserveditems;
-	foreach my $reserve (@reserves) {
-		push @reserveditems, $reserve->{'itemnumber'};
-	}
-	if ( grep {$itemnumber eq $_} @reserveditems) {
-		push @availablefor, 'hold cancellation';
-	}
-	
-	# Renewal management
-	my @renewal = CanBookBeRenewed( $borrowernumber, $itemnumber );
-	if ( $renewal[0] ) {
-		push @availablefor, 'loan renewal';
-	}
-	
-	# Issuing management
-	my $barcode = $item->{'barcode'} || '';
-	$barcode = barcodedecode($barcode) if( $barcode && C4::Context->preference('itemBarcodeInputFilter'));
-	if ($barcode) {
-		my ( $issuingimpossible, $needsconfirmation ) =  CanBookBeIssued( $borrower, $barcode );
-		# TODO push @availablefor, 'loan';
-	}
+    }
+
+    my @availablefor;
+
+    # Reserve level management
+    my $biblionumber = $item->{'biblionumber'};
+    my $canbookbereserved = CanBookBeReserved( $borrower, $biblionumber );
+    if ($canbookbereserved) {
+        push @availablefor, 'title level hold';
+        my $canitembereserved = IsAvailableForItemLevelRequest($itemnumber);
+        if ($canitembereserved) {
+            push @availablefor, 'item level hold';
+        }
+    }
+
+    # Reserve cancellation management
+    my @reserves = GetReservesFromBorrowernumber( $borrowernumber, undef );
+    my @reserveditems;
+    foreach my $reserve (@reserves) {
+        push @reserveditems, $reserve->{'itemnumber'};
+    }
+    if ( grep { $itemnumber eq $_ } @reserveditems ) {
+        push @availablefor, 'hold cancellation';
+    }
+
+    # Renewal management
+    my @renewal = CanBookBeRenewed( $borrowernumber, $itemnumber );
+    if ( $renewal[0] ) {
+        push @availablefor, 'loan renewal';
+    }
+
+    # Issuing management
+    my $barcode = $item->{'barcode'} || '';
+    $barcode = barcodedecode($barcode) if ( $barcode && C4::Context->preference('itemBarcodeInputFilter') );
+    if ($barcode) {
+        my ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $borrower, $barcode );
+
+        # TODO push @availablefor, 'loan';
+    }
 
     my $out;
-	$out->{'AvailableFor'} = \@availablefor;
-	
-	return $out;
+    $out->{'AvailableFor'} = \@availablefor;
+
+    return $out;
 }
 
 =head2 RenewLoan
@@ -533,36 +540,36 @@ sub GetServices {
 =cut
 
 sub RenewLoan {
-	my ( $cgi ) = @_;
+    my ($cgi) = @_;
 
-	# Get borrower infos or return an error code
-	my $borrowernumber = $cgi->param('patron_id');
-	my $borrower = GetMemberDetails($borrowernumber, undef);
-	if ( not $borrower->{'borrowernumber'} ) { 
+    # Get borrower infos or return an error code
+    my $borrowernumber = $cgi->param('patron_id');
+    my $borrower = GetMemberDetails( $borrowernumber, undef );
+    if ( not $borrower->{'borrowernumber'} ) {
         return { message => 'PatronNotFound' };
-	}
+    }
 
-	# Get the item, or return an error code
-	my $itemnumber = $cgi->param('item_id');
-	my $item = GetItem($itemnumber, undef, undef);
-	if ( not $item->{'itemnumber'} ) {
+    # Get the item, or return an error code
+    my $itemnumber = $cgi->param('item_id');
+    my $item = GetItem( $itemnumber, undef, undef );
+    if ( not $item->{'itemnumber'} ) {
         return { message => 'RecordNotFound' };
-	}
+    }
 
-	# Add renewal if possible
-	my @renewal = CanBookBeRenewed( $borrowernumber, $itemnumber );
-	if ($renewal[0]) { AddRenewal( $borrowernumber, $itemnumber ); }
+    # Add renewal if possible
+    my @renewal = CanBookBeRenewed( $borrowernumber, $itemnumber );
+    if ( $renewal[0] ) { AddRenewal( $borrowernumber, $itemnumber ); }
 
-	my $issue = GetItemIssue($itemnumber);
+    my $issue = GetItemIssue($itemnumber);
 
-	# Hashref building
+    # Hashref building
     my $out;
-	$out->{'renewals'} = $issue->{'renewals'};
-	$out->{'date_due'} = $issue->{'date_due'};
-	$out->{'success'} = $renewal[0];
-	$out->{'error'}   = $renewal[1];
-	
-	return $out;
+    $out->{'renewals'} = $issue->{'renewals'};
+    $out->{'date_due'} = $issue->{'date_due'};
+    $out->{'success'}  = $renewal[0];
+    $out->{'error'}    = $renewal[1];
+
+    return $out;
 }
 
 =head2 HoldTitle
@@ -587,52 +594,54 @@ sub RenewLoan {
 =cut
 
 sub HoldTitle {
-	my ( $cgi ) = @_;
+    my ($cgi) = @_;
 
-	# Get the borrower or return an error code
-	my $borrowernumber = $cgi->param('patron_id');
-	my $borrower = GetMemberDetails($borrowernumber, undef);
-	if ( not $borrower->{'borrowernumber'} ) {
+    # Get the borrower or return an error code
+    my $borrowernumber = $cgi->param('patron_id');
+    my $borrower = GetMemberDetails( $borrowernumber, undef );
+    if ( not $borrower->{'borrowernumber'} ) {
         return { message => 'PatronNotFound' };
-	}
-	
-	# Get the biblio record, or return an error code
-	my $biblionumber = $cgi->param('bib_id');
-	my ($count, $biblio) = GetBiblio($biblionumber);
-	if ( not $biblio->{'biblionumber'} ) {
+    }
+
+    # Get the biblio record, or return an error code
+    my $biblionumber = $cgi->param('bib_id');
+    my ( $count, $biblio ) = GetBiblio($biblionumber);
+    if ( not $biblio->{'biblionumber'} ) {
         return { message => 'RecordNotFound' };
-	}
-	my $title = $biblio->{'title'};
-	
-	# Check if the biblio can be reserved
-	my $canbereserved = CanBookBeReserved($borrower, $biblionumber);
-	if ( not $canbereserved ) {
+    }
+    my $title = $biblio->{'title'};
+
+    # Check if the biblio can be reserved
+    my $canbereserved = CanBookBeReserved( $borrower, $biblionumber );
+    if ( not $canbereserved ) {
         return { message => 'NotHoldable' };
-	}
+    }
 
-	my $branch;
-	# Pickup branch management
-	if ($cgi->param('pickup_location')) {
-		$branch = $cgi->param('pickup_location');
-		my $branches = GetBranches();
-		if ( not $branches->{$branch} ) {
+    my $branch;
+
+    # Pickup branch management
+    if ( $cgi->param('pickup_location') ) {
+        $branch = $cgi->param('pickup_location');
+        my $branches = GetBranches();
+        if ( not $branches->{$branch} ) {
             return { message => 'LocationNotFound' };
-		}
-	} else { # if user provide no branch, use his own
-		$branch = $borrower->{'branchcode'};
-	}
+        }
+    } else {    # if user provide no branch, use his own
+        $branch = $borrower->{'branchcode'};
+    }
 
-	# Add the reserve
-	#          $branch, $borrowernumber, $biblionumber, $constraint, $bibitems,  $priority, $notes, $title, $checkitem,  $found
-	AddReserve($branch, $borrowernumber, $biblionumber, 'a',         undef,      0,         undef,  $title, undef,       undef);
+    # Add the reserve
+    #          $branch, $borrowernumber, $biblionumber, $constraint, $bibitems,  $priority, $notes, $title, $checkitem,  $found
+    AddReserve( $branch, $borrowernumber, $biblionumber, 'a', undef, 0, undef, $title, undef, undef );
 
-	# Hashref building
+    # Hashref building
     my $out;
-	$out->{'title'}          = $title;
-	$out->{'pickup_location'} = GetBranchName($branch);
-	# TODO $out->{'date_available'}  = '';
+    $out->{'title'}           = $title;
+    $out->{'pickup_location'} = GetBranchName($branch);
 
-	return $out;
+    # TODO $out->{'date_available'}  = '';
+
+    return $out;
 }
 
 =head2 HoldItem
@@ -658,72 +667,75 @@ sub HoldTitle {
 =cut
 
 sub HoldItem {
-	my ( $cgi ) = @_;
+    my ($cgi) = @_;
 
-	# Get the borrower or return an error code
-	my $borrowernumber = $cgi->param('patron_id');
-	my $borrower = GetMemberDetails($borrowernumber, undef);
-	if ( not $borrower->{'borrowernumber'} ) {
+    # Get the borrower or return an error code
+    my $borrowernumber = $cgi->param('patron_id');
+    my $borrower = GetMemberDetails( $borrowernumber, undef );
+    if ( not $borrower->{'borrowernumber'} ) {
         return { message => 'PatronNotFound' };
-	}
-	
-	# Get the biblio or return an error code
-	my $biblionumber = $cgi->param('bib_id');
-	my ($count, $biblio) = GetBiblio($biblionumber);
-	if ( not $biblio->{'biblionumber'} ) {
-        return { message => 'RecordNotFound' };
-	}
-	my $title = $biblio->{'title'};
+    }
 
-	# Get the item or return an error code
-	my $itemnumber = $cgi->param('item_id');
-	my $item = GetItem($itemnumber, undef, undef);
-	if ( not $item->{'itemnumber'} ) {
+    # Get the biblio or return an error code
+    my $biblionumber = $cgi->param('bib_id');
+    my ( $count, $biblio ) = GetBiblio($biblionumber);
+    if ( not $biblio->{'biblionumber'} ) {
         return { message => 'RecordNotFound' };
-	}
-	
-	# if the biblio does not match the item, return an error code
-	if ( $item->{'biblionumber'} ne $biblio->{'biblionumber'} ) {
+    }
+    my $title = $biblio->{'title'};
+
+    # Get the item or return an error code
+    my $itemnumber = $cgi->param('item_id');
+    my $item = GetItem( $itemnumber, undef, undef );
+    if ( not $item->{'itemnumber'} ) {
         return { message => 'RecordNotFound' };
-	}
-	
-	# Check for item disponibility
-	my $canitembereserved = IsAvailableForItemLevelRequest($itemnumber);
-	my $canbookbereserved = CanBookBeReserved($borrower, $biblionumber);
-	if ( (not $canbookbereserved)  or not ($canitembereserved) ) {
+    }
+
+    # if the biblio does not match the item, return an error code
+    if ( $item->{'biblionumber'} ne $biblio->{'biblionumber'} ) {
+        return { message => 'RecordNotFound' };
+    }
+
+    # Check for item disponibility
+    my $canitembereserved = IsAvailableForItemLevelRequest($itemnumber);
+    my $canbookbereserved = CanBookBeReserved( $borrower, $biblionumber );
+    if ( ( not $canbookbereserved ) or not($canitembereserved) ) {
         return { message => 'NotHoldable' };
-	}
-	
-	my $branch;
-	# Pickup branch management
-	if ($cgi->param('pickup_location')) {
-		$branch = $cgi->param('pickup_location');
-		my $branches = GetBranches();
-		if ( not $branches->{$branch} ) {
+    }
+
+    my $branch;
+
+    # Pickup branch management
+    if ( $cgi->param('pickup_location') ) {
+        $branch = $cgi->param('pickup_location');
+        my $branches = GetBranches();
+        if ( not $branches->{$branch} ) {
             return { message => 'LocationNotFound' };
-		}
-	} else { # if user provide no branch, use his own
-		$branch = $borrower->{'branchcode'};
-	}
-	
-	my $rank;
-	my $found;
-	# Get rank and found
-	$rank = '0' unless C4::Context->preference('ReservesNeedReturns');
-	if ( $item->{'holdingbranch'} eq $branch ){
-		$found = 'W' unless C4::Context->preference('ReservesNeedReturns');
-	}
+        }
+    } else {    # if user provide no branch, use his own
+        $branch = $borrower->{'branchcode'};
+    }
 
-	# Add the reserve
-	#          $branch, $borrowernumber, $biblionumber, $constraint, $bibitems,  $priority, $notes, $title, $checkitem,  $found
-	AddReserve($branch, $borrowernumber, $biblionumber, 'a',         undef,      $rank,         undef,  $title, $itemnumber, $found);
+    my $rank;
+    my $found;
 
-	# Hashref building
+    # Get rank and found
+    $rank = '0' unless C4::Context->preference('ReservesNeedReturns');
+    if ( $item->{'holdingbranch'} eq $branch ) {
+        $found = 'W' unless C4::Context->preference('ReservesNeedReturns');
+    }
+
+    # Add the reserve
+    #          $branch, $borrowernumber, $biblionumber, $constraint, $bibitems,  $priority, $notes, $title, $checkitem,  $found
+    AddReserve( $branch, $borrowernumber, $biblionumber, 'a', undef, $rank, undef, $title, $itemnumber, $found );
+
+    # Hashref building
     my $out;
-	$out->{'pickup_location'} = GetBranchName($branch);
-	# TODO $out->{'date_available'} = '';
+    $out->{'pickup_location'} = GetBranchName($branch);
 
-	return $out;
+    # TODO $out->{'date_available'} = '';
+
+    return $out;
 }
 
 =head2 CancelHold
@@ -740,39 +752,41 @@ sub HoldItem {
 =cut
 
 sub CancelHold {
-	my ( $cgi ) = @_;
+    my ($cgi) = @_;
 
-	# Get the borrower or return an error code
-	my $borrowernumber = $cgi->param('patron_id');
-	my $borrower = GetMemberDetails($borrowernumber, undef);
-	if ( not $borrower->{'borrowernumber'} ) {
+    # Get the borrower or return an error code
+    my $borrowernumber = $cgi->param('patron_id');
+    my $borrower = GetMemberDetails( $borrowernumber, undef );
+    if ( not $borrower->{'borrowernumber'} ) {
         return { message => 'PatronNotFound' };
-	}
+    }
 
-	# Get the item or return an error code
-	my $itemnumber = $cgi->param('item_id');
-	my $item = GetItem($itemnumber, undef, undef);
-	if ( not $item->{'itemnumber'} ) {
+    # Get the item or return an error code
+    my $itemnumber = $cgi->param('item_id');
+    my $item = GetItem( $itemnumber, undef, undef );
+    if ( not $item->{'itemnumber'} ) {
         return { message => 'RecordNotFound' };
-	}
-	
-	# Get borrower's reserves
-	my @reserves = GetReservesFromBorrowernumber($borrowernumber, undef);
-	my @reserveditems;
-	# ...and loop over it to build an array of reserved itemnumbers
-	foreach my $reserve (@reserves) {
-		push @reserveditems, $reserve->{'itemnumber'};
-	}
-	# if the item was not reserved by the borrower, returns an error code
-	if ( not grep {$itemnumber eq $_} @reserveditems) {
-        return { message => 'NotCanceled' };
-	}
+    }
 
-	# Cancel the reserve
-	CancelReserve($itemnumber, undef, $borrowernumber);
+    # Get borrower's reserves
+    my @reserves = GetReservesFromBorrowernumber( $borrowernumber, undef );
+    my @reserveditems;
+
+    # ...and loop over it to build an array of reserved itemnumbers
+    foreach my $reserve (@reserves) {
+        push @reserveditems, $reserve->{'itemnumber'};
+    }
+
+    # if the item was not reserved by the borrower, returns an error code
+    if ( not grep { $itemnumber eq $_ } @reserveditems ) {
+        return { message => 'NotCanceled' };
+    }
+
+    # Cancel the reserve
+    CancelReserve( $itemnumber, undef, $borrowernumber );
 
     return { message => 'Canceled' };
-	
+
 }
 
 1;

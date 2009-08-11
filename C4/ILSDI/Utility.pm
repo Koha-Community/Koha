@@ -32,13 +32,14 @@ use Digest::MD5 qw(md5_base64);
 use vars qw($VERSION @ISA @EXPORT);
 
 BEGIN {
-	# set the version for version checking
-	$VERSION = 3.00;
-	require Exporter;
-	@ISA    = qw(Exporter);
-	@EXPORT = qw(
-		&BorrowerExists &CanBookBeReserved &Availability
-	);
+
+    # set the version for version checking
+    $VERSION = 3.00;
+    require Exporter;
+    @ISA    = qw(Exporter);
+    @EXPORT = qw(
+      &BorrowerExists &CanBookBeReserved &Availability
+    );
 }
 
 =head1 NAME
@@ -58,13 +59,12 @@ Checks, for a given userid and password, if the borrower exists.
 =cut
 
 sub BorrowerExists {
-	my ( $userid, $password ) = @_;
-	$password = md5_base64($password);
-	my $dbh = C4::Context->dbh;
-	my $sth =
-	$dbh->prepare("SELECT COUNT(*) FROM borrowers WHERE userid =? and password=? ");
-	$sth->execute( $userid, $password );
-	return $sth->fetchrow;
+    my ( $userid, $password ) = @_;
+    $password = md5_base64($password);
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT COUNT(*) FROM borrowers WHERE userid =? and password=? ");
+    $sth->execute( $userid, $password );
+    return $sth->fetchrow;
 }
 
 =head2 CanBookBeReserved
@@ -78,42 +78,42 @@ Checks if a book (at bibliographic level) can be reserved by a borrower.
 =cut
 
 sub CanBookBeReserved {
-	my ( $borrower, $biblionumber ) = @_;
+    my ( $borrower, $biblionumber ) = @_;
 
-	my $MAXIMUM_NUMBER_OF_RESERVES = C4::Context->preference("maxreserves");
-	my $MAXOUTSTANDING             = C4::Context->preference("maxoutstanding");
+    my $MAXIMUM_NUMBER_OF_RESERVES = C4::Context->preference("maxreserves");
+    my $MAXOUTSTANDING             = C4::Context->preference("maxoutstanding");
 
-	my $out = 1;
+    my $out = 1;
 
-	if ( $borrower->{'amountoutstanding'} > $MAXOUTSTANDING ) {
-		$out = undef;
-	}
-	if ( $borrower->{gonenoaddress} eq 1 ) {
-		$out = undef;
-	}
-	if ( $borrower->{lost} eq 1 ) {
-		$out = undef;
-	}
-	if ( $borrower->{debarred} eq 1 ) {
-		$out = undef;
-	}
-	my @reserves = GetReservesFromBorrowernumber( $borrower->{'borrowernumber'} );
-	if ( scalar(@reserves) >= $MAXIMUM_NUMBER_OF_RESERVES ) {
-		$out = undef;
-	}
-	foreach my $res (@reserves) {
-		if ( $res->{'biblionumber'} == $biblionumber ) {
-			$out = undef;
-		}
-	}
-	my $issues = GetPendingIssues($borrower->{'borrowernumber'});
-	foreach my $issue (@$issues) {
-		if ( $issue->{'biblionumber'} == $biblionumber ) {
-			$out = undef;
-		}
-	}
-	
-	return $out;
+    if ( $borrower->{'amountoutstanding'} > $MAXOUTSTANDING ) {
+        $out = undef;
+    }
+    if ( $borrower->{gonenoaddress} eq 1 ) {
+        $out = undef;
+    }
+    if ( $borrower->{lost} eq 1 ) {
+        $out = undef;
+    }
+    if ( $borrower->{debarred} eq 1 ) {
+        $out = undef;
+    }
+    my @reserves = GetReservesFromBorrowernumber( $borrower->{'borrowernumber'} );
+    if ( scalar(@reserves) >= $MAXIMUM_NUMBER_OF_RESERVES ) {
+        $out = undef;
+    }
+    foreach my $res (@reserves) {
+        if ( $res->{'biblionumber'} == $biblionumber ) {
+            $out = undef;
+        }
+    }
+    my $issues = GetPendingIssues( $borrower->{'borrowernumber'} );
+    foreach my $issue (@$issues) {
+        if ( $issue->{'biblionumber'} == $biblionumber ) {
+            $out = undef;
+        }
+    }
+
+    return $out;
 }
 
 =head2 Availability
@@ -125,36 +125,31 @@ Returns, for an itemnumber, an array containing availability information.
 =cut
 
 sub Availability {
-	my ( $itemnumber ) = @_;
-	my $item = GetItem($itemnumber, undef, undef);
-	
-	if ( not $item->{'itemnumber'} ) { 
-		return (undef, 'unknown', 'Error: could not retrieve availability for this ID', undef);
-	}
-	
-	my $biblionumber = $item->{'biblioitemnumber'};
-	my $location = GetBranchName($item->{'holdingbranch'});
-	
-	if ($item->{'notforloan'}) {
-		return ($biblionumber, 'not available', 'Not for loan', $location);
-	}
-	elsif ($item->{'onloan'}) {
-		return ($biblionumber, 'not available', 'Checked out', $location);
-	}
-	elsif ($item->{'itemlost'}) {
-		return ($biblionumber, 'not available', 'Item lost', $location);
-	}
-	elsif ($item->{'wthdrawn'}) {
-		return ($biblionumber, 'not available', 'Item withdrawn', $location);
-	}
-	elsif ($item->{'damaged'}) {
-		return ($biblionumber, 'not available', 'Item damaged', $location);
-	}
-	else {
-		return ($biblionumber, 'available', undef, $location);
-	}
-	
-	die Data::Dumper::Dumper($item);
+    my ($itemnumber) = @_;
+    my $item = GetItem( $itemnumber, undef, undef );
+
+    if ( not $item->{'itemnumber'} ) {
+        return ( undef, 'unknown', 'Error: could not retrieve availability for this ID', undef );
+    }
+
+    my $biblionumber = $item->{'biblioitemnumber'};
+    my $location     = GetBranchName( $item->{'holdingbranch'} );
+
+    if ( $item->{'notforloan'} ) {
+        return ( $biblionumber, 'not available', 'Not for loan', $location );
+    } elsif ( $item->{'onloan'} ) {
+        return ( $biblionumber, 'not available', 'Checked out', $location );
+    } elsif ( $item->{'itemlost'} ) {
+        return ( $biblionumber, 'not available', 'Item lost', $location );
+    } elsif ( $item->{'wthdrawn'} ) {
+        return ( $biblionumber, 'not available', 'Item withdrawn', $location );
+    } elsif ( $item->{'damaged'} ) {
+        return ( $biblionumber, 'not available', 'Item damaged', $location );
+    } else {
+        return ( $biblionumber, 'available', undef, $location );
+    }
+
+    die Data::Dumper::Dumper($item);
 }
 
 1;
