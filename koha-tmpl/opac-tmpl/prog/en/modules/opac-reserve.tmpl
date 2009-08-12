@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" DEFAULT="Koha Online" --> Catalog &rsaquo;  Reserving <!-- TMPL_VAR NAME="title" escape="html" --> for <!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --><!-- /TMPL_LOOP -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" DEFAULT="Koha Online" --> Catalog &rsaquo;  Placing hold <!-- TMPL_VAR NAME="title" escape="html" --> for <!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --><!-- /TMPL_LOOP -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 <script type="text/javascript">
@@ -240,7 +240,7 @@
                   <!-- /TMPL_UNLESS -->
                   <th>Priority</th>
 		  <!-- TMPL_IF NAME="reserve_in_future" -->
-		  <th>Reserve Starts on Date</th>
+		  <th>Hold Starts on Date</th>
 		  <!-- /TMPL_IF -->
                   <!-- TMPL_IF NAME="OPACItemHolds" -->
                     <th id="place_on_hdr" style="display:none">Place On:</th>
