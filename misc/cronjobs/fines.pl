@@ -112,7 +112,7 @@ if (!-d $fldir) {
 $filename = $dbname;
 $filename =~ s/\W//;
 $filename = $fldir . '/'. $filename . '_' .  $today_iso . ".log";
-print "writing to $filename\n";
+print "writing to $filename\n" if $verbose;
 open (FILE, ">$filename") or die "Cannot write file $filename: $!";
 print FILE join $delim, (@borrower_fields, @item_fields, @other_fields);
 print FILE "\n";
