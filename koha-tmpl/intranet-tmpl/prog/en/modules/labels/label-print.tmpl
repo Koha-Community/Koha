@@ -24,15 +24,64 @@
                     <table class="borderless">
                         <!-- TMPL_LOOP NAME="batches" -->
                         <tr>
+                            <!-- TMPL_IF NAME="label_ids" -->
                             <td class="borderless">
-                                <!-- TMPL_IF NAME="label_ids" -->
-                                <a href="/cgi-bin/koha/labels/<!-- TMPL_VAR NAME="create_script" -->?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;template_id=<!-- TMPL_VAR NAME="template_id" -->&amp;layout_id=<!-- TMPL_VAR NAME="layout_id" -->&amp;start_label=<!-- TMPL_VAR NAME="start_label" --><!-- TMPL_VAR NAME="label_ids" -->">label_single_<!-- TMPL_VAR NAME="label_count" -->.pdf</a>
-                                <!-- TMPL_ELSIF NAME="item_numbers" -->
-                                <a href="/cgi-bin/koha/labels/<!-- TMPL_VAR NAME="create_script" -->?template_id=<!-- TMPL_VAR NAME="template_id" -->&amp;layout_id=<!-- TMPL_VAR NAME="layout_id" -->&amp;start_label=<!-- TMPL_VAR NAME="start_label" --><!-- TMPL_VAR NAME="item_numbers" -->">label_single_<!-- TMPL_VAR NAME="label_count" -->.pdf</a>
-                                <!-- TMPL_ELSE -->
-                                <a href="/cgi-bin/koha/labels/<!-- TMPL_VAR NAME="create_script" -->?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;template_id=<!-- TMPL_VAR NAME="template_id" -->&amp;layout_id=<!-- TMPL_VAR NAME="layout_id" -->&amp;start_label=<!-- TMPL_VAR NAME="start_label" -->">label_batch_<!-- TMPL_VAR NAME="batch_id" -->.pdf</a>
-                                <!-- /TMPL_IF -->
+                                <!-- TMPL_VAR NAME="label_count" --> Single Labels
                             </td>
+                            <td class="borderless">
+                                <h1 id="pdf">
+                                    <a href="/cgi-bin/koha/labels/<!-- TMPL_VAR NAME="create_script" -->?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;template_id=<!-- TMPL_VAR NAME="template_id" -->&amp;layout_id=<!-- TMPL_VAR NAME="layout_id" -->&amp;start_label=<!-- TMPL_VAR NAME="start_label" --><!-- TMPL_VAR NAME="label_ids" -->">label_single_<!-- TMPL_VAR NAME="label_count" -->.pdf</a>
+                                </h1>
+                            </td>
+                            <td class="borderless">
+                                <h1 id="csv">
+                                    <a href="/cgi-bin/koha/labels/label-create-csv.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;template_id=<!-- TMPL_VAR NAME="template_id" -->&amp;layout_id=<!-- TMPL_VAR NAME="layout_id" --><!-- TMPL_VAR NAME="label_ids" -->">label_single_<!-- TMPL_VAR NAME="label_count" -->.csv</a>
+                                </h1>
+                            </td>
+                            <td class="borderless">
+                                <h1 id="xml">
+                                    <a href="/cgi-bin/koha/labels/label-create-xml.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;template_id=<!-- TMPL_VAR NAME="template_id" -->&amp;layout_id=<!-- TMPL_VAR NAME="layout_id" --><!-- TMPL_VAR NAME="label_ids" -->">label_single_<!-- TMPL_VAR NAME="label_count" -->.xml</a>
+                                </h1>
+                            </td>
+                            <!-- TMPL_ELSIF NAME="item_numbers" -->
+                            <td class="borderless">
+                                <!-- TMPL_VAR NAME="label_count" --> Single Labels
+                            </td>
+                            <td class="borderless">
+                                <h1 id="pdf">
+                                    <a href="/cgi-bin/koha/labels/<!-- TMPL_VAR NAME="create_script" -->?template_id=<!-- TMPL_VAR NAME="template_id" -->&amp;layout_id=<!-- TMPL_VAR NAME="layout_id" -->&amp;start_label=<!-- TMPL_VAR NAME="start_label" --><!-- TMPL_VAR NAME="item_numbers" -->">label_single_<!-- TMPL_VAR NAME="label_count" -->.pdf</a>
+                                </h1>
+                            </td>
+                            <td class="borderless">
+                                <h1 id="csv">
+                                    <a href="/cgi-bin/koha/labels/label-create-csv.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;template_id=<!-- TMPL_VAR NAME="template_id" -->&amp;layout_id=<!-- TMPL_VAR NAME="layout_id" --><!-- TMPL_VAR NAME="item_numbers" -->">label_single_<!-- TMPL_VAR NAME="label_count" -->.csv</a>
+                                </h1>
+                            </td>
+                            <td class="borderless">
+                                <h1 id="xml">
+                                    <a href="/cgi-bin/koha/labels/label-create-xml.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;template_id=<!-- TMPL_VAR NAME="template_id" -->&amp;layout_id=<!-- TMPL_VAR NAME="layout_id" --><!-- TMPL_VAR NAME="item_numbers" -->">label_single_<!-- TMPL_VAR NAME="label_count" -->.xml</a>
+                                </h1>
+                            </td>
+                            <!-- TMPL_ELSE -->
+                            <td class="borderless">
+                                Label Batch Number <!-- TMPL_VAR NAME="batch_id" -->
+                            </td>
+                            <td class="borderless">
+                                <h1 id="pdf">
+                                    <a href="/cgi-bin/koha/labels/label-create-pdf.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;template_id=<!-- TMPL_VAR NAME="template_id" -->&amp;layout_id=<!-- TMPL_VAR NAME="layout_id" -->&amp;start_label=<!-- TMPL_VAR NAME="start_label" -->">label_batch_<!-- TMPL_VAR NAME="batch_id" -->.pdf</a>
+                                </h1>
+                            </td>
+                            <td class="borderless">
+                                <h1 id="csv">
+                                    <a href="/cgi-bin/koha/labels/label-create-csv.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;template_id=<!-- TMPL_VAR NAME="template_id" -->&amp;layout_id=<!-- TMPL_VAR NAME="layout_id" -->">label_batch_<!-- TMPL_VAR NAME="batch_id" -->.csv</a>
+                                </h1>
+                            </td>
+                            <td class="borderless">
+                                <h1 id="xml">
+                                    <a href="/cgi-bin/koha/labels/label-create-xml.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;template_id=<!-- TMPL_VAR NAME="template_id" -->&amp;layout_id=<!-- TMPL_VAR NAME="layout_id" -->">label_batch_<!-- TMPL_VAR NAME="batch_id" -->.xml</a>
+                                </h1>
+                            </td>
+                            <!-- /TMPL_IF -->
                         </tr>
                         <!-- /TMPL_LOOP -->
                     </table>
@@ -99,18 +148,6 @@
                             </td>
                             <td class="borderless">
                                 <input type="text" size="5" id="start_label" name="start_label" class="focus" title="Starting label number" value="1"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="borderless">
-                                <label for="output_type">Select output format: </label>
-                            </td>
-                            <td class="borderless">
-                                <select name="output_format">
-                                    <!-- TMPL_LOOP NAME="label_output_formats" -->
-                                    <option value="<!-- TMPL_VAR NAME="type" -->"><!-- TMPL_VAR NAME="desc"  --></option>
-                                    <!-- /TMPL_LOOP -->
-                                </select>
                             </td>
                         </tr>
                     </table>
