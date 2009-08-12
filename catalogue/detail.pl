@@ -268,4 +268,10 @@ if ( C4::Context->preference("AmazonEnabled") == 1 ) {
         $template->param( AMAZON_EDITORIAL_REVIEWS => $editorial_reviews      );
     }
 }
+
+# Get OPAC URL
+if (C4::Context->preference('OPACBaseURL')){
+     $template->param( OpacUrl => C4::Context->preference('OPACBaseURL') );
+}
+
 output_html_with_http_headers $query, $cookie, $template->output;
