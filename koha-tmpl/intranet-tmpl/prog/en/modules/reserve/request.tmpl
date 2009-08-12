@@ -149,7 +149,7 @@ function checkMultiHold() {
 	<div class="yui-b">
 <!-- TMPL_IF NAME="noitems" -->
 <div class="dialog alert">            
-<strong>Cannot reserve:</strong> this record has no items attached.                            
+<strong>Cannot place hold:</strong> this record has no items attached.
 </div>
 <!-- TMPL_ELSE -->
   <!-- TMPL_IF NAME="messagetransfert" -->
@@ -284,7 +284,7 @@ function checkMultiHold() {
         </li>
 	<!-- TMPL_IF NAME="reserve_in_future" -->
 	<li>
-	    <label for="reserve_date">Reserve starts on date:</label>
+	    <label for="reserve_date">Hold starts on date:</label>
 	    <input name="reserve_date" id="reserve_date" size="10" readonly="readonly">
 	    <img src="<!-- TMPL_VAR NAME="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="CalendarReserveDate" style="cursor: pointer;" />
 	    <script language="JavaScript" type="text/javascript">
