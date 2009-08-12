@@ -33,8 +33,6 @@ $(document).ready(function() {
     $('#sort_by').change(function() {
         $('#sortbyform').submit();
     });
-	$("#z3950searchc").empty();
-	yuiZ3950button();
     $("#selection_ops").show();
     $(".selection").show();
     <!-- TMPL_IF NAME="query_desc" -->
@@ -119,16 +117,6 @@ function GetZ3950Terms(){
 	<!-- /TMPL_LOOP -->
 	return strQuery;
 }
-/* prepare DOM for Z39.50 Search Button */
-function yuiZ3950button() {
-	new YAHOO.widget.Button({
-			id: "z3950search",
-			type: "button",
-			label: _("z39.50 Search"),
-			container: "z3950searchc",
-			onclick: {fn:function(){PopupZ3950()}}
-	});
-}
 //]]>
 </script>
 </head>
@@ -166,9 +154,6 @@ function yuiZ3950button() {
 
     <!-- TMPL_IF NAME="total" -->
         <div id="searchheader">
-			<form method="post" name="fz3950" class="fz3950" action="#">
-					<span id="z3950searchc"><input type="button" id="z3950search" value="z39.50 Search" onclick="PopupZ3950(); return false;" /></span>
-			</form>
             <form action="/cgi-bin/koha/catalogue/search.pl" method="get" id="sortbyform">
                 <!-- TMPL_IF NAME="searchdesc" -->
                     <!-- TMPL_LOOP NAME="QUERY_INPUTS"-->
@@ -200,6 +185,7 @@ function yuiZ3950button() {
                   <input type="button" onclick="placeHold(); return false;" value="Place Hold"/>
                 <!-- /TMPL_IF -->
                 <input type="button" onclick="addToList(); return false;" value="Add to List"/>
+				<!-- TMPL_IF NAME="CAN_user_editcatalogue" --><input type="button" onclick="PopupZ3950(); return false;" value="z39.50 Search"/><!-- /TMPL_IF -->
             </div>
         </div>
     <!-- TMPL_IF NAME="stopwords_removed" --><div><p class="tip">Ignored the following common words: "<!-- TMPL_VAR NAME="stopwords_removed" -->"<p></div><!-- /TMPL_IF -->

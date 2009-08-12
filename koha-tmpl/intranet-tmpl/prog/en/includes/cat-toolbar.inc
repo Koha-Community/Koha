@@ -2,7 +2,7 @@
 	
 	<script type="text/javascript">
 	//<![CDATA[
-	
+	<!-- TMPL_IF NAME="CAN_user_editcatalogue" -->
 	/* this function open a popup to search on z3950 server.  */
 	function PopupZ3950() {
 		var strQuery = GetZ3950Terms();
@@ -19,7 +19,7 @@
 		<!-- /TMPL_LOOP -->
 		return strQuery;
 	}
-
+	<!-- /TMPL_IF -->
 	function addToShelf() {	window.open('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->','Add_to_virtualshelf','width=500,height=400,toolbar=false,scrollbars=yes');
 	}
 	function printBiblio() {window.open('/cgi-bin/koha/catalogue/detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->','Print_Biblio','width=700,height=500,toolbar=false,scrollbars=yes');
@@ -160,7 +160,7 @@ function confirm_deletion() {
         <!-- TMPL_UNLESS name="bi_notforloan" -->
 	<!-- TMPL_UNLESS NAME="norequests" --><li><a id="placehold" href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a></li><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS -->
 	<!-- /TMPL_IF -->
-	<li id="z3950searchc"><input type="button" id="z3950search" value="z39.50 Search" onclick="PopupZ3950(); return false;" /></li>
+	<!-- TMPL_IF NAME="CAN_user_editcatalogue" --><li id="z3950searchc"><input type="button" id="z3950search" value="z39.50 Search" onclick="PopupZ3950(); return false;" /></li><!-- /TMPL_IF -->
     </ul>
 </form>
 </div>
