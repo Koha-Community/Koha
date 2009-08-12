@@ -18,6 +18,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
 
 use CGI;
 use Mail::Sendmail;
@@ -52,8 +53,8 @@ my $lib = GetBranchDetail($borr->{'branchcode'});
 # handle the new information....
 # collect the form values and send an email.
 my @fields = (
-    'surname',       'firstname',    'phone',
-    'fax', 'address','address2','city','zipcode','phone','mobile','fax','phonepro', 'emailaddress','B_streetaddress','B_city','B_zipcode','dateofbirth','sex'
+    'surname',       'firstname', 
+    'address','address2','city','zipcode','phone','mobile','fax','phonepro', 'emailaddress','B_streetaddress','B_city','B_zipcode','dateofbirth','sex'
 );
 my $update;
 my $updateemailaddress = $lib->{'branchemail'};
@@ -89,9 +90,30 @@ Borrower $borr->{'cardnumber'}
 has requested to change her/his personal details.
 Please check these new details and make the changes:
 EOF
+
+    my $B_streetnumber = $borr->{'B_streetnumber'} || '';
+    my $B_address = $borr->{'B_address'} || '';
+
     foreach my $field (@fields) {
-        my $newfield = $query->param($field);
-        $message .= "$field : $borr->{$field}  -->  $newfield\n";
+        my $newfield = $query->param($field) || '';
+        my $borrowerfield = '';
+        if($borr->{$field}) {
+            $borrowerfield = $borr->{$field};
+        }
+        # reconstruct the alternate address
+        if($field eq "B_streetaddress") {
+            $borrowerfield = "$B_streetnumber $B_address";
+        }
+
+        if($field eq "dateofbirth") {
+           $borrowerfield  = format_date( $borr->{'dateofbirth'} ) || '';
+        }
+
+        if($borrowerfield eq $newfield) {
+            $message .= "$field : $borrowerfield  -->  $newfield\n";
+        } else {
+            $message .= uc($field) . " : $borrowerfield  -->  $newfield\n";
+        }
     }
     $message .= "\n\nThanks,\nKoha\n\n";
     my %mail = (
