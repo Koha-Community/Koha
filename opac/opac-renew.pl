@@ -4,6 +4,9 @@
 # adapted for use in the hlt opac by finlay@katipo.co.nz 29/11/2002
 #script to renew items from the web
 
+use strict;
+use warnings;
+
 use CGI;
 use C4::Circulation;
 use C4::Auth;
@@ -21,7 +24,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 	}
 ); 
 my @items          = $query->param('item');
-my $borrowernumber = $query->param('borrowernumber') || $query->param('bornum');
+$borrowernumber = $query->param('borrowernumber') || $query->param('bornum');
 my $opacrenew = C4::Context->preference("OpacRenewalAllowed");
 
 for my $itemnumber ( @items ) {
