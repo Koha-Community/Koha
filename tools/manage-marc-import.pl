@@ -24,6 +24,7 @@ use warnings;
 use CGI;
 use CGI::Cookie;
 use MARC::File::USMARC;
+use Sys::Syslog qw(syslog);
 
 # Koha modules used
 use C4::Context;
@@ -33,7 +34,8 @@ use C4::Biblio;
 use C4::ImportBatch;
 use C4::Matcher;
 use C4::BackgroundJob;
-use C4::Labels qw(add_batch);  
+use C4::Labels::Batch 1.000000;
+use C4::Branch qw(get_branch_code_from_name);
 
 my $script_name = "/cgi-bin/koha/tools/manage-marc-import.pl";
 
@@ -63,7 +65,16 @@ my $dbh = C4::Context->dbh;
 if ($op eq "create_labels") {
 	#create a batch of labels, then lose $op & $import_batch_id so we get back to import batch list.
 	my $label_batch_id = create_labelbatch_from_importbatch($import_batch_id);
-	$template->param( label_batch => $label_batch_id );
+        if ($label_batch_id == -1) {
+            $template->param(   label_batch_msg => "Error attempting to create label batch. Please ask your system administrator to check the log for more details.",
+                                message_type    => 'alert',
+            );
+        }
+        else {
+            $template->param(   label_batch_msg => "Label batch #$label_batch_id created.",
+                                message_type    => 'dialog',
+            );
+        }
 	$op='';
 	$import_batch_id='';
 }
@@ -166,9 +177,22 @@ sub redo_matching {
 
 sub create_labelbatch_from_importbatch {
 	my ($batch_id) = @_;
+        my $err = undef;
+        my $branch_code = get_branch_code_from_name($template->param('LoginBranchname'));
+        my $batch = C4::Labels::Batch->new(branch_code => $branch_code);
 	my @items = GetItemNumbersFromImportBatch($batch_id);
-	my $labelbatch = add_batch('labels',\@items);
-	return $labelbatch; 
+        if (grep{$_ == 0} @items) {
+            syslog("LOG_ERR", "tools/manage-marc-import.pl : create_labelbatch_from_importbatch() : Call to C4::ImportBatch::GetItemNumbersFromImportBatch returned no item number(s) from import batch #%s.", $batch_id);
+            return -1;
+        }
+        foreach my $item_number (@items) {
+            $err = $batch->add_item($item_number);
+            if ($err == -1) {
+                syslog("LOG_ERR", "tools/manage-marc-import.pl : create_labelbatch_from_importbatch() : Error attempting to add item #%s of import batch #%s to label batch.", $item_number, $batch_id);
+                return -1;
+            }
+        }
+        return $batch->get_attr('batch_id');
 }
 
 sub import_batches_list {
