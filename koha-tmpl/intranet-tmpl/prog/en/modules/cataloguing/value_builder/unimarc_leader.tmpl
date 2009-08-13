@@ -4,210 +4,210 @@
 <head>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Construction_du leader</title>
+<title>Leader building</title>
 </head>
 <body>
 <form name="f_pop">
 <table>
 	<tr>
-		<td>1-4 Taille</td>
-		<td>(auto-calculé)</td>
+		<td>1-4 Record lenght</td>
+		<td>(auto-calculated)</td>
 	</tr>
 	<tr>
-		<td>5- Etat de la notice</td>
+		<td>5- Record status</td>
 		<td>
 			<select name="f5" size="1">
 			<!-- TMPL_IF name="f5|" -->
-            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            	<option value="|" SELECTED>|- Filling character</option>
             <!-- TMPL_ELSE -->
-            	<option value="|">|- Caractère de remplissage</option>
+            	<option value="|">|- Filling character</option>
             <!-- /TMPL_IF -->
             
 			<!-- TMPL_IF name="f5c" -->
-				<option value="c" SELECTED>c- Notice corrigée</option>
+				<option value="c" SELECTED>c- corrected record</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">c- Notice corrigée</option>
+				<option value="c">c- corrected record</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5d" -->
-				<option value="d" SELECTED>d- Notice détruite</option>
+				<option value="d" SELECTED>d- deleted record</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">d- Notice détruite</option>
+				<option value="d">d- deleted record</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5n" -->
-				<option value="n" SELECTED>n- Nouvelle notice</option>
+				<option value="n" SELECTED>n- new record</option>
 			<!-- TMPL_ELSE -->
-				<option value="n">n- Nouvelle notice</option>
+				<option value="n">n- new record</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5o" -->
-				<option value="o" SELECTED>o- Notice fille</option>
+				<option value="o" SELECTED>o- previously issued higher level record</option>
 			<!-- TMPL_ELSE -->
-				<option value="o">o- Notice fille</option>
+				<option value="o">o- previously issued higher level record</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f5p" -->
-				<option value="p" SELECTED>p- Notice incomplète ou pré-publi</option>
+				<option value="p" SELECTED>p- previously issued as an incomplete, pre-publication record</option>
 			<!-- TMPL_ELSE -->
-				<option value="p">p- Notice incomplète ou pré-publi</option>
+				<option value="p">p- previously issued as an incomplete, pre-publication record</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td>
 	</tr>
 	<tr>
-		<td>6- Type de document</td>
+		<td>6- Type of record</td>
 		<td>
 			<select name="f6" size="1">
 			<!-- TMPL_IF name="f6|" -->
-            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            	<option value="|" SELECTED>|- Filling character</option>
             <!-- TMPL_ELSE -->
-            	<option value="|">|- Caractère de remplissage</option>
+            	<option value="|">|- Filling character</option>
             <!-- /TMPL_IF -->
             
 			<!-- TMPL_IF name="f6a" -->
-				<option value="a" SELECTED>a- Texte imprimé</option>
+				<option value="a" SELECTED>a- language materials, printed</option>
 			<!-- TMPL_ELSE -->
-				<option value="a">a- Texte imprimé</option>
+				<option value="a">a- language materials, printed</option>
 			<!-- /TMPL_IF -->
 			
 			<!-- TMPL_IF name="f6b" -->
-				<option value="b" SELECTED>b- Texte manuscrit</option>
+				<option value="b" SELECTED>b- language materials, manuscript</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">b- Texte manuscrit</option>
+				<option value="b">b- language materials, manuscript</option>
 			<!-- /TMPL_IF -->
 			
 			<!-- TMPL_IF name="f6c" -->
-				<option value="c" SELECTED>c- Partition musicale imprimée</option>
+				<option value="c" SELECTED>c- music scores, printed</option>
 			<!-- TMPL_ELSE -->
-				<option value="c">c- Partition musicale imprimée</option>
+				<option value="c">c- music scores, printed</option>
 			<!-- /TMPL_IF -->
 			
 			<!-- TMPL_IF name="f6d" -->
-				<option value="d" SELECTED>d- Partition musicale manuscrite</option>
+				<option value="d" SELECTED>d- music scores, manuscript</option>
 			<!-- TMPL_ELSE -->
-				<option value="d">d- Partition musicale manuscrite</option>
+				<option value="d">d- music scores, manuscript</option>
 			<!-- /TMPL_IF -->
 			
 			<!-- TMPL_IF name="f6e" -->
-				<option value="e" SELECTED>e- doc cartographique imprimé</option>
+				<option value="e" SELECTED>e- cartographic materials, printed</option>
 			<!-- TMPL_ELSE -->
-				<option value="e">e- doc cartographique imprimé</option>
+				<option value="e">e- cartographic materials, printed</option>
 			<!-- /TMPL_IF -->
 			
 			<!-- TMPL_IF name="f6f" -->
-				<option value="f" SELECTED>f - doc cartographique manuscrit</option>
+				<option value="f" SELECTED>f - cartographic materials, manuscript</option>
 			<!-- TMPL_ELSE -->
-				<option value="f">f - doc cartographique manuscrit</option>
+				<option value="f">f - cartographic materials, manuscript</option>
 			<!-- /TMPL_IF -->
 			
 			<!-- TMPL_IF name="f6g" -->
-				<option value="g" SELECTED>g - doc projeté ou vidéo</option>
+				<option value="g" SELECTED>g - projected and video material</option>
 			<!-- TMPL_ELSE -->
-				<option value="g">g - doc projeté ou vidéo</option>
+				<option value="g">g - projected and video material</option>
 			<!-- /TMPL_IF -->
 			
 			<!-- TMPL_IF name="f6i" -->
-				<option value="i" SELECTED>i - enreg sonore non musical</option>
+				<option value="i" SELECTED>i - sound recordings, nonmusical performance</option>
 			<!-- TMPL_ELSE -->
-				<option value="i">i - enreg sonore non musical</option>
+				<option value="i">i - sound recordings, nonmusical performance</option>
 			<!-- /TMPL_IF -->
 			
 			<!-- TMPL_IF name="f6j" -->
-				<option value="j" SELECTED>j - enreg sonore musical</option>
+				<option value="j" SELECTED>j - sound recordings, musical performance</option>
 			<!-- TMPL_ELSE -->
-				<option value="j">j - enreg sonore musical</option>
+				<option value="j">j - sound recordings, musical performance</option>
 			<!-- /TMPL_IF -->
 			
 			<!-- TMPL_IF name="f6k" -->
-				<option value="k" SELECTED>k - doc graphique 2 dimensions</option>
+				<option value="k" SELECTED>k - twodimensional graphics</option>
 			<!-- TMPL_ELSE -->
-				<option value="k">k - doc graphique 2 dimensions</option>
+				<option value="k">k - twodimensional graphics</option>
 			<!-- /TMPL_IF -->
 			
 			<!-- TMPL_IF name="f6l" -->
-				<option value="l" SELECTED>l - support électronique</option>
+				<option value="l" SELECTED>l - electronic resources</option>
 			<!-- TMPL_ELSE -->
-				<option value="l">l - support électronique</option>
+				<option value="l">l - electronic resources</option>
 			<!-- /TMPL_IF -->
 			
 			<!-- TMPL_IF name="f6m" -->
-				<option value="m" SELECTED>m - doc multimédia</option>
+				<option value="m" SELECTED>m - multimedia</option>
 			<!-- TMPL_ELSE -->
-				<option value="m">m - doc multimédia</option>
+				<option value="m">m - multimedia</option>
 			<!-- /TMPL_IF -->
 			
 			<!-- TMPL_IF name="f6r" -->
-				<option value="r" SELECTED>r - Objet à 3 dimension, artefact</option>
+				<option value="r" SELECTED>r - threedimensional artefacts and realia</option>
 			<!-- TMPL_ELSE -->
-				<option value="r">r - Objet à 3 dimension, artefact</option>
+				<option value="r">r - threedimensional artefacts and realia</option>
 			<!-- /TMPL_IF -->
 			
 			</select>
 		</td>
 	</tr>
 	<tr>
-		<td>7- Type de la notice</td>
+		<td>7- Bibliographic level</td>
 		<td>
 			<select name="f7" size="1">
 			<!-- TMPL_IF name="f7|" -->
-            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            	<option value="|" SELECTED>|- Filling character</option>
             <!-- TMPL_ELSE -->
-            	<option value="|">|- Caractère de remplissage</option>
+            	<option value="|">|- Filling character</option>
             <!-- /TMPL_IF -->
             
 				<!-- TMPL_IF name="f7a" -->
-					<option value="a" SELECTED>a- Analytique (partie composante)</option>
+					<option value="a" SELECTED>a- analytic (component part)</option>
 				<!-- TMPL_ELSE -->
-					<option value="a">a- Analytique (partie composante)</option>
+					<option value="a">a- analytic (component part)</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="f7c" -->
-					<option value="c" SELECTED>c- Recueil factice</option>
+					<option value="c" SELECTED>c- collection - bibliographic item that is a made-up collection</option>
 				<!-- TMPL_ELSE -->
-					<option value="c">c- Recueil factice</option>
+					<option value="c">c- collection - bibliographic item that is a made-up collection</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="f7m" -->
-					<option value="m" SELECTED>m- Monographie</option>
+					<option value="m" SELECTED>m- monographic bibliographic item</option>
 				<!-- TMPL_ELSE -->
-					<option value="m">m- Monographie</option>
+					<option value="m">m- monographic bibliographic item</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="f7s" -->
-					<option value="s" SELECTED>s- Publication en série</option>
+					<option value="s" SELECTED>s- serial - bibliographic item</option>
 				<!-- TMPL_ELSE -->
-					<option value="s">s- Publication en série</option>
+					<option value="s">s- serial - bibliographic item</option>
 				<!-- /TMPL_IF -->
 			</select>
 		</td>
 	</tr>
 	
 	<tr>
-		<td>8- Niveau hiérarchique</td>
+		<td>8- Hierarchical level code</td>
 		<td>
 			<select name="f8" size="1">
 			<!-- TMPL_IF name="f8|" -->
-            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            	<option value="|" SELECTED>|- Filling character</option>
             <!-- TMPL_ELSE -->
-            	<option value="|">|- Caractère de remplissage</option>
+            	<option value="|">|- Filling character</option>
             <!-- /TMPL_IF -->
             
 				<!-- TMPL_IF name="f8 " -->
-					<option value=" " SELECTED> - Relation hiérachique non définie</option>
+					<option value=" " SELECTED> - hierarchical relationship undefined</option>
 				<!-- TMPL_ELSE -->
-					<option value=" "> - Relation hiérachique non définie</option>
+					<option value=" "> - hierarchical relationship undefined</option>
 				<!-- /TMPL_IF -->
 				
 				<!-- TMPL_IF name="f80" -->
-					<option value="0" SELECTED>0- Pas de relation hiérarchique</option>
+					<option value="0" SELECTED>0- no hierarchical relationship</option>
 				<!-- TMPL_ELSE -->
-					<option value="0">0- Pas de relation hiérarchique</option>
+					<option value="0">0- no hierarchical relationship</option>
 				<!-- /TMPL_IF -->
 				
 				<!-- TMPL_IF name="f81" -->
-					<option value="1" SELECTED>1- Notice de niveau le + élevé (notice mère)</option>
+					<option value="1" SELECTED>1- highest level record</option>
 				<!-- TMPL_ELSE -->
-					<option value="1">1- Notice de niveau le + élevé (notice mère)</option>
+					<option value="1">1- highest level record</option>
 				<!-- /TMPL_IF -->
 				
 				<!-- TMPL_IF name='f82' -->
-					<option value="2" SELECTED>2- Notice de niveau inférieur au niveau le plus élevé (notice fille)</option>
+					<option value="2" SELECTED>2- record below highest level (all levels below)</option>
 				<!-- TMPL_ELSE -->
-					<option value="2">2- Notice de niveau inférieur au niveau le plus élevé (notice fille)</option>
+					<option value="2">2- record below highest level (all levels below)</option>
 				<!-- /TMPL_IF -->
 				
 			</select>
@@ -218,34 +218,34 @@
 		<td>9-16 indicator/subfields/size</td>
 		<td>(auto-filled)</td>
 	<tr>
-		<td>17- Niveau de catalogage</td>
+		<td>17- Encoding level</td>
 		<td>
 			<select name="f17" size="1">
 			<!-- TMPL_IF name="f17|" -->
-            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            	<option value="|" SELECTED>|- Filling character</option>
             <!-- TMPL_ELSE -->
-            	<option value="|">|- Caractère de remplissage</option>
+            	<option value="|">|- Filling character</option>
             <!-- /TMPL_IF -->
             
 				<!-- TMPL_IF name="f17 " -->
-					<option value=" " SELECTED>Rédigée "document en mains"</option>
+					<option value=" " SELECTED> full level ("item in hand")</option>
 				<!-- TMPL_ELSE -->
-					<option value=" ">Rédigée "document en mains"</option>
+					<option value=" "> full level ("item in hand")</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="f171" -->
-					<option value="1" SELECTED>1- Non rédigée "document en mains"</option>
+					<option value="1" SELECTED>1- sublevel 1 (not "item in hand")</option>
 				<!-- TMPL_ELSE -->
-					<option value="1">1- Non rédigée "document en mains"</option>
+					<option value="1">1- sublevel  (not "item in hand")<option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="f172" -->
-					<option value="2" SELECTED>2 - Rédigée sur un doc avant publi</option>
+					<option value="2" SELECTED>2 - sublevel 2. The record is a prepublication (Cataloguing In Publication) record</option>
 				<!-- TMPL_ELSE -->
-					<option value="2">2 - Rédigée sur un doc avant publi</option>
+					<option value="2">2 - sublevel 2. The record is a prepublication (Cataloguing In Publication) record</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="f173" -->
-					<option value="3" SELECTED>3- Notice incomplète</option>
+					<option value="3" SELECTED>3- sublevel 3. Incomplete record</option>
 				<!-- TMPL_ELSE -->
-					<option value="3">3- Notice incomplète</option>
+					<option value="3">3- sublevel 3. Incomplete record</option>
 				<!-- /TMPL_IF -->
 			</select>
 		</td>
@@ -256,32 +256,32 @@
 		<td>
 			<select name="f18" size="1">
 			<!-- TMPL_IF name="f18|" -->
-            	<option value="|" SELECTED>|- Caractère de remplissage</option>
+            	<option value="|" SELECTED>|- Filling character</option>
             <!-- TMPL_ELSE -->
-            	<option value="|">|- Caractère de remplissage</option>
+            	<option value="|">|- Filling character</option>
             <!-- /TMPL_IF -->
             
 				<!-- TMPL_IF name="f18 " -->
-					<option value=" " SELECTED> conforme ISBD</option>
+					<option value=" " SELECTED> in full ISBD form</option>
 				<!-- TMPL_ELSE -->
-					<option value=" "> conforme ISBD</option>
+					<option value=" "> in full ISBD form</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="f18i" -->
-					<option value="i" SELECTED>i- partiellement conforme ISBD</option>
+					<option value="i" SELECTED>i- in partial or incomplete ISBD form</option>
 				<!-- TMPL_ELSE -->
-					<option value="i">i- partiellement conforme ISBD</option>
+					<option value="i">i- in partial or incomplete ISBD form</option>
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF name="f18n" -->
-					<option value="n" SELECTED>n- Non conforme ISBD</option>
+					<option value="n" SELECTED>n- in non-ISBD form</option>
 				<!-- TMPL_ELSE -->
-					<option value="n">n- Non conforme ISBD</option>
+					<option value="n">n- in non-ISBD form</option>
 				<!-- /TMPL_IF -->
 			</select>
 		</td>
 	</tr>
 	
 	<tr>
-		<td>19-24 entry map &amp; lengths</td>
+		<td>19-24 entry map & lengths</td>
 		<td>(auto-filled)</td>
 	<tr>
 
@@ -296,10 +296,11 @@ function report() {
             field.value =  '     '+document.f_pop.f5.value +
 			document.f_pop.f6.value+ document.f_pop.f7.value+
 			document.f_pop.f8.value+ '        '+
-			document.f_pop.f17.value+ document.f_pop.f18.value+' 450 ';
+			document.f_pop.f17.value+ document.f_pop.f18.value+' 450  ';
 		window.close();
 		return false;
 	}
 </script>
 </body>
 </html>
+
