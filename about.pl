@@ -80,6 +80,7 @@ Date::Calc
 Date::ICal
 Date::Manip
 Digest::MD5
+Digest::SHA
 Email::Date
 File::Temp
 GD
