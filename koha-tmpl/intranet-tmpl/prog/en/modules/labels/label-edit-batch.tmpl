@@ -2,95 +2,6 @@
     <title>Koha &rsaquo; Tools &rsaquo; Labels &rsaquo; Manage Label Batches</title>
     <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
     <!-- TMPL_INCLUDE NAME="greybox.inc" -->
-    <script type="text/JavaScript" language="JavaScript">
-        //<![CDATA[
-            function Remove() {
-                items= new Array;
-                if(document.items.action.length > 0) {
-                    for (var i=0; i < document.items.action.length; i++) {
-                        if (document.items.action[i].checked) {
-                            items.push("label_id=" +  document.items.action[i].value);
-                        }
-                    }
-                    if (items.length < 1) {
-                        alert("Please select at least one item to delete.");
-                        return;     // no item selected
-                    }
-                    getstr = items.join("&");
-                }
-                else if (document.items.action.checked) {
-                    getstr = "label_id="+document.items.action.value;
-                }
-                else {
-                    alert("Please select at least one item to delete.");
-                    return;     // no item selected
-                }
-                var msg = "Are you sure you want to remove the selected item(s) from this batch?"
-                var answer = confirm(msg);
-                if (answer) {
-                    window.location = "/cgi-bin/koha/labels/label-edit-batch.pl?op=remove&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;" + getstr;
-                }
-                else {
-                    return; // abort delete
-                }
-            };
-            function Add() {
-                window.location = "/cgi-bin/koha/labels/label-edit-batch.pl?op=add&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->";
-            };
-            function Xport(mode) {
-                if (mode == 'label') {
-                    labels= new Array;
-                    if(document.items.action.length > 0) {
-                        for (var i=0; i < document.items.action.length; i++) {
-                            if (document.items.action[i].checked) {
-                                labels.push("label_id=" +  document.items.action[i].value);
-                            }
-                        }
-                        if (labels.length < 1) {
-                            alert("Please select at least one label to export.");
-                            return;     // no batch selected
-                        }
-                        getstr = labels.join("&");
-                    }
-                    else if (document.items.action.checked) {
-                        getstr = document.items.action.value;
-                    }
-                    else {
-                        alert("Please select at least one label to export.");
-                        return;     // no batch selected
-                    }
-                    //<td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=<!-- TMPL_VAR NAME="breedingid" -->" title="MARC" rel="gb_page_center[600,500]">MARC</a></td>
-                    //window.location = "/cgi-bin/koha/labels/label-print.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&" + getstr;
-                    //return GB_show('Google', this.href)
-                    return GB_showCenter('Export Labels', "/cgi-bin/koha/labels/label-print.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&" + getstr, 700, 800);
-                }
-                else if (mode == 'batch') {
-                    //window.location = "/cgi-bin/koha/labels/label-print.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->";
-                    //$(".checkboxed").uncheckCheckboxes();
-                    return GB_showCenter('Export Labels', "/cgi-bin/koha/labels/label-print.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->", 700, 800);
-                }
-                else {
-                    // some pass-thru error trapping just in case...
-                }
-            };
-           function selected_layout() {
-                if (document.items.action.length) {
-                for (i=0;i<document.items.action.length;i++){
-                    if (document.items.action[i].checked==true){
-                        return(document.items.action[i].value);
-                    }
-                };
-                }
-                else {
-                    if (document.items.action.checked){
-                        return(document.items.action.value);
-                    }
-                };
-                alert("Please select at least one item.");
-                return (-1);
-            };
-        //]]>
-    </script>
 </head>
 <body>
     <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -106,59 +17,53 @@
             <div id="yui-main">
                 <div class="yui-b">
                     <!-- TMPL_INCLUDE NAME="labels-batches-toolbar.inc" -->
-                    <div class="yui-gc">
+                    <div class="yui-g">
                         <div class="yui-u first" id="manage-label-batches">
                             <div class="hint">Current Branch: <!-- TMPL_VAR NAME="LoginBranchname" --></div>
-                            <form name="items" class="checkboxed">
-                            <h2>Items in batch number <!-- TMPL_VAR NAME="batch_id" --></h2>
-                            <table>
-                                <!-- TMPL_LOOP NAME="table_loop" -->
-                                <!-- TMPL_IF NAME="header_fields" -->
-                                <tr>
-                                <!-- TMPL_LOOP NAME="header_fields" -->
-                                    <th><!-- TMPL_VAR NAME="field_label" --></th>
-                                <!-- /TMPL_LOOP -->
-                                </tr>
-                                <!-- TMPL_ELSE -->
-                                <tr>
-                                <!-- TMPL_LOOP NAME="text_fields" -->
-                                <!-- TMPL_IF NAME="select_field" -->
-                                    <td align="center"><input type="checkbox" name="action" value="<!-- TMPL_VAR NAME="field_value" -->"></td>
-                                <!-- TMPL_ELSE -->
-                                    <td><!-- TMPL_VAR NAME="field_value" --></td>
-                                <!-- /TMPL_IF -->
-                                <!-- /TMPL_LOOP -->
-                                </tr>
-                                <!-- /TMPL_IF -->
-                                <!-- /TMPL_LOOP -->
-                            </table>
-                            </form>
-                            <div style="margin: 10px 10px 10px 0px;">
-                                <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="add" onclick="Add()" value="Add Item(s)"></span></span>
-                                <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="remove" onclick="Remove()" value="Remove Item(s)"></span></span>
-                                <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="export_item" onclick="Xport('label')" value="Export Item(s)"></span></span>
-                                <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="export_batch" onclick="Xport('batch')" value="Export Batch"></span></span>
+                                <form name="items" class="checkboxed">
+                                    <h2>Items in batch number <!-- TMPL_VAR NAME="batch_id" --></h2>
+                                    <table>
+                                        <!-- TMPL_LOOP NAME="table_loop" -->
+                                        <!-- TMPL_IF NAME="header_fields" -->
+                                        <tr>
+                                        <!-- TMPL_LOOP NAME="header_fields" -->
+                                            <th><!-- TMPL_VAR NAME="field_label" --></th>
+                                        <!-- /TMPL_LOOP -->
+                                        </tr>
+                                        <!-- TMPL_ELSE -->
+                                        <tr>
+                                        <!-- TMPL_LOOP NAME="text_fields" -->
+                                        <!-- TMPL_IF NAME="select_field" -->
+                                            <td align="center"><input type="checkbox" name="action" value="<!-- TMPL_VAR NAME="field_value" -->"></td>
+                                        <!-- TMPL_ELSE -->
+                                            <td><!-- TMPL_VAR NAME="field_value" --></td>
+                                        <!-- /TMPL_IF -->
+                                        <!-- /TMPL_LOOP -->
+                                        </tr>
+                                        <!-- /TMPL_IF -->
+                                        <!-- /TMPL_LOOP -->
+                                    </table>
+                                </form>
                             </div>
-                        </div>
-                        <!-- TMPL_IF NAME="err" -->
-                        <div class="yui-u">
-                            <div class="alert">
-                                <strong>WARNING: An error was encountered and <!-- TMPL_VAR NAME="errstr" --> Please have your system administrator check the syslog for details.</strong>
+                            <!-- TMPL_IF NAME="err" -->
+                            <div class="yui-u">
+                                <div class="alert">
+                                    <strong>WARNING: An error was encountered and <!-- TMPL_VAR NAME="errstr" --> Please have your system administrator check the syslog for details.</strong>
+                                </div>
                             </div>
-                        </div>
-                        <!-- /TMPL_IF -->
-                        <!-- TMPL_IF NAME="duplicate_message" -->
-                        <div class="yui-u">
-                            <div class="dialog">
-                                <strong><!-- TMPL_VAR NAME="duplicate_count" --> duplicate item(s) found and removed from batch <!-- TMPL_VAR NAME="batch_id" -->.</strong>
+                            <!-- TMPL_ELSIF NAME="duplicate_message" -->
+                            <div class="yui-u">
+                                <div class="dialog">
+                                    <strong><!-- TMPL_VAR NAME="duplicate_count" --> duplicate item(s) found and removed from batch <!-- TMPL_VAR NAME="batch_id" -->.</strong>
+                                </div>
                             </div>
+                            <!-- /TMPL_IF -->
                         </div>
-                        <!-- /TMPL_IF -->
                     </div>
                 </div>
-            </div>
-            <div class="yui-b">
-                <!-- TMPL_INCLUDE NAME="labels-menu.inc" -->
+                <div class="yui-b">
+                    <!-- TMPL_INCLUDE NAME="labels-menu.inc" -->
+                </div>
             </div>
         </div>
     <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
