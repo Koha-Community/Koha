@@ -132,7 +132,7 @@ sub get_amazon_details {
     my %hformat = ( a => 'Books', g => 'Video', j => 'Music' );
     my $search_index = $hformat{ substr($record->leader(),6,1) } || 'Books';
 
-	my $parameters={Service=>"AWSECommerceService" ,
+    my $parameters={Service=>"AWSECommerceService" ,
         "AWSAccessKeyId"=> C4::Context->preference('AWSAccessKeyID') ,
         "Operation"=>"ItemLookup", 
         "AssociateTag"=>  C4::Context->preference('AmazonAssocTag') ,
@@ -141,12 +141,12 @@ sub get_amazon_details {
         "IdType"=>$id_type,
         "ResponseGroup"=>  join( ',',  @aws ),
         "Timestamp"=>strftime("%Y-%m-%dT%H:%M:%SZ", gmtime)
-		};
-	$$parameters{"SearchIndex"} = $search_index if $id_type ne 'ASIN';
-	my @params;
-	while (my ($key,$value)=each %$parameters){
-		push @params, qq{$key=}.uri_escape($value, "^A-Za-z0-9\-_.~" );
-	}
+    };
+    $$parameters{"SearchIndex"} = $search_index if $id_type ne 'ASIN';
+    my @params;
+    while (my ($key,$value)=each %$parameters){
+        push @params, qq{$key=}.uri_escape($value, "^A-Za-z0-9\-_.~" );
+    }
 
     my $url =qq{http://webservices.amazon}.  get_amazon_tld(). 
         "/onca/xml?".join("&",sort @params).qq{&Signature=}.uri_escape(SignRequest(@params),"^A-Za-z0-9\-_.~" );
@@ -162,14 +162,10 @@ sub get_amazon_details {
 }
 
 sub SignRequest{
-	my @params=@_;
+    my @params=@_;
     my $tld=get_amazon_tld(); 
-    my $string = qq{ 
-GET 
-webservices.amazon$tld 
-/onca/xml 
-}.join("&",sort @params);
- 	return hmac_sha256_base64($string,C4::Context->preference('AWSPrivateKey'));
+    my $string = qq{GET\nwebservices.amazon$tld\n/onca/xml\n} . join("&",sort @params);
+    return hmac_sha256_base64($string,C4::Context->preference('AWSPrivateKey')) . '=';
 }
 
 sub check_search_inside {
