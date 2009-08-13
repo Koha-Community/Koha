@@ -2499,9 +2499,11 @@ sub CalcDateDue {
 
 	# if ceilingDueDate ON the datedue can't be after the ceiling date
 	if ( C4::Context->preference('ceilingDueDate')
-	     && ( C4::Context->preference('ceilingDueDate') =~ C4::Dates->regexp('syspref') )
-	     && $datedue->output gt C4::Context->preference('ceilingDueDate') ) {
-	    $datedue = C4::Dates->new( C4::Context->preference('ceilingDueDate') );
+             && ( C4::Context->preference('ceilingDueDate') =~ C4::Dates->regexp('syspref') ) ) {
+            my $ceilingDate = C4::Dates->new( C4::Context->preference('ceilingDueDate') );
+            if ( $datedue->output( 'iso' ) gt $ceilingDate->output( 'iso' ) ) {
+                $datedue = $ceilingDate;
+            }
 	}
 
 	return $datedue;
