@@ -148,8 +148,14 @@ sub get_amazon_details {
         push @params, qq{$key=}.uri_escape($value, "^A-Za-z0-9\-_.~" );
     }
 
-    my $url =qq{http://webservices.amazon}.  get_amazon_tld(). 
-        "/onca/xml?".join("&",sort @params).qq{&Signature=}.uri_escape(SignRequest(@params),"^A-Za-z0-9\-_.~" );
+    my $url;
+    if (C4::Context->preference('AWSPrivateKey')) {
+        $url = qq{http://webservices.amazon} . get_amazon_tld() . 
+               "/onca/xml?" . join("&",sort @params) . qq{&Signature=} . uri_escape(SignRequest(@params),"^A-Za-z0-9\-_.~" );
+    } else {
+        $url = qq{http://webservices.amazon} . get_amazon_tld() .  "/onca/xml?" .join("&",sort @params);
+        warn "MUST set AWSPrivateKey syspref after 2009-08-15 in order to access Amazon web services";
+    }
 
     my $content = get($url);
     warn "could not retrieve $url" unless $content;
