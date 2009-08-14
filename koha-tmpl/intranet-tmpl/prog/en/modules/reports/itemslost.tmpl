@@ -42,7 +42,11 @@
         <th>Notes</th>
     </tr>
      <!-- TMPL_LOOP NAME="itemsloop"-->
+        <!-- TMPL_UNLESS NAME="__odd__" -->
+        <tr class="highlight">
+        <!-- TMPL_ELSE -->
         <tr>
+        <!-- /TMPL_UNLESS -->
             <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->" title="<!-- TMPL_VAR NAME="itemnotes"-->">
 						  <!-- TMPL_VAR NAME="title" escape="html" -->
 					 </a></td>
