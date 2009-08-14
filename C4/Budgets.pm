@@ -468,40 +468,42 @@ sub DelBudgetPeriod() {
 
 	## get information about the record that will be deleted
 	my $sth = $dbh->prepare(qq|
-		SELECT     budget_period_id
-                 , budget_period_startdate
-                 , budget_period_enddate
-                 , budget_period_amount
-                 , budget_period_ref
-                 , budget_period_description
+		DELETE 
          FROM aqbudgetperiods
          WHERE budget_period_id=? |
 	);
-	$sth->execute($budget_period_id);
-	my $data = $sth->fetchrow_hashref;
-	$sth->finish;
+	return $sth->execute($budget_period_id);
 }
 
 # -------------------------------------------------------------------
 sub ModBudgetPeriod() {
-	my ($budget_period_id) = @_;
-	my $dbh = C4::Context->dbh
-	  ; ## $total = number of records linked to the record that must be deleted       my $total = 0;
+	my ($budget_period_information) = @_;
+	my $dbh = C4::Context->dbh ; ## $total = number of records linked to the record that must be deleted       my $total = 0;
 
 	## get information about the record that will be deleted
-	my $sth = $dbh->prepare("
-	    SELECT     budget_period_id
-                 , budget_period_startdate
-                 , budget_period_enddate
-                 , budget_period_amount
-                 , budget_period_ref
-                 , budget_period_description
-        FROM aqbudgetperiods
-        WHERE budget_period_id=?;"
-	);
-	$sth->execute($budget_period_id);
-	my $data = $sth->fetchrow_hashref;
-	$sth->finish;
+    my $budget_period_id=$$budget_period_information{'budget_period_id'};
+    delete $$budget_period_information{'budget_period_id'};
+    my @values;
+    my @keys;
+
+    while ( my ($k,$v) = each %$budget_period_information ) {
+		next if (not $v and $k!~/sort1|note/);
+		#next if any { $_ eq $k } qw( sort1 note);
+		push @values, $v;
+		push @keys,   "$k=?";
+    }
+
+    my $query = do { local $"=',';
+					qq{
+						UPDATE aqbudgetperiods
+							SET  @keys
+							WHERE  budget_period_id=?
+					}
+    			};
+
+	my $sth=$dbh->prepare($query);
+	my $data = $sth->execute(@values,$budget_period_id);
+	return $data;
 }
 
 # -------------------------------------------------------------------
@@ -644,85 +646,55 @@ sub GetBudgetHierarchy {
 sub AddBudget {
 my ($budget) = @_;
 my $dbh        = C4::Context->dbh;
-	my $query = qq|
-    INSERT INTO aqbudgets
-    SET budget_code         = ?,
-        budget_period_id    = ?,
-        budget_parent_id    = ?,
-        budget_name         = ?,
-        budget_branchcode   = ?,
-        budget_amount       = ?,
-        budget_amount_sublevel       = ?,
-        budget_encumb       = ?,
-        budget_expend       = ?,
-        budget_notes        = ?,
-        sort1_authcat       = ?,
-        sort2_authcat       = ?,
-        budget_owner_id     = ?,
-        budget_permission   = ?
-    |;
-	my $sth = $dbh->prepare($query);
-	$sth->execute(
-        $budget->{'budget_code'}        ? $budget->{'budget_code'} : undef,
-        $budget->{'budget_period_id'}   ? $budget->{'budget_period_id'} : undef,
-        $budget->{'budget_parent_id'}   ? $budget->{'budget_parent_id'} : undef,
-        $budget->{'budget_name'}        ? $budget->{'budget_name'} : undef,
-        $budget->{'budget_branchcode'}  ? $budget->{'budget_branchcode'} : undef,
-        $budget->{'budget_amount'}      ? $budget->{'budget_amount'} : undef,
-        $budget->{'budget_amount_sublevel'}      ? $budget->{'budget_amount_sublevel'} : undef,
-        $budget->{'budget_encumb'}      ? $budget->{'budget_encumb'} : undef,
-        $budget->{'budget_expend'}      ? $budget->{'budget_expend'} : undef,
-        $budget->{'budget_notes'}       ? $budget->{'budget_notes'} : undef,
-        $budget->{'sort1_authcat'}      ? $budget->{'sort1_authcat'} : undef,
-        $budget->{'sort2_authcat'}      ? $budget->{'sort2_authcat'} : undef,
-        $budget->{'budget_owner_id'}    ? $budget->{'budget_owner_id'} : undef,
-        $budget->{'budget_permission'}  ? $budget->{'budget_permission'} : undef,
-	);
-	$sth->finish;
+    my @keys; my  @values;
+
+    while ( my ($k,$v) = each %$budget ) {
+		next unless $v;
+		push @values, $v;
+		push @keys  , "$k = ?";
+    }
+
+    my $query = do {
+		local $" = ',';
+		qq{
+			INSERT INTO aqbudgets
+			SET @keys 
+		};
+    };
+
+    #warn $query;   
+    my $sth = $dbh->prepare($query);
+    $sth->execute(@values);
+    return $dbh->{'mysql_insertid'};
 }
 
 # -------------------------------------------------------------------
 sub ModBudget {
     my ($budget) = @_;
     my $dbh      = C4::Context->dbh;
-	my $query = qq|
-    UPDATE aqbudgets
-    SET budget_code         = ?,
-        budget_period_id    = ?,
-        budget_parent_id    = ?,
-        budget_name         = ?,
-        budget_branchcode   = ?,
-        budget_amount       = ?,
-        budget_amount_sublevel       = ?,
-        budget_encumb       = ?,
-        budget_expend       = ?,
-        budget_notes        = ?,
-        sort1_authcat       = ?,
-        sort2_authcat       = ?,
-        budget_owner_id     = ?,
-        budget_permission   = ?
-    WHERE budget_id = ?
-    |;
+    my $budgetid=$$budget{'budgetid'};
+    delete $$budget{'budget_id'};
+
+    my @values;
+    my @keys;
+
+    while ( my ($k,$v) = each %$budget ) {
+		next if (not $v and $k!~/sort1|note/);
+		#next if any { $_ eq $k } qw( sort1 note);
+		push @values, $v;
+		push @keys,   "$k=?";
+    }
+
+    my $query = do { local $"=',';
+	qq{
+            UPDATE aqbudgets
+            SET  @keys
+            WHERE  budget_id=?
+	    };
+    };
 
 	my $sth = $dbh->prepare($query);
-    $sth->execute(
-        $budget->{'budget_code'}        ? $budget->{'budget_code'} : undef,
-        $budget->{'budget_period_id'}   ? $budget->{'budget_period_id'} : undef,
-        $budget->{'budget_parent_id'}   ? $budget->{'budget_parent_id'} : undef,
-        $budget->{'budget_name'}        ? $budget->{'budget_name'} : undef,
-        $budget->{'budget_branchcode'}  ? $budget->{'budget_branchcode'} : undef,
-        $budget->{'budget_amount'}      ? $budget->{'budget_amount'} : undef,
-        $budget->{'budget_amount_sublevel'}      ? $budget->{'budget_amount_sublevel'} : undef,
-        $budget->{'budget_encumb'}      ? $budget->{'budget_encumb'} : undef,
-        $budget->{'budget_expend'}      ? $budget->{'budget_expend'} : undef,
-        $budget->{'budget_notes'}       ? $budget->{'budget_notes'} : undef,
-        $budget->{'sort1_authcat'}      ? $budget->{'sort1_authcat'} : undef,
-        $budget->{'sort2_authcat'}      ? $budget->{'sort2_authcat'} : undef,
-        $budget->{'budget_owner_id'}    ? $budget->{'budget_owner_id'} : undef,
-        $budget->{'budget_permission'}  ? $budget->{'budget_permission'} : undef,
-        $budget->{'budget_id'},
-    );
-    $sth->finish;
+    $sth->execute( @values,$budgetid);
 }
 
 # -------------------------------------------------------------------

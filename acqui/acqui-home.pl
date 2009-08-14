@@ -69,7 +69,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $borrower= GetMember('borrowernumber' => $loggedinuser);
 my ( $flags, $homebranch )= ($borrower->{'flags'},$borrower->{'branchcode'});
 
-my @results = GetBookFunds($homebranch);
+my @results = GetBudgets($homebranch);
 my $count = scalar @results;
 my $branchname = GetBranchName($homebranch);
 

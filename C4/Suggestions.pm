@@ -27,7 +27,7 @@ use C4::Dates qw(format_date);
 use C4::SQLHelper qw(:all);
 use C4::Debug;
 use C4::Letters;
-use List::MoreUtils qw(any);
+use List::MoreUtils qw<any>;
 use base 'Exporter';  # parent would be better there
 our $VERSION = 3.01;
 our @EXPORT  = qw<
@@ -201,7 +201,7 @@ sub GetSuggestion {
 
 =head2 GetSuggestionFromBiblionumber
 
-$ordernumber = &GetSuggestionFromBiblionumber($dbh,$biblionumber)
+$ordernumber = &GetSuggestionFromBiblionumber($biblionumber)
 
 Get a suggestion from it's biblionumber.
 
@@ -211,12 +211,13 @@ the id of the suggestion which is related to the biblionumber given on input arg
 =cut
 
 sub GetSuggestionFromBiblionumber {
-    my ($dbh,$biblionumber) = @_;
-    my $query = qq|
+    my ($biblionumber) = @_;
+    my $query = q{
         SELECT suggestionid
         FROM   suggestions
         WHERE  biblionumber=?
-    |;
+	};
+	my $dbh=C4::Context->dbh;
     my $sth = $dbh->prepare($query);
     $sth->execute($biblionumber);
     my ($ordernumber) = $sth->fetchrow;
@@ -344,7 +345,7 @@ sub CountSuggestion {
 =head2 NewSuggestion
 
 
-&NewSuggestion($suggestion)
+&NewSuggestion($suggestion);
 
 Insert a new suggestion on database with value given on input arg.
 

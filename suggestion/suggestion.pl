@@ -208,6 +208,11 @@ $template->param(
 ## Initializing selection lists
 
 #branch display management
+my @bookfunds = GetBudgets($branchfilter||'');
+map{$_->{'selected'}=1 if ($$suggestion_ref{'bookfundid'} && $_->{'bookfundid'} eq $$suggestion_ref{'bookfundid'})} @bookfunds;
+$template->param( bookfundsloop => \@bookfunds);
+
+#branch display management
 my $onlymine=C4::Context->preference('IndependantBranches') && 
              C4::Context->userenv && 
              C4::Context->userenv->{flags}!=1 && 

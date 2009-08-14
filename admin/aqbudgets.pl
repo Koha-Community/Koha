@@ -224,7 +224,7 @@ if ($op eq 'add_form') {
         dateformat                => C4::Dates->new()->visual(),
         budget_id                 => $budget->{'budget_id'},
         budget_parent_id          => $budget->{'budget_parent_id'},
-        budget_dropbox     => $budget_dropbox,
+        budget_dropbox     => $budget_period_dropbox,
         budget_perm_dropbox       => $budget_perm_dropbox,
         budget_code               => $budget->{'budget_code'},
         budget_code_indent        => $budget->{'budget_code_indent'},
