@@ -2,6 +2,8 @@
     <title>Koha &rsaquo; Tools &rsaquo; Labels &rsaquo; Manage Label Elements</title>
     <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
     <!-- TMPL_INCLUDE NAME="greybox.inc" -->
+    <!-- Uncomment the following script line to enable firebug lite for use on IE -->
+    <!-- <script type='text/javascript' src='http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js'></script> -->
     <script type="text/JavaScript" language="JavaScript">
         //<![CDATA[
             function DeleteConfirm() {
@@ -50,15 +52,7 @@
                     alert("Please select at least one batch to export.");
                     return;     // no batch selected
                 }
-                var msg = "Are you sure you want to export the selected batch(s)?"
-                var answer = confirm(msg);
-                if (answer) {
-                    return GB_showCenter('Export Labels', "/cgi-bin/koha/labels/label-print.pl?" + getstr, 700, 800);
-//                    window.location = "/cgi-bin/koha/labels/label-print.pl?" + getstr;
-                }
-                else {
-                    return; // abort export
-                }
+                return GB_showCenter('Export Labels', "/cgi-bin/koha/labels/label-print.pl?" + getstr, 700, 800);
             };
             function selected_layout(op) {
                 var selected = new Array;
@@ -80,11 +74,6 @@
                     if (document.layouts.action.checked){
                         return(document.layouts.action.value);
                     }
-                    //var x=document.getElementsByName("action");
-                    //if (x[0].checked) {
-                    //    alert(x[0].value);
-                    //    return(x[0].value);
-                    //};
                 };
                 alert("Please select a <!-- TMPL_VAR NAME="label_element" -->.");
                 return (-1);
@@ -98,7 +87,7 @@
     <div id="breadcrumbs">
         <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; 
         <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
-        <a href="/cgi-bin/koha/labels/labels-home.pl">Labels</a> &rsaquo;
+        <a href="/cgi-bin/koha/labels/label-home.pl">Labels Home</a> &rsaquo;
         Manage Label <!-- TMPL_VAR NAME="label_element_title" -->
     </div>
     <div id="doc3" class="yui-t2">
@@ -109,6 +98,7 @@
                     <div class="yui-gc">
                         <div class="yui-u first" id="manage-label-layouts">
                             <div class="hint">Current Branch: <!-- TMPL_VAR NAME="LoginBranchname" --></div>
+                            <!-- TMPL_IF NAME="table_loop" -->
                             <form name="layouts">
                             <h2>Currently Available <!-- TMPL_VAR NAME="label_element_title" --></h2>
                             <table>
@@ -124,8 +114,10 @@
                                 <!-- TMPL_LOOP NAME="text_fields" -->
                                 <!-- TMPL_IF NAME="select_field" -->
                                     <td align="center"><input type="checkbox" name="action" value="<!-- TMPL_VAR NAME="field_value" -->"></td>
-                                <!-- TMPL_ELSE -->
+                                <!-- TMPL_ELSIF NAME="field_value" -->
                                     <td><!-- TMPL_VAR NAME="field_value" --></td>
+                                <!-- TMPL_ELSE -->
+                                    <td>&nbsp;</td>
                                 <!-- /TMPL_IF -->
                                 <!-- /TMPL_LOOP -->
                                 </tr>
@@ -138,6 +130,10 @@
                                 <!-- TMPL_IF NAME="print" --><span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="print" onclick="Xport()" value="Export"></span></span><!-- /TMPL_IF -->
                             </div>
                             </form>
+                            <!-- TMPL_ELSE -->
+                            <h2>There Are No <!-- TMPL_VAR NAME="label_element_title" --> Currently Available.</h2>
+                            <div class="hint"><h3>Use the toolbar above to create a new <!-- TMPL_VAR NAME="label_element" -->.</h3></div>
+                            <!-- /TMPL_IF -->
                         </div>
                         <!-- TMPL_IF NAME="error" -->
                         <div class="yui-u">

@@ -104,7 +104,7 @@ sub _select_format_string {     # generate field table based on format_string
 }
 
 if ($op eq 'edit') {
-    syslog("LOG_ERR", "labels/label-edit-layout.pl : Error performing '%s': No 'layout_id' passed in.", $op) unless ($layout);
+    syslog("LOG_ERR", "labels/label-edit-layout.pl : Error performing '%s': No 'layout_id' passed in.", $op) unless ($layout_id);
     $layout = C4::Labels::Layout->retrieve(layout_id => $layout_id);
 
 }

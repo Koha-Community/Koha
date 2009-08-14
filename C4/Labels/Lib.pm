@@ -441,6 +441,7 @@ sub get_table_names {
 sub html_table {
     my $headers = shift;
     my $data = shift;
+    return undef if scalar(@$data) == 0;      # no need to generate a table if there is not data to display
     my $table = [];
     my $fields = [];
     my @headers = ();

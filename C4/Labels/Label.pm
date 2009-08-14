@@ -349,8 +349,10 @@ sub draw_label_text {
         }
         ($field->{'code'} eq 'title') ? (($font =~ /T/) ? ($font = 'TI') : ($font = ($font . 'O'))) : ($font = $font);
         my $field_data = $field->{'data'};
-        $field_data =~ s/\n//g;
-        $field_data =~ s/\r//g;
+        if ($field_data) {
+            $field_data =~ s/\n//g;
+            $field_data =~ s/\r//g;
+        }
         my @label_lines;
         my @callnumber_list = ('itemcallnumber', '050a', '050b', '082a', '952o'); # Fields which hold call number data  FIXME: ( 060? 090? 092? 099? )
         if ((grep {$field->{'code'} =~ m/$_/} @callnumber_list) and ($self->{'printing_type'} eq 'BIB') and ($self->{'callnum_split'})) { # If the field contains the call number, we do some sp
@@ -368,10 +370,12 @@ sub draw_label_text {
             }
         }
         else {
-            $field_data =~ s/\/$//g;       # Here we will strip out all trailing '/' in fields other than the call number...
-            $field_data =~ s/\(/\\\(/g;    # Escape '(' and ')' for the pdf object stream...
-            $field_data =~ s/\)/\\\)/g;
-            eval{local($Text::Wrap::columns) = $self->{'text_wrap_cols'};};
+            if ($field_data) {
+                $field_data =~ s/\/$//g;       # Here we will strip out all trailing '/' in fields other than the call number...
+                $field_data =~ s/\(/\\\(/g;    # Escape '(' and ')' for the pdf object stream...
+                $field_data =~ s/\)/\\\)/g;
+            }
+            eval{$Text::Wrap::columns = $self->{'text_wrap_cols'};};
             my @line = split(/\n/ ,wrap('', '', $field_data));
             # If this is a title field, limit to two lines; all others limit to one... FIXME: this is rather arbitrary
             if ($field->{'code'} eq 'title' && scalar(@line) >= 2) {

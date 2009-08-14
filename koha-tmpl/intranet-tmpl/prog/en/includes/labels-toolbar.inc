@@ -13,22 +13,22 @@
     function yuiToolbar() {
         var layouts = [
                 {text: _("Manage Layouts"), url: "/cgi-bin/koha/labels/label-manage.pl?label_element=layout" },
-                {text: _("New Layout"), url: "/cgi-bin/koha/labels/label-edit-layout.pl" }
+                {text: _("New Layout"), url: "/cgi-bin/koha/labels/label-edit-layout.pl?op=new" }
         ];
 
         var templates = [
                 {text: _("Manage Templates"), url: "/cgi-bin/koha/labels/label-manage.pl?label_element=template" },
-                {text: _("New Template"), url: "/cgi-bin/koha/labels/label-edit-template.pl" }
+                {text: _("New Template"), url: "/cgi-bin/koha/labels/label-edit-template.pl?op=new" }
         ];
 
         var profiles = [
                 {text: _("Manage Profiles"), url: "/cgi-bin/koha/labels/label-manage.pl?label_element=profile" },
-                {text: _("New Profile"), url: "/cgi-bin/koha/labels/label-edit-profile.pl" }
+                {text: _("New Profile"), url: "/cgi-bin/koha/labels/label-edit-profile.pl?op=new" }
         ];
 
         var batches = [
                 {text: _("Manage Batches"), url: "/cgi-bin/koha/labels/label-manage.pl?label_element=batch" },
-                {text: _("New Batch"), url: "/cgi-bin/koha/labels/label-edit-batch.pl" }
+                {text: _("New Batch"), url: "/cgi-bin/koha/labels/label-edit-batch.pl?op=new" }
         ];
 
         new YAHOO.widget.Button({

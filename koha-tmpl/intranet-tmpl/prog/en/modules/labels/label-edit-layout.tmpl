@@ -25,7 +25,8 @@
     <div id="breadcrumbs">
         <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
         <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
-        <a href="/cgi-bin/koha/labels/label-home.pl">Labels</a> &rsaquo;
+        <a href="/cgi-bin/koha/labels/label-home.pl">Labels Home</a> &rsaquo;
+        <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=layout">Mange Label Layouts</a> &rsaquo;
         <!-- TMPL_IF NAME="layout_id" -->Edit<!-- TMPL_ELSE -->Create<!-- /TMPL_IF --> Label Layout
     </div>
     <div id="doc3" class="yui-t2">
@@ -158,7 +159,8 @@
                             </ol>
                         </fieldset>
                         <fieldset class="action">
-                            <input type="submit" value="Submit" /><a class="cancel" href="/cgi-bin/koha/labels/label-layout.pl">Cancel</a>
+                            <span class="yui-button yui-link-button"><span class="first-child"><input type="submit" value="Save" /></span></span>
+                            <span class="yui-button yui-link-button"><span class="first-child"><input type="button" value="Cancel" onclick="window.location='/cgi-bin/koha/labels/label-manage.pl?label_element=layout';" /></span></span>
                             <input type="hidden" name="op" value="save" />
                             <input type="hidden" name="layout_id" value="<!-- TMPL_VAR NAME="layout_id" -->" />
                         </fieldset>

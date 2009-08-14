@@ -82,7 +82,8 @@
                                         </ol>
                                     </fieldset>
                                     <fieldset class="action">
-                                        <input type="submit" value="Submit" /><a class="cancel" href="/cgi-bin/koha/labels/label-manage.pl?label_element=profile">Cancel</a>
+                                        <span class="yui-button yui-link-button"><span class="first-child"><input type="submit" value="Save" /></span></span>
+                                        <span class="yui-button yui-link-button"><span class="first-child"><input type="button" value="Cancel" onclick="window.location='/cgi-bin/koha/labels/label-manage.pl?label_element=profile';" /></span></span>
                                         <input type="hidden" name="op" value="save" />
                                         <input type="hidden" name="profile_id" value="<!-- TMPL_VAR NAME="profile_id" -->" />
                                     </fieldset>
