@@ -1,13 +1,56 @@
 <!-- TMPL_INCLUDE NAME="help-top.inc" -->
 
-<h1>Circulation Check Out (Issues)</h1>
+<h1>Check Out (Issues)</h1>
 
-<h2>Q: How do I check out an item to a patron?</h2> <p> A: Start by scanning the patron&rsquo;s barcode or type in their name to find their account. Once Koha has found the patron, you will see a new form for scanning or typing the item&rsquo;s identifying number (usually a barcode). If the item can be checked out without problems, it will be done immediately and shown with other patron checkouts at bottom. </p> 
-<h2>Q: How do I set up a sticky date?</h2><p>A: If you wish to have this item and all subsequent items in this transaction to have a date due other than the default date due defined for the item type, use the &ldquo;Sticky Due Date&rdquo; to set the date due before scanning the first item. </p> 
-<h2>Q: What to do I do if there is a problem with a checkout?</h2> <p>A: If there is a problem with an checkout, then a box will appear and ask for confirmation, if possible. Confirming will override the system and check out the item. </p> 
-<h2>Q: What can I do with a blocked checkout?</h2> <p> A:  If the checking out is really impossible (for example, the barcode does not exist), then you can&rsquo;t confirm the checkout.    </p>  
-<h2>Q: What happens if an item is checked out to another patron?</h2><p> A: Confirming will checkout the check out and automatically check in the item from the other patron account.   </p>
-<h3>INFORMATION: BRANCH AND PRINTER SETTINGS.
-</h3> <p>Before you begin, it is very important that you take note of the branch and printer settings and change them if necessary. This should only have to be done the first time you do circulations from a workstation, after which a browser cookie will remember the correct settings. If you do circulations under the wrong branch settings then Koha will reset the location of all items scanned to the incorrect branch and the statistical reports will credit all circulations to the wrong branch. </p>  
+<ul>
+	<li>Type or scan item barcodes in the 'Check out' field.<br />
+	<ul>
+		<li style="color: #990000">IMPORTANT: Depending on your barcode scanner's settings you may have to click 'Submit' after scanning the barcode</li>
+		<li style="background-color: #ffe599">TIP: You can use the 'Specify Due Date' field to change the programmed due date if you want to offer an exception. <br />
+		</li>
+	</ul>
+	</li>
+	<li>Click 'Check out'</li>
+	<li>If
+	the patron has overdue items a note will appear on the patron record to
+	that affect so that the circulation staff can manage the situation
+	while the patron is present<br />
+	</li>
+	<li>If the patron has any outstanding fines it will also appear on the patron record<br />
+	</li>
+	<li>Once you have finished checking out items, you can print a receipt by clicking Print &gt; Print Slip<br />
+	
+	<ul>
+		<li style="background-color: #ffe599">TIP: Find out more about printing to your receipt printer here: <a id="au6g" href="http://wiki.koha.org/doku.php?id=receipt_printing" title="http://wiki.koha.org/doku.php?id=receipt_printing">http://wiki.koha.org/doku.php?id=receipt_printing</a>  <br />
+		</li>
+	</ul>
+	</li>
+	<li>If a patron has reached the max fine amount, check out will be disabled<br />
+	
+	<ul>
+		<li style="background-color: #ffe599">TIP: The noissuescharge system preference defines when checkouts will be disabled
+		<ul>
+			<li><em>Get there: </em>More &gt; Administration &gt; Circulation &gt; noissuescharge</li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+	<li>If a circulation librarian marks a patron as 'Gone no Address', then the patron will be unable to check items out<br />
+	
+	<ul>
+		<li>A warning will appear if a librarian tries to check an item out to a patron who has been marked as 'Gone no Address'<br />
+		</li>
+	</ul>
+	</li>
+	<li>If a patron has been 'Debarred' you will not be able to check out items<br />
+	
+	<ul>
+		<li>A warning will appear if a librarian tries to check an item out to a patron who has been marked as 'Debarred'<br />
+		</li>
+		<li>A warning will appear if a librarian tries to check an item out to a patron who has expired<br />
+		</li>
+	</ul>
+	</li>
+</ul>
 
 <!-- TMPL_INCLUDE name="help-bottom.inc" -->

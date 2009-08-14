@@ -2,9 +2,78 @@
 
 <h1>Circulation Check In (Returns)</h1>
 
-<h2>How do I&nbsp; check in (return) an item?</h2><p>Simply scan or type the returned item's identifying number (usually a barcode) in the box provided.</p>
-<h2>What happens if a patron has debts?</h2><p>A red box will alert you. Fines are calculated and posted the following day.</p><p>If you know the items all have fines or debts associated with them, you can chose to &quot;Forgive All Debts&quot; by using the Check box. By usiing this check box, no charges will be placed against the patrons account.</p>
-<h2>What happens if the item is on reserve?</h2><p>A red typed alert saying &quot;Reserve Found&quot; will be displayed along with the Reserve listing information. Click on the confirm button to proceed. If the item is confirmed than the items status will be changed to &quot;waiting&quot;. If the item is requested by someone in another branch, then you must validate the transfer.</p> <h3>WARNING: BRANCH AND PRINTING SETTINGS.
-</h3><p>Before you begin, it is very important that you take note of the branch and printer settings and change them if necessary. This should only have to be done the first time you do circulations (or returns) from a workstation, after which a browser cookie will remember the correct settings. If you do returns under the wrong branch settings Koha will reset the location of all items scanned to the incorrect branch</p>    
+
+<ul>
+	<li>Click 'Check In' on your global navigation bar.<br />
+	<ul>
+		<li style="background-color: #ffe599">TIP:
+		Do not use this method to check items in if you want to forgive fines
+		or use dropbox mode, instead use the check in form found under
+		Circulation.
+		<ul>
+			<li><em>Get there:</em> Circulation &gt; Check In</li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+	<li>Type or scan the item barcode into the 'check in' box.
+	<ul>
+		<li style="color: #990000">IMPORTANT: Depending on your barcode scanner's settings you may have to click 'Submit' after scanning the barcode</li>
+	</ul>
+	</li>
+	<li>You will be brought to a confirmation page for the checked in item.<br />
+	<ul>
+		<li style="background-color: #ffe599">TIP: When you have multiple
+		branches in your system, Koha will notify you when a book needs
+		returned to its home branch. </li>
+	</ul>
+	</li>
+	<li>To
+	check in additional items enter the barcodes into the field at the top
+	of the screen or the field above your list of checked in items
+	<ul>
+		<li style="background-color: #ffe599">TIP:
+		The only difference between these fields is that the quick check-in box
+		at the top will produce a confirmation for one book at a time, the box
+		above the list of 'Checked-In items' will continue to update the list.</li>
+	</ul>
+	</li>
+	<li>If checking in a book from the 'Check In' page you will have two options to choose from before checking the item in</li>
+	<li>Should you want to forgive any overdue fines on the item you're checking in, you can click the 'Forgive overdue charges' box.</li>
+	<li>If
+	you are checking in items returned after the library closed the
+	previous night (or after a holiday closing) you can check the 'Dropbox
+	mode' option to have the system ignore any fines that may have been
+	accrued while the library was closed.
+	<ul>
+		<li style="background-color: #ffe599">TIP: Dropbox mode will check the calendar and assume that the book was returned on the last day that the library was open.</li>
+	</ul>
+	</li>
+</ul>
+<h2>Questions</h2>
+<h3>What happens if I check in an item that was thought to be lost? <br />
+</h3>
+<p>
+When you check it in you will get a message telling you that the book has been marked as found.&nbsp; 
+</p>
+<p>
+This means that the Lost status is changed on the item back to available.
+</p>
+<h3>How is the dropbox date is determined? <br />
+</h3>
+<p>
+Is it the last open date for the
+checkout branch? Is it today's date minus one? Can the dropbox checkin
+date be set? If the library is closed for four days for repairs, for
+example, there would be more than one day needed for the dropbox date.
+</p>
+<p>
+You will only have one dropbox date and that will be the last day that
+the library open (determined by the holiday calendar) because there is
+no real way to know what day the
+books were dropped into the box during the 4 closed days. The only way
+to change the effective checkin date in dropbox mode is to modify the
+calendar.
+</p>
 
 <!-- TMPL_INCLUDE name="help-bottom.inc" -->
