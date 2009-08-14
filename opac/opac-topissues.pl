@@ -19,6 +19,8 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
+
 use CGI;
 use C4::Auth;
 use C4::Context;
@@ -52,8 +54,8 @@ my ($template, $borrowernumber, $cookie)
 my $dbh = C4::Context->dbh;
 # Displaying results
 my $limit = $input->param('limit') || 10;
-my $branch = $input->param('branch');
-my $itemtype = $input->param('itemtype');
+my $branch = $input->param('branch') || '';
+my $itemtype = $input->param('itemtype') || '';
 my $timeLimit = $input->param('timeLimit') || 3;
 my $whereclause;
 $whereclause .= ' AND items.homebranch='.$dbh->quote($branch) if ($branch);
@@ -103,12 +105,13 @@ while (my $line= $sth->fetchrow_hashref) {
     push @results, $line;
 }
 
-if($timeLimit eq 999){ $timeLimit = 0 };
+my $timeLimitFinite = $timeLimit;
+if($timeLimit eq 999){ $timeLimitFinite = 0 };
 
 $template->param(do_it => 1,
                 limit => $limit,
-                branch => $branches->{$branch}->{branchname},
-                itemtype => $itemtypes->{$itemtype}->{description},
+                branch => $branches->{$branch}->{branchname} || 'all locations',
+                itemtype => $itemtypes->{$itemtype}->{description} || 'item types',
                 timeLimit => $timeLimit,
                 timeLimitFinite => $timeLimit,
                 results_loop => \@results,
@@ -131,10 +134,12 @@ $template->param( branchloop => \@branch_loop, "mylibraryfirst"=>C4::Context->pr
 #doctype
 $itemtypes = GetItemTypes;
 my @itemtypeloop;
-foreach my $thisitemtype (keys %$itemtypes) {
+foreach my $thisitemtype (sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'}} keys %$itemtypes) {
+        my $selected = 1 if $thisitemtype eq $itemtype;
         my %row =(value => $thisitemtype,
                     description => $itemtypes->{$thisitemtype}->{'description'},
-                        );
+                    selected => $selected,
+                 );
         push @itemtypeloop, \%row;
 }
 

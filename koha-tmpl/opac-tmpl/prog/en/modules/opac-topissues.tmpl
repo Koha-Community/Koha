@@ -45,8 +45,8 @@ function Dopop(link) {
         at 
         <!-- TMPL_VAR name="branch" -->
         <!-- /TMPL_IF -->
-        <!-- TMPL_IF name="timeLimit" -->
-        in the past <!-- TMPL_VAR name="timeLimit" --> months
+        <!-- TMPL_IF name="timeLimitFinite" -->
+        in the past <!-- TMPL_VAR name="timeLimitFinite" --> months
         <!-- TMPL_ELSE --> of all time<!-- /TMPL_IF -->
     </caption>
             <thead><tr>
@@ -90,9 +90,11 @@ function Dopop(link) {
                 <select name="branch" id="branch">
                 <option value="">All branches</option>
                 <!-- TMPL_LOOP name="branchloop" -->
-                    <!-- TMPL_IF EXPR="branch eq branchname" --><option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="value" -->"><!-- /TMPL_IF -->
-                        <!-- TMPL_VAR name="branchname" -->
-                    </option>
+                    <!-- TMPL_IF name="selected" -->
+                        <option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="branchname" --></option>
+                    <!-- TMPL_ELSE -->
+                        <option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="branchname" --></option>
+                    <!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
                 </select>
             </li>
@@ -100,9 +102,11 @@ function Dopop(link) {
                     <select name="itemtype" id="itemtype">
                         <option value="">All item types</option>
                        <!-- TMPL_LOOP name="itemtypeloop" -->
-                            <!-- TMPL_IF EXPR="itemtype eq description" --><option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="value" -->"><!-- /TMPL_IF -->
-                                <!-- TMPL_VAR name="description" -->
-                            </option>
+                           <!-- TMPL_IF name="selected" -->
+                               <option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="description" --></option>
+                           <!-- TMPL_ELSE -->
+                               <option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="description" --></option>
+                           <!-- /TMPL_IF -->
                         <!-- /TMPL_LOOP -->
                     </select></li>
 			<li>
