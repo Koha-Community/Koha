@@ -1,15 +1,241 @@
 <!-- TMPL_INCLUDE NAME="help-top.inc" -->
 
-<h1>Add MARC Record Help</h1><h2>How do I add the cataloging data?</h2>
+<h1>Cataloging</h1>
+<p>
+Cataloging in Koha can be done one of two
+ways.&nbsp; This manual will explain how to use the labeled MARC view for
+cataloging.&nbsp; The other way to catalog is to use the &Dagger;bilbios cataloging
+plugin.&nbsp; 
+</p>
+<h2>Adding a Bib Record<br />
+</h2>
+<p>
+To
+catalog a new record, you need to be in Koha's 'Cataloguing' module.
+You can find this module in your global nav at the top of the screen,
+under the 'More' dropdown list.
+</p>
+<ul>
+	<li>
+	Start by searching the catalog to see if your item is already in the system</li>
+	<li>
+	If 'no results found', click on 'New Record' and choose a 'framework' from the dropdown box. </li>
+	<li style="background-color: #ffe599">TIP: Choose 'default' if you have not yet created a new framework
+	<ul>
+		<li>To create a framework you must go into the administration section
+		<ul>
+			<li><em>Get there: </em>More &gt; Administration &gt; MARC Bibliographic Framework
+			</li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+</ul>
+<ul>
+	<li style="background-color: #ffe599">TIP: To quick start copy cataloging, instead of clicking the 'New Record' button, click the 'Z30.50 Search' button to search for a record from another target.</li>
+	<li>From the 'Add MARC Record' page, you have two options for cataloging new records</li>
+</ul>
+<ul>
+	<li>
+	<ul>
+		<li>Original cataloging OR
+		</li>
+	</ul>
+	<ul>
+		<li>Copy cataloging using the Koha's Z39.50 search
+		<ul>
+			<li style="color: #990000">IMPORTANT: You must first set up Z39.50 Search Targets
+			<ul>
+				<li><em>Get there: </em>More &gt; Administration &gt; Additional parameters &gt; Z39.50 Client Targets</li>
+			</ul>
+			</li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+</ul>
+<h2>
+Original Cataloging</h2>
+<ul>
+	<li>
+	Use the numerical tabbed interface to go through your MARC record
+	<ul>
+		<li>TIP: 1xx fields will be found under tab 1, 2xx fields will be found under tab 2, etc</li>
+	</ul>
+	</li>
+	<li>To help with your original cataloging, Koha has some built in plugins denoted by an ellipsis (...) at the end of the field. <br />
+	<ul>
+		<li>Some of these will automatically enter the data just by clicking in the text field, others require that you click on the '...'
+		</li>
+	</ul>
+	</li>
+</ul>
+<h3>Leader Plugin</h3>
+<strong>
+</strong>
+<ul>
+	<li>The Leader is a fixed field at the beginning of each MARC
+	record that contains coded information for the processing of the
+	record.
+	</li>
+	<li>Koha has no need for Leader information and does not use
+	it. However, Koha can store Leader data, and can help you build your
+	own Leader data.</li>
+	<li>
+	When you create (or edit) bibliographic records, clicking on the '...'
+	to the right of the Leader field will open a pop-up window to guide you
+	through the creation of your MARC Leader.</li>
+	<li>Make the appropriate choices from the pull-down menus, and Koha will
+	create the encoded Leader data and insert it into your 000@ subfield. </li>
+	<li>You now have Leader data stored with your records, should you ever need
+	it for some other application.</li>
+</ul>
+<h3>Adding Additional Fields</h3>
+<ul>
+	<li>When editing MARC fields you can duplicate fields (that are repeatable) by clicking the plus (+) next to the field or subfield<br />
+	<ul>
+		<li>When clicking plus (+) it will automatically duplicate the data in the field into a new field</li>
+		<li>When
+		clicking minus (-) it will delete the field or subfield if there is
+		another of the same field or subfield.&nbsp; If you click minus (-) when
+		there are no other repeats of the field or subfield it will delete the
+		field contents.</li>
+	</ul>
+	</li>
+	<li>By default subfields will appear
+	in alphabetical order. You can move these fields to the right order by
+	clicking the ^ to the left of the subfield&nbsp;
+	</li>
+</ul>
+<h3><strong>Authority Plugin</strong></h3>
+<ul>
+	<li>Some fields (such as the 100) offer Authority Plugins</li>
+	<li>Click the '...' to the left of the field</li>
+	<li>
+	Search for the authority
+	</li>
+	<li>
+	Click 'choose' next to the matching record and it will auto fill the fields in your MARC record<br />
+	</li>
+</ul>
+<h2>
+<strong> Using Z39.50 for Copy Cataloging</strong></h2>
+<p>
+To perform a Z39.50 search
+</p>
+<ul>
+	<li>Enter data into at least one of the following MARC fields
+	<ul>
+		<li>Title - 245</li>
+		<li>ISBN - 020</li>
+		<li>ISSN - 022</li>
+		<li>Author - 100</li>
+	</ul>
+	</li>
+	<li>
+	Click 'z39.50 Search'</li>
+	<li>
+	Alter your search and choose Z39.50 targets from the pop-up window
+	</li>
+	<li>
+	TIP: First make sure you have set up your Z39.50 search targets
 
-<p>Depending on the chosen framework, the various MARC tags will appear on each tab. Use the tabs across the top of the page to enter record data.</p>
+	<ul>
+		<li>
+		<em>Get there: </em>More &gt; Administration &gt; Additional Parameters &gt; Z39.50 Client Targets
 
-<h2>What is the z39.50 search?</h2>
+		</li>
+	</ul>
+	</li>
+</ul>
+<ul>
+	<li>Click on 'import' to import the record of your choice.</li>
+	<li>
+	Koha
+	will auto-fill the fields in your new MARC record with the values
+	supplied by the record you've just imported from the Z39.50 search.
+	
+	</li>
+	<li>
+	You can now add/edit fields to the record.
+	
+	</li>
+	<li>
+	Click 'Save' when you are done.
+	
+	</li>
+</ul>
+<h2>Editing a record</h2>
+<p>
+Editing a record is mostly the same as adding
+a record except that you will find that your fields will only display
+the subfields that you entered data in.&nbsp; When adding a new record you
+will see this for a 650 field.
+</p>
+<p>
+When editing you will only see
+</p>
+<p>
+To show all possible subfields in the framework, click on the text of the MARC field
+</p>
+<h2>Deleting Records</h2>
+<ul>
+	<li style="background-color: #ffe599">TIP: To delete a BIB Record, first delete all holdings
+	(items) attached to the bib. </li>
+	<li>Select Delete from the Edit dropdown
+	menu in the normal view of the record. <br />
+	<ul>
+		<li>Note: the delete option on the
+		Edit dropdown menu will be grayed out when holdings exist. It will only
+		allow you to delete the bib record after all the holdings (items) have
+		been deleted.</li>
+	</ul>
+	</li>
+</ul>
 
-<p>Koha has an built in z39.50 client that can be used to query any number of z39.50 servers. To use the z39.50 search enter at least the ISBN and Title. The search will give you results form&nbsp; the servers you query. Select the record you wish to use and the fields will be populated with cataloging information from that server.</p><p>To use this feature you will need to setup z39.50 servers to query under &quot;System Administration&quot;.</p>
+<h2>Questions<br />
+</h2>
 
-<h2>What do the &quot;...&quot; mean?</h2>
+<h3>&quot;I searched on the MARC record I just added, and no results were found&quot;</h3>
+<p>
+If your catalog changes aren't visible in search results, it is because
+of the indexing process. Indexing can take anywhere from 1 minute to 4
+hours, depending on the load. If you do not see the new records by the
+following day, (24hrs) contact your system administrator. <br />
+</p>
+<h3>How to reorder my subject heading subfields so they appear in the proper order?</h3>
+<p>
+By default Koha alphabetizes your 6xx subfields, but you can easily
+move them around by clicking on the arrow on the left hand side of the
+subfield. This will allow you to put the headings in the order that
+best suits your item.
+</p>
+<h3>Can I duplicate a record in my system to do some copy cataloging?<br />
+</h3>
 
-<p>The ... to the right of the input field are used to indicate that this field uses a plugin. Various plugins have been created to help make it easier to catalog records more quickly.</p><p>If you click in the input field of any field that has a ..., the field will be populated with the default data for the plugin. This default data is set either by the plugin itself or system preferences.</p><p>Clicking on the ... for some plugins will bring up a pop up window where you can make various selections to populate the field. This is partiuclarly useful for Leaders and other data element fields.</p><p>Talk to your system administrator about loading additional plugins for use in this module.</p>
+<ul>
+	<li>Search for the record you'd like to copy</li>
+	<li>Choose the record by clicking on the title</li>
+	<li>Click on 'Edit'</li>
+	<li>Choose to 'Edit as New (Duplicate)'</li>
+	<li>After editing your record, click 'Save'</li>
+	<li>You will be warned that this record was a duplicate</li>
+	<li>Choose 'No' to save this as a new record</li>
+</ul>
+
+<h3>How do I overlay a full
+bib record over the brief one that was added at acquisitions?</h3>
+<p>
+The librarian added orders using the form in Koha, then
+'received' them on that brief record.&nbsp; Is there a way to download the full record right in acquisitions so
+that the item gets attached to that full record? Or if not that, a way
+to replace the brief record with a complete one?</p>
+<p>Search for the partial record in your catalog and then go to Edit &gt;
+Edit Record and from there you can do a Z39.50 search to pull in a more
+full record or you can do your full cataloging there.
+</p>
+<p>
+&nbsp;
+</p>
 
 <!-- TMPL_INCLUDE name="help-bottom.inc" -->

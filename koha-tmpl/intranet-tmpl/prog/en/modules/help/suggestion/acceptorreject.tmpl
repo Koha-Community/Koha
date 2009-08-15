@@ -1,15 +1,64 @@
 <!-- TMPL_INCLUDE NAME="help-top.inc" -->
 
 <h1>Suggestions Management</h1>
-
 <h2>What are Purchase Suggestions?</h2>
-<p>Purchase suggestions give the users of the OPAC a way to lodge requests for the library to purchase for items.</p>
-<p>To use this feature, purchase suggestions need to be turned on in system preferences. (System Preferences &gt; OPAC Features &gt; Suggest set to &quot;on&quot;).</p>
+<p>
+Purchase suggestions give the users of the OPAC a way to lodge requests for the library to purchase for items.
+</p>
+<p>
+<span style="color: #990000">IMPORTANT: To use this feature, purchase suggestions need to be turned on in
+system preferences.</span> <br />
 
-<h2>How do I manage suggestions?</h2>
-<p>Suggestions that have been placed but not acted upon will show on the &quot;Waiting&quot; tab below. To process a suggestion the &quot;Status&quot; needs to be changed and a &quot;Reason&quot; chosen.</p>
-<p>Marking an item as &quot;Accepted&quot;, will move the suggestion to the Accepted tab. The suggested item can now be added to an order in Acquisitions by using the &quot;From a Suggestion&quot; feature under &quot;Add To Order&quot;.</p>
-<p>Marking an item  as &quot;Rejected&quot;, will move the selected item to the rejected tab.</p>
-<p>When ever the status is changed to Accepted or Rejected, the reason for the status change can be selected from the &quot;Reason&quot; drop down. Reasons are AuthoriZed values that need to be setup by the library. There is also the option to select &quot;Other&quot; and enter a custom reason.</p>
-<p>The authorized values for &quot;Reason&quot; can be set under System Administration &gt; Authorized Values. From the drop down select the &quot;SUGGEST&quot; authorized value category and add your custom reasons.</p>
-<p>Once the status and reason have been selected, these will display for the suggestor in the OPAC.</p><!-- TMPL_INCLUDE NAME="help-bottom.inc" -->
+</p>
+<ul>
+	<li><em>Get there:</em> More &gt; Administration &gt; Global System Preferences &gt; OPAC &gt; suggestion</li>
+</ul>
+<span style="color: #990000">IMPORTANT: Suggestions are only managed here if the emailPurchaseSuggestions preference is turned off.<br /></span>
+
+<ul>
+	<li><em>Get there:</em> More &gt; Administration &gt; Global System Preferences &gt; Acquisitions &gt; emailPurchaseSuggestions</li>
+</ul>
+<h2>Manage Suggestions<br />
+</h2>
+<p>
+To manage suggestions, go to More &gt; Acquisitions
+</p>
+<ul>
+	<li>Click 'Manage suggestions'</li>
+	<li>If you have suggestions to manage they will appear here
+	</li>
+	<li style="color: #990000">IMPORTANT: You need to have authorized values for 'Reason' already set before working with suggestions</li>
+	<ul>
+		<li style="background-color: #ffe599">TIP: Reasons are the librarian's reason for accepting/rejecting request</li>
+		<li>If reasons are not set the Suggestions page will will look like this:<br />
+		</li>
+		<li>If you get this error, click 'authorized values'
+		<ul>
+			<li style="background-color: #ffe599">TIP: You can also edit these values by going to More &gt; Administration &gt; Authorized Values</li>
+		</ul>
+		</li>
+		<li>Choose SUGGEST from the pull down
+		<br />
+		</li>
+		<li>Enter a short 'Authorized value' and a longer 'Description' (this second field is optional)<br />
+		</li>
+		<li>This will result in a list of values that can be added to or edited at any time
+		<br />
+		</li>
+		<li>It will also add these values to the pull down on the manage suggestions page
+		<br />
+		</li>
+	</ul>
+	<li>If there are no errors, continue to approving or rejecting the request and submitting a reason
+	<br />
+	</li>
+	<li style="background-color: #ffe599">TIP: By choosing 'Others...' from the reason pull down you will be able to enter a free text reason.<br />
+	</li>
+	<li>After choosing your reason, click 'Change Status'</li>
+	<li style="background-color: #ffe599">TIP: Statuses can be updated in bulk by choosing from the pull down at the bottom and clicking 'Mark all with this reason'<br />
+	</li>
+	<li>The item will be moved to the 'Accepted' or 'Rejected' menu</li>
+	<li>If you accidentally pick the wrong option (accept or reject) you can always edit your selection by visiting the appropriate tab</li>
+</ul>
+
+<!-- TMPL_INCLUDE NAME="help-bottom.inc" -->
