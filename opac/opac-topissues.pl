@@ -94,6 +94,7 @@ $template->param(do_it => 1,
                 branch => $branches->{$branch}->{branchname} || 'all locations',
                 itemtype => $itemtypes->{$itemtype}->{description} || 'item types',
                 timeLimit => $timeLimit,
+                timeLimitFinite => $timeLimit,
                 results_loop => \@results,
                 );
 
