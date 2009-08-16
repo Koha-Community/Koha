@@ -2578,6 +2578,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print " Upgrade to $DBversion done (fix spelling/capitalization to make things match the standard.)\n";
 }
 
+$DBversion = '3.01.00.044';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("UPDATE letter SET content='Dear <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nYou have a hold available for pickup as of <<reserves.waitingdate>>:\r\n\r\nTitle: <<biblio.title>>\r\nAuthor: <<biblio.author>>\r\nCopy: <<items.copynumber>>\r\nLocation: <<branches.branchname>>\r\n<<branches.branchaddress1>>\r\n<<branches.branchaddress2>>\r\n<<branches.branchaddress3>>\r\n<<branches.branchcity>> <<branches.branchzip>>' WHERE code = 'HOLD';");
+    $dbh->do("UPDATE letter SET content='Dear <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nAccording to our current records, you have items that are overdue. Your library does not charge late fines, but please return or renew them as soon as possible.\r\n\r\n<<branches.branchname>>\n<<branches.branchaddress1>>\n<<branches.branchaddress2>>\n<<branches.branchaddress3>>\n<<branches.branchphone>>\n<<branches.branchfax>>\n<<branches.branchemail>>\r\n\r\nIf you have registered a password with the library, you may use it with your library card number to renew online. If an item becomes more than 30 days overdue, you will be unable to use your library card until the item is returned. The following item is currently overdue:\r\n\r\n<<items.content>>' WHERE code = 'ODUE';' WHERE bit=9;");
+    SetVersion ($DBversion);
+    print " Upgrade to $DBversion done (fixed language and typos in notices.)\n";
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
