@@ -2567,6 +2567,17 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print " Upgrade to $DBversion done (bug 2611: fix spelling/capitalization in permission flag descriptions)\n";
 }
 
+$DBversion = '3.01.00.043';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("UPDATE userflags SET flagdesc='View Catalog (Librarian Interface)' WHERE bit=2;");
+    $dbh->do("UPDATE userflags SET flagdesc='Edit Catalog (Modify bibliographic/holdings data)' WHERE bit=9;");
+    $dbh->do("UPDATE userflags SET flagdesc='Allow to edit authorities' WHERE bit=14;");
+    $dbh->do("UPDATE userflags SET flagdesc='Allow to access to the reports module' WHERE bit=16;");
+    $dbh->do("UPDATE userflags SET flagdesc='Allow to manage serials subscriptions' WHERE bit=15;");
+    SetVersion ($DBversion);
+    print " Upgrade to $DBversion done (fix spelling/capitalization to make things match the standard.)\n";
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
