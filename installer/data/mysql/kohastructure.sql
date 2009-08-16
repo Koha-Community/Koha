@@ -936,7 +936,7 @@ CREATE TABLE `deleteditems` (
   `damaged` tinyint(1) NOT NULL default 0,
   `itemlost` tinyint(1) NOT NULL default 0,
   `wthdrawn` tinyint(1) NOT NULL default 0,
-  `itemcallnumber` varchar(30) default NULL,
+  `itemcallnumber` varchar(255) default NULL,
   `issues` smallint(6) default NULL,
   `renewals` smallint(6) default NULL,
   `reserves` smallint(6) default NULL,
