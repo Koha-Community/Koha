@@ -119,23 +119,22 @@
 <div class="yui-b">
 
 <!-- TMPL_INCLUDE NAME="budgets-admin.inc" -->
-<! -- FIXME <!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->  -->
 
 <!-- TMPL_IF name="add_form" -->
     <!--  add or modify a budget period   -->
+<!--TMPL_IF Name="duplicates"--><!--TMPL_INCLUDE Name="duplicates.inc"--><!--/TMPL_IF-->
     <!-- TMPL_IF name="budget_period_id" -->
         <h3>Modify budget period</h3>
     <!-- TMPL_ELSE -->
         <h3>Add budget period</h3>
-<!-- /TMPL_IF -->
-
-<form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" name="Aform" method="post">
+	<!-- /TMPL_IF -->
+<form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" name="f" method="post">
     <fieldset class="rows">
     <!-- ################################################################################# -->
     <!-- display information about the budget period that must be added or modified -->
     <!-- ################################################################################# -->
     <input type="hidden" name="op" value="add_validate" />
-    <input type="hidden" name="checked" value="0" />
+    <input type="hidden" name="confirm_not_duplicate" value="<!--TMPL_VAR Name="confirm_not_duplicate"-->" />
     <input type="hidden" name="budget_period_id" value="<!-- TMPL_VAR name="budget_period_id" -->" />
     <ol>
     <li>
@@ -190,16 +189,14 @@
         <!-- ACTIVE -->
         <!-- ############################## -->
         <label for="budget_period_active">Make Period Active</label>
-        <input type="checkbox" id="budget_period_active" name="budget_period_active" value="1"
-        <!-- TMPL_IF NAME="budget_period_active" -->checked<!-- /TMPL_IF --> />
+        <!-- TMPL_IF NAME="budget_period_active" --><input type="checkbox" checked="checked" id="budget_period_active" name="budget_period_active" value="1" checked /><!--TMPL_ELSE-->  <input type="checkbox" id="budget_period_active" name="budget_period_active" value="1"/> <!--/TMPL_IF-->
     </li>
 
     <li>
         <!-- LOCK  -->
         <!-- ############################## -->
-        <label for="budget_period_active">Lock Period</label>
-        <input type="checkbox" id="budget_period_locked" name="budget_period_locked" value="1"
-        <!-- TMPL_IF NAME="budget_period_locked" -->checked<!-- /TMPL_IF --> />
+        <label for="budget_period_locked">Lock Period</label>
+        <!-- TMPL_IF NAME="budget_period_locked" --><input type="checkbox" checked="checked" id="budget_period_locked" name="budget_period_locked" value="1" /><!--TMPL_ELSE-->  <input type="checkbox" id="budget_period_locked" name="budget_period_locked" value="1"/> <!--/TMPL_IF-->
     </li>
     </ol>
     </fieldset>
@@ -285,7 +282,7 @@
     </tr>
 
     <!-- TMPL_LOOP name="period_loop" -->
-        <!-- TMPL_IF NAME="toggle" -->
+        <!-- TMPL_IF NAME="__odd__" -->
             <tr>
         <!-- TMPL_ELSE -->
             <tr class="highlight">

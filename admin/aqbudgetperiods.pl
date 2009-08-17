@@ -60,10 +60,10 @@ my $input       = new CGI;
 
 my $searchfield          = $input->param('searchfield');
 my $budget_period_id     = $input->param('budget_period_id');
-my $budget_period_active = $input->param('budget_period_active');
-my $budget_period_locked = $input->param('budget_period_locked');
-my $op                   = $input->param('op');
+my $op                   = $input->param('op')||"else";
+my $check_duplicate      = $input->param('confirm_not_duplicate')||0;
 
+my $budget_period_hashref= $input->Vars;
 #my $sort1_authcat = $input->param('sort1_authcat');
 #my $sort2_authcat = $input->param('sort2_authcat');
 
@@ -80,11 +80,6 @@ my ($template, $borrowernumber, $cookie, $staff_flags ) = get_template_and_user(
 	}
 );
 
-my $script_name = "/cgi-bin/koha/admin/aqbudgetperiods.pl";  # ???
-
-my ( $count, $results ) = GetBudgetPeriods();
-### $count
-$template->param( period_button_only => 1 ) if ($count == 0) ;
 
 my $cur = GetCurrency();
 $template->param( cur => $cur->{symbol} );
@@ -108,96 +103,63 @@ if ( $cur_format eq 'US' ) {
     );
 }
 
-if   ($op) { $template->param( $op    => 1 ); }
-else       { $template->param( 'else' => 1 ); }
 
 # ADD OR MODIFY A BUDGET PERIOD - BUILD SCREEN
 if ( $op eq 'add_form' ) {
     ## add or modify a budget period (preparation)
     ## get information about the budget period that must be modified
 
-#    my ( $default, $sort1_authcat_dropbox, $sort1_default, $sort2_default );
-#    my ( $default, t );
 
     if ($budget_period_id) {    # MOD
-        my $data;
-        my $dbh = C4::Context->dbh;
-        my $sth = $dbh->prepare(qq|
-                                        SELECT * FROM aqbudgetperiods
-                                        WHERE budget_period_id=?    | );
-        $sth->execute($budget_period_id);
-        $data = $sth->fetchrow_hashref;
-        $sth->finish;
-
+		my $budgetperiod_hash=GetBudgetPeriod($budget_period_id);
         # get dropboxes
+		FormatData($budgetperiod_hash);
+        $$budgetperiod_hash{budget_period_total}= $num->format_price($$budgetperiod_hash{'budget_period_total'});  
         $template->param(
-            budget_period_id          => $budget_period_id,
-            budget_period_startdate   => format_date( $data->{'budget_period_startdate'} ),
-            budget_period_enddate     => format_date( $data->{'budget_period_enddate'} ),
-            budget_period_description => $data->{'budget_period_description'},
-            budget_period_total       => sprintf ("%.2f",  $data->{'budget_period_total'} ),
-            budget_period_active      => $data->{'budget_period_active'},
-            budget_period_locked      => $data->{'budget_period_locked'},
+			%$budgetperiod_hash
         );
     } # IF-MOD
-    $template->param(              DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),     );
+    $template->param( DHTMLcalendar_dateformat 	=> C4::Dates->DHTMLcalendar(),);
+    $template->param( confirm_not_duplicate		=> $check_duplicate     	  );
 }
 
 elsif ( $op eq 'add_validate' ) {
 ## add or modify a budget period (confirmation)
 
-    ## update budget period data
-    if ( $budget_period_id ne '' ) {
-        my $query = '
-                UPDATE aqbudgetperiods
-                SET    budget_period_startdate  = ?
-                    , budget_period_enddate     = ?
-                    , budget_period_description = ?
-                    , budget_period_total       = ?
-                    , budget_period_locked      = ?
-                    , budget_period_active      = ?
-                WHERE budget_period_id          = ?
-            ';
-
-        my $sth = $dbh->prepare($query);
-        $sth->execute(
-            $input->param('budget_period_startdate')   ? format_date_in_iso( $input->param('budget_period_startdate') ) : undef,
-            $input->param('budget_period_enddate')     ? format_date_in_iso( $input->param('budget_period_enddate') )   : undef,
-            $input->param('budget_period_description') ? $input->param('budget_period_description')                     : undef,
-            $input->param('budget_period_total')       ? $input->param('budget_period_total')                           : undef,
-            $input->param('budget_period_locked')      ? $input->param('budget_period_locked')                          : undef,
-            $input->param('budget_period_active')      ? $input->param('budget_period_active')                          : undef,
-            $input->param('budget_period_id'),
-        );
-
-    } else {    # ELSE ITS AN ADD
-        my $query = "
-                INSERT INTO aqbudgetperiods (
-                    budget_period_id
-                    , budget_period_startdate
-                    , budget_period_enddate
-                    , budget_period_total
-                    , budget_period_description
-                    , budget_period_locked
-                    , budget_period_active)
-                VALUES  (?,?,?,?,?,?,? );
-            ";
-        my $sth = $dbh->prepare($query);
-        $sth->execute(
-            $budget_period_id,
-            $input->param('budget_period_startdate')   ? format_date_in_iso( $input->param('budget_period_startdate') ) : undef,
-            $input->param('budget_period_enddate')     ? format_date_in_iso( $input->param('budget_period_enddate') )   : undef,
-            $input->param('budget_period_total')       ? $input->param('budget_period_total')                           : undef,
-            $input->param('budget_period_description') ? $input->param('budget_period_description')                     : undef,
-            $input->param('budget_period_locked')      ? $input->param('budget_period_locked')                          : undef,
-            $input->param('budget_period_active')      ? $input->param('budget_period_active')                          : undef,
-        );
-        $budget_period_id = $dbh->last_insert_id( undef, undef, 'aqbudgetperiods', undef );
-    }
-
-    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=aqbudgetperiods.pl\"></html>";    #YUCK
-    #    output_html_with_http_headers $input, $cookie, $template->output;   # FIXME: THIS WOULD BE NICER THAN THE PREVIOUS PRINT
-    exit;
+	## update budget period data
+	if ( $budget_period_id ne '' ) {
+		$$budget_period_hashref{$_}||=0 for qw(budget_period_active budget_period_locked);
+		my $status=ModBudgetPeriod($budget_period_hashref);
+	} 
+	else {    # ELSE ITS AN ADD
+		unless ($check_duplicate){
+			my $candidates=GetBudgetPeriods({ 
+									 		budget_period_startdate	=> $$budget_period_hashref{budget_period_startdate}
+									 		, budget_period_enddate	=> $$budget_period_hashref{budget_period_enddate}
+									 		});
+			if (@$candidates){
+				my @duplicates=map{
+									{ dupid 			   => $$_{budget_period_id}
+									, duplicateinformation =>
+											$$_{budget_period_description}." ".$$_{budget_period_startdate}." ".$$_{budget_period_enddate}
+									}
+								  } @$candidates;
+				$template->param(url			  => "aqbudgetperiods.pl", 
+								field_name		  => "budget_period_id",
+								action_dup_yes_url=> "aqbudgets.pl",
+								action_dup_no_url => "aqbudgetperiods.pl?op=add_validate",
+								confirm_not_duplicate	  => 0
+									);
+				delete $$budget_period_hashref{budget_period_id};
+				$template->param(duplicates=>\@duplicates,%$budget_period_hashref);
+				$template->param("add_form"=>1);
+				output_html_with_http_headers $input, $cookie, $template->output;
+				exit;
+			}
+		}
+		my $budget_period_id=AddBudgetPeriod($budget_period_hashref);
+	}
+	$op='else';
 }
 
 #--------------------------------------------------
@@ -208,39 +170,28 @@ elsif ( $op eq 'delete_confirm' ) {
     my $total = 0;
     my $data = GetBudgetPeriod( $budget_period_id);
 
+	FormatData($data);
+	$$data{'budget_period_total'}=$num->format_price(  $data->{'budget_period_total'});
     $template->param(
-            budget_period_id            => $budget_period_id,
-            budget_period_startdate     => format_date($data->{'budget_period_startdate'}),
-            budget_period_enddate       => format_date($data->{'budget_period_enddate'}),
-            budget_period_total         => $num->format_price(  $data->{'budget_period_total'}   )
-
-#            budget_period_active            => $data->{'budget_period_active'},
-#            budget_period_description    => $data->{'budget_period_description'},
-#            template                    => C4::Context->preference('template'),  ##  ??!?
+		%$data
     );
 }
 
 elsif ( $op eq 'delete_confirmed' ) {
 ## delete the budget period record
 
-    my $dbh              = C4::Context->dbh;
-    my $budget_period_id = uc( $input->param('budget_period_id') );
-    my $sth              = $dbh->prepare("DELETE FROM aqbudgetperiods WHERE budget_period_id=?");
-    $sth->execute($budget_period_id);
-    $sth->finish;
-    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=aqbudgetperiods.pl\"></html>";
-    exit;
+    my $data = GetBudgetPeriod( $budget_period_id);
+    DelBudgetPeriod($budget_period_id);
+	$op='else';
 }
-
-else {
 
 # DEFAULT - DISPLAY AQPERIODS TABLE
 # -------------------------------------------------------------------
 # display the list of budget periods
-    my ( $count, $results ) = GetBudgetPeriods();
+    my $results = GetBudgetPeriods();
+	$template->param( period_button_only => 1 ) unless (@$results) ;
     my $page = $input->param('page') || 1;
     my $first = ( $page - 1 ) * $pagesize;
-
     # if we are on the last page, the number of the last word to display
     # must not exceed the length of the results array
     my $last = min( $first + $pagesize - 1, scalar @{$results} - 1, );
@@ -248,10 +199,8 @@ else {
     my @period_loop;
     foreach my $result ( @{$results}[ $first .. $last ] ) {
         my $budgetperiod = $result;
-        $budgetperiod->{'budget_period_startdate'} = format_date( $budgetperiod->{'budget_period_startdate'} );
-        $budgetperiod->{'budget_period_enddate'}   = format_date( $budgetperiod->{'budget_period_enddate'} );
+		FormatData($budgetperiod);
         $budgetperiod->{'budget_period_total'}     = $num->format_price( $budgetperiod->{'budget_period_total'} );
-        $budgetperiod->{toggle} = ( $toggle++ % 2 eq 0 ? 1 : 0 );
         $budgetperiod->{budget_active} = 1;
         push( @period_loop, $budgetperiod );
     }
@@ -260,10 +209,8 @@ else {
     $template->param(
         budget_period_dropbox => $budget_period_dropbox,
         period_loop           => \@period_loop,
-#        pagination_bar        => pagination_bar( $script_name, 
-#                                                getnbpages( scalar @{$results}, 
-#                                                $pagesize ), $page, 'page' )
+		pagination_bar		  => pagination_bar("aqbudgetperiods.pl",getnbpages(scalar(@$results),$pagesize),$page),
     );
-}
 
+$template->param($op=>1);
 output_html_with_http_headers $input, $cookie, $template->output;
