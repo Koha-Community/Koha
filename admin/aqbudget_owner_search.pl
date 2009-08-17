@@ -63,13 +63,7 @@ my @resultsdata;
 my $toggle = 0;
 
 if ( $member ) {
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare(
-        qq|       SELECT  * from borrowers where surname like ? or firstname like ? or cardnumber like ? |
-    );
-
-    $sth->execute( "$member%", "$member%", "$member%", );
-    my $results = $sth->fetchall_arrayref({});      
+	my $results= SearchMember($member,"surname",undef,undef,undef);
 
     foreach my $res (@$results) {
 
@@ -86,13 +80,12 @@ if ( $member ) {
 
             $count2++;
             #find out stats
-            my ( $od, $issue, $fines ) = GetMemberIssuesAndFines( $res->{'borrowerid'} );
+#            my ( $od, $issue, $fines ) = GetMemberIssuesAndFines( $res->{'borrowerid'} );
+			#This looks unused and very unuseful
             my $guarantorinfo = uc( $res->{'surname'} ) . " , " . ucfirst( $res->{'firstname'} );
             my $budget_owner_name = $res->{'firstname'} . ' ' . $res->{'surname'}, my $budget_owner_id = $res->{'borrowernumber'};
 
             my %row = (
-                toggle            => $toggle,
-                count             => 1,
                 borrowernumber    => $res->{'borrowernumber'},
                 cardnumber        => $res->{'cardnumber'},
                 surname           => $res->{'surname'},
@@ -102,11 +95,10 @@ if ( $member ) {
                 guarantorinfo     => $guarantorinfo,
                 budget_owner_id   => $budget_owner_id,
                 budget_owner_name => $budget_owner_name,
-                odissue           => "$od/$issue",
-                fines             => $fines,
+#                odissue           => "$od/$issue",
+#                fines             => $fines,
 #                borrowernotes     => $res->{'borrowernotes'}
             );
-            $toggle = ( $toggle++ % 2 eq 0 ? 1 : 0 );
             push( @resultsdata, \%row );
         }
     }

@@ -290,9 +290,7 @@
     <select name="budget_branchcode">
     <option value=""></option>
     <!-- TMPL_LOOP name="branchloop_select" -->
-        <option value="<!-- TMPL_VAR name="value" -->"
-        <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF --> >
-        <!-- TMPL_VAR name="branchname" --></option>
+        <!-- TMPL_IF name="selected" --> <option value="<!-- TMPL_VAR name="value" -->" > <!--TMPL_ELSE--> <option value="<!-- TMPL_VAR name="value" -->" selected="selected"> <!-- /TMPL_IF --> <!-- TMPL_VAR name="branchname" --></option>
     <!-- /TMPL_LOOP -->
     </select>
     </li>
@@ -349,7 +347,7 @@
     </fieldset>
 
     <fieldset class="action">
-        <input type="button" value="Submit" onclick="Check(this.form)" /> <a class="cancel" href="/cgi-bin/koha/admin/aqbudgets.pl">Cancel</a>
+        <input type="button" value="Submit"  /> <a class="cancel" href="/cgi-bin/koha/admin/aqbudgets.pl">Cancel</a>
         <input type="hidden" name="budget_period_id" value="<!-- TMPL_VAR name='budget_period_id' -->" />
     </fieldset>
 </form>
