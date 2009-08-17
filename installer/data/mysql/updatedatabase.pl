@@ -2808,10 +2808,17 @@ ADDPERIODS
     $dbh->do(<<BUDGETNAME);
 ALTER TABLE aqbudget RENAME`aqbudgets` 
 BUDGETNAME
+    my $maxbudgetid=$dbh->selectcol_arrayref(<<IDsBUDGET);
+SELECT MAX(aqbudgetid) from aqbudgets 
+BUDGETNAME
+
+    $dbh->do(<<BUDGETAUTOINCREMENT);
+ALTER TABLE `aqbudgets` AUTO_INCREMENT=$$maxbudgetid[0]
+BUDGETAUTOINCREMENT
 
     $dbh->do(<<BUDGETS);
 ALTER TABLE `aqbudgets` 
-   CHANGE  COLUMN aqbudgetid `budget_id` int(11) NOT NULL,
+   CHANGE  COLUMN aqbudgetid `budget_id` int(11) NOT NULL AUTO_INCREMENT,
    CHANGE  COLUMN branchcode `budget_branchcode` varchar(10) default NULL,
    CHANGE  COLUMN budgetamount `budget_amount` decimal(28,6) NOT NULL default '0.00',
    CHANGE  COLUMN bookfundid   `budget_code` varchar(30) default NULL,
