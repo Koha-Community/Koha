@@ -2528,6 +2528,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (added DisplayClearScreenButton system preference)\n";
 }
 
+$DBversion = '3.01.00.045';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type)VALUES('HidePatronName', '0', '', 'If this is switched on, patrons cardnumbers will be shown instead of their name on the holds and catalogue screens', 'YesNo')");
+    SetVersion ($DBversion);
+    print "Upgrade to $DBversion done (added a preference to hide the patrons name in the staff catalog)";
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table

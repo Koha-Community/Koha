@@ -552,7 +552,13 @@ function checkMultiHold() {
           </select>
         </td>
         <td>
-          <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" ><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a>
+          <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" >
+	  <!-- TMPL_IF NAME="hidename" -->
+	      <!-- TMPL_VAR NAME="cardnumber" -->
+	  <!-- TMPL_ELSE -->
+	      <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->
+	  <!-- /TMPL_IF -->
+	  </a>
         </td>
         <td><!-- TMPL_VAR NAME="notes" --></td>
         <td><!-- TMPL_VAR NAME="date" --></td>

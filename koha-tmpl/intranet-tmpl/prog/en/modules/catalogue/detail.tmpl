@@ -200,7 +200,13 @@ function verify_images() {
                 <!-- TMPL_IF name="datedue" -->
 						<span class="datedue">Checked out
                     <!-- TMPL_UNLESS  NAME="NOTSAMEBRANCH" -->
-                          to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></a>
+                          to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">
+			  <!-- TMPL_IF NAME='hidepatronname' -->
+			      <!-- TMPL_VAR NAME="cardnumber" -->
+			  <!-- TMPL_ELSE -->
+			      <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->
+			  <!-- /TMPL_IF -->
+			  </a>
                     <!-- /TMPL_UNLESS -->
 						: due <!-- TMPL_VAR NAME="datedue" -->
 						</span>
@@ -252,7 +258,13 @@ function verify_images() {
                     <!-- TMPL_ELSE -->
                         On hold
                     <!-- /TMPL_IF -->
-                    <!-- TMPL_IF NAME="canreservefromotherbranches" -->for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="ReservedForBorrowernumber" -->"><!-- TMPL_VAR NAME="ReservedForFirstname" --> <!-- TMPL_VAR NAME="ReservedForSurname" --></a><!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="canreservefromotherbranches" -->for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="ReservedForBorrowernumber" -->">
+		        <!-- TMPL_IF NAME="hidepatronname" -->
+		            <!-- TMPL_VAR NAME="cardnumber" -->
+		        <!-- TMPL_ELSE -->
+		            <!-- TMPL_VAR NAME="ReservedForFirstname" --> <!-- TMPL_VAR NAME="ReservedForSurname" -->
+			<!-- /TMPL_IF -->
+		    </a><!-- /TMPL_IF -->
                     <!-- TMPL_IF NAME="waitingdate" -->
                         at<!-- TMPL_ELSE -->expected at
                     <!-- /TMPL_IF -->   <!-- TMPL_VAR NAME="ExpectedAtLibrary" -->

@@ -478,13 +478,16 @@ foreach my $biblionumber (@biblionumbers) {
         
         #     get borrowers reserve info
         my $reserveborrowerinfo = GetMemberDetails( $res->{'borrowernumber'}, 0);
-        
+        if (C4::Context->preference('HidePatronName')){
+	    $reserve{'hidename'} = 1;
+	    $reserve{'cardnumber'} = $reserveborrowerinfo->{'cardnumber'};
+	}
         $reserve{'date'}           = format_date( $res->{'reservedate'} );
         $reserve{'borrowernumber'} = $res->{'borrowernumber'};
         $reserve{'biblionumber'}   = $res->{'biblionumber'};
         $reserve{'borrowernumber'} = $res->{'borrowernumber'};
         $reserve{'firstname'}      = $reserveborrowerinfo->{'firstname'};
-        $reserve{'surname'}        = $reserveborrowerinfo->{'surname'};
+        $reserve{'surname'}        = $reserveborrowerinfo->{'surname'};	    
         $reserve{'notes'}          = $res->{'reservenotes'};
         $reserve{'wait'}           =
           ( ( defined $res->{'found'} and $res->{'found'} eq 'W' ) or ( $res->{'priority'} eq '0' ) );

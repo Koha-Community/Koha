@@ -155,6 +155,10 @@ foreach my $item (@items) {
     # checking for holds
     my ($reservedate,$reservedfor,$expectedAt) = GetReservesFromItemnumber($item->{itemnumber});
     my $ItemBorrowerReserveInfo = GetMemberDetails( $reservedfor, 0);
+    
+    if (C4::Context->preference('HidePatronName')){
+	$item->{'hidepatronname'} = 1;
+    }
 
     if ( defined $reservedate ) {
         $item->{backgroundcolor} = 'reserved';
@@ -162,7 +166,8 @@ foreach my $item (@items) {
         $item->{ReservedForBorrowernumber}     = $reservedfor;
         $item->{ReservedForSurname}     = $ItemBorrowerReserveInfo->{'surname'};
         $item->{ReservedForFirstname}   = $ItemBorrowerReserveInfo->{'firstname'};
-        $item->{ExpectedAtLibrary}     = $branches->{$expectedAt}{branchname};
+        $item->{ExpectedAtLibrary}      = $branches->{$expectedAt}{branchname};
+	$item->{cardnumber}             = $ItemBorrowerReserveInfo->{'cardnumber'};
     }
 
 	# Check the transit status
