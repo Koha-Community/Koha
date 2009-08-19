@@ -2586,6 +2586,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print " Upgrade to $DBversion done (fixed language and typos in notices.)\n";
 }
 
+$DBversion = '3.01.00.XXX';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("UPDATE permissions SET description = 'Perform inventory (stocktaking) of your catalog' WHERE code = 'inventory';");
+     SetVersion ($DBversion);
+    print " Upgrade to $DBversion done (changed catalogue to catalog per the standard)\n";
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
