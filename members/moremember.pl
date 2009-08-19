@@ -73,9 +73,11 @@ my %return_failed;
 for my $failedret (@failedreturns) { $return_failed{$failedret} = 1; }
 
 my $template_name;
+my $quickslip = 0;
 
 if    ($print eq "page") { $template_name = "members/moremember-print.tmpl";   }
 elsif ($print eq "slip") { $template_name = "members/moremember-receipt.tmpl"; }
+elsif ($print eq "qslip") { $template_name = "members/moremember-receipt.tmpl"; $quickslip = 1; }
 else {                     $template_name = "members/moremember.tmpl";         }
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -222,6 +224,7 @@ my $overdues_exist = 0;
 my $totalprice = 0;
 for ( my $i = 0 ; $i < $count ; $i++ ) {
     my $datedue = $issue->[$i]{'date_due'};
+    my $issuedate = $issue->[$i]{'issuedate'};
     $issue->[$i]{'date_due'}  = C4::Dates->new($issue->[$i]{'date_due'}, 'iso')->output('syspref');
     $issue->[$i]{'issuedate'} = C4::Dates->new($issue->[$i]{'issuedate'},'iso')->output('syspref');
     my $biblionumber = $issue->[$i]{'biblionumber'};
@@ -255,7 +258,11 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
     if ( $datedue lt $today ) {
         $overdues_exist = 1;
         $row{'red'} = 1;
-        }
+	}
+	 if ( $issuedate eq $today ) {
+        $row{'today'} = 1; 
+	 }
+
     #find the charge for an item
     my ( $charge, $itemtype ) =
       GetIssuingCharges( $issue->[$i]{'itemnumber'}, $borrowernumber );
@@ -398,6 +405,7 @@ $template->param(
     dateformat      => C4::Context->preference("dateformat"),
     "dateformat_" . (C4::Context->preference("dateformat") || '') => 1,
     samebranch     => $samebranch,
+    quickslip		  => $quickslip,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -18,6 +18,19 @@ Checked out to <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL
 
 <!-- TMPL_VAR NAME="todaysdate" --><br />
 
+<!-- TMPL_IF name="quickslip" -->
+<h4>Checked Out Today</h4>
+<!-- TMPL_loop name="issueloop" -->
+<!-- TMPL_IF name="red" --><!-- TMPL_ELSE -->
+<!-- TMPL_IF name="today" -->
+<p><a href="/cgi-bin/koha/catalogue/detail.pl?item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a><br />
+Barcode: <!-- TMPL_VAR NAME="barcode" --><br />
+Date due: <!-- TMPL_VAR NAME="date_due" --><br /></p>
+    <!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->
+    <!-- /TMPL_LOOP -->
+
+<!-- TMPL_ELSE -->
 <h4>Checked Out</h4>
 <!-- TMPL_loop name="issueloop" -->
 <!-- TMPL_IF name="red" --><!-- TMPL_ELSE -->
@@ -27,17 +40,20 @@ Date due: <!-- TMPL_VAR NAME="date_due" --><br /></p>
     <!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
 
+<!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="overdues_exist" -->
+<!-- TMPL_IF name="quickslip" -->
+<!-- TMPL_ELSE -->
+<!-- TMPL_IF name="overdues_exist" -->
 <h4>Overdues</h4>
-    <!-- TMPL_LOOP NAME="issueloop" -->
-    <!-- TMPL_IF NAME="red" -->
+    <!-- TMPL_LOOP name="issueloop" -->
+    <!-- TMPL_IF name="red" -->
 <p><a href="/cgi-bin/koha/catalogue/detail.pl?item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a><br />
 Barcode: <!-- TMPL_VAR NAME="barcode" --><br />
-Date due: <!-- TMPL_VAR NAME="date_due" --><br /></p>
-    <!-- /TMPL_IF -->
-    <!-- /TMPL_LOOP -->
-
+Date due: <!-- TMPL_VAR NAME="date_due" --></p>
+<!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
+<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
