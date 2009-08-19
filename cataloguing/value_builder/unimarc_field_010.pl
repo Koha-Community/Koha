@@ -92,19 +92,24 @@ sub plugin {
     my $sth = $dbh->prepare('SELECT publishercode FROM biblioitems WHERE isbn LIKE ? OR isbn LIKE ? LIMIT 1');
     
     if (length ($isbn) == 13){
-        $isbn = substr(3, length($isbn));
+        $isbn = substr($isbn, 3, length($isbn)-3);
     }
+    
+    if(length($isbn) <= 10){
 
-    if(length($isbn) <=10){
         $len = 5;
-        $len = 1 if ( substr( $isbn, 0, 1 ) <= 7 );
-        $len = 2 if ( substr( $isbn, 0, 2 ) <= 94 );
-        $len = 3 if ( substr( $isbn, 0, 3 ) <= 995 );
-        $len = 4 if ( substr( $isbn, 0, 4 ) <= 9989 );
+        if ( substr( $isbn, 0, 1 ) <= 7 ){
+            $len = 1;
+        }elsif ( substr( $isbn, 0, 2 ) <= 94 ){
+            $len = 2;
+        }elsif ( substr( $isbn, 0, 3 ) <= 995 ){
+            $len = 3;
+        }elsif ( substr( $isbn, 0, 4 ) <= 9989 ){
+            $len = 4 ;
+        }
 
         my $x = substr( $isbn, $len );
         my $seg2 = "";
-        my $seg3 = "";
         
         if ( substr( $x, 0, 2 ) <= 19 ) {    
             $seg2 = substr( $x, 0, 2 );
@@ -128,10 +133,14 @@ sub plugin {
         while($len--){
             $seg2 = "_".$seg2;
         }
-    
-        $seg2 .= "%";
-        $seg3 = "978" . $seg2; #support of ISBN13
-        $sth->execute($seg2, $seg3);
+        
+        $len = 10 -length($seg2);
+        
+        while($len--){
+            $seg2 .= "_";
+        }
+
+        $sth->execute($seg2, "978$seg2");
     }
     
     if( (my $publishercode) = $sth->fetchrow )
