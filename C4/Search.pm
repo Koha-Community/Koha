@@ -1337,10 +1337,12 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
             elsif ($item->{$otherbranch}) {	# Last resort
                 $item->{'branchname'} = $branches{$item->{$otherbranch}}; 
             }
-
+            
+            ($item->{'reserved'}) = C4::Reserves::CheckReserves($item->{itemnumber});
+            
 			my $prefix = $item->{$hbranch} . '--' . $item->{location} . $item->{itype} . $item->{itemcallnumber};
 # For each grouping of items (onloan, available, unavailable), we build a key to store relevant info about that item
-            if ( $item->{onloan} ) {
+            if ( $item->{onloan} or $item->{reserved} ) {
                 $onloan_count++;
 				my $key = $prefix . $item->{onloan} . $item->{barcode};
 				$onloan_items->{$key}->{due_date} = format_date($item->{onloan});
@@ -1397,6 +1399,7 @@ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
                     || $item->{itemlost}
                     || $item->{damaged}
                     || $item->{notforloan} 
+                    || $item->{reserved}
                     || ($transfertwhen ne ''))
                 {
                     $wthdrawn_count++        if $item->{wthdrawn};
