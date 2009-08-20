@@ -59,7 +59,7 @@ if ( $op eq "do_search" ) {
     my @and_or    = $query->param('and_or');
     my @excluding = $query->param('excluding');
     my @operator  = $query->param('operator');
-    my @value     = ($query->param('value_mainstr'), $query->param('value_main'), $query->param('value_any'));
+    my @value     = ($query->param('value_mainstr')||undef, $query->param('value_main')||undef, $query->param('value_any')||undef);
     my $orderby   = $query->param('orderby');
 
     $resultsperpage = $query->param('resultsperpage');

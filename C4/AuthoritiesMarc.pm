@@ -101,8 +101,10 @@ returns ref to array result and count of results returned
 
 sub SearchAuthorities {
     my ($tags, $and_or, $excluding, $operator, $value, $offset,$length,$authtypecode,$sortby) = @_;
-    #use Data::Dumper; map {warn "CALL : ".Data::Dumper::Dumper($_);} @_;
+#     warn "CALL : $tags, $and_or, $excluding, $operator, $value, $offset,$length,$authtypecode,$sortby";
     my $dbh=C4::Context->dbh;
+	use YAML;
+	warn "tags : ",Dump($tags),"\noperators:",Dump($operator),"\nvalues:",Dump($value);
     if (C4::Context->preference('NoZebra')) {
     
         #
@@ -213,17 +215,17 @@ sub SearchAuthorities {
             while ($n>1){$query= "\@or ".$query;$n--;}
         }
         
+        my $dosearch;
         my $and=" \@and " ;
-        my $q2="";
+        my $q2;
         for(my $i = 0 ; $i <= $#{$value} ; $i++)
         {
             if (@$value[$i]){
             ##If mainentry search $a tag
                 if (@$tags[$i] eq "mainmainentry") {
 
-# FIXME: 'Heading-Main' index not yet defined in zebra
-#                $attr =" \@attr 1=Heading-Main "; 
-                $attr =" \@attr 1=Heading ";
+                $attr =" \@attr 1=Heading-Main "; 
+#                $attr =" \@attr 1=Heading ";
 
                 }elsif (@$tags[$i] eq "mainentry") {
                 $attr =" \@attr 1=Heading ";
@@ -240,16 +242,16 @@ sub SearchAuthorities {
                     $attr .=" \@attr 5=1 \@attr 4=6 ";## Word list, right truncated, anywhere
                 }
                 $attr =$attr."\"".@$value[$i]."\"";
-                $q2 =($q2 ne "" ?$and.$q2.$attr:$attr);
+                $q2 =($q2?"$and $q2 $attr":"$attr");
+            $dosearch=1;
             }#if value
         }
         ##Add how many queries generated
-        if ($query=~/\S+/ && $q2 ne ""){    
-          $query= $and.$query.$q2;
-        } 
-        elsif ($q2 ne "") {
-          $query=$q2;
-        }
+        if ($query=~/\S+/){    
+          $query= $and.$query.$q2 
+        } else {
+          $query=$q2;    
+        }         
         ## Adding order
         #$query=' @or  @attr 7=2 @attr 1=Heading 0 @or  @attr 7=1 @attr 1=Heading 1'.$query if ($sortby eq "HeadingDsc");
         my $orderstring= ($sortby eq "HeadingAsc"?
@@ -259,8 +261,7 @@ sub SearchAuthorities {
                             '@attr 7=2 @attr 1=Heading 0'
                            :''
                         );            
-        my  $allrecords=" \@attr 1=_ALLRECORDS \@attr 2=103 '' ";
-        $query=($q2?"\@or $orderstring $query":"\@or $orderstring ".($query?"\@and $allrecords $query":$allrecords) );
+        $query=($query?"\@or $orderstring $query":"\@or \@attr 1=_ALLRECORDS \@attr 2=103 '' $orderstring ");
         
         $offset=0 unless $offset;
         my $counter = $offset;

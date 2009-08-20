@@ -33,24 +33,24 @@
                     <input type="text" name="value_main" value="<!-- TMPL_VAR ESCAPE="HTML" name="value_main" -->" />
                 </li>
                 <li>
-                    <label for="marclist">Anywhere</label>
+                    <label for="anywhere">Anywhere</label>
                     <input type="hidden" name="marclist" value="" />
                     <input type="hidden" name="and_or" value="and" />
                     <input type="hidden" name="excluding" value="" />
-                    <select name="operator" id="marclist">
+                    <select name="operator" id="anywhere">
                         <option value="contains">contains</option>
                         <option value="start">starts with</option>
                         <option value="is">is exactly</option>
                     </select>
                     <input type="text" name="value_any" value="<!-- TMPL_VAR ESCAPE="HTML" name="value_any" -->" />
                 </li>
-                <li>
-                    <label for="orderby">Sort by </label>
-                    <select name="orderby" id="orderby">
-                        <option value="NoOrder">No order</option>
-                        <option value="HeadingAsc" selected="selected">Heading Ascendant</option>
-                        <option value="HeadingDsc">Heading Descendant</option>
-                    </select>
-                </li></ol></fieldset>
+		<li>
+		<label for="orderby">Sort by </label>
+		<select name="orderby" id="orderby">
+		    <option value="">No order</option>
+            <option value="HeadingAsc" selected="selected">Heading Ascendant</option>
+            <option value="HeadingDsc">Heading Descendant</option>
+        </select>
+		</li></ol></fieldset>
             <fieldset class="action"> <input type="submit" value="Start search" class="submit" /> <a class="cancel close" href="#">Cancel</a></fieldset>
 </form>
