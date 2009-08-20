@@ -58,7 +58,11 @@ function searchauthority() {
       <th>Delete</th>
     </tr>
 <!-- TMPL_LOOP NAME="result" -->
+    <!-- TMPL_UNLESS name="__odd__" -->
+    <tr class="highlight">
+    <!-- TMPL_ELSE -->
     <tr>
+    <!-- /TMPL_UNLESS -->
       <td><a href="detail.pl?authid=<!-- TMPL_VAR NAME="authid" -->"><!-- TMPL_VAR NAME="summary" --></a></td>
   <!-- TMPL_UNLESS name="isEDITORS" -->
       <td>
