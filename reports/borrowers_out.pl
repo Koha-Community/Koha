@@ -18,6 +18,8 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
+
 use CGI;
 use C4::Auth;
 use C4::Context;
@@ -47,7 +49,7 @@ my @filters = $input->param("Filter");
 my $output = $input->param("output");
 my $basename = $input->param("basename");
 my $mime = $input->param("MIME");
-our $sep     = $input->param("sep");
+our $sep     = $input->param("sep") || '';
 $sep = "\t" if ($sep eq 'tabulation');
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => $fullreportname,
@@ -88,9 +90,10 @@ if ($do_it) {
             my $x = $line->{loopcell};
             print $line->{rowtitle}.$sep;
             foreach my $cell (@$x) {
-                print $cell->{value}.$sep;
+                my $cellvalue = defined $cell->{value} ? $cell->{value}.$sep : ''.$sep;
+                print $cellvalue;
             }
-            print $line->{totalrow};
+#            print $line->{totalrow};
             print "\n";
         }
 # footer
@@ -190,7 +193,7 @@ sub calculate {
         }
         $strsth2 .=" group by $colfield";
         $strsth2 .=" order by $colorder";
-        warn "". $strsth2;
+        # warn "". $strsth2;
         
         my $sth2 = $dbh->prepare( $strsth2 );
         $sth2->execute;
@@ -213,10 +216,11 @@ sub calculate {
     my @table;
     
 #	warn "init table";
-    for (my $i=1;$i<=$line;$i++) {
-        foreach my $col ( @loopcol ) {
-#			warn " init table : $row->{rowtitle} / $col->{coltitle} ";
-            $table[$i]->{($col->{coltitle})?$col->{coltitle}:"Global"}=0;
+    if($line) {
+        for (my $i=1;$i<=$line;$i++) {
+            foreach my $col ( @loopcol ) {
+                $table[$i]->{($col->{coltitle})?$col->{coltitle}:"Global"}=0;
+            }
         }
     }
 
@@ -253,11 +257,13 @@ sub calculate {
     $strcalc .= ", $colfield" if ($column);
     $strcalc .= " order by $colfield " if ($colfield);
     my $max;
-    if (@loopcol) {
-        $max = $line*@loopcol;
-    } else { $max=$line;}
-    $strcalc .= " LIMIT 0,$max" if ($line);
-    warn "SQL :". $strcalc;
+    if ($line) {
+        if (@loopcol) {
+            $max = $line*@loopcol;
+        } else { $max=$line;}
+        $strcalc .= " LIMIT 0,$max";
+     } 
+#    warn "SQL :". $strcalc;
     
     my $dbcalc = $dbh->prepare($strcalc);
     $dbcalc->execute;
@@ -313,3 +319,4 @@ sub calculate {
 }
 
 1;
+__END__
