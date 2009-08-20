@@ -69,7 +69,7 @@ my $i=0;
 while ( my $record = $batch->next() ) {
     $i++;
     foreach my $MARCfield ($record->fields()) {
-    next if $MARCfield->tag()<=010;
+    next if $MARCfield->is_control_field(); # tag num < 10
         if ($MARCfield) {
             foreach my $fields ($MARCfield->subfields()) {
                 if ($fields) {

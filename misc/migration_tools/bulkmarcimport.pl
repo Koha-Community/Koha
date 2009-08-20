@@ -195,7 +195,7 @@ RECORD: while (  ) {
             next RECORD;
         } 
         if (defined $idmapfl) {
-          if ($sourcetag < "010"){
+          if ($sourcetag lt '010'){
             if ($record->field($sourcetag)){
               my $source = $record->field($sourcetag)->data();
               printf(IDMAP "%s|%s\n",$source,$biblionumber);

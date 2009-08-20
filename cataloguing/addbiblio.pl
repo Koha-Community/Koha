@@ -665,7 +665,7 @@ sub build_tabs ($$$$$) {
                             fixedfield    => $tag < 10?1:0,
                             random        => CreateKey,
                         );
-                        if ($tag >= 010){ # no indicator for theses tag
+                        if ($tag >= 10){ # no indicator for 00x tags
                            $tag_data{indicator1} = format_indicator($field->indicator(1)),
                            $tag_data{indicator2} = format_indicator($field->indicator(2)),
                         }
