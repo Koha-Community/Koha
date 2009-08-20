@@ -381,7 +381,7 @@ sub html2marcxml {
 						$marcxml.="<leader>@$values[$i]</leader>\n";
 						$first=1;
 					# rest of the fixed fields
-					} elsif (@$tags[$i] < 010) { #FIXME: <10 was the way it was, there might even be a better way
+					} elsif (@$tags[$i] lt '010') { # don't compare numerically 010 == 8
 						$marcxml.="<controlfield tag=\"@$tags[$i]\">@$values[$i]</controlfield>\n";
 						$first=1;
 					} else {
