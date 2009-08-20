@@ -114,27 +114,30 @@ Note the status is stored twice :
 sub SearchSuggestion  {
     my ($suggestion)=@_;
     my $dbh = C4::Context->dbh;
-	my @sql_params;
-    my @query =(q{ 
-    SELECT suggestions.*,
-        U1.branchcode   AS branchcodesuggestedby,
-        B1.branchname AS branchnamesuggestedby,
-        U1.surname   AS surnamesuggestedby,
-        U1.firstname AS firstnamesuggestedby,
-        U1.borrowernumber AS borrnumsuggestedby,
+    my @sql_params;
+    my @query = (
+	q{ SELECT suggestions.*,
+	    U1.branchcode   AS branchcodesuggestedby,
+	    B1.branchname   AS branchnamesuggestedby,
+	    U1.surname   AS surnamesuggestedby,
+	    U1.firstname AS firstnamesuggestedby,
+	    U1.email AS emailsuggestedby,
+	    U1.borrowernumber AS borrnumsuggestedby,
         U1.categorycode AS categorycodesuggestedby,
         C1.description AS categorydescriptionsuggestedby,
-        U2.branchcode AS branchcodemanagedby,
-        B2.branchname AS branchnamemanagedby,
-        U2.surname   AS surnamemanagedby,
-        U2.firstname AS firstnamemanagedby,
-        U2.borrowernumber AS borrnummanagedby
-    FROM suggestions
-    LEFT JOIN borrowers AS U1 ON suggestedby=U1.borrowernumber
-    LEFT JOIN borrowers AS U2 ON managedby=U2.borrowernumber
+	    U2.surname   AS surnamemanagedby,
+	    U2.firstname AS firstnamemanagedby,
+	    B2.branchname   AS branchnamesuggestedby,
+	    U2.email AS emailmanagedby,
+	    U2.branchcode AS branchcodemanagedby,
+	    U2.borrowernumber AS borrnummanagedby
+	FROM suggestions
+	LEFT JOIN borrowers AS U1 ON suggestedby=U1.borrowernumber
+	LEFT JOIN branches AS B1 ON B1.branchcode=U1.branchcode
     LEFT JOIN categories AS C1 ON C1.categorycode = U1.categorycode
-    LEFT JOIN branches AS B1 ON B1.branchcode = U1.branchcode
-    LEFT JOIN branches AS B2 ON B2.branchcode = U2.branchcode
+	LEFT JOIN borrowers AS U2 ON managedby=U2.borrowernumber
+	LEFT JOIN branches AS B2 ON B2.branchcode=U2.branchcode
+    LEFT JOIN categories AS C2 ON C2.categorycode = U2.categorycode
 	WHERE STATUS NOT IN ('CLAIMED')
 	} , map {
 	    if ( my $s = $$suggestion{$_} ) {
@@ -172,7 +175,12 @@ sub SearchSuggestion  {
 	$debug && warn "@query";
     my $sth=$dbh->prepare("@query");
     $sth->execute(@sql_params);
-	return ($sth->fetchall_arrayref({}));
+    my @results;
+    while ( my $data=$sth->fetchrow_hashref ){
+        $$data{$$data{STATUS}} = 1;
+        push(@results,$data);
+    }
+    return (\@results);
 }
 
 =head2 GetSuggestion

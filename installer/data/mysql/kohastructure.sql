@@ -1699,7 +1699,9 @@ DROP TABLE IF EXISTS `suggestions`;
 CREATE TABLE `suggestions` (
   `suggestionid` int(8) NOT NULL auto_increment,
   `suggestedby` int(11) NOT NULL default 0,
+  `suggesteddate` date NOT NULL default 0,
   `managedby` int(11) default NULL,
+  `manageddate` date default NULL,
   `STATUS` varchar(10) NOT NULL default '',
   `note` mediumtext,
   `author` varchar(80) default NULL,

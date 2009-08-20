@@ -2810,7 +2810,7 @@ ALTER TABLE aqbudget RENAME`aqbudgets`
 BUDGETNAME
     my $maxbudgetid=$dbh->selectcol_arrayref(<<IDsBUDGET);
 SELECT MAX(aqbudgetid) from aqbudgets 
-BUDGETNAME
+IDsBUDGET
 
     $dbh->do(<<BUDGETAUTOINCREMENT);
 ALTER TABLE `aqbudgets` AUTO_INCREMENT=$$maxbudgetid[0]
@@ -2992,6 +2992,35 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER table aqorders drop column title");
     $dbh->do("ALTER TABLE `aqorders` CHANGE `budget_id` `budget_id` INT( 11 ) NOT NULL");
     print "Upgrade to $DBversion done update budget_id size that should not be a tinyint\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.01.00.114";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(<<SUGGESTIONS);
+ALTER table suggestions 
+	ADD budgetid INT(11),
+	ADD branchcode VARCHAR(10) default NULL,
+	ADD acceptedby INT(11) default NULL,
+	ADD acceptedon date default NULL,
+	ADD suggestedby INT(11) default NULL,
+	ADD suggestedon date default NULL,
+	ADD managedby INT(11) default NULL,
+	ADD managedon date default NULL,
+	ADD rejectedby INT(11) default NULL,
+	ADD rejectedon date default NULL,
+	ADD collectiontitle text default NULL,
+	ADD itemtype VARCHAR(30) default NULL,
+	ADD biblionumber INT(11) default NULL,
+	ADD sort1 VARCHAR(80) default NULL,
+	ADD sort2 VARCHAR(80) default NULL
+	;
+SUGGESTIONS
+
+    print <<COMMENT;
+Upgrade to $DBversion done  
+	Suggestions
+COMMENT
     SetVersion ($DBversion);
 }
 
