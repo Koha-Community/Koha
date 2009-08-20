@@ -35,6 +35,8 @@ BEGIN {
     use version; our $VERSION = qv('1.0.0_1');
 }
 
+my $possible_decimal = qr/\d{3,}(?:\.\d+)?/; # at least three digits for a DDCN
+
 sub _guide_box {
     my ( $llx, $lly, $width, $height ) = @_;
     my $obj_stream = "q\n";                            # save the graphic state
@@ -86,43 +88,60 @@ sub _get_text_fields {
     return \@sorted_fields;
 }
 
+
 sub _split_lccn {
     my ($lccn) = @_;    
-    my ($ll, $wnl, $dec, $cutter, $pubdate) = (0, 0, 0, 0, 0);
     $_ = $lccn;
-    # lccn example 'HE8700.7 .P6T44 1983';
-    my    @splits   = m/
-        (^[a-zA-Z]+)            # HE
-        ([0-9]+\.*[0-9]*)             # 8700.7
+    # lccn examples: 'HE8700.7 .P6T44 1983', 'BS2545.E8 H39 1996';
+    my (@parts) = m/
+        ^([a-zA-Z]+)      # HE          # BS
+        (\d+(?:\.\d)*)    # 8700.7      # 2545
         \s*
-        (\.*[a-zA-Z0-9]*)       # P6T44
+        (\.*\D+\d*)       # .P6         # .E8
         \s*
-        ([0-9]*)                # 1983
-        /x;  
-
-    # strip something occuring spaces too
-    $splits[0] =~ s/\s+$//;
-    $splits[1] =~ s/\s+$//;
-    $splits[2] =~ s/\s+$//;
-
-    return @splits;
+        (.*)              # T44 1983    # H39 1996   # everything else (except any bracketing spaces)
+        \s*
+        /x;
+    unless (scalar @parts)  {
+        syslog("LOG_ERR", "C4::Labels::Label::_split_lccn : regexp failed to match string: %s", $_);
+        push @parts, $_;     # if no match, just push the whole string.
+    }
+    push @parts, split /\s+/, pop @parts;   # split the last piece into an arbitrary number of pieces at spaces
+    $debug and print STDERR "split_lccn array: ", join(" | ", @parts), "\n";
+    return @parts;
 }
 
 sub _split_ddcn {
     my ($ddcn) = @_;
-    $ddcn =~ s/\///g;   # in theory we should be able to simply remove all segmentation markers and arrive at the correct call number...
     $_ = $ddcn;
-    # ddcn example R220.3 H2793Z H32 c.2
-    my @splits = m/^([A-Z]{0,3})                # R (OS, REF, etc. up do three letters)
-                    ([0-9]+\.[0-9]*)            # 220.3
-                    \s?                         # space (not requiring anything beyond the call number)
-                    ([a-zA-Z0-9]*\.?[a-zA-Z0-9])# cutter number... maybe, but if so it is in this position (Z indicates literary criticism)
-                    \s?                         # space if it exists
-                    ([a-zA-Z]*\.?[0-9]*)        # other indicators such as cutter for author of literary criticism in this example if it exists
-                    \s?                         # space if ie exists
-                    ([a-zA-Z]*\.?[0-9]*)        # other indicators such as volume number, copy number, edition date, etc. if it exists
-                    /x;
-    return @splits;
+    s/\///g;   # in theory we should be able to simply remove all segmentation markers and arrive at the correct call number...
+    # ddcn examples: 'R220.3 H2793Z H32 c.2', 'BIO JP2 R5c.1'
+
+    my (@parts) = m/
+        ^([a-zA-Z-]+(?:$possible_decimal)?) # R220.3            # BIO   # first example will require extra splitting
+        \s+
+        (.+)                               # H2793Z H32 c.2   # R5c.1   # everything else (except bracketing spaces)
+        \s*
+        /x;
+    unless (scalar @parts)  {
+        syslog("LOG_ERR", "C4::Labels::Label::_split_ddcn : regexp failed to match string: %s", $_);
+        push @parts, $_;     # if no match, just push the whole string.
+    }
+
+    if ($parts[ 0] =~ /^([a-zA-Z]+)($possible_decimal)$/) {
+          shift @parts;         # pull off the mathching first element, like example 1
+        unshift @parts, $1, $2; # replace it with the two pieces
+    }
+
+    push @parts, split /\s+/, pop @parts;   # split the last piece into an arbitrary number of pieces at spaces
+
+    if ($parts[-1] !~ /^.*\d-\d.*$/ && $parts[-1] =~ /^(.*\d+)(\D.*)$/) {
+         pop @parts;            # pull off the mathching last element, like example 2
+        push @parts, $1, $2;    # replace it with the two pieces
+    }
+
+    $debug and print STDERR "split_ddcn array: ", join(" | ", @parts), "\n";
+    return @parts;
 }
 
 sub _split_fcn {
@@ -138,6 +157,10 @@ sub _split_fcn {
         else {
             last SPLIT_FCN;     # No match, break out of the loop
         }
+    }
+    unless (scalar @fcn_split) {
+        syslog("LOG_ERR", "C4::Labels::Label::_split_fcn : regexp failed to match string: %s", $_);
+        push (@fcn_split, $_);
     }
     return @fcn_split;
 }
