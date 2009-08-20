@@ -19,6 +19,8 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
+
 use C4::Context;
 use C4::Output;
 use CGI;
@@ -28,7 +30,7 @@ use C4::Debug;
 use Date::Calc qw/Today Add_Delta_YM/;
 
 my $input = new CGI;
-my $order     = $input->param('order');
+my $order     = $input->param('order') || '';
 my $startdate = $input->param('from');
 my $enddate   = $input->param('to');
 my $ratio     = $input->param('ratio');
