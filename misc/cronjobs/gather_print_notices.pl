@@ -68,7 +68,7 @@ my $today = C4::Dates->new();
 my @messages = @{ GetPrintMessages() };
 exit unless( @messages );
 
-open OUTPUT, '>', File::Spec->catdir( $output_directory, "notices-" . $today->output( 'iso' ) . ".html" );
+open OUTPUT, '>', File::Spec->catdir( $output_directory, "holdnotices-" . $today->output( 'iso' ) . ".html" );
 
 my $template = C4::Output::gettemplate( 'batch/print-notices.tmpl', 'intranet', new CGI );
 my $stylesheet_contents = '';
