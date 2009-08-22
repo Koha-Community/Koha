@@ -81,6 +81,8 @@
             <option value="nb">&nbsp;&nbsp;&nbsp;&nbsp; ISBN</option>
             <option value="ns">&nbsp;&nbsp;&nbsp;&nbsp; ISSN</option>
             <option value="lcn,phr">&nbsp;&nbsp;&nbsp;&nbsp; Call Number</option>
+<!-- TMPL_ELSE -->
+            <option value="nb">ISBN</option>
 <!-- /TMPL_IF -->
             <option value="su,wrdl">Subject</option>
 <!-- TMPL_IF NAME="expanded_options" -->
@@ -90,7 +92,6 @@
 <!-- TMPL_IF NAME="expanded_options" -->
             <option value="ti,phr">&nbsp;&nbsp;&nbsp;&nbsp; Title Phrase</option>
             <option value="se,wrdl">Series Title</option>
-            <option value="nb">ISBN</option>
             <option value="callnum">Call Number</option>
 <!-- /TMPL_IF -->
         </select>
