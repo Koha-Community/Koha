@@ -542,4 +542,13 @@ if (C4::Context->preference('TagsEnabled') and $tag_quantity = C4::Context->pref
 								'sort'=>'-weight', limit=>$tag_quantity}));
 }
 
+#Search for title in links
+if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
+    $search_for_title =~ s/AUTHOR/$dat->{author}/g;
+    $search_for_title =~ s/TITLE/$dat->{title}/g;
+    $search_for_title =~ s/ISBN/$isbn/g;
+ $template->param('OPACSearchForTitleIn' => $search_for_title);
+}
+
+
 output_html_with_http_headers $query, $cookie, $template->output;

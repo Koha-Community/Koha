@@ -762,16 +762,18 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 		<li style="display:none;"><a href="#" id="furthersearches">More searches</a></li>
 </ul>
 
+<!-- TMPL_IF name="OPACSearchForTitleIn" -->
 <div id="furtherm" class="yuimenu">
 <div class="bd">
 <h4>Search for this title in:</h4>
 <ul class="first-of-type">
-<li class="yuimenuitem"><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a class="yuimenuitemlabel" href="http://worldcat.org/search?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->" target="_blank">Other Libraries (WorldCat)</a><!-- TMPL_ELSE --><a class="yuimenuitemlabel" href="http://worldcat.org/search?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->">Other Libraries (WorldCat)</a><!-- /TMPL_IF --></li>
-<li class="yuimenuitem"><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a class="yuimenuitemlabel" href="http://www.scholar.google.com/scholar?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->" target="_blank">Other Databases (Google Scholar)</a><!-- TMPL_ELSE --><a class="yuimenuitemlabel" href="http://www.scholar.google.com/scholar?q=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->">Other Databases (Google Scholar)</a><!-- /TMPL_IF --></li>
-<li class="yuimenuitem"><!-- TMPL_IF NAME="OPACURLOpenInNewWindow" --><a class="yuimenuitemlabel" href="http://www.bookfinder.com/search/?author=<!-- TMPL_VAR NAME="author" -->&amp;title=<!-- TMPL_VAR NAME="title" -->&amp;st=xl&amp;ac=qr" target="_blank">Online Stores (Bookfinder.com)</a><!-- TMPL_ELSE --><a class="yuimenuitemlabel" href="http://www.bookfinder.com/search/?author=<!-- TMPL_VAR NAME="author" -->&amp;title=<!-- TMPL_VAR NAME="title" -->&amp;st=xl&amp;ac=qr">Online Stores (Bookfinder.com)</a><!-- /TMPL_IF --></li>
+
+<!-- TMPL_VAR NAME="OPACSearchForTitleIn" -->
+
 </ul>
 </div>
 </div>
+<!-- /TMPL_IF -->
 
         <div id="export" class="detailtagcell">
         <form method="get" action="/cgi-bin/koha/opac-export.pl">

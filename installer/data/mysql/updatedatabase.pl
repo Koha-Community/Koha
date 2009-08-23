@@ -2593,6 +2593,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print " Upgrade to $DBversion done (changed catalogue to catalog per the standard)\n";
 }
 
+$DBversion = '3.01.00.XXX';
+     if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OPACSearchForTitleIn','<li class="yuimenuitem"><a target="_blank" class="yuimenuitemlabel" href="http://worldcat.org/search?q=TITLE"">Other Libraries (WorldCat)</a></li>\n<li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://www.scholar.google.com/scholar?q=TITLE" target="_blank">Other Databases (Google Scholar)</a></li>\n<li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://www.bookfinder.com/search/?author=AUTHOR&amp;title=TITLE&amp;st=xl&amp;ac=qr" target="_blank">Online Stores (Bookfinder.com)</a></li>','Enter the HTML that will appear in the \'Search for this title in\' box on the detail page in the OPAC.  Enter TITLE, AUTHOR, or ISBN in place of their respective variables in the URL.  Leave blank to disable \'More Searches\' menu.','70|10','Textarea')");
+     SetVersion ($DBversion);
+     print "Add OPACSearchForTitleIn system preference which will hold the links found on opac_detail under 'More Searches')\n";
+     }
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
