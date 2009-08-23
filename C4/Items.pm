@@ -1759,6 +1759,9 @@ sub _do_column_fixes_for_mod {
         (not defined $item->{'wthdrawn'} or $item->{'wthdrawn'} eq '')) {
         $item->{'wthdrawn'} = 0;
     }
+    if (exists $item->{'location'} && !exists $item->{'permanent_location'}) {
+        $item->{'permanent_location'} = $item->{'location'};
+    }
 }
 
 =head2 _get_single_item_column
