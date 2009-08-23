@@ -2523,9 +2523,9 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion = '3.01.00.044';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES( 'DisplayClearScreenButton', '0', '', 'If set to yes, a clear screen button will appear on the circulation page.', 'YesNo')");
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES( 'DisplayClearScreenButton', '0', 'If set to yes, a clear screen button will appear on the circulation page.', 'If set to yes, a clear screen button will appear on the circulation page.', 'YesNo')");
     SetVersion ($DBversion);
-    print "Upgrade to $DBversion done (added FilterBeforeOverdueReport syspref and new index on authorised_values)\n";
+    print "Upgrade to $DBversion done (added DisplayClearScreenButton system preference)\n";
 }
 
 =item DropAllForeignKeys($table)
