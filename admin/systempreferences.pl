@@ -166,6 +166,9 @@ $tabsysprefs{RenewalPeriodBase}              = "Circulation";
 $tabsysprefs{FilterBeforeOverdueReport}      = "Circulation";
 $tabsysprefs{AllowHoldDateInFuture}          = "Circulation";
 $tabsysprefs{OPACFineNoRenewals}             = "Circulation";
+$tabsysprefs{InProcessingToShelvingCart}     = "Circulation";
+$tabsysprefs{NewItemsDefaultLocation}        = "Circulation";
+$tabsysprefs{ReturnToShelvingCart}           = "Circulation";
 
 # Staff Client
 $tabsysprefs{TemplateEncoding}        = "StaffClient";
