@@ -18,6 +18,9 @@
         <!-- Option: Display Alternate Graphic Representation (MARC 880)  -->
         <xsl:variable name="display880" select="boolean(marc:datafield[@tag=880])"/>
 
+    <xsl:variable name="DisplayOPACiconsXSLT" select="marc:sysprefs/marc:syspref[@name='DisplayOPACiconsXSLT']"/>
+    <xsl:variable name="OPACURLOpenInNewWindow" select="marc:sysprefs/marc:syspref[@name='OPACURLOpenInNewWindow']"/>
+    <xsl:variable name="URLLinkText" select="marc:sysprefs/marc:syspref[@name='URLLinkText']"/>
         <xsl:variable name="leader" select="marc:leader"/>
         <xsl:variable name="leader6" select="substring($leader,7,1)"/>
         <xsl:variable name="leader7" select="substring($leader,8,1)"/>
@@ -483,6 +486,7 @@
 	</span>
     </xsl:if>
 
+<xsl:if test="$DisplayOPACiconsXSLT!='0'">
     <span class="results_summary">
     <xsl:if test="$typeOf008!=''">
         <span class="label">Type: </span>
@@ -819,6 +823,7 @@
             </xsl:choose>
     </xsl:if>
 	</span>
+</xsl:if>
 
     <!-- Publisher Statement: Alternate Graphic Representation (MARC 880) -->
     <xsl:if test="$display880">
@@ -860,7 +865,6 @@
                     </xsl:call-template>
             </xsl:for-each>
 	</span>
-
     </xsl:if>
 
     <span class="results_summary">
@@ -868,9 +872,8 @@
 			        <xsl:choose>
                         <xsl:when test="marc:datafield[@tag=856]">
                             <xsl:for-each select="marc:datafield[@tag=856]">
-                                <xsl:choose>
-                                    <xsl:when test="@ind2=0">
-                                    <a><xsl:attribute name="href"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute>
+                            <xsl:if test="$OPACURLOpenInNewWindow='0'">
+                                   <a><xsl:attribute name="href"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute>
                                     <xsl:choose>
                                     <xsl:when test="marc:subfield[@code='y' or @code='3' or @code='z']">
                                         <xsl:call-template name="subfieldSelect">                        
@@ -878,18 +881,46 @@
                                         </xsl:call-template>
                                     </xsl:when>
                                     <xsl:when test="not(marc:subfield[@code='y']) and not(marc:subfield[@code='3']) and not(marc:subfield[@code='z'])">
-                                    Click here to access online
+					<xsl:choose>
+					<xsl:when test="$URLLinkText!=''">
+						<xsl:value-of select="$URLLinkText"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text>Click here to access online</xsl:text>
+					</xsl:otherwise>
+					</xsl:choose>
                                     </xsl:when>
                                     </xsl:choose>
                                     </a>
+                              </xsl:if>
+                            <xsl:if test="$OPACURLOpenInNewWindow='1'">
+                                   <a target='_blank'><xsl:attribute name="href"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute>
                                     <xsl:choose>
-                                    <xsl:when test="position()=last()"></xsl:when>
+                                    <xsl:when test="marc:subfield[@code='y' or @code='3' or @code='z']">
+                                        <xsl:call-template name="subfieldSelect">                        
+                                        <xsl:with-param name="codes">y3z</xsl:with-param>                    
+                                        </xsl:call-template>
+                                    </xsl:when>
+                                    <xsl:when test="not(marc:subfield[@code='y']) and not(marc:subfield[@code='3']) and not(marc:subfield[@code='z'])">
+					<xsl:choose>
+					<xsl:when test="$URLLinkText!=''">
+						<xsl:value-of select="$URLLinkText"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text>Click here to access online</xsl:text>
+					</xsl:otherwise>
+					</xsl:choose>
+                                    </xsl:when>
+                                    </xsl:choose>
+                                    </a>
+                              </xsl:if>
+                                    <xsl:choose>
+                                    <xsl:when test="position()=last()"><xsl:text>  </xsl:text></xsl:when>
                                     <xsl:otherwise> | </xsl:otherwise>
                                     </xsl:choose>
-                                    </xsl:when> 
-                                </xsl:choose>
                             </xsl:for-each>
                         </xsl:when>
+
 
 				   <xsl:when test="count(key('item-by-status', 'available'))=0 and count(key('item-by-status', 'reference'))=0">No copies available
 				   </xsl:when>
