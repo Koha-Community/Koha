@@ -2541,6 +2541,8 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     # 
     $dbh->do("ALTER TABLE borrowers ADD `country` text AFTER zipcode");
     $dbh->do("ALTER TABLE borrowers ADD `B_country` text AFTER B_zipcode");
+    $dbh->do("ALTER TABLE deletedborrowers ADD `country` text AFTER zipcode");
+    $dbh->do("ALTER TABLE deletedborrowers ADD `B_country` text AFTER B_zipcode");
     print "Upgrade to $DBversion done (add country and B_country to borrowers)\n";
     SetVersion ($DBversion);
 }

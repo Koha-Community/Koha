@@ -222,7 +222,7 @@ if (!defined($guarantorid) or $guarantorid eq '' or $guarantorid eq '0') {
     # set only if parameter was passed from the form
     $newdata{'city'}    = $input->param('city')    if defined($input->param('city'));
     $newdata{'zipcode'} = $input->param('zipcode') if defined($input->param('zipcode'));
-    $newdata{'country'} = $input->param('counry') if defined($input->param('country'));
+    $newdata{'country'} = $input->param('country') if defined($input->param('country'));
 }
 
 #builds default userid
