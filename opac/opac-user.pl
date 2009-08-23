@@ -66,8 +66,7 @@ $borr->{'ethnicity'} = fixEthnicity( $borr->{'ethnicity'} );
 if ( $borr->{'debarred'} || $borr->{'gonenoaddress'} || $borr->{'lost'} ) {
     $borr->{'flagged'} = 1;
 }
-# $make flagged available everywhere in the template
-my $patron_flagged = $borr->{'flagged'};
+
 if ( $borr->{'amountoutstanding'} > 5 ) {
     $borr->{'amountoverfive'} = 1;
 }
@@ -94,7 +93,7 @@ $bordat[0] = $borr;
 
 $template->param(   BORROWER_INFO  => \@bordat,
                     borrowernumber => $borrowernumber,
-                    patron_flagged => $patron_flagged,
+                    patron_flagged => $borr->{flagged},
                 );
 
 #get issued items ....
