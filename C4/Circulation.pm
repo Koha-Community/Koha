@@ -1448,7 +1448,13 @@ sub AddReturn {
             Wrongbranch => $branch,
             Rightbranch => $hbr,
         };
-        $doreturn = 0;  # Could we bail here?
+        $doreturn = 0;
+        # bailing out here - in this case, current desired behavior
+        # is to act as if no return ever happened at all.
+        # FIXME - even in an indy branches situation, there should
+        # still be an option for the library to accept the item
+        # and transfer it to its owning library.
+        return ( $doreturn, $messages, $issue, $borrower );
     }
 
     if ( $item->{'wthdrawn'} ) { # book has been cancelled
