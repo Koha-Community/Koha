@@ -2503,7 +2503,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (added AWSPrivateKey syspref - note that if you use enhanced content from Amazon, this should be set right away.)\n";
 }
 
-$DBversion = '3.01.00.042';
+$DBversion = '3.01.00.XXX';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACFineNoRenewals','99999','Fine Limit above which user canmot renew books via OPAC','','Integer')");
     SetVersion ($DBversion);
@@ -2567,7 +2567,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print " Upgrade to $DBversion done (bug 2611: fix spelling/capitalization in permission flag descriptions)\n";
 }
 
-$DBversion = '3.01.00.043';
+$DBversion = '3.01.00.XXX';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("UPDATE userflags SET flagdesc='View Catalog (Librarian Interface)' WHERE bit=2;");
     $dbh->do("UPDATE userflags SET flagdesc='Edit Catalog (Modify bibliographic/holdings data)' WHERE bit=9;");
@@ -2575,29 +2575,21 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("UPDATE userflags SET flagdesc='Allow to access to the reports module' WHERE bit=16;");
     $dbh->do("UPDATE userflags SET flagdesc='Allow to manage serials subscriptions' WHERE bit=15;");
     SetVersion ($DBversion);
-    print " Upgrade to $DBversion done (fix spelling/capitalization to make things match the standard.)\n";
-}
-
-$DBversion = '3.01.00.044';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("UPDATE letter SET content='Dear <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nYou have a hold available for pickup as of <<reserves.waitingdate>>:\r\n\r\nTitle: <<biblio.title>>\r\nAuthor: <<biblio.author>>\r\nCopy: <<items.copynumber>>\r\nLocation: <<branches.branchname>>\r\n<<branches.branchaddress1>>\r\n<<branches.branchaddress2>>\r\n<<branches.branchaddress3>>\r\n<<branches.branchcity>> <<branches.branchzip>>' WHERE code = 'HOLD';");
-    $dbh->do("UPDATE letter SET content='Dear <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nAccording to our current records, you have items that are overdue. Your library does not charge late fines, but please return or renew them as soon as possible.\r\n\r\n<<branches.branchname>>\n<<branches.branchaddress1>>\n<<branches.branchaddress2>>\n<<branches.branchaddress3>>\n<<branches.branchphone>>\n<<branches.branchfax>>\n<<branches.branchemail>>\r\n\r\nIf you have registered a password with the library, you may use it with your library card number to renew online. If an item becomes more than 30 days overdue, you will be unable to use your library card until the item is returned. The following item is currently overdue:\r\n\r\n<<items.content>>' WHERE code = 'ODUE';' WHERE bit=9;");
-    SetVersion ($DBversion);
-    print " Upgrade to $DBversion done (fixed language and typos in notices.)\n";
+    print "Upgrade to $DBversion done (fix spelling/capitalization to make things match the standard.)\n";
 }
 
 $DBversion = '3.01.00.XXX';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("UPDATE permissions SET description = 'Perform inventory (stocktaking) of your catalog' WHERE code = 'inventory';");
      SetVersion ($DBversion);
-    print " Upgrade to $DBversion done (changed catalogue to catalog per the standard)\n";
+    print "Upgrade to $DBversion done (changed catalogue to catalog per the standard)\n";
 }
 
 $DBversion = '3.01.00.XXX';
      if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OPACSearchForTitleIn','<li class="yuimenuitem"><a target="_blank" class="yuimenuitemlabel" href="http://worldcat.org/search?q=TITLE"">Other Libraries (WorldCat)</a></li>\n<li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://www.scholar.google.com/scholar?q=TITLE" target="_blank">Other Databases (Google Scholar)</a></li>\n<li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://www.bookfinder.com/search/?author=AUTHOR&amp;title=TITLE&amp;st=xl&amp;ac=qr" target="_blank">Online Stores (Bookfinder.com)</a></li>','Enter the HTML that will appear in the \'Search for this title in\' box on the detail page in the OPAC.  Enter TITLE, AUTHOR, or ISBN in place of their respective variables in the URL.  Leave blank to disable \'More Searches\' menu.','70|10','Textarea')");
+     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OPACSearchForTitleIn','<li class="yuimenuitem"><a target="_blank" class="yuimenuitemlabel" href="http://worldcat.org/search?q=TITLE"">Other Libraries (WorldCat)</a></li>\n<li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://www.scholar.google.com/scholar?q=TITLE" target="_blank">Other Databases (Google Scholar)</a></li>\n<li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://www.bookfinder.com/search/?author=AUTHOR&amp;title=TITLE&amp;st=xl&amp;ac=qr" target="_blank">Online Stores (Bookfinder.com)</a></li>','Enter the HTML that will appear in the \'Search for this title in\' box on the detail page in the OPAC.  Enter TITLE, AUTHOR, or ISBN in place of their respective variables in the URL.  Leave blank to disable \'More Searches\' menu.','70|10','Textarea');");
      SetVersion ($DBversion);
-     print "Add OPACSearchForTitleIn system preference which will hold the links found on opac_detail under 'More Searches')\n";
+     print "Upgrade to $DBversion done (Add OPACSearchForTitleIn syspref)\n";
      }
 
 =item DropAllForeignKeys($table)
