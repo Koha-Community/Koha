@@ -1469,14 +1469,16 @@ sub AddReturn {
             $messages->{'WasReturned'} = 1;    # FIXME is the "= 1" right?  This could be the borrower hash.
         }
 
-        # the holdingbranch is updated if the document is returned to another location.
-        if ($item->{'holdingbranch'} ne $branch) {
-            UpdateHoldingbranch($branch, $item->{'itemnumber'});
-            $item->{'holdingbranch'} = $branch; # update item data holdingbranch too
-        }
-        ModDateLastSeen( $item->{'itemnumber'} );
         ModItem({ onloan => undef }, $issue->{'biblionumber'}, $item->{'itemnumber'});
     }
+
+    # the holdingbranch is updated if the document is returned to another location.
+    # this is always done regardless of whether the item was on loan or not
+    if ($item->{'holdingbranch'} ne $branch) {
+        UpdateHoldingbranch($branch, $item->{'itemnumber'});
+        $item->{'holdingbranch'} = $branch; # update item data holdingbranch too
+    }
+    ModDateLastSeen( $item->{'itemnumber'} );
 
     # check if we have a transfer for this document
     my ($datesent,$frombranch,$tobranch) = GetTransfers( $item->{'itemnumber'} );
