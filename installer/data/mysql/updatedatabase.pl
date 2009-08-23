@@ -2505,13 +2505,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion = '3.01.00.042';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("ALTER TABLE items MODIFY itemcallnumber varchar(255);");
-    SetVersion ($DBversion);
-    print " Upgrade to $DBversion done (change max length of itemcallnumber to 255 from 30.)\n";
-}
-
-$DBversion = '3.01.00.042';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACFineNoRenewals','99999','Fine Limit above which user canmot renew books via OPAC','','Integer')");
     SetVersion ($DBversion);
     print "Upgrade to $DBversion done (added OPACFineNoRenewals syspref)\n";
@@ -2554,7 +2547,16 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.01.00.043';
+$DBversion = '3.01.00.047';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE items MODIFY itemcallnumber varchar(255);");
+    $dbh->do("ALTER TABLE deleteditems MODIFY itemcallnumber varchar(255);");
+    $dbh->do("ALTER TABLE tmp_holdsqueue MODIFY itemcallnumber varchar(255);");
+    SetVersion ($DBversion);
+    print " Upgrade to $DBversion done (bug 2761: change max length of itemcallnumber to 255 from 30)\n";
+}
+
+$DBversion = '3.01.00.048';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("UPDATE userflags SET flagdesc='View Catalog (Librarian Interface)' WHERE bit=2;");
     $dbh->do("UPDATE userflags SET flagdesc='Edit Catalog (Modify bibliographic/holdings data)' WHERE bit=9;");
@@ -2562,7 +2564,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("UPDATE userflags SET flagdesc='Allow to access to the reports module' WHERE bit=16;");
     $dbh->do("UPDATE userflags SET flagdesc='Allow to manage serials subscriptions' WHERE bit=15;");
     SetVersion ($DBversion);
-    print " Upgrade to $DBversion done (fix spelling/capitalization to make things match the standard.)\n";
+    print " Upgrade to $DBversion done (bug 2611: fix spelling/capitalization in permission flag descriptions)\n";
 }
 
 =item DropAllForeignKeys($table)
