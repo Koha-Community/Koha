@@ -156,28 +156,32 @@ sub GetItem {
     return $data;
 }    # sub GetItem
 
+=head2 CartToShelf
+
+=over 4
+
+CartToShelf($itemnumber);
+
+=back
+
+Set the current shelving location of the item record
+to its stored permanent shelving location.  This is
+primarily used to indicate when an item whose current
+location is a special processing ('PROC') or shelving cart
+('CART') location is back in the stacks.
+
+=cut
+
 sub CartToShelf {
-    my ( $itemnumber, $barcode ) = @_;
+    my ( $itemnumber ) = @_;
 
-    my ( $field, $value );
-
-    if ( $itemnumber ) {
-        $field = 'itemnumber';
-        $value = $itemnumber;
-    } elsif ( $barcode ) {
-        $field = 'barcode';
-        $value = $barcode;
-    } else {
-        $barcode    ||= 'UNDEFINED';
-        $itemnumber ||= 'UNDEFINED';
-        croak "FAILED CartToShelf( $itemnumber, $barcode )";
+    unless ( $itemnumber ) {
+        croak "FAILED CartToShelf() - no itemnumber supplied";
     }
 
-    my $sql = "UPDATE items SET items.location = items.permanent_location WHERE $field = ?";
-
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare( $sql );
-    $sth->execute( $value );
+    my $item = GetItem($itemnumber);
+    $item->{location} = $item->{permanent_location};
+    ModItem($item, undef, $itemnumber);
 }
 
 =head2 AddItemFromMarc

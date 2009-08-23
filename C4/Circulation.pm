@@ -1001,7 +1001,7 @@ sub AddIssue {
         );
         $sth->finish;
         if ( C4::Context->preference('ReturnToShelvingCart') ) { ## ReturnToShelvingCart is on, anything issued should be taken off the cart.
-          CartToShelf( '', $barcode );
+          CartToShelf( $item->{'itemnumber'} );
         }
         $item->{'issues'}++;
         ModItem({ issues           => $item->{'issues'},
