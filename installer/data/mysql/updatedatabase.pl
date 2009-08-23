@@ -2530,7 +2530,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion = '3.01.00.045';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type)VALUES('HidePatronName', '0', '', 'If this is switched on, patrons cardnumbers will be shown instead of their name on the holds and catalogue screens', 'YesNo')");
+    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type)VALUES('HidePatronName', '0', '', 'If this is switched on, patron''s cardnumber will be shown instead of their name on the holds and catalog screens', 'YesNo')");
     SetVersion ($DBversion);
     print "Upgrade to $DBversion done (added a preference to hide the patrons name in the staff catalog)";
 }
