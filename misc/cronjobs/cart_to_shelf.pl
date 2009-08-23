@@ -28,6 +28,8 @@ cart_to_shelf.pl  cron script to set items with location of CART to original she
 use strict;
 use warnings;
 
+use C4::Items qw/ CartToShelf /;
+
 BEGIN {
 
     # find Koha's Perl modules
@@ -51,7 +53,7 @@ This script takes the following parameters :
     --hours | -h         The number of hours that need to pass before the location is updated.
 
   examples :
-  $PERL5LIB/misc/cronjobs/cart_to_shelf.pl --hours 24
+  {Koha script directory}/cronjobs/cart_to_shelf.pl --hours 24
     Would make any item that has a location of CART for more than 24 hours change to it's original shelving location.
 
 ENDUSAGE
@@ -61,9 +63,9 @@ unless ($hours) {
     die "ERROR: No --hours (-h) option defined";
 }
 
-my $query =
-"UPDATE items SET location = permanent_location WHERE location = 'CART' AND TIMESTAMPDIFF(HOUR, items.timestamp, NOW() ) > ?";
-
-my $dbh = C4::Context->dbh;
-my $sth = $dbh->prepare($query);
+my $query = "SELECT itemnumber FROM items WHERE location = 'CART' AND TIMESTAMPDIFF(HOUR, items.timestamp, NOW() ) > ?";
+my $sth = C4::Context->dbh->prepare($query);
 $sth->execute($hours);
+while (my ($itemnumber) = $sth->fetchrow_array) {
+    CartToShelf($itemnumber);
+}
