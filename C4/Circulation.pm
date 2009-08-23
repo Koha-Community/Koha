@@ -1791,7 +1791,7 @@ C<$borrower> is a hashref to borrower. Only {branchcode} is used.
 =cut
 
 sub _GetCircControlBranch {
-    my ($iteminfos, $borrower) = @_;
+    my ($item, $borrower) = @_;
     my $circcontrol = C4::Context->preference('CircControl');
     my $branch;
 
@@ -1801,7 +1801,12 @@ sub _GetCircControlBranch {
         $branch=$borrower->{branchcode};
     } else {
         my $branchfield = C4::Context->preference('HomeOrHoldingBranch') || 'homebranch';
-        $branch = $iteminfos->{$branchfield};
+        $branch = $item->{$branchfield};
+        # default to item home branch if holdingbranch is used
+        # and is not defined
+        if (!defined($branch) && $branchfield eq 'holdingbranch') {
+            $branch = $item->{homebranch};
+        }
     }
     return $branch;
 }
