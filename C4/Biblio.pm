@@ -1285,10 +1285,10 @@ sub GetMarcSubjects {
         my $counter = 0;
         my @link_loop;
         # if there is an authority link, build the link with an= subfield9
-        my $subfield9 = $field->subfield('9');
+		my $found9=0;
         for my $subject_subfield (@subfields ) {
             # don't load unimarc subfields 3,4,5
-            next if (($marcflavour eq "UNIMARC") and ($subject_subfield->[0] =~ /3|4|5/ ) );
+            next if (($marcflavour eq "UNIMARC") and ($subject_subfield->[0] =~ /2|3|4|5/ ) );
             # don't load MARC21 subfields 2 (FIXME: any more subfields??)
             next if (($marcflavour eq "MARC21")  and ($subject_subfield->[0] =~ /2/ ) );
             my $code = $subject_subfield->[0];
@@ -1296,11 +1296,13 @@ sub GetMarcSubjects {
             my $linkvalue = $value;
             $linkvalue =~ s/(\(|\))//g;
             my $operator = " and " unless $counter==0;
-            if ($subfield9) {
-                @link_loop = ({'limit' => 'an' ,link => "$subfield9" });
-            } else {
-                push @link_loop, {'limit' => 'su', link => $linkvalue, operator => $operator };
-            }
+            if ($code eq 9) {
+				$found9 = 1;
+                @link_loop = ({'limit' => 'an' ,link => "$linkvalue" });
+			}
+			if (not $found9) {
+				push @link_loop, {'limit' => 'su', link => $linkvalue, operator => $operator };
+			}
             my $separator = C4::Context->preference("authoritysep") unless $counter==0;
             # ignore $9
             my @this_link_loop = @link_loop;
