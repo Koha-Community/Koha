@@ -137,6 +137,8 @@ $prefix = $ENV{'INSTALL_BASE'} || "/usr";
   "__AUTH_INDEX_MODE__" => 'grs1',
   "__RUN_DATABASE_TESTS__" => 'no',
   "__PATH_TO_ZEBRA__" => "",
+  "__MEMCACHED_SERVERS__" => "",
+  "__MEMCACHED_NAMESPACE__" => "",
 );
 
 # Override configuration from the environment
@@ -192,4 +194,3 @@ Makefile.PL, ExtUtils::MakeMaker(3)
 MJ Ray mjr at phonecoop.coop
 
 =cut
-
