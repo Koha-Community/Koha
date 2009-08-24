@@ -82,11 +82,14 @@
 		<label for="format">Save Record:</label>
 	    <select name="format" id="format">
 		<option value="">-- Choose Format --</option>
-        <option value="mods">MODS (XML)</option>
+ 	    <option value="bibtex">BibTex</option>
         <option value="dc">Dublin Core (XML)</option>
         <option value="marcxml">MARCXML</option>
         <option value="marc8">MARC (non-Unicode/MARC-8)</option>
-        <option value="utf8">MARC (Unicode/UTF-8)</option>    </select><input type="hidden" name="op" value="export" /><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+        <option value="utf8">MARC (Unicode/UTF-8)</option>
+        <option value="mods">MODS (XML)</option>
+ 	    <option value="ris">RIS</option>    
+		</select><input type="hidden" name="op" value="export" /><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
 <input type="submit" name="save" value="Go" /></form></div>
 </div>
 </div>
