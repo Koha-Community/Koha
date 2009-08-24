@@ -51,7 +51,7 @@ use C4::Output;
 use CGI;
 
 use C4::Bookseller qw/GetBookSellerFromId/;
-use C4::Acquisition qw/GetOrders GetBasketsByBasketgroup GetBasketsByBookseller ModBasketgroup NewBasketgroup DelBasketgroup GetBasketgroups ModBasket GetBasketgroup/;
+use C4::Acquisition qw/GetOrders GetBasketsByBasketgroup GetBasketsByBookseller ModBasketgroup NewBasketgroup DelBasketgroup GetBasketgroups ModBasket GetBasketgroup GetBasket/;
 use C4::Bookseller qw/GetBookSellerFromId/;
 
 my $input=new CGI;
@@ -311,37 +311,43 @@ if (! $op ) {
     print $pdf;
     exit;
 } elsif ( $op eq 'attachbasket') {
-    # TODO: create basketgroup and attach basket to it?
+    # Getting parameters
     my $basketgroup = {};
-    $basketgroup->{'name'} = $input->param('basketgroupname');
+    my $basketno = $input->param('basketno');
+    my $basket = GetBasket($basketno);
+    $basketgroup->{'name'} = $input->param('basketgroupname') || $basket->{'basketname'};
     $basketgroup->{'booksellerid'} = $input->param('booksellerid');
     my $basketgroupid;
-    my $basketno = $input->param('basketno');
     warn "basketgroupname", $basketgroup->{'name'};
+
+    # If we got a basketgroupname, we create a basketgroup
     if ($basketgroup->{'name'}) {
         $basketgroupid = NewBasketgroup($basketgroup);
     } else {
+	# Else, we use the basketgroupid in parameter
         $basketgroupid = $input->param('basketgroupid');
     }
-    if ($input->param('closebasketgroup')){
-        #we override $basketgroup on purpose here
-        my $basketgroup= {};
-        $basketgroup->{'closed'} = 1;
-        $basketgroup->{'id'} = $basketgroupid;
-        ModBasketgroup($basketgroup)
-    }
-    my $basket = {};
+
+    $basketgroup= {};
+    $basketgroup->{'closed'} = 1;
+    $basketgroup->{'id'} = $basketgroupid;
+    ModBasketgroup($basketgroup);
+ 
+    $basket = {};
     $basket->{'basketno'} = $basketno;
     $basket->{'basketgroupid'} = $basketgroupid;
     ModBasket($basket);
-    $basketgroup = GetBasketgroup($basketgroupid);
+
+   
+      $basketgroup = GetBasketgroup($basketgroupid);
     my $baskets = GetBasketsByBasketgroup($basketgroupid);
     my $bookseller = &GetBookSellerFromId($booksellerid);
-    my @basketgroups;
-    push(@basketgroups, $basketgroup);
-    $template->param(displayclosedbgs => 1,
-                     booksellerid => $booksellerid);
-    displaybasketgroups(\@basketgroups, $bookseller, $baskets);
+
+    if ($input->param('createorder')) {
+ 	print $input->redirect('/cgi-bin/koha/acqui/basketgroup.pl?op=printbgroup&bgroupid=' . $basketgroupid);
+    } else {
+	print $input->redirect('/cgi-bin/koha/acqui/booksellers.pl');
+    }
 }
 #prolly won't use all these, maybe just use print, the rest can be done inside validate
 output_html_with_http_headers $input, $cookie, $template->output;

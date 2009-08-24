@@ -133,33 +133,24 @@ if ( $op eq 'delete_confirm' ) {
         count               =>     $count,
       );
 } elsif ($op eq 'attachbasket' && $template->{'param_map'}->{'CAN_user_acquisition_group_manage'} == 1) {
-    my $basketgroups = GetBasketgroups($basket->{booksellerid});
-    for (my $i=0; $i < scalar(@$basketgroups); $i++) {
-        if (@$basketgroups[$i]->{closed}) {
-            splice(@$basketgroups, $i, 1);
-            $i--;
-        } elsif ($basket->{basketgroupid} == @$basketgroups[$i]->{id}){
-            @$basketgroups[$i]->{default} = 1;
-        }
-    }
-    $template->param(
-        basketgroups    => $basketgroups,
-        booksellerid    => $booksellerid,
-        basketno        => $basket->{'basketno'},
-        basketname      => $basket->{'basketname'},
-        name            => $bookseller->{'name'},
-        selectbasketg    => "1"
-    );
+      print $query->redirect('/cgi-bin/koha/acqui/basketgroup.pl?basketno=' . $basket->{'basketno'} . '&op=attachbasket&booksellerid=' . $booksellerid);
     # check if we have to "close" a basket before building page
 } elsif ($op eq 'close') {
-    my $basket = $query->param('basketno');
-    $basket =~ /^\d+$/ and CloseBasket($basket);
-    if ($template->{'param_map'}->{'CAN_user_acquisition_group_manage'} == 1){
-        print $query->redirect('/cgi-bin/koha/acqui/basket.pl?basketno='.$basket.'&op=attachbasket');
-        exit;
+    my $confirm = $query->param('confirm');
+    if ($confirm) {
+	my $basketno = $query->param('basketno');
+	my $booksellerid = $query->param('booksellerid');
+	$basketno =~ /^\d+$/ and CloseBasket($basketno);
+	print $query->redirect('/cgi-bin/koha/acqui/basketgroup.pl?basketno='.$basketno.'&op=attachbasket&booksellerid=' . $booksellerid);
+	exit;
+
     } else {
-        print $query->redirect('/cgi-bin/koha/acqui/booksellers.pl?supplierid='.$booksellerid);
-        exit;
+	$template->param(confirm_close => "1",
+		 	booksellerid    => $booksellerid,
+			basketno        => $basket->{'basketno'},
+		    	basketname      => $basket->{'basketname'},
+			basketgroupname => $basket->{'basketname'});
+		
     }
 } elsif ($query->param('op') eq 'reopen') {
     my $basket;
@@ -188,10 +179,7 @@ if ( $op eq 'delete_confirm' ) {
     if ($basket->{closedate} && haspermission({ flagsrequired   => { acquisition => 'group_manage'} })) {
         $basketgroups = GetBasketgroups($basket->{booksellerid});
         for (my $i=0; $i < scalar(@$basketgroups); $i++) {
-            if (@$basketgroups[$i]->{closed}) {
-                splice(@$basketgroups, $i, 1);
-                $i--;
-            } elsif ($basket->{basketgroupid} == @$basketgroups[$i]->{id}){
+            if ($basket->{basketgroupid} == @$basketgroups[$i]->{id}){
                 @$basketgroups[$i]->{default} = 1;
             }
         }

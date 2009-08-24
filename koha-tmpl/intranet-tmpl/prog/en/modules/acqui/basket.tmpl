@@ -55,6 +55,7 @@
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
+        <!-- TMPL_UNLESS name="confirm_close" -->
         <!-- TMPL_UNLESS name="selectbasketg" -->
             <!-- TMPL_UNLESS name="closedate" -->
                 <div id="toolbar">
@@ -84,11 +85,7 @@
                         <li><button onclick="confirm_close()" class="yui-button-disabled" id="closebutton" type="push" disabled="true" title="You can not close this basket" >Can not close basket</a></li>
                         <li><a href="/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=<!-- TMPL_VAR name="booksellerid" -->&owner=1" class="button" id="uncertpricesbutton">Uncertain prices</a></li>
                     <!-- TMPL_ELSE -->
-                        <!-- TMPL_IF name="CAN_user_acquisition_group_manage" -->
-                            <li><a href="<!-- TMPL_VAR name="script_name" -->?op=close&basketno=<!-- TMPL_VAR name="basketno" -->" class="button" id="closebutton">Close this basket</a></li>
-                        <!-- TMPL_ELSE -->
-                            <li><a href="javascript:confirm_close();" class="button" id="closebutton">Close this basket</a></li>
-                        <!-- /TMPL_IF -->
+                        <li><a href="<!-- TMPL_VAR name="script_name" -->?op=close&basketno=<!-- TMPL_VAR name="basketno" -->&booksellerid=<!-- TMPL_VAR name="booksellerid" -->" class="button" id="closebutton">Close this basket</a></li>
                     <!-- /TMPL_IF -->
                     </ul>
                 </div>
@@ -112,6 +109,7 @@
                         </ul>
                 </div>
                 <!-- /TMPL_UNLESS -->
+            <!-- /TMPL_UNLESS -->
             <!-- /TMPL_UNLESS -->
             
     <!-- TMPL_IF NAME="NO_BOOKSELLER" -->
@@ -288,33 +286,33 @@
         <!-- /TMPL_UNLESS -->
         <!-- /TMPL_UNLESS -->
 <!-- /TMPL_IF -->
-<!-- /TMPL_IF -->
-    <!-- TMPL_ELSE --> <!-- if we want just to select a basketgroup for a closed basket -->
-        <form action="/cgi-bin/koha/acqui/basketgroup.pl">
-        <fieldset>
-            <legend>Assign basket <!-- TMPL_VAR name="basketname" --> to basketgroup</legend>
-                <p><label for="basketgroupid" >basketgroup:</label>
-                    <select id="basketgroupid" name="basketgroupid">
-                        <!-- TMPL_LOOP name="basketgroups" -->
-                        <option value="<!-- TMPL_VAR name="id" -->"><!-- TMPL_VAR name="name" --></option>
-                        <!-- /TMPL_LOOP -->
-                    </select>
-                </p>
-                <p>
-                    <label for="basketgroupname">Or type in the name of a new basketgroup:</label>
-                    <input type="text" id="basketgroupname" name="basketgroupname"/>
-                </p>
-                <p>
-                    <label for='closebasketgroup'>Close basketgroup after attaching it:</label>
-                    <input type="checkbox" id="closebasketgroup" name="closebasketgroup"/>
-                </p>
-                <input type="hidden" id="basketno" value="<!-- TMPL_VAR name="basketno" -->" name="basketno" />
-                <input type="hidden" value="attachbasket" name="op" />
-                <input type="hidden" name="booksellerid" value="<!-- TMPL_VAR name="booksellerid" -->" />
-                <input type="submit" value="Change basketgroup" />
-        </fieldset>
-        </form>
+<!-- /TMPL_IF -->    <!-- TMPL_ELSE --> <!-- if we want just to select a basketgroup for a closed basket -->
     <!-- /TMPL_UNLESS -->
+<!-- TMPL_IF name="confirm_close" -->
+	    <div id="closebasket_needsconfirmation" class="dialog alert">
+
+	    <form action="/cgi-bin/koha/acqui/basket.pl" class="confirm">
+	    <fieldset>
+		<legend>Closing basket <!-- TMPL_VAR name="basketname" --></legend>
+		    <p>Are you sure you want to close this basket ?</p>
+		    <p>
+			<label for="createorder">Create order ?</label>
+			<input type="checkbox" id="createorder" name="createorder"/>
+		    </p>
+		    <input type="hidden" id="basketno" value="<!-- TMPL_VAR name="basketno" -->" name="basketno" />
+		    <input type="hidden" value="close" name="op" />
+		    <input type="hidden" name="booksellerid" value="<!-- TMPL_VAR name="booksellerid" -->" />
+		    <input type="hidden" name="confirm" value="1" />
+		    <input type="hidden" name="basketgroupname" value="<!-- TMPL_VAR name="basketgroupname" -->" />
+		    <input type="submit" class="approve" value="Yes, Close (Y)" accesskey="y" />
+		    <input type="submit" class="deny" value="No, Don't Close (N)" accesskey="n" onclick="javascript:window.location='/cgi-bin/koha/acqui/basket.pl?basketno=<!-- TMPL_VAR name="basketno" -->';return false;" />
+	    </fieldset>
+	    </form>
+	    </div>
+	<!-- /TMPL_IF -->
+  
+
+
 </div>
 </div>
 <div class="yui-b">
