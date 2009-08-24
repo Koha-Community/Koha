@@ -2,7 +2,7 @@
 <title>Koha &rsaquo; Tools &rsaquo; Inventory</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.pack.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function(){
@@ -42,8 +42,25 @@ $(document).ready(function(){
     <h1>Inventory/Stocktaking</h1>
 	<!-- TMPL_UNLESS name="loop" -->
 	<div class="yui-g">
-	<div class="yui-u first">
     <form method="post" action="/cgi-bin/koha/tools/inventory.pl">
+        <fieldset class="rows">
+            <legend>Use a barcode file</legend>
+	 <ol>
+            <li><label for="uploadbarcodes">Barcode file: </label> <input type="file" id="uploadbarcodes" name="uploadbarcodes" /></li>
+            <li><label for="setdate">Set inventory date to:</label> <input type="text" id="setdate" name="setdate" value="<!-- TMPL_VAR name="today" -->" />
+             <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="setdate_button" alt="Show Calendar" />
+            <script type="text/javascript">
+            Calendar.setup(
+            {
+            inputField : "setdate",
+            ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+            button : "setdate_button"
+            }
+            );
+            </script>
+            </li>
+          </ol>
+        </fieldset>
         <fieldset class="rows">
         <legend>Select items you want to check</legend>
         <ol><li>
@@ -56,25 +73,6 @@ $(document).ready(function(){
             <!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
         </select>
-        </li>
-        <li>
-        <label for="itemtype">Item type</label>
-        <select name="itemtype" id="itemtype" style="width:12em;">
-            <option value="">Any</option>
-        <!-- TMPL_LOOP name="itemtypeloop" -->
-            <!-- TMPL_IF name="selected" -->
-                <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option>
-            <!-- TMPL_ELSE -->
-                <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="description" --></option>
-            <!-- /TMPL_IF -->
-        <!-- /TMPL_LOOP -->
-        </select>
-        </li>
-        <li>
-            <label for="minlocation">Item location between: </label> 
-                <input type="text" name="minlocation" id="minlocation" value="<!-- TMPL_VAR NAME="minlocation" -->" /> (items.itemcallnumber)  </li>
-           <li><label for="maxlocation">...and: </label> 
-                <input type="text" name="maxlocation" id="maxlocation" value="<!-- TMPL_VAR NAME="maxlocation" -->" />
         </li>
         <!-- TMPL_IF NAME="authorised_values" -->
         <li>
@@ -90,7 +88,41 @@ $(document).ready(function(){
         <!-- /TMPL_LOOP -->
         </select>        </li>
         <!-- /TMPL_IF -->
-        <li><label for="datelastseen">Not seen since:</label>
+        <li>
+            <label for="minlocation">Item callnumber between: </label>
+                <input type="text" name="minlocation" id="minlocation" value="<!-- TMPL_VAR NAME="minlocation" -->" /> (items.itemcallnumber)  </li>
+           <li><label for="maxlocation">...and: </label>
+                <input type="text" name="maxlocation" id="maxlocation" value="<!-- TMPL_VAR NAME="maxlocation" -->" />
+        </li>
+        <!-- TMPL_IF name="statuses" -->
+            <label for="statuses" style="display: block;">Item statuses:</label>
+          <li>
+            <fieldset class="rows">
+            <div name="statuses" style="display: block;">
+                  <!-- TMPL_LOOP name="statuses" -->
+                      <!-- TMPL_IF name="values" -->
+                          <div style="float: left; padding: 5px; margin: 5px;" align="right">
+                              <strong style="text-decoration: underline;">
+                                  <!-- TMPL_VAR name="fieldname" -->
+                              </strong>
+                              <ul id="statuses-<!-- TMPL_VAR name="fieldname" -->" style="display: inline;">
+                              <!-- TMPL_LOOP name="values" -->
+                                  <li>
+                                    <strong>
+                                      <!-- TMPL_VAR name="lib" -->
+                                    </strong>
+                                    <input type="checkbox" name="status-<!-- TMPL_VAR name="fieldname" -->-<!-- TMPL_VAR name="id" -->" id="<!-- TMPL_VAR name="id" -->" />
+                                  </li>
+                              <!-- /TMPL_LOOP -->
+                              </ul>
+                          </div>
+                      <!-- /TMPL_IF -->
+                  <!-- /TMPL_LOOP -->
+                </div>
+            </fieldset>
+          </li>
+        <!-- /TMPL_IF -->
+        <li><label for="datelastseen">Inventory date:</label>
             <input type="text" id="datelastseen" name="datelastseen" value="<!-- TMPL_VAR NAME="datelastseen" -->" />
             <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="datelastseen_button" alt="Show Calendar" />
             <script type="text/javascript">
@@ -113,32 +145,18 @@ $(document).ready(function(){
             <input type="text" id="pagesize" name="pagesize" value="<!-- TMPL_VAR NAME="pagesize" -->" maxlength="5" size="5" /> items</li>
           <li><label for="offset">Beginning at offset: </label>
             <input type="text" id="offset" name="offset" value="<!-- TMPL_VAR NAME="offset" -->" size="5" maxlength="5" />
-        </li></ol>
+        </li>
+        <li>
+           <label for="CSVexport">Export to csv file</label>
+           <input type="checkbox" name="CSVexport" />
+        </li>
+        <li>
+            <label for="compareinv2barcd">Compare barcodes list to results</label>
+            <input type="checkbox" name="compareinv2barcd" />
+        </li>
+        </ol>
   </fieldset>
             <input type="hidden" name="op" value="do_it" />
-            <fieldset class="action"><input type="submit" value="Submit" class="button" /></fieldset>
-    </form>
-	</div>
-	
-	<div class="yui-u">
-    <form name="barcodefile" method="post" action="/cgi-bin/koha/tools/inventory.pl" enctype="multipart/form-data">
-        <fieldset class="rows">
-            <legend>Use a barcode file</legend>
-			<ol>
-            <li><label for="uploadbarcodes">Barcode file: </label> <input type="file" id="uploadbarcodes" name="uploadbarcodes" /></li>
-            <li><label for="setdate">Set date last seen to:</label> <input type="text" id="setdate" name="setdate" />
-             <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="setdate_button" alt="Show Calendar" />
-            <script type="text/javascript">
-            Calendar.setup(
-            {
-            inputField : "setdate",
-            ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
-            button : "setdate_button"
-            }
-            );
-            </script>
-</li></ol>
-        </fieldset>
             <fieldset class="action"><input type="submit" value="Submit" class="button" /></fieldset>
     </form>
 	</div>
@@ -172,6 +190,7 @@ $(document).ready(function(){
             <th>Barcode</th>
             <th>Title</th>
             <th>Unseen since</th>
+            <th>Problems</th>
         </tr>
     <!-- TMPL_LOOP NAME="loop" -->
         <tr>
@@ -187,6 +206,15 @@ $(document).ready(function(){
             </td>
             <td>
                 <p><!-- TMPL_VAR name="datelastseen" --></p>
+            </td>
+            <td>
+                 <!-- TMPL_IF name="notfoundbarcode" -->
+                     <p style="background: red;">Not found among barcodes in barcodes file.</p>
+                 <!-- TMPL_ELSIF name="notfoundkoha" -->
+                     <p style="background: red;">Not found in koha.</p>
+                 <!-- TMPL_ELSE -->
+                     <p style="background: green;">None</p>
+                 <!-- /TMPL_IF -->
             </td>
         </tr>
     <!-- /TMPL_LOOP -->
@@ -219,10 +247,9 @@ $(document).ready(function(){
         <input type="hidden" name="op" value="do_it" />
         <input type="submit" value="Continue without Marking &gt;&gt;" class="submit" />
     </form>
+    </div>
     <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
-
-</div>
 </div>
 <div class="yui-b">
 <!-- TMPL_INCLUDE NAME="tools-menu.inc" -->

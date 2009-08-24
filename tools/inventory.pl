@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
-# Copyright 2000-2002 Katipo Communications
+# Copyright 2000-2009 Biblibre S.A
+#                                         John Soros <john.soros@biblibre.com>
 #
 # This file is part of Koha.
 #
@@ -18,7 +19,13 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
+
+#need to open cgi and get the fh before anything else opens a new cgi context (see C4::Auth)
 use CGI;
+my $input = CGI->new;
+my $uploadbarcodes = $input->param('uploadbarcodes');
+
 use C4::Auth;
 use C4::Context;
 use C4::Output;
@@ -29,7 +36,6 @@ use C4::Koha;
 use C4::Branch; # GetBranches
 use C4::Circulation;
 
-my $input = new CGI;
 my $minlocation=$input->param('minlocation') || '';
 my $maxlocation=$input->param('maxlocation');
 $maxlocation=$minlocation.'Z' unless ( $maxlocation || ! $minlocation );
@@ -42,11 +48,12 @@ my $markseen = $input->param('markseen');
 $offset=0 unless $offset;
 my $pagesize = $input->param('pagesize');
 $pagesize=50 unless $pagesize;
-my $uploadbarcodes = $input->param('uploadbarcodes');
 my $branchcode = $input->param('branchcode');
 my $op = $input->param('op');
+my $res;    #contains the results loop
 # warn "uploadbarcodes : ".$uploadbarcodes;
 # use Data::Dumper; warn Dumper($input);
+
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => "tools/inventory.tmpl",
                 query => $input,
@@ -64,46 +71,59 @@ for my $branch_hash (keys %$branches) {
 	                   branchname => $branches->{$branch_hash}->{'branchname'}, 
 	                   selected => ($branch_hash eq $branchcode?1:0)};	
 }
- 
-
-my $itemtypes = GetItemTypes;
-my @itemtypesloop;
-foreach my $thisitemtype (sort keys %$itemtypes) {
-    my $selected = 1 if $thisitemtype eq $itemtype;
-    my %row =(value => $thisitemtype,
-                selected => $selected,
-                description => $itemtypes->{$thisitemtype}->{'description'},
-            );
-    push @itemtypesloop, \%row;
-}
-$template->param(itemtypeloop => \@itemtypesloop);
 
 my @authorised_value_list;
 my $authorisedvalue_categories;
 
-my $dbh=C4::Context->dbh;
-my $rqauthcategorie=$dbh->prepare("SELECT authorised_value FROM marc_subfield_structure WHERE frameworkcode=? AND kohafield='items.location'");
-my $rq=$dbh->prepare("SELECT frameworkcode FROM biblio_framework");
-$rq->execute;
-while (my ($fwkcode)=$rq->fetchrow){
-  $rqauthcategorie->execute($fwkcode);
-  while (my ($authcat)=$rqauthcategorie->fetchrow){
-    if ($authcat && $authorisedvalue_categories!~/\b$authcat\W/){
-      $authorisedvalue_categories.="$authcat ";
-      my $data=GetAuthorisedValues($authcat);
+my $frameworks = getframeworks();
+for my $fwk (keys %$frameworks){
+  my $fwkcode = $frameworks->{$fwk}->{'frameworkcode'};
+  my $authcode = GetAuthValCode('items.location', $fwkcode);
+    if ($authcode && $authorisedvalue_categories!~/\b$authcode\W/){
+      $authorisedvalue_categories.="$authcode ";
+      my $data=GetAuthorisedValues($authcode);
       foreach my $value (@$data){
         $value->{selected}=1 if ($value->{authorised_value} eq ($location));
       }      
       push @authorised_value_list,@$data;
-    }  
-  }
+    }
 }
 
+my $statuses = [];
+for my $statfield (qw/items.notforloan items.itemlost items.wthdrawn items.damaged/){
+    my $hash = {};
+    $hash->{fieldname} = $statfield;
+    $hash->{authcode} = GetAuthValCode($statfield);
+    if ($hash->{authcode}){
+        my $arr = GetAuthorisedValues($hash->{authcode});
+        $hash->{values} = $arr;
+        push @$statuses, $hash;
+    }
+}
+$template->param( statuses => $statuses );
+my $staton = {};								#authorized values that are ticked
+for my $authvfield (@$statuses) {
+    $staton->{$authvfield->{fieldname}} = [];
+    for my $authval (@{$authvfield->{values}}){
+        if ( $input->param('status-' . $authvfield->{fieldname} . '-' . $authval->{id}) eq 'on' ){
+            push @{$staton->{$authvfield->{fieldname}}}, $authval->{id};
+        }
+    }
+}
 
+my $statussth = '';
+for my $authvfield (@$statuses) {
+    if ( scalar @{$staton->{$authvfield->{fieldname}}} > 0 ){
+        my $joinedvals = join ',', @{$staton->{$authvfield->{fieldname}}};
+        $statussth .= "$authvfield->{fieldname} in ($joinedvals) and ";
+    }
+}
+$statussth =~ s, and $,,g;
  
 $template->param(branchloop => \@branch_loop,
                 authorised_values=>\@authorised_value_list,   
                 DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
+                today			=>	C4::Dates->today(),
                 minlocation => $minlocation,
                 maxlocation => $maxlocation,
                 location=>$location,
@@ -113,6 +133,7 @@ $template->param(branchloop => \@branch_loop,
                 pagesize => $pagesize,
                 datelastseen => $datelastseen,
                 );
+my @brcditems;
 if ($uploadbarcodes && length($uploadbarcodes)>0){
     my $dbh=C4::Context->dbh;
     my $date = format_date_in_iso($input->param('setdate')) || C4::Dates->today('iso');
@@ -131,13 +152,17 @@ if ($uploadbarcodes && length($uploadbarcodes)>0){
             my $item = GetItem('', $barcode);
             if (defined $item && $item->{'itemnumber'}){
                 ModItem({ datelastseen => $date }, undef, $item->{'itemnumber'});
+                push @brcditems, $item;
                 $count++;
                 $qonloan->execute($barcode);
                 if ($qonloan->rows){
                     my $data = $qonloan->fetchrow_hashref;
                     my ($doreturn, $messages, $iteminformation, $borrower) =AddReturn($barcode, $data->{homebranch});
-                    if ($doreturn){push @errorloop, {'barcode'=>$barcode,'ERR_ONLOAN_RET'=>1}}
-                    else {push @errorloop, {'barcode'=>$barcode,'ERR_ONLOAN_NOT_RET'=>1}}
+                    if ($doreturn){
+                        push @errorloop, {'barcode'=>$barcode,'ERR_ONLOAN_RET'=>1}
+                    } else {
+                        push @errorloop, {'barcode'=>$barcode,'ERR_ONLOAN_NOT_RET'=>1}
+                    }
                 }
             } else {
                 push @errorloop, {'barcode'=>$barcode,'ERR_BARCODE'=>1};
@@ -149,22 +174,59 @@ if ($uploadbarcodes && length($uploadbarcodes)>0){
     $template->param(date=>format_date($date),Number=>$count);
 # 	$template->param(errorfile=>$errorfile) if ($errorfile);
     $template->param(errorloop=>\@errorloop) if (@errorloop);
-}else{
+}
+#if we want to compare the results to a list of barcodes, or we have no barcode file
+if ( ! ($uploadbarcodes && length($uploadbarcodes)>0 ) || ( $input->param('compareinv2barcd') eq 'on' && length($uploadbarcodes)>0) ) {
     if ($markseen) {
         foreach ($input->param) {
             /SEEN-(.+)/ and &ModDateLastSeen($1);
         }
     }
     if ($markseen or $op) {
-        my $res = GetItemsForInventory($minlocation,$maxlocation,$location,$itemtype,$ignoreissued,$datelastseen,$branchcode,$offset,$pagesize);
+        $res = GetItemsForInventory($minlocation,$maxlocation,$location, $ignoreissued,$datelastseen,$branchcode,$offset,$pagesize,$staton);
         $template->param(loop =>$res,
                         nextoffset => ($offset+$pagesize),
                         prevoffset => ($offset?$offset-$pagesize:0),
                         );
     }
+    if ( ( ( $input->param('compareinv2barcd') eq 'on' ) && ( scalar @brcditems != scalar @$res ) ) && length($uploadbarcodes) > 0 ){
+        if ( scalar @brcditems > scalar @$res ){
+            for my $brcditem (@brcditems) {
+                if (! grep(/$brcditem->{barcode}/, @$res) ){
+                    $brcditem->{notfoundkoha} = 1;
+                    push @$res, $brcditem;
+                }
+            }
+        } else {
+            my @notfound;
+            for my $item (@$res) {
+                if ( ! grep(/$item->{barcode}/, @brcditems) ){
+                    $item->{notfoundbarcode} = 1;
+                    push @notfound, $item;
+                }
+            }
+            $res = [@$res, @notfound];
+        }
+    }
 }
-output_html_with_http_headers $input, $cookie, $template->output;
 
-# Local Variables:
-# tab-width: 8
-# End:
+if ($input->param('CSVexport') eq 'on'){
+    eval {use Text::CSV};
+    my $csv = Text::CSV->new or
+            die Text::CSV->error_diag ();
+    print $input->header(
+        -type       => 'text/csv',
+        -attachment => 'inventory.csv',
+    );
+    for my $re (@$res){
+        my @line;
+        for my $key (keys %$re) {
+            push @line, $re->{$key};
+        }
+        $csv->combine(@line);
+        print $csv->string, "\n";
+    }
+    exit;
+}
+
+output_html_with_http_headers $input, $cookie, $template->output;
