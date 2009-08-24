@@ -68,6 +68,16 @@
     <dd>Perform inventory (stocktaking) of your catalog</dd>
     <!-- /TMPL_IF -->
 	
+    <!-- TMPL_IF NAME="CAN_user_tools_batchmod" -->
+    <dt><a href="/cgi-bin/koha/tools/batchMod.pl">Modify a queryset of items</a></dt>
+    <dd>Perform batch modification of items</dd>
+    <!-- /TMPL_IF -->
+
+    <!-- TMPL_IF NAME="CAN_user_tools_batchdel" -->
+    <dt><a href="/cgi-bin/koha/tools/batchMod.pl?del=1">Delete a queryset of items</a></dt>
+    <dd>Perform batch deletion of items</dd>
+    <!-- /TMPL_IF -->
+
 	</dl>
 </div>
 <div class="yui-u">
