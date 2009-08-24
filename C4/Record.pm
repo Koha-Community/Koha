@@ -564,6 +564,94 @@ sub changeEncoding {
 	return ($error,$newrecord);
 }
 
+=head2 marc2bibtex - Convert from MARC21 and UNIMARC to BibTex
+
+=over 4
+
+my ($bibtex) = marc2bibtex($record, $id);
+
+Returns a BibTex scalar
+
+=over 2
+
+C<$record> - a MARC::Record object
+
+C<$id> - an id for the BibTex record (might be the biblionumber)
+
+=back
+
+=back
+
+=cut
+
+
+sub marc2bibtex {
+    my ($record, $id) = @_;
+    my $tex;
+
+    # Authors
+    my $marcauthors = GetMarcAuthors($record,C4::Context->preference("marcflavour"));
+    my $author;
+    for my $authors ( map { map { @$_ } values %$_  } @$marcauthors  ) {  
+	$author .= " and " if ($author && $$authors{value});
+	$author .= $$authors{value} if ($$authors{value}); 
+    }
+
+    # Defining the conversion hash according to the marcflavour
+    my %bh;
+    if (C4::Context->preference("marcflavour") eq "UNIMARC") {
+	
+	# FIXME, TODO : handle repeatable fields
+	# TODO : handle more types of documents
+
+	# Unimarc to bibtex hash
+	%bh = (
+
+	    # Mandatory
+	    author    => $author,
+	    title     => $record->subfield("200", "a") || "",
+	    editor    => $record->subfield("210", "g") || "",
+	    publisher => $record->subfield("210", "c") || "",
+	    year      => $record->subfield("210", "d") || $record->subfield("210", "h") || "",
+
+	    # Optional
+	    volume  =>  $record->subfield("200", "v") || "",
+	    series  =>  $record->subfield("225", "a") || "",
+	    address =>  $record->subfield("210", "a") || "",
+	    edition =>  $record->subfield("205", "a") || "",
+	    note    =>  $record->subfield("300", "a") || "",
+	    url     =>  $record->subfield("856", "u") || ""
+	);
+    } else {
+
+	# Marc21 to bibtex hash
+	%bh = (
+
+	    # Mandatory
+	    author    => $author,
+	    title     => $record->subfield("245", "a") || "",
+	    editor    => $record->subfield("260", "f") || "",
+	    publisher => $record->subfield("260", "b") || "",
+	    year      => $record->subfield("260", "c") || $record->subfield("260", "g") || "",
+
+	    # Optional
+	    # unimarc to marc21 specification says not to convert 200$v to marc21
+	    series  =>  $record->subfield("490", "a") || "",
+	    address =>  $record->subfield("260", "a") || "",
+	    edition =>  $record->subfield("250", "a") || "",
+	    note    =>  $record->subfield("500", "a") || "",
+	    url     =>  $record->subfield("856", "u") || ""
+	);
+    }
+
+    $tex .= "\@book{";
+    $tex .= join(",\n", $id, map { $bh{$_} ? qq(\t$_ = "$bh{$_}") : () } keys %bh);
+    $tex .= "\n}\n";
+
+    return $tex;
+}
+
+
 =head1 INTERNAL FUNCTIONS
 
 =head2 _entity_encode - Entity-encode an array of strings

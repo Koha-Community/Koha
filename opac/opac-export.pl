@@ -9,6 +9,7 @@ use C4::Output;
 use C4::Biblio;
 use CGI;
 use C4::Auth;
+use C4::Ris;
 
 my $query = new CGI;
 my $op=$query->param("op");
@@ -34,7 +35,13 @@ if ($op eq "export") {
 			elsif ($format=~ /mods/) {
 				$marc = marc2modsxml($marc);
 			}
-			elsif ($format =~ /dc/) {
+ 			elsif ($format =~ /ris/) {
+ 				$marc = marc2ris(MARC::Record->new_from_usmarc($marc));
+ 			}
+			elsif ($format =~ /bibtex/) {
+				my $error;
+				($error,$marc) = marc2bibtex(C4::Biblio::GetMarcBiblio($biblionumber),$biblionumber);
+			}elsif ($format =~ /dc/) {
 				my $error;
 				($error,$marc) = marc2dcxml($marc,1);
 				$format = "dublin-core.xml";
