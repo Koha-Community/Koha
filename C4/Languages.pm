@@ -25,6 +25,18 @@ use Carp;
 use C4::Context;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
 
+
+use Memoize::Memcached
+      memcached => {
+        servers    => [ C4::Context->config('memcached_servers') ],
+        key_prefix => C4::Context->config('memcached_namespace'),
+      };
+
+memoize_memcached('getTranslatedLanguages', expire_time => 600); #cache for 10 minutes
+memoize_memcached('getFrameworkLanguages' , expire_time => 600);
+memoize_memcached('getAllLanguages',        expire_time => 600);
+
+
 BEGIN {
     $VERSION = 3.00;
     require Exporter;
