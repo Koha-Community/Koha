@@ -239,25 +239,24 @@ if ($op eq "additem") {
 } elsif ($op eq "delitem") {
 #-------------------------------------------------------------------------------
     # check that there is no issue on this item before deletion.
-    my $sth=$dbh->prepare("select * from issues i where i.itemnumber=?");
-    $sth->execute($itemnumber);
-    my $onloan=$sth->fetchrow;
-	$sth->finish();
-    $nextop="additem";
-    if ($onloan){
-        push @errors,"book_on_loan";
-    } else {
-		# check it doesnt have a waiting reserve
-		$sth=$dbh->prepare("SELECT * FROM reserves WHERE found = 'W' AND itemnumber = ?");
-		$sth->execute($itemnumber);
-		my $reserve=$sth->fetchrow;
-		unless ($reserve){
-			&DelItem($dbh,$biblionumber,$itemnumber);
-			print $input->redirect("additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode");
-            exit;
-		}
-        push @errors,"book_reserved";
+    $error = &DelItemCheck($dbh,$biblionumber,$itemnumber);
+    if($error == 1){
+        print $input->redirect("additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode");
+    }else{
+        push @errors,$error;
+        $nextop="additem";
     }
+#-------------------------------------------------------------------------------
+} elsif ($op eq "delallitems") {
+#-------------------------------------------------------------------------------
+    my @biblioitems = &GetBiblioItemByBiblioNumber($biblionumber);
+    foreach my $biblioitem (@biblioitems){
+        my $items = &GetItemsByBiblioitemnumber($biblioitem->{biblioitemnumber});
+
+        foreach my $item (@$items){
+            &DelItem($dbh,$biblionumber,$item->{itemnumber});
+        }
+	}
 #-------------------------------------------------------------------------------
 } elsif ($op eq "saveitem") {
 #-------------------------------------------------------------------------------
