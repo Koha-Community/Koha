@@ -261,3 +261,4 @@ INSERT INTO systempreferences (variable,value,options,explanation,type)VALUES('H
 INSERT INTO systempreferences (variable,value,options,explanation,type)VALUES('DisplayOPACiconsXSLT', '1', '', 'Si activé, affiche le format, le type de public et les icônes de type en XSLT (MARC21)).', 'YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AllowAllMessageDeletion','0','Allow any Library to delete any message','','YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('ShowPatronImageInWebBasedSelfCheck', '0', 'Si activé, affiche la photo de l''adhérent lors de l''utilisation de la console de prêt auto-contrôlé', '', 'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('EnableOpacSearchHistory', '1', 'Enable or disable opac search history', 'YesNo','')
