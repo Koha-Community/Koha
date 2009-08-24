@@ -22,6 +22,7 @@ use warnings;
 
 use MARC::Charset qw/marc8_to_utf8/;
 use Text::Iconv;
+use C4::Debug;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -192,7 +193,7 @@ sub MarcToUTF8Record {
         } else {
             if ($marc_flavour eq 'MARC21') {
                 return _default_marc21_charconv_to_utf8($marc_record, $marc_flavour);
-            } elsif ($marc_flavour eq 'UNIMARC') {
+            } elsif ($marc_flavour =~/UNIMARC/) {
                 return _default_unimarc_charconv_to_utf8($marc_record, $marc_flavour);
             } else {
                 return _default_marc21_charconv_to_utf8($marc_record, $marc_flavour);
@@ -253,18 +254,27 @@ sub SetMarcUnicodeFlag {
         my $leader = $marc_record->leader();
         substr($leader, 9, 1) = 'a';
         $marc_record->leader($leader); 
-    } elsif ($marc_flavour eq "UNIMARC") {
-        if (my $field = $marc_record->field('100')) {
-            my $sfa = $field->subfield('a');
-            
-            my $subflength = 36;
-            # fix the length of the field
-            $sfa = substr $sfa, 0, $subflength if (length($sfa) > $subflength);
-            $sfa = sprintf( "%-*s", 35, $sfa ) if (length($sfa) < $subflength);
-            
-            substr($sfa, 26, 4) = '50  ';
-            $field->update('a' => $sfa);
+    } elsif ($marc_flavour =~/UNIMARC/) {
+        my $string; 
+		my ($subflength,$encodingposition)=($marc_flavour=~/AUTH/?(21,8):(36,22));
+		$string=$marc_record->subfield( 100, "a" );
+        if (length($string)==$subflength) { 
+			$string = substr $string, 0,$subflength if (length($string)>$subflength);
+        } 
+        else { 
+            $string = POSIX::strftime( "%Y%m%d", localtime ); 
+            $string =~ s/\-//g; 
+            $string = sprintf( "%-*s", $subflength, $string ); 
+        } 
+        substr( $string, $encodingposition, 8, "frey50  " ); 
+        if ( $marc_record->subfield( 100, "a" ) ) { 
+			$marc_record->field('100')->update(a=>$string);
+		}
+		else {
+            $marc_record->insert_grouped_field( 
+                MARC::Field->new( 100, '', '', "a" => $string ) ); 
         }
+		$debug && warn "encodage: ", substr( $marc_record->subfield(100, 'a'), $encodingposition, 8 );
     } else {
         warn "Unrecognized marcflavour: $marc_flavour";
     }

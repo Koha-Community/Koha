@@ -57,6 +57,9 @@ BEGIN {
     
     	&merge
     	&FindDuplicateAuthority
+
+        &GuessAuthTypeCode
+        &GuessAuthId
  	);
 }
 
@@ -409,6 +412,107 @@ sub GetAuthTypeCode {
   return $authtypecode;
 }
  
+=head2 GuessAuthTypeCode
+
+=over 4
+
+my $authtypecode = GuessAuthTypeCode($record);
+
+=back
+
+Get the record and tries to guess the adequate authtypecode from its content.
+
+=cut
+
+sub GuessAuthTypeCode {
+    my ($record) = @_;
+    return unless defined $record;
+my $heading_fields = {
+    "MARC21"=>{
+        '100'=>{authtypecode=>'PERSO_NAME'},
+        '110'=>{authtypecode=>'CORPO_NAME'},
+        '111'=>{authtypecode=>'MEETI_NAME'},
+        '130'=>{authtypecode=>'UNIF_TITLE'},
+        '148'=>{authtypecode=>'CHRON_TERM'},
+        '150'=>{authtypecode=>'TOPIC_TERM'},
+        '151'=>{authtypecode=>'GEOGR_NAME'},
+        '155'=>{authtypecode=>'GENRE/FORM'},
+        '180'=>{authtypecode=>'GEN_SUBDIV'},
+        '181'=>{authtypecode=>'GEO_SUBDIV'},
+        '182'=>{authtypecode=>'CHRON_SUBD'},
+        '185'=>{authtypecode=>'FORM_SUBD'},
+    },
+#200 Personal name	700, 701, 702 4-- with embedded 700, 701, 702 600
+#                    604 with embedded 700, 701, 702
+#210 Corporate or meeting name	710, 711, 712 4-- with embedded 710, 711, 712 601 604 with embedded 710, 711, 712
+#215 Territorial or geographic name 	710, 711, 712 4-- with embedded 710, 711, 712 601, 607 604 with embedded 710, 711, 712
+#216 Trademark 	716 [Reserved for future use]
+#220 Family name 	720, 721, 722 4-- with embedded 720, 721, 722 602 604 with embedded 720, 721, 722
+#230 Title 	500 4-- with embedded 500 605
+#240 Name and title (embedded 200, 210, 215, or 220 and 230) 	4-- with embedded 7-- and 500 7--  604 with embedded 7-- and 500 500
+#245 Name and collective title (embedded 200, 210, 215, or 220 and 235) 	4-- with embedded 7-- and 501 604 with embedded 7-- and 501 7-- 501
+#250 Topical subject 	606
+#260 Place access 	620
+#280 Form, genre or physical characteristics 	608
+#
+#
+# Could also be represented with :
+#leader position 9
+#a = personal name entry
+#b = corporate name entry
+#c = territorial or geographical name
+#d = trademark
+#e = family name
+#f = uniform title
+#g = collective uniform title
+#h = name/title
+#i = name/collective uniform title
+#j = topical subject
+#k = place access
+#l = form, genre or physical characteristics
+    "UNIMARC"=>{
+        '200'=>{authtypecode=>'NP'},
+        '210'=>{authtypecode=>'CO'},
+        '215'=>{authtypecode=>'SNG'},
+        '216'=>{authtypecode=>'TM'},
+        '220'=>{authtypecode=>'FAM'},
+        '230'=>{authtypecode=>'TU'},
+        '235'=>{authtypecode=>'CO_UNI_TI'},
+        '240'=>{authtypecode=>'SAUTTIT'},
+        '245'=>{authtypecode=>'NAME_COL'},
+        '250'=>{authtypecode=>'SNC'},
+        '260'=>{authtypecode=>'PA'},
+        '280'=>{authtypecode=>'GENRE/FORM'},
+    }
+};
+    foreach my $field (keys %{$heading_fields->{uc(C4::Context->preference('marcflavour'))} }) {
+       return $heading_fields->{uc(C4::Context->preference('marcflavour'))}->{$field}->{'authtypecode'} if (defined $record->field($field));
+    }
+    return;
+}
+
+=head2 GuessAuthId
+
+=over 4
+
+my $authtid = GuessAuthId($record);
+
+=back
+
+Get the record and tries to guess the adequate authtypecode from its content.
+
+=cut
+
+sub GuessAuthId {
+    my ($record) = @_;
+    return unless ($record && $record->field('001'));
+#    my $authtypecode=GuessAuthTypeCode($record);
+#    my ($tag,$subfield)=GetAuthMARCFromKohaField("auth_header.authid",$authtypecode);
+#    if ($tag > 010) {return $record->subfield($tag,$subfield)}
+#    else {return $record->field($tag)->data}
+    return $record->field('001')->data;
+}
+
 =head2 GetTagsLabels
 
 =over 4
