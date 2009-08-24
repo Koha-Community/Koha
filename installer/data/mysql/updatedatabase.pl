@@ -2589,6 +2589,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (fixed typos in new sysprefs)\n";
 }
 
+$DBversion = '3.01.00.052';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do('ALTER TABLE deleteditems ADD COLUMN permanent_location VARCHAR(80) DEFAULT NULL AFTER location');
+    SetVersion ($DBversion);
+    print "Upgrade to $DBversion done (bug 3481: add permanent_location column to deleteditems)\n";
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
