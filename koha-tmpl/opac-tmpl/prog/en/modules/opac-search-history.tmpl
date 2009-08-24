@@ -1,0 +1,80 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+         $(document).ready(function() {
+		// We show table ordered by descending dates by default
+		// (so that the more recent query is shown first)
+		$.tablesorter.defaults.sortList = [[0,1]]; 
+                $("#historyt").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
+                        dateFormat: 'uk'<!-- /TMPL_IF -->
+                });
+            });
+//]]>
+
+</script>
+</head>
+<body>
+<!-- TMPL_IF NAME="OpacNav" --><div id="doc3" class="yui-t1"><!-- TMPL_ELSE --><div id="doc3" class="yui-t7"><!-- /TMPL_IF -->
+   <div id="bd">
+<!--TMPL_INCLUDE NAME="masthead.inc" -->
+
+	<div id="yui-main">
+<div class="yui-b"><div class="yui-g">
+        <div class="container">
+	<h1>Search history</h1>
+	<!-- TMPL_IF EXPR="recentSearches || previousSearches" -->
+	    <!-- TMPL_IF NAME="recentSearches" -->
+	    <!-- TMPL_IF NAME="previousSearches" -->
+	    <h2>Current session</h2>
+	    <!-- /TMPL_IF -->
+	    <table id="historyt">
+		<thead>
+		    <tr><th>Date</th><th>Search</th><th>Results</th></tr>
+		</thead>
+		<tbody>
+		    <!-- TMPL_LOOP NAME="recentSearches" -->
+		    <tr>
+			<td><!-- TMPL_VAR NAME="time" --></td>
+			<td><a href="/cgi-bin/koha/opac-search.pl?<!-- TMPL_VAR NAME="query_cgi" -->"><!-- TMPL_VAR NAME="query_desc" --></a></td>
+			<td><!-- TMPL_VAR NAME="total" --></td>
+		    </tr>
+		    <!-- /TMPL_LOOP -->
+		</tbody>
+	    </table>
+	    <!-- /TMPL_IF -->
+
+	    <!-- TMPL_IF NAME="previousSearches" -->
+	    <h2>Previous sessions</h2>
+	    <table id="historyt">
+		<thead>
+		    <tr><th>Date</th><th>Search</th><th>Results</th></tr>
+		</thead>
+		<tbody>
+		    <!-- TMPL_LOOP NAME="previousSearches" -->
+		    <tr>
+			<td><!-- TMPL_VAR NAME="time" --></td>
+			<td><a href="/cgi-bin/koha/opac-search.pl?<!-- TMPL_VAR NAME="query_cgi" -->"><!-- TMPL_VAR NAME="query_desc" --></a></td>
+			<td><!-- TMPL_VAR NAME="total" --></td>
+		    </tr>
+		    <!-- /TMPL_LOOP -->
+		</tbody>
+	    </table>
+	    <!-- /TMPL_IF -->
+	<!-- TMPL_ELSE -->
+	<p>Your search history is now empty.</p> 
+	<!-- /TMPL_IF -->
+     </div>
+     </div>
+     </div>
+     </div>
+<!-- TMPL_IF EXPR="OpacNav||loggedinusername" -->
+<div class="yui-b"><div class="container">
+<!--TMPL_INCLUDE NAME="navigation.inc" -->
+<!--TMPL_INCLUDE NAME="usermenu.inc" -->
+</div></div></div>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

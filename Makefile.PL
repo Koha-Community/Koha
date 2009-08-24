@@ -593,6 +593,7 @@ WriteMakefile(
                             'POE'                              => 0.9999,
                             'POSIX'                            => 1.09,
                             'Schedule::At'                     => 1.06,
+                            'Storable'	                       => 2.21,
                             'SMS::Send'                        => 0.05, # optional
                             'Term::ANSIColor'                  => 1.10,
                             'Test'                             => 1.25,

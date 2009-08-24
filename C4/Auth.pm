@@ -19,6 +19,8 @@ package C4::Auth;
 
 use strict;
 use Digest::MD5 qw(md5_base64);
+use Storable qw(thaw freeze);
+use URI::Escape;
 use CGI::Session;
 
 require Exporter;
@@ -225,6 +227,58 @@ sub get_template_and_user {
                 }
             }
         }
+		# Logged-in opac search history
+		# If the requested template is an opac one and opac search history is enabled
+		if ($in->{'type'} == "opac" && C4::Context->preference('EnableOpacSearchHistory')) {
+			my $dbh = C4::Context->dbh;
+			my $query = "SELECT COUNT(*) FROM search_history WHERE userid=?";
+			my $sth = $dbh->prepare($query);
+			$sth->execute($borrowernumber);
+			
+			# If at least one search has already been performed
+			if ($sth->fetchrow_array > 0) { 
+			# We show the link in opac
+			$template->param(ShowOpacRecentSearchLink => 1);
+			}
+
+			# And if there's a cookie with searches performed when the user was not logged in, 
+			# we add them to the logged-in search history
+			my @recentSearches;
+			my $searchcookie = $in->{'query'}->cookie('KohaOpacRecentSearches');
+			if ($searchcookie){
+				$searchcookie = uri_unescape($searchcookie);
+				if (thaw($searchcookie)) {
+					@recentSearches = @{thaw($searchcookie)};
+				}
+
+				if (@recentSearches > 0) {
+					my $query = "INSERT INTO search_history(userid, sessionid, query_desc, query_cgi, total, time) VALUES";
+					my $icount = 1;
+					foreach my $asearch (@recentSearches) {
+						$query .= "(";
+						$query .= $borrowernumber . ", ";
+						$query .= '"' . $in->{'query'}->cookie("CGISESSID") . "\", ";
+						$query .= '"' . $asearch->{'query_desc'} . "\", ";
+						$query .= '"' . $asearch->{'query_cgi'} . "\", ";
+						$query .=       $asearch->{'total'} . ", ";
+						$query .= 'FROM_UNIXTIME(' . $asearch->{'time'} . "))";
+						if ($icount < @recentSearches) { $query .= ", ";}
+						$icount++;
+					}
+
+					my $sth = $dbh->prepare($query);
+					$sth->execute;
+
+					# And then, delete the cookie's content
+					my $newsearchcookie = $in->{'query'}->cookie(
+												-name => 'KohaOpacRecentSearches',
+												-value => freeze([]),
+												-expires => ''
+											 );
+					$cookie = [$cookie, $newsearchcookie];
+				}
+			}
+		}
     }
     else {  # if this is an anonymous session, setup to display public lists...
 
@@ -250,6 +304,17 @@ sub get_template_and_user {
         }
 
     }
+ 	# Anonymous opac search history
+ 	# If opac search history is enabled and at least one search has already been performed
+ 	if (C4::Context->preference('EnableOpacSearchHistory') && $in->{'query'}->cookie('KohaOpacRecentSearches')) {
+ 	    # We show the link in opac
+ 	    if (thaw(uri_unescape($in->{'query'}->cookie('KohaOpacRecentSearches')))) {
+			my @recentSearches = @{thaw(uri_unescape($in->{'query'}->cookie('KohaOpacRecentSearches')))};
+			if (@recentSearches > 0) {
+				$template->param(ShowOpacRecentSearchLink => 1);
+			}
+	    }
+ 	}
 
     # these template parameters are set the same regardless of $in->{'type'}
     $template->param(

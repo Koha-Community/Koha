@@ -15,8 +15,10 @@ use C4::Search;
 use C4::Biblio;  # GetBiblioData
 use C4::Koha;
 use C4::Tags qw(get_tags);
-use POSIX qw(ceil floor strftime);
 use C4::Branch; # GetBranches
+use POSIX qw(ceil floor strftime);
+use URI::Escape;
+use Storable qw(thaw freeze);
 
 # create a new CGI object
 # FIXME: no_undef_params needs to be tested
@@ -438,7 +440,54 @@ for (my $i=0;$i<=@servers;$i++) {
 	if ($results_hashref->{$server}->{"hits"}){
 	    $total = $total + $results_hashref->{$server}->{"hits"};
 	}
-        ## If there's just one result, redirect to the detail page
+    > 
+ 	# Opac search history
+ 	my $newsearchcookie;
+ 	if (C4::Context->preference('EnableOpacSearchHistory')) {
+ 	    my @recentSearches; 
+ 
+ 	    # Getting the (maybe) already sent cookie
+ 	    my $searchcookie = $cgi->cookie('KohaOpacRecentSearches');
+ 	    if ($searchcookie){
+ 		$searchcookie = uri_unescape($searchcookie);
+ 		if (thaw($searchcookie)) {
+ 		    @recentSearches = @{thaw($searchcookie)};
+ 		}
+ 	    }
+ 
+ 	    # Adding the new search if needed
+ 	    if ($borrowernumber eq '') {
+ 	    # To a cookie (the user is not logged in)
+ 
+     		if ($params->{'offset'} eq '') {
+ 
+     		    push @recentSearches, {
+     					    "query_desc" => $query_desc || "unknown", 
+     					    "query_cgi"  => $query_cgi  || "unknown", 
+     					    "time"       => time(),
+     					    "total"      => $total
+     					  };
+     		    $template->param(ShowOpacRecentSearchLink => 1);
+     		}
+ 
+     		# Pushing the cookie back 
+     		$newsearchcookie = $cgi->cookie(
+ 					    -name => 'KohaOpacRecentSearches',
+ 					    # We uri_escape the whole freezed structure so we're sure we won't have any encoding problems
+ 					    -value => uri_escape(freeze(\@recentSearches)),
+ 					    -expires => ''
+ 			);
+ 			$cookie = [$cookie, $newsearchcookie];
+ 	    } 
+		else {
+ 	    # To the session (the user is logged in)
+ 			if ($params->{'offset'} eq '') {
+				AddSearchHistory($borrowernumber, $cgi->cookie("CGISESSID"), $query_desc, $query_cgi, $total);
+     		    $template->param(ShowOpacRecentSearchLink => 1);
+     		}
+ 	    }
+ 	}
+    ## If there's just one result, redirect to the detail page
         if ($total == 1) {         
             my $biblionumber=$newresults[0]->{biblionumber};
             if (C4::Context->preference('BiblioDefaultView') eq 'isbd') {
