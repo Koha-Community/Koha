@@ -2503,7 +2503,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (added AWSPrivateKey syspref - note that if you use enhanced content from Amazon, this should be set right away.)\n";
 }
 
-$DBversion = '3.01.00.XXX';
+$DBversion = '3.01.00.042';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACFineNoRenewals','99999','Fine Limit above which user canmot renew books via OPAC','','Integer')");
     SetVersion ($DBversion);
@@ -2567,30 +2567,19 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print " Upgrade to $DBversion done (bug 2611: fix spelling/capitalization in permission flag descriptions)\n";
 }
 
-$DBversion = '3.01.00.XXX';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("UPDATE userflags SET flagdesc='View Catalog (Librarian Interface)' WHERE bit=2;");
-    $dbh->do("UPDATE userflags SET flagdesc='Edit Catalog (Modify bibliographic/holdings data)' WHERE bit=9;");
-    $dbh->do("UPDATE userflags SET flagdesc='Allow to edit authorities' WHERE bit=14;");
-    $dbh->do("UPDATE userflags SET flagdesc='Allow to access to the reports module' WHERE bit=16;");
-    $dbh->do("UPDATE userflags SET flagdesc='Allow to manage serials subscriptions' WHERE bit=15;");
-    SetVersion ($DBversion);
-    print "Upgrade to $DBversion done (fix spelling/capitalization to make things match the standard.)\n";
-}
-
-$DBversion = '3.01.00.XXX';
+$DBversion = '3.01.00.049';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("UPDATE permissions SET description = 'Perform inventory (stocktaking) of your catalog' WHERE code = 'inventory';");
      SetVersion ($DBversion);
-    print "Upgrade to $DBversion done (changed catalogue to catalog per the standard)\n";
+    print "Upgrade to $DBversion done (bug 2611: changed catalogue to catalog per the standard)\n";
 }
 
-$DBversion = '3.01.00.XXX';
-     if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OPACSearchForTitleIn','<li class="yuimenuitem"><a target="_blank" class="yuimenuitemlabel" href="http://worldcat.org/search?q=TITLE"">Other Libraries (WorldCat)</a></li>\n<li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://www.scholar.google.com/scholar?q=TITLE" target="_blank">Other Databases (Google Scholar)</a></li>\n<li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://www.bookfinder.com/search/?author=AUTHOR&amp;title=TITLE&amp;st=xl&amp;ac=qr" target="_blank">Online Stores (Bookfinder.com)</a></li>','Enter the HTML that will appear in the \'Search for this title in\' box on the detail page in the OPAC.  Enter TITLE, AUTHOR, or ISBN in place of their respective variables in the URL.  Leave blank to disable \'More Searches\' menu.','70|10','Textarea');");
-     SetVersion ($DBversion);
-     print "Upgrade to $DBversion done (Add OPACSearchForTitleIn syspref)\n";
-     }
+$DBversion = '3.01.00.050';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OPACSearchForTitleIn','<li class=\"yuimenuitem\">\n<a target=\"_blank\" class=\"yuimenuitemlabel\" href=\"http://worldcat.org/search?q=TITLE\">Other Libraries (WorldCat)</a></li>\n<li class=\"yuimenuitem\">\n<a class=\"yuimenuitemlabel\" href=\"http://www.scholar.google.com/scholar?q=TITLE\" target=\"_blank\">Other Databases (Google Scholar)</a></li>\n<li class=\"yuimenuitem\">\n<a class=\"yuimenuitemlabel\" href=\"http://www.bookfinder.com/search/?author=AUTHOR&amp;title=TITLE&amp;st=xl&amp;ac=qr\" target=\"_blank\">Online Stores (Bookfinder.com)</a></li>','Enter the HTML that will appear in the ''Search for this title in'' box on the detail page in the OPAC.  Enter TITLE, AUTHOR, or ISBN in place of their respective variables in the URL.  Leave blank to disable ''More Searches'' menu.','70|10','Textarea');");
+    SetVersion ($DBversion);
+    print "Upgrade to $DBversion done (bug 1934: Add OPACSearchForTitleIn syspref)\n";
+}
 
 =item DropAllForeignKeys($table)
 
