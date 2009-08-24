@@ -2034,39 +2034,52 @@ sub CanBookBeRenewed {
     # Look in the issues table for this item, lent to this borrower,
     # and not yet returned.
 
-    # FIXME - I think this function could be redone to use only one SQL call.
-    my $sth1 = $dbh->prepare(
-        "SELECT * FROM issues
-            WHERE borrowernumber = ?
-            AND itemnumber = ?"
-    );
-    $sth1->execute( $borrowernumber, $itemnumber );
-    if ( my $data1 = $sth1->fetchrow_hashref ) {
+    # Look in the issues table for this item, lent to this borrower,
+    # and not yet returned.
+    my %branch = (
+            'ItemHomeLibrary' => 'items.homebranch',
+            'PickupLibrary'   => 'items.holdingbranch',
+            'PatronLibrary'   => 'borrowers.branchcode'
+            );
+    my $controlbranch = $branch{C4::Context->preference('CircControl')};
+    my $itype         = C4::Context->preference('item-level_itypes') ? 'items.itype' : 'biblioitems.itemtype';
+    
+    my $sthcount = $dbh->prepare("
+                   SELECT 
+                    borrowers.categorycode, biblioitems.itemtype, issues.renewals, renewalsallowed, $controlbranch
+                   FROM  issuingrules, 
+                   issues 
+                   LEFT JOIN items USING (itemnumber) 
+                   LEFT JOIN borrowers USING (borrowernumber) 
+                   LEFT JOIN biblioitems USING (biblioitemnumber)
+                   
+                   WHERE
+                    issuingrules.categorycode = borrowers.categorycode
+                   AND
+                    issuingrules.itemtype = $itype
+                   AND
+                    (issuingrules.branchcode = $controlbranch OR issuingrules.branchcode = '*') 
+                   AND 
+                    borrowernumber = ? 
+                   AND
+                    itemnumber = ?
+                   ORDER BY
+                    issuingrules.categorycode desc,
+                    issuingrules.itemtype desc,
+                    issuingrules.branchcode desc
+                   LIMIT 1;
+                  ");
 
-        # Found a matching item
-
-        # See if this item may be renewed. This query is convoluted
-        # because it's a bit messy: given the item number, we need to find
-        # the biblioitem, which gives us the itemtype, which tells us
-        # whether it may be renewed.
-        my $query = "SELECT renewalsallowed FROM items ";
-        $query .= (C4::Context->preference('item-level_itypes'))
-                    ? "LEFT JOIN itemtypes ON items.itype = itemtypes.itemtype "
-                    : "LEFT JOIN biblioitems on items.biblioitemnumber = biblioitems.biblioitemnumber
-                       LEFT JOIN itemtypes ON biblioitems.itemtype = itemtypes.itemtype ";
-        $query .= "WHERE items.itemnumber = ?";
-        my $sth2 = $dbh->prepare($query);
-        $sth2->execute($itemnumber);
-        if ( my $data2 = $sth2->fetchrow_hashref ) {
-            $renews = $data2->{'renewalsallowed'};
-        }
-        if ( ( $renews && $renews > $data1->{'renewals'} ) || $override_limit ) {
+    $sthcount->execute( $borrowernumber, $itemnumber );
+    if ( my $data1 = $sthcount->fetchrow_hashref ) {
+        
+        if ( ( $data1->{renewalsallowed} && $data1->{renewalsallowed} > $data1->{renewals} ) || $override_limit ) {
             $renewokay = 1;
         }
         else {
 			$error="too_many";
 		}
-        $sth2->finish;
+		
         my ( $resfound, $resrec ) = C4::Reserves::CheckReserves($itemnumber);
         if ($resfound) {
             $renewokay = 0;
@@ -2074,7 +2087,6 @@ sub CanBookBeRenewed {
         }
 
     }
-    $sth1->finish;
     return ($renewokay,$error);
 }
 

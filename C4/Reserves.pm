@@ -329,7 +329,180 @@ sub GetReservesFromBorrowernumber {
     return @$data;
 }
 #-------------------------------------------------------------------------------------
+=item CanBookBeReserved
 
+$error = &CanBookBeReserved($borrowernumber, $biblionumber)
+
+=cut
+
+sub CanBookBeReserved{
+    my ($borrowernumber, $biblionumber) = @_;
+
+    my $dbh           = C4::Context->dbh;
+    my $biblio        = GetBiblioData($biblionumber);
+    my $borrower      = C4::Members::GetMember($borrowernumber);
+    my $controlbranch = C4::Context->preference('ReservesControlBranch');
+    my $itype         = C4::Context->preference('item-level_itypes');
+    my $reservesrights= 0;
+    my $reservescount = 0;
+    
+    # we retrieve the user rights
+    my @args;
+    my $rightsquery = "SELECT categorycode, itemtype, branchcode, reservesallowed 
+                       FROM issuingrules 
+                       WHERE categorycode = ?";
+    push @args,$borrower->{categorycode};
+
+    if($controlbranch eq "ItemHomeLibrary"){
+        $rightsquery .= " AND branchcode = '*'";
+    }elsif($controlbranch eq "PatronLibrary"){
+        $rightsquery .= " AND branchcode IN (?,'*')";
+        push @args, $borrower->{branchcode};
+    }
+    
+    if(not $itype){
+        $rightsquery .= " AND itemtype IN (?,'*')";
+        push @args, $biblio->{itemtype};
+    }else{
+        $rightsquery .= " AND itemtype = '*'";
+    }
+    
+    $rightsquery .= " ORDER BY categorycode DESC, itemtype DESC, branchcode DESC";
+    
+    my $sthrights = $dbh->prepare($rightsquery);
+    $sthrights->execute(@args);
+    
+    if(my $row = $sthrights->fetchrow_hashref()){
+       $reservesrights = $row->{reservesallowed};
+    }
+    
+    @args = ();
+    # we count how many reserves the borrower have
+    my $countquery = "SELECT count(*) as count
+                      FROM reserves
+                      LEFT JOIN items USING (itemnumber)
+                      LEFT JOIN biblioitems ON (reserves.biblionumber=biblioitems.biblionumber)
+                      LEFT JOIN borrowers USING (borrowernumber)
+                      WHERE borrowernumber = ?
+                    ";
+    push @args, $borrowernumber;
+    
+    if(not $itype){
+           $countquery .= "AND itemtype = ?";
+           push @args, $biblio->{itemtype};
+    }
+    
+    if($controlbranch eq "PatronLibrary"){
+        $countquery .= " AND borrowers.branchcode = ? ";
+        push @args, $borrower->{branchcode};
+    }
+    
+    my $sthcount = $dbh->prepare($countquery);
+    $sthcount->execute(@args);
+    
+    if(my $row = $sthcount->fetchrow_hashref()){
+       $reservescount = $row->{count};
+    }
+    
+    if($reservescount < $reservesrights){
+        return 1;
+    }else{
+        return 0;
+    }
+    
+}
+
+=item CanItemBeReserved
+
+$error = &CanItemBeReserved($borrowernumber, $itemnumber)
+
+this function return 1 if an item can be issued by this borrower.
+
+=cut
+
+sub CanItemBeReserved{
+    my ($borrowernumber, $itemnumber) = @_;
+    
+    my $dbh             = C4::Context->dbh;
+    my $allowedreserves = 0;
+            
+    my $controlbranch = C4::Context->preference('ReservesControlBranch');
+    my $itype         = C4::Context->preference('item-level_itypes') ? "itype" : "itemtype";
+
+    # we retrieve borrowers and items informations #
+    my $item     = GetItem($itemnumber);
+    my $borrower = C4::Members::GetMember($borrowernumber);     
+    
+    # we retrieve user rights on this itemtype and branchcode
+    my $sth = $dbh->prepare("SELECT categorycode, itemtype, branchcode, reservesallowed 
+                             FROM issuingrules 
+                             WHERE (categorycode in (?,'*') ) 
+                             AND (itemtype IN (?,'*')) 
+                             AND (branchcode IN (?,'*')) 
+                             ORDER BY 
+                               categorycode DESC, 
+                               itemtype     DESC, 
+                               branchcode   DESC;"
+                           );
+                           
+    my $querycount ="SELECT 
+                            count(*) as count
+                            FROM reserves
+                                LEFT JOIN items USING (itemnumber)
+                                LEFT JOIN biblioitems ON (reserves.biblionumber=biblioitems.biblionumber)
+                                LEFT JOIN borrowers USING (borrowernumber)
+                            WHERE borrowernumber = ?
+                                ";
+    
+    
+    my $itemtype     = $item->{$itype};
+    my $categorycode = $borrower->{categorycode};
+    my $branchcode   = "";
+    my $branchfield  = "reserves.branchcode";
+    
+    if( $controlbranch eq "ItemHomeLibrary" ){
+        $branchfield = "items.homebranch";
+        $branchcode = $item->{homebranch};
+    }elsif( $controlbranch eq "PatronLibrary" ){
+        $branchfield = "borrowers.branchcode";
+        $branchcode = $borrower->{branchcode};
+    }
+    
+    # we retrieve rights 
+    $sth->execute($categorycode, $itemtype, $branchcode);
+    if(my $rights = $sth->fetchrow_hashref()){
+        $itemtype        = $rights->{itemtype};
+        $allowedreserves = $rights->{reservesallowed}; 
+    }else{
+        $itemtype = '*';
+    }
+    
+    # we retrieve count
+    
+    $querycount .= "AND $branchfield = ?";
+    
+    $querycount .= " AND $itype = ?" if ($itemtype ne "*");
+    my $sthcount = $dbh->prepare($querycount);
+    
+    if($itemtype eq "*"){
+        $sthcount->execute($borrowernumber, $branchcode);
+    }else{
+        $sthcount->execute($borrowernumber, $branchcode, $itemtype);
+    }
+    
+    my $reservecount = "0";
+    if(my $rowcount = $sthcount->fetchrow_hashref()){
+        $reservecount = $rowcount->{count};
+    }
+    
+    # we check if it's ok or not
+    if( $reservecount < $allowedreserves ){
+        return 1;
+    }else{
+        return 0;
+    }
+}
+#--------------------------------------------------------------------------------
 =item GetReserveCount
 
 $number = &GetReserveCount($borrowernumber);

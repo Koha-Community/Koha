@@ -56,6 +56,7 @@ $(document).ready(function() {
             <!-- /TMPL_LOOP -->
             </select>
         </form>
+ 	<!-- TMPL_IF Name="definedbranch" --><form action="/cgi-bin/koha/admin/clone-rules.pl" method="post"><input type="hidden" name="frombranch" value="<!-- TMPL_VAR NAME="branch" -->" /><input type="submit" value="Clone these rules" /></form><!-- /TMPL_IF -->
 		<br />
 		<br />
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
@@ -65,44 +66,54 @@ $(document).ready(function() {
                 <th>Patron Category</th>
                 <th>Item Type</th>
                 <th>Fine Amount</th>
+                <th>Fine Days</th>
                 <th>Fine Grace Period</th>
                 <th>Fine Charging Interval</th>
                 <th>Current Checkouts Allowed</th>
+                <th>Renewals Allowed</th>
+                <th>Reserves Allowed</th>
                 <th>Loan Period</th><th>&nbsp;</th>
             </tr>
-            <!-- TMPL_LOOP NAME="rules" -->
-                <!-- TMPL_UNLESS NAME="__odd__" -->
-                <tr class="highlight">
-                <!-- TMPL_ELSE -->
-                <tr>
-                <!-- /TMPL_UNLESS -->
-                    <td><!-- TMPL_IF NAME="default_humancategorycode" -->
-                            <em>Default</em>
-                        <!-- TMPL_ELSE -->
-                            <!-- TMPL_VAR NAME="humancategorycode" -->
-                        <!-- /TMPL_IF -->
-                    </td>
-                    <td><!-- TMPL_IF NAME="default_humanitemtype" -->
-                            <em>Default</em>
-                        <!-- TMPL_ELSE -->
-                            <!-- TMPL_VAR NAME="humanitemtype" -->
-                        <!-- /TMPL_IF -->
-                    </td>
-                    <td><!-- TMPL_VAR NAME="fine" --></td>
-                    <td><!-- TMPL_IF NAME="firstremind" --><!-- TMPL_VAR NAME="firstremind" --> day(s)<!-- /TMPL_IF --></td>
-                    <td><!-- TMPL_IF NAME="chargeperiod" --><!-- TMPL_VAR NAME="chargeperiod" --> day(s)<!-- /TMPL_IF --></td>
-                    <td><!-- TMPL_IF NAME="unlimited_maxissueqty" -->
-                            Unlimited
-                        <!-- TMPL_ELSE -->
-                            <!-- TMPL_VAR NAME="maxissueqty" -->
-                        <!-- /TMPL_IF -->
-                    </td>
-                    <td><!-- TMPL_IF NAME="issuelength" --><!-- TMPL_VAR NAME="issuelength" --> day(s)<!-- /TMPL_IF --></td>
-                    <td>
-                        <a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=<!-- TMPL_VAR NAME="itemtype" -->&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->&amp;branch=<!-- TMPL_VAR NAME="branch" -->">Delete</a>
-                    </td>
-                </tr>
-            <!-- /TMPL_LOOP -->
+				<!-- TMPL_LOOP NAME="rules" -->
+					<!-- TMPL_UNLESS NAME="__odd__" -->
+					<tr class="highlight">
+					<!-- TMPL_ELSE -->
+					<tr>
+					<!-- /TMPL_UNLESS -->
+							<td><!-- TMPL_IF NAME="default_humancategorycode" -->
+									<em>Default</em>
+								<!-- TMPL_ELSE -->
+									<!-- TMPL_VAR NAME="humancategorycode" -->
+								<!-- /TMPL_IF -->
+							</td>
+							<td><!-- TMPL_IF NAME="default_humanitemtype" -->
+									<em>Default</em>
+								<!-- TMPL_ELSE -->
+									<!-- TMPL_VAR NAME="humanitemtype" -->
+								<!-- /TMPL_IF -->
+							</td>
+							<td><!-- TMPL_VAR NAME="fine" --></td>
+							<td>
+								<!-- TMPL_IF NAME="finedays" -->
+									<!-- TMPL_VAR NAME="finedays" --> day(s)
+								<!-- /TMPL_IF -->
+							</td>
+							<td><!-- TMPL_IF NAME="firstremind" --><!-- TMPL_VAR NAME="firstremind" --> day(s)<!-- /TMPL_IF --></td>
+							<td><!-- TMPL_IF NAME="chargeperiod" --><!-- TMPL_VAR NAME="chargeperiod" --> day(s)<!-- /TMPL_IF --></td>
+							<td><!-- TMPL_IF NAME="unlimited_maxissueqty" -->
+									Unlimited
+								<!-- TMPL_ELSE -->
+									<!-- TMPL_VAR NAME="maxissueqty" -->
+								<!-- /TMPL_IF -->
+							</td>
+							<td><!-- TMPL_IF NAME="renewalsallowed" --><!-- TMPL_VAR NAME="renewalsallowed" --> time(s)<!-- /TMPL_IF --></td>
+							<td><!-- TMPL_IF NAME="reservesallowed" --><!-- TMPL_VAR NAME="reservesallowed" --> time(s)<!-- /TMPL_IF --></td>
+							<td><!-- TMPL_IF NAME="issuelength" --><!-- TMPL_VAR NAME="issuelength" --> day(s)<!-- /TMPL_IF --></td>
+							<td>
+								<a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=<!-- TMPL_VAR NAME="itemtype" -->&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->&amp;branch=<!-- TMPL_VAR NAME="branch" -->">Delete</a>
+							</td>
+                	</tr>
+            	<!-- /TMPL_LOOP -->
                 <tr>
                     <td>
                         <select name="categorycode">
