@@ -37,6 +37,7 @@ BEGIN {
 		&GetPrinters &GetPrinter
 		&GetItemTypes &getitemtypeinfo
 		&GetCcodes
+		&GetSupportName &GetSupportList
 		&get_itemtypeinfos_of
 		&getframeworks &getframeworkinfo
 		&getauthtypes &getauthtype
@@ -211,6 +212,87 @@ sub subfield_is_koha_internal_p ($) {
     return length $subfield != 1;
 }
 
+=head2 GetSupportName
+
+  $itemtypename = &GetSupportName($codestring);
+
+Returns a string with the name of the itemtype.
+
+
+=cut
+
+sub GetSupportName{
+	my ($codestring)=@_;
+	return if (! $codestring); 
+	my $resultstring;
+	my $advanced_search_types = C4::Context->preference("AdvancedSearchTypes");
+	if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {  
+		my $query = qq|
+			SELECT description
+			FROM   itemtypes
+			WHERE itemtype=?
+			order by description
+		|;
+		my $sth = C4::Context->dbh->prepare($query);
+		$sth->execute($codestring);
+		($resultstring)=$sth->fetchrow;
+		return $resultstring;
+	} else {
+        my $sth =
+            C4::Context->dbh->prepare(
+                    "SELECT lib FROM authorised_values WHERE category = ? AND authorised_value = ?"
+                    );
+        $sth->execute( $advanced_search_types, $codestring );
+        my $data = $sth->fetchrow_hashref;
+        return $$data{'lib'};
+	}
+
+}
+=head2 GetSupportList
+
+  $itemtypes = &GetSupportList();
+
+Returns an array ref containing informations about Support (since itemtype is rather a circulation code when item-level-itypes is used).
+
+build a HTML select with the following code :
+
+=head3 in PERL SCRIPT
+
+    my $itemtypes = GetSupportList();
+    $template->param(itemtypeloop => $itemtypes);
+
+=head3 in TEMPLATE
+
+    <form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+        <select name="itemtype">
+            <option value="">Default</option>
+        <!-- TMPL_LOOP name="itemtypeloop" -->
+            <option value="<!-- TMPL_VAR name="itemtype" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->> <!--TMPL_IF Name="imageurl"--><img alt="<!-- TMPL_VAR name="description" -->" src="<!--TMPL_VAR Name="imageurl"-->><!--TMPL_ELSE-->"<!-- TMPL_VAR name="description" --><!--/TMPL_IF--></option>
+        <!-- /TMPL_LOOP -->
+        </select>
+        <input type=text name=searchfield value="<!-- TMPL_VAR name="searchfield" -->">
+        <input type="submit" value="OK" class="button">
+    </form>
+
+=cut
+
+sub GetSupportList{
+	my $advanced_search_types = C4::Context->preference("AdvancedSearchTypes");
+	if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {  
+		my $query = qq|
+			SELECT *
+			FROM   itemtypes
+			order by description
+		|;
+		my $sth = C4::Context->dbh->prepare($query);
+		$sth->execute;
+		return $sth->fetchall_arrayref({});
+	} else {
+		my $advsearchtypes = GetAuthorisedValues($advanced_search_types);
+		my @results= map {{itemtype=>$$_{authorised_value},description=>$$_{lib},imageurl=>$$_{imageurl}}} @$advsearchtypes;
+		return \@results;
+	}
+}
 =head2 GetItemTypes
 
   $itemtypes = &GetItemTypes();
@@ -998,6 +1080,7 @@ sub GetAuthorisedValues {
     my $dbh      = C4::Context->dbh;
     my $query    = "SELECT * FROM authorised_values";
     $query .= " WHERE category = '" . $category . "'" if $category;
+    $query .= " ORDER BY category, lib";
 
     my $sth = $dbh->prepare($query);
     $sth->execute;
