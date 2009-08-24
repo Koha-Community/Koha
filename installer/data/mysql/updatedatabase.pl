@@ -2581,13 +2581,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (bug 1934: Add OPACSearchForTitleIn syspref)\n";
 }
 
-$DBversion = '3.01.00.XXX';
-     if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-     $dbh->do("UPDATE systempreferences SET explanation='Fine limit above which user cannot renew books via OPAC' WHERE variable='OPACFineNoRenewals';");
-     $dbh->do("UPDATE systempreferences SET explanation='If set to ON, a clear screen button will appear on the circulation page.' WHERE variable='DisplayClearScreenButton';");
-     SetVersion ($DBversion);
-     print "Upgrade to $DBversion done (fixed typos in new sysprefs)\n";
-     }
+$DBversion = '3.01.00.051';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("UPDATE systempreferences SET explanation='Fine limit above which user cannot renew books via OPAC' WHERE variable='OPACFineNoRenewals';");
+    $dbh->do("UPDATE systempreferences SET explanation='If set to ON, a clear screen button will appear on the circulation page.' WHERE variable='DisplayClearScreenButton';");
+    SetVersion ($DBversion);
+    print "Upgrade to $DBversion done (fixed typos in new sysprefs)\n";
+}
 
 =item DropAllForeignKeys($table)
 
