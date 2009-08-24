@@ -532,7 +532,6 @@ sub itemissues {
             $data->{'date_due'} = ($data->{'wthdrawn'} eq '1') ? 'Cancelled' : 'Available';
         }
 
-        $sth2->finish;
 
         # Find the last 3 people who borrowed this item.
         $sth2 = $dbh->prepare(
@@ -552,12 +551,10 @@ sub itemissues {
             }    # if
         }    # for
 
-        $sth2->finish;
         $results[$i] = $data;
         $i++;
     }
 
-    $sth->finish;
     return (@results);
 }
 
@@ -731,7 +728,16 @@ sub CanBookBeIssued {
         }
     }
 
-    #
+    my ($blocktype, $count) = C4::Members::IsMemberBlocked($borrower->{'borrowernumber'});
+    if($blocktype == -1){
+        ## remaining overdue documents
+        $issuingimpossible{USERBLOCKEDREMAINING} = $count;
+    }elsif($blocktype == 1){
+        ## blocked because of overdue return
+        $issuingimpossible{USERBLOCKEDOVERDUE} = $count;
+    }
+
+#
     # JB34 CHECKS IF BORROWERS DONT HAVE ISSUE TOO MANY BOOKS
     #
 	my $toomany = TooMany( $borrower, $item->{biblionumber}, $item );
