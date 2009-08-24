@@ -17,7 +17,7 @@
     <option value="sn">Standard Number</option>
     <option value="nb">&nbsp;&nbsp;&nbsp;&nbsp; ISBN</option>
     <option value="ns">&nbsp;&nbsp;&nbsp;&nbsp; ISSN</option>
-    <option value="lcn,phr">&nbsp;&nbsp;&nbsp;&nbsp; Call Number</option>
+    <option value="callnum">&nbsp;&nbsp;&nbsp;&nbsp; Call Number</option>
     <option value="su">Subject</option>
     <option value="su,phr">&nbsp;&nbsp;&nbsp;&nbsp; Subject as Phrase</option>
     <option value="ti">Title</option>
