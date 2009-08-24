@@ -181,35 +181,6 @@ sub _split_fcn {
     return @fcn_split;
 }
 
-sub _get_fields {
-    my ( $layout_id, $sorttype ) = @_;
-    my @sorted_fields;
-    my $sortorder = get_layout($layout_id);
-    if ( !$sorttype ) {
-        return $sortorder->{'formatstring'};
-    }
-    else {
-        my $csv    = Text::CSV_XS->new( { allow_whitespace => 1 } );
-        my $line   = $sortorder->{'formatstring'};
-        my $status = $csv->parse($line);
-        @sorted_fields =
-          map { { 'code' => $_, desc => $_ } } $csv->fields();
-        if (my $error = $csv->error_input()) {
-            syslog("LOG_ERR", "C4::Labels::Label::_get_fields : Text::CSV_XS returned the following error: %s", $error);
-        }
-    }
-}
-
-sub _get_item_fields {
-    my @fields = qw (
-      barcode           title
-      isbn              issn
-      author            itemtype
-      itemcallnumber
-    );
-    return @fields;
-}
-
 sub _get_barcode_data {
     my ( $f, $item, $record ) = @_;
     my $kohatables = _desc_koha_tables();
