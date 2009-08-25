@@ -390,11 +390,11 @@ if ($borrowernumber) {
 #         if we don't have a reserv on item, we put the biblio infos and the waiting position
         if ( $getiteminfo->{'title'} eq '' ) {
             my $getbibinfo = GetBiblioData( $num_res->{'biblionumber'} );
-            my $getbibtype = getitemtypeinfo( $getbibinfo->{'itemtype'} );  # fixme - we should have item-level reserves here ?
+
             $getreserv{color}           = 'inwait';
             $getreserv{title}           = $getbibinfo->{'title'};
             $getreserv{nottransfered}   = 0;
-            $getreserv{itemtype}        = $getbibtype->{'description'};
+            $getreserv{itemtype}        = $itemtypeinfo->{'description'};
             $getreserv{author}          = $getbibinfo->{'author'};
             $getreserv{biblionumber}    = $num_res->{'biblionumber'};
         }
