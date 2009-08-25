@@ -513,8 +513,17 @@ sub getRecords {
 
                             # if it's a branch, label by the name, not the code,
                             if ( $link_value =~ /branch/ ) {
-                                $facet_label_value =
-                                  $branches->{$one_facet}->{'branchname'};
+								if (defined $branches 
+									&& ref($branches) eq "HASH" 
+									&& defined $branches->{$one_facet} 
+									&& ref ($branches->{$one_facet}) eq "HASH")
+								{
+                                	$facet_label_value =
+                                  		$branches->{$one_facet}->{'branchname'};
+								}
+								else {
+									$facet_label_value = "*";
+								}
                             }
 
                             # but we're down with the whole label being in the link's title.
