@@ -98,7 +98,7 @@ $template->param(   BORROWER_INFO  => \@bordat,
 
 #get issued items ....
 my ($issues) = GetPendingIssues($borrowernumber);
-my @issue_list = sort { $b->{'date_due'} cmp $a->{'date_due'} } @$issues;
+my @issue_list = sort { $b->{'date_due'} cmp $a->{'date_due'} } @$issues if ($issues);
 
 my $count          = 0;
 my $toggle = 0;
