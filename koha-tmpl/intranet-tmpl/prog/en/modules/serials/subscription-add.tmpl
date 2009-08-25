@@ -917,6 +917,7 @@ function Check(f) {
 
 $(document).ready(function() {
     init_pattern();
+   //  $(".widelabel").attr("width", "300px");  // labels stay skinny in IE7 anyway.
 <!-- TMPL_IF name="mod" -->
     set_num_pattern_from_template_vars();
     <!-- TMPL_IF name="hemisphere" -->
@@ -1281,6 +1282,27 @@ $(document).ready(function() {
                 </select>
                 <input type="text" name="sublength" value="<!-- TMPL_VAR name="sublength" -->" size="3" onkeypress="return check_input(event)" /> (enter amount in numerals)
             <span class="required">Required</span>
+        </li>
+        <li>
+           <label for="ending_date" class="required"> Subscription end date:</label>
+            
+                <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="buttonend1" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />
+                <input type="text" name="enddate" value="<!-- TMPL_VAR name="enddate" -->" size="13" maxlength="10" id="ending_date" style="border-width: 0px;" />
+                <!-- both scripts for calendar must follow the input field --> 
+                <script type="text/javascript">
+                    Calendar.setup({
+                        inputField   : "ending_date",
+                        ifFormat     : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+                        button       : "buttonend1",
+                        align        : "Tl"
+                    });
+                    Calendar.setup({
+                        inputField   : "ending_date",
+                        ifFormat     : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+                        button       : "ending_date",
+                        align        : "Tl"
+                    });
+                </script>
         </li>
     <li><label for="numberingmethod">Numbering formula:</label> <input type="text" name="numberingmethod" id="numberingmethod" value="<!-- TMPL_VAR name="numberingmethod" -->" />
     </li>

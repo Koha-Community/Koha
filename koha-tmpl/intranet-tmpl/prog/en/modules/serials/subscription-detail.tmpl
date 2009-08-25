@@ -52,7 +52,29 @@ function popup(subscriptionid) {
 
     <h1>Subscription for <!-- TMPL_VAR name="bibliotitle" --> </h1>
     <!--TMPL_IF Name="abouttoexpire"--><div class="problem">Subscription is near its end. It should be renewed now.</div><!--/TMPL_IF-->
-    
+    <!-- TMPL_IF NAME="NEEDSCONFIRMATION" -->
+    <div id="circ_needsconfirmation" class="dialog alert">
+			<h3>Please Confirm Subscription deletion</h3>
+
+			<ul>
+			<!-- TMPL_IF NAME="NOTEXPIRED" --> <li>The subscription has not expired yet</li> <!-- /TMPL_IF --> 
+			<!-- TMPL_IF NAME="LINKEDISSUES" --> <li>The subscription has linked issues</li> <!-- /TMPL_IF -->
+			</ul>
+			<form method="post" action="/cgi-bin/koha/serials/subscription-detail.pl">
+			<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR NAME="subscriptionid" -->" />
+			<input type="hidden" name="issueconfirmed" value="1" />
+			<input type="hidden" name="op" value="del" />
+			<input type="submit" class="approve" value="Yes, Delete (Y)" accesskey="y" />
+			</form>
+			<form method="get" action="/cgi-bin/koha/serials/subscription-detail.pl">
+			<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR NAME="subscriptionid" -->" />
+			<input type="submit" class="deny" value="No, Don't Delete (N)" accesskey="n" />
+			</form>
+
+	</div>
+	<!-- /TMPL_IF --> <!-- NEEDSCONFIRMATION -->
+
+ 
     <div id="subscription_info">
         <h2>Subscription information</h2>
 		<ul>

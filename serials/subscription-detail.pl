@@ -29,26 +29,11 @@ use Carp;
 
 my $query = new CGI;
 my $op = $query->param('op') || q{};
+my $issueconfirmed = $query->param('issueconfirmed');
 my $dbh = C4::Context->dbh;
 my ($template, $loggedinuser, $cookie, $hemisphere);
 my $subscriptionid = $query->param('subscriptionid');
 my $subs = GetSubscription($subscriptionid);
-
-$subs->{enddate} = GetExpirationDate($subscriptionid);
-
-if ( $op eq 'del') {
-	if ($subs->{'cannotedit'}){
-		carp "Attempt to delete subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
-		print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
-	}
-	DelSubscription($subscriptionid);
-	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=serials-home.pl\"></html>";
-	exit;
-}
-my ($routing, @routinglist) = getroutinglist($subscriptionid);
-my ($totalissues,@serialslist) = GetSerials($subscriptionid);
-$totalissues-- if $totalissues; # the -1 is to have 0 if this is a new subscription (only 1 issue)
-# the subscription must be deletable if there is NO issues for a reason or another (should not happend, but...)
 
 ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "serials/subscription-detail.tmpl",
@@ -59,17 +44,46 @@ $totalissues-- if $totalissues; # the -1 is to have 0 if this is a new subscript
                 debug => 1,
                 });
 
+$$subs{enddate} ||= GetExpirationDate($subscriptionid);
+
+if ($op eq 'del') {
+	if ($$subs{'cannotedit'}){
+		carp "Attempt to delete subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
+		print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
+		exit;
+	}
+	
+    # Asking for confirmation if the subscription has not strictly expired yet or if it has linked issues
+    my $strictlyexpired = HasSubscriptionStrictlyExpired($subscriptionid);
+    my $linkedissues = CountIssues($subscriptionid);
+    if ($strictlyexpired == 0 || $linkedissues > 0) {
+		$template->param(NEEDSCONFIRMATION => 1);
+		if ($strictlyexpired == 0) { $template->param("NOTEXPIRED" => 1); }
+		if ($linkedissues     > 0) { $template->param("LINKEDISSUES" => 1); }
+    } else {
+		$issueconfirmed = "1";
+    }
+    # If it's ok to delete the subscription, we do so
+    if ($issueconfirmed eq "1") {
+		&DelSubscription($subscriptionid);
+		print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=serials-home.pl\"></html>";
+		exit;
+    }
+}
+my ($routing, @routinglist) = getroutinglist($subscriptionid);
+my ($totalissues,@serialslist) = GetSerials($subscriptionid);
+$totalissues-- if $totalissues; # the -1 is to have 0 if this is a new subscription (only 1 issue)
+# the subscription must be deletable if there is NO issues for a reason or another (should not happend, but...)
+
 my ($user, $sessionID, $flags);
 ($user, $cookie, $sessionID, $flags)
     = checkauth($query, 0, {catalogue => 1}, "intranet");
 
 # COMMENT hdl : IMHO, we should think about passing more and more data hash to template->param rather than duplicating code a new coding Guideline ?
 
-$subs->{startdate}      = format_date($subs->{startdate});
-$subs->{firstacquidate} = format_date($subs->{firstacquidate});
-$subs->{histstartdate}  = format_date($subs->{histstartdate});
-$subs->{enddate}        = format_date($subs->{enddate});
-$subs->{histenddate}    = format_date($subs->{histenddate});
+for my $date qw(startdate enddate firstacquidate histstartdate histenddate){
+	$$subs{$_}      = format_date($$subs{$_});
+}
 $subs->{abouttoexpire}  = abouttoexpire($subs->{subscriptionid});
 
 $template->param($subs);

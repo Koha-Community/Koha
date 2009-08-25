@@ -19,7 +19,7 @@ package C4::Serials;    #assumes C4/Serials.pm
 
 
 use strict;
-use C4::Dates qw(format_date format_date_in_iso);
+use C4::Dates qw(format_date);
 use Date::Calc qw(:all);
 use POSIX qw(strftime);
 use C4::Suggestions;
@@ -41,7 +41,7 @@ BEGIN {
     &NewSubscription    &ModSubscription    &DelSubscription    &GetSubscriptions
     &GetSubscription    &CountSubscriptionFromBiblionumber      &GetSubscriptionsFromBiblionumber
     &GetFullSubscriptionsFromBiblionumber   &GetFullSubscription &ModSubscriptionHistory
-    &HasSubscriptionExpired &GetExpirationDate &abouttoexpire
+    &HasSubscriptionStrictlyExpired &HasSubscriptionExpired &GetExpirationDate &abouttoexpire
     
     &GetNextSeq         &NewIssue           &ItemizeSerials    &GetSerials
     &GetLatestSerials   &ModSerialStatus    &GetNextDate       &GetSerials2
@@ -51,10 +51,12 @@ BEGIN {
     
     &UpdateClaimdateIssues
     &GetSuppliersWithLateIssues             &getsupplierbyserialid
+    &GetDistributedTo   &SetDistributedTo
     &getroutinglist     &delroutingmember   &addroutingmember
     &reorder_members
     &check_routing &updateClaim &removeMissingIssue
-    
+    &CountIssues
+
 	);
 }
 
@@ -320,14 +322,14 @@ Update Claimdate for issues in @$serialids list with date $date
 
 sub UpdateClaimdateIssues {
     my ( $serialids, $date ) = @_;
-    if (!$date) {
-        $date = strftime('%Y-%m-%d',localtime);
-    }
     my $dbh   = C4::Context->dbh;
-    my $ids_str = join ',', @{$serialids};
-    my $query = 'UPDATE serial SET claimdate=? ,status=7 WHERE  serialid IN ( '
-     . $ids_str . ' )';
-    return $dbh->do($query,undef, $date);
+    $date = strftime("%Y-%m-%d",localtime) unless ($date);
+    my $query = "
+        UPDATE serial SET claimdate=$date,status=7
+        WHERE  serialid in (".join (",",@$serialids) .")";
+    my $rq = $dbh->prepare($query);
+    $rq->execute;
+    return $rq->rows;
 }
 
 =head2 GetSubscription
@@ -350,7 +352,6 @@ sub GetSubscription {
     my $query            = qq(
         SELECT  subscription.*,
                 subscriptionhistory.*,
-                subscriptionhistory.enddate as histenddate,
                 aqbudget.bookfundid,
                 aqbooksellers.name AS aqbooksellername,
                 biblio.title AS bibliotitle,
@@ -514,7 +515,6 @@ sub GetSubscriptionsFromBiblionumber {
         SELECT subscription.*,
                branches.branchname,
                subscriptionhistory.*,
-               subscriptionhistory.enddate as histenddate, 
                aqbudget.bookfundid,
                aqbooksellers.name AS aqbooksellername,
                biblio.title AS bibliotitle
@@ -587,7 +587,6 @@ sub GetFullSubscriptionsFromBiblionumber {
             aqbudget.bookfundid,aqbooksellers.name as aqbooksellername,
             biblio.title as bibliotitle,
             subscription.branchcode AS branchcode,
-            branches.branchname AS branchname,
             subscription.subscriptionid AS subscriptionid|;
      if (C4::Context->preference('IndependantBranches') && 
         C4::Context->userenv && 
@@ -602,7 +601,6 @@ sub GetFullSubscriptionsFromBiblionumber {
           (serial.subscriptionid=subscription.subscriptionid)
   LEFT JOIN aqbudget ON subscription.aqbudgetid=aqbudget.aqbudgetid 
   LEFT JOIN aqbooksellers on subscription.aqbooksellerid=aqbooksellers.id 
-  LEFT JOIN branches ON branches.branchcode=subscription.branchcode
   LEFT JOIN biblio on biblio.biblionumber=subscription.biblionumber 
   WHERE     subscription.biblionumber = ? 
   ORDER BY year DESC,
@@ -735,7 +733,7 @@ sub GetSerials {
     $count=5 unless ($count);
     my @serials;
     my $query =
-      "SELECT serialid,serialseq, status, publisheddate, planneddate,notes, routingnotes, claimdate
+      "SELECT serialid,serialseq, status, publisheddate, planneddate,notes, routingnotes
                         FROM   serial
                         WHERE  subscriptionid = ? AND status NOT IN (2,4,5) 
                         ORDER BY IF(publisheddate<>'0000-00-00',publisheddate,planneddate) DESC";
@@ -746,7 +744,6 @@ sub GetSerials {
           1;    # fills a "statusX" value, used for template status select list
         $line->{"publisheddate"} = format_date( $line->{"publisheddate"} );
         $line->{"planneddate"}   = format_date( $line->{"planneddate"} );
-        $line->{claimdate}       = format_date( $line->{claimdate} );
         push @serials, $line;
     }
     # OK, now add the last 5 issues arrives/missing
@@ -832,7 +829,7 @@ sub GetLatestSerials {
                         FROM     serial
                         WHERE    subscriptionid = ?
                         AND      (status =2 or status=4)
-                        ORDER BY publisheddate DESC LIMIT 0,$limit
+                        ORDER BY planneddate DESC LIMIT 0,$limit
                 ";
     my $sth = $dbh->prepare($strsth);
     $sth->execute($subscriptionid);
@@ -853,6 +850,27 @@ sub GetLatestSerials {
     #     $sth->execute($subscriptionid);
     #     my ($totalissues) = $sth->fetchrow;
     return \@serials;
+}
+
+=head2 GetDistributedTo
+
+=over 4
+
+$distributedto=GetDistributedTo($subscriptionid)
+This function select the old previous value of distributedto in the database.
+
+=back
+
+=cut
+
+sub GetDistributedTo {
+    my $dbh = C4::Context->dbh;
+    my $distributedto;
+    my $subscriptionid = @_;
+    my $query = "SELECT distributedto FROM subscription WHERE subscriptionid=?";
+    my $sth   = $dbh->prepare($query);
+    $sth->execute($subscriptionid);
+    return ($distributedto) = $sth->fetchrow;
 }
 
 =head2 GetNextSeq
@@ -1010,10 +1028,15 @@ sub GetExpirationDate {
     my ($subscriptionid) = @_;
     my $dbh              = C4::Context->dbh;
     my $subscription     = GetSubscription($subscriptionid);
-    my $enddate          = $subscription->{startdate};
+    my $enddate          = $$subscription{enddate}||$$subscription{histenddate};
 
-# we don't do the same test if the subscription is based on X numbers or on X weeks/months
-    if (($subscription->{periodicity} % 16) >0){
+    return $enddate if ($enddate && $enddate ne "0000-00-00");
+	 
+	  # we don't do the same test if the subscription is based on X numbers or on X weeks/months
+	 $enddate=$$subscription{startdate};
+	 my @date=split (/-/,$$subscription{startdate});
+	 return if (scalar(@date)!=3 ||not check_date(@date));
+     if (($subscription->{periodicity} % 16) >0){
       if ( $subscription->{numberlength} ) {
           #calculate the date of the last issue.
           my $length = $subscription->{numberlength};
@@ -1022,17 +1045,20 @@ sub GetExpirationDate {
           }
       }
       elsif ( $subscription->{monthlength} ){
-          my @date=split (/-/,$subscription->{startdate});
-          my @enddate = Add_Delta_YM($date[0],$date[1],$date[2],0,$subscription->{monthlength});
-          $enddate=sprintf("%04d-%02d-%02d",$enddate[0],$enddate[1],$enddate[2]);
-      } elsif ( $subscription->{weeklength} ){
-          my @date=split (/-/,$subscription->{startdate});
-          my @enddate = Add_Delta_Days($date[0],$date[1],$date[2],$subscription->{weeklength}*7);
-          $enddate=sprintf("%04d-%02d-%02d",$enddate[0],$enddate[1],$enddate[2]);
-      }
-      return $enddate;
-    } else {
-      return 0;  
+		   if ($$subscription{startdate}){
+		       my @enddate = Add_Delta_YM($date[0],$date[1],$date[2],0,$subscription->{monthlength});
+		       $enddate=sprintf("%04d-%02d-%02d",$enddate[0],$enddate[1],$enddate[2]);
+		   }
+      } elsif   ( $subscription->{weeklength} ){
+		   if ($$subscription{startdate}){
+		        my @date=split (/-/,$subscription->{startdate});
+		        my @enddate = Add_Delta_Days($date[0],$date[1],$date[2],$subscription->{weeklength}*7);
+		        $enddate=sprintf("%04d-%02d-%02d",$enddate[0],$enddate[1],$enddate[2]);
+	  		}
+	  }
+	  return $enddate;
+	} else {
+       return ;  
     }  
 }
 
@@ -1078,7 +1104,7 @@ sub ModSubscriptionHistory {
     ) = @_;
     my $dbh   = C4::Context->dbh;
     my $query = "UPDATE subscriptionhistory 
-                    SET histstartdate=?,enddate=?,recievedlist=?,missinglist=?,opacnote=?,librariannote=?
+                    SET histstartdate=?,histenddate=?,recievedlist=?,missinglist=?,opacnote=?,librariannote=?
                     WHERE subscriptionid=?
                 ";
     my $sth = $dbh->prepare($query);
@@ -1279,8 +1305,8 @@ sub ModSubscription {
         $whenmorethan3,   $setto3,       $lastvalue3,     $innerloop3,
         $numberingmethod, $status,       $biblionumber,   $callnumber,
         $notes,           $letter,       $hemisphere,     $manualhistory,
-        $internalnotes,   $serialsadditems,$subscriptionid,
-        $staffdisplaycount,$opacdisplaycount, $graceperiod, $location
+        $internalnotes,   $serialsadditems,
+        $staffdisplaycount,$opacdisplaycount, $graceperiod, $location,$enddate,$subscriptionid
     ) = @_;
 #     warn $irregularity;
     my $dbh   = C4::Context->dbh;
@@ -1290,7 +1316,10 @@ sub ModSubscription {
                         add1=?,every1=?,whenmorethan1=?,setto1=?,lastvalue1=?,innerloop1=?,
                         add2=?,every2=?,whenmorethan2=?,setto2=?,lastvalue2=?,innerloop2=?,
                         add3=?,every3=?,whenmorethan3=?,setto3=?,lastvalue3=?,innerloop3=?,
-                        numberingmethod=?, status=?, biblionumber=?, callnumber=?, notes=?, letter=?, hemisphere=?,manualhistory=?,internalnotes=?,serialsadditems=?,staffdisplaycount = ?,opacdisplaycount = ?, graceperiod = ?, location = ?
+                        numberingmethod=?, status=?, biblionumber=?, callnumber=?, notes=?, 
+						letter=?, hemisphere=?,manualhistory=?,internalnotes=?,serialsadditems=?,
+						staffdisplaycount = ?,opacdisplaycount = ?, graceperiod = ?, location = ?
+						,enddate=?
                     WHERE subscriptionid = ?";
      #warn "query :".$query;
     my $sth = $dbh->prepare($query);
@@ -1306,7 +1335,7 @@ sub ModSubscription {
         $numberingmethod, $status,       $biblionumber,   $callnumber,
         $notes,           $letter,       $hemisphere,     ($manualhistory?$manualhistory:0),
         $internalnotes,   $serialsadditems,
-        $staffdisplaycount, $opacdisplaycount, $graceperiod, $location,
+        $staffdisplaycount, $opacdisplaycount, $graceperiod, $location,$enddate,
         $subscriptionid
     );
     my $rows=$sth->rows;
@@ -1326,7 +1355,7 @@ $subscriptionid = &NewSubscription($auser,branchcode,$aqbooksellerid,$cost,$aqbu
     $add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
     $add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
     $numberingmethod, $status, $notes, $serialsadditems,
-    $staffdisplaycount, $opacdisplaycount, $graceperiod, $location);
+    $staffdisplaycount, $opacdisplaycount, $graceperiod, $location, $enddate);
 
 Create a new subscription with value given on input args.
 
@@ -1350,7 +1379,7 @@ sub NewSubscription {
         $notes,         $letter,       $firstacquidate,  $irregularity,
         $numberpattern, $callnumber,   $hemisphere,      $manualhistory,
         $internalnotes, $serialsadditems, $staffdisplaycount, $opacdisplaycount,
-        $graceperiod, $location
+        $graceperiod, $location,$enddate
     ) = @_;
     my $dbh = C4::Context->dbh;
 
@@ -1364,15 +1393,15 @@ sub NewSubscription {
             add3,every3,whenmorethan3,setto3,lastvalue3,innerloop3,
             numberingmethod, status, notes, letter,firstacquidate,irregularity,
             numberpattern, callnumber, hemisphere,manualhistory,internalnotes,serialsadditems,
-            staffdisplaycount,opacdisplaycount,graceperiod,location)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+            staffdisplaycount,opacdisplaycount,graceperiod,location,enddate)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         |;
     my $sth = $dbh->prepare($query);
     $sth->execute(
         $auser,                         $branchcode,
         $aqbooksellerid,                $cost,
         $aqbudgetid,                    $biblionumber,
-        format_date_in_iso($startdate), $periodicity,
+        $startdate, $periodicity,
         $dow,                           $numberlength,
         $weeklength,                    $monthlength,
         $add1,                          $every1,
@@ -1386,12 +1415,13 @@ sub NewSubscription {
         $lastvalue3,                    $innerloop3,
         $numberingmethod,               "$status",
         $notes,                         $letter,
-        format_date_in_iso($firstacquidate),                $irregularity,
+        $firstacquidate,                $irregularity,
         $numberpattern,                 $callnumber,
         $hemisphere,                    $manualhistory,
         $internalnotes,                 $serialsadditems,
 		$staffdisplaycount,				$opacdisplaycount,
         $graceperiod,                   $location,
+		$enddate
     );
 
     #then create the 1st waited number
@@ -1403,7 +1433,7 @@ sub NewSubscription {
         );
     $sth = $dbh->prepare($query);
     $sth->execute( $biblionumber, $subscriptionid,
-        format_date_in_iso($startdate),
+        $startdate,
         $notes,$internalnotes );
 
    # reread subscription to get a hash (for calculation of the 1st issue number)
@@ -1426,8 +1456,8 @@ sub NewSubscription {
     $sth = $dbh->prepare($query);
     $sth->execute(
         "$serialseq", $subscriptionid, $biblionumber, 1,
-        format_date_in_iso($firstacquidate),
-        format_date_in_iso($firstacquidate)
+        $firstacquidate,
+        $firstacquidate
     );
     
     logaction("SERIAL", "ADD", $subscriptionid, "") if C4::Context->preference("SubscriptionLog");
@@ -1492,7 +1522,7 @@ sub ReNewSubscription {
         WHERE  subscriptionid=?
     |;
     $sth = $dbh->prepare($query);
-    $sth->execute( format_date_in_iso($startdate),
+    $sth->execute( $startdate,
         $numberlength, $weeklength, $monthlength, $subscriptionid );
         
     logaction("SERIAL", "RENEW", $subscriptionid, "") if C4::Context->preference("SubscriptionLog");
@@ -1610,7 +1640,7 @@ sub ItemizeSerials {
             $sth->execute( $data->{'biblionumber'} );
             my $biblioitem = $sth->fetchrow_hashref;
             $biblioitem->{'volumedate'} =
-              format_date_in_iso( $data->{planneddate} );
+               $data->{planneddate} ;
             $biblioitem->{'volumeddesc'} =
               $data->{serialseq} . ' ('
               . format_date( $data->{'planneddate'} ) . ')';
@@ -1758,6 +1788,49 @@ sub ItemizeSerials {
     }
 }
 
+=head2 HasSubscriptionStrictlyExpired
+
+=over 4
+
+1 or 0 = HasSubscriptionStrictlyExpired($subscriptionid)
+
+the subscription has stricly expired when today > the end subscription date 
+
+return :
+1 if true, 0 if false, -1 if the expiration date is not set.
+
+=back
+
+=cut
+sub HasSubscriptionStrictlyExpired {
+    # Getting end of subscription date
+    my ($subscriptionid) = @_;
+    my $dbh              = C4::Context->dbh;
+    my $subscription     = GetSubscription($subscriptionid);
+    my $expirationdate   = GetExpirationDate($subscriptionid);
+   
+    # If the expiration date is set
+    if ($expirationdate != 0) {
+	my ($endyear, $endmonth, $endday) = split('-', $expirationdate);
+
+	# Getting today's date
+	my ($nowyear, $nowmonth, $nowday) = Today();
+
+	# if today's date > expiration date, then the subscription has stricly expired
+	if (Delta_Days($nowyear, $nowmonth, $nowday,
+			 $endyear, $endmonth, $endday) < 0) {
+	    return 1;	
+	} else {
+	    return 0;
+	}
+    } else {
+	# There are some cases where the expiration date is not set
+	# As we can't determine if the subscription has expired on a date-basis,
+	# we return -1;
+	return -1;
+    }
+}
+
 =head2 HasSubscriptionExpired
 
 =over 4
@@ -1807,6 +1880,29 @@ sub HasSubscriptionExpired {
       }
     }
     return 0;	# Notice that you'll never get here.
+}
+
+=head2 SetDistributedto
+
+=over 4
+
+SetDistributedto($distributedto,$subscriptionid);
+This function update the value of distributedto for a subscription given on input arg.
+
+=back
+
+=cut
+
+sub SetDistributedto {
+    my ( $distributedto, $subscriptionid ) = @_;
+    my $dbh   = C4::Context->dbh;
+    my $query = qq|
+        UPDATE subscription
+        SET    distributedto=?
+        WHERE  subscriptionid=?
+    |;
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $distributedto, $subscriptionid );
 }
 
 =head2 DelSubscription
@@ -1930,7 +2026,7 @@ LEFT JOIN subscription  ON serial.subscriptionid=subscription.subscriptionid
 LEFT JOIN biblio        ON subscription.biblionumber=biblio.biblionumber
 LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
 WHERE subscription.subscriptionid = serial.subscriptionid 
-AND (serial.STATUS = 4 OR ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3))
+AND (serial.STATUS = 4 OR ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3 OR serial.STATUS = 7))
 AND subscription.aqbooksellerid=$supplierid
 $byserial
 ORDER BY $order"
@@ -1957,7 +2053,7 @@ LEFT JOIN aqbooksellers
 ON subscription.aqbooksellerid = aqbooksellers.id
 WHERE 
    subscription.subscriptionid = serial.subscriptionid 
-AND (serial.STATUS = 4 OR ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3))
+AND (serial.STATUS = 4 OR ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3 OR serial.STATUS = 7))
 $byserial
 ORDER BY $order"
         );
@@ -2301,6 +2397,31 @@ sub countissuesfrom {
     return $countreceived;  
 }
 
+=head2 CountIssues
+
+=over 4
+
+$result = &CountIssues($subscriptionid)
+
+
+=back
+
+=cut
+
+sub CountIssues {
+    my ($subscriptionid) = @_;
+    my $dbh              = C4::Context->dbh;
+    my $query = qq|
+            SELECT count(*)
+            FROM   serial
+            WHERE  subscriptionid=?
+        |;
+    my $sth=$dbh->prepare($query);
+    $sth->execute($subscriptionid);
+    my ($countreceived)=$sth->fetchrow;
+    return $countreceived;  
+}
+
 =head2 abouttoexpire
 
 =over 4
@@ -2358,6 +2479,7 @@ sub abouttoexpire {
     return (countissuesfrom($subscriptionid,$subscription->{'startdate'}) >=$subscription->{numberlength}-1);
    } else {return 0}
 }
+
 
 =head2 GetNextDate
 
