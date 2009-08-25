@@ -120,7 +120,11 @@ function placeHold () {
    <div class="yui-g">
     <!-- TMPL_IF NAME="itemsloop" -->
 
-<form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post" class="checkboxed">
+	<form action="merge.pl" method="get">
+		<input type="hidden" name="shelf" value="<!-- TMPL_VAR NAME="shelf" -->" />
+		<input type="submit" class="editshelf" value="Merge" />
+	</form>
+	<form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post" class="checkboxed">
         <input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->" />
         <input type="hidden" name="modifyshelfcontents" value="1" />
  <fieldset>
@@ -324,6 +328,10 @@ function placeHold () {
 		</td>
         <td>
             <!-- TMPL_IF NAME="mine" -->
+				<form action="merge.pl" method="get">
+					<input type="hidden" name="shelf" value="<!-- TMPL_VAR NAME="shelf" -->" />
+					<input type="submit" class="editshelf" value="Merge" />
+				</form>
 				<form action="shelves.pl" method="get">
 					<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelf" -->" />
 					<input type="hidden" name="op" value="modif" />
