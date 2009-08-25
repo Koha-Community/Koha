@@ -80,8 +80,8 @@ if ($op eq "export") {
         ($itemtype && C4::Context->preference('item-level_itypes'));
     my $query = $items_filter ?
         "SELECT DISTINCT biblioitems.biblionumber
-         FROM biblioitems,items
-         WHERE biblioitems.biblionumber=items.biblionumber "
+         FROM biblioitems JOIN items
+         USING (biblionumber) WHERE 1"
         :
         "SELECT biblioitems.biblionumber FROM biblioitems WHERE biblionumber >0 ";
                   
@@ -123,6 +123,7 @@ if ($op eq "export") {
         $query .= (C4::Context->preference('item-level_itypes')) ? " AND items.itype = ? " : " AND biblioitems.itemtype = ?";
         push @sql_params, $itemtype;
     }
+    warn "$query, @sql_params";
     my $sth = $dbh->prepare($query);
     $sth->execute(@sql_params);
     
