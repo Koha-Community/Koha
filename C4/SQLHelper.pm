@@ -155,7 +155,7 @@ sub UpdateInTable{
 	my $field_id=GetPrimaryKey($tablename);
     my $id=$$data{$field_id};
     my $dbh      = C4::Context->dbh;
-    my ($keys,$values)=_filter_fields($data,$tablename);
+    my ($keys,$values)=_filter_fields($data,$tablename,0);
 
     my $query = do { local $"=',';
     qq{
@@ -234,7 +234,7 @@ and a ref to value array
 
 sub _filter_fields{
 	my ($data_to_filter,$tablename,$research)=@_;
-	warn "$tablename";
+	warn "$tablename research $research";
     my @keys; 
 	my @values;
 	my $columns= _columns($tablename);
