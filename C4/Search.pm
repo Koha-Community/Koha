@@ -62,6 +62,7 @@ This module provides searching functions for Koha's bibliographic databases
   &buildQuery
   &NZgetRecords
   &AddSearchHistory
+  &GetDistinctValues
 );
 
 # make all your functions, whether exported or not;
@@ -678,7 +679,8 @@ sub _detect_truncation {
 
 # STEMMING
 sub _build_stemmed_operand {
-    my ($operand) = @_;
+    my ($operand,$lang) = @_;
+    require Lingua::Stem::Snowball;
     my $stemmed_operand;
 
     # If operand contains a digit, it is almost certainly an identifier, and should
@@ -689,7 +691,8 @@ sub _build_stemmed_operand {
     return $operand if $operand =~ /\d/;
 
 # FIXME: the locale should be set based on the user's language and/or search choice
-    my $stemmer = Lingua::Stem->new( -locale => 'EN-US' );
+    my $stemmer = Lingua::Stem::Snowball->new( lang => $lang,
+                                               encoding => "UTF-8" );
 
 # FIXME: these should be stored in the db so the librarian can modify the behavior
     $stemmer->add_exceptions(
@@ -700,8 +703,8 @@ sub _build_stemmed_operand {
         }
     );
     my @words = split( / /, $operand );
-    my $stems = $stemmer->stem(@words);
-    for my $stem (@$stems) {
+    my @stems = $stemmer->stem(\@words);
+    for my $stem (@stems) {
         $stemmed_operand .= "$stem";
         $stemmed_operand .= "?"
           unless ( $stem =~ /(and$|or$|not$)/ ) || ( length($stem) < 3 );
@@ -778,7 +781,7 @@ sub _build_weighted_query {
 $simple_query, $query_cgi,
 $query_desc, $limit,
 $limit_cgi, $limit_desc,
-$stopwords_removed, $query_type ) = getRecords ( $operators, $operands, $indexes, $limits, $sort_by, $scan);
+$stopwords_removed, $query_type ) = buildQuery ( $operators, $operands, $indexes, $limits, $sort_by, $scan, $lang);
 
 Build queries and limits in CCL, CGI, Human,
 handle truncation, stemming, field weighting, stopwords, fuzziness, etc.
@@ -789,7 +792,7 @@ See verbose embedded documentation.
 =cut
 
 sub buildQuery {
-    my ( $operators, $operands, $indexes, $limits, $sort_by, $scan ) = @_;
+    my ( $operators, $operands, $indexes, $limits, $sort_by, $scan, $lang) = @_;
 
     warn "---------\nEnter buildQuery\n---------" if $DEBUG;
 
@@ -974,7 +977,8 @@ sub buildQuery {
 
                 # Handle Stemming
                 my $stemmed_operand;
-                $stemmed_operand = _build_stemmed_operand($operand) if $stemming;
+                $stemmed_operand = _build_stemmed_operand($operand, $lang)
+										if $stemming;
 
                 warn "STEMMED OPERAND: >$stemmed_operand<" if $DEBUG;
 
@@ -2129,6 +2133,54 @@ sub z3950_search_args {
     return $array;
 }
 
+=head2 GetDistinctValues($field);
+
+C<$field> is a reference to the fields array
+
+=cut
+
+sub GetDistinctValues {
+    my ($fieldname,$string)=@_;
+    # returns a reference to a hash of references to branches...
+    if ($fieldname=~/\./){
+			my ($table,$column)=split /\./, $fieldname;
+			my $dbh = C4::Context->dbh;
+			warn "select DISTINCT($column) as value, count(*) as cnt from $table group by lib order by $column ";
+			my $sth = $dbh->prepare("select DISTINCT($column) as value, count(*) as cnt from $table ".($string?" where $column like \"$string%\"":"")."group by value order by $column ");
+			$sth->execute;
+			my $elements=$sth->fetchall_arrayref({});
+			return $elements;
+   }
+   else {
+		$string||= qq("");
+		my @servers=qw<biblioserver authorityserver>;
+		my (@zconns,@results);
+        for ( my $i = 0 ; $i < @servers ; $i++ ) {
+        	$zconns[$i] = C4::Context->Zconn( $servers[$i], 1 );
+			$results[$i] =
+                      $zconns[$i]->scan(
+                        ZOOM::Query::CCL2RPN->new( qq"$fieldname $string", $zconns[$i])
+                      );
+		}
+		# The big moment: asynchronously retrieve results from all servers
+		my @elements;
+		while ( ( my $i = ZOOM::event( \@zconns ) ) != 0 ) {
+			my $ev = $zconns[ $i - 1 ]->last_event();
+			if ( $ev == ZOOM::Event::ZEND ) {
+				next unless $results[ $i - 1 ];
+				my $size = $results[ $i - 1 ]->size();
+				if ( $size > 0 ) {
+                      for (my $j=0;$j<$size;$j++){
+						my %hashscan;
+						@hashscan{qw(value cnt)}=$results[ $i - 1 ]->display_term($j);
+						push @elements, \%hashscan;
+					  }
+				}
+			}
+		}
+		return \@elements;
+   }
+}
 
 END { }    # module clean-up code here (global destructor)
 
