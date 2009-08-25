@@ -114,6 +114,19 @@ BEGIN {
 	);
 }
 
+eval {
+    my $servers = C4::Context->config('memcached_servers');
+    if ($servers) {
+        require Memoize::Memcached;
+        import Memoize::Memcached qw(memoize_memcached);
+
+        my $memcached = {
+            servers    => [ $servers ],
+            key_prefix => C4::Context->config('memcached_namespace') || 'koha',
+        };
+        memoize_memcached('GetMarcStructure', memcached => $memcached, expire_time => 600); #cache for 10 minutes
+    }
+};
 =head1 NAME
 
 C4::Biblio - cataloging management functions
