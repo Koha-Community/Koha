@@ -467,7 +467,7 @@ function hideLists(){
 $("#cartDetails").ready(function(){
 	$("#cartDetails,#cartmenulink").click(function(){ hideCart(); });
 	$("#cartmenulink").click(function(){ openBasket(); return false; });
-	$("#cartmenulink").hoverIntent(function(){
+	$("#cartmenulink").hover(function(){
 		showCart();
 	},function(){
 		hideCart();
