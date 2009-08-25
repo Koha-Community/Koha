@@ -111,7 +111,7 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
 # suggestions
 my $status           = $query->param('status') || "ASKED";
 my $suggestion       = CountSuggestion($status);
-my $suggestions_loop = &SearchSuggestion( '', '', '', '', $status, '' );
+my $suggestions_loop = &SearchSuggestion( {status=> $status} );
 
 $template->param(
     classlist        => $classlist,

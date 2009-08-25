@@ -21,27 +21,21 @@ use warnings;
 use CGI;
 use C4::Auth;    # get_template_and_user
 use C4::Branch;
+use C4::Koha;
 use C4::Output;
 use C4::Suggestions;
+use C4::Koha;
+use C4::Dates;
 
 my $input           = new CGI;
-my $title           = $input->param('title');
-my $author          = $input->param('author');
-my $note            = $input->param('note');
-my $copyrightdate   = $input->param('copyrightdate');
-my $publishercode   = $input->param('publishercode');
-my $volumedesc      = $input->param('volumedesc');
-my $publicationyear = $input->param('publicationyear');
-my $place           = $input->param('place');
-my $isbn            = $input->param('isbn');
-my $status          = $input->param('status');
-my $suggestedbyme   = (defined $input->param('suggestedby')? $input->param('suggestedby'):1);
+my $allsuggestions  = $input->param('showall');
 my $op              = $input->param('op');
+my $suggestion      = $input->Vars;
+delete $$suggestion{$_} foreach qw<op suggestedbyme>;
 $op = 'else' unless $op;
 
 my ( $template, $borrowernumber, $cookie );
 
-my $dbh = C4::Context->dbh;
 
 if ( C4::Context->preference("AnonSuggestions") ) {
     ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -52,8 +46,8 @@ if ( C4::Context->preference("AnonSuggestions") ) {
             authnotrequired => 1,
         }
     );
-    if ( !$borrowernumber ) {
-        $borrowernumber = C4::Context->preference("AnonSuggestions");
+    if ( !$$suggestion{suggestedby} ) {
+        $$suggestion{suggestedby} = C4::Context->preference("AnonSuggestions");
     }
 }
 else {
@@ -66,24 +60,30 @@ else {
         }
     );
 }
-
+if ($allsuggestions){
+	delete $$suggestion{suggestedby};
+}
+else {
+	$$suggestion{suggestedby} ||= $borrowernumber unless ($allsuggestions);
+}
+warn "bornum:",$borrowernumber;
+use YAML;
+my $suggestions_loop =
+  &SearchSuggestion( $suggestion);
 if ( $op eq "add_confirm" ) {
-    &NewSuggestion(
-        $borrowernumber, $title,         $author,     $publishercode,
-        $note,           $copyrightdate, $volumedesc, $publicationyear,
-        $place,          $isbn,          ''
-    );
-
-    # empty fields, to avoid filter in "SearchSuggestion"
-    $title           = '';
-    $author          = '';
-    $publishercode   = '';
-    $copyrightdate   = '';
-    $volumedesc      = '';
-    $publicationyear = '';
-    $place           = '';
-    $isbn            = '';
-    $op              = 'else';
+	if (@$suggestions_loop>=1){
+		#some suggestion are answering the request Donot Add	
+	} 
+	else {
+		$$suggestion{'suggestioncreatedon'}=C4::Dates->today;
+		$$suggestion{'branchcode'}=C4::Context->userenv->{"branch"};
+		&NewSuggestion($suggestion);
+		# empty fields, to avoid filter in "SearchSuggestion"
+		$$suggestion{$_}='' foreach qw<title author publishercode copyrightdate place collectiontitle isbn STATUS>;
+		$suggestions_loop =
+		   &SearchSuggestion( $suggestion );
+	}
+	$op              = 'else';
 }
 
 if ( $op eq "delete_confirm" ) {
@@ -93,28 +93,24 @@ if ( $op eq "delete_confirm" ) {
     }
     $op = 'else';
 }
-
-my $suggestions_loop =
-  &SearchSuggestion( $borrowernumber, $author, $title, $publishercode, $status,
-    $suggestedbyme );
-
-foreach my $suggestion(@$suggestions_loop) {
-    if($suggestion->{'suggestedby'} == $borrowernumber) {
-        $suggestion->{'showcheckbox'} = $borrowernumber;
-    } else {
-        $suggestion->{'showcheckbox'} = 0;
-    }
+map{ $_->{'branchcodesuggestedby'}=GetBranchInfo($_->{'branchcodesuggestedby'})->[0]->{'branchname'}} @$suggestions_loop;  
+my $supportlist=GetSupportList();				
+foreach my $support(@$supportlist){
+	if ($$support{'imageurl'}){
+		$$support{'imageurl'}= getitemtypeimagelocation( 'intranet', $$support{'imageurl'} );
+	}
+	else {
+	   delete $$support{'imageurl'}
+	}
 }
-
 $template->param(
+	%$suggestion,
+	itemtypeloop=> $supportlist,
     suggestions_loop => $suggestions_loop,
-    title            => $title,
-    author           => $author,
-    publishercode    => $publishercode,
-    status           => $status,
-    suggestedbyme    => $suggestedbyme,
+    showall    => $allsuggestions,
     "op_$op"         => 1,
-	suggestionsview => 1
+	  suggestionsview => 1
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
+

@@ -63,10 +63,20 @@ $.tablesorter.addParser({
     <li><label for="title">Title:</label><input type="text" id="title" name="title" size="50" maxlength="80" /></li>
     <li><label for="author">Author:</label><input type="text" id="author" name="author" size="50" maxlength="80" /></li>
     <li><label for="copyrightdate">Copyright date:</label><input type="text" id="copyrightdate" name="copyrightdate" size="4" maxlength="4" /></li>
+    <li><label for="isbn">ISBN or ISSN or other standard number:</label></label><input type="text" id="isbn" name="isbn" size="50" maxlength="80" /></li>
     <li><label for="publishercode">Publisher:</label><input type="text" id="publishercode" name="publishercode" size="50" maxlength="80" /></li>
+    <li><label for="collectiontitle">Collection title:</label><input type="text" id="collectiontitle" name="collectiontitle" size="50" maxlength="80" /></li>
+    <li><label for="place">Publication Place :</label><input type="text" id="place" name="place" size="50" maxlength="80" /></li>
+    <li><label for="itemtype">Document Type:</label><select name="itemtype" >
+            <option value="">Default</option>
+        <!-- TMPL_LOOP name="itemtypeloop" -->
+			<!-- TMPL_IF name="selected" --><option value="<!-- TMPL_VAR name="itemtype"-->" selected="selected"> <!--TMPL_ELSE--><option value="<!-- TMPL_VAR name="itemtype" -->"> <!--/TMPL_IF--> <!--TMPL_IF Name="imageurl"--><img alt="<!-- TMPL_VAR name="description" -->" src="<!--TMPL_VAR Name="imageurl"-->"><!--TMPL_ELSE--><!-- TMPL_VAR name="description" --><!--/TMPL_IF--></option>
+        <!-- /TMPL_LOOP -->
+        </select> </li>
+    <li><label for="sort1">Sort1:</label><input type="text" id="sort1" name="sort1" size="50" maxlength="80" /></li>
     <li><label for="note">Notes:</label><textarea name="note" id="note" rows="5" cols="40"></textarea></li>
     </ol></fieldset>
-        <fieldset class="action"><input type="hidden" name="op" value="add_confirm" /><input type="submit" value="Submit Your Suggestion" /> <a class="action" href="/cgi-bin/koha/opac-suggestions.pl">Cancel</a></fieldset>
+        <fieldset class="action"><input type="hidden" name="suggestedby" value="<!--TMPL_VAR Name="suggestedbyme"-->" /><input type="hidden" name="op" value="add_confirm" /><input type="submit" value="Submit Your Suggestion" /> <a class="action" href="/cgi-bin/koha/opac-suggestions.pl">Cancel</a></fieldset>
     </form>
 
 <!-- /TMPL_IF -->
@@ -101,8 +111,8 @@ $.tablesorter.addParser({
             </form><!-- /TMPL_IF -->
         <form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
             <input type="hidden" name="op" value="delete_confirm" />
-			<div><!-- TMPL_IF NAME="loggedinusername" --><span class="checkall"><a href="#" id="CheckAll">Select All</a></span>
-		<span class="clearall"><a href="#" id="CheckNone">Clear All</a></span> | <a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a><!-- TMPL_ELSE --><!-- TMPL_IF NAME="AnonSuggestions" --><a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a><!-- /TMPL_IF --><!-- /TMPL_IF -->
+			<div><span class="checkall"><a href="#" id="CheckAll">Select All</a></span>
+		<span class="clearall"><a href="#" id="CheckNone">Clear All</a></span> | <!-- TMPL_IF NAME="loggedinusername" --><a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a><!-- TMPL_ELSE --><!-- TMPL_IF NAME="AnonSuggestions" --><a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a><!-- /TMPL_IF --><!-- /TMPL_IF -->
 </div>
 			<table id="suggestt" class="checkboxed">
 			<thead><tr>
@@ -116,28 +126,30 @@ $.tablesorter.addParser({
         <tbody><!-- TMPL_LOOP NAME="suggestions_loop" -->
             <!-- TMPL_IF name="even" --><tr><!-- TMPL_ELSE --><tr class="highlight"><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="loggedinusername" --><td>
-    <!-- TMPL_IF NAME="showcheckbox" -->
-                    <input type="checkbox" name="delete_field" value="<!--TMPL_VAR name="suggestionid" -->" />
-    <!-- /TMPL_IF -->
+                    <input type="checkbox" name="delete_field" value="<!--TMPL_VAR name="ordernumber" -->" />
                 </td><!-- /TMPL_IF -->
                 <td>
                     <p><strong><!-- TMPL_VAR NAME="title" escape="html" --></strong></p>
                     <p><!-- TMPL_IF name="author" --><!-- TMPL_VAR NAME="author" -->,<!-- /TMPL_IF -->
                         <!-- TMPL_IF name="copyrightdate" --> - <!-- TMPL_VAR NAME="copyrightdate" -->,<!-- /TMPL_IF --> 
                         <!-- TMPL_IF name="publishercode" --> - <!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="place" -->(<!-- TMPL_VAR name="place" -->)<!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="collectiontitle" --> , <!-- TMPL_VAR name="collectiontitle" --><!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="itemtype" --> - <!-- TMPL_VAR name="itemtype" --><!-- /TMPL_IF -->
                     </p>
                 </td>
                 <td>
                     <!-- TMPL_VAR name="note" -->
                 </td>
                 <!-- TMPL_IF NAME="OPACViewOthersSuggestions" --><td>
-                    <!-- TMPL_IF NAME="branchnamesuggestedby" --><!-- TMPL_VAR name="branchnamesuggestedby" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="branchcodesuggestedby" --><!-- TMPL_VAR name="branchcodesuggestedby" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
                 </td><!-- /TMPL_IF -->
                 <td>
 					<!-- TMPL_IF NAME="surnamemanagedby" --><!-- TMPL_VAR name="surnamemanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->,<!-- /TMPL_IF --> <!-- TMPL_VAR name="firstnamemanagedby" --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
                 </td>
                 <td>
                     <!-- TMPL_IF name="ASKED" -->Requested<!-- /TMPL_IF -->
+                    <!-- TMPL_IF name="CHECKED" -->Checked by the library<!-- /TMPL_IF -->
                     <!-- TMPL_IF name="ACCEPTED" -->Accepted by the library<!-- /TMPL_IF -->
                     <!-- TMPL_IF name="ORDERED" -->Ordered by the library<!-- /TMPL_IF -->
                     <!-- TMPL_IF name="REJECTED" -->Suggestion declined <!-- /TMPL_IF -->

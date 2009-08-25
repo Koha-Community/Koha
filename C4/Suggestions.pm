@@ -20,11 +20,14 @@ package C4::Suggestions;
 
 use strict;
 use CGI;
-use Mail::Sendmail;
 
 use C4::Context;
 use C4::Output;
 use C4::Dates qw(format_date);
+use C4::SQLHelper qw(:all);
+use C4::Debug;
+use C4::Letters;
+use List::MoreUtils qw(any);
 use vars qw($VERSION @ISA @EXPORT);
 
 BEGIN {
@@ -39,7 +42,7 @@ BEGIN {
 		&GetSuggestionByStatus
 		&DelSuggestion
 		&CountSuggestion
-		&ModStatus
+		&ModSuggestion
 		&ConnectSuggestionAndBiblio
 		&GetSuggestionFromBiblionumber
 	);
@@ -72,7 +75,7 @@ Suggestions done by other borrowers can be seen when not "AVAILABLE"
 
 =head2 SearchSuggestion
 
-(\@array) = &SearchSuggestion($user,$author,$title,$publishercode,$status,$suggestedbyme,$branchcode)
+(\@array) = &SearchSuggestion($suggestionhashref_to_search)
 
 searches for a suggestion
 
@@ -85,9 +88,10 @@ Note the status is stored twice :
 =cut
 
 sub SearchSuggestion  {
-    my ($user,$author,$title,$publishercode,$status,$suggestedbyme,$branchcode)=@_;
+    my ($suggestion)=@_;
     my $dbh = C4::Context->dbh;
-    my $query = "
+	my @sql_params;
+    my @query =(q{ 
     SELECT suggestions.*,
         U1.branchcode   AS branchcodesuggestedby,
         B1.branchname AS branchnamesuggestedby,
@@ -107,62 +111,44 @@ sub SearchSuggestion  {
     LEFT JOIN categories AS C1 ON C1.categorycode = U1.categorycode
     LEFT JOIN branches AS B1 ON B1.branchcode = U1.branchcode
     LEFT JOIN branches AS B2 ON B2.branchcode = U2.branchcode
-    WHERE 1=1 ";
+	WHERE status NOT IN ('CLAIMED')
+	} , map {
+	    if ( my $s = $$suggestion{$_} ) {
+		push @sql_params,'%'.$s.'%'; 
+		" and suggestions.$_ like ? ";
+	    } else { () }
+	} qw( title author isbn publishercode collectiontitle )
+	);
 
-    my @sql_params;
-    if ($author) {
-       push @sql_params,"%".$author."%";
-       $query .= " and author like ?";
+	my $userenv = C4::Context->userenv;
+    if (C4::Context->preference('IndependantBranches')) {
+			if ($userenv) {
+				if (($userenv->{flags} % 2) != 1 && !$$suggestion{branchcode}){
+				   push @sql_params,$$userenv{branch};
+				   push @query,q{ and (branchcode = ? or branchcode ='')};
+				}
+			}
     }
-    if ($title) {
-        push @sql_params,"%".$title."%";
-        $query .= " and suggestions.title like ?";
+
+    foreach my $field (grep { my $fieldname=$_;
+		any {$fieldname eq $_ } qw<
+	status branchcode itemtype suggestedby managedby acceptedby
+	bookfundid biblionumber
+	>} keys %$suggestion
+    ) {
+		if ($$suggestion{$field}){
+			push @sql_params,$$suggestion{$field};
+			push @query, " and suggestions.$field=?";
+		} 
+		else {
+			push @query, " and (suggestions.$field='' OR suggestions.$field IS NULL)";
+		}
     }
-    if ($publishercode) {
-        push @sql_params,"%".$publishercode."%";
-        $query .= " and publishercode like ?";
-    }
-    if (C4::Context->preference("IndependantBranches") || $branchcode) {
-        my $userenv = C4::Context->userenv;
-        if ($userenv) {
-            unless ($userenv->{flags} % 2 == 1){
-                push @sql_params,$userenv->{branch};
-                $query .= " and (U1.branchcode = ? or U1.branchcode ='')";
-            }
-        }
-        if ($branchcode) {
-            push @sql_params,$branchcode;
-            $query .= " and (U1.branchcode = ? or U1.branchcode ='')";
-        }
-    }
-    if ($status) {
-        push @sql_params,$status;
-        $query .= " and status=?";
-    }
-    if ($suggestedbyme) {
-        unless ($suggestedbyme eq -1) {
-            push @sql_params,$user;
-            $query .= " and suggestedby=?";
-        }
-    } else {
-        $query .= " and managedby is NULL";
-    }
-    my $sth=$dbh->prepare($query);
+
+	$debug && warn "@query";
+    my $sth=$dbh->prepare("@query");
     $sth->execute(@sql_params);
-    my @results;
-    my $even=1; # the even variable is used to set even / odd lines, for highlighting
-    while (my $data=$sth->fetchrow_hashref){
-        $data->{$data->{STATUS}} = 1;
-        if ($even) {
-            $even=0;
-            $data->{even}=1;
-        } else {
-            $even=1;
-        }
-#         $data->{date} = format_date($data->{date});
-        push(@results,$data);
-    }
-    return (\@results);
+	return ($sth->fetchall_arrayref({}));
 }
 
 =head2 GetSuggestion
@@ -234,8 +220,8 @@ sub GetSuggestionByStatus {
                         U1.firstname AS firstnamesuggestedby,
                         U1.branchcode AS branchcodesuggestedby,
                         B1.branchname AS branchnamesuggestedby,
-			U1.borrowernumber AS borrnumsuggestedby,
-			U1.categorycode AS categorycodesuggestedby,
+						U1.borrowernumber AS borrnumsuggestedby,
+						U1.categorycode AS categorycodesuggestedby,
                         C1.description AS categorydescriptionsuggestedby,
                         U2.surname   AS surnamemanagedby,
                         U2.firstname AS firstnamemanagedby,
@@ -265,7 +251,6 @@ sub GetSuggestionByStatus {
     
     my $results;
     $results=  $sth->fetchall_arrayref({});
-#     map{$_->{date} = format_date($_->{date})} @$results;
     return $results;
 }
 
@@ -335,117 +320,47 @@ sub CountSuggestion {
 =head2 NewSuggestion
 
 
-&NewSuggestion($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn,$biblionumber)
+&NewSuggestion($suggestion)
 
 Insert a new suggestion on database with value given on input arg.
 
 =cut
 
 sub NewSuggestion {
-    my ($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn,$biblionumber,$reason) = @_;
-    my $dbh = C4::Context->dbh;
-    my $query = qq |
-        INSERT INTO suggestions
-            (status,suggestedby,title,author,publishercode,note,copyrightdate,
-            volumedesc,publicationyear,place,isbn,biblionumber,reason)
-        VALUES ('ASKED',?,?,?,?,?,?,?,?,?,?,?,?)
-    |;
-    my $sth = $dbh->prepare($query);
-    $sth->execute($borrowernumber,$title,$author,$publishercode,$note,$copyrightdate,$volumedesc,$publicationyear,$place,$isbn,$biblionumber,$reason);
+    my ($suggestion) = @_;
+	return InsertInTable("suggestions",$suggestion); 
 }
 
-=head2 ModStatus
+=head2 ModSuggestion
 
-&ModStatus($suggestionid,$status,$managedby,$biblionumber)
+&ModSuggestion($suggestion)
 
-Modify the status (status can be 'ASKED', 'ACCEPTED', 'REJECTED', 'ORDERED')
-and send a mail to notify the user that did the suggestion.
+Modify the suggestion according to the hash passed by ref.
+The hash HAS to contain suggestionid
+Data not defined is not updated unless it is a note or sort1 
+Send a mail to notify the user that did the suggestion.
 
-Note that there is no function to modify a suggestion : only the status can be modified, thus the name of the function.
+Note that there is no function to modify a suggestion. 
 
 =cut
 
-sub ModStatus {
-    my ($suggestionid,$status,$managedby,$biblionumber,$reason) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth;
-    if ($managedby>0) {
-        if ($biblionumber) {
-        my $query = qq|
-            UPDATE suggestions
-            SET    status=?,managedby=?,biblionumber=?,reason=?
-            WHERE  suggestionid=?
-        |;
-        $sth = $dbh->prepare($query);
-        $sth->execute($status,$managedby,$biblionumber,$reason,$suggestionid);
-        } else {
-            my $query = qq|
-                UPDATE suggestions
-                SET    status=?,managedby=?,reason=?
-                WHERE  suggestionid=?
-            |;
-            $sth = $dbh->prepare($query);
-            $sth->execute($status,$managedby,$reason,$suggestionid);
-        }
-   } else {
-        if ($biblionumber) {
-            my $query = qq|
-                UPDATE suggestions
-                SET    status=?,biblionumber=?,reason=?
-                WHERE  suggestionid=?
-            |;
-            $sth = $dbh->prepare($query);
-            $sth->execute($status,$biblionumber,$reason,$suggestionid);
-        }
-        else {
-            my $query = qq|
-                UPDATE suggestions
-                SET    status=?,reason=?
-                WHERE  suggestionid=?
-            |;
-            $sth = $dbh->prepare($query);
-            $sth->execute($status,$reason,$suggestionid);
+sub ModSuggestion {
+    my ($suggestion)=@_;
+	my $status_update_table=UpdateInTable("suggestions", $suggestion);
+    # check mail sending.
+    if ($$suggestion{STATUS}){
+        my $letter=C4::Letters::getletter('suggestions',$$suggestion{STATUS});
+        if ($letter){
+        my $enqueued = C4::Letters::EnqueueLetter({
+            letter=>$letter,
+            borrowernumber=>$$suggestion{suggestedby},
+            suggestionid=>$$suggestion{suggestionid},
+            msg_transport_type=>'email'
+            });
+        if (!$enqueued){warn "can't enqueue letter $letter";}
         }
     }
-    # check mail sending.
-    my $queryMail = "
-        SELECT suggestions.*,
-            boby.surname AS bysurname,
-            boby.firstname AS byfirstname,
-            boby.email AS byemail,
-            lib.surname AS libsurname,
-            lib.firstname AS libfirstname,
-            lib.email AS libemail
-        FROM suggestions
-            LEFT JOIN borrowers AS boby ON boby.borrowernumber=suggestedby
-            LEFT JOIN borrowers AS lib ON lib.borrowernumber=managedby
-        WHERE suggestionid=?
-    ";
-    $sth = $dbh->prepare($queryMail);
-    $sth->execute($suggestionid);
-    my $emailinfo = $sth->fetchrow_hashref;
-    my $template = gettemplate("suggestion/mail_suggestion_$status.tmpl", "intranet", CGI->new());
-
-    $template->param(
-        byemail => $emailinfo->{byemail},
-        libemail => $emailinfo->{libemail},
-        status => $emailinfo->{status},
-        title => $emailinfo->{title},
-        author =>$emailinfo->{author},
-        libsurname => $emailinfo->{libsurname},
-        libfirstname => $emailinfo->{libfirstname},
-        byfirstname => $emailinfo->{byfirstname},
-        bysurname => $emailinfo->{bysurname},
-        reason => $emailinfo->{reason}
-    );
-    my %mail = (
-        To => $emailinfo->{byemail},
-        From => $emailinfo->{libemail},
-        Subject => 'Koha suggestion',
-        Message => "".$template->output,
-        'Content-Type' => 'text/plain; charset="utf8"',
-    );
-    sendmail(%mail);
+	return $status_update_table;
 }
 
 =head2 ConnectSuggestionAndBiblio
