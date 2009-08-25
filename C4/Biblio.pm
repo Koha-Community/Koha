@@ -63,6 +63,7 @@ BEGIN {
 		&GetBiblioItemByBiblioNumber
 		&GetBiblioFromItemNumber
 		
+		&GetRecordValue
 		&GetFieldMapping
 		&SetFieldMapping
 		&DeleteFieldMapping
@@ -508,7 +509,7 @@ sub GetRecordValue {
         }
     }
     
-    return @result;
+    return \@result;
 }
 
 =head2 SetFieldMapping
