@@ -49,7 +49,7 @@ my $borrowernumber=$input->param('borrowernumber');
 my $action = $input->param('action') || '';
 
 #get borrower details
-my $data=GetMember($borrowernumber,'borrowernumber');
+my $data=GetMember('borrowernumber' => $borrowernumber);
 
 if ( $action eq 'reverse' ) {
   ReversePayment( $borrowernumber, $input->param('accountno') );

@@ -127,7 +127,7 @@ my $res = GetISBDView($biblionumber);
 my $reviews = getreviews( $biblionumber, 1 );
 foreach ( @$reviews ) {
     my $borrower_number_review = $_->{borrowernumber};
-    my $borrowerData           = GetMember($borrower_number_review,'borrowernumber');
+    my $borrowerData           = GetMember('borrowernumber' =>$borrower_number_review);
     # setting some borrower info into this hash
     $_->{title}     = $borrowerData->{'title'};
     $_->{surname}   = $borrowerData->{'surname'};

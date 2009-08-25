@@ -49,7 +49,7 @@ my $startdate=$input->param('reserve_date') || '';
 my @rank=$input->param('rank-request');
 my $type=$input->param('type');
 my $title=$input->param('title');
-my $borrowernumber=GetMember($borrower,'cardnumber');
+my $borrowernumber=GetMember('cardnumber'=>$borrower);
 my $checkitem=$input->param('checkitem');
 
 my $multi_hold = $input->param('multi_hold');

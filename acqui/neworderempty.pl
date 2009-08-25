@@ -167,7 +167,7 @@ foreach my $thisbranch ( sort {$branches->{$a}->{'branchname'} cmp $branches->{$
 $template->param( branchloop => \@branchloop , itypeloop => \@itemtypesloop );
 
 # build bookfund list
-my $borrower= GetMember($loggedinuser);
+my $borrower= GetMember('borrowernumber' => $loggedinuser);
 my ( $flags, $homebranch )= ($borrower->{'flags'},$borrower->{'branchcode'});
 
 my @select_bookfund;

@@ -71,7 +71,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 if ($src eq 'circ') {   # if we were called from circulation, use the circulation menu and get data to populate it -fbcit
     use C4::Members;
     my $borrowernumber = $object;
-    my $data = GetMember($borrowernumber,'borrowernumber');
+    my $data = GetMember('borrowernumber'=>$borrowernumber);
     my ($picture, $dberror) = GetPatronImage($data->{'cardnumber'});
     $template->param( picture => 1 ) if $picture;
     $template->param(   menu            => 1,

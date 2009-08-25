@@ -40,7 +40,7 @@ my $member=$input->param('member');
 my $cardnumber = $input->param('cardnumber');
 my $destination = $input->param('destination');
 my $errormsg;
-my ($bor)=GetMember($member);
+my ($bor)=GetMember('borrowernumber' => $member);
 if(( $member ne $loggedinuser ) && ($bor->{'category_type'} eq 'S' ) ) {
 	$errormsg = 'NOPERMISSION' unless($staffflags->{'superlibrarian'} || $staffflags->{'staffaccess'} );
 	# need superlibrarian for koha-conf.xml fakeuser.

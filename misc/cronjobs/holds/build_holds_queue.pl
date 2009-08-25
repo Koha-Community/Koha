@@ -354,7 +354,7 @@ sub CreatePicklistFromItemMap {
         my $barcode = $item->{barcode};
         my $itemcallnumber = $item->{itemcallnumber};
 
-        my $borrower = GetMember($borrowernumber);
+        my $borrower = GetMember('borrowernumber'=>$borrowernumber);
         my $cardnumber = $borrower->{'cardnumber'};
         my $surname = $borrower->{'surname'};
         my $firstname = $borrower->{'firstname'};

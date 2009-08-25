@@ -40,7 +40,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $borrower = GetMember( $borrowernumber, 'borrowernumber' );
+my $borrower = GetMember( 'borrowernumber'=> $borrowernumber );
 $template->param(
     textmessaging        => $borrower->{textmessaging},
 );

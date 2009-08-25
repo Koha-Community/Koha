@@ -238,7 +238,7 @@ $template->param(
 my $reviews = getreviews( $biblionumber, 1 );
 my $loggedincommenter;
 foreach ( @$reviews ) {
-    my $borrowerData   = GetMember($_->{borrowernumber},'borrowernumber');
+    my $borrowerData   = GetMember('borrowernumber' => $_->{borrowernumber});
     # setting some borrower info into this hash
     $_->{title}     = $borrowerData->{'title'};
     $_->{surname}   = $borrowerData->{'surname'};

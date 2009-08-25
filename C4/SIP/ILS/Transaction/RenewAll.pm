@@ -36,7 +36,7 @@ sub new {
 sub do_renew_all {
 	my $self = shift;
 	my $patron = $self->{patron};							# SIP's  patron
-	my $borrower = GetMember($patron->id, 'cardnumber');	# Koha's patron
+	my $borrower = GetMember('cardnumber'=>$patron->id);	# Koha's patron
 	my $all_ok = 1;
 	foreach my $itemx (@{$patron->{items}}) {
 		my $item_id = $itemx->{barcode};

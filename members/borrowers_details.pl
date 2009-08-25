@@ -53,7 +53,7 @@ my $borrowernumber=$input->param('borrowernumber');
 my $description=$input->param('description');
 my $category_type=$input->param('category_type');
 
-$data=GetMember($borrowernumber,'borrowernumber');
+$data=GetMember('borrowernumber' => $borrowernumber);
 
 $template->param(		borrowernumber  => $borrowernumber,#register number
 				#transform value  in capital or capital for first letter of the word

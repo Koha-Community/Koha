@@ -110,7 +110,7 @@ sub create_new_basket {
 sub enable_independant_branches {
     my $self = shift;
     
-    my $member = GetMember( $self->{'memberid'} );
+    my $member = GetMember( 'borrowernumber' =>$self->{'memberid'} );
     
     C4::Context::set_userenv( 0, # usernum
                               $self->{'memberid'}, # userid

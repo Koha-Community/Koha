@@ -44,7 +44,7 @@ sub startup_60_create_overdue_item : Test( startup => 17 ) {
     # diag( Data::Dumper->Dump( [ $item_from_barcode ], [ 'item_from_barcode' ] ) );
 
     ok( $self->{'memberid'}, 'memberid' );
-    my $borrower = C4::Members::GetMember( $self->{'memberid'} );
+    my $borrower = C4::Members::GetMember( borrowernumber=>$self->{'memberid'} );
     ok( $borrower->{'borrowernumber'}, 'borrowernumber' );
     
     my ( $issuingimpossible, $needsconfirmation ) = C4::Circulation::CanBookBeIssued( $borrower, $item->{'barcode'}, $duedate, 0 );

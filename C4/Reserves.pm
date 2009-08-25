@@ -340,7 +340,7 @@ sub CanBookBeReserved{
 
     my $dbh           = C4::Context->dbh;
     my $biblio        = GetBiblioData($biblionumber);
-    my $borrower      = C4::Members::GetMember($borrowernumber);
+    my $borrower      = C4::Members::GetMember(borrowernumber=>$borrowernumber);
     my $controlbranch = C4::Context->preference('ReservesControlBranch');
     my $itype         = C4::Context->preference('item-level_itypes');
     my $reservesrights= 0;
@@ -431,7 +431,7 @@ sub CanItemBeReserved{
 
     # we retrieve borrowers and items informations #
     my $item     = GetItem($itemnumber);
-    my $borrower = C4::Members::GetMember($borrowernumber);     
+    my $borrower = C4::Members::GetMember('borrowernumber'=>$borrowernumber);     
     
     # we retrieve user rights on this itemtype and branchcode
     my $sth = $dbh->prepare("SELECT categorycode, itemtype, branchcode, reservesallowed 
