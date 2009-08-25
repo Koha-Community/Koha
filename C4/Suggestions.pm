@@ -111,7 +111,7 @@ sub SearchSuggestion  {
     LEFT JOIN categories AS C1 ON C1.categorycode = U1.categorycode
     LEFT JOIN branches AS B1 ON B1.branchcode = U1.branchcode
     LEFT JOIN branches AS B2 ON B2.branchcode = U2.branchcode
-	WHERE status NOT IN ('CLAIMED')
+	WHERE STATUS NOT IN ('CLAIMED')
 	} , map {
 	    if ( my $s = $$suggestion{$_} ) {
 		push @sql_params,'%'.$s.'%'; 
@@ -132,7 +132,7 @@ sub SearchSuggestion  {
 
     foreach my $field (grep { my $fieldname=$_;
 		any {$fieldname eq $_ } qw<
-	status branchcode itemtype suggestedby managedby acceptedby
+	STATUS branchcode itemtype suggestedby managedby acceptedby
 	bookfundid biblionumber
 	>} keys %$suggestion
     ) {
@@ -288,7 +288,7 @@ sub CountSuggestion {
             my $query = qq |
                 SELECT count(*)
                 FROM   suggestions
-                WHERE  status=?
+                WHERE  STATUS=?
             |;
             $sth = $dbh->prepare($query);
             $sth->execute($status);
@@ -297,7 +297,7 @@ sub CountSuggestion {
             my $query = qq |
                 SELECT count(*)
                 FROM suggestions LEFT JOIN borrowers ON borrowers.borrowernumber=suggestions.suggestedby
-                WHERE status=?
+                WHERE STATUS=?
                 AND (borrowers.branchcode='' OR borrowers.branchcode =?)
             |;
             $sth = $dbh->prepare($query);
@@ -308,7 +308,7 @@ sub CountSuggestion {
         my $query = qq |
             SELECT count(*)
             FROM suggestions
-            WHERE status=?
+            WHERE STATUS=?
         |;
          $sth = $dbh->prepare($query);
         $sth->execute($status);
@@ -328,6 +328,7 @@ Insert a new suggestion on database with value given on input arg.
 
 sub NewSuggestion {
     my ($suggestion) = @_;
+	$suggestion->{STATUS}="ASKED" unless $suggestion->{STATUS};
 	return InsertInTable("suggestions",$suggestion); 
 }
 
