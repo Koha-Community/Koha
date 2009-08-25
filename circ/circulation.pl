@@ -659,6 +659,9 @@ if($lib_messages_loop){ $template->param(flagged => 1 ); }
 my $bor_messages_loop = GetMessages( $borrowernumber, 'B', $branch );
 if($bor_messages_loop){ $template->param(flagged => 1 ); }
 
+# Computes full borrower address
+my (undef, $roadttype_hashref) = &GetRoadTypes();
+my $address = $borrower->{'streetnumber'}.' '.$roadttype_hashref->{$borrower->{'streettype'}}.' '.$borrower->{'address'};
 
 $template->param(
     issued_itemtypes_count_loop => \@issued_itemtypes_count_loop,
@@ -678,7 +681,7 @@ $template->param(
     expiry            => format_date($borrower->{'dateexpiry'}),
     categorycode      => $borrower->{'categorycode'},
     categoryname      => $borrower->{description},
-    address           => $borrower->{'address'},
+    address           => $address,
     address2          => $borrower->{'address2'},
     email             => $borrower->{'email'},
     emailpro          => $borrower->{'emailpro'},
