@@ -239,6 +239,10 @@ foreach my $res (@reserves) {
         push @waiting, $res;
         $wcount++;
     }
+    # can be cancelled
+    #$res->{'cancelable'} = 1 if ($res->{'wait'} && $res->{'atdestination'} && $res->{'found'} ne "1");
+    $res->{'cancelable'} = 1 if    ($res->{wait} and not $res->{found}) or (not $res->{wait} and not $res->{intransit});
+    
 }
 
 $template->param( WAITING => \@waiting );
