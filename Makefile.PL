@@ -850,7 +850,10 @@ be run from the current directory.
 
 Configuration directory:);
         # FIXME - home directory portability consideration apply
-        $install_base_default = (exists $ENV{'HOME'}) ? "$ENV{'HOME'}/koha-dev" : "$defaults->{'INSTALL_BASE'}-dev";
+        $install_base_default = 
+	    $ENV{DESTDIR}
+	    || ( exists $ENV{HOME} ? "$ENV{HOME}/koha-dev" : "$defaults->{'INSTALL_BASE'}-dev" ) 
+	;
     } elsif ($config{'INSTALL_MODE'} eq 'single') {
         $msg = "\nPlease specify the directory in which to install Koha";
         # FIXME -- we're assuming under a 'single' mode install
