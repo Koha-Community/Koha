@@ -10,36 +10,18 @@
 <!-- /TMPL_IF -->
 </head>
 <body>
-<!-- TMPL_IF NAME="OpacNav" --><div id="doc3" class="yui-t1"><!-- TMPL_ELSE --><div id="doc3" class="yui-t7"><!-- /TMPL_IF -->
+
+<div id="doc3" class="yui-t7">
    <div id="bd">
-<!-- TMPL_INCLUDE name="masthead.inc" -->
+<!--TMPL_INCLUDE NAME="masthead.inc" -->
 
-	<div id="yui-main">
-	<div class="yui-b">
-<div class="container"><div class="yui-g">
-<div id="toolbar">
-<ul>
-	<!-- TMPL_UNLESS NAME="norequests" -->
-		<!-- TMPL_IF NAME="opacuserlogin" -->
-			<!-- TMPL_IF NAME="RequestOnOpac" -->
-				<!-- TMPL_IF NAME="AllowOnShelfHolds" -->
-					<li><a class="link reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a></li>
-				<!-- TMPL_ELSE -->
-					<!-- TMPL_IF NAME="ItemsIssued" -->
-						<li><a class="link reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a></li>
-					<!-- /TMPL_IF -->
-				<!-- /TMPL_IF -->
-			<!-- /TMPL_IF -->
-		<!-- /TMPL_IF -->
-	<!-- /TMPL_UNLESS -->
-	<li><a class="link print" href="/cgi-bin/koha/opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">Print</a></li>
-	<!-- TMPL_IF name="virtualshelves" --><!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="loggedinusername" --><li><a class="link addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">Save to Your Lists</a></li><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
-	<!-- TMPL_IF NAME="opacbookbag" --><li><a class="link addtocart" href="#" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">Add to Your Cart</a></li><!-- /TMPL_IF -->
-</ul>
-</div>
-</div>
 
-    <div class="yui-g" style="margin-top : 1em;">
+    <div id="yui-main">
+    <div class="yui-b"><div id="opac-detail" class="yui-ge">
+    <div class="yui-u first">
+    <div class="container">
+    <div id="catalogue_detail_biblio">
+
 	<h1 style="float:left;margin: 0 1em 1em 0;">MARC View</h1>
 	<div id="views">
 	<span class="view"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Normal View</a></span> 
@@ -172,15 +154,61 @@
         </table><!-- TMPL_ELSE -->
         <p>No copies available.</p>
     <!-- /TMPL_IF -->
+    </div>
+    </div>
+    </div>
+	<div class="yui-u">
+	<div class="container">
+<ul id="action">
+
+<!-- TMPL_UNLESS NAME="norequests" -->
+    <!-- TMPL_UNLESS name="bi_notforloan" -->
+        <!-- TMPL_IF NAME="opacuserlogin" -->
+		<!-- TMPL_IF NAME="RequestOnOpac" -->
+			<!-- TMPL_IF NAME="AllowOnShelfHolds" -->
+				<li><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a></li>
+			<!-- TMPL_ELSE -->
+				<!-- TMPL_IF NAME="ItemsIssued" -->
+					<li><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a></li>
+				<!-- /TMPL_IF -->
+			<!-- /TMPL_IF -->
+
+        	<!-- /TMPL_IF -->
+	<!-- /TMPL_IF -->
+    <!-- /TMPL_UNLESS -->
+<!-- /TMPL_UNLESS -->
+        <li><a class="print" href="/cgi-bin/koha/opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
+            Print
+        </a></li>
+<!-- TMPL_IF name="virtualshelves" -->
+   <!-- TMPL_IF NAME="opacuserlogin" --> <!-- TMPL_IF NAME="loggedinusername" -->
+        <li><a class="addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
+            Save to Your Lists
+        </a></li>
+    <!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="opacbookbag" --><li><a class="addtocart" href="#" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
+            Add to Your Cart
+        </a></li><!-- /TMPL_IF -->
+</ul>
+
+		<div id="export">
+		<form method="get" action="/cgi-bin/koha/opac-export.pl">
+		<label for="format">Save Record:</label>
+	    <select name="format" id="format">
+		<option value="">-- Choose Format --</option>
+        <option value="mods">MODS (XML)</option>
+        <option value="dc">Dublin Core (XML)</option>
+        <option value="marcxml">MARCXML</option>
+        <option value="marc8">MARC (non-Unicode/MARC-8)</option>
+        <option value="utf8">MARC (Unicode/UTF-8)</option>    </select><input type="hidden" name="op" value="export" /><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+<input type="submit" name="save" value="Go" /></form></div>
 </div>
 </div>
 </div>
+
 </div>
-<!-- TMPL_IF NAME="OpacNav" -->
-<div class="yui-b">
-<div class="container">
-<!--TMPL_INCLUDE NAME="navigation.inc" -->
 </div>
-</div><!-- /TMPL_IF -->
-</div>
+
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
+
