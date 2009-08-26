@@ -233,7 +233,7 @@ Returns undef in case of error.
 =cut
 
 sub read_config_file {		# Pass argument naming config file to read
-    my $koha = XMLin(shift, keyattr => ['id'], forcearray => ['listen', 'server', 'serverinfo']);
+    my $koha = XMLin(shift, keyattr => ['id'], forcearray => ['listen', 'server', 'serverinfo'], suppressempty => '');
     return $koha;			# Return value: ref-to-hash holding the configuration
 }
 
