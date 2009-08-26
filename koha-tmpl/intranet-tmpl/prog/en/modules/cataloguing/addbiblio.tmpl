@@ -746,6 +746,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
                 <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
                     <!-- TMPL_IF name="mandatory" --><span class="subfield subfield_mandatory"><!-- TMPL_ELSE --><span class="subfield"><!-- /TMPL_IF -->
                         <!-- TMPL_VAR NAME="marc_lib_plain" -->
+                        <!-- TMPL_IF NAME="mandatory" --><span class="mandatory_marker" title="This field is mandatory">*</span><!-- /TMPL_IF -->
                     </span>
                     </label>
                 <!-- /TMPL_UNLESS -->
