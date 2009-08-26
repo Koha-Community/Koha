@@ -97,8 +97,6 @@ $template->param(   BORROWER_INFO  => \@bordat,
                 );
 
 #get issued items ....
-my ($issues) = GetPendingIssues($borrowernumber);
-my @issue_list = sort { $b->{'date_due'} cmp $a->{'date_due'} } @$issues if ($issues);
 
 my $count          = 0;
 my $toggle = 0;
@@ -106,60 +104,61 @@ my $overdues_count = 0;
 my @overdues;
 my @issuedat;
 my $itemtypes = GetItemTypes();
-foreach my $issue ( @issue_list ) {
-    if($count%2 eq 0){ $issue->{'toggle'} = 1; } else { $issue->{'toggle'} = 0; }
-    # check for reserves
-    my ( $restype, $res ) = CheckReserves( $issue->{'itemnumber'} );
-    if ( $restype ) {
-        $issue->{'reserved'} = 1;
-    }
-    
-    my ( $total , $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
-    my $charges = 0;
-    foreach my $ac (@$accts) {
-        if ( $ac->{'itemnumber'} == $issue->{'itemnumber'} ) {
-            $charges += $ac->{'amountoutstanding'}
-              if $ac->{'accounttype'} eq 'F';
-            $charges += $ac->{'amountoutstanding'}
-              if $ac->{'accounttype'} eq 'L';
-        }
-    }
-    $issue->{'charges'} = $charges;
+my ($issues) = GetPendingIssues($borrowernumber);
+if ($issues){
+	foreach my $issue ( sort sort { $b->{'date_due'} cmp $a->{'date_due'} } @$issues ) {
+		# check for reserves
+		my ( $restype, $res ) = CheckReserves( $issue->{'itemnumber'} );
+		if ( $restype ) {
+			$issue->{'reserved'} = 1;
+		}
+		
+		my ( $total , $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
+		my $charges = 0;
+		foreach my $ac (@$accts) {
+			if ( $ac->{'itemnumber'} == $issue->{'itemnumber'} ) {
+				$charges += $ac->{'amountoutstanding'}
+				  if $ac->{'accounttype'} eq 'F';
+				$charges += $ac->{'amountoutstanding'}
+				  if $ac->{'accounttype'} eq 'L';
+			}
+		}
+		$issue->{'charges'} = $charges;
 
-    # get publictype for icon
+		# get publictype for icon
 
-    my $publictype = $issue->{'publictype'};
-    $issue->{$publictype} = 1;
+		my $publictype = $issue->{'publictype'};
+		$issue->{$publictype} = 1;
 
-    # check if item is renewable
-    my ($status,$renewerror) = CanBookBeRenewed( $borrowernumber, $issue->{'itemnumber'} );
-    ($issue->{'renewcount'},$issue->{'renewsallowed'},$issue->{'renewsleft'}) = GetRenewCount($borrowernumber, $issue->{'itemnumber'});
-    $issue->{'status'} = $status && C4::Context->preference("OpacRenewalAllowed");
-    $issue->{'too_many'} = 1 if $renewerror and $renewerror eq 'too_many';
-    $issue->{'on_reserve'} = 1 if $renewerror and $renewerror eq 'on_reserve';
+		# check if item is renewable
+		my ($status,$renewerror) = CanBookBeRenewed( $borrowernumber, $issue->{'itemnumber'} );
+		($issue->{'renewcount'},$issue->{'renewsallowed'},$issue->{'renewsleft'}) = GetRenewCount($borrowernumber, $issue->{'itemnumber'});
+		$issue->{'status'} = $status && C4::Context->preference("OpacRenewalAllowed");
+		$issue->{'too_many'} = 1 if $renewerror and $renewerror eq 'too_many';
+		$issue->{'on_reserve'} = 1 if $renewerror and $renewerror eq 'on_reserve';
 
-    if ( $issue->{'overdue'} ) {
-        push @overdues, $issue;
-        $overdues_count++;
-        $issue->{'overdue'} = 1;
-    }
-    else {
-        $issue->{'issued'} = 1;
-    }
-    # imageurl:
-    my $itemtype = $issue->{'itemtype'};
-    if ( $itemtype ) {
-        $issue->{'imageurl'}    = getitemtypeimagelocation( 'opac', $itemtypes->{$itemtype}->{'imageurl'} );
-        $issue->{'description'} = $itemtypes->{$itemtype}->{'description'};
-    }
-    $issue->{date_due} = format_date($issue->{date_due});
-    push @issuedat, $issue;
-    $count++;
-    
-    my $isbn = GetNormalizedISBN($issue->{'isbn'});
-    $issue->{normalized_isbn} = $isbn;
+		if ( $issue->{'overdue'} ) {
+			push @overdues, $issue;
+			$overdues_count++;
+			$issue->{'overdue'} = 1;
+		}
+		else {
+			$issue->{'issued'} = 1;
+		}
+		# imageurl:
+		my $itemtype = $issue->{'itemtype'};
+		if ( $itemtype ) {
+			$issue->{'imageurl'}    = getitemtypeimagelocation( 'opac', $itemtypes->{$itemtype}->{'imageurl'} );
+			$issue->{'description'} = $itemtypes->{$itemtype}->{'description'};
+		}
+		$issue->{date_due} = format_date($issue->{date_due});
+		push @issuedat, $issue;
+		$count++;
+		
+		my $isbn = GetNormalizedISBN($issue->{'isbn'});
+		$issue->{normalized_isbn} = $isbn;
+	}
 }
-
 $template->param( ISSUES       => \@issuedat );
 $template->param( issues_count => $count );
 
