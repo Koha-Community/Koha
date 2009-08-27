@@ -112,7 +112,18 @@
 				<input type="hidden" name="result" value="unimarc field 4 <!--TMPL_VAR Name="index" -->">
 				<input type="hidden" name="op" value="do_search">
 				<label class="label100" for="searchbox">Any word</label>
-				<input type="text" name="search" id="searchbox" size="35">
+				<input type="text" name="search" id="searchbox" size="35"><br />
+				<label for="itypeloop">Item type:</label>
+				<select name="itype">
+				<option value="">All Item Types</option>
+				<!-- TMPL_LOOP NAME="itypeloop" -->
+				<!-- TMPL_IF NAME="selected" -->
+				<option value="<!-- TMPL_VAR NAME="itemtype" -->" selected="selected"><!-- TMPL_VAR NAME="description" --></option>
+				<!-- TMPL_ELSE -->
+				<option value="<!-- TMPL_VAR NAME="itemtype" -->"><!-- TMPL_VAR NAME="description" --></option>
+				<!-- /TMPL_IF -->
+				<!-- /TMPL_LOOP -->
+				</select>
 			</p>
 			<p>
 				<input type="submit" value="Start search">

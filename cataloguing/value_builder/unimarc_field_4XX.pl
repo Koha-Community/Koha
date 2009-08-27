@@ -31,6 +31,7 @@ use C4::Biblio;
 use C4::Koha;
 use MARC::Record;
 use C4::Branch;    # GetBranches
+use C4::ItemType;
 
 sub plugin_parameters {
     my ( $dbh, $record, $tagslib, $i, $tabloop ) = @_;
@@ -327,9 +328,11 @@ sub plugin {
     }
     elsif ( $op eq "do_search" ) {
         my $search         = $query->param('search');
+        my $itype          = $query->param('itype');
         my $startfrom      = $query->param('startfrom');
         my $resultsperpage = $query->param('resultsperpage') || 20;
         my $orderby;
+        $search = 'kw,wrdl='.$search.' and mc-itemtype='.$itype if $itype;
         my ( $errors, $results, $total_hits ) = SimpleSearch($search, $startfrom * $resultsperpage, $resultsperpage );
         my $total = scalar(@$results);
 
@@ -530,10 +533,13 @@ sub plugin {
 #         }
 #         $sth->finish;
 
+        my @itemtypes = C4::ItemType->all;
+
         $template->param(    #classlist => $classlist,
             CGIitemtype  => $CGIitemtype,
             CGIbranch    => $CGIbranch,
             CGIPublisher => $CGIpublisher,
+            itypeloop    => \@itemtypes,
             index        => $query->param('index'),
             Search       => 1,
         );
