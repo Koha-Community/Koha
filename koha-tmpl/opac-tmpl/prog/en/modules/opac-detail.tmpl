@@ -216,6 +216,15 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     </span>
 <!-- /TMPL_IF --> 
 
+<!--This grabs all of the lists a bib record appears in -->
+<!-- TMPL_IF NAME="GetShelves" -->
+	<span class="results_summary"><span class="label">List(s) this item appears in: </span>
+	<!-- TMPL_LOOP NAME="GetShelves" -->
+		<a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelfnumber" -->&sortfield=title"><!-- TMPL_VAR NAME="shelfname" --></a> 
+		<!-- TMPL_IF NAME="__LAST__" --><!-- TMPL_ELSE -->|<!-- /TMPL_IF -->
+	<!-- /TMPL_LOOP -->
+	</span>
+<!-- /TMPL_IF -->
 
     <!-- TMPL_IF NAME="TagsShowOnDetail" -->
         <div class="results_summary">

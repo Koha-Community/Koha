@@ -100,6 +100,7 @@ function verify_images() {
             <!-- /TMPL_LOOP --></ul>
 </li>
     <!-- /TMPL_IF -->
+    
     <!-- TMPL_IF name="OpacUrl" -->
     	<li><strong>OPAC View:</strong>
     	<a href="http://<!-- TMPL_VAR name="OpacUrl" -->/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" target="_blank">Open in new window</a>
@@ -149,6 +150,16 @@ function verify_images() {
                     <a href="<!-- TMPL_VAR name="url" -->"><!-- TMPL_VAR NAME="url" --></a>
                 <!-- /TMPL_LOOP -->
             </li>
+        <!-- /TMPL_IF -->
+        <!--This grabs all of the lists a bib record appears in -->
+        <!-- TMPL_IF NAME="GetShelves" -->
+	        <li><strong>Lists that include this title: </strong>
+	        <ul>
+	        <!-- TMPL_LOOP NAME="GetShelves" -->
+		        <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelfnumber" -->"><!-- TMPL_VAR NAME="shelfname" --></a></li>
+	        <!-- /TMPL_LOOP -->
+	        </ul>
+	        </li>
         <!-- /TMPL_IF -->
         </ul>
 </div>

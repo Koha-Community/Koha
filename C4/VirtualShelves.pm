@@ -44,6 +44,7 @@ BEGIN {
             &ModShelf
             &ShelfPossibleAction
             &DelFromShelf &DelShelf
+            &GetBibliosShelves
 	);
         @EXPORT_OK = qw(
             &GetShelvesSummary &GetRecentShelves
@@ -530,6 +531,24 @@ sub DelShelf {
 	}
 	my $sth = $dbh->prepare("DELETE FROM virtualshelves WHERE shelfnumber=?");
 	return $sth->execute(shift);
+}
+
+=item GetBibShelves
+
+This finds all the lists that this bib record is in.
+
+=cut
+
+sub GetBibliosShelves {
+  my ( $biblionumber )  = @_;
+  my $dbh = C4::Context->dbh;
+  my $sth = $dbh->prepare('SELECT vs.shelfname, vs.shelfnumber FROM virtualshelves vs LEFT JOIN virtualshelfcontents vc ON (vs.shelfnumber= vc.shelfnumber) WHERE vs.category != 1 AND vc.biblionumber= ?');
+  $sth->execute( $biblionumber );
+  my @lists;
+  while (my $data = $sth->fetchrow_hashref){
+    push @lists,$data;
+  }
+  return \@lists;
 }
 
 =item RefreshShelvesSummary

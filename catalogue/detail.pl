@@ -35,6 +35,7 @@ use C4::Serials;
 use C4::XISBN qw(get_xisbns get_biblionumber_from_isbn);
 use C4::External::Amazon;
 use C4::Search;		# enabled_staff_search_views
+use C4::VirtualShelves;
 
 # use Smart::Comments;
 
@@ -224,6 +225,12 @@ $template->param(
 );
 
 # $debug and $template->param(debug_display => 1);
+
+# Lists
+
+if (C4::Context->preference("virtualshelves") ) {
+   $template->param( 'GetShelves' => GetBibliosShelves( $biblionumber ) );
+}
 
 # XISBN Stuff
 if (C4::Context->preference("FRBRizeEditions")==1) {
