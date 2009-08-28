@@ -120,10 +120,6 @@ function placeHold () {
    <div class="yui-g">
     <!-- TMPL_IF NAME="itemsloop" -->
 
-	<form action="merge.pl" method="get">
-		<input type="hidden" name="shelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->" />
-		<input type="submit" class="editshelf" value="Merge" />
-	</form>
 	<form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post" class="checkboxed">
         <input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->" />
         <input type="hidden" name="modifyshelfcontents" value="1" />
