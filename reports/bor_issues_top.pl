@@ -109,7 +109,7 @@ my $dbh = C4::Context->dbh;
 my @values;
 
 # here each element returned by map is a hashref, get it?
-my @mime  = ( map { +{type =>$_} } (split /[;:]/,C4::Context->preference("MIME")) );
+my @mime  = ( map { {type =>$_} } (split /[;:]/,C4::Context->preference("MIME")) );
 my $delims = GetDelimiterChoices;
 my $branches = GetBranches;
 my @branchloop;
@@ -264,7 +264,7 @@ sub calculate {
         print DEBUG "rows: ", $sth2->rows, "\n";
         while (my @row = $sth2->fetchrow) {
 			$columns{($row[0] ||'NULL')}++;
-            push @loopcol, +{ coltitle => $row[0] || 'NULL' };
+            push @loopcol, { coltitle => $row[0] || 'NULL' };
         }
 
 		$strsth2 =~ s/old_issues/issues/g;
@@ -274,9 +274,11 @@ sub calculate {
         $debug and print DEBUG "rows: ", $sth2->rows, "\n";
         while (my @row = $sth2->fetchrow) {
 			$columns{($row[0] ||'NULL')}++;
-            push @loopcol, +{ coltitle => $row[0] || 'NULL' };
+            push @loopcol, { coltitle => $row[0] || 'NULL' };
         }
 		$debug and print DEBUG "full array: ", Dumper(\%columns), "\n";
+    }else{
+        $columns{''} = 1;
     }
 
     #Initialization of cell values.....
@@ -383,11 +385,19 @@ sub calculate {
     foreach my $id (@ranked_ids) {
         my @loopcell;
         foreach my $key (@cols_in_order) {
-            push @loopcell, {
+			if($column){
+		      push @loopcell, {
 				value => $patrons{$id}->{name},
-				count => $patrons{$id}->{allcols}->{$key},
 				reference => $id,
-			};
+				count => $patrons{$id}->{allcols}->{$key},
+			  };
+			}else{
+			  push @loopcell, {
+				value => $patrons{$id}->{name},
+				reference => $id,
+				count => $patrons{$id}->{total},
+			  };  
+			}
         }
         push @looprow,{ 'rowtitle' => $i++ ,
                         'loopcell' => \@loopcell,
@@ -399,7 +409,7 @@ sub calculate {
     $globalline{loopfilter}=\@loopfilter;
     # the core of the table
     $globalline{looprow} = \@looprow;
-    $globalline{loopcol} = [ map {+{coltitle=>$_}} @cols_in_order ];
+    $globalline{loopcol} = [ map {{coltitle=>$_}} @cols_in_order ];
  	# the foot (totals by borrower type)
     $globalline{loopfooter} = [];
     $globalline{total}= $grantotal;		# FIXME: useless
