@@ -55,7 +55,7 @@ my $authvals = [['items.notforloan', 'Item not for loan', 'notforloan'],
                              ['items.wthdrawn', 'item withdrawn', 'sele'],
                              ['items.damaged', 'item damaged', 'damaged'],
                              ['items.location', 'item location', 'location'],
-                             ['items.ccode', 'items.ccode FIXME???', 'ccode'],
+                             ['items.ccode', 'items.ccode', 'ccode'],
                             ];
 
 my $itemlevelpref = C4::Context->preference('item-level_itypes');
@@ -163,7 +163,7 @@ if ( $invars->{op} && $invars->{op} eq 'barcodes'){
 			for my $auth (@$authvals){
 				my ($authfieldname, $description, $hashfdname) = @$auth;
 				my $authcode = GetAuthValCode($authfieldname);
-				if ($invars->{$authcode} && $invars->{$authcode} ne '0'){
+				if ($authcode && $invars->{$authcode} && $invars->{$authcode} ne '0'){
 					$item->{$hashfdname}=$invars->{$authcode};
 				}
 			}
