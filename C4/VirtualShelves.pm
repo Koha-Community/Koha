@@ -604,6 +604,26 @@ sub _shelf_count ($$) {
 	return $total;
 }
 
+sub _biblionumber_sth {
+    my ($shelf) = @_;
+    my $query = 'select biblionumber from virtualshelfcontents where shelfnumber = ?';
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare($query)
+	or die $dbh->errstr;
+    $sth->execute( $shelf )
+	or die $sth->errstr;
+    $sth;
+}
+
+sub each_biblionumbers (&$) {
+    my ($code,$shelf) = @_;
+    my $ref =  _biblionumber_sth($shelf)->fetchall_arrayref;
+    map {
+	$_=$$_[0];
+	$code->();
+    } @$ref;
+}
+
 1;
 
 __END__

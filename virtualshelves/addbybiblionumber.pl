@@ -63,7 +63,6 @@ use C4::Circulation;
 use C4::Auth;
 
 #use it only to debug !
-use CGI::Carp qw/fatalsToBrowser/;
 use warnings;
 
 sub AddBibliosToShelf {
@@ -81,11 +80,11 @@ sub AddBibliosToShelf {
 my $query           = new CGI;
 
 # If set, then single item case.
-my $biblionumber    = $query->param('biblionumber');
+my @biblionumber    = $query->param('biblionumber');
 
 # If set, then multiple item case.
-my $biblionumbers   = $query->param('biblionumbers');
 
+my $biblionumbers   = $query->param('biblionumbers');
 my $shelfnumber     = $query->param('shelfnumber');
 my $newvirtualshelf = $query->param('newvirtualshelf');
 my $category        = $query->param('category');
@@ -151,7 +150,7 @@ else {    # this shelf doesn't already exist.
         $shelvesloop{$shelf->{shelfnumber}} = $shelf->{shelfname};
     }
     # then open shelves...
-    my ($shelflist) = GetRecentShelves(3, $limit, undef);
+    ($shelflist) = GetRecentShelves(3, $limit, undef);
     for my $shelf ( @{ $shelflist->[0] } ) {
         push( @shelvesloop, $shelf->{shelfnumber} );
         $shelvesloop{$shelf->{shelfnumber}} = $shelf->{shelfname};
