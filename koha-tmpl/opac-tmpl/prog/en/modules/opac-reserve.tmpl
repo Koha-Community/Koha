@@ -293,9 +293,8 @@
                     </td>
                     <!-- TMPL_UNLESS NAME="item-level_itypes" -->
                       <td>
-                        <img src="<!-- TMPL_VAR NAME="imageurl" -->"
-                             alt="<!-- TMPL_VAR NAME="description" -->"
-                             title="<!-- TMPL_VAR NAME="description" -->" />
+                        <!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="" /><!-- /TMPL_IF -->
+						<!-- TMPL_VAR NAME="description" -->
                       </td>
                     <!-- /TMPL_UNLESS -->
                     <td><!-- TMPL_VAR name="rank" --> out of <!-- TMPL_VAR NAME="reservecount" --></td>
@@ -436,9 +435,8 @@
                               </td>
                               <!-- TMPL_IF NAME="item-level_itypes" -->
                                 <td>
-                                  <img src="<!-- TMPL_VAR NAME="imageurl" -->"
-                                       alt="<!-- TMPL_VAR NAME="description" -->"
-                                       title="<!-- TMPL_VAR NAME="description" -->" />
+                                  <!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="" /><!-- /TMPL_IF -->
+								<!-- TMPL_VAR NAME="description" -->
                                 </td>
                               <!-- /TMPL_IF -->
                               <td><!-- TMPL_VAR NAME="barcode" --></td>
