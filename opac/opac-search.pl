@@ -441,7 +441,6 @@ for (my $i=0;$i<=@servers;$i++) {
 	if ($results_hashref->{$server}->{"hits"}){
 	    $total = $total + $results_hashref->{$server}->{"hits"};
 	}
-    > 
  	# Opac search history
  	my $newsearchcookie;
  	if (C4::Context->preference('EnableOpacSearchHistory')) {
