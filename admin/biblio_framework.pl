@@ -74,13 +74,16 @@ if ($op eq 'add_form') {
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
 } elsif ($op eq 'add_validate') {
-    if ($input->param('modif')) {
-        my $sth=$dbh->prepare("UPDATE biblio_framework SET frameworktext=? WHERE frameworkcode=?");
-        $sth->execute($input->param('frameworktext'),$input->param('frameworkcode'));
-    } else {
-        my $sth=$dbh->prepare("INSERT into biblio_framework (frameworkcode,frameworktext) values (?,?)");
-        $sth->execute($input->param('frameworkcode'),$input->param('frameworktext'));
-    }
+	my $dbh = C4::Context->dbh;
+	if($input->param('frameworktext') and $input->param('frameworkcode')){
+        if ($input->param('modif')) {
+            my $sth=$dbh->prepare("UPDATE biblio_framework SET frameworktext=? WHERE frameworkcode=?");
+            $sth->execute($input->param('frameworktext'),$input->param('frameworkcode'));
+        } else {
+            my $sth=$dbh->prepare("INSERT into biblio_framework (frameworkcode,frameworktext) values (?,?)");
+            $sth->execute($input->param('frameworkcode'),$input->param('frameworktext'));
+        }
+	}
 	print $input->redirect($script_name);   # FIXME: unnecessary redirect
 	exit;
 													# END $OP eq ADD_VALIDATE
