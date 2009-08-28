@@ -1217,7 +1217,7 @@ sub BuildUnimarcHierarchy{
   my $record = shift @_;
   my $class = shift @_;
   my $authid_constructed = shift @_;
-  my $authid=$record->subfield('250','3');
+  my $authid=$record->subfield('2..','3');
   my %cell;
   my $parents=""; my $children="";
   my (@loopparents,@loopchildren);
@@ -1238,7 +1238,7 @@ sub BuildUnimarcHierarchy{
   $cell{"class"}=$class;
   $cell{"loopauthid"}=$authid;
   $cell{"current_value"} =1 if $authid eq $authid_constructed;
-  $cell{"value"}=$record->subfield('250',"a");
+  $cell{"value"}=$record->subfield('2..',"a");
   return \%cell;
 }
 
