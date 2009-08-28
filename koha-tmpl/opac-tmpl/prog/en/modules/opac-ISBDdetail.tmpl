@@ -62,9 +62,7 @@
 	<!-- /TMPL_IF -->
     <!-- /TMPL_UNLESS -->
 <!-- /TMPL_UNLESS -->
-        <li><a class="print" href="/cgi-bin/koha/opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
-            Print
-        </a></li>
+        <li><a class="print" href="javascript:window.print();">Print</a></li>
 <!-- TMPL_IF name="virtualshelves" -->
    <!-- TMPL_IF NAME="opacuserlogin" --> <!-- TMPL_IF NAME="loggedinusername" -->
         <li><a class="addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
