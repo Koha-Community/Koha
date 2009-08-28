@@ -24,6 +24,7 @@ use strict;
 # use warnings;  # FIXME: someday
 use C4::Context;
 use C4::Biblio;
+use C4::Members;
 use C4::Items;
 use C4::Search;
 use C4::Circulation;
@@ -184,6 +185,33 @@ sub AddReserve {
         $found,          $waitingdate,	$expdate
     );
 
+    # Send e-mail to librarian if syspref is active
+    if(C4::Context->preference("emailLibrarianWhenHoldIsPlaced")){
+        my $borrower = GetMemberDetails($borrowernumber);
+        my $biblio   = GetBiblioData($biblionumber);
+        my $letter = C4::Letters::getletter( 'reserves', 'HOLDPLACED');
+        my $admin_email_address = C4::Context->preference('KohaAdminEmailAddress');
+
+        my %keys = (%$borrower, %$biblio);
+        foreach my $key (keys %keys) {
+            my $replacefield = "<<$key>>";
+            $letter->{content} =~ s/$replacefield/$keys{$key}/g;
+            $letter->{title} =~ s/$replacefield/$keys{$key}/g;
+        }
+        
+        C4::Letters::EnqueueLetter(
+                            {   letter                 => $letter,
+                                borrowernumber         => $borrowernumber,
+                                message_transport_type => 'email',
+                                from_address           => $admin_email_address,
+                                to_address           => $admin_email_address,
+                            }
+                        );
+        
+
+    }
+
+
     #}
     ($const eq "o" || $const eq "e") or return;   # FIXME: why not have a useful return value?
     $query = qq/
@@ -196,6 +224,7 @@ sub AddReserve {
     foreach (@$bibitems) {
         $sth->execute($borrowernumber, $biblionumber, $resdate, $_);
     }
+        
     return;     # FIXME: why not have a useful return value?
 }
 
