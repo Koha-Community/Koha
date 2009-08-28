@@ -206,8 +206,13 @@ if (C4::Context->preference("marcflavour") eq "UNIMARC" ) {
 my $branches = GetBranches();
 my @branch_loop;
 
+# we need to know the borrower branch code to set a default branch
+my $borrowerbranchcode = C4::Context->userenv->{'branch'};
+
 for my $branch_hash (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
-    push @branch_loop, {value => "$branch_hash" , branchname => $branches->{$branch_hash}->{'branchname'}, };
+    # if independantbranches is activated, set the default branch to the borrower branch
+    my $selected = (C4::Context->preference("independantbranches") and ($borrowerbranchcode eq $branch_hash)) ? 1 : undef;
+    push @branch_loop, {value => "$branch_hash" , branchname => $branches->{$branch_hash}->{'branchname'}, selected => $selected};
 }
 
 my $categories = GetBranchCategories(undef,'searchdomain');
