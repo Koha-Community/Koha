@@ -19,6 +19,7 @@ use C4::Biblio;
 use C4::Items;
 use C4::Serials;
 use URI::Escape;
+use C4::Branch;
 
 my $query = new CGI;
 my $subscriptionid = $query->param('subscriptionid');
@@ -60,6 +61,7 @@ if($ok){
     my ($count2,@bibitems) = GetBiblioItemByBiblioNumber($biblio);
     my @itemresults = GetItemsInfo($subs->{'biblionumber'}, 'intra');
     my $branch = $itemresults[0]->{'holdingbranch'};
+    my $branchname = GetBranchName($branch);
     my $const = 'o';
     my $notes;
     my $title = $subs->{'bibliotitle'};
@@ -85,7 +87,7 @@ if($ok){
 				flagsrequired => {serials => 1},
 				debug => 1,
 				});
-    $template->param("libraryname"=>C4::Context->preference("LibraryName"));
+    $template->param("libraryname"=>$branchname);
 } else {
     ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "serials/routing-preview.tmpl",
@@ -100,8 +102,12 @@ if($ok){
 my @results;
 my $data;
 for(my $i=0;$i<$routing;$i++){
+<<<<<<< HEAD:serials/routing-preview.pl
     $data=GetMember('borrowernumber' => $routinglist[$i]->{'borrowernumber'});
     $data->{'location'}=$data->{'branchcode'};
+=======
+    $data=GetMember($routinglist[$i]->{'borrowernumber'},'borrowernumber');
+>>>>>>> 704d6c9... [3.0.x](bug #3563) This replaces the library name by the branchname attached to the subscription, and hide streetaddesses in serials routing:serials/routing-preview.pl
     $data->{'name'}="$data->{'firstname'} $data->{'surname'}";
     $data->{'routingid'}=$routinglist[$i]->{'routingid'};
     $data->{'subscriptionid'}=$subscriptionid;
