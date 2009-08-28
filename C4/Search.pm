@@ -1201,11 +1201,22 @@ sub searchResults {
     }
 
 	my $marcflavour = C4::Context->preference("marcflavour");
+    # We get the biblionumber position in MARC 
+    my ($bibliotag,$bibliosubf)=GetMarcFromKohaField('biblio.biblionumber','');
+    my $fw;
+    
     # loop through all of the records we've retrieved
     for ( my $i = $offset ; $i <= $times - 1 ; $i++ ) {
         my $marcrecord = MARC::File::USMARC::decode( $marcresults[$i] );
-        my $oldbiblio = TransformMarcToKoha( $dbh, $marcrecord, '' );
-        $oldbiblio->{subtitle} = C4::Biblio::get_koha_field_from_marc('bibliosubtitle', 'subtitle', $marcrecord, '');
+        
+        if ($bibliotag<10){
+            $fw = GetFrameworkCode($marcrecord->field($bibliotag)->data);
+        }else{
+            $fw = GetFrameworkCode($marcrecord->subfield($bibliotag,$bibliosubf));
+        }
+        
+        my $oldbiblio = TransformMarcToKoha( $dbh, $marcrecord, $fw );
+        $oldbiblio->{subtitle} = GetRecordValue('subtitle', $marcrecord, $fw);
         $oldbiblio->{result_number} = $i + 1;
 
         # add imageurl to itemtype if there is one

@@ -56,7 +56,10 @@ function verify_images() {
     <!-- TMPL_IF NAME="AmazonEnabled" --><div class="yui-gb"><!-- TMPL_ELSE --><div class="yui-g"><!-- /TMPL_IF -->
     <div id="catalogue_detail_biblio" class="yui-u first">
         
-    <h3><!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_VAR NAME="subtitle" --></h3> 
+    <h3><!-- TMPL_VAR NAME="title" escape="html"--></h3>
+    <!-- TMPL_LOOP NAME="subtitle" -->
+    	<h4><!-- TMPL_VAR NAME="subfield" --></h4>
+    <!-- /TMPL_LOOP -->
             <!-- TMPL_UNLESS NAME="item-level_itypes" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->"><!-- /TMPL_UNLESS -->
             <!-- TMPL_IF name="unititle" --><p><!-- TMPL_VAR name="unititle" escape="html" --></p><!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="author" --><p>By <a href="/cgi-bin/koha/catalogue/search.pl?q=au:<!-- TMPL_VAR NAME="author" ESCAPE="url" -->"><!-- TMPL_VAR NAME="author" --></a></p><!-- /TMPL_IF -->
