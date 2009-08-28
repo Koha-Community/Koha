@@ -425,13 +425,14 @@ my @previousissues;
 ## ADDED BY JF: new itemtype issuingrules counter stuff
 my $issued_itemtypes_count;
 my @issued_itemtypes_count_loop;
+my $totalprice = 0;
 
 if ($borrower) {
 # get each issue of the borrower & separate them in todayissues & previous issues
     my ($issueslist) = GetPendingIssues($borrower->{'borrowernumber'});
-
     # split in 2 arrays for today & previous
     foreach my $it ( @$issueslist ) {
+        my $itemtypeinfo = getitemtypeinfo( (C4::Context->preference('item-level_itypes')) ? $it->{'itype'} : $it->{'itemtype'} );
         # set itemtype per item-level_itype syspref - FIXME this is an ugly hack
         $it->{'itemtype'} = ( C4::Context->preference( 'item-level_itypes' ) ) ? $it->{'itype'} : $it->{'itemtype'};
 
@@ -447,8 +448,13 @@ if ($borrower) {
 		$it->{'can_renew'} = $can_renew;
 		$it->{'can_confirm'} = !$can_renew && !$restype;
 		$it->{'renew_error'} = $restype;
+	    $it->{'checkoutdate'} = C4::Dates->new($it->{'issuedate'},'iso')->output('syspref');
 
+	    $totalprice += $it->{'replacementprice'};
+		$it->{'itemtype'} = $itemtypeinfo->{'description'};
+		$it->{'itemtype_image'} = $itemtypeinfo->{'imageurl'};
         $it->{'dd'} = format_date($it->{'date_due'});
+        $it->{'issuedate'} = format_date($it->{'issuedate'});
         $it->{'od'} = ( $it->{'date_due'} lt $todaysdate ) ? 1 : 0 ;
         ($it->{'author'} eq '') and $it->{'author'} = ' ';
         $it->{'renew_failed'} = $renew_failed{$it->{'itemnumber'}};
@@ -619,6 +625,8 @@ foreach my $flag ( sort keys %$flags ) {
 my $amountold = $borrower->{flags}->{'CHARGES'}->{'message'} || 0;
 $amountold =~ s/^.*\$//;    # remove upto the $, if any
 
+my ( $total, $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
+
 if ( $borrower->{'category_type'} eq 'C') {
     my  ( $catcodes, $labels ) =  GetborCatFromCatType( 'A', 'WHERE category_type = ?' );
     my $cnt = scalar(@$catcodes);
@@ -676,6 +684,8 @@ $template->param(
     duedatespec       => $duedatespec,
     message           => $message,
     CGIselectborrower => $CGIselectborrower,
+	totalprice => sprintf("%.2f", $totalprice),
+    totaldue        => sprintf("%.2f", $total),
     todayissues       => \@todaysissues,
     previssues        => \@previousissues,
     inprocess         => $inprocess,

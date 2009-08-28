@@ -216,13 +216,13 @@ $template->param( lib2 => $lib2 ) if ($lib2);
 # current issues
 #
 my $issue = GetPendingIssues($borrowernumber);
-my $count = scalar(@$issue);
+my $issuecount = scalar(@$issue);
 my $roaddetails = &GetRoadTypeDetails( $data->{'streettype'} );
 my $today       = POSIX::strftime("%Y-%m-%d", localtime);	# iso format
 my @issuedata;
 my $overdues_exist = 0;
 my $totalprice = 0;
-for ( my $i = 0 ; $i < $count ; $i++ ) {
+for ( my $i = 0 ; $i < $issuecount ; $i++ ) {
     my $datedue = $issue->[$i]{'date_due'};
     my $issuedate = $issue->[$i]{'issuedate'};
     $issue->[$i]{'date_due'}  = C4::Dates->new($issue->[$i]{'date_due'}, 'iso')->output('syspref');
@@ -347,7 +347,9 @@ if ($borrowernumber) {
     }
 
     # return result to the template
-    $template->param( reservloop => \@reservloop );
+    $template->param( reservloop => \@reservloop,
+        countreserv => scalar @reservloop,
+	 );
 }
 
 # current alert subscriptions
@@ -396,6 +398,7 @@ $template->param(
     totaldue        => sprintf("%.2f", $total),
     totaldue_raw    => $total,
     issueloop       => \@issuedata,
+	issuecount => $issuecount,
     overdues_exist  => $overdues_exist,
     error           => $error,
     $error          => 1,
