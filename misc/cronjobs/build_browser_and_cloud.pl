@@ -79,6 +79,7 @@ my %browser_result;
 
 # the result hash for the cloud table
 my %cloud_result;
+
 while ((my ($biblionumber)= $sth->fetchrow)) {
     $i++;
     print "." unless $batch;
@@ -104,14 +105,18 @@ while ((my ($biblionumber)= $sth->fetchrow)) {
     }
     #deal with CLOUD part
     if ($cloud_tag && $Koharecord) {
-        foreach ($Koharecord->field($cloud_tag)) {
-            my $line;
-            foreach ($_->subfields()) {
-                next if $_->[0]=~ /\d/;
-                $line .= $_->[1].' ';
+        if($Koharecord->field($cloud_tag)){
+            foreach ($Koharecord->field($cloud_tag)) {
+                my $line;
+                foreach ($_->subfields()) {
+                    next if $_->[0]=~ /\d/;
+                    $line .= $_->[1].' ';
+                }
+                $line =~ s/ $//;
+                $cloud_result{$line}++;
             }
-            $line =~ s/ $//;
-            $cloud_result{$line}++;
+        }else{
+            print "!";
         }
     }
 
@@ -140,11 +145,19 @@ if ($browser_tag) {
 }
 
 # fills the cloud (tags) table
+my $sthver = $dbh->prepare("SELECT weight FROM tags WHERE entry = ? ");
+my $sthins = $dbh->prepare("insert into tags (entry,weight) values (?,?)");
+my $sthup  = $dbh->prepare("UPDATE tags SET weight = ? WHERE entry = ?");
 if ($cloud_tag) {
     $dbh->do("truncate tags");
-    my $sth = $dbh->prepare("insert into tags (entry,weight) values (?,?)");
-    foreach (keys %cloud_result) {
-        $sth->execute($_,$cloud_result{$_});
+    foreach my $key (keys %cloud_result) {
+        $sthver->execute($key);
+        if(my $row = $sthver->fetchrow_hashref){
+            my $count = $row->{weight} + $cloud_result{$key};
+            $sthup->execute($count, $key);
+        }else{
+            $sthins->execute($key,$cloud_result{$key});
+        }
     }
 }
 # $dbh->do("unlock tables");
