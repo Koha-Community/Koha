@@ -78,24 +78,29 @@ C4::Labels::Batch - A class for creating and manipulating batch objects in Koha
 =cut
 
 sub new {
-    my ($invocant, %params) = @_;
+    my ($invocant) = shift;
     my $type = ref($invocant) || $invocant;
     my $self = {
         batch_id        => 0,
         items           => [],
         branch_code     => 'NB',
         batch_stat      => 0,   # False if any data has changed and the db has not been updated
+        @_,
     };
+    my $sth = C4::Context->dbh->prepare("SELECT MAX(batch_id) FROM labels_batches;");
+    $sth->execute();
+    my $batch_id = $sth->fetchrow_array;
+    $self->{'batch_id'} = ++$batch_id;
     bless ($self, $type);
     return $self;
 }
 
-=head2 $batch->add_item($item_number)
+=head2 $batch->add_item(item_number => $item_number, branch_code => $branch_code)
 
     Invoking the I<add_item> method will add the supplied item to the batch object.
 
     example:
-        $batch->add_item($item_number);
+        $batch->add_item(item_number => $item_number, branch_code => $branch_code);
 
 =cut
 
@@ -105,12 +110,16 @@ sub add_item {
     my $query = "INSERT INTO labels_batches (batch_id, item_number, branch_code) VALUES (?,?,?);";
     my $sth = C4::Context->dbh->prepare($query);
 #    $sth->{'TraceLevel'} = 3;
-    $sth->execute($item_number, $self->{'batch_id'});
+    $sth->execute($self->{'batch_id'}, $item_number, $self->{'branch_code'});
     if ($sth->err) {
         syslog("LOG_ERR", "C4::Labels::Batch->add_item : Database returned the following error on attempted INSERT: %s", $sth->errstr);
         return -1;
     }
-    push (@{$self->{'items'}}, $item_number);
+    $query = "SELECT max(label_id) FROM labels_batches WHERE batch_id=? AND item_number=? AND branch_code=?;";
+    my $sth1 = C4::Context->dbh->prepare($query);
+    $sth1->execute($self->{'batch_id'}, $item_number, $self->{'branch_code'});
+    my $label_id = $sth1->fetchrow_array;
+    push (@{$self->{'items'}}, {item_number => $item_number, label_id => $label_id});
     $self->{'batch_stat'} = 0;
     return 0;
 }
@@ -140,16 +149,16 @@ sub get_attr {
 
 sub remove_item {
     my $self = shift;
-    my $item_number = shift;
-    my $query = "DELETE FROM labels_batches WHERE item_number=? AND batch_id=?;";
+    my $label_id = shift;
+    my $query = "DELETE FROM labels_batches WHERE label_id=? AND batch_id=?;";
     my $sth = C4::Context->dbh->prepare($query);
 #    $sth->{'TraceLevel'} = 3;
-    $sth->execute($item_number, $self->{'batch_id'});
+    $sth->execute($label_id, $self->{'batch_id'});
     if ($sth->err) {
         syslog("LOG_ERR", "C4::Labels::Batch->remove_item : Database returned the following error on attempted DELETE: %s", $sth->errstr);
         return -1;
     }
-    @{$self->{'items'}} = grep{$_ != $item_number} @{$self->{'items'}};
+    @{$self->{'items'}} = grep{$_->{'label_id'} != $label_id} @{$self->{'items'}};
     $self->{'batch_stat'} = 1;
     return 0;
 }
@@ -167,14 +176,10 @@ sub remove_item {
 
 sub save {
     my $self = shift;
-    my $sth = C4::Context->dbh->prepare("SELECT MAX(batch_id) FROM labels_batches;");
-    $sth->execute();
-    my $batch_id = $sth->fetchrow_array;
-    $self->{'batch_id'} = $batch_id++;
     foreach my $item_number (@{$self->{'items'}}) {
         my $query = "INSERT INTO labels_batches (batch_id, item_number, branch_code) VALUES (?,?,?);";
         my $sth1 = C4::Context->dbh->prepare($query);
-        $sth1->execute($self->{'batch_id'}, $item_number, $self->{'branch_code'});
+        $sth1->execute($self->{'batch_id'}, $item_number->{'item_number'}, $self->{'branch_code'});
         if ($sth1->err) {
             syslog("LOG_ERR", "C4::Labels::Batch->save : Database returned the following error on attempted INSERT: %s", $sth1->errstr);
             return -1;
@@ -199,20 +204,24 @@ sub retrieve {
     my $invocant = shift;
     my %opts = @_;
     my $type = ref($invocant) || $invocant;
+    my $record_flag = 0;
     my $query = "SELECT * FROM labels_batches WHERE batch_id = ? ORDER BY label_id";  
     my $sth = C4::Context->dbh->prepare($query);
+#    $sth->{'TraceLevel'} = 3;
     $sth->execute($opts{'batch_id'});
-    if ($sth->err) {
-        syslog("LOG_ERR", "C4::Labels::Batch->retrieve : Database returned the following error on attempted SELECT: %s", $sth->errstr);
-        return 1;
-    }
     my $self = {
-        items   => [],
+        batch_id        => $opts{'batch_id'},
+        items           => [],
     };
     while (my $record = $sth->fetchrow_hashref) {
-        $self->{'batch_id'} = $record->{'batch_id'};        # FIXME: seems a bit wasteful to re-initialize these every trip: is there a better way?
         $self->{'branch_code'} = $record->{'branch_code'};
-        push (@{$self->{'items'}}, $record->{'item_number'});
+        push (@{$self->{'items'}}, {item_number => $record->{'item_number'}, label_id => $record->{'label_id'}});
+        $record_flag = 1;
+    }
+    return -2 if $record_flag == 0;     # a hackish sort of way of indicating no such record exists
+    if ($sth->err) {
+        syslog("LOG_ERR", "C4::Labels::Batch->retrieve : Database returned the following error on attempted SELECT: %s", $sth->errstr);
+        return -1;
     }
     $self->{'batch_stat'} = 1;
     bless ($self, $type);

@@ -27,6 +27,7 @@ use Switch qw(Perl6);
 use CGI;
 use HTML::Template::Pro;
 use Data::Dumper;
+use JSON;
 
 use C4::Auth;
 use C4::Output;
@@ -55,11 +56,12 @@ my $display_columns = [ {_label_number  => {label => 'Label Number', link_field 
                         {_summary       => {label => 'Summary', link_field => 0}},
                         {_item_type     => {label => 'Item Type', link_field => 0}},
                         {_barcode       => {label => 'Barcode', link_field => 0}},
-                        {select         => {label => 'Select', value => '_item_number'}},
+                        {select         => {label => 'Select', value => '_label_id'}},
                       ];
 my $op = $cgi->param('op') || undef;
 my $label_id = $cgi->param('label_id') || undef;
 my $batch_id = $cgi->param('element_id') || $cgi->param('batch_id') || undef;
+my @item_numbers = $cgi->param('item_number') if $cgi->param('item_number');
 my $branch_code = get_branch_code_from_name($template->param('LoginBranchname'));
 
 if ($op eq 'remove') {
@@ -71,7 +73,19 @@ elsif ($op eq 'delete') {
     $err = C4::Labels::Batch::delete(batch_id => $batch_id, branch_code => $branch_code);
     $errstr = "batch $batch_id was not deleted." if $err;
 }
-else{
+elsif ($op eq 'add') {
+    $batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);
+    $batch = C4::Labels::Batch->new(branch_code => $branch_code) if $batch == -2;
+    foreach my $item_number (@item_numbers) {
+        $err = $batch->add_item($item_number);
+    }
+    $errstr = "item(s) not added to batch $batch_id." if $err;
+}
+elsif ($op eq 'new') {
+    $batch = C4::Labels::Batch->new(branch_code => $branch_code);
+    $batch_id = $batch->get_attr('batch_id');
+}
+else { # display batch
     $batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);
 }
 

@@ -276,9 +276,9 @@ sub get_label_summary {
     my @label_summaries = ();
     my $query = "SELECT b.title, b.author, bi.itemtype, i.barcode, i.biblionumber FROM biblio AS b, biblioitems AS bi ,items AS i, labels_batches AS l WHERE itemnumber=? AND l.item_number=i.itemnumber AND i.biblioitemnumber=bi.biblioitemnumber AND bi.biblionumber=b.biblionumber AND l.batch_id=?;";
     my $sth = C4::Context->dbh->prepare($query);
-    foreach my $item_number (@{$params{'items'}}) {
+    foreach my $item (@{$params{'items'}}) {
         $label_number++;
-        $sth->execute($item_number, $params{'batch_id'});
+        $sth->execute($item->{'item_number'}, $params{'batch_id'});
         if ($sth->err) {
             syslog("LOG_ERR", "C4::Labels::Lib::get_label_summary : Database returned the following error on attempted SELECT: %s", $sth->errstr);
             return -1;
@@ -291,7 +291,8 @@ sub get_label_summary {
         $label_summary->{'_summary'} = $record->{'title'} . " | " . ($record->{'author'} ? $record->{'author'} : 'N/A');
         $label_summary->{'_item_type'} = $record->{'itemtype'};
         $label_summary->{'_barcode'} = $record->{'barcode'};
-        $label_summary->{'_item_number'} = $item_number;
+        $label_summary->{'_item_number'} = $item->{'item_number'};
+        $label_summary->{'_label_id'} = $item->{'label_id'};
         push (@label_summaries, $label_summary);
     }
     return \@label_summaries;

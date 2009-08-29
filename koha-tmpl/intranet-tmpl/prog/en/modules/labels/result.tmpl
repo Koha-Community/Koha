@@ -1,143 +1,138 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo; Barcodes and Labels &rsaquo; Search Results</title><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<style type="text/css">#custom-doc { width:46.23em;*width:45.04em;min-width:610px; margin:auto;margin-top: .4em; text-align:left; }</style>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function(){
-    $("#CheckAll").click(function(){
-		$(".checkboxed").checkCheckboxes();
-	        return false;
-    });
-    $("#CheckNone").click(function(){
-        $(".checkboxed").unCheckCheckboxes();
-        return false;
-    });
-});
-function add_item(itemnum,batch_id,type_id){
- var getstr='';
- if (itemnum == 'checked') {
-    itms= new Array;
-    if(document.resultform.i_itemnumber.length > 0) {
-        for (var i=0; i < document.resultform.i_itemnumber.length; i++) {
-            if (document.resultform.i_itemnumber[i].checked) {
-                itms.push("itemnumber=" +  document.resultform.i_itemnumber[i].value);
+    <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+    <title>Koha &rsaquo; Barcodes and Labels &rsaquo; Search Results</title>
+    <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+    <style type="text/css">#custom-doc { width:46.23em;*width:45.04em;min-width:610px; margin:auto;margin-top: .4em; text-align:left; }</style>
+    <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.pack.js"></script>
+    <script type="text/javascript">
+        //<![CDATA[
+            $(document).ready(function(){
+                $("#CheckAll").click(function(){
+                    $(".checkboxed").checkCheckboxes();
+                    return false;
+                });
+                $("#CheckNone").click(function(){
+                    $(".checkboxed").unCheckCheckboxes();
+                    return false;
+                });
+            });
+            function add_item(item_number,batch_id,type_id){
+                var getstr='';
+                if (item_number == 'checked') {
+                    items= new Array;
+                    if(document.resultform.action.length > 0) {
+                        for (var i=0; i < document.resultform.action.length; i++) {
+                            if (document.resultform.action[i].checked) {
+                                items.push("item_number=" +  document.resultform.action[i].value);
+                            }
+                        }
+                        getstr = items.join("&");
+                    } else {
+                        getstr = "item_number="+document.resultform.action.value;
+                    }
+                }
+                else {
+                    getstr = "item_number="+item_number;
+                }
+                var myurl = "label-edit-batch.pl?op=add&batch_id="+batch_id+
+                "&"+getstr;
+                 window.opener.location.href = myurl;
             }
-        }
-        getstr = itms.join("&");
-    } else {
-        getstr = "itemnumber="+document.resultform.i_itemnumber.value;
-    }
-  } else {
-		getstr = "itemnumber="+itemnum;
-}
-	var myurl = "label-manager.pl?op=add&batch_id="+batch_id+
-									// "&type="+type_id+	// The template variable NAME="TYPE" is RESERVED ('opac' or 'intranet').
-									"&"+getstr;
-	window.opener.location.href = myurl;
-}
-function add_item3(i_itemnumber){
- var myurl = "label-manager.pl?op=add&itemnumber="+i_itemnumber+"";
-     window.opener.location.href = myurl;
-}
-//]]>
-</script>
+            ]]>
+    </script>
 </head>
 <body>
-
-<div id="custom-doc" class="yui-t7">
-   <div id="bd">
-<h1>Search results</h1>
-
-
-	<div class="results">
-		<!-- TMPL_IF EXPR="displayprev || displaynext" --><p>
-			<!-- TMPL_IF NAME="displayprev" -->
-					<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;ccl_query=<!-- TMPL_VAR NAME="ccl_query" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">&lt;&lt;</a>
-			<!-- /TMPL_IF -->
-
-			<!-- TMPL_LOOP NAME="numbers" -->
-				<!-- TMPL_IF NAME="highlight" -->
-					<span class="current"><!-- TMPL_VAR NAME="number" --></span>
-				<!-- TMPL_ELSE -->
-					<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;ccl_query=<!-- TMPL_VAR NAME="ccl_query" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->"><!-- TMPL_VAR NAME="number" --></a>
-				<!-- /TMPL_IF -->
-			<!-- /TMPL_LOOP -->
-
-			<!-- TMPL_IF NAME="displaynext" -->
-					<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;ccl_query=<!-- TMPL_VAR NAME="ccl_query" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">&gt;&gt;</a>
-				<!-- /TMPL_IF -->
-		</p><!-- /TMPL_IF -->
-
-			<!-- TMPL_IF name="result" -->
-			<strong>Results <!-- TMPL_VAR name="from" --> through <!-- TMPL_VAR name="to" --> <!-- TMPL_IF NAME="total" --> of <!-- TMPL_VAR name="total" --><!-- /TMPL_IF --></strong>
-			<!-- TMPL_ELSE -->
-			No results found
-			<!-- /TMPL_IF -->
-	</div>
-
-
-<div id="breadcrumbs"><a href="/cgi-bin/koha/labels/label-item-search.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->">Search for Items for Batch <!-- TMPL_VAR NAME="batch_id" --></a> &rsaquo; Search results</div>
-<form name="resultform" class="checkboxed" action=""><div style="float: right; margin-top: .5em;"><input type="submit" class="icon addchecked" value="Add checked" onclick="add_item('checked',<!-- TMPL_VAR NAME="batch_id" -->,'<!-- TMPL_VAR NAME="type" -->'); return false" /> <input type="button" class="close" value="Done" /></div><div style="line-height: 2em; margin-left: .7em;"><a id="CheckAll" href="/cgi-bin/koha/labels/label-item-search.pl">Select All</a><span class="clearall"><a id="CheckNone" href="/cgi-bin/koha/labels/label-item-search.pl">Clear All</a></span></div>
-
-<input type="hidden" name="ccl_query" value="<!-- TMPL_VAR name="ccl_query" -->" />
-
-
-	<!-- TMPL_LOOP name="result" -->
-	<table frame="border" border="2" style="float: left; margin: .5em 0;">
-		<!-- TMPL_IF name="highlight" -->
-			<tr class="highlight">
-		<!-- TMPL_ELSE -->
-			<tr>
-		<!-- /TMPL_IF -->
-			<td colspan="5">
-					<label style="font-weight:bold;"><!-- TMPL_VAR NAME="title" escape="html" --></label> by <!-- TMPL_VAR NAME="author" --><br />
-                                      [<!-- TMPL_VAR NAME="itemtype" -->], <!-- TMPL_IF name="publishercode" --><!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF --><!-- TMPL_IF name="place" --><!-- TMPL_VAR name="place" --> <!-- /TMPL_IF --><!-- TMPL_IF name="copyrightdate" --><!-- TMPL_VAR name="copyrightdate" -->, <!-- /TMPL_IF --><!-- TMPL_IF name="pages" --><!-- TMPL_VAR name="pages" --><!-- /TMPL_IF --><!-- TMPL_IF name="isbn" -->, <b>ISBN: </b><!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF --><!-- TMPL_IF name="notes" -->,<br /><!-- TMPL_VAR name="notes" --><!-- /TMPL_IF -->
+    <div id="custom-doc" class="yui-t7">
+        <div id="bd">
+            <h1>Search results</h1>
+	    <div class="results">
+                <!-- TMPL_IF EXPR="displayprev || displaynext" -->
+                <p>
+                    <!-- TMPL_IF NAME="displayprev" -->
+                    <a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromprev" -->&amp;ccl_query=<!-- TMPL_VAR NAME="ccl_query" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">&lt;&lt;</a>
+                    <!-- /TMPL_IF -->
+                    <!-- TMPL_LOOP NAME="numbers" -->
+                    <a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;ccl_query=<!-- TMPL_VAR NAME="ccl_query" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->"><!-- TMPL_VAR NAME="number" --></a>
+                    <!-- /TMPL_LOOP -->
+                    <!-- TMPL_IF NAME="displaynext" -->
+                    <a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;ccl_query=<!-- TMPL_VAR NAME="ccl_query" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">&gt;&gt;</a>
+                    <!-- /TMPL_IF -->
+		</p>
+                <!-- /TMPL_IF -->
+                <!-- TMPL_IF name="results" -->
+                <strong>Results <!-- TMPL_VAR name="from" --> through <!-- TMPL_VAR name="to" --> <!-- TMPL_IF NAME="total" --> of <!-- TMPL_VAR name="total" --><!-- /TMPL_IF --></strong>
+                <!-- TMPL_ELSE -->
+                No results found
+                <!-- /TMPL_IF -->
+            </div>
+            <div id="breadcrumbs">
+                <a href="/cgi-bin/koha/labels/label-item-search.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->">Search for Items for Batch <!-- TMPL_VAR NAME="batch_id" --></a> &rsaquo;
+                Search results
+            </div>
+            <form name="resultform" class="checkboxed" action="">
+                    <div style="float: right; margin-top: .5em; margin-left: .7em; margin-bottom: .7em">
+                        <input type="submit" class="icon addchecked" value="Add checked" onclick="add_item('checked',<!-- TMPL_VAR NAME="batch_id" -->,'<!-- TMPL_VAR NAME="type" -->'); return false" />
+                        <input type="button" class="close" value="Done" />
+                    </div>
+                <div style="line-height: 2em; margin-left: .7em;">
+                    <a id="CheckAll" href="/cgi-bin/koha/labels/label-item-search.pl">Select All</a>
+                    <span class="clearall">
+                        <a id="CheckNone" href="/cgi-bin/koha/labels/label-item-search.pl">Clear All</a>
+                    </span>
+                </div>
+                <input type="hidden" name="ccl_query" value="<!-- TMPL_VAR name="ccl_query" -->" />
+	        <!-- TMPL_LOOP name="result_set" -->
+	        <table id="label-search-results" frame="border" border="2">
+		    <tr>
+		        <td colspan="5">
+		            <label style="font-weight:bold;"><!-- TMPL_VAR NAME="title" --></label>
+                            by <!-- TMPL_VAR NAME="author" --><br />
+                            [<!-- TMPL_VAR NAME="itemtype" -->], <!-- TMPL_IF name="publishercode" --><!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF --><!-- TMPL_IF name="place" --><!-- TMPL_VAR name="place" --> <!-- /TMPL_IF --><!-- TMPL_IF name="copyrightdate" --><!-- TMPL_VAR name="copyrightdate" -->, <!-- /TMPL_IF --><!-- TMPL_IF name="pages" --><!-- TMPL_VAR name="pages" --><!-- /TMPL_IF --><!-- TMPL_IF name="isbn" -->, <b>ISBN: </b><!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF --><!-- TMPL_IF name="notes" -->,<br /><!-- TMPL_VAR name="notes" --><!-- /TMPL_IF -->
 			</td>
-                        </tr>
-<!-- NEW -->
-                                <tr>
-                                    <th>Select</th>
-                                    <th>Item Call Number</th>
-                                    <th>Date Accessioned</th>
-                                    <th>Barcode</th>
-                                    <th></th>
-                                </tr>
-        <!-- TMPL_IF name="item" -->
-        <!-- TMPL_LOOP name="item" -->
-					<!-- TMPL_IF name="i_itemnumber1" --><tr><td align="center"><label for="itm<!-- TMPL_VAR NAME="i_itemnumber1" -->" ><input type="checkbox" name="i_itemnumber" id="itm<!-- TMPL_VAR NAME="i_itemnumber1" -->" value="<!-- TMPL_VAR NAME="i_itemnumber1" -->" /></label></td><!-- /TMPL_IF -->
-					<!-- TMPL_IF name="i_itemcallnumber" --><td align="center"><!-- TMPL_VAR name="i_itemcallnumber" --><br /></td><!-- /TMPL_IF -->
-					<!-- TMPL_IF name="i_dateaccessioned" --><td align="center"><!-- TMPL_VAR name="i_dateaccessioned" --><br /></td><!-- /TMPL_IF -->
-					<!-- TMPL_IF name="i_barcode" --><td align="center"><!-- TMPL_VAR name="i_barcode" --></td><!-- /TMPL_IF -->
-					<!-- TMPL_IF name="i_itemnumber2" --><td align="center">
-					<a onclick="add_item('<!-- TMPL_VAR NAME="i_itemnumber2" -->',<!-- TMPL_VAR NAME="batch_id" -->, '<!-- TMPL_VAR NAME="type" -->'); return false" href="/cgi-bin/koha/barcodes/label-manager.pl?itemnumber=<!-- TMPL_VAR NAME="i_itemnumber2" -->&amp;batch_id=<!-- TMPL_VAR name="batch_id" -->&amp;op=add">Add</a></td></tr>
-		                        <!-- /TMPL_IF -->
-<!-- /NEW -->
-        <!-- /TMPL_LOOP --><!-- item -->
-        <!-- /TMPL_IF -->
-	 </table>
-	<!-- /TMPL_LOOP -->
-</form>
-</div>
-
+                    </tr>
+                    <!-- TMPL_LOOP NAME="item_table" -->
+                    <!-- TMPL_IF NAME="header_fields" -->
+                    <tr>
+                    <!-- TMPL_LOOP NAME="header_fields" -->
+                        <th><!-- TMPL_VAR NAME="field_label" --></th>
+                    <!-- /TMPL_LOOP -->
+                    </tr>
+                    <!-- TMPL_ELSE -->
+                    <tr>
+                    <!-- TMPL_LOOP NAME="text_fields" -->
+                    <!-- TMPL_IF NAME="select_field" -->
+                        <td align="center"><input type="checkbox" name="action" value="<!-- TMPL_VAR NAME="field_value" -->"></td>
+                    <!-- TMPL_ELSIF NAME="link_field" -->
+                        <td align="center">
+			    <a onclick="add_item('<!-- TMPL_VAR NAME="field_value" -->',<!-- TMPL_VAR NAME="batch_id" -->, '<!-- TMPL_VAR NAME="type" -->'); return false" href="/cgi-bin/koha/barcodes/label-edit-batch.pl?op=add&amp;batch_id=<!-- TMPL_VAR name="batch_id" -->&amp;item_number=<!-- TMPL_VAR NAME="field_value" -->">Add</a>
+                        </td>
+                    <!-- TMPL_ELSE -->
+                        <td align="center"><!-- TMPL_VAR NAME="field_value" --></td>
+                    <!-- /TMPL_IF -->
+                    <!-- /TMPL_LOOP -->
+                    </tr>
+                    <!-- /TMPL_IF -->
+                    <!-- /TMPL_LOOP -->
+	        </table>
+	        <!-- /TMPL_LOOP -->
+            </form>
+        </div>
 	<div class="results">
-		<!-- TMPL_IF EXPR="displayprev || displaynext" --><p>
-			<!-- TMPL_IF NAME="displayprev" -->
-					<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;ccl_query=<!-- TMPL_VAR NAME="ccl_query" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">&lt;&lt;</a>
-			<!-- /TMPL_IF -->
-
-			<!-- TMPL_LOOP NAME="numbers" -->
-				<!-- TMPL_IF NAME="highlight" -->
-					<span class="current"><!-- TMPL_VAR NAME="number" --></span>
-				<!-- TMPL_ELSE -->
-					<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;ccl_query=<!-- TMPL_VAR NAME="ccl_query" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->"><!-- TMPL_VAR NAME="number" --></a>
-				<!-- /TMPL_IF -->
-			<!-- /TMPL_LOOP -->
-
-			<!-- TMPL_IF NAME="displaynext" -->
-					<a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;ccl_query=<!-- TMPL_VAR NAME="ccl_query" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">&gt;&gt;</a>
-				<!-- /TMPL_IF -->
-		</p><!-- /TMPL_IF -->
+	    <!-- TMPL_IF EXPR="displayprev || displaynext" -->
+            <p>
+                <!-- TMPL_IF NAME="displayprev" -->
+                <a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;ccl_query=<!-- TMPL_VAR NAME="ccl_query" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">&lt;&lt;</a>
+                <!-- /TMPL_IF -->
+                <!-- TMPL_LOOP NAME="numbers" -->
+                <!-- TMPL_IF NAME="highlight" -->
+                <span class="current"><!-- TMPL_VAR NAME="number" --></span>
+                <!-- TMPL_ELSE -->
+                <a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfrom" -->&amp;ccl_query=<!-- TMPL_VAR NAME="ccl_query" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->"><!-- TMPL_VAR NAME="number" --></a>
+                <!-- /TMPL_IF -->
+                <!-- /TMPL_LOOP -->
+                <!-- TMPL_IF NAME="displaynext" -->
+                <a href="label-item-search.pl?startfrom=<!-- TMPL_VAR NAME="startfromnext" -->&amp;ccl_query=<!-- TMPL_VAR NAME="ccl_query" -->&amp;resultsperpage=<!-- TMPL_VAR NAME="resultsperpage" -->&amp;op=do_search&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->">&gt;&gt;</a>
+                <!-- /TMPL_IF -->
+	    </p>
+            <!-- /TMPL_IF -->
 	</div>
-
-
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+    <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
