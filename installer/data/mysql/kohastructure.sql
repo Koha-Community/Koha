@@ -1228,60 +1228,40 @@ CREATE TABLE `itemtypes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Table structure for table `labels`
+-- Table structure for table `labels_batches`
 --
 
-DROP TABLE IF EXISTS `labels`;
-CREATE TABLE `labels` (
-  `labelid` int(11) NOT NULL auto_increment,
-  `batch_id` int(10) NOT NULL default 1,
-  `itemnumber` varchar(100) NOT NULL default '',
+DROP TABLE IF EXISTS `labels_batches`;
+CREATE TABLE `labels_batches` (
+  `label_id` int(11) NOT NULL auto_increment,
+  `batch_id` int(10) NOT NULL default '1',
+  `item_number` int(11) NOT NULL default '0',
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  PRIMARY KEY  (`labelid`)
+  `branch_code` varchar(10) NOT NULL default 'NB',
+  PRIMARY KEY  USING BTREE (`label_id`),
+  KEY `branch_fk` (`branch_code`),
+  KEY `item_fk` (`item_number`),
+  CONSTRAINT `item_fk_constraint` FOREIGN KEY (`item_number`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE,
+  CONSTRAINT `branch_fk_constraint` FOREIGN KEY (`branch_code`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Table structure for table `labels_conf`
+-- Table structure for table `labels_layouts`
 --
 
-DROP TABLE IF EXISTS `labels_conf`;
-CREATE TABLE `labels_conf` (
- `id` int(4) NOT NULL auto_increment,
-  `barcodetype` char(100) default '',
-  `title` int(1) default '0',
-  `subtitle` int(1) default '0',
-  `itemtype` int(1) default '0',
-  `barcode` int(1) default '0',
-  `dewey` int(1) default '0',
-  `classification` int(1) default NULL,
-  `subclass` int(1) default '0',
-  `itemcallnumber` int(1) default '0',
-  `author` int(1) default '0',
-  `issn` int(1) default '0',
-  `isbn` int(1) default '0',
-  `startlabel` int(2) NOT NULL default '1',
-  `printingtype` char(32) default 'BAR',
-  `formatstring` mediumtext default NULL,
-  `layoutname` char(20) NOT NULL default 'TEST',
+DROP TABLE IF EXISTS `labels_layouts`;
+CREATE TABLE `labels_layouts` (
+  `layout_id` int(4) NOT NULL auto_increment,
+  `barcode_type` char(100) NOT NULL default 'CODE39',
+  `printing_type` char(32) NOT NULL default 'BAR',
+  `layout_name` char(20) NOT NULL default 'DEFAULT',
   `guidebox` int(1) default '0',
-  `active` tinyint(1) default '1',
-  `fonttype` char(10) collate utf8_unicode_ci default NULL,
-  `ccode` char(4) collate utf8_unicode_ci default NULL,
-  `callnum_split` int(1) default NULL,
-  `text_justify` char(1) collate utf8_unicode_ci default NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Table structure for table `labels_profile`
---
-
-DROP TABLE IF EXISTS `labels_profile`;
-CREATE TABLE `labels_profile` (
-  `tmpl_id` int(4) NOT NULL,
-  `prof_id` int(4) NOT NULL,
-  UNIQUE KEY `tmpl_id` (`tmpl_id`),
-  UNIQUE KEY `prof_id` (`prof_id`)
+  `font` char(10) character set utf8 collate utf8_unicode_ci NOT NULL default 'TR',
+  `font_size` int(4) NOT NULL default '10',
+  `callnum_split` int(1) default '0',
+  `text_justify` char(1) character set utf8 collate utf8_unicode_ci NOT NULL default 'L',
+  `format_string` varchar(210) NOT NULL default 'barcode',
+  PRIMARY KEY  USING BTREE (`layout_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1290,24 +1270,25 @@ CREATE TABLE `labels_profile` (
 
 DROP TABLE IF EXISTS `labels_templates`;
 CREATE TABLE `labels_templates` (
-`tmpl_id` int(4) NOT NULL auto_increment,
-  `tmpl_code` char(100)  default '',
-  `tmpl_desc` char(100) default '',
-  `page_width` float default '0',
-  `page_height` float default '0',
-  `label_width` float default '0',
-  `label_height` float default '0',
-  `topmargin` float default '0',
-  `leftmargin` float default '0',
-  `cols` int(2) default '0',
-  `rows` int(2) default '0',
-  `colgap` float default '0',
-  `rowgap` float default '0',
-  `active` int(1) default NULL,
-  `units` char(20)  default 'PX',
-  `fontsize` int(4) NOT NULL default '3',
-  `font` char(10) NOT NULL default 'TR',
-  PRIMARY KEY  (`tmpl_id`)
+  `template_id` int(4) NOT NULL auto_increment,
+  `profile_id` int(4) default NULL,
+  `template_code` char(100) NOT NULL default 'DEFAULT TEMPLATE',
+  `template_desc` char(100) NOT NULL default 'Default description',
+  `page_width` float NOT NULL default '0',
+  `page_height` float NOT NULL default '0',
+  `label_width` float NOT NULL default '0',
+  `label_height` float NOT NULL default '0',
+  `top_text_margin` float NOT NULL default '0',
+  `left_text_margin` float NOT NULL default '0',
+  `top_margin` float NOT NULL default '0',
+  `left_margin` float NOT NULL default '0',
+  `cols` int(2) NOT NULL default '0',
+  `rows` int(2) NOT NULL default '0',
+  `col_gap` float NOT NULL default '0',
+  `row_gap` float NOT NULL default '0',
+  `units` char(20) NOT NULL default 'POINT',
+  PRIMARY KEY  (`template_id`),
+  KEY `template_profile_fk_constraint` (`profile_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1630,18 +1611,17 @@ CREATE TABLE `printers` (
 
 DROP TABLE IF EXISTS `printers_profile`;
 CREATE TABLE `printers_profile` (
-  `prof_id` int(4) NOT NULL auto_increment,
-  `printername` varchar(40) NOT NULL,
-  `tmpl_id` int(4) NOT NULL,
-  `paper_bin` varchar(20) NOT NULL,
-  `offset_horz` float default NULL,
-  `offset_vert` float default NULL,
-  `creep_horz` float default NULL,
-  `creep_vert` float default NULL,
-  `unit` char(20) NOT NULL default 'POINT',
-  PRIMARY KEY  (`prof_id`),
-  UNIQUE KEY `printername` (`printername`,`tmpl_id`,`paper_bin`),
-  CONSTRAINT `printers_profile_pnfk_1` FOREIGN KEY (`tmpl_id`) REFERENCES `labels_templates` (`tmpl_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  `profile_id` int(4) NOT NULL auto_increment,
+  `printer_name` varchar(40) NOT NULL default 'Default Printer',
+  `template_id` int(4) NOT NULL default '0',
+  `paper_bin` varchar(20) NOT NULL default 'Bypass',
+  `offset_horz` float NOT NULL default '0',
+  `offset_vert` float NOT NULL default '0',
+  `creep_horz` float NOT NULL default '0',
+  `creep_vert` float NOT NULL default '0',
+  `units` char(20) NOT NULL default 'POINT',
+  PRIMARY KEY  (`profile_id`),
+  UNIQUE KEY `printername` (`printer_name`,`template_id`,`paper_bin`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
