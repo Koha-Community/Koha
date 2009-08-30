@@ -421,7 +421,6 @@ CREATE TABLE `biblioitems` (
   KEY `isbn` (`isbn`),
   KEY `issn` (`issn`),
   KEY `publishercode` (`publishercode`),
-  KEY `issn` (`issn`),
   CONSTRAINT `biblioitems_ibfk_1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -837,7 +836,6 @@ CREATE TABLE `deletedborrowers` (
   `phonepro` text,
   `B_streetnumber` varchar(10) default NULL,
   `B_streettype` varchar(50) default NULL,
-  `smsalertnumber` varchar(50) default NULL,
   `B_address` varchar(100) default NULL,
   `B_city` mediumtext,
   `B_zipcode` varchar(25) default NULL,
