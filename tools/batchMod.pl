@@ -59,10 +59,6 @@ my $authvals = [['items.notforloan', 'Item not for loan', 'notforloan'],
                             ];
 
 my $itemlevelpref = C4::Context->preference('item-level_itypes');
-#we use item -level itemtypes
-if ( $itemlevelpref ){
-    push(@$authvals, ['items.itype', 'itemtype', 'itype']);
-}
 if ( $invars->{op} && $invars->{op} eq 'barcodes'){
     #Parse barcodes list
     my @barcodelist;
@@ -98,10 +94,11 @@ if ( $invars->{op} && $invars->{op} eq 'barcodes'){
             push @$authloop, $fieldstatusauth;
         }
     }
-    my $itemtypes = [];
-    #we use biblio level itype
-    if ( ! $itemlevelpref){
-        my $itypes = GetItemTypes();
+    
+    #we use item level itype
+	my $itemtypes = [];
+    if ($itemlevelpref){
+	my $itypes = GetItemTypes();
         for my $key (keys %$itypes){
             push(@$itemtypes, $itypes->{$key});
         }
@@ -117,6 +114,10 @@ if ( $invars->{op} && $invars->{op} eq 'barcodes'){
             for my $field (qw(title isbn itemtype)){
                 $item->{$field} = $iteminfo->{$field};
             }
+	    if ($itemlevelpref) {
+		my $iteminfo = GetItem($itemno);
+		$item->{itemtype} = $iteminfo->{itype}; 
+	    }
 #kind of flakey, though we can be pretty sure the values will be in the same order as in the authloop
 #have to use this since in html::template::pro i can't access one loop from inside an other,
 #and variable substitution doesn't work (<!-- TMPL_VAR name="<!-- TMPL_VAR name="foo" -->" -->)
@@ -131,10 +132,11 @@ if ( $invars->{op} && $invars->{op} eq 'barcodes'){
                     }
                 }
                 if ( ! $authvaluename){
-                    $authvaluename = "Not found or invalid";
+                    $authvaluename = $item->{$authfield->{itemfieldname}}; 
                 }
                 push(@$itemauthloop, { 'authvalue' => $authvaluename} );
             }
+
             for my $type (@$itemtypes){
                 if ( $item->{itemtype} eq $type->{itemtype} ) {
                     $item->{itemtypedesc} = $type->{description};
@@ -145,7 +147,6 @@ if ( $invars->{op} && $invars->{op} eq 'barcodes'){
             $itemslst .= $item->{'itemnumber'} . ',';
         }
     }
-    
     $template->param( 'itemsloop' => \@items,
                                         'authloop' => $authloop,
                                         'branches' => $branches,
@@ -172,6 +173,9 @@ if ( $invars->{op} && $invars->{op} eq 'barcodes'){
 			}
 			if ($invars->{homebranch} && $invars->{homebranch} ne '0'){
 				$item->{homebranch} = $invars->{homebranch};
+			}
+			if ($invars->{itemtypes} && $invars->{itemtypes} ne '0') {
+				$item->{itype} = $invars->{itemtypes};
 			}
 			ModItem($item, $item->{biblionumber}, $item->{itemnumber});
 		}
