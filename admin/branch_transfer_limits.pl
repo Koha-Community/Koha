@@ -90,6 +90,7 @@ foreach my $branchcode ( @branchcodes ) {
 	$row_data{ branchcode } = $branchcode;
 	push ( @branchcode_loop, \%row_data );
 }
+my $branchcount = scalar(@branchcode_loop);
 
 ## Build the default data
 my @codes_loop;
@@ -124,6 +125,7 @@ foreach my $code ( @codes ) {
 
 
 $template->param(
+		branchcount => $branchcount,
 		codes_loop => \@codes_loop,
 		branchcode_loop => \@branchcode_loop,
 		limit_phrase => $limit_phrase,

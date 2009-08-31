@@ -1,33 +1,59 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Administration &rsaquo; Library Transfer Limits</title>
-<script language="JavaScript" type="text/javascript">
-	function SwitchAll() {
-		count = document.mainform.elements.length;
-	    for (i=0; i < count; i++) {
-		    if(document.mainform.elements[i].checked == 1){
-				document.mainform.elements[i].checked = 0;
-			} else {
-				document.mainform.elements[i].checked = 1;
-			}
-		}
-	}
- 
-	function CheckAll() {
-		count = document.mainform.elements.length;
-	    for (i=0; i < count; i++) {
-			document.mainform.elements[i].checked = 1;
-		}
-	}
-
-	function UncheckAll() {
-		count = document.mainform.elements.length;
-	    for (i=0; i < count; i++) {
-			document.mainform.elements[i].checked = 0;
-		}
-	}
-</script>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#CheckAll").click(function(){ $("#transferlimit_tabs").checkCheckboxes();});
+		$("#UncheckAll").click(function(){ $("#transferlimit_tabs").unCheckCheckboxes();});
+		$("#SwapAll").click(function(){ $("#transferlimit_tabs").toggleCheckboxes();});
+	    $('#transferlimit_tabs > ul').tabs();
+
+		var checkcolumn = $(".checkcolumn");
+		var checkrow = $(".checkrow");
+		var checkall = $(".checkall");
+		var uncheckall = $(".uncheckall");
+		var swapall = $(".swapall");
+
+		$(checkcolumn).click(function(){
+			if(this.checked){ status = "checked" } else { status = "" }
+			var tableid = $(this).parent().parent().parent().parent().attr("id");
+			var columncontext = $(this).parent();
+			var tdindex = columncontext.parent().children().index(columncontext);
+			$("#"+tableid+" tr td:nth-child("+(tdindex+2)+") input[type='checkbox']").attr("checked",status);
+		});
+
+		$(checkrow).click(function(){
+			if(this.checked){ status = "checked" } else { status = "" }
+			$(this).parent().siblings().each(function(){
+				$(this).find("input[type='checkbox']").attr("checked",status);
+			})
+		});
+
+		$(checkall).click(function(){
+			var tid = $(this).attr("id");
+			tid = tid.replace("CheckAll","");
+			$("#"+tid).checkCheckboxes();
+			return false;
+		});
+
+		$(uncheckall).click(function(){
+			console.log("Clicked");
+			var tid = $(this).attr("id");
+			tid = tid.replace("UncheckAll","");
+			$("#"+tid).unCheckCheckboxes();
+			return false;
+		});
+
+		$(swapall).click(function(){
+			var tid = $(this).attr("id");
+			tid = tid.replace("SwapAll","");
+			$("#"+tid).toggleCheckboxes();
+			return false;
+		});
+	});
+</script>
+<style type="text/css">td { text-align: center; }</style>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -41,48 +67,43 @@
      <div id="yui-main">
     <div class="yui-b">
 
-<div id="toolbar">
-    <script type="text/javascript">
-    //<![CDATA[
-    // prepare DOM for YUI Toolbar
-     $(document).ready(function() {
-        yuiToolbar();
-     });
-    // YUI Toolbar Functions
-    function yuiToolbar() {
-        new YAHOO.widget.Button("CheckAll").addListener('click', CheckAll);
-        new YAHOO.widget.Button("UncheckAll").addListener('click', UncheckAll);
-        new YAHOO.widget.Button("SwapAll").addListener('click',SwitchAll);
-    }   //]]>
-    </script>
-    <ul class="toolbar">
-    <li><a id="CheckAll" href="#">Check All</a></li>
-    <li><a id="UncheckAll" href="#">Uncheck All</a></li>
-    <li><a id="SwapAll" href="#">Swap All</a></li>
-</ul></div>
+<h1>Library Transfer Limits</h1>
+<p class="help">Check the boxes for the items that should <strong><em>not</em></strong> be transferable.</p>
+<fieldset>For <strong>all</strong> <!--TMPL_VAR NAME="limit_phrase" -->s: <a id="CheckAll" href="#">Check All</a> | <a id="UncheckAll" href="#">Uncheck All</a> | <a id="SwapAll" href="#">Toggle All</a></fieldset>
 
-<h1 class="parameters">Library Transfer Limits</h1>
-<div class="help">Check the boxes for the items that should <strong><em>not</em></strong> be transferable.</div>
 
-	<div class="table">
-		<form name="mainform" method="post" action="branch_transfer_limits.pl">
-		<table>
+  <div id="transferlimit_tabs" class="toptabs">
+	<ul class="ui-tabs-nav">
+      <!-- TMPL_LOOP NAME="codes_loop" --><li><a href="#<!-- TMPL_VAR NAME="code" -->set"><!-- TMPL_VAR NAME="code" --></a></li><!-- /TMPL_LOOP -->
+	</ul>
+
+		<form method="post" action="branch_transfer_limits.pl">
+
+	<!-- TMPL_LOOP NAME="codes_loop" -->
+	<div id="<!-- TMPL_VAR NAME="code" -->set">
+		<h4>Limits for <!--TMPL_VAR NAME="limit_phrase" -->: <!-- TMPL_VAR NAME="code" --></h4>
+	<p><a id="CheckAll<!-- TMPL_VAR NAME="code" -->table" class="checkall" href="#">Check All</a> | <a id="UncheckAll<!-- TMPL_VAR NAME="code" -->table" class="uncheckall" href="#">Uncheck All</a> | <a id="SwapAll<!-- TMPL_VAR NAME="code" -->table" class="swapall" href="#">Toggle All</a></p>
+		<table id="<!-- TMPL_VAR NAME="code" -->table">
 			<thead>
 				<tr>
-					<th>To/From</th>
-					<!-- TMPL_LOOP NAME="branchcode_loop" -->
-						<th><!-- TMPL_VAR NAME="branchcode" --></th>
+					<th>&nbsp;</th><th>To:</th>
+					<!-- TMPL_LOOP NAME="to_branch_loop" -->
+						<th><!-- TMPL_VAR NAME="toBranch" --></th>
+					<!-- /TMPL_LOOP -->
+				</tr>
+				<tr><th colspan="2">From:</th>
+					<!-- TMPL_LOOP NAME="to_branch_loop" -->
+						<th><input type="checkbox" name="checkcolumn" class="checkcolumn" /></th>
 					<!-- /TMPL_LOOP -->
 				</tr>
 			</thead>
 
 			<tbody>
-				<!-- TMPL_LOOP NAME="codes_loop" -->
-					<tr><th>Limits for <!--TMPL_VAR NAME="limit_phrase" -->: <!-- TMPL_VAR NAME="code" --></th></tr>
-	
 					<!-- TMPL_LOOP NAME="to_branch_loop" -->
-						<tr>
-							<td><!-- TMPL_VAR NAME="toBranch" --></td>
+						<!-- TMPL_UNLESS NAME="__odd__" --><tr class="highlight"><!-- TMPL_ELSE
+--><tr><!-- /TMPL_UNLESS -->
+							<td><input type="checkbox" name="checkrow" id="<!-- TMPL_VAR NAME="code" --><!-- TMPL_VAR NAME="toBranch" -->row" class="checkrow" /></td>
+							<td><label for="<!-- TMPL_VAR NAME="code" --><!-- TMPL_VAR NAME="toBranch" -->row"><!-- TMPL_VAR NAME="toBranch" --></label></td>
 							<!-- TMPL_LOOP NAME="from_branch_loop" -->
 								<td>
                                     <!-- TMPL_IF NAME="isChecked" -->
@@ -99,14 +120,15 @@
 							<!-- /TMPL_LOOP -->
 						</tr>
 					<!-- /TMPL_LOOP -->
-				<!-- /TMPL_LOOP -->
 			</tbody>
 		</table>
+		</div>
+				<!-- /TMPL_LOOP -->
+		</div>
 		
-		<input type="hidden" name="updateLimits" value="1" />
-		<input type="submit" value="Save Data" />
+		<fieldset class="action"><input type="hidden" name="updateLimits" value="1" />
+		<input type="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/admin-home.pl">Cancel</a></fieldset>
 		</form>
-	</div>
   </div>
 </div>
 <div class="yui-b">
