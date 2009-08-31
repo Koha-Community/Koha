@@ -1269,38 +1269,9 @@ sub _Findgroupreserve {
     my ( $bibitem, $biblio, $itemnumber ) = @_;
     my $dbh   = C4::Context->dbh;
 
-    # TODO: consolidate at least the SELECT portion of the first 2 queries to a common $select var.
     # check for exact targetted match
+	# This select is valid for both item_level and biblio_level
     my $item_level_target_query = qq/
-        SELECT reserves.biblionumber        AS biblionumber,
-               reserves.borrowernumber      AS borrowernumber,
-               reserves.reservedate         AS reservedate,
-               reserves.branchcode          AS branchcode,
-               reserves.cancellationdate    AS cancellationdate,
-               reserves.found               AS found,
-               reserves.reservenotes        AS reservenotes,
-               reserves.priority            AS priority,
-               reserves.timestamp           AS timestamp,
-               biblioitems.biblioitemnumber AS biblioitemnumber,
-               reserves.itemnumber          AS itemnumber
-        FROM reserves
-        JOIN biblioitems USING (biblionumber)
-        JOIN hold_fill_targets USING (biblionumber, borrowernumber, itemnumber)
-        WHERE found IS NULL
-        AND priority > 0
-        AND item_level_request = 1
-        AND itemnumber = ?
-    /;
-    my $sth = $dbh->prepare($item_level_target_query);
-    $sth->execute($itemnumber);
-    my @results;
-    if ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data );
-    }
-    return @results if @results;
-    
-    # check for title-level targetted match
-    my $title_level_target_query = qq/
         SELECT reserves.biblionumber        AS biblionumber,
                reserves.borrowernumber      AS borrowernumber,
                reserves.reservedate         AS reservedate,
@@ -1317,16 +1288,13 @@ sub _Findgroupreserve {
         JOIN hold_fill_targets USING (biblionumber, borrowernumber)
         WHERE found IS NULL
         AND priority > 0
-        AND item_level_request = 0
-        AND hold_fill_targets.itemnumber = ?
+        AND holds_fill_targets.itemnumber = ?
+
     /;
-    $sth = $dbh->prepare($title_level_target_query);
+    my $sth = $dbh->prepare($item_level_target_query);
     $sth->execute($itemnumber);
-    @results = ();
-    if ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data );
-    }
-    return @results if @results;
+	my $data = $sth->fetchall_arrayref({});
+    return @$data if ($data);
 
     my $query = qq/
         SELECT reserves.biblionumber               AS biblionumber,
@@ -1351,11 +1319,9 @@ sub _Findgroupreserve {
     /;
     $sth = $dbh->prepare($query);
     $sth->execute( $biblio, $bibitem, $itemnumber );
-    @results = ();
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data );
-    }
-    return @results;
+    $data = $sth->fetchall_arrayref({});
+    return @$data if ($data);
+	return undef;
 }
 
 =item _koha_notify_reserve
