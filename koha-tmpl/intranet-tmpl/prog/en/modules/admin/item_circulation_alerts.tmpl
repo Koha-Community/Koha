@@ -1,14 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Administration &rsaquo; Item Circulation Alerts</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<style>
-div.circulation-alert h2 {
-  margin-top: 1.5em;
-}
-div.circulation-alert h3 {
-  margin-top: 1em;
-}
-
+<style type="text/css">
 table.grid thead th {
   vertical-align: bottom;
 }
@@ -43,9 +36,11 @@ table.grid td.default {
   background: #f88;
 }
 </style>
-<script>
+
+<script type="text/javascript">//<![CDATA[
 var $branch = "<!-- TMPL_VAR NAME="branch" -->";
 $(function(){
+    $('#alerttabs > ul').tabs();
 
     var blocked            = _('Blocked!');
     var saving             = _('Saving...');
@@ -87,7 +82,7 @@ $(function(){
         }
     });
 
-});
+}); //]]>
 </script>
 </head>
 <body>
@@ -101,11 +96,12 @@ $(function(){
 
 <div id="yui-main" class="circulation-alert">
 <div class="yui-b">
+
+<div class="yui-g">
+<div class="yui-u first">
 <h1>Item Circulation Alerts</h1>
-
-
 <h2>Select a library:</h2>
-<form id="branch_selector" method="GET">
+<form id="branch_selector" method="get" action="/cgi-bin/koha/admin/item_circulation_alerts.pl">
 <select id="branch" name="branch">
 <!-- TMPL_LOOP NAME="branches" -->
 <!-- TMPL_IF NAME="selected" -->
@@ -117,11 +113,44 @@ $(function(){
 </select>
 <input type="submit" name="pick" value="Pick" />
 </form>
-
+</div>
+<div class="yui-u">
+<table class="grid">
+<caption>Legend</caption>
+<thead>
+<tr>
+  <th>Color</th>
+  <th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+  <tr>
+    <td width="100" class="default">&nbsp;</td>
+    <td class="info">These are disabled for ALL libraries.  To change these settings, choose the "Default" library.</td>
+  </tr>
+  <tr>
+    <td class="disabled">&nbsp;</td>
+    <td class="info">These are disabled for the current library.</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td class="info">These are enabled.</td>
+  </tr>
+</tbody>
+</table>
+</div>
+</div>
 
 <h2>Circulation Alerts for <!-- TMPL_VAR NAME="branch_name" --></h2>
 <p>Click on the grid to toggle the settings.</p>
 
+<div id="alerttabs" class="toptabs">
+<ul>
+<li><a href="#checkout">Checkout</a></li>
+<li><a href="#checkin">Check-in</a></li>
+</ul>
+
+<div id="checkout">
 <h3>Checkout</h3>
 <table class="grid active" width="100%">
 <thead>
@@ -143,7 +172,9 @@ $(function(){
 <!-- /TMPL_LOOP -->
 </tbody>
 </table>
+</div>
 
+<div id="checkin">
 <h3>Check-in</h3>
 <table class="grid active" width="100%">
 <thead>
@@ -165,29 +196,8 @@ $(function(){
 <!-- /TMPL_LOOP -->
 </tbody>
 </table>
-
-<h3>Legend</h3>
-<table class="grid">
-<thead>
-  <th>Color</th>
-  <th>Meaning</th>
-</thead>
-<tbody>
-  <tr>
-    <td width="100" class="default">&nbsp;</td>
-    <td class="info">These are disabled for ALL libraries.  To change these settings, choose the "Default" library.</td>
-  </tr>
-  <tr>
-    <td class="disabled">&nbsp;</td>
-    <td class="info">These are disabled for the current library.</td>
-  </tr>
-  <tr>
-    <td class="">&nbsp;</td>
-    <td class="info">These are enabled.</td>
-  </tr>
-</tbody>
-</table>
-
+</div>
+</div>
 
 </div>
 </div>
