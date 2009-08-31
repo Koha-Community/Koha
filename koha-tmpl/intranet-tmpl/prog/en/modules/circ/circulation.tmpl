@@ -146,7 +146,9 @@ function refocus(calendar) {
 <!-- TMPL_ELSE -->
 <div id="doc3" class="yui-t2">
 
-   <div id="bd">
+   <div id="bd"><!-- TMPL_UNLESS NAME="CGIselectborrower" -->
+<!-- TMPL_IF NAME="borrowernumber" --><div class="yui-b"><!-- TMPL_INCLUDE NAME="circ-menu.inc" --></div><!-- /TMPL_IF -->
+<!-- /TMPL_UNLESS -->
 	<div id="yui-main">
 	<div class="yui-b">
 <!-- /TMPL_IF -->
@@ -286,10 +288,6 @@ function refocus(calendar) {
             <li>This item belongs to <!-- TMPL_VAR NAME="itemhomebranch" --> and cannot be issued from this location.</li>
         <!-- /TMPL_IF -->
         </ul>
-
-    <!-- TMPL_IF NAME="memberofinstution" -->
-    <p><!-- TMPL_VAR NAME="CGIorganisations" --></p>
-    <!-- /TMPL_IF -->
 
 </div></div>
     <!--/TMPL_IF --> <!-- /impossible -->
@@ -764,8 +762,6 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 
 </div>
 </div>
-<!-- TMPL_UNLESS NAME="CGIselectborrower" --><!-- TMPL_IF NAME="borrowernumber" --><div class="yui-b">
-<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
-</div><!-- /TMPL_IF --><!-- /TMPL_UNLESS -->
+</div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
