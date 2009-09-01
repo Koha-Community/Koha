@@ -51,10 +51,10 @@ my $err = 0;
 my $errstr = undef;
 my $db_rows = {};
 my $batch = undef;
-my $display_columns = [ {_label_number  => 'Label Number'},
-                        {_summary       => 'Summary'},
-                        {_item_type     => 'Item Type'},
-                        {_barcode       => 'Barcode'},
+my $display_columns = [ {_label_number  => {label => 'Label Number', link_field => 0}},
+                        {_summary       => {label => 'Summary', link_field => 0}},
+                        {_item_type     => {label => 'Item Type', link_field => 0}},
+                        {_barcode       => {label => 'Barcode', link_field => 0}},
                         {select         => {label => 'Select', value => '_item_number'}},
                       ];
 my $op = $cgi->param('op') || undef;

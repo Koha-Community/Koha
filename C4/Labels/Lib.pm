@@ -41,7 +41,6 @@ BEGIN {
                         get_table_names
                         get_unit_values
                         html_table
-                        SELECT
     );
 }
 
@@ -286,10 +285,10 @@ sub get_label_summary {
         }
         my $record = $sth->fetchrow_hashref;
         my $label_summary->{'_label_number'} = $label_number;
-        $record->{'author'} =~ s/\W*[^.]$//;  # strip off ugly trailing chars... but not periods
+        $record->{'author'} =~ s/[^\.|\w]$// if $record->{'author'};  # strip off ugly trailing chars... but not periods or word chars
         $record->{'title'} =~ s/\W*$//;  # strip off ugly trailing chars
         $record->{'title'} = '<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=' . $record->{'biblionumber'} . '"> ' . $record->{'title'} . '</a>';
-        $label_summary->{'_summary'} = $record->{'title'} . " | " . $record->{'author'};
+        $label_summary->{'_summary'} = $record->{'title'} . " | " . ($record->{'author'} ? $record->{'author'} : 'N/A');
         $label_summary->{'_item_type'} = $record->{'itemtype'};
         $label_summary->{'_barcode'} = $record->{'barcode'};
         $label_summary->{'_item_number'} = $item_number;
@@ -419,23 +418,27 @@ sub html_table {
     my $data = shift;
     my $table = [];
     my $fields = [];
-    my @db_columns = ();
+    my @headers = ();
+    my @table_columns = ();
     my ($row_index, $col_index) = (0,0);
     my $cols = 0;       # number of columns to wrap on
     my $field_count = 0;
     my $select_value = undef;
+    my $link_field = undef;
     POPULATE_HEADER:
-    foreach my $db_column (@$headers) {
-        my @key = keys %$db_column;
+    foreach my $header (@$headers) {
+        my @key = keys %$header;
         if ($key[0] eq 'select' ) {
-            push (@db_columns, $key[0]);
-            $$fields[$col_index] = {hidden => 0, select_field => 0, field_name => ($key[0]), field_label => $db_column->{$key[0]}{'label'}};
-            $select_value = $db_column->{$key[0]}{'value'}
-            # do stuff....
+            push (@table_columns, $key[0]);
+            $$fields[$col_index] = {hidden => 0, select_field => 0, field_name => ($key[0]), field_label => $header->{$key[0]}{'label'}};
+            # do special formatting stuff....
+            $select_value = $header->{$key[0]}{'value'};
         }
         else {
-            push (@db_columns, $key[0]);
-            $$fields[$col_index] = {hidden => 0, select_field => 0, field_name => ($key[0]), field_label => $db_column->{$key[0]}};
+            # do special formatting stuff....
+            $link_field->{$key[0]} = ($header->{$key[0]}{'link_field'} == 1 ? 1 : 0);
+            push (@table_columns, $key[0]);
+            $$fields[$col_index] = {hidden => 0, select_field => 0, field_name => ($key[0]), field_label => $header->{$key[0]}{'label'}};
         }
         $field_count++;
         $col_index++;
@@ -448,23 +451,21 @@ sub html_table {
     $fields = [];
     POPULATE_TABLE:
     foreach my $db_row (@$data) {
-#        my $element_id = 0;
         POPULATE_ROW:
-        foreach my $db_column (@db_columns) {
-            if (grep {$db_column eq $_} keys %$db_row) {
-#                $element_id = $db_row->{$db_column} if $db_column =~ m/id/;
-                $$fields[$col_index] = {hidden => 0, select_field => 0, field_name => ($db_column . "_tbl"), field_value => $db_row->{$db_column}};
+        foreach my $table_column (@table_columns) {
+            if (grep {$table_column eq $_} keys %$db_row) {
+                $$fields[$col_index] = {hidden => 0, link_field => $link_field->{$table_column}, select_field => 0, field_name => ($table_column . "_tbl"), field_value => $db_row->{$table_column}};
                 $col_index++;
                 next POPULATE_ROW;
             }
-            elsif ($db_column =~ m/^_((.*)_(.*$))/) {   # this a special case
+            elsif ($table_column =~ m/^_((.*)_(.*$))/) {   # this a special case
                 my $table_name = get_table_names($2);
                 my $record_set = _SELECT($1, @$table_name[0], $2 . "_id = " . $db_row->{$2 . "_id"});
-                $$fields[$col_index] = {select_field => 0, field_name => ($db_column . "_tbl"), field_value => $$record_set[0]{$1}};
+                $$fields[$col_index] = {hidden => 0, link_field => $link_field->{$table_column}, select_field => 0, field_name => ($table_column . "_tbl"), field_value => $$record_set[0]{$1}};
                 $col_index++;
                 next POPULATE_ROW;
             }
-            elsif ($db_column eq 'select' ) {
+            elsif ($table_column eq 'select' ) {
                 $$fields[$col_index] = {hidden => 0, select_field => 1, field_name => 'select', field_value => $db_row->{$select_value}};
             }
         }
