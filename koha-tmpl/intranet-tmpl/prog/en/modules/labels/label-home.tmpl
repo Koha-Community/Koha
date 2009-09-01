@@ -1,19 +1,51 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo; Tools &rsaquo; Labels</title>
+    <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+    <title>Koha &rsaquo; Tools &rsaquo; Labels Home</title>
     <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+    <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/label.css" />
 </head>
 <body>
     <!-- TMPL_INCLUDE NAME="header.inc" -->
     <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
-    <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; Labels</div>
-        <div id="doc3" class="yui-t2">
-            <div id="bd">
-	        <div id="yui-main">
-	            <div class="yui-b">
-                        <!-- TMPL_INCLUDE NAME="labels-home-toolbar.inc" -->
+    <div id="breadcrumbs">
+        <a href="/cgi-bin/koha/mainpage.pl">Home</a>&rsaquo;
+        <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>&rsaquo;
+        Labels Home
+    </div>
+    <div id="doc3" class="yui-t2">
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+                    <div class="yui-g">
+                    <!-- TMPL_INCLUDE NAME="labels-toolbar.inc" -->
+                        <div class="yui-u first">
+                            <div class="justify homeimage">
+                            <div class="lci_01"></div>
+                            <div class="lci_02"></div>
+                            <div class="lci_03"></div>
+                                <h2>Welcome to Koha's Label Creator Module</h2>
+                                <p>The Label Creator allow you to use layouts and templates which you design to print a nearly unlimited variety of labels including barcodes. Here are some of the features of the Label Creator module:</p>
+                                <ul>
+                                    <li>Customize label layouts</li>
+                                    <li>Design custom label templates for printed labels</li>
+                                    <li>Build and manage batches of labels</li>
+                                    <li>Export single or multiple batches</li>
+                                    <li>Export single or multiple labels from within a batch</li>
+                                    <li>Export label data in one of three formats:</li>
+                                    <ul>
+                                        <li>PDF - Readable by any standard PDF reader, making labels printable directly on a printer</li>
+                                        <li>CSV - Export label data after your chosen layout is applied allowing labels to be imported in to a variety of applications</li>
+                                        <li>XML - Included as an alternate export format</li>
+                                    </ul>
+                                </ul>
+                                <p>At the top of each screen within the Label Creator, you will see a toolbar allowing quick access to relevant functions. The menu to the left of each screen also allows easy access to the different sections of the Label Creator. The breadcrumb trail near the top of each screen will give specific indication as to where you are within the Label Creator module and allow quick navigation to previously traversed sections. And finally, you can find more detailed information on each section of the Label Creator by clicking the online help link at the upper left-hand corner of every page.</p>
+                                <p>The developers of the Label Creator module hope you will find this an extremely useful tool in the course of your cataloging work. You are encouraged to submit any enhancement requests as well as any bugs via <a href="http://bugs.koha.org/">Koha Project Bugzilla</a>.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="yui-b">
-                    <!-- TMPL_INCLUDE NAME="labels-menu.inc" -->
-                </div>
             </div>
+            <div class="yui-b">
+                <!-- TMPL_INCLUDE NAME="labels-menu.inc" -->
+            </div>
+        </div>
         <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
