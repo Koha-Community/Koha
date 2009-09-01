@@ -22,17 +22,9 @@ use strict;
 use warnings;
 
 use CGI;
-use HTML::Template::Pro;
-use POSIX qw(ceil);
-use Data::Dumper;
 use Sys::Syslog qw(syslog);
+use Data::Dumper;
 
-use C4::Labels;
-use C4::Auth;
-use C4::Output;
-use C4::Context;
-use C4::Members;
-use C4::Branch;
 use C4::Debug;
 use C4::Labels::Batch 1.000000;
 use C4::Labels::Template 1.000000;
@@ -40,15 +32,26 @@ use C4::Labels::Layout 1.000000;
 use C4::Labels::PDF 1.000000;
 use C4::Labels::Label 1.000000;
 
+=head
+
+=cut
+
 my $cgi = new CGI;
 
-my $htdocs_path = C4::Context->config('intrahtdocs');
-my $batch_id    = $cgi->param('batch_id') || $ARGV[0];
-my $template_id = $cgi->param('template_id') || $ARGV[1];
-my $layout_id   = $cgi->param('layout_id') || $ARGV[2];
-my $start_label = $cgi->param('start_label') || $ARGV[3];
+my $batch_id    = $cgi->param('batch_id') if $cgi->param('batch_id');
+my $template_id = $cgi->param('template_id') || undef;
+my $layout_id   = $cgi->param('layout_id') || undef;
+my $start_label = $cgi->param('start_label') || 1;
+my @label_ids   = $cgi->param('label_id') if $cgi->param('label_id');
+my @item_numbers  = $cgi->param('item_number') if $cgi->param('item_number');
 
-print $cgi->header( -type => 'application/pdf', -attachment => "label_batch_$batch_id.pdf" );
+my $items = undef;
+
+my $pdf_file = (@label_ids || @item_numbers ? "label_single_" . scalar(@label_ids || @item_numbers) : "label_batch_$batch_id");
+print $cgi->header( -type       => 'application/pdf',
+                    -encoding   => 'utf-8',
+                    -attachment => "$pdf_file.pdf",
+                  );
 
 my $pdf = C4::Labels::PDF->new(InitVars => 0);
 my $batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);
@@ -98,8 +101,25 @@ $pdf->Compress(1);
 $pdf->Mbox($lowerLeftX, $lowerLeftY, $upperRightX, $upperRightY);
 
 my ($row_count, $col_count, $llx, $lly) = $template->get_label_position($start_label);
+
+if (@label_ids) {
+    my $batch_items = $batch->get_attr('items');
+    grep {
+        my $label_id = $_;
+        push(@{$items}, grep{$_->{'label_id'} == $label_id;} @{$batch_items});
+    } @label_ids;
+}
+elsif (@item_numbers) {
+    grep {
+        push(@{$items}, {item_number => $_});
+    } @item_numbers;
+}
+else {
+    $items = $batch->get_attr('items');
+}
+
 LABEL_ITEMS:
-foreach my $item (@{$batch->get_attr('items')}) {
+foreach my $item (@{$items}) {
     my ($barcode_llx, $barcode_lly, $barcode_width, $barcode_y_scale_factor) = 0,0,0,0;
     my $label = C4::Labels::Label->new(
                                     batch_id            => $batch_id,
@@ -174,3 +194,5 @@ foreach my $item (@{$batch->get_attr('items')}) {
 }
 
 $pdf->End();
+
+exit(1);

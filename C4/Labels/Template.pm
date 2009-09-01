@@ -22,6 +22,7 @@ use warnings;
 use Sys::Syslog qw(syslog);
 use Data::Dumper;
 use PDF::Reuse;
+use POSIX qw(ceil);
 
 use C4::Context;
 use C4::Debug;

@@ -509,6 +509,15 @@ sub barcode {
     }
 }
 
+sub csv_data {
+    my $self = shift;
+    my $label_fields = _get_text_fields($self->{'format_string'});
+    my $item = _get_label_item($self->{'item_number'});
+    my $bib_record = GetMarcBiblio($item->{biblionumber});
+    my @csv_data = (map { _get_barcode_data($_->{'code'},$item,$bib_record) } @$label_fields);
+    return \@csv_data;
+}
+
 1;
 __END__
 

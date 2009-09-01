@@ -1,6 +1,7 @@
     <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
     <title>Koha &rsaquo; Tools &rsaquo; Labels &rsaquo; Manage Label Elements</title>
     <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+    <!-- TMPL_INCLUDE NAME="greybox.inc" -->
     <script type="text/JavaScript" language="JavaScript">
         //<![CDATA[
             function DeleteConfirm() {
@@ -28,18 +29,7 @@
                     return;     // no layout selected
                 };
             };
-            function Print() {
-                var element_id = selected_layout("print");
-                if (element_id>-1) {
-                    window.location = "/cgi-bin/koha/labels/label-print.pl?batch_id=" + element_id;
-                }
-                else {
-                    return;     // no layout selected
-                };
-            };
-
-
-           function Xport() {
+            function Xport() {
                 batches= new Array;
                 if(document.layouts.action.length > 0) {
                     for (var i=0; i < document.layouts.action.length; i++) {
@@ -63,13 +53,13 @@
                 var msg = "Are you sure you want to export the selected batch(s)?"
                 var answer = confirm(msg);
                 if (answer) {
-                    window.location = "/cgi-bin/koha/labels/label-print.pl?" + getstr;
+                    return GB_showCenter('Export Labels', "/cgi-bin/koha/labels/label-print.pl?" + getstr, 700, 800);
+//                    window.location = "/cgi-bin/koha/labels/label-print.pl?" + getstr;
                 }
                 else {
                     return; // abort export
                 }
             };
-
             function selected_layout(op) {
                 var selected = new Array;
                 if (document.layouts.action.length) {

@@ -1,14 +1,20 @@
     <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
     <title>Koha &rsaquo; Tools &rsaquo; Labels &rsaquo; Label Printing/Exporting</title>
     <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+    <script type="text/JavaScript" language="JavaScript">
+        //<![CDATA[
+            function Done() {
+                window.location = "<!-- TMPL_VAR NAME="referer" -->";
+            };
+        //]]>
+    </script>
     <style type="text/css">#custom-doc {width:47.23em; *width:46.04em; min-width:610px; margin:auto; margin-top:0.4em;}</style>
 </head>
 <body>
     <div id="custom-doc" class="yui-t2">
         <div id="bd">
             <!-- TMPL_IF NAME="batches" -->
-            <form name="exporting" method="post" action="/cgi-bin/koha/labels/label-manage.pl">
-                <input type="hidden" name="label_element" value="batch" />
+            <form>
                 <div align="center">
                     <div class="message">
                         <h2>Click on the following link(s) to download the exported batch(es).</h2>
@@ -19,26 +25,47 @@
                         <!-- TMPL_LOOP NAME="batches" -->
                         <tr>
                             <td class="borderless">
+                                <!-- TMPL_IF NAME="label_ids" -->
+                                <a href="/cgi-bin/koha/labels/<!-- TMPL_VAR NAME="create_script" -->?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;template_id=<!-- TMPL_VAR NAME="template_id" -->&amp;layout_id=<!-- TMPL_VAR NAME="layout_id" -->&amp;start_label=<!-- TMPL_VAR NAME="start_label" --><!-- TMPL_VAR NAME="label_ids" -->">label_single_<!-- TMPL_VAR NAME="label_count" -->.pdf</a>
+                                <!-- TMPL_ELSIF NAME="item_numbers" -->
+                                <a href="/cgi-bin/koha/labels/<!-- TMPL_VAR NAME="create_script" -->?template_id=<!-- TMPL_VAR NAME="template_id" -->&amp;layout_id=<!-- TMPL_VAR NAME="layout_id" -->&amp;start_label=<!-- TMPL_VAR NAME="start_label" --><!-- TMPL_VAR NAME="item_numbers" -->">label_single_<!-- TMPL_VAR NAME="label_count" -->.pdf</a>
+                                <!-- TMPL_ELSE -->
                                 <a href="/cgi-bin/koha/labels/<!-- TMPL_VAR NAME="create_script" -->?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;template_id=<!-- TMPL_VAR NAME="template_id" -->&amp;layout_id=<!-- TMPL_VAR NAME="layout_id" -->&amp;start_label=<!-- TMPL_VAR NAME="start_label" -->">label_batch_<!-- TMPL_VAR NAME="batch_id" -->.pdf</a>
+                                <!-- /TMPL_IF -->
                             </td>
                         </tr>
                         <!-- /TMPL_LOOP -->
                     </table>
                 </fieldset>
                 <fieldset class="action">
-                    <input type="submit" value="Done" class="submit" />
+                    <div style="margin: 10px 10px 10px 0px;">
+                        <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="done" onclick="parent.parent.GB_hide();" value="Done"></span></span>
+                    </div>
                 </fieldset>
             </form>
             <!-- TMPL_ELSE -->
             <div align="center">
                 <div class="message">
+                    <!-- TMPL_IF NAME="label_ids" -->
+                    <h2>Exporting <!-- TMPL_VAR NAME="label_count" --> label(s).</h2>
+                    <!-- TMPL_ELSIF NAME="item_numbers"-->
+                    <h2>Exporting <!-- TMPL_VAR NAME="item_count" --> label(s).</h2>
+                    <!-- TMPL_ELSE -->
                     <h2><!-- TMPL_VAR NAME="multi_batch_count" --> batch(es) to export.</h2>
+                    <!-- /TMPL_IF -->
                 </div>
             </div>
             <form name="exporting" method="post" action="/cgi-bin/koha/labels/label-print.pl">
                 <input type="hidden" name="op" value="export" />
+                <input type="hidden" name="referer" value="<!-- TMPL_VAR NAME="referer" -->" />
                 <!-- TMPL_LOOP NAME="batch_ids" -->
                     <input type="hidden" name="batch_id" value="<!-- TMPL_VAR NAME="batch_id" -->" />
+                <!-- /TMPL_LOOP -->
+                <!-- TMPL_LOOP NAME="label_ids" -->
+                    <input type="hidden" name="label_id" value="<!-- TMPL_VAR NAME="label_id" -->" />
+                <!-- /TMPL_LOOP -->
+                <!-- TMPL_LOOP NAME="item_numbers" -->
+                    <input type="hidden" name="item_number" value="<!-- TMPL_VAR NAME="item_number" -->" />
                 <!-- /TMPL_LOOP -->
                 <fieldset class="rows">
                     <table class="borderless">
@@ -89,8 +116,10 @@
                     </table>
                 </fieldset>
                 <fieldset class="action">
-                    <input type="submit" value="Export" class="submit" />
-                    <a class="cancel close" href="#">Cancel</a>
+                    <div style="margin: 10px 10px 10px 0px;">
+                        <span class="yui-button yui-link-button"><span class="first-child"><input type="submit" value="Export" /></span></span>
+                        <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="done" onclick="parent.parent.GB_hide();" value="Cancel"></span></span>
+                    </div>
                 </fieldset>
             </form>
             <!-- /TMPL_IF -->

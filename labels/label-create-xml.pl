@@ -21,7 +21,7 @@ use warnings;
 
 use CGI;
 use Sys::Syslog qw(syslog);
-use Text::CSV_XS;
+use XML::Simple;
 use Data::Dumper;
 
 use C4::Debug;
@@ -45,12 +45,11 @@ my @item_numbers  = $cgi->param('item_number') if $cgi->param('item_number');
 
 my $items = undef;
 
-my $csv_file = (@label_ids || @item_numbers ? "label_single_" . scalar(@label_ids || @item_numbers) : "label_batch_$batch_id");
-print $cgi->header(-type        => 'application/vnd.sun.xml.calc',
+my $xml_file = (@label_ids || @item_numbers ? "label_single_" . scalar(@label_ids || @item_numbers) : "label_batch_$batch_id");
+print $cgi->header(-type        => 'text/xml',
                    -encoding    => 'utf-8',
-                   -attachment  => "$csv_file.csv",
+                   -attachment  => "$xml_file.xml",
                     );
-
 
 my $batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);
 my $template = C4::Labels::Template->retrieve(template_id => $template_id, profile_id => 1);
@@ -73,23 +72,36 @@ else {
     $items = $batch->get_attr('items');
 }
 
-my $csv = Text::CSV_XS->new();
+my $xml = XML::Simple->new();
+my $xml_data = {'label' => []};
 
-CSV_ITEMS:
+my $item_count = 0;
+
+XML_ITEMS:
 foreach my $item (@$items) {
+    push(@{$xml_data->{'label'}}, {'item_number' => $item->{'item_number'}});
     my $label = C4::Labels::Label->new(
                                     batch_id            => $batch_id,
                                     item_number         => $item->{'item_number'},
                                     format_string       => $layout->get_attr('format_string'),
                                       );
-    my $csv_fields = $label->csv_data();
-    if ($csv->combine(@$csv_fields)) {
-        print $csv->string() . "\n";
+    my $format_string = $layout->get_attr('format_string');
+    my @data_fields = split(/, /, $format_string);
+    my $csv_data = $label->csv_data();
+    for (my $i = 0; $i < (scalar(@data_fields) - 1); $i++) {
+        push(@{$xml_data->{'label'}[$item_count]->{$data_fields[$i]}}, $$csv_data[$i]);
     }
-    else {
-        syslog("LOG_ERR", "labels/label-create-csv.pl : Text::CSV_XS->combine() returned the following error: %s", $csv->error_input);
-        next CSV_ITEMS;
-    }
+    $item_count++;
+#    else {
+#        syslog("LOG_ERR", "labels/label-create-csv.pl : Text::CSV_XS->combine() returned the following error: %s", $csv->error_input);
+#        next CSV_ITEMS;
+#    }
 }
+
+#die "XML DATA:\n" . Dumper($xml_data);
+
+my $xml_out = $xml->XMLout($xml_data);
+#die "XML OUT:\n" . Dumper($xml_out);
+print $xml_out;
 
 exit(1);

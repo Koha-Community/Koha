@@ -1,6 +1,7 @@
     <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
     <title>Koha &rsaquo; Tools &rsaquo; Labels &rsaquo; Manage Label Batches</title>
     <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+    <!-- TMPL_INCLUDE NAME="greybox.inc" -->
     <script type="text/JavaScript" language="JavaScript">
         //<![CDATA[
             function Remove() {
@@ -36,21 +37,41 @@
             function Add() {
                 window.location = "/cgi-bin/koha/labels/label-edit-batch.pl?op=add&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->";
             };
-            function Print(mode) {
-                if (mode == 'batch') {
-                    alert("Print batch <!-- TMPL_VAR NAME="batch_id" -->.");
-//                    window.location = "/cgi-bin/koha/labels/label-edit-batch.pl?op=print&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->";
+            function Xport(mode) {
+                if (mode == 'label') {
+                    labels= new Array;
+                    if(document.items.action.length > 0) {
+                        for (var i=0; i < document.items.action.length; i++) {
+                            if (document.items.action[i].checked) {
+                                labels.push("label_id=" +  document.items.action[i].value);
+                            }
+                        }
+                        if (labels.length < 1) {
+                            alert("Please select at least one label to export.");
+                            return;     // no batch selected
+                        }
+                        getstr = labels.join("&");
+                    }
+                    else if (document.items.action.checked) {
+                        getstr = document.items.action.value;
+                    }
+                    else {
+                        alert("Please select at least one label to export.");
+                        return;     // no batch selected
+                    }
+                    //<td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=<!-- TMPL_VAR NAME="breedingid" -->" title="MARC" rel="gb_page_center[600,500]">MARC</a></td>
+                    //window.location = "/cgi-bin/koha/labels/label-print.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&" + getstr;
+                    //return GB_show('Google', this.href)
+                    return GB_showCenter('Export Labels', "/cgi-bin/koha/labels/label-print.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&" + getstr, 700, 800);
+                }
+                else if (mode == 'batch') {
+                    //window.location = "/cgi-bin/koha/labels/label-print.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->";
+                    //$(".checkboxed").uncheckCheckboxes();
+                    return GB_showCenter('Export Labels', "/cgi-bin/koha/labels/label-print.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->", 700, 800);
                 }
                 else {
-                    var label_id = selected_layout();
-                    alert("Print item " + label_id + ".");
-//                    if (label_id>-1) {
-//                       window.location = "/cgi-bin/koha/labels/label-edit-batch.pl?op=print&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;label_id=" + label_id;
-//                    }
-//                    else {
-//                        return;     // no layout selected
-//                    };
-                };
+                    // some pass-thru error trapping just in case...
+                }
             };
            function selected_layout() {
                 if (document.items.action.length) {
@@ -93,7 +114,7 @@
                     <div class="yui-gc">
                         <div class="yui-u first" id="manage-label-batches">
                             <div class="hint">Current Branch: <!-- TMPL_VAR NAME="LoginBranchname" --></div>
-                            <form name="items">
+                            <form name="items" class="checkboxed">
                             <h2>Items in batch number <!-- TMPL_VAR NAME="batch_id" --></h2>
                             <table>
                                 <!-- TMPL_LOOP NAME="table_loop" -->
@@ -120,8 +141,8 @@
                             <div style="margin: 10px 10px 10px 0px;">
                                 <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="add" onclick="Add()" value="Add Item(s)"></span></span>
                                 <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="remove" onclick="Remove()" value="Remove Item(s)"></span></span>
-                                <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="print_item" onclick="Print(item)" value="Print Item(s)"></span></span>
-                                <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="print_batch" onclick="Print(batch)" value="Print Batch"></span></span>
+                                <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="print_item" onclick="Xport('label')" value="Print Item(s)"></span></span>
+                                <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="print_batch" onclick="Xport('batch')" value="Print Batch"></span></span>
                             </div>
                         </div>
                         <!-- TMPL_IF NAME="err" -->

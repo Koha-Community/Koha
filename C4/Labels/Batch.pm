@@ -96,7 +96,7 @@ sub new {
     my $sth = C4::Context->dbh->prepare("SELECT MAX(batch_id) FROM labels_batches;");
     $sth->execute();
     my $batch_id = $sth->fetchrow_array;
-    $self->{'batch_id'} = ++$batch_id;
+    $self->{'batch_id'} = ++$batch_id unless $self->{'batch_id'} != 0;      # this allows batch_id to be passed in for individual label printing
     bless ($self, $type);
     return $self;
 }

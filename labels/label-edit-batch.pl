@@ -104,20 +104,17 @@ $db_rows = get_label_summary(items => $items, batch_id => $batch_id);
 
 my $table = html_table($display_columns, $db_rows);
 
-$template->param(
-                duplicate_message       => $duplicate_message,
-                duplicate_count         => $duplicate_count,
-                );
-
 $template->param(   
                 err         => $err,
                 errstr      => $errstr,
                 ) if ($err ne 0);
 
 $template->param(
-                op              => $op,
-                batch_id        => $batch_id,
-                table_loop      => $table,
+                op                      => $op,
+                batch_id                => $batch_id,
+                table_loop              => $table,
+                duplicate_message       => $duplicate_message,
+                duplicate_count         => $duplicate_count,
                 );
 
 output_html_with_http_headers $cgi, $cookie, $template->output;

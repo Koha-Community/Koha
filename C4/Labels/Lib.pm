@@ -19,6 +19,7 @@ package C4::Labels::Lib;
 
 use strict;
 use warnings;
+
 use Sys::Syslog qw(syslog);
 use Data::Dumper;
 
