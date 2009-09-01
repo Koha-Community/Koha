@@ -93,32 +93,19 @@ if ($op eq 'mod' || $op eq 'dup' || $op eq 'modsubscription') {
     $nextexpected->{'isfirstissue'} = $nextexpected->{planneddate}->output('iso') eq $firstissuedate ;
     $subs->{nextacquidate} = $nextexpected->{planneddate}->output()  if($op eq 'mod');
     unless($op eq 'modsubscription') {
-        if($subs->{numberlength} > 0){
-            $sublength = $subs->{numberlength};
-            $sub_on = $subscription_types[0];
-        } elsif ($subs->{weeklength}>0){
-            $sublength = $subs->{weeklength};
-            $sub_on = $subscription_types[1];
-        } else {
-            $sublength = $subs->{monthlength};
-            $sub_on = $subscription_types[2];
-        }
-        while (@subscription_types) {
-            my $sub_type = shift @subscription_types;
-            my %row = ( 'name' => $sub_type );
-            if ( $sub_on eq $sub_type ) {
-                $row{'selected'} = ' selected';
-            } else {
-                $row{'selected'} = '';
-            }
-            push( @sub_type_data, \%row );
-        }
+		foreach my $length_unit qw(numberlength weeklength monthlength){
+			if ($subs->{$length_unit}){
+				$sublength=$subs->{$length_unit};
+				$sub_on=$length_unit;
+				last;
+			}
+		}
     
         $template->param($subs);
         $template->param("dow".$subs->{'dow'} => 1) if defined $subs->{'dow'};
         $template->param(
                     $op => 1,
-                    subtype => \@sub_type_data,
+                    "subtype_$sub_on" => 1,
                     sublength =>$sublength,
                     history => ($op eq 'mod' && $subs->{manualhistory} == 1 ),
                     "periodicity".$subs->{'periodicity'} => 1,
