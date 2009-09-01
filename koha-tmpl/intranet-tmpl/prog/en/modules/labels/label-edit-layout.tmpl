@@ -4,11 +4,11 @@
     <script type="text/JavaScript" language="JavaScript">
         //<![CDATA[
             $(document).ready(function() {
-                $("input[@name='layout_choice']").change( function() { layout_method() } );
+                $("input[name='layout_choice']").change( function() { layout_method() } );
                 layout_method();
             });
             function layout_method() {
-                if( $("input[@name='layout_choice']:checked").val() == 'layout_string' ) {
+                if( $("input[name='layout_choice']:checked").val() == 'layout_string' ) {
                     $('#layout_table').hide();
                     $('#layout_string').show();
                 } else {

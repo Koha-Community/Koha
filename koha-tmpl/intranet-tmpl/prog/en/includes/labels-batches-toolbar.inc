@@ -1,6 +1,16 @@
 <div id="toolbar">
     <script type="text/JavaScript">
         //<![CDATA[
+           function DeleteConfirm() {
+                var msg = "Are you sure you want to delete batch <!-- TMPL_VAR NAME="batch_id" -->?"
+                var answer = confirm(msg);
+                if (answer) {
+                    window.location = "/cgi-bin/koha/labels/label-manage.pl?op=delete&amp;label_element=batch&amp;element_id=<!-- TMPL_VAR NAME="batch_id" -->";
+                }
+                else {
+                    return; // abort delete
+                }
+            };
             function Remove() {
                 items = new Array;
                 item_num = new Array;
@@ -93,6 +103,7 @@
          $(document).ready(function() {
             $("#additemsc").empty();
             $("#removeitemsc").empty();
+            $("#deletebatchc").empty();
             $("#deduplicatec").empty();
             $("#exportitemsc").empty();
             $("#exportbatchc").empty();
@@ -116,6 +127,15 @@
                 label: _("Remove Item(s)"), 
                 container: "removeitemsc",
                 onclick: {fn:function(){Remove()}}
+            });
+
+            new YAHOO.widget.Button({
+                id: "deletebatch", 
+                type: "link", 
+                href: "#",
+                label: _("Delete Batch"), 
+                container: "deletebatchc",
+                onclick: {fn:function(){DeleteConfirm()}}
             });
 
             new YAHOO.widget.Button({
@@ -151,8 +171,7 @@
     <ul class="toolbar">
         <li id="additemsc"><a id="additems" href="#">Add Item(s)</a></li>
         <li id="removeitemsc"><a id="removeitems" href="#">Remove Item(s)</a></li>
-        <li><a id="deletebatch" href="/cgi-bin/koha/labels/label-manage.pl?op=delete&amp;label_element=batch&amp;element_id=<!-- TMPL_VAR NAME="batch_id" -->">Delete Batch</a></li>
-                                <!-- FIXME: should use POST to change server state, not GET -->
+        <li id="deletebatchc"><a id="deletebatch" href="#">Delete Batch</a></li>
         <li id="deduplicatec"><a id="deduplicate" href="#">Remove Duplicates</a></li>
         <li id="exportitemsc"><a id="exportitems" href="#">Export Item(s)</a></li>
         <li id="exportbatchc"><a id="exportbatch" href="#">Export Batch</a></li>

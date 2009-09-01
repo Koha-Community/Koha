@@ -92,4 +92,4 @@ is_deeply($updated_profile, $saved_profile) || diag "Updated layout object FAILE
 diag "Testing Profile->delete() method.";
 
 my $del_results = $updated_profile->delete();
-ok($del_results eq 0) || diag "Profile->delete() FAILED. See syslog for details.";
+ok($del_results ne -1) || diag "Profile->delete() FAILED. See syslog for details.";
