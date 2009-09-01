@@ -3,6 +3,7 @@
             Receipt Summary for <!-- TMPL_VAR NAME="name" --> <!--TMPL_IF Name="invoice"-->Invoice <!-- TMPL_VAR NAME="invoice" --><!--/TMPL_IF --> on <!-- TMPL_VAR NAME="formatteddatereceived" --><!-- TMPL_ELSE -->Receive Orders from <!-- TMPL_VAR NAME="name" --><!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="greybox.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/json/json-min.js"></script> 
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
 
@@ -61,42 +62,54 @@
     // Launch filtering
     function filter() {
 
-    	var summaryStatus = jQuery.trim($("#summaryfilter").val());
+    var summaryStatus = jQuery.trim($("#summaryfilter").val());
 	var basketStatus  = $("#basketfilter").val();
 	var orderStatus   = $("#orderfilter").val();
 
 	if (summaryStatus == '' && basketStatus == '' && orderStatus == '') { clearFilters(); return false; }
 
 	var filtered = "table#pendingt tbody.filterclass tr";
-	var foundCount = 0;
 
 	// We hide everything
 	$("#nothingfoundrow").remove();
 	$(filtered).hide();
 
-	// Then show what matches the filters
-	if (summaryStatus != '') {
-	    // Case-insensitive search for a substring
-	    $(filtered + " td.summaryfilterclass:icontains(" + summaryStatus + ")").parent().show();
-	    foundCount += $(filtered + " td.summaryfilterclass:icontains(" + summaryStatus + ")").length;
-	}
+	// Do the search
+	var callback =  {
+		success: function(o) {
+			var jsonString = o.responseText;
+			var gst = "<!-- TMPL_VAR NAME="gst" -->";
+			try { 
+				var orders = YAHOO.lang.JSON.parse(jsonString);
+				var foundCount = orders.length;
 
-	if (basketStatus != '') {
-	    // Exact search
-	    $(filtered + " td.basketfilterclass:containsExactly(" + basketStatus + ")").parent().show();
-	    foundCount += $(filtered + " td.basketfilterclass:containsExactly(" + basketStatus + ")").length;
-	}
+				for( i = 0 ; i < orders.length ; i++){
+					order = orders[i];
+					$('<tr>'
+                       + '<td class="basketfilterclass"><a href="/cgi-bin/koha/acqui/basket.pl?basketno=' + order.basketno + '">' + order.basketno + '</a></td>'
+                       + '<td class="orderfilterclass"> ' + order.ordernumber + ' </td>'
+                       + '<td class="summaryfilterclass">'
+                       + '<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=' + order.biblionumber + '">' + order.title + '</a> / ' + order.author + '&ndash;' + order.isbn + '</td>'
+                       + '<td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=' + order.biblionumber + '" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=' + order.biblionumber + '" title="MARC" rel="gb_page_center[600,500]">Card</a></td>'
+                       + '<td>' + order.quantrem + ' / ' + order.quantity + '</td>'
+                       + '<td>' + order.ecost + '</td>'
+                       + '<td>' + order.ordertotal + '</td>'
+                       + '<td>'
+                       + '<a href="orderreceive.pl?ordernumber=' + order.ordernumber + '&amp;datereceived=<!-- TMPL_VAR NAME="invoicedatereceived" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=' + gst + '&amp;freight=' + order.freight + '&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->">Receive</a> /' 
+                       + '<a href="parcel.pl?type=intra&amp;ordernumber=' + order.ordernumber + '&amp;biblionumber=' + order.biblionumber + '&amp;action=cancelorder&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;datereceived=<!-- TMPL_VAR NAME="invoicedatereceived" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->" onclick="return confirm(' + _('Are you sure you want to cancel this order?') + ');">Cancel</a>'
+                       + '</td></tr>').appendTo("table#pendingt");
+				}
 
-	if (orderStatus != '') {
-	    // Exact search
-	    $(filtered + " td.orderfilterclass:containsExactly(" + orderStatus + ")").parent().show();
-	    foundCount += $(filtered + " td.orderfilterclass:containsExactly(" + orderStatus + ")").length;
+				// If nothing has been found, we tell the user so
+				if (orders.length == 0) {
+				    $("<tr><td id=\"nothingfoundrow\" colspan=\"8\">No items match your criteria.<\/tr>").appendTo("table#pendingt");
+				}
+			}catch(e){alert(e);}
+		}
 	}
+	var transaction = YAHOO.util.Connect.asyncRequest('GET', '/cgi-bin/koha/acqui/parcel.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->&search='+summaryStatus+'&basketno='+basketStatus+'&orderno='+orderStatus+'&format=json', callback, null);
 
-	// If nothing has been found, we tell the user so
-	if (foundCount == 0) {
-	    $("<tr><td id=\"nothingfoundrow\" colspan=\"8\">No items match your criteria.<\/tr>").appendTo("table#pendingt");
-	}
+	return false;
     }
     
     // Clear already applied filters
@@ -162,7 +175,7 @@
 </div>
 <div id="acqui_receive_search">
     <h2>Items in shipment</h2>
-        <form action="/cgi-bin/koha/acqui/parcel.pl" id="filterform" onsubmit="filter(); return false;">
+        <form action="/cgi-bin/koha/acqui/parcel.pl" id="filterform" onsubmit="return filter();">
         <fieldset class="rows">
 
             <legend>Filters :</legend>

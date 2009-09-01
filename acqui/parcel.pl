@@ -61,6 +61,7 @@ use C4::Items;
 use CGI;
 use C4::Output;
 use C4::Dates qw/format_date format_date_in_iso/;
+use JSON;
 
 use strict;
 
@@ -82,6 +83,47 @@ my $startfrom=$input->param('startfrom');
 my $resultsperpage = $input->param('resultsperpage');
 $resultsperpage = 20 unless ($resultsperpage);
 $startfrom=0 unless ($startfrom);
+
+if($input->param('format') eq "json"){
+    my ($template, $loggedinuser, $cookie)
+        = get_template_and_user({template_name => "acqui/ajax.tmpl",
+                 query => $input,
+				 type => "intranet",
+                 authnotrequired => 0,
+                 flagsrequired => {acquisition => 'order_receive'},
+                 debug => 1,
+    });
+       
+    my @datas;
+    my $search   = $input->param('search') || '';
+    my $supplier = $input->param('supplierid') || '';
+    my $basketno = $input->param('basketno') || '';
+    my $orderno  = $input->param('orderno') || '';
+
+    my $orders = SearchOrder($orderno, $search, $supplier, $basketno);
+    foreach my $order (@$orders){
+        if($order->{quantityreceived} < $order->{quantity}){
+            my $data = {};
+            
+            $data->{basketno} = $order->{basketno};
+            $data->{ordernumber} = $order->{ordernumber};
+            $data->{title} = $order->{title};
+            $data->{author} = $order->{author};
+            $data->{biblionumber} = $order->{biblionumber};
+            $data->{freight} = $order->{freight};
+            $data->{quantrem} = $order->{quantity} - $order->{quantityreceived};
+            $data->{quantity} = $order->{quantity};
+            $data->{ecost} = $order->{ecost};
+            $data->{ordertotal} = sprintf("%.2f",$order->{ecost}*$order->{quantity});
+            push @datas, $data;
+        }
+    }
+    
+    my $json_text = to_json(\@datas);
+    $template->param(return => $json_text);
+    output_html_with_http_headers $input, $cookie, $template->output;
+    exit;
+}
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "acqui/parcel.tmpl",

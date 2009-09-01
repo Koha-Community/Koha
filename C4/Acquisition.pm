@@ -1170,39 +1170,40 @@ C<@results> is an array of references-to-hash with the following keys:
 
 sub SearchOrder {
 #### -------- SearchOrder-------------------------------
-    my ($ordernumber, $search) = @_;
+    my ($ordernumber, $search, $supplierid, $basket) = @_;
 
-    if ($ordernumber) {
-        my $dbh = C4::Context->dbh;
-        my $query =
+    my $dbh = C4::Context->dbh;
+    my @args = ();
+    my $query =
             "SELECT *
             FROM aqorders
             LEFT JOIN biblio ON aqorders.biblionumber=biblio.biblionumber
             LEFT JOIN biblioitems ON biblioitems.biblionumber=biblio.biblionumber
             LEFT JOIN aqbasket ON aqorders.basketno = aqbasket.basketno
-                WHERE  ((datecancellationprinted is NULL)
-                AND (aqorders.ordernumber=?))";
-        my $sth = $dbh->prepare($query);
-        $sth->execute($ordernumber);
-        my $results = $sth->fetchall_arrayref({});
-        $sth->finish;
-        return $results;
-    } else {
-        my $dbh = C4::Context->dbh;
-        my $query =
-            "SELECT *
-            FROM aqorders
-            LEFT JOIN biblio ON aqorders.biblionumber=biblio.biblionumber
-            LEFT JOIN biblioitems ON biblioitems.biblionumber=biblio.biblionumber
-            LEFT JOIN aqbasket ON aqorders.basketno = aqbasket.basketno
-                WHERE  ((datecancellationprinted is NULL)
-                AND (biblio.title like ? OR biblioitems.isbn like ?))";
-        my $sth = $dbh->prepare($query);
-        $sth->execute("%$search%","%$search%");
-        my $results = $sth->fetchall_arrayref({});
-        $sth->finish;
-        return $results;
+                WHERE  (datecancellationprinted is NULL)";
+                
+    if($ordernumber){
+        $query .= " AND (aqorders.ordernumber=?)";
+        push @args, $ordernumber;
     }
+    if($search){
+        $query .= " AND (biblio.title like ? OR biblio.author LIKE ? OR biblioitems.isbn like ?)";
+        push @args, ("%$search%","%$search%","%$search%");
+    }
+    if($supplierid){
+        $query .= "AND aqbasket.booksellerid = ?";
+        push @args, $supplierid;
+    }
+    if($basket){
+        $query .= "AND aqorders.basketno = ?";
+        push @args, $basket;
+    }
+
+    my $sth = $dbh->prepare($query);
+    $sth->execute(@args);
+    my $results = $sth->fetchall_arrayref({});
+    $sth->finish;
+    return $results;
 }
 
 #------------------------------------------------------------#
