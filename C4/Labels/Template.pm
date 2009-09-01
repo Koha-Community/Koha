@@ -1,26 +1,8 @@
 package C4::Labels::Template;
 
-# Copyright 2009 Foundations Bible College.
-#
-# This file is part of Koha.
-#       
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
-#
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-# Suite 330, Boston, MA  02111-1307 USA
-
 use strict;
 use warnings;
 use Sys::Syslog qw(syslog);
-use Data::Dumper;
 use PDF::Reuse;
 use POSIX qw(ceil);
 
@@ -99,25 +81,6 @@ sub _apply_profile {
     return $self;
 }
 
-=head1 NAME
-
-C4::Labels::Template - A class for creating and manipulating template objects in Koha
-
-=cut
-
-=head1 METHODS
-
-=head2 C4::Labels::Template->new()
-
-    Invoking the I<new> method constructs a new template object containing the default values for a template.
-
-    example:
-        my $template = Template->new(); # Creates and returns a new template object
-
-    B<NOTE:> This template is I<not> written to the database untill $template->save() is invoked. You have been warned!
-
-=cut
-
 sub new {
     my $invocant = shift;
     if (_check_params(@_) eq 1) {
@@ -141,30 +104,12 @@ sub new {
         col_gap         =>      0,
         row_gap         =>      0,
         units           =>      'POINT',
-        tmpl_stat       =>      0,      # false if any data has changed and the db has not been updated
+        template_stat   =>      0,      # false if any data has changed and the db has not been updated
         @_,
     };
     bless ($self, $type);
     return $self;
 }
-
-=head2 C4::Labels::Template->retrieve(template_id)
-
-    Invoking the I<retrieve> method constructs a new template object containing the current values for template_id. The method returns
-    a new object upon success and 1 upon failure. Errors are logged to the syslog. Two further options may be accessed. See the example
-    below for further description.
-
-    examples:
-
-        my $template = C4::Labels::Template->retrieve(template_id => 1); # Retrieves template record 1 and returns an object containing the record
-
-        my $template = C4::Labels::Template->retrieve(template_id => 1, convert => 1); # Retrieves template record 1, converts the units to points,
-            and returns an object containing the record
-
-        my $template = C4::Labels::Template->retrieve(template_id => 1, profile_id => profile_id); # Retrieves template record 1, converts the units
-            to points, applies the given profile id, and returns an object containing the record
-
-=cut
 
 sub retrieve {
     my $invocant = shift;
@@ -180,21 +125,10 @@ sub retrieve {
     my $self = $sth->fetchrow_hashref;
     $self = _conv_points($self) if (($opts{convert} && $opts{convert} == 1) || $opts{profile_id});
     $self = _apply_profile($self) if $opts{profile_id};
-    $self->{'tmpl_stat'} = 1;
+    $self->{'template_stat'} = 1;
     bless ($self, $type);
     return $self;
 }
-
-=head2 C4::Labels::Template::delete(template_id => template_id) |  $template->delete()
-
-    Invoking the delete method attempts to delete the template from the database. The method returns 0 upon success
-    and 1 upon failure. Errors are logged to the syslog.
-
-    examples:
-        my $exitstat = $template->delete(); # to delete the record behind the $template object
-        my $exitstat = C4::Labels::Template::delete(template_id => 1); # to delete template record 1
-
-=cut
 
 sub delete {
     my $self = {};
@@ -218,20 +152,8 @@ sub delete {
     my $query = "DELETE FROM labels_templates WHERE template_id = ?";  
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute($query_param);
-    $self->{'tmpl_stat'} = 0;
-    return 0;
+    $self->{'template_stat'} = 0;
 }
-
-=head2 $template->save()
-
-    Invoking the I<save> method attempts to insert the template into the database if the template is new and
-    update the existing template record if the template exists. The method returns the new record template_id upon
-    success and -1 upon failure (This avotemplate_ids conflicting with a record template_id of 1). Errors are logged to the syslog.
-
-    example:
-        my $exitstat = $template->save(); # to save the record behind the $template object
-
-=cut
 
 sub save {
     my $self = shift;
@@ -239,7 +161,7 @@ sub save {
         my @params;
         my $query = "UPDATE labels_templates SET ";
         foreach my $key (keys %{$self}) {
-            next if ($key eq 'template_id') || ($key eq 'tmpl_stat');
+            next if ($key eq 'template_id') || ($key eq 'template_stat');
             push (@params, $self->{$key});
             $query .= "$key=?, ";
         }
@@ -252,14 +174,14 @@ sub save {
             syslog("LOG_ERR", "Database returned the following error: %s", $sth->errstr);
             return -1;
         }
-        $self->{'tmpl_stat'} = 1;
+        $self->{'template_stat'} = 1;
         return $self->{'template_id'};
     }
     else {                      # otherwise create a new record
         my @params;
         my $query = "INSERT INTO labels_templates (";
         foreach my $key (keys %{$self}) {
-            next if $key eq 'tmpl_stat';
+            next if $key eq 'template_stat';
             push (@params, $self->{$key});
             $query .= "$key, ";
         }
@@ -280,19 +202,10 @@ sub save {
         $sth1->execute();
         my $template_id = $sth1->fetchrow_array;
         $self->{'template_id'} = $template_id;
-        $self->{'tmpl_stat'} = 1;
+        $self->{'template_stat'} = 1;
         return $template_id;
     }
 }
-
-=head2 $template->get_attr("attr")
-
-    Invoking the I<get_attr> method will return the value of the requested attribute or 1 on errors.
-
-    example:
-        my $value = $template->get_attr("attr");
-
-=cut
 
 sub get_attr {
     my $self = shift;
@@ -308,15 +221,6 @@ sub get_attr {
     }
 }
 
-=head2 $template->set_attr(attr, value)
-
-    Invoking the I<set_attr> method will set the value of the supplied attribute to the supplied value.
-
-    example:
-        $template->set_attr(attr => value);
-
-=cut
-
 sub set_attr {
     my $self = shift;
     if (_check_params(@_) eq 1) {
@@ -327,16 +231,6 @@ sub set_attr {
         $self->{$attrib} = $attrs{$attrib};
     };
 }
-
-=head2 $template->get_label_position($start_label)
-
-    Invoking the I<get_label_position> method will return the row, column coordinates on the starting page
-    and the lower left x,y coordinates on the starting label for the template object.
-
-    examples:
-        my ($row_count, $col_count, $llx, $lly) = $template->get_label_position($start_label);
-
-=cut
 
 sub get_label_position {
     my ($self, $start_label) = @_;
@@ -360,8 +254,144 @@ sub get_label_position {
 1;
 __END__
 
+=head1 NAME
+
+C4::Labels::Template - A class for creating and manipulating template objects in Koha
+
+=head1 ABSTRACT
+
+This module provides methods for creating, retrieving, and otherwise manipulating label template objects used by Koha to create and export labels.
+
+=head1 METHODS
+
+=head2 new()
+
+    Invoking the I<new> method constructs a new template object containing the default values for a template.
+    The following parameters are optionally accepted as key => value pairs:
+
+        C<profile_id>           A valid profile id to be assciated with this template. NOTE: The profile must exist in the database and B<not> be assigned to another template.
+        C<template_code>        A template code. ie. 'Avery 5160 | 1 x 2-5/8'
+        C<template_desc>        A readable description of the template. ie. '3 columns, 10 rows of labels'
+        C<page_width>           The width of the page measured in the units supplied by the units parameter in this template.
+        C<page_height>          The height of the page measured in the same units.
+        C<label_width>          The width of a single label on the page this template applies to.
+        C<label_height>         The height of a single label on the page.
+        C<top_text_margin>      The measure of the top margin on a single label on the page.
+        C<left_text_margin>     The measure of the left margin on a single label on the page.
+        C<top_margin>           The measure of the top margin of the page.
+        C<left_margin>          The measure of the left margin of the page.
+        C<cols>                 The number of columns of labels on the page.
+        C<rows>                 The number of rows of labels on the page.
+        C<col_gap>              The measure of the gap between the columns of labels on the page.
+        C<row_gap>              The measure of the gap between the rows of labels on the page.
+        C<units>                The units of measure used for this template. These B<must> match the measures you supply above or
+                                bad things will happen to your document. NOTE: The only supported units at present are:
+
+=over 9
+
+=item .
+POINT   = Postscript Points (This is the base unit in the Koha label creator.)
+
+=item .
+AGATE   = Adobe Agates (5.1428571 points per)
+
+=item .
+INCH    = US Inches (72 points per)
+
+=item .
+MM      = SI Millimeters (2.83464567 points per)
+
+=item .
+CM      = SI Centimeters (28.3464567 points per)
+
+=back
+                                    
+    example:
+        my $template = Template->new(); # Creates and returns a new template object with the defaults
+
+        my $template = C4::Labels::Template->new(profile_id => 1, page_width => 8.5, page_height => 11.0, units => 'INCH'); # Creates and returns a new template object using
+            the supplied values to override the defaults
+
+    B<NOTE:> This template is I<not> written to the database untill save() is invoked. You have been warned!
+
+=head2 retrieve(template_id => $template_id)
+
+    Invoking the I<retrieve> method constructs a new template object containing the current values for template_id. The method returns
+    a new object upon success and -1 upon failure. Errors are logged to the syslog. Two further options may be accessed. See the example
+    below for further description.
+
+    examples:
+
+        C<my $template = C4::Labels::Template->retrieve(template_id => 1); # Retrieves template record 1 and returns an object containing the record>
+
+        C<my $template = C4::Labels::Template->retrieve(template_id => 1, convert => 1); # Retrieves template record 1, converts the units to points,
+            and returns an object containing the record>
+
+        C<my $template = C4::Labels::Template->retrieve(template_id => 1, profile_id => 1); # Retrieves template record 1, converts the units
+            to points, applies the currently associated profile id, and returns an object containing the record.>
+
+=head2 delete()
+
+    Invoking the delete method attempts to delete the template from the database. The method returns -1 upon failure. Errors are logged to the syslog.
+    NOTE: This method may also be called as a function and passed a key/value pair simply deleteing that template from the database. See the example below.
+
+    examples:
+        C<my $exitstat = $template->delete(); # to delete the record behind the $template object>
+        C<my $exitstat = C4::Labels::Template::delete(template_id => 1); # to delete template record 1>
+
+=head2 save()
+
+    Invoking the I<save> method attempts to insert the template into the database if the template is new and update the existing template record if
+    the template exists. The method returns the new record template_id upon success and -1 upon failure (This avoids template_ids conflicting with a
+    record template_id of 1). Errors are logged to the syslog.
+
+    example:
+        C<my $template_id = $template->save(); # to save the record behind the $template object>
+
+=head2 get_attr($attribute)
+
+    Invoking the I<get_attr> method will return the value of the requested attribute or -1 on errors.
+
+    example:
+        C<my $value = $template->get_attr($attribute);>
+
+=head2 set_attr(attribute => value, attribute_2 => value)
+
+    Invoking the I<set_attr> method will set the value of the supplied attributes to the supplied values. The method accepts key/value pairs separated by
+    commas.
+
+    example:
+        C<$template->set_attr(attribute => value);>
+
+=head2 get_label_position($start_label)
+
+    Invoking the I<get_label_position> method will return the row, column coordinates on the starting page and the lower left x,y coordinates on the starting
+    label for the template object.
+
+    examples:
+        C<my ($row_count, $col_count, $llx, $lly) = $template->get_label_position($start_label);>
+
 =head1 AUTHOR
 
 Chris Nighswonger <cnighswonger AT foundations DOT edu>
+
+=head1 COPYRIGHT
+
+Copyright 2009 Foundations Bible College.
+
+=head1 LICENSE
+
+This file is part of Koha.
+       
+Koha is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any later version.
+
+You should have received a copy of the GNU General Public License along with Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+Suite 330, Boston, MA  02111-1307 USA
+
+=head1 DISCLAIMER OF WARRANTY
+
+Koha is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 =cut

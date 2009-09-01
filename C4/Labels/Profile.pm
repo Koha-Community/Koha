@@ -1,26 +1,8 @@
 package C4::Labels::Profile;
 
-# Copyright 2009 Foundations Bible College.
-#
-# This file is part of Koha.
-#       
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
-#
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-# Suite 330, Boston, MA  02111-1307 USA
-
 use strict;
 use warnings;
 use Sys::Syslog qw(syslog);
-use Data::Dumper;
 
 use C4::Context;
 use C4::Debug;
@@ -71,25 +53,6 @@ sub _conv_points {
     return $self;
 }
 
-=head1 NAME
-
-C4::Labels::Profile - A class for creating and manipulating profile objects in Koha
-
-=cut
-
-=head1 METHODS
-
-=head2 C4::Labels::Profile->new()
-
-    Invoking the I<new> method constructs a new profile object containing the default values for a template.
-
-    example:
-        my $profile = Profile->new(); # Creates and returns a new profile object
-
-    B<NOTE:> This profile is I<not> written to the database untill $profile->save() is invoked. You have been warned!
-
-=cut
-
 sub new {
     my $invocant = shift;
     if (_check_params(@_) eq 1) {
@@ -111,21 +74,6 @@ sub new {
     return $self;
 }
 
-=head2 C4::Labels::Profile->retrieve(profile_id => profile_id, convert => 1)
-
-    Invoking the I<retrieve> method constructs a new profile object containing the current values for profile_id. The method returns
-    a new object upon success and 1 upon failure. Errors are logged to the syslog. One further option maybe accessed. See the examples
-    below for further description.
-
-    examples:
-
-        my $profile = C4::Labels::Profile->retrieve(profile_id => 1); # Retrieves profile record 1 and returns an object containing the record
-
-        my $profile = C4::Labels::Profile->retrieve(profile_id => 1, convert => 1); # Retrieves profile record 1, converts the units to points,
-        and returns an object containing the record
-
-=cut
-
 sub retrieve {
     my $invocant = shift;
     my %opts = @_;
@@ -142,17 +90,6 @@ sub retrieve {
     bless ($self, $type);
     return $self;
 }
-
-=head2 C4::Labels::Profile::delete(profile_id => profile_id) | $profile->delete()
-
-    Invoking the delete method attempts to delete the profile from the database. The method returns 0 upon success
-    and 1 upon failure. Errors are logged to the syslog.
-
-    examples:
-        my $exitstat = $profile->delete(); # to delete the record behind the $profile object
-        my $exitstat = C4::Labels::Profile::delete(profile_id => 1); # to delete profile record 1
-
-=cut
 
 sub delete {
     my $self = {};
@@ -177,19 +114,7 @@ sub delete {
     my $sth = C4::Context->dbh->prepare($query);
 #    $sth->{'TraceLevel'} = 3;
     $sth->execute($query_param);
-    return 0;
 }
-
-=head2 $profile->save()
-
-    Invoking the I<save> method attempts to insert the profile into the database if the profile is new and
-    update the existing profile record if the profile exists. The method returns the new record profile_id upon
-    success and -1 upon failure (This avoids conflicting with a record profile_id of 1). Errors are logged to the syslog.
-
-    example:
-        my $exitstat = $profile->save(); # to save the record behind the $profile object
-
-=cut
 
 sub save {
     my $self = shift;
@@ -240,15 +165,6 @@ sub save {
     }
 }
 
-=head2 $profile->get_attr(attr)
-
-    Invoking the I<get_attr> method will return the value of the requested attribute or 1 on errors.
-
-    example:
-        my $value = $profile->get_attr(attr);
-
-=cut
-
 sub get_attr {
     my $self = shift;
     if (_check_params(@_) eq 1) {
@@ -264,15 +180,6 @@ sub get_attr {
     }
 }
 
-=head2 $profile->set_attr(attr => value)
-
-    Invoking the I<set_attr> method will set the value of the supplied attribute to the supplied value.
-
-    example:
-        $profile->set_attr(attr => value);
-
-=cut
-
 sub set_attr {
     my $self = shift;
     if (_check_params(@_) eq 1) {
@@ -285,54 +192,165 @@ sub set_attr {
     return 0;
 }
 
-
 1;
 __END__
+
+=head1 NAME
+
+C4::Labels::Profile - A class for creating and manipulating profile objects in Koha
+
+=head1 ABSTRACT
+
+This module provides methods for creating, retrieving, and otherwise manipulating label profile objects used by Koha to create and export labels.
+
+=head1 METHODS
+
+=head2 new()
+
+    Invoking the I<new> method constructs a new profile object containing the default values for a template.
+    The following parameters are optionally accepted as key => value pairs:
+
+        C<printer_name>         The name of the printer to which this profile applies.
+        C<template_id>          The template to which this profile may be applied. NOTE: There may be multiple profiles which may be applied to the same template.
+        C<paper_bin>            The paper bin of the above printer to which this profile applies. NOTE: printer name, template id, and paper bin must form a unique combination.
+        C<offset_horz>          Amount of compensation for horizontal offset (position of text on a single label). This amount is measured in the units supplied by the units parameter in this profile.
+        C<offset_vert>          Amount of compensation for vertical offset.
+        C<creep_horz>           Amount of compensation for horizontal creep (tendency of text to 'creep' off of the labels over the span of the entire page).
+        C<creep_vert>           Amount of compensation for vertical creep.
+        C<units>                The units of measure used for this template. These B<must> match the measures you supply above or
+                                bad things will happen to your document. NOTE: The only supported units at present are:
+
+=over 9
+
+=item .
+POINT   = Postscript Points (This is the base unit in the Koha label creator.)
+
+=item .
+AGATE   = Adobe Agates (5.1428571 points per)
+
+=item .
+INCH    = US Inches (72 points per)
+
+=item .
+MM      = SI Millimeters (2.83464567 points per)
+
+=item .
+CM      = SI Centimeters (28.3464567 points per)
+
+=back
+
+    example:
+        C<my $profile = C4::Labels::Profile->new(); # Creates and returns a new profile object>
+
+        C<my $profile = C4::Labels::Profile->new(template_id => 1, paper_bin => 'Bypass Tray', offset_horz => 0.02, units => 'POINT'); # Creates and returns a new profile object using
+            the supplied values to override the defaults>
+
+    B<NOTE:> This profile is I<not> written to the database until save() is invoked. You have been warned!
+
+=head2 retrieve(profile_id => $profile_id, convert => 1)
+
+    Invoking the I<retrieve> method constructs a new profile object containing the current values for profile_id. The method returns a new object upon success and 1 upon failure.
+    Errors are logged to the syslog. One further option maybe accessed. See the examples below for further description.
+
+    examples:
+
+        C<my $profile = C4::Labels::Profile->retrieve(profile_id => 1); # Retrieves profile record 1 and returns an object containing the record>
+
+        C<my $profile = C4::Labels::Profile->retrieve(profile_id => 1, convert => 1); # Retrieves profile record 1, converts the units to points and returns an object containing the record>
+
+=head2 delete()
+
+    Invoking the delete method attempts to delete the profile from the database. The method returns -1 upon failure. Errors are logged to the syslog.
+    NOTE: This method may also be called as a function and passed a key/value pair simply deleteing that profile from the database. See the example below.
+
+    examples:
+        C<my $exitstat = $profile->delete(); # to delete the record behind the $profile object>
+        C<my $exitstat = C4::Labels::Profile::delete(profile_id => 1); # to delete profile record 1>
+
+=head2 save()
+
+    Invoking the I<save> method attempts to insert the profile into the database if the profile is new and update the existing profile record if the profile exists. The method returns
+    the new record profile_id upon success and -1 upon failure (This avoids conflicting with a record profile_id of 1). Errors are logged to the syslog.
+
+    example:
+        C<my $exitstat = $profile->save(); # to save the record behind the $profile object>
+
+=head2 get_attr($attribute)
+
+    Invoking the I<get_attr> method will return the value of the requested attribute or -1 on errors.
+
+    example:
+        C<my $value = $profile->get_attr($attribute);>
+
+=head2 set_attr(attribute => value, attribute_2 => value)
+
+    Invoking the I<set_attr> method will set the value of the supplied attributes to the supplied values. The method accepts key/value pairs separated by commas.
+
+    example:
+        $profile->set_attr(attribute => value);
 
 =head1 AUTHOR
 
 Chris Nighswonger <cnighswonger AT foundations DOT edu>
 
-=cut
+=head1 COPYRIGHT
 
+Copyright 2009 Foundations Bible College.
 
-=head1
-drawbox( ($left_margin), ($top_margin), ($page_width-(2*$left_margin)), ($page_height-(2*$top_margin)) ); # FIXME: Breakout code to print alignment page for printer profile setup
+=head1 LICENSE
 
-ead2 draw_boundaries
+This file is part of Koha.
+       
+Koha is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any later version.
 
- sub draw_boundaries ($llx_spine, $llx_circ1, $llx_circ2,
-                $lly, $spine_width, $label_height, $circ_width)  
+You should have received a copy of the GNU General Public License along with Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+Suite 330, Boston, MA  02111-1307 USA
 
-This sub draws boundary lines where the label outlines are, to aid in printer testing, and debugging.
+=head1 DISCLAIMER OF WARRANTY
 
-=cut
-
-#       FIXME: Template use for profile adjustment...
-#sub draw_boundaries {
-#
-#    my (
-#        $llx_spine, $llx_circ1,  $llx_circ2, $lly,
-#        $spine_width, $label_height, $circ_width
-#    ) = @_;
-#
-#    my $lly_initial = ( ( 792 - 36 ) - 90 );
-#    $lly            = $lly_initial; # FIXME - why are we ignoring the y_pos parameter by redefining it?
-#    my $i             = 1;
-#
-#    for ( $i = 1 ; $i <= 8 ; $i++ ) {
-#
-#        _draw_box( $llx_spine, $lly, ($spine_width), ($label_height) );
-#
-#   #warn "OLD BOXES  x=$llx_spine, y=$lly, w=$spine_width, h=$label_height";
-#        _draw_box( $llx_circ1, $lly, ($circ_width), ($label_height) );
-#        _draw_box( $llx_circ2, $lly, ($circ_width), ($label_height) );
-#
-#        $lly = ( $lly - $label_height );
-#
-#    }
-#}
-
-
+Koha is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
 =cut
+
+#=head1
+#drawbox( ($left_margin), ($top_margin), ($page_width-(2*$left_margin)), ($page_height-(2*$top_margin)) ); # FIXME: Breakout code to print alignment page for printer profile setup
+#
+#=head2 draw_boundaries
+#
+# sub draw_boundaries ($llx_spine, $llx_circ1, $llx_circ2,
+#                $lly, $spine_width, $label_height, $circ_width)  
+#
+#This sub draws boundary lines where the label outlines are, to aid in printer testing, and debugging.
+#
+#=cut
+#
+##       FIXME: Template use for profile adjustment...
+##sub draw_boundaries {
+##
+##    my (
+##        $llx_spine, $llx_circ1,  $llx_circ2, $lly,
+##        $spine_width, $label_height, $circ_width
+##    ) = @_;
+##
+##    my $lly_initial = ( ( 792 - 36 ) - 90 );
+##    $lly            = $lly_initial; # FIXME - why are we ignoring the y_pos parameter by redefining it?
+##    my $i             = 1;
+##
+##    for ( $i = 1 ; $i <= 8 ; $i++ ) {
+##
+##        _draw_box( $llx_spine, $lly, ($spine_width), ($label_height) );
+##
+##   #warn "OLD BOXES  x=$llx_spine, y=$lly, w=$spine_width, h=$label_height";
+##        _draw_box( $llx_circ1, $lly, ($circ_width), ($label_height) );
+##        _draw_box( $llx_circ2, $lly, ($circ_width), ($label_height) );
+##
+##        $lly = ( $lly - $label_height );
+##
+##    }
+##}
+#
+#
+#
+#=cut

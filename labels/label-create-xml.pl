@@ -1,20 +1,4 @@
 #!/usr/bin/perl
-# Copyright 2009 Foundations Bible College.
-#
-# This file is part of Koha.
-#
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
-#
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-# Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
 use warnings;
@@ -105,3 +89,36 @@ my $xml_out = $xml->XMLout($xml_data);
 print $xml_out;
 
 exit(1);
+
+=head1 NAME
+
+labels/label-create-xml.pl - A script for creating a xml export of labels and label batches in Koha
+
+=head1 ABSTRACT
+
+This script provides the means of producing a xml of labels for items either individually, in groups, or in batches from within Koha. This particular script is provided more as
+a demonstration of the multitude of formats Koha labels could be exported in based on the current Label Creator API.
+
+=head1 AUTHOR
+
+Chris Nighswonger <cnighswonger AT foundations DOT edu>
+
+=head1 COPYRIGHT
+
+Copyright 2009 Foundations Bible College.
+
+=head1 LICENSE
+
+This file is part of Koha.
+       
+Koha is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any later version.
+
+You should have received a copy of the GNU General Public License along with Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+Suite 330, Boston, MA  02111-1307 USA
+
+=head1 DISCLAIMER OF WARRANTY
+
+Koha is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+

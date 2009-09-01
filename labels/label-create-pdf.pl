@@ -1,29 +1,10 @@
 #!/usr/bin/perl
 
-# Copyright 2006 Katipo Communications.
-# Some parts Copyright 2009 Foundations Bible College.
-#
-# This file is part of Koha.
-#
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 2 of the License, or (at your option) any later
-# version.
-#
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-# Suite 330, Boston, MA  02111-1307 USA
-
 use strict;
 use warnings;
 
 use CGI;
 use Sys::Syslog qw(syslog);
-use Data::Dumper;
 
 use C4::Debug;
 use C4::Labels::Batch 1.000000;
@@ -31,10 +12,6 @@ use C4::Labels::Template 1.000000;
 use C4::Labels::Layout 1.000000;
 use C4::Labels::PDF 1.000000;
 use C4::Labels::Label 1.000000;
-
-=head
-
-=cut
 
 my $cgi = new CGI;
 
@@ -121,78 +98,129 @@ else {
 LABEL_ITEMS:
 foreach my $item (@{$items}) {
     my ($barcode_llx, $barcode_lly, $barcode_width, $barcode_y_scale_factor) = 0,0,0,0;
-    my $label = C4::Labels::Label->new(
-                                    batch_id            => $batch_id,
-                                    item_number         => $item->{'item_number'},
-                                    width               => $template->get_attr('label_width'),
-                                    height              => $template->get_attr('label_height'),
-                                    top_text_margin     => $template->get_attr('top_text_margin'),
-                                    left_text_margin    => $template->get_attr('left_text_margin'),
-                                    barcode_type        => $layout->get_attr('barcode_type'),
-                                    printing_type       => $layout->get_attr('printing_type'),
-                                    guidebox            => $layout->get_attr('guidebox'),
-                                    font                => $layout->get_attr('font'),
-                                    font_size           => $layout->get_attr('font_size'),
-                                    callnum_split       => $layout->get_attr('callnum_split'),
-                                    justify             => $layout->get_attr('text_justify'),
-                                    format_string       => $layout->get_attr('format_string'),
-                                    text_wrap_cols      => $layout->get_text_wrap_cols(label_width => $template->get_attr('label_width'), left_text_margin => $template->get_attr('left_text_margin')),
-                                      );
-    my $label_type = $label->get_label_type;
-    if ($label_type eq 'BIB') {
-        my $line_spacer = ($label->get_attr('font_size') * 1);    # number of pixels between text rows (This is actually leading: baseline to baseline minus font size. Recommended starting point is 20% of font size.).
-        my $text_lly = ($lly + ($template->get_attr('label_height') - $template->get_attr('top_text_margin')));
-        my $label_text = $label->draw_label_text(
-                                        llx             => $llx,
-                                        lly             => $text_lly,
-                                        line_spacer     => $line_spacer,
-                                        );
-        _print_text($label_text);
+    if ($layout->get_attr('printing_type') eq 'ALT') {  # we process the ALT style printing type here because it is not an atomic printing type 
+        my $label_a = C4::Labels::Label->new(
+                                        batch_id            => $batch_id,
+                                        item_number         => $item->{'item_number'},
+                                        llx                 => $llx,
+                                        lly                 => $lly,
+                                        width               => $template->get_attr('label_width'),
+                                        height              => $template->get_attr('label_height'),
+                                        top_text_margin     => $template->get_attr('top_text_margin'),
+                                        left_text_margin    => $template->get_attr('left_text_margin'),
+                                        barcode_type        => $layout->get_attr('barcode_type'),
+                                        printing_type       => 'BIB',
+                                        guidebox            => $layout->get_attr('guidebox'),
+                                        font                => $layout->get_attr('font'),
+                                        font_size           => $layout->get_attr('font_size'),
+                                        callnum_split       => $layout->get_attr('callnum_split'),
+                                        justify             => $layout->get_attr('text_justify'),
+                                        format_string       => $layout->get_attr('format_string'),
+                                        text_wrap_cols      => $layout->get_text_wrap_cols(label_width => $template->get_attr('label_width'), left_text_margin => $template->get_attr('left_text_margin')),
+                                          );
+        my $label_a_text = $label_a->create_label();
+        _print_text($label_a_text);
+        ($row_count, $col_count, $llx, $lly) = _calc_next_label_pos($row_count, $col_count, $llx, $lly);
+        my $label_b = C4::Labels::Label->new(
+                                        batch_id            => $batch_id,
+                                        item_number         => $item->{'item_number'},
+                                        llx                 => $llx,
+                                        lly                 => $lly,
+                                        width               => $template->get_attr('label_width'),
+                                        height              => $template->get_attr('label_height'),
+                                        top_text_margin     => $template->get_attr('top_text_margin'),
+                                        left_text_margin    => $template->get_attr('left_text_margin'),
+                                        barcode_type        => $layout->get_attr('barcode_type'),
+                                        printing_type       => 'BAR',
+                                        guidebox            => $layout->get_attr('guidebox'),
+                                        font                => $layout->get_attr('font'),
+                                        font_size           => $layout->get_attr('font_size'),
+                                        callnum_split       => $layout->get_attr('callnum_split'),
+                                        justify             => $layout->get_attr('text_justify'),
+                                        format_string       => $layout->get_attr('format_string'),
+                                        text_wrap_cols      => $layout->get_text_wrap_cols(label_width => $template->get_attr('label_width'), left_text_margin => $template->get_attr('left_text_margin')),
+                                          );
+        my $label_b_text = $label_b->create_label();
         ($row_count, $col_count, $llx, $lly) = _calc_next_label_pos($row_count, $col_count, $llx, $lly);
         next LABEL_ITEMS;
     }
-    elsif ($label_type eq 'BARBIB') {
-        $barcode_llx = $llx + $template->get_attr('left_text_margin');                             # this places the bottom left of the barcode the left text margin distance to right of the the left edge of the label ($llx)
-        $barcode_lly = ($lly + $template->get_attr('label_height')) - $template->get_attr('top_text_margin');        # this places the bottom left of the barcode the top text margin distance below the top of the label ($lly)
-        $barcode_width = 0.8 * $template->get_attr('label_width');                                 # this scales the barcode width to 80% of the label width
-        $barcode_y_scale_factor = 0.01 * $template->get_attr('label_height');                      # this scales the barcode height to 10% of the label height
-        my $line_spacer = ($label->get_attr('font_size') * 1);    # number of pixels between text rows (This is actually leading: baseline to baseline minus font size. Recommended starting point is 20% of font size.).
-        my $text_lly = ($lly + ($template->get_attr('label_height') - $template->get_attr('top_text_margin')));
-        my $label_text = $label->draw_label_text(
-                                        llx             => $llx,
-                                        lly             => $text_lly,
-                                        line_spacer     => $line_spacer,
-                                        );
-        _print_text($label_text);
-    }
     else {
-        $barcode_llx = $llx + $template->get_attr('left_text_margin');             # this places the bottom left of the barcode the left text margin distance to right of the the left edge of the label ($llx)
-        $barcode_lly = $lly + $template->get_attr('top_text_margin');              # this places the bottom left of the barcode the top text margin distance above the bottom of the label ($lly)
-        $barcode_width = 0.8 * $template->get_attr('label_width');                 # this scales the barcode width to 80% of the label width
-        $barcode_y_scale_factor = 0.01 * $template->get_attr('label_height');      # this scales the barcode height to 10% of the label height
-        if ($label_type eq 'BIBBAR' || $label_type eq 'ALT') {
-            my $line_spacer = ($label->get_attr('font_size') * 1);    # number of pixels between text rows (This is actually leading: baseline to baseline minus font size. Recommended starting point is 20% of font size.).
-            my $text_lly = ($lly + ($template->get_attr('label_height') - $template->get_attr('top_text_margin')));
-            my $label_text = $label->draw_label_text(
-                                            llx             => $llx,
-                                            lly             => $text_lly,
-                                            line_spacer     => $line_spacer,
-                                            );
-            _print_text($label_text);
-        }
-        if ($label_type eq 'ALT') {
-        ($row_count, $col_count, $llx, $lly) = _calc_next_label_pos($row_count, $col_count, $llx, $lly);
-        }
     }
-    $label->barcode(
-                llx                 => $barcode_llx,
-                lly                 => $barcode_lly,
-                width               => $barcode_width,
-                y_scale_factor      => $barcode_y_scale_factor,
-    );
-    ($row_count, $col_count, $llx, $lly) = _calc_next_label_pos($row_count, $col_count, $llx, $lly);
+        my $label = C4::Labels::Label->new(
+                                        batch_id            => $batch_id,
+                                        item_number         => $item->{'item_number'},
+                                        llx                 => $llx,
+                                        lly                 => $lly,
+                                        width               => $template->get_attr('label_width'),
+                                        height              => $template->get_attr('label_height'),
+                                        top_text_margin     => $template->get_attr('top_text_margin'),
+                                        left_text_margin    => $template->get_attr('left_text_margin'),
+                                        barcode_type        => $layout->get_attr('barcode_type'),
+                                        printing_type       => $layout->get_attr('printing_type'),
+                                        guidebox            => $layout->get_attr('guidebox'),
+                                        font                => $layout->get_attr('font'),
+                                        font_size           => $layout->get_attr('font_size'),
+                                        callnum_split       => $layout->get_attr('callnum_split'),
+                                        justify             => $layout->get_attr('text_justify'),
+                                        format_string       => $layout->get_attr('format_string'),
+                                        text_wrap_cols      => $layout->get_text_wrap_cols(label_width => $template->get_attr('label_width'), left_text_margin => $template->get_attr('left_text_margin')),
+                                          );
+        my $label_text = $label->create_label();
+        _print_text($label_text) if $label_text;
+        ($row_count, $col_count, $llx, $lly) = _calc_next_label_pos($row_count, $col_count, $llx, $lly);
+        next LABEL_ITEMS;
 }
 
 $pdf->End();
 
 exit(1);
+
+=head1 NAME
+
+labels/label-create-pdf.pl - A script for creating a pdf export of labels and label batches in Koha
+
+=head1 ABSTRACT
+
+This script provides the means of producing a pdf of labels for items either individually, in groups, or in batches from within Koha.
+
+=head1 USAGE
+
+This script is intended to be called as a cgi script although it could be easily modified to accept command line parameters. The script accepts four single
+parameters and two "multiple" parameters as follows:
+
+    C<batch_id>         A single valid batch id to export.
+    C<template_id>      A single valid template id to be applied to the current export. This parameter is manditory.
+    C<layout_id>        A single valid layout id to be applied to the current export. This parameter is manditory.
+    C<start_label>      The number of the label on which to begin the export. This parameter is optional.
+    C<lable_ids>        A single valid label id to export. Multiple label ids may be submitted to export multiple labels.
+    C<item_numbers>     A single valid item number to export. Multiple item numbers may be submitted to export multiple items.
+
+B<NOTE:> One of the C<batch_id>, C<label_ids>, or C<item_number> parameters is manditory. However, do not pass a combination of them or bad things might result.
+
+    example:
+        http://staff-client.kohadev.org/cgi-bin/koha/labels/label-create-pdf.pl?batch_id=1&template_id=1&layout_id=5&start_label=1
+
+=head1 AUTHOR
+
+Chris Nighswonger <cnighswonger AT foundations DOT edu>
+
+=head1 COPYRIGHT
+
+Copyright 2009 Foundations Bible College.
+
+=head1 LICENSE
+
+This file is part of Koha.
+       
+Koha is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any later version.
+
+You should have received a copy of the GNU General Public License along with Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+Suite 330, Boston, MA  02111-1307 USA
+
+=head1 DISCLAIMER OF WARRANTY
+
+Koha is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+=cut
