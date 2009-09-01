@@ -269,6 +269,33 @@ sub delete {
     return 0;
 }
 
+=head2 C4::Labels::Batch->remove_duplicates(batch_id => batch_id) | $batch->remove_duplicates()
+
+    Invoking the remove_duplicates method attempts to remove duplicates the batch from the database. The method returns the count of duplicate
+    records removed upon success and -1 upon failure. Errors are logged to the syslog.
+
+    examples:
+        my $remove_count = $batch->remove_duplicates(); # to remove duplicates the record behind the $batch object
+
+=cut
+
+sub remove_duplicates {
+    my $self = shift;
+    my %seen=();
+    my $query = "DELETE FROM labels_batches WHERE label_id = ?;"; # ORDER BY timestamp ASC LIMIT ?;";
+    my $sth = C4::Context->dbh->prepare($query);
+    my @duplicate_items = grep{$seen{$_->{'item_number'}}++} @{$self->{'items'}};
+    foreach my $item (@duplicate_items) {
+        $sth->execute($item->{'label_id'});
+        if ($sth->err) {
+            syslog("LOG_ERR", "C4::Labels::Batch->remove_duplicates() : Database returned the following error on attempted DELETE for label_id %s: %s", $item->{'label_id'}, $sth->errstr);
+            return -1;
+        }
+        $sth->finish(); # Per DBI.pm docs: "If execute() is called on a statement handle that's still active ($sth->{Active} is true) then it should effectively call finish() to tidy up the previous execution results before starting this new execution."
+        @{$self->{'items'}} = grep{$_->{'label_id'} != $item->{'label_id'}} @{$self->{'items'}};  # the correct label/item must be removed from the current batch object as well; this should be done *after* each sql DELETE in case the DELETE fails
+    }
+    return scalar(@duplicate_items);
+}
 
 1;
 __END__

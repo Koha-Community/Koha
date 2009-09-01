@@ -126,8 +126,15 @@
                         </div>
                         <!-- TMPL_IF NAME="err" -->
                         <div class="yui-u">
-                            <div class="dialog alert">
+                            <div class="alert">
                                 <strong>WARNING: An error was encountered and <!-- TMPL_VAR NAME="errstr" --> Please have your system administrator check the syslog for details.</strong>
+                            </div>
+                        </div>
+                        <!-- /TMPL_IF -->
+                        <!-- TMPL_IF NAME="duplicate_message" -->
+                        <div class="yui-u">
+                            <div class="dialog">
+                                <strong><!-- TMPL_VAR NAME="duplicate_count" --> duplicate item(s) found and removed from batch <!-- TMPL_VAR NAME="batch_id" -->.</strong>
                             </div>
                         </div>
                         <!-- /TMPL_IF -->

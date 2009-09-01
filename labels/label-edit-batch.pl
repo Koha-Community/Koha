@@ -50,6 +50,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 my $err = 0;
 my $errstr = undef;
+my $duplicate_count = undef;
+my $duplicate_message = undef;
 my $db_rows = {};
 my $batch = undef;
 my $display_columns = [ {_label_number  => {label => 'Label Number', link_field => 0}},
@@ -90,7 +92,13 @@ elsif ($op eq 'new') {
     $batch = C4::Labels::Batch->new(branch_code => $branch_code);
     $batch_id = $batch->get_attr('batch_id');
 }
-else { # display batch
+elsif ($op eq 'de_duplicate') {
+    $batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);
+    $duplicate_count = $batch->remove_duplicates();
+    $duplicate_message = 1 if $duplicate_count != -1;
+    $errstr = "batch $batch_id not fully de-duplicated." if $duplicate_count == -1;
+}
+else { # edit
     $batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);
 }
 
@@ -99,13 +107,20 @@ $db_rows = get_label_summary(items => $items, batch_id => $batch_id);
 
 my $table = html_table($display_columns, $db_rows);
 
-$template->param(   err         => $err,
-                    errstr      => $errstr,
+$template->param(
+                duplicate_message       => $duplicate_message,
+                duplicate_count         => $duplicate_count,
+                );
+
+$template->param(   
+                err         => $err,
+                errstr      => $errstr,
                 ) if ($err ne 0);
+
 $template->param(
                 op              => $op,
                 batch_id        => $batch_id,
                 table_loop      => $table,
-);
+                );
 
 output_html_with_http_headers $cgi, $cookie, $template->output;
