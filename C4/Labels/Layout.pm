@@ -1,6 +1,6 @@
 package C4::Labels::Layout;
 
-# Copyright 2007 Foundations Bible College.
+# Copyright 2009 Foundations Bible College.
 #
 # This file is part of Koha.
 #       
@@ -26,14 +26,8 @@ use C4::Context;
 use C4::Debug;
 use Data::Dumper;
 
-#use vars qw($VERSION @ISA @EXPORT);
-use vars qw($VERSION);
-
 BEGIN {
-    $VERSION = 1.00;
-#    require Exporter;
-#    @ISA    = qw(Exporter);
-#    @EXPORT = qw();
+    use version; our $VERSION = qv('1.0.0_1');
 }
 
 # FIXME: Consider this style parameter verification instead...
@@ -123,18 +117,19 @@ sub new {
     return $self;
 }
 
-=head2 Layout->retrieve(layout_id)
+=head2 Layout->retrieve(layout_id => layout_id)
 
     Invoking the I<retrieve> method constructs a new layout object containing the current values for layout_id. The method returns
     a new object upon success and 1 upon failure. Errors are logged to the syslog.
 
     example:
-        my $layout = Layout->retrieve(1); # Retrieves layout record 1 and returns an object containing the record
+        my $layout = Layout->retrieve(layout_id => 1); # Retrieves layout record 1 and returns an object containing the record
 
 =cut
 
 sub retrieve {
-    my ($invocant, $layout_id) = @_;
+    my $invocant = shift;
+    my %opts = @_;
     my $type = ref($invocant) || $invocant;
     my $query = "SELECT * FROM labels_layouts WHERE layout_id = ?";  
     my $sth = C4::Context->dbh->prepare($query);
