@@ -14,6 +14,10 @@
             <xsl:apply-templates/>
     </xsl:template>
     <xsl:template match="marc:record">
+
+        <!-- Option: Display Alternate Graphic Representation (MARC 880)  -->
+        <xsl:variable name="display880" select="boolean(marc:datafield[@tag=880])"/>
+
         <xsl:variable name="leader" select="marc:leader"/>
         <xsl:variable name="leader6" select="substring($leader,7,1)"/>
         <xsl:variable name="leader7" select="substring($leader,8,1)"/>
@@ -372,6 +376,16 @@
             </xsl:for-each>
 -->
         </xsl:variable>
+
+        <!-- Title Statement: Alternate Graphic Representation (MARC 880) -->
+        <xsl:if test="$display880">
+           <xsl:call-template name="m880Select">
+              <xsl:with-param name="basetags">245</xsl:with-param>
+              <xsl:with-param name="codes">abh</xsl:with-param>
+              <xsl:with-param name="bibno"><xsl:value-of  select="$biblionumber"/></xsl:with-param>
+           </xsl:call-template>
+        </xsl:if>
+
      	<a><xsl:attribute name="href">/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="$biblionumber"/></xsl:attribute>
 
         <xsl:if test="marc:datafield[@tag=245]">
@@ -408,6 +422,15 @@
         </xsl:if>
     </a>
     <p>
+
+    <!-- Author Statement: Alternate Graphic Representation (MARC 880) -->
+    <xsl:if test="$display880">
+      <xsl:call-template name="m880Select">
+      <xsl:with-param name="basetags">100,110,111,700,710,711</xsl:with-param>
+      <xsl:with-param name="codes">abc</xsl:with-param>
+      <xsl:with-param name="class">term</xsl:with-param>
+      </xsl:call-template>
+    </xsl:if>
 
     <xsl:choose>
     <xsl:when test="marc:datafield[@tag=100] or marc:datafield[@tag=110] or marc:datafield[@tag=111] or marc:datafield[@tag=700] or marc:datafield[@tag=710] or marc:datafield[@tag=711]">
@@ -797,6 +820,16 @@
     </xsl:if>
 	</span>
 
+    <!-- Publisher Statement: Alternate Graphic Representation (MARC 880) -->
+    <xsl:if test="$display880">
+      <xsl:call-template name="m880Select">
+        <xsl:with-param name="basetags">260</xsl:with-param>
+        <xsl:with-param name="codes">abcg</xsl:with-param>
+        <xsl:with-param name="class">results_summary</xsl:with-param>
+        <xsl:with-param name="label">Publisher: </xsl:with-param>
+      </xsl:call-template>
+    </xsl:if>
+        
     <xsl:if test="marc:datafield[@tag=260]">
 	<span class="results_summary">
     <span class="label">Publisher: </span> 
@@ -808,6 +841,16 @@
 	</span>
     </xsl:if>
 
+    <!-- Other Title  Statement: Alternate Graphic Representation (MARC 880) -->
+    <xsl:if test="$display880">
+       <xsl:call-template name="m880Select">
+         <xsl:with-param name="basetags">246</xsl:with-param>
+         <xsl:with-param name="codes">ab</xsl:with-param>
+         <xsl:with-param name="class">results_summary</xsl:with-param>
+         <xsl:with-param name="label">Other Title: </xsl:with-param>
+       </xsl:call-template>
+    </xsl:if>
+        
     <xsl:if test="marc:datafield[@tag=246]">
 	<span class="results_summary">
     <span class="label">Other title: </span>
