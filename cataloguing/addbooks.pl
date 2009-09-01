@@ -110,14 +110,13 @@ if ($query) {
     ( $countbr, @resultsbr ) = BreedingSearch( $title, $isbn );
 }
 my $breeding_loop = [];
-my $id = 0;
 for my $resultsbr (@resultsbr) {
     push @{$breeding_loop}, {
-        id               => $id++,
+        id               => $resultsbr->{import_record_id},
         isbn             => $resultsbr->{isbn},
         copyrightdate    => $resultsbr->{copyrightdate},
         editionstatement => $resultsbr->{editionstatement},
-        file             => $resultsbr->{file},
+        file             => $resultsbr->{file_name},
         title            => $resultsbr->{title},
         author           => $resultsbr->{author},
     };
