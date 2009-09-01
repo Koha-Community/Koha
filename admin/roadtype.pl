@@ -18,6 +18,8 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
+
 use CGI;
 use C4::Context;
 use C4::Output;
@@ -25,27 +27,16 @@ use C4::Auth;
 
 
 sub StringSearch  {
-	my ($searchstring,$type)=@_;
-	my $dbh = C4::Context->dbh;
-	$searchstring=~ s/\'/\\\'/g;
-	my @data=split(' ',$searchstring);
-	my $count=@data;
-	my $sth=$dbh->prepare("Select * from roadtype where (road_type like ?)");
-	$sth->execute("$data[0]%");
-	my @results;
-	while (my $data=$sth->fetchrow_hashref){
-	push(@results,$data);
-	}
-	#  $sth->execute;
-	$sth->finish;
-	return (scalar(@results),\@results);
+    my $sth = C4::Context->dbh->prepare("Select * from roadtype where (road_type like ?) ORDER BY road_type");
+    $sth->execute((shift || '') . '%');
+    return $sth->fetchall_arrayref({});
 }
 
 my $input = new CGI;
 my $searchfield=$input->param('road_type');
 my $script_name="/cgi-bin/koha/admin/roadtype.pl";
 my $roadtypeid=$input->param('roadtypeid');
-my $op = $input->param('op');
+my $op = $input->param('op') || '';
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "admin/roadtype.tmpl",
@@ -139,14 +130,7 @@ if ($op eq 'add_form') {
 													# END $OP eq DELETE_CONFIRMED
 } else { # DEFAULT
 	$template->param(else => 1);
-	my @loop;
-	my ($count,$results)=StringSearch($searchfield,'web');
-	for (my $i=0; $i < $count; $i++){
-		my %row = (roadtypeid => $results->[$i]{'roadtypeid'},
-				road_type => $results->[$i]{'road_type'});
-		push @loop, \%row;
-	}
-	$template->param(loop => \@loop);
+	$template->param(loop => StringSearch($searchfield));
 
 
 } #---- END $OP eq DEFAULT
