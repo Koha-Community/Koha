@@ -24,9 +24,6 @@ use Sys::Syslog qw(syslog);
 
 use C4::Context;
 use C4::Debug;
-use C4::Biblio;
-use C4::Labels::Layout 1.000000;        # use version 1.0.0 or better
-use C4::Labels::Template 1.000000;
 use Data::Dumper;
 
 BEGIN {
@@ -37,9 +34,10 @@ sub _check_params {
     my $given_params = {};
     my $exit_code = 0;
     my @valid_template_params = (
-        'layout_id',
-        'template_id',
-        'profile_id',
+        'label_id',
+        'batch_id',
+        'item_number',
+        'branch_code',
     );
     if (scalar(@_) >1) {
         $given_params = {@_};
@@ -84,10 +82,8 @@ sub new {
     my $type = ref($invocant) || $invocant;
     my $self = {
         batch_id        => 0,
-        layout_id       => $params{layout_id},
-        template_id         => $params{template_id},
-        profile_id      => $params{profile_id},
         items           => [],
+        branch_code     => 'NB',
         batch_stat      => 0,   # False if any data has changed and the db has not been updated
     };
     bless ($self, $type);
@@ -106,8 +102,8 @@ sub new {
 sub add_item {
     my $self = shift;
     my $item_num = shift;
-    push (@{$self->{items}}, $item_num);
-    $self->{batch_stat} = 0;
+    push (@{$self->{'items'}}, $item_num);
+    $self->{'batch_stat'} = 0;
 }
 
 =head2 $batch->get_attr()
@@ -137,9 +133,13 @@ sub delete_item {
     my $self = shift;
     my $item_num = shift;
     my $index = 0;
-    ++$index until $$self->{items}[$index] == $item_num or $item_num > $#$self->{items};
-    delete ($$self->{items}[$index]);
-    $self->{batch_stat} = 0;
+    ++$index until $$self->{'items'}[$index] == $item_num or $index > $#$self->{'items'};
+    if ($index > $#$self->{'items'}) {
+        syslog("LOG_ERR", "C4::Labels::Batch->delete_item : Item %s does not exist in batch %s.", $item_num, $self->{'batch_id'});
+        return -1;
+    }
+    delete ($$self->{'items'}[$index]);
+    $self->{'batch_stat'} = 0;
 }
 
 =head2 $batch->save()
@@ -156,36 +156,36 @@ sub delete_item {
 
 sub save {
     my $self = shift;
-    if ($self->{batch_id} > 0) {
-        foreach my $item_number (@$self->{items}) {
-            my $query = "UPDATE labels_batches SET item_number=?, layout_id=?, template_id=?, profile_id=? WHERE batch_id=?;";
+    if ($self->{'batch_id'} > 0) {
+        foreach my $item_number (@$self->{'items'}) {
+            my $query = "UPDATE labels_batches SET item_number=?, branch_code=? WHERE batch_id=?;";
             warn "DEBUG: Updating: $query\n" if $debug;
             my $sth->C4::Context->dbh->prepare($query);
-            $sth->execute($item_number, $self->{layout_id}, $self->{template_id}, $self->{profile_id}, $self->{batch_id});
+            $sth->execute($item_number, $self->{'branch_code'}, $self->{'batch_id'});
             if ($sth->err) {
-                syslog("LOG_ERR", "Database returned the following error: %s", $sth->errstr);
+                syslog("LOG_ERR", "C4::Labels::Batch->save : Database returned the following error on attempted UPDATE: %s", $sth->errstr);
                 return -1;
             }
         }
     }
     else {
-        foreach my $item_number (@$self->{items}) {
-            my $query = "INSERT INTO labels_batches (item_number, layout_id, template_id, profile_id) VALUES (?,?,?,?);";
+        my $sth1 = C4::Context->dbh->prepare("SELECT MAX(batch_id) FROM labels_batches;");
+        $sth1->execute();
+        my $batch_id = $sth1->fetchrow_array;
+        $self->{'batch_id'} = $batch_id++;
+        foreach my $item_number (@$self->{'items'}) {
+            my $query = "INSERT INTO labels_batches (batch_id, item_number, branch_code) VALUES (?,?,?);";
             warn "DEBUG: Inserting: $query\n" if $debug;
             my $sth->C4::Context->dbh->prepare($query);
-            $sth->execute($item_number, $self->{layout_id}, $self->{template_id}, $self->{profile_id});
+            $sth->execute($self->{'batch_id'}, $item_number, $self->{'branch_code'});
             if ($sth->err) {
-                syslog("LOG_ERR", "Database returned the following error: %s", $sth->errstr);
+                syslog("LOG_ERR", "C4::Labels::Batch->save : Database returned the following error on attempted INSERT: %s", $sth->errstr);
                 return -1;
             }
-            my $sth1 = C4::Context->dbh->prepare("SELECT MAX(batch_id) FROM labels_batches;");
-            $sth1->execute();
-            my $batch_id = $sth1->fetchrow_array;
-            $self->{batch_id} = $batch_id;
-            return $batch_id;
+            return $self->{'batch_id'};
         }
     }
-    $self->{batch_stat} = 1;
+    $self->{'batch_stat'} = 1;
 }
 
 =head2 C4::Labels::Template->retrieve(template_id)
@@ -212,22 +212,20 @@ sub retrieve {
     my $type = ref($invocant) || $invocant;
     my $query = "SELECT * FROM labels_batches WHERE batch_id = ? ORDER BY label_id";  
     my $sth = C4::Context->dbh->prepare($query);
-    $sth->execute($opts{batch_id});
+    $sth->execute($opts{'batch_id'});
     if ($sth->err) {
-        syslog("LOG_ERR", "Database returned the following error: %s", $sth->errstr);
+        syslog("LOG_ERR", "C4::Labels::Batch->retrieve : Database returned the following error on attempted SELECT: %s", $sth->errstr);
         return 1;
     }
     my $self = {
         items   => [],
     };
     while (my $record = $sth->fetchrow_hashref) {
-        $self->{batch_id} = $record->{batch_id};        # FIXME: seems a bit wasteful to re-initialize these every trip: is there a better way?
-        $self->{layout_id} = $record->{layout_id};
-        $self->{template_id} = $record->{template_id};
-        $self->{profile_id} = $record->{profile_id};
-        push (@{$self->{items}}, $record->{item_number});
+        $self->{'batch_id'} = $record->{'batch_id'};        # FIXME: seems a bit wasteful to re-initialize these every trip: is there a better way?
+        $self->{'branch_code'} = $record->{'branch_code'};
+        push (@{$self->{'items'}}, $record->{'item_number'});
     }
-    $self->{batch_stat} = 1;
+    $self->{'batch_stat'} = 1;
     bless ($self, $type);
     return $self;
 }
@@ -244,19 +242,32 @@ sub retrieve {
 =cut
 
 sub delete {
-    my $self = shift;
-    my %opts = @_;
-    if ((ref $self) && !$self->{'batch_id'}) {   # If there is no batch batch_id then we cannot delete it from the db
-        syslog("LOG_ERR", "Cannot delete batch: Batch has not been saved.");
-        return 1;
+    my $self = {};
+    my %opts = ();
+    my $call_type = '';
+    my $query_param = '';
+    if (ref($_[0])) {
+        $self = shift;  # check to see if this is a method call
+        $call_type = 'C4::Labels::Batch->delete';
+        $query_param = $self->{'batch_id'};
     }
-    elsif (!$opts{batch_id}) {
-        syslog("LOG_ERR", "Cannot delete batch: Missing batch_id.");
-        return 1;
+    else {
+        %opts = @_;
+        $call_type = 'C4::Labels::Batch::delete';
+        $query_param = $opts{'batch_id'};
+    }
+    if ($query_param eq '') {   # If there is no template id then we cannot delete it
+        syslog("LOG_ERR", "%s : Cannot delete batch as the batch id is invalid or non-existant.", $call_type);
+        return -1;
     }
     my $query = "DELETE FROM labels_batches WHERE batch_id = ?";
     my $sth = C4::Context->dbh->prepare($query);
-    $sth->execute($self->{'batch_id'});
+#    $sth->{'TraceLevel'} = 3;
+    $sth->execute($query_param);
+    if ($sth->err) {
+        syslog("LOG_ERR", "%s : Database returned the following error on attempted INSERT: %s", $call_type, $sth->errstr);
+        return -1;
+    }
     return 0;
 }
 

@@ -31,6 +31,7 @@ BEGIN {
     our @EXPORT_OK = qw(get_all_templates
                         get_all_layouts
                         get_all_profiles
+                        get_batch_summary
                         get_barcode_types
                         get_label_types
                         get_font_types
@@ -175,11 +176,54 @@ sub get_all_profiles {
         syslog("LOG_ERR", "C4::Labels::Lib::get_all_profiles : Database returned the following error: %s", $sth->errstr);
         return -1;
     }
-    ADD_LAYOUTS:
+    ADD_PROFILES:
     while (my $profile = $sth->fetchrow_hashref) {
         push(@profiles, $profile);
     }
     return \@profiles;
+}
+
+=head2 C4::Labels::Lib::get_batch_summary()
+
+    This function returns an arrayref whose elements are hashes containing the batch_ids of current batches along with the item count
+    for each batch upon success and 1 upon failure. Item counts are stored under the key '_item_count' Errors are logged to the syslog.
+    One parameter is accepted which limits the records returned based on a string containing a valud SQL 'WHERE' filter.
+    
+    NOTE: Do not pass in the keyword 'WHERE.'
+
+    examples:
+
+        my $batches = get_batch_summary();
+        my $batches = get_batch_summary(filter => filter_string);
+
+=cut
+
+sub get_batch_summary {
+    my %params = @_;
+    my @batches = ();
+    my $query = "SELECT DISTINCT batch_id FROM labels_batches";
+    $query .= ($params{'filter'} ? " WHERE $params{'filter'};" : ';');
+    my $sth = C4::Context->dbh->prepare($query);
+#    $sth->{'TraceLevel'} = 3;
+    $sth->execute();
+    if ($sth->err) {
+        syslog("LOG_ERR", "C4::Labels::Lib::get_batch_summary : Database returned the following error on attempted SELECT: %s", $sth->errstr);
+        return -1;
+    }
+    ADD_BATCHES:
+    while (my $batch = $sth->fetchrow_hashref) {
+        my $query = "SELECT count(item_number) FROM labels_batches WHERE batch_id=?;";
+        my $sth1 = C4::Context->dbh->prepare($query);
+        $sth1->execute($batch->{'batch_id'});
+        if ($sth1->err) {
+            syslog("LOG_ERR", "C4::Labels::Lib::get_batch_summary : Database returned the following error on attempted SELECT count: %s", $sth1->errstr);
+            return -1;
+        }
+        my $count = $sth1->fetchrow_arrayref;
+        $batch->{'_item_count'} = @$count[0];
+        push(@batches, $batch);
+    }
+    return \@batches;
 }
 
 =head2 C4::Labels::Lib::get_barcode_types()

@@ -28,13 +28,22 @@
                     return;     // no layout selected
                 };
             };
+            function Print() {
+                var element_id = selected_layout();
+                if (element_id>-1) {
+                    window.location = "/cgi-bin/koha/labels/label-edit-<!-- TMPL_VAR NAME="label_element" -->.pl?op=edit&amp;element_id=" + element_id;
+                }
+                else {
+                    return;     // no layout selected
+                };
+            };
             function selected_layout() {
                 for (i=0;i<document.layouts.action.length;i++){
                     if (document.layouts.action[i].checked==true){
                         return(document.layouts.action[i].value);
                     };
                 };
-                alert("Please select a layout.");
+                alert("Please select a <!-- TMPL_VAR NAME="label_element" -->.");
                 return (-1);
             };
         //]]>
@@ -56,6 +65,7 @@
                     <!-- TMPL_INCLUDE NAME="labels-new-toolbar.inc" -->
                     <div class="yui-gc">
                         <div class="yui-u first" id="manage-label-layouts">
+                            <div class="hint">Current Branch: <!-- TMPL_VAR NAME="LoginBranchname" --></div>
                             <form name="layouts">
                             <h2>Currently Available <!-- TMPL_VAR NAME="label_element_title" --></h2>
                             <table>
@@ -83,12 +93,13 @@
                             <div style="margin: 10px 10px 10px 0px;">
                                 <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="edit" onclick="Edit()" value="Edit"></span></span>
                                 <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="delete" onclick="DeleteConfirm()" value="Delete"></span></span>
+                                <!-- TMPL_IF NAME="print" --><span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="print" onclick="Print()" value="Print"></span></span><!-- /TMPL_IF -->
                             </div>
                         </div>
                         <!-- TMPL_IF NAME="error" -->
                         <div class="yui-u">
                             <div class="dialog alert">
-                                <strong>WARNING: An error was encountered and layout <!-- TMPL_VAR NAME="element_id" --> was not deleted. Please have your system administrator check the syslog for details.</strong>
+                                <strong>WARNING: An error was encountered and <!-- TMPL_VAR NAME="label_element" --> <!-- TMPL_VAR NAME="element_id" --> was not deleted. Please have your system administrator check the syslog for details.</strong>
                             </div>
                         </div>
                         <!-- /TMPL_IF -->
