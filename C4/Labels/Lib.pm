@@ -32,6 +32,7 @@ BEGIN {
                         get_all_layouts
                         get_all_profiles
                         get_batch_summary
+                        get_label_summary
                         get_barcode_types
                         get_label_types
                         get_font_types
@@ -39,8 +40,37 @@ BEGIN {
                         get_column_names
                         get_table_names
                         get_unit_values
+                        html_table
                         SELECT
     );
+}
+
+#=head2 C4::Labels::Lib::_SELECT()
+#
+#    This function returns a recordset upon success and 1 upon failure. Errors are logged to the syslog.
+#
+#    examples:
+#
+#        my $field_value = _SELECT(field_name, table_name, condition);
+#
+#=cut
+
+sub _SELECT {
+    my @params = @_;
+    my $query = "SELECT $params[0] FROM $params[1]";
+    $params[2] ? $query .= " WHERE $params[2];" : $query .= ';';
+    my $sth = C4::Context->dbh->prepare($query);
+#    $sth->{'TraceLevel'} = 3;
+    $sth->execute();
+    if ($sth->err) {
+        syslog("LOG_ERR", "C4::Labels::Lib::get_single_field_value : Database returned the following error: %s", $sth->errstr);
+        return 1;
+    }
+    my $record_set = [];
+    while (my $row = $sth->fetchrow_hashref()) {
+        push(@$record_set, $row);
+    }
+    return $record_set;
 }
 
 my $barcode_types = [
@@ -226,6 +256,48 @@ sub get_batch_summary {
     return \@batches;
 }
 
+=head2 C4::Labels::Lib::get_label_summary()
+
+    This function returns an arrayref whose elements are hashes containing the label_ids of current labels along with the item count
+    for each label upon success and 1 upon failure. Item counts are stored under the key '_item_count' Errors are logged to the syslog.
+    One parameter is accepted which limits the records returned based on a string containing a valud SQL 'WHERE' filter.
+    
+    NOTE: Do not pass in the keyword 'WHERE.'
+
+    examples:
+
+        my $labels = get_label_summary();
+        my $labels = get_label_summary(items => @item_list);
+
+=cut
+
+sub get_label_summary {
+    my %params = @_;
+    my $label_number = 0;
+    my @label_summaries = ();
+    my $query = "SELECT b.title, b.author, bi.itemtype, i.barcode, i.biblionumber FROM biblio AS b, biblioitems AS bi ,items AS i, labels_batches AS l WHERE itemnumber=? AND l.item_number=i.itemnumber AND i.biblioitemnumber=bi.biblioitemnumber AND bi.biblionumber=b.biblionumber AND l.batch_id=?;";
+    my $sth = C4::Context->dbh->prepare($query);
+    foreach my $item_number (@{$params{'items'}}) {
+        $label_number++;
+        $sth->execute($item_number, $params{'batch_id'});
+        if ($sth->err) {
+            syslog("LOG_ERR", "C4::Labels::Lib::get_label_summary : Database returned the following error on attempted SELECT: %s", $sth->errstr);
+            return -1;
+        }
+        my $record = $sth->fetchrow_hashref;
+        my $label_summary->{'_label_number'} = $label_number;
+        $record->{'author'} =~ s/\W*[^.]$//;  # strip off ugly trailing chars... but not periods
+        $record->{'title'} =~ s/\W*$//;  # strip off ugly trailing chars
+        $record->{'title'} = '<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=' . $record->{'biblionumber'} . '"> ' . $record->{'title'} . '</a>';
+        $label_summary->{'_summary'} = $record->{'title'} . " | " . $record->{'author'};
+        $label_summary->{'_item_type'} = $record->{'itemtype'};
+        $label_summary->{'_barcode'} = $record->{'barcode'};
+        $label_summary->{'_item_number'} = $item_number;
+        push (@label_summaries, $label_summary);
+    }
+    return \@label_summaries;
+}
+
 =head2 C4::Labels::Lib::get_barcode_types()
 
     This function returns a reference to an array of hashes containing all barcode types along with their name and description.
@@ -331,32 +403,76 @@ sub get_table_names {
     return $table_names;
 }
 
-=head2 C4::Labels::Lib::SELECT()
+=head2 C4::Labels::Lib::html_table()
 
-    This function returns a recordset upon success and 1 upon failure. Errors are logged to the syslog.
+    This function returns an arrayref of an array of hashes contianing the supplied data formatted suitably to
+    be passed off as a T::P template parameter and used to build an html table.
 
     examples:
 
-        my $field_value = SELECT(field_name, table_name, condition);
+        my $table = html_table(header_fields, array_of_row_data);
 
 =cut
 
-sub SELECT {
-    my @params = @_;
-    my $query = "SELECT $params[0] FROM $params[1]";
-    $params[2] ? $query .= " WHERE $params[2];" : $query .= ';';
-    my $sth = C4::Context->dbh->prepare($query);
-#    $sth->{'TraceLevel'} = 3;
-    $sth->execute();
-    if ($sth->err) {
-        syslog("LOG_ERR", "C4::Labels::Lib::get_single_field_value : Database returned the following error: %s", $sth->errstr);
-        return 1;
+sub html_table {
+    my $headers = shift;
+    my $data = shift;
+    my $table = [];
+    my $fields = [];
+    my @db_columns = ();
+    my ($row_index, $col_index) = (0,0);
+    my $cols = 0;       # number of columns to wrap on
+    my $field_count = 0;
+    my $select_value = undef;
+    POPULATE_HEADER:
+    foreach my $db_column (@$headers) {
+        my @key = keys %$db_column;
+        if ($key[0] eq 'select' ) {
+            push (@db_columns, $key[0]);
+            $$fields[$col_index] = {hidden => 0, select_field => 0, field_name => ($key[0]), field_label => $db_column->{$key[0]}{'label'}};
+            $select_value = $db_column->{$key[0]}{'value'}
+            # do stuff....
+        }
+        else {
+            push (@db_columns, $key[0]);
+            $$fields[$col_index] = {hidden => 0, select_field => 0, field_name => ($key[0]), field_label => $db_column->{$key[0]}};
+        }
+        $field_count++;
+        $col_index++;
     }
-    my $record_set = [];
-    while (my $row = $sth->fetchrow_hashref()) {
-        push(@$record_set, $row);
+    $$table[$row_index] = {header_fields => $fields};
+    $cols = $col_index;
+    $field_count *= scalar(@$data);     # total fields to be displayed in the table
+    $col_index = 0;
+    $row_index++;
+    $fields = [];
+    POPULATE_TABLE:
+    foreach my $db_row (@$data) {
+#        my $element_id = 0;
+        POPULATE_ROW:
+        foreach my $db_column (@db_columns) {
+            if (grep {$db_column eq $_} keys %$db_row) {
+#                $element_id = $db_row->{$db_column} if $db_column =~ m/id/;
+                $$fields[$col_index] = {hidden => 0, select_field => 0, field_name => ($db_column . "_tbl"), field_value => $db_row->{$db_column}};
+                $col_index++;
+                next POPULATE_ROW;
+            }
+            elsif ($db_column =~ m/^_((.*)_(.*$))/) {   # this a special case
+                my $table_name = get_table_names($2);
+                my $record_set = _SELECT($1, @$table_name[0], $2 . "_id = " . $db_row->{$2 . "_id"});
+                $db_row->{$db_column} = $$record_set[0]{$1};
+                next POPULATE_ROW;
+            }
+            elsif ($db_column eq 'select' ) {
+                $$fields[$col_index] = {hidden => 0, select_field => 1, field_name => 'select', field_value => $db_row->{$select_value}};
+            }
+        }
+        $$table[$row_index] = {text_fields => $fields};
+        $col_index = 0;
+        $row_index++;
+        $fields = [];
     }
-    return $record_set;
+    return $table;
 }
 
 1;

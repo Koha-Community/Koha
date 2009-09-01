@@ -101,9 +101,18 @@ sub new {
 
 sub add_item {
     my $self = shift;
-    my $item_num = shift;
-    push (@{$self->{'items'}}, $item_num);
+    my $item_number = shift;
+    my $query = "INSERT INTO labels_batches (batch_id, item_number, branch_code) VALUES (?,?,?);";
+    my $sth = C4::Context->dbh->prepare($query);
+#    $sth->{'TraceLevel'} = 3;
+    $sth->execute($item_number, $self->{'batch_id'});
+    if ($sth->err) {
+        syslog("LOG_ERR", "C4::Labels::Batch->add_item : Database returned the following error on attempted INSERT: %s", $sth->errstr);
+        return -1;
+    }
+    push (@{$self->{'items'}}, $item_number);
     $self->{'batch_stat'} = 0;
+    return 0;
 }
 
 =head2 $batch->get_attr()
@@ -120,34 +129,36 @@ sub get_attr {
     return $self->{$_[0]};
 }
 
-=head2 $batch->delete_item()
+=head2 $batch->remove_item()
 
-    Invoking the I<delete_item> method will delete the supplied item from the batch object.
+    Invoking the I<remove_item> method will remove the supplied item from the batch object.
 
     example:
-        $batch->delete_item();
+        $batch->remove_item();
 
 =cut
 
-sub delete_item {
+sub remove_item {
     my $self = shift;
-    my $item_num = shift;
-    my $index = 0;
-    ++$index until $$self->{'items'}[$index] == $item_num or $index > $#$self->{'items'};
-    if ($index > $#$self->{'items'}) {
-        syslog("LOG_ERR", "C4::Labels::Batch->delete_item : Item %s does not exist in batch %s.", $item_num, $self->{'batch_id'});
+    my $item_number = shift;
+    my $query = "DELETE FROM labels_batches WHERE item_number=? AND batch_id=?;";
+    my $sth = C4::Context->dbh->prepare($query);
+#    $sth->{'TraceLevel'} = 3;
+    $sth->execute($item_number, $self->{'batch_id'});
+    if ($sth->err) {
+        syslog("LOG_ERR", "C4::Labels::Batch->remove_item : Database returned the following error on attempted DELETE: %s", $sth->errstr);
         return -1;
     }
-    delete ($$self->{'items'}[$index]);
-    $self->{'batch_stat'} = 0;
+    @{$self->{'items'}} = grep{$_ != $item_number} @{$self->{'items'}};
+    $self->{'batch_stat'} = 1;
+    return 0;
 }
 
 =head2 $batch->save()
 
-    Invoking the I<save> method attempts to insert the batch into the database if the batch is new and
-    update the existing batch record if the batch exists. The method returns the new record batch_id upon
-    success and -1 upon failure (This avoids conflicting with a record batch_id of 1). Errors are
-    logged to the syslog.
+    Invoking the I<save> method attempts to insert the batch into the database. The method returns
+    the new record batch_id upon success and -1 upon failure (This avoids conflicting with a record
+    batch_id of 1). Errors are logged to the syslog.
 
     example:
         my $exitstat = $batch->save(); # to save the record behind the $batch object
@@ -156,53 +167,31 @@ sub delete_item {
 
 sub save {
     my $self = shift;
-    if ($self->{'batch_id'} > 0) {
-        foreach my $item_number (@$self->{'items'}) {
-            my $query = "UPDATE labels_batches SET item_number=?, branch_code=? WHERE batch_id=?;";
-            warn "DEBUG: Updating: $query\n" if $debug;
-            my $sth->C4::Context->dbh->prepare($query);
-            $sth->execute($item_number, $self->{'branch_code'}, $self->{'batch_id'});
-            if ($sth->err) {
-                syslog("LOG_ERR", "C4::Labels::Batch->save : Database returned the following error on attempted UPDATE: %s", $sth->errstr);
-                return -1;
-            }
+    my $sth = C4::Context->dbh->prepare("SELECT MAX(batch_id) FROM labels_batches;");
+    $sth->execute();
+    my $batch_id = $sth->fetchrow_array;
+    $self->{'batch_id'} = $batch_id++;
+    foreach my $item_number (@{$self->{'items'}}) {
+        my $query = "INSERT INTO labels_batches (batch_id, item_number, branch_code) VALUES (?,?,?);";
+        my $sth1 = C4::Context->dbh->prepare($query);
+        $sth1->execute($self->{'batch_id'}, $item_number, $self->{'branch_code'});
+        if ($sth1->err) {
+            syslog("LOG_ERR", "C4::Labels::Batch->save : Database returned the following error on attempted INSERT: %s", $sth1->errstr);
+            return -1;
         }
+        $self->{'batch_stat'} = 1;
+        return $self->{'batch_id'};
     }
-    else {
-        my $sth1 = C4::Context->dbh->prepare("SELECT MAX(batch_id) FROM labels_batches;");
-        $sth1->execute();
-        my $batch_id = $sth1->fetchrow_array;
-        $self->{'batch_id'} = $batch_id++;
-        foreach my $item_number (@$self->{'items'}) {
-            my $query = "INSERT INTO labels_batches (batch_id, item_number, branch_code) VALUES (?,?,?);";
-            warn "DEBUG: Inserting: $query\n" if $debug;
-            my $sth->C4::Context->dbh->prepare($query);
-            $sth->execute($self->{'batch_id'}, $item_number, $self->{'branch_code'});
-            if ($sth->err) {
-                syslog("LOG_ERR", "C4::Labels::Batch->save : Database returned the following error on attempted INSERT: %s", $sth->errstr);
-                return -1;
-            }
-            return $self->{'batch_id'};
-        }
-    }
-    $self->{'batch_stat'} = 1;
 }
 
-=head2 C4::Labels::Template->retrieve(template_id)
+=head2 C4::Labels::Batch->retrieve(batch_id)
 
-    Invoking the I<retrieve> method constructs a new template object containing the current values for template_id. The method returns
-    a new object upon success and 1 upon failure. Errors are logged to the syslog. Two further options may be accessed. See the example
-    below for further description.
+    Invoking the I<retrieve> method constructs a new batch object containing the current values for batch_id. The method returns
+    a new object upon success and 1 upon failure. Errors are logged to the syslog.
 
     examples:
 
-        my $template = C4::Labels::Template->retrieve(template_id => 1); # Retrieves template record 1 and returns an object containing the record
-
-        my $template = C4::Labels::Template->retrieve(template_id => 1, convert => 1); # Retrieves template record 1, converts the units to points,
-            and returns an object containing the record
-
-        my $template = C4::Labels::Template->retrieve(template_id => 1, profile_id => profile_id); # Retrieves template record 1, converts the units
-            to points, applies the given profile id, and returns an object containing the record
+        my $batch = C4::Labels::Batch->retrieve(batch_id => 1); # Retrieves batch record 1 and returns an object containing the record
 
 =cut
 
@@ -230,7 +219,7 @@ sub retrieve {
     return $self;
 }
 
-=head2 C4::Labels::Batch->delete(batch_id => batch_id) |  $batch->delete()
+=head2 C4::Labels::Batch->delete(batch_id => batch_id) | $batch->delete()
 
     Invoking the delete method attempts to delete the batch from the database. The method returns 0 upon success
     and 1 upon failure. Errors are logged to the syslog.
@@ -245,25 +234,25 @@ sub delete {
     my $self = {};
     my %opts = ();
     my $call_type = '';
-    my $query_param = '';
+    my @query_params = ();
     if (ref($_[0])) {
         $self = shift;  # check to see if this is a method call
         $call_type = 'C4::Labels::Batch->delete';
-        $query_param = $self->{'batch_id'};
+        @query_params = ($self->{'batch_id'}, $self->{'branch_code'});
     }
     else {
         %opts = @_;
         $call_type = 'C4::Labels::Batch::delete';
-        $query_param = $opts{'batch_id'};
+        @query_params = ($opts{'batch_id'}, $opts{'branch_code'});
     }
-    if ($query_param eq '') {   # If there is no template id then we cannot delete it
+    if ($query_params[0] eq '') {   # If there is no template id then we cannot delete it
         syslog("LOG_ERR", "%s : Cannot delete batch as the batch id is invalid or non-existant.", $call_type);
         return -1;
     }
-    my $query = "DELETE FROM labels_batches WHERE batch_id = ?";
+    my $query = "DELETE FROM labels_batches WHERE batch_id = ? AND branch_code =?";
     my $sth = C4::Context->dbh->prepare($query);
 #    $sth->{'TraceLevel'} = 3;
-    $sth->execute($query_param);
+    $sth->execute(@query_params);
     if ($sth->err) {
         syslog("LOG_ERR", "%s : Database returned the following error on attempted INSERT: %s", $call_type, $sth->errstr);
         return -1;

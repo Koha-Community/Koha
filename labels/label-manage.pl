@@ -59,22 +59,22 @@ my $display_columns = { layout =>   [  #db column       => display column
                                         {barcode_type    => 'Barcode Type'},
                                         {printing_type   => 'Print Type'},
                                         {format_string   => 'Fields to Print'},
-                                        {select          => 'Select'},
+                                        {select          => {label => 'Select', value => 'layout_id'}},
                                     ],
                         template => [   {template_id     => 'Template ID'},
                                         {template_code   => 'Template Name'},
                                         {template_desc   => 'Description'},
-                                        {select          => 'Select'},
+                                        {select          => {label => 'Select', value => 'template_id'}},
                                     ],
                         profile =>  [   {profile_id      => 'Profile ID'},
                                         {printer_name    => 'Printer Name'},
                                         {paper_bin       => 'Paper Bin'},
                                         {_template_code  => 'Template Name'},     # this display column does not have a corrisponding db column in the profile table, hence the underscore
-                                        {select          => 'Select'},
+                                        {select          => {label => 'Select', value => 'profile_id'}},
                                     ],
                         batch =>    [   {batch_id        => 'Batch ID'},
                                         {_item_count     => 'Item Count'},
-                                        {select          => 'Select'},
+                                        {select          => {label => 'Select', value => 'batch_id'}},
                                     ],
 };
 
@@ -139,9 +139,12 @@ if ($op eq 'delete') {
         when 'layout'   {$error = C4::Labels::Layout::delete(layout_id => $element_id); last;}
         when 'template' {$error = C4::Labels::Template::delete(template_id => $element_id); last;}
         when 'profile'  {$error = C4::Labels::Profile::delete(profile_id => $element_id); last;}
-        when 'batch'    {$error = C4::Labels::Batch::delete(batch_id => $element_id); last;}
+        when 'batch'    {$error = C4::Labels::Batch::delete(batch_id => $element_id, branch_code => $branch_code); last;}
         default         {}      # FIXME: Some error trapping code 
     }
+#    FIXME: this does not allow us to process any errors
+#    print $cgi->redirect("label-manage.pl?label_element=$label_element");
+#    exit;
 }
 
 given ($label_element) {

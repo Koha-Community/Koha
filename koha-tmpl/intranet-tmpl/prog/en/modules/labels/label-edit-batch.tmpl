@@ -1,15 +1,15 @@
     <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-    <title>Koha &rsaquo; Tools &rsaquo; Labels &rsaquo; Manage Label Elements</title>
+    <title>Koha &rsaquo; Tools &rsaquo; Labels &rsaquo; Manage Label Batches</title>
     <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
     <script type="text/JavaScript" language="JavaScript">
         //<![CDATA[
-            function DeleteConfirm() {
-                var element_id = selected_layout();
-                if (element_id>-1) {
-                    var msg = "Are you sure you want to delete <!-- TMPL_VAR NAME="label_element" --> " + element_id + "?"
+            function RemoveConfirm() {
+                var label_id = selected_layout();
+                if (label_id>-1) {
+                    var msg = "Are you sure you want to the selected item from this batch?"
                     var answer = confirm(msg);
                     if (answer) {
-                        window.location = "/cgi-bin/koha/labels/label-manage.pl?op=delete&amp;label_element=<!-- TMPL_VAR NAME="label_element" -->&amp;element_id=" + element_id;
+                        window.location = "/cgi-bin/koha/labels/label-edit-batch.pl?op=remove&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;label_id=" + label_id;
                     }
                     else {
                         return; // abort delete
@@ -19,25 +19,26 @@
                     return;     // no layout selected
                 };
             };
-            function Edit() {
-                var element_id = selected_layout();
-                if (element_id>-1) {
-                    window.location = "/cgi-bin/koha/labels/label-edit-<!-- TMPL_VAR NAME="label_element" -->.pl?op=edit&amp;element_id=" + element_id;
+            function Add() {
+                window.location = "/cgi-bin/koha/labels/label-edit-batch.pl?op=add&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->";
+            };
+            function Print(mode) {
+                if (mode == 'batch') {
+                    alert("Print batch <!-- TMPL_VAR NAME="batch_id" -->.");
+//                    window.location = "/cgi-bin/koha/labels/label-edit-batch.pl?op=print&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->";
                 }
                 else {
-                    return;     // no layout selected
+                    var label_id = selected_layout();
+                    alert("Print item " + label_id + ".");
+//                    if (label_id>-1) {
+//                       window.location = "/cgi-bin/koha/labels/label-edit-batch.pl?op=print&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;label_id=" + label_id;
+//                    }
+//                    else {
+//                        return;     // no layout selected
+//                    };
                 };
             };
-            function Print() {
-                var element_id = selected_layout();
-                if (element_id>-1) {
-                    window.location = "/cgi-bin/koha/labels/label-edit-<!-- TMPL_VAR NAME="label_element" -->.pl?op=edit&amp;element_id=" + element_id;
-                }
-                else {
-                    return;     // no layout selected
-                };
-            };
-            function selected_layout() {
+           function selected_layout() {
                 if (document.layouts.action.length) {
                 for (i=0;i<document.layouts.action.length;i++){
                     if (document.layouts.action[i].checked==true){
@@ -55,7 +56,7 @@
                     //    return(x[0].value);
                     //};
                 };
-                alert("Please select a <!-- TMPL_VAR NAME="label_element" -->.");
+                alert("Please select an item.");
                 return (-1);
             };
         //]]>
@@ -68,18 +69,18 @@
         <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; 
         <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
         <a href="/cgi-bin/koha/labels/labels-home.pl">Labels</a> &rsaquo;
-        Manage Label <!-- TMPL_VAR NAME="label_element_title" -->
+        Manage Batch Number <!-- TMPL_VAR NAME="batch_id" -->
     </div>
     <div id="doc3" class="yui-t2">
         <div id="bd">
             <div id="yui-main">
                 <div class="yui-b">
-                    <!-- TMPL_INCLUDE NAME="labels-new-toolbar.inc" -->
+                    <!-- TMPL_INCLUDE NAME="labels-batches-toolbar.inc" -->
                     <div class="yui-gc">
-                        <div class="yui-u first" id="manage-label-layouts">
+                        <div class="yui-u first" id="manage-label-batches">
                             <div class="hint">Current Branch: <!-- TMPL_VAR NAME="LoginBranchname" --></div>
                             <form name="layouts">
-                            <h2>Currently Available <!-- TMPL_VAR NAME="label_element_title" --></h2>
+                            <h2>Items in batch number <!-- TMPL_VAR NAME="batch_id" --></h2>
                             <table>
                                 <!-- TMPL_LOOP NAME="table_loop" -->
                                 <!-- TMPL_IF NAME="header_fields" -->
@@ -101,17 +102,18 @@
                                 <!-- /TMPL_IF -->
                                 <!-- /TMPL_LOOP -->
                             </table>
-                            <div style="margin: 10px 10px 10px 0px;">
-                                <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="edit" onclick="Edit()" value="Edit"></span></span>
-                                <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="delete" onclick="DeleteConfirm()" value="Delete"></span></span>
-                                <!-- TMPL_IF NAME="print" --><span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="print" onclick="Print()" value="Print"></span></span><!-- /TMPL_IF -->
-                            </div>
                             </form>
+                            <div style="margin: 10px 10px 10px 0px;">
+                                <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="add" onclick="Add()" value="Add Item"></span></span>
+                                <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="remove" onclick="RemoveConfirm()" value="Remove Item"></span></span>
+                                <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="print_item" onclick="Print(item)" value="Print Item"></span></span>
+                                <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="print_batch" onclick="Print(batch)" value="Print Batch"></span></span>
+                            </div>
                         </div>
-                        <!-- TMPL_IF NAME="error" -->
+                        <!-- TMPL_IF NAME="err" -->
                         <div class="yui-u">
                             <div class="dialog alert">
-                                <strong>WARNING: An error was encountered and <!-- TMPL_VAR NAME="label_element" --> <!-- TMPL_VAR NAME="element_id" --> was not deleted. Please have your system administrator check the syslog for details.</strong>
+                                <strong>WARNING: An error was encountered and <!-- TMPL_VAR NAME="errstr" --> Please have your system administrator check the syslog for details.</strong>
                             </div>
                         </div>
                         <!-- /TMPL_IF -->
