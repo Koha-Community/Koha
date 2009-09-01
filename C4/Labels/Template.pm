@@ -27,24 +27,19 @@ use C4::Context;
 use C4::Debug;
 use C4::Labels::Profile 1.000000;
 use C4::Labels::PDF 1.000000;
+use C4::Labels::Lib 1.000000 qw(get_unit_values);
 
 BEGIN {
     use version; our $VERSION = qv('1.0.0_1');
 }
 
-my $unit_values = { 
-    POINT       => 1,
-    INCH        => 72,
-    MM          => 2.83464567,
-    CM          => 28.3464567,
-};
-
 sub _check_params {
     my $given_params = {};
     my $exit_code = 0;
     my @valid_template_params = (
-        'tmpl_code',
-        'tmpl_desc',
+        'profile_id',
+        'template_code',
+        'template_desc',
         'page_width',
         'page_height',
         'label_width',
@@ -58,8 +53,6 @@ sub _check_params {
         'col_gap',
         'row_gap',
         'units',
-        'font_size',
-        'font',
     );
     if (scalar(@_) >1) {
         $given_params = {@_};
@@ -81,16 +74,17 @@ sub _check_params {
 
 sub _conv_points {
     my $self = shift;
-    $self->{page_width}         = $self->{page_width} * $unit_values->{$self->{units}};
-    $self->{page_height}        = $self->{page_height} * $unit_values->{$self->{units}};
-    $self->{label_width}        = $self->{label_width} * $unit_values->{$self->{units}};
-    $self->{label_height}       = $self->{label_height} * $unit_values->{$self->{units}};
-    $self->{top_text_margin}    = $self->{top_text_margin} * $unit_values->{$self->{units}};
-    $self->{left_text_margin}   = $self->{left_text_margin} * $unit_values->{$self->{units}};
-    $self->{top_margin}         = $self->{top_margin} * $unit_values->{$self->{units}};
-    $self->{left_margin}        = $self->{left_margin} * $unit_values->{$self->{units}};
-    $self->{col_gap}            = $self->{col_gap} * $unit_values->{$self->{units}};
-    $self->{row_gap}            = $self->{row_gap} * $unit_values->{$self->{units}};
+    my @unit_value = grep {$_->{'type'} eq $self->{units}} get_unit_values();
+    $self->{page_width}         = $self->{page_width} * $unit_value[0]->{'value'};
+    $self->{page_height}        = $self->{page_height} * $unit_value[0]->{'value'};
+    $self->{label_width}        = $self->{label_width} * $unit_value[0]->{'value'};
+    $self->{label_height}       = $self->{label_height} * $unit_value[0]->{'value'};
+    $self->{top_text_margin}    = $self->{top_text_margin} * $unit_value[0]->{'value'};
+    $self->{left_text_margin}   = $self->{left_text_margin} * $unit_value[0]->{'value'};
+    $self->{top_margin}         = $self->{top_margin} * $unit_value[0]->{'value'};
+    $self->{left_margin}        = $self->{left_margin} * $unit_value[0]->{'value'};
+    $self->{col_gap}            = $self->{col_gap} * $unit_value[0]->{'value'};
+    $self->{row_gap}            = $self->{row_gap} * $unit_value[0]->{'value'};
     return $self;
 }
 
@@ -127,12 +121,13 @@ C4::Labels::Template - A class for creating and manipulating template objects in
 sub new {
     my $invocant = shift;
     if (_check_params(@_) eq 1) {
-        return 1;
+        return -1;
     }
     my $type = ref($invocant) || $invocant;
     my $self = {
-        tmpl_code       =>      '',
-        tmpl_desc       =>      '',
+        profile_id      =>      '0',
+        template_code   =>      'DEFAULT TEMPLATE',
+        template_desc   =>      'Default description',
         page_width      =>      0,
         page_height     =>      0,
         label_width     =>      0,
@@ -146,8 +141,6 @@ sub new {
         col_gap         =>      0,
         row_gap         =>      0,
         units           =>      'POINT',
-        font_size       =>      3,
-        font            =>      'TR',
         tmpl_stat       =>      0,      # false if any data has changed and the db has not been updated
         @_,
     };
@@ -177,12 +170,12 @@ sub retrieve {
     my $invocant = shift;
     my %opts = @_;
     my $type = ref($invocant) || $invocant;
-    my $query = "SELECT * FROM labels_templates WHERE tmpl_id = ?";  
+    my $query = "SELECT * FROM labels_templates WHERE template_id = ?";  
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute($opts{template_id});
     if ($sth->err) {
         syslog("LOG_ERR", "Database returned the following error: %s", $sth->errstr);
-        return 1;
+        return -1;
     }
     my $self = $sth->fetchrow_hashref;
     $self = _conv_points($self) if (($opts{convert} && $opts{convert} == 1) || $opts{profile_id});
@@ -192,26 +185,39 @@ sub retrieve {
     return $self;
 }
 
-=head2 C4::Labels::Template->delete(tmpl_id => template_id) |  $template->delete()
+=head2 C4::Labels::Template::delete(template_id => template_id) |  $template->delete()
 
     Invoking the delete method attempts to delete the template from the database. The method returns 0 upon success
     and 1 upon failure. Errors are logged to the syslog.
 
     examples:
         my $exitstat = $template->delete(); # to delete the record behind the $template object
-        my $exitstat = C4::Labels::Template->delete(tmpl_id => 1); # to delete template record 1
+        my $exitstat = C4::Labels::Template::delete(template_id => 1); # to delete template record 1
 
 =cut
 
 sub delete {
-    my $self = shift;
-    if (!$self->{tmpl_id}) {   # If there is no template tmpl_id then we cannot delete it
-        syslog("LOG_ERR", "Cannot delete template as it has not been saved.");
-        return 1;
+    my $self = {};
+    my %opts = ();
+    my $call_type = '';
+    my $query_param = '';
+    if (ref($_[0])) {
+        $self = shift;  # check to see if this is a method call
+        $call_type = 'C4::Labels::Template->delete';
+        $query_param = $self->{'template_id'};
     }
-    my $query = "DELETE FROM labels_templates WHERE tmpl_id = ?";  
+    else {
+        %opts = @_;
+        $call_type = 'C4::Labels::Template::delete';
+        $query_param = $opts{'template_id'};
+    }
+    if ($query_param eq '') {   # If there is no template id then we cannot delete it
+        syslog("LOG_ERR", "%s : Cannot delete layout as the template id is invalid or non-existant.", $call_type);
+        return -1;
+    }
+    my $query = "DELETE FROM labels_templates WHERE template_id = ?";  
     my $sth = C4::Context->dbh->prepare($query);
-    $sth->execute($self->{tmpl_id});
+    $sth->execute($query_param);
     $self->{tmpl_stat} = 0;
     return 0;
 }
@@ -219,8 +225,8 @@ sub delete {
 =head2 $template->save()
 
     Invoking the I<save> method attempts to insert the template into the database if the template is new and
-    update the existing template record if the template exists. The method returns the new record tmpl_id upon
-    success and -1 upon failure (This avotmpl_ids conflicting with a record tmpl_id of 1). Errors are logged to the syslog.
+    update the existing template record if the template exists. The method returns the new record template_id upon
+    success and -1 upon failure (This avotemplate_ids conflicting with a record template_id of 1). Errors are logged to the syslog.
 
     example:
         my $exitstat = $template->save(); # to save the record behind the $template object
@@ -229,17 +235,17 @@ sub delete {
 
 sub save {
     my $self = shift;
-    if ($self->{'tmpl_id'}) {        # if we have an tmpl_id, the record exists and needs UPDATE
+    if ($self->{'template_id'}) {        # if we have an template_id, the record exists and needs UPDATE
         my @params;
         my $query = "UPDATE labels_templates SET ";
         foreach my $key (keys %{$self}) {
-            next if ($key eq 'tmpl_id') || ($key eq 'tmpl_stat');
+            next if ($key eq 'template_id') || ($key eq 'tmpl_stat');
             push (@params, $self->{$key});
             $query .= "$key=?, ";
         }
         $query = substr($query, 0, (length($query)-2));
-        push (@params, $self->{'tmpl_id'});
-        $query .= " WHERE tmpl_id=?;";
+        push (@params, $self->{'template_id'});
+        $query .= " WHERE template_id=?;";
         warn "DEBUG: Updating: $query\n" if $debug;
         my $sth = C4::Context->dbh->prepare($query);
         $sth->execute(@params);
@@ -248,7 +254,7 @@ sub save {
             return -1;
         }
         $self->{tmpl_stat} = 1;
-        return $self->{'tmpl_id'};
+        return $self->{'template_id'};
     }
     else {                      # otherwise create a new record
         my @params;
@@ -272,12 +278,12 @@ sub save {
             syslog("LOG_ERR", "Database returned the following error: %s", $sth->errstr);
             return -1;
         }
-        my $sth1 = C4::Context->dbh->prepare("SELECT MAX(tmpl_id) FROM labels_templates;");
+        my $sth1 = C4::Context->dbh->prepare("SELECT MAX(template_id) FROM labels_templates;");
         $sth1->execute();
-        my $tmpl_id = $sth1->fetchrow_array;
-        $self->{tmpl_id} = $tmpl_id;
+        my $template_id = $sth1->fetchrow_array;
+        $self->{template_id} = $template_id;
         $self->{tmpl_stat} = 1;
-        return $tmpl_id;
+        return $template_id;
     }
 }
 
@@ -293,14 +299,14 @@ sub save {
 sub get_attr {
     my $self = shift;
     if (_check_params(@_) eq 1) {
-        return 1;
+        return -1;
     }
     my ($attr) = @_;
     if (exists($self->{$attr})) {
         return $self->{$attr};
     }
     else {
-        return 1;
+        return -1;
     }
 }
 
@@ -316,10 +322,12 @@ sub get_attr {
 sub set_attr {
     my $self = shift;
     if (_check_params(@_) eq 1) {
-        return 1;
+        return -1;
     }
-    my ($attr, $value) = @_;
-    $self->{$attr} = $value;
+    my %attrs = @_;
+    foreach my $attrib (keys(%attrs)) {
+        $self->{$attrib} = $attrs{$attrib};
+    };
 }
 
 =head2 $template->get_text_wrap_cols()

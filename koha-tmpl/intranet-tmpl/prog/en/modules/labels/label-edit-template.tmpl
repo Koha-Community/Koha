@@ -1,126 +1,134 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo; Tools &rsaquo; Labels</title>
-<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+    <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+    <title>Koha &rsaquo; Tools &rsaquo; Labels &rsaquo; Templates</title>
+    <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
-<!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
-
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a>&rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/labels/label-home.pl">Labels</a> &rsaquo; <a href="/cgi-bin/koha/labels/label-templates.pl">Label Templates</a> &rsaquo; Edit Label Template</div>
-
-<div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
-<form name="input" action="/cgi-bin/koha/labels/label-save-template.pl" method="get">
-
-<div class="yui-g">
-<h3>Edit Label Template</h3>
-<div class="yui-u first">
-<fieldset class="rows"><legend>Template Settings</legend>
-
-<ol>
-<li><span class="label">Template ID: <!-- TMPL_VAR NAME="tmpl_id" --> </span></li>
-	<li><label for="tmpl_code">Template Code:</label> <input type="text"  size="40" name="tmpl_code" id="tmpl_code" value="<!-- TMPL_VAR NAME="tmpl_code" -->" /></li>
-	<li><label for="tmpl_desc">Template Description:</label> <textarea cols="40" rows="3" id="tmpl_desc" name="tmpl_desc"><!-- TMPL_VAR NAME="tmpl_desc" --></textarea></li>
-
-<li>
-        <label for="page_width">Page Width: </label><input type="text"  size="4" name="page_width" id="page_width" value="<!-- TMPL_VAR NAME="page_width" -->" />
-</li>
-<li>
-        <label for="page_height">Page Height: </label><input type="text" size="4" name="page_height" id="page_height" value="<!-- TMPL_VAR NAME="page_height" -->" />
-</li>
-<li>
-        <label for="label_width">Label Width: </label><input type="text"  size="4" name="label_width" id="label_width" value="<!-- TMPL_VAR NAME="label_width" -->" />
-</li>
-<li>
-        <label for="label_height">Label Height: </label><input type="text" size="4" name="label_height" id="label_height" value="<!-- TMPL_VAR NAME="label_height" -->" />
-</li>
-<li>
-        <label for="topmargin">Top Page Margin: </label><input type="text" size="4" name="topmargin" id="topmargin" value="<!-- TMPL_VAR NAME="topmargin" -->" />
-</li>
-<li>
-        <label for="leftmargin">Left Page Margin: </label><input type="text" size="4" name="leftmargin" id="leftmargin" value="<!-- TMPL_VAR NAME="leftmargin" -->" />
-</li>
-</ol>
-</fieldset>
-</div>
-<div class="yui-u">
-<fieldset class="rows">
-<ol>
-
-<li>
-        <label for="cols">Number of Columns: </label><input type="text" size="4" name="cols" id="cols" value="<!-- TMPL_VAR NAME="cols" -->" />
-</li>
-<li>
-        <label for="rows">Number of Rows: </label><input type="text" size="4" name="rows" id="rows" value="<!-- TMPL_VAR NAME="rows" -->" />
-</li>
-<li>
-        <label for="colgap">Gap between Columns: </label><input type="text" size="4" name="colgap" id="colgap" value="<!-- TMPL_VAR NAME="colgap" -->" />
-</li>
-<li>
-        <label for="rowgap">Gap between Rows: </label><input type="text" size="4" name="rowgap" id="rowgap" value="<!-- TMPL_VAR NAME="rowgap" -->" />
-
-</li>
-
-<li><label for="units">Units: </label><select id="units" name="units">
-    <!-- TMPL_LOOP NAME="units" -->
-        <!-- TMPL_IF NAME="selected" -->
-            <option value="<!-- TMPL_VAR NAME="unit" -->" selected="selected">
-        <!-- TMPL_ELSE -->
-            <option value="<!-- TMPL_VAR NAME="unit" -->">
-        <!-- /TMPL_IF --><!-- TMPL_VAR NAME="desc" --></option>
-    <!-- /TMPL_LOOP -->
-</select></li>
-
-<li><label for="prof_id">Profile: </label>
-<!-- TMPL_IF NAME="proflist" -->
-    <select id="prof_id" name="prof_id">
-    <!-- TMPL_LOOP NAME="proflist" -->
-        <!-- TMPL_IF NAME="selected" -->
-            <option value="<!-- TMPL_VAR NAME="prof_id" -->" selected="selected">
-        <!-- TMPL_ELSE -->
-            <option value="<!-- TMPL_VAR NAME="prof_id" -->">
-        <!-- /TMPL_IF --><!-- TMPL_VAR NAME="printername" -->/<!-- TMPL_VAR NAME="paper_bin" --></option>
-    <!-- /TMPL_LOOP -->
-    </select>
-<!-- TMPL_ELSE -->
-    None Defined
-<!-- /TMPL_IF -->
-</li>
-
-<li><label for="fonts">Font: </label><select id="fonts" name="fonts">
-    <!-- TMPL_LOOP NAME="fonts" -->
-        <!-- TMPL_IF NAME="selected" -->
-            <option value="<!-- TMPL_VAR NAME="font" -->" selected="selected">
-        <!-- TMPL_ELSE -->
-            <option value="<!-- TMPL_VAR NAME="font" -->">
-        <!-- /TMPL_IF --><!-- TMPL_VAR NAME="name" --></option>
-    <!-- /TMPL_LOOP -->
-</select></li>
-
-<li><label for="fontsize">Font Size:</label> <input type="text" id="fontsize" name="fontsize"  size="1" value="<!-- TMPL_VAR NAME="fontsize" -->" /></li>
-
-<li><label for="active">Active: </label>
-<!-- TMPL_IF NAME="active" -->
-<input type="checkbox" name="active" id="active" checked="checked" />
-<!-- TMPL_ELSE -->
-<input type="checkbox" name="active" id="active" />
-<!-- /TMPL_IF -->
-        <input type="hidden" name="tmpl_id" value="<!-- TMPL_VAR NAME="tmpl_id" -->" /></li>
-
-</ol></fieldset>
-</div>
-</div><div class="yui-g">
-<fieldset class="action">
-        <input type="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/labels/label-save-template.pl">Cancel</a>
-</fieldset></div>
-</form>
-
-</div>
-</div>
-<div class="yui-b">
-<!-- TMPL_INCLUDE NAME="labels-menu.inc" -->
-</div>
-</div>
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+    <!-- TMPL_INCLUDE NAME="header.inc" -->
+    <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+    <div id="breadcrumbs">
+        <a href="/cgi-bin/koha/mainpage.pl">Home</a>&rsaquo;
+        <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>&rsaquo;
+        <a href="/cgi-bin/koha/labels/label-home.pl">Labels</a>&rsaquo;
+        <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=template">Label Templates</a>&rsaquo;
+        Edit Label Template
+    </div>
+    <div id="doc3" class="yui-t2">
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+                    <form name="input" action="/cgi-bin/koha/labels/label-edit-template.pl" method="get">
+                    <div class="yui-g">
+                        <h3>Edit Label Template</h3>
+                        <div class="yui-u first">
+                            <fieldset class="rows">
+                                <ol>
+                                    <li>
+                                        <span class="label">Template ID:</span><!-- TMPL_IF NAME="template_id" --><!-- TMPL_VAR NAME="template_id" --><!-- TMPL_ELSE -->N/A<!-- /TMPL_IF -->
+                                    </li>
+                                    <li>
+                                        <label for="template_code">Template Code:</label>
+                                        <input type="text"  size="43" name="template_code" id="template_code" value="<!-- TMPL_VAR NAME="template_code" -->" />
+                                    </li>
+                                    <li>
+                                        <label for="template_desc">Template Description:</label>
+                                        <textarea cols="40" rows="3" id="template_desc" name="template_desc"><!-- TMPL_VAR NAME="template_desc" --></textarea>
+                                    </li>
+                                    <li>
+                                        <label for="page_height">Page Height:</label>
+                                        <input type="text" size="4" name="page_height" id="page_height" value="<!-- TMPL_VAR NAME="page_height" -->" />
+                                    </li>
+                                    <li>
+                                        <label for="page_width">Page Width:</label>
+                                        <input type="text" size="4" name="page_width" id="page_width" value="<!-- TMPL_VAR NAME="page_width" -->" />
+                                    </li>
+                                    <li>
+                                        <label for="label_width">Label Width:</label>
+                                        <input type="text" size="4" name="label_width" id="label_width" value="<!-- TMPL_VAR NAME="label_width" -->" />
+                                    </li>
+                                    <li>
+                                        <label for="label_height">Label Height:</label>
+                                        <input type="text" size="4" name="label_height" id="label_height" value="<!-- TMPL_VAR NAME="label_height" -->" />
+                                    </li>
+                                    <li>
+                                        <label for="top_margin">Top Page Margin:</label>
+                                        <input type="text" size="4" name="top_margin" id="top_margin" value="<!-- TMPL_VAR NAME="top_margin" -->" />
+                                    </li>
+                                    <li>
+                                        <label for="left_margin">Left Page Margin:</label>
+                                        <input type="text" size="4" name="left_margin" id="left_margin" value="<!-- TMPL_VAR NAME="left_margin" -->" />
+                                    </li>
+                                </ol>
+                            </fieldset>
+                        </div>
+                        <div class="yui-u">
+                            <fieldset class="rows">
+                                <ol>
+                                    <li>
+                                        <label for="top_text_margin">Top Text Margin:</label>
+                                        <input type="text" size="4" name="top_text_margin" id="top_text_margin" value="<!-- TMPL_VAR NAME="top_text_margin" -->" />
+                                    </li>
+                                    <li>
+                                        <label for="left_text_margin">Left Text Margin:</label>
+                                        <input type="text" size="4" name="left_text_margin" id="left_text_margin" value="<!-- TMPL_VAR NAME="left_text_margin" -->" />
+                                    </li>
+                                    <li>
+                                        <label for="cols">Number of Columns:</label>
+                                        <input type="text" size="4" name="cols" id="cols" value="<!-- TMPL_VAR NAME="cols" -->" />
+                                    </li>
+                                    <li>
+                                        <label for="rows">Number of Rows:</label>
+                                        <input type="text" size="4" name="rows" id="rows" value="<!-- TMPL_VAR NAME="rows" -->" />
+                                    </li>
+                                    <li>
+                                        <label for="col_gap">Gap between Columns:</label>
+                                        <input type="text" size="4" name="col_gap" id="col_gap" value="<!-- TMPL_VAR NAME="col_gap" -->" />
+                                    </li>
+                                    <li>
+                                        <label for="row_gap">Gap between Rows:</label>
+                                        <input type="text" size="4" name="row_gap" id="row_gap" value="<!-- TMPL_VAR NAME="row_gap" -->" />
+                                    </li>
+                                    <li>
+                                        <label for="units">Units:</label>
+                                        <select id="units" name="units">
+                                        <!-- TMPL_LOOP NAME="units" -->
+                                        <option value="<!-- TMPL_VAR NAME="type" -->"<!-- TMPL_IF NAME="selected" --> selected="selected"<!-- /TMPL_IF -->>
+                                        <!-- TMPL_VAR NAME="desc" -->
+                                        </option>
+                                        <!-- /TMPL_LOOP -->
+                                        </select>
+                                    </li>
+                                    <li>
+                                        <label for="profile_id">Profile:</label>
+                                        <!-- TMPL_IF NAME="profile_list" -->
+                                        <select id="profile_id" name="profile_id">
+                                        <!-- TMPL_LOOP NAME="profile_list" -->
+                                        <option value="<!-- TMPL_VAR NAME="profile_id" -->"<!-- TMPL_IF NAME="selected" --> selected="selected"<!-- /TMPL_IF -->>
+                                        <!-- TMPL_VAR NAME="printer_name" -->/<!-- TMPL_VAR NAME="paper_bin" -->
+                                        </option>
+                                        <!-- /TMPL_LOOP -->
+                                        </select>
+                                        <!-- TMPL_ELSE -->
+                                        <a href="/cgi-bin/koha/tools/tools-edit-profile.pl?op=new">Click here to define a printer profile.</a>
+                                        <!-- /TMPL_IF -->
+                                    </li>
+                                </ol>
+                            </fieldset>
+                        </div>
+                    </div>
+                    <div class="yui-g">
+                        <fieldset class="action">
+                            <input type="submit" value="Submit" /><a class="cancel" href="/cgi-bin/koha/labels/label-manage.pl?label_element=template">Cancel</a>
+                            <input type="hidden" name="op" value="save" />
+                            <!-- TMPL_IF NAME="template_id" -->
+                            <input type="hidden" name="template_id" value="<!-- TMPL_VAR NAME="template_id" -->" />
+                            <!-- /TMPL_IF -->
+                        </fieldset>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="yui-b">
+            <!-- TMPL_INCLUDE NAME="labels-menu.inc" -->
+        </div>
+    </div>
+    <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
