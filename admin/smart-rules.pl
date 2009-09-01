@@ -29,10 +29,6 @@ use C4::Branch; # GetBranches
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
 
-my $type=$input->param('type');
-my $branch = $input->param('branch') || '*';
-my $op = $input->param('op');
-
 # my $flagsrequired;
 # $flagsrequired->{circulation}=1;
 my ($template, $loggedinuser, $cookie)
@@ -43,6 +39,10 @@ my ($template, $loggedinuser, $cookie)
                             flagsrequired => {parameters => 1},
                             debug => 1,
                             });
+
+my $type=$input->param('type');
+my $branch = $input->param('branch') || ( C4::Branch::onlymine() ? ( C4::Branch::mybranch() || '*' ) : '*' );
+my $op = $input->param('op');
 
 if ($op eq 'delete') {
     my $itemtype     = $input->param('itemtype');
