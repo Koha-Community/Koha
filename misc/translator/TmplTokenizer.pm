@@ -39,7 +39,7 @@ use vars qw( $pedantic_error_markup_in_pcdata_p );
 
 # Hideous stuff
 use vars qw( $re_directive $re_tmpl_var $re_tmpl_var_escaped $re_tmpl_include );
-use vars qw( $re_directive_control $re_tmpl_endif_endloop );
+use vars qw( $re_directive_control $re_tmpl_endif_endloop $re_xsl);
 BEGIN {
     # $re_directive must not do any backreferences
     $re_directive = q{<(?:(?i)(?:!--\s*)?\/?TMPL_(?:VAR|LOOP|INCLUDE|IF|ELSE|UNLESS)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))*\s*(?:--)?)>};
@@ -47,6 +47,7 @@ BEGIN {
     $re_tmpl_var = q{<(?:(?i)(?:!--\s*)?TMPL_(?:VAR)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))*\s*(?:--)?)>};
     $re_tmpl_include = q{<(?:(?i)(?:!--\s*)?TMPL_(?:INCLUDE)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))*\s*(?:--)?)>};
     # TMPL_VAR ESCAPE=1/HTML/URL
+    $re_xsl = q{<\/?(?:xsl:)(?:[\s\-a-zA-Z0-9"'\/\.\[\]\@\(\):=,$]+)\/?>};
     $re_tmpl_var_escaped = q{<(?:(?i)(?:!--\s*)?TMPL_(?:VAR|INCLUDE)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))\s+ESCAPE=(?:1|HTML|URL)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))*\s*(?:--)?)>};
     # Any control flow directive
     $re_directive_control = q{<(?:(?i)(?:!--\s*)?\/?TMPL_(?:LOOP|IF|ELSE|UNLESS)(?:\s+(?:[a-zA-Z][-a-zA-Z0-9]*=)?(?:'[^']*'|"[^"]*"|[^\s<>]+))*\s*(?:--)?)>};
@@ -875,7 +876,7 @@ sub next_token {
 
 sub blank_p ($) {
     my($s) = @_;
-    return $s =~ /^(?:\s|\&nbsp$re_end_entity|$re_tmpl_var)*$/os;
+    return $s =~ /^(?:\s|\&nbsp$re_end_entity|$re_tmpl_var|$re_xsl)*$/os;
 }
 
 sub trim ($) {

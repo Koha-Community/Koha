@@ -7,6 +7,7 @@ xgettext.pl - xgettext(1)-like interface for .tmpl strings extraction
 =cut
 
 use strict;
+use warnings;
 use Getopt::Long;
 use POSIX;
 use Locale::PO;
@@ -101,7 +102,7 @@ sub text_extract (*) {
 		if ($attr->{$a}) {
 		    next if $a eq 'content' && $tag ne 'meta';
 		    next if $a eq 'value' && ($tag ne 'input'
-			|| (ref $attr->{'type'} && $attr->{'type'}->[1] =~ /^(?:hidden|radio)$/)); # FIXME
+			|| (ref $attr->{'type'} && $attr->{'type'}->[1] =~ /^(?:hidden|radio|submit)$/)); # FIXME
 		    my($key, $val, $val_orig, $order) = @{$attr->{$a}}; #FIXME
 		    $val = TmplTokenizer::trim $val;
 		    remember( $s, $val ) if $val =~ /\S/s;
