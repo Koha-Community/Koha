@@ -284,7 +284,8 @@ binmode( STDOUT, ":utf8" );
 our $csv;       # the Text::CSV_XS object
 our $csv_fh;    # the filehandle to the CSV file.
 if ( defined $csvfilename ) {
-    $csv = Text::CSV_XS->new( { binary => 1 } );
+    my $sep_char = C4::Context->preference('delimiter') || ',';
+    $csv = Text::CSV_XS->new( { binary => 1 , sep_char => $sep_char } );
     if ( $csvfilename eq '' ) {
         $csv_fh = *STDOUT;
     } else {
