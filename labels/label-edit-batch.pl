@@ -80,10 +80,16 @@ elsif ($op eq 'delete') {
 elsif ($op eq 'add') {
     $batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);
     $batch = C4::Labels::Batch->new(branch_code => $branch_code) if $batch == -2;
-    foreach my $item_number (@item_numbers) {
-        $err = $batch->add_item($item_number);
+    if ($branch_code){
+        foreach my $item_number (@item_numbers) {
+            $err = $batch->add_item($item_number);
+        }
+        $errstr = "item(s) not added to batch $batch_id." if $err;
     }
-    $errstr = "item(s) not added to batch $batch_id." if $err;
+    else {
+        $err = 1;
+        $errstr = "items(s) not added, the error was: Branch is not set, you please set your branch before adding items to a batch";
+    }
 }
 elsif ($op eq 'new') {
     $batch = C4::Labels::Batch->new(branch_code => $branch_code);
