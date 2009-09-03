@@ -124,7 +124,7 @@ sub retrieve {
     }
     my $self = $sth->fetchrow_hashref;
     $self = _conv_points($self) if (($opts{convert} && $opts{convert} == 1) || $opts{profile_id});
-    $self = _apply_profile($self) if $opts{profile_id};
+    $self = _apply_profile($self) if $opts{profile_id} && $self->{'profile_id'};        # don't bother if there is no profile_id
     $self->{'template_stat'} = 1;
     bless ($self, $type);
     return $self;

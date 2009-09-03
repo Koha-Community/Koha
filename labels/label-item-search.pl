@@ -48,7 +48,7 @@ BEGIN {
 my $query = new CGI;
 
 my $type      = $query->param('type');
-my $op        = $query->param('op');
+my $op        = $query->param('op') || '';
 my $batch_id  = $query->param('batch_id');
 my $ccl_query = $query->param('ccl_query');
 my $startfrom = $query->param('startfrom') || 1;
