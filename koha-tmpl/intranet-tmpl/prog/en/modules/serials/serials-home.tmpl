@@ -116,7 +116,7 @@ Serials updated :
                 <!-- TMPL_IF NAME="cannotedit" -->
                   &nbsp;        
                 <!-- TMPL_ELSE -->
-                  <a href="/cgi-bin/koha/serials/serials-edit.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&amp;serstatus=1,3">Serial receive</a>
+                  <!-- TMPL_IF name="CAN_user_serials_receive_serials" --><a href="/cgi-bin/koha/serials/serials-edit.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&amp;serstatus=1,3">Serial receive</a><!-- /TMPL_IF -->
                 <!-- /TMPL_IF -->
                 </td>
             </tr>

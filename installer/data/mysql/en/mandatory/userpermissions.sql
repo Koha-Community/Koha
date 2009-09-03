@@ -15,5 +15,13 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'import_patrons', 'Import patron data'),
    (13, 'delete_anonymize_patrons', 'Delete old borrowers and anonymize circulation history (deletes borrower reading history)'),
    (13, 'batch_upload_patron_images', 'Upload patron images in batch or one at a time'),
-   (13, 'schedule_tasks', 'Schedule tasks to run')
+   (13, 'schedule_tasks', 'Schedule tasks to run'),
+   (15, 'check_expiration', 'Check the expiration of a serial'),
+   (15, 'claim_serials', 'Claim missing serials'),
+   (15, 'create_subscription', 'Create a new subscription'),
+   (15, 'delete_subscription', 'Delete an existing subscription'),
+   (15, 'edit_subscription', 'Edit an existing subscription'),
+   (15, 'receive_serials', 'Serials receiving'),
+   (15, 'renew_subscription', 'Renew a subscription'),
+   (15, 'routing', 'Routing')
 ;
