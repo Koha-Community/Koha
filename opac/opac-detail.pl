@@ -35,7 +35,6 @@ use C4::Dates qw/format_date/;
 use C4::XISBN qw(get_xisbns get_biblionumber_from_isbn get_biblio_from_xisbn);
 use C4::External::Amazon;
 use C4::Review;
-use C4::Serials;
 use C4::Members;
 use C4::XSLT;
 
@@ -101,7 +100,7 @@ my $collections =  GetKohaAuthorisedValues('items.ccode',$dat->{'frameworkcode'}
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
 my @subscriptions       = GetSubscriptions( $dat->{title}, $dat->{issn}, $biblionumber );
 my @subs;
-$dat->{'serial'}=1 if $subscriptionsnumber;
+$dat->{'serials'}=1 if $subscriptionsnumber;
 foreach my $subscription (@subscriptions) {
     my %cell;
     $cell{subscriptionid}    = $subscription->{subscriptionid};
