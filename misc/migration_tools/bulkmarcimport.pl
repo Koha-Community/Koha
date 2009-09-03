@@ -131,7 +131,7 @@ print "Characteristic MARC flavour: $marcFlavour\n" if $verbose;
 my $starttime = gettimeofday;
 my $batch;
 my $fh = IO::File->new($input_marc_file); # don't let MARC::Batch open the file, as it applies the ':utf8' IO layer
-if ($format =~ /XML/i) {
+if (defined $format && $format =~ /XML/i) {
     # ugly hack follows -- MARC::File::XML, when used by MARC::Batch,
     # appears to try to convert incoming XML records from MARC-8
     # to UTF-8.  Setting the BinaryEncoding key turns that off

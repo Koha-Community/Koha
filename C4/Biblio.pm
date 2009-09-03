@@ -2669,7 +2669,8 @@ sub _AddBiblioNoZebra {
                 foreach (split / /,$line) {
                     next unless $_; # skip  empty values (multiple spaces)
                     # if the entry is already here, improve weight
-                    if ($result{'__RAW__'}->{"$_"} =~ /$biblionumber,\Q$title\E\-(\d+);/) { 
+                    my $tmpstr = $result{'__RAW__'}->{"$_"} || "";
+                    if ($tmpstr =~ /$biblionumber,\Q$title\E\-(\d+);/) {
                         my $weight=$1+1;
                         $result{'__RAW__'}->{"$_"} =~ s/$biblionumber,\Q$title\E\-(\d+);//;
                         $result{'__RAW__'}->{"$_"} .= "$biblionumber,$title-$weight;";
@@ -2680,7 +2681,7 @@ sub _AddBiblioNoZebra {
                         # it exists
                         if ($existing_biblionumbers) {
                             $result{'__RAW__'}->{"$_"} =$existing_biblionumbers;
-                            my $weight=$1+1;
+                            my $weight = ($1 ? $1 : 0) + 1;
                             $result{'__RAW__'}->{"$_"} =~ s/$biblionumber,\Q$title\E\-(\d+);//;
                             $result{'__RAW__'}->{"$_"} .= "$biblionumber,$title-$weight;";
                         # create a new ligne for this entry
@@ -3271,9 +3272,8 @@ sub ModBiblioMarc {
 
     # deal with UNIMARC field 100 (encoding) : create it if needed & set encoding to unicode
     if ( $encoding eq "UNIMARC" ) {
-        my $string;
-        if ( length($record->subfield( 100, "a" )) == 35 ) {
-            $string = $record->subfield( 100, "a" );
+        my $string = $record->subfield( 100, "a" );
+        if ( ($string) && ( length($record->subfield( 100, "a" )) == 35 ) ) {
             my $f100 = $record->field(100);
             $record->delete_field($f100);
         }
