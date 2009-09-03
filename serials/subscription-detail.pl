@@ -50,12 +50,16 @@ my ($totalissues,@serialslist) = GetSerials($subscriptionid);
 $totalissues-- if $totalissues; # the -1 is to have 0 if this is a new subscription (only 1 issue)
 # the subscription must be deletable if there is NO issues for a reason or another (should not happend, but...)
 
+# Permission needed if it is a deletion (del) : delete_subscription
+# Permission needed otherwise : *
+my $permission = ($op eq "del") ? "delete_subscription" : "*";
+
 ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "serials/subscription-detail.tmpl",
                 query => $query,
                 type => "intranet",
                 authnotrequired => 0,
-                flagsrequired => {serials => 1},
+                flagsrequired => {serials => $permission},
                 debug => 1,
                 });
 
