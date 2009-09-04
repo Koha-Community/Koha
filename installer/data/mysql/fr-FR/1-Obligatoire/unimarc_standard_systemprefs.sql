@@ -213,4 +213,6 @@ INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('MergeAuthoritiesOnUpdate', '0', 'Si Activé, met à jour toutes les notices bibliographiques afférentes dès la modification d''une autorité',NULL,'YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AllowNotForLoanOverride', '0', 'Si activé, permet au bibliothécaire de choisir de prêter tout de même un exemplaire normalement exclu du prêt',NULL,'YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('RenewalPeriodBase', 'date_due', 'Permet de déterminer si la période de renouvellement doit être calculée sur la date de retour ou sur le jour du renouvellement','date_due|now','Choice');
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('OPACDisplayRequestPriority','0','','Afficher l\'ordre des réservation pour les adhérents � l\'opac','YesNo');
+
 
