@@ -18,12 +18,13 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
 use CGI;
 use C4::Context;
 use C4::Output;
 use C4::Auth;
 use C4::Koha;
-use C4::Branch; # GetBranches
+use C4::Branch;
 use C4::Letters;
 use C4::Members;
 
@@ -59,11 +60,10 @@ sub blank_row {
 
 my $type=$input->param('type');
 my $branch = $input->param('branch');
-$branch="" unless $branch;
+$branch ||= q{};
 my $op = $input->param('op');
+$op ||= q{};
 
-# my $flagsrequired;
-# $flagsrequired->{circulation}=1;
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "tools/overduerules.tmpl",
                             query => $input,
@@ -171,20 +171,11 @@ if ($op eq 'save') {
         $input_saved = 1;
     }
 }
-my $branches = GetBranches();
-my @branchloop;
-foreach my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
-        my $selected = 1 if $thisbranch eq $branch;
-        my %row =(value => $thisbranch,
-                                selected => $selected,
-                                branchname => $branches->{$thisbranch}->{'branchname'},
-                        );
-        push @branchloop, \%row;
-}
+my $branchloop = GetBranchesLoop($branch);
 
 my $letters = GetLetters("circulation");
 
-my $countletters = scalar $letters;
+my $countletters = keys %{$letters};
 
 my @line_loop;
 
@@ -204,7 +195,11 @@ for my $data (@categories) {
             if ($countletters){
                 my @letterloop;
                 foreach my $thisletter (sort { $letters->{$a} cmp $letters->{$b} } keys %$letters) {
-                    my $selected = 1 if $thisletter eq $temphash{$data->{'categorycode'}}->{"letter$i"};
+                    my $selected;
+                    if ( $temphash{$data->{categorycode}}->{"letter$i"} &&
+                        $thisletter eq $temphash{$data->{'categorycode'}}->{"letter$i"}) {
+                        $selected = 1;
+                    }
                     my %letterrow =(value => $thisletter,
                                     selected => $selected,
                                     lettername => $letters->{$thisletter},
@@ -226,7 +221,10 @@ for my $data (@categories) {
             if ($countletters){
                 my @letterloop;
                 foreach my $thisletter (sort { $letters->{$a} cmp $letters->{$b} } keys %$letters) {
-                    my $selected = 1 if $thisletter eq $dat->{"letter$i"};
+                    my $selected;
+                    if ($dat->{"letter$i"} && $thisletter eq $dat->{"letter$i"}) {
+                        $selected = 1;
+                    }
                     my %letterrow =(value => $thisletter,
                                     selected => $selected,
                                     lettername => $letters->{$thisletter},
@@ -241,12 +239,11 @@ for my $data (@categories) {
             if ($dat->{"delay$i"}){$row{"delay$i"}=$dat->{"delay$i"};}
             if ($dat->{"debarred$i"}){$row{"debarred$i"}=$dat->{"debarred$i"};}
         }
-        $sth2->finish;
     }
     push @line_loop,\%row;
 }
 
 $template->param(table=> \@line_loop,
-                branchloop => \@branchloop,
+                branchloop => $branchloop,
                 branch => $branch);
 output_html_with_http_headers $input, $cookie, $template->output;
