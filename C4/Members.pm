@@ -694,6 +694,7 @@ sub AddMember {
       . ",dateexpiry="  . $dbh->quote( $data{'dateexpiry'} )
       . ",contactnote=" . $dbh->quote( $data{'contactnote'} )
       . ",B_address="   . $dbh->quote( $data{'B_address'} )
+      . ",B_address2="   . $dbh->quote( $data{'B_address2'} )
       . ",B_zipcode="   . $dbh->quote( $data{'B_zipcode'} )
       . ",B_country="   . $dbh->quote( $data{'B_country'} )
       . ",B_city="      . $dbh->quote( $data{'B_city'} )
@@ -722,6 +723,7 @@ sub AddMember {
       . ",altcontactaddress2="  . $dbh->quote( $data{'altcontactaddress2'} ) 
       . ",altcontactaddress3="  . $dbh->quote( $data{'altcontactaddress3'} ) 
       . ",altcontactzipcode="   . $dbh->quote( $data{'altcontactzipcode'} ) 
+      . ",altcontactcountry="   . $dbh->quote( $data{'altcontactcountry'} ) 
       . ",altcontactphone="     . $dbh->quote( $data{'altcontactphone'} ) ;
     $debug and print STDERR "AddMember SQL: ($query)\n";
     my $sth = $dbh->prepare($query);

@@ -30,7 +30,8 @@
 	<input type="text" name="address" value="<!-- TMPL_VAR NAME="address" -->" id="address" />
 	<input type="text" name="address2" value="<!-- TMPL_VAR NAME="address2" -->" id="address2" /></li>
 <li><label for="city">City, State:</label> <input id="city" type="text" value="<!-- TMPL_VAR name="city" -->"  name="city" /></li>
-<li><label for="zipcode">Zip Code: </label><input id="zipcode" name="zipcode" value="<!-- TMPL_VAR NAME="zipcode" -->" /></li>
+<li><label for="zipcode">Zip Code: </label><input id="zipcode" name="zipcode" value="<!-- TMPL_VAR NAME="zipcode" -->" name="zipcode" /></li>
+<li><label for="country">Country: </label><input id="country" name="country" value="<!-- TMPL_VAR NAME="country" -->" name="country" /></li>
 <li><label for="phone">Home Phone:</label> <input id="phone" type="text" value="<!-- TMPL_VAR name="phone" -->"  name="phone" /></li>
 <li><label for="mobile">Mobile Phone:</label> <input id="mobile" type="text" value="<!-- TMPL_VAR name="mobile" -->"  name="mobile" /></li>
 <li><label for="fax">Fax:</label> <input id="fax" type="text" value="<!-- TMPL_VAR name="fax" -->"  name="fax" /></li>
@@ -92,11 +93,12 @@
 <ol>
 <li>
     <label for="B_streetaddress">Permanent or Alternate Address:</label>
-        <textarea id="B_streetaddress" cols="25" rows="2" name="B_streetaddress"><!--TMPL_VAR NAME="B_streetnumber"--> <!-- TMPL_VAR name="B_address" --></textarea>
+        <textarea id="B_streetaddress" cols="25" rows="3" name="B_streetaddress"><!--TMPL_VAR NAME="B_streetnumber"--> <!-- TMPL_VAR name="B_address" --> <!-- TMPL_VAR name="B_address2" --></textarea>
 </li>
 
 <li><label for="B_city">City, State:</label> <input id="B_city" type="text" value="<!-- TMPL_VAR name="B_city" -->"  name="B_city" /></li>
-<li><label for="B_zipcode">Zip Code</label> <input type="text" id="B_zipcode" name="B_zipcode" value="<!-- TMPL_VAR NAME="B_zipcode" -->" /></li>
+<li><label for="B_zipcode">Zip Code</label> <input type="text" id="B_zipcode" name="B_zipcode" value="<!-- TMPL_VAR NAME="B_zipcode" -->" name="B_zipcode" /></li>
+<li><label for="B_country">Country</label> <input type="text" id="B_country" name="B_country" value="<!-- TMPL_VAR NAME="B_country" -->" name="B_country" /></li>
 </ol>
 </fieldset>
 <fieldset class="brief">

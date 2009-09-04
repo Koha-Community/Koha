@@ -2604,6 +2604,15 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.01.00.053';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE borrowers ADD `B_address2` text AFTER B_address");
+    $dbh->do("ALTER TABLE borrowers ADD `altcontactcountry` text AFTER altcontactzipcode");
+    $dbh->do("ALTER TABLE deletedborrowers ADD `B_address2` text AFTER B_address");
+    $dbh->do("ALTER TABLE deletedborrowers ADD `altcontactcountry` text AFTER altcontactzipcode");
+    SetVersion ($DBversion);
+    print "Upgrade to $DBversion done (bug 1600, bug 3454: add altcontactcountry and B_address2 to borrowers and deletedborrowers)\n";
+}
 
 =item DropAllForeignKeys($table)
 

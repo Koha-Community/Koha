@@ -415,10 +415,17 @@
       <input type="text" name="zipcode" id="zipcode" size="10" value="<!-- TMPL_VAR NAME="zipcode" -->" />
 	  <!-- TMPL_IF NAME="mandatoryzipcode" --><span class="required">Required</span><!-- /TMPL_IF -->
     </li>
-    <li>
-      <label for="country">Country: </label>
-      <input type="text" name="country" id="country" value="<!-- TMPL_VAR NAME="country" -->" />
-    </li>
+    
+    <li> 
+      <!-- TMPL_IF NAME="mandatorycountry" -->
+        <label for="country" class="required">
+      <!--TMPL_ELSE-->
+        <label for="country">
+      <!-- /TMPL_IF-->
+      Country: </label>
+      <input type="text" name="country" id="country" size="20" value="<!-- TMPL_VAR NAME="country" -->" />
+	  <!-- TMPL_IF NAME="mandatorycountry" --><span class="required">Required</span><!-- /TMPL_IF -->
+    </li>    
   
 	</ol>
     </fieldset>
@@ -492,7 +499,7 @@
 
 <!-- ************************ STEP_1 *********************** -->
 <!--/TMPL_IF -->
-<!--TMPL_IF Name="step_2"-->
+<!--TMPL_IF Name="step_6"-->
 
 		<fieldset class="rows" id="memberentry_address">
 		<legend>Alternate address</legend><ol>
@@ -506,6 +513,16 @@
 				<input type="text" id="B_address" name="B_address" size="40" value="<!-- TMPL_VAR NAME="B_address" -->" />
 	  <!-- TMPL_IF NAME="mandatoryB_address" --><span class="required">Required</span><!-- /TMPL_IF -->
 			</li>
+			<li>
+				<!-- TMPL_IF NAME="mandatoryB_address2" -->
+					<label for="B_address2" class="required">
+				<!--TMPL_ELSE-->
+					<label for="B_address2">
+				<!-- /TMPL_IF-->
+				Address 2: </label>
+				<input type="text" id="B_address2" name="B_address2" size="40" value="<!-- TMPL_VAR NAME="B_address2" -->" />
+	  <!-- TMPL_IF NAME="mandatoryB_address2" --><span class="required">Required</span><!-- /TMPL_IF -->
+			</li>			
 			<li>
 				<!-- TMPL_IF NAME="mandatoryB_city" -->
 					<label for="B_city" class="required" >
@@ -526,10 +543,16 @@
 				<input type="text" id="B_zipcode" name="B_zipcode" maxlength="10" size="10" value="<!-- TMPL_VAR NAME="B_zipcode" -->" />
 	  <!-- TMPL_IF NAME="mandatoryB_zipcode" --><span class="required">Required</span><!-- /TMPL_IF -->
 			</li>
-	    <li>
-	        <label for="B_country">Country: </label>
-	        <input type="text" name="B_country" id="B_country" value="<!-- TMPL_VAR NAME="B_country" -->" />
-	    </li>
+			<li>
+				<!-- TMPL_IF NAME="mandatoryB_country" -->
+					<label for="B_country" class="required">
+				<!--TMPL_ELSE-->
+					<label for="B_country">
+				<!-- /TMPL_IF-->
+				Country: </label>
+				<input type="text" id="B_country" name="B_country" size="20" value="<!-- TMPL_VAR NAME="B_country" -->" />
+	  <!-- TMPL_IF NAME="mandatoryB_country" --><span class="required">Required</span><!-- /TMPL_IF -->
+			</li>
             <li>
                 <!-- TMPL_IF NAME="mandatoryB_phone" -->
                 <label for="B_phone" class="required">
@@ -561,6 +584,8 @@
             </li>
 			</ol>
 		</fieldset>
+<!-- /TMPL_IF -->		
+<!--TMPL_IF Name="step_2"-->
 		<fieldset class="rows" id="memberentry_altaddress">       
 		    <legend>Alternate Contact</legend><ol>
 			<li>
@@ -623,6 +648,16 @@
 				<input type="text" name="altcontactzipcode" id="altcontactzipcode" value="<!-- TMPL_VAR NAME="altcontactzipcode" -->" size="5" />
 				<!-- TMPL_IF NAME="mandatoryaltcontactzipcode" --><span class="required">Required</span><!-- /TMPL_IF -->
 			</li>
+			<li>
+			    <!-- TMPL_IF NAME="mandatoryaltcontactcountry" -->
+				<label for="altcontactcountry" class="required">
+				<!-- TMPL_ELSE -->
+				<label for="altcontactcountry">
+				<!-- /TMPL_IF -->
+				Country:</label>
+				<input type="text" name="altcontactcountry" id="altcontactcountry" value="<!-- TMPL_VAR NAME="altcontactcountry" -->" size="20" />
+				<!-- TMPL_IF NAME="mandatoryaltcontactcountry" --><span class="required">Required</span><!-- /TMPL_IF -->
+			</li>			
 			<li>
 			    <!-- TMPL_IF NAME="mandatoryaltcontactphone" -->
 				<label for="altcontactphone" class="required">

@@ -483,6 +483,7 @@ phonepro text,
 B_streetnumber varchar(10) default NULL,
 B_streettype varchar(50) default NULL,
 B_address varchar(100) default NULL,
+B_address2 text default NULL,
 B_city text,
 B_zipcode varchar(25) default NULL,
 B_country text,
@@ -511,7 +512,16 @@ userid varchar(30) default NULL,
 opacnote text,
 contactnote varchar(255) default NULL,
 sort1 varchar(80) default NULL,
-sort2 varchar(80) default NULL
+sort2 varchar(80) default NULL,
+altcontactfirstname varchar(255) default NULL,
+altcontactsurname varchar(255) default NULL,
+altcontactaddress1 varchar(255) default NULL,
+altcontactaddress2 varchar(255) default NULL,
+altcontactaddress3 varchar(255) default NULL,
+altcontactzipcode varchar(50) default NULL,
+altcontactcountry text default NULL,
+altcontactphone varchar(50) default NULL,
+smsalertnumber varchar(50) default NULL
 );
 CREATE INDEX borrowers_branchcode_idx ON borrowers (branchcode);
 CREATE INDEX borrowers_borrowernumber_idx ON borrowers (borrowernumber);
@@ -769,6 +779,7 @@ phonepro text,
 B_streetnumber varchar(10) default NULL,
 B_streettype varchar(50) default NULL,
 B_address varchar(100) default NULL,
+B_address2 text default NULL,
 B_city text,
 B_zipcode varchar(25) default NULL,
 B_email text,
@@ -796,7 +807,16 @@ userid varchar(30) default NULL,
 opacnote text,
 contactnote varchar(255) default NULL,
 sort1 varchar(80) default NULL,
-sort2 varchar(80) default NULL
+sort2 varchar(80) default NULL,
+altcontactfirstname varchar(255) default NULL,
+altcontactsurname varchar(255) default NULL,
+altcontactaddress1 varchar(255) default NULL,
+altcontactaddress2 varchar(255) default NULL,
+altcontactaddress3 varchar(255) default NULL,
+altcontactzipcode varchar(50) default NULL,
+altcontactcountry text default NULL,
+altcontactphone varchar(50) default NULL,
+smsalertnumber varchar(50) default NULL
 );
 CREATE INDEX deletedborrowers_borrowernumber_idx ON deletedborrowers (borrowernumber);
 CREATE INDEX deletedborrowers_cardnumber_idx ON deletedborrowers (cardnumber);

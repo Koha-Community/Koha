@@ -384,6 +384,7 @@ From borrowers table:
 | address2            | text         | YES  |     |
 | city                | mediumtext   | NO   |     |
 | zipcode             | varchar(25)  | YES  |     |
+| country             | text         | YES  |     |
 | email               | mediumtext   | YES  |     |
 | phone               | text         | YES  |     |
 | mobile              | varchar(50)  | YES  |     |
@@ -393,8 +394,10 @@ From borrowers table:
 | B_streetnumber      | varchar(10)  | YES  |     |
 | B_streettype        | varchar(50)  | YES  |     |
 | B_address           | varchar(100) | YES  |     |
+| B_address2          | text         | YES  |     |
 | B_city              | mediumtext   | YES  |     |
 | B_zipcode           | varchar(25)  | YES  |     |
+| B_country           | text         | YES  |     |
 | B_email             | text         | YES  |     |
 | B_phone             | mediumtext   | YES  |     |
 | dateofbirth         | date         | YES  |     |
@@ -427,7 +430,9 @@ From borrowers table:
 | altcontactaddress2  | varchar(255) | YES  |     |
 | altcontactaddress3  | varchar(255) | YES  |     |
 | altcontactzipcode   | varchar(50)  | YES  |     |
+| altcontactcountry   | text         | YES  |     |
 | altcontactphone     | varchar(50)  | YES  |     |
+| smsalertnumber      | varchar(50)  | YES  |     |
 +---------------------+--------------+------+-----+
 
 From C4::Members
