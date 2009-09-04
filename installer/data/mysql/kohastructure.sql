@@ -421,6 +421,7 @@ CREATE TABLE `biblioitems` (
   KEY `isbn` (`isbn`),
   KEY `issn` (`issn`),
   KEY `publishercode` (`publishercode`),
+  KEY `issn` (`issn`),
   CONSTRAINT `biblioitems_ibfk_1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
