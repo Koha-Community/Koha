@@ -62,7 +62,7 @@ my $record       = GetMarcBiblio($biblionumber);
 $template->param( biblionumber => $biblionumber );
 # XSLT processing of some stuff
 if (C4::Context->preference("XSLTDetailsDisplay") ) {
-    my $newxmlrecord = XSLTParse4Display($biblionumber,C4::Context->config('opachtdocs')."/prog/en/xslt/MARC21slim2OPACDetail.xsl");
+    my $newxmlrecord = XSLTParse4Display($biblionumber,$record,'Detail');
     $template->param('XSLTBloc' => $newxmlrecord);
 }
 
@@ -302,69 +302,6 @@ if ( C4::Context->preference("OPACAmazonEnabled") && C4::Context->preference("OP
     $template->param( AMAZON_EDITORIAL_REVIEWS    => $editorial_reviews );
 }
 
-my $syndetics_elements;
-
-if ( C4::Context->preference("SyndeticsEnabled") ) {
-	eval {
-    $syndetics_elements = &get_syndetics_index($isbn,$upc,$oclc);
-	for my $element (values %$syndetics_elements) {
-		$template->param("Syndetics$element"."Exists" => 1 );
-		#warn "Exists: "."Syndetics$element"."Exists";
-	}
-    };
-    warn $@ if $@;
-}
-
-if ( C4::Context->preference("SyndeticsEnabled")
-        && C4::Context->preference("SyndeticsSummary")
-        && $syndetics_elements->{'SUMMARY'} =~ /SUMMARY/) {
-	eval {
-	my $syndetics_summary = &get_syndetics_summary($isbn,$upc,$oclc);
-	$template->param( SYNDETICS_SUMMARY => $syndetics_summary );
-	};
-	warn $@ if $@;
-
-}
-
-if ( C4::Context->preference("SyndeticsEnabled")
-        && C4::Context->preference("SyndeticsTOC")
-        && $syndetics_elements->{'TOC'} =~ /TOC/) {
-	eval {
-    my $syndetics_toc = &get_syndetics_toc($isbn,$upc,$oclc);
-    $template->param( SYNDETICS_TOC => $syndetics_toc );
-	};
-	warn $@ if $@;
-}
-
-if ( C4::Context->preference("SyndeticsEnabled")
-    && C4::Context->preference("SyndeticsExcerpt")
-    && $syndetics_elements->{'DBCHAPTER'} =~ /DBCHAPTER/ ) {
-    eval {
-    my $syndetics_excerpt = &get_syndetics_excerpt($isbn,$upc,$oclc);
-    $template->param( SYNDETICS_EXCERPT => $syndetics_excerpt );
-    };
-	warn $@ if $@;
-}
-
-if ( C4::Context->preference("SyndeticsEnabled")
-    && C4::Context->preference("SyndeticsReviews")) {
-    eval {
-    my $syndetics_reviews = &get_syndetics_reviews($isbn,$upc,$oclc,$syndetics_elements);
-    $template->param( SYNDETICS_REVIEWS => $syndetics_reviews );
-    };
-	warn $@ if $@;
-}
-
-if ( C4::Context->preference("SyndeticsEnabled")
-    && C4::Context->preference("SyndeticsAuthorNotes")
-	&& $syndetics_elements->{'ANOTES'} =~ /ANOTES/ ) {
-    eval {
-    my $syndetics_anotes = &get_syndetics_anotes($isbn,$upc,$oclc);
-    $template->param( SYNDETICS_ANOTES => $syndetics_anotes );
-    };
-    warn $@ if $@;
-}
-
 # Babelthèque
 if ( C4::Context->preference("Babeltheque") ) {
     $template->param( 
@@ -440,8 +377,10 @@ if (C4::Context->preference("OPACShelfBrowser")) {
             ((cn_sort = ? AND itemnumber >= ?) OR cn_sort > ?) AND
             homebranch = ? AND location = ?
         ORDER BY cn_sort, itemnumber LIMIT 3
+        ");
       $sth_shelfbrowse_next->execute($starting_cn_sort, $starting_itemnumber, $starting_cn_sort, $starting_homebranch->{code}, $starting_location->{code});
-    } else {
+    } 
+    else {
       $sth_shelfbrowse_next = $dbh->prepare("
         SELECT *
         FROM items
