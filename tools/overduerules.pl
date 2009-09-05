@@ -90,7 +90,13 @@ if ($op eq 'save') {
                     my $type = $1; # data type
                     my $num = $2; # From 1 to 3
                     my $bor = $3; # borrower category
-                    $temphash{$bor}->{"$type$num"}=$input->param("$key") if (($input->param("$key") ne "") or ($input->param("$key")>0));
+                    my $value = $input->param($key);
+                    if ($type eq 'delay') {
+                        $temphash{$bor}->{"$type$num"} = ($value =~ /^\d+$/ && int($value) > 0) ? int($value) : '';
+                    } else {
+                        # type is letter
+                        $temphash{$bor}->{"$type$num"} = $value if $value ne '';
+                    }
             }
     }
 
