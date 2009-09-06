@@ -65,7 +65,7 @@ sub show {
             query           => $input,
             type            => "intranet",
             authnotrequired => 0,
-            flagsrequired   => { admin => 1 },
+            flagsrequired   => { parameters => 1 },
             debug           => defined($input->param('debug')),
         }
     );
