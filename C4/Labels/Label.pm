@@ -205,9 +205,8 @@ sub _get_barcode_data {
         elsif ( $f =~ /^($match_kohatable).*/ ) {
             if ($item->{$f}) {
                 $datastring .= $item->{$f};
-            }
-            else {
-                warn sprintf("The '%s' field contains no data.", $f);
+            } else {
+                $debug and warn sprintf("The '%s' field contains no data.", $f);
             }
             $f = $';
             next FIELD_LIST;
