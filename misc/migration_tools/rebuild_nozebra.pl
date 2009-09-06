@@ -16,24 +16,55 @@ $|=1; # flushes output
 # limit for database dumping
 my $limit;# = "LIMIT 100";
 my $directory;
-my $skip_export;
-my $keep_export;
-my $reset;
-my $biblios;
+#my $skip_export;
+#my $keep_export;
+#my $reset;
+#my $biblios;
 my $authorities;
 my $sysprefs;
 my $commit;
+my $want_help;
 
-GetOptions(
+my $result = GetOptions(
     'd:s'      => \$directory,
-    'reset'      => \$reset,
-    's'        => \$skip_export,
-    'k'        => \$keep_export,
-    'b'        => \$biblios,
-    'a'        => \$authorities,
+#    'reset'      => \$reset,
+#    's'        => \$skip_export,    # Not used and conflicts with 's' option some lines below for sysprefs!!!
+#    'k'        => \$keep_export,
+#    'b'        => \$biblios,
+#    'a'        => \$authorities,
     's'        => \$sysprefs,  # rebuild 'NoZebraIndexes' syspref
-    'commit:f'    => \$commit,
+    'h|help'        => \$want_help,
+   'commit:f'    => \$commit,
     );
+
+if (not $result or $want_help) {
+    print_usage();
+    exit 0;
+}
+
+
+sub print_usage {
+    print <<_USAGE_;
+$0: reindex MARC bibs and authorities if NOT using Zebra ("NoZebra").
+
+Use this batch job to reindex all biblio and authority
+records in your Koha database.  This job is useful
+only if you are NOT using Zebra ('NoZebra'); if you are 
+using the 'Zebra'mode, this job should NOT be used.
+
+Parameters:
+    -d                      Temporary directory for indexing.
+                            If not specified, one is automatically
+                            created.  The export directory
+                            is automatically deleted unless
+                            you supply the -k switch.
+
+    -s                      Rebuild "NoZebraIndexes" System Preference 
+
+    --help or -h            show this message.
+_USAGE_
+}   # END of print_usage sub
+
 
 my $commitnum = 1000; 
 $commitnum = $commit if ($commit) ;
