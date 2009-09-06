@@ -22,7 +22,6 @@ use strict;
 use warnings;
 
 use CGI;
-use HTML::Template::Pro;
 use POSIX;
 use Text::CSV_XS;
 

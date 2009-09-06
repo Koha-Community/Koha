@@ -23,7 +23,6 @@ use warnings;
 use vars qw($debug);
 
 use CGI;
-use HTML::Template::Pro;
 use Data::Dumper;
 
 use C4::Auth qw(get_template_and_user);

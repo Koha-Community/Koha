@@ -22,7 +22,6 @@ use warnings;
 use vars qw($debug $cgi_debug);
 
 use CGI;
-use HTML::Template::Pro;
 use List::Util qw( max min );
 use POSIX qw(ceil);
 

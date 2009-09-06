@@ -21,7 +21,6 @@ use strict;
 use warnings;
 
 use CGI;
-use HTML::Template::Pro;
 use Data::Dumper;
 
 use C4::Auth qw(get_template_and_user);
