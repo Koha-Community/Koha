@@ -2,7 +2,6 @@ package C4::Labels::Template;
 
 use strict;
 use warnings;
-use Sys::Syslog qw(syslog);
 use PDF::Reuse;
 use POSIX qw(ceil);
 
@@ -41,14 +40,14 @@ sub _check_params {
         $given_params = {@_};
         foreach my $key (keys %{$given_params}) {
             if (!(grep m/$key/, @valid_template_params)) {
-                syslog("LOG_ERR", "C4::Labels::Template : Unrecognized parameter type of \"%s\".", $key);
+                warn sprintf('Unrecognized parameter type of "%s".', $key);
                 $exit_code = 1;
             }
         }
     }
     else {
         if (!(grep m/$_/, @valid_template_params)) {
-            syslog("LOG_ERR", "C4::Labels::Template : Unrecognized parameter type of \"%s\".", $_);
+            warn sprintf('Unrecognized parameter type of "%s".', $_);
             $exit_code = 1;
         }
     }
@@ -119,7 +118,7 @@ sub retrieve {
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute($opts{template_id});
     if ($sth->err) {
-        syslog("LOG_ERR", "Database returned the following error: %s", $sth->errstr);
+        warn sprintf('Database returned the following error: %s', $sth->errstr);
         return -1;
     }
     my $self = $sth->fetchrow_hashref;
@@ -146,7 +145,7 @@ sub delete {
         $query_param = $opts{'template_id'};
     }
     if ($query_param eq '') {   # If there is no template id then we cannot delete it
-        syslog("LOG_ERR", "%s : Cannot delete layout as the template id is invalid or non-existant.", $call_type);
+        warn sprintf('%s : Cannot delete layout as the template id is invalid or non-existant.', $call_type);
         return -1;
     }
     my $query = "DELETE FROM labels_templates WHERE template_id = ?";  
@@ -171,7 +170,7 @@ sub save {
         my $sth = C4::Context->dbh->prepare($query);
         $sth->execute(@params);
         if ($sth->err) {
-            syslog("LOG_ERR", "Database returned the following error: %s", $sth->errstr);
+            warn sprintf('Database returned the following error: %s', $sth->errstr);
             return -1;
         }
         $self->{'template_stat'} = 1;
@@ -195,7 +194,7 @@ sub save {
         my $sth = C4::Context->dbh->prepare($query);
         $sth->execute(@params);
         if ($sth->err) {
-            syslog("LOG_ERR", "Database returned the following error: %s", $sth->errstr);
+            warn sprintf('Database returned the following error: %s', $sth->errstr);
             return -1;
         }
         my $sth1 = C4::Context->dbh->prepare("SELECT MAX(template_id) FROM labels_templates;");
@@ -317,7 +316,7 @@ CM      = SI Centimeters (28.3464567 points per)
 =head2 retrieve(template_id => $template_id)
 
     Invoking the I<retrieve> method constructs a new template object containing the current values for template_id. The method returns
-    a new object upon success and -1 upon failure. Errors are logged to the syslog. Two further options may be accessed. See the example
+    a new object upon success and -1 upon failure. Errors are logged to the Apache log. Two further options may be accessed. See the example
     below for further description.
 
     examples:
@@ -332,7 +331,7 @@ CM      = SI Centimeters (28.3464567 points per)
 
 =head2 delete()
 
-    Invoking the delete method attempts to delete the template from the database. The method returns -1 upon failure. Errors are logged to the syslog.
+    Invoking the delete method attempts to delete the template from the database. The method returns -1 upon failure. Errors are logged to the Apache log.
     NOTE: This method may also be called as a function and passed a key/value pair simply deleteing that template from the database. See the example below.
 
     examples:
@@ -343,7 +342,7 @@ CM      = SI Centimeters (28.3464567 points per)
 
     Invoking the I<save> method attempts to insert the template into the database if the template is new and update the existing template record if
     the template exists. The method returns the new record template_id upon success and -1 upon failure (This avoids template_ids conflicting with a
-    record template_id of 1). Errors are logged to the syslog.
+    record template_id of 1). Errors are logged to the Apache log.
 
     example:
         C<my $template_id = $template->save(); # to save the record behind the $template object>

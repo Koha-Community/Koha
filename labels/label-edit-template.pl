@@ -21,7 +21,6 @@
 use strict;
 use warnings;
 
-use Sys::Syslog qw(syslog);
 use CGI;
 use HTML::Template::Pro;
 

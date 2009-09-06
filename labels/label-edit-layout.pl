@@ -21,7 +21,6 @@
 use strict;
 use warnings;
 
-use Sys::Syslog qw(syslog);
 use CGI;
 use HTML::Template::Pro;
 use POSIX;
@@ -75,7 +74,7 @@ sub _select_format_string {     # generate field table based on format_string
     my $csv = Text::CSV_XS->new({ allow_whitespace => 1 });
     my $status = $csv->parse($format_string);
     my @text_fields = $csv->fields();
-    syslog("LOG_ERR", "labels/label-edit-layout.pl : Error parsing format_string. Parser returned: %s",$csv->error_input()) if $csv->error_input();
+    warn sprintf('Error parsing format_string. Parser returned: %s', $csv->error_input()) if $csv->error_input();
     my $field_count = $#text_fields + 1;
     POPULATE_TABLE:
     foreach my $text_field (@text_fields) {
@@ -104,7 +103,7 @@ sub _select_format_string {     # generate field table based on format_string
 }
 
 if ($op eq 'edit') {
-    syslog("LOG_ERR", "labels/label-edit-layout.pl : Error performing '%s': No 'layout_id' passed in.", $op) unless ($layout_id);
+    warn sprintf("Error performing '%s': No 'layout_id' passed in.", $op) unless ($layout_id);
     $layout = C4::Labels::Layout->retrieve(layout_id => $layout_id);
 
 }

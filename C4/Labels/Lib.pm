@@ -20,7 +20,6 @@ package C4::Labels::Lib;
 use strict;
 use warnings;
 
-use Sys::Syslog qw(syslog);
 use Data::Dumper;
 
 use C4::Context;
@@ -48,7 +47,7 @@ BEGIN {
 
 #=head2 C4::Labels::Lib::_SELECT()
 #
-#    This function returns a recordset upon success and 1 upon failure. Errors are logged to the syslog.
+#    This function returns a recordset upon success and 1 upon failure. Errors are logged to the Apache log.
 #
 #    examples:
 #
@@ -64,7 +63,7 @@ sub _SELECT {
 #    $sth->{'TraceLevel'} = 3;
     $sth->execute();
     if ($sth->err) {
-        syslog("LOG_ERR", "C4::Labels::Lib::get_single_field_value : Database returned the following error: %s", $sth->errstr);
+        warn sprintf('Database returned the following error: %s', $sth->errstr);
         return 1;
     }
     my $record_set = [];
@@ -134,7 +133,7 @@ my $label_output_formats = [
 
 =head2 C4::Labels::Lib::get_all_templates()
 
-    This function returns a reference to a hash containing all templates upon success and 1 upon failure. Errors are logged to the syslog.
+    This function returns a reference to a hash containing all templates upon success and 1 upon failure. Errors are logged to the Apache log.
 
     examples:
 
@@ -150,7 +149,7 @@ sub get_all_templates {
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute();
     if ($sth->err) {
-        syslog("LOG_ERR", "C4::Labels::Lib::get_all_templates : Database returned the following error: %s", $sth->errstr);
+        warn sprintf('Database returned the following error: %s', $sth->errstr);
         return -1;
     }
     ADD_TEMPLATES:
@@ -162,7 +161,7 @@ sub get_all_templates {
 
 =head2 C4::Labels::Lib::get_all_layouts()
 
-    This function returns a reference to a hash containing all layouts upon success and 1 upon failure. Errors are logged to the syslog.
+    This function returns a reference to a hash containing all layouts upon success and 1 upon failure. Errors are logged to the Apache log.
 
     examples:
 
@@ -179,7 +178,7 @@ sub get_all_layouts {
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute();
     if ($sth->err) {
-        syslog("LOG_ERR", "C4::Labels::Lib::get_all_layouts : Database returned the following error: %s", $sth->errstr);
+        warn sprintf('Database returned the following error: %s', $sth->errstr);
         return -1;
     }
     ADD_LAYOUTS:
@@ -192,7 +191,7 @@ sub get_all_layouts {
 =head2 C4::Labels::Lib::get_all_profiles()
 
     This function returns an arrayref whose elements are hashes containing all profiles upon success and 1 upon failure. Errors are logged
-    to the syslog. Two parameters are accepted. The first limits the field(s) returned. This parameter should be string of comma separted
+    to the Apache log. Two parameters are accepted. The first limits the field(s) returned. This parameter should be string of comma separted
     fields. ie. "field_1, field_2, ...field_n" The second limits the records returned based on a string containing a valud SQL 'WHERE' filter.
     NOTE: Do not pass in the keyword 'WHERE.'
 
@@ -212,7 +211,7 @@ sub get_all_profiles {
 #    $sth->{'TraceLevel'} = 3 if $debug;
     $sth->execute();
     if ($sth->err) {
-        syslog("LOG_ERR", "C4::Labels::Lib::get_all_profiles : Database returned the following error: %s", $sth->errstr);
+        warn sprintf('Database returned the following error: %s', $sth->errstr);
         return -1;
     }
     ADD_PROFILES:
@@ -225,7 +224,7 @@ sub get_all_profiles {
 =head2 C4::Labels::Lib::get_batch_summary()
 
     This function returns an arrayref whose elements are hashes containing the batch_ids of current batches along with the item count
-    for each batch upon success and 1 upon failure. Item counts are stored under the key '_item_count' Errors are logged to the syslog.
+    for each batch upon success and 1 upon failure. Item counts are stored under the key '_item_count' Errors are logged to the Apache log.
     One parameter is accepted which limits the records returned based on a string containing a valud SQL 'WHERE' filter.
     
     NOTE: Do not pass in the keyword 'WHERE.'
@@ -246,7 +245,7 @@ sub get_batch_summary {
 #    $sth->{'TraceLevel'} = 3;
     $sth->execute();
     if ($sth->err) {
-        syslog("LOG_ERR", "C4::Labels::Lib::get_batch_summary : Database returned the following error on attempted SELECT: %s", $sth->errstr);
+        warn sprintf('Database returned the following error on attempted SELECT: %s', $sth->errstr);
         return -1;
     }
     ADD_BATCHES:
@@ -255,7 +254,7 @@ sub get_batch_summary {
         my $sth1 = C4::Context->dbh->prepare($query);
         $sth1->execute($batch->{'batch_id'});
         if ($sth1->err) {
-            syslog("LOG_ERR", "C4::Labels::Lib::get_batch_summary : Database returned the following error on attempted SELECT count: %s", $sth1->errstr);
+            warn sprintf('Database returned the following error on attempted SELECT count: %s', $sth1->errstr);
             return -1;
         }
         my $count = $sth1->fetchrow_arrayref;
@@ -268,7 +267,7 @@ sub get_batch_summary {
 =head2 C4::Labels::Lib::get_label_summary()
 
     This function returns an arrayref whose elements are hashes containing the label_ids of current labels along with the item count
-    for each label upon success and 1 upon failure. Item counts are stored under the key '_item_count' Errors are logged to the syslog.
+    for each label upon success and 1 upon failure. Item counts are stored under the key '_item_count' Errors are logged to the Apache log.
     One parameter is accepted which limits the records returned based on a string containing a valud SQL 'WHERE' filter.
     
     NOTE: Do not pass in the keyword 'WHERE.'
@@ -290,13 +289,15 @@ sub get_label_summary {
         $label_number++;
         $sth->execute($item->{'item_number'}, $params{'batch_id'});
         if ($sth->err) {
-            syslog("LOG_ERR", "C4::Labels::Lib::get_label_summary : Database returned the following error on attempted SELECT: %s", $sth->errstr);
+            warn sprintf('Database returned the following error on attempted SELECT: %s', $sth->errstr);
             return -1;
         }
         my $record = $sth->fetchrow_hashref;
         my $label_summary->{'_label_number'} = $label_number;
         $record->{'author'} =~ s/[^\.|\w]$// if $record->{'author'};  # strip off ugly trailing chars... but not periods or word chars
         $record->{'title'} =~ s/\W*$//;  # strip off ugly trailing chars
+        # FIXME contructing staff interface URLs should be done *much* higher up the stack - for the most part, C4 module code
+        # should not know that it's part of a web app
         $record->{'title'} = '<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=' . $record->{'biblionumber'} . '"> ' . $record->{'title'} . '</a>';
         $label_summary->{'_summary'} = $record->{'title'} . " | " . ($record->{'author'} ? $record->{'author'} : 'N/A');
         $label_summary->{'_item_type'} = $record->{'itemtype'};

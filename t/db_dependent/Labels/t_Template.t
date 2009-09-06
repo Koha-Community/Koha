@@ -51,7 +51,7 @@ my $expect_template = {
 my $template;
 
 diag "Testing Template->new() method.";
-ok($template = C4::Labels::Template->new(page_width => 8.5,cols => 3))  || diag "Template->new() FAILED. Check syslog for details.";
+ok($template = C4::Labels::Template->new(page_width => 8.5,cols => 3))  || diag "Template->new() FAILED.";
 is_deeply($template, $expect_template) || diag "New template object FAILED to verify.";
 
 diag "Testing Template->get_attr() method.";
@@ -89,13 +89,13 @@ foreach my $key (keys %{$new_attr}) {
 diag "Testing Template->save() method with a new object.";
 
 my $sav_results = $template->save();
-ok($sav_results ne -1) || diag "Template->save() FAILED. See syslog for details.";
+ok($sav_results ne -1) || diag "Template->save() FAILED.";
 
 my $saved_template;
 if ($sav_results ne -1) {
     diag "Testing Template->retrieve() method.";
     $new_attr->{'template_id'} = $sav_results;
-    ok($saved_template = C4::Labels::Template->retrieve(template_id => $sav_results))  || diag "Template->retrieve() FAILED. Check syslog for details.";
+    ok($saved_template = C4::Labels::Template->retrieve(template_id => $sav_results))  || diag "Template->retrieve() FAILED.";
     is_deeply($saved_template, $new_attr) || diag "Retrieved template object FAILED to verify.";
 }
 
@@ -103,7 +103,7 @@ diag "Testing Template->save method with an updated object.";
 
 $saved_template->set_attr(template_desc => 'A test template');
 my $upd_results = $saved_template->save();
-ok($upd_results ne -1) || diag "Template->save() FAILED. See syslog for details.";
+ok($upd_results ne -1) || diag "Template->save() FAILED.";
 my $updated_template = C4::Labels::Template->retrieve(template_id => $sav_results);
 is_deeply($updated_template, $saved_template) || diag "Updated template object FAILED to verify.";
 
@@ -130,4 +130,4 @@ foreach my $key (keys %{$expect_conv}) {
 diag "Testing Template->delete() method.";
 
 my $del_results = $updated_template->delete();
-ok($del_results ne -1) || diag "Template->delete() FAILED. See syslog for details.";
+ok($del_results ne -1) || diag "Template->delete() FAILED.";

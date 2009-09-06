@@ -24,7 +24,6 @@ use vars qw($debug $cgi_debug);
 use CGI;
 use HTML::Template::Pro;
 use List::Util qw( max min );
-use Sys::Syslog qw(syslog);
 use POSIX qw(ceil);
 
 use C4::Auth qw(get_template_and_user);
@@ -140,7 +139,7 @@ if ($show_results) {
         }
         else {
             # FIXME: Some error trapping code needed
-            syslog("LOG_ERR", "labels/label-item-search.pl : No item numbers retrieved for biblio number: %s", $biblionumber);
+            warn sprintf('No item numbers retrieved for biblio number: %s', $biblionumber);
         }
     }
 

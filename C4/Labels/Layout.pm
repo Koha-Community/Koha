@@ -3,7 +3,6 @@ package C4::Labels::Layout;
 use strict;
 use warnings;
 
-use Sys::Syslog qw(syslog);
 use DBI qw(neat);
 
 use C4::Context;
@@ -43,14 +42,14 @@ sub _check_params {
         my %given_params = @_;
         foreach my $key (keys %given_params) {
             if (!(grep m/$key/, @valtmpl_id_params)) {
-                syslog("LOG_ERR", "C4::Labels::Layout : (Multiple parameters) Unrecognized parameter type of \"%s\".", $key);
+                warn sprintf('(Multiple parameters) Unrecognized parameter type of "%s".', $key);
                 $exit_code = 1;
             }
         }
     }
     else {
         if (!(grep m/$_/, @valtmpl_id_params)) {
-            syslog("LOG_ERR", "C4::Labels::Layout : (Single parameter) Unrecognized parameter type of \"%s\".", $_);
+            warn sprintf('(Single parameter) Unrecognized parameter type of "%s".', $_);
             $exit_code = 1;
         }
     }
@@ -87,7 +86,7 @@ sub retrieve {
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute($opts{'layout_id'});
     if ($sth->err) {
-        syslog("LOG_ERR", "Database returned the following error: %s", $sth->errstr);
+        warn sprintf('Database returned the following error: %s', $sth->errstr);
         return -1;
     }
     my $self = $sth->fetchrow_hashref;
@@ -111,14 +110,14 @@ sub delete {
         $query_param = $opts{'layout_id'};
     }
     if ($query_param eq '') {   # If there is no layout id then we cannot delete it
-        syslog("LOG_ERR", "%s : Cannot delete layout as the layout id is invalid or non-existant.", $call_type);
+        warn sprintf('%s : Cannot delete layout as the layout id is invalid or non-existant.', $call_type);
         return -1;
     }
     my $query = "DELETE FROM labels_layouts WHERE layout_id = ?";  
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute($query_param);
     if ($sth->err) {
-        syslog("LOG_ERR", "%s : Database returned the following error: %s", $call_type, $sth->errstr);
+        warn sprintf('%s : Database returned the following error: %s', $call_type, $sth->errstr);
         return -1;
     }
     return 0;
@@ -141,7 +140,7 @@ sub save {
         #local $sth->{TraceLevel} = "3";        # enable DBI trace and set level; outputs to STDERR
         $sth->execute(@params);
         if ($sth->err) {
-            syslog("LOG_ERR", "C4::Labels::Layout : Database returned the following error: %s", $sth->errstr);
+            warn sprintf('Database returned the following error: %s', $sth->errstr);
             return -1;
         }
         return $self->{'layout_id'};
@@ -163,7 +162,7 @@ sub save {
         my $sth = C4::Context->dbh->prepare($query);
         $sth->execute(@params);
         if ($sth->err) {
-            syslog("LOG_ERR", "C4::Labels::Layout : Database returned the following error: %s", $sth->errstr);
+            warn sprintf('Database returned the following error: %s', $sth->errstr);
             return -1;
         }
         my $sth1 = C4::Context->dbh->prepare("SELECT MAX(layout_id) FROM labels_layouts;");
@@ -350,14 +349,14 @@ R       = Right
 =head2 retrieve(layout_id => layout_id)
 
     Invoking the I<retrieve> method constructs a new layout object containing the current values for layout_id. The method returns a new object upon success and 1 upon failure.
-    Errors are logged to the syslog.
+    Errors are logged to the Apache log.
 
     example:
         C<my $layout = Layout->retrieve(layout_id => 1); # Retrieves layout record 1 and returns an object containing the record>
 
 =head2 delete()
 
-    Invoking the delete method attempts to delete the layout from the database. The method returns 0 upon success and -1 upon failure. Errors are logged to the syslog.
+    Invoking the delete method attempts to delete the layout from the database. The method returns 0 upon success and -1 upon failure. Errors are logged to the Apache log.
     NOTE: This method may also be called as a function and passed a key/value pair simply deleteing that template from the database. See the example below.
 
     examples:
@@ -367,7 +366,7 @@ R       = Right
 =head2 save()
 
     Invoking the I<save> method attempts to insert the layout into the database if the layout is new and update the existing layout record if the layout exists.
-    The method returns the new record id upon success and -1 upon failure (This avoids conflicting with a record id of 1). Errors are logged to the syslog.
+    The method returns the new record id upon success and -1 upon failure (This avoids conflicting with a record id of 1). Errors are logged to the Apache log.
 
     example:
         C<my $exitstat = $layout->save(); # to save the record behind the $layout object>

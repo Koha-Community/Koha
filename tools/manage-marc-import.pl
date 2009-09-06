@@ -24,7 +24,6 @@ use warnings;
 use CGI;
 use CGI::Cookie;
 use MARC::File::USMARC;
-use Sys::Syslog qw(syslog);
 
 # Koha modules used
 use C4::Context;
@@ -182,13 +181,13 @@ sub create_labelbatch_from_importbatch {
         my $batch = C4::Labels::Batch->new(branch_code => $branch_code);
 	my @items = GetItemNumbersFromImportBatch($batch_id);
         if (grep{$_ == 0} @items) {
-            syslog("LOG_ERR", "tools/manage-marc-import.pl : create_labelbatch_from_importbatch() : Call to C4::ImportBatch::GetItemNumbersFromImportBatch returned no item number(s) from import batch #%s.", $batch_id);
+            warn sprintf('create_labelbatch_from_importbatch() : Call to C4::ImportBatch::GetItemNumbersFromImportBatch returned no item number(s) from import batch #%s.', $batch_id);
             return -1;
         }
         foreach my $item_number (@items) {
             $err = $batch->add_item($item_number);
             if ($err == -1) {
-                syslog("LOG_ERR", "tools/manage-marc-import.pl : create_labelbatch_from_importbatch() : Error attempting to add item #%s of import batch #%s to label batch.", $item_number, $batch_id);
+                warn sprintf('create_labelbatch_from_importbatch() : Error attempting to add item #%s of import batch #%s to label batch.', $item_number, $batch_id);
                 return -1;
             }
         }

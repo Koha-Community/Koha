@@ -22,7 +22,6 @@ use strict;
 use warnings;
 use vars qw($debug);
 
-use Sys::Syslog qw(syslog);
 use CGI;
 use HTML::Template::Pro;
 use Data::Dumper;

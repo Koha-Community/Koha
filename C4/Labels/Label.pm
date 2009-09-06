@@ -3,7 +3,6 @@ package C4::Labels::Label;
 use strict;
 use warnings;
 
-use Sys::Syslog qw(syslog);
 use Text::Wrap;
 use Algorithm::CheckDigits;
 use Text::CSV_XS;
@@ -45,14 +44,14 @@ sub _check_params {
         $given_params = {@_};
         foreach my $key (keys %{$given_params}) {
             if (!(grep m/$key/, @valid_label_params)) {
-                syslog("LOG_ERR", "C4::Labels::Label : Unrecognized parameter type of \"%s\".", $key);
+                warn sprintf('Unrecognized parameter type of "%s".', $key);
                 $exit_code = 1;
             }
         }
     }
     else {
         if (!(grep m/$_/, @valid_label_params)) {
-            syslog("LOG_ERR", "C4::Labels::Label : Unrecognized parameter type of \"%s\".", $_);
+            warn sprintf('Unrecognized parameter type of "%s".', $_);
             $exit_code = 1;
         }
     }
@@ -81,14 +80,14 @@ sub _get_label_item {
     my $sth = $dbh->prepare("SELECT bi.*, i.*, b.* FROM items AS i, biblioitems AS bi ,biblio AS b WHERE itemnumber=? AND i.biblioitemnumber=bi.biblioitemnumber AND bi.biblionumber=b.biblionumber;");
     $sth->execute($item_number);
     if ($sth->err) {
-        syslog("LOG_ERR", "C4::Labels::Label::_get_label_item : Database returned the following error: %s", $sth->errstr);
+        warn sprintf('Database returned the following error: %s', $sth->errstr);
     }
     my $data = $sth->fetchrow_hashref;
     # Replaced item's itemtype with the more user-friendly description...
     my $sth1 = $dbh->prepare("SELECT itemtype,description FROM itemtypes WHERE itemtype = ?");
     $sth1->execute($data->{'itemtype'});
     if ($sth1->err) {
-        syslog("LOG_ERR", "C4::Labels::Label::_get_label_item : Database returned the following error: %s", $sth1->errstr);
+        warn sprintf('Database returned the following error: %s', $sth1->errstr);
     }
     my $data1 = $sth->fetchrow_hashref;
     $data->{'itemtype'} = $data1->{'description'};
@@ -102,7 +101,7 @@ sub _get_text_fields {
     my $status = $csv->parse($format_string);
     my @sorted_fields = map {{ 'code' => $_, desc => $_ }} $csv->fields();
     my $error = $csv->error_input();
-    syslog("LOG_ERR", "C4::Labels::Label::_get_text_fields : Text field sort failed with this error: %s", $error) if $error;
+    warn sprintf('Text field sort failed with this error: %s', $error) if $error;
     return \@sorted_fields;
 }
 
@@ -121,11 +120,11 @@ sub _split_lccn {
         \s*
         /x;
     unless (scalar @parts)  {
-        syslog("LOG_ERR", "C4::Labels::Label::_split_lccn : regexp failed to match string: %s", $_);
+        warn sprintf('regexp failed to match string: %s', $_);
         push @parts, $_;     # if no match, just push the whole string.
     }
     push @parts, split /\s+/, pop @parts;   # split the last piece into an arbitrary number of pieces at spaces
-    $debug and print STDERR "split_lccn array: ", join(" | ", @parts), "\n";
+    $debug and warn "split_lccn array: ", join(" | ", @parts), "\n";
     return @parts;
 }
 
@@ -140,7 +139,7 @@ sub _split_ddcn {
         \s*
         /x;
     unless (scalar @parts)  {
-        syslog("LOG_ERR", "C4::Labels::Label::_split_ddcn : regexp failed to match string: %s", $_);
+        warn sprintf('regexp failed to match string: %s', $_);
         push @parts, $_;     # if no match, just push the whole string.
     }
 
@@ -175,7 +174,7 @@ sub _split_fcn {
         }
     }
     unless (scalar @fcn_split) {
-        syslog("LOG_ERR", "C4::Labels::Label::_split_fcn : regexp failed to match string: %s", $_);
+        warn sprintf('regexp failed to match string: %s', $_);
         push (@fcn_split, $_);
     }
     return @fcn_split;
@@ -208,7 +207,7 @@ sub _get_barcode_data {
                 $datastring .= $item->{$f};
             }
             else {
-                syslog("LOG_ERR", "C4::Labels::Label::_get_barcode_data : The '%s' field contains no data.", $f);
+                warn sprintf("The '%s' field contains no data.", $f);
             }
             $f = $';
             next FIELD_LIST;
@@ -227,7 +226,7 @@ sub _get_barcode_data {
                                 $datastring .= $itemfield->subfield($subf) . $ws;
                             }
                             else {
-                                syslog("LOG_ERR", "C4::Labels::Label::_get_barcode_data : The '%s' field contains no data.", $f);
+                                warn sprintf("The '%s' field contains no data.", $f);
                             }
                             last ITEM_FIELDS;
                         }
@@ -237,7 +236,7 @@ sub _get_barcode_data {
                         $datastring .= $marcfield[0]->subfield($subf) . $ws;
                     }
                     else {
-                        syslog("LOG_ERR", "C4::Labels::Label::_get_barcode_data : The '%s' field contains no data.", $f);
+                        warn sprintf("The '%s' field contains no data.", $f);
                     }
                 }
             }
@@ -245,7 +244,7 @@ sub _get_barcode_data {
             next FIELD_LIST;
         }
         else {
-            syslog("LOG_ERR", "C4::Labels::Label::_get_barcode_data : Failed to parse label format string: %s", $f);
+            warn sprintf('Failed to parse label format string: %s', $f);
             last FIELD_LIST;    # Failed to match
         }
     }
@@ -423,7 +422,7 @@ sub draw_label_text {
                 @label_lines = _split_fcn($field_data) if !@label_lines;
                 push (@label_lines, $field_data) if !@label_lines;
             } else {
-                syslog("LOG_ERR", "C4::Labels::Label->draw_label_text : Call number splitting failed for: %s. Please add this call number to bug #2500 at bugs.koha.org", $field_data);
+                warn sprintf('Call number splitting failed for: %s. Please add this call number to bug #2500 at bugs.koha.org', $field_data);
                 push @label_lines, $field_data;
             }
         }
@@ -513,7 +512,7 @@ sub barcode {
             );
         };
         if ($@) {
-            syslog("LOG_ERR", "Barcode generation failed for item %s with this error: %s", $self->{'item_number'}, $@);
+            warn sprintf('Barcode generation failed for item %s with this error: %s', $self->{'item_number'}, $@);
         }
     }
     elsif ($params{'barcode_type'} eq 'COOP2OF5') {
@@ -531,7 +530,7 @@ sub barcode {
             );
         };
         if ($@) {
-            syslog("LOG_ERR", "Barcode generation failed for item %s with this error: %s", $self->{'item_number'}, $@);
+            warn sprintf('Barcode generation failed for item %s with this error: %s', $self->{'item_number'}, $@);
         }
     }
     elsif ( $params{'barcode_type'} eq 'INDUSTRIAL2OF5' ) {
@@ -549,7 +548,7 @@ sub barcode {
             );
         };
         if ($@) {
-            syslog("LOG_ERR", "Barcode generation failed for item %s with this error: %s", $self->{'item_number'}, $@);
+            warn sprintf('Barcode generation failed for item %s with this error: %s', $self->{'item_number'}, $@);
         }
     }
 }

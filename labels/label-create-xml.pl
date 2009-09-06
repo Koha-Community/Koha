@@ -4,7 +4,6 @@ use strict;
 use warnings;
 
 use CGI;
-use Sys::Syslog qw(syslog);
 use XML::Simple;
 use Data::Dumper;
 
@@ -76,10 +75,6 @@ foreach my $item (@$items) {
         push(@{$xml_data->{'label'}[$item_count]->{$data_fields[$i]}}, $$csv_data[$i]);
     }
     $item_count++;
-#    else {
-#        syslog("LOG_ERR", "labels/label-create-csv.pl : Text::CSV_XS->combine() returned the following error: %s", $csv->error_input);
-#        next CSV_ITEMS;
-#    }
 }
 
 #die "XML DATA:\n" . Dumper($xml_data);

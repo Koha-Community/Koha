@@ -2,7 +2,6 @@ package C4::Labels::Profile;
 
 use strict;
 use warnings;
-use Sys::Syslog qw(syslog);
 
 use C4::Context;
 use C4::Debug;
@@ -29,14 +28,14 @@ sub _check_params {
         $given_params = {@_};
         foreach my $key (keys %{$given_params}) {
             if (!(grep m/$key/, @valid_profile_params)) {
-                syslog("LOG_ERR", "C4::Labels::Profile : Unrecognized parameter type of \"%s\".", $key);
+                warn sprintf('Unrecognized parameter type of "%s".', $key);
                 $exit_code = 1;
             }
         }
     }
     else {
         if (!(grep m/$_/, @valid_profile_params)) {
-            syslog("LOG_ERR", "C4::Labels::Profile : Unrecognized parameter type of \"%s\".", $_);
+            warn sprintf('Unrecognized parameter type of "%s".', $_);
             $exit_code = 1;
         }
     }
@@ -82,7 +81,7 @@ sub retrieve {
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute($opts{profile_id});
     if ($sth->err) {
-        syslog("LOG_ERR", "Database returned the following error: %s", $sth->errstr);
+        warn sprintf('Database returned the following error: %s', $sth->errstr);
         return -1;
     }
     my $self = $sth->fetchrow_hashref;
@@ -107,7 +106,7 @@ sub delete {
         $query_param = $opts{'profile_id'};
     }
     if ($query_param eq '') {   # If there is no profile id then we cannot delete it
-        syslog("LOG_ERR", "%s : Cannot delete layout as the profile id is invalid or non-existant.", $call_type);
+        warn sprintf('%s : Cannot delete layout as the profile id is invalid or non-existant.', $call_type);
         return -1;
     }
     my $query = "DELETE FROM printers_profile WHERE profile_id = ?";  
@@ -133,7 +132,7 @@ sub save {
 #        $sth->{'TraceLevel'} = 3;
         $sth->execute(@params);
         if ($sth->err) {
-            syslog("LOG_ERR", "C4::Labels::Profile : Database returned the following error on attempted UPDATE: %s", $sth->errstr);
+            warn sprintf('Database returned the following error on attempted UPDATE: %s', $sth->errstr);
             return -1;
         }
         return $self->{'profile_id'};
@@ -155,7 +154,7 @@ sub save {
         my $sth = C4::Context->dbh->prepare($query);
         $sth->execute(@params);
         if ($sth->err) {
-            syslog("LOG_ERR", "C4::Labels::Profile : Database returned the following error on attempted INSERT: %s", $sth->errstr);
+            warn sprintf('Database returned the following error on attempted INSERT: %s', $sth->errstr);
             return -1;
         }
         my $sth1 = C4::Context->dbh->prepare("SELECT MAX(profile_id) FROM printers_profile;");
@@ -175,7 +174,7 @@ sub get_attr {
         return $self->{$attr};
     }
     else {
-        syslog("LOG_ERR", "C4::Labels::Profile : %s is currently undefined.", $attr);
+        warn sprintf('%s is currently undefined.', $attr);
         return -1;
     }
 }
@@ -250,7 +249,7 @@ CM      = SI Centimeters (28.3464567 points per)
 =head2 retrieve(profile_id => $profile_id, convert => 1)
 
     Invoking the I<retrieve> method constructs a new profile object containing the current values for profile_id. The method returns a new object upon success and 1 upon failure.
-    Errors are logged to the syslog. One further option maybe accessed. See the examples below for further description.
+    Errors are logged to the Apache log. One further option maybe accessed. See the examples below for further description.
 
     examples:
 
@@ -260,7 +259,7 @@ CM      = SI Centimeters (28.3464567 points per)
 
 =head2 delete()
 
-    Invoking the delete method attempts to delete the profile from the database. The method returns -1 upon failure. Errors are logged to the syslog.
+    Invoking the delete method attempts to delete the profile from the database. The method returns -1 upon failure. Errors are logged to the Apache log.
     NOTE: This method may also be called as a function and passed a key/value pair simply deleteing that profile from the database. See the example below.
 
     examples:
@@ -270,7 +269,7 @@ CM      = SI Centimeters (28.3464567 points per)
 =head2 save()
 
     Invoking the I<save> method attempts to insert the profile into the database if the profile is new and update the existing profile record if the profile exists. The method returns
-    the new record profile_id upon success and -1 upon failure (This avoids conflicting with a record profile_id of 1). Errors are logged to the syslog.
+    the new record profile_id upon success and -1 upon failure (This avoids conflicting with a record profile_id of 1). Errors are logged to the Apache log.
 
     example:
         C<my $exitstat = $profile->save(); # to save the record behind the $profile object>

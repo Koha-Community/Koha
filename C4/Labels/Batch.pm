@@ -3,8 +3,6 @@ package C4::Labels::Batch;
 use strict;
 use warnings;
 
-use Sys::Syslog qw(syslog);
-
 use C4::Context;
 use C4::Debug;
 
@@ -25,14 +23,14 @@ sub _check_params {
         $given_params = {@_};
         foreach my $key (keys %{$given_params}) {
             if (!(grep m/$key/, @valid_template_params)) {
-                syslog("LOG_ERR", "C4::Labels::Batch : Unrecognized parameter type of \"%s\".", $key);
+                warn sprintf('Unrecognized parameter type of "%s".', $key);
                 $exit_code = 1;
             }
         }
     }
     else {
         if (!(grep m/$_/, @valid_template_params)) {
-            syslog("LOG_ERR", "C4::Labels::Batch : Unrecognized parameter type of \"%s\".", $_);
+            warn sprintf('Unrecognized parameter type of %s', $_);
             $exit_code = 1;
         }
     }
@@ -65,7 +63,7 @@ sub add_item {
 #    $sth->{'TraceLevel'} = 3;
     $sth->execute($self->{'batch_id'}, $item_number, $self->{'branch_code'});
     if ($sth->err) {
-        syslog("LOG_ERR", "C4::Labels::Batch->add_item : Database returned the following error on attempted INSERT: %s", $sth->errstr);
+        warn sprintf('Database returned the following error on attempted INSERT: %s', $sth->errstr);
         return -1;
     }
     $query = "SELECT max(label_id) FROM labels_batches WHERE batch_id=? AND item_number=? AND branch_code=?;";
@@ -90,7 +88,7 @@ sub remove_item {
 #    $sth->{'TraceLevel'} = 3;
     $sth->execute($label_id, $self->{'batch_id'});
     if ($sth->err) {
-        syslog("LOG_ERR", "C4::Labels::Batch->remove_item : Database returned the following error on attempted DELETE: %s", $sth->errstr);
+        warn sprintf('Database returned the following error on attempted DELETE: %s', $sth->errstr);
         return -1;
     }
     @{$self->{'items'}} = grep{$_->{'label_id'} != $label_id} @{$self->{'items'}};
@@ -106,7 +104,7 @@ sub remove_item {
 #
 #    Invoking the I<save> method attempts to insert the batch into the database. The method returns
 #    the new record batch_id upon success and -1 upon failure (This avoids conflicting with a record
-#    batch_id of 1). Errors are logged to the syslog.
+#    batch_id of 1). Errors are logged to the Apache log.
 #
 #    example:
 #        my $exitstat = $batch->save(); # to save the record behind the $batch object
@@ -120,7 +118,7 @@ sub remove_item {
 #        my $sth1 = C4::Context->dbh->prepare($query);
 #        $sth1->execute($self->{'batch_id'}, $item_number->{'item_number'}, $self->{'branch_code'});
 #        if ($sth1->err) {
-#            syslog("LOG_ERR", "C4::Labels::Batch->save : Database returned the following error on attempted INSERT: %s", $sth1->errstr);
+#            warn sprintf('Database returned the following error on attempted INSERT: %s', $sth1->errstr);
 #            return -1;
 #        }
 #        $self->{'batch_stat'} = 1;
@@ -148,7 +146,7 @@ sub retrieve {
     }
     return -2 if $record_flag == 0;     # a hackish sort of way of indicating no such record exists
     if ($sth->err) {
-        syslog("LOG_ERR", "C4::Labels::Batch->retrieve : Database returned the following error on attempted SELECT: %s", $sth->errstr);
+        warn sprintf('Database returned the following error on attempted SELECT: %s', $sth->errstr);
         return -1;
     }
     $self->{'batch_stat'} = 1;
@@ -172,7 +170,7 @@ sub delete {
         @query_params = ($opts{'batch_id'}, $opts{'branch_code'});
     }
     if ($query_params[0] eq '') {   # If there is no template id then we cannot delete it
-        syslog("LOG_ERR", "%s : Cannot delete batch as the batch id is invalid or non-existant.", $call_type);
+        warn sprtinf('%s : Cannot delete batch as the batch id is invalid or non-existent.', $call_type);
         return -1;
     }
     my $query = "DELETE FROM labels_batches WHERE batch_id = ? AND branch_code =?";
@@ -180,7 +178,7 @@ sub delete {
 #    $sth->{'TraceLevel'} = 3;
     $sth->execute(@query_params);
     if ($sth->err) {
-        syslog("LOG_ERR", "%s : Database returned the following error on attempted INSERT: %s", $call_type, $sth->errstr);
+        warn sprintf('%s : Database returned the following error on attempted INSERT: %s', $call_type, $sth->errstr);
         return -1;
     }
     return 0;
@@ -195,7 +193,7 @@ sub remove_duplicates {
     foreach my $item (@duplicate_items) {
         $sth->execute($item->{'label_id'});
         if ($sth->err) {
-            syslog("LOG_ERR", "C4::Labels::Batch->remove_duplicates() : Database returned the following error on attempted DELETE for label_id %s: %s", $item->{'label_id'}, $sth->errstr);
+            warn sprintf('Database returned the following error on attempted DELETE for label_id %s: %s', $item->{'label_id'}, $sth->errstr);
             return -1;
         }
         $sth->finish(); # Per DBI.pm docs: "If execute() is called on a statement handle that's still active ($sth->{Active} is true) then it should effectively call finish() to tidy up the previous execution results before starting this new execution."
@@ -257,7 +255,7 @@ This module provides methods for creating, and otherwise manipulating batch obje
 =head2 C4::Labels::Batch->retrieve(batch_id => $batch_id)
 
     Invoking the I<retrieve> method constructs a new batch object containing the current values for batch_id. The method returns a new object upon success and 1 upon failure.
-    Errors are logged to the syslog.
+    Errors are logged to the Apache log.
 
     examples:
 
@@ -265,7 +263,7 @@ This module provides methods for creating, and otherwise manipulating batch obje
 
 =head2 delete()
 
-    Invoking the delete method attempts to delete the template from the database. The method returns -1 upon failure. Errors are logged to the syslog.
+    Invoking the delete method attempts to delete the template from the database. The method returns -1 upon failure. Errors are logged to the Apache log.
     NOTE: This method may also be called as a function and passed a key/value pair simply deleteing that batch from the database. See the example below.
 
     examples:
@@ -275,7 +273,7 @@ This module provides methods for creating, and otherwise manipulating batch obje
 =head2 remove_duplicates()
 
     Invoking the remove_duplicates method attempts to remove duplicate items in the batch from the database. The method returns the count of duplicate records removed upon
-    success and -1 upon failure. Errors are logged to the syslog.
+    success and -1 upon failure. Errors are logged to the Apache log.
     NOTE: This method may also be called as a function and passed a key/value pair removing duplicates in the batch passed in. See the example below.
 
     examples:

@@ -4,7 +4,6 @@ use strict;
 use warnings;
 
 use CGI;
-use Sys::Syslog qw(syslog);
 use Text::CSV_XS;
 use Data::Dumper;
 
@@ -71,7 +70,7 @@ foreach my $item (@$items) {
         print $csv->string() . "\n";
     }
     else {
-        syslog("LOG_ERR", "labels/label-create-csv.pl : Text::CSV_XS->combine() returned the following error: %s", $csv->error_input);
+        warn sprintf('Text::CSV_XS->combine() returned the following error: %s', $csv->error_input);
         next CSV_ITEMS;
     }
 }

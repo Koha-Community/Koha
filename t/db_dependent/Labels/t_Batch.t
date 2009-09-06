@@ -31,7 +31,7 @@ BEGIN {
 my $sth = C4::Context->dbh->prepare('SELECT branchcode FROM branches b LIMIT 0,1');
 $sth->execute();
 my $branch_code = $sth->fetchrow_hashref()->{'branchcode'};
-syslog("LOG_ERR", "t/db_dependent/Labels/t_Batch.t : Database returned the following error: %s", $sth->errstr) if $sth->errstr;
+diag sprintf('Database returned the following error: %s', $sth->errstr) if $sth->errstr;
 my $expected_batch = {
         items           => [],
         branch_code     => $branch_code,
@@ -42,7 +42,7 @@ my $batch = 0;
 my $item_number = 0;
 
 diag "Testing Batch->new() method.";
-ok($batch = C4::Labels::Batch->new(branch_code => $branch_code)) || diag "Batch->new() FAILED. Check syslog for details.";
+ok($batch = C4::Labels::Batch->new(branch_code => $branch_code)) || diag "Batch->new() FAILED.";
 my $batch_id = $batch->get_attr('batch_id');
 $expected_batch->{'batch_id'} = $batch_id;
 is_deeply($batch, $expected_batch) || diag "New batch object FAILED to verify.";
@@ -61,22 +61,22 @@ diag "Testing Batch->add_item() method.";
 my $sth1 = C4::Context->dbh->prepare('SELECT itemnumber FROM items LIMIT 0,10');
 $sth1->execute();
 while (my $row = $sth1->fetchrow_hashref()) {
-    syslog("LOG_ERR", "t/db_dependent/Labels/t_Batch.t : Database returned the following error: %s", $sth1->errstr) if $sth1->errstr;
-    ok($batch->add_item($row->{'itemnumber'}) eq 0 ) || diag "Batch->add_item() FAILED. Check syslog for details.";
+    diag sprintf('Database returned the following error: %s', $sth1->errstr) if $sth1->errstr;
+    ok($batch->add_item($row->{'itemnumber'}) eq 0 ) || diag "Batch->add_item() FAILED.";
     $item_number = $row->{'itemnumber'};
 }
 
 diag "Testing Batch->retrieve() method.";
-ok(my $saved_batch = C4::Labels::Batch->retrieve(batch_id => $batch_id)) || diag "Batch->retrieve() FAILED. Check syslog for details.";
+ok(my $saved_batch = C4::Labels::Batch->retrieve(batch_id => $batch_id)) || diag "Batch->retrieve() FAILED.";
 is_deeply($saved_batch, $batch) || diag "Retrieved batch object FAILED to verify.";
 
 diag "Testing Batch->remove_item() method.";
 
-ok($batch->remove_item($item_number) eq 0) || diag "Batch->remove_item() FAILED. See syslog for details.";
+ok($batch->remove_item($item_number) eq 0) || diag "Batch->remove_item() FAILED.";
 my $updated_batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);
 is_deeply($updated_batch, $batch) || diag "Updated batch object FAILED to verify.";
 
 diag "Testing Batch->delete() method.";
 
 my $del_results = $batch->delete();
-ok($del_results eq 0) || diag "Batch->delete() FAILED. See syslog for details.";
+ok($del_results eq 0) || diag "Batch->delete() FAILED.";

@@ -20,8 +20,6 @@ package C4::Labels::Patroncard;
 use strict;
 use warnings;
 
-use Sys::Syslog qw(syslog);
-
 use C4::Context;
 use C4::Debug;
 use C4::Biblio;
@@ -45,14 +43,14 @@ sub _check_params {
         $given_params = {@_};
         foreach my $key (keys %{$given_params}) {
             if (!(grep m/$key/, @valid_template_params)) {
-                syslog("LOG_ERR", "C4::Labels::Batch : Unrecognized parameter type of \"%s\".", $key);
+                warn sprintf('Unrecognized parameter type of "%s".', $key);
                 $exit_code = 1;
             }
         }
     }
     else {
         if (!(grep m/$_/, @valid_template_params)) {
-            syslog("LOG_ERR", "C4::Labels::Batch : Unrecognized parameter type of \"%s\".", $_);
+            warn sprintf('Unrecognized parameter type of "%s".', $_);
             $exit_code = 1;
         }
     }
@@ -147,7 +145,7 @@ sub delete_item {
     Invoking the I<save> method attempts to insert the batch into the database if the batch is new and
     update the existing batch record if the batch exists. The method returns the new record batch_id upon
     success and -1 upon failure (This avoids conflicting with a record batch_id of 1). Errors are
-    logged to the syslog.
+    logged to the Apache log.
 
     example:
         my $exitstat = $batch->save(); # to save the record behind the $batch object
@@ -163,7 +161,7 @@ sub save {
             my $sth->C4::Context->dbh->prepare($query);
             $sth->execute($item_number, $self->{layout_id}, $self->{tmpl_id}, $self->{prof_id}, $self->{batch_id});
             if ($sth->err) {
-                syslog("LOG_ERR", "Database returned the following error: %s", $sth->errstr);
+                warn sprintf('Database returned the following error: %s', $sth->errstr);
                 return -1;
             }
         }
@@ -175,7 +173,7 @@ sub save {
             my $sth->C4::Context->dbh->prepare($query);
             $sth->execute($item_number, $self->{layout_id}, $self->{tmpl_id}, $self->{prof_id});
             if ($sth->err) {
-                syslog("LOG_ERR", "Database returned the following error: %s", $sth->errstr);
+                warn sprintf('Database returned the following error: %s', $sth->errstr);
                 return -1;
             }
             my $sth1 = C4::Context->dbh->prepare("SELECT MAX(batch_id) FROM labels_batches;");
@@ -191,7 +189,7 @@ sub save {
 =head2 C4::Labels::Template->retrieve(template_id)
 
     Invoking the I<retrieve> method constructs a new template object containing the current values for template_id. The method returns
-    a new object upon success and 1 upon failure. Errors are logged to the syslog. Two further options may be accessed. See the example
+    a new object upon success and 1 upon failure. Errors are logged to the Apache log. Two further options may be accessed. See the example
     below for further description.
 
     examples:
@@ -214,7 +212,7 @@ sub retrieve {
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute($opts{batch_id});
     if ($sth->err) {
-        syslog("LOG_ERR", "Database returned the following error: %s", $sth->errstr);
+        warn sprintf('Database returned the following error: %s', $sth->errstr);
         return 1;
     }
     my $self = {
@@ -235,7 +233,7 @@ sub retrieve {
 =head2 C4::Labels::Batch->delete(batch_id => batch_id) |  $batch->delete()
 
     Invoking the delete method attempts to delete the batch from the database. The method returns 0 upon success
-    and 1 upon failure. Errors are logged to the syslog.
+    and 1 upon failure. Errors are logged to the Apache log.
 
     examples:
         my $exitstat = $batch->delete(); # to delete the record behind the $batch object
@@ -247,11 +245,11 @@ sub delete {
     my $self = shift;
     my %opts = @_;
     if ((ref $self) && !$self->{'batch_id'}) {   # If there is no batch batch_id then we cannot delete it from the db
-        syslog("LOG_ERR", "Cannot delete batch: Batch has not been saved.");
+        warn 'Cannot delete batch: Batch has not been saved.';
         return 1;
     }
     elsif (!$opts{batch_id}) {
-        syslog("LOG_ERR", "Cannot delete batch: Missing batch_id.");
+        warn 'Cannot delete batch: Missing batch_id.';
         return 1;
     }
     my $query = "DELETE FROM labels_batches WHERE batch_id = ?";

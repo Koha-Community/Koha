@@ -43,7 +43,7 @@ my $default_layout = {
 my $layout;
 
 diag "Testing Layout->new() method.";
-ok($layout = C4::Labels::Layout->new(layout_name => 'TEST')) || diag "Layout->new() FAILED. Check syslog for details.";
+ok($layout = C4::Labels::Layout->new(layout_name => 'TEST')) || diag "Layout->new() FAILED";
 is_deeply($layout, $default_layout) || diag "New layout object FAILED to verify.";
 
 diag "Testing Layout->get_attr() method.";
@@ -72,13 +72,13 @@ foreach my $key (keys %{$new_attr}) {
 diag "Testing Layout->save() method with a new object.";
 
 my $sav_results = $layout->save();
-ok($sav_results ne -1) || diag "Layout->save() FAILED. See syslog for details.";
+ok($sav_results ne -1) || diag "Layout->save() FAILED";
 
 my $saved_layout;
 if ($sav_results ne -1) {
     diag "Testing Layout->retrieve() method.";
     $new_attr->{'layout_id'} = $sav_results;
-    ok($saved_layout = C4::Labels::Layout->retrieve(layout_id => $sav_results)) || diag "Layout->retrieve() FAILED. Check syslog for details.";
+    ok($saved_layout = C4::Labels::Layout->retrieve(layout_id => $sav_results)) || diag "Layout->retrieve() FAILED";
     is_deeply($saved_layout, $new_attr) || diag "Retrieved layout object FAILED to verify.";
 }
 
@@ -86,7 +86,7 @@ diag "Testing Layout->save() method with an updated object.";
 
 $saved_layout->set_attr(font => 'C');
 my $upd_results = $saved_layout->save();
-ok($upd_results ne -1) || diag "Layout->save() FAILED. See syslog for details.";
+ok($upd_results ne -1) || diag "Layout->save() FAILED";
 my $updated_layout = C4::Labels::Layout->retrieve(layout_id => $sav_results);
 is_deeply($updated_layout, $saved_layout) || diag "Updated layout object FAILED to verify.";
 
@@ -97,4 +97,4 @@ ok($updated_layout->get_text_wrap_cols(label_width => 180, left_text_margin => 1
 diag "Testing Layout->delete() method.";
 
 my $del_results = $updated_layout->delete();
-ok($del_results eq 0) || diag "Layout->delete() FAILED. See syslog for details.";
+ok($del_results eq 0) || diag "Layout->delete() FAILED";

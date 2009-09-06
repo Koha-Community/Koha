@@ -4,7 +4,6 @@ use strict;
 use warnings;
 
 use CGI;
-use Sys::Syslog qw(syslog);
 
 use C4::Debug;
 use C4::Labels::Batch 1.000000;
