@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-
+#
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -19,26 +19,22 @@
 
 use strict;
 use warnings;
+use vars qw($debug $cgi_debug);
 
 use CGI;
-use C4::Auth;
-use HTML::Template::Pro;
-use C4::Context;
-use C4::Search;
-use C4::Auth;
-use C4::Output;
-use C4::Biblio;
-use C4::Items;
-use C4::Acquisition;
-use C4::Search;
-use C4::Dates;
-use C4::Koha;    # XXX subfield_is_koha_internal_p
-use C4::Debug;
 use List::Util qw( max min );
-use POSIX;
+use POSIX qw(ceil);
 
-#use Smart::Comments;
-#use Data::Dumper;
+use C4::Auth qw(get_template_and_user);
+use C4::Output qw(output_html_with_http_headers);
+use C4::Context;
+use C4::Dates;
+use C4::Search qw(SimpleSearch);
+use C4::Biblio qw(TransformMarcToKoha);
+use C4::Items qw(GetItemInfosOf get_itemnumbers_of);
+use C4::Koha qw(GetItemTypes);    # XXX subfield_is_koha_internal_p
+use C4::Labels::Lib qw(html_table);
+use C4::Debug;
 
 BEGIN {
     $debug = $debug || $cgi_debug;
@@ -48,29 +44,26 @@ BEGIN {
     }
 }
 
-# Creates a scrolling list with the associated default value.
-# Using more than one scrolling list in a CGI assigns the same default value to all the
-# scrolling lists on the page !?!? That's why this function was written.
-
 my $query = new CGI;
 
 my $type      = $query->param('type');
 my $op        = $query->param('op') || '';
 my $batch_id  = $query->param('batch_id');
 my $ccl_query = $query->param('ccl_query');
-
-my $dbh = C4::Context->dbh;
-
 my $startfrom = $query->param('startfrom') || 1;
-my ( $template, $loggedinuser, $cookie );
+my ($template, $loggedinuser, $cookie) = (undef, undef, undef);
 my (
     $total_hits,  $orderby, $results,  $total,  $error,
     $marcresults, $idx,     $datefrom, $dateto, $ccl_textbox
 );
-
 my $resultsperpage = C4::Context->preference('numSearchResults') || '20';
-
 my $show_results = 0;
+my $display_columns = [ {_add                   => {label => "Add Item", link_field => 1}},
+                        {_item_call_number      => {label => "Call Number", link_field => 0}},
+                        {_date_accessioned      => {label => "Accession Date", link_field => 0}},
+                        {_barcode               => {label => "Barcode", link_field => 0}},
+                        {select                 => {label => "Select", value => "_item_number"}},
+                      ];
 
 if ( $op eq "do_search" ) {
     $idx         = $query->param('idx');
@@ -81,18 +74,6 @@ if ( $op eq "do_search" ) {
 
     $datefrom = $query->param('datefrom');
     $dateto   = $query->param('dateto');
-
-    ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-        {
-            template_name   => "labels/result.tmpl",
-            query           => $query,
-            type            => "intranet",
-            authnotrequired => 0,
-            flagsrequired   => { borrowers => 1 },
-            flagsrequired   => { catalogue => 1 },
-            debug           => 1,
-        }
-    );
 
     if ($datefrom) {
         $datefrom = C4::Dates->new($datefrom);
@@ -111,7 +92,7 @@ if ( $op eq "do_search" ) {
     ( $error, $marcresults, $total_hits ) =
       SimpleSearch( $ccl_query, $offset, $resultsperpage );
 
-    if ($marcresults) {
+    if (scalar($marcresults) > 0) {
         $show_results = scalar @$marcresults;
     }
     else {
@@ -123,71 +104,55 @@ if ( $op eq "do_search" ) {
 
 if ($show_results) {
     my $hits = $show_results;
-    my ( @results, @items );
-
+    my @results_set = ();
+    my @items =();
     # This code needs to be refactored using these subs...
     #my @items = &GetItemsInfo( $biblio->{biblionumber}, 'intra' );
     #my $dat = &GetBiblioData( $biblio->{biblionumber} );
     for ( my $i = 0 ; $i < $hits ; $i++ ) {
-
+        my @row_data= ();
         #DEBUG Notes: Decode the MARC record from each resulting MARC record...
         my $marcrecord = MARC::File::USMARC::decode( $marcresults->[$i] );
-
         #DEBUG Notes: Transform it to Koha form...
         my $biblio = TransformMarcToKoha( C4::Context->dbh, $marcrecord, '' );
-
-# Begin building the hash for the template...
-# I don't think we need this with the current template design, but I'm leaving it in place. -fbcit
-#$biblio->{highlight}       = ($i % 2)?(1):(0);
-#DEBUG Notes: Stuff the bib into @results...
-        push @results, $biblio;
+        #DEBUG Notes: Stuff the bib into @biblio_data...
+        push (@results_set, $biblio);
         my $biblionumber = $biblio->{'biblionumber'};
-
         #DEBUG Notes: Grab the item numbers associated with this MARC record...
         my $itemnums = get_itemnumbers_of($biblionumber);
-
         #DEBUG Notes: Retrieve the item data for each number...
-        my $iii = $itemnums->{$biblionumber};
-        if ($iii) {
+        if (my $iii = $itemnums->{$biblionumber}) {
             my $item_results = GetItemInfosOf(@$iii);
             foreach my $item ( keys %$item_results ) {
-
-#DEBUG Notes: Build an array element 'item' of the correct bib (results) hash which contains item-specific data...
-                if ( $item_results->{$item}->{'biblionumber'} eq
-                    $results[$i]->{'biblionumber'} )
-                {
-
-# NOTE: The order of the elements in this array must be preserved or the table dependent on it will be incorrectly rendered.
-# This is a real hack, but I can't think of a better way right now. -fbcit
-# It is conceivable that itemcallnumber and/or barcode fields might be empty so the trinaries cover this possibility.
-                    push @{ $results[$i]->{'item'} }, { i_itemnumber1 =>
-                          $item_results->{$item}->{'itemnumber'} };
-                    push @{ $results[$i]->{'item'} },
-                      {
-                        i_itemcallnumber => (
-                              $item_results->{$item}->{'itemcallnumber'}
-                            ? $item_results->{$item}->{'itemcallnumber'}
-                            : 'NA'
-                        )
-                      };
-                    push @{ $results[$i]->{'item'} }, { i_dateaccessioned =>
-                          $item_results->{$item}->{'dateaccessioned'} };
-                    push @{ $results[$i]->{'item'} },
-                      {
-                        i_barcode => (
-                              $item_results->{$item}->{'barcode'}
-                            ? $item_results->{$item}->{'barcode'}
-                            : 'NA'
-                        )
-                      };
-                    push @{ $results[$i]->{'item'} }, { i_itemnumber2 =>
-                          $item_results->{$item}->{'itemnumber'} };
+                #DEBUG Notes: Build an array element 'item' of the correct bib (results) hash which contains item-specific data...
+                if ($item_results->{$item}->{'biblionumber'} eq $results_set[$i]->{'biblionumber'}) {
+                    my $item_data->{'_item_number'} = $item_results->{$item}->{'itemnumber'};
+                    $item_data->{'_item_call_number'} = ($item_results->{$item}->{'itemcallnumber'} ? $item_results->{$item}->{'itemcallnumber'} : 'NA');
+                    $item_data->{'_date_accessioned'} = $item_results->{$item}->{'dateaccessioned'};
+                    $item_data->{'_barcode'} = ( $item_results->{$item}->{'barcode'} ? $item_results->{$item}->{'barcode'} : 'NA');
+                    $item_data->{'_add'} = $item_results->{$item}->{'itemnumber'};
+                    unshift (@row_data, $item_data);    # item numbers are given to us in descending order by get_itemnumbers_of()...
                 }
             }
+            $results_set[$i]->{'item_table'} = html_table($display_columns, \@row_data);
+        }
+        else {
+            # FIXME: Some error trapping code needed
+            warn sprintf('No item numbers retrieved for biblio number: %s', $biblionumber);
         }
     }
-    $debug and warn "**********\@results**********\n";
-    $debug and warn Dumper(@results);
+
+    ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {
+            template_name   => "labels/result.tmpl",
+            query           => $query,
+            type            => "intranet",
+            authnotrequired => 0,
+            flagsrequired   => { borrowers => 1 },
+            flagsrequired   => { catalogue => 1 },
+            debug           => 1,
+        }
+    );
 
     # build page nav stuff.
     my ( @field_data, @numbers );
@@ -242,7 +207,8 @@ if ($show_results) {
     );
 
     $template->param(
-        result    => \@results,
+        results   => ($show_results ? 1 : 0),
+        result_set=> \@results_set,
         batch_id  => $batch_id,
         type      => $type,
         idx       => $idx,

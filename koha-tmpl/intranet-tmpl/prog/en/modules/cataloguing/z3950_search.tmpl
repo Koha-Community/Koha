@@ -116,8 +116,9 @@ $(document).ready(function(){
             <td><!-- TMPL_VAR NAME="edition" --></td>
             <td><!-- TMPL_VAR NAME="isbn" --></td>
             <td><!-- TMPL_VAR NAME="lccn" --></td>
-            <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=<!-- TMPL_VAR NAME="breedingid" -->" title="MARC" rel="gb_page_center[600,500]">MARC</a></td><td><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=<!-- TMPL_VAR NAME="breedingid" -->" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
-			<td><a href="javascript:Import(<!-- TMPL_VAR NAME="breedingid" -->,<!-- TMPL_VAR NAME="biblionumber" -->)">Import</a></td> 
+            <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=<!-- TMPL_VAR NAME="breedingid" -->" title="MARC" rel="gb_page_center[600,500]">MARC</a></td>
+            <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&importid=<!-- TMPL_VAR NAME="breedingid" -->" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
+            <td><a href="javascript:Import(<!-- TMPL_VAR NAME="breedingid" -->,<!-- TMPL_VAR NAME="biblionumber" -->)">Import</a></td> 
         </tr>
         <!-- /TMPL_IF -->
     <!-- /TMPL_LOOP --></tbody>

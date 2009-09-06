@@ -5,8 +5,12 @@ a, a:link, a:visited, a:active {
 	color : #0000CC;
 }
 
-.yui-button a,.yui-button a:link,.yui-button a:visited {
+.yui-button,.yui-button a:link,.yui-button a:visited {
 	color : #000;
+}
+
+a.yuimenuitemlabel {
+        color: #000000;
 }
 
 a:hover {
@@ -227,6 +231,15 @@ table {
 	border-right : 1px solid #BCBCBC;
 }
 
+table.borderless {
+    border-collapse : separate;
+    border: 0 none;
+}
+
+#label-search-results {
+        width: 700px;
+}
+
 td, th {
 	border-bottom : 1px solid #BCBCBC;
 	border-left : 1px solid #BCBCBC;
@@ -235,6 +248,11 @@ td, th {
 
 td {
 	background-color : White;
+}
+
+td.borderless {
+    border-collapse : separate;
+    border : 0 none;
 }
 
 th {
@@ -323,6 +341,9 @@ legend {
 	display : inline;
 }
 
+div.justify {
+    text-align: justify;
+}
 
 div#header_search {
 	background-position : .5em .5em;
@@ -474,7 +495,7 @@ fieldset.brief ol, fieldset.brief li {
 	list-style-type : none;
 }
 
-fieldset.brief div.hint, fieldset.rows div.hint {
+fieldset.brief div.hint, fieldset.rows div.hint, div.yui-u div.hint {
 	color : #999999;
 	font-size : 95%;
 	margin-bottom : .4em;
@@ -534,7 +555,7 @@ fieldset.rows fieldset {
 }
 
 .yui-u fieldset.rows label, .yui-u fieldset.rows span.label {  
-	width: 6em;  
+	width: 10em;  
 }
 
 .yui-u fieldset.rows div.hint {
@@ -777,7 +798,7 @@ fieldset.rows .inputnote {
     visibility:visible; /* you propably don't need to change this one */
     display:block;
 }
-#newbiblio a, #addchild a, #newentry a, #newshelf a, #newmenuc .first-child, #newsupplier .first-child, #newlabel a, #newtemplate a, #newlabelbatch a, #newpatroncardbatch a, #newprofile a, #newsubscription a, #newdictionary a, #neworder a {
+#newbiblio a, #addchild a, #newentry a, #newshelf a, #newmenuc .first-child, #newsupplier .first-child, #newlabel a, #newtemplate a, #newbatch a, #newprofile a, #newsubscription a, #newdictionary a, #neworder a {
 	padding-left : 34px;
 	background-image: url("../../img/toolbar-new.gif");
 	background-position : center left;
@@ -806,7 +827,7 @@ fieldset.rows .inputnote {
 	background-repeat : no-repeat;
 }
 
-#editpatron a, #editmenuc .first-child, #editshelf a, #edit a, #editsupplier a {
+#editpatron a, #editmenuc .first-child, #editshelf a, #edit a, #editsupplier a, #managelabel a, #managetemplate a, #managelabelbatch a, #manageprofile a {
 	padding-left : 34px;
 	background-image: url("../../img/toolbar-edit.gif");
 	background-position : center left;
@@ -1101,6 +1122,11 @@ div.alert {
 
 div.alert strong {
 	color : #900;
+}
+
+div.dialog {
+  background : #FFC url(../../img/dialog-bg.gif) repeat-x left 0;
+  text-align : center;
 }
 
 div.message {
@@ -1694,3 +1720,72 @@ span.permissiondesc {
 	color: black;
 }
 
+.hintsClass {
+    font-family: tahoma, verdana, arial;
+    font-size: 12px;
+    background-color: #f0f0f0;
+    color: #000000;
+    border: 1px solid #808080;
+    padding: 5px;
+}
+.hintSource {
+    color: green;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+h1#pdf {
+        background:transparent url(../../img/pdficon_large.gif) no-repeat scroll 0%;
+        border: 0;
+        margin:0.75em .3em 0.75em .7em;
+        padding:0;
+}
+
+h1#pdf a {
+	border:0;
+	cursor:pointer;
+	display:block;
+	height:0px !important;
+	margin:0;
+	overflow:hidden;
+	padding:44px 0 0;
+	text-decoration:none;
+	width:35px;
+}
+
+h1#csv {
+        background:transparent url(../../img/csv_icon.gif) no-repeat scroll 0%;
+        border: 0;
+        margin:0.75em .3em 0.75em .7em;
+        padding:0;
+}
+
+h1#csv a {
+	border:0;
+	cursor:pointer;
+	display:block;
+	height:0px !important;
+	margin:0;
+	overflow:hidden;
+	padding:44px 0 0;
+	text-decoration:none;
+	width:35px;
+}
+
+h1#xml {
+        background:transparent url(../../img/icon_xml.gif) no-repeat scroll 0%;
+        border: 0;
+        margin:0.75em .3em 0.75em .7em;
+        padding:0;
+}
+
+h1#xml a {
+	border:0;
+	cursor:pointer;
+	display:block;
+	height:0px !important;
+	margin:0;
+	overflow:hidden;
+	padding:44px 0 0;
+	text-decoration:none;
+	width:35px;

@@ -37,9 +37,13 @@
  &rsaquo; Batch <!-- TMPL_VAR name="import_batch_id" -->
 <!-- /TMPL_IF -->
 </h1>
-<!-- TMPL_IF name="label_batch" -->
-<div class="dialog message">
-<p>Label batch created, with id: <!-- TMPL_VAR name="label_batch" --> </p>
+<!-- TMPL_IF name="label_batch_msg" -->
+<!-- TMPL_IF name="alert" -->
+<div class="alert">
+<!-- TMPL_ELSE -->
+<div class="dialog">
+<!-- /TMPL_IF -->
+<b><p><!-- TMPL_VAR name="label_batch_msg" --></p></b>
 </div>
 <!-- /TMPL_IF -->
 
