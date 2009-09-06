@@ -351,6 +351,7 @@ sub get_template_and_user {
             OpacMainUserBlock         => "" . C4::Context->preference("OpacMainUserBlock"),
             OpacNav                   => "" . C4::Context->preference("OpacNav"),
             OpacPasswordChange        => C4::Context->preference("OpacPasswordChange"),
+            OPACPatronDetails        => C4::Context->preference("OPACPatronDetails"),
             OpacTopissue              => C4::Context->preference("OpacTopissue"),
             RequestOnOpac             => C4::Context->preference("RequestOnOpac"),
             TemplateEncoding          => "". C4::Context->preference("TemplateEncoding"),
