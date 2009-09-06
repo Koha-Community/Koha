@@ -535,20 +535,22 @@ sub DelShelf {
 
 =item GetBibShelves
 
-This finds all the lists that this bib record is in.
+This finds all the public lists that this bib record is in.
 
 =cut
 
 sub GetBibliosShelves {
-  my ( $biblionumber )  = @_;
-  my $dbh = C4::Context->dbh;
-  my $sth = $dbh->prepare('SELECT vs.shelfname, vs.shelfnumber FROM virtualshelves vs LEFT JOIN virtualshelfcontents vc ON (vs.shelfnumber= vc.shelfnumber) WHERE vs.category != 1 AND vc.biblionumber= ?');
-  $sth->execute( $biblionumber );
-  my @lists;
-  while (my $data = $sth->fetchrow_hashref){
-    push @lists,$data;
-  }
-  return \@lists;
+    my ( $biblionumber )  = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare('
+        SELECT vs.shelfname, vs.shelfnumber 
+        FROM virtualshelves vs 
+        JOIN virtualshelfcontents vc ON (vs.shelfnumber= vc.shelfnumber) 
+        WHERE vs.category != 1 
+        AND vc.biblionumber= ?
+    ');
+    $sth->execute( $biblionumber );
+    return $sth->fetchall_arrayref({});
 }
 
 =item RefreshShelvesSummary
