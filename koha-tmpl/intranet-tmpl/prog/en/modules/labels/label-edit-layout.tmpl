@@ -68,7 +68,11 @@
                                 <li> 
                                     <fieldset class="rows">
                                         <legend>Bibliographic Data to Print</legend>
-                                        <input type="radio" name="layout_choice" value="layout_table" <!-- TMPL_UNLESS NAME="layout_string" -->checked="checked"<!-- /TMPL_UNLESS -->" >Choose Order Of Text Fields to Print</input>
+                                        <!-- TMPL_IF NAME="layout_string" -->
+                                        <input type="radio" name="layout_choice" value="layout_table" checked="checked">Choose Order Of Text Fields to Print</input>
+                                        <!-- TMPL_ELSE -->
+                                        <input type="radio" name="layout_choice" value="layout_table">Choose Order Of Text Fields to Print</input>
+                                        <!-- /TMPL_IF -->
                                         <br />
                                             <fieldset id="layout_table">
                                                 <table summary="fields to print">
@@ -100,7 +104,11 @@
                                                 <br />
                                             </fieldset>
                                             <br />
-                                            <input type="radio" name="layout_choice" value="layout_string" <!-- TMPL_IF NAME="layout_string" -->checked="checked"<!-- /TMPL_IF -->"> List Fields </input>
+                                            <!-- TMPL_IF NAME="layout_string" -->
+                                            <input type="radio" name="layout_choice" value="layout_string" checked="checked"> List Fields </input>
+                                            <!-- TMPL_ELSE -->
+                                            <input type="radio" name="layout_choice" value="layout_string"> List Fields </input>
+                                            <!-- /TMPL_IF -->
                                             <fieldset id="layout_string" class="brief">
                                                 <label for="format_string">Data Fields</label>
                                                 <input type="text" name="format_string" id="format_string" size="80" value="<!-- TMPL_VAR ESCAPE='HTML' NAME="format_string" -->" />
