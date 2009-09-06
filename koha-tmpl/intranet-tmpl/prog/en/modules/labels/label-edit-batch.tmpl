@@ -21,6 +21,7 @@
                     <div class="yui-g">
                         <div class="yui-u first" id="manage-label-batches">
                             <div class="hint">Current Branch: <!-- TMPL_VAR NAME="LoginBranchname" --></div>
+                                <!-- TMPL_IF NAME="table_loop" -->
                                 <form name="items" class="checkboxed">
                                     <h2>Items in batch number <!-- TMPL_VAR NAME="batch_id" --></h2>
                                     <table>
@@ -45,6 +46,10 @@
                                         <!-- /TMPL_LOOP -->
                                     </table>
                                 </form>
+                                <!-- TMPL_ELSE -->
+                                    <h2>There are no items in this batch yet</h2>
+                                    <div class="hint"><h3>Use the toolbar above to add items.</h3></div>
+                                <!-- /TMPL_IF -->
                             </div>
                             <!-- TMPL_IF NAME="err" -->
                             <div class="yui-u">
