@@ -175,6 +175,19 @@ sub hold_patron_name {
     # $self->{hold_patron_name} = $name;      # TODO: consider caching
     return $name;
 }
+
+sub hold_patron_bcode {
+    my $self = shift or return;
+    my $borrowernumber = (@_ ? shift: $self->hold_patron_id()) or return;
+    my $holder = GetMember($borrowernumber, 'borrowernumber');
+    if ($holder) {
+        if ($holder->{cardnumber}) {
+            return $holder->{cardnumber};
+        }
+    }
+    return;
+}
+
 sub destination_loc {
     my $self = shift or return;
     my $hold = $self->next_hold();

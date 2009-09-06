@@ -676,7 +676,7 @@ sub handle_checkin {
             $resp .= maybe_add(FID_COLLECTION_CODE,      $item->collection_code    );
             $resp .= maybe_add(FID_CALL_NUMBER,          $item->call_number        );
             $resp .= maybe_add(FID_DESTINATION_LOCATION, $item->destination_loc    );
-            $resp .= maybe_add(FID_HOLD_PATRON_ID,       $item->hold_patron_id     );
+            $resp .= maybe_add(FID_HOLD_PATRON_ID,       $item->hold_patron_bcode     );
             $resp .= maybe_add(FID_HOLD_PATRON_NAME,     $item->hold_patron_name   );
             if ($status->hold and $status->hold->{branchcode} ne $item->destination_loc) {
                 warn 'SIP hold mismatch: $status->hold->{branchcode}=' . $status->hold->{branchcode} . '; $item->destination_loc=' . $item->destination_loc;
