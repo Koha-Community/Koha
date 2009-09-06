@@ -2634,6 +2634,15 @@ $DBversion = '3.01.00.XXX';
      SetVersion ($DBversion);
      print "Upgrade to $DBversion done (Bug 2576 : Add OPACFinesTab syspref)\n";
      }    
+     
+$DBversion = '3.01.00.XXX';
+     if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+     $dbh->do("ALTER TABLE `language_subtag_registry` ADD `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY;");
+     $dbh->do("ALTER TABLE `language_rfc4646_to_iso639` ADD `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY;");
+     $dbh->do("ALTER TABLE `language_descriptions` ADD `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY;");
+     SetVersion ($DBversion);
+     print "Upgrade to $DBversion done (Added primary keys to language tables)\n";
+     }    
 
 =item DropAllForeignKeys($table)
 
