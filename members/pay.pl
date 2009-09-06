@@ -26,6 +26,8 @@
 =cut
 
 use strict;
+use warnings;
+
 use C4::Context;
 use C4::Auth;
 use C4::Output;
@@ -82,7 +84,7 @@ for ( my $i = 0 ; $i < @names ; $i++ ) {
         $check = 2;
     }
 }
-my $total = $input->param('total');
+my $total = $input->param('total') || '';
 if ( $check == 0 ) {
     if ( $total ne '' ) {
         recordpayment( $borrowernumber, $total );

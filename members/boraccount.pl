@@ -23,6 +23,8 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
+
 use C4::Auth;
 use C4::Output;
 use C4::Dates qw/format_date/;
@@ -44,10 +46,12 @@ my ($template, $loggedinuser, $cookie)
                             });
 
 my $borrowernumber=$input->param('borrowernumber');
+my $action = $input->param('action') || '';
+
 #get borrower details
 my $data=GetMember($borrowernumber,'borrowernumber');
 
-if ( $input->param('action') eq 'reverse' ) {
+if ( $action eq 'reverse' ) {
   ReversePayment( $borrowernumber, $input->param('accountno') );
 }
 
