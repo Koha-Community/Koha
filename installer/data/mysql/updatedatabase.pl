@@ -2628,6 +2628,12 @@ $DBversion = '3.01.00.XXX';
      print "Upgrade to $DBversion done (Bug 1172 : Add OPACPatronDetails syspref)\n";
      }     
 
+$DBversion = '3.01.00.XXX';
+     if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OPACFinesTab','1','If OFF the patron fines tab in the OPAC is disabled.','','YesNo');");
+     SetVersion ($DBversion);
+     print "Upgrade to $DBversion done (Bug 2576 : Add OPACFinesTab syspref)\n";
+     }    
 
 =item DropAllForeignKeys($table)
 

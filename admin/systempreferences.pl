@@ -319,6 +319,7 @@ $tabsysprefs{OPACShelfBrowser}           = "OPAC";
 $tabsysprefs{OPACDisplayRequestPriority} = "OPAC";
 $tabsysprefs{OPACAllowHoldDateInFuture}  = "OPAC";
 $tabsysprefs{OPACPatronDetails}  = "OPAC";
+$tabsysprefs{OPACFinesTab}  = "OPAC";
 
 # OPAC
 $tabsysprefs{SearchMyLibraryFirst} = "OPAC";
