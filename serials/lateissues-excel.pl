@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
+use warnings;
 use CGI;
 use C4::Auth;
 use C4::Serials;
@@ -28,7 +29,7 @@ my $csv = Text::CSV_XS->new(
 my $query = new CGI;
 my $supplierid = $query->param('supplierid');
 my @serialid = $query->param('serialid');
-my $op = $query->param('op');
+my $op = $query->param('op') || q{};
 my $serialidcount = @serialid;
 
 my %supplierlist = GetSuppliersWithLateIssues;
@@ -38,13 +39,9 @@ my @loop1;
 my ($count, @lateissues);
 if($op ne 'claims'){
     ($count, @lateissues) = GetLateIssues($supplierid);
-    for (my $i=0;$i<@lateissues;$i++){
-        my @rows1 = ($lateissues[$i]->{'name'},          # lets build up a row
-            	     $lateissues[$i]->{'title'}, 
-                     $lateissues[$i]->{'serialseq'},
-                     $lateissues[$i]->{'planneddate'},
-                     );
-        push (@loop1, \@rows1);
+    for my $issue (@lateissues){
+        push @loop1,
+      [ $issue->{'name'}, $issue->{'title'}, $issue->{'serialseq'}, $issue->{'planneddate'},];
     }
 }
 my $totalcount2 = 0;
@@ -55,7 +52,7 @@ for (my $k=0;$k<@serialid;$k++){
 
     for (my $j=0;$j<@missingissues;$j++){
 	my @rows2 = ($missingissues[$j]->{'name'},          # lets build up a row
-	             $missingissues[$j]->{'title'}, 
+	             $missingissues[$j]->{'title'},
                      $missingissues[$j]->{'serialseq'},
                      $missingissues[$j]->{'planneddate'},
                      );
@@ -72,7 +69,7 @@ if($supplierid){
     if($missingissues[0]->{'name'}){ # if exists display supplier name in heading for neatness
 	# not necessarily needed as the name will appear in supplier column also
         $heading = "FOR $missingissues[0]->{'name'}";
-	$filename = "_$missingissues[0]->{'name'}"; 
+	$filename = "_$missingissues[0]->{'name'}";
     }
 }
 
@@ -86,7 +83,7 @@ if($op ne 'claims'){
     print "SUPPLIER,TITLE,ISSUE NUMBER,LATE SINCE\n";
 
     for my $row ( @loop1 ) {
-    
+
         $csv->combine(@$row);
         my $string = $csv->string;
         print $string, "\n";
@@ -102,7 +99,7 @@ if($serialidcount == 1){
 print "SUPPLIER,TITLE,ISSUE NUMBER,LATE SINCE\n";
 
 for my $row ( @loop2 ) {
-    
+
         $csv->combine(@$row);
         my $string = $csv->string;
         print $string, "\n";

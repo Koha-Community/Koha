@@ -28,7 +28,7 @@ serials-recieve.pl
 
 =item op
 op can be :
-    * modsubscriptionhistory :to modify the subscription history 
+    * modsubscriptionhistory :to modify the subscription history
     * serialchangestatus     :to modify the status of this subscription
 
 =item subscriptionid
@@ -63,6 +63,7 @@ op can be :
 
 
 use strict;
+use warnings;
 use CGI;
 use C4::Auth;
 use C4::Dates qw/format_date format_date_in_iso/;
@@ -90,7 +91,6 @@ if (scalar(@subscriptionids)==1 && index($subscriptionids[0],",")>0){
 }
 my @errors;
 my @errseq;
-my $redirectstring;
 # If user comes from subscription details
 unless (@serialids){
   foreach my $subscriptionid (@subscriptionids){
@@ -107,7 +107,7 @@ unless (@serialids){
 unless (scalar(@serialids)){
   my $string="serials-collection.pl?subscriptionid=".join(",",@subscriptionids);
   $string=~s/,$//;
-#  warn $string; 
+#  warn $string;
   print $query->redirect($string);
 }
 my ($template, $loggedinuser, $cookie)
@@ -130,7 +130,7 @@ foreach my $tmpserialid (@serialids){
     $data->{planneddate}=format_date($data->{planneddate});
     $data->{'editdisable'}=((HasSubscriptionExpired($data->{subscriptionid})&& $data->{'status1'})||$data->{'cannotedit'});
     push @serialdatalist,$data;
-    $processedserialid{$tmpserialid}=1;  
+    $processedserialid{$tmpserialid}=1;
 }
 my $bibdata=GetBiblioData($serialdatalist[0]->{'biblionumber'});
 
@@ -143,7 +143,7 @@ foreach my $subscriptionid (@subscriptionids){
     next unless (defined($subscriptionid) && !$processedsubscriptionid{$subscriptionid});
     my $cell;
     if ($serialdatalist[0]->{'serialsadditems'}){
-    #Create New empty item  
+    #Create New empty item
         $cell =
         PrepareItemrecordDisplay( $serialdatalist[0]->{'biblionumber'},'', GetSubscription($subscriptionid));
         $cell->{serialsadditems} = 1;
@@ -157,12 +157,12 @@ foreach my $subscriptionid (@subscriptionids){
                             'abouttoexpire'=>abouttoexpire($subscriptionid),
                             'subscriptionexpired'=>HasSubscriptionExpired($subscriptionid),
     };
-    $processedsubscriptionid{$subscriptionid}=1;  
+    $processedsubscriptionid{$subscriptionid}=1;
 }
 $template->param(newserialloop=>\@newserialloop);
 $template->param(subscriptions=>\@subscriptionloop);
 
-if ($op eq 'serialchangestatus') {
+if ($op and $op eq 'serialchangestatus') {
 #     my $sth = $dbh->prepare("select status from serial where serialid=?");
     my $newserial;
     for (my $i=0;$i<=$#serialids;$i++) {
@@ -247,15 +247,18 @@ if ($op eq 'serialchangestatus') {
               }
             }
             # check for item barcode # being unique
-            my $exists = GetItemnumberFromBarcode($record->subfield($barcodetagfield,$barcodetagsubfield)) if ($record->subfield($barcodetagfield,$barcodetagsubfield));
-  #           push @errors,"barcode_not_unique" if($exists);
+            my $exists;
+            if ($record->subfield($barcodetagfield,$barcodetagsubfield)) {
+                $exists = GetItemnumberFromBarcode($record->subfield($barcodetagfield,$barcodetagsubfield));
+            }
+            #           push @errors,"barcode_not_unique" if($exists);
             # if barcode exists, don't create, but report The problem.
-			      if ($exists){
-              push @errors,"barcode_not_unique" if($exists);
-              push @errseq,{"serialseq"=>$serialseqs[$index]};
+            if ($exists){
+                push @errors,"barcode_not_unique" if($exists);
+                push @errseq,{"serialseq"=>$serialseqs[$index]};
             } else {
-              my ($biblionumber,$bibitemnum,$itemnumber) = AddItemFromMarc($record,$itemhash{$item}->{'bibnum'});
-              AddItem2Serial($itemhash{$item}->{'serial'},$itemnumber);
+                my ($biblionumber,$bibitemnum,$itemnumber) = AddItemFromMarc($record,$itemhash{$item}->{'bibnum'});
+                AddItem2Serial($itemhash{$item}->{'serial'},$itemnumber);
             }
           } else {
             #modify item
@@ -264,7 +267,7 @@ if ($op eq 'serialchangestatus') {
         }
       }
     }
-#     ### FIXME this part of code is not very pretty. Nor is it very efficient... There MUST be a more perlish way to write it. But it works.     
+#     ### FIXME this part of code is not very pretty. Nor is it very efficient... There MUST be a more perlish way to write it. But it works.
 #     my $redirect ="serials-home.pl?";
 #     $redirect.=join("&",map{"serialseq=".$_} @serialseqs);
 #     $redirect.="&".join("&",map{"planneddate=".$_} @planneddates);
@@ -276,9 +279,9 @@ if ($op eq 'serialchangestatus') {
         $template->param("Errors" => 1);
         if (scalar(@errseq)>0){
             $template->param("barcode_not_unique" => 1);
-            $template->param('errseq'=>\@errseq); 
-        }    
-   } else { 
+            $template->param('errseq'=>\@errseq);
+        }
+   } else {
         my $redirect ="serials-collection.pl?";
         my %hashsubscription;
 	      foreach (@subscriptionids) {
@@ -286,7 +289,7 @@ if ($op eq 'serialchangestatus') {
 	      }
         $redirect.=join("&",map{"subscriptionid=".$_} sort keys %hashsubscription);
         print $query->redirect("$redirect");
-   }  
+   }
 }
 
 $template->param(

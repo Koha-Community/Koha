@@ -18,10 +18,11 @@
 =head1 member-search.pl
 
 Member Search.pl script used to search for members to add to a routing list
- 
+
 =cut
 
 use strict;
+use warnings;
 use CGI;
 use C4::Auth;       # get_template_and_user
 use C4::Output;

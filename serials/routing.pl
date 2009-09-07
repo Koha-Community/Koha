@@ -26,6 +26,7 @@ printed out
 =cut
 
 use strict;
+use warnings;
 use CGI;
 use C4::Koha;
 use C4::Auth;
@@ -46,7 +47,7 @@ my $serialseq = $query->param('serialseq');
 my $routingid = $query->param('routingid');
 my $borrowernumber = $query->param('borrowernumber');
 my $notes = $query->param('notes');
-my $op = $query->param('op');
+my $op = $query->param('op') || q{};
 my $date_selected = $query->param('date_selected');
 my $dbh = C4::Context->dbh;
 
@@ -63,7 +64,7 @@ if($op eq 'save'){
     my $urldate = URI::Escape::uri_escape($date_selected);
     print $query->redirect("routing-preview.pl?subscriptionid=$subscriptionid&issue=$urldate");
 }
-    
+
 my ($routing, @routinglist) = getroutinglist($subscriptionid);
 my $subs = GetSubscription($subscriptionid);
 my ($count,@serials) = GetSerials($subscriptionid);
@@ -104,26 +105,38 @@ my ($template, $loggedinuser, $cookie)
 # }
 
 # my $issue = "$serialseq ($date)";
-  
+
 my @results;
 my $data;
 for(my $i=0;$i<$routing;$i++){
     $data=GetMember($routinglist[$i]->{'borrowernumber'},'borrowernumber');
     $data->{'location'}=$data->{'branchcode'};
-    $data->{'name'}="$data->{'firstname'} $data->{'surname'}";
+    if ($data->{firstname} ) {
+        $data->{name} = $data->{firstname} . q| |;
+    }
+    else {
+        $data->{name} = q{};
+    }
+    if ($data->{surname} ) {
+        $data->{name} .= $data->{surname};
+    }
     $data->{'routingid'}=$routinglist[$i]->{'routingid'};
     $data->{'subscriptionid'}=$subscriptionid;
-    my $rankingbox = '<select name="itemrank" onchange="reorder_item('.$subscriptionid.','.$routinglist[$i]->{'routingid'}.',this.options[this.selectedIndex].value)">';
+    if (! $routinglist[$i]->{routingid} ) {
+        $routinglist[$i]->{routingid} = q||;
+    }
+    my $rankingbox = '<select name="itemrank" onchange="reorder_item('
+    . $subscriptionid . ',' .$routinglist[$i]->{'routingid'} . ',this.options[this.selectedIndex].value)">';
     for(my $j=1; $j <= $routing; $j++) {
 	$rankingbox .= "<option ";
-	if($routinglist[$i]->{'ranking'} == $j){
+	if($routinglist[$i]->{ranking} && $routinglist[$i]->{ranking} == $j){
 	    $rankingbox .= " selected=\"selected\"";
 	}
 	$rankingbox .= " value=\"$j\">$j</option>";
     }
     $rankingbox .= "</select>";
     $data->{'routingbox'} = $rankingbox;
-    
+
     push(@results, $data);
 }
 
@@ -139,7 +152,7 @@ if ($op eq 'new') {
 $template->param(
     title => $subs->{'bibliotitle'},
     subscriptionid => $subscriptionid,
-    memberloop => \@results,    
+    memberloop => \@results,
     op => $new,
     dates => \@dates,
     routingnotes => $serials[0]->{'routingnotes'},
