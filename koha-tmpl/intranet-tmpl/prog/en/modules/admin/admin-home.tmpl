@@ -16,11 +16,11 @@
 	<div class="yui-g">
 
 <div class="yui-u first">
-<form action="/cgi-bin/koha/admin/systempreferences.pl" method="post">
+<form action="/cgi-bin/koha/admin/preferences.pl" method="post">
 <fieldset>
-<h4><a href="/cgi-bin/koha/admin/systempreferences.pl">Global system preferences</a></h4>
+<h4><a href="/cgi-bin/koha/admin/preferences.pl">Global system preferences</a></h4>
 	<p>Manage global system preferences like MARC flavor, date format, administrator email, and templates.</p>
-		<input type="hidden" value="all" name="tab" />
+        <input type="hidden" name="op" value="search" />
         <input type="text" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
         <input type="submit" name="ok" class="submit" value="Search" />
 </fieldset>

@@ -1,0 +1,165 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Administration &rsaquo; System Preferences</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang"-->/css/preferences.css">
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang"-->/css/humanmsg.css">
+<script src="<!-- TMPL_VAR NAME="themelang" -->/lib/jquery/plugins/humanmsg.js" type="text/javascript"></script>
+<script src="<!-- TMPL_VAR NAME="themelang" -->/js/ajax.js" type="text/javascript"></script>
+<script src="<!-- TMPL_VAR NAME="themelang" -->/js/pages/preferences.js" type="text/javascript"></script>
+<script src="<!-- TMPL_VAR NAME="themelang" -->/lib/jquery/plugins/jquery.highlight-3.js" type="text/javascript"></script>
+<script type="text/javascript">
+    <!--
+    <!-- TMPL_IF NAME="searchfield" -->
+    var to_highlight = "<!-- TMPL_VAR NAME="searchfield" ESCAPE="JS"-->";
+
+    if ( to_highlight ) {
+        var words = to_highlight.split( ' ' );
+        $( document ).ready( function () {
+            $( '.prefs-tab table' ).find( 'td, th' ).not( '.name-cell' ).each( function ( i, td ) {
+                $.each( words, function ( i, word ) { $( td ).highlight( word ) } );
+            } ).find( 'option' ).removeHighlight();
+        } );
+    }
+    <!-- /TMPL_IF -->
+    // -->
+</script>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="prefs-admin-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; System Preferences</div>
+
+<div id="doc3" class="yui-t2">
+
+   <div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+	<div id="toolbar">
+		<form action="/cgi-bin/koha/admin/preferences.pl" method="GET">
+			<input type="hidden" name="op" value="jump" />
+			<input type="hidden" name="tab" value="<!-- TMPL_VAR NAME="tab" -->" />
+			<label for="jumpfield">Jump to named preference:</label>
+			<input type="text" name="jumpfield" id="jumpfield" value="<!-- TMPL_VAR NAME="jumpfield" -->" />
+			<input type="submit" value="Jump" />
+		</form>
+	</div>
+
+    <h1>System preferences</h1>
+    <!-- TMPL_IF NAME="jump_not_found" -->
+    <div class="dialog error">
+        Could not find a system preference named <code><!-- TMPL_VAR NAME="jumpfield" --></code>.
+    </div>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="search_not_found" -->
+    <div class="dialog error">
+        No system preferences matched your search for <strong><!-- TMPL_VAR NAME="searchfield" --></strong>. You can try a different search or <a href="/cgi-bin/koha/admin/preferences.pl?tab=<!-- TMPL_VAR NAME="last_tab" -->">return to where you were before.</a>
+    </div>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_LOOP NAME="TABS" -->
+    <div class="prefs-tab">
+    <h2><!-- TMPL_VAR NAME="tab_title" --> preferences</h2>
+    <form action="/cgi-bin/koha/admin/preferences.pl" method="POST">
+        <input type="hidden" name="op" value="save" />
+        <input type="hidden" name="tab" value="<!-- TMPL_VAR NAME="tab" -->" />
+        <table>
+            <thead><tr><th>Preference</th><th>Value</th></tr></thead>
+
+            <!-- TMPL_LOOP NAME="LINES" -->
+            <!-- TMPL_IF NAME="is_group_title" -->
+            <!-- TMPL_UNLESS NAME="__first__" --></tbody><!-- /TMPL_UNLESS -->
+			<thead>
+				<!-- TMPL_IF NAME="highlighted" -->
+				<tr><th colspan="2"><span class="term"><!-- TMPL_VAR NAME="title" --></span></th></tr>
+				<!-- TMPL_ELSE -->
+				<tr><th colspan="2"><!-- TMPL_VAR NAME="title" --></th></tr>
+				<!-- /TMPL_IF -->
+			</thead>
+            <!-- TMPL_UNLESS NAME="__last__" --><tbody><!-- /TMPL_UNLESS -->
+            <!-- TMPL_ELSE -->
+            <!-- TMPL_IF NAME="__first__" --><tbody><!-- /TMPL_IF -->
+            <tr>
+                <td class="name-cell">
+                    <code>
+                        <!-- TMPL_LOOP NAME="NAMES" -->
+						<label for="pref_<!-- TMPL_VAR NAME="name" -->">
+							<!-- TMPL_IF NAME="highlighted" -->
+							<a name="highlighted"></a>
+							<span class="term"><!-- TMPL_VAR NAME="name" --></span>
+							<!-- TMPL_ELSE -->
+							<!-- TMPL_VAR NAME="name" -->
+							<!-- /TMPL_IF -->
+						</label>
+                        <!-- TMPL_UNLESS NAME="__last__" --><br /><!-- /TMPL_UNLESS -->
+                        <!-- /TMPL_LOOP -->
+                    </code>
+                </td>
+                <td>
+                    <!-- TMPL_LOOP NAME="CHUNKS" -->
+                    <!-- TMPL_IF NAME="type_text" -->
+                    <!-- TMPL_IF NAME="highlighted" -->
+                    <span class="term"><!-- TMPL_VAR NAME="contents" --></span>
+                    <!-- TMPL_ELSE -->
+                    <!-- TMPL_VAR NAME="contents" -->
+                    <!-- /TMPL_IF -->
+                    <!-- TMPL_ELSIF NAME="type_input" -->
+                    <input type="<!-- TMPL_VAR NAME="input_type" DEFAULT="text" -->" name="pref_<!-- TMPL_VAR NAME="name" -->" id="pref_<!-- TMPL_VAR NAME="name" -->" class="preference preference-<!-- TMPL_VAR NAME="class" DEFAULT="short" -->" value="<!-- TMPL_VAR NAME="value" -->" autocomplete="off" />
+                    <!-- TMPL_ELSIF NAME="type_select" -->
+                    <select name="pref_<!-- TMPL_VAR NAME="name" -->" id="pref_<!-- TMPL_VAR NAME="name" -->" class="preference preference-<!-- TMPL_VAR NAME="class" DEFAULT="choice" -->">
+                        <!-- TMPL_LOOP NAME="CHOICES" -->
+                        <!-- TMPL_IF NAME="selected" -->
+                        <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected">
+                        <!-- TMPL_ELSE -->
+                        <option value="<!-- TMPL_VAR NAME="value" -->">
+                        <!-- /TMPL_IF -->
+                            <!-- TMPL_VAR NAME="text" -->
+                        </option>
+                        <!-- /TMPL_LOOP -->
+                    </select>
+                    <!-- TMPL_ELSIF NAME="type_textarea" -->
+					<a class="expand-textarea" style="display: none" href="#">Click to Edit</a>
+					<textarea name="pref_<!-- TMPL_VAR NAME="name" -->" id="pref_<!-- TMPL_VAR NAME="name" -->" class="preference preference-<!-- TMPL_VAR NAME="class" DEFAULT="short" -->"><!-- TMPL_VAR NAME="value" --></textarea>
+                    <!-- TMPL_ELSIF NAME="type_languages" -->
+                    <table>
+                    <!-- TMPL_LOOP NAME="languages" -->
+                    <tr><td>
+                        <!-- TMPL_IF NAME="plural" -->
+                        <!-- TMPL_IF NAME="native_description" --><!-- TMPL_VAR NAME="native_description" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="rfc4646_subtag" --><!-- /TMPL_IF -->
+                        <!-- TMPL_LOOP NAME="sublanguages_loop" --><table><tr><td>
+                        <label for="<!-- TMPL_VAR NAME="rfc4646_subtag" -->"><!-- TMPL_VAR NAME="native_description" --> <!-- TMPL_VAR NAME="script_description" --> <!-- TMPL_VAR NAME="region_description" --> <!-- TMPL_VAR NAME="variant_description" -->(<!-- TMPL_VAR NAME="rfc4646_subtag" -->)</label>
+                        <!-- TMPL_IF NAME="enabled" -->
+                        <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="pref_<!-- TMPL_VAR NAME="name" -->" id="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" checked="checked" />
+                        <!-- TMPL_ELSE -->
+                        <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="pref_<!-- TMPL_VAR NAME="name" -->" id="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" />
+                        <!-- /TMPL_IF -->
+                        <!-- /TMPL_LOOP -->
+                        <!-- TMPL_ELSE -->
+                        <label for="<!-- TMPL_VAR NAME="rfc4646_subtag" -->"><!-- TMPL_VAR NAME="native_description" -->(<!-- TMPL_VAR NAME="rfc4646_subtag" -->)</label>
+                        <!-- TMPL_IF NAME="group_enabled" -->
+                        <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="pref_<!-- TMPL_VAR NAME="name" -->" id="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" checked="checked" />
+                        <!-- TMPL_ELSE -->
+                        <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="pref_<!-- TMPL_VAR NAME="name" -->" id="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" />
+                        <!-- /TMPL_IF -->
+                        <!-- /TMPL_IF -->
+                    </td></tr>
+                    <!-- /TMPL_LOOP -->
+                    </table>
+                    <!-- /TMPL_IF -->
+                    <!-- /TMPL_LOOP -->
+                </td>
+            </tr>
+            <!-- TMPL_IF NAME="__last__" --></tbody><!-- /TMPL_IF -->
+            <!-- /TMPL_IF -->
+        <!-- /TMPL_LOOP -->
+        </table>
+        <button class="save-all submit" type="submit">Save All</button>
+    </form>
+    </div>
+    <!-- /TMPL_LOOP -->
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="prefs-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

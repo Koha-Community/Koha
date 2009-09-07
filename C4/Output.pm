@@ -69,17 +69,10 @@ my $path = C4::Context->config('intrahtdocs') . "/prog/en/includes/";
 
 #---------------------------------------------------------------------------------------------------------
 # FIXME - POD
-sub gettemplate {
+
+sub _get_template_file {
     my ( $tmplbase, $interface, $query ) = @_;
-    ($query) or warn "no query in gettemplate";
-    my $htdocs;
-    if ( $interface ne "intranet" ) {
-        $htdocs = C4::Context->config('opachtdocs');
-    }
-    else {
-        $htdocs = C4::Context->config('intrahtdocs');
-    }
-    my $path = C4::Context->preference('intranet_includes') || 'includes';
+    my $htdocs = C4::Context->config( $interface ne 'intranet' ? 'opachtdocs' : 'intrahtdocs' );
     my ( $theme, $lang ) = themelanguage( $htdocs, $tmplbase, $interface, $query );
 
     # if the template doesn't exist, load the English one as a last resort
@@ -88,6 +81,17 @@ sub gettemplate {
         $lang = 'en';
         $filename = "$htdocs/$theme/$lang/modules/$tmplbase";
     }
+
+    return ( $htdocs, $theme, $lang, $filename );
+}
+
+sub gettemplate {
+    my ( $tmplbase, $interface, $query ) = @_;
+    ($query) or warn "no query in gettemplate";
+    my $path = C4::Context->preference('intranet_includes') || 'includes';
+    my $opacstylesheet = C4::Context->preference('opacstylesheet');
+    my ( $htdocs, $theme, $lang, $filename ) = _get_template_file( $tmplbase, $interface, $query );
+
     my $template       = HTML::Template::Pro->new(
         filename          => $filename,
         die_on_bad_params => 1,

@@ -24,7 +24,7 @@ use strict;
 use vars qw($VERSION @ISA @EXPORT);
 
 # set the version for version checking
-$VERSION = 3.00;
+$VERSION = 3.01;
 
 =head1 NAME
 
@@ -48,6 +48,7 @@ They allow to get and/or set some informations for a specific budget or currency
     &ModBookFund &ModCurrencies
     &SearchBookFund
     &Countbookfund 
+    &GetLocalCurrency
     &ConvertCurrency
     &DelBookFund
 );
@@ -197,6 +198,34 @@ sub GetCurrencies {
     }
     $sth->finish;
     return @results;
+}
+
+#-------------------------------------------------------------#
+
+=head3 GetLocalCurrency
+
+$currency = GetLocalCurrency;
+
+Returns the currency with exchange rate 1 (the local currency).
+
+$currency is a reference-to-hash, whose keys are the fields from the currency
+table in the Koha database.
+
+=cut
+
+sub GetLocalCurrency {
+    my $dbh = C4::Context->dbh;
+
+    my $result = $dbh->selectrow_hashref("
+      SELECT
+        currency, symbol, timestamp, rate
+        FROM currency
+        WHERE rate = 1
+    ");
+
+    die "No currency found with rate 1" if ( !defined( $result ) );
+
+    return $result;
 }
 
 #-------------------------------------------------------------#
