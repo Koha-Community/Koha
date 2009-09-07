@@ -166,7 +166,6 @@ sub GetBookFunds {
     while ( my $data = $sth->fetchrow_hashref ) {
         push( @results, $data );
     }
-    $sth->finish;
     return @results;
 }
 
@@ -185,18 +184,9 @@ keys are the fields from the currency table in the Koha database.
 
 sub GetCurrencies {
     my $dbh = C4::Context->dbh;
-    my $query = "
-        SELECT *
-        FROM   currency
-    ";
-    my $sth = $dbh->prepare($query);
-    $sth->execute;
-    my @results = ();
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push( @results, $data );
-    }
-    $sth->finish;
-    return @results;
+    my $results = $dbh->selectall_arrayref(
+        'SELECT * FROM currency', { Slice => {} } );
+    return @{$results};
 }
 
 #-------------------------------------------------------------#
@@ -284,7 +274,6 @@ sub GetBookFundBreakdown {
 #         use Data::Dumper; warn Dumper($data);    
     }
 
-    $sth->finish;
     return ( $spent, $comtd );
 }
 
@@ -419,13 +408,8 @@ Sets the exchange rate for C<$currency> to be C<$newrate>.
 sub ModCurrencies {
     my ( $currency, $rate ) = @_;
     my $dbh = C4::Context->dbh;
-    my $query = "
-        UPDATE currency
-        SET    rate=?
-        WHERE  currency=?
-    ";
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $rate, $currency );
+    $dbh->do('UPDATE currency SET rate=? WHERE currency=?', {}, $rate, $currency );
+    return;
 }
 
 #-------------------------------------------------------------#
@@ -500,20 +484,9 @@ sub DelBookFund {
     my $bookfundid = shift;
     my $branchcode=shift;
     my $dbh = C4::Context->dbh;
-    my $query = "
-        DELETE FROM aqbookfund
-        WHERE bookfundid=?
-        AND branchcode=?
-    ";
-    my $sth=$dbh->prepare($query);
-    $sth->execute($bookfundid,$branchcode);
-    $sth->finish;
-    $query = "
-        DELETE FROM aqbudget where bookfundid=? and branchcode=?
-    ";
-    $sth=$dbh->prepare($query);
-    $sth->execute($bookfundid,$branchcode);
-    $sth->finish;
+    $dbh->do('DELETE FROM aqbookfund WHERE bookfundid=?  AND branchcode=?', {}, $bookfundid,$branchcode);
+    $dbh->do('DELETE FROM aqbudget where bookfundid=? and branchcode=?', {}, $bookfundid,$branchcode);
+    return;
 }
 
 END { }    # module clean-up code here (global destructor)
