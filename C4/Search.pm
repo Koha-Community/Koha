@@ -1084,6 +1084,10 @@ sub buildQuery {
                 my $operand = $operands[$i];
                 my $index   = $indexes[$i];
 
+                if(not $index){
+                    $index = 'kw';
+                } 
+
                 # Add index-specific attributes
                 # Date of Publication
                 if ( $index eq 'yr' ) {
