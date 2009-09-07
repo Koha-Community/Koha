@@ -1,0 +1,43 @@
+Logging:
+    -
+        - pref: LetterLog
+          choices:
+              on: Log
+              off: "Don't log"
+        - when an automatic claim notice is sent.
+    -
+        - pref: BorrowersLog
+          choices:
+              on: Log
+              off: "Don't log"
+        - changes to patron records.
+    -
+        - pref: CataloguingLog
+          choices:
+              on: Log
+              off: "Don't log"
+        - any changes to bibliographic or item records. Since this occurs whenever a book is checked in or out as well, it is not advisable to turn this on.
+    -
+        - pref: FinesLog
+          choices:
+              on: Log
+              off: "Don't log"
+        - when overdue fines are charged or automatically forgiven.
+    -
+        - pref: IssueLog
+          choices:
+              on: Log
+              off: "Don't log"
+        - when items are checked out.
+    -
+        - pref: ReturnLog
+          choices:
+              on: Log
+              off: "Don't log"
+        - when items are returned.
+    -
+        - pref: SubscriptionLog
+          choices:
+              on: Log
+              off: "Don't log"
+        - when serials are added, deleted or changed.

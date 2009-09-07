@@ -1,0 +1,107 @@
+Cataloguing:
+# broken, omitted: marc
+    Interface:
+        -
+            - Use
+            - pref: DefaultClassificationSource
+              choices: class-sources
+            - as the default classification source.
+        -
+            - pref: advancedMARCeditor
+              choices:
+                  yes: Display
+                  no: "Don't display"
+            - descriptions of fields and subfields in the MARC editor.
+    Record Structure:
+        -
+            - Interpret and store MARC records in the
+            - pref: marcflavour
+              choices:
+                  MARC21: MARC21
+                  UNIMARC: UNIMARC
+            - format.
+        -
+            - Use the item type of the
+            - pref: item-level_itypes
+              choices:
+                  yes: specific item
+                  no: biblio record
+            - as the authoritative item type (for determining circulation and fines rules, etc).
+        -
+            - Map the MARC subfield
+            - pref: itemcallnumber
+            - "to an item's callnumber. (This can contain multiple subfields to look in; for instance <code>082ab</code> would look in 082 subfields a and b.)<br />Examples: <strong>Dewey</strong>: <code>082ab</code> or <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> or <code>090ab</code>; <strong>from the item record</strong>: <code>852hi</code>"
+        -
+            - Fill in the <a href="http://www.loc.gov/marc/organizations/orgshome.html">MARC organization code</a>
+            - pref: MARCOrgCode
+            - by default in new MARC records (leave blank to disable).
+        -
+            - pref: NoZebra
+              choices:
+                  yes: "Don't use"
+                  no: Use
+            - the Zebra search engine. Searches are very slow on even modest sized collections when Zebra is off.
+        -
+            - When Zebra is off, translate the following marc fields to the following indexes (each line should look something like <code>'indexname' =&gt; '100a,245a,500*',</code>):
+            - pref: NoZebraIndexes
+              type: textarea
+              class: list
+            -
+        -
+            - pref: z3950NormalizeAuthor
+              choices:
+                  yes: Copy
+                  no: "Don't copy"
+            - authors from the UNIMARC
+            - pref: z3950AuthorAuthFields
+              class: multi
+            - tags (separated by commas) to the correct author tags when importing a record using Z39.50.
+        -
+            - pref: RoutingSerials
+              choices:
+                  yes: Add
+                  no: "Don't add"
+            - extra information to items automatically added to serials.
+        -
+            - Barcodes are
+            - pref: autoBarcode
+              choices:
+                  incremental: generated in the form 1, 2, 3.
+                  annual: generated in the form &lt;year&gt;-0001, &lt;year&gt;-0002.
+                  hbyymmincr: generated in the form &lt;branchcode&gt;yymm0001.
+                  OFF: not generated automatically.
+    Display:
+        -
+            - Show
+            - pref: URLLinkText
+            - as the text of links embedded in MARC records.
+        -
+            - pref: hide_marc
+              choices:
+                  yes: "Don't display"
+                  no: Display
+            - MARC tag numbers, subfield codes and indicators in MARC views.
+        -
+            - pref: LabelMARCView
+              choices:
+                  standard: "Don't"
+                  economical: Do
+            - collapse repeated tags of the same type into one tag entry.
+        -
+            - By default, display biblio records in
+            - pref: IntranetBiblioDefaultView
+              choices:
+                  default: normal form.
+                  marc: MARC form.
+                  isbd: ISBD form (see below).
+        -
+            - "Use the following as the ISBD template:"
+            - pref: ISBD
+              type: textarea
+              class: code
+        -
+            - pref: OpacSuppression
+              choices:
+                  yes: Hide
+                  no: "Don't hide"
+            - items marked as suppressed from OPAC search results. Note that you must have the <code>Suppress</code> index set up in Zebra and at least one suppressed item, or your searches will be broken.

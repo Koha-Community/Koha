@@ -1,0 +1,18 @@
+# Broken, omitted: OAI-PMH:Set, OAI-PMH:Subset
+OAI-PMH:
+    -
+        - pref: OAI-PMH
+          choices:
+              yes: Enable
+              no: Disable
+        - "Koha's"
+        - '<a href="http://www.openarchives.org/pmh/">OAI-PMH</a> server.'
+    -
+        - Identify records at this site with the prefix
+        - pref: "OAI-PMH:archiveID"
+        - ": ."
+    -
+        - Only return
+        - pref: "OAI-PMH:MaxCount"
+          class: integer
+        - records at a time in response to a <code>ListRecords</code> or <code>ListIdentifiers</code> query.
