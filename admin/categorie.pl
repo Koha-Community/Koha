@@ -185,8 +185,7 @@ if ($op eq 'add_form') {
 				issuelimit => $results->[$i]{'issuelimit'},
 				reservefee => sprintf("%.2f",$results->[$i]{'reservefee'}),
 				category_type => $results->[$i]{'category_type'},
-				"type_".$results->[$i]{'category_type'} => 1,
-				toggle => $toggle );
+				"type_".$results->[$i]{'category_type'} => 1);
 	    if (C4::Context->preference('EnhancedMessagingPreferences')) {
 		my $brief_prefs = _get_brief_messaging_prefs($results->[$i]{'categorycode'});
 		$row{messaging_prefs} = $brief_prefs if @$brief_prefs;
