@@ -654,4 +654,4 @@ if ($cgi->param('format') && $cgi->param('format') =~ /rss/) {
     $content_type = 'html'
 }
 
-output_with_http_headers $cgi, $cookie, $template->output, $content_type;
+output_html_with_http_headers $cgi, $cookie, $template->output, $content_type;
