@@ -1955,12 +1955,15 @@ from the book's item type.
 =cut
 
 sub AddRenewal {
+    
     my $borrowernumber  = shift or return undef;
     my $itemnumber      = shift or return undef;
+    my $item   = GetItem($itemnumber) or return undef;
     my $branch  = (@_) ? shift : $item->{homebranch};	# opac-renew doesn't send branch
     my $datedue         = shift;
     my $lastreneweddate = shift || C4::Dates->new()->output('iso');
-    my $item   = GetItem($itemnumber) or return undef;
+
+
     my $biblio = GetBiblioFromItemNumber($itemnumber) or return undef;
 
     # If the due date wasn't specified, calculate it by adding the
