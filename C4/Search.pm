@@ -772,6 +772,194 @@ sub _build_weighted_query {
     return $weighted_query;
 }
 
+=head2 getIndexes
+
+Return an array with available indexes.
+
+=cut
+
+sub getIndexes{
+    my @indexes = (
+                    # biblio indexes
+                    'ab',
+                    'Abstract',
+                    'acqdate',
+                    'allrecords',
+                    'an',
+                    'Any',
+                    'at',
+                    'au',
+                    'aub',
+                    'aud',
+                    'audience',
+                    'auo',
+                    'aut',
+                    'Author',
+                    'Author-in-order ',
+                    'Author-personal-bibliography',
+                    'Authority-Number',
+                    'authtype',
+                    'bc',
+                    'biblionumber',
+                    'bio',
+                    'biography',
+                    'callnum',          
+                    'cfn',
+                    'Chronological-subdivision',
+                    'cn-bib-source',
+                    'cn-bib-sort',
+                    'cn-class',
+                    'cn-item',
+                    'cn-prefix',
+                    'cn-suffix',
+                    'cpn',
+                    'Code-institution',
+                    'Conference-name',
+                    'Conference-name-heading',
+                    'Conference-name-see',
+                    'Conference-name-seealso',
+                    'Content-type',
+                    'Control-number',
+                    'copydate',
+                    'Corporate-name',
+                    'Corporate-name-heading',
+                    'Corporate-name-see',
+                    'Corporate-name-seealso',
+                    'ctype',
+                    'date-entered-on-file',
+                    'Date-of-acquisition',
+                    'Date-of-publication',
+                    'Dewey-classification',
+                    'extent',
+                    'fic',
+                    'fiction',
+                    'Form-subdivision',
+                    'format',
+                    'Geographic-subdivision',
+                    'he',
+                    'Heading',
+                    'Heading-use-main-or-added-entry',
+                    'Heading-use-series-added-entry ',
+                    'Heading-use-subject-added-entry',
+                    'Host-item',
+                    'id-other',
+                    'Illustration-code',
+                    'ISBN',
+                    'ISSN',
+                    'itemtype',
+                    'kw',
+                    'Koha-Auth-Number',
+                    'l-format',
+                    'language',
+                    'lc-card',
+                    'LC-card-number',
+                    'lcn',
+                    'llength',
+                    'ln',
+                    'Local-classification',
+                    'Local-number',
+                    'Match-heading',
+                    'Match-heading-see-from',
+                    'Material-type',
+                    'mc-itemtype',
+                    'mc-rtype',
+                    'mus',
+                    'Name-geographic',
+                    'Name-geographic-heading',
+                    'Name-geographic-see',
+                    'Name-geographic-seealso',
+                    'nb',
+                    'Note',
+                    'ns',
+                    'nt',
+                    'pb',
+                    'Personal-name',
+                    'Personal-name-heading',
+                    'Personal-name-see',
+                    'Personal-name-seealso',
+                    'pl',
+                    'Place-publication',
+                    'pn',
+                    'popularity',
+                    'pubdate',
+                    'Publisher',
+                    'Record-type',
+                    'rtype',
+                    'se',
+                    'See',
+                    'See-also',
+                    'sn',
+                    'Stock-number',
+                    'su',
+                    'Subject',
+                    'Subject-heading-thesaurus',
+                    'Subject-name-personal',
+                    'Subject-subdivision',
+                    'Summary',
+                    'Suppress',
+                    'su-geo',
+                    'su-na',
+                    'su-to',
+                    'su-ut',
+                    'ut',
+                    'Term-genre-form',
+                    'Term-genre-form-heading',
+                    'Term-genre-form-see',
+                    'Term-genre-form-seealso',
+                    'ti',
+                    'Title',
+                    'Title-cover',
+                    'Title-series',
+                    'Title-uniform',
+                    'Title-uniform-heading',
+                    'Title-uniform-see',
+                    'Title-uniform-seealso',
+                    'totalissues',
+                    'yr',
+                    
+                    # items indexes
+                    'acqsource',
+                    'barcode',
+                    'bc',
+                    'branch',
+                    'ccode',
+                    'classification-source',
+                    'cn-sort',
+                    'coded-location-qualifier',
+                    'copynumber',
+                    'damaged',
+                    'datelastborrowed',
+                    'datelastseen',
+                    'holdingbranch',
+                    'homebranch',
+                    'issues',
+                    'itemnumber',
+                    'itype',
+                    'Local-classification',
+                    'location',
+                    'lost',
+                    'materials-specified',
+                    'mc-ccode',
+                    'mc-itype',
+                    'mc-loc',
+                    'notforloan',
+                    'onloan',
+                    'price',
+                    'renewals',
+                    'replacementprice',
+                    'replacementpricedate',
+                    'reserves',
+                    'restricted',
+                    'stack',
+                    'uri',
+                    'withdrawn',
+                    
+                    # subject related
+                  );
+                  
+    return \@indexes;
+}
+
 =head2 buildQuery
 
 ( $error, $query,
@@ -826,6 +1014,17 @@ sub buildQuery {
     my $limit_desc;
 
     my $stopwords_removed;    # flag to determine if stopwords have been removed
+
+    my $cclq;
+    my $indexes = getIndexes();
+    for my $index (@$indexes){
+        if($query =~ /($index)(,?\w)*:/){
+            $cclq = 1;
+        }
+    }
+    if($cclq){
+        $query = "ccl=$query";
+    }
 
 # for handling ccl, cql, pqf queries in diagnostic mode, skip the rest of the steps
 # DIAGNOSTIC ONLY!!
@@ -901,6 +1100,11 @@ sub buildQuery {
                     ) = ( 0, 0, 0, 0, 0 );
 
                 }
+                
+                if(not $index){
+                    $index = 'kw';
+                }
+                
                 # Set default structure attribute (word list)
                 my $struct_attr;
                 unless ( $indexes_set || !$index || $index =~ /(st-|phr|ext|wrdl)/ ) {
