@@ -284,7 +284,11 @@ if ( C4::Context->preference("OPACAmazonEnabled") && C4::Context->preference("OP
     my $similar_products_exist;
     my $amazon_reviews  = C4::Context->preference("AmazonReviews");
     my $amazon_similars = C4::Context->preference("AmazonSimilarItems");
+    my @services;
+    my $amazon_details = &get_amazon_details( $dat->{isbn}, $record, $marcflavour, \@services );
+
     if ( $amazon_reviews ) {
+	
         my $item = $amazon_details->{Items}->{Item}->[0];
         my $customer_reviews = \@{ $item->{CustomerReviews}->{Review} };
         for my $one_review ( @$customer_reviews ) {
@@ -308,14 +312,10 @@ if ( C4::Context->preference("OPACAmazonEnabled") && C4::Context->preference("OP
                 push @similar_products, +{ similar_biblionumbers => $similar_biblionumbers, title => $similar_product->{Title}, ASIN => $similar_product->{ASIN}  };
             }
         }
-    }
-    my $editorial_reviews = \@{$amazon_details->{Items}->{Item}->{EditorialReviews}->{EditorialReview}};
-    my $average_rating = $amazon_details->{Items}->{Item}->{CustomerReviews}->{AverageRating} || 0;
-    $template->param( OPACAmazonSimilarItems => $similar_products_exist );
-    $template->param( amazon_average_rating => $average_rating * 20);
-    $template->param( AMAZON_CUSTOMER_REVIEWS    => $customer_reviews );
-    $template->param( AMAZON_SIMILAR_PRODUCTS => \@similar_products );
-    $template->param( AMAZON_EDITORIAL_REVIEWS    => $editorial_reviews );
+	$template->param( OPACAmazonSimilarItems => $similar_products_exist );
+	$template->param( AMAZON_SIMILAR_PRODUCTS => \@similar_products );
+    }    
+    
 }
 
 # Babelthèque
