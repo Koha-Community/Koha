@@ -475,23 +475,7 @@ $("span.addto").html(param1);
 				<!-- TMPL_IF Name="searchhighlightblob" --><span class="results_summary"><span class="label">Match:</span> <!-- TMPL_VAR NAME="searchhighlightblob" --></span><!-- /TMPL_IF -->
 
 <span class="results_summary actions"><span class="label">Actions:</span>
-<<<<<<< HEAD:koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl
-                                <!-- TMPL_IF name="RequestOnOpac" -->
-					<!-- TMPL_UNLESS NAME="norequests" -->
-						<!-- TMPL_IF NAME="opacuserlogin" -->
-							<!-- TMPL_IF NAME="AllowOnShelfHolds" -->
-								<a class="hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a><!-- add back when available 0 holds in queue-->
-							<!-- TMPL_ELSE -->
-								<!-- TMPL_IF NAME="itemsissued" -->
-									<a class="hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a><!-- add back when available 0 holds in queue-->
-								<!-- /TMPL_IF -->
-							<!-- /TMPL_IF -->
-						<!-- /TMPL_IF -->
-					<!-- /TMPL_UNLESS -->
-				<!-- /TMPL_IF -->
-=======
                                 <!-- TMPL_IF name="RequestOnOpac" --><!-- TMPL_UNLESS NAME="norequests" --><!-- TMPL_IF NAME="opacuserlogin" --><a class="hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a><!-- add back when available 0 holds in queue--> <!-- /TMPL_IF --><!-- /TMPL_UNLESS --><!-- /TMPL_IF -->
->>>>>>> 3fa269d... Bug 3173 Place Hold link visible in OPAC even if syspref turned off:koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl
 
 
 				<!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="loggedinusername" --><!-- TMPL_IF NAME="virtualshelves" --><a class="addtolist" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">Save to Lists</a>
