@@ -214,10 +214,12 @@ if (C4::Context->preference("FRBRizeEditions")==1) {
     };
     if ($@) { warn "XISBN Failed $@"; }
 }
+
 if ( C4::Context->preference("AmazonEnabled") == 1 ) {
     $template->param( AmazonTld => get_amazon_tld() );
     my $amazon_reviews  = C4::Context->preference("AmazonReviews");
     my $amazon_similars = C4::Context->preference("AmazonSimilarItems");
+    my $isbn = $dat->{'isbn'};
     my @services;
     if ( $amazon_reviews ) {
         $template->param( AmazonReviews => 1 );
@@ -246,18 +248,11 @@ if ( C4::Context->preference("AmazonEnabled") == 1 ) {
     if ( $amazon_reviews ) {
         my $item = $amazon_details->{Items}->{Item}->[0];
         my $editorial_reviews = \@{ $item->{EditorialReviews}->{EditorialReview} };
-        #my $customer_reviews  = \@{$amazon_details->{Items}->{Item}->[0]->{CustomerReviews}->{Review}};
-        #my $average_rating = $amazon_details->{Items}->{Item}->[0]->{CustomerReviews}->{AverageRating} || 0;
-        #$template->param( amazon_average_rating    => $average_rating * 20    );
-        #$template->param( AMAZON_CUSTOMER_REVIEWS  => $customer_reviews       );
+        my $customer_reviews  = \@{$amazon_details->{Items}->{Item}->[0]->{CustomerReviews}->{Review}};
+        my $average_rating = $amazon_details->{Items}->{Item}->[0]->{CustomerReviews}->{AverageRating} || 0;
+        $template->param( amazon_average_rating    => $average_rating * 20    );
+        $template->param( AMAZON_CUSTOMER_REVIEWS  => $customer_reviews       );
         $template->param( AMAZON_EDITORIAL_REVIEWS => $editorial_reviews      );
     }
-    my $editorial_reviews = \@{$amazon_details->{Items}->{Item}->{EditorialReviews}->{EditorialReview}};
-    my $average_rating    =    $amazon_details->{Items}->{Item}->{CustomerReviews}->{AverageRating} || 0;
-    $template->param( AmazonSimilarItems       => $similar_products_exist );
-    $template->param( amazon_average_rating    => $average_rating * 20    );
-    $template->param( AMAZON_CUSTOMER_REVIEWS  => $customer_reviews       );
-    $template->param( AMAZON_SIMILAR_PRODUCTS  => \@similar_products      );
-    $template->param( AMAZON_EDITORIAL_REVIEWS => $editorial_reviews      );
 }
 output_html_with_http_headers $query, $cookie, $template->output;
