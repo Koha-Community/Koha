@@ -1184,7 +1184,7 @@ sub searchResults {
     else {
         $times = $hits;	 # FIXME: if $hits is undefined, why do we want to equal it?
     }
-
+     my $marcflavour = C4::Context->preference("marcflavour");
     # loop through all of the records we've retrieved
     for ( my $i = $offset ; $i <= $times - 1 ; $i++ ) {
         my $marcrecord = MARC::File::USMARC::decode( $marcresults[$i] );
