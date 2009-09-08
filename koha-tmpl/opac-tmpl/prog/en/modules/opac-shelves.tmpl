@@ -9,30 +9,58 @@ $.tablesorter.addParser({
     format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
     type: 'text' 
 });
+function holdSelections() {
+    var checkedBoxes = $(":checkbox:checked");
+    if ($(checkedBoxes).size() == 0) {
+        alert(MSG_NO_RECORD_SELECTED);
+    } else {
+        var bibs = "";
+        $(checkedBoxes).each(function(){
+            var name = $(this).attr("name");
+            bib = name.substr(4);
+            bibs += bib + "/";
+        });
+        document.location = "/cgi-bin/koha/opac-reserve.pl?biblionumbers="+bibs;
+    }
+}
 
-       $(function() {
-            $("span.clearall").html("<a id=\"CheckNone\" href=\"#\">Clear All</a>");
-            $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">Select All</a>");
-            $("#listcontents").tablesorter({
-                widgets : ['zebra'],
-                <!-- TMPL_IF NAME="manageshelf" -->
-                sortList: [[1,0]],
-                headers: { 0: { sorter: false },1:{sorter: 'articles'}
-                <!-- TMPL_ELSE -->
-                sortList: [[0,0]],
-                headers: { 0:{sorter:'articles'}
-                <!-- /TMPL_IF -->
-                }
-            }); 
-            $("#CheckAll").click(function(){
-                $(".checkboxed").checkCheckboxes();
-                return false;
-            });
-            $("#CheckNone").click(function(){
-                $(".checkboxed").unCheckCheckboxes();
-                return false;
-            });
-       });
+
+$(function() {
+    $("span.clearall").html("<a id=\"CheckNone\" href=\"#\">Clear All</a>");
+    $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">Select All</a>");
+    $("#listcontents").tablesorter({
+        widgets : ['zebra'],
+        <!-- TMPL_IF NAME="manageshelf" -->
+          sortList: [[1,0]],
+          headers: { 0: { sorter: false },1:{sorter: 'articles'}
+        <!-- TMPL_ELSE -->
+          sortList: [[0,0]],
+          headers: { 0:{sorter:'articles'}
+        <!-- /TMPL_IF -->
+        }
+    }); 
+    $("#CheckAll").click(function(){
+        $(".checkboxed").checkCheckboxes();
+        return false;
+    });
+    $("#CheckNone").click(function(){
+        $(".checkboxed").unCheckCheckboxes();
+        return false;
+    });
+});
+
+$(document).ready(function(){
+<!-- TMPL_IF NAME="RequestOnOpac" -->
+    $(".hold").html("Place Hold");
+<!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="TagsEnabled" -->
+    $("#tagsel_tag").text("Tag");
+    $("#tagsel_button").click(function(){
+        tagAdded();
+        return false;
+    });
+    <!-- /TMPL_IF -->
+});
 //]]>
 </script>
 </head>
@@ -81,6 +109,7 @@ $.tablesorter.addParser({
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_IF --> 
 
+<<<<<<< HEAD:koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl
     <div class="yui-g">
     
     
@@ -115,6 +144,42 @@ $.tablesorter.addParser({
         <tr class="highlight">
                 <!-- TMPL_ELSE -->
         <tr>
+=======
+            <!-- TMPL_IF NAME="viewshelf" --><!--  Viewing a particular shelf -->
+              <h3><a href="/cgi-bin/koha/opac-shelves.pl">Lists</a> <img src="<!-- TMPL_VAR NAME="themelang" -->/../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> <em><!-- TMPL_VAR NAME="shelfname" ESCAPE="html" --></em></h3>
+              <!-- TMPL_IF NAME="itemsloop" -->
+                <!-- TMPL_IF NAME="manageshelf" -->
+                  <div>
+                    <span class="checkall"></span>
+                    <span class="clearall"></span>
+                    |
+                    <!-- div id="tag_hides" -->
+                      <a class="editshelf tag_hides" href="/cgi-bin/koha/opac-shelves.pl?shelfnumber=<!-- TMPL_VAR NAME="shelfnumber" -->&amp;op=modif">Edit List</a>
+                      <form method="post" action="opac-shelves.pl" class="tag_hides">
+                        <input type="hidden" value="1" name="shelves"/>
+                    <!-- TMPL_IF NAME="showprivateshelves" -->
+                         <input type="hidden" name="display" value="privateshelves" />
+                    <!-- /TMPL_IF -->
+                         <input type="hidden" value="1" name="DEL-<!-- TMPL_VAR NAME="shelfnumber" -->"/>
+                         <input type="submit" class="deleteshelf" value="Delete List" onclick="return confirmDelete(_('Are you sure you want to remove this List?'));"/>
+                      </form>
+                      <a href="#" class="send tag_hides" onclick="open(CGIBIN+'opac-sendshelf.pl?shelfid=<!-- TMPL_VAR NAME="shelfnumber" -->','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100')">Send List</a>
+<!-- TMPL_IF NAME="RequestOnOpac" -->
+                      <a href="#" class="hold tag_hides" onclick="holdSelections();return false;"></a>
+<!-- /TMPL_IF -->
+                    <!-- /div -->
+                    <a id="tagsel_tag" href="#" onclick="tagSelected(); return false;"></a>                 
+                    <span id="tagsel_form" style="display:none">
+                      <label for="tagsel_new" style="display:inline">New&nbsp;Tag:</label>
+                      <input name="tagsel_new" id="tagsel_new" maxlength="100" style="display:inline"/>
+                      <input id="tagsel_button" name="tagsel_button" class="input tagsel_button" title="tagsel_button"
+                             type="submit" value="Add" style="display:inline" />
+                      <a href="#" id="tagsel_cancel" onclick="tagCanceled(); return false;" style="display:inline">Cancel</a>
+                    </span>
+                  </div>
+				<!-- TMPL_ELSE -->
+				<div style="margin-left:1em;"><a href="#" class="send tag_hides" onclick="open(CGIBIN+'opac-sendshelf.pl?shelfid=<!-- TMPL_VAR NAME="shelfnumber" -->','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100')">Send List</a> | <span><a href="/cgi-bin/koha/opac-user.pl">Log in</a> to place holds or add tags</span></div>
+>>>>>>> 3fa269d... Bug 3173 Place Hold link visible in OPAC even if syspref turned off:koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="manageshelf" -->
             <td>

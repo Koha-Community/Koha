@@ -30,6 +30,22 @@
 		);
 	        return false;
 	    });
+<!-- TMPL_IF NAME="RequestOnOpac" -->
+        $(".holdsep").text("| ");
+        $(".hold").text("Place Hold");
+<!-- /TMPL_IF -->
+  
+        <!-- TMPL_IF NAME="TagsEnabled" -->
+        <!-- TMPL_IF NAME="TagsInputOnList" -->
+          $(".tagsep").text("| ");
+          $("#tagsel_tag").text("Tag");
+          $("#tagsel_button").click(function(){
+              tagAdded();
+              return false;
+          });
+          $("#tablehead").attr("colspan", $("#tablehead").attr("colspan") + 1);
+        <!-- /TMPL_IF -->
+        <!-- /TMPL_IF -->
 	});
 	//]]>
 	</script>
