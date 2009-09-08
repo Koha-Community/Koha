@@ -2138,6 +2138,8 @@ CREATE TABLE language_subtag_registry (
         type varchar(25), -- language-script-region-variant-extension-privateuse
         description varchar(25), -- only one of the possible descriptions for ease of reference, see language_descriptions for the complete list
         added date,
+        id int(11) NOT NULL auto_increment,
+        PRIMARY KEY  (`id`),
         KEY `subtag` (`subtag`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -2148,6 +2150,8 @@ DROP TABLE IF EXISTS language_rfc4646_to_iso639;
 CREATE TABLE language_rfc4646_to_iso639 (
         rfc4646_subtag varchar(25),
         iso639_2_code varchar(25),
+        id int(11) NOT NULL auto_increment,
+        PRIMARY KEY  (`id`),
         KEY `rfc4646_subtag` (`rfc4646_subtag`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -2157,6 +2161,8 @@ CREATE TABLE language_descriptions (
         type varchar(25),
         lang varchar(25),
         description varchar(255),
+        id int(11) NOT NULL auto_increment,
+        PRIMARY KEY  (`id`),
         KEY `lang` (`lang`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

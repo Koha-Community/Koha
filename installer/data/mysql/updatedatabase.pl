@@ -2614,6 +2614,36 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (bug 1600, bug 3454: add altcontactcountry and B_address2 to borrowers and deletedborrowers)\n";
 }
 
+$DBversion = '3.01.00.055';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(qq|UPDATE systempreferences set explanation='Enter the HTML that will appear in the ''Search for this title in'' box on the detail page in the OPAC.  Enter {TITLE}, {AUTHOR}, or {ISBN} in place of their respective variables in the URL. Leave blank to disable ''More Searches'' menu.', value='<li><a  href="http://worldcat.org/search?q={TITLE}" target="_blank">Other Libraries (WorldCat)</a></li>\n<li><a href="http://www.scholar.google.com/scholar?q={TITLE}" target="_blank">Other Databases (Google Scholar)</a></li>\n<li><a href="http://www.bookfinder.com/search/?author={AUTHOR}&amp;title={TITLE}&amp;st=xl&amp;ac=qr" target="_blank">Online Stores (Bookfinder.com)</a></li>' WHERE variable='OPACSearchForTitleIn'|);
+    SetVersion ($DBversion);
+    print "Upgrade to $DBversion done (changed OPACSearchForTitleIn per requests in bug 1934)\n";
+}
+
+$DBversion = '3.01.00.056';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OPACPatronDetails','1','If OFF the patron details tab in the OPAC is disabled.','','YesNo');");
+    SetVersion ($DBversion);
+    print "Upgrade to $DBversion done (Bug 1172 : Add OPACPatronDetails syspref)\n";
+}
+
+$DBversion = '3.01.00.057';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OPACFinesTab','1','If OFF the patron fines tab in the OPAC is disabled.','','YesNo');");
+    SetVersion ($DBversion);
+    print "Upgrade to $DBversion done (Bug 2576 : Add OPACFinesTab syspref)\n";
+}
+
+$DBversion = '3.01.00.058';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE `language_subtag_registry` ADD `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY;");
+    $dbh->do("ALTER TABLE `language_rfc4646_to_iso639` ADD `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY;");
+    $dbh->do("ALTER TABLE `language_descriptions` ADD `id` INT( 11 ) NOT NULL AUTO_INCREMENT PRIMARY KEY;");
+    SetVersion ($DBversion);
+    print "Upgrade to $DBversion done (Added primary keys to language tables)\n";
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table

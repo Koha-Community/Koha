@@ -1052,7 +1052,7 @@ $(document).ready(function() {
             
                 <ul>
                     <li>The subscription <strong>must</strong> be associated with a bibliographic record.</li>
-                    <li>You <strong>must</strong> select a vendor if you wish to generate claims.</li>
+                    <li>You have to select a vendor if you wish to generate claims.</li>
                 </ul></div>
             
             
@@ -1275,15 +1275,9 @@ $(document).ready(function() {
             <label for="subtype" class="required">Subscription length:</label>
             
                 <select name="subtype" id="subtype">
-                    <!-- TMPL_LOOP NAME="subtype" -->
-                        <!-- TMPL_IF NAME="selected" -->
-                        <option value="<!-- TMPL_VAR NAME="name" -->" selected="selected">
-                        <!-- TMPL_ELSE -->
-                        <option value="<!-- TMPL_VAR NAME="name" -->">
-                        <!-- /TMPL_IF -->
-                        <!-- TMPL_VAR NAME="name" -->
-                        </option>
-                    <!-- /TMPL_LOOP -->
+					<!--TMPL_IF Name="subtype_numberlength"--><option value="numberlength" selected="selected"><!--TMPL_ELSE--><option value="numberlength"><!--/TMPL_IF--> Number of issues</option>					
+					<!--TMPL_IF Name="subtype_weeklength"--><option value="weeklength" selected="selected"><!--TMPL_ELSE--><option value="weeklength"><!--/TMPL_IF--> Number of weeks</option>					
+					<!--TMPL_IF Name="subtype_monthlength"--><option value="monthlength" selected="selected"><!--TMPL_ELSE--><option value="monthlength"><!--/TMPL_IF--> Number of months</option>					
                 </select>
                 <input type="text" name="sublength" value="<!-- TMPL_VAR name="sublength" -->" size="3" onkeypress="return check_input(event)" /> (enter amount in numerals)
             <span class="required">Required</span>

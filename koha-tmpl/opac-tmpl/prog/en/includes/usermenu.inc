@@ -2,8 +2,12 @@
 <div id="menu">
 <ul>
   <!-- TMPL_IF NAME="userview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-user.pl">my summary</a></li>
+  <!-- TMPL_IF NAME="OPACFinesTab" -->
   <!-- TMPL_IF NAME="accountview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-account.pl">my fines</a></li>
+  <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME="OPACPatronDetails" -->
   <!-- TMPL_IF NAME="userupdateview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-userupdate.pl">my personal details</a></li>
+    <!-- /TMPL_IF -->
   <!-- TMPL_IF NAME="TagsEnabled" -->
     <!-- TMPL_IF NAME="tagsview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-tags.pl">my tags</a></li>
   <!-- /TMPL_IF -->
