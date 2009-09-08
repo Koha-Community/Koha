@@ -278,6 +278,7 @@ if ($borrowernumber) {
 # STEP 3 : ISSUING
 #
 #
+my $noerror = 1;
 if ($barcode) {
   # always check for blockers on issuing
   my ( $error, $question ) =
@@ -295,7 +296,7 @@ if ($barcode) {
             );
             $blocker = 1;
         }
-	}
+  }
     if( !$blocker ){
         my $confirm_required = 0;
     	unless($issueconfirmed){
@@ -369,6 +370,7 @@ if ($barcode) {
     my ( $od, $issue, $fines ) = GetMemberIssuesAndFines( $borrowernumber );
     $template->param( issuecount   => $issue );
 }
+}    
 
 # reload the borrower info for the sake of reseting the flags.....
 if ($borrowernumber) {
