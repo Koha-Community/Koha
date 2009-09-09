@@ -1017,13 +1017,13 @@ sub buildQuery {
 
     my $cclq;
     my $indexes = getIndexes();
-    for my $index (@$indexes){
-        if($query =~ /($index)(,?\w)*:/){
-            $cclq = 1;
+    if( $query !~ /\s*ccl=/ ){
+        for my $index (@$indexes){
+            if($query =~ /($index)(,?\w)*:/){
+                $cclq = 1;
+            }
         }
-    }
-    if($cclq){
-        $query = "ccl=$query";
+        $query = "ccl=$query" if($cclq);
     }
 
 # for handling ccl, cql, pqf queries in diagnostic mode, skip the rest of the steps
