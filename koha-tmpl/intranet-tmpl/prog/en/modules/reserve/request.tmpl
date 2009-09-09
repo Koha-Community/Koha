@@ -52,14 +52,14 @@ if (alreadyreserved > "0"){
  $(document).ready(function() {
  	$("#requestany").click(function() {
 		if(this.checked){
-		$("input[@name=checkitem]").each(function() {
+		$("input[name=checkitem]").each(function() {
 			$(this).attr("checked","");
 		});
 		}
 	});
- 	$("input[@name=checkitem]").click(function() {
+ 	$("input[name=checkitem]").click(function() {
 		onechecked = 0;
-		$("input[@name=checkitem]").each(function() {
+		$("input[name=checkitem]").each(function() {
 			if(this.checked){
 				onechecked = 1;
 			}
