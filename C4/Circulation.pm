@@ -1335,20 +1335,19 @@ sub AddReturn {
         $messages->{'BadBarcode'} = $barcode;
         $doreturn = 0;
     } else {
-        if ( not %$iteminformation ) {
+        # find the borrower
+        if ( not $iteminformation->{borrowernumber} ) {
             $messages->{'NotIssued'} = $barcode;
-            # even though item is not on loan, it may still
-            # be transferred; therefore, get current branch information
-            my $curr_iteminfo = GetItem($itemnumber);
-            $iteminformation->{'itemnumber'}    = $curr_iteminfo->{'itemnumber'};
-            $iteminformation->{'homebranch'}    = $curr_iteminfo->{'homebranch'};
-            $iteminformation->{'holdingbranch'} = $curr_iteminfo->{'holdingbranch'};
-            $iteminformation->{'itemlost'}      = $curr_iteminfo->{'itemlost'};
-            # These lines patch up $iteminformation enough so it can be used below for other messages
             $doreturn = 0;
         }
-
-        my $hbr = $iteminformation->{C4::Context->preference("HomeOrHoldingBranch")} || '';
+        
+        # even though item is not on loan, it may still
+        # be transferred; therefore, get current branch information
+        my $curr_iteminfo = GetItem($iteminformation->{'itemnumber'});
+        $iteminformation->{'homebranch'} = $curr_iteminfo->{'homebranch'};
+        $iteminformation->{'holdingbranch'} = $curr_iteminfo->{'holdingbranch'};
+        $iteminformation->{'itemlost'} = $curr_iteminfo->{'itemlost'};
+        
         # check if the book is in a permanent collection....
         # FIXME -- This 'PE' attribute is largely undocumented.  afaict, there's no user interface that reflects this functionality.
         if ( $hbr ) {
@@ -1450,7 +1449,7 @@ sub AddReturn {
         #adding message if holdingbranch is non equal a userenv branch to return the document to homebranch
         #we check, if we don't have reserv or transfert for this document, if not, return it to homebranch .
         
-        if ($doreturn and ($branch ne $iteminformation->{$hbr}) and not $messages->{'WrongTransfer'} and ($validTransfert ne 1) and ($reserveDone ne 1) ){
+        if (($doreturn or $messages->{'NotIssued'}) and ($branch ne $iteminformation->{$hbr}) and not $messages->{'WrongTransfer'} and ($validTransfert ne 1) and ($reserveDone ne 1) ){
 			if (C4::Context->preference("AutomaticItemReturn") == 1) {
 				ModItemTransfer($iteminformation->{'itemnumber'}, C4::Context->userenv->{'branch'}, $iteminformation->{$hbr});
 				$messages->{'WasTransfered'} = 1;
