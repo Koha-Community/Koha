@@ -66,28 +66,6 @@ $(document).ready(function() {
 		}
 	});
  });
-function uncheck_sibling(me){
-nodename=me.getAttribute("name");
-if (nodename =="barcodes[]"){
-    var Node=me.parentNode.previousSibling;
-    while (Node.nodeName!="TD"){Node=Node.previousSibling}
-    var Nodes=Node.childNodes;
-    for (var i=0;i<Nodes.length;i++){
-      if (Nodes[i].nodeName=="INPUT" && Nodes[i].getAttribute("type")=="checkbox"){
-        Nodes[i].checked=false;
-      }     
-   }   
-
-}else {
-    var Node=me.parentNode.nextSibling;
-    while (Node.nodeName!="TD"){Node=Node.nextSibling}
-    var Nodes=Node.childNodes;
-    for (var i=0;i<Nodes.length;i++){
-      if (Nodes[i].nodeName=="INPUT" && Nodes[i].getAttribute("type")=="checkbox"){
-        Nodes[i].checked=false;
-      }     
-   }   
-}
 }
 
 //]]>
@@ -428,9 +406,9 @@ if (nodename =="barcodes[]"){
             <!-- TMPL_ELSE -->
             <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
             <!-- TMPL_IF NAME="red" -->
-            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" onclick="uncheck_sibling(this);" />
+            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
             <!-- TMPL_ELSE -->
-            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" onclick="uncheck_sibling(this);" />
+            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->"  />
             <!-- /TMPL_IF -->
             <!-- /TMPL_IF -->
             </td>
@@ -438,7 +416,7 @@ if (nodename =="barcodes[]"){
       <!-- TMPL_IF NAME="return_failed" -->
             <td class="problem">Return Failed</td>
        <!--TMPL_ELSE-->   
-            <td><input type="checkbox" name="barcodes[]"  value="<!-- TMPL_VAR NAME="barcode" -->" onclick="uncheck_sibling(this);" />
+            <td><input type="checkbox" name="barcodes[]"  value="<!-- TMPL_VAR NAME="barcode" -->" />
             <input type="checkbox" name="all_barcodes[]" value="<!-- TMPL_VAR NAME="barcode" -->" checked="checked" style="display: none;" />
             </td>
       <!-- /TMPL_IF -->
