@@ -1,8 +1,8 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Administration &rsaquo; System Preferences</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang"-->/css/preferences.css">
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang"-->/css/humanmsg.css">
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang"-->/css/preferences.css" />
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang"-->/css/humanmsg.css" />
 <script src="<!-- TMPL_VAR NAME="themelang" -->/lib/jquery/plugins/humanmsg.js" type="text/javascript"></script>
 <script src="<!-- TMPL_VAR NAME="themelang" -->/js/ajax.js" type="text/javascript"></script>
 <script src="<!-- TMPL_VAR NAME="themelang" -->/js/pages/preferences.js" type="text/javascript"></script>
@@ -36,7 +36,7 @@
     <div id="yui-main">
     <div class="yui-b">
 	<div id="toolbar">
-		<form action="/cgi-bin/koha/admin/preferences.pl" method="GET">
+		<form action="/cgi-bin/koha/admin/preferences.pl" method="get">
 			<input type="hidden" name="op" value="jump" />
 			<input type="hidden" name="tab" value="<!-- TMPL_VAR NAME="tab" -->" />
 			<label for="jumpfield">Jump to named preference:</label>
@@ -59,7 +59,7 @@
     <!-- TMPL_LOOP NAME="TABS" -->
     <div class="prefs-tab">
     <h2><!-- TMPL_VAR NAME="tab_title" --> preferences</h2>
-    <form action="/cgi-bin/koha/admin/preferences.pl" method="POST">
+    <form action="/cgi-bin/koha/admin/preferences.pl" method="post">
         <input type="hidden" name="op" value="save" />
         <input type="hidden" name="tab" value="<!-- TMPL_VAR NAME="tab" -->" />
         <table>
@@ -84,8 +84,7 @@
                         <!-- TMPL_LOOP NAME="NAMES" -->
 						<label for="pref_<!-- TMPL_VAR NAME="name" -->">
 							<!-- TMPL_IF NAME="highlighted" -->
-							<a name="highlighted"></a>
-							<span class="term"><!-- TMPL_VAR NAME="name" --></span>
+							<span class="term" id="highlighted"><!-- TMPL_VAR NAME="name" --></span>
 							<!-- TMPL_ELSE -->
 							<!-- TMPL_VAR NAME="name" -->
 							<!-- /TMPL_IF -->
@@ -120,32 +119,35 @@
 					<a class="expand-textarea" style="display: none" href="#">Click to Edit</a>
 					<textarea name="pref_<!-- TMPL_VAR NAME="name" -->" id="pref_<!-- TMPL_VAR NAME="name" -->" class="preference preference-<!-- TMPL_VAR NAME="class" DEFAULT="short" -->"><!-- TMPL_VAR NAME="value" --></textarea>
                     <!-- TMPL_ELSIF NAME="type_languages" -->
-                    <table>
+                    <dl>
                     <!-- TMPL_LOOP NAME="languages" -->
-                    <tr><td>
+                    <dt>
                         <!-- TMPL_IF NAME="plural" -->
-                        <!-- TMPL_IF NAME="native_description" --><!-- TMPL_VAR NAME="native_description" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="rfc4646_subtag" --><!-- /TMPL_IF -->
+                        <dt>
+                            <!-- TMPL_IF NAME="native_description" --><!-- TMPL_VAR NAME="native_description" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="rfc4646_subtag" --><!-- /TMPL_IF -->
+                        </dt>
                         <!-- TMPL_LOOP NAME="sublanguages_loop" -->
-                        <table><tr><td>
+                        <dd>
                             <label for="<!-- TMPL_VAR NAME="rfc4646_subtag" -->"><!-- TMPL_VAR NAME="native_description" --> <!-- TMPL_VAR NAME="script_description" --> <!-- TMPL_VAR NAME="region_description" --> <!-- TMPL_VAR NAME="variant_description" -->(<!-- TMPL_VAR NAME="rfc4646_subtag" -->)</label>
                             <!-- TMPL_IF NAME="enabled" -->
                             <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="pref_<!-- TMPL_VAR NAME="name" -->" id="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" checked="checked" />
                             <!-- TMPL_ELSE -->
                             <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="pref_<!-- TMPL_VAR NAME="name" -->" id="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" />
                             <!-- /TMPL_IF -->
-                        </td></tr></table>
+                        </dd>
                         <!-- /TMPL_LOOP -->
                         <!-- TMPL_ELSE -->
-                        <label for="<!-- TMPL_VAR NAME="rfc4646_subtag" -->"><!-- TMPL_VAR NAME="native_description" -->(<!-- TMPL_VAR NAME="rfc4646_subtag" -->)</label>
-                        <!-- TMPL_IF NAME="group_enabled" -->
-                        <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="pref_<!-- TMPL_VAR NAME="name" -->" id="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" checked="checked" />
-                        <!-- TMPL_ELSE -->
-                        <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="pref_<!-- TMPL_VAR NAME="name" -->" id="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" />
+                        <dt>
+                            <label for="<!-- TMPL_VAR NAME="rfc4646_subtag" -->"><!-- TMPL_VAR NAME="native_description" -->(<!-- TMPL_VAR NAME="rfc4646_subtag" -->)</label>
+                            <!-- TMPL_IF NAME="group_enabled" -->
+                            <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="pref_<!-- TMPL_VAR NAME="name" -->" id="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" checked="checked" />
+                            <!-- TMPL_ELSE -->
+                            <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="pref_<!-- TMPL_VAR NAME="name" -->" id="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" />
+                            <!-- /TMPL_IF -->
+                        </dt>
                         <!-- /TMPL_IF -->
-                        <!-- /TMPL_IF -->
-                    </td></tr>
                     <!-- /TMPL_LOOP -->
-                    </table>
+                    </dl>
                     <!-- /TMPL_IF -->
                     <!-- /TMPL_LOOP -->
                 </td>
@@ -154,7 +156,7 @@
             <!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
         </table>
-        <button class="save-all submit" type="submit">Save All</button>
+        <fieldset class="action"><button class="save-all submit" type="submit">Save all <!-- TMPL_VAR NAME="tab_title" --> preferences</button> <a href="/cgi-bin/koha/admin/preferences.pl?tab=<!-- TMPL_VAR NAME="tab" -->" class="cancel">Cancel</a></fieldset>
     </form>
     </div>
     <!-- /TMPL_LOOP -->
