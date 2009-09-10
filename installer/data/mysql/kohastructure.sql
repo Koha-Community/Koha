@@ -968,6 +968,20 @@ CREATE TABLE `ethnicity` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Table structure for table `export_format`
+--
+
+DROP TABLE IF EXISTS `export_format`;
+CREATE TABLE `export_format` (
+  `export_format_id` int(11) NOT NULL auto_increment,
+  `profile` varchar(255) NOT NULL,
+  `description` mediumtext NOT NULL,
+  `marcfields` mediumtext NOT NULL,
+  PRIMARY KEY  (`export_format_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Used for CSV export';
+
+
+--
 -- Table structure for table `hold_fill_targets`
 --
 
