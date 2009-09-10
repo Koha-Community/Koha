@@ -149,7 +149,7 @@ if ($op eq "additem") {
         my $items = &GetItemsByBiblioitemnumber($biblioitem->{biblioitemnumber});
 
         foreach my $item (@$items){
-            &DelItem($dbh,$biblionumber,$item->{itemnumber});
+            &DelItemCheck($dbh,$biblionumber,$item->{itemnumber});
         }
     }
     print $input->redirect("/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=$biblionumber");
