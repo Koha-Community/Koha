@@ -318,16 +318,7 @@ sub TooMany {
     my $dbh             = C4::Context->dbh;
 	my $branch;
 	# Get which branchcode we need
-	if (C4::Context->preference('CircControl') eq 'PickupLibrary'){
-		$branch = C4::Context->userenv->{'branch'}; 
-	}
-	elsif (C4::Context->preference('CircControl') eq 'PatronLibrary'){
-        $branch = $borrower->{'branchcode'}; 
-	}
-	else {
-		# items home library
-		$branch = $item->{'homebranch'};
-	}
+	$branch = _GetCircControlBranch($item,$borrower);
 	my $type = (C4::Context->preference('item-level_itypes')) 
   			? $item->{'itype'}         # item-level
 			: $item->{'itemtype'};     # biblio-level
@@ -659,9 +650,8 @@ sub CanBookBeIssued {
     #
     unless ( $duedate ) {
         my $issuedate = strftime( "%Y-%m-%d", localtime );
-        my $branch = (C4::Context->preference('CircControl') eq 'PickupLibrary') ? C4::Context->userenv->{'branch'} :
-                     (C4::Context->preference('CircControl') eq 'PatronLibrary') ? $borrower->{'branchcode'}        :
-                     $item->{'homebranch'};     # fallback to item's homebranch
+
+        my $branch = _GetCircControlBranch($item,$borrower);
         my $itype = ( C4::Context->preference('item-level_itypes') ) ? $item->{'itype'} : $biblioitem->{'itemtype'};
         my $loanlength = GetLoanLength( $borrower->{'categorycode'}, $itype, $branch );
         $duedate = CalcDateDue( C4::Dates->new( $issuedate, 'iso' ), $loanlength, $branch, $borrower );
@@ -898,9 +888,7 @@ sub AddIssue {
 	if ($borrower and $barcode and $barcodecheck ne '0'){
 		# find which item we issue
 		my $item = GetItem('', $barcode) or return undef;	# if we don't get an Item, abort.
-		my $branch = (C4::Context->preference('CircControl') eq 'PickupLibrary') ? C4::Context->userenv->{'branch'} :
-                     (C4::Context->preference('CircControl') eq 'PatronLibrary') ? $borrower->{'branchcode'}        : 
-                     $item->{'homebranch'};     # fallback to item's homebranch
+		my $branch = _GetCircControlBranch($item,$borrower);
 		
 		# get actual issuing if there is one
 		my $actualissue = GetItemIssue( $item->{itemnumber});
@@ -1329,6 +1317,7 @@ sub AddReturn {
     # get information on item
     my $itemnumber      = GetItemnumberFromBarcode( $barcode );
     my $iteminformation = GetItemIssue($itemnumber);
+	my $hbr 			= $iteminformation->{C4::Context->preference("HomeOrHoldingBranch")} || '';
     my $biblio          = GetBiblioItemData($iteminformation->{'biblioitemnumber'});
 #     use Data::Dumper;warn Data::Dumper::Dumper($iteminformation);  
     unless ($itemnumber) {
@@ -1339,6 +1328,16 @@ sub AddReturn {
         if ( not $iteminformation->{borrowernumber} ) {
             $messages->{'NotIssued'} = $barcode;
             $doreturn = 0;
+		}
+    }
+
+    # case of a return of document (deal with issues and holdingbranch)
+    if ($doreturn) {
+        $borrower or warn "AddReturn without current borrower";
+		my $circControlBranch = _GetCircControlBranch($iteminformation,$borrower);
+        if ($dropbox) {
+            # don't allow dropbox mode to create an invalid entry in issues (issuedate > returndate) FIXME: actually checks eq, not gt
+            undef($dropbox) if ( $iteminformation->{'issuedate'} eq C4::Dates->today('iso') );
         }
         
         # even though item is not on loan, it may still
@@ -1373,7 +1372,7 @@ sub AddReturn {
         # case of a return of document (deal with issues and holdingbranch)
     
         if ($doreturn) {
-			my $circControlBranch = GetCirculationBranch($iteminformation,$borrower);
+			my $circControlBranch = _GetCircControlBranch($iteminformation,$borrower);
 			if($dropbox) {
 				# don't allow dropbox mode to create an invalid entry in issues (issuedate > returndate) FIXME: actually checks eq, not gt
 				undef($dropbox) if ( $iteminformation->{'issuedate'} eq C4::Dates->today('iso') );
@@ -1671,32 +1670,36 @@ sub FixAccountForLostAndReturned {
 	return;
 }
 
-=head2 GetCirculationBranch
+=head2 _GetCircControlBranch
 
-	&GetCirculationBranch($iteminfos,$borrower);
+   my $circ_control_branch = _GetCircControlBranch($iteminfos, $borrower);
 
-Return the branchcode that must be used for an item circulation
+Internal function : 
+
+Return the library code to be used to determine which circulation
+policy applies to a transaction.  Looks up the CircControl and
+HomeOrHoldingBranch system preferences.
 
 C<$iteminfos> is a hashref to iteminfo. Only {itemnumber} is used.
 
 C<$borrower> is a hashref to borrower. Only {borrowernumber is used.
 
-Internal function, called by AddReturn
-
 =cut
 
-sub GetCirculationBranch {
+sub _GetCircControlBranch {
     my ($iteminfos, $borrower) = @_;
     my $circcontrol = C4::Context->preference('CircControl');
-    
-    if($circcontrol eq 'ItemHomeLibrary'){
-        return $iteminfos->{C4::Context->preference("HomeOrHoldingBranch")};
-    }elsif($circcontrol eq 'PatronLibrary'){
-        return $borrower->{branchcode};
-    }elsif($circcontrol eq 'PickupLibrary'){
-        return C4::Context->userenv->{'branch'};
+    my $branch;
+
+    if ($circcontrol eq 'PickupLibrary') {
+        $branch= C4::Context->userenv->{'branch'};
+    } elsif ($circcontrol eq 'PatronLibrary') {
+        $branch=$borrower->{branchcode};
+    } else {
+        my $branchfield = C4::Context->preference('HomeOrHoldingBranch') || 'homebranch';
+        $branch = $iteminfos->{$branchfield};
     }
-    
+    return $branch;
 }
 
 =head2 GetItemIssue
