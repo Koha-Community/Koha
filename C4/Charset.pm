@@ -301,6 +301,9 @@ to work, at the possible risk of some data loss.
 
 sub StripNonXmlChars {
     my $str = shift;
+    if (!defined($str) || $str eq ""){
+        return "";
+    }
     $str =~ s/[^\x09\x0A\x0D\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}\x{10000}-\x{10FFFF}]//g;
     return $str;
 }
