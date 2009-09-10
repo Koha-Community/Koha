@@ -225,6 +225,26 @@ warn "query ".$query  if $DEBUG;
                         my ($charset_result, $charset_errors);
                         ($marcrecord, $charset_result, $charset_errors) = 
                           MarcToUTF8Record($marcdata, C4::Context->preference('marcflavour'), $encoding[$k]);
+                          
+                          # We clean the ISBN
+                          my ($bibliotag,$bibliosubf)=GetMarcFromKohaField('biblioitems.isbn','');
+                          
+                          if ($bibliotag<10){
+                                $isbn = $marcrecord->field($bibliotag)->data;
+                          }else{
+                                $isbn = $marcrecord->subfield($bibliotag,$bibliosubf);
+                          }
+                          
+                          $isbn = C4::Koha::_isbn_cleanup($isbn);
+
+                          if($marcrecord->field($bibliotag)){
+                              if($bibliotag < 10){
+                                $marcrecord->field($bibliotag)->update($isbn)
+                              }else{
+                                $marcrecord->field($bibliotag)->update($bibliosubf => $isbn);  
+                              }
+                          }
+                          
 ####WARNING records coming from Z3950 clients are in various character sets MARC8,UTF8,UNIMARC etc
 ## In HEAD i change everything to UTF-8
 # In rel2_2 i am not sure what encoding is so no character conversion is done here
