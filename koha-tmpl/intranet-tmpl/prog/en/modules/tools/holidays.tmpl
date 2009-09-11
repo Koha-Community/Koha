@@ -228,7 +228,7 @@ h1 select { width: 20em; }
 				<textarea rows="2" cols="40" id="showDescription" name="showDescription"></textarea>	
 			</p>
 			<div id="exceptionPosibility" style="position:static">
-				<input type="radio" name="showOperation" id="showOperationExc" value="exception" /> <label for="showOperationExc">Generate an exception to this holiday.</label>
+				<input type="radio" name="showOperation" id="showOperationExc" value="exception" /> <label for="showOperationExc">Generate an exception for this repeated holiday.</label>
 				<a href="#" onclick=" additionalInformation('You can make an exception for this holiday rule. This means that you will be able to say for a repeatable holiday, that there is one of those days that is going to be an exception.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/../img/more.gif" border="0" alt="More information" /></a><br />
 			</div>
 			<input type="radio" name="showOperation" id="showOperationDel" value="delete" /> <label for="showOperationDel" id="showOperationDelLabel">Delete this holiday</label>
@@ -278,8 +278,8 @@ h1 select { width: 20em; }
 				<a href="#" onclick=" additionalInformation('This will take this day and month as a reference to make it holiday. Through this option, you can repeat this rule for every year. For example, selecting August 1st will make August 1st a holiday every year.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/../img/more.gif" border="0" alt="More information" /></a>
 				<p>
 				<input type="checkbox" name="allBranches" id="allBranches" />
-				<label for="allBranches">Copy to all locations</label>.
-				<a href="#" onclick=" additionalInformation('If checked, this holiday will be copied to all locations. If the holiday already exists for a location, no change is made.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/../img/more.gif" border="0" alt="More information" /></a>
+				<label for="allBranches">Copy to all libraries</label>.
+				<a href="#" onclick=" additionalInformation('If checked, this holiday will be copied to all libraries. If the holiday already exists for a library, no change is made.')"><img src="<!-- TMPL_VAR NAME="themelang" -->/../img/more.gif" border="0" alt="More information" /></a>
 				</p><p>
 					<input type="submit" name="submit" value="Save" />
 					<input type="button" name="cancel2" value="Cancel" onclick=" hidePanel('newHoliday');hidePanel('information')" />
