@@ -121,7 +121,16 @@ $(document).ready(function(){
         <input type="hidden" name="modifyshelfcontents" value="1" />
  <fieldset>
   <legend>Contents of <i><!-- TMPL_VAR NAME="shelfname" --></i></legend>
- <!--TMPL_IF NAME="manageshelf" --><p><span class="checkall"></span><span class="clearall"></span></p><!-- /TMPL_IF -->
+   <div id="toolbar" class="list-actions">
+ <!--TMPL_IF NAME="manageshelf" -->
+     <span class="checkall"></span> |
+     <span class="clearall"></span> |
+ <!-- /TMPL_IF -->
+  <a class="print" href="shelves.pl" onclick="print(); return false;">Print</a> |
+  <a href="#" class="send tag_hides" onclick="open('/cgi-bin/koha/virtualshelves/sendshelf.pl?shelfid=<!-- TMPL_VAR NAME="shelfnumber" -->','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100')">Send List</a> |
+ <a href="#" class="download tag_hides" onclick="open('/cgi-bin/koha/virtualshelves/downloadshelf.pl?shelfid=<!-- TMPL_VAR NAME="shelfnumber" -->','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100')">Download List</a>
+
+ </div>
  <!-- TMPL_VAR name='pagination_bar'-->
     <table id="shelvescontentt">
 	<thead>
@@ -191,7 +200,7 @@ $(document).ready(function(){
 <!-- TMPL_IF name="manageshelf" -->
 <div class="yui-g">
 <form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post">
- <fieldset class="brief">
+ <fieldset class="brief action">
     <legend>Add an item to <i><!-- TMPL_VAR NAME="shelfname" --></i></legend>
         <ol>
             <li>
