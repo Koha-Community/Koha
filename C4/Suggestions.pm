@@ -406,7 +406,7 @@ connect a suggestion to an existing biblio
 =cut
 
 sub ConnectSuggestionAndBiblio {
-    my ($ordernumber,$biblionumber) = @_;
+    my ($suggestionid,$biblionumber) = @_;
     my $dbh=C4::Context->dbh;
     my $query = "
         UPDATE suggestions
@@ -426,7 +426,7 @@ Delete a suggestion. A borrower can delete a suggestion only if he is its owner.
 =cut
 
 sub DelSuggestion {
-    my ($borrowernumber,$ordernumber,$type) = @_;
+    my ($borrowernumber,$suggestionid,$type) = @_;
     my $dbh = C4::Context->dbh;
     # check that the suggestion comes from the suggestor
     my $query = "
@@ -435,7 +435,7 @@ sub DelSuggestion {
         WHERE  suggestionid=?
     ";
     my $sth = $dbh->prepare($query);
-    $sth->execute($ordernumber);
+    $sth->execute($suggestionid);
     my ($suggestedby) = $sth->fetchrow;
     if ($type eq "intranet" || $suggestedby eq $borrowernumber ) {
         my $queryDelete = "
