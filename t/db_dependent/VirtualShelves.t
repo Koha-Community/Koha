@@ -10,7 +10,7 @@ use strict;
 use C4::Context;
 
 # Making 30 tests.
-BEGIN { plan tests => 30 }
+BEGIN { plan tests => 32 }
 
 # Getting some borrowers from database.
 my $dbh = C4::Context->dbh;
@@ -54,10 +54,10 @@ while(my $biblionumber = $sth->fetchrow){
 
 # ---
 my $delete_virtualshelf = qq/
-    DELETE FROM  virtualshelf WHERE 1
+    DELETE FROM  virtualshelves WHERE 1
 /;
 my $delete_virtualshelfcontent =qq/
-    DELETE  FROM  shelfcontents WHERE 1
+    DELETE  FROM  virtualshelfcontents WHERE 1
 /;
 
 my $sth = $dbh->prepare($delete_virtualshelf);
@@ -85,7 +85,7 @@ ok($version);   # First test: the module is loaded & the version is readable.
 # creating 10 good shelves.
 my @shelves;
 for(my $i=0; $i<10;$i++){
-     my $ShelfNumber = AddShelf("Shelf_".$i,$borrowers[$i],int(rand(3))+1);
+     my $ShelfNumber = AddShelf("Shelf_".$i,$borrowers[$i] || '',int(rand(3))+1);
      die "test Not ok, remove some shelves before" if ($ShelfNumber == -1);
      ok($ShelfNumber);   # Shelf creation successful;
      push @shelves, $ShelfNumber if ok($ShelfNumber);
@@ -95,7 +95,7 @@ ok(10,scalar @shelves); # 10 shelves in @shelves;
 
 # try to create some shelf which already exists.
 for(my $i=0;$i<10;$i++){
-    my $badNumShelf = AddShelf("Shelf_".int(rand(9)),'','');
+    my $badNumShelf = AddShelf("Shelf_".$i,$borrowers[$i] || '','');
     ok(-1,$badNumShelf);   # AddShelf returns -1 if name already exist.
 }
 
@@ -108,17 +108,17 @@ for(my $i=0; $i<10;$i++){
     my $item = $items[int(rand(9))];
     my $shelfnumber = $shelves[int(rand(9))];
     
-    my $itemlistBefore = GetShelfContents($shelfnumber);
+    my ($itemlistBefore,$countbefore) = GetShelfContents($shelfnumber);
     AddToShelf($item,$shelfnumber);
-    my $itemlistAfter = GetShelfContents($shelfnumber);
-    ok(scalar @$itemlistBefore,scalar (@$itemlistAfter - 1));  # the item has been successfuly added.
+    my ($itemlistAfter,$countafter) = GetShelfContents($shelfnumber);
+    ok($countbefore,$countafter - 1);  # the item has been successfuly added.
 
     
     # same thing with AddToShelfFromBiblio
     my $biblionumber = $biblionumbers[int(rand(10))];
     &AddToShelfFromBiblio($biblionumber, $shelfnumber);
-    my $AfterAgain = GetShelfContents($shelfnumber);
-    ok(scalar @$itemlistAfter, scalar (@$AfterAgain -1));
+    my ($AfterAgain,$countagain) = GetShelfContents($shelfnumber);
+    ok($countafter, $countagain -1);
 }
 
 #-----------------------TEST ModShelf & GetShelf functions------------------------#
