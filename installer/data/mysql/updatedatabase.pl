@@ -2438,324 +2438,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.035";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacPrivacy', '0', 'if ON, allows patrons to define their privacy rules (reading history)',NULL,'YesNo')");
-    # create a new syspref for the 'Mr anonymous' patron
-    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AnonymousPatron', '0', \"Set the identifier (borrowernumber) of the 'Mister anonymous' patron. Used for Suggestion and reading history privacy\",NULL,'')");
-    # fill AnonymousPatron with AnonymousSuggestion value (copy)
-    my $sth=$dbh->prepare("SELECT value FROM systempreferences WHERE variable='AnonSuggestions'");
-    $sth->execute;
-    my ($value) = $sth->fetchrow();
-    $dbh->do("UPDATE systempreferences SET value=$value WHERE variable='AnonymousPatron'");
-    # set AnonymousSuggestion do YesNo
-    # 1st, set the value (1/True if it had a borrowernumber)
-    $dbh->do("UPDATE systempreferences SET value=1 WHERE variable='AnonSuggestions' AND value>0");
-    # 2nd, change the type to Choice
-    $dbh->do("UPDATE systempreferences SET type='YesNo' WHERE variable='AnonSuggestions'");
-        # borrower reading record privacy : 0 : forever, 1 : laws, 2 : don't keep at all
-    $dbh->do("ALTER TABLE `borrowers` ADD `privacy` INTEGER NOT NULL DEFAULT 1;");
-    print "Upgrade to $DBversion done (add new syspref and column in borrowers)\n";
-    SetVersion ($DBversion);
-}
-
-$DBversion = '3.01.00.036';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do(<<'END_SQL');
-CREATE TABLE IF NOT EXISTS `aqcontract` (
-  `contractnumber` int(11) NOT NULL auto_increment,
-  `contractstartdate` date default NULL,
-  `contractenddate` date default NULL,
-  `contractname` varchar(50) default NULL,
-  `contractdescription` mediumtext,
-  `booksellerid` int(11) not NULL,
-    PRIMARY KEY  (`contractnumber`),
-        CONSTRAINT `booksellerid_fk1` FOREIGN KEY (`booksellerid`) 
-        REFERENCES `aqbooksellers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-END_SQL
-    print "Upgrade to $DBversion done (adding aqcontract table)\n";
-    SetVersion ($DBversion);
-}
-
-$DBversion = '3.01.00.037';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("ALTER TABLE `aqbasket` ADD COLUMN `basketname` varchar(50) default NULL AFTER `basketno`");
-    $dbh->do("ALTER TABLE `aqbasket` ADD COLUMN `note` mediumtext AFTER `basketname`");
-    $dbh->do("ALTER TABLE `aqbasket` ADD COLUMN `booksellernote` mediumtext AFTER `note`");
-    $dbh->do("ALTER TABLE `aqbasket` ADD COLUMN `contractnumber` int(11) AFTER `booksellernote`");
-    $dbh->do("ALTER TABLE `aqbasket` ADD FOREIGN KEY (`contractnumber`) REFERENCES `aqcontract` (`contractnumber`)");
-    print "Upgrade to $DBversion done (edit aqbasket table done)\n";
-    SetVersion ($DBversion);
-}
-
-$DBversion = '3.01.00.038';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("ALTER TABLE `aqorders` ADD COLUMN `uncertainprice` tinyint(1)");
-
-    print "Upgrade to $DBversion done (adding uncertainprices)\n";
-    SetVersion ($DBversion);
-}
-
-$DBversion = '3.01.00.039';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("CREATE TABLE IF NOT EXISTS `aqbasketgroups` (
-                         `id` int(11) NOT NULL auto_increment,
-                         `name` varchar(50) default NULL,
-                         `closed` tinyint(1) default NULL,
-                         `booksellerid` int(11) NOT NULL,
-                         PRIMARY KEY (`id`),
-                         KEY `booksellerid` (`booksellerid`),
-                         CONSTRAINT `aqbasketgroups_ibfk_1` FOREIGN KEY (`booksellerid`) REFERENCES `aqbooksellers` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
-                         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-    $dbh->do("ALTER TABLE aqbasket ADD COLUMN `basketgroupid` int(11)");
-    $dbh->do("ALTER TABLE aqbasket ADD FOREIGN KEY (`basketgroupid`) REFERENCES `aqbasketgroups` (`id`) ON UPDATE CASCADE");
-    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('pdfformat','pdfformat/example.pl','Controls what script is used for printing (basketgroups)','','free')");
-    print "Upgrade to $DBversion done (adding basketgroups)\n";
-    SetVersion ($DBversion);
-}
-
-$DBversion = '3.01.00.040';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("DROP TABLE IF EXISTS `aqbudgetperiods` ");
-    $dbh->do(qq|
-                    CREATE TABLE `aqbudgetperiods` (
-                    `budget_period_id` int(11) NOT NULL auto_increment,
-                    `budget_period_startdate` date NOT NULL,
-                    `budget_period_enddate` date NOT NULL,
-                    `budget_period_active` tinyint(1) default '0',
-                    `budget_period_description` mediumtext,
-                    `budget_period_locked` tinyint(1) default NULL,
-                    `sort1_authcat` varchar(10) default NULL,
-                    `sort2_authcat` varchar(10) default NULL,
-                    PRIMARY KEY  (`budget_period_id`)
-                    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 |);
-
-# SORRY , NO AQBUDGET/AQBOOKFUND -> AQBUDGETS IMPORT JUST YET,
-# BUT A NEW CLEAN AQBUDGETS TABLE CREATE FOR NOW..
-
-    DropAllForeignKeys('aqbudget');
-  $dbh->do("drop table aqbudget;");  
-
-    $dbh->do("CREATE TABLE `aqbudgets` (
-                    `budget_id` int(11) NOT NULL auto_increment,
-                    `budget_parent_id` int(11) default NULL,
-                    `budget_code` varchar(30) default NULL,
-                    `budget_name` varchar(80) default NULL,
-                    `budget_branchcode` varchar(10) default NULL,
-                    `budget_amount` decimal(13,2) NOT NULL default '0.00',
-                    `budget_encumb` tinyint(3) default NULL,
-                    `budget_expend` tinyint(3) default NULL,
-                    `budget_notes` mediumtext,
-                    `budget_desciption` mediumtext,
-                    `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-                    `budget_period_id` int(11) default NULL,
-                    `sort1_authcat` varchar(80) default NULL,
-                    `sort2_authcat` varchar(80) default NULL,
-                    `owner` tinyint(11) default NULL,
-                    `budget_owner_id` tinyint(11) default NULL,
-                    `budget_permission` int(1) default '0',
-                            PRIMARY KEY  (`budget_id`),
-                            CONSTRAINT `aqbudgets_ifbk_1` FOREIGN KEY (`budget_period_id`) REFERENCES `aqbudgetperiods` (`budget_period_id`) ON DELETE CASCADE ON UPDATE CASCADE
-                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-
-    $dbh->do("DROP TABLE IF EXISTS `aqbudgets_planning` ");
-    $dbh->do("CREATE TABLE  `aqbudgets_planning` (
-                    `plan_id` int(11) NOT NULL auto_increment,
-                    `budget_id` int(11) NOT NULL,
-                    `budget_period_id` int(11) NOT NULL,
-                    `estimated_amount` decimal(28,6) default NULL,
-                    `authcat` varchar(30) NOT NULL,
-                    `authvalue` varchar(30) NOT NULL,
-                        PRIMARY KEY  (`plan_id`),
-                        CONSTRAINT `aqbudgets_planning_ifbk_1` FOREIGN KEY (`budget_id`) REFERENCES `aqbudgets` (`budget_id`) ON DELETE CASCADE ON UPDATE CASCADE
-                        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-
-    $dbh->do("ALTER TABLE `aqorders` 
-                    ADD COLUMN `budget_id` tinyint(4) NOT NULL,
-                    ADD COLUMN `budgetgroup_id` int(11) NOT NULL,
-                    ADD COLUMN  `sort1_authcat` varchar(10) default NULL,
-                    ADD COLUMN  `sort2_authcat` varchar(10) default NULL" );
-
-
-    $dbh->do("ALTER TABLE `aqorderbreakdown` 
-  ADD COLUMN `budget_id` int(11) NOT NULL" );
-
-
-#    $dbh->do("ALTER TABLE aqorders  ADD FOREIGN KEY (`budget_id`) REFERENCES `aqbudgets` (`budget_id`) ON UPDATE CASCADE  " ); ????
-
-    print "Upgrade to $DBversion done (Adding new aqbudgetperiods, aqbudgets and aqbudget_planning tables  )\n";
-    SetVersion ($DBversion);
-}
-
-$DBversion = '3.01.00.041';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-
-# removes 'aqbudgets' NOT NULL
-    $dbh->do("ALTER table `aqbudgets` MODIFY COLUMN `budget_amount`  decimal(28,6)  ");
-    $dbh->do("ALTER table `aqbudgets` ADD  COLUMN `budget_amount_sublevel`  decimal(28,6) AFTER `budget_amount` ");
-    $dbh->do("ALTER table `aqbudgets` DROP  COLUMN `owner` ");
-    $dbh->do("ALTER table `aqbudgets` DROP  COLUMN `budget_desciption` ");
- #   $dbh->do("ALTER table `aqbudgets` DROP  COLUMN `budgetgroup_id` ");
-    $dbh->do("ALTER table `aqbudgets` MODIFY  COLUMN `budget_encumb`  decimal(28,6) default '0.00'   ");
-    $dbh->do("ALTER table `aqbudgets` MODIFY  COLUMN `budget_expend`  decimal(28,6) default '0.00'   ");
-
-    print "Upgrade to $DBversion done (adding `budget_amount_sublevel` colmn, and removing temp columns )\n";
-    SetVersion ($DBversion);
-}
-
-$DBversion = '3.01.00.042';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-
-# removes 'aqbudgets' NOT NULL
-    $dbh->do("ALTER TABLE aqorderbreakdown DROP FOREIGN KEY aqorderbreakdown_ibfk_2 ");
-    $dbh->do("ALTER TABLE aqorderbreakdown DROP COLUMN bookfundid ");
-    $dbh->do("ALTER TABLE aqorderbreakdown ADD KEY budget_id (budget_id)" );
-
-    print "Upgrade to $DBversion done (aqorderbreakdown table tidy)\n";
-    SetVersion ($DBversion);
-}
-
-
-$DBversion = '3.01.00.043';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-
-# removes 'aqbudgets' NOT NULL
-#    $dbh->do("ALTER TABLE aqorderbreakdown ADD COLUMN  budget_id int(11) " );
-#    $dbh->do("ALTER TABLE aqorderbreakdown ADD KEY budget_id (budget_id)" );
-
-    print "Upgrade to $DBversion done (aqorderbreakdown table tidy2)\n";
-    SetVersion ($DBversion);
-}
-
-$DBversion = '3.01.00.044';
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
-    $dbh->do("ALTER TABLE aqbudgetperiods ADD COLUMN budget_period_total decimal(28,6)");
-    print "Upgrade to $DBversion done (adds 'budget_period_total' column to aqbudgetperiods table)\n";
-    SetVersion($DBversion);
-}
-
-
-$DBversion = '3.01.00.045';
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
-    $dbh->do("ALTER TABLE currency ADD COLUMN active  tinyint(1)");
-
-    print "Upgrade to $DBversion done (adds 'active' column to currencies table)\n";
-    SetVersion($DBversion);
-}
-
-$DBversion = '3.01.00.046';
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
-    $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES
-            (11, 'vendors_manage', 'Manage vendors'),
-            (11, 'contracts_manage', 'Manage contracts'),
-            (11, 'period_manage', 'Manage periods'),
-            (11, 'budget_manage', 'Manage budgets'),
-            (11, 'budget_modify', 'Modify budget (can''t create lines, but can modify existing ones)'),
-            (11, 'planning_manage', 'Manage budget plannings'),
-            (11, 'order_manage', 'Manage orders & basket'),
-            (11, 'group_manage', 'Manage orders & basketgroups'),
-            (11, 'order_receive', 'Manage orders & basket')
-    ");
-
-    print "Upgrade to $DBversion done (adds permissions for the acquisitions module)\n";
-    SetVersion($DBversion);
-}
-
-$DBversion = '3.01.00.047';
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
-    $dbh->do("ALTER TABLE aqbudgets CHANGE COLUMN budget_owner_id budget_owner_id int(11)");
-
-    print "Upgrade to $DBversion done (changes 'budget_owner_id' col to int(11)\n";
-    SetVersion($DBversion);
-}
-
-
-$DBversion = '3.01.00.048';
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
-    $dbh->do(qq|  INSERT INTO permissions (module_bit, code, description) VALUES
-            (11, 'budget_add_del', "Add and delete budgets (but can't modify budgets) )") |);
-
-    print "Upgrade to $DBversion done (small budget perm change)\n";
-    SetVersion($DBversion);
-}
-
-$DBversion = '3.01.00.049';
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
-    $dbh->do("ALTER TABLE aqbooksellers ADD COLUMN `gstrate` decimal(5,2) default NULL");
-    print "Upgrade to $DBversion done (added per-supplier gstrate setting)\n";
-    SetVersion($DBversion);
-}
-
-$DBversion = "3.01.00.050";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    if (C4::Context->preference("opaclanguages") eq "fr") {
-        $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AcqCreateItem','ordering','Définit quand l'exemplaire est créé : à la commande, à la livraison, au catalogage','ordering|receiving|cataloguing','Choice')");
-    } else {
-        $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AcqCreateItem','ordering','Define when the item is created : when ordering, when receiving, or in cataloguing module','ordering|receiving|cataloguing','Choice')");
-    }
-    print "Upgrade to $DBversion done (adding ReservesNeedReturns systempref, in circulation)\n";
-    SetVersion ($DBversion);
-}
-
-$DBversion = "3.01.00.051";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do(qq| 
- CREATE TABLE `aqorders_items` (
-  `ordernumber` int(11) NOT NULL,
-  `itemnumber` int(11) NOT NULL,
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  PRIMARY KEY  (`itemnumber`),
-  KEY `ordernumber` (`ordernumber`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8   |
-    );
-
-    $dbh->do(qq| DROP TABLE aqorderbreakdown |);
-    print "Upgrade to $DBversion done (New aqorders_items table for acqui)\n";
-    SetVersion ($DBversion);
-}
-
-$DBversion = "3.01.00.052";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    my $query = "SELECT * FROM `aqbooksellers`";
-    my $sth = $dbh->prepare($query);
-    $sth->execute;
-    my $booksellers=$sth->fetchall_arrayref({});
-    $sth->finish;
-    $dbh->do("ALTER TABLE `aqbooksellers` DROP COLUMN `gstrate`");
-    $dbh->do("ALTER TABLE `aqbooksellers` ADD COLUMN `gstrate` decimal(6,4) default NULL");
-    for my $bookseller (@$booksellers) {
-        my $sth = $dbh->prepare("UPDATE aqbooksellers SET gstrate=? WHERE id=?");
-        $sth->execute($bookseller->{gstrate}?$bookseller->{gstrate}:0 / 100, $bookseller->{id});
-        $sth->finish;
-    }
-    print "Upgrade to $DBversion done (modify gstrate to be consistent with syspref)\n";
-    SetVersion ($DBversion);
-}
-
-$DBversion = "3.01.00.053";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do(  qq# INSERT INTO `systempreferences` VALUES ('CurrencyFormat','US','US|FR','Determines the display format of currencies. eg: ''36000'' is displayed as ''360 000,00''  in ''FR'' or 360,000.00''  in ''US''.','Choice')  #);
-
-    print "Upgrade to $DBversion done (CurrencyFormat syspref added)\n";
-    SetVersion ($DBversion);
-}
-
-$DBversion = "3.01.00.054";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("ALTER table aqorders drop column title");
-
-    print "Upgrade to $DBversion done (dropped the title column from the aqorders table)\n";
-    SetVersion ($DBversion);
-}
-
-$DBversion = "3.01.00.055";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("ALTER TABLE `aqorders` CHANGE `budget_id` `budget_id` INT( 11 ) NOT NULL");
-    print "Upgrade to $DBversion done update budget_id size that should not be a tinyint\n";
-    SetVersion ($DBversion);
-}
-
 $DBversion = '3.01.00.035';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do(q{ ALTER TABLE `subscription` ADD location varchar(80) NULL DEFAULT '' AFTER callnumber; });
@@ -2785,41 +2467,55 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (added FilterBeforeOverdueReport syspref and new index on authorised_values)\n";
 }
 
-$DBversion = "3.01.00.038";
+$DBversion = '3.01.00.038';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    # update branches table
-    # 
-    $dbh->do("ALTER TABLE branches ADD `branchzip` varchar(25) default NULL AFTER `branchaddress3`");
-    $dbh->do("ALTER TABLE branches ADD `branchcity` mediumtext AFTER `branchzip`");
-    $dbh->do("ALTER TABLE branches ADD `branchcountry` text AFTER `branchcity`");
-    $dbh->do("ALTER TABLE branches ADD `branchurl` mediumtext AFTER `branchemail`");
-    $dbh->do("ALTER TABLE branches ADD `branchnotes` mediumtext AFTER `branchprinter`");
-    print "Upgrade to $DBversion done (add ZIP, city, country, URL, and notes column to branches)\n";
+    $dbh->do('ALTER TABLE issuingrules DROP FOREIGN KEY issuingrules_ibfk_1');
+    $dbh->do('ALTER TABLE issuingrules DROP FOREIGN KEY issuingrules_ibfk_2');
     SetVersion ($DBversion);
+    print "Upgrade to $DBversion done (deleting contraints in issuingrules)\n";
 }
 
 $DBversion = '3.01.00.039';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type)VALUES('SpineLabelFormat', '<itemcallnumber><copynumber>', '30|10', 'This preference defines the format for the quick spine label printer. Just list the fields you would like to see in the order you would like to see them, surrounded by <>, for example <itemcallnumber>.', 'Textarea')");
-    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type)VALUES('SpineLabelAutoPrint', '0', '', 'If this setting is turned on, a print dialog will automatically pop up for the quick spine label printer.', 'YesNo')");
+    $dbh->do('ALTER TABLE issuingrules ADD COLUMN `renewalsallowed` smallint(6) NOT NULL default "0" AFTER `issuelength`;');
+    $sth = $dbh->prepare("SELECT itemtype, renewalsallowed FROM itemtypes");
+    $sth->execute();
+
+    my $sthupd = $dbh->prepare("UPDATE issuingrules SET renewalsallowed = ? WHERE itemtype = ?");
+    
+    while(my $row = $sth->fetchrow_hashref){
+        $sthupd->execute($row->{renewalsallowed}, $row->{itemtype});
+    }
+    
+    $dbh->do('ALTER TABLE itemtypes DROP COLUMN `renewalsallowed`;');
+    
     SetVersion ($DBversion);
-    print "Upgrade to $DBversion done (added SpineLabelFormat and SpineLabelAutoPrint sysprefs)\n";
+    print "Upgrade to $DBversion done (Moving allowed renewals from itemtypes to issuingrule)\n";
 }
 
 $DBversion = '3.01.00.040';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('AllowHoldDateInFuture','0','If set a date field is displayed on the Hold screen of the Staff Interface, allowing the hold date to be set in the future.','','YesNo')");
-    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('OPACAllowHoldDateInFuture','0','If set, along with the AllowHoldDateInFuture system preference, OPAC users can set the date of a hold to be in the future.','','YesNo')");
+    $dbh->do('ALTER TABLE issuingrules ADD COLUMN `reservesallowed` smallint(6) NOT NULL default "0" AFTER `renewalsallowed`;');
+    
+    my $maxreserves = C4::Context->preference('maxreserves');
+    $sth = $dbh->prepare('UPDATE issuingrules SET reservesallowed = ?;');
+    $sth->execute($maxreserves);
+    
+    $dbh->do('DELETE FROM systempreferences WHERE variable = "maxreserves";');
+
+    $dbh->do("INSERT INTO systempreferences (variable,value, options, explanation, type) VALUES('ReservesControlBranch','PatronLibrary','ItemHomeLibrary|PatronLibrary','Branch checked for members reservations rights','Choice')");
+    
     SetVersion ($DBversion);
-    print "Upgrade to $DBversion done (AllowHoldDateInFuture and OPACAllowHoldDateInFuture sysprefs)\n";
+    print "Upgrade to $DBversion done (Moving max allowed reserves from system preference to issuingrule)\n";
 }
 
-$DBversion = '3.01.00.041';
+$DBversion = "3.01.00.041";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AWSPrivateKey','','See:  http://aws.amazon.com.  Note that this is required after 2009/08/15 in order to retrieve any enhanced content other than book covers from Amazon.','','free')");
-    SetVersion ($DBversion);
-    print "Upgrade to $DBversion done (added AWSPrivateKey syspref - note that if you use enhanced content from Amazon, this should be set right away.)\n";
+    $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES ( 13, 'batchmod', 'Perform batch modification of items')");
+    $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES ( 13, 'batchdel', 'Perform batch deletion of items')");
+    print "Upgrade to $DBversion done (added permissions for batch modification and deletion)\n";
 }
+
 
 $DBversion = '3.01.00.042';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
@@ -2992,15 +2688,307 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	print "Upgrade to $DBversion done ( Added ShowPatronImageInWebBasedSelfCheck system preference )\n";
     SetVersion ($DBversion);
 }
+=item
 
-$DBversion = "3.00.99.023";
+Acquisitions update
+
+=cut
+
+$DBversion = "3.01.00.100";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("ALTER TABLE `aqorders` drop foreign key `aqorders_ibfk_2`");
-    $dbh->do("ALTER TABLE `aqorders` drop key `biblionumber`");
-    $dbh->do("ALTER TABLE `aqorders` ADD foreign key (biblionumber) REFERENCES biblio(`biblionumber`) ON DELETE SET NULL ON UPDATE CASCADE;"); 
-    print "Upgrade to $DBversion done adding display column to aqbudgets_planning\n";
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacPrivacy', '0', 'if ON, allows patrons to define their privacy rules (reading history)',NULL,'YesNo')");
+    # create a new syspref for the 'Mr anonymous' patron
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AnonymousPatron', '0', \"Set the identifier (borrowernumber) of the 'Mister anonymous' patron. Used for Suggestion and reading history privacy\",NULL,'')");
+    # fill AnonymousPatron with AnonymousSuggestion value (copy)
+    my $sth=$dbh->prepare("SELECT value FROM systempreferences WHERE variable='AnonSuggestions'");
+    $sth->execute;
+    my ($value) = $sth->fetchrow();
+    $dbh->do("UPDATE systempreferences SET value=$value WHERE variable='AnonymousPatron'");
+    # set AnonymousSuggestion do YesNo
+    # 1st, set the value (1/True if it had a borrowernumber)
+    $dbh->do("UPDATE systempreferences SET value=1 WHERE variable='AnonSuggestions' AND value>0");
+    # 2nd, change the type to Choice
+    $dbh->do("UPDATE systempreferences SET type='YesNo' WHERE variable='AnonSuggestions'");
+        # borrower reading record privacy : 0 : forever, 1 : laws, 2 : don't keep at all
+    $dbh->do("ALTER TABLE `borrowers` ADD `privacy` INTEGER NOT NULL DEFAULT 1;");
+    print "Upgrade to $DBversion done (add new syspref and column in borrowers)\n";
     SetVersion ($DBversion);
 }
+
+$DBversion = '3.01.00.101';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(<<'END_SQL');
+CREATE TABLE IF NOT EXISTS `aqcontract` (
+  `contractnumber` int(11) NOT NULL auto_increment,
+  `contractstartdate` date default NULL,
+  `contractenddate` date default NULL,
+  `contractname` varchar(50) default NULL,
+  `contractdescription` mediumtext,
+  `booksellerid` int(11) not NULL,
+    PRIMARY KEY  (`contractnumber`),
+        CONSTRAINT `booksellerid_fk1` FOREIGN KEY (`booksellerid`) 
+        REFERENCES `aqbooksellers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+END_SQL
+    print "Upgrade to $DBversion done (adding aqcontract table)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = '3.01.00.102';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE `aqbasket` ADD COLUMN `basketname` varchar(50) default NULL AFTER `basketno`");
+    $dbh->do("ALTER TABLE `aqbasket` ADD COLUMN `note` mediumtext AFTER `basketname`");
+    $dbh->do("ALTER TABLE `aqbasket` ADD COLUMN `booksellernote` mediumtext AFTER `note`");
+    $dbh->do("ALTER TABLE `aqbasket` ADD COLUMN `contractnumber` int(11) AFTER `booksellernote`");
+    $dbh->do("ALTER TABLE `aqbasket` ADD FOREIGN KEY (`contractnumber`) REFERENCES `aqcontract` (`contractnumber`)");
+    print "Upgrade to $DBversion done (edit aqbasket table done)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = '3.01.00.103';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE `aqorders` ADD COLUMN `uncertainprice` tinyint(1)");
+
+    print "Upgrade to $DBversion done (adding uncertainprices)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = '3.01.00.104';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("CREATE TABLE IF NOT EXISTS `aqbasketgroups` (
+                         `id` int(11) NOT NULL auto_increment,
+                         `name` varchar(50) default NULL,
+                         `closed` tinyint(1) default NULL,
+                         `booksellerid` int(11) NOT NULL,
+                         PRIMARY KEY (`id`),
+                         KEY `booksellerid` (`booksellerid`),
+                         CONSTRAINT `aqbasketgroups_ibfk_1` FOREIGN KEY (`booksellerid`) REFERENCES `aqbooksellers` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
+                         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+    $dbh->do("ALTER TABLE aqbasket ADD COLUMN `basketgroupid` int(11)");
+    $dbh->do("ALTER TABLE aqbasket ADD FOREIGN KEY (`basketgroupid`) REFERENCES `aqbasketgroups` (`id`) ON UPDATE CASCADE");
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('pdfformat','pdfformat/example.pl','Controls what script is used for printing (basketgroups)','','free')");
+    print "Upgrade to $DBversion done (adding basketgroups)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = '3.01.00.105';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("DROP TABLE IF EXISTS `aqbudgetperiods` ");
+    $dbh->do(qq|
+                    CREATE TABLE `aqbudgetperiods` (
+                    `budget_period_id` int(11) NOT NULL auto_increment,
+                    `budget_period_startdate` date NOT NULL,
+                    `budget_period_enddate` date NOT NULL,
+                    `budget_period_active` tinyint(1) default '0',
+                    `budget_period_description` mediumtext,
+                    `budget_period_locked` tinyint(1) default NULL,
+                    `sort1_authcat` varchar(10) default NULL,
+                    `sort2_authcat` varchar(10) default NULL,
+                    PRIMARY KEY  (`budget_period_id`)
+                    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 |);
+
+   $dbh->do(<<ADDPERIODS);
+INSERT INTO aqbudgetperiods (budget_period_startdate,budget_period_enddate,budget_period_active,budget_period_description,budget_period_locked)
+SELECT DISTINCT startdate, enddate, 1, concat(startdate," ",enddate),1 from aqbudget
+ADDPERIODS
+# SORRY , NO AQBUDGET/AQBOOKFUND -> AQBUDGETS IMPORT JUST YET,
+# BUT A NEW CLEAN AQBUDGETS TABLE CREATE FOR NOW..
+# DROP TABLE IF EXISTS `aqbudget`;
+#CREATE TABLE `aqbudget` (
+#  `bookfundid` varchar(10) NOT NULL default ',
+#    `startdate` date NOT NULL default 0,
+#	  `enddate` date default NULL,
+#	    `budgetamount` decimal(13,2) default NULL,
+#		  `aqbudgetid` tinyint(4) NOT NULL auto_increment,
+#		    `branchcode` varchar(10) default NULL,
+    DropAllForeignKeys('aqbudget');
+  #$dbh->do("drop table aqbudget;");  
+
+
+    $dbh->do(<<BUDGETNAME);
+ALTER TABLE aqbudget RENAME`aqbudgets` 
+BUDGETNAME
+
+    $dbh->do(<<BUDGETS);
+ALTER TABLE `aqbudgets` 
+   CHANGE  COLUMN aqbudgetid `budget_id` int(11) NOT NULL,
+   CHANGE  COLUMN branchcode `budget_branchcode` varchar(10) default NULL,
+   CHANGE  COLUMN budgetamount `budget_amount` decimal(28,6) NOT NULL default '0.00',
+   CHANGE  COLUMN bookfundid   `budget_code` varchar(30) default NULL,
+   ADD     COLUMN `budget_parent_id` int(11) default NULL,
+   ADD     COLUMN `budget_name` varchar(80) default NULL,
+   ADD     COLUMN `budget_encumb` decimal(28,6) default '0.00',
+   ADD     COLUMN `budget_expend` decimal(28,6) default '0.00',
+   ADD     COLUMN `budget_notes` mediumtext,
+   ADD     COLUMN `budget_description` mediumtext,
+   ADD     COLUMN `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+   ADD     COLUMN `budget_amount_sublevel`  decimal(28,6) AFTER `budget_amount`,
+   ADD     COLUMN `budget_period_id` int(11) default NULL,
+   ADD     COLUMN `sort1_authcat` varchar(80) default NULL,
+   ADD     COLUMN `sort2_authcat` varchar(80) default NULL,
+   ADD     COLUMN `budget_owner_id` int(11) default NULL,
+   ADD     COLUMN `budget_permission` int(1) default '0';
+BUDGETS
+
+    $dbh->do(<<BUDGETCONSTRAINTS);
+ALTER TABLE `aqbudgets` 
+   ADD CONSTRAINT `aqbudgets_ifbk_1` FOREIGN KEY (`budget_period_id`) REFERENCES `aqbudgetperiods` (`budget_period_id`) ON DELETE CASCADE ON UPDATE CASCADE
+BUDGETCONSTRAINTS
+#    $dbh->do(<<BUDGETPKDROP);
+#ALTER TABLE `aqbudgets` 
+#   DROP PRIMARY KEY
+#BUDGETPKDROP
+#    $dbh->do(<<BUDGETPKADD);
+#ALTER TABLE `aqbudgets` 
+#   ADD PRIMARY KEY budget_id
+#BUDGETPKADD
+
+
+	my $query_period= $dbh->prepare(qq|SELECT budget_period_id from aqbudgetperiods where budget_period_startdate=? and budget_period_enddate=?|);
+	my $query_bookfund= $dbh->prepare(qq|SELECT * from aqbookfund where bookfundid=?|);
+	my $selectbudgets=$dbh->prepare(qq|SELECT * from aqbudgets|);
+	my $updatebudgets=$dbh->prepare(qq|UPDATE aqbudgets SET budget_period_id= ? , budget_name=?, budget_branchcode=? where budget_id=?|);	
+	$selectbudgets->execute;
+	while (my $databudget=$selectbudgets->fetchrow_hashref){
+		$query_period->execute ($$databudget{startdate},$$databudget{enddate});	
+		my ($budgetperiodid)=$query_period->fetchrow;
+		$query_bookfund->execute ($$databudget{budget_code});	
+		my $databf=$query_bookfund->fetchrow_hashref;
+		my $branchcode=$$databudget{budget_branchcode}||$$databf{branchcode};
+		$updatebudgets->execute($budgetperiodid,$$databf{bookfundname},$branchcode,$$databudget{budget_id});
+	}
+    $dbh->do(<<BUDGETDROPDATES);
+ALTER TABLE `aqbudgets` 
+   DROP startdate,
+   DROP enddate,
+   DROP bookfundid
+BUDGETDROPDATES
+
+    $dbh->do("DROP TABLE aqbookfund ");
+
+    $dbh->do("DROP TABLE IF EXISTS `aqbudgets_planning` ");
+    $dbh->do("CREATE TABLE  `aqbudgets_planning` (
+                    `plan_id` int(11) NOT NULL auto_increment,
+                    `budget_id` int(11) NOT NULL,
+                    `budget_period_id` int(11) NOT NULL,
+                    `estimated_amount` decimal(28,6) default NULL,
+                    `authcat` varchar(30) NOT NULL,
+                    `authvalue` varchar(30) NOT NULL,
+					`display` tinyint(1) DEFAULT 1,
+                        PRIMARY KEY  (`plan_id`),
+                        CONSTRAINT `aqbudgets_planning_ifbk_1` FOREIGN KEY (`budget_id`) REFERENCES `aqbudgets` (`budget_id`) ON DELETE CASCADE ON UPDATE CASCADE
+                        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+
+    $dbh->do("ALTER TABLE `aqorders` 
+                    ADD COLUMN `budget_id` tinyint(4) NOT NULL,
+                    ADD COLUMN `budgetgroup_id` int(11) NOT NULL,
+                    ADD COLUMN  `sort1_authcat` varchar(10) default NULL,
+                    ADD COLUMN  `sort2_authcat` varchar(10) default NULL" );
+
+
+
+
+#    $dbh->do("ALTER TABLE aqorders  ADD FOREIGN KEY (`budget_id`) REFERENCES `aqbudgets` (`budget_id`) ON UPDATE CASCADE  " ); ????
+
+    print "Upgrade to $DBversion done (Adding new aqbudgetperiods, aqbudgets and aqbudget_planning tables  )\n";
+    SetVersion ($DBversion);
+}
+
+
+
+$DBversion = '3.01.00.106';
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("ALTER TABLE aqbudgetperiods ADD COLUMN budget_period_total decimal(28,6)");
+    print "Upgrade to $DBversion done (adds 'budget_period_total' column to aqbudgetperiods table)\n";
+    SetVersion($DBversion);
+}
+
+
+$DBversion = '3.01.00.107';
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("ALTER TABLE currency ADD COLUMN active  tinyint(1)");
+
+    print "Upgrade to $DBversion done (adds 'active' column to currencies table)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = '3.01.00.108';
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(<<BUDG_PERM );
+INSERT INTO permissions (module_bit, code, description) VALUES
+            (11, 'vendors_manage', 'Manage vendors'),
+            (11, 'contracts_manage', 'Manage contracts'),
+            (11, 'period_manage', 'Manage periods'),
+            (11, 'budget_manage', 'Manage budgets'),
+            (11, 'budget_modify', "Modify budget (can't create lines, but can modify existing ones)"),
+            (11, 'planning_manage', 'Manage budget plannings'),
+            (11, 'order_manage', 'Manage orders & basket'),
+            (11, 'group_manage', 'Manage orders & basketgroups'),
+            (11, 'order_receive', 'Manage orders & basket')
+            (11, 'budget_add_del', "Add and delete budgets (but can't modify budgets)");
+BUDG_PERM
+
+    print "Upgrade to $DBversion done (adds permissions for the acquisitions module)\n";
+    SetVersion($DBversion);
+}
+
+
+$DBversion = '3.01.00.109';
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("ALTER TABLE aqbooksellers ADD COLUMN `gstrate` decimal(6,4) default NULL");
+    if (my $gist=C4::Context->preference("gist")){
+		my $sql=$dbh->prepare("UPDATE aqbooksellers set `gstrate`=? ");
+    	$sql->execute($gist) ;
+	}
+    print "Upgrade to $DBversion done (added per-supplier gstrate setting)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.01.00.110";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    if (C4::Context->preference("opaclanguages") eq "fr") {
+        $dbh->do(qq#INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AcqCreateItem','ordering',"Définit quand l'exemplaire est créé : à la commande, à la livraison, au catalogage",'ordering|receiving|cataloguing','Choice')#);
+    } else {
+        $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AcqCreateItem','ordering','Define when the item is created : when ordering, when receiving, or in cataloguing module','ordering|receiving|cataloguing','Choice')");
+    }
+    print "Upgrade to $DBversion done (adding ReservesNeedReturns systempref, in circulation)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.01.00.111";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(qq| 
+ CREATE TABLE `aqorders_items` (
+  `ordernumber` int(11) NOT NULL,
+  `itemnumber` int(11) NOT NULL,
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`itemnumber`),
+  KEY `ordernumber` (`ordernumber`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8   |
+    );
+
+    $dbh->do(qq| DROP TABLE aqorderbreakdown |);
+    print "Upgrade to $DBversion done (New aqorders_items table for acqui)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.01.00.112";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(  qq# INSERT INTO `systempreferences` VALUES ('CurrencyFormat','US','US|FR','Determines the display format of currencies. eg: ''36000'' is displayed as ''360 000,00''  in ''FR'' or 360,000.00''  in ''US''.','Choice')  #);
+
+    print "Upgrade to $DBversion done (CurrencyFormat syspref added)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.01.00.113";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER table aqorders drop column title");
+    $dbh->do("ALTER TABLE `aqorders` CHANGE `budget_id` `budget_id` INT( 11 ) NOT NULL");
+    print "Upgrade to $DBversion done update budget_id size that should not be a tinyint\n";
+    SetVersion ($DBversion);
+}
+
+
 
 =item DropAllForeignKeys($table)
 
