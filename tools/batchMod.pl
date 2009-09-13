@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
-# Copyright 2000-2009 Biblibre S.A
-#                                         John Soros <john.soros@biblibre.com>
+
+# Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
 #
@@ -18,168 +18,366 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-use strict;
-use warnings;
-
-#need to open cgi and get the fh before anything else opens a new cgi context (see C4::Auth)
 use CGI;
-my $input = new CGI;
-my $barcodefh = $input->upload('uploadbarcodes');
-
+use strict;
 use C4::Auth;
-use C4::Context;
 use C4::Output;
-use C4::Branch qw(GetBranches);
-use C4::Koha qw(GetAuthorisedValues GetAuthValCode);
-use C4::Items qw(GetItemnumberFromBarcode GetItem ModItem DelItemCheck);
-use C4::Biblio qw(GetBiblioData);
-use C4::Koha qw(GetItemTypes);
+use C4::Biblio;
+use C4::Items;
+use C4::Context;
+use C4::Koha; # XXX subfield_is_koha_internal_p
+use C4::Branch; # XXX subfield_is_koha_internal_p
+use C4::ClassSource;
+use C4::Dates;
+use C4::Debug;
+use YAML;
+use MARC::File::XML;
+
+sub find_value {
+    my ($tagfield,$insubfield,$record) = @_;
+    my $result;
+    my $indicator;
+    foreach my $field ($record->field($tagfield)) {
+        my @subfields = $field->subfields();
+        foreach my $subfield (@subfields) {
+            if (@$subfield[0] eq $insubfield) {
+                $result .= @$subfield[1];
+                $indicator = $field->indicator(1).$field->indicator(2);
+            }
+        }
+    }
+    return($indicator,$result);
+}
 
 
-my ($template, $borrowernumber, $cookie)
+my $input = new CGI;
+my $dbh = C4::Context->dbh;
+my $error        = $input->param('error');
+my @itemnumbers  = $input->param('itemnumber');
+my $op           = $input->param('op');
+
+my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "tools/batchMod.tmpl",
-                query => $input,
-                type => "intranet",
-                authnotrequired => 0,
-                flagsrequired => {tools => 'batchmod'},
-                debug => 1,
-                });
+                 query => $input,
+                 type => "intranet",
+                 authnotrequired => 0,
+                 flagsrequired => {editcatalogue => 1},
+                 });
 
-#get all input vars and put it in a hash
-my $invars = $input->Vars;
 
-# Global item status lists (this has proven to be very handy :)
-my $authloop = [];
-my $authvals = [['items.notforloan', 'Item not for loan', 'notforloan'],
-                             ['items.itemlost', 'Item lost', 'itemlost'],
-                             ['items.wthdrawn', 'item withdrawn', 'sele'],
-                             ['items.damaged', 'item damaged', 'damaged'],
-                             ['items.location', 'item location', 'location'],
-                             ['items.ccode', 'items.ccode', 'ccode'],
-                            ];
+my $today_iso = C4::Dates->today('iso');
+$template->param(today_iso => $today_iso);
 
-my $itemlevelpref = C4::Context->preference('item-level_itypes');
-if ( $invars->{op} && $invars->{op} eq 'barcodes'){
-    #Parse barcodes list
+my $itemrecord;
+my $nextop="";
+my @errors; # store errors found while checking data BEFORE saving item.
+my $items_display_hashref;
+my $frameworkcode="";
+my $tagslib = &GetMarcStructure(1,$frameworkcode);
+
+#--- ----------------------------------------------------------------------------
+if ($op eq "action") {
+#-------------------------------------------------------------------------------
+    my @tags      = $input->param('tag');
+    my @subfields = $input->param('subfield');
+    my @values    = $input->param('field_value');
+    # build indicator hash.
+    my @ind_tag   = $input->param('ind_tag');
+    my @indicator = $input->param('indicator');
+    my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag, 'ITEM');
+    my $marcitem = MARC::Record::new_from_xml($xml, 'UTF-8');
+    my $localitem = TransformMarcToKoha( $dbh, $marcitem, "", 'items' );
+
+#	my @params=$input->param();
+#	warn @params;
+#    my $marcitem = TransformHtmlToMarc(\@params,$input);
+	foreach my $itemnumber(@itemnumbers){
+		my $itemdata=GetItem($itemnumber);
+		if ($input->param("del")){
+			DelItemCheck(C4::Context->dbh, $itemdata->{'biblionumber'}, $itemdata->{'itemnumber'})
+		} else {
+			my $localmarcitem=Item2Marc($itemdata);
+			UpdateMarcWith($marcitem,$localmarcitem);
+            eval{my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = ModItemFromMarc($localmarcitem,$itemdata->{biblionumber},$itemnumber)};
+		#	eval{ModItem($localitem,$itemdata->{biblionumber},$itemnumber)};
+		}
+	}
+	$items_display_hashref=BuildItemsData(@itemnumbers);
+    $nextop="action";
+}
+
+#
+#-------------------------------------------------------------------------------
+# build screen with existing items. and "new" one
+#-------------------------------------------------------------------------------
+
+if ($op eq "show"){
+	my $barcodefh = $input->upload('uploadbarcodes');
     my @barcodelist;
-    if ( $invars->{'uploadbarcodes'} && length($invars->{'uploadbarcodes'})>0){
+    if ( $barcodefh){
         while (my $barcode=<$barcodefh>){
             chomp $barcode;
             push @barcodelist, $barcode;
         }
     }
-    if ( $invars->{barcodelist} && length($invars->{barcodelist}) > 0){
-        @barcodelist = split(/\s\n/, $invars->{barcodelist});
+    if ( my $list=$input->param('barcodelist')){
+        push @barcodelist, split(/\s\n/, $list);
     }
-    #get all branches
-    my $brancheshash = GetBranches();
-    my $branches = [];
-    for my $branchcode (keys %$brancheshash){
-        my $branch;
-        $branch->{'name'} = $brancheshash->{$branchcode}->{'branchname'};
-        $branch->{'code'} = $branchcode;
-        push @$branches, $branch;
-    }
-    
-    #get all item statuses
-    for my $field (@$authvals){
-        my $fieldstatusauth = {};
-        my ($fieldname, $fielddesc, $hashfdname) = @$field;
-        $fieldstatusauth->{authcode} = GetAuthValCode($fieldname);
-        if ($fieldstatusauth->{authcode} && length($fieldstatusauth->{authcode}) > 0){
-            $fieldstatusauth->{values} = GetAuthorisedValues($fieldstatusauth->{authcode});
-            $fieldstatusauth->{fieldname} = $fieldname;
-            $fieldstatusauth->{description} = $fielddesc;
-            $fieldstatusauth->{itemfieldname} = $hashfdname;
-            push @$authloop, $fieldstatusauth;
-        }
-    }
-    
-    #we use item level itype
-	my $itemtypes = [];
-    if ($itemlevelpref){
-	my $itypes = GetItemTypes();
-        for my $key (keys %$itypes){
-            push(@$itemtypes, $itypes->{$key});
-        }
-    }
-    #build items list
-    my @items;
-    my $itemslst = '';
-    if (scalar @barcodelist > 0){
-        for my $barcode (@barcodelist){
-            my $itemno = GetItemnumberFromBarcode($barcode);
-            my $item = GetItem($itemno, $barcode);
-            my $iteminfo = GetBiblioData($item->{biblionumber});
-            for my $field (qw(title isbn itemtype)){
-                $item->{$field} = $iteminfo->{$field};
-            }
-	    if ($itemlevelpref) {
-		my $iteminfo = GetItem($itemno);
-		$item->{itemtype} = $iteminfo->{itype}; 
-	    }
-#kind of flakey, though we can be pretty sure the values will be in the same order as in the authloop
-#have to use this since in html::template::pro i can't access one loop from inside an other,
-#and variable substitution doesn't work (<!-- TMPL_VAR name="<!-- TMPL_VAR name="foo" -->" -->)
-#this pushes a list of authorized valuse into each item's hash
-            my $itemauthloop = [];
-            for my $authfield (@$authloop){
-                my $authvaluename;
-#looking for the authvalues human-readable form
-                for my $val (@{$authfield->{values}}){
-                    if( $item->{$authfield->{itemfieldname}} eq $val->{lib} || $item->{$authfield->{itemfieldname}} eq $val->{authorised_value}){
-                        $authvaluename = $val->{lib};
-                    }
-                }
-                if ( ! $authvaluename){
-                    $authvaluename = $item->{$authfield->{itemfieldname}}; 
-                }
-                push(@$itemauthloop, { 'authvalue' => $authvaluename} );
-            }
+	push @itemnumbers,map{GetItemnumberFromBarcode($_)} @barcodelist;
 
-            for my $type (@$itemtypes){
-                if ( $item->{itemtype} eq $type->{itemtype} ) {
-                    $item->{itemtypedesc} = $type->{description};
-                }
-            }
-            $item->{authloop} = $itemauthloop;
-            push @items, $item;
-            $itemslst .= $item->{'itemnumber'} . ',';
+	warn Dump(@itemnumbers);
+	$items_display_hashref=BuildItemsData(@itemnumbers);
+	warn Dump($items_display_hashref);
+
+# now, build the item form for entering a new item
+my @loop_data =();
+my $i=0;
+my $authorised_values_sth = $dbh->prepare("SELECT authorised_value,lib FROM authorised_values WHERE category=? ORDER BY lib");
+
+my $branches = GetBranchesLoop();  # build once ahead of time, instead of multiple times later.
+my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
+
+foreach my $tag (sort keys %{$tagslib}) {
+# loop through each subfield
+  foreach my $subfield (sort keys %{$tagslib->{$tag}}) {
+    next if subfield_is_koha_internal_p($subfield);
+    next if ($tagslib->{$tag}->{$subfield}->{'tab'} ne "10");
+    my %subfield_data;
+ 
+    my $index_subfield = int(rand(1000000)); 
+    if ($subfield eq '@'){
+        $subfield_data{id} = "tag_".$tag."_subfield_00_".$index_subfield;
+    } else {
+        $subfield_data{id} = "tag_".$tag."_subfield_".$subfield."_".$index_subfield;
+    }
+    $subfield_data{tag}        = $tag;
+    $subfield_data{subfield}   = $subfield;
+    $subfield_data{random}     = int(rand(1000000));    # why do we need 2 different randoms?
+#   $subfield_data{marc_lib}   = $tagslib->{$tag}->{$subfield}->{lib};
+    $subfield_data{marc_lib}   ="<span id=\"error$i\" title=\"".$tagslib->{$tag}->{$subfield}->{lib}."\">".$tagslib->{$tag}->{$subfield}->{lib}."</span>";
+    $subfield_data{mandatory}  = $tagslib->{$tag}->{$subfield}->{mandatory};
+    $subfield_data{repeatable} = $tagslib->{$tag}->{$subfield}->{repeatable};
+    my ($x,$value);
+    $value =~ s/"/&quot;/g;
+    unless ($value) {
+        $value = $tagslib->{$tag}->{$subfield}->{defaultvalue};
+        # get today date & replace YYYY, MM, DD if provided in the default value
+        my ( $year, $month, $day ) = split ',', $today_iso;     # FIXME: iso dates don't have commas!
+        $value =~ s/YYYY/$year/g;
+        $value =~ s/MM/$month/g;
+        $value =~ s/DD/$day/g;
+    }
+    $subfield_data{visibility} = "display:none;" if (($tagslib->{$tag}->{$subfield}->{hidden} > 4) || ($tagslib->{$tag}->{$subfield}->{hidden} < -4));
+    # testing branch value if IndependantBranches.
+
+    my $attributes_no_value = qq(tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="255" );
+    my $attributes          = qq($attributes_no_value value="$value" );
+    if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {
+      my @authorised_values;
+      my %authorised_lib;
+      # builds list, depending on authorised value...
+  
+      if ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "branches" ) {
+          foreach my $thisbranch (@$branches) {
+              push @authorised_values, $thisbranch->{value};
+              $authorised_lib{$thisbranch->{value}} = $thisbranch->{branchname};
+              $value = $thisbranch->{value} if $thisbranch->{selected};
+          }
+      }
+      elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
+          push @authorised_values, "" unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
+          my $sth = $dbh->prepare("select itemtype,description from itemtypes order by description");
+          $sth->execute;
+          while ( my ( $itemtype, $description ) = $sth->fetchrow_array ) {
+              push @authorised_values, $itemtype;
+              $authorised_lib{$itemtype} = $description;
+          }
+
+          #---- class_sources
+      }
+      elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "cn_source" ) {
+          push @authorised_values, "" unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
+            
+          my $class_sources = GetClassSources();
+          my $default_source = C4::Context->preference("DefaultClassificationSource");
+          
+          foreach my $class_source (sort keys %$class_sources) {
+              next unless $class_sources->{$class_source}->{'used'} or
+                          ($value and $class_source eq $value)      or
+                          ($class_source eq $default_source);
+              push @authorised_values, $class_source;
+              $authorised_lib{$class_source} = $class_sources->{$class_source}->{'description'};
+          }
+		  $value = $default_source unless ($value);
+
+          #---- "true" authorised value
+      }
+      else {
+          push @authorised_values, "" unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
+          $authorised_values_sth->execute( $tagslib->{$tag}->{$subfield}->{authorised_value} );
+          while ( my ( $value, $lib ) = $authorised_values_sth->fetchrow_array ) {
+              push @authorised_values, $value;
+              $authorised_lib{$value} = $lib;
+          }
+      }
+      $subfield_data{marc_value} =CGI::scrolling_list(      # FIXME: factor out scrolling_list
+          -name     => "field_value",
+          -values   => \@authorised_values,
+          -default  => $value,
+          -labels   => \%authorised_lib,
+          -override => 1,
+          -size     => 1,
+          -multiple => 0,
+          -tabindex => 1,
+          -id       => "tag_".$tag."_subfield_".$subfield."_".$index_subfield,
+          -class    => "input_marceditor",
+      );
+    # it's a thesaurus / authority field
+    }
+    elsif ( $tagslib->{$tag}->{$subfield}->{authtypecode} ) {
+        $subfield_data{marc_value} = "<input type=\"text\" $attributes />
+            <a href=\"#\" class=\"buttonDot\"
+                onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&index=$subfield_data{id}','$subfield_data{id}'); return false;\" title=\"Tag Editor\">...</a>
+    ";
+    # it's a plugin field
+    }
+    elsif ( $tagslib->{$tag}->{$subfield}->{value_builder} ) {
+        # opening plugin
+        my $plugin = C4::Context->intranetdir . "/cataloguing/value_builder/" . $tagslib->{$tag}->{$subfield}->{'value_builder'};
+        if (do $plugin) {
+			my $temp;
+            my $extended_param = plugin_parameters( $dbh, $temp, $tagslib, $subfield_data{id}, \@loop_data );
+            my ( $function_name, $javascript ) = plugin_javascript( $dbh, $temp, $tagslib, $subfield_data{id}, \@loop_data );
+            $subfield_data{marc_value} = qq[<input $attributes
+                onfocus="Focus$function_name($subfield_data{random}, '$subfield_data{id}');"
+                 onblur=" Blur$function_name($subfield_data{random}, '$subfield_data{id}');" />
+                <a href="#" class="buttonDot" onclick="Clic$function_name('$subfield_data{id}'); return false;" title="Tag Editor">...</a>
+                $javascript];
+        } else {
+            warn "Plugin Failed: $plugin";
+            $subfield_data{marc_value} = "<input $attributes />"; # supply default input form
         }
     }
-    $template->param( 'itemsloop' => \@items,
-                                        'authloop' => $authloop,
-                                        'branches' => $branches,
-                                        'actions'    => 1,
-                                        'op'            => '1',
-                                        'itemslst'   => $itemslst,
-                                        'itemtypes' => $itemtypes,
-                                      );
-} elsif ( $invars->{'itemslst'} ) {
-    for my $itemno ( split(',', $invars->{itemslst}) ) {
-		my $item = GetItem($itemno);
-		if ( $invars->{'del'} ) {
-			DelItemCheck(C4::Context->dbh, $item->{'biblionumber'}, $item->{'itemnumber'})
-		} else {
-			for my $auth (@$authvals){
-				my ($authfieldname, $description, $hashfdname) = @$auth;
-				my $authcode = GetAuthValCode($authfieldname);
-				if ($authcode && $invars->{$authcode} && $invars->{$authcode} ne '0'){
-					$item->{$hashfdname}=$invars->{$authcode};
+    elsif ( $tag eq '' ) {       # it's an hidden field
+        $subfield_data{marc_value} = qq(<input type="hidden" $attributes />);
+    }
+    elsif ( $tagslib->{$tag}->{$subfield}->{'hidden'} ) {   # FIXME: shouldn't input type be "hidden" ?
+        $subfield_data{marc_value} = qq(<input type="text" $attributes />);
+    }
+    elsif ( length($value) > 100
+            or (C4::Context->preference("marcflavour") eq "UNIMARC" and
+                  300 <= $tag && $tag < 400 && $subfield eq 'a' )
+            or (C4::Context->preference("marcflavour") eq "MARC21"  and
+                  500 <= $tag && $tag < 600                     )
+          ) {
+        # oversize field (textarea)
+        $subfield_data{marc_value} = "<textarea $attributes_no_value>$value</textarea>\n";
+    } else {
+        # it's a standard field
+         $subfield_data{marc_value} = "<input $attributes />";
+    }
+#   $subfield_data{marc_value}="<input type=\"text\" name=\"field_value\">";
+    push (@loop_data, \%subfield_data);
+    $i++
+  }
+}
+
+# what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
+$template->param(
+    item             => \@loop_data,
+);
+$nextop="action"
+}
+$template->param(%$items_display_hashref) if $items_display_hashref;
+$template->param(
+    op      => $nextop,
+    $op => 1,
+    opisadd => ($nextop eq "saveitem") ? 0 : 1,
+);
+foreach my $error (@errors) {
+    $template->param($error => 1);
+}
+output_html_with_http_headers $input, $cookie, $template->output;
+exit;
+
+sub BuildItemsData{
+	my @itemnumbers=@_;
+		# now, build existiing item list
+		my %witness; #---- stores the list of subfields used at least once, with the "meaning" of the code
+		my @big_array;
+		#---- finds where items.itemnumber is stored
+		my (  $itemtagfield,   $itemtagsubfield) = &GetMarcFromKohaField("items.itemnumber", "");
+		my ($branchtagfield, $branchtagsubfield) = &GetMarcFromKohaField("items.homebranch", "");
+		foreach my $itemnumber (@itemnumbers){
+			my $itemdata=GetItem($itemnumber);
+			my $itemmarc=Item2Marc($itemdata);
+			my $biblio=GetBiblioData($$itemdata{biblionumber});
+			my %this_row;
+			foreach my $field (grep {$_->tag() eq $itemtagfield} $itemmarc->fields()) {
+				# loop through each subfield
+				if (my $itembranchcode=$field->subfield($branchtagsubfield) && C4::Context->preference("IndependantBranches")) {
+						#verifying rights
+						my $userenv = C4::Context->userenv();
+						unless (($userenv->{'flags'} == 1) or (($userenv->{'branch'} eq $itembranchcode))){
+								$this_row{'nomod'}=1;
+						}
+				}
+				my $tag=$field->tag();
+				foreach my $subfield ($field->subfields) {
+					my ($subfcode,$subfvalue)=@$subfield;
+					next if ($tagslib->{$tag}->{$subfcode}->{tab} ne 10 
+							&& $tag        ne $itemtagfield 
+							&& $subfcode   ne $itemtagsubfield);
+
+					$witness{$subfcode} = $tagslib->{$tag}->{$subfcode}->{lib} if ($tagslib->{$tag}->{$subfcode}->{tab}  eq 10);
+					if ($tagslib->{$tag}->{$subfcode}->{tab}  eq 10) {
+						$this_row{$subfcode}=GetAuthorisedValueDesc( $tag,
+									$subfcode, $subfvalue, '', $tagslib) 
+									|| $subfvalue;
+					}
+
+					$this_row{itemnumber} = $subfvalue if ($tag eq $itemtagfield && $subfcode eq $itemtagsubfield);
 				}
 			}
-			if ($invars->{holdingbranch} && $invars->{holdingbranch} ne '0'){
-				$item->{holdingbranch} = $invars->{holdingbranch};
+			$this_row{0}=join("\n",@$biblio{qw(title author ISBN)});
+			$witness{0}="&nbsp;";
+			if (%this_row) {
+				push(@big_array, \%this_row);
 			}
-			if ($invars->{homebranch} && $invars->{homebranch} ne '0'){
-				$item->{homebranch} = $invars->{homebranch};
-			}
-			if ($invars->{itemtypes} && $invars->{itemtypes} ne '0') {
-				$item->{itype} = $invars->{itemtypes};
-			}
-			ModItem($item, $item->{biblionumber}, $item->{itemnumber});
+		}
+		@big_array = sort {$a->{0} cmp $b->{0}} @big_array;
+
+		# now, construct template !
+		# First, the existing items for display
+		my @item_value_loop;
+		my @witnesscodessorted=sort keys %witness;
+		for my $row ( @big_array ) {
+			my %row_data;
+			my @item_fields = map +{ field => $_ || '' }, @$row{ @witnesscodessorted };
+			$row_data{item_value} = [ @item_fields ];
+			$row_data{itemnumber} = $row->{itemnumber};
+			#reporting this_row values
+			$row_data{'nomod'} = $row->{'nomod'};
+			push(@item_value_loop,\%row_data);
+		}
+		my @header_loop=map { { header_value=> $witness{$_}} } @witnesscodessorted;
+	return { item_loop        => \@item_value_loop, item_header_loop => \@header_loop };
+}
+#BE WARN : it is not the general case 
+# This function can be OK in the item marc record special case
+# Where subfield is not repeated
+# And where we are sure that field should correspond
+# And $tag>10
+sub UpdateMarcWith($$){
+  my ($marcfrom,$marcto)=@_;
+  warn "FROM :",$marcfrom->as_formatted;
+	my (  $itemtag,   $itemtagsubfield) = &GetMarcFromKohaField("items.itemnumber", "");
+	my $fieldfrom=$marcfrom->field($itemtag);
+	my @fields_to=$marcto->field($itemtag);
+    foreach my $subfield ($fieldfrom->subfields()){
+		foreach my $field_to_update (@fields_to){
+				$field_to_update->update($$subfield[0]=>$$subfield[1]) if ($$subfield[1]);
 		}
     }
+  warn "TO edited:",$marcto->as_formatted;
 }
-$template->param('del' => $input->param('del'));
-output_html_with_http_headers $input, $cookie, $template->output;

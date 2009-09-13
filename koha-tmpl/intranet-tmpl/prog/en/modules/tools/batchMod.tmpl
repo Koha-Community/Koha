@@ -23,7 +23,6 @@
             <div class="yui-b">
                 <h1>Batch <!-- TMPL_IF name="del" -->deletion<!-- TMPL_ELSE -->modification<!-- /TMPL_IF --></h1>
                 <!-- TMPL_UNLESS name="op" -->
-                    <div class="yui-g">
                         <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/batchMod.pl">
                             <fieldset class="rows">
                                 <legend>Use a barcode file</legend>
@@ -40,7 +39,7 @@
                                     </li>
                                 </ol>
                             </fieldset>
-                            <input type="hidden" name="op" value="barcodes" />
+                            <input type="hidden" name="op" value="show" />
                             <!-- TMPL_IF name="del" --><input type="hidden" name="del" value="1" /><!-- /TMPL_IF -->
                             <fieldset class="action">
                                 <input type="submit" value="Continue" class="button" />
@@ -48,100 +47,64 @@
                         </form>
                     </div>
                 <!-- /TMPL_UNLESS -->
-                <!-- TMPL_IF name="actions" -->
-                    <!-- TMPL_IF name="itemsloop" -->
-                        <table>
-                            <tr>
-                                <th>title</th>
-                                <th>homebranch</th>
-                                <th>holdingbranch</th>
-                                <!-- TMPL_LOOP name="authloop" -->
-                                    <th><!-- TMPL_VAR name="description" --></th>
-                                <!-- /TMPL_LOOP -->
-                                <!-- TMPL_IF name="itemtypes" -->
-                                    <th>item type</th>
-                                <!-- /TMPL_UNLESS -->
-                            </tr>
-                            <!-- TMPL_LOOP name="itemsloop" -->
-                                <tr>
-                                    <td><!-- TMPL_VAR name="title" --></td>
-                                    <td><!-- TMPL_VAR name="homebranch" --></td>
-                                    <td><!-- TMPL_VAR name="holdingbranch" --></td>
-                                    <!-- TMPL_LOOP name="authloop" -->
-                                        <td><!-- TMPL_VAR name="authvalue" --></td>
-                                    <!-- /TMPL_LOOP -->
-                                    <!-- TMPL_IF name="itemtypes" -->
-                                        <td><!-- TMPL_VAR name="itemtypedesc" --></td>
-                                    <!-- /TMPL_UNLESS -->
-                                </tr>
-                            <!-- /TMPL_LOOP -->
-                        </table>
-                        <form method="post" action="/cgi-bin/koha/tools/batchMod.pl">
-                            <!-- TMPL_IF name="del" -->
+<!-- TMPL_IF NAME="barcode_not_unique" --><div class="dialog alert"><strong>Error saving item</strong>: Barcode must be unique.</div><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="no_next_barcode" --><div class="dialog alert"><strong>Error saving items</strong>: Unable to automatically determine values for barcodes. No item has been inserted.</div><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="book_on_loan" --><div class="dialog alert"><strong>Cannot Delete</strong>: item is checked out.</div><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="book_reserved" --><div class="dialogalert"><strong>Cannot Delete</strong>: item has a waiting hold.</div><!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="item_loop" -->
+<form name="f" action="batchMod.pl" method="post">
+<div id="cataloguing_additem_itemlist">
+        <div style="overflow:auto">
+        <table>
+            <tr>
+				<th>&nbsp;</th>
+                <!-- TMPL_LOOP NAME="item_header_loop" --> <th> <!-- TMPL_VAR NAME="header_value" --> </th>
+                <!-- /TMPL_LOOP --> </tr>
+            <!-- TMPL_LOOP NAME="item_loop" --> <tr> <!-- TMPL_IF Name="nomod"--> <td class="error">Cannot Edit</td><!--TMPL_ELSE--><td><input type="checkbox" name="itemnumber" value="<!--TMPL_VAR Name="itemnumber"-->" id="row<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked"></td><!--/TMPL_IF-->
+                <!-- TMPL_LOOP NAME="item_value" --> <td><!-- TMPL_VAR ESCAPE="HTML" NAME="field" --></td> 
+				<!-- /TMPL_LOOP --> </tr>
+            <!-- /TMPL_LOOP -->
+        </table>
+        </div>
+</div>
+<!-- TMPL_IF name="show" -->
+<div id="cataloguing_additem_newitem">
+     <input type="hidden" name="op" value="<!-- TMPL_VAR NAME="op" -->" />
+    <!-- TMPL_IF name="del" -->
                             <p>This will delete the selected items.</p>
                             <input type="hidden" name="del" value="1" />
-                            <!-- TMPL_ELSE -->
-                            <fieldset class="rows">
-                                <legend>Change items' properties</legend>
-                                <ol>
-                                    <!-- TMPL_LOOP name="authloop" -->
-                                        <li>
-                                            <label for="<!-- TMPL_VAR name="authcode" -->">Change <!-- TMPL_VAR name="description" --></label>
-                                            <select name="<!-- TMPL_VAR name="authcode" -->" id="<!-- TMPL_VAR name="authcode" -->">
-                                                <option selected="selected" value="0">No change</option>
-                                                <!-- TMPL_LOOP name="values" -->
-                                                    <option value="<!-- TMPL_VAR name="authorised_value" -->"><!-- TMPL_VAR NAME="lib" --></option>
-                                                <!-- /TMPL_LOOP -->
-                                            </select>
-                                        </li>
-                                    <!-- /TMPL_LOOP -->
-                                    <li>
-                                        <label for="homebranch">Change the homebranch</label>
-                                        <select name="homebranch" id="homebranch">
-                                            <option selected="selected" value="0">No change</option>
-                                            <!-- TMPL_LOOP name="branches" -->
-                                                <option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR NAME="name" --></option>
-                                            <!-- /TMPL_LOOP -->
-                                        </select>
-                                    </li>
-                                    <li>
-                                        <label for="holdingbranch">Change the holdingbranch</label>
-                                        <select name="holdingbranch" id="holdingbranch">
-                                            <option selected="selected" value="0">No change</option>
-                                            <!-- TMPL_LOOP name="branches" -->
-                                                <option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR NAME="name" --></option>
-                                            <!-- /TMPL_LOOP -->
-                                        </select>
-                                    </li>
-                                    <!-- TMPL_IF name="itemtypes" -->
-                                        <li>
-                                            <label for="itemtypes">Change the itemtypes</label>
-                                                <select name="itemtypes" id="itemtypes">
-                                                    <option selected="selected" value="0">No change</option>
-                                                    <!-- TMPL_LOOP name="itemtypes" -->
-                                                        <option value="<!-- TMPL_VAR name="itemtype" -->"><!-- TMPL_VAR name="description" --></option>
-                                                    <!-- /TMPL_LOOP -->
-                                        </li>
-                                    <!-- /TMPL_IF -->
-                                    <li>
-                                        <label for="itemnotes">Change item note</label>
-                                        <textarea name="itemnotes" id="itemnotes" rows="10" cols="40" ></textarea>
-                                    </li>
-                                </ol>
-                            </fieldset>
-                            <!-- /TMPL_IF -->
-                            <input type="hidden" name="itemslst" value="<!-- TMPL_VAR name="itemslst" -->"/>
-                            <fieldset class="action">
-                                <input type="submit" value="Go" class="button" />
-                            </fieldset>
-                        </form>
-                    <!-- TMPL_ELSE -->
+    <!-- TMPL_ELSE -->
+        <h2>Edit Items</h2>
+	<fieldset class="rows">
+	<ol>
+        <!-- TMPL_LOOP NAME="item" -->
+               <li><div class="subfield_line" style="<!-- TMPL_VAR NAME='visibility' -->" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
+               <label><!-- TMPL_VAR NAME="subfield" --> - <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR NAME="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></label>
+                <!-- TMPL_VAR NAME="marc_value" -->
+                <input type="hidden" name="tag"       value="<!-- TMPL_VAR NAME="tag" -->" />
+                <input type="hidden" name="subfield"  value="<!-- TMPL_VAR NAME="subfield" -->" />
+                <input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->" />
+                <!-- TMPL_IF NAME="repeatable" -->
+                    <span class="buttonPlus" onclick="CloneSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->')">+</span>
+                <!-- /TMPL_IF -->
+   
+            </div></li>
+        <!-- /TMPL_LOOP -->
+    </ol>
+    </fieldset>
+<fieldset class="action">    
+    <input type="submit" name="submit" value="Go" />
+</fieldset>
+</div>
+    <!-- /TMPL_IF -->	
+           <!-- TMPL_ELSE -->
                         <h3>No results!</h3>
                         <a href="javascript:window.history.back()">Go back</a>
-                    <!-- /TMPL_IF -->
-                <!-- /TMPL_IF -->
-            </div>
-        </div>
+           <!-- /TMPL_IF -->
+
+</div>
+</div>
         <div class="yui-b">
             <!-- TMPL_INCLUDE NAME="tools-menu.inc" -->
         </div>
