@@ -27,7 +27,8 @@ use C4::Auth;
 use C4::Output;
 use CGI;
 use C4::Members;
-
+use C4::Branch;
+use C4::Category;
 
 my $input = new CGI;
 my $quicksearch = $input->param('quicksearch');
@@ -80,15 +81,24 @@ $member =~ s/\*/%/g;
 
 my ($count,$results);
 
-if(length($member) == 1)
-{
-    ($count,$results)=SearchMember($member,$orderby,"simple");
+my $patron = $input->Vars;
+foreach (keys %$patron){
+	delete $$patron{$_} unless($$patron{$_}); 
 }
-else
-{
-    ($count,$results)=SearchMember($member,$orderby,"advanced");
+($results)=Search($patron,{surname=>1,firstname=>1}) if (keys %$patron);
+$count =scalar(@$results);
+use YAML;
+warn Dump($results);
+unless ($count){
+	if(length($member) == 1)
+	{
+		($count,$results)=SearchMember($member,$orderby,"simple");
+	}
+	else
+	{
+		($count,$results)=SearchMember($member,$orderby,"advanced");
+	}
 }
-
 
 my @resultsdata;
 my $to=($count>($startfrom*$resultsperpage)?$startfrom*$resultsperpage:$count);
@@ -96,29 +106,15 @@ for (my $i=($startfrom-1)*$resultsperpage; $i < $to; $i++){
   #find out stats
   my ($od,$issue,$fines)=GetMemberIssuesAndFines($results->[$i]{'borrowernumber'});
 
+  $$results[$i]{'dateexpiry'}= C4::Dates->new($results->[$i]{'dateexpiry'},'iso')->output('syspref');
+
   my %row = (
     count => $i+1,
-    borrowernumber => $results->[$i]{'borrowernumber'},
-    cardnumber => $results->[$i]{'cardnumber'},
-    surname => $results->[$i]{'surname'},
-    firstname => $results->[$i]{'firstname'},
-    categorycode => $results->[$i]{'categorycode'},
-    category_type => $results->[$i]{'category_type'},
-    category_description => $results->[$i]{'description'},
-    address => $results->[$i]{'address'},
-	address2 => $results->[$i]{'address2'},
-    city => $results->[$i]{'city'},
-	zipcode => $results->[$i]{'zipcode'},
-	country => $results->[$i]{'country'},
-    branchcode => $results->[$i]{'branchcode'},
+	%{$results->[$i]},
     overdues => $od,
     issues => $issue,
     odissue => "$od/$issue",
     fines =>  sprintf("%.2f",$fines),
-    borrowernotes => $results->[$i]{'borrowernotes'},
-    sort1 => $results->[$i]{'sort1'},
-    sort2 => $results->[$i]{'sort2'},
-    dateexpiry => C4::Dates->new($results->[$i]{'dateexpiry'},'iso')->output('syspref'),
     );
   push(@resultsdata, \%row);
 }
@@ -134,6 +130,7 @@ my $base_url =
     )
   );
 
+my @categories=C4::Category->all;
 $template->param(
     paginationbar => pagination_bar(
         $base_url,  int( $count / $resultsperpage ) + 1,
@@ -143,6 +140,8 @@ $template->param(
     from      => ($startfrom-1)*$resultsperpage+1,  
     to        => $to,
     multipage => ($count != $to || $startfrom!=1),
+	branchloop=>GetBranchesLoop(),
+	categoryloop=>\@categories,
 );
 
 $template->param( 

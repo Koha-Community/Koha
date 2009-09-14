@@ -1,0 +1,30 @@
+    <form action="member.pl" method="get">
+                <fieldset> <legend>search</legend><fieldset><legend>
+			Patron information
+                </legend>
+                    <label for="firstname"> Firstname :</label><input type="text" name="firstname" value="<!-- TMPL_VAR name="firstname"-->" /><br/>
+                    <label for="surname"> Surname :</label><input type="text" name="surname" value="<!-- TMPL_VAR name="surname"-->" /><br/>
+                    <label for="address"> Address :</label><input type="text" name="address1" value="<!-- TMPL_VAR name="address"-->" /><br/>
+                    <label for="zipcode"> Zipcode :</label><input type="text" name="zipcode" value="<!-- TMPL_VAR name="zipcode"-->" /><br/>
+                    <label for="city"> City :</label><input type="text" name="city" value="<!-- TMPL_VAR name="city"-->" /><br />
+                    <label for="email"> email :</label><input type="text" name="email" value="<!-- TMPL_VAR name="email"-->" /><br />
+                </fieldset>
+                <fieldset ><legend>
+                Library Management 
+                </legend>
+                    <label for="branchcode"> Library :</label><select name="branchcode" id="branchcode">
+        <option value="">Any</option><!-- TMPL_LOOP name="branchloop" -->
+        <!-- TMPL_IF NAME="selected" -->
+        <option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="branchname" --></option><!-- TMPL_ELSE -->
+        <option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="branchname" --></option><!-- /TMPL_IF -->
+      <!-- /TMPL_LOOP --></select><br />
+                    <label for="categorycode"> categorycode :</label><select name="categorycode" id="categorycode">
+        <option value="">Any</option><!-- TMPL_LOOP name="categoryloop" -->
+        <!-- TMPL_IF NAME="selected" -->
+        <option value="<!-- TMPL_VAR name="categorycode" -->" selected="selected"><!-- TMPL_VAR name="description" --></option><!-- TMPL_ELSE -->
+        <option value="<!-- TMPL_VAR name="categorycode" -->"><!-- TMPL_VAR name="description" --></option><!-- /TMPL_IF -->
+      <!-- /TMPL_LOOP --></select>
+                </fieldset>
+                    <input type="submit" value="Search" />
+                </fieldset>
+            </form>

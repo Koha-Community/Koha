@@ -28,7 +28,7 @@ use C4::Overdues;
 use C4::Reserves;
 use C4::Accounts;
 use C4::Biblio;
-use C4::SQLHelper qw(InsertInTable UpdateInTable);
+use C4::SQLHelper qw(InsertInTable UpdateInTable SearchInTable);
 
 our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,$debug);
 
@@ -39,6 +39,7 @@ BEGIN {
 	@ISA = qw(Exporter);
 	#Get data
 	push @EXPORT, qw(
+		&Search
 		&SearchMember 
 		&GetMemberDetails
 		&GetMember
@@ -251,6 +252,14 @@ AND attribute like ?
     $data = $sth->fetchall_arrayref({});
 
     return ( scalar(@$data), $data );
+}
+
+sub Search {
+    my ($filter,$orderby ) = @_;
+
+	my $data=SearchInTable("borrowers",$filter,$orderby);
+
+    return ( $data );
 }
 
 =head2 GetMemberDetails
