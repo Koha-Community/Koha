@@ -33,8 +33,8 @@
                 var budgets_menu = [
                         { text: _("Display budgets"), url: "/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->" },                        
                         { text: _("New budget for '<!-- TMPL_VAR NAME="budget_period_description" -->'"), url: "/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->"
-                           <!-- TMPL_IF NAME="budget_period_locked" -->,  id:'disabled' <!-- /TMPL_IF  -->
-                           <!-- TMPL_UNLESS NAME="CAN_user_acquisition_budget_add_del" -->,  id:'disabled' <!-- /TMPL_UNLESS  -->
+                           <!-- TMPL_IF NAME="budget_period_locked" -->,  disabled:true<!-- /TMPL_IF  -->
+                           <!-- TMPL_UNLESS NAME="CAN_user_acquisition_budget_add_del" -->,  disabled:true <!-- /TMPL_UNLESS  -->
                           },
                 ]
 
