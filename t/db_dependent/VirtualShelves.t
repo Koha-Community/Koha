@@ -10,7 +10,7 @@ use strict;
 use C4::Context;
 
 # Making 30 tests.
-BEGIN { plan tests => 32 }
+BEGIN { plan tests => 112 }
 
 # Getting some borrowers from database.
 my $dbh = C4::Context->dbh;
@@ -128,17 +128,17 @@ for(my $i=0; $i<10;$i++){
 for(my $i=0; $i<10;$i++){
     my $rand = int(rand(9));
     my $numA = $shelves[$rand];
-    my $nameA = "NewName_".$rand;
-    my $ownerA = $borrowers[$rand];
-    my $categoryA = int(rand(3))+1;
+    my $shelf = { shelfname => "NewName_".$rand,
+	owner => $borrowers[$rand],
+	category =>  int(rand(3))+1 };
     
-    ModShelf($numA,$nameA,$ownerA,$categoryA);
+    ModShelf($numA,$shelf);
     my ($numB,$nameB,$ownerB,$categoryB) = GetShelf($numA);
     
     ok($numA,$numB);
-    ok($nameA,$nameB);
-    ok($ownerB,$ownerA);
-    ok($categoryA,$categoryB);
+    ok($shelf->{shelfname},$nameB);
+    ok($shelf->{owner},$ownerB);
+    ok($shelf->{category},$categoryB);
 }
 
 #-----------------------TEST DelShelf & DelFromShelf functions------------------------#
@@ -149,8 +149,8 @@ for(my $i=0; $i<10;$i++){
     my $shelfnumber = $shelves[$i];
     my $status = DelShelf($shelfnumber);
     if($status){
-        my $items = GetShelfContents($shelfnumber);
-        ok($status,scalar @$items);
+        my ($items,$count) = GetShelfContents($shelfnumber);
+        ok($status,$count);
         foreach (@$items){ # delete all the item in this shelf
             DelFromShelf($_{'itemnumber'},$shelfnumber);
         }
