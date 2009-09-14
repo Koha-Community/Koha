@@ -67,9 +67,7 @@ Serials updated :
         <tr>
             <th>ISSN</th>
             <th>Title</th>
-            <th>
-                Note
-            </th>
+            <th> Notes </th>
             <th>
                 Library (Callnumber)
             </th>
@@ -94,7 +92,8 @@ Serials updated :
                     ---
                 <!-- /TMPL_IF --></a>
                 </td>
-                <td><!-- TMPL_IF name="notes" -->(<!-- TMPL_VAR name="notes" -->)<!-- /TMPL_IF -->
+                <td><!-- TMPL_IF name="notes" --><!-- TMPL_VAR name="notes" --><!-- /TMPL_IF -->
+                <!-- TMPL_IF name="internalnotes" -->(<!-- TMPL_VAR name="internalnotes" -->)<!-- /TMPL_IF -->
                 </td>
                 <td>
                 <!-- TMPL_IF name="branchcode" --><!-- TMPL_VAR name="branchcode" --><!-- /TMPL_IF -->
