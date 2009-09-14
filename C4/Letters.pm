@@ -821,7 +821,9 @@ sub _send_message_by_email ($;$$$) {
                                    status     => 'failed' } );
             return;
         }
-        unless ($to_address = $member->{email}) {   # assigment, not comparison
+        my $which_address = C4::Context->preference('AutoEmailPrimaryAddress');
+        $to_address = $member->{$which_address};
+        unless ($to_address) {  
             # warn "FAIL: No 'to_address' and no email for " . ($member->{surname} ||'') . ", borrowernumber ($message->{borrowernumber})";
             # warning too verbose for this more common case?
             _set_message_status( { message_id => $message->{'message_id'},
