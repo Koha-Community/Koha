@@ -176,7 +176,6 @@ my $suggestionid  = $input->param('suggestionid');
 my $biblionumber  = $input->param('biblionumber');
 my $user          = $input->remote_user;
 my $uncertainprice = $input->param('uncertainprice');
-my $biblionumber   = $input->param('biblionumber');
 
 #warn "CREATEBIBITEM =  $input->param('createbibitem')";
 #warn Dumper $input->param('createbibitem');

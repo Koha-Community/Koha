@@ -76,6 +76,7 @@ my $results_per_page = $params->{'num'} || 20;
 my $booksellerid     = $params->{'booksellerid'};
 my $basketno         = $params->{'basketno'};
 my $sub              = $params->{'sub'};
+my $bookseller = GetBookSellerFromId($booksellerid);
 
 # getting the template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
