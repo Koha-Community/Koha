@@ -65,14 +65,15 @@ $(document).ready(function() {
             <tr>
                 <th>Patron Category</th>
                 <th>Item Type</th>
-                <th>Fine Amount</th>
-                <th>Fine Days</th>
-                <th>Fine Grace Period</th>
-                <th>Fine Charging Interval</th>
                 <th>Current Checkouts Allowed</th>
-                <th>Renewals Allowed</th>
-                <th>Reserves Allowed</th>
-                <th>Loan Period</th><th>&nbsp;</th>
+                <th>Loan Period (day)</th>
+                <th>Fine Amount</th>
+                <th>Fine Charging Interval</th>
+                <th>Fine Grace period (day)</th>
+                <th>Suspension in Days (day)</th>
+                <th>Renewals Allowed (count)</th>
+                <th>Reserves Allowed (count)</th>
+				<th>&nbsp;</th>
             </tr>
 				<!-- TMPL_LOOP NAME="rules" -->
 					<!-- TMPL_UNLESS NAME="__odd__" -->
@@ -92,23 +93,19 @@ $(document).ready(function() {
 									<!-- TMPL_VAR NAME="humanitemtype" -->
 								<!-- /TMPL_IF -->
 							</td>
-							<td><!-- TMPL_VAR NAME="fine" --></td>
-							<td>
-								<!-- TMPL_IF NAME="finedays" -->
-									<!-- TMPL_VAR NAME="finedays" --> day(s)
-								<!-- /TMPL_IF -->
-							</td>
-							<td><!-- TMPL_IF NAME="firstremind" --><!-- TMPL_VAR NAME="firstremind" --> day(s)<!-- /TMPL_IF --></td>
-							<td><!-- TMPL_IF NAME="chargeperiod" --><!-- TMPL_VAR NAME="chargeperiod" --> day(s)<!-- /TMPL_IF --></td>
 							<td><!-- TMPL_IF NAME="unlimited_maxissueqty" -->
 									Unlimited
 								<!-- TMPL_ELSE -->
 									<!-- TMPL_VAR NAME="maxissueqty" -->
 								<!-- /TMPL_IF -->
 							</td>
-							<td><!-- TMPL_IF NAME="renewalsallowed" --><!-- TMPL_VAR NAME="renewalsallowed" --> time(s)<!-- /TMPL_IF --></td>
-							<td><!-- TMPL_IF NAME="reservesallowed" --><!-- TMPL_VAR NAME="reservesallowed" --> time(s)<!-- /TMPL_IF --></td>
-							<td><!-- TMPL_IF NAME="issuelength" --><!-- TMPL_VAR NAME="issuelength" --> day(s)<!-- /TMPL_IF --></td>
+							<td><!-- TMPL_IF NAME="issuelength" --><!-- TMPL_VAR NAME="issuelength" --> <!-- /TMPL_IF --></td>
+							<td><!-- TMPL_VAR NAME="fine" --></td>
+							<td><!-- TMPL_IF NAME="chargeperiod" --><!-- TMPL_VAR NAME="chargeperiod" --> <!-- /TMPL_IF --></td>
+							<td><!-- TMPL_IF NAME="firstremind" --><!-- TMPL_VAR NAME="firstremind" --> <!-- /TMPL_IF --></td>
+							<td><!-- TMPL_IF NAME="finedays" --> <!-- TMPL_VAR NAME="finedays" --> <!-- /TMPL_IF --></td>
+							<td><!-- TMPL_IF NAME="renewalsallowed" --><!-- TMPL_VAR NAME="renewalsallowed" --> <!-- /TMPL_IF --></td>
+							<td><!-- TMPL_IF NAME="reservesallowed" --><!-- TMPL_VAR NAME="reservesallowed" --> <!-- /TMPL_IF --></td>
 							<td>
 								<a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=<!-- TMPL_VAR NAME="itemtype" -->&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->&amp;branch=<!-- TMPL_VAR NAME="branch" -->">Delete</a>
 							</td>
@@ -131,11 +128,14 @@ $(document).ready(function() {
                         <!-- /TMPL_LOOP -->
                         </select>
                     </td>
-                    <td><input name="fine" size="4" /></td>
-                    <td><input name="firstremind" size="2" /> day(s)</td>
-                    <td><input name="chargeperiod" size="2" /> day(s)</td>
                     <td><input name="maxissueqty" size="3" /></td>
-                    <td><input name="issuelength" size="3" /> day(s)</td>
+                    <td><input name="issuelength" size="3" /> </td>
+                    <td><input name="fine" size="4" /></td>
+                    <td><input name="chargeperiod" size="2" /></td>
+                    <td><input name="firstremind" size="2" /> </td>
+                    <td><input name="finedays" size="3" /> </td>
+                    <td><input name="renewalsallowed" size="2" /></td>
+                    <td><input name="reservesallowed" size="2" /></td>
                     <td><input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->"/><input type="submit" value="Add" class="submit" /></td>
                 </tr>
             </table>
