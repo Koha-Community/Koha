@@ -51,8 +51,8 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
 
 my $biblionumber=$query->param('biblionumber');
 my $title=$query->param('title');
-# my $bi=$query->param('bi');
-# $bi = $biblionumber unless $bi;
+my $bi=$query->param('bi');
+$bi = $biblionumber unless $bi;
 my $data=GetBiblioData($biblionumber);
 my $dewey = $data->{'dewey'};
 
@@ -81,6 +81,7 @@ my $itemtypes = GetItemTypes;
 
 $data->{'itemtypename'} = $itemtypes->{$data->{'itemtype'}}->{'description'};
 $results[0]=$data;
+my $itemnumber;
 ($itemnumber) and @items = (grep {$_->{'itemnumber'} == $itemnumber} @items);
 foreach my $item (@items){
     $item->{itemlostloop}= GetAuthorisedValues(GetAuthValCode('items.itemlost',$fw),$item->{itemlost}) if GetAuthValCode('items.itemlost',$fw);
