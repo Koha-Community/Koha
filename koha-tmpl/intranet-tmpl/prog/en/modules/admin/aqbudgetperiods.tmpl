@@ -3,6 +3,7 @@
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/js/acq.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript">
 // #################################################################################
 // Javascript
@@ -46,6 +47,12 @@
                     alert(alertString2);
             }
     }
+	$(document).ready(function() { 
+		 $("#periodsh").tablesorter({
+	            widgets : ['zebra'],
+	            sortList: [[0,0]]
+	     });
+	});
 </script>
 
 <title>
@@ -270,17 +277,19 @@
 <!-- TMPL_IF name="else" -->
     <h2>Budget periods administration</h2>
     <!-- TMPL_IF name="cur" --><b>Currency = <!-- TMPL_VAR name="cur" --></b><!-- /TMPL_IF -->
-    <table>
-    <tr>
-        <th>Period Name</th>
-        <th>Start Date</th>
-        <th>End Date</th>
-        <th>Active</th>
-        <th>Locked</th>
-        <th>Total</th>
-        <th>Actions</th>
-    </tr>
-
+    <table id="periodsh">
+    <thead>
+	    <tr>
+	        <th>Period Name</th>
+	        <th>Start Date</th>
+	        <th>End Date</th>
+	        <th>Active</th>
+	        <th>Locked</th>
+	        <th>Total</th>
+	        <th>Actions</th>
+	    </tr>
+	</thead>
+	<tbody>
     <!-- TMPL_LOOP name="period_loop" -->
         <!-- TMPL_IF NAME="__odd__" -->
             <tr>
@@ -301,6 +310,7 @@
         </td>
         </tr>
     <!-- /TMPL_LOOP -->
+    </tbody>
     </table>
     <div class="paginationBar"><!-- TMPL_VAR NAME="pagination_bar" --></div>
 <!-- /TMPL_IF -->

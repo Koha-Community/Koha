@@ -6,6 +6,7 @@
 <script type="text/javascript">
 //<![CDATA[
 	//
+	
         var actTotal ="";
 
 	function ownerRemove(f) {
@@ -79,6 +80,19 @@
 	}
 //]]>
 </script>
+<!-- TMPL_ELSE -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+	//
+	$(document).ready(function() { 
+		 $("#budgeth").tablesorter({
+	            widgets : ['zebra'],
+	            sortList: [[0,0]]
+	     });
+	});
+//]]>
+</script>
 <!-- /TMPL_IF -->
 
 </head>
@@ -127,26 +141,28 @@
 </fieldset>
 </form>
 
-<table>
-    <tr>
-    <th>Budget hierarchy</th>
-    <th>Budget name</th>
-    <th>Total<br>allocated</th>
-    <th>Base-level<br>allocated</th>
-    <th>Sub-level<br>allocated (unallocated)</th>
-    <th>Base-level<br>spent</th>
-    <th>Base-level<br>remaining</th>
-    <!--
-    <th>Sub-level<br>spent</th>
-    <th>Encum%</th>
-    <th>Expend%</th>
-    -->
-    <th>Owner</th>
-    <th>Branch</th>
-    <th>Note</th>
-    <th colspan="3">Actions</th>
-    </tr>
-
+<table id="budgeth">
+    <thead>
+    	<tr>
+		    <th>Budget hierarchy</th>
+		    <th>Budget name</th>
+		    <th>Total<br>allocated</th>
+		    <th>Base-level<br>allocated</th>
+		    <th>Sub-level<br>allocated (unallocated)</th>
+		    <th>Base-level<br>spent</th>
+		    <th>Base-level<br>remaining</th>
+		    <!--
+		    <th>Sub-level<br>spent</th>
+		    <th>Encum%</th>
+		    <th>Expend%</th>
+		    -->
+		    <th>Owner</th>
+		    <th>Branch</th>
+		    <th>Note</th>
+		    <th colspan="3">Actions</th>
+    	</tr>
+    </thead>
+	<tbody>
 <!-- TMPL_LOOP name="budget" -->
     <!-- TMPL_IF NAME="toggle" -->
     <tr class="highlight">
@@ -190,7 +206,7 @@
     <!-- /TMPL_IF -->
     </tr>
 <!-- /TMPL_LOOP -->
-
+	</tbody>
     <tfoot>
     <tr>
     <th colspan='2' style='text-align: left;' nowrap>Period allocated <!--TMPL_IF NAME="budget_period_total" --><!-- TMPL_VAR NAME='budget_period_total'--><!-- /TMPL_IF -->  </th>
