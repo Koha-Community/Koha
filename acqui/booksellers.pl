@@ -104,7 +104,7 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
     $line{name}       = $suppliers[$i]->{'name'};
     $line{active}     = $suppliers[$i]->{'active'};
     my @loop_basket;
-    my $uid = GetMember($loggedinuser)->{userid} if $loggedinuser;
+    my $uid = GetMember(borrowernumber => $loggedinuser)->{userid} if $loggedinuser;
     for ( my $i2 = 0 ; $i2 < $ordcount ; $i2++ ) {
         if ( $orders->[$i2]{'authorisedby'} eq $loggedinuser || haspermission($uid, { flagsrequired   => { 'acquisition' => '*' } } ) ) {
             my %inner_line;
