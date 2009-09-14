@@ -184,7 +184,6 @@ sub SearchMember {
     if (@$data){
         return ( scalar(@$data), $data );
     }
-    $sth->finish;
 
     if ( $type eq "simple" )    # simple search for one letter only
     {
@@ -251,7 +250,6 @@ AND attribute like ?
     my @results;
     $data = $sth->fetchall_arrayref({});
 
-    $sth->finish;
     return ( scalar(@$data), $data );
 }
 
@@ -317,7 +315,6 @@ sub GetMemberDetails {
             $accessflagshash->{$flag} = 1;
         }
     }
-    $sth->finish;
     $borrower->{'flags'}     = $flags;
     $borrower->{'authflags'} = $accessflagshash;
 
@@ -596,7 +593,6 @@ sub GetMemberIssuesAndFines {
     my $sth = $dbh->prepare($query);
     $sth->execute($borrowernumber);
     my $issue_count = $sth->fetchrow_arrayref->[0];
-    $sth->finish;
 
     $sth = $dbh->prepare(
         "SELECT COUNT(*) FROM issues 
@@ -605,12 +601,10 @@ sub GetMemberIssuesAndFines {
     );
     $sth->execute($borrowernumber);
     my $overdue_count = $sth->fetchrow_arrayref->[0];
-    $sth->finish;
 
     $sth = $dbh->prepare("SELECT SUM(amountoutstanding) FROM accountlines WHERE borrowernumber = ?");
     $sth->execute($borrowernumber);
     my $total_fines = $sth->fetchrow_arrayref->[0];
-    $sth->finish;
 
     return ($overdue_count, $issue_count, $total_fines);
 }
@@ -857,7 +851,6 @@ sub GetGuarantees {
 
     my @dat;
     my $data = $sth->fetchall_arrayref({}); 
-    $sth->finish;
     return ( scalar(@$data), $data );
 }
 
@@ -889,7 +882,6 @@ sub UpdateGuarantees {
         |;
         my $sth3 = $dbh->prepare($guaquery);
         $sth3->execute;
-        $sth3->finish;
     }
 }
 =head2 GetPendingIssues
@@ -1034,9 +1026,7 @@ sub GetAllIssues {
             $result[$i] = $data2;
             $i++;
         }
-        $sth2->finish;
     }
-    $sth->finish;
 
     return ( $i, \@result );
 }
@@ -1084,7 +1074,6 @@ sub GetMemberAccountRecords {
         $total += int(1000 * $data->{'amountoutstanding'}); # convert float to integer to avoid round-off errors
     }
     $total /= 1000;
-    $sth->finish;
     return ( $total, \@acctlines,$numlines);
 }
 
@@ -1127,7 +1116,6 @@ sub GetBorNotifyAcctRecord {
         $total += int(100 * $data->{'amountoutstanding'});
     }
     $total /= 100;
-    $sth->finish;
     return ( $total, \@acctlines, $numlines );
 }
 
@@ -1166,7 +1154,6 @@ sub checkuniquemember {
         $sth->execute( uc($surname), ucfirst($firstname));
     }
     my @data = $sth->fetchrow;
-    $sth->finish;
     ( $data[0] ) and return $data[0], $data[1];
     return 0;
 }
@@ -1188,7 +1175,6 @@ sub checkcardnumber {
     else {
         return 0;
     }
-    $sth->finish();
 }  
 
 
@@ -1307,7 +1293,6 @@ sub GetborCatFromCatType {
         push @codes, $data->{'categorycode'};
         $labels{ $data->{'categorycode'} } = $data->{'description'};
     }
-    $sth->finish;
     return ( \@codes, \%labels );
 }
 
@@ -1336,7 +1321,6 @@ sub GetBorrowercategory {
         $sth->execute($catcode);
         my $data =
         $sth->fetchrow_hashref;
-        $sth->finish();
         return $data;
     } 
     return;  
@@ -1360,7 +1344,6 @@ sub GetBorrowercategoryList {
     $sth->execute;
     my $data =
     $sth->fetchall_arrayref({});
-    $sth->finish();
     return $data;
 }    # sub getborrowercategory
 
@@ -1387,7 +1370,6 @@ sub ethnicitycategories {
         push @codes, $data->{'code'};
         $labels{ $data->{'code'} } = $data->{'name'};
     }
-    $sth->finish;
     return ( \@codes, \%labels );
 }
 
@@ -1410,7 +1392,6 @@ sub fixEthnicity {
     my $sth       = $dbh->prepare("Select name from ethnicity where code = ?");
     $sth->execute($ethnicity);
     my $data = $sth->fetchrow_hashref;
-    $sth->finish;
     return $data->{'name'};
 }    # sub fixEthnicity
 
@@ -1460,7 +1441,6 @@ sub get_institutions {
     while ( my $data = $sth->fetchrow_hashref() ) {
         $orgs{ $data->{'borrowernumber'} } = $data;
     }
-    $sth->finish();
     return ( \%orgs );
 
 }    # sub get_institutions
@@ -1483,7 +1463,6 @@ sub add_member_orgs {
     foreach my $otherborrowernumber (@$otherborrowers) {
         $sth->execute( $borrowernumber, $otherborrowernumber );
     }
-    $sth->finish();
 
 }    # sub add_member_orgs
 
@@ -1521,7 +1500,6 @@ sub GetCities {
 
 #test to know if the table contain some records if no the function return nothing
     my $id = @id;
-    $sth->finish;
     if ( $id == 1 ) {
         # all we have is the one blank row
         return ();
@@ -1605,7 +1583,6 @@ sub DelMember {
           WHERE borrowernumber=?|;
     my $sth = $dbh->prepare($query);
     $sth->execute($borrowernumber);
-    $sth->finish;
     $query = "
        DELETE
        FROM borrowers
@@ -1613,7 +1590,6 @@ sub DelMember {
    ";
     $sth = $dbh->prepare($query);
     $sth->execute($borrowernumber);
-    $sth->finish;
     logaction("MEMBERS", "DELETE", $borrowernumber, "") if C4::Context->preference("BorrowersLog");
     return $sth->rows;
 }
@@ -1683,7 +1659,6 @@ ORDER BY road_type|;
 
 #test to know if the table contain some records if no the function return nothing
     my $id = @id;
-    $sth->finish;
     if ( $id eq 0 ) {
         return ();
     }
