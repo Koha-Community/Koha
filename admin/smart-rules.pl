@@ -480,7 +480,7 @@ $template->param(categoryloop => \@category_loop,
                         branchloop => \@branchloop,
                         humanbranch => ($branch ne '*' ? $branches->{$branch}->{branchname} : ''),
                         branch => $branch,
-                        definedbranch => $branch eq '*'
+                        definedbranch => scalar(@sorted_row_loop)>0 
                         );
 output_html_with_http_headers $input, $cookie, $template->output;
 
